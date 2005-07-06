@@ -1,0 +1,104 @@
+<?xml version="1.0"?>
+<digi-config>
+
+    <smtp>
+		 <host>gnyan.ncb.ernet.in</host>
+		 <from>system@digijava.org</from>
+	</smtp>
+	
+	<!--
+	
+	<logon-site id="dglogin" host="login.ncb.ernet.in">
+			  http://login.ncb.ernet.in:8080/digijava/
+	</logon-site>
+	
+	
+	<logon-site id="dglogin" host="amp-login.org">
+			  http://amp-login.org/
+	</logon-site>
+	
+	-->
+	
+	 <logon-site id="dglogin" host="amp-login.mofed.gov">
+                          http://amp-login.mofed.gov:8080/digijava/
+     </logon-site>
+     
+	
+	<server-type prefix="">development</server-type>
+
+	<!-- Digi ver 0.1beta setting. Alpha version has this removed and uses old view-rendering -->
+	<site-config>repository</site-config>
+
+	<forward-emails enabled="false">
+		<email>lasha@gateway.ge</email>
+	</forward-emails>
+
+	<exception-emails>
+		<email>lasha@gateway.ge</email>
+	</exception-emails>
+	
+	<!-- Indicates if resource lookup is cached.
+	Set to true on production boxes. Set to false on
+	dev machines -->
+	<res-cache>false</res-cache>
+
+	<!-- Search-engine optimization separator in URLs -->
+	<param-separator>~</param-separator>
+
+    <param-safeHTML>b,u,i,pre</param-safeHTML>
+	<param-bbTag>b,u,i,quote,code,list,list=,img,url,color,li,size</param-bbTag>
+
+    <!-- Enable/disable AccessLogger -->
+	<enable-logging>true</enable-logging>
+
+	<!-- Hibernate class -->
+	<hibernate-classes required="false">              
+		<!-- kernel classes -->
+		<hibernate-class>org.digijava.kernel.request.SiteDomain</hibernate-class>
+		<hibernate-class>org.digijava.kernel.entity.Address</hibernate-class>
+		<hibernate-class>org.digijava.kernel.entity.GeoRegion</hibernate-class>
+		<hibernate-class>org.digijava.kernel.user.User</hibernate-class>
+		<hibernate-class>org.digijava.kernel.user.UserLoginInfo</hibernate-class>
+		<hibernate-class>org.digijava.kernel.request.Site</hibernate-class>
+		<hibernate-class>org.digijava.kernel.entity.Image</hibernate-class>
+		<hibernate-class>org.digijava.kernel.user.Group</hibernate-class>
+		<hibernate-class>org.digijava.kernel.user.GroupPermission</hibernate-class>
+		<hibernate-class precache="true">org.digijava.kernel.entity.Locale</hibernate-class>
+		<hibernate-class>org.digijava.kernel.entity.UserPreferences</hibernate-class>
+		<hibernate-class precache="true">org.digijava.kernel.dbentity.Country</hibernate-class>
+		<hibernate-class>org.digijava.kernel.entity.OrganizationType</hibernate-class>
+		<hibernate-class>org.digijava.kernel.entity.HowDidYouHear</hibernate-class>
+		<hibernate-class>org.digijava.kernel.entity.ModuleInstance</hibernate-class>
+		<hibernate-class>org.digijava.kernel.entity.UserLangPreferences</hibernate-class>
+		<hibernate-class>org.digijava.kernel.entity.Interests</hibernate-class>
+		<hibernate-class>org.digijava.kernel.entity.ContentAlert</hibernate-class>
+		<hibernate-class>org.digijava.kernel.dbentity.SignOn</hibernate-class>
+		<hibernate-class>org.digijava.kernel.entity.OracleLocale</hibernate-class>
+		<hibernate-class>org.digijava.kernel.entity.PrincipalPermission</hibernate-class>
+		<hibernate-class>org.digijava.kernel.entity.PrincipalPermissionParameter</hibernate-class>
+
+		<hibernate-class precache="true" filter="not (obj.key like 'cpv:%')"
+          region="org.digijava.kernel.entity.Message.id_cache">org.digijava.kernel.entity.Message</hibernate-class>
+
+		<hibernate-class>org.digijava.kernel.entity.AccessLog</hibernate-class>
+
+		<hibernate-class>org.digijava.module.common.dbentity.ItemStatus</hibernate-class>
+		<hibernate-class>org.digijava.module.common.dbentity.ModuleTeaser</hibernate-class>
+	</hibernate-classes>
+
+    <!-- The following agents are not authenticated. If we would try
+    to authenticate them, they would have to go through single-signgon
+    redirects, driven by cookies, which, in case these agents are not
+    storing and/or processing cookies may result in "too many redirects"
+    on the client side. The list contains agents which most probabely
+    have problems with cookies and "hate" redirects :)
+
+    If client set accept-cookies HTTP header correctly, it does not have to
+    get here, though, but do all of them? Konqueror does not... -->
+    <ignored-agents>                                                          <ignored-agent>googlebot</ignored-agent>
+	    <ignored-agent>org.digijava.kernel.startup.UrlFetcher</ignored-agent>
+	    <ignored-agent>AOLserver</ignored-agent>
+	    <ignored-agent>Konqueror</ignored-agent>
+    </ignored-agents>
+
+</digi-config>

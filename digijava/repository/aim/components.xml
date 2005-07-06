@@ -1,0 +1,289 @@
+<?xml version="1.0"?>
+<config>
+<secondary-pages>
+
+	<page name="viewMyDesktop" title=" - Team Desktop " /> 
+	<page name="viewChannelOverviewDescription" title="AMP: Ethiopia: AIM Dashboard: Detail" />
+	<page name="editPhysicalProgress" title="AMP: Ethiopia: AIM Dashboard: Detail" />
+	<page name="addAmpProjectDetails" title="AMP: Ethiopia: AIM Dashboard: Detail" /> 
+	<page name="editAmpProjectDetails" title="AMP: Ethiopia: AIM Dashboard: Detail" /> 
+	<page name="createPhysicalProgress" title="AMP: Ethiopia: AIM Dashboard: Detail" />
+	<page name="addPhysicalProgress" title="AMP: Ethiopia: AIM Dashboard: Detail" />
+	<page name="addAmpPhysicalProgress" title="AMP: Ethiopia: AIM Dashboard: Detail" />
+	<page name="editAmpPhysicalProgress" title="AMP: Ethiopia: AIM Dashboard: Detail" />
+	<page name="addKnowledgeDocument" title="AMP: Ethiopia: AIM Dashboard: Detail" />
+	<page name="addKnowledgeNotes" title="AMP: Ethiopia: AIM Dashboard: Detail" />
+	<page name="addAmpKnowledge" title="AMP: Ethiopia: AIM Dashboard: Detail" />
+	<page name="editAmpKnowledge" title="AMP: Ethiopia: AIM Dashboard: Detail" />
+	<page name="createKnowledgeDocument" title="AMP: Ethiopia: AIM Dashboard: Detail" />
+	<page name="createKnowledgeNotes" title="AMP: Ethiopia: AIM Dashboard: Detail" />
+	<page name="getKnowledgeDocument" title="AMP: Ethiopia: AIM Dashboard: Detail" />
+	<page name="getKnowledgeNotes" title="AMP: Ethiopia: AIM Dashboard: Detail" />
+	<page name="deleteKnowledgeDocument" title="AMP: Ethiopia: AIM Dashboard: Detail" />
+	<page name="deleteKnowledgeNotes" title="AMP: Ethiopia: AIM Dashboard: Detail" />
+	<page name="updateKnowledgeDocument" title="AMP: Ethiopia: AIM Dashboard: Detail" />
+	<page name="updateKnowledgeNotes" title="AMP: Ethiopia: AIM Dashboard: Detail" />
+	<page name="deleteAmpActivity" title="AMP: Ethiopia: AIM Dashboard: Detail" />
+	<page name="addLocationList" title="AMP: Ethiopia: AIM Dashboard: Detail" />
+	<page name="createLocationList" title="AMP: Ethiopia: AIM Dashboard: Detail" />
+	<page name="createOrganisationList" title="AMP: Ethiopia: AIM Dashboard: Detail" />
+	<page name="getPhysicalProgress" title="AMP: Ethiopia: AIM Dashboard: Detail" />
+	<page name="deletePhysicalProgress" title="AMP: Ethiopia: AIM Dashboard: Detail" />
+	<page name="addAmpOrganisations" title="AMP: Ethiopia: AIM Dashboard: Detail" />
+	<page name="editAmpOrganisations" title="AMP: Ethiopia: AIM Dashboard: Detail" />
+	<page name="addFAOrgList" title="AMP: Ethiopia: AIM Dashboard: Detail" />
+	<page name="addRAOrgList" title="AMP: Ethiopia: AIM Dashboard: Detail" />
+	<page name="addIAOrgList" title="AMP: Ethiopia: AIM Dashboard: Detail" />
+	<page name="addRIOrgList" title="AMP: Ethiopia: AIM Dashboard: Detail" />
+	<page name="createSectorList" title="AMP: Ethiopia: AIM Dashboard: Detail" />
+	<page name="deleteSectorList" title="AMP: Ethiopia: AIM Dashboard: Detail" />
+	<page name="createSubSectorList" title="AMP: Ethiopia: AIM Dashboard: Detail" />
+	<page name="addAmpProjectOthers" title="AMP: Ethiopia: AIM Dashboard: Detail" /> 
+	<page name="editAmpProjectOthers" title="AMP: Ethiopia: AIM Dashboard: Detail" /> 
+	<page name="sectorManager" title=" - Sector Manager" />	
+	<page name="addSector" title=" - Add Sector" />	
+	<page name="updateAmpActivity" title=" - Add Sector" />	
+	<page name="addSectorList" title=" - Add Sector" />	
+	<page name="addSubSectorList" title=" - Add Sector" />	
+	<page name="editSector" title=" - Edit Sector" />	
+	<page name="deleteSector" title=" - Delete Sector" />	
+	<page name="viewSectorDetails" title=" - View Sector Details" />	
+	<page name="adminHome" title=" - Admin Home" />	
+	<page name="statusManager" title=" - Status Manager" />	
+	<page name="addStatus" title=" - Add Status" />	
+	<page name="updateStatus" title=" - Update Status" />	
+	<page name="deleteStatus" title=" - Delete Status" />	
+	<page name="viewCommitmentbyModality" title=" - Reports" />
+	<page name="viewMulitlateralbyDonor" title=" - Reports" />
+	<page name="quarterlyMulitlateralbyDonor" title=" - Reports" />
+	<page name="viewbyProjectbyDonor" title=" : Reports" />
+	<page name="viewbySectorbyProject" title=" : Reports" />
+	<page name="viewQuarterlyDateRange" title=" : Quaterly Reports" />
+	<page name="viewProjects" title=" : Reports" />
+	<page name="viewPlannedProjects" title=" : Reports" />
+	<page name="quarterlyReportByProject" title=" : Reports" />
+	<page name="quarterlyReportBySector" title=" : Reports" />
+	<page name="themeManager" title=" - Program Manager" />	
+	<page name="addTheme" title=" - Add Program" />	
+	<page name="editTheme" title=" - Edit Program" />	
+	<page name="deleteTheme" title=" - Delete Program" />	
+	<page name="viewTheme" title=" - View Program" />
+	<page name="fiscalCalendarManager" title=" - Fiscal Calendar Manager" />
+	<page name="addFiscalCalendar" title=" - Fiscal Calendar Manager" />
+	<page name="organisationManager" title=" - Organisation Manager" />
+	<page name="editOrganisation" title=" - Organisation Manager" />
+	<page name="orgGroupManager" title=" - Organisation Group Manager" />
+	<page name="editOrgGroup" title=" - Organisation Group Manager" />
+	<page name="addCurrency" title=" - Add Currency" />
+	<page name="editCurrency" title=" - Edit Currency" />
+	<page name="deleteCurrency" title=" - Delete Currency" />
+	<page name="currencyManager" title=" - Currency Manager" />
+	<page name="currencyRates" title=" - Currency Rates" />
+	<page name="searchSector" title=" - Search Sector" />
+	<page name="searchSectResults" title=" - Search Sector Results" />
+	<page name="workspaceManager" title=" - Workspace Manager" />
+	<page name="updateWorkspace" title=" - Workspace Manager" />
+	<page name="rolesManager" title=" - Roles Manager" />
+	<page name="updateRoles" title=" - Roles Manager" />
+	<page name="teamMembersAddFromAdmin" title=" - Team Members" />
+	<page name="showTeamMembers" title=" - Team Members" />
+	<page name="showTeamActivities" title=" - Team Activities" />
+	<page name="updateTeamMembers" title=" - Team Members" />
+	<page name="login" title=" - Login" />
+	<page name="selectTeam" title=" - Select Team" />
+	<!--
+	<page name="logout" title=" - Logout" />
+	-->
+	<page name="updateAppSettings" title=" - Update Application Settings" />
+	<page name="assignActivities" title=" - Assign activities" />
+	<page name="removeTeamActivities" title=" - Remove team activities" />
+	<page name="teamWorkspaceOverview" title=" - Team Workspace Setup" />
+	<page name="addTeamActivities" title=" - Team Workspace Setup" />
+	<page name="teamActivities" title=" - Team Workspace Setup" />
+	<page name="teamMembersAdd" title=" - Team Workspace Setup" />
+	<page name="teamMembers" title=" - Team Workspace Setup" />
+	<page name="index" title=" - Home" />
+	<page name="changePassword" title=" - Change Password" />
+	<page name="changePasswordSuccess" title=" - Change Password Success" />	
+	<page name="viewAmpActivityPreview" title="AMP: Ethiopia: Preview" />
+	<page name="userRegistration" title=" - New User Registration" />
+	<page name="teamMemberDetails" title=" - Team Member Details" />
+	<page name="addMemberActivities" title=" - Add Team Member Activities" />
+	<page name="teamMemberActivities" title=" - Team Member Activities" />
+	<page name="userRegistrationSuccess" title=" - Successfully registered user" />
+	<page name="getEmail" title=" - Forgot Password" />
+	<page name="resetEmailSuccess" title=" - Forgot Password" />
+
+	<page name="reportsManager" title=" - Reports Manager" />
+	<page name="addReports" title=" - Add Reports" />
+	<page name="editReports" title=" - Edit Reports " />
+	<page name="deleteReports" title=" - Delete Reports" />
+	<page name="teamReports" title=" - Team Report List" />
+	<page name="addTeamReports" title=" - Add Reports" />
+	<page name="teamMemberReports" title=" - Member Reports" />
+	<page name="addMemberReports" title=" - Add Member Reports" />
+	<page name="addDocument" title=" - Add Document" />
+	<page page="selectFile" name="aim_selectFilePopupLayout" title="AMP - Select File" />
+	<page page="selectCMSCategory" name="aim_selectCMSCategoryPopupLayout" title="AMP - Select Category" />
+	<page name="teamPagesConfigure" title=" - Configure Team Pages" />
+	<page name="configureTeam" title=" - Configure Team Pages" />
+	<page name="showTeamReports" title=" - Public Team Reports" />
+	<page name="teamConfiguration" title=" - Configure Team" />
+	<page name="viewProjectPdf" title=" - View Project PDF " />
+	<page page="viewActivityDetails" name="aim_viewActivityDetails" title="AMP - View Activity Details" />	
+	<page name="addActivityStep1" title=" - Add Activity - Identification | Planning" />	
+	<page name="addActivityStep2" title=" - Add Activity - Location | Sectors" />	
+	<page name="addActivityStep3" title=" - Add Activity - Funding" />	
+	<page name="addActivityStep4" title=" - Add Activity - Components" />	
+	<page name="addActivityStep5" title=" - Add Activity - Related Documents" />
+	<page name="addActivityStep6" title=" - Add Activity - Related Organizations" />
+	<page name="addActivityStep7" title=" - Add Activity - Conact Details | Conditions" />
+	<page name="locationManager" title=" - Location Manager" />
+	<page page="addLocation" name="aim_addlocPopupLayout" title=" - Location Manager" />
+	<page page="addOrgGroup" name="aim_addOrgGrpPopupLayout" title=" - Add Organization Group" />
+	<page page="viewOrgDetail" name="aim_viewOrgDetailPopupLayout" title=" - Organization Detail" />
+	<page page="viewComment" name="aim_viewCommentPopupLayout" title=" - Comment Detail" />
+	<page page="viewCommentOverview" name="aim_viewCommentOverviewPopupLayout" title=" - Comment Detail" />
+	<page page="selectLocation" name="aim_locPopupLayout" title="AMP - Select Location" />		
+	<page page="selectOrganization" name="aim_orgPopupLayout" title="AMP - Select Organization" />		
+	<page page="addFunding" name="aim_fundingPopupLayout" title="AMP - Add Funding" />
+	<page page="selectSector" name="aim_selSectorPopupLayout" title="AMP - Select Sector" />
+
+	<page page="searchLocation" name="aim_searchlocPopupLayout" title="AMP - Search Location" />
+	<page page="searchSectors" name="aim_searchSectorPopupLayout" title="AMP - Search Sectors" />
+	
+	<page name="donorDataImport" title="AMP: Ethiopia: AIM Dashboard: Donor Data Import" /> 
+	<page page="selectPhysicalProgress" name="aim_addPhyProgPopupLayout" title="AMP - Add Physical Progress" />	
+	<page page="selectComponent" name="aim_addCompPopupLayout" title="AMP - Add Components" />	
+	<page page="selectDocument" name="aim_selectDocument" title="AMP - Add Documents and Links" />	
+	<page page="reviseCompDate" name="aim_reviseCloseDate" title="AMP - Revise Completion Date" />	
+	<page page="addChildWorkspaces" name="aim_addChildWorkspaces" title="AMP - Select Child Workspaces" />	
+	<page page="viewUserProfile" name="aim_viewUserProfile" title="AMP - User Profile" />	
+	<page name="previewActivity" title=" - Preview Activity" />	
+	<page name="viewRelatedLinks" title=" - Related Documents and Links" />
+	<page name="viewDocument" title=" - Document Details" />
+	<page name="teamDocument" title=" - Document Details" />	
+	<page name="teamEditDocument" title=" - Edit Document Details" />		
+	<page name="moreDocuments" title=" - Related Documents and Links" />		
+	<page name="customizePersonalSettings" title=" - Customized Personal Settings" />		
+	
+	<page page="updateCurrencyRates" name="aim_addExchangeRate" title="AMP - Currency Rate Editor" />	
+	<page page="updateCurrency" name="aim_updateCurrency" title="AMP - Currency Editor" />	
+	<page page="loadCurrencyRates" name="aim_loadCurrencyRates" title="AMP - Load Currency Rates" />	
+	<page page="printerFriendlyPreview" name="aim_printerFriendlyPreview" title="AMP - Preview Activity" />	
+	
+	<page name="projectByDonor_NoLayout" title=" : Reports" />
+	<page page="projectByDonor_NoLayout" name="viewbyProjectbyDonor_NoLayout" title=" : Reports" />
+
+		
+</secondary-pages>
+
+<module>
+		  <teaser name="logout" action="logoutAction.do">
+				logout.jsp
+			</teaser>
+					 
+	<teaser name="mainProjectDetails" action="mainProjectDetails.do">
+		mainProjectDetails.jsp
+	</teaser>
+	<teaser name="financingBreakdown" action="financingBreakdown.do">
+		viewFinancingBreakdown.jsp
+	</teaser>
+	<teaser name="financingBreakdownFilter" action="financingBreakdownFilter.do">
+		viewFinancingBreakdown.jsp
+	</teaser>
+	<teaser name="financialOverview" action="financialOverview.do">
+		viewFinancialOverview.jsp
+	</teaser>
+	<teaser name="yearlyInfo" action="yearlyInfo.do">
+		viewYearlyInfo.jsp
+	</teaser>
+	<teaser name="yearlyInfoFilter" action="yearlyInfoFilter.do">
+		viewYearlyInfo.jsp
+	</teaser>
+	<teaser name="quarterlyInfo" action="quarterlyInfo.do">
+		viewQuarterlyInfo.jsp
+	</teaser>
+	<teaser name="quarterlyGrouping" action="quarterlyGrouping.do">
+		viewQuarterlyInfo.jsp
+	</teaser>
+	<teaser name="quarterlyInfoFilter" action="quarterlyInfoFilter.do">
+		viewQuarterlyInfo.jsp
+	</teaser>
+	<teaser name="quarterlyComparisons" action="quarterlyComparisons.do">
+		viewQuarterlyComparisons.jsp
+	</teaser>
+	<teaser name="quarterlyComparisonsFilter" action="quarterlyComparisonsFilter.do">
+		viewQuarterlyComparisons.jsp
+	</teaser>
+	<teaser name="yearlyComparisons" action="yearlyComparisons.do">
+		viewYearlyComparisons.jsp
+	</teaser>
+	<teaser name="yearlyComparisonsFilter" action="yearlyComparisonsFilter.do">
+		viewYearlyComparisons.jsp
+	</teaser>
+	<teaser name="quarterlyDiscrepancy" action="quarterlyDiscrepancy.do">
+		viewQuarterlyDiscrepancy.jsp
+	</teaser>
+	<teaser name="quarterlyDiscrepancyFilter" action="quarterlyDiscrepancyFilter.do">
+		viewQuarterlyDiscrepancy.jsp
+	</teaser>
+	<teaser name="yearlyDiscrepancy" action="yearlyDiscrepancy.do">
+		viewYearlyDiscrepancy.jsp
+	</teaser>
+	<teaser name="yearlyDiscrepancyFilter" action="yearlyDiscrepancyFilter.do">
+		viewYearlyDiscrepancy.jsp
+	</teaser>
+	<teaser name="quarterlyDiscrepancyAll" action="quarterlyDiscrepancyAll.do">
+		viewQuarterlyDiscrepancyAll.jsp
+	</teaser>
+	<teaser name="quarterlyDiscrepancyAllFilter" action="quarterlyDiscrepancyAllFilter.do">
+		viewQuarterlyDiscrepancyAll.jsp
+	</teaser>
+	<teaser name="yearlyDiscrepancyAll" action="yearlyDiscrepancyAll.do">
+		viewYearlyDiscrepancyAll.jsp
+	</teaser>
+	<teaser name="yearlyDiscrepancyAllFilter" action="yearlyDiscrepancyAllFilter.do">
+		viewYearlyDiscrepancyAll.jsp
+	</teaser>
+	
+	<teaser name="channelOverview" action="channelOverview.do">
+                viewChannelOverview.jsp
+    </teaser>      
+
+	<teaser name="channelOverviewObjective" action="channelOverviewObjective.do">
+                viewChannelOverviewObjective.jsp
+    </teaser>      
+
+	<teaser name="physicalProgress" action="physicalProgress.do">
+                viewPhysicalProgress.jsp
+    </teaser> 
+	<teaser name="physicalProgressDescription" action="physicalProgressDescription.do">
+                viewPhysicalProgressDescription.jsp
+    </teaser>
+    <teaser name="componentDescription" action="componentDescription.do">
+                viewComponentDescription.jsp
+    </teaser>      
+	<teaser name="knowledge" action="knowledge.do">
+                viewKnowledge.jsp
+    </teaser>      
+
+	<teaser name="knowledgeNotes" action="knowledgeNotes.do">
+                viewKnowledgeNotes.jsp
+    </teaser>      
+
+	<teaser name="knowledgeDocument" action="knowledgeDocument.do">
+                viewKnowledgeDocument.jsp
+    </teaser>     
+    <!-- Teasers Add/Edit Start	-->
+    <teaser name="addEditNavigator" action="showAddEditNavigator.do">
+    	addEditNavigator.jsp
+    </teaser>
+    <teaser name="dummy" action="dummyAction.do">
+    	blank.jsp
+    </teaser>
+  
+    <!-- Teasers Add/Edit End	--> 
+</module>
+
+</config>

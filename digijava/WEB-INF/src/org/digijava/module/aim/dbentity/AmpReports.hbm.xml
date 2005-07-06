@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 2.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-2.0.dtd">
+<hibernate-mapping>
+		  <class name="org.digijava.module.aim.dbentity.AmpReports" table="AMP_REPORTS">
+					 <cache usage="read-write" />
+					 <id name="ampReportId" column="amp_report_id" type="java.lang.Long">
+								<generator class="native">
+										  <param name="sequence">AMP_REPORTS_seq</param>
+								</generator>
+					 </id>
+			 
+					 <property name="name" column="name" type="java.lang.String"/>
+					 <property name="description" column="description" type="java.lang.String"/>
+
+					 <set name="members" table="amp_member_reports" lazy="true">
+								<cache usage="read-write"/>
+								<key column="amp_report_id"/>
+								<many-to-many class="org.digijava.module.aim.dbentity.AmpTeamMember" column="amp_member_id"/>
+					 </set>
+		  </class>
+</hibernate-mapping>

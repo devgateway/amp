@@ -1,0 +1,2404 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+
+<struts-config>
+
+<form-beans>
+
+  	<form-bean
+      name="aimMyDesktopForm"
+      type="org.digijava.module.aim.form.MyDesktopForm" />
+
+	<form-bean
+      		name="aimAddLocationForm"
+      		type="org.digijava.module.aim.form.AddLocationForm" />
+	
+	<form-bean
+			  name="aimFiscalCalendarForm"
+			  type="org.digijava.module.aim.form.FiscalCalendarForm" />
+	
+	<form-bean
+			  name="aimAddFiscalCalForm"
+			  type="org.digijava.module.aim.form.AddFiscalCalendarForm" />
+	
+	<form-bean
+			  name="aimOrgManagerForm"
+			  type="org.digijava.module.aim.form.OrgManagerForm" />
+	
+	<form-bean
+			  name="aimAddOrgForm"
+			  type="org.digijava.module.aim.form.AddOrgForm" />
+	
+	<form-bean
+			  name="aimOrgGroupManagerForm"
+			  type="org.digijava.module.aim.form.OrgGroupManagerForm" />
+	
+	<form-bean
+			  name="aimAddOrgGroupForm"
+			  type="org.digijava.module.aim.form.AddOrgGroupForm" />
+	  
+	<form-bean
+      		name="aimViewOrgForm"
+      		type="org.digijava.module.aim.form.ViewOrgForm" />
+      		
+	<form-bean
+      name="aimMainProjectDetailsForm"
+      type="org.digijava.module.aim.form.MainProjectDetailsForm" />
+	  
+	<form-bean
+      name="aimChannelOverviewForm"
+      type="org.digijava.module.aim.form.ChannelOverviewForm" />
+
+	<form-bean
+      name="aimChannelOverviewDescriptionForm"
+      type="org.digijava.module.aim.form.ChannelOverviewDescriptionForm" />
+
+	<form-bean
+      name="aimChannelOverviewObjectiveForm"
+      type="org.digijava.module.aim.form.ChannelOverviewObjectiveForm" />
+
+      
+   <form-bean
+      name="aimFinancialOverviewForm"
+      type="org.digijava.module.aim.form.FinancialOverviewForm" />
+      
+   <form-bean
+   	  name="aimQuarterlyInfoForm"
+   	  type="org.digijava.module.aim.form.QuarterlyInfoForm" />
+   	  
+   <form-bean
+   	  name="aimYearlyInfoForm"
+   	  type="org.digijava.module.aim.form.YearlyInfoForm" />
+   	  
+   <form-bean
+   		name="aimYearlyComparisonsForm"
+   		type="org.digijava.module.aim.form.YearlyComparisonsForm" />
+   		
+   	<form-bean
+   		name="aimQuarterlyComparisonsForm"
+   		type="org.digijava.module.aim.form.QuarterlyComparisonsForm" />	
+      
+    <form-bean
+   	  name="aimFinancingBreakdownForm"
+   	  type="org.digijava.module.aim.form.FinancingBreakdownForm" />
+
+	<form-bean
+		name="aimQuarterlyDiscrepancyForm"
+		type="org.digijava.module.aim.form.QuarterlyDiscrepancyForm"/>
+		
+	<form-bean
+		name="aimYearlyDiscrepancyForm"
+		type="org.digijava.module.aim.form.YearlyDiscrepancyForm"/>
+
+		
+	<form-bean
+		name="aimQuarterlyDiscrepancyAllForm"
+		type="org.digijava.module.aim.form.QuarterlyDiscrepancyAllForm"/>
+		
+	<form-bean
+		name="aimYearlyDiscrepancyAllForm"
+		type="org.digijava.module.aim.form.YearlyDiscrepancyAllForm"/>
+
+   <form-bean
+      name="aimPhysicalProgressForm"
+      type="org.digijava.module.aim.form.PhysicalProgressForm" />
+	
+   <form-bean
+      name="aimKnowledgeForm"
+      type="org.digijava.module.aim.form.KnowledgeForm" />  
+
+
+<form-bean name="addAmpProjectDetailsForm" type="org.digijava.module.aim.form.AddAmpProjectDetailsForm" />
+	
+	<form-bean
+			  name="editPhysicalProgressForm"    type="org.digijava.module.aim.form.EditPhysicalProgressForm" />
+
+	<form-bean
+			  name="aimSectorsForm"
+			  type="org.digijava.module.aim.form.SectorsForm" />
+
+	<form-bean
+			  name="aimAddSectorForm"
+			  type="org.digijava.module.aim.form.AddSectorForm" />
+
+	<form-bean
+      			name="aimStatusListForm"
+      			type="org.digijava.module.aim.form.StatusListForm" />
+      
+     <form-bean
+      			name="aimStatusItemForm"
+      			type="org.digijava.module.aim.form.StatusItemForm" />
+			  
+     <form-bean
+      			name="aimRelatedLinksForm"
+      			type="org.digijava.module.aim.form.RelatedLinksForm" />			  
+
+<form-bean 
+	name="aimCommitmentbyDonorForm" 
+	type="org.digijava.module.aim.form.CommitmentbyDonorForm" />
+<form-bean 
+	name="aimMulitlateralbyDonorForm" 
+	type="org.digijava.module.aim.form.MulitlateralbyDonorForm" />
+
+	<form-bean name="aimCommitmentbySectorForm" type="org.digijava.module.aim.form.CommitmentbySectorForm" />
+
+
+
+	<form-bean
+			  name="aimThemeForm"
+			  type="org.digijava.module.aim.form.ThemeForm" />
+
+    <form-bean
+     			name="aimUserEmailForm"
+     			type="org.digijava.module.um.form.UserEmailForm" />
+	
+	<form-bean
+			  name="aimAddThemeForm"
+			  type="org.digijava.module.aim.form.AddThemeForm" />
+				  
+	<form-bean
+			  name="aimViewSectorForm"
+			  type="org.digijava.module.aim.form.AddSectorForm" />
+
+	<form-bean
+			  name="aimAmpActivityForm"
+			  type="org.digijava.module.aim.form.AmpActivityForm" />
+	
+	<form-bean
+			  name="aimCurrencyForm"
+			  type="org.digijava.module.aim.form.CurrencyForm" />
+	
+	<form-bean
+			  name="aimAddCurrencyForm"
+			  type="org.digijava.module.aim.form.AddCurrencyForm" />
+	
+	<form-bean
+			  name="aimSearchSectorForm"
+			  type="org.digijava.module.aim.form.SearchSectorForm" />
+	
+	<form-bean
+			  name="aimWorkspaceForm"
+			  type="org.digijava.module.aim.form.WorkspaceForm" />
+	
+	<form-bean
+			  name="aimUpdateWorkspaceForm"
+			  type="org.digijava.module.aim.form.UpdateWorkspaceForm" />
+	
+	<form-bean
+			  name="aimRolesForm"
+			  type="org.digijava.module.aim.form.RolesForm" />
+	
+	<form-bean
+			  name="aimUpdateRoleForm"
+			  type="org.digijava.module.aim.form.UpdateRoleForm" />
+	
+	<form-bean
+			  name="aimTeamMemberForm"
+			  type="org.digijava.module.aim.form.TeamMemberForm" />
+	
+	<form-bean
+			  name="aimLoginForm"
+			  type="org.digijava.module.aim.form.LoginForm" />
+	
+	<form-bean
+			  name="aimUpdateAppSettingsForm"
+			  type="org.digijava.module.aim.form.UpdateAppSettingsForm" />
+	
+	<form-bean
+			  name="aimTeamActivitiesForm"
+			  type="org.digijava.module.aim.form.TeamActivitiesForm" />
+
+	<form-bean
+			  name="aimMemberActivitiesForm"
+			  type="org.digijava.module.aim.form.TeamActivitiesForm" />	
+	
+	<form-bean
+			  name="aimAssignActivityForm"
+			  type="org.digijava.module.aim.form.AssignActivityForm" />
+	
+	<form-bean
+			  name="aimChangePasswordForm"
+			  type="org.digijava.module.aim.form.ChangePasswordForm" />
+	
+	<form-bean
+			  name="aimUserRegisterForm"
+			  type="org.digijava.module.um.form.UserRegisterForm" />
+	
+	<form-bean
+			  name="aimReportsForm"
+			  type="org.digijava.module.aim.form.ReportsForm" />	
+	
+	<form-bean
+			  name="aimTeamReportsForm"
+			  type="org.digijava.module.aim.form.ReportsForm" />	
+	
+	<form-bean
+			  name="aimMemberReportsForm"
+			  type="org.digijava.module.aim.form.ReportsForm" />	
+	
+	<form-bean
+			  name="aimAddDocumentForm"
+			  type="org.digijava.module.cms.form.CMSContentItemForm" />	
+	
+	<form-bean 
+			  name="cmsForm" 
+			  type="org.digijava.module.cms.form.CMSForm" />
+
+	<form-bean 
+			  name="aimTeamPagesForm" 
+			  type="org.digijava.module.aim.form.TeamPagesForm" />	
+
+	<form-bean 
+			  name="aimEditActivityForm" 
+			  type="org.digijava.module.aim.form.EditActivityForm" />	
+
+	<form-bean 
+			  name="aimCurrencyRateForm" 
+			  type="org.digijava.module.aim.form.CurrencyRateForm" />
+	
+	<form-bean
+      name="aimDonorDataImportForm"
+      type="org.digijava.module.aim.form.DonorDataImportForm" />
+
+	<form-bean
+      name="aimUserDetailForm"
+      type="org.digijava.module.aim.form.UserDetailForm" />
+	</form-beans> 
+
+  <global-forwards>
+			 <forward name="viewMyDesktop" path="/aim/viewMyDesktop.do" /> 
+			 <forward name="index" path="/aim/index.do" /> 
+  </global-forwards>
+
+<action-mappings>	
+	<action 
+		name="aimUserDetailForm"
+		type="org.digijava.module.aim.action.ViewUserProfile" 		
+		scope="request" validate="false" path="/aim/userProfile">
+	    <forward name="forward" path="/showLayout.do?layout=aim_viewUserProfile" />
+    </action>
+
+
+	<action 
+			  name="aimLoginForm"
+			  type="org.digijava.module.aim.action.ViewAmp" 
+			  scope="request" validate="false" path="/aim/index">
+			  <forward name="forward" path="/showLayout.do?layout=index" />
+    </action>
+   
+    <action name="aimMyDesktopForm"
+     	type="org.digijava.module.aim.action.ViewMyDesktop" 
+     	scope="request" validate="false" path="/aim/viewMyDesktop">
+    <forward name="forward" path="/showLayout.do?layout=viewMyDesktop" />
+    <forward name="index" path="/aim/index.do" redirect="true" />
+    </action>
+
+	 <action name="aimDonorDataImportForm"
+     	type="org.digijava.module.aim.action.DonorDataImport" 
+     	scope="request" validate="false" path="/aim/donorDataImport">
+    <forward name="forward" path="/showLayout.do?layout=donorDataImport" />
+    <forward name="index" path="/aim/index.do" redirect="true" />
+    </action>
+
+	<action name="aimChannelOverviewDescriptionForm"
+     	type="org.digijava.module.aim.action.ViewChannelOverviewDescription" 
+     	scope="request" validate="false" path="/aim/viewChannelOverviewDescription">
+    <forward name="forward" path="/showLayout.do?layout=viewChannelOverviewDescription" />
+    </action>
+	
+     
+	<action name="aimYearlyComparisonsForm"
+    	type="org.digijava.module.aim.action.YearlyComparisonsFilter"
+    	scope="request" validate="false" path="/aim/yearlyComparisonsFilter">
+    <forward name="forward" path="/showLayout.do?layout=viewYearlyComparisons"/>
+    </action>
+	
+	
+    
+   
+  <!-- START TEASERS -->
+	<action forward="/showLayout.do?layout=layoutFinancingBreakdown" 
+		path="/aim/viewFinancingBreakdown" />
+		
+	<action forward="/showLayout.do?layout=layoutFinancingBreakdownFilter" 
+		path="/aim/viewFinancingBreakdownFilter" />
+
+	<action forward="/showLayout.do?layout=layoutChannelOverview" 
+        path="/aim/viewChannelOverview" />
+	
+	<action forward="/showLayout.do?layout=layoutChannelOverviewObjective" 
+        path="/aim/viewChannelOverviewObjective" />
+
+	<action forward="/showLayout.do?layout=layoutPhysicalProgress" 
+        path="/aim/viewPhysicalProgress" />
+	
+	<action forward="/showLayout.do?layout=layoutComponentDescription" 
+        path="/aim/viewComponentDescription" />
+	
+	<action forward="/showLayout.do?layout=layoutPhysicalProgressDescription" 
+        path="/aim/viewPhysicalProgressDescription" />
+
+	<action forward="/showLayout.do?layout=layoutKnowledge" 
+        path="/aim/viewKnowledge" />
+
+	<action forward="/showLayout.do?layout=layoutKnowledgeNotes" 
+        path="/aim/viewKnowledgeNotes" />
+
+	<action forward="/showLayout.do?layout=layoutKnowledgeDocument" 
+        path="/aim/viewKnowledgeDocument" />
+		
+	<action forward="/showLayout.do?layout=layoutFinancialOverview" 
+		path="/aim/viewFinancialOverview" />
+		
+	<action forward="/showLayout.do?layout=layoutYearlyInfo" 
+		path="/aim/viewYearlyInfo" />
+		
+	<action forward="/showLayout.do?layout=layoutYearlyInfoFilter" 
+		path="/aim/viewYearlyInfoFilter" />
+		
+	<action forward="/showLayout.do?layout=layoutQuarterlyInfo" 
+		path="/aim/viewQuarterlyInfo" />
+		
+	<action forward="/showLayout.do?layout=layoutQuarterlyGrouping" 
+		path="/aim/viewQuarterlyGrouping" />
+		
+	<action forward="/showLayout.do?layout=layoutQuarterlyInfoFilter" 
+		path="/aim/viewQuarterlyInfoFilter" />
+	
+	<action forward="/showLayout.do?layout=layoutQuarterlyComparisons" 
+			  path="/aim/viewQuarterlyComparisons" />
+			  
+	<action forward="/showLayout.do?layout=layoutQuarterlyComparisonsFilter" 
+			  path="/aim/viewQuarterlyComparisonsFilter" />
+			  	
+	<action forward="/showLayout.do?layout=layoutYearlyComparisons" 
+			  path="/aim/viewYearlyComparisons" />
+	
+	<action forward="/showLayout.do?layout=layoutYearlyComparisonsFilter" 
+			  path="/aim/viewYearlyComparisonsFilter" />
+			  
+	<action forward="/showLayout.do?layout=layoutQuarterlyDiscrepancy" 
+			  path="/aim/viewQuarterlyDiscrepancy" />
+	
+	<action forward="/showLayout.do?layout=layoutQuarterlyDiscrepancyFilter" 
+			  path="/aim/viewQuarterlyDiscrepancyFilter" />
+			  		  
+	<action forward="/showLayout.do?layout=layoutYearlyDiscrepancy"
+			path="/aim/viewYearlyDiscrepancy"/>
+			
+	<action forward="/showLayout.do?layout=layoutYearlyDiscrepancyFilter"
+			path="/aim/viewYearlyDiscrepancyFilter"/>
+			
+	<action forward="/showLayout.do?layout=layoutQuarterlyDiscrepancyAll" 
+			  path="/aim/viewQuarterlyDiscrepancyAll" />
+			  
+	<action forward="/showLayout.do?layout=layoutQuarterlyDiscrepancyAllFilter" 
+			  path="/aim/viewQuarterlyDiscrepancyAllFilter" />
+			  
+	<action forward="/showLayout.do?layout=layoutYearlyDiscrepancyAll" 
+			  path="/aim/viewYearlyDiscrepancyAll" />
+			  
+	<action forward="/showLayout.do?layout=layoutYearlyDiscrepancyAllFilter" 
+			  path="/aim/viewYearlyDiscrepancyAllFilter" />
+	
+
+	<action forward="/showLayout.do?layout=logoutLayout" 
+			  path="/aim/logout" />
+
+	<action
+			  type="org.digijava.module.aim.action.Logout"
+			  scope="request"
+			  validate="false"
+			  path="/aim/logoutAction">
+	</action>	
+	
+	<action name="aimMainProjectDetailsForm" 
+		type="org.digijava.module.aim.action.ViewMainProjectDetails"
+		scope="request"
+		validate="false"
+		path="/aim/mainProjectDetails" />
+		
+	<action name="aimFinancingBreakdownForm"
+    	type="org.digijava.module.aim.action.ViewFinancingBreakdown"
+		scope="request"
+    	validate="false" 
+		path="/aim/financingBreakdown">
+	</action>
+	
+	<action name="aimFinancingBreakdownForm"
+    	type="org.digijava.module.aim.action.FinancingBreakdownFilter"
+		scope="request"
+    	validate="true" 
+		input="/aim/viewFinancingBreakdownFilter"
+		path="/aim/financingBreakdownFilter">
+	</action>
+	
+	<action name="aimFinancialOverviewForm"
+     	type="org.digijava.module.aim.action.ViewFinancialOverview" 
+     	scope="request" 
+		validate="false" 
+		path="/aim/financialOverview">
+    </action>
+
+	<action name="aimYearlyInfoForm"
+    	type="org.digijava.module.aim.action.ViewYearlyInfo"
+    	scope="request" 
+		validate="true"
+		input="/aim/viewYearlyInfo" 
+		path="/aim/yearlyInfo">
+    </action>
+	
+	<action name="aimYearlyInfoForm"
+    	type="org.digijava.module.aim.action.YearlyInfoFilter"
+    	scope="request" 
+		validate="true" 
+		input="/aim/viewYearlyInfoFilter"
+		path="/aim/yearlyInfoFilter">
+    </action>
+
+    <action name="aimQuarterlyInfoForm"
+    	type="org.digijava.module.aim.action.ViewQuarterlyInfo"
+    	scope="request" 
+		validate="true"
+		input="/aim/viewQuarterlyInfo" 
+		path="/aim/quarterlyInfo">
+		
+	</action>
+	
+	 <action name="aimQuarterlyInfoForm"
+    	type="org.digijava.module.aim.action.ViewQuarterlyGrouping"
+    	scope="request" 
+		validate="true"
+		input="/aim/viewQuarterlyGrouping" 
+		path="/aim/quarterlyGrouping">
+	</action>
+	
+	<action name="aimQuarterlyInfoForm"
+    	type="org.digijava.module.aim.action.QuarterlyInfoFilter"
+    	scope="request" 
+		validate="true"
+		input="/aim/viewQuarterlyInfoFilter" 
+		path="/aim/quarterlyInfoFilter">
+    </action>
+	
+	<action name="aimQuarterlyComparisonsForm"
+    	type="org.digijava.module.aim.action.ViewQuarterlyComparisons"
+    	scope="request" 
+		validate="true"
+		input="/aim/viewQuarterlyComparisons" 
+		path="/aim/quarterlyComparisons">
+    </action>
+	
+	<action name="aimQuarterlyComparisonsForm"
+    	type="org.digijava.module.aim.action.QuarterlyComparisonsFilter"
+    	scope="request" 
+		validate="true"
+		input="/aim/viewQuarterlyComparisonsFilter" 
+		path="/aim/quarterlyComparisonsFilter">
+	</action>
+	
+	<action name="aimYearlyComparisonsForm"
+    	type="org.digijava.module.aim.action.ViewYearlyComparisons"
+    	scope="request" 
+		validate="true"
+		input="/aim/viewYearlyComparisons" 
+		path="/aim/yearlyComparisons">
+    </action>
+	
+	<action name="aimYearlyComparisonsForm"
+    	type="org.digijava.module.aim.action.YearlyComparisonsFilter"
+    	scope="request" 
+		validate="true"
+		input="/aim/viewYearlyComparisonsFilter" 
+		path="/aim/yearlyComparisonsFilter">
+    </action>
+	 
+	<action name="aimQuarterlyDiscrepancyForm"
+    	type="org.digijava.module.aim.action.ViewQuarterlyDiscrepancy"
+    	scope="request" 
+		validate="false"
+		path="/aim/quarterlyDiscrepancy">
+    </action>
+	
+	<action name="aimQuarterlyDiscrepancyForm"
+    	type="org.digijava.module.aim.action.QuarterlyDiscrepancyFilter"
+    	scope="request" 
+		validate="true"
+		input="/aim/viewQuarterlyDiscrepancyFilter" 
+		path="/aim/quarterlyDiscrepancyFilter">
+    </action>
+	
+	<action name="aimYearlyDiscrepancyForm"
+			type="org.digijava.module.aim.action.ViewYearlyDiscrepancy"
+			scope="request"
+			validate="false"
+			path="/aim/yearlyDiscrepancy">
+	</action>
+	
+	<action name="aimYearlyDiscrepancyForm"
+			type="org.digijava.module.aim.action.YearlyDiscrepancyFilter"
+			scope="request"
+			validate="true"
+			input="/aim/viewYearlyDiscrepancyFilter" 
+			path="/aim/yearlyDiscrepancyFilter">
+	</action>
+	
+	<action name="aimQuarterlyDiscrepancyAllForm"
+    	type="org.digijava.module.aim.action.ViewQuarterlyDiscrepancyAll"
+    	scope="request" 
+		validate="false"
+		path="/aim/quarterlyDiscrepancyAll">
+    </action>
+	
+	<action name="aimQuarterlyDiscrepancyAllForm"
+    	type="org.digijava.module.aim.action.QuarterlyDiscrepancyAllFilter"
+    	scope="request" 
+		validate="false"
+		path="/aim/quarterlyDiscrepancyAllFilter">
+    </action>
+	
+	<action name="aimYearlyDiscrepancyAllForm"
+    	type="org.digijava.module.aim.action.ViewYearlyDiscrepancyAll"
+    	scope="request" 
+		validate="false"
+		path="/aim/yearlyDiscrepancyAll">
+    </action>
+	
+	<action name="aimYearlyDiscrepancyAllForm"
+    	type="org.digijava.module.aim.action.YearlyDiscrepancyAllFilter"
+    	scope="request" 
+		validate="false"
+		path="/aim/yearlyDiscrepancyAllFilter">
+    </action>
+	
+    <action name="aimChannelOverviewForm"
+	    type="org.digijava.module.aim.action.ViewChannelOverview"
+        validate="false" 
+        path="/aim/channelOverview">
+    </action>
+
+	<action name="aimChannelOverviewObjectiveForm"
+	    type="org.digijava.module.aim.action.ViewChannelOverviewObjective"
+        validate="false" 
+        path="/aim/channelOverviewObjective">
+    </action>
+
+	<action name="aimPhysicalProgressForm"
+	    type="org.digijava.module.aim.action.ViewPhysicalProgress"
+        validate="false"
+        scope = "request" 
+        path="/aim/physicalProgress">
+    </action>
+
+	<action name="aimPhysicalProgressForm"
+	    type="org.digijava.module.aim.action.ViewPhysicalProgressDescription"
+        validate="false" 
+        scope = "request"
+        path="/aim/physicalProgressDescription">
+    </action>
+    
+    <action name="aimPhysicalProgressForm"
+	    type="org.digijava.module.aim.action.ViewComponentDescription"
+        validate="false" 
+        scope = "request"
+        path="/aim/componentDescription">
+    </action>
+
+	<action name="aimKnowledgeForm"
+	    type="org.digijava.module.aim.action.ViewKnowledge"
+        validate="false" 
+        path="/aim/knowledge">
+    </action>
+
+	<action name="aimKnowledgeForm"
+	    type="org.digijava.module.aim.action.ViewKnowledgeNotes"
+        validate="false" 
+        path="/aim/knowledgeNotes">
+    </action>
+
+	<action name="aimKnowledgeForm"
+	    type="org.digijava.module.aim.action.ViewKnowledgeDocument"
+        validate="false" 
+        path="/aim/knowledgeDocument">
+    </action>
+	
+	
+  <!-- END TEASERS  -->
+  
+	<action name="aimPhysicalProgressForm"
+     	type="org.digijava.module.aim.action.ViewPhysicalProgress" 
+     	scope="request" validate="false" path="/aim/editPhysicalProgress">
+    <forward name="forward" path="/showLayout.do?layout=editPhysicalProgress" />
+    </action>
+
+	<action name="aimPhysicalProgressForm"   type="org.digijava.module.aim.action.ViewPhysicalProgressDescription"
+    scope="request" validate="false" path="/aim/getPhysicalProgress">
+    <forward name="forward"
+    path="/showLayout.do?layout=getPhysicalProgress" />
+	</action>
+
+	<action name="aimKnowledgeForm"
+     	type="org.digijava.module.aim.action.ViewKnowledgeDocument" 
+     	scope="request" validate="false" path="/aim/getKnowledgeDocument">
+    <forward name="forward" path="/showLayout.do?layout=getKnowledgeDocument" />
+    </action>
+
+	<action name="aimKnowledgeForm"
+     type="org.digijava.module.aim.action.ViewKnowledgeNotes" 
+     scope="request" validate="false" path="/aim/getKnowledgeNotes">
+    <forward name="forward" path="/showLayout.do?layout=getKnowledgeNotes" />
+    </action>
+
+	
+	<!-- For adding and activity -->
+
+	<action name="aimAmpActivityForm"   type="org.digijava.module.aim.action.ShowSubSectorList"
+    scope="session" validate="false" path="/aim/addSubSectorList">
+    <forward name="forward"
+    path="/showLayout.do?layout=addSubSectorList" />
+	</action>
+
+	
+	<action name="aimAmpActivityForm" type="org.digijava.module.aim.action.AddSectorList" scope="session" validate="true" path="/aim/createSectorList">
+      <forward name="forward"
+    path="/showLayout.do?layout=addSectorList" />
+	</action>
+
+	<action name="aimAmpActivityForm" type="org.digijava.module.aim.action.AddSectorList" scope="session" validate="true" path="/aim/createSubSectorList">
+      <forward name="forward"
+    path="/showLayout.do?layout=addSubSectorList" />
+	</action>
+
+
+	<action name="aimAmpActivityForm" type="org.digijava.module.aim.action.AddLocationList" scope="session" validate="true" path="/aim/createLocationList">
+      <forward name="forward"
+    path="/showLayout.do?layout=addLocationList" />
+	</action>
+
+	<action name="aimAmpActivityForm"   type="org.digijava.module.aim.action.ShowAddOrganisation"
+    scope="session" validate="true" path="/aim/addFAOrgList">
+    <forward name="forward"
+    path="/showLayout.do?layout=addFAOrgList" />
+	</action>
+
+	<action name="aimAmpActivityForm"   type="org.digijava.module.aim.action.ShowAddOrganisation"
+    scope="session" validate="true" path="/aim/addRAOrgList">
+    <forward name="forward"
+    path="/showLayout.do?layout=addRAOrgList" />
+	</action>
+
+	<action name="aimAmpActivityForm"   type="org.digijava.module.aim.action.ShowAddOrganisation"
+    scope="session" validate="true" path="/aim/addIAOrgList">
+    <forward name="forward"
+    path="/showLayout.do?layout=addIAOrgList" />
+	</action>
+
+	<action name="aimAmpActivityForm"   type="org.digijava.module.aim.action.ShowAddOrganisation"
+    scope="session" validate="true" path="/aim/addRIOrgList">
+    <forward name="forward"
+    path="/showLayout.do?layout=addRIOrgList" />
+	</action>
+
+	<action name="aimAmpActivityForm"   type="org.digijava.module.aim.action.AddOrganisationList"
+    scope="session" validate="true" path="/aim/createOrganisationList">
+    <forward name="forward"
+    path="/showLayout.do?layout=addRIOrgList" />
+	</action>
+
+	<action name="aimAmpActivityForm"   type="org.digijava.module.aim.action.AddOrganisationList"
+    scope="session" validate="true" path="/aim/createOrganisationList">
+    <forward name="forward"
+    path="/showLayout.do?layout=addFAOrgList" />
+	</action>
+
+	<action name="aimAmpActivityForm"   type="org.digijava.module.aim.action.AddOrganisationList"
+    scope="session" validate="true" path="/aim/createOrganisationList">
+    <forward name="forward"
+    path="/showLayout.do?layout=addRAOrgList" />
+	</action>
+
+	<action name="aimAmpActivityForm"   type="org.digijava.module.aim.action.AddOrganisationList"
+    scope="session" validate="true" path="/aim/createOrganisationList">
+    <forward name="forward"
+	path="/showLayout.do?layout=addIAOrgList" />
+	</action>
+
+	
+	<!-- End of activity action events -->
+
+	<action
+		name="aimRelatedLinksForm"
+		type="org.digijava.module.aim.action.ViewRelatedLinks"
+		scope="session"
+		validate="false"
+		path="/aim/relatedLinksList">
+ 	  	<forward name="forward" path="/showLayout.do?layout=viewRelatedLinks" />
+		<forward name="index" path="/aim/index.do" redirect="true" />
+	</action>
+
+	<action
+		name="aimRelatedLinksForm"
+		type="org.digijava.module.aim.action.ViewRelatedLinks"
+		scope="session"
+		validate="false"
+		path="/aim/viewAllDocuments">
+ 	  	<forward name="forward" path="/showLayout.do?layout=moreDocuments" />
+		<forward name="index" path="/aim/index.do" redirect="true" />
+	</action>	
+	
+	<action
+		name="aimRelatedLinksForm"
+		type="org.digijava.module.aim.action.UpdateDocument"
+		scope="session"
+		validate="false"
+		path="/aim/updateDocumentDetails">
+ 	  	<forward name="showEditDocument1" path="/showLayout.do?layout=editDocument" />
+ 	  	<forward name="showEditDocument2" path="/showLayout.do?layout=teamEditDocument" />
+ 	  	<forward name="updated1" path="/showLayout.do?layout=editDocument" />
+ 	  	<forward name="updated2" path="/aim/relatedLinksList.do" redirect="true" /> 	  	
+		<forward name="index" path="/aim/index.do" redirect="true" />
+	</action>	
+
+	<action
+		name="aimRelatedLinksForm"
+		type="org.digijava.module.aim.action.DeleteDocument"
+		scope="session"
+		validate="false"
+		path="/aim/deleteDocument">
+ 	  	<forward name="forward" path="/aim/relatedLinksList.do" redirect="true" /> 	  	
+		<forward name="index" path="/aim/index.do" redirect="true" />
+	</action>	
+
+	<action
+		name="aimRelatedLinksForm"
+		type="org.digijava.module.aim.action.GetDocumentDetails"
+		scope="session"
+		validate="false"
+		path="/aim/getDocumentDetails">
+ 	  	<forward name="forward1" path="/showLayout.do?layout=viewDocument" />
+ 	  	<forward name="forward2" path="/showLayout.do?layout=teamDocument" /> 	  	
+		<forward name="index" path="/aim/index.do" redirect="true" />
+	</action>	
+
+	<action 
+			  name="aimSectorsForm"
+			  type="org.digijava.module.aim.action.GetSectors"
+			  scope="request"
+			  validate="false"
+			  path="/aim/sectorManager">
+			  <forward name="forward" path="/showLayout.do?layout=sectorManager" />
+			  <forward name="index" path="/aim/index.do" redirect="true" />			  
+	</action>
+
+	<action 
+			  name="aimAddSectorForm"
+			  type="org.digijava.module.aim.action.AddSector"
+			  scope="request"
+			  validate="false"
+			  path="/aim/addSector">
+			  <forward name="forward" path="/showLayout.do?layout=addSector" />
+			  <forward name="added" path="/aim/sectorManager.do?sectorId=0" /> 	  
+  			  <forward name="index" path="/aim/index.do" redirect="true" />
+	</action>
+	
+	<action 
+			  name="aimAddSectorForm"
+			  type="org.digijava.module.aim.action.EditSector"
+			  scope="request"
+			  validate="false"
+			  path="/aim/editSector">
+			  <forward name="forward" path="/showLayout.do?layout=editSector" />
+			  <forward name="edited" path="/aim/sectorManager.do?sectorId=0" /> 	  
+			  <forward name="index" path="/aim/index.do" redirect="true" />			  
+	</action>
+
+	<action 
+			  name="aimAddSectorForm"
+			  type="org.digijava.module.aim.action.DeleteSector"
+			  scope="request"
+			  validate="false"
+			  path="/aim/deleteSector">
+			  <forward name="forward" path="/showLayout.do?layout=deleteSector" />
+			  <forward name="deleted" path="/aim/sectorManager.do?sectorId=0" /> 	  
+			  <forward name="index" path="/aim/index.do" redirect="true" />			  
+	</action>
+	
+	<action 
+			  name="aimAddSectorForm"
+			  type="org.digijava.module.aim.action.ViewSectorDetails"
+			  scope="request"
+			  validate="false"
+			  path="/aim/viewSectorDetails">
+			  <forward name="forward" path="/showLayout.do?layout=viewSectorDetails" />
+			  <forward name="index" path="/aim/index.do" redirect="true" />			  
+	</action>
+
+	<action 
+			  name="aimThemeForm"
+			  type="org.digijava.module.aim.action.ThemeManager"
+			  scope="request"
+			  validate="false"
+			  path="/aim/themeManager">
+			  <forward name="forward" path="/showLayout.do?layout=themeManager" />
+			  <forward name="index" path="/aim/index.do" redirect="true" />			  
+	</action>
+
+	<action 
+			  name="aimAddThemeForm"
+			  type="org.digijava.module.aim.action.AddTheme"
+			  scope="request"
+			  validate="false"
+			  input="/showLayout.do?layout=addTheme"
+			  path="/aim/addTheme">
+			  <forward name="forward" path="/showLayout.do?layout=addTheme" />
+			  <forward name="added" path="/aim/themeManager.do?page=1" /> 	
+			  <forward name="index" path="/aim/index.do" redirect="true" />			    
+	</action>
+	
+	<action 
+			  name="aimAddThemeForm"
+			  type="org.digijava.module.aim.action.GetTheme"
+			  scope="request"
+			  validate="false"
+			  path="/aim/getTheme">
+			  <forward name="editTheme" path="/showLayout.do?layout=editTheme" />
+			  <forward name="themeManager" path="/aim/themeManager.do?page=1" />
+			  <forward name="deleteTheme" path="/showLayout.do?layout=deleteTheme" />
+			  <forward name="index" path="/aim/index.do" redirect="true" />			  
+	</action>
+
+	<action 
+			  name="aimAddThemeForm"
+			  type="org.digijava.module.aim.action.EditTheme"
+			  scope="request"
+			  validate="false"
+			  path="/aim/editTheme">
+			  <forward name="forward" path="/aim/themeManager.do?page=1" />
+			  <forward name="index" path="/aim/index.do" redirect="true" />			  
+	</action>
+
+	<action 
+			  name="aimAddThemeForm"
+			  type="org.digijava.module.aim.action.GetTheme"
+			  scope="request"
+			  validate="false"
+			  path="/aim/viewTheme">
+			  <forward name="forward" path="/showLayout.do?layout=viewTheme" />
+  			  <forward name="index" path="/aim/index.do" redirect="true" />
+	</action>
+	
+	<action 
+			  name="aimAddThemeForm"
+			  type="org.digijava.module.aim.action.DeleteTheme"
+			  scope="request"
+			  validate="false"
+			  path="/aim/deleteTheme">
+			  <forward name="forward" path="/aim/themeManager.do?page=1" />
+			  <forward name="index" path="/aim/index.do" redirect="true" />			  
+	</action>	
+	
+	<action 
+			  name="aimAddLocationForm"
+			  type="org.digijava.module.aim.action.AddLocation" 
+			  scope="session"
+			  validate="false"
+			  path="/aim/addLocation">
+			  <forward name="forward" path="/showLayout.do?layout=aim_addlocPopupLayout" />
+			  <forward name="added" path="/aim/locationManager.do" redirect="true" />
+    </action>
+
+	<action 
+			  name="aimAddLocationForm"
+			  type="org.digijava.module.aim.action.LocationManager"
+			  scope="session"
+			  validate="false"
+			  path="/aim/locationManager">
+			  <forward name="forward" path="/showLayout.do?layout=locationManager" />
+			  <forward name="index" path="/aim/index.do" redirect="true" />
+	</action>
+	
+	<action 
+			  name="aimFiscalCalendarForm"
+			  type="org.digijava.module.aim.action.FiscalCalendarManager"
+			  scope="request"
+			  validate="false"
+			  path="/aim/fiscalCalendarManager">
+			  <forward name="forward" path="/showLayout.do?layout=fiscalCalendarManager" />
+			  <forward name="index" path="/aim/index.do" redirect="true" />			  
+	</action>
+
+	<action 
+			  name="aimAddFiscalCalForm"
+			  type="org.digijava.module.aim.action.EditFiscalCalendar"
+			  scope="request"
+			  validate="true"
+			  input="/showLayout.do?layout=addFiscalCalendar"
+			  path="/aim/editFiscalCalendar">
+			  <forward name="forward" path="/showLayout.do?layout=addFiscalCalendar" />
+			  <forward name="index" path="/aim/index.do" redirect="true" />
+			  <forward name="added" path="/aim/fiscalCalendarManager.do" redirect="true" />	  
+	</action>
+	
+	<action 
+			  name="aimOrgManagerForm"
+			  type="org.digijava.module.aim.action.OrganisationManager"
+			  scope="session"
+			  validate="false"
+			  path="/aim/organisationManager">
+			  <forward name="forward" path="/showLayout.do?layout=organisationManager" />
+			  <forward name="index" path="/aim/index.do" redirect="true" />			  
+	</action>
+	
+	<action 
+			  name="aimOrgManagerForm"
+			  type="org.digijava.module.aim.action.OrganisationSearch"
+			  scope="session"
+			  validate="false"
+			  path="/aim/organisationSearch">
+			  <forward name="forward" path="/showLayout.do?layout=organisationManager" />
+			  <forward name="index" path="/aim/index.do" redirect="true" />			  
+	</action>
+
+	<action 
+			  name="aimAddOrgForm"
+			  type="org.digijava.module.aim.action.EditOrganisation"
+			  scope="request"
+			  validate="false"
+			  path="/aim/editOrganisation">
+			  <forward name="forward" path="/showLayout.do?layout=editOrganisation" />
+			  <forward name="index" path="/aim/index.do" redirect="true" />
+			  <forward name="added" path="/aim/organisationManager.do" redirect="true" />	  
+	</action>
+	
+	<action 
+			  name="aimOrgGroupManagerForm"
+			  type="org.digijava.module.aim.action.OrgGroupManager"
+			  scope="request"
+			  validate="false"
+			  path="/aim/orgGroupManager">
+			  <forward name="forward" path="/showLayout.do?layout=orgGroupManager" />
+			  <forward name="index" path="/aim/index.do" redirect="true" />			  
+	</action>
+
+	<action 
+			  name="aimAddOrgGroupForm"
+			  type="org.digijava.module.aim.action.EditOrgGroup"
+			  scope="request"
+			  validate="false"
+			  path="/aim/editOrgGroup">
+			  <forward name="forward" path="/showLayout.do?layout=editOrgGroup" />
+			  <forward name="index" path="/aim/index.do" redirect="true" />
+			  <forward name="added" path="/aim/orgGroupManager.do" redirect="true" />
+			  <forward name="groupadded" path="/aim/editOrganisation.do?action=create" />
+			  <forward name="groupedited" path="/aim/editOrganisation.do?action=edit" />
+			  <forward name="popup" path="/showLayout.do?layout=aim_addOrgGrpPopupLayout" />	  
+	</action>
+	
+	<action 
+			  name="aimViewOrgForm"
+			  type="org.digijava.module.aim.action.ViewOrganisation"
+			  scope="request"
+			  validate="false"
+			  path="/aim/viewOrganisation">
+			  <forward name="forward" path="/showLayout.do?layout=aim_viewOrgDetailPopupLayout" />
+			  <forward name="index" path="/aim/index.do" redirect="true" />			  
+	</action>
+
+	<action 
+			  name="aimCurrencyForm"
+			  type="org.digijava.module.aim.action.ChangeCurrencyStatus"
+			  scope="session"
+			  validate="false"
+			  path="/aim/changeCurrencyStatus">
+			  <forward name="forward" path="/currencyManager.do" redirect="true"/>
+	</action>		
+
+	<action 
+			  name="aimCurrencyRateForm"
+			  type="org.digijava.module.aim.action.LoadCurrencyRates"
+			  scope="session"
+			  validate="false"
+			  path="/aim/loadCurrencyRates">
+			  <forward name="showCurrencyRates" path="/aim/showCurrencyRates.do" redirect="true"/>
+			  <forward name="forward" path="/showLayout.do?layout=aim_loadCurrencyRates"/>
+	</action>
+	
+	<action 
+			  name="aimCurrencyRateForm"
+			  type="org.digijava.module.aim.action.UpdateCurrencyRate"
+			  scope="session"
+			  validate="false"
+			  path="/aim/showAddExchangeRates">
+			  <forward name="forward" path="/showLayout.do?layout=aim_addExchangeRate" />
+	</action>
+
+	<action 
+			  name="aimCurrencyRateForm"
+			  type="org.digijava.module.aim.action.UpdateCurrencyRate"
+			  scope="session"
+			  validate="false"
+			  path="/aim/saveCurrencyRate">
+			  <forward name="forward" path="/aim/showCurrencyRates.do" />
+	</action>	
+
+	<action 
+			  name="aimCurrencyRateForm"
+			  type="org.digijava.module.aim.action.ShowCurrencyRates"
+			  scope="session"
+			  validate="false"
+			  path="/aim/showCurrencyRates">
+			  <forward name="forward" path="/showLayout.do?layout=currencyRates" />
+	</action>	
+	
+	<action 
+			  name="aimCurrencyForm"
+			  type="org.digijava.module.aim.action.CurrencyManager"
+			  scope="session"
+			  validate="false"
+			  path="/aim/currencyManager">
+			  <forward name="forward" path="/showLayout.do?layout=currencyManager" />
+			  <forward name="index" path="/aim/index.do" redirect="true" />			  
+	</action>
+	
+	<action 
+			  name="aimCurrencyForm"
+			  type="org.digijava.module.aim.action.UpdateCurrency"
+			  scope="session"
+			  validate="false"
+			  path="/aim/updateCurrency">
+			  <forward name="forward" path="/showLayout.do?layout=aim_updateCurrency" />
+			  <forward name="index" path="/aim/index.do" redirect="true"/>
+	</action>
+
+	<action 
+			  name="aimCurrencyForm"
+			  type="org.digijava.module.aim.action.UpdateCurrency"
+			  scope="session"
+			  validate="false"
+			  path="/aim/saveCurrency">
+			  <forward name="forward" path="/aim/currencyManager.do" />
+	</action>	
+
+	<action 
+			  name="aimAddCurrencyForm"
+			  type="org.digijava.module.aim.action.EditCurrency"
+			  scope="request"
+			  validate="false"
+			  path="/aim/editCurrency">
+			  <forward name="forward" path="/aim/currencyManager.do" />
+			  <forward name="index" path="/aim/index.do" redirect="true" />			  
+	</action>
+
+	<action 
+			  name="aimAddCurrencyForm"
+			  type="org.digijava.module.aim.action.DeleteCurrency"
+			  scope="request"
+			  validate="false"
+			  path="/aim/deleteCurrency">
+			  <forward name="forward" path="/aim/currencyManager.do" />
+			  <forward name="index" path="/aim/index.do" redirect="true" />			  
+	</action>
+
+	<action 
+			  name="aimAddCurrencyForm"
+			  type="org.digijava.module.aim.action.GetCurrency"
+			  scope="request"
+			  validate="false"
+			  path="/aim/getCurrency">
+			  <forward name="editCurrency" path="/showLayout.do?layout=editCurrency" />
+			  <forward name="deleteCurrency" path="/showLayout.do?layout=deleteCurrency" />
+			  <forward name="forward" path="/aim/currencyManager.do" />
+			  <forward name="index" path="/aim/index.do" redirect="true" />			  
+	</action>
+	
+	<action 
+			  name="aimSearchSectorForm"
+			  type="org.digijava.module.aim.action.SearchSector"
+			  scope="request"
+			  validate="false"
+			  path="/aim/sectorSearchResults">
+			  <forward name="forward" path="/aim/sectorManager.do" />
+			  <forward name="searchResults" path="/showLayout.do?layout=searchSectResults" />
+			  <forward name="index" path="/aim/index.do" redirect="true" />			  
+	</action>
+
+	<action 
+			  name="aimSearchSectorForm"
+			  type="org.digijava.module.aim.action.SearchSector"
+			  scope="request"
+			  validate="false"
+			  path="/aim/searchSector">
+			  <forward name="forward" path="/showLayout.do?layout=searchSector" />
+			  <forward name="index" path="/aim/index.do" redirect="true" />			  
+	</action>
+
+	<action 
+			  name="aimWorkspaceForm"
+			  type="org.digijava.module.aim.action.WorkspaceManager"
+			  scope="request"
+			  validate="false"
+			  path="/aim/workspaceManager">
+			  <forward name="forward" path="/showLayout.do?layout=workspaceManager" />
+			  <forward name="index" path="/aim/index.do" redirect="true" />			  
+	</action>
+
+	<action 
+			  name="aimUpdateWorkspaceForm"
+			  type="org.digijava.module.aim.action.UpdateWorkspace"
+			  scope="session"
+			  validate="true"
+			  input="/showLayout.do?layout=updateWorkspace"
+			  path="/aim/updateWorkspace">
+			  <forward name="showAdd" path="/showLayout.do?layout=updateWorkspace" />
+ 			  <forward name="index" path="/aim/index.do" redirect="true" />
+			  <forward name="workspaceManager" path="/aim/workspaceManager.do" />
+	</action>
+
+	<action 
+			  name="aimUpdateWorkspaceForm"
+			  type="org.digijava.module.aim.action.UpdateWorkspace"
+			  scope="request"
+			  validate="false"
+			  input="/showLayout.do?layout=teamWorkspaceOverview"
+			  path="/aim/updateTeamWorkspace">
+			  <forward name="workspaceOverview" path="/aim/workspaceOverview.do" />
+			  <forward name="index" path="/aim/index.do" redirect="true" />			  
+	</action>
+
+	<action 
+			  name="aimUpdateWorkspaceForm"
+			  type="org.digijava.module.aim.action.GetWorkspace"
+			  scope="session"
+			  validate="false"
+			  path="/aim/workspaceOverview">
+			  <forward name="forward" path="/showLayout.do?layout=teamWorkspaceOverview" />
+			  <forward name="index" path="/aim/index.do" redirect="true" />			  
+	</action>
+	
+	<action 
+			  name="aimUpdateWorkspaceForm"
+			  type="org.digijava.module.aim.action.GetWorkspace"
+			  scope="session"
+			  validate="false"
+			  path="/aim/getWorkspace">
+			  <forward name="showWorkspace" path="/showLayout.do?layout=updateWorkspace" />
+			  <forward name="index" path="/aim/index.do" redirect="true" />			  
+			  <forward name="forward" path="/aim/workspaceManager.do" />
+	</action>
+
+	<action 
+			  name="aimUpdateWorkspaceForm"
+			  type="org.digijava.module.aim.action.GetUnAssignedWorkspaces"
+			  scope="session"
+			  validate="false"
+			  path="/aim/addChildWorkspaces">
+			  <forward name="forward" path="/showLayout.do?layout=aim_addChildWorkspaces" />
+			  <forward name="index" path="/aim/index.do" redirect="true" />			  
+	</action>
+
+	<action 
+			  name="aimUpdateWorkspaceForm"
+			  type="org.digijava.module.aim.action.UpdateWorkspaceSubmit"
+			  scope="session"
+			  validate="false"
+			  path="/aim/updateWorkspaceSubmit">
+			  <forward name="addChild" path="/aim/addChildWorkspaces.do" />
+			  <forward name="updateWorkspace" path="/aim/updateWorkspace.do" redirect="true" />			  
+			  <forward name="removeChild" path="/aim/removeChildWorkspace.do" redirect="true" />			  
+	</action>
+	
+
+	<action 
+			  name="aimUpdateWorkspaceForm"
+			  type="org.digijava.module.aim.action.ShowEditWorkspace"
+			  scope="session"
+			  validate="false"
+			  path="/aim/showEditWorkspace">
+			  <forward name="forward" path="/showLayout.do?layout=updateWorkspace" />
+	</action>		
+
+	<action 
+			  name="aimUpdateWorkspaceForm"
+			  type="org.digijava.module.aim.action.AddChildWorkspaces"
+			  scope="session"
+			  validate="false"
+			  path="/aim/childWorkspacesAdded">
+			  <forward name="forward" path="/aim/showEditWorkspace.do" />
+	</action>	
+
+	<action 
+			  name="aimUpdateWorkspaceForm"
+			  type="org.digijava.module.aim.action.RemoveChildWorkspace"
+			  scope="session"
+			  validate="false"
+			  path="/aim/removeChildWorkspace">
+			  <forward name="forward" path="/aim/showEditWorkspace.do" />
+	</action>		
+	
+	<action 
+			  name="aimRolesForm"
+			  type="org.digijava.module.aim.action.RolesManager"
+			  scope="request"
+			  validate="false"
+			  path="/aim/roles">
+			  <forward name="forward" path="/showLayout.do?layout=rolesManager" />
+			  <forward name="index" path="/aim/index.do" redirect="true" />			  
+	</action>
+
+	<action 
+			  name="aimUpdateRoleForm"
+			  type="org.digijava.module.aim.action.UpdateRoles"
+			  scope="request"
+			  validate="true"
+			  input="/showLayout.do?layout=updateRoles"
+			  path="/aim/updateRole">
+			  <forward name="showAdd" path="/showLayout.do?layout=updateRoles" />
+			  <forward name="roles" path="/aim/roles.do" />
+			  <forward name="index" path="/aim/index.do" redirect="true" />			  
+	</action>
+
+	<action 
+			  name="aimUpdateRoleForm"
+			  type="org.digijava.module.aim.action.GetRoles"
+			  scope="request"
+			  validate="false"
+			  path="/aim/getRole">
+			  <forward name="showRoles" path="/showLayout.do?layout=updateRoles" />
+			  <forward name="rolesManager" path="/aim/roles.do" />
+			  <forward name="index" path="/aim/index.do" redirect="true" />			  
+	</action>
+	
+	<action 
+			  name="aimTeamMemberForm"
+			  type="org.digijava.module.aim.action.GetTeamMembers"
+			  scope="request"
+			  validate="false"
+			  path="/aim/teamMembers">
+			  <forward name="forward" path="/showLayout.do?layout=showTeamMembers" />
+			  <forward name="workspaceManager" path="/aim/workspaceManager.do" />
+			  <forward name="index" path="/aim/index.do" redirect="true" />			  
+	</action>
+
+	<action 
+			  name="aimTeamActivitiesForm"
+			  type="org.digijava.module.aim.action.GetTeamActivities"
+			  scope="request"
+			  validate="false"
+			  path="/aim/teamActivities">
+			  <forward name="forward" path="/showLayout.do?layout=showTeamActivities" />
+  			  <forward name="index" path="/aim/index.do" redirect="true" />
+			  <forward name="workspaceManager" path="/aim/workspaceManager.do" />
+			  <forward name="index" path="/aim/index.do" redirect="true" />			  
+	</action>	
+
+	<action 
+			  name="aimMemberActivitiesForm"
+			  type="org.digijava.module.aim.action.GetMemberActivities"
+			  scope="request"
+			  validate="false"
+			  path="/aim/teamMemberActivities">
+			  <forward name="forward" path="/showLayout.do?layout=teamMemberActivities" />
+			  <forward name="index" path="/aim/index.do" redirect="true" />			  
+	</action>		
+
+	<action 
+			  name="aimMemberActivitiesForm"
+			  type="org.digijava.module.aim.action.UpdateMemberActivities"
+			  scope="request"
+			  validate="false"
+			  path="/aim/updateMemberActivity">
+			  <forward name="forward" path="/aim/teamMemberList.do" />
+			  <forward name="showAddActivity" path="/showLayout.do?layout=addMemberActivities" />
+			  <forward name="index" path="/aim/index.do" redirect="true" />			  
+	</action>
+
+	<action 
+			  name="aimMemberReportsForm"
+			  type="org.digijava.module.aim.action.GetMemberReports"
+			  scope="request"
+			  validate="false"
+			  path="/aim/teamMemberReports">
+			  <forward name="forward" path="/showLayout.do?layout=teamMemberReports" />
+			  <forward name="index" path="/aim/index.do" redirect="true" />			  
+	</action>			
+
+	<action 
+			  name="aimMemberReportsForm"
+			  type="org.digijava.module.aim.action.UpdateMemberReports"
+			  scope="request"
+			  validate="false"
+			  path="/aim/updateMemberReports">
+			  <forward name="forward" path="/aim/teamMemberList.do" />
+			  <forward name="showAddReports" path="/showLayout.do?layout=addMemberReports" />
+			  <forward name="index" path="/aim/index.do" redirect="true" />			  
+	</action>			
+
+	<action 
+			  name="aimTeamMemberForm"
+			  type="org.digijava.module.aim.action.GetTeamMembers"
+			  scope="request"
+			  validate="false"
+			  path="/aim/teamMemberList">
+			  <forward name="forward" path="/showLayout.do?layout=teamMembers" />
+			  <forward name="index" path="/aim/index.do" redirect="true" />			  
+	</action>	
+
+	<action 
+			  name="aimTeamMemberForm"
+			  type="org.digijava.module.aim.action.UpdateTeamMemberList"
+			  scope="request"
+			  validate="false"
+			  path="/aim/updateTeamMemberList">
+			  <forward name="showAdd" path="/showLayout.do?layout=teamMembersAdd" />
+			  <forward name="forward" path="/aim/teamMemberList.do" />
+			  <forward name="index" path="/aim/index.do" redirect="true" />			  
+	</action>
+
+	<action 
+			  name="aimTeamMemberForm"
+			  type="org.digijava.module.aim.action.AddTeamMember"
+			  scope="request"
+			  input="/showLayout.do?layout=teamMembersAdd"			  
+			  validate="false"
+			  path="/aim/teamMemberAdd">
+			  <forward name="forward" path="/aim/teamMemberList.do" />
+			  <forward name="index" path="/aim/index.do" redirect="true" />			  
+	</action>
+	
+	<action 
+			  name="aimAssignActivityForm"
+			  type="org.digijava.module.aim.action.AssignActivity"
+			  scope="request"
+			  validate="false"
+			  path="/aim/assignActivity">
+			  <forward name="showAssignActivity" path="/showLayout.do?layout=assignActivities" />
+			  <forward name="forward" path="/aim/teamActivities.do" />
+			  <forward name="index" path="/aim/index.do" redirect="true" />			  
+	</action>		
+	
+	<action 
+			  name="aimTeamActivitiesForm"
+			  type="org.digijava.module.aim.action.RemoveTeamActivity"
+			  scope="request"
+			  validate="false"
+			  path="/aim/removeTeamActivity">
+			  <forward name="showRemoveActivity" path="/showLayout.do?layout=removeTeamActivities" />
+			  <forward name="forward" path="/aim/workspaceManager.do" />
+			  <forward name="index" path="/aim/index.do" redirect="true" />			  
+	</action>			
+	
+	<action 
+			  name="aimTeamActivitiesForm"
+			  type="org.digijava.module.aim.action.GetTeamActivities"
+			  scope="request"
+			  validate="false"
+			  path="/aim/teamActivityList">
+			  <forward name="forward" path="/showLayout.do?layout=teamActivities" />
+			  <forward name="index" path="/aim/index.do" redirect="true" />
+	</action>			
+
+	<action 
+			  name="aimTeamReportsForm"
+			  type="org.digijava.module.aim.action.GetTeamReports"
+			  scope="request"
+			  validate="false"
+			  path="/aim/teamReportList">
+			  <forward name="forward" path="/showLayout.do?layout=teamReports" />
+			  <forward name="index" path="/aim/index.do" redirect="true" />			  
+	</action>
+
+	<action 
+			  name="aimTeamReportsForm"
+			  type="org.digijava.module.aim.action.UpdateTeamReports"
+			  scope="session"
+			  validate="false"
+			  input="/showLayout.do?layout=teamReports"
+			  path="/aim/updateTeamReports">
+			  <forward name="forward" path="/aim/teamReportList.do" />
+			  <forward name="showAddReport" path="/showLayout.do?layout=addTeamReports" />
+			  <forward name="index" path="/aim/index.do" redirect="true" />			  
+	</action>	
+	
+	<action 
+			  name="aimTeamActivitiesForm"
+			  type="org.digijava.module.aim.action.UpdateTeamActivities"
+			  scope="session"
+			  validate="false"
+			  input="/showLayout.do?layout=teamActivities"
+			  path="/aim/updateTeamActivity">
+			  <forward name="showAddActivity" path="/showLayout.do?layout=addTeamActivities" />
+ 			  <forward name="index" path="/aim/index.do" redirect="true" />
+			  <forward name="forward" path="/aim/teamActivityList.do" />
+	</action>			
+	
+	<action 
+			  name="aimTeamMemberForm"
+			  type="org.digijava.module.aim.action.AddTeamMember"
+			  scope="session"
+			  validate="false"
+			  path="/aim/addTeamMember">
+			  <forward name="addedFromAdmin" path="/aim/teamMembers.do" />
+			  <forward name="addedFromTeam" path="/aim/teamMemberList.do" />
+			  <forward name="showAddFromAdmin" path="/showLayout.do?layout=teamMembersAddFromAdmin" />
+			  <forward name="showAddFromTeam" path="/showLayout.do?layout=teamMembersAdd" />			  
+			  <forward name="index" path="/aim/index.do" redirect="true" />			  
+	</action>
+
+	<action 
+			  name="aimTeamMemberForm"
+			  type="org.digijava.module.aim.action.ShowAddTeamMember"
+			  scope="session"
+			  path="/aim/showAddTeamMember">
+			  <forward name="showAddFromAdmin" path="/showLayout.do?layout=teamMembersAddFromAdmin" />
+			  <forward name="showAddFromTeam" path="/showLayout.do?layout=teamMembersAdd" />
+			  <forward name="index" path="/aim/index.do" redirect="true" />			  
+	</action>	
+
+	<action 
+			  name="aimUserEmailForm"
+			  type="org.digijava.module.um.action.UserEmail"
+			  scope="request"
+			  validate="true"
+			  input="/showLayout.do?layout=getEmail"
+			  path="/aim/resetUserPassword">
+			  <forward name="success" path="/showLayout.do?layout=resetEmailSuccess" />
+			  <forward name="index" path="/aim/index.do" redirect="true" />			  
+	</action>
+
+	<action 
+			  name="aimUserEmailForm"
+			  type="org.digijava.module.aim.action.ShowEmail"
+			  scope="request"
+			  validate="true"
+			  path="/aim/showEmailForm">
+			  <forward name="forward" path="/showLayout.do?layout=getEmail" />
+			  <forward name="index" path="/aim/index.do" redirect="true" />			  
+	</action>		
+
+	<action 
+			  name="aimTeamMemberForm"
+			  type="org.digijava.module.aim.action.GetTeamMemberDetails"
+			  scope="request"
+			  validate="false"
+			  path="/aim/getTeamMemberDetails">
+			  <forward name="showUpdate" path="/showLayout.do?layout=updateTeamMembers" />
+			  <forward name="forward" path="/aim/teamMembers.do" />
+			  <forward name="index" path="/aim/index.do" redirect="true" />			  
+	</action>
+
+	<action 
+			  name="aimTeamMemberForm"
+			  type="org.digijava.module.aim.action.GetTeamMemberDetails"
+			  scope="request"
+			  validate="false"
+			  path="/aim/viewMemberDetails">
+			  <forward name="showUpdate" path="/showLayout.do?layout=teamMemberDetails" />
+			  <forward name="forward" path="/aim/teamMemberList.do" />
+			  <forward name="index" path="/aim/index.do" redirect="true" />			  
+	</action>
+
+	<action 
+			  name="aimTeamMemberForm"
+			  type="org.digijava.module.aim.action.UpdateTeamMembers"
+			  scope="request"
+			  validate="false"
+			  path="/aim/saveMemberDetails">
+			  <forward name="forward" path="/aim/teamMemberList.do" />
+			  <forward name="index" path="/aim/index.do" redirect="true" />			  
+	</action>
+
+	<action 
+			  name="aimTeamMemberForm"
+			  type="org.digijava.module.aim.action.UpdateTeamMembers"
+			  scope="request"
+			  input="/showLayout.do?layout=updateTeamMembers"
+			  validate="false"
+			  path="/aim/updateTeamMember">
+			  <forward name="forward" path="/aim/teamMembers.do" />
+			  <forward name="index" path="/aim/index.do" redirect="true" />			  
+	</action>
+
+
+
+	<action 
+			  name="aimLoginForm"
+			  type="org.digijava.module.aim.action.Login"
+			  scope="request"
+			  validate="true"
+			  input="/showLayout.do?layout=login"
+			  path="/aim/login">
+			  <forward name="forward" path="/showLayout.do?layout=login" />
+			  <forward name="index" path="/aim/index.do" redirect="true"/>
+			  <forward name="viewMyDesktop" path="/aim/viewMyDesktop.do" redirect="true"/>
+			  <forward name="selectTeam" path="/showLayout.do?layout=selectTeam"/>
+			  
+	</action>
+
+	<action 
+			  name="aimLoginForm"
+			  type="org.digijava.module.aim.action.SelectTeam"
+			  scope="request"
+			  validate="false"
+			  path="/aim/selectTeam">
+			  <forward name="viewMyDesktop" path="/aim/viewMyDesktop.do" redirect="true"/>
+	</action>
+
+	
+	<!--	
+	<action 
+			  type="org.digijava.module.aim.action.Logout"
+			  scope="request"
+			  validate="false"
+			  path="/aim/logout">
+			  <forward name="forward" path="/showLayout.do?layout=logout" />
+			  <forward name="index" path="/aim/index.do" redirect="true" />			  
+	</action>	
+	-->
+	<action 
+			  name="aimUpdateAppSettingsForm"
+			  type="org.digijava.module.aim.action.UpdateAppSettings"
+			  scope="request"
+			  validate="false"
+			  path="/aim/defaultSettings">
+			  <forward name="showDefaultSettings" path="/showLayout.do?layout=updateAppSettings" />			  
+			  <forward name="index" path="/aim/index.do" redirect="true" />			  
+	</action>
+	
+	<action 
+			  name="aimUpdateAppSettingsForm"
+			  type="org.digijava.module.aim.action.UpdateAppSettings"
+			  scope="request"
+			  validate="false"
+			  path="/aim/customizeSettings">
+			  <forward name="showDefaultSettings" path="/showLayout.do?layout=updateAppSettings" />
+			  <forward name="showUserSettings" path="/showLayout.do?layout=customizePersonalSettings" />			  
+			  <forward name="index" path="/aim/index.do" redirect="true" />			  
+	</action>	
+
+
+	<action 
+			  name="aimUpdateAppSettingsForm"
+			  type="org.digijava.module.aim.action.UpdateAppSettings"
+			  scope="request"
+			  validate="false"
+			  path="/aim/saveApplicationSettings">
+			  <forward name="default" path="/aim/defaultSettings.do" />
+			  <forward name="userSpecific" path="/aim/customizeSettings.do" />
+			  <forward name="index" path="/aim/index.do" redirect="true" />			  
+	</action>
+
+	<action 
+			  name="aimChangePasswordForm"
+			  type="org.digijava.module.aim.action.ChangePassword"
+			  scope="request"
+			  validate="true"
+			  input="/showLayout.do?layout=changePassword"
+			  path="/aim/changePassword">
+			  <forward name="success" path="/showLayout.do?layout=changePasswordSuccess" />
+			  <forward name="changePassword" path="/showLayout.do?layout=changePassword" />
+			  <forward name="index" path="/aim/index.do" redirect="true" />			  
+	</action>
+
+	<action 
+			  name="aimChangePasswordForm"
+			  type="org.digijava.module.aim.action.ShowChangePassword"
+			  scope="request"
+			  validate="false"
+			  path="/aim/showChangePassword">
+			  <forward name="forward" path="/showLayout.do?layout=changePassword" />
+			  <forward name="index" path="/aim/index.do" redirect="true" />			  
+	</action>
+	
+	<action 
+			  name="aimUserRegisterForm"
+			  type="org.digijava.module.aim.action.RegisterUser"
+			  scope="request"
+			  validate="true"
+			  input="/aim/showRegisterUser.do"
+			  path="/aim/registerUser">
+			  <forward name="forward" path="/showLayout.do?layout=userRegistrationSuccess" />
+			  <forward name="index" path="/aim/index.do" redirect="true" />			  
+	</action>
+	
+	<action 
+			  name="aimUserRegisterForm"
+			  type="org.digijava.module.aim.action.ShowUserRegister"
+			  scope="request"
+			  validate="false"
+			  path="/aim/showRegisterUser">
+			  <forward name="forward" path="/showLayout.do?layout=userRegistration" />
+			  <forward name="index" path="/aim/index.do" redirect="true" />			  
+	</action>	
+
+	<action 
+			  name="aimReportsForm"
+			  type="org.digijava.module.aim.action.ReportsManager"
+			  scope="request"
+			  validate="false"
+			  path="/aim/reportsManager">
+			  <forward name="forward" path="/showLayout.do?layout=reportsManager" />
+			  <forward name="index" path="/aim/index.do" redirect="true" />			  
+	</action>		
+
+	<action 
+			  name="aimReportsForm"
+			  type="org.digijava.module.aim.action.GetReports"
+			  scope="request"
+			  validate="false"
+			  path="/aim/getReports">
+			  <forward name="editReport" path="/showLayout.do?layout=editReports" />
+			  <forward name="deleteReport" path="/showLayout.do?layout=deleteReports" />
+			  <forward name="forward" path="/aim/reportsManager.do" />
+			  <forward name="index" path="/aim/index.do" redirect="true" />			  
+	</action>		
+
+	<action 
+			  name="aimReportsForm"
+			  type="org.digijava.module.aim.action.EditReports"
+			  scope="request"
+			  input="/showLayout.do?layout=editReports"
+			  validate="false"
+			  path="/aim/editReports">
+			  <forward name="forward" path="/aim/reportsManager.do" />
+			  <forward name="index" path="/aim/index.do" redirect="true" />			  
+	</action>
+	
+	<action 
+			  name="aimReportsForm"
+			  type="org.digijava.module.aim.action.DeleteReports"
+			  scope="request"
+			  input="/showLayout.do?layout=deleteReports"			  
+			  validate="false"
+			  path="/aim/deleteReports">
+			  <forward name="forward" path="/aim/reportsManager.do" />
+			  <forward name="index" path="/aim/index.do" redirect="true" />			  
+	</action>
+
+	<action 
+			  name="aimReportsForm"
+			  type="org.digijava.module.aim.action.AddReports"
+			  scope="request"
+			  input="/showLayout.do?layout=addReports"			  
+			  validate="false"
+			  path="/aim/addReports">
+			  <forward name="forward" path="/showLayout.do?layout=addReports" />
+			  <forward name="added" path="/aim/reportsManager.do" />
+			  <forward name="index" path="/aim/index.do" redirect="true" />			  
+	</action>
+
+	<action 
+			  name="aimAddDocumentForm"
+			  type="org.digijava.module.aim.action.ShowAddDocument"
+			  scope="session"
+			  validate="false"
+			  path="/aim/addDocument">
+			  <forward name="showCreateContentItem" path="/showLayout.do?layout=addDocument" />
+			  <forward name="index" path="/aim/index.do" redirect="true" />			  
+	</action>	
+
+	<action 
+			  name="aimAddDocumentForm"
+			  type="org.digijava.module.cms.action.ShowSelectItemFile"
+			  scope="session"
+			  validate="false"
+			  path="/aim/showSelectFile">
+			  <forward name="showSelectFile" path="/showLayout.do?layout=aim_selectFilePopupLayout" />
+			  <forward name="index" path="/aim/index.do" redirect="true" />			  
+	</action>
+
+	<action 
+			  name="aimAddDocumentForm" 
+			  type="org.digijava.module.cms.action.SelectItemFile" 
+			  validate="false" 
+			  scope="session" 
+			  path="/aim/selectFile">	
+			  <forward name="showCreate" path="/aim/addDocument.do?reset=false" redirect="true" />
+			  <forward name="index" path="/aim/index.do" redirect="true" />			  
+	</action>
+
+	<action 
+			  name="aimAddDocumentForm" 
+			  type="org.digijava.module.cms.action.AddContentItemCategoryFwd" 
+			  validate="false" 
+			  scope="session" 
+			  path="/aim/addContentItemCategoryFwd">
+			  <forward name="addContentItemCategory" path="/aim/showSelectCategory.do?selType=3" />
+			  <forward name="index" path="/aim/index.do" redirect="true" />			  
+	</action>	
+   
+	<action 
+			  name="aimAddDocumentForm" 
+			  type="org.digijava.module.cms.action.AddContentItemCategory" 
+			  validate="false" 
+			  scope="session" 
+			  path="/aim/addContentItemCategory">
+			  <forward name="showCreateContentItem" path="/aim/addDocument.do?reset=false" redirect="true" />
+			  <forward name="index" path="/aim/index.do" redirect="true" />			  
+	</action>
+
+	<action 
+			  name="aimAddDocumentForm" 
+			  type="org.digijava.module.cms.action.RemoveContentItemCategory" 
+			  validate="false" 
+			  scope="session" 
+			  path="/aim/removeContentItemCategory">
+			  <forward name="showContentItem" path="/showLayout.do?layout=addDocument" />
+			  <forward name="index" path="/aim/index.do" redirect="true" />			  
+	</action>
+
+	<action 
+			  name="aimAddDocumentForm" 
+			  type="org.digijava.module.cms.action.CreateContentItem" 
+			  validate="true" 
+			  scope="session" path="/aim/createContentItem">
+			  <forward name="createContentItem" path="/aim/viewMyDesktop.do" redirect="true" />	
+			  <forward name="index" path="/aim/index.do" redirect="true" />			  
+	</action>
+
+	<action 
+			  name="aimAddDocumentForm" 
+			  type="org.digijava.module.aim.action.SetCMSFormValues" 
+			  validate="true" 
+			  input="/showLayout.do?layout=addDocument" 
+			  scope="session" path="/aim/createDocument">
+			  <forward name="forward" path="/aim/createContentItem.do" />	
+			  <forward name="index" path="/aim/index.do" redirect="true" />			  
+	</action>	
+	
+	<action 
+			  name="cmsForm" 
+			  type="org.digijava.module.cms.action.ShowSelectCategory" 
+			  scope="request" 
+			  path="/aim/showSelectCategory">
+			  <forward name="showSelectCategory" path="/showLayout.do?layout=aim_selectCMSCategoryPopupLayout" />
+			  <forward name="index" path="/aim/index.do" redirect="true" />			  
+	</action>	
+
+	<action 
+			  name="aimTeamPagesForm" 
+			  type="org.digijava.module.aim.action.ShowConfigureTeamPage" 
+			  scope="request" 
+			  path="/aim/configureTeamPage">
+			  <forward name="showConfigurePages" path="/showLayout.do?layout=teamPagesConfigure" />
+			  <forward name="index" path="/aim/index.do" redirect="true" />			  
+	</action>		
+
+	<action 
+			  name="aimTeamPagesForm" 
+			  type="org.digijava.module.aim.action.ShowConfigureTeam" 
+			  scope="request" 
+			  path="/aim/showConfigureTeam">
+			  <forward name="showFilters" path="/showLayout.do?layout=configureTeam" />
+			  <forward name="index" path="/aim/index.do" redirect="true" />
+	</action>		
+
+	<action 
+			  name="aimTeamPagesForm" 
+			  type="org.digijava.module.aim.action.SaveTeamPageConfiguration" 
+			  scope="request" 
+			  path="/aim/saveTeamPageConfiguration">
+			  <forward name="forward" path="/aim/showConfigureTeam.do" />
+			  <forward name="index" path="/aim/index.do" redirect="true" />
+	</action>
+
+	<action
+			  type="org.digijava.module.aim.action.ChangeTeamReportStatus"
+			  scope="request"
+			  path="/aim/changeTeamReportStatus">
+			  <forward name="index" path="/aim/index.do" redirect="true" />
+	</action>
+
+	<action
+			  name="aimTeamReportsForm" 
+			  type="org.digijava.module.aim.action.ShowTeamReports"
+			  scope="request"
+			  path="/aim/viewTeamReports">	
+			  <forward name="forward" path="/showLayout.do?layout=showTeamReports" />
+			  <forward name="index" path="/aim/index.do" redirect="true" />			  
+	</action>
+
+	<action
+			  type="org.digijava.module.aim.action.ConfigureTeam"
+			  scope="request"
+			  path="/aim/configureTeam">	
+			  <forward name="forward" path="/showLayout.do?layout=teamConfiguration" />
+			  <forward name="index" path="/aim/index.do" redirect="true" />
+	</action>	
+
+	<action
+			  name="aimChannelOverviewForm"
+			  type="org.digijava.module.aim.action.GetActivityDetails"
+			  scope="request"
+			  path="/aim/getActivityDetails">	
+			  <forward name="forward" path="/showLayout.do?layout=aim_viewActivityDetails" />
+			  <forward name="index" path="/aim/index.do" redirect="true" />
+			  <forward name="viewMyDesktop" path="/aim/viewMyDesktop.do" redirect="true" />
+	</action>		
+	
+	<action
+			  name="aimEditActivityForm"	
+			  type="org.digijava.module.aim.action.ViewComment"
+			  scope="session"
+			  path="/aim/viewComment">	
+			  <forward name="forward" path="/showLayout.do?layout=aim_viewCommentPopupLayout" />
+			  <forward name="index" path="/aim/index.do" redirect="true" />
+			  <forward name="overview" path="/showLayout.do?layout=aim_viewCommentOverviewPopupLayout" />
+	</action>
+	
+	<action
+			  name="aimEditActivityForm"	
+			  type="org.digijava.module.aim.action.EditActivity"
+			  scope="session"
+			  path="/aim/editActivity">	
+			  <forward name="forward" path="/aim/addActivity.do" redirect="true"/>
+	</action>		
+
+	<action
+			  name="aimEditActivityForm"	
+			  type="org.digijava.module.aim.action.AddAmpActivity"
+			  scope="session"
+			  path="/aim/addActivity">	
+			  <forward name="addActivityStep1" path="/showLayout.do?layout=addActivityStep1" />
+			  <forward name="addActivityStep2" path="/showLayout.do?layout=addActivityStep2" />
+			  <forward name="addActivityStep3" path="/showLayout.do?layout=addActivityStep3" />
+			  <forward name="addActivityStep4" path="/showLayout.do?layout=addActivityStep4" />
+			  <forward name="addActivityStep5" path="/showLayout.do?layout=addActivityStep5" />
+			  <forward name="addActivityStep6" path="/showLayout.do?layout=addActivityStep6" />
+			  <forward name="addActivityStep7" path="/showLayout.do?layout=addActivityStep7" />
+			  <forward name="added" path="/aim/addActivity.do" redirect="true" />
+			  <forward name="index" path="/aim/index.do" redirect="true" />
+	</action>	
+
+	<action
+			  name="aimEditActivityForm"	
+			  type="org.digijava.module.aim.action.AddAmpActivity"
+			  scope="session"
+			  path="/aim/previewActivity">	
+			  <forward name="preview" path="/showLayout.do?layout=previewActivity" />
+			  <forward name="index" path="/aim/index.do" redirect="true" />			  
+	</action>		
+
+	<action
+			  name="aimEditActivityForm"	
+			  type="org.digijava.module.aim.action.EditActivity"
+			  scope="session"
+			  path="/aim/viewActivityPreview">	
+			  <forward name="forward" path="/aim/previewActivity.do" />
+			  <forward name="index" path="/aim/index.do" redirect="true" />			  
+	</action>			
+
+	<action
+			  name="aimEditActivityForm"	
+			  type="org.digijava.module.aim.action.ShowActivityPrintPreview"
+			  scope="session"
+			  path="/aim/showPrinterFriendlyPage">	
+			  <forward name="forward" path="/showLayout.do?layout=aim_printerFriendlyPreview" />
+			  <forward name="index" path="/aim/index.do" redirect="true" />			  
+	</action>			
+
+	<action
+			  name="aimEditActivityForm"	
+			  type="org.digijava.module.aim.action.RemoveSelOrganisations"
+			  scope="session"
+			  path="/aim/removeSelOrganisations">	
+			  <forward name="forward" path="/aim/addActivity.do" redirect="true" />
+			  <forward name="index" path="/aim/index.do" redirect="true" />			  
+	</action>		
+
+	<action
+			  name="aimEditActivityForm"	
+			  type="org.digijava.module.aim.action.RemoveSelRelatedOrgs"
+			  scope="session"
+			  path="/aim/removeSelRelOrgs">	
+			  <forward name="forward" path="/aim/addActivity.do" redirect="true" />
+			  <forward name="index" path="/aim/index.do" redirect="true" />			  
+	</action>			
+
+	<action
+			  name="aimEditActivityForm"
+			  type="org.digijava.module.aim.action.SelectLocation"
+			  scope="session"
+			  path="/aim/selectLocation">	
+			  <forward name="forward" path="/showLayout.do?layout=aim_locPopupLayout" />
+			  <forward name="index" path="/aim/index.do" redirect="true" />
+	</action>	
+
+	<action
+			  name="aimEditActivityForm"
+			  type="org.digijava.module.aim.action.RemoveSelLocations"
+			  scope="session"
+			  path="/aim/removeSelLocations">	
+			  <forward name="forward" path="/aim/addActivity.do" redirect="true" />
+			  <forward name="index" path="/aim/index.do" redirect="true" />			  
+	</action>	
+	
+	<action
+			  name="aimEditActivityForm"
+			  type="org.digijava.module.aim.action.SelectOrganization"
+			  scope="session"
+			  path="/aim/selectOrganization">	
+			  <forward name="forward" path="/showLayout.do?layout=aim_orgPopupLayout" />
+			  <forward name="index" path="/aim/index.do" redirect="true" />			  
+	</action>	
+
+<!-- edited by rahul -->
+	<action 
+			  name="aimEditActivityForm"
+			  type="org.digijava.module.aim.action.SearchLocation"
+			  scope="session"
+			  validate="false"
+			  path="/aim/searchLocation">
+  			  <forward name="forward" path="/showLayout.do?layout=aim_searchlocPopupLayout" />
+			  <forward name="index" path="/aim/index.do" redirect="true" />			  
+	</action>	
+
+	<action 
+			  name="aimEditActivityForm"
+			  type="org.digijava.module.aim.action.AddSelectedLocations"
+			  scope="session"
+			  validate="false"
+			  path="/aim/addSelectedLocations">
+  			  <forward name="forward" path="/aim/addActivity.do" />
+			  <forward name="index" path="/aim/index.do" redirect="true" />			  
+	</action>		
+
+	<action 
+			  name="aimEditActivityForm"
+			  type="org.digijava.module.aim.action.SearchSectors"
+			  scope="session"
+			  validate="false"
+			  path="/aim/searchSectors">
+  			  <forward name="forward" path="/showLayout.do?layout=aim_searchSectorPopupLayout" />
+			  <forward name="index" path="/aim/index.do" redirect="true" />			  
+	</action>	
+
+	<action 
+			  name="aimEditActivityForm"
+			  type="org.digijava.module.aim.action.AddSelectedSectors"
+			  scope="session"
+			  validate="false"
+			  path="/aim/addSelectedSectors">
+  			  <forward name="forward" path="/aim/addActivity.do" />
+			  <forward name="index" path="/aim/index.do" redirect="true" />
+	</action>	
+
+<!-- end -->
+
+	<action
+			  name="aimEditActivityForm"
+			  type="org.digijava.module.aim.action.SearchOrganisation"
+			  scope="session"
+			  path="/aim/searchOrganisation">	
+			  <forward name="forward" path="/showLayout.do?layout=aim_orgPopupLayout" />
+			  <forward name="index" path="/aim/index.do" redirect="true" />			  
+	</action>		
+
+	<action
+			  name="aimEditActivityForm"
+			  type="org.digijava.module.aim.action.OrganisationSelected"
+			  scope="session"
+			  path="/aim/organisationSelected">	
+			  <forward name="forward" path="/aim/addActivity.do" redirect="true" />
+			  <forward name="step3" path="/aim/addActivity.do?step=3" redirect="true" />
+			  <forward name="step6" path="/aim/addActivity.do?step=6" redirect="true" />
+			  <forward name="index" path="/aim/index.do" redirect="true" />			  
+	</action>	
+
+	<action
+			  name="aimEditActivityForm"
+			  type="org.digijava.module.aim.action.LocationSelected"
+			  scope="session"
+			  path="/aim/locationSelected">	
+			  <forward name="forward" path="/aim/addActivity.do?step=2" />
+			  <forward name="index" path="/aim/index.do" redirect="true" />			  
+	</action>		
+
+	<action
+			  name="aimEditActivityForm"
+			  type="org.digijava.module.aim.action.SelectSector"
+			  scope="session"
+			  path="/aim/selectSectors">	
+			  <forward name="forward" path="/showLayout.do?layout=aim_selSectorPopupLayout" />
+			  <forward name="index" path="/aim/index.do" redirect="true" />			  
+	</action>	
+
+	<action
+			  name="aimEditActivityForm"
+			  type="org.digijava.module.aim.action.SectorSelected"
+			  scope="session"
+			  path="/aim/sectorSelected">	
+			  <forward name="forward" path="/aim/addActivity.do?step=2" redirect="true"/>
+			  <forward name="index" path="/aim/index.do" redirect="true" />			  
+	</action>		
+
+	<action
+			  name="aimEditActivityForm"	
+			  type="org.digijava.module.aim.action.RemoveSelSectors"
+			  scope="session"
+			  path="/aim/removeSelSectors">	
+			  <forward name="forward" path="/aim/addActivity.do" redirect="true" />
+			  <forward name="index" path="/aim/index.do" redirect="true" />			  
+	</action>		
+
+	<action
+			  name="aimEditActivityForm"
+			  type="org.digijava.module.aim.action.ShowAddComponent"
+			  scope="session"
+			  path="/aim/showAddComponent">	
+			  <forward name="forward" path="/showLayout.do?layout=aim_addCompPopupLayout" />
+	</action>		
+
+	<action
+			  name="aimEditActivityForm"
+			  type="org.digijava.module.aim.action.RemoveComponent"
+			  scope="session"
+			  path="/aim/deleteComponent">	
+			  <forward name="forward" path="/addActivity.do?step=4" redirect="true" />
+	</action>		
+
+	<action
+			  name="aimEditActivityForm"
+			  type="org.digijava.module.aim.action.ComponentSelected"
+			  scope="session"
+			  path="/aim/componentSelected">	
+			  <forward name="forward" path="/addActivity.do?step=4" redirect="true" />
+			  <forward name="selectComponent" path="/showLayout.do?layout=aim_addCompPopupLayout" />
+			  
+	</action>			
+
+
+	<action
+			  name="aimEditActivityForm"
+			  type="org.digijava.module.aim.action.ShowAddPhyProgress"
+			  scope="session"
+			  path="/aim/showAddPhyProg">	
+			  <forward name="forward" path="/showLayout.do?layout=aim_addPhyProgPopupLayout" />
+			  <forward name="index" path="/aim/index.do" redirect="true" />			  
+	</action>		
+
+	<action
+			  name="aimEditActivityForm"
+			  type="org.digijava.module.aim.action.PhysicalProgressAdded"
+			  scope="session"
+			  path="/aim/phyProgSelected">	
+			  <forward name="forward" path="/addActivity.do?step=4" redirect="true" />
+			  <forward name="index" path="/aim/index.do" redirect="true" />			  
+	</action>	
+
+	<action
+			  name="aimEditActivityForm"
+			  type="org.digijava.module.aim.action.RemoveSelPhyProgress"
+			  scope="session"
+			  path="/aim/removeSelPhyProg">	
+			  <forward name="forward" path="/addActivity.do" redirect="true" />
+			  <forward name="index" path="/aim/index.do" redirect="true" />			  
+	</action>	
+	
+	<action
+			  name="aimEditActivityForm"
+			  type="org.digijava.module.aim.action.SelectDocument"
+			  scope="session"
+			  path="/aim/selectDocument">	
+			  <forward name="forward" path="/showLayout.do?layout=aim_selectDocument" />
+			  <forward name="index" path="/aim/index.do" redirect="true" />			  
+	</action>	
+
+	<action
+			  name="aimEditActivityForm"
+			  type="org.digijava.module.aim.action.RemoveSelDocuments"
+			  scope="session"
+			  path="/aim/removeSelDocuments">	
+			  <forward name="forward" path="/addActivity.do" redirect="true" />
+			  <forward name="index" path="/aim/index.do" redirect="true" />			  
+	</action>		
+
+	<action
+			  name="aimEditActivityForm"
+			  type="org.digijava.module.aim.action.DocumentSelected"
+			  scope="session"
+			  path="/aim/documentSelected">	
+			  <forward name="forward" path="/addActivity.do" redirect="true" />
+			  <forward name="index" path="/aim/index.do" redirect="true" />			  
+	</action>			
+	
+	<action
+			  name="aimEditActivityForm"
+			  type="org.digijava.module.aim.action.SaveActivity"
+			  scope="session"
+			  path="/aim/saveActivity">	
+			  <forward name="adminHome" path="/admin.do" redirect="true" />
+			  <forward name="viewMyDesktop" path="/viewMyDesktop.do" redirect="true" />
+			  <forward name="index" path="/aim/index.do" redirect="true" />			  
+			  <forward name="addActivityStep2" path="/showLayout.do?layout=addActivityStep2" />
+			  <forward name="addActivityStep1" path="/showLayout.do?layout=addActivityStep1" />			  
+	</action>
+
+	<action
+			  name="aimEditActivityForm"
+			  type="org.digijava.module.aim.action.CompDateRevised"
+			  scope="session"
+			  path="/aim/compDateRevised">
+			  <forward name="forward" path="/aim/addActivity.do?step=1" redirect="true"/>
+	</action>
+
+	<action
+			  name="aimEditActivityForm"
+			  type="org.digijava.module.aim.action.ShowReviseCloseDate"
+			  scope="session"
+			  path="/aim/reviseCompDate">
+			  <forward name="forward" path="/showLayout.do?layout=aim_reviseCloseDate"/>
+	</action>	
+
+		<action
+			  type="org.digijava.module.aim.action.ShowAdminHome"
+			  path="/aim/admin"
+			  forward="/showLayout.do?layout=adminHome" />
+	
+   
+   	<action name="aimStatusListForm"   type="org.digijava.module.aim.action.StatusManager"
+    scope="request" validate="false" path="/aim/statusManager">
+    <forward name="forward"
+    path="/showLayout.do?layout=statusManager" />
+	</action>
+	
+  <action name="aimStatusItemForm"   type="org.digijava.module.aim.action.GetStatusItem"
+    scope="request" validate="false" path="/aim/getStatusItem">
+    <forward name="deleteforward" path="/showLayout.do?layout=deleteStatus" />
+    <forward name="editforward" path="/showLayout.do?layout=updateStatus" />
+	</action>
+	
+   <action name="aimStatusItemForm"   type="org.digijava.module.aim.action.UpdateStatus"
+    scope="request" validate="false" path="/aim/updateStatus">
+    <forward name="forward" path="/aim/statusManager.do" />
+	</action>
+	
+	<action name="aimStatusItemForm"   type="org.digijava.module.aim.action.AddStatus"
+    scope="request" validate="false" path="/aim/addStatus">
+    <forward name="addforward"    path="/aim/statusManager.do" />
+    <forward name="forward"    path="/showLayout.do?layout=addStatus" />
+	</action>
+	
+	<action name="aimStatusItemForm"   type="org.digijava.module.aim.action.DeleteStatus"
+    scope="request" validate="false" path="/aim/deleteStatus">
+    <forward name="forward"
+    path="/aim/statusManager.do"/>
+	</action>
+   
+	<action name="aimCommitmentbyDonorForm" 
+    	type="org.digijava.module.aim.action.ViewCommitmentbyModality" 
+     	scope="session" validate="false" path="/aim/viewCommitmentbyModality">
+    <forward name="forward" path="/showLayout.do?layout=viewCommitmentbyModality" />
+    </action>
+	
+	<action name="aimMulitlateralbyDonorForm" 
+     	type="org.digijava.module.aim.action.ViewMulitlateralbyDonor" 
+     	scope="session" validate="false" path="/aim/viewMulitlateralbyDonor">
+    <forward name="forward" path="/showLayout.do?layout=viewMulitlateralbyDonor" />
+    </action>
+
+	<action name="aimMulitlateralbyDonorForm" 
+     	type="org.digijava.module.aim.action.ViewQuarterlyMultilateralbyDonor" 
+     	scope="session" validate="false" path="/aim/quarterlyMulitlateralbyDonor">
+    <forward name="forward" path="/showLayout.do?layout=quarterlyMulitlateralbyDonor" />
+    </action>
+ 
+	<action name="aimMulitlateralbyDonorForm" 
+     	type="org.digijava.module.aim.action.ViewbyProjectbyDonor" 
+     	scope="session" validate="false" path="/aim/viewbyProjectbyDonor">
+    <forward name="forward" path="/showLayout.do?layout=viewbyProjectbyDonor" />
+    </action>
+
+	<action name="aimMulitlateralbyDonorForm" 
+     	type="org.digijava.module.aim.action.ViewbyProjectbyDonor" 
+     	scope="session" validate="false" path="/aim/projectByDonor_NoLayout">
+    <forward name="forward" path="/showLayout.do?layout=viewbyProjectbyDonor_NoLayout" />
+    </action>
+
+
+	<action name="aimMulitlateralbyDonorForm" 
+     	type="org.digijava.module.aim.action.ViewQuarterlyByProject" 
+     	scope="session" validate="false" path="/aim/quarterlyReportByProject">
+    <forward name="forward" path="/showLayout.do?layout=quarterlyReportByProject" />
+    </action>
+
+	<action name="aimMulitlateralbyDonorForm" 
+     	type="org.digijava.module.aim.action.ViewbySectorbyProject" 
+     	scope="session" validate="false" path="/aim/viewbySectorbyProject">
+    <forward name="forward" path="/showLayout.do?layout=viewbySectorbyProject" />
+    </action>
+
+	<action name="aimMulitlateralbyDonorForm" 
+     	type="org.digijava.module.aim.action.ViewQuarterlyBySector" 
+     	scope="session" validate="false" path="/aim/quarterlyReportBySector">
+    <forward name="forward" path="/showLayout.do?layout=quarterlyReportBySector" />
+    </action>
+
+
+	<action name="aimCommitmentbyDonorForm" 
+     	type="org.digijava.module.aim.action.ViewQuarterlyDateRange" 
+     	scope="session" validate="false" path="/aim/viewQuarterlyDateRange">
+    <forward name="forward" path="/showLayout.do?layout=viewQuarterlyDateRange" />
+    </action>
+
+	<action name="aimCommitmentbyDonorForm" 
+     	type="org.digijava.module.aim.action.ViewProjects" 
+     	scope="session" validate="false" path="/aim/viewProjects">
+    <forward name="forward" path="/showLayout.do?layout=viewProjects" />
+    </action>
+
+	<action name="aimCommitmentbyDonorForm" 
+     	type="org.digijava.module.aim.action.ViewPlannedProjects" 
+     	scope="session" validate="false" path="/aim/viewPlannedProjects">
+    <forward name="forward" path="/showLayout.do?layout=viewPlannedProjects" />
+    </action>
+
+<!-- START EDIT LAYOUT TEASERS -->
+  
+  <action 
+  	forward="/showLayout.do?layout=addActivity" 
+	path="/aim/viewAddEdit" />
+	
+<!-- END EDIT LAYOUT TEASERS -->
+
+<!-- New Action for PDF generation  -->
+	<action name="aimCommitmentbyDonorForm" 
+     	type="org.digijava.module.aim.action.PlannedProjectPDF" 
+     	scope="session" validate="false" path="/aim/PlannedProjectPdf">
+    </action>
+
+	<action name="aimCommitmentbyDonorForm" 
+     	type="org.digijava.module.aim.action.PlannedProjectPDF" 
+     	scope="session" validate="false" path="/aim/PlannedProjectPdf">
+    </action>
+
+	<action name="aimCommitmentbyDonorForm" 
+     	type="org.digijava.module.aim.action.ViewProjectPDF" 
+     	scope="session" validate="false" path="/aim/viewProjectPdf">
+    </action>
+
+	<action name="aimCommitmentbyDonorForm" 
+    	type="org.digijava.module.aim.action.QuarterlyDateRangePDF" 
+     	scope="session" validate="false" path="/aim/quarterlyDateRangePdf">
+	</action>
+
+	<action name="aimCommitmentbyDonorForm" 
+    	type="org.digijava.module.aim.action.CommitmentByModalityPDF" 
+     	scope="session" validate="false" path="/aim/commitmentByModalityPdf">
+	</action>
+	<action name="aimMulitlateralbyDonorForm" 
+    	type="org.digijava.module.aim.action.SectorByProjectPDF" 
+     	scope="session" validate="false" path="/aim/sectorByProjectPdf">
+	</action>
+	<action name="aimMulitlateralbyDonorForm" 
+    	type="org.digijava.module.aim.action.MultilateralDonorPDF" 
+     	scope="session" validate="false" path="/aim/multilateralDonorPdf">
+	</action>
+	<action name="aimMulitlateralbyDonorForm" 
+    	type="org.digijava.module.aim.action.ProjectbyDonorPDF" 
+     	scope="session" validate="false" path="/aim/projectByDonorPdf">
+	</action>
+	
+	<action name="aimMulitlateralbyDonorForm" 
+    	type="org.digijava.module.aim.action.QuarterlyMultilateralByDonorPDF" 
+     	scope="session" validate="false" path="/aim/quarterlyMultilaterByDonorPdf">
+	</action>
+	
+	<action name="aimMulitlateralbyDonorForm" 
+    	type="org.digijava.module.aim.action.QuarterlyReportByProjectPDF" 
+     	scope="session" validate="false" path="/aim/quarterlyReportByProjectPdf">
+	</action>
+
+	<action name="aimMulitlateralbyDonorForm" 
+    	type="org.digijava.module.aim.action.QuarterlyReportBySectorPDF" 
+     	scope="session" validate="false" path="/aim/quarterlyReportBySectorPdf">
+	</action>
+	
+	
+<!-- New Action for Excel File generation  -->
+	
+	<action name="aimCommitmentbyDonorForm" 
+     	type="org.digijava.module.aim.action.PlannedProjectXLS" 
+     	scope="session" validate="false" path="/aim/PlannedProjectXls">
+	</action>
+	<action name="aimCommitmentbyDonorForm" 
+     	type="org.digijava.module.aim.action.ViewProjectXLS" 
+     	scope="session" validate="false" path="/aim/viewProjectXls">
+	</action>
+	<action name="aimMulitlateralbyDonorForm" 
+    	type="org.digijava.module.aim.action.SectorByProjectXLS" 
+     	scope="session" validate="false" path="/aim/SectorByProjectXls">
+	</action>
+	<action name="aimMulitlateralbyDonorForm" 
+    	type="org.digijava.module.aim.action.ProjectbyDonorXLS" 
+     	scope="session" validate="false" path="/aim/projectByDonorXls">
+	</action>
+	<action name="aimMulitlateralbyDonorForm" 
+    	type="org.digijava.module.aim.action.MultilateralDonorXLS" 
+     	scope="session" validate="false" path="/aim/multilateralDonorXls">
+	</action>
+	<action name="aimCommitmentbyDonorForm" 
+    	type="org.digijava.module.aim.action.CommitmentByModalityXLS" 
+     	scope="session" validate="false" path="/aim/commitmentByModalityXls">
+	</action>
+	<action name="aimCommitmentbyDonorForm" 
+    	type="org.digijava.module.aim.action.QuarterlyDateRangeXLS" 
+     	scope="session" validate="false" path="/aim/quarterlyDateRangeXls">
+	</action>
+	
+	<action name="aimMulitlateralbyDonorForm" 
+    	type="org.digijava.module.aim.action.QuarterlyMultilateralByDonorXLS" 
+     	scope="session" validate="false" path="/aim/quarterlyMultilaterByDonorXls">
+	</action>
+	<action name="aimMulitlateralbyDonorForm" 
+    	type="org.digijava.module.aim.action.QuarterlyReportByProjectXLS" 
+     	scope="session" validate="false" path="/aim/quarterlyReportByProjectXls">
+	</action>
+
+	<action name="aimMulitlateralbyDonorForm" 
+    	type="org.digijava.module.aim.action.QuarterlyReportBySectorXLS" 
+     	scope="session" validate="false" path="/aim/quarterlyReportBySectorXls">
+	</action>
+	
+<!-- START FINANCIAL EDIT	-->		
+	<action
+			name="aimEditActivityForm"
+		  	type="org.digijava.module.aim.action.AddFunding"
+		  	scope="session"
+		  	path="/aim/addFunding">	
+		  	<forward name="forward" path="/showLayout.do?layout=aim_fundingPopupLayout" />
+	</action>	
+	<action
+			name="aimEditActivityForm"
+			type="org.digijava.module.aim.action.EditFunding"
+			scope="session"
+			path="/aim/editFunding">
+			<forward name="forward" path="/showLayout.do?layout=aim_fundingPopupLayout"/>
+	</action>		
+	<action
+			name="aimEditActivityForm"
+			type="org.digijava.module.aim.action.FundingAdded"
+			scope="session"
+			path="/aim/fundingAdded">	
+			<forward name="forward" path="/aim/addActivity.do?step=3" redirect="true" />
+	</action>	
+	<action
+			name="aimEditActivityForm"
+			type="org.digijava.module.aim.action.AddFundingDetail"
+			scope="session"
+			path="/aim/addFundingDetail">
+			<forward name="forward" path="/showLayout.do?layout=aim_fundingPopupLayout" />
+	</action>
+	
+	<action
+			name="aimEditActivityForm"
+			type="org.digijava.module.aim.action.RemoveSelFundingOrgs"
+			scope="session"
+			path="/aim/remSelFundOrgs">
+			<forward name="forward" path="/aim/addActivity.do" redirect="true"/>
+	</action>	
+			
+<!-- END FINANCIAL EDIT	-->
+  </action-mappings>
+
+</struts-config>
+

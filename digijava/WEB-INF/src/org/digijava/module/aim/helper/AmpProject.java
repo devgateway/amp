@@ -1,0 +1,89 @@
+package org.digijava.module.aim.helper ;
+
+import java.util.Collection;
+
+public class AmpProject
+{
+	private Long ampActivityId;
+	private String ampId;
+	private String name ;
+	private Collection donor ;
+	private Collection sector ;
+	private String currency;
+	private String totalCommited;
+	
+	public AmpProject() {
+		totalCommited = "0.00";
+	}
+
+	public String getName() 
+	{
+		return name;
+	}
+
+	public Collection getDonor() 
+	{
+		return donor;
+	}
+
+	public Collection getSector() 
+	{
+		return sector;
+	}
+
+	public String getCurrency() 
+	{
+		return currency;
+	}
+
+	public String getTotalCommited() 
+	{
+		return totalCommited;
+	}
+
+	public Long getAmpActivityId() 
+	{
+		return ampActivityId;
+	}
+
+	public String getAmpId() 
+	{
+		return ampId;
+	}
+
+	public void setName(String name) 
+	{
+		this.name = name ;
+	}
+
+	public void setDonor(Collection donor) 
+	{
+		this.donor = donor ;
+	}
+
+	public void setSector(Collection sector) 
+	{
+		this.sector = sector ;
+	}
+
+	public void setAmpActivityId(Long ampActivityId)
+	{
+		this.ampActivityId = ampActivityId;
+	}
+
+	public void setAmpId(String ampId)
+	{
+		this.ampId = ampId;
+	}
+
+	public void setCurrency(String currency)
+	{
+		this.currency = currency;
+	}
+
+	public void setTotalCommited(String totalCommited)
+	{
+		this.totalCommited = totalCommited;
+	}
+
+}

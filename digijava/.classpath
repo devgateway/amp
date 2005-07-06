@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="WEB-INF/src"/>
+	<classpathentry exported="true" kind="lib" path="WEB-INF/lib/activation.jar"/>
+	<classpathentry exported="true" kind="lib" path="WEB-INF/lib/ant.jar"/>
+	<classpathentry exported="true" kind="lib" path="WEB-INF/lib/c3p0.jar"/>
+	<classpathentry exported="true" kind="lib" path="WEB-INF/lib/cglib-asm.jar"/>
+	<classpathentry exported="true" kind="lib" path="WEB-INF/lib/classes12.jar"/>
+	<classpathentry exported="true" kind="lib" path="WEB-INF/lib/commons-beanutils.jar"/>
+	<classpathentry exported="true" kind="lib" path="WEB-INF/lib/commons-collections.jar"/>
+	<classpathentry exported="true" kind="lib" path="WEB-INF/lib/commons-dbcp.jar"/>
+	<classpathentry exported="true" kind="lib" path="WEB-INF/lib/commons-digester.jar"/>
+	<classpathentry exported="true" kind="lib" path="WEB-INF/lib/commons-fileupload.jar"/>
+	<classpathentry exported="true" kind="lib" path="WEB-INF/lib/commons-lang.jar"/>
+	<classpathentry exported="true" kind="lib" path="WEB-INF/lib/commons-logging.jar"/>
+	<classpathentry exported="true" kind="lib" path="WEB-INF/lib/commons-pool.jar"/>
+	<classpathentry exported="true" kind="lib" path="WEB-INF/lib/commons-validator.jar"/>
+	<classpathentry exported="true" kind="lib" path="WEB-INF/lib/connector.jar"/>
+	<classpathentry exported="true" kind="lib" path="WEB-INF/lib/digi-commons.jar"/>
+	<classpathentry exported="true" kind="lib" path="WEB-INF/lib/dom4j.jar"/>
+	<classpathentry exported="true" kind="lib" path="WEB-INF/lib/hibernate2.jar"/>
+	<classpathentry exported="true" kind="lib" path="WEB-INF/lib/itext-1.1.jar"/>
+	<classpathentry exported="true" kind="lib" path="WEB-INF/lib/jaas.jar"/>
+	<classpathentry exported="true" kind="lib" path="WEB-INF/lib/jai_codec.jar"/>
+	<classpathentry exported="true" kind="lib" path="WEB-INF/lib/jai_core.jar"/>
+	<classpathentry exported="true" kind="lib" path="WEB-INF/lib/jakarta-oro.jar"/>
+	<classpathentry exported="true" kind="lib" path="WEB-INF/lib/jasperreports-0.6.1.jar"/>
+	<classpathentry exported="true" kind="lib" path="WEB-INF/lib/jboss.jar"/>
+	<classpathentry exported="true" kind="lib" path="WEB-INF/lib/jboss-cache.jar"/>
+	<classpathentry exported="true" kind="lib" path="WEB-INF/lib/jboss-common-jdbc-wrapper.jar"/>
+	<classpathentry exported="true" kind="lib" path="WEB-INF/lib/jdbc2_0-stdext.jar"/>
+	<classpathentry exported="true" kind="lib" path="WEB-INF/lib/jgroups.jar"/>
+	<classpathentry exported="true" kind="lib" path="WEB-INF/lib/jstl.jar"/>
+	<classpathentry exported="true" kind="lib" path="WEB-INF/lib/jta.jar"/>
+	<classpathentry exported="true" kind="lib" path="WEB-INF/lib/junit.jar"/>
+	<classpathentry exported="true" kind="lib" path="WEB-INF/lib/log4j.jar"/>
+	<classpathentry exported="true" kind="lib" path="WEB-INF/lib/mail.jar"/>
+	<classpathentry exported="true" kind="lib" path="WEB-INF/lib/mysql-connector-java.jar"/>
+	<classpathentry exported="true" kind="lib" path="WEB-INF/lib/ocrs12.zip"/>
+	<classpathentry exported="true" kind="lib" path="WEB-INF/lib/odmg.jar"/>
+	<classpathentry exported="true" kind="lib" path="WEB-INF/lib/optional.jar"/>
+	<classpathentry exported="true" kind="lib" path="WEB-INF/lib/proxool.jar"/>
+	<classpathentry exported="true" kind="lib" path="WEB-INF/lib/quartz.jar"/>
+	<classpathentry exported="true" kind="lib" path="WEB-INF/lib/spring.jar"/>
+	<classpathentry exported="true" kind="lib" path="WEB-INF/lib/standard.jar"/>
+	<classpathentry exported="true" kind="lib" path="WEB-INF/lib/struts.jar"/>
+	<classpathentry exported="true" kind="lib" path="WEB-INF/lib/struts-el.jar"/>
+	<classpathentry exported="true" kind="lib" path="WEB-INF/lib/strutstest.jar"/>
+	<classpathentry exported="true" kind="lib" path="WEB-INF/lib/swarmcache.jar"/>
+	<classpathentry exported="true" kind="lib" path="WEB-INF/lib/xml-apis.jar"/>
+	<classpathentry exported="true" kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry exported="true" kind="lib" path="WEB-INF/system-lib/concurrent.jar"/>
+	<classpathentry exported="true" kind="lib" path="WEB-INF/system-lib/jboss-common.jar"/>
+	<classpathentry exported="true" kind="lib" path="WEB-INF/system-lib/jboss-j2ee.jar"/>
+	<classpathentry exported="true" kind="lib" path="WEB-INF/system-lib/jboss-jmx.jar"/>
+	<classpathentry exported="true" kind="lib" path="WEB-INF/system-lib/jboss-system.jar"/>
+	<classpathentry exported="true" kind="lib" path="WEB-INF/system-lib/log4j.jar"/>
+	<classpathentry exported="true" kind="lib" path="WEB-INF/system-lib/servlet.jar"/>
+	<classpathentry kind="output" path="WEB-INF/classes"/>
+</classpath>

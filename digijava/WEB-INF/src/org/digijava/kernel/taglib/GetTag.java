@@ -1,0 +1,173 @@
+/*
+ *   GetTag.java
+ * 	 @Author Shamanth Murthy shamanth.murthy@mphasis.com
+ * 	 Created: Sep 24, 2003
+ * 	 CVS-ID: $Id: GetTag.java,v 1.1 2005-07-06 10:34:07 rahul Exp $
+ *
+ *   This file is part of DiGi project (www.digijava.org).
+ *   DiGi is a multi-site portal system written in Java/J2EE.
+ *
+ *   Confidential and Proprietary, Subject to the Non-Disclosure
+ *   Agreement, Version 1.0, between the Development Gateway
+ *   Foundation, Inc and the Recipient -- Copyright 2001-2004 Development
+ *   Gateway Foundation, Inc.
+ *
+ *   Unauthorized Disclosure Prohibited.
+ *
+ *************************************************************************/
+package org.digijava.kernel.taglib;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.jsp.tagext.BodyTagSupport;
+
+import javax.servlet.jsp.*;
+import javax.servlet.jsp.tagext.*;
+
+import org.digijava.kernel.translator.TranslatorWorker;
+import org.digijava.kernel.persistence.WorkerException;
+import org.digijava.kernel.entity.Message;
+import org.digijava.kernel.util.DgUtil;
+import java.io.IOException;
+import org.apache.log4j.Logger;
+import org.digijava.kernel.util.RequestUtils;
+
+public class GetTag extends BodyTagSupport {
+
+    private static Logger logger = Logger.getLogger(GetTag.class);
+
+	private String locale;
+	private String key;
+	private String type;
+
+	/**
+	 *
+	 * @exception JspException if a JSP exception has occurred
+	 * @return
+	 */
+	public int doAfterBody() {
+
+		HttpServletRequest request =
+			(HttpServletRequest) pageContext.getRequest();
+
+		BodyContent body = getBodyContent();
+
+		String output = "";
+
+		if (getKey() != null && getType() != null) { //commented
+//        if (getKey() != null) {
+
+			String siteId = "";
+
+			if(this.getKey().trim().startsWith("cn") || this.getKey().trim().startsWith("ln")){
+
+				siteId="0";
+
+
+			}else{
+				if (getType().equalsIgnoreCase("local")) {
+
+					siteId =
+						RequestUtils.getSiteDomain(request).getSite().getId().toString();
+
+				} else {
+					siteId =
+						DgUtil
+							.getRootSite(RequestUtils.getSiteDomain(request).getSite())
+							.getId()
+							.toString();
+
+				}
+			}
+
+			try {
+				Message msg =
+					new TranslatorWorker().get(getKey(), getLocale(), siteId);
+
+
+				if (msg != null) {
+					if (msg.getMessage() != null) {
+						output = msg.getMessage();
+
+					}else{
+						output="key:" + getKey();
+					}
+				}else{
+					output="key:" + getKey();
+				}
+
+			} catch (WorkerException we) {
+				we.printStackTrace();
+			}
+
+		}
+
+		writeData(output, body);
+		return SKIP_BODY;
+
+	}
+
+	/**
+	 * Writes given string to the browser
+	 * @param localizedMsg
+	 * @param body
+	 */
+	private void writeData(String localizedMsg, BodyContent body) {
+
+		try {
+
+			JspWriter out = body.getEnclosingWriter();
+
+			out.print(localizedMsg);
+
+		} catch (IOException ioexception) {
+			ioexception.printStackTrace();
+		}
+
+	}
+
+	/**
+	 * @return
+	 */
+	public String getLocale() {
+		return locale;
+	}
+
+	/**
+	 * @param locale
+	 */
+	public void setLocale(String locale) {
+		this.locale = locale;
+	}
+
+	/**
+	 * @return
+	 */
+	public String getKey() {
+		return key;
+	}
+
+	/**
+	 * @param key
+	 */
+	public void setKey(String key) {
+		this.key = key;
+	}
+	/**
+	 * @return
+	 */
+	public String getType() {
+
+		if (this.type == null) {
+
+			type = "group";
+		}
+		return type;
+	}
+
+	/**
+	 * @param type
+	 */
+	public void setType(String type) {
+		this.type = type;
+	}
+}

@@ -265,7 +265,7 @@ function validateForm() {
 									</td></tr>									
 					<tr>
 					<td vAlign="center" colspan=5>
-							<b><FONT color="blue">*</FONT></b>
+							<b></b>
 								Select the appropriate Region, Zone or Woreda as needed.
 					</td>
 					</tr>
@@ -284,86 +284,83 @@ function validateForm() {
 									</td></tr>
 									</table>
 									</td></tr>
-									<%-- <tr><td vAlign="center">
-										<digi:trn key="aim:implementationLevel2">
-										Implementation Location</digi:trn> &nbsp;
-										<html:radio property="implementationLevel" 
-										value="country">Country</html:radio>
-										&nbsp;&nbsp;
-										<html:radio property="implementationLevel" 
-										value="region">Region</html:radio>
-										&nbsp;&nbsp;
-										<html:radio property="implementationLevel" 
-										value="zone">Zone</html:radio>
-										&nbsp;&nbsp;
-										<html:radio property="implementationLevel" 
-										value="woreda">Woreda</html:radio>
-									</td></tr> --%>
 									<tr><td>
 										&nbsp;
 									</td></tr>
-									<tr><td >
-										<table width="100%" bgcolor="#f4f4f2" cellSpacing=1 cellPadding=5 class="box-border-nopadding">
-											<logic:empty name="aimEditActivityForm" property="selectedLocs">
-												<tr>
-													<td bgcolor="#ffffff">
-														<input type="button" value="Add Location" class="buton" 
-														onclick="selectLocation()">
-													</td>
-												</tr>
-											</logic:empty>
-											<logic:notEmpty name="aimEditActivityForm" property="selectedLocs">
-												<tr>
-													<td>
-														<table cellSpacing=2 cellPadding=2 border=0 bgcolor="#ffffff" width="100%">
-														<logic:iterate name="aimEditActivityForm" property="selectedLocs" id="selectedLocs"
-														type="org.digijava.module.aim.helper.Location">
-															<tr><td width="100%"> 
-																<table width="100%" cellSpacing=2 cellPadding=2 vAlign="top" align="left">
-																	<tr>
-																		<td width="3" vAlign="center">
-																			<html:multibox property="selLocs">
-																				<bean:write name="selectedLocs" property="locId" />
-																			</html:multibox>																		
-																		</td>
-																		<td vAlign="center" align="left">
-																			<c:if test="${!empty selectedLocs.country}">
-																				[<bean:write name="selectedLocs" property="country"/>]
-																			</c:if>
-																			<c:if test="${!empty selectedLocs.region}">
-																				[<bean:write name="selectedLocs" property="region"/>]
-																			</c:if>
-																			<c:if test="${!empty selectedLocs.zone}">
-																				[<bean:write name="selectedLocs" property="zone"/>]
-																			</c:if>
-																			<c:if test="${!empty selectedLocs.woreda}">
-																				[<bean:write name="selectedLocs" property="woreda"/>]
-																			</c:if>																		
-																		</td>
-																	</tr>	
-																</table>
-															</td></tr>
-														</logic:iterate>
-															<tr><td>
-																<table cellSpacing=2 cellPadding=2>
-																	<tr>
-																		<td>
-																			<input type="button" value="Add Location" class="buton" 
-																			onclick="selectLocation()">
-																		</td>
-																		<td>
-																			<input type="button" value="Remove Location" class="buton" 
+									<tr><td>
+
+										<table cellPadding=5 cellSpacing=1 border=0 width="100%" bgcolor="#d7eafd">
+											<tr>
+												<td align="left">
+													<b><digi:trn key="aim:location">Location</digi:trn></b>
+												</td>
+											</tr>
+											<tr>
+												<td bgcolor="#ffffff" width="100%">
+													<table cellPadding=1 cellSpacing=1 border=0 bgcolor="#ffffff" width="100%">
+													<logic:empty name="aimEditActivityForm" property="selectedLocs">
+														<tr>
+															<td bgcolor="#ffffff">
+																<input type="button" value="Add Location" class="buton" 
+																onclick="selectLocation()">
+															</td>
+														</tr>
+													</logic:empty>
+													<logic:notEmpty name="aimEditActivityForm" property="selectedLocs">
+														<tr>
+															<td>
+																<table cellSpacing=0 cellPadding=0 border=0 bgcolor="#ffffff" width="100%">
+																<logic:iterate name="aimEditActivityForm" property="selectedLocs" id="selectedLocs"
+																type="org.digijava.module.aim.helper.Location">
+																	<tr><td width="100%"> 
+																		<table width="100%" cellSpacing=1 cellPadding=1 vAlign="top" align="left">
+																			<tr>
+																				<td width="3" vAlign="center">
+																					<html:multibox property="selLocs">
+																						<bean:write name="selectedLocs" property="locId" />
+																					</html:multibox>																		
+																				</td>
+																				<td vAlign="center" align="left">
+																					<c:if test="${!empty selectedLocs.country}">
+																						[<bean:write name="selectedLocs" property="country"/>]
+																					</c:if>
+																					<c:if test="${!empty selectedLocs.region}">
+																						[<bean:write name="selectedLocs" property="region"/>]
+																					</c:if>
+																					<c:if test="${!empty selectedLocs.zone}">
+																						[<bean:write name="selectedLocs" property="zone"/>]
+																					</c:if>
+																					<c:if test="${!empty selectedLocs.woreda}">
+																						[<bean:write name="selectedLocs" property="woreda"/>]
+																					</c:if>																		
+																				</td>
+																			</tr>	
+																		</table>
+																	</td></tr>
+																</logic:iterate>
+																<tr><td>
+																	<table cellSpacing=2 cellPadding=2>
+																		<tr>
+																			<td>
+																				<input type="button" value="Add Location" class="buton" 
+																				onclick="selectLocation()">
+																			</td>
+																			<td>
+																				<input type="button" value="Remove Location" class="buton" 
 																				onclick="return removeSelLocations()">
-																		</td>
-																	</tr>
-																</table>
-															</td></tr>
-														</table>
-													</td>
-												</tr>
-											</logic:notEmpty>
-											
-										</table>
+																			</td>
+																		</tr>
+																	</table>
+																</td></tr>
+															</table>
+														</td>
+													</tr>
+													</logic:notEmpty>
+													</table>
+												</td>
+											</tr>
+										</table>						
+										
 										<!-- Add Location -->
 									</td></tr>
 									<tr><td>
@@ -385,66 +382,79 @@ function validateForm() {
 										&nbsp;
 									</td></tr>
 									<tr><td>
-										<table width="100%" bgcolor="#f4f4f2" cellSpacing=1 cellPadding=5 class="box-border-nopadding">
-										
-<!-- 											<logic:empty name="aimEditActivityForm" property="activitySectors">
- -->												<tr>
-													<td bgcolor="#ffffff">
-														<input type="button" value="Add Sector" class="buton" name="addSec"
-														onclick="addSectors()">
-													</td>
-												</tr>
-											<!-- </logic:empty> -->
-											<logic:notEmpty name="aimEditActivityForm" property="activitySectors">
-												<tr>
-													<td>
-														<table cellSpacing=2 cellPadding=2 border=0 bgcolor="#ffffff" width="100%">
-														<logic:iterate name="aimEditActivityForm" property="activitySectors" 
-														id="actSect" type="org.digijava.module.aim.helper.ActivitySector">
-															<tr><td> 
-																<table width="100%" cellSpacing=2 cellPadding=2 vAlign="top" align="left">
-																	<tr>
-																		<td width="3" vAlign="center">
-																			<html:multibox property="selActivitySectors">
-																				<bean:write name="actSect" property="id" />
-																			</html:multibox>
-																		</td>
-																		<td vAlign="center" align="left">
-																			<c:if test="${!empty actSect.sectorName}">
-																				[<bean:write name="actSect" property="sectorName"/>]
-																			</c:if>
-																			<c:if test="${!empty actSect.subsectorLevel1Name}">
-																				[<bean:write name="actSect" property="subsectorLevel1Name"/>]
-																			</c:if>
-																			<c:if test="${!empty actSect.subsectorLevel2Name}">
-																				[<bean:write name="actSect" property="subsectorLevel2Name"/>]
-																			</c:if>
-																		</td>
-																	</tr>	
-																</table>
-															</td></tr>
-														</logic:iterate>
-															<tr><td>
-																<table cellSpacing=2 cellPadding=2>
-																	<tr>
-<!--																		
-																		<td>
-																			<input type="button" value="Add Sectors" class="buton" 
-																			onclick="addSectors()">
-																		</td>
--->																		
-																		<td>
-																			<input type="button" value="Remove Sector" class="buton" 
+
+
+										<table cellPadding=5 cellSpacing=1 border=0 width="100%" bgcolor="#d7eafd">
+											<tr>
+												<td align="left">
+													<b><digi:trn key="aim:sector">Sector</digi:trn></b>
+												</td>
+											</tr>
+											<tr>
+												<td bgcolor="#ffffff" width="100%">
+													<table cellPadding=1 cellSpacing=1 border=0 bgcolor="#ffffff" width="100%">
+		 											<logic:empty name="aimEditActivityForm" property="activitySectors">
+														<tr>
+															<td bgcolor="#ffffff">
+																<input type="button" value="Add Sector" class="buton" name="addSec"
+																onclick="addSectors()">
+															</td>
+														</tr>
+													</logic:empty> 
+													<logic:notEmpty name="aimEditActivityForm" property="activitySectors">
+														<tr>
+															<td>
+																<table cellSpacing=0 cellPadding=0 border=0 bgcolor="#ffffff" width="100%">
+																<logic:iterate name="aimEditActivityForm" property="activitySectors" 
+																id="actSect" type="org.digijava.module.aim.helper.ActivitySector">
+																	<tr><td> 
+																			<table width="100%" cellSpacing=1 cellPadding=1 vAlign="top" align="left">
+																				<tr>
+																					<td width="3" vAlign="center">
+																						<html:multibox property="selActivitySectors">
+																							<bean:write name="actSect" property="id" />
+																						</html:multibox>
+																					</td>
+																					<td vAlign="center" align="left">
+																						<c:if test="${!empty actSect.sectorName}">
+																							[<bean:write name="actSect" property="sectorName"/>]
+																						</c:if>
+																						<c:if test="${!empty actSect.subsectorLevel1Name}">
+																							[<bean:write name="actSect" property="subsectorLevel1Name"/>]
+																						</c:if>
+																						<c:if test="${!empty actSect.subsectorLevel2Name}">
+																							[<bean:write name="actSect" property="subsectorLevel2Name"/>]
+																						</c:if>
+																					</td>
+																				</tr>	
+																			</table>
+																	</td></tr>
+																</logic:iterate>
+																<tr><td>
+																	<table cellSpacing=2 cellPadding=2>
+																		<tr>
+																			<%--
+																			<td>
+																				<input type="button" value="Add Sectors" class="buton" 
+																				onclick="addSectors()">
+																			</td>
+																			--%>
+																			<td>
+																				<input type="button" value="Remove Sector" class="buton" 
 																				onclick="return removeSelSectors()">
-																		</td>
-																	</tr>
+																			</td>
+																		</tr>
+																	</table>
+																</td></tr>
 																</table>
-															</td></tr>
-														</table>
-													</td>
-												</tr>
-											</logic:notEmpty>
+															</td>
+														</tr>
+													</logic:notEmpty>
+													</table>
+												</td>
+											</tr>
 										</table>
+
 										<!-- Add Sectors -->
 									</td></tr>									
 									<tr><td>

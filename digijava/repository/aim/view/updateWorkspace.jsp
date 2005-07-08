@@ -328,7 +328,7 @@ onsubmit="return validateAimUpdateWorkspaceForm(this);">
 																<tr>
 																	<td>
 																		<input type="button" value="Delete" class="dr-menu"
-																		onclick="update(delete)"/>
+																		onclick="update('delete')"/>
 																	</td>
 																	<td>
 																		<html:reset value="Clear" styleClass="dr-menu"/>

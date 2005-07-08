@@ -69,36 +69,26 @@ public class UpdateTeamActivities extends Action {
 		}
 
 		if (taForm.getRemoveActivity() != null) {
-			/* remove all selected articles */
+			/* remove all selected activities */
+		    
+	        if (taForm.getSelActivities() != null) {
+	            TeamUtil.removeActivitiesFromTeam(taForm.getSelActivities());
+	        }
+	 		    
 			Long selActivities[] = taForm.getSelActivities();
+			taForm.setSelActivities(null);
 
-			ActionErrors errors = null;
-			Object params = new Object();
-			if (selActivities != null) {
-				for (int i = 0; i < selActivities.length; i++) {
-					if (selActivities[i] != null) {
-						Long actId = selActivities[i];
-						AmpActivity activity = DbUtil.getProjectChannelOverview(actId);
-						activity.setTeam(null);
-						activity.setMember(null);
-						DbUtil.update(activity);
-						UpdateDB.updateReportCache(actId);
-					}
-				}
-				taForm.setSelActivities(null);
-
-				if (session.getAttribute("unassignedActivityList") != null) {
-					session.removeAttribute("unassignedActivityList");
-				}
-				if (session.getAttribute("ampProjects") != null) {
-					session.removeAttribute("ampProjects");
-				}
-				if (session.getAttribute("teamActivityList") != null) {
-					session.removeAttribute("teamActivityList");
-				}
-				taForm.setRemoveActivity(null);
-				taForm.setSelActivities(null);
+			if (session.getAttribute("unassignedActivityList") != null) {
+				session.removeAttribute("unassignedActivityList");
 			}
+			if (session.getAttribute("ampProjects") != null) {
+				session.removeAttribute("ampProjects");
+			}
+			if (session.getAttribute("teamActivityList") != null) {
+				session.removeAttribute("teamActivityList");
+			}
+			taForm.setRemoveActivity(null);
+			taForm.setSelActivities(null);			
 
 			return mapping.findForward("forward");
 		} else if (taForm.getAssignActivity() != null) {

@@ -15,6 +15,7 @@ import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
+import org.digijava.module.aim.dbentity.AmpApplicationSettings;
 import org.digijava.module.aim.dbentity.AmpTeam;
 import org.digijava.module.aim.form.TeamActivitiesForm;
 import org.digijava.module.aim.helper.Constants;
@@ -36,6 +37,8 @@ public class GetTeamActivities extends Action {
 
 		Long id = null;
 
+		try {
+		
 		boolean permitted = false;
 		HttpSession session = request.getSession();
 		if (session.getAttribute("ampAdmin") != null) {
@@ -57,17 +60,24 @@ public class GetTeamActivities extends Action {
 
 		int numRecords = Constants.NUM_RECORDS;
 		int page = 0;
-		boolean admin = true;
 
 		if (request.getParameter("id") != null) {
 			id = new Long(Long.parseLong(request.getParameter("id")));
+			AmpApplicationSettings appSettings = DbUtil.getTeamAppSettings(id);
+			if (appSettings != null) {
+			    numRecords = appSettings.getDefaultRecordsPerPage().intValue();
+			}			
 		} else if (request.getAttribute("teamId") != null) {
 			id = (Long) request.getAttribute("teamId");
+			AmpApplicationSettings appSettings = DbUtil.getTeamAppSettings(id);
+			if (appSettings != null) {
+			    numRecords = appSettings.getDefaultRecordsPerPage().intValue();
+			}
 		} else if (session.getAttribute("currentMember") != null) {
 			TeamMember tm = (TeamMember) session.getAttribute("currentMember");
 			id = tm.getTeamId();
-			numRecords = tm.getAppSettings().getDefRecsPerPage();
-			admin = false;
+			if (tm.getAppSettings() != null)
+			    numRecords = tm.getAppSettings().getDefRecsPerPage();
 		}
 
 		if (id != null) {
@@ -78,69 +88,56 @@ public class GetTeamActivities extends Action {
 			}
 			
 			page = (page < 0) ? 1 : page;
-
 			taForm.setPage(page);
 
 			AmpTeam ampTeam = TeamUtil.getAmpTeam(id);
-
-			Collection col = null;
-
-			if (admin == true) {
-				col = DbUtil.getAllTeamActivities(id);
+			taForm.setTeamId(id);
+			taForm.setTeamName(ampTeam.getName());						    
+			
+			if (taForm.getAllActivities() == null) {
+			    Collection col = DbUtil.getAllTeamActivities(id);
+			    logger.info("Loaded " + col.size() + " activities for the team " + ampTeam.getName());			    
 				List temp = (List) col;
 				Collections.sort(temp);
 				col = (Collection) temp;
-			} else {
-
-				if (session.getAttribute("teamActivityList") == null) {
-					col = DbUtil.getAllTeamActivities(id);
-					List temp = (List) col;
-					logger.info("Activity Collection size = " + col.size());
-					Collections.sort(temp);
-					col = (Collection) temp;
-					session.setAttribute("teamActivityList", col);
-				}
-
-				Collection actList = (Collection) session
-						.getAttribute("teamActivityList");
-
-				int stIndex = ((page - 1) * numRecords) + 1;
-				int edIndex = page * numRecords;
-				if (edIndex > actList.size()) {
-					edIndex = actList.size();
-				}
-
-				Vector vect = new Vector();
-				vect.addAll(actList);
-
-				col = new ArrayList();
-				for (int i = (stIndex - 1); i < edIndex; i++) {
-					col.add(vect.get(i));
-				}
-
-				int numPages = actList.size() / numRecords;
-				numPages += (actList.size() % numRecords != 0) ? 1 : 0;
-
-				Collection pages = null;
-
-				if (numPages > 1) {
-					pages = new ArrayList();
-					for (int i = 0; i < numPages; i++) {
-						Integer pageNum = new Integer(i + 1);
-						pages.add(pageNum);
-					}
-				}
-				taForm.setCurrentPage(new Integer(page));
-				taForm.setPages(pages);
-				session.setAttribute("pageno", new Integer(page));
+				taForm.setAllActivities(col);
 			}
-			taForm.setActivities(col);
-			taForm.setTeamId(id);
-			taForm.setTeamName(ampTeam.getName());
+
+			int totActivities = taForm.getAllActivities().size();
+			int stIndex = ((page - 1) * numRecords) + 1;
+			int edIndex = page * numRecords;
+			edIndex = (edIndex > totActivities) ? totActivities : edIndex;
+
+			Vector vect = new Vector();
+			vect.addAll(taForm.getAllActivities());
+
+			taForm.setActivities(new ArrayList());
+			for (int i = (stIndex - 1); i < edIndex; i++) {
+			    taForm.getActivities().add(vect.get(i));
+			}
+
+			int numPages = totActivities / numRecords;
+			numPages += (totActivities % numRecords != 0) ? 1 : 0;
+
+			Collection pages = null;
+			if (numPages > 1) {
+				pages = new ArrayList();
+				for (int i = 0; i < numPages; i++) {
+					Integer pageNum = new Integer(i + 1);
+					pages.add(pageNum);
+				}
+			}
+			taForm.setCurrentPage(new Integer(page));
+			taForm.setPages(pages);
+			session.setAttribute("pageno", new Integer(page));
 
 			return mapping.findForward("forward");
 		} else {
 			return null;
 		}
+		} catch (Exception e) {
+		    e.printStackTrace(System.out);
+		}
+		return null;
 	}
 }

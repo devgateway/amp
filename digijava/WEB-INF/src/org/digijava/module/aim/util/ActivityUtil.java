@@ -22,13 +22,12 @@ import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.user.User;
 import org.digijava.module.aim.dbentity.AmpActivity;
 import org.digijava.module.aim.dbentity.AmpActivityClosingDates;
-import org.digijava.module.aim.dbentity.AmpActivityInternalId;
+import org.digijava.module.aim.dbentity.AmpComments;
 import org.digijava.module.aim.dbentity.AmpComponent;
 import org.digijava.module.aim.dbentity.AmpFunding;
 import org.digijava.module.aim.dbentity.AmpFundingDetail;
 import org.digijava.module.aim.dbentity.AmpLocation;
 import org.digijava.module.aim.dbentity.AmpOrgRole;
-import org.digijava.module.aim.dbentity.AmpComments;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpPhysicalPerformance;
 import org.digijava.module.aim.dbentity.AmpSector;
@@ -38,8 +37,7 @@ import org.digijava.module.aim.helper.ActivitySector;
 import org.digijava.module.aim.helper.DateConversion;
 import org.digijava.module.aim.helper.Location;
 import org.digijava.module.aim.helper.RelOrganization;
-import org.digijava.module.cms.dbentity.CMSContentItem;
-import org.digijava.module.aim.util.DbUtil;
+import org.digijava.module.aim.helper.TeamMember;
 
 /**
  * ActivityUtil is the persister class for all activity related 
@@ -89,12 +87,16 @@ public class ActivityUtil {
 			tx = session.beginTransaction();
 			
 			if (edit) { /* edit an existing activity */
-				oldActivity = DbUtil.getProjectChannelOverview(oldActivityId);
+			    oldActivity = (AmpActivity) session.load(AmpActivity.class,oldActivityId);
+			    
+			    activity.setAmpActivityId(oldActivityId);
 				
+			    
 				if (oldActivity == null) {
 					logger.debug("Previous Activity is null");
 				}
 				
+			    
 				/* delete previos fundings and funding details */
 				Set fundSet = oldActivity.getFunding();
 				if (fundSet != null) {
@@ -133,16 +135,6 @@ public class ActivityUtil {
 					}
 				}
 				
-				/* delete all activity internal Ids*/
-				Set intIds = oldActivity.getInternalIds();
-				if (intIds != null) {
-					Iterator intIdItr = intIds.iterator();
-					while (intIdItr.hasNext()) {
-						AmpActivityInternalId intId = (AmpActivityInternalId) intIdItr.next();
-						session.delete(intId);
-					}
-				}
-				
 				/* delete all previous closing dates */
 				Set closeDates = oldActivity.getClosingDates();
 				if (closeDates != null) {
@@ -151,8 +143,8 @@ public class ActivityUtil {
 						AmpActivityClosingDates date = (AmpActivityClosingDates) dtItr.next();
 						session.delete(date);
 					}
-				}
-				
+				}				
+
 				/* delete all previous comments */
 				ArrayList col = DbUtil.getAllCommentsByField(field,oldActivity.getAmpActivityId());
 				logger.debug("col.size() [Inside deleting]: " + col.size());
@@ -164,64 +156,113 @@ public class ActivityUtil {
 						}
 					}
 				logger.debug("comments deleted");
+
+				oldActivity.getClosingDates().clear();
+				oldActivity.getComponents().clear();
+				oldActivity.getDocuments().clear();
+				oldActivity.getFunding().clear();
+				oldActivity.getInternalIds().clear();
+				oldActivity.getLocations().clear();
+				oldActivity.getOrgrole().clear();
+				oldActivity.getSectors().clear();				
 				
-				activity.setAmpActivityId(oldActivityId);
+				oldActivity.setActualApprovalDate(activity.getActualApprovalDate());
+				oldActivity.setActualCompletionDate(activity.getActualCompletionDate());
+				oldActivity.setActualStartDate(activity.getActualStartDate());
+				oldActivity.setAmpId(activity.getAmpId());
+				oldActivity.setCalType(activity.getCalType());				
+				oldActivity.setCondition(activity.getCondition());
+				oldActivity.setContFirstName(activity.getContFirstName());
+				oldActivity.setContLastName(activity.getContLastName());
+				oldActivity.setContractors(activity.getContractors());
+				oldActivity.setCountry(activity.getCountry());
+				oldActivity.setDescription(activity.getDescription());
+				oldActivity.setEmail(activity.getEmail());
+				oldActivity.setLanguage(activity.getLanguage());
+				oldActivity.setLevel(activity.getLevel());
+				oldActivity.setModality(activity.getModality());
+				oldActivity.setMofedCntEmail(activity.getMofedCntEmail());
+				oldActivity.setMofedCntFirstName(activity.getMofedCntFirstName());
+				oldActivity.setMofedCntLastName(activity.getMofedCntLastName());
+				oldActivity.setName(activity.getName());
+				oldActivity.setObjective(activity.getObjective());
+				oldActivity.setProgramDescription(activity.getProgramDescription());
+				oldActivity.setProposedApprovalDate(activity.getProposedApprovalDate());
+				oldActivity.setProposedStartDate(activity.getProposedStartDate());
+				oldActivity.setStatus(activity.getStatus());
+				oldActivity.setStatusReason(activity.getStatusReason());
+				oldActivity.setTeam(activity.getTeam());
+				oldActivity.setThemeId(activity.getThemeId());
+				oldActivity.setUpdatedDate(activity.getUpdatedDate());
+				
+				Iterator itr = null;
+				if (activity.getClosingDates() != null) {
+					itr = activity.getClosingDates().iterator();
+					while (itr.hasNext()) {
+					    AmpActivityClosingDates cDate = (AmpActivityClosingDates) itr.next();
+					    cDate.setAmpActivityId(oldActivity);
+					    if (oldActivity.getClosingDates() == null) 
+					        oldActivity.setClosingDates(new HashSet());
+					    oldActivity.getClosingDates().add(cDate);
+					}				    
+				}
+				
+				if (activity.getComponents() != null) {
+					itr = activity.getComponents().iterator();
+					while (itr.hasNext()) {
+					    AmpComponent compnt = (AmpComponent) itr.next();
+					    compnt.setActivity(oldActivity);
+					    if (oldActivity.getComponents() == null)
+					        oldActivity.setComponents(new HashSet());
+					    oldActivity.getComponents().add(compnt);
+					}				    
+				}
+				logger.debug("Component size in oldActivity = " + oldActivity.getComponents().size());
+				
+				oldActivity.setDocuments(activity.getDocuments());				
+
+				if (activity.getFunding() != null) {
+					itr = activity.getFunding().iterator();
+					while (itr.hasNext()) {
+					    AmpFunding fund = (AmpFunding) itr.next();
+					    fund.setAmpActivityId(oldActivity);
+					    if (oldActivity.getFunding() == null)
+					        oldActivity.setFunding(new HashSet());
+					    oldActivity.getFunding().add(fund);
+					}				    
+				}
+				
+				oldActivity.setInternalIds(activity.getInternalIds());
+				oldActivity.setLocations(activity.getLocations());
+				oldActivity.setOrgrole(activity.getOrgrole());
+				oldActivity.setSectors(activity.getSectors());
 			}
 			
-			/* Persists document objects, of type CMSContentItem, related to the activity */
-			Set docsSet = activity.getDocuments();
-			if (docsSet != null) {
-				Iterator docItr = docsSet.iterator();
-				while (docItr.hasNext()) {
-					CMSContentItem cmsItem = (CMSContentItem) docItr.next();
-					session.save(cmsItem);
-				}
-			}
 			
 			/* Persists the activity */
 			if (edit) {
 				// update the activity
-				activity.setActivityCreator(oldActivity.getActivityCreator());
-				activity.setCreatedDate(oldActivity.getCreatedDate());
-				session.update(activity);
+			    logger.debug("updating ....");
+				session.saveOrUpdate(oldActivity);
 			} else {
 				// create the activity
-				//activity.setMember(new HashSet());
-				//activity.getMember().add(activity.getActivityCreator());
+			    logger.debug("Sector size :" + activity.getSectors().size());
+			    logger.debug("creating ....");
+			    if (activity.getMember() == null) {
+					activity.setMember(new HashSet());			        
+			    }
+
+				activity.getMember().add(activity.getActivityCreator());
+				AmpTeamMember member = (AmpTeamMember) session.load(AmpTeamMember.class,
+				        activity.getActivityCreator().getAmpTeamMemId());
+				if (member.getActivities() == null) {
+				    member.setActivities(new HashSet());
+				}
+				member.getActivities().add(activity);
 				session.save(activity);
-				
-				String qryStr = "select tm from " + AmpTeamMember.class.getName() + " tm " +
-					"where (tm.ampTeamMemId=:id)";
-				Query qry = session.createQuery(qryStr);
-				qry.setParameter("id",activity.getActivityCreator().getAmpTeamMemId(),Hibernate.LONG);
-				Iterator tmpItr = qry.list().iterator();
-				AmpTeamMember member = null;
-				if (tmpItr.hasNext()) {
-					member = (AmpTeamMember) tmpItr.next();
-					logger.debug("Number of member activities is " + member.getActivities().size());
-					Collection memActivites = member.getActivities();
-					if (memActivites  == null) {
-						memActivites = new ArrayList();
-					}
-					boolean flag = false;
-					Iterator tmp = memActivites.iterator();
-					while (tmp.hasNext()) {
-						AmpActivity act = (AmpActivity) tmp.next();
-						if (act.getAmpActivityId() != null &&
-								act.getAmpActivityId().equals(activity.getAmpActivityId())) {
-							flag = true;
-							break;
-						}
-					}
-					if (!flag) {
-						memActivites.add(activity);
-					}
-					member.setActivities(new HashSet(memActivites));
-					session.update(member);
-				}				
+				session.saveOrUpdate(member);
 			}
 			
-		
 			/* Persists comments, of type AmpComments, related to the activity */
 			if (!commentsCol.isEmpty()) {
 				logger.debug("commentsCol.size() [Inside Persisting]: " + commentsCol.size());
@@ -230,90 +271,15 @@ public class ActivityUtil {
 				if (edit && serializeFlag)
 					flag = false; */
 				logger.debug("flag [Inside Persisting comments]: " + flag);
-				/*if (flag) {*/
-					Iterator itr = commentsCol.iterator();
-					while (itr.hasNext()) {
-						AmpComments comObj = (AmpComments) itr.next();
-						comObj.setAmpActivityId(activity);
-						session.save(comObj);
-						logger.debug("Comment Saved [AmpCommentId] : " + comObj.getAmpCommentId());
-					}
+				Iterator itr = commentsCol.iterator();
+				while (itr.hasNext()) {
+					AmpComments comObj = (AmpComments) itr.next();
+					comObj.setAmpActivityId(activity);
+					session.save(comObj);
+					logger.debug("Comment Saved [AmpCommentId] : " + comObj.getAmpCommentId());
+				}
 			} else
 				logger.debug("commentsCol is empty !");
-			
-			/*
-			 * Persists the activity closing dates 
-			 */
-			Set closeDates = activity.getClosingDates();
-			if (closeDates != null && closeDates.size() > 0) {
-				Iterator datesItr = closeDates.iterator();
-				while (datesItr.hasNext()) {
-					AmpActivityClosingDates date = (AmpActivityClosingDates) datesItr.next();
-					session.save(date);
-				}
-			}
-			
-			/* 
-			 * Persists the activity internal ids
-			 * This is done after saving activity since this requires the activity id
-			 * as one of the key, which will be got only after saving the activity object
-			 */ 
-			
-			Set intIdSet = activity.getInternalIds();
-			if (intIdSet != null) {
-				Iterator intIdItr = intIdSet.iterator();
-				while (intIdItr.hasNext()) {
-					AmpActivityInternalId intId = (AmpActivityInternalId) intIdItr.next();
-					intId.setAmpActivityId(activity.getAmpActivityId());
-					session.save(intId);
-				}
-			}
-			
-			/* Persists components physical performance object */
-			logger.info("Here 1");
-			Set compSet = activity.getComponents();
-			if (compSet != null || compSet.size() > 0) {
-				logger.info("Inside if");
-				Iterator compItr = compSet.iterator();
-				logger.info("Got iterator");
-				while (compItr.hasNext()) {
-					AmpComponent comp = (AmpComponent) compItr.next();
-					logger.info("Saving component " + comp.getTitle());
-					session.save(comp);
-					Set phyProgSet = comp.getPhysicalProgress();
-					if (phyProgSet != null) {
-						Iterator phyProgItr = phyProgSet.iterator();
-						while (phyProgItr.hasNext()) {
-							AmpPhysicalPerformance phyPerf = (AmpPhysicalPerformance) phyProgItr.next();
-							logger.info("Saving phy perf " + phyPerf.getTitle());
-							session.save(phyPerf);
-						}
-					}					
-				}
-				logger.info("end while");
-			} else {
-				logger.info("Component is either null or size is equal to 0");
-			}
-			
-			/* Persists the funding,funding details and closing date history objects */
-			Set fundSet = activity.getFunding();
-			if (fundSet != null) {
-				logger.debug("Fundings present");
-				Iterator fundItr = fundSet.iterator();
-				while (fundItr.hasNext()) {
-					AmpFunding funding = (AmpFunding) fundItr.next();
-					session.save(funding); // saves funding
-					
-					Set fundDetSet = funding.getFundingDetails();
-					if (fundDetSet != null) {
-						Iterator fundDetItr = fundDetSet.iterator();
-						while (fundDetItr.hasNext()) {
-							AmpFundingDetail funDet = (AmpFundingDetail) fundDetItr.next();
-							session.save(funDet); // saves funding details
-						}
-					}
-				}
-			}
 			
 			tx.commit(); // commit the transcation
 			logger.debug("Activity saved");
@@ -426,6 +392,82 @@ public class ActivityUtil {
 		 	}			
 		}
 		return col;
+	}
+	
+	public static AmpActivity getAmpActivity(Long id) {
+	    Session session = null;
+	    AmpActivity activity = null;
+	    
+	    try {
+			session = PersistenceManager.getSession();
+			String queryString = "select act from " + AmpActivity.class.getName() + 
+			" act where (act.ampActivityId=:actId)";
+			Query qry = session.createQuery(queryString);
+			qry.setParameter("actId",id,Hibernate.LONG);
+			Iterator actItr = qry.list().iterator();
+			while (actItr.hasNext()) {
+			    AmpActivity ampActivity = (AmpActivity) actItr.next();
+			    activity = new AmpActivity();
+			    activity.setActivityApprovalDate(ampActivity.getActivityApprovalDate());
+			    activity.setActivityCloseDate(ampActivity.getActivityCloseDate());
+			    activity.setActivityCreator(ampActivity.getActivityCreator());
+			    activity.setActivityStartDate(ampActivity.getActivityStartDate());
+			    activity.setActualApprovalDate(ampActivity.getActualApprovalDate());
+			    activity.setActualCompletionDate(ampActivity.getActualCompletionDate());
+			    activity.setActualStartDate(ampActivity.getActualStartDate());
+			    activity.setAmpActivityId(ampActivity.getAmpActivityId());
+			    activity.setAmpId(ampActivity.getAmpId());
+			    activity.setCalType(ampActivity.getCalType());
+			    activity.setComments(ampActivity.getComments());
+			    activity.setCondition(ampActivity.getCondition());
+			    activity.setContactName(ampActivity.getContactName());
+			    activity.setContFirstName(ampActivity.getContFirstName());
+			    activity.setContLastName(ampActivity.getContLastName());
+			    activity.setContractors(ampActivity.getContractors());
+			    activity.setCountry(ampActivity.getCountry());
+			    activity.setCreatedDate(ampActivity.getCreatedDate());
+			    activity.setDescription(ampActivity.getDescription());
+			    activity.setEmail(ampActivity.getEmail());
+			    activity.setLanguage(ampActivity.getLanguage());
+			    activity.setLevel(ampActivity.getLevel());
+			    activity.setModality(ampActivity.getModality());
+			    activity.setMofedCntEmail(ampActivity.getMofedCntEmail());
+			    activity.setMofedCntFirstName(ampActivity.getMofedCntFirstName());
+			    activity.setMofedCntLastName(ampActivity.getMofedCntLastName());
+			    activity.setName(ampActivity.getName());
+			    activity.setObjective(ampActivity.getObjective());
+			    activity.setOriginalCompDate(ampActivity.getOriginalCompDate());
+			    activity.setProgramDescription(ampActivity.getProgramDescription());
+			    activity.setProposedApprovalDate(ampActivity.getProposedApprovalDate());
+			    activity.setProposedStartDate(ampActivity.getProposedStartDate());
+			    activity.setStatus(ampActivity.getStatus());
+			    activity.setStatusReason(ampActivity.getStatusReason());
+			    activity.setTeam(ampActivity.getTeam());
+			    activity.setThemeId(ampActivity.getThemeId());
+			    activity.setUpdatedDate(ampActivity.getUpdatedDate());
+			    activity.setVersion(ampActivity.getVersion());
+			    
+			    activity.setClosingDates(new HashSet(ampActivity.getClosingDates()));
+			    activity.setComponents(new HashSet(ampActivity.getComponents()));
+			    logger.debug("Component size set = " + activity.getComponents().size());
+			    activity.setDocuments(new HashSet(ampActivity.getDocuments()));
+			    activity.setFunding(new HashSet(ampActivity.getFunding()));
+			    activity.setInternalIds(new HashSet(ampActivity.getInternalIds()));
+			    activity.setLocations(new HashSet(ampActivity.getLocations()));
+			    activity.setOrgrole(new HashSet(ampActivity.getOrgrole()));
+			    activity.setSectors(new HashSet(ampActivity.getSectors()));
+			}
+		} catch (Exception e) {
+		 	logger.error("Unable to getAmpActivity");
+		 	e.printStackTrace(System.out);
+		} finally {
+			try {
+				PersistenceManager.releaseSession(session);
+			} catch (Exception  ex) {
+		 		logger.error("Release Session failed :" + ex);
+		 	}
+		}	    
+	    return activity;
 	}
 	
 	public static Activity getChannelOverview(Long actId) {
@@ -586,7 +628,7 @@ public class ActivityUtil {
 				queryString = "select fund from " + AmpFunding.class.getName() + " fund " +
 						"where (fund.ampActivityId=:actId)";
 				qry = session.createQuery(queryString);
-				qry.setParameter("actId",actId,Hibernate.LONG);
+				qry.setParameter("actId",actId,Hibernate.LONG);	
 				Iterator itr = qry.list().iterator();
 				while (itr.hasNext()) {
 					AmpFunding fund = (AmpFunding) itr.next();

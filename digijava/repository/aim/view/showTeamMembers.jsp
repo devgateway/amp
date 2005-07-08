@@ -21,6 +21,7 @@
 				<tr>
 					<!-- Start Navigation -->
 					<td height=33>
+						<span class=crumb>					
 						<bean:define id="translation">
 							<digi:trn key="aim:clickToViewAdmin">Click here to goto Admin Home</digi:trn>
 						</bean:define>
@@ -40,6 +41,7 @@
 						<digi:trn key="aim:members">
 						Members
 						</digi:trn>
+						</span>
 					</td>
 					<!-- End navigation -->
 				</tr>
@@ -52,50 +54,23 @@
 					<td noWrap width=100% vAlign="top">
 					<table width="100%" cellspacing=1 cellSpacing=1>
 					<tr><td noWrap width=600 vAlign="top">
-						<table bgColor=#ffffff cellPadding=0 cellSpacing=0 class=box-border-nopadding width="100%">
-							<tr bgColor=#f4f4f2>
+						<table  bgcolor="#d7eafd" cellPadding=0 cellSpacing=1 width="100%" border=0>
+							<tr bgColor=#ffffff>
 								<td vAlign="top" width="100%">
-									&nbsp;
-								</td>
-							</tr>
-							<tr bgColor=#f4f4f2>
-								<td valign="top">
-									<table align=center bgColor=#f4f4f2 cellPadding=0 cellSpacing=0 width="95%" border=0>	
-										<tr bgColor=#f4f4f2>
-											<td bgColor=#f4f4f2>
-												<table border="0" cellPadding=0 cellSpacing=0 width="100%">
-													<tr bgColor=#f4f4f2>
-														<td bgColor=#c9c9c7 class=box-title height=20 align="center">
-															<!-- Table title -->
-															<digi:trn key="aim:membersFor">Members for </digi:trn>
-															<bean:write name="aimTeamMemberForm" property="teamName" />
-															<!-- end table title -->
-														</td>
-													</tr>
-												</table>
-											</td>
-										</tr>
-										<tr>
-											<td bgColor=#ffffff class=box-border>
-												<table border=0 cellPadding=1 cellSpacing=1 class=box-border width="100%">
-													<tr bgColor=#dddddb>
-														<!-- header -->
-														<td bgColor=#dddddb align="left" width="60%" height=20>
-															<b>
-															<digi:trn key="aim:memberName">Name</digi:trn>
-															</b>
-														</td>
-														<td bgColor=#dddddb align="left" colspan="3" height=20>
-															<b>
-															<digi:trn key="aim:memberRole">Role</digi:trn>
-															</b>
-														</td>
-														<!-- end header -->
-													</tr>
-													<!-- Page Logic -->
+								
+									<table width="100%" cellspacing=1 cellpadding=1 valign=top align=left>	
+										<tr><td bgColor=#d7eafd class=box-title height="20" align="center">
+											<!-- Table title -->
+											<digi:trn key="aim:membersFor">Members for </digi:trn>
+											<bean:write name="aimTeamMemberForm" property="teamName" />
+											<!-- end table title -->
+										</td></tr>
+										<tr><td>
+											<table width="100%" cellspacing=1 cellpadding=4 valign=top align=left bgcolor="#d7eafd">
+
 													<logic:empty name="aimTeamMemberForm" property="teamMembers">
-														<tr>
-															<td colspan="4">
+														<tr bgcolor="#ffffff">
+															<td colspan="3" align="center">
 																<b>No team members present</b>
 															</td>
 														</tr>
@@ -103,21 +78,23 @@
 													<logic:notEmpty name="aimTeamMemberForm" property="teamMembers">
 														<logic:iterate name="aimTeamMemberForm" property="teamMembers" id="teamMembers"
 														type="org.digijava.module.aim.helper.TeamMember">
-														<tr bgcolor=#f4f4f2 height="20">
-															<td width="60%">	
-																<bean:write name="teamMembers" property="memberName" />
+														<tr bgcolor=#ffffff>
+															<td>
+																<logic:equal name="teamMembers" property="teamHead" value="true">*
+																</logic:equal>
+																<a href="javascript:showUserProfile(<bean:write name="teamMembers" property="memberId" />)">	
+																	<bean:write name="teamMembers" property="memberName" />
+																</a>											
 															</td>
-															<td width="34%">
-																<bean:write name="teamMembers" property="roleName" />
-															</td>
-															<td align="center"> 
+															<td align="center" width="50">  
 																<jsp:useBean id="urlParams" type="java.util.Map" class="java.util.HashMap"/>
 																<c:set target="${urlParams}" property="id">
 																	<bean:write name="teamMembers" property="memberId" />
 																</c:set>
 																<c:set target="${urlParams}" property="action" value="edit" />
 																<bean:define id="translation">
-																	<digi:trn key="aim:clickToEditTeamMemberDetails">Click here to Edit Team Member Details</digi:trn>
+																	<digi:trn key="aim:clickToEditTeamMemberDetails">
+																	Click here to Edit Team Member Details</digi:trn>
 																</bean:define>
 																[ <digi:link href="/getTeamMemberDetails.do" name="urlParams" title="<%=translation%>" >
 																	<digi:trn key="aim:showTeamMembersEdit">
@@ -125,7 +102,7 @@
 																	</digi:trn>
 																</digi:link> ]
 															</td>
-															<td align="center"> 
+															<td align="center" width="60"> 
 																<c:set target="${urlParams}" property="action" value="delete" />
 																<bean:define id="translation">
 																	<digi:trn key="aim:clickToDeleteTeamMember">Click here to Delete Team Member</digi:trn>
@@ -138,17 +115,20 @@
 															</td>
 														</tr>
 														</logic:iterate>
+														<tr bgcolor="#ffffff"><td colspan="3">
+															*
+															<digi:trn key="aim:teamLead">	
+															Team lead
+															</digi:trn>
+														</td></tr>
 													</logic:notEmpty>
 													<!-- end page logic -->
-												</table>
-											</td>
-										</tr>
+											
+											</table>
+										</td></tr>
 									</table>
 								</td>
 							</tr>
-							<tr><td bgColor=#f4f4f2>
-								&nbsp;
-							</td></tr>
 						</table>
 					</td>
 					<td noWrap width=100% vAlign="top">

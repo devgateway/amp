@@ -6,9 +6,7 @@ public class OrgProjectId implements Serializable
 {
 
 	private Long ampOrgId;
-
 	private String name;
-
 	private String projectId;
 
 	public OrgProjectId() {

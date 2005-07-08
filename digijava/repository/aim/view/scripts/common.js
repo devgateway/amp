@@ -10,7 +10,9 @@ function openURLinWindow(url,wndWidth, wndHeight) {
 		wndWidth = window.screen.availWidth/2;
 		wndHeight = window.screen.availHeight/2;
 	}
-	popupPointer = window.open(url, "forumPopup", "height=" + wndHeight + ",width=" + wndWidth + ",menubar=no,scrollbars=yes,status=no,resizable=yes");
+	var t = ((screen.width)-wndWidth)/2;
+	var l = ((screen.height)-wndHeight)/2;	
+	popupPointer = window.open(url, "forumPopup", "height=" + wndHeight + ",width=" + wndWidth + ",top=" + l + ",left=" + t +",menubar=no,scrollbars=yes");
 }
 
 function openResisableWindow(wndWidth, wndHeight) {
@@ -19,7 +21,9 @@ function openResisableWindow(wndWidth, wndHeight) {
 		wndWidth = window.screen.availWidth/2;
 		wndHeight = window.screen.availHeight/2;
 	}
-	popupPointer = window.open("about:blank", "forumPopup", "height=" + wndHeight + ",width=" + wndWidth + ",menubar=yes,scrollbars=yes,status=no,resizable=yes");
+	var t = ((screen.width)-wndWidth)/2;
+	var l = ((screen.height)-wndHeight)/2;	
+	popupPointer = window.open("about:blank", "forumPopup", "height=" + wndHeight + ",width=" + wndWidth + ",top=" + l + ",left=" + t +",menubar=no,scrollbars=yes");
 }
 
 function openNewWindow(wndWidth, wndHeight){
@@ -28,7 +32,9 @@ function openNewWindow(wndWidth, wndHeight){
 		wndWidth = window.screen.availWidth/2;
 		wndHeight = window.screen.availHeight/2;
 	}
-	popupPointer = window.open("about:blank", "forumPopup", "height=" + wndHeight + ",width=" + wndWidth + ",menubar=no,scrollbars=yes,status=yes");
+	var t = ((screen.width)-wndWidth)/2;
+	var l = ((screen.height)-wndHeight)/2;	
+	popupPointer = window.open("about:blank", "forumPopup", "height=" + wndHeight + ",width=" + wndWidth + ",top=" + l + ",left=" + t +",menubar=no,scrollbars=yes");
 }
 
 function checkNumeric(objName,period) {

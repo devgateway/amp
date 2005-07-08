@@ -27,7 +27,10 @@ function reload() {
 function openCalendar(month,year) {
 	Month = month;
 	Year = year;
-	calWindow = window.open('','Calendar','resizable=no,width=350,height=270');	
+
+	var t = ((screen.width)-350)/2;
+	var l = ((screen.height)-270)/2;
+	calWindow = window.open('','Calendar','resizable=no,width=350,height=270,top='+l+',left='+t);		
 
 	str  = '<HTML><HEAD><TITLE>Calendar</TITLE>';
 	str += '<SCRIPT LANGUAGE="JavaScript"> ';
@@ -128,7 +131,9 @@ function openNewWindow(wndWidth, wndHeight){
 		wndWidth = window.screen.availWidth/2;
 		wndHeight = window.screen.availHeight/2;
 	}
-	popupPointer = window.open("about:blank", "forumPopup", "height=" + wndHeight + ",width=" + wndWidth + ",menubar=no,scrollbars=yes");
+	var t = ((screen.width)-wndWidth)/2;
+	var l = ((screen.height)-wndHeight)/2;
+	popupPointer = window.open("about:blank", "forumPopup", "height=" + wndHeight + ",width=" + wndWidth + ",top=" + l + ",left=" + t +",menubar=no,scrollbars=yes");
 }
 
 function padout(number) { return (number < 10) ? '0' + number : number; }

@@ -107,7 +107,8 @@ class="box-border-nopadding">
 								<i><bean:write name="relatedLink" property="fileName" /></i></a>
 						</c:if>
 						<c:if test="${aimRelatedLinksForm.document.isFile == false}">
-							<c:out value="${aimRelatedLinksForm.document.url}" />
+							<a href="<c:out value="${aimRelatedLinksForm.document.url}" />" target="_blank">
+							<c:out value="${aimRelatedLinksForm.document.url}" /></a>
 						</c:if>
 					</td>
 				</tr>				

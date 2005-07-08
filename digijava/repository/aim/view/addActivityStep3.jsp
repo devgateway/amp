@@ -196,6 +196,9 @@
 						</tr>	
 					</table>
 				</td></tr>
+				<tr> <td>
+					<digi:errors/>
+				</td></tr>				
 				<tr><td>
 					<table width="100%" cellSpacing="5" cellPadding="3" vAlign="top">
 						<tr><td width="75%" vAlign="top">

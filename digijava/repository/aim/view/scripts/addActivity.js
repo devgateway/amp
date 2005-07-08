@@ -26,7 +26,10 @@ function openCalendar(month,year) {
 	Month = month;
 	Year = year;
 
-	calWindow = window.open('','Calendar','resizable=no,width=350,height=270,top=210,left=337');	
+	var t = ((screen.width)-350)/2;
+	var l = ((screen.height)-270)/2;
+	
+	calWindow = window.open('','Calendar','resizable=no,width=350,height=270,top='+l+',left='+t);	
 
 	str  = '<HTML><HEAD><TITLE>Calendar</TITLE>';
 	str += '<SCRIPT LANGUAGE="JavaScript"> ';

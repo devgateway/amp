@@ -89,8 +89,7 @@ public class EditActivity extends Action {
 		eaForm.setReset(false);
 
 		if (eaForm.getActivityId() != null) {
-			AmpActivity activity = DbUtil.getProjectChannelOverview(eaForm
-					.getActivityId()); // get activity
+		    AmpActivity activity = ActivityUtil.getAmpActivity(eaForm.getActivityId());
 
 			if (activity != null) {
 				// set title,description and objective
@@ -103,8 +102,7 @@ public class EditActivity extends Action {
 				eaForm.setCreatedDate(DateConversion.ConvertDateToString(
 						activity.getCreatedDate()));
 
-				eaForm
-						.setOriginalAppDate(DateConversion
+				eaForm.setOriginalAppDate(DateConversion
 								.ConvertDateToString(activity
 										.getProposedApprovalDate()));
 				eaForm.setRevisedAppDate(DateConversion
@@ -113,24 +111,38 @@ public class EditActivity extends Action {
 						.ConvertDateToString(activity.getProposedStartDate()));
 				eaForm.setRevisedStartDate(DateConversion
 						.ConvertDateToString(activity.getActualStartDate()));
-				eaForm
-						.setCurrentCompDate(DateConversion
-								.ConvertDateToString(activity
-										.getActualCompletionDate()));
+				eaForm.setCurrentCompDate(DateConversion
+				        .ConvertDateToString(activity
+				                .getActualCompletionDate()));
 				
 				eaForm.setContractors(activity.getContractors().trim());
 				
+				if (activity.getClosingDates() != null) {
+				    logger.debug("Closing dates size = " + activity.getClosingDates().size());
+				} else {
+				    logger.debug("Closing dates is null");
+				}
 				
-				Collection col = ActivityUtil.getActivityCloseDates(activity
-						.getAmpActivityId());
+				if (activity.getFunding() != null) {
+				    logger.debug("Fundings size = " + activity.getFunding().size());
+				} else {
+				    logger.debug("funding is null");
+				}				
+				
+				//Collection col = ActivityUtil.getActivityCloseDates(activity
+					//	.getAmpActivityId());
+				
+				Collection col = activity.getClosingDates();				
 				Collection dates = new ArrayList();
 				if (col != null && col.size() > 0) {
 					Iterator itr = col.iterator();
 					while (itr.hasNext()) {
 						AmpActivityClosingDates cDate = (AmpActivityClosingDates) itr
 								.next();
-						dates.add(DateConversion.ConvertDateToString(cDate
-								.getClosingDate()));
+						if (cDate.getType().intValue() == Constants.REVISED.intValue()) {
+							dates.add(DateConversion.ConvertDateToString(cDate
+									.getClosingDate()));
+						}
 					}
 				}
 
@@ -145,9 +157,8 @@ public class EditActivity extends Action {
 						AmpActivityInternalId actIntId = (AmpActivityInternalId) projIdItr
 								.next();
 						OrgProjectId projId = new OrgProjectId();
-						projId.setAmpOrgId(actIntId.getAmpOrgId());
-						projId.setName(DbUtil.getOrganisation(
-								actIntId.getAmpOrgId()).getName());
+						projId.setAmpOrgId(actIntId.getOrganisation().getAmpOrgId());
+						projId.setName(actIntId.getOrganisation().getName());
 						projId.setProjectId(actIntId.getInternalId());
 						temp.add(projId);
 					}
@@ -172,8 +183,11 @@ public class EditActivity extends Action {
 				// loading the locations
 				int impLevel = 0;
 
-				Collection ampLocs = DbUtil.getAllLocations(activity
-						.getAmpActivityId());
+//				Collection ampLocs = DbUtil.getAllLocations(activity
+	//					.getAmpActivityId());
+				Collection ampLocs = activity.getLocations();
+				
+				
 				if (ampLocs != null && ampLocs.size() > 0) {
 					Collection locs = new ArrayList();
 
@@ -241,8 +255,12 @@ public class EditActivity extends Action {
 				}
 
 				// loading the sectors
+				/*
 				Collection sectors = ActivityUtil.getActivitySectors(activity
-						.getAmpActivityId());
+						.getAmpActivityId());*/
+				
+				
+				Collection sectors = activity.getSectors();
 
 				if (sectors != null && sectors.size() > 0) {
 					Collection activitySectors = new ArrayList();
@@ -301,145 +319,111 @@ public class EditActivity extends Action {
 				eaForm.setProgramDescription(activity.getProgramDescription().trim());
 
 				// loading the funding orgs , fundings and funding details
-
-				Collection donors = DbUtil.getOrganizations(activity
-						.getAmpActivityId(), Constants.DONOR);
-				if (donors != null && donors.size() > 0) {
-					Collection fundingOrgs = new ArrayList();
-
-					Iterator donItr = donors.iterator();
-					boolean startDateSet = false;
-					boolean endDateSet = false;
-					while (donItr.hasNext()) {
-						AmpOrganisation org = (AmpOrganisation) donItr.next();
-						FundingOrganization fundOrg = new FundingOrganization();
-						fundOrg.setAmpOrgId(org.getAmpOrgId());
-						fundOrg.setOrgName(org.getName());
-						Collection funding = new ArrayList();
-						Collection ampFundings = DbUtil.getFundingId(activity
-								.getAmpActivityId(), org.getAmpOrgId());
-						if (ampFundings != null && ampFundings.size() > 0) {
-							Iterator ampFundItr = ampFundings.iterator();
-							while (ampFundItr.hasNext()) {
-								AmpFunding ampFunding = (AmpFunding) ampFundItr
-										.next();
-								Funding fund = new Funding();
-								/*
-								 * TODO: Add Closing date history
-								 */
-								fund.setAmpTermsAssist(ampFunding
-										.getAmpTermsAssistId());
-								fund.setFundingId(ampFunding.getAmpFundingId()
-										.intValue());
-								fund.setOrgFundingId(ampFunding
-										.getFinancingId());
-								/*
-								fund.setSignatureDate(DateConversion
-										.ConvertDateToString(ampFunding
-												.getSignatureDate()));
-								fund.setReportingDate(DateConversion
-										.ConvertDateToString(ampFunding
-												.getReportingDate()));
-								fund.setPropCloseDate(DateConversion
-										.ConvertDateToString(ampFunding
-												.getPlannedCompletionDate()));
-								fund.setPropStartDate(DateConversion
-										.ConvertDateToString(ampFunding
-												.getPlannedStartDate()));
-								fund.setActCloseDate(DateConversion
-										.ConvertDateToString(ampFunding
-												.getActualCompletionDate()));
-								fund.setActStartDate(DateConversion
-										.ConvertDateToString(ampFunding
-												.getActualStartDate()));
-							    */
-								fund.setModality(ampFunding.getModalityId());
-								fund.setConditions(ampFunding.getConditions());
-								Collection fundDetails = DbUtil
-										.getFundingDetails(ampFunding
-												.getAmpFundingId());
-								if (fundDetails != null
-										&& fundDetails.size() > 0) {
-									Iterator fundDetItr = fundDetails
-											.iterator();
-									Collection fundDetail = new ArrayList();
-									while (fundDetItr.hasNext()) {
-										AmpFundingDetail fundDet = (AmpFundingDetail) fundDetItr
-												.next();
-										FundingDetail fundingDetail = new FundingDetail();
-										int adjType = fundDet
-												.getAdjustmentType().intValue();
-										fundingDetail
-												.setAdjustmentType(adjType);
-										if (adjType == Constants.PLANNED) {
-											fundingDetail
-													.setAdjustmentTypeName("Planned");
-										} else if (adjType == Constants.ACTUAL) {
-											fundingDetail
-													.setAdjustmentTypeName("Actual");
-										}
-										if (fundDet.getTransactionType().intValue() == Constants.EXPENDITURE) {
-											fundingDetail.setClassification(fundDet.getExpCategory());
-										}
-										fundingDetail.setCurrencyCode(fundDet
-												.getAmpCurrencyId()
-												.getCurrencyCode());
-										fundingDetail.setCurrencyName(fundDet
-												.getAmpCurrencyId()
-												.getCountryName());
-
-										fundingDetail
-												.setTransactionAmount(CurrencyWorker
-														.convert(
-																fundDet
-																		.getTransactionAmount()
-																		.doubleValue(),
-																1, 1));
-										fundingDetail
-												.setTransactionDate(DateConversion
-														.ConvertDateToString(fundDet
-																.getTransactionDate()));
-										fundingDetail
-												.setPerspectiveCode(fundDet
-														.getOrgRoleCode());
-										if (fundDet.getOrgRoleCode().equals(
-												Constants.DONOR))
-											fundingDetail
-													.setPerspectiveName("Donor");
-										else if (fundDet.getOrgRoleCode()
-												.equals(Constants.MOFED))
-											fundingDetail
-													.setPerspectiveName("MOFED");
-										else if (fundDet
-												.getOrgRoleCode()
-												.equals(
-														Constants.IMPLEMENTING_AGENCY))
-											fundingDetail
-													.setPerspectiveName("Implementing Agency");
-
-										fundingDetail
-												.setPerspectiveCode(fundDet
-														.getOrgRoleCode());
-										fundingDetail
-												.setTransactionType(fundDet
-														.getTransactionType()
-														.intValue());
-										fundDetail.add(fundingDetail);
-									}
-									fund.setFundingDetails(fundDetail);
-									funding.add(fund);
-								}
-							}
-							fundOrg.setFundings(funding);
-						}
-						fundingOrgs.add(fundOrg);
-					}
-					eaForm.setFundingOrganizations(fundingOrgs);
+				
+				Iterator orgRolesItr = activity.getOrgrole().iterator();
+				while (orgRolesItr.hasNext()) {
+				    AmpOrgRole orgRole = (AmpOrgRole) orgRolesItr.next();
 				}
+				
+				
+				Collection fundingOrgs = new ArrayList();
+				Iterator fundItr = activity.getFunding().iterator();
+				while (fundItr.hasNext()) {
+				    AmpFunding ampFunding = (AmpFunding) fundItr.next();
+					AmpOrganisation org = ampFunding.getAmpDonorOrgId();
+					FundingOrganization fundOrg = new FundingOrganization();
+					fundOrg.setAmpOrgId(org.getAmpOrgId());
+					fundOrg.setOrgName(org.getName());				    
+					Funding fund = new Funding();
+					fund.setAmpTermsAssist(ampFunding
+							.getAmpTermsAssistId());
+					fund.setFundingId(ampFunding.getAmpFundingId()
+							.intValue());
+					fund.setOrgFundingId(ampFunding
+							.getFinancingId());
+					fund.setModality(ampFunding.getModalityId());
+					fund.setConditions(ampFunding.getConditions());
+					Collection fundDetails = ampFunding.getFundingDetails();	
+					Collection funding = new ArrayList();
+					if (fundDetails != null
+							&& fundDetails.size() > 0) {
+						Iterator fundDetItr = fundDetails.iterator();
+						Collection fundDetail = new ArrayList();
+						
+						while (fundDetItr.hasNext()) {
+							AmpFundingDetail fundDet = (AmpFundingDetail) fundDetItr.next();
+							FundingDetail fundingDetail = new FundingDetail();
+							int adjType = fundDet.getAdjustmentType().intValue();
+							fundingDetail.setAdjustmentType(adjType);
+							if (adjType == Constants.PLANNED) {
+								fundingDetail.setAdjustmentTypeName("Planned");
+							} else if (adjType == Constants.ACTUAL) {
+								fundingDetail.setAdjustmentTypeName("Actual");
+							}
+							if (fundDet.getTransactionType().intValue() == Constants.EXPENDITURE) {
+								fundingDetail.setClassification(fundDet.getExpCategory());
+							}
+							fundingDetail.setCurrencyCode(fundDet
+									.getAmpCurrencyId()
+									.getCurrencyCode());
+							fundingDetail.setCurrencyName(fundDet
+									.getAmpCurrencyId()
+									.getCountryName());
 
+							fundingDetail
+									.setTransactionAmount(CurrencyWorker
+											.convert(
+													fundDet
+															.getTransactionAmount()
+															.doubleValue(),
+													1, 1));
+							fundingDetail
+									.setTransactionDate(DateConversion
+											.ConvertDateToString(fundDet
+													.getTransactionDate()));
+							fundingDetail
+									.setPerspectiveCode(fundDet
+											.getOrgRoleCode());
+							if (fundDet.getOrgRoleCode().equals(
+									Constants.DONOR))
+								fundingDetail
+										.setPerspectiveName("Donor");
+							else if (fundDet.getOrgRoleCode()
+									.equals(Constants.MOFED))
+								fundingDetail
+										.setPerspectiveName("MOFED");
+							else if (fundDet
+									.getOrgRoleCode()
+									.equals(
+											Constants.IMPLEMENTING_AGENCY))
+								fundingDetail
+										.setPerspectiveName("Implementing Agency");
+
+							fundingDetail
+									.setPerspectiveCode(fundDet
+											.getOrgRoleCode());
+							fundingDetail
+									.setTransactionType(fundDet
+											.getTransactionType()
+											.intValue());
+							fundDetail.add(fundingDetail);
+						}
+						
+						fund.setFundingDetails(fundDetail);
+						funding.add(fund);
+					}
+					fundOrg.setFundings(funding);
+					fundingOrgs.add(fundOrg);
+				}
+				eaForm.setFundingOrganizations(fundingOrgs);
+
+									    								
 				// loading components
+				/*
 				Collection componets = ActivityUtil.getComponents(activity
-						.getAmpActivityId());
+						.getAmpActivityId());*/
+				Collection componets = activity.getComponents();
+				logger.debug("Components Size = " + componets.size());
 				if (componets != null && componets.size() > 0) {
 					Collection comp = new ArrayList();
 					Iterator compItr = componets.iterator();
@@ -485,8 +469,10 @@ public class EditActivity extends Action {
 				}
 
 				// loading the documents and links
+				/*
 				Collection actDocs = DbUtil.getActivityDocuments(activity
-						.getAmpActivityId());
+						.getAmpActivityId());*/
+				Collection actDocs = activity.getDocuments();
 				if (actDocs != null && actDocs.size() > 0) {
 					Collection docsList = new ArrayList();
 					Collection linksList = new ArrayList();

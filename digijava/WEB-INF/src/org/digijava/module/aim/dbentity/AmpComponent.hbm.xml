@@ -20,7 +20,7 @@
 		<many-to-one name="currency" column="currency_id" 
 		class="org.digijava.module.aim.dbentity.AmpCurrency" cascade="none"/>
 		
-		<set name="physicalProgress" cascade="delete" inverse="true">
+		<set name="physicalProgress" cascade="all" inverse="true">
 			<cache usage="read-write" />
 			<key column="amp_component_id"/>
 			<one-to-many class="org.digijava.module.aim.dbentity.AmpPhysicalPerformance"/>

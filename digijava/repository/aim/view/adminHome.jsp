@@ -144,17 +144,7 @@
 											</digi:link>
 											</td>
 										</tr>	
-										<tr>
-											<td class=f-names noWrap>
-											<digi:img src="module/aim/images/arrow-th-BABAB9.gif" width="16"/>
-											<bean:define id="translation">
-												<digi:trn key="aim:clickToAddNewProject">Click here to Add New Project</digi:trn>
-											</bean:define>
-											<digi:link href="/addActivity.do~pageId=0~reset=true" title="<%=translation%>">
-												<digi:trn key="aim:addNewProject">Add new project</digi:trn>
-											</digi:link>
-											</td>
-										</tr>											
+
 									</table>
 								</td>
 							</tr>

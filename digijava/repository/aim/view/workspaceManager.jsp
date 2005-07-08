@@ -17,7 +17,7 @@
 	<tr>
 		<td class=r-dotted-lg width=14>&nbsp;</td>
 		<td align=left class=r-dotted-lg vAlign=top width=750>
-			<table cellPadding=5 cellSpacing=0 width="100%">
+			<table cellPadding=5 cellSpacing=0 width="100%" border=0>
 				<tr>
 					<!-- Start Navigation -->
 					<td height=33><span class=crumb>
@@ -41,51 +41,25 @@
 				</tr>
 				<tr>
 					<td noWrap width=100% vAlign="top">
-					<table width="100%" cellspacing=1 cellSpacing=1>
+					<table width="100%" cellspacing=1 cellSpacing=1 border=0>
 					<tr><td noWrap width=600 vAlign="top">
-						<table bgColor=#ffffff cellPadding=0 cellSpacing=0 class=box-border-nopadding width="100%">
-							<tr bgColor=#f4f4f2>
+						<table bgColor=#d7eafd cellPadding=1 cellSpacing=1 width="100%" valign="top">
+							<tr bgColor=#ffffff>
 								<td vAlign="top" width="100%">
-									&nbsp;
-								</td>
-							</tr>
-							<tr bgColor=#f4f4f2>
-								<td valign="top">
-									<table align=center bgColor=#f4f4f2 cellPadding=0 cellSpacing=0 width="90%" border=0>	
-										<tr bgColor=#f4f4f2>
-											<td bgColor=#f4f4f2>
-												<table border="0" cellPadding=0 cellSpacing=0 width="100%">
-													<tr bgColor=#f4f4f2>
-														<td bgColor=#c9c9c7 class=box-title height="20" align="center">
-															<!-- Table title -->
-															<digi:trn key="aim:teams">
-															Teams
-															</digi:trn>
-															<!-- end table title -->
-														</td>
-													</tr>
-												</table>
-											</td>
-										</tr>
-										<tr>
-											<td bgColor=#ffffff class=box-border>
-												<table border=0 cellPadding=4 cellSpacing=1 class=box-border width="100%">
-												
-													<tr bgColor=#dddddb>
-														<!-- header -->
-														<td bgColor=#dddddb align="left" colspan="5" height="20">
-															<b>
-															<digi:trn key="aim:teamName">
-															Team Name
-															</digi:trn>
-															</b>
-														</td>
-														<!-- end header -->
-													</tr>
-													<!-- Page Logic -->
+									
+									<table width="100%" cellspacing=1 cellpadding=1 valign=top align=left>	
+										<tr><td bgColor=#d7eafd class=box-title height="20" align="center">
+											<!-- Table title -->
+											<digi:trn key="aim:teams">
+												Teams
+											</digi:trn>
+											<!-- end table title -->										
+										</td></tr>
+										<tr><td>
+											<table width="100%" cellspacing=1 cellpadding=4 valign=top align=left bgcolor="#d7eafd">
 													<logic:empty name="aimWorkspaceForm" property="workspaces">
-													<tr>
-														<td colspan="3"><b>
+													<tr bgcolor="#ffffff">
+														<td colspan="5" align="center"><b>
 															<digi:trn key="aim:noTeams">
 															No teams present
 															</digi:trn>
@@ -96,7 +70,7 @@
 													<logic:iterate name="aimWorkspaceForm" property="workspaces"
 													id="workspaces" type="org.digijava.module.aim.dbentity.AmpTeam">
 													<tr>
-														<td width="80%" bgcolor="#EEEEEE">
+														<td bgcolor="#ffffff">
 															<jsp:useBean id="urlParams2" type="java.util.Map" class="java.util.HashMap"/>
 															<c:set target="${urlParams2}" property="id">
 															<bean:write name="workspaces" property="ampTeamId" />
@@ -108,7 +82,7 @@
 															<digi:link href="/getWorkspace.do" name="urlParams2" title="<%=translation%>" >
 															<bean:write name="workspaces" property="name"/></digi:link>
 														</td>
-														<td bgcolor="#EEEEEE">
+														<td bgcolor="#ffffff" width="70" align="center">
 															<jsp:useBean id="urlParams" type="java.util.Map" class="java.util.HashMap"/>
 															<c:set target="${urlParams}" property="teamId">
 															<bean:write name="workspaces" property="ampTeamId" />
@@ -118,7 +92,7 @@
 															</bean:define>
 															[ <digi:link href="/teamMembers.do" name="urlParams" title="<%=translation%>" >Members</digi:link> ]
 														</td>
-														<td bgcolor="#EEEEEE">
+														<td bgcolor="#ffffff" width="70" align="center">
 															<jsp:useBean id="urlParams1" type="java.util.Map" class="java.util.HashMap"/>
 															<c:set target="${urlParams1}" property="id">
 															<bean:write name="workspaces" property="ampTeamId" />
@@ -129,15 +103,14 @@
 															[ <digi:link href="/teamActivities.do" name="urlParams1" title="<%=translation%>" >
 															Activities</digi:link> ]
 														</td>
-														<td bgcolor="#EEEEEE">
-							
+														<td bgcolor="#ffffff" width="40" align="center">
 															<c:set target="${urlParams2}" property="actionEvent" value="edit" />
 															<bean:define id="translation">
 																<digi:trn key="aim:clickToEditWorkspace">Click here to Edit Workspace</digi:trn>
 															</bean:define>
 															[ <digi:link href="/getWorkspace.do" name="urlParams2" title="<%=translation%>" >Edit</digi:link> ]
 														</td>
-														<td bgcolor="#EEEEEE">
+														<td bgcolor="#ffffff" width="55" align="center">
 															<c:set target="${urlParams2}" property="actionEvent" value="delete" />
 															<bean:define id="translation">
 																<digi:trn key="aim:clickToDeleteWorkspace">Click here to Delete Workspace</digi:trn>
@@ -146,41 +119,40 @@
 														</td>
 													</tr>
 													</logic:iterate>
-													</logic:notEmpty>
-													<!-- end page logic -->
-												</table>
-											</td>
-										</tr>
 
-										<!-- page logic for pagination -->
-										<logic:notEmpty name="aimWorkspaceForm" property="pages">
-										<tr>
-											<td colspan="4">
-												<digi:trn key="aim:workspaceManagerPages">
-												Pages :
-												</digi:trn>
-												<jsp:useBean id="urlParams3" type="java.util.Map" class="java.util.HashMap"/>
-												<logic:iterate name="aimWorkspaceForm" property="pages" id="pages" 
-												type="java.lang.Integer">
-												<c:set target="${urlParams3}" property="page"><%=pages%></c:set>
-												<bean:define id="translation">
-													<digi:trn key="aim:clickToViewAllPages">Click here to view All pages</digi:trn>
-												</bean:define>
-												<digi:link href="/workspaceManager.do" name="urlParams3" title="<%=translation%>" ><%=pages%></digi:link> |&nbsp; 
-												</logic:iterate>
-											</td>
-										</tr>
-										</logic:notEmpty>												
-										<!-- end page logic for pagination -->
-										
+													<!-- page logic for pagination -->
+													<logic:notEmpty name="aimWorkspaceForm" property="pages">
+													<tr bgcolor="#ffffff">
+														<td colspan="5">
+															<digi:trn key="aim:workspaceManagerPages">
+																Pages :
+															</digi:trn>
+															<jsp:useBean id="urlParams3" type="java.util.Map" class="java.util.HashMap"/>
+															<logic:iterate name="aimWorkspaceForm" property="pages" id="pages" 
+															type="java.lang.Integer">
+															<c:set target="${urlParams3}" property="page"><%=pages%></c:set>
+															<bean:define id="translation">
+																<digi:trn key="aim:clickToViewAllPages">Click here to view All pages</digi:trn>
+															</bean:define>
+															<digi:link href="/workspaceManager.do" name="urlParams3" 
+															title="<%=translation%>" ><%=pages%></digi:link> |&nbsp; 
+															</logic:iterate>
+														</td>
+													</tr>
+													</logic:notEmpty>												
+													<!-- end page logic for pagination -->													
+													
+													</logic:notEmpty>
+													<!-- end page logic -->													
+											</table>
+										</td></tr>
 									</table>
+									
 								</td>
 							</tr>
-							<tr><td bgColor=#f4f4f2>
-								&nbsp;
-							</td></tr>
 						</table>
 					</td>
+					
 					<td noWrap width=100% vAlign="top">
 						<table align=center cellPadding=0 cellSpacing=0 width="90%" border=0>	
 							<tr>

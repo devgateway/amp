@@ -28,6 +28,7 @@ import org.digijava.module.aim.dbentity.AmpTeamReports;
 import org.digijava.module.aim.exception.AimException;
 import org.digijava.module.aim.helper.Activity;
 import org.digijava.module.aim.helper.Constants;
+import org.digijava.module.aim.helper.UpdateDB;
 import org.digijava.module.aim.helper.Workspace;
 
 /**
@@ -566,7 +567,9 @@ public class TeamUtil {
 			tx = session.beginTransaction();
 			session.save(member);
 			session.save(appSettings);
-			if (member.getAmpMemberRole().getTeamHead() == new Boolean(true)) {
+			logger.debug("Team Head = " + member.getAmpMemberRole().getTeamHead().booleanValue());
+			logger.debug("Role Name = " + member.getAmpMemberRole().getRole());
+			if (member.getAmpMemberRole().getTeamHead().booleanValue() == true) {
 				AmpTeam team = member.getAmpTeam();
 				team.setTeamLead(member);
 				session.update(team);
@@ -933,4 +936,51 @@ public class TeamUtil {
 		}
 	}		
 	
+	public static void removeActivitiesFromTeam(Long activities[]) {
+		Session session = null;
+		Transaction tx = null;
+		Query qry = null;
+		AmpTeamMember member = null;
+
+		try {
+			session = PersistenceManager.getSession();
+			tx = session.beginTransaction();
+			
+			for (int i = 0;i < activities.length;i ++) {
+			    AmpActivity activity = (AmpActivity) session.load(AmpActivity.class,
+			            activities[i]);
+			    activity.setTeam(null);
+			    Iterator membersItr = activity.getMember().iterator();
+			    while (membersItr.hasNext()) {
+			        member = (AmpTeamMember) membersItr.next();
+			        member.getActivities().remove(activity);
+			        session.update(member);
+			    }
+			    activity.setMember(null); 
+			    session.update(activity);
+			    session.flush();
+			    UpdateDB.updateReportCache(activities[i]);
+			}
+			
+			tx.commit();
+		} catch (Exception e) {
+			logger.error("Unable to remove activities" + e.getMessage());
+			e.printStackTrace(System.out);
+			if (tx != null) {
+				try {
+					tx.rollback();
+				} catch (Exception rbf) {
+					logger.error("Roll back failed");
+				}
+			}
+		} finally {
+			try {
+				if (session != null) {
+					PersistenceManager.releaseSession(session);
+				}
+			} catch (Exception ex) {
+				logger.error("releaseSession() failed");
+			}
+		}	    
+	}
 }

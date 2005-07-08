@@ -21,7 +21,7 @@
   	            <cache usage="read-write"/>
 				<key column="amp_member_id"/>
 				<many-to-many class="org.digijava.module.aim.dbentity.AmpActivity" column="amp_activity_id"/>
-	 </set>	
+	 	</set>	
 
 
 		<set name="reports" table="amp_member_reports" lazy="true">

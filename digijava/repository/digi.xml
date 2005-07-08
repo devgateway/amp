@@ -6,22 +6,9 @@
 		 <from>system@digijava.org</from>
 	</smtp>
 	
-	<!--
-	
-	<logon-site id="dglogin" host="login.ncb.ernet.in">
-			  http://login.ncb.ernet.in:8080/digijava/
-	</logon-site>
-	
-	
-	<logon-site id="dglogin" host="amp-login.org">
-			  http://amp-login.org/
-	</logon-site>
-	
-	-->
-	
-	 <logon-site id="dglogin" host="amp-login.mofed.gov">
-                          http://amp-login.mofed.gov:8080/digijava/
-     </logon-site>
+	<logon-site id="dglogin" host="amp-login.mofed.gov">
+			  http://amp-login.mofed.gov/
+   </logon-site>
      
 	
 	<server-type prefix="">development</server-type>

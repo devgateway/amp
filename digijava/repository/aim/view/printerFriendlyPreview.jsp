@@ -68,9 +68,9 @@
 							<tr><td width="100%">
 							<table width="100%" cellSpacing="1" cellPadding="1" vAlign="top" align="left">
 							<tr><td align="center" vAlign="top">
-								<table width="98%" cellSpacing=0 cellpadding=4>
+								<table width="98%" cellSpacing=0 cellpadding=4 style="border-collapse: collapse" border=1>
 									<tr bgcolor="#f4f4f2">
-										<td class="borderTLBR" align="center" colspan="2">
+										<td  align="center" colspan="2">
 											<b>
 											<digi:trn key="aim:activityDetail">
 												Activity Details	
@@ -78,13 +78,13 @@
 										</td>
 									</tr>								
 									<tr>
-										<td class="borderTLBR" width="140" align="right" bgcolor="#ffffff">
+										<td width="140" align="right" bgcolor="#ffffff">
 											<b>
 											<digi:trn key="aim:orgsAndProjectIds">
 											Organizations and Project IDs
 											</digi:trn></b>
 										</td>
-										<td bgcolor="#ffffff" class="borderTLBR">
+										<td bgcolor="#ffffff" >
 											<c:if test="${!empty aimEditActivityForm.selectedOrganizations}">
 												<table cellSpacing=2 cellPadding=2 border=0>
 													<c:forEach var="selectedOrganizations" items="${aimEditActivityForm.selectedOrganizations}" >
@@ -101,12 +101,12 @@
 										</td>
 									</tr>
 									<tr>
-										<td class="borderTLBR" width="140" align="right" bgcolor="#ffffff">
+										<td  width="140" align="right" bgcolor="#ffffff">
 											<b>
 											<digi:trn key="aim:planning">
 											Planning</digi:trn></b>
 										</td>
-										<td bgcolor="#ffffff" class="borderTLBR">
+										<td bgcolor="#ffffff" >
 											<table width="100%" cellSpacing=2 cellPadding=1>
 												<tr>
 													<td width="32%"><digi:trn key="aim:originalApprovalDate">
@@ -169,13 +169,13 @@
 										</td>
 									</tr>		
 									<tr>
-										<td class="borderTLBR" width="140" align="right" bgcolor="#ffffff">
+										<td  width="140" align="right" bgcolor="#ffffff">
 											<b>
 											<digi:trn key="aim:level">
 											Level</digi:trn>
 											</b>
 										</td>
-										<td bgcolor="#ffffff" class="borderTLBR">
+										<td bgcolor="#ffffff" >
 											<c:if test="${!empty aimEditActivityForm.levelCollection}">
 												<c:forEach var="tempLevel" items="${aimEditActivityForm.levelCollection}">
 													<c:if test="${tempLevel.ampLevelId == aimEditActivityForm.level}">												
@@ -190,12 +190,12 @@
 										</td>
 									</tr>																											
 									<tr>
-										<td class="borderTLBR" width="140" align="right" bgcolor="#ffffff">
+										<td  width="140" align="right" bgcolor="#ffffff">
 											<b>
 											<digi:trn key="aim:locations">
 											Locations</digi:trn></b>
 										</td>
-										<td bgcolor="#ffffff" class="borderTLBR">
+										<td bgcolor="#ffffff" >
 											<c:if test="${!empty aimEditActivityForm.selectedLocs}">
 												<table width="100%" cellSpacing="2" cellPadding="1">
 												<c:forEach var="locations" items="${aimEditActivityForm.selectedLocs}">
@@ -222,12 +222,12 @@
 										</td>
 									</tr>		
 									<tr>
-										<td class="borderTLBR" width="140" align="right" bgcolor="#ffffff">
+										<td  width="140" align="right" bgcolor="#ffffff">
 											<b>
 											<digi:trn key="aim:sectors">
 											Sectors</digi:trn></b>
 										</td>
-										<td bgcolor="#ffffff" class="borderTLBR">
+										<td bgcolor="#ffffff" >
 											<c:if test="${!empty aimEditActivityForm.activitySectors}">
 												<table width="100%" cellSpacing="2" cellPadding="1">
 												<c:forEach var="sectors" items="${aimEditActivityForm.activitySectors}">
@@ -248,10 +248,10 @@
 										</td>
 									</tr>		
 									<tr>
-										<td class="borderTLBR" width="140" align="right" bgcolor="#ffffff">
+										<td  width="140" align="right" bgcolor="#ffffff">
 											<b><digi:trn key="aim:program">Program</digi:trn></b>
 										</td>
-										<td bgcolor="#ffffff" class="borderTLBR">
+										<td bgcolor="#ffffff" >
 											<c:if test="${!empty aimEditActivityForm.programCollection}">
 												<c:forEach var="tempPgm" items="${aimEditActivityForm.programCollection}">
 													<c:if test="${tempPgm.ampThemeId == aimEditActivityForm.program}">
@@ -265,12 +265,12 @@
 										</td>
 									</tr>										
 									<tr>
-										<td class="borderTLBR" width="140" align="right" bgcolor="#ffffff">
+										<td  width="140" align="right" bgcolor="#ffffff">
 											<b>
 											<digi:trn key="aim:fundings">
 											Fundings</digi:trn></b>
 										</td>
-										<td bgcolor="#ffffff" class="borderTLBR">
+										<td bgcolor="#ffffff" >
 											<c:if test="${!empty aimEditActivityForm.fundingOrganizations}">
 												<table width="100%" cellSpacing="1" cellPadding="3" bgcolor="#dddddd">
 												<c:forEach var="fundOrgs" items="${aimEditActivityForm.fundingOrganizations}">
@@ -284,7 +284,7 @@
 																	<tr><td bgcolor="#ffffff">
 																		<table width="100%" cellSpacing="1" cellPadding="1" class="box-border">
 																			<tr>
-																				<td width="31%">
+																				<td width="35%">
 																					<digi:trn key="aim:fundingOrgId">
 																					Funding Organization Id</digi:trn>
 																				</td>
@@ -294,7 +294,7 @@
 																				</td>
 																			</tr>																		
 																			<tr>
-																				<td width="31%">
+																				<td width="35%">
 																					<digi:trn key="aim:typeOfAssistance">
 																					Type of Assistance</digi:trn>
 																				</td>
@@ -304,7 +304,7 @@
 																				</td>
 																			</tr>
 																			<tr>
-																				<td width="31%">
+																				<td width="35%">
 																					<digi:trn key="aim:financingInstrument">
 																					Financing Instrument</digi:trn>
 																				</td>
@@ -322,14 +322,15 @@
 																			</tr>																			
 																			<c:if test="${!empty fund.fundingDetails}">
 																			<tr><td colspan="3">
-																			<table width="100%" cellSpacing=1 cellPadding=1 bgcolor="#dddddd">
-																				<tr><td valign="top" width="140" bgcolor="#ffffff">
+																			<table width="100%" cellSpacing=1 cellPadding=1 bordercolor="#dddddd"
+																			border=1  style="border-collapse: collapse">
+																				<tr><td valign="top" width="100" bgcolor="#ffffff">
 																					<digi:trn key="aim:commitments">
 																					Commitments</digi:trn>
 																				</td>
 																				<td bgcolor="#ffffff">
 																					<c:forEach var="fundDet" items="${fund.fundingDetails}">
-																					<table width="100%" cellSpacing="1" cellPadding="1" bgcolor="#eeeeee">
+																					<table width="100%" cellSpacing="1" cellPadding="2">
 																						<c:if test="${fundDet.transactionType == 0}">
 																						<tr>
 																							<td width="50" bgcolor="#ffffff">
@@ -355,14 +356,15 @@
 																			</table>
 																			</td></tr>
 																			<tr><td colspan="3">
-																			<table width="100%" cellSpacing=1 cellPadding=1 bgcolor="#dddddd">
-																				<tr><td valign="top" width="140" bgcolor="#ffffff">
+																			<table width="100%" cellSpacing=1 cellPadding=1 bordercolor="#dddddd"
+																			border=1  style="border-collapse: collapse">
+																				<tr><td valign="top" width="100" bgcolor="#ffffff">
 																					<digi:trn key="aim:disbursements">
 																					Disbursements</digi:trn>
 																				</td>
 																				<td bgcolor="#ffffff">
 																					<c:forEach var="fundDet" items="${fund.fundingDetails}">
-																					<table width="100%" cellSpacing="1" cellPadding="1" bgcolor="#eeeeee">
+																					<table width="100%" cellSpacing="1" cellPadding="2">
 																						<c:if test="${fundDet.transactionType == 1}">
 																						<tr>
 																							<td width="50" bgcolor="#ffffff">
@@ -388,14 +390,15 @@
 																			</table>
 																			</td></tr>	
 																			<tr><td colspan="3">
-																			<table width="100%" cellSpacing=1 cellPadding=1 bgcolor="#dddddd">
-																				<tr><td valign="top" width="140" bgcolor="#ffffff">
+																			<table width="100%" cellSpacing=1 cellPadding=1 bordercolor="#dddddd"
+																			border=1  style="border-collapse: collapse">
+																				<tr><td valign="top" width="100" bgcolor="#ffffff">
 																					<digi:trn key="expenditures">
 																					Expenditures</digi:trn>
 																				</td>
 																				<td bgcolor="#ffffff">
 																					<c:forEach var="fundDet" items="${fund.fundingDetails}">
-																					<table width="100%" cellSpacing="1" cellPadding="1" bgcolor="#eeeeee">
+																					<table width="100%" cellSpacing="1" cellPadding="2">
 																						<c:if test="${fundDet.transactionType == 2}">
 																						<tr>
 																							<td width="50" bgcolor="#ffffff">
@@ -438,12 +441,12 @@
 										</td>
 									</tr>										
 									<tr>
-										<td  class="borderTLBR"width="140" align="right" bgcolor="#ffffff">
+										<td  width="140" align="right" bgcolor="#ffffff">
 											<b>
 											<digi:trn key="aim:components">
 											Components</digi:trn></b>
 										</td>
-										<td bgcolor="#ffffff" class="borderTLBR">
+										<td bgcolor="#ffffff" >
 											<c:if test="${empty aimEditActivityForm.selectedComponents}">
 												&nbsp;
 											</c:if>
@@ -480,12 +483,12 @@
 										</td>
 									</tr>	
 									<tr>
-										<td class="borderTLBR" width="140" align="right" bgcolor="#ffffff">
+										<td  width="140" align="right" bgcolor="#ffffff">
 											<b>
 											<digi:trn key="aim:relatedDocuments">
 											Related Documents</digi:trn></b>
 										</td>
-										<td bgcolor="#ffffff" class="borderTLBR">
+										<td bgcolor="#ffffff" >
 											<c:if test="${empty aimEditActivityForm.documentList}">
 												&nbsp;
 											</c:if>										
@@ -544,12 +547,12 @@
 										</td>
 									</tr>
 									<tr>
-										<td class="borderTLBR" width="140" align="right" bgcolor="#ffffff">
+										<td  width="140" align="right" bgcolor="#ffffff">
 											<b>
 											<digi:trn key="aim:executingAgencies">
 											Executing Agencies</digi:trn></b>
 										</td>
-										<td bgcolor="#ffffff" class="borderTLBR">
+										<td bgcolor="#ffffff" >
 											<c:if test="${!empty aimEditActivityForm.executingAgencies}">
 												<table width="100%" cellpadding="2" cellspacing="2" valign="top" align="left">
 													<c:forEach var="exAgency" items="${aimEditActivityForm.executingAgencies}"> 
@@ -565,12 +568,12 @@
 										</td>
 									</tr>
 									<tr>
-										<td class="borderTLBR" width="140" align="right" bgcolor="#ffffff">
+										<td  width="140" align="right" bgcolor="#ffffff">
 											<b>
 											<digi:trn key="aim:implementingAgencies">
 											Implementing Agencies</digi:trn></b>
 										</td>
-										<td bgcolor="#ffffff" class="borderTLBR">
+										<td bgcolor="#ffffff" >
 											<c:if test="${!empty aimEditActivityForm.impAgencies}">
 												<table width="100%" cellpadding="2" cellspacing="2" valign="top" align="left">
 													<c:forEach var="impAgency" items="${aimEditActivityForm.impAgencies}"> 
@@ -586,25 +589,25 @@
 										</td>
 									</tr>
 									<tr>
-										<td class="borderTLBR" width="140" align="right" bgcolor="#ffffff">
+										<td  width="140" align="right" bgcolor="#ffffff">
 											<b>
 											<digi:trn key="aim:contractors">
 											Contractors</digi:trn></b>
 										</td>
-										<td bgcolor="#ffffff" class="borderTLBR">
+										<td bgcolor="#ffffff" >
 											<c:out value="${aimEditActivityForm.contractors}"/>
 											&nbsp;
 										</td>
 									</tr>	
 
 									<tr>
-										<td class="borderTLBR" width="140" align="right" bgcolor="#ffffff">
+										<td  width="140" align="right" bgcolor="#ffffff">
 											<b>
 											<digi:trn key="aim:donorFundingContactInformation">
 											Donor funding contact information</digi:trn>
 											</b>
 										</td>
-										<td bgcolor="#ffffff" class="borderTLBR">
+										<td bgcolor="#ffffff" >
 											<c:out value="${aimEditActivityForm.dnrCntFirstName}"/>
 											<c:out value="${aimEditActivityForm.dnrCntLastName}"/> -
 											<c:out value="${aimEditActivityForm.dnrCntEmail}"/>
@@ -612,13 +615,13 @@
 										</td>
 									</tr>	
 									<tr>
-										<td class="borderTLBR" width="140" align="right" bgcolor="#ffffff">
+										<td  width="140" align="right" bgcolor="#ffffff">
 											<b>
 											<digi:trn key="aim:mofedContactInformation">
 											MOFED contact information</digi:trn>
 											</b>
 										</td>
-										<td bgcolor="#ffffff" class="borderTLBR">
+										<td bgcolor="#ffffff" >
 											<c:out value="${aimEditActivityForm.mfdCntFirstName}"/>
 											<c:out value="${aimEditActivityForm.mfdCntLastName}"/> -
 											<c:out value="${aimEditActivityForm.mfdCntEmail}"/>
@@ -626,13 +629,13 @@
 										</td>
 									</tr>										
 									<tr>
-										<td class="borderTLBR" width="140" align="right" bgcolor="#ffffff">
+										<td  width="140" align="right" bgcolor="#ffffff">
 											<b>
 											<digi:trn key="aim:activityCreatedBy">
 											Activity created by</digi:trn>
 											</b>
 										</td>
-										<td bgcolor="#ffffff" class="borderTLBR">
+										<td bgcolor="#ffffff" >
 											<c:out value="${aimEditActivityForm.actAthFirstName}"/>
 											<c:out value="${aimEditActivityForm.actAthLastName}"/> -
 											<c:out value="${aimEditActivityForm.actAthEmail}"/>
@@ -641,11 +644,11 @@
 									</tr>		
 									<logic:notEmpty name="aimEditActivityForm" property="createdDate">
 									<tr>
-										<td class="borderTLBR" width="30%" align="right" bgcolor="#ffffff"><b>
+										<td  width="30%" align="right" bgcolor="#ffffff"><b>
 											<digi:trn key="aim:activityCreatedOn">
 											Activity created on</digi:trn></b>
 										</td>
-										<td bgcolor="#ffffff" class="borderTLBR">
+										<td bgcolor="#ffffff" >
 											<c:out value="${aimEditActivityForm.createdDate}"/>
 										</td>
 									</tr>									

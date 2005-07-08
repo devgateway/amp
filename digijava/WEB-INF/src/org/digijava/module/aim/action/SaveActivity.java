@@ -8,6 +8,7 @@ import org.apache.struts.action.ActionError;
 import org.apache.struts.action.ActionErrors;
 
 import java.util.Calendar;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
@@ -47,6 +48,7 @@ import org.digijava.module.aim.helper.Components;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.DateConversion;
 import org.digijava.module.aim.helper.DecimalToText;
+import org.digijava.module.aim.helper.FundTotal;
 import org.digijava.module.aim.helper.Funding;
 import org.digijava.module.aim.helper.FundingDetail;
 import org.digijava.module.aim.helper.FundingOrganization;
@@ -83,6 +85,9 @@ public class SaveActivity extends Action {
 		if (session.getAttribute("currentMember") == null)
 			return mapping.findForward("index");
 
+		
+		try {
+		
 		TeamMember tm = null;
 		if (session.getAttribute("currentMember") != null)
 			tm = (TeamMember) session.getAttribute("currentMember");
@@ -165,6 +170,19 @@ public class SaveActivity extends Action {
 			saveErrors(request, errors);
 			return mapping.findForward("addActivityStep2");
 		}
+		
+		if (eaForm.getFundingOrganizations() != null &&
+		        eaForm.getFundingOrganizations().size() > 0) {
+		    Iterator tempItr = eaForm.getFundingOrganizations().iterator();
+		    while (tempItr.hasNext()) {
+		        FundingOrganization forg = (FundingOrganization) tempItr.next();
+		        if (forg.getFundings() == null || forg.getFundings().size() == 0) {
+					errors.add("fundings",new ActionError("error.aim.addActivity.fundingsNotEntered"));
+					saveErrors(request, errors);
+					return mapping.findForward("addActivityStep3");
+		        }
+		    }
+		}
 		// end of Modified code
 
 		activity.setAmpId(eaForm.getAmpId());
@@ -194,23 +212,29 @@ public class SaveActivity extends Action {
 				DateConversion.getDate(eaForm.getRevisedAppDate()));
 		activity.setProposedStartDate(
 				DateConversion.getDate(eaForm.getOriginalStartDate()));
+		logger.debug("Setting actual start date as " + eaForm.getRevisedStartDate());
 		activity.setActualStartDate(
 				DateConversion.getDate(eaForm.getRevisedStartDate()));
+		logger.debug("Actual start date = " + activity.getActualStartDate());
 		activity.setActualCompletionDate(
 				DateConversion.getDate(eaForm.getCurrentCompDate()));
 		
 		AmpActivityClosingDates closeDate = null;
+
 		Set closeDates = new HashSet();
+		if (activity.getClosingDates() == null) {
+		    activity.setClosingDates(new HashSet());
+		}
 		
-		if (!eaForm.isEdit()) {
-			String date = eaForm.getProposedCompDate();
+		if (!(eaForm.isEdit())) {
 			closeDate = new AmpActivityClosingDates();
 			closeDate.setAmpActivityId(activity);
-			closeDate.setClosingDate(DateConversion.getDate(date));
-			closeDate.setType(Constants.REVISED);
+			closeDate.setClosingDate(DateConversion.getDate(eaForm.getProposedCompDate()));
 			closeDate.setComments(" ");
-			closeDates.add(closeDate);			
+			closeDate.setType(Constants.REVISED);
+			activity.getClosingDates().add(closeDate);			    
 		}
+		
 		if (eaForm.getActivityCloseDates() != null) {
 			Iterator itr = eaForm.getActivityCloseDates().iterator();
 			while (itr.hasNext()) {
@@ -220,19 +244,25 @@ public class SaveActivity extends Action {
 				closeDate.setClosingDate(DateConversion.getDate(date));
 				closeDate.setType(Constants.REVISED);
 				closeDate.setComments(" ");
-				closeDates.add(closeDate);
+				activity.getClosingDates().add(closeDate);
 			}
 		}
-		closeDate = new AmpActivityClosingDates();
-		closeDate.setAmpActivityId(activity);
-		closeDate.setClosingDate(DateConversion.getDate(eaForm.getCurrentCompDate()));
-		closeDate.setComments(" ");
-		closeDate.setType(Constants.CURRENT);
 		
 		
-		closeDates.add(closeDate);		
-		activity.setClosingDates(closeDates);
-		
+		if (eaForm.getCurrentCompDate() != null &&
+		        eaForm.getCurrentCompDate().trim().length() > 0) {
+			closeDate = new AmpActivityClosingDates();
+			closeDate.setAmpActivityId(activity);
+			closeDate.setClosingDate(DateConversion.getDate(eaForm.getCurrentCompDate()));
+			closeDate.setComments(" ");
+			closeDate.setType(Constants.CURRENT);
+			
+			Collection temp = activity.getClosingDates();
+			if (!(temp.contains(closeDate))) {
+			    activity.getClosingDates().add(closeDate);			    
+			}
+		}
+
 		activity.setContFirstName(eaForm.getDnrCntFirstName());
 		activity.setContLastName(eaForm.getDnrCntLastName());		
 		activity.setEmail(eaForm.getDnrCntEmail());
@@ -491,9 +521,10 @@ public class SaveActivity extends Action {
 			OrgProjectId orgProjId[] = eaForm.getSelectedOrganizations();
 			for (int i = 0; i < orgProjId.length; i++) {
 				AmpActivityInternalId actInternalId = new AmpActivityInternalId();
-				actInternalId.setAmpOrgId(orgProjId[i].getAmpOrgId());
+				logger.info("Setting orgId in Internal id as " + orgProjId[i].getAmpOrgId());
+				actInternalId.setOrganisation(DbUtil.getOrganisation(orgProjId[i].getAmpOrgId()));
 				actInternalId.setInternalId(orgProjId[i].getProjectId());
-				internalIds.add(actInternalId);
+				internalIds.add(actInternalId);	
 			}
 		}
 		activity.setInternalIds(internalIds);
@@ -667,6 +698,10 @@ public class SaveActivity extends Action {
 			return mapping.findForward("viewMyDesktop");
 		else
 			return null;
+		} catch (Exception e) {
+		    e.printStackTrace(System.out);
+		}
+		return null;
 	}
 	
 	/*

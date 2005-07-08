@@ -27,9 +27,6 @@
 			org.digijava.module.aim.dbentity.AmpLevel
 		</hibernate-class>
 		<hibernate-class>
-			org.digijava.module.aim.dbentity.AmpActivityInternalId
-		</hibernate-class>
-		<hibernate-class>
 			org.digijava.module.aim.dbentity.AmpModality
 		</hibernate-class>
 		<hibernate-class>

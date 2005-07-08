@@ -61,7 +61,7 @@
 		<many-to-one name="activityCreator" column="activity_creator" 
 			class="org.digijava.module.aim.dbentity.AmpTeamMember" cascade="none"/>		
 	
-		<set name="orgrole" table="amp_org_role">
+		<set name="orgrole" table="amp_org_role" lazy="true">
 			<key column="amp_activity_id"/>
 				<composite-element class="org.digijava.module.aim.dbentity.AmpOrgRole">
 					<many-to-one name="organisation" class="org.digijava.module.aim.dbentity.AmpOrganisation" column="amp_org_id"/>
@@ -70,42 +70,45 @@
 		</set>
 
 		<set name="sectors" table="amp_activity_sector" lazy="true">
-  	            <cache usage="read-write"/>
-				<key column="amp_activity_id"/>
-				<many-to-many class="org.digijava.module.aim.dbentity.AmpSector" column="amp_sector_id"/>
-		</set>
-
-		<set name="locations" table="amp_activity_location" lazy="true">
-  	            <cache usage="read-write"/>
-				<key column="amp_activity_id"/>
-				<many-to-many class="org.digijava.module.aim.dbentity.AmpLocation" column="amp_location_id"/>
-		</set>
-
-		<set name="internalIds" cascade="delete" inverse="true">
-		<cache usage="read-write" />
+			<cache usage="read-write"/>
 			<key column="amp_activity_id"/>
-			<one-to-many class="org.digijava.module.aim.dbentity.AmpActivityInternalId"/>
+			<many-to-many class="org.digijava.module.aim.dbentity.AmpSector" column="amp_sector_id"/>
+		</set>
+
+		<set name="locations" table="amp_activity_location" lazy="true" cascade="all">
+			<cache usage="read-write"/>
+			<key column="amp_activity_id"/>
+			<many-to-many class="org.digijava.module.aim.dbentity.AmpLocation" column="amp_location_id"/>
+		</set>
+
+		<set name="internalIds" table="amp_activity_internal_id">
+			<key column="amp_activity_id"/>
+			<composite-element class="org.digijava.module.aim.dbentity.AmpActivityInternalId">
+				<many-to-one name="organisation" class="org.digijava.module.aim.dbentity.AmpOrganisation" 
+					column="amp_org_id"/>
+				<property name="internalId" column="internal_id"  type="java.lang.String"/>					
+			</composite-element>
 		</set>	
 
-		<set name="funding" cascade="delete" inverse="true">
+		<set name="funding" cascade="all" inverse="true">
 		<cache usage="read-write" />
 			<key column="amp_activity_id"/>
 			<one-to-many class="org.digijava.module.aim.dbentity.AmpFunding"/>
 		</set>
 
-		<set name="components" cascade="delete" inverse="true">
+		<set name="components" cascade="all" inverse="true" order-by="amp_component_id asc">
 		<cache usage="read-write" />
 			<key column="amp_activity_id"/>
 			<one-to-many class="org.digijava.module.aim.dbentity.AmpComponent"/>
  		</set>	
 
- 		<set name="documents" table="amp_activity_km_documents" lazy="true">
+ 		<set name="documents" table="amp_activity_km_documents" lazy="true" cascade="all">
   	            <cache usage="read-write"/>
 				<key column="amp_activity_id"/>
 				<many-to-many class="org.digijava.module.cms.dbentity.CMSContentItem" column="id"/>
 		</set>	
 		
-		<set name="member" table="amp_member_activities" lazy="true">
+		<set name="member" table="amp_member_activities" lazy="true" inverse="true">
   	            <cache usage="read-write"/>
 				<key column="amp_activity_id"/>
 				<many-to-many class="org.digijava.module.aim.dbentity.AmpTeamMember" column="amp_member_id"/>
@@ -125,7 +128,7 @@
 			<one-to-many class="org.digijava.module.aim.dbentity.AmpNotes"/>
 		</set>
 	
-		<set name="closingDates" cascade="delete" inverse="true">
+		<set name="closingDates" cascade="all" inverse="true" order-by="closing_date desc">
 		<cache usage="read-write" />
 			<key column="amp_activity_id"/>
 			<one-to-many class="org.digijava.module.aim.dbentity.AmpActivityClosingDates" />

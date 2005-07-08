@@ -239,12 +239,19 @@ function reviseCloseDate() {
 										</table>
 									</td></tr>
 									<tr><td>
-										<table cellPadding=1 cellSpacing=4 border=0>
-											<tr><td valign="top" align="left">
-												<a title="<digi:trn key="aim:TrackActivitiesintheDonorsInternalDatabase">Facilitates tracking activities in donors' internal databases </digi:trn>">
-												<digi:trn key="aim:orgsAndProjectIds">Organizations and Project IDs</digi:trn>
-												</a>											
-											</td>
+									
+										<table cellPadding=5 cellSpacing=1 border=0 width="100%" bgcolor="#d7eafd">
+											<tr>
+												<td align="left"><b>
+													<a title="<digi:trn key="aim:TrackActivitiesintheDonorsInternalDatabase">Facilitates tracking activities in donors' internal databases </digi:trn>">
+													<digi:trn key="aim:orgsAndProjectIds">Organizations and Project IDs</digi:trn>
+													</a></b>												
+												</td>
+											</tr>
+											<tr>
+												<td bgcolor="#ffffff" width="100%">
+
+										<table cellPadding=1 cellSpacing=1 border=0 bgcolor="#ffffff" width="100%">
 											<logic:empty name="aimEditActivityForm" property="selectedOrganizations">
 												<td>
 													<a title="<digi:trn key="aim:TrackActivitiesintheDonorsInternalDatabase">Facilitates tracking activities in donors' internal databases </digi:trn>">
@@ -253,21 +260,25 @@ function reviseCloseDate() {
 											</logic:empty>
 											<logic:notEmpty name="aimEditActivityForm" property="selectedOrganizations">
 											<td>
-												<table cellSpacing=2 cellPadding=2 border=0>
+												<table cellSpacing=1 cellPadding=1 border=0 width="500">
 													<c:forEach var="selectedOrganizations" items="${aimEditActivityForm.selectedOrganizations}" >
-														<tr><td>	
-														<c:if test="${! empty selectedOrganizations}">
-														<html:multibox property="selOrgs">
-															<c:out value="${selectedOrganizations.ampOrgId}"/>
-														</html:multibox>
-														<digi:trn key="aim:organization">Organization</digi:trn> : 
-														<c:out value="${selectedOrganizations.name}"/><br>
-														<digi:trn key="aim:projectId">Project ID</digi:trn> : 
-														<html:text name="selectedOrganizations" property="projectId" indexed="true" styleClass="inp-text"/>
-														</c:if>
+														<tr>
+															<td align="left" width=3> 	
+																<html:multibox property="selOrgs">
+																	<c:out value="${selectedOrganizations.ampOrgId}"/>
+																</html:multibox>
+															</td>
+															<td align="left" width="367">
+																<c:out value="${selectedOrganizations.name}"/>
+															</td>
+															<td align="left" width="130">
+																<html:text name="selectedOrganizations" 
+																property="projectId" indexed="true" 
+																styleClass="inp-text" size="15"/>
+															</td>															
 														</td></tr>
 													</c:forEach>													
-													<tr><td>
+													<tr><td colspan="3">
 														<table cellSpacing=2 cellPadding=2>
 															<tr>
 																<td>
@@ -286,6 +297,13 @@ function reviseCloseDate() {
 											</logic:notEmpty>
 											</tr>
 										</table>
+												
+												</td>
+											</tr>
+										</table>
+
+										
+									
 									</td></tr>
 									<tr><td>
 										&nbsp;

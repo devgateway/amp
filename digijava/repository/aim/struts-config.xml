@@ -2130,6 +2130,7 @@
 			  <forward name="viewMyDesktop" path="/viewMyDesktop.do" redirect="true" />
 			  <forward name="index" path="/aim/index.do" redirect="true" />			  
 			  <forward name="addActivityStep2" path="/showLayout.do?layout=addActivityStep2" />
+			  <forward name="addActivityStep3" path="/showLayout.do?layout=addActivityStep3" />
 			  <forward name="addActivityStep1" path="/showLayout.do?layout=addActivityStep1" />			  
 	</action>
 

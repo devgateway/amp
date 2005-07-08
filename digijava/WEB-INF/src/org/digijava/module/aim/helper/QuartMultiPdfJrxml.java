@@ -3,7 +3,7 @@ import java.io.*;
 
 public class QuartMultiPdfJrxml
 {
-	public void createJrxml(String filePath ,int cnt)
+	public void createJrxml(String filePath ,int cnt, int calculatedHeight)
 	throws IOException
     {		
 		try
@@ -18,11 +18,20 @@ public class QuartMultiPdfJrxml
 			p2 = new PrintStream(out2);
 			p2.println("<?xml version=\"1.0\" encoding=\"UTF-8\" ?>");
 
+			int height;
 int n=cnt;//cnt;
 int center=0;//(12-n)*30;
 int x=(0+center),x1=0,y=0,y1=0,xl=0,yl=0;
 int textkey=11,linekey=21,c=0,c1=0;
 String ctextkey="";
+
+			
+			if(calculatedHeight > 80 )
+				height = calculatedHeight;
+			else
+			{
+				height  = 89;
+			}
 
 p2.println("<!-- Created with iReport - A designer for JasperReports -->");
 p2.println("<!DOCTYPE jasperReport PUBLIC '//JasperReports//DTD Report Design//EN' 'http://jasperreports.sourceforge.net/dtds/jasperreport.dtd'>");
@@ -57,7 +66,7 @@ p2.println("<field name='c1' class='java.lang.String'/>");
 p2.println("<field name='c2' class='java.lang.String'/>");
 for(int k=3;k<=(16*n+8);k++)
 {
-	
+
 	dc="c"+k;
 	p2.println("<field name='"+dc+"' class='java.lang.String'/>");
 }
@@ -379,13 +388,14 @@ p2.println("<band height='0'  isSplitAllowed='true' >");
 p2.println("</band>");
 p2.println("</columnHeader>");
 p2.println("<detail>");
-p2.println("<band height='89'  isSplitAllowed='true' >");
+p2.println("<band height='"+height+"' isSplitAllowed='true' >");
 p2.println("<textField isStretchWithOverflow='true' pattern='' isBlankWhenNull='false' evaluationTime='Now' hyperlinkType='None' >					<reportElement");
 p2.println("mode='Transparent'");
 p2.println("x='0'");
 p2.println("y='0'");
 p2.println("width='70'");
-p2.println("height='85'");
+//p2.println("height='85'");
+p2.println("height='"+height+"'");
 p2.println("forecolor='#000000'");
 p2.println("backcolor='#FFFFFF'");
 p2.println("key='textField-10'");
@@ -404,41 +414,43 @@ p2.println("</textField>");
 x=90;y=0;x1=90;y1=0;c=(5+n+1);
 for(int i=0;i<n;i++)//bigone
 {
-	for(int j=0;j<4;j++)//ver
-	{
-//			x = 90;
-			for(int k=0;k<3;k++)//hor
-			{
-				ctextkey="c"+c;
-				p2.println("<textField isStretchWithOverflow='false' pattern='' isBlankWhenNull='false' evaluationTime='Now' hyperlinkType='None' >					<reportElement");
-				p2.println("mode='Opaque'");
-				p2.println("x='"+x+"'");
-				p2.println("y='"+y+"'");
-				p2.println("width='60'");
-				p2.println("height='20'");
-				p2.println("forecolor='#000000'");
-				p2.println("backcolor='#FFFFFF'");
-				p2.println("key='textField-27'");
-				p2.println("stretchType='NoStretch'");
-				p2.println("positionType='FixRelativeToTop'");
-				p2.println("isPrintRepeatedValues='true'");
-				p2.println("isRemoveLineWhenBlank='false'");
-				p2.println("isPrintInFirstWholeBand='false'");
-				p2.println("isPrintWhenDetailOverflows='false'/>");
-				p2.println("<textElement textAlignment='Right' verticalAlignment='Middle' rotation='None' lineSpacing='Single'>");
-				p2.println("<font fontName='Arial' pdfFontName='Helvetica' size='8' isBold='false' isItalic='false' isUnderline='false' isPdfEmbedded ='false' pdfEncoding ='Cp1252' isStrikeThrough='false' />");
-				p2.println("</textElement>");
-				p2.println("<textFieldExpression   class='java.lang.String'><![CDATA[$F{"+ctextkey+"}]]></textFieldExpression>");
-				p2.println("</textField>");
-			
-				x += 60;
-				c++;
-			}
-			x -= 180;
-			y += 21;
-	}
-	x += 180;
-	y=0;
+for(int j=0;j<4;j++)//ver
+{
+//x = 90;
+for(int k=0;k<3;k++)//hor
+{
+	ctextkey="c"+c;
+	p2.println("<textField isStretchWithOverflow='false' pattern='' isBlankWhenNull='false' evaluationTime='Now' hyperlinkType='None' >					<reportElement");
+	p2.println("mode='Opaque'");
+	p2.println("x='"+x+"'");
+	p2.println("y='"+y+"'");
+	p2.println("width='60'");
+	//p2.println("height='20'");
+	p2.println("height='"+(height/4)+"'");
+	p2.println("forecolor='#000000'");
+	p2.println("backcolor='#FFFFFF'");
+	p2.println("key='textField-27'");
+	p2.println("stretchType='NoStretch'");
+	p2.println("positionType='FixRelativeToTop'");
+	p2.println("isPrintRepeatedValues='true'");
+	p2.println("isRemoveLineWhenBlank='false'");
+	p2.println("isPrintInFirstWholeBand='false'");
+	p2.println("isPrintWhenDetailOverflows='false'/>");
+	p2.println("<textElement textAlignment='Right' verticalAlignment='Middle' rotation='None' lineSpacing='Single'>");
+	p2.println("<font fontName='Arial' pdfFontName='Helvetica' size='8' isBold='false' isItalic='false' isUnderline='false' isPdfEmbedded ='false' pdfEncoding ='Cp1252' isStrikeThrough='false' />");
+	p2.println("</textElement>");
+	p2.println("<textFieldExpression   class='java.lang.String'><![CDATA[$F{"+ctextkey+"}]]></textFieldExpression>");
+	p2.println("</textField>");
+
+	x += 60;
+	c++;
+}
+x -= 180;
+//y += 21;
+y += (height/4);
+}
+x += 180;
+y=0;
 
 }//for2
 
@@ -453,7 +465,8 @@ p2.println("mode='Opaque'");
 p2.println("x='"+x+"'");
 p2.println("y='0'");
 p2.println("width='55'");
-p2.println("height='85'");
+//p2.println("height='85'");
+p2.println("height='"+height+"'");
 p2.println("forecolor='#000000'");
 p2.println("backcolor='#FFFFFF'");
 p2.println("key='textField-27'");
@@ -479,7 +492,8 @@ p2.println("<line direction='TopDown'>");
 p2.println("<reportElement");
 p2.println("mode='Opaque'");
 p2.println("x='0'");
-p2.println("y='87'");
+//p2.println("y='87'");
+p2.println("y='"+( height - 1) +"'");
 p2.println("width='"+(797-180*(3-n))+"'");
 p2.println("height='0'");
 p2.println("forecolor='#666666'");
@@ -494,93 +508,100 @@ p2.println("isPrintWhenDetailOverflows='false'/>");
 p2.println("<graphicElement stretchType='NoStretch' pen='Thin' fill='Solid' />");
 p2.println("</line>");
 
-			p2.println("<staticText>");
-			p2.println("<reportElement");
-			p2.println("mode='Opaque'");
-			p2.println("x='70'");
-			p2.println("y='1'");
-			p2.println("width='20'");
-			p2.println("height='20'");
-			p2.println("forecolor='#000000'");
-			p2.println("backcolor='#CCCCCC'");
-			p2.println("key='staticText-8'");
-			p2.println("stretchType='NoStretch'");
-			p2.println("positionType='FixRelativeToTop'");
-			p2.println("isPrintRepeatedValues='true'");
-			p2.println("isRemoveLineWhenBlank='false'");
-			p2.println("isPrintInFirstWholeBand='false'");
-			p2.println("isPrintWhenDetailOverflows='false'/>");
-			p2.println("<textElement textAlignment='Center' verticalAlignment='Middle' rotation='None' lineSpacing='Single'>");
-			p2.println("<font fontName='Arial' pdfFontName='Helvetica' size='8' isBold='false' isItalic='false' isUnderline='false' isPdfEmbedded ='false' pdfEncoding ='Cp1252' isStrikeThrough='false' />");
-			p2.println("</textElement>");
-			p2.println("<text><![CDATA[Q1]]></text>");
-			p2.println("</staticText>");
+p2.println("<staticText>");
+p2.println("<reportElement");
+p2.println("mode='Opaque'");
+p2.println("x='70'");
+p2.println("y='1'");
+p2.println("width='20'");
+//p2.println("height='20'");
+p2.println("height='"+ (height/4) +"'");
+p2.println("forecolor='#000000'");
+p2.println("backcolor='#CCCCCC'");
+p2.println("key='staticText-8'");
+p2.println("stretchType='NoStretch'");
+p2.println("positionType='FixRelativeToTop'");
+p2.println("isPrintRepeatedValues='true'");
+p2.println("isRemoveLineWhenBlank='false'");
+p2.println("isPrintInFirstWholeBand='false'");
+p2.println("isPrintWhenDetailOverflows='false'/>");
+p2.println("<textElement textAlignment='Center' verticalAlignment='Middle' rotation='None' lineSpacing='Single'>");
+p2.println("<font fontName='Arial' pdfFontName='Helvetica' size='8' isBold='false' isItalic='false' isUnderline='false' isPdfEmbedded ='false' pdfEncoding ='Cp1252' isStrikeThrough='false' />");
+p2.println("</textElement>");
+p2.println("<text><![CDATA[Q1]]></text>");
+p2.println("</staticText>");
 
-			p2.println("<staticText>");
-			p2.println("<reportElement");
-			p2.println("mode='Opaque'");
-			p2.println("x='70'");
-			p2.println("y='22'");
-			p2.println("width='20'");
-			p2.println("height='20'");
-			p2.println("forecolor='#000000'");
-			p2.println("backcolor='#CCCCCC'");
-			p2.println("key='staticText-8'");
-			p2.println("stretchType='NoStretch'");
-			p2.println("positionType='FixRelativeToTop'");
-			p2.println("isPrintRepeatedValues='true'");
-			p2.println("isRemoveLineWhenBlank='false'");
-			p2.println("isPrintInFirstWholeBand='false'");
-			p2.println("isPrintWhenDetailOverflows='false'/>");
-			p2.println("<textElement textAlignment='Center' verticalAlignment='Middle' rotation='None' lineSpacing='Single'>");
-			p2.println("<font fontName='Arial' pdfFontName='Helvetica' size='8' isBold='false' isItalic='false' isUnderline='false' isPdfEmbedded ='false' pdfEncoding ='Cp1252' isStrikeThrough='false' />");
-			p2.println("</textElement>");
-			p2.println("<text><![CDATA[Q2]]></text>");
-			p2.println("</staticText>");
+p2.println("<staticText>");
+p2.println("<reportElement");
+p2.println("mode='Opaque'");
+p2.println("x='70'");
+//p2.println("y='22'");
+p2.println("y='"+((height/4)+1 )+"'");
+p2.println("width='20'");
+//p2.println("height='20'");
+p2.println("height='"+ (height/4) +"'");
+p2.println("forecolor='#000000'");
+p2.println("backcolor='#CCCCCC'");
+p2.println("key='staticText-8'");
+p2.println("stretchType='NoStretch'");
+p2.println("positionType='FixRelativeToTop'");
+p2.println("isPrintRepeatedValues='true'");
+p2.println("isRemoveLineWhenBlank='false'");
+p2.println("isPrintInFirstWholeBand='false'");
+p2.println("isPrintWhenDetailOverflows='false'/>");
+p2.println("<textElement textAlignment='Center' verticalAlignment='Middle' rotation='None' lineSpacing='Single'>");
+p2.println("<font fontName='Arial' pdfFontName='Helvetica' size='8' isBold='false' isItalic='false' isUnderline='false' isPdfEmbedded ='false' pdfEncoding ='Cp1252' isStrikeThrough='false' />");
+p2.println("</textElement>");
+p2.println("<text><![CDATA[Q2]]></text>");
+p2.println("</staticText>");
 
-			p2.println("<staticText>");
-			p2.println("<reportElement");
-			p2.println("mode='Opaque'");
-			p2.println("x='70'");
-			p2.println("y='43'");
-			p2.println("width='20'");
-			p2.println("height='20'");
-			p2.println("forecolor='#000000'");
-			p2.println("backcolor='#CCCCCC'");
-			p2.println("key='staticText-8'");
-			p2.println("stretchType='NoStretch'");
-			p2.println("positionType='FixRelativeToTop'");
-			p2.println("isPrintRepeatedValues='true'");
-			p2.println("isRemoveLineWhenBlank='false'");
-			p2.println("isPrintInFirstWholeBand='false'");
-			p2.println("isPrintWhenDetailOverflows='false'/>");
-			p2.println("<textElement textAlignment='Center' verticalAlignment='Middle' rotation='None' lineSpacing='Single'>");
-			p2.println("<font fontName='Arial' pdfFontName='Helvetica' size='8' isBold='false' isItalic='false' isUnderline='false' isPdfEmbedded ='false' pdfEncoding ='Cp1252' isStrikeThrough='false' />");
-			p2.println("</textElement>");
-			p2.println("<text><![CDATA[Q3]]></text>");
-			p2.println("</staticText>");
+p2.println("<staticText>");
+p2.println("<reportElement");
+p2.println("mode='Opaque'");
+p2.println("x='70'");
+//p2.println("y='43'");
+p2.println("y='"+((height/4) * 2 + 1)+"'");
+p2.println("width='20'");
+//p2.println("height='20'");
+p2.println("height='"+ (height/4) +"'");
+p2.println("forecolor='#000000'");
+p2.println("backcolor='#CCCCCC'");
+p2.println("key='staticText-8'");
+p2.println("stretchType='NoStretch'");
+p2.println("positionType='FixRelativeToTop'");
+p2.println("isPrintRepeatedValues='true'");
+p2.println("isRemoveLineWhenBlank='false'");
+p2.println("isPrintInFirstWholeBand='false'");
+p2.println("isPrintWhenDetailOverflows='false'/>");
+p2.println("<textElement textAlignment='Center' verticalAlignment='Middle' rotation='None' lineSpacing='Single'>");
+p2.println("<font fontName='Arial' pdfFontName='Helvetica' size='8' isBold='false' isItalic='false' isUnderline='false' isPdfEmbedded ='false' pdfEncoding ='Cp1252' isStrikeThrough='false' />");
+p2.println("</textElement>");
+p2.println("<text><![CDATA[Q3]]></text>");
+p2.println("</staticText>");
 
-			p2.println("<staticText>");
-			p2.println("<reportElement");
-			p2.println("mode='Opaque'");
-			p2.println("x='70'");
-			p2.println("y='64'");
-			p2.println("width='20'");
-			p2.println("height='20'");
-			p2.println("forecolor='#000000'");
-			p2.println("backcolor='#CCCCCC'");
-			p2.println("key='staticText-8'");
-			p2.println("stretchType='NoStretch'");
-			p2.println("positionType='FixRelativeToTop'");
-			p2.println("isPrintRepeatedValues='true'");
-			p2.println("isRemoveLineWhenBlank='false'");
-			p2.println("isPrintInFirstWholeBand='false'");
-			p2.println("isPrintWhenDetailOverflows='false'/>");
-			p2.println("<textElement textAlignment='Center' verticalAlignment='Middle' rotation='None' lineSpacing='Single'>");
-			p2.println("<font fontName='Arial' pdfFontName='Helvetica' size='8' isBold='false' isItalic='false' isUnderline='false' isPdfEmbedded ='false' pdfEncoding ='Cp1252' isStrikeThrough='false' />");
-			p2.println("</textElement>");
-			p2.println("<text><![CDATA[Q4]]></text>");
-			p2.println("</staticText>");
+p2.println("<staticText>");
+p2.println("<reportElement");
+p2.println("mode='Opaque'");
+p2.println("x='70'");
+//p2.println("y='64'");
+p2.println("y='"+((height/4) * 3)+"'");
+p2.println("width='20'");
+//p2.println("height='20'");
+p2.println("height='"+ (height/4) +"'");
+p2.println("forecolor='#000000'");
+p2.println("backcolor='#CCCCCC'");
+p2.println("key='staticText-8'");
+p2.println("stretchType='NoStretch'");
+p2.println("positionType='FixRelativeToTop'");
+p2.println("isPrintRepeatedValues='true'");
+p2.println("isRemoveLineWhenBlank='false'");
+p2.println("isPrintInFirstWholeBand='false'");
+p2.println("isPrintWhenDetailOverflows='false'/>");
+p2.println("<textElement textAlignment='Center' verticalAlignment='Middle' rotation='None' lineSpacing='Single'>");
+p2.println("<font fontName='Arial' pdfFontName='Helvetica' size='8' isBold='false' isItalic='false' isUnderline='false' isPdfEmbedded ='false' pdfEncoding ='Cp1252' isStrikeThrough='false' />");
+p2.println("</textElement>");
+p2.println("<text><![CDATA[Q4]]></text>");
+p2.println("</staticText>");
 
 
 p2.println("</band>");

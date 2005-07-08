@@ -33,7 +33,7 @@ import org.digijava.module.aim.helper.QuartMultiPdfJrxml;
 public class QuarterlyMultilateralByDonorPDF extends Action 
 {
 	private static Logger logger = Logger.getLogger(QuarterlyMultilateralByDonorPDF.class) ;
-	
+	private static int fieldHeight = 0; 	 	
 	public ActionForward execute(ActionMapping mapping,
 								ActionForm form, javax.servlet.http.HttpServletRequest request,
 								javax.servlet.http.HttpServletResponse response) 
@@ -140,10 +140,13 @@ public class QuarterlyMultilateralByDonorPDF extends Action
 				{
 					col+=1;
 					data[row][col] = report.getTeamName();
+					calculateFieldHeight(report.getTeamName());
+					
 					teamName = report.getTeamName();
 					ampTeamDonors = (AmpTeamDonors) teamDonorsIter.next();
 					col+=1;
 					data[row][col] = ampTeamDonors.getDonorAgency();
+					calculateFieldHeight(ampTeamDonors.getDonorAgency());
 
 					// Stores the years consecutivily
 					ampFisYears = new ArrayList((formBean.getFiscalYearRange()));
@@ -191,6 +194,26 @@ public class QuarterlyMultilateralByDonorPDF extends Action
 							row = row + 1;
 							data[row][3] = report.getTeamName();	
 							data[row][4] = "Total " + termFund.getTermAssistName();
+							calculateFieldHeight(data[row][4].toString());
+							
+							col = 4;
+							// Stores the years consecutivily
+							ampFisYears = new ArrayList((formBean.getFiscalYearRange()));
+							fiscIter = ampFisYears.iterator();
+							fisc=null;
+							if(fiscIter.hasNext() == true)
+							{
+								year = (Integer)fiscIter.next();
+								yy = year.intValue();
+							}
+							yyTmp = yy;
+							for(int i=0; i< formBean.getFiscalYearRange().size(); i++)
+							{
+								col+=1;
+								data[row][col] = Integer.toString(yy);
+								yy = yy + 1;
+							}
+
 							col = 4 + formBean.getFiscalYearRange().size();
 							termFundTotals = new ArrayList(termFund.getTermFundTotal());
 							termFundTotalIter = termFundTotals.iterator();
@@ -227,6 +250,26 @@ public class QuarterlyMultilateralByDonorPDF extends Action
 						data[row][3] = teamName; 
 						termFund = (TermFund) totalTeamTermAssistFundIter.next();
 						data[row][4] = "Total " + termFund.getTermAssistName();
+						calculateFieldHeight(data[row][4].toString());
+
+						col = 4;
+						// Stores the years consecutivily
+						ampFisYears = new ArrayList((formBean.getFiscalYearRange()));
+						Iterator fiscIter = ampFisYears.iterator();
+						fiscalYrs fisc=null;
+						if(fiscIter.hasNext() == true)
+						{
+							year = (Integer)fiscIter.next();
+							yy = year.intValue();
+						}
+						yyTmp = yy;
+						for(int i=0; i< formBean.getFiscalYearRange().size(); i++)
+						{
+							col+=1;
+							data[row][col] = Integer.toString(yy);
+							yy = yy + 1;
+						}
+
 						col = 4 + formBean.getFiscalYearRange().size();
 						System.out.println(  row + "  : Total Term Assit :  " + termFund.getTermAssistName());
 						termFundTotals = new ArrayList(termFund.getTermFundTotal());
@@ -253,6 +296,8 @@ public class QuarterlyMultilateralByDonorPDF extends Action
 				row = row + 1;
 				data[row][3] = teamName; 
 				data[row][4] = "Total for " + report.getTeamName();
+				calculateFieldHeight(data[row][4].toString());
+				
 				col = 4 + formBean.getFiscalYearRange().size();
 				totalTeamFunds = new ArrayList(report.getTotalTeamFund());
 				totalTeamFundIter = totalTeamFunds.iterator();
@@ -277,6 +322,9 @@ public class QuarterlyMultilateralByDonorPDF extends Action
 			col = 0;
 		}
 		
+		int height = (( fieldHeight / 25 ) * 10 ) + 50;
+		logger.info(" Column Height = " + height );
+
 		if(flag == 1)
 		{
 			
@@ -305,7 +353,7 @@ public class QuarterlyMultilateralByDonorPDF extends Action
 			String realPathJrxml = s.getServletContext().getRealPath(
 							 	"/WEB-INF/classes/org/digijava/module/aim/reports/quarterlyMultilaterByDonorPdf.jrxml");
 			QuartMultiPdfJrxml jrxml = new QuartMultiPdfJrxml();
-			jrxml.createJrxml( realPathJrxml, yyCount);
+			jrxml.createJrxml( realPathJrxml, yyCount, height);
 			JasperCompileManager.compileReportToFile(realPathJrxml);
 			byte[] bytes = null;
 			try
@@ -337,5 +385,15 @@ public class QuarterlyMultilateralByDonorPDF extends Action
 		}
 		return null;
 	}// end of Execute Func
+
+
+	void calculateFieldHeight(String input)
+	{
+		System.out.println(" Large ::" + fieldHeight + " :: CUrrent : " + input.length());
+		if(input.length() > fieldHeight)
+			fieldHeight = input.length();
+	}
+
+
 }// end of Class
 	

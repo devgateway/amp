@@ -37,7 +37,7 @@ import org.digijava.module.aim.helper.SectorByProjectDatasource;
 public class QuarterlyReportBySectorPDF extends Action 
 {
 	private static Logger logger = Logger.getLogger(QuarterlyReportBySectorPDF.class) ;
-	
+	private static int fieldHeight = 0; 	 	
 	public ActionForward execute(ActionMapping mapping,
 								ActionForm form, javax.servlet.http.HttpServletRequest request,
 								javax.servlet.http.HttpServletResponse response) 
@@ -182,11 +182,16 @@ public class QuarterlyReportBySectorPDF extends Action
 						col = 3;
 						project = (Project) projectIter.next();
 						data[row][col] = multiReport.getSector();
+						calculateFieldHeight(multiReport.getSector());
+						
 						col+=1;
 						data[row][col] = ampTeamDonor.getDonorAgency();
+						calculateFieldHeight(ampTeamDonor.getDonorAgency());
+						
 						donor = ampTeamDonor.getDonorAgency();
 						col+=1;
 						data[row][col] = project.getName();
+						calculateFieldHeight(project.getName());
 						
 						// Stores the years consecutivily
 						ampFiscalYears = new ArrayList((formBean.getFiscalYearRange()));
@@ -278,6 +283,8 @@ public class QuarterlyReportBySectorPDF extends Action
 						
 						col = 5;
 						data[row][col] = "Total " + termFund.getTermAssistName();
+						calculateFieldHeight(data[row][col].toString());
+						
 						col = 5 + formBean.getFiscalYearRange().size();
 						termFundTotals = termFund.getTermFundTotal();
 						termFundTotalIter = termFundTotals.iterator();
@@ -305,6 +312,8 @@ public class QuarterlyReportBySectorPDF extends Action
 				data[row][4] = donor;
 				col = 5;
 				data[row][col] = "Total for " + multiReport.getSector();
+				calculateFieldHeight(data[row][col].toString());
+				
 				col = 5 + formBean.getFiscalYearRange().size();
 				totalSectorFunds = new ArrayList(multiReport.getTotalSectorFund());
 				totalSectorFundIter = totalSectorFunds.iterator();
@@ -341,6 +350,8 @@ public class QuarterlyReportBySectorPDF extends Action
 						col = 5;
 						termFund = (TermFund)totalTeamTermAssistFundIter.next();
 						data[row][col] = "Total " + termFund.getTermAssistName();
+						calculateFieldHeight(data[row][col].toString());
+						
 						col = 5 + formBean.getFiscalYearRange().size();
 						termFundTotals = new ArrayList(termFund.getTermFundTotal());
 						termFundTotalIter = termFundTotals.iterator();
@@ -407,7 +418,9 @@ public class QuarterlyReportBySectorPDF extends Action
 			} // End of Objects Collection
 		}
 		
-		
+		int height = (( fieldHeight / 25 ) * 10 ) + 40;
+		logger.info(" Column Height = " + height );
+
 		if(flag == 1)
 		{
 			for(int i=0; i < rowCnt; i++)
@@ -435,7 +448,7 @@ public class QuarterlyReportBySectorPDF extends Action
 			String realPathJrxml = s.getServletContext().getRealPath(
 							 	"/WEB-INF/classes/org/digijava/module/aim/reports/quarterlyReportBySectorPdf.jrxml");
 			QuarterlyReportBySectorPdfJrxml jrxml = new QuarterlyReportBySectorPdfJrxml();
-			jrxml.createJrxml(realPathJrxml, yyCount);
+			jrxml.createJrxml(realPathJrxml, yyCount, height);
 
 			JasperCompileManager.compileReportToFile(realPathJrxml);
 			byte[] bytes = null;
@@ -470,5 +483,14 @@ public class QuarterlyReportBySectorPDF extends Action
 	
 		return null;
 	}// end of Execute Func
+
+
+	void calculateFieldHeight(String input)
+	{
+		System.out.println(" Large ::" + fieldHeight + " :: CUrrent : " + input.length());
+		if(input.length() > fieldHeight)
+			fieldHeight = input.length();
+	}
+
 }// end of Class
 	

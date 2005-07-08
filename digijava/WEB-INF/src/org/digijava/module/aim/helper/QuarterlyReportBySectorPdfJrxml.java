@@ -4,7 +4,7 @@ import java.io.*;
 public class QuarterlyReportBySectorPdfJrxml
 {
 	String ctextkey;
-	public void createJrxml(String filePath ,int cnt)
+	public void createJrxml(String filePath ,int cnt, int calculatedHeight)
 	throws IOException
     {		
 		try
@@ -21,6 +21,13 @@ public class QuarterlyReportBySectorPdfJrxml
 			int x=(0+center),x1=0,y=0,y1=0,xl=0,yl=0;
 			int textkey=11,linekey=21,c=0;
 			
+			int height= 0;
+			if(calculatedHeight > 60 )
+				height = calculatedHeight;
+			else
+			{
+				height  = 61;
+			}
 
 			int pagesize=(60*n)+120;
 			p2.println("<!-- Created with iReport - A designer for JasperReports -->");
@@ -427,7 +434,7 @@ public class QuarterlyReportBySectorPdfJrxml
 			p2.println("</band>");
 			p2.println("</columnHeader>");
 			p2.println("<detail>");
-			p2.println("<band height='61'  isSplitAllowed='true' >");
+			p2.println("<band height='"+height+"'  isSplitAllowed='true' >");
 			
 			x=130;y=0;
 				c=6+n+1;
@@ -445,7 +452,8 @@ public class QuarterlyReportBySectorPdfJrxml
 							p2.println("x='"+x+"'");
 							p2.println("y='"+y+"'");
 							p2.println("width='55'");
-							p2.println("height='15'");
+							p2.println("height='"+ (height/4)+"'");
+					//		p2.println("height='15'");
 							p2.println("forecolor='#000000'");
 							p2.println("backcolor='#FFFFFF'");
 							p2.println("key='textField-11'");
@@ -465,7 +473,8 @@ public class QuarterlyReportBySectorPdfJrxml
 							c++;
 						}//l
 //						x=130+(j-1)*165;
-						y+=15;
+//						y+=15;
+						y+=(height/4);
 					}//k
 
 					//x+=165;
@@ -479,7 +488,8 @@ public class QuarterlyReportBySectorPdfJrxml
 			p2.println("x='0'");
 			p2.println("y='0'");
 			p2.println("width='100'");
-			p2.println("height='60'");
+//			p2.println("height='60'");
+			p2.println("height='"+height+"'");	
 			p2.println("forecolor='#000000'");
 			p2.println("backcolor='#FFFFFF'");
 			p2.println("key='textField-11'");
@@ -494,30 +504,102 @@ public class QuarterlyReportBySectorPdfJrxml
 			p2.println("</textElement>");
 			p2.println("<textFieldExpression   class='java.lang.String'><![CDATA[$F{c6}]]></textFieldExpression>");
 			p2.println("</textField>");
-			p2.println("<staticText>");
-			p2.println("<reportElement");
-			p2.println("mode='Opaque'");
-			p2.println("x='100'");
-			p2.println("y='0'");
-			p2.println("width='30'");
-			p2.println("height='60'");
-			p2.println("forecolor='#000000'");
-			p2.println("backcolor='#CCCCCC'");
-			p2.println("key='staticText-9'");
-			p2.println("stretchType='NoStretch'");
-			p2.println("positionType='FixRelativeToTop'");
-			p2.println("isPrintRepeatedValues='true'");
-			p2.println("isRemoveLineWhenBlank='false'");
-			p2.println("isPrintInFirstWholeBand='false'");
-			p2.println("isPrintWhenDetailOverflows='false'/>");
-			p2.println("<textElement textAlignment='Center' verticalAlignment='Middle' rotation='None' lineSpacing='Single'>");
-			p2.println("<font fontName='Arial' pdfFontName='Helvetica' size='10' isBold='true' isItalic='false' isUnderline='false' isPdfEmbedded ='false' pdfEncoding ='Cp1252' isStrikeThrough='false' />");
-			p2.println("</textElement>");
-			p2.println("<text><![CDATA[Q1");
-			p2.println("Q2");
-			p2.println("Q3");
-			p2.println("Q4]]></text>");
-			p2.println("</staticText>");
+
+p2.println("<staticText>");
+p2.println("<reportElement");
+p2.println("mode='Opaque'");
+p2.println("x='100'");
+p2.println("y='0'");
+p2.println("width='30'");
+//p2.println("height='20'");
+p2.println("height='"+ (height/4) +"'");
+p2.println("forecolor='#000000'");
+p2.println("backcolor='#CCCCCC'");
+p2.println("key='staticText-8'");
+p2.println("stretchType='NoStretch'");
+p2.println("positionType='FixRelativeToTop'");
+p2.println("isPrintRepeatedValues='true'");
+p2.println("isRemoveLineWhenBlank='false'");
+p2.println("isPrintInFirstWholeBand='false'");
+p2.println("isPrintWhenDetailOverflows='false'/>");
+p2.println("<textElement textAlignment='Center' verticalAlignment='Middle' rotation='None' lineSpacing='Single'>");
+p2.println("<font fontName='Arial' pdfFontName='Helvetica' size='8' isBold='false' isItalic='false' isUnderline='false' isPdfEmbedded ='false' pdfEncoding ='Cp1252' isStrikeThrough='false' />");
+p2.println("</textElement>");
+p2.println("<text><![CDATA[Q1]]></text>");
+p2.println("</staticText>");
+
+p2.println("<staticText>");
+p2.println("<reportElement");
+p2.println("mode='Opaque'");
+p2.println("x='100'");
+//p2.println("y='22'");
+p2.println("y='"+((height/4))+"'");
+p2.println("width='30'");
+//p2.println("height='20'");
+p2.println("height='"+ (height/4) +"'");
+p2.println("forecolor='#000000'");
+p2.println("backcolor='#CCCCCC'");
+p2.println("key='staticText-8'");
+p2.println("stretchType='NoStretch'");
+p2.println("positionType='FixRelativeToTop'");
+p2.println("isPrintRepeatedValues='true'");
+p2.println("isRemoveLineWhenBlank='false'");
+p2.println("isPrintInFirstWholeBand='false'");
+p2.println("isPrintWhenDetailOverflows='false'/>");
+p2.println("<textElement textAlignment='Center' verticalAlignment='Middle' rotation='None' lineSpacing='Single'>");
+p2.println("<font fontName='Arial' pdfFontName='Helvetica' size='8' isBold='false' isItalic='false' isUnderline='false' isPdfEmbedded ='false' pdfEncoding ='Cp1252' isStrikeThrough='false' />");
+p2.println("</textElement>");
+p2.println("<text><![CDATA[Q2]]></text>");
+p2.println("</staticText>");
+
+p2.println("<staticText>");
+p2.println("<reportElement");
+p2.println("mode='Opaque'");
+p2.println("x='100'");
+//p2.println("y='43'");
+p2.println("y='"+((height/4) * 2)+"'");
+p2.println("width='30'");
+//p2.println("height='20'");
+p2.println("height='"+ (height/4) +"'");
+p2.println("forecolor='#000000'");
+p2.println("backcolor='#CCCCCC'");
+p2.println("key='staticText-8'");
+p2.println("stretchType='NoStretch'");
+p2.println("positionType='FixRelativeToTop'");
+p2.println("isPrintRepeatedValues='true'");
+p2.println("isRemoveLineWhenBlank='false'");
+p2.println("isPrintInFirstWholeBand='false'");
+p2.println("isPrintWhenDetailOverflows='false'/>");
+p2.println("<textElement textAlignment='Center' verticalAlignment='Middle' rotation='None' lineSpacing='Single'>");
+p2.println("<font fontName='Arial' pdfFontName='Helvetica' size='8' isBold='false' isItalic='false' isUnderline='false' isPdfEmbedded ='false' pdfEncoding ='Cp1252' isStrikeThrough='false' />");
+p2.println("</textElement>");
+p2.println("<text><![CDATA[Q3]]></text>");
+p2.println("</staticText>");
+
+p2.println("<staticText>");
+p2.println("<reportElement");
+p2.println("mode='Opaque'");
+p2.println("x='100'");
+//p2.println("y='64'");
+p2.println("y='"+((height/4) * 3)+"'");
+p2.println("width='30'");
+//p2.println("height='20'");
+p2.println("height='"+ (height/4) +"'");
+p2.println("forecolor='#000000'");
+p2.println("backcolor='#CCCCCC'");
+p2.println("key='staticText-8'");
+p2.println("stretchType='NoStretch'");
+p2.println("positionType='FixRelativeToTop'");
+p2.println("isPrintRepeatedValues='true'");
+p2.println("isRemoveLineWhenBlank='false'");
+p2.println("isPrintInFirstWholeBand='false'");
+p2.println("isPrintWhenDetailOverflows='false'/>");
+p2.println("<textElement textAlignment='Center' verticalAlignment='Middle' rotation='None' lineSpacing='Single'>");
+p2.println("<font fontName='Arial' pdfFontName='Helvetica' size='8' isBold='false' isItalic='false' isUnderline='false' isPdfEmbedded ='false' pdfEncoding ='Cp1252' isStrikeThrough='false' />");
+p2.println("</textElement>");
+p2.println("<text><![CDATA[Q4]]></text>");
+p2.println("</staticText>");
+
 
 						x=(625-(3-n)*165);y=0;
 						c=6+(13*n)+1;
@@ -530,7 +612,8 @@ public class QuarterlyReportBySectorPdfJrxml
 							p2.println("x='"+x+"'");
 							p2.println("y='0'");
 							p2.println("width='60'");
-							p2.println("height='60'");
+//							p2.println("height='60'");
+							p2.println("height='"+height+"'");
 							p2.println("forecolor='#000000'");
 							p2.println("backcolor='#FFFFFF'");
 							p2.println("key='textField-29'");
@@ -573,7 +656,8 @@ public class QuarterlyReportBySectorPdfJrxml
 			p2.println("<reportElement");
 			p2.println("mode='Opaque'");
 			p2.println("x='0'");
-			p2.println("y='61'");
+//			p2.println("y='61'");
+			p2.println("y	='"+ (height+1) +"'");
 			p2.println("width='805'");
 			p2.println("height='0'");
 			p2.println("forecolor='#000000'");

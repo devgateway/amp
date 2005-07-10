@@ -146,16 +146,20 @@ public class ActivityUtil {
 				}				
 
 				/* delete all previous comments */
-				ArrayList col = DbUtil.getAllCommentsByField(field,oldActivity.getAmpActivityId());
-				logger.debug("col.size() [Inside deleting]: " + col.size());
-					if (col != null) {
-						Iterator itr = col.iterator();
-						while (itr.hasNext()) {
-							AmpComments comObj = (AmpComments) itr.next();
-							session.delete(comObj);
+				if (!commentsCol.isEmpty()) {
+					ArrayList col = DbUtil.getAllCommentsByField(field,oldActivity.getAmpActivityId());
+					logger.debug("col.size() [Inside deleting]: " + col.size());
+						if (col != null) {
+							Iterator itr = col.iterator();
+							while (itr.hasNext()) {
+								AmpComments comObj = (AmpComments) itr.next();
+								session.delete(comObj);
+							}
 						}
-					}
-				logger.debug("comments deleted");
+					logger.debug("comments deleted");
+				}
+				else
+					logger.debug("commentsCol is empty !");
 
 				oldActivity.getClosingDates().clear();
 				oldActivity.getComponents().clear();

@@ -196,8 +196,6 @@ public class UpdateWorkspaceForm extends ValidatorForm {
 			mainAction = null;
 		}		
 		if (popupReset) {
-			childWorkspaceType = null;
-			childTeamCategory = null;
 			availChildWorkspaces = null;
 			selChildWorkspaces = null;			
 		}

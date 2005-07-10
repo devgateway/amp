@@ -37,11 +37,17 @@ public class GetUnAssignedWorkspaces extends Action {
 		UpdateWorkspaceForm uwForm = (UpdateWorkspaceForm) form;
 		logger.info("Action :" + uwForm.getActionEvent());
 		
-		Collection col = TeamUtil.getUnassignedWorkspaces(workspaceType,
-				teamCategory);
+		if ((workspaceType == null || workspaceType.trim().length() == 0) 
+				&& (teamCategory == null || teamCategory.trim().length() == 0)) {
+			uwForm.setChildWorkspaceType(null);
+			uwForm.setChildTeamCategory(null);
+		}
+		
+		Collection col = TeamUtil.getUnassignedWorkspaces(workspaceType, teamCategory);
 		
 		uwForm.setAvailChildWorkspaces(col);
 		uwForm.setReset(false);
+		
 		return mapping.findForward("forward");
 	}
 }

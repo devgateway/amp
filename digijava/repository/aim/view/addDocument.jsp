@@ -320,7 +320,7 @@
 																					onclick="createDocument()">
 																				</td>
 																				<td>
-																					<input type="reset" value="Cancel" class="dr-menu">
+																					<input type="reset" value="Cancel" class="dr-menu"  onclick="javascript:history.go(-1)">
 																				</td>
 																			</tr>
 																		</table>

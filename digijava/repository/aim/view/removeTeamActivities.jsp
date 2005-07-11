@@ -76,7 +76,7 @@
 									<html:submit value="Remove" />
 								</td>
 								<td>
-									<html:reset value="Cancel" />
+									<html:reset value="Cancel"  onclick="javascript:history.go(-1)"/>
 								</td>
 							</tr>
 						</table>

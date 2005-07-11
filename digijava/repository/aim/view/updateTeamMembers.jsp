@@ -186,7 +186,7 @@
 						<html:submit value="Delete" styleClass="dr-menu"/>
 					</td>
 					<td width="50%" align="left">
-						<html:reset value="Cancel" styleClass="dr-menu" />
+						<html:reset value="Cancel" onclick="javascript:history.go(-1)" styleClass="dr-menu" />
 					</td>
 				</tr>
 			</table>
@@ -198,7 +198,7 @@
 						<html:submit value="Save" styleClass="dr-menu" />
 					</td>
 					<td width="50%" align="left">
-						<html:reset value="Cancel" styleClass="dr-menu" />
+						<html:reset value="Cancel" onclick="javascript:history.go(-1)" styleClass="dr-menu" />
 					</td>
 				</tr>
 			</table>

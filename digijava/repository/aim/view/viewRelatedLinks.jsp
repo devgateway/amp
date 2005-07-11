@@ -138,6 +138,7 @@
 															<bean:write name="relatedLink" property="title" /></digi:link>
 															&nbsp; :
 															<c:if test="${relatedLink.isFile == true}">
+															<logic:notEmpty name="relatedLink" property="fileName">
 															<bean:define name="relatedLink" property="fileName" id="fileName"/>
 													    	<%
 																int index2;
@@ -148,10 +149,11 @@
 																	((String)fileName).substring(
 																				index2 + 1,((String)fileName).length()) + ".gif";
 																}
-														    %>
-														    	<digi:img skipBody="true" src="<%=extension%>" border="0" 
-																 align="absmiddle"/>	
-																<a href="<%=digiContext%>/cms/downloadFile.do?itemId=<bean:write name="relatedLink" property="docId" />">
+														    %>															
+													    	<digi:img skipBody="true" src="<%=extension%>" border="0" 
+															 align="absmiddle"/>																 
+															</logic:notEmpty>
+															<a href="<%=digiContext%>/cms/downloadFile.do?itemId=<bean:write name="relatedLink" property="docId" />">
 																<i><bean:write name="relatedLink" property="fileName" /></i></a>
 															</c:if>
 															<c:if test="${relatedLink.isFile == false}">

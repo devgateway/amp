@@ -126,7 +126,7 @@
 																				</td>	
 																				<td width="50%" align="left">
 																					<html:button property="button" value="Cancel"
-																					styleClass="dr-menu" onclick="history.go(-1)"/>
+																					styleClass="dr-menu" onclick="javascript:history.go(-1)"/>
 																				</td>
 																			</tr>	
 																		</table>

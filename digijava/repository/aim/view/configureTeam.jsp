@@ -114,7 +114,7 @@
 																			<html:submit value="  Save  " styleClass="dr-menu" />
 																		</td>
 																		<td>
-																			<html:reset value="Cancel" styleClass="dr-menu" />
+																			<html:reset value="Cancel" styleClass="dr-menu" onclick="javascript:history.go(-1)" />
 																		</td>
 																	</tr>
 																</table>

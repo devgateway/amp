@@ -35,6 +35,7 @@ import org.digijava.module.aim.helper.QuarterlyReportByProjectPdfJrxml;
 public class QuarterlyReportByProjectPDF extends Action 
 {
 	private static Logger logger = Logger.getLogger(QuarterlyReportByProjectPDF.class) ;
+	private static int fieldHeight = 0; 	 	
 	
 	public ActionForward execute(ActionMapping mapping,
 								ActionForm form, javax.servlet.http.HttpServletRequest request,
@@ -186,6 +187,7 @@ public class QuarterlyReportByProjectPDF extends Action
 					//data[row][col]  = ampTeamDonors.getDonorAgency();
 					donor = ampTeamDonors.getDonorAgency();
 					ampProjects = ampTeamDonors.getProject();
+
 					projectIter = ampProjects.iterator();
 					while(projectIter.hasNext())
 					{
@@ -193,8 +195,12 @@ public class QuarterlyReportByProjectPDF extends Action
 						project = (Project) projectIter.next();
 						col+=1;
 						data[row][col] = multiReport.getTeamName();
+						calculateFieldHeight(multiReport.getTeamName());
+
 						col+=1;
 						data[row][col]  = ampTeamDonors.getDonorAgency();
+						calculateFieldHeight(ampTeamDonors.getDonorAgency());
+
 						col+=1;
 						data[row][col] = project.getName();
 						
@@ -245,6 +251,7 @@ public class QuarterlyReportByProjectPDF extends Action
 								data[row][3] = multiReport.getTeamName();;
 								projectTermAssist = (ProjectTermAssist) termAssistIter.next();
 								data[row][col] = ampTeamDonors.getDonorAgency();
+
 								col+=1;
 								data[row][col] = projectTermAssist.getTermAssistName();
 								col = 5 + formBean.getFiscalYearRange().size();
@@ -287,6 +294,7 @@ public class QuarterlyReportByProjectPDF extends Action
 							col+=1;
 							System.out.println(row + " : Total  "+termFund.getTermAssistName());
 							data[row][col] = "Total " +termFund.getTermAssistName();
+							calculateFieldHeight(data[row][col].toString());
 							
 							col = 5 + formBean.getFiscalYearRange().size();
 							
@@ -317,6 +325,8 @@ public class QuarterlyReportByProjectPDF extends Action
 					data[row][4] = ampTeamDonors.getDonorAgency();
 					col+=1;
 					data[row][col] = "Total for " + ampTeamDonors.getDonorAgency();
+					calculateFieldHeight(data[row][col].toString());
+
 					col = 5 + formBean.getFiscalYearRange().size();
 					totalDonorFunds = ampTeamDonors.getTotalDonorFund();
 					totalDonorFundIter = totalDonorFunds.iterator();
@@ -356,6 +366,7 @@ public class QuarterlyReportByProjectPDF extends Action
 						termFund = (TermFund) totalTeamTermAssistFundIter.next();
 						col+=1;
 						data[row][col] = "Total " + termFund.getTermAssistName();
+						calculateFieldHeight(data[row][col].toString());
 						
 						col = 5 + formBean.getFiscalYearRange().size();
 						
@@ -386,6 +397,8 @@ public class QuarterlyReportByProjectPDF extends Action
 				data[row][4] = ampTeamDonors.getDonorAgency();
 				col+=1;
 				data[row][col] = "Total for " + multiReport.getTeamName();
+				calculateFieldHeight(data[row][col].toString());
+
 				col = 5 + formBean.getFiscalYearRange().size();
 				
 				totalTeamFunds = new ArrayList(multiReport.getTotalTeamFund());
@@ -413,6 +426,9 @@ public class QuarterlyReportByProjectPDF extends Action
 				
 			} // End of Objects Collection
 		}// ENd of IF 
+
+		int height = (( fieldHeight / 25 ) * 10 ) + 60;
+		logger.info(" Column Height = " + height );
 
 
 		if(flag == 1)
@@ -445,7 +461,7 @@ public class QuarterlyReportByProjectPDF extends Action
 							 	"/WEB-INF/classes/org/digijava/module/aim/reports/quarterlyReportByProjectPdf.jrxml");
 			QuarterlyReportByProjectPdfJrxml jrxml = new QuarterlyReportByProjectPdfJrxml();
 			
-			jrxml.createJrxml(realPathJrxml,yearCount);
+			jrxml.createJrxml(realPathJrxml, yearCount, height);
 			JasperCompileManager.compileReportToFile(realPathJrxml);
 			byte[] bytes = null;
 			try
@@ -478,5 +494,13 @@ public class QuarterlyReportByProjectPDF extends Action
 		}
 		return null;
 	}// end of Execute Func
+
+	void calculateFieldHeight(String input)
+	{
+		System.out.println(" Large ::" + fieldHeight + " :: CUrrent : " + input.length());
+		if(input.length() > fieldHeight)
+			fieldHeight = input.length();
+	}
+
 }// end of Class
 	

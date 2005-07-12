@@ -1460,7 +1460,8 @@ public class DbUtil {
 						ampProject.setAmpId(ampReportCache.getAmpId());
 					}
 					
-					if(ampReportCache.getDonorName()!=null && !(ampProjectDonor.getDonorName().equals(ampReportCache.getDonorName())))
+					if(ampReportCache.getDonorName()!=null && ampProjectDonor != null && 
+							!(ampProjectDonor.getDonorName().equals(ampReportCache.getDonorName())))
 					{
 						ampProjectDonor = new AmpProjectDonor();
 						ampProjectDonor.setDonorName(ampReportCache.getDonorName());

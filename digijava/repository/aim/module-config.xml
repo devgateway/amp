@@ -129,7 +129,10 @@
  		</hibernate-class> 		
  		<hibernate-class>
 			org.digijava.module.aim.dbentity.AmpComments
- 		</hibernate-class> 				
+ 		</hibernate-class> 
+		<hibernate-class>
+			org.digijava.module.aim.dbentity.AmpPhysicalComponentReport
+ 		</hibernate-class>
 	</hibernate-classes>
         <!-- highlights classes End-->
 

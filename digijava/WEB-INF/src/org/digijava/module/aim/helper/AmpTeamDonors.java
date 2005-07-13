@@ -6,6 +6,7 @@ public class AmpTeamDonors
 	private String donorAgency;
 	private int donorCount;
 	private Collection project;
+	private Collection component;
 	private Collection totalDonorTermAssistFund;
 	private Collection totalDonorFund;
 	private String donorCommAmount;
@@ -54,6 +55,11 @@ public class AmpTeamDonors
 		return totalDonorFund;
 	}
 
+	public Collection getComponent() 
+	{
+		return component;
+	}
+
 	public Collection getTotalDonorTermAssistFund() 
 	{
 		return totalDonorTermAssistFund;
@@ -71,6 +77,11 @@ public class AmpTeamDonors
 	public void setProject(Collection c) 
 	{
 		project = c;
+	}
+
+	public void setComponent(Collection c) 
+	{
+		component = c;
 	}
 
 	public void setTotalDonorFund(Collection c) 

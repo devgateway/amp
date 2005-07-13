@@ -52,6 +52,8 @@ public class Report
 	private String totComm;
 	private String totDisb;
 	private String totUnDisb;
+
+	private String objective;
 		
 	private int yearCount;
 
@@ -482,6 +484,10 @@ public class Report
 		return plDisbursement;
 	}
 
+	 public String getObjective() {
+					 return objective;
+		  }
+
 	/**
 	 * @param string
 	 */
@@ -558,5 +564,8 @@ public class Report
 	public void setPlannedDisbursementForcast3(String string) {
 		plannedDisbursementForcast3 = string;
 	}
-
+	
+	 public void setObjective(String objective) {
+					 this.objective = objective;
+		  }
 }

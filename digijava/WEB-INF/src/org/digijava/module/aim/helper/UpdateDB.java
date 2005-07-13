@@ -288,6 +288,30 @@ public class UpdateDB {
 			sql += "where amp_activity_location.amp_location_id=amp_location.amp_location_id and amp_activity_id='" + ampActivityId + "'";
 			stmt.executeUpdate(sql);
 
+			sql = "delete from amp_physical_component_report where amp_activity_id='" + ampActivityId + "'";
+			stmt.executeUpdate(sql);
+			
+			sql = "insert into amp_physical_component_report ";
+			sql += "select distinct '',amp_activity.amp_activity_id,amp_activity.name ";
+			sql += "'activity_name',amp_organisation.amp_org_id 'amp_donor_id',amp_organisation.name 'donor_name',amp_components.amp_component_id 'amp_component_id',amp_components.title 'component_name',amp_components.description 'objective',";
+			sql += "signature_date,amp_activity.actual_start_date,amp_activity.actual_completion_date,";
+			sql += "case when (transaction_type=0 and adjustment_type=1) then transaction_amount else 0 end 'actual_commitment',";
+			sql += "case when (transaction_type=0 and adjustment_type=1) then currency_code else null end 'comm_currency_code', amount 'actual_expenditure',currency_code 'exp_currency_code',amp_physical_performance.title 'status',amp_physical_performance.reporting_date,";
+			sql += "case when (mofed_cnt_first_name is not null or mofed_cnt_last_name is not null) then concat_ws(' ',mofed_cnt_first_name,mofed_cnt_last_name) else null end 'mofed_contact',";
+			sql += "case when (cont_first_name is not null or cont_last_name is not null) then concat_ws(' ',cont_first_name,cont_last_name) else null end 'donor_contact',";
+			sql += "amp_team_id,transaction_date,extract(YEAR from transaction_date) 'fiscal_year',";
+			sql += "amp_status_id,amp_funding.amp_modality_id from amp_components,amp_physical_performance,amp_activity,amp_funding,amp_funding_detail,amp_organisation,amp_currency ";
+			sql += "where amp_components.amp_component_id=amp_physical_performance.amp_component_id ";
+			sql += "and amp_components.amp_activity_id=amp_activity.amp_activity_id ";
+			sql += "and amp_activity.amp_activity_id=amp_funding.amp_activity_id ";
+			sql += "and amp_funding.amp_donor_org_id=amp_organisation.amp_org_id ";
+			sql += "and amp_funding.amp_funding_id=amp_funding_detail.amp_funding_id ";
+			sql += "and amp_funding_detail.amp_currency_id=amp_currency.amp_currency_id ";
+			sql += "and amp_components.currency_id=amp_currency.amp_currency_id ";
+			sql += "and org_role_code='MA' and amp_activity_id='" + ampActivityId + "' ";
+			sql += "order by amp_organisation.amp_org_id,amp_activity.amp_activity_id,amp_components.amp_component_id,amp_physical_performance.reporting_date";
+			stmt.executeUpdate(sql);
+
 			logger.debug("All the statements got executed");
 			con.close();
 		} catch (ClassNotFoundException e) {

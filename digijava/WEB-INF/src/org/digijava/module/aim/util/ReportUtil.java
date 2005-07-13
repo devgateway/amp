@@ -19,6 +19,7 @@ import net.sf.hibernate.Transaction;
 import org.apache.log4j.Logger;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.dbentity.AmpReports;
+import org.digijava.module.aim.dbentity.AmpPhysicalComponentReport;
 import org.digijava.module.aim.dbentity.AmpTeam;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.dbentity.AmpTeamReports;
@@ -41,6 +42,7 @@ import org.digijava.module.aim.helper.TermFundTotal;
 import org.digijava.module.aim.helper.ProjectTermAssist;
 import org.digijava.module.aim.helper.CurrencyWorker;
 import org.digijava.module.aim.helper.DateConversion;
+import org.digijava.module.aim.helper.AmpComponent;
 
 /**
  * Utility class for persisting all reports related entities
@@ -9443,5 +9445,362 @@ public static ArrayList getAmpReportByProjectByDonor(Long ampTeamId,int fromYr,i
 		}
 		return ampReports ;
 	}
+
+	public static ArrayList getAmpPhysicalComponentReport(Long ampTeamId,int fromYr,int toYr,String perspective,String ampCurrencyCode,Long ampModalityId,Long ampStatusId,Long ampDonorId,Long ampSectorId,int fiscalCalId,String startDate,String closeDate,String region)
+	{
+		Session session = null ;
+		Query q = null ;
+		ArrayList ampReports = new ArrayList() ;
+		ArrayList status = new ArrayList() ;
+		double actualCommitment=0.0;
+		double actualExpenditure=0.0;	
+		double amount=0.0;	
+		String queryString = null;
+		Iterator iter=null;
+		Long All=new Long(0);
+		int yrCount = (toYr - fromYr)+1;
+		int donorCount=0;
+		int projCount=0;
+		int compCount=0;
+		String inClause=null;
+		double toExchangeRate=1.0;
+		double fromExchangeRate=0.0;
+		int expFlag=0;
+		Iterator iterSector=null;
+		DecimalFormat mf = new DecimalFormat("###,###,###,###,###.##") ;
+				
+		try
+		{
+			logger.debug("Modality Id: " + ampModalityId);
+			ArrayList dbReturnSet=(ArrayList)DbUtil.getAmpLevel0Teams(ampTeamId);				
+			if(dbReturnSet.size()==0)
+				inClause= "'" + ampTeamId + "'";
+			else
+			{
+				iter=dbReturnSet.iterator();
+				while(iter.hasNext())
+				{
+					Long teamId= (Long) iter.next();
+					if(inClause==null)
+						inClause="'" + teamId + "'";
+					else
+						inClause=inClause + ",'" + teamId + "'";
+				}
+			}
+			logger.info("Inclause: " + inClause);
+
+			session = PersistenceManager.getSession();
+			if(startDate==null && closeDate==null)
+				queryString = "select report from " + AmpPhysicalComponentReport.class.getName() + " report where report.ampTeamId in(" + inClause + ") order by report.ampDonorId,report.ampActivityId,report.ampComponentId,report.reportingDate";
+			else
+				queryString = "select report from " + AmpPhysicalComponentReport.class.getName() + " report where report.ampTeamId in(" + inClause + ") and (report.actualStartDate='" + startDate + "' or report.actualCompletionDate='" + closeDate + "') order by report.ampDonorId,report.ampActivityId,report.ampComponentId,report.reportingDate";
+				
+	
+			logger.info("querystring: " + queryString);
+			q = session.createQuery(queryString);	
+			multiReport report =null;
+			AmpTeamDonors ampTeamDonors=null;
+			AmpComponent component=null;
+			Project project=null;
+			if(q!=null)
+			{
+				iter = q.list().iterator();
+				while(iter.hasNext())
+				{
+					AmpPhysicalComponentReport ampReportCache = (AmpPhysicalComponentReport) iter.next(); 
+					if(!ampModalityId.equals(All))
+					{
+						if(ampReportCache.getAmpModalityId()==null)
+							continue;
+						if(!(ampModalityId.equals(ampReportCache.getAmpModalityId())))
+							continue;
+					}
+
+					if(!ampStatusId.equals(All))
+					{
+						if(ampReportCache.getAmpStatusId()==null)
+							continue;
+						if(!(ampStatusId.equals(ampReportCache.getAmpStatusId())))
+							continue;
+					}
+	
+					if(!ampDonorId.equals(All))
+					{
+						if(ampReportCache.getAmpDonorId()==null)
+							continue;
+						if(!(ampDonorId.equals(ampReportCache.getAmpDonorId())))
+							continue;
+					}
+
+					if(!ampSectorId.equals(All))
+					{
+						int sflag=0;
+						iterSector=DbUtil.getAmpReportSectorId(ampReportCache.getAmpActivityId()).iterator();
+						while(iterSector.hasNext())
+						{
+							AmpReportSector sector=(AmpReportSector) iterSector.next();
+							if(sector.getAmpSectorId().equals(ampSectorId))
+							{
+								sflag=1;
+								break;
+							}
+							if(sector.getAmpSubSectorId().equals(new Long(0)))
+							{
+								if(new Long(sector.getSubSectorName()).equals(ampSectorId))
+								{
+									sflag=1;
+									break;
+								}
+							}
+							if(!(sector.getAmpSubSectorId().equals(new Long(0))) && sector.getAmpSubSectorId().equals(ampSectorId))
+							{
+								sflag=1;
+								break;
+							}
+						}
+						if (sflag==0)
+						{
+							continue;
+						}
+					}
+
+										
+				//	logger.debug("Report Team Id: " +  report.getAmpTeamId());
+					logger.debug("Cache Team Id: " +  ampReportCache.getAmpTeamId());
+
+					if(report==null || !(report.getAmpTeamId().equals(ampReportCache.getAmpTeamId())))
+					{
+						if(report!=null)
+						{
+							component.getStatus().addAll(status);
+							component.setAcCommitment(mf.format(actualCommitment/1000000.00));
+							component.setAcExpenditure(mf.format(actualExpenditure/1000000.00));
+							component.setAcBalance(mf.format((actualCommitment-actualExpenditure)/1000000.00));
+							project.getComponent().add(component);
+							ampTeamDonors.getProject().add(project);
+							report.getDonors().add(ampTeamDonors);
+							ampReports.add(report);
+							status.clear();
+							actualCommitment=0.0;
+							actualExpenditure=0.0;
+							donorCount=0;
+							projCount=0;
+							compCount=0;
+							expFlag=0;
+						}		
+						report = new multiReport();
+						AmpTeam ampTeam=DbUtil.getAmpTeam(ampReportCache.getAmpTeamId());
+						report.setAmpTeamId(ampReportCache.getAmpTeamId());
+						report.setTeamName(ampTeam.getName());
+						report.setDonors(new ArrayList());
+						ampTeamDonors=new AmpTeamDonors();
+						ampTeamDonors.setDonorAgency(ampReportCache.getDonorName());
+						ampTeamDonors.setDonorCount(++donorCount);
+						ampTeamDonors.setProject(new ArrayList());
+						project=new Project();
+						project.setName(ampReportCache.getActivityName());
+						project.setAmpActivityId(ampReportCache.getAmpActivityId());
+						project.setCount(++projCount);
+						project.setComponent(new ArrayList());
+						component=new AmpComponent();
+						component.setStatus(new ArrayList());
+						component.setIssues(new ArrayList());
+						component.setMeasures(new ArrayList());
+						component.setResponsibleActor(new ArrayList());
+						component.setName(ampReportCache.getComponentName());
+						component.setObjective(ampReportCache.getObjective());
+						component.setAmpComponentId(ampReportCache.getAmpComponentId());
+						if(ampReportCache.getMofedContact() != null)
+							component.getResponsibleActor().add(ampReportCache.getMofedContact());
+						if(ampReportCache.getDonorContact() != null)
+							component.getResponsibleActor().add(ampReportCache.getDonorContact());
+						component.setSignatureDate(DateConversion.ConvertDateToString(ampReportCache.getSignatureDate()));
+						component.setPlannedCompletionDate(DateConversion.ConvertDateToString(ampReportCache.getPlannedCompletionDate()));
+						status.add(ampReportCache.getStatus());
+						component.setCount(++compCount);
+					}
+
+					if(report.getAmpTeamId().equals(ampReportCache.getAmpTeamId()) && !(ampReportCache.getDonorName().equals(ampTeamDonors.getDonorAgency())))
+					{
+						logger.info("Inside Donor");
+						component.getStatus().addAll(status);
+						component.setAcCommitment(mf.format(actualCommitment/1000000.00));
+						component.setAcExpenditure(mf.format(actualExpenditure/1000000.00));
+						component.setAcBalance(mf.format((actualCommitment-actualExpenditure)/1000000.00));
+						project.getComponent().add(component);
+						ampTeamDonors.getProject().add(project);
+						report.getDonors().add(ampTeamDonors);
+						status.clear();
+						actualCommitment=0.0;
+						actualExpenditure=0.0;
+						expFlag=0;
+						compCount=0;
+						projCount=0;
+						ampTeamDonors=new AmpTeamDonors();
+						ampTeamDonors.setDonorAgency(ampReportCache.getDonorName());
+						ampTeamDonors.setDonorCount(++donorCount);
+						ampTeamDonors.setProject(new ArrayList());
+						project=new Project();
+						project.setName(ampReportCache.getActivityName());
+						project.setAmpActivityId(ampReportCache.getAmpActivityId());
+						project.setCount(++projCount);
+						project.setComponent(new ArrayList());
+						component=new AmpComponent();
+						component.setStatus(new ArrayList());
+						component.setIssues(new ArrayList());
+						component.setMeasures(new ArrayList());
+						component.setResponsibleActor(new ArrayList());
+						component.setName(ampReportCache.getComponentName());
+						component.setObjective(ampReportCache.getObjective());
+						component.setAmpComponentId(ampReportCache.getAmpComponentId());
+						if(ampReportCache.getMofedContact() != null)
+							component.getResponsibleActor().add(ampReportCache.getMofedContact());
+						if(ampReportCache.getDonorContact() != null)
+							component.getResponsibleActor().add(ampReportCache.getDonorContact());
+						component.setSignatureDate(DateConversion.ConvertDateToString(ampReportCache.getSignatureDate()));
+						component.setPlannedCompletionDate(DateConversion.ConvertDateToString(ampReportCache.getPlannedCompletionDate()));
+						status.add(ampReportCache.getStatus());
+						component.setCount(++compCount);
+						logger.info("Outside Donor");
+					}
+
+					if(report.getAmpTeamId().equals(ampReportCache.getAmpTeamId()) && ampReportCache.getDonorName().equals(ampTeamDonors.getDonorAgency()) && !(ampReportCache.getAmpActivityId().equals(project.getAmpActivityId())))
+					{
+						logger.info("Inside Project");
+						component.getStatus().addAll(status);
+						component.setAcCommitment(mf.format(actualCommitment/1000000.00));
+						component.setAcExpenditure(mf.format(actualExpenditure/1000000.00));
+						component.setAcBalance(mf.format((actualCommitment-actualExpenditure)/1000000.00));
+						project.getComponent().add(component);
+						ampTeamDonors.getProject().add(project);
+						compCount=0;
+						status.clear();
+						actualCommitment=0.0;
+						actualExpenditure=0.0;
+						expFlag=0;
+						project=new Project();
+						project.setName(ampReportCache.getActivityName());
+						project.setAmpActivityId(ampReportCache.getAmpActivityId());
+						project.setCount(++projCount);
+						project.setComponent(new ArrayList());
+						component=new AmpComponent();
+						component.setStatus(new ArrayList());
+						component.setIssues(new ArrayList());
+						component.setMeasures(new ArrayList());
+						component.setResponsibleActor(new ArrayList());
+						component.setName(ampReportCache.getComponentName());
+						component.setObjective(ampReportCache.getObjective());
+						component.setAmpComponentId(ampReportCache.getAmpComponentId());
+						if(ampReportCache.getMofedContact() != null)
+							component.getResponsibleActor().add(ampReportCache.getMofedContact());
+						if(ampReportCache.getDonorContact() != null)
+							component.getResponsibleActor().add(ampReportCache.getDonorContact());
+						component.setSignatureDate(DateConversion.ConvertDateToString(ampReportCache.getSignatureDate()));
+						component.setPlannedCompletionDate(DateConversion.ConvertDateToString(ampReportCache.getPlannedCompletionDate()));
+						status.add(ampReportCache.getStatus());
+						component.setCount(++compCount);
+						
+						logger.info("Outside Project");
+					}
+
+					if(report.getAmpTeamId().equals(ampReportCache.getAmpTeamId()) && ampReportCache.getDonorName().equals(ampTeamDonors.getDonorAgency()) && ampReportCache.getAmpActivityId().equals(project.getAmpActivityId()) && !(ampReportCache.getAmpComponentId().equals(component.getAmpComponentId())))
+					{
+						logger.info("Inside Component");
+						component.getStatus().addAll(status);
+						component.setAcCommitment(mf.format(actualCommitment/1000000.00));
+						component.setAcExpenditure(mf.format(actualExpenditure/1000000.00));
+						component.setAcBalance(mf.format((actualCommitment-actualExpenditure)/1000000.00));
+						project.getComponent().add(component);
+						status.clear();
+						actualCommitment=0.0;
+						actualExpenditure=0.0;
+						expFlag=0;
+						component=new AmpComponent();
+						component.setStatus(new ArrayList());
+						component.setIssues(new ArrayList());
+						component.setMeasures(new ArrayList());
+						component.setResponsibleActor(new ArrayList());
+						component.setName(ampReportCache.getComponentName());
+						component.setObjective(ampReportCache.getObjective());
+						component.setAmpComponentId(ampReportCache.getAmpComponentId());
+						if(ampReportCache.getMofedContact() != null)
+							component.getResponsibleActor().add(ampReportCache.getMofedContact());
+						if(ampReportCache.getDonorContact() != null)
+							component.getResponsibleActor().add(ampReportCache.getDonorContact());
+						component.setSignatureDate(DateConversion.ConvertDateToString(ampReportCache.getSignatureDate()));
+						component.setPlannedCompletionDate(DateConversion.ConvertDateToString(ampReportCache.getPlannedCompletionDate()));
+						status.add(ampReportCache.getStatus());
+						component.setCount(++compCount);
+						
+						logger.info("Outside Component");
+					}
+							
+										
+					if(ampReportCache.getActualCommitment().doubleValue()>0 && ampReportCache.getCommCurrencyCode()!=null)
+					{
+						logger.info("Inside Fund Calculator");
+						
+						if(ampReportCache.getCommCurrencyCode().equals("USD"))
+							fromExchangeRate=1.0;
+						else
+							fromExchangeRate=DbUtil.getExchangeRate(ampReportCache.getCommCurrencyCode(),Constants.ACTUAL,ampReportCache.getTransactionDate());
+						if(ampCurrencyCode.equals("USD"))
+							toExchangeRate=1.0;
+						else
+							toExchangeRate=DbUtil.getExchangeRate(ampCurrencyCode,Constants.ACTUAL,ampReportCache.getTransactionDate());
+						
+						amount=CurrencyWorker.convert1(ampReportCache.getActualCommitment().doubleValue(),fromExchangeRate,toExchangeRate);
+						actualCommitment=actualCommitment + amount;
+					}
+
+					amount=0.0;
+					if(expFlag==0)
+					{
+						if(ampReportCache.getExpCurrencyCode().equals("USD"))
+							fromExchangeRate=1.0;
+						else
+							fromExchangeRate=DbUtil.getExchangeRate(ampReportCache.getExpCurrencyCode(),Constants.ACTUAL,ampReportCache.getReportingDate());
+						if(ampCurrencyCode.equals("USD"))
+							toExchangeRate=1.0;
+						else
+							toExchangeRate=DbUtil.getExchangeRate(ampCurrencyCode,Constants.ACTUAL,ampReportCache.getReportingDate());
+						amount=CurrencyWorker.convert1(ampReportCache.getActualExpenditure().doubleValue(),fromExchangeRate,toExchangeRate);
+						actualExpenditure=actualExpenditure + amount;
+						expFlag=1;
+					}			
+					if(status.indexOf(ampReportCache.getStatus())==-1)
+						status.add(ampReportCache.getStatus());
+				}
+				if(report!=null)
+				{
+					component.getStatus().addAll(status);
+					component.setAcCommitment(mf.format(actualCommitment/1000000));
+					component.setAcExpenditure(mf.format(actualExpenditure/1000000));
+					component.setAcBalance(mf.format((actualCommitment-actualExpenditure)/1000000));
+					project.getComponent().add(component);
+					ampTeamDonors.getProject().add(project);
+					report.getDonors().add(ampTeamDonors);
+					ampReports.add(report);
+				}
+			}
+		}
+		catch(Exception ex) 		
+		{
+			logger.debug("Unable to get report names  from database " + ex.getMessage());
+		}
+		finally 
+		{
+			try 
+			{
+				PersistenceManager.releaseSession(session);
+			}
+			catch (Exception ex2) 
+			{
+				logger.debug("releaseSession() failed ");
+			}
+		}
+		return ampReports ;
+	}
+
 
 }

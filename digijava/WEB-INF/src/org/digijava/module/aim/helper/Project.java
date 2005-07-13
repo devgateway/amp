@@ -6,6 +6,7 @@ public class Project
 	private String name;
 	private String termName;
 	private Collection ampFund;
+	private Collection component;
 	private Collection termAssist;
 	private String projCommAmount;
 	private String projDisbAmount;
@@ -253,6 +254,16 @@ public class Project
 	 */
 	public void setAcUnDisbursement(String string) {
 		acUnDisbursement = string;
+	}
+
+	public void setComponent(Collection c) 
+	{
+		component = c;
+	}
+
+	public Collection getComponent() 
+	{
+		return component;
 	}
 
 	

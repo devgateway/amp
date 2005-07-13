@@ -2247,6 +2247,12 @@
     <forward name="forward" path="/showLayout.do?layout=viewProjects" />
     </action>
 
+	<action name="aimMulitlateralbyDonorForm" 
+     	type="org.digijava.module.aim.action.ViewPhysicalComponentReport" 
+     	scope="session" validate="false" path="/aim/viewPhysicalComponentReport">
+    <forward name="forward" path="/showLayout.do?layout=viewPhysicalComponentReport" />
+    </action>
+
 	<action name="aimCommitmentbyDonorForm" 
      	type="org.digijava.module.aim.action.ViewPlannedProjects" 
      	scope="session" validate="false" path="/aim/viewPlannedProjects">

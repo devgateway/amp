@@ -60,6 +60,7 @@
 	<page name="viewbySectorbyProject" title=" : Reports" />
 	<page name="viewQuarterlyDateRange" title=" : Quaterly Reports" />
 	<page name="viewProjects" title=" : Reports" />
+	<page name="viewPhysicalComponentReport" title=" : Reports" />
 	<page name="viewPlannedProjects" title=" : Reports" />
 	<page name="quarterlyReportByProject" title=" : Reports" />
 	<page name="quarterlyReportBySector" title=" : Reports" />

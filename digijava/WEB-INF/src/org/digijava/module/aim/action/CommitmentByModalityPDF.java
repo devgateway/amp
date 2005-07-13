@@ -22,7 +22,7 @@ public class CommitmentByModalityPDF extends Action
 {
 
 	private static Logger logger = Logger.getLogger(CommitmentByModalityPDF.class) ;
-		  
+	private static int fieldHeight = 0; 	 		  
 	public ActionForward execute(ActionMapping mapping,
 									ActionForm form,
 									javax.servlet.http.HttpServletRequest request,
@@ -82,13 +82,23 @@ public class CommitmentByModalityPDF extends Action
 					data[row][l+1] = formBean.getFilter()[l].toString();
 				}
 				data[row][3] = report.getDonors().toString().replace('[',' ').replace(']',' ');
+				calculateFieldHeight(data[row][3].toString());
+				
 				data[row][4] = report.getTitle();
+				calculateFieldHeight(report.getTitle());
+				
 				data[row][5] = report.getStatus();
 				data[row][6] = report.getAssistance().toString().replace('[',' ').replace(']',' ');
 				data[row][7] = report.getModality().toString().replace('[',' ').replace(']',' ');
+				calculateFieldHeight(data[row][7].toString());
+				
 				data[row][8] = report.getSectors().toString().replace('[',' ').replace(']',' ');
+				calculateFieldHeight(data[row][8].toString());
+				
 				data[row][9] = report.getLevel();
 				data[row][10] = report.getRegions().toString().replace('[',' ').replace(']',' ');
+				calculateFieldHeight(data[row][10].toString());
+				
 				data[row][11] = report.getStartDate();
 				data[row][12] = report.getCloseDate();
 				data[row][13] = report.getCommitmentDate().toString().replace('[',' ').replace(']',' ');
@@ -162,6 +172,9 @@ public class CommitmentByModalityPDF extends Action
 			logger.info("Not objects to get");
 		}
 		
+		int height = (( fieldHeight / 25 ) * 10 ) + 50;
+		logger.info(" Column Height = " + height );
+		
 		if(flag == 1)
 		{
 			for(int i=0; i < rowCnt; i++)
@@ -189,7 +202,8 @@ public class CommitmentByModalityPDF extends Action
 			String realPathJrxml = s.getServletContext().getRealPath(
 					 "/WEB-INF/classes/org/digijava/module/aim/reports/commitmentByModalityPdf.jrxml");
 			TrendJrxml jrxml = new TrendJrxml();
-			jrxml.createJrxml(yyCnt, realPathJrxml);
+			//calling dynamic jrxml
+			jrxml.createJrxml(yyCnt, realPathJrxml, height);
 			JasperCompileManager.compileReportToFile(realPathJrxml);
 			byte[] bytes = null;
 			try
@@ -224,5 +238,13 @@ public class CommitmentByModalityPDF extends Action
 		}
 		return null;
 	} // end of Execute
+
+	void calculateFieldHeight(String input)
+	{
+		System.out.println(" Large ::" + fieldHeight + " :: Current : " + input.length());
+		if(input.length() > fieldHeight)
+			fieldHeight = input.length();
+	}
+
 }// end of CLass
 

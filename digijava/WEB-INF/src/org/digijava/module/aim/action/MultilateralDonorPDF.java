@@ -375,6 +375,7 @@ public class MultilateralDonorPDF extends Action
 			String realPathJrxml = s.getServletContext().getRealPath(
 							 	"/WEB-INF/classes/org/digijava/module/aim/reports/MultilateralDonorPdf.jrxml");
 			MultiJrxml jrxml = new MultiJrxml();
+			//calling dynamic jrxml
 			jrxml.createJrxml(yyCount,realPathJrxml, height);
 			System.out.println( realPathJrxml + " : YEAR  + " + yyCount );
 			JasperCompileManager.compileReportToFile(realPathJrxml);
@@ -413,7 +414,7 @@ public class MultilateralDonorPDF extends Action
 
 	void calculateFieldHeight(String input)
 	{
-		System.out.println(" Large ::" + fieldHeight + " :: CUrrent : " + input.length());
+		System.out.println(" Large ::" + fieldHeight + " :: Current : " + input.length());
 		if(input.length() > fieldHeight)
 			fieldHeight = input.length();
 	}

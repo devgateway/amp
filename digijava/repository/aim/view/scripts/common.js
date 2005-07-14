@@ -1,6 +1,16 @@
 function unload() {
 }
 
+/*
+<SCRIPT LANGUAGE="javascript">
+<!--
+window.open ('titlepage.html', 'newwindow', config='height=100,
+width=400, toolbar=yes, menubar=yes, scrollbars=no, resizable=yes,
+location=no, directories=no, status=no')
+-->
+</SCRIPT>
+*/
+
 function load() {
 }
 
@@ -23,7 +33,7 @@ function openResisableWindow(wndWidth, wndHeight) {
 	}
 	var t = ((screen.width)-wndWidth)/2;
 	var l = ((screen.height)-wndHeight)/2;	
-	popupPointer = window.open("about:blank", "forumPopup", "height=" + wndHeight + ",width=" + wndWidth + ",top=" + l + ",left=" + t +",menubar=no,scrollbars=yes");
+	popupPointer = window.open("about:blank", "forumPopup", "height=" + wndHeight + ",width=" + wndWidth + ",top=" + l + ",left=" + t +",toolbar=yes,menubar=yes,scrollbars=yes,resizable=yes,location=no, directories=no, status=no");
 }
 
 function openNewWindow(wndWidth, wndHeight){

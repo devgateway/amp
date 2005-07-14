@@ -19,7 +19,7 @@ import javax.servlet.*;
 public class PlannedProjectPDF extends Action 
 {
 	private static Logger logger = Logger.getLogger(PlannedProjectPDF.class) ;
-		  
+	private static int fieldHeight = 0; 	 		  
 	public ActionForward execute(ActionMapping mapping,
 								ActionForm form,
 								javax.servlet.http.HttpServletRequest request,
@@ -72,8 +72,12 @@ public class PlannedProjectPDF extends Action
 				}
 				col+=1;
 				data[row][col] = report.getDonors().toString().replace('[',' ').replace(']',' ');
+				calculateFieldHeight(data[row][col].toString());
+				
 				col+=1;
 				data[row][col] = report.getTitle();
+				calculateFieldHeight(report.getTitle());
+				
 				col+=1;
 				data[row][col] = report.getStatus();
 				col+=1;				
@@ -82,10 +86,14 @@ public class PlannedProjectPDF extends Action
 				data[row][col] = report.getModality().toString().replace('[',' ').replace(']',' ');
 				col+=1;				
 				data[row][col] = report.getSectors().toString().replace('[',' ').replace(']',' ');
+				calculateFieldHeight(data[row][col].toString());
+				
 				col+=1;				
 				data[row][col] = report.getLevel();
 				col+=1;				
 				data[row][col] = report.getRegions().toString().replace('[',' ').replace(']',' ');
+				calculateFieldHeight(data[row][col].toString());
+				
 				col+=1;				
 				data[row][col] = report.getStartDate();
 				col+=1;				
@@ -141,7 +149,9 @@ public class PlannedProjectPDF extends Action
 			}
 		}
 		
-		
+		int height = (( fieldHeight / 25 ) * 10 ) + 50;
+		logger.info(" Column Height = " + height );
+
 		if(flag == 1)
 		{
 			
@@ -170,7 +180,8 @@ public class PlannedProjectPDF extends Action
 		 	String realPathJrxml = s.getServletContext().getRealPath(
 			 					"/WEB-INF/classes/org/digijava/module/aim/reports/PlannedProjectPdf.jrxml");
 		 	PlannedProjPdfJrxml jrxml = new PlannedProjPdfJrxml();
-		 	jrxml.createJrxml(realPathJrxml, yearCount);
+			// calling dynamic jrxml
+		 	jrxml.createJrxml(realPathJrxml, yearCount, height);
 		 	JasperCompileManager.compileReportToFile(realPathJrxml);
 			byte[] bytes = null;
 			try
@@ -202,4 +213,13 @@ public class PlannedProjectPDF extends Action
 		}		
 		return null;
 	}
+
+
+	void calculateFieldHeight(String input)
+	{
+		System.out.println(" Large ::" + fieldHeight + " :: CUrrent : " + input.length());
+		if(input.length() > fieldHeight)
+			fieldHeight = input.length();
+	}
+
 }

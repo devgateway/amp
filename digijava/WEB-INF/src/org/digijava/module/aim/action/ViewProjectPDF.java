@@ -82,31 +82,31 @@ public class ViewProjectPDF extends Action
 				}
 				col+=1;
 				data[row][col] = report.getDonors().toString().replace('[',' ').replace(']',' ');
-				calculateSize(data[row][col].toString());
+				calculateFieldHeight(data[row][col].toString());
 				col+=1;
 				data[row][col] = report.getTitle();
 				logger.info(data[row][col].toString().length() + ":    :" + data[row][col].toString());
-				calculateSize(data[row][col].toString());
+				calculateFieldHeight(data[row][col].toString());
 				
 				col+=1;
 				data[row][col] = report.getSectors().toString().replace('[',' ').replace(']',' ');
-				calculateSize(data[row][col].toString());
+				calculateFieldHeight(data[row][col].toString());
 				col+=1;
 				data[row][col] = report.getAssistance().toString().replace('[',' ').replace(']',' ');
-				calculateSize(data[row][col].toString());
+				calculateFieldHeight(data[row][col].toString());
 				col+=1;
 				data[row][col] = report.getStartDate();
 				col+=1;
 				data[row][col] = report.getCloseDate();
 				col+=1;
 				data[row][col] = report.getLevel();
-				calculateSize(data[row][col].toString());
+				calculateFieldHeight(data[row][col].toString());
 				col+=1;
 				data[row][col] = report.getRegions().toString().replace('[',' ').replace(']',' ');
-				calculateSize(data[row][col].toString());
+				calculateFieldHeight(data[row][col].toString());
 				col+=1;
 				data[row][col] = report.getStatus();
-				calculateSize(data[row][col].toString());
+				calculateFieldHeight(data[row][col].toString());
 				col+=1;
 				data[row][col] = report.getAcCommitment();
 				col+=1;
@@ -137,6 +137,9 @@ public class ViewProjectPDF extends Action
 				row = row + 1;
 				col = 0;
 			} // End of REport Collection
+			
+			
+			logger.info("Size ***********     "+ size );
 			data[row][3] = "Total ";
 			for(int i=4; i<12; i++)
 			{
@@ -195,7 +198,7 @@ public class ViewProjectPDF extends Action
 			 					"/WEB-INF/classes/org/digijava/module/aim/reports/viewProjectPdf.jrxml");
 		 	viewProjectsJrxml jrxml = new viewProjectsJrxml();
 		 	logger.info( " RowCnt =  " + rowCnt);
-		 	jrxml.createJrxml(rowCnt, realPathJrxml);
+		 	jrxml.createJrxml(rowCnt, realPathJrxml, height);
 		 	JasperCompileManager.compileReportToFile(realPathJrxml);
 			byte[] bytes = null;
 			try
@@ -228,7 +231,7 @@ public class ViewProjectPDF extends Action
 		return null;
 	}
 	
-	void calculateSize(String input)
+	void calculateFieldHeight(String input)
 	{
 		if(input.length() > size)
 			size = input.length();

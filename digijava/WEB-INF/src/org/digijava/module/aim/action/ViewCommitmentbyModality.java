@@ -462,10 +462,10 @@ public class ViewCommitmentbyModality extends Action
 		formBean.setFiscalYearRange(new ArrayList());
 		for(int yr=fromYr;yr<=toYr;yr++)
 			formBean.getFiscalYearRange().add(new Integer(yr));
-		formBean.setTotalColumns(3*yearRange);
+		formBean.setTotalColumns(4*yearRange);
 
 		double totComm=0.0;
-		double[][] totProjFund=new double[yearRange+1][3];
+		double[][] totProjFund=new double[yearRange+1][4];
 		iter = reports.iterator() ;
 	//	logger.debug("Grand Total :" + grandTotal);
 		while ( iter.hasNext() )
@@ -476,9 +476,10 @@ public class ViewCommitmentbyModality extends Action
 			for(int i=0;i<=yearRange ;i++ )
 			{
 				AmpFund ampFund=(AmpFund) iterFund.next();
-				totProjFund[i][0]=totProjFund[i][0] + Double.parseDouble(DecimalToText.removeCommas(ampFund.getPlannedDisbAmount()));
+				totProjFund[i][0]=totProjFund[i][0] + Double.parseDouble(DecimalToText.removeCommas(ampFund.getCommAmount()));
 				totProjFund[i][1]=totProjFund[i][1] + Double.parseDouble(DecimalToText.removeCommas(ampFund.getDisbAmount()));
 				totProjFund[i][2]=totProjFund[i][2] + Double.parseDouble(DecimalToText.removeCommas(ampFund.getExpAmount()));
+				totProjFund[i][3]=totProjFund[i][3] + Double.parseDouble(DecimalToText.removeCommas(ampFund.getPlannedDisbAmount()));
 			}
 		}
 		formBean.setTotComm(mf.format(totComm));
@@ -486,9 +487,10 @@ public class ViewCommitmentbyModality extends Action
 		for(int i=0;i<=yearRange ;i++ )
 		{
 			AmpFund ampFund=new AmpFund();
-			ampFund.setPlannedDisbAmount(mf.format(totProjFund[i][0]));
+			ampFund.setCommAmount(mf.format(totProjFund[i][0]));
 			ampFund.setDisbAmount(mf.format(totProjFund[i][1]));
 			ampFund.setExpAmount(mf.format(totProjFund[i][2]));
+			ampFund.setPlannedDisbAmount(mf.format(totProjFund[i][3]));
 			formBean.getTotFund().add(ampFund);
 		}
 

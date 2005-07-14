@@ -405,14 +405,14 @@
 	<digi:trn key="aim:year">Year</digi:trn>
 	</strong></div></td>
 </logic:iterate>	
-					<td rowspan="2" colspan="3" align="center" height="21" ><div align="center"><strong>
+					<td rowspan="2" colspan="4" align="center" height="21" ><div align="center"><strong>
 					<digi:trn key="aim:total">Total</digi:trn> 
 					</strong></div></td>
 					
 				</tr>
 			<tr bgcolor="#F4F4F2">
 <logic:iterate name="aimCommitmentbyDonorForm"  property="fiscalYearRange" id="fiscalYearRange">
-				<td height="21" width="69" colspan="3" align="center" >
+				<td height="21" width="69" colspan="4" align="center" >
 				<div align="center"><strong><%=fiscalYearRange%></strong></div>
 				</td>
 </logic:iterate>	
@@ -421,6 +421,11 @@
 			<tr bgcolor="#FFFFFF">
 			
 			<logic:iterate name="aimCommitmentbyDonorForm"  property="fiscalYearRange" id="fiscalYearRange">
+					<td height="21" width="23" align="center" >
+					<a title="<digi:trn key="aim:actualCommitment">Actual Commitment</digi:trn>">
+					<digi:trn key="aim:commitment">Commitment</digi:trn>
+					</a>
+					</td>
 					<td height="21" width="23" align="center" >
 					<a title="<digi:trn key="aim:PlannedDisbursementofFund">Expected disbursements</digi:trn>">
 					<digi:trn key="aim:plannedDisbursements">Planned Disbursement</digi:trn>
@@ -438,6 +443,11 @@
 					</td>
 		   	
 			</logic:iterate>
+					<td height="21" width="23" align="center" >
+					<a title="<digi:trn key="aim:actualCommitment">Actual Commitment</digi:trn>">
+					<digi:trn key="aim:commitment">Commitment</digi:trn>
+					</a>
+					</td>
 					<td height="21" width="23" align="center" >
 					<a title="<digi:trn key="aim:PlannedDisbursementofFund">Expected disbursements</digi:trn>">
 					<digi:trn key="aim:plannedDisbursements">Planned Disbursement</digi:trn>
@@ -550,6 +560,11 @@
 
 					<logic:iterate name="report"  property="ampFund" id="ampFund" 	type="org.digijava.module.aim.helper.AmpFund">
 						<td align="right" height="21" width="69">
+							<logic:notEqual name="ampFund" property="commAmount" value="0">
+							<bean:write name="ampFund" property="commAmount" />
+							</logic:notEqual>
+						</td>
+						<td align="right" height="21" width="69">
 							<logic:notEqual name="ampFund" property="plannedDisbAmount" value="0">
 							<bean:write name="ampFund" property="plannedDisbAmount" />
 							</logic:notEqual>
@@ -576,6 +591,11 @@
 			</logic:notEqual>
 		</td>
 		 <logic:iterate name="aimCommitmentbyDonorForm"  property="totFund" id="totFund" type="org.digijava.module.aim.helper.AmpFund">
+				<td align="right" height="21" width="69">
+		 			<logic:notEqual name="totFund" property="commAmount" value="0">
+					<bean:write name="totFund" property="commAmount" />
+					</logic:notEqual>
+				</td>
 		 <td align="right" height="21" width="69">
 		 			<logic:notEqual name="totFund" property="plannedDisbAmount" value="0">
 					<bean:write name="totFund" property="plannedDisbAmount" />

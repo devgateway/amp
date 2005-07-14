@@ -384,11 +384,11 @@ public class ViewbyProjectbyDonor extends Action
 		formBean.setMultiReport(dbReturnSet);
 		formBean.setFiscalYrRange((toYr - fromYr) + 1);
 		int yearRange=(toYr - fromYr) + 1;
-		formBean.setYearCount(3*yearRange);
+		formBean.setYearCount(4*yearRange);
 		formBean.setFiscalYearRange(new ArrayList());
 		for(int yr=fromYr;yr<=toYr;yr++)
 			formBean.getFiscalYearRange().add(new Integer(yr));
-		formBean.setTotalColumns(3*yearRange+5);
+		formBean.setTotalColumns(4*yearRange+6);
 		logger.debug(" YR = "+formBean.getFiscalYrRange());
 		formBean.setFilterCnt(filterCnt);
 

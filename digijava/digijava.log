@@ -5321,3 +5321,619 @@ net.sf.hibernate.MappingException: Could not interpret type: java.util.Integer
 12:05:46,260  INFO SessionFactoryImpl:532 - closing
 12:05:46,260  INFO TreeCache:235 - Stopping null
 12:05:46,260  INFO DriverManagerConnectionProvider:143 - cleaning up connection pool: jdbc:mysql://asrd07/tmp-mofed-may16?autoReconnect=true&useUnicode=true&characterEncoding=UTF-8
+14:34:19,870  INFO DigiSchemaExport:37 - Command-line parameters: {}
+14:34:19,932  INFO DigiSchemaExport:44 - Working for the whole database
+14:34:20,635  INFO DigiConfigManager:73 - File digi.xml was parsed successfully
+14:34:20,760  INFO DigiConfigManager:105 - File admin\module-config.xml was parsed successfully
+14:34:20,823  INFO DigiConfigManager:105 - File aim\module-config.xml was parsed successfully
+14:34:20,916  INFO DigiConfigManager:105 - File calendar\module-config.xml was parsed successfully
+14:34:21,010  INFO DigiConfigManager:105 - File cms\module-config.xml was parsed successfully
+14:34:21,104  INFO DigiConfigManager:105 - File editor\module-config.xml was parsed successfully
+14:34:21,135  INFO DigiConfigManager:105 - File exception\module-config.xml was parsed successfully
+14:34:21,245  INFO DigiConfigManager:105 - File forum\module-config.xml was parsed successfully
+14:34:21,354  INFO DigiConfigManager:105 - File highlights\module-config.xml was parsed successfully
+14:34:21,526  INFO DigiConfigManager:105 - File news\module-config.xml was parsed successfully
+14:34:21,635  INFO DigiConfigManager:105 - File poll\module-config.xml was parsed successfully
+14:34:21,745  INFO DigiConfigManager:105 - File sdm\module-config.xml was parsed successfully
+14:34:21,838  INFO DigiConfigManager:105 - File syndication\module-config.xml was parsed successfully
+14:34:21,870  INFO DigiConfigManager:105 - File translate\module-config.xml was parsed successfully
+14:34:21,948  INFO DigiConfigManager:105 - File translation\module-config.xml was parsed successfully
+14:34:22,026  INFO DigiConfigManager:105 - File um\module-config.xml was parsed successfully
+14:34:22,182  INFO Environment:466 - Hibernate 2.1.5
+14:34:22,229  INFO Environment:500 - loaded properties from resource hibernate.properties: {hibernate.connection.driver_class=com.mysql.jdbc.Driver, hibernate.cglib.use_reflection_optimizer=true, hibernate.cache.provider_class=net.sf.hibernate.cache.TreeCacheProvider, hibernate.dialect=net.sf.hibernate.dialect.MySQLDialect, hibernate.jdbc.use_streams_for_binary=true, hibernate.cache.query_cache_factory=org.digijava.kernel.persistence.StaleTolerantQueryCacheFactory, hibernate.query.substitutions=true 1, false 0, yes 'Y', no 'N', hibernate.connection.username=root, hibernate.connection.url=jdbc:mysql://asrd03/mofed-1jun05?autoReconnect=true&useUnicode=true&characterEncoding=UTF-8, hibernate.show_sql=false, hibernate.connection.password=, hibernate.statement_cache.size=200}
+14:34:22,245  INFO Environment:525 - using java.io streams to persist binary types
+14:34:22,245  INFO Environment:526 - using CGLIB reflection optimizer
+14:34:22,307  INFO Configuration:347 - Mapping resource: org/digijava/kernel/request/SiteDomain.hbm.xml
+14:34:22,729  INFO Binder:229 - Mapping class: org.digijava.kernel.request.SiteDomain -> DG_SITE_DOMAIN
+14:34:23,026  INFO Configuration:347 - Mapping resource: org/digijava/kernel/entity/Address.hbm.xml
+14:34:23,104  INFO Binder:229 - Mapping class: org.digijava.kernel.entity.Address -> EP_ADDRESSES
+14:34:23,120  INFO Configuration:347 - Mapping resource: org/digijava/kernel/entity/GeoRegion.hbm.xml
+14:34:23,166  INFO Binder:229 - Mapping class: org.digijava.kernel.entity.GeoRegion -> DG_GEOREGIONS
+14:34:23,213  INFO Configuration:347 - Mapping resource: org/digijava/kernel/user/User.hbm.xml
+14:34:23,307  INFO Binder:229 - Mapping class: org.digijava.kernel.user.User -> DG_USER
+14:34:23,401  INFO Binder:570 - Mapping collection: org.digijava.kernel.user.User.groups -> DG_USER_GROUP
+14:34:23,416  INFO Configuration:347 - Mapping resource: org/digijava/kernel/user/UserLoginInfo.hbm.xml
+14:34:23,495  INFO Binder:229 - Mapping class: org.digijava.kernel.user.UserLoginInfo -> DG_USER
+14:34:23,495  INFO Configuration:347 - Mapping resource: org/digijava/kernel/request/Site.hbm.xml
+14:34:23,588  INFO Binder:229 - Mapping class: org.digijava.kernel.request.Site -> DG_SITE
+14:34:23,588  INFO Binder:570 - Mapping collection: org.digijava.kernel.request.Site.translationLanguages -> DG_SITE_TRANS_LANG_MAP
+14:34:23,588  INFO Binder:570 - Mapping collection: org.digijava.kernel.request.Site.userLanguages -> DG_SITE_USER_LANG_MAP
+14:34:23,620  INFO Binder:570 - Mapping collection: org.digijava.kernel.request.Site.countries -> DG_SITE_COUNTRY_MAP
+14:34:23,620  INFO Configuration:347 - Mapping resource: org/digijava/kernel/entity/Image.hbm.xml
+14:34:23,682  INFO Binder:229 - Mapping class: org.digijava.kernel.entity.Image -> DG_IMAGE
+14:34:23,698  INFO Configuration:347 - Mapping resource: org/digijava/kernel/user/Group.hbm.xml
+14:34:23,745  INFO Binder:229 - Mapping class: org.digijava.kernel.user.Group -> DG_GROUP
+14:34:23,760  INFO Binder:570 - Mapping collection: org.digijava.kernel.user.Group.users -> DG_USER_GROUP
+14:34:23,776  INFO Configuration:347 - Mapping resource: org/digijava/kernel/user/GroupPermission.hbm.xml
+14:34:23,807  INFO Binder:229 - Mapping class: org.digijava.kernel.user.GroupPermission -> DG_GROUP_PERMISSION
+14:34:23,807  INFO Configuration:347 - Mapping resource: org/digijava/kernel/entity/Locale.hbm.xml
+14:34:23,854  INFO Binder:229 - Mapping class: org.digijava.kernel.entity.Locale -> DG_LOCALE
+14:34:23,854  INFO Configuration:347 - Mapping resource: org/digijava/kernel/entity/UserPreferences.hbm.xml
+14:34:23,885  INFO Binder:229 - Mapping class: org.digijava.kernel.entity.UserPreferences -> DG_USER_PREFERENCES
+14:34:24,729  INFO Configuration:347 - Mapping resource: org/digijava/kernel/dbentity/Country.hbm.xml
+14:34:24,776  INFO Binder:229 - Mapping class: org.digijava.kernel.dbentity.Country -> DG_COUNTRIES
+14:34:24,776  INFO Configuration:347 - Mapping resource: org/digijava/kernel/entity/OrganizationType.hbm.xml
+14:34:24,807  INFO Binder:229 - Mapping class: org.digijava.kernel.entity.OrganizationType -> DG_ORGANIZATION_TYPE
+14:34:24,823  INFO Configuration:347 - Mapping resource: org/digijava/kernel/entity/HowDidYouHear.hbm.xml
+14:34:24,870  INFO Binder:229 - Mapping class: org.digijava.kernel.entity.HowDidYouHear -> DG_HOW_DID_U_HEAR
+14:34:24,870  INFO Configuration:347 - Mapping resource: org/digijava/kernel/entity/ModuleInstance.hbm.xml
+14:34:24,916  INFO Binder:229 - Mapping class: org.digijava.kernel.entity.ModuleInstance -> DG_MODULE_INSTANCE
+14:34:24,916  INFO Configuration:347 - Mapping resource: org/digijava/kernel/entity/UserLangPreferences.hbm.xml
+14:34:24,948  INFO Binder:229 - Mapping class: org.digijava.kernel.entity.UserLangPreferences -> DG_USER_LANG_PREFERENCES
+14:34:24,948  INFO Binder:570 - Mapping collection: org.digijava.kernel.entity.UserLangPreferences.contentLanguages -> DG_USER_CONT_LANGUAGE_MAP
+14:34:24,948  INFO Configuration:347 - Mapping resource: org/digijava/kernel/entity/Interests.hbm.xml
+14:34:24,995  INFO Binder:229 - Mapping class: org.digijava.kernel.entity.Interests -> DG_INTERESTS
+14:34:24,995  INFO Configuration:347 - Mapping resource: org/digijava/kernel/entity/ContentAlert.hbm.xml
+14:34:25,026  INFO Binder:229 - Mapping class: org.digijava.kernel.entity.ContentAlert -> DG_CONTENT_ALERT
+14:34:25,041  INFO Configuration:347 - Mapping resource: org/digijava/kernel/dbentity/SignOn.hbm.xml
+14:34:25,057 ERROR HibernateClassLoader:160 - Error loading Hibernate class org.digijava.kernel.dbentity.SignOn
+14:34:25,088  INFO Configuration:347 - Mapping resource: org/digijava/kernel/entity/OracleLocale.hbm.xml
+14:34:25,104  INFO Binder:229 - Mapping class: org.digijava.kernel.entity.OracleLocale -> J_LOCALES
+14:34:25,135  INFO Configuration:347 - Mapping resource: org/digijava/kernel/entity/PrincipalPermission.hbm.xml
+14:34:25,182  INFO Binder:229 - Mapping class: org.digijava.kernel.entity.PrincipalPermission -> DG_PRINCIPAL_PERMISSION
+14:34:25,182  INFO Configuration:347 - Mapping resource: org/digijava/kernel/entity/PrincipalPermissionParameter.hbm.xml
+14:34:25,229  INFO Binder:229 - Mapping class: org.digijava.kernel.entity.PrincipalPermissionParameter -> DG_PRINCIPAL_PERMISSION_PARAM
+14:34:25,276  INFO Configuration:347 - Mapping resource: org/digijava/kernel/entity/Message.hbm.xml
+14:34:25,323  INFO Binder:229 - Mapping class: org.digijava.kernel.entity.Message -> DG_MESSAGE
+14:34:25,354  INFO Configuration:347 - Mapping resource: org/digijava/kernel/entity/AccessLog.hbm.xml
+14:34:25,385  INFO Binder:229 - Mapping class: org.digijava.kernel.entity.AccessLog -> DG_ACCESS_LOG
+14:34:25,401  INFO Configuration:347 - Mapping resource: org/digijava/module/common/dbentity/ItemStatus.hbm.xml
+14:34:25,416  INFO Binder:229 - Mapping class: org.digijava.module.common.dbentity.ItemStatus -> DG_ITEM_STATUS
+14:34:25,416  INFO Configuration:347 - Mapping resource: org/digijava/module/common/dbentity/ModuleTeaser.hbm.xml
+14:34:25,463  INFO Binder:229 - Mapping class: org.digijava.module.common.dbentity.ModuleTeaser -> DG_MODULE_TEASER_SETTINGS
+14:34:25,463  WARN HibernateClassLoader:97 - No hibernate classes for module translation
+14:34:25,479  INFO Configuration:347 - Mapping resource: org/digijava/module/aim/dbentity/AmpActivity.hbm.xml
+14:34:25,526  INFO Binder:229 - Mapping class: org.digijava.module.aim.dbentity.AmpActivity -> AMP_ACTIVITY
+14:34:25,541  INFO Binder:570 - Mapping collection: org.digijava.module.aim.dbentity.AmpActivity.orgrole -> amp_org_role
+14:34:25,557  INFO Binder:570 - Mapping collection: org.digijava.module.aim.dbentity.AmpActivity.sectors -> amp_activity_sector
+14:34:25,557  INFO Binder:570 - Mapping collection: org.digijava.module.aim.dbentity.AmpActivity.locations -> amp_activity_location
+14:34:25,557  INFO Binder:570 - Mapping collection: org.digijava.module.aim.dbentity.AmpActivity.internalIds -> amp_activity_internal_id
+14:34:25,573  INFO Binder:570 - Mapping collection: org.digijava.module.aim.dbentity.AmpActivity.documents -> amp_activity_km_documents
+14:34:25,588  INFO Binder:570 - Mapping collection: org.digijava.module.aim.dbentity.AmpActivity.member -> amp_member_activities
+14:34:25,588  INFO Configuration:347 - Mapping resource: org/digijava/module/aim/dbentity/AmpStatus.hbm.xml
+14:34:25,635  INFO Binder:229 - Mapping class: org.digijava.module.aim.dbentity.AmpStatus -> AMP_STATUS
+14:34:25,635  INFO Configuration:347 - Mapping resource: org/digijava/module/aim/dbentity/AmpSector.hbm.xml
+14:34:25,666  INFO Binder:229 - Mapping class: org.digijava.module.aim.dbentity.AmpSector -> AMP_SECTOR
+14:34:25,682  INFO Binder:570 - Mapping collection: org.digijava.module.aim.dbentity.AmpSector.aidlist -> amp_activity_sector
+14:34:25,682  INFO Configuration:347 - Mapping resource: org/digijava/module/aim/dbentity/AmpLocation.hbm.xml
+14:34:25,713  INFO Binder:229 - Mapping class: org.digijava.module.aim.dbentity.AmpLocation -> AMP_LOCATION
+14:34:25,729  INFO Binder:570 - Mapping collection: org.digijava.module.aim.dbentity.AmpLocation.aidlocation -> amp_activity_location
+14:34:25,729  INFO Configuration:347 - Mapping resource: org/digijava/module/aim/dbentity/AmpOrganisation.hbm.xml
+14:34:25,760  INFO Binder:229 - Mapping class: org.digijava.module.aim.dbentity.AmpOrganisation -> AMP_ORGANISATION
+14:34:25,776  INFO Configuration:347 - Mapping resource: org/digijava/module/aim/dbentity/AmpRole.hbm.xml
+14:34:25,791  INFO Binder:229 - Mapping class: org.digijava.module.aim.dbentity.AmpRole -> AMP_ROLE
+14:34:25,791  INFO Configuration:347 - Mapping resource: org/digijava/module/aim/dbentity/AmpLevel.hbm.xml
+14:34:25,823  INFO Binder:229 - Mapping class: org.digijava.module.aim.dbentity.AmpLevel -> AMP_LEVEL
+14:34:25,823  INFO Configuration:347 - Mapping resource: org/digijava/module/aim/dbentity/AmpModality.hbm.xml
+14:34:25,963  INFO Binder:229 - Mapping class: org.digijava.module.aim.dbentity.AmpModality -> AMP_MODALITY
+14:34:25,963  INFO Configuration:347 - Mapping resource: org/digijava/module/aim/dbentity/AmpPhysicalPerformance.hbm.xml
+14:34:26,010  INFO Binder:229 - Mapping class: org.digijava.module.aim.dbentity.AmpPhysicalPerformance -> AMP_PHYSICAL_PERFORMANCE
+14:34:26,026  INFO Configuration:347 - Mapping resource: org/digijava/module/aim/dbentity/AmpNotes.hbm.xml
+14:34:26,041  INFO Binder:229 - Mapping class: org.digijava.module.aim.dbentity.AmpNotes -> AMP_NOTES
+14:34:26,057  INFO Configuration:347 - Mapping resource: org/digijava/module/aim/dbentity/AmpKmDocuments.hbm.xml
+14:34:26,088  INFO Binder:229 - Mapping class: org.digijava.module.aim.dbentity.AmpKmDocuments -> AMP_KM_DOCUMENTS
+14:34:26,088  INFO Configuration:347 - Mapping resource: org/digijava/module/aim/dbentity/AmpTheme.hbm.xml
+14:34:26,120  INFO Binder:229 - Mapping class: org.digijava.module.aim.dbentity.AmpTheme -> AMP_THEME
+14:34:26,135  INFO Configuration:347 - Mapping resource: org/digijava/module/aim/dbentity/AmpFiscalCalendar.hbm.xml
+14:34:26,166  INFO Binder:229 - Mapping class: org.digijava.module.aim.dbentity.AmpFiscalCalendar -> AMP_FISCAL_CALENDAR
+14:34:26,166  INFO Configuration:347 - Mapping resource: org/digijava/module/aim/dbentity/AmpFunding.hbm.xml
+14:34:26,213  INFO Binder:229 - Mapping class: org.digijava.module.aim.dbentity.AmpFunding -> AMP_FUNDING
+14:34:26,229  INFO Configuration:347 - Mapping resource: org/digijava/module/aim/dbentity/AmpFundingDetail.hbm.xml
+14:34:26,291  INFO Binder:229 - Mapping class: org.digijava.module.aim.dbentity.AmpFundingDetail -> AMP_FUNDING_DETAIL
+14:34:26,291  INFO Configuration:347 - Mapping resource: org/digijava/module/aim/dbentity/AmpCurrency.hbm.xml
+14:34:26,338  INFO Binder:229 - Mapping class: org.digijava.module.aim.dbentity.AmpCurrency -> AMP_CURRENCY
+14:34:26,338  INFO Configuration:347 - Mapping resource: org/digijava/module/aim/dbentity/AmpCurrencyRate.hbm.xml
+14:34:26,354  INFO Binder:229 - Mapping class: org.digijava.module.aim.dbentity.AmpCurrencyRate -> AMP_CURRENCY_RATE
+14:34:26,370  INFO Configuration:347 - Mapping resource: org/digijava/module/aim/dbentity/AmpTeam.hbm.xml
+14:34:26,401  INFO Binder:229 - Mapping class: org.digijava.module.aim.dbentity.AmpTeam -> AMP_TEAM
+14:34:26,401  INFO Binder:570 - Mapping collection: org.digijava.module.aim.dbentity.AmpTeam.teamPageFilters -> amp_team_page_filters
+14:34:26,401  INFO Configuration:347 - Mapping resource: org/digijava/module/aim/dbentity/AmpTeamMemberRoles.hbm.xml
+14:34:26,432  INFO Binder:229 - Mapping class: org.digijava.module.aim.dbentity.AmpTeamMemberRoles -> AMP_TEAM_MEMBER_ROLES
+14:34:26,448  INFO Configuration:347 - Mapping resource: org/digijava/module/aim/dbentity/AmpTeamMember.hbm.xml
+14:34:26,495  INFO Binder:229 - Mapping class: org.digijava.module.aim.dbentity.AmpTeamMember -> AMP_TEAM_MEMBER
+14:34:26,510  INFO Binder:570 - Mapping collection: org.digijava.module.aim.dbentity.AmpTeamMember.activities -> amp_member_activities
+14:34:26,510  INFO Binder:570 - Mapping collection: org.digijava.module.aim.dbentity.AmpTeamMember.reports -> amp_member_reports
+14:34:26,526  INFO Configuration:347 - Mapping resource: org/digijava/module/aim/dbentity/AmpApplicationSettings.hbm.xml
+14:34:26,541  INFO Binder:229 - Mapping class: org.digijava.module.aim.dbentity.AmpApplicationSettings -> AMP_APPLICATION_SETTINGS
+14:34:26,557  INFO Configuration:347 - Mapping resource: org/digijava/module/aim/dbentity/AmpReports.hbm.xml
+14:34:26,604  INFO Binder:229 - Mapping class: org.digijava.module.aim.dbentity.AmpReports -> AMP_REPORTS
+14:34:26,604  INFO Binder:570 - Mapping collection: org.digijava.module.aim.dbentity.AmpReports.members -> amp_member_reports
+14:34:26,604  INFO Configuration:347 - Mapping resource: org/digijava/module/aim/dbentity/AmpSectorScheme.hbm.xml
+14:34:26,651  INFO Binder:229 - Mapping class: org.digijava.module.aim.dbentity.AmpSectorScheme -> AMP_SECTOR_SCHEME
+14:34:26,651  INFO Configuration:347 - Mapping resource: org/digijava/module/aim/dbentity/AmpTermsAssist.hbm.xml
+14:34:26,698  INFO Binder:229 - Mapping class: org.digijava.module.aim.dbentity.AmpTermsAssist -> AMP_TERMS_ASSIST
+14:34:26,698  INFO Configuration:347 - Mapping resource: org/digijava/module/aim/dbentity/AmpClosingDateHistory.hbm.xml
+14:34:26,729  INFO Binder:229 - Mapping class: org.digijava.module.aim.dbentity.AmpClosingDateHistory -> AMP_CLOSING_DATE_HISTORY
+14:34:26,729  INFO Configuration:347 - Mapping resource: org/digijava/module/aim/dbentity/AmpPages.hbm.xml
+14:34:26,760  INFO Binder:229 - Mapping class: org.digijava.module.aim.dbentity.AmpPages -> AMP_PAGES
+14:34:26,760  INFO Binder:570 - Mapping collection: org.digijava.module.aim.dbentity.AmpPages.filters -> amp_page_filters
+14:34:26,760  INFO Configuration:347 - Mapping resource: org/digijava/module/aim/dbentity/AmpFilters.hbm.xml
+14:34:26,807  INFO Binder:229 - Mapping class: org.digijava.module.aim.dbentity.AmpFilters -> AMP_FILTERS
+14:34:26,807  INFO Binder:570 - Mapping collection: org.digijava.module.aim.dbentity.AmpFilters.pages -> amp_page_filters
+14:34:26,807  INFO Configuration:347 - Mapping resource: org/digijava/module/aim/dbentity/AmpTeamReports.hbm.xml
+14:34:26,870  INFO Binder:229 - Mapping class: org.digijava.module.aim.dbentity.AmpTeamReports -> AMP_TEAM_REPORTS
+14:34:26,870  INFO Configuration:347 - Mapping resource: org/digijava/module/aim/dbentity/AmpReportCache.hbm.xml
+14:34:26,901  INFO Binder:229 - Mapping class: org.digijava.module.aim.dbentity.AmpReportCache -> AMP_REPORT_CACHE
+14:34:26,916  INFO Configuration:347 - Mapping resource: org/digijava/module/aim/dbentity/AmpReportSector.hbm.xml
+14:34:26,963  INFO Binder:229 - Mapping class: org.digijava.module.aim.dbentity.AmpReportSector -> AMP_REPORT_SECTOR
+14:34:26,963  INFO Configuration:347 - Mapping resource: org/digijava/module/aim/dbentity/AmpReportLocation.hbm.xml
+14:34:26,995  INFO Binder:229 - Mapping class: org.digijava.module.aim.dbentity.AmpReportLocation -> AMP_REPORT_LOCATION
+14:34:26,995  INFO Configuration:347 - Mapping resource: org/digijava/module/aim/dbentity/AmpRegion.hbm.xml
+14:34:27,026  INFO Binder:229 - Mapping class: org.digijava.module.aim.dbentity.AmpRegion -> AMP_REGION
+14:34:27,041  INFO Configuration:347 - Mapping resource: org/digijava/module/aim/dbentity/AmpZone.hbm.xml
+14:34:27,166  INFO Binder:229 - Mapping class: org.digijava.module.aim.dbentity.AmpZone -> AMP_ZONE
+14:34:27,166  INFO Configuration:347 - Mapping resource: org/digijava/module/aim/dbentity/AmpWoreda.hbm.xml
+14:34:27,213  INFO Binder:229 - Mapping class: org.digijava.module.aim.dbentity.AmpWoreda -> AMP_WOREDA
+14:34:27,229  INFO Configuration:347 - Mapping resource: org/digijava/module/aim/dbentity/AmpComponent.hbm.xml
+14:34:27,260  INFO Binder:229 - Mapping class: org.digijava.module.aim.dbentity.AmpComponent -> AMP_COMPONENTS
+14:34:27,260  INFO Configuration:347 - Mapping resource: org/digijava/module/aim/dbentity/AmpActivityClosingDates.hbm.xml
+14:34:27,307  INFO Binder:229 - Mapping class: org.digijava.module.aim.dbentity.AmpActivityClosingDates -> AMP_ACTIVITY_CLOSING_DATES
+14:34:27,307  INFO Configuration:347 - Mapping resource: org/digijava/module/aim/dbentity/AmpOrgType.hbm.xml
+14:34:27,338  INFO Binder:229 - Mapping class: org.digijava.module.aim.dbentity.AmpOrgType -> AMP_ORG_TYPE
+14:34:27,338  INFO Configuration:347 - Mapping resource: org/digijava/module/aim/dbentity/AmpOrgGroup.hbm.xml
+14:34:27,370  INFO Binder:229 - Mapping class: org.digijava.module.aim.dbentity.AmpOrgGroup -> AMP_ORG_GROUP
+14:34:27,370  INFO Configuration:347 - Mapping resource: org/digijava/module/aim/dbentity/AmpPerspective.hbm.xml
+14:34:27,401  INFO Binder:229 - Mapping class: org.digijava.module.aim.dbentity.AmpPerspective -> AMP_PERSPECTIVE
+14:34:27,416  INFO Configuration:347 - Mapping resource: org/digijava/module/aim/dbentity/AmpField.hbm.xml
+14:34:27,432  INFO Binder:229 - Mapping class: org.digijava.module.aim.dbentity.AmpField -> AMP_FIELD
+14:34:27,432  INFO Configuration:347 - Mapping resource: org/digijava/module/aim/dbentity/AmpComments.hbm.xml
+14:34:27,479  INFO Binder:229 - Mapping class: org.digijava.module.aim.dbentity.AmpComments -> AMP_COMMENTS
+14:34:27,479  INFO Configuration:347 - Mapping resource: org/digijava/module/aim/dbentity/AmpPhysicalComponentReport.hbm.xml
+14:34:27,526  INFO Binder:229 - Mapping class: org.digijava.module.aim.dbentity.AmpPhysicalComponentReport -> AMP_PHYSICAL_COMPONENT_REPORT
+14:34:27,541  INFO Configuration:347 - Mapping resource: org/digijava/module/sdm/dbentity/Sdm.hbm.xml
+14:34:27,573  INFO Binder:229 - Mapping class: org.digijava.module.sdm.dbentity.Sdm -> DG_SDM
+14:34:27,588  INFO Configuration:347 - Mapping resource: org/digijava/module/sdm/dbentity/SdmItem.hbm.xml
+14:34:27,620  INFO Binder:229 - Mapping class: org.digijava.module.sdm.dbentity.SdmItem -> DG_SDM_ITEM
+14:34:27,651  INFO Configuration:347 - Mapping resource: org/digijava/module/cms/dbentity/CMS.hbm.xml
+14:34:27,682  INFO Binder:229 - Mapping class: org.digijava.module.cms.dbentity.CMS -> DG_CMS
+14:34:27,682  INFO Configuration:347 - Mapping resource: org/digijava/module/cms/dbentity/CMSCategory.hbm.xml
+14:34:27,713  INFO Binder:229 - Mapping class: org.digijava.module.cms.dbentity.CMSCategory -> DG_CMS_CATEGORY
+14:34:27,713  INFO Binder:570 - Mapping collection: org.digijava.module.cms.dbentity.CMSCategory.parentCategories -> DG_CMS_CATEGORY_PARENT_MAP
+14:34:27,713  INFO Binder:570 - Mapping collection: org.digijava.module.cms.dbentity.CMSCategory.childCategories -> DG_CMS_CATEGORY_PARENT_MAP
+14:34:27,713  INFO Binder:570 - Mapping collection: org.digijava.module.cms.dbentity.CMSCategory.relatedCategories -> DG_CMS_CATEGORY_RELATED_MAP
+14:34:27,729  INFO Binder:570 - Mapping collection: org.digijava.module.cms.dbentity.CMSCategory.contentItems -> DG_CMS_ITEM_CATEGORY_MAP
+14:34:27,745  INFO Configuration:347 - Mapping resource: org/digijava/module/cms/dbentity/CMSContentItem.hbm.xml
+14:34:27,760  INFO Binder:229 - Mapping class: org.digijava.module.cms.dbentity.CMSContentItem -> DG_CMS_CONTENT_ITEM
+14:34:27,776  INFO Binder:570 - Mapping collection: org.digijava.module.cms.dbentity.CMSContentItem.categories -> DG_CMS_ITEM_CATEGORY_MAP
+14:34:27,776  INFO Configuration:347 - Mapping resource: org/digijava/module/news/dbentity/News.hbm.xml
+14:34:27,807  INFO Binder:229 - Mapping class: org.digijava.module.news.dbentity.News -> DG_NEWS
+14:34:27,807  INFO Configuration:347 - Mapping resource: org/digijava/module/news/dbentity/NewsItem.hbm.xml
+14:34:27,838  INFO Binder:229 - Mapping class: org.digijava.module.news.dbentity.NewsItem -> DG_NEWS_ITEM
+14:34:27,854  INFO Configuration:347 - Mapping resource: org/digijava/module/news/dbentity/NewsSettings.hbm.xml
+14:34:27,885  INFO Binder:229 - Mapping class: org.digijava.module.news.dbentity.NewsSettings -> DG_NEWS_SETTINGS
+14:34:27,885  WARN HibernateClassLoader:97 - No hibernate classes for module translate
+14:34:27,885  INFO Configuration:347 - Mapping resource: org/digijava/module/forum/dbentity/ForumUserSettings.hbm.xml
+14:34:27,916  INFO Binder:229 - Mapping class: org.digijava.module.forum.dbentity.ForumUserSettings -> DG_FORUM_USER_SETTINGS
+14:34:27,932  INFO Configuration:347 - Mapping resource: org/digijava/module/forum/dbentity/ForumSection.hbm.xml
+14:34:27,948  INFO Binder:229 - Mapping class: org.digijava.module.forum.dbentity.ForumSection -> DG_FORUM_SECTION
+14:34:27,963  INFO Configuration:347 - Mapping resource: org/digijava/module/forum/dbentity/ForumSubsection.hbm.xml
+14:34:28,010  INFO Binder:229 - Mapping class: org.digijava.module.forum.dbentity.ForumSubsection -> DG_FORUM_SUBSECTION
+14:34:28,010  INFO Configuration:347 - Mapping resource: org/digijava/module/forum/dbentity/ForumThread.hbm.xml
+14:34:28,041  INFO Binder:229 - Mapping class: org.digijava.module.forum.dbentity.ForumThread -> DG_FORUM_THREAD
+14:34:28,041  INFO Configuration:347 - Mapping resource: org/digijava/module/forum/dbentity/ForumPost.hbm.xml
+14:34:28,073  INFO Binder:229 - Mapping class: org.digijava.module.forum.dbentity.ForumPost -> DG_FORUM_POST
+14:34:28,073  INFO Configuration:347 - Mapping resource: org/digijava/module/forum/dbentity/Forum.hbm.xml
+14:34:28,135  INFO Binder:229 - Mapping class: org.digijava.module.forum.dbentity.Forum -> DG_FORUM
+14:34:28,135  INFO Configuration:347 - Mapping resource: org/digijava/module/forum/dbentity/ForumAsset.hbm.xml
+14:34:28,182  INFO Binder:229 - Mapping class: org.digijava.module.forum.dbentity.ForumAsset -> DG_FORUM_ASSET
+14:34:28,182  INFO Configuration:347 - Mapping resource: org/digijava/module/forum/dbentity/ForumPrivateMessage.hbm.xml
+14:34:28,229  INFO Binder:229 - Mapping class: org.digijava.module.forum.dbentity.ForumPrivateMessage -> DG_FORUM_PRIVATE_MESSAGE
+14:34:28,229  INFO Configuration:347 - Mapping resource: org/digijava/module/um/dbentity/ResetPassword.hbm.xml
+14:34:28,260  INFO Binder:229 - Mapping class: org.digijava.module.um.dbentity.ResetPassword -> DG_RESET_PASSWORD
+14:34:28,276  INFO Configuration:347 - Mapping resource: org/digijava/module/editor/dbentity/Editor.hbm.xml
+14:34:28,307  INFO Binder:229 - Mapping class: org.digijava.module.editor.dbentity.Editor -> DG_EDITOR
+14:34:28,338  INFO Configuration:347 - Mapping resource: org/digijava/module/calendar/dbentity/Calendar.hbm.xml
+14:34:28,479  INFO Binder:229 - Mapping class: org.digijava.module.calendar.dbentity.Calendar -> DG_CALENDAR
+14:34:28,495  INFO Configuration:347 - Mapping resource: org/digijava/module/calendar/dbentity/CalendarItem.hbm.xml
+14:34:28,526  INFO Binder:229 - Mapping class: org.digijava.module.calendar.dbentity.CalendarItem -> DG_CALENDAR_ITEM
+14:34:28,541  INFO Configuration:347 - Mapping resource: org/digijava/module/calendar/dbentity/CalendarSettings.hbm.xml
+14:34:28,573  INFO Binder:229 - Mapping class: org.digijava.module.calendar.dbentity.CalendarSettings -> DG_CALENDAR_SETTINGS
+14:34:28,588  WARN HibernateClassLoader:97 - No hibernate classes for module exception
+14:34:28,604  INFO Configuration:347 - Mapping resource: org/digijava/module/syndication/dbentity/CollectorFeed.hbm.xml
+14:34:28,635  INFO Binder:229 - Mapping class: org.digijava.module.syndication.dbentity.CollectorFeed -> DG_COLLECTOR_FEED
+14:34:28,651  INFO Configuration:347 - Mapping resource: org/digijava/module/syndication/dbentity/CollectorFeedItem.hbm.xml
+14:34:28,682  INFO Binder:229 - Mapping class: org.digijava.module.syndication.dbentity.CollectorFeedItem -> DG_COLLECTOR_FEED_ITEM
+14:34:28,698  INFO Configuration:347 - Mapping resource: org/digijava/module/syndication/dbentity/PublicationFeed.hbm.xml
+14:34:28,729  INFO Binder:229 - Mapping class: org.digijava.module.syndication.dbentity.PublicationFeed -> DG_PUBLICATION_FEED
+14:34:28,729  INFO Configuration:347 - Mapping resource: org/digijava/module/poll/entity/Poll.hbm.xml
+14:34:28,760  INFO Binder:229 - Mapping class: org.digijava.module.poll.entity.Poll -> poll
+14:34:28,776  INFO Configuration:347 - Mapping resource: org/digijava/module/poll/entity/PollOption.hbm.xml
+14:34:28,807  INFO Binder:229 - Mapping class: org.digijava.module.poll.entity.PollOption -> poll_option
+14:34:28,807  INFO Configuration:347 - Mapping resource: org/digijava/module/poll/entity/PollVoter.hbm.xml
+14:34:28,823  INFO Binder:229 - Mapping class: org.digijava.module.poll.entity.PollVoter -> poll_voter
+14:34:28,838  WARN HibernateClassLoader:97 - No hibernate classes for module admin
+14:34:28,838  INFO Configuration:347 - Mapping resource: org/digijava/module/highlights/dbentity/Highlight.hbm.xml
+14:34:28,870  INFO Binder:229 - Mapping class: org.digijava.module.highlights.dbentity.Highlight -> DG_HIGHLIGHT
+14:34:28,870  INFO Configuration:347 - Mapping resource: org/digijava/module/highlights/dbentity/HighlightLinks.hbm.xml
+14:34:28,916  INFO Binder:229 - Mapping class: org.digijava.module.highlights.dbentity.HighlightLinks -> DG_HIGHLIGHT_LINK
+14:34:28,932  INFO Configuration:613 - processing one-to-many association mappings
+14:34:28,948  INFO Binder:1178 - Mapping collection: org.digijava.kernel.user.User.interests -> DG_INTERESTS
+14:34:28,948  INFO Binder:1178 - Mapping collection: org.digijava.kernel.request.Site.groups -> DG_GROUP
+14:34:28,948  INFO Binder:1178 - Mapping collection: org.digijava.kernel.request.Site.siteDomains -> DG_SITE_DOMAIN
+14:34:28,948  INFO Binder:1178 - Mapping collection: org.digijava.kernel.request.Site.moduleInstances -> DG_MODULE_INSTANCE
+14:34:28,948  INFO Binder:1178 - Mapping collection: org.digijava.kernel.user.Group.permissions -> DG_GROUP_PERMISSION
+14:34:28,948  INFO Binder:1178 - Mapping collection: org.digijava.kernel.entity.PrincipalPermission.parameters -> DG_PRINCIPAL_PERMISSION_PARAM
+14:34:29,010  INFO Binder:1178 - Mapping collection: org.digijava.module.aim.dbentity.AmpActivity.funding -> AMP_FUNDING
+14:34:29,010  INFO Binder:1178 - Mapping collection: org.digijava.module.aim.dbentity.AmpActivity.components -> AMP_COMPONENTS
+14:34:29,010  INFO Binder:1178 - Mapping collection: org.digijava.module.aim.dbentity.AmpActivity.notes -> AMP_NOTES
+14:34:29,010  INFO Binder:1178 - Mapping collection: org.digijava.module.aim.dbentity.AmpActivity.closingDates -> AMP_ACTIVITY_CLOSING_DATES
+14:34:29,010  INFO Binder:1178 - Mapping collection: org.digijava.module.aim.dbentity.AmpFunding.fundingDetails -> AMP_FUNDING_DETAIL
+14:34:29,010  INFO Binder:1178 - Mapping collection: org.digijava.module.aim.dbentity.AmpFunding.closingDateHistory -> AMP_CLOSING_DATE_HISTORY
+14:34:29,057  INFO Binder:1178 - Mapping collection: org.digijava.module.aim.dbentity.AmpComponent.physicalProgress -> AMP_PHYSICAL_PERFORMANCE
+14:34:29,057  INFO Binder:1178 - Mapping collection: org.digijava.module.sdm.dbentity.Sdm.items -> DG_SDM_ITEM
+14:34:29,057  INFO Binder:1178 - Mapping collection: org.digijava.module.cms.dbentity.CMSCategory.primaryChildCategories -> DG_CMS_CATEGORY
+14:34:29,057  INFO Binder:1178 - Mapping collection: org.digijava.module.news.dbentity.News.newsItem -> DG_NEWS_ITEM
+14:34:29,057  INFO Binder:1178 - Mapping collection: org.digijava.module.forum.dbentity.ForumSection.subsections -> DG_FORUM_SUBSECTION
+14:34:29,073  INFO Binder:1178 - Mapping collection: org.digijava.module.forum.dbentity.ForumSubsection.threads -> DG_FORUM_THREAD
+14:34:29,073  INFO Binder:1178 - Mapping collection: org.digijava.module.forum.dbentity.ForumThread.posts -> DG_FORUM_POST
+14:34:29,073  INFO Binder:1178 - Mapping collection: org.digijava.module.forum.dbentity.ForumThread.shadowThreads -> DG_FORUM_THREAD
+14:34:29,088  INFO Binder:1178 - Mapping collection: org.digijava.module.forum.dbentity.Forum.sections -> DG_FORUM_SECTION
+14:34:29,088  INFO Binder:1178 - Mapping collection: org.digijava.module.calendar.dbentity.Calendar.calendarItem -> DG_CALENDAR_ITEM
+14:34:29,088  INFO Binder:1178 - Mapping collection: org.digijava.module.syndication.dbentity.CollectorFeed.items -> DG_COLLECTOR_FEED_ITEM
+14:34:29,088  INFO Binder:1178 - Mapping collection: org.digijava.module.poll.entity.Poll.pollOptions -> poll_option
+14:34:29,120  INFO Binder:1178 - Mapping collection: org.digijava.module.poll.entity.Poll.pollVoters -> poll_voter
+14:34:29,120  INFO Binder:1178 - Mapping collection: org.digijava.module.highlights.dbentity.Highlight.links -> DG_HIGHLIGHT_LINK
+14:34:29,120  INFO Configuration:622 - processing one-to-one association property references
+14:34:29,120  INFO Configuration:647 - processing foreign key constraints
+14:34:29,182  INFO Dialect:82 - Using dialect: net.sf.hibernate.dialect.MySQLDialect
+14:34:29,182  INFO SettingsFactory:63 - Use outer join fetching: false
+14:34:29,198  INFO DriverManagerConnectionProvider:42 - Using Hibernate built-in connection pool (not for production use!)
+14:34:29,198  INFO DriverManagerConnectionProvider:43 - Hibernate connection pool size: 20
+14:34:29,229  INFO DriverManagerConnectionProvider:77 - using driver: com.mysql.jdbc.Driver at URL: jdbc:mysql://asrd03/mofed-1jun05?autoReconnect=true&useUnicode=true&characterEncoding=UTF-8
+14:34:29,229  INFO DriverManagerConnectionProvider:78 - connection properties: {user=root, password=}
+14:34:29,245  INFO TransactionManagerLookupFactory:33 - No TransactionManagerLookup configured (in JTA environment, use of process level read-write cache is not recommended)
+14:34:30,401  INFO SettingsFactory:103 - Use scrollable result sets: true
+14:34:30,401  INFO SettingsFactory:106 - Use JDBC3 getGeneratedKeys(): true
+14:34:30,401  INFO SettingsFactory:109 - Optimize cache for minimal puts: false
+14:34:30,401  INFO SettingsFactory:118 - Query language substitutions: {no='N', true=1, yes='Y', false=0}
+14:34:30,401  INFO SettingsFactory:129 - cache provider: net.sf.hibernate.cache.TreeCacheProvider
+14:34:30,401  INFO Configuration:1093 - instantiating and configuring caches
+14:34:30,698  INFO PropertyConfigurator:172 - configure(): attribute size: 10
+14:34:30,745  INFO TreeCache:391 - setClusterConfig(): setting cluster properties from xml to: TCP(start_port=32327;bind_addr=192.86.99.198;loopback=true):TCPPING(initial_hosts=192.86.99.76[32327];port_range=1;timeout=3000;num_initial_members=3;up_thread=true;down_thread=true):MERGE2(min_interval=10000;max_interval=20000):FD(shun=true;up_thread=true;down_thread=true;timeout=1500):VERIFY_SUSPECT(timeout=150000):pbcast.NAKACK(gc_lag=50;retransmit_timeout=600,1200,2400,4800;up_thread=false;down_thread=false):pbcast.STABLE(desired_avg_gossip=20000;up_thread=false;down_thread=false):pbcast.GMS(join_timeout=5000;join_retry_timeout=2000;shun=true;print_local_addr=true):pbcast.STATE_TRANSFER(up_thread=true;down_thread=true)
+14:34:30,760  INFO TransactionManagerLookupFactory:33 - No TransactionManagerLookup configured (in JTA environment, use of process level read-write cache is not recommended)
+14:34:30,791  WARN TreeCache:869 - No transaction manager lookup class has been defined. TX will be null
+14:34:30,791  INFO TreeCache:882 - cache mode is local, will not create the channel
+14:34:30,807  INFO TreeCache:220 - Started null
+14:34:30,854  INFO SessionFactoryImpl:118 - building session factory
+14:34:31,010  INFO ReflectHelper:176 - reflection optimizer disabled for: org.digijava.module.forum.dbentity.ForumUserSettings, IllegalArgumentException: Cannot find matching method/constructor
+14:34:31,073  INFO ReflectHelper:176 - reflection optimizer disabled for: org.digijava.module.forum.dbentity.ForumAsset, IllegalArgumentException: Cannot find matching method/constructor
+14:34:31,354  INFO ReflectHelper:176 - reflection optimizer disabled for: org.digijava.module.forum.dbentity.ForumSubsection, IllegalArgumentException: Cannot find matching method/constructor
+14:34:31,479  INFO ReflectHelper:176 - reflection optimizer disabled for: org.digijava.module.calendar.dbentity.CalendarSettings, IllegalArgumentException: Cannot find matching method/constructor
+14:34:31,651  INFO ReflectHelper:176 - reflection optimizer disabled for: org.digijava.module.forum.dbentity.ForumPrivateMessage, IllegalArgumentException: Cannot find matching method/constructor
+14:34:32,557  INFO ReflectHelper:176 - reflection optimizer disabled for: org.digijava.module.forum.dbentity.Forum, IllegalArgumentException: Cannot find matching method/constructor
+14:34:32,573  INFO ReflectHelper:176 - reflection optimizer disabled for: org.digijava.module.news.dbentity.NewsSettings, IllegalArgumentException: Cannot find matching method/constructor
+14:34:32,604  INFO ReflectHelper:176 - reflection optimizer disabled for: org.digijava.module.forum.dbentity.ForumPost, IllegalArgumentException: Cannot find matching method/constructor
+14:34:32,745  INFO ReflectHelper:176 - reflection optimizer disabled for: org.digijava.module.forum.dbentity.ForumSection, IllegalArgumentException: Cannot find matching method/constructor
+14:34:32,807  INFO ReflectHelper:176 - reflection optimizer disabled for: org.digijava.module.forum.dbentity.ForumThread, IllegalArgumentException: Cannot find matching method/constructor
+14:34:34,026  INFO SessionFactoryObjectFactory:82 - no JNDI name configured
+14:34:34,026  INFO DigiSchemaExport:78 - Updating database schema
+14:34:34,026  INFO Dialect:82 - Using dialect: net.sf.hibernate.dialect.MySQLDialect
+14:34:34,041  INFO DriverManagerConnectionProvider:42 - Using Hibernate built-in connection pool (not for production use!)
+14:34:34,041  INFO DriverManagerConnectionProvider:43 - Hibernate connection pool size: 20
+14:34:34,041  INFO DriverManagerConnectionProvider:77 - using driver: com.mysql.jdbc.Driver at URL: jdbc:mysql://asrd03/mofed-1jun05?autoReconnect=true&useUnicode=true&characterEncoding=UTF-8
+14:34:34,041  INFO DriverManagerConnectionProvider:78 - connection properties: {user=root, password=}
+14:34:34,041  INFO SchemaUpdate:102 - Running hbm2ddl schema update
+14:34:34,041  INFO SchemaUpdate:110 - fetching database metadata
+14:34:34,088  INFO SchemaUpdate:124 - updating schema
+14:34:34,088  INFO Configuration:613 - processing one-to-many association mappings
+14:34:34,088  INFO Configuration:622 - processing one-to-one association property references
+14:34:34,088  INFO Configuration:647 - processing foreign key constraints
+14:34:36,354 ERROR SchemaUpdate:138 - Unsuccessful: alter table DG_PUBLICATION_FEED add index FKC599582DCE788358 (LANGUAGE), add constraint FKC599582DCE788358 foreign key (LANGUAGE) references DG_LOCALE (CODE)
+14:34:36,354 ERROR SchemaUpdate:139 - Invalid argument value,  message from server: "Duplicate key name 'FKC599582DCE788358'"
+14:34:36,370 ERROR SchemaUpdate:138 - Unsuccessful: alter table DG_PUBLICATION_FEED add index FKC599582D2864841C (COUNTRY_ISO), add constraint FKC599582D2864841C foreign key (COUNTRY_ISO) references DG_COUNTRIES (ISO)
+14:34:36,370 ERROR SchemaUpdate:139 - Invalid argument value,  message from server: "Duplicate key name 'FKC599582D2864841C'"
+14:34:36,370 ERROR SchemaUpdate:138 - Unsuccessful: alter table AMP_SECTOR add index FK48976A611D4C484C (amp_sec_scheme_id), add constraint FK48976A611D4C484C foreign key (amp_sec_scheme_id) references AMP_SECTOR_SCHEME (amp_sec_scheme_id)
+14:34:36,370 ERROR SchemaUpdate:139 - Invalid argument value,  message from server: "Duplicate key name 'FK48976A611D4C484C'"
+14:34:36,370 ERROR SchemaUpdate:138 - Unsuccessful: alter table AMP_SECTOR add index FK48976A6188CB6731 (amp_org_id), add constraint FK48976A6188CB6731 foreign key (amp_org_id) references AMP_ORGANISATION (amp_org_id)
+14:34:36,370 ERROR SchemaUpdate:139 - Invalid argument value,  message from server: "Duplicate key name 'FK48976A6188CB6731'"
+14:34:36,370 ERROR SchemaUpdate:138 - Unsuccessful: alter table AMP_SECTOR add index FK48976A61AF81CF3F (parent_sector_id), add constraint FK48976A61AF81CF3F foreign key (parent_sector_id) references AMP_SECTOR (amp_sector_id)
+14:34:36,370 ERROR SchemaUpdate:139 - Invalid argument value,  message from server: "Duplicate key name 'FK48976A61AF81CF3F'"
+14:34:36,385 ERROR SchemaUpdate:138 - Unsuccessful: alter table DG_GROUP_PERMISSION add index FKF7E1B7EB4CD4DEFB (GROUP_ID), add constraint FKF7E1B7EB4CD4DEFB foreign key (GROUP_ID) references DG_GROUP (ID)
+14:34:36,385 ERROR SchemaUpdate:139 - Invalid argument value,  message from server: "Duplicate key name 'FKF7E1B7EB4CD4DEFB'"
+14:34:36,432 ERROR SchemaUpdate:138 - Unsuccessful: alter table amp_activity_sector add index FKC6A86A1B497927D9 (amp_sector_id), add constraint FKC6A86A1B497927D9 foreign key (amp_sector_id) references AMP_SECTOR (amp_sector_id)
+14:34:36,432 ERROR SchemaUpdate:139 - Invalid argument value,  message from server: "Duplicate key name 'FKC6A86A1B497927D9'"
+14:34:36,432 ERROR SchemaUpdate:138 - Unsuccessful: alter table amp_activity_sector add index FKC6A86A1B3524C250 (amp_activity_id), add constraint FKC6A86A1B3524C250 foreign key (amp_activity_id) references AMP_ACTIVITY (amp_activity_id)
+14:34:36,432 ERROR SchemaUpdate:139 - Invalid argument value,  message from server: "Duplicate key name 'FKC6A86A1B3524C250'"
+14:34:36,448 ERROR SchemaUpdate:138 - Unsuccessful: alter table AMP_REGION add index FK46E439EFC35AEA64 (country_id), add constraint FK46E439EFC35AEA64 foreign key (country_id) references DG_COUNTRIES (ISO)
+14:34:36,463 ERROR SchemaUpdate:139 - Invalid argument value,  message from server: "Duplicate key name 'FK46E439EFC35AEA64'"
+14:34:36,463 ERROR SchemaUpdate:138 - Unsuccessful: alter table J_LOCALES add index FKA74F064411C65 (ISO), add constraint FKA74F064411C65 foreign key (ISO) references DG_LOCALE (CODE)
+14:34:36,463 ERROR SchemaUpdate:139 - Invalid argument value,  message from server: "Duplicate key name 'FKA74F064411C65'"
+14:34:36,479 ERROR SchemaUpdate:138 - Unsuccessful: alter table DG_USER add index FK8BB26E07BBE37D34 (ORGANIZATION_TYPE_ID), add constraint FK8BB26E07BBE37D34 foreign key (ORGANIZATION_TYPE_ID) references DG_ORGANIZATION_TYPE (id)
+14:34:36,479 ERROR SchemaUpdate:139 - Invalid argument value,  message from server: "Duplicate key name 'FK8BB26E07BBE37D34'"
+14:34:36,479 ERROR SchemaUpdate:138 - Unsuccessful: alter table DG_USER add index FK8BB26E072864841C (COUNTRY_ISO), add constraint FK8BB26E072864841C foreign key (COUNTRY_ISO) references DG_COUNTRIES (ISO)
+14:34:36,479 ERROR SchemaUpdate:139 - Invalid argument value,  message from server: "Duplicate key name 'FK8BB26E072864841C'"
+14:34:36,495 ERROR SchemaUpdate:138 - Unsuccessful: alter table DG_USER add index FK8BB26E078577A41E (REGISTRATION_LANGUAGE), add constraint FK8BB26E078577A41E foreign key (REGISTRATION_LANGUAGE) references DG_LOCALE (CODE)
+14:34:36,495 ERROR SchemaUpdate:139 - Invalid argument value,  message from server: "Duplicate key name 'FK8BB26E078577A41E'"
+14:34:36,495 ERROR SchemaUpdate:138 - Unsuccessful: alter table DG_USER add index FK8BB26E07CCC3867F (image_id), add constraint FK8BB26E07CCC3867F foreign key (image_id) references DG_IMAGE (ID)
+14:34:36,495 ERROR SchemaUpdate:139 - Invalid argument value,  message from server: "Duplicate key name 'FK8BB26E07CCC3867F'"
+14:34:36,541 ERROR SchemaUpdate:138 - Unsuccessful: alter table DG_USER add index FK8BB26E07C72C25E8 (REGISTERED_THROUGH), add constraint FK8BB26E07C72C25E8 foreign key (REGISTERED_THROUGH) references DG_SITE (ID)
+14:34:36,541 ERROR SchemaUpdate:139 - Invalid argument value,  message from server: "Duplicate key name 'FK8BB26E07C72C25E8'"
+14:34:36,541 ERROR SchemaUpdate:138 - Unsuccessful: alter table DG_USER_PREFERENCES add index FK34ED6CA02206F20F (USER_ID), add constraint FK34ED6CA02206F20F foreign key (USER_ID) references DG_USER (ID)
+14:34:36,541 ERROR SchemaUpdate:139 - Invalid argument value,  message from server: "Duplicate key name 'FK34ED6CA02206F20F'"
+14:34:36,541 ERROR SchemaUpdate:138 - Unsuccessful: alter table DG_USER_PREFERENCES add index FK34ED6CA0A7F77D13 (SITE_ID), add constraint FK34ED6CA0A7F77D13 foreign key (SITE_ID) references DG_SITE (ID)
+14:34:36,541 ERROR SchemaUpdate:139 - Invalid argument value,  message from server: "Duplicate key name 'FK34ED6CA0A7F77D13'"
+14:34:36,573 ERROR SchemaUpdate:138 - Unsuccessful: alter table AMP_COMMENTS add index FK23FB1A2FFDD6EA9B (amp_field_id), add constraint FK23FB1A2FFDD6EA9B foreign key (amp_field_id) references AMP_FIELD (amp_field_id)
+14:34:36,573 ERROR SchemaUpdate:139 - Invalid argument value,  message from server: "Duplicate key name 'FK23FB1A2FFDD6EA9B'"
+14:34:36,573 ERROR SchemaUpdate:138 - Unsuccessful: alter table AMP_COMMENTS add index FK23FB1A2F5000A8E0 (member_id), add constraint FK23FB1A2F5000A8E0 foreign key (member_id) references AMP_TEAM_MEMBER (amp_team_mem_id)
+14:34:36,604 ERROR SchemaUpdate:139 - Invalid argument value,  message from server: "Duplicate key name 'FK23FB1A2F5000A8E0'"
+14:34:36,604 ERROR SchemaUpdate:138 - Unsuccessful: alter table AMP_COMMENTS add index FK23FB1A2F3524C250 (amp_activity_id), add constraint FK23FB1A2F3524C250 foreign key (amp_activity_id) references AMP_ACTIVITY (amp_activity_id)
+14:34:36,604 ERROR SchemaUpdate:139 - Invalid argument value,  message from server: "Duplicate key name 'FK23FB1A2F3524C250'"
+14:34:36,620 ERROR SchemaUpdate:138 - Unsuccessful: alter table DG_SITE_USER_LANG_MAP add index FK96EF6FA3A7F77D13 (SITE_ID), add constraint FK96EF6FA3A7F77D13 foreign key (SITE_ID) references DG_SITE (ID)
+14:34:36,620 ERROR SchemaUpdate:139 - Invalid argument value,  message from server: "Duplicate key name 'FK96EF6FA3A7F77D13'"
+14:34:36,620 ERROR SchemaUpdate:138 - Unsuccessful: alter table DG_SITE_USER_LANG_MAP add index FK96EF6FA31FA5ED (CODE), add constraint FK96EF6FA31FA5ED foreign key (CODE) references DG_LOCALE (CODE)
+14:34:36,620 ERROR SchemaUpdate:139 - Invalid argument value,  message from server: "Duplicate key name 'FK96EF6FA31FA5ED'"
+14:34:36,635 ERROR SchemaUpdate:138 - Unsuccessful: alter table DG_FORUM_POST add index FKAA7B9A5A372C7C2D (EDITED_BY), add constraint FKAA7B9A5A372C7C2D foreign key (EDITED_BY) references DG_FORUM_USER_SETTINGS (ID)
+14:34:36,635 ERROR SchemaUpdate:139 - Invalid argument value,  message from server: "Duplicate key name 'FKAA7B9A5A372C7C2D'"
+14:34:36,635 ERROR SchemaUpdate:138 - Unsuccessful: alter table DG_FORUM_POST add index FKAA7B9A5A19B9E663 (AUTHOR_USER_SETTINGS), add constraint FKAA7B9A5A19B9E663 foreign key (AUTHOR_USER_SETTINGS) references DG_FORUM_USER_SETTINGS (ID)
+14:34:36,635 ERROR SchemaUpdate:139 - Invalid argument value,  message from server: "Duplicate key name 'FKAA7B9A5A19B9E663'"
+14:34:36,635 ERROR SchemaUpdate:138 - Unsuccessful: alter table DG_FORUM_POST add index FKAA7B9A5A9374020A (THREAD), add constraint FKAA7B9A5A9374020A foreign key (THREAD) references DG_FORUM_THREAD (ID)
+14:34:36,635 ERROR SchemaUpdate:139 - Invalid argument value,  message from server: "Duplicate key name 'FKAA7B9A5A9374020A'"
+14:34:36,635 ERROR SchemaUpdate:138 - Unsuccessful: alter table DG_CMS_CATEGORY_PARENT_MAP add index FK998A063691907F3E (CHILD_ID), add constraint FK998A063691907F3E foreign key (CHILD_ID) references DG_CMS_CATEGORY (CATEGORY_ID)
+14:34:36,698 ERROR SchemaUpdate:139 - Invalid argument value,  message from server: "Duplicate key name 'FK998A063691907F3E'"
+14:34:36,698 ERROR SchemaUpdate:138 - Unsuccessful: alter table DG_CMS_CATEGORY_PARENT_MAP add index FK998A0636217F38D0 (PARENT_ID), add constraint FK998A0636217F38D0 foreign key (PARENT_ID) references DG_CMS_CATEGORY (CATEGORY_ID)
+14:34:36,698 ERROR SchemaUpdate:139 - Invalid argument value,  message from server: "Duplicate key name 'FK998A0636217F38D0'"
+14:34:36,698 ERROR SchemaUpdate:138 - Unsuccessful: alter table AMP_FUNDING_DETAIL add index FK99D5ABEE77F53DFE (perspective_id), add constraint FK99D5ABEE77F53DFE foreign key (perspective_id) references AMP_PERSPECTIVE (amp_perspective_id)
+14:34:36,698 ERROR SchemaUpdate:139 - Invalid argument value,  message from server: "Duplicate key name 'FK99D5ABEE77F53DFE'"
+14:34:36,713 ERROR SchemaUpdate:138 - Unsuccessful: alter table AMP_FUNDING_DETAIL add index FK99D5ABEE8EC88E0E (amp_currency_id), add constraint FK99D5ABEE8EC88E0E foreign key (amp_currency_id) references AMP_CURRENCY (amp_currency_id)
+14:34:36,713 ERROR SchemaUpdate:139 - Invalid argument value,  message from server: "Duplicate key name 'FK99D5ABEE8EC88E0E'"
+14:34:36,713 ERROR SchemaUpdate:138 - Unsuccessful: alter table AMP_FUNDING_DETAIL add index FK99D5ABEEE00F4AF8 (amp_funding_id), add constraint FK99D5ABEEE00F4AF8 foreign key (amp_funding_id) references AMP_FUNDING (amp_funding_id)
+14:34:36,713 ERROR SchemaUpdate:139 - Invalid argument value,  message from server: "Duplicate key name 'FK99D5ABEEE00F4AF8'"
+14:34:36,791 ERROR SchemaUpdate:138 - Unsuccessful: alter table AMP_FUNDING_DETAIL add index FK99D5ABEE1F8B2F87 (reporting_org_id), add constraint FK99D5ABEE1F8B2F87 foreign key (reporting_org_id) references AMP_ORGANISATION (amp_org_id)
+14:34:36,791 ERROR SchemaUpdate:139 - Invalid argument value,  message from server: "Duplicate key name 'FK99D5ABEE1F8B2F87'"
+14:34:36,807 ERROR SchemaUpdate:138 - Unsuccessful: alter table amp_activity_location add index FKF702D92A8CBD0BEA (amp_location_id), add constraint FKF702D92A8CBD0BEA foreign key (amp_location_id) references AMP_LOCATION (amp_location_id)
+14:34:36,807 ERROR SchemaUpdate:139 - Invalid argument value,  message from server: "Duplicate key name 'FKF702D92A8CBD0BEA'"
+14:34:36,807 ERROR SchemaUpdate:138 - Unsuccessful: alter table amp_activity_location add index FKF702D92A3524C250 (amp_activity_id), add constraint FKF702D92A3524C250 foreign key (amp_activity_id) references AMP_ACTIVITY (amp_activity_id)
+14:34:36,807 ERROR SchemaUpdate:139 - Invalid argument value,  message from server: "Duplicate key name 'FKF702D92A3524C250'"
+14:34:36,807 ERROR SchemaUpdate:138 - Unsuccessful: alter table AMP_WOREDA add index FK4FFE4FC3C35AEA64 (country_id), add constraint FK4FFE4FC3C35AEA64 foreign key (country_id) references DG_COUNTRIES (ISO)
+14:34:36,807 ERROR SchemaUpdate:139 - Invalid argument value,  message from server: "Duplicate key name 'FK4FFE4FC3C35AEA64'"
+14:34:36,823 ERROR SchemaUpdate:138 - Unsuccessful: alter table AMP_WOREDA add index FK4FFE4FC3F95F9E8E (zone_id), add constraint FK4FFE4FC3F95F9E8E foreign key (zone_id) references AMP_ZONE (amp_zone_id)
+14:34:36,823 ERROR SchemaUpdate:139 - Invalid argument value,  message from server: "Duplicate key name 'FK4FFE4FC3F95F9E8E'"
+14:34:36,823 ERROR SchemaUpdate:138 - Unsuccessful: alter table AMP_CURRENCY add index FK6A2F2C4CC35AEA64 (country_id), add constraint FK6A2F2C4CC35AEA64 foreign key (country_id) references DG_COUNTRIES (ISO)
+14:34:36,823 ERROR SchemaUpdate:139 - Invalid argument value,  message from server: "Duplicate key name 'FK6A2F2C4CC35AEA64'"
+14:34:36,823 ERROR SchemaUpdate:138 - Unsuccessful: alter table DG_FORUM_SECTION add index FKD290EECB3FF9501 (FORUM), add constraint FKD290EECB3FF9501 foreign key (FORUM) references DG_FORUM (ID)
+14:34:36,854 ERROR SchemaUpdate:139 - Invalid argument value,  message from server: "Duplicate key name 'FKD290EECB3FF9501'"
+14:34:36,854 ERROR SchemaUpdate:138 - Unsuccessful: alter table AMP_NOTES add index FK1299EC463524C250 (amp_activity_id), add constraint FK1299EC463524C250 foreign key (amp_activity_id) references AMP_ACTIVITY (amp_activity_id)
+14:34:36,854 ERROR SchemaUpdate:139 - Invalid argument value,  message from server: "Duplicate key name 'FK1299EC463524C250'"
+14:34:36,854 ERROR SchemaUpdate:138 - Unsuccessful: alter table DG_USER_CONT_LANGUAGE_MAP add index FK513A778A1FA5ED (CODE), add constraint FK513A778A1FA5ED foreign key (CODE) references DG_LOCALE (CODE)
+14:34:36,854 ERROR SchemaUpdate:139 - Invalid argument value,  message from server: "Duplicate key name 'FK513A778A1FA5ED'"
+14:34:36,854 ERROR SchemaUpdate:138 - Unsuccessful: alter table DG_USER_CONT_LANGUAGE_MAP add index FK513A778AC9FE6F22 (USER_ID, SITE_ID), add constraint FK513A778AC9FE6F22 foreign key (USER_ID, SITE_ID) references DG_USER_LANG_PREFERENCES (USER_ID, SITE_ID)
+14:34:36,854 ERROR SchemaUpdate:139 - Invalid argument value,  message from server: "Duplicate key name 'FK513A778AC9FE6F22'"
+14:34:36,870 ERROR SchemaUpdate:138 - Unsuccessful: alter table AMP_ZONE add index FKD754BD6746E7646 (region_id), add constraint FKD754BD6746E7646 foreign key (region_id) references AMP_REGION (amp_region_id)
+14:34:36,870 ERROR SchemaUpdate:139 - Invalid argument value,  message from server: "Duplicate key name 'FKD754BD6746E7646'"
+14:34:36,916 ERROR SchemaUpdate:138 - Unsuccessful: alter table AMP_ZONE add index FKD754BD67C35AEA64 (country_id), add constraint FKD754BD67C35AEA64 foreign key (country_id) references DG_COUNTRIES (ISO)
+14:34:36,916 ERROR SchemaUpdate:139 - Invalid argument value,  message from server: "Duplicate key name 'FKD754BD67C35AEA64'"
+14:34:36,932 ERROR SchemaUpdate:138 - Unsuccessful: alter table AMP_ORG_GROUP add index FK67B0AC49B6286BD1 (amp_level_id), add constraint FK67B0AC49B6286BD1 foreign key (amp_level_id) references AMP_LEVEL (amp_level_id)
+14:34:36,932 ERROR SchemaUpdate:139 - Invalid argument value,  message from server: "Duplicate key name 'FK67B0AC49B6286BD1'"
+14:34:36,932 ERROR SchemaUpdate:138 - Unsuccessful: alter table AMP_PHYSICAL_PERFORMANCE add index FKBE6514631F8B2F87 (reporting_org_id), add constraint FKBE6514631F8B2F87 foreign key (reporting_org_id) references AMP_ORGANISATION (amp_org_id)
+14:34:36,932 ERROR SchemaUpdate:139 - Invalid argument value,  message from server: "Duplicate key name 'FKBE6514631F8B2F87'"
+14:34:36,932 ERROR SchemaUpdate:138 - Unsuccessful: alter table AMP_PHYSICAL_PERFORMANCE add index FKBE651463F098C638 (amp_component_id), add constraint FKBE651463F098C638 foreign key (amp_component_id) references AMP_COMPONENTS (amp_component_id)
+14:34:36,932 ERROR SchemaUpdate:139 - Invalid argument value,  message from server: "Duplicate key name 'FKBE651463F098C638'"
+14:34:36,932 ERROR SchemaUpdate:138 - Unsuccessful: alter table AMP_PHYSICAL_PERFORMANCE add index FKBE6514633524C250 (amp_activity_id), add constraint FKBE6514633524C250 foreign key (amp_activity_id) references AMP_ACTIVITY (amp_activity_id)
+14:34:36,948 ERROR SchemaUpdate:139 - Invalid argument value,  message from server: "Duplicate key name 'FKBE6514633524C250'"
+14:34:36,948 ERROR SchemaUpdate:138 - Unsuccessful: alter table DG_SITE_DOMAIN add index FKAF603B00A7F77D13 (SITE_ID), add constraint FKAF603B00A7F77D13 foreign key (SITE_ID) references DG_SITE (ID)
+14:34:36,948 ERROR SchemaUpdate:139 - Invalid argument value,  message from server: "Duplicate key name 'FKAF603B00A7F77D13'"
+14:34:36,995 ERROR SchemaUpdate:138 - Unsuccessful: alter table DG_SITE_DOMAIN add index FKAF603B00A2E63274 (LANGUAGE_CODE), add constraint FKAF603B00A2E63274 foreign key (LANGUAGE_CODE) references DG_LOCALE (CODE)
+14:34:36,995 ERROR SchemaUpdate:139 - Invalid argument value,  message from server: "Duplicate key name 'FKAF603B00A2E63274'"
+14:34:36,995 ERROR SchemaUpdate:138 - Unsuccessful: alter table DG_SITE_COUNTRY_MAP add index FK4005243711C65 (ISO), add constraint FK4005243711C65 foreign key (ISO) references DG_COUNTRIES (ISO)
+14:34:36,995 ERROR SchemaUpdate:139 - Invalid argument value,  message from server: "Duplicate key name 'FK4005243711C65'"
+14:34:36,995 ERROR SchemaUpdate:138 - Unsuccessful: alter table DG_SITE_COUNTRY_MAP add index FK40052437A7F77D13 (SITE_ID), add constraint FK40052437A7F77D13 foreign key (SITE_ID) references DG_SITE (ID)
+14:34:36,995 ERROR SchemaUpdate:139 - Invalid argument value,  message from server: "Duplicate key name 'FK40052437A7F77D13'"
+14:34:37,010 ERROR SchemaUpdate:138 - Unsuccessful: alter table AMP_FUNDING add index FK36860F423524C250 (amp_activity_id), add constraint FK36860F423524C250 foreign key (amp_activity_id) references AMP_ACTIVITY (amp_activity_id)
+14:34:37,010 ERROR SchemaUpdate:139 - Invalid argument value,  message from server: "Duplicate key name 'FK36860F423524C250'"
+14:34:37,010 ERROR SchemaUpdate:138 - Unsuccessful: alter table AMP_FUNDING add index FK36860F42CF3E797E (amp_terms_assist_id), add constraint FK36860F42CF3E797E foreign key (amp_terms_assist_id) references AMP_TERMS_ASSIST (amp_terms_assist_id)
+14:34:37,010 ERROR SchemaUpdate:139 - Invalid argument value,  message from server: "Duplicate key name 'FK36860F42CF3E797E'"
+14:34:37,010 ERROR SchemaUpdate:138 - Unsuccessful: alter table AMP_FUNDING add index FK36860F42EFFC93E (amp_modality_id), add constraint FK36860F42EFFC93E foreign key (amp_modality_id) references AMP_MODALITY (amp_modality_id)
+14:34:37,010 ERROR SchemaUpdate:139 - Invalid argument value,  message from server: "Duplicate key name 'FK36860F42EFFC93E'"
+14:34:37,073 ERROR SchemaUpdate:138 - Unsuccessful: alter table AMP_FUNDING add index FK36860F4287B866EA (amp_donor_org_id), add constraint FK36860F4287B866EA foreign key (amp_donor_org_id) references AMP_ORGANISATION (amp_org_id)
+14:34:37,073 ERROR SchemaUpdate:139 - Invalid argument value,  message from server: "Duplicate key name 'FK36860F4287B866EA'"
+14:34:37,073 ERROR SchemaUpdate:138 - Unsuccessful: alter table amp_page_filters add index FKF8E59CE63D0F6287 (amp_filter_id), add constraint FKF8E59CE63D0F6287 foreign key (amp_filter_id) references AMP_FILTERS (amp_filter_id)
+14:34:37,073 ERROR SchemaUpdate:139 - Invalid argument value,  message from server: "Duplicate key name 'FKF8E59CE63D0F6287'"
+14:34:37,073 ERROR SchemaUpdate:138 - Unsuccessful: alter table amp_page_filters add index FKF8E59CE6A887ED50 (amp_page_id), add constraint FKF8E59CE6A887ED50 foreign key (amp_page_id) references AMP_PAGES (amp_page_id)
+14:34:37,073 ERROR SchemaUpdate:139 - Invalid argument value,  message from server: "Duplicate key name 'FKF8E59CE6A887ED50'"
+14:34:37,088 ERROR SchemaUpdate:138 - Unsuccessful: alter table DG_FORUM_PRIVATE_MESSAGE add index FK5D554F11372C7C2D (EDITED_BY), add constraint FK5D554F11372C7C2D foreign key (EDITED_BY) references DG_FORUM_USER_SETTINGS (ID)
+14:34:37,088 ERROR SchemaUpdate:139 - Invalid argument value,  message from server: "Duplicate key name 'FK5D554F11372C7C2D'"
+14:34:37,088 ERROR SchemaUpdate:138 - Unsuccessful: alter table DG_FORUM_PRIVATE_MESSAGE add index FK5D554F1119B9E663 (AUTHOR_USER_SETTINGS), add constraint FK5D554F1119B9E663 foreign key (AUTHOR_USER_SETTINGS) references DG_FORUM_USER_SETTINGS (ID)
+14:34:37,135 ERROR SchemaUpdate:139 - Invalid argument value,  message from server: "Duplicate key name 'FK5D554F1119B9E663'"
+14:34:37,135 ERROR SchemaUpdate:138 - Unsuccessful: alter table DG_PRINCIPAL_PERMISSION_PARAM add index FKAF97934AB06A571A (PRINCIPAL_PERMISSION_ID), add constraint FKAF97934AB06A571A foreign key (PRINCIPAL_PERMISSION_ID) references DG_PRINCIPAL_PERMISSION (PRINCIPAL_PERMISSION_ID)
+14:34:37,135 ERROR SchemaUpdate:139 - Invalid argument value,  message from server: "Duplicate key name 'FKAF97934AB06A571A'"
+14:34:37,135 ERROR SchemaUpdate:138 - Unsuccessful: alter table DG_INTERESTS add index FKC1EBC9ADF0514DD6 (CONTENT_ALERT), add constraint FKC1EBC9ADF0514DD6 foreign key (CONTENT_ALERT) references DG_CONTENT_ALERT (VALUE)
+14:34:37,135 ERROR SchemaUpdate:139 - Invalid argument value,  message from server: "Duplicate key name 'FKC1EBC9ADF0514DD6'"
+14:34:37,135 ERROR SchemaUpdate:138 - Unsuccessful: alter table DG_INTERESTS add index FKC1EBC9ADA7F77D13 (SITE_ID), add constraint FKC1EBC9ADA7F77D13 foreign key (SITE_ID) references DG_SITE (ID)
+14:34:37,135 ERROR SchemaUpdate:139 - Invalid argument value,  message from server: "Duplicate key name 'FKC1EBC9ADA7F77D13'"
+14:34:37,135 ERROR SchemaUpdate:138 - Unsuccessful: alter table DG_INTERESTS add index FKC1EBC9AD2206F20F (USER_ID), add constraint FKC1EBC9AD2206F20F foreign key (USER_ID) references DG_USER (ID)
+14:34:37,135 ERROR SchemaUpdate:139 - Invalid argument value,  message from server: "Duplicate key name 'FKC1EBC9AD2206F20F'"
+14:34:37,198 ERROR SchemaUpdate:138 - Unsuccessful: alter table DG_HIGHLIGHT_LINK add index FKF38F70017C9198A6 (HIGHLIGHT_ID), add constraint FKF38F70017C9198A6 foreign key (HIGHLIGHT_ID) references DG_HIGHLIGHT (HIGHLIGHT_ID)
+14:34:37,198 ERROR SchemaUpdate:139 - Invalid argument value,  message from server: "Duplicate key name 'FKF38F70017C9198A6'"
+14:34:37,213 ERROR SchemaUpdate:138 - Unsuccessful: alter table DG_EDITOR add index FK4CB000A92206F20F (USER_ID), add constraint FK4CB000A92206F20F foreign key (USER_ID) references DG_USER (ID)
+14:34:37,213 ERROR SchemaUpdate:139 - Invalid argument value,  message from server: "Duplicate key name 'FK4CB000A92206F20F'"
+14:34:37,229 ERROR SchemaUpdate:138 - Unsuccessful: alter table amp_team_page_filters add index FK82CE4F3282A352C2 (amp_team_id), add constraint FK82CE4F3282A352C2 foreign key (amp_team_id) references AMP_TEAM (amp_team_id)
+14:34:37,229 ERROR SchemaUpdate:139 - Invalid argument value,  message from server: "Duplicate key name 'FK82CE4F3282A352C2'"
+14:34:37,229 ERROR SchemaUpdate:138 - Unsuccessful: alter table amp_team_page_filters add index FK82CE4F323D0F6287 (amp_filter_id), add constraint FK82CE4F323D0F6287 foreign key (amp_filter_id) references AMP_FILTERS (amp_filter_id)
+14:34:37,229 ERROR SchemaUpdate:139 - Invalid argument value,  message from server: "Duplicate key name 'FK82CE4F323D0F6287'"
+14:34:37,229 ERROR SchemaUpdate:138 - Unsuccessful: alter table amp_team_page_filters add index FK82CE4F32A887ED50 (amp_page_id), add constraint FK82CE4F32A887ED50 foreign key (amp_page_id) references AMP_PAGES (amp_page_id)
+14:34:37,245 ERROR SchemaUpdate:139 - Invalid argument value,  message from server: "Duplicate key name 'FK82CE4F32A887ED50'"
+14:34:37,245 ERROR SchemaUpdate:138 - Unsuccessful: alter table AMP_APPLICATION_SETTINGS add index FK8B5660D1F64F63B (fis_cal_id), add constraint FK8B5660D1F64F63B foreign key (fis_cal_id) references AMP_FISCAL_CALENDAR (amp_fiscal_cal_id)
+14:34:37,260 ERROR SchemaUpdate:139 - Invalid argument value,  message from server: "Duplicate key name 'FK8B5660D1F64F63B'"
+14:34:37,260 ERROR SchemaUpdate:138 - Unsuccessful: alter table AMP_APPLICATION_SETTINGS add index FK8B5660DAA36363D (team_id), add constraint FK8B5660DAA36363D foreign key (team_id) references AMP_TEAM (amp_team_id)
+14:34:37,260 ERROR SchemaUpdate:139 - Invalid argument value,  message from server: "Duplicate key name 'FK8B5660DAA36363D'"
+14:34:37,260 ERROR SchemaUpdate:138 - Unsuccessful: alter table AMP_APPLICATION_SETTINGS add index FK8B5660D77F53DFE (perspective_id), add constraint FK8B5660D77F53DFE foreign key (perspective_id) references AMP_PERSPECTIVE (amp_perspective_id)
+14:34:37,307 ERROR SchemaUpdate:139 - Invalid argument value,  message from server: "Duplicate key name 'FK8B5660D77F53DFE'"
+14:34:37,323 ERROR SchemaUpdate:138 - Unsuccessful: alter table AMP_APPLICATION_SETTINGS add index FK8B5660D22F73C09 (currency_id), add constraint FK8B5660D22F73C09 foreign key (currency_id) references AMP_CURRENCY (amp_currency_id)
+14:34:37,323 ERROR SchemaUpdate:139 - Invalid argument value,  message from server: "Duplicate key name 'FK8B5660D22F73C09'"
+14:34:37,323 ERROR SchemaUpdate:138 - Unsuccessful: alter table AMP_APPLICATION_SETTINGS add index FK8B5660DBFC28A9A (member), add constraint FK8B5660DBFC28A9A foreign key (member) references AMP_TEAM_MEMBER (amp_team_mem_id)
+14:34:37,323 ERROR SchemaUpdate:139 - Invalid argument value,  message from server: "Duplicate key name 'FK8B5660DBFC28A9A'"
+14:34:37,323 ERROR SchemaUpdate:138 - Unsuccessful: alter table AMP_LOCATION add index FKB932DBF046E7646 (region_id), add constraint FKB932DBF046E7646 foreign key (region_id) references AMP_REGION (amp_region_id)
+14:34:37,338 ERROR SchemaUpdate:139 - Invalid argument value,  message from server: "Duplicate key name 'FKB932DBF046E7646'"
+14:34:37,338 ERROR SchemaUpdate:138 - Unsuccessful: alter table AMP_LOCATION add index FKB932DBF0C35AEA64 (country_id), add constraint FKB932DBF0C35AEA64 foreign key (country_id) references DG_COUNTRIES (ISO)
+14:34:37,354 ERROR SchemaUpdate:139 - Invalid argument value,  message from server: "Duplicate key name 'FKB932DBF0C35AEA64'"
+14:34:37,354 ERROR SchemaUpdate:138 - Unsuccessful: alter table AMP_LOCATION add index FKB932DBF037009FF2 (woreda_id), add constraint FKB932DBF037009FF2 foreign key (woreda_id) references AMP_WOREDA (amp_woreda_id)
+14:34:37,354 ERROR SchemaUpdate:139 - Invalid argument value,  message from server: "Duplicate key name 'FKB932DBF037009FF2'"
+14:34:37,354 ERROR SchemaUpdate:138 - Unsuccessful: alter table AMP_LOCATION add index FKB932DBF0F95F9E8E (zone_id), add constraint FKB932DBF0F95F9E8E foreign key (zone_id) references AMP_ZONE (amp_zone_id)
+14:34:37,354 ERROR SchemaUpdate:139 - Invalid argument value,  message from server: "Duplicate key name 'FKB932DBF0F95F9E8E'"
+14:34:37,354 ERROR SchemaUpdate:138 - Unsuccessful: alter table DG_CMS_ITEM_CATEGORY_MAP add index FK5A422FD5DBFCB7FC (CATEGORY_ID), add constraint FK5A422FD5DBFCB7FC foreign key (CATEGORY_ID) references DG_CMS_CATEGORY (CATEGORY_ID)
+14:34:37,354 ERROR SchemaUpdate:139 - Invalid argument value,  message from server: "Duplicate key name 'FK5A422FD5DBFCB7FC'"
+14:34:37,354 ERROR SchemaUpdate:138 - Unsuccessful: alter table DG_CMS_ITEM_CATEGORY_MAP add index FK5A422FD591B (ID), add constraint FK5A422FD591B foreign key (ID) references DG_CMS_CONTENT_ITEM (ID)
+14:34:37,370 ERROR SchemaUpdate:139 - Invalid argument value,  message from server: "Duplicate key name 'FK5A422FD591B'"
+14:34:37,370 ERROR SchemaUpdate:138 - Unsuccessful: alter table amp_activity_km_documents add index FK19FDFF10D1B (id), add constraint FK19FDFF10D1B foreign key (id) references DG_CMS_CONTENT_ITEM (ID)
+14:34:37,370 ERROR SchemaUpdate:139 - Invalid argument value,  message from server: "Duplicate key name 'FK19FDFF10D1B'"
+14:34:37,416 ERROR SchemaUpdate:138 - Unsuccessful: alter table amp_activity_km_documents add index FK19FDFF103524C250 (amp_activity_id), add constraint FK19FDFF103524C250 foreign key (amp_activity_id) references AMP_ACTIVITY (amp_activity_id)
+14:34:37,416 ERROR SchemaUpdate:139 - Invalid argument value,  message from server: "Duplicate key name 'FK19FDFF103524C250'"
+14:34:37,416 ERROR SchemaUpdate:138 - Unsuccessful: alter table DG_USER_LANG_PREFERENCES add index FK9E86C93F817D9800 (ALERTS_LANGUAGE), add constraint FK9E86C93F817D9800 foreign key (ALERTS_LANGUAGE) references DG_LOCALE (CODE)
+14:34:37,416 ERROR SchemaUpdate:139 - Invalid argument value,  message from server: "Duplicate key name 'FK9E86C93F817D9800'"
+14:34:37,416 ERROR SchemaUpdate:138 - Unsuccessful: alter table DG_USER_LANG_PREFERENCES add index FK9E86C93F2206F20F (USER_ID), add constraint FK9E86C93F2206F20F foreign key (USER_ID) references DG_USER (ID)
+14:34:37,416 ERROR SchemaUpdate:139 - Invalid argument value,  message from server: "Duplicate key name 'FK9E86C93F2206F20F'"
+14:34:37,432 ERROR SchemaUpdate:138 - Unsuccessful: alter table DG_USER_LANG_PREFERENCES add index FK9E86C93FA7F77D13 (SITE_ID), add constraint FK9E86C93FA7F77D13 foreign key (SITE_ID) references DG_SITE (ID)
+14:34:37,432 ERROR SchemaUpdate:139 - Invalid argument value,  message from server: "Duplicate key name 'FK9E86C93FA7F77D13'"
+14:34:37,432 ERROR SchemaUpdate:138 - Unsuccessful: alter table DG_USER_LANG_PREFERENCES add index FK9E86C93FABB7B14 (NAV_LANGUAGE), add constraint FK9E86C93FABB7B14 foreign key (NAV_LANGUAGE) references DG_LOCALE (CODE)
+14:34:37,479 ERROR SchemaUpdate:139 - Invalid argument value,  message from server: "Duplicate key name 'FK9E86C93FABB7B14'"
+14:34:37,479 ERROR SchemaUpdate:138 - Unsuccessful: alter table AMP_CLOSING_DATE_HISTORY add index FK42E21808E00F4AF8 (amp_funding_id), add constraint FK42E21808E00F4AF8 foreign key (amp_funding_id) references AMP_FUNDING (amp_funding_id)
+14:34:37,479 ERROR SchemaUpdate:139 - Invalid argument value,  message from server: "Duplicate key name 'FK42E21808E00F4AF8'"
+14:34:37,495 ERROR SchemaUpdate:138 - Unsuccessful: alter table DG_SITE add index FK8BB16183B3E828F3 (DEFAULT_INSTANCE), add constraint FK8BB16183B3E828F3 foreign key (DEFAULT_INSTANCE) references DG_MODULE_INSTANCE (MODULE_INSTANCE_ID)
+14:34:37,495 ERROR SchemaUpdate:139 - Invalid argument value,  message from server: "Duplicate key name 'FK8BB16183B3E828F3'"
+14:34:37,495 ERROR SchemaUpdate:138 - Unsuccessful: alter table DG_SITE add index FK8BB1618332A427B6 (DEFAULT_LANGUAGE), add constraint FK8BB1618332A427B6 foreign key (DEFAULT_LANGUAGE) references DG_LOCALE (CODE)
+14:34:37,495 ERROR SchemaUpdate:139 - Invalid argument value,  message from server: "Duplicate key name 'FK8BB1618332A427B6'"
+14:34:37,495 ERROR SchemaUpdate:138 - Unsuccessful: alter table amp_member_activities add index FKA4853CF73524C250 (amp_activity_id), add constraint FKA4853CF73524C250 foreign key (amp_activity_id) references AMP_ACTIVITY (amp_activity_id)
+14:34:37,495 ERROR SchemaUpdate:139 - Invalid argument value,  message from server: "Duplicate key name 'FKA4853CF73524C250'"
+14:34:37,495 ERROR SchemaUpdate:138 - Unsuccessful: alter table amp_member_activities add index FKA4853CF7C198B825 (amp_member_id), add constraint FKA4853CF7C198B825 foreign key (amp_member_id) references AMP_TEAM_MEMBER (amp_team_mem_id)
+14:34:37,526 ERROR SchemaUpdate:139 - Invalid argument value,  message from server: "Duplicate key name 'FKA4853CF7C198B825'"
+14:34:37,526 ERROR SchemaUpdate:138 - Unsuccessful: alter table AMP_TEAM_REPORTS add index FKA4B9C87836425D (team), add constraint FKA4B9C87836425D foreign key (team) references AMP_TEAM (amp_team_id)
+14:34:37,526 ERROR SchemaUpdate:139 - Invalid argument value,  message from server: "Duplicate key name 'FKA4B9C87836425D'"
+14:34:37,526 ERROR SchemaUpdate:138 - Unsuccessful: alter table AMP_TEAM_REPORTS add index FKA4B9C878C84C5534 (report), add constraint FKA4B9C878C84C5534 foreign key (report) references AMP_REPORTS (amp_report_id)
+14:34:37,526 ERROR SchemaUpdate:139 - Invalid argument value,  message from server: "Duplicate key name 'FKA4B9C878C84C5534'"
+14:34:37,526 ERROR SchemaUpdate:138 - Unsuccessful: alter table DG_COLLECTOR_FEED_ITEM add index FK2BB64A06F09F435C (FEED_ID), add constraint FK2BB64A06F09F435C foreign key (FEED_ID) references DG_COLLECTOR_FEED (ID)
+14:34:37,526 ERROR SchemaUpdate:139 - Invalid argument value,  message from server: "Duplicate key name 'FK2BB64A06F09F435C'"
+14:34:37,541 ERROR SchemaUpdate:138 - Unsuccessful: alter table DG_CALENDAR add index FK7687F77A9260C3F2 (STATUS), add constraint FK7687F77A9260C3F2 foreign key (STATUS) references DG_ITEM_STATUS (code)
+14:34:37,541 ERROR SchemaUpdate:139 - Invalid argument value,  message from server: "Duplicate key name 'FK7687F77A9260C3F2'"
+14:34:37,541 ERROR SchemaUpdate:138 - Unsuccessful: alter table DG_CMS_CATEGORY add index FK3C902590A738AD7D (OWNER_CMS), add constraint FK3C902590A738AD7D foreign key (OWNER_CMS) references DG_CMS (ID)
+14:34:37,541 ERROR SchemaUpdate:139 - Invalid argument value,  message from server: "Duplicate key name 'FK3C902590A738AD7D'"
+14:34:37,604 ERROR SchemaUpdate:138 - Unsuccessful: alter table DG_CMS_CATEGORY add index FK3C902590357742BB (PRIMARY_CATEGORY), add constraint FK3C902590357742BB foreign key (PRIMARY_CATEGORY) references DG_CMS_CATEGORY (CATEGORY_ID)
+14:34:37,604 ERROR SchemaUpdate:139 - Invalid argument value,  message from server: "Duplicate key name 'FK3C902590357742BB'"
+14:34:37,604 ERROR SchemaUpdate:138 - Unsuccessful: alter table AMP_TEAM add index FKD751DC18B95A9BA8 (parent_team_id), add constraint FKD751DC18B95A9BA8 foreign key (parent_team_id) references AMP_TEAM (amp_team_id)
+14:34:37,604 ERROR SchemaUpdate:139 - Invalid argument value,  message from server: "Duplicate key name 'FKD751DC18B95A9BA8'"
+14:34:37,620 ERROR SchemaUpdate:138 - Unsuccessful: alter table AMP_TEAM add index FKD751DC187B4080FC (team_lead_id), add constraint FKD751DC187B4080FC foreign key (team_lead_id) references AMP_TEAM_MEMBER (amp_team_mem_id)
+14:34:37,620 ERROR SchemaUpdate:139 - Invalid argument value,  message from server: "Duplicate key name 'FKD751DC187B4080FC'"
+14:34:37,620 ERROR SchemaUpdate:138 - Unsuccessful: alter table DG_GROUP add index FKE9D5BBA3A7F77D13 (SITE_ID), add constraint FKE9D5BBA3A7F77D13 foreign key (SITE_ID) references DG_SITE (ID)
+14:34:37,620 ERROR SchemaUpdate:139 - Invalid argument value,  message from server: "Duplicate key name 'FKE9D5BBA3A7F77D13'"
+14:34:37,620 ERROR SchemaUpdate:138 - Unsuccessful: alter table DG_NEWS add index FK8BAF0D0F9260C3F2 (STATUS), add constraint FK8BAF0D0F9260C3F2 foreign key (STATUS) references DG_ITEM_STATUS (code)
+14:34:37,666 ERROR SchemaUpdate:139 - Invalid argument value,  message from server: "Duplicate key name 'FK8BAF0D0F9260C3F2'"
+14:34:37,666 ERROR SchemaUpdate:138 - Unsuccessful: alter table poll_option add index FKD4FE88F5E8484D9B (poll_id), add constraint FKD4FE88F5E8484D9B foreign key (poll_id) references poll (poll_id)
+14:34:37,666 ERROR SchemaUpdate:139 - Invalid argument value,  message from server: "Duplicate key name 'FKD4FE88F5E8484D9B'"
+14:34:37,807 ERROR SchemaUpdate:138 - Unsuccessful: alter table amp_org_role add index FK8392AD0C88CB6731 (amp_org_id), add constraint FK8392AD0C88CB6731 foreign key (amp_org_id) references AMP_ORGANISATION (amp_org_id)
+14:34:37,807 ERROR SchemaUpdate:139 - Invalid argument value,  message from server: "Duplicate key name 'FK8392AD0C88CB6731'"
+14:34:37,823 ERROR SchemaUpdate:138 - Unsuccessful: alter table amp_org_role add index FK8392AD0C2A7EB209 (amp_role_id), add constraint FK8392AD0C2A7EB209 foreign key (amp_role_id) references AMP_ROLE (amp_role_id)
+14:34:37,823 ERROR SchemaUpdate:139 - Invalid argument value,  message from server: "Duplicate key name 'FK8392AD0C2A7EB209'"
+14:34:37,823 ERROR SchemaUpdate:138 - Unsuccessful: alter table amp_org_role add index FK8392AD0C3524C250 (amp_activity_id), add constraint FK8392AD0C3524C250 foreign key (amp_activity_id) references AMP_ACTIVITY (amp_activity_id)
+14:34:37,823 ERROR SchemaUpdate:139 - Invalid argument value,  message from server: "Duplicate key name 'FK8392AD0C3524C250'"
+14:34:37,838 ERROR SchemaUpdate:138 - Unsuccessful: alter table DG_CALENDAR_ITEM add index FKD866D0B8986CD1BC (CALENDAR_ID), add constraint FKD866D0B8986CD1BC foreign key (CALENDAR_ID) references DG_CALENDAR (ID)
+14:34:37,838 ERROR SchemaUpdate:139 - Invalid argument value,  message from server: "Duplicate key name 'FKD866D0B8986CD1BC'"
+14:34:37,838 ERROR SchemaUpdate:138 - Unsuccessful: alter table DG_USER_GROUP add index FK841EEE272206F20F (USER_ID), add constraint FK841EEE272206F20F foreign key (USER_ID) references DG_USER (ID)
+14:34:37,838 ERROR SchemaUpdate:139 - Invalid argument value,  message from server: "Duplicate key name 'FK841EEE272206F20F'"
+14:34:37,838 ERROR SchemaUpdate:138 - Unsuccessful: alter table DG_USER_GROUP add index FK841EEE274CD4DEFB (GROUP_ID), add constraint FK841EEE274CD4DEFB foreign key (GROUP_ID) references DG_GROUP (ID)
+14:34:37,854 ERROR SchemaUpdate:139 - Invalid argument value,  message from server: "Duplicate key name 'FK841EEE274CD4DEFB'"
+14:34:37,854 ERROR SchemaUpdate:138 - Unsuccessful: alter table DG_SITE_TRANS_LANG_MAP add index FK638B417EA7F77D13 (SITE_ID), add constraint FK638B417EA7F77D13 foreign key (SITE_ID) references DG_SITE (ID)
+14:34:37,870 ERROR SchemaUpdate:139 - Invalid argument value,  message from server: "Duplicate key name 'FK638B417EA7F77D13'"
+14:34:37,870 ERROR SchemaUpdate:138 - Unsuccessful: alter table DG_SITE_TRANS_LANG_MAP add index FK638B417E1FA5ED (CODE), add constraint FK638B417E1FA5ED foreign key (CODE) references DG_LOCALE (CODE)
+14:34:37,870 ERROR SchemaUpdate:139 - Invalid argument value,  message from server: "Duplicate key name 'FK638B417E1FA5ED'"
+14:34:37,870 ERROR SchemaUpdate:138 - Unsuccessful: alter table DG_MODULE_INSTANCE add index FK4F0A0D4CA7F77D13 (SITE_ID), add constraint FK4F0A0D4CA7F77D13 foreign key (SITE_ID) references DG_SITE (ID)
+14:34:37,870 ERROR SchemaUpdate:139 - Invalid argument value,  message from server: "Duplicate key name 'FK4F0A0D4CA7F77D13'"
+14:34:37,870 ERROR SchemaUpdate:138 - Unsuccessful: alter table DG_MODULE_INSTANCE add index FK4F0A0D4C7F0957E4 (REAL_INSTANCE_ID), add constraint FK4F0A0D4C7F0957E4 foreign key (REAL_INSTANCE_ID) references DG_MODULE_INSTANCE (MODULE_INSTANCE_ID)
+14:34:37,870 ERROR SchemaUpdate:139 - Invalid argument value,  message from server: "Duplicate key name 'FK4F0A0D4C7F0957E4'"
+14:34:37,870 ERROR SchemaUpdate:138 - Unsuccessful: alter table amp_member_reports add index FK9C68FCF5C198B825 (amp_member_id), add constraint FK9C68FCF5C198B825 foreign key (amp_member_id) references AMP_TEAM_MEMBER (amp_team_mem_id)
+14:34:37,870 ERROR SchemaUpdate:139 - Invalid argument value,  message from server: "Duplicate key name 'FK9C68FCF5C198B825'"
+14:34:37,885 ERROR SchemaUpdate:138 - Unsuccessful: alter table amp_member_reports add index FK9C68FCF55C88AF4B (amp_report_id), add constraint FK9C68FCF55C88AF4B foreign key (amp_report_id) references AMP_REPORTS (amp_report_id)
+14:34:37,885 ERROR SchemaUpdate:139 - Invalid argument value,  message from server: "Duplicate key name 'FK9C68FCF55C88AF4B'"
+14:34:37,948 ERROR SchemaUpdate:138 - Unsuccessful: alter table DG_CMS_CONTENT_ITEM add index FK9FE69ACB63E2E376 (COUNTRY), add constraint FK9FE69ACB63E2E376 foreign key (COUNTRY) references DG_COUNTRIES (ISO)
+14:34:37,948 ERROR SchemaUpdate:139 - Invalid argument value,  message from server: "Duplicate key name 'FK9FE69ACB63E2E376'"
+14:34:37,948 ERROR SchemaUpdate:138 - Unsuccessful: alter table DG_CMS_CONTENT_ITEM add index FK9FE69ACBCE788358 (LANGUAGE), add constraint FK9FE69ACBCE788358 foreign key (LANGUAGE) references DG_LOCALE (CODE)
+14:34:37,948 ERROR SchemaUpdate:139 - Invalid argument value,  message from server: "Duplicate key name 'FK9FE69ACBCE788358'"
+14:34:37,948 ERROR SchemaUpdate:138 - Unsuccessful: alter table DG_CMS_CONTENT_ITEM add index FK9FE69ACBAC9945FF (AUTHOR_USER), add constraint FK9FE69ACBAC9945FF foreign key (AUTHOR_USER) references DG_USER (ID)
+14:34:37,948 ERROR SchemaUpdate:139 - Invalid argument value,  message from server: "Duplicate key name 'FK9FE69ACBAC9945FF'"
+14:34:37,948 ERROR SchemaUpdate:138 - Unsuccessful: alter table DG_CMS_CONTENT_ITEM add index FK9FE69ACBA738AD7D (OWNER_CMS), add constraint FK9FE69ACBA738AD7D foreign key (OWNER_CMS) references DG_CMS (ID)
+14:34:37,995 ERROR SchemaUpdate:139 - Invalid argument value,  message from server: "Duplicate key name 'FK9FE69ACBA738AD7D'"
+14:34:37,995 ERROR SchemaUpdate:138 - Unsuccessful: alter table DG_NEWS_ITEM add index FKB7A6F04398D59607 (NEWS_ID), add constraint FKB7A6F04398D59607 foreign key (NEWS_ID) references DG_NEWS (ID)
+14:34:37,995 ERROR SchemaUpdate:139 - Invalid argument value,  message from server: "Duplicate key name 'FKB7A6F04398D59607'"
+14:34:37,995 ERROR SchemaUpdate:138 - Unsuccessful: alter table AMP_ORGANISATION add index FK29689F95591D11E5 (org_type_id), add constraint FK29689F95591D11E5 foreign key (org_type_id) references AMP_ORG_TYPE (amp_org_type_id)
+14:34:38,010 ERROR SchemaUpdate:139 - Invalid argument value,  message from server: "Duplicate key name 'FK29689F95591D11E5'"
+14:34:38,010 ERROR SchemaUpdate:138 - Unsuccessful: alter table AMP_ORGANISATION add index FK29689F951D4C484C (amp_sec_scheme_id), add constraint FK29689F951D4C484C foreign key (amp_sec_scheme_id) references AMP_SECTOR_SCHEME (amp_sec_scheme_id)
+14:34:38,010 ERROR SchemaUpdate:139 - Invalid argument value,  message from server: "Duplicate key name 'FK29689F951D4C484C'"
+14:34:38,010 ERROR SchemaUpdate:138 - Unsuccessful: alter table AMP_ORGANISATION add index FK29689F9580F1F7B6 (level_id), add constraint FK29689F9580F1F7B6 foreign key (level_id) references AMP_LEVEL (amp_level_id)
+14:34:38,010 ERROR SchemaUpdate:139 - Invalid argument value,  message from server: "Duplicate key name 'FK29689F9580F1F7B6'"
+14:34:38,010 ERROR SchemaUpdate:138 - Unsuccessful: alter table AMP_ORGANISATION add index FK29689F95C35AEA64 (country_id), add constraint FK29689F95C35AEA64 foreign key (country_id) references DG_COUNTRIES (ISO)
+14:34:38,010 ERROR SchemaUpdate:139 - Invalid argument value,  message from server: "Duplicate key name 'FK29689F95C35AEA64'"
+14:34:38,010 ERROR SchemaUpdate:138 - Unsuccessful: alter table AMP_ORGANISATION add index FK29689F9515988070 (org_grp_id), add constraint FK29689F9515988070 foreign key (org_grp_id) references AMP_ORG_GROUP (amp_org_grp_id)
+14:34:38,041 ERROR SchemaUpdate:139 - Invalid argument value,  message from server: "Duplicate key name 'FK29689F9515988070'"
+14:34:38,041 ERROR SchemaUpdate:138 - Unsuccessful: alter table AMP_ORGANISATION add index FK29689F9546E7646 (region_id), add constraint FK29689F9546E7646 foreign key (region_id) references AMP_REGION (amp_region_id)
+14:34:38,041 ERROR SchemaUpdate:139 - Invalid argument value,  message from server: "Duplicate key name 'FK29689F9546E7646'"
+14:34:38,057 ERROR SchemaUpdate:138 - Unsuccessful: alter table AMP_ORGANISATION add index FK29689F9598CF8D92 (amp_fiscal_cal_id), add constraint FK29689F9598CF8D92 foreign key (amp_fiscal_cal_id) references AMP_FISCAL_CALENDAR (amp_fiscal_cal_id)
+14:34:38,057 ERROR SchemaUpdate:139 - Invalid argument value,  message from server: "Duplicate key name 'FK29689F9598CF8D92'"
+14:34:38,057 ERROR SchemaUpdate:138 - Unsuccessful: alter table AMP_ACTIVITY add index FKE52F2F4AA802645C (country_iso), add constraint FKE52F2F4AA802645C foreign key (country_iso) references DG_COUNTRIES (ISO)
+14:34:38,057 ERROR SchemaUpdate:139 - Invalid argument value,  message from server: "Duplicate key name 'FKE52F2F4AA802645C'"
+14:34:38,057 ERROR SchemaUpdate:138 - Unsuccessful: alter table AMP_ACTIVITY add index FKE52F2F4AB6286BD1 (amp_level_id), add constraint FKE52F2F4AB6286BD1 foreign key (amp_level_id) references AMP_LEVEL (amp_level_id)
+14:34:38,073 ERROR SchemaUpdate:139 - Invalid argument value,  message from server: "Duplicate key name 'FKE52F2F4AB6286BD1'"
+14:34:38,073 ERROR SchemaUpdate:138 - Unsuccessful: alter table AMP_ACTIVITY add index FKE52F2F4AF63353CD (amp_status_id), add constraint FKE52F2F4AF63353CD foreign key (amp_status_id) references AMP_STATUS (amp_status_id)
+14:34:38,073 ERROR SchemaUpdate:139 - Invalid argument value,  message from server: "Duplicate key name 'FKE52F2F4AF63353CD'"
+14:34:38,073 ERROR SchemaUpdate:138 - Unsuccessful: alter table AMP_ACTIVITY add index FKE52F2F4AEFFC93E (amp_modality_id), add constraint FKE52F2F4AEFFC93E foreign key (amp_modality_id) references AMP_MODALITY (amp_modality_id)
+14:34:38,073 ERROR SchemaUpdate:139 - Invalid argument value,  message from server: "Duplicate key name 'FKE52F2F4AEFFC93E'"
+14:34:38,073 ERROR SchemaUpdate:138 - Unsuccessful: alter table AMP_ACTIVITY add index FKE52F2F4A91899AFC (activity_creator), add constraint FKE52F2F4A91899AFC foreign key (activity_creator) references AMP_TEAM_MEMBER (amp_team_mem_id)
+14:34:38,073 ERROR SchemaUpdate:139 - Invalid argument value,  message from server: "Duplicate key name 'FKE52F2F4A91899AFC'"
+14:34:38,073 ERROR SchemaUpdate:138 - Unsuccessful: alter table AMP_ACTIVITY add index FKE52F2F4A82A352C2 (amp_team_id), add constraint FKE52F2F4A82A352C2 foreign key (amp_team_id) references AMP_TEAM (amp_team_id)
+14:34:38,135 ERROR SchemaUpdate:139 - Invalid argument value,  message from server: "Duplicate key name 'FKE52F2F4A82A352C2'"
+14:34:38,135 ERROR SchemaUpdate:138 - Unsuccessful: alter table AMP_ACTIVITY add index FKE52F2F4AAC2D218B (author), add constraint FKE52F2F4AAC2D218B foreign key (author) references DG_USER (ID)
+14:34:38,135 ERROR SchemaUpdate:139 - Invalid argument value,  message from server: "Duplicate key name 'FKE52F2F4AAC2D218B'"
+14:34:38,135 ERROR SchemaUpdate:138 - Unsuccessful: alter table AMP_ACTIVITY add index FKE52F2F4A774FAF6C (amp_theme_id), add constraint FKE52F2F4A774FAF6C foreign key (amp_theme_id) references AMP_THEME (amp_theme_id)
+14:34:38,135 ERROR SchemaUpdate:139 - Invalid argument value,  message from server: "Duplicate key name 'FKE52F2F4A774FAF6C'"
+14:34:38,151 ERROR SchemaUpdate:138 - Unsuccessful: alter table AMP_TEAM_MEMBER add index FKE40054A136EBCB (user), add constraint FKE40054A136EBCB foreign key (user) references DG_USER (ID)
+14:34:38,182 ERROR SchemaUpdate:139 - Invalid argument value,  message from server: "Duplicate key name 'FKE40054A136EBCB'"
+14:34:38,182 ERROR SchemaUpdate:138 - Unsuccessful: alter table AMP_TEAM_MEMBER add index FKE40054A182A352C2 (amp_team_id), add constraint FKE40054A182A352C2 foreign key (amp_team_id) references AMP_TEAM (amp_team_id)
+14:34:38,198 ERROR SchemaUpdate:139 - Invalid argument value,  message from server: "Duplicate key name 'FKE40054A182A352C2'"
+14:34:38,198 ERROR SchemaUpdate:138 - Unsuccessful: alter table AMP_TEAM_MEMBER add index FKE40054A1AD3C40BA (amp_member_role_id), add constraint FKE40054A1AD3C40BA foreign key (amp_member_role_id) references AMP_TEAM_MEMBER_ROLES (amp_team_mem_role_id)
+14:34:38,198 ERROR SchemaUpdate:139 - Invalid argument value,  message from server: "Duplicate key name 'FKE40054A1AD3C40BA'"
+14:34:38,198 ERROR SchemaUpdate:138 - Unsuccessful: alter table DG_FORUM_THREAD add index FK6E85447DBA4F3F (PARENT_THREAD), add constraint FK6E85447DBA4F3F foreign key (PARENT_THREAD) references DG_FORUM_THREAD (ID)
+14:34:38,198 ERROR SchemaUpdate:139 - Invalid argument value,  message from server: "Duplicate key name 'FK6E85447DBA4F3F'"
+14:34:38,198 ERROR SchemaUpdate:138 - Unsuccessful: alter table DG_FORUM_THREAD add index FK6E85441FD9ECA9 (LAST_POST), add constraint FK6E85441FD9ECA9 foreign key (LAST_POST) references DG_FORUM_POST (ID)
+14:34:38,198 ERROR SchemaUpdate:139 - Invalid argument value,  message from server: "Duplicate key name 'FK6E85441FD9ECA9'"
+14:34:38,198 ERROR SchemaUpdate:138 - Unsuccessful: alter table DG_FORUM_THREAD add index FK6E8544D6D124A5 (SUBSECTION), add constraint FK6E8544D6D124A5 foreign key (SUBSECTION) references DG_FORUM_SUBSECTION (ID)
+14:34:38,229 ERROR SchemaUpdate:139 - Invalid argument value,  message from server: "Duplicate key name 'FK6E8544D6D124A5'"
+14:34:38,245 ERROR SchemaUpdate:138 - Unsuccessful: alter table DG_SDM_ITEM add index FK966EA9929184E81E (SDM_ID), add constraint FK966EA9929184E81E foreign key (SDM_ID) references DG_SDM (ID)
+14:34:38,245 ERROR SchemaUpdate:139 - Invalid argument value,  message from server: "Duplicate key name 'FK966EA9929184E81E'"
+14:34:38,260 ERROR SchemaUpdate:138 - Unsuccessful: alter table poll_voter add index FKF6BCFA48E8484D9B (poll_id), add constraint FKF6BCFA48E8484D9B foreign key (poll_id) references poll (poll_id)
+14:34:38,260 ERROR SchemaUpdate:139 - Invalid argument value,  message from server: "Duplicate key name 'FKF6BCFA48E8484D9B'"
+14:34:38,260 ERROR SchemaUpdate:138 - Unsuccessful: alter table AMP_COMPONENTS add index FKC15998913524C250 (amp_activity_id), add constraint FKC15998913524C250 foreign key (amp_activity_id) references AMP_ACTIVITY (amp_activity_id)
+14:34:38,260 ERROR SchemaUpdate:139 - Invalid argument value,  message from server: "Duplicate key name 'FKC15998913524C250'"
+14:34:38,260 ERROR SchemaUpdate:138 - Unsuccessful: alter table AMP_COMPONENTS add index FKC159989122F73C09 (currency_id), add constraint FKC159989122F73C09 foreign key (currency_id) references AMP_CURRENCY (amp_currency_id)
+14:34:38,260 ERROR SchemaUpdate:139 - Invalid argument value,  message from server: "Duplicate key name 'FKC159989122F73C09'"
+14:34:38,260 ERROR SchemaUpdate:138 - Unsuccessful: alter table AMP_ACTIVITY_CLOSING_DATES add index FKD5894E063524C250 (amp_activity_id), add constraint FKD5894E063524C250 foreign key (amp_activity_id) references AMP_ACTIVITY (amp_activity_id)
+14:34:38,260 ERROR SchemaUpdate:139 - Invalid argument value,  message from server: "Duplicate key name 'FKD5894E063524C250'"
+14:34:38,307 ERROR SchemaUpdate:138 - Unsuccessful: alter table DG_CMS_CATEGORY_RELATED_MAP add index FK9BDF2ED991B (ID), add constraint FK9BDF2ED991B foreign key (ID) references DG_CMS_CATEGORY (CATEGORY_ID)
+14:34:38,307 ERROR SchemaUpdate:139 - Invalid argument value,  message from server: "Duplicate key name 'FK9BDF2ED991B'"
+14:34:38,323 ERROR SchemaUpdate:138 - Unsuccessful: alter table DG_CMS_CATEGORY_RELATED_MAP add index FK9BDF2ED9DBFCB7FC (CATEGORY_ID), add constraint FK9BDF2ED9DBFCB7FC foreign key (CATEGORY_ID) references DG_CMS_CATEGORY (CATEGORY_ID)
+14:34:38,323 ERROR SchemaUpdate:139 - Invalid argument value,  message from server: "Duplicate key name 'FK9BDF2ED9DBFCB7FC'"
+14:34:38,338 ERROR SchemaUpdate:138 - Unsuccessful: alter table DG_FORUM_SUBSECTION add index FK70037ADFA03B0AC5 (SECTION), add constraint FK70037ADFA03B0AC5 foreign key (SECTION) references DG_FORUM_SECTION (ID)
+14:34:38,338 ERROR SchemaUpdate:139 - Invalid argument value,  message from server: "Duplicate key name 'FK70037ADFA03B0AC5'"
+14:34:38,338 ERROR SchemaUpdate:138 - Unsuccessful: alter table DG_FORUM_SUBSECTION add index FK70037ADF1FD9ECA9 (LAST_POST), add constraint FK70037ADF1FD9ECA9 foreign key (LAST_POST) references DG_FORUM_POST (ID)
+14:34:38,338 ERROR SchemaUpdate:139 - Invalid argument value,  message from server: "Duplicate key name 'FK70037ADF1FD9ECA9'"
+14:34:38,338  INFO SchemaUpdate:143 - schema update complete
+14:34:38,338  INFO DriverManagerConnectionProvider:143 - cleaning up connection pool: jdbc:mysql://asrd03/mofed-1jun05?autoReconnect=true&useUnicode=true&characterEncoding=UTF-8
+14:34:38,338  INFO SessionFactoryImpl:532 - closing
+14:34:38,338  INFO TreeCache:235 - Stopping null
+14:34:38,338  INFO DriverManagerConnectionProvider:143 - cleaning up connection pool: jdbc:mysql://asrd03/mofed-1jun05?autoReconnect=true&useUnicode=true&characterEncoding=UTF-8

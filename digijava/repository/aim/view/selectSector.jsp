@@ -75,6 +75,11 @@
 		window.opener.document.aimEditActivityForm.currUrl.value="";
 	}
 
+	function closeWindow() {
+		window.opener.document.aimEditActivityForm.currUrl.value="";
+		window.close();
+	}
+
 	-->
 
 </script>
@@ -170,7 +175,7 @@
 													</td>
 													<td>
 														<input type="button" value="Close" class="dr-menu" 
-																	 onclick="javascript:window.close()">
+																	 onclick="closeWindow()">
 													</td>
 												</tr>
 											</table>

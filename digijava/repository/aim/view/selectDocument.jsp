@@ -140,6 +140,7 @@
 			document.aimEditActivityForm.action = "<%= addDoc %>";	
 		 	document.aimEditActivityForm.target = window.opener.name;	
 		    document.aimEditActivityForm.submit();
+			window.opener.document.aimEditActivityForm.currUrl.value="";
 			window.close();			  
 		}
 	}
@@ -150,6 +151,10 @@
 
 	function unload() {
 		window.opener.document.aimEditActivityForm.currUrl.value="";
+	}
+	function closeWindow() {
+		window.opener.document.aimEditActivityForm.currUrl.value="";
+		window.close();			  
 	}
 
 -->
@@ -243,7 +248,7 @@
 													</td>
 													<td>
 														<input type="button" value="Close" class="dr-menu"
-														onclick="javascript:window.close()">																										
+														onclick="closeWindow()">																										
 													</td>
 												</tr>
 											</table>

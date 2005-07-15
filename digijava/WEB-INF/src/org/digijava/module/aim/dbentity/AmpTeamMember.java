@@ -21,6 +21,7 @@ public class AmpTeamMember implements Serializable {
 	private Boolean deletePermission;   /* whether the team member has delete permission on the team pages */
 	private Set activities;
 	private Set reports;
+	private Set links;
 
 	public void setReports(Set reports) {
 		this.reports = reports;
@@ -129,4 +130,16 @@ public class AmpTeamMember implements Serializable {
 		return temp.getAmpTeamMemId().equals(ampTeamMemId);
 	}
 
+    /**
+     * @return Returns the links.
+     */
+    public Set getLinks() {
+        return links;
+    }
+    /**
+     * @param links The links to set.
+     */
+    public void setLinks(Set links) {
+        this.links = links;
+    }
 }

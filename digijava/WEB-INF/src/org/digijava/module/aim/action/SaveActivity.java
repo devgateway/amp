@@ -48,7 +48,6 @@ import org.digijava.module.aim.helper.Components;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.DateConversion;
 import org.digijava.module.aim.helper.DecimalToText;
-import org.digijava.module.aim.helper.FundTotal;
 import org.digijava.module.aim.helper.Funding;
 import org.digijava.module.aim.helper.FundingDetail;
 import org.digijava.module.aim.helper.FundingOrganization;

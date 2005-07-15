@@ -32,6 +32,7 @@ import org.digijava.module.aim.helper.DecimalToText;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.helper.Documents;
 import org.digijava.module.aim.util.DbUtil;
+import org.digijava.module.aim.util.TeamUtil;
 
 
 public class ViewMyDesktop extends Action
@@ -46,10 +47,14 @@ public class ViewMyDesktop extends Action
 		if(teamMember==null)
 			return mapping.findForward("index");
 		Long ampTeamId=teamMember.getTeamId();
+		
 		Long ampMemberId=teamMember.getMemberId();
 		boolean teamLeadFlag = teamMember.getTeamHead();
 		
-		MyDesktopForm formBean = (MyDesktopForm) form ; 
+		MyDesktopForm formBean = (MyDesktopForm) form ;
+		
+		formBean.setTeamMemberId(ampMemberId);
+		
 		ArrayList dbReturnSet= null ;
 		Iterator iter = null ;
 		Iterator iterSub = null ;
@@ -441,9 +446,13 @@ public class ViewMyDesktop extends Action
 		
 		// show all documents
 		
-		dbReturnSet = (ArrayList)DbUtil.getAllDocuments(ampTeamId);
+		//dbReturnSet = (ArrayList)DbUtil.getAllDocuments(teamMember.getMemberId());
+		dbReturnSet = (ArrayList)TeamUtil.getMemberLinks(teamMember.getMemberId());
 		formBean.setDocumentCount(new Integer(dbReturnSet.size()));
 		formBean.setDocuments(new ArrayList());
+		formBean.getDocuments().addAll(dbReturnSet);
+		
+		/*
 		if(dbReturnSet.size()>5)
 		{
 			iter=dbReturnSet.iterator();
@@ -455,6 +464,7 @@ public class ViewMyDesktop extends Action
 		}
 		else
 			formBean.getDocuments().addAll(dbReturnSet);
+		*/
 		
 		
 		

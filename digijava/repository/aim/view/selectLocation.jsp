@@ -49,6 +49,7 @@
 	    	document.aimEditActivityForm.action = "<%= selLoc %>";
 		 	document.aimEditActivityForm.target = window.opener.name;
 	    	document.aimEditActivityForm.submit();
+			window.opener.document.aimEditActivityForm.currUrl.value="";
 		 	window.close();
 		 }
 		 else
@@ -91,6 +92,11 @@
 
 	function unload() {
 		window.opener.document.aimEditActivityForm.currUrl.value="";
+	}
+
+	function unload() {
+		window.opener.document.aimEditActivityForm.currUrl.value="";
+		window.close();
 	}
 
 	function checkEmpty() {
@@ -262,7 +268,7 @@
 											<input type="reset" value="Clear" class="dr-menu">
 										</td>
 										<td>
-											<input type="button" value="Close" class="dr-menu" onclick="javascript:window.close()">
+											<input type="button" value="Close" class="dr-menu" onclick="closeWindow()">
 										</td>
 									</tr>
 								</table>

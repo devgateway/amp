@@ -22,6 +22,11 @@
 		window.opener.document.aimUpdateWorkspaceForm.currUrl.value="";
 	}
 
+	function closeWindow() {
+		window.opener.document.aimUpdateWorkspaceForm.currUrl.value="";
+		window.close();
+	}
+
 	function getChildWorkspaces() {
 		<digi:context name="getChild" property="context/module/moduleinstance/addChildWorkspaces.do" />
 		document.aimUpdateWorkspaceForm.action = "<%= getChild %>?wType="+document.aimUpdateWorkspaceForm.childWorkspaceType.value+"&tCategory="+document.aimUpdateWorkspaceForm.childTeamCategory.value+"&popupReset=true";
@@ -121,7 +126,7 @@
 														<input type="reset" value="Clear" class="dr-menu">
 													</td>
 													<td>
-														<input type="button" value="Close" class="dr-menu" onclick="javascript:window.close()">
+														<input type="button" value="Close" class="dr-menu" onclick="closeWindow()">
 													</td>
 												</tr>
 											</table>										

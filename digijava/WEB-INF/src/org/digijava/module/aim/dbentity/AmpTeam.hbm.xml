@@ -29,6 +29,7 @@
 				</composite-element>
 	 </set>
 	 
+
 	 	<!-- not needed
 		<set name="activityList" table="amp_team_activities" lazy="true">
   	            <cache usage="read-write"/>

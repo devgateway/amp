@@ -15,6 +15,11 @@ public class Documents {
 	private Long activityId;
 	private String activityName;
 	
+	public Documents() {}
+	
+	public Documents(Long id) {
+	    docId = id;
+	}
 	/**
 	 * @return Returns the docId.
 	 */
@@ -110,5 +115,14 @@ public class Documents {
 	 */
 	public void setIsFile(boolean isFile) {
 		this.isFile = isFile;
+	}
+	
+	public boolean equals(Object obj) {
+	    if (obj == null) throw new NullPointerException();
+	    if (!(obj instanceof Documents)) throw new ClassCastException();
+	    
+	    Documents docs = (Documents) obj;
+	    return docId.equals(docs.getDocId());
+	    
 	}
 }

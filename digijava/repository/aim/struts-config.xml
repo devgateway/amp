@@ -291,7 +291,20 @@
      	scope="request" validate="false" path="/aim/viewMyDesktop">
     <forward name="forward" path="/showLayout.do?layout=viewMyDesktop" />
     <forward name="index" path="/aim/index.do" redirect="true" />
-    </action>
+	 </action>
+
+    <action 
+     	type="org.digijava.module.aim.action.SaveQuickLink" 
+     	scope="request" validate="false" path="/aim/updateQuickLink">
+		<forward name="forward" path="/aim/viewMyDesktop.do" redirect="true" />
+	 </action>	 
+
+    <action 
+		type="org.digijava.module.aim.action.DeleteLinks" 
+		name="aimMyDesktopForm"		
+     	scope="session" validate="false" path="/aim/deleteLinks">
+		<forward name="forward" path="/aim/viewMyDesktop.do" redirect="true" />
+    </action>	 	 
 
 	 <action name="aimDonorDataImportForm"
      	type="org.digijava.module.aim.action.DonorDataImport" 
@@ -736,6 +749,13 @@
 		<forward name="index" path="/aim/index.do" redirect="true" />
 	</action>
 
+ 	<action 
+	  	path="/aim/viewRelatedLinks" 
+		type="org.digijava.module.aim.action.ShowRelatedLinks" 
+		name="aimMyDesktopForm" scope="session">
+		<forward name="forward" path="/showLayout.do?layout=viewLinks"/>
+	</action>
+	
 	<action
 		name="aimRelatedLinksForm"
 		type="org.digijava.module.aim.action.ViewRelatedLinks"

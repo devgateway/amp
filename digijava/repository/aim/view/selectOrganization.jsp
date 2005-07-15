@@ -46,6 +46,7 @@
 	   document.aimEditActivityForm.action = "<%= selOrg %>";
 		document.aimEditActivityForm.target = window.opener.name;
 	   document.aimEditActivityForm.submit();
+		window.opener.document.aimEditActivityForm.currUrl.value="";
 		window.close();
 		return true;
 	}	
@@ -88,6 +89,11 @@
 		window.opener.document.aimEditActivityForm.currUrl.value="";
 	}
 
+	function closeWindow() {
+		alert(window.opener.location.href);	  
+		window.opener.document.aimEditActivityForm.currUrl.value="";
+		window.close();
+	}
 	-->
 
 </script>
@@ -148,7 +154,7 @@
 										<td align="center" colspan=2>
 											<input type="button" value="Search" class="dr-menu" onclick="return searchOrganization()">&nbsp;
 											<input type="reset" value="Clear" class="dr-menu">&nbsp;
-											<input type="button" value="Close" class="dr-menu" onclick="javascript:window.close()">
+											<input type="button" value="Close" class="dr-menu" onclick="closeWindow()">
 										</td>
 									</tr>
 								</table>
@@ -192,7 +198,7 @@
 														<input type="button" value="Add" class="dr-menu" onclick="return selectOrganization()">
 													</td>
 													<td>
-														<input type="button" value="Close" class="dr-menu" onclick="javascript:window.close()">
+														<input type="button" value="Close" class="dr-menu" onclick="closeWindow()">
 													</td>
 												</tr>
 											</table>

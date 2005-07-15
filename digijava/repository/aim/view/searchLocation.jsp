@@ -47,6 +47,7 @@
 		*/
 		document.aimEditActivityForm.target = window.opener.name;
 		document.aimEditActivityForm.submit();
+		window.opener.document.aimEditActivityForm.currUrl.value="";
 		window.close();
 		return true;
 	}	
@@ -108,6 +109,10 @@
 		window.opener.document.aimEditActivityForm.currUrl.value="";
 	}
 
+	function closeWindow() {
+		window.opener.document.aimEditActivityForm.currUrl.value="";
+		window.close();
+	}
 -->	
 </script>
 
@@ -155,7 +160,7 @@
 											<input type="button" value="Search" class="dr-menu" onclick="return searchLoc()">&nbsp;&nbsp;
 											<input type="button" value="Back" class="dr-menu" onclick="return selectLoc()">
 										&nbsp;&nbsp;
-										<input type="button" value="Close" class="dr-menu" onclick="javascript:window.close()">
+										<input type="button" value="Close" class="dr-menu" onclick="closeWindow()">
 										</td>
 									</tr>
 								</table>
@@ -212,7 +217,7 @@
 														<input type="reset" value="Clear" class="dr-menu">
 													</td>
 													<td>
-														<input type="button" value="Close" class="dr-menu" onclick="javascript:window.close()">
+														<input type="button" value="Close" class="dr-menu" onclick="closeWindow()">
 													</td>
 												</tr>
 											</table>

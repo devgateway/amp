@@ -71,7 +71,7 @@
 					<td>&nbsp;</td>				
 					<td>&nbsp;</td>
 					<td align="left">
-						<html:submit value="Sign In" styleClass="dr-menu" property="submitButton" onclick="submitForm()"/>
+						<html:submit value="Sign In" styleClass="dr-menu" property="submitButton" onclick="return submitForm()"/>
 					</td>
 				</tr>
 

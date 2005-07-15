@@ -167,6 +167,7 @@
 	<page name="teamEditDocument" title=" - Edit Document Details" />		
 	<page name="moreDocuments" title=" - Related Documents and Links" />		
 	<page name="customizePersonalSettings" title=" - Customized Personal Settings" />		
+	<page name="viewLinks" title=" - Related Links" />		
 	
 	<page page="updateCurrencyRates" name="aim_addExchangeRate" title="AMP - Currency Rate Editor" />	
 	<page page="updateCurrency" name="aim_updateCurrency" title="AMP - Currency Editor" />	

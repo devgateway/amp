@@ -66,6 +66,11 @@
 		window.opener.document.aimEditActivityForm.currUrl.value="";
 	}
 
+	function closeWindow() {
+		window.opener.document.aimEditActivityForm.currUrl.value="";
+		window.close();
+	}
+
 	-->
 </script>
 
@@ -561,7 +566,7 @@
 									<input type="reset" value="Reset" class="inp-text">
 								</td>
 								<td>
-									<input type="button" value="Close" class="inp-text" onclick="javascript:window.close()">
+									<input type="button" value="Close" class="inp-text" onclick="closeWindow()">
 								</td>
 							</tr>
 						</table>

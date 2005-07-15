@@ -23,6 +23,12 @@
 				<many-to-many class="org.digijava.module.aim.dbentity.AmpActivity" column="amp_activity_id"/>
 	 	</set>	
 
+		<set name="links" table="amp_member_links" lazy="true" cascade="all">
+  	    	<cache usage="read-write"/>
+			<key column="amp_team_mem_id"/>
+			<many-to-many class="org.digijava.module.cms.dbentity.CMSContentItem" column="id"/>
+		</set>		 
+	 
 
 		<set name="reports" table="amp_member_reports" lazy="true">
   	            <cache usage="read-write"/>

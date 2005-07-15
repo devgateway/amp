@@ -7,9 +7,23 @@
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
 
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
+<script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/relatedLinks.js"/>"></script>
 <digi:context name="digiContext" property="context" />
 
 <script type="text/javascript">
+
+function addLinks(id) {
+
+	window.name = "opener" + new Date().getTime();		  
+	var t = ((screen.width)-420)/2;
+	var l = ((screen.height)-110)/2;
+	
+	addLinksWindow = window.open("","",'resizable=no,width=420,height=110,top='+l+',left='+t);
+	addLinksWindow.document.open();
+	addLinksWindow.document.write(getAddLinksWindowString(id));
+	addLinksWindow.document.close();
+}
+
 function openNewWindow(wndWidth, wndHeight){
 		window.name = "opener" + new Date().getTime();
 		if (wndWidth == null || wndWidth == 0 || wndHeight == null || wndHeight == 0) {
@@ -73,6 +87,7 @@ function showtip()
 </TD></TR>
 <TR><TD width="100%" valign="top" align="left">
 <digi:form action="/viewMyDesktop.do" method="post">
+<html:hidden property="teamMemberId" />
 <TABLE border=0 bgColor=#ffffff cellPadding=0 cellSpacing=0 width="99%" valign="top" align="left">
 <TBODY>
 	<TR>
@@ -539,7 +554,7 @@ function showtip()
 					</TD>
 				</TR>
 				</logic:notEmpty>
-				<logic:notEmpty name="aimMyDesktopForm"  property="documents" >
+				
 				<TR>
 					<TD class=r-dotted-lg-buttom vAlign=top>
 						<TABLE border=0 cellPadding=0 cellSpacing=0 width="100%" >
@@ -550,25 +565,31 @@ function showtip()
                  					<TBODY>
                  						<TR bgColor=#f4f4f2>
                     						<TD bgColor=#c9c9c7 class=box-title width=100>
-											<a title="<digi:trn key="aim:ListofRelatedLinks">Frequently Used Links for Desktop</digi:trn>">
-											<digi:trn key="aim:relatedLinks">Related Links</digi:trn>
-											</a>
-											</TD>
-                      						<TD background="module/aim/images/corner-r.gif" 
-											height=17 width=17></TD>
-										</TR>
-									</TBODY>
-									</TABLE></TD>
-							</TR>
-							<TR>
-	   					        <TD bgColor=#ffffff class=box-border width="20%">
-									<TABLE border=0 cellPadding=0 cellSpacing=3 width="80%">							     
-									<jsp:useBean id="docParams" type="java.util.Map" class="java.util.HashMap"/>									
-									 <logic:iterate name="aimMyDesktopForm"  property="documents" 
-									 id="document" type="org.digijava.module.aim.helper.Documents"> 							     
+													<a title="<digi:trn key="aim:ListofRelatedLinks">Frequently Used Links for Desktop</digi:trn>">
+														<digi:trn key="aim:relatedLinks">Related Links</digi:trn>
+													</a>
+												</TD>
+                    						<TD background="module/aim/images/corner-r.gif" height=17 width=17></TD>
+											</TR>
+										</TBODY>
+										</TABLE>
+									</TD>
+								</TR>
+								<TR>
+	   					   	<TD bgColor=#ffffff class=box-border width="20%">
+										<TABLE border=0 cellPadding=0 cellSpacing=3 width="80%">	
+										<logic:notEmpty name="aimMyDesktopForm"  property="documents" >
+										<%--
+										<jsp:useBean id="docParams" type="java.util.Map" class="java.util.HashMap"/>			
+										--%>
+										<% int linkCnt = 0; %>
+										<logic:iterate name="aimMyDesktopForm"  property="documents" 
+									 	id="document" type="org.digijava.module.aim.helper.Documents"> 							     
+										<% if (linkCnt < 5) { linkCnt ++; %>
 										<TR>
 											<TD width=10><IMG alt=Link height=10 src="../ampTemplate/images/arrow-gr.gif"></TD>
 											<TD>
+												<%--
 												<c:set target="${docParams}" property="docId">
 													<c:out value="${document.docId}"/>
 												</c:set>											
@@ -577,29 +598,46 @@ function showtip()
 												</c:set>																							
 												<c:set target="${docParams}" property="pageId" value="0"/>
 												<c:set target="${docParams}" property="reset" value="true"/>
+												--%>
 												<bean:define id="translation">
-													<digi:trn key="aim:clickToViewDocumentDetails">Click here to view Document Details</digi:trn>
+													<digi:trn key="aim:clickToViewLinkDetails">Click here to view Link Details</digi:trn>
 												</bean:define>
-												<digi:link href="/getDocumentDetails.do" name="docParams" styleClass="h-box" title="<%=translation%>" >
+												<digi:link href="/viewRelatedLinks.do" styleClass="h-box" title="<%=translation%>" >
 												<bean:write name="document" property="title"/>
 												</digi:link>
 											</TD>
 										</TR>
-									</logic:iterate>
-									<logic:greaterThan name="aimMyDesktopForm" property="documentCount" value="5">
-									<TR><TD colspan=2>
-										<digi:link href="/viewAllDocuments.do">
-										<digi:trn key="aim:more">more</digi:trn></digi:link>
-									</TD></TR>
-									</logic:greaterThan>
-									</TABLE> 
-								</TD>
-							</TR>
-						</TBODY>
+										<% } %>
+										</logic:iterate>
+										</logic:notEmpty>
+										<TR><TD colspan=2>
+											<table width="100%" cellpadding=0 cellspacing=0 valign=top align=left>
+												<tr>
+													<td>
+														<a href="javascript:addLinks(<c:out value="${aimMyDesktopForm.teamMemberId}"/>)">
+														<digi:trn key="aim:addLinks">Add Links</digi:trn></a>													
+													</td>
+													<td>
+														<logic:greaterThan name="aimMyDesktopForm" property="documentCount" value="5">
+															<digi:link href="/viewRelatedLinks.do">
+															<digi:trn key="aim:more">more</digi:trn></digi:link>
+														</logic:greaterThan>													
+													</td>
+												</tr>
+											</table>
+										</TD></TR>									
+										</TABLE> 
+									</TD>
+								</TR>
+							</TBODY>
 						</TABLE>
 					</TD>
 				</TR>
-				</logic:notEmpty>
+
+
+				
+
+				
 				<logic:notEmpty name="aimMyDesktopForm"  property="ampTeamMembers" >
 				<TR>
 					<TD class=r-dotted-lg-buttom vAlign=top>
@@ -614,8 +652,7 @@ function showtip()
 											<a title="<digi:trn key="aim:TeamMemberListNActivities">List of Team Members associated with Activities</digi:trn>">			<digi:trn key="aim:teamMembers">Team Members</digi:trn>
 											</a>
 											</TD>
-                      						<TD background="module/aim/images/corner-r.gif" 
-											height=17 width=100%></TD>
+											<TD background="module/aim/images/corner-r.gif" height=17 width=17></TD>
 										</TR>
 									</TBODY>
 									</TABLE></TD>

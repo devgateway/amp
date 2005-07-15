@@ -47,6 +47,7 @@
 		if (flag == true) {
 			document.aimEditActivityForm.target = window.opener.name;
 			document.aimEditActivityForm.submit();
+		window.opener.document.aimEditActivityForm.currUrl.value="";
 			window.close();
 			return flag;
 		} else {
@@ -60,6 +61,10 @@
 
 	function unload() {
 		window.opener.document.aimEditActivityForm.currUrl.value="";
+	}
+	function closeWindow() {
+		window.opener.document.aimEditActivityForm.currUrl.value="";
+		window.close();
 	}
 -->
 </script>
@@ -174,7 +179,7 @@
 														tabindex="7">
 													</td>
 													<td>
-														<input type="button" value="Close" class="dr-menu" onclick="javascript:window.close()"
+														<input type="button" value="Close" class="dr-menu" onclick="closeWindow()"
 														tabindex="8">
 													</td>
 												</tr>

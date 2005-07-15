@@ -40,6 +40,12 @@ public class MyDesktopForm extends ActionForm
 	private Integer reportCount;
 	private Integer documentCount;
 	private boolean write;
+	private Long teamMemberId;
+	
+	/* added by Priyajith 
+	 * for RelatedLinksList */
+	private Long selLinks[];
+	
 
 	public Collection getPages() 
 	{
@@ -405,4 +411,28 @@ public class MyDesktopForm extends ActionForm
 	{
 		this.documentCount=documentCount;
 	}
+    /**
+     * @return Returns the teamMemberId.
+     */
+    public Long getTeamMemberId() {
+        return teamMemberId;
+    }
+    /**
+     * @param teamMemberId The teamMemberId to set.
+     */
+    public void setTeamMemberId(Long teamMemberId) {
+        this.teamMemberId = teamMemberId;
+    }
+    /**
+     * @return Returns the selLinks.
+     */
+    public Long[] getSelLinks() {
+        return selLinks;
+    }
+    /**
+     * @param selLinks The selLinks to set.
+     */
+    public void setSelLinks(Long[] selLinks) {
+        this.selLinks = selLinks;
+    }
 }

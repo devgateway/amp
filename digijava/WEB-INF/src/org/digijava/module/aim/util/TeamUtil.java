@@ -6,6 +6,7 @@ package org.digijava.module.aim.util;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.Iterator;
 
 import net.sf.hibernate.Hibernate;
@@ -28,8 +29,10 @@ import org.digijava.module.aim.dbentity.AmpTeamReports;
 import org.digijava.module.aim.exception.AimException;
 import org.digijava.module.aim.helper.Activity;
 import org.digijava.module.aim.helper.Constants;
+import org.digijava.module.aim.helper.Documents;
 import org.digijava.module.aim.helper.UpdateDB;
 import org.digijava.module.aim.helper.Workspace;
+import org.digijava.module.cms.dbentity.CMSContentItem;
 
 /**
  * Persister class for all Team/Workspaces related Objects
@@ -815,6 +818,46 @@ public class TeamUtil {
 		return col1;
 	}
 	
+	public static Collection getMemberLinks(Long memberId) {
+		Collection col = new ArrayList();
+		
+		Session session = null;
+		Query qry = null;
+		AmpTeamMember member = null;
+
+		try {
+			session = PersistenceManager.getSession();
+			member = (AmpTeamMember) session.load(AmpTeamMember.class,memberId);
+			
+			if (member.getLinks() != null && member.getLinks().size() > 0) {
+				Iterator itr = member.getLinks().iterator();
+				while (itr.hasNext()) {
+					CMSContentItem cmsItem = (CMSContentItem) itr.next();
+					Documents document = new Documents();
+					document.setDocId(new Long(cmsItem.getId()));
+					document.setTitle(cmsItem.getTitle());
+					document.setIsFile(cmsItem.getIsFile());
+					document.setUrl(cmsItem.getUrl());
+					document.setDocDescription(cmsItem.getDescription());
+					col.add(document);
+				}			    
+			}
+
+		} catch (Exception e) {
+			logger.error("Unable to get Member links" + e.getMessage());
+			e.printStackTrace(System.out);
+		} finally {
+			try {
+				if (session != null) {
+					PersistenceManager.releaseSession(session);
+				}
+			} catch (Exception ex) {
+				logger.error("releaseSession() failed");
+			}
+		}
+		return col;
+	}		
+	
 	public static Collection getUnassignedMemberReports(Long teamId,Long memberId) {
 		Collection col = new ArrayList();
 		
@@ -851,6 +894,98 @@ public class TeamUtil {
 		}
 		return col;
 	}	
+	
+	
+	public static void removeMemberLinks(Long memberId,Long links[]) {
+		Session session = null;
+		Transaction tx = null;
+		Query qry = null;
+		AmpTeamMember member = null;
+
+		try {
+			session = PersistenceManager.getSession();
+			member = (AmpTeamMember) session.load(AmpTeamMember.class,memberId);
+			if (member != null) {
+			    Collection col = new ArrayList();
+				tx = session.beginTransaction();
+				
+				Iterator itr = member.getLinks().iterator();
+				while (itr.hasNext()) {
+				    CMSContentItem cmsItem = (CMSContentItem) itr.next();
+				    boolean flag = false;
+				    for (int i = 0;i < links.length;i ++) {
+				        if (cmsItem.getId() == links[i].longValue()) {
+				            flag = true;
+				            session.delete(cmsItem);
+				            break;
+				        }
+				    }
+				    if (!flag) {
+				        col.add(cmsItem);
+				    }
+				}
+				member.setLinks(new HashSet(col));
+				session.update(member);
+				tx.commit();
+			}
+		} catch (Exception e) {
+			logger.error("Unable to remove members link" + e.getMessage());
+			e.printStackTrace(System.out);
+			if (tx != null) {
+				try {
+					tx.rollback();
+				} catch (Exception rbf) {
+					logger.error("Roll back failed");
+				}
+			}
+		} finally {
+			try {
+				if (session != null) {
+					PersistenceManager.releaseSession(session);
+				}
+			} catch (Exception ex) {
+				logger.error("releaseSession() failed");
+			}
+		}
+	}			
+	
+	public static void addLinkToMember(Long memberId,CMSContentItem cmsItem) {
+		Session session = null;
+		Transaction tx = null;
+		Query qry = null;
+		AmpTeamMember member = null;
+
+		try {
+			session = PersistenceManager.getSession();
+			member = (AmpTeamMember) session.load(AmpTeamMember.class,memberId);
+			if (member != null) {
+				tx = session.beginTransaction();
+				if (member.getLinks() == null) 
+				    member.setLinks(new HashSet());
+				member.getLinks().add(cmsItem);
+				session.update(member);
+				tx.commit();
+			}
+		} catch (Exception e) {
+			logger.error("Unable to add Links to members" + e.getMessage());
+			e.printStackTrace(System.out);
+			if (tx != null) {
+				try {
+					tx.rollback();
+				} catch (Exception rbf) {
+					logger.error("Roll back failed");
+				}
+			}
+		} finally {
+			try {
+				if (session != null) {
+					PersistenceManager.releaseSession(session);
+				}
+			} catch (Exception ex) {
+				logger.error("releaseSession() failed");
+			}
+		}
+	}		
 	
 	public static void assignReportsToMember(Long memberId,Long reports[]) {
 		Session session = null;

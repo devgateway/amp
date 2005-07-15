@@ -42,6 +42,7 @@
 		   document.aimEditActivityForm.action = "<%= addPhyProg %>";
 			document.aimEditActivityForm.target = window.opener.name;
 		   document.aimEditActivityForm.submit();
+		window.opener.document.aimEditActivityForm.currUrl.value="";
 			window.close();
 		}
 	}	
@@ -54,6 +55,10 @@
 		window.opener.document.aimEditActivityForm.currUrl.value="";
 	}
 
+	function closeWindow() {
+		window.opener.document.aimEditActivityForm.currUrl.value="";
+		window.close();
+	}
 -->
 </script>
 
@@ -143,7 +148,7 @@
 														<input type="reset" value="Clear" class="dr-menu" tabindex="5">
 													</td>
 													<td>
-														<input type="button" value="Close" class="dr-menu" onclick="javascript:window.close()"
+														<input type="button" value="Close" class="dr-menu" onclick="closeWindow()"
 														tabindex="6">
 													</td>
 												</tr>

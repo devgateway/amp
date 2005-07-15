@@ -34,7 +34,7 @@ import org.digijava.module.aim.helper.SbpJrxml;
 public class SectorByProjectPDF	extends Action 
 {
 	private static Logger logger = Logger.getLogger(SectorByProjectPDF.class) ;
-		  
+	private static int fieldHeight = 0; 	 	  
 	public ActionForward execute(ActionMapping mapping,
 								ActionForm form,
 								javax.servlet.http.HttpServletRequest request,
@@ -217,12 +217,18 @@ public class SectorByProjectPDF	extends Action
 								isProject = true;
 								col = col + 1;
 								data[row][col] = multiReport.getSector();
+								calculateFieldHeight(multiReport.getSector());
+								
 								col = col+ 1;
 								data[row][col] = teamDonors.getDonorAgency();
+								calculateFieldHeight(teamDonors.getDonorAgency());
+								
 								project = (Project)projIter.next();
 
 								col= col+ 1;
 								data[row][col] = project.getName();
+								calculateFieldHeight(project.getName());
+								
 								ampFunds = new ArrayList(project.getAmpFund());
 								Iterator fundIter = ampFunds.iterator();
 								if( ampFunds.isEmpty() == false )
@@ -315,6 +321,8 @@ public class SectorByProjectPDF	extends Action
 						col = 5;
 						termFund = (TermFund)totatSecTermAssistFdIter.next();
 						data[row][col] = "Total " + termFund.getTermAssistName();
+						calculateFieldHeight(data[row][col].toString());
+						
 						Collection termFundTotals = new ArrayList(termFund.getTermFundTotal());
 						Iterator termFundTotalIter = termFundTotals.iterator();
 						while(termFundTotalIter.hasNext())
@@ -346,6 +354,8 @@ public class SectorByProjectPDF	extends Action
 				data[row][4] = donor;
 				
 				data[row][col] = "Total for " + multiReport.getSector();
+				calculateFieldHeight(data[row][col].toString());
+				
 				yy = yyTmp;
 				Collection totalSectorFunds = new ArrayList(multiReport.getTotalSectorFund());
 				Iterator totalSectorFundIter  = totalSectorFunds.iterator();
@@ -385,6 +395,8 @@ public class SectorByProjectPDF	extends Action
 						col = 5;
 						termFund = (TermFund)totalTeamTermAssistFundIter.next();
 						data[row][col] = "Total " + termFund.getTermAssistName();
+						calculateFieldHeight(data[row][col].toString());
+						
 						Collection termFundTotals = new ArrayList(termFund.getTermFundTotal());
 						Iterator termFundTotalIter = termFundTotals.iterator();
 						while(termFundTotalIter.hasNext())
@@ -458,6 +470,10 @@ public class SectorByProjectPDF	extends Action
 			flag = 0;	
 			logger.info("Collection empty");
 		}
+		
+		int height = (( fieldHeight / 25 ) * 10 ) + 50;
+		logger.info(" Column Height = " + height );
+
 		if(flag == 1)
 		{
 			
@@ -487,7 +503,8 @@ public class SectorByProjectPDF	extends Action
 			String realPathJrxml = s.getServletContext().getRealPath(
 									"/WEB-INF/classes/org/digijava/module/aim/reports/SectorByProjectPdf.jrxml");
 			SbpJrxml jrxml = new SbpJrxml();
-			jrxml.createJrxml(yyCnt, realPathJrxml);
+			// calling dynamic jrxml
+			jrxml.createJrxml(yyCnt, realPathJrxml, height);
 			JasperCompileManager.compileReportToFile(realPathJrxml);
 			byte[] bytes = null;
 			try
@@ -522,5 +539,12 @@ public class SectorByProjectPDF	extends Action
 		}
 		return null;
 	}// end of Execute Func
+
+	void calculateFieldHeight(String input)
+	{
+		System.out.println(" Large ::" + fieldHeight + " :: CUrrent : " + input.length());
+		if(input.length() > fieldHeight)
+			fieldHeight = input.length();
+	}
+
 }// end of Class
- 

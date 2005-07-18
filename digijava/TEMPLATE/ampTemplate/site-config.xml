@@ -257,6 +257,17 @@
 				<page>aim_viewActivityDetails</page>
 				<page>viewbyProjectbyDonor_NoLayout</page>
 				
+				<page>	projectByDonor_NoLayout				</page>
+				<page>	htmlCommitmentbyModality			</page>
+				<page>	htmlMultilateralbyDonor				</page>
+				<page>	htmlQuarterlyMulitlateralbyDonor	</page>
+				<page>	htmlProjectbyDonor					</page>
+				<page>	htmlQuarterlyReportByProject		</page>
+				<page>	htmlSectorbyProject					</page>
+				<page>	htmlQuarterlyReportBySector			</page>
+				<page>	htmlViewProjects					</page>
+				<page>	htmlViewPlannedProjects				</page>
+				
 		 	</module>
 		</page-group> 
 	</site-layout>

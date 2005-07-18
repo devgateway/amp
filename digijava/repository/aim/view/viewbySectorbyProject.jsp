@@ -10,6 +10,15 @@
 <script language="JavaScript">
 <!--
 
+	function openPage()
+	{
+//	 	openResisableWindow(1000, 768);
+		<digi:context name="clearVal" property="context/module/moduleinstance/htmlSectorbyProject.do" />
+		document.aimMulitlateralbyDonorForm.action = "<%= clearVal %>";
+		document.aimMulitlateralbyDonorForm.target = "_blank";
+		document.aimMulitlateralbyDonorForm.submit();
+	}
+
 	function clearFilter()
 	{
 		<digi:context name="clearVal" property="context/module/moduleinstance/viewbySectorbyProject.do" />
@@ -82,7 +91,14 @@
 				<!--	<digi:trn key="aim:team">Team</digi:trn>	-->
 				</td>
 			</tr>
-			
+
+			<logic:notEmpty name="aimMulitlateralbyDonorForm" property="multiReport">
+				<tr>
+					<td>
+						<input type="button" onclick="openPage()" value="Print Preview" class="dr-menu">
+					</td>
+				</tr>
+			</logic:notEmpty>
 <!--  PDF/XLS Links -->		
 	<logic:notEmpty name="aimMulitlateralbyDonorForm" property="multiReport">
 		<tr>	
@@ -726,6 +742,7 @@
 		</tr>
 		</logic:iterate>
 		</logic:notEmpty>
+
 		<logic:notEmpty name="multiReport"  property="totalTeamFund">
 		<tr bgcolor="#F4F4F2"><td align="left" height="21" colspan="2"><strong>
 			<digi:trn key="aim:grandTotal">Grand Total</digi:trn></strong></td>

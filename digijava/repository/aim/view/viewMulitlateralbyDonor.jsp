@@ -10,6 +10,15 @@
 
 <script language="JavaScript">
 <!--
+	
+	function openPage()
+	{
+	 	openResisableWindow(1000, 768);
+		<digi:context name="clearVal" property="context/module/moduleinstance/htmlMultilateralbyDonor.do" />
+		document.aimMulitlateralbyDonorForm.action = "<%= clearVal %>";
+		document.aimMulitlateralbyDonorForm.target = popupPointer.name;
+		document.aimMulitlateralbyDonorForm.submit();
+	}
 
 	function clearFilter()
 	{
@@ -87,6 +96,15 @@
 			<!--		<digi:trn key="aim:team">Team</digi:trn>	-->
 				</td>
 			</tr>
+
+			<logic:notEmpty name="aimMulitlateralbyDonorForm" property="multiReport">
+				<tr>
+					<td width="14" >&nbsp;</td>
+					<td align="left">
+- 						<input type="button" onclick="openPage()" value="Print Preview" class="dr-menu"> 
+					</td>
+				</tr>
+			</logic:notEmpty>
 			
 <!--  PDF/XLS Links -->		
 			<tr>	

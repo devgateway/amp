@@ -10,6 +10,15 @@
 
 <script language="JavaScript">
 <!--
+	function openPage()
+	{
+	 	//openResisableWindow(1000, 768);
+		<digi:context name="clearVal" property="context/module/moduleinstance/htmlQuarterlyReportByProject.do" />
+		document.aimMulitlateralbyDonorForm.action = "<%= clearVal %>";
+//		document.aimMulitlateralbyDonorForm.target = popupPointer.name;
+		document.aimMulitlateralbyDonorForm.target = "_blank";
+		document.aimMulitlateralbyDonorForm.submit();
+	}
 
 	function clearFilter()
 	{
@@ -83,6 +92,13 @@
 				</td>
 			</tr>
 
+			<logic:notEmpty name="aimMulitlateralbyDonorForm" property="multiReport">
+				<tr>
+					<td>
+						<input type="button" onclick="openPage()" value="Print Preview" class="dr-menu">
+					</td>
+				</tr>
+			</logic:notEmpty>
 
 		<logic:notEmpty name="aimMulitlateralbyDonorForm" property="multiReport">
 			<!--  PDF/XLS Links -->		

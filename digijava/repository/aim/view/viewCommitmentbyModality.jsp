@@ -9,6 +9,14 @@
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
 <script language="JavaScript">
 <!--
+	function openPage()
+	{
+	 	openResisableWindow(1000, 768);
+		<digi:context name="clearVal" property="context/module/moduleinstance/htmlCommitmentbyModality.do" />
+		document.aimCommitmentbyDonorForm.action = "<%= clearVal %>";
+		document.aimCommitmentbyDonorForm.target = popupPointer.name;
+		document.aimCommitmentbyDonorForm.submit();
+	}
 
 	function clearFilter()
 	{
@@ -68,7 +76,7 @@
 				<bean:write name="aimCommitmentbyDonorForm" property="perspective"/>&nbsp;
 				<digi:trn key="aim:perspective">perspective</digi:trn></td>
 				<td width="2">&nbsp;</td>
-            </tr>
+			</tr>
 			<tr>
 				<td colspan=3 class=subtitle-blue align=center>
 					<digi:trn key="aim:TrendAnalysisTitle">
@@ -122,6 +130,16 @@
            <td valign="top" class="r-dotted-lg">&nbsp;</td>
            </tr>
 		   -->
+
+		   <logic:notEmpty name="aimCommitmentbyDonorForm" property="report">
+				<tr>
+					<td width="14" class="r-dotted-lg">&nbsp;</td>
+					<td align="left">
+						<input type="button" onclick="openPage()" value="Print Preview" class="dr-menu">
+					</td>
+				</tr>
+			</logic:notEmpty>
+
 			<tr>
 				<td width="14" class="r-dotted-lg">&nbsp;</td>
 						<td valign="bottom" class="crumb">

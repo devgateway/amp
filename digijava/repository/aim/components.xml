@@ -174,8 +174,22 @@
 	<page page="loadCurrencyRates" name="aim_loadCurrencyRates" title="AMP - Load Currency Rates" />	
 	<page page="printerFriendlyPreview" name="aim_printerFriendlyPreview" title="AMP - Preview Activity" />	
 	
-	<page name="projectByDonor_NoLayout" title=" : Reports" />
-	<page page="projectByDonor_NoLayout" name="viewbyProjectbyDonor_NoLayout" title=" : Reports" />
+
+	<!-- Printer Friendly HTML Reports -->
+	<page name="projectByDonor_NoLayout" title=" : Annual Report By Project " />
+	<page name="htmlCommitmentbyModality"	title=" : Annual Project Detail Report " />
+	<page name="htmlMultilateralbyDonor"		title=" : Annual Report By Type of Assistance " />
+	<page name="htmlQuarterlyMulitlateralbyDonor"	title=" : Quarterly Report By Type of Assistance " />
+	<page name="htmlQuarterlyReportByProject"	title=" : Quarterly Report By Project" />
+	<page name="htmlSectorbyProject"				title=" :  Annual Report By Sector " />
+	<page name="htmlQuarterlyReportBySector"		title=" : Quarterly Report By Sector " />
+	<page name="htmlViewProjects"				title=" :  Annual Forecasting Report " />
+	<page name="htmlViewPlannedProjects"			title=" :Quarterly Project Detail Report " />
+	
+	
+	<!-- Advanced Report Manager -->
+	
+	<page name="AdvancedReportManager" title=" - Advanced Report Manager" />
 
 		
 </secondary-pages>

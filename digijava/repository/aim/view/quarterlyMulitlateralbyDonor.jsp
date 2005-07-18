@@ -11,6 +11,15 @@
 <script language="JavaScript">
 <!--
 
+	function openPage()
+	{
+	 	//openResisableWindow(1000, 768);
+		<digi:context name="clearVal" property="context/module/moduleinstance/htmlQuarterlyMulitlateralbyDonor.do" />
+		document.aimMulitlateralbyDonorForm.action = "<%= clearVal %>";
+		document.aimMulitlateralbyDonorForm.target = "_blank";
+		document.aimMulitlateralbyDonorForm.submit();
+	}
+
 	function clearFilter()
 	{
 		<digi:context name="clearVal" property="context/module/moduleinstance/quarterlyMulitlateralbyDonor.do" />
@@ -72,7 +81,7 @@
 				<digi:trn key="aim:perspective">perspective</digi:trn></td>
               <td width="2">&nbsp;</td>
               </tr>
-		<tr>
+			<tr>
 				<td colspan=3 class=subtitle-blue align=center>
 					<digi:trn key="aim:QuarterlyMultilateralbyDonorTitle">
 					<bean:write name="aimMulitlateralbyDonorForm" property="reportName" />
@@ -85,6 +94,15 @@
 				<!--	<digi:trn key="aim:team">Team</digi:trn>	-->
 				</td>
 			</tr>
+			
+			<logic:notEmpty name="aimMulitlateralbyDonorForm" property="multiReport">
+				<tr>
+					<td colspan=4 align="left">
+						<input type="button" onclick="openPage()" value="Print Preview" class="dr-menu">
+					</td>
+				</tr>
+			</logic:notEmpty>				
+
 			<!--  PDF/XLS Links -->		
 			<tr>	
 			<td width="0" >&nbsp;</td>

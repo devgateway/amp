@@ -10,6 +10,15 @@
 <script language="JavaScript">
 <!--
 
+	function openPage()
+	{
+	 	//openResisableWindow(1000, 768);
+		<digi:context name="clearVal" property="context/module/moduleinstance/htmlQuarterlyReportBySector.do" />
+		document.aimMulitlateralbyDonorForm.action = "<%= clearVal %>";
+		document.aimMulitlateralbyDonorForm.target = "_blank";
+		document.aimMulitlateralbyDonorForm.submit();
+	}
+
 	function popup_pdf() {
 		openResisableWindow(800, 600);
 		<digi:context name="pdf" property="context/module/moduleinstance/quarterlyReportBySectorPdf.do" />
@@ -40,7 +49,7 @@
 <jsp:include page="teamPagesHeader.jsp" flush="true" />
 <table width="772" border="0" cellpadding="10" cellspacing="0" bgcolor="#FFFFFF" class="r-dotted">
 <tr>
-	
+
 	<td width="14" class="r-dotted-lg">&nbsp;</td>
 	<td width="750" align="left" valign="top" >
 	<table width="100%"  border="0" cellpadding="5" cellspacing="0" >
@@ -68,7 +77,15 @@
 				<!--	<digi:trn key="aim:team">Team</digi:trn>	-->
 				</td>
 			</tr>
-			
+
+			<logic:notEmpty name="aimMulitlateralbyDonorForm" property="multiReport">
+				<tr>
+					<td>
+						<input type="button" onclick="openPage()" value="Print Preview" class="dr-menu">
+					</td>
+				</tr>
+			</logic:notEmpty>
+
 			<tr><td width="9" ></td>
 			<!--  PDF/XLS Links -->		
 	<logic:notEmpty name="aimMulitlateralbyDonorForm" property="multiReport">
@@ -293,7 +310,7 @@
 
 		</tr>-->
    		<tr>
-              <td valign="top" class="r-dotted-lg">&nbsp;</td>
+			<td valign="top" class="r-dotted-lg">&nbsp;</td>
               <td >
 
 			  <table width="100%"  border="0" cellpadding="0" cellspacing="0" >
@@ -694,7 +711,7 @@
       
 			         
 		  </td>
-          <td valign="top" class="r-dotted-lg">&nbsp;</td>
+		  <td valign="top" class="r-dotted-lg">&nbsp;</td>
 		</tr>
 
 </table>

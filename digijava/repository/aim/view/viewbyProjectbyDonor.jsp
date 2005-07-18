@@ -11,6 +11,15 @@
 <script language="JavaScript">
 <!--
 
+	function openPage()
+	{
+	 	//openResisableWindow(1000, 768);
+		<digi:context name="clearVal" property="context/module/moduleinstance/projectByDonor_NoLayout.do" />
+		document.aimMulitlateralbyDonorForm.action = "<%= clearVal %>";
+		document.aimMulitlateralbyDonorForm.target = "_blank";
+		document.aimMulitlateralbyDonorForm.submit();
+	}
+	
 	function clearFilter()
 	{
 		<digi:context name="clearVal" property="context/module/moduleinstance/viewbyProjectbyDonor.do" />
@@ -83,6 +92,13 @@
 				<!--	<digi:trn key="aim:team">Team</digi:trn> -->
 				</td>
 			</tr>
+			<logic:notEmpty name="aimMulitlateralbyDonorForm" property="multiReport">
+			<tr>
+				<td>
+					<input type="button" onclick="openPage()" value="Print Preview" class="dr-menu">
+				</td>
+			</tr>
+			</logic:notEmpty>
 
 <logic:notEmpty name="aimMulitlateralbyDonorForm" property="multiReport">
 <!--  PDF/XLS Links -->		
@@ -543,6 +559,7 @@
 			</tr>
 		</logic:iterate></logic:notEmpty>
 		</logic:iterate>
+
 		<logic:notEmpty name="donors"  property="totalDonorTermAssistFund">
 		<logic:iterate name="donors"  property="totalDonorTermAssistFund" id="totalDonorTermAssistFund" type="org.digijava.module.aim.helper.TermFund">
 		<tr bgcolor="#C9C9C7"><td>&nbsp;</td>
@@ -591,6 +608,7 @@
 			</td>
 		</tr>
 	</logic:iterate></logic:notEmpty>
+
 		<tr bgcolor="#C9C9C7"><td>&nbsp;</td>
 			<td align="left" height="21">
 			<digi:trn key="aim:totalFor">Total for </digi:trn>
@@ -638,7 +656,8 @@
 			</td>
 		</tr>
 		
-				</logic:iterate>
+	</logic:iterate>
+
 	<logic:iterate name="multiReport"  property="totalTeamTermAssistFund" id="totalTeamTermAssistFund" type="org.digijava.module.aim.helper.TermFund">
 		<tr bgcolor="#C9C9C7"><td>&nbsp;</td>
 			<td align="left" height="21">Total <bean:write name="totalTeamTermAssistFund" property="termAssistName" /></td>
@@ -686,6 +705,7 @@
 			</td>
 		</tr>
 	</logic:iterate>		
+
 	<tr bgcolor="#C9C9C7"><td>&nbsp;</td>
 			<td align="left" height="21">
 			<digi:trn key="aim:totalFor">Total for </digi:trn>

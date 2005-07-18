@@ -411,7 +411,7 @@ public class QuarterlyReportBySectorPDF extends Action
 				}
 				else
 				{
-					logger.info("*******     Count != SECTOR SIXE **********");
+					logger.info("*******     Count != SECTOR SIX **********");
 				}
 				flag = 1;
 				row = row + 1;

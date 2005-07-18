@@ -140,8 +140,8 @@ public class ProjectbyDonorPDF extends Action {
   		rowCnt = rowCnt + drSize + (curr + 1);
   		colCnt = 3 + 3 + yyCnt + (yyCnt *3) + 3;
 // 		logger.info("Curr Value " + curr );
-// 		logger.info(rowCnt +": ROW : COL " + colCnt);  		
-		Object[][] data = new Object[rowCnt][colCnt];
+ 		logger.info(rowCnt +": ROW : COL " + colCnt);  		
+		Object[][] data = new Object[rowCnt+2][colCnt];
 		col = row = 0;
 		if(coll.size() > 0)
 		{	
@@ -385,6 +385,7 @@ public class ProjectbyDonorPDF extends Action {
 				//data[row][4] = teamDonors.getDonorAgency();
 				Collection totalTeamFund = new ArrayList(rep.getTotalTeamFund());
 				Iterator totalTeamFundIter = totalTeamFund.iterator();
+				logger.info("COLLLL :"+col);
 				data[row][col] = "Total for " + rep.getTeamName();
 				calculateFieldHeight(data[row][col].toString());
 				

@@ -146,7 +146,7 @@ public class ProjectbyDonorXLS extends Action {
   		colCnt = 3 + 3 + yyCnt + (yyCnt *3) + 3;
   		logger.info("Curr Value " + curr );
   		logger.info(rowCnt +": ROW : COL " + colCnt);  		
-		Object[][] data = new Object[rowCnt][colCnt];
+		Object[][] data = new Object[rowCnt+1][colCnt];
 		StringBuffer sb = new StringBuffer();
 		StringBuffer sb2= new StringBuffer();
 		col = row = 0;

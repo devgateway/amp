@@ -20,8 +20,8 @@ public class QuarterlyReportBySectorXlsJrxml
 			int center=0;//(12-n)*30;
 			int x=(0+center),x1=0,y=0,y1=0,xl=0,yl=0;
 			int textkey=11,linekey=21,c=0;
-			
 			int pagesize=(60*n)+120;
+	
 			p2.println("<!-- Created with iReport - A designer for JasperReports -->");
 			p2.println("<!DOCTYPE jasperReport PUBLIC '//JasperReports//DTD Report Design//EN' 'http://jasperreports.sourceforge.net/dtds/jasperreport.dtd'>");
 			p2.println("<jasperReport");

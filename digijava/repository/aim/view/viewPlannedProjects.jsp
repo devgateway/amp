@@ -11,6 +11,15 @@
 <script language="JavaScript">
 <!--
 
+	function openPage()
+	{
+	 	openResisableWindow(1000, 768);
+		<digi:context name="clearVal" property="context/module/moduleinstance/htmlViewPlannedProjects.do" />
+		document.aimCommitmentbyDonorForm.action = "<%= clearVal %>";
+		document.aimCommitmentbyDonorForm.target = popupPointer.name;
+		document.aimCommitmentbyDonorForm.submit();
+	}
+
 	function popup_pdf() {
 		openResisableWindow(800, 600);
 		<digi:context name="pdf" property="context/module/moduleinstance/PlannedProjectPdf.do" />
@@ -75,6 +84,15 @@
 				<!--	<digi:trn key="aim:team">Team</digi:trn>	-->
 				</td>
 			</tr>
+			
+			<logic:notEmpty name="aimCommitmentbyDonorForm" property="report">
+				<tr>
+				<td width="14" class="r-dotted-lg">&nbsp;</td>
+				<td>
+						<input type="button" onclick="openPage()" value="Print Preview" class="dr-menu">
+					</td>
+				</tr>
+			</logic:notEmpty>	
 			
 <!--  PDF/XLS Links -->		
 <logic:notEmpty name="aimCommitmentbyDonorForm" property="report">

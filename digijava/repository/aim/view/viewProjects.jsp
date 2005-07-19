@@ -10,6 +10,15 @@
 <script language="JavaScript">
 <!--
 
+	function openPage()
+	{
+	 	//openResisableWindow(1000, 768);
+		<digi:context name="clearVal" property="context/module/moduleinstance/htmlViewProjects.do" />
+		document.aimCommitmentbyDonorForm.action = "<%= clearVal %>";
+		document.aimCommitmentbyDonorForm.target = "_blank";
+		document.aimCommitmentbyDonorForm.submit();
+	}
+
 	function clearFilter()
 	{
 		<digi:context name="clearVal" property="context/module/moduleinstance/viewProjects.do" />
@@ -83,7 +92,16 @@
 			<!--		<digi:trn key="aim:team">Team</digi:trn>		-->
 				</td>
 			</tr>
-			
+
+			<logic:notEmpty name="aimCommitmentbyDonorForm"  property="report">
+				<tr>
+					<td>
+						<input type="button" onclick="openPage()" value="Print Preview" class="dr-menu">
+					</td>
+				</tr>
+			</logic:notEmpty>			
+
+
 <!--  PDF/XLS Links -->	
 <logic:notEmpty name="aimCommitmentbyDonorForm"  property="report">
 		<tr>	

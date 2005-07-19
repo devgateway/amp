@@ -29,6 +29,14 @@ function addOrgs(value) {
 		popupPointer.focus();
 	}
 } 	
+function resetAll()
+{
+	<digi:context name="resetAll" property="context/module/moduleinstance/resetAll.do" />
+	document.aimEditActivityForm.action = "<%= resetAll %>";
+	document.aimEditActivityForm.target = "_self";
+	document.aimEditActivityForm.submit();
+	return true;
+}
 
 function removeSelOrgs(value) {
 	document.aimEditActivityForm.item.value = value;
@@ -478,7 +486,7 @@ function removeSelOrgs(value) {
 											<input type="submit" value="Next >> " class="dr-menu" onclick="gotoStep(7)">
 										</td>
 										<td>
-											<input type="reset" value="Reset" class="dr-menu">
+											<input type="reset" value="Reset" class="dr-menu" onclick="return resetAll()">
 										</td>
 									</tr>
 								</table>

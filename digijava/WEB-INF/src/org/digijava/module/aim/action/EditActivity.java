@@ -163,8 +163,7 @@ public class EditActivity extends Action {
 						temp.add(projId);
 					}
 					if (temp != null && temp.size() > 0) {
-						OrgProjectId orgProjectIds[] = new OrgProjectId[temp
-								.size()];
+						OrgProjectId orgProjectIds[] = new OrgProjectId[temp.size()];
 						Object arr[] = temp.toArray();
 						for (int i = 0; i < arr.length; i++) {
 							orgProjectIds[i] = (OrgProjectId) arr[i];

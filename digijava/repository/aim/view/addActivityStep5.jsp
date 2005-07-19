@@ -101,6 +101,15 @@ function removeSelDocuments() {
 	return true;
 }
 
+function resetAll()
+{
+	<digi:context name="resetAll" property="context/module/moduleinstance/resetAll.do" />
+	document.aimEditActivityForm.action = "<%= resetAll %>";
+	document.aimEditActivityForm.target = "_self";
+	document.aimEditActivityForm.submit();
+	return true;
+}
+
 function removeSelLinks() {
 	var flag = validate(2);
 	if (flag == false) return false;
@@ -400,7 +409,7 @@ function removeSelLinks() {
 											<input type="submit" value="Next >> " class="dr-menu" onclick="gotoStep(6)">
 										</td>
 										<td>
-											<input type="reset" value="Reset" class="dr-menu">
+											<input type="reset" value="Reset" class="dr-menu" onclick="return resetAll()">
 										</td>
 									</tr>
 								</table>

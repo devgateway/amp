@@ -6,10 +6,23 @@
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
 
-<digi:instance property="aimEditActivityForm" />
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/addActivity.js"/>"></script>
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
 
+<script language="JavaScript">
+<!--
+function resetAll()
+{
+	<digi:context name="resetAll" property="context/module/moduleinstance/resetAll.do" />
+	document.aimEditActivityForm.action = "<%= resetAll %>";
+	document.aimEditActivityForm.target = "_self";
+	document.aimEditActivityForm.submit();
+	return true;
+}
+-->
+</script>
+
+<digi:instance property="aimEditActivityForm" />
 <digi:form action="/addActivity.do" method="post">
 <html:hidden property="step" />
 <table width="100%" cellPadding="0" cellSpacing="0" vAlign="top" align="left">
@@ -208,7 +221,7 @@
 											<input type="button" value="Preview" class="dr-menu" onclick="previewClicked()">
 										</td>
 										<td>
-											<input type="reset" value="Reset" class="dr-menu">
+											<input type="reset" value="Reset" class="dr-menu" onclick="return resetAll()">
 										</td>
 									</tr>
 								</table>

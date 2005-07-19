@@ -98,6 +98,15 @@ function removeSelSectors() {
 			return true;
 } 	
 
+function resetAll()
+{
+	<digi:context name="resetAll" property="context/module/moduleinstance/resetAll.do" />
+	document.aimEditActivityForm.action = "<%= resetAll %>";
+	document.aimEditActivityForm.target = "_self";
+	document.aimEditActivityForm.submit();
+	return true;
+}
+
 function removeSelLocations() {
 		  var flag = validate(1);
 		  if (flag == false) return false;
@@ -505,7 +514,7 @@ function validateForm() {
 											<input type="submit" value="Next >> " class="dr-menu" onclick="return validateForm()">
 										</td>
 										<td>
-											<input type="reset" value="Reset" class="dr-menu">
+											<input type="reset" value="Reset" class="dr-menu" onclick="return resetAll()">
 										</td>
 									</tr>
 								</table>

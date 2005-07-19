@@ -74,6 +74,15 @@ function removeSelOrganisations() {
 	return true;
 }
 
+function resetAll()
+{
+	<digi:context name="resetAll" property="context/module/moduleinstance/resetAll.do" />
+	document.aimEditActivityForm.action = "<%= resetAll %>";
+	document.aimEditActivityForm.target = "_self";
+	document.aimEditActivityForm.submit();
+	return true;
+}
+
 function validateForm() {
 	if (trim(document.aimEditActivityForm.title.value) == "") {
 		alert("Please enter title");
@@ -545,7 +554,7 @@ function reviseCloseDate() {
 											<html:submit value="Next >>" styleClass="dr-menu" onclick="return validateForm()"/>
 										</td>
 										<td>
-											<html:reset value="Reset" styleClass="dr-menu"/>
+											<html:reset value="Reset" styleClass="dr-menu" onclick="return resetAll()"/>
 										</td>
 									</tr>
 								</table>

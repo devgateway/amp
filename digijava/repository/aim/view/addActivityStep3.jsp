@@ -80,6 +80,14 @@
 			popupPointer.focus();	  
 		}
 	} 
+	function resetAll()
+	{
+		<digi:context name="resetAll" property="context/module/moduleinstance/resetAll.do" />
+		document.aimEditActivityForm.action = "<%= resetAll %>";
+		document.aimEditActivityForm.target = "_self";
+		document.aimEditActivityForm.submit();
+		return true;
+	}
 	
 	function removeSelOrganisations() {
 		var flag = validate();
@@ -556,7 +564,7 @@
 													<input type="submit" value="Next >> " class="dr-menu" onclick="gotoStep(4)">
 												</td>
 												<td>
-													<input type="reset" value="Reset" class="dr-menu">
+													<input type="reset" value="Reset" class="dr-menu" onclick="return resetAll()">
 												</td>
 											</tr>
 										</table>

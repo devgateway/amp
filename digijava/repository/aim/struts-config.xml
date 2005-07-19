@@ -6,8 +6,8 @@
 <form-beans>
 
   	<form-bean
-      name="aimMyDesktopForm"
-      type="org.digijava.module.aim.form.MyDesktopForm" />
+	      	name="aimMyDesktopForm"
+    		type="org.digijava.module.aim.form.MyDesktopForm" />
 
 	<form-bean
       		name="aimAddLocationForm"
@@ -42,119 +42,122 @@
       		type="org.digijava.module.aim.form.ViewOrgForm" />
       		
 	<form-bean
-      name="aimMainProjectDetailsForm"
-      type="org.digijava.module.aim.form.MainProjectDetailsForm" />
+      		name="aimMainProjectDetailsForm"
+      		type="org.digijava.module.aim.form.MainProjectDetailsForm" />
 	  
 	<form-bean
-      name="aimChannelOverviewForm"
-      type="org.digijava.module.aim.form.ChannelOverviewForm" />
+      		name="aimChannelOverviewForm"
+      		type="org.digijava.module.aim.form.ChannelOverviewForm" />
 
 	<form-bean
-      name="aimChannelOverviewDescriptionForm"
-      type="org.digijava.module.aim.form.ChannelOverviewDescriptionForm" />
+      		name="aimChannelOverviewDescriptionForm"
+      		type="org.digijava.module.aim.form.ChannelOverviewDescriptionForm" />
 
 	<form-bean
-      name="aimChannelOverviewObjectiveForm"
-      type="org.digijava.module.aim.form.ChannelOverviewObjectiveForm" />
+      		name="aimChannelOverviewObjectiveForm"
+      		type="org.digijava.module.aim.form.ChannelOverviewObjectiveForm" />
 
       
    <form-bean
-      name="aimFinancialOverviewForm"
-      type="org.digijava.module.aim.form.FinancialOverviewForm" />
+      		name="aimFinancialOverviewForm"
+      		type="org.digijava.module.aim.form.FinancialOverviewForm" />
       
    <form-bean
-   	  name="aimQuarterlyInfoForm"
-   	  type="org.digijava.module.aim.form.QuarterlyInfoForm" />
+   	  		name="aimQuarterlyInfoForm"
+   	  		type="org.digijava.module.aim.form.QuarterlyInfoForm" />
    	  
    <form-bean
-   	  name="aimYearlyInfoForm"
-   	  type="org.digijava.module.aim.form.YearlyInfoForm" />
+   	  		name="aimYearlyInfoForm"
+   	  		type="org.digijava.module.aim.form.YearlyInfoForm" />
    	  
    <form-bean
-   		name="aimYearlyComparisonsForm"
-   		type="org.digijava.module.aim.form.YearlyComparisonsForm" />
+   			name="aimYearlyComparisonsForm"
+   			type="org.digijava.module.aim.form.YearlyComparisonsForm" />
    		
    	<form-bean
-   		name="aimQuarterlyComparisonsForm"
-   		type="org.digijava.module.aim.form.QuarterlyComparisonsForm" />	
+   			name="aimQuarterlyComparisonsForm"
+   			type="org.digijava.module.aim.form.QuarterlyComparisonsForm" />	
       
     <form-bean
-   	  name="aimFinancingBreakdownForm"
-   	  type="org.digijava.module.aim.form.FinancingBreakdownForm" />
+   	  		name="aimFinancingBreakdownForm"
+   	  		type="org.digijava.module.aim.form.FinancingBreakdownForm" />
 
 	<form-bean
-		name="aimQuarterlyDiscrepancyForm"
-		type="org.digijava.module.aim.form.QuarterlyDiscrepancyForm"/>
+			name="aimQuarterlyDiscrepancyForm"
+			type="org.digijava.module.aim.form.QuarterlyDiscrepancyForm"/>
 		
 	<form-bean
-		name="aimYearlyDiscrepancyForm"
-		type="org.digijava.module.aim.form.YearlyDiscrepancyForm"/>
+			name="aimYearlyDiscrepancyForm"
+			type="org.digijava.module.aim.form.YearlyDiscrepancyForm"/>
 
 		
 	<form-bean
-		name="aimQuarterlyDiscrepancyAllForm"
-		type="org.digijava.module.aim.form.QuarterlyDiscrepancyAllForm"/>
+			name="aimQuarterlyDiscrepancyAllForm"
+			type="org.digijava.module.aim.form.QuarterlyDiscrepancyAllForm"/>
 		
 	<form-bean
-		name="aimYearlyDiscrepancyAllForm"
-		type="org.digijava.module.aim.form.YearlyDiscrepancyAllForm"/>
+			name="aimYearlyDiscrepancyAllForm"
+			type="org.digijava.module.aim.form.YearlyDiscrepancyAllForm"/>
 
    <form-bean
-      name="aimPhysicalProgressForm"
-      type="org.digijava.module.aim.form.PhysicalProgressForm" />
+      		name="aimPhysicalProgressForm"
+      		type="org.digijava.module.aim.form.PhysicalProgressForm" />
 	
    <form-bean
-      name="aimKnowledgeForm"
-      type="org.digijava.module.aim.form.KnowledgeForm" />  
+      		name="aimKnowledgeForm"
+      		type="org.digijava.module.aim.form.KnowledgeForm" />  
 
 
-<form-bean name="addAmpProjectDetailsForm" type="org.digijava.module.aim.form.AddAmpProjectDetailsForm" />
+	<form-bean 
+			name="addAmpProjectDetailsForm" 
+			type="org.digijava.module.aim.form.AddAmpProjectDetailsForm" />
 	
 	<form-bean
-			  name="editPhysicalProgressForm"    type="org.digijava.module.aim.form.EditPhysicalProgressForm" />
+			name="editPhysicalProgressForm"    
+			type="org.digijava.module.aim.form.EditPhysicalProgressForm" />
 
 	<form-bean
-			  name="aimSectorsForm"
-			  type="org.digijava.module.aim.form.SectorsForm" />
+			name="aimSectorsForm"
+			type="org.digijava.module.aim.form.SectorsForm" />
 
 	<form-bean
-			  name="aimAddSectorForm"
-			  type="org.digijava.module.aim.form.AddSectorForm" />
+			name="aimAddSectorForm"
+			type="org.digijava.module.aim.form.AddSectorForm" />
 
 	<form-bean
-      			name="aimStatusListForm"
-      			type="org.digijava.module.aim.form.StatusListForm" />
+      		name="aimStatusListForm"
+      		type="org.digijava.module.aim.form.StatusListForm" />
       
      <form-bean
-      			name="aimStatusItemForm"
-      			type="org.digijava.module.aim.form.StatusItemForm" />
+      		name="aimStatusItemForm"
+      		type="org.digijava.module.aim.form.StatusItemForm" />
 			  
      <form-bean
-      			name="aimRelatedLinksForm"
-      			type="org.digijava.module.aim.form.RelatedLinksForm" />			  
+      		name="aimRelatedLinksForm"
+      		type="org.digijava.module.aim.form.RelatedLinksForm" />			  
 
-<form-bean 
-	name="aimCommitmentbyDonorForm" 
-	type="org.digijava.module.aim.form.CommitmentbyDonorForm" />
-<form-bean 
-	name="aimMulitlateralbyDonorForm" 
-	type="org.digijava.module.aim.form.MulitlateralbyDonorForm" />
+	<form-bean 
+			name="aimCommitmentbyDonorForm" 
+			type="org.digijava.module.aim.form.CommitmentbyDonorForm" />
+	<form-bean 
+			name="aimMulitlateralbyDonorForm" 
+			type="org.digijava.module.aim.form.MulitlateralbyDonorForm" />
 
-	<form-bean name="aimCommitmentbySectorForm" type="org.digijava.module.aim.form.CommitmentbySectorForm" />
-
-
+	<form-bean 
+			name="aimCommitmentbySectorForm" 
+			type="org.digijava.module.aim.form.CommitmentbySectorForm" />
 
 	<form-bean
-			  name="aimThemeForm"
-			  type="org.digijava.module.aim.form.ThemeForm" />
+			name="aimThemeForm"
+			type="org.digijava.module.aim.form.ThemeForm" />
 
     <form-bean
-     			name="aimUserEmailForm"
-     			type="org.digijava.module.um.form.UserEmailForm" />
+     		name="aimUserEmailForm"
+     		type="org.digijava.module.um.form.UserEmailForm" />
 	
 	<form-bean
-			  name="aimAddThemeForm"
-			  type="org.digijava.module.aim.form.AddThemeForm" />
+			name="aimAddThemeForm"
+			type="org.digijava.module.aim.form.AddThemeForm" />
 				  
 	<form-bean
 			  name="aimViewSectorForm"
@@ -257,10 +260,11 @@
 			  type="org.digijava.module.aim.form.CurrencyRateForm" />
 	
 	<form-bean
-      name="aimDonorDataImportForm"
-      type="org.digijava.module.aim.form.DonorDataImportForm" />
+      		name="aimDonorDataImportForm"
+      		type="org.digijava.module.aim.form.DonorDataImportForm" />
 
 	<form-bean
+      	
       name="aimUserDetailForm"
       type="org.digijava.module.aim.form.UserDetailForm" />
       
@@ -272,10 +276,12 @@
       
 	</form-beans> 
 
-  <global-forwards>
+
+<global-forwards>
 			 <forward name="viewMyDesktop" path="/aim/viewMyDesktop.do" /> 
 			 <forward name="index" path="/aim/index.do" /> 
-  </global-forwards>
+</global-forwards>
+
 
 <action-mappings>	
 	<action 
@@ -285,15 +291,15 @@
 	    <forward name="forward" path="/showLayout.do?layout=aim_viewUserProfile" />
     </action>
 
-
 	<action 
-			  name="aimLoginForm"
-			  type="org.digijava.module.aim.action.ViewAmp" 
-			  scope="request" validate="false" path="/aim/index">
-			  <forward name="forward" path="/showLayout.do?layout=index" />
+		name="aimLoginForm"
+		type="org.digijava.module.aim.action.ViewAmp" 
+		scope="request" validate="false" path="/aim/index">
+		<forward name="forward" path="/showLayout.do?layout=index" />
     </action>
    
-    <action name="aimMyDesktopForm"
+    <action 
+    	name="aimMyDesktopForm"
      	type="org.digijava.module.aim.action.ViewMyDesktop" 
      	scope="session" validate="false" path="/aim/viewMyDesktop">
     <forward name="forward" path="/showLayout.do?layout=viewMyDesktop" />
@@ -316,21 +322,21 @@
 	 <action name="aimDonorDataImportForm"
      	type="org.digijava.module.aim.action.DonorDataImport" 
      	scope="request" validate="false" path="/aim/donorDataImport">
-    <forward name="forward" path="/showLayout.do?layout=donorDataImport" />
-    <forward name="index" path="/aim/index.do" redirect="true" />
+    	<forward name="forward" path="/showLayout.do?layout=donorDataImport" />
+    	<forward name="index" path="/aim/index.do" redirect="true" />
     </action>
 
 	<action name="aimChannelOverviewDescriptionForm"
      	type="org.digijava.module.aim.action.ViewChannelOverviewDescription" 
      	scope="request" validate="false" path="/aim/viewChannelOverviewDescription">
-    <forward name="forward" path="/showLayout.do?layout=viewChannelOverviewDescription" />
+    	<forward name="forward" path="/showLayout.do?layout=viewChannelOverviewDescription" />
     </action>
-	
+
      
 	<action name="aimYearlyComparisonsForm"
     	type="org.digijava.module.aim.action.YearlyComparisonsFilter"
     	scope="request" validate="false" path="/aim/yearlyComparisonsFilter">
-    <forward name="forward" path="/showLayout.do?layout=viewYearlyComparisons"/>
+    	<forward name="forward" path="/showLayout.do?layout=viewYearlyComparisons"/>
     </action>
 	
 	
@@ -1932,6 +1938,15 @@
 			  <forward name="index" path="/aim/index.do" redirect="true" />			  
 	</action>		
 
+	<action
+			  name="aimEditActivityForm"	
+			  type="org.digijava.module.aim.action.ResetAll"
+			  scope="session"
+			  path="/aim/resetAll">	
+			  <forward name="forward" path="/aim/addActivity.do" redirect="true" />
+			  <forward name="index" path="/aim/index.do" redirect="true" />			  
+	</action>
+	
 	<action
 			  name="aimEditActivityForm"	
 			  type="org.digijava.module.aim.action.RemoveSelRelatedOrgs"

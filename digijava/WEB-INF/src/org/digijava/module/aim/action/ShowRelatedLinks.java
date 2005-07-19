@@ -22,7 +22,6 @@ public class ShowRelatedLinks extends Action {
             HttpServletRequest request,HttpServletResponse response) throws Exception {
         
         MyDesktopForm mdForm = (MyDesktopForm) form;
-        logger.debug("Num Links = " + mdForm.getDocuments().size());
         return mapping.findForward("forward");
     }
 }

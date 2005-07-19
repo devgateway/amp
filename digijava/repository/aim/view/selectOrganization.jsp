@@ -90,7 +90,6 @@
 	}
 
 	function closeWindow() {
-		alert(window.opener.location.href);	  
 		window.opener.document.aimEditActivityForm.currUrl.value="";
 		window.close();
 	}

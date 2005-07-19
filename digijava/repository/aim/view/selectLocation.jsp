@@ -93,10 +93,9 @@
 	function unload() {
 		window.opener.document.aimEditActivityForm.currUrl.value="";
 	}
-
-	function unload() {
+	function closeWindow() {
 		window.opener.document.aimEditActivityForm.currUrl.value="";
-		window.close();
+		window.close();			  
 	}
 
 	function checkEmpty() {

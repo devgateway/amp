@@ -295,7 +295,7 @@
    
     <action name="aimMyDesktopForm"
      	type="org.digijava.module.aim.action.ViewMyDesktop" 
-     	scope="request" validate="false" path="/aim/viewMyDesktop">
+     	scope="session" validate="false" path="/aim/viewMyDesktop">
     <forward name="forward" path="/showLayout.do?layout=viewMyDesktop" />
     <forward name="index" path="/aim/index.do" redirect="true" />
 	 </action>

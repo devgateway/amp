@@ -577,7 +577,7 @@ function showtip()
 								</TR>
 								<TR>
 	   					   	<TD bgColor=#ffffff class=box-border width="20%">
-										<TABLE border=0 cellPadding=0 cellSpacing=3 width="80%">	
+										<TABLE border=0 cellPadding=0 cellSpacing=3 width="90%">	
 										<logic:notEmpty name="aimMyDesktopForm"  property="documents" >
 										<%--
 										<jsp:useBean id="docParams" type="java.util.Map" class="java.util.HashMap"/>			
@@ -587,8 +587,8 @@ function showtip()
 									 	id="document" type="org.digijava.module.aim.helper.Documents"> 							     
 										<% if (linkCnt < 5) { linkCnt ++; %>
 										<TR>
-											<TD width=10><IMG alt=Link height=10 src="../ampTemplate/images/arrow-gr.gif"></TD>
-											<TD>
+											<TD><IMG alt=Link height=10 width=10 src="../ampTemplate/images/arrow-gr.gif"></TD>
+											<TD width="91%">
 												<%--
 												<c:set target="${docParams}" property="docId">
 													<c:out value="${document.docId}"/>

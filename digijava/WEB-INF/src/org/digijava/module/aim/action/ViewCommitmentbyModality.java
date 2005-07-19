@@ -491,6 +491,8 @@ public class ViewCommitmentbyModality extends Action
 			ampFund.setDisbAmount(mf.format(totProjFund[i][1]));
 			ampFund.setExpAmount(mf.format(totProjFund[i][2]));
 			ampFund.setPlannedDisbAmount(mf.format(totProjFund[i][3]));
+			if(i==yearRange)
+				ampFund.setUnDisbAmount(mf.format(totProjFund[i][0] - totProjFund[i][1]));
 			formBean.getTotFund().add(ampFund);
 		}
 

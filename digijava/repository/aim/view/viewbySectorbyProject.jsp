@@ -420,10 +420,10 @@
 				<digi:trn key="aim:donor">Donor / Project</digi:trn>
 				</a></strong>
 				</td>
-				<td colspan=<bean:write name="multiReport" property="yearCount" /> align="center" height="21" ><strong>
+				<td colspan=<bean:write name="aimMulitlateralbyDonorForm" property="yearCount" /> align="center" height="21" ><strong>
 				<digi:trn key="aim:year">YEAR</digi:trn>
 				</strong> </td>
-				<td rowspan="2" colspan="4" align="center" height="21" width="20%">
+				<td rowspan="2" colspan="5" align="center" height="21" width="20%">
 				<digi:trn key="aim:total">Total</digi:trn>
 				</td>
 			</tr>
@@ -456,6 +456,7 @@
 				<digi:trn key="aim:expenditures">Expenditures</digi:trn>
 				</a>
 				</td>
+				
 				</logic:iterate>
 				<td align="center" height="21" width="7%"> 
 				<a title="<digi:trn key="aim:PlannedDisbursementofFund">Actual Commitment</digi:trn>">
@@ -477,13 +478,18 @@
 				<digi:trn key="aim:expenditures">Expenditures</digi:trn>
 				</a>
 				</td>
+				<td align="center" height="21" width="77"> 
+				<a title="<digi:trn key="aim:undisbursedAmount">Undisbursed Amount</digi:trn>">
+				<digi:trn key="aim:undisbursed">Undisbursed</digi:trn>
+				</a>
+				</td>
 				</tr>
 			
 		
 			<logic:iterate name="multiReport"  property="donors" id="donors" type="org.digijava.module.aim.helper.AmpTeamDonors">				
 				<tr bgcolor="#FFFFFF">
 				<td align="center"><bean:write name="donors" property="donorCount"/></td>
-					<td colspan=<bean:write name="multiReport" property="count" /> height="21">
+					<td colspan=<bean:write name="aimMulitlateralbyDonorForm" property="totalColumns" /> height="21">
 					<!--<td align="center" height="21" width="77">1</td>-->
 						<strong><bean:write name="donors" property="donorAgency"/></strong>
 					</td>
@@ -537,6 +543,11 @@
 								<bean:write name="project" property="projExpAmount"/>
 							</logic:notEqual>
 						</td>
+						<td align="right" height="21"> 
+							<logic:notEqual name="project" property="projUnDisbAmount" value="0">
+								<bean:write name="project" property="projUnDisbAmount"/>
+							</logic:notEqual>
+						</td>
 					</tr>
 				
 				<logic:notEmpty name="project"  property="termAssist">
@@ -585,6 +596,11 @@
 				<td align="right" height="21"> 
 					<logic:notEqual name="termAssist" property="termExpAmount" value="0">
 					<bean:write name="termAssist" property="termExpAmount"/>
+					</logic:notEqual>
+				</td>
+				<td align="right" height="21"> 
+					<logic:notEqual name="termAssist" property="termUnDisbAmount" value="0">
+					<bean:write name="termAssist" property="termUnDisbAmount"/>
 					</logic:notEqual>
 				</td>
 			</tr>
@@ -641,6 +657,11 @@
 				<bean:write name="totalSectorTermAssistFund" property="totDonorExpAmount"/>
 				</logic:notEqual>
 			</td>
+			<td align="right" height="21"><br> 
+				<logic:notEqual name="totalSectorTermAssistFund" property="totDonorUnDisbAmount" value="0">
+				<bean:write name="totalSectorTermAssistFund" property="totDonorUnDisbAmount"/>
+				</logic:notEqual>
+				</td>
 		</tr>
 		</logic:iterate>
 		</logic:notEmpty>
@@ -687,6 +708,11 @@
 			<td align="right" height="21"> <br>
 				<logic:notEqual name="multiReport" property="sectorExpAmount" value="0">			
 				<bean:write name="multiReport" property="sectorExpAmount"/>
+				</logic:notEqual>
+			</td>
+			<td align="right" height="21"><br> 
+				<logic:notEqual name="multiReport" property="sectorUnDisbAmount" value="0">			
+				<bean:write name="multiReport" property="sectorUnDisbAmount"/>
 				</logic:notEqual>
 			</td>
 		</tr>
@@ -739,6 +765,11 @@
 				<bean:write name="totalTeamTermAssistFund" property="totDonorExpAmount"/>
 				</logic:notEqual>
 			</td>
+			<td align="right" height="21"><br> 
+				<logic:notEqual name="totalTeamTermAssistFund" property="totDonorUnDisbAmount" value="0">
+				<bean:write name="totalTeamTermAssistFund" property="totDonorUnDisbAmount"/>
+				</logic:notEqual>
+				</td>
 		</tr>
 		</logic:iterate>
 		</logic:notEmpty>
@@ -784,6 +815,11 @@
 			<td align="right" height="21"> <br>
 				<logic:notEqual name="multiReport" property="teamExpAmount" value="0">			
 				<bean:write name="multiReport" property="teamExpAmount"/>
+				</logic:notEqual>
+			</td>
+			<td align="right" height="21"><br> 
+				<logic:notEqual name="multiReport" property="teamUnDisbAmount" value="0">			
+				<bean:write name="multiReport" property="teamUnDisbAmount"/>
 				</logic:notEqual>
 			</td>
 		</tr>

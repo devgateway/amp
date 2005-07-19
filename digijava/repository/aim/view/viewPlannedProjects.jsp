@@ -337,7 +337,7 @@
 				<div align="center"><strong><%=fiscalYearRange%></strong></div>
 				</td>
 </logic:iterate>	
-<td rowspan="2" colspan="3" align="center" height="21" ><div align="center"><strong>
+<td rowspan="2" colspan="4" align="center" height="21" ><div align="center"><strong>
 					<digi:trn key="aim:total">Total</digi:trn> 
 					</strong></div></td>
 
@@ -370,6 +370,7 @@
 		<td align="center" height="21" width="7%"> Planned Disbursements</td>
 		<td align="center" height="21" width="7%"> Disbursements</td>
 		<td align="center" height="21" width="7%"> Expenditures</td>
+		<td align="center" height="21" width="7%"> Undisbursed</td>
 </tr>
 			
 	
@@ -479,6 +480,13 @@
 							</logic:notEqual>
 						</td>
 					</logic:iterate>
+					<td align="right" height="21" width="69">
+					<logic:iterate name="report" property="ampFund" id="ampFund" type="org.digijava.module.aim.helper.AmpFund">
+							<logic:notEqual name="ampFund" property="unDisbAmount" value="0">
+							<bean:write name="ampFund" property="unDisbAmount" />
+							</logic:notEqual>
+					</logic:iterate>		
+					</td>
 					
 		 </tr>
 		 </logic:iterate>
@@ -502,6 +510,13 @@
 					</logic:notEqual>
 				</td>
 			</logic:iterate>
+			<td align="right" height="21" width="69">
+			<logic:iterate name="aimCommitmentbyDonorForm"  property="totFund" id="totFund" type="org.digijava.module.aim.helper.AmpFund">
+					<logic:notEqual name="totFund" property="unDisbAmount" value="0">
+					<bean:write name="totFund" property="unDisbAmount" />
+					</logic:notEqual>
+			</logic:iterate>		
+			</td>
 		</tr>
 		</logic:notEmpty>		 
                      </table></td>

@@ -454,16 +454,18 @@ public class ViewPlannedProjects extends Action
 		formBean.setFiscalYearRange(new ArrayList());
 		for(int yr=fromYr;yr<=toYr;yr++)
 			formBean.getFiscalYearRange().add(new Integer(yr));
-		formBean.setTotalColumns(4*yearRange+6);
+		formBean.setTotalColumns(4*yearRange+7);
 		
 //---------------------------------------------------		
 		double totComm=0.0;
 		double totDisb=0.0;
 		double totPlDisb=0.0;
 		double totExp=0.0;
+		double totUnDisb=0.0;
 		double[][] totDisbFund=new double[yearRange][4];
 		double[][] totExpFund=new double[yearRange][4];
 		double[][] totPlDisbFund=new double[yearRange][4];
+		double[][] totUnDisbFund=new double[yearRange][4];
 		iter = reports.iterator() ;
 	//	logger.debug("Grand Total :" + grandTotal);
 		while ( iter.hasNext() )
@@ -479,12 +481,14 @@ public class ViewPlannedProjects extends Action
 					totPlDisbFund[i][0]=totPlDisbFund[i][0] + Double.parseDouble(DecimalToText.removeCommas(ampFund.getPlannedDisbAmount()));
 					totDisbFund[i][1]=totDisbFund[i][1] + Double.parseDouble(DecimalToText.removeCommas(ampFund.getDisbAmount()));
 					totExpFund[i][2]=totExpFund[i][2] + Double.parseDouble(DecimalToText.removeCommas(ampFund.getExpAmount()));
+					totUnDisbFund[i][1]=totUnDisbFund[i][1] + Double.parseDouble(DecimalToText.removeCommas(ampFund.getUnDisbAmount()));
 				}	
 			}
 			AmpFund ampFund=(AmpFund) iterFund.next();
 			totPlDisb=totPlDisb + Double.parseDouble(DecimalToText.removeCommas(ampFund.getPlannedDisbAmount()));
 			totDisb=totDisb + Double.parseDouble(DecimalToText.removeCommas(ampFund.getDisbAmount()));
 			totExp=totExp + Double.parseDouble(DecimalToText.removeCommas(ampFund.getExpAmount()));
+			totUnDisb=totUnDisb + Double.parseDouble(DecimalToText.removeCommas(ampFund.getUnDisbAmount()));
 		}
 		formBean.setTotComm(mf.format(totComm));
 		formBean.setTotFund(new ArrayList());
@@ -503,6 +507,7 @@ public class ViewPlannedProjects extends Action
 		ampFund.setPlannedDisbAmount(mf.format(totPlDisb));
 		ampFund.setDisbAmount(mf.format(totDisb));
 		ampFund.setExpAmount(mf.format(totExp));
+		ampFund.setUnDisbAmount(mf.format(totUnDisb));
 		formBean.getTotFund().add(ampFund);
 		
 		formBean.setFilterCnt(filterCnt);

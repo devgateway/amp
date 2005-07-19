@@ -388,7 +388,7 @@ public class ViewbyProjectbyDonor extends Action
 		formBean.setFiscalYearRange(new ArrayList());
 		for(int yr=fromYr;yr<=toYr;yr++)
 			formBean.getFiscalYearRange().add(new Integer(yr));
-		formBean.setTotalColumns(4*yearRange+6);
+		formBean.setTotalColumns(4*yearRange+7);
 		logger.debug(" YR = "+formBean.getFiscalYrRange());
 		formBean.setFilterCnt(filterCnt);
 

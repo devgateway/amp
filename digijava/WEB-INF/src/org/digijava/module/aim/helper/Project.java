@@ -12,6 +12,7 @@ public class Project
 	private String projDisbAmount;
 	private String projPlannedDisbAmount;
 	private String projExpAmount;
+	private String projUnDisbAmount;
 	private Long ampActivityId;
 	private String donor ;
 	private String title ;
@@ -66,6 +67,10 @@ public class Project
 		return projExpAmount;
 	}
 
+	public String getProjUnDisbAmount() {
+		return projUnDisbAmount;
+	}
+
 	public Collection getTermAssist() {
 		return termAssist;
 	}
@@ -96,6 +101,10 @@ public class Project
 
 	public void setProjExpAmount(String s) {
 		projExpAmount = s;
+	}
+
+	public void setProjUnDisbAmount(String s) {
+		projUnDisbAmount = s;
 	}
 
 		/**

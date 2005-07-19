@@ -9,6 +9,7 @@ public class ProjectTermAssist
 	private String termDisbAmount;
 	private String termPlannedDisbAmount;
 	private String termExpAmount;
+	private String termUnDisbAmount;
 
 	
 	public String getTermAssistName() 
@@ -37,6 +38,10 @@ public class ProjectTermAssist
 		return termExpAmount;
 	}
 
+	public String getTermUnDisbAmount() {
+		return termUnDisbAmount;
+	}
+
 	public void setTermAssistName(String s) {
 		termAssistName = s;
 	}
@@ -59,5 +64,9 @@ public class ProjectTermAssist
 
 	public void setTermExpAmount(String s) {
 		termExpAmount = s;
+	}
+
+	public void setTermUnDisbAmount(String s) {
+		termUnDisbAmount = s;
 	}
 }

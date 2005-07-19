@@ -423,7 +423,7 @@
 	<digi:trn key="aim:year">Year</digi:trn>
 	</strong></div></td>
 </logic:iterate>	
-					<td rowspan="2" colspan="4" align="center" height="21" ><div align="center"><strong>
+					<td rowspan="2" colspan="5" align="center" height="21" ><div align="center"><strong>
 					<digi:trn key="aim:total">Total</digi:trn> 
 					</strong></div></td>
 					
@@ -479,6 +479,11 @@
 					<td height="21" width="23" align="center" >
 					<a title="<digi:trn key="aim:ExpenditureofFunds">Amount effectively spent by the implementing agency</digi:trn>">
 					<digi:trn key="aim:expenditure">Expenditure</digi:trn>
+					</a>
+					</td>
+					<td height="21" width="23" align="center" >
+					<a title="<digi:trn key="aim:undisbursedAmount">Undisbursed</digi:trn>">
+					<digi:trn key="aim:undisbursed">Undisbursed</digi:trn>
 					</a>
 					</td>
   			</tr>	
@@ -598,6 +603,13 @@
 							</logic:notEqual>
 						</td>
 					</logic:iterate>
+				<td align="right" height="21" width="69">
+				<logic:iterate name="report"  property="ampFund" id="ampFund" 	type="org.digijava.module.aim.helper.AmpFund">
+						<logic:notEqual name="ampFund" property="unDisbAmount" value="0">
+						<bean:write name="ampFund" property="unDisbAmount" />
+						</logic:notEqual>
+				</logic:iterate>		
+				</td>	
 					
 		 </tr>
 		 </logic:iterate>
@@ -630,7 +642,15 @@
 					<bean:write name="totFund" property="expAmount" />
 					</logic:notEqual>
 				</td>
-			</logic:iterate></tr>
+			</logic:iterate>
+			<td align="right" height="21" width="69">
+			<logic:iterate name="aimCommitmentbyDonorForm"  property="totFund" id="totFund" type="org.digijava.module.aim.helper.AmpFund">
+					<logic:notEqual name="totFund" property="unDisbAmount" value="0">
+					<bean:write name="totFund" property="unDisbAmount" />
+					</logic:notEqual>
+			</logic:iterate>		
+			</td>
+			</tr>
 </logic:notEmpty>		 
 		 
         

@@ -6,6 +6,7 @@ public class AmpFund
 	private String commAmount;
 	private String disbAmount;
 	private String plannedDisbAmount;
+	private String unDisbAmount;
 	private String expAmount;
 	private String commAmountG;
 	private String disbAmountG;
@@ -79,6 +80,10 @@ public class AmpFund
 		disbAmount = string;
 	}
 
+	public String getUnDisbAmount() {
+		return unDisbAmount;
+	}
+
 	public void setPlannedDisbAmount(String string) {
 		plannedDisbAmount = string;
 	}
@@ -102,5 +107,9 @@ public class AmpFund
 	 */
 	public void setExpAmountG(String string) {
 		expAmountG = string;
+	}
+
+	public void setUnDisbAmount(String string) {
+		unDisbAmount = string;
 	}
 }

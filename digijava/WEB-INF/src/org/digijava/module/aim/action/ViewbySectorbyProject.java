@@ -423,12 +423,12 @@ public class ViewbySectorbyProject extends Action{
 		
 //----------------------------------------------------------------		
 		int yearRange=(toYr-fromYr)+1;
-		formBean.setYearCount((4*(toYr-fromYr)+1));
+		formBean.setYearCount(4*((toYr-fromYr)+1));
 		formBean.setFiscalYrRange((toYr - fromYr) + 1);
 		formBean.setFiscalYearRange(new ArrayList());
 		for(int yr=fromYr;yr<=toYr;yr++)
 			formBean.getFiscalYearRange().add(new Integer(yr));
-		formBean.setTotalColumns(4*formBean.getFiscalYrRange()+6);
+		formBean.setTotalColumns(4*formBean.getFiscalYrRange()+7);
 		AmpTeam ampTeam=DbUtil.getAmpTeam(ampTeamId);
 		formBean.setReportName("Annual Report By Sector");
 		formBean.setWorkspaceType(ampTeam.getType());

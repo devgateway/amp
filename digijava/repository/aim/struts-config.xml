@@ -2304,6 +2304,12 @@
 <!-- Action for Printer Friendly HTML Reports -->
 
 	<action name="aimMulitlateralbyDonorForm" 
+     	type="org.digijava.module.aim.action.ViewPhysicalComponentReport" 
+     	scope="session" validate="false" path="/aim/htmlPhysicalComponentReport">
+    <forward name="forward" path="/showLayout.do?layout=htmlPhysicalComponentReport" />
+    </action>
+
+	<action name="aimMulitlateralbyDonorForm" 
      	type="org.digijava.module.aim.action.ViewbyProjectbyDonor" 
      	scope="session" validate="false" path="/aim/projectByDonor_NoLayout">
     <forward name="forward" path="/showLayout.do?layout=projectByDonor_NoLayout" />
@@ -2429,6 +2435,11 @@
      	scope="session" validate="false" path="/aim/quarterlyReportBySectorPdf">
 	</action>
 	
+	<action name="aimMulitlateralbyDonorForm" 
+     	type="org.digijava.module.aim.action.PhysicalComponentReportPDF" 
+     	scope="session" validate="false" path="/aim/physicalComponentReportPdf">
+    </action>
+
 	
 <!-- New Action for Excel File generation  -->
 	
@@ -2474,6 +2485,11 @@
     	type="org.digijava.module.aim.action.QuarterlyReportBySectorXLS" 
      	scope="session" validate="false" path="/aim/quarterlyReportBySectorXls">
 	</action>
+
+	<action name="aimMulitlateralbyDonorForm" 
+     	type="org.digijava.module.aim.action.PhysicalComponentReportXLS" 
+     	scope="session" validate="false" path="/aim/physicalComponentReportXls">
+    </action>
 	
 <!-- START FINANCIAL EDIT	-->		
 	<action

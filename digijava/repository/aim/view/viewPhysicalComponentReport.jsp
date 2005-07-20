@@ -10,10 +10,18 @@
 
 <script language="JavaScript">
 <!--
+	function openPage()
+	{
+	 	//openResisableWindow(1000, 768);
+		<digi:context name="clearVal" property="context/module/moduleinstance/htmlPhysicalComponentReport.do" />
+		document.aimMulitlateralbyDonorForm.action = "<%= clearVal %>";
+		document.aimMulitlateralbyDonorForm.target = "_blank";
+		document.aimMulitlateralbyDonorForm.submit();
+	}
 
 	function clearFilter()
 	{
-		<digi:context name="clearVal" property="context/module/moduleinstance/viewPhysicalComponentReport.do" />
+		<digi:context name="clearVal" property="context/module/moduleinstance/viewPhysicalComponentReportPdf.do" />
 		document.aimMulitlateralbyDonorForm.action = "<%= clearVal %>";
 		document.aimMulitlateralbyDonorForm.target = "_self";
 		document.aimMulitlateralbyDonorForm.submit();
@@ -21,7 +29,7 @@
 
 	function popup_pdf() {
 		openResisableWindow(800, 600);
-		<digi:context name="pdf" property="context/module/moduleinstance/projectByDonorPdf.do" />
+		<digi:context name="pdf" property="context/module/moduleinstance/physicalComponentReportPdf.do" />
 		document.aimMulitlateralbyDonorForm.action = "<%= pdf %>";
 		document.aimMulitlateralbyDonorForm.target = popupPointer.name;
 		document.aimMulitlateralbyDonorForm.submit();
@@ -29,7 +37,7 @@
 
 	function popup_xls() {
 		openResisableWindow(800, 600);
-		<digi:context name="xls" property="context/module/moduleinstance/projectByDonorXls.do" />
+		<digi:context name="xls" property="context/module/moduleinstance/physicalComponentReportXls.do" />
 		document.aimMulitlateralbyDonorForm.action = "<%= xls %>";
 		document.aimMulitlateralbyDonorForm.target = popupPointer.name;
 		document.aimMulitlateralbyDonorForm.submit();
@@ -83,6 +91,15 @@
 				<!--	<digi:trn key="aim:team">Team</digi:trn> -->
 				</td>
 			</tr>
+
+			<logic:notEmpty name="aimMulitlateralbyDonorForm"  property="multiReport">
+			<tr>
+				<td>
+					<input type="button" onclick="openPage()" value="Print Preview" class="dr-menu">
+				</td>
+			</tr>
+			</logic:notEmpty>
+
 
 <logic:notEmpty name="aimMulitlateralbyDonorForm" property="multiReport">
 <!--  PDF/XLS Links -->		

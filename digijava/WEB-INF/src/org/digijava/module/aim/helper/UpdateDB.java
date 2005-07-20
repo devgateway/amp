@@ -33,19 +33,14 @@ public class UpdateDB {
 			
 			setConnectionProps();
 			
-			logger.debug("JDBC Driver :" + driver);
-			logger.debug("URL :" + url);
-			logger.debug("Username :" + username);
-			logger.debug("Password :" + passwd);
+			//logger.debug("JDBC Driver :" + driver);
+			//logger.debug("URL :" + url);
+			//logger.debug("Username :" + username);
+			//logger.debug("Password :" + passwd);
 			
 			Class.forName(driver).newInstance();
 
 			con = DriverManager.getConnection(url, username, passwd);
-			if (con != null) {
-				logger.debug("Got the connection");
-			} else {
-				logger.debug("Connection is null");
-			}
 
 			Statement stmt = con.createStatement();
 			DatabaseMetaData dbm = con.getMetaData();
@@ -99,7 +94,7 @@ public class UpdateDB {
 			sql += " and amp_activity.amp_level_id=amp_level.amp_level_id and org_role_code='DN'";
 			
 			stmt.executeUpdate(sql);
-
+			
 			sql = "insert into amp_report_cache ";
 			sql += " select '',amp_activity.amp_activity_id,amp_id,amp_activity.name 'activity_name',amp_funding.amp_modality_id 'amp_modality_id',amp_modality.name 'modality_name',";
 			sql += " amp_activity.amp_status_id 'amp_status_id',amp_status.name 'status_name',";
@@ -123,9 +118,9 @@ public class UpdateDB {
 			sql += " and amp_funding.amp_funding_id=amp_funding_detail.amp_funding_id ";
 			sql += " and amp_funding_detail.amp_currency_id=amp_currency.amp_currency_id and amp_activity.amp_activity_id='" + ampActivityId + "'";
 			sql += " and amp_activity.amp_level_id=amp_level.amp_level_id and org_role_code='MA'";
-
+			
 			stmt.executeUpdate(sql);
-
+			
 			sql = "insert into amp_report_cache ";
 			sql += "select '',amp_activity.amp_activity_id,amp_activity.amp_id,amp_activity.name,NULL,NULL, ";
 			sql += "amp_activity.amp_status_id,amp_status.name,NULL,amp_organisation.name,amp_org_role.amp_org_id,amp_organisation.org_type,NULL,";
@@ -142,7 +137,7 @@ public class UpdateDB {
 			sql += "and amp_role_id='1' and amp_activity.amp_activity_id=amp_org_role.amp_activity_id ";
 			sql += "and amp_org_role.amp_org_id=amp_organisation.amp_org_id ";
 			sql += "and amp_activity.amp_status_id=amp_status.amp_status_id";
-
+			
 			stmt.executeUpdate(sql);
 
 			sql = "insert into amp_report_cache ";
@@ -158,7 +153,7 @@ public class UpdateDB {
 			sql += "amp_activity.amp_activity_id=amp_funding.amp_activity_id,amp_status ";
 			sql += "where amp_funding.amp_funding_id is null and amp_activity.amp_activity_id='" + ampActivityId + "' ";
 			sql += "and amp_activity.amp_status_id=amp_status.amp_status_id";
-
+			
 			stmt.executeUpdate(sql);
 			
 			sql = "insert into amp_report_cache select ";
@@ -261,9 +256,8 @@ public class UpdateDB {
 			
 			stmt.executeUpdate(sql);
 
-			
-
 			sql = "delete from amp_report_sector where amp_activity_id='" + ampActivityId + "'";
+			
 			stmt.executeUpdate(sql);
 			
 			sql = "select amp_sector_id from amp_activity_sector ";
@@ -272,13 +266,12 @@ public class UpdateDB {
 			while(rs.next())
 			{
 				AmpSector ampSector=DbUtil.getAmpParentSector(new Long(rs.getLong("amp_sector_id")));
-				logger.info("Sector: " + ampSector.getAmpSectorId());
+				logger.debug("Sector: " + ampSector.getAmpSectorId());
 				sql = "insert into amp_report_sector ";
 				sql += "values('','" + ampActivityId + "','" + ampSector.getName() + "','" + ampSector.getAmpSectorId() + "','','','" + rs.getString("amp_sector_id") + "')";
 				stmt.executeUpdate(sql);
 			}
 
-	
 			sql= "delete from amp_report_location where amp_activity_id='" + ampActivityId + "'";
 			stmt.executeUpdate(sql);
 
@@ -308,7 +301,7 @@ public class UpdateDB {
 			sql += "and amp_funding.amp_funding_id=amp_funding_detail.amp_funding_id ";
 			sql += "and amp_funding_detail.amp_currency_id=amp_currency.amp_currency_id ";
 			sql += "and amp_components.currency_id=amp_currency.amp_currency_id ";
-			sql += "and org_role_code='MA' and amp_activity_id='" + ampActivityId + "' ";
+			sql += "and org_role_code='MA' and amp_activity.amp_activity_id='" + ampActivityId + "' ";
 			sql += "order by amp_organisation.amp_org_id,amp_activity.amp_activity_id,amp_components.amp_component_id,amp_physical_performance.reporting_date";
 			stmt.executeUpdate(sql);
 
@@ -339,15 +332,7 @@ public class UpdateDB {
 
 	private static void setConnectionProps() {
 
-		logger.debug("In setConnectionProps()");
-
 		String file =  new UpdateDB().getClass().getResource("/hibernate.properties").getPath(); 
-
-		if (file != null) {
-				  logger.debug("hibernate.properties file path = " + file);
-		} else {
-				  logger.debug("hibernate.properties file not found");
-		}
 
 		try {
 			FileReader fileReader = new FileReader(file);

@@ -2966,9 +2966,10 @@ public class DbUtil {
 
 			String queryString = "";
 			Query qry = null;
+			
 			if (teamId != null) {
 				queryString = "select act from " + AmpActivity.class.getName()
-						+ " act where (act.team=:teamId)";
+								+ " act where (act.team=:teamId)";
 				qry = session.createQuery(queryString);
 				qry.setParameter("teamId", teamId, Hibernate.LONG);
 
@@ -3003,7 +3004,7 @@ public class DbUtil {
 					AmpOrgRole orgRole = (AmpOrgRole) orgItr.next();
 
 					if (orgRole.getRole().getRoleCode().equals(Constants.DONOR)) {
-						donors += orgRole.getOrganisation().getOrgCode();
+						donors += orgRole.getOrganisation().getAcronym();
 					}
 				}
 

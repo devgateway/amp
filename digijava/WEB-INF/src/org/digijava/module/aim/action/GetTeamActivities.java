@@ -5,7 +5,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Vector;
-
+import java.util.Comparator;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -17,11 +17,13 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.digijava.module.aim.dbentity.AmpApplicationSettings;
 import org.digijava.module.aim.dbentity.AmpTeam;
+import org.digijava.module.aim.helper.Activity;
 import org.digijava.module.aim.form.TeamActivitiesForm;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.TeamUtil;
+
 
 public class GetTeamActivities extends Action {
 
@@ -60,7 +62,7 @@ public class GetTeamActivities extends Action {
 
 		int numRecords = Constants.NUM_RECORDS;
 		int page = 0;
-
+		
 		if (request.getParameter("id") != null) {
 			id = new Long(Long.parseLong(request.getParameter("id")));
 			AmpApplicationSettings appSettings = DbUtil.getTeamAppSettings(id);
@@ -95,14 +97,52 @@ public class GetTeamActivities extends Action {
 			taForm.setTeamName(ampTeam.getName());						    
 			
 			if (taForm.getAllActivities() == null) {
-			    Collection col = DbUtil.getAllTeamActivities(id);
-			    logger.info("Loaded " + col.size() + " activities for the team " + ampTeam.getName());			    
-				List temp = (List) col;
-				Collections.sort(temp);
-				col = (Collection) temp;
+				Collection col = DbUtil.getAllTeamActivities(id);
+				logger.info("Loaded " + col.size() + " activities for the team " + ampTeam.getName());			    
 				taForm.setAllActivities(col);
 			}
-
+			
+			Comparator acronymComp = new Comparator() {
+				public int compare(Object o1, Object o2) {
+					Activity r1 = (Activity) o1;
+					Activity r2 = (Activity) o2;
+			        return r1.getDonors().trim().toLowerCase().compareTo(r2.getDonors().trim().toLowerCase());
+				}
+			};
+			Comparator racronymComp = new Comparator() {
+				public int compare(Object o1, Object o2) {
+					Activity r1 = (Activity) o1;
+					Activity r2 = (Activity) o2;
+					return -(r1.getDonors().trim().toLowerCase().compareTo(r2.getDonors().trim().toLowerCase()));
+				}
+			};
+			
+			List temp = (List)taForm.getAllActivities();
+			String sort = (taForm.getSort() == null) ? null : taForm.getSort().trim();
+			String sortOrder = (taForm.getSortOrder() == null) ? null : taForm.getSortOrder().trim();
+			
+			if ( sort == null || "".equals(sort) || sortOrder == null || "".equals(sortOrder)) {
+				System.out.println("Inside IF [NULL]");
+				Collections.sort(temp);
+				taForm.setSort("activity");
+				taForm.setSortOrder("asc");
+			}
+			else {
+				if ("activity".equals(sort)) {
+					if ("asc".equals(sortOrder))
+						Collections.sort(temp);
+					else
+						Collections.sort(temp,Collections.reverseOrder());
+				}
+				else if ("donor".equals(sort)) {
+					if ("asc".equals(sortOrder))
+						Collections.sort(temp, acronymComp);
+					else
+						Collections.sort(temp, racronymComp);
+				}
+			}
+			taForm.setAllActivities((Collection)temp);
+			
 			int totActivities = taForm.getAllActivities().size();
 			int stIndex = ((page - 1) * numRecords) + 1;
 			int edIndex = page * numRecords;

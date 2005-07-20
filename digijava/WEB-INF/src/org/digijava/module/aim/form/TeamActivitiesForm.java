@@ -21,6 +21,8 @@ public class TeamActivitiesForm extends ActionForm {
 	private Collection pages;
 	private Integer currentPage;
 	private int page = 0;
+	private String sort = null;
+	private String sortOrder = null;
 
 
     /**
@@ -203,4 +205,28 @@ public class TeamActivitiesForm extends ActionForm {
     public void setTeamName(String teamName) {
         this.teamName = teamName;
     }
+	/**
+	 * @return Returns the sort.
+	 */
+	public String getSort() {
+		return sort;
+	}
+	/**
+	 * @param sort The sort to set.
+	 */
+	public void setSort(String sort) {
+		this.sort = sort;
+	}
+	/**
+	 * @return Returns the sortOrder.
+	 */
+	public String getSortOrder() {
+		return sortOrder;
+	}
+	/**
+	 * @param sortOrder The sortOrder to set.
+	 */
+	public void setSortOrder(String sortOrder) {
+		this.sortOrder = sortOrder;
+	}
 }

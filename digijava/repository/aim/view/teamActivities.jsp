@@ -61,6 +61,34 @@
 		}		  
 
 	}
+	
+	function sortMe(val) {
+		<digi:context name="sel" property="context/module/moduleinstance/teamActivityList.do" />
+			url = "<%= sel %>" ;
+			
+			var sval = document.aimTeamActivitiesForm.sort.value;
+			var soval = document.aimTeamActivitiesForm.sortOrder.value;
+			
+			if ( val == sval ) {
+				if (soval == "asc")
+					document.aimTeamActivitiesForm.sortOrder.value = "desc";
+				else if (soval == "desc")
+					document.aimTeamActivitiesForm.sortOrder.value = "asc";	
+			}
+			else
+				document.aimTeamActivitiesForm.sortOrder.value = "asc";
+
+			document.aimTeamActivitiesForm.sort.value = val;
+			document.aimTeamActivitiesForm.action = url;
+			document.aimTeamActivitiesForm.submit();
+	}
+	
+	function page(val) {
+		<digi:context name="sel" property="context/module/moduleinstance/teamActivityList.do" />
+			url = "<%= sel %>?page=" + val ;
+			document.aimTeamActivitiesForm.action = url;
+			document.aimTeamActivitiesForm.submit();
+	}
 
 -->
 
@@ -68,6 +96,10 @@
 
 <digi:instance property="aimTeamActivitiesForm" />
 <digi:form action="/updateTeamActivity.do" method="post">
+
+<html:hidden property="sort" />
+<html:hidden property="sortOrder" />
+<html:hidden property="page" />
 
 <table width="100%" cellSpacing=0 cellPadding=0 valign="top" align="left">
 <tr><td width="100%" valign="top" align="left">
@@ -147,14 +179,14 @@
 																	<input type="checkbox" name="checkAll" onclick="checkall()">
 																</td>
 																<td valign="center" align="center" bgcolor="#dddddd">
-																	<b><digi:trn key="aim:activityList">
-																		Activity List
-																	</digi:trn></b>
+																	<a href="javascript:sortMe('activity')" title="Click here to sort by Activity Details">
+																		<b><digi:trn key="aim:activityList">Activity List</digi:trn></b>
+																	</a>
 																</td>
-																<td bgColor=#dddddb align="center" width="15%" bgcolor="#dddddd">
-																	<b><digi:trn key="aim:donors">
-																	Donors
-																	</digi:trn></b>
+																<td bgColor=#dddddb align="center" width="20%" bgcolor="#dddddd">
+																	<a href="javascript:sortMe('donor')" title="Click here to sort by Donors">
+																		<b><digi:trn key="aim:donors">Donors</digi:trn></b>
+																	</a>
 																</td></tr>
 															</table>
 														</td>
@@ -210,7 +242,7 @@
 																		<bean:write name="activities" property="name" />
 																	</digi:link>
 																</td>
-																<td align="center" width="15%" bgcolor="#f4f4f2">
+																<td align="center" width="20%" bgcolor="#f4f4f2">
 																	<bean:write name="activities" property="donors" />
 																</td></tr>
 															</logic:iterate>
@@ -243,14 +275,8 @@
 													<digi:trn key="aim:pages">
 														Pages :
 													</digi:trn>
-														<logic:iterate name="aimTeamActivitiesForm" property="pages" id="pages" 
-													type="java.lang.Integer">
-														<jsp:useBean id="urlParams1" type="java.util.Map" class="java.util.HashMap"/>
-														<c:set target="${urlParams1}" property="page">
-															<%=pages%>
-														</c:set>
-																			    
-														<bean:define id="currPage" name="aimTeamActivitiesForm" property="currentPage" />
+														<logic:iterate name="aimTeamActivitiesForm" property="pages" id="pages" type="java.lang.Integer">
+													  	<bean:define id="currPage" name="aimTeamActivitiesForm" property="currentPage" />
 														
 														<% if (currPage.equals(pages)) { %>
 																<%=pages%>
@@ -258,9 +284,7 @@
 															<bean:define id="translation">
 																<digi:trn key="aim:clickToViewNextPage">Click here to goto Next Page</digi:trn>
 															</bean:define>
-															<digi:link href="/teamActivityList.do" name="urlParams1" title="<%=translation%>" >
-																<%=pages%>
-															</digi:link>
+															<a href="javascript:page(<%=pages%>)" title="<%=translation%>"><%=pages%></a>
 														<% } %>
 														|&nbsp; 
 													</logic:iterate>

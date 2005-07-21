@@ -1,4 +1,4 @@
-z<%@ page pageEncoding="UTF-8" %>
+<%@ page pageEncoding="UTF-8" %>
 <%@ taglib uri="/taglib/struts-bean" prefix="bean" %>
 <%@ taglib uri="/taglib/struts-logic" prefix="logic" %>
 <%@ taglib uri="/taglib/struts-tiles" prefix="tiles" %>
@@ -18,7 +18,7 @@ z<%@ page pageEncoding="UTF-8" %>
 
 <digi:instance property="aimCommitmentbyDonorForm" />
 
-<table width="100%" cellspacing=1 cellpadding=1 valign=top align=left>
+<table width="900" cellspacing=1 cellpadding=1 valign=top align=left>
 
 	<%! int stYr = 0, ind = 0; %> 
 	<%! int temp = 0, count = 0; %> 
@@ -66,7 +66,7 @@ z<%@ page pageEncoding="UTF-8" %>
 			  <table width="100%" cellspacing=1 cellpadding=1 valign=top align=left style="border-collapse: collapse" border=1 >
 
 				<tr>
-				 <td >
+				 <td  colspan=2>
 				  <table>
 				   <tr>
 				    <td align=left colspan=2>  <b> Donor(s) :</b> 
@@ -88,10 +88,10 @@ z<%@ page pageEncoding="UTF-8" %>
 				</tr>
 
 				<tr>
-				 <td width=550>
+				 <td width=500>
 				  <table style="border-collapse: collapse" border=0 width="100%" cellspacing=1 cellpadding=1 border=1>
 					<tr>
-					  <td width=150> <b>
+					  <td width=200> <b>
 						Status : </b><bean:write name="report" property="status" />
 					  </td>
 					  <td width=200><b>
@@ -104,7 +104,7 @@ z<%@ page pageEncoding="UTF-8" %>
 					  </td>
 					</tr>
 					<tr>
-					   <td width=150><b>
+					   <td width=200><b>
 							Type of Assistance : </b>
 							<logic:empty name="report" property="assistance">&nbsp;	</logic:empty>
 							<logic:notEmpty name="report" property="assistance">
@@ -119,7 +119,7 @@ z<%@ page pageEncoding="UTF-8" %>
 					</tr>
 
 					<tr>
-					  <td width=150> <b>
+					  <td width=200> <b>
 						Instrument of Funding : </b>
 						<logic:empty name="report" property="modality">&nbsp;	</logic:empty>
 						<logic:notEmpty name="report" property="modality">
@@ -138,14 +138,14 @@ z<%@ page pageEncoding="UTF-8" %>
 					</tr>
 
 					<tr>
-					  <td width=150> <b>
+					  <td width=200> <b>
 						Start Date : </b> <bean:write name="report" property="startDate" />  </td>
 					  <td width=200><b>
 						Close Date : </b> <bean:write name="report" property="closeDate" />					  </td>
 					</tr>
 
 					<tr>
-					  <td width=150> <b>
+					  <td width=200> <b>
 						Commitment Date : </b> 
 						<logic:empty name="report" property="commitmentDate">&nbsp;	</logic:empty>
 						<logic:notEmpty name="report" property="commitmentDate">
@@ -167,27 +167,37 @@ z<%@ page pageEncoding="UTF-8" %>
 				 <td width=500 valign=top >
 				 <table>
 				  <tr>
-	  				 <td align=right>
+	  				 <td align=left>
 					 <table cellpadding=2 cellspacing=1 border=1 style="border-collapse: collapse">
 					   <tr>
-						 <td width=50 align=center>
+						 <td width=70 align=center height=32>
 							Year
 						 </td>
-						 <td width=100 align=center>
-							<digi:trn key="aim:commitments">Commitment</digi:trn>
+						 <td width=120 align=center height=32>
+							<digi:trn key="aim:commit">Commit</digi:trn>
 						 </td>
-						 <td width=100 align=center>
-							<digi:trn key="aim:plannedDisbursements">Planned Disbursements</digi:trn>
+						 <td width=120 align=center height=32>
+							<digi:trn key="aim:plannedDisb">Planned Disb</digi:trn>
 						 </td>
-						 <td width=100 align=center>
-							<digi:trn key="aim:disbursements">Disbursements</digi:trn>
+						 <td width=100 align=center height=32>
+							<digi:trn key="aim:disbursement">Disbursement</digi:trn>
 						 </td>
-						 <td width=100 align=center>
-							<digi:trn key="aim:expenditures">Expenditures</digi:trn>
+						 <td width=100 align=center height=32>
+							<digi:trn key="aim:expenditure">Expenditure</digi:trn>
 						 </td>
 					   </tr>
 					 </table>			
 				   </td>
+					   <td align=center width=90 valign=bottom height=35>
+				     <table height=35 cellspacing=1 cellpadding=1 valign=top align=center style="border-collapse: collapse" border=1 width=100%>
+					   <tr>
+					     <td valign=center>
+							<digi:trn key="aim:undisbursed">Undisbursed</digi:trn>
+						 </td>
+					   </tr>
+					 </table>
+				   </td>
+
 				 </tr>
 				</tr>
 
@@ -199,8 +209,8 @@ z<%@ page pageEncoding="UTF-8" %>
 					<% ind++; %>
 
 					<% if(ind > count ) {  ind=0;%>
- 					 <td width=50>
-						Total 
+ 					 <td width=50> <b>
+						Total	</b>
 					</td>
 					<% } else { %>
 	 					 <td width=40>
@@ -209,22 +219,22 @@ z<%@ page pageEncoding="UTF-8" %>
 					 </td>
 
 					<%} %>
-					  <td align=right width=100>
+					  <td align=right width=90>
 					  <logic:notEqual name="ampFund" property="commAmount" value="0">
 						<bean:write name="ampFund" property="commAmount" />
 						</logic:notEqual>
 					 </td>
-					  <td align=right width=100>
+					  <td align=right width=90>
 						<logic:notEqual name="ampFund" property="plannedDisbAmount" value="0">
 						<bean:write name="ampFund" property="plannedDisbAmount" />
 						</logic:notEqual>
 					  </td>
-					  <td align=right width=100>
+					  <td align=right width=90>
 					   <logic:notEqual name="ampFund" property="disbAmount" value="0">
 						<bean:write name="ampFund" property="disbAmount" />
 					   </logic:notEqual>
 					  </td>
-					  <td align=right width=100>
+					  <td align=right width=90>
 						<logic:notEqual name="ampFund" property="expAmount" value="0">
 						<bean:write name="ampFund" property="expAmount" />
 						</logic:notEqual>
@@ -233,15 +243,109 @@ z<%@ page pageEncoding="UTF-8" %>
 					</logic:iterate>
 				  </table>
 				 </td>
+ 				 <td width=90 valig=bottom>
+			      <table cellpadding=2 cellspacing=1 border=1 style="border-collapse: collapse" valign=top>
+					<logic:iterate name="report"  property="ampFund" id="ampFund" 	type="org.digijava.module.aim.helper.AmpFund">
+					  <tr>
+					    <td align=right width=90 height=17>
+							<logic:notEqual name="ampFund" property="unDisbAmount" value="0">
+							<bean:write name="ampFund" property="unDisbAmount" />
+							</logic:notEqual>
+						</td>
+					  </tr>
+					</logic:iterate>
+					</table>
+				 </td>
 				</tr>
 				</table>
 				 </td>
 			 </tr>
-
 			 </table>
 			 </td>
 			</tr>
 			</logic:iterate>
+			<tr>
+			  <td>
+				<table width="900" cellspacing=1 cellpadding=1 valign=top align=left style="border-collapse: collapse" border=1 >
+				 <tr>
+				 	<td width=100>
+					 <b>	Total		</b>
+				    </td>
+					<td align=right width=330> <b>	Total Commitment :	</b>
+					<logic:notEqual name="aimCommitmentbyDonorForm" property="totComm" value="0">
+					<bean:write name="aimCommitmentbyDonorForm" property="totComm" />
+					</logic:notEqual>
+					</td>
+					<td width=400  align=right>
+					  <% temp = stYr; %>
+					 <table cellpadding=2 cellspacing=1 border=1 style="border-collapse: collapse" valign=top >
+					 <logic:iterate name="aimCommitmentbyDonorForm"  property="totFund" id="totFund" type="org.digijava.module.aim.helper.AmpFund">
+						<tr>
+					<% ind++; %>
+
+					<% if(ind > count ) {  ind=0;%>
+ 					 <td width=50> <b>
+						Total	</b>
+					</td>
+					<% } else { %>
+	 					 <td width=40>
+						<%=temp%>
+						<%temp++;%>
+					 </td>
+					<%} %>
+
+					  <td align=right width=90>	<b>
+						<logic:notEqual name="totFund" property="commAmount" value="0">
+						<bean:write name="totFund" property="commAmount" />
+						</logic:notEqual>
+						</b>
+					 </td>
+						  <td align=right width=90>	<b>
+							<logic:notEqual name="totFund" property="plannedDisbAmount" value="0">
+							<bean:write name="totFund" property="plannedDisbAmount" />
+							</logic:notEqual>
+							</b>
+						</td>
+						<td align=right width=90>	<b>
+							<logic:notEqual name="totFund" property="disbAmount" value="0">
+							<bean:write name="totFund" property="disbAmount" />
+							</logic:notEqual>
+							</b>
+						 </td>
+						<td align=right width=90>	<b>
+							<logic:notEqual name="totFund" property="expAmount" value="0">
+							<bean:write name="totFund" property="expAmount" />
+							</logic:notEqual>
+							</b>
+						 </td>
+
+						</tr>
+					</logic:iterate>
+					  </table>
+					</td>
+ 				 <td width=90 valig=bottom>
+			      <table cellpadding=2 cellspacing=1 border=1 style="border-collapse: collapse" valign=top>
+					<logic:iterate name="aimCommitmentbyDonorForm"  property="totFund" id="totFund" type="org.digijava.module.aim.helper.AmpFund">
+					  <tr>
+					    <td align=right width=90 height=17>		<b>
+							<logic:notEqual name="totFund" property="unDisbAmount" value="0">
+							<bean:write name="totFund" property="unDisbAmount" />
+							</logic:notEqual>	</b>
+						</td>
+					  </tr>
+					</logic:iterate>
+					</table>
+				 </td>
+
+				   </tr>
+				 </table>
+
+					  </td>
+					    
+				  </tr>
+				</table>
+			  <td>
+			</tr>
 		   </logic:notEmpty>
 		</table> 
 	</td>

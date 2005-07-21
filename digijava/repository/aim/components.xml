@@ -185,7 +185,7 @@
 	<page name="htmlQuarterlyReportBySector"		title=" : Quarterly Report By Sector " />
 	<page name="htmlViewProjects"				title=" :  Annual Forecasting Report " />
 	<page name="htmlViewPlannedProjects"			title=" :Quarterly Project Detail Report " />
-	
+	<page name="htmlPhysicalComponentReport"			title=" :Physical Component Report " />
 	
 	<!-- Advanced Report Manager -->
 	

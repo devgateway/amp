@@ -17,7 +17,7 @@
 
 <digi:instance property="aimMulitlateralbyDonorForm" />
 
-<table width="700" cellspacing=1 cellpadding=1 valign=top align=left>
+<table width="800" cellspacing=1 cellpadding=1 valign=top align=left>
 
   <tr height="20">
 	<td align="left" >
@@ -99,7 +99,7 @@
 		   <td width=570>
 			  <table cellpadding=2 cellspacing=1 border=1 style="border-collapse: collapse">
 			   <tr>
-			     <td width=100 align=center>
+			     <td width=50 align=center>
 				    Year
 				 </td>
 				 <td width=100 align=center>
@@ -113,6 +113,9 @@
 				 </td>
 			     <td width=100 align=center>
 					<digi:trn key="aim:expenditures">Expenditures</digi:trn>
+				 </td>
+				 <td width=100 align=center>
+				 <digi:trn key="aim:undisbursed">Undisbursed</digi:trn>
 				 </td>
 			   </tr>
 			  </table>			
@@ -201,10 +204,13 @@
 							&nbsp;
 							</logic:equal>
 						</td>
+						<td align=right width=100>
+							&nbsp;
+						</td>
 					  </tr> 
 					</logic:iterate>
-				     <td width=50>
-						Total
+				     <td width=50> <b>
+						Total	</b>
 					 </td>
  					 <td align=right width=100>
 					  <logic:notEqual name="project" property="projCommAmount"  value="0" >
@@ -239,6 +245,15 @@
 						</logic:notEqual>
 
 						<logic:equal name="project" property="projExpAmount"  value="0" >
+						&nbsp;
+						</logic:equal>
+					</td>
+					<td align=right width=100>
+						<logic:notEqual name="project" property="projUnDisbAmount"  value="0" >
+						<bean:write name="project" property="projUnDisbAmount"/>
+						</logic:notEqual>
+
+						<logic:equal name="project" property="projUnDisbAmount"  value="0" >
 						&nbsp;
 						</logic:equal>
 					</td>
@@ -306,10 +321,13 @@
 							&nbsp;
 							</logic:equal>
 						</td>
+						<td align=right width=100>
+							&nbsp;
+						</td>
 					</tr>
 					</logic:iterate>
-				     <td width=50>
-						Total
+				     <td width=50>	<b>
+						Total	</b>
 					 </td>
 					<td align=right width=100> 
 						<logic:notEqual name="termAssist" property="termCommAmount"  value="0" >
@@ -345,6 +363,15 @@
 						</logic:notEqual>
 
 						<logic:equal name="termAssist" property="termExpAmount"  value="0" >
+						&nbsp;
+						</logic:equal>
+					</td>
+					<td align=right width=100>
+						<logic:notEqual name="termAssist" property="termUnDisbAmount"  value="0" >
+						<bean:write name="termAssist" property="termUnDisbAmount"/>
+						</logic:notEqual>
+
+						<logic:equal name="termAssist" property="termUnDisbAmount"  value="0" >
 						&nbsp;
 						</logic:equal>
 					</td>
@@ -418,10 +445,13 @@
 							&nbsp;
 							</logic:equal>
 						</td>
+						<td align=right width=100>
+							&nbsp;
+						</td>
 					</tr>
 					</logic:iterate>
-				     <td width=50>
-						Total
+				     <td width=50>	<b>
+						Total	</b>
 					 </td>
 					<td align=right width=100> 
 						<logic:notEqual name="totalSectorTermAssistFund" property="totDonorCommAmount"  value="0" >
@@ -457,6 +487,15 @@
 					</logic:notEqual>
 
 					<logic:equal name="totalSectorTermAssistFund" property="totDonorExpAmount"  value="0" >
+					&nbsp;
+					</logic:equal>
+					</td>
+					<td align=right width=100>
+					<logic:notEqual name="totalSectorTermAssistFund" property="totDonorUnDisbAmount"  value="0" >
+					<bean:write name="totalSectorTermAssistFund" property="totDonorUnDisbAmount"/>
+					</logic:notEqual>
+
+					<logic:equal name="totalSectorTermAssistFund" property="totDonorUnDisbAmount"  value="0" >
 					&nbsp;
 					</logic:equal>
 					</td>
@@ -525,6 +564,9 @@
 							&nbsp;
 							</logic:equal>
 						</td>
+						<td align=right width=100>
+							&nbsp;
+						</td>
 					</tr>
 					</logic:iterate>
 				     <td width=50>
@@ -564,6 +606,15 @@
 					</logic:notEqual>
 
 					<logic:equal name="multiReport" property="sectorExpAmount"  value="0" >
+					&nbsp;
+					</logic:equal>
+					</td>
+					<td align=right width=100>
+					<logic:notEqual name="multiReport" property="sectorUnDisbAmount"  value="0" >
+					<bean:write name="multiReport" property="sectorUnDisbAmount"/>
+					</logic:notEqual>
+
+					<logic:equal name="multiReport" property="sectorUnDisbAmount"  value="0" >
 					&nbsp;
 					</logic:equal>
 					</td>
@@ -631,10 +682,13 @@
 							&nbsp;
 							</logic:equal>
 						</td>
+						<td align=right width=100>
+							&nbsp;
+						</td>
 					</tr>
 					</logic:iterate>
-				     <td width=50>
-						Total
+				     <td width=50>	<b>
+						Total	</b>
 					 </td>
 					<td align=right width=100> 
 						<logic:notEqual name="totalTeamTermAssistFund" property="totDonorCommAmount"  value="0" >
@@ -670,6 +724,15 @@
 						</logic:notEqual>
 
 						<logic:equal name="totalTeamTermAssistFund" property="totDonorExpAmount"  value="0" >
+						&nbsp;
+						</logic:equal>
+					</td>
+					<td align=right width=100>
+						<logic:notEqual name="totalTeamTermAssistFund" property="totDonorUnDisbAmount"  value="0" >
+						<bean:write name="totalTeamTermAssistFund" property="totDonorUnDisbAmount"/>
+						</logic:notEqual>
+
+						<logic:equal name="totalTeamTermAssistFund" property="totDonorUnDisbAmount"  value="0" >
 						&nbsp;
 						</logic:equal>
 					</td>
@@ -735,10 +798,13 @@
 							&nbsp;
 							</logic:equal>
 						</td>
+						<td align=right width=100>
+							&nbsp;
+						</td>
 					</tr>
 					</logic:iterate>
-				     <td width=50>
-						Total
+				     <td width=50>	<b>
+						Total	</b>
 					 </td>
 					<td align=right width=100> 
 						<logic:notEqual name="multiReport" property="teamCommAmount"  value="0" >
@@ -774,6 +840,15 @@
 					</logic:notEqual>
 
 					<logic:equal name="multiReport" property="teamExpAmount"  value="0" >
+					&nbsp;
+					</logic:equal>
+					</td>
+					<td align=right width=100>
+					<logic:notEqual name="multiReport" property="teamUnDisbAmount"  value="0" >
+					<bean:write name="multiReport" property="teamUnDisbAmount"/>
+					</logic:notEqual>
+
+					<logic:equal name="multiReport" property="teamUnDisbAmount"  value="0" >
 					&nbsp;
 					</logic:equal>
 					</td>

@@ -90,25 +90,31 @@
 				 </td>
 				
 				 <td align=left valign=bottom>
-					 <table cellpadding=2 cellspacing=1 border=1 style="border-collapse: collapse">
+					 <table cellpadding=1 cellspacing=1 border=1 style="border-collapse: collapse">
 					   <tr>
-						 <td width=50 align=center>
+						 <td width=130 align=center colspan=2>
 							Year
 						 </td>
-						 <td width=55 align=center>
-							&nbsp;&nbsp;
-						 </td>
-						 <td width=100 align=center>
+						 <td width=90 align=center>
 							<digi:trn key="aim:plannedDisbursements">Planned Disbursements</digi:trn>
 						 </td>
-						 <td width=100 align=center>
+						 <td width=90 align=center>
 							<digi:trn key="aim:disbursements">Disbursements</digi:trn>
 						 </td>
-						 <td width=100 align=center>
+						 <td width=90 align=center>
 							<digi:trn key="aim:expenditures">Expenditures</digi:trn>
 						 </td>
 					   </tr>
 					 </table>			
+				   </td>
+				   <td align=center width=110 valign=bottom>
+				     <table height=32 cellspacing=1 cellpadding=1 valign=top align=left style="border-collapse: collapse" border=1 width=100%>
+					   <tr>
+					     <td>
+							<digi:trn key="aim:undisbursed">Undisbursed</digi:trn>
+						 </td>
+					   </tr>
+					 </table>
 				   </td>
 
 				</tr>
@@ -255,6 +261,19 @@
 					</logic:iterate>
 				  </table>
 				 </td>
+				 <td width=110 valig=bottom>
+			      <table cellpadding=2 cellspacing=1 border=1 style="border-collapse: collapse" valign=top>
+					<logic:iterate name="report" property="ampFund" id="ampFund" type="org.digijava.module.aim.helper.AmpFund">
+					  <tr>
+					    <td align=right width=110 height=17>
+							<logic:notEqual name="ampFund" property="unDisbAmount" value="0">
+							<bean:write name="ampFund" property="unDisbAmount" />
+							</logic:notEqual>
+						</td>
+					  </tr>
+					</logic:iterate>
+					</table>
+				 </td>
 			 </tr>
 			 </table>
 			 </td>
@@ -265,26 +284,15 @@
 			 <td >
 				<table width="900" cellspacing=1 cellpadding=1 valign=top align=left style="border-collapse: collapse" border=1 >
 				 <tr>
-				 	<td width=100>
+				 	<td width=100 colspan=2>
 					 <b>	Total		</b>
 				    </td>
 					<td align=right width=220>
-					 <table>
-					  <tr>
-						<td width=150 align=left colspan=2>
-							<b>	Total Commitment	</b>
-						</td>
-
-						<td align="right" width=100 colspan=2>
+						<b>	Total Commitment  :	</b>
 						<bean:write name="aimCommitmentbyDonorForm" property="totComm" />				
-						</td>
-					  </tr>
-					 </table>
 					</td>
-					<td width=120 align=right >
-						&nbsp;
-					</td>
-					<td width=430  align=right>
+
+					<td width=390  align=right>
 					  <% temp = stYr; %>
 					 <table cellpadding=2 cellspacing=1 border=1 style="border-collapse: collapse" valign=top >
 					 <logic:iterate name="aimCommitmentbyDonorForm"  property="totFund" id="totFund" type="org.digijava.module.aim.helper.AmpFund">
@@ -294,7 +302,8 @@
 
 					 <% if(ind > (count*4))	{	ind=0; i=1; %>
  					 <td width=40>
-						Total  
+					   <b>
+						Total   </b>
 					 </td>
  					  <td align=right width=50>
 						&nbsp;
@@ -308,7 +317,7 @@
 							<%=temp%>
 							<%temp++;%>
 						 </td>
-	  					  <td align=center width=50>
+	  					  <td align=left width=50>
 						  <%="Q"+i%>
 						  <% i = i + 1; %>
 						  </td>
@@ -316,27 +325,27 @@
 	 					 <td width=50 valign=top>
 							
 						 </td>
- 					  <td align=center width=50 >
+ 					  <td align=left width=50 >
 						  <%="Q"+i%>
 						  <% i = i + 1; %>
 					  </td>
 
 					<%	}	}	%>
 
-					  <td align=right width=100>
+					  <td align=right width=90>	<b>
 					 	<logic:notEqual name="totFund" property="plannedDisbAmount" value="0">
 			 			<bean:write name="totFund" property="plannedDisbAmount" />
-			 			</logic:notEqual>
+			 			</logic:notEqual>	</b>
 						 </td>
-						  <td align=right width=100>
+						  <td align=right width=90>	<b>
 							<logic:notEqual name="totFund" property="disbAmount" value="0">
 							<bean:write name="totFund" property="disbAmount" />
-							</logic:notEqual>
+							</logic:notEqual>	</b>
 						</td>
-						<td align=right width=100>
+						<td align=right width=90>	<b>
 							<logic:notEqual name="totFund" property="expAmount" value="0">
 							<bean:write name="totFund" property="expAmount" />
-							</logic:notEqual>
+							</logic:notEqual>	</b>
 						 </td>
 
 						</tr>
@@ -350,6 +359,20 @@
 					</logic:iterate>
 					  </table>
 					</td>
+				 <td width=100 valig=bottom>
+			      <table cellpadding=2 cellspacing=1 border=1 style="border-collapse: collapse" valign=top>
+					<logic:iterate name="aimCommitmentbyDonorForm"  property="totFund" id="totFund" type="org.digijava.module.aim.helper.AmpFund">
+					  <tr>
+					    <td align=right width=100 height=17>	<b>
+							<logic:notEqual name="totFund" property="unDisbAmount" value="0">
+							<bean:write name="totFund" property="unDisbAmount" />
+							</logic:notEqual>	</b>
+						</td>
+					  </tr>
+					</logic:iterate>
+					</table>
+				 </td>
+
 				   </tr>
 				 </table>
 				</td>

@@ -104,6 +104,10 @@
 				     <td width=100 align=center>
 						<digi:trn key="aim:expenditures">Expenditures</digi:trn>
 					 </td>
+	 				 <td width=100 align=center>
+					 <digi:trn key="aim:undisbursed">Undisbursed</digi:trn>
+					 </td>
+
 				   </tr>
 				 </table>			
 			   </td>
@@ -220,6 +224,16 @@
 						&nbsp;
 						</logic:equal>
 					</td>
+					 <td align=right width=100>
+						<logic:notEqual name="project" property="projUnDisbAmount"  value="0" >
+						<bean:write name="project" property="projUnDisbAmount"/>
+						</logic:notEqual>
+
+						<logic:equal name="project" property="projUnDisbAmount"  value="0" >
+						&nbsp;
+						</logic:equal>
+					</td>
+
 			  </table>
 				</td>
 			 </tr>
@@ -323,6 +337,15 @@
 						&nbsp;
 						</logic:equal>
 					</td>
+					<td align=right width=100>
+						<logic:notEqual name="termAssist" property="termUnDisbAmount"  value="0" >
+						<bean:write name="termAssist" property="termUnDisbAmount"/>
+						</logic:notEqual>
+
+						<logic:equal name="termAssist" property="termUnDisbAmount"  value="0" >
+						&nbsp;
+						</logic:equal>
+					</td>
 				</table>
 				</td>
 			</tr>
@@ -409,6 +432,11 @@
 				     <td align=right width=100><b>
 						<logic:notEqual name="totalDonorTermAssistFund" property="totDonorExpAmount" value="0">
 							<bean:write name="totalDonorTermAssistFund" property="totDonorExpAmount"/>
+						</logic:notEqual></b>
+					 </td>
+				     <td align=right width=100><b>
+						<logic:notEqual name="totalDonorTermAssistFund" property="totDonorUnDisbAmount" value="0">
+							<bean:write name="totalDonorTermAssistFund" property="totDonorUnDisbAmount"/>
 						</logic:notEqual></b>
 					 </td>
 				 </table>
@@ -499,6 +527,11 @@
 							<bean:write name="donors" property="donorExpAmount"/>
 						</logic:notEqual></b>
 					 </td>
+				     <td align=right width=100><b>
+						<logic:notEqual name="donors" property="donorUnDisbAmount" value="0">
+							<bean:write name="donors" property="donorUnDisbAmount"/>
+						</logic:notEqual></b>
+					 </td>
 				 </table>
 			   </td>
 			 </tr>
@@ -586,6 +619,11 @@
 							<bean:write name="totalTeamTermAssistFund" property="totDonorExpAmount"/>
 						</logic:notEqual></b>
 					 </td>
+				     <td align=right width=100><b>
+						<logic:notEqual name="totalTeamTermAssistFund" property="totDonorUnDisbAmount" value="0">
+							<bean:write name="totalTeamTermAssistFund" property="totDonorUnDisbAmount"/>
+						</logic:notEqual></b>
+					 </td>
 				 </table>
 			   </td>
 			 </tr>
@@ -671,6 +709,11 @@
 				     <td align=right width=100><b>
 						<logic:notEqual name="multiReport" property="teamExpAmount" value="0">
 							<bean:write name="multiReport" property="teamExpAmount"/>
+						</logic:notEqual></b>
+					 </td>
+				     <td align=right width=100><b>
+						<logic:notEqual name="multiReport" property="teamUnDisbAmount" value="0">
+							<bean:write name="multiReport" property="teamUnDisbAmount"/>
 						</logic:notEqual></b>
 					 </td>
 				 </table>

@@ -267,6 +267,7 @@
 				<page>	htmlQuarterlyReportBySector			</page>
 				<page>	htmlViewProjects					</page>
 				<page>	htmlViewPlannedProjects				</page>
+				<page>	htmlPhysicalComponentReport			</page>
 				
 		 	</module>
 		</page-group> 

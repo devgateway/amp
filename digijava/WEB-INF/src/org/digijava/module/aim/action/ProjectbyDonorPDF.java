@@ -138,7 +138,7 @@ public class ProjectbyDonorPDF extends Action {
 		}
  		logger.info("Row Cnt : " + rowCnt +": dr Size :" + drSize + " :CURR : " + curr );
   		rowCnt = rowCnt + drSize + (curr + 1);
-  		colCnt = 3 + 3 + yyCnt + (yyCnt *3) + 3;
+  		colCnt = 3 + 3 + yyCnt + (yyCnt *4) + 5;
 // 		logger.info("Curr Value " + curr );
  		logger.info(rowCnt +": ROW : COL " + colCnt);  		
 		Object[][] data = new Object[rowCnt+2][colCnt];
@@ -212,6 +212,8 @@ public class ProjectbyDonorPDF extends Action {
 									col = col+1;
 									data[row][col] = ampFund.getCommAmount();
 									col = col+1;
+									data[row][col] = ampFund.getPlannedDisbAmount();
+									col = col+1;
 									data[row][col] = ampFund.getDisbAmount();
 									col = col+1;
 									data[row][col] = ampFund.getExpAmount();
@@ -219,13 +221,18 @@ public class ProjectbyDonorPDF extends Action {
 								}// end of Funds loop
 								yyCnt = yy - yyTmp;
 								yy = yyTmp ;
-								col = 5 + yyCnt + (yyCnt*3)+1;
+								col = 5 + yyCnt + (yyCnt*4)+1;
 								data[row][col] = project.getProjCommAmount();
+								col = col+1;
+								data[row][col] = project.getProjPlannedDisbAmount();
 								col = col+1;
 								data[row][col] = project.getProjDisbAmount();
 								col = col+1;
 								data[row][col] = project.getProjExpAmount();
+								col = col+1;
+								data[row][col] = project.getProjUnDisbAmount();
 
+								
 								if(project.getTermAssist() != null)
 								{
 									termsAssist = new ArrayList(project.getTermAssist());
@@ -246,9 +253,14 @@ public class ProjectbyDonorPDF extends Action {
 											{
 												while(assistFundIter.hasNext())
 												{
+													col = col+1;
+													data[row][col] = Integer.toString(yy);
+
 													ampFund = (AmpFund) assistFundIter.next();
-													col = col + 2;
+													col = col + 1;
 													data[row][col] = ampFund.getCommAmount();
+													col = col + 1;
+													data[row][col] = ampFund.getPlannedDisbAmount();
 													col = col + 1;
 													data[row][col] = ampFund.getDisbAmount();
 													col = col + 1;
@@ -257,9 +269,13 @@ public class ProjectbyDonorPDF extends Action {
 												col = col + 1;
 												data[row][col] = projTermsAssist.getTermCommAmount();
 												col = col + 1;
+												data[row][col] = projTermsAssist.getTermPlannedDisbAmount();
+												col = col + 1;
 												data[row][col] = projTermsAssist.getTermDisbAmount();
 												col = col + 1;
 												data[row][col] = projTermsAssist.getTermExpAmount();
+												col = col + 1;
+												data[row][col] = projTermsAssist.getTermUnDisbAmount();
 											}
 										}
 									}// End of  IF Terms Assist 
@@ -292,19 +308,32 @@ public class ProjectbyDonorPDF extends Action {
 									while(termFundTotalIter.hasNext())
 									{
 										termFundTotal = (TermFundTotal) termFundTotalIter.next();
-										col = col + 2;
+										col = col+1;
+										data[row][col] = Integer.toString(yy);
+										
+										col = col + 1;
 										data[row][col] = termFundTotal.getTotCommAmount();
+										col = col + 1;
+										data[row][col] = termFundTotal.getTotPlannedDisbAmount();
 										col = col + 1;
 										data[row][col] = termFundTotal.getTotDisbAmount();
 										col = col + 1;
 										data[row][col] = termFundTotal.getTotExpAmount();
 									}
+									yyCnt = yy - yyTmp;
+									yy = yyTmp ;
+
 									col = col + 1;
 									data[row][col] =  termFund.getTotDonorCommAmount();
+									col = col + 1;
+									data[row][col] = termFund.getTotDonorPlannedDisbAmount();
 									col = col + 1;
 									data[row][col] = termFund.getTotDonorDisbAmount();
 									col = col + 1;
 									data[row][col] = termFund.getTotDonorExpAmount();
+									col = col + 1;
+									data[row][col] = termFund.getTotDonorUnDisbAmount();
+
 								}
 								
 							}// End of Total Donor Term Assist Fund
@@ -322,20 +351,33 @@ public class ProjectbyDonorPDF extends Action {
 						
 						while(fundTotalIter.hasNext())
 						{
+							col = col+1;
+							data[row][col] = Integer.toString(yy);
+							
 							FundTotal ampFundT = (FundTotal)fundTotalIter.next();
-							col = col + 2;
+							col = col + 1;
 							data[row][col] = ampFundT.getTotCommAmount() ;
+							col = col + 1;
+							data[row][col] = ampFundT.getTotPlannedDisbAmount();
 							col = col + 1;
 							data[row][col] = ampFundT.getTotDisbAmount() ;
 							col = col + 1;
 							data[row][col] = ampFundT.getTotExpAmount() ;
 						}
+						yyCnt = yy - yyTmp;
+						yy = yyTmp ;
+
 						col = col+1;
 						data[row][col] = teamDonors.getDonorCommAmount();
+						col = col+1;
+						data[row][col] = teamDonors.getDonorPlannedDisbAmount();
 						col = col+1;
 						data[row][col] = teamDonors.getDonorDisbAmount();
 						col = col+1;
 						data[row][col] = teamDonors.getDonorExpAmount();
+						col = col+1;
+						data[row][col] = teamDonors.getDonorUnDisbAmount();
+
 						col = 3;
 						row = row + 1;
 //						logger.info(" Next Donor " + row);						
@@ -363,20 +405,33 @@ public class ProjectbyDonorPDF extends Action {
 						Iterator termFundTotalIter = termFundTotalColl.iterator();
 						while(termFundTotalIter.hasNext())
 						{
+							col = col+1;
+							data[row][col] = Integer.toString(yy);
+
 							termFundTotal = (TermFundTotal) termFundTotalIter.next();
-							col = col + 2;
+							col = col + 1;
 							data[row][col] = termFundTotal.getTotCommAmount();
+							col = col + 1;
+							data[row][col] = termFundTotal.getTotPlannedDisbAmount();
 							col = col + 1;
 							data[row][col] = termFundTotal.getTotDisbAmount();
 							col = col + 1;
 							data[row][col] = termFundTotal.getTotExpAmount();
 						}
+						yyCnt = yy - yyTmp;
+						yy = yyTmp ;
+						
 						col = col + 1;
 						data[row][col] = termFund.getTotDonorCommAmount();
+						col = col + 1;
+						data[row][col] = termFund.getTotDonorPlannedDisbAmount();
 						col = col + 1;
 						data[row][col] = termFund.getTotDonorDisbAmount();
 						col = col + 1;
 						data[row][col] = termFund.getTotDonorExpAmount();
+						col = col + 1;
+						data[row][col] = termFund.getTotDonorUnDisbAmount();
+						
 					}
 				}
 				row = row + 1;
@@ -392,20 +447,33 @@ public class ProjectbyDonorPDF extends Action {
 				while(totalTeamFundIter.hasNext())
 				{
 					data[row][4] = teamDonors.getDonorAgency();
+					col = col+1;
+					data[row][col] = Integer.toString(yy);
+
 					FundTotal fundTotal = (FundTotal) totalTeamFundIter.next();
-					col = col + 2;
+					col = col + 1;
 					data[row][col] = fundTotal.getTotCommAmount();
+					col = col + 1;
+					data[row][col] = fundTotal.getTotPlannedDisbAmount();
 					col = col + 1;
 					data[row][col] = fundTotal.getTotDisbAmount();
 					col = col + 1;
 					data[row][col] = fundTotal.getTotExpAmount();
 				}
+				yyCnt = yy - yyTmp;
+				yy = yyTmp ;
+
 				col = col + 1;
 				data[row][col] = rep.getTeamCommAmount();
+				col = col + 1;
+				data[row][col] = rep.getTeamPlannedDisbAmount();
 				col = col + 1;
 				data[row][col] = rep.getTeamDisbAmount();
 				col = col + 1;
 				data[row][col] = rep.getTeamExpAmount();
+				col = col + 1;
+				data[row][col] = rep.getTeamUnDisbAmount();
+
 				row = row + 1;
 			}
 			flag = 1;
@@ -417,7 +485,9 @@ public class ProjectbyDonorPDF extends Action {
 
 		if(flag == 1)
 		{
-			
+			// ReInit Year Count Value ......
+			yyCnt = formBean.getFiscalYearRange().size();
+
 			for(int i=0; i < rowCnt; i++)
 			{
 				for(int j=0; j < colCnt; j++)
@@ -431,7 +501,7 @@ public class ProjectbyDonorPDF extends Action {
 						data[i][1] = formBean.getFilter()[0].toString();
 						data[i][2] = formBean.getFilter()[1].toString();
 					}
-						
+					
 				}
 			}
 

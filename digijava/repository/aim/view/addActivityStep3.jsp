@@ -287,6 +287,22 @@
 																					</logic:notEmpty>	
 																				</td>
 																			</tr>
+
+																			<tr>
+																	      	<td bgcolor="#FFFFFF" align="left" width="150">
+																					<a title="<digi:trn key="aim:Financing">Method by which aid is delivered to an activity</digi:trn>">	
+																		  <digi:trn key="aim:financingInstrument">
+																					Financing Instrument</digi:trn>
+																					</a>
+																				</td>
+																				<td width="1">:</td>
+																			<td bgcolor="#FFFFFF" align="left">
+																				<logic:notEmpty name="funding" property="modality">
+																					<bean:write name="funding"	property="modality.name"/>
+																				</logic:notEmpty>	
+																			</td>
+																		</tr>																			
+																			
 																			<%--
 																			<!-- Signature Date -->
 																			<tr>

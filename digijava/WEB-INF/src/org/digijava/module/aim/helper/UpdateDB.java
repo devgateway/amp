@@ -45,30 +45,16 @@ public class UpdateDB {
 			Statement stmt = con.createStatement();
 			DatabaseMetaData dbm = con.getMetaData();
 			ResultSet rs = null;
-
-			//-------------------- Update the Amp Activity Table---------------------------------------------------
-			/*
 			
-	        System.out.println(" New COde check");
-			stmt = con.createStatement();
-	        ResultSet rs = stmt.executeQuery("select amp_activity_id, amp_id from amp_activity");
-	        UpdateDB obj = new UpdateDB();
- 			String startDd="", closeDd="", orgCloseDd="", id="";
- 			while (rs.next()) 
-	 		{
-	 			id = rs.getString("amp_activity_id");
-	 			startDd = obj.computeActivityStartDate( id );
-	 			closeDd = obj.computeActivityCloseDate( id );
-	 			orgCloseDd = obj.computeActivityOrigCloseDate( id );
-	 			obj.updateAmpActivityDates(id, startDd, closeDd,orgCloseDd);            
-	        }
-	        */
-			//--------------------------------------------------------------------------------			
 
-			
 			String sql = "delete from amp_report_cache where amp_activity_id='" + ampActivityId + "'";
+			// Query #1
+			long t1 = System.currentTimeMillis();			
 			stmt.executeUpdate(sql);
+			long t2 = System.currentTimeMillis();
+			logger.debug("Query #1 executed in " + (t2-t1) + "ms");
 			
+
 			sql = "insert into amp_report_cache ";
 			sql += " select '',amp_activity.amp_activity_id,amp_id,amp_activity.name 'activity_name',amp_funding.amp_modality_id 'amp_modality_id',amp_modality.name 'modality_name',";
 			sql += " amp_activity.amp_status_id 'amp_status_id',amp_status.name 'status_name',";
@@ -92,9 +78,14 @@ public class UpdateDB {
 			sql += " and amp_funding.amp_funding_id=amp_funding_detail.amp_funding_id ";
 			sql += " and amp_funding_detail.amp_currency_id=amp_currency.amp_currency_id and amp_activity.amp_activity_id='" + ampActivityId + "'";
 			sql += " and amp_activity.amp_level_id=amp_level.amp_level_id and org_role_code='DN'";
-			
+
+			// Query #2
+			t1 = System.currentTimeMillis();						
 			stmt.executeUpdate(sql);
+			t2 = System.currentTimeMillis();
+			logger.debug("Query #2 executed in " + (t2-t1) + "ms");			
 			
+
 			sql = "insert into amp_report_cache ";
 			sql += " select '',amp_activity.amp_activity_id,amp_id,amp_activity.name 'activity_name',amp_funding.amp_modality_id 'amp_modality_id',amp_modality.name 'modality_name',";
 			sql += " amp_activity.amp_status_id 'amp_status_id',amp_status.name 'status_name',";
@@ -119,7 +110,12 @@ public class UpdateDB {
 			sql += " and amp_funding_detail.amp_currency_id=amp_currency.amp_currency_id and amp_activity.amp_activity_id='" + ampActivityId + "'";
 			sql += " and amp_activity.amp_level_id=amp_level.amp_level_id and org_role_code='MA'";
 			
+			// Query #3
+			t1 = System.currentTimeMillis();			
 			stmt.executeUpdate(sql);
+			t2 = System.currentTimeMillis();
+			logger.debug("Query #3 executed in " + (t2-t1) + "ms");			
+
 			
 			sql = "insert into amp_report_cache ";
 			sql += "select '',amp_activity.amp_activity_id,amp_activity.amp_id,amp_activity.name,NULL,NULL, ";
@@ -138,7 +134,11 @@ public class UpdateDB {
 			sql += "and amp_org_role.amp_org_id=amp_organisation.amp_org_id ";
 			sql += "and amp_activity.amp_status_id=amp_status.amp_status_id";
 			
+			// Query #4
+			t1 = System.currentTimeMillis();						
 			stmt.executeUpdate(sql);
+			t2 = System.currentTimeMillis();
+			logger.debug("Query #4 executed in " + (t2-t1) + "ms");			
 
 			sql = "insert into amp_report_cache ";
 			sql += "select distinct ' ',";
@@ -153,8 +153,12 @@ public class UpdateDB {
 			sql += "amp_activity.amp_activity_id=amp_funding.amp_activity_id,amp_status ";
 			sql += "where amp_funding.amp_funding_id is null and amp_activity.amp_activity_id='" + ampActivityId + "' ";
 			sql += "and amp_activity.amp_status_id=amp_status.amp_status_id";
-			
+
+			// Query #5
+			t1 = System.currentTimeMillis();						
 			stmt.executeUpdate(sql);
+			t2 = System.currentTimeMillis();
+			logger.debug("Query #5 executed in " + (t2-t1) + "ms");			
 			
 			sql = "insert into amp_report_cache select ";
 			sql += "'',amp_activity.amp_activity_id,amp_id,amp_activity.name,amp_funding.amp_modality_id,case ";
@@ -204,7 +208,11 @@ public class UpdateDB {
 			sql += "and amp_funding_detail.amp_currency_id=amp_currency.amp_currency_id and amp_activity.amp_activity_id='" + ampActivityId + "' ";
 			sql += "and amp_activity.amp_status_id=amp_status.amp_status_id";
 			
+			// Query #6
+			t1 = System.currentTimeMillis();						
 			stmt.executeUpdate(sql);
+			t2 = System.currentTimeMillis();
+			logger.debug("Query #6 executed in " + (t2-t1) + "ms");			
 			
 			sql = "insert into amp_report_cache select ";
 			sql += "'',amp_activity.amp_activity_id,amp_id,amp_activity.name,amp_funding.amp_modality_id,case ";
@@ -254,35 +262,75 @@ public class UpdateDB {
 			sql += "and amp_funding_detail.amp_currency_id=amp_currency.amp_currency_id and amp_activity.amp_activity_id='" + ampActivityId + "' ";
 			sql += "and amp_activity.amp_status_id=amp_status.amp_status_id";
 			
+			// Query #7
+			t1 = System.currentTimeMillis();						
 			stmt.executeUpdate(sql);
+			t2 = System.currentTimeMillis();
+			logger.debug("Query #7 executed in " + (t2-t1) + "ms");			
 
 			sql = "delete from amp_report_sector where amp_activity_id='" + ampActivityId + "'";
 			
+			// Query #8
+			t1 = System.currentTimeMillis();						
 			stmt.executeUpdate(sql);
+			t2 = System.currentTimeMillis();
+			logger.debug("Query #8 executed in " + (t2-t1) + "ms");			
 			
 			sql = "select amp_sector_id from amp_activity_sector ";
 			sql += "where amp_activity_id='" + ampActivityId + "'";
+			
+			// Query #9
+			t1 = System.currentTimeMillis();						
 			rs=stmt.executeQuery(sql);
+			t2 = System.currentTimeMillis();
+			logger.debug("Query #9 executed in " + (t2-t1) + "ms");
+			
+			StringBuffer sb = new StringBuffer();
 			while(rs.next())
 			{
 				AmpSector ampSector=DbUtil.getAmpParentSector(new Long(rs.getLong("amp_sector_id")));
 				logger.debug("Sector: " + ampSector.getAmpSectorId());
-				sql = "insert into amp_report_sector ";
-				sql += "values('','" + ampActivityId + "','" + ampSector.getName() + "','" + ampSector.getAmpSectorId() + "','','','" + rs.getString("amp_sector_id") + "')";
-				stmt.executeUpdate(sql);
+				sb.append("insert into amp_report_sector values('','");
+				sb.append(ampActivityId);
+				sb.append("','");
+				sb.append(ampSector.getName());
+				sb.append("','");
+				sb.append(ampSector.getAmpSectorId());
+				sb.append("','','','");
+				sb.append(rs.getString("amp_sector_id"));
+				sb.append("')");
+				// Query #10
+				t1 = System.currentTimeMillis();							
+				stmt.executeUpdate(sb.toString());
+				t2 = System.currentTimeMillis();
+				logger.debug("Query #10 executed in " + (t2-t1) + "ms");
+				sb.delete(0,sb.length());
 			}
 
 			sql= "delete from amp_report_location where amp_activity_id='" + ampActivityId + "'";
+			// Query #11
+			t1 = System.currentTimeMillis();										
 			stmt.executeUpdate(sql);
+			t2 = System.currentTimeMillis();
+			logger.debug("Query #11 executed in " + (t2-t1) + "ms");			
 
 			sql= "insert into amp_report_location ";
 			sql += "select distinct '',amp_activity_id,country,region ";
 			sql += "from amp_activity_location,amp_location ";
 			sql += "where amp_activity_location.amp_location_id=amp_location.amp_location_id and amp_activity_id='" + ampActivityId + "'";
+			
+			// Query #12
+			t1 = System.currentTimeMillis();										
 			stmt.executeUpdate(sql);
+			t2 = System.currentTimeMillis();
+			logger.debug("Query #12 executed in " + (t2-t1) + "ms");			
 
 			sql = "delete from amp_physical_component_report where amp_activity_id='" + ampActivityId + "'";
+			// Query #13
+			t1 = System.currentTimeMillis();										
 			stmt.executeUpdate(sql);
+			t2 = System.currentTimeMillis();
+			logger.debug("Query #13 executed in " + (t2-t1) + "ms");			
 			
 			sql = "insert into amp_physical_component_report ";
 			sql += "select distinct '',amp_activity.amp_activity_id,amp_activity.name ";
@@ -303,7 +351,11 @@ public class UpdateDB {
 			sql += "and amp_components.currency_id=amp_currency.amp_currency_id ";
 			sql += "and org_role_code='MA' and amp_activity.amp_activity_id='" + ampActivityId + "' ";
 			sql += "order by amp_organisation.amp_org_id,amp_activity.amp_activity_id,amp_components.amp_component_id,amp_physical_performance.reporting_date";
+			// Query #14
+			t1 = System.currentTimeMillis();										
 			stmt.executeUpdate(sql);
+			t2 = System.currentTimeMillis();
+			logger.debug("Query #14 executed in " + (t2-t1) + "ms");			
 
 			logger.debug("All the statements got executed");
 			con.close();

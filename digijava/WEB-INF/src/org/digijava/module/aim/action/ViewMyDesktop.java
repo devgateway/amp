@@ -20,7 +20,6 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.digijava.module.aim.dbentity.AmpActivity;
 import org.digijava.module.aim.dbentity.AmpCurrency;
-import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpSector;
 import org.digijava.module.aim.dbentity.AmpReports;
 import org.digijava.module.aim.dbentity.AmpTeam;
@@ -30,7 +29,6 @@ import org.digijava.module.aim.helper.AmpProjectDonor;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.DecimalToText;
 import org.digijava.module.aim.helper.TeamMember;
-import org.digijava.module.aim.helper.Documents;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.TeamUtil;
 
@@ -42,6 +40,7 @@ public class ViewMyDesktop extends Action
 	public ActionForward execute(ActionMapping mapping, ActionForm form, 
 								HttpServletRequest request, HttpServletResponse response) throws java.lang.Exception
 	{
+	    long t1 = System.currentTimeMillis();
 		HttpSession session = request.getSession();
 		TeamMember teamMember=(TeamMember)session.getAttribute("currentMember");
 		if(teamMember==null)
@@ -54,7 +53,10 @@ public class ViewMyDesktop extends Action
 		MyDesktopForm formBean = (MyDesktopForm) form ;
 		
 		formBean.setTeamMemberId(ampMemberId);
+		long t2 = System.currentTimeMillis();
+		logger.debug("1. at" + (t2-t1)+ "ms");
 		
+		t1 = System.currentTimeMillis();
 		ArrayList dbReturnSet= null ;
 		Iterator iter = null ;
 		Iterator iterSub = null ;
@@ -85,6 +87,10 @@ public class ViewMyDesktop extends Action
 		
 		
 		String perspective = "DN";
+		t2 = System.currentTimeMillis();
+		logger.debug("2. at" + (t2-t1)+ "ms");		
+		
+		t1 = System.currentTimeMillis();
 		if(formBean.getPerspective() == null)
 		{
 			if (teamMember.getAppSettings() != null)
@@ -106,19 +112,33 @@ public class ViewMyDesktop extends Action
 		formBean.setAmpToYears(new ArrayList());
 		formBean.setSector(new ArrayList()) ;
 		formBean.setDonor(new ArrayList()) ;
+		t2 = System.currentTimeMillis();
+		logger.debug("3. at" + (t2-t1)+ "ms");
+		
+		t1 = System.currentTimeMillis();
 		filters=DbUtil.getTeamPageFilters(ampTeamId,Constants.DESKTOP);
-	//	logger.debug("Filter Size: " + filters.size());
+		t2 = System.currentTimeMillis();
+		logger.debug("4. at" + (t2-t1)+ "ms");		
+		
+		
 		if(filters.size()==0)
 			formBean.setFilterFlag("false");		
 		if(filters.size()>0)
 		{
+		    t1 = System.currentTimeMillis();
 			formBean.setFilterFlag("true");	
 			if(filters.indexOf(Constants.PERSPECTIVE)!=-1)
 				formBean.setPerspectives(DbUtil.getAmpPerspective());
+			t2 = System.currentTimeMillis();
+			logger.debug("5.0 at" + (t2-t1)+ "ms");		
 			
+			t1 = System.currentTimeMillis();
 			if(filters.indexOf(Constants.CALENDAR)!=-1)
 				formBean.setFiscalYears(DbUtil.getAllFisCalenders());
-						
+			t2 = System.currentTimeMillis();
+			logger.debug("5.1 at" + (t2-t1)+ "ms");					
+
+			t1 = System.currentTimeMillis();
 			if(filters.indexOf(Constants.YEAR_RANGE)!=-1)
 			{	
 				Calendar c=Calendar.getInstance();
@@ -130,13 +150,21 @@ public class ViewMyDesktop extends Action
 					formBean.getAmpToYears().add(new Long(i));
 				}
 			}
-
+			t2 = System.currentTimeMillis();
+			logger.debug("5.2 at" + (t2-t1)+ "ms");					
+			
+			t1 = System.currentTimeMillis();			
 			if(filters.indexOf(Constants.STATUS)!=-1)
 				formBean.setStatus(DbUtil.getAmpStatus());
-
+			t2 = System.currentTimeMillis();
+			logger.debug("5.3 at" + (t2-t1)+ "ms");					
+			
+			t1 = System.currentTimeMillis();			
 			if(filters.indexOf(Constants.DONORS)!=-1)
 			{
-				dbReturnSet=DbUtil.getAmpDonors(ampTeamId);
+				dbReturnSet=(ArrayList) TeamUtil.getAllDonorsToDesktop(ampTeamId);
+				formBean.setDonor(dbReturnSet);
+				/*
 				iter = dbReturnSet.iterator() ;
 				while ( iter.hasNext() )
 				{
@@ -147,8 +175,12 @@ public class ViewMyDesktop extends Action
 						ampOrganisation.setAcronym(temp);
 					}
 					formBean.getDonor().add(ampOrganisation);
-				}
+				}*/
 			}	
+			t2 = System.currentTimeMillis();
+			logger.debug("5.4 at" + (t2-t1)+ "ms");
+			
+			t1 = System.currentTimeMillis();
 			if(filters.indexOf(Constants.SECTOR)!=-1)
 			{
 				dbReturnSet=DbUtil.getAmpSectors();
@@ -173,7 +205,7 @@ public class ViewMyDesktop extends Action
 							temp=temp.substring(0,20) + "...";
 							ampSubSector.setName(temp);
 						}
-						logger.debug("Sub Sector:" + temp);
+						//logger.debug("Sub Sector:" + temp);
 						ampSubSector.setName(temp);
 						formBean.getSector().add(ampSubSector);
 						dbReturnSet=DbUtil.getAmpSubSectors(ampSubSector.getAmpSectorId());
@@ -187,19 +219,27 @@ public class ViewMyDesktop extends Action
 								temp=temp.substring(0,20) + "...";
 								ampSubSubSector.setName(temp);
 							}
-							logger.debug("Sub Sector:" + temp);
+							//logger.debug("Sub Sector:" + temp);
 							ampSubSubSector.setName(temp);
 							formBean.getSector().add(ampSubSubSector);
 						}
 					}
 				}
 			}
+			t2 = System.currentTimeMillis();
+			logger.debug("5.5 at" + (t2-t1)+ "ms");			
 
+			t1 = System.currentTimeMillis();
 			if(filters.indexOf(Constants.REGION)!=-1)
 				formBean.setRegion(DbUtil.getAmpLocations());
-
+			t2 = System.currentTimeMillis();
+			logger.debug("5.6 at" + (t2-t1)+ "ms");
+			
+			t1 = System.currentTimeMillis();
 			if(filters.indexOf(Constants.CURRENCY)!=-1)
 				formBean.setCurrency(DbUtil.getAmpCurrency()) ;
+			t2 = System.currentTimeMillis();
+			logger.debug("5.7 at" + (t2-t1)+ "ms");			
 		}
 		else
 		{
@@ -207,6 +247,7 @@ public class ViewMyDesktop extends Action
 			formBean.setFilterFlag("false");
 		}
 
+		t1 = System.currentTimeMillis();
 		if(formBean.getAmpStatusId()==null)
 			ampStatusId=All;
 		else
@@ -244,7 +285,11 @@ public class ViewMyDesktop extends Action
 			ampToYear=All;
 		else
 			ampToYear=formBean.getAmpToYear();
-
+		
+		t2 = System.currentTimeMillis();
+		logger.debug("6. at" + (t2-t1)+ "ms");				
+		
+		t1 = System.currentTimeMillis();
 		if(formBean.getAmpCurrencyCode()==null || formBean.getAmpCurrencyCode().equals("0"))
 		{
 			AmpCurrency ampCurrency=DbUtil.getAmpcurrency(teamMember.getAppSettings().getCurrencyId());
@@ -255,7 +300,10 @@ public class ViewMyDesktop extends Action
 		{
 			ampCurrencyCode=formBean.getAmpCurrencyCode();
 		}
-
+		t2 = System.currentTimeMillis();
+		logger.debug("7. at" + (t2-t1)+ "ms");
+		
+		t1 = System.currentTimeMillis();
 		search=formBean.getSearchCriteria() + " ";
 		if(request.getParameter("view")!=null)
 		{
@@ -283,6 +331,9 @@ public class ViewMyDesktop extends Action
 		 }
 		 Collection projects = new ArrayList();
 		 int page = 0;
+		 t2 = System.currentTimeMillis();
+		 logger.debug("8.0 at" + (t2-t1)+ "ms");	
+		
 		 if (request.getParameter("page") == null) 
 		 {
 			page = 1;
@@ -292,8 +343,13 @@ public class ViewMyDesktop extends Action
 			{
 				if(request.getParameter("view").equals("search"))
 				{
+				    t1 = System.currentTimeMillis();
 					ampProjects =DbUtil.getProjectList(ampTeamId,ampMemberId,teamLeadFlag,ampStatusId,ampOrgId,ampSectorId,region,ampCalType,ampFromYear,ampToYear,ampCurrencyCode,perspective,sortOrder,sortField);
 					session.setAttribute("ampProjects",ampProjects);
+					t2 = System.currentTimeMillis();
+					logger.debug("8.1 at" + (t2-t1)+ "ms");
+					
+					t1 = System.currentTimeMillis();										
 					iter=ampProjects.iterator();
 					while(iter.hasNext())
 					{
@@ -350,23 +406,32 @@ public class ViewMyDesktop extends Action
 						 if(flag==false)
 							iter.remove();
 					}
+					t2 = System.currentTimeMillis();
+					logger.debug("8.2 at" + (t2-t1)+ "ms");					
 				}
 				else
 				{
+				    t1 = System.currentTimeMillis();
 //					ampCurrencyCode = (String)session.getAttribute("ampCurrency");
 					ampProjects =DbUtil.getProjectList(ampTeamId,ampMemberId,teamLeadFlag,ampStatusId,ampOrgId,ampSectorId,region,ampCalType,ampFromYear,ampToYear,ampCurrencyCode,perspective,sortOrder,sortField);
 					session.setAttribute("ampProjects",ampProjects);
+					t2 = System.currentTimeMillis();
+					logger.debug("8.3 at" + (t2-t1)+ "ms");					
 				}
 			}
 			else
 			{
+			    t1 = System.currentTimeMillis();
 //				ampCurrencyCode = (String)session.getAttribute("ampCurrency");
 				ampProjects =DbUtil.getProjectList(ampTeamId,ampMemberId,teamLeadFlag,ampStatusId,ampOrgId,ampSectorId,region,ampCalType,ampFromYear,ampToYear,ampCurrencyCode,perspective,sortOrder,sortField);
 				session.setAttribute("ampProjects",ampProjects);
+				t2 = System.currentTimeMillis();
+				logger.debug("8.4 at" + (t2-t1)+ "ms");									
 			}
 		}
 		else 
 		{
+		    t1 = System.currentTimeMillis();
 			page = Integer.parseInt(request.getParameter("page"));
 			if(session.getAttribute("ampProjects")==null)
 			{
@@ -376,8 +441,12 @@ public class ViewMyDesktop extends Action
 			}
 			else
 				ampProjects=(ArrayList)session.getAttribute("ampProjects");
+			
+			t2 = System.currentTimeMillis();
+			logger.debug("8.5 at" + (t2-t1)+ "ms");												
 		 }
 
+		 t1 = System.currentTimeMillis();
 		 formBean.setPage(new Integer(page));
 		 int defRecsPerPage = teamMember.getAppSettings().getDefRecsPerPage();			
 		 int stIndex = ((page - 1) * defRecsPerPage) + 1;
@@ -404,6 +473,10 @@ public class ViewMyDesktop extends Action
 			  pages.add(pageNum);
 			}
 		}
+		t2 = System.currentTimeMillis();
+		logger.debug("8.6 at" + (t2-t1)+ "ms");
+		
+		t1 = System.currentTimeMillis();
 		formBean.setAmpProjects(projects);
 		formBean.setPages(pages);
 		logger.debug("Page: " + page);
@@ -422,16 +495,24 @@ public class ViewMyDesktop extends Action
 		{
 			formBean.setGrandTotalFlag("true");
 		}
-//		logger.info("Team Member Id: " + ampMemberId);
+		t2 = System.currentTimeMillis();
+		logger.debug("9. at" + (t2-t1)+ "ms");
+		
 		// Modified by priyajith
 		// start
 		// showing all team members
+		t1 = System.currentTimeMillis();		
 		if (teamLeadFlag==true) 
 			dbReturnSet = (ArrayList)DbUtil.getAllTeamReports(ampTeamId);
 		else
 			dbReturnSet = DbUtil.getAllMemberReports(ampMemberId);
+		
 		formBean.setReportCount(new Integer(dbReturnSet.size()));
 		formBean.setAmpReports(new ArrayList());
+		t2 = System.currentTimeMillis();
+		logger.debug("10. at" + (t2-t1)+ "ms");
+		
+		t1 = System.currentTimeMillis();
 		if(dbReturnSet.size()>5)
 		{
 			iter=dbReturnSet.iterator();
@@ -443,45 +524,42 @@ public class ViewMyDesktop extends Action
 		}
 		else
 			formBean.getAmpReports().addAll(dbReturnSet);
+		t2 = System.currentTimeMillis();
+		logger.debug("11. at" + (t2-t1)+ "ms");
 		
 		// show all documents
 		
-		//dbReturnSet = (ArrayList)DbUtil.getAllDocuments(teamMember.getMemberId());
+		t1 = System.currentTimeMillis();
 		dbReturnSet = (ArrayList)TeamUtil.getMemberLinks(teamMember.getMemberId());
-		formBean.setDocumentCount(new Integer(dbReturnSet.size()));
-		formBean.setDocuments(new ArrayList());
-		formBean.getDocuments().addAll(dbReturnSet);
-		
-		/*
-		if(dbReturnSet.size()>5)
-		{
-			iter=dbReturnSet.iterator();
-			for(int i=1;i<=5;i++)
-			{
-				Documents document=(Documents) iter.next();
-				formBean.getDocuments().add(document);
-			}
+		if (dbReturnSet.size() > 0) {
+			formBean.setDocumentCount(new Integer(dbReturnSet.size()));
+			formBean.setDocuments(dbReturnSet);
 		}
-		else
-			formBean.getDocuments().addAll(dbReturnSet);
-		*/
-		
-		
+		t2 = System.currentTimeMillis();
+		logger.debug("12. at" + (t2-t1)+ "ms");		
 		
 		//end
 					 
-		formBean.setAmpTeamMembers(DbUtil.getAllTeamMembers(ampTeamId));
+		t1 = System.currentTimeMillis();		
+		formBean.setAmpTeamMembers(TeamUtil.getAllTeamMembersToDesktop(ampTeamId));
 		formBean.setAmpCurrencyCode(ampCurrencyCode);
 		formBean.setSearchCriteria("");
-		AmpTeam ampTeam=DbUtil.getAmpTeam(ampTeamId);
+		t2 = System.currentTimeMillis();
+		logger.debug("13. at" + (t2-t1)+ "ms");
+		
+		t1 = System.currentTimeMillis();		
+		AmpTeam ampTeam=TeamUtil.getAmpTeam(ampTeamId);
+		t2 = System.currentTimeMillis();
+		logger.debug("14. at" + (t2-t1)+ "ms");
+		
+		t1 = System.currentTimeMillis();
 		if(ampTeam.getAccessType().equals("Team"))
 			formBean.setWrite(true);
 		else
 			formBean.setWrite(false);
-	/*	if(teamMember.getWrite()==true)
-			formBean.setWrite(true);
-		else
-			formBean.setWrite(false);*/
+		t2 = System.currentTimeMillis();
+		logger.debug("15. at" + (t2-t1)+ "ms");
+		
 		return mapping.findForward("forward");
 	}
 }

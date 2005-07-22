@@ -3100,25 +3100,19 @@ public class DbUtil {
 			qry.setParameter("teamId", teamId, Hibernate.LONG);
 			Iterator itr = qry.list().iterator();
 			col = new ArrayList();
+			StringBuffer qryBuffer = new StringBuffer();
+			AmpTeamReports ampTeamRep = null;
 			while (itr.hasNext()) {
-				AmpTeamReports ampTeamRep = (AmpTeamReports) itr.next();
-				// modified by Priyajith
-				// desc:used select query instead of session.load
-				// start
-				queryString = "select r from " + AmpReports.class.getName()
-						+ " r " + "where (r.ampReportId=:id)";
-				qry = session.createQuery(queryString);
-				qry.setParameter("id", ampTeamRep.getReport().getAmpReportId(),
-						Hibernate.LONG);
-				Iterator itrTemp = qry.list().iterator();
-				AmpReports ampReport = null;
-				while (itrTemp.hasNext()) {
-					ampReport = (AmpReports) itrTemp.next();
-					col.add(ampReport);
-				}
-				// end
-
+			    ampTeamRep = (AmpTeamReports) itr.next();
+			    if (qryBuffer.length() != 0)
+			        qryBuffer.append(",");
+			    qryBuffer.append(ampTeamRep.getReport().getAmpReportId());
 			}
+			
+			queryString = "select r from " + AmpReports.class.getName() + " r " +
+					"where r.ampReportId in (" + qryBuffer + ")";
+			qry = session.createQuery(queryString);
+			col = qry.list();
 		} catch (Exception e) {
 			logger.debug("Exception from getAllTeamReports()");
 			logger.debug(e.toString());
@@ -3637,23 +3631,6 @@ public class DbUtil {
 
 		try {
 			session = PersistenceManager.getSession();
-			// modified by Priyajith
-			// desc:used select query instead of session.load
-			// start
-			
-			/*
-			String queryString = "select t from " + AmpTeam.class.getName()
-					+ " t " + "where (t.ampTeamId=:id)";
-			Query qry = session.createQuery(queryString);
-			qry.setParameter("id", teamId, Hibernate.LONG);
-			Iterator itrTemp = qry.list().iterator();
-			AmpTeam ampTeam = null;
-			while (itrTemp.hasNext()) {
-				ampTeam = (AmpTeam) itrTemp.next();
-			}
-			*/
-			// end
-
 	
 			AmpTeam ampTeam = (AmpTeam) session.load(AmpTeam.class,teamId);
 			Iterator itr = ampTeam.getTeamPageFilters().iterator();

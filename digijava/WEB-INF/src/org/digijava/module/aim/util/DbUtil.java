@@ -3594,6 +3594,7 @@ public class DbUtil {
 		return filter;
 	}
 
+	/*
 	public static Collection getAllTeamPageFiltersOfTeam(Long teamId) {
 		Session session = null;
 		Collection col = null;
@@ -3623,24 +3624,24 @@ public class DbUtil {
 			}
 		}
 		return col;
-	}
+	}*/
 
 	public static ArrayList getTeamPageFilters(Long teamId, Long pageId) {
 		Session session = null;
-		ArrayList col = null;
+		ArrayList col = new ArrayList();
 
 		try {
 			session = PersistenceManager.getSession();
-	
-			AmpTeam ampTeam = (AmpTeam) session.load(AmpTeam.class,teamId);
-			Iterator itr = ampTeam.getTeamPageFilters().iterator();
-			col = new ArrayList();
+			String qryStr = "select tpf.filter.ampFilterId from " +
+					AmpTeamPageFilters.class.getName() + " tpf " +
+							"where (tpf.team=:tId) and (tpf.page=:pId)";
+			Query qry = session.createQuery(qryStr);
+			qry.setParameter("tId",teamId,Hibernate.LONG);
+			qry.setParameter("pId",pageId,Hibernate.LONG);
+			
+			Iterator itr = qry.list().iterator();
 			while (itr.hasNext()) {
-				AmpTeamPageFilters ampTpf = (AmpTeamPageFilters) itr.next();
-				AmpPages ampPage = ampTpf.getPages();
-				if (ampPage.getAmpPageId().equals(pageId)) {
-					col.add(ampTpf.getFilters().getAmpFilterId());
-				}
+			    col.add((Long) itr.next());
 			}
 		} catch (Exception e) {
 			logger.debug("Exception from getTeamPageFilters()");

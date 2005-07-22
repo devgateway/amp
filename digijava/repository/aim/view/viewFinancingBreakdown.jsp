@@ -76,28 +76,28 @@
 						<TABLE width="750" cellPadding=2 cellSpacing=0 vAlign="top" align="center" border=0>
 							<TR>
                      	<logic:equal name="aimFinancingBreakdownForm" property="perspectivePresent" value="true">
-								<TD align="center" width="10%">
+								<TD align="center" width="100">
 									<STRONG>	
 										<digi:trn key="aim:perspective">Perspective</digi:trn>
 									</STRONG>
 								</TD>
 								</logic:equal>
 			               <logic:equal name="aimFinancingBreakdownForm" property="currencyPresent" value="true">
-								<TD align="center" width="10%">
+								<TD align="center" width="100">
 									<STRONG>
 										<digi:trn key="aim:currency">Currency</digi:trn>
 									</STRONG>
 								</TD>
 								</logic:equal>
 								<logic:equal name="aimFinancingBreakdownForm" property="calendarPresent" value="true">
-								<TD align="center" width="10%">
+								<TD align="center" width="100">
 									<STRONG>
 										<digi:trn key="aim:calendarType">Calendar Type</digi:trn>
 									</STRONG>					
 								</TD>
 								</logic:equal>
 			               <logic:equal name="aimFinancingBreakdownForm" property="yearRangePresent" value="true">
-								<TD align="center" width="33%">
+								<TD align="center" width="150">
 									<STRONG>
              						<digi:trn key="aim:year">Year</digi:trn>
 									</STRONG>								

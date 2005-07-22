@@ -52,6 +52,17 @@ public class ViewMyDesktop extends Action
 		
 		MyDesktopForm formBean = (MyDesktopForm) form ;
 		
+		// clear filters
+		formBean.setFiscalYears(null);
+		formBean.setCurrency(null);
+		formBean.setDonor(null);
+		formBean.setRegion(null);
+		formBean.setSector(null);
+		formBean.setStatus(null);
+		formBean.setAmpFromYear(null);
+		formBean.setAmpToYear(null);
+		formBean.setFilterFlag("false");
+		
 		formBean.setTeamMemberId(ampMemberId);
 		long t2 = System.currentTimeMillis();
 		logger.debug("1. at" + (t2-t1)+ "ms");

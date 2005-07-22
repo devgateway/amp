@@ -133,6 +133,9 @@
 		<hibernate-class>
 			org.digijava.module.aim.dbentity.AmpPhysicalComponentReport
  		</hibernate-class>
+		<hibernate-class>
+			org.digijava.module.aim.dbentity.AmpTeamPageFilters
+ 		</hibernate-class> 		
 	</hibernate-classes>
         <!-- highlights classes End-->
 

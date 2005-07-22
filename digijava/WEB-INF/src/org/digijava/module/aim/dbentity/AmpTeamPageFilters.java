@@ -8,42 +8,58 @@ import java.io.Serializable;
 
 public class AmpTeamPageFilters implements Serializable {
 
-	private AmpPages pages;
-	private AmpFilters filters;
+    private Long ampTeamPageFilterId;
+    private AmpTeam team;
+	private AmpPages page;
+	private AmpFilters filter;
 
-	public AmpTeamPageFilters() {
-	}
 
-	public AmpTeamPageFilters(AmpPages page, AmpFilters filter) {
-		setPages(page);
-		setFilters(filter);
-	}
-
-	public AmpPages getPages() {
-		return pages;
-	}
-
-	public AmpFilters getFilters() {
-		return filters;
-	}
-
-	public void setPages(AmpPages pages) {
-		this.pages = pages;
-	}
-
-	public void setFilters(AmpFilters filters) {
-		this.filters = filters;
-	}
-	
-	public boolean equals(Object obj) {
-		if (obj == null) throw new NullPointerException();
-		
-		if (!(obj instanceof AmpTeamPageFilters)) throw new ClassCastException();
-		
-		AmpTeamPageFilters tpf = (AmpTeamPageFilters) obj;
-
-		return (tpf.getFilters().getAmpFilterId().equals(filters.getAmpFilterId()) &&
-			tpf.getPages().getAmpPageId().equals(pages.getAmpPageId()));
-		
-	}
+    /**
+     * @return Returns the ampTeamPageFilterId.
+     */
+    public Long getAmpTeamPageFilterId() {
+        return ampTeamPageFilterId;
+    }
+    /**
+     * @param ampTeamPageFilterId The ampTeamPageFilterId to set.
+     */
+    public void setAmpTeamPageFilterId(Long ampTeamPageFilterId) {
+        this.ampTeamPageFilterId = ampTeamPageFilterId;
+    }
+    /**
+     * @return Returns the filter.
+     */
+    public AmpFilters getFilter() {
+        return filter;
+    }
+    /**
+     * @param filter The filter to set.
+     */
+    public void setFilter(AmpFilters filter) {
+        this.filter = filter;
+    }
+    /**
+     * @return Returns the page.
+     */
+    public AmpPages getPage() {
+        return page;
+    }
+    /**
+     * @param page The page to set.
+     */
+    public void setPage(AmpPages page) {
+        this.page = page;
+    }
+    /**
+     * @return Returns the team.
+     */
+    public AmpTeam getTeam() {
+        return team;
+    }
+    /**
+     * @param team The team to set.
+     */
+    public void setTeam(AmpTeam team) {
+        this.team = team;
+    }
 }

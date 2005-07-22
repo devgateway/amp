@@ -19,17 +19,6 @@
 		<many-to-one name="parentTeamId" column="parent_team_id" class="org.digijava.module.aim.dbentity.AmpTeam" cascade="none"/>
 		
 
-	 <set name="teamPageFilters" table="amp_team_page_filters">
-				<key column="amp_team_id"/>
-				<composite-element class="org.digijava.module.aim.dbentity.AmpTeamPageFilters">
-						  <many-to-one name="pages" class="org.digijava.module.aim.dbentity.AmpPages" 
-									 column="amp_page_id"/>
-						  <many-to-one name="filters" class="org.digijava.module.aim.dbentity.AmpFilters" 
-									 column="amp_filter_id"/>
-				</composite-element>
-	 </set>
-	 
-
 	 	<!-- not needed
 		<set name="activityList" table="amp_team_activities" lazy="true">
   	            <cache usage="read-write"/>

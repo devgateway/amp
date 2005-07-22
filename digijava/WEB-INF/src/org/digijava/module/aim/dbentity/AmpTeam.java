@@ -4,9 +4,7 @@
 
 package org.digijava.module.aim.dbentity;
 
-import java.util.Set;
 import java.io.Serializable;
-
 
 public class AmpTeam  implements Serializable {
 
@@ -19,8 +17,6 @@ public class AmpTeam  implements Serializable {
 	private AmpTeamMember teamLead; // Denotes the Team Leader
 
 	private String type; // Whether Bilateral or Multilateral
-
-	private Set teamPageFilters;
 
 	private AmpTeam parentTeamId;
 
@@ -90,14 +86,6 @@ public class AmpTeam  implements Serializable {
 
 	public void setType(String type) {
 		this.type = type;
-	}
-
-	public Set getTeamPageFilters() {
-		return teamPageFilters;
-	}
-
-	public void setTeamPageFilters(Set teamPageFilters) {
-		this.teamPageFilters = teamPageFilters;
 	}
 
 	/**

@@ -173,6 +173,7 @@
 	<page page="updateCurrency" name="aim_updateCurrency" title="AMP - Currency Editor" />	
 	<page page="loadCurrencyRates" name="aim_loadCurrencyRates" title="AMP - Load Currency Rates" />	
 	<page page="printerFriendlyPreview" name="aim_printerFriendlyPreview" title="AMP - Preview Activity" />	
+	<page page="viewProjectDescObj" name="aim_projectDetails" title="AMP - Project Details" />	
 	
 
 	<!-- Printer Friendly HTML Reports -->

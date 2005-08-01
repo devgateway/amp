@@ -1,6 +1,7 @@
 package org.digijava.module.aim.action;
 
 import java.util.Collection;
+import java.util.Date;
 import java.util.Iterator;
 
 import javax.servlet.http.HttpServletRequest;
@@ -12,13 +13,19 @@ import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
+import org.digijava.kernel.request.SiteDomain;
 import org.digijava.kernel.user.User;
+import org.digijava.kernel.util.RequestUtils;
+import org.digijava.kernel.util.SiteUtils;
 import org.digijava.module.aim.dbentity.AmpModality;
 import org.digijava.module.aim.form.EditActivityForm;
 import org.digijava.module.aim.helper.FundingOrganization;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.ProgramUtil;
+import org.digijava.module.editor.dbentity.Editor;
+import org.digijava.module.editor.exception.EditorException;
+import org.digijava.module.editor.util.Constants;
 
 
 public class AddAmpActivity extends Action {
@@ -84,6 +91,57 @@ public class AddAmpActivity extends Action {
 		
 		if (eaForm.getStep().equals("1")) { // show the step 1 page.
 			
+		    if (eaForm.getContext() == null) {
+				SiteDomain currentDomain = RequestUtils.getSiteDomain(request);
+				
+				String url = SiteUtils.getSiteURL(currentDomain, request.getScheme(),
+	                            request.getServerPort(),
+	                            request.getContextPath());
+				eaForm.setContext(url);
+		    }
+				
+
+		    
+		    if (eaForm.getDescription() == null || eaForm.getDescription().trim().length() == 0) {
+		        eaForm.setDescription("aim-desc-" + teamMember.getMemberId() + "-" + System.currentTimeMillis());
+				User user = RequestUtils.getUser(request);
+		        String currentLang = RequestUtils.getNavigationLanguage(request).getCode();
+		        String refUrl = RequestUtils.getSourceURL(request);
+		        String key = eaForm.getDescription();
+                Editor ed = org.digijava.module.editor.util.DbUtil.createEditor(user,
+	                    currentLang,
+	                    refUrl,
+	                    key,
+	                    key,
+	                    " ",
+	                    null,
+	                    request);
+                ed.setLastModDate(new Date());
+                ed.setGroupName(Constants.GROUP_OTHER);
+                org.digijava.module.editor.util.DbUtil.saveEditor(ed);
+		    }
+		        
+		    
+		    if (eaForm.getObjectives() == null || eaForm.getObjectives().trim().length() == 0) {
+		        eaForm.setObjectives("aim-obj-" + teamMember.getMemberId() + "-" + System.currentTimeMillis());
+				User user = RequestUtils.getUser(request);
+		        String currentLang = RequestUtils.getNavigationLanguage(request).getCode();
+		        String refUrl = RequestUtils.getSourceURL(request);
+		        String key = eaForm.getObjectives();
+                Editor ed = org.digijava.module.editor.util.DbUtil.createEditor(user,
+	                    currentLang,
+	                    refUrl,
+	                    key,
+	                    key,
+	                    " ",
+	                    null,
+	                    request);
+                ed.setLastModDate(new Date());
+                ed.setGroupName(Constants.GROUP_OTHER);
+                org.digijava.module.editor.util.DbUtil.saveEditor(ed);		        
+		    }
+		        
+		    
 			/*
 			if (!eaForm.isEdit()) {
 				EditActivityForm temp =	(EditActivityForm) ObjectPersister.loadObject(fileName);

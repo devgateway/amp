@@ -228,7 +228,10 @@
 			  <page>cms_selectCategory</page>							  
   			  <page>cms_selectFile</page>							  
 			  <page>cms_categoryDetails</page>							  
-			</module>	 
+			</module>
+			<module name="editor">
+			  <page>editor_editText</page>
+			</module>	
 		</page-group>
 		<page-group masterLayout="popup" tile="body">
 			<module name="aim">
@@ -255,6 +258,7 @@
 				<page>aim_searchSectorPopupLayout</page>
 				<page>aim_printerFriendlyPreview</page>
 				<page>aim_viewActivityDetails</page>
+				<page>aim_projectDetails</page>
 				<page>viewbyProjectbyDonor_NoLayout</page>
 				
 				<page>	projectByDonor_NoLayout				</page>

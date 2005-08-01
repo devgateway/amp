@@ -107,6 +107,7 @@ function reviseCloseDate() {
 	document.aimEditActivityForm.submit();		  
 }
 
+
 -->
 </script>
 
@@ -209,8 +210,8 @@ function reviseCloseDate() {
 									</td></tr>
 									<tr><td>&nbsp;</td></tr>
 									<tr><td>
-										<table width="100%">
-											<tr><td valign="top" align="left">
+										<table width="100%" bgcolor="#cccccc" cellPadding=5 cellSpacing=1>
+											<tr bgcolor="#ffffff"><td valign="top" align="left">
 												<FONT color=red>*</FONT>
 												<a title="<digi:trn key="aim:TitleInDonorsOrMoFEDInternalSystems">Title used in donors or MoFED internal systems</digi:trn>">
 												<digi:trn key="aim:projectTitle">Project Title</digi:trn>
@@ -223,17 +224,26 @@ function reviseCloseDate() {
 												<html:textarea property="title" cols="60" rows="2" styleClass="inp-text"/>
 												</a>
 											</td></tr>									
-											<tr><td valign="top" align="left">
+											<tr bgcolor="#ffffff"><td valign="top" align="left">
 												<a title="<digi:trn key="aim:ObjectivesAndComponentsofProject">The key objectives and main components of the project</digi:trn>">
 												<digi:trn key="aim:objective">Objective</digi:trn>
 												</a>
 											</td>
 											<td valign="top" align="left">
+												<%--
 												<a title="<digi:trn key="aim:ObjectivesAndComponentsofProject">The key objectives and main components of the project</digi:trn>">
 												<html:textarea property="objectives" cols="60" rows="4" styleClass="inp-text" />
 											   </a>
+												<digi:edit key="aim.act.desc.1247"/>
+												--%>
+												<bean:define id="objKey">
+													<c:out value="${aimEditActivityForm.objectives}"/>
+												</bean:define>
+												
+												<digi:edit key="<%=objKey%>"></digi:edit>
+												<a href="<c:out value="${aimEditActivityForm.context}"/>/editor/showEditText.do?id=<%=objKey%>&referrer=<c:out value="${aimEditActivityForm.context}"/>/aim/addActivity.do">Edit</a>
 											</td></tr>																				
-											<tr><td valign="top" align="left">
+											<tr bgcolor="#ffffff"><td valign="top" align="left">
 												<a title="<digi:trn key="aim:DescriptionofProject">Summary information describing the project</digi:trn>">
 												<digi:trn key="aim:description">
 												Description
@@ -241,11 +251,22 @@ function reviseCloseDate() {
 												</a>
 											</td>
 											<td valign="top" align="left">
+												<%--
 												<a title="<digi:trn key="aim:DescriptionofProject">Summary information describing the project</digi:trn>">
 												<html:textarea property="description" cols="60" rows="4" styleClass="inp-text" />
-											   </a>
-											</td></tr>							
+											   </a>--%>
+
+												<bean:define id="descKey">
+													<c:out value="${aimEditActivityForm.description}"/>
+												</bean:define>
+												
+												<digi:edit key="<%=descKey%>"></digi:edit>
+												<a href="<c:out value="${aimEditActivityForm.context}"/>/editor/showEditText.do?id=<%=descKey%>&referrer=<c:out value="${aimEditActivityForm.context}"/>/aim/addActivity.do">Edit</a>
+											</td></tr>																				
 										</table>
+									</td></tr>
+									<tr><td>
+										&nbsp;
 									</td></tr>
 									<tr><td>
 									

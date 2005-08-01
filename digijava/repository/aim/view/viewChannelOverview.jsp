@@ -123,6 +123,7 @@ type="org.digijava.module.aim.form.ChannelOverviewForm" method="post">
 						</TABLE>
 					</TD>
 				</TR>
+				<%--
 				<TR bgColor=#f4f4f2>
 					<TD vAlign="top" align="left" width="100%">
 						<TABLE width="100%" cellPadding=2 cellSpacing=2 vAlign="top" align="left" bgColor=#f4f4f2>
@@ -149,7 +150,6 @@ type="org.digijava.module.aim.form.ChannelOverviewForm" method="post">
 						</TABLE>
 					</TD>
 				</TR>				
-				<%--
 				<TR bgColor=#f4f4f2>
 					<TD vAlign="top" align="left" width="100%">
 						<TABLE width="100%" cellPadding=2 cellSpacing=2 vAlign="top" align="left" bgColor=#f4f4f2>

@@ -332,6 +332,11 @@
     	<forward name="forward" path="/showLayout.do?layout=viewChannelOverviewDescription" />
     </action>
 
+	<action name="aimMainProjectDetailsForm"
+     	type="org.digijava.module.aim.action.ViewProjectDetails" 
+     	scope="request" validate="false" path="/aim/viewProjectDetails">
+    	<forward name="forward" path="/showLayout.do?layout=aim_projectDetails" />
+    </action>	 
      
 	<action name="aimYearlyComparisonsForm"
     	type="org.digijava.module.aim.action.YearlyComparisonsFilter"

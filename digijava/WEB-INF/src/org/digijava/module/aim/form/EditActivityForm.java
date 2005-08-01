@@ -244,6 +244,8 @@ public class EditActivityForm extends ActionForm implements Serializable{
 	private Long componentId;
 	
 	private String author;
+	
+	private String context;
 
 	public EditActivityForm() {
 		step = "1";
@@ -2655,4 +2657,17 @@ public class EditActivityForm extends ActionForm implements Serializable{
 	public void setCreatedDate(String createdDate) {
 		this.createdDate = createdDate;
 	}
+ 
+    /**
+     * @return Returns the context.
+     */
+    public String getContext() {
+        return context;
+    }
+    /**
+     * @param context The context to set.
+     */
+    public void setContext(String context) {
+        this.context = context;
+    }
 }

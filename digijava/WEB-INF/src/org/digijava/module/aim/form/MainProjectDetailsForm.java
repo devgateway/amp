@@ -7,7 +7,6 @@ import java.util.GregorianCalendar;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
-import org.apache.log4j.Logger;
 import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.validator.ValidatorForm;
@@ -24,11 +23,10 @@ import org.digijava.module.aim.util.DbUtil;
 
 public class MainProjectDetailsForm extends ValidatorForm
 {
-	private static Logger logger = Logger.getLogger(MainProjectDetailsForm.class);
-	
 	private String ampId;
 	private String name ;
 	private String description ;
+	private String objectives;
 	private String channelOverviewTabColor ;
 	private String financialProgressTabColor ;
 	private String physicalProgressTabColor ;
@@ -50,6 +48,7 @@ public class MainProjectDetailsForm extends ValidatorForm
 	private boolean yearRangePresent;
 	private boolean goButtonPresent;
 	private boolean sessionExpired;
+	private String type;
 						
 	/**
 	 * @return
@@ -281,7 +280,6 @@ public class MainProjectDetailsForm extends ValidatorForm
 	
 	public ActionErrors validate(ActionMapping actionMapping,
 								  HttpServletRequest httpServletRequest) {
-	   logger.debug("INSIDE VALIDATE");
 	   ActionErrors errors = super.validate(actionMapping, httpServletRequest);
 	   HttpSession session = httpServletRequest.getSession();
 	   TeamMember teamMember=(TeamMember)session.getAttribute("currentMember");
@@ -332,7 +330,6 @@ public class MainProjectDetailsForm extends ValidatorForm
 			  setYears(YearUtil.getYears());
 			  setCurrencies(CurrencyUtil.getAllCurrencies(1));		
 	   }
-	   logger.debug("END OF VALIDATE");
 	   return errors.isEmpty() ? null : errors;
 	 }
 	/**
@@ -431,4 +428,28 @@ public class MainProjectDetailsForm extends ValidatorForm
 	public void setAmpId(String ampId) {
 		this.ampId = ampId;
 	}
+    /**
+     * @return Returns the objectives.
+     */
+    public String getObjectives() {
+        return objectives;
+    }
+    /**
+     * @param objectives The objectives to set.
+     */
+    public void setObjectives(String objectives) {
+        this.objectives = objectives;
+    }
+    /**
+     * @return Returns the type.
+     */
+    public String getType() {
+        return type;
+    }
+    /**
+     * @param type The type to set.
+     */
+    public void setType(String type) {
+        this.type = type;
+    }
 }

@@ -48,8 +48,11 @@
 										</td>
 									</tr>	
 									<tr>
-										<td class="head3-name" width="100%" align="left" bgcolor="#ffffff">
-											<c:out value="${aimEditActivityForm.objectives}"/>
+										<td width="100%" align="left" bgcolor="#ffffff">
+											<bean:define id="objKey">
+												<c:out value="${aimEditActivityForm.objectives}"/>
+											</bean:define>
+											<digi:edit key="<%=objKey%>"/>
 										</td>
 									</tr>										
 
@@ -59,8 +62,11 @@
 										</td>
 									</tr>	
 									<tr>
-										<td class="head3-name" width="100%" align="left" bgcolor="#ffffff">
-											<c:out value="${aimEditActivityForm.description}"/>
+										<td width="100%" align="left" bgcolor="#ffffff">
+											<bean:define id="descKey">
+												<c:out value="${aimEditActivityForm.description}"/>
+											</bean:define>
+											<digi:edit key="<%=descKey%>"/>										
 										</td>
 									</tr>									
 								</table>							

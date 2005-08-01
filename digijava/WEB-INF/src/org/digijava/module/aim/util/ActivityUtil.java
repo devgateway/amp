@@ -37,7 +37,6 @@ import org.digijava.module.aim.helper.ActivitySector;
 import org.digijava.module.aim.helper.DateConversion;
 import org.digijava.module.aim.helper.Location;
 import org.digijava.module.aim.helper.RelOrganization;
-import org.digijava.module.aim.helper.TeamMember;
 
 /**
  * ActivityUtil is the persister class for all activity related 
@@ -494,6 +493,9 @@ public class ActivityUtil {
 				activity.setStatus(ampAct.getStatus().getName());
 				activity.setStatusReason(ampAct.getStatusReason().trim());
 				
+				activity.setObjective(ampAct.getObjective());
+				
+				/*
 				if (ampAct.getObjective().length() > 200) {
 					activity.setObjective(ampAct.getObjective().substring(0,200));
 					activity.setObjMore(true);
@@ -501,6 +503,7 @@ public class ActivityUtil {
 					activity.setObjective(ampAct.getObjective());
 					activity.setObjMore(false);					
 				}
+				*/
 				
 				activity.setCurrCompDate(DateConversion.
 						ConvertDateToString(ampAct.getActualCompletionDate()));

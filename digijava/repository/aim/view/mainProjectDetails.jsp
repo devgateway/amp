@@ -6,10 +6,27 @@
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
 
-<digi:errors/>
-<digi:instance property="aimMainProjectDetailsForm" />
-<digi:context name="digiContext" property="context"/>
+<script language="JavaScript">
+<!--
 
+	function viewProjectDetails(type,key) {
+		openNewWindow(600, 400);
+		<digi:context name="viewProjDetails" property="context/module/moduleinstance/viewProjectDetails.do"/>
+		document.aimMainProjectDetailsForm.action = "<%= viewProjDetails %>";
+		document.aimMainProjectDetailsForm.type.value = type;
+		document.aimMainProjectDetailsForm.description.value = key;
+		document.aimMainProjectDetailsForm.objectives.value = key;
+		document.aimMainProjectDetailsForm.target = popupPointer.name;
+		
+		document.aimMainProjectDetailsForm.submit();					  
+	}
+
+-->
+</script>
+
+<digi:errors/>
+
+<digi:instance property="aimMainProjectDetailsForm" />
 <logic:equal name="aimMainProjectDetailsForm" property="sessionExpired" value="true">
 	
 </logic:equal>
@@ -25,9 +42,13 @@
 	<bean:write name="aimMainProjectDetailsForm" property="ampActivityId"/>
 </c:set>
 	
-<TABLE width="100%"  border="0" cellpadding="0" cellspacing="0" vAlign="top" align="center">
+<TABLE width="100%" border="0" cellpadding="0" cellspacing="0" vAlign="top" align="center">
    <TR>
 		<TD>
+			<digi:form action="/viewProjectDetails.do">
+			<html:hidden property="type" />
+			<html:hidden property="description" />
+			<html:hidden property="objectives" />					
 			<TABLE width="100%" cellSpacing="3" cellPadding="3" vAlign="top">
 				<TR>
 					<TD>
@@ -38,9 +59,9 @@
 							<digi:link href="/viewMyDesktop.do" styleClass="comment" title="<%=translation%>" >
 								<digi:trn key="aim:portfolio">Portfolio</digi:trn>
 							</digi:link>&nbsp;&gt;&nbsp;
-		<bean:define id="translation">
-			<digi:trn key="aim:clickToViewActivity">Click here to view Activity</digi:trn>
-		</bean:define>
+							<bean:define id="translation">
+								<digi:trn key="aim:clickToViewActivity">Click here to view Activity</digi:trn>
+							</bean:define>
 		            	<digi:link href="/viewChannelOverview.do" name="urlTabs" styleClass="comment" title="<%=translation%>" >
         						<digi:trn key="aim:activity">Activity</digi:trn>
 							</digi:link>&nbsp;&gt;&nbsp;
@@ -49,10 +70,12 @@
 					</TD>
 				</TR>
 			</TABLE>
+			</digi:form>
 		</TD>
 	</TR>
    <TR>
 		<TD>
+
 			<TABLE width="100%" cellSpacing="3" cellPadding="3" vAlign="top">
 				<TR>
 					<TD height=16 vAlign=center width="100%"><span class=subtitle-blue>
@@ -62,17 +85,31 @@
 				<TR>
 					<TD height=16 vAlign=center width="100%"><span class=subtitle-blue>
 						<bean:write name="aimMainProjectDetailsForm" property="name"/></span>
-						<bean:define id="translation">
-							<digi:trn key="aim:clickToViewProjectDescription">Click here to View Project Description</digi:trn>
-						</bean:define>
-						(<digi:link href="/viewChannelOverviewDescription.do" name="urlDescription" styleClass="comment" title="<%=translation%>" >
-						<digi:trn key="aim:viewDescription">View Description</digi:trn>
-						</digi:link>)			
-						<A class=comment>
-							<bean:write name="aimMainProjectDetailsForm" property="description" /> 
-						</A>
 					</TD>
 				</TR>	
+				<TR>
+					<TD>
+						<TABLE cellpadding=0 cellspacing=0 valign=top align=left>
+							<TR>
+								<TD>
+									<bean:define id="translation">
+										<digi:trn key="aim:clickToViewProjectDescription">Click here to View Project Description</digi:trn>
+									</bean:define>	
+									<a href="javascript:viewProjectDetails('Desc','<c:out value="${aimMainProjectDetailsForm.description}"/>')" class="comment" title="<%=translation%>">
+										<digi:trn key="aim:viewDescription">View Description</digi:trn></a>
+									&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;									
+								</TD>
+								<TD>
+									<bean:define id="translation">
+										<digi:trn key="aim:clickToViewProjectObjectives">Click here to View Project Objectives</digi:trn>
+									</bean:define>					
+									<a href="javascript:viewProjectDetails('Obj','<c:out value="${aimMainProjectDetailsForm.objectives}"/>')" class="comment" title="<%=translation%>">
+										<digi:trn key="aim:viewObjectives">View Objectives</digi:trn></a>
+								</TD>
+							</TR>
+						</TABLE>
+					</TD>
+				</TR>					
 			</TABLE>
 		</TD>
 	</TR>
@@ -155,5 +192,3 @@
 	</TR>
 </TABLE>
 </logic:equal>								
-								
-

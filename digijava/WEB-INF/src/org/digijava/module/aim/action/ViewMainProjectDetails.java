@@ -52,8 +52,12 @@ public class ViewMainProjectDetails extends TilesAction
 				formBean.setDescription("");
 			else
 			{
+			    /*
 				dbReturn=COverSubString.getCOverSubString(ampActivity.getDescription(),'D');
 				formBean.setDescription(dbReturn) ; 
+				*/
+				formBean.setDescription(ampActivity.getDescription()) ;
+				formBean.setObjectives(ampActivity.getObjective());
 			}	
 			formBean.setFlag(COverSubString.getCOverSubStringLength(ampActivity.getDescription(),'D'));
 			formBean.setName(ampActivity.getName()) ;

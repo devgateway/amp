@@ -254,11 +254,11 @@ function disable() {
 											<digi:trn key="aim:objectives">
 											Objectives</digi:trn>
 										</td>
-										<td class="v-name" bgcolor="#ffffff">
-											<c:if test="${empty aimEditActivityForm.objectives}">
-												&nbsp;
-											</c:if>
-											<c:out value="${aimEditActivityForm.objectives}"/>
+										<td bgcolor="#ffffff">
+											<bean:define id="objKey">
+												<c:out value="${aimEditActivityForm.objectives}"/>
+											</bean:define>
+											<digi:edit key="<%=objKey%>"></digi:edit>
 										</td>
 									</tr>
 									<tr>
@@ -266,11 +266,11 @@ function disable() {
 											<digi:trn key="aim:description">
 											Description</digi:trn>
 										</td>
-										<td class="v-name" bgcolor="#ffffff">
-											<c:if test="${empty aimEditActivityForm.description}">
-												&nbsp;
-											</c:if>										
-											<c:out value="${aimEditActivityForm.description}"/>
+										<td bgcolor="#ffffff">
+											<bean:define id="descKey">
+												<c:out value="${aimEditActivityForm.description}"/>
+											</bean:define>
+											<digi:edit key="<%=descKey%>"></digi:edit>
 										</td>
 									</tr>		
 									<%--

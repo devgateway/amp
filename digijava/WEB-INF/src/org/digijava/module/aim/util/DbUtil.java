@@ -114,6 +114,32 @@ public class DbUtil {
 		}
 		return fundingDetails;
 	}
+	
+	public static Collection getFundingByActivity(Long actId) {
+		Session session = null;
+		Collection funding = new ArrayList();
+
+		try {
+			session = PersistenceManager.getSession();
+			String queryString = "select f from "
+					+ AmpFunding.class.getName()
+					+ " f "
+					+ "where (f.ampActivityId=:actId)";
+			Query qry = session.createQuery(queryString);
+			qry.setParameter("actId", actId, Hibernate.LONG);
+			funding = qry.list();
+
+		} catch (Exception ex) {
+			logger.error("Unable to get funding :" + ex);
+		} finally {
+			try {
+				PersistenceManager.releaseSession(session);
+			} catch (Exception ex2) {
+				logger.error("releaseSession() failed :" + ex2);
+			}
+		}
+		return funding;
+	}
 
 	public static AmpActivityInternalId getActivityInternalId(Long actId,
 			Long orgId) {

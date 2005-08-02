@@ -20,6 +20,7 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.digijava.module.aim.dbentity.AmpActivity;
+import org.digijava.module.aim.dbentity.AmpFunding;
 import org.digijava.module.aim.dbentity.AmpActivityInternalId;
 import org.digijava.module.aim.dbentity.AmpModality;
 import org.digijava.module.aim.dbentity.AmpSector;
@@ -102,6 +103,34 @@ public class GetActivityDetails extends Action {
 			//logger.info("Project Modality Code: " + modName);
 			coForm.setModalityCode(modName);					
 		}
+		Long actId = activity.getAmpActivityId();
+		Collection funding = DbUtil.getFundingByActivity(actId);
+		coForm.setModal(new ArrayList());
+		if (funding != null) {
+			Iterator itrf = funding.iterator(); 
+			boolean flag = true; 
+			while (itrf.hasNext()) {
+				AmpFunding ampf = (AmpFunding) itrf.next();
+				AmpModality modal = ampf.getModalityId();
+				if (modal != null) {
+					if (!coForm.getModal().isEmpty()) {
+						for (int i = 0; flag && i < coForm.getModal().size(); i++) {
+							Iterator itr = coForm.getModal().iterator();
+							while (itr.hasNext()) {
+								AmpModality amod = (AmpModality) itr.next();
+								if (modal.getName().equals(amod.getName())) {
+									flag = false;
+									break;
+								}
+							}
+						}
+					}
+					if (flag)
+						coForm.getModal().add(modal);
+				}
+			}
+		}
+		
 
 		// start $3
 		if (modality != null) {

@@ -79,10 +79,15 @@
 															<table width="100%">
 																<tr>
 																	<td><b>
-																		<digi:trn key="aim:modality">
-																			Modality
+																		<digi:trn key="aim:financingInstrument">
+																			Financing Instrument
 																		</digi:trn> :</b>&nbsp;
-																		<bean:write name="aimChannelOverviewForm" property="modality" />
+																		<c:if test="${!empty aimChannelOverviewForm.modal}">
+																			<logic:iterate name="aimChannelOverviewForm" id="modal" property="modal"
+																				type="org.digijava.module.aim.dbentity.AmpModality">
+																				<bean:write name="modal" property="name" />&nbsp;
+																			</logic:iterate>
+																		</c:if>
 																	</td>
 																</tr>
 															</table>														
@@ -117,6 +122,19 @@
 															<table width="100%" border=0>
 																<tr>
 																	<td><b>
+																		<digi:trn key="aim:implementingAgency">
+																			Implementing Agency
+																		</digi:trn> :</b>&nbsp;
+																		<bean:write name="aimChannelOverviewForm" property="implagency" />
+																	</td>
+																</tr>											
+															</table>														
+														</td>
+														<%--
+														<td align="center" width="50%"  bgcolor="#f4f4f2">
+															<table width="100%" border=0>
+																<tr>
+																	<td><b>
 																		<digi:trn key="aim:reportingAgency">
 																			Reporting Agency
 																		</digi:trn> :</b>&nbsp;
@@ -125,7 +143,9 @@
 																</tr>											
 															</table>														
 														</td>
+														--%>
 													</tr>		
+													<%--
 													<tr>
 														<td bgcolor="#f4f4f2" align="center" width="50%">
 															<table width="100%">
@@ -151,7 +171,8 @@
 																</tr>											
 															</table>														
 														</td>
-													</tr>	
+													</tr>
+													--%>	
 													<tr>
 														<td bgcolor="#f4f4f2" align="center" width="50%">
 															<table width="100%">
@@ -193,7 +214,7 @@
 													<tr>
 														<td bgcolor="#f4f4f2">
 														<b>
-	    													<digi:trn key="aim:sectors">Sectors</digi:trn>: </b>
+	    													<digi:trn key="aim:sectors">Sector</digi:trn>: </b>
 															<c:if test="${!empty aimChannelOverviewForm.sectors}">
 																<logic:iterate name="aimChannelOverviewForm" property="sectors" id="sector"
 																type="org.digijava.module.aim.dbentity.AmpSector">

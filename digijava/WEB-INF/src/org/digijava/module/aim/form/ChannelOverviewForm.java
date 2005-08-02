@@ -38,6 +38,7 @@ public class ChannelOverviewForm extends MainProjectDetailsForm
 	private String perspective;
 	private Integer pageNo;
 	private String currCode;
+	private Collection modal;
 	
 	private Activity activity;
 	
@@ -386,4 +387,16 @@ public class ChannelOverviewForm extends MainProjectDetailsForm
 		this.currCode = currCode;
 	}
 
+	/**
+	 * @return Returns the modal.
+	 */
+	public Collection getModal() {
+		return modal;
+	}
+	/**
+	 * @param modal The modal to set.
+	 */
+	public void setModal(Collection modal) {
+		this.modal = modal;
+	}
 }

@@ -17,16 +17,7 @@
 
 <digi:instance property="aimMulitlateralbyDonorForm" />
 
-<table width="100%" cellspacing=1 cellpadding=1 valign=top align=left>
-
-  <tr height="20">
-	<td align="left" >
-		<input type="button" name="Print" value="Print" 
-					onclick="javascript:window.print()">
-		<input type="button" name="Close" value="Close" 
-				onclick="javascript:window.close()">
-	</td>
-  </tr>
+<table width="780" cellspacing=1 cellpadding=1 valign=top align=left>
 
   <!-- Report Name -->
   <tr>

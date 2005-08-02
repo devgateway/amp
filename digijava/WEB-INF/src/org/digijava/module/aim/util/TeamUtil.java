@@ -30,6 +30,7 @@ import org.digijava.module.aim.dbentity.AmpOrgRole;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpPages;
 import org.digijava.module.aim.dbentity.AmpReports;
+import org.digijava.module.aim.dbentity.AmpRole;
 import org.digijava.module.aim.dbentity.AmpTeam;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.dbentity.AmpTeamPageFilters;
@@ -1183,11 +1184,33 @@ public class TeamUtil {
 			    inclause.append((Long)itr.next());
 			}
 			
-			Connection con = session.connection();
+			//Connection con = session.connection();
+			
+			qryStr = "select distinct aor.organisation from " +
+					AmpOrgRole.class.getName() + " aor, " + AmpOrganisation.class.getName() + " " +
+							"org, " + AmpRole.class.getName() + " role where " +
+									"aor.activity in (" + inclause + ") and " +
+											"aor.role = role.ampRoleId and " +
+											"aor.organisation = org.ampOrgId and " +
+											"role.roleCode = '" + Constants.FUNDING_AGENCY + "'" +
+													" order by org.acronym asc" ;
+			
+			qry = session.createQuery(qryStr);
+			itr = qry.list().iterator();
+			while (itr.hasNext()) {
+				AmpOrganisation ampOrg = (AmpOrganisation) itr.next();
+				if(ampOrg.getAcronym().length()>20)
+					ampOrg.setAcronym(ampOrg.getAcronym().substring(0,20) + "...");
+				donors.add(ampOrg);			    
+			}
+			
+			
+			/*
 			qryStr = "select distinct a.amp_org_id,c.name,c.acronym from amp_org_role a,amp_role b,amp_organisation c " +
 					"where a.amp_activity_id in (" + inclause + ") and a.amp_role_id = b.amp_role_id " +
 					"and a.amp_org_id = c.amp_org_id and b.role_code = '" + Constants.FUNDING_AGENCY + "' " +
 					"order by c.c.acronym asc";
+			
 			Statement stmt = con.createStatement();
 			ResultSet rs = stmt.executeQuery(qryStr);
 			while (rs.next()) {
@@ -1202,6 +1225,7 @@ public class TeamUtil {
 			rs.close();
 			stmt.close();
 			session.disconnect();
+			*/
 		} catch (Exception e) {
 			logger.error("Unable to get all donors");
 			logger.debug("Exceptiion " + e);

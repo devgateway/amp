@@ -119,7 +119,7 @@ public class UpdateDB {
 			
 			sql = "insert into amp_report_cache ";
 			sql += "select '',amp_activity.amp_activity_id,amp_activity.amp_id,amp_activity.name,NULL,NULL, ";
-			sql += "amp_activity.amp_status_id,amp_status.name,NULL,amp_organisation.name,amp_org_role.amp_org_id,amp_organisation.org_type,NULL,";
+			sql += "amp_activity.amp_status_id,amp_status.name,NULL,amp_organisation.name,amp_org_role.organisation,amp_organisation.org_type,NULL,";
 			sql += "0 'planned_commitment',0 'planned_disbursement',0 'planned_expenditure',";
 			sql += "0 'actual_commitment',0 'actual_disbursement',0 'actual_expenditure',";
 			sql += "NULL,amp_activity.actual_start_date,amp_activity.actual_completion_date,amp_activity.proposed_start_date,";
@@ -130,8 +130,9 @@ public class UpdateDB {
 			sql += "'level_name' from amp_activity LEFT JOIN amp_report_cache ON ";
 			sql += "amp_activity.amp_activity_id=amp_report_cache.amp_activity_id,amp_org_role,amp_organisation,amp_status ";
 			sql += "where amp_report_cache.amp_activity_id is null ";
-			sql += "and amp_role_id='1' and amp_activity.amp_activity_id=amp_org_role.amp_activity_id ";
-			sql += "and amp_org_role.amp_org_id=amp_organisation.amp_org_id ";
+			//sql += "and amp_role_id='1' and amp_activity.amp_activity_id=amp_org_role.activity ";
+			sql += "and amp_org_role.role='1' and amp_activity.amp_activity_id=amp_org_role.activity ";
+			sql += "and amp_org_role.organisation=amp_organisation.amp_org_id ";
 			sql += "and amp_activity.amp_status_id=amp_status.amp_status_id";
 			
 			// Query #4

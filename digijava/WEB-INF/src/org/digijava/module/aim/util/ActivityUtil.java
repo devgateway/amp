@@ -134,6 +134,16 @@ public class ActivityUtil {
 					}
 				}
 				
+				/* delete all previous org roles */
+				Set orgrole = oldActivity.getOrgrole();
+				if (orgrole != null) {
+					Iterator orgroleItr = orgrole.iterator();
+					while (orgroleItr.hasNext()) {
+						AmpOrgRole ampOrgrole = (AmpOrgRole) orgroleItr.next();
+						session.delete(ampOrgrole);
+					}
+				}				
+				
 				/* delete all previous closing dates */
 				Set closeDates = oldActivity.getClosingDates();
 				if (closeDates != null) {
@@ -362,27 +372,33 @@ public class ActivityUtil {
 		Collection col = new ArrayList();
 		try {
 			session = PersistenceManager.getSession();
+			String qryStr = "select aor from " + AmpOrgRole.class.getName() + " aor " +
+					"where (aor.activity=actId)";
+			Query qry = session.createQuery(qryStr);
+			qry.setParameter("actId",actId,Hibernate.LONG);
+			Collection orgRoles = qry.list();
+			Collection temp = new ArrayList();
+			
+			Iterator orgItr = orgRoles.iterator();
+			while (orgItr.hasNext()) {
+				AmpOrgRole orgRole = (AmpOrgRole) orgItr.next();
+				if (orgRole.getRole().getRoleCode().equalsIgnoreCase(roleCode)) {
+					if (!temp.contains(orgRole.getOrganisation())) {
+						temp.add(orgRole.getOrganisation());							
+					}
+				}											
+			}
+			
+			orgItr = temp.iterator();
+			while (orgItr.hasNext()) {
+				AmpOrganisation org = (AmpOrganisation) orgItr.next();
+				col.add(org.getName());
+			}			
+			
 			AmpActivity act = (AmpActivity) session.load(AmpActivity.class,actId);
 				
 			if (act.getOrgrole() != null) {
-				Collection orgRoles = act.getOrgrole();
-				Collection temp = new ArrayList();
-				
-				Iterator orgItr = orgRoles.iterator();
-				while (orgItr.hasNext()) {
-					AmpOrgRole orgRole = (AmpOrgRole) orgItr.next();
-					if (orgRole.getRole().getRoleCode().equalsIgnoreCase(roleCode)) {
-						if (!temp.contains(orgRole.getOrganisation())) {
-							temp.add(orgRole.getOrganisation());							
-						}
-					}											
-				}
-				
-				orgItr = temp.iterator();
-				while (orgItr.hasNext()) {
-					AmpOrganisation org = (AmpOrganisation) orgItr.next();
-					col.add(org.getName());
-				}
+
 			}
 		} catch (Exception e) {
 			logger.error("Unable to get Organization with role " + roleCode);
@@ -408,7 +424,7 @@ public class ActivityUtil {
 			Query qry = session.createQuery(queryString);
 			qry.setParameter("actId",id,Hibernate.LONG);
 			Iterator actItr = qry.list().iterator();
-			while (actItr.hasNext()) {
+			if (actItr.hasNext()) {
 			    AmpActivity ampActivity = (AmpActivity) actItr.next();
 			    activity = new AmpActivity();
 			    activity.setActivityApprovalDate(ampActivity.getActivityApprovalDate());
@@ -452,13 +468,12 @@ public class ActivityUtil {
 			    
 			    activity.setClosingDates(new HashSet(ampActivity.getClosingDates()));
 			    activity.setComponents(new HashSet(ampActivity.getComponents()));
-			    logger.debug("Component size set = " + activity.getComponents().size());
 			    activity.setDocuments(new HashSet(ampActivity.getDocuments()));
 			    activity.setFunding(new HashSet(ampActivity.getFunding()));
 			    activity.setInternalIds(new HashSet(ampActivity.getInternalIds()));
 			    activity.setLocations(new HashSet(ampActivity.getLocations()));
-			    activity.setOrgrole(new HashSet(ampActivity.getOrgrole()));
 			    activity.setSectors(new HashSet(ampActivity.getSectors()));
+			    activity.setOrgrole(new HashSet(ampActivity.getOrgrole()));
 			}
 		} catch (Exception e) {
 		 	logger.error("Unable to getAmpActivity");
@@ -688,6 +703,28 @@ public class ActivityUtil {
 			}
 		}
 		return sectors;
-	}	
+	}
+	
+	public static Collection getOrgRole(Long id) {
+	    Session session = null;
+	    Collection orgroles = new ArrayList();
+		try {
+			session = PersistenceManager.getSession() ;
+			String queryString = "select aor from " + AmpOrgRole.class.getName() +
+ 			 " aor " +  "where (aor.activity=:actId)";
+			Query qry = session.createQuery(queryString);
+			qry.setParameter("actId",id,Hibernate.LONG);
+			orgroles = qry.list();
+		} catch(Exception ex) {
+			logger.error("Unable to get activity sectors :" + ex);
+		} finally {
+			try {
+				PersistenceManager.releaseSession(session);
+			} catch (Exception ex2) {
+				logger.error("releaseSession() failed ");
+			}
+		}
+		return orgroles;
+	}
 
 } // End

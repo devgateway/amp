@@ -61,6 +61,7 @@
 		<many-to-one name="activityCreator" column="activity_creator" 
 			class="org.digijava.module.aim.dbentity.AmpTeamMember" cascade="none"/>		
 	
+		<!--
 		<set name="orgrole" table="amp_org_role" lazy="true">
 			<key column="amp_activity_id"/>
 				<composite-element class="org.digijava.module.aim.dbentity.AmpOrgRole">
@@ -68,6 +69,13 @@
 					<many-to-one name="role" class="org.digijava.module.aim.dbentity.AmpRole" column="amp_role_id"/>
 				</composite-element>
 		</set>
+		-->
+		
+		<set name="orgrole" cascade="all">
+		<cache usage="read-write" />
+			<key column="activity"/>
+			<one-to-many class="org.digijava.module.aim.dbentity.AmpOrgRole"/>
+ 		</set>			
 
 		<set name="sectors" table="amp_activity_sector" lazy="true">
 			<cache usage="read-write"/>

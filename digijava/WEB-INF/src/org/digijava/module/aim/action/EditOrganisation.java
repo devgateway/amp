@@ -6,6 +6,8 @@ import org.digijava.module.aim.dbentity.*;
 import org.digijava.kernel.dbentity.Country;
 import java.util.Collection;
 import java.util.Iterator;
+
+import org.digijava.module.aim.util.ActivityUtil;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.form.AddOrgForm;
 import javax.servlet.http.*;
@@ -418,7 +420,8 @@ public class EditOrganisation extends Action {
 					    		AmpActivity testActivity = new AmpActivity();
 					    		testActivity = (AmpActivity)itr1.next();
 					    		
-					    		Collection testOrgrole = testActivity.getOrgrole();
+					    		//Collection testOrgrole = testActivity.getOrgrole();
+					    		Collection testOrgrole = ActivityUtil.getOrgRole(testActivity.getAmpActivityId());
 					    		Iterator itr2 = testOrgrole.iterator();
 					    						    		
 					    		while (itr2.hasNext()) {

@@ -135,7 +135,10 @@
  		</hibernate-class>
 		<hibernate-class>
 			org.digijava.module.aim.dbentity.AmpTeamPageFilters
- 		</hibernate-class> 		
+	 	</hibernate-class> 		
+		<hibernate-class>
+			org.digijava.module.aim.dbentity.AmpOrgRole
+ 		</hibernate-class> 		 
 	</hibernate-classes>
         <!-- highlights classes End-->
 

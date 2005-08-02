@@ -347,6 +347,7 @@ public class SaveActivity extends Action {
 				AmpOrganisation ampOrg = DbUtil.getOrganisation(fOrg
 						.getAmpOrgId());
 				AmpOrgRole ampOrgRole = new AmpOrgRole();
+				ampOrgRole.setActivity(activity);
 				ampOrgRole.setRole(role);
 				ampOrgRole.setOrganisation(ampOrg);
 				orgRole.add(ampOrgRole);
@@ -358,6 +359,7 @@ public class SaveActivity extends Action {
 			while (itr.hasNext()) {
 				AmpOrganisation org = (AmpOrganisation) itr.next();
 				AmpOrgRole ampOrgRole = new AmpOrgRole();
+				ampOrgRole.setActivity(activity);
 				ampOrgRole.setRole(role);
 				ampOrgRole.setOrganisation(org);
 				orgRole.add(ampOrgRole);
@@ -369,6 +371,7 @@ public class SaveActivity extends Action {
 			while (itr.hasNext()) {
 				AmpOrganisation org = (AmpOrganisation) itr.next();
 				AmpOrgRole ampOrgRole = new AmpOrgRole();
+				ampOrgRole.setActivity(activity);
 				ampOrgRole.setRole(role);
 				ampOrgRole.setOrganisation(org);
 				orgRole.add(ampOrgRole);
@@ -392,6 +395,7 @@ public class SaveActivity extends Action {
 			while (itr.hasNext()) {
 				AmpOrganisation org = (AmpOrganisation) itr.next();
 				AmpOrgRole ampOrgRole = new AmpOrgRole();
+				ampOrgRole.setActivity(activity);
 				ampOrgRole.setRole(role);
 				ampOrgRole.setOrganisation(org);
 				orgRole.add(ampOrgRole);

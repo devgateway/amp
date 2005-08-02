@@ -318,11 +318,11 @@ public class EditActivity extends Action {
 				eaForm.setProgramDescription(activity.getProgramDescription().trim());
 
 				// loading the funding orgs , fundings and funding details
-				
+				/*
 				Iterator orgRolesItr = activity.getOrgrole().iterator();
 				while (orgRolesItr.hasNext()) {
 				    AmpOrgRole orgRole = (AmpOrgRole) orgRolesItr.next();
-				}
+				}*/
 				
 				
 				Collection fundingOrgs = new ArrayList();

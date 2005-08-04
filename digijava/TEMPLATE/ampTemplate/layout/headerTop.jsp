@@ -4,12 +4,12 @@
 	<tbody>
    	<tr bgColor="#323232">
    		<td vAlign="top" align="left" width="35">
-   			<digi:link href="/" site="amp">
+   			<digi:link href="/" site="amp" onclick="return quitRnot()">
          		<digi:img src="images/amp-logo.gif" border="0" alt="AMP" />
 				</digi:link>
 			</td>
 			<td vAlign="center">
-   			<digi:link href="/" styleClass="heading" title="Aid Management Platform">
+   			<digi:link href="/" styleClass="heading" onclick="return quitRnot()" title="Aid Management Platform">
 					<digi:trn key="aim:aidManagementPlatform">Aid Management Platform (AMP)</digi:trn>
 				</digi:link>
 			</td>

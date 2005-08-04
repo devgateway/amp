@@ -51,7 +51,7 @@ function resetAll()
 									</digi:link>&nbsp;&gt;&nbsp;
 								</c:if>
 								<c:if test="${aimEditActivityForm.pageId == 1}">								
-									<digi:link href="/viewMyDesktop.do" styleClass="comment" title="Click here to view MyDesktop ">
+									<digi:link href="/viewMyDesktop.do" styleClass="comment" onclick="return quitRnot()" title="Click here to view MyDesktop ">
 										<digi:trn key="aim:portfolio">
 											Portfolio
 										</digi:trn>

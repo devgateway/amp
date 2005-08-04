@@ -163,7 +163,7 @@ function removeSelLinks() {
 									<bean:define id="translation">
 										<digi:trn key="aim:clickToViewMyDesktop">Click here to view MyDesktop</digi:trn>
 									</bean:define>
-									<digi:link href="/viewMyDesktop.do" styleClass="comment" title="<%=translation%>">
+									<digi:link href="/viewyDesktop.do" styleClass="comment" onclick="return quitRnot()" title="<%=translation%>">
 										<digi:trn key="aim:portfolio">
 											Portfolio
 										</digi:trn>

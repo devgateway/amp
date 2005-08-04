@@ -190,3 +190,9 @@ function newWindow(field) {
 	document.aimEditActivityForm.selectedDate.value = field;
 	reload(curr_month,curr_year);
 }
+
+function quitRnot()
+{
+	var temp = confirm('WARNING : The document has not been saved. Please press OK to continue or Cancel to save the document.');
+	return(temp);
+}

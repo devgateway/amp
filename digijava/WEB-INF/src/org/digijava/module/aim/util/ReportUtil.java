@@ -7,9 +7,11 @@ package org.digijava.module.aim.util;
 import java.util.Collection;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.Vector;
 import java.text.DecimalFormat;
-import java.util.Date;
+import java.sql.Timestamp;
 import java.util.GregorianCalendar;
+import java.util.Date;
 
 import net.sf.hibernate.Hibernate;
 import net.sf.hibernate.Query;
@@ -18,6 +20,7 @@ import net.sf.hibernate.Transaction;
 
 import org.apache.log4j.Logger;
 import org.digijava.kernel.persistence.PersistenceManager;
+import org.digijava.module.aim.dbentity.AmpColumns;
 import org.digijava.module.aim.dbentity.AmpReports;
 import org.digijava.module.aim.dbentity.AmpPhysicalComponentReport;
 import org.digijava.module.aim.dbentity.AmpTeam;
@@ -3037,9 +3040,9 @@ public class ReportUtil {
 		return ampReports ;
 	}
 
-	
-	
-	
+
+
+
 	public static ArrayList getAmpReportViewProjects(Long ampTeamId,int fromYr,int toYr,String perspective,String ampCurrencyCode,Long ampModalityId,Long ampStatusId,Long ampDonorId,Long ampSectorId,int fiscalCalId,String startDate,String closeDate,String region)
 	{
 		Session session = null ;
@@ -10513,6 +10516,168 @@ public class ReportUtil {
 		}
 		return ampReports ;
 	}
+	
+//----------Advanced Report Function--------------------------------
 
+	public static Collection getColumnList()
+	throws java.lang.Exception
+	{
+		Session session = null;
+		session = PersistenceManager.getSession();
+		String sqlQuery = "";
+		boolean flag =false;
+		Iterator iter = null;
+		Collection coll = new ArrayList();
+		Query query = null;
+		AmpColumns ampColumns = new AmpColumns();
+		try
+		{
+			sqlQuery = "select c from "+ AmpColumns.class.getName() + " c";
+			query = session.createQuery(sqlQuery);
+			if (query != null) 
+			{
+				iter = query.list().iterator();
+				while (iter.hasNext()) 
+				{
+					ampColumns = (AmpColumns) iter.next();
+					coll.add(ampColumns);
+				}
+				flag = true;
+			}
+			return coll;
+		}
+		catch(Exception e)
+		{
+			System.out.println(" Error in getColumnList()  :  " + e);
+		}
+
+		return coll;
+			
+	}
+
+	public static Collection generateQuery(Collection coll, Long ampTeamId)
+	{
+		Session session = null;
+		Iterator iter = null;
+		AmpColumns ampColumns = null;
+		String inClause=null;
+		Collection columns = new ArrayList();
+		DecimalFormat mf = new DecimalFormat("###,###,###,###,###") ;
+		Collection result = new ArrayList(1);
+		AmpReportCache reportCachePrev = null;
+		int j = 0;
+		try
+		{
+			if(coll.size() > 0)
+			{
+				int ind = 0;
+				iter = coll.iterator();
+				
+				ArrayList dbReturnSet=(ArrayList)DbUtil.getAmpLevel0Teams(ampTeamId);				
+				if(dbReturnSet.size()==0)
+					inClause= "'" + ampTeamId + "'";
+				else
+				{
+					iter=dbReturnSet.iterator();
+					while(iter.hasNext())
+					{
+						Long teamId= (Long) iter.next();
+						if(inClause==null)
+							inClause="'" + teamId + "'";
+						else
+							inClause=inClause + ",'" + teamId + "'";
+					}
+				}
+				logger.debug("Inclause: " + inClause);
+
+				iter = coll.iterator();
+				while(iter.hasNext())
+				{
+					ampColumns = (AmpColumns) iter.next();
+					columns.add(ampColumns.getColumnName().toString());
+				}
+				
+				iter = columns.iterator();
+				while(iter.hasNext())
+				{
+					String str = (String) iter.next();
+					logger.info(" >>>> " + str);
+				}
+				Long lg = new Long("0");
+				session = PersistenceManager.getSession();
+				String queryString = "select report from " + AmpReportCache.class.getName() + " report where (report.ampTeamId in(" + inClause + ")) ";
+				logger.info( " Query 2 :" + queryString);
+				Query query = session.createQuery(queryString);
+				iter = query.list().iterator();
+				int i = 0, count = 0;
+				double actCommit = 0, actDisb = 0, unDisb = 0;
+
+				if(query!=null)
+				{
+					iter = query.list().iterator();
+					while(iter.hasNext())
+					{
+						AmpReportCache ampReportCache = (AmpReportCache) iter.next();
+						
+						if(i == 0)
+						{
+							lg = ampReportCache.getAmpActivityId();
+							i = i + 1;
+							reportCachePrev = ampReportCache;
+							actCommit = ampReportCache.getActualCommitment().doubleValue();
+						}
+						else
+						{
+							if(ampReportCache.getAmpActivityId().compareTo(reportCachePrev.getAmpActivityId()) == 0 )
+							{
+								actCommit = actCommit + ampReportCache.getActualCommitment().doubleValue();
+								reportCachePrev = ampReportCache;
+							}
+							else
+							{
+								logger.info(  reportCachePrev.getActivityName()+ " ::" + reportCachePrev.getAmpActivityId()+ " Not Equak : " + actCommit);
+								reportCachePrev = ampReportCache;
+								Collection tempColl = new ArrayList();
+								
+								Report report  = new Report();
+								if(columns.contains("actual commitment") == true)
+									report.setAcCommitment(mf.format(actCommit));
+								if(columns.contains("level name") == true)
+									report.setLevel(reportCachePrev.getLevelName());
+								if(columns.contains("donor name") == true)
+									
+									report.setDonor(reportCachePrev.getDonorName());
+								if(columns.contains("status name") == true)
+									report.setStatus(reportCachePrev.getStatusName());
+								if(columns.contains("activity name") == true)
+									report.setTitle(reportCachePrev.getActivityName());
+								if(columns.contains("actual start date") == true)
+									report.setStartDate(DateConversion.ConvertDateToString(ampReportCache.getActualStartDate()));
+								if(columns.contains("actual completion date") == true)
+									report.setCloseDate(DateConversion.ConvertDateToString(ampReportCache.getActualCompletionDate()));
+								if(columns.contains("term assist name") == true)
+								{
+									tempColl.add(reportCachePrev.getTermAssistName());
+									report.setAssistance(tempColl);
+								}
+								if(reportCachePrev.getDonorName() != null)
+									result.add(report);
+								
+								actCommit = ampReportCache.getActualCommitment().doubleValue();
+							}
+						}
+					}
+				}
+				logger.info( result.size()+ " : Record count : ");
+			}
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace(System.out);
+		}
+		return result;
+	}
+
+// end of Advanced Function	
 
 }

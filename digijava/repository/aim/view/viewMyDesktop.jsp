@@ -546,6 +546,18 @@ function showtip()
 												</TABLE>
 											</TD>
 										</TR>
+
+										<tr><td >	&nbsp;	</td></tr>
+										<tr>
+											<td height= 20 >
+												<bean:define id="translation">
+													<digi:trn key="aim:createAdvancedReport">Create Advanced Report </digi:trn>
+							  				 	</bean:define>
+												<digi:link href="/advancedReportManager.do" title="<%=translation%>">
+													<b> Advanced Report Manager	</b>
+												</digi:link>
+											</td>
+										</tr>
 									</TABLE>	
 								</TD>
 							</TR>

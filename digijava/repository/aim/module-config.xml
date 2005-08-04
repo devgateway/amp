@@ -139,6 +139,10 @@
 		<hibernate-class>
 			org.digijava.module.aim.dbentity.AmpOrgRole
  		</hibernate-class> 		 
+
+		<hibernate-class>
+			org.digijava.module.aim.dbentity.AmpColumns
+		</hibernate-class>
 	</hibernate-classes>
         <!-- highlights classes End-->
 

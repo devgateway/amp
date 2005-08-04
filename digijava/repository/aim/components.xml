@@ -190,8 +190,10 @@
 	
 	<!-- Advanced Report Manager -->
 	
-	<page name="AdvancedReportManager" title=" - Advanced Report Manager" />
-
+	<page name="AdvancedReportManagerStep1" title=" - Advanced Report Manager Step 1 : Select Columns" />
+	<page name="AdvancedReportManagerStep2" title=" - Advanced Report Manager Step 2 : Generate HTML Report" />
+	<page name="AdvancedReportManagerStep4" title=" - Advanced Report Manager Step 4 : Report Details " />
+	<page name="AdvancedReportManagerStep3" title=" - Advanced Report Manager Step 3 : Generate Charts " />
 		
 </secondary-pages>
 

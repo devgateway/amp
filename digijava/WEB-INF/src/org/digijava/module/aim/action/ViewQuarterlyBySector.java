@@ -429,7 +429,7 @@ public class ViewQuarterlyBySector extends Action{
 		formBean.setFiscalYearRange(new ArrayList());
 		for(int yr=fromYr;yr<=toYr;yr++)
 			formBean.getFiscalYearRange().add(new Integer(yr));
-		formBean.setTotalColumns(12*yearRange+5);
+		formBean.setTotalColumns(12*yearRange+6);
 		AmpTeam ampTeam=DbUtil.getAmpTeam(ampTeamId);
 		formBean.setReportName("Quarterly Report By Sector");
 		formBean.setWorkspaceType(ampTeam.getType());

@@ -13,17 +13,16 @@ import org.jfree.util.Rotation;
 
 public class WebappScriptlet extends JRDefaultScriptlet
 {
-	static Vector v= new Vector(1);
+	static Vector v= new Vector();
 
 	public void setV(Collection c){
-		System.out.println("#######inside setVVVVVVVV"+c.size());
 		if(v!=null)
 			v.clear();
 		v.addAll(c);
 		
 		String str="";
 		for(int j=0;j<v.size();j++){
-			System.out.println("#######"+j+"::***"+v.get(j).toString());
+			//System.out.println("#######"+v.get(j).toString());
 		}	
 	}
 /*
@@ -57,31 +56,31 @@ public class WebappScriptlet extends JRDefaultScriptlet
 		dataset.setValue("OECD", new Double(12.5));
 		dataset.setValue("WB", new Double(20.0));
 */
-		JFreeChart chart = 
+/*		JFreeChart chart = 
 			ChartFactory.createPieChart3D(
-				"Just testing.........",
+				"Pie Chart for Annual Team Forecasting Report (ViewProjects)",
 				dataset,
 				true,
-				true,
-				false
-				);
-/*
-		JFreeChart chart = 
-			ChartFactory.createPieChart(
-				"Sample testing pie chart.",
-				dataset,
-				true,
-				true,
+				false,
 				false
 				);
 */
-		PiePlot3D plot = (PiePlot3D) chart.getPlot();
-//		PiePlot plot = (PiePlot) chart.getPlot();
-		plot.setStartAngle(90);
+		JFreeChart chart = 
+			ChartFactory.createPieChart(
+				"Annual Team Forecasting Report Pie Chart (ViewProjects).",
+				dataset,
+				true,
+				true,
+				false
+				);
+
+//		PiePlot3D plot = (PiePlot3D) chart.getPlot();
+		PiePlot plot = (PiePlot) chart.getPlot();
+/*		plot.setStartAngle(90);
 		plot.setDirection(Rotation.CLOCKWISE);
 		plot.setForegroundAlpha(0.5f);
 		plot.setNoDataMessage("No data to display");
-
+*/
 		this.setVariableValue("Chart", new JCommonDrawableRenderer(chart));
 
 	}

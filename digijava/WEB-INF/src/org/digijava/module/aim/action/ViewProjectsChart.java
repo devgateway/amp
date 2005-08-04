@@ -68,7 +68,7 @@ public class ViewProjectsChart extends Action
 
 		
 	ActionServlet s = getServlet();
-	System.out.println("###########################Inside VIEW Projects JfreeChart Action...SIZE:"+chart_coll.size());
+	//System.out.println("###########################Inside VIEW Projects JfreeChart Action...SIZE:"+chart_coll.size());
 			
 			WebappScriptlet ws= new WebappScriptlet();
 			ws.setV(chart_coll);	

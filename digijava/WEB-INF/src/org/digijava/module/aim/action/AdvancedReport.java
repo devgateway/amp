@@ -21,7 +21,6 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.digijava.module.aim.dbentity.AmpColumns;
-import org.digijava.module.aim.dbentity.AmpReportData;
 import org.digijava.kernel.persistence.PersistenceManager;
 
 import net.sf.hibernate.Query;

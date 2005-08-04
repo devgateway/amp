@@ -407,7 +407,7 @@ public class ViewQuarterlyByProject extends Action
 		formBean.setFiscalYearRange(new ArrayList());
 		for(int yr=fromYr;yr<=toYr;yr++)
 			formBean.getFiscalYearRange().add(new Integer(yr));
-		formBean.setTotalColumns(12*yearRange+5);
+		formBean.setTotalColumns(12*yearRange+6);
 		String filterNames[] =new String[2];
 		filterNames = DbUtil.setFilterDetails(filter);
 		for(int i=0; i< filterNames.length; i++)

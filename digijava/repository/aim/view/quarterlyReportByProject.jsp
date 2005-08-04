@@ -370,7 +370,7 @@
 					<%=fiscalYearRange%>
 				</td>
 			</logic:iterate>
-		<td rowspan="2" colspan="3" align="center" height="21" width="20%">
+		<td rowspan="2" colspan="4" align="center" height="21" width="20%">
 		<digi:trn key="aim:total">Total</digi:trn>
 		</td>
 		
@@ -416,6 +416,7 @@
 	<td align="center" height="21" width="7%"> <digi:trn key="aim:plannedDisbursements">Planned Disbursements</digi:trn></td>
 		<td align="center" height="21" width="7%"> <digi:trn key="aim:disbursements">Disbursements</digi:trn></td>
 		<td align="center" height="21" width="7%"> <digi:trn key="aim:expenditures">Expenditures</digi:trn></td>
+		<td align="center" height="21" width="7%"> <digi:trn key="aim:undisbursed">Undisbursed</digi:trn></td>
 		</tr>
 	<logic:empty name="aimMulitlateralbyDonorForm" property="multiReport"> 
 		<tr bgcolor="#F4F4F2">
@@ -482,6 +483,11 @@
 					<bean:write name="project" property="projExpAmount"/>
 					</logic:notEqual>
 				</td>
+				<td align="right" height="21"> 
+					<logic:notEqual name="project" property="projUnDisbAmount"  value="0" >
+					<bean:write name="project" property="projUnDisbAmount"/>
+					</logic:notEqual>
+				</td>
 			</tr>
 			<logic:notEmpty name="project"  property="termAssist">
 			<logic:iterate name="project"  property="termAssist" id="termAssist" type="org.digijava.module.aim.helper.ProjectTermAssist">
@@ -520,6 +526,11 @@
 				<td align="right" height="21"> 
 					<logic:notEqual name="termAssist" property="termExpAmount"  value="0" >
 					<bean:write name="termAssist" property="termExpAmount"/>
+					</logic:notEqual>
+				</td>
+				<td align="right" height="21"> 
+					<logic:notEqual name="termAssist" property="termUnDisbAmount"  value="0" >
+					<bean:write name="termAssist" property="termUnDisbAmount"/>
 					</logic:notEqual>
 				</td>
 			</tr>
@@ -561,6 +572,11 @@
 				<bean:write name="totalDonorTermAssistFund" property="totDonorExpAmount"/>
 				</logic:notEqual>
 			</td>
+			<td align="right" height="21"><br> 
+				<logic:notEqual name="totalDonorTermAssistFund" property="totDonorUnDisbAmount"  value="0" >
+				<bean:write name="totalDonorTermAssistFund" property="totDonorUnDisbAmount"/>
+				</logic:notEqual>
+			</td>
 		</tr>
 	</logic:iterate></logic:notEmpty>
 		<tr bgcolor="#C9C9C7"><td>&nbsp;</td>
@@ -596,6 +612,11 @@
 			<td align="right" height="21"><br> 
 				<logic:notEqual name="donors" property="donorExpAmount"  value="0" >	
 				<bean:write name="donors" property="donorExpAmount"/>
+				</logic:notEqual>
+			</td>
+			<td align="right" height="21"><br>
+			 	<logic:notEqual name="donors" property="donorUnDisbAmount"  value="0" >	
+				<bean:write name="donors" property="donorUnDisbAmount"/>
 				</logic:notEqual>
 			</td>
 		</tr>
@@ -636,6 +657,11 @@
 				<bean:write name="totalTeamTermAssistFund" property="totDonorExpAmount"/>
 				</logic:notEqual>
 			</td>
+			<td align="right" height="21"><br> 
+				<logic:notEqual name="totalTeamTermAssistFund" property="totDonorDisbAmount"  value="0" >
+				<bean:write name="totalTeamTermAssistFund" property="totDonorUnDisbAmount"/>
+				</logic:notEqual>
+			</td>
 		</tr>
 	</logic:iterate>		
 	<tr bgcolor="#C9C9C7"><td>&nbsp;</td>
@@ -672,6 +698,11 @@
 			<td align="right" height="21"><br> 
 				<logic:notEqual name="multiReport" property="teamExpAmount"  value="0" >
 				<bean:write name="multiReport" property="teamExpAmount"/>
+				</logic:notEqual>
+			</td>
+			<td align="right" height="21"><br> 
+				<logic:notEqual name="multiReport" property="teamUnDisbAmount"  value="0" >	
+				<bean:write name="multiReport" property="teamUnDisbAmount"/>
 				</logic:notEqual>
 			</td>
 		</tr>

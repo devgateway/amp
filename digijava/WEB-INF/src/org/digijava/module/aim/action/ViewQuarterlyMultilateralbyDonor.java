@@ -420,12 +420,12 @@ public class ViewQuarterlyMultilateralbyDonor extends Action
 		formBean.setFiscalYearRange(new ArrayList());
 		for(int yr=fromYr;yr<=toYr;yr++)
 			formBean.getFiscalYearRange().add(new Integer(yr));
-		formBean.setTotalColumns(12*yearRange+5);
+		formBean.setTotalColumns(16*yearRange+6);
 		formBean.setFilterCnt(filterCnt);
 		logger.debug("Set Filters = " + formBean.getFiltersNames());
 		setFiltersNames ="";
 		formBean.setFiscalYrRange((toYr - fromYr) + 1);
-		formBean.setYearCount(3*formBean.getFiscalYrRange());
+		formBean.setYearCount(4*formBean.getFiscalYrRange());
 		logger.debug("FS = " + formBean.getFiscalYrRange());
 		AmpTeam ampTeam=DbUtil.getAmpTeam(ampTeamId);
 		formBean.setReportName("Quarterly Report By Type of Assistance");

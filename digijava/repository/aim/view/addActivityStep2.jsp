@@ -127,6 +127,24 @@ function validateForm() {
 	return true;
 }
 
+function popupwin()
+{
+	var wndWidth = window.screen.availWidth/2.5;
+	var wndHeight = window.screen.availHeight/2.5;
+	var t = ((screen.width)-wndWidth)/2;
+	var l = ((screen.height)-wndHeight)/2;
+	winpopup=window.open('',"popup","height=" + wndHeight + ",width=" + wndWidth + ",top=" + l + ",left=" + t +",menubar=no,scrollbars=no,status=no,toolbar=no");
+	winpopup.document.write('<html>\n<head>\n');
+	winpopup.document.write('<title>About : Sector</title>\n');
+	winpopup.document.write('</head>\n');
+	winpopup.document.write('<body bgcolor="#f4f4f2">\n');
+	winpopup.document.write('<font face="verdana" size=1>\n');
+	winpopup.document.write('The OECD/DAC Creditor Reporting System(CRS) codes are used by all 23 OECD/DAC members when they report on their aid activities to the DAC Secretariat. The complete list of CRS codes and definitions and principles can be found in Annex 3.<ul><li>In the CRS,data on the sector of destination are recorded using 5-digit purpose codes. The first three digits of the code refer to the main sector or category (i.e.112 for Basic education, or 210 for Transpost and storage). The last two digits of the CRS purpose code allow providing more detailed classification(i.e. 11240 for Early childhood education, or 21020 for Rail transport).</li><li>For the purpose of AMP, if the 5-digits codificaton is too detailed and not relevant, only 3-digits codes may be used.</li><li>One and only one purpose code should be applied to each project. In case of multi-sector projects, use the CRS codes 400xx.</li><li>Non-sector activities (i.e. general budget support, debt, emergency aid, NGOs) are covered by the CRS, under codes 500xx to 900xx.</li></ul>\n');
+	winpopup.document.write('</font>\n');
+	winpopup.document.write('</body>\n</html>\n');
+	winpopup.document.close();	
+}
+
 -->
 </script>
 
@@ -378,9 +396,9 @@ function validateForm() {
 									<tr><td>
 										<IMG alt=Link height=10 src="../ampTemplate/images/arrow-014E86.gif" width=15>
 										<b><FONT color=red>*</FONT>
-										<a title="<digi:trn key="aim:impSector">The OECD/DAC Creditor Reporting System (CRS) codes are used by all 23 OECD/DAC members when they report on their aid activities to the DAC Secretariat. The complete list of CRS codes and definitions and principles can be found in Annex 3. • In the CRS, data on the sector of destination are recorded using 5-digit purpose codes. The first three digits of the code refer to the main sector or category (i.e. 112 for Basic education, or 210 for Transport and storage). The last two digits of the CRS purpose code allow providing more detailed classification (i.e. 11240 for Early childhood education, or 21020 for Rail transport). • For the purpose of AMP, if the 5-digits codification is too detailed and not relevant, only 3-digits codes may be used. • One and only one purpose code should be applied to each project. In case of multi-sector projects, use the CRS codes 400xx. • Non-sector activities (i.e. general budget support, debt, emergency aid, NGOs) are covered by the CRS, under codes 500xx to 900xx. </digi:trn>"> 
 										<digi:trn key="aim:sector">Sector</digi:trn></b>
-										</a>
+										<a href="javascript:popupwin()">
+										<img src="../ampTemplate/images/help.gif" alt="Click to get help on Status" width=10 height=10 border=0></a>
 									</td></tr>
 									<tr><td>
 									<FONT color=red>*</FONT>

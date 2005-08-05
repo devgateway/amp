@@ -107,6 +107,24 @@ function reviseCloseDate() {
 	document.aimEditActivityForm.submit();		  
 }
 
+function popupwin()
+{
+	var wndWidth = window.screen.availWidth/3.5;
+	var wndHeight = window.screen.availHeight/3.5;
+	var t = ((screen.width)-wndWidth)/2;
+	var l = ((screen.height)-wndHeight)/2;
+	winpopup=window.open('',"popup","height=" + wndHeight + ",width=" + wndWidth + ",top=" + l + ",left=" + t +",menubar=no,scrollbars=no,status=no,toolbar=no");
+	winpopup.document.write('<html>\n<head>\n');
+	winpopup.document.write('<title>About : Status</title>\n');
+	winpopup.document.write('</head>\n');
+	winpopup.document.write('<body bgcolor="#f4f4f2">\n');
+	winpopup.document.write('<font face="verdana" size=1>\n');
+	winpopup.document.write('<ul><li><b>Planned:</b> from the conceptual stage to just prior to official commitment.</li><li><b>On-going:</b> the project is committed, is active but not yet completed.</li><li><b>Completed:</b> the project is finished, with all approved assistance provided.</li><li><b>Cancelled:</b> the project was committed but was terminated prior to planned completion.</li><li><b>Suspended:</b> the project has been suspended.</li></ul>\n');
+	winpopup.document.write('</font>\n');
+	winpopup.document.write('</font>\n</body>\n</html>\n');
+	winpopup.document.close();	
+}
+
 
 -->
 </script>
@@ -541,11 +559,9 @@ function reviseCloseDate() {
 												</c:if>
 											</c:if>
 											<tr>
-												<td bgcolor="#ffffff">													
-												<a title="<digi:trn key="aim:StatusofProject">Planned: from the conceptual stage to just prior to official commitment. On-going: the project is committed, is active, but not yet completed. Completed: the project is finished, with all approved assistance provided. Cancelled: the project was committed but was terminated prior to planned completion.  Suspended: the project has been suspended.</digi:trn>">
-												<FONT color=red>*</FONT>&nbsp;
-												<digi:trn key="aim:status">Status</digi:trn>
-												</a>
+												<td bgcolor="#ffffff">																			  <FONT color=red>*</FONT>&nbsp;
+												<digi:trn key="aim:status">Status</digi:trn>												  <a href="javascript:popupwin()">
+												<img src="../ampTemplate/images/help.gif" alt="Click to get help on Status" width=10 height=10 border=0></a>
 												</td>
 												<td bgcolor="#ffffff">
 														<html:select property="status" styleClass="inp-text">

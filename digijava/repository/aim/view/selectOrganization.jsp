@@ -42,7 +42,7 @@
 		if (flag == false)
 			return false;
 
-		<digi:context name="selOrg" property="context/module/moduleinstance/organisationSelected.do"/>
+		<digi:context name="selOrg" property="context/module/moduleinstance/organisationSelected.do?edit=true"/>
 	   document.aimEditActivityForm.action = "<%= selOrg %>";
 		document.aimEditActivityForm.target = window.opener.name;
 	   document.aimEditActivityForm.submit();
@@ -57,7 +57,7 @@
 			  document.aimEditActivityForm.tempNumResults.focus();
 			  return false;
 		} else {
-			 <digi:context name="searchOrg" property="context/module/moduleinstance/searchOrganisation.do"/>
+			 <digi:context name="searchOrg" property="context/module/moduleinstance/searchOrganisation.do?edit=true"/>
 		    document.aimEditActivityForm.action = "<%= searchOrg %>";
 		    document.aimEditActivityForm.submit();
 			  return true;
@@ -71,7 +71,7 @@
 			  return false;
 		} else {
 			 <digi:context name="searchOrg" property="context/module/moduleinstance/searchOrganisation.do"/>
-			 url = "<%= searchOrg %>?alpha=" + val + "&orgSelReset=false";
+			 url = "<%= searchOrg %>?alpha=" + val + "&orgSelReset=false&edit=true";
 		     document.aimEditActivityForm.action = url;
 		     document.aimEditActivityForm.submit();
 			  return true;
@@ -101,6 +101,7 @@
 <digi:form action="/organisationSelected.do" method="post">
 
 <html:hidden property="item" />
+<html:hidden property="edit" />
 
 <table width="100%" cellSpacing=5 cellPadding=5 vAlign="top" border=0>
 	<tr><td vAlign="top">
@@ -219,6 +220,7 @@
 											<%=pages%>
 										</c:set>
 										<c:set target="${urlParams1}" property="orgSelReset" value="false"/>
+										<c:set target="${urlParams1}" property="edit" value="true"/>
 										
 										<c:if test="${aimEditActivityForm.currentPage == pages}">
 											<font color="#FF0000"><%=pages%></font>

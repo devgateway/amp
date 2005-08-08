@@ -28,6 +28,8 @@
 </script>
 
 <digi:form action="/compDateRevised.do">
+<html:hidden property="edit"/>
+
 <input type="hidden" name="selectedDate" value="">
 <table bgcolor=#f4f4f2 cellPadding=5 cellSpacing=5 width="100%" class=box-border-nopadding>
 	<tr>

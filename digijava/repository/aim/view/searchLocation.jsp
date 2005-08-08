@@ -78,7 +78,7 @@
 			  document.aimEditActivityForm.tempNumResults.focus();
 			  return false;
 		} else {
-		 <digi:context name="searchLoc" property="context/module/moduleinstance/searchLocation.do"/>
+		 <digi:context name="searchLoc" property="context/module/moduleinstance/searchLocation.do?edit=true"/>
 		    document.aimEditActivityForm.action = "<%= searchLoc %>";
 		    document.aimEditActivityForm.submit();
 			return true;
@@ -87,7 +87,7 @@
 	}
 
 	function selectLoc() {
-		<digi:context name="selectLoc" property="context/module/moduleinstance/selectLocation.do" />
+		<digi:context name="selectLoc" property="context/module/moduleinstance/selectLocation.do?edit=true" />
 		document.aimEditActivityForm.action = "<%= selectLoc %>";
 		document.aimEditActivityForm.submit();
 	} 
@@ -95,7 +95,7 @@
 	function impLevelChanged() {
 		  alert("imp  level changed..");
 		  document.aimEditActivityForm.fill.value = "region";
-		  <digi:context name="selectLoc" property="context/module/moduleinstance/selectLocation.do" />
+		  <digi:context name="selectLoc" property="context/module/moduleinstance/selectLocation.do?edit=true" />
 		  document.aimEditActivityForm.action = "<%= selectLoc %>";
 		  document.aimEditActivityForm.target = "_self";
 		  document.aimEditActivityForm.submit();
@@ -120,6 +120,7 @@
 <digi:form action="/addSelectedLocations.do" method="post">
 <html:hidden property="locationReset" value="false" />
 <html:hidden property="fill" />
+<html:hidden property="edit" />
 
 
 <table width="100%" cellSpacing=5 cellPadding=5 vAlign="top" border=0>
@@ -246,6 +247,7 @@
 											<%=pages%>
 										</c:set>
 										<c:set target="${urlParams1}" property="locSelReset" value="false"/>
+										<c:set target="${urlParams1}" property="edit" value="true"/>
 										
 										<c:if test="${aimEditActivityForm.currentPage == pages}">
 											<font color="#FF0000"><%=pages%></font>

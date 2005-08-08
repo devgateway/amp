@@ -604,12 +604,14 @@
 	
     <action name="aimChannelOverviewForm"
 	    type="org.digijava.module.aim.action.ViewChannelOverview"
+    	scope="request" 
         validate="false" 
         path="/aim/channelOverview">
     </action>
 
 	<action name="aimChannelOverviewObjectiveForm"
 	    type="org.digijava.module.aim.action.ViewChannelOverviewObjective"
+    	scope="request" 
         validate="false" 
         path="/aim/channelOverviewObjective">
     </action>
@@ -1888,7 +1890,7 @@
 			  type="org.digijava.module.aim.action.EditActivity"
 			  scope="session"
 			  path="/aim/editActivity">	
-			  <forward name="forward" path="/aim/addActivity.do" redirect="true"/>
+			  <forward name="forward" path="/aim/addActivity.do?edit=true" redirect="true"/>
 	</action>		
 
 	<action
@@ -1903,7 +1905,7 @@
 			  <forward name="addActivityStep5" path="/showLayout.do?layout=addActivityStep5" />
 			  <forward name="addActivityStep6" path="/showLayout.do?layout=addActivityStep6" />
 			  <forward name="addActivityStep7" path="/showLayout.do?layout=addActivityStep7" />
-			  <forward name="added" path="/aim/addActivity.do" redirect="true" />
+			  <forward name="added" path="/aim/addActivity.do?edit=true" redirect="true" />
 			  <forward name="index" path="/aim/index.do" redirect="true" />
 	</action>	
 
@@ -1939,7 +1941,7 @@
 			  type="org.digijava.module.aim.action.RemoveSelOrganisations"
 			  scope="session"
 			  path="/aim/removeSelOrganisations">	
-			  <forward name="forward" path="/aim/addActivity.do" redirect="true" />
+			  <forward name="forward" path="/aim/addActivity.do?edit=true" redirect="true" />
 			  <forward name="index" path="/aim/index.do" redirect="true" />			  
 	</action>		
 
@@ -1948,7 +1950,7 @@
 			  type="org.digijava.module.aim.action.ResetAll"
 			  scope="session"
 			  path="/aim/resetAll">	
-			  <forward name="forward" path="/aim/addActivity.do" redirect="true" />
+			  <forward name="forward" path="/aim/addActivity.do?edit=true" redirect="true" />
 			  <forward name="index" path="/aim/index.do" redirect="true" />			  
 	</action>
 	
@@ -1957,7 +1959,7 @@
 			  type="org.digijava.module.aim.action.RemoveSelRelatedOrgs"
 			  scope="session"
 			  path="/aim/removeSelRelOrgs">	
-			  <forward name="forward" path="/aim/addActivity.do" redirect="true" />
+			  <forward name="forward" path="/aim/addActivity.do?edit=true" redirect="true" />
 			  <forward name="index" path="/aim/index.do" redirect="true" />			  
 	</action>			
 
@@ -1975,7 +1977,7 @@
 			  type="org.digijava.module.aim.action.RemoveSelLocations"
 			  scope="session"
 			  path="/aim/removeSelLocations">	
-			  <forward name="forward" path="/aim/addActivity.do" redirect="true" />
+			  <forward name="forward" path="/aim/addActivity.do?edit=true" redirect="true" />
 			  <forward name="index" path="/aim/index.do" redirect="true" />			  
 	</action>	
 	
@@ -2005,7 +2007,7 @@
 			  scope="session"
 			  validate="false"
 			  path="/aim/addSelectedLocations">
-  			  <forward name="forward" path="/aim/addActivity.do" />
+  			  <forward name="forward" path="/aim/addActivity.do?edit=true"/>
 			  <forward name="index" path="/aim/index.do" redirect="true" />			  
 	</action>		
 
@@ -2025,7 +2027,7 @@
 			  scope="session"
 			  validate="false"
 			  path="/aim/addSelectedSectors">
-  			  <forward name="forward" path="/aim/addActivity.do" />
+  			  <forward name="forward" path="/aim/addActivity.do?edit=true" />
 			  <forward name="index" path="/aim/index.do" redirect="true" />
 	</action>	
 
@@ -2045,9 +2047,9 @@
 			  type="org.digijava.module.aim.action.OrganisationSelected"
 			  scope="session"
 			  path="/aim/organisationSelected">	
-			  <forward name="forward" path="/aim/addActivity.do" redirect="true" />
-			  <forward name="step3" path="/aim/addActivity.do?step=3" redirect="true" />
-			  <forward name="step6" path="/aim/addActivity.do?step=6" redirect="true" />
+			  <forward name="forward" path="/aim/addActivity.do?edit=true" redirect="true" />
+			  <forward name="step3" path="/aim/addActivity.do?edit=true" redirect="true" />
+			  <forward name="step6" path="/aim/addActivity.do?edit=true" redirect="true" />
 			  <forward name="index" path="/aim/index.do" redirect="true" />			  
 	</action>	
 
@@ -2056,7 +2058,7 @@
 			  type="org.digijava.module.aim.action.LocationSelected"
 			  scope="session"
 			  path="/aim/locationSelected">	
-			  <forward name="forward" path="/aim/addActivity.do?step=2" />
+			  <forward name="forward" path="/aim/addActivity.do?edit=true" />
 			  <forward name="index" path="/aim/index.do" redirect="true" />			  
 	</action>		
 
@@ -2074,7 +2076,7 @@
 			  type="org.digijava.module.aim.action.SectorSelected"
 			  scope="session"
 			  path="/aim/sectorSelected">	
-			  <forward name="forward" path="/aim/addActivity.do?step=2" redirect="true"/>
+			  <forward name="forward" path="/aim/addActivity.do?edit=true" redirect="true"/>
 			  <forward name="index" path="/aim/index.do" redirect="true" />			  
 	</action>		
 
@@ -2083,7 +2085,7 @@
 			  type="org.digijava.module.aim.action.RemoveSelSectors"
 			  scope="session"
 			  path="/aim/removeSelSectors">	
-			  <forward name="forward" path="/aim/addActivity.do" redirect="true" />
+			  <forward name="forward" path="/aim/addActivity.do?edit=true" redirect="true" />
 			  <forward name="index" path="/aim/index.do" redirect="true" />			  
 	</action>		
 
@@ -2186,7 +2188,7 @@
 			  type="org.digijava.module.aim.action.CompDateRevised"
 			  scope="session"
 			  path="/aim/compDateRevised">
-			  <forward name="forward" path="/aim/addActivity.do?step=1" redirect="true"/>
+			  <forward name="forward" path="/aim/addActivity.do?edit=true" redirect="true"/>
 	</action>
 
 	<action
@@ -2516,7 +2518,7 @@
 			type="org.digijava.module.aim.action.FundingAdded"
 			scope="session"
 			path="/aim/fundingAdded">	
-			<forward name="forward" path="/aim/addActivity.do?step=3" redirect="true" />
+			<forward name="forward" path="/aim/addActivity.do?edit=true" redirect="true" />
 	</action>	
 	<action
 			name="aimEditActivityForm"
@@ -2531,7 +2533,7 @@
 			type="org.digijava.module.aim.action.RemoveSelFundingOrgs"
 			scope="session"
 			path="/aim/remSelFundOrgs">
-			<forward name="forward" path="/aim/addActivity.do" redirect="true"/>
+			<forward name="forward" path="/aim/addActivity.do?edit=true" redirect="true"/>
 	</action>	
 
 <!-- Advanced Report Manager -->

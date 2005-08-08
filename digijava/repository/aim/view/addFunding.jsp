@@ -20,7 +20,7 @@
 	function addFunding() {
 		var flag = validateFunding();
 		if (flag == false) return false;
-		<digi:context name="fundAdded" property="context/module/moduleinstance/fundingAdded.do" />;
+		<digi:context name="fundAdded" property="context/module/moduleinstance/fundingAdded.do?edit=true" />;
 		document.aimEditActivityForm.action = "<%= fundAdded %>";
 		document.aimEditActivityForm.target = window.opener.name;
 	   document.aimEditActivityForm.submit();
@@ -83,6 +83,7 @@
 <html:hidden property="numComm"/>
 <html:hidden property="numDisb"/>
 <html:hidden property="numExp"/>
+<html:hidden property="edit"/>
 
 <table width="100%" border="0" cellspacing="2" cellpadding="2" align="center" class=box-border-nopadding>
 	<!-- funding -->

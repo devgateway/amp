@@ -15,7 +15,7 @@
 	<!--
 
 	function selectSector() {
-		<digi:context name="selSector" property="context/module/moduleinstance/sectorSelected.do"/>
+		<digi:context name="selSector" property="context/module/moduleinstance/sectorSelected.do?edit=true"/>
 	    document.aimEditActivityForm.action = "<%= selSector %>";
 		 document.aimEditActivityForm.target = window.opener.name;
 	    document.aimEditActivityForm.submit();
@@ -32,7 +32,7 @@
 		} else if (value == 3) {
 			document.aimEditActivityForm.subsectorLevel2.value = -1;
 		}
-		<digi:context name="selSector" property="context/module/moduleinstance/selectSectors.do"/>
+		<digi:context name="selSector" property="context/module/moduleinstance/selectSectors.do?edit=true"/>
 	    document.aimEditActivityForm.action = "<%= selSector %>";
   		document.aimEditActivityForm.submit();									
 	}	
@@ -57,7 +57,7 @@
 		var flg=checkEmpty();
 			if(flg)
 		{
-		 <digi:context name="searchSctr" property="context/module/moduleinstance/searchSectors.do"/>
+		 <digi:context name="searchSctr" property="context/module/moduleinstance/searchSectors.do?edit=true"/>
 		 document.aimEditActivityForm.action = "<%= searchSctr %>";
 		 document.aimEditActivityForm.submit();
 		 return true;
@@ -88,6 +88,7 @@
 <digi:form action="/sectorSelected.do" method="post">
 
 <html:hidden property="sectorReset" value="false"/>
+<html:hidden property="edit"/>
 
 <table width="100%" cellSpacing=5 cellPadding=5 vAlign="top" border=0>
 	<tr><td vAlign="top">

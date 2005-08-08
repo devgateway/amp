@@ -66,7 +66,7 @@ function addPhyProgess(id,comp) {
 	if (document.aimEditActivityForm.currUrl.value == "" ||
 						 document.aimEditActivityForm.prevId.value != id) {
 		openNewWindow(610, 255);
-		<digi:context name="addPhyProg" property="context/module/moduleinstance/showAddPhyProg.do" />
+		<digi:context name="addPhyProg" property="context/module/moduleinstance/showAddPhyProg.do~edit=true" />
 		if (id == -1) {
 			document.aimEditActivityForm.action = "<%= addPhyProg %>~comp=" + comp;
 		} else {
@@ -84,7 +84,7 @@ function addPhyProgess(id,comp) {
 function removeSelPhyProgress() {
 	var flag = validatePhyProg();
 	if (flag == false) return false;
-	<digi:context name="remPhyProg" property="context/module/moduleinstance/removeSelPhyProg.do" />
+	<digi:context name="remPhyProg" property="context/module/moduleinstance/removeSelPhyProg.do?edit=true" />
 	document.aimEditActivityForm.action = "<%= remPhyProg %>";
 	document.aimEditActivityForm.target = "_self"
 	document.aimEditActivityForm.submit();
@@ -94,7 +94,7 @@ function removeSelPhyProgress() {
 function addComponents(id) {
 
 	 if (document.aimEditActivityForm.currUrl.value == "") { 
-		<digi:context name="addComponents" property="context/module/moduleinstance/showAddComponent.do" />
+		<digi:context name="addComponents" property="context/module/moduleinstance/showAddComponent.do~edit=true" />
 		if (id == -1) {
 			document.aimEditActivityForm.action = "<%= addComponents %>";
 		} else {
@@ -111,7 +111,7 @@ function addComponents(id) {
 }
 function resetAll()
 {
-	<digi:context name="resetAll" property="context/module/moduleinstance/resetAll.do" />
+	<digi:context name="resetAll" property="context/module/moduleinstance/resetAll.do?edit=true" />
 	document.aimEditActivityForm.action = "<%= resetAll %>";
 	document.aimEditActivityForm.target = "_self";
 	document.aimEditActivityForm.submit();
@@ -121,7 +121,7 @@ function resetAll()
 function removeSelComponents() {
 	var flag = validateComponents();
 	if (flag == false) return false;
-	<digi:context name="remPhyProg" property="context/module/moduleinstance/removeSelPhyProg.do" />
+	<digi:context name="remPhyProg" property="context/module/moduleinstance/removeSelPhyProg.do?edit=true" />
 	document.aimEditActivityForm.action = "<%= remPhyProg %>";
 	document.aimEditActivityForm.target = "_self"
 	document.aimEditActivityForm.submit();
@@ -138,6 +138,7 @@ function removeSelComponents() {
 <input type="hidden" name="currUrl">
 <input type="hidden" name="prevId">
 
+<html:hidden property="edit" />
 
 <table width="100%" cellPadding="0" cellSpacing="0" vAlign="top" align="left">
 <tr><td width="100%" vAlign="top" align="left">
@@ -177,12 +178,10 @@ function removeSelComponents() {
 										</digi:trn>
 									</digi:link>&nbsp;&gt;&nbsp;								
 								</c:if>																	
-								<jsp:useBean id="urlParams" type="java.util.Map" class="java.util.HashMap"/>
-								<c:set target="${urlParams}" property="step" value="1" />
 								<bean:define id="translation">
 									<digi:trn key="aim:clickToViewAddActivityStep1">Click here to goto Add Activity Step 1</digi:trn>
 								</bean:define>
-								<digi:link href="/addActivity.do" name="urlParams" styleClass="comment" title="<%=translation%>">
+								<digi:link href="/addActivity.do?step=1&edit=true" styleClass="comment" title="<%=translation%>">
 								
 								<c:if test="${aimEditActivityForm.edit == true}">
 									<digi:trn key="aim:editActivityStep1">
@@ -198,7 +197,7 @@ function removeSelComponents() {
 									<bean:define id="translation">
 										<digi:trn key="aim:clickToViewAddActivityStep2">Click here to goto Add Activity Step 2</digi:trn>
 									</bean:define>
-									<digi:link href="/addActivity.do?step=2" styleClass="comment" title="<%=translation%>">						
+									<digi:link href="/addActivity.do?step=2&edit=true" styleClass="comment" title="<%=translation%>">						
 										<digi:trn key="aim:addActivityStep2">
 											Step 2
 										</digi:trn>
@@ -206,7 +205,7 @@ function removeSelComponents() {
 									<bean:define id="translation">
 										<digi:trn key="aim:clickToViewAddActivityStep3">Click here to goto Add Activity Step 3</digi:trn>
 									</bean:define>
-									<digi:link href="/addActivity.do?step=3" styleClass="comment" title="<%=translation%>">						
+									<digi:link href="/addActivity.do?step=3&edit=true" styleClass="comment" title="<%=translation%>">						
 										<digi:trn key="aim:addActivityStep3">
 											Step 3
 										</digi:trn>
@@ -293,7 +292,7 @@ function removeSelComponents() {
 															</td>
 															<td align="right">
 																<bean:define id="compId" property="componentId" name="selComponents"/>
-																<% String url = "/deleteComponent.do~id=" + compId;%>
+																<% String url = "/deleteComponent.do~edit=true~id=" + compId;%>
 																<digi:link href="<%=url%>">
 															 	<digi:img src="module/cms/images/deleteIcon.gif" border="0" alt="Delete this component"/>
 																</digi:link>
@@ -334,7 +333,7 @@ function removeSelComponents() {
 																					</td>
 																					<td align="right">
 																						<bean:define id="id" property="pid" name="phyProg"/>
-																						<% String url1 = "/removeSelPhyProg.do~pid="+id+"~cid="+compId;%>
+																						<% String url1 = "/removeSelPhyProg.do~edit=true~pid="+id+"~cid="+compId;%>
 																						<digi:link href="<%=url1%>">
 																					 	<digi:img src="module/cms/images/deleteIcon.gif" border="0" 
 																						alt="Delete this physical progress"/>

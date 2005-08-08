@@ -10,9 +10,9 @@
 function fnEditProject(id)
 {
 	<digi:context name="addUrl" property="context/module/moduleinstance/editActivity.do" />
-    document.aimChannelOverviewForm.action = "<%=addUrl%>~pageId=1~action=edit~activityId=" + id;
+   document.aimChannelOverviewForm.action = "<%=addUrl%>~pageId=1~action=edit~activityId=" + id;
 	document.aimChannelOverviewForm.target = "_self";    
-    document.aimChannelOverviewForm.submit();
+   document.aimChannelOverviewForm.submit();
 }
 
 function preview(id)
@@ -63,11 +63,10 @@ function commentWin(val) {
 
 </script>
 
-<digi:errors/>
 
 
 <digi:form action="/viewChannelOverview.do" name="aimChannelOverviewForm" 
-type="org.digijava.module.aim.form.ChannelOverviewForm" method="post">
+type="org.digijava.module.aim.form.ChannelOverviewForm" method="get">
 <digi:instance property="aimChannelOverviewForm" />
 
 <html:hidden name="aimChannelOverviewForm" property="id" />
@@ -114,10 +113,11 @@ type="org.digijava.module.aim.form.ChannelOverviewForm" method="post">
 								<TD align="right">
 									<input type="button" value="Preview" class="dr-menu"
 									onclick="preview(<c:out value="${activity.activityId}"/>)">	
-									<c:if test="${aimChannelOverviewForm.write == true}">
+									<%--
+									<c:if test="${aimChannelOverviewForm.write == true}">--%>
 									<input type="button" value="Edit" class="dr-menu"
 									onclick="fnEditProject(<c:out value="${activity.activityId}"/>)">
-									</c:if>
+									<%--</c:if>--%>
 								</TD>
 							</TR>
 						</TABLE>
@@ -165,6 +165,11 @@ type="org.digijava.module.aim.form.ChannelOverviewForm" method="post">
 					</TD>
 				</TR>
 				--%>
+				<TR bgColor=#f4f4f2>
+					<TD vAlign="top" align="center" width="100%">
+						<html:errors/>				
+					</TD>
+				</TR>				
 				<TR bgColor=#f4f4f2>
 					<TD vAlign="top" align="left" width="100%">
 						<TABLE width="100%" cellPadding=2 cellSpacing=2 vAlign="top" align="left" bgColor=#f4f4f2>

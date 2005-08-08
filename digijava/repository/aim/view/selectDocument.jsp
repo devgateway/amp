@@ -136,7 +136,7 @@
 			resourceFlag = validateResource();		
 		if(docFlag == true || resourceFlag == true)
 		{
-			<digi:context name="addDoc" property="context/module/moduleinstance/documentSelected.do" />
+			<digi:context name="addDoc" property="context/module/moduleinstance/documentSelected.do?edit=true" />
 			document.aimEditActivityForm.action = "<%= addDoc %>";	
 		 	document.aimEditActivityForm.target = window.opener.name;	
 		    document.aimEditActivityForm.submit();
@@ -163,6 +163,8 @@
 <digi:instance property="aimEditActivityForm" />
 <digi:form action="/documentSelected.do" method="post" enctype="multipart/form-data" onsubmit="return false;">
 <html:hidden property="docFileOrLink" />
+<html:hidden property="edit" />
+
 <table width="100%" cellSpacing=5 cellPadding=5 vAlign="top" border=0>
 	<tr><td vAlign="top">
 		<table bgcolor=#f4f4f2 cellPadding=5 cellSpacing=5 width="100%" class=box-border-nopadding>

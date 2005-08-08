@@ -154,6 +154,8 @@ function popupwin()
 <html:hidden property="step"/>
 <html:hidden property="reset" />
 <html:hidden property="country" />
+<html:hidden property="edit" />
+
 <input type="hidden" name="currUrl">
 
 <table width="100%" cellPadding="0" cellSpacing="0" vAlign="top" align="left">
@@ -194,12 +196,10 @@ function popupwin()
 									</digi:link>&nbsp;&gt;&nbsp;								
 								</c:if>																
 	
-								<jsp:useBean id="urlParams" type="java.util.Map" class="java.util.HashMap"/>
-								<c:set target="${urlParams}" property="step" value="1" />
 								<bean:define id="translation">
 									<digi:trn key="aim:clickToViewAddActivityStep1">Click here to goto Add Activity Step 1</digi:trn>
 								</bean:define>
-								<digi:link href="/addActivity.do" name="urlParams" styleClass="comment" title="<%=translation%>" >
+								<digi:link href="/addActivity.do?step=1&edit=true" styleClass="comment" title="<%=translation%>" >
 								<c:if test="${aimEditActivityForm.edit == true}">
 									<digi:trn key="aim:editActivityStep1">
 										Edit Activity - Step 1

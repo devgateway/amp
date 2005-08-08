@@ -45,7 +45,7 @@
 
 		if(check)
 		{
-			<digi:context name="selLoc" property="context/module/moduleinstance/locationSelected.do"/>
+			<digi:context name="selLoc" property="context/module/moduleinstance/locationSelected.do?edit=true"/>
 	    	document.aimEditActivityForm.action = "<%= selLoc %>";
 		 	document.aimEditActivityForm.target = window.opener.name;
 	    	document.aimEditActivityForm.submit();
@@ -60,7 +60,7 @@
 
 	function countryChanged() {
 		  document.aimEditActivityForm.fill.value = "region";
-		  <digi:context name="selectLoc" property="context/module/moduleinstance/selectLocation.do" />
+		  <digi:context name="selectLoc" property="context/module/moduleinstance/selectLocation.do?edit=true" />
 		  document.aimEditActivityForm.action = "<%= selectLoc %>";
 		  document.aimEditActivityForm.target = "_self";
 		  document.aimEditActivityForm.submit();
@@ -68,7 +68,7 @@
 
 	function regionChanged() {
 		  document.aimEditActivityForm.fill.value = "zone";
-		  <digi:context name="selectLoc" property="context/module/moduleinstance/selectLocation.do" />
+		  <digi:context name="selectLoc" property="context/module/moduleinstance/selectLocation.do?edit=true" />
 		  document.aimEditActivityForm.action = "<%= selectLoc %>";
 		  document.aimEditActivityForm.target = "_self";
 		  document.aimEditActivityForm.submit();
@@ -76,7 +76,7 @@
 
 	function zoneChanged() {
 		  document.aimEditActivityForm.fill.value = "woreda";
-		  <digi:context name="selectLoc" property="context/module/moduleinstance/selectLocation.do" />
+		  <digi:context name="selectLoc" property="context/module/moduleinstance/selectLocation.do?edit=true" />
 		  document.aimEditActivityForm.action = "<%= selectLoc %>";
 		  document.aimEditActivityForm.target = "_self";
 		  document.aimEditActivityForm.submit();
@@ -144,6 +144,7 @@
 <html:hidden property="impLevelValue" />
 <html:hidden property="country" />
 <html:hidden property="impCountry" />
+<html:hidden property="edit" />
 
 
 <table width="100%" cellSpacing=5 cellPadding=5 vAlign="top" border=0>

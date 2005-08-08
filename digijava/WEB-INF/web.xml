@@ -44,6 +44,7 @@
 	<!-- Quartz test -->
 
 	<!-- Standard Action Servlet Configuration (with debugging) -->
+	<!--
   	<servlet>
 		<servlet-name>action</servlet-name>
 		<servlet-class>org.apache.struts.action.ActionServlet</servlet-class>
@@ -80,6 +81,44 @@
 		</init-param>
 		<load-on-startup>2</load-on-startup>
 	</servlet>
+	-->
+
+  	<servlet>
+		<servlet-name>action</servlet-name>
+		<servlet-class>org.digijava.module.aim.config.AMPActionServlet</servlet-class>
+ 		<init-param>
+			<param-name>config</param-name>
+  		    	<param-value>/repository/struts-config.xml,
+ 	    			     /repository/admin/struts-config.xml,
+						  /repository/calendar/struts-config.xml,
+							/repository/aim/struts-config.xml,						  
+		                 /repository/editor/struts-config.xml,
+  		    		     /repository/highlights/struts-config.xml,
+  		    		     /repository/news/struts-config.xml,
+  		    		     /repository/poll/struts-config.xml,
+  		    		     /repository/sdm/struts-config.xml,
+		                 /repository/translation/struts-config.xml,
+  		    		     /repository/um/struts-config.xml,
+				     	/repository/forum/struts-config.xml,
+				     	/repository/cms/struts-config.xml,
+				     	/repository/exception/struts-config.xml,
+				     	/repository/syndication/struts-config.xml
+			</param-value>
+		</init-param>
+		<init-param>
+			<param-name>debug</param-name>
+			<param-value>2</param-value>
+	  	</init-param>
+		<init-param>
+			<param-name>detail</param-name>
+			<param-value>2</param-value>
+		</init-param>
+		<init-param>
+	  		 <param-name>factory</param-name>
+	    	 <param-value>org.digijava.kernel.util.DigiMessageResourcesFactory</param-value>
+		</init-param>
+		<load-on-startup>2</load-on-startup>
+	</servlet>	
 
 	<!-- Standard Action Servlet Mapping -->
 	<servlet-mapping>

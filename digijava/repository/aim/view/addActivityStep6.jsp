@@ -20,7 +20,7 @@ function addOrgs(value) {
 						 document.aimEditActivityForm.prevOrg.value != value) { 		  			  			  		  
 		openNewWindow(600, 400);
 		<digi:context name="selectOrganization" property="context/module/moduleinstance/selectOrganization.do~orgSelReset=true" />
-		document.aimEditActivityForm.action = "<%= selectOrganization %>~item="+value;
+		document.aimEditActivityForm.action = "<%= selectOrganization %>~item="+value+"~edit=true";
 		document.aimEditActivityForm.currUrl.value = "<%= selectOrganization %>";
 		document.aimEditActivityForm.prevOrg.value = value;
 		document.aimEditActivityForm.target = popupPointer.name;
@@ -31,7 +31,7 @@ function addOrgs(value) {
 } 	
 function resetAll()
 {
-	<digi:context name="resetAll" property="context/module/moduleinstance/resetAll.do" />
+	<digi:context name="resetAll" property="context/module/moduleinstance/resetAll.do?edit=true" />
 	document.aimEditActivityForm.action = "<%= resetAll %>";
 	document.aimEditActivityForm.target = "_self";
 	document.aimEditActivityForm.submit();
@@ -40,7 +40,7 @@ function resetAll()
 
 function removeSelOrgs(value) {
 	document.aimEditActivityForm.item.value = value;
-	<digi:context name="remOrgs" property="context/module/moduleinstance/removeSelRelOrgs.do" />
+	<digi:context name="remOrgs" property="context/module/moduleinstance/removeSelRelOrgs.do?edit=true" />
 	document.aimEditActivityForm.action = "<%= remOrgs %>";
 	document.aimEditActivityForm.target = "_self"
 	document.aimEditActivityForm.submit();
@@ -55,6 +55,9 @@ function removeSelOrgs(value) {
 <html:hidden property="item" />
 <input type="hidden" name="currUrl">
 <input type="hidden" name="prevOrg">
+
+<html:hidden property="edit" />
+
 <table width="100%" cellPadding="0" cellSpacing="0" vAlign="top" align="left">
 <tr><td width="100%" vAlign="top" align="left">
 <!--  AMP Admin Logo -->
@@ -93,12 +96,10 @@ function removeSelOrgs(value) {
 										</digi:trn>
 									</digi:link>&nbsp;&gt;&nbsp;								
 								</c:if>				
-								<jsp:useBean id="urlParams" type="java.util.Map" class="java.util.HashMap"/>
-								<c:set target="${urlParams}" property="step" value="1" />
 								<bean:define id="translation">
 									<digi:trn key="aim:clickToViewAddActivityStep1">Click here to go to Add Activity Step 1</digi:trn>
 								</bean:define>
-								<digi:link href="/addActivity.do" name="urlParams" styleClass="comment" title="<%=translation%>" >
+								<digi:link href="/addActivity.do?step=1&edit=true" styleClass="comment" title="<%=translation%>" >
 								
 								<c:if test="${aimEditActivityForm.edit == true}">
 									<digi:trn key="aim:editActivityStep1">
@@ -114,7 +115,7 @@ function removeSelOrgs(value) {
 								<bean:define id="translation">
 									<digi:trn key="aim:clickToViewAddActivityStep2">Click here to go to Add Activity Step 2</digi:trn>
 								</bean:define>
-								<digi:link href="/addActivity.do?step=2" styleClass="comment" title="<%=translation%>" >						
+								<digi:link href="/addActivity.do?step=2&edit=true" styleClass="comment" title="<%=translation%>" >						
 									<digi:trn key="aim:addActivityStep2">
 									Step 2
 									</digi:trn>
@@ -122,7 +123,7 @@ function removeSelOrgs(value) {
 									<bean:define id="translation">
 										<digi:trn key="aim:clickToViewAddActivityStep3">Click here to go to Add Activity Step 3</digi:trn>
 									</bean:define>
-									<digi:link href="/addActivity.do?step=3" styleClass="comment" title="<%=translation%>" >						
+									<digi:link href="/addActivity.do?step=3&edit=true" styleClass="comment" title="<%=translation%>" >						
 									<digi:trn key="aim:addActivityStep3">
 									Step 3
 									</digi:trn>
@@ -130,7 +131,7 @@ function removeSelOrgs(value) {
 									<bean:define id="translation">
 										<digi:trn key="aim:clickToViewAddActivityStep4">Click here to go to Add Activity Step 4</digi:trn>
 									</bean:define>
-									<digi:link href="/addActivity.do?step=4" styleClass="comment" title="<%=translation%>" >						
+									<digi:link href="/addActivity.do?step=4&edit=true" styleClass="comment" title="<%=translation%>" >						
 									<digi:trn key="aim:addActivityStep4">
 									Step 4
 									</digi:trn>
@@ -138,7 +139,7 @@ function removeSelOrgs(value) {
 									<bean:define id="translation">
 										<digi:trn key="aim:clickToViewAddActivityStep5">Click here to go to Add Activity Step 5</digi:trn>
 									</bean:define>
-									<digi:link href="/addActivity.do?step=5" styleClass="comment" title="<%=translation%>" >						
+									<digi:link href="/addActivity.do?step=5&edit=true" styleClass="comment" title="<%=translation%>" >						
 									<digi:trn key="aim:addActivityStep5">
 									Step 5
 									</digi:trn>

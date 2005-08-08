@@ -7,12 +7,16 @@ package org.digijava.module.aim.action;
 import org.apache.struts.action.ActionError;
 import org.apache.struts.action.ActionErrors;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
 
+import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -211,10 +215,8 @@ public class SaveActivity extends Action {
 				DateConversion.getDate(eaForm.getRevisedAppDate()));
 		activity.setProposedStartDate(
 				DateConversion.getDate(eaForm.getOriginalStartDate()));
-		logger.debug("Setting actual start date as " + eaForm.getRevisedStartDate());
 		activity.setActualStartDate(
 				DateConversion.getDate(eaForm.getRevisedStartDate()));
-		logger.debug("Actual start date = " + activity.getActualStartDate());
 		activity.setActualCompletionDate(
 				DateConversion.getDate(eaForm.getCurrentCompDate()));
 		
@@ -524,7 +526,6 @@ public class SaveActivity extends Action {
 			OrgProjectId orgProjId[] = eaForm.getSelectedOrganizations();
 			for (int i = 0; i < orgProjId.length; i++) {
 				AmpActivityInternalId actInternalId = new AmpActivityInternalId();
-				logger.info("Setting orgId in Internal id as " + orgProjId[i].getAmpOrgId());
 				actInternalId.setOrganisation(DbUtil.getOrganisation(orgProjId[i].getAmpOrgId()));
 				actInternalId.setInternalId(orgProjId[i].getProjectId());
 				internalIds.add(actInternalId);	
@@ -534,12 +535,9 @@ public class SaveActivity extends Action {
 
 		// set components
 		Set components = new HashSet();
-		logger.info("Setting components from Save Activity");
 		if (eaForm.getSelectedComponents() != null) {
 			Iterator itr = eaForm.getSelectedComponents().iterator();
-			logger.info("Got the iterator");
 			while (itr.hasNext()) {
-				logger.info("Inside while");
 				Components comp = (Components) itr.next();
 				AmpComponent ampComponent = new AmpComponent();
 				ampComponent.setActivity(activity);
@@ -663,6 +661,18 @@ public class SaveActivity extends Action {
 		if (eaForm.isEdit()) {
 			// update an existing activity
 			ActivityUtil.saveActivity(activity, eaForm.getActivityId(), true, eaForm.getCommentsCol(), eaForm.isSerializeFlag(), field);
+			
+			// remove the activity details from the edit activity list
+			ServletContext ampContext = getServlet().getServletContext();
+			String sessId = session.getId(); 
+			HashMap activityMap = (HashMap) ampContext.getAttribute("editActivityList");
+			activityMap.remove(sessId);
+			ArrayList sessList = (ArrayList) ampContext.getAttribute("sessionList");
+		    sessList.remove(sessId);
+		    Collections.sort(sessList);
+            ampContext.setAttribute("editActivityList",activityMap);		    
+		    ampContext.setAttribute("sessionList",sessList);
+		    
 		} else {
 			AmpTeamMember teamMember = DbUtil.getAmpTeamMember(tm.getMemberId()) ;
 			activity.setActivityCreator(teamMember);
@@ -690,6 +700,8 @@ public class SaveActivity extends Action {
 		eaForm.setPageId(-1);
 		UpdateDB.updateReportCache(activity.getAmpActivityId());
 		eaForm.reset(mapping, request);
+		
+		
 
 		if (session.getAttribute("ampProjects") != null) {
 			session.removeAttribute("ampProjects");

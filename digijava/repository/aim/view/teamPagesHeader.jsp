@@ -14,7 +14,7 @@ function showUserProfile(id)
 {
 
 	<digi:context name="information" property="context/module/moduleinstance/userProfile.do" />
-	openURLinWindow("<%= information %>~id="+id,480, 350);
+	openURLinWindow("<%= information %>~edit=true~id="+id,480, 350);
 } 	
 -->
 </script>

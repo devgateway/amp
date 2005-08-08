@@ -66,7 +66,7 @@ function addDocuments() {
 	if (document.aimEditActivityForm.currUrl.value == "") {
 		openNewWindow(600, 230);
 		document.aimEditActivityForm.docFileOrLink.value = "file";
-		<digi:context name="selDoc" property="context/module/moduleinstance/selectDocument.do" />
+		<digi:context name="selDoc" property="context/module/moduleinstance/selectDocument.do?edit=true" />
 		document.aimEditActivityForm.action = "<%= selDoc %>";
 		document.aimEditActivityForm.currUrl.value = "<%= selDoc %>";
 		document.aimEditActivityForm.target = popupPointer.name;
@@ -80,7 +80,7 @@ function addLinks() {
 	if (document.aimEditActivityForm.currUrl.value == "") {
 		openNewWindow(600, 225);
 		document.aimEditActivityForm.docFileOrLink.value = "link";
-		<digi:context name="selDoc" property="context/module/moduleinstance/selectDocument.do" />
+		<digi:context name="selDoc" property="context/module/moduleinstance/selectDocument.do?edit=true" />
 		document.aimEditActivityForm.action = "<%= selDoc %>";
 		document.aimEditActivityForm.currUrl.value = "<%= selDoc %>";
 		document.aimEditActivityForm.target = popupPointer.name;
@@ -94,7 +94,7 @@ function removeSelDocuments() {
 	var flag = validate(1);
 	if (flag == false) return false;
 	document.aimEditActivityForm.docFileOrLink.value = "file";
-	<digi:context name="remDoc" property="context/module/moduleinstance/removeSelDocuments.do" />
+	<digi:context name="remDoc" property="context/module/moduleinstance/removeSelDocuments.do?edit=true" />
 	document.aimEditActivityForm.action = "<%= remDoc %>";
 	document.aimEditActivityForm.target = "_self"
 	document.aimEditActivityForm.submit();
@@ -103,7 +103,7 @@ function removeSelDocuments() {
 
 function resetAll()
 {
-	<digi:context name="resetAll" property="context/module/moduleinstance/resetAll.do" />
+	<digi:context name="resetAll" property="context/module/moduleinstance/resetAll.do?edit=true" />
 	document.aimEditActivityForm.action = "<%= resetAll %>";
 	document.aimEditActivityForm.target = "_self";
 	document.aimEditActivityForm.submit();
@@ -114,7 +114,7 @@ function removeSelLinks() {
 	var flag = validate(2);
 	if (flag == false) return false;
 	document.aimEditActivityForm.docFileOrLink.value = "link";
-	<digi:context name="remDoc" property="context/module/moduleinstance/removeSelDocuments.do" />
+	<digi:context name="remDoc" property="context/module/moduleinstance/removeSelDocuments.do?edit=true" />
 	document.aimEditActivityForm.action = "<%= remDoc %>";
 	document.aimEditActivityForm.target = "_self"
 	document.aimEditActivityForm.submit();
@@ -130,6 +130,8 @@ function removeSelLinks() {
 <html:hidden property="docFileOrLink" />
 
 <input type="hidden" name="currUrl">
+
+<html:hidden property="edit" />
 
 <table width="100%" cellPadding="0" cellSpacing="0" vAlign="top" align="left">
 <tr><td width="100%" vAlign="top" align="left">
@@ -169,12 +171,10 @@ function removeSelLinks() {
 										</digi:trn>
 									</digi:link>&nbsp;&gt;&nbsp;								
 								</c:if>				
-								<jsp:useBean id="urlParams" type="java.util.Map" class="java.util.HashMap"/>
-								<c:set target="${urlParams}" property="step" value="1" />
 								<bean:define id="translation">
 									<digi:trn key="aim:clickToViewAddActivityStep1">Click here to go to Add Activity Step 1</digi:trn>
 								</bean:define>
-								<digi:link href="/addActivity.do" name="urlParams" styleClass="comment" title="<%=translation%>">
+								<digi:link href="/addActivity.do?step=1&edit=true" styleClass="comment" title="<%=translation%>">
 								<c:if test="${aimEditActivityForm.edit == true}">
 									<digi:trn key="aim:editActivityStep1">
 										Edit Activity - Step 1
@@ -189,7 +189,7 @@ function removeSelLinks() {
 									<bean:define id="translation">
 										<digi:trn key="aim:clickToViewAddActivityStep2">Click here to goto Add Activity Step 2</digi:trn>
 									</bean:define>
-									<digi:link href="/addActivity.do?step=2" styleClass="comment" title="<%=translation%>">						
+									<digi:link href="/addActivity.do?step=2&edit=true" styleClass="comment" title="<%=translation%>">						
 									<digi:trn key="aim:addActivityStep2">
 									Step 2
 									</digi:trn>
@@ -197,7 +197,7 @@ function removeSelLinks() {
 									<bean:define id="translation">
 										<digi:trn key="aim:clickToViewAddActivityStep3">Click here to goto Add Activity Step 3</digi:trn>
 									</bean:define>
-									<digi:link href="/addActivity.do?step=3" styleClass="comment" title="<%=translation%>">						
+									<digi:link href="/addActivity.do?step=3&edit=true" styleClass="comment" title="<%=translation%>">						
 									<digi:trn key="aim:addActivityStep3">
 									Step 3
 									</digi:trn>
@@ -205,7 +205,7 @@ function removeSelLinks() {
 									<bean:define id="translation">
 										<digi:trn key="aim:clickToViewAddActivityStep4">Click here to goto Add Activity Step 4</digi:trn>
 									</bean:define>
-									<digi:link href="/addActivity.do?step=4" styleClass="comment" title="<%=translation%>">						
+									<digi:link href="/addActivity.do?step=4&edit=true" styleClass="comment" title="<%=translation%>">						
 									<digi:trn key="aim:addActivityStep4">
 									Step 4
 									</digi:trn>

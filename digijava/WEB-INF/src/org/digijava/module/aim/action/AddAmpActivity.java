@@ -24,7 +24,6 @@ import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.ProgramUtil;
 import org.digijava.module.editor.dbentity.Editor;
-import org.digijava.module.editor.exception.EditorException;
 import org.digijava.module.editor.util.Constants;
 
 
@@ -72,7 +71,6 @@ public class AddAmpActivity extends Action {
 			eaForm.reset(mapping, request);
 		}
 
-		logger.debug("Page :" + eaForm.getPageId());
 		if (eaForm.getPageId() < 0 || eaForm.getPageId() > 2)
 			return mapping.findForward("index");
 		
@@ -291,7 +289,6 @@ public class AddAmpActivity extends Action {
 			
 			if ((!eaForm.isEdit()) && 
 					(eaForm.getActAthEmail() == null || eaForm.getActAthEmail().trim().length() == 0)) {
-				logger.debug("Author is " + teamMember.getEmail());
 				User usr = DbUtil.getUser(teamMember.getEmail());
 				if (usr != null) {
 					eaForm.setActAthFirstName(usr.getFirstNames());

@@ -40,9 +40,9 @@ function checkSelOrgs() {
 function selectOrganisation() {
 	if (document.aimEditActivityForm.currUrl.value == "") { 		  
 		openNewWindow(600, 400);
-		<digi:context name="selectOrganization" property="context/module/moduleinstance/selectOrganization.do?orgSelReset=true" />
-		document.aimEditActivityForm.currUrl.value = "<%=selectOrganization%>"		  
-		document.aimEditActivityForm.action = "<%= selectOrganization %>";
+		<digi:context name="selectOrganization" property="context/module/moduleinstance/selectOrganization.do?orgSelReset=true&edit=true" />
+		document.aimEditActivityForm.currUrl.value = "<%= selectOrganization %>";
+		document.aimEditActivityForm.action = "<%=selectOrganization%>";
 		document.aimEditActivityForm.target = popupPointer.name;
 		document.aimEditActivityForm.submit();
 	} else {
@@ -54,7 +54,7 @@ function commentWin() {
 	if (document.aimEditActivityForm.currUrl1.value == "") { 		  
 		openNewWindow(600, 400);
 		<digi:context name="comment" property="context/module/moduleinstance/viewComment.do" />
-		url = "<%=comment %>?comment=current_completion_date";
+		url = "<%=comment %>?comment=current_completion_date&edit=true";
 		document.aimEditActivityForm.currUrl1.value = "<%=comment %>";		  
 		document.aimEditActivityForm.action = url;
 		document.aimEditActivityForm.target = popupPointer.name;
@@ -67,7 +67,7 @@ function commentWin() {
 function removeSelOrganisations() {
 	var flag = checkSelOrgs();
 	if (flag == false) return false;
-	<digi:context name="remOrgs" property="context/module/moduleinstance/removeSelOrganisations.do" />
+	<digi:context name="remOrgs" property="context/module/moduleinstance/removeSelOrganisations.do?edit=true" />
 	document.aimEditActivityForm.action = "<%= remOrgs %>";
 	document.aimEditActivityForm.target = "_self"
 	document.aimEditActivityForm.submit();
@@ -76,7 +76,7 @@ function removeSelOrganisations() {
 
 function resetAll()
 {
-	<digi:context name="resetAll" property="context/module/moduleinstance/resetAll.do" />
+	<digi:context name="resetAll" property="context/module/moduleinstance/resetAll.do?edit=true" />
 	document.aimEditActivityForm.action = "<%= resetAll %>";
 	document.aimEditActivityForm.target = "_self";
 	document.aimEditActivityForm.submit();
@@ -101,7 +101,7 @@ function validateForm() {
 
 function reviseCloseDate() {
 	openNewWindow(600, 150);
-	<digi:context name="rev" property="context/module/moduleinstance/reviseCompDate.do" />
+	<digi:context name="rev" property="context/module/moduleinstance/reviseCompDate.do?edit=true" />
 	document.aimEditActivityForm.action = "<%= rev %>";
 	document.aimEditActivityForm.target = popupPointer.name;
 	document.aimEditActivityForm.submit();		  
@@ -134,6 +134,8 @@ function popupwin()
 <digi:form action="/addActivity.do" method="post">
 
 <html:hidden property="step"/>
+<html:hidden property="edit"/>
+
 <input type="hidden" name="selectedDate" value="">
 <input type="hidden" name="currUrl">
 <input type="hidden" name="currUrl1">
@@ -258,8 +260,8 @@ function popupwin()
 													<c:out value="${aimEditActivityForm.objectives}"/>
 												</bean:define>
 												
-												<digi:edit key="<%=objKey%>"></digi:edit>
-												<a href="<c:out value="${aimEditActivityForm.context}"/>/editor/showEditText.do?id=<%=objKey%>&referrer=<c:out value="${aimEditActivityForm.context}"/>/aim/addActivity.do">Edit</a>
+												<digi:edit key="<%=objKey%>"/>
+												<a href="<c:out value="${aimEditActivityForm.context}"/>/editor/showEditText.do?id=<%=objKey%>&referrer=<c:out value="${aimEditActivityForm.context}"/>/aim/addActivity.do?edit=true">Edit</a>
 											</td></tr>																				
 											<tr bgcolor="#ffffff"><td valign="top" align="left">
 												<a title="<digi:trn key="aim:DescriptionofProject">Summary information describing the project</digi:trn>">
@@ -278,8 +280,8 @@ function popupwin()
 													<c:out value="${aimEditActivityForm.description}"/>
 												</bean:define>
 												
-												<digi:edit key="<%=descKey%>"></digi:edit>
-												<a href="<c:out value="${aimEditActivityForm.context}"/>/editor/showEditText.do?id=<%=descKey%>&referrer=<c:out value="${aimEditActivityForm.context}"/>/aim/addActivity.do">Edit</a>
+												<digi:edit key="<%=descKey%>"/>
+												<a href="<c:out value="${aimEditActivityForm.context}"/>/editor/showEditText.do?id=<%=descKey%>&referrer=<c:out value="${aimEditActivityForm.context}"/>/aim/addActivity.do?edit=true">Edit</a>
 											</td></tr>																				
 										</table>
 									</td></tr>

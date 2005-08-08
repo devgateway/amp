@@ -45,9 +45,12 @@
 	function addComponent() {
 		var flag = validate();
 		if (flag == true) {
+			if (document.aimEditActivityForm.edit.value == "true") {
+				document.aimEditActivityForm.pggrp.value = "edit"
+			}				  
 			document.aimEditActivityForm.target = window.opener.name;
 			document.aimEditActivityForm.submit();
-		window.opener.document.aimEditActivityForm.currUrl.value="";
+			window.opener.document.aimEditActivityForm.currUrl.value="";
 			window.close();
 			return flag;
 		} else {
@@ -75,9 +78,13 @@
 
 <html:hidden property="componentReset" value="false"/>
 <html:hidden property="componentId"/>
+<html:hidden property="edit"/>
 
 <input type="hidden" name="selectedDate">
 
+<c:if test="${aimEditActivityForm.edit == true}">	
+	<input type="hidden" name="pggrp" value="edit">	
+</c:if>
 
 <table width="100%" cellSpacing=5 cellPadding=5 vAlign="top" border=0>
 	<tr><td vAlign="top">

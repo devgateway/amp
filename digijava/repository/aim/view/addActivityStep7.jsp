@@ -13,7 +13,7 @@
 <!--
 function resetAll()
 {
-	<digi:context name="resetAll" property="context/module/moduleinstance/resetAll.do" />
+	<digi:context name="resetAll" property="context/module/moduleinstance/resetAll.do?edit=true" />
 	document.aimEditActivityForm.action = "<%= resetAll %>";
 	document.aimEditActivityForm.target = "_self";
 	document.aimEditActivityForm.submit();
@@ -25,6 +25,8 @@ function resetAll()
 <digi:instance property="aimEditActivityForm" />
 <digi:form action="/addActivity.do" method="post">
 <html:hidden property="step" />
+<html:hidden property="edit" />
+
 <table width="100%" cellPadding="0" cellSpacing="0" vAlign="top" align="left">
 <tr><td width="100%" vAlign="top" align="left">
 <!--  AMP Admin Logo -->
@@ -57,10 +59,8 @@ function resetAll()
 										</digi:trn>
 									</digi:link>&nbsp;&gt;&nbsp;								
 								</c:if>				
-								<jsp:useBean id="urlParams" type="java.util.Map" class="java.util.HashMap"/>
-								<c:set target="${urlParams}" property="step" value="1" />
-								<digi:link href="/addActivity.do" name="urlParams" styleClass="comment" title="Click here to goto Add Activity Step 1">
-								
+								<digi:link href="/addActivity.do?step=1&edit=true" styleClass="comment" 
+								title="Click here to goto Add Activity Step 1">
 								<c:if test="${aimEditActivityForm.edit == true}">
 									<digi:trn key="aim:editActivityStep1">
 										Edit Activity - Step 1
@@ -72,27 +72,32 @@ function resetAll()
 									</digi:trn>
 								</c:if>																
 								</digi:link>&nbsp;&gt;&nbsp;						
-									<digi:link href="/addActivity.do?step=2" styleClass="comment" title="Click here to goto Add Activity Step 2" >						
+									<digi:link href="/addActivity.do?step=2&edit=true" styleClass="comment" 
+									title="Click here to goto Add Activity Step 2" >						
 									<digi:trn key="aim:addActivityStep2">
 									Step 2
 									</digi:trn>
 									</digi:link>&nbsp;&gt;&nbsp;			
-									<digi:link href="/addActivity.do?step=3" styleClass="comment" title="Click here to goto Add Activity Step 3">						
+									<digi:link href="/addActivity.do?step=3&edit=true" styleClass="comment" 
+									title="Click here to goto Add Activity Step 3">						
 									<digi:trn key="aim:addActivityStep3">
 									Step 3
 									</digi:trn>
 									</digi:link>&nbsp;&gt;&nbsp;							
-									<digi:link href="/addActivity.do?step=4" styleClass="comment" title="Click here to goto Add Activity Step 4">						
+									<digi:link href="/addActivity.do?step=4&edit=true" styleClass="comment" 
+									title="Click here to goto Add Activity Step 4">						
 									<digi:trn key="aim:addActivityStep4">
 									Step 4
 									</digi:trn>
 									</digi:link>&nbsp;&gt;&nbsp;			
-									<digi:link href="/addActivity.do?step=5" styleClass="comment" title="Click here to goto Add Activity Step 5">						
+									<digi:link href="/addActivity.do?step=5&edit=true" styleClass="comment" 
+									title="Click here to goto Add Activity Step 5">						
 									<digi:trn key="aim:addActivityStep5">
 									Step 5
 									</digi:trn>
 									</digi:link>&nbsp;&gt;&nbsp;			
-									<digi:link href="/addActivity.do?step=6" styleClass="comment" title="Click here to goto Add Activity Step 6">						
+									<digi:link href="/addActivity.do?step=6&edit=true" styleClass="comment" 
+									title="Click here to goto Add Activity Step 6">						
 									<digi:trn key="aim:addActivityStep6">
 									Step 6
 									</digi:trn>

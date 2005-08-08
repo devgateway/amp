@@ -246,6 +246,7 @@ public class EditActivityForm extends ActionForm implements Serializable{
 	private String author;
 	
 	private String context;
+	
 
 	public EditActivityForm() {
 		step = "1";

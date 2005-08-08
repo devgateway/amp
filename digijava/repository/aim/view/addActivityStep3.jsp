@@ -43,7 +43,7 @@
 			openNewWindow(650, 500);
 			<digi:context name="addFunding" property="context/module/moduleinstance/addFunding.do" />
 			document.aimEditActivityForm.orgId.value = orgId;
-			document.aimEditActivityForm.action = "<%= addFunding %>?orgId" + orgId;
+			document.aimEditActivityForm.action = "<%= addFunding %>?orgId" + orgId+"&=edit=true";
 			document.aimEditActivityForm.currUrl.value = "<%= addFunding %>";
 			document.aimEditActivityForm.prevOrg.value = orgId;
 			document.aimEditActivityForm.target = popupPointer.name;
@@ -56,7 +56,7 @@
 	function selectOrganisation() {
 		if (document.aimEditActivityForm.currUrl.value == "") { 		  			  
 			openNewWindow(650, 420);
-			<digi:context name="selectOrganization" property="context/module/moduleinstance/selectOrganization.do?orgSelReset=true" />
+			<digi:context name="selectOrganization" property="context/module/moduleinstance/selectOrganization.do?orgSelReset=true&edit=true" />
 			document.aimEditActivityForm.action = "<%= selectOrganization %>";
 			document.aimEditActivityForm.currUrl.value = "<%= selectOrganization %>";
 			document.aimEditActivityForm.target = popupPointer.name;
@@ -71,7 +71,7 @@
 							 document.aimEditActivityForm.prevOrg.value != orgId) { 		  			  			  			  
 			openNewWindow(650, 500);
 			<digi:context name="editItem" property="context/module/moduleinstance/editFunding.do"/>
-			document.aimEditActivityForm.action = "<%= editItem %>?orgId=" + orgId + "&offset=" + index;	
+			document.aimEditActivityForm.action = "<%= editItem %>?orgId=" + orgId + "&offset=" + index+"&edit=true";	
 			document.aimEditActivityForm.currUrl.value = "<%= addFunding %>";
 			document.aimEditActivityForm.prevOrg.value = orgId;			
 			document.aimEditActivityForm.target = popupPointer.name;
@@ -82,7 +82,7 @@
 	} 
 	function resetAll()
 	{
-		<digi:context name="resetAll" property="context/module/moduleinstance/resetAll.do" />
+		<digi:context name="resetAll" property="context/module/moduleinstance/resetAll.do?edit=true" />
 		document.aimEditActivityForm.action = "<%= resetAll %>";
 		document.aimEditActivityForm.target = "_self";
 		document.aimEditActivityForm.submit();
@@ -92,7 +92,7 @@
 	function removeSelOrganisations() {
 		var flag = validate();
 		if (flag == false) return false;
-		<digi:context name="remSelOrg" property="context/module/moduleinstance/remSelFundOrgs.do" />
+		<digi:context name="remSelOrg" property="context/module/moduleinstance/remSelFundOrgs.do?edit=true" />
 		document.aimEditActivityForm.action = "<%= remSelOrg %>";
 		document.aimEditActivityForm.target = "_self";
 		document.aimEditActivityForm.submit();
@@ -110,6 +110,8 @@
 
 <input type="hidden" name="currUrl">
 <input type="hidden" name="prevOrg">
+
+<html:hidden property="edit" />
 
 <table width="100%" cellPadding="0" cellSpacing="0" vAlign="top" align="left">
 <tr>
@@ -151,12 +153,10 @@
 										</digi:trn>
 									</digi:link>&nbsp;&gt;&nbsp;								
 								</c:if>																	
-								<jsp:useBean id="urlParams" type="java.util.Map" class="java.util.HashMap"/>
-								<c:set target="${urlParams}" property="step" value="1" />
 								<bean:define id="translation">
 									<digi:trn key="aim:clickToViewAddActivityStep1">Click here to go to Add Activity Step 1</digi:trn>
 								</bean:define>
-								<digi:link href="/addActivity.do" name="urlParams" styleClass="comment" title="<%=translation%>" >
+								<digi:link href="/addActivity.do?step=1&edit=true" styleClass="comment" title="<%=translation%>" >
 								
 								<c:if test="${aimEditActivityForm.edit == true}">
 									<digi:trn key="aim:editActivityStep1">
@@ -173,7 +173,7 @@
 									<bean:define id="translation">
 										<digi:trn key="aim:clickToViewAddActivityStep2">Click here to goto Add Activity Step 2</digi:trn>
 									</bean:define>
-									<digi:link href="/addActivity.do?step=2" styleClass="comment" title="<%=translation%>" >	
+									<digi:link href="/addActivity.do?step=2&edit=true" styleClass="comment" title="<%=translation%>" >	
 									<digi:trn key="aim:addActivityStep2">
 									Step 2
 									</digi:trn>

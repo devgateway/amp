@@ -14,7 +14,7 @@
 	function message(val1,val2) {
 		var flag = true;
 		val2 = val2 - 1;
-		<digi:context name="url" property="context/module/moduleinstance/viewComment.do" />
+		<digi:context name="url" property="context/module/moduleinstance/viewComment.do?edit=true" />
 		if (val1 == "delete") {
 			if(alert("Are you sure about deleting this comment."))
 				flag = false;
@@ -72,6 +72,7 @@
 <digi:form action="/viewComment.do" method="post">
 <html:hidden property="actionFlag" />
 <html:hidden property="ampCommentId" />
+<html:hidden property="edit" />
 
 		<table bgcolor=#f4f4f2 cellPadding=5 cellSpacing=5 width="100%" class=box-border-nopadding>
 			<tr>

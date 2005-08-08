@@ -16,7 +16,7 @@
 <!-- 
 function backClicked() {
 	document.aimEditActivityForm.step.value = "7";
-	<digi:context name="backStep" property="context/module/moduleinstance/addActivity.do" />
+	<digi:context name="backStep" property="context/module/moduleinstance/addActivity.do?edit=true" />
 	document.aimEditActivityForm.action = "<%= backStep %>";
 	document.aimEditActivityForm.target = "_self";		
 	document.aimEditActivityForm.submit();
@@ -34,6 +34,8 @@ function disable() {
 
 <digi:form action="/saveActivity.do" method="post">
 <html:hidden property="step" />
+<html:hidden property="edit" />
+
 <table width="100%" cellPadding="0" cellSpacing="0" vAlign="top" align="left">
 <tr><td width="100%" vAlign="top" align="left">
 <!--  AMP Admin Logo -->
@@ -98,12 +100,10 @@ function disable() {
 								
 								<c:if test="${aimEditActivityForm.pageId != 2}">
 								
-								<jsp:useBean id="urlParams" type="java.util.Map" class="java.util.HashMap"/>
-								<c:set target="${urlParams}" property="step" value="1" />
 								<bean:define id="translation">
 									<digi:trn key="aim:clickToViewAddActivityStep1">Click here to goto Add Activity Step 1</digi:trn>
 								</bean:define>
-								<digi:link href="/addActivity.do" name="urlParams" styleClass="comment" title="<%=translation%>" >
+								<digi:link href="/addActivity.do?step=1&edit=true" styleClass="comment" title="<%=translation%>" >
 								
 								<c:if test="${aimEditActivityForm.edit == true}">
 									<digi:trn key="aim:editActivityStep1">
@@ -119,7 +119,7 @@ function disable() {
 									<bean:define id="translation">
 										<digi:trn key="aim:clickToViewAddActivityStep2">Click here to goto Add Activity Step 2</digi:trn>
 									</bean:define>
-									<digi:link href="/addActivity.do?step=2" styleClass="comment" title="<%=translation%>" >						
+									<digi:link href="/addActivity.do?step=2&edit=true" styleClass="comment" title="<%=translation%>" >						
 									<digi:trn key="aim:addActivityStep2">
 									Step 2
 									</digi:trn>
@@ -127,7 +127,7 @@ function disable() {
 									<bean:define id="translation">
 										<digi:trn key="aim:clickToViewAddActivityStep3">Click here to goto Add Activity Step 3</digi:trn>
 									</bean:define>
-									<digi:link href="/addActivity.do?step=3" styleClass="comment" title="<%=translation%>" >						
+									<digi:link href="/addActivity.do?step=3&edit=true" styleClass="comment" title="<%=translation%>" >						
 									<digi:trn key="aim:addActivityStep3">
 									Step 3
 									</digi:trn>
@@ -135,7 +135,7 @@ function disable() {
 									<bean:define id="translation">
 										<digi:trn key="aim:clickToViewAddActivityStep4">Click here to goto Add Activity Step 4</digi:trn>
 									</bean:define>
-									<digi:link href="/addActivity.do?step=4" styleClass="comment" title="<%=translation%>" >						
+									<digi:link href="/addActivity.do?step=4&edit=true" styleClass="comment" title="<%=translation%>" >						
 									<digi:trn key="aim:addActivityStep4">
 									Step 4
 									</digi:trn>
@@ -143,7 +143,7 @@ function disable() {
 									<bean:define id="translation">
 										<digi:trn key="aim:clickToViewAddActivityStep5">Click here to goto Add Activity Step 5</digi:trn>
 									</bean:define>
-									<digi:link href="/addActivity.do?step=5" styleClass="comment" title="<%=translation%>" >												
+									<digi:link href="/addActivity.do?step=5&edit=true" styleClass="comment" title="<%=translation%>" >												
 									<digi:trn key="aim:addActivityStep5">
 									Step 5
 									</digi:trn>						
@@ -151,7 +151,7 @@ function disable() {
 									<bean:define id="translation">
 										<digi:trn key="aim:clickToViewAddActivityStep6">Click here to goto Add Activity Step 6</digi:trn>
 									</bean:define>
-									<digi:link href="/addActivity.do?step=6" styleClass="comment" title="<%=translation%>" >						
+									<digi:link href="/addActivity.do?step=6&edit=true" styleClass="comment" title="<%=translation%>" >						
 									<digi:trn key="aim:addActivityStep6">
 									Step 6
 									</digi:trn>
@@ -159,7 +159,7 @@ function disable() {
 									<bean:define id="translation">
 										<digi:trn key="aim:clickToViewAddActivityStep7">Click here to goto Add Activity Step 7</digi:trn>
 									</bean:define>
-									<digi:link href="/addActivity.do?step=7" styleClass="comment" title="<%=translation%>" >
+									<digi:link href="/addActivity.do?step=7&edit=true" styleClass="comment" title="<%=translation%>" >
 									<digi:trn key="aim:addActivityStep7">
 									Step 7
 									</digi:trn>
@@ -203,7 +203,7 @@ function disable() {
 											<digi:img src="module/aim/images/print_icon.gif"/>
 										</td>
 										<td height=16 vAlign=center align="left" width="50">
-											<digi:link href="/showPrinterFriendlyPage.do" target="_blank">
+											<digi:link href="/showPrinterFriendlyPage.do?edit=true" target="_blank">
 												<digi:trn key="aim:print">
 													Print
 												</digi:trn>
@@ -887,4 +887,3 @@ function disable() {
 </td></tr>
 </table>
 </digi:form>
-

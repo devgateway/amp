@@ -140,11 +140,10 @@ public class AMPStartupListener
                     qryBfr.append(activityId);
                     stmt.executeUpdate(qryBfr.toString());
                     qryBfr.delete(0,qryBfr.length());
-                    logger.debug("Moved.");                    
+                                        
                 }
-                
+                logger.debug("Moved.");
             }
-
             stmt.close();
             session.close();
             

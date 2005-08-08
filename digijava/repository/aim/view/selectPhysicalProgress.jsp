@@ -38,7 +38,7 @@
 		}
 		if(titleFlag == false && dateFlag == false)
 		{
-			<digi:context name="addPhyProg" property="context/module/moduleinstance/phyProgSelected.do"/>
+			<digi:context name="addPhyProg" property="context/module/moduleinstance/phyProgSelected.do?edit=true"/>
 		   document.aimEditActivityForm.action = "<%= addPhyProg %>";
 			document.aimEditActivityForm.target = window.opener.name;
 		   document.aimEditActivityForm.submit();
@@ -73,6 +73,7 @@
 <input type="hidden" name="selectedDate">
 <html:hidden property="phyProgId"/>
 <html:hidden property="componentId"/>
+<html:hidden property="edit"/>
 
 <table width="100%" cellSpacing=5 cellPadding=5 vAlign="top" border=0>
 	<tr><td vAlign="top">

@@ -7,15 +7,21 @@ package org.digijava.module.aim.action;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Set;
 
+import javax.servlet.RequestDispatcher;
+import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
 import org.apache.struts.action.Action;
+import org.apache.struts.action.ActionError;
+import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
@@ -68,10 +74,45 @@ public class EditActivity extends Action {
 		// if user is not logged in, forward him to the home page
 		if (session.getAttribute("currentMember") == null)
 			return mapping.findForward("index");
+		
+		EditActivityForm eaForm = (EditActivityForm) form; // form bean instance		
+		
+		// Checking whether the activity is already opened for editing
+		// by some other user
+		ServletContext ampContext = getServlet().getServletContext();
+		HashMap activityMap = (HashMap) ampContext.getAttribute("editActivityList");
+		if (activityMap != null && activityMap.containsValue(eaForm.getActivityId())) {
+		    // The activity is already opened for editing
+		    logger.debug("The activity is already opened by another user");
+		    ActionErrors errors = new ActionErrors();
+		    errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
+				"error.aim.activityAlreadyOpenedForEdit"));
+		    saveErrors(request, errors);
+		    
+		    String url = "/aim/viewChannelOverview.do?ampActivityId="+eaForm.getActivityId()+"&tabIndex=0";
+		    RequestDispatcher rd = getServlet().getServletContext().
+		    	getRequestDispatcher(url);
+		    rd.forward(request,response);
+		} else {
+		    // Edit the activity
+		    logger.debug("User given permission to edit the activity");
+		    String sessId = session.getId();
+		    ArrayList sessList = (ArrayList) ampContext.getAttribute("sessionList");
+		    if (sessList == null) {
+		        sessList = new ArrayList();
+		    }
+		    if (activityMap == null) {
+		        activityMap = new HashMap();
+		    }
+		    sessList.add(sessId);
+		    Collections.sort(sessList);
+		    activityMap.put(sessId,eaForm.getActivityId());
+		    ampContext.setAttribute("sessionList",sessList);
+            ampContext.setAttribute("editActivityList",activityMap);		    
+		}
 
-		EditActivityForm eaForm = (EditActivityForm) form; // form bean instance
+		
 		eaForm.reset(mapping, request);
-
 		eaForm.setEdit(true);
 		
 		// Clearing comment properties
@@ -116,21 +157,6 @@ public class EditActivity extends Action {
 				                .getActualCompletionDate()));
 				
 				eaForm.setContractors(activity.getContractors().trim());
-				
-				if (activity.getClosingDates() != null) {
-				    logger.debug("Closing dates size = " + activity.getClosingDates().size());
-				} else {
-				    logger.debug("Closing dates is null");
-				}
-				
-				if (activity.getFunding() != null) {
-				    logger.debug("Fundings size = " + activity.getFunding().size());
-				} else {
-				    logger.debug("funding is null");
-				}				
-				
-				//Collection col = ActivityUtil.getActivityCloseDates(activity
-					//	.getAmpActivityId());
 				
 				Collection col = activity.getClosingDates();				
 				Collection dates = new ArrayList();
@@ -182,10 +208,7 @@ public class EditActivity extends Action {
 				// loading the locations
 				int impLevel = 0;
 
-//				Collection ampLocs = DbUtil.getAllLocations(activity
-	//					.getAmpActivityId());
 				Collection ampLocs = activity.getLocations();
-				
 				
 				if (ampLocs != null && ampLocs.size() > 0) {
 					Collection locs = new ArrayList();
@@ -253,12 +276,6 @@ public class EditActivity extends Action {
 					eaForm.setImplementationLevel("country");
 				}
 
-				// loading the sectors
-				/*
-				Collection sectors = ActivityUtil.getActivitySectors(activity
-						.getAmpActivityId());*/
-				
-				
 				Collection sectors = activity.getSectors();
 
 				if (sectors != null && sectors.size() > 0) {
@@ -317,14 +334,6 @@ public class EditActivity extends Action {
 				}
 				eaForm.setProgramDescription(activity.getProgramDescription().trim());
 
-				// loading the funding orgs , fundings and funding details
-				/*
-				Iterator orgRolesItr = activity.getOrgrole().iterator();
-				while (orgRolesItr.hasNext()) {
-				    AmpOrgRole orgRole = (AmpOrgRole) orgRolesItr.next();
-				}*/
-				
-				
 				Collection fundingOrgs = new ArrayList();
 				Iterator fundItr = activity.getFunding().iterator();
 				while (fundItr.hasNext()) {
@@ -417,12 +426,7 @@ public class EditActivity extends Action {
 				eaForm.setFundingOrganizations(fundingOrgs);
 
 									    								
-				// loading components
-				/*
-				Collection componets = ActivityUtil.getComponents(activity
-						.getAmpActivityId());*/
 				Collection componets = activity.getComponents();
-				logger.debug("Components Size = " + componets.size());
 				if (componets != null && componets.size() > 0) {
 					Collection comp = new ArrayList();
 					Iterator compItr = componets.iterator();
@@ -467,10 +471,6 @@ public class EditActivity extends Action {
 					eaForm.setSelectedComponents(comp);
 				}
 
-				// loading the documents and links
-				/*
-				Collection actDocs = DbUtil.getActivityDocuments(activity
-						.getAmpActivityId());*/
 				Collection actDocs = activity.getDocuments();
 				if (actDocs != null && actDocs.size() > 0) {
 					Collection docsList = new ArrayList();
@@ -506,12 +506,6 @@ public class EditActivity extends Action {
 								Constants.IMPLEMENTING_AGENCY) && (!eaForm.getImpAgencies().contains(orgRole.getOrganisation()))) {
 							eaForm.getImpAgencies().add(
 									orgRole.getOrganisation());
-						/*
-						} else if (orgRole.getRole().getRoleCode().equals(
-								Constants.CONTRACTOR)) {
-							eaForm.getContractors().add(
-									orgRole.getOrganisation());
-						*/
 						} else if (orgRole.getRole().getRoleCode().equals(
 								Constants.REPORTING_AGENCY) && (!eaForm.getReportingOrgs().contains(orgRole.getOrganisation()))) {
 							eaForm.getReportingOrgs().add(

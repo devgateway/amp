@@ -11,5 +11,11 @@
 		<property column="columnName" name="columnName" type="java.lang.String"/>
 		<property column="aliasName" name="aliasName" type="java.lang.String"/>
 
+		<set name="reports" table="amp_report_columns" lazy="true">
+			<cache usage="read-write"/>
+			<key column="columnId"/>
+			<many-to-many class="org.digijava.module.aim.dbentity.AmpReports" column="amp_report_id"/>
+		</set>
+
 	</class>
 </hibernate-mapping>

@@ -9,6 +9,34 @@
 
 <script language="JavaScript">
 
+function moveUp(val)
+{
+	if(document.aimAdvancedReportForm.removeColumns.length == undefined)
+		alert("Cannot move a single column ");
+	else
+	{
+		<digi:context name="step" property="context/module/moduleinstance/advancedReportManager.do?check=MoveUp" />
+		document.aimAdvancedReportForm.action = "<%= step %>";
+		document.aimAdvancedReportForm.moveColumn.value = val;
+		document.aimAdvancedReportForm.target = "_self";
+		document.aimAdvancedReportForm.submit();
+	}	
+}
+
+function moveDown(val)
+{
+	if(document.aimAdvancedReportForm.removeColumns.length == undefined)
+		alert("Cannot move a single column ");
+	else
+	{
+		<digi:context name="step" property="context/module/moduleinstance/advancedReportManager.do?check=MoveDown" />
+		document.aimAdvancedReportForm.action = "<%= step %>";
+		document.aimAdvancedReportForm.moveColumn.value = val;
+		document.aimAdvancedReportForm.target = "_self";
+		document.aimAdvancedReportForm.submit();
+	}	
+}
+
 function gotoStep() {
 
 	if(document.aimAdvancedReportForm.removeColumns == null)
@@ -26,7 +54,6 @@ function addColumn()
 {
 	<digi:context name="advReport" property="context/module/moduleinstance/advancedReportManager.do?check=add" />
 	document.aimAdvancedReportForm.action = "<%= advReport %>";
-	document.aimAdvancedReportForm.isAdd.value = true;
 	document.aimAdvancedReportForm.target = "_self";
 	document.aimAdvancedReportForm.submit();
 }
@@ -39,7 +66,6 @@ function deleteColumn()
 	{
 		<digi:context name="advReport" property="context/module/moduleinstance/advancedReportManager.do?check=delete" />
 		document.aimAdvancedReportForm.action = "<%= advReport %>";
-		document.aimAdvancedReportForm.isAdd.value = true;
 		document.aimAdvancedReportForm.target = "_self";
 		document.aimAdvancedReportForm.submit();
 	}
@@ -49,7 +75,9 @@ function deleteColumn()
 
 <digi:instance property="aimAdvancedReportForm" />
 <digi:form action="/advancedReportManager.do" method="post">
-<input type="hidden" name="isAdd" >
+
+
+<html:hidden property="moveColumn"/>
 
 <TABLE cellSpacing=0 cellPadding=0 align="center" vAlign="top" border=0 width="100%">
 <tr>
@@ -249,10 +277,14 @@ function deleteColumn()
 																							<c:out value="${addedColumns.aliasName}"/>
 																						</td>
 																						<td align="right">
-																							<html:multibox property="removeColumns">
+																							<html:multibox property="removeColumns" >
 																							  <c:out value="${addedColumns.columnId}"/>
 					  																	    </html:multibox>
 																						</td>
+																							<td align="right">
+																								<IMG alt="Move Up"  height=10 src="../ampTemplate/images/up-arrow.jpg" width=10 onclick="moveUp(<c:out value='${addedColumns.columnId}' />)">
+																								<IMG alt="Move Down" styleClass="test" height=10 src="../ampTemplate/images/down-arrow.jpg" width=10 onclick="moveDown(<c:out value='${addedColumns.columnId}' />)">
+																							</td>
 																						</tr>
 																					</logic:iterate>
 																				</c:if>

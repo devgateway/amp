@@ -11,7 +11,13 @@
 
 <script language="JavaScript">
 <!--
-	
+	function saveReport()
+	{
+		<digi:context name="step" property="context/module/moduleinstance/advancedReportManager.do?check=SaveReport" />
+		document.aimAdvancedReportForm.action = "<%= step %>";
+		document.aimAdvancedReportForm.target = "_self";
+		document.aimAdvancedReportForm.submit();
+	}
 	function popup_chart() {
 		openResisableWindow(800, 600);
 		<digi:context name="pchart" property="context/module/moduleinstance/viewProjectsChart.do" />
@@ -96,7 +102,7 @@
 			</tr>
 			<tr colspan="2">
 				<td class=box-title align="center" valign="top">
-					&nbsp;
+															<digi:errors/>			&nbsp;
 				<td>
 			</tr>
 			<TR>
@@ -201,8 +207,9 @@
 																<br><br>chart image...
 																<br><br>
 																<input type=button name=back value="<< Previous"   class="dr-menu" onclick="javascript:history.back()">						
-																
 																<input type="button" onclick="popup_chart()" value="CREATE PIE CHART" class="dr-menu"> 
+																<input type=button name=back value=" Save Report "   class="dr-menu" onclick="saveReport()">						
+
 																</TD>
 															    
 															    </tr>

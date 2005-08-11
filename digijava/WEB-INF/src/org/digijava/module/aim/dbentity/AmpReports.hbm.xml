@@ -17,5 +17,11 @@
 								<key column="amp_report_id"/>
 								<many-to-many class="org.digijava.module.aim.dbentity.AmpTeamMember" column="amp_member_id"/>
 					 </set>
+					 <set name="columns" table="amp_report_columns" lazy="true">
+						<cache usage="read-write"/>
+						<key column="amp_report_id"/>
+						<many-to-many class="org.digijava.module.aim.dbentity.AmpColumns" column="columnId"/>
+					</set>
+					 
 		  </class>
 </hibernate-mapping>

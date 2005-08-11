@@ -17,6 +17,14 @@ public class AmpReports implements Comparable {
 
 	private Set members;
 
+	private Set columns;
+	
+	public Set getColumns() {
+		return columns;
+	}
+	public void setColumns(Set columns) {
+		this.columns = columns;
+	}
 	public Long getAmpReportId() {
 		return ampReportId;
 	}

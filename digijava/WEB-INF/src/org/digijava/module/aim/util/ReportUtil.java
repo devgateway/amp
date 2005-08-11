@@ -10738,7 +10738,12 @@ public class ReportUtil {
 									report.setAssistance(tempColl);
 								}
 								if(reportCachePrev.getDonorName() != null)
-									result.add(report);
+								{
+									if(result.contains(report) == false)
+									{
+										result.add(report);
+									}
+								}
 								
 								actCommit = ampReportCache.getActualCommitment().doubleValue();
 							}
@@ -10752,6 +10757,19 @@ public class ReportUtil {
 		{
 			e.printStackTrace(System.out);
 		}
+
+		finally 
+		{
+			try 
+			{
+				PersistenceManager.releaseSession(session);
+			}
+			catch (Exception ex2) 
+			{
+				logger.debug("releaseSession() failed ");
+			}
+		}
+
 		return result;
 	}
 

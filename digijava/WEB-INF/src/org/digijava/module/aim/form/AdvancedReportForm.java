@@ -18,7 +18,15 @@ public class AdvancedReportForm extends ActionForm
 	private String perspectiveFilter ;
 	private String reportTitle = "";
 	private String reportDescription = "";
+	private String moveColumn="";
 	
+	
+	public String getMoveColumn() {
+		return moveColumn;
+	}
+	public void setMoveColumn(String moveColumn) {
+		this.moveColumn = moveColumn;
+	}
 	public String getPerspectiveFilter() {
 		return perspectiveFilter;
 	}

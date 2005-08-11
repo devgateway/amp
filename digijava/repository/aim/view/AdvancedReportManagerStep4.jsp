@@ -11,6 +11,7 @@
 <script language="JavaScript">
 function gotoStep() {
 	var temp = document.aimAdvancedReportForm.reportTitle.value;
+	var desc = document.aimAdvancedReportForm.reportDescription.value;
 	if(trim(temp) == "")
 	{
 		alert(" Please enter report title");
@@ -22,6 +23,7 @@ function gotoStep() {
 		document.aimAdvancedReportForm.action = "<%= step %>";
 		document.aimAdvancedReportForm.target = "_self";
 		document.aimAdvancedReportForm.reportTitle.value = temp;
+		document.aimAdvancedReportForm.reportDescription.value = desc;
 		document.aimAdvancedReportForm.submit();
 	}
 }
@@ -163,6 +165,11 @@ function gotoStep() {
 								<TR bgColor=#f4f4f2>
 									<TD vAlign="top" align="center" width="100%" bgColor=#f4f4f2>
 										<TABLE width="100%" cellPadding=0 cellSpacing=0 vAlign="top" align="center" bgColor=#f4f4f2 >
+											<tr>	
+												<td>		
+													<digi:errors/>
+												</td>
+											</tr>
 											<TR>
 												<TD width="100%" bgcolor="pink" align="center"  valign=top>
 													<TABLE width="100%" cellPadding="2" cellSpacing="2" vAlign="top" align="center" bgColor=#f4f4f2 class="box-border-nopadding" border=0>

@@ -11,13 +11,6 @@ import java.util.Collection;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
-import java.sql.Connection;
-import java.sql.DatabaseMetaData;
-import java.sql.DriverManager;
-import java.sql.ResultSet;
-import java.sql.Statement;
-import java.io.BufferedReader;
-import java.io.FileReader;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -90,11 +83,15 @@ public class AdvancedReport extends Action {
 			tx = session.beginTransaction();
 			// Fills the column that can be selected from AMP_COLUMNS
 			if(formBean.getAmpColumns() == null)
+			{
 				formBean.setAmpColumns(ReportUtil.getColumnList());
+				formBean.setReportTitle("");
+			}
 			else
 				logger.info(" AmpColumns is not NULL........");
 			
 			// add columns that are available
+			
 			if(request.getParameter("check") != null && request.getParameter("check").equals("add"))
 			{
 				str = request.getParameter("check");
@@ -220,6 +217,11 @@ public class AdvancedReport extends Action {
 						ampReports.setDescription("/advancedReport.do?view=reset~reportId="+ampReports.getAmpReportId());
 						session.update(ampReports);
 						tx.commit(); // commit the transcation
+						
+						// Clears the values of the Previous report 
+						formBean.setAmpColumns(null);
+						formBean.setAddedColumns(null);
+
 	                }
 					logger.info("-------------Stop-----------");
 				}

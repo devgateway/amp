@@ -85,8 +85,10 @@ public class SaveActivity extends Action {
 		HttpSession session = request.getSession();
 
 		// if user has not logged in, forward him to the home page
-		if (session.getAttribute("currentMember") == null)
+		if (session.getAttribute("currentMember") == null) {
+			logger.info("From here #1");
 			return mapping.findForward("index");
+		}
 
 		
 		try {
@@ -110,16 +112,21 @@ public class SaveActivity extends Action {
 
 		EditActivityForm eaForm = (EditActivityForm) form;
 
-		if (eaForm.getPageId() < 0 || eaForm.getPageId() > 1)
+		if (eaForm.getPageId() < 0 || eaForm.getPageId() > 1) {
+			logger.info("From here #2");
 			return mapping.findForward("index");
+		}
 
 		AmpActivity activity = new AmpActivity();
 
+		/*
 		if (eaForm.isEdit()) {
 			if (eaForm.getActivityId() == null
-					|| eaForm.getActivityId().intValue() < 1)
+					|| eaForm.getActivityId().intValue() < 1) {
+				logger.info("From here #3");
 				return mapping.findForward("index");
-		}
+			}
+		}*/
 
 		/*
 		 * Ronald
@@ -227,7 +234,7 @@ public class SaveActivity extends Action {
 		    activity.setClosingDates(new HashSet());
 		}
 		
-		if (!(eaForm.isEdit())) {
+		if (!(eaForm.isEditAct())) {
 			closeDate = new AmpActivityClosingDates();
 			closeDate.setAmpActivityId(activity);
 			closeDate.setClosingDate(DateConversion.getDate(eaForm.getProposedCompDate()));
@@ -658,7 +665,7 @@ public class SaveActivity extends Action {
 		Long field = null;
 		if (eaForm.getField() != null)
 			field = eaForm.getField().getAmpFieldId();
-		if (eaForm.isEdit()) {
+		if (eaForm.isEditAct()) {
 			// update an existing activity
 			ActivityUtil.saveActivity(activity, eaForm.getActivityId(), true, eaForm.getCommentsCol(), eaForm.isSerializeFlag(), field);
 			

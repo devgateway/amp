@@ -232,7 +232,7 @@ public class EditActivityForm extends ActionForm implements Serializable{
 	private String docFileOrLink;
 	private boolean docReset;
 	private int pageId;
-	private boolean edit;
+	private boolean editAct;
 	
 	// FOR ADD COMPONENTS
 	private boolean componentReset;
@@ -251,7 +251,7 @@ public class EditActivityForm extends ActionForm implements Serializable{
 	public EditActivityForm() {
 		step = "1";
 		reset = false;
-		edit = false;
+		editAct = false;
 		orgPopupReset = true;
 		numResults = 0;
 		tempNumResults = 0;
@@ -321,7 +321,7 @@ public class EditActivityForm extends ActionForm implements Serializable{
 			offset = 0;
 			selFundingOrgs = null;
 			reset = false;
-			edit = false;
+			editAct = false;
 			currentPage = new Integer(0);
 			currentAlpha = null;
 			executingAgencies = null;
@@ -1725,16 +1725,16 @@ public class EditActivityForm extends ActionForm implements Serializable{
 		this.activityId = activityId;
 	}
 	/**
-	 * @return Returns the edit.
+	 * @return Returns the editAct.
 	 */
-	public boolean isEdit() {
-		return edit;
+	public boolean isEditAct() {
+		return editAct;
 	}
 	/**
-	 * @param edit The edit to set.
+	 * @param edit The editAct to set.
 	 */
-	public void setEdit(boolean edit) {
-		this.edit = edit;
+	public void setEditAct(boolean edit) {
+		this.editAct = edit;
 	}
 	/**
 	 * @return Returns the country.

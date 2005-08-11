@@ -83,7 +83,7 @@
 <html:hidden property="numComm"/>
 <html:hidden property="numDisb"/>
 <html:hidden property="numExp"/>
-<html:hidden property="edit"/>
+<html:hidden property="editAct"/>
 
 <table width="100%" border="0" cellspacing="2" cellpadding="2" align="center" class=box-border-nopadding>
 	<!-- funding -->

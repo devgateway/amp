@@ -144,7 +144,6 @@
 <html:hidden property="impLevelValue" />
 <html:hidden property="country" />
 <html:hidden property="impCountry" />
-<html:hidden property="edit" />
 
 
 <table width="100%" cellSpacing=5 cellPadding=5 vAlign="top" border=0>

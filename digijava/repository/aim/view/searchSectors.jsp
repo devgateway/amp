@@ -104,7 +104,6 @@
 <digi:form action="/addSelectedSectors.do" method="post">
 <html:hidden property="locationReset" value="false" />
 <html:hidden property="fill" />
-<html:hidden property="edit" />
 
 
 <table width="100%" cellSpacing=5 cellPadding=5 vAlign="top" border=0>

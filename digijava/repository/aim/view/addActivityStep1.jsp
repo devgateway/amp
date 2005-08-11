@@ -134,7 +134,7 @@ function popupwin()
 <digi:form action="/addActivity.do" method="post">
 
 <html:hidden property="step"/>
-<html:hidden property="edit"/>
+<html:hidden property="editAct"/>
 
 <input type="hidden" name="selectedDate" value="">
 <input type="hidden" name="currUrl">
@@ -177,10 +177,10 @@ function popupwin()
 										<digi:trn key="aim:portfolio">Portfolio</digi:trn>
 									</digi:link>&nbsp;&gt;&nbsp;								
 								</c:if>
-								<c:if test="${aimEditActivityForm.edit == true}">
+								<c:if test="${aimEditActivityForm.editAct == true}">
 									<digi:trn key="aim:editActivityStep1">Edit Activity - Step 1</digi:trn>
 								</c:if>
-								<c:if test="${aimEditActivityForm.edit == false}">
+								<c:if test="${aimEditActivityForm.editAct == false}">
 									<digi:trn key="aim:addActivityStep1">Add Activity - Step 1</digi:trn>
 								</c:if>								
 								</span>
@@ -192,10 +192,10 @@ function popupwin()
 					<table width="100%" cellSpacing="1" cellPadding="1" vAlign="top">
 						<tr>
 							<td height=16 vAlign=center width="100%"><span class=subtitle-blue>
-								<c:if test="${aimEditActivityForm.edit == false}">
+								<c:if test="${aimEditActivityForm.editAct == false}">
 									<digi:trn key="aim:addNewActivity">Add New Activity</digi:trn>
 								</c:if>			
-								<c:if test="${aimEditActivityForm.edit == true}">
+								<c:if test="${aimEditActivityForm.editAct == true}">
 									<digi:trn key="aim:editActivity">Edit Activity</digi:trn>
 								</c:if>										
 							</td>
@@ -462,7 +462,7 @@ function popupwin()
 													</table>
 												</td>
 											</tr>
-											<c:if test="${aimEditActivityForm.edit == false}">
+											<c:if test="${aimEditActivityForm.editAct == false}">
 											<tr>
 												<td width=200 bgcolor="#ffffff">
 													<a title="<digi:trn key="aim:ExpectedCompletionDateofProject">Date (dd/mm/yy) when the project is expected to be completed </digi:trn>">&nbsp;&nbsp;
@@ -517,7 +517,7 @@ function popupwin()
 												</td>
 											</tr>
 											</c:if>
-											<c:if test="${aimEditActivityForm.edit == true}">
+											<c:if test="${aimEditActivityForm.editAct == true}">
 												<tr>
 													<td width=200 bgcolor="#ffffff">&nbsp;
 													<digi:trn key="aim:currentCompletionDate">Current Completion Date</digi:trn>

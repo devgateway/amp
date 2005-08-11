@@ -163,7 +163,6 @@
 <digi:instance property="aimEditActivityForm" />
 <digi:form action="/documentSelected.do" method="post" enctype="multipart/form-data" onsubmit="return false;">
 <html:hidden property="docFileOrLink" />
-<html:hidden property="edit" />
 
 <table width="100%" cellSpacing=5 cellPadding=5 vAlign="top" border=0>
 	<tr><td vAlign="top">

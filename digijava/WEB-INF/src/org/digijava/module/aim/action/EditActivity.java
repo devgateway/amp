@@ -113,7 +113,7 @@ public class EditActivity extends Action {
 
 		
 		eaForm.reset(mapping, request);
-		eaForm.setEdit(true);
+		eaForm.setEditAct(true);
 		
 		// Clearing comment properties
 		String action = request.getParameter("action");

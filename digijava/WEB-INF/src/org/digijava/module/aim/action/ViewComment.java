@@ -50,7 +50,7 @@ public class ViewComment extends Action {
 						}
 						 	
 						logger.debug("editForm.getCommentsCol().size() [At Start-I]: " + editForm.getCommentsCol().size());
-						if (editForm.isEdit() || comment.equals("view_current_completion_date")) {
+						if (editForm.isEditAct() || comment.equals("view_current_completion_date")) {
 							if (comment.equals("view_current_completion_date")) {
 								String activityId = request.getParameter("id");
 								Long id = null;

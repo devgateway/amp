@@ -154,7 +154,7 @@ function popupwin()
 <html:hidden property="step"/>
 <html:hidden property="reset" />
 <html:hidden property="country" />
-<html:hidden property="edit" />
+<html:hidden property="editAct" />
 
 <input type="hidden" name="currUrl">
 
@@ -200,12 +200,12 @@ function popupwin()
 									<digi:trn key="aim:clickToViewAddActivityStep1">Click here to goto Add Activity Step 1</digi:trn>
 								</bean:define>
 								<digi:link href="/addActivity.do?step=1&edit=true" styleClass="comment" title="<%=translation%>" >
-								<c:if test="${aimEditActivityForm.edit == true}">
+								<c:if test="${aimEditActivityForm.editAct == true}">
 									<digi:trn key="aim:editActivityStep1">
 										Edit Activity - Step 1
 									</digi:trn>
 								</c:if>
-								<c:if test="${aimEditActivityForm.edit == false}">
+								<c:if test="${aimEditActivityForm.editAct == false}">
 									<digi:trn key="aim:addActivityStep1">
 										Add Activity - Step 1
 									</digi:trn>
@@ -223,12 +223,12 @@ function popupwin()
 					<table width="100%" cellSpacing="1" cellPadding="1" vAlign="top">
 						<tr>
 							<td height=16 vAlign=center width="100%"><span class=subtitle-blue>
-								<c:if test="${aimEditActivityForm.edit == false}">
+								<c:if test="${aimEditActivityForm.editAct == false}">
 									<digi:trn key="aim:addNewActivity">
 										Add New Activity
 									</digi:trn>
 								</c:if>			
-								<c:if test="${aimEditActivityForm.edit == true}">
+								<c:if test="${aimEditActivityForm.editAct == true}">
 									<digi:trn key="aim:editActivity">
 										Edit Activity
 									</digi:trn>

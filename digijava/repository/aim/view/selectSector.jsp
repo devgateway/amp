@@ -88,7 +88,6 @@
 <digi:form action="/sectorSelected.do" method="post">
 
 <html:hidden property="sectorReset" value="false"/>
-<html:hidden property="edit"/>
 
 <table width="100%" cellSpacing=5 cellPadding=5 vAlign="top" border=0>
 	<tr><td vAlign="top">

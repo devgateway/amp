@@ -138,7 +138,7 @@ function removeSelComponents() {
 <input type="hidden" name="currUrl">
 <input type="hidden" name="prevId">
 
-<html:hidden property="edit" />
+<html:hidden property="editAct" />
 
 <table width="100%" cellPadding="0" cellSpacing="0" vAlign="top" align="left">
 <tr><td width="100%" vAlign="top" align="left">
@@ -183,12 +183,12 @@ function removeSelComponents() {
 								</bean:define>
 								<digi:link href="/addActivity.do?step=1&edit=true" styleClass="comment" title="<%=translation%>">
 								
-								<c:if test="${aimEditActivityForm.edit == true}">
+								<c:if test="${aimEditActivityForm.editAct == true}">
 									<digi:trn key="aim:editActivityStep1">
 										Edit Activity - Step 1
 									</digi:trn>
 								</c:if>
-								<c:if test="${aimEditActivityForm.edit == false}">
+								<c:if test="${aimEditActivityForm.editAct == false}">
 									<digi:trn key="aim:addActivityStep1">
 										Add Activity - Step 1
 									</digi:trn>
@@ -222,12 +222,12 @@ function removeSelComponents() {
 					<table width="100%" cellSpacing="1" cellPadding="1" vAlign="top">
 						<tr>
 							<td height=16 vAlign=center width="100%"><span class=subtitle-blue>
-								<c:if test="${aimEditActivityForm.edit == false}">
+								<c:if test="${aimEditActivityForm.editAct == false}">
 									<digi:trn key="aim:addNewActivity">
 										Add New Activity
 									</digi:trn>
 								</c:if>			
-								<c:if test="${aimEditActivityForm.edit == true}">
+								<c:if test="${aimEditActivityForm.editAct == true}">
 									<digi:trn key="aim:editActivity">
 										Edit Activity
 									</digi:trn>

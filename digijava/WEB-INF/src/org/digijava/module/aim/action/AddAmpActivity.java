@@ -67,7 +67,7 @@ public class AddAmpActivity extends Action {
 		Long memId = teamMember.getMemberId();
 		//String fileName = getRealPath(memId);
 
-		if (!eaForm.isEdit() || eaForm.isReset()) {
+		if (!eaForm.isEditAct() || eaForm.isReset()) {
 			eaForm.reset(mapping, request);
 		}
 
@@ -287,7 +287,7 @@ public class AddAmpActivity extends Action {
 				eaForm.setAmpId(ampId);
 			}
 			
-			if ((!eaForm.isEdit()) && 
+			if ((!eaForm.isEditAct()) && 
 					(eaForm.getActAthEmail() == null || eaForm.getActAthEmail().trim().length() == 0)) {
 				User usr = DbUtil.getUser(teamMember.getEmail());
 				if (usr != null) {

@@ -67,7 +67,7 @@ public class ResetAll extends Action
 		EditActivityForm eaForm = (EditActivityForm) form; // form bean instance
 		logger.info("In reset all method");
 
-    	if(!eaForm.isEdit())
+    	if(!eaForm.isEditAct())
 	    {
 	    	if(eaForm.getStep().equals("1"))
 	    	{

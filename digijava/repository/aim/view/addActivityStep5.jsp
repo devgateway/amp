@@ -131,7 +131,7 @@ function removeSelLinks() {
 
 <input type="hidden" name="currUrl">
 
-<html:hidden property="edit" />
+<html:hidden property="editAct" />
 
 <table width="100%" cellPadding="0" cellSpacing="0" vAlign="top" align="left">
 <tr><td width="100%" vAlign="top" align="left">
@@ -165,7 +165,7 @@ function removeSelLinks() {
 									<bean:define id="translation">
 										<digi:trn key="aim:clickToViewMyDesktop">Click here to view MyDesktop</digi:trn>
 									</bean:define>
-									<digi:link href="/viewyDesktop.do" styleClass="comment" onclick="return quitRnot()" title="<%=translation%>">
+									<digi:link href="/viewMyDesktop.do" styleClass="comment" onclick="return quitRnot()" title="<%=translation%>">
 										<digi:trn key="aim:portfolio">
 											Portfolio
 										</digi:trn>
@@ -175,12 +175,12 @@ function removeSelLinks() {
 									<digi:trn key="aim:clickToViewAddActivityStep1">Click here to go to Add Activity Step 1</digi:trn>
 								</bean:define>
 								<digi:link href="/addActivity.do?step=1&edit=true" styleClass="comment" title="<%=translation%>">
-								<c:if test="${aimEditActivityForm.edit == true}">
+								<c:if test="${aimEditActivityForm.editAct == true}">
 									<digi:trn key="aim:editActivityStep1">
 										Edit Activity - Step 1
 									</digi:trn>
 								</c:if>
-								<c:if test="${aimEditActivityForm.edit == false}">
+								<c:if test="${aimEditActivityForm.editAct == false}">
 									<digi:trn key="aim:addActivityStep1">
 										Add Activity - Step 1
 									</digi:trn>
@@ -222,12 +222,12 @@ function removeSelLinks() {
 					<table width="100%" cellSpacing="1" cellPadding="1" vAlign="top">
 						<tr>
 							<td height=16 vAlign=center width="100%"><span class=subtitle-blue>
-								<c:if test="${aimEditActivityForm.edit == false}">
+								<c:if test="${aimEditActivityForm.editAct == false}">
 									<digi:trn key="aim:addNewActivity">
 										Add New Activity
 									</digi:trn>
 								</c:if>			
-								<c:if test="${aimEditActivityForm.edit == true}">
+								<c:if test="${aimEditActivityForm.editAct == true}">
 									<digi:trn key="aim:editActivity">
 										Edit Activity
 									</digi:trn>

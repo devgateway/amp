@@ -72,7 +72,7 @@
 <digi:form action="/viewComment.do" method="post">
 <html:hidden property="actionFlag" />
 <html:hidden property="ampCommentId" />
-<html:hidden property="edit" />
+<html:hidden property="editAct" />
 
 		<table bgcolor=#f4f4f2 cellPadding=5 cellSpacing=5 width="100%" class=box-border-nopadding>
 			<tr>

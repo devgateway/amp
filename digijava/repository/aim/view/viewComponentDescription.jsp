@@ -67,6 +67,46 @@ method="post">
       	                  </TABLE>									
 								</TD>
 							</TR>
+							<tr>
+								<td>
+									<table width="100%" cellPadding="5" cellSpacing="1" vAlign="top" align="center" bgColor=#ffffff
+									class="box-border-nopadding">
+										<tr bgcolor="#f4f4f2">
+											<td width="17%" vAlign="top" align="left"><b>
+												<digi:trn key="aim:reportingDate">Reporting Date</digi:trn></b>
+											</td>
+											<td width="40%" vAlign="top" align="left">
+												<bean:write name="aimPhysicalProgressForm" property="compRepDate" />
+											</td>
+											<td width="20%" vAlign="top" align="right"><b>
+												<digi:trn key="aim:amount">Amount</digi:trn></b>
+											</td>
+											<td width="23%" vAlign="top" align="right">
+												<bean:write name="aimPhysicalProgressForm" property="currCode" />&nbsp;
+												<bean:write name="aimPhysicalProgressForm" property="amount" />
+											</td>
+										</tr>
+									</table>	
+								</td>
+							</tr>
+							<%--
+							<logic:notEmpty name="aimPhysicalProgressForm" property="physicalProgress">
+							<TR bgcolor="#f4f4f2">
+                                 <TD colspan="4">
+									<TABLE width="90%" cellPadding="5" cellSpacing="1" vAlign="top" align="center" bgcolor="#ffffff">
+										<logic:iterate name="aimPhysicalProgressForm"  property="physicalProgress" id="phyPP" 
+											type="org.digijava.module.aim.dbentity.AmpPhysicalPerformance">
+											<TR>
+												<TD width="50%">
+													<bean:write name="phyPP" property="title" />	
+												</TD>
+											</TR>
+										</logic:iterate>
+									</TABLE>
+								</TD>
+							</TR>
+							</logic:notEmpty>
+							--%>
 							<TR>
 								<TD width="100%" bgcolor="#F4F4F2" align="center">
 									<TABLE width="100%" cellPadding="5" cellSpacing="1" vAlign="top" align="center" bgColor=#ffffff

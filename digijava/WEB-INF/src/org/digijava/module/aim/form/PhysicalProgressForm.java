@@ -5,8 +5,8 @@ import java.util.Collection;
 
 public class PhysicalProgressForm extends ActionForm
 {
-	private String name ;
-	private String title ;
+	private String name;
+	private String title;
 	private String description ;
 	private Collection physicalProgress;
 	private Collection selectComponent;
@@ -19,6 +19,12 @@ public class PhysicalProgressForm extends ActionForm
 	private Long ampActivityId;
 	private boolean validLogin;
 	private String perspective;
+	private String compRepDate;
+	private String ppRepDate;
+	private String amount;
+	private String currCode;
+	private String compTitle;
+	
 	
 	public String getDescription() 
 	{
@@ -157,4 +163,64 @@ public class PhysicalProgressForm extends ActionForm
 		this.perspective = perspective ;
 	}
 
+	/**
+	 * @return Returns the amount.
+	 */
+	public String getAmount() {
+		return amount;
+	}
+	/**
+	 * @param amount The amount to set.
+	 */
+	public void setAmount(String amount) {
+		this.amount = amount;
+	}
+	/**
+	 * @return Returns the compRepDate.
+	 */
+	public String getCompRepDate() {
+		return compRepDate;
+	}
+	/**
+	 * @param compRepDate The compRepDate to set.
+	 */
+	public void setCompRepDate(String compRepDate) {
+		this.compRepDate = compRepDate;
+	}
+	/**
+	 * @return Returns the ppRepDate.
+	 */
+	public String getPpRepDate() {
+		return ppRepDate;
+	}
+	/**
+	 * @param ppRepDate The ppRepDate to set.
+	 */
+	public void setPpRepDate(String ppRepDate) {
+		this.ppRepDate = ppRepDate;
+	}
+	/**
+	 * @return Returns the currCode.
+	 */
+	public String getCurrCode() {
+		return currCode;
+	}
+	/**
+	 * @param currCode The currCode to set.
+	 */
+	public void setCurrCode(String currCode) {
+		this.currCode = currCode;
+	}
+	/**
+	 * @return Returns the compTitle.
+	 */
+	public String getCompTitle() {
+		return compTitle;
+	}
+	/**
+	 * @param compTitle The compTitle to set.
+	 */
+	public void setCompTitle(String compTitle) {
+		this.compTitle = compTitle;
+	}
 }

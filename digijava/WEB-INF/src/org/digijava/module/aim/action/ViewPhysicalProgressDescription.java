@@ -10,6 +10,7 @@ import org.digijava.module.aim.form.PhysicalProgressForm ;
 import org.digijava.module.aim.dbentity.AmpPhysicalPerformance ;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.helper.COverSubString ;
+import org.digijava.module.aim.helper.DateConversion;
 import org.digijava.module.aim.helper.TeamMember ;
 import javax.servlet.http.HttpServletRequest ;
 import javax.servlet.http.HttpSession ;
@@ -42,6 +43,9 @@ public class ViewPhysicalProgressDescription extends Action
 			AmpPhysicalPerformance progress=DbUtil.getAmpPhysicalProgressDescription(pid);
 			formBean.setTitle(progress.getTitle());
 			formBean.setDescription(progress.getDescription());
+			String date = DateConversion.ConvertDateToString(progress.getReportingDate());
+			formBean.setPpRepDate(date);
+			formBean.setCompTitle(progress.getComponent().getTitle());
 		}
 		return mapping.findForward("forward");
 	}

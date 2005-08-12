@@ -67,6 +67,36 @@ method="post">
       	                  </TABLE>									
 								</TD>
 							</TR>
+							<tr>
+								<td>
+									<table width="100%" cellPadding="5" cellSpacing="1" vAlign="top" align="center" bgColor=#ffffff
+									class="box-border-nopadding">
+										<tr bgcolor="#f4f4f2">
+											<td width="17%" vAlign="top" align="left"><b>
+												<digi:trn key="aim:component">Component</digi:trn></b>
+											</td>
+											<td width="83%" vAlign="top" align="left">
+												<bean:write name="aimPhysicalProgressForm" property="compTitle" />
+											</td>
+										</tr>
+									</table>	
+								</td>
+							</tr>
+							<tr>
+								<td>
+									<table width="100%" cellPadding="5" cellSpacing="1" vAlign="top" align="center" bgColor=#ffffff
+									class="box-border-nopadding">
+										<tr bgcolor="#f4f4f2">
+											<td width="17%" vAlign="top" align="left"><b>
+												<digi:trn key="aim:reportingDate">Reporting Date</digi:trn></b>
+											</td>
+											<td width="83%" vAlign="top" align="left">
+												<bean:write name="aimPhysicalProgressForm" property="ppRepDate" />
+											</td>
+										</tr>
+									</table>	
+								</td>
+							</tr>
 							<TR>
 								<TD width="100%" bgcolor="#F4F4F2" align="center">
 									<TABLE width="100%" cellPadding="5" cellSpacing="1" vAlign="top" align="center" bgColor=#ffffff

@@ -20,7 +20,17 @@ public class AdvancedReportForm extends ActionForm
 	private String reportDescription = "";
 	private String moveColumn="";
 	
+	private String imageUrl="";
 	
+	public String getImageUrl()
+	{
+		return imageUrl;
+	}
+	public void setImageUrl(String str)
+	{
+		imageUrl=str;
+	}
+
 	public String getMoveColumn() {
 		return moveColumn;
 	}

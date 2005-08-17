@@ -26,14 +26,25 @@ import org.digijava.module.aim.dbentity.AmpColumns;
 import org.digijava.module.aim.dbentity.AmpReports;
 import org.digijava.kernel.persistence.PersistenceManager;
 
+import org.jfree.data.*;
+import org.jfree.chart.*;
+import org.jfree.chart.axis.*;
+import org.jfree.chart.plot.*;
+import org.jfree.ui.RectangleInsets;
+import org.jfree.chart.entity.*;
+import org.jfree.chart.labels.*;
+import org.jfree.chart.urls.*;
+import org.jfree.chart.servlet.*;
+import org.jfree.data.general.DefaultPieDataset;
+
 import net.sf.hibernate.Query;
 import net.sf.hibernate.Session;
 import net.sf.hibernate.Transaction;
 
 import org.digijava.module.aim.form.AdvancedReportForm;
 import org.digijava.module.aim.helper.TeamMember;
+import org.digijava.module.aim.helper.Report;
 import org.digijava.module.aim.util.ReportUtil;
-
 
 import org.apache.struts.action.ActionError;
 import org.apache.struts.action.ActionErrors;
@@ -132,6 +143,67 @@ public class AdvancedReport extends Action {
 			if(request.getParameter("check") != null && request.getParameter("check").equals("3"))
 			{
 				logger.info("In here  chart process####..........");
+
+				//logger.info("###########################Inside GeneratePIEChart..:):)");
+				//logger.info("CHART FORMBEAN SIZE::::::::::::::::"+formBean.getFinalData().size());
+		        Iterator iter2 = formBean.getFinalData().iterator();
+		        
+		        Collection chart_coll=new ArrayList();
+		    	chart_coll.add("60");
+		    	chart_coll.add("Donor 1");
+
+				while(iter2.hasNext()){
+					Report r= (Report) iter2.next();
+					chart_coll.add(r.getAcCommitment().replaceAll("," , ""));
+					logger.info("filling COMM into the COLLLLL."+r.getAcCommitment());
+					chart_coll.add(r.getDonor());
+					//logger.info("filling DONOR NAME into the COLLLLL."+r.getDonor());
+				}
+				
+				
+				Iterator iter3 = chart_coll.iterator();
+				//logger.info("@@@@@@@@@@ flag:"+chart_coll.size());
+				String temp="";
+				Double demp;
+
+				DefaultPieDataset data = new DefaultPieDataset();
+//		        data.setValue("test12Aug", new Double(2.0));
+		        
+				while (iter3.hasNext()) {
+					demp=new Double(iter3.next().toString());
+					temp= (String)iter3.next();
+					//logger.info(temp+":::::"+demp);
+					data.setValue(temp, demp);
+//					iter.next();
+		        }
+
+		        //  Create the chart object
+				//logger.info("@@@@@@@@@@ PLOTTTTTTT:");
+		        PiePlot plot = new PiePlot(data);
+		        plot.setURLGenerator(new StandardPieURLGenerator("xy_chart.jsp","section"));
+		        plot.setToolTipGenerator(new StandardPieItemLabelGenerator());
+				//logger.info("@@@@@@@@@@ Chart Object:");
+				JFreeChart chart = new JFreeChart("", JFreeChart.DEFAULT_TITLE_FONT, plot, true);
+		        chart.setBackgroundPaint(java.awt.Color.white);
+
+		        //  Write the chart image to the temporary directory
+		        ChartRenderingInfo info = new ChartRenderingInfo(new StandardEntityCollection());
+		        String filename = "";
+		        try{
+				//logger.info("@@@@@@@@@@ IMAGE CREATION PNG:");
+				filename = ServletUtilities.saveChartAsJPEG(chart, 600, 550, info, httpSession);
+
+				//logger.info("@@@@@@@@@@IMAGE FILE NAME:"+filename);
+
+				formBean.setImageUrl(filename);
+//				ServletUtilities.sendTempFile(filename, response);
+				}
+				catch(Exception e)
+				{
+					//logger.info("EXCEPTION thrown at image:"+e);				
+				}
+				
+
 				return mapping.findForward("GenerateChart");
 			}
 			

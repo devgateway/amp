@@ -22,19 +22,19 @@ public class WebappScriptlet extends JRDefaultScriptlet
 		
 		String str="";
 		for(int j=0;j<v.size();j++){
-			//System.out.println("#######"+v.get(j).toString());
+			////logger.info("#######"+v.get(j).toString());
 		}	
 	}
 /*
 	public Vector getV(){
-		System.out.println("++++++++++++++++++++++++"+v.size());
+		//logger.info("++++++++++++++++++++++++"+v.size());
 		return v;
 	}
 */	
 	public void afterReportInit() throws JRScriptletException
 	{
 	
-	System.out.println("Inside Jfree Webapp SCRIPTLET....6");
+	//logger.info("Inside Jfree Webapp SCRIPTLET....6");
 
 	DefaultPieDataset dataset = new DefaultPieDataset();
 
@@ -45,11 +45,11 @@ public class WebappScriptlet extends JRDefaultScriptlet
 			dbl=new Double(v.get(j).toString());
 			j++;
 			str=v.get(j).toString();
-			System.out.println("******"+str+"******"+dbl);
+			//logger.info("******"+str+"******"+dbl);
 			dataset.setValue(str, dbl);
 		}
 
-		System.out.println("=====================v size: "+v.size());
+		//logger.info("=====================v size: "+v.size());
 /*		dataset.setValue("DGF", new Double(23.2));
 		dataset.setValue("NCST", new Double(30.0));
 		dataset.setValue("MoFED", new Double(25.5));

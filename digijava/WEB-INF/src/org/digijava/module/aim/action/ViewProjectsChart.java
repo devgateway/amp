@@ -40,7 +40,7 @@ public class ViewProjectsChart extends Action
 	{
 
 		AdvancedReportForm formbean = (AdvancedReportForm) form;
-		System.out.println("CHART FORM SIZE::::::::::::::::"+formbean.getFinalData().size());
+		//logger.info("CHART FORM SIZE::::::::::::::::"+formbean.getFinalData().size());
 		
 		Iterator iter= formbean.getFinalData().iterator();
 		
@@ -52,9 +52,9 @@ public class ViewProjectsChart extends Action
 		while(iter.hasNext()){
 			Report r= (Report) iter.next();
 			chart_coll.add(r.getAcCommitment().replaceAll("," , ""));
-			System.out.println("filling COMM into the Chart Scriptlet."+r.getAcCommitment());
+			//logger.info("filling COMM into the Chart Scriptlet."+r.getAcCommitment());
 			chart_coll.add(r.getDonor());
-			System.out.println("filling DONOR NAME into the Chart Scriptlet."+r.getDonor());
+			//logger.info("filling DONOR NAME into the Chart Scriptlet."+r.getDonor());
 		} 
 
 /*
@@ -68,7 +68,7 @@ public class ViewProjectsChart extends Action
 
 		
 	ActionServlet s = getServlet();
-	//System.out.println("###########################Inside VIEW Projects JfreeChart Action...SIZE:"+chart_coll.size());
+	////logger.info("###########################Inside VIEW Projects JfreeChart Action...SIZE:"+chart_coll.size());
 			
 			WebappScriptlet ws= new WebappScriptlet();
 			ws.setV(chart_coll);	
@@ -82,12 +82,12 @@ public class ViewProjectsChart extends Action
 			s.getServletContext().getRealPath("/WEB-INF/classes/")
 		);
 
-//	System.out.println("###########################Inside JfreeChart Compile...4444444444444");
+//	//logger.info("###########################Inside JfreeChart Compile...4444444444444");
 	System.setProperty(
 		"jasper.reports.compile.temp", 
 			s.getServletContext().getRealPath("/WEB-INF/classes/org/digijava/module/aim/reports/")
 		);
-//	System.out.println("###########################Inside JfreeChart Compile...55555555555555");
+//	//logger.info("###########################Inside JfreeChart Compile...55555555555555");
 
 String realPathJrxml = s.getServletContext().getRealPath(
 							 	"/WEB-INF/classes/org/digijava/module/aim/reports/WebappReport.jrxml");
@@ -97,7 +97,7 @@ JasperCompileManager.compileReportToFile(realPathJrxml);
 
 //chart pdf jsp
 
-//	System.out.println("###########################Inside JfreeChart Compile...22222222");
+//	//logger.info("###########################Inside JfreeChart Compile...22222222");
 
 	File reportFile = new File(s.getServletContext().getRealPath("/WEB-INF/classes/org/digijava/module/aim/reports/WebappReport.jasper"));
 
@@ -105,7 +105,7 @@ JasperCompileManager.compileReportToFile(realPathJrxml);
 	parameters.put("ReportTitle", "JFREE ChArt Report - MULTILATERAL");
 	parameters.put("BaseDir", reportFile.getParentFile());
 				
-	System.out.println("Inside Jfree PDF Compile....2");
+	//logger.info("Inside Jfree PDF Compile....2");
 
 	byte[] bytes = 
 		JasperRunManager.runReportToPdf(
@@ -113,7 +113,7 @@ JasperCompileManager.compileReportToFile(realPathJrxml);
 			parameters, 
 			new WebappDataSource()
 			);
-	System.out.println("Inside Jfree PDF EXPORT...3");
+	//logger.info("Inside Jfree PDF EXPORT...3");
 	
 	response.setContentType("application/pdf");
 	response.setContentLength(bytes.length);
@@ -123,7 +123,7 @@ JasperCompileManager.compileReportToFile(realPathJrxml);
 	ouputStream.flush();
 	ouputStream.close();
 
-	System.out.println("Inside Jfree PDF EXPORT...FINISHED..");
+	//logger.info("Inside Jfree PDF EXPORT...FINISHED..");
 
 		
 		return null;

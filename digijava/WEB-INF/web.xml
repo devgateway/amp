@@ -120,6 +120,19 @@
 		<load-on-startup>2</load-on-startup>
 	</servlet>	
 
+<!-- JFREE Chart Start -->
+	<servlet>
+		<servlet-name>DisplayChart</servlet-name>
+		<servlet-class>org.jfree.chart.servlet.DisplayChart</servlet-class>
+	</servlet>
+
+	  <servlet-mapping>
+		<servlet-name>DisplayChart</servlet-name>
+	    <url-pattern>/aim/DisplayChart.img</url-pattern>
+	  </servlet-mapping>
+
+<!-- JFREE Chart End -->
+
 	<!-- Standard Action Servlet Mapping -->
 	<servlet-mapping>
 		<servlet-name>action</servlet-name>

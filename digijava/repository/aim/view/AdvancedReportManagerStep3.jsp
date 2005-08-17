@@ -203,11 +203,22 @@
 																<TD bgcolor="#f4f4f4" height=200 align="center">
 																<br>
 																<digi:link href="" onclick="popup_chart(); return false;"></digi:link>
-																::: Pie CHART Image::: 
-																<br><br>chart image...
+																<b>::: Pie CHART Image:::</b><br>
+																<br>
+																<bean:define id="fName">
+																	<c:out value="${aimAdvancedReportForm.imageUrl}"/>
+																</bean:define>
+																<%	
+																String graphURL = request.getContextPath() + "/aim/DisplayChart.img?filename="+fName;
+																%>
+
+																<!-- CHART : <%=graphURL%> -->
+																<br>
+																<img src=<%=graphURL%> border="1">
+																<br>
 																<br><br>
 																<input type=button name=back value="<< Previous"   class="dr-menu" onclick="javascript:history.back()">						
-																<input type="button" onclick="popup_chart()" value="CREATE PIE CHART" class="dr-menu"> 
+																<input type="button" onclick="popup_chart()" value="Create Pie-Chart PDF" class="dr-menu"> 
 																<input type=button name=back value=" Save Report "   class="dr-menu" onclick="saveReport()">						
 
 																</TD>

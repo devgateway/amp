@@ -422,7 +422,6 @@ public class EditActivityForm extends ActionForm implements Serializable{
 	}
 
 	public FundingDetail getFundingDetail(int index) {
-		FundingDetail fundingDetail = null;
 		int currentSize = fundingDetails.size();
 		if (index >= currentSize) {
 			for (int i = 0; i <= index - currentSize; i++) {
@@ -433,7 +432,6 @@ public class EditActivityForm extends ActionForm implements Serializable{
 	}
 
 	public OrgProjectId getSelectedOrgs(int index) {
-		OrgProjectId orgProjectId = null;
 		int currentSize = selectedOrgs.size();
 		if (index >= currentSize) {
 			for (int i = 0; i <= index - currentSize; i++) {

@@ -354,7 +354,7 @@ function showtip()
 									
 									<%  int curr = currPage.intValue();
 										int cnt = pages.intValue();
-										System.out.println(curr + " Comparison : " + cnt);
+										//System.out.println(curr + " Comparison : " + cnt);
 									%>
 									<% if( curr != cnt ) { %>
 									<bean:define id="translation">

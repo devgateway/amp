@@ -31,6 +31,7 @@ import org.digijava.module.aim.dbentity.AmpOrgRole;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpPhysicalPerformance;
 import org.digijava.module.aim.dbentity.AmpSector;
+import org.digijava.module.aim.dbentity.AmpTeam;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.helper.Activity;
 import org.digijava.module.aim.helper.ActivitySector;
@@ -95,7 +96,6 @@ public class ActivityUtil {
 					logger.debug("Previous Activity is null");
 				}
 				
-			    
 				/* delete previos fundings and funding details */
 				Set fundSet = oldActivity.getFunding();
 				if (fundSet != null) {
@@ -204,9 +204,10 @@ public class ActivityUtil {
 				oldActivity.setProposedStartDate(activity.getProposedStartDate());
 				oldActivity.setStatus(activity.getStatus());
 				oldActivity.setStatusReason(activity.getStatusReason());
-				oldActivity.setTeam(activity.getTeam());
 				oldActivity.setThemeId(activity.getThemeId());
 				oldActivity.setUpdatedDate(activity.getUpdatedDate());
+				
+				logger.debug("Team is " + oldActivity.getTeam().getName());
 				
 				Iterator itr = null;
 				if (activity.getClosingDates() != null) {
@@ -230,7 +231,6 @@ public class ActivityUtil {
 					    oldActivity.getComponents().add(compnt);
 					}				    
 				}
-				logger.debug("Component size in oldActivity = " + oldActivity.getComponents().size());
 				
 				oldActivity.setDocuments(activity.getDocuments());				
 
@@ -249,6 +249,7 @@ public class ActivityUtil {
 				oldActivity.setLocations(activity.getLocations());
 				oldActivity.setOrgrole(activity.getOrgrole());
 				oldActivity.setSectors(activity.getSectors());
+				
 			}
 			
 			

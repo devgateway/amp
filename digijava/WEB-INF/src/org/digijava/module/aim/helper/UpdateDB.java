@@ -43,7 +43,6 @@ public class UpdateDB {
 			con = DriverManager.getConnection(url, username, passwd);
 
 			Statement stmt = con.createStatement();
-			DatabaseMetaData dbm = con.getMetaData();
 			ResultSet rs = null;
 			
 
@@ -540,7 +539,7 @@ public class UpdateDB {
 	void updateAmpActivityDates(String id,String sdd, String cdd, String ocd)
 	{
 		
-		String query ="", res="";
+		String query ="";
 		try
 		{
         Connection connection = DriverManager.getConnection(url, username, passwd);

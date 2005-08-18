@@ -229,7 +229,6 @@ public class SaveActivity extends Action {
 		
 		AmpActivityClosingDates closeDate = null;
 
-		Set closeDates = new HashSet();
 		if (activity.getClosingDates() == null) {
 		    activity.setClosingDates(new HashSet());
 		}
@@ -522,9 +521,11 @@ public class SaveActivity extends Action {
 
 		// if the activity is being added from a users workspace, associate the
 		// activity with the team of the current member.
-		if (eaForm.getPageId() == 1 && tm != null) {
+		if (tm != null && (eaForm.isEditAct() == false)) {
 			AmpTeam team = TeamUtil.getAmpTeam(tm.getTeamId());
 			activity.setTeam(team);
+		} else {
+			activity.setTeam(null);
 		}
 
 		// set activity internal ids

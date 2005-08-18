@@ -143,6 +143,11 @@
 		<hibernate-class>
 			org.digijava.module.aim.dbentity.AmpColumns
 		</hibernate-class>
+		<hibernate-class>
+			org.digijava.module.aim.dbentity.AmpMeasures
+		</hibernate-class>
+
+
 	</hibernate-classes>
         <!-- highlights classes End-->
 

@@ -12,10 +12,10 @@
 function moveUp(val)
 {
 	if(document.aimAdvancedReportForm.removeColumns.length == undefined)
-		alert("Cannot move the column Up ");
+		alert("Cannot move the column Up");
 	else
 	{
-		<digi:context name="step" property="context/module/moduleinstance/advancedReportManager.do?check=MoveUp" />
+		<digi:context name="step" property="context/module/moduleinstance/advancedReportManager.do?check=MoveUpMeasure" />
 		document.aimAdvancedReportForm.action = "<%= step %>";
 		document.aimAdvancedReportForm.moveColumn.value = val;
 		document.aimAdvancedReportForm.target = "_self";
@@ -26,10 +26,10 @@ function moveUp(val)
 function moveDown(val)
 {
 	if(document.aimAdvancedReportForm.removeColumns.length == undefined)
-		alert("Cannot move the column Down ");
+		alert("Cannot move the  column Down ");
 	else
 	{
-		<digi:context name="step" property="context/module/moduleinstance/advancedReportManager.do?check=MoveDown" />
+		<digi:context name="step" property="context/module/moduleinstance/advancedReportManager.do?check=MoveDownMeasure" />
 		document.aimAdvancedReportForm.action = "<%= step %>";
 		document.aimAdvancedReportForm.moveColumn.value = val;
 		document.aimAdvancedReportForm.target = "_self";
@@ -38,12 +38,11 @@ function moveDown(val)
 }
 
 function gotoStep() {
-
 	if(document.aimAdvancedReportForm.removeColumns == null)
-		alert(" Please select columns to generate report ");
+		alert("Please select a measure");
 	else
 	{
-		<digi:context name="step" property="context/module/moduleinstance/advancedReportManager.do?check=SelectRows" />
+		<digi:context name="step" property="context/module/moduleinstance/advancedReportManager.do?check=4" />
 		document.aimAdvancedReportForm.action = "<%= step %>";
 		document.aimAdvancedReportForm.target = "_self";
 		document.aimAdvancedReportForm.submit();
@@ -52,10 +51,10 @@ function gotoStep() {
 
 function addColumn()
 {
-	<digi:context name="advReport" property="context/module/moduleinstance/advancedReportManager.do?check=add" />
-	document.aimAdvancedReportForm.action = "<%= advReport %>";
-	document.aimAdvancedReportForm.target = "_self";
-	document.aimAdvancedReportForm.submit();
+		<digi:context name="advReport" property="context/module/moduleinstance/advancedReportManager.do?check=AddMeasure" />
+		document.aimAdvancedReportForm.action = "<%= advReport %>";
+		document.aimAdvancedReportForm.target = "_self";
+		document.aimAdvancedReportForm.submit();
 }
 
 function deleteColumn()
@@ -64,7 +63,7 @@ function deleteColumn()
 		alert(" Please select columns to remove");
 	else
 	{
-		<digi:context name="advReport" property="context/module/moduleinstance/advancedReportManager.do?check=delete" />
+		<digi:context name="advReport" property="context/module/moduleinstance/advancedReportManager.do?check=DeleteMeasure" />
 		document.aimAdvancedReportForm.action = "<%= advReport %>";
 		document.aimAdvancedReportForm.target = "_self";
 		document.aimAdvancedReportForm.submit();
@@ -108,10 +107,27 @@ function deleteColumn()
 									Portfolio
 								</digi:trn>
 								</digi:link>&nbsp;&gt;&nbsp;
+
+								<bean:define id="translation">
+									<digi:trn key="aim:clickToGotoStep1">Click here to goto Step 1</digi:trn>
+								</bean:define>
+								<digi:link href="/advancedReportManager.do?check=forward" styleClass="comment" title="<%=translation%>" >
 								<digi:trn key="aim:reportBuilder:selectcolumn">
 									Report Builder : Select Column
 								</digi:trn>					
-								&gt;		
+								&gt;&gt;		
+								</digi:link>&nbsp;&nbsp;
+								
+								<digi:link href="/advancedReportManager.do?check=SelectRows" styleClass="comment" title="<%=translation%>" >
+								<digi:trn key="aim:reportBuilder:selectrows">
+									Report Builder : Select Rows
+								</digi:trn>					
+								&gt;&gt;		
+								</digi:link>&nbsp;&nbsp;
+
+								<digi:trn key="aim:reportBuilder:selectmeasures">
+									Report Builder : Select Measure
+								</digi:trn>					
 							</td>
 						</tr>
 					</table>	
@@ -121,7 +137,7 @@ function deleteColumn()
 
 				<td height=16 vAlign=right align=center>
 					<span class=subtitle-blue>
-					Report Builder : Select Column
+					Report Builder : Select Measures
 					</span>
 				</td>
 			</tr>
@@ -216,7 +232,7 @@ function deleteColumn()
 																	<tr height=10>	<td>	</td>	</tr>												
 																	<TR bgcolor="#eeeeee">
 																		<td align="center" class=box-title>
-																			Available Columns
+																			Available Measures
 																		</td>	
 																	</tr>
 																	<tr height=10>	<td>	</td>	</tr>
@@ -224,15 +240,15 @@ function deleteColumn()
 																	<TR>
 																		<TD>
 																			<TABLE width="100%" cellPadding=2 cellSpacing=1 vAlign="top" align="top" bgcolor="#aaaaaa" border=0>
-																				<c:if test="${!empty aimAdvancedReportForm.ampColumns}">
-																					<logic:iterate name="aimAdvancedReportForm" id="ampColumns"	property="ampColumns" >
+																				<c:if test="${!empty aimAdvancedReportForm.ampMeasures}">
+																					<logic:iterate name="aimAdvancedReportForm" id="ampMeasures"	property="ampMeasures" >
 																						<TR bgcolor="#ffffff">
 																							<td align="left" width="98%" valign=top>
-																								<c:out value="${ampColumns.aliasName}"/>
+																								<c:out value="${ampMeasures.aliasName}"/>
 																							</td>
 																							<td align="right">
 																							<html:multibox property="selectedColumns">
-																							  <c:out value="${ampColumns.columnId}"/>
+																							  <c:out value="${ampMeasures.measureId}"/>
 					  																	    </html:multibox>
 																							</td>
 																						</tr>
@@ -244,11 +260,11 @@ function deleteColumn()
 																	</TR>												
 		
 																	<tr>
-																		<c:if test="${empty aimAdvancedReportForm.ampColumns}">
+																		<c:if test="${empty aimAdvancedReportForm.ampMeasures}">
 																			<td >
 																				<TABLE width="100%" height="200" cellPadding=2 cellSpacing=0 vAlign="top" align="center" bgcolor="#f4f4f2">
 																					<tr bgcolor="#eeeeee">	<td class=box-title align=center>
-																					No columns available to add 
+																					No measures available to add
 																					</td></tr>
 																				</table>
 																			</td>
@@ -262,28 +278,28 @@ function deleteColumn()
 																	<tr height=10>	<td>	</td>	</tr>												
 																	<TR bgcolor="#eeeeee">
 																		<td align="center" class=box-title>
-																			Selected Columns
+																			Selected Measures
 																		</td>
 																	</tr>
 																	<tr height=10>	<td>	</td>	</tr>
 																	<TR>
-																		<c:if test="${!empty aimAdvancedReportForm.addedColumns}">
+																		<c:if test="${!empty aimAdvancedReportForm.addedMeasures}">
 																		<TD>
 																			<TABLE width="100%" cellPadding=2 cellSpacing=1 vAlign="top" align="top" bgcolor="#aaaaaa" border=0>
-																				<c:if test="${!empty aimAdvancedReportForm.addedColumns}">
-																					<logic:iterate name="aimAdvancedReportForm" id="addedColumns"	property="addedColumns" >
+																				<c:if test="${!empty aimAdvancedReportForm.addedMeasures}">
+																					<logic:iterate name="aimAdvancedReportForm" id="addedMeasures"	property="addedMeasures" >
 																						<tr bgcolor=#ffffff>
 																						<td align="left" width="98%">
-																							<c:out value="${addedColumns.aliasName}"/>
+																							<c:out value="${addedMeasures.aliasName}"/>
 																						</td>
 																						<td align="right">
 																							<html:multibox property="removeColumns" >
-																							  <c:out value="${addedColumns.columnId}"/>
+																							  <c:out value="${addedMeasures.measureId}"/>
 					  																	    </html:multibox>
 																						</td>
 																							<td align="right">
-																								<IMG alt="Move Up"  height=10 src="../ampTemplate/images/up-arrow.jpg" width=10 onclick="moveUp(<c:out value='${addedColumns.columnId}' />)">
-																								<IMG alt="Move Down" styleClass="test" height=10 src="../ampTemplate/images/down-arrow.jpg" width=10 onclick="moveDown(<c:out value='${addedColumns.columnId}' />)">
+																								<IMG alt="Move Up"  height=10 src="../ampTemplate/images/up-arrow.jpg" width=10 onclick="moveUp(<c:out value='${addedMeasures.measureId}' />)">
+																								<IMG alt="Move Down" styleClass="test" height=10 src="../ampTemplate/images/down-arrow.jpg" width=10 onclick="moveDown(<c:out value='${addedMeasures.measureId}' />)">
 																							</td>
 																						</tr>
 																					</logic:iterate>
@@ -292,16 +308,17 @@ function deleteColumn()
 																		</TD>
 																		</c:if>														
 																		
-																		<c:if test="${empty aimAdvancedReportForm.addedColumns}">
+																		<c:if test="${empty aimAdvancedReportForm.addedMeasures}">
 																			<td >
 																				<TABLE width="100%" height="200" cellPadding=2 cellSpacing=0 vAlign="top" align="center" bgcolor="#f4f4f2">
 																					<tr bgcolor="#eeeeee">	<td class=box-title align=center>
-																					No Columns Selected 
+																					No measures selected 
 																					</td></tr>
 																				</table>
 																			</td>
 																		</c:if>
 																	</TR>												
+
 																</TABLE>
 															</TD>
 														</TR>
@@ -316,6 +333,7 @@ function deleteColumn()
 											</tr>	<!-- Add and Remove Button-->
 											<tr>
 												<td align="right" colspan="2">
+													<input type=button name=back value="<< Previous"   class="dr-menu" onclick="javascript:history.back()">												
 													<input type="button" name="Cancel" value="Cancel" class="dr-menu" bgcolor="#ffffff">
 													<input type=button value="  Next  " class="dr-menu" onclick="javascript:gotoStep()" >															
 												</td>

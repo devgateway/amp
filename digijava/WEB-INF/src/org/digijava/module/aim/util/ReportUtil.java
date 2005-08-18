@@ -21,6 +21,7 @@ import net.sf.hibernate.Transaction;
 import org.apache.log4j.Logger;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.dbentity.AmpColumns;
+import org.digijava.module.aim.dbentity.AmpMeasures;
 import org.digijava.module.aim.dbentity.AmpReports;
 import org.digijava.module.aim.dbentity.AmpPhysicalComponentReport;
 import org.digijava.module.aim.dbentity.AmpTeam;
@@ -46,6 +47,8 @@ import org.digijava.module.aim.helper.ProjectTermAssist;
 import org.digijava.module.aim.helper.CurrencyWorker;
 import org.digijava.module.aim.helper.DateConversion;
 import org.digijava.module.aim.helper.AmpComponent;
+import org.digijava.module.aim.dbentity.AmpMeasures;
+
 
 /**
  * Utility class for persisting all reports related entities
@@ -10626,6 +10629,42 @@ public class ReportUtil {
 		catch(Exception e)
 		{
 			System.out.println(" Error in getColumnList()  :  " + e);
+		}
+
+		return coll;
+			
+	}
+
+	public static Collection getMeasureList()
+	throws java.lang.Exception
+	{
+		Session session = null;
+		session = PersistenceManager.getSession();
+		String sqlQuery = "";
+		boolean flag =false;
+		Iterator iter = null;
+		Collection coll = new ArrayList();
+		Query query = null;
+		AmpMeasures ampMeasures = new AmpMeasures();
+		try
+		{
+			sqlQuery = "select c from "+ AmpMeasures.class.getName() + " c";
+			query = session.createQuery(sqlQuery);
+			if (query != null) 
+			{
+				iter = query.list().iterator();
+				while (iter.hasNext()) 
+				{
+					ampMeasures = (AmpMeasures) iter.next();
+					coll.add(ampMeasures);
+				}
+				flag = true;
+			}
+			return coll;
+		}
+		catch(Exception e)
+		{
+			System.out.println(" Error in getMeasureList()  :  " + e);
 		}
 
 		return coll;

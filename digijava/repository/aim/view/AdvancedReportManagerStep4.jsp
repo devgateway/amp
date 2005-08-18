@@ -66,9 +66,24 @@ function gotoStep() {
 								<bean:define id="translation">
 									<digi:trn key="aim:clickToGotoStep1">Click here to goto Step 1</digi:trn>
 								</bean:define>
-								<digi:link href="/advancedReportManager.do?check=add" styleClass="comment" title="<%=translation%>" >
+								<digi:link href="/advancedReportManager.do?check=forward" styleClass="comment" title="<%=translation%>" >
 								<digi:trn key="aim:reportBuilder:selectcolumn">
 									Report Builder : Select Column
+								</digi:trn>					
+								&gt;&gt;		
+								</digi:link>&nbsp;&nbsp;
+								
+								<digi:link href="/advancedReportManager.do?check=SelectRows" styleClass="comment" title="<%=translation%>" >
+								<digi:trn key="aim:reportBuilder:selectrows">
+									Report Builder : Select Rows
+								</digi:trn>					
+								&gt;&gt;		
+								</digi:link>&nbsp;&nbsp;
+								
+								
+								<digi:link href="/advancedReportManager.do?check=SelectMeasures" styleClass="comment" title="<%=translation%>" >
+								<digi:trn key="aim:reportBuilder:selectmeasures">
+									Report Builder : Select Measure
 								</digi:trn>					
 								&gt;&gt;		
 								</digi:link>&nbsp;&nbsp;
@@ -109,7 +124,7 @@ function gotoStep() {
 													<bean:define id="translation">
 														<digi:trn key="aim:clickToSelectColumns">Click here to Select Columns</digi:trn>
 													</bean:define>
-													<digi:link href="/advancedReportManager.do?check=add"   styleClass="sub-nav" title="<%=translation%>" >
+													<digi:link href="/advancedReportManager.do?check=forward"   styleClass="sub-nav" title="<%=translation%>" >
 														1 :   Select Columns
 													</digi:link>
 												</td>											
@@ -117,7 +132,7 @@ function gotoStep() {
 													<bean:define id="translation">
 														<digi:trn key="aim:clickToselectrows/hierarchies">Click here to select rows/hierarchies</digi:trn>
 													</bean:define>
-													<digi:link href="/advancedReportManager.do"  styleClass="sub-nav" title="<%=translation%>" >
+													<digi:link href="/advancedReportManager.do?check=SelectRows"  styleClass="sub-nav" title="<%=translation%>" >
 														2 : <digi:trn key="aim:SelectRows/hierarchies">Select rows/hierarchies</digi:trn>
 													</digi:link>
 												</td>										
@@ -125,7 +140,7 @@ function gotoStep() {
 													<bean:define id="translation">
 														<digi:trn key="aim:clickToSelectMeasures">Click here to Select Measures</digi:trn>
 													</bean:define>
-													<digi:link href="/advancedReportManager.do"  styleClass="sub-nav" title="<%=translation%>" > 
+													<digi:link href="/advancedReportManager.do?check=SelectMeasures"  styleClass="sub-nav" title="<%=translation%>" > 
 													3 : <digi:trn key="aim:SelectMeasures">Select Measures</digi:trn>
 													</digi:link>
 												</td>											
@@ -147,7 +162,7 @@ function gotoStep() {
 										<bean:define id="translation">
 											<digi:trn key="aim:clickToGenerateReport">Click here to Generate Reports</digi:trn>
 										</bean:define>
-										<digi:link href="/advancedReportManager.do?check=5"  styleClass="sub-nav" title="<%=translation%>" >
+										<digi:link href="/advancedReportManager.do?check=4"  styleClass="sub-nav" title="<%=translation%>" >
 										5 : <digi:trn key="aim:GenerateReport">Generate Report</digi:trn>
 										</digi:link>
 										</td>	

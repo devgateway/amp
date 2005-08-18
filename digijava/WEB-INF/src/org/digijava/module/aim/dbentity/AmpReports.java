@@ -18,6 +18,7 @@ public class AmpReports implements Comparable {
 	private Set members;
 
 	private Set columns;
+	private Set hierarchies;
 	
 	public Set getColumns() {
 		return columns;
@@ -64,5 +65,12 @@ public class AmpReports implements Comparable {
 		  return (this.name.trim().toLowerCase().
 								compareTo(rep.name.trim().toLowerCase()));
 
-	}		  		
+	}
+	
+	public Set getHierarchies() {
+		return hierarchies;
+	}
+	public void setHierarchies(Set hierarchies) {
+		this.hierarchies = hierarchies;
+	}
 }

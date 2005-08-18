@@ -15,7 +15,7 @@ function moveUp(val)
 		alert("Cannot move the column Up ");
 	else
 	{
-		<digi:context name="step" property="context/module/moduleinstance/advancedReportManager.do?check=MoveUp" />
+		<digi:context name="step" property="context/module/moduleinstance/advancedReportManager.do?check=Step2MoveUp" />
 		document.aimAdvancedReportForm.action = "<%= step %>";
 		document.aimAdvancedReportForm.moveColumn.value = val;
 		document.aimAdvancedReportForm.target = "_self";
@@ -26,10 +26,10 @@ function moveUp(val)
 function moveDown(val)
 {
 	if(document.aimAdvancedReportForm.removeColumns.length == undefined)
-		alert("Cannot move the column Down ");
+		alert("Cannot move the column Down");
 	else
 	{
-		<digi:context name="step" property="context/module/moduleinstance/advancedReportManager.do?check=MoveDown" />
+		<digi:context name="step" property="context/module/moduleinstance/advancedReportManager.do?check=Step2MoveDown" />
 		document.aimAdvancedReportForm.action = "<%= step %>";
 		document.aimAdvancedReportForm.moveColumn.value = val;
 		document.aimAdvancedReportForm.target = "_self";
@@ -39,20 +39,15 @@ function moveDown(val)
 
 function gotoStep() {
 
-	if(document.aimAdvancedReportForm.removeColumns == null)
-		alert(" Please select columns to generate report ");
-	else
-	{
-		<digi:context name="step" property="context/module/moduleinstance/advancedReportManager.do?check=SelectRows" />
+		<digi:context name="step" property="context/module/moduleinstance/advancedReportManager.do?check=SelectMeasures" />
 		document.aimAdvancedReportForm.action = "<%= step %>";
 		document.aimAdvancedReportForm.target = "_self";
 		document.aimAdvancedReportForm.submit();
-	}
 }
 
 function addColumn()
 {
-	<digi:context name="advReport" property="context/module/moduleinstance/advancedReportManager.do?check=add" />
+	<digi:context name="advReport" property="context/module/moduleinstance/advancedReportManager.do?check=Step2AddRows" />
 	document.aimAdvancedReportForm.action = "<%= advReport %>";
 	document.aimAdvancedReportForm.target = "_self";
 	document.aimAdvancedReportForm.submit();
@@ -64,7 +59,7 @@ function deleteColumn()
 		alert(" Please select columns to remove");
 	else
 	{
-		<digi:context name="advReport" property="context/module/moduleinstance/advancedReportManager.do?check=delete" />
+		<digi:context name="advReport" property="context/module/moduleinstance/advancedReportManager.do?check=Step2DeleteRows" />
 		document.aimAdvancedReportForm.action = "<%= advReport %>";
 		document.aimAdvancedReportForm.target = "_self";
 		document.aimAdvancedReportForm.submit();
@@ -108,10 +103,18 @@ function deleteColumn()
 									Portfolio
 								</digi:trn>
 								</digi:link>&nbsp;&gt;&nbsp;
+
+								<digi:link href="/advancedReportManager.do?check=forward" styleClass="comment" title="<%=translation%>" >
 								<digi:trn key="aim:reportBuilder:selectcolumn">
 									Report Builder : Select Column
 								</digi:trn>					
-								&gt;		
+								&gt;&gt;		
+								</digi:link>&nbsp;&nbsp;
+								
+								<digi:trn key="aim:reportBuilder:selectrows">
+									Report Builder : Select Rows
+								</digi:trn>		
+								
 							</td>
 						</tr>
 					</table>	
@@ -121,7 +124,7 @@ function deleteColumn()
 
 				<td height=16 vAlign=right align=center>
 					<span class=subtitle-blue>
-					Report Builder : Select Column
+					Report Builder : Select Rows
 					</span>
 				</td>
 			</tr>
@@ -150,7 +153,7 @@ function deleteColumn()
 												</td>											
 												<td noWrap align=left>
 													<bean:define id="translation">
-														<digi:trn key="aim:clickToselectrows/hierarchies" >Click here to select rows/hierarchies</digi:trn>
+														<digi:trn key="aim:clickToselectrows/hierarchies">Click here to select rows/hierarchies</digi:trn>
 													</bean:define>
 													<digi:link href="/advancedReportManager.do?check=SelectRows"  styleClass="sub-nav" title="<%=translation%>" >
 														2 : <digi:trn key="aim:SelectRows/hierarchies">Select rows/hierarchies</digi:trn>
@@ -216,7 +219,7 @@ function deleteColumn()
 																	<tr height=10>	<td>	</td>	</tr>												
 																	<TR bgcolor="#eeeeee">
 																		<td align="center" class=box-title>
-																			Available Columns
+																			Selected Columns
 																		</td>	
 																	</tr>
 																	<tr height=10>	<td>	</td>	</tr>
@@ -224,15 +227,15 @@ function deleteColumn()
 																	<TR>
 																		<TD>
 																			<TABLE width="100%" cellPadding=2 cellSpacing=1 vAlign="top" align="top" bgcolor="#aaaaaa" border=0>
-																				<c:if test="${!empty aimAdvancedReportForm.ampColumns}">
-																					<logic:iterate name="aimAdvancedReportForm" id="ampColumns"	property="ampColumns" >
+																				<c:if test="${!empty aimAdvancedReportForm.addedColumns}">
+																					<logic:iterate name="aimAdvancedReportForm" id="addedColumns"	property="addedColumns" >
 																						<TR bgcolor="#ffffff">
 																							<td align="left" width="98%" valign=top>
-																								<c:out value="${ampColumns.aliasName}"/>
+																								<c:out value="${addedColumns.aliasName}"/>
 																							</td>
 																							<td align="right">
 																							<html:multibox property="selectedColumns">
-																							  <c:out value="${ampColumns.columnId}"/>
+																							  <c:out value="${addedColumns.columnId}"/>
 					  																	    </html:multibox>
 																							</td>
 																						</tr>
@@ -244,46 +247,56 @@ function deleteColumn()
 																	</TR>												
 		
 																	<tr>
-																		<c:if test="${empty aimAdvancedReportForm.ampColumns}">
+																		<c:if test="${empty aimAdvancedReportForm.addedColumns}">
 																			<td >
 																				<TABLE width="100%" height="200" cellPadding=2 cellSpacing=0 vAlign="top" align="center" bgcolor="#f4f4f2">
-																					<tr bgcolor="#eeeeee">	<td class=box-title align=center>
-																					No columns available to add 
-																					</td></tr>
+																					<tr bgcolor="#eeeeee">	
+																						<td class=box-title align=center>
+																							Columns to be selected before creating hierarchie
+																							<br><br><br><br><br><br>
+																								Please return to Step 1 : Select Column																						</td>
+																					</tr>
 																				</table>
 																			</td>
 																		</c:if>
 																	</tr>
 																</TABLE>
 															</TD>
-				
 															<TD width="50%" vAlign="top" align="left" bgcolor="#eeeeee">
 																<TABLE width="100%" cellPadding="2" cellSpacing="1" vAlign="top" align="top" bgcolor="#eeeeee" border=0>
 																	<tr height=10>	<td>	</td>	</tr>												
 																	<TR bgcolor="#eeeeee">
 																		<td align="center" class=box-title>
-																			Selected Columns
+																			Column Hierarchie
 																		</td>
 																	</tr>
 																	<tr height=10>	<td>	</td>	</tr>
 																	<TR>
-																		<c:if test="${!empty aimAdvancedReportForm.addedColumns}">
+																		<c:if test="${!empty aimAdvancedReportForm.columnHierarchie}">
 																		<TD>
 																			<TABLE width="100%" cellPadding=2 cellSpacing=1 vAlign="top" align="top" bgcolor="#aaaaaa" border=0>
-																				<c:if test="${!empty aimAdvancedReportForm.addedColumns}">
-																					<logic:iterate name="aimAdvancedReportForm" id="addedColumns"	property="addedColumns" >
+																				<c:if test="${!empty aimAdvancedReportForm.columnHierarchie}">
+																				<% int i =0; %>
+																					<logic:iterate name="aimAdvancedReportForm" id="columnHierarchie"	property="columnHierarchie" >
+																					<% i = i + 1; %>
 																						<tr bgcolor=#ffffff>
 																						<td align="left" width="98%">
-																							<c:out value="${addedColumns.aliasName}"/>
+																							<% if(i > 1 )	{ 	%>
+																								<% for(int j=0; j<i; j++)	{  %>
+																							   		&nbsp;	
+																							   	<% }	%>
+																									<IMG src="../ampTemplate/images/link_out_bot.gif">
+																							<%	}	%>
+																							<c:out value="${columnHierarchie.aliasName}"/>
 																						</td>
 																						<td align="right">
 																							<html:multibox property="removeColumns" >
-																							  <c:out value="${addedColumns.columnId}"/>
+																							  <c:out value="${columnHierarchie.columnId}"/>
 					  																	    </html:multibox>
 																						</td>
 																							<td align="right">
-																								<IMG alt="Move Up"  height=10 src="../ampTemplate/images/up-arrow.jpg" width=10 onclick="moveUp(<c:out value='${addedColumns.columnId}' />)">
-																								<IMG alt="Move Down" styleClass="test" height=10 src="../ampTemplate/images/down-arrow.jpg" width=10 onclick="moveDown(<c:out value='${addedColumns.columnId}' />)">
+																								<IMG alt="Move Up"  height=10 src="../ampTemplate/images/up-arrow.jpg" width=10 onclick="moveUp(<c:out value='${columnHierarchie.columnId}' />)">
+																								<IMG alt="Move Down" styleClass="test" height=10 src="../ampTemplate/images/down-arrow.jpg" width=10 onclick="moveDown(<c:out value='${columnHierarchie.columnId}' />)">
 																							</td>
 																						</tr>
 																					</logic:iterate>
@@ -292,11 +305,11 @@ function deleteColumn()
 																		</TD>
 																		</c:if>														
 																		
-																		<c:if test="${empty aimAdvancedReportForm.addedColumns}">
+																		<c:if test="${empty aimAdvancedReportForm.columnHierarchie}">
 																			<td >
 																				<TABLE width="100%" height="200" cellPadding=2 cellSpacing=0 vAlign="top" align="center" bgcolor="#f4f4f2">
 																					<tr bgcolor="#eeeeee">	<td class=box-title align=center>
-																					No Columns Selected 
+																					No Columns Hierarchie Selected 
 																					</td></tr>
 																				</table>
 																			</td>
@@ -304,6 +317,7 @@ function deleteColumn()
 																	</TR>												
 																</TABLE>
 															</TD>
+															
 														</TR>
 													</TABLE>
 												</TD>
@@ -316,6 +330,7 @@ function deleteColumn()
 											</tr>	<!-- Add and Remove Button-->
 											<tr>
 												<td align="right" colspan="2">
+													<input type=button name=back value="<< Previous"   class="dr-menu" onclick="javascript:history.back()">												
 													<input type="button" name="Cancel" value="Cancel" class="dr-menu" bgcolor="#ffffff">
 													<input type=button value="  Next  " class="dr-menu" onclick="javascript:gotoStep()" >															
 												</td>

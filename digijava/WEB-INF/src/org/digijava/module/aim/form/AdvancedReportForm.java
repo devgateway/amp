@@ -6,6 +6,7 @@ import org.apache.struts.action.ActionForm ;
 
 public class AdvancedReportForm extends ActionForm 
 {
+	private Collection ampMeasures = null; // Contains the avaliable measures from Database
 	private Collection ampColumns = null; // Contains the columns got from the DB
 	private Long selectedColumns[] = null; // list of columns after selecting.
 	private Long removeColumns[] = null; // list of columns after selecting.
@@ -19,6 +20,9 @@ public class AdvancedReportForm extends ActionForm
 	private String reportTitle = "";
 	private String reportDescription = "";
 	private String moveColumn="";
+	private Collection intermediate = null;
+	private Collection addedMeasures = null;
+	private Collection columnHierarchie = null; // contains the columns that have been added.
 	
 	private String imageUrl="";
 	
@@ -109,6 +113,30 @@ public class AdvancedReportForm extends ActionForm
 	}
 	public void setReportTitle(String reportTitle) {
 		this.reportTitle = reportTitle;
+	}
+	public Collection getColumnHierarchie() {
+		return columnHierarchie;
+	}
+	public void setColumnHierarchie(Collection columnHierarchie) {
+		this.columnHierarchie = columnHierarchie;
+	}
+	public Collection getIntermediate() {
+		return intermediate;
+	}
+	public void setIntermediate(Collection intermediate) {
+		this.intermediate = intermediate;
+	}
+	public Collection getAmpMeasures() {
+		return ampMeasures;
+	}
+	public void setAmpMeasures(Collection ampMeasures) {
+		this.ampMeasures = ampMeasures;
+	}
+	public Collection getAddedMeasures() {
+		return addedMeasures;
+	}
+	public void setAddedMeasures(Collection addedMeasures) {
+		this.addedMeasures = addedMeasures;
 	}
 } //		End of Class
 

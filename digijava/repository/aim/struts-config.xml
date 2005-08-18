@@ -2557,6 +2557,9 @@
 		<forward name="GenerateChart" path="/showLayout.do?layout=AdvancedReportManagerStep3" />		
 	    <forward name="viewMyDesktop" path="/aim/viewMyDesktop.do" /> 
 		<forward name="MissingReportDetails" path="/showLayout.do?layout=AdvancedReportManagerStep4" />
+		<forward name="SelectRows" path="/showLayout.do?layout=AdvancedReportManagerStep5" />
+		<forward name="SelectMeasures" path="/showLayout.do?layout=AdvancedReportManagerStep6" />
+		
 	</action>
 			
 <!-- END FINANCIAL EDIT	-->

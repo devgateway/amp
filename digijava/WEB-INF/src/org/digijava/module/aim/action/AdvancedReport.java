@@ -23,6 +23,9 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.digijava.module.aim.dbentity.AmpColumns;
+import org.digijava.module.aim.dbentity.AmpMeasures;
+import org.digijava.module.aim.dbentity.AmpReportColumn;
+import org.digijava.module.aim.dbentity.AmpReportHierarchy;
 import org.digijava.module.aim.dbentity.AmpReports;
 import org.digijava.kernel.persistence.PersistenceManager;
 
@@ -96,6 +99,7 @@ public class AdvancedReport extends Action {
 			if(formBean.getAmpColumns() == null)
 			{
 				formBean.setAmpColumns(ReportUtil.getColumnList());
+				formBean.setAmpMeasures(ReportUtil.getMeasureList());				
 				formBean.setReportTitle("");
 			}
 			else
@@ -103,6 +107,7 @@ public class AdvancedReport extends Action {
 			
 			// add columns that are available
 			
+			// add columns that are available
 			if(request.getParameter("check") != null && request.getParameter("check").equals("add"))
 			{
 				str = request.getParameter("check");
@@ -118,13 +123,51 @@ public class AdvancedReport extends Action {
 				updateData(formBean.getAddedColumns(), formBean.getAmpColumns() , formBean.getRemoveColumns(), formBean);
 				formBean.setRemoveColumns(null);
 			}
+			
+			// Add the columns selected : Step 2
+			if(request.getParameter("check") != null && request.getParameter("check").equals("Step2AddRows"))
+			{
+				str = request.getParameter("check");
+				updateData(formBean.getAddedColumns(), formBean.getColumnHierarchie(), formBean.getSelectedColumns(), formBean);
+				formBean.setSelectedColumns(null);
+				return mapping.findForward("SelectRows");
+			}
+			// Remove the columns selected : Step 2
+			if(request.getParameter("check") != null && request.getParameter("check").equals("Step2DeleteRows"))
+			{
+				str = request.getParameter("check");
+				logger.info( "Operation is : " + str);
+				updateData(formBean.getColumnHierarchie(), formBean.getAddedColumns(), formBean.getRemoveColumns(), formBean);
+				formBean.setRemoveColumns(null);
+				return mapping.findForward("SelectRows");
+			}
+			// Step 3 : Select Measures
+			if(request.getParameter("check") != null && request.getParameter("check").equals("AddMeasure"))
+			{
+				str = request.getParameter("check");
+				logger.info( "Operation is : " + str);
+				updateData(formBean.getAmpMeasures(), formBean.getAddedMeasures(), formBean.getSelectedColumns(), formBean);
+				formBean.setSelectedColumns(null);
+				return mapping.findForward("SelectMeasures");
+			}
+			
+			// Remove the columns selected
+			if(request.getParameter("check") != null && request.getParameter("check").equals("DeleteMeasure"))
+			{
+				str = request.getParameter("check");
+				logger.info( "Operation is : " + str);
+				updateData(formBean.getAddedMeasures(), formBean.getAmpMeasures() , formBean.getRemoveColumns(), formBean);
+				formBean.setRemoveColumns(null);
+				return mapping.findForward("SelectMeasures");
+			}
 			// Goto Step 2.
 			if(request.getParameter("check") != null && request.getParameter("check").equals("5"))
 			{
 				logger.info("In here  generating data..........");
-				if(formBean.getAddedColumns() != null)
+				if(formBean.getColumnHierarchie() != null)
 				{
-					coll = formBean.getAddedColumns();
+					//coll = formBean.getAddedColumns();
+					coll = formBean.getColumnHierarchie();
 					if(coll != null)
 					{
 						formBean.setFinalData( ReportUtil.generateQuery(coll, ampTeamId) );
@@ -139,6 +182,16 @@ public class AdvancedReport extends Action {
 				logger.info("In here  Getting Report Details..........");
 				return mapping.findForward("ReportDetails");
 			}
+			if(request.getParameter("check") != null && request.getParameter("check").equals("SelectColumn"))
+				return mapping.findForward("forward");
+			
+			if(request.getParameter("check") != null && request.getParameter("check").equals("SelectRows"))
+				return mapping.findForward("SelectRows");
+
+
+			if(request.getParameter("check") != null && request.getParameter("check").equals("SelectMeasures"))
+				return mapping.findForward("SelectMeasures");
+
 			// step 3 : 
 			if(request.getParameter("check") != null && request.getParameter("check").equals("3"))
 			{
@@ -218,11 +271,30 @@ public class AdvancedReport extends Action {
 			// Move the selected column Up : Step 1 ie Select Columns
 			if(request.getParameter("check") != null && request.getParameter("check").equals("MoveUp"))
 				moveColumns(formBean, "MoveUp");
+			if(request.getParameter("check") != null && request.getParameter("check").equals("Step2MoveUp"))
+			{
+				moveColumns(formBean, "Step2MoveUp");
+				return mapping.findForward("SelectRows");
+			}
+			if(request.getParameter("check") != null && request.getParameter("check").equals("MoveUpMeasure"))
+			{
+				moveColumns(formBean, "MoveUpMeasure");
+				return mapping.findForward("SelectMeasures");
+			}
 
 			// Move the selected column Down : Step 1 ie Select Columns
 			if(request.getParameter("check") != null && request.getParameter("check").equals("MoveDown"))
 				moveColumns(formBean, "MoveDown");
-
+			if(request.getParameter("check") != null && request.getParameter("check").equals("Step2MoveDown"))
+			{
+				moveColumns(formBean, "Step2MoveDown");
+				return mapping.findForward("SelectRows");
+			}
+			if(request.getParameter("check") != null && request.getParameter("check").equals("MoveDownMeasure"))
+			{
+				moveColumns(formBean, "MoveDownMeasure");
+				return mapping.findForward("SelectMeasures");
+			}
 			
 			// save Report
 			if(request.getParameter("check") != null && request.getParameter("check").equals("SaveReport"))
@@ -234,9 +306,10 @@ public class AdvancedReport extends Action {
 				{
 					if(formBean.getReportTitle().trim().length() == 0)
 					{
-							errors.add("title", new ActionError("error.aim.addActivity.titleMissing"));
+							errors.add("title", new ActionError("error.aim.reportManager.ReportNameAbsent"));
 							saveErrors(request, errors);
 							flag = true;
+							return mapping.findForward("MissingReportDetails");
 					}
 				}
 				
@@ -247,6 +320,8 @@ public class AdvancedReport extends Action {
 					logger.info( " Query 2 :" + queryString);
 					query = session.createQuery(queryString);
 					iter = query.list().iterator();
+					int i = 0;
+					double actCommit = 0, actDisb = 0, unDisb = 0;
 
 					if(query!=null)
 					{
@@ -260,40 +335,62 @@ public class AdvancedReport extends Action {
 								saveErrors(request, errors);
 								found = true;
 								return mapping.findForward("MissingReportDetails");
-								//break;
 							}
 							else
 								found = false;
 						}
 					}
 
-					if(found == false)
+	                if(found == false)
 	                {
 						AmpReports ampReports = new AmpReports();
 						String descr = "/"+formBean.getReportTitle().replaceAll(" " , "");
 						descr = descr + ".do";
 						ampReports.setDescription(descr);
 						ampReports.setName(formBean.getReportTitle());
-					
+						ampReports.setAmpReportId(new Long("0"));
+						
 						// saving the selected columns for the report
 						Set columns = new HashSet();
 						iter = formBean.getAddedColumns().iterator();
+						i = 1;
 						while(iter.hasNext())
 						{
 							AmpColumns cols = (AmpColumns)iter.next();
-							columns.add(cols);
+
+							AmpReportColumn	temp = new AmpReportColumn();
+							temp.setColumn(cols);
+							temp.setOrderId(""+i);
+							columns.add(temp);
+							i = i + 1;
 						}
 						ampReports.setColumns(columns);
 						
-						session.save(ampReports);
-						ampReports.setDescription("/advancedReport.do?view=reset~reportId="+ampReports.getAmpReportId());
-						session.update(ampReports);
-						tx.commit(); // commit the transcation
+						// saving the column hierarchies in step2 
+						Set hierarchies = new HashSet();
+						iter  = formBean.getColumnHierarchie().iterator();
+						i = 1;
+						while(iter.hasNext())
+						{
+							AmpColumns cols = (AmpColumns)iter.next();
+							
+							AmpReportHierarchy reportHierarchy = new AmpReportHierarchy();
+							reportHierarchy.setColumn(cols);
+							reportHierarchy.setLevelId(""+i);
+							hierarchies.add(reportHierarchy);
+							i = i + 1;
+						}
+						ampReports.setHierarchies(hierarchies);
 						
+						session.save(ampReports);
+						tx.commit(); // commit the transcation
+
 						// Clears the values of the Previous report 
 						formBean.setAmpColumns(null);
 						formBean.setAddedColumns(null);
-
+						formBean.setColumnHierarchie(null);
+						formBean.setAddedMeasures(null);
+						
 	                }
 					logger.info("-------------Stop-----------");
 				}
@@ -332,6 +429,7 @@ public class AdvancedReport extends Action {
 		Collection temp = new ArrayList();
 		Collection  dup= new ArrayList();
 		AmpColumns ampColumns;
+		AmpMeasures ampMeasures = null, tempMeasures = null;
 		boolean flag=false;
 		AmpColumns colTemp = null;
 		try
@@ -350,24 +448,42 @@ public class AdvancedReport extends Action {
 					dup = src;
 					coll = dest;
 				}
-
+				
 				for(int i=0; i < selCol.length; i++)
 				{
 					iter = src.iterator();// change needed
 					temp.clear();
 					while(iter.hasNext())
 					{
-						ampColumns = (AmpColumns) iter.next();
-						if(ampColumns.getColumnId().compareTo(selCol[i]) == 0)
+						if(str.equals("AddMeasure") == true || str.equals("DeleteMeasure") == true)
 						{
-							coll.add(ampColumns);
-							colTemp = ampColumns;
-							flag = true;
+							ampMeasures = (AmpMeasures) iter.next();
+							if(ampMeasures.getMeasureId().compareTo(selCol[i]) == 0 )
+							{
+								coll.add(ampMeasures);
+								tempMeasures = ampMeasures;
+								flag = true;
+							}
+							else
+							{
+								if(temp.contains(ampMeasures) == false)
+									temp.add(ampMeasures);
+							}
 						}
 						else
 						{
-							if(temp.contains(ampColumns) == false)
-								temp.add(ampColumns);
+							ampColumns = (AmpColumns) iter.next();
+							if(ampColumns.getColumnId().compareTo(selCol[i]) == 0)
+							{
+								coll.add(ampColumns);
+								colTemp = ampColumns;
+								flag = true;
+							}
+							else
+							{
+								if(temp.contains(ampColumns) == false)
+									temp.add(ampColumns);
+							}
 						}
 					}
 					if(flag == true && colTemp != null)
@@ -376,6 +492,13 @@ public class AdvancedReport extends Action {
 						flag = false;
 						src = dup;
 					}
+					if(flag == true && tempMeasures != null)
+					{
+						dup.remove(tempMeasures);
+						flag = false;
+						src = dup;
+					}
+
 				}
 
 				if(str.equals("add"))
@@ -388,6 +511,28 @@ public class AdvancedReport extends Action {
 					formBean.setAddedColumns(temp);
 					formBean.setAmpColumns(coll);
 				}
+				if(str.equals("Step2AddRows") == true)
+				{
+					formBean.setColumnHierarchie(coll);
+					formBean.setAddedColumns(temp);
+				}
+				if(str.equals("Step2DeleteRows"))
+				{
+					formBean.setColumnHierarchie(temp);
+					formBean.setAddedColumns(coll);
+				}
+			
+				if(str.equals("AddMeasure") == true)
+				{
+					formBean.setAddedMeasures(coll);
+					formBean.setAmpMeasures(temp);
+				}
+				if(str.equals("DeleteMeasure"))
+				{
+					formBean.setAddedMeasures(temp);
+					formBean.setAmpMeasures(coll);
+				}
+
 			}
 		}
 		catch(Exception e)
@@ -403,73 +548,137 @@ public class AdvancedReport extends Action {
 	{
 		Iterator iter= null;
 		AmpColumns ampColumns = null;
+		AmpMeasures ampMeasures  = null;
+		Collection tempColl = new ArrayList();
+
+		if(option.equals("MoveUp") || option.equals("MoveDown"))
+		{
+			tempColl = formBean.getAddedColumns();
+			logger.info("Step1 " + option);
+		}
+		if(option.equals("Step2MoveUp") || option.equals("Step2MoveDown"))
+		{
+			tempColl = formBean.getColumnHierarchie();
+			logger.info("Step2 " + option);
+		}
+		if(option.equals("MoveUpMeasure") || option.equals("MoveDownMeasure"))
+		{
+			tempColl = formBean.getAddedMeasures();
+			logger.info("Step3  : " + option);
+		}
 		
-		logger.info(  formBean.getAddedColumns().size() +" : Move Up : "+ formBean.getMoveColumn());
-		if(formBean.getAddedColumns().size() == 1)
+		
+		if(tempColl.size() == 1)
 			logger.info(" Cannot move field up.......");
 		else
 		{
 			Long lg = new Long(formBean.getMoveColumn());
 			ArrayList temp = new ArrayList();
 			AmpColumns curr = null, prev = null , next = null;
+			AmpMeasures currMeasure, prevMeasure, nextMeasure;
 			int index = 0;
 			
-			temp.addAll(formBean.getAddedColumns());
+			temp.addAll(tempColl);
 			iter = temp.iterator();		
+			logger.info(lg.toString() + " <<< Field Selected >>>> " + formBean.getMoveColumn() + "??????" + tempColl.size());
 			while(iter.hasNext())
 			{
-				ampColumns = (AmpColumns) iter.next();
-				
-				if(option.compareTo("MoveUp") == 0)
+				if(option.equals("MoveUpMeasure")== true || option.equals("MoveDownMeasure")== true)
 				{
-					if(lg.compareTo(ampColumns.getColumnId()) == 0 )
+					ampMeasures = (AmpMeasures) iter.next();
+					if(option.equals("MoveUpMeasure")== true)
 					{
-						logger.info(" Found : " + temp.indexOf(ampColumns));
-						if(temp.indexOf(ampColumns) > 0)
+						if(lg.compareTo(ampMeasures.getMeasureId()) == 0 )
 						{
-							curr = (AmpColumns)temp.get(temp.indexOf(ampColumns));
-							prev = (AmpColumns)temp.get(temp.indexOf(ampColumns)-1);
-							index = temp.indexOf(ampColumns);
-	
-							temp.set(index, prev);
-							temp.set(index-1, curr);
-							formBean.setAddedColumns(temp);
-							break;
-						}
-						else
-						{
-							logger.info("Cannot  Swap.........");
-							break;								
+							if(temp.indexOf(ampMeasures) > 0)
+							{
+								currMeasure = (AmpMeasures)temp.get(temp.indexOf(ampMeasures));
+								prevMeasure = (AmpMeasures)temp.get(temp.indexOf(ampMeasures)-1);
+								index = temp.indexOf(ampMeasures);
+								temp.set(index, prevMeasure);
+								temp.set(index-1, currMeasure);
+								formBean.setAddedMeasures(temp);
+								break;
+							}
 						}
 					}
-				} // This code moves the selected Column Up
-
-				if(option.compareTo("MoveDown") == 0)
-				{
-					if(lg.compareTo(ampColumns.getColumnId()) == 0 )
+					if(option.equals("MoveDownMeasure")== true)
 					{
-						logger.info(" Found : " + temp.indexOf(ampColumns));
-						if( (temp.indexOf(ampColumns)+1) < formBean.getAddedColumns().size())
+						if(lg.compareTo(ampMeasures.getMeasureId()) == 0 )
 						{
-							curr = (AmpColumns)temp.get(temp.indexOf(ampColumns));
-							next = (AmpColumns)temp.get(temp.indexOf(ampColumns)+1);
-							index = temp.indexOf(ampColumns);
-							temp.set(index, next);
-							temp.set(index+1, curr);
-							formBean.setAddedColumns(temp);
-							break;
-						}
-						else
-						{
-							logger.info("Cannot  Swap.........");
-							break;								
+							if( (temp.indexOf(ampMeasures)+1) < tempColl.size() )
+							{
+								currMeasure = (AmpMeasures)temp.get(temp.indexOf(ampMeasures));
+								nextMeasure = (AmpMeasures)temp.get(temp.indexOf(ampMeasures)+1);
+								index = temp.indexOf(ampMeasures);
+								temp.set(index, nextMeasure);
+								temp.set(index+1, currMeasure);
+								formBean.setAddedMeasures(temp);
+								break;
+							}
 						}
 					}
-				} // This code moves the selected Column Down
 
+				}
+				else
+				{
+					ampColumns = (AmpColumns) iter.next();
+					
+					if(option.compareTo("MoveUp") == 0 || option.compareTo("Step2MoveUp") == 0)
+					{
+						if(lg.compareTo(ampColumns.getColumnId()) == 0 )
+						{
+							if(temp.indexOf(ampColumns) > 0)
+							{
+								curr = (AmpColumns)temp.get(temp.indexOf(ampColumns));
+								prev = (AmpColumns)temp.get(temp.indexOf(ampColumns)-1);
+								index = temp.indexOf(ampColumns);
+		
+								temp.set(index, prev);
+								temp.set(index-1, curr);
+								if(option.equals("MoveUp"))
+									formBean.setAddedColumns(temp);
+								if(option.equals("Step2MoveUp"))
+									formBean.setColumnHierarchie(temp);
+								break;
+							}
+							else
+							{
+								logger.info("Cannot  Swap.........");
+								break;								
+							}
+						}
+					} // This code moves the selected Column Up
+					
+					if(option.compareTo("MoveDown") == 0 || option.compareTo("Step2MoveDown") == 0)
+					{
+						if(lg.compareTo(ampColumns.getColumnId()) == 0 )
+						{
+							logger.info(" Found : " + temp.indexOf(ampColumns));
+							if( (temp.indexOf(ampColumns)+1) < tempColl.size())
+							{
+								curr = (AmpColumns)temp.get(temp.indexOf(ampColumns));
+								next = (AmpColumns)temp.get(temp.indexOf(ampColumns)+1);
+								index = temp.indexOf(ampColumns);
+								temp.set(index, next);
+								temp.set(index+1, curr);
+								if(option.equals("MoveDown"))
+									formBean.setAddedColumns(temp);
+								if(option.equals("Step2MoveDown"))
+									formBean.setColumnHierarchie(temp);
+								
+								break;
+							}
+							else
+							{
+								logger.info("Cannot  Swap.........");
+								break;								
+							}
+						}
+					} // This code moves the selected Column Down
+				}				
 			}
 		}
-
 	}
-
+	
 }

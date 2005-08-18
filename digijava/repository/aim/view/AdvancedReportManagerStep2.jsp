@@ -56,9 +56,23 @@ function gotoStep() {
 									<digi:trn key="aim:clickToGotoStep1">Click here to goto Step 1</digi:trn>
 								</bean:define>
 
-								<digi:link href="/advancedReportManager.do?check=add" styleClass="comment" title="<%=translation%>" >
+								<digi:link href="/advancedReportManager.do?check=forward" styleClass="comment" title="<%=translation%>" >
 								<digi:trn key="aim:reportBuilder:selectcolumn">
 									Report Builder : Select Column
+								</digi:trn>					
+								&gt;&gt;		
+								</digi:link>&nbsp;&nbsp;
+
+								<digi:link href="/advancedReportManager.do?check=SelectRows" styleClass="comment" title="<%=translation%>" >
+								<digi:trn key="aim:reportBuilder:selectrows">
+									Report Builder : Select Rows
+								</digi:trn>					
+								&gt;&gt;		
+								</digi:link>&nbsp;&nbsp;
+
+								<digi:link href="/advancedReportManager.do?check=SelectMeasuress" styleClass="comment" title="<%=translation%>" >
+								<digi:trn key="aim:reportBuilder:selectmeasures">
+									Report Builder : Select Measures
 								</digi:trn>					
 								&gt;&gt;		
 								</digi:link>&nbsp;&nbsp;
@@ -107,7 +121,7 @@ function gotoStep() {
 													<bean:define id="translation">
 														<digi:trn key="aim:clickToSelectColumns">Click here to Select Columns</digi:trn>
 													</bean:define>
-													<digi:link href="/advancedReportManager.do?check=add"   styleClass="sub-nav" title="<%=translation%>" >
+													<digi:link href="/advancedReportManager.do?check=forward"   styleClass="sub-nav" title="<%=translation%>" >
 														1 :   Select Columns
 													</digi:link>
 												</td>											
@@ -115,7 +129,7 @@ function gotoStep() {
 													<bean:define id="translation">
 														<digi:trn key="aim:clickToselectrows/hierarchies">Click here to select rows/hierarchies</digi:trn>
 													</bean:define>
-													<digi:link href="/advancedReportManager.do"  styleClass="sub-nav" title="<%=translation%>" >
+													<digi:link href="/advancedReportManager.do?check=SelectRows"  styleClass="sub-nav" title="<%=translation%>" >
 														2 : <digi:trn key="aim:SelectRows/hierarchies">Select rows/hierarchies</digi:trn>
 													</digi:link>
 												</td>										
@@ -123,7 +137,7 @@ function gotoStep() {
 													<bean:define id="translation">
 														<digi:trn key="aim:clickToSelectMeasures">Click here to Select Measures</digi:trn>
 													</bean:define>
-													<digi:link href="/advancedReportManager.do"  styleClass="sub-nav" title="<%=translation%>" > 
+													<digi:link href="/advancedReportManager.do?check=SelectMeasures"  styleClass="sub-nav" title="<%=translation%>" > 
 													3 : <digi:trn key="aim:SelectMeasures">Select Measures</digi:trn>
 													</digi:link>
 												</td>											
@@ -177,10 +191,10 @@ function gotoStep() {
 															<TABLE width="700" cellPadding=2 cellSpacing=0 vAlign="top" align="top" bgColor=#f4f4f2 border=1
 															style="border-collapse: collapse">
 															    <tr bgcolor="#cccccc">
-															    <c:if test="${!empty aimAdvancedReportForm.addedColumns}">
-																<logic:iterate name="aimAdvancedReportForm" id="addedColumns"	property="addedColumns" >
+															    <c:if test="${!empty aimAdvancedReportForm.columnHierarchie}">
+																<logic:iterate name="aimAdvancedReportForm" id="columnHierarchie"	property="columnHierarchie" >
 																	<td align="center"  class=box-title width=100 >
-																		<c:out value="${addedColumns.aliasName}"/>
+																		<c:out value="${columnHierarchie.aliasName}"/>
 																	</td>
 																</logic:iterate>
 																</c:if>
@@ -190,43 +204,43 @@ function gotoStep() {
 																<c:if test="${!empty aimAdvancedReportForm.finalData}">
 																<logic:iterate name="aimAdvancedReportForm" id="finalData" property="finalData" type="org.digijava.module.aim.helper.Report">
 															    	<tr>
-																		<logic:iterate name="aimAdvancedReportForm" id="addedColumns"	property="addedColumns" >
-																		<c:if test="${addedColumns.columnName == 'activity name'}">
+																		<logic:iterate name="aimAdvancedReportForm" id="columnHierarchie"	property="columnHierarchie" >
+																		<c:if test="${columnHierarchie.columnName == 'activity name'}">
 																			<td align="left"  width=100 >
 																				<bean:write name="finalData" property="title" /> 
 																			</td>
 																		</c:if>
-																		<c:if test="${addedColumns.columnName == 'level name'}">
+																		<c:if test="${columnHierarchie.columnName == 'level name'}">
 																			<td align="left"  width=100 >
 																				<bean:write name="finalData" property="level" /> 
 																			</td>
 																		</c:if>
-																		<c:if test="${addedColumns.columnName == 'actual start date'}">
+																		<c:if test="${columnHierarchie.columnName == 'actual start date'}">
 																			<td align="left"   width=100 >
 																				<bean:write name="finalData" property="startDate" /> 
 																			</td>
 																		</c:if>
-																		<c:if test="${addedColumns.columnName == 'actual completion date'}">
+																		<c:if test="${columnHierarchie.columnName == 'actual completion date'}">
 																			<td align="left"   width=100 >
 																				<bean:write name="finalData" property="closeDate" /> 
 																			</td>
 																		</c:if>
-																		<c:if test="${addedColumns.columnName == 'actual commitment'}">
+																		<c:if test="${columnHierarchie.columnName == 'actual commitment'}">
 																			<td align="right"   width=100 >
 																				<bean:write name="finalData" property="acCommitment" />
 																			</td>
 																		</c:if>
-																		<c:if test="${addedColumns.columnName == 'donor name'}">
+																		<c:if test="${columnHierarchie.columnName == 'donor name'}">
 																			<td align="left"  width=100 >
 																				<bean:write name="finalData" property="donor" /> 
 																			</td>
 																		</c:if>
-																		<c:if test="${addedColumns.columnName == 'status name'}">
+																		<c:if test="${columnHierarchie.columnName == 'status name'}">
 																			<td align="left"  width=100 >
 																				<bean:write name="finalData" property="status" /> 
 																			</td>
 																		</c:if>
-																		<c:if test="${addedColumns.columnName == 'term assist name'}">
+																		<c:if test="${columnHierarchie.columnName == 'term assist name'}">
 																			<td align="left" width="100">
 																				<logic:empty name="finalData" property="assistance">&nbsp;
 																				</logic:empty>

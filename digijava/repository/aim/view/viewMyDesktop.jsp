@@ -553,7 +553,7 @@ function showtip()
 												<bean:define id="translation">
 													<digi:trn key="aim:createAdvancedReport">Create Advanced Report </digi:trn>
 							  				 	</bean:define>
-												<digi:link href="/advancedReportManager.do" title="<%=translation%>">
+												<digi:link href="/advancedReportManager.do?clear=true" title="<%=translation%>">
 													<b> Advanced Report Manager	</b>
 												</digi:link>
 											</td>

@@ -195,6 +195,56 @@ A.sub-nav
 	TEXT-DECORATION: none
 }
 
+A.sub-nav3
+{
+	PADDING-RIGHT: 9px; 
+	PADDING-LEFT: 20px; 
+	FONT-WEIGHT: normal; 
+	FONT-SIZE: 11px; 
+	PADDING-BOTTOM: 3px; 
+	TEXT-TRANSFORM: uppercase; 
+	COLOR: #f4f4f2; 
+	PADDING-TOP: 3px; 
+	WHITE-SPACE: nowrap; 
+	LETTER-SPACING: 0px; 
+	HEIGHT: 20px; 
+	BACKGROUND-COLOR: #3754a1; 
+	TEXT-DECORATION: none
+}
+
+A.sub-nav3:visited
+{
+	PADDING-RIGHT: 9px; 
+	PADDING-LEFT: 20px; 
+	FONT-WEIGHT: normal; 
+	FONT-SIZE: 11px; 
+	PADDING-BOTTOM: 3px; 
+	TEXT-TRANSFORM: uppercase; 
+	COLOR: #f4f4f2; 
+	PADDING-TOP: 3px; 
+	WHITE-SPACE: nowrap; 
+	LETTER-SPACING: 0px; 
+	HEIGHT: 20px; 
+	BACKGROUND-COLOR: #333366; 
+	TEXT-DECORATION: none
+}
+A.sub-nav3:hover 
+{
+	PADDING-RIGHT: 9px; 
+	PADDING-LEFT: 20px; 
+	FONT-WEIGHT: normal; 
+	FONT-SIZE: 11px; 
+	PADDING-BOTTOM: 3px; 
+	TEXT-TRANSFORM: uppercase; 
+	COLOR: #fdfdfa; 
+	PADDING-TOP: 3px; 
+	WHITE-SPACE: nowrap; 
+	LETTER-SPACING: 0px; 
+	HEIGHT: 20px; 
+	BACKGROUND-COLOR: #222e5d; 
+	TEXT-DECORATION: none
+}
+
 A.sub-nav:visited 
 {
 	PADDING-RIGHT: 9px; 

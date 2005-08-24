@@ -144,7 +144,7 @@ function deleteColumn()
 													<bean:define id="translation">
 														<digi:trn key="aim:clickToSelectColumns">Click here to Select Columns</digi:trn>
 													</bean:define>
-													<digi:link href="/advancedReportManager.do/check=forward"   styleClass="sub-nav" title="<%=translation%>" >
+													<digi:link href="/advancedReportManager.do/check=forward" styleClass="sub-nav3" title="<%=translation%>"  >
 														1 :   Select Columns
 													</digi:link>
 												</td>											

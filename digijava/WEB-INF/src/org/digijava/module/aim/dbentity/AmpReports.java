@@ -19,7 +19,14 @@ public class AmpReports implements Comparable {
 
 	private Set columns;
 	private Set hierarchies;
+	private Set measures;
 	
+	public Set getMeasures() {
+		return measures;
+	}
+	public void setMeasures(Set measures) {
+		this.measures = measures;
+	}
 	public Set getColumns() {
 		return columns;
 	}

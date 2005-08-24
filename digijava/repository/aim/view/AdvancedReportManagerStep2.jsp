@@ -159,7 +159,7 @@ function gotoStep() {
 										<bean:define id="translation">
 											<digi:trn key="aim:clickToGenerateReport">Click here to Generate Reports</digi:trn>
 										</bean:define>
-										<digi:link href="/advancedReportManager.do?check=5"  styleClass="sub-nav" title="<%=translation%>" >
+										<digi:link href="/advancedReportManager.do?check=5"  styleClass="sub-nav3" title="<%=translation%>" >
 										5 : <digi:trn key="aim:GenerateReport">Generate Report</digi:trn>
 										</digi:link>
 										</td>	

@@ -26,14 +26,13 @@ import org.digijava.module.aim.dbentity.AmpColumns;
 import org.digijava.module.aim.dbentity.AmpMeasures;
 import org.digijava.module.aim.dbentity.AmpReportColumn;
 import org.digijava.module.aim.dbentity.AmpReportHierarchy;
+import org.digijava.module.aim.dbentity.AmpReportMeasures;
 import org.digijava.module.aim.dbentity.AmpReports;
 import org.digijava.kernel.persistence.PersistenceManager;
 
-import org.jfree.data.*;
+
 import org.jfree.chart.*;
-import org.jfree.chart.axis.*;
 import org.jfree.chart.plot.*;
-import org.jfree.ui.RectangleInsets;
 import org.jfree.chart.entity.*;
 import org.jfree.chart.labels.*;
 import org.jfree.chart.urls.*;
@@ -66,13 +65,11 @@ public class AdvancedReport extends Action {
 		Query query;
 		Session session = null;
 		Transaction tx = null;
-		String sqlQuery;
+		String sqlQuery;		
 		Iterator iter;
 		Collection coll = new ArrayList();
-		AmpColumns ampColumns;
 		TeamMember teamMember=(TeamMember)httpSession.getAttribute("currentMember");
 
-		
 		if(teamMember==null)
 			return mapping.findForward("index");
 		Long ampTeamId=teamMember.getTeamId();
@@ -95,6 +92,19 @@ public class AdvancedReport extends Action {
 		{
 			session = PersistenceManager.getSession();
 			tx = session.beginTransaction();
+
+			// clears all the values once portfolio is clicked
+			if( request.getParameter("clear") != null && request.getParameter("clear").equals("true"))
+			{
+				logger.info("from ViewMyDesktop");
+				formBean.setAmpColumns(null);
+				formBean.setAddedColumns(null);
+				formBean.setColumnHierarchie(null);
+				formBean.setAddedMeasures(null);
+				formBean.setReportTitle("");
+			}
+
+			
 			// Fills the column that can be selected from AMP_COLUMNS
 			if(formBean.getAmpColumns() == null)
 			{
@@ -104,8 +114,6 @@ public class AdvancedReport extends Action {
 			}
 			else
 				logger.info(" AmpColumns is not NULL........");
-			
-			// add columns that are available
 			
 			// add columns that are available
 			if(request.getParameter("check") != null && request.getParameter("check").equals("add"))
@@ -321,8 +329,6 @@ public class AdvancedReport extends Action {
 					query = session.createQuery(queryString);
 					iter = query.list().iterator();
 					int i = 0;
-					double actCommit = 0, actDisb = 0, unDisb = 0;
-
 					if(query!=null)
 					{
 						iter = query.list().iterator();
@@ -382,8 +388,27 @@ public class AdvancedReport extends Action {
 						}
 						ampReports.setHierarchies(hierarchies);
 						
+						logger.info("********************** " + formBean.getAddedMeasures().size());
+						// saving the AMp Report Measures
+						Set measures = new HashSet();
+						iter = formBean.getAddedMeasures().iterator();
+						i = 1;
+						while(iter.hasNext())
+						{
+							AmpMeasures ampMeasures = (AmpMeasures) iter.next();
+							AmpReportMeasures reportMeasure = new AmpReportMeasures();
+							reportMeasure.setMeasure(ampMeasures);
+							reportMeasure.setOrderId(""+i);
+							measures.add(reportMeasure);
+							i = i + 1;
+						}
+						ampReports.setMeasures(measures);
+						
 						session.save(ampReports);
 						tx.commit(); // commit the transcation
+
+						ampReports.setDescription("/advancedReport.do?view=reset~reportId="+ampReports.getAmpReportId());
+						session.update(ampReports);
 
 						// Clears the values of the Previous report 
 						formBean.setAmpColumns(null);

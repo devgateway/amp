@@ -245,6 +245,15 @@ A.sub-nav3:hover
 	TEXT-DECORATION: none
 }
 
+.sub-nav3-selected 
+{
+	FONT-WEIGHT: normal; 
+	FONT-SIZE: 10px; 
+	TEXT-TRANSFORM: uppercase; 
+	COLOR: #fdfdfa; 
+	WHITE-SPACE: nowrap
+}
+
 A.sub-nav:visited 
 {
 	PADDING-RIGHT: 9px; 

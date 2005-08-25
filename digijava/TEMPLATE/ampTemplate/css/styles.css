@@ -195,7 +195,7 @@ A.sub-nav
 	TEXT-DECORATION: none
 }
 
-A.sub-nav3
+A.sub-nav3 
 {
 	PADDING-RIGHT: 9px; 
 	PADDING-LEFT: 20px; 
@@ -208,11 +208,11 @@ A.sub-nav3
 	WHITE-SPACE: nowrap; 
 	LETTER-SPACING: 0px; 
 	HEIGHT: 20px; 
-	BACKGROUND-COLOR: #3754a1; 
+	BACKGROUND-COLOR: #333366; 
 	TEXT-DECORATION: none
 }
 
-A.sub-nav3:visited
+A.sub-nav3:visited 
 {
 	PADDING-RIGHT: 9px; 
 	PADDING-LEFT: 20px; 
@@ -241,17 +241,42 @@ A.sub-nav3:hover
 	WHITE-SPACE: nowrap; 
 	LETTER-SPACING: 0px; 
 	HEIGHT: 20px; 
-	BACKGROUND-COLOR: #222e5d; 
+	BACKGROUND-COLOR: #333366; 
+	TEXT-DECORATION: none
+}
+
+.sub-nav3 
+{
+	PADDING-RIGHT: 9px; 
+	PADDING-LEFT: 20px; 
+	FONT-WEIGHT: normal; 
+	FONT-SIZE: 11px; 
+	PADDING-BOTTOM: 3px; 
+	TEXT-TRANSFORM: uppercase; 
+	COLOR: #f4f4f2; 
+	PADDING-TOP: 3px; 
+	WHITE-SPACE: nowrap; 
+	LETTER-SPACING: 0px; 
+	HEIGHT: 20px; 
+	BACKGROUND-COLOR: #333366; 
 	TEXT-DECORATION: none
 }
 
 .sub-nav3-selected 
 {
+	PADDING-RIGHT: 9px; 
+	PADDING-LEFT: 20px; 
+	PADDING-BOTTOM: 3px; 
+	PADDING-TOP: 3px;
 	FONT-WEIGHT: normal; 
 	FONT-SIZE: 10px; 
 	TEXT-TRANSFORM: uppercase; 
 	COLOR: #fdfdfa; 
-	WHITE-SPACE: nowrap
+	WHITE-SPACE: nowrap; 
+	LETTER-SPACING: 0px; 
+	HEIGHT: 20px; 
+	TEXT-DECORATION: none
+	BACKGROUND-COLOR: #333366; 
 }
 
 A.sub-nav:visited 

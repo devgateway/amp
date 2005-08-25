@@ -193,7 +193,7 @@ function deleteColumn()
 										<bean:define id="translation">
 											<digi:trn key="aim:clickToGenerateReport">Click here to Generate Chart</digi:trn>
 										</bean:define>
-										<digi:link href="/advancedReportManager.do?check=3"  styleClass="sub-nav" title="<%=translation%>" >
+										<digi:link href="/advancedReportManager.do?check=charts"  styleClass="sub-nav" title="<%=translation%>" >
 										6 : <digi:trn key="aim:GenerateChart">Generate Chart</digi:trn>
 										</digi:link>
 										</td>	

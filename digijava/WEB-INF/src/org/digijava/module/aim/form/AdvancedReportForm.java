@@ -24,15 +24,25 @@ public class AdvancedReportForm extends ActionForm
 	private Collection addedMeasures = null;
 	private Collection columnHierarchie = null; // contains the columns that have been added.
 	
-	private String imageUrl="";
+	private String pieImageUrl="";
+	private String barImageUrl="";
 	
-	public String getImageUrl()
+	public String getPieImageUrl()
 	{
-		return imageUrl;
+		return pieImageUrl;
 	}
-	public void setImageUrl(String str)
+	public void setPieImageUrl(String str)
 	{
-		imageUrl=str;
+		pieImageUrl=str;
+	}
+
+	public String getBarImageUrl()
+	{
+		return barImageUrl;
+	}
+	public void setBarImageUrl(String str)
+	{
+		barImageUrl=str;
 	}
 
 	public String getMoveColumn() {

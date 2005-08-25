@@ -10,7 +10,7 @@
 <script language="JavaScript">
 function gotoStep() {
 
-	<digi:context name="step" property="context/module/moduleinstance/advancedReportManager.do?check=3" />
+	<digi:context name="step" property="context/module/moduleinstance/advancedReportManager.do?check=charts" />
 	document.aimAdvancedReportForm.action = "<%= step %>";
 	document.aimAdvancedReportForm.target = "_self";
 	document.aimAdvancedReportForm.submit();
@@ -167,7 +167,7 @@ function gotoStep() {
 										<bean:define id="translation">
 											<digi:trn key="aim:clickToGenerateReport">Click here to Generate Chart</digi:trn>
 										</bean:define>
-										<digi:link href="/advancedReportManager.do?check=3"  styleClass="sub-nav" title="<%=translation%>" >
+										<digi:link href="/advancedReportManager.do?check=charts"  styleClass="sub-nav" title="<%=translation%>" >
 										6 : <digi:trn key="aim:GenerateChart">Generate Chart</digi:trn>
 										</digi:link>
 										</td>	

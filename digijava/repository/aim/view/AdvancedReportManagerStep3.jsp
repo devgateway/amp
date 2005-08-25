@@ -174,7 +174,7 @@
 										<bean:define id="translation">
 											<digi:trn key="aim:clickToGenerateReport">Click here to Generate Chart</digi:trn>
 										</bean:define>
-										<digi:link href="/advancedReportManager.do?check=3"  styleClass="sub-nav3" title="<%=translation%>" >
+										<digi:link href="/advancedReportManager.do?check=charts"  styleClass="sub-nav3" title="<%=translation%>" >
 										6 : <digi:trn key="aim:GenerateChart">Generate Chart</digi:trn>
 										</digi:link>
 										</td>	
@@ -212,19 +212,30 @@
 																<TD bgcolor="#f4f4f4" height=200 align="center">
 																<br>
 																<digi:link href="" onclick="popup_chart(); return false;"></digi:link>
-																<b>::: Pie CHART Image:::</b><br>
+																<b>::: Pie CHART Image :::</b><br>
 																<br>
 																<bean:define id="fName">
-																	<c:out value="${aimAdvancedReportForm.imageUrl}"/>
+																	<c:out value="${aimAdvancedReportForm.pieImageUrl}"/>
 																</bean:define>
 																<%	
-																String graphURL = request.getContextPath() + "/aim/DisplayChart.img?filename="+fName;
+																String piegraphURL = request.getContextPath() + "/aim/DisplayChart.img?filename="+fName;
 																%>
 
-																<!-- CHART : <%=graphURL%> -->
 																<br>
-																<img src=<%=graphURL%> border="1">
+																<img src=<%=piegraphURL%> border="1">
+																<br><br><br>
+																<b>::: Bar CHART Image :::</b><br>
 																<br>
+																<bean:define id="brName">
+																	<c:out value="${aimAdvancedReportForm.barImageUrl}"/>
+																</bean:define>
+																<%	
+																String bargraphURL = request.getContextPath() + "/aim/DisplayChart.img?filename="+brName;
+																%>
+
+																<br>
+																<img src=<%=bargraphURL%> border="1">
+
 																<br><br>
 																<input type=button name=back value="<< Previous"   class="dr-menu" onclick="javascript:history.back()">						
 																<input type="button" onclick="popup_chart()" value="Create Pie-Chart PDF" class="dr-menu"> 

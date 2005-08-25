@@ -38,6 +38,8 @@ import org.jfree.chart.labels.*;
 import org.jfree.chart.urls.*;
 import org.jfree.chart.servlet.*;
 import org.jfree.data.general.DefaultPieDataset;
+import org.jfree.data.category.DefaultCategoryDataset;
+import org.jfree.data.category.*;
 
 import net.sf.hibernate.Query;
 import net.sf.hibernate.Session;
@@ -56,12 +58,14 @@ public class AdvancedReport extends Action {
 
 	private static Logger logger = Logger.getLogger(Login.class);
 	private String str="";
+	static HttpSession httpSession= null;
+
 	public ActionForward execute(ActionMapping mapping, ActionForm form, 
 			HttpServletRequest request, HttpServletResponse response) throws java.lang.Exception
 	{
 		AdvancedReportForm formBean = (AdvancedReportForm) form;
 		
-		HttpSession httpSession = request.getSession();
+		httpSession = request.getSession();
 		Query query;
 		Session session = null;
 		Transaction tx = null;
@@ -201,7 +205,7 @@ public class AdvancedReport extends Action {
 				return mapping.findForward("SelectMeasures");
 
 			// step 3 : 
-			if(request.getParameter("check") != null && request.getParameter("check").equals("3"))
+			if(request.getParameter("check") != null && request.getParameter("check").equals("charts"))
 			{
 				logger.info("In here  chart process####..........");
 
@@ -210,64 +214,30 @@ public class AdvancedReport extends Action {
 		        Iterator iter2 = formBean.getFinalData().iterator();
 		        
 		        Collection chart_coll=new ArrayList();
-		    	chart_coll.add("60");
-		    	chart_coll.add("Donor 1");
+		    	//chart_coll.add("60");
+		    	//chart_coll.add("Donor 1");
 
 				while(iter2.hasNext()){
 					Report r= (Report) iter2.next();
 					chart_coll.add(r.getAcCommitment().replaceAll("," , ""));
-					logger.info("filling COMM into the COLLLLL."+r.getAcCommitment());
+//					logger.info("filling COMM into the COLLLLL."+r.getAcCommitment());
 					chart_coll.add(r.getDonor());
 					//logger.info("filling DONOR NAME into the COLLLLL."+r.getDonor());
 				}
 				
-				
-				Iterator iter3 = chart_coll.iterator();
-				//logger.info("@@@@@@@@@@ flag:"+chart_coll.size());
-				String temp="";
-				Double demp;
+				// calling Piechart
+				String piechartname=createPieChart(chart_coll);
+				//logger.info("@@@@@@@@@@IMAGE FILE NAME:"+piechartname);
+				formBean.setPieImageUrl(piechartname);
 
-				DefaultPieDataset data = new DefaultPieDataset();
-//		        data.setValue("test12Aug", new Double(2.0));
-		        
-				while (iter3.hasNext()) {
-					demp=new Double(iter3.next().toString());
-					temp= (String)iter3.next();
-					//logger.info(temp+":::::"+demp);
-					data.setValue(temp, demp);
-//					iter.next();
-		        }
-
-		        //  Create the chart object
-				//logger.info("@@@@@@@@@@ PLOTTTTTTT:");
-		        PiePlot plot = new PiePlot(data);
-		        plot.setURLGenerator(new StandardPieURLGenerator("xy_chart.jsp","section"));
-		        plot.setToolTipGenerator(new StandardPieItemLabelGenerator());
-				//logger.info("@@@@@@@@@@ Chart Object:");
-				JFreeChart chart = new JFreeChart("", JFreeChart.DEFAULT_TITLE_FONT, plot, true);
-		        chart.setBackgroundPaint(java.awt.Color.white);
-
-		        //  Write the chart image to the temporary directory
-		        ChartRenderingInfo info = new ChartRenderingInfo(new StandardEntityCollection());
-		        String filename = "";
-		        try{
-				//logger.info("@@@@@@@@@@ IMAGE CREATION PNG:");
-				filename = ServletUtilities.saveChartAsJPEG(chart, 600, 550, info, httpSession);
-
-				//logger.info("@@@@@@@@@@IMAGE FILE NAME:"+filename);
-
-				formBean.setImageUrl(filename);
-//				ServletUtilities.sendTempFile(filename, response);
-				}
-				catch(Exception e)
-				{
-					//logger.info("EXCEPTION thrown at image:"+e);				
-				}
-				
+				// calling Barchart
+				String barchartname=createBarChart(chart_coll);
+				//logger.info("@@@@@@@@@@IMAGE FILE NAME:"+piechartname);
+				formBean.setBarImageUrl(barchartname);
 
 				return mapping.findForward("GenerateChart");
 			}
-			
+
 
 			// Step 4 : Report Details
 			if(request.getParameter("check") != null && request.getParameter("check").equals("4"))
@@ -441,7 +411,99 @@ public class AdvancedReport extends Action {
 		return mapping.findForward("forward");
 	}// end of function execute
 	
+// Function for Pie Chart
+		private static String createPieChart(Collection chart_coll){
+
+				logger.info("@@@@@@@@@@ INSIDE createPieChart...");
+				Iterator iter3 = chart_coll.iterator();
+				//logger.info("@@@@@@@@@@ flag:"+chart_coll.size());
+				String temp="";
+				Double demp;
+
+				DefaultPieDataset data = new DefaultPieDataset();
+//		        data.setValue("test12Aug", new Double(2.0));
+		        
+				while (iter3.hasNext()) {
+					demp=new Double(iter3.next().toString());
+					temp= (String)iter3.next();
+					//logger.info(temp+":::::"+demp);
+					data.setValue(temp, demp);
+//					iter.next();
+		        }
+
+		        //  Create the chart object
+				//logger.info("@@@@@@@@@@ PLOTTTTTTT:");
+		        PiePlot plot = new PiePlot(data);
+		        plot.setURLGenerator(new StandardPieURLGenerator("xy_chart.jsp","section"));
+		        plot.setToolTipGenerator(new StandardPieItemLabelGenerator());
+				//logger.info("@@@@@@@@@@ Chart Object:");
+				JFreeChart chart = new JFreeChart("", JFreeChart.DEFAULT_TITLE_FONT, plot, true);
+		        chart.setBackgroundPaint(java.awt.Color.white);
+
+		        //  Write the chart image to the temporary directory
+		        ChartRenderingInfo info = new ChartRenderingInfo(new StandardEntityCollection());
+		        String filename = "";
+		        try{
+				//logger.info("@@@@@@@@@@ IMAGE CREATION PNG:");
+				filename = ServletUtilities.saveChartAsPNG(chart, 600, 550, info, httpSession);
+//				ServletUtilities.sendTempFile(filename, response);
+				}
+				catch(Exception e){
+					logger.info("EXCEPTION thrown at PIECHARTimage: "+e);				
+				}
+
+			return filename;
+		}
+// end pie chart function.
+
+// Function for BarChart
+		private static String createBarChart(Collection chart_coll){
+
+			logger.info("@@@@@@@@@@ INSIDE createBARRRRRR Chart...");
+
+			String filename = null;
+			DefaultCategoryDataset data = new DefaultCategoryDataset(); 
+	        Iterator iter = chart_coll.iterator();
+			////System.out.println("@@@@@@@@@@ flag:"+chart_coll.size());
+
+//			data.addValue(new Double(30.0), "CDAC", "");
+			
+			String temp="";
+			Double demp;
+
+			while (iter.hasNext()) {
+				demp=new Double(iter.next().toString());
+				temp= (String)iter.next();
+				//System.out.println(temp+":::::"+demp);
+
+				data.addValue(demp,temp,"");
+	        }
+
+		// Create the chart object 
+
+			CategoryDataset categorydataset = new DefaultCategoryDataset();
+			categorydataset = data;
+			
+			JFreeChart jfreechart = ChartFactory.createBarChart("Bar Chart", "Donors", "Actual Commitment (in US$)", categorydataset, PlotOrientation.VERTICAL, true, true, true);
+			jfreechart.setBackgroundPaint(java.awt.Color.white);
+			
+			// Write the chart image to the temporary directory 
+			ChartRenderingInfo info = new ChartRenderingInfo(new StandardEntityCollection());
 	
+			try{
+			filename = ServletUtilities.saveChartAsPNG(jfreechart, 600, 500, info, httpSession);
+			}
+			catch(Exception e){
+					logger.info("EXCEPTION thrown at image:"+e);				
+			}
+
+//			//System.out.println("@@@@@@@@@@IMAGE FILE NAME:"+filename);
+
+			return filename;
+		}
+// end barchart function.
+
+
 	public void updateData(Collection src, Collection dest, Long []selCol, AdvancedReportForm formBean)
 	{
 		if(str.equals("delete"))
@@ -565,7 +627,6 @@ public class AdvancedReport extends Action {
 			e.printStackTrace(System.out);
 		}
 	}// end of Function ...........
-	
 	
 	// Function to move Columns Up and Down
 	

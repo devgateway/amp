@@ -75,7 +75,9 @@ public class EditActivity extends Action {
 		if (session.getAttribute("currentMember") == null)
 			return mapping.findForward("index");
 		
-		EditActivityForm eaForm = (EditActivityForm) form; // form bean instance		
+		EditActivityForm eaForm = (EditActivityForm) form; // form bean instance
+		
+		try {
 		
 		// Checking whether the activity is already opened for editing
 		// by some other user
@@ -534,6 +536,9 @@ public class EditActivity extends Action {
 					}
 				}
 			}
+		}
+		} catch (Exception e) {
+			e.printStackTrace(System.out);
 		}
 
 		return mapping.findForward("forward");

@@ -15,6 +15,8 @@ import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
+import org.digijava.kernel.request.Site;
+import org.digijava.kernel.util.RequestUtils;
 import org.digijava.kernel.util.UserUtils;
 import org.digijava.module.aim.dbentity.AmpApplicationSettings;
 import org.digijava.module.aim.dbentity.AmpTeam;
@@ -136,35 +138,11 @@ public class UpdateTeamMembers extends Action {
 			} else if (upForm.getAction() != null
 					&& upForm.getAction().trim().equals("delete")) {
 				logger.debug("In delete team member");
-				AmpTeamMember ampMember = new AmpTeamMember();
-				ampMember.setAmpTeamMemId(upForm.getTeamMemberId());
-
-				AmpTeamMember ampTeamHead = DbUtil.getTeamHead(ampTeam
-						.getAmpTeamId());
-				if (ampTeamHead != null) {
-					if (ampTeamHead.getAmpTeamMemId().equals(
-							upForm.getTeamMemberId())) {
-						logger.debug("team lead set to null");
-						ampTeam.setTeamLead(null);
-					} else {
-						logger.debug("team lead remains same = "
-								+ ampTeamHead.getUser().getName());
-						ampTeam.setTeamLead(ampTeamHead);
-					}
-					DbUtil.update(ampTeam);
-				}
-				AmpApplicationSettings ampAppSettings = DbUtil
-						.getMemberAppSettings(upForm.getTeamMemberId());
-				if (ampAppSettings == null) {
-					logger.debug("ampAppSettings is null");
-				} else {
-					logger.debug("got ampAppSettings");
-				}
-				DbUtil.delete(ampAppSettings);
-				logger.debug("AppSettings deleted");
-				DbUtil.delete(ampMember);
-				logger.debug("TeamMember deleted");
-
+				Long selMembers[] = new Long[1];
+				selMembers[0] = upForm.getTeamMemberId();
+				Site site = RequestUtils.getSite(request);
+				TeamUtil.removeTeamMembers(selMembers,site.getId());
+				
 				if (ampTeam != null) {
 					request.setAttribute("teamId", ampTeam.getAmpTeamId());
 					return mapping.findForward("forward");

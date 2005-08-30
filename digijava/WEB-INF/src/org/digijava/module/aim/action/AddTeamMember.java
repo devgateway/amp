@@ -6,7 +6,6 @@ package org.digijava.module.aim.action;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
 import org.apache.struts.action.Action;
@@ -15,7 +14,9 @@ import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
+import org.digijava.kernel.request.Site;
 import org.digijava.kernel.user.User;
+import org.digijava.kernel.util.RequestUtils;
 import org.digijava.module.aim.dbentity.AmpApplicationSettings;
 import org.digijava.module.aim.dbentity.AmpTeam;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
@@ -36,8 +37,6 @@ public class AddTeamMember extends Action {
 	public ActionForward execute(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response)
 			throws java.lang.Exception {
-
-		HttpSession session = request.getSession();
 
 		TeamMemberForm upMemForm = (TeamMemberForm) form;
 		ActionErrors errors = new ActionErrors();
@@ -151,7 +150,8 @@ public class AddTeamMember extends Action {
 					.getDefaultPerspective());
 			newAppSettings.setUseDefault(new Boolean(true));
 
-			TeamUtil.addTeamMember(newMember,newAppSettings);
+			Site site = RequestUtils.getSite(request);
+			TeamUtil.addTeamMember(newMember,newAppSettings,site);
 			upMemForm.setEmail(null);
 			upMemForm.setRole(null);
 			upMemForm.setTeamName(null);

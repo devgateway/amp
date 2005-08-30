@@ -7468,5 +7468,31 @@ public class DbUtil {
 		}
 		return year.intValue();
 	}
-
+	
+	public static Group getGroup(String key,Long siteId) {
+		Session session = null;
+		Group group = null;
+		try {
+			session = PersistenceManager.getSession();
+			String qryStr = "select grp from " + Group.class.getName() + " grp " +
+					"where (grp.key=:key) and (grp.site=:sid)";
+			Query qry = session.createQuery(qryStr);
+			qry.setParameter("key",key,Hibernate.STRING);
+			qry.setParameter("sid",siteId,Hibernate.LONG);
+			Iterator itr = qry.list().iterator();
+			if (itr.hasNext()) { 
+				group = (Group) itr.next();		
+			}
+		} catch (Exception ex) {
+			logger.error("Unable to get Group "
+					+ ex.getMessage());
+		} finally {
+			try {
+				PersistenceManager.releaseSession(session);
+			} catch (Exception ex2) {
+				logger.error("releaseSession() failed ");
+			}
+		}
+		return group;	
+	}
 }

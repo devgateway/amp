@@ -7,7 +7,6 @@ package org.digijava.module.aim.config;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Enumeration;
 import java.util.HashMap;
 
 import javax.servlet.ServletContext;
@@ -41,14 +40,6 @@ public class AMPActionServlet extends ActionServlet {
             int tempIndex = url.indexOf("/aim/");
             if (tempIndex != -1) {
                 logger.debug("URL = " + url);
-                /*
-                Enumeration en = request.getParameterNames();
-                while (en.hasMoreElements()) {
-                    String param = (String) en.nextElement();
-                    String value = request.getParameter(param);
-                    logger.debug("Param :" + param + " = " + value);
-                }*/
-                
                 String pggrp = request.getParameter("edit");
                 if (pggrp == null || !(pggrp.trim().equalsIgnoreCase("true"))) {
                     logger.debug("Moving from edit pages....Resetting fields");

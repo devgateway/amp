@@ -9,9 +9,8 @@ import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
-import org.digijava.module.aim.dbentity.AmpApplicationSettings;
-import org.digijava.module.aim.dbentity.AmpTeam;
-import org.digijava.module.aim.dbentity.AmpTeamMember;
+import org.digijava.kernel.request.Site;
+import org.digijava.kernel.util.RequestUtils;
 import org.digijava.module.aim.form.TeamMemberForm;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.DbUtil;
@@ -38,38 +37,10 @@ public class UpdateTeamMemberList extends Action {
 				tmForm.setAction("teamWorkspaceSetup");
 				return mapping.findForward("showAdd");
 			} else if (tmForm.getRemoveMember() != null) {
-				logger.debug("in remove member");
+				logger.debug("in remove members");
 				Long selMembers[] = tmForm.getSelMembers();
-				for (int i = 0; i < selMembers.length; i++) {
-					if (selMembers[i] != null) {
-						Long memId = selMembers[i];
-						AmpTeamMember ampMember = new AmpTeamMember();
-						ampMember.setAmpTeamMemId(memId);
-						AmpTeamMember ampTeamHead = DbUtil.getTeamHead(tm
-								.getTeamId());
-						AmpTeam ampTeam = TeamUtil.getAmpTeam(tm.getTeamId());
-						if (ampTeamHead.getAmpTeamMemId().equals(memId)) {
-							logger.debug("team lead set to null");
-							ampTeam.setTeamLead(null);
-						} else {
-							logger.debug("team lead remains same = "
-									+ ampTeamHead.getUser().getName());
-							ampTeam.setTeamLead(ampTeamHead);
-						}
-						DbUtil.update(ampTeam);
-						AmpApplicationSettings ampAppSettings = DbUtil
-								.getMemberAppSettings(tmForm.getTeamMemberId());
-						if (ampAppSettings == null) {
-							logger.debug("ampAppSettings is null");
-						} else {
-							logger.debug("got ampAppSettings");
-						}
-						DbUtil.delete(ampAppSettings);
-						logger.debug("AppSettings deleted");
-						DbUtil.delete(ampMember);
-						logger.debug("TeamMember deleted");
-					}
-				}
+				Site site = RequestUtils.getSite(request);
+				TeamUtil.removeTeamMembers(selMembers,site.getId());
 				return mapping.findForward("forward");
 			} else {
 				return mapping.findForward(null);

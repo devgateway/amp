@@ -13,7 +13,8 @@ public class Report
 	private Collection regions ;
 	private Collection sectors;
 	private Collection projects;
-	
+	private Collection records;
+
 	private String startDate ;
 	private Collection commitmentDate ;
 	private String closeDate ;
@@ -86,6 +87,17 @@ public class Report
 		{
 			projects = c;
 		}
+
+		public Collection getRecords() 
+		{
+			return records;
+		}
+
+		public void setRecords(Collection c) 
+		{
+			records = c;
+		}
+
 
 		public Collection getRegions() 
 		{

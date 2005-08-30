@@ -196,6 +196,7 @@
 	<page name="AdvancedReportManagerStep3" title=" - Advanced Report Manager Step 3 : Generate Charts " />
 	<page name="AdvancedReportManagerStep5" title=" - Advanced Report Manager Step  :  Select Rows/Hierarchies" />
 	<page name="AdvancedReportManagerStep6" title=" - Advanced Report Manager Step  :  Select Measures" />
+	<page name="viewAdvancedReport" title=" : Reports" />
 		
 </secondary-pages>
 

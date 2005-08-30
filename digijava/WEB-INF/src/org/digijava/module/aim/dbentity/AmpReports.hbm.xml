@@ -1,37 +1,37 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 2.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-2.0.dtd">
 <hibernate-mapping>
-		  <class name="org.digijava.module.aim.dbentity.AmpReports" table="AMP_REPORTS">
-					 <cache usage="read-write" />
-					 <id name="ampReportId" column="amp_report_id" type="java.lang.Long">
-								<generator class="native">
-										  <param name="sequence">AMP_REPORTS_seq</param>
-								</generator>
-					 </id>
+	<class name="org.digijava.module.aim.dbentity.AmpReports" table="AMP_REPORTS">
+		 <cache usage="read-write" />
+		 <id name="ampReportId" column="amp_report_id" type="java.lang.Long">
+			<generator class="native">
+				 <param name="sequence">AMP_REPORTS_seq</param>
+			</generator>
+		 </id>
 			 
-					 <property name="name" column="name" type="java.lang.String"/>
-					 <property name="description" column="description" type="java.lang.String"/>
+		<property name="name" column="name" type="java.lang.String"/>
+		<property name="description" column="description" type="java.lang.String"/>
 
-					 <set name="members" table="amp_member_reports" lazy="true">
-								<cache usage="read-write"/>
-								<key column="amp_report_id"/>
-								<many-to-many class="org.digijava.module.aim.dbentity.AmpTeamMember" column="amp_member_id"/>
-					 </set>
-					<set name="columns" table="amp_report_column">
-						<key column="amp_report_id"/>
-						<composite-element class="org.digijava.module.aim.dbentity.AmpReportColumn">
-							<many-to-one name="column" class="org.digijava.module.aim.dbentity.AmpColumns" 
-								column="columnId"/>
-							<property name="orderId" column="order_id"  type="java.lang.String"/>					
-						</composite-element>
-					</set>						
+		<set name="members" table="amp_member_reports" lazy="true">
+			<cache usage="read-write"/>
+			<key column="amp_report_id"/>
+				<many-to-many class="org.digijava.module.aim.dbentity.AmpTeamMember" column="amp_member_id"/>
+		</set>
+		<set name="columns" table="amp_report_column">
+			<key column="amp_report_id"/>
+			<composite-element class="org.digijava.module.aim.dbentity.AmpReportColumn">
+				<many-to-one name="column" class="org.digijava.module.aim.dbentity.AmpColumns" column="columnId"/>
+				<property name="orderId" column="order_id"  type="java.lang.String"/>					
+			</composite-element>
+		</set>						
 
-					<set name="hierarchies" table="amp_report_hierarchy">
-						<key column="amp_report_id"/>
-						<composite-element class="org.digijava.module.aim.dbentity.AmpReportHierarchy">
-							<many-to-one name="column" class="org.digijava.module.aim.dbentity.AmpColumns" 
+		<set name="hierarchies" table="amp_report_hierarchy">
+			<key column="amp_report_id"/>
+				<composite-element class="org.digijava.module.aim.dbentity.AmpReportHierarchy">
+					<many-to-one name="column" class="org.digijava.module.aim.dbentity.AmpColumns" 
 								column="columnId"/>
-							<property name="levelId" column="levelId"  type="java.lang.String"/>					
+					
+				<property name="levelId" column="levelId"  type="java.lang.String"/>					
 						</composite-element>
 					</set>						
 
@@ -43,6 +43,7 @@
 							<property name="orderId" column="order_id"  type="java.lang.String"/>					
 						</composite-element>
 					</set>						
+
 					
-		  </class>
+	</class>
 </hibernate-mapping>

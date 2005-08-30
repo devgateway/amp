@@ -76,4 +76,15 @@ public class Constants
 	public static final int FROM_YEAR_RANGE = 22;
 	public static final int TO_YEAR_RANGE = 5;
 
+	public static final Long STATUS_NAME = new Long(1) ;	
+	public static final Long DONOR_NAME = new Long(2) ;
+	public static final Long ACTUAL_START_DATE = new Long(3) ;
+	public static final Long ACTIVITY_NAME = new Long(4) ;
+	public static final Long TERM_ASSIST_NAME = new Long(5) ;
+	public static final Long ACTUAL_COMMITMENT = new Long(6) ;
+	public static final Long LEVEL_NAME = new Long(7) ;
+	public static final Long ACTUAL_COMPLETION_DATE = new Long(8) ;
+	
+	
+
 }	

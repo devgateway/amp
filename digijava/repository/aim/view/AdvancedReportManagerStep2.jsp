@@ -191,10 +191,10 @@ function gotoStep() {
 															<TABLE width="700" cellPadding=2 cellSpacing=0 vAlign="top" align="top" bgColor=#f4f4f2 border=1
 															style="border-collapse: collapse">
 															    <tr bgcolor="#cccccc">
-															    <c:if test="${!empty aimAdvancedReportForm.columnHierarchie}">
-																<logic:iterate name="aimAdvancedReportForm" id="columnHierarchie"	property="columnHierarchie" >
+															    <c:if test="${!empty aimAdvancedReportForm.addedColumns}">
+																<logic:iterate name="aimAdvancedReportForm" id="addedColumns"	property="addedColumns" >
 																	<td align="center"  class=box-title width=100 >
-																		<c:out value="${columnHierarchie.aliasName}"/>
+																		<c:out value="${addedColumns.columnName}"/>
 																	</td>
 																</logic:iterate>
 																</c:if>
@@ -204,43 +204,43 @@ function gotoStep() {
 																<c:if test="${!empty aimAdvancedReportForm.finalData}">
 																<logic:iterate name="aimAdvancedReportForm" id="finalData" property="finalData" type="org.digijava.module.aim.helper.Report">
 															    	<tr>
-																		<logic:iterate name="aimAdvancedReportForm" id="columnHierarchie"	property="columnHierarchie" >
-																		<c:if test="${columnHierarchie.columnName == 'activity name'}">
+																		<logic:iterate name="aimAdvancedReportForm" id="addedColumns"	property="addedColumns" >
+																		<c:if test="${addedColumns.columnName == 'title'}">
 																			<td align="left"  width=100 >
 																				<bean:write name="finalData" property="title" /> 
 																			</td>
 																		</c:if>
-																		<c:if test="${columnHierarchie.columnName == 'level name'}">
+																		<c:if test="${addedColumns.columnName == 'level'}">
 																			<td align="left"  width=100 >
 																				<bean:write name="finalData" property="level" /> 
 																			</td>
 																		</c:if>
-																		<c:if test="${columnHierarchie.columnName == 'actual start date'}">
+																		<c:if test="${addedColumns.columnName == 'start date'}">
 																			<td align="left"   width=100 >
 																				<bean:write name="finalData" property="startDate" /> 
 																			</td>
 																		</c:if>
-																		<c:if test="${columnHierarchie.columnName == 'actual completion date'}">
+																		<c:if test="${addedColumns.columnName == 'close date'}">
 																			<td align="left"   width=100 >
 																				<bean:write name="finalData" property="closeDate" /> 
 																			</td>
 																		</c:if>
-																		<c:if test="${columnHierarchie.columnName == 'actual commitment'}">
+																		<c:if test="${addedColumns.columnName == 'commitment'}">
 																			<td align="right"   width=100 >
 																				<bean:write name="finalData" property="acCommitment" />
 																			</td>
 																		</c:if>
-																		<c:if test="${columnHierarchie.columnName == 'donor name'}">
+																		<c:if test="${addedColumns.columnName == 'donor'}">
 																			<td align="left"  width=100 >
 																				<bean:write name="finalData" property="donor" /> 
 																			</td>
 																		</c:if>
-																		<c:if test="${columnHierarchie.columnName == 'status name'}">
+																		<c:if test="${addedColumns.columnName == 'status'}">
 																			<td align="left"  width=100 >
 																				<bean:write name="finalData" property="status" /> 
 																			</td>
 																		</c:if>
-																		<c:if test="${columnHierarchie.columnName == 'term assist name'}">
+																		<c:if test="${addedColumns.columnName == 'type of Assistance'}">
 																			<td align="left" width="100">
 																				<logic:empty name="finalData" property="assistance">&nbsp;
 																				</logic:empty>

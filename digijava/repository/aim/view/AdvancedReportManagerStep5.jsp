@@ -231,7 +231,7 @@ function deleteColumn()
 																					<logic:iterate name="aimAdvancedReportForm" id="addedColumns"	property="addedColumns" >
 																						<TR bgcolor="#ffffff">
 																							<td align="left" width="98%" valign=top>
-																								<c:out value="${addedColumns.aliasName}"/>
+																								<c:out value="${addedColumns.columnName}"/>
 																							</td>
 																							<td align="right">
 																							<html:multibox property="selectedColumns">
@@ -287,7 +287,7 @@ function deleteColumn()
 																							   	<% }	%>
 																									<IMG src="../ampTemplate/images/link_out_bot.gif">
 																							<%	}	%>
-																							<c:out value="${columnHierarchie.aliasName}"/>
+																							<c:out value="${columnHierarchie.columnName}"/>
 																						</td>
 																						<td align="right">
 																							<html:multibox property="removeColumns" >

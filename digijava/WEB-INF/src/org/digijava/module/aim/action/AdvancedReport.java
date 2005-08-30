@@ -176,10 +176,9 @@ public class AdvancedReport extends Action {
 			if(request.getParameter("check") != null && request.getParameter("check").equals("5"))
 			{
 				logger.info("In here  generating data..........");
-				if(formBean.getColumnHierarchie() != null)
+				if(formBean.getAddedColumns() != null)
 				{
-					//coll = formBean.getAddedColumns();
-					coll = formBean.getColumnHierarchie();
+					coll = formBean.getAddedColumns();
 					if(coll != null)
 					{
 						formBean.setFinalData( ReportUtil.generateQuery(coll, ampTeamId) );
@@ -213,9 +212,10 @@ public class AdvancedReport extends Action {
 				//logger.info("CHART FORMBEAN SIZE::::::::::::::::"+formBean.getFinalData().size());
 		        Iterator iter2 = formBean.getFinalData().iterator();
 		        
+		        
 		        Collection chart_coll=new ArrayList();
-		    	//chart_coll.add("60");
-		    	//chart_coll.add("Donor 1");
+		    	chart_coll.add("60");
+		    	chart_coll.add("Donor 1");
 
 				while(iter2.hasNext()){
 					Report r= (Report) iter2.next();
@@ -342,21 +342,24 @@ public class AdvancedReport extends Action {
 						}
 						ampReports.setColumns(columns);
 						
-						// saving the column hierarchies in step2 
-						Set hierarchies = new HashSet();
-						iter  = formBean.getColumnHierarchie().iterator();
-						i = 1;
-						while(iter.hasNext())
+						if(formBean.getColumnHierarchie() != null)
 						{
-							AmpColumns cols = (AmpColumns)iter.next();
-							
-							AmpReportHierarchy reportHierarchy = new AmpReportHierarchy();
-							reportHierarchy.setColumn(cols);
-							reportHierarchy.setLevelId(""+i);
-							hierarchies.add(reportHierarchy);
-							i = i + 1;
+							// saving the column hierarchies in step2 
+							Set hierarchies = new HashSet();
+							iter  = formBean.getColumnHierarchie().iterator();
+							i = 1;
+							while(iter.hasNext())
+							{
+								AmpColumns cols = (AmpColumns)iter.next();
+								
+								AmpReportHierarchy reportHierarchy = new AmpReportHierarchy();
+								reportHierarchy.setColumn(cols);
+								reportHierarchy.setLevelId(""+i);
+								hierarchies.add(reportHierarchy);
+								i = i + 1;
+							}
+							ampReports.setHierarchies(hierarchies);
 						}
-						ampReports.setHierarchies(hierarchies);
 						
 						logger.info("********************** " + formBean.getAddedMeasures().size());
 						// saving the AMp Report Measures
@@ -377,7 +380,7 @@ public class AdvancedReport extends Action {
 						session.save(ampReports);
 						tx.commit(); // commit the transcation
 
-						ampReports.setDescription("/advancedReport.do?view=reset~reportId="+ampReports.getAmpReportId());
+						ampReports.setDescription("/viewAdvancedReport.do?view=reset&ampReportId="+ampReports.getAmpReportId());
 						session.update(ampReports);
 
 						// Clears the values of the Previous report 

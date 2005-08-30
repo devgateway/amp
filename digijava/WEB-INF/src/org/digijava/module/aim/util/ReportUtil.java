@@ -10764,22 +10764,22 @@ public class ReportUtil {
 								Collection tempColl = new ArrayList();
 								
 								Report report  = new Report();
-								if(columns.contains("actual commitment") == true)
+								if(columns.contains("commitment") == true)
 									report.setAcCommitment(mf.format(actCommit));
-								if(columns.contains("level name") == true)
+								if(columns.contains("level") == true)
 									report.setLevel(reportCachePrev.getLevelName());
-								if(columns.contains("donor name") == true)
+								if(columns.contains("donor") == true)
 									
 									report.setDonor(reportCachePrev.getDonorName());
-								if(columns.contains("status name") == true)
+								if(columns.contains("status") == true)
 									report.setStatus(reportCachePrev.getStatusName());
-								if(columns.contains("activity name") == true)
+								if(columns.contains("title") == true)
 									report.setTitle(reportCachePrev.getActivityName());
-								if(columns.contains("actual start date") == true)
+								if(columns.contains("start date") == true)
 									report.setStartDate(DateConversion.ConvertDateToString(ampReportCache.getActualStartDate()));
-								if(columns.contains("actual completion date") == true)
+								if(columns.contains("close date") == true)
 									report.setCloseDate(DateConversion.ConvertDateToString(ampReportCache.getActualCompletionDate()));
-								if(columns.contains("term assist name") == true)
+								if(columns.contains("type of Assistance") == true)
 								{
 									tempColl.add(reportCachePrev.getTermAssistName());
 									report.setAssistance(tempColl);

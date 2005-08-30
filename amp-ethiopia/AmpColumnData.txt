@@ -3,14 +3,14 @@
 # Dumping data for table 'amp_columns'
 #
 
-INSERT INTO `amp_columns` VALUES("6", "actual commitment", "actual commitment");
-INSERT INTO `amp_columns` VALUES("7", "level name", "level");
-INSERT INTO `amp_columns` VALUES("8", "actual completion date", "close date");
-INSERT INTO `amp_columns` VALUES("1", "status name", "status");
-INSERT INTO `amp_columns` VALUES("2", "donor name", "donor");
-INSERT INTO `amp_columns` VALUES("3", "actual start date", "start date");
-INSERT INTO `amp_columns` VALUES("4", "activity name", "title");
-INSERT INTO `amp_columns` VALUES("5", "term assist name", "type of Assistance");
+INSERT INTO amp_columns VALUES("1", "status", "statusName");
+INSERT INTO amp_columns VALUES("2", "donor", "donorName");
+INSERT INTO amp_columns VALUES("3", "start date", "actualStartDate");
+INSERT INTO amp_columns VALUES("4", "title", "activityName");
+INSERT INTO amp_columns VALUES("5", "type of Assistance", "termAssistName");
+INSERT INTO amp_columns VALUES("6", "commitment", "actualCommitment");
+INSERT INTO amp_columns VALUES("7", "level", "levelName");
+INSERT INTO amp_columns VALUES("8", "close date", "actualCompletionDate");
 
 
 #

@@ -2546,8 +2546,14 @@
 
 	<action 
 		name="aimAdvancedReportForm" 
-    	type="org.digijava.module.aim.action.ViewProjectsChart" 
-     	scope="session" validate="false" path="/aim/viewProjectsChart">
+    	type="org.digijava.module.aim.action.AdvancedReportPieChart" 
+     	scope="session" validate="false" path="/aim/advancedReportPieChart">
+	</action>
+
+	<action 
+		name="aimAdvancedReportForm" 
+    	type="org.digijava.module.aim.action.AdvancedReportBarChart" 
+     	scope="session" validate="false" path="/aim/advancedReportBarChart">
 	</action>
 
 	<action 

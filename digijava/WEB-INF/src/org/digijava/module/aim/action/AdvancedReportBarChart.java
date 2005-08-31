@@ -20,15 +20,15 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.action.ActionServlet;
 
-import org.digijava.module.aim.helper.WebappScriptlet;
+import org.digijava.module.aim.helper.JFreeChartScriptlet;
 import org.digijava.module.aim.helper.WebappDataSource;	
 import org.digijava.module.aim.form.AdvancedReportForm;	
 import org.digijava.module.aim.helper.Report;
 import javax.servlet.*;
 
-public class ViewProjectsChart extends Action 
+public class AdvancedReportBarChart	extends Action 
 {
-//	private static Logger logger = Logger.getLogger(MultilateralDonorPDF.class) ;
+//	private static Logger logger = Logger.getLogger(Login.class) ;
 
 	private static int fieldHeight = 0; 	 		  
 	
@@ -46,8 +46,8 @@ public class ViewProjectsChart extends Action
 		
 		Collection chart_coll=new ArrayList();
 	
-		chart_coll.add("60");
-		chart_coll.add("Donor 1");
+//		chart_coll.add("60");
+//		chart_coll.add("Donor 1");
 		
 		while(iter.hasNext()){
 			Report r= (Report) iter.next();
@@ -70,7 +70,7 @@ public class ViewProjectsChart extends Action
 	ActionServlet s = getServlet();
 	////logger.info("###########################Inside VIEW Projects JfreeChart Action...SIZE:"+chart_coll.size());
 			
-			WebappScriptlet ws= new WebappScriptlet();
+			JFreeChartScriptlet ws= new JFreeChartScriptlet();
 			ws.setV(chart_coll);	
 	
 //chart compile jsp
@@ -82,24 +82,20 @@ public class ViewProjectsChart extends Action
 			s.getServletContext().getRealPath("/WEB-INF/classes/")
 		);
 
-//	//logger.info("###########################Inside JfreeChart Compile...4444444444444");
 	System.setProperty(
 		"jasper.reports.compile.temp", 
 			s.getServletContext().getRealPath("/WEB-INF/classes/org/digijava/module/aim/reports/")
 		);
-//	//logger.info("###########################Inside JfreeChart Compile...55555555555555");
 
-String realPathJrxml = s.getServletContext().getRealPath(
-							 	"/WEB-INF/classes/org/digijava/module/aim/reports/WebappReport.jrxml");
+	String realPathJrxml = s.getServletContext().getRealPath(
+							 	"/WEB-INF/classes/org/digijava/module/aim/reports/BarChartReport.jrxml");
 
 //JasperCompileManager.compileReportToFile(s.getServletContext().getRealPath("/WEB-INF/classes/org/digijava/module/aim/reports/WebappReport.jrxml"));
-JasperCompileManager.compileReportToFile(realPathJrxml);
+	JasperCompileManager.compileReportToFile(realPathJrxml);
 
 //chart pdf jsp
 
-//	//logger.info("###########################Inside JfreeChart Compile...22222222");
-
-	File reportFile = new File(s.getServletContext().getRealPath("/WEB-INF/classes/org/digijava/module/aim/reports/WebappReport.jasper"));
+	File reportFile = new File(s.getServletContext().getRealPath("/WEB-INF/classes/org/digijava/module/aim/reports/BarChartReport.jasper"));
 
 	Map parameters = new HashMap();
 	parameters.put("ReportTitle", "JFREE ChArt Report - MULTILATERAL");
@@ -114,18 +110,25 @@ JasperCompileManager.compileReportToFile(realPathJrxml);
 			new WebappDataSource()
 			);
 	//logger.info("Inside Jfree PDF EXPORT...3");
-	
-	response.setContentType("application/pdf");
-	response.setContentLength(bytes.length);
-	
-	ServletOutputStream ouputStream = response.getOutputStream();
-	ouputStream.write(bytes, 0, bytes.length);
-	ouputStream.flush();
-	ouputStream.close();
+
+			if (bytes != null && bytes.length > 0)
+			{
+				ServletOutputStream ouputStream = response.getOutputStream();
+				System.out.println("Generating Bar Chart PDF");
+				response.setContentType("application/pdf");
+				response.setHeader("Content-Disposition","inline; filename=AdvancedReportBarChart.pdf");
+				response.setContentLength(bytes.length);
+				ouputStream.write(bytes, 0, bytes.length);
+				ouputStream.flush();
+				ouputStream.close();
+			}
+			else
+			{
+				System.out.println("Nothing to display");
+			}
 
 	//logger.info("Inside Jfree PDF EXPORT...FINISHED..");
 
-		
 		return null;
 	}// end of Execute Func
 }// end of Class

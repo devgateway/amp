@@ -20,10 +20,19 @@
 	}
 	function popup_chart() {
 		openResisableWindow(800, 600);
-		<digi:context name="pchart" property="context/module/moduleinstance/viewProjectsChart.do" />
+		<digi:context name="pchart" property="context/module/moduleinstance/advancedReportPieChart.do" />
 		document.aimAdvancedReportForm.action = "<%= pchart %>";
 		document.aimAdvancedReportForm.target = popupPointer.name;
 		document.aimAdvancedReportForm.submit();
+	}
+
+	function popup_barChart() {
+		openResisableWindow(800, 600);
+		<digi:context name="barchart" property="context/module/moduleinstance/advancedReportBarChart.do" />
+		document.aimAdvancedReportForm.action = "<%= barchart %>";
+		document.aimAdvancedReportForm.target = popupPointer.name;
+		document.aimAdvancedReportForm.submit();
+
 	}
 
 -->
@@ -172,7 +181,7 @@
 										</td>	
 										<td noWrap valign=top align=left>
 										<bean:define id="translation">
-											<digi:trn key="aim:clickToGenerateReport">Click here to Generate Chart</digi:trn>
+											<digi:trn key="aim:clickToGenerateChart">Click here to Generate Chart</digi:trn>
 										</bean:define>
 										<digi:link href="/advancedReportManager.do?check=charts"  styleClass="sub-nav3" title="<%=translation%>" >
 										6 : <digi:trn key="aim:GenerateChart">Generate Chart</digi:trn>
@@ -239,7 +248,11 @@
 																<br><br>
 																<input type=button name=back value="<< Previous"   class="dr-menu" onclick="javascript:history.back()">						
 																<input type="button" onclick="popup_chart()" value="Create Pie-Chart PDF" class="dr-menu"> 
+
+																<input type="button" onclick="popup_barChart()" value="Create Bar-Chart PDF" class="dr-menu"> 
+
 																<input type=button name=back value=" Save Report "   class="dr-menu" onclick="saveReport()">						
+
 
 																</TD>
 															    

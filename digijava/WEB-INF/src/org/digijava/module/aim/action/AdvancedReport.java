@@ -214,8 +214,8 @@ public class AdvancedReport extends Action {
 		        
 		        
 		        Collection chart_coll=new ArrayList();
-		    	chart_coll.add("60");
-		    	chart_coll.add("Donor 1");
+//		    	chart_coll.add("60");
+//		    	chart_coll.add("Donor 1");
 
 				while(iter2.hasNext()){
 					Report r= (Report) iter2.next();

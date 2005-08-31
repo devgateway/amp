@@ -83,6 +83,7 @@ public class WebappScriptlet extends JRDefaultScriptlet
 */
 		this.setVariableValue("Chart", new JCommonDrawableRenderer(chart));
 
+
 	}
 
 

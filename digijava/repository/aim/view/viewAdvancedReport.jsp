@@ -390,6 +390,10 @@
 				<td align="center" height="21" >
 				<logic:notEmpty name="records" property="title">
 				<bean:write name="records" property="title" /></logic:notEmpty>
+
+				<logic:notEmpty name="records" property="actualCommitment">
+					<bean:write name="records" property="actualCommitment" /></logic:notEmpty>
+
 				<logic:notEmpty name="records" property="actualStartDate">
 				<bean:write name="records" property="actualStartDate" /></logic:notEmpty>
 				<logic:notEmpty name="records" property="actualCompletionDate">
@@ -464,7 +468,7 @@
 								  <bean:define id="translation">
 										<digi:trn key="aim:clickToViewPreviousPage">Click here to view Previous page</digi:trn>
 									</bean:define>
-									<digi:link href="/viewProjects.do" name="urlParams2" title="<%=translation%>" >
+									<digi:link href="/viewAdvancedReport.do" name="urlParams2" title="<%=translation%>" >
 										Previous
 									</digi:link>
 									&nbsp
@@ -491,7 +495,7 @@
 									<bean:define id="translation">
 										<digi:trn key="aim:clickToViewAllPages">Click here to view All pages</digi:trn>
 									</bean:define>
-									<digi:link href="/viewProjects.do" name="urlParams1" title="<%=translation%>" >
+									<digi:link href="/viewAdvancedReport.do" name="urlParams1" title="<%=translation%>" >
 										<%=pages%>
 									</digi:link>
 									<% } else { %>
@@ -516,7 +520,7 @@
 								  <bean:define id="translation">
 										<digi:trn key="aim:clickToViewNextPage">Click here to go to Next page</digi:trn>
 									</bean:define>
-									<digi:link href="/viewProjects.do" name="urlParams3" title="<%=translation%>" >
+									<digi:link href="/viewAdvancedReport.do" name="urlParams3" title="<%=translation%>" >
 										Next
 									</digi:link>
 									&nbsp;	

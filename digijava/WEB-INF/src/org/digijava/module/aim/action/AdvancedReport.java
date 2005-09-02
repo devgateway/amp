@@ -6,11 +6,14 @@
 package org.digijava.module.aim.action;
 
 
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.util.Iterator;
 import java.util.Collection;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.Vector;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -23,11 +26,15 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.digijava.module.aim.dbentity.AmpColumns;
+import org.digijava.module.aim.dbentity.AmpCurrency;
 import org.digijava.module.aim.dbentity.AmpMeasures;
 import org.digijava.module.aim.dbentity.AmpReportColumn;
 import org.digijava.module.aim.dbentity.AmpReportHierarchy;
 import org.digijava.module.aim.dbentity.AmpReportMeasures;
 import org.digijava.module.aim.dbentity.AmpReports;
+import org.digijava.module.aim.dbentity.AmpTeam;
+import org.digijava.module.aim.dbentity.AmpTeamMember;
+import org.digijava.module.aim.dbentity.AmpTeamReports;
 import org.digijava.kernel.persistence.PersistenceManager;
 
 
@@ -38,7 +45,6 @@ import org.jfree.chart.labels.*;
 import org.jfree.chart.urls.*;
 import org.jfree.chart.servlet.*;
 import org.jfree.data.general.DefaultPieDataset;
-import org.jfree.data.category.DefaultCategoryDataset;
 import org.jfree.data.category.*;
 
 import net.sf.hibernate.Query;
@@ -48,6 +54,7 @@ import net.sf.hibernate.Transaction;
 import org.digijava.module.aim.form.AdvancedReportForm;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.helper.Report;
+import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.ReportUtil;
 
 import org.apache.struts.action.ActionError;
@@ -67,13 +74,14 @@ public class AdvancedReport extends Action {
 		
 		httpSession = request.getSession();
 		Query query;
+		Collection reports = new ArrayList();
 		Session session = null;
 		Transaction tx = null;
 		String sqlQuery;		
 		Iterator iter;
 		Collection coll = new ArrayList();
 		TeamMember teamMember=(TeamMember)httpSession.getAttribute("currentMember");
-
+		logger.info(teamMember.getMemberId());
 		if(teamMember==null)
 			return mapping.findForward("index");
 		Long ampTeamId=teamMember.getTeamId();
@@ -176,14 +184,136 @@ public class AdvancedReport extends Action {
 			if(request.getParameter("check") != null && request.getParameter("check").equals("5"))
 			{
 				logger.info("In here  generating data..........");
-				if(formBean.getAddedColumns() != null)
+				int fromYr = 0, toYr = 0, year=0, fiscalCalId;
+				String ampCurrencyCode=null;
+				AmpCurrency ampCurrency=null;
+				GregorianCalendar c=new GregorianCalendar();
+				year=c.get(Calendar.YEAR);
+				//for storing the value of year filter 
+				if(formBean.getAmpToYear()==null)
 				{
-					coll = formBean.getAddedColumns();
-					if(coll != null)
+					toYr=year;
+					formBean.setAmpToYear(new Long(toYr));
+				}
+				else
+			  		toYr = formBean.getAmpToYear().intValue();
+
+				if(formBean.getAmpFromYear()==null)
+				{
+					fromYr=toYr-2;
+					formBean.setAmpFromYear(new Long(fromYr));
+				}
+				else
+			  		fromYr = formBean.getAmpFromYear().intValue();
+				if(formBean.getFiscalCalId()==0)
+				{
+					fiscalCalId=teamMember.getAppSettings().getFisCalId().intValue();
+					formBean.setFiscalCalId(fiscalCalId);
+				}
+				else
+					fiscalCalId =  formBean.getFiscalCalId();		
+
+				if(request.getParameter("view")!=null)
+				{
+					if(request.getParameter("view").equals("reset"))
 					{
-						formBean.setFinalData( ReportUtil.generateQuery(coll, ampTeamId) );
+						perspective =teamMember.getAppSettings().getPerspective();
+						if(perspective.equals("Donor"))
+							perspective="DN";
+						if(perspective.equals("MOFED"))
+							perspective="MA";
+						fiscalCalId=teamMember.getAppSettings().getFisCalId().intValue();
 					}
 				}
+				if(formBean.getAmpCurrencyCode()==null || formBean.getAmpCurrencyCode().equals("0"))
+				{
+					ampCurrency=DbUtil.getAmpcurrency(teamMember.getAppSettings().getCurrencyId());
+					ampCurrencyCode=ampCurrency.getCurrencyCode();
+					formBean.setAmpCurrencyCode(ampCurrencyCode);
+				}
+				else
+					ampCurrencyCode=formBean.getAmpCurrencyCode();
+
+				
+				logger.info(fromYr + " <>>>>>" + toYr);
+				
+				Long measure = null;
+				if(formBean.getAddedMeasures() != null)
+				{
+					iter = formBean.getAddedMeasures().iterator();
+					if(iter.hasNext())
+					{
+						AmpMeasures ampMeasure = (AmpMeasures)iter.next();
+						logger.info(ampMeasure.getMeasureName()+ " <<<  Measure id : " +ampMeasure.getMeasureId());
+						measure = ampMeasure.getMeasureId();
+					}
+				}
+				
+				if(formBean.getAddedColumns() != null)
+				{
+					formBean.setFinalData(ReportUtil.generateQuery(formBean.getAddedColumns(),ampTeamId));
+					
+					Collection pageRecords = new ArrayList();
+					int page=0;
+					if (request.getParameter("page") == null) 
+					{
+						page = 1;
+						reports=ReportUtil.generateAdvancedReport(ampTeamId,fromYr,toYr,fiscalCalId,ampCurrencyCode,perspective, measure, formBean.getAddedColumns() );
+						httpSession.setAttribute("ampReports",reports);
+						logger.info("Page is NULL............................");
+					}
+					else 
+					{
+						page = Integer.parseInt(request.getParameter("page"));
+						reports=(ArrayList)httpSession.getAttribute("ampReports");
+						logger.info("Page is NOT NULL.................");
+					}
+					int stIndex = ((page - 1) * 10) + 1;
+					int edIndex = page * 10;
+					if (edIndex > reports.size()) 
+					{
+						edIndex = reports.size();
+					}
+					Vector vect = new Vector();
+					vect.addAll(reports);
+								 
+					for (int i = (stIndex-1);i < edIndex;i ++) 
+					{
+						pageRecords.add(vect.get(i));
+					}
+					logger.info("< Page Record Size >" + pageRecords.size());
+					Collection pages = null;
+					int numPages=0;
+					if (reports.size() > 10) 
+					{
+						pages = new ArrayList();
+						numPages = reports.size()/10;
+						if(reports.size()%10>0)
+							numPages++;
+						for (int i = 0;i < numPages;i++) 
+						{
+							Integer pageNum=new Integer(i+1);
+							pages.add(pageNum);
+						}
+					 }
+					
+					int yearRange=(toYr-fromYr)+1;
+					formBean.setFiscalYearRange(new ArrayList());
+					for(int yr=fromYr;yr<=toYr;yr++)
+						formBean.getFiscalYearRange().add(new Integer(yr));
+					formBean.setTotalColumns(14);
+					formBean.setPages(pages);
+					formBean.setReport(pageRecords);
+					formBean.setPage(new Integer(page));
+					formBean.setAllReports(reports);
+					logger.info(" page REC " + pageRecords.size());
+			 		logger.info(" REPORTS  " + reports.size());
+					formBean.setForecastYear(new ArrayList());
+					for(int i=toYr;i<=(toYr+3);i++)
+						formBean.getForecastYear().add(new Integer(i));
+
+				}
+
 				return mapping.findForward("GenerateReport");
 			}
 
@@ -203,6 +333,7 @@ public class AdvancedReport extends Action {
 			if(request.getParameter("check") != null && request.getParameter("check").equals("SelectMeasures"))
 				return mapping.findForward("SelectMeasures");
 
+
 			// step 3 : 
 			if(request.getParameter("check") != null && request.getParameter("check").equals("charts"))
 			{
@@ -210,21 +341,45 @@ public class AdvancedReport extends Action {
 
 				//logger.info("###########################Inside GeneratePIEChart..:):)");
 				//logger.info("CHART FORMBEAN SIZE::::::::::::::::"+formBean.getFinalData().size());
-		        Iterator iter2 = formBean.getFinalData().iterator();
-		        
-		        
+
+		        //Iterator iter2 = formBean.getFinalData().iterator();
 		        Collection chart_coll=new ArrayList();
+		        String title = "", commit = "";
+				iter = formBean.getReport().iterator();
+				Collection colls = null;
+				while(iter.hasNext())
+				{
+					Report report = (Report) iter.next();
+					colls = report.getRecords();
+					Iterator it = colls.iterator();
+					while(it.hasNext())
+					{
+						org.digijava.module.aim.helper.AdvancedReport advReport = (org.digijava.module.aim.helper.AdvancedReport)it.next();
+						if(advReport.getTitle() != null)
+							title = advReport.getTitle();
+						if(advReport.getActualCommitment() != null)
+							commit = advReport.getActualCommitment();
+							//chart_coll.add(advReport.getActualCommitment().replaceAll("," , ""));
+						//chart_coll.add(advReport.getTitle());
+					}
+					logger.info(title + "<------***********------->"  + commit );
+					chart_coll.add(new Double(commit.replaceAll(",", "")) );
+					chart_coll.add(title);
+				}
+				
+				logger.info("  Chart Size : " +chart_coll.size());
+		        
 //		    	chart_coll.add("60");
 //		    	chart_coll.add("Donor 1");
 
-				while(iter2.hasNext()){
+/*				while(iter2.hasNext()){
 					Report r= (Report) iter2.next();
 					chart_coll.add(r.getAcCommitment().replaceAll("," , ""));
 //					logger.info("filling COMM into the COLLLLL."+r.getAcCommitment());
 					chart_coll.add(r.getDonor());
 					//logger.info("filling DONOR NAME into the COLLLLL."+r.getDonor());
 				}
-				
+*/				
 				// calling Piechart
 				String piechartname=createPieChart(chart_coll);
 				//logger.info("@@@@@@@@@@IMAGE FILE NAME:"+piechartname);
@@ -378,11 +533,39 @@ public class AdvancedReport extends Action {
 						ampReports.setMeasures(measures);
 						
 						session.save(ampReports);
-						tx.commit(); // commit the transcation
-
+						
 						ampReports.setDescription("/viewAdvancedReport.do?view=reset&ampReportId="+ampReports.getAmpReportId());
 						session.update(ampReports);
+						
+						logger.info("***************  START *******");
 
+						logger.info("is Team Head : " + teamMember.getTeamHead());
+						if(teamMember.getTeamHead() == true)
+						{
+							logger.info(teamMember.getMemberName() + " is Team Leader ");
+							AmpTeamReports ampTeamReports = new AmpTeamReports();
+							ampTeamReports.setTeamView(true);
+							AmpTeam ampTeam = (AmpTeam) session.get(AmpTeam.class, teamMember.getTeamId());
+							ampTeamReports.setTeam(ampTeam);
+							ampTeamReports.setReport(ampReports);
+							
+							session.save(ampTeamReports);
+						}
+						else
+						{
+							logger.info(teamMember.getMemberName() + " is Team Memeber ");
+							Long lg = teamMember.getMemberId();
+							AmpTeamMember ampTeamMember = (AmpTeamMember) session.get(AmpTeamMember.class, lg);
+							Set reportSet = ampTeamMember.getReports();
+							reportSet.add(ampReports);
+							ampTeamMember.setReports(reportSet);
+							
+							session.save(ampTeamMember);
+						}
+						logger.info("***************  END   *******");
+						
+						
+						tx.commit(); // commit the transcation
 						// Clears the values of the Previous report 
 						formBean.setAmpColumns(null);
 						formBean.setAddedColumns(null);

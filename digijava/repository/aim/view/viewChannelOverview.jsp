@@ -51,10 +51,10 @@ function fnDeleteProject()
 function commentWin(val) {
 	if (document.aimChannelOverviewForm.currUrl1.value == "") { 		  
 		openNewWindow(600, 400);
-		<digi:context name="comment" property="context/module/moduleinstance/viewComment.do" />
-		url = "<%=comment %>?comment=view_current_completion_date&id=" + val;
-		document.aimChannelOverviewForm.currUrl1.value = "<%=comment %>";		  
+		<digi:context name="commurl" property="context/module/moduleinstance/viewComment.do" />
+		url = "<%=commurl %>?comment=" + "viewccd" + "&actId=" + val;
 		document.aimChannelOverviewForm.action = url;
+		document.aimChannelOverviewForm.currUrl1.value = "<%=commurl %>";
 		document.aimChannelOverviewForm.target = popupPointer.name;
 		document.aimChannelOverviewForm.submit();
 	} else
@@ -66,10 +66,10 @@ function commentWin(val) {
 
 
 <digi:form action="/viewChannelOverview.do" name="aimChannelOverviewForm" 
-type="org.digijava.module.aim.form.ChannelOverviewForm" method="get">
+type="org.digijava.module.aim.form.ChannelOverviewForm" method="post">
 <digi:instance property="aimChannelOverviewForm" />
 
-<html:hidden name="aimChannelOverviewForm" property="id" />
+<html:hidden property="id" />
 <input type="hidden" name="currUrl1">
 
 <logic:equal name="aimChannelOverviewForm" property="validLogin" value="false">

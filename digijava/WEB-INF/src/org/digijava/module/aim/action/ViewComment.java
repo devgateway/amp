@@ -36,23 +36,24 @@ public class ViewComment extends Action {
 					 EditActivityForm editForm = (EditActivityForm) form;
 					 String action = editForm.getActionFlag();
 					 String comment = request.getParameter("comment");
+					 
 					 TeamMember member = (TeamMember) request.getSession().getAttribute("currentMember");
 					 
 					 logger.debug("CommentFlag[before IF] : " + editForm.isCommentFlag());
 					 if (comment != null && comment.trim().length() != 0) {
-						AmpField field = null;
+					 	AmpField field = null;
 						ArrayList col = new ArrayList();
 						if (editForm.isCommentFlag() == false) {
 							editForm.setFieldName("current completion date");
-							if (comment.equals("current_completion_date") || comment.equals("view_current_completion_date"))
+							if (comment.equals("ccd") || comment.equals("viewccd"))
 								field = DbUtil.getAmpFieldByName("current completion date");
 							editForm.setField(field);
 						}
 						 	
 						logger.debug("editForm.getCommentsCol().size() [At Start-I]: " + editForm.getCommentsCol().size());
-						if (editForm.isEditAct() || comment.equals("view_current_completion_date")) {
-							if (comment.equals("view_current_completion_date")) {
-								String activityId = request.getParameter("id");
+						if (editForm.isEditAct() || comment.equals("viewccd")) {
+							if (comment.equals("viewccd")) {
+								String activityId = request.getParameter("actId");
 								Long id = null;
 								if (activityId != null && activityId.length() != 0)
 									id = new Long(Integer.parseInt(activityId));
@@ -74,7 +75,7 @@ public class ViewComment extends Action {
 						if (editForm.getCommentText() != null)	// Clearing the commentText property
 							editForm.setCommentText(null);
 						//editForm.setSerializeFlag(false);  //To make sure comment(s) not added to database without user's knowledge
-						if (comment.equals("current_completion_date"))
+						if (comment.equals("ccd"))
 							editForm.setCommentFlag(true);
 						logger.debug("CommentFlag[forwarding] : " + editForm.isCommentFlag());
 						return mapping.findForward("forward");
@@ -125,7 +126,7 @@ public class ViewComment extends Action {
 								logger.debug("Comment deleted");
 								return mapping.findForward("forward");
 							}
-						
+					 	
 					 return mapping.findForward("index");
 				}
 }

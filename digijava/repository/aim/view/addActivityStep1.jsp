@@ -53,9 +53,9 @@ function selectOrganisation() {
 function commentWin() {
 	if (document.aimEditActivityForm.currUrl1.value == "") { 		  
 		openNewWindow(600, 400);
-		<digi:context name="comment" property="context/module/moduleinstance/viewComment.do" />
-		url = "<%=comment %>?comment=current_completion_date&edit=true";
-		document.aimEditActivityForm.currUrl1.value = "<%=comment %>";		  
+		<digi:context name="commentUrl" property="context/module/moduleinstance/viewComment.do" />
+		url = "<%=commentUrl %>?comment=" + "ccd" + "&edit=" + "true";
+		document.aimEditActivityForm.currUrl1.value = "<%=commentUrl %>";		  
 		document.aimEditActivityForm.action = url;
 		document.aimEditActivityForm.target = popupPointer.name;
 		document.aimEditActivityForm.submit();

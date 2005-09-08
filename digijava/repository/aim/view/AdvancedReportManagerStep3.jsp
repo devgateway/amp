@@ -13,6 +13,7 @@
 <!--
 	function saveReport()
 	{
+		alert("Your report is being saved");
 		<digi:context name="step" property="context/module/moduleinstance/advancedReportManager.do?check=SaveReport" />
 		document.aimAdvancedReportForm.action = "<%= step %>";
 		document.aimAdvancedReportForm.target = "_self";

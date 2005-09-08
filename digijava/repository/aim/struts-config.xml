@@ -2197,6 +2197,79 @@
 			  scope="session"
 			  path="/aim/reviseCompDate">
 			  <forward name="forward" path="/showLayout.do?layout=aim_reviseCloseDate"/>
+	</action>
+
+	<action
+			  name="aimEditActivityForm"	
+			  type="org.digijava.module.aim.action.UpdateIssue"
+			  scope="session"
+			  path="/aim/addIssue">	
+			  <forward name="forward" path="/aim/addActivity.do?edit=true" redirect="true" />
+	</action>		
+
+	<action
+			  name="aimEditActivityForm"	
+			  type="org.digijava.module.aim.action.ShowUpdateIssue"
+			  scope="session"
+			  path="/aim/showUpdateIssue">	
+			  <forward name="forward" path="/showLayout.do?layout=aim_addIssue" />
+	</action>			
+	
+	<action
+			  name="aimEditActivityForm"	
+			  type="org.digijava.module.aim.action.RemoveIssue"
+			  scope="session"
+			  path="/aim/removeIssue">	
+			  <forward name="forward" path="/aim/addActivity.do?edit=true" redirect="true" />
+	</action>			
+
+	<action
+			  name="aimEditActivityForm"	
+			  type="org.digijava.module.aim.action.UpdateMeasures"
+			  scope="session"
+			  path="/aim/addMeasure">	
+			  <forward name="forward" path="/aim/addActivity.do?edit=true" redirect="true" />
+	</action>		
+
+	<action
+			  name="aimEditActivityForm"	
+			  type="org.digijava.module.aim.action.ShowUpdateMeasures"
+			  scope="session"
+			  path="/aim/showUpdateMeasure">	
+			  <forward name="forward" path="/showLayout.do?layout=aim_addMeasure" />
+	</action>		
+	
+	<action
+			  name="aimEditActivityForm"	
+			  type="org.digijava.module.aim.action.RemoveMeasures"
+			  scope="session"
+			  path="/aim/removeMeasure">	
+			  <forward name="forward" path="/aim/addActivity.do?edit=true" redirect="true" />
+	</action>	
+
+
+	<action
+			  name="aimEditActivityForm"	
+			  type="org.digijava.module.aim.action.UpdateActor"
+			  scope="session"
+			  path="/aim/addActor">	
+			  <forward name="forward" path="/aim/addActivity.do?edit=true" redirect="true" />
+	</action>		
+
+	<action
+			  name="aimEditActivityForm"	
+			  type="org.digijava.module.aim.action.ShowUpdateActor"
+			  scope="session"
+			  path="/aim/showUpdateActors">	
+			  <forward name="forward" path="/showLayout.do?layout=aim_addActor" />
+	</action>		
+	
+	<action
+			  name="aimEditActivityForm"	
+			  type="org.digijava.module.aim.action.RemoveActor"
+			  scope="session"
+			  path="/aim/removeActors">
+			  <forward name="forward" path="/aim/addActivity.do?edit=true" redirect="true" />
 	</action>	
 
 		<action

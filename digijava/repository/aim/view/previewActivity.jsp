@@ -218,21 +218,30 @@ function disable() {
 				<tr><td>
 					<table width="100%" cellSpacing="5" cellPadding="3" vAlign="top">
 						<tr><td width="100%" vAlign="top">	
-						<table width="100%" cellSpacing=1 cellPadding=2 vAlign="top" align="left" bgcolor="#006699">
-							<tr><td vAlign="center" width="100%" align ="center" 
-							class="textalb" height="20"><%--
-								<digi:trn key="aim:addEditActivityConfirmation">
-								Add/Edit Activity Confirmation</digi:trn>--%>
-								<digi:trn key="aim:previewActivity">
-									Preview Activity
-								</digi:trn>
-							</td></tr>
+						<table width="100%" cellSpacing=0 cellPadding=0 vAlign="top" align="left">
+							<tr>
+								<td width="100%">
+									<table cellPadding=0 cellSpacing=0 width="100%" border=0>
+										<tr>
+											<td width="13" height="20" background="module/aim/images/left-side.gif">
+											</td>
+											<td vAlign="center" align ="center" class="textalb" height="20" bgcolor="#006699">
+												<digi:trn key="aim:previewActivity">
+													Preview Activity
+												</digi:trn>
+											</td>
+											<td width="13" height="20" background="module/aim/images/right-side.gif">
+											</td>
+										</tr>
+									</table>
+								</td>							
+							</tr>
 							<tr><td width="100%" bgcolor="#f4f4f2">
-							<table width="100%" cellSpacing="2" cellPadding="2" vAlign="top" align="left" bgcolor="#f4f4f2">
+							<table width="100%" cellSpacing="1" cellPadding="3" vAlign="top" align="left" bgcolor="#006699">
 							<tr><td align="center" vAlign="top" bgcolor="#ffffff">
-								<table width="98%" cellSpacing=1 cellpadding=3 bgcolor="#006699">
+								<table width="100%" cellSpacing=1 cellpadding=3 bgcolor="#dddddd">
 									<tr>
-										<td class="t-name" width="30%" align="right" bgcolor="#ffffff">
+										<td class="t-name" width="30%" align="right" bgcolor="#fffff0">
 											<digi:trn key="aim:ampId">
 											AMP ID</digi:trn>
 										</td>
@@ -241,16 +250,16 @@ function disable() {
 										</td>
 									</tr>								
 									<tr>
-										<td class="t-name" width="30%" align="right" bgcolor="#ffffff">
+										<td class="t-name" width="30%" align="right" bgcolor="#fffff0">
 											<digi:trn key="aim:projectTitle">
 											Project title</digi:trn>
 										</td>
-										<td class="v-name" bgcolor="#ffffff">
+										<td class="v-name"  bgcolor="#ffffff">
 											<c:out value="${aimEditActivityForm.title}"/>
 										</td>
 									</tr>
 									<tr>
-										<td class="t-name" width="30%" align="right" bgcolor="#ffffff">
+										<td class="t-name" width="30%" align="right" bgcolor="#fffff0">
 											<digi:trn key="aim:objectives">
 											Objectives</digi:trn>
 										</td>
@@ -262,7 +271,7 @@ function disable() {
 										</td>
 									</tr>
 									<tr>
-										<td class="t-name" width="30%" align="right" bgcolor="#ffffff">
+										<td class="t-name" width="30%" align="right" bgcolor="#fffff0">
 											<digi:trn key="aim:description">
 											Description</digi:trn>
 										</td>
@@ -273,26 +282,8 @@ function disable() {
 											<digi:edit key="<%=descKey%>"></digi:edit>
 										</td>
 									</tr>		
-									<%--
 									<tr>
-										<td class="t-name" width="30%" align="right" bgcolor="#ffffff">
-											<digi:trn key="aim:conditions">
-											Conditions</digi:trn>
-										</td>
-										<td bgcolor="#ffffff">
-											<c:out value="${aimEditActivityForm.conditions}"/>
-										</td>
-									</tr>									
-									--%>
-								</table>
-							</td></tr>
-							<tr><td bgcolor="#f4f4f2">
-								&nbsp;
-							</td></tr>
-							<tr><td align="center" vAlign="top" bgcolor="#f4f4f2">
-								<table width="98%" cellSpacing=1 cellpadding=3 bgcolor="#006699">
-									<tr>
-										<td class="t-name" width="30%" align="right" bgcolor="#ffffff">
+										<td class="t-name" width="30%" align="right" bgcolor="#f4f4f2">
 											<digi:trn key="aim:orgsAndProjectIds">
 											Organizations and Project IDs
 											</digi:trn>
@@ -311,7 +302,7 @@ function disable() {
 										</td>
 									</tr>
 									<tr>
-										<td class="t-name" width="30%" align="right" bgcolor="#ffffff">
+										<td class="t-name" width="30%" align="right" bgcolor="#f4f4f2">
 											<digi:trn key="aim:planning">
 											Planning</digi:trn>
 										</td>
@@ -376,25 +367,9 @@ function disable() {
 												</tr>
 											</table>
 										</td>
-									</tr>		
-									<%--
+									</tr>											
 									<tr>
-										<td class="t-name" width="30%" align="right" bgcolor="#ffffff">
-											<digi:trn key="aim:financingInstrument">Financing Instrument</digi:trn>
-										</td>
-										<td bgcolor="#ffffff">
-											<c:if test="${!empty aimEditActivityForm.modalityCollection}">
-												<c:forEach var="tempModality" items="${aimEditActivityForm.modalityCollection}">
-													<c:if test="${tempModality.ampModalityId == aimEditActivityForm.modality}">
-														<c:out value="${tempModality.name}"/>
-													</c:if>
-												</c:forEach>
-											</c:if>
-										</td>
-									</tr>		
-									--%>
-									<tr>
-										<td class="t-name" width="30%" align="right" bgcolor="#ffffff">
+										<td class="t-name" width="30%" align="right" bgcolor="#f4f4f2">
 											<digi:trn key="aim:level">
 											Level</digi:trn>
 										</td>
@@ -409,7 +384,7 @@ function disable() {
 										</td>
 									</tr>																											
 									<tr>
-										<td class="t-name" width="30%" align="right" bgcolor="#ffffff">
+										<td class="t-name" width="30%" align="right" bgcolor="#f4f4f2">
 											<digi:trn key="aim:locations">
 											Locations</digi:trn>
 										</td>
@@ -437,7 +412,7 @@ function disable() {
 										</td>
 									</tr>		
 									<tr>
-										<td class="t-name" width="30%" align="right" bgcolor="#ffffff">
+										<td class="t-name" width="30%" align="right" bgcolor="#f4f4f2">
 											<digi:trn key="aim:sectors">
 											Sectors</digi:trn>
 										</td>
@@ -462,7 +437,7 @@ function disable() {
 										</td>
 									</tr>
 									<tr>
-										<td class="t-name" width="30%" align="right" bgcolor="#ffffff">
+										<td class="t-name" width="30%" align="right" bgcolor="#f4f4f2">
 											<digi:trn key="aim:program">Program</digi:trn>
 										</td>
 										<td bgcolor="#ffffff">
@@ -477,13 +452,13 @@ function disable() {
 									</tr>											
 									
 									<tr>
-										<td class="t-name" width="30%" align="right" bgcolor="#ffffff">
+										<td class="t-name" width="30%" align="right" bgcolor="#f4f4f2">
 											<digi:trn key="aim:fundings">
 											Fundings</digi:trn>
 										</td>
 										<td bgcolor="#ffffff">
 											<c:if test="${!empty aimEditActivityForm.fundingOrganizations}">
-												<table width="100%" cellSpacing="1" cellPadding="3" bgcolor="#006699">
+												<table width="100%" cellSpacing="1" cellPadding="3" bgcolor="#aaaaaa">
 												<c:forEach var="fundOrgs" items="${aimEditActivityForm.fundingOrganizations}">
 													<tr><td bgcolor="#ffffff">
 														<table width="100%" cellSpacing="1" cellPadding="1">
@@ -531,18 +506,6 @@ function disable() {
 																					</c:if>
 																				</td>
 																			</tr>																			
-																			<%--
-																			<tr>
-																				<td width="31%">
-																					<digi:trn key="aim:signatureDate">
-																					Signature Date</digi:trn>
-																				</td>
-																				<td width="1">:</td>
-																				<td align="left">
-																					<c:out value="${fund.signatureDate}"/>
-																				</td>
-																			</tr>	
-																			--%>
 																			<c:if test="${!empty fund.fundingDetails}">
 																			<tr><td colspan="3">
 																			<table width="100%" cellSpacing=1 cellPadding=1 bgcolor="#dddddd">
@@ -664,7 +627,7 @@ function disable() {
 										</td>
 									</tr>										
 									<tr>
-										<td class="t-name" width="30%" align="right" bgcolor="#ffffff">
+										<td class="t-name" width="30%" align="right" bgcolor="#f4f4f2">
 											<digi:trn key="aim:components">
 											Components</digi:trn>
 										</td>
@@ -702,7 +665,7 @@ function disable() {
 										</td>
 									</tr>	
 									<tr>
-										<td class="t-name" width="30%" align="right" bgcolor="#ffffff">
+										<td class="t-name" width="30%" align="right" bgcolor="#f4f4f2">
 											<digi:trn key="aim:relatedDocuments">
 											Related Documents</digi:trn>
 										</td>
@@ -762,7 +725,7 @@ function disable() {
 										</td>
 									</tr>
 									<tr>
-										<td class="t-name" width="30%" align="right" bgcolor="#ffffff">
+										<td class="t-name" width="30%" align="right" bgcolor="#f4f4f2">
 											<digi:trn key="aim:executingAgencies">
 											Executing Agencies</digi:trn>
 										</td>
@@ -779,7 +742,7 @@ function disable() {
 										</td>
 									</tr>
 									<tr>
-										<td class="t-name" width="30%" align="right" bgcolor="#ffffff">
+										<td class="t-name" width="30%" align="right" bgcolor="#f4f4f2">
 											<digi:trn key="aim:implementingAgencies">
 											Implementing Agencies</digi:trn>
 										</td>
@@ -796,7 +759,7 @@ function disable() {
 										</td>
 									</tr>
 									<tr>
-										<td class="t-name" width="30%" align="right" bgcolor="#ffffff">
+										<td class="t-name" width="30%" align="right" bgcolor="#f4f4f2">
 											<digi:trn key="aim:contractors">
 											Contractors</digi:trn>
 										</td>
@@ -805,7 +768,7 @@ function disable() {
 										</td>
 									</tr>									
 									<tr>
-										<td class="t-name" width="30%" align="right" bgcolor="#ffffff">
+										<td class="t-name" width="30%" align="right" bgcolor="#f4f4f2">
 											<digi:trn key="aim:donorFundingContactInformation">
 											Donor funding contact information</digi:trn>
 										</td>
@@ -816,7 +779,7 @@ function disable() {
 										</td>
 									</tr>	
 									<tr>
-										<td class="t-name" width="30%" align="right" bgcolor="#ffffff">
+										<td class="t-name" width="30%" align="right" bgcolor="#f4f4f2">
 											<digi:trn key="aim:mofedContactInformation">
 											MOFED contact information</digi:trn>
 										</td>
@@ -827,7 +790,7 @@ function disable() {
 										</td>
 									</tr>										
 									<tr>
-										<td class="t-name" width="30%" align="right" bgcolor="#ffffff">
+										<td class="t-name" width="30%" align="right" bgcolor="#f4f4f2">
 											<digi:trn key="aim:activityCreatedBy">
 											Activity created by</digi:trn>
 										</td>
@@ -839,7 +802,7 @@ function disable() {
 									</tr>																			
 									<logic:notEmpty name="aimEditActivityForm" property="createdDate">
 									<tr>
-										<td class="t-name" width="30%" align="right" bgcolor="#ffffff">
+										<td class="t-name" width="30%" align="right" bgcolor="#f4f4f2">
 											<digi:trn key="aim:activityCreatedOn">
 											Activity created on</digi:trn>
 										</td>
@@ -847,29 +810,26 @@ function disable() {
 											<c:out value="${aimEditActivityForm.createdDate}"/>
 										</td>
 									</tr>									
-									</logic:notEmpty>
-								</table>
-							</td></tr>							
-							<tr><td bgColor=#f4f4f2>
-								&nbsp;
-							</td></tr>
-							<c:if test="${aimEditActivityForm.pageId != 2}">	
-							<tr><td bgColor=#f4f4f2 align="center">
-								<table cellPadding=3>
-									<tr>
-										<td>
-											<input type="button" value=" << Back" class="dr-menu" onclick="backClicked()"
-											name="backButton">
+									</logic:notEmpty>									
+									<c:if test="${aimEditActivityForm.pageId != 2}">	
+									<tr><td bgColor=#ffffff align="center" colspan=2>
+										<table cellPadding=3>
+											<tr>
+												<td>
+													<input type="button" value=" << Back" class="dr-menu" onclick="backClicked()"
+												name="backButton">
 											
-										</td>
-										<td>
-											<input type="button" value="Save Activity" class="dr-menu" onclick="disable()"
-											name="submitButton">
-										</td>
-									</tr>
+											</td>
+											<td>
+												<input type="button" value="Save Activity" class="dr-menu" onclick="disable()"
+												name="submitButton">
+											</td>
+										</tr>
+									</table>
+								</td></tr>
+								</c:if>									
 								</table>
 							</td></tr>
-							</c:if>
 							</table>
 							</td></tr>							
 						</table>

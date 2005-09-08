@@ -26,12 +26,12 @@ import org.digijava.module.aim.dbentity.AmpComments;
 import org.digijava.module.aim.dbentity.AmpComponent;
 import org.digijava.module.aim.dbentity.AmpFunding;
 import org.digijava.module.aim.dbentity.AmpFundingDetail;
+import org.digijava.module.aim.dbentity.AmpIssues;
 import org.digijava.module.aim.dbentity.AmpLocation;
 import org.digijava.module.aim.dbentity.AmpOrgRole;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpPhysicalPerformance;
 import org.digijava.module.aim.dbentity.AmpSector;
-import org.digijava.module.aim.dbentity.AmpTeam;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.helper.Activity;
 import org.digijava.module.aim.helper.ActivitySector;
@@ -154,6 +154,16 @@ public class ActivityUtil {
 					}
 				}				
 
+				/* delete all previous issues */
+				Set issues = oldActivity.getIssues();
+				if (issues != null) {
+					Iterator iItr = issues.iterator();
+					while (iItr.hasNext()) {
+						AmpIssues issue = (AmpIssues) iItr.next();
+						session.delete(issue);
+					}
+				}								
+				
 				/* delete all previous comments */
 				if (!commentsCol.isEmpty()) {
 					ArrayList col = DbUtil.getAllCommentsByField(field,oldActivity.getAmpActivityId());
@@ -206,9 +216,12 @@ public class ActivityUtil {
 				oldActivity.setStatusReason(activity.getStatusReason());
 				oldActivity.setThemeId(activity.getThemeId());
 				oldActivity.setUpdatedDate(activity.getUpdatedDate());
+				oldActivity.setClosingDates(activity.getClosingDates());
+				oldActivity.setComponents(activity.getComponents());
+				oldActivity.setDocuments(activity.getDocuments());
+				oldActivity.setFunding(activity.getFunding());
 				
-				logger.debug("Team is " + oldActivity.getTeam().getName());
-				
+				/*
 				Iterator itr = null;
 				if (activity.getClosingDates() != null) {
 					itr = activity.getClosingDates().iterator();
@@ -243,13 +256,13 @@ public class ActivityUtil {
 					        oldActivity.setFunding(new HashSet());
 					    oldActivity.getFunding().add(fund);
 					}				    
-				}
+				}*/
 				
 				oldActivity.setInternalIds(activity.getInternalIds());
 				oldActivity.setLocations(activity.getLocations());
 				oldActivity.setOrgrole(activity.getOrgrole());
 				oldActivity.setSectors(activity.getSectors());
-				
+				oldActivity.setIssues(activity.getIssues());
 			}
 			
 			
@@ -420,13 +433,10 @@ public class ActivityUtil {
 	    
 	    try {
 			session = PersistenceManager.getSession();
-			String queryString = "select act from " + AmpActivity.class.getName() + 
-			" act where (act.ampActivityId=:actId)";
-			Query qry = session.createQuery(queryString);
-			qry.setParameter("actId",id,Hibernate.LONG);
-			Iterator actItr = qry.list().iterator();
-			if (actItr.hasNext()) {
-			    AmpActivity ampActivity = (AmpActivity) actItr.next();
+			
+			AmpActivity ampActivity = (AmpActivity) session.load(AmpActivity.class,id);
+			
+			if (ampActivity != null) {
 			    activity = new AmpActivity();
 			    activity.setActivityApprovalDate(ampActivity.getActivityApprovalDate());
 			    activity.setActivityCloseDate(ampActivity.getActivityCloseDate());
@@ -475,6 +485,8 @@ public class ActivityUtil {
 			    activity.setLocations(new HashSet(ampActivity.getLocations()));
 			    activity.setSectors(new HashSet(ampActivity.getSectors()));
 			    activity.setOrgrole(new HashSet(ampActivity.getOrgrole()));
+			    logger.debug("** Issue size = " + ampActivity.getIssues().size() + " **");
+			    activity.setIssues(new HashSet(ampActivity.getIssues()));
 			}
 		} catch (Exception e) {
 		 	logger.error("Unable to getAmpActivity");

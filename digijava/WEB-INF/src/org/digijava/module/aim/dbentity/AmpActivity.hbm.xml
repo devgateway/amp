@@ -122,14 +122,6 @@
 				<many-to-many class="org.digijava.module.aim.dbentity.AmpTeamMember" column="amp_member_id"/>
 		</set>	
 		
-		<!-- Not needed
-		<set name="teamList" table="amp_team_activities" lazy="true">
-  	            <cache usage="read-write"/>
-				<key column="amp_activity_id"/>
-				<many-to-many class="org.digijava.module.aim.dbentity.AmpTeam" column="amp_team_id"/>
-		</set>			
-		-->
-
 		<set name="notes" cascade="delete" inverse="true">
 		<cache usage="read-write" />
 			<key column="amp_activity_id"/>
@@ -142,5 +134,10 @@
 			<one-to-many class="org.digijava.module.aim.dbentity.AmpActivityClosingDates" />
 		</set>	
 		
+		<set name="issues" cascade="all" inverse="true" order-by="amp_issue_id asc">
+		<cache usage="read-write" />
+			<key column="amp_activity_id"/>
+			<one-to-many class="org.digijava.module.aim.dbentity.AmpIssues"/>
+ 		</set>			
 	</class>
 </hibernate-mapping>

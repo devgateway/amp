@@ -30,10 +30,13 @@ import org.digijava.kernel.user.User;
 import org.digijava.module.aim.dbentity.AmpActivity;
 import org.digijava.module.aim.dbentity.AmpActivityClosingDates;
 import org.digijava.module.aim.dbentity.AmpActivityInternalId;
+import org.digijava.module.aim.dbentity.AmpActor;
 import org.digijava.module.aim.dbentity.AmpComponent;
 import org.digijava.module.aim.dbentity.AmpFunding;
 import org.digijava.module.aim.dbentity.AmpFundingDetail;
+import org.digijava.module.aim.dbentity.AmpIssues;
 import org.digijava.module.aim.dbentity.AmpLocation;
+import org.digijava.module.aim.dbentity.AmpMeasure;
 import org.digijava.module.aim.dbentity.AmpOrgRole;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpPhysicalPerformance;
@@ -48,7 +51,9 @@ import org.digijava.module.aim.helper.DecimalToText;
 import org.digijava.module.aim.helper.Funding;
 import org.digijava.module.aim.helper.FundingDetail;
 import org.digijava.module.aim.helper.FundingOrganization;
+import org.digijava.module.aim.helper.Issues;
 import org.digijava.module.aim.helper.Location;
+import org.digijava.module.aim.helper.Measures;
 import org.digijava.module.aim.helper.OrgProjectId;
 import org.digijava.module.aim.helper.PhysicalProgress;
 import org.digijava.module.aim.util.ActivityUtil;
@@ -514,6 +519,51 @@ public class EditActivity extends Action {
 									orgRole.getOrganisation());
 						}
 					}
+				}
+				
+				// loading the Issues,Measures and Actors
+				if(activity.getIssues() == null) {
+					logger.debug("Issues NULL");
+				} else {
+					logger.debug("Number of issues = " + activity.getIssues().size());
+				}
+				
+				
+				if (activity.getIssues() != null &&
+						activity.getIssues().size() > 0) {
+					ArrayList issueList = new ArrayList();
+					Iterator iItr = activity.getIssues().iterator();
+					while (iItr.hasNext()) {
+						AmpIssues ampIssue = (AmpIssues) iItr.next();
+						Issues issue = new Issues();
+						issue.setId(ampIssue.getAmpIssueId());
+						issue.setName(ampIssue.getName());
+						ArrayList measureList = new ArrayList();
+						if (ampIssue.getMeasures() != null &&
+								ampIssue.getMeasures().size() > 0) {
+							Iterator mItr = ampIssue.getMeasures().iterator();
+							while (mItr.hasNext()) {
+								AmpMeasure ampMeasure = (AmpMeasure) mItr.next();
+								Measures measure = new Measures();
+								measure.setId(ampMeasure.getAmpMeasureId());
+								measure.setName(ampMeasure.getName());
+								ArrayList actorList = new ArrayList();
+								if (ampMeasure.getActors() != null &&
+										ampMeasure.getActors().size() > 0) {
+									Iterator aItr = ampMeasure.getActors().iterator();
+									while (aItr.hasNext()) {
+										AmpActor actor = (AmpActor) aItr.next();
+										actorList.add(actor);
+									}
+								}
+								measure.setActors(actorList);
+								measureList.add(measure);
+							}
+						}
+						issue.setMeasures(measureList);
+						issueList.add(issue);
+					}
+					eaForm.setIssues(issueList);
 				}
 
 				// loading the contact person details and condition

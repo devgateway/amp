@@ -14,6 +14,88 @@
 <script language="JavaScript">
 <!--
 
+function checkallIssues() {
+	var selectbox = document.aimEditActivityForm.checkAllIssues;
+	var items = document.aimEditActivityForm.selIssues;
+	if (document.aimEditActivityForm.selIssues.checked == true || 
+						 document.aimEditActivityForm.selIssues.checked == false) {
+			  document.aimEditActivityForm.selIssues.checked = selectbox.checked;
+	} else {
+		for(i=0; i<items.length; i++){
+			document.aimEditActivityForm.selIssues[i].checked = selectbox.checked;
+		}
+	}
+}
+
+function addIssues() {
+	openNewWindow(610, 160);
+	<digi:context name="addIssue" property="context/module/moduleinstance/showUpdateIssue.do?edit=true" />
+	document.aimEditActivityForm.action = "<%=addIssue%>&issueId=-1";
+	document.aimEditActivityForm.target = popupPointer.name;
+	document.aimEditActivityForm.submit();
+}
+
+function updateIssues(id) {
+	openNewWindow(610, 160);
+	<digi:context name="addIssue" property="context/module/moduleinstance/showUpdateIssue.do?edit=true" />
+	document.aimEditActivityForm.action = "<%=addIssue%>&issueId="+id;
+	document.aimEditActivityForm.target = popupPointer.name;
+	document.aimEditActivityForm.submit();
+}
+
+function removeIssues() {
+	<digi:context name="addIssue" property="context/module/moduleinstance/removeIssue.do?edit=true" />
+	document.aimEditActivityForm.action = "<%=addIssue%>";				  
+	document.aimEditActivityForm.target = "_self"
+	document.aimEditActivityForm.submit();		  
+}
+
+function addMeasures(issueId) {
+	openNewWindow(610, 160);
+	<digi:context name="addMeasure" property="context/module/moduleinstance/showUpdateMeasure.do?edit=true" />
+	document.aimEditActivityForm.action = "<%=addMeasure%>&issueId="+issueId+"&measureId=-1";
+	document.aimEditActivityForm.target = popupPointer.name;
+	document.aimEditActivityForm.submit();
+}
+
+function updateMeasures(issueId,measureId) {
+	openNewWindow(610, 160);
+	<digi:context name="addMeasure" property="context/module/moduleinstance/showUpdateMeasure.do?edit=true" />
+	document.aimEditActivityForm.action = "<%=addMeasure%>&issueId="+issueId+"&measureId="+measureId;
+	document.aimEditActivityForm.target = popupPointer.name;
+	document.aimEditActivityForm.submit();
+}
+
+function removeMeasure(issueId) {
+	<digi:context name="removeMeasure" property="context/module/moduleinstance/removeMeasure.do?edit=true" />
+	document.aimEditActivityForm.action = "<%=removeMeasure%>&issueId="+issueId;
+	document.aimEditActivityForm.target = "_self"
+	document.aimEditActivityForm.submit();		  
+}
+
+function addActors(issueId,measureId) {
+	openNewWindow(610, 160);
+	<digi:context name="addActors" property="context/module/moduleinstance/showUpdateActors.do?edit=true" />
+	document.aimEditActivityForm.action = "<%=addActors%>&issueId="+issueId+"&measureId="+measureId+"&actorId=-1";
+	document.aimEditActivityForm.target = popupPointer.name;
+	document.aimEditActivityForm.submit();
+}
+
+function updateActor(issueId,measureId,actorId) {
+	openNewWindow(610, 160);
+	<digi:context name="addActors" property="context/module/moduleinstance/showUpdateActors.do?edit=true" />
+	document.aimEditActivityForm.action = "<%=addActors%>&issueId="+issueId+"&measureId="+measureId+"&actorId="+actorId;
+	document.aimEditActivityForm.target = popupPointer.name;
+	document.aimEditActivityForm.submit();
+}
+
+function removeActors(issueId,measureId) {
+	<digi:context name="removeActors" property="context/module/moduleinstance/removeActors.do?edit=true" />
+	document.aimEditActivityForm.action = "<%=removeActors%>&issueId="+issueId+"&measureId="+measureId;
+	document.aimEditActivityForm.target = "_self"
+	document.aimEditActivityForm.submit();		  
+}
+
 function validatePhyProg() {
 	if (document.aimEditActivityForm.selPhyProg.checked != null) { 
 		if (document.aimEditActivityForm.selPhyProg.checked == false) {
@@ -239,16 +321,24 @@ function removeSelComponents() {
 				<tr><td>
 					<table width="100%" cellSpacing="5" cellPadding="3" vAlign="top">
 						<tr><td width="75%" vAlign="top">	
-						<table bgcolor="#006699" cellPadding=2 cellSpacing=1 width="100%">
+						<table cellPadding=0 cellSpacing=0 width="100%">
 							<tr>
-								<td vAlign="center" width="100%" align ="center" class="textalb" 
-								height="20">
-								<a title="<digi:trn key="aim:ComponentofProject">A smaller sub project of a donor approved project</digi:trn>">								
-								<digi:trn key="aim:step4Components">Step 4 of 7: Components</digi:trn></a>
-								</td>
+								<td width="100%">
+									<table cellPadding=0 cellSpacing=0 width="100%" border=0>
+										<tr>
+											<td width="13" height="20" background="module/aim/images/left-side.gif">
+											</td>
+											<td vAlign="center" align ="center" class="textalb" height="20" bgcolor="#006699">
+												<digi:trn key="aim:step4Components">Step 4 of 7: Components</digi:trn>
+											</td>
+											<td width="13" height="20" background="module/aim/images/right-side.gif">
+											</td>
+										</tr>
+									</table>
+								</td>							
 							</tr>
 							<tr><td width="100%" bgcolor="#f4f4f2">
-							<table width="100%" cellSpacing="2" cellPadding="2" vAlign="top" align="left" bgcolor="#f4f4f2">
+							<table width="100%" cellSpacing="1" cellPadding="3" vAlign="top" align="left" bgcolor="#006699">
 							<tr><td bgColor=#f4f4f2 align="center" vAlign="top">
 								<!-- contents -->
 
@@ -261,6 +351,7 @@ function removeSelComponents() {
 									<tr><td>
 										&nbsp;
 									</td></tr>
+									
 									<tr><td>
 										<logic:notEmpty name="aimEditActivityForm" property="selectedComponents">
 											<table width="100%" cellSpacing=1 cellPadding=4 class="box-border-nopadding">
@@ -300,8 +391,6 @@ function removeSelComponents() {
 														</tr>	
 														<tr>
 															<td colspan="2">
-
-															
 																<table width="100%" cellPadding=1 cellSpacing=1 vAlign="top" border=0 
 																class="box-border-nopadding">
 																	<tr><td width="100%" bgcolor="#dddddd" height="15">
@@ -385,31 +474,188 @@ function removeSelComponents() {
 										</logic:empty>
 									</td></tr>
 
+									<!-- Issues , Measures and Actions -->
 									<tr><td>
 										&nbsp;
 									</td></tr>
+									<tr><td>
+										<IMG alt=Link height=10 src="../ampTemplate/images/arrow-014E86.gif" width=15>
+										<a title="<digi:trn key="aim:issuesForTheActivity">The issues for the activity</digi:trn>">
+										<b><digi:trn key="aim:Issues">Issues</digi:trn></b></a>
+									</td></tr>
+									<tr><td>
+										&nbsp;
+									</td></tr>									
+									<tr><td>
+										<logic:notEmpty name="aimEditActivityForm" property="issues">
+											<table width="100%" cellSpacing=1 cellPadding=4 class="box-border-nopadding">
+												<tr><td align="center">
+													<table width="98%" cellSpacing=1 cellPadding=2 vAlign="top" align="center" bgcolor="#dddddd">
+														<%--<tr bgcolor="#d7eafd">--%>
+														<tr bgcolor="#ffd5d5">
+															<td vAlign="center" align="left" width="3">
+																<input type="checkbox" name="checkAllIssues" onclick="checkallIssues()">
+															</td>														
+															<td vAlign="center" align="left">
+																<b><digi:trn key="aim:Issues">Issues</digi:trn></b>
+															</td>
+														</tr>
+														<% int i = 0; 
+															String rowClass = "";
+														%>
+														
+														<logic:iterate name="aimEditActivityForm" property="issues"
+														id="issues" type="org.digijava.module.aim.helper.Issues">
+														<% if ((i % 2) != 0) { 
+															rowClass = "rowAlternate";
+															} else {
+															rowClass = "rowNormal";
+															} 
+															i++; 
+														%>
+														
+														<tr class="<%=rowClass%>">
+															<td vAlign="center" align="left" width="3">
+																<html:multibox property="selIssues">
+																	<c:out value="${issues.id}"/>
+																</html:multibox>
+															</td>														
+															<td vAlign="center" align="left">
+																<a href="javascript:updateIssues('<c:out value="${issues.id}"/>')">
+																<c:out value="${issues.name}"/></a>
+															</td>
+														</tr>
+														<tr class="<%=rowClass%>">
+															<td vAlign="center" align="left" width="3">
+															</td>														
+															<td vAlign="center" align="left">
+																<table width="100%" cellPadding=4 cellSpacing=1 vAlign="top" border=0 
+																bgcolor="#dddddd">
+																	<tr class="<%=rowClass%>">
+																		<td align="left" colspan="2">
+																			<b><digi:trn key="aim:measures">Measures</digi:trn></b>&nbsp;&nbsp;
+																			<a href="javascript:addMeasures('<c:out value="${issues.id}"/>')">
+																			Add Measures</a>
+																		</td>																	
+																	</tr>																
+																	<logic:notEmpty name="issues" property="measures">
+																	<logic:iterate name="issues" property="measures" id="measure"
+																	 type="org.digijava.module.aim.helper.Measures">
+																	<tr class="<%=rowClass%>">
+																		<td vAlign="center" align="left" width="3">
+																			<html:multibox property="selMeasures">
+																				<c:out value="${measure.id}"/>
+																			</html:multibox>
+																		</td>														
+																		<td vAlign="center" align="left">
+																			<a href="javascript:updateMeasures('<c:out value="${issues.id}"/>','<c:out value="${measure.id}"/>')">
+																			<c:out value="${measure.name}"/>
+																		</td>																		
+																	</tr>
+																	<tr class="<%=rowClass%>">
+																		<td vAlign="center" align="left" width="3">
+																		</td>														
+																		<td vAlign="center" align="left">
+																			<table width="100%" cellPadding=4 cellSpacing=1 vAlign="top" border=0 
+																			bgcolor="#dddddd">
+																				<tr class="<%=rowClass%>">
+																					<td align="left" colspan="2">
+																						<b><digi:trn key="aim:actors">Actors</digi:trn></b>&nbsp;&nbsp;
+																						<a href="javascript:addActors('<c:out value="${issues.id}"/>','<c:out value="${measure.id}"/>')">Add Actors</a>
+																					</td>																	
+																				</tr>																
+																				<logic:notEmpty name="measure" property="actors">
+																				<logic:iterate name="measure" property="actors" id="actor"
+																				 type="org.digijava.module.aim.dbentity.AmpActor">
+																				<tr class="<%=rowClass%>">
+																					<td vAlign="center" align="left" width="3">
+																						<html:multibox property="selActors">
+																							<c:out value="${actor.ampActorId}"/>
+																						</html:multibox>
+																					</td>														
+																					<td vAlign="center" align="left">
+																						<a href="javascript:updateActor('<c:out value="${issues.id}"/>','<c:out value="${measure.id}"/>','<c:out value="${actor.ampActorId}"/>')">
+																							<c:out value="${actor.name}"/>
+																					</td>																		
+																				</tr>
+																				</logic:iterate>		
+																				<tr class="<%=rowClass%>">
+																					<td vAlign="center" align="left" width="3">
+																					</td>														
+																					<td vAlign="center" align="left">
+																						<input type="button" value="Remove Actors" class="buton"
+																						onclick="removeActors('<c:out value="${issues.id}"/>','<c:out value="${measure.id}"/>')" 
+																						class="buton">
+																					</td>
+																				</tr>
+																				</logic:notEmpty>
+																			</table>
+																		</td>														
+																	</tr>
+																	</logic:iterate>		
+																	<tr class="<%=rowClass%>">
+																		<td vAlign="center" align="left" width="3">
+																		</td>														
+																		<td vAlign="center" align="left">
+																			<input type="button" value="Remove Measures" class="buton"
+																			onclick="removeMeasure('<c:out value="${issues.id}"/>')" class="buton">
+																		</td>
+																	</tr>
+																	</logic:notEmpty>
+																</table>
+															</td>
+														</tr>														
+														</logic:iterate>	
+													</table>	
+												</td></tr>	
+												<tr><td align="center">
+													<table cellSpacing=2 cellPadding=2>
+														<tr>
+															<td>
+																<input type="button" value="Add Issues" class="buton"
+																onclick="addIssues()" class="buton">
+															</td>
+															<td>
+																<input type="button" value="Remove Issues" class="buton"
+																onclick="removeIssues()" class="buton">
+															</td>															
+														</tr>
+													</table>
+												</td></tr>
+											</table>												
+										</logic:notEmpty>
+										<logic:empty name="aimEditActivityForm" property="issues">
+											<table width="100%" cellSpacing=1 cellPadding=5 class="box-border-nopadding">
+												<tr><td>
+													<input type="button" value="Add Issues" class="buton"
+													onclick="addIssues()" class="buton">
+												</td></tr>
+											</table>
+										</logic:empty>
+									</td></tr>
+									<tr><td>
+										&nbsp;
+									</td></tr>
+									<tr><td bgColor=#f4f4f2 align="center">
+										<table cellPadding=3>
+											<tr>
+												<td>
+													<input type="submit" value=" << Back " class="dr-menu" onclick="gotoStep(3)">
+												</td>
+												<td>
+													<input type="submit" value="Next >> " class="dr-menu" onclick="gotoStep(5)">
+												</td>
+												<td>
+													<input type="reset" value="Reset" class="dr-menu" onclick="return resetAll()">
+												</td>
+											</tr>
+										</table>
+									</td></tr>									
 								</table>
 
 								<!-- end contents -->
 							</td></tr>
-							<tr><td bgColor=#f4f4f2>
-								&nbsp;
-							</td></tr>
-							<tr><td bgColor=#f4f4f2 align="center">
-								<table cellPadding=3>
-									<tr>
-										<td>
-											<input type="submit" value=" << Back " class="dr-menu" onclick="gotoStep(3)">
-										</td>
-										<td>
-											<input type="submit" value="Next >> " class="dr-menu" onclick="gotoStep(5)">
-										</td>
-										<td>
-											<input type="reset" value="Reset" class="dr-menu" onclick="return resetAll()">
-										</td>
-									</tr>
-								</table>
-							</td></tr>
+
 							</table>
 							</td></tr>							
 						</table>		

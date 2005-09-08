@@ -74,7 +74,7 @@ public class AmpActivity
 	private AmpTeamMember activityCreator;
 	private Date createdDate;
 	private Date updatedDate;
-	
+	private Set issues;
 	
 	//private Set teamList;
 	
@@ -724,4 +724,19 @@ public class AmpActivity
 		AmpActivity act = (AmpActivity) obj;
 		return this.ampActivityId.equals(act.getAmpActivityId());
 	}
+
+	/**
+	 * @return Returns the issues.
+	 */
+	public Set getIssues() {
+		return issues;
+	}
+
+	/**
+	 * @param issues The issues to set.
+	 */
+	public void setIssues(Set issues) {
+		this.issues = issues;
+	}
+
 }

@@ -239,18 +239,26 @@ function removeSelLinks() {
 				<tr><td>
 					<table width="100%" cellSpacing="5" cellPadding="3" vAlign="top">
 						<tr><td width="75%" vAlign="top">	
-						<table cellPadding=2 cellSpacing=1 width="100%" bgcolor="#006699">
+						<table cellPadding=0 cellSpacing=0 width="100%">
 							<tr>
-								<td vAlign="center" width="100%" align ="center" class="textalb" 
-								height="20">
-								<a title="<digi:trn key="aim:DocumentsRelated">Document related to the project</digi:trn>">
-								<digi:trn key="aim:step5RelatedDocumentsandLinks">								
-								Step 5 of 7: Related Documents and Links
-								</digi:trn></a>
-								</td>
+								<td width="100%">
+									<table cellPadding=0 cellSpacing=0 width="100%" border=0>
+										<tr>
+											<td width="13" height="20" background="module/aim/images/left-side.gif">
+											</td>
+											<td vAlign="center" align ="center" class="textalb" height="20" bgcolor="#006699">
+												<digi:trn key="aim:step5RelatedDocumentsandLinks">								
+													Step 5 of 7: Related Documents and Links
+												</digi:trn>
+											</td>
+											<td width="13" height="20" background="module/aim/images/right-side.gif">
+											</td>
+										</tr>
+									</table>
+								</td>							
 							</tr>
 							<tr><td width="100%" bgcolor="#f4f4f2">
-							<table width="100%" cellSpacing="2" cellPadding="2" vAlign="top" align="left" bgcolor="#f4f4f2">							
+							<table width="100%" cellSpacing="1" cellPadding="3" vAlign="top" align="left" bgcolor="#006699">
 							<tr><td bgColor=#f4f4f2 align="center" vAlign="top">
 								<!-- contents -->
 
@@ -327,18 +335,6 @@ function removeSelLinks() {
 									<tr><td>
 										&nbsp;
 									</td></tr>
-								</table>
-
-								<!-- end contents -->
-							</td></tr>
-							<tr><td bgColor=#f4f4f2>
-								&nbsp;
-							</td></tr>
-							
-							<tr><td bgColor=#f4f4f2 align="center" vAlign="top">
-								<!-- contents -->
-
-								<table width="95%" bgcolor="#f4f4f2">
 									<tr><td>
 										<IMG alt=Link height=10 src="../ampTemplate/images/arrow-014E86.gif" width=15>
 										<a title="<digi:trn key="aim:WebSource">Web links related to the project</digi:trn>">										  			  <b><digi:trn key="aim:webResource">Web resources</digi:trn></b></a>
@@ -389,30 +385,27 @@ function removeSelLinks() {
 											</table>
 										</logic:empty>
 									</td></tr>
-									<tr><td>
+									<tr><td bgColor=#f4f4f2>
 										&nbsp;
 									</td></tr>
+									<tr><td bgColor=#f4f4f2 align="center">
+										<table cellPadding=3>
+											<tr>
+												<td>
+													<input type="button" value=" << Back " class="dr-menu" onclick="gotoStep(4)">
+												</td>
+												<td>
+													<input type="submit" value="Next >> " class="dr-menu" onclick="gotoStep(6)">
+												</td>
+												<td>
+													<input type="reset" value="Reset" class="dr-menu" onclick="return resetAll()">
+												</td>
+											</tr>
+										</table>
+									</td></tr>
+									
 								</table>
 
-								<!-- end contents -->
-							</td></tr>
-							<tr><td bgColor=#f4f4f2>
-								&nbsp;
-							</td></tr>
-							<tr><td bgColor=#f4f4f2 align="center">
-								<table cellPadding=3>
-									<tr>
-										<td>
-											<input type="button" value=" << Back " class="dr-menu" onclick="gotoStep(4)">
-										</td>
-										<td>
-											<input type="submit" value="Next >> " class="dr-menu" onclick="gotoStep(6)">
-										</td>
-										<td>
-											<input type="reset" value="Reset" class="dr-menu" onclick="return resetAll()">
-										</td>
-									</tr>
-								</table>
 							</td></tr>
 							</table>
 							</td></tr>							

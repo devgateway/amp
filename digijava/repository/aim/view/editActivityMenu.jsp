@@ -37,10 +37,11 @@ function gotoStep(value) {
 
 <digi:instance property="aimEditActivityForm" />
 
-<table width="200" cellSpacing=4 cellPadding=0 vAlign="top" align="left" 
-class="box-border-nopadding">
-<tr><td align="center" vAlign="top">
-<table width="98%" cellSpacing=10 cellPadding=2 vAlign="top" align="left" 
+<table width="209" cellSpacing=0 cellPadding=0 vAlign="top" align="left" border=0>
+<tr><td width="209" height="10" background="module/aim/images/top.gif">
+</td></tr>
+<tr><td>
+<table width="209" cellSpacing=4 cellPadding=2 vAlign="top" align="left" 
 bgcolor="#006699">
 	<tr>
 		<c:if test="${aimEditActivityForm.step != 1}">
@@ -56,12 +57,22 @@ bgcolor="#006699">
 		</td>
 		</c:if>	
 		<c:if test="${aimEditActivityForm.step == 1}">
-		<td bgcolor="#3399ff">
-			<IMG alt=Link height=10 src="../ampTemplate/images/arrow-th-BABAB9.gif" width=15>
-			<span class="textalb">
-			<digi:trn key="aim:identification">
-			Identification</digi:trn>
-			</span>
+		<td>
+			<table width="100%" cellspacing=0 cellpadding=0 valign=top align=left border=0> 
+				<tr>
+					<td width="10" height="19" background="module/aim/images/left-arc.gif">
+					</td>
+					<td bgcolor="#3399ff" height="19">
+					<IMG alt=Link height=10 src="../ampTemplate/images/arrow-th-BABAB9.gif" width=15>
+						<span class="textalb">
+						<digi:trn key="aim:identification">
+						Identification</digi:trn>
+					</span>
+					</td>
+					<td width="10" height="19"  background="module/aim/images/right-arc.gif">
+					</td>
+				</tr>
+			</table>
 		</td>
 		</c:if>				
 	</tr>
@@ -79,13 +90,23 @@ bgcolor="#006699">
 		</td>
 		</c:if>	
 		<c:if test="${aimEditActivityForm.step == 1}">
-		<td bgcolor="#3399ff">
-			<IMG alt=Link height=10 src="../ampTemplate/images/arrow-th-BABAB9.gif" width=15>
-			<span class="textalb">
-			<digi:trn key="aim:planning">
-			Planning</digi:trn>
-			</span>
-		</td>
+		<td>
+			<table width="100%" cellspacing=0 cellpadding=0 valign=top align=left border=0> 
+				<tr>
+					<td width="10" height="19" background="module/aim/images/left-arc.gif">
+					</td>
+					<td bgcolor="#3399ff" height="19">
+						<IMG alt=Link height=10 src="../ampTemplate/images/arrow-th-BABAB9.gif" width=15>
+						<span class="textalb">
+							<digi:trn key="aim:planning">
+							Planning</digi:trn>
+						</span>
+					</td>
+					<td width="10" height="19"  background="module/aim/images/right-arc.gif">
+					</td>
+				</tr>
+			</table>
+		</td>		
 		</c:if>				
 	</tr>
 	<tr>
@@ -102,13 +123,23 @@ bgcolor="#006699">
 		</td>
 		</c:if>	
 		<c:if test="${aimEditActivityForm.step == 2}">
-		<td bgcolor="#3399ff">
-			<IMG alt=Link height=10 src="../ampTemplate/images/arrow-th-BABAB9.gif" width=15>
-			<span class="textalb">
-				<digi:trn key="aim:location">
-				Location</digi:trn>
-			</span>
-		</td>
+		<td>
+			<table width="100%" cellspacing=0 cellpadding=0 valign=top align=left border=0> 
+				<tr>
+					<td width="10" height="19" background="module/aim/images/left-arc.gif">
+					</td>
+					<td bgcolor="#3399ff" height="19">
+						<IMG alt=Link height=10 src="../ampTemplate/images/arrow-th-BABAB9.gif" width=15>
+						<span class="textalb">
+							<digi:trn key="aim:location">
+								Location</digi:trn>
+						</span>
+					</td>
+					<td width="10" height="19"  background="module/aim/images/right-arc.gif">
+					</td>
+				</tr>
+			</table>
+		</td>		
 		</c:if>				
 	</tr>
 	<tr>
@@ -125,13 +156,23 @@ bgcolor="#006699">
 		</td>
 		</c:if>	
 		<c:if test="${aimEditActivityForm.step == 2}">
-		<td bgcolor="#3399ff">
+		<td>
+			<table width="100%" cellspacing=0 cellpadding=0 valign=top align=left border=0> 
+				<tr>
+					<td width="10" height="19" background="module/aim/images/left-arc.gif">
+					</td>
+					<td bgcolor="#3399ff" height="19">
 			<IMG alt=Link height=10 src="../ampTemplate/images/arrow-th-BABAB9.gif" width=15>
 			<span class="textalb">
 				<digi:trn key="aim:sectors">
 				Sectors</digi:trn>
 			</span>
-		</td>
+					</td>
+					<td width="10" height="19"  background="module/aim/images/right-arc.gif">
+					</td>
+				</tr>
+			</table>
+		</td>				
 		</c:if>				
 	</tr>
 	<tr>
@@ -148,13 +189,23 @@ bgcolor="#006699">
 		</td>
 		</c:if>	
 		<c:if test="${aimEditActivityForm.step == 2}">
-		<td bgcolor="#3399ff">
+		<td>
+			<table width="100%" cellspacing=0 cellpadding=0 valign=top align=left border=0> 
+				<tr>
+					<td width="10" height="19" background="module/aim/images/left-arc.gif">
+					</td>
+					<td bgcolor="#3399ff" height="19">
 			<IMG alt=Link height=10 src="../ampTemplate/images/arrow-th-BABAB9.gif" width=15>
 			<span class="textalb">
 				<digi:trn key="aim:program">
 				Program</digi:trn>
 			</span>
-		</td>
+					</td>
+					<td width="10" height="19"  background="module/aim/images/right-arc.gif">
+					</td>
+				</tr>
+			</table>
+		</td>						
 		</c:if>				
 	</tr>	
 	<tr>
@@ -171,15 +222,26 @@ bgcolor="#006699">
 		</td>
 		</c:if>	
 		<c:if test="${aimEditActivityForm.step == 3}">
-		<td bgcolor="#3399ff">
+		<td>
+			<table width="100%" cellspacing=0 cellpadding=0 valign=top align=left border=0> 
+				<tr>
+					<td width="10" height="19" background="module/aim/images/left-arc.gif">
+					</td>
+					<td bgcolor="#3399ff" height="19">
 			<IMG alt=Link height=10 src="../ampTemplate/images/arrow-th-BABAB9.gif" width=15>
 			<span class="textalb">
 				<digi:trn key="aim:funding">
 				Funding</digi:trn>
 			</span>
-		</td>
+					</td>
+					<td width="10" height="19"  background="module/aim/images/right-arc.gif">
+					</td>
+				</tr>
+			</table>
+		</td>			
 		</c:if>				
 	</tr>
+
 	<tr>
 		<c:if test="${aimEditActivityForm.step != 4}">
 		<td>
@@ -194,13 +256,23 @@ bgcolor="#006699">
 		</td>
 		</c:if>	
 		<c:if test="${aimEditActivityForm.step == 4}">
-		<td bgcolor="#3399ff">
+		<td>
+			<table width="100%" cellspacing=0 cellpadding=0 valign=top align=left border=0> 
+				<tr>
+					<td width="10" height="19" background="module/aim/images/left-arc.gif">
+					</td>
+					<td bgcolor="#3399ff" height="19">
 			<IMG alt=Link height=10 src="../ampTemplate/images/arrow-th-BABAB9.gif" width=15>
 			<span class="textalb">
 				<digi:trn key="aim:components">
 				Components</digi:trn>
 			</span>
-		</td>
+					</td>
+					<td width="10" height="19"  background="module/aim/images/right-arc.gif">
+					</td>
+				</tr>
+			</table>
+		</td>				
 		</c:if>
 	</tr>
 	<tr>
@@ -217,13 +289,23 @@ bgcolor="#006699">
 		</td>
 		</c:if>	
 		<c:if test="${aimEditActivityForm.step == 5}">
-		<td bgcolor="#3399ff">
+		<td>
+			<table width="100%" cellspacing=0 cellpadding=0 valign=top align=left border=0> 
+				<tr>
+					<td width="10" height="19" background="module/aim/images/left-arc.gif">
+					</td>
+					<td bgcolor="#3399ff" height="19">
 			<IMG alt=Link height=10 src="../ampTemplate/images/arrow-th-BABAB9.gif" width=15>
 			<span class="textalb">
 				<digi:trn key="aim:relatedDocuments">
 				Related Documents</digi:trn>
 			</span>
-		</td>
+					</td>
+					<td width="10" height="19"  background="module/aim/images/right-arc.gif">
+					</td>
+				</tr>
+			</table>
+		</td>						
 		</c:if>
 	</tr>
 	<tr>
@@ -240,13 +322,23 @@ bgcolor="#006699">
 		</td>
 		</c:if>	
 		<c:if test="${aimEditActivityForm.step == 6}">
-		<td bgcolor="#3399ff">
+		<td>
+			<table width="100%" cellspacing=0 cellpadding=0 valign=top align=left border=0> 
+				<tr>
+					<td width="10" height="19" background="module/aim/images/left-arc.gif">
+					</td>
+					<td bgcolor="#3399ff" height="19">
 			<IMG alt=Link height=10 src="../ampTemplate/images/arrow-th-BABAB9.gif" width=15>
 			<span class="textalb">
 				<digi:trn key="aim:relatedOrgs">
 				Related Organizations</digi:trn>
 			</span>
-		</td>
+					</td>
+					<td width="10" height="19"  background="module/aim/images/right-arc.gif">
+					</td>
+				</tr>
+			</table>
+		</td>				
 		</c:if>	
 	</tr>	
 	<tr>
@@ -263,13 +355,23 @@ bgcolor="#006699">
 		</td>
 		</c:if>	
 		<c:if test="${aimEditActivityForm.step == 7}">
-		<td bgcolor="#3399ff">
+		<td>
+			<table width="100%" cellspacing=0 cellpadding=0 valign=top align=left border=0> 
+				<tr>
+					<td width="10" height="19" background="module/aim/images/left-arc.gif">
+					</td>
+					<td bgcolor="#3399ff" height="19">
 			<IMG alt=Link height=10 src="../ampTemplate/images/arrow-th-BABAB9.gif" width=15>
 			<span class="textalb">
 				<digi:trn key="aim:contactInformation">
 				Contact Information</digi:trn>
 			</span>
-		</td>
+					</td>
+					<td width="10" height="19"  background="module/aim/images/right-arc.gif">
+					</td>
+				</tr>
+			</table>
+		</td>					
 		</c:if>		
 	</tr>	
 	<tr>
@@ -287,5 +389,7 @@ bgcolor="#006699">
 		</td>
 	</tr>		
 </table>
+</td></tr>
+<tr><td width="209" height="10" background="module/aim/images/bottom.gif">
 </td></tr>
 </table>

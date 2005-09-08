@@ -211,18 +211,29 @@ function popupwin()
 					<digi:errors/>
 				</td></tr>
 				<tr><td>
-					<table width="100%" cellSpacing="5" cellPadding="3" vAlign="top">
-						<tr><td width="75%" vAlign="top">	
-						<table cellPadding=2 cellSpacing=1 width="100%" border=0 bgcolor="#006699">
+					<table width="100%" cellSpacing="5" cellPadding="3" vAlign="top" border=0>
+						<tr><td width="75%" vAlign="top">
+						<table cellPadding=0 cellSpacing=0 width="100%" border=0>
 							<tr>
-								<td vAlign="center" width="100%" align ="center" class="textalb" height="20">
-								<digi:trn key="aim:step1IdentificationAndPlanning">Step 1 of 7: Identification | Planning</digi:trn>
+								<td width="100%">
+									<table cellPadding=0 cellSpacing=0 width="100%" border=0>
+										<tr>
+											<td width="13" height="20" background="module/aim/images/left-side.gif">
+											</td>
+											<td vAlign="center" align ="center" class="textalb" height="20" bgcolor="#006699">
+												<digi:trn key="aim:step1IdentificationAndPlanning">Step 1 of 7: Identification | Planning</digi:trn>
+											</td>
+											<td width="13" height="20" background="module/aim/images/right-side.gif">
+											</td>
+										</tr>
+									</table>
 								</td>
 							</tr>
 							<tr><td bgcolor="#f4f4f2" width="100%">
-							<table width="100%" cellSpacing="2" cellPadding="2" vAlign="top" align="left" bgcolor="#f4f4f2">
+							<table width="100%" cellSpacing="1" cellPadding="3" vAlign="top" align="left" bgcolor="#006699">
 							<tr><td bgColor=#f4f4f2 align="center" vAlign="top">
 								<!-- contents -->
+
 								<table width="95%" bgcolor="#f4f4f2" border=0>
 									<tr><td>
 										<IMG alt=Link height=10 src="../ampTemplate/images/arrow-014E86.gif" width=15>
@@ -572,8 +583,8 @@ function popupwin()
 														value="ampStatusId" label="name" />
 													</html:select>													
 													<br><br>
-													<a title="<digi:trn key="aim:ReasonforStatusofProject">Use this space to provide explanations as to why that status was selected. Used primarily in the case of cancelled and suspended projects</digi:trn>">
 													If there have been some changes in the status, explain below the reasons :
+													<a title="<digi:trn key="aim:ReasonforStatusofProject">Use this space to provide explanations as to why that status was selected. Used primarily in the case of cancelled and suspended projects</digi:trn>">
 													<br>														
 													<html:textarea property="statusReason" cols="50" rows="3" styleClass="inp-text" />
 													</a>														
@@ -581,22 +592,22 @@ function popupwin()
 											</tr>											
 										</table>
 									</td></tr>									
+									<tr><td bgColor=#f4f4f2>&nbsp;</td></tr>									
+									<tr><td bgColor=#f4f4f2 align="center">
+										<table cellPadding=3>
+											<tr>
+												<td>
+													<html:submit value="Next >>" styleClass="dr-menu" onclick="return validateForm()"/>
+												</td>
+												<td>
+													<html:reset value="Reset" styleClass="dr-menu" onclick="return resetAll()"/>
+												</td>
+											</tr>
+										</table>
+									</td></tr>									
 								</table>
 
 								<!-- end contents -->
-							</td></tr>
-							<tr><td bgColor=#f4f4f2>&nbsp;</td></tr>
-							<tr><td bgColor=#f4f4f2 align="center">
-								<table cellPadding=3>
-									<tr>
-										<td>
-											<html:submit value="Next >>" styleClass="dr-menu" onclick="return validateForm()"/>
-										</td>
-										<td>
-											<html:reset value="Reset" styleClass="dr-menu" onclick="return resetAll()"/>
-										</td>
-									</tr>
-								</table>
 							</td></tr>
 							</table>
 							</td></tr>							

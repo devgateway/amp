@@ -211,19 +211,30 @@
 					<table width="100%" cellSpacing="5" cellPadding="3" vAlign="top">
 						<tr><td width="75%" vAlign="top">
 						
-							<table cellPadding=2 cellSpacing=1 width="100%" vAlign="top" bgcolor="#006699">
+							<table cellPadding=0 cellSpacing=0 width="100%" vAlign="top">
 								<tr>
-									<td vAlign="top" width="100%" align="center" class="textalb" height="20">
-									<digi:trn key="aim:step3Funding">
-										Step 3 of 7: Funding
-									</digi:trn>
-									</td>
+								<td width="100%">
+									<table cellPadding=0 cellSpacing=0 width="100%" border=0>
+										<tr>
+											<td width="13" height="20" background="module/aim/images/left-side.gif">
+											</td>
+											<td vAlign="center" align ="center" class="textalb" height="20" bgcolor="#006699">
+												<digi:trn key="aim:step3Funding">
+													Step 3 of 7: Funding
+												</digi:trn>
+											</td>
+											<td width="13" height="20" background="module/aim/images/right-side.gif">
+											</td>
+										</tr>
+									</table>
+								</td>								
 								</tr>
 								<tr><td width="100%" bgcolor="#f4f4f2">
-								<table width="100%" cellSpacing="2" cellPadding="2" vAlign="top" align="left" bgcolor="#f4f4f2">
+								<table width="100%" cellSpacing="1" cellPadding="3" vAlign="top" align="left" bgcolor="#006699">
 									<tr>
 										<td bgColor=#f4f4f2 align="center" vAlign="top">
 									<!-- contents -->
+									
 										<table width="95%" bgcolor="#f4f4f2">
 											<tr>
 												<td>
@@ -303,72 +314,6 @@
 																			</td>
 																		</tr>																			
 																			
-																			<%--
-																			<!-- Signature Date -->
-																			<tr>
-																				<td bgcolor="#FFFFFF" align="left" width="150">
-																					<digi:trn key="aim:signatureDate">
-																						Signature Date
-																					</digi:trn>
-																				</td>
-																					<td width="1">:</td>
-																				<td bgcolor="#FFFFFF" align="left">
-																					<bean:write name="funding"	property="signatureDate"/>	
-																				</td>
-																			</tr>
-																			--%>
-																			<%--
-																			<tr>
-																				<td bgcolor="#FFFFFF" align="left" width="150">
-																					<digi:trn key="aim:reportingDate">
-																						Reporting Date</digi:trn>
-																				</td>
-																					<td width="1">:</td>
-																				<td bgcolor="#FFFFFF" align="left">
-																					<bean:write name="funding"	property="reportingDate"/>	
-																				</td>
-																			</tr>																			
-																			<tr>
-																				<td bgcolor="#FFFFFF" align="left" width="150">
-																					<digi:trn key="aim:plannedStartDate">
-																						Planned Start Date</digi:trn>
-																				</td>
-																					<td width="1">:</td>
-																				<td bgcolor="#FFFFFF" align="left">
-																					<bean:write name="funding"	property="propStartDate"/>	
-																				</td>
-																			</tr>
-																			<tr>
-																				<td bgcolor="#FFFFFF" align="left" width="150">
-																					<digi:trn key="aim:actualStartDate">
-																						Actual Start Date</digi:trn>
-																				</td>
-																					<td width="1">:</td>
-																				<td bgcolor="#FFFFFF" align="left">
-																					<bean:write name="funding"	property="actStartDate"/>	
-																				</td>
-																			</tr>	
-																			<tr>
-																				<td bgcolor="#FFFFFF" align="left" width="150">
-																					<digi:trn key="aim:plannedCloseDate">
-																						Planned Close Date</digi:trn>
-																				</td>
-																					<td width="1">:</td>
-																				<td bgcolor="#FFFFFF" align="left">
-																					<bean:write name="funding"	property="propCloseDate"/>	
-																				</td>
-																			</tr>
-																			<tr>
-																				<td bgcolor="#FFFFFF" align="left" width="150">
-																					<digi:trn key="aim:actualCloseDate">
-																						Actual Start Date</digi:trn>
-																				</td>
-																					<td width="1">:</td>
-																				<td bgcolor="#FFFFFF" align="left">
-																					<bean:write name="funding"	property="actCloseDate"/>	
-																				</td>
-																			</tr>	
-																			--%>
 																			<tr>
 																				<td bgcolor="#FFFFFF" align="left" width="150">
 																					<a title="<digi:trn key="aim:ConditionsforFundRelease">Enter the conditions attached to the release of the funds</digi:trn>">		 <digi:trn key="aim:conditions"> Conditions
@@ -416,11 +361,6 @@
 																							<td>	
 																								<bean:write name="fundingDetail" property="perspectiveName"/>
 																							</td>
-																							<%--
-																							<td>	
-																								<bean:write name="fundingDetail" 
-																								property="reportingOrganizationName"/>
-																							</td>--%>
 																						</tr>
 																						</logic:equal>
 																						</logic:iterate>
@@ -452,11 +392,6 @@
 																							<td>	
 																								<bean:write name="fundingDetail" property="perspectiveName"/>
 																							</td>
-																							<%--
-																							<td>	
-																								<bean:write name="fundingDetail" 
-																								property="reportingOrganizationName"/>
-																							</td>--%>
 																						</tr>
 																						</logic:equal>
 																						</logic:iterate>
@@ -488,11 +423,6 @@
 																							<td>	
 																								<bean:write name="fundingDetail" property="perspectiveName"/>
 																							</td>
-																							<%--
-																							<td>	
-																								<bean:write name="fundingDetail" 
-																								property="reportingOrganizationName"/>
-																							</td>--%>
 																						</tr>
 																						<tr>
 																							<td colspan=5 bgcolor="#ffffff">&nbsp;&nbsp;
@@ -564,11 +494,6 @@
 												</td>
 											</tr>
 											<tr><td>&nbsp;</td></tr>
-										</table>
-										<!-- end contents -->
-									</td>
-								</tr>
-								<tr><td bgColor=#f4f4f2>&nbsp;</td></tr>
 								<tr>
 									<td bgColor=#f4f4f2 align="center">
 										<table cellPadding=3>
@@ -585,7 +510,16 @@
 											</tr>
 										</table>
 									</td>
+								</tr>											
+										</table>
+
+
+
+										
+										<!-- end contents -->
+									</td>
 								</tr>
+
 							</table>
 							</td></tr>
 						</table>

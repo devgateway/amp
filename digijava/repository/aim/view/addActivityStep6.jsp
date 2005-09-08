@@ -171,19 +171,28 @@ function removeSelOrgs(value) {
 					</table>
 				</td></tr>
 				<tr><td>
-					<table width="100%" cellSpacing="0" cellPadding="0" vAlign="top">
+					<table width="100%" cellSpacing="5" cellPadding="3" vAlign="top">
 						<tr><td width="75%" vAlign="top">	
-						<table cellPadding=2 cellSpacing=1 width="100%" bgcolor="#006699">
+						<table cellPadding=0 cellSpacing=0 width="100%">
 							<tr>
-								<td vAlign="center" width="100%" align ="center" class="textalb" 
-								height="20">
-								<digi:trn key="aim:step6RelatedOrganizations">
-								Step 6 of 7: Related Organizations
-								</digi:trn>
-								</td>
+								<td width="100%">
+									<table cellPadding=0 cellSpacing=0 width="100%" border=0>
+										<tr>
+											<td width="13" height="20" background="module/aim/images/left-side.gif">
+											</td>
+											<td vAlign="center" align ="center" class="textalb" height="20" bgcolor="#006699">
+												<digi:trn key="aim:step6RelatedOrganizations">
+													Step 6 of 7: Related Organizations
+												</digi:trn>
+											</td>
+											<td width="13" height="20" background="module/aim/images/right-side.gif">
+											</td>
+										</tr>
+									</table>
+								</td>							
 							</tr>
 							<tr><td width="100%" bgcolor="#f4f4f2">
-							<table width="100%" cellSpacing="2" cellPadding="2" vAlign="top" align="left" bgcolor="#f4f4f2">							
+							<table width="100%" cellSpacing="1" cellPadding="3" vAlign="top" align="left" bgcolor="#006699">
 							<tr><td bgColor=#f4f4f2 align="center" vAlign="top">
 
 								<!-- contents -->
@@ -248,15 +257,7 @@ function removeSelOrgs(value) {
 									<tr><td>
 										&nbsp;
 									</td></tr>
-								</table>
 
-								<!-- end contents -->
-							</td></tr>
-							
-							<tr><td bgColor=#f4f4f2 align="center" vAlign="top">
-								<!-- contents -->
-
-								<table width="95%" bgcolor="#f4f4f2">
 									<tr><td>
 										<IMG alt=Link height=10 src="../ampTemplate/images/arrow-014E86.gif" width=15>
 										<a title="<digi:trn key="aim:AgencyImplementing">The organization that directly implements the activity</digi:trn>">
@@ -316,16 +317,6 @@ function removeSelOrgs(value) {
 									<tr><td>
 										&nbsp;
 									</td></tr>
-								</table>
-
-								<!-- end contents -->
-							</td></tr>
-							<tr><td bgColor=#f4f4f2 align="center" vAlign="top">
-								<!-- contents -->
-
-
-
-								<table width="95%" bgcolor="#f4f4f2">
 									<tr><td>
 										<IMG alt=Link height=10 src="../ampTemplate/images/arrow-014E86.gif" width=15>
 										<a title="<digi:trn key="aim:ContractAgency">The third party outside of the implementing agency</digi:trn>">
@@ -336,161 +327,26 @@ function removeSelOrgs(value) {
 										<html:text property="contractors" size="60" styleClass="inp-text"/>
 										</a>
 									</td></tr>									
-								</table>
-
-
-								
-								<%--
-
-								<table width="95%" bgcolor="#f4f4f2">
-									<tr><td>
-										<IMG alt=Link height=10 src="../ampTemplate/images/arrow-014E86.gif" width=15>
-										<b><digi:trn key="aim:contractor">Contractor</digi:trn></b>
-									</td></tr>
-									<tr><td bgColor=#f4f4f2>
-										&nbsp;
+									<tr><td bgColor=#f4f4f2 align="center">&nbsp;
+									</td></tr>																		
+									<tr><td bgColor=#f4f4f2 align="center">
+										<table cellPadding=3>
+											<tr>
+												<td>
+													<input type="button" value=" << Back " class="dr-menu" onclick="gotoStep(5)">
+												</td>
+												<td>
+													<input type="submit" value="Next >> " class="dr-menu" onclick="gotoStep(7)">
+												</td>
+												<td>
+													<input type="reset" value="Reset" class="dr-menu" onclick="return resetAll()">
+												</td>
+											</tr>
+										</table>
 									</td></tr>									
-									<tr><td>
-										<logic:notEmpty name="aimEditActivityForm" property="contractors">
-											<table width="100%" cellSpacing=1 cellPadding=5 class="box-border-nopadding">
-												<logic:iterate name="aimEditActivityForm" property="contractors"
-												id="cont" type="org.digijava.module.aim.dbentity.AmpOrganisation">
-												<tr><td>
-													<table width="100%" cellSpacing="1" cellPadding="1" vAlign="top" align="left">
-														<tr>
-															<td width="3">
-																<html:multibox property="selContractors">
-																	<bean:write name="cont" property="ampOrgId" />
-																</html:multibox>															
-															</td>
-															<td align="left">
-																<bean:write name="cont" property="name" />
-															</td>
-														</tr>
-													</table>
-												</td></tr>
-												</logic:iterate>
-												<tr><td>
-													<table cellSpacing=1 cellPadding=1>
-														<tr>
-															<td>
-																<input type="button" value="Add Organizations" class="buton" 
-																onclick="addOrgs(3)" class="buton">
-															</td>
-															<td>
-																<input type="button" value="Remove Selected Organizations" class="buton" 
-																onclick="return removeSelOrgs(3)" class="buton">
-															</td>
-														</tr>
-													</table>
-												</td></tr>
-											</table>
-										</logic:notEmpty>
-										
-										<logic:empty name="aimEditActivityForm" property="contractors">
-											<table width="100%" bgcolor="#cccccc" cellSpacing=1 cellPadding=5>
-												<tr>
-													<td bgcolor="#ffffff">
-														<input type="button" value="Add Organizations" class="buton" 
-														onclick="addOrgs(3)">
-													</td>
-												</tr>
-											</table>
-										</logic:empty>
-									</td></tr>
-									<tr><td>
-										&nbsp;
-									</td></tr>
 								</table>
-								--%>
+
 								<!-- end contents -->
-							</td></tr>					
-							
-							<%--
-							<tr><td bgColor=#f4f4f2 align="center" vAlign="top">
-
-								<table width="95%" bgcolor="#f4f4f2">
-									<tr><td>
-										<IMG alt=Link height=10 src="../ampTemplate/images/arrow-014E86.gif" width=15>
-										<b><digi:trn key="aim:reportingAgency">Reporting Agency</digi:trn></b>
-									</td></tr>
-									<tr><td bgColor=#f4f4f2>
-										&nbsp;
-									</td></tr>									
-									<tr><td>
-										<logic:notEmpty name="aimEditActivityForm" property="reportingOrgs">
-											<table width="100%" cellSpacing=1 cellPadding=5 class="box-border-nopadding">
-												<logic:iterate name="aimEditActivityForm" property="reportingOrgs"
-												id="repOrgs" type="org.digijava.module.aim.dbentity.AmpOrganisation">
-												<tr><td>
-													<table width="100%" cellSpacing="1" cellPadding="1" vAlign="top" align="left" bgcolor="#ffffff">
-														<tr>
-															<td width="3">
-																<html:multibox property="selReportingOrgs">
-																	<bean:write name="repOrgs" property="ampOrgId" />
-																</html:multibox>															
-															</td>
-															<td align="left">
-																<bean:write name="repOrgs" property="name" />
-															</td>
-														</tr>
-													</table>
-												</td></tr>
-												</logic:iterate>
-												<tr><td>
-													<table cellSpacing=1 cellPadding=1>
-														<tr>
-															<td>
-																<input type="button" value="Add Organizations" class="buton" 
-																onclick="addOrgs(4)" class="buton">
-															</td>
-															<td>
-																<input type="button" value="Remove Selected Organizations" class="buton" 
-																onclick="return removeSelOrgs(4)" class="buton">
-															</td>
-														</tr>
-													</table>
-												</td></tr>
-											</table>											
-										</logic:notEmpty>
-										
-										<logic:empty name="aimEditActivityForm" property="reportingOrgs">
-											<table width="100%" bgcolor="#cccccc" cellSpacing=1 cellPadding=5>
-												<tr>
-													<td bgcolor="#ffffff">
-														<input type="button" value="Add Organizations" class="buton" 
-														onclick="addOrgs(4)">
-													</td>
-												</tr>
-											</table>
-										</logic:empty>										
-									</td></tr>
-									<tr><td>
-										&nbsp;
-									</td></tr>
-								</table>
-								<!-- end contents -->							
-							</td></tr>							
-							<tr><td bgColor=#f4f4f2>
-								&nbsp;
-							</td></tr>														
-							--%>
-							
-							
-							<tr><td bgColor=#f4f4f2 align="center">
-								<table cellPadding=3>
-									<tr>
-										<td>
-											<input type="button" value=" << Back " class="dr-menu" onclick="gotoStep(5)">
-										</td>
-										<td>
-											<input type="submit" value="Next >> " class="dr-menu" onclick="gotoStep(7)">
-										</td>
-										<td>
-											<input type="reset" value="Reset" class="dr-menu" onclick="return resetAll()">
-										</td>
-									</tr>
-								</table>
 							</td></tr>
 							</table>
 							</td></tr>							

@@ -244,8 +244,20 @@ public class EditActivityForm extends ActionForm implements Serializable{
 	private Long componentId;
 	
 	private String author;
-	
 	private String context;
+	
+	private Collection regionalFundings;
+	
+	private ArrayList issues;
+	private Long[] selIssues;
+	private String issue;
+	private Long[] selMeasures;
+	private String measure;
+	private Long issueId;
+	private Long measureId;
+	private Long[] selActors;
+	private String actor;
+	private Long actorId;
 	
 
 	public EditActivityForm() {
@@ -358,6 +370,7 @@ public class EditActivityForm extends ActionForm implements Serializable{
 			actAthEmail = null;
 			actAthFirstName = null;
 			actAthLastName = null;
+			regionalFundings = null;
 		}
 
 		if (orgSelReset) {
@@ -2669,4 +2682,158 @@ public class EditActivityForm extends ActionForm implements Serializable{
     public void setContext(String context) {
         this.context = context;
     }
+
+	/**
+	 * @return Returns the regionalFundings.
+	 */
+	public Collection getRegionalFundings() {
+		return regionalFundings;
+	}
+
+	/**
+	 * @param regionalFundings The regionalFundings to set.
+	 */
+	public void setRegionalFundings(Collection regionalFundings) {
+		this.regionalFundings = regionalFundings;
+	}
+
+	/**
+	 * @return Returns the issues.
+	 */
+	public ArrayList getIssues() {
+		return issues;
+	}
+
+	/**
+	 * @param issues The issues to set.
+	 */
+	public void setIssues(ArrayList issues) {
+		this.issues = issues;
+	}
+
+	/**
+	 * @return Returns the selIssues.
+	 */
+	public Long[] getSelIssues() {
+		return selIssues;
+	}
+
+	/**
+	 * @param selIssues The selIssues to set.
+	 */
+	public void setSelIssues(Long[] selIssues) {
+		this.selIssues = selIssues;
+	}
+
+	/**
+	 * @return Returns the issue.
+	 */
+	public String getIssue() {
+		return issue;
+	}
+
+	/**
+	 * @param issue The issue to set.
+	 */
+	public void setIssue(String issue) {
+		this.issue = issue;
+	}
+
+	/**
+	 * @return Returns the measure.
+	 */
+	public String getMeasure() {
+		return measure;
+	}
+
+	/**
+	 * @param measure The measure to set.
+	 */
+	public void setMeasure(String measure) {
+		this.measure = measure;
+	}
+
+	/**
+	 * @return Returns the selMeasures.
+	 */
+	public Long[] getSelMeasures() {
+		return selMeasures;
+	}
+
+	/**
+	 * @param selMeasures The selMeasures to set.
+	 */
+	public void setSelMeasures(Long[] selMeasures) {
+		this.selMeasures = selMeasures;
+	}
+
+	/**
+	 * @return Returns the issueId.
+	 */
+	public Long getIssueId() {
+		return issueId;
+	}
+
+	/**
+	 * @param issueId The issueId to set.
+	 */
+	public void setIssueId(Long issueId) {
+		this.issueId = issueId;
+	}
+
+	/**
+	 * @return Returns the measureId.
+	 */
+	public Long getMeasureId() {
+		return measureId;
+	}
+
+	/**
+	 * @param measureId The measureId to set.
+	 */
+	public void setMeasureId(Long measureId) {
+		this.measureId = measureId;
+	}
+
+	/**
+	 * @return Returns the actor.
+	 */
+	public String getActor() {
+		return actor;
+	}
+
+	/**
+	 * @param actor The actor to set.
+	 */
+	public void setActor(String actor) {
+		this.actor = actor;
+	}
+
+	/**
+	 * @return Returns the actorId.
+	 */
+	public Long getActorId() {
+		return actorId;
+	}
+
+	/**
+	 * @param actorId The actorId to set.
+	 */
+	public void setActorId(Long actorId) {
+		this.actorId = actorId;
+	}
+
+	/**
+	 * @return Returns the selActors.
+	 */
+	public Long[] getSelActors() {
+		return selActors;
+	}
+
+	/**
+	 * @param selActors The selActors to set.
+	 */
+	public void setSelActors(Long[] selActors) {
+		this.selActors = selActors;
+	}
 }

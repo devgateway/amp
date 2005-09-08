@@ -32,11 +32,14 @@ import org.digijava.kernel.util.RequestUtils;
 import org.digijava.module.aim.dbentity.AmpActivity;
 import org.digijava.module.aim.dbentity.AmpActivityClosingDates;
 import org.digijava.module.aim.dbentity.AmpActivityInternalId;
+import org.digijava.module.aim.dbentity.AmpActor;
 import org.digijava.module.aim.dbentity.AmpComponent;
 import org.digijava.module.aim.dbentity.AmpFunding;
 import org.digijava.module.aim.dbentity.AmpFundingDetail;
+import org.digijava.module.aim.dbentity.AmpIssues;
 import org.digijava.module.aim.dbentity.AmpLevel;
 import org.digijava.module.aim.dbentity.AmpLocation;
+import org.digijava.module.aim.dbentity.AmpMeasure;
 import org.digijava.module.aim.dbentity.AmpOrgRole;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpPhysicalPerformance;
@@ -55,7 +58,9 @@ import org.digijava.module.aim.helper.DecimalToText;
 import org.digijava.module.aim.helper.Funding;
 import org.digijava.module.aim.helper.FundingDetail;
 import org.digijava.module.aim.helper.FundingOrganization;
+import org.digijava.module.aim.helper.Issues;
 import org.digijava.module.aim.helper.Location;
+import org.digijava.module.aim.helper.Measures;
 import org.digijava.module.aim.helper.OrgProjectId;
 import org.digijava.module.aim.helper.PhysicalProgress;
 import org.digijava.module.aim.helper.TeamMember;
@@ -385,18 +390,6 @@ public class SaveActivity extends Action {
 				orgRole.add(ampOrgRole);
 			}
 		}
-		/*
-		if (eaForm.getContractors() != null) { // contractors
-			AmpRole role = DbUtil.getAmpRole(Constants.CONTRACTOR);
-			Iterator itr = eaForm.getContractors().iterator();
-			while (itr.hasNext()) {
-				AmpOrganisation org = (AmpOrganisation) itr.next();
-				AmpOrgRole ampOrgRole = new AmpOrgRole();
-				ampOrgRole.setRole(role);
-				ampOrgRole.setOrganisation(org);
-				orgRole.add(ampOrgRole);
-			}
-		}*/
 		if (eaForm.getReportingOrgs() != null) { // Reporting Organization
 			AmpRole role = DbUtil.getAmpRole(Constants.REPORTING_AGENCY);
 			Iterator itr = eaForm.getReportingOrgs().iterator();
@@ -662,6 +655,42 @@ public class SaveActivity extends Action {
 			}
 		}
 		activity.setFunding(fundings);
+		
+		if (eaForm.getIssues() != null &&
+				eaForm.getIssues().size() > 0) {
+			Set issueSet = new HashSet();
+			for (int i = 0;i < eaForm.getIssues().size();i++) {
+				Issues issue = (Issues) eaForm.getIssues().get(i);
+				AmpIssues ampIssue = new AmpIssues();
+				ampIssue.setActivity(activity);
+				ampIssue.setName(issue.getName());
+				Set measureSet = new HashSet();
+				if (issue.getMeasures() != null &&
+						issue.getMeasures().size() > 0) {
+					for (int j = 0;j < issue.getMeasures().size();j++) {
+						Measures measure = (Measures) issue.getMeasures().get(j);
+						AmpMeasure ampMeasure = new AmpMeasure();
+						ampMeasure.setIssue(ampIssue);
+						ampMeasure.setName(measure.getName());
+						Set actorSet = new HashSet();
+						if (measure.getActors() != null &&
+								measure.getActors().size() > 0) {
+							for (int k = 0;k < measure.getActors().size();k++) {
+								AmpActor actor = (AmpActor) measure.getActors().get(k);
+								actor.setAmpActorId(null);
+								actor.setMeasure(ampMeasure);
+								actorSet.add(actor);
+							}
+						}
+						ampMeasure.setActors(actorSet);
+						measureSet.add(ampMeasure);
+					}
+				}
+				ampIssue.setMeasures(measureSet);
+				issueSet.add(ampIssue);
+			}
+			activity.setIssues(issueSet);
+		}
 				
 		Long field = null;
 		if (eaForm.getField() != null)

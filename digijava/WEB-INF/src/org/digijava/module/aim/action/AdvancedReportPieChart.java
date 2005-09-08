@@ -48,14 +48,30 @@ public class AdvancedReportPieChart extends Action
 	
 //		chart_coll.add("60");
 //		chart_coll.add("Donor 1");
+		String title = "", commit = "";
+		iter = formbean.getReport().iterator();
+		Collection colls = null;
+		while(iter.hasNext())
+		{
+			Report report = (Report) iter.next();
+			colls = report.getRecords();
+			Iterator it = colls.iterator();
+			while(it.hasNext())
+			{
+				org.digijava.module.aim.helper.AdvancedReport advReport = (org.digijava.module.aim.helper.AdvancedReport)it.next();
+				if(advReport.getTitle() != null)
+					title = advReport.getTitle();
+				if(advReport.getActualCommitment() != null)
+					commit = advReport.getActualCommitment();
+					//chart_coll.add(advReport.getActualCommitment().replaceAll("," , ""));
+				//chart_coll.add(advReport.getTitle());
+			}
+			System.out.println(title + "<------***********------->"  + commit );
+			chart_coll.add(new Double(commit.replaceAll(",", "")) );
+			chart_coll.add(title);
+		}
 		
-		while(iter.hasNext()){
-			Report r= (Report) iter.next();
-			chart_coll.add(r.getAcCommitment().replaceAll("," , ""));
-			//logger.info("filling COMM into the Chart Scriptlet."+r.getAcCommitment());
-			chart_coll.add(r.getDonor());
-			//logger.info("filling DONOR NAME into the Chart Scriptlet."+r.getDonor());
-		} 
+		System.out.println("  Chart Size : " +chart_coll.size());
 
 	ActionServlet s = getServlet();
 	////logger.info("###########################Inside VIEW Projects JfreeChart Action...SIZE:"+chart_coll.size());

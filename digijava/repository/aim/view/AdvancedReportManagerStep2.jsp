@@ -330,6 +330,17 @@ function gotoStep() {
 													value="1">
 														<digi:trn key="aim:prev">Previous</digi:trn> &nbsp
 													</logic:equal>	
+
+													<logic:notEmpty name="aimAdvancedReportForm" property="finalData">
+													  <bean:define id="translation">
+															<digi:trn key="aim:clickToViewAllRecords">Click here to view All Records</digi:trn>
+														</bean:define>
+														<digi:link href="/advancedReportManager.do?check=5&page=all" title="<%=translation%>" >
+															All
+														</digi:link>
+														&nbsp
+													</logic:notEmpty>
+
 					<!----------------------------------END   -----------------------------------------------     -->									
 					
 													

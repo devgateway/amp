@@ -248,10 +248,10 @@ public class AdvancedReport extends Action {
 						measure = ampMeasure.getMeasureId();
 					}
 				}
-				
+				boolean allPages = false;
 				if(formBean.getAddedColumns() != null)
 				{
-					formBean.setFinalData(ReportUtil.generateQuery(formBean.getAddedColumns(),ampTeamId));
+					//formBean.setFinalData(ReportUtil.generateQuery(formBean.getAddedColumns(),ampTeamId));
 					
 					Collection pageRecords = new ArrayList();
 					int page=0;
@@ -259,55 +259,77 @@ public class AdvancedReport extends Action {
 					{
 						page = 1;
 						reports=ReportUtil.generateAdvancedReport(ampTeamId,fromYr,toYr,fiscalCalId,ampCurrencyCode,perspective, measure, formBean.getAddedColumns() );
+						logger.info("Page is NULL............................" + reports.size());
+						formBean.setFinalData(reports);
 						httpSession.setAttribute("ampReports",reports);
-						logger.info("Page is NULL............................");
+						
 					}
 					else 
 					{
-						page = Integer.parseInt(request.getParameter("page"));
-						reports=(ArrayList)httpSession.getAttribute("ampReports");
-						logger.info("Page is NOT NULL.................");
-					}
-					int stIndex = ((page - 1) * 10) + 1;
-					int edIndex = page * 10;
-					if (edIndex > reports.size()) 
-					{
-						edIndex = reports.size();
-					}
-					Vector vect = new Vector();
-					vect.addAll(reports);
-								 
-					for (int i = (stIndex-1);i < edIndex;i ++) 
-					{
-						pageRecords.add(vect.get(i));
-					}
-					logger.info("< Page Record Size >" + pageRecords.size());
-					Collection pages = null;
-					int numPages=0;
-					if (reports.size() > 10) 
-					{
-						pages = new ArrayList();
-						numPages = reports.size()/10;
-						if(reports.size()%10>0)
-							numPages++;
-						for (int i = 0;i < numPages;i++) 
+						logger.info("  ------>>>>>>>>    " + formBean.getFinalData().size());
+						if(request.getParameter("page").equals("all") == true)
+							allPages = true;
+						else
 						{
-							Integer pageNum=new Integer(i+1);
-							pages.add(pageNum);
+							page = Integer.parseInt(request.getParameter("page"));
+							reports=(ArrayList)httpSession.getAttribute("ampReports");
+							logger.info("Page is NOT NULL.................");
 						}
-					 }
+					}
 					
-					int yearRange=(toYr-fromYr)+1;
-					formBean.setFiscalYearRange(new ArrayList());
-					for(int yr=fromYr;yr<=toYr;yr++)
-						formBean.getFiscalYearRange().add(new Integer(yr));
-					formBean.setTotalColumns(14);
-					formBean.setPages(pages);
-					formBean.setReport(pageRecords);
-					formBean.setPage(new Integer(page));
-					formBean.setAllReports(reports);
-					logger.info(" page REC " + pageRecords.size());
-			 		logger.info(" REPORTS  " + reports.size());
+					if(allPages == true)
+					{
+						logger.info("IN ALl Records.........>>>" + formBean.getFinalData().size());
+						formBean.setReport(formBean.getFinalData());
+						formBean.setFiscalYearRange(new ArrayList());
+						for(int yr=fromYr;yr<=toYr;yr++)
+							formBean.getFiscalYearRange().add(new Integer(yr));
+						
+					}
+					else
+					{
+						int stIndex = ((page - 1) * 10) + 1;
+						int edIndex = page * 10;
+						if (edIndex > reports.size()) 
+						{
+							edIndex = reports.size();
+						}
+						Vector vect = new Vector();
+						vect.addAll(reports);
+									 
+						for (int i = (stIndex-1);i < edIndex;i ++) 
+						{
+							pageRecords.add(vect.get(i));
+						}
+						logger.info("< For each Page Record size is ..... >" + pageRecords.size());
+						Collection pages = null;
+						int numPages=0;
+						if (reports.size() > 10) 
+						{
+							pages = new ArrayList();
+							numPages = reports.size()/10;
+							if(reports.size()%10>0)
+								numPages++;
+							for (int i = 0;i < numPages;i++) 
+							{
+								Integer pageNum=new Integer(i+1);
+								pages.add(pageNum);
+							}
+						 }
+						
+						int yearRange=(toYr-fromYr)+1;
+						formBean.setFiscalYearRange(new ArrayList());
+						for(int yr=fromYr;yr<=toYr;yr++)
+							formBean.getFiscalYearRange().add(new Integer(yr));
+						formBean.setTotalColumns(14);
+						formBean.setPages(pages);
+						formBean.setReport(pageRecords);
+						formBean.setPage(new Integer(page));
+						formBean.setAllReports(reports);
+						logger.info(" page REC " + pageRecords.size());
+				 		logger.info(" REPORTS  " + reports.size());
+					}
+
 					formBean.setForecastYear(new ArrayList());
 					for(int i=toYr;i<=(toYr+3);i++)
 						formBean.getForecastYear().add(new Integer(i));

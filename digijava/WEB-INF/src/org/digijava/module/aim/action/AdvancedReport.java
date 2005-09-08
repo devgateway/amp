@@ -645,7 +645,7 @@ public class AdvancedReport extends Action {
 		        plot.setURLGenerator(new StandardPieURLGenerator("xy_chart.jsp","section"));
 		        plot.setToolTipGenerator(new StandardPieItemLabelGenerator());
 				//logger.info("@@@@@@@@@@ Chart Object:");
-				JFreeChart chart = new JFreeChart("", JFreeChart.DEFAULT_TITLE_FONT, plot, true);
+				JFreeChart chart = new JFreeChart("", JFreeChart.DEFAULT_TITLE_FONT, plot, false);
 		        chart.setBackgroundPaint(java.awt.Color.white);
 
 		        //  Write the chart image to the temporary directory
@@ -692,7 +692,7 @@ public class AdvancedReport extends Action {
 			CategoryDataset categorydataset = new DefaultCategoryDataset();
 			categorydataset = data;
 			
-			JFreeChart jfreechart = ChartFactory.createBarChart("Bar Chart", "Donors", "Actual Commitment (in US$)", categorydataset, PlotOrientation.VERTICAL, true, true, true);
+			JFreeChart jfreechart = ChartFactory.createBarChart("Bar Chart", "Donors", "Actual Commitment (in US$)", categorydataset, PlotOrientation.VERTICAL, false, false, false);
 			jfreechart.setBackgroundPaint(java.awt.Color.white);
 			
 			// Write the chart image to the temporary directory 

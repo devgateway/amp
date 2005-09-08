@@ -80,7 +80,7 @@
 								&gt;&gt;		
 								</digi:link>&nbsp;&nbsp;
 
-								<digi:link href="/advancedReportManager.do?check=SelectRows" styleClass="comment" title="<%=translation%>" >
+								<digi:link href="/advancedReportManager.do?check=charts" styleClass="comment" title="<%=translation%>" >
 								<digi:trn key="aim:reportBuilder:selectrows">
 									Report Builder : Select Rows
 								</digi:trn>					
@@ -146,7 +146,7 @@
 													<bean:define id="translation">
 														<digi:trn key="aim:clickToselectrows/hierarchies">Click here to select rows/hierarchies</digi:trn>
 													</bean:define>
-													<digi:link href="/advancedReportManager.do?check=SelectRows"  styleClass="sub-nav" title="<%=translation%>" >
+													<digi:link href="/advancedReportManager.do?check=charts"  styleClass="sub-nav" title="<%=translation%>" >
 														2 : <digi:trn key="aim:SelectRows/hierarchies">Select rows/hierarchies</digi:trn>
 													</digi:link>
 												</td>										

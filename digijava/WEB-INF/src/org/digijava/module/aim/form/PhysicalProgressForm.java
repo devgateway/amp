@@ -1,7 +1,9 @@
 package org.digijava.module.aim.form ;
 
-import org.apache.struts.action.ActionForm ;
+import java.util.ArrayList;
 import java.util.Collection;
+
+import org.apache.struts.action.ActionForm;
 
 public class PhysicalProgressForm extends ActionForm
 {
@@ -24,6 +26,7 @@ public class PhysicalProgressForm extends ActionForm
 	private String amount;
 	private String currCode;
 	private String compTitle;
+	private ArrayList issues;
 	
 	
 	public String getDescription() 
@@ -222,5 +225,19 @@ public class PhysicalProgressForm extends ActionForm
 	 */
 	public void setCompTitle(String compTitle) {
 		this.compTitle = compTitle;
+	}
+
+	/**
+	 * @return Returns the issues.
+	 */
+	public ArrayList getIssues() {
+		return issues;
+	}
+
+	/**
+	 * @param issues The issues to set.
+	 */
+	public void setIssues(ArrayList issues) {
+		this.issues = issues;
 	}
 }

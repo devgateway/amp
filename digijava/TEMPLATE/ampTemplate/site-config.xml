@@ -246,6 +246,9 @@
 				<page>aim_addlocPopupLayout</page>
 				<page>aim_addCompPopupLayout</page>
 				<page>aim_reviseCloseDate</page>
+				<page>aim_addIssue</page>
+				<page>aim_addMeasure</page>
+				<page>aim_addActor</page>
 				<page>aim_addChildWorkspaces</page>
 				<page>aim_addOrgGrpPopupLayout</page>
 				<page>aim_viewOrgDetailPopupLayout</page>

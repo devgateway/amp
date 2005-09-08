@@ -34,7 +34,7 @@ method="post">
 			<TABLE width="760" cellSpacing=0 cellPadding=0 vAlign="top" align="center" bgcolor="#f4f4f4" class="box-border-nopadding">
 			<TR><TD bgcolor="#f4f4f4">
 			
-			<TABLE width="760" cellSpacing=3 cellPadding=3 vAlign="top" align="center" bgcolor="#f4f4f4">
+			<TABLE width="760" cellSpacing=3 cellPadding=3 vAlign="top" align="center" bgcolor="#f4f4f4" border=0>
 				<TR bgColor=#f4f4f2>
             	<TD align=left>
 						<SPAN class=crumb>					
@@ -46,7 +46,8 @@ method="post">
 						<bean:define id="translation">
 							<digi:trn key="aim:clickToViewPhysicalProgress">Click here to view Physical Progress</digi:trn>
 						</bean:define>
-						<digi:link href="/viewPhysicalProgress.do" name="urlPhysicalProgress" styleClass="comment" title="<%=translation%>" >
+						<digi:link href="/viewPhysicalProgress.do" name="urlPhysicalProgress" styleClass="comment" 
+						title="<%=translation%>" >
 							<digi:trn key="aim:physicalProgress">PhysicalProgress</digi:trn>
 						</digi:link>
 						&gt; Overview &gt; <bean:write name="aimPhysicalProgressForm" property="perspective"/> Perspective
@@ -55,6 +56,8 @@ method="post">
 				</TR>
 				<TR bgColor=#f4f4f2>
 					<TD vAlign="top" align="center" width="100%">
+
+					
 						<TABLE width="98%" cellPadding=0 cellSpacing=0 vAlign="top" align="center" bgColor=#f4f4f2>
 							<TR>
 								<TD width="100%" bgcolor="#F4F4F2" height="17">
@@ -160,11 +163,87 @@ method="post">
 						</TABLE>
 					</TD>
 				</TR>				
+				<TR>
+					<TD>
 
-			</TABLE>
+						<!-- issues --> 
 
-			</TD></TR>
-			
+						<TABLE width="98%" cellPadding=0 cellSpacing=0 vAlign="top" align="center" bgColor=#f4f4f2>
+							<TR>
+								<TD width="100%" bgcolor="#F4F4F2" height="17">
+									<TABLE border="0" cellpadding="0" cellspacing="0" bgcolor="#F4F4F2" height="17">
+                           	<TR bgcolor="#F4F4F2" height="17"> 
+                              	<TD bgcolor="#C9C9C7" class="box-title">&nbsp;&nbsp;
+											<digi:trn key="aim:Issues">Issues</digi:trn></TD>
+	                              <TD><IMG src="../ampTemplate/images/corner-r.gif" width="17" height="17"></TD>
+   	                        </TR>
+      	                  </TABLE>									
+								</TD>
+							</TR>
+							<TR>
+								<TD width="100%" bgcolor="#F4F4F2" align="center">
+									<TABLE width="100%" cellPadding="2" cellSpacing="2" vAlign="top" align="center" bgColor=#f4f4f2
+									class="box-border-nopadding">
+	   	                  	<logic:empty name="aimPhysicalProgressForm" property="issues">
+											<TR><TD>&nbsp;</TD></TR>
+										</logic:empty>
+										<logic:notEmpty name="aimPhysicalProgressForm" property="issues">
+											<logic:iterate name="aimPhysicalProgressForm" property="issues" id="issue" 
+											type="org.digijava.module.aim.helper.Issues">
+												<TR><TD width="100%" bgcolor="#F4F4F2" align="center">
+													<TABLE width="100%" cellPadding="2" cellSpacing="2" vAlign="top" align="center" 
+													bgColor=#f4f4f2 class="box-border-nopadding">
+														<TR>
+															<TD width="100%" vAlign="top" align="left">
+																<TABLE width="100%" cellPadding="5" cellSpacing="1" vAlign="top" align="left" 
+																bgcolor="#ffffff">
+																	<TR bgcolor="#dfdfdf"><TD>
+																		<bean:write name="issue" property="name"/>
+																	</TD></TR>
+																	<logic:empty name="issue" property="measures">
+																		<TR><TD>&nbsp;</TD></TR>
+																	</logic:empty>
+																	<logic:notEmpty name="issue" property="measures">
+																		<logic:iterate name="issue" property="measures" id="measure" 
+																		type="org.digijava.module.aim.helper.Measures">
+																			<TR><TD>
+																				<TABLE width="95%" cellPadding="5" cellSpacing="0" vAlign="top" 
+																				align="center" bgcolor="#ffffff" bordercolor="#cccccc" border="1">
+																					<TR bgcolor="#f6f6f6"><TD class="box-title"><b>
+																						<bean:write name="measure" property="name"/></b>
+																					</TD></TR>
+																					<logic:empty name="measure" property="actors">
+																						<TR><TD>&nbsp;</TD></TR>
+																					</logic:empty>
+																					<logic:notEmpty name="measure" property="actors">
+																						<logic:iterate name="measure" property="actors" id="actor"
+																						type="org.digijava.module.aim.dbentity.AmpActor">
+																							<TR><TD>
+																								<TABLE width="90%" cellPadding="5" 
+																								cellSpacing="0" vAlign="top" align="center" 
+																								bgcolor="#ffffff" bordercolor="#cccccc" border="1">
+																									<TR bgcolor="#ffffff"><TD class="box-title"><b>
+																										<bean:write name="actor" property="name"/></b>
+																									</TD></TR>
+																								</TABLE>
+																							</TD></TR>
+																						</logic:iterate>
+																					</logic:notEmpty>
+																				</TABLE>
+																			</TD></TR>
+																		</logic:iterate>
+																	</logic:notEmpty>																			
+																</TABLE>
+														</TD></TR>
+													</TABLE>	
+												</TD></TR>
+											</logic:iterate>
+										</logic:notEmpty>																			
+									</TABLE>
+								</TD>
+							</TR>
+						</TABLE>
+					</TD></TR>
 			</TABLE>
 		<!-- end -->
 	</TD>

@@ -22,12 +22,14 @@ import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.user.User;
 import org.digijava.module.aim.dbentity.AmpActivity;
 import org.digijava.module.aim.dbentity.AmpActivityClosingDates;
+import org.digijava.module.aim.dbentity.AmpActor;
 import org.digijava.module.aim.dbentity.AmpComments;
 import org.digijava.module.aim.dbentity.AmpComponent;
 import org.digijava.module.aim.dbentity.AmpFunding;
 import org.digijava.module.aim.dbentity.AmpFundingDetail;
 import org.digijava.module.aim.dbentity.AmpIssues;
 import org.digijava.module.aim.dbentity.AmpLocation;
+import org.digijava.module.aim.dbentity.AmpMeasure;
 import org.digijava.module.aim.dbentity.AmpOrgRole;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpPhysicalPerformance;
@@ -36,8 +38,12 @@ import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.helper.Activity;
 import org.digijava.module.aim.helper.ActivitySector;
 import org.digijava.module.aim.helper.DateConversion;
+import org.digijava.module.aim.helper.Issues;
 import org.digijava.module.aim.helper.Location;
+import org.digijava.module.aim.helper.Measures;
 import org.digijava.module.aim.helper.RelOrganization;
+
+import sun.security.krb5.internal.ac;
 
 /**
  * ActivityUtil is the persister class for all activity related 
@@ -738,6 +744,62 @@ public class ActivityUtil {
 			}
 		}
 		return orgroles;
+	}
+	 
+	public static ArrayList getIssues(Long id) {
+		ArrayList list = new ArrayList();
+		
+		Session  session = null;
+		try {
+			session = PersistenceManager.getSession();
+			AmpActivity activity = (AmpActivity) session.load(AmpActivity.class,id);
+			Set issues = activity.getIssues();
+			if (issues != null && issues.size() > 0) {
+				Iterator iItr = issues.iterator();
+				while (iItr.hasNext()) {
+					AmpIssues ampIssue = (AmpIssues) iItr.next();
+					Issues issue = new Issues();
+					issue.setId(ampIssue.getAmpIssueId());
+					issue.setName(ampIssue.getName());
+					ArrayList mList = new ArrayList();
+					if (ampIssue.getMeasures() != null &&
+							ampIssue.getMeasures().size() > 0) {
+						Iterator mItr = ampIssue.getMeasures().iterator() ;
+						while (mItr.hasNext()) {
+							AmpMeasure ampMeasure = (AmpMeasure) mItr.next();
+							Measures measure = new Measures();
+							measure.setId(ampMeasure.getAmpMeasureId());
+							measure.setName(ampMeasure.getName());
+							ArrayList aList = new ArrayList();
+							if (ampMeasure.getActors() != null &&
+									ampMeasure.getActors().size() > 0) {
+								Iterator aItr = ampMeasure.getActors().iterator();
+								while (aItr.hasNext()) {
+									AmpActor actor = (AmpActor) aItr.next();	
+									aList.add(actor);
+								}
+							}
+							measure.setActors(aList);
+							mList.add(measure);
+						}
+					}
+					issue.setMeasures(mList);
+					list.add(issue);
+				}
+			}
+		} catch (Exception e) {
+			logger.debug("Exception in getIssues() " + e.getMessage());
+			e.printStackTrace(System.out);
+		} finally {
+			if (session != null) {
+				try {
+					PersistenceManager.releaseSession(session);
+				} catch (Exception ex) {
+					logger.debug("Exception while releasing session " + ex.getMessage());
+				}
+			}
+		}
+		return list;
 	}
 
 } // End

@@ -68,7 +68,7 @@ public class UpdateDB {
 			sql += " case when extract(MONTH from transaction_date) between '1' and '3' then '1'";
 			sql += " when extract(MONTH from transaction_date) between '4' and '6' then '2'";
 			sql += " when extract(MONTH from transaction_date) between '7' and '9' then '3'";
-			sql += " when extract(MONTH from transaction_date) between '10' and '12' then '4' end 'fiscal_quarter',org_role_code 'perspective',amp_team_id,transaction_date 'transaction_date',amp_activity.amp_level_id,amp_level.name ";
+			sql += " when extract(MONTH from transaction_date) between '10' and '12' then '4' end 'fiscal_quarter',org_role_code 'perspective',amp_team_id,transaction_date 'transaction_date',amp_activity.amp_level_id,amp_level.name,amp_activity.description ";
 			sql += " from amp_activity,amp_currency,amp_modality,amp_terms_assist,amp_funding,amp_organisation,amp_status,amp_funding_detail,amp_level ";
 			sql += " where amp_funding.amp_modality_id=amp_modality.amp_modality_id ";
 			sql += " and amp_activity.amp_activity_id=amp_funding.amp_activity_id and amp_funding.amp_donor_org_id=amp_organisation.amp_org_id ";
@@ -99,7 +99,7 @@ public class UpdateDB {
 			sql += " case when extract(MONTH from transaction_date) between '1' and '3' then '1'";
 			sql += " when extract(MONTH from transaction_date) between '4' and '6' then '2'";
 			sql += " when extract(MONTH from transaction_date) between '7' and '9' then '3'";
-			sql += " when extract(MONTH from transaction_date) between '10' and '12' then '4' end 'fiscal_quarter',org_role_code 'perspective',amp_team_id ,transaction_date 'transaction_date',amp_activity.amp_level_id,amp_level.name ";
+			sql += " when extract(MONTH from transaction_date) between '10' and '12' then '4' end 'fiscal_quarter',org_role_code 'perspective',amp_team_id ,transaction_date 'transaction_date',amp_activity.amp_level_id,amp_level.name,amp_activity.description ";
 			sql += " from amp_activity,amp_currency,amp_modality,amp_terms_assist,amp_funding,amp_organisation,amp_status,amp_funding_detail,amp_level ";
 			sql += " where amp_funding.amp_modality_id=amp_modality.amp_modality_id ";
 			sql += " and amp_activity.amp_activity_id=amp_funding.amp_activity_id and amp_funding.amp_donor_org_id=amp_organisation.amp_org_id ";
@@ -125,7 +125,7 @@ public class UpdateDB {
 			sql += "amp_activity.proposed_approval_date,NULL 'fiscal_year',";
 			sql += "NULL 'fiscal_quarter','MA',amp_activity.amp_team_id,NULL,amp_activity.amp_level_id,case when amp_activity.amp_level_id='1' then 'REGIONAL' ";
 			sql += "when amp_activity.amp_level_id='2' then 'NATIONAL' ";
-			sql += "when amp_activity.amp_level_id='3' then 'BOTH' else 'Not Exist' end ";
+			sql += "when amp_activity.amp_level_id='3' then 'BOTH' else 'Not Exist' end,amp_activity.description ";
 			sql += "'level_name' from amp_activity LEFT JOIN amp_report_cache ON ";
 			sql += "amp_activity.amp_activity_id=amp_report_cache.amp_activity_id,amp_org_role,amp_organisation,amp_status ";
 			sql += "where amp_report_cache.amp_activity_id is null ";
@@ -148,7 +148,7 @@ public class UpdateDB {
 			sql += "0 'planned_commitment',0 'planned_disbursement',0 'planned_expenditure',";
 			sql += "0 'actual_commitment',0 'actual_disbursement',0 'actual_expenditure',";
 			sql += "NULL,amp_activity.actual_start_date,amp_activity.actual_completion_date,amp_activity.proposed_start_date,amp_activity.proposed_approval_date,NULL 'fiscal_year',";
-			sql += "NULL 'fiscal_quarter','MA',amp_team_id,NULL,amp_activity.amp_level_id,case when amp_activity.amp_level_id='1' then 'REGIONAL' when amp_activity.amp_level_id='2' then 'NATIONAL' when amp_activity.amp_level_id='3' then 'BOTH' else 'Unspecified' end 'level_name' ";
+			sql += "NULL 'fiscal_quarter','MA',amp_team_id,NULL,amp_activity.amp_level_id,case when amp_activity.amp_level_id='1' then 'REGIONAL' when amp_activity.amp_level_id='2' then 'NATIONAL' when amp_activity.amp_level_id='3' then 'BOTH' else 'Unspecified' end 'level_name',amp_activity.description ";
 			sql += "from amp_activity LEFT JOIN amp_funding ON ";
 			sql += "amp_activity.amp_activity_id=amp_funding.amp_activity_id,amp_status ";
 			sql += "where amp_funding.amp_funding_id is null and amp_activity.amp_activity_id='" + ampActivityId + "' ";
@@ -197,7 +197,7 @@ public class UpdateDB {
 			sql += "when extract(MONTH from transaction_date) between '4' and '6' then '2' ";
 			sql += "when extract(MONTH from transaction_date) between '7' and '9' then '3' ";
 			sql += "when extract(MONTH from transaction_date) between '10' and '12' then '4' ";
-			sql += "end 'fiscal_quarter',org_role_code 'perspective',amp_team_id,transaction_date 'transaction_date',amp_activity.amp_level_id,case when amp_activity.amp_level_id='1' then 'REGIONAL' when amp_activity.amp_level_id='2' then 'NATIONAL' when amp_activity.amp_level_id='3' then 'BOTH' else 'Unspecified' end 'level_name' ";
+			sql += "end 'fiscal_quarter',org_role_code 'perspective',amp_team_id,transaction_date 'transaction_date',amp_activity.amp_level_id,case when amp_activity.amp_level_id='1' then 'REGIONAL' when amp_activity.amp_level_id='2' then 'NATIONAL' when amp_activity.amp_level_id='3' then 'BOTH' else 'Unspecified' end 'level_name',amp_activity.description ";
 			sql += "from amp_activity LEFT JOIN amp_funding ON ";
 			sql += "amp_activity.amp_activity_id=amp_funding.amp_activity_id,amp_funding_detail, ";
 			sql += "amp_terms_assist,amp_organisation, amp_currency,amp_status ";
@@ -251,7 +251,7 @@ public class UpdateDB {
 			sql += "when extract(MONTH from transaction_date) between '4' and '6' then '2' ";
 			sql += "when extract(MONTH from transaction_date) between '7' and '9' then '3' ";
 			sql += "when extract(MONTH from transaction_date) between '10' and '12' then '4' ";
-			sql += "end 'fiscal_quarter',org_role_code 'perspective',amp_team_id ,transaction_date 'transaction_date',amp_activity.amp_level_id,case when amp_activity.amp_level_id='1' then 'REGIONAL' when amp_activity.amp_level_id='2' then 'NATIONAL' when amp_activity.amp_level_id='3' then 'BOTH' else 'Unspecified' end 'level_name' ";
+			sql += "end 'fiscal_quarter',org_role_code 'perspective',amp_team_id ,transaction_date 'transaction_date',amp_activity.amp_level_id,case when amp_activity.amp_level_id='1' then 'REGIONAL' when amp_activity.amp_level_id='2' then 'NATIONAL' when amp_activity.amp_level_id='3' then 'BOTH' else 'Unspecified' end 'level_name',amp_activity.description ";
 			sql += "from amp_activity LEFT JOIN amp_funding ON ";
 			sql += "amp_activity.amp_activity_id=amp_funding.amp_activity_id,amp_funding_detail, ";
 			sql += "amp_terms_assist,amp_organisation, amp_currency,amp_status ";

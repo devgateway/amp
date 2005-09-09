@@ -35,6 +35,7 @@ public class AmpReportCache {
 		  private Date transactionDate;
 		  private Long ampLevelId;
 		  private String levelName;
+		  private String activityDescription;
 		  
 		  public Long getAmpActivityId() {
 					 return ampActivityId;
@@ -161,6 +162,10 @@ public class AmpReportCache {
 					 return levelName;
 		  }
 
+		  public String getActivityDescription() {
+					 return activityDescription;
+		  }
+
 		  
 		  public void setAmpReportId(Long ampReportId) {
 					 this.ampReportId = ampReportId;
@@ -284,6 +289,10 @@ public class AmpReportCache {
 
 		  public void setLevelName(String levelName) {
 					 this.levelName = levelName;
+		  }
+
+		  public void setActivityDescription(String activityDescription) {
+					 this.activityDescription = activityDescription;
 		  }
 
 }

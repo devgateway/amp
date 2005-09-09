@@ -30,6 +30,14 @@ public class Project
 	private String acUnDisbursement;
 	private Collection assistance;
 
+	private String description ;
+	private String signatureDate;
+	private String plannedCompletionDate;
+	private Collection progress ;
+	private Collection issues ;
+	private Collection measures ;
+	private Collection responsibleActor;
+
 	private int count;
 	private int rowspan;
 
@@ -73,6 +81,34 @@ public class Project
 
 	public Collection getTermAssist() {
 		return termAssist;
+	}
+
+	public String getSignatureDate() {
+		return signatureDate;
+	}
+
+	public String getPlannedCompletionDate() {
+		return plannedCompletionDate;
+	}
+
+	public Collection getProgress() {
+		return progress;
+	}
+
+	public Collection getIssues() {
+		return issues;
+	}
+
+	public Collection getMeasures() {
+		return measures;
+	}
+
+	public Collection getResponsibleActor() {
+		return responsibleActor;
+	}
+
+	public String getDescription() {
+		return description;
 	}
 	
 	
@@ -275,6 +311,35 @@ public class Project
 		return component;
 	}
 
+	public void setDescription(String s) {
+		description = s;
+	}
+
+	public void setResponsibleActor(Collection c) {
+		responsibleActor = c;
+	}
+
+	public void setProgress(Collection c) {
+		progress=c;
+	}
+
+	public void setIssues(Collection c) {
+		issues=c;
+	}
+
+	public void setMeasures(Collection c) {
+		measures=c;
+	}
+
+	public void setSignatureDate(String s) 
+	{
+		signatureDate = s;
+	}
+
+	public void setPlannedCompletionDate(String s) 
+	{
+		plannedCompletionDate = s;
+	}
 	
 	
 }

@@ -133,7 +133,7 @@
 			<key column="amp_activity_id"/>
 			<one-to-many class="org.digijava.module.aim.dbentity.AmpActivityClosingDates" />
 		</set>	
-		
+
 		<set name="issues" cascade="all" inverse="true" order-by="amp_issue_id asc">
 		<cache usage="read-write" />
 			<key column="amp_activity_id"/>

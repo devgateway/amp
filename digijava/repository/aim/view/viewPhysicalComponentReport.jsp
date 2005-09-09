@@ -357,7 +357,7 @@
               <td colspan="100"><table border="0" cellspacing="0" cellpadding="0">
                   <tr bgcolor="#C9C9C7">
                   <td bgcolor="#C9C9C7" class="box-title">&nbsp;
-					<digi:trn key="aim:ProjectbyDonor">Commitment Disbursement by Project by Donor</digi:trn>
+					<digi:trn key="aim:physicalComponentReport">Physical Component Report </digi:trn>
                   </td>
                  <td bgcolor="#FFFFFF"><img src="../ampTemplate/images/corner-r.gif" width="17" height="17"></td>
                  </tr>
@@ -441,76 +441,67 @@
 		</tr>
 
 		<logic:iterate name="donors"  property="project" id="project" type="org.digijava.module.aim.helper.Project">
-		<tr bgcolor="white">
-		<td align="center"><bean:write name="donors" property="donorCount"/>.<bean:write name="project" property="count"/></td>
-			<td align="left" colspan="11" height="21"> 
-				<strong><bean:write name="project" property="name"/></strong>
-			</td>
-		</tr>
-		
-		<logic:iterate name="project"  property="component" id="component" type="org.digijava.module.aim.helper.AmpComponent">
 			<tr bgcolor="white">
-			<td align="center" ><bean:write name="donors" property="donorCount"/>.<bean:write name="project" property="count"/>.<bean:write name="component" property="count"/></td>
+			<td align="center"><bean:write name="donors" property="donorCount"/>.<bean:write name="project" property="count"/></td>
 				<td align="left" height="21" > 
-					<bean:write name="component" property="name"/>
-					<logic:notEmpty name="component" property="objective"><br><b>Objective</b><br>
-				<bean:write name="component" property="objective" /></logic:notEmpty>
+					<bean:write name="project" property="name"/>
+					<logic:notEmpty name="project" property="description"><br><b>Description</b><br>
+				<bean:write name="project" property="description" /></logic:notEmpty>
 				</td>
 				
 					<td align="left" height="21" width="39">
-					<bean:write name="component" property="signatureDate" />
+					<bean:write name="project" property="signatureDate" />
 					</td>
 					<td align="left" height="21" width="40"> 
-					<bean:write name="component" property="plannedCompletionDate" />
+					<bean:write name="project" property="plannedCompletionDate" />
 					</td>
 					
 					<td align="right" height="21" width="45"> 
-					<bean:write name="component" property="acCommitment" />
+					<bean:write name="project" property="acCommitment" />
 					</td>
 					<td align="right" height="21" width="40"> 
-					<bean:write name="component" property="acExpenditure" />
+					<bean:write name="project" property="acDisbursement" />
 					</td>
 					<td align="right" height="21" width="77" >
-						<bean:write name="component" property="acBalance" />
+						<bean:write name="project" property="acUnDisbursement" />
 					</td>
 					<td align="left" height="21" width="91" >
-						<logic:empty name="component" property="status">&nbsp;
+						<logic:empty name="project" property="progress">&nbsp;
 					</logic:empty>
-					<logic:notEmpty name="component" property="status">
-					<logic:iterate name="component" id="status" property="status">* <%=status%>	
+					<logic:notEmpty name="project" property="progress">
+					<logic:iterate name="project" id="progress" property="progress"> <%=progress%>	
+					<br><br>
+					</logic:iterate>
+					</logic:notEmpty>
+					</td>
+					<td align="right" height="21" width="86" >
+						<logic:empty name="project" property="issues">&nbsp;
+					</logic:empty>
+					<logic:notEmpty name="project" property="issues">
+					<logic:iterate name="project" id="issues" property="issues"> <%=issues%>	
 					<br>
 					</logic:iterate>
 					</logic:notEmpty>
 					</td>
 					<td align="right" height="21" width="86" >
-						<logic:empty name="component" property="issues">&nbsp;
+						<logic:empty name="project" property="measures">&nbsp;
 					</logic:empty>
-					<logic:notEmpty name="component" property="issues">
-					<logic:iterate name="component" id="issues" property="issues"> <%=issues%>	
-					<br>
-					</logic:iterate>
-					</logic:notEmpty>
-					</td>
-					<td align="right" height="21" width="86" >
-						<logic:empty name="component" property="measures">&nbsp;
-					</logic:empty>
-					<logic:notEmpty name="component" property="measures">
-					<logic:iterate name="component" id="measures" property="measures"> <%=measures%>	
+					<logic:notEmpty name="project" property="measures">
+					<logic:iterate name="project" id="measures" property="measures"> <%=measures%>	
 					<br>
 					</logic:iterate>
 					</logic:notEmpty>
 					</td>
 					<td align="left" height="21" width="39">
-					<logic:empty name="component" property="responsibleActor">&nbsp;
+					<logic:empty name="project" property="responsibleActor">&nbsp;
 					</logic:empty>
-					<logic:notEmpty name="component" property="responsibleActor">
-					<logic:iterate name="component" id="responsibleActor" property="responsibleActor"> <%=responsibleActor%>	
+					<logic:notEmpty name="project" property="responsibleActor">
+					<logic:iterate name="project" id="responsibleActor" property="responsibleActor"> <%=responsibleActor%>	
 					<br>
 					</logic:iterate>
 					</logic:notEmpty>
 					</td>
 			</tr>
-		</logic:iterate>
 		</logic:iterate>
 		</logic:iterate>
 	</logic:iterate>

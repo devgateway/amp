@@ -54,6 +54,7 @@ import org.digijava.module.aim.dbentity.AmpRegion;
 import org.digijava.module.aim.dbentity.AmpReportCache;
 import org.digijava.module.aim.dbentity.AmpReportLocation;
 import org.digijava.module.aim.dbentity.AmpReportSector;
+import org.digijava.module.aim.dbentity.AmpReportPhysicalPerformance;
 import org.digijava.module.aim.dbentity.AmpReports;
 import org.digijava.module.aim.dbentity.AmpRole;
 import org.digijava.module.aim.dbentity.AmpSector;
@@ -7468,6 +7469,37 @@ public class DbUtil {
 		}
 		return year.intValue();
 	}
+
+
+	public static ArrayList getAmpReportPhysicalPerformance(Long ampActivityId) {
+		Session session = null;
+		ArrayList progress = new ArrayList();
+
+		try {
+			session = PersistenceManager.getSession();
+			String queryString = "select a from "
+					+ AmpReportPhysicalPerformance.class.getName() + " a "
+					+ "where (a.ampActivityId=:ampActivityId)";
+			Query qry = session.createQuery(queryString);
+			qry.setParameter("ampActivityId", ampActivityId, Hibernate.LONG);
+			Iterator itr = qry.list().iterator();
+			while (itr.hasNext()) {
+				AmpReportPhysicalPerformance act = (AmpReportPhysicalPerformance) itr.next();
+				progress.add(act.getTitle() + " : " + act.getDescription());
+			}
+
+		} catch (Exception ex) {
+			logger.error("Unable to get activity sectors" + ex);
+		} finally {
+			try {
+				PersistenceManager.releaseSession(session);
+			} catch (Exception ex2) {
+				logger.error("releaseSession() failed ");
+			}
+		}
+		return progress;
+	}
+
 	
 	public static Group getGroup(String key,Long siteId) {
 		Session session = null;
@@ -7495,4 +7527,7 @@ public class DbUtil {
 		}
 		return group;	
 	}
+
+
+
 }

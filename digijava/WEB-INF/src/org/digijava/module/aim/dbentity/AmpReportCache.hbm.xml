@@ -38,6 +38,7 @@
 		<property name="transactionDate" column="transaction_date" type="java.util.Date"/>
 		<property name="ampLevelId" column="amp_level_id" type="java.lang.Long"/>
 		<property name="levelName" column="level_name" type="java.lang.String"/>
+		<property name="activityDescription" column="activity_description" type="org.digijava.kernel.db.SafeClobType"/>
 		
 
 		</class>

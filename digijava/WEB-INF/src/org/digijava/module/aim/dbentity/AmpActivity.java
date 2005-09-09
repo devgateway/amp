@@ -38,6 +38,7 @@ public class AmpActivity
 	private Set progress;
 	private Set documents ;
 	private Set notes;
+	private Set issues;
 	private AmpModality modality ;
 	private AmpTheme themeId;
 	private String programDescription;
@@ -74,7 +75,6 @@ public class AmpActivity
 	private AmpTeamMember activityCreator;
 	private Date createdDate;
 	private Date updatedDate;
-	private Set issues;
 	
 	//private Set teamList;
 	
@@ -159,6 +159,10 @@ public class AmpActivity
 		return sectors;
 	}
 
+	public Set getIssues() {
+		return issues;
+	}
+
 	/**
 	 * @return
 	 */
@@ -212,6 +216,10 @@ public class AmpActivity
 	 */
 	public void setInternalIds(Set set) {
 		internalIds = set;
+	}
+
+	public void setIssues(Set set) {
+		issues = set;
 	}
 
 	/**
@@ -725,18 +733,5 @@ public class AmpActivity
 		return this.ampActivityId.equals(act.getAmpActivityId());
 	}
 
-	/**
-	 * @return Returns the issues.
-	 */
-	public Set getIssues() {
-		return issues;
-	}
-
-	/**
-	 * @param issues The issues to set.
-	 */
-	public void setIssues(Set issues) {
-		this.issues = issues;
-	}
 
 }

@@ -421,7 +421,7 @@ public class ViewPhysicalComponentReport extends Action
 		
 //---------------------------------------------------		
 		AmpTeam ampTeam=DbUtil.getAmpTeam(ampTeamId);
-		formBean.setReportName("Annual Report By Project");
+		formBean.setReportName("Physical Component Report");
 		formBean.setWorkspaceType(ampTeam.getType());
 		formBean.setWorkspaceName(ampTeam.getName());
 		if(perspective.equals("DN"))

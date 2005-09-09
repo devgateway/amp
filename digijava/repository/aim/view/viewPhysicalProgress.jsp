@@ -185,7 +185,8 @@ method="post">
 						<TR><TD width="100%" bgcolor="#F4F4F2" align="center" class="box-border">
 							<TABLE width="100%" cellPadding="0" cellSpacing="1" vAlign="top" align="center" bgColor=#dddddd>
 	   	            	<logic:empty name="aimPhysicalProgressForm" property="issues">
-									<TR bgcolor="#f4f4f2"><TD>&nbsp;</TD></TR>
+									<TR bgcolor="#f4f4f2"><TD align="center"><font color="red"><digi:trn key="aim:noIssues">No issues
+									</digi:trn></font></TD></TR>
 								</logic:empty>
 								<logic:notEmpty name="aimPhysicalProgressForm" property="issues">
 									<logic:iterate name="aimPhysicalProgressForm" property="issues" id="issue" 
@@ -196,11 +197,15 @@ method="post">
 												<TR><TD width="100%" vAlign="top" align="left">
 													<TABLE width="100%" cellPadding="2" cellSpacing="1" vAlign="top" align="left" 
 													bgcolor="#ffffff">
-														<TR bgcolor="#dfdfdf"><TD><b>
-															<bean:write name="issue" property="name"/></b>
+														<TR bgcolor="#dfdfdf"><TD>
+															<font color="#0000ff">Issue: </font><bean:write name="issue" property="name"/>
 														</TD></TR>
 														<logic:empty name="issue" property="measures">
-															<TR><TD>&nbsp;</TD></TR>
+															<TR><TD align="center">
+																<font color="red">
+																	<digi:trn key="aim:noMeasures">No measures</digi:trn>
+																</font>	
+															</TD></TR>
 														</logic:empty>
 														<logic:notEmpty name="issue" property="measures">
 															<logic:iterate name="issue" property="measures" id="measure" 
@@ -209,10 +214,15 @@ method="post">
 																	<TABLE width="95%" cellPadding="2" cellSpacing="1" vAlign="top" 
 																	align="center" bgcolor="#dddddd">
 																		<TR bgcolor="#f6f6f6"><TD>
-																			<i><bean:write name="measure" property="name"/></i>
+																			<font color="#0000ff">Measure: </font>
+																			<bean:write name="measure" property="name"/>
 																		</TD></TR>
 																		<logic:empty name="measure" property="actors">
-																			<TR bgcolor="#ffffff"><TD>&nbsp;</TD></TR>
+																			<TR bgcolor="#ffffff"><TD align="center">
+																			<font color="red">
+																				<digi:trn key="aim:noActors">No actors</digi:trn>
+																			</font>	
+																			</TD></TR>
 																		</logic:empty>
 																		<logic:notEmpty name="measure" property="actors">
 																			<TR bgcolor="#ffffff"><TD>
@@ -221,8 +231,8 @@ method="post">
 																					<logic:iterate name="measure" property="actors" id="actor"
 																					type="org.digijava.module.aim.dbentity.AmpActor">
 																						<TR bgcolor="#ffffff"><TD>
-																							<li type="dot">
-																							<bean:write name="actor" property="name"/></li>
+																							<font color="#0000ff">Actor: </font>
+																							<bean:write name="actor" property="name"/>
 																						</TD></TR>
 																					</logic:iterate>
 																				</TABLE>

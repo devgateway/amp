@@ -20,6 +20,7 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.action.ActionServlet;
 
+import org.digijava.module.aim.helper.AmpFund;
 import org.digijava.module.aim.helper.JFreeChartScriptlet;
 import org.digijava.module.aim.helper.WebappDataSource;	
 import org.digijava.module.aim.form.AdvancedReportForm;	
@@ -40,7 +41,7 @@ public class AdvancedReportBarChart	extends Action
 	{
 
 		AdvancedReportForm formbean = (AdvancedReportForm) form;
-		//logger.info("CHART FORM SIZE::::::::::::::::"+formbean.getFinalData().size());
+		System.out.println("CHART FORM SIZE::::::::::::::::"+formbean.getFinalData().size());
 		
 		Iterator iter= formbean.getFinalData().iterator();
 		
@@ -48,27 +49,52 @@ public class AdvancedReportBarChart	extends Action
 	
 //		chart_coll.add("60");
 //		chart_coll.add("Donor 1");
-		String title = "", commit = "";
+		String title = "", commit = "", comm="", disb="", exp="";
 		iter = formbean.getReport().iterator();
 		Collection colls = null;
+		Iterator it, fundItr=null;
+
 		while(iter.hasNext())
 		{
 			Report report = (Report) iter.next();
 			colls = report.getRecords();
-			Iterator it = colls.iterator();
+			
+			it = colls.iterator();
+
 			while(it.hasNext())
 			{
 				org.digijava.module.aim.helper.AdvancedReport advReport = (org.digijava.module.aim.helper.AdvancedReport)it.next();
 				if(advReport.getTitle() != null)
 					title = advReport.getTitle();
-				if(advReport.getActualCommitment() != null)
-					commit = advReport.getActualCommitment();
+				
+				if(advReport.getAmpFund() != null){
+						System.out.println("ampFund is NOT NULL....");
+					fundItr = advReport.getAmpFund().iterator();
+
+					AmpFund ampFund1 = new AmpFund();
+					while(fundItr.hasNext()){
+						ampFund1 = (AmpFund) fundItr.next();
+						comm = ampFund1.getCommAmount();
+						disb = ampFund1.getDisbAmount();
+						exp = ampFund1.getExpAmount();
+					}
+				}
+
+				//if(advReport.getActualCommitment() != null)
+					//commit = advReport.getActualCommitment();
 					//chart_coll.add(advReport.getActualCommitment().replaceAll("," , ""));
 				//chart_coll.add(advReport.getTitle());
-			}
-			System.out.println(title + "<------***********------->"  + commit );
-			chart_coll.add(new Double(commit.replaceAll(",", "")) );
+			}//end of while
+			System.out.println("ZZZZZZZZZZz"+title+"<------***********------->"  + comm +"<------***********------->" +disb + "<------***********------->"  + exp );
+			//chart_coll.add(new Double(commit.replaceAll(",", "")) );
+
+			chart_coll.add(new Double(comm.replaceAll(",", "")) );
 			chart_coll.add(title);
+			chart_coll.add(new Double(disb.replaceAll(",", "")) );
+			chart_coll.add(title);
+			chart_coll.add(new Double(exp.replaceAll(",", "")) );
+			chart_coll.add(title);
+
 		}
 		
 		System.out.println("  Chart Size : " +chart_coll.size());
@@ -84,7 +110,7 @@ public class AdvancedReportBarChart	extends Action
 
 		
 	ActionServlet s = getServlet();
-	////logger.info("###########################Inside VIEW Projects JfreeChart Action...SIZE:"+chart_coll.size());
+	////System.out.println("###########################Inside VIEW Projects JfreeChart Action...SIZE:"+chart_coll.size());
 			
 			JFreeChartScriptlet ws= new JFreeChartScriptlet();
 			ws.setV(chart_coll);	
@@ -117,7 +143,7 @@ public class AdvancedReportBarChart	extends Action
 	parameters.put("ReportTitle", "JFREE ChArt Report - MULTILATERAL");
 	parameters.put("BaseDir", reportFile.getParentFile());
 				
-	//logger.info("Inside Jfree PDF Compile....2");
+	//System.out.println("Inside Jfree PDF Compile....2");
 
 	byte[] bytes = 
 		JasperRunManager.runReportToPdf(
@@ -125,7 +151,7 @@ public class AdvancedReportBarChart	extends Action
 			parameters, 
 			new WebappDataSource()
 			);
-	//logger.info("Inside Jfree PDF EXPORT...3");
+	//System.out.println("Inside Jfree PDF EXPORT...3");
 
 			if (bytes != null && bytes.length > 0)
 			{
@@ -143,7 +169,7 @@ public class AdvancedReportBarChart	extends Action
 				System.out.println("Nothing to display");
 			}
 
-	//logger.info("Inside Jfree PDF EXPORT...FINISHED..");
+	//System.out.println("Inside Jfree PDF EXPORT...FINISHED..");
 
 		return null;
 	}// end of Execute Func

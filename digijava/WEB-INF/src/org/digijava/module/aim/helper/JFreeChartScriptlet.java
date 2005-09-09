@@ -25,7 +25,7 @@ public class JFreeChartScriptlet extends JRDefaultScriptlet
 		
 		String str="";
 		for(int j=0;j<v.size();j++){
-//			logger.info("####### JFREE SCRIPTLET"+v.get(j).toString());
+			System.out.println("####### JFREE SCRIPTLET"+v.get(j).toString());
 		}	
 	}
 /*
@@ -82,16 +82,26 @@ public class JFreeChartScriptlet extends JRDefaultScriptlet
 				demp=new Double(iter.next().toString());
 				temp= (String)iter.next();
 //				System.out.println(temp+":::::"+demp);
+				data.addValue(demp,temp,"comm");
+				demp=new Double(iter.next().toString());
+				temp= (String)iter.next();
+//				System.out.println(temp+":::::"+demp);
+				data.addValue(demp,temp,"disb");
+				demp=new Double(iter.next().toString());
+				temp= (String)iter.next();
+//				System.out.println(temp+":::::"+demp);
+				data.addValue(demp,temp,"exp");
 
-				data.addValue(demp,temp,"");
+				
 	        }
+			
 		
 		CategoryDataset categorydataset = new DefaultCategoryDataset();
 		categorydataset = data;
 
 		JFreeChart chart2 = 
 //			ChartFactory.createBarChart("Bar Chart for Custom Report.",dataset,true,true,false);
-			ChartFactory.createBarChart("Advanced Report Builder - Bar Chart", "Donors", "Actual Commitment (in Thousand $)", categorydataset, PlotOrientation.VERTICAL, true, true, true);
+			ChartFactory.createBarChart("Advanced Report Builder - Bar Chart", "title", "Amount(in Thousand $)", categorydataset, PlotOrientation.VERTICAL, true, true, true);
 
 		this.setVariableValue("Chart2", new JCommonDrawableRenderer(chart2));
 

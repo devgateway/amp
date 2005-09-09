@@ -247,7 +247,7 @@
 
 																<br><br>
 																<input type=button name=back value="<< Previous"   class="dr-menu" onclick="javascript:history.back()">						
-																<input type="button" onclick="popup_chart()" value="Create Pie-Chart PDF" class="dr-menu"> 
+<!--<input type="button" onclick="popup_chart()" value="Create Pie-Chart PDF" class="dr-menu"> -->
 
 																<input type="button" onclick="popup_barChart()" value="Create Bar-Chart PDF" class="dr-menu"> 
 

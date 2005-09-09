@@ -213,14 +213,12 @@
 																</tr>
 																<tr>
 																	<td class=box-title> 
-																	<FONT color=red>* </font>	Please select<u> "Donor" and "actual commitment"  to generate a Pie Chart for Annaual Forcasting Report</u>.<br>
-																	<FONT color=red>* </font>  This report builder allows to customize Annual Forecasting Report. <br>
-																	<FONT color=red>* </font>  Please cilck on "Generate Report" FIRST, before exporting the report into Chart format. <br>
+																	<FONT color=red size="4">* </font>	Please select<u> "Title"  to generate a Chart.</u><br>
 																	</td>
 																</tr>
 															    <tr bgcolor="#cccccc">
 																<TD bgcolor="#f4f4f4" height=200 align="center">
-																<br>
+<!--																<br>
 																<digi:link href="" onclick="popup_chart(); return false;"></digi:link>
 																<b>::: Pie CHART Image :::</b><br>
 																<br>
@@ -233,6 +231,7 @@
 
 																<br>
 																<img src=<%=piegraphURL%> border="1">
+-->
 																<br><br><br>
 																<b>::: Bar CHART Image :::</b><br>
 																<br>
@@ -244,7 +243,7 @@
 																%>
 
 																<br>
-																<img src=<%=bargraphURL%> border="1">
+																<a href="<%=bargraphURL%>" target="_blank"><img src=<%=bargraphURL%> border="1" width="600" height="600"></a>
 
 																<br><br>
 																<input type=button name=back value="<< Previous"   class="dr-menu" onclick="javascript:history.back()">						

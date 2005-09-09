@@ -37,6 +37,7 @@ import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.dbentity.AmpTeamReports;
 import org.digijava.kernel.persistence.PersistenceManager;
 
+import org.digijava.module.aim.helper.AmpFund;
 
 import org.jfree.chart.*;
 import org.jfree.chart.plot.*;
@@ -366,27 +367,54 @@ public class AdvancedReport extends Action {
 
 		        //Iterator iter2 = formBean.getFinalData().iterator();
 		        Collection chart_coll=new ArrayList();
-		        String title = "", commit = "";
-				iter = formBean.getReport().iterator();
+		        String title = "", commit = "", comm="", disb="", exp="";
+				iter = formBean.getFinalData().iterator();
 				Collection colls = null;
+				Collection ampFund= null;
+
+				Iterator it, fundItr=null;
+
 				while(iter.hasNext())
 				{
 					Report report = (Report) iter.next();
 					colls = report.getRecords();
-					Iterator it = colls.iterator();
+					
+					it = colls.iterator();
+
 					while(it.hasNext())
 					{
 						org.digijava.module.aim.helper.AdvancedReport advReport = (org.digijava.module.aim.helper.AdvancedReport)it.next();
 						if(advReport.getTitle() != null)
 							title = advReport.getTitle();
+						
+						if(advReport.getAmpFund() != null){
+								logger.info("ampFund is NOT NULL....");
+							fundItr = advReport.getAmpFund().iterator();
+
+							AmpFund ampFund1 = new AmpFund();
+							while(fundItr.hasNext()){
+								ampFund1 = (AmpFund) fundItr.next();
+								comm = ampFund1.getCommAmount();
+								disb = ampFund1.getDisbAmount();
+								exp = ampFund1.getExpAmount();
+							}
+						}
+
 						if(advReport.getActualCommitment() != null)
 							commit = advReport.getActualCommitment();
 							//chart_coll.add(advReport.getActualCommitment().replaceAll("," , ""));
 						//chart_coll.add(advReport.getTitle());
-					}
-					logger.info(title + "<------***********------->"  + commit );
-					chart_coll.add(new Double(commit.replaceAll(",", "")) );
+					}//end of while
+					logger.info("ZZZZZZZZZZz"+title+"<------***********------->"  + comm +"<------***********------->" +disb + "<------***********------->"  + exp );
+					//chart_coll.add(new Double(commit.replaceAll(",", "")) );
+
+					chart_coll.add(new Double(comm.replaceAll(",", "")) );
 					chart_coll.add(title);
+					chart_coll.add(new Double(disb.replaceAll(",", "")) );
+					chart_coll.add(title);
+					chart_coll.add(new Double(exp.replaceAll(",", "")) );
+					chart_coll.add(title);
+
 				}
 				
 				logger.info("  Chart Size : " +chart_coll.size());
@@ -664,7 +692,7 @@ public class AdvancedReport extends Action {
 		}
 // end pie chart function.
 
-// Function for BarChart
+//		 Function for BarChart
 		private static String createBarChart(Collection chart_coll){
 
 			logger.info("@@@@@@@@@@ INSIDE createBARRRRRR Chart...");
@@ -682,9 +710,16 @@ public class AdvancedReport extends Action {
 			while (iter.hasNext()) {
 				demp=new Double(iter.next().toString());
 				temp= (String)iter.next();
-				//System.out.println(temp+":::::"+demp);
-
-				data.addValue(demp,temp,"");
+//				System.out.println(temp+":::::"+demp);
+				data.addValue(demp,temp,"comm");
+				demp=new Double(iter.next().toString());
+				temp= (String)iter.next();
+//				System.out.println(temp+":::::"+demp);
+				data.addValue(demp,temp,"disb");
+				demp=new Double(iter.next().toString());
+				temp= (String)iter.next();
+//				System.out.println(temp+":::::"+demp);
+				data.addValue(demp,temp,"exp");
 	        }
 
 		// Create the chart object 
@@ -692,14 +727,19 @@ public class AdvancedReport extends Action {
 			CategoryDataset categorydataset = new DefaultCategoryDataset();
 			categorydataset = data;
 			
-			JFreeChart jfreechart = ChartFactory.createBarChart("Bar Chart", "Donors", "Actual Commitment (in US$)", categorydataset, PlotOrientation.VERTICAL, false, false, false);
+			JFreeChart jfreechart = ChartFactory.createBarChart("Bar Chart", "Title", "Amount(in US$)", categorydataset, PlotOrientation.VERTICAL,true, true, true);
 			jfreechart.setBackgroundPaint(java.awt.Color.white);
 			
 			// Write the chart image to the temporary directory 
 			ChartRenderingInfo info = new ChartRenderingInfo(new StandardEntityCollection());
 	
+			logger.info("  Chart Size : " +chart_coll.size());
+			int dim=chart_coll.size()/6;
+			int x=dim*30;
+			int y=dim*25;
+				System.out.println("IMG DIMMMMMMMMMMMMM: "+"dim="+dim+"x="+x+"::"+y);
 			try{
-			filename = ServletUtilities.saveChartAsPNG(jfreechart, 600, 500, info, httpSession);
+			filename = ServletUtilities.saveChartAsPNG(jfreechart, x, y, info, httpSession);
 			}
 			catch(Exception e){
 					logger.info("EXCEPTION thrown at image:"+e);				
@@ -710,7 +750,6 @@ public class AdvancedReport extends Action {
 			return filename;
 		}
 // end barchart function.
-
 
 	public void updateData(Collection src, Collection dest, Long []selCol, AdvancedReportForm formBean)
 	{

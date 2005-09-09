@@ -737,9 +737,7 @@ public class SaveActivity extends Action {
 		eaForm.setPageId(-1);
 		UpdateDB.updateReportCache(activity.getAmpActivityId());
 		eaForm.reset(mapping, request);
-		
-		
-
+	
 		if (session.getAttribute("ampProjects") != null) {
 			session.removeAttribute("ampProjects");
 		}

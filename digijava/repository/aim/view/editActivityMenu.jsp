@@ -18,6 +18,7 @@ function previewClicked() {
 }
 
 function saveClicked() {
+	document.aimEditActivityForm.saveButton.disabled = true;	
 	<digi:context name="save" property="context/module/moduleinstance/saveActivity.do" />
 	document.aimEditActivityForm.action = "<%= save %>";
 	document.aimEditActivityForm.target = "_self";	
@@ -276,6 +277,40 @@ bgcolor="#006699">
 		</c:if>
 	</tr>
 	<tr>
+		<c:if test="${aimEditActivityForm.step != 4}">
+		<td>
+			<IMG alt=Link height=10 src="../ampTemplate/images/arrow-th-BABAB9.gif" width=15>
+			<bean:define id="translation">
+				<digi:trn key="aim:clickToAdd/UpdateIssues">Add / Update Issues</digi:trn>
+			</bean:define>
+			<a href="javascript:gotoStep(4)" class="menu" title="<%=translation%>">
+				<digi:trn key="aim:issues">
+				Issues</digi:trn>
+			</a>
+		</td>
+		</c:if>	
+		<c:if test="${aimEditActivityForm.step == 4}">
+		<td>
+			<table width="100%" cellspacing=0 cellpadding=0 valign=top align=left border=0> 
+				<tr>
+					<td width="10" height="19" background="module/aim/images/left-arc.gif">
+					</td>
+					<td bgcolor="#3399ff" height="19">
+						<IMG alt=Link height=10 src="../ampTemplate/images/arrow-th-BABAB9.gif" width=15>
+						<span class="textalb">
+							<digi:trn key="aim:issues">
+							Issues</digi:trn>
+						</span>
+					</td>
+					<td width="10" height="19"  background="module/aim/images/right-arc.gif">
+					</td>
+				</tr>
+			</table>
+		</td>				
+		</c:if>
+	</tr>	
+	
+	<tr>
 		<c:if test="${aimEditActivityForm.step != 5}">
 		<td>
 			<IMG alt=Link height=10 src="../ampTemplate/images/arrow-th-BABAB9.gif" width=15>
@@ -385,7 +420,7 @@ bgcolor="#006699">
 	</tr>	
 	<tr>
 		<td align="center">
-			<input type="button" value="Save" class="buton" onclick="saveClicked()">
+			<input type="button" value="Save" name="saveButton" class="buton" onclick="saveClicked()">
 		</td>
 	</tr>		
 </table>

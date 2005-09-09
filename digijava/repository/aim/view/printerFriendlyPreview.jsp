@@ -445,7 +445,8 @@
 											</c:if>
 											&nbsp;
 										</td>
-									</tr>										
+									</tr>		
+									
 									<tr>
 										<td  width="140" align="right" bgcolor="#ffffff">
 											<b>
@@ -488,6 +489,41 @@
 											</c:if>
 										</td>
 									</tr>	
+									<tr>
+										<td  width="140" align="right" bgcolor="#ffffff">
+											<b>
+											<digi:trn key="aim:issues">
+											Issues</digi:trn></b>
+										</td>
+										<td bgcolor="#ffffff" >
+											<c:if test="${empty aimEditActivityForm.issues}">
+												&nbsp;
+											</c:if>
+											<c:if test="${!empty aimEditActivityForm.issues}">
+												<table width="100%" cellSpacing="2" cellPadding="2" border=0>
+												<c:forEach var="issue" items="${aimEditActivityForm.issues}">
+													<tr><td valign="top">
+														<li class="level1"><b><c:out value="${issue.name}"/></b></li>
+													</td></tr>
+													<c:if test="${!empty issue.measures}">
+														<c:forEach var="measure" items="${issue.measures}">
+															<tr><td>
+																<li class="level2"><i><c:out value="${measure.name}"/></i></li>
+															</td></tr>	
+															<c:if test="${!empty measure.actors}">
+																<c:forEach var="actor" items="${measure.actors}">
+																	<tr><td>
+																		<li class="level3"><c:out value="${actor.name}"/></li>
+																	</td></tr>	
+																</c:forEach>
+															</c:if>															
+														</c:forEach>
+													</c:if>
+												</c:forEach>
+												</table>
+											</c:if>
+										</td>
+									</tr>									
 									<tr>
 										<td  width="140" align="right" bgcolor="#ffffff">
 											<b>

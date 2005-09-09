@@ -859,3 +859,22 @@ A.imglink:hover
 {
 	TEXT-DECORATION: none
 }
+
+.level1 {
+ 	LIST-STYLE-TYPE:circle;
+	PADDING-LEFT: 0px; 
+	PADDING-BOTTOM: 0px; 
+	PADDING-TOP: 0px;	
+}
+.level2 {
+	LIST-STYLE-TYPE:square;
+	PADDING-LEFT: 20px; 
+	PADDING-BOTTOM: 0px; 
+	PADDING-TOP: 0px;	
+}
+.level3 {
+	LIST-STYLE-TYPE:disc;
+	PADDING-LEFT: 40px; 
+	PADDING-BOTTOM: 0px; 
+	PADDING-TOP: 0px;	
+}

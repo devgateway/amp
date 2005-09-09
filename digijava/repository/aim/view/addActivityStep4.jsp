@@ -481,7 +481,7 @@ function removeSelComponents() {
 									<tr><td>
 										<IMG alt=Link height=10 src="../ampTemplate/images/arrow-014E86.gif" width=15>
 										<a title="<digi:trn key="aim:issuesForTheActivity">The issues for the activity</digi:trn>">
-										<b><digi:trn key="aim:Issues">Issues</digi:trn></b></a>
+										<b><digi:trn key="aim:issues">Issues</digi:trn></b></a>
 									</td></tr>
 									<tr><td>
 										&nbsp;
@@ -497,7 +497,7 @@ function removeSelComponents() {
 																<input type="checkbox" name="checkAllIssues" onclick="checkallIssues()">
 															</td>														
 															<td vAlign="center" align="left">
-																<b><digi:trn key="aim:Issues">Issues</digi:trn></b>
+																<b><digi:trn key="aim:issues">Issues</digi:trn></b>
 															</td>
 														</tr>
 														<% int i = 0; 

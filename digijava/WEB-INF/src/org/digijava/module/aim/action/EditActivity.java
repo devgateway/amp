@@ -564,6 +564,8 @@ public class EditActivity extends Action {
 						issueList.add(issue);
 					}
 					eaForm.setIssues(issueList);
+				} else {
+					eaForm.setIssues(null);
 				}
 
 				// loading the contact person details and condition

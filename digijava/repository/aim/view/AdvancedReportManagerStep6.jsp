@@ -12,7 +12,7 @@
 function moveUp(val)
 {
 	if(document.aimAdvancedReportForm.removeColumns.length == undefined)
-		alert("Cannot move the column Up");
+		alert("Cannot move the column Up ");
 	else
 	{
 		<digi:context name="step" property="context/module/moduleinstance/advancedReportManager.do?check=MoveUpMeasure" />
@@ -21,6 +21,7 @@ function moveUp(val)
 		document.aimAdvancedReportForm.target = "_self";
 		document.aimAdvancedReportForm.submit();
 	}	
+
 }
 
 function moveDown(val)
@@ -37,16 +38,40 @@ function moveDown(val)
 	}	
 }
 
-function gotoStep() {
-	if(document.aimAdvancedReportForm.removeColumns == null)
-		alert("Please select a measure");
+function moveUpAdjType(val)
+{
+
+	if(document.aimAdvancedReportForm.removeAdjustType.length == undefined)
+		alert("Cannot move the column Up ");
 	else
 	{
+		<digi:context name="step" property="context/module/moduleinstance/advancedReportManager.do?check=MoveUpAdjustType" />
+		document.aimAdvancedReportForm.action = "<%= step %>";
+		document.aimAdvancedReportForm.moveColumn.value = val;
+		document.aimAdvancedReportForm.target = "_self";
+		document.aimAdvancedReportForm.submit();
+	}	
+
+}
+function moveDownAdjType(val)
+{
+	if(document.aimAdvancedReportForm.removeAdjustType.length == undefined)
+		alert("Cannot move the  column Down ");
+	else
+	{
+		<digi:context name="step" property="context/module/moduleinstance/advancedReportManager.do?check=MoveDownAdjustType" />
+		document.aimAdvancedReportForm.action = "<%= step %>";
+		document.aimAdvancedReportForm.moveColumn.value = val;
+		document.aimAdvancedReportForm.target = "_self";
+		document.aimAdvancedReportForm.submit();
+	}	
+
+}
+function gotoStep() {
 		<digi:context name="step" property="context/module/moduleinstance/advancedReportManager.do?check=4" />
 		document.aimAdvancedReportForm.action = "<%= step %>";
 		document.aimAdvancedReportForm.target = "_self";
 		document.aimAdvancedReportForm.submit();
-	}
 }
 
 function addColumn()
@@ -69,6 +94,27 @@ function deleteColumn()
 		document.aimAdvancedReportForm.submit();
 	}
 }
+
+function addAdjustType()
+{
+		<digi:context name="advReport" property="context/module/moduleinstance/advancedReportManager.do?check=AddAdjustType" />
+		document.aimAdvancedReportForm.action = "<%= advReport %>";
+		document.aimAdvancedReportForm.target = "_self";
+		document.aimAdvancedReportForm.submit();
+}
+function deleteAdjustType()
+{
+	if(document.aimAdvancedReportForm.removeAdjustType == null)
+		alert(" Please select columns to remove");
+	else
+	{
+		<digi:context name="advReport" property="context/module/moduleinstance/advancedReportManager.do?check=DeleteAdjustType" />
+		document.aimAdvancedReportForm.action = "<%= advReport %>";
+		document.aimAdvancedReportForm.target = "_self";
+		document.aimAdvancedReportForm.submit();
+	}
+}
+
 
 </script>
 
@@ -235,13 +281,13 @@ function deleteColumn()
 																			Available Measures
 																		</td>	
 																	</tr>
-																	<tr height=10>	<td>	</td>	</tr>
-																	
+																	<tr height=10>	<td>	</td>	</tr>			
 																	<TR>
 																		<TD>
 																			<TABLE width="100%" cellPadding=2 cellSpacing=1 vAlign="top" align="top" bgcolor="#aaaaaa" border=0>
 																				<c:if test="${!empty aimAdvancedReportForm.ampMeasures}">
 																					<logic:iterate name="aimAdvancedReportForm" id="ampMeasures"	property="ampMeasures" >
+																						<c:if test="${ampMeasures.type == 'Transaction'}">
 																						<TR bgcolor="#ffffff">
 																							<td align="left" width="98%" valign=top>
 																								<c:out value="${ampMeasures.aliasName}"/>
@@ -252,8 +298,8 @@ function deleteColumn()
 					  																	    </html:multibox>
 																							</td>
 																						</tr>
+																						</c:if>
 																					</logic:iterate>
-																					
 																				</c:if>
 																			</TABLE>
 																		</TD>
@@ -262,7 +308,7 @@ function deleteColumn()
 																	<tr>
 																		<c:if test="${empty aimAdvancedReportForm.ampMeasures}">
 																			<td >
-																				<TABLE width="100%" height="200" cellPadding=2 cellSpacing=0 vAlign="top" align="center" bgcolor="#f4f4f2">
+																				<TABLE width="100%" height="100" cellPadding=2 cellSpacing=0 vAlign="top" align="center" bgcolor="#f4f4f2">
 																					<tr bgcolor="#eeeeee">	<td class=box-title align=center>
 																					No measures available to add
 																					</td></tr>
@@ -310,7 +356,7 @@ function deleteColumn()
 																		
 																		<c:if test="${empty aimAdvancedReportForm.addedMeasures}">
 																			<td >
-																				<TABLE width="100%" height="200" cellPadding=2 cellSpacing=0 vAlign="top" align="center" bgcolor="#f4f4f2">
+																				<TABLE width="100%" height="100" cellPadding=2 cellSpacing=0 vAlign="top" align="center" bgcolor="#f4f4f2">
 																					<tr bgcolor="#eeeeee">	<td class=box-title align=center>
 																					No measures selected 
 																					</td></tr>
@@ -320,6 +366,7 @@ function deleteColumn()
 																	</TR>												
 
 																</TABLE>
+																
 															</TD>
 														</TR>
 													</TABLE>
@@ -331,6 +378,98 @@ function deleteColumn()
 													<input type=button value="<< Remove " class="dr-menu" onclick="deleteColumn()" >						
 												</td>
 											</tr>	<!-- Add and Remove Button-->
+											<tr>	<td height=30>	&nbsp;</td>	</tr>
+								<TR bgColor=#f4f4f2>
+									<TD vAlign="top" align="center" width="100%" bgColor=#f4f4f2>
+										<TABLE width="98%" cellPadding=0 cellSpacing=0 vAlign="top" align="center" bgColor=#f4f4f2 >
+											<TR>
+												<TD width="100%" bgcolor="pink" align="center"  valign=top>
+													<TABLE width="100%" cellPadding="2" cellSpacing="2" vAlign="top" align="center" bgColor=#f4f4f2 class="box-border-nopadding" border=0>
+														<TR>
+				
+															<TD width="50%" vAlign="top" align="left" bgcolor="#eeeeee">
+																<TABLE width="100%" cellPadding="3" cellSpacing="1" vAlign="top" align="left" bgcolor="#eeeeee" >
+																	<tr height=10>	<td>	</td>	</tr>												
+																	<TR bgcolor="#eeeeee">
+																		<td align="center" class=box-title>
+																			Adjustment Type
+																		</td>	
+																	</tr>
+																	<tr height=10>	<td>	</td>	</tr>
+																	
+																	<TR>
+																		<TD>
+																			<TABLE width=98%" cellPadding=2 cellSpacing=1 vAlign="top" align="top" bgcolor="#aaaaaa" border=0>
+																				<c:if test="${!empty aimAdvancedReportForm.adjustType}">
+																					<logic:iterate name="aimAdvancedReportForm" id="adjustType"	property="adjustType" >
+																						<TR bgcolor="#ffffff">
+																							<td align="left" width="98%" valign=top>
+																								<c:out value="${adjustType.aliasName}"/>
+																							</td>
+																							<td align="right">
+																								<html:multibox property="selectedAdjustmentType" >
+																								  <c:out value="${adjustType.measureId}"/>
+						  																	    </html:multibox>
+																							</td>
+																						</tr>
+																					</logic:iterate>
+																				</c:if>
+																			</TABLE>
+																		</TD>
+																	</TR>												
+																</TABLE>
+															</TD>
+															<TD width="50%" vAlign="top" align="left" bgcolor="#eeeeee">
+																<TABLE width="100%" cellPadding="2" cellSpacing="1" vAlign="top" align="top" bgcolor="#eeeeee" border=0>
+																	<tr height=10>	<td>	</td>	</tr>												
+																	<TR bgcolor="#eeeeee">
+																		<td align="center" class=box-title>
+																			Selected Adjustment Types
+																		</td>
+																	</tr>
+																	<tr height=10>	<td>	</td>	</tr>
+																	<TR>
+																		<c:if test="${!empty aimAdvancedReportForm.selAdjustType}">
+																		<TD>
+																			<TABLE width="100%" cellPadding=2 cellSpacing=1 vAlign="top" align="top" bgcolor="#aaaaaa" border=0>
+																				<c:if test="${!empty aimAdvancedReportForm.selAdjustType}">
+																					<logic:iterate name="aimAdvancedReportForm" id="selAdjustType"	property="selAdjustType" >
+																						<tr bgcolor=#ffffff>
+																						<td align="left" width="98%">
+																							<c:out value="${selAdjustType.aliasName}"/>
+																						</td>
+																						<td align="right">
+																							<html:multibox property="removeAdjustType" >
+																							  <c:out value="${selAdjustType.measureId}"/>
+					  																	    </html:multibox>
+																						</td>
+																							<td align="right">
+																								<IMG alt="Move Up"  height=10 src="../ampTemplate/images/up-arrow.jpg" width=10 onclick="moveUpAdjType(<c:out value='${selAdjustType.measureId}' />)">
+																								<IMG alt="Move Down" styleClass="test" height=10 src="../ampTemplate/images/down-arrow.jpg" width=10 onclick="moveDownAdjType(<c:out value='${selAdjustType.measureId}' />)">
+																							</td>
+																						
+																					</logic:iterate>
+																				</c:if>
+																			</TABLE>
+																		</TD>
+																		</c:if>														
+																		
+																	</TR>												
+
+																</TABLE>
+																
+															</TD>
+														</TR>
+													</TABLE>
+												</TD>
+											</TR>
+											<tr align="center">
+												<td align="center">
+													<input type=button value="  Add >>   " class="dr-menu" onclick="addAdjustType()" >						
+													<input type=button value="<< Remove " class="dr-menu" onclick="deleteAdjustType()" >						
+												</td>
+											</tr>	<!-- Add and Remove Button-->
+											
 											<tr>
 												<td align="right" colspan="2">
 													<input type=button name=back value="<< Previous"   class="dr-menu" onclick="javascript:history.back()">												

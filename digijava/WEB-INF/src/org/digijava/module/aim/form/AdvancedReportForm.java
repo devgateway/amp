@@ -21,8 +21,11 @@ public class AdvancedReportForm extends ActionForm
 	private Collection intermediate = null;
 	private Collection addedMeasures = null;
 	private Collection columnHierarchie = null; // contains the columns that have been added.
+	private Long selectedAdjustmentType[] = null;
+	private Collection adjustType = null;
+	private Collection selAdjustType = null;
+	private Long removeAdjustType[] = null; 
 	
-
 	private String imageUrl="";
 
 	private String donor ;
@@ -1080,6 +1083,30 @@ private int yrDiff;
 
 	public Collection getTotFund() {
 		return totFund;
+	}
+	public Collection getAdjustType() {
+		return adjustType;
+	}
+	public void setAdjustType(Collection adjustType) {
+		this.adjustType = adjustType;
+	}
+	public Collection getSelAdjustType() {
+		return selAdjustType;
+	}
+	public void setSelAdjustType(Collection selAdjustType) {
+		this.selAdjustType = selAdjustType;
+	}
+	public Long[] getSelectedAdjustmentType() {
+		return selectedAdjustmentType;
+	}
+	public void setSelectedAdjustmentType(Long[] selectedAdjustmentType) {
+		this.selectedAdjustmentType = selectedAdjustmentType;
+	}
+	public Long[] getRemoveAdjustType() {
+		return removeAdjustType;
+	}
+	public void setRemoveAdjustType(Long[] removeAdjustType) {
+		this.removeAdjustType = removeAdjustType;
 	}
 
 } //		End of Class

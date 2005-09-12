@@ -10,6 +10,7 @@
 		</id>
 		<property column="measureName" name="measureName" type="java.lang.String"/>
 		<property column="aliasName" name="aliasName" type="java.lang.String"/>
+		<property column="type" name="type" type="java.lang.String"/>
 
 	</class>
 </hibernate-mapping>

@@ -115,6 +115,9 @@ public class AdvancedReport extends Action {
 				formBean.setColumnHierarchie(null);
 				formBean.setAddedMeasures(null);
 				formBean.setReportTitle("");
+				formBean.setAdjustType(null);
+				formBean.setSelAdjustType(null);
+				
 			}
 
 			
@@ -122,8 +125,18 @@ public class AdvancedReport extends Action {
 			if(formBean.getAmpColumns() == null)
 			{
 				formBean.setAmpColumns(ReportUtil.getColumnList());
-				formBean.setAmpMeasures(ReportUtil.getMeasureList());				
+				formBean.setAmpMeasures(ReportUtil.getMeasureList());
 				formBean.setReportTitle("");
+				
+				iter = formBean.getAmpMeasures().iterator();
+				Collection tempColl = new ArrayList();
+				while(iter.hasNext())
+				{
+					AmpMeasures ampMeasure = (AmpMeasures) iter.next();
+					if(ampMeasure.getType().equals("AdjustmentType") == true)
+						tempColl.add(ampMeasure);
+				}
+				formBean.setAdjustType(tempColl);
 			}
 			else
 				logger.info(" AmpColumns is not NULL........");
@@ -181,6 +194,27 @@ public class AdvancedReport extends Action {
 				formBean.setRemoveColumns(null);
 				return mapping.findForward("SelectMeasures");
 			}
+
+			// Step 3 : Select Adjustment Type
+			if(request.getParameter("check") != null && request.getParameter("check").equals("AddAdjustType"))
+			{
+				str = request.getParameter("check");
+				logger.info( "Operation is : " + str + "" + formBean.getAdjustType().size());
+				updateData(formBean.getAdjustType(), formBean.getSelAdjustType(), formBean.getSelectedAdjustmentType(), formBean);
+				formBean.setSelectedAdjustmentType(null);
+				return mapping.findForward("SelectMeasures");
+			}
+			
+			// Remove the columns selected
+			if(request.getParameter("check") != null && request.getParameter("check").equals("DeleteAdjustType"))
+			{
+				str = request.getParameter("check");
+				logger.info( "Operation is : " + str);
+				updateData(formBean.getSelAdjustType(), formBean.getAdjustType() , formBean.getRemoveAdjustType(), formBean);
+				formBean.setRemoveAdjustType(null);
+				return mapping.findForward("SelectMeasures");
+			}
+
 			// Goto Step 2.
 			if(request.getParameter("check") != null && request.getParameter("check").equals("5"))
 			{
@@ -237,7 +271,6 @@ public class AdvancedReport extends Action {
 
 				
 				logger.info(fromYr + " <>>>>>" + toYr);
-				
 				Long measure = null;
 				if(formBean.getAddedMeasures() != null)
 				{
@@ -249,6 +282,8 @@ public class AdvancedReport extends Action {
 						measure = ampMeasure.getMeasureId();
 					}
 				}
+
+				measure = new Long(1);
 				boolean allPages = false;
 				if(formBean.getAddedColumns() != null)
 				{
@@ -479,6 +514,18 @@ public class AdvancedReport extends Action {
 				return mapping.findForward("SelectMeasures");
 			}
 			
+			
+			if(request.getParameter("check") != null && request.getParameter("check").equals("MoveUpAdjustType"))
+			{
+				moveColumns(formBean, "MoveUpAdjustType");
+				return mapping.findForward("SelectMeasures");
+			}
+			if(request.getParameter("check") != null && request.getParameter("check").equals("MoveDownAdjustType"))
+			{
+				moveColumns(formBean, "MoveDownAdjustType");
+				return mapping.findForward("SelectMeasures");
+			}
+			
 			// save Report
 			if(request.getParameter("check") != null && request.getParameter("check").equals("SaveReport"))
 			{
@@ -533,19 +580,22 @@ public class AdvancedReport extends Action {
 						
 						// saving the selected columns for the report
 						Set columns = new HashSet();
-						iter = formBean.getAddedColumns().iterator();
-						i = 1;
-						while(iter.hasNext())
+						if(formBean.getAddedColumns() != null)
 						{
-							AmpColumns cols = (AmpColumns)iter.next();
-
-							AmpReportColumn	temp = new AmpReportColumn();
-							temp.setColumn(cols);
-							temp.setOrderId(""+i);
-							columns.add(temp);
-							i = i + 1;
+							iter = formBean.getAddedColumns().iterator();
+							i = 1;
+							while(iter.hasNext())
+							{
+								AmpColumns cols = (AmpColumns)iter.next();
+	
+								AmpReportColumn	temp = new AmpReportColumn();
+								temp.setColumn(cols);
+								temp.setOrderId(""+i);
+								columns.add(temp);
+								i = i + 1;
+							}
+							ampReports.setColumns(columns);
 						}
-						ampReports.setColumns(columns);
 						
 						if(formBean.getColumnHierarchie() != null)
 						{
@@ -566,19 +616,36 @@ public class AdvancedReport extends Action {
 							ampReports.setHierarchies(hierarchies);
 						}
 						
-						logger.info("********************** " + formBean.getAddedMeasures().size());
 						// saving the AMp Report Measures
 						Set measures = new HashSet();
-						iter = formBean.getAddedMeasures().iterator();
-						i = 1;
-						while(iter.hasNext())
+						if(formBean.getAddedMeasures() != null)
 						{
-							AmpMeasures ampMeasures = (AmpMeasures) iter.next();
-							AmpReportMeasures reportMeasure = new AmpReportMeasures();
-							reportMeasure.setMeasure(ampMeasures);
-							reportMeasure.setOrderId(""+i);
-							measures.add(reportMeasure);
-							i = i + 1;
+							iter = formBean.getAddedMeasures().iterator();
+							i = 1;
+							while(iter.hasNext())
+							{
+								AmpMeasures ampMeasures = (AmpMeasures) iter.next();
+								AmpReportMeasures reportMeasure = new AmpReportMeasures();
+								reportMeasure.setMeasure(ampMeasures);
+								//reportMeasure.setOrderId(""+i);
+								reportMeasure.setMeasureType("Transaction");
+								measures.add(reportMeasure);
+								i = i + 1;
+							}
+						}
+						
+						if(formBean.getSelAdjustType() != null)
+						{
+							iter = formBean.getSelAdjustType().iterator();
+							
+							while(iter.hasNext())
+							{
+								AmpMeasures ampMeasures = (AmpMeasures) iter.next();
+								AmpReportMeasures reportMeasure = new AmpReportMeasures();
+								reportMeasure.setMeasure(ampMeasures);
+								reportMeasure.setMeasureType("AdjustmentType");
+								measures.add(reportMeasure);
+							}
 						}
 						ampReports.setMeasures(measures);
 						
@@ -789,7 +856,8 @@ public class AdvancedReport extends Action {
 					temp.clear();
 					while(iter.hasNext())
 					{
-						if(str.equals("AddMeasure") == true || str.equals("DeleteMeasure") == true)
+						if(str.equals("AddMeasure") == true || str.equals("DeleteMeasure") == true 
+								|| str.equals("AddAdjustType") == true || str.equals("DeleteAdjustType") == true )
 						{
 							ampMeasures = (AmpMeasures) iter.next();
 							if(ampMeasures.getMeasureId().compareTo(selCol[i]) == 0 )
@@ -866,7 +934,17 @@ public class AdvancedReport extends Action {
 					formBean.setAddedMeasures(temp);
 					formBean.setAmpMeasures(coll);
 				}
-
+				if(str.equals("AddAdjustType") == true)
+				{
+					formBean.setSelAdjustType(coll);
+					formBean.setAdjustType(temp);
+				}
+				if(str.equals("DeleteAdjustType") == true)
+				{
+					formBean.setSelAdjustType(temp);
+					formBean.setAdjustType(coll);
+				}
+				
 			}
 		}
 		catch(Exception e)
@@ -899,8 +977,9 @@ public class AdvancedReport extends Action {
 			tempColl = formBean.getAddedMeasures();
 			logger.info("Step3  : " + option);
 		}
-		
-		
+		if(option.equals("MoveUpAdjustType") || option.equals("MoveDownAdjustType"))
+			tempColl = formBean.getSelAdjustType();
+			
 		if(tempColl.size() == 1)
 			logger.info(" Cannot move field up.......");
 		else
@@ -916,10 +995,11 @@ public class AdvancedReport extends Action {
 			logger.info(lg.toString() + " <<< Field Selected >>>> " + formBean.getMoveColumn() + "??????" + tempColl.size());
 			while(iter.hasNext())
 			{
-				if(option.equals("MoveUpMeasure")== true || option.equals("MoveDownMeasure")== true)
+				if(option.equals("MoveUpMeasure")== true || option.equals("MoveDownMeasure")== true
+					|| option.equals("MoveUpAdjustType")== true || option.equals("MoveDownAdjustType")== true)
 				{
 					ampMeasures = (AmpMeasures) iter.next();
-					if(option.equals("MoveUpMeasure")== true)
+					if(option.equals("MoveUpMeasure")== true || option.equals("MoveUpAdjustType")== true)
 					{
 						if(lg.compareTo(ampMeasures.getMeasureId()) == 0 )
 						{
@@ -930,12 +1010,16 @@ public class AdvancedReport extends Action {
 								index = temp.indexOf(ampMeasures);
 								temp.set(index, prevMeasure);
 								temp.set(index-1, currMeasure);
-								formBean.setAddedMeasures(temp);
+								if(option.equals("MoveUpAdjustType"))
+									formBean.setSelAdjustType(temp);
+								if(option.equals("MoveUpMeasure"))
+									formBean.setAddedMeasures(temp);
+								
 								break;
 							}
 						}
 					}
-					if(option.equals("MoveDownMeasure")== true)
+					if(option.equals("MoveDownMeasure")== true  || option.equals("MoveDownAdjustType")== true )
 					{
 						if(lg.compareTo(ampMeasures.getMeasureId()) == 0 )
 						{
@@ -946,7 +1030,11 @@ public class AdvancedReport extends Action {
 								index = temp.indexOf(ampMeasures);
 								temp.set(index, nextMeasure);
 								temp.set(index+1, currMeasure);
-								formBean.setAddedMeasures(temp);
+								if(option.equals("MoveDownAdjustType"))
+									formBean.setSelAdjustType(temp);
+								if(option.equals("MoveDownMeasure"))
+									formBean.setAddedMeasures(temp);
+								
 								break;
 							}
 						}

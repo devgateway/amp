@@ -40,7 +40,7 @@
 						<composite-element class="org.digijava.module.aim.dbentity.AmpReportMeasures">
 							<many-to-one name="measure" class="org.digijava.module.aim.dbentity.AmpMeasures" 
 								column="measureId"/>
-							<property name="orderId" column="order_id"  type="java.lang.String"/>					
+							<property name="measureType" column="measureType"  type="java.lang.String"/>					
 						</composite-element>
 					</set>						
 

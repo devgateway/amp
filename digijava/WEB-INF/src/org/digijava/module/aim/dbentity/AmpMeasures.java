@@ -10,7 +10,14 @@ public class AmpMeasures  implements Serializable
 	private Long measureId ;
 	private String measureName ;
 	private String aliasName;
+	private String type;
 
+	public String getType() {
+		return type;
+	}
+	public void setType(String type) {
+		this.type = type;
+	}
 	public String getAliasName() {
 		return aliasName;
 	}

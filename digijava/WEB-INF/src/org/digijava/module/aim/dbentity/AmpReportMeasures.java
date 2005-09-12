@@ -6,8 +6,7 @@ import java.io.Serializable;
 public class AmpReportMeasures  implements Serializable
 {
 	private AmpMeasures measure;
-	private String orderId;
-
+	private String measureType;
 	
 	public AmpMeasures getMeasure() {
 		return measure;
@@ -15,10 +14,11 @@ public class AmpReportMeasures  implements Serializable
 	public void setMeasure(AmpMeasures measure) {
 		this.measure = measure;
 	}
-	public String getOrderId() {
-		return orderId;
+
+	public String getMeasureType() {
+		return measureType;
 	}
-	public void setOrderId(String orderId) {
-		this.orderId = orderId;
+	public void setMeasureType(String measureType) {
+		this.measureType = measureType;
 	}
 }

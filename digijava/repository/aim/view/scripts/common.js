@@ -170,7 +170,6 @@ function checkAmountLen(amt)
 			len = len - 1;
 		}
 	}
-	alert(len);
 	for (i = 0;i < amt.length; i++)
 	{
 		if(amt.charCodeAt(i) == 46)
@@ -186,7 +185,6 @@ function checkAmountLen(amt)
 				if(cnt > 6)
 				{
 					valid = confirm('All funding information should be entered in thousands "000". Do you wish to proceed with your entry?');
-					alert(cnt);
 				}
 				return valid;
 			}

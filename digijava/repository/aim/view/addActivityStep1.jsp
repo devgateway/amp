@@ -50,6 +50,13 @@ function selectOrganisation() {
 	}
 } 	
 
+function edit(key) {
+	document.aimEditActivityForm.step.value = "1.1";
+	document.aimEditActivityForm.editKey.value = key;
+	document.aimEditActivityForm.target = "_self";
+	document.aimEditActivityForm.submit();
+}
+
 function commentWin() {
 	if (document.aimEditActivityForm.currUrl1.value == "") { 		  
 		openNewWindow(600, 400);
@@ -134,6 +141,7 @@ function popupwin()
 <digi:form action="/addActivity.do" method="post">
 
 <html:hidden property="step"/>
+<html:hidden property="editKey"/>
 <html:hidden property="editAct"/>
 
 <input type="hidden" name="selectedDate" value="">
@@ -261,18 +269,16 @@ function popupwin()
 												</a>
 											</td>
 											<td valign="top" align="left">
-												<%--
-												<a title="<digi:trn key="aim:ObjectivesAndComponentsofProject">The key objectives and main components of the project</digi:trn>">
-												<html:textarea property="objectives" cols="60" rows="4" styleClass="inp-text" />
-											   </a>
-												<digi:edit key="aim.act.desc.1247"/>
-												--%>
 												<bean:define id="objKey">
 													<c:out value="${aimEditActivityForm.objectives}"/>
 												</bean:define>
 												
 												<digi:edit key="<%=objKey%>"/>
+												<%--
 												<a href="<c:out value="${aimEditActivityForm.context}"/>/editor/showEditText.do?id=<%=objKey%>&referrer=<c:out value="${aimEditActivityForm.context}"/>/aim/addActivity.do?edit=true">Edit</a>
+												--%>
+												<a href="javascript:edit('<%=objKey%>')">
+												Edit</a>
 											</td></tr>																				
 											<tr bgcolor="#ffffff"><td valign="top" align="left">
 												<a title="<digi:trn key="aim:DescriptionofProject">Summary information describing the project</digi:trn>">
@@ -292,7 +298,11 @@ function popupwin()
 												</bean:define>
 												
 												<digi:edit key="<%=descKey%>"/>
-												<a href="<c:out value="${aimEditActivityForm.context}"/>/editor/showEditText.do?id=<%=descKey%>&referrer=<c:out value="${aimEditActivityForm.context}"/>/aim/addActivity.do?edit=true">Edit</a>
+												<%--
+												<a href="<c:out value="${aimEditActivityForm.context}"/>/editor/showEditText.do?id=<%=descKey%>&referrer=<c:out value="${aimEditActivityForm.context}"/>/aim/addActivity.do?edit=true">Edit</a>--%>
+												
+												<a href="javascript:edit('<%=descKey%>')">
+												Edit</a>												
 											</td></tr>																				
 										</table>
 									</td></tr>

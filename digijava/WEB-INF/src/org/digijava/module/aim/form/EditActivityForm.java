@@ -259,6 +259,8 @@ public class EditActivityForm extends ActionForm implements Serializable{
 	private String actor;
 	private Long actorId;
 	
+	private String editKey;
+	
 
 	public EditActivityForm() {
 		step = "1";
@@ -270,6 +272,7 @@ public class EditActivityForm extends ActionForm implements Serializable{
 		pageId = 0;
 		modality = null;
 		docWebResource = "http://";
+		editKey = "";
 	}
 
 	public void reset(ActionMapping mapping, HttpServletRequest request) {
@@ -372,6 +375,7 @@ public class EditActivityForm extends ActionForm implements Serializable{
 			actAthLastName = null;
 			regionalFundings = null;
 			issues = null;
+			editKey = "";
 		}
 
 		if (orgSelReset) {
@@ -2836,5 +2840,19 @@ public class EditActivityForm extends ActionForm implements Serializable{
 	 */
 	public void setSelActors(Long[] selActors) {
 		this.selActors = selActors;
+	}
+
+	/**
+	 * @return Returns the editKey.
+	 */
+	public String getEditKey() {
+		return editKey;
+	}
+
+	/**
+	 * @param editKey The editKey to set.
+	 */
+	public void setEditKey(String editKey) {
+		this.editKey = editKey;
 	}
 }

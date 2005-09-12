@@ -4,6 +4,7 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.Iterator;
 
+import javax.servlet.RequestDispatcher;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -39,22 +40,6 @@ public class AddAmpActivity extends Action {
 		TeamMember teamMember= new TeamMember();
 		teamMember=(TeamMember)session.getAttribute("currentMember");
 
-		/*
-		 * TeamMember tm = null; if (session.getAttribute("ampAdmin") == null &&
-		 * session.getAttribute("currentMember") == null) { return
-		 * mapping.findForward("index"); } else { if
-		 * (session.getAttribute("ampAdmin") != null) { String str = (String)
-		 * session.getAttribute("ampAdmin"); if (!str.equals("yes")) { if
-		 * (session.getAttribute("currentMember") != null) { tm = (TeamMember)
-		 * session.getAttribute("currentMember"); if (tm.getTeamHead() == false)
-		 * return mapping.findForward("index"); } else { return
-		 * mapping.findForward("index"); } } } else if
-		 * (session.getAttribute("currentMember") != null) { tm = (TeamMember)
-		 * session.getAttribute("currentMember"); if (tm.getTeamHead() == false)
-		 * return mapping.findForward("index"); } else { return
-		 * mapping.findForward("index"); } }
-		 */
-
 		// if user is not logged in, forward him to the home page
 		if (session.getAttribute("currentMember") == null)
 			return mapping.findForward("index");
@@ -64,7 +49,6 @@ public class AddAmpActivity extends Action {
 
 		try {
 		
-		Long memId = teamMember.getMemberId();
 		//String fileName = getRealPath(memId);
 
 		if (!eaForm.isEditAct() || eaForm.isReset()) {
@@ -138,55 +122,6 @@ public class AddAmpActivity extends Action {
                 ed.setGroupName(Constants.GROUP_OTHER);
                 org.digijava.module.editor.util.DbUtil.saveEditor(ed);		        
 		    }
-		        
-		    
-			/*
-			if (!eaForm.isEdit()) {
-				EditActivityForm temp =	(EditActivityForm) ObjectPersister.loadObject(fileName);
-				if(temp != null) {
-					eaForm.setTitle(temp.getTitle());
-					eaForm.setObjectives(temp.getObjectives());
-					eaForm.setDescription(temp.getDescription());
-					eaForm.setSelectedOrganizations(temp.getSelectedOrganizations());
-					eaForm.setSelOrgs(temp.getSelOrgs());
-					eaForm.setOriginalAppDate(temp.getOriginalAppDate());
-					eaForm.setRevisedAppDate(temp.getRevisedAppDate());
-					eaForm.setOriginalStartDate(temp.getOriginalStartDate());
-					eaForm.setRevisedStartDate(temp.getRevisedStartDate());
-					eaForm.setProposedCompDate(temp.getProposedCompDate());
-					eaForm.setCurrentCompDate(temp.getCurrentCompDate());
-					eaForm.setCommentsCol(temp.getCommentsCol());
-					eaForm.setStatus(temp.getStatus());
-					eaForm.setStatusReason(temp.getStatusReason());
-					eaForm.setCountry(temp.getCountry());
-					eaForm.setLevel(temp.getLevel());
-					eaForm.setImplementationLevel(temp.getImplementationLevel());
-					eaForm.setSelectedLocs(temp.getSelectedLocs());
-					eaForm.setSelLocs(temp.getSelLocs());
-					eaForm.setActivitySectors(temp.getActivitySectors());
-					eaForm.setSelActivitySectors(temp.getSelActivitySectors());
-					eaForm.setProgram(temp.getProgram());
-					eaForm.setProgramDescription(temp.getProgramDescription());
-					eaForm.setOrgId(temp.getOrgId());
-					eaForm.setFundingOrganizations(temp.getFundingOrganizations());
-					eaForm.setSelFundingOrgs(temp.getSelFundingOrgs());
-					eaForm.setComponentId(temp.getComponentId());
-					eaForm.setSelectedComponents(temp.getSelectedComponents());
-					eaForm.setDocFileOrLink(temp.getDocFileOrLink());
-					eaForm.setDocumentList(temp.getDocumentList());
-					eaForm.setSelDocs(temp.getSelDocs());
-					eaForm.setLinksList(temp.getLinksList());
-					eaForm.setSelLinks(temp.getSelLinks());
-					eaForm.setItem(temp.getItem());
-					eaForm.setExecutingAgencies(temp.getExecutingAgencies());
-					eaForm.setImpAgencies(temp.getImpAgencies());
-					eaForm.setContractors(temp.getContractors());
-					eaForm.setContFirstName(temp.getContFirstName());
-					eaForm.setContLastName(temp.getContLastName());
-					eaForm.setEmail(temp.getEmail());
-				} 				
-			}*/
-
 			eaForm.setReset(false);
 			
 			Collection statusCol = null;
@@ -230,41 +165,26 @@ public class AddAmpActivity extends Action {
 			eaForm.setProgramCollection(ProgramUtil.getAllThemes());				
 			
 			return mapping.findForward("addActivityStep1");
+		} else if (eaForm.getStep().equals("1.1")) {
+			eaForm.setStep("1");
+		    String url = "/editor/showEditText.do?id="+eaForm.getEditKey()+"&referrer="+eaForm.getContext()+"/aim/addActivity.do?edit=true";
+		    /*
+		    RequestDispatcher rd = getServlet().getServletContext().
+		    	getRequestDispatcher(url);
+		   */
+		    response.sendRedirect(eaForm.getContext() + url);
+		    //rd.forward(request,response);			
 		} else if (eaForm.getStep().equals("2")) { // show the step 2 page.
-			/*
-			if (!eaForm.isEdit()) {
-				ObjectPersister.saveObject(eaForm,fileName);	
-			}*/
 			return mapping.findForward("addActivityStep2");
 		} else if (eaForm.getStep().equals("3")) { // show the step 3 page.
-			/*
-			if (!eaForm.isEdit()) {
-				ObjectPersister.saveObject(eaForm,fileName);	
-			}*/
 			return mapping.findForward("addActivityStep3");
 		} else if (eaForm.getStep().equals("4")) { // show the step 4 page.
-			/*
-			if (!eaForm.isEdit()) {
-				ObjectPersister.saveObject(eaForm,fileName);	
-			}*/
 			return mapping.findForward("addActivityStep4");
 		} else if (eaForm.getStep().equals("5")) { // show the step 5 page.
-			/*
-			if (!eaForm.isEdit()) {
-				ObjectPersister.saveObject(eaForm,fileName);	
-			}*/
 			return mapping.findForward("addActivityStep5");
 		} else if (eaForm.getStep().equals("6")) { // show the step 6 page.
-			/*
-			if (!eaForm.isEdit()) {
-				ObjectPersister.saveObject(eaForm,fileName);	
-			}*/
 			return mapping.findForward("addActivityStep6");
 		} else if (eaForm.getStep().equals("7")) { // show the step 7 page.
-			/*
-			if (!eaForm.isEdit()) {
-				ObjectPersister.saveObject(eaForm,fileName);	
-			}*/
 			return mapping.findForward("addActivityStep7");
 		} else if (eaForm.getStep().equals("8")) { // finish wizard. add the activity details.
 
@@ -314,11 +234,6 @@ public class AddAmpActivity extends Action {
 				eaForm.setProgramCollection(ProgramUtil.getAllThemes());				
 			}
 			
-
-			/*
-			if (!eaForm.isEdit()) {
-				ObjectPersister.saveObject(eaForm,fileName);	
-			}*/
 			return mapping.findForward("preview");
 		} else {
 			return mapping.findForward("adminHome");
@@ -327,21 +242,6 @@ public class AddAmpActivity extends Action {
 			e.printStackTrace(System.out);
 			return null;
 		}
+		return null;
 	}
-	
-	/*
-	private String getRealPath(Long val) {
-		String fileName =  val.toString()+ ".dat";
-		ActionServlet s = getServlet();
-		String path = "/WEB-INF/tmp";
-		String realPath = s.getServletContext().getRealPath(path);
-		File dir = new File(realPath);
-		if(dir.mkdir() == true)
-			logger.debug("Directory created ...");
-		else
-			logger.debug("Directory not created ...");
-		
-		fileName = realPath + "\\" + fileName; 
-		return fileName;
-	}*/
 }

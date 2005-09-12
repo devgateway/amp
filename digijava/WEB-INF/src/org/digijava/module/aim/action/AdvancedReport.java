@@ -117,6 +117,7 @@ public class AdvancedReport extends Action {
 				formBean.setReportTitle("");
 				formBean.setAdjustType(null);
 				formBean.setSelAdjustType(null);
+				formBean.setSelectedAdjustmentType(null);
 				
 			}
 

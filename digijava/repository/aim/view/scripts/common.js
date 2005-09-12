@@ -154,7 +154,49 @@ function checkAmount(amt)
 			valid = false;
 			break;
 		}
-		
 	}
 	return valid;
+}
+
+function checkAmountLen(amt)
+{
+	var len = amt.length;
+	var valid = false;
+	var cnt = 0;
+	for (var x = 0;x < amt.length;x++)
+	{
+		if(amt.charCodeAt(x) == 44)
+		{
+			len = len - 1;
+		}
+	}
+	alert(len);
+	for (i = 0;i < amt.length; i++)
+	{
+		if(amt.charCodeAt(i) == 46)
+		{
+			if(i > 6)
+			{
+				cnt = i;
+				for(j = 0;j < i; j++)
+				{
+					if(amt.charCodeAt(j) == 44)
+						cnt = cnt - 1;
+				}
+				if(cnt > 6)
+				{
+					valid = confirm('All funding information should be entered in thousands "000". Do you wish to proceed with your entry?');
+					alert(cnt);
+				}
+				return valid;
+			}
+			else
+				return true;
+		}
+	}
+	if(len > 6)
+	{
+		valid = confirm('All funding information should be entered in thousands "000". Do you wish to proceed with your entry?');
+		return valid;			
+	}
 }

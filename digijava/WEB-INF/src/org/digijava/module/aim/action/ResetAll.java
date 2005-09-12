@@ -18,6 +18,9 @@ import org.digijava.kernel.dbentity.Country;
 import org.digijava.module.aim.dbentity.AmpActivity;
 import org.digijava.module.aim.dbentity.AmpActivityInternalId;
 import org.digijava.module.aim.dbentity.AmpComponent;
+import org.digijava.module.aim.dbentity.AmpIssues;
+import org.digijava.module.aim.dbentity.AmpMeasure;
+import org.digijava.module.aim.dbentity.AmpActor;
 import org.digijava.module.aim.dbentity.AmpFunding;
 import org.digijava.module.aim.dbentity.AmpFundingDetail;
 import org.digijava.module.aim.dbentity.AmpLocation;
@@ -28,6 +31,8 @@ import org.digijava.module.aim.dbentity.AmpSector;
 import org.digijava.module.aim.form.EditActivityForm;
 import org.digijava.module.aim.helper.ActivitySector;
 import org.digijava.module.aim.helper.Components;
+import org.digijava.module.aim.helper.Issues;
+import org.digijava.module.aim.helper.Measures;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.CurrencyWorker;
 import org.digijava.module.aim.helper.DateConversion;
@@ -104,6 +109,9 @@ public class ResetAll extends Action
 	    	if(eaForm.getStep().equals("4"))
 	    	{
 	    		eaForm.setSelectedComponents(null);
+				eaForm.setIssues(null);
+				eaForm.setMeasure(null);
+				eaForm.setActor(null);
 	    	}
 	    	if(eaForm.getStep().equals("5"))
 	    	{
@@ -410,7 +418,47 @@ public class ResetAll extends Action
 					}
 					eaForm.setSelectedComponents(comp);
 				}
-		    }
+				ArrayList list = new ArrayList();
+				Set issues = activity.getIssues();
+				if (issues != null && issues.size() > 0) 
+				{
+					Iterator iItr = issues.iterator();
+					while (iItr.hasNext()) 
+					{
+						AmpIssues ampIssue = (AmpIssues) iItr.next();
+						Issues issue = new Issues();
+						issue.setId(ampIssue.getAmpIssueId());
+						issue.setName(ampIssue.getName());
+						ArrayList mList = new ArrayList();
+						if (ampIssue.getMeasures() != null && ampIssue.getMeasures().size() > 0) 
+						{
+							Iterator mItr = ampIssue.getMeasures().iterator() ;
+							while (mItr.hasNext()) 
+							{
+								AmpMeasure ampMeasure = (AmpMeasure) mItr.next();
+								Measures measure = new Measures();
+								measure.setId(ampMeasure.getAmpMeasureId());
+								measure.setName(ampMeasure.getName());
+								ArrayList aList = new ArrayList();
+								if (ampMeasure.getActors() != null && ampMeasure.getActors().size() > 0) 
+								{
+									Iterator aItr = ampMeasure.getActors().iterator();
+									while (aItr.hasNext()) 
+									{
+										AmpActor actor = (AmpActor) aItr.next();	
+										aList.add(actor);
+									}
+								}
+								measure.setActors(aList);
+								mList.add(measure);
+							}
+						}
+						issue.setMeasures(mList);
+						list.add(issue);
+						eaForm.setIssues(list);
+					}
+			    }
+			 }
 		    if(eaForm.getStep().equals("5"))
 		    {
 				Collection actDocs = activity.getDocuments();

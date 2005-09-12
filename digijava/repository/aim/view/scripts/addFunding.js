@@ -52,7 +52,11 @@ function validateFundingDetails(comm,disb,exp) {
 					alert(msg);
 					temp[i].focus();
 					return false;
-				}				
+				}
+				if (checkAmountLen(temp[i].value) == false) {
+					temp[i].focus();
+					return false;
+				}
 			}
 			
 			if (temp[i].name != null && temp[i].name == dateField) {

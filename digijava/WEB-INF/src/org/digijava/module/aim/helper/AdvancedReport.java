@@ -25,10 +25,13 @@ public class AdvancedReport
 	
 	private Collection modality;	
 	private Collection assistance;
+	private Collection contacts;
 	
 	private Collection fiscalYrs;
 	private Collection ampFund;
 	private int yearCount;
+	private String ampId;
+	private String year;
 
 	public Collection getDonors() 
 	{
@@ -90,6 +93,16 @@ public class AdvancedReport
 		regions = c;
 	}
 
+	public Collection getContacts() 
+	{
+		return contacts;
+	}
+
+	public void setContacts(Collection c) 
+	{
+		contacts = c;
+	}
+
 	public Collection getSectors() 
 	{
 		return sectors;
@@ -119,6 +132,26 @@ public class AdvancedReport
 	public void setTitle(String string) 
 	{
 		title = string;
+	}
+
+	public String getAmpId() 
+	{
+		return ampId;
+	}
+	
+	public void setAmpId(String string) 
+	{
+		ampId = string;
+	}
+
+	public String getYear() 
+	{
+		return year;
+	}
+	
+	public void setYear(String string) 
+	{
+		year = string;
 	}
 
 	public String getStatus() 

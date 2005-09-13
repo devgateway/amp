@@ -11,6 +11,7 @@ public class AmpMeasures  implements Serializable
 	private String measureName ;
 	private String aliasName;
 	private String type;
+	private Set reports;
 
 	public String getType() {
 		return type;
@@ -36,5 +37,12 @@ public class AmpMeasures  implements Serializable
 	}
 	public void setMeasureName(String measureName) {
 		this.measureName = measureName;
+	}
+
+	public Set getReports() {
+		return reports;
+	}
+	public void setReports(Set reports) {
+		this.reports = reports;
 	}
 }

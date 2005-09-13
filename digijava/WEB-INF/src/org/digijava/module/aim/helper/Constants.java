@@ -81,9 +81,14 @@ public class Constants
 	public static final Long ACTUAL_START_DATE = new Long(3) ;
 	public static final Long ACTIVITY_NAME = new Long(4) ;
 	public static final Long TERM_ASSIST_NAME = new Long(5) ;
-	public static final Long ACTUAL_COMMITMENT = new Long(6) ;
-	public static final Long LEVEL_NAME = new Long(7) ;
-	public static final Long ACTUAL_COMPLETION_DATE = new Long(8) ;
+	public static final Long LEVEL_NAME = new Long(6) ;
+	public static final Long ACTUAL_COMPLETION_DATE = new Long(7) ;
+	public static final Long SECTOR_NAME = new Long(8) ;
+	public static final Long REGION_NAME = new Long(9) ;
+	public static final Long FUNDING_INSTRUMENT = new Long(10) ;
+	public static final Long YEAR = new Long(11) ;
+	public static final Long AMP_ID = new Long(12) ;
+	public static final Long CONTACT_NAME = new Long(13) ;
 	
 	
 

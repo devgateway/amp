@@ -34,16 +34,12 @@
 				<property name="levelId" column="levelId"  type="java.lang.String"/>					
 						</composite-element>
 					</set>						
-
-					<set name="measures" table="amp_report_measures">
-						<key column="amp_report_id"/>
-						<composite-element class="org.digijava.module.aim.dbentity.AmpReportMeasures">
-							<many-to-one name="measure" class="org.digijava.module.aim.dbentity.AmpMeasures" 
-								column="measureId"/>
-							<property name="measureType" column="measureType"  type="java.lang.String"/>					
-						</composite-element>
-					</set>						
-
+		<set name="measures" table="amp_report_measures" lazy="true">
+			<cache usage="read-write"/>
+			<key column="amp_report_id"/>
+			<many-to-many class="org.digijava.module.aim.dbentity.AmpMeasures" column="measureId"/>
+		</set>
+					
 					
 	</class>
 </hibernate-mapping>

@@ -88,7 +88,7 @@ public class AdvancedReportForm extends ActionForm
 	private Integer ampAdjustmentId;
 	private Collection fiscalYearRange;
 	private int totalColumns;
-
+	private int fundColumns;
 	private Collection totDisbFund;
 	private Collection totFund;
 	private String totComm;
@@ -98,6 +98,12 @@ public class AdvancedReportForm extends ActionForm
 	private Collection titles;
 	private String pieImageUrl="";
 	private String barImageUrl="";
+
+	private String plannedFlag;
+	private String actualFlag;
+	private String commFlag;
+	private String disbFlag;
+	private String expFlag;
 
 	
 	public String getPieImageUrl()
@@ -1107,6 +1113,54 @@ private int yrDiff;
 	}
 	public void setRemoveAdjustType(Long[] removeAdjustType) {
 		this.removeAdjustType = removeAdjustType;
+	}
+
+	public String getPlannedFlag() {
+		return plannedFlag;
+	}
+
+	public void setPlannedFlag(String string) {
+		plannedFlag = string;
+	}
+
+	public String getActualFlag() {
+		return actualFlag;
+	}
+
+	public void setActualFlag(String string) {
+		actualFlag = string;
+	}
+
+	public String getCommFlag() {
+		return commFlag;
+	}
+
+	public void setCommFlag(String string) {
+		commFlag = string;
+	}
+
+	public String getDisbFlag() {
+		return disbFlag;
+	}
+
+	public void setDisbFlag(String string) {
+		disbFlag = string;
+	}
+
+	public String getExpFlag() {
+		return expFlag;
+	}
+
+	public void setExpFlag(String string) {
+		expFlag = string;
+	}
+
+	public int getFundColumns() {
+		return fundColumns;
+	}
+
+	public void setFundColumns(int i) {
+		fundColumns = i;
 	}
 
 } //		End of Class

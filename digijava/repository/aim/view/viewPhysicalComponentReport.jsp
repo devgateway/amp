@@ -80,7 +80,7 @@
             </tr>
 			<tr>
 				<td colspan=3 class=subtitle-blue align=center>
-					<digi:trn key="aim:ProjectbyDonorTitle">
+					<digi:trn key="aim:physicalComponentReport">
 					<bean:write name="aimMulitlateralbyDonorForm" property="reportName" />
 					</digi:trn>
 				</td>
@@ -375,19 +375,19 @@
 					</td>
 					
 					<td align="center" height="21" > <div align="center"><strong>
-					Signature Date
+					Commitment Date
 					</strong>
 					</td>
 					<td align="center" height="21" > <div align="center"><strong>
-					Ending Date
+					Completion Date
 					</strong></div>
 					</td>
 					<td align="center" height="21"> <div align="center"><strong>
-					Total Allocation
+					Total Commitments
 					</strong></div>
 					</td>
 					<td align="center" height="21" ><div align="center"> <strong>
-					Cumulative Expenditure
+					Cumulative Disbursement
 					</strong></div>
 					</td>
 					<td align="center" height="21"> <div align="center"><strong>

@@ -30,7 +30,7 @@ import org.digijava.module.aim.dbentity.AmpCurrency;
 import org.digijava.module.aim.dbentity.AmpMeasures;
 import org.digijava.module.aim.dbentity.AmpReportColumn;
 import org.digijava.module.aim.dbentity.AmpReportHierarchy;
-import org.digijava.module.aim.dbentity.AmpReportMeasures;
+//import org.digijava.module.aim.dbentity.AmpReportMeasures;
 import org.digijava.module.aim.dbentity.AmpReports;
 import org.digijava.module.aim.dbentity.AmpTeam;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
@@ -626,11 +626,11 @@ public class AdvancedReport extends Action {
 							while(iter.hasNext())
 							{
 								AmpMeasures ampMeasures = (AmpMeasures) iter.next();
-								AmpReportMeasures reportMeasure = new AmpReportMeasures();
-								reportMeasure.setMeasure(ampMeasures);
+							//	AmpReportMeasures reportMeasure = new AmpReportMeasures();
+							//	reportMeasure.setMeasure(ampMeasures);
 								//reportMeasure.setOrderId(""+i);
-								reportMeasure.setMeasureType("Transaction");
-								measures.add(reportMeasure);
+							//	reportMeasure.setMeasureType("Transaction");
+							//	measures.add(reportMeasure);
 								i = i + 1;
 							}
 						}
@@ -642,10 +642,10 @@ public class AdvancedReport extends Action {
 							while(iter.hasNext())
 							{
 								AmpMeasures ampMeasures = (AmpMeasures) iter.next();
-								AmpReportMeasures reportMeasure = new AmpReportMeasures();
-								reportMeasure.setMeasure(ampMeasures);
-								reportMeasure.setMeasureType("AdjustmentType");
-								measures.add(reportMeasure);
+				//				AmpReportMeasures reportMeasure = new AmpReportMeasures();
+				//				reportMeasure.setMeasure(ampMeasures);
+				//				reportMeasure.setMeasureType("AdjustmentType");
+				//				measures.add(reportMeasure);
 							}
 						}
 						ampReports.setMeasures(measures);

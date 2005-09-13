@@ -41,7 +41,7 @@ import org.digijava.module.aim.helper.CurrencyWorker;
 
 public class ViewAdvancedReport extends Action
 {
-	private static Logger logger = Logger.getLogger(ViewProjects.class) ;
+	private static Logger logger = Logger.getLogger(ViewAdvancedReport.class) ;
 	
 	public ActionForward execute(ActionMapping mapping, ActionForm form, 
 	HttpServletRequest request, HttpServletResponse response) throws java.lang.Exception
@@ -67,6 +67,8 @@ public class ViewAdvancedReport extends Action
 			perspective="MA";
 		formBean.setPerspectiveFilter(perspective);
 		ArrayList dbReturnSet= null ;
+		ArrayList transaction=new ArrayList();
+		ArrayList adjustment=new ArrayList();
 		Iterator iterst = null ;
 		Iterator iterSub = null ;
 		Iterator iter = null;
@@ -391,6 +393,38 @@ public class ViewAdvancedReport extends Action
 		ReportSelectionCriteria rsc=ReportUtil.getReportSelectionCriteria(ampReportId);
 		
 		formBean.setTitles(rsc.getColumns());
+		logger.info("Adjustment: " + rsc.getAdjustment().size());
+		logger.info("Transaction: " + rsc.getTransaction().size());
+		transaction=(ArrayList)rsc.getTransaction();
+		adjustment=(ArrayList)rsc.getAdjustment();
+		logger.info("Adjustment: " + adjustment.size());
+		logger.info("Transaction: " + transaction.size());
+		if(adjustment.indexOf(new Long(1))>=0)
+			formBean.setPlannedFlag("true");
+		else
+			formBean.setPlannedFlag("false");
+
+		if(adjustment.indexOf(new Long(2))>=0)
+			formBean.setActualFlag("true");
+		else
+			formBean.setActualFlag("false");
+
+		if(transaction.indexOf(new Long(4))>=0)
+			formBean.setCommFlag("true");
+		else
+			formBean.setCommFlag("false");
+		
+		if(transaction.indexOf(new Long(5))>=0)
+			formBean.setDisbFlag("true");
+		else
+			formBean.setDisbFlag("false");
+
+		if(transaction.indexOf(new Long(6))>=0)
+			formBean.setExpFlag("true");
+		else
+			formBean.setExpFlag("false");
+
+		formBean.setFundColumns((adjustment.size()*transaction.size()));
 
 //		dbReturnSet=ReportUtil.getAdvancedReport(ampTeamId,fromYr,toYr,perspective,ampCurrencyCode,ampModalityId,ampStatusId,ampOrgId,ampSectorId,fiscalCalId,startDate,closeDate,region,ampReportId);
 //		logger.info("Number of Records:" + dbReturnSet.size());

@@ -27,13 +27,16 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.digijava.module.aim.dbentity.AmpColumns;
 import org.digijava.module.aim.dbentity.AmpCurrency;
+import org.digijava.module.aim.dbentity.AmpFilters;
 import org.digijava.module.aim.dbentity.AmpMeasures;
+import org.digijava.module.aim.dbentity.AmpPages;
 import org.digijava.module.aim.dbentity.AmpReportColumn;
 import org.digijava.module.aim.dbentity.AmpReportHierarchy;
 //import org.digijava.module.aim.dbentity.AmpReportMeasures;
 import org.digijava.module.aim.dbentity.AmpReports;
 import org.digijava.module.aim.dbentity.AmpTeam;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
+import org.digijava.module.aim.dbentity.AmpTeamPageFilters;
 import org.digijava.module.aim.dbentity.AmpTeamReports;
 import org.digijava.kernel.persistence.PersistenceManager;
 
@@ -76,6 +79,7 @@ public class AdvancedReport extends Action {
 		httpSession = request.getSession();
 		Query query;
 		Collection reports = new ArrayList();
+		Collection selectedTransc = new ArrayList();
 		Session session = null;
 		Transaction tx = null;
 		String sqlQuery;		
@@ -134,7 +138,7 @@ public class AdvancedReport extends Action {
 				while(iter.hasNext())
 				{
 					AmpMeasures ampMeasure = (AmpMeasures) iter.next();
-					if(ampMeasure.getType().equals("AdjustmentType") == true)
+					if(ampMeasure.getType().equals("A") == true)
 						tempColl.add(ampMeasure);
 				}
 				formBean.setAdjustType(tempColl);
@@ -271,20 +275,67 @@ public class AdvancedReport extends Action {
 					ampCurrencyCode=formBean.getAmpCurrencyCode();
 
 				
-				logger.info(fromYr + " <>>>>>" + toYr);
-				Long measure = null;
-				if(formBean.getAddedMeasures() != null)
+				logger.info(fromYr + ":  From year - TO Year : " + toYr);
+				// Gets the Transaction and Adjustement Type from the user
+				ArrayList adjType = new ArrayList(), transc = new ArrayList();
+				int count = 0;
+				if(formBean.getSelAdjustType() != null)
 				{
-					iter = formBean.getAddedMeasures().iterator();
-					if(iter.hasNext())
+					
+					iter = formBean.getSelAdjustType().iterator();
+					while(iter.hasNext())
 					{
-						AmpMeasures ampMeasure = (AmpMeasures)iter.next();
-						logger.info(ampMeasure.getMeasureName()+ " <<<  Measure id : " +ampMeasure.getMeasureId());
-						measure = ampMeasure.getMeasureId();
+						AmpMeasures ampMeasures = (AmpMeasures) iter.next();
+						logger.info("Adjustment : " + ampMeasures.getMeasureId() + "" + ampMeasures.getMeasureName());
+						adjType.add(count, ampMeasures.getMeasureId());
+						count = count + 1;
 					}
 				}
+				
+				if(formBean.getAddedMeasures() != null)
+				{
+					count = 0;
+					iter = formBean.getAddedMeasures().iterator();
+					while(iter.hasNext())
+					{
+						AmpMeasures ampMeasure = (AmpMeasures) iter.next();
+						logger.info("Transaction : " + ampMeasure.getMeasureId() + "" + ampMeasure.getMeasureName());
+						transc.add(count, ampMeasure.getMeasureId());
+						selectedTransc.add(ampMeasure.getMeasureName().toString());
+						count = count + 1;
+					}
+				}
+				logger.info(transc.size() + "________________ " + adjType.size());
+				logger.info("Adjustment: " + adjType.size());
+				logger.info("Transaction: " + transc.size());
+				if(adjType.indexOf(new Long(1))>=0)
+					formBean.setPlannedFlag("true");
+				else
+					formBean.setPlannedFlag("false");
 
-				measure = new Long(1);
+				if(adjType.indexOf(new Long(2))>=0)
+					formBean.setActualFlag("true");
+				else
+					formBean.setActualFlag("false");
+
+				if(transc.indexOf(new Long(4))>=0)
+					formBean.setCommFlag("true");
+				else
+					formBean.setCommFlag("false");
+				
+				if(transc.indexOf(new Long(5))>=0)
+					formBean.setDisbFlag("true");
+				else
+					formBean.setDisbFlag("false");
+
+				if(transc.indexOf(new Long(6))>=0)
+					formBean.setExpFlag("true");
+				else
+					formBean.setExpFlag("false");
+
+				formBean.setFundColumns((adjType.size()*transc.size()));
+
+				
 				boolean allPages = false;
 				if(formBean.getAddedColumns() != null)
 				{
@@ -295,7 +346,7 @@ public class AdvancedReport extends Action {
 					if (request.getParameter("page") == null) 
 					{
 						page = 1;
-						reports=ReportUtil.generateAdvancedReport(ampTeamId,fromYr,toYr,fiscalCalId,ampCurrencyCode,perspective, measure, formBean.getAddedColumns() );
+						reports=ReportUtil.generateAdvancedReport(ampTeamId,fromYr,toYr,fiscalCalId,ampCurrencyCode,perspective, adjType, transc, formBean.getAddedColumns() );
 						logger.info("Page is NULL............................" + reports.size());
 						formBean.setFinalData(reports);
 						httpSession.setAttribute("ampReports",reports);
@@ -576,7 +627,7 @@ public class AdvancedReport extends Action {
 						String descr = "/"+formBean.getReportTitle().replaceAll(" " , "");
 						descr = descr + ".do";
 						ampReports.setDescription(descr);
-						ampReports.setName(formBean.getReportTitle());
+						ampReports.setName(formBean.getReportTitle().trim());
 						ampReports.setAmpReportId(new Long("0"));
 						
 						// saving the selected columns for the report
@@ -680,6 +731,71 @@ public class AdvancedReport extends Action {
 							
 							session.save(ampTeamMember);
 						}
+			
+						// Setting the filters for the New Report that has been created.
+						Set pageFilters = new HashSet();
+						queryString = "select filters from " + AmpFilters.class.getName() + " filters ";
+						logger.info( " Filter Query...:: " + queryString);
+						query = session.createQuery(queryString);
+						if(query!=null)
+						{
+							iter = query.list().iterator();
+							while(iter.hasNext())
+							{
+								AmpFilters filt = (AmpFilters) iter.next();
+								if(filt.getFilterName().compareTo("Region") != 0 && 
+									filt.getFilterName().compareTo("Start Date/Close Date") !=0	&& 
+									filt.getFilterName().compareTo("Planned/Actual") != 0 )  
+								{
+									logger.info("Insertd : " + filt.getFilterName());
+									pageFilters.add(filt);
+								}
+							}
+						}
+						logger.info("Filter size : " + pageFilters.size());
+						
+						AmpPages ampPages = new AmpPages();
+						ampPages.setFilters(pageFilters);
+						ampPages.setPageName(ampReports.getName());
+						logger.info(" Page Name  : " + ampPages.getPageName());
+						
+						String pageCode = "" + ampReports.getName().trim().charAt(0);
+						for(int j=0; j <ampReports.getName().length(); j++)
+						{
+							if(ampReports.getName().charAt(j) == ' ')
+									pageCode = pageCode + ampReports.getName().charAt(j+1);
+						}
+						ampPages.setPageCode(pageCode);
+						session.save(ampPages);
+						
+						
+						queryString = "select filters from " + AmpFilters.class.getName() + " filters ";
+						logger.info( " Filter Query...:: " + queryString);
+						query = session.createQuery(queryString);
+						if(query!=null)
+						{
+							iter = query.list().iterator();
+							while(iter.hasNext())
+							{
+								AmpFilters filt = (AmpFilters) iter.next();
+								if(filt.getFilterName().compareTo("Region") != 0 && 
+									filt.getFilterName().compareTo("Start Date/Close Date") !=0	&& 
+									filt.getFilterName().compareTo("Planned/Actual") != 0 )  
+								{
+									AmpTeamPageFilters ampTeamPageFilters = new AmpTeamPageFilters();
+									ampTeamPageFilters.setFilter(filt);
+							//		logger.info("Filter:" + filt.getFilterName());
+							
+									ampTeamPageFilters.setPage(ampPages);
+							//		logger.info("Page" + ampPages.getPageName());
+									AmpTeam ampTeam = (AmpTeam) session.get(AmpTeam.class, teamMember.getTeamId());
+									ampTeamPageFilters.setTeam(ampTeam);
+								//	logger.info("Team:" + ampTeam.getName())
+									session.save(ampTeamPageFilters);
+								}						
+							}
+						}
+
 						logger.info("***************  END   *******");
 						
 						

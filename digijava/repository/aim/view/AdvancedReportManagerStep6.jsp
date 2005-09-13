@@ -287,7 +287,7 @@ function deleteAdjustType()
 																			<TABLE width="100%" cellPadding=2 cellSpacing=1 vAlign="top" align="top" bgcolor="#aaaaaa" border=0>
 																				<c:if test="${!empty aimAdvancedReportForm.ampMeasures}">
 																					<logic:iterate name="aimAdvancedReportForm" id="ampMeasures"	property="ampMeasures" >
-																						<c:if test="${ampMeasures.type == 'Transaction'}">
+																						<c:if test="${ampMeasures.type == 'T'}">
 																						<TR bgcolor="#ffffff">
 																							<td align="left" width="98%" valign=top>
 																								<c:out value="${ampMeasures.aliasName}"/>

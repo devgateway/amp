@@ -11117,6 +11117,7 @@ public class ReportUtil {
 								AmpFund ampFund=new AmpFund();
 								if(adjustment.indexOf(new Long(1))!=-1)
 								{
+									logger.info("*******     Actual.......   **************");
 									if(transaction.indexOf(new Long(4))!=-1)
 										ampFund.setCommAmount(mf.format(plannedFunds[i][0])); 
 									if(transaction.indexOf(new Long(5))!=-1)
@@ -11411,12 +11412,14 @@ public class ReportUtil {
 	}
 
 //---------New Function-----------------------------------------------------------------------------
-	public static ArrayList generateAdvancedReport(Long ampTeamId,int fromYr,int toYr, int fiscalCalId,String ampCurrencyCode, String perspective, Long measure, Collection addedColumns)
+	public static ArrayList generateAdvancedReport(Long ampTeamId,int fromYr,int toYr, int fiscalCalId,String ampCurrencyCode, String perspective, ArrayList adjust, ArrayList transc, Collection addedColumns)
 	{
 		Session session = null ;
 		Query q = null ;
 		ArrayList ampReports = new ArrayList() ;
 		Collection columns=new ArrayList();
+		ArrayList adjustment = adjust;
+		ArrayList transaction = transc;
 		Report reports=null;
 		String queryString = null;
 		Iterator iter=null;
@@ -11584,17 +11587,24 @@ public class ReportUtil {
 							for(int i=0;i<yrCount;i++)
 							{
 								AmpFund ampFund=new AmpFund();
-								if(measure.equals(new Long(1)))
+								if(adjustment.indexOf(new Long(1))!=-1)
 								{
-									ampFund.setCommAmount(mf.format(plannedFunds[i][0])); 
-									ampFund.setDisbAmount(mf.format(plannedFunds[i][1])); 
-									ampFund.setExpAmount(mf.format(plannedFunds[i][2]));	
+									
+									if(transaction.indexOf(new Long(4))!=-1)
+										ampFund.setCommAmount(mf.format(plannedFunds[i][0])); 
+									if(transaction.indexOf(new Long(5))!=-1)
+										ampFund.setDisbAmount(mf.format(plannedFunds[i][1])); 
+									if(transaction.indexOf(new Long(6))!=-1)
+										ampFund.setExpAmount(mf.format(plannedFunds[i][2]));	
 								}
-								if(measure.equals(new Long(2)))
+								if(adjustment.indexOf(new Long(2))!=-1)
 								{
-									ampFund.setCommAmount(mf.format(actualFunds[i][0])); 
-									ampFund.setDisbAmount(mf.format(actualFunds[i][1])); 
-									ampFund.setExpAmount(mf.format(actualFunds[i][2]));	
+									if(transaction.indexOf(new Long(4))!=-1)
+										ampFund.setCommAmount(mf.format(actualFunds[i][0])); 
+									if(transaction.indexOf(new Long(5))!=-1)
+										ampFund.setDisbAmount(mf.format(actualFunds[i][1])); 
+									if(transaction.indexOf(new Long(6))!=-1)
+										ampFund.setExpAmount(mf.format(actualFunds[i][2]));	
 								}
 								report.getAmpFund().add(ampFund);
 							}
@@ -11604,16 +11614,16 @@ public class ReportUtil {
 							actualDisbursement=0;
 							donors.clear();
 							assistance.clear();
-							contacts.clear();
 							modality.clear();
+							contacts.clear();
 							sectors.clear();
 							regions.clear();
+							minYear=maxYear=0;
 							for(int i=0;i<yrCount;i++)
 							{
 								actualFunds[i][0]=actualFunds[i][1]=actualFunds[i][2]=0;
 								plannedFunds[i][0]=plannedFunds[i][1]=plannedFunds[i][2]=0;
 							}
-							
 						} // CHECK IF REPORT != NULL
 						reports= new Report();
 						reports.setRecords(new ArrayList());
@@ -11672,7 +11682,7 @@ public class ReportUtil {
 					//logger.info("Measure: " + measure);
 					if(ampReportCache.getFiscalYear()!=null && ampReportCache.getFiscalQuarter()!=null)
 					{
-						//logger.info("begin if");
+						logger.info("begin if");
 						if(new Long(fiscalCalId).equals(Constants.GREGORIAN))
 						{
 							fiscalYear=ampReportCache.getFiscalYear().intValue();
@@ -11682,6 +11692,7 @@ public class ReportUtil {
 							minYear=fiscalYear;
 						if(maxYear < fiscalYear)
 							maxYear=fiscalYear;
+
 						if(ampReportCache.getCurrencyCode().equals("USD"))
 							fromExchangeRate=1.0;
 						else
@@ -11690,7 +11701,7 @@ public class ReportUtil {
 							toExchangeRate=1.0;
 						else
 							toExchangeRate=DbUtil.getExchangeRate(ampCurrencyCode,Constants.PLANNED,ampReportCache.getTransactionDate());
-						if(measure.equals(new Long(2)))
+						if(adjustment.indexOf(new Long(2))!=-1)
 						{	
 							if(ampReportCache.getActualCommitment().doubleValue()>0 && ampReportCache.getPerspective().equals(perspective))
 							{
@@ -11705,7 +11716,7 @@ public class ReportUtil {
 										actualFunds[fiscalYear%fromYr][0]=actualFunds[fiscalYear%fromYr][0] + amount;
 								}
 							}
-							amount=0.0;
+							//amount=0.0;
 							if(ampReportCache.getActualDisbursement().doubleValue()>0 && ampReportCache.getPerspective().equals(perspective))
 							{
 								amount=CurrencyWorker.convert1(ampReportCache.getActualDisbursement().doubleValue(),fromExchangeRate,toExchangeRate);
@@ -11718,7 +11729,7 @@ public class ReportUtil {
 										actualFunds[fiscalYear%fromYr][1]=actualFunds[fiscalYear%fromYr][1] + amount;
 								}
 							}
-							amount=0.0;
+							///amount=0.0;
 							if(ampReportCache.getActualExpenditure().doubleValue()>0 && ampReportCache.getPerspective().equals(perspective))
 							{
 								amount=CurrencyWorker.convert1(ampReportCache.getActualExpenditure().doubleValue(),fromExchangeRate,toExchangeRate);
@@ -11731,9 +11742,9 @@ public class ReportUtil {
 										actualFunds[fiscalYear%fromYr][2]=actualFunds[fiscalYear%fromYr][2] + amount;
 								}
 							}
-							amount=0.0;
+							//amount=0.0;
 						}
-						if(measure.equals(new Long(1)))
+						if(adjustment.indexOf(new Long(1))!=-1)
 						{
 							if(ampReportCache.getPlannedCommitment().doubleValue()>0 && ampReportCache.getPerspective().equals(perspective))
 							{
@@ -11748,7 +11759,7 @@ public class ReportUtil {
 										plannedFunds[fiscalYear%fromYr][0]=plannedFunds[fiscalYear%fromYr][0] + amount;
 								}
 							}
-							amount=0.0;
+							//amount=0.0;
 							if(ampReportCache.getPlannedDisbursement().doubleValue()>0 && ampReportCache.getPerspective().equals(perspective))
 							{
 								amount=CurrencyWorker.convert1(ampReportCache.getPlannedDisbursement().doubleValue(),fromExchangeRate,toExchangeRate);
@@ -11761,7 +11772,7 @@ public class ReportUtil {
 										plannedFunds[fiscalYear%fromYr][1]=plannedFunds[fiscalYear%fromYr][1] + amount;
 								}
 							}
-							amount=0.0;
+							//amount=0.0;
 							if(ampReportCache.getPlannedExpenditure().doubleValue()>0 && ampReportCache.getPerspective().equals(perspective))
 							{
 								amount=CurrencyWorker.convert1(ampReportCache.getPlannedExpenditure().doubleValue(),fromExchangeRate,toExchangeRate);
@@ -11774,11 +11785,11 @@ public class ReportUtil {
 										plannedFunds[fiscalYear%fromYr][2]=plannedFunds[fiscalYear%fromYr][2] + amount;
 								}
 							}
-							amount=0.0;
+							//amount=0.0;
 						}	
 						//logger.info("End If");
 						
-					} // end of Fiscal Year and Fiscal Quarter CHecek
+					}
 					
 				}// End of One AmpReportCache row........
 				
@@ -11842,27 +11853,35 @@ public class ReportUtil {
 					}					
 					reports.getRecords().add(report);
 				}
+
 				report=new AdvancedReport();
 				report.setAmpFund(new ArrayList());
 				for(int i=0;i<yrCount;i++)
 				{
 					AmpFund ampFund=new AmpFund();
-					if(measure.equals(new Long(1)))
+					if(adjustment.indexOf(new Long(1))!=-1)
 					{
-						ampFund.setCommAmount(mf.format(plannedFunds[i][0])); 
-						ampFund.setDisbAmount(mf.format(plannedFunds[i][1])); 
-						ampFund.setExpAmount(mf.format(plannedFunds[i][2]));	
+						if(transaction.indexOf(new Long(4))!=-1)
+							ampFund.setCommAmount(mf.format(plannedFunds[i][0])); 
+						if(transaction.indexOf(new Long(5))!=-1)
+							ampFund.setDisbAmount(mf.format(plannedFunds[i][1])); 
+						if(transaction.indexOf(new Long(6))!=-1)
+							ampFund.setExpAmount(mf.format(plannedFunds[i][2]));	
 					}
-					if(measure.equals(new Long(2)))
+					if(adjustment.indexOf(new Long(2))!=-1)
 					{
-						ampFund.setCommAmount(mf.format(actualFunds[i][0])); 
-						ampFund.setDisbAmount(mf.format(actualFunds[i][1])); 
-						ampFund.setExpAmount(mf.format(actualFunds[i][2]));	
+						if(transaction.indexOf(new Long(4))!=-1)
+							ampFund.setCommAmount(mf.format(actualFunds[i][0])); 
+						if(transaction.indexOf(new Long(5))!=-1)
+							ampFund.setDisbAmount(mf.format(actualFunds[i][1])); 
+						if(transaction.indexOf(new Long(6))!=-1)
+							ampFund.setExpAmount(mf.format(actualFunds[i][2]));	
 					}
 					report.getAmpFund().add(ampFund);
 				}
 				reports.getRecords().add(report);
 				ampReports.add(reports);
+
 			}
 		}
 		catch(Exception ex) 		

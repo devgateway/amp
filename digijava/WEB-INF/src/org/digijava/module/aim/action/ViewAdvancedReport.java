@@ -54,7 +54,11 @@ public class ViewAdvancedReport extends Action
 		Long ampTeamId=teamMember.getTeamId();
 		logger.debug("Team Id: " + ampTeamId);
 		String perspective = "DN";
-		
+		if(request.getParameter("ampReportId") != null)
+		{
+			logger.info("-------------------->>>>>>>>>" + request.getParameter("ampReportId").toString());
+			formBean.setCreatedReportId(request.getParameter("ampReportId"));
+		}
 		if(formBean.getPerspective() == null)
 		{
 			perspective = teamMember.getAppSettings().getPerspective();
@@ -115,30 +119,30 @@ public class ViewAdvancedReport extends Action
 		formBean.setAmpStartDays(new ArrayList());
 		formBean.setAmpCloseDays(new ArrayList());
 		formBean.setFiscalYears(new ArrayList());
-		filters=DbUtil.getTeamPageFilters(ampTeamId,Constants.PIPELINE);
-		logger.debug("Filter Size: " + filters.size());
-		if(filters.size()==0)
-			formBean.setGoFlag("false");
-		if(filters.size()>0)
-		{
+		//filters=DbUtil.getTeamPageFilters(ampTeamId,Constants.PIPELINE);
+		//logger.debug("Filter Size: " + filters.size());
+		//if(filters.size()==0)
+			//formBean.setGoFlag("false");
+		//if(filters.size()>0)
+		//{
 			formBean.setGoFlag("true");
-			if(filters.indexOf(Constants.PERSPECTIVE)!=-1)
-			{
+			//if(filters.indexOf(Constants.PERSPECTIVE)!=-1)
+			//{
 				formBean.setFilterFlag("true");
 				setFilters = setFilters + " PERSPECTIVE -";
 				filterCnt++;
-			}
+			//}
 		
-			if(filters.indexOf(Constants.STATUS)!=-1)
-			{
+			//if(filters.indexOf(Constants.STATUS)!=-1)
+			//{
 				dbReturnSet=DbUtil.getAmpStatus();
 				formBean.setStatusColl(dbReturnSet) ;
 				setFilters = setFilters + " STATUS -";
 				filterCnt++;
-			}
+			//}
 		
-			if(filters.indexOf(Constants.SECTOR)!=-1)
-			{
+			//if(filters.indexOf(Constants.SECTOR)!=-1)
+			//{
 				setFilters = setFilters + " SECTOR -";
 				filterCnt++;
 				formBean.setSectorColl(new ArrayList()) ;
@@ -168,18 +172,18 @@ public class ViewAdvancedReport extends Action
 						formBean.getSectorColl().add(ampSubSector);
 					}
 				}
-			}
+			//}
 		
-			if(filters.indexOf(Constants.REGION)!=-1)
-			{
+			//if(filters.indexOf(Constants.REGION)!=-1)
+			//{
 				setFilters = setFilters + " REGION -";
 				filterCnt++;
 				dbReturnSet=DbUtil.getAmpLocations();
 				formBean.setRegionColl(dbReturnSet) ;
-			}
+			//}
 		
-			if(filters.indexOf(Constants.DONORS)!=-1)
-			{
+			//if(filters.indexOf(Constants.DONORS)!=-1)
+			//{
 				setFilters = setFilters + " DONORS -";
 				filterCnt++;
 				dbReturnSet=DbUtil.getAmpDonors(ampTeamId);
@@ -195,41 +199,41 @@ public class ViewAdvancedReport extends Action
 					}
 					formBean.getDonorColl().add(ampOrganisation);
 				}
-			}
+			//}
 		
-			if(filters.indexOf(Constants.FINANCING_INSTRUMENT)!=-1)
-			{
+			//if(filters.indexOf(Constants.FINANCING_INSTRUMENT)!=-1)
+			//{
 				setFilters = setFilters + " MODALITY -";
 				filterCnt++;
 				dbReturnSet=DbUtil.getAmpModality();
 				formBean.setModalityColl(dbReturnSet);
-			}	
+			//}	
 		
-			if(filters.indexOf(Constants.CURRENCY)!=-1)
-			{
+			//if(filters.indexOf(Constants.CURRENCY)!=-1)
+			//{
 				setFilters = setFilters + " CURRENCY -";
 				filterCnt++;
 				dbReturnSet=DbUtil.getAmpCurrency();
 				formBean.setCurrencyColl(dbReturnSet) ;	
-			}
+			//}
 				
-			if(filters.indexOf(Constants.CALENDAR)!=-1)
-			{
+			//if(filters.indexOf(Constants.CALENDAR)!=-1)
+			///{
 				setFilters = setFilters + " CALENDAR -";
 				filterCnt+=10;
 				formBean.setFiscalYears(DbUtil.getAllFisCalenders());
-			}
+			//}
 			
-			if(filters.indexOf(Constants.YEAR_RANGE)!=-1)
-			{
+			//if(filters.indexOf(Constants.YEAR_RANGE)!=-1)
+			//{
 				for(int i=(year-Constants.FROM_YEAR_RANGE);i<=(year+Constants.TO_YEAR_RANGE);i++)
 				{
 					formBean.getAmpFromYears().add(new Long(i));
 					formBean.getAmpToYears().add(new Long(i));
 				}
-			}
-			if(filters.indexOf(Constants.STARTDATE_CLOSEDATE)!=-1)
-			{
+			//}
+			//if(filters.indexOf(Constants.STARTDATE_CLOSEDATE)!=-1)
+			//{
 				for(int i=(year-Constants.FROM_YEAR_RANGE);i<=(year+Constants.TO_YEAR_RANGE);i++)
 				{
 					formBean.getAmpStartYears().add(new Long(i));
@@ -240,8 +244,8 @@ public class ViewAdvancedReport extends Action
 					formBean.getAmpStartDays().add(new Long(i));
 					formBean.getAmpCloseDays().add(new Long(i));
 				}
-			}
-		}		
+			//}
+		//}		
 		
 		if(formBean.getAmpStatusId()==null || formBean.getAmpStatusId().intValue()==0)
 			ampStatusId=All;

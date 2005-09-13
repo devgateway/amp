@@ -22,7 +22,8 @@
 	function clearFilter()
 	{
 		<digi:context name="clearVal" property="context/module/moduleinstance/viewAdvancedReport.do" />
-		document.aimAdvancedReportForm.action = "<%= clearVal %>";
+		url = "<%=clearVal %>?ampReportId=" + document.aimAdvancedReportForm.createdReportId.value;
+		document.aimAdvancedReportForm.action = url;
 		document.aimAdvancedReportForm.target = "_self";
 		document.aimAdvancedReportForm.submit();
 	}
@@ -54,6 +55,9 @@
 <digi:instance property="aimAdvancedReportForm" />
 <digi:form action="/viewAdvancedReport.do" >
 <jsp:include page="teamPagesHeader.jsp" flush="true" />
+
+<html:hidden property="createdReportId"/>
+
 
 <table width="772" border="0" cellpadding="10" cellspacing="0" bgcolor="#FFFFFF">
 		<tr>
@@ -511,6 +515,10 @@
 								<c:set target="${urlParams2}" property="page">
 									<%=(currPage.intValue()-1)%>
 								</c:set>
+								<c:set target="${urlParams2}" property="ampReportId">
+									<bean:write name="aimAdvancedReportForm" property="createdReportId" />
+								</c:set>
+								
 								<logic:notEqual name="aimAdvancedReportForm" property="page"
 								value="1">
 								  <bean:define id="translation">
@@ -533,6 +541,9 @@
 									<jsp:useBean id="urlParams1" type="java.util.Map" class="java.util.HashMap"/>
 									<c:set target="${urlParams1}" property="page">
 										<%=pages%>
+									</c:set>
+									<c:set target="${urlParams1}" property="ampReportId">
+										<bean:write name="aimAdvancedReportForm" property="createdReportId" />
 									</c:set>
 								
 									<%  int curr = currPage.intValue();
@@ -559,7 +570,10 @@
 								<c:set target="${urlParams3}" property="page">
 									<%=(currPage.intValue()+1)%>
 								</c:set>
-									
+
+								<c:set target="${urlParams3}" property="ampReportId">
+									<bean:write name="aimAdvancedReportForm" property="createdReportId" />
+								</c:set>
 								<bean:define name="aimAdvancedReportForm" id="allPages" property="pages" 
 								type="java.util.Collection" />
 								<% if(allPages.size() == currPage.intValue()) { %>	

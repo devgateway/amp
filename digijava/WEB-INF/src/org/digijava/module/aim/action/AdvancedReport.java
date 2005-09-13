@@ -677,11 +677,7 @@ public class AdvancedReport extends Action {
 							while(iter.hasNext())
 							{
 								AmpMeasures ampMeasures = (AmpMeasures) iter.next();
-							//	AmpReportMeasures reportMeasure = new AmpReportMeasures();
-							//	reportMeasure.setMeasure(ampMeasures);
-								//reportMeasure.setOrderId(""+i);
-							//	reportMeasure.setMeasureType("Transaction");
-							//	measures.add(reportMeasure);
+								measures.add(ampMeasures);
 								i = i + 1;
 							}
 						}
@@ -693,10 +689,7 @@ public class AdvancedReport extends Action {
 							while(iter.hasNext())
 							{
 								AmpMeasures ampMeasures = (AmpMeasures) iter.next();
-				//				AmpReportMeasures reportMeasure = new AmpReportMeasures();
-				//				reportMeasure.setMeasure(ampMeasures);
-				//				reportMeasure.setMeasureType("AdjustmentType");
-				//				measures.add(reportMeasure);
+								measures.add(ampMeasures);
 							}
 						}
 						ampReports.setMeasures(measures);

@@ -110,7 +110,7 @@ public class ViewPhysicalComponentReport extends Action
 		formBean.setAmpCloseDays(new ArrayList());
 		formBean.setFiscalYears(new ArrayList());
 
-		filters=DbUtil.getTeamPageFilters(ampTeamId,Constants.PIPELINE);
+		filters=DbUtil.getTeamPageFilters(ampTeamId,Constants.PHYSICALCOMPONENT);
 		logger.debug("Filter Size: " + filters.size());
 		if(filters.size()==0)
 			formBean.setGoFlag("false");

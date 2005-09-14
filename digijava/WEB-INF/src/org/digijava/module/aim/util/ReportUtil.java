@@ -10904,7 +10904,8 @@ public class ReportUtil {
 		int minYear=0;
 		double totActualComm=0;
 		double totActualDisb=0;
-		
+		String objective=null;
+		String description=null;
 		Iterator iterSector=null;
 		
 		DecimalFormat mf = new DecimalFormat("###,###,###,###,###") ;
@@ -11077,13 +11078,21 @@ public class ReportUtil {
 								if(c.getColumnId().equals(Constants.STATUS_NAME))
 									report.setStatus(status);
 								if(c.getColumnId().equals(Constants.DONOR_NAME))
+								{
+									if(donors.size()==0)
+										donors.add(" ");
 									report.getDonors().addAll(donors);
+								}
 								if(c.getColumnId().equals(Constants.ACTUAL_START_DATE))
 									report.setActualStartDate(actualStartDate);
 								if(c.getColumnId().equals(Constants.ACTIVITY_NAME))
 									report.setTitle(title);
 								if(c.getColumnId().equals(Constants.TERM_ASSIST_NAME))
+								{
+									if(assistance.size()==0)
+										assistance.add(" ");
 									report.setAssistance(assistance);
+								}
 								if(c.getColumnId().equals(Constants.LEVEL_NAME))
 									report.setLevel(level);
 								if(c.getColumnId().equals(Constants.ACTUAL_COMPLETION_DATE))
@@ -11095,32 +11104,47 @@ public class ReportUtil {
 								if(c.getColumnId().equals(Constants.AMP_ID))
 									report.setAmpId(ampId);
 								if(c.getColumnId().equals(Constants.FUNDING_INSTRUMENT))
+								{
+									if(modality.size()==0)
+										modality.add(" ");
 									report.getModality().addAll(modality);
+								}
 								if(c.getColumnId().equals(Constants.CONTACT_NAME))
+								{
+									if(contacts.size()==0)
+										contacts.add(" ");
 									report.getContacts().addAll(contacts);
+								}
+								if(c.getColumnId().equals(Constants.OBJECTIVE))
+									report.setObjective(objective);
+								if(c.getColumnId().equals(Constants.DESCRIPTION))
+									report.setDescription(description);
 								reports.getRecords().add(report);
 
 							}
+							logger.info("Reports Size: " + reports.getRecords().size());
 							report=new AdvancedReport();
 							report.setAmpFund(new ArrayList());
 							for(int i=0;i<yrCount;i++)
 							{
 								AmpFund ampFund=new AmpFund();
-								if(measures.indexOf(new Long(1))!=-1)
+								if(measures.indexOf(new Long(1))>=0)
 									ampFund.setCommAmount(mf.format(actualFunds[i][0])); 
-								if(measures.indexOf(new Long(2))!=-1)
+								if(measures.indexOf(new Long(2))>=0)
 									ampFund.setDisbAmount(mf.format(actualFunds[i][1])); 
-								if(measures.indexOf(new Long(3))!=-1)
+								if(measures.indexOf(new Long(3))>=0)
 									ampFund.setExpAmount(mf.format(actualFunds[i][2]));	
-								if(measures.indexOf(new Long(4))!=-1)
+								if(measures.indexOf(new Long(4))>=0)
 									ampFund.setPlCommAmount(mf.format(plannedFunds[i][0])); 
-								if(measures.indexOf(new Long(5))!=-1)
+								if(measures.indexOf(new Long(5))>=0)
 									ampFund.setPlDisbAmount(mf.format(plannedFunds[i][1])); 
-								if(measures.indexOf(new Long(6))!=-1)
+								if(measures.indexOf(new Long(6))>=0)
 									ampFund.setPlExpAmount(mf.format(plannedFunds[i][2]));	
 								report.getAmpFund().add(ampFund);
 							}
 							reports.getRecords().add(report);
+							logger.info("Reports Size: " + reports.getRecords().size());
+							logger.info("Fund Size: " + report.getAmpFund().size());
 							ampReports.add(reports);
 							actualCommitment=0;
 							actualDisbursement=0;
@@ -11144,14 +11168,20 @@ public class ReportUtil {
 						ampId=ampReportCache.getAmpId();
 						reports.setAmpActivityId(ampReportCache.getAmpActivityId());
 						if(ampReportCache.getLevelName().equals("Not Exist"))
-							level="Unspecified";
+							level=" ";
 						else
 							level=ampReportCache.getLevelName();
-						if(ampReportCache.getStatusName()!=null)
+						if(ampReportCache.getStatusName()==null)
+							status=" ";
+						else
 							status=ampReportCache.getStatusName();
-						if(DbUtil.getAmpReportSector(ampReportCache.getAmpActivityId()).size()>0)
+						if(DbUtil.getAmpReportSector(ampReportCache.getAmpActivityId()).size()==0)
+							sectors.add(" ");
+						else
 							sectors.addAll(DbUtil.getAmpReportSector(ampReportCache.getAmpActivityId()));
-						if(DbUtil.getAmpReportLocation(ampReportCache.getAmpActivityId()).size()>0)
+						if(DbUtil.getAmpReportLocation(ampReportCache.getAmpActivityId()).size()==0)
+							regions.add(" ");
+						else
 							regions.addAll(DbUtil.getAmpReportLocation(ampReportCache.getAmpActivityId()));
 						if(ampReportCache.getTermAssistName()!=null)
 							assistance.add(ampReportCache.getTermAssistName());
@@ -11160,16 +11190,22 @@ public class ReportUtil {
 						if(ampReportCache.getActualStartDate()!=null)
 							actualStartDate=DateConversion.ConvertDateToString(ampReportCache.getActualStartDate());
 						else
-							actualStartDate="";
+							actualStartDate=" ";
 						if(ampReportCache.getActualCompletionDate()!=null)
 							actualCompletionDate=DateConversion.ConvertDateToString(ampReportCache.getActualCompletionDate());
 						else
-							actualCompletionDate="";
+							actualCompletionDate=" ";
 						if(ampReportCache.getModalityName()!=null)
 							modality.add(ampReportCache.getModalityName());
-						if(ampReportCache.getFiscalYear()!=null)
-							minYear=maxYear=ampReportCache.getFiscalYear().intValue();
 						AmpActivity ampActivity=(AmpActivity) ActivityUtil.getAmpActivity(ampReportCache.getAmpActivityId());
+						if(ampActivity.getObjective()==null)
+							objective=" ";
+						else
+							objective=ampActivity.getObjective();
+						if(ampActivity.getDescription()==null)
+							description=" ";
+						else
+							description=ampActivity.getDescription();
 						if(ampActivity.getContFirstName()!=null)
 							contactName=ampActivity.getContFirstName();
 						if(ampActivity.getContLastName()!=null)
@@ -11333,16 +11369,19 @@ public class ReportUtil {
 					if(c.getColumnId().equals(Constants.DONOR_NAME))
 					{
 						if(donors.size()==0)
-							report.getDonors().add("Unspecified");
-						else
-							report.getDonors().addAll(donors);
+							donors.add(" ");
+						report.getDonors().addAll(donors);
 					}
 					if(c.getColumnId().equals(Constants.ACTUAL_START_DATE))
 						report.setActualStartDate(actualStartDate);
 					if(c.getColumnId().equals(Constants.ACTIVITY_NAME))
 						report.setTitle(title);
 					if(c.getColumnId().equals(Constants.TERM_ASSIST_NAME))
+					{
+						if(assistance.size()==0)
+							assistance.add(" ");
 						report.setAssistance(assistance);
+					}
 					if(c.getColumnId().equals(Constants.LEVEL_NAME))
 						report.setLevel(level);
 					if(c.getColumnId().equals(Constants.ACTUAL_COMPLETION_DATE))
@@ -11354,9 +11393,21 @@ public class ReportUtil {
 					if(c.getColumnId().equals(Constants.AMP_ID))
 						report.setAmpId(ampId);
 					if(c.getColumnId().equals(Constants.FUNDING_INSTRUMENT))
+					{
+						if(modality.size()==0)
+							modality.add(" ");
 						report.getModality().addAll(modality);
+					}
 					if(c.getColumnId().equals(Constants.CONTACT_NAME))
+					{
+						if(contacts.size()==0)
+							contacts.add(" ");
 						report.getContacts().addAll(contacts);
+					}
+					if(c.getColumnId().equals(Constants.OBJECTIVE))
+						report.setObjective(objective);
+					if(c.getColumnId().equals(Constants.DESCRIPTION))
+						report.setDescription(description);
 					reports.getRecords().add(report);
 				}
 				report=new AdvancedReport();
@@ -11446,6 +11497,9 @@ public class ReportUtil {
 		
 		double totActualComm=0;
 		double totActualDisb=0;
+
+		String description=null;
+		String objective=null;
 		
 		Iterator iterSector=null;
 		
@@ -11525,13 +11579,21 @@ public class ReportUtil {
 								if(c.getColumnId().equals(Constants.STATUS_NAME))
 									report.setStatus(status);
 								if(c.getColumnId().equals(Constants.DONOR_NAME))
+								{
+									if(donors.size()==0)
+										donors.add(" ");
 									report.getDonors().addAll(donors);
+								}
 								if(c.getColumnId().equals(Constants.ACTUAL_START_DATE))
 									report.setActualStartDate(actualStartDate);
 								if(c.getColumnId().equals(Constants.ACTIVITY_NAME))
 									report.setTitle(title);
 								if(c.getColumnId().equals(Constants.TERM_ASSIST_NAME))
+								{
+									if(assistance.size()==0)
+										assistance.add(" ");
 									report.setAssistance(assistance);
+								}
 								if(c.getColumnId().equals(Constants.LEVEL_NAME))
 									report.setLevel(level);
 								if(c.getColumnId().equals(Constants.ACTUAL_COMPLETION_DATE))
@@ -11543,9 +11605,21 @@ public class ReportUtil {
 								if(c.getColumnId().equals(Constants.AMP_ID))
 									report.setAmpId(ampId);
 								if(c.getColumnId().equals(Constants.FUNDING_INSTRUMENT))
+								{
+									if(modality.size()==0)
+										modality.add(" ");
 									report.getModality().addAll(modality);
+								}
 								if(c.getColumnId().equals(Constants.CONTACT_NAME))
+								{
+									if(contacts.size()==0)
+										contacts.add(" ");
 									report.getContacts().addAll(contacts);
+								}
+								if(c.getColumnId().equals(Constants.OBJECTIVE))
+									report.setObjective(objective);
+								if(c.getColumnId().equals(Constants.DESCRIPTION))
+									report.setDescription(description);
 								reports.getRecords().add(report);
 
 							}
@@ -11595,14 +11669,20 @@ public class ReportUtil {
 						ampId=ampReportCache.getAmpId();
 						reports.setAmpActivityId(ampReportCache.getAmpActivityId());
 						if(ampReportCache.getLevelName().equals("Not Exist"))
-							level="Unspecified";
+							level=" ";
 						else
 							level=ampReportCache.getLevelName();
-						if(ampReportCache.getStatusName()!=null)
+						if(ampReportCache.getStatusName()==null)
+							status=" ";
+						else
 							status=ampReportCache.getStatusName();
-						if(DbUtil.getAmpReportSector(ampReportCache.getAmpActivityId()).size()>0)
+						if(DbUtil.getAmpReportSector(ampReportCache.getAmpActivityId()).size()==0)
+							sectors.add(" ");
+						else
 							sectors.addAll(DbUtil.getAmpReportSector(ampReportCache.getAmpActivityId()));
-						if(DbUtil.getAmpReportLocation(ampReportCache.getAmpActivityId()).size()>0)
+						if(DbUtil.getAmpReportLocation(ampReportCache.getAmpActivityId()).size()==0)
+							regions.add(" ");
+						else
 							regions.addAll(DbUtil.getAmpReportLocation(ampReportCache.getAmpActivityId()));
 						if(ampReportCache.getTermAssistName()!=null)
 							assistance.add(ampReportCache.getTermAssistName());
@@ -11611,16 +11691,22 @@ public class ReportUtil {
 						if(ampReportCache.getActualStartDate()!=null)
 							actualStartDate=DateConversion.ConvertDateToString(ampReportCache.getActualStartDate());
 						else
-							actualStartDate="";
+							actualStartDate=" ";
 						if(ampReportCache.getActualCompletionDate()!=null)
 							actualCompletionDate=DateConversion.ConvertDateToString(ampReportCache.getActualCompletionDate());
 						else
-							actualCompletionDate="";
+							actualCompletionDate=" ";
 						if(ampReportCache.getModalityName()!=null)
 							modality.add(ampReportCache.getModalityName());
-						if(ampReportCache.getFiscalYear()!=null)
-							minYear=maxYear=ampReportCache.getFiscalYear().intValue();
 						AmpActivity ampActivity=(AmpActivity) ActivityUtil.getAmpActivity(ampReportCache.getAmpActivityId());
+						if(ampActivity.getObjective()==null)
+							objective=" ";
+						else
+							objective=ampActivity.getObjective();
+						if(ampActivity.getDescription()==null)
+							description=" ";
+						else
+							description=ampActivity.getDescription();
 						if(ampActivity.getContFirstName()!=null)
 							contactName=ampActivity.getContFirstName();
 						if(ampActivity.getContLastName()!=null)
@@ -11788,34 +11874,49 @@ public class ReportUtil {
 					report.setContacts(new ArrayList());
 					AmpColumns c=(AmpColumns) iterColumn.next();
 					if(c.getColumnId().equals(Constants.STATUS_NAME))
-						report.setStatus(status);
-					if(c.getColumnId().equals(Constants.DONOR_NAME))
-					{
-						if(donors.size()==0)
-							report.getDonors().add("Unspecified");
-						else
-							report.getDonors().addAll(donors);
-					}
-					if(c.getColumnId().equals(Constants.ACTUAL_START_DATE))
-						report.setActualStartDate(actualStartDate);
-					if(c.getColumnId().equals(Constants.ACTIVITY_NAME))
-						report.setTitle(title);
-					if(c.getColumnId().equals(Constants.TERM_ASSIST_NAME))
-						report.setAssistance(assistance);
-					if(c.getColumnId().equals(Constants.LEVEL_NAME))
-						report.setLevel(level);
-					if(c.getColumnId().equals(Constants.ACTUAL_COMPLETION_DATE))
-						report.setActualCompletionDate(actualCompletionDate);
-					if(c.getColumnId().equals(Constants.SECTOR_NAME))
-						report.getSectors().addAll(sectors);
-					if(c.getColumnId().equals(Constants.REGION_NAME))
-						report.getRegions().addAll(regions);
-					if(c.getColumnId().equals(Constants.AMP_ID))
-						report.setAmpId(ampId);
-					if(c.getColumnId().equals(Constants.FUNDING_INSTRUMENT))
-						report.getModality().addAll(modality);
-					if(c.getColumnId().equals(Constants.CONTACT_NAME))
-						report.getContacts().addAll(contacts);
+									report.setStatus(status);
+								if(c.getColumnId().equals(Constants.DONOR_NAME))
+								{
+									if(donors.size()==0)
+										donors.add(" ");
+									report.getDonors().addAll(donors);
+								}
+								if(c.getColumnId().equals(Constants.ACTUAL_START_DATE))
+									report.setActualStartDate(actualStartDate);
+								if(c.getColumnId().equals(Constants.ACTIVITY_NAME))
+									report.setTitle(title);
+								if(c.getColumnId().equals(Constants.TERM_ASSIST_NAME))
+								{
+									if(assistance.size()==0)
+										assistance.add(" ");
+									report.setAssistance(assistance);
+								}
+								if(c.getColumnId().equals(Constants.LEVEL_NAME))
+									report.setLevel(level);
+								if(c.getColumnId().equals(Constants.ACTUAL_COMPLETION_DATE))
+									report.setActualCompletionDate(actualCompletionDate);
+								if(c.getColumnId().equals(Constants.SECTOR_NAME))
+									report.getSectors().addAll(sectors);
+								if(c.getColumnId().equals(Constants.REGION_NAME))
+									report.getRegions().addAll(regions);
+								if(c.getColumnId().equals(Constants.AMP_ID))
+									report.setAmpId(ampId);
+								if(c.getColumnId().equals(Constants.FUNDING_INSTRUMENT))
+								{
+									if(modality.size()==0)
+										modality.add(" ");
+									report.getModality().addAll(modality);
+								}
+								if(c.getColumnId().equals(Constants.CONTACT_NAME))
+								{
+									if(contacts.size()==0)
+										contacts.add(" ");
+									report.getContacts().addAll(contacts);
+								}
+								if(c.getColumnId().equals(Constants.OBJECTIVE))
+									report.setObjective(objective);
+								if(c.getColumnId().equals(Constants.DESCRIPTION))
+									report.setDescription(description);
 					reports.getRecords().add(report);
 				}
 

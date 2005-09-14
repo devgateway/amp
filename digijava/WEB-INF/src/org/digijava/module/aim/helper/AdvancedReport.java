@@ -32,6 +32,8 @@ public class AdvancedReport
 	private int yearCount;
 	private String ampId;
 	private String year;
+	private String objective;
+	private String description;
 
 	public Collection getDonors() 
 	{
@@ -267,6 +269,28 @@ public class AdvancedReport
 	 */
 	public void setYearCount(int i) {
 		yearCount = i;
+	}
+
+	public String getObjective() 
+	{
+		return objective;
+	}
+
+	
+	public void setObjective(String string) 
+	{
+		objective = string;
+	}
+
+	public String getDescription() 
+	{
+		return description;
+	}
+
+	
+	public void setDescription(String string) 
+	{
+		description = string;
 	}
 
 

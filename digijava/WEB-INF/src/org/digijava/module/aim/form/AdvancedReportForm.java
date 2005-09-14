@@ -99,11 +99,12 @@ public class AdvancedReportForm extends ActionForm
 	private String pieImageUrl="";
 	private String barImageUrl="";
 
-	private String plannedFlag;
-	private String actualFlag;
-	private String commFlag;
-	private String disbFlag;
-	private String expFlag;
+	private String acCommFlag;
+	private String acDisbFlag;
+	private String acExpFlag;
+	private String plCommFlag;
+	private String plDisbFlag;
+	private String plExpFlag;
 
 	
 	public String getPieImageUrl()
@@ -1115,44 +1116,53 @@ private int yrDiff;
 		this.removeAdjustType = removeAdjustType;
 	}
 
-	public String getPlannedFlag() {
-		return plannedFlag;
+	
+	public String getAcCommFlag() {
+		return acCommFlag;
 	}
 
-	public void setPlannedFlag(String string) {
-		plannedFlag = string;
+	public void setAcCommFlag(String string) {
+		acCommFlag = string;
 	}
 
-	public String getActualFlag() {
-		return actualFlag;
+	public String getAcDisbFlag() {
+		return acDisbFlag;
 	}
 
-	public void setActualFlag(String string) {
-		actualFlag = string;
+	public void setAcDisbFlag(String string) {
+		acDisbFlag = string;
 	}
 
-	public String getCommFlag() {
-		return commFlag;
+	public String getAcExpFlag() {
+		return acExpFlag;
 	}
 
-	public void setCommFlag(String string) {
-		commFlag = string;
+	public void setAcExpFlag(String string) {
+		acExpFlag = string;
 	}
 
-	public String getDisbFlag() {
-		return disbFlag;
+	public String getPlCommFlag() {
+		return plCommFlag;
 	}
 
-	public void setDisbFlag(String string) {
-		disbFlag = string;
+	public void setPlCommFlag(String string) {
+		plCommFlag = string;
 	}
 
-	public String getExpFlag() {
-		return expFlag;
+	public String getPlDisbFlag() {
+		return plDisbFlag;
 	}
 
-	public void setExpFlag(String string) {
-		expFlag = string;
+	public void setPlDisbFlag(String string) {
+		plDisbFlag = string;
+	}
+
+	public String getPlExpFlag() {
+		return plExpFlag;
+	}
+
+	public void setPlExpFlag(String string) {
+		plExpFlag = string;
 	}
 
 	public int getFundColumns() {

@@ -5,26 +5,21 @@ import java.util.Collection;
 public class ReportSelectionCriteria {
 
 		  private Collection columns;
-		  private Collection transaction;
-		  private Collection adjustment;
+		  private Collection measures;
+
 
 		  public void setColumns(Collection c) {
 					 columns = c;
 		  }
 
-		  public void setTransaction(Collection c) {
-					 transaction = c;
+		  public void setMeasures(Collection c) {
+					 measures = c;
 		  }
 
-		  public void setAdjustment(Collection c) {
-					 adjustment = c;
-		  }
-
+		  
 		  public Collection getColumns() { return columns; }
 
-		  public Collection getTransaction() { return transaction; }
-
-		  public Collection getAdjustment() { return adjustment; }
+		  public Collection getMeasures() { return measures; }
 
 		  
 }

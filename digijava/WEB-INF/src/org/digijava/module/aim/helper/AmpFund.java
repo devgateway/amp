@@ -8,9 +8,9 @@ public class AmpFund
 	private String plannedDisbAmount;
 	private String unDisbAmount;
 	private String expAmount;
-	private String commAmountG;
-	private String disbAmountG;
-	private String expAmountG;
+	private String plCommAmount;
+	private String plDisbAmount;
+	private String plExpAmount;
 	
 	
 	/**
@@ -23,8 +23,8 @@ public class AmpFund
 	/**
 	 * @return
 	 */
-	public String getCommAmountG() {
-		return commAmountG;
+	public String getPlCommAmount() {
+		return plCommAmount;
 	}
 
 	/**
@@ -41,8 +41,8 @@ public class AmpFund
 	/**
 	 * @return
 	 */
-	public String getDisbAmountG() {
-		return disbAmountG;
+	public String getPlDisbAmount() {
+		return plDisbAmount;
 	}
 
 	/**
@@ -55,8 +55,8 @@ public class AmpFund
 	/**
 	 * @return
 	 */
-	public String getExpAmountG() {
-		return expAmountG;
+	public String getPlExpAmount() {
+		return plExpAmount;
 	}
 
 	/**
@@ -69,8 +69,8 @@ public class AmpFund
 	/**
 	 * @param string
 	 */
-	public void setCommAmountG(String string) {
-		commAmountG = string;
+	public void setPlCommAmount(String string) {
+		plCommAmount = string;
 	}
 
 	/**
@@ -91,8 +91,8 @@ public class AmpFund
 	/**
 	 * @param string
 	 */
-	public void setDisbAmountG(String string) {
-		disbAmountG = string;
+	public void setPlDisbAmount(String string) {
+		plDisbAmount = string;
 	}
 
 	/**
@@ -105,8 +105,8 @@ public class AmpFund
 	/**
 	 * @param string
 	 */
-	public void setExpAmountG(String string) {
-		expAmountG = string;
+	public void setPlExpAmount(String string) {
+		plExpAmount = string;
 	}
 
 	public void setUnDisbAmount(String string) {

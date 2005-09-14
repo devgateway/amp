@@ -56,6 +56,7 @@ public class Constants
 	public static final Long SECTORBYPROJECT = new Long(5);
 	public static final Long MULTILATERALDONOR = new Long(3);
 	public static final Long PROJECTBYDONOR = new Long(4);
+	public static final Long PHYSICALCOMPONENT = new Long(13);
 //	public static final Long YEAR_RANGE = new Long(1) ;
 	public static final String DIRECT_BUDGET_SUPPORT = "1" ;
 	public static final String PROGRAM_SUPPORT = "6" ;
@@ -86,9 +87,10 @@ public class Constants
 	public static final Long SECTOR_NAME = new Long(8) ;
 	public static final Long REGION_NAME = new Long(9) ;
 	public static final Long FUNDING_INSTRUMENT = new Long(10) ;
-	public static final Long YEAR = new Long(11) ;
+	public static final Long OBJECTIVE = new Long(11) ;
 	public static final Long AMP_ID = new Long(12) ;
 	public static final Long CONTACT_NAME = new Long(13) ;
+	public static final Long DESCRIPTION = new Long(14) ;
 	
 	
 

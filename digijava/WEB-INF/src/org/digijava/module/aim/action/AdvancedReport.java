@@ -308,33 +308,40 @@ public class AdvancedReport extends Action {
 				logger.info(transc.size() + "________________ " + adjType.size());
 				logger.info("Adjustment: " + adjType.size());
 				logger.info("Transaction: " + transc.size());
-				if(adjType.indexOf(new Long(1))>=0)
-					formBean.setPlannedFlag("true");
-				else
-					formBean.setPlannedFlag("false");
 
-				if(adjType.indexOf(new Long(2))>=0)
-					formBean.setActualFlag("true");
+				ArrayList measures=new ArrayList();
+				if(measures.indexOf(new Long(1))>=0)
+					formBean.setAcCommFlag("true");
 				else
-					formBean.setActualFlag("false");
+					formBean.setAcCommFlag("false");
 
-				if(transc.indexOf(new Long(4))>=0)
-					formBean.setCommFlag("true");
+				if(measures.indexOf(new Long(2))>=0)
+					formBean.setAcDisbFlag("true");
 				else
-					formBean.setCommFlag("false");
-				
-				if(transc.indexOf(new Long(5))>=0)
-					formBean.setDisbFlag("true");
+					formBean.setAcDisbFlag("false");
+
+				if(measures.indexOf(new Long(3))>=0)
+					formBean.setAcExpFlag("true");
 				else
-					formBean.setDisbFlag("false");
-
-				if(transc.indexOf(new Long(6))>=0)
-					formBean.setExpFlag("true");
+					formBean.setAcExpFlag("false");
+		
+				if(measures.indexOf(new Long(4))>=0)
+					formBean.setPlCommFlag("true");
 				else
-					formBean.setExpFlag("false");
+					formBean.setPlCommFlag("false");
 
-				formBean.setFundColumns((adjType.size()*transc.size()));
+				if(measures.indexOf(new Long(5))>=0)
+					formBean.setPlDisbFlag("true");
+				else
+					formBean.setPlDisbFlag("false");
 
+				if(measures.indexOf(new Long(6))>=0)
+					formBean.setPlExpFlag("true");
+				else
+					formBean.setPlExpFlag("false");
+
+				formBean.setFundColumns((measures.size()));
+	
 				
 				boolean allPages = false;
 				if(formBean.getAddedColumns() != null)

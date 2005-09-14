@@ -9,7 +9,7 @@
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
 
 <script language="JavaScript">
-<!--
+
 	function openPage()
 	{
 	 	//openResisableWindow(1000, 768);
@@ -19,9 +19,9 @@
 		document.aimMulitlateralbyDonorForm.submit();
 	}
 
-	function clearFilter()
+		function clearFilter()
 	{
-		<digi:context name="clearVal" property="context/module/moduleinstance/viewPhysicalComponentReportPdf.do" />
+		<digi:context name="clearVal" property="context/module/moduleinstance/viewPhysicalComponentReport.do" />
 		document.aimMulitlateralbyDonorForm.action = "<%= clearVal %>";
 		document.aimMulitlateralbyDonorForm.target = "_self";
 		document.aimMulitlateralbyDonorForm.submit();
@@ -43,11 +43,14 @@
 		document.aimMulitlateralbyDonorForm.submit();
 	}
 
+	
+
+
 	function popup_warn() {
 		alert("Year Range selected should NOT be Greater than 3 Years.");
 	}
 
--->
+
 </script>
 
 <digi:errors/>
@@ -387,7 +390,7 @@
 					</strong></div>
 					</td>
 					<td align="center" height="21" ><div align="center"> <strong>
-					Cumulative Disbursement
+					Cumulative Disbursements
 					</strong></div>
 					</td>
 					<td align="center" height="21"> <div align="center"><strong>

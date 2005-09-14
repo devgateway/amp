@@ -71,8 +71,7 @@ public class ViewAdvancedReport extends Action
 			perspective="MA";
 		formBean.setPerspectiveFilter(perspective);
 		ArrayList dbReturnSet= null ;
-		ArrayList transaction=new ArrayList();
-		ArrayList adjustment=new ArrayList();
+		ArrayList measures=new ArrayList();
 		Iterator iterst = null ;
 		Iterator iterSub = null ;
 		Iterator iter = null;
@@ -104,6 +103,13 @@ public class ViewAdvancedReport extends Action
 		
 		DecimalFormat mf = new DecimalFormat("###,###,###,###,###") ;
 
+		if(request.getParameter("ampReportId")!=null)
+		{
+			ampReportId=new Long(Long.parseLong(request.getParameter("ampReportId")));
+			logger.info("Report Id: " + ampReportId);
+		}	
+
+
 		//Set all the filters
 		formBean.setFilterFlag("false");
 		formBean.setStatusColl(new ArrayList()) ;
@@ -119,12 +125,7 @@ public class ViewAdvancedReport extends Action
 		formBean.setAmpStartDays(new ArrayList());
 		formBean.setAmpCloseDays(new ArrayList());
 		formBean.setFiscalYears(new ArrayList());
-		//filters=DbUtil.getTeamPageFilters(ampTeamId,Constants.PIPELINE);
-		//logger.debug("Filter Size: " + filters.size());
-		//if(filters.size()==0)
-			//formBean.setGoFlag("false");
-		//if(filters.size()>0)
-		//{
+
 			formBean.setGoFlag("true");
 			//if(filters.indexOf(Constants.PERSPECTIVE)!=-1)
 			//{
@@ -387,48 +388,45 @@ public class ViewAdvancedReport extends Action
 		if(formBean.getCloseYear()!=null && formBean.getCloseYear().intValue()>0)
 			closeDate = closeYear + "-" + closeMonth + "-" + closeDay;
 	
-		if(request.getParameter("ampReportId")!=null)
-		{
-			ampReportId=new Long(Long.parseLong(request.getParameter("ampReportId")));
-			logger.info("Report Id: " + ampReportId);
-		}	
-
+		
 
 		ReportSelectionCriteria rsc=ReportUtil.getReportSelectionCriteria(ampReportId);
 		
 		formBean.setTitles(rsc.getColumns());
-		logger.info("Adjustment: " + rsc.getAdjustment().size());
-		logger.info("Transaction: " + rsc.getTransaction().size());
-		transaction=(ArrayList)rsc.getTransaction();
-		adjustment=(ArrayList)rsc.getAdjustment();
-		logger.info("Adjustment: " + adjustment.size());
-		logger.info("Transaction: " + transaction.size());
-		if(adjustment.indexOf(new Long(1))>=0)
-			formBean.setPlannedFlag("true");
-		else
-			formBean.setPlannedFlag("false");
+		logger.info("Measures: " + rsc.getMeasures().size());
+		measures=(ArrayList)rsc.getMeasures();
 
-		if(adjustment.indexOf(new Long(2))>=0)
-			formBean.setActualFlag("true");
+		if(measures.indexOf(new Long(1))>=0)
+			formBean.setAcCommFlag("true");
 		else
-			formBean.setActualFlag("false");
+			formBean.setAcCommFlag("false");
 
-		if(transaction.indexOf(new Long(4))>=0)
-			formBean.setCommFlag("true");
+		if(measures.indexOf(new Long(2))>=0)
+			formBean.setAcDisbFlag("true");
 		else
-			formBean.setCommFlag("false");
+			formBean.setAcDisbFlag("false");
+
+		if(measures.indexOf(new Long(3))>=0)
+			formBean.setAcExpFlag("true");
+		else
+			formBean.setAcExpFlag("false");
 		
-		if(transaction.indexOf(new Long(5))>=0)
-			formBean.setDisbFlag("true");
+		if(measures.indexOf(new Long(4))>=0)
+			formBean.setPlCommFlag("true");
 		else
-			formBean.setDisbFlag("false");
+			formBean.setPlCommFlag("false");
 
-		if(transaction.indexOf(new Long(6))>=0)
-			formBean.setExpFlag("true");
+		if(measures.indexOf(new Long(5))>=0)
+			formBean.setPlDisbFlag("true");
 		else
-			formBean.setExpFlag("false");
+			formBean.setPlDisbFlag("false");
 
-		formBean.setFundColumns((adjustment.size()*transaction.size()));
+		if(measures.indexOf(new Long(6))>=0)
+			formBean.setPlExpFlag("true");
+		else
+			formBean.setPlExpFlag("false");
+
+		formBean.setFundColumns((measures.size()));
 
 //		dbReturnSet=ReportUtil.getAdvancedReport(ampTeamId,fromYr,toYr,perspective,ampCurrencyCode,ampModalityId,ampStatusId,ampOrgId,ampSectorId,fiscalCalId,startDate,closeDate,region,ampReportId);
 //		logger.info("Number of Records:" + dbReturnSet.size());
@@ -548,7 +546,7 @@ public class ViewAdvancedReport extends Action
 		formBean.setFiscalYearRange(new ArrayList());
 		for(int yr=fromYr;yr<=toYr;yr++)
 			formBean.getFiscalYearRange().add(new Integer(yr));
-		formBean.setTotalColumns(14);
+		formBean.setTotalColumns(rsc.getColumns().size() + (yearRange * measures.size()));
 		formBean.setPages(pages);
 		formBean.setReport(pageRecords);
 		formBean.setPage(new Integer(page));

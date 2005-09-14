@@ -8,9 +8,18 @@
 
 
 <script language="JavaScript">
+	function saveReport()
+	{
+		alert("Your report is being saved");
+		<digi:context name="step" property="context/module/moduleinstance/advancedReportManager.do?check=SaveReport" />
+		document.aimAdvancedReportForm.action = "<%= step %>";
+		document.aimAdvancedReportForm.target = "_self";
+		document.aimAdvancedReportForm.submit();
+	}
+
 function gotoStep() {
 
-	<digi:context name="step" property="context/module/moduleinstance/advancedReportManager.do?check=charts" />
+	<digi:context name="step" property="context/module/moduleinstance/advancedReportManager.do?check=5" />
 	document.aimAdvancedReportForm.action = "<%= step %>";
 	document.aimAdvancedReportForm.target = "_self";
 	document.aimAdvancedReportForm.submit();
@@ -167,7 +176,7 @@ function gotoStep() {
 										<bean:define id="translation">
 											<digi:trn key="aim:clickToGenerateReport">Click here to Generate Chart</digi:trn>
 										</bean:define>
-										<digi:link href="/advancedReportManager.do?check=charts"  styleClass="sub-nav" title="<%=translation%>" >
+										<digi:link href="/advancedReportManager.do?check=5"  styleClass="sub-nav" title="<%=translation%>" >
 										6 : <digi:trn key="aim:GenerateChart">Generate Chart</digi:trn>
 										</digi:link>
 										</td>	
@@ -461,6 +470,8 @@ function gotoStep() {
 												<td align="center" colspan="2" bgcolor="#f4f4f2">
 													<input type=button name=back value="<< Previous"   class="dr-menu" onclick="javascript:history.back()">
 													<input type=button name=next value="  Chart Creation  " class="dr-menu" onclick="javascript:gotoStep()" >															
+													<input type=button name=back value=" Save Report "   class="dr-menu" onclick="saveReport()">						
+													
 												</td>
 											</tr>
 										</TABLE>

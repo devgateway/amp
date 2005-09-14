@@ -11401,14 +11401,14 @@ public class ReportUtil {
 	}
 
 //---------New Function-----------------------------------------------------------------------------
-	public static ArrayList generateAdvancedReport(Long ampTeamId,int fromYr,int toYr, int fiscalCalId,String ampCurrencyCode, String perspective, ArrayList adjust, ArrayList transc, Collection addedColumns)
+	public static ArrayList generateAdvancedReport(Long ampTeamId,int fromYr,int toYr, int fiscalCalId,String ampCurrencyCode, String perspective, ArrayList transc, Collection addedColumns)
 	{
 		Session session = null ;
 		Query q = null ;
 		ArrayList ampReports = new ArrayList() ;
 		Collection columns=new ArrayList();
 
-		ArrayList measures=new ArrayList();
+		ArrayList measures = transc;
 
 		Report reports=null;
 		String queryString = null;
@@ -11525,23 +11525,13 @@ public class ReportUtil {
 								if(c.getColumnId().equals(Constants.STATUS_NAME))
 									report.setStatus(status);
 								if(c.getColumnId().equals(Constants.DONOR_NAME))
-								{
-									if(donors.size()==0)
-										report.getDonors().add("Unspecified");
-									else
-										report.getDonors().addAll(donors);
-								}
+									report.getDonors().addAll(donors);
 								if(c.getColumnId().equals(Constants.ACTUAL_START_DATE))
 									report.setActualStartDate(actualStartDate);
 								if(c.getColumnId().equals(Constants.ACTIVITY_NAME))
 									report.setTitle(title);
 								if(c.getColumnId().equals(Constants.TERM_ASSIST_NAME))
-								{
-									if(assistance.size()==0)
-										report.getAssistance().add("Unspecified");
-									else
-										report.setAssistance(assistance);
-								}
+									report.setAssistance(assistance);
 								if(c.getColumnId().equals(Constants.LEVEL_NAME))
 									report.setLevel(level);
 								if(c.getColumnId().equals(Constants.ACTUAL_COMPLETION_DATE))
@@ -11553,19 +11543,9 @@ public class ReportUtil {
 								if(c.getColumnId().equals(Constants.AMP_ID))
 									report.setAmpId(ampId);
 								if(c.getColumnId().equals(Constants.FUNDING_INSTRUMENT))
-								{
-									if(modality.size()==0)
-										report.getModality().add("Unspecified");
-									else
-										report.getModality().addAll(modality);
-								}
+									report.getModality().addAll(modality);
 								if(c.getColumnId().equals(Constants.CONTACT_NAME))
-								{
-									if(contacts.size()==0)
-										report.getContacts().add("Unspecified");
-									else
-										report.getContacts().addAll(contacts);
-								}
+									report.getContacts().addAll(contacts);
 								reports.getRecords().add(report);
 
 							}
@@ -11575,7 +11555,7 @@ public class ReportUtil {
 							for(int i=0;i<yrCount;i++)
 							{
 								AmpFund ampFund=new AmpFund();
-
+								
 								if(measures.indexOf(new Long(1))!=-1)
 									ampFund.setCommAmount(mf.format(actualFunds[i][0])); 
 								if(measures.indexOf(new Long(2))!=-1)
@@ -11588,7 +11568,7 @@ public class ReportUtil {
 									ampFund.setPlDisbAmount(mf.format(plannedFunds[i][1])); 
 								if(measures.indexOf(new Long(6))!=-1)
 									ampFund.setPlExpAmount(mf.format(plannedFunds[i][2]));	
-
+								
 								report.getAmpFund().add(ampFund);
 							}
 							reports.getRecords().add(report);
@@ -11620,14 +11600,10 @@ public class ReportUtil {
 							level=ampReportCache.getLevelName();
 						if(ampReportCache.getStatusName()!=null)
 							status=ampReportCache.getStatusName();
-						/*if(DbUtil.getAmpReportSector(ampReportCache.getAmpActivityId()).size()==0)
-							sectors.add("Unspecified");
-						else
+						if(DbUtil.getAmpReportSector(ampReportCache.getAmpActivityId()).size()>0)
 							sectors.addAll(DbUtil.getAmpReportSector(ampReportCache.getAmpActivityId()));
-						if(DbUtil.getAmpReportLocation(ampReportCache.getAmpActivityId()).size()==0)
-							regions.add("Unspecified");
-						else
-							regions.addAll(DbUtil.getAmpReportLocation(ampReportCache.getAmpActivityId()));*/
+						if(DbUtil.getAmpReportLocation(ampReportCache.getAmpActivityId()).size()>0)
+							regions.addAll(DbUtil.getAmpReportLocation(ampReportCache.getAmpActivityId()));
 						if(ampReportCache.getTermAssistName()!=null)
 							assistance.add(ampReportCache.getTermAssistName());
 						if(ampReportCache.getDonorName()!=null)
@@ -11658,6 +11634,7 @@ public class ReportUtil {
 							contactName=contactName + " " + ampActivity.getMofedCntFirstName();
 						if(contactName!=null)
 							contacts.add(contactName);
+
 					}
 					//logger.info("Title:" + title);
 					if(donors.indexOf(ampReportCache.getDonorName())==-1 && ampReportCache.getDonorName()!=null)
@@ -11790,7 +11767,7 @@ public class ReportUtil {
 										plannedFunds[fiscalYear%fromYr][2]=plannedFunds[fiscalYear%fromYr][2] + amount;
 								}
 							}
-							//amount=0.0;
+							amount=0.0;
 						}	
 						//logger.info("End If");
 						
@@ -11824,12 +11801,7 @@ public class ReportUtil {
 					if(c.getColumnId().equals(Constants.ACTIVITY_NAME))
 						report.setTitle(title);
 					if(c.getColumnId().equals(Constants.TERM_ASSIST_NAME))
-					{
-						if(assistance.size()==0)
-							report.getAssistance().add("Unspecified");
-						else
-							report.setAssistance(assistance);
-					}
+						report.setAssistance(assistance);
 					if(c.getColumnId().equals(Constants.LEVEL_NAME))
 						report.setLevel(level);
 					if(c.getColumnId().equals(Constants.ACTUAL_COMPLETION_DATE))
@@ -11841,19 +11813,9 @@ public class ReportUtil {
 					if(c.getColumnId().equals(Constants.AMP_ID))
 						report.setAmpId(ampId);
 					if(c.getColumnId().equals(Constants.FUNDING_INSTRUMENT))
-					{
-						if(modality.size()==0)
-							report.getModality().add("Unspecified");
-						else
-							report.getModality().addAll(modality);
-					}
+						report.getModality().addAll(modality);
 					if(c.getColumnId().equals(Constants.CONTACT_NAME))
-					{
-						if(contacts.size()==0)
-							report.getContacts().add("Unspecified");
-						else
-							report.getContacts().addAll(contacts);
-					}					
+						report.getContacts().addAll(contacts);
 					reports.getRecords().add(report);
 				}
 

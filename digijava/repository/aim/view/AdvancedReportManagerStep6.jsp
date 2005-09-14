@@ -252,7 +252,7 @@ function deleteAdjustType()
 										<bean:define id="translation">
 											<digi:trn key="aim:clickToGenerateReport">Click here to Generate Chart</digi:trn>
 										</bean:define>
-										<digi:link href="/advancedReportManager.do?check=charts"  styleClass="sub-nav" title="<%=translation%>" >
+										<digi:link href="/advancedReportManager.do?check=SelectMeasures"  styleClass="sub-nav" title="<%=translation%>" >
 										6 : <digi:trn key="aim:GenerateChart">Generate Chart</digi:trn>
 										</digi:link>
 										</td>	
@@ -287,7 +287,6 @@ function deleteAdjustType()
 																			<TABLE width="100%" cellPadding=2 cellSpacing=1 vAlign="top" align="top" bgcolor="#aaaaaa" border=0>
 																				<c:if test="${!empty aimAdvancedReportForm.ampMeasures}">
 																					<logic:iterate name="aimAdvancedReportForm" id="ampMeasures"	property="ampMeasures" >
-																						<c:if test="${ampMeasures.type == 'T'}">
 																						<TR bgcolor="#ffffff">
 																							<td align="left" width="98%" valign=top>
 																								<c:out value="${ampMeasures.aliasName}"/>
@@ -298,7 +297,6 @@ function deleteAdjustType()
 					  																	    </html:multibox>
 																							</td>
 																						</tr>
-																						</c:if>
 																					</logic:iterate>
 																				</c:if>
 																			</TABLE>
@@ -379,96 +377,6 @@ function deleteAdjustType()
 												</td>
 											</tr>	<!-- Add and Remove Button-->
 											<tr>	<td height=30>	&nbsp;</td>	</tr>
-								<TR bgColor=#f4f4f2>
-									<TD vAlign="top" align="center" width="100%" bgColor=#f4f4f2>
-										<TABLE width="98%" cellPadding=0 cellSpacing=0 vAlign="top" align="center" bgColor=#f4f4f2 >
-											<TR>
-												<TD width="100%" bgcolor="pink" align="center"  valign=top>
-													<TABLE width="100%" cellPadding="2" cellSpacing="2" vAlign="top" align="center" bgColor=#f4f4f2 class="box-border-nopadding" border=0>
-														<TR>
-				
-															<TD width="50%" vAlign="top" align="left" bgcolor="#eeeeee">
-																<TABLE width="100%" cellPadding="3" cellSpacing="1" vAlign="top" align="left" bgcolor="#eeeeee" >
-																	<tr height=10>	<td>	</td>	</tr>												
-																	<TR bgcolor="#eeeeee">
-																		<td align="center" class=box-title>
-																			Adjustment Type
-																		</td>	
-																	</tr>
-																	<tr height=10>	<td>	</td>	</tr>
-																	
-																	<TR>
-																		<TD>
-																			<TABLE width=98%" cellPadding=2 cellSpacing=1 vAlign="top" align="top" bgcolor="#aaaaaa" border=0>
-																				<c:if test="${!empty aimAdvancedReportForm.adjustType}">
-																					<logic:iterate name="aimAdvancedReportForm" id="adjustType"	property="adjustType" >
-																						<TR bgcolor="#ffffff">
-																							<td align="left" width="98%" valign=top>
-																								<c:out value="${adjustType.aliasName}"/>
-																							</td>
-																							<td align="right">
-																								<html:multibox property="selectedAdjustmentType" >
-																								  <c:out value="${adjustType.measureId}"/>
-						  																	    </html:multibox>
-																							</td>
-																						</tr>
-																					</logic:iterate>
-																				</c:if>
-																			</TABLE>
-																		</TD>
-																	</TR>												
-																</TABLE>
-															</TD>
-															<TD width="50%" vAlign="top" align="left" bgcolor="#eeeeee">
-																<TABLE width="100%" cellPadding="2" cellSpacing="1" vAlign="top" align="top" bgcolor="#eeeeee" border=0>
-																	<tr height=10>	<td>	</td>	</tr>												
-																	<TR bgcolor="#eeeeee">
-																		<td align="center" class=box-title>
-																			Selected Adjustment Types
-																		</td>
-																	</tr>
-																	<tr height=10>	<td>	</td>	</tr>
-																	<TR>
-																		<c:if test="${!empty aimAdvancedReportForm.selAdjustType}">
-																		<TD>
-																			<TABLE width="100%" cellPadding=2 cellSpacing=1 vAlign="top" align="top" bgcolor="#aaaaaa" border=0>
-																				<c:if test="${!empty aimAdvancedReportForm.selAdjustType}">
-																					<logic:iterate name="aimAdvancedReportForm" id="selAdjustType"	property="selAdjustType" >
-																						<tr bgcolor=#ffffff>
-																						<td align="left" width="98%">
-																							<c:out value="${selAdjustType.aliasName}"/>
-																						</td>
-																						<td align="right">
-																							<html:multibox property="removeAdjustType" >
-																							  <c:out value="${selAdjustType.measureId}"/>
-					  																	    </html:multibox>
-																						</td>
-																							<td align="right">
-																								<IMG alt="Move Up"  height=10 src="../ampTemplate/images/up-arrow.jpg" width=10 onclick="moveUpAdjType(<c:out value='${selAdjustType.measureId}' />)">
-																								<IMG alt="Move Down" styleClass="test" height=10 src="../ampTemplate/images/down-arrow.jpg" width=10 onclick="moveDownAdjType(<c:out value='${selAdjustType.measureId}' />)">
-																							</td>
-																						
-																					</logic:iterate>
-																				</c:if>
-																			</TABLE>
-																		</TD>
-																		</c:if>														
-																		
-																	</TR>												
-
-																</TABLE>
-																
-															</TD>
-														</TR>
-													</TABLE>
-												</TD>
-											</TR>
-											<tr align="center">
-												<td align="center">
-													<input type=button value="  Add >>   " class="dr-menu" onclick="addAdjustType()" >						
-													<input type=button value="<< Remove " class="dr-menu" onclick="deleteAdjustType()" >						
-												</td>
-											</tr>	<!-- Add and Remove Button-->
 											
 											<tr>
 												<td align="right" colspan="2">

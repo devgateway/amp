@@ -133,7 +133,7 @@ public class AdvancedReport extends Action {
 				formBean.setAmpMeasures(ReportUtil.getMeasureList());
 				formBean.setReportTitle("");
 				
-				iter = formBean.getAmpMeasures().iterator();
+				/*iter = formBean.getAmpMeasures().iterator();
 				Collection tempColl = new ArrayList();
 				while(iter.hasNext())
 				{
@@ -142,6 +142,7 @@ public class AdvancedReport extends Action {
 						tempColl.add(ampMeasure);
 				}
 				formBean.setAdjustType(tempColl);
+				*/
 			}
 			else
 				logger.info(" AmpColumns is not NULL........");
@@ -200,6 +201,7 @@ public class AdvancedReport extends Action {
 				return mapping.findForward("SelectMeasures");
 			}
 
+			/*
 			// Step 3 : Select Adjustment Type
 			if(request.getParameter("check") != null && request.getParameter("check").equals("AddAdjustType"))
 			{
@@ -219,7 +221,7 @@ public class AdvancedReport extends Action {
 				formBean.setRemoveAdjustType(null);
 				return mapping.findForward("SelectMeasures");
 			}
-
+			*/
 			// Goto Step 2.
 			if(request.getParameter("check") != null && request.getParameter("check").equals("5"))
 			{
@@ -279,6 +281,7 @@ public class AdvancedReport extends Action {
 				// Gets the Transaction and Adjustement Type from the user
 				ArrayList adjType = new ArrayList(), transc = new ArrayList();
 				int count = 0;
+				/*
 				if(formBean.getSelAdjustType() != null)
 				{
 					
@@ -291,7 +294,7 @@ public class AdvancedReport extends Action {
 						count = count + 1;
 					}
 				}
-				
+				*/
 				if(formBean.getAddedMeasures() != null)
 				{
 					count = 0;
@@ -309,7 +312,7 @@ public class AdvancedReport extends Action {
 				logger.info("Adjustment: " + adjType.size());
 				logger.info("Transaction: " + transc.size());
 
-				ArrayList measures=new ArrayList();
+				ArrayList measures = transc;
 				if(measures.indexOf(new Long(1))>=0)
 					formBean.setAcCommFlag("true");
 				else
@@ -353,7 +356,7 @@ public class AdvancedReport extends Action {
 					if (request.getParameter("page") == null) 
 					{
 						page = 1;
-						reports=ReportUtil.generateAdvancedReport(ampTeamId,fromYr,toYr,fiscalCalId,ampCurrencyCode,perspective, adjType, transc, formBean.getAddedColumns() );
+						reports=ReportUtil.generateAdvancedReport(ampTeamId,fromYr,toYr,fiscalCalId,ampCurrencyCode,perspective, transc, formBean.getAddedColumns() );
 						logger.info("Page is NULL............................" + reports.size());
 						formBean.setFinalData(reports);
 						httpSession.setAttribute("ampReports",reports);

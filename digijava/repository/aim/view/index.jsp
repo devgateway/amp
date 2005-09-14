@@ -43,11 +43,11 @@
 					<td align=right class=f-names noWrap width="31%">
 						<digi:img src="module/aim/images/arrow-th-BABAB9.gif" width="16"/>
 							<digi:trn key="aim:registeredUserLogIn">
-							Registered User Log In:
+							Registered <u>U</u>ser Log In:
 							</digi:trn>
 					</td>
 					<td align="left">
-						<html:text property="userId" size="20" styleClass="inp-text"/> &nbsp;
+						<html:text property="userId" size="20" styleClass="inp-text" accesskey="u"/> &nbsp;
 						<font color="red"><br>
 						<digi:trn key="aim:userIdExample1">
 						e.g. yourname@emailaddress.com
@@ -60,11 +60,11 @@
 					<td align=right class=f-names noWrap width="31%">
 						<digi:img src="module/aim/images/arrow-th-BABAB9.gif" width="16"/>
 						<digi:trn key="aim:password">
-						Password:
+						<u>P</u>assword:
 						</digi:trn>
 					</td>
 					<td align="left">
-						<html:password property="password" size="20" styleClass="inp-text"/>
+						<html:password property="password" size="20" styleClass="inp-text" accesskey="p"/>
 					</td>
 				</tr>
 				<tr>

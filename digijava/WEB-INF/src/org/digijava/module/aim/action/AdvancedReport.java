@@ -70,11 +70,12 @@ public class AdvancedReport extends Action {
 	private static Logger logger = Logger.getLogger(Login.class);
 	private String str="";
 	static HttpSession httpSession= null;
+	static AdvancedReportForm formBean;
 
 	public ActionForward execute(ActionMapping mapping, ActionForm form, 
 			HttpServletRequest request, HttpServletResponse response) throws java.lang.Exception
 	{
-		AdvancedReportForm formBean = (AdvancedReportForm) form;
+		formBean = (AdvancedReportForm) form;
 		
 		httpSession = request.getSession();
 		Query query;
@@ -913,8 +914,11 @@ public class AdvancedReport extends Action {
 
 			CategoryDataset categorydataset = new DefaultCategoryDataset();
 			categorydataset = data;
+
+			String chartTitle=formBean.getReportTitle();
+//			System.out.println("CHART TITLE----(ACTION)----------------"+chartTitle);
 			
-			JFreeChart jfreechart = ChartFactory.createBarChart("Bar Chart", "Title", "Amount(in US$)", categorydataset, PlotOrientation.VERTICAL,true, true, true);
+			JFreeChart jfreechart = ChartFactory.createBarChart(chartTitle+" - Bar Chart", "Title", "Amount(in US$)", categorydataset, PlotOrientation.VERTICAL,true, true, true);
 			jfreechart.setBackgroundPaint(java.awt.Color.white);
 			
 			// Write the chart image to the temporary directory 

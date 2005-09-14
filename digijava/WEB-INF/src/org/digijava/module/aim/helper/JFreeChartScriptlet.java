@@ -17,6 +17,7 @@ import org.jfree.util.Rotation;
 public class JFreeChartScriptlet extends JRDefaultScriptlet
 {
 	static Vector v= new Vector();
+	static String chartTitle="";
 
 	public void setV(Collection c){
 		if(v!=null)
@@ -34,12 +35,19 @@ public class JFreeChartScriptlet extends JRDefaultScriptlet
 		return v;
 	}
 */	
+	public void setChartTitle(String str){
+		chartTitle = str;
+		//System.out.println("CHART TITLE----------------"+chartTitle);
+	}
+
+
 	public void afterReportInit() throws JRScriptletException
 	{
 	
 	//logger.info("Inside Jfree Webapp SCRIPTLET....6");
 
 	DefaultPieDataset dataset = new DefaultPieDataset();
+
 
 // should be dynamic.
 		String str="test";
@@ -55,7 +63,7 @@ public class JFreeChartScriptlet extends JRDefaultScriptlet
 		//logger.info("=====================v size: "+v.size());
 		JFreeChart chart = 
 			ChartFactory.createPieChart(
-				"Advanced Report Builder - Pie Chart",
+				chartTitle+" - Pie Chart",
 				dataset,
 				true,
 				true,
@@ -101,7 +109,7 @@ public class JFreeChartScriptlet extends JRDefaultScriptlet
 
 		JFreeChart chart2 = 
 //			ChartFactory.createBarChart("Bar Chart for Custom Report.",dataset,true,true,false);
-			ChartFactory.createBarChart("Advanced Report Builder - Bar Chart", "title", "Amount(in Thousand $)", categorydataset, PlotOrientation.VERTICAL, true, true, true);
+			ChartFactory.createBarChart(chartTitle+" - Bar Chart", "title", "Amount(in Thousand $)", categorydataset, PlotOrientation.VERTICAL, true, true, true);
 
 		this.setVariableValue("Chart2", new JCommonDrawableRenderer(chart2));
 

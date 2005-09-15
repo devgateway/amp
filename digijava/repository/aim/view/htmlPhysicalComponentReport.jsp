@@ -23,7 +23,7 @@
   <!-- Report Name -->
   <tr>
    <td class="head1-name" align="center">
-	 <digi:trn key="aim:MultilateralbyDonorTitle">
+	 <digi:trn key="aim:physicalComponentReport">
 	  <bean:write name="aimMulitlateralbyDonorForm" property="reportName" />
 	 </digi:trn>	
    </td>

@@ -86,52 +86,100 @@
 						   <td width=40 > <b>
 							   <bean:write name="donors" property="donorCount"/>.<bean:write name="project" property="count"/>	</b>
 						   </td>
-						   <td width=120 valign=top>	<b> Project  </b> </td>
+						   <td width=120 valign=top>	<b> Program/Project Component    </b> </td>
+		 					 <td> <b> :  </b> </td>						   
 						   <td width=560>
 							  <bean:write name="project" property="name"/></strong>
 						   </td>
 				         </tr>
-			   		     <logic:iterate name="project"  property="component" id="component" type="org.digijava.module.aim.helper.AmpComponent">
-  					     <tr>
- 						   <td width=40 >
-						   <b><bean:write name="donors" property="donorCount"/>.<bean:write name="project" property="count"/>.<bean:write name="component" property="count"/> </b>
-						   </td>
-
-						  <td width=120 valign=top><b> Component Name  </b> </td>
-					       <td width=560>
-						      <bean:write name="component" property="name"/>
-					       </td>
-					     </tr>
 						<tr>
  						   <td width=40 >	    &nbsp;		   </td>
-						  <td width=120 valign=top> <b>Objective</b> </td>
+						  <td width=120 valign=top> <b>Description  </b> </td>
+	 					 <td> <b> : </b> </td>						  
 						  <td width=560>
-							  <logic:notEmpty name="component" property="objective">
-							   <bean:write name="component" property="objective" />
+							  <logic:notEmpty name="project" property="description">
+							   <bean:write name="project" property="description" />
 							  </logic:notEmpty>
 						  </td>
 						</tr>
+
+					<tr>
+ 						   <td width=40 >	    &nbsp;		   </td>
+					   <td width=120  valign=top> <b> Commitment Date  </b>  </td>
+ 					 <td> <b> : </b> </td>					   
+					   <td align="left" width=560>
+ 							<bean:write name="project" property="signatureDate" />
+					   </td>
+					</tr>
+					<tr>
+ 						   <td width=40 >	    &nbsp;		   </td>
+					   <td width=120 valign=top> <b>Completion Date  </b> </td>
+	 					 <td> <b> : </b> </td>					   
+					   <td align="left"width=560> 
+				        <bean:write name="project" property="plannedCompletionDate" />
+					   </td>
+					</tr>
+					<tr>
+ 						   <td width=40 >	    &nbsp;		   </td>
+  					  <td width=120 valign=top> <b> Total Commitments  </b> </td>
+ 					 <td> <b> : </b> </td>  					  
+					  <td align="left" width=560>
+					    <bean:write name="project" property="acCommitment" />
+					  </td>
+					</tr>
+					<tr>
+ 						   <td width=40 >	    &nbsp;		   </td>
+					  <td width=120 valign=top> <b> Cumulative Disbursements  </b></td>
+	 					 <td> <b> : </b> </td>					  
+					  <td align="left" width=560>
+					  <bean:write name="project" property="acDisbursement" />
+					</td>
+					</tr>
+					<tr>
+ 						   <td width=40 >	    &nbsp;		   </td>
+					  <td width=120 valign=top> <b> Remaining Balance   </b></td>
+ 					 <td> <b> : </b> </td>					  
+					  <td align="left" width=560>
+					  <bean:write name="project" property="acUnDisbursement" />
+					</td>
+					</tr>
 						<tr>
 						   <td width=40 >	    &nbsp;		   </td>
-						 <td width=120 valign=top>  <b>	Status </b> </td>
+						 <td width=120 valign=top>  <b>Status : </b> </td>
+	 					 <td> <b> : </b> </td>						 
 						 <td align="left" width=560 >
 
-							<logic:empty name="component" property="status"> 
+							<logic:empty name="project" property="progress"> 
 							</logic:empty>
-							<logic:notEmpty name="component" property="status">
-							<logic:iterate name="component" id="status" property="status">* <%=status%>	
+							<logic:notEmpty name="project" property="progress">
+							<logic:iterate name="project" id="progress" property="progress">* <%=progress%>	
+							</logic:iterate>
+							</logic:notEmpty>
+						 </td>
+						</tr>
+						<tr>
+						   <td width=40 >	    &nbsp;		   </td>
+						 <td width=120 valign=top>  <b>	Measures to Be Taken </b> </td>
+	  					 <td> <b> : </b> </td>
+						 <td align="left" width=560 >
+
+							<logic:empty name="project" property="measures"> 
+							</logic:empty>
+							<logic:notEmpty name="project" property="measures">
+							<logic:iterate name="project" id="measures" property="measures">* <%=measures%>	
 							</logic:iterate>
 							</logic:notEmpty>
 						 </td>
 						</tr>
 					<tr>
  						   <td width=40 >	    &nbsp;		   </td>
- 					 <td width=120 valign=top>	<b>	Issues	</b> </td>
+ 					 <td width=120 valign=top>	<b>	Issues </b> </td>
+ 					 <td> <b> : </b> </td>
 					 <td align="left" width=560 >
-						<logic:empty name="component" property="issues"> 
+						<logic:empty name="project" property="issues"> 
 						</logic:empty>
-						<logic:notEmpty name="component" property="issues">
-						<logic:iterate name="component" id="issues" property="issues"> <%=issues%>	
+						<logic:notEmpty name="project" property="issues">
+						<logic:iterate name="project" id="issues" property="issues"> <%=issues%>	
 
 						</logic:iterate>
 						</logic:notEmpty>
@@ -140,65 +188,21 @@
 
 					<tr>
 					   <td width=40 >	    &nbsp;		   </td>
-					 <td width=120 valign=top>	<b>	Measures </b>	</td>
+					 <td width=120 valign=top>	<b>	Responsible Actor </b>	</td>
+ 					 <td> <b> : </b> </td>
 					 <td align="left" width=560 >
 						
-						<logic:empty name="component" property="measures"> 
+						<logic:empty name="project" property="responsibleActor"> 
 						</logic:empty>
-						<logic:notEmpty name="component" property="measures">
-						<logic:iterate name="component" id="measures" property="measures"> <%=measures%>	
+						<logic:notEmpty name="project" property="responsibleActor">
+						<logic:iterate name="project" id="responsibleActor" property="responsibleActor"> <%=responsibleActor%>	
 						<br>
 						</logic:iterate>
 						</logic:notEmpty>
 						</td>
 					</tr>
 
-					<tr>
- 					 <td width=40 >	    &nbsp;		   </td>
-					 <td width=120 valign=top>	<b>	Resonsible Actors </b> </td>
-					 <td align="left" width=560>
-					   
-						<logic:empty name="component" property="responsibleActor">&nbsp;
-						</logic:empty>
-						<logic:notEmpty name="component" property="responsibleActor">
-						<logic:iterate name="component" id="responsibleActor" property="responsibleActor"> 	<%=responsibleActor%>	
-						</logic:iterate>
-						</logic:notEmpty>
-					 </td>
-					 </tr>
-
-
-					<tr>
- 						   <td width=40 >	    &nbsp;		   </td>
-					   <td width=120  valign=top> <b> Signature Date </b>  </td>
-					   <td align="left" width=560>
- 							<bean:write name="component" property="signatureDate" />
-					   </td>
-					</tr>
-					<tr>
- 						   <td width=40 >	    &nbsp;		   </td>
-					   <td width=120 valign=top> <b>Ending Date  </b> </td>
-					   <td align="left"width=560> 
-				        <bean:write name="component" property="plannedCompletionDate" />
-					   </td>
-					</tr>
-					<tr>
- 						   <td width=40 >	    &nbsp;		   </td>
-  					  <td width=120 valign=top> <b> Total Allocation  </b> </td>
-					  <td align="left" width=560>
-					    <bean:write name="component" property="acCommitment" />
-					  </td>
-					</tr>
-					<tr>
- 						   <td width=40 >	    &nbsp;		   </td>
-					  <td width=120 valign=top> <b> Cumulative Expenditure   </b></td>
-					  <td align="left" width=560>
-					  <bean:write name="component" property="acExpenditure" />
-					</td>
-					</tr>
-
-					     </logic:iterate>
-						</table>
+					</table>
 					 </td>
 					</tr>
 				</logic:iterate>

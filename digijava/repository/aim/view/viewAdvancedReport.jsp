@@ -85,9 +85,9 @@
              </tr>
 	<tr>
 				<td colspan=3 class=subtitle-blue align=center>
-					<digi:trn key="aim:ViewProjectsTitle">
+					
 					<bean:write name="aimAdvancedReportForm" property="reportName" />
-					</digi:trn>
+					
 				</td>
 			</tr>
 			<tr>

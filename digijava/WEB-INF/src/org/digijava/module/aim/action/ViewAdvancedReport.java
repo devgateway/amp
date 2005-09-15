@@ -17,6 +17,7 @@ import org.digijava.module.aim.dbentity.AmpModality;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpCurrency;
 import org.digijava.module.aim.dbentity.AmpTeam;
+import org.digijava.module.aim.dbentity.AmpReports;
 import org.digijava.module.aim.helper.DateConversion ;
 import org.digijava.module.aim.helper.EthiopianCalendar;
 import org.digijava.module.aim.helper.FilterProperties;
@@ -559,7 +560,8 @@ public class ViewAdvancedReport extends Action
 		
 		formBean.setFilterCnt(filterCnt);
 		AmpTeam ampTeam=DbUtil.getAmpTeam(ampTeamId);
-		formBean.setReportName("Annual Forecasting Report");
+		AmpReports ampReports=DbUtil.getAmpReport(ampReportId);
+		formBean.setReportName(ampReports.getName());
 		formBean.setWorkspaceType(ampTeam.getType());
 		formBean.setWorkspaceName(ampTeam.getName());
 		if(perspective.equals("DN"))

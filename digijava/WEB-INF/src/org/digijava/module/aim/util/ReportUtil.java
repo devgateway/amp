@@ -11154,6 +11154,7 @@ public class ReportUtil {
 							contacts.clear();
 							sectors.clear();
 							regions.clear();
+							contactName=null;
 							minYear=maxYear=0;
 							for(int i=0;i<yrCount;i++)
 							{
@@ -11209,14 +11210,14 @@ public class ReportUtil {
 						if(ampActivity.getContFirstName()!=null)
 							contactName=ampActivity.getContFirstName();
 						if(ampActivity.getContLastName()!=null)
-							contactName=contactName + " " + ampActivity.getContFirstName();
+							contactName=contactName + " " + ampActivity.getContLastName();
 						if(contactName!=null)
 							contacts.add(contactName);
 						contactName=null;
 						if(ampActivity.getMofedCntFirstName()!=null)
 							contactName=ampActivity.getMofedCntFirstName();
 						if(ampActivity.getMofedCntLastName()!=null)
-							contactName=contactName + " " + ampActivity.getMofedCntFirstName();
+							contactName=contactName + " " + ampActivity.getMofedCntLastName();
 						if(contactName!=null)
 							contacts.add(contactName);
 
@@ -11655,6 +11656,7 @@ public class ReportUtil {
 							contacts.clear();
 							sectors.clear();
 							regions.clear();
+							contactName=null;
 							minYear=maxYear=0;
 							for(int i=0;i<yrCount;i++)
 							{
@@ -11710,14 +11712,14 @@ public class ReportUtil {
 						if(ampActivity.getContFirstName()!=null)
 							contactName=ampActivity.getContFirstName();
 						if(ampActivity.getContLastName()!=null)
-							contactName=contactName + " " + ampActivity.getContFirstName();
+							contactName=contactName + " " + ampActivity.getContLastName();
 						if(contactName!=null)
 							contacts.add(contactName);
 						contactName=null;
 						if(ampActivity.getMofedCntFirstName()!=null)
 							contactName=ampActivity.getMofedCntFirstName();
 						if(ampActivity.getMofedCntLastName()!=null)
-							contactName=contactName + " " + ampActivity.getMofedCntFirstName();
+							contactName=contactName + " " + ampActivity.getMofedCntLastName();
 						if(contactName!=null)
 							contacts.add(contactName);
 

@@ -283,6 +283,10 @@ function gotoStep() {
 				<bean:write name="records" property="status" /></logic:notEmpty>
 				<logic:notEmpty name="records" property="level">
 				<bean:write name="records" property="level" /></logic:notEmpty>
+				<logic:notEmpty name="records" property="objective">
+				<bean:write name="records" property="objective" /></logic:notEmpty>
+				<logic:notEmpty name="records" property="description">
+				<bean:write name="records" property="description" /></logic:notEmpty>
 				<logic:notEmpty name="records" property="assistance">
 				<logic:iterate name="records" id="assistance" property="assistance"> <%=assistance%>	
 					<br>

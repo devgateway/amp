@@ -94,8 +94,8 @@ public class PhysicalComponentReportXLS extends Action
 					{
 						project = (Project) projectIter.next();
 						rowCnt = rowCnt + 1;
-						components = new ArrayList(project.getComponent());
-						componentIter = components.iterator();
+						//components = new ArrayList(project.getComponent());
+						//componentIter = components.iterator();
 					}// End of Project Collection
 				}// End of Donor Collection
 			}// end of Report Collection			
@@ -136,55 +136,32 @@ public class PhysicalComponentReportXLS extends Action
 					projectIter = ampProjects.iterator();
 					while(projectIter.hasNext())
 					{
-						//data[row][0] += (Object) " Team Namex: "+report.getTeamName() ;
 						temp = "                           Team Name: " + report.getTeamName();
-						data[row][0] = data[row][0].toString()+temp;
-//						calculateFieldHeight(report.getTeamName());
+						data[row][3] = data[row][3].toString()+temp;
 						
-						data[row][3] = teamDonors.getDonorAgency();
+						data[row][4] = teamDonors.getDonorAgency().trim();
 						calculateFieldHeight(teamDonors.getDonorAgency());
 						
 						project = (Project) projectIter.next();
-						data[row][4] = project.getName();
+						data[row][5] = project.getName().trim();
 						calculateFieldHeight(project.getName());
 						
-						components = new ArrayList(project.getComponent());
-						componentIter = components.iterator();
-						while(componentIter.hasNext())
+						if(project.getDescription() != null)
 						{
-							ampComponent = (AmpComponent) componentIter.next();
-							data[row][5] = ampComponent.getName();
-							if(ampComponent.getObjective() != null)
-							{
-								temp = "\n Objective: " + ampComponent.getObjective();
-								data[row][5] = data[row][5].toString()+temp;
-								calculateFieldHeight(ampComponent.getObjective());
-							}
-							else
-							{
-								temp = " ";
-								//data[row][5] = data[row][5].toString() + temp;
-							}
-							data[row][6] = ampComponent.getSignatureDate();
-							data[row][7] = ampComponent.getPlannedCompletionDate();
-							data[row][8] = ampComponent.getAcCommitment();
-							data[row][9] = ampComponent.getAcExpenditure();
-							data[row][10] = ampComponent.getAcBalance();
-							temp = " * ";
-							data[row][11] = temp+ampComponent.getStatus().toString().replace('[',' ').replace(']',' ');
-							calculateFieldHeight(data[row][11].toString());
-							
-							data[row][12] = ampComponent.getIssues().toString().replace('[',' ').replace(']',' ');
-							calculateFieldHeight(data[row][12].toString());
-							
-							data[row][13] = ampComponent.getMeasures().toString().replace('[',' ').replace(']',' ');
-							calculateFieldHeight(data[row][13].toString());
-							
-							data[row][14] = ampComponent.getResponsibleActor().toString().replace('[',' ').replace(']',' ');
-							calculateFieldHeight(data[row][14].toString());
-							
-							
-						}	// End of Component Collection
+							data[row][6] = project.getDescription().trim();
+							calculateFieldHeight(project.getDescription());
+						}
+						
+						data[row][7] = project.getSignatureDate();
+						data[row][8] = project.getPlannedCompletionDate();
+						data[row][9] = project.getAcCommitment();
+						data[row][10] = project.getAcDisbursement();
+						data[row][11] = project.getAcUnDisbursement();
+						
+						data[row][12] = project.getProgress().toString().trim().replace('[',' ').replace(']',' ');
+						data[row][13] = project.getMeasures().toString().trim().replace('[',' ').replace(']',' ');
+						data[row][14] = project.getResponsibleActor().toString().trim().replace('[',' ').replace(']',' ');
+						
 						row = row + 1;
 					}// End of Project Collection
 				}// End of Donor Collection
@@ -250,9 +227,12 @@ public class PhysicalComponentReportXLS extends Action
 
 	void calculateFieldHeight(String input)
 	{
-		System.out.println(" Large ::" + fieldHeight + " :: Current : " + input.length());
-		if(input.length() > fieldHeight)
-			fieldHeight = input.length();
+		if(input.length() > 0)
+		{
+			System.out.println(" Large ::" + fieldHeight + " :: Current : " + input.length());
+			if(input.length() > fieldHeight)
+				fieldHeight = input.length();
+		}
 	}
 
 }// end of Class

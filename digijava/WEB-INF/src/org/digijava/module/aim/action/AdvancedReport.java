@@ -344,6 +344,11 @@ public class AdvancedReport extends Action {
 				else
 					formBean.setPlExpFlag("false");
 
+				if(measures.indexOf(new Long(7))>=0)
+					formBean.setAcBalFlag("true");
+				else
+					formBean.setAcBalFlag("false");
+
 				formBean.setFundColumns((measures.size()));
 	
 				

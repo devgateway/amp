@@ -31,6 +31,7 @@ import org.digijava.module.aim.dbentity.AmpTeamReports;
 import org.digijava.module.aim.dbentity.AmpReportCache;
 import org.digijava.module.aim.dbentity.AmpReportSector;
 import org.digijava.module.aim.dbentity.AmpReportColumn;
+import org.digijava.module.editor.dbentity.Editor;
 import org.digijava.module.aim.dbentity.AmpSector;
 import org.digijava.module.aim.helper.AmpFund;
 import org.digijava.module.aim.helper.Column;
@@ -10410,7 +10411,13 @@ public class ReportUtil {
 							project.setIssues(new ArrayList());
 							project.setMeasures(new ArrayList());
 							project.setResponsibleActor(new ArrayList());
-							project.setDescription(ampReportCache.getActivityDescription());
+							if(ampReportCache.getActivityDescription()!=null)
+							{
+								Editor ed = org.digijava.module.editor.util.DbUtil.getEditor(ampReportCache.getActivityDescription(),"en");
+								project.setDescription(ed.getBody());
+							}
+							else
+								project.setDescription(" ");
 							project.setPlannedCompletionDate(DateConversion.ConvertDateToString(ampReportCache.getPlannedCompletionDate()));
 							if(DbUtil.getAmpReportPhysicalPerformance(ampReportCache.getAmpActivityId()) !=null)
 								project.getProgress().addAll(DbUtil.getAmpReportPhysicalPerformance(ampReportCache.getAmpActivityId()));
@@ -10427,7 +10434,13 @@ public class ReportUtil {
 							project.setIssues(new ArrayList());
 							project.setMeasures(new ArrayList());
 							project.setResponsibleActor(new ArrayList());
-							project.setDescription(ampReportCache.getActivityDescription());
+							if(ampReportCache.getActivityDescription()!=null)
+							{
+								Editor ed = org.digijava.module.editor.util.DbUtil.getEditor(ampReportCache.getActivityDescription(),"en");
+								project.setDescription(ed.getBody());
+							}
+							else
+								project.setDescription(" ");
 							project.setPlannedCompletionDate(DateConversion.ConvertDateToString(ampReportCache.getPlannedCompletionDate()));
 							if(DbUtil.getAmpReportPhysicalPerformance(ampReportCache.getAmpActivityId()) !=null)
 								project.getProgress().addAll(DbUtil.getAmpReportPhysicalPerformance(ampReportCache.getAmpActivityId()));
@@ -10467,7 +10480,13 @@ public class ReportUtil {
 							project.setIssues(new ArrayList());
 							project.setMeasures(new ArrayList());
 							project.setResponsibleActor(new ArrayList());
-							project.setDescription(ampReportCache.getActivityDescription());
+							if(ampReportCache.getActivityDescription()!=null)
+							{
+								Editor ed = org.digijava.module.editor.util.DbUtil.getEditor(ampReportCache.getActivityDescription(),"en");
+								project.setDescription(ed.getBody());
+							}
+							else
+								project.setDescription(" ");
 							project.setPlannedCompletionDate(DateConversion.ConvertDateToString(ampReportCache.getPlannedCompletionDate()));
 							if(DbUtil.getAmpReportPhysicalPerformance(ampReportCache.getAmpActivityId()) !=null)
 								project.getProgress().addAll(DbUtil.getAmpReportPhysicalPerformance(ampReportCache.getAmpActivityId()));
@@ -10496,7 +10515,13 @@ public class ReportUtil {
 							project.setIssues(new ArrayList());
 							project.setMeasures(new ArrayList());
 							project.setResponsibleActor(new ArrayList());
-							project.setDescription(ampReportCache.getActivityDescription());
+							if(ampReportCache.getActivityDescription()!=null)
+							{
+								Editor ed = org.digijava.module.editor.util.DbUtil.getEditor(ampReportCache.getActivityDescription(),"en");
+								project.setDescription(ed.getBody());
+							}
+							else
+								project.setDescription(" ");
 							project.setPlannedCompletionDate(DateConversion.ConvertDateToString(ampReportCache.getPlannedCompletionDate()));
 							if(DbUtil.getAmpReportPhysicalPerformance(ampReportCache.getAmpActivityId()) !=null)
 								project.getProgress().addAll(DbUtil.getAmpReportPhysicalPerformance(ampReportCache.getAmpActivityId()));
@@ -11140,6 +11165,8 @@ public class ReportUtil {
 									ampFund.setPlDisbAmount(mf.format(plannedFunds[i][1])); 
 								if(measures.indexOf(new Long(6))>=0)
 									ampFund.setPlExpAmount(mf.format(plannedFunds[i][2]));	
+								if(measures.indexOf(new Long(7))!=-1)
+									ampFund.setUnDisbAmount(mf.format(actualFunds[i][0]-actualFunds[i][1]));	
 								report.getAmpFund().add(ampFund);
 							}
 							reports.getRecords().add(report);
@@ -11199,14 +11226,22 @@ public class ReportUtil {
 						if(ampReportCache.getModalityName()!=null)
 							modality.add(ampReportCache.getModalityName());
 						AmpActivity ampActivity=(AmpActivity) ActivityUtil.getAmpActivity(ampReportCache.getAmpActivityId());
-						if(ampActivity.getObjective()==null)
-							objective=" ";
+						if(ampReportCache.getActivityDescription()!=null)
+						{
+							Editor ed = org.digijava.module.editor.util.DbUtil.getEditor(ampReportCache.getActivityDescription(),"en");
+							description=ed.getBody();
+						}
 						else
-							objective=ampActivity.getObjective();
-						if(ampActivity.getDescription()==null)
 							description=" ";
+						
+						if(ampActivity.getObjective()!=null)
+						{
+							Editor ed = org.digijava.module.editor.util.DbUtil.getEditor(ampActivity.getObjective(),"en");
+							objective=ed.getBody();
+						}
 						else
-							description=ampActivity.getDescription();
+							objective=" ";
+	
 						if(ampActivity.getContFirstName()!=null)
 							contactName=ampActivity.getContFirstName();
 						if(ampActivity.getContLastName()!=null)
@@ -11250,8 +11285,7 @@ public class ReportUtil {
 							toExchangeRate=1.0;
 						else
 							toExchangeRate=DbUtil.getExchangeRate(ampCurrencyCode,Constants.PLANNED,ampReportCache.getTransactionDate());
-						if(measures.indexOf(new Long(1))!=-1)
-						{	
+						
 							if(ampReportCache.getActualCommitment().doubleValue()>0 && ampReportCache.getPerspective().equals(perspective))
 							{
 								amount=CurrencyWorker.convert1(ampReportCache.getActualCommitment().doubleValue(),fromExchangeRate,toExchangeRate);
@@ -11266,9 +11300,7 @@ public class ReportUtil {
 								}
 							}
 							amount=0.0;
-						}
-						if(measures.indexOf(new Long(2))!=-1)
-						{
+						
 							if(ampReportCache.getActualDisbursement().doubleValue()>0 && ampReportCache.getPerspective().equals(perspective))
 							{
 								amount=CurrencyWorker.convert1(ampReportCache.getActualDisbursement().doubleValue(),fromExchangeRate,toExchangeRate);
@@ -11282,7 +11314,7 @@ public class ReportUtil {
 								}
 							}
 							amount=0.0;
-						}
+						
 						if(measures.indexOf(new Long(3))!=-1)
 						{
 							if(ampReportCache.getActualExpenditure().doubleValue()>0 && ampReportCache.getPerspective().equals(perspective))
@@ -11428,6 +11460,8 @@ public class ReportUtil {
 						ampFund.setPlDisbAmount(mf.format(plannedFunds[i][1])); 
 					if(measures.indexOf(new Long(6))!=-1)
 						ampFund.setPlExpAmount(mf.format(plannedFunds[i][2]));	
+					if(measures.indexOf(new Long(7))!=-1)
+						ampFund.setUnDisbAmount(mf.format(actualFunds[i][0]-actualFunds[i][1]));	
 					report.getAmpFund().add(ampFund);
 				}
 				reports.getRecords().add(report);
@@ -11643,6 +11677,8 @@ public class ReportUtil {
 									ampFund.setPlDisbAmount(mf.format(plannedFunds[i][1])); 
 								if(measures.indexOf(new Long(6))!=-1)
 									ampFund.setPlExpAmount(mf.format(plannedFunds[i][2]));	
+								if(measures.indexOf(new Long(7))!=-1)
+									ampFund.setUnDisbAmount(mf.format(actualFunds[i][0]-actualFunds[i][1]));	
 								
 								report.getAmpFund().add(ampFund);
 							}
@@ -11701,14 +11737,21 @@ public class ReportUtil {
 						if(ampReportCache.getModalityName()!=null)
 							modality.add(ampReportCache.getModalityName());
 						AmpActivity ampActivity=(AmpActivity) ActivityUtil.getAmpActivity(ampReportCache.getAmpActivityId());
-						if(ampActivity.getObjective()==null)
-							objective=" ";
+						if(ampReportCache.getActivityDescription()!=null)
+						{
+							Editor ed = org.digijava.module.editor.util.DbUtil.getEditor(ampReportCache.getActivityDescription(),"en");
+							description=ed.getBody();
+						}
 						else
-							objective=ampActivity.getObjective();
-						if(ampActivity.getDescription()==null)
 							description=" ";
+						
+						if(ampActivity.getObjective()!=null)
+						{
+							Editor ed = org.digijava.module.editor.util.DbUtil.getEditor(ampActivity.getObjective(),"en");
+							objective=ed.getBody();
+						}
 						else
-							description=ampActivity.getDescription();
+							objective=" ";
 						if(ampActivity.getContFirstName()!=null)
 							contactName=ampActivity.getContFirstName();
 						if(ampActivity.getContLastName()!=null)
@@ -11752,8 +11795,7 @@ public class ReportUtil {
 							toExchangeRate=1.0;
 						else
 							toExchangeRate=DbUtil.getExchangeRate(ampCurrencyCode,Constants.PLANNED,ampReportCache.getTransactionDate());
-						if(measures.indexOf(new Long(1))!=-1)
-						{	
+						
 							if(ampReportCache.getActualCommitment().doubleValue()>0 && ampReportCache.getPerspective().equals(perspective))
 							{
 								amount=CurrencyWorker.convert1(ampReportCache.getActualCommitment().doubleValue(),fromExchangeRate,toExchangeRate);
@@ -11768,9 +11810,7 @@ public class ReportUtil {
 								}
 							}
 							amount=0.0;
-						}
-						if(measures.indexOf(new Long(2))!=-1)
-						{
+						
 							if(ampReportCache.getActualDisbursement().doubleValue()>0 && ampReportCache.getPerspective().equals(perspective))
 							{
 								amount=CurrencyWorker.convert1(ampReportCache.getActualDisbursement().doubleValue(),fromExchangeRate,toExchangeRate);
@@ -11785,7 +11825,7 @@ public class ReportUtil {
 							}
 
 							amount=0.0;
-						}
+						
 						if(measures.indexOf(new Long(3))!=-1)
 						{
 							if(ampReportCache.getActualExpenditure().doubleValue()>0 && ampReportCache.getPerspective().equals(perspective))
@@ -11939,6 +11979,8 @@ public class ReportUtil {
 						ampFund.setPlDisbAmount(mf.format(plannedFunds[i][1])); 
 					if(measures.indexOf(new Long(6))!=-1)
 						ampFund.setPlExpAmount(mf.format(plannedFunds[i][2]));	
+					if(measures.indexOf(new Long(7))!=-1)
+						ampFund.setUnDisbAmount(mf.format(actualFunds[i][0]-actualFunds[i][1]));	
 
 					report.getAmpFund().add(ampFund);
 				}

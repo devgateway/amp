@@ -89,6 +89,7 @@ public class AdvancedReportForm extends ActionForm
 	private Collection fiscalYearRange;
 	private int totalColumns;
 	private int fundColumns;
+	private int dimColumns;
 	private Collection totDisbFund;
 	private Collection totFund;
 	private String totComm;
@@ -105,6 +106,7 @@ public class AdvancedReportForm extends ActionForm
 	private String plCommFlag;
 	private String plDisbFlag;
 	private String plExpFlag;
+	private String acBalFlag;
 
 	
 	public String getPieImageUrl()
@@ -1165,12 +1167,28 @@ private int yrDiff;
 		plExpFlag = string;
 	}
 
+	public String getAcBalFlag() {
+		return acBalFlag;
+	}
+
+	public void setAcBalFlag(String string) {
+		acBalFlag = string;
+	}
+
 	public int getFundColumns() {
 		return fundColumns;
 	}
 
 	public void setFundColumns(int i) {
 		fundColumns = i;
+	}
+
+	public int getDimColumns() {
+		return dimColumns;
+	}
+
+	public void setDimColumns(int i) {
+		dimColumns = i;
 	}
 	public String getCreatedReportId() {
 		return createdReportId;

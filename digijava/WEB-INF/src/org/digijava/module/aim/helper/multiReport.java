@@ -43,7 +43,7 @@ public class multiReport
 	private String sectorUnDisbAmount;
 	private String sectorPlannedDisbAmount;
 	private String sectorExpAmount;
-	
+		
 	
 	private int count;
 	
@@ -409,6 +409,9 @@ public class multiReport
 
 	public void setSectorExpAmount(String s) 
 	{
+	
 		sectorExpAmount = s;
 	}
+
+	
 }

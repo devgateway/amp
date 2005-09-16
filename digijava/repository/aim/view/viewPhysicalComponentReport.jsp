@@ -448,8 +448,9 @@
 			<td align="center"><bean:write name="donors" property="donorCount"/>.<bean:write name="project" property="count"/></td>
 				<td align="left" height="21" > 
 					<bean:write name="project" property="name"/>
-					<logic:notEmpty name="project" property="description"><br><b>Description</b><br>
-				<bean:write name="project" property="description" /></logic:notEmpty>
+					<logic:notEqual name="project" property="description" value=" ">
+					<br><br><b>Description</b><br><br>
+				<bean:write name="project" property="description" /></logic:notEqual>
 				</td>
 				
 					<td align="left" height="21" width="39">

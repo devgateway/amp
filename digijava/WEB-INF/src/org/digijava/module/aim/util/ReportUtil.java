@@ -31,6 +31,7 @@ import org.digijava.module.aim.dbentity.AmpTeamReports;
 import org.digijava.module.aim.dbentity.AmpReportCache;
 import org.digijava.module.aim.dbentity.AmpReportSector;
 import org.digijava.module.aim.dbentity.AmpReportColumn;
+import org.digijava.module.aim.dbentity.AmpActor;
 import org.digijava.module.editor.dbentity.Editor;
 import org.digijava.module.aim.dbentity.AmpSector;
 import org.digijava.module.aim.helper.AmpFund;
@@ -53,6 +54,8 @@ import org.digijava.module.aim.helper.ProjectTermAssist;
 import org.digijava.module.aim.helper.CurrencyWorker;
 import org.digijava.module.aim.helper.DateConversion;
 import org.digijava.module.aim.helper.AmpComponent;
+import org.digijava.module.aim.helper.Issues;
+import org.digijava.module.aim.helper.Measures;
 import org.digijava.module.aim.dbentity.AmpMeasures;
 
 
@@ -10421,6 +10424,29 @@ public class ReportUtil {
 							project.setPlannedCompletionDate(DateConversion.ConvertDateToString(ampReportCache.getPlannedCompletionDate()));
 							if(DbUtil.getAmpReportPhysicalPerformance(ampReportCache.getAmpActivityId()) !=null)
 								project.getProgress().addAll(DbUtil.getAmpReportPhysicalPerformance(ampReportCache.getAmpActivityId()));
+							if(ActivityUtil.getIssues(ampReportCache.getAmpActivityId())!=null)
+							{
+								ArrayList issues = ActivityUtil.getIssues(ampReportCache.getAmpActivityId());
+								Iterator issueIter=issues.iterator();
+								while(issueIter.hasNext())
+								{
+									Issues issue=(Issues) issueIter.next();
+									project.getIssues().add(issue.getName());
+									Iterator measureIter=issue.getMeasures().iterator();
+									while(measureIter.hasNext())
+									{
+										Measures measure=(Measures) measureIter.next();
+										project.getMeasures().add(measure.getName());
+										Iterator actorIter=measure.getActors().iterator();
+										while(actorIter.hasNext())
+										{
+											AmpActor actor = (AmpActor) actorIter.next();
+											project.getResponsibleActor().add(actor.getName());
+										}
+									}
+								}
+							}		
+
 						}
 						logger.info("End init");
 					}
@@ -10447,6 +10473,28 @@ public class ReportUtil {
 							project.setAcCommitment(mf.format(0));
 							project.setAcDisbursement(mf.format(0));
 							project.setAcUnDisbursement(mf.format(0));
+							if(ActivityUtil.getIssues(ampReportCache.getAmpActivityId())!=null)
+							{
+								ArrayList issues = ActivityUtil.getIssues(ampReportCache.getAmpActivityId());
+								Iterator issueIter=issues.iterator();
+								while(issueIter.hasNext())
+								{
+									Issues issue=(Issues) issueIter.next();
+									project.getIssues().add(issue.getName());
+									Iterator measureIter=issue.getMeasures().iterator();
+									while(measureIter.hasNext())
+									{
+										Measures measure=(Measures) measureIter.next();
+										project.getMeasures().add(measure.getName());
+										Iterator actorIter=measure.getActors().iterator();
+										while(actorIter.hasNext())
+										{
+											AmpActor actor = (AmpActor) actorIter.next();
+											project.getResponsibleActor().add(actor.getName());
+										}
+									}
+								}
+							}
 							ampTeamDonors.getProject().add(project);
 					}
 
@@ -10490,6 +10538,28 @@ public class ReportUtil {
 							project.setPlannedCompletionDate(DateConversion.ConvertDateToString(ampReportCache.getPlannedCompletionDate()));
 							if(DbUtil.getAmpReportPhysicalPerformance(ampReportCache.getAmpActivityId()) !=null)
 								project.getProgress().addAll(DbUtil.getAmpReportPhysicalPerformance(ampReportCache.getAmpActivityId()));
+							if(ActivityUtil.getIssues(ampReportCache.getAmpActivityId())!=null)
+							{
+								ArrayList issues = ActivityUtil.getIssues(ampReportCache.getAmpActivityId());
+								Iterator issueIter=issues.iterator();
+								while(issueIter.hasNext())
+								{
+									Issues issue=(Issues) issueIter.next();
+									project.getIssues().add(issue.getName());
+									Iterator measureIter=issue.getMeasures().iterator();
+									while(measureIter.hasNext())
+									{
+										Measures measure=(Measures) measureIter.next();
+										project.getMeasures().add(measure.getName());
+										Iterator actorIter=measure.getActors().iterator();
+										while(actorIter.hasNext())
+										{
+											AmpActor actor = (AmpActor) actorIter.next();
+											project.getResponsibleActor().add(actor.getName());
+										}
+									}
+								}
+							}
 							logger.info("Outside Donor");
 						}
 					}
@@ -10525,6 +10595,28 @@ public class ReportUtil {
 							project.setPlannedCompletionDate(DateConversion.ConvertDateToString(ampReportCache.getPlannedCompletionDate()));
 							if(DbUtil.getAmpReportPhysicalPerformance(ampReportCache.getAmpActivityId()) !=null)
 								project.getProgress().addAll(DbUtil.getAmpReportPhysicalPerformance(ampReportCache.getAmpActivityId()));
+							if(ActivityUtil.getIssues(ampReportCache.getAmpActivityId())!=null)
+							{
+								ArrayList issues = ActivityUtil.getIssues(ampReportCache.getAmpActivityId());
+								Iterator issueIter=issues.iterator();
+								while(issueIter.hasNext())
+								{
+									Issues issue=(Issues) issueIter.next();
+									project.getIssues().add(issue.getName());
+									Iterator measureIter=issue.getMeasures().iterator();
+									while(measureIter.hasNext())
+									{
+										Measures measure=(Measures) measureIter.next();
+										project.getMeasures().add(measure.getName());
+										Iterator actorIter=measure.getActors().iterator();
+										while(actorIter.hasNext())
+										{
+											AmpActor actor = (AmpActor) actorIter.next();
+											project.getResponsibleActor().add(actor.getName());
+										}
+									}
+								}
+							}
 							logger.info("Outside Project");
 						}
 					}

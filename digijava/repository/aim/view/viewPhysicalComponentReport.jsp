@@ -478,7 +478,7 @@
 					</logic:iterate>
 					</logic:notEmpty>
 					</td>
-					<td align="right" height="21" width="86" >
+					<td align="left" height="21" >
 						<logic:empty name="project" property="issues">&nbsp;
 					</logic:empty>
 					<logic:notEmpty name="project" property="issues">
@@ -487,7 +487,7 @@
 					</logic:iterate>
 					</logic:notEmpty>
 					</td>
-					<td align="right" height="21" width="86" >
+					<td align="left" height="21" >
 						<logic:empty name="project" property="measures">&nbsp;
 					</logic:empty>
 					<logic:notEmpty name="project" property="measures">
@@ -496,7 +496,7 @@
 					</logic:iterate>
 					</logic:notEmpty>
 					</td>
-					<td align="left" height="21" width="39">
+					<td align="left" height="21" >
 					<logic:empty name="project" property="responsibleActor">&nbsp;
 					</logic:empty>
 					<logic:notEmpty name="project" property="responsibleActor">

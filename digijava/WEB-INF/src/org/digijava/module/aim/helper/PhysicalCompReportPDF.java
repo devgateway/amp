@@ -94,10 +94,10 @@ public class PhysicalCompReportPDF
 			p2.println("isPrintInFirstWholeBand='false'");
 			p2.println("isPrintWhenDetailOverflows='false'/>");
 
-			p2.println("<textElement textAlignment='Center' verticalAlignment='Middle' rotation='None' lineSpacing='Single'>");
+			p2.println("<textElement textAlignment='Left' verticalAlignment='Middle' rotation='None' lineSpacing='Single'>");
 			p2.println("<font fontName='Arial' pdfFontName='Helvetica' size='10' isBold='true' isItalic='false' isUnderline='false' isPdfEmbedded ='false' pdfEncoding ='Cp1252' isStrikeThrough='false' />");
 			p2.println("</textElement>");
-			p2.println("<textFieldExpression   class='java.lang.String'><![CDATA[\" Agency: \"+ $F{c4}]]></textFieldExpression>");
+			p2.println("<textFieldExpression   class='java.lang.String'><![CDATA[$F{c4}]]></textFieldExpression>");
 			p2.println("</textField>");
 			p2.println("</band>");
 			p2.println("</groupHeader>");
@@ -184,7 +184,7 @@ public class PhysicalCompReportPDF
 			p2.println("<textElement textAlignment='Center' verticalAlignment='Middle' rotation='None' lineSpacing='Single'>");
 			p2.println("<font fontName='Arial' pdfFontName='Helvetica' size='14' isBold='true' isItalic='false' isUnderline='false' isPdfEmbedded ='false' pdfEncoding ='Cp1252' isStrikeThrough='false' />");
 			p2.println("</textElement>");
-			p2.println("<text><![CDATA[Annual Report by Project]]></text>");
+			p2.println("<text><![CDATA[Physical Component Report]]></text>");
 			p2.println("</staticText>");
 			p2.println("<textField isStretchWithOverflow='true' pattern='' isBlankWhenNull='false' evaluationTime='Now' hyperlinkType='None'   >");
 			p2.println("<reportElement");
@@ -298,7 +298,7 @@ public class PhysicalCompReportPDF
 			p2.println("<textElement textAlignment='Center' verticalAlignment='Middle' rotation='None' lineSpacing='Single'>");
 			p2.println("<font fontName='Arial' pdfFontName='Helvetica' size='10' isBold='true' isItalic='false' isUnderline='false' isPdfEmbedded ='false' pdfEncoding ='Cp1252' isStrikeThrough='false' />");
 			p2.println("</textElement>");
-			p2.println("<text><![CDATA[Signature Date]]></text>");
+			p2.println("<text><![CDATA[Commitment Date]]></text>");
 			p2.println("</staticText>");
 			p2.println("<staticText>");
 			p2.println("<reportElement");
@@ -320,7 +320,7 @@ public class PhysicalCompReportPDF
 			p2.println("<textElement textAlignment='Center' verticalAlignment='Middle' rotation='None' lineSpacing='Single'>");
 			p2.println("<font fontName='Arial' pdfFontName='Helvetica' size='10' isBold='true' isItalic='false' isUnderline='false' isPdfEmbedded ='false' pdfEncoding ='Cp1252' isStrikeThrough='false' />");
 			p2.println("</textElement>");
-			p2.println("<text><![CDATA[Ending Date]]></text>");
+			p2.println("<text><![CDATA[Completion Date]]></text>");
 			p2.println("</staticText>");
 			p2.println("<staticText>");
 			p2.println("<reportElement");
@@ -342,7 +342,7 @@ public class PhysicalCompReportPDF
 			p2.println("<textElement textAlignment='Center' verticalAlignment='Middle' rotation='None' lineSpacing='Single'>");
 			p2.println("<font fontName='Arial' pdfFontName='Helvetica' size='10' isBold='true' isItalic='false' isUnderline='false' isPdfEmbedded ='false' pdfEncoding ='Cp1252' isStrikeThrough='false' />");
 			p2.println("</textElement>");
-			p2.println("<text><![CDATA[Total Allocation]]></text>");
+			p2.println("<text><![CDATA[Total Commitments]]></text>");
 			p2.println("</staticText>");
 			p2.println("<staticText>");
 			p2.println("<reportElement");
@@ -364,7 +364,7 @@ public class PhysicalCompReportPDF
 			p2.println("<textElement textAlignment='Center' verticalAlignment='Middle' rotation='None' lineSpacing='Single'>");
 			p2.println("<font fontName='Arial' pdfFontName='Helvetica' size='10' isBold='true' isItalic='false' isUnderline='false' isPdfEmbedded ='false' pdfEncoding ='Cp1252' isStrikeThrough='false' />");
 			p2.println("</textElement>");
-			p2.println("<text><![CDATA[Cumulative Expenditure]]></text>");
+			p2.println("<text><![CDATA[Cumulative Disbursements]]></text>");
 			p2.println("</staticText>");
 			p2.println("<staticText>");
 			p2.println("<reportElement");
@@ -603,7 +603,7 @@ public class PhysicalCompReportPDF
 			p2.println("isPrintInFirstWholeBand='false'");
 			p2.println("isPrintWhenDetailOverflows='false'/>");
 
-			p2.println("<textElement textAlignment='Center' verticalAlignment='Middle' rotation='None' lineSpacing='Single'>");
+			p2.println("<textElement textAlignment='Right' verticalAlignment='Middle' rotation='None' lineSpacing='Single'>");
 			p2.println("<font fontName='Arial' pdfFontName='Helvetica' size='8' isBold='false' isItalic='false' isUnderline='false' isPdfEmbedded ='false' pdfEncoding ='Cp1252' isStrikeThrough='false' />");
 			p2.println("</textElement>");
 			p2.println("<textFieldExpression   class='java.lang.String'><![CDATA[$F{c9}]]></textFieldExpression>");
@@ -625,7 +625,7 @@ public class PhysicalCompReportPDF
 			p2.println("isPrintInFirstWholeBand='false'");
 			p2.println("isPrintWhenDetailOverflows='false'/>");
 
-			p2.println("<textElement textAlignment='Center' verticalAlignment='Middle' rotation='None' lineSpacing='Single'>");
+			p2.println("<textElement textAlignment='Right' verticalAlignment='Middle' rotation='None' lineSpacing='Single'>");
 			p2.println("<font fontName='Arial' pdfFontName='Helvetica' size='8' isBold='false' isItalic='false' isUnderline='false' isPdfEmbedded ='false' pdfEncoding ='Cp1252' isStrikeThrough='false' />");
 			p2.println("</textElement>");
 			p2.println("<textFieldExpression   class='java.lang.String'><![CDATA[$F{c10}]]></textFieldExpression>");

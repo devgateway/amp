@@ -131,7 +131,16 @@ public class PhysicalComponentReportPDF extends Action
 					projectIter = ampProjects.iterator();
 					while(projectIter.hasNext())
 					{
-						temp = "                           Team Name: " + report.getTeamName();
+						String filtName[] = new String[2];
+						int ind = 0;
+						filtName = formBean.getFilter();
+						for(int i=0; i<filterName.length; i++)
+						{	
+							ind = ind + 1;
+							data[row][ind] = filterName[i];
+						}
+
+						temp = "Team Name: " + report.getTeamName();
 						data[row][3] = data[row][3].toString()+temp;
 						
 						data[row][4] = teamDonors.getDonorAgency().trim();
@@ -143,19 +152,19 @@ public class PhysicalComponentReportPDF extends Action
 						
 						if(project.getDescription() != null)
 						{
-							data[row][6] = project.getDescription().trim();
+							data[row][5] = data[row][5] + "  \n\nDescription :  " +project.getDescription().trim();
 							calculateFieldHeight(project.getDescription());
 						}
 						
-						data[row][7] = project.getSignatureDate();
-						data[row][8] = project.getPlannedCompletionDate();
-						data[row][9] = project.getAcCommitment();
-						data[row][10] = project.getAcDisbursement();
-						data[row][11] = project.getAcUnDisbursement();
+						data[row][6] = project.getSignatureDate();
+						data[row][7] = project.getPlannedCompletionDate();
+						data[row][8] = project.getAcCommitment();
+						data[row][9] = project.getAcDisbursement();
+						data[row][10] = project.getAcUnDisbursement();
 						
-						data[row][12] = project.getProgress().toString().trim().replace('[',' ').replace(']',' ');
-						data[row][13] = project.getMeasures().toString().trim().replace('[',' ').replace(']',' ');
-						data[row][14] = project.getResponsibleActor().toString().trim().replace('[',' ').replace(']',' ');
+						data[row][11] = project.getProgress().toString().trim().replace('[',' ').replace(']',' ');
+						data[row][12] = project.getMeasures().toString().trim().replace('[',' ').replace(']',' ');
+						data[row][13] = project.getResponsibleActor().toString().trim().replace('[',' ').replace(']',' ');
 						
 						row = row + 1;
 					}// End of Project Collection

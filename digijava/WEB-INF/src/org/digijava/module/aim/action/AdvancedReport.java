@@ -6,6 +6,7 @@
 package org.digijava.module.aim.action;
 
 
+import java.text.DecimalFormat;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.Iterator;
@@ -41,6 +42,7 @@ import org.digijava.module.aim.dbentity.AmpTeamReports;
 import org.digijava.kernel.persistence.PersistenceManager;
 
 import org.digijava.module.aim.helper.AmpFund;
+import org.digijava.module.aim.helper.DecimalToText;
 
 import org.jfree.chart.*;
 import org.jfree.chart.plot.*;
@@ -86,6 +88,7 @@ public class AdvancedReport extends Action {
 		String sqlQuery;		
 		Iterator iter;
 		Collection coll = new ArrayList();
+		DecimalFormat mf = new DecimalFormat("###,###,###,###,###") ;
 		TeamMember teamMember=(TeamMember)httpSession.getAttribute("currentMember");
 		logger.info(teamMember.getMemberId());
 		if(teamMember==null)
@@ -433,6 +436,67 @@ public class AdvancedReport extends Action {
 						logger.info(" page REC " + pageRecords.size());
 				 		logger.info(" REPORTS  " + reports.size());
 					}
+
+//					---------------------------------------------------		
+					/*BEGIN CODE FOR GRAND TOTAL*/
+					int yearRange=(toYr-fromYr)+1;
+					double[][] totFunds=new double[yearRange][7];
+					iter = reports.iterator() ;
+				//	logger.debug("Grand Total :" + grandTotal);
+					while ( iter.hasNext() )
+					{
+						Report report=(Report) iter.next();
+						Iterator advIter=report.getRecords().iterator();
+						while(advIter.hasNext())
+						{
+							org.digijava.module.aim.helper.AdvancedReport advancedReport=(org.digijava.module.aim.helper.AdvancedReport) advIter.next();
+							if(advancedReport.getAmpFund()!=null)
+							{
+								Iterator iterFund = advancedReport.getAmpFund().iterator();
+								for(int i=0;i<yearRange ;i++ )
+								{
+									AmpFund ampFund=(AmpFund) iterFund.next();
+									if(measures.indexOf(new Long(1))!=-1)
+										totFunds[i][0]=totFunds[i][0] + Double.parseDouble(DecimalToText.removeCommas(ampFund.getCommAmount()));
+									if(measures.indexOf(new Long(2))!=-1)
+										totFunds[i][1]=totFunds[i][1] + Double.parseDouble(DecimalToText.removeCommas(ampFund.getDisbAmount()));
+									if(measures.indexOf(new Long(3))!=-1)
+										totFunds[i][2]=totFunds[i][2] + Double.parseDouble(DecimalToText.removeCommas(ampFund.getExpAmount()));
+									if(measures.indexOf(new Long(4))!=-1)
+										totFunds[i][3]=totFunds[i][3] + Double.parseDouble(DecimalToText.removeCommas(ampFund.getPlCommAmount()));
+									if(measures.indexOf(new Long(5))!=-1)
+										totFunds[i][4]=totFunds[i][4] + Double.parseDouble(DecimalToText.removeCommas(ampFund.getPlDisbAmount()));
+									if(measures.indexOf(new Long(6))!=-1)
+										totFunds[i][5]=totFunds[i][5] + Double.parseDouble(DecimalToText.removeCommas(ampFund.getPlExpAmount()));
+									if(measures.indexOf(new Long(7))!=-1)
+										totFunds[i][6]=totFunds[i][6] + Double.parseDouble(DecimalToText.removeCommas(ampFund.getUnDisbAmount()));
+								}
+							}
+						}	
+					}
+					formBean.setTotFund(new ArrayList());
+					for(int i=0;i<yearRange ;i++ )
+					{
+						AmpFund ampFund=new AmpFund();
+						if(measures.indexOf(new Long(1))!=-1)
+							ampFund.setCommAmount(mf.format(totFunds[i][0])); 
+						if(measures.indexOf(new Long(2))!=-1)
+							ampFund.setDisbAmount(mf.format(totFunds[i][1])); 
+						if(measures.indexOf(new Long(3))!=-1)
+							ampFund.setExpAmount(mf.format(totFunds[i][2]));	
+						if(measures.indexOf(new Long(4))!=-1)
+							ampFund.setPlCommAmount(mf.format(totFunds[i][3])); 
+						if(measures.indexOf(new Long(5))!=-1)
+							ampFund.setPlDisbAmount(mf.format(totFunds[i][4])); 
+						if(measures.indexOf(new Long(6))!=-1)
+							ampFund.setPlExpAmount(mf.format(totFunds[i][5]));	
+						if(measures.indexOf(new Long(7))!=-1)
+							ampFund.setUnDisbAmount(mf.format(totFunds[i][6]));	
+						formBean.getTotFund().add(ampFund);
+					}
+
+							/*END CODE FOR GRAND TOTAL*/
+
 
 					formBean.setForecastYear(new ArrayList());
 					for(int i=toYr;i<=(toYr+3);i++)

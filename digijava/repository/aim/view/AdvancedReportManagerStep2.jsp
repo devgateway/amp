@@ -41,7 +41,7 @@ function gotoStep() {
 <tr>
 
 <td width="100%" vAlign="top" align="left">
-<table bgColor=#ffffff cellPadding=0 cellSpacing=0 width="770" vAlign="top" align="left" border=0>
+<table bgColor=#ffffff cellPadding=0 cellSpacing=0 vAlign="top" align="left" border=0>
 	<tr>
 
 	<td class=r-dotted-lg align=left vAlign=top >	&nbsp;</td>
@@ -376,6 +376,63 @@ function gotoStep() {
 				</td>																		</logic:iterate>
 																	</tr>
 																</logic:iterate>
+			  <tr background="#F4F4F2"><td align="left" > <b> Total</b></td>
+			  <logic:iterate name="aimAdvancedReportForm"  property="addedColumns" id="addedColumns">
+				  <td>
+				  </td>
+				</logic:iterate>
+			  <logic:iterate name="aimAdvancedReportForm"  property="totFund" id="totFund" type="org.digijava.module.aim.helper.AmpFund">
+			  <logic:equal name="aimAdvancedReportForm" property="acCommFlag" value="true">
+						<td align="right" height="21" width="69">
+							<logic:notEqual name="totFund" property="commAmount" value="0">
+							<b><bean:write name="totFund" property="commAmount" /></b>
+							</logic:notEqual>
+						</td>
+				</logic:equal>
+				<logic:equal name="aimAdvancedReportForm" property="acDisbFlag" value="true">
+						<td align="right" height="21" width="69">
+							<logic:notEqual name="totFund" property="disbAmount" value="0">
+							<b><bean:write name="totFund" property="disbAmount" /></b>
+							</logic:notEqual>
+						</td>
+				</logic:equal>
+				<logic:equal name="aimAdvancedReportForm" property="acExpFlag" value="true">
+						<td align="right" height="21" width="69">
+							<logic:notEqual name="totFund" property="expAmount" value="0">
+							<b><bean:write name="totFund" property="expAmount" /></b>
+							</logic:notEqual>
+						</td>
+				</logic:equal>
+				<logic:equal name="aimAdvancedReportForm" property="plCommFlag" value="true">
+						<td align="right" height="21" width="69">
+							<logic:notEqual name="totFund" property="plCommAmount" value="0">
+							<b><bean:write name="totFund" property="plCommAmount" /></b>
+							</logic:notEqual>
+						</td>
+				</logic:equal>
+				<logic:equal name="aimAdvancedReportForm" property="plDisbFlag" value="true">
+						<td align="right" height="21" width="69">
+							<logic:notEqual name="totFund" property="plDisbAmount" value="0">
+							<b><bean:write name="totFund" property="plDisbAmount" />	</b>
+							</logic:notEqual>
+						</td>
+				</logic:equal>
+				<logic:equal name="aimAdvancedReportForm" property="plExpFlag" value="true">
+						<td align="right" height="21" width="69">
+							<logic:notEqual name="totFund" property="plExpAmount" value="0">
+							<b><bean:write name="totFund" property="plExpAmount" /></b>
+							</logic:notEqual>
+						</td>
+				</logic:equal>
+				<logic:equal name="aimAdvancedReportForm" property="acBalFlag" value="true">
+						<td align="right" height="21" width="69">
+							<logic:notEqual name="totFund" property="unDisbAmount" value="0">
+							<b><bean:write name="totFund" property="unDisbAmount" /></b>
+							</logic:notEqual>
+						</td>
+				</logic:equal>
+					</logic:iterate>
+				</tr>																
 																</logic:notEmpty>
 															</TABLE>
 														</td>

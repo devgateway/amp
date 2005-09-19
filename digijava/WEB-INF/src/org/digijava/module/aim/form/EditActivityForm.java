@@ -260,7 +260,6 @@ public class EditActivityForm extends ActionForm implements Serializable{
 	private Long actorId;
 	
 	private String editKey;
-	
 
 	public EditActivityForm() {
 		step = "1";

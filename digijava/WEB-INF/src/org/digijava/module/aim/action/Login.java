@@ -14,9 +14,15 @@ import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
+import org.digijava.kernel.entity.UserLangPreferences;
+import org.digijava.kernel.request.Site;
+import org.digijava.kernel.request.SiteDomain;
 import org.digijava.kernel.security.HttpLoginManager;
 import org.digijava.kernel.user.User;
 import org.digijava.kernel.util.DgUtil;
+import org.digijava.kernel.util.RequestUtils;
+import org.digijava.kernel.util.SiteUtils;
+import org.digijava.kernel.util.UserUtils;
 import org.digijava.module.aim.dbentity.AmpApplicationSettings;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.dbentity.AmpTeamMemberRoles;
@@ -205,7 +211,16 @@ public class Login extends Action {
 					session.setMaxInactiveInterval(-1);
 					lForm.setLogin(true);
 
-					return mapping.findForward("viewMyDesktop");
+					SiteDomain currentDomain = RequestUtils.getSiteDomain(request);
+					
+					String context = SiteUtils.getSiteURL(currentDomain, request.getScheme(),
+		                            request.getServerPort(),
+		                            request.getContextPath());					
+					
+					String url = context + "/translation/switchLanguage.do?code=" +
+						tm.getAppSettings().getLanguage() +"&rfr="+context+"/aim/viewMyDesktop.do";
+					
+					response.sendRedirect(url);
 
 				} else if (members.size() > 1) {
 					lForm.setMembers(members);

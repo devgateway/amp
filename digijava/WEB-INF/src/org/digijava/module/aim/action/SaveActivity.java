@@ -709,7 +709,6 @@ public class SaveActivity extends Action {
 		    Collections.sort(sessList);
             ampContext.setAttribute("editActivityList",activityMap);		    
 		    ampContext.setAttribute("sessionList",sessList);
-		    
 		} else {
 			AmpTeamMember teamMember = DbUtil.getAmpTeamMember(tm.getMemberId()) ;
 			activity.setActivityCreator(teamMember);
@@ -717,7 +716,6 @@ public class SaveActivity extends Action {
 			activity.setCreatedDate(cal.getTime());			
 			// create a new activity
 			ActivityUtil.saveActivity(activity, eaForm.getCommentsCol(), eaForm.isSerializeFlag(), field);
-			//ObjectPersister.removeObject(getRealPath(tm.getMemberId()));
 		}
 
 		eaForm.setStep("1");

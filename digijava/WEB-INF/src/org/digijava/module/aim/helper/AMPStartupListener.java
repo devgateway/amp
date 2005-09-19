@@ -75,9 +75,7 @@ public class AMPStartupListener
 
                 String description = "";
                 String objectives = "";
-                long actUserId = 0;
                 long activityId = 0;
-                long currUserId = 0;
                 long currTime = System.currentTimeMillis();
                 String objKey = "aim-obj-";
                 String descKey = "aim-desc-";
@@ -144,6 +142,25 @@ public class AMPStartupListener
                 }
                 logger.debug("Moved.");
             }
+            
+            logger.debug("Changing the language name to code");
+            qryStr = "select distinct language from " +
+            		"amp_application_settings where length(language) > 2";
+            rs = stmt.executeQuery(qryStr);
+            while (rs.next()) {
+            	String lang = rs.getString(1);
+            	qryStr = "select code from dg_locale" +
+            			" where name = '" + lang + "'";
+            	ResultSet rs1 = con.createStatement().executeQuery(qryStr);
+            	while (rs1.next()) {
+            		String code = rs1.getString(1);
+            		qryStr = "update amp_application_settings" +
+            				" set language='" + code + "' where " +
+            				"language='" + lang + "'";
+            		con.createStatement().executeUpdate(qryStr);
+            	}
+            }
+            
             stmt.close();
             session.close();
             

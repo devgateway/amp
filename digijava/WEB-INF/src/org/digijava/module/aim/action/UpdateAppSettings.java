@@ -17,6 +17,7 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.digijava.kernel.entity.Locale;
+import org.digijava.kernel.request.SiteDomain;
 import org.digijava.kernel.translator.util.TrnLocale;
 import org.digijava.kernel.translator.util.TrnUtil;
 import org.digijava.kernel.util.RequestUtils;
@@ -48,12 +49,16 @@ public class UpdateAppSettings extends Action {
 		}
 
 		TeamMember tm = (TeamMember) session.getAttribute("currentMember");
+		
+		if (request.getParameter("updated") != null &&
+				request.getParameter("updated").equals("true")) {
+			uForm.setUpdated(true);
+		} else {
+			uForm.setUpdated(false);
+		}
 
-		logger.debug("uForm.getType() = " + uForm.getType());
-
-		if (uForm.getUpdateFlag() == true || uForm.getType() == null
+		if (uForm.getType() == null
 				|| uForm.getType().trim().equals("")) {
-			uForm.setUpdateFlag(false);
 			String path = mapping.getPath();
 			logger.debug("path = " + path);
 			AmpApplicationSettings ampAppSettings = null;
@@ -114,9 +119,10 @@ public class UpdateAppSettings extends Action {
 				return mapping.findForward("showDefaultSettings");
 			}
 		} else {
-
+			logger.debug("In saving");
+			AmpApplicationSettings ampAppSettings = null;
 			if (uForm.getSave() != null) {
-				AmpApplicationSettings ampAppSettings = new AmpApplicationSettings();
+				ampAppSettings = new AmpApplicationSettings();
 				ampAppSettings.setAmpAppSettingsId(uForm.getAppSettingsId());
 				ampAppSettings.setDefaultRecordsPerPage(new Integer(uForm
 						.getDefRecsPerPage()));
@@ -152,21 +158,19 @@ public class UpdateAppSettings extends Action {
 
 				try {
 					DbUtil.update(ampAppSettings);
-					uForm.setUpdated(true); // to show the message on the jsp
-											// that the
-					// application settings has been updated.
+					uForm.setUpdated(true);
 				} catch (Exception e) {
 					uForm.setUpdated(false);
 				}
 			} else if (uForm.getRestore() != null) {
-				AmpApplicationSettings teamSettings = DbUtil
+				ampAppSettings = DbUtil
 						.getTeamAppSettings(tm.getTeamId());
 				AmpApplicationSettings memSettings = DbUtil
 						.getMemberAppSettings(tm.getMemberId());
 				AmpTeamMember member = DbUtil
 						.getAmpTeamMember(tm.getMemberId());
 				try {
-					restoreApplicationSettings(memSettings, teamSettings,
+					restoreApplicationSettings(memSettings, ampAppSettings,
 							member);
 					uForm.setUpdated(true);
 				} catch (Exception e) {
@@ -183,12 +187,28 @@ public class UpdateAppSettings extends Action {
 			}
 			logger.debug("settings updated");
 
-			uForm.setUpdateFlag(true);
-
+			uForm.setUpdateFlag(false);
+			SiteDomain currentDomain = RequestUtils.getSiteDomain(request);
+			
+			String context = SiteUtils.getSiteURL(currentDomain, request.getScheme(),
+                            request.getServerPort(),
+                            request.getContextPath());					
 			if (uForm.getType().equals("default")) {
-				return mapping.findForward("default");
+				uForm.setType(null);
+				String url = context + "/translation/switchLanguage.do?code=" +
+				ampAppSettings.getLanguage() +"&rfr="+context+"/aim/defaultSettings.do~updated="+uForm.getUpdated();
+				response.sendRedirect(url);					
+				logger.debug("redirecting " + url + " ....");
+				//return mapping.findForward("default");
+				return null;
 			} else if (uForm.getType().equals("userSpecific")) {
-				return mapping.findForward("userSpecific");
+				uForm.setType(null);
+				String url = context + "/translation/switchLanguage.do?code=" +
+				ampAppSettings.getLanguage() +"&rfr="+context+"/aim/customizeSettings.do~updated="+uForm.getUpdated();
+				response.sendRedirect(url);					
+				logger.debug("redirecting " + url + " ....");
+				//return mapping.findForward("userSpecific");
+				return null;
 			} else {
 				return mapping.findForward("index");
 			}

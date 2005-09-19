@@ -116,7 +116,7 @@
 															<html:select property="language" styleClass="inp-text">
 										                <bean:define id="languages" name="aimUpdateAppSettingsForm" 
 															 property="languages" type="java.util.Collection" />
-										                <html:options collection="languages" property="name" labelProperty="name" />
+										                <html:options collection="languages" property="code" labelProperty="name" />
 															</html:select>
 														</td>
 													</tr>

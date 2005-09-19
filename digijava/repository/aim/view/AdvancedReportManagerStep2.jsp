@@ -213,6 +213,9 @@ function gotoStep() {
 																			<strong><%=fiscalYearRange%></strong>
 																		</td>
 																	</logic:iterate>
+																	<td width="69" colspan=7 align=center >
+																		<b> Total 	</b>
+																	</td>
 															    </tr>
 															   	<tr>
 																	<td></td>
@@ -221,58 +224,135 @@ function gotoStep() {
 																		</td>
 																	</logic:iterate>
 																	<logic:iterate name="aimAdvancedReportForm"  property="fiscalYearRange" id="fiscalYearRange">
-				<logic:equal name="aimAdvancedReportForm" property="acCommFlag" value="true">
-					<td height="21" width="23" align="center" >
-					<a title="<digi:trn key="aim:actualCommitment">Actual Commitment</digi:trn>">
-					<digi:trn key="aim:actualCommitment">Actual Commitment</digi:trn>
-					</a>
-					</td>
-				</logic:equal>
-				<logic:equal name="aimAdvancedReportForm" property="acDisbFlag" value="true">
-					<td height="21" width="23" align="center" >
-					<a title="<digi:trn key="aim:DisbursementofFund">Release of funds to, or the purchase of goods or services for a recipient; by extension, the amount thus spent. Disbursements record the actual international transfer of financial resources, or of goods or services valued at the cost to the donor</digi:trn>">
-					<digi:trn key="aim:actualDisbursement">Actual Disbursement</digi:trn>
-					</a>
-					</td>
-				</logic:equal>
-				<logic:equal name="aimAdvancedReportForm" property="acExpFlag" value="true">
-					<td height="21" width="23" align="center" >
-					<a title="<digi:trn key="aim:ExpenditureofFunds">Amount effectively spent by the implementing agency</digi:trn>">
-					<digi:trn key="aim:actualExpenditure">Actual Expenditure</digi:trn>
-					</a>
-					</td>
-				</logic:equal>
-
-
-				<logic:equal name="aimAdvancedReportForm" property="plCommFlag" value="true">
-					<td height="21" width="23" align="center" >
-					<a title="<digi:trn key="aim:plannedCommitment">Planned Commitment</digi:trn>">
-					<digi:trn key="aim:plannedCommitment">Planned Commitment</digi:trn>
-					</a>
-					</td>
-				</logic:equal>
-				<logic:equal name="aimAdvancedReportForm" property="plDisbFlag" value="true">
-					<td height="21" width="23" align="center" >
-					<a title="<digi:trn key="aim:DisbursementofFund">Release of funds to, or the purchase of goods or services for a recipient; by extension, the amount thus spent. Disbursements record the actual international transfer of financial resources, or of goods or services valued at the cost to the donor</digi:trn>">
-					<digi:trn key="aim:plannedDisbursement">Planned Disbursement</digi:trn>
-					</a>
-					</td>
-				</logic:equal>
-				<logic:equal name="aimAdvancedReportForm" property="plExpFlag" value="true">
-					<td height="21" width="23" align="center" >
-					<a title="<digi:trn key="aim:ExpenditureofFunds">Amount effectively spent by the implementing agency</digi:trn>">
-					<digi:trn key="aim:plannedExpenditure">Planned Expenditure</digi:trn>
-					</a>
-					</td>
-				</logic:equal>
-
-				<logic:equal name="aimAdvancedReportForm" property="acBalFlag" value="true">
-					<td height="21" width="23" align="center" >
-					<digi:trn key="aim:cumulativeBalance">Cumulative Balance</digi:trn>
-					</td>
-				</logic:equal>
-
+																		<logic:iterate name="aimAdvancedReportForm"  property="addedMeasures" id="addedMeasures">																	
+																			<c:if test="${addedMeasures.measureName == 'Actual Commitments'}">
+																			<logic:equal name="aimAdvancedReportForm" property="acCommFlag" value="true">
+																				<td height="21" width="23" align="center" >
+																				<a title="<digi:trn key="aim:actualCommitment">Actual Commitment</digi:trn>">
+																				<digi:trn key="aim:actualCommitment">Actual Commitment</digi:trn>
+																				</a>
+																				</td>
+																			</logic:equal>
+																			</c:if>
+																			<c:if test="${addedMeasures.measureName == 'Actual Disbursements'}">
+																			<logic:equal name="aimAdvancedReportForm" property="acDisbFlag" value="true">
+																				<td height="21" width="23" align="center" >
+																				<a title="<digi:trn key="aim:DisbursementofFund">Release of funds to, or the purchase of goods or services for a recipient; by extension, the amount thus spent. Disbursements record the actual international transfer of financial resources, or of goods or services valued at the cost to the donor</digi:trn>">
+																				<digi:trn key="aim:actualDisbursement">Actual Disbursement</digi:trn>
+																				</a>
+																				</td>
+																			</logic:equal>
+																			</c:if>
+																			<c:if test="${addedMeasures.measureName == 'Actual Expenditures'}">
+																			<logic:equal name="aimAdvancedReportForm" property="acExpFlag" value="true">
+																				<td height="21" width="23" align="center" >
+																				<a title="<digi:trn key="aim:ExpenditureofFunds">Amount effectively spent by the implementing agency</digi:trn>">
+																				<digi:trn key="aim:actualExpenditure">Actual Expenditure</digi:trn>
+																				</a>
+																				</td>
+																			</logic:equal>
+																			</c:if>											
+																			<c:if test="${addedMeasures.measureName == 'Planned Commitments'}">
+																			<logic:equal name="aimAdvancedReportForm" property="plCommFlag" value="true">
+																				<td height="21" width="23" align="center" >
+																				<a title="<digi:trn key="aim:plannedCommitment">Planned Commitment</digi:trn>">
+																				<digi:trn key="aim:plannedCommitment">Planned Commitment</digi:trn>
+																				</a>
+																				</td>
+																			</logic:equal>
+																			</c:if>
+																			<c:if test="${addedMeasures.measureName == 'Planned Disbursements'}">
+																			<logic:equal name="aimAdvancedReportForm" property="plDisbFlag" value="true">
+																				<td height="21" width="23" align="center" >
+																				<a title="<digi:trn key="aim:DisbursementofFund">Release of funds to, or the purchase of goods or services for a recipient; by extension, the amount thus spent. Disbursements record the actual international transfer of financial resources, or of goods or services valued at the cost to the donor</digi:trn>">
+																				<digi:trn key="aim:plannedDisbursement">Planned Disbursement</digi:trn>
+																				</a>
+																				</td>
+																			</logic:equal>
+																			</c:if>
+																			<c:if test="${addedMeasures.measureName == 'Planned Expenditures'}">
+																			<logic:equal name="aimAdvancedReportForm" property="plExpFlag" value="true">
+																				<td height="21" width="23" align="center" >
+																				<a title="<digi:trn key="aim:ExpenditureofFunds">Amount effectively spent by the implementing agency</digi:trn>">
+																				<digi:trn key="aim:plannedExpenditure">Planned Expenditure</digi:trn>
+																				</a>
+																				</td>
+																			</logic:equal>
+																			</c:if>
+																			<c:if test="${addedMeasures.measureName == 'Cumulative Balance'}">
+																			<logic:equal name="aimAdvancedReportForm" property="acBalFlag" value="true">
+																				<td height="21" width="23" align="center" >
+																				<digi:trn key="aim:cumulativeBalance">Cumulative Balance</digi:trn>
+																				</td>
+																			</logic:equal>
+																			</c:if>
+																		</logic:iterate>
 																	</logic:iterate>
+
+																	<logic:iterate name="aimAdvancedReportForm"  property="addedMeasures" id="addedMeasures">																	
+																			<c:if test="${addedMeasures.measureName == 'Actual Commitments'}">
+																			<logic:equal name="aimAdvancedReportForm" property="acCommFlag" value="true">
+																				<td height="21" width="23" align="center" >
+																				<a title="<digi:trn key="aim:actualCommitment">Actual Commitment</digi:trn>">
+																				<digi:trn key="aim:actualCommitment">Actual Commitment</digi:trn>
+																				</a>
+																				</td>
+																			</logic:equal>
+																			</c:if>
+																			<c:if test="${addedMeasures.measureName == 'Actual Disbursements'}">
+																			<logic:equal name="aimAdvancedReportForm" property="acDisbFlag" value="true">
+																				<td height="21" width="23" align="center" >
+																				<a title="<digi:trn key="aim:DisbursementofFund">Release of funds to, or the purchase of goods or services for a recipient; by extension, the amount thus spent. Disbursements record the actual international transfer of financial resources, or of goods or services valued at the cost to the donor</digi:trn>">
+																				<digi:trn key="aim:actualDisbursement">Actual Disbursement</digi:trn>
+																				</a>
+																				</td>
+																			</logic:equal>
+																			</c:if>
+																			<c:if test="${addedMeasures.measureName == 'Actual Expenditures'}">
+																			<logic:equal name="aimAdvancedReportForm" property="acExpFlag" value="true">
+																				<td height="21" width="23" align="center" >
+																				<a title="<digi:trn key="aim:ExpenditureofFunds">Amount effectively spent by the implementing agency</digi:trn>">
+																				<digi:trn key="aim:actualExpenditure">Actual Expenditure</digi:trn>
+																				</a>
+																				</td>
+																			</logic:equal>
+																			</c:if>											
+																			<c:if test="${addedMeasures.measureName == 'Planned Commitments'}">
+																			<logic:equal name="aimAdvancedReportForm" property="plCommFlag" value="true">
+																				<td height="21" width="23" align="center" >
+																				<a title="<digi:trn key="aim:plannedCommitment">Planned Commitment</digi:trn>">
+																				<digi:trn key="aim:plannedCommitment">Planned Commitment</digi:trn>
+																				</a>
+																				</td>
+																			</logic:equal>
+																			</c:if>
+																			<c:if test="${addedMeasures.measureName == 'Planned Disbursements'}">
+																			<logic:equal name="aimAdvancedReportForm" property="plDisbFlag" value="true">
+																				<td height="21" width="23" align="center" >
+																				<a title="<digi:trn key="aim:DisbursementofFund">Release of funds to, or the purchase of goods or services for a recipient; by extension, the amount thus spent. Disbursements record the actual international transfer of financial resources, or of goods or services valued at the cost to the donor</digi:trn>">
+																				<digi:trn key="aim:plannedDisbursement">Planned Disbursement</digi:trn>
+																				</a>
+																				</td>
+																			</logic:equal>
+																			</c:if>
+																			<c:if test="${addedMeasures.measureName == 'Planned Expenditures'}">
+																			<logic:equal name="aimAdvancedReportForm" property="plExpFlag" value="true">
+																				<td height="21" width="23" align="center" >
+																				<a title="<digi:trn key="aim:ExpenditureofFunds">Amount effectively spent by the implementing agency</digi:trn>">
+																				<digi:trn key="aim:plannedExpenditure">Planned Expenditure</digi:trn>
+																				</a>
+																				</td>
+																			</logic:equal>
+																			</c:if>
+																			<c:if test="${addedMeasures.measureName == 'Cumulative Balance'}">
+																			<logic:equal name="aimAdvancedReportForm" property="acBalFlag" value="true">
+																				<td height="21" width="23" align="center" >
+																				<digi:trn key="aim:cumulativeBalance">Cumulative Balance</digi:trn>
+																				</td>
+																			</logic:equal>
+																			</c:if>
+																		</logic:iterate>
+															
 															   	</tr>
 																<logic:notEmpty name="aimAdvancedReportForm" property="report"> 
 																<logic:iterate name="aimAdvancedReportForm"  property="report" id="report" type="org.digijava.module.aim.helper.Report">
@@ -323,56 +403,81 @@ function gotoStep() {
 					<bean:write name="records" property="ampId" /></logic:notEmpty>
 				<logic:notEmpty name="records" property="ampFund">
 				<logic:iterate name="records"  property="ampFund" id="ampFund" 	type="org.digijava.module.aim.helper.AmpFund">
+					<logic:iterate name="aimAdvancedReportForm"  property="addedMeasures" id="addedMeasures">
+					<c:if test="${addedMeasures.measureName == 'Actual Commitments'}">
+					
 						<logic:equal name="aimAdvancedReportForm" property="acCommFlag" value="true">
 						<td align="right" height="21" width="69">
 							<logic:notEqual name="ampFund" property="commAmount" value="0">
 							<bean:write name="ampFund" property="commAmount" />
 							</logic:notEqual>
 						</td>
-				</logic:equal>
-				<logic:equal name="aimAdvancedReportForm" property="acDisbFlag" value="true">
-						<td align="right" height="21" width="69">
-							<logic:notEqual name="ampFund" property="disbAmount" value="0">
-							<bean:write name="ampFund" property="disbAmount" />
-							</logic:notEqual>
-						</td>
-				</logic:equal>
-				<logic:equal name="aimAdvancedReportForm" property="acExpFlag" value="true">
-						<td align="right" height="21" width="69">
-							<logic:notEqual name="ampFund" property="expAmount" value="0">
-							<bean:write name="ampFund" property="expAmount" />
-							</logic:notEqual>
-						</td>
-				</logic:equal>
-				<logic:equal name="aimAdvancedReportForm" property="plCommFlag" value="true">
-						<td align="right" height="21" width="69">
-							<logic:notEqual name="ampFund" property="plCommAmount" value="0">
-							<bean:write name="ampFund" property="plCommAmount" />
-							</logic:notEqual>
-						</td>
-				</logic:equal>
-				<logic:equal name="aimAdvancedReportForm" property="plDisbFlag" value="true">
-						<td align="right" height="21" width="69">
-							<logic:notEqual name="ampFund" property="plDisbAmount" value="0">
-							<bean:write name="ampFund" property="plDisbAmount" />
-							</logic:notEqual>
-						</td>
-				</logic:equal>
-				<logic:equal name="aimAdvancedReportForm" property="plExpFlag" value="true">
-						<td align="right" height="21" width="69">
-							<logic:notEqual name="ampFund" property="plExpAmount" value="0">
-							<bean:write name="ampFund" property="plExpAmount" />
-							</logic:notEqual>
-						</td>
-				</logic:equal>
-				<logic:equal name="aimAdvancedReportForm" property="acBalFlag" value="true">
-						<td align="right" height="21" width="69">
-							<logic:notEqual name="ampFund" property="unDisbAmount" value="0">
-							<bean:write name="ampFund" property="unDisbAmount" />
-							</logic:notEqual>
-						</td>
-				</logic:equal>
-					</logic:iterate></logic:notEmpty>
+						</logic:equal>
+						</c:if>
+						
+						<c:if test="${addedMeasures.measureName == 'Actual Disbursements'}">
+						<logic:equal name="aimAdvancedReportForm" property="acDisbFlag" value="true">
+								<td align="right" height="21" width="69">
+									<logic:notEqual name="ampFund" property="disbAmount" value="0">
+									<bean:write name="ampFund" property="disbAmount" />
+									</logic:notEqual>
+								</td>
+						</logic:equal>
+						</c:if>
+						
+						<c:if test="${addedMeasures.measureName == 'Actual Expenditures'}">
+						<logic:equal name="aimAdvancedReportForm" property="acExpFlag" value="true">
+								<td align="right" height="21" width="69">
+									<logic:notEqual name="ampFund" property="expAmount" value="0">
+									<bean:write name="ampFund" property="expAmount" />
+									</logic:notEqual>
+								</td>
+						</logic:equal>
+						</c:if>
+						
+						<c:if test="${addedMeasures.measureName == 'Planned Commitments'}">
+						<logic:equal name="aimAdvancedReportForm" property="plCommFlag" value="true">
+								<td align="right" height="21" width="69">
+									<logic:notEqual name="ampFund" property="plCommAmount" value="0">
+									<bean:write name="ampFund" property="plCommAmount" />
+									</logic:notEqual>
+								</td>
+						</logic:equal>
+						</c:if>
+						
+						<c:if test="${addedMeasures.measureName == 'Planned Disbursements'}">
+						<logic:equal name="aimAdvancedReportForm" property="plDisbFlag" value="true">
+								<td align="right" height="21" width="69">
+									<logic:notEqual name="ampFund" property="plDisbAmount" value="0">
+									<bean:write name="ampFund" property="plDisbAmount" />
+									</logic:notEqual>
+								</td>
+						</logic:equal>
+						</c:if>
+						
+						<c:if test="${addedMeasures.measureName == 'Planned Expenditures'}">
+						<logic:equal name="aimAdvancedReportForm" property="plExpFlag" value="true">
+								<td align="right" height="21" width="69">
+									<logic:notEqual name="ampFund" property="plExpAmount" value="0">
+									<bean:write name="ampFund" property="plExpAmount" />
+									</logic:notEqual>
+								</td>
+						</logic:equal>
+						</c:if>
+						
+						<c:if test="${addedMeasures.measureName == 'Cumulative Balance'}">
+						<logic:equal name="aimAdvancedReportForm" property="acBalFlag" value="true">
+								<td align="right" height="21" width="69">
+									<logic:notEqual name="ampFund" property="unDisbAmount" value="0">
+										<bean:write name="ampFund" property="unDisbAmount" />
+									</logic:notEqual>
+								</td>
+						</logic:equal>
+						</c:if>
+						
+					</logic:iterate>
+				</logic:iterate>	
+				</logic:notEmpty>
 				</td>																		</logic:iterate>
 																	</tr>
 																</logic:iterate>
@@ -425,7 +530,7 @@ function gotoStep() {
 						</td>
 				</logic:equal>
 				<logic:equal name="aimAdvancedReportForm" property="acBalFlag" value="true">
-						<td align="right" height="21" width="69">
+						<td align="right" height="21" width="69" >
 							<logic:notEqual name="totFund" property="unDisbAmount" value="0">
 							<b><bean:write name="totFund" property="unDisbAmount" /></b>
 							</logic:notEqual>

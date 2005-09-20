@@ -440,6 +440,7 @@ public class AdvancedReport extends Action {
 //					---------------------------------------------------		
 					/*BEGIN CODE FOR GRAND TOTAL*/
 					int yearRange=(toYr-fromYr)+1;
+					double totUnDisb = 0, actTotalCommit = 0, actTotalDisb = 0, actTotalExp = 0, planTotalCommit = 0, planTotalDisb = 0, planTotalExp = 0;
 					double[][] totFunds=new double[yearRange][7];
 					iter = reports.iterator() ;
 				//	logger.debug("Grand Total :" + grandTotal);
@@ -470,6 +471,15 @@ public class AdvancedReport extends Action {
 										totFunds[i][5]=totFunds[i][5] + Double.parseDouble(DecimalToText.removeCommas(ampFund.getPlExpAmount()));
 									if(measures.indexOf(new Long(7))!=-1)
 										totFunds[i][6]=totFunds[i][6] + Double.parseDouble(DecimalToText.removeCommas(ampFund.getUnDisbAmount()));
+									
+									actTotalCommit = actTotalCommit + Double.parseDouble(DecimalToText.removeCommas(ampFund.getCommAmount()));
+									actTotalDisb = actTotalDisb + totFunds[i][1] + Double.parseDouble(DecimalToText.removeCommas(ampFund.getDisbAmount()));
+									actTotalExp = actTotalExp + totFunds[i][2] + Double.parseDouble(DecimalToText.removeCommas(ampFund.getExpAmount()));
+									planTotalCommit = planTotalCommit + totFunds[i][3] + Double.parseDouble(DecimalToText.removeCommas(ampFund.getPlCommAmount()));
+									planTotalDisb = planTotalDisb + totFunds[i][4] + Double.parseDouble(DecimalToText.removeCommas(ampFund.getPlDisbAmount()));
+									planTotalExp = planTotalExp + totFunds[i][5] + Double.parseDouble(DecimalToText.removeCommas(ampFund.getPlExpAmount()));
+									totUnDisb = totUnDisb + Double.parseDouble(DecimalToText.removeCommas(ampFund.getUnDisbAmount()));
+
 								}
 							}
 						}	
@@ -495,6 +505,17 @@ public class AdvancedReport extends Action {
 						formBean.getTotFund().add(ampFund);
 					}
 
+					AmpFund fund = new AmpFund();
+					fund.setCommAmount(mf.format(actTotalCommit));
+					fund.setDisbAmount(mf.format(actTotalDisb));
+					fund.setExpAmount(mf.format(actTotalExp));
+					fund.setPlCommAmount(mf.format(planTotalCommit));
+					fund.setPlDisbAmount(mf.format(planTotalDisb));
+					fund.setPlExpAmount(mf.format(planTotalExp));
+					fund.setUnDisbAmount(mf.format(totUnDisb));
+					formBean.getTotFund().add(fund);
+					
+					
 							/*END CODE FOR GRAND TOTAL*/
 
 

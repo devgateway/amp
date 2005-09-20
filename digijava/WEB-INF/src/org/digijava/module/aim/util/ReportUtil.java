@@ -11849,14 +11849,20 @@ public class ReportUtil {
 						if(ampReportCache.getModalityName()!=null)
 							modality.add(ampReportCache.getModalityName());
 						AmpActivity ampActivity=(AmpActivity) ActivityUtil.getAmpActivity(ampReportCache.getAmpActivityId());
-						if(ampReportCache.getActivityDescription()!=null)
+						
+						//if(ampReportCache.getActivityDescription()!=null)
+						if(ampActivity.getDescription()!=null)
 						{
-							Editor ed = org.digijava.module.editor.util.DbUtil.getEditor(ampReportCache.getActivityDescription(),"en");
-							description=ed.getBody();
+							logger.info(ampActivity.getAmpId() + "<><><><><><>" + ampActivity.getDescription());
+							//Editor ed = org.digijava.module.editor.util.DbUtil.getEditor(ampReportCache.getActivityDescription(),"en");
+							//description=ed.getBody();
+							description= ampActivity.getDescription();
 						}
 						else
+						{
+							logger.info(ampActivity.getAmpId() + "<><>NOT NULL <><><>" + ampActivity.getDescription());
 							description=" ";
-						
+						}
 						if(ampActivity.getObjective()!=null)
 						{
 							Editor ed = org.digijava.module.editor.util.DbUtil.getEditor(ampActivity.getObjective(),"en");
@@ -11888,7 +11894,7 @@ public class ReportUtil {
 					//logger.info("Measure: " + measure);
 					if(ampReportCache.getFiscalYear()!=null && ampReportCache.getFiscalQuarter()!=null)
 					{
-						logger.info("begin if");
+						//logger.info("begin if");
 						if(new Long(fiscalCalId).equals(Constants.GREGORIAN))
 						{
 							fiscalYear=ampReportCache.getFiscalYear().intValue();

@@ -11016,6 +11016,7 @@ public class ReportUtil {
 		double toExchangeRate=1.0;
 		double fromExchangeRate=0.0;
 		double amount=0.0;
+		double totUnDisb = 0, actTotalCommit = 0, actTotalDisb = 0, actTotalExp = 0, planTotalCommit = 0, planTotalDisb = 0, planTotalExp = 0;
 		int fiscalYear=0,fiscalQuarter=0;
 		int maxYear=0;
 		int minYear=0;
@@ -11259,8 +11260,29 @@ public class ReportUtil {
 									ampFund.setPlExpAmount(mf.format(plannedFunds[i][2]));	
 								if(measures.indexOf(new Long(7))!=-1)
 									ampFund.setUnDisbAmount(mf.format(actualFunds[i][0]-actualFunds[i][1]));	
+								
+								actTotalCommit = actTotalCommit + actualFunds[i][0];
+								actTotalDisb = actTotalDisb + actualFunds[i][1];
+								actTotalExp = actTotalExp + actualFunds[i][2];
+								planTotalCommit = planTotalCommit + plannedFunds[i][0];
+								planTotalDisb = planTotalDisb + plannedFunds[i][1];
+								planTotalExp = planTotalExp + plannedFunds[i][2];
+								totUnDisb = totUnDisb + actualFunds[i][0]-actualFunds[i][1];
+
+								
 								report.getAmpFund().add(ampFund);
 							}
+							AmpFund fund = new AmpFund();
+							fund.setCommAmount(mf.format(actTotalCommit));
+							fund.setDisbAmount(mf.format(actTotalDisb));
+							fund.setExpAmount(mf.format(actTotalExp));
+							fund.setPlCommAmount(mf.format(planTotalCommit));
+							fund.setPlDisbAmount(mf.format(planTotalDisb));
+							fund.setPlExpAmount(mf.format(planTotalExp));
+							fund.setUnDisbAmount(mf.format(totUnDisb));
+							report.getAmpFund().add(fund) ;	
+
+							
 							reports.getRecords().add(report);
 							logger.info("Reports Size: " + reports.getRecords().size());
 							logger.info("Fund Size: " + report.getAmpFund().size());
@@ -11275,6 +11297,7 @@ public class ReportUtil {
 							regions.clear();
 							contactName=null;
 							minYear=maxYear=0;
+							totUnDisb=actTotalCommit=actTotalDisb=actTotalExp=planTotalCommit=planTotalDisb=planTotalExp = 0;
 							for(int i=0;i<yrCount;i++)
 							{
 								actualFunds[i][0]=actualFunds[i][1]=actualFunds[i][2]=0;
@@ -11553,9 +11576,31 @@ public class ReportUtil {
 					if(measures.indexOf(new Long(6))!=-1)
 						ampFund.setPlExpAmount(mf.format(plannedFunds[i][2]));	
 					if(measures.indexOf(new Long(7))!=-1)
-						ampFund.setUnDisbAmount(mf.format(actualFunds[i][0]-actualFunds[i][1]));	
+						ampFund.setUnDisbAmount(mf.format(actualFunds[i][0]-actualFunds[i][1]));
+					
+					actTotalCommit = actTotalCommit + actualFunds[i][0];
+					actTotalDisb = actTotalDisb + actualFunds[i][1];
+					actTotalExp = actTotalExp + actualFunds[i][2];
+					planTotalCommit = planTotalCommit + plannedFunds[i][0];
+					planTotalDisb = planTotalDisb + plannedFunds[i][1];
+					planTotalExp = planTotalExp + plannedFunds[i][2];
+					totUnDisb = totUnDisb + actualFunds[i][0]-actualFunds[i][1];
+
+
+					
 					report.getAmpFund().add(ampFund);
 				}
+				
+				AmpFund fund = new AmpFund();
+				fund.setCommAmount(mf.format(actTotalCommit));
+				fund.setDisbAmount(mf.format(actTotalDisb));
+				fund.setExpAmount(mf.format(actTotalExp));
+				fund.setPlCommAmount(mf.format(planTotalCommit));
+				fund.setPlDisbAmount(mf.format(planTotalDisb));
+				fund.setPlExpAmount(mf.format(planTotalExp));
+				fund.setUnDisbAmount(mf.format(totUnDisb));
+				report.getAmpFund().add(fund) ;	
+
 				reports.getRecords().add(report);
 				ampReports.add(reports);
 			}

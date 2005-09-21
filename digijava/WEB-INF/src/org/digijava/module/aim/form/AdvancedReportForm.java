@@ -108,7 +108,15 @@ public class AdvancedReportForm extends ActionForm
 	private String plExpFlag;
 	private String acBalFlag;
 
+	private int measureCount = 0;  
 	
+	
+	public int getMeasureCount() {
+		return measureCount;
+	}
+	public void setMeasureCount(int measureCount) {
+		this.measureCount = measureCount;
+	}
 	public String getPieImageUrl()
 	{
 		return pieImageUrl;

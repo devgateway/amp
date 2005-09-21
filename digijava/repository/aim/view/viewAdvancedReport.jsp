@@ -459,7 +459,7 @@
 
 				<logic:equal name="aimAdvancedReportForm" property="acBalFlag" value="true">
 					<td height="21" width="23" align="center" >
-					<digi:trn key="aim:cumulativeBalance">Cumulative Balance</digi:trn>
+					<digi:trn key="aim:undisbursed">Undisbursed</digi:trn>
 					</td>
 				</logic:equal>
 

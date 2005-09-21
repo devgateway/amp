@@ -114,7 +114,7 @@
 								<td align="right" bgcolor=#ECF3FD>
 			                	<FONT color=red>*</FONT><b>
 									<a title="<digi:trn key="aim:AssitanceType">Specify whether the project was financed through a grant, a loan or in kind</digi:trn>">									
-									<digi:trn key="aim:typeOfAssistance">Assistance</digi:trn></a>
+									<digi:trn key="aim:typeOfAssistance">Type of Assistance</digi:trn></a>
 									</b>
 								</td>
 								<td align="left" bgcolor=#ECF3FD>
@@ -182,6 +182,7 @@
 	<tr><td>
 		<FONT color=blue><B><BIG>*</BIG>
 			<digi:trn key="aim:pleaseEnterTheAmountInThousands">
+		  alert(window.location);
 			Please enter amount in thousands (000)</digi:trn>
 	</td></tr>
 			
@@ -236,6 +237,7 @@
 										<html:option value="1">Actual</html:option>	
 										<html:option value="0">Planned</html:option>
 									</html:select>
+									<html:hidden name="fundingDetail" indexed="true" property="transactionType"/>
 								</td>
 								<td valign="bottom">
 									<html:text name="fundingDetail" indexed="true" property="transactionAmount" size="17" styleClass="amt"/>
@@ -349,6 +351,7 @@
 										<html:option value="1">Actual</html:option>	
 										<html:option value="0">Planned</html:option>
 									</html:select>
+									<html:hidden name="fundingDetail" indexed="true" property="transactionType"/>									
 								</td>
 								<td valign="bottom">
 									<html:text name="fundingDetail" indexed="true" property="transactionAmount" size="17" styleClass="amt"/>
@@ -462,6 +465,7 @@
 										<html:option value="1">Actual</html:option>	
 										<html:option value="0">Planned</html:option>
 									</html:select>
+									<html:hidden name="fundingDetail" indexed="true" property="transactionType"/>									
 								</td>
 								<td valign="bottom">
 									<html:text name="fundingDetail" indexed="true" property="transactionAmount" size="17" styleClass="amt"/>

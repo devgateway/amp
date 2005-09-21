@@ -32,9 +32,11 @@ function validateFunding() {
 
 function validateFundingDetails(comm,disb,exp) {
 	var itr = comm + disb + exp;
+	var flagcomm = 0, flagdisb = 1, flagexp = 2, noentry = 0; 
 	for (var j = 0;j < itr;j ++) {
 		var amtField = "fundingDetail[" + j + "].transactionAmount";
 		var dateField = "fundingDetail[" + j + "].transactionDate";
+		var transType = "fundingDetail[" + j + "].transactionType";
 		var temp = new Array();
 		temp = document.aimEditActivityForm.elements;		
 
@@ -58,7 +60,6 @@ function validateFundingDetails(comm,disb,exp) {
 					return false;
 				}
 			}
-			
 			if (temp[i].name != null && temp[i].name == dateField) {
 				if (trim(temp[i].value) == "") {
 					msg = "Please enter the transaction date for the transaction";
@@ -67,7 +68,104 @@ function validateFundingDetails(comm,disb,exp) {
 					return false;
 				}	
 			}	
-		}		
+			
+			if( noentry < 3 )
+			{
+				if (temp[i].name != null && temp[i].name == transType) 
+				{
+					if(temp[i].value == 0)
+					{
+						if( flagcomm == 1)
+							continue;
+						else
+							flagcomm = 1;
+						noentry++;
+
+						if( comm > 1 )
+						{
+							for( var x = i-1; x < (i + (comm-2)*6) ; x=x+6)
+							{
+								for( var y = x+6 ; y < (i + (comm-1)*6) ; y=y+6)
+								{
+									if( x < y )
+									{
+										if( ( temp[x].value == temp[y].value ) && ( compareAmount(temp[x+2].value,temp[y+2].value )) && ( temp[x+3].value == temp[y+3].value ) && ( temp[x+4].value == temp[y+4].value ) && ( temp[x+5].value == temp[y+5].value ))
+										{
+											var ret = confirm('This information is a duplicate of existing funding information. Do you wish to proceed?');
+											if(ret == false)
+											{
+												temp[y+2].focus();
+												return false;
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+					if(temp[i].value == 1)
+					{
+						if( flagdisb == 2)
+							continue;
+						else
+							flagdisb = 2;
+						noentry++;
+						
+						if( disb > 1 )
+						{
+							for( var x = i-1; x < (i + (disb-2)*6) ; x=x+6)
+							{
+								for( var y = x+6 ; y < (i + (disb-1)*6) ; y=y+6)
+								{
+									if( x < y )
+									{
+										if( ( temp[x].value == temp[y].value ) && ( compareAmount(temp[x+2].value,temp[y+2].value )) && ( temp[x+3].value == temp[y+3].value ) && ( temp[x+4].value == temp[y+4].value ) && ( temp[x+5].value == temp[y+5].value ))
+										{
+											var ret = confirm('This information is a duplicate of existing funding information. Do you wish to proceed?');
+											if(ret == false)
+											{
+												temp[y+2].focus();
+												return false;
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+					if(temp[i].value == 2)
+					{
+						if( flagexp == 3)
+							continue;
+						else
+							flagexp = 3;
+						noentry++;
+						
+						if( exp > 1 )
+						{
+							for( var x = i-1; x < (i + (exp-2)*7) ; x=x+7)
+							{
+								for( var y = x+7 ; y < (i + (exp-1)*7) ; y=y+7)
+								{
+									if( x < y )
+									{
+										if( ( temp[x].value == temp[y].value ) && ( compareAmount(temp[x+2].value,temp[y+2].value )) && ( temp[x+3].value == temp[y+3].value ) && ( temp[x+4].value == temp[y+4].value ) && ( temp[x+5].value == temp[y+5].value ))
+										{
+											var ret = confirm('This information is a duplicate of existing funding information. Do you wish to proceed?');
+											if(ret == false)
+											{
+												temp[y+2].focus();
+												return false;
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
 	}
 	return true;
 }

@@ -198,3 +198,70 @@ function checkAmountLen(amt)
 		return valid;			
 	}
 }
+
+function compareAmount( num1, num2)
+{
+	if( num1 == num2 )
+		return true;
+	else
+	{
+		if( num1.length >= num2.length )
+			var len1 = num1.length;
+		else
+			var len2 = num2.length;
+		for( var x=0,y=0; (x<len1 || y<len2) ; x++,y++ )
+		{
+			if( num1.charCodeAt(x) == num2.charCodeAt(y) )
+				continue;
+			else
+			{
+				if( num1.charCodeAt(x) == 44 )
+				{
+					x++;
+					if( num1.charCodeAt(x) == num2.charCodeAt(y) )
+						continue;
+					else
+						return false;
+				}
+				if( num1.charCodeAt(y) == 44 )
+				{
+					y++;
+					if( num1.charCodeAt(x) == num2.charCodeAt(y) )
+						continue;
+					else
+						return false;
+				}
+				if( num1.charCodeAt(x) == 46 )
+				{
+					x++;
+					if( num1.charCodeAt(x) == 48 )
+					{
+						x++;
+						if( num1.charCodeAt(x) == 48 || num1.charCodeAt(x) == 32)
+							return true;
+						else
+							return false;
+					}
+					else
+						return false;
+				}
+				if( num2.charCodeAt(y) == 46 )
+				{
+					y++;
+					if( num2.charCodeAt(y) == 48 )
+					{
+						y++;
+						if( num2.charCodeAt(y) == 48 || num2.charCodeAt(y) == 32)
+							return true;
+						else
+							return false;
+					}
+					else
+						return false;
+				}
+				return false;
+			}
+		}
+	}
+	return true;
+}

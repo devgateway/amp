@@ -100,7 +100,7 @@
 			<logic:notEmpty name="aimAdvancedReportForm"  property="report">
 				<tr>
 					<td>
-						<input type="button" onclick="openPage()" value="Print Preview" class="dr-menu">
+						<input type="button" value="Print Preview" class="dr-menu">
 					</td>
 				</tr>
 			</logic:notEmpty>			
@@ -108,13 +108,13 @@
 
 <!--  PDF/XLS Links -->	
 <logic:notEmpty name="aimAdvancedReportForm"  property="report">
-		<tr>	
+<%--		<tr>	
 				<td valign="bottom" class="crumb">
 					&nbsp;&nbsp;<img src="../ampTemplate/images/pdf_icon.gif" border=0>
 					<bean:define id="translation">
 						<digi:trn key="aim:clickToCreateReportInPDF">Click here to Create Report in Pdf </digi:trn>
 					</bean:define>
-					<digi:link href="" onclick="popup_pdf(''); return false;" title="<%=translation%>"> 
+					<digi:link href="" title="<%=translation%>"> 
 						<digi:trn key="aim:createReportInPdf">Create Report in Pdf.</digi:trn>
 					</digi:link>
                 </td>
@@ -125,11 +125,12 @@
 				<bean:define id="translation">
 					<digi:trn key="aim:clickToCreateReportInExcel">Click here to Create Report in Excel </digi:trn>
 				</bean:define>
-				<digi:link href="" onclick="popup_xls(''); return false;" title="<%=translation%>">
+				<digi:link href="" title="<%=translation%>">
 					 <digi:trn key="aim:createReportInXls">Create Report in Xls.</digi:trn>
 				</digi:link>
                 </td>
        </tr>
+--%>
 </logic:notEmpty>
 <!--  PDF/XLS Links -->	
 

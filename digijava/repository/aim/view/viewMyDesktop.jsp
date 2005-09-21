@@ -110,7 +110,7 @@ function showtip()
          		    <TD noWrap width="100%" align="left">
 						<logic:notEqual name="aimMyDesktopForm" property="filterFlag" value="false">
            				<DIV class=f-names>
-							<bean:write name="aimMyDesktopForm" property="perspective"/>&nbsp; <digi:trn key="aim:view">View</digi:trn>:
+							<bean:write name="aimMyDesktopForm" property="perspective"/>&nbsp;<digi:trn key="aim:view">View</digi:trn>:
 							</DIV>
 						</logic:notEqual>
 						<%--
@@ -220,7 +220,7 @@ function showtip()
 									<digi:link href="/viewMyDesktop.do" name="urlProjectDesc" style="TEXT-DECORATION: NONE">-</digi:link>)</DIV></TD>
 	                			<TD class=box-title width="20%">
 					       			<DIV align=center>
-									<a title="<digi:trn key="aim:IdOfAMP">System Gererated Project ID</digi:trn>">
+									<a title="<digi:trn key="aim:IdforAMP">System Generated Project ID</digi:trn>">
 									<digi:trn key="aim:ampId">AMP ID</digi:trn>
 									</a>(<jsp:useBean id="urlIdAsc" type="java.util.Map" class="java.util.HashMap"/>
 									<c:set target="${urlIdAsc}" property="sortField" value="2"/>

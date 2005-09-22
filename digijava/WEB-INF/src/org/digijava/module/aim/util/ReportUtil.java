@@ -11341,10 +11341,12 @@ public class ReportUtil {
 						if(ampReportCache.getModalityName()!=null)
 							modality.add(ampReportCache.getModalityName());
 						AmpActivity ampActivity=(AmpActivity) ActivityUtil.getAmpActivity(ampReportCache.getAmpActivityId());
-						if(ampReportCache.getActivityDescription()!=null)
+						//if(ampReportCache.getActivityDescription()!=null)
+						if(ampActivity.getDescription()!=null)
 						{
-							Editor ed = org.digijava.module.editor.util.DbUtil.getEditor(ampReportCache.getActivityDescription(),"en");
-							description=ed.getBody();
+							//Editor ed = org.digijava.module.editor.util.DbUtil.getEditor(ampReportCache.getActivityDescription(),"en");
+							//description=ed.getBody();
+							description = ampActivity.getDescription();
 						}
 						else
 							description=" ";

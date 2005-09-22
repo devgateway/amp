@@ -506,8 +506,13 @@
 						<td align="center" height="21" >
 				<bean:write name="records" property="objective" /></td></logic:notEmpty>
 				<logic:notEmpty name="records" property="description">
-						<td align="center" height="21" >
-				<bean:write name="records" property="description" /></td></logic:notEmpty>
+				<td align="center" height="21" width="800">
+					<bean:define id="descriptionKey">
+						<bean:write name="records" property="description" />
+					</bean:define>						
+				<digi:edit key="<%=descriptionKey%>" />
+				</td></logic:notEmpty>
+
 				<logic:notEmpty name="records" property="assistance">
 						<td align="center" height="21" >
 				<logic:iterate name="records" id="assistance" property="assistance"> <%=assistance%>	

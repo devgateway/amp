@@ -2469,6 +2469,12 @@
 <!-- END EDIT LAYOUT TEASERS -->
 
 <!-- New Action for PDF generation  -->
+
+	<action name="aimAdvancedReportForm" 
+     	type="org.digijava.module.aim.action.AdvancedReportPDF" 
+     	scope="session" validate="false" path="/aim/advancedReportPdf">
+    </action>
+
 	<action name="aimCommitmentbyDonorForm" 
      	type="org.digijava.module.aim.action.PlannedProjectPDF" 
      	scope="session" validate="false" path="/aim/PlannedProjectPdf">

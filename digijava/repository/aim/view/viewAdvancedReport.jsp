@@ -30,7 +30,7 @@
 
 	function popup_pdf() {
 		openResisableWindow(800, 600);
-		<digi:context name="pdf" property="context/module/moduleinstance/viewProjectPdf.do" />
+		<digi:context name="pdf" property="context/module/moduleinstance/advancedReportPdf.do" />
 		document.aimAdvancedReportForm.action = "<%= pdf %>";
 		document.aimAdvancedReportForm.target = popupPointer.name;
 		document.aimAdvancedReportForm.submit();
@@ -108,18 +108,18 @@
 
 <!--  PDF/XLS Links -->	
 <logic:notEmpty name="aimAdvancedReportForm"  property="report">
-<%--		<tr>	
+		<tr>	
 				<td valign="bottom" class="crumb">
 					&nbsp;&nbsp;<img src="../ampTemplate/images/pdf_icon.gif" border=0>
 					<bean:define id="translation">
 						<digi:trn key="aim:clickToCreateReportInPDF">Click here to Create Report in Pdf </digi:trn>
 					</bean:define>
-					<digi:link href="" title="<%=translation%>"> 
+					<digi:link href="" onclick="popup_pdf(''); return false;"  title="<%=translation%>"> 
 						<digi:trn key="aim:createReportInPdf">Create Report in Pdf.</digi:trn>
 					</digi:link>
                 </td>
            </tr>
-			<tr>
+<%--			<tr>
 				<td valign="bottom" class="crumb" >
 				&nbsp;&nbsp;<img src="../ampTemplate/images/xls_icon.jpg" border=0>
 				<bean:define id="translation">

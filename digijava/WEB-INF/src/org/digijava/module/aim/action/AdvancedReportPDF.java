@@ -18,6 +18,7 @@ import net.sf.jasperreports.engine.JasperCompileManager;
 import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.JasperRunManager;
+import net.sf.jasperreports.engine.export.JRCsvExporter;
 import net.sf.jasperreports.engine.export.JRXlsExporter;
 import net.sf.jasperreports.engine.export.JRXlsExporterParameter;
 
@@ -562,6 +563,66 @@ public class AdvancedReportPDF extends Action
 				}
 
 			}
+			
+			/*
+			 * 	Creates CSV document when csv link is clicked
+			 */
+			
+			if(request.getParameter("docType") != null && request.getParameter("docType").equals("csv"))
+			{
+				AdvancedReportDatasource dataSource = new AdvancedReportDatasource(dataArray,rsc.getColumns().size(), rowData);
+				
+				ActionServlet s = getServlet();
+				String jarFile = s.getServletContext().getRealPath(
+									  "/WEB-INF/lib/jasperreports-0.6.8.jar");
+				System.setProperty("jasper.reports.compile.class.path",jarFile);
+				String realPathJrxml = s.getServletContext().getRealPath(
+									 "/WEB-INF/classes/org/digijava/module/aim/reports");
+				realPathJrxml = realPathJrxml + "\\" + formBean.getReportName().replaceAll(" ", "").replaceAll("#", "")+".jrxml";
+				logger.info("Path : " + realPathJrxml);
+
+				//calling dynamic jrxml
+				AdvancedReportPdfJrxml jrxml = new AdvancedReportPdfJrxml();
+				jrxml.createJRXML(realPathJrxml, undisbFlag ,rowData, dataArray, rsc.getColumns().size(), rsc.getMeasures().size(), 
+						formBean.getReportName().replaceAll(" ", "").replaceAll("#", ""));
+				JasperCompileManager.compileReportToFile(realPathJrxml);
+				byte[] bytes = null;
+				ServletOutputStream outputStream = null;
+				try
+				{
+					Map parameters = new HashMap();
+					
+					String jasperFile = s.getServletContext().getRealPath(
+							"/WEB-INF/classes/org/digijava/module/aim/reports"+"\\"+formBean.getReportName().replaceAll(" ", "").replaceAll("#", "")+".jasper");
+					logger.info("Jasper FIle ::::::::::::::::;" + jasperFile);
+					JasperPrint jasperPrint = 
+						JasperFillManager.fillReport(jasperFile,parameters,dataSource);
+						response.setContentType("application/vnd.ms-excel");
+						String responseHeader = "inline; filename="+formBean.getReportName().replaceAll(" ", "").replaceAll("#", "");
+						logger.info("--------------" + responseHeader);
+						response.setHeader("Content-Disposition", responseHeader);
+						//response.setHeader("Content-Disposition","inline; filename=commitmentByModalityXls.xls");
+
+						logger.info("--------------");
+					
+					//JRXlsExporter exporter = new JRXlsExporter();
+						JRCsvExporter exporter = new JRCsvExporter();
+					outputStream = response.getOutputStream();
+					exporter.setParameter(JRExporterParameter.JASPER_PRINT, jasperPrint);
+					exporter.setParameter(JRExporterParameter.OUTPUT_STREAM, outputStream);
+					//exporter.setParameter(JRXlsExporterParameter.IS_ONE_PAGE_PER_SHEET, Boolean.FALSE);
+					exporter.exportReport();
+				}
+				catch (Exception e) 
+				{
+					if (outputStream != null) 
+					{
+						outputStream.close();
+					}
+				}
+
+			}
+
 		}
 
 		return null;

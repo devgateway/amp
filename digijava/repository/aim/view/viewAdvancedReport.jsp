@@ -44,6 +44,14 @@
 		document.aimAdvancedReportForm.submit();
 	}
 
+	function popup_csv() {
+		openResisableWindow(800, 600);
+		<digi:context name="csv" property="context/module/moduleinstance/advancedReportPdf.do?docType=csv" />
+		document.aimAdvancedReportForm.action = "<%= csv %>";
+		document.aimAdvancedReportForm.target = popupPointer.name;
+		document.aimAdvancedReportForm.submit();
+	}
+
 	function popup_warn() {
 		alert("Year Range selected should NOT be Greater than 4 Years.");
 	}
@@ -130,6 +138,18 @@
 				</digi:link>
                 </td>
        </tr>
+	
+			<tr>
+				<td valign="bottom" class="crumb" >
+				&nbsp;&nbsp;<img src="../ampTemplate/images/icon_csv.gif" border=0>
+				<bean:define id="translation">
+					<digi:trn key="aim:clickToCreateReportInExcel">Click here to Create Report in Excel </digi:trn>
+				</bean:define>
+				<digi:link href="" onclick="popup_csv(''); return false;" title="<%=translation%>">
+					 <digi:trn key="aim:createReportInCsv">Create Report in CSV.</digi:trn>
+				</digi:link>
+                </td>
+	       </tr>
 
 </logic:notEmpty>
 <!--  PDF/XLS Links -->	

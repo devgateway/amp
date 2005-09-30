@@ -418,7 +418,7 @@ p2.println("<band height='0'  isSplitAllowed='true' >");
 p2.println("</band>");
 p2.println("</columnHeader>");
 p2.println("<detail>");
-p2.println("<band height='80'  isSplitAllowed='true' >");
+p2.println("<band height='83'  isSplitAllowed='true' >");
 
 x=0;x1=0;
 w=0;
@@ -546,7 +546,7 @@ temp=cols;
 	p2.println("<reportElement");
 	p2.println("mode='Opaque'");
 	p2.println("x='0'");
-	p2.println("y='79'");
+	p2.println("y='82'");
 	p2.println("width='"+lwidth+"'");
 	p2.println("height='0'");
 	p2.println("forecolor='#000000'");

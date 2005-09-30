@@ -13,8 +13,14 @@ import java.util.*;
 
 import javax.servlet.ServletOutputStream;
 import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.JRExporterParameter;
 import net.sf.jasperreports.engine.JasperCompileManager;
+import net.sf.jasperreports.engine.JasperFillManager;
+import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.JasperRunManager;
+import net.sf.jasperreports.engine.export.JRXlsExporter;
+import net.sf.jasperreports.engine.export.JRXlsExporterParameter;
+
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
@@ -446,53 +452,115 @@ public class AdvancedReportPDF extends Action
 				}
 			}
 
-			AdvancedReportDatasource dataSource = new AdvancedReportDatasource(dataArray,rsc.getColumns().size(), rowData);
+			if(request.getParameter("docType") != null && request.getParameter("docType").equals("pdf"))
+			{
+				AdvancedReportDatasource dataSource = new AdvancedReportDatasource(dataArray,rsc.getColumns().size(), rowData);
+				
+				ActionServlet s = getServlet();
+				String jarFile = s.getServletContext().getRealPath(
+									  "/WEB-INF/lib/jasperreports-0.6.8.jar");
+				System.setProperty("jasper.reports.compile.class.path",jarFile);
+				String realPathJrxml = s.getServletContext().getRealPath(
+									 "/WEB-INF/classes/org/digijava/module/aim/reports");
+				realPathJrxml = realPathJrxml + "\\" + formBean.getReportName().replaceAll(" ", "").replaceAll("#", "")+".jrxml";
+				logger.info("Path : " + realPathJrxml);
+	
+				//calling dynamic jrxml
+				AdvancedReportPdfJrxml jrxml = new AdvancedReportPdfJrxml();
+				jrxml.createJRXML(realPathJrxml, undisbFlag ,rowData, dataArray, rsc.getColumns().size(), rsc.getMeasures().size(), 
+						formBean.getReportName().replaceAll(" ", "").replaceAll("#", ""));
+				JasperCompileManager.compileReportToFile(realPathJrxml);
+				byte[] bytes = null;
+				try
+				{
+					String jasperFile = s.getServletContext().getRealPath(
+							"/WEB-INF/classes/org/digijava/module/aim/reports"+"\\"+formBean.getReportName().replaceAll(" ", "").replaceAll("#", "")+".jasper");
+					logger.info("Jasper FIle ::::::::::::::::;" + jasperFile);
+					
+					
+					Map parameters = new HashMap();
+					System.out.println(jasperFile );
+					System.out.println(parameters);
+					bytes = JasperRunManager.runReportToPdf( jasperFile,  parameters, dataSource);
+				}
+				catch (JRException e)
+				{
+					System.out.println("Exception from MultilateralDonorDatasource = " + e);
+				}
+				if (bytes != null && bytes.length > 0)
+				{
+					ServletOutputStream ouputStream = response.getOutputStream();
+					System.out.println("Generating PDF");
+					response.setContentType("application/pdf");
+					response.setHeader("Content-Disposition","inline; filename=MultilateralDonorPdf.pdf");
+					response.setContentLength(bytes.length);
+					ouputStream.write(bytes, 0, bytes.length);
+					ouputStream.flush();
+					ouputStream.close();
+				}
+				else
+				{
+					System.out.println("Nothing to display");
+				}
+			}
 			
-			ActionServlet s = getServlet();
-			String jarFile = s.getServletContext().getRealPath(
-								  "/WEB-INF/lib/jasperreports-0.6.8.jar");
-			System.setProperty("jasper.reports.compile.class.path",jarFile);
-			String realPathJrxml = s.getServletContext().getRealPath(
-								 "/WEB-INF/classes/org/digijava/module/aim/reports");
-			realPathJrxml = realPathJrxml + "\\" + formBean.getReportName().replaceAll(" ", "").replaceAll("#", "")+".jrxml";
-			logger.info("Path : " + realPathJrxml);
+			
+			/*
+			 * 	Creates Excel document when excel link is clicked
+			 */
+			
+			if(request.getParameter("docType") != null && request.getParameter("docType").equals("excel"))
+			{
+				AdvancedReportDatasource dataSource = new AdvancedReportDatasource(dataArray,rsc.getColumns().size(), rowData);
+				
+				ActionServlet s = getServlet();
+				String jarFile = s.getServletContext().getRealPath(
+									  "/WEB-INF/lib/jasperreports-0.6.8.jar");
+				System.setProperty("jasper.reports.compile.class.path",jarFile);
+				String realPathJrxml = s.getServletContext().getRealPath(
+									 "/WEB-INF/classes/org/digijava/module/aim/reports");
+				realPathJrxml = realPathJrxml + "\\" + formBean.getReportName().replaceAll(" ", "").replaceAll("#", "")+".jrxml";
+				logger.info("Path : " + realPathJrxml);
 
-			//calling dynamic jrxml
-			AdvancedReportPdfJrxml jrxml = new AdvancedReportPdfJrxml();
-			jrxml.createJRXML(realPathJrxml, undisbFlag ,rowData, dataArray, rsc.getColumns().size(), rsc.getMeasures().size(), 
-					formBean.getReportName().replaceAll(" ", "").replaceAll("#", ""));
-			JasperCompileManager.compileReportToFile(realPathJrxml);
-			byte[] bytes = null;
-			try
-			{
-				String jasperFile = s.getServletContext().getRealPath(
-						"/WEB-INF/classes/org/digijava/module/aim/reports"+"\\"+formBean.getReportName().replaceAll(" ", "").replaceAll("#", "")+".jasper");
-				logger.info("Jasper FIle ::::::::::::::::;" + jasperFile);
-				
-				
-				Map parameters = new HashMap();
-				System.out.println(jasperFile );
-				System.out.println(parameters);
-				bytes = JasperRunManager.runReportToPdf( jasperFile,  parameters, dataSource);
-			}
-			catch (JRException e)
-			{
-				System.out.println("Exception from MultilateralDonorDatasource = " + e);
-			}
-			if (bytes != null && bytes.length > 0)
-			{
-				ServletOutputStream ouputStream = response.getOutputStream();
-				System.out.println("Generating PDF");
-				response.setContentType("application/pdf");
-				response.setHeader("Content-Disposition","inline; filename=MultilateralDonorPdf.pdf");
-				response.setContentLength(bytes.length);
-				ouputStream.write(bytes, 0, bytes.length);
-				ouputStream.flush();
-				ouputStream.close();
-			}
-			else
-			{
-				System.out.println("Nothing to display");
+				//calling dynamic jrxml
+				AdvancedReportPdfJrxml jrxml = new AdvancedReportPdfJrxml();
+				jrxml.createJRXML(realPathJrxml, undisbFlag ,rowData, dataArray, rsc.getColumns().size(), rsc.getMeasures().size(), 
+						formBean.getReportName().replaceAll(" ", "").replaceAll("#", ""));
+				JasperCompileManager.compileReportToFile(realPathJrxml);
+				byte[] bytes = null;
+				ServletOutputStream outputStream = null;
+				try
+				{
+					Map parameters = new HashMap();
+					
+					String jasperFile = s.getServletContext().getRealPath(
+							"/WEB-INF/classes/org/digijava/module/aim/reports"+"\\"+formBean.getReportName().replaceAll(" ", "").replaceAll("#", "")+".jasper");
+					logger.info("Jasper FIle ::::::::::::::::;" + jasperFile);
+					JasperPrint jasperPrint = 
+						JasperFillManager.fillReport(jasperFile,parameters,dataSource);
+						response.setContentType("application/vnd.ms-excel");
+						String responseHeader = "inline; filename="+formBean.getReportName().replaceAll(" ", "").replaceAll("#", "");
+						logger.info("--------------" + responseHeader);
+						response.setHeader("Content-Disposition", responseHeader);
+						//response.setHeader("Content-Disposition","inline; filename=commitmentByModalityXls.xls");
+
+						logger.info("--------------");
+					
+					JRXlsExporter exporter = new JRXlsExporter();
+					outputStream = response.getOutputStream();
+					exporter.setParameter(JRExporterParameter.JASPER_PRINT, jasperPrint);
+					exporter.setParameter(JRExporterParameter.OUTPUT_STREAM, outputStream);
+					exporter.setParameter(JRXlsExporterParameter.IS_ONE_PAGE_PER_SHEET, Boolean.FALSE);
+					exporter.exportReport();
+				}
+				catch (Exception e) 
+				{
+					if (outputStream != null) 
+					{
+						outputStream.close();
+					}
+				}
+
 			}
 		}
 

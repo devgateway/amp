@@ -30,7 +30,7 @@
 
 	function popup_pdf() {
 		openResisableWindow(800, 600);
-		<digi:context name="pdf" property="context/module/moduleinstance/advancedReportPdf.do" />
+		<digi:context name="pdf" property="context/module/moduleinstance/advancedReportPdf.do?docType=pdf" />
 		document.aimAdvancedReportForm.action = "<%= pdf %>";
 		document.aimAdvancedReportForm.target = popupPointer.name;
 		document.aimAdvancedReportForm.submit();
@@ -38,7 +38,7 @@
 
 	function popup_xls() {
 		openResisableWindow(800, 600);
-		<digi:context name="xls" property="context/module/moduleinstance/viewProjectXls.do" />
+		<digi:context name="xls" property="context/module/moduleinstance/advancedReportPdf.do?docType=excel" />
 		document.aimAdvancedReportForm.action = "<%= xls %>";
 		document.aimAdvancedReportForm.target = popupPointer.name;
 		document.aimAdvancedReportForm.submit();
@@ -119,18 +119,18 @@
 					</digi:link>
                 </td>
            </tr>
-<%--			<tr>
+			<tr>
 				<td valign="bottom" class="crumb" >
 				&nbsp;&nbsp;<img src="../ampTemplate/images/xls_icon.jpg" border=0>
 				<bean:define id="translation">
 					<digi:trn key="aim:clickToCreateReportInExcel">Click here to Create Report in Excel </digi:trn>
 				</bean:define>
-				<digi:link href="" title="<%=translation%>">
+				<digi:link href="" onclick="popup_xls(''); return false;" title="<%=translation%>">
 					 <digi:trn key="aim:createReportInXls">Create Report in Xls.</digi:trn>
 				</digi:link>
                 </td>
        </tr>
---%>
+
 </logic:notEmpty>
 <!--  PDF/XLS Links -->	
 

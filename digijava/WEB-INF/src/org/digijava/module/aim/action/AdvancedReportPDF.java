@@ -468,8 +468,7 @@ public class AdvancedReportPDF extends Action
 	
 				//calling dynamic jrxml
 				AdvancedReportPdfJrxml jrxml = new AdvancedReportPdfJrxml();
-				jrxml.createJRXML(realPathJrxml, undisbFlag ,rowData, dataArray, rsc.getColumns().size(), rsc.getMeasures().size(), 
-						formBean.getReportName().replaceAll(" ", "").replaceAll("#", ""));
+				jrxml.createJRXML(realPathJrxml, undisbFlag ,rowData, dataArray, rsc.getColumns().size(), rsc.getMeasures().size(), formBean.getReportName().replaceAll(" ", "").replaceAll("#", ""), "pdf");
 				JasperCompileManager.compileReportToFile(realPathJrxml);
 				byte[] bytes = null;
 				try
@@ -525,8 +524,7 @@ public class AdvancedReportPDF extends Action
 
 				//calling dynamic jrxml
 				AdvancedReportPdfJrxml jrxml = new AdvancedReportPdfJrxml();
-				jrxml.createJRXML(realPathJrxml, undisbFlag ,rowData, dataArray, rsc.getColumns().size(), rsc.getMeasures().size(), 
-						formBean.getReportName().replaceAll(" ", "").replaceAll("#", ""));
+				jrxml.createJRXML(realPathJrxml, undisbFlag ,rowData, dataArray, rsc.getColumns().size(), rsc.getMeasures().size(), formBean.getReportName().replaceAll(" ", "").replaceAll("#", " "), "xls");				
 				JasperCompileManager.compileReportToFile(realPathJrxml);
 				byte[] bytes = null;
 				ServletOutputStream outputStream = null;
@@ -583,8 +581,7 @@ public class AdvancedReportPDF extends Action
 
 				//calling dynamic jrxml
 				AdvancedReportPdfJrxml jrxml = new AdvancedReportPdfJrxml();
-				jrxml.createJRXML(realPathJrxml, undisbFlag ,rowData, dataArray, rsc.getColumns().size(), rsc.getMeasures().size(), 
-						formBean.getReportName().replaceAll(" ", "").replaceAll("#", ""));
+				jrxml.createJRXML(realPathJrxml, undisbFlag ,rowData, dataArray, rsc.getColumns().size(), rsc.getMeasures().size(),	formBean.getReportName().replaceAll(" ", "").replaceAll("#", ""),"csv");
 				JasperCompileManager.compileReportToFile(realPathJrxml);
 				byte[] bytes = null;
 				ServletOutputStream outputStream = null;

@@ -167,8 +167,9 @@ public class PhysicalComponentReportXLS extends Action
 						data[row][10] = project.getAcUnDisbursement();
 						
 						data[row][11] = project.getProgress().toString().trim().replace('[',' ').replace(']',' ');
-						data[row][12] = project.getMeasures().toString().trim().replace('[',' ').replace(']',' ');
-						data[row][13] = project.getResponsibleActor().toString().trim().replace('[',' ').replace(']',' ');
+						data[row][12] = project.getIssues().toString().trim().replace('[',' ').replace(']',' ');
+						data[row][13] = project.getMeasures().toString().trim().replace('[',' ').replace(']',' ');
+						data[row][14] = project.getResponsibleActor().toString().trim().replace('[',' ').replace(']',' ');
 						
 						row = row + 1;
 					}// End of Project Collection
@@ -183,8 +184,10 @@ public class PhysicalComponentReportXLS extends Action
 			System.out.println("Collection empty");
 		}
 		
-		int height = (( fieldHeight / 25 ) * 10 ) + 50;
+		int height = (( fieldHeight / 25 ) * 5 ) + 50;
 		logger.info(" Column Height = " + height );
+		if(height>300)
+			height=300;
 
 		if(flag == 1)
 		{

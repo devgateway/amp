@@ -163,8 +163,9 @@ public class PhysicalComponentReportPDF extends Action
 						data[row][10] = project.getAcUnDisbursement();
 						
 						data[row][11] = project.getProgress().toString().trim().replace('[',' ').replace(']',' ');
-						data[row][12] = project.getMeasures().toString().trim().replace('[',' ').replace(']',' ');
-						data[row][13] = project.getResponsibleActor().toString().trim().replace('[',' ').replace(']',' ');
+						data[row][12] = project.getIssues().toString().trim().replace('[',' ').replace(']',' ');
+						data[row][13] = project.getMeasures().toString().trim().replace('[',' ').replace(']',' ');
+						data[row][14] = project.getResponsibleActor().toString().trim().replace('[',' ').replace(']',' ');
 						
 						row = row + 1;
 					}// End of Project Collection
@@ -179,8 +180,18 @@ public class PhysicalComponentReportPDF extends Action
 			System.out.println("Collection empty");
 		}
 		
-		int height = (( fieldHeight / 25 ) * 10 ) + 50;
+		/*for(int i=0;i<data.length;i++){
+			for(int j=0;j<data[0].length;j++){
+				if(data[i][j]!=null)
+				System.out.println("data ::::: ["+i+"]"+"["+j+"] ::::::"+data[i][j].toString());
+			}
+			System.out.println("-------------------------------------------------------"+i);
+		}*/
+		
+		int height = (( fieldHeight / 25 ) * 3 );
 		logger.info(" Column Height = " + height );
+		if(height>200)
+			height=200;
 
 		if(flag == 1)
 		{

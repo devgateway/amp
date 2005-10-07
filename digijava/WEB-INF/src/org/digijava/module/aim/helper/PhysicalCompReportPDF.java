@@ -393,7 +393,7 @@ public class PhysicalCompReportPDF
 			p2.println("mode='Opaque'");
 			p2.println("x='470'");
 			p2.println("y='30'");
-			p2.println("width='100'");
+			p2.println("width='30'");
 			p2.println("height='30'");
 			p2.println("forecolor='#000000'");
 			p2.println("backcolor='#CCCCCC'");
@@ -413,9 +413,9 @@ public class PhysicalCompReportPDF
 			p2.println("<staticText>");
 			p2.println("<reportElement");
 			p2.println("mode='Opaque'");
-			p2.println("x='570'");
+			p2.println("x='500'");
 			p2.println("y='30'");
-			p2.println("width='80'");
+			p2.println("width='140'");
 			p2.println("height='30'");
 			p2.println("forecolor='#000000'");
 			p2.println("backcolor='#CCCCCC'");
@@ -426,12 +426,12 @@ public class PhysicalCompReportPDF
 			p2.println("isRemoveLineWhenBlank='false'");
 			p2.println("isPrintInFirstWholeBand='false'");
 			p2.println("isPrintWhenDetailOverflows='false'/>");
-
 			p2.println("<textElement textAlignment='Center' verticalAlignment='Middle' rotation='None' lineSpacing='Single'>");
 			p2.println("<font fontName='Arial' pdfFontName='Helvetica' size='10' isBold='true' isItalic='false' isUnderline='false' isPdfEmbedded ='false' pdfEncoding ='Cp1252' isStrikeThrough='false' />");
 			p2.println("</textElement>");
 			p2.println("<text><![CDATA[Issues]]></text>");
 			p2.println("</staticText>");
+
 			p2.println("<staticText>");
 			p2.println("<reportElement");
 			p2.println("mode='Opaque'");
@@ -457,9 +457,9 @@ public class PhysicalCompReportPDF
 			p2.println("<staticText>");
 			p2.println("<reportElement");
 			p2.println("mode='Opaque'");
-			p2.println("x='650'");
+			p2.println("x='640'");
 			p2.println("y='30'");
-			p2.println("width='80'");
+			p2.println("width='90'");
 			p2.println("height='30'");
 			p2.println("forecolor='#000000'");
 			p2.println("backcolor='#CCCCCC'");
@@ -657,7 +657,7 @@ public class PhysicalCompReportPDF
 			p2.println("mode='Transparent'");
 			p2.println("x='470'");
 			p2.println("y='0'");
-			p2.println("width='100'");
+			p2.println("width='30'");
 			p2.println("height='"+height+"'");
 			p2.println("forecolor='#000000'");
 			p2.println("backcolor='#FFFFFF'");
@@ -668,18 +668,18 @@ public class PhysicalCompReportPDF
 			p2.println("isRemoveLineWhenBlank='false'");
 			p2.println("isPrintInFirstWholeBand='false'");
 			p2.println("isPrintWhenDetailOverflows='false'/>");
-
 			p2.println("<textElement textAlignment='Justified' verticalAlignment='Middle' rotation='None' lineSpacing='Single'>");
 			p2.println("<font fontName='Arial' pdfFontName='Helvetica' size='8' isBold='false' isItalic='false' isUnderline='false' isPdfEmbedded ='false' pdfEncoding ='Cp1252' isStrikeThrough='false' />");
 			p2.println("</textElement>");
 			p2.println("<textFieldExpression   class='java.lang.String'><![CDATA[$F{c12}]]></textFieldExpression>");
 			p2.println("</textField>");
+			
 			p2.println("<textField isStretchWithOverflow='false' pattern='' isBlankWhenNull='true' evaluationTime='Now' hyperlinkType='None'   >");
 			p2.println("<reportElement");
 			p2.println("mode='Transparent'");
-			p2.println("x='570'");
+			p2.println("x='500'");
 			p2.println("y='0'");
-			p2.println("width='80'");
+			p2.println("width='140'");
 			p2.println("height='"+height+"'");
 			p2.println("forecolor='#000000'");
 			p2.println("backcolor='#FFFFFF'");
@@ -690,18 +690,18 @@ public class PhysicalCompReportPDF
 			p2.println("isRemoveLineWhenBlank='false'");
 			p2.println("isPrintInFirstWholeBand='false'");
 			p2.println("isPrintWhenDetailOverflows='false'/>");
-
 			p2.println("<textElement textAlignment='Justified' verticalAlignment='Middle' rotation='None' lineSpacing='Single'>");
 			p2.println("<font fontName='Arial' pdfFontName='Helvetica' size='8' isBold='false' isItalic='false' isUnderline='false' isPdfEmbedded ='false' pdfEncoding ='Cp1252' isStrikeThrough='false' />");
 			p2.println("</textElement>");
 			p2.println("<textFieldExpression   class='java.lang.String'><![CDATA[$F{c13}]]></textFieldExpression>");
 			p2.println("</textField>");
+
 			p2.println("<textField isStretchWithOverflow='false' pattern='' isBlankWhenNull='true' evaluationTime='Now' hyperlinkType='None'   >");
 			p2.println("<reportElement");
 			p2.println("mode='Transparent'");
-			p2.println("x='650'");
+			p2.println("x='640'");
 			p2.println("y='0'");
-			p2.println("width='80'");
+			p2.println("width='90'");
 			p2.println("height='"+height+"'");
 			p2.println("forecolor='#000000'");
 			p2.println("backcolor='#FFFFFF'");
@@ -712,12 +712,12 @@ public class PhysicalCompReportPDF
 			p2.println("isRemoveLineWhenBlank='false'");
 			p2.println("isPrintInFirstWholeBand='false'");
 			p2.println("isPrintWhenDetailOverflows='false'/>");
-
 			p2.println("<textElement textAlignment='Justified' verticalAlignment='Middle' rotation='None' lineSpacing='Single'>");
 			p2.println("<font fontName='Arial' pdfFontName='Helvetica' size='8' isBold='false' isItalic='false' isUnderline='false' isPdfEmbedded ='false' pdfEncoding ='Cp1252' isStrikeThrough='false' />");
 			p2.println("</textElement>");
 			p2.println("<textFieldExpression   class='java.lang.String'><![CDATA[$F{c14}]]></textFieldExpression>");
 			p2.println("</textField>");
+
 			p2.println("<textField isStretchWithOverflow='false' pattern='' isBlankWhenNull='true' evaluationTime='Now' hyperlinkType='None'   >");
 			p2.println("<reportElement");
 			p2.println("mode='Transparent'");

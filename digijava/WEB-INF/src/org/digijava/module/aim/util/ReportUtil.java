@@ -2498,7 +2498,7 @@ public class ReportUtil {
 							kindTeamFunds[yrCount][0]=kindTeamFunds[yrCount][1]=kindTeamFunds[yrCount][2]=kindTeamFunds[yrCount][3]=0;
 							donorCount=0;
 						}
-						logger.info("begin intialize");
+						//logger.info("begin intialize");
 						report = new multiReport();
 						AmpTeam ampTeam=DbUtil.getAmpTeam(ampReportCache.getAmpTeamId());
 						report.setAmpTeamId(ampReportCache.getAmpTeamId());
@@ -2758,7 +2758,7 @@ public class ReportUtil {
 					logger.info("Funding Information");
 					if(ampReportCache.getFiscalYear()!=null && ampReportCache.getFiscalQuarter()!=null)
 					{
-						logger.info("begin if");
+						//logger.info("begin if");
 						if(new Long(fiscalCalId).equals(Constants.GREGORIAN))
 						{
 							fiscalYear=ampReportCache.getFiscalYear().intValue();
@@ -5412,7 +5412,7 @@ public class ReportUtil {
 
 					if(ampReportCache.getFiscalYear()!=null && ampReportCache.getFiscalQuarter()!=null)
 					{
-						logger.debug("begin if");
+						//logger.debug("begin if");
 						if(new Long(fiscalCalId).equals(Constants.GREGORIAN))
 						{
 							fiscalYear=ampReportCache.getFiscalYear().intValue();
@@ -10655,7 +10655,7 @@ public class ReportUtil {
 							}
 						}		
 						amount=0.0;
-						logger.info("End if");
+						//logger.info("End if");
 					}		
 								
 					

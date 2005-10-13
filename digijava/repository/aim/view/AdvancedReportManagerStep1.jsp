@@ -71,6 +71,20 @@ function deleteColumn()
 	}
 }
 
+function checkUncheckAll() {
+     var items=document.aimAdvancedReportForm.selectedColumns;
+		for(i=0; i<items.length; i++){
+			document.aimAdvancedReportForm.selectedColumns[i].checked = document.aimAdvancedReportForm.checkall.checked;
+		}
+}
+
+function checkUncheckAll2() {
+     var items=document.aimAdvancedReportForm.removeColumns;
+		for(i=0; i<items.length; i++){
+			document.aimAdvancedReportForm.removeColumns[i].checked = document.aimAdvancedReportForm.checkall2.checked;
+		}
+}
+
 </script>
 
 <digi:instance property="aimAdvancedReportForm" />
@@ -212,14 +226,19 @@ function deleteColumn()
 														<TR>
 				
 															<TD width="50%" vAlign="top" align="left" bgcolor="#eeeeee">
-																<TABLE width="100%" cellPadding="3" cellSpacing="1" vAlign="top" align="left" bgcolor="#eeeeee" >
+																<TABLE width="100%" cellPadding="3" cellSpacing="1" vAlign="top" align="left" bgcolor="#eeeeee" border=0>
 																	<tr height=10>	<td>	</td>	</tr>												
 																	<TR bgcolor="#eeeeee">
 																		<td align="center" class=box-title>
 																			Available Columns
 																		</td>	
 																	</tr>
-																	<tr height=10>	<td>	</td>	</tr>
+
+																	<tr height=10>	<td align="right">Select All
+																	<input type="checkbox" name="checkall" onclick="checkUncheckAll();">
+																	</input>
+																	</td>
+																	</tr>
 																	
 																	<TR>
 																		<TD>
@@ -265,6 +284,11 @@ function deleteColumn()
 																			Selected Columns
 																		</td>
 																	</tr>
+																	<tr height=10>	<td align="right">Select All
+																	<input type="checkbox" name="checkall2" onclick="checkUncheckAll2(this);">
+																	</input>
+																	</td>
+																	</tr>																	
 																	<tr height=10>	<td>	</td>	</tr>
 																	<TR>
 																		<c:if test="${!empty aimAdvancedReportForm.addedColumns}">

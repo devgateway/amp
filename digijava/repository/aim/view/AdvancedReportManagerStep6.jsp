@@ -115,6 +115,19 @@ function deleteAdjustType()
 	}
 }
 
+function checkUncheckAll() {
+     var items=document.aimAdvancedReportForm.selectedColumns;
+		for(i=0; i<items.length; i++){
+			document.aimAdvancedReportForm.selectedColumns[i].checked = document.aimAdvancedReportForm.checkall.checked;
+		}
+}
+
+function checkUncheckAll2() {
+     var items=document.aimAdvancedReportForm.removeColumns;
+		for(i=0; i<items.length; i++){
+			document.aimAdvancedReportForm.removeColumns[i].checked = document.aimAdvancedReportForm.checkall2.checked;
+		}
+}
 
 </script>
 
@@ -281,7 +294,13 @@ function deleteAdjustType()
 																			Available Measures
 																		</td>	
 																	</tr>
-																	<tr height=10>	<td>	</td>	</tr>			
+
+																	<tr height="10">	<td align="right">Select All
+																	<input type="checkbox" name="checkall" onclick="checkUncheckAll();">
+																	</input>
+																	</td>
+																	</tr>
+																
 																	<TR>
 																		<TD>
 																			<TABLE width="100%" cellPadding=2 cellSpacing=1 vAlign="top" align="top" bgcolor="#aaaaaa" border=0>
@@ -325,7 +344,11 @@ function deleteAdjustType()
 																			Selected Measures
 																		</td>
 																	</tr>
-																	<tr height=10>	<td>	</td>	</tr>
+																	<tr height=10>	<td align="right">Select All
+																	<input type="checkbox" name="checkall2" onclick="checkUncheckAll2(this);">
+																	</input>
+																	</td>
+																	</tr>																	
 																	<TR>
 																		<c:if test="${!empty aimAdvancedReportForm.addedMeasures}">
 																		<TD>

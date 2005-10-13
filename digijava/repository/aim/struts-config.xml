@@ -61,7 +61,11 @@
    <form-bean
       		name="aimFinancialOverviewForm"
       		type="org.digijava.module.aim.form.FinancialOverviewForm" />
-      
+
+   <form-bean
+      		name="aimRegionalFundingForm"
+      		type="org.digijava.module.aim.form.RegionalFundingForm" />
+	 
    <form-bean
    	  		name="aimQuarterlyInfoForm"
    	  		type="org.digijava.module.aim.form.QuarterlyInfoForm" />
@@ -349,7 +353,13 @@
    
   <!-- START TEASERS -->
 	<action forward="/showLayout.do?layout=layoutFinancingBreakdown" 
-		path="/aim/viewFinancingBreakdown" />
+			  path="/aim/viewFinancingBreakdown" />
+
+	<action forward="/showLayout.do?layout=layoutRegionalFundingBreakdown" 
+			  path="/aim/viewRegionalFundingBreakdown" />	
+
+	<action forward="/showLayout.do?layout=layoutRegionalFundingDetails" 
+		path="/aim/viewRegFundDetails" />		
 		
 	<action forward="/showLayout.do?layout=layoutFinancingBreakdownFilter" 
 		path="/aim/viewFinancingBreakdownFilter" />
@@ -455,6 +465,13 @@
     	validate="false" 
 		path="/aim/financingBreakdown">
 	</action>
+
+	<action name="aimRegionalFundingForm"
+    	type="org.digijava.module.aim.action.GetRegionalFundings"
+		scope="request"
+    	validate="false" 
+		path="/aim/getRegionalFundings">
+	</action>	
 	
 	<action name="aimFinancingBreakdownForm"
     	type="org.digijava.module.aim.action.FinancingBreakdownFilter"
@@ -1905,6 +1922,7 @@
 			  <forward name="addActivityStep5" path="/showLayout.do?layout=addActivityStep5" />
 			  <forward name="addActivityStep6" path="/showLayout.do?layout=addActivityStep6" />
 			  <forward name="addActivityStep7" path="/showLayout.do?layout=addActivityStep7" />
+			  <forward name="addActivityStep8" path="/showLayout.do?layout=addActivityStep8" />
 			  <forward name="added" path="/aim/addActivity.do?edit=true" redirect="true" />
 			  <forward name="index" path="/aim/index.do" redirect="true" />
 	</action>	
@@ -2590,7 +2608,26 @@
 		  	scope="session"
 		  	path="/aim/addFunding">	
 		  	<forward name="forward" path="/showLayout.do?layout=aim_fundingPopupLayout" />
-	</action>	
+ </action>	
+
+ 	<action
+			name="aimEditActivityForm"
+		  	type="org.digijava.module.aim.action.AddRegionalFunding"
+		  	scope="session"
+			path="/aim/addRegionalFunding">	
+			<forward name="forward" path="/showLayout.do?layout=aim_addRegionalFunding" />
+			<forward name="updated" path="/aim/addActivity.do?edit=true" redirect="true" />
+ </action>
+
+ 	<action
+			name="aimEditActivityForm"
+		  	type="org.digijava.module.aim.action.RemoveRegionalFunding"
+		  	scope="session"
+			path="/aim/removeRegionalFunding">	
+			<forward name="forward" path="/aim/addActivity.do?edit=true" redirect="true"/>
+ </action>
+ 
+
 	<action
 			name="aimEditActivityForm"
 			type="org.digijava.module.aim.action.EditFunding"

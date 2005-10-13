@@ -31,13 +31,6 @@ public class CurrencyWorker {
 		}
 		resultStr = mf.format(Math.round(resultDbl));
 
-		/*
-		 * Modified by Priyajith Formated the amount to contain decimal places
-		 * for ex. if the String value is 2,500,000 this will be made into
-		 * 2,500,000.00
-		 */
-		//resultStr = insertDecmalPlaces(resultStr);
-
 		if (logger.isDebugEnabled())
 			logger.debug("convert returns=" + resultStr);
 		return resultStr;
@@ -54,11 +47,6 @@ public class CurrencyWorker {
 
 	public static double convert1(double amt, double fromExchangeRate,
 			double toExchangeRate) {
-		/*
-		 * logger.debug("convert passed amt="+ amt +"
-		 * ,fromExchangeRate="+fromExchangeRate
-		 * +",toExchangeRate"+toExchangeRate) ;
-		 */
 		if (fromExchangeRate != toExchangeRate) {
 			double inter = 1 / fromExchangeRate;
 			inter = inter * amt;
@@ -97,54 +85,7 @@ public class CurrencyWorker {
 		
 		return DecimalToText.ConvertDecimalToText(value);
 		
-
-		/*
-		String dec = "";
-		if (fmt.indexOf(".") != -1) {
-			dec = fmt.substring(fmt.indexOf(".") + 1, fmt.length());
-			fmt = fmt.substring(0, fmt.indexOf("."));
-		}
-
-		if (fmt.trim().length() == 0)
-			fmt = "0";
-
-		StringBuffer buf = new StringBuffer(fmt);
-		int itrCnt = (buf.length() - 1) / 3;
-		buf = buf.reverse();
-		for (int i = 0; i < itrCnt; i++) {
-			buf.insert((((i + 1) * 3) + i), ',');
-		}
-		buf = buf.reverse();
-		if (dec.trim().length() != 0) {
-			buf.append('.');
-			buf.append(dec);
-		}
-
-		fmt = buf.toString();
-		*/
 	}
-	
-	/*
-	public static String insertDecmalPlaces(String amt) {
-		if (amt == null) return null;
-		String resultStr = amt.trim();
-		if (resultStr.indexOf(".") == -1) {
-			resultStr += ".00";
-		} else {
-			int index = resultStr.indexOf(".");
-			if (index + 1 < resultStr.length()) {
-				String temp = resultStr
-						.substring(index + 1, resultStr.length());
-				if (temp.length() == 1) {
-					resultStr += "0";
-				}
-			} else {
-				resultStr += "00";
-			}
-		}
-		
-		return resultStr;
-	}*/
 	
 	public static boolean validateAmount(String s) {
 		boolean valid = true;

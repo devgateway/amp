@@ -121,11 +121,11 @@
 						<TABLE border="0" cellpadding="0" cellspacing="1" bgcolor="#F4F4F2" height="20">
                  		<TR bgColor=#f4f4f2 height="20">
 								<logic:equal name="aimMainProjectDetailsForm" property="tabIndex" value="0">
-	                     <TD vAlign=center bgColor=#222e5d class="sub-nav-selected" noWrap width="165">
+	                     <TD vAlign=center bgColor=#222e5d class="sub-nav-selected" noWrap width="149">
 									:: <digi:trn key="aim:channelOverview">Channel Overview</digi:trn>									
 								</logic:equal>
 								<logic:notEqual name="aimMainProjectDetailsForm" property="tabIndex" value="0">
-	                     <TD vAlign=center bgColor=#3754a1 noWrap width="165">
+	                     <TD vAlign=center bgColor=#3754a1 noWrap width="149">
 									<bean:define id="translation">
 										<digi:trn key="aim:clickToViewChannelOverview">Click here to view Channel Overview</digi:trn>
 									</bean:define>
@@ -136,11 +136,11 @@
 								</TD>
 									
 								<logic:equal name="aimMainProjectDetailsForm" property="tabIndex" value="1">
-	                     <TD vAlign=center bgColor=#222e5d class="sub-nav-selected" noWrap width="175">
+	                     <TD vAlign=center bgColor=#222e5d class="sub-nav-selected" noWrap width="159">
 									:: <digi:trn key="aim:financialProgress">Financial Progress</digi:trn>								
 								</logic:equal>
 								<logic:notEqual name="aimMainProjectDetailsForm" property="tabIndex" value="1">
-                    		<TD vAlign=center bgColor=#3754a1 noWrap width="175">
+                    		<TD vAlign=center bgColor=#3754a1 noWrap width="159">
               					<c:set target="${urlTabs}" property="tabIndex" value="1"/>
 <bean:define id="translation">
 	<digi:trn key="aim:clickToViewFinancialProgress">Click here to view Financial Progress</digi:trn>
@@ -152,11 +152,11 @@
 								</TD>
 									
 								<logic:equal name="aimMainProjectDetailsForm" property="tabIndex" value="2">
-	                      <TD vAlign=center bgColor=#222e5d class="sub-nav-selected" noWrap width="170">
+	                      <TD vAlign=center bgColor=#222e5d class="sub-nav-selected" noWrap width="154">
 									:: <digi:trn key="aim:physicalProgress">Physical Progress</digi:trn>  
 								</logic:equal>
 								<logic:notEqual name="aimMainProjectDetailsForm" property="tabIndex" value="2">
-                    		<TD vAlign=center bgColor=#3754a1 noWrap width="170">
+                    		<TD vAlign=center bgColor=#3754a1 noWrap width="154">
                    			<c:set target="${urlTabs}" property="tabIndex" value="2"/>
 <bean:define id="translation">
 	<digi:trn key="aim:clickToViewPhysicalProgress">Click here to view Physical Progress</digi:trn>
@@ -168,11 +168,11 @@
 								</TD>
 									
 								<logic:equal name="aimMainProjectDetailsForm" property="tabIndex" value="3">
-	                     <TD vAlign=center bgColor=#222e5d class="sub-nav-selected" noWrap>
+	                     <TD vAlign=center bgColor=#222e5d class="sub-nav-selected" noWrap width="102">
 									:: <digi:trn key="aim:documents">Documents</digi:trn> 									
 								</logic:equal>
 								<logic:notEqual name="aimMainProjectDetailsForm" property="tabIndex" value="3">
-	                    	<TD vAlign=center bgColor=#3754a1 noWrap width="117">
+	                    	<TD vAlign=center bgColor=#3754a1 noWrap width="102">
                    			<c:set target="${urlTabs}" property="tabIndex" value="3"/>
 <bean:define id="translation">
 	<digi:trn key="aim:clickToViewDocuments">Click here to view Documents</digi:trn>
@@ -182,6 +182,21 @@
 									</digi:link>									
 								</logic:notEqual>
 								</TD>
+								<logic:equal name="aimMainProjectDetailsForm" property="tabIndex" value="4">
+	                     <TD vAlign=center bgColor=#222e5d class="sub-nav-selected" noWrap width="153">
+									:: <digi:trn key="aim:regionalFundings">Regional Fundings</digi:trn> 									
+								</logic:equal>
+								<logic:notEqual name="aimMainProjectDetailsForm" property="tabIndex" value="4">
+	                    	<TD vAlign=center bgColor=#3754a1 noWrap width="153">
+                   			<c:set target="${urlTabs}" property="tabIndex" value="4"/>
+<bean:define id="translation">
+	<digi:trn key="aim:clickToViewRegionalFundings">Click here to view regional fundings</digi:trn>
+</bean:define>
+                    			<digi:link href="/viewRegionalFundingBreakdown.do" name="urlTabs" styleClass="sub-nav" title="<%=translation%>" >
+									 :: <digi:trn key="aim:regionalFundings">Regional Fundings</digi:trn> 	
+									</digi:link>									
+								</logic:notEqual>
+								</TD>								
 								<TD vAlign=middle width="100%" bgColor=#3754A1 >&nbsp;</TD>
 							</TR>
 						</TABLE>

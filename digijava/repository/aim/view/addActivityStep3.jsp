@@ -219,8 +219,8 @@
 											<td width="13" height="20" background="module/aim/images/left-side.gif">
 											</td>
 											<td vAlign="center" align ="center" class="textalb" height="20" bgcolor="#006699">
-												<digi:trn key="aim:step3Funding">
-													Step 3 of 7: Funding
+												<digi:trn key="aim:step3of8Funding">
+													Step 3 of 8: Funding
 												</digi:trn>
 											</td>
 											<td width="13" height="20" background="module/aim/images/right-side.gif">

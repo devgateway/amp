@@ -180,8 +180,8 @@ A.comment:hover
 
 A.sub-nav 
 {
-	PADDING-RIGHT: 9px; 
-	PADDING-LEFT: 20px; 
+	PADDING-RIGHT: 3px; 
+	PADDING-LEFT: 10px; 
 	FONT-WEIGHT: normal; 
 	FONT-SIZE: 11px; 
 	PADDING-BOTTOM: 3px; 
@@ -281,8 +281,8 @@ A.sub-nav3:hover
 
 A.sub-nav:visited 
 {
-	PADDING-RIGHT: 9px; 
-	PADDING-LEFT: 20px; 
+	PADDING-RIGHT: 3px; 
+	PADDING-LEFT: 10px; 
 	FONT-WEIGHT: normal; 
 	FONT-SIZE: 11px; 
 	PADDING-BOTTOM: 3px; 
@@ -298,8 +298,8 @@ A.sub-nav:visited
 
 A.sub-nav:hover 
 {
-	PADDING-RIGHT: 9px; 
-	PADDING-LEFT: 20px; 
+	PADDING-RIGHT: 3px; 
+	PADDING-LEFT: 10px; 
 	FONT-WEIGHT: normal; 
 	FONT-SIZE: 11px; 
 	PADDING-BOTTOM: 3px; 
@@ -315,8 +315,8 @@ A.sub-nav:hover
 
 .sub-nav 
 {
-	PADDING-RIGHT: 9px; 
-	PADDING-LEFT: 20px; 
+	PADDING-RIGHT: 3px; 
+	PADDING-LEFT: 10px; 
 	FONT-WEIGHT: normal; 
 	FONT-SIZE: 11px; 
 	PADDING-BOTTOM: 3px; 
@@ -332,8 +332,8 @@ A.sub-nav:hover
 
 .sub-nav-selected 
 {
-	PADDING-RIGHT: 9px; 
-	PADDING-LEFT: 20px; 
+	PADDING-RIGHT: 0px; 
+	PADDING-LEFT: 10px; 
 	PADDING-BOTTOM: 3px; 
 	PADDING-TOP: 3px;
 	FONT-WEIGHT: normal; 
@@ -877,4 +877,18 @@ A.imglink:hover
 	PADDING-LEFT: 40px; 
 	PADDING-BOTTOM: 0px; 
 	PADDING-TOP: 0px;	
+}
+
+.box-border-alt1
+{
+	BORDER-RIGHT: #c9c9c7 1px solid; 
+	PADDING-RIGHT: 5px; 
+	BORDER-TOP: #c9c9c7 1px solid; 
+	PADDING-LEFT: 5px; 
+	PADDING-BOTTOM: 9px; 
+	BORDER-LEFT: #c9c9c7 1px solid; 
+	PADDING-TOP: 6px; 
+	BORDER-BOTTOM: #c9c9c7 1px solid; 
+	WHITE-SPACE: nowrap; 
+	BACKGROUND-COLOR: #f4f4f2
 }

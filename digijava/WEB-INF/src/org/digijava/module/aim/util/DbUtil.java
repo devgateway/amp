@@ -4498,8 +4498,7 @@ public class DbUtil {
 			Query qry = session.createQuery(queryString);
 			qry.setParameter("id", id, Hibernate.LONG);
 			Iterator itr = qry.list().iterator();
-			AmpTeam ampTeam = null;
-			while (itr.hasNext()) {
+			if (itr.hasNext()) {
 				ampCurrency = (AmpCurrency) itr.next();
 			}
 			// end
@@ -7528,6 +7527,34 @@ public class DbUtil {
 		return group;	
 	}
 
+	public static AmpPerspective getPerspective(String code) {
+		Session session = null;
+		AmpPerspective persp = null;
+		logger.debug("In getPerspective()" + code);
+		try {
+			session = PersistenceManager.getSession();
+			String qryStr = "select p from " + AmpPerspective.class.getName() + " p " +
+					"where (p.code=:code)";
+			Query qry = session.createQuery(qryStr);
+			qry.setParameter("code",code,Hibernate.STRING);
+			Iterator itr = qry.list().iterator();
+			if (itr.hasNext()) { 
+				persp = (AmpPerspective) itr.next();
+				logger.debug("Got the perspective " + persp.getName());
+			}
+		} catch (Exception ex) {
+			logger.error("Unable to get AmpPerspective "
+					+ ex.getMessage());
+			ex.printStackTrace(System.out);
+		} finally {
+			try {
+				PersistenceManager.releaseSession(session);
+			} catch (Exception ex2) {
+				logger.error("releaseSession() failed ");
+			}
+		}
+		return persp;			
+	}
 
 
 }

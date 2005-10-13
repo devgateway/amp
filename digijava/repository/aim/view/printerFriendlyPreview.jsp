@@ -269,7 +269,8 @@
 												&nbsp;
 											</c:if>											
 										</td>
-									</tr>										
+									</tr>		
+									
 									<tr>
 										<td  width="140" align="right" bgcolor="#ffffff">
 											<b>
@@ -446,6 +447,140 @@
 											&nbsp;
 										</td>
 									</tr>		
+
+									<tr>
+										<td width="30%" align="right" bgcolor="#ffffff">
+											<b><digi:trn key="aim:regionalFundings">
+											Regional Fundings</digi:trn></b>
+										</td>
+										<td bgcolor="#ffffff">
+											<c:if test="${!empty aimEditActivityForm.regionalFundings}">
+												<table width="100%" cellSpacing="1" cellPadding="3" bgcolor="#aaaaaa">
+												<c:forEach var="regFunds" items="${aimEditActivityForm.regionalFundings}">
+													<tr><td bgcolor="#ffffff">
+														<table width="100%" cellSpacing="1" cellPadding="1">
+															<tr><td bgcolor="#ffffff"><b>
+																<c:out value="${regFunds.regionName}"/></b>
+															</td></tr>
+															<c:if test="${!empty regFunds.commitments}">
+																<tr><td bgcolor="#ffffff">
+																	<table width="100%" cellSpacing="1" cellPadding="1" bordercolor="#dddddd"
+																	border=1 style="border-collapse: collapse">
+																		<tr>
+																			<td valign="top" width="100" bgcolor="#ffffff">
+																				<digi:trn key="aim:commitments">
+																				Commitments</digi:trn>
+																			</td>
+																			<td bgcolor="#ffffff">
+																				<table width="100%" cellSpacing="1" cellPadding="1" bgcolor="#ffffff">
+																					<c:forEach var="fd" items="${regFunds.commitments}">
+																						<tr>
+																							<td width="50" bgcolor="#ffffff">
+																								<c:out value="${fd.adjustmentTypeName}"/>
+																							</td>
+																							<td align="right" width="100" bgcolor="#ffffff">
+																							* <c:out value="${fd.transactionAmount}"/>
+																							</td>
+																							<td bgcolor="#ffffff">
+																								<c:out value="${fd.currencyCode}"/>
+																							</td>
+																							<td bgcolor="#ffffff" width="70">
+																								<c:out value="${fd.transactionDate}"/>
+																							</td>
+																							<td bgcolor="#ffffff">
+																								<c:out value="${fd.perspectiveName}"/>
+																							</td>
+																						</tr>
+																					</c:forEach>
+																				</table>
+																			</td>
+																		</tr>
+																	</table>
+																</td></tr>
+															</c:if>
+															<c:if test="${!empty regFunds.disbursements}">
+																<tr><td bgcolor="#ffffff">
+																	<table width="100%" cellSpacing="1" cellPadding="1" bordercolor="#dddddd"
+																	border=1 style="border-collapse: collapse">
+																		<tr>
+																			<td valign="top" width="100" bgcolor="#ffffff">
+																				<digi:trn key="aim:disbursements">
+																				Disbursements</digi:trn>
+																			</td>
+																			<td bgcolor="#ffffff">
+																				<table width="100%" cellSpacing="1" cellPadding="1" bgcolor="#ffffff">
+																					<c:forEach var="fd" items="${regFunds.disbursements}">
+																						<tr>
+																							<td width="50" bgcolor="#ffffff">
+																								<c:out value="${fd.adjustmentTypeName}"/>
+																							</td>
+																							<td align="right" width="100" bgcolor="#ffffff">
+																							* <c:out value="${fd.transactionAmount}"/>
+																							</td>
+																							<td bgcolor="#ffffff">
+																								<c:out value="${fd.currencyCode}"/>
+																							</td>
+																							<td bgcolor="#ffffff" width="70">
+																								<c:out value="${fd.transactionDate}"/>
+																							</td>
+																							<td bgcolor="#ffffff">
+																								<c:out value="${fd.perspectiveName}"/>
+																							</td>
+																						</tr>
+																					</c:forEach>
+																				</table>
+																			</td>
+																		</tr>
+																	</table>
+																</td></tr>															
+															</c:if>
+															<c:if test="${!empty regFunds.expenditures}">
+																<tr><td bgcolor="#ffffff">
+																	<table width="100%" cellSpacing="1" cellPadding="1" bordercolor="#dddddd"
+																	border=1 style="border-collapse: collapse">
+																		<tr>
+																			<td valign="top" width="100" bgcolor="#ffffff">
+																				<digi:trn key="aim:expenditures">
+																				Expenditures</digi:trn>
+																			</td>
+																			<td bgcolor="#ffffff">
+																				<table width="100%" cellSpacing="1" cellPadding="1" bgcolor="#ffffff">
+																					<c:forEach var="fd" items="${regFunds.expenditures}">
+																						<tr>
+																							<td width="50" bgcolor="#ffffff">
+																								<c:out value="${fd.adjustmentTypeName}"/>
+																							</td>
+																							<td align="right" width="100" bgcolor="#ffffff">
+																							* <c:out value="${fd.transactionAmount}"/>
+																							</td>
+																							<td bgcolor="#ffffff">
+																								<c:out value="${fd.currencyCode}"/>
+																							</td>
+																							<td bgcolor="#ffffff" width="70">
+																								<c:out value="${fd.transactionDate}"/>
+																							</td>
+																							<td bgcolor="#ffffff">
+																								<c:out value="${fd.perspectiveName}"/>
+																							</td>
+																						</tr>
+																					</c:forEach>
+																				</table>
+																			</td>
+																		</tr>
+																	</table>
+																</td></tr>															
+															</c:if>															
+														</table>
+													</td></tr>
+												</c:forEach>
+												<tr><td bgcolor="#ffffff">
+													* <digi:trn key="aim:theAmountEnteredAreInThousands">	
+													The amount entered are in thousands (000)</digi:trn>
+												</td></tr>
+												</table>
+											</c:if>
+										</td>
+									</tr>										
 									
 									<tr>
 										<td  width="140" align="right" bgcolor="#ffffff">

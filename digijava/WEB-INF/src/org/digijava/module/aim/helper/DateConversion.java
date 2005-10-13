@@ -30,32 +30,6 @@ public class DateConversion
 	 */
 	public static Date getDate(String strDate)
 	{
-		/*
-		String temp = "" ;
-		char[] arr = strDate.toCharArray() ;
-		int i = 0 ;
-		while ( arr[i] != '/' )
-		{
-			temp += arr[i] ;
-			i++ ;
-		}		  
-		int day = Integer.parseInt(temp) ;
-		temp = "" ;
-		i++ ;
-		while( arr[i] != '/' )
-		{
-			temp += arr[i] ;
-			i++ ;
-		}		  
-		int mon = Integer.parseInt(temp) ;
-		--mon ;
-		int yr = getYear(strDate) ;
-		*/
-		
-		/**
-		 * modified by Priyajith
-		 */
-		// start
 		if (strDate == null) return null;
 		if (strDate.length() > 10 || strDate.length() < 8) return null;
 		
@@ -70,7 +44,6 @@ public class DateConversion
 		
 		curr = index + 1;
 		int yr = Integer.parseInt(strDate.substring(curr, strDate.length()));
-		// end
 		
 		GregorianCalendar gc = new GregorianCalendar(yr,mon-1,day) ;
 		if ( logger.isDebugEnabled() )

@@ -33,6 +33,7 @@ import org.digijava.module.aim.dbentity.AmpMeasure;
 import org.digijava.module.aim.dbentity.AmpOrgRole;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpPhysicalPerformance;
+import org.digijava.module.aim.dbentity.AmpRegionalFunding;
 import org.digijava.module.aim.dbentity.AmpSector;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.helper.Activity;
@@ -117,6 +118,15 @@ public class ActivityUtil {
 							}
 						}
 						session.delete(fund);
+					}
+				}
+				
+				fundSet = oldActivity.getRegionalFundings();
+				if (fundSet != null) {
+					Iterator fundSetItr = fundSet.iterator();
+					while (fundSetItr.hasNext()) {
+						AmpRegionalFunding regFund = (AmpRegionalFunding) fundSetItr.next();
+						session.delete(regFund);
 					}
 				}
 				
@@ -226,43 +236,7 @@ public class ActivityUtil {
 				oldActivity.setComponents(activity.getComponents());
 				oldActivity.setDocuments(activity.getDocuments());
 				oldActivity.setFunding(activity.getFunding());
-				
-				/*
-				Iterator itr = null;
-				if (activity.getClosingDates() != null) {
-					itr = activity.getClosingDates().iterator();
-					while (itr.hasNext()) {
-					    AmpActivityClosingDates cDate = (AmpActivityClosingDates) itr.next();
-					    cDate.setAmpActivityId(oldActivity);
-					    if (oldActivity.getClosingDates() == null) 
-					        oldActivity.setClosingDates(new HashSet());
-					    oldActivity.getClosingDates().add(cDate);
-					}				    
-				}
-				
-				if (activity.getComponents() != null) {
-					itr = activity.getComponents().iterator();
-					while (itr.hasNext()) {
-					    AmpComponent compnt = (AmpComponent) itr.next();
-					    compnt.setActivity(oldActivity);
-					    if (oldActivity.getComponents() == null)
-					        oldActivity.setComponents(new HashSet());
-					    oldActivity.getComponents().add(compnt);
-					}				    
-				}
-				
-				oldActivity.setDocuments(activity.getDocuments());				
-
-				if (activity.getFunding() != null) {
-					itr = activity.getFunding().iterator();
-					while (itr.hasNext()) {
-					    AmpFunding fund = (AmpFunding) itr.next();
-					    fund.setAmpActivityId(oldActivity);
-					    if (oldActivity.getFunding() == null)
-					        oldActivity.setFunding(new HashSet());
-					    oldActivity.getFunding().add(fund);
-					}				    
-				}*/
+				oldActivity.setRegionalFundings(activity.getRegionalFundings());
 				
 				oldActivity.setInternalIds(activity.getInternalIds());
 				oldActivity.setLocations(activity.getLocations());
@@ -279,7 +253,6 @@ public class ActivityUtil {
 				session.saveOrUpdate(oldActivity);
 			} else {
 				// create the activity
-			    logger.debug("Sector size :" + activity.getSectors().size());
 			    logger.debug("creating ....");
 			    if (activity.getMember() == null) {
 					activity.setMember(new HashSet());			        
@@ -487,6 +460,7 @@ public class ActivityUtil {
 			    activity.setComponents(new HashSet(ampActivity.getComponents()));
 			    activity.setDocuments(new HashSet(ampActivity.getDocuments()));
 			    activity.setFunding(new HashSet(ampActivity.getFunding()));
+			    activity.setRegionalFundings(new HashSet(ampActivity.getRegionalFundings()));
 			    activity.setInternalIds(new HashSet(ampActivity.getInternalIds()));
 			    activity.setLocations(new HashSet(ampActivity.getLocations()));
 			    activity.setSectors(new HashSet(ampActivity.getSectors()));
@@ -800,6 +774,29 @@ public class ActivityUtil {
 			}
 		}
 		return list;
+	}
+	
+	public static Collection getRegionalFundings(Long id) {
+		Collection col = new ArrayList();
+
+		Session  session = null;
+		try {
+			session = PersistenceManager.getSession();
+			AmpActivity activity = (AmpActivity) session.load(AmpActivity.class,id);
+			col = activity.getRegionalFundings();
+		} catch (Exception e) {
+			logger.debug("Exception in getRegionalFundings() " + e.getMessage());
+			e.printStackTrace(System.out);
+		} finally {
+			if (session != null) {
+				try {
+					PersistenceManager.releaseSession(session);
+				} catch (Exception ex) {
+					logger.debug("Exception while releasing session " + ex.getMessage());
+				}
+			}
+		}		
+		return col;
 	}
 
 } // End

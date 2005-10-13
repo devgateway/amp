@@ -11,34 +11,25 @@ import java.io.Serializable;
 public class FundingDetail implements Serializable
 {
 	private long indexId;
-
 	private boolean checked;
-
 	private int transactionType;
-
 	private int adjustmentType;
-
 	private String adjustmentTypeName;
-
 	private String transactionDate;
-
 	private String transactionAmount;
-
 	private String perspectiveCode;
-
 	private String perspectiveName;
-
 	private Long reportingOrganizationId;
-
 	private String reportingOrganizationName;
-
 	private String currencyCode;
-
 	private String currencyName;
-
 	private int index;
-	
 	private String classification;
+	
+	/*
+	private Long regionId;
+	private String regionName;
+	*/
 	
 	public FundingDetail() {}
 

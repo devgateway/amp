@@ -142,7 +142,7 @@ function unload() {
 											</td>
 											<td align="left" vAlign="center">&nbsp;
 												<a href="javascript:newWindow(1)">
-												<img src="../ampTemplate/images/show-calendar.gif" width=24 height=22 border=0></a>
+												<img src="../ampTemplate/images/show-calendar.gif" border=0></a>
 											</td>
 										</tr>
 									</table>

@@ -157,7 +157,12 @@
 		<hibernate-class>
 			org.digijava.module.aim.dbentity.AmpActor
 		</hibernate-class>
-
+		<hibernate-class>
+			org.digijava.module.aim.dbentity.AmpComponentFunding
+		</hibernate-class>
+		<hibernate-class>
+			org.digijava.module.aim.dbentity.AmpRegionalFunding
+		</hibernate-class>		
 		<hibernate-class>
 			org.digijava.module.aim.dbentity.AmpReportPhysicalPerformance
 		</hibernate-class>

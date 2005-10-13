@@ -6,7 +6,6 @@
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
 
-<digi:instance property="aimEditActivityForm" />
 
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/addActivity.js"/>"></script>
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
@@ -15,20 +14,93 @@
 
 <!--
 
-function addOrgs(value) {
-	if (document.aimEditActivityForm.currUrl.value == "" ||
-						 document.aimEditActivityForm.prevOrg.value != value) { 		  			  			  		  
-		openNewWindow(600, 400);
-		<digi:context name="selectOrganization" property="context/module/moduleinstance/selectOrganization.do~orgSelReset=true" />
-		document.aimEditActivityForm.action = "<%= selectOrganization %>~item="+value+"~edit=true";
-		document.aimEditActivityForm.currUrl.value = "<%= selectOrganization %>";
-		document.aimEditActivityForm.prevOrg.value = value;
+function validate(field) {
+	if (field == 1) { // validate location
+		if (document.aimEditActivityForm.selDocs.checked != null) {
+			if (document.aimEditActivityForm.selDocs.checked == false) {
+				alert("Please choose a document to remove");
+				return false;
+			}				  
+		} else {
+			var length = document.aimEditActivityForm.selDocs.length;	  
+			var flag = 0;
+			for (i = 0;i < length;i ++) {
+				if (document.aimEditActivityForm.selDocs[i].checked == true) {
+					flag = 1;
+					break;
+				}
+			}		
+
+			if (flag == 0) {
+				alert("Please choose a document to remove");
+				return false;					  
+			}				  
+		}
+		return true;
+	} else { // validate sector
+		if (document.aimEditActivityForm.selLinks.checked != null) {
+			if (document.aimEditActivityForm.selLinks.checked == false) {
+				alert("Please choose a link to remove");
+				return false;
+			}				  
+		} else {
+			var length = document.aimEditActivityForm.selLinks.length;	  
+			var flag = 0;
+			for (i = 0;i < length;i ++) {
+				if (document.aimEditActivityForm.selLinks[i].checked == true) {
+					flag = 1;
+					break;
+				}
+			}		
+
+			if (flag == 0) {
+				alert("Please choose a link to remove");
+				return false;					  
+			}				  
+		}
+		return true;			  
+	}		  
+}
+
+function addDocuments() {
+	if (document.aimEditActivityForm.currUrl.value == "") {
+		openNewWindow(600, 230);
+		document.aimEditActivityForm.docFileOrLink.value = "file";
+		<digi:context name="selDoc" property="context/module/moduleinstance/selectDocument.do?edit=true" />
+		document.aimEditActivityForm.action = "<%= selDoc %>";
+		document.aimEditActivityForm.currUrl.value = "<%= selDoc %>";
 		document.aimEditActivityForm.target = popupPointer.name;
 		document.aimEditActivityForm.submit();
 	} else {
-		popupPointer.focus();
+		popupPointer.focus();	  
 	}
-} 	
+}
+
+function addLinks() {
+	if (document.aimEditActivityForm.currUrl.value == "") {
+		openNewWindow(600, 225);
+		document.aimEditActivityForm.docFileOrLink.value = "link";
+		<digi:context name="selDoc" property="context/module/moduleinstance/selectDocument.do?edit=true" />
+		document.aimEditActivityForm.action = "<%= selDoc %>";
+		document.aimEditActivityForm.currUrl.value = "<%= selDoc %>";
+		document.aimEditActivityForm.target = popupPointer.name;
+		document.aimEditActivityForm.submit();
+	} else {
+		popupPointer.focus();	  
+	}
+}
+
+function removeSelDocuments() {
+	var flag = validate(1);
+	if (flag == false) return false;
+	document.aimEditActivityForm.docFileOrLink.value = "file";
+	<digi:context name="remDoc" property="context/module/moduleinstance/removeSelDocuments.do?edit=true" />
+	document.aimEditActivityForm.action = "<%= remDoc %>";
+	document.aimEditActivityForm.target = "_self"
+	document.aimEditActivityForm.submit();
+	return true;
+}
+
 function resetAll()
 {
 	<digi:context name="resetAll" property="context/module/moduleinstance/resetAll.do?edit=true" />
@@ -38,23 +110,26 @@ function resetAll()
 	return true;
 }
 
-function removeSelOrgs(value) {
-	document.aimEditActivityForm.item.value = value;
-	<digi:context name="remOrgs" property="context/module/moduleinstance/removeSelRelOrgs.do?edit=true" />
-	document.aimEditActivityForm.action = "<%= remOrgs %>";
+function removeSelLinks() {
+	var flag = validate(2);
+	if (flag == false) return false;
+	document.aimEditActivityForm.docFileOrLink.value = "link";
+	<digi:context name="remDoc" property="context/module/moduleinstance/removeSelDocuments.do?edit=true" />
+	document.aimEditActivityForm.action = "<%= remDoc %>";
 	document.aimEditActivityForm.target = "_self"
 	document.aimEditActivityForm.submit();
 	return true;
 }
-
 -->
 </script>
 
+<digi:instance property="aimEditActivityForm" />
 <digi:form action="/addActivity.do" method="post">
+
 <html:hidden property="step" />
-<html:hidden property="item" />
+<html:hidden property="docFileOrLink" />
+
 <input type="hidden" name="currUrl">
-<input type="hidden" name="prevOrg">
 
 <html:hidden property="editAct" />
 
@@ -80,7 +155,7 @@ function removeSelOrgs(value) {
 									<bean:define id="translation">
 										<digi:trn key="aim:clickToViewAdmin">Click here to go to Admin Home</digi:trn>
 									</bean:define>
-									<digi:link href="/admin.do" styleClass="comment" title="<%=translation%>">
+									<digi:link href="/admin.do" styleClass="comment" title="<%translation%>">
 										<digi:trn key="aim:AmpAdminHome">
 											Admin Home
 										</digi:trn>
@@ -99,8 +174,7 @@ function removeSelOrgs(value) {
 								<bean:define id="translation">
 									<digi:trn key="aim:clickToViewAddActivityStep1">Click here to go to Add Activity Step 1</digi:trn>
 								</bean:define>
-								<digi:link href="/addActivity.do?step=1&edit=true" styleClass="comment" title="<%=translation%>" >
-								
+								<digi:link href="/addActivity.do?step=1&edit=true" styleClass="comment" title="<%=translation%>">
 								<c:if test="${aimEditActivityForm.editAct == true}">
 									<digi:trn key="aim:editActivityStep1">
 										Edit Activity - Step 1
@@ -112,41 +186,43 @@ function removeSelOrgs(value) {
 									</digi:trn>
 								</c:if>																
 								</digi:link>&nbsp;&gt;&nbsp;						
-								<bean:define id="translation">
-									<digi:trn key="aim:clickToViewAddActivityStep2">Click here to go to Add Activity Step 2</digi:trn>
-								</bean:define>
-								<digi:link href="/addActivity.do?step=2&edit=true" styleClass="comment" title="<%=translation%>" >						
+									<bean:define id="translation">
+										<digi:trn key="aim:clickToViewAddActivityStep2">Click here to goto Add Activity Step 2</digi:trn>
+									</bean:define>
+									<digi:link href="/addActivity.do?step=2&edit=true" styleClass="comment" title="<%=translation%>">						
 									<digi:trn key="aim:addActivityStep2">
 									Step 2
 									</digi:trn>
 									</digi:link>&nbsp;&gt;&nbsp;			
 									<bean:define id="translation">
-										<digi:trn key="aim:clickToViewAddActivityStep3">Click here to go to Add Activity Step 3</digi:trn>
+										<digi:trn key="aim:clickToViewAddActivityStep3">Click here to goto Add Activity Step 3</digi:trn>
 									</bean:define>
-									<digi:link href="/addActivity.do?step=3&edit=true" styleClass="comment" title="<%=translation%>" >						
+									<digi:link href="/addActivity.do?step=3&edit=true" styleClass="comment" title="<%=translation%>">
 									<digi:trn key="aim:addActivityStep3">
 									Step 3
 									</digi:trn>
-									</digi:link>&nbsp;&gt;&nbsp;							
+									</digi:link>&nbsp;&gt;&nbsp;
+									
 									<bean:define id="translation">
-										<digi:trn key="aim:clickToViewAddActivityStep4">Click here to go to Add Activity Step 4</digi:trn>
+										<digi:trn key="aim:clickToViewAddActivityStep4">Click here to goto Add Activity Step 4</digi:trn>
 									</bean:define>
-									<digi:link href="/addActivity.do?step=4&edit=true" styleClass="comment" title="<%=translation%>" >						
+									<digi:link href="/addActivity.do?step=4&edit=true" styleClass="comment" title="<%=translation%>">
 									<digi:trn key="aim:addActivityStep4">
 									Step 4
 									</digi:trn>
 									</digi:link>&nbsp;&gt;&nbsp;			
+									
 									<bean:define id="translation">
-										<digi:trn key="aim:clickToViewAddActivityStep5">Click here to go to Add Activity Step 5</digi:trn>
+										<digi:trn key="aim:clickToViewAddActivityStep5">Click here to goto Add Activity Step 5</digi:trn>
 									</bean:define>
-									<digi:link href="/addActivity.do?step=5&edit=true" styleClass="comment" title="<%=translation%>" >						
+									<digi:link href="/addActivity.do?step=5&edit=true" styleClass="comment" title="<%=translation%>">
 									<digi:trn key="aim:addActivityStep5">
 									Step 5
 									</digi:trn>
-									</digi:link>&nbsp;&gt;&nbsp;			
+									</digi:link>&nbsp;&gt;&nbsp;												
 									<digi:trn key="aim:addActivityStep6">
 									Step 6
-									</digi:trn>
+									</digi:trn>						
 								</span>
 							</td>
 						</tr>
@@ -181,8 +257,8 @@ function removeSelOrgs(value) {
 											<td width="13" height="20" background="module/aim/images/left-side.gif">
 											</td>
 											<td vAlign="center" align ="center" class="textalb" height="20" bgcolor="#006699">
-												<digi:trn key="aim:step6RelatedOrganizations">
-													Step 6 of 7: Related Organizations
+												<digi:trn key="aim:step6of8RelatedDocumentsandLinks">								
+													Step 6 of 8: Related Documents and Links
 												</digi:trn>
 											</td>
 											<td width="13" height="20" background="module/aim/images/right-side.gif">
@@ -194,48 +270,60 @@ function removeSelOrgs(value) {
 							<tr><td width="100%" bgcolor="#f4f4f2">
 							<table width="100%" cellSpacing="1" cellPadding="3" vAlign="top" align="left" bgcolor="#006699">
 							<tr><td bgColor=#f4f4f2 align="center" vAlign="top">
-
 								<!-- contents -->
 
 								<table width="95%" bgcolor="#f4f4f2">
 									<tr><td>
 										<IMG alt=Link height=10 src="../ampTemplate/images/arrow-014E86.gif" width=15>
-										<a title="<digi:trn key="aim:AgencyExecuting">The organization that receives the funds from the funding country/agency, and coordinates the project</digi:trn>">
-										<b><digi:trn key="aim:executingAgency">Executing Agency</digi:trn></b></a>
+										<a title="<digi:trn key="aim:DocumentsRelated">Document related to the project</digi:trn>">
+										<b><digi:trn key="aim:relatedDocuments">Related Documents</digi:trn></b></a>
 									</td></tr>
 									<tr><td bgColor=#f4f4f2>
 										&nbsp;
 									</td></tr>									
 									<tr><td>
-										<logic:notEmpty name="aimEditActivityForm" property="executingAgencies">
+										<logic:notEmpty name="aimEditActivityForm" property="documentList">
 											<table width="100%" cellSpacing=1 cellPadding=5 class="box-border-nopadding">
-												<logic:iterate name="aimEditActivityForm" property="executingAgencies"
-												id="exAgency" type="org.digijava.module.aim.dbentity.AmpOrganisation">
-												<tr><td>
-													<table width="100%" cellSpacing="1" cellPadding="1" vAlign="top" align="left" bgcolor="#ffffff">
-														<tr>
-															<td width="3">
-																<html:multibox property="selExAgencies">
-																	<bean:write name="exAgency" property="ampOrgId" />
-																</html:multibox>															
-															</td>
-															<td align="left">
-																<bean:write name="exAgency" property="name" />
-															</td>
-														</tr>
-													</table>
-												</td></tr>
+												<logic:iterate name="aimEditActivityForm" property="documentList"
+												id="selDocuments" type="org.digijava.module.cms.dbentity.CMSContentItem">
+												<tr>
+													<td>
+														<html:multibox property="selDocs">
+															<bean:write name="selDocuments" property="id" />
+														</html:multibox>
+														<bean:write name="selDocuments" property="title" /> - 
+
+														<c:if test="${!empty selDocuments.fileName}">
+							   							<bean:define id="fileName" name="selDocuments" 
+															property="fileName" />
+														    <%
+															int index2;
+															String extension = null;
+															index2 = ((String)fileName).lastIndexOf(".");	
+															if( index2 >= 0 ) {
+															   extension = "module/cms/images/extensions/" + 
+																((String)fileName).substring(
+																index2 + 1,((String)fileName).length()) + ".gif";
+															}
+														    %>
+														    <digi:img skipBody="true" src="<%=extension%>" border="0" 
+															 align="absmiddle"/>	
+														</c:if>
+															<i>
+														<bean:write name="selDocuments" property="fileName" /></i>	
+													</td>
+												</tr>
 												</logic:iterate>
 												<tr><td>
-													<table cellSpacing=1 cellPadding=1>
+													<table cellSpacing=2 cellPadding=2>
 														<tr>
 															<td>
-																<input type="button" value="Add Organizations" class="buton" 
-																onclick="addOrgs(1)" class="buton">
+																<input type="button" value="Add Documents" class="buton" 
+																onclick="addDocuments()" class="buton">
 															</td>
 															<td>
-																<input type="button" value="Remove Selected Organizations" class="buton" 
-																onclick="return removeSelOrgs(1)" class="buton">
+																<input type="button" value="Remove Documents" class="buton" 
+																onclick="return removeSelDocuments()" class="buton">
 															</td>
 														</tr>
 													</table>
@@ -243,12 +331,12 @@ function removeSelOrgs(value) {
 											</table>											
 										</logic:notEmpty>
 										
-										<logic:empty name="aimEditActivityForm" property="executingAgencies">
+										<logic:empty name="aimEditActivityForm" property="documentList">
 											<table width="100%" bgcolor="#cccccc" cellSpacing=1 cellPadding=5>
 												<tr>
 													<td bgcolor="#ffffff">
-														<input type="button" value="Add Organizations" class="buton" 
-														onclick="addOrgs(1)">
+														<input type="button" value="Add Documents" class="buton" 
+														onclick="addDocuments()" class="buton">
 													</td>
 												</tr>
 											</table>
@@ -257,78 +345,59 @@ function removeSelOrgs(value) {
 									<tr><td>
 										&nbsp;
 									</td></tr>
-
 									<tr><td>
 										<IMG alt=Link height=10 src="../ampTemplate/images/arrow-014E86.gif" width=15>
-										<a title="<digi:trn key="aim:AgencyImplementing">The organization that directly implements the activity</digi:trn>">
-										<b><digi:trn key="aim:implementingAgency">Implementing Agency</digi:trn></b></a>
+										<a title="<digi:trn key="aim:WebSource">Web links related to the project</digi:trn>">										  			  <b><digi:trn key="aim:webResource">Web resources</digi:trn></b></a>
 									</td></tr>
 									<tr><td bgColor=#f4f4f2>
 										&nbsp;
 									</td></tr>									
 									<tr><td>
-										<logic:notEmpty name="aimEditActivityForm" property="impAgencies">
+										<logic:notEmpty name="aimEditActivityForm" property="linksList">
 											<table width="100%" cellSpacing=1 cellPadding=5 class="box-border-nopadding">
-												<logic:iterate name="aimEditActivityForm" property="impAgencies"
-												id="impAgency" type="org.digijava.module.aim.dbentity.AmpOrganisation">
-												<tr><td>
-													<table width="100%" cellSpacing="1" cellPadding="1" vAlign="top" align="left">
-														<tr>
-															<td width="3">
-																<html:multibox property="selImpAgencies">
-																	<bean:write name="impAgency" property="ampOrgId" />
-																</html:multibox>															
-															</td>
-															<td align="left">
-																<bean:write name="impAgency" property="name" />
-															</td>
-														</tr>
-													</table>
-												</td></tr>
+												<logic:iterate name="aimEditActivityForm" property="linksList"
+												id="selWebLinks" type="org.digijava.module.cms.dbentity.CMSContentItem">
+												<tr>
+													<td>
+														<html:multibox property="selLinks">
+															<bean:write name="selWebLinks" property="id" />
+														</html:multibox>
+														<bean:write name="selWebLinks" property="title" /> - 
+														<a href="<bean:write name="selWebLinks" property="url" />" target="_blank">
+														<bean:write name="selWebLinks" property="url" />
+													</td>
+												</tr>
 												</logic:iterate>
 												<tr><td>
-													<table cellSpacing=1 cellPadding=1>
+													<table cellSpacing=2 cellPadding=2>
 														<tr>
 															<td>
-																<input type="button" value="Add Organizations" class="buton" 
-																onclick="addOrgs(2)" class="buton">
+																<input type="button" value="Add Web Resources" class="buton" 
+																onclick="addLinks()" class="buton">
 															</td>
 															<td>
-																<input type="button" value="Remove Selected Organizations" class="buton" 
-																onclick="return removeSelOrgs(2)" class="buton">
+																<input type="button" value="Remove Web Resources" class="buton" 
+																onclick="return removeSelLinks()" class="buton">
 															</td>
 														</tr>
 													</table>
 												</td></tr>
-											</table>
+											</table>											
 										</logic:notEmpty>
-										
-										<logic:empty name="aimEditActivityForm" property="impAgencies">
+										<logic:empty name="aimEditActivityForm" property="linksList">
 											<table width="100%" bgcolor="#cccccc" cellSpacing=1 cellPadding=5>
 												<tr>
 													<td bgcolor="#ffffff">
-														<input type="button" value="Add Organizations" class="buton" 
-														onclick="addOrgs(2)">
+														<input type="button" value="Add Web Resources" class="buton" 
+														onclick="addLinks()" class="buton">
 													</td>
 												</tr>
 											</table>
 										</logic:empty>
 									</td></tr>
-									<tr><td>
+									<tr><td bgColor=#f4f4f2>
 										&nbsp;
 									</td></tr>
-									<tr><td>
-										<IMG alt=Link height=10 src="../ampTemplate/images/arrow-014E86.gif" width=15>
-										<a title="<digi:trn key="aim:ContractAgency">The third party outside of the implementing agency</digi:trn>">
-										<b><digi:trn key="aim:contractor">Contractor</digi:trn></b></a>
-									</td></tr>
-									<tr><td bgColor=#f4f4f2>
-										<a title="<digi:trn key="aim:ContractAgency">The third party outside of the implementing agency</digi:trn>">
-										<html:text property="contractors" size="60" styleClass="inp-text"/>
-										</a>
-									</td></tr>									
-									<tr><td bgColor=#f4f4f2 align="center">&nbsp;
-									</td></tr>																		
 									<tr><td bgColor=#f4f4f2 align="center">
 										<table cellPadding=3>
 											<tr>
@@ -343,10 +412,10 @@ function removeSelOrgs(value) {
 												</td>
 											</tr>
 										</table>
-									</td></tr>									
+									</td></tr>
+									
 								</table>
 
-								<!-- end contents -->
 							</td></tr>
 							</table>
 							</td></tr>							

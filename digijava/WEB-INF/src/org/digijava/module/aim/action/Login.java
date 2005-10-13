@@ -142,10 +142,8 @@ public class Login extends Action {
 					TeamMember tm = new TeamMember();
 
 					if (lead != null) {
-						if (lead.getAmpTeamMemRoleId()
-								.equals(
-										member.getAmpMemberRole()
-												.getAmpTeamMemRoleId())) {
+						if (lead.getAmpTeamMemRoleId().equals(
+										member.getAmpMemberRole().getAmpTeamMemRoleId())) {
 							session.setAttribute("teamLeadFlag", new String(
 									"true"));
 							tm.setTeamHead(true);
@@ -173,12 +171,10 @@ public class Login extends Action {
 						logger.info("AmpAppSettings.getFisCal is null");
 					} else {
 						logger.info("AmpAppSettings.getFisCal is not null");
-						if (ampAppSettings.getFiscalCalendar()
-								.getAmpFiscalCalId() == null) {
+						if (ampAppSettings.getFiscalCalendar().getAmpFiscalCalId() == null) {
 							logger.info("AmpAppSettings.getFisCal.id is null");
 						} else {
-							logger
-									.info("AmpAppSettings.getFisCal.id is not null");
+							logger.info("AmpAppSettings.getFisCal.id is not null");
 						}
 					}
 					appSettings.setFisCalId(ampAppSettings.getFiscalCalendar()

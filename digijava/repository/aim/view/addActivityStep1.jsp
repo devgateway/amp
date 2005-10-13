@@ -229,7 +229,8 @@ function popupwin()
 											<td width="13" height="20" background="module/aim/images/left-side.gif">
 											</td>
 											<td vAlign="center" align ="center" class="textalb" height="20" bgcolor="#006699">
-												<digi:trn key="aim:step1IdentificationAndPlanning">Step 1 of 7: Identification | Planning</digi:trn>
+												<digi:trn key="aim:step1of8IdentificationAndPlanning">
+													Step 1 of 8: Identification | Planning</digi:trn>
 											</td>
 											<td width="13" height="20" background="module/aim/images/right-side.gif">
 											</td>
@@ -405,7 +406,7 @@ function popupwin()
 															</td>
 															<td align="left" vAlign="center">&nbsp;
 															<a href="javascript:newWindow(1)">
-																<img src= "../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" width=24 height=22 border=0>
+																<img src= "../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border=0>
 															</a>
 															</td>
 														</tr>
@@ -428,7 +429,7 @@ function popupwin()
 															</td>
 															<td align="left" vAlign="center">&nbsp;
 																<a href="javascript:newWindow(2)">
-																<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" width=24 height=22 border=0>
+																<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border=0>
 																</a>
 															</td>
 														</tr>
@@ -452,7 +453,7 @@ function popupwin()
 															</td>
 															<td align="left" vAlign="center">&nbsp;
 																<a href="javascript:newWindow(3)">
-																<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" width=24 height=22 border=0>
+																<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border=0>
 																</a>
 															</td>
 														</tr>
@@ -476,7 +477,7 @@ function popupwin()
 															</td>
 															<td align="left" vAlign="center">&nbsp;
 																<a href="javascript:newWindow(4)">
-																<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" width=24 height=22 border=0>
+																<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border=0>
 																</a>
 															</td>
 														</tr>
@@ -502,7 +503,7 @@ function popupwin()
 															</td>
 															<td align="left" vAlign="center">&nbsp;
 																<a href="javascript:newWindow(9)">
-																<img src="../ampTemplate/images/show-calendar.gif" alt="Click to view the Calendar" width=24 height=22 border=0>
+																<img src="../ampTemplate/images/show-calendar.gif" alt="Click to view the Calendar" border=0>
 																</a>
 															</td>
 														</tr>
@@ -527,7 +528,7 @@ function popupwin()
 															</td>
 															<td align="left" vAlign="center">&nbsp;
 																<a href="javascript:newWindow(5)">
-																<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" width=24 height=22 border=0>
+																<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border=0>
 																</a>
 															</td>
 															<td>&nbsp;

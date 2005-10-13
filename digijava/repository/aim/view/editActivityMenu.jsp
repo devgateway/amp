@@ -10,7 +10,7 @@
 <script language="JavaScript">
 <!--
 function previewClicked() {
-	document.aimEditActivityForm.step.value = "8";	  
+	document.aimEditActivityForm.step.value = "9";
 	<digi:context name="preview" property="context/module/moduleinstance/previewActivity.do?edit=true" />
 	document.aimEditActivityForm.action = "<%= preview %>";
 	document.aimEditActivityForm.target = "_self";	
@@ -27,7 +27,7 @@ function saveClicked() {
 
 function gotoStep(value) {
 	document.aimEditActivityForm.step.value = value;
-	<digi:context name="step" property="context/module/moduleinstance/addActivity.do" />
+	<digi:context name="step" property="context/module/moduleinstance/addActivity.do?edit=true" />
 	document.aimEditActivityForm.action = "<%= step %>";
 	document.aimEditActivityForm.target = "_self";
 	document.aimEditActivityForm.submit();
@@ -248,15 +248,49 @@ bgcolor="#006699">
 		<td>
 			<IMG alt=Link height=10 src="../ampTemplate/images/arrow-th-BABAB9.gif" width=15>
 			<bean:define id="translation">
-				<digi:trn key="aim:clickToAdd/UpdateComponents">Add / Update Components</digi:trn>
+				<digi:trn key="aim:clickToAdd/UpdateRegionalFundings">Add / Update Regional Fundings</digi:trn>
 			</bean:define>
 			<a href="javascript:gotoStep(4)" class="menu" title="<%=translation%>">
+						<digi:trn key="aim:regionalFundings">
+						Regional Fundings</digi:trn>
+			</a>
+		</td>
+		</c:if>	
+		<c:if test="${aimEditActivityForm.step == 4}">
+		<td>
+			<table width="100%" cellspacing=0 cellpadding=0 valign=top align=left border=0> 
+				<tr>
+					<td width="10" height="19" background="module/aim/images/left-arc.gif">
+					</td>
+					<td bgcolor="#3399ff" height="19">
+					<IMG alt=Link height=10 src="../ampTemplate/images/arrow-th-BABAB9.gif" width=15>
+					<span class="textalb">
+						<digi:trn key="aim:regionalFundings">
+						Regional Fundings</digi:trn>
+					</span>
+					</td>
+					<td width="10" height="19"  background="module/aim/images/right-arc.gif">
+					</td>
+				</tr>
+			</table>
+		</td>				
+		</c:if>
+	</tr>	
+
+	<tr>
+		<c:if test="${aimEditActivityForm.step != 5}">
+		<td>
+			<IMG alt=Link height=10 src="../ampTemplate/images/arrow-th-BABAB9.gif" width=15>
+			<bean:define id="translation">
+				<digi:trn key="aim:clickToAdd/UpdateComponents">Add / Update Components</digi:trn>
+			</bean:define>
+			<a href="javascript:gotoStep(5)" class="menu" title="<%=translation%>">
 				<digi:trn key="aim:components">
 				Components</digi:trn>
 			</a>
 		</td>
 		</c:if>	
-		<c:if test="${aimEditActivityForm.step == 4}">
+		<c:if test="${aimEditActivityForm.step == 5}">
 		<td>
 			<table width="100%" cellspacing=0 cellpadding=0 valign=top align=left border=0> 
 				<tr>
@@ -277,19 +311,19 @@ bgcolor="#006699">
 		</c:if>
 	</tr>
 	<tr>
-		<c:if test="${aimEditActivityForm.step != 4}">
+		<c:if test="${aimEditActivityForm.step != 5}">
 		<td>
 			<IMG alt=Link height=10 src="../ampTemplate/images/arrow-th-BABAB9.gif" width=15>
 			<bean:define id="translation">
 				<digi:trn key="aim:clickToAdd/UpdateIssues">Add / Update Issues</digi:trn>
 			</bean:define>
-			<a href="javascript:gotoStep(4)" class="menu" title="<%=translation%>">
+			<a href="javascript:gotoStep(5)" class="menu" title="<%=translation%>">
 				<digi:trn key="aim:issues">
 				Issues</digi:trn>
 			</a>
 		</td>
 		</c:if>	
-		<c:if test="${aimEditActivityForm.step == 4}">
+		<c:if test="${aimEditActivityForm.step == 5}">
 		<td>
 			<table width="100%" cellspacing=0 cellpadding=0 valign=top align=left border=0> 
 				<tr>
@@ -311,19 +345,19 @@ bgcolor="#006699">
 	</tr>	
 	
 	<tr>
-		<c:if test="${aimEditActivityForm.step != 5}">
+		<c:if test="${aimEditActivityForm.step != 6}">
 		<td>
 			<IMG alt=Link height=10 src="../ampTemplate/images/arrow-th-BABAB9.gif" width=15>
 			<bean:define id="translation">
 				<digi:trn key="aim:clickToAdd/UpdateDocumentsAndLinks">Add / Update the documents and links</digi:trn>
 			</bean:define>
-			<a href="javascript:gotoStep(5)" class="menu" title="<%=translation%>">
+			<a href="javascript:gotoStep(6)" class="menu" title="<%=translation%>">
 				<digi:trn key="aim:relatedDocuments">
 				Related Documents</digi:trn>
 			</a>
 		</td>
 		</c:if>	
-		<c:if test="${aimEditActivityForm.step == 5}">
+		<c:if test="${aimEditActivityForm.step == 6}">
 		<td>
 			<table width="100%" cellspacing=0 cellpadding=0 valign=top align=left border=0> 
 				<tr>
@@ -344,19 +378,19 @@ bgcolor="#006699">
 		</c:if>
 	</tr>
 	<tr>
-		<c:if test="${aimEditActivityForm.step != 6}">
+		<c:if test="${aimEditActivityForm.step != 7}">
 		<td>
 			<IMG alt=Link height=10 src="../ampTemplate/images/arrow-th-BABAB9.gif" width=15>
 			<bean:define id="translation">
 				<digi:trn key="aim:clickToAdd/UpdateOrganizationsInvolved">Add / Update the organizations involved</digi:trn>
 			</bean:define>
-			<a href="javascript:gotoStep(6)" class="menu" title="<%=translation%>">
+			<a href="javascript:gotoStep(7)" class="menu" title="<%=translation%>">
 				<digi:trn key="aim:relatedOrgs">
 				Related Organizations</digi:trn>
 			</a>
 		</td>
 		</c:if>	
-		<c:if test="${aimEditActivityForm.step == 6}">
+		<c:if test="${aimEditActivityForm.step == 7}">
 		<td>
 			<table width="100%" cellspacing=0 cellpadding=0 valign=top align=left border=0> 
 				<tr>
@@ -377,19 +411,19 @@ bgcolor="#006699">
 		</c:if>	
 	</tr>	
 	<tr>
-		<c:if test="${aimEditActivityForm.step != 7}">
+		<c:if test="${aimEditActivityForm.step != 8}">
 		<td>
 			<IMG alt=Link height=10 src="../ampTemplate/images/arrow-th-BABAB9.gif" width=15>
 			<bean:define id="translation">
 				<digi:trn key="aim:clickToAdd/UpdateContactPersonDetails">Add / Update the contact person details</digi:trn>
 			</bean:define>
-			<a href="javascript:gotoStep(7)" class="menu" title="<%=translation%>">
+			<a href="javascript:gotoStep(8)" class="menu" title="<%=translation%>">
 				<digi:trn key="aim:contactInformation">
 				Contact Information</digi:trn>
 			</a>
 		</td>
 		</c:if>	
-		<c:if test="${aimEditActivityForm.step == 7}">
+		<c:if test="${aimEditActivityForm.step == 8}">
 		<td>
 			<table width="100%" cellspacing=0 cellpadding=0 valign=top align=left border=0> 
 				<tr>

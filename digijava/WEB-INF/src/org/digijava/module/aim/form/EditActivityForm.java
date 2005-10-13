@@ -34,6 +34,7 @@ public class EditActivityForm extends ActionForm implements Serializable{
 	private Long countryIso = null;
 	private Long assistanceType = null;
 	private String createdDate;
+	private Collection perspectives;
 	
 	private Long program;
 	private Collection programCollection;
@@ -247,6 +248,9 @@ public class EditActivityForm extends ActionForm implements Serializable{
 	private String context;
 	
 	private Collection regionalFundings;
+	private Long[] selRegFundings;
+	private Collection fundingRegions;
+	private Long fundingRegionId;
 	
 	private ArrayList issues;
 	private Long[] selIssues;
@@ -260,7 +264,11 @@ public class EditActivityForm extends ActionForm implements Serializable{
 	private Long actorId;
 	
 	private String editKey;
-
+	
+	private double totalCommitments;
+	private double totalDisbursements;
+	private double totalExpenditures;
+	
 	public EditActivityForm() {
 		step = "1";
 		reset = false;
@@ -272,6 +280,10 @@ public class EditActivityForm extends ActionForm implements Serializable{
 		modality = null;
 		docWebResource = "http://";
 		editKey = "";
+		fundingRegionId = new Long(-1);
+		totalCommitments = 0;
+		totalDisbursements = 0;
+		totalExpenditures = 0;
 	}
 
 	public void reset(ActionMapping mapping, HttpServletRequest request) {
@@ -375,6 +387,11 @@ public class EditActivityForm extends ActionForm implements Serializable{
 			regionalFundings = null;
 			issues = null;
 			editKey = "";
+			regionalFundings = null;
+			perspectives = null;
+			totalCommitments = 0;
+			totalDisbursements = 0;
+			totalExpenditures = 0;
 		}
 
 		if (orgSelReset) {
@@ -2853,5 +2870,104 @@ public class EditActivityForm extends ActionForm implements Serializable{
 	 */
 	public void setEditKey(String editKey) {
 		this.editKey = editKey;
+	}
+
+	/**
+	 * @return Returns the selRegFundings.
+	 */
+	public Long[] getSelRegFundings() {
+		return selRegFundings;
+	}
+
+	/**
+	 * @param selRegFundings The selRegFundings to set.
+	 */
+	public void setSelRegFundings(Long[] selRegFundings) {
+		this.selRegFundings = selRegFundings;
+	}
+
+
+	/**
+	 * @return Returns the fundingRegionId.
+	 */
+	public Long getFundingRegionId() {
+		return fundingRegionId;
+	}
+
+	/**
+	 * @param fundingRegionId The fundingRegionId to set.
+	 */
+	public void setFundingRegionId(Long fundingRegionId) {
+		this.fundingRegionId = fundingRegionId;
+	}
+
+	/**
+	 * @return Returns the fundingRegions.
+	 */
+	public Collection getFundingRegions() {
+		return fundingRegions;
+	}
+
+	/**
+	 * @param fundingRegions The fundingRegions to set.
+	 */
+	public void setFundingRegions(Collection fundingRegions) {
+		this.fundingRegions = fundingRegions;
+	}
+
+	/**
+	 * @return Returns the perspectives.
+	 */
+	public Collection getPerspectives() {
+		return perspectives;
+	}
+
+	/**
+	 * @param perspectives The perspectives to set.
+	 */
+	public void setPerspectives(Collection perspectives) {
+		this.perspectives = perspectives;
+	}
+
+	/**
+	 * @return Returns the totalCommitments.
+	 */
+	public double getTotalCommitments() {
+		return totalCommitments;
+	}
+
+	/**
+	 * @param totalCommitments The totalCommitments to set.
+	 */
+	public void setTotalCommitments(double totalCommitments) {
+		this.totalCommitments = totalCommitments;
+	}
+
+	/**
+	 * @return Returns the totalDisbursements.
+	 */
+	public double getTotalDisbursements() {
+		return totalDisbursements;
+	}
+
+	/**
+	 * @param totalDisbursements The totalDisbursements to set.
+	 */
+	public void setTotalDisbursements(double totalDisbursements) {
+		this.totalDisbursements = totalDisbursements;
+	}
+
+	/**
+	 * @return Returns the totalExpenditures.
+	 */
+	public double getTotalExpenditures() {
+		return totalExpenditures;
+	}
+
+	/**
+	 * @param totalExpenditures The totalExpenditures to set.
+	 */
+	public void setTotalExpenditures(double totalExpenditures) {
+		this.totalExpenditures = totalExpenditures;
 	}
 }

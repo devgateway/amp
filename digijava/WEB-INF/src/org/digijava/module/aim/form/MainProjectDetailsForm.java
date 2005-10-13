@@ -49,7 +49,7 @@ public class MainProjectDetailsForm extends ValidatorForm
 	private boolean goButtonPresent;
 	private boolean sessionExpired;
 	private String type;
-						
+	
 	/**
 	 * @return
 	 */

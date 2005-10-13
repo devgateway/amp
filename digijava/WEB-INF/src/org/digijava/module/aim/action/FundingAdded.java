@@ -2,10 +2,12 @@ package org.digijava.module.aim.action;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
 import java.util.Iterator;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
@@ -13,13 +15,17 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.digijava.module.aim.dbentity.AmpCurrency;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
+import org.digijava.module.aim.dbentity.AmpPerspective;
 import org.digijava.module.aim.form.EditActivityForm;
+import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.CurrencyWorker;
+import org.digijava.module.aim.helper.DateConversion;
+import org.digijava.module.aim.helper.DecimalToText;
 import org.digijava.module.aim.helper.Funding;
 import org.digijava.module.aim.helper.FundingDetail;
 import org.digijava.module.aim.helper.FundingOrganization;
+import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.DbUtil;
-import org.digijava.module.aim.helper.Constants;
 
 public class FundingAdded extends Action {
 
@@ -28,6 +34,9 @@ public class FundingAdded extends Action {
 			throws Exception {
 
 		EditActivityForm eaForm = (EditActivityForm) form;
+		
+		HttpSession session = request.getSession();
+		TeamMember tm = (TeamMember) session.getAttribute("currentMember");
 		
 		Iterator fundOrgsItr = eaForm.getFundingOrganizations().iterator();
 		FundingOrganization fundOrg = null;
@@ -53,17 +62,15 @@ public class FundingAdded extends Action {
 			}
 		}
 
+		double totComm = eaForm.getTotalCommitments();
+		double totDisb = eaForm.getTotalDisbursements();
+		double totExp = eaForm.getTotalExpenditures();
+		
 		Funding newFund = new Funding();
 		newFund.setAmpTermsAssist(DbUtil.getAssistanceType(eaForm
 				.getAssistanceType()));
 		newFund.setOrgFundingId(eaForm.getOrgFundingId());
 		newFund.setModality(DbUtil.getModality(eaForm.getModality()));
-		//newFund.setSignatureDate(eaForm.getSignatureDate());
-		//newFund.setReportingDate(eaForm.getReportingDate());
-		//newFund.setPropCloseDate(eaForm.getPlannedCompletionDate());
-		//newFund.setPropStartDate(eaForm.getPlannedStartDate());
-		//newFund.setActCloseDate(eaForm.getActualCompletionDate());
-		//newFund.setActStartDate(eaForm.getActualStartDate());
 		newFund.setConditions(eaForm.getFundingConditions());
 
 		Collection fundDetails = new ArrayList();
@@ -87,20 +94,30 @@ public class FundingAdded extends Action {
 					fundDet.setReportingOrganizationName(org.getName());
 				}
 				String perspective = fundDet.getPerspectiveCode();
-				if (perspective != null) {
-					if (perspective.equals(Constants.DONOR))
-						fundDet.setPerspectiveName("Donor");
-					else if (perspective.equals(Constants.MOFED))
-						fundDet.setPerspectiveName("MOFED");
-					else if (perspective.equals(Constants.IMPLEMENTING_AGENCY))
-						fundDet.setPerspectiveName("Implementing Agency");
+				Iterator itr1 = eaForm.getPerspectives().iterator();
+				while (itr1.hasNext()) {
+					AmpPerspective pers = (AmpPerspective) itr1.next();
+					if (pers.getCode().equals(perspective)) {
+						fundDet.setPerspectiveName(pers.getName());
+					}
 				}
-
 				if (fundDet.getAdjustmentType() == Constants.PLANNED)
 					fundDet.setAdjustmentTypeName("Planned");
-				else if (fundDet.getAdjustmentType() == Constants.ACTUAL)
+				else if (fundDet.getAdjustmentType() == Constants.ACTUAL) {
 					fundDet.setAdjustmentTypeName("Actual");
-
+					Date dt = DateConversion.getDate(fundDet.getTransactionDate());
+					double frmExRt = DbUtil.getExchangeRate(fundDet.getCurrencyCode(),1,dt);
+					double toExRt = DbUtil.getExchangeRate(DbUtil.getAmpcurrency(
+							tm.getAppSettings().getCurrencyId()).getCurrencyCode(),1,dt);
+					double amt = CurrencyWorker.convert1(DecimalToText.getDouble(fundDet.getTransactionAmount()),frmExRt,toExRt);
+					if (fundDet.getTransactionType() == Constants.COMMITMENT) {
+						totComm += amt;
+					} else if (fundDet.getTransactionType() == Constants.DISBURSEMENT) {
+						totDisb += amt;
+					} else if (fundDet.getTransactionType() == Constants.EXPENDITURE) {
+						totExp += amt;
+					}
+				}
 				fundDetails.add(fundDet);
 			}
 		}
@@ -122,6 +139,9 @@ public class FundingAdded extends Action {
 			fundingOrgs = new ArrayList(eaForm.getFundingOrganizations());
 			fundingOrgs.set(fundOrgOffset, fundOrg);
 		}
+		eaForm.setTotalCommitments(totComm);
+		eaForm.setTotalDisbursements(totDisb);
+		eaForm.setTotalExpenditures(totExp);
 		return mapping.findForward("forward");
 	}
 }

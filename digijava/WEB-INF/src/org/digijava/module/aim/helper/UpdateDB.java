@@ -336,7 +336,7 @@ public class UpdateDB {
 			sql += "select '',amp_activity.amp_activity_id,amp_physical_performance.title,amp_physical_performance.description ";
 			sql += "from amp_activity,amp_components,amp_physical_performance ";
 			sql += "where amp_activity.amp_activity_id=amp_components.amp_activity_id ";
-			sql += "and amp_components.amp_component_id=amp_physical_performance.amp_component_id and amp_activity_id='" + ampActivityId + "'";
+			sql += "and amp_components.amp_component_id=amp_physical_performance.amp_component_id and amp_activity.amp_activity_id='" + ampActivityId + "'";
 			// Query #14
 			t1 = System.currentTimeMillis();										
 			stmt.executeUpdate(sql);

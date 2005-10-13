@@ -121,6 +121,17 @@ public class AmpRegion implements Serializable{
 	public void setRegionCode(String string) {
 		regionCode = string;
 	}
+	/* (non-Javadoc)
+	 * @see java.lang.Object#equals(java.lang.Object)
+	 */
+	public boolean equals(Object arg) {
+		// TODO Auto-generated method stub
+		if (arg instanceof AmpRegion) {
+			AmpRegion region = (AmpRegion) arg;
+			return region.getAmpRegionId().equals(ampRegionId);
+		}
+		throw new ClassCastException();
+	}
 
 }
  

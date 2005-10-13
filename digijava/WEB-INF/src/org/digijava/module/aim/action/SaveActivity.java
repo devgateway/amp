@@ -34,6 +34,7 @@ import org.digijava.module.aim.dbentity.AmpActivityClosingDates;
 import org.digijava.module.aim.dbentity.AmpActivityInternalId;
 import org.digijava.module.aim.dbentity.AmpActor;
 import org.digijava.module.aim.dbentity.AmpComponent;
+import org.digijava.module.aim.dbentity.AmpCurrency;
 import org.digijava.module.aim.dbentity.AmpFunding;
 import org.digijava.module.aim.dbentity.AmpFundingDetail;
 import org.digijava.module.aim.dbentity.AmpIssues;
@@ -42,7 +43,10 @@ import org.digijava.module.aim.dbentity.AmpLocation;
 import org.digijava.module.aim.dbentity.AmpMeasure;
 import org.digijava.module.aim.dbentity.AmpOrgRole;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
+import org.digijava.module.aim.dbentity.AmpPerspective;
 import org.digijava.module.aim.dbentity.AmpPhysicalPerformance;
+import org.digijava.module.aim.dbentity.AmpRegion;
+import org.digijava.module.aim.dbentity.AmpRegionalFunding;
 import org.digijava.module.aim.dbentity.AmpRole;
 import org.digijava.module.aim.dbentity.AmpSector;
 import org.digijava.module.aim.dbentity.AmpStatus;
@@ -63,9 +67,11 @@ import org.digijava.module.aim.helper.Location;
 import org.digijava.module.aim.helper.Measures;
 import org.digijava.module.aim.helper.OrgProjectId;
 import org.digijava.module.aim.helper.PhysicalProgress;
+import org.digijava.module.aim.helper.RegionalFunding;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.helper.UpdateDB;
 import org.digijava.module.aim.util.ActivityUtil;
+import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.TeamUtil;
 import org.digijava.module.aim.util.ProgramUtil;
@@ -656,6 +662,148 @@ public class SaveActivity extends Action {
 		}
 		activity.setFunding(fundings);
 		
+		// set Regional fundings
+		Set regFundings = new HashSet();
+		if (eaForm.getRegionalFundings() != null &&
+				eaForm.getRegionalFundings().size() > 0) {
+			Iterator itr1 = eaForm.getRegionalFundings().iterator();
+			while (itr1.hasNext()) {
+				RegionalFunding regFund = (RegionalFunding) itr1.next();
+				if (regFund.getCommitments() != null &&
+						regFund.getCommitments().size() > 0) {
+					logger.debug("Reg. Fund - Commitments size :" + regFund.getCommitments().size());
+					Iterator itr2 = regFund.getCommitments().iterator();
+					while (itr2.hasNext()) {
+						AmpRegionalFunding ampRegFund = new AmpRegionalFunding();
+						ampRegFund.setActivity(activity);					
+						ampRegFund.setTransactionType(new Integer(Constants.COMMITMENT));						
+						FundingDetail fd = (FundingDetail) itr2.next();
+						Iterator tmpItr = eaForm.getCurrencies().iterator();
+						while (tmpItr.hasNext()) {
+							AmpCurrency curr = (AmpCurrency) tmpItr.next();
+							if (curr.getCurrencyCode().equals(fd.getCurrencyCode())) {
+								ampRegFund.setCurrency(curr);
+								break;
+							}
+						}
+						tmpItr = eaForm.getPerspectives().iterator();
+						while (tmpItr.hasNext()) {
+							AmpPerspective pers = (AmpPerspective) tmpItr.next();
+							if (pers.getCode().equals(fd.getPerspectiveCode())) {
+								ampRegFund.setPerspective(pers);
+								break;
+							}
+						}
+						tmpItr = eaForm.getFundingRegions().iterator();
+						while (tmpItr.hasNext()) {
+							AmpRegion reg = (AmpRegion) tmpItr.next();
+							if (reg.getAmpRegionId().equals(regFund.getRegionId())) {
+								ampRegFund.setRegion(reg);
+								break;
+							}
+						}
+						ampRegFund.setTransactionAmount(new Double(
+								DecimalToText.getDouble(fd.getTransactionAmount())));
+						ampRegFund.setTransactionDate(DateConversion.getDate(fd.getTransactionDate()));
+						ampRegFund.setAdjustmentType(new Integer(fd.getAdjustmentType()));
+						regFundings.add(ampRegFund);						
+					}
+				}
+				
+				if (regFund.getDisbursements() != null &&
+						regFund.getDisbursements().size() > 0) {
+					logger.debug("Reg. Fund - Disbursements size :" + regFund.getDisbursements().size());					
+					Iterator itr2 = regFund.getDisbursements().iterator();
+					while (itr2.hasNext()) {
+						AmpRegionalFunding ampRegFund = new AmpRegionalFunding();
+						ampRegFund.setActivity(activity);					
+						ampRegFund.setTransactionType(new Integer(Constants.DISBURSEMENT));						
+						FundingDetail fd = (FundingDetail) itr2.next();
+						Iterator tmpItr = eaForm.getCurrencies().iterator();
+						while (tmpItr.hasNext()) {
+							AmpCurrency curr = (AmpCurrency) tmpItr.next();
+							if (curr.getCurrencyCode().equals(fd.getCurrencyCode())) {
+								ampRegFund.setCurrency(curr);
+								break;
+							}
+						}
+						tmpItr = eaForm.getPerspectives().iterator();
+						while (tmpItr.hasNext()) {
+							AmpPerspective pers = (AmpPerspective) tmpItr.next();
+							if (pers.getCode().equals(fd.getPerspectiveCode())) {
+								ampRegFund.setPerspective(pers);
+								break;
+							}
+						}
+						tmpItr = eaForm.getFundingRegions().iterator();
+						while (tmpItr.hasNext()) {
+							AmpRegion reg = (AmpRegion) tmpItr.next();
+							if (reg.getAmpRegionId().equals(regFund.getRegionId())) {
+								ampRegFund.setRegion(reg);
+								break;
+							}
+						}
+						ampRegFund.setTransactionAmount(new Double(
+								DecimalToText.getDouble(fd.getTransactionAmount())));
+						ampRegFund.setTransactionDate(DateConversion.getDate(fd.getTransactionDate()));
+						ampRegFund.setAdjustmentType(new Integer(fd.getAdjustmentType()));
+						regFundings.add(ampRegFund);						
+					}
+				}				
+				
+				if (regFund.getExpenditures() != null &&
+						regFund.getExpenditures().size() > 0) {
+					logger.debug("Reg. Fund - Expenditures size :" + regFund.getExpenditures().size());					
+					Iterator itr2 = regFund.getExpenditures().iterator();
+					while (itr2.hasNext()) {
+						AmpRegionalFunding ampRegFund = new AmpRegionalFunding();
+						ampRegFund.setActivity(activity);					
+						ampRegFund.setTransactionType(new Integer(Constants.EXPENDITURE));						
+						FundingDetail fd = (FundingDetail) itr2.next();
+						Iterator tmpItr = eaForm.getCurrencies().iterator();
+						while (tmpItr.hasNext()) {
+							AmpCurrency curr = (AmpCurrency) tmpItr.next();
+							if (curr.getCurrencyCode().equals(fd.getCurrencyCode())) {
+								ampRegFund.setCurrency(curr);
+								break;
+							}
+						}
+						tmpItr = eaForm.getPerspectives().iterator();
+						while (tmpItr.hasNext()) {
+							AmpPerspective pers = (AmpPerspective) tmpItr.next();
+							if (pers.getCode().equals(fd.getPerspectiveCode())) {
+								ampRegFund.setPerspective(pers);
+								break;
+							}
+						}
+						tmpItr = eaForm.getFundingRegions().iterator();
+						while (tmpItr.hasNext()) {
+							AmpRegion reg = (AmpRegion) tmpItr.next();
+							if (reg.getAmpRegionId().equals(regFund.getRegionId())) {
+								ampRegFund.setRegion(reg);
+								break;
+							}
+						}
+						ampRegFund.setTransactionAmount(new Double(
+								DecimalToText.getDouble(fd.getTransactionAmount())));
+						ampRegFund.setTransactionDate(DateConversion.getDate(fd.getTransactionDate()));
+						ampRegFund.setAdjustmentType(new Integer(fd.getAdjustmentType()));
+						regFundings.add(ampRegFund);						
+					}
+
+				}				
+			}
+		}
+		
+		// Delete the following code
+		Iterator tmp = regFundings.iterator();
+		while (tmp.hasNext()) {
+			AmpRegionalFunding rf = (AmpRegionalFunding) tmp.next();
+			logger.debug("Regional Fundings :" + rf.getAdjustmentType() + " " + rf.getTransactionAmount());
+		}
+		
+		activity.setRegionalFundings(regFundings);
+		
 		if (eaForm.getIssues() != null &&
 				eaForm.getIssues().size() > 0) {
 			Set issueSet = new HashSet();
@@ -730,7 +878,9 @@ public class SaveActivity extends Action {
 		// Clearing comment properties
 		eaForm.getCommentsCol().clear();
 		eaForm.setCommentFlag(false);
-
+		eaForm.setFundingRegions(null);
+		eaForm.setRegionalFundings(null);
+		
 		int temp = eaForm.getPageId();
 		eaForm.setPageId(-1);
 		UpdateDB.updateReportCache(activity.getAmpActivityId());
@@ -751,24 +901,4 @@ public class SaveActivity extends Action {
 		}
 		return null;
 	}
-	
-	/*
-	private String getRealPath(Long val) {
-		String fileName =  val.toString()+ ".dat";
-		ActionServlet s = getServlet();
-		String path = "/WEB-INF/tmp";
-		String realPath = s.getServletContext().getRealPath(path);
-		File dir = new File(realPath);
-		if(dir.mkdir() == true) 
-		{
-			System.out.println("--- Dir Make ----------");
-		}
-		else
-		{
-			System.out.println("---No Dir created ----------");
-		}
-
-		fileName = realPath + "\\" + fileName; 
-		return fileName;
-	}*/		
 }

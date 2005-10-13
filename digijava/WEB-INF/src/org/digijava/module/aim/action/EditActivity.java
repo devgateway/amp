@@ -8,6 +8,7 @@ package org.digijava.module.aim.action;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Set;
@@ -39,7 +40,9 @@ import org.digijava.module.aim.dbentity.AmpLocation;
 import org.digijava.module.aim.dbentity.AmpMeasure;
 import org.digijava.module.aim.dbentity.AmpOrgRole;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
+import org.digijava.module.aim.dbentity.AmpPerspective;
 import org.digijava.module.aim.dbentity.AmpPhysicalPerformance;
+import org.digijava.module.aim.dbentity.AmpRegionalFunding;
 import org.digijava.module.aim.dbentity.AmpSector;
 import org.digijava.module.aim.form.EditActivityForm;
 import org.digijava.module.aim.helper.ActivitySector;
@@ -56,6 +59,8 @@ import org.digijava.module.aim.helper.Location;
 import org.digijava.module.aim.helper.Measures;
 import org.digijava.module.aim.helper.OrgProjectId;
 import org.digijava.module.aim.helper.PhysicalProgress;
+import org.digijava.module.aim.helper.RegionalFunding;
+import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.ActivityUtil;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.cms.dbentity.CMSContentItem;
@@ -75,7 +80,8 @@ public class EditActivity extends Action {
 			throws Exception {
 
 		HttpSession session = request.getSession();
-
+		TeamMember tm = (TeamMember) session.getAttribute("currentMember");
+		
 		// if user is not logged in, forward him to the home page
 		if (session.getAttribute("currentMember") == null)
 			return mapping.findForward("index");
@@ -135,7 +141,9 @@ public class EditActivity extends Action {
 		// load the activity details
 		eaForm.setStep("1");
 		eaForm.setReset(false);
-
+		eaForm.setPerspectives(DbUtil.getAmpPerspective());
+		
+		logger.debug("Activity Id = " + eaForm.getActivityId());
 		if (eaForm.getActivityId() != null) {
 		    AmpActivity activity = ActivityUtil.getAmpActivity(eaForm.getActivityId());
 
@@ -248,6 +256,12 @@ public class EditActivity extends Action {
 										.setRegion(loc.getAmpRegion().getName());
 								location.setRegionId(loc.getAmpRegion()
 										.getAmpRegionId());
+								if (eaForm.getFundingRegions() == null) {
+									eaForm.setFundingRegions(new ArrayList());
+								}
+								if (eaForm.getFundingRegions().contains(loc.getAmpRegion()) == false) {
+									eaForm.getFundingRegions().add(loc.getAmpRegion());
+								}
 							}
 							if (loc.getAmpZone() != null) {
 								location.setZone(loc.getAmpZone().getName());
@@ -314,19 +328,15 @@ public class EditActivity extends Action {
 								actSect.setSectorId(parent.getAmpSectorId());
 								actSect.setSectorName(parent.getName());
 								if (subsectorLevel1 != null) {
-									actSect
-											.setSubsectorLevel1Id(subsectorLevel1
-													.getAmpSectorId());
-									actSect
-											.setSubsectorLevel1Name(subsectorLevel1
-													.getName());
+									actSect.setSubsectorLevel1Id(
+											subsectorLevel1.getAmpSectorId());
+									actSect.setSubsectorLevel1Name(
+											subsectorLevel1.getName());
 									if (subsectorLevel2 != null) {
-										actSect
-												.setSubsectorLevel2Id(subsectorLevel2
-														.getAmpSectorId());
-										actSect
-												.setSubsectorLevel2Name(subsectorLevel2
-														.getName());
+										actSect.setSubsectorLevel2Id(
+												subsectorLevel2.getAmpSectorId());
+										actSect.setSubsectorLevel2Name(
+												subsectorLevel2.getName());
 									}
 								}
 							}
@@ -340,6 +350,10 @@ public class EditActivity extends Action {
 					eaForm.setProgram(activity.getThemeId().getAmpThemeId());
 				}
 				eaForm.setProgramDescription(activity.getProgramDescription().trim());
+				
+				double totComm = 0;
+				double totDisb = 0;
+				double totExp = 0;				
 
 				Collection fundingOrgs = new ArrayList();
 				Iterator fundItr = activity.getFunding().iterator();
@@ -374,53 +388,47 @@ public class EditActivity extends Action {
 								fundingDetail.setAdjustmentTypeName("Planned");
 							} else if (adjType == Constants.ACTUAL) {
 								fundingDetail.setAdjustmentTypeName("Actual");
+								Date dt = fundDet.getTransactionDate();
+								double frmExRt = DbUtil.getExchangeRate(
+										fundDet.getAmpCurrencyId().getCurrencyCode(),1,dt);
+								double toExRt = DbUtil.getExchangeRate(DbUtil.getAmpcurrency(
+										tm.getAppSettings().getCurrencyId()).getCurrencyCode(),1,dt);
+								double amt = CurrencyWorker.convert1(
+										fundDet.getTransactionAmount().doubleValue(),frmExRt,toExRt);
+								if (fundDet.getTransactionType().intValue() == Constants.COMMITMENT) {
+									totComm += amt;
+								} else if (fundDet.getTransactionType().intValue() == Constants.DISBURSEMENT) {
+									totDisb += amt;
+								} else if (fundDet.getTransactionType().intValue() == Constants.EXPENDITURE) {
+									totExp += amt;
+								}								
 							}
 							if (fundDet.getTransactionType().intValue() == Constants.EXPENDITURE) {
 								fundingDetail.setClassification(fundDet.getExpCategory());
 							}
-							fundingDetail.setCurrencyCode(fundDet
-									.getAmpCurrencyId()
-									.getCurrencyCode());
-							fundingDetail.setCurrencyName(fundDet
-									.getAmpCurrencyId()
-									.getCountryName());
+							fundingDetail.setCurrencyCode(
+									fundDet.getAmpCurrencyId().getCurrencyCode());
+							fundingDetail.setCurrencyName(
+									fundDet.getAmpCurrencyId().getCountryName());
 
-							fundingDetail
-									.setTransactionAmount(CurrencyWorker
-											.convert(
-													fundDet
-															.getTransactionAmount()
-															.doubleValue(),
-													1, 1));
-							fundingDetail
-									.setTransactionDate(DateConversion
-											.ConvertDateToString(fundDet
-													.getTransactionDate()));
-							fundingDetail
-									.setPerspectiveCode(fundDet
-											.getOrgRoleCode());
-							if (fundDet.getOrgRoleCode().equals(
-									Constants.DONOR))
-								fundingDetail
-										.setPerspectiveName("Donor");
-							else if (fundDet.getOrgRoleCode()
-									.equals(Constants.MOFED))
-								fundingDetail
-										.setPerspectiveName("MOFED");
-							else if (fundDet
-									.getOrgRoleCode()
-									.equals(
-											Constants.IMPLEMENTING_AGENCY))
-								fundingDetail
-										.setPerspectiveName("Implementing Agency");
-
-							fundingDetail
-									.setPerspectiveCode(fundDet
-											.getOrgRoleCode());
-							fundingDetail
-									.setTransactionType(fundDet
-											.getTransactionType()
-											.intValue());
+							fundingDetail.setTransactionAmount(
+									CurrencyWorker.convert(
+											fundDet.getTransactionAmount().doubleValue(),1, 1));
+							fundingDetail.setTransactionDate(
+									DateConversion.ConvertDateToString(
+											fundDet.getTransactionDate()));
+							fundingDetail.setPerspectiveCode(fundDet.getOrgRoleCode());
+							
+							Iterator itr1 = eaForm.getPerspectives().iterator();
+							while (itr1.hasNext()) {
+								AmpPerspective pers = (AmpPerspective) itr1.next();
+								if (pers.getCode().equals(fundDet.getOrgRoleCode())) {
+									fundingDetail.setPerspectiveName(pers.getName());
+								}
+							}
+							
+							fundingDetail.setTransactionType(
+									fundDet.getTransactionType().intValue());
 							fundDetail.add(fundingDetail);
 						}
 						
@@ -431,7 +439,61 @@ public class EditActivity extends Action {
 					fundingOrgs.add(fundOrg);
 				}
 				eaForm.setFundingOrganizations(fundingOrgs);
+				eaForm.setTotalCommitments(totComm);
+				eaForm.setTotalDisbursements(totDisb);
+				eaForm.setTotalExpenditures(totExp);
 
+				
+				ArrayList regFunds = new ArrayList();
+				Iterator rItr = activity.getRegionalFundings().iterator();
+				
+				while (rItr.hasNext()) {
+					AmpRegionalFunding ampRegFund = (AmpRegionalFunding) rItr.next();
+					FundingDetail fd = new FundingDetail();
+					fd.setAdjustmentType(ampRegFund.getAdjustmentType().intValue());
+					if (fd.getAdjustmentType() == 1) {
+						fd.setAdjustmentTypeName("Actual");
+					} else if (fd.getAdjustmentType() == 0) {
+						fd.setAdjustmentTypeName("Planned");	
+					}
+					fd.setCurrencyCode(ampRegFund.getCurrency().getCurrencyCode());
+					fd.setCurrencyName(ampRegFund.getCurrency().getCurrencyName());
+					fd.setPerspectiveCode(ampRegFund.getPerspective().getCode());
+					fd.setPerspectiveName(ampRegFund.getPerspective().getName());
+					fd.setTransactionAmount(DecimalToText.ConvertDecimalToText(ampRegFund.getTransactionAmount().doubleValue()));
+					fd.setTransactionDate(DateConversion.ConvertDateToString(ampRegFund.getTransactionDate()));
+					fd.setTransactionType(ampRegFund.getTransactionType().intValue());
+					
+					RegionalFunding regFund = new RegionalFunding();
+					regFund.setRegionId(ampRegFund.getRegion().getAmpRegionId());
+					regFund.setRegionName(ampRegFund.getRegion().getName());
+					
+					if (regFunds.contains(regFund) == false) {
+						regFunds.add(regFund);
+					}
+					
+					int index = regFunds.indexOf(regFund);
+					regFund = (RegionalFunding) regFunds.get(index);
+					if (fd.getTransactionType() == 0) { // commitments
+						if (regFund.getCommitments() == null) {
+							regFund.setCommitments(new ArrayList());
+						}
+						regFund.getCommitments().add(fd);
+					} else if (fd.getTransactionType() == 1) { // disbursements
+						if (regFund.getDisbursements() == null) {
+							regFund.setDisbursements(new ArrayList());
+						}
+						regFund.getDisbursements().add(fd);							
+					} else if (fd.getTransactionType() == 2) { // expenditures
+						if (regFund.getExpenditures() == null) {
+							regFund.setExpenditures(new ArrayList());
+						}
+						regFund.getExpenditures().add(fd);							
+					}
+					regFunds.set(index,regFund);
+				}
+				
+				eaForm.setRegionalFundings(regFunds);
 									    								
 				Collection componets = activity.getComponents();
 				if (componets != null && componets.size() > 0) {

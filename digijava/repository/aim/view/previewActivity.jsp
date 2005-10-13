@@ -164,6 +164,14 @@ function disable() {
 									Step 7
 									</digi:trn>
 									</digi:link>&nbsp;&gt;&nbsp;
+									<bean:define id="translation">
+										<digi:trn key="aim:clickToViewAddActivityStep8">Click here to goto Add Activity Step 8</digi:trn>
+									</bean:define>
+									<digi:link href="/addActivity.do?step=8&edit=true" styleClass="comment" title="<%=translation%>" >
+									<digi:trn key="aim:addActivityStep8">
+									Step 8
+									</digi:trn>
+									</digi:link>&nbsp;&gt;&nbsp;									
 								</c:if>
 								<digi:trn key="aim:previewActivity">
 								Preview Activity
@@ -535,7 +543,7 @@ function disable() {
 																								<c:out value="${fundDet.perspectiveName}"/>
 																							</td>
 																						</tr>
-																						</c:if>																						
+																						</c:if>
 																					</table>
 																				   </c:forEach>
 																				</td></tr>
@@ -569,7 +577,7 @@ function disable() {
 																								<c:out value="${fundDet.perspectiveName}"/>
 																							</td>
 																						</tr>
-																						</c:if>																						
+																						</c:if>
 																					</table>
 																				   </c:forEach>
 																				</td></tr>
@@ -603,7 +611,7 @@ function disable() {
 																								<c:out value="${fundDet.perspectiveName}"/>
 																							</td>
 																						</tr>
-																						</c:if>																						
+																						</c:if>
 																					</table>
 																				   </c:forEach>
 																				</td></tr>
@@ -625,7 +633,144 @@ function disable() {
 												</table>
 											</c:if>
 										</td>
-									</tr>										
+									</tr>	
+
+
+									<tr>
+										<td class="t-name" width="30%" align="right" bgcolor="#f4f4f2">
+											<digi:trn key="aim:regionalFundings">
+											Regional Fundings</digi:trn>
+										</td>
+										<td bgcolor="#ffffff">
+											<c:if test="${!empty aimEditActivityForm.regionalFundings}">
+												<table width="100%" cellSpacing="1" cellPadding="3" bgcolor="#aaaaaa">
+												<c:forEach var="regFunds" items="${aimEditActivityForm.regionalFundings}">
+													<tr><td bgcolor="#ffffff">
+														<table width="100%" cellSpacing="1" cellPadding="1">
+															<tr><td bgcolor="#ffffff"><b>
+																<c:out value="${regFunds.regionName}"/></b>
+															</td></tr>
+															<c:if test="${!empty regFunds.commitments}">
+																<tr><td bgcolor="#ffffff">
+																	<table width="100%" cellSpacing="1" cellPadding="0" class="box-border-nopadding">
+																		<tr>
+																			<td valign="top" width="100" bgcolor="#ffffff">
+																				<digi:trn key="aim:commitments">
+																				Commitments</digi:trn>
+																			</td>
+																			<td bgcolor="#ffffff">
+																				<table width="100%" cellSpacing="1" cellPadding="1" bgcolor="#eeeeee">
+																					<c:forEach var="fd" items="${regFunds.commitments}">
+																						<tr>
+																							<td width="50" bgcolor="#ffffff">
+																								<c:out value="${fd.adjustmentTypeName}"/>
+																							</td>
+																							<td align="right" width="100" bgcolor="#ffffff">
+																							<FONT color=blue>*</FONT>
+																								<c:out value="${fd.transactionAmount}"/>
+																							</td>
+																							<td bgcolor="#ffffff">
+																								<c:out value="${fd.currencyCode}"/>
+																							</td>
+																							<td bgcolor="#ffffff" width="70">
+																								<c:out value="${fd.transactionDate}"/>
+																							</td>
+																							<td bgcolor="#ffffff">
+																								<c:out value="${fd.perspectiveName}"/>
+																							</td>
+																						</tr>
+																					</c:forEach>
+																				</table>
+																			</td>
+																		</tr>
+																	</table>
+																</td></tr>
+															</c:if>
+															<c:if test="${!empty regFunds.disbursements}">
+																<tr><td bgcolor="#ffffff">
+																	<table width="100%" cellSpacing="1" cellPadding="1" class="box-border-nopadding">
+																		<tr>
+																			<td valign="top" width="100" bgcolor="#ffffff">
+																				<digi:trn key="aim:disbursements">
+																				Disbursements</digi:trn>
+																			</td>
+																			<td bgcolor="#ffffff">
+																				<table width="100%" cellSpacing="1" cellPadding="1" bgcolor="#eeeeee">
+																					<c:forEach var="fd" items="${regFunds.disbursements}">
+																						<tr>
+																							<td width="50" bgcolor="#ffffff">
+																								<c:out value="${fd.adjustmentTypeName}"/>
+																							</td>
+																							<td align="right" width="100" bgcolor="#ffffff">
+																							<FONT color=blue>*</FONT>
+																								<c:out value="${fd.transactionAmount}"/>
+																							</td>
+																							<td bgcolor="#ffffff">
+																								<c:out value="${fd.currencyCode}"/>
+																							</td>
+																							<td bgcolor="#ffffff" width="70">
+																								<c:out value="${fd.transactionDate}"/>
+																							</td>
+																							<td bgcolor="#ffffff">
+																								<c:out value="${fd.perspectiveName}"/>
+																							</td>
+																						</tr>
+																					</c:forEach>
+																				</table>
+																			</td>
+																		</tr>
+																	</table>
+																</td></tr>															
+															</c:if>
+															<c:if test="${!empty regFunds.expenditures}">
+																<tr><td bgcolor="#ffffff">
+																	<table width="100%" cellSpacing="1" cellPadding="1" class="box-border-nopadding">
+																		<tr>
+																			<td valign="top" width="100" bgcolor="#ffffff">
+																				<digi:trn key="aim:expenditures">
+																				Expenditures</digi:trn>
+																			</td>
+																			<td bgcolor="#ffffff">
+																				<table width="100%" cellSpacing="1" cellPadding="1" bgcolor="#eeeeee">
+																					<c:forEach var="fd" items="${regFunds.expenditures}">
+																						<tr>
+																							<td width="50" bgcolor="#ffffff">
+																								<c:out value="${fd.adjustmentTypeName}"/>
+																							</td>
+																							<td align="right" width="100" bgcolor="#ffffff">
+																							<FONT color=blue>*</FONT>
+																								<c:out value="${fd.transactionAmount}"/>
+																							</td>
+																							<td bgcolor="#ffffff">
+																								<c:out value="${fd.currencyCode}"/>
+																							</td>
+																							<td bgcolor="#ffffff" width="70">
+																								<c:out value="${fd.transactionDate}"/>
+																							</td>
+																							<td bgcolor="#ffffff">
+																								<c:out value="${fd.perspectiveName}"/>
+																							</td>
+																						</tr>
+																					</c:forEach>
+																				</table>
+																			</td>
+																		</tr>
+																	</table>
+																</td></tr>															
+															</c:if>															
+														</table>
+													</td></tr>
+												</c:forEach>
+												<tr><td bgcolor="#ffffff">
+													<FONT color=blue>*
+													<digi:trn key="aim:theAmountEnteredAreInThousands">	
+													The amount entered are in thousands (000)</digi:trn></FONT>
+												</td></tr>
+												</table>
+											</c:if>
+										</td>
+									</tr>	
+									
 									<tr>
 										<td class="t-name" width="30%" align="right" bgcolor="#f4f4f2">
 											<digi:trn key="aim:components">

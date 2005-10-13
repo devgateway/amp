@@ -27,7 +27,6 @@ public class LocationSelected extends Action {
 
 		EditActivityForm eaForm = (EditActivityForm) form;
 		
-		Location loc = new Location();
 		Location location[] = null;
 		
 		boolean flag = false;
@@ -68,14 +67,19 @@ public class LocationSelected extends Action {
 				for (int i = 0; i < rgn.length; i++) {
 					reg = DbUtil.getAmpRegion(rgn[i]);
 					if (reg != null) {
-						logger.info("rgn=" + rgn[i] + ":REGION-ID::"+ reg.getAmpRegionId() + "::REGION-NAME::"+ reg.getName());
 						location[i] = new Location();
 						location[i].setLocId(id);
 						id = new Long(id.longValue() + 1);
 						location[i].setCountryId(cntryId);// from implev=1
 						location[i].setCountry(cntryName);// from implev=1
 						location[i].setRegionId(reg.getAmpRegionId());
-						location[i].setRegion(reg.getName());						
+						location[i].setRegion(reg.getName());		
+						if (eaForm.getFundingRegions() == null) {
+							eaForm.setFundingRegions(new ArrayList());
+						}
+						if (eaForm.getFundingRegions().contains(reg) == false) {
+							eaForm.getFundingRegions().add(reg);
+						}
 					}
 				}
 				flag = false;
@@ -89,6 +93,12 @@ public class LocationSelected extends Action {
 				AmpRegion reg = DbUtil.getAmpRegion(eaForm.getImpRegion());
 				regnId = reg.getAmpRegionId();
 				regnName = reg.getName();
+				if (eaForm.getFundingRegions() == null) {
+					eaForm.setFundingRegions(new ArrayList());
+				}
+				if (eaForm.getFundingRegions().contains(reg) == false) {
+					eaForm.getFundingRegions().add(reg);
+				}				
 				flag = false;
 			} else
 				flag = true;

@@ -64,7 +64,6 @@ public class AddFunding extends Action {
 				}
 			}
 		}
-		formBean.setCurrencies(DbUtil.getAmpCurrency());
 		formBean.setOrganizations(DbUtil.getAllOrganisation());
 		formBean.setEvent(null);
 		if ( logger.isDebugEnabled() )

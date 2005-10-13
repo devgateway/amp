@@ -4,7 +4,6 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.Iterator;
 
-import javax.servlet.RequestDispatcher;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -22,7 +21,6 @@ import org.digijava.module.aim.dbentity.AmpModality;
 import org.digijava.module.aim.form.EditActivityForm;
 import org.digijava.module.aim.helper.FundingOrganization;
 import org.digijava.module.aim.helper.TeamMember;
-import org.digijava.module.aim.util.ActivityUtil;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.ProgramUtil;
 import org.digijava.module.editor.dbentity.Editor;
@@ -60,7 +58,7 @@ public class AddAmpActivity extends Action {
 			return mapping.findForward("index");
 		
 		if (eaForm.getPageId() == 2)
-			eaForm.setStep("8");
+			eaForm.setStep("9");
 		
 		// Clearing comment properties
 		String action = request.getParameter("action");
@@ -164,17 +162,14 @@ public class AddAmpActivity extends Action {
 			}
 			
 			eaForm.setProgramCollection(ProgramUtil.getAllThemes());				
-			
+			eaForm.setCurrencies(DbUtil.getAmpCurrency());	
+			eaForm.setPerspectives(DbUtil.getAmpPerspective());
+			eaForm.setFundingRegionId(new Long(-1));
 			return mapping.findForward("addActivityStep1");
 		} else if (eaForm.getStep().equals("1.1")) {
 			eaForm.setStep("1");
 		    String url = "/editor/showEditText.do?id="+eaForm.getEditKey()+"&referrer="+eaForm.getContext()+"/aim/addActivity.do?edit=true";
-		    /*
-		    RequestDispatcher rd = getServlet().getServletContext().
-		    	getRequestDispatcher(url);
-		   */
 		    response.sendRedirect(eaForm.getContext() + url);
-		    //rd.forward(request,response);			
 		} else if (eaForm.getStep().equals("2")) { // show the step 2 page.
 			return mapping.findForward("addActivityStep2");
 		} else if (eaForm.getStep().equals("3")) { // show the step 3 page.
@@ -187,7 +182,9 @@ public class AddAmpActivity extends Action {
 			return mapping.findForward("addActivityStep6");
 		} else if (eaForm.getStep().equals("7")) { // show the step 7 page.
 			return mapping.findForward("addActivityStep7");
-		} else if (eaForm.getStep().equals("8")) { // finish wizard. add the activity details.
+		} else if (eaForm.getStep().equals("8")) { // show the step 7 page.
+			return mapping.findForward("addActivityStep8");			
+		} else if (eaForm.getStep().equals("9")) { // finish wizard. add the activity details.
 
 			if (eaForm.getAmpId() == null) { // if AMP-ID is not generated, generate the AMP-ID
 				String ampId = "AMP";

@@ -77,8 +77,10 @@ public class AmpActivity
 	private Date updatedDate;
 	
 	//private Set teamList;
-	
 	private String contractors;
+	
+	private Set regionalFundings;
+	
 	
 	/**
 	 * @return
@@ -731,6 +733,20 @@ public class AmpActivity
 		
 		AmpActivity act = (AmpActivity) obj;
 		return this.ampActivityId.equals(act.getAmpActivityId());
+	}
+
+	/**
+	 * @return Returns the regionalFundings.
+	 */
+	public Set getRegionalFundings() {
+		return regionalFundings;
+	}
+
+	/**
+	 * @param regionalFundings The regionalFundings to set.
+	 */
+	public void setRegionalFundings(Set regionalFundings) {
+		this.regionalFundings = regionalFundings;
 	}
 
 

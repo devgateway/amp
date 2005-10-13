@@ -52,7 +52,16 @@
 		<layout name="layoutFinancingBreakdown" extends="tabLayout">
 			<put name="title">Activity - Financial Progress Overview </put>
 			<put-item name="tabBody" module="aim" instance="default" teaser="financingBreakdown"/> 
+	 	</layout>
+ 		<layout name="layoutRegionalFundingBreakdown" extends="tabLayout">
+			<put name="title">Activity - Regional Funding </put>
+			<put-item name="tabBody" module="aim" instance="default" teaser="regionalFundingBreakdown"/> 
+	 	</layout>
+  		<layout name="layoutRegionalFundingDetails" extends="tabLayout">
+			<put name="title">Activity - Regional Funding Details</put>
+			<put-item name="tabBody" module="aim" instance="default" teaser="regionalFundingDetails"/> 
 		</layout>
+
 		<layout name="layoutFinancingBreakdownFilter" extends="tabLayout">
 			<put name="title">Activity - Financial Progress Overview </put>
 			<put-item name="tabBody" module="aim" instance="default" teaser="financingBreakdownFilter"/> 
@@ -263,7 +272,7 @@
 				<page>aim_viewActivityDetails</page>
 				<page>aim_projectDetails</page>
 				<page>viewbyProjectbyDonor_NoLayout</page>
-				
+				<page>aim_addRegionalFunding</page>
 				<page>	projectByDonor_NoLayout				</page>
 				<page>	htmlCommitmentbyModality			</page>
 				<page>	htmlMultilateralbyDonor				</page>

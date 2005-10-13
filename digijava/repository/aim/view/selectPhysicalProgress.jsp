@@ -129,7 +129,7 @@
 													<td>
 														&nbsp;
 														<a href="javascript:newWindow(7)">
-														<img src="../ampTemplate/images/show-calendar.gif" width=24 height=20 border=0
+														<img src="../ampTemplate/images/show-calendar.gif" border=0
 														tabindex="3"></a>
 													</td>													
 												</tr>

@@ -182,7 +182,6 @@
 	<tr><td>
 		<FONT color=blue><B><BIG>*</BIG>
 			<digi:trn key="aim:pleaseEnterTheAmountInThousands">
-		  alert(window.location);
 			Please enter amount in thousands (000)</digi:trn>
 	</td></tr>
 			
@@ -256,7 +255,7 @@
 											</td>
 											<td align="left" vAlign="center">&nbsp;
 			             					<a href='javascript:newWindow(2,<bean:write name="fundingDetail" property="index"/>)'>	
-		   			          			<img src="../ampTemplate/images/show-calendar.gif" width="24" height="20" border="0"></a>
+		   			          			<img src="../ampTemplate/images/show-calendar.gif" border="0"></a>
 											</td>
 										</tr>
 									</table>
@@ -370,7 +369,7 @@
 											</td>
 											<td align="left" vAlign="center">&nbsp;
 					             			<a href='javascript:newWindow(2,<bean:write name="fundingDetail" property="index"/>)'>	
-      					       			<img src="../ampTemplate/images/show-calendar.gif" width="24" height="20" border="0"></a>
+      					       			<img src="../ampTemplate/images/show-calendar.gif" border="0"></a>
 											</td>
 										</tr>
 									</table>								
@@ -484,7 +483,7 @@
 											</td>
 											<td align="left" vAlign="center">&nbsp;
 			             					<a href='javascript:newWindow(2,<bean:write name="fundingDetail" property="index"/>)'>	
-		   			          			<img src="../ampTemplate/images/show-calendar.gif" width="24" height="20" border="0"></a>
+		   			          			<img src="../ampTemplate/images/show-calendar.gif" border="0"></a>
 											</td>
 										</tr>
 									</table>																

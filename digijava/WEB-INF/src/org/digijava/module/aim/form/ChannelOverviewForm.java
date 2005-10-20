@@ -42,6 +42,7 @@ public class ChannelOverviewForm extends MainProjectDetailsForm
 	
 	private Activity activity;
 	
+	private String buttonText;  // added by Akash for activity approval
 
 	public Integer getPageNo() {
 			  return pageNo;
@@ -398,5 +399,17 @@ public class ChannelOverviewForm extends MainProjectDetailsForm
 	 */
 	public void setModal(Collection modal) {
 		this.modal = modal;
+	}
+	/**
+	 * @return Returns the buttonText.
+	 */
+	public String getButtonText() {
+		return buttonText;
+	}
+	/**
+	 * @param buttonText The buttonText to set.
+	 */
+	public void setButtonText(String buttonText) {
+		this.buttonText = buttonText;
 	}
 }

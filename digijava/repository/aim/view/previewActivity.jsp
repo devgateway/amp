@@ -25,6 +25,21 @@ function backClicked() {
 function disable() {
 	document.aimEditActivityForm.submitButton.disabled = true;
 	document.aimEditActivityForm.backButton.disabled = true;
+	var appstatus = document.aimEditActivityForm.approvalStatus.value;
+	var wTLFlag   = document.aimEditActivityForm.workingTeamLeadFlag.value;
+	if (appstatus == "started") {
+		if (confirm("Do you want to submit this activity for approval ?"))
+			document.aimEditActivityForm.approvalStatus.value = "created";
+	}
+	if (appstatus == "approved") {
+		document.aimEditActivityForm.approvalStatus.value = "edited";
+	}
+	else if (wTLFlag == "yes") {
+		if (appstatus == "created" || appstatus == "edited") {
+			if (confirm("Do you want to approve this activity ?"))
+				document.aimEditActivityForm.approvalStatus.value = "approved";
+		}
+	}
 	document.aimEditActivityForm.submit();
 	return true;
 }
@@ -35,6 +50,8 @@ function disable() {
 <digi:form action="/saveActivity.do" method="post">
 <html:hidden property="step" />
 <html:hidden property="editAct" />
+<html:hidden property="approvalStatus" />
+<html:hidden property="workingTeamLeadFlag" />
 
 <table width="100%" cellPadding="0" cellSpacing="0" vAlign="top" align="left">
 <tr><td width="100%" vAlign="top" align="left">

@@ -55,6 +55,22 @@ public class ViewChannelOverview extends TilesAction {
 			
 			Activity activity = ActivityUtil.getChannelOverview(id);
 			
+			// added by Akash
+			// desc: approval status check
+			// start
+			String actApprovalStatus = DbUtil.getActivityApprovalStatus(id);
+			Long ampTeamId = teamMember.getTeamId();
+			boolean teamLeadFlag    = teamMember.getTeamHead();
+			boolean workingTeamFlag = DbUtil.checkForParentTeam(ampTeamId);
+			
+		 	if ("approved".equals(actApprovalStatus) || "started".equals(actApprovalStatus))
+		 		formBean.setButtonText("edit");
+		 	else if (workingTeamFlag && teamLeadFlag)
+		 			formBean.setButtonText("validate");
+		 	     else
+		 			formBean.setButtonText("approvalAwaited");
+		 	// end
+			
 			String perspective = null;
 			String currCode = null;
 			Long fiscalCalId = null;

@@ -1,5 +1,7 @@
 package org.digijava.module.aim.helper;
 
+import java.util.Set;
+
 public class TeamMember {
 
 	private Long memberId;
@@ -30,6 +32,8 @@ public class TeamMember {
 											  */
 
 	private boolean translator;
+	
+	private Set activities;
 
 	public TeamMember() {}
 
@@ -188,5 +192,17 @@ public class TeamMember {
 	 */
 	public void setWrite(boolean write) {
 		this.write = write;
+	}
+	/**
+	 * @return Returns the activities.
+	 */
+	public Set getActivities() {
+		return activities;
+	}
+	/**
+	 * @param activities The activities to set.
+	 */
+	public void setActivities(Set activities) {
+		this.activities = activities;
 	}
 }

@@ -844,6 +844,8 @@ public class SaveActivity extends Action {
 		if (eaForm.getField() != null)
 			field = eaForm.getField().getAmpFieldId();
 		if (eaForm.isEditAct()) {
+			// Setting approval status of activity
+			activity.setApprovalStatus(eaForm.getApprovalStatus());
 			// update an existing activity
 			ActivityUtil.saveActivity(activity, eaForm.getActivityId(), true, eaForm.getCommentsCol(), eaForm.isSerializeFlag(), field);
 			
@@ -861,7 +863,9 @@ public class SaveActivity extends Action {
 			AmpTeamMember teamMember = DbUtil.getAmpTeamMember(tm.getMemberId()) ;
 			activity.setActivityCreator(teamMember);
 			Calendar cal = Calendar.getInstance();
-			activity.setCreatedDate(cal.getTime());			
+			activity.setCreatedDate(cal.getTime());
+			// Setting approval status of activity
+			activity.setApprovalStatus(eaForm.getApprovalStatus());
 			// create a new activity
 			ActivityUtil.saveActivity(activity, eaForm.getCommentsCol(), eaForm.isSerializeFlag(), field);
 		}
@@ -878,6 +882,9 @@ public class SaveActivity extends Action {
 		// Clearing comment properties
 		eaForm.getCommentsCol().clear();
 		eaForm.setCommentFlag(false);
+		// Clearing approval process properties
+		activity.setApprovalStatus("");
+		eaForm.setWorkingTeamLeadFlag("no");
 		eaForm.setFundingRegions(null);
 		eaForm.setRegionalFundings(null);
 		

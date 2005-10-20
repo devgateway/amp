@@ -142,6 +142,10 @@ public class EditActivityForm extends ActionForm implements Serializable{
 	private AmpField field = null;
 	private ArrayList commentsCol = new ArrayList();
 	
+	// For activity approval process
+	private String approvalStatus;
+	private String workingTeamLeadFlag;
+	
 	/* START FINANCIAL EDIT */
 	private Collection fundingOrganizations; // Collection of FundingOrganization objects
 	private String orgFundingId;
@@ -2969,5 +2973,29 @@ public class EditActivityForm extends ActionForm implements Serializable{
 	 */
 	public void setTotalExpenditures(double totalExpenditures) {
 		this.totalExpenditures = totalExpenditures;
+	}
+	/**
+	 * @return Returns the approvalStatus.
+	 */
+	public String getApprovalStatus() {
+		return approvalStatus;
+	}
+	/**
+	 * @param approvalStatus The approvalStatus to set.
+	 */
+	public void setApprovalStatus(String approvalStatus) {
+		this.approvalStatus = approvalStatus;
+	}
+	/**
+	 * @return Returns the workingTeamLeadFlag.
+	 */
+	public String getWorkingTeamLeadFlag() {
+		return workingTeamLeadFlag;
+	}
+	/**
+	 * @param workingTeamLeadFlag The workingTeamLeadFlag to set.
+	 */
+	public void setWorkingTeamLeadFlag(String workingTeamLeadFlag) {
+		this.workingTeamLeadFlag = workingTeamLeadFlag;
 	}
 }

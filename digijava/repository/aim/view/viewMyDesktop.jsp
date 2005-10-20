@@ -44,6 +44,12 @@ function newWin(val) {
 		} else
 			popupPointer.focus();
 }
+function myTask() {
+	<digi:context name="mytask" property="context/module/moduleinstance/viewMyTask.do" />
+    document.aimMyDesktopForm.action = "<%=mytask%>";
+    document.aimMyDesktopForm.showTask.value = "showTask";
+    document.aimMyDesktopForm.submit();
+}
 function open_win()
 {
 	<digi:context name="addUrl" property="context/module/moduleinstance/viewMyDesktop.do" />
@@ -86,8 +92,11 @@ function showtip()
 <jsp:include page="teamPagesHeader.jsp" flush="true" />
 </TD></TR>
 <TR><TD width="100%" valign="top" align="left">
+
 <digi:form action="/viewMyDesktop.do" method="post">
 <html:hidden property="teamMemberId" />
+<input type="hidden" name="showTask" value="">
+
 <TABLE border=0 bgColor=#ffffff cellPadding=0 cellSpacing=0 width="99%" valign="top" align="left">
 <TBODY>
 	<TR>
@@ -647,8 +656,60 @@ function showtip()
 				</TR>
 
 
+				<%-- My Task begins here --%>
 				
+   				<logic:equal name="aimMyDesktopForm"  property="workingTeamFlag" value="yes">
+				<TR>
+					<TD class=r-dotted-lg-buttom vAlign=top>
+						<TABLE border=0 cellPadding=0 cellSpacing=0 width="100%" >
+  		           		<TBODY>
+           					<TR>
+              					<TD>
+                 					<TABLE border=0 cellPadding=0 cellSpacing=0 width="50%">
+                 					<TBODY>
+                 						<TR bgColor=#f4f4f2>
+                    						<TD bgColor=#c9c9c7 class=box-title width=100%>
+											<a title="<digi:trn key="aim:myTaskListOfTeamLeader">List of activities pending for approval</digi:trn>">
+														<digi:trn key="aim:myTaskList">My Tasks</digi:trn>
+											</a>
+											</TD>
+											<TD background="module/aim/images/corner-r.gif" height=17 width=17>&nbsp;</TD>
+										</TR>
+									</TBODY>
+									</TABLE></TD>
+							</TR>
+							<TR>
+							     <TD bgColor=#ffffff class=box-border width="100%">
+									<TABLE border=0 cellPadding=2 cellSpacing=3 width="80%">
+									<logic:empty name="aimMyDesktopForm"  property="myTasksColl" >
+										<digi:trn key="aim:emptyMyTaskList">No pending task</digi:trn>
+									</logic:empty>
+									<logic:notEmpty name="aimMyDesktopForm"  property="myTasksColl" >
+										<a href="javascript:myTask()">
+											<bean:write name="aimMyDesktopForm" property="myTaskSize" />&nbsp;
+											<c:choose>
+												<c:when test="${aimMyDesktopForm.myTaskSize == 1}">
+													<digi:trn key="aim:myPendingTask">Task pending for approval</digi:trn>
+												</c:when>
+												<c:otherwise>
+													<digi:trn key="aim:myPendingTasks">Tasks pending for approval</digi:trn>
+												</c:otherwise>
+											</c:choose>
+										</a>
+									</logic:notEmpty>
+								   </TABLE>
+								</TD>
+							</TR>
+							
+						</TBODY>
+						
+						</TABLE>
+					</TD>
+				</TR>
+				</logic:equal>
 
+				<%-- My Task ends here --%>
+				
 				
 				<logic:notEmpty name="aimMyDesktopForm"  property="ampTeamMembers" >
 				<TR>

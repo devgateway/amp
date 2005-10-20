@@ -306,8 +306,17 @@
     	name="aimMyDesktopForm"
      	type="org.digijava.module.aim.action.ViewMyDesktop" 
      	scope="session" validate="false" path="/aim/viewMyDesktop">
-    <forward name="forward" path="/showLayout.do?layout=viewMyDesktop" />
-    <forward name="index" path="/aim/index.do" redirect="true" />
+    	<forward name="forward" path="/showLayout.do?layout=viewMyDesktop" />
+    	<forward name="index" path="/aim/index.do" redirect="true" />
+	 </action>
+	 
+	 <action 
+    	name="aimMyDesktopForm"
+     	type="org.digijava.module.aim.action.ViewMyTask" 
+     	scope="session" validate="false" path="/aim/viewMyTask">
+    	<forward name="forward" path="/showLayout.do?layout=showMyTask" />
+    	<forward name="view" path="/showLayout.do?layout=viewMyDesktop" />
+    	<forward name="index" path="/aim/index.do" redirect="true" />
 	 </action>
 
     <action 

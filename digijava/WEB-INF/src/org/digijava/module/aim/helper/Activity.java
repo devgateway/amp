@@ -42,7 +42,7 @@ public class Activity implements Comparable {
 	
 	private String contractors;
 	
-
+	
 	/**
 	 * @return Returns the programDescription.
 	 */

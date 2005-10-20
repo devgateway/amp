@@ -27,6 +27,7 @@ public class AMPActionServlet extends ActionServlet {
         HttpSession session = request.getSession();
         String sessId = session.getId();
         
+        //logger.debug("Querystring accessed " + request.getQueryString());
         ServletContext ampContext = getServletContext();
         ArrayList sessionList = (ArrayList) ampContext.getAttribute("sessionList");
         int index = -1;

@@ -42,6 +42,11 @@ public class MyDesktopForm extends ActionForm
 	private boolean write;
 	private Long teamMemberId;
 	
+	// Added by Akash for activity approval process
+	private String workingTeamFlag;
+	private int myTaskSize;
+	private Collection myTasksColl;
+	
 	/* added by Priyajith 
 	 * for RelatedLinksList */
 	private Long selLinks[];
@@ -435,4 +440,40 @@ public class MyDesktopForm extends ActionForm
     public void setSelLinks(Long[] selLinks) {
         this.selLinks = selLinks;
     }
+	/**
+	 * @return Returns the myTaskSize.
+	 */
+	public int getMyTaskSize() {
+		return myTaskSize;
+	}
+	/**
+	 * @param myTaskSize The myTaskSize to set.
+	 */
+	public void setMyTaskSize(int myTaskSize) {
+		this.myTaskSize = myTaskSize;
+	}
+	/**
+	 * @return Returns the workingTeamFlag.
+	 */
+	public String getWorkingTeamFlag() {
+		return workingTeamFlag;
+	}
+	/**
+	 * @param workingTeamFlag The workingTeamFlag to set.
+	 */
+	public void setWorkingTeamFlag(String workingTeamFlag) {
+		this.workingTeamFlag = workingTeamFlag;
+	}
+	/**
+	 * @return Returns the myTasksColl.
+	 */
+	public Collection getMyTasksColl() {
+		return myTasksColl;
+	}
+	/**
+	 * @param myTasksColl The myTasksColl to set.
+	 */
+	public void setMyTasksColl(Collection myTasksColl) {
+		this.myTasksColl = myTasksColl;
+	}
 }

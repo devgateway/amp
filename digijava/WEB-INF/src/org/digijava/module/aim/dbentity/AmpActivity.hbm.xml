@@ -60,6 +60,8 @@
 		<many-to-one name="author" column="author" class="org.digijava.kernel.user.User" cascade="none"/>   <!-- defunct -->
 		<many-to-one name="activityCreator" column="activity_creator" 
 			class="org.digijava.module.aim.dbentity.AmpTeamMember" cascade="none"/>		
+		
+		<property name="approvalStatus" column="approval_status" type="java.lang.String"/>
 	
 		<!--
 		<set name="orgrole" table="amp_org_role" lazy="true">

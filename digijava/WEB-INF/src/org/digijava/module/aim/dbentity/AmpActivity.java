@@ -81,6 +81,7 @@ public class AmpActivity
 	
 	private Set regionalFundings;
 	
+	private String approvalStatus;
 	
 	/**
 	 * @return
@@ -750,4 +751,17 @@ public class AmpActivity
 	}
 
 
+
+	/**
+	 * @return Returns the approvalStatus.
+	 */
+	public String getApprovalStatus() {
+		return approvalStatus;
+	}
+	/**
+	 * @param approval_status The approval_status to set.
+	 */
+	public void setApprovalStatus(String approvalStatus) {
+		this.approvalStatus = approvalStatus;
+	}
 }

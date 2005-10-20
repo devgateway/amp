@@ -2,7 +2,8 @@
 <config>
 <secondary-pages>
 
-	<page name="viewMyDesktop" title=" - Team Desktop " /> 
+	<page name="viewMyDesktop" title=" - Team Desktop " />
+	<page name="showMyTask" title=" - My Task List " />
 	<page name="viewChannelOverviewDescription" title="AMP: Ethiopia: AIM Dashboard: Detail" />
 	<page name="editPhysicalProgress" title="AMP: Ethiopia: AIM Dashboard: Detail" />
 	<page name="addAmpProjectDetails" title="AMP: Ethiopia: AIM Dashboard: Detail" /> 

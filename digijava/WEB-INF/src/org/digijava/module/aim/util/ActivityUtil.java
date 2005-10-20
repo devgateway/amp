@@ -43,6 +43,7 @@ import org.digijava.module.aim.helper.Issues;
 import org.digijava.module.aim.helper.Location;
 import org.digijava.module.aim.helper.Measures;
 import org.digijava.module.aim.helper.RelOrganization;
+import org.digijava.module.aim.helper.TeamMember;
 
 import sun.security.krb5.internal.ac;
 
@@ -243,6 +244,8 @@ public class ActivityUtil {
 				oldActivity.setOrgrole(activity.getOrgrole());
 				oldActivity.setSectors(activity.getSectors());
 				oldActivity.setIssues(activity.getIssues());
+				
+				oldActivity.setApprovalStatus(activity.getApprovalStatus());
 			}
 			
 			
@@ -250,7 +253,32 @@ public class ActivityUtil {
 			if (edit) {
 				// update the activity
 			    logger.debug("updating ....");
-				session.saveOrUpdate(oldActivity);
+			    
+			    session.saveOrUpdate(oldActivity);
+			    // added by Akash
+			    // desc: Saving team members in amp_member_activity table in case activity is Approved
+			    // start
+				if ("approved".equals(oldActivity.getApprovalStatus())) {
+					Long teamId = oldActivity.getTeam().getAmpTeamId();
+					Query qry = null;
+					String queryString = "select tm from " + AmpTeamMember.class.getName()
+					 					 + " tm where (tm.ampTeam=:teamId)";
+					qry = session.createQuery(queryString);
+					qry.setParameter("teamId", teamId, Hibernate.LONG);
+					Iterator tmItr = qry.list().iterator();
+					AmpTeamMember member = new AmpTeamMember();
+					while (tmItr.hasNext()) {
+						member = (AmpTeamMember) tmItr.next();
+						if (!member.getAmpMemberRole().getTeamHead().booleanValue()) {
+							if (member.getActivities() == null)
+								member.setActivities(new HashSet());
+						}
+						member.getActivities().add(oldActivity);
+						session.saveOrUpdate(member);
+					}
+				}
+				// end
+				
 			} else {
 				// create the activity
 			    logger.debug("creating ....");

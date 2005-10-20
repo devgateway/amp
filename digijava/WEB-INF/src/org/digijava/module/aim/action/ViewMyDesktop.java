@@ -457,6 +457,35 @@ public class ViewMyDesktop extends Action
 			logger.debug("8.5 at" + (t2-t1)+ "ms");												
 		 }
 
+		 // added by Akash
+		 // desc: approval status check
+		 // start
+		 ArrayList actColl = new ArrayList();
+		 if (request.getParameter("page") == null) {
+		 	/*
+		 	actColl = (ArrayList)session.getAttribute("ampProjects");
+		 	logger.debug("Size of ampProjects [before approval status filtering]" + actColl.size());
+		 	ampProjects = DbUtil.getApprovedOrCreatorActivities(actColl, ampMemberId);
+		 	logger.debug("Size of ampProjects [after approval status filtering]" + ampProjects.size());
+		 	session.setAttribute("ampProjects",ampProjects);
+		 	*/
+		 	actColl = (ArrayList)session.getAttribute("ampProjects");
+		 	logger.debug("actColl.size [from Session attribute] : " + actColl.size());
+		 	// To check if this team is a regular working team not belonging to management workspace 
+		 	boolean workingTeamFlag = DbUtil.checkForParentTeam(ampTeamId);
+		 	if (workingTeamFlag && teamLeadFlag)
+		 		formBean.setWorkingTeamFlag("yes");
+		 	else
+		 		formBean.setWorkingTeamFlag("no");
+		 	
+		 	// Getting activities in workflow section of Team Leader for Approval
+		 	Collection myTaskColl = DbUtil.getCreatedOrEditedActivities(ampTeamId);
+		 	formBean.setMyTasksColl(myTaskColl);
+		 	formBean.setMyTaskSize(myTaskColl.size());
+		 } 
+		 // end
+		 
+		 // Pagination starts here
 		 t1 = System.currentTimeMillis();
 		 formBean.setPage(new Integer(page));
 		 int defRecsPerPage = teamMember.getAppSettings().getDefRecsPerPage();			
@@ -492,6 +521,7 @@ public class ViewMyDesktop extends Action
 		formBean.setPages(pages);
 		logger.debug("Page: " + page);
 		logger.debug("Number of Page: " + numPages);
+		// end pagination
 
 		iter = ampProjects.iterator() ;
 		logger.debug("Grand Total :" + grandTotal);

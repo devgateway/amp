@@ -214,7 +214,7 @@
 													<tr>
 														<td bgcolor="#f4f4f2">
 														<b>
-	    													<digi:trn key="aim:sectors">Sector</digi:trn>: </b>
+	    													<digi:trn key="aim:sector">Sector</digi:trn>: </b>
 															<c:if test="${!empty aimChannelOverviewForm.sectors}">
 																<logic:iterate name="aimChannelOverviewForm" property="sectors" id="sector"
 																type="org.digijava.module.aim.dbentity.AmpSector">
@@ -239,8 +239,7 @@
 		        												<bean:write name="aimChannelOverviewForm" property="level" />
 														</td>
 														<TD bgcolor="#f4f4f2">
-															<b><digi:trn key="aim:effectiveDate">
-															Effective Date</digi:trn>:</b>
+															<b><digi:trn key="aim:startDate">Start Date</digi:trn>:</b>
 															<bean:write name="aimChannelOverviewForm" property="activityStartDate" />
 														</TD>
 													</tr>
@@ -251,7 +250,7 @@
 															<bean:write name="aimChannelOverviewForm" property="grandTotal" />
 														</TD>
 														<TD bgcolor="#f4f4f2">
-															<b><digi:trn key="aim:closeDate">Close Date</digi:trn>:</b>
+															<b><digi:trn key="aim:completionDate">Completion Date</digi:trn>:</b>
 															<bean:write name="aimChannelOverviewForm" property="activityCloseDate" />
 														</TD>
 														

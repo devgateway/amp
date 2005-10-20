@@ -29,6 +29,7 @@ public class AMPStartupListener
 
     }
     public void contextInitialized(ServletContextEvent sce) {
+    	/*
         logger.debug("In contextInitialized");
         Session session = null;
         try {
@@ -36,9 +37,8 @@ public class AMPStartupListener
             Connection con = session.connection();
             Statement stmt = con.createStatement();
             
-            /*
+
              * Check whether the desc and obj is already moved 
-             */
             logger.debug("Checking the description and objectives");
             boolean moved = false;
             String qryStr = "select count(*) from amp_activity where " +
@@ -54,9 +54,8 @@ public class AMPStartupListener
                 
             if (!moved) {
                 logger.debug("Moving Objectives and description");
-                /*
+
                  * Move the description and objectives from amp_activity to dg_editor
-                 */
                 qryStr = "select site_id from dg_site where id " +
                 		"not in (1,2) and name like '%AMP%'";
                 rs = stmt.executeQuery(qryStr);
@@ -175,6 +174,6 @@ public class AMPStartupListener
                 }
             }
         }
-        
+        */
     }
 }

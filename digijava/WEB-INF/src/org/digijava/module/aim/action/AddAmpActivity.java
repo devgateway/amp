@@ -60,7 +60,9 @@ public class AddAmpActivity extends Action {
 		if (eaForm.getPageId() == 2)
 			eaForm.setStep("9");
 		
-		// Clearing comment properties
+		// added by Akash
+		// desc: clearing comment properties
+		// start
 		String action = request.getParameter("action");
 		logger.debug("action [inside AddAmpActivity] : " + action);
 		if (action != null && action.trim().length() != 0) {
@@ -69,6 +71,27 @@ public class AddAmpActivity extends Action {
 				eaForm.setCommentFlag(false);
 			}
 		}
+		// end
+		
+		// added by Akash
+		// desc: setting WorkingTeamLeadFlag & approval status in form bean
+		// start
+		if (!eaForm.isEditAct()) {
+			eaForm.setWorkingTeamLeadFlag("no");
+			eaForm.setApprovalStatus("started");
+		}
+		else {
+			Long ampTeamId = teamMember.getTeamId();
+			boolean teamLeadFlag = teamMember.getTeamHead();
+			boolean workingTeamFlag = DbUtil.checkForParentTeam(ampTeamId);
+			if (teamLeadFlag && workingTeamFlag)
+				eaForm.setWorkingTeamLeadFlag("yes");
+			else
+				eaForm.setWorkingTeamLeadFlag("no");
+			String actApprovalStatus = DbUtil.getActivityApprovalStatus(eaForm.getActivityId());
+			eaForm.setApprovalStatus(actApprovalStatus);
+		}
+		// end
 		
 		if (eaForm.getStep().equals("1")) { // show the step 1 page.
 			

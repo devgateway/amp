@@ -21,7 +21,22 @@ function saveClicked() {
 	document.aimEditActivityForm.saveButton.disabled = true;	
 	<digi:context name="save" property="context/module/moduleinstance/saveActivity.do" />
 	document.aimEditActivityForm.action = "<%= save %>";
-	document.aimEditActivityForm.target = "_self";	
+	document.aimEditActivityForm.target = "_self";
+	var appstatus = document.aimEditActivityForm.approvalStatus.value;
+	var wTLFlag   = document.aimEditActivityForm.workingTeamLeadFlag.value;
+	if (appstatus == "started") {
+		if (confirm("Do you want to submit this activity for approval ?"))
+			document.aimEditActivityForm.approvalStatus.value = "created";
+	}
+	if (appstatus == "approved") {
+		document.aimEditActivityForm.approvalStatus.value = "edited";
+	}
+	else if (wTLFlag == "yes") {
+		if (appstatus == "created" || appstatus == "edited") {
+			if (confirm("Do you want to approve this activity ?"))
+				document.aimEditActivityForm.approvalStatus.value = "approved";
+		}
+	}
 	document.aimEditActivityForm.submit();
 }
 
@@ -37,6 +52,8 @@ function gotoStep(value) {
 </script>
 
 <digi:instance property="aimEditActivityForm" />
+<html:hidden property="approvalStatus" />
+<html:hidden property="workingTeamLeadFlag" />
 
 <table width="209" cellSpacing=0 cellPadding=0 vAlign="top" align="left" border=0>
 <tr><td width="209" height="10" background="module/aim/images/top.gif">

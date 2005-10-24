@@ -1932,6 +1932,7 @@
 			  <forward name="addActivityStep6" path="/showLayout.do?layout=addActivityStep6" />
 			  <forward name="addActivityStep7" path="/showLayout.do?layout=addActivityStep7" />
 			  <forward name="addActivityStep8" path="/showLayout.do?layout=addActivityStep8" />
+
 			  <forward name="added" path="/aim/addActivity.do?edit=true" redirect="true" />
 			  <forward name="index" path="/aim/index.do" redirect="true" />
 	</action>	
@@ -2208,6 +2209,7 @@
 			  <forward name="addActivityStep2" path="/showLayout.do?layout=addActivityStep2" />
 			  <forward name="addActivityStep3" path="/showLayout.do?layout=addActivityStep3" />
 			  <forward name="addActivityStep1" path="/showLayout.do?layout=addActivityStep1" />			  
+			  <forward name="activityExist" path="/showLayout.do?layout=activityExist" />			  
 	</action>
 
 	<action

@@ -826,5 +826,32 @@ public class ActivityUtil {
 		}		
 		return col;
 	}
+	
+	public static AmpActivity getActivityByName(String name) {
+		AmpActivity activity = null;
+		Session  session = null;
+		try {
+			session = PersistenceManager.getSession();
+			String qryStr = "select a from " + AmpActivity.class.getName() + " a " +
+					"where lower(a.name) = '" + name.toLowerCase() + "'";
+			Query qry = session.createQuery(qryStr);
+			Iterator itr = qry.list().iterator();
+			if (itr.hasNext()) {
+				activity = (AmpActivity) itr.next();
+			}
+		} catch (Exception e) {
+			logger.debug("Exception in isActivityExisting() " + e.getMessage());
+			e.printStackTrace(System.out);
+		} finally {
+			if (session != null) {
+				try {
+					PersistenceManager.releaseSession(session);
+				} catch (Exception ex) {
+					logger.debug("Exception while releasing session " + ex.getMessage());
+				}
+			}
+		}				
+		return activity;
+	}
 
 } // End

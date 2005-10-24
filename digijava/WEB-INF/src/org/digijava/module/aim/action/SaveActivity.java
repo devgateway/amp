@@ -128,20 +128,24 @@ public class SaveActivity extends Action {
 			return mapping.findForward("index");
 		}
 
-		AmpActivity activity = new AmpActivity();
+		String toDelete = request.getParameter("delete");
 
-		/*
-		if (eaForm.isEdit()) {
-			if (eaForm.getActivityId() == null
-					|| eaForm.getActivityId().intValue() < 1) {
-				logger.info("From here #3");
-				return mapping.findForward("index");
+		if (toDelete == null || (!toDelete.trim().equalsIgnoreCase("true"))) {
+			if (eaForm.isEditAct() == false) {
+				AmpActivity act = ActivityUtil.getActivityByName(eaForm.getTitle());
+				if (act != null) {
+					eaForm.setActivityId(act.getAmpActivityId());
+					logger.debug("Forwarding to activityExist");
+					return mapping.findForward("activityExist");
+				}
 			}
-		}*/
+		} else if (toDelete.trim().equals("true")){
+			eaForm.setEditAct(true);
+		} else {
+			logger.debug("No duplicate found");
+		}
 
-		/*
-		 * Ronald
-		 */
+		AmpActivity activity = new AmpActivity();
 		ActionErrors errors = new ActionErrors();
 		boolean titleFlag = false;
 		boolean statusFlag = false;
@@ -850,15 +854,17 @@ public class SaveActivity extends Action {
 			ActivityUtil.saveActivity(activity, eaForm.getActivityId(), true, eaForm.getCommentsCol(), eaForm.isSerializeFlag(), field);
 			
 			// remove the activity details from the edit activity list
-			ServletContext ampContext = getServlet().getServletContext();
-			String sessId = session.getId(); 
-			HashMap activityMap = (HashMap) ampContext.getAttribute("editActivityList");
-			activityMap.remove(sessId);
-			ArrayList sessList = (ArrayList) ampContext.getAttribute("sessionList");
-		    sessList.remove(sessId);
-		    Collections.sort(sessList);
-            ampContext.setAttribute("editActivityList",activityMap);		    
-		    ampContext.setAttribute("sessionList",sessList);
+			if (toDelete == null || (!toDelete.trim().equalsIgnoreCase("true"))) {
+				ServletContext ampContext = getServlet().getServletContext();
+				String sessId = session.getId(); 
+				HashMap activityMap = (HashMap) ampContext.getAttribute("editActivityList");
+				activityMap.remove(sessId);
+				ArrayList sessList = (ArrayList) ampContext.getAttribute("sessionList");
+			    sessList.remove(sessId);
+			    Collections.sort(sessList);
+	            ampContext.setAttribute("editActivityList",activityMap);		    
+			    ampContext.setAttribute("sessionList",sessList);				
+			}
 		} else {
 			AmpTeamMember teamMember = DbUtil.getAmpTeamMember(tm.getMemberId()) ;
 			activity.setActivityCreator(teamMember);

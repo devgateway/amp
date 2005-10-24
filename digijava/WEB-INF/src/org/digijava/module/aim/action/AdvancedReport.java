@@ -77,6 +77,7 @@ public class AdvancedReport extends Action {
 	public ActionForward execute(ActionMapping mapping, ActionForm form, 
 			HttpServletRequest request, HttpServletResponse response) throws java.lang.Exception
 	{
+		logger.info("###---------------------------------------------------------------------->>>>>>>>");
 		formBean = (AdvancedReportForm) form;
 		
 		httpSession = request.getSession();
@@ -391,7 +392,7 @@ public class AdvancedReport extends Action {
 						formBean.setFiscalYearRange(new ArrayList());
 						for(int yr=fromYr;yr<=toYr;yr++)
 							formBean.getFiscalYearRange().add(new Integer(yr));
-						
+						reports=(ArrayList)httpSession.getAttribute("ampReports");
 					}
 					else
 					{
@@ -439,10 +440,11 @@ public class AdvancedReport extends Action {
 
 //					---------------------------------------------------		
 					/*BEGIN CODE FOR GRAND TOTAL*/
+					logger.info("BEGIN CODE FOR GRAND TOTAL..............");
 					int yearRange=(toYr-fromYr)+1;
 					double totUnDisb = 0, actTotalCommit = 0, actTotalDisb = 0, actTotalExp = 0, planTotalCommit = 0, planTotalDisb = 0, planTotalExp = 0;
 					double[][] totFunds=new double[yearRange][7];
-					iter = reports.iterator() ;
+					iter = reports.iterator();			
 				//	logger.debug("Grand Total :" + grandTotal);
 					while ( iter.hasNext() )
 					{
@@ -471,7 +473,7 @@ public class AdvancedReport extends Action {
 										totFunds[i][5]=totFunds[i][5] + Double.parseDouble(DecimalToText.removeCommas(ampFund.getPlExpAmount()));
 									if(measures.indexOf(new Long(7))!=-1)
 										totFunds[i][6]=totFunds[i][6] + Double.parseDouble(DecimalToText.removeCommas(ampFund.getUnDisbAmount()));
-									
+					
 									actTotalCommit = actTotalCommit + Double.parseDouble(DecimalToText.removeCommas(ampFund.getCommAmount()));
 									actTotalDisb = actTotalDisb + totFunds[i][1] + Double.parseDouble(DecimalToText.removeCommas(ampFund.getDisbAmount()));
 									actTotalExp = actTotalExp + totFunds[i][2] + Double.parseDouble(DecimalToText.removeCommas(ampFund.getExpAmount()));
@@ -488,8 +490,10 @@ public class AdvancedReport extends Action {
 					for(int i=0;i<yearRange ;i++ )
 					{
 						AmpFund ampFund=new AmpFund();
-						if(measures.indexOf(new Long(1))!=-1)
-							ampFund.setCommAmount(mf.format(totFunds[i][0])); 
+						if(measures.indexOf(new Long(1))!=-1){
+							ampFund.setCommAmount(mf.format(totFunds[i][0]));
+							System.out.println("GRRRRRRRRR"+totFunds[i][0]+"--------"+mf.format(totFunds[i][0]));
+						}	
 						if(measures.indexOf(new Long(2))!=-1)
 							ampFund.setDisbAmount(mf.format(totFunds[i][1])); 
 						if(measures.indexOf(new Long(3))!=-1)
@@ -506,6 +510,7 @@ public class AdvancedReport extends Action {
 					}
 
 					AmpFund fund = new AmpFund();
+					logger.info("setting val of : actTotalCommit====="+actTotalCommit);
 					fund.setCommAmount(mf.format(actTotalCommit));
 					fund.setDisbAmount(mf.format(actTotalDisb));
 					fund.setExpAmount(mf.format(actTotalExp));
@@ -516,14 +521,15 @@ public class AdvancedReport extends Action {
 					formBean.getTotFund().add(fund);
 					
 					
-							/*END CODE FOR GRAND TOTAL*/
-
+					/*END CODE FOR GRAND TOTAL*/
+					logger.info("END CODE FOR GRAND TOTAL..............");
 
 					formBean.setForecastYear(new ArrayList());
 					for(int i=toYr;i<=(toYr+3);i++)
 						formBean.getForecastYear().add(new Integer(i));
 
 				}
+				logger.info("###----------------------------------------------------------------------#####");
 
 				return mapping.findForward("GenerateReport");
 			}

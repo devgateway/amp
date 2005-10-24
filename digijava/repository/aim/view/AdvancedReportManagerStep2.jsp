@@ -538,7 +538,7 @@ function gotoStep() {
 					int i =0;
 				%>              
 					
-			  <tr background="#F4F4F2"><td align="left"> <b> Total</b></td>
+			  <tr background="#F4F4F2"><td align="right"> <b> Total :</b></td>
 				  <td colspan="<%=cnt%>">
 				  </td>
 			  <logic:iterate name="aimAdvancedReportForm"  property="totFund" id="totFund" type="org.digijava.module.aim.helper.AmpFund">
@@ -667,11 +667,11 @@ function gotoStep() {
 													
 														<%  int curr = currPage.intValue();
 															int cnt = pages.intValue();
-															System.out.println(curr + " Comparison : " + cnt);
+															logger.info(curr + " Comparison : " + cnt);
 														%>
 														<% if( curr != cnt ) { %>
 														<bean:define id="translation">
-															<digi:trn key="aim:clickToViewAllPages">Click here to view All pages</digi:trn>
+															<digi:trn key="aim:clickToViewSpecificPages">Click here to view Specified Page</digi:trn>
 														</bean:define>
 														<digi:link href="/advancedReportManager.do?check=5" name="urlParams1" title="<%=translation%>" >
 															<%=pages%>

@@ -25,8 +25,12 @@ function saveClicked() {
 	var appstatus = document.aimEditActivityForm.approvalStatus.value;
 	var wTLFlag   = document.aimEditActivityForm.workingTeamLeadFlag.value;
 	if (appstatus == "started") {
-		if (confirm("Do you want to submit this activity for approval ?"))
-			document.aimEditActivityForm.approvalStatus.value = "created";
+		if (wTLFlag == "yes") {
+			if (confirm("Do you want to approve this activity ?"))
+				document.aimEditActivityForm.approvalStatus.value = "approved";
+		}
+		else if (confirm("Do you want to submit this activity for approval ?"))
+				document.aimEditActivityForm.approvalStatus.value = "created";
 	}
 	if (appstatus == "approved") {
 		document.aimEditActivityForm.approvalStatus.value = "edited";

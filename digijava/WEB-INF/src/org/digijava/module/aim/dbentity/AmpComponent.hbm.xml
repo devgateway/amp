@@ -26,5 +26,11 @@
 			<one-to-many class="org.digijava.module.aim.dbentity.AmpPhysicalPerformance"/>
 		</set>
 		
+		<set name="componentFundings" cascade="all" inverse="true">
+			<cache usage="read-write" />
+			<key column="amp_component_id"/>
+			<one-to-many class="org.digijava.module.aim.dbentity.AmpComponentFunding"/>
+		</set>
+
 	</class> 
 </hibernate-mapping>

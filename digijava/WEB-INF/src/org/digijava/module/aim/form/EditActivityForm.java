@@ -114,8 +114,8 @@ public class EditActivityForm extends ActionForm implements Serializable{
 	private String conditions;
 	private int item;
 	
-	private Collection selectedComponents;
-	private Long selComp[];
+	//private Collection selectedComponents;
+	//private Long selComp[];
 
 	// FOR SELECT ORGANIZATION POPUP
 	private Long ampOrgTypeId;
@@ -244,9 +244,14 @@ public class EditActivityForm extends ActionForm implements Serializable{
 	private String componentTitle;
 	private String componentDesc;
 	private String componentAmount;
+//	private collection components;
+//	private Long[] selCompFundings;
 	private String currencyCode;
 	private String componentRepDate;
 	private Long componentId;
+	private Collection selectedComponents;
+	private Long[] selComp;
+
 	
 	private String author;
 	private String context;
@@ -324,6 +329,7 @@ public class EditActivityForm extends ActionForm implements Serializable{
 			orgTypes = null;
 			implementationLevel = null;
 			selectedPhysicalProgress = null;
+			componentDesc = null;
 			selPhyProg = null;
 			documentList = null;
 			selDocs = null;

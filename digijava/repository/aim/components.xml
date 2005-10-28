@@ -293,7 +293,11 @@
 
 	<teaser name="physicalProgress" action="physicalProgress.do">
                 viewPhysicalProgress.jsp
-    </teaser> 
+		  </teaser> 
+
+	<teaser name="physicalProgressDetails" action="physicalProgress.do">
+                viewPhysicalProgressDetails.jsp
+    </teaser> 		  
 	<teaser name="physicalProgressDescription" action="physicalProgressDescription.do">
                 viewPhysicalProgressDescription.jsp
     </teaser>

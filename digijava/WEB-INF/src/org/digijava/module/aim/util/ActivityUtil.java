@@ -5,6 +5,7 @@
 
 package org.digijava.module.aim.util;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
@@ -25,6 +26,7 @@ import org.digijava.module.aim.dbentity.AmpActivityClosingDates;
 import org.digijava.module.aim.dbentity.AmpActor;
 import org.digijava.module.aim.dbentity.AmpComments;
 import org.digijava.module.aim.dbentity.AmpComponent;
+import org.digijava.module.aim.dbentity.AmpComponentFunding;
 import org.digijava.module.aim.dbentity.AmpFunding;
 import org.digijava.module.aim.dbentity.AmpFundingDetail;
 import org.digijava.module.aim.dbentity.AmpIssues;
@@ -38,10 +40,15 @@ import org.digijava.module.aim.dbentity.AmpSector;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.helper.Activity;
 import org.digijava.module.aim.helper.ActivitySector;
+import org.digijava.module.aim.helper.Components;
+import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.DateConversion;
+import org.digijava.module.aim.helper.DecimalToText;
+import org.digijava.module.aim.helper.FundingDetail;
 import org.digijava.module.aim.helper.Issues;
 import org.digijava.module.aim.helper.Location;
 import org.digijava.module.aim.helper.Measures;
+import org.digijava.module.aim.helper.PhysicalProgress;
 import org.digijava.module.aim.helper.RelOrganization;
 import org.digijava.module.aim.helper.TeamMember;
 
@@ -137,8 +144,17 @@ public class ActivityUtil {
 					Iterator compItr = comp.iterator();
 					while (compItr.hasNext()) {
 						AmpComponent ampComp = (AmpComponent) compItr.next();
+
+						/*
+						Set compFund = ampComp.getComponentFundings();
+						if (compFund != null) {
+							Iterator cfItr = compFund.iterator();
+							while (cfItr.hasNext()) {
+								AmpComponentFundings cf = (AmpComponentFundings) cfItr.next();
+								session.delete(cf);
+							}
+						}						
 						
-						/* delete physical progress items */
 						Set phyProg = ampComp.getPhysicalProgress();
 						if (phyProg != null) {
 							Iterator phyProgItr = phyProg.iterator();
@@ -146,7 +162,7 @@ public class ActivityUtil {
 								AmpPhysicalPerformance phyProf = (AmpPhysicalPerformance) phyProgItr.next();
 								session.delete(phyProf);
 							}
-						}
+						}*/
 						session.delete(ampComp);
 					}
 				}
@@ -746,6 +762,87 @@ public class ActivityUtil {
 			}
 		}
 		return orgroles;
+	}
+	
+	public static Collection getAllComponents(Long id) {
+	    Collection col = new ArrayList();
+	    
+	    Session session = null;
+	    
+	    try {
+	        session = PersistenceManager.getSession();
+	        AmpActivity activity = (AmpActivity) session.load(AmpActivity.class,id);
+	        Set comp = activity.getComponents();
+	        if (comp != null && comp.size() > 0) {
+	            Iterator itr1 = comp.iterator();
+	            while (itr1.hasNext()) {
+	                AmpComponent ampComp = (AmpComponent) itr1.next();
+	                Components components = new Components();
+	                components.setComponentId(ampComp.getAmpComponentId());
+	                components.setDescription(ampComp.getDescription());
+	                components.setTitle(ampComp.getTitle());
+	                components.setCommitments(new ArrayList());
+	                components.setDisbursements(new ArrayList());
+	                components.setExpenditures(new ArrayList());
+	                components.setPhyProgress(new ArrayList());
+	                Iterator itr2 = ampComp.getComponentFundings().iterator();
+	                while (itr2.hasNext()) {
+	                    AmpComponentFunding cf = (AmpComponentFunding) itr2.next();
+	                    FundingDetail fd = new FundingDetail();
+	                    fd.setAdjustmentType(cf.getAdjustmentType().intValue());
+	                    if (fd.getAdjustmentType() == Constants.PLANNED) {
+	                        fd.setAdjustmentTypeName("Planned");
+	                    } else {
+	                        fd.setAdjustmentTypeName("Actual");
+	                    }
+	                    fd.setCurrencyCode(cf.getCurrency().getCurrencyCode());
+	                    fd.setCurrencyName(cf.getCurrency().getCurrencyName());
+	                    fd.setPerspectiveCode(cf.getPerspective().getCode());
+	                    fd.setPerspectiveName(cf.getPerspective().getName());
+	                    fd.setTransactionAmount(
+	                            DecimalToText.ConvertDecimalToText(
+	                                    cf.getTransactionAmount().doubleValue()));
+	                    fd.setTransactionDate(
+	                            DateConversion.ConvertDateToString(
+	                                    cf.getTransactionDate()));
+	                    fd.setTransactionType(cf.getTransactionType().intValue());
+	                    if (fd.getTransactionType() == Constants.COMMITMENT) {
+	                        components.getCommitments().add(fd);
+	                    } else if (fd.getTransactionType() == Constants.DISBURSEMENT) {
+	                        components.getDisbursements().add(fd);
+	                    } else if (fd.getTransactionType() == Constants.EXPENDITURE) {
+	                        components.getExpenditures().add(fd);
+	                    }
+	                }
+	                itr2 = ampComp.getPhysicalProgress().iterator();
+	                while (itr2.hasNext()) {
+	                    AmpPhysicalPerformance ampPhyPerf = (AmpPhysicalPerformance) itr2.next();
+	                    PhysicalProgress pp = new PhysicalProgress();
+	                    pp.setDescription(ampPhyPerf.getDescription());
+	                    pp.setPid(ampPhyPerf.getAmpPpId());
+	                    pp.setReportingDate(
+	                            DateConversion.ConvertDateToString(
+	                                    ampPhyPerf.getReportingDate()));
+	                    pp.setTitle(ampPhyPerf.getTitle());
+	                    components.getPhyProgress().add(pp);
+	                }
+	                col.add(components);
+	            }
+	        }
+	        
+	    } catch (Exception e) {
+			logger.debug("Exception in getAmpComponents() " + e.getMessage());
+			e.printStackTrace(System.out);	        
+	    } finally {
+			if (session != null) {
+				try {
+					PersistenceManager.releaseSession(session);
+				} catch (Exception ex) {
+					logger.debug("Exception while releasing session " + ex.getMessage());
+				}
+			}	        
+	    }
+	    return col;
 	}
 	 
 	public static ArrayList getIssues(Long id) {

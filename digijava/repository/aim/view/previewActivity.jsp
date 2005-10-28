@@ -799,34 +799,152 @@ function disable() {
 										</td>
 										<td bgcolor="#ffffff">
 											<c:if test="${!empty aimEditActivityForm.selectedComponents}">
-												<table width="100%" cellSpacing="2" cellPadding="1">
 												<c:forEach var="comp" items="${aimEditActivityForm.selectedComponents}">
-													<tr><td><b>
-													<c:out value="${comp.title}"/></b> -
-													<c:out value="${comp.amount}"/> -
-													<c:out value="${comp.reportingDate}"/>
-													</td></tr>
+													<table width="100%" cellSpacing="1" cellPadding="1">
 													<tr><td>
-													<i>
-													<digi:trn key="aim:description">Description</digi:trn> :</i>
-													<c:out value="${comp.description}"/>
-													</td></tr>													
-													<c:if test="${!empty comp.phyProgress}">
-														<c:forEach var="phyProg" items="${comp.phyProgress}">
-															<tr><td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-																<b>
-																<c:out value="${phyProg.title}"/></b> -
-																<c:out value="${phyProg.reportingDate}"/>
-															</td></tr>	
-															<tr><td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-															<i>
+														<table width="100%" cellSpacing="2" cellPadding="1" class="box-border-nopadding">
+
+															<tr><td><b>
+																<c:out value="${comp.title}"/></b>
+															</td></tr>
+															<tr><td>
+																<i>
 																<digi:trn key="aim:description">Description</digi:trn> :</i>
-																<c:out value="${phyProg.description}"/>
+																<c:out value="${comp.description}"/>
+															</td></tr>
+															<tr><td bgcolor="#f4f4f2">
+																<b><digi:trn key="aim:fundingOfTheComponent">Finance of the component</digi:trn></b>
 															</td></tr>															
-														</c:forEach>
-													</c:if>
+															<c:if test="${!empty comp.commitments}">
+																<tr><td bgcolor="#ffffff">
+																	<table width="100%" cellSpacing="1" cellPadding="0" class="box-border-nopadding">
+																		<tr>
+																			<td valign="top" width="100" bgcolor="#ffffff">
+																				<digi:trn key="aim:commitments">
+																				Commitments</digi:trn>
+																			</td>
+																			<td bgcolor="#ffffff">
+																				<table width="100%" cellSpacing="1" cellPadding="1" bgcolor="#eeeeee">
+																					<c:forEach var="fd" items="${comp.commitments}">
+																						<tr>
+																							<td width="50" bgcolor="#ffffff">
+																								<c:out value="${fd.adjustmentTypeName}"/>
+																							</td>
+																							<td align="right" width="100" bgcolor="#ffffff">
+																								<FONT color=blue>*</FONT>
+																								<c:out value="${fd.transactionAmount}"/>
+																							</td>
+																							<td bgcolor="#ffffff">
+																								<c:out value="${fd.currencyCode}"/>
+																							</td>
+																							<td bgcolor="#ffffff" width="70">
+																								<c:out value="${fd.transactionDate}"/>
+																							</td>
+																							<td bgcolor="#ffffff">
+																								<c:out value="${fd.perspectiveName}"/>
+																							</td>
+																						</tr>
+																					</c:forEach>
+																				</table>
+																			</td>
+																		</tr>
+																	</table>
+																</td></tr>
+															</c:if>
+															<c:if test="${!empty comp.disbursements}">
+																<tr><td bgcolor="#ffffff">
+																	<table width="100%" cellSpacing="1" cellPadding="1" class="box-border-nopadding">
+																		<tr>
+																			<td valign="top" width="100" bgcolor="#ffffff">
+																				<digi:trn key="aim:disbursements">
+																				Disbursements</digi:trn>
+																			</td>
+																			<td bgcolor="#ffffff">
+																				<table width="100%" cellSpacing="1" cellPadding="1" bgcolor="#eeeeee">
+																					<c:forEach var="fd" items="${comp.disbursements}">
+																						<tr>
+																							<td width="50" bgcolor="#ffffff">
+																								<c:out value="${fd.adjustmentTypeName}"/>
+																							</td>
+																							<td align="right" width="100" bgcolor="#ffffff">
+																								<FONT color=blue>*</FONT>
+																								<c:out value="${fd.transactionAmount}"/>
+																							</td>
+																							<td bgcolor="#ffffff">
+																								<c:out value="${fd.currencyCode}"/>
+																							</td>
+																							<td bgcolor="#ffffff" width="70">
+																								<c:out value="${fd.transactionDate}"/>
+																							</td>
+																							<td bgcolor="#ffffff">
+																								<c:out value="${fd.perspectiveName}"/>
+																							</td>
+																						</tr>
+																					</c:forEach>
+																				</table>
+																			</td>
+																		</tr>
+																	</table>
+																</td></tr>															
+															</c:if>
+															<c:if test="${!empty comp.expenditures}">
+																<tr><td bgcolor="#ffffff">
+																	<table width="100%" cellSpacing="1" cellPadding="1" class="box-border-nopadding">
+																		<tr>
+																			<td valign="top" width="100" bgcolor="#ffffff">
+																				<digi:trn key="aim:expenditures">
+																				Expenditures</digi:trn>
+																			</td>
+																			<td bgcolor="#ffffff">
+																				<table width="100%" cellSpacing="1" cellPadding="1" bgcolor="#eeeeee">
+																					<c:forEach var="fd" items="${comp.expenditures}">
+																						<tr>
+																							<td width="50" bgcolor="#ffffff">
+																								<c:out value="${fd.adjustmentTypeName}"/>
+																							</td>
+																							<td align="right" width="100" bgcolor="#ffffff">
+																								<FONT color=blue>*</FONT>
+																								<c:out value="${fd.transactionAmount}"/>
+																							</td>
+																							<td bgcolor="#ffffff">
+																								<c:out value="${fd.currencyCode}"/>
+																							</td>
+																							<td bgcolor="#ffffff" width="70">
+																								<c:out value="${fd.transactionDate}"/>
+																							</td>
+																							<td bgcolor="#ffffff">
+																								<c:out value="${fd.perspectiveName}"/>
+																							</td>
+																						</tr>
+																					</c:forEach>
+																				</table>	
+																			</td>
+																		</tr>
+																	</table>
+																</td></tr>															
+															</c:if>
+															<tr><td bgcolor="#f4f4f2">
+																<b><digi:trn key="aim:physicalProgressOfTheComponent">
+																Physical progress of the component</digi:trn></b>
+															</td></tr>
+															<c:if test="${!empty comp.phyProgress}">
+																<c:forEach var="phyProg" items="${comp.phyProgress}">
+																	<tr><td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+																		<b>
+																			<c:out value="${phyProg.title}"/></b> -
+																			<c:out value="${phyProg.reportingDate}"/>
+																	</td></tr>	
+																	<tr><td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+																		<i>
+																		<digi:trn key="aim:description">Description</digi:trn> :</i>
+																		<c:out value="${phyProg.description}"/>
+																	</td></tr>															
+																</c:forEach>
+															</c:if>
+														</table>
+													</td></tr>
+													</table>
 												</c:forEach>
-												</table>
 											</c:if>
 										</td>
 									</tr>	

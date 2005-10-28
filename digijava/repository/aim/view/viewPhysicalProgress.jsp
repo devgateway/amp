@@ -58,7 +58,7 @@ method="post">
 								<TABLE border="0" cellpadding="0" cellspacing="0" bgcolor="#F4F4F2" height="17">
                           	<TR bgcolor="#F4F4F2" height="17">
 										<TD bgcolor="#C9C9C7" class="box-title">&nbsp;&nbsp;
-											<digi:trn key="aim:progressDetails">Progress Details</digi:trn>
+											<digi:trn key="aim:components">Components</digi:trn>
 										</TD>
 	                           <TD background="module/aim/images/corner-r.gif" height=17 width=17>
 										</TD>
@@ -71,95 +71,24 @@ method="post">
 									<TR><TD width="100%" vAlign="top" align="left">
 										<TABLE width="100%" cellPadding="5" cellSpacing="1" vAlign="top" align="left" 
 										bgcolor="#ffffff">
-											<TR bgcolor="#dddddd">
-												<TD width="50%"><b>
-													<digi:trn key="aim:component">Component</digi:trn></b>
-												</TD>
-												<TD width="20%"><b>
-													<digi:trn key="aim:reportingDate">Reporting Date</digi:trn></b>
-												</TD>
-												<TD width="30%"><b>
-													<digi:trn key="aim:amount">Amount</digi:trn></b>
-												</TD>
-											</TR>
-                        			<logic:iterate name="aimPhysicalProgressForm"  property="selectComponent" 
-											id="selectComponent" type="org.digijava.module.aim.helper.SelectComponent">
+                        			<logic:iterate name="aimPhysicalProgressForm" property="components" 
+											id="component" type="org.digijava.module.aim.helper.Components">
 												<TR bgcolor="#f4f4f2">
-													<TD width="50%">
-														<jsp:useBean id="urlComponentDescription" type="java.util.Map" 
-														class="java.util.HashMap"/>
-														<c:set target="${urlComponentDescription}" property="ampActivityId">
+													<TD>
+														<jsp:useBean id="urlPP" type="java.util.Map" class="java.util.HashMap"/>
+														<c:set target="${urlPP}" property="ampActivityId">
 															<bean:write name="aimPhysicalProgressForm" property="ampActivityId"/>
 														</c:set>
-														<c:set target="${urlComponentDescription}" property="cid">
-															<bean:write name="selectComponent" property="cid"/>
+														<c:set target="${urlPP}" property="tabIndex" value="2"/>
+														<c:set target="${urlPP}" property="compId">
+															<bean:write name="component" property="componentId"/>
 														</c:set>
-														<c:set target="${urlComponentDescription}" property="tabIndex" value="2"/>
-														<bean:define id="translation">
-														<digi:trn key="aim:clickToViewComponentDescription">
-															Click here to view Component Description
-														</digi:trn>
-														</bean:define>
-														<digi:link href="/viewComponentDescription.do" name="urlComponentDescription" 
-														styleClass="comment" title="<%=translation%>" >
-														<bean:write name="selectComponent" property="title"/>
-														</digi:link>
-													</TD>
-													<TD width="20%">
-														<bean:write name="selectComponent" property="reportingDate"/>
-													</TD>
-													<TD width="30%">
-														<bean:write name="selectComponent" property="currency"/>&nbsp;
-														<bean:write name="selectComponent" property="amount"/>
+														<digi:link href="/viewPhysicalProgressDetails.do" 
+														name="urlPP">
+														<bean:write name="component" property="title"/></digi:link><br>
+														<i>Desc:</i> <bean:write name="component" property="description"/>
 													</TD>
 												</TR>
-												<logic:notEmpty name="selectComponent"  property="physicalProgress">
-													<TR bgcolor="#f4f4f2"><TD colspan="3">
-														<TABLE width="90%" cellPadding="5" cellSpacing="1" vAlign="top" align="center" 
-														bgcolor="#ffffff">
-															<TR>
-																<TD width="50%"><b>
-																	<digi:trn key="aim:title">Title</digi:trn></b>
-																</TD>
-																<TD width="50%"><b>
-																	<digi:trn key="aim:reportingDate">Reporting Date</digi:trn></b>
-																</TD>
-															</TR>
-															<logic:iterate name="selectComponent"  property="physicalProgress" 
-															id="physicalProgress" type="org.digijava.module.aim.helper.PhysicalProgress">
-																<TR>
-																	<TD width="50%">
-																		<jsp:useBean id="urlPhysicalProgressDescription" type="java.util.Map" 
-																		class="java.util.HashMap"/>
-																		<c:set target="${urlPhysicalProgressDescription}" 
-																		property="ampActivityId">
-																			<bean:write name="aimPhysicalProgressForm" 
-																			property="ampActivityId"/>
-																		</c:set>
-																		<c:set target="${urlPhysicalProgressDescription}" property="pid">
-																			<bean:write name="physicalProgress" property="pid"/>
-																		</c:set>
-																		<c:set target="${urlPhysicalProgressDescription}" property="tabIndex" 
-																		value="2"/>
-																		<bean:define id="translation">
-																			<digi:trn key="aim:clickToViewPhysicalProgress">
-																				Click here to view Physical Progress
-																			</digi:trn>
-																		</bean:define>
-																		<digi:link href="/viewPhysicalProgressDescription.do" 
-																		name="urlPhysicalProgressDescription" styleClass="comment" 
-																		title="<%=translation%>">
-																			<bean:write name="physicalProgress" property="title" />
-			 															</digi:link>
-																	</TD>
-																	<TD width="50%">
-																		<bean:write name="physicalProgress" property="reportingDate" />
-																	</TD>
-																</TR>
-															</logic:iterate>
-														</TABLE>
-													</TD></TR>
-												</logic:notEmpty>										
 											</logic:iterate>
 										</TABLE>
 									</TD></TR>

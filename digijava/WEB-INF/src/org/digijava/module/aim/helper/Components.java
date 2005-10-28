@@ -8,10 +8,14 @@ import java.io.Serializable;
 import java.util.Collection;
 
 public class Components implements Comparable , Serializable{
+	
 	private Long componentId;
 	private String title;
 	private String description;
 	private String amount;
+	private Collection commitments;
+	private Collection disbursements;
+	private Collection expenditures;
 	private String reportingDate;	
 	private String currencyCode;
 	private Collection phyProgress;
@@ -114,7 +118,49 @@ public class Components implements Comparable , Serializable{
 	public void setCurrencyCode(String currencyCode) {
 		this.currencyCode = currencyCode;
 	}
-	
+
+		/**
+	 * @return Returns the commitments.
+	 */
+	public Collection getCommitments() {
+		return commitments;
+	}
+
+	/**
+	 * @param commitments The commitments to set.
+	 */
+	public void setCommitments(Collection commitments) {
+		this.commitments = commitments;
+	}
+
+		/**
+	 * @return Returns the disbursements.
+	 */
+	public Collection getDisbursements() {
+		return disbursements;
+	}
+
+	/**
+	 * @param disbursements The disbursements to set.
+	 */
+	public void setDisbursements(Collection disbursements) {
+		this.disbursements = disbursements;
+	}
+
+		/**
+	 * @return Returns the expenditures.
+	 */
+	public Collection getExpenditures() {
+		return expenditures;
+	}
+
+	/**
+	 * @param expenditures The expenditures to set.
+	 */
+	public void setExpenditures(Collection expenditures) {
+		this.expenditures = expenditures;
+	}
+
 	public boolean equals(Object obj) {
 		if (obj == null) throw new NullPointerException();
 		if (!(obj instanceof Components)) throw new ClassCastException();

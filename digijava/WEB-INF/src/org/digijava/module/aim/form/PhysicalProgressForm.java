@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 import org.apache.struts.action.ActionForm;
+import org.digijava.module.aim.helper.Components;
 
 public class PhysicalProgressForm extends ActionForm
 {
@@ -26,6 +27,9 @@ public class PhysicalProgressForm extends ActionForm
 	private String amount;
 	private String currCode;
 	private String compTitle;
+	
+	private Components component;
+	private Collection components;
 	private ArrayList issues;
 	
 	
@@ -240,4 +244,28 @@ public class PhysicalProgressForm extends ActionForm
 	public void setIssues(ArrayList issues) {
 		this.issues = issues;
 	}
+    /**
+     * @return Returns the components.
+     */
+    public Collection getComponents() {
+        return components;
+    }
+    /**
+     * @param components The components to set.
+     */
+    public void setComponents(Collection components) {
+        this.components = components;
+    }
+    /**
+     * @return Returns the component.
+     */
+    public Components getComponent() {
+        return component;
+    }
+    /**
+     * @param component The component to set.
+     */
+    public void setComponent(Components component) {
+        this.component = component;
+    }
 }

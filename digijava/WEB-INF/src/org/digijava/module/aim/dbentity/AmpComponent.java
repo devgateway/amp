@@ -23,6 +23,7 @@ public class AmpComponent implements Serializable {
 	private AmpCurrency currency;
 	private AmpActivity activity;
 	private Set physicalProgress; 
+	private Set componentFundings;
 	
 	/**
 	 * @return Returns the activity.
@@ -120,4 +121,11 @@ public class AmpComponent implements Serializable {
 	public void setPhysicalProgress(Set physicalProgress) {
 		this.physicalProgress = physicalProgress;
 	}
+
+	public Set getComponentFundings() {
+		return componentFundings;
+	}
+	public void setComponentFundings(Set componentFundings) {
+		this.componentFundings = componentFundings;
+	}	
 }

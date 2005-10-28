@@ -157,6 +157,12 @@
 			teaser="physicalProgress"/>
        </layout>
 
+	   <layout name="layoutPhysicalProgressDetails" extends="tabLayout">
+        <put name="title">Activity - Physical Progress </put>
+        <put-item name="tabBody" module="aim" instance="default"
+			teaser="physicalProgressDetails"/>
+       </layout>		 
+
 	   <layout name="layoutPhysicalProgressDescription" extends="tabLayout">
         <put name="title">Activity - Physical Progress Description </put>
         <put-item name="tabBody" module="aim" instance="default"

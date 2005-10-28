@@ -34,6 +34,7 @@ import org.digijava.module.aim.dbentity.AmpActivityClosingDates;
 import org.digijava.module.aim.dbentity.AmpActivityInternalId;
 import org.digijava.module.aim.dbentity.AmpActor;
 import org.digijava.module.aim.dbentity.AmpComponent;
+import org.digijava.module.aim.dbentity.AmpComponentFunding;
 import org.digijava.module.aim.dbentity.AmpCurrency;
 import org.digijava.module.aim.dbentity.AmpFunding;
 import org.digijava.module.aim.dbentity.AmpFundingDetail;
@@ -545,26 +546,118 @@ public class SaveActivity extends Action {
 		activity.setInternalIds(internalIds);
 
 		// set components
-		Set components = new HashSet();
+		activity.setComponents(new HashSet());
+		//Set components = new HashSet();
 		if (eaForm.getSelectedComponents() != null) {
 			Iterator itr = eaForm.getSelectedComponents().iterator();
 			while (itr.hasNext()) {
 				Components comp = (Components) itr.next();
 				AmpComponent ampComponent = new AmpComponent();
 				ampComponent.setActivity(activity);
-				ampComponent.setAmount(new Double(DecimalToText.getDouble(comp
-						.getAmount())));
-				ampComponent.setCurrency(DbUtil.getCurrencyByCode(comp
-						.getCurrencyCode()));
 				if (comp.getDescription() == null
 						|| comp.getDescription().trim().length() == 0) {
 					ampComponent.setDescription(" ");
 				} else {
 					ampComponent.setDescription(comp.getDescription());
 				}
-				ampComponent.setReportingDate(DateConversion.getDate(comp
-						.getReportingDate()));
 				ampComponent.setTitle(comp.getTitle());
+				ampComponent.setComponentFundings(new HashSet());
+
+				if (comp.getCommitments() != null && comp.getCommitments().size() > 0) {
+					logger.debug("Component Funding - Commitments size :" + comp.getCommitments().size());
+					Iterator itr2 = comp.getCommitments().iterator();
+					while (itr2.hasNext()) {
+						AmpComponentFunding ampCompFund = new AmpComponentFunding();
+						ampCompFund.setActivity(activity);					
+						ampCompFund.setTransactionType(new Integer(Constants.COMMITMENT));						
+						FundingDetail fd = (FundingDetail) itr2.next();
+						Iterator tmpItr = eaForm.getCurrencies().iterator();
+						while (tmpItr.hasNext()) {
+							AmpCurrency curr = (AmpCurrency) tmpItr.next();
+							if (curr.getCurrencyCode().equals(fd.getCurrencyCode())) {
+								ampCompFund.setCurrency(curr);
+								break;
+							}
+						}
+						tmpItr = eaForm.getPerspectives().iterator();
+						while (tmpItr.hasNext()) {
+							AmpPerspective pers = (AmpPerspective) tmpItr.next();
+							if (pers.getCode().equals(fd.getPerspectiveCode())) {
+								ampCompFund.setPerspective(pers);
+								break;
+							}
+						}
+						ampCompFund.setTransactionAmount(new Double(DecimalToText.getDouble(fd.getTransactionAmount())));
+						ampCompFund.setTransactionDate(DateConversion.getDate(fd.getTransactionDate()));
+						ampCompFund.setAdjustmentType(new Integer(fd.getAdjustmentType()));
+						ampCompFund.setComponent(ampComponent);
+						ampComponent.getComponentFundings().add(ampCompFund);
+					}
+				}
+				
+				if (comp.getDisbursements() != null && comp.getDisbursements().size() > 0) {
+					logger.debug("Component Funding - Disbursements size :" + comp.getDisbursements().size());					
+					Iterator itr2 = comp.getDisbursements().iterator();
+					while (itr2.hasNext()) {
+						AmpComponentFunding ampCompFund = new AmpComponentFunding();
+						ampCompFund.setActivity(activity);					
+						ampCompFund.setTransactionType(new Integer(Constants.DISBURSEMENT));						
+						FundingDetail fd = (FundingDetail) itr2.next();
+						Iterator tmpItr = eaForm.getCurrencies().iterator();
+						while (tmpItr.hasNext()) {
+							AmpCurrency curr = (AmpCurrency) tmpItr.next();
+							if (curr.getCurrencyCode().equals(fd.getCurrencyCode())) {
+								ampCompFund.setCurrency(curr);
+								break;
+							}
+						}
+						tmpItr = eaForm.getPerspectives().iterator();
+						while (tmpItr.hasNext()) {
+							AmpPerspective pers = (AmpPerspective) tmpItr.next();
+							if (pers.getCode().equals(fd.getPerspectiveCode())) {
+								ampCompFund.setPerspective(pers);
+								break;
+							}
+						}
+						ampCompFund.setTransactionAmount(new Double(DecimalToText.getDouble(fd.getTransactionAmount())));
+						ampCompFund.setTransactionDate(DateConversion.getDate(fd.getTransactionDate()));
+						ampCompFund.setAdjustmentType(new Integer(fd.getAdjustmentType()));
+						ampCompFund.setComponent(ampComponent);
+						ampComponent.getComponentFundings().add(ampCompFund);
+					}
+				}				
+				
+				if (comp.getExpenditures() != null && comp.getExpenditures().size() > 0) {
+					logger.debug("Component Fundings - Expenditures size :" + comp.getExpenditures().size());					
+					Iterator itr2 = comp.getExpenditures().iterator();
+					while (itr2.hasNext()) {
+						AmpComponentFunding ampCompFund = new AmpComponentFunding();
+						ampCompFund.setActivity(activity);					
+						ampCompFund.setTransactionType(new Integer(Constants.EXPENDITURE));						
+						FundingDetail fd = (FundingDetail) itr2.next();
+						Iterator tmpItr = eaForm.getCurrencies().iterator();
+						while (tmpItr.hasNext()) {
+							AmpCurrency curr = (AmpCurrency) tmpItr.next();
+							if (curr.getCurrencyCode().equals(fd.getCurrencyCode())) {
+								ampCompFund.setCurrency(curr);
+								break;
+							}
+						}
+						tmpItr = eaForm.getPerspectives().iterator();
+						while (tmpItr.hasNext()) {
+							AmpPerspective pers = (AmpPerspective) tmpItr.next();
+							if (pers.getCode().equals(fd.getPerspectiveCode())) {
+								ampCompFund.setPerspective(pers);
+								break;
+							}
+						}
+						ampCompFund.setTransactionAmount(new Double(DecimalToText.getDouble(fd.getTransactionAmount())));
+						ampCompFund.setTransactionDate(DateConversion.getDate(fd.getTransactionDate()));
+						ampCompFund.setAdjustmentType(new Integer(fd.getAdjustmentType()));
+						ampCompFund.setComponent(ampComponent);
+						ampComponent.getComponentFundings().add(ampCompFund);
+					}
+				}
 
 				// set physical progress
 				Set phyProgess = new HashSet();
@@ -591,10 +684,10 @@ public class SaveActivity extends Action {
 					}
 				}
 				ampComponent.setPhysicalProgress(phyProgess);
-				components.add(ampComponent);
+				logger.debug("Component have " + ampComponent.getComponentFundings().size() + " elements!");
+				activity.getComponents().add(ampComponent);
 			}
 		}
-		activity.setComponents(components);
 
 		// set funding and funding details
 		Set fundings = new HashSet();

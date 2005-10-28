@@ -33,6 +33,7 @@ import org.digijava.module.aim.dbentity.AmpActivityClosingDates;
 import org.digijava.module.aim.dbentity.AmpActivityInternalId;
 import org.digijava.module.aim.dbentity.AmpActor;
 import org.digijava.module.aim.dbentity.AmpComponent;
+import org.digijava.module.aim.dbentity.AmpComponentFunding;
 import org.digijava.module.aim.dbentity.AmpFunding;
 import org.digijava.module.aim.dbentity.AmpFundingDetail;
 import org.digijava.module.aim.dbentity.AmpIssues;
@@ -494,28 +495,68 @@ public class EditActivity extends Action {
 				}
 				
 				eaForm.setRegionalFundings(regFunds);
-									    								
+				
+				eaForm.setSelectedComponents(null);
+				
 				Collection componets = activity.getComponents();
+				logger.debug("Number of components = " + componets.size());
 				if (componets != null && componets.size() > 0) {
 					Collection comp = new ArrayList();
 					Iterator compItr = componets.iterator();
+					logger.debug("crossed if....if satisfied");
 					while (compItr.hasNext()) {
 						AmpComponent temp = (AmpComponent) compItr.next();
+						logger.debug("Inside the while");
 						Components tempComp = new Components();
 						tempComp.setTitle(temp.getTitle());
-						tempComp.setAmount(DecimalToText
-								.ConvertDecimalToText(temp.getAmount()
-										.doubleValue()));
 						tempComp.setComponentId(temp.getAmpComponentId());
-						if (temp.getCurrency() != null)
-							tempComp.setCurrencyCode(temp.getCurrency()
-									.getCurrencyCode());
 						tempComp.setDescription(temp.getDescription().trim());
-						tempComp.setReportingDate(DateConversion
-								.ConvertDateToString(temp.getReportingDate()));
+						tempComp.setCommitments(new ArrayList());
+						tempComp.setDisbursements(new ArrayList());
+						tempComp.setExpenditures(new ArrayList());
 
+				
+						logger.debug("com. fund size = " + temp.getComponentFundings().size());
+						Iterator cItr = temp.getComponentFundings().iterator();
+						while( cItr.hasNext() ) 
+						{
+							logger.debug("Inside the while 2");
+							AmpComponentFunding ampCompFund = (AmpComponentFunding) cItr.next();
+							FundingDetail fd = new FundingDetail();
+							fd.setAdjustmentType(ampCompFund.getAdjustmentType().intValue());
+							if (fd.getAdjustmentType() == 1) 
+							{
+								fd.setAdjustmentTypeName("Actual");
+							} 
+							else if (fd.getAdjustmentType() == 0) 
+							{
+								fd.setAdjustmentTypeName("Planned");	
+							}
+							fd.setCurrencyCode(ampCompFund.getCurrency().getCurrencyCode());
+							fd.setCurrencyName(ampCompFund.getCurrency().getCurrencyName());
+							fd.setPerspectiveCode(ampCompFund.getPerspective().getCode());
+							fd.setPerspectiveName(ampCompFund.getPerspective().getName());
+							fd.setTransactionAmount
+									  (DecimalToText.ConvertDecimalToText(ampCompFund.getTransactionAmount().doubleValue()));
+							fd.setTransactionDate(DateConversion.ConvertDateToString(ampCompFund.getTransactionDate()));
+							fd.setTransactionType(ampCompFund.getTransactionType().intValue());
+							
+							if(fd.getTransactionType() == 0)
+							{
+								tempComp.getCommitments().add(fd);
+							}
+							else if(fd.getTransactionType() == 1)
+							{
+								logger.debug("In disb");
+								tempComp.getDisbursements().add(fd);
+							}
+							else if(fd.getTransactionType() == 2)
+							{
+								tempComp.getExpenditures().add(fd);
+							}
+						}
+						
 						Collection phyProgess = temp.getPhysicalProgress();
-
 						if (phyProgess != null && phyProgess.size() > 0) {
 							Collection physicalProgress = new ArrayList();
 							Iterator phyProgItr = phyProgess.iterator();
@@ -537,8 +578,9 @@ public class EditActivity extends Action {
 						}
 						comp.add(tempComp);
 					}
+					logger.debug("Selected Components size = " + comp.size());
 					eaForm.setSelectedComponents(comp);
-				}
+				} 
 
 				Collection actDocs = activity.getDocuments();
 				if (actDocs != null && actDocs.size() > 0) {

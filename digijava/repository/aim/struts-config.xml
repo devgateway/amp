@@ -380,7 +380,10 @@
         path="/aim/viewChannelOverviewObjective" />
 
 	<action forward="/showLayout.do?layout=layoutPhysicalProgress" 
-        path="/aim/viewPhysicalProgress" />
+			  path="/aim/viewPhysicalProgress" />
+
+	<action forward="/showLayout.do?layout=layoutPhysicalProgressDetails" 
+        path="/aim/viewPhysicalProgressDetails" />	
 	
 	<action forward="/showLayout.do?layout=layoutComponentDescription" 
         path="/aim/viewComponentDescription" />
@@ -645,7 +648,7 @@
 	<action name="aimPhysicalProgressForm"
 	    type="org.digijava.module.aim.action.ViewPhysicalProgress"
         validate="false"
-        scope = "request" 
+        scope = "session" 
         path="/aim/physicalProgress">
     </action>
 
@@ -1932,7 +1935,6 @@
 			  <forward name="addActivityStep6" path="/showLayout.do?layout=addActivityStep6" />
 			  <forward name="addActivityStep7" path="/showLayout.do?layout=addActivityStep7" />
 			  <forward name="addActivityStep8" path="/showLayout.do?layout=addActivityStep8" />
-
 			  <forward name="added" path="/aim/addActivity.do?edit=true" redirect="true" />
 			  <forward name="index" path="/aim/index.do" redirect="true" />
 	</action>	
@@ -2123,14 +2125,15 @@
 			  scope="session"
 			  path="/aim/showAddComponent">	
 			  <forward name="forward" path="/showLayout.do?layout=aim_addCompPopupLayout" />
+			  <forward name="updated" path="/aim/addActivity.do?edit=true" redirect="true" />			  
 	</action>		
 
 	<action
 			  name="aimEditActivityForm"
 			  type="org.digijava.module.aim.action.RemoveComponent"
 			  scope="session"
-			  path="/aim/deleteComponent">	
-			  <forward name="forward" path="/addActivity.do?step=4" redirect="true" />
+			  path="/aim/removeComponent">	
+			  <forward name="forward" path="/addActivity.do" redirect="true" />
 	</action>		
 
 	<action
@@ -2138,7 +2141,7 @@
 			  type="org.digijava.module.aim.action.ComponentSelected"
 			  scope="session"
 			  path="/aim/componentSelected">	
-			  <forward name="forward" path="/addActivity.do?step=4" redirect="true" />
+			  <forward name="forward" path="/addActivity.do" redirect="true" />
 			  <forward name="selectComponent" path="/showLayout.do?layout=aim_addCompPopupLayout" />
 			  
 	</action>			
@@ -2158,7 +2161,7 @@
 			  type="org.digijava.module.aim.action.PhysicalProgressAdded"
 			  scope="session"
 			  path="/aim/phyProgSelected">	
-			  <forward name="forward" path="/addActivity.do?step=4" redirect="true" />
+			  <forward name="forward" path="/addActivity.do" redirect="true" />
 			  <forward name="index" path="/aim/index.do" redirect="true" />			  
 	</action>	
 

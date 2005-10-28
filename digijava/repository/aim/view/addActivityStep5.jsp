@@ -173,6 +173,8 @@ function removeSelPhyProgress() {
 	return true;
 }
 
+
+/*
 function addComponents(id) {
 
 	 if (document.aimEditActivityForm.currUrl.value == "") { 
@@ -191,6 +193,36 @@ function addComponents(id) {
 	}
 
 }
+*/
+
+function addComponents() 
+{
+	openNewWindow(650,500 );
+	<digi:context name="addComp" property="context/module/moduleinstance/showAddComponent.do?edit=true&compFundAct=show" />
+	document.aimEditActivityForm.action = "<%= addComp %>";
+	document.aimEditActivityForm.target = popupPointer.name;
+	document.aimEditActivityForm.submit();
+} 		
+
+function editFunding(id) 
+{
+	openNewWindow(650,500 );
+	<digi:context name="addComp" property="context/module/moduleinstance/showAddComponent.do?edit=true&compFundAct=showEdit" />
+	document.aimEditActivityForm.action = "<%= addComp %>&fundId="+id;
+	document.aimEditActivityForm.target = popupPointer.name;
+	document.aimEditActivityForm.submit();
+} 		
+
+/*
+function removeSelComponents() 
+{
+	<digi:context name="rem" property="context/module/moduleinstance/removeSelPhyProg.do?edit=true" />
+	document.aimEditActivityForm.action = "<%= rem %>";
+	document.aimEditActivityForm.target = "_self";
+	document.aimEditActivityForm.submit();	
+}
+*/
+
 function resetAll()
 {
 	<digi:context name="resetAll" property="context/module/moduleinstance/resetAll.do?edit=true" />
@@ -200,10 +232,11 @@ function resetAll()
 	return true;
 }
 
+
 function removeSelComponents() {
 	var flag = validateComponents();
 	if (flag == false) return false;
-	<digi:context name="remPhyProg" property="context/module/moduleinstance/removeSelPhyProg.do?edit=true" />
+	<digi:context name="remPhyProg" property="context/module/moduleinstance/removeComponent.do?edit=true" />
 	document.aimEditActivityForm.action = "<%= remPhyProg %>";
 	document.aimEditActivityForm.target = "_self"
 	document.aimEditActivityForm.submit();
@@ -330,6 +363,9 @@ function removeSelComponents() {
 					</table>
 				</td></tr>
 				<tr><td>
+					<digi:errors/>
+				</td></tr>
+				<tr><td>
 					<table width="100%" cellSpacing="5" cellPadding="3" vAlign="top">
 						<tr><td width="75%" vAlign="top">	
 						<table cellPadding=0 cellSpacing=0 width="100%">
@@ -362,130 +398,245 @@ function removeSelComponents() {
 									<tr><td>
 										&nbsp;
 									</td></tr>
-									
-									<tr><td>
+								
+									<tr><td align="left">
+										<table width="100%" cellSpacing=5 cellPadding=0 border=0 class="box-border-nopadding">
+
 										<logic:notEmpty name="aimEditActivityForm" property="selectedComponents">
-											<table width="100%" cellSpacing=1 cellPadding=4 class="box-border-nopadding">
-												<logic:iterate name="aimEditActivityForm" property="selectedComponents"
-												id="selComponents" type="org.digijava.module.aim.helper.Components">
+											<logic:iterate name="aimEditActivityForm" property="selectedComponents"
+											id="selComponents" type="org.digijava.module.aim.helper.Components">
+										
 												<tr><td align="center">
 													<table width="98%" cellSpacing=1 cellPadding=4 vAlign="top" align="center" border=0
 													class="box-border-nopadding">
-														<tr>
+														<tr bgcolor="#fffffc">
 															<td vAlign="center" align="left" width="95%">
-																<a title="<digi:trn key="aim:TitleComponent">Title of the project component specified</digi:trn>">																
+																<html:multibox property="selComp">
+																	<c:out value="${selComponents.componentId}"/>
+																</html:multibox>
+																<a title="<digi:trn key="aim:TitleofComponent">Title of the project component specified</digi:trn>">											<b>					
 																<digi:trn key="aim:TitleofComponent">Component Title</digi:trn></a> :
-																<a href="javascript:addComponents(<c:out value="${selComponents.componentId}"/>)">
-																<bean:write name="selComponents" property="title" /></a><br>
-																<a title="<digi:trn key="aim:ComponentAmt">Budgeted amount for the component based on total project award amount (Grant, Load and In-Kind)</digi:trn>">
-																<digi:trn key="aim:componentAmount">Amount</digi:trn></a> :
-																<c:if test="${selComponents.amount == '0.00'}">
-																	<bean:write name="selComponents" property="amount" />
-																</c:if>
-																<c:if test="${selComponents.amount != '0.00'}">
-																	<bean:write name="selComponents" property="amount" />&nbsp;
-																	<bean:write name="selComponents" property="currencyCode" /> 
-																</c:if><br>
-																<c:if test="${!empty selComponents.reportingDate}">
-																<a title="<digi:trn key="aim:DateofReporting">Date the activity was initiated</digi:trn>">
-																<digi:trn key="aim:reportingDate">Reporting Date</digi:trn></a> : 
-																	<bean:write name="selComponents" property="reportingDate" />
-																</c:if>
+																<c:out value="${selComponents.title}"/></b>
+																&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+																<a href="javascript:editFunding('<bean:write name="selComponents" 
+																property="componentId"/>')">Edit</a><br>
+																&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<c:out value="${selComponents.description}"/>
+																</a><br>
 															</td>
-															<td align="right">
-																<bean:define id="compId" property="componentId" name="selComponents"/>
-																<% String url = "/deleteComponent.do~edit=true~id=" + compId;%>
-																<digi:link href="<%=url%>">
-															 	<digi:img src="module/cms/images/deleteIcon.gif" border="0" alt="Delete this component"/>
-																</digi:link>
-															</td>															
-														</tr>	
-														<tr>
-															<td colspan="2">
-																<table width="100%" cellPadding=1 cellSpacing=1 vAlign="top" border=0 
-																class="box-border-nopadding">
-																	<tr><td width="100%" bgcolor="#dddddd" height="15">
-																	<a title="<digi:trn key="aim:PhysicalProgress">Measurable task done on a project to achieve component objectives</digi:trn>">
-																		<digi:trn key="aim:physicalProgres">Physical Progress</digi:trn></a>
-																	</td></tr>														
-														
-																	<c:if test="${empty selComponents.phyProgress}">
-																	<tr>
-																		<td colspan="2"><b>
-																			<a href="javascript:
-																			addPhyProgess(-1,<c:out value="${selComponents.componentId}"/>)">
-																			Add Physical Progress</a></b>
-																		</td>
-																	</tr>															
-																	</c:if>
-																	<c:if test="${!empty selComponents.phyProgress}">
-																	<c:forEach var="phyProg" items="${selComponents.phyProgress}">
-																	<tr>
-																		<td>
-																			<table width="100%" cellSpacing=1 cellPadding=1 vAlign="top" align="left">
+														</tr>		
+
+																<tr><td>
+																<!-- Component funding details -->
+																	<table width="100%" cellSpacing=1 cellPadding=3 border=0 
+																	bgcolor="#d7eafd">
+																		<logic:notEmpty name="selComponents" property="commitments">
+																		<tr><td><b>
+																			<digi:trn key="aim:commitments">Commitments</digi:trn> 
+																		</b></td></tr>
+																		<tr><td bgcolor=#ffffff>
+																			<table width="100%" cellSpacing=1 cellPadding=3 border=0 
+																			bgcolor="#eeeeee">
 																				<tr>
-																					<td vAlign="center" align="left" width="95%">
-																						<a href="javascript:addPhyProgess(<bean:write name="phyProg" 
-																						property="pid" />,<c:out value="${selComponents.componentId}"/>)">
-																						<bean:write name="phyProg" property="title" /> - 
-																						<bean:write name="phyProg" property="reportingDate" />
-																						</a>
+																					<td>Actual/Planned</td>
+																					<td>Total Amount</td>
+																					<td>Currency</td>
+																					<td>Date</td>
+																					<td>Perspective</td>
+																				</tr>
+																				<logic:iterate name="selComponents" property="commitments" 
+																				id="commitment" 
+																				type="org.digijava.module.aim.helper.FundingDetail"> 																						           <!-- L2 START-->
+																					<tr bgcolor="#ffffff">
+																						<td>
+																							<c:out value="${commitment.adjustmentTypeName}"/></td>
+																						<td align="right">
+																							<c:out value="${commitment.transactionAmount}"/>
+																						</td>
+																						<td>
+																							<c:out value="${commitment.currencyCode}"/>
+																						</td>
+																						<td>
+																							<c:out value="${commitment.transactionDate}"/>
+																						</td>
+																						<td>
+																							<c:out value="${commitment.perspectiveName}"/>
+																						</td>
+																					</tr>																			
+																				</logic:iterate>	<!-- L2 END-->
+																			</table>	
+																		</td></tr>
+																	</logic:notEmpty>
+																	<logic:notEmpty name="selComponents" property="disbursements">
+																		<tr><td><b>
+																			<digi:trn key="aim:disbursements">Disbursements</digi:trn>
+																	</b>		
+																		</td></tr>
+																		<tr><td bgcolor=#ffffff>
+																			<table width="100%" cellSpacing=1 cellPadding=3 border=0 
+																			bgcolor="#eeeeee">
+																				<tr>
+																					<td>Actual/Planned</td>
+																					<td>Total Amount</td>
+																					<td>Currency</td>
+																					<td>Date</td>
+																					<td>Perspective</td>
+																				</tr>
+																				<logic:iterate name="selComponents" property="disbursements" 
+																				id="disbursement" 
+																				type="org.digijava.module.aim.helper.FundingDetail">
+																				<!-- L3 START-->
+																					<tr bgcolor="#ffffff">
+																						<td>
+																							<c:out value="${disbursement.adjustmentTypeName}"/>
+																						</td>
+																						<td align="right">
+																							<c:out value="${disbursement.transactionAmount}"/>
+																						</td>
+																						<td>
+																							<c:out value="${disbursement.currencyCode}"/>
+																						</td>
+																						<td>
+																							<c:out value="${disbursement.transactionDate}"/>
+																						</td>
+																						<td>
+																							<c:out value="${disbursement.perspectiveName}"/>
+																						</td>
+																					</tr>																			
+																				</logic:iterate>	
+																				<!-- L3 END-->
+																			</table>																		
+																		</td></tr>															
+																	</logic:notEmpty>
+																	<logic:notEmpty name="selComponents" property="expenditures">
+																		<tr><td><b>
+																			<digi:trn key="aim:expenditures">Expenditures</digi:trn> 
+																	</b>
+																		</td></tr>
+																		<tr><td bgcolor=#ffffff>
+																			<table width="100%" cellSpacing=1 cellPadding=3 border=0 
+																			bgcolor="#eeeeee">
+																				<tr>
+																					<td>Actual/Planned</td>
+																					<td>Total Amount</td>
+																					<td>Currency</td>
+																					<td>Date</td>
+																					<td>Perspective</td>
+																				</tr>
+																				<logic:iterate name="selComponents" property="expenditures" 
+																				id="expenditure" 
+																				type="org.digijava.module.aim.helper.FundingDetail">
+																				<!-- L4 START-->
+																				<tr bgcolor="#ffffff">
+																					<td>
+																						<c:out value="${expenditure.adjustmentTypeName}"/>
 																					</td>
 																					<td align="right">
-																						<bean:define id="id" property="pid" name="phyProg"/>
-																						<% String url1 = "/removeSelPhyProg.do~edit=true~pid="+id+"~cid="+compId;%>
-																						<digi:link href="<%=url1%>">
-																					 	<digi:img src="module/cms/images/deleteIcon.gif" border="0" 
-																						alt="Delete this physical progress"/>
-																						</digi:link>
-																					</td>																							
-																				</tr>	
-																			</table>	
+																						<c:out value="${expenditure.transactionAmount}"/>
+																					</td>
+																					<td>
+																						<c:out value="${expenditure.currencyCode}"/>
+																					</td>
+																					<td>
+																						<c:out value="${expenditure.transactionDate}"/>
+																					</td>
+																					<td>
+																						<c:out value="${expenditure.perspectiveName}"/>
+																					</td>
+																				</tr>
+																			</logic:iterate>	
+																			<!-- L4 END-->
+																		</table>
+																	</td></tr>
+																</logic:notEmpty>
+															</table>
+														</td></tr>
+
+
+													</tr>	
+													<tr>
+														<td colspan="2">
+															<table width="100%" cellPadding=1 cellSpacing=1 vAlign="top" border=0 
+															class="box-border-nopadding">
+															<tr><td width="100%" bgcolor="#dddddd" height="15">
+																<a title="<digi:trn key="aim:PhysicalProgress">Measurable task done on a 
+																project to achieve component objectives</digi:trn>">
+																	<digi:trn key="aim:physicalProgres">Physical Progress</digi:trn>
+																</a>
+															</td></tr>														
+															<c:if test="${empty selComponents.phyProgress}">
+																<tr><td colspan="2"><b>
+																	<a href="javascript:
+																	addPhyProgess(-1,<c:out value="${selComponents.componentId}"/>)">
+																	Add Physical Progress</a>
+																	</b>
+																</td></tr>															
+															</c:if>
+															<c:if test="${!empty selComponents.phyProgress}">
+															<c:forEach var="phyProg" items="${selComponents.phyProgress}">
+																<tr><td>
+																	<table width="100%" cellSpacing=1 cellPadding=1 vAlign="top" align="left">
+																		<tr>
+																		<td vAlign="center" align="left" width="95%">
+																			<a href="javascript:addPhyProgess(<bean:write name="phyProg" 
+																			property="pid" />,<c:out value="${selComponents.componentId}"/>)">
+																				<bean:write name="phyProg" property="title" /> - 
+																				<bean:write name="phyProg" property="reportingDate" />
+																			</a>
 																		</td>
-																	</tr>
-																	</c:forEach>
-																	<tr>
-																		<td>
-																			<table cellSpacing=2 cellPadding=2>
-																				<tr><td>
-																					<b>
-																					<a href="javascript:
-																					addPhyProgess(-1,<c:out value="${selComponents.componentId}"/>)">
-																					Add Physical Progress</a></b>
-																				</td></tr>
-																			</table>																
-																		</td>
-																	</tr>
-																	</c:if>
-																</table>													
-															</td>
-														</tr>
+																		<td align="right">
+																			<bean:define id="id" property="pid" name="phyProg"/>
+																			<bean:define id="compId" property="componentId" name="selComponents"/>
+																			<% String url1 = 
+																			"/removeSelPhyProg.do~edit=true~pid="+id+"~cid="+compId;%>
+																			<digi:link href="<%=url1%>">
+																				<digi:img src="module/cms/images/deleteIcon.gif" border="0" 
+																				alt="Delete this physical progress"/>
+																			</digi:link>
+																		</td>																																								  </tr>	
+																	</table>	
+																</td></tr>
+															</c:forEach>
+																<tr><td>
+																	<table cellSpacing=2 cellPadding=2>
+																		<tr><td>
+																			<b>
+																				<a href="javascript:
+																				addPhyProgess(-1,<c:out value="${selComponents.componentId}"/>)">
+																				Add Physical Progress</a>
+																			</b>
+																		</td></tr>
+																	</table>																
+																</td></tr>
+															</c:if>
+															</table>													
+														</td></tr>
 													</table>	
 												</td></tr>	
-												</logic:iterate>	
-												<tr><td align="center">
-													<table cellSpacing=2 cellPadding=2>
-														<tr>
-															<td>
-																<input type="button" value="Add Components" class="buton" name="addComponent" 
-																onclick="addComponents(-1)" class="buton">
-															</td>
-														</tr>
-													</table>
-												</td></tr>
-											</table>												
-										</logic:notEmpty>
-										<logic:empty name="aimEditActivityForm" property="selectedComponents">
-											<table width="100%" cellSpacing=1 cellPadding=5 class="box-border-nopadding">
-												<tr><td>
-													<input type="button" value="Add Components" class="buton" name="addComponent" 
-													onclick="addComponents(-1)" class="buton">
-												</td></tr>
-											</table>
-										</logic:empty>
-									</td></tr>
+											</logic:iterate>	
+											<tr><td align="center">
+												<table cellSpacing=2 cellPadding=2>
+													<tr><td>
+														<input type="button" value="Add Components" class="buton" name="addComponent" 
+														onclick="addComponents()" class="buton"> &nbsp;&nbsp;&nbsp;
+														<input type="button" value="Remove Components" class="buton" name="removeComponent" 
+														onclick="removeSelComponents()" class="buton">														
+													</td></tr>
+												</table>
+											</td></tr>
+										</table>												
+									</logic:notEmpty>
+									<logic:empty name="aimEditActivityForm" property="selectedComponents">
+										<table width="100%" cellSpacing=1 cellPadding=5 class="box-border-nopadding">
+											<tr><td>
+												<input type="button" value="Add Components" class="buton" name="addComponent" 
+												onclick="addComponents()" class="buton">
+											</td></tr>
+										</table>
+									</logic:empty>
+								</td></tr>
 
-									<!-- Issues , Measures and Actions -->
+								
+								<!-- Issues , Measures and Actions -->
 									<tr><td>
 										&nbsp;
 									</td></tr>

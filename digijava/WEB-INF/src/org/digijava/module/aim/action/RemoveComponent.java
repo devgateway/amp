@@ -24,11 +24,13 @@ public class RemoveComponent extends Action {
 		
 		EditActivityForm eaForm = (EditActivityForm) form;
 		
-		if (request.getParameter("id") == null) return mapping.findForward("forward");
-		
-		Long id = new Long(Long.parseLong(request.getParameter("id")));
-		eaForm.getSelectedComponents().remove(new Components(id));
-		eaForm.setComponentId(null);
+		Long comp[] = eaForm.getSelComp();
+		for (int i = 0;i < comp.length; i++) {
+		    Components temp = new Components();
+		    temp.setComponentId(comp[i]);
+		    eaForm.getSelectedComponents().remove(temp);
+		}
+		eaForm.setSelComp(null);
 		return mapping.findForward("forward");
 	}
 }

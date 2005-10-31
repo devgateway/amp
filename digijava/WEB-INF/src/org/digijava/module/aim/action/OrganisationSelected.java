@@ -45,7 +45,7 @@ public class OrganisationSelected extends Action {
 			prevOrgs = eaForm.getSelectedOrganizations();
 		} else if (eaForm.getStep().equals("3")) {
 			prevSelOrgs = eaForm.getFundingOrganizations();
-		} else if (eaForm.getStep().equals("6")) {
+		} else if (eaForm.getStep().equals("7")) {
 			item = eaForm.getItem();
 		} else {
 			mapping.findForward("index");
@@ -131,7 +131,6 @@ public class OrganisationSelected extends Action {
 			return mapping.findForward("step3");
 
 		} else {
-			logger.info("In step 6");
 			logger.info("item = " + item);
 			if (item != 0) {
 				Vector temp = new Vector();

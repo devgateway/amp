@@ -76,18 +76,17 @@ public class AddAmpActivity extends Action {
 		// added by Akash
 		// desc: setting WorkingTeamLeadFlag & approval status in form bean
 		// start
-		if (!eaForm.isEditAct()) {
+		Long ampTeamId = teamMember.getTeamId();
+		boolean teamLeadFlag = teamMember.getTeamHead();
+		boolean workingTeamFlag = DbUtil.checkForParentTeam(ampTeamId);
+		if (teamLeadFlag && workingTeamFlag)
+			eaForm.setWorkingTeamLeadFlag("yes");
+		else
 			eaForm.setWorkingTeamLeadFlag("no");
+		
+		if (!eaForm.isEditAct())
 			eaForm.setApprovalStatus("started");
-		}
 		else {
-			Long ampTeamId = teamMember.getTeamId();
-			boolean teamLeadFlag = teamMember.getTeamHead();
-			boolean workingTeamFlag = DbUtil.checkForParentTeam(ampTeamId);
-			if (teamLeadFlag && workingTeamFlag)
-				eaForm.setWorkingTeamLeadFlag("yes");
-			else
-				eaForm.setWorkingTeamLeadFlag("no");
 			String actApprovalStatus = DbUtil.getActivityApprovalStatus(eaForm.getActivityId());
 			eaForm.setApprovalStatus(actApprovalStatus);
 		}

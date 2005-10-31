@@ -667,7 +667,6 @@ function gotoStep() {
 													
 														<%  int curr = currPage.intValue();
 															int cnt = pages.intValue();
-															logger.info(curr + " Comparison : " + cnt);
 														%>
 														<% if( curr != cnt ) { %>
 														<bean:define id="translation">

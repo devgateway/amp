@@ -15,7 +15,8 @@
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/regionalFunding.js"/>"></script>
 
 <% EditActivityForm eaForm = (EditActivityForm) session.getAttribute("siteampdefaultaimEditActivityForm"); 
-
+  	String defPers = (String) request.getAttribute("defPerspective"); 
+  	String defCurr = (String) request.getAttribute("defCurrency"); 
  int indexC = 0;
  int indexD = 0; 
  int indexE = 0; %>
@@ -338,11 +339,13 @@ function addCommitments()
 		Iterator itr = col.iterator();
 		while (itr.hasNext()) 
 		{
-			AmpCurrency curr = (AmpCurrency) itr.next();	%>
-		s += "<option value='<%=curr.getCurrencyCode()%>'><%=curr.getCurrencyName()%></option>";				  			
-		<% 
-		}
-	%>
+			AmpCurrency curr = (AmpCurrency) itr.next();	
+			if (curr.getCurrencyCode().equalsIgnoreCase(defCurr)) { %>
+				s += "<option value='<%=curr.getCurrencyCode()%>' selected='true'><%=curr.getCurrencyName()%></option>";
+			<% } else { %>
+				s += "<option value='<%=curr.getCurrencyCode()%>'><%=curr.getCurrencyName()%></option>";				  			
+			<% }
+		 }%>
 	
 	s += "</select>&nbsp;";
 	s += "<input type='text' name='comm_" + numComm + "_4' id='comm_" + numComm + "_4' size='10' class='inp-text'>&nbsp;";
@@ -350,9 +353,13 @@ function addCommitments()
 	s += "<select name='comm_" + numComm + "_5' class='inp-text'>";
 	<% itr = eaForm.getPerspectives().iterator();
 		while (itr.hasNext()) { 
-			AmpPerspective pers = (AmpPerspective) itr.next(); %>
-			s += "<option value='<%=pers.getCode()%>'><%=pers.getName()%></option>";
-	<%	} %>
+			AmpPerspective pers = (AmpPerspective) itr.next();
+			if (pers.getCode().equalsIgnoreCase(defPers)) { %>
+				s += "<option value='<%=pers.getCode()%>' selected='true'><%=pers.getName()%></option>";
+			<% } else { %>
+				s += "<option value='<%=pers.getCode()%>'><%=pers.getName()%></option>";
+			<% } 
+		} %>	
 	s += "</select>&nbsp;";
 	s += "<input type='button' value='Delete' class='inp-text' onclick=removeCommitment('" + divname + "')><br>";
 	
@@ -386,9 +393,13 @@ function addDisbursement()
 	<% col = eaForm.getCurrencies();
 		itr = col.iterator();
 		while (itr.hasNext()) {
-			AmpCurrency curr = (AmpCurrency) itr.next();	%>
-		s += "<option value='<%=curr.getCurrencyCode()%>'><%=curr.getCurrencyName()%></option>";				  			
-		<% }%>
+			AmpCurrency curr = (AmpCurrency) itr.next();	
+			if (curr.getCurrencyCode().equalsIgnoreCase(defCurr)) { %>
+				s += "<option value='<%=curr.getCurrencyCode()%>' selected='true'><%=curr.getCurrencyName()%></option>";
+			<% } else { %>
+				s += "<option value='<%=curr.getCurrencyCode()%>'><%=curr.getCurrencyName()%></option>";				  			
+			<% }
+		 }%>
 	
 	s += "</select>&nbsp;";
 	s += "<input type='text' name='disb_" + numDisb + "_4' id='disb_" + numDisb + "_4' size='10' class='inp-text'>&nbsp;";
@@ -396,9 +407,13 @@ function addDisbursement()
 	s += "<select name='disb_" + numDisb + "_5' class='inp-text'>";
 	<% itr = eaForm.getPerspectives().iterator();
 		while (itr.hasNext()) { 
-			AmpPerspective pers = (AmpPerspective) itr.next(); %>
-			s += "<option value='<%=pers.getCode()%>'><%=pers.getName()%></option>";
-	<%	} %>
+			AmpPerspective pers = (AmpPerspective) itr.next();
+			if (pers.getCode().equalsIgnoreCase(defPers)) { %>
+				s += "<option value='<%=pers.getCode()%>' selected='true'><%=pers.getName()%></option>";
+			<% } else { %>
+				s += "<option value='<%=pers.getCode()%>'><%=pers.getName()%></option>";
+			<% } 
+		} %>
 	s += "</select>&nbsp;";
 	s += "<input type='button' value='Delete' class='inp-text' onclick=removeDisbursement('" + divname + "')><br>";
 	
@@ -432,9 +447,13 @@ function addExpenditure()
 	<% col = eaForm.getCurrencies();
 		itr = col.iterator();
 		while (itr.hasNext()) {
-			AmpCurrency curr = (AmpCurrency) itr.next();	%>
-		s += "<option value='<%=curr.getCurrencyCode()%>'><%=curr.getCurrencyName()%></option>";				  			
-		<% }%>
+			AmpCurrency curr = (AmpCurrency) itr.next();	
+			if (curr.getCurrencyCode().equalsIgnoreCase(defCurr)) { %>
+				s += "<option value='<%=curr.getCurrencyCode()%>' selected='true'><%=curr.getCurrencyName()%></option>";
+			<% } else { %>
+				s += "<option value='<%=curr.getCurrencyCode()%>'><%=curr.getCurrencyName()%></option>";				  			
+			<% }
+		 }%>
 	
 	s += "</select>&nbsp;";
 	s += "<input type='text' name='expn_" + numExpn + "_4' id='expn_" + numExpn + "_4' size='10' class='inp-text'>&nbsp;";
@@ -442,9 +461,13 @@ function addExpenditure()
 	s += "<select name='expn_" + numExpn + "_5' class='inp-text'>";
 	<% itr = eaForm.getPerspectives().iterator();
 		while (itr.hasNext()) { 
-			AmpPerspective pers = (AmpPerspective) itr.next(); %>
-			s += "<option value='<%=pers.getCode()%>'><%=pers.getName()%></option>";
-	<%	} %>
+			AmpPerspective pers = (AmpPerspective) itr.next();
+			if (pers.getCode().equalsIgnoreCase(defPers)) { %>
+				s += "<option value='<%=pers.getCode()%>' selected='true'><%=pers.getName()%></option>";
+			<% } else { %>
+				s += "<option value='<%=pers.getCode()%>'><%=pers.getName()%></option>";
+			<% } 
+		} %>
 	s += "</select>&nbsp;";
 	s += "<input type='button' value='Delete' class='inp-text' onclick=removeExpenditure('" + divname + "')><br>";
 	

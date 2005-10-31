@@ -11,6 +11,8 @@ public class Constants
 	public static final int TO_YEAR = 2005 ;
 	public static final String DONOR = "DN" ;
 	public static final String MOFED = "MA" ;
+	public static final String DEF_DNR_PERSPECTIVE = "DONOR" ;
+	public static final String DEF_MFD_PERSPECTIVE = "MOFED" ;
 	public static final String DISCREPANCY = "DI";
 	public static final Long MOFED_ORG_ID= new Long(12);
 	public static final String DEFAULT_CURRENCY = "USD" ;

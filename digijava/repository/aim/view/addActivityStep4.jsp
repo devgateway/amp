@@ -329,6 +329,7 @@
 																				</td></tr>
 																				</logic:iterate>	<!-- L1 END-->
 																			</logic:notEmpty>
+																			<logic:notEmpty name="aimEditActivityForm" property="fundingRegions">
 																			<logic:empty name="aimEditActivityForm" property="regionalFundings">
 																				<!-- No fundings -->
 																				<tr><td>
@@ -351,7 +352,14 @@
 																						</tr>
 																					</table>
 																				</td></tr>															
-																			</logic:notEmpty>																			
+																			</logic:notEmpty>
+																			</logic:notEmpty>
+																			<logic:empty name="aimEditActivityForm" property="fundingRegions">
+																				<tr><td align="center" class="red-log">
+																					<digi:trn key="aim:noRegionsSelected">No regions selected
+																					</digi:trn>
+																				</td></tr>
+																			</logic:empty>
 																			</table>	
 																		</td>
 																	</tr>

@@ -189,30 +189,6 @@ public class OrganisationSelected extends Action {
 						eaForm.setImpAgencies(col);						
 					}
 				} else if (item == 3) {
-					/*
-					if (eaForm.getContractors() != null) {
-						for (int i = 0;i < temp.size();i ++) {
-							AmpOrganisation newOrg = (AmpOrganisation) temp.get(i);
-							if (newOrg != null) {
-								boolean flag = false;
-								Iterator itr = eaForm.getContractors().iterator();
-								while (itr.hasNext()) {
-									AmpOrganisation org = (AmpOrganisation) itr.next();
-									if (org.getAmpOrgId().equals(newOrg.getAmpOrgId())) {
-										flag = true;
-										break;
-									}
-								}
-								if (!flag) {
-									eaForm.getContractors().add(newOrg);
-								}
-							}
-						}
-					} else {
-						Collection col = new ArrayList();
-						col.addAll(temp);
-						eaForm.setContractors(col);						
-					}*/
 				} else if (item == 4) {
 					if (eaForm.getReportingOrgs() != null) {
 						for (int i = 0;i < temp.size();i ++) {

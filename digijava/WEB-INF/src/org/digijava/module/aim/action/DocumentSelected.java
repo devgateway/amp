@@ -29,13 +29,11 @@ public class DocumentSelected extends Action {
 		if (eaForm.getDocFileOrLink().equals("file")) {
 			if (eaForm.getDocTitle() == null || eaForm.getDocTitle().trim().length() == 0 ||
 								 eaForm.getDocFile() == null) {
-				eaForm.setStep("5");
 				return mapping.findForward("forward");
 			}
 		} else {
 			if (eaForm.getDocTitle() == null || eaForm.getDocTitle().trim().length() == 0 ||
 								 eaForm.getDocWebResource() == null || eaForm.getDocWebResource().trim().length() == 0) {
-				eaForm.setStep("5");
 				return mapping.findForward("forward");
 			}				  
 		}
@@ -97,8 +95,6 @@ public class DocumentSelected extends Action {
 			eaForm.setLinksList(newDocs);
 		}
 		
-		eaForm.setStep("5");
-
 		return mapping.findForward("forward");
 	}
 }

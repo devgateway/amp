@@ -11,19 +11,24 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.StringTokenizer;
 
+import javax.jms.Session;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
+import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.dbentity.AmpPerspective;
 import org.digijava.module.aim.form.EditActivityForm;
+import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.FundingDetail;
 import org.digijava.module.aim.helper.Location;
 import org.digijava.module.aim.helper.RegionalFunding;
+import org.digijava.module.aim.helper.TeamMember;
 
 public class AddRegionalFunding extends Action {
 	
@@ -33,6 +38,8 @@ public class AddRegionalFunding extends Action {
 			HttpServletRequest request,HttpServletResponse response) throws Exception {
 	
 		String action = request.getParameter("regFundAct");
+		HttpSession session = request.getSession();
+		TeamMember tm = (TeamMember) session.getAttribute("currentMember");
 		
 		logger.debug("Action is " + action);
 		
@@ -41,6 +48,17 @@ public class AddRegionalFunding extends Action {
 		if (action != null && action.equalsIgnoreCase("show")) {
 			logger.debug("Forarding to forward");
 			eaForm.setFundingRegionId(new Long(-1));
+			if (tm.getAppSettings().getPerspective()
+					.equalsIgnoreCase(Constants.DEF_DNR_PERSPECTIVE)) {
+				request.setAttribute("defPerspective",Constants.DONOR);
+			} else if (tm.getAppSettings().getPerspective().
+					equalsIgnoreCase(Constants.DEF_MFD_PERSPECTIVE)) {
+				request.setAttribute("defPerspective",Constants.MOFED);
+			}
+			String defCurr = DbUtil.getCurrency(
+					tm.getAppSettings().getCurrencyId()).getCurrencyCode();
+			request.setAttribute("defCurrency",defCurr);
+			
 			return mapping.findForward("forward");
 		} else if (action != null && action.equalsIgnoreCase("showEdit")) {
 			Iterator itr = eaForm.getRegionalFundings().iterator();
@@ -53,6 +71,17 @@ public class AddRegionalFunding extends Action {
 					break;
 				}
 			}
+			
+			if (tm.getAppSettings().getPerspective()
+					.equalsIgnoreCase(Constants.DEF_DNR_PERSPECTIVE)) {
+				request.setAttribute("defPerspective",Constants.DONOR);
+			} else if (tm.getAppSettings().getPerspective().
+					equalsIgnoreCase(Constants.DEF_MFD_PERSPECTIVE)) {
+				request.setAttribute("defPerspective",Constants.MOFED);
+			}
+			String defCurr = DbUtil.getCurrency(
+					tm.getAppSettings().getCurrencyId()).getCurrencyCode();
+			request.setAttribute("defCurrency",defCurr);			
 			return mapping.findForward("forward");
 		} else if (action != null && action.equalsIgnoreCase("update")){
 

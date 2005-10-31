@@ -4,16 +4,16 @@
 
 package org.digijava.module.aim.action;
 
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.Enumeration;
-import java.util.Map;
-import java.util.HashMap;
-import java.util.StringTokenizer;
 import java.util.ArrayList;
+import java.util.Enumeration;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.StringTokenizer;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
 import org.apache.struts.action.Action;
@@ -21,9 +21,11 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.digijava.module.aim.dbentity.AmpPerspective;
-import org.digijava.module.aim.helper.FundingDetail;
 import org.digijava.module.aim.form.EditActivityForm;
 import org.digijava.module.aim.helper.Components;
+import org.digijava.module.aim.helper.Constants;
+import org.digijava.module.aim.helper.FundingDetail;
+import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.DbUtil;
 
 
@@ -37,6 +39,9 @@ public class ShowAddComponent extends Action {
 		String action = request.getParameter("compFundAct");
 		logger.debug("Action is " + action);
 
+		HttpSession session = request.getSession();
+		TeamMember tm = (TeamMember) session.getAttribute("currentMember");		
+		
 		try
 		{
 			EditActivityForm eaForm = (EditActivityForm) form;
@@ -47,6 +52,17 @@ public class ShowAddComponent extends Action {
 				eaForm.setComponentId(new Long(-1));
 				eaForm.setComponentTitle(null);
 				eaForm.setComponentDesc(null);
+				if (tm.getAppSettings().getPerspective()
+						.equalsIgnoreCase(Constants.DEF_DNR_PERSPECTIVE)) {
+					request.setAttribute("defPerspective",Constants.DONOR);
+				} else if (tm.getAppSettings().getPerspective().
+						equalsIgnoreCase(Constants.DEF_MFD_PERSPECTIVE)) {
+					request.setAttribute("defPerspective",Constants.MOFED);
+				}
+				String defCurr = DbUtil.getCurrency(
+						tm.getAppSettings().getCurrencyId()).getCurrencyCode();
+				request.setAttribute("defCurrency",defCurr);				
+				
 				return mapping.findForward("forward");
 			}
 			else if( action != null && action.equalsIgnoreCase("showEdit") )
@@ -61,11 +77,20 @@ public class ShowAddComponent extends Action {
 					{
 						eaForm.setComponentId(comp.getComponentId());
 						eaForm.setComponentTitle(comp.getTitle());
-//						eaForm.setComponentAmount(comp.getAmount());
 						eaForm.setComponentDesc(comp.getDescription());
 						break;
 					}
 				}
+				if (tm.getAppSettings().getPerspective()
+						.equalsIgnoreCase(Constants.DEF_DNR_PERSPECTIVE)) {
+					request.setAttribute("defPerspective",Constants.DONOR);
+				} else if (tm.getAppSettings().getPerspective().
+						equalsIgnoreCase(Constants.DEF_MFD_PERSPECTIVE)) {
+					request.setAttribute("defPerspective",Constants.MOFED);
+				}
+				String defCurr = DbUtil.getCurrency(
+						tm.getAppSettings().getCurrencyId()).getCurrencyCode();
+				request.setAttribute("defCurrency",defCurr);				
 				return mapping.findForward("forward");
 			}
 			else if( action != null && action.equalsIgnoreCase("update") )

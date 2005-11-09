@@ -242,6 +242,7 @@
 																								<tr bgcolor="#ffffff">
 																									<td><c:out value="${commitment.adjustmentTypeName}"/></td>
 																									<td align="right">
+																									<FONT color=blue>*</FONT>
 																									<c:out value="${commitment.transactionAmount}"/></td>
 																									<td><c:out value="${commitment.currencyCode}"/></td>
 																									<td><c:out value="${commitment.transactionDate}"/></td>
@@ -278,6 +279,7 @@
 																									<td><c:out value="${disbursement.adjustmentTypeName}"/>
 																									</td>
 																									<td align="right">
+																									<FONT color=blue>*</FONT>
 																									<c:out value="${disbursement.transactionAmount}"/>
 																									</td>
 																									<td><c:out value="${disbursement.currencyCode}"/></td>
@@ -315,6 +317,7 @@
 																									<td><c:out value="${expenditure.adjustmentTypeName}"/>
 																									</td>
 																									<td align="right">
+																									<FONT color=blue>*</FONT>
 																									<c:out value="${expenditure.transactionAmount}"/>
 																									</td>
 																									<td><c:out value="${expenditure.currencyCode}"/></td>
@@ -328,6 +331,13 @@
 																					</table>
 																				</td></tr>
 																				</logic:iterate>	<!-- L1 END-->
+																				<TR><TD>
+																					<FONT color=blue>*
+																						<digi:trn key="aim:allTheAmountsInThousands">	
+																							All the amounts are in thousands (000)
+				  																		</digi:trn>
+																					</FONT>								
+																				</TD></TR>
 																			</logic:notEmpty>
 																			<logic:notEmpty name="aimEditActivityForm" property="fundingRegions">
 																			<logic:empty name="aimEditActivityForm" property="regionalFundings">

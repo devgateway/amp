@@ -561,8 +561,6 @@ function removeSelComponents() {
 																</FONT>								
 															</TD></TR>
 														</td></tr>
-
-
 													</tr>	
 													<tr>
 														<td colspan="2">

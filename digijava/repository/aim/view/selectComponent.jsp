@@ -76,6 +76,13 @@
 											</a>
 										</td>
 									</tr>			
+									<tr><td colspan=2>
+										<FONT color=blue><BIG>*</BIG>
+											<digi:trn key="aim:pleaseEnterTheAmountInThousands">
+												Please enter amount in thousands (000)
+		  									</digi:trn>
+										</FONT>
+									</td></tr>
 								<tr bgcolor="#f4f4f2">
 								<td colspan="2" class="box-border-alt1">
 										<span class="f-names">Commitments</span>&nbsp;&nbsp;

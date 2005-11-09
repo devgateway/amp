@@ -96,11 +96,15 @@
  						   <td width=40 >	    &nbsp;		   </td>
 						  <td width=120 valign=top> <b>Description  </b> </td>
 	 					 <td> <b> : </b> </td>						  
-						  <td width=560>
-							  <logic:notEmpty name="project" property="description">
-							   <bean:write name="project" property="description" />
-							  </logic:notEmpty>
-						  </td>
+						  	<td width=560>
+								<logic:empty name="project" property="description">&nbsp;</logic:empty>	
+								<logic:notEmpty name="project" property="description">
+									<bean:define id="describeKey">
+										<bean:write name="project" property="description"/>
+									</bean:define>
+									<digi:edit key="<%=describeKey%>"/>
+								</logic:notEmpty>  
+							</td>
 						</tr>
 
 					<tr>

@@ -923,6 +923,13 @@ function disable() {
 																	</table>
 																</td></tr>															
 															</c:if>
+															<tr><td bgcolor="#ffffff">
+																<FONT color=blue>*
+																	<digi:trn key="aim:theAmountEnteredAreInThousands">	
+																		The amount entered are in thousands (000)
+		  															</digi:trn>
+																</FONT>
+															</td></tr>
 															<tr><td bgcolor="#f4f4f2">
 																<b><digi:trn key="aim:physicalProgressOfTheComponent">
 																Physical progress of the component</digi:trn></b>

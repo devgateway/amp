@@ -17,6 +17,8 @@ function makeArray0() {
 }
 
 function reload() {
+	document.aimEditActivityForm.sameAs1.checked = false;
+	document.aimEditActivityForm.sameAs2.checked = false;
 	openCalendar(curr_month,curr_year);
 	calWindow.focus();
 }
@@ -120,26 +122,23 @@ function openCalendar(month,year) {
 	self.calWindow.document.close();
 }
 
-function sameAsDateClicked(value) {
-	if (value == 1) {
-		if (document.aimEditActivityForm.actAppDateCheckBox.checked == true) {
-			document.aimEditActivityForm.actAppDate.value = document.aimEditActivityForm.propAppDate.value;
-		} else {
+function sameAsfunction(val)
+{
+		if(val == 1)
+		{
+			if(document.aimEditActivityForm.sameAs1.checked == true)
+				document.aimEditActivityForm.revisedAppDate.value = document.aimEditActivityForm.originalAppDate.value;
+			else
+				document.aimEditActivityForm.revisedAppDate.value = "";
 		}
-	} 
-	else if (value == 2) {
-		if (document.aimEditActivityForm.actStartDateCheckBox.checked == true) {
-			document.aimEditActivityForm.actStartDate.value = document.aimEditActivityForm.propStartDate.value;
-		} else {
-		}			  
-	}
-	else if (value == 3) {
-		if (document.aimEditActivityForm.actCloseDateCheckBox.checked == true) {
-			document.aimEditActivityForm.actCloseDate.value = document.aimEditActivityForm.propCloseDate.value;
-		} else {
-		}			  
-	}
-}
+		else if(val == 2)
+		{
+			if(document.aimEditActivityForm.sameAs2.checked == true)
+				document.aimEditActivityForm.revisedStartDate.value = document.aimEditActivityForm.originalStartDate.value;
+			else
+				document.aimEditActivityForm.revisedStartDate.value = "";
+		}
+}		  
 
 function dateChanged(value) {
 	/*

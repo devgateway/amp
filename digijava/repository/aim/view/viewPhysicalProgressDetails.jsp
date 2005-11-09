@@ -113,6 +113,7 @@ method="post">
 																			<bean:write name="comm" property="transactionDate"/>
 																		</TD>
 																		<TD width="150" align="right">
+																			<font color="blue">*</font>
 																			<bean:write name="comm" property="transactionAmount"/>
 																		</TD>
 																		<TD width="70">
@@ -143,6 +144,7 @@ method="post">
 																			<bean:write name="disb" property="transactionDate"/>
 																		</TD>
 																		<TD width="150" align="right">
+																			<font color="blue">*</font>
 																			<bean:write name="disb" property="transactionAmount"/>
 																		</TD>
 																		<TD width="70">
@@ -173,6 +175,7 @@ method="post">
 																			<bean:write name="exp" property="transactionDate"/>
 																		</TD>
 																		<TD width="150" align="right">
+																			<font color="blue">*</font>
 																			<bean:write name="exp" property="transactionAmount"/>
 																		</TD>
 																		<TD width="70">
@@ -186,6 +189,13 @@ method="post">
 																</TABLE>
 															</TD>
 														</TR>														
+														<TR><TD>
+															<FONT color=blue>*
+																<digi:trn key="aim:allTheAmountsInThousands">	
+																	All the amounts are in thousands (000)
+		  														</digi:trn>
+															</FONT>								
+														</TD></TR>
 													</TABLE>
 												</TD>
 											</TR>																						

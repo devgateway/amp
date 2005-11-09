@@ -132,7 +132,6 @@ function popupwin()
 	winpopup.document.close();	
 }
 
-
 -->
 </script>
 
@@ -432,6 +431,9 @@ function popupwin()
 																<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border=0>
 																</a>
 															</td>
+															<td align="left" vAlign="center">&nbsp;
+																<input type="checkbox" name="sameAs1" onclick="sameAsfunction(1)">
+															</td>
 														</tr>
 													</table>
 												</td>
@@ -447,8 +449,8 @@ function popupwin()
 													<table cellPadding=0 cellSpacing=0>
 														<tr>
 															<td>
-																<a title="<digi:trn key="aim:ProposedDateProjectStart">Date (dd/mm/yy) when the project is expected to commence</digi:trn>">																   	<html:text name="aimEditActivityForm" property="originalStartDate" size="10" 
-																styleClass="inp-text" readonly="true"/>
+																<a title="<digi:trn key="aim:ProposedDateProjectStart">Date (dd/mm/yy) when the project is expected to commence</digi:trn>">																   	
+																<html:text name="aimEditActivityForm" property="originalStartDate" size="10" styleClass="inp-text" readonly="true"/>
 																</a>
 															</td>
 															<td align="left" vAlign="center">&nbsp;
@@ -479,6 +481,9 @@ function popupwin()
 																<a href="javascript:newWindow(4)">
 																<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border=0>
 																</a>
+															</td>
+															<td align="left" vAlign="center">&nbsp;
+																<input type="checkbox" name="sameAs2" onclick="sameAsfunction(2)">
 															</td>
 														</tr>
 													</table>

@@ -450,6 +450,7 @@ function removeSelComponents() {
 																						<td>
 																							<c:out value="${commitment.adjustmentTypeName}"/></td>
 																						<td align="right">
+																							<FONT color=blue>*</FONT>
 																							<c:out value="${commitment.transactionAmount}"/>
 																						</td>
 																						<td>
@@ -490,6 +491,7 @@ function removeSelComponents() {
 																							<c:out value="${disbursement.adjustmentTypeName}"/>
 																						</td>
 																						<td align="right">
+																							<FONT color=blue>*</FONT>
 																							<c:out value="${disbursement.transactionAmount}"/>
 																						</td>
 																						<td>
@@ -531,6 +533,7 @@ function removeSelComponents() {
 																						<c:out value="${expenditure.adjustmentTypeName}"/>
 																					</td>
 																					<td align="right">
+																						<FONT color=blue>*</FONT>
 																						<c:out value="${expenditure.transactionAmount}"/>
 																					</td>
 																					<td>
@@ -548,7 +551,15 @@ function removeSelComponents() {
 																		</table>
 																	</td></tr>
 																</logic:notEmpty>
+																
 															</table>
+															<TR><TD>
+																<FONT color=blue>*
+																	<digi:trn key="aim:allTheAmountsInThousands">	
+																		All the amounts are in thousands (000)
+				  													</digi:trn>
+																</FONT>								
+															</TD></TR>
 														</td></tr>
 
 

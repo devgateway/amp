@@ -349,7 +349,8 @@
 																							<td width="50">	
 																								<bean:write name="fundingDetail" property="adjustmentTypeName"/>
 																							</td>
-																							<td width="120" align="right">	
+																							<td width="120" align="right">
+																								<FONT color=blue>*</FONT>
 																								<bean:write name="fundingDetail" property="transactionAmount"/>&nbsp;
 																							</td>
 																							<td width="150">	
@@ -381,6 +382,7 @@
 																								<bean:write name="fundingDetail" property="adjustmentTypeName"/>
 																							</td>
 																							<td align="right">	
+																								<FONT color=blue>*</FONT>
 																								<bean:write name="fundingDetail" property="transactionAmount"/>&nbsp;
 																							</td>
 																							<td>	
@@ -412,6 +414,7 @@
 																								<bean:write name="fundingDetail" property="adjustmentTypeName"/>
 																							</td>
 																							<td align="right">	
+																								<FONT color=blue>*</FONT>
 																								<bean:write name="fundingDetail" property="transactionAmount"/>&nbsp;
 																							</td>
 																							<td>	
@@ -448,7 +451,14 @@
 																				</td>
 																			</tr>
 																		</table>																	
-																	</td></tr>																	
+																	</td></tr>
+																	<tr><td bgcolor="#ffffff">
+																		<FONT color=blue>*
+																			<digi:trn key="aim:theAmountEnteredAreInThousands">	
+																				The amount entered are in thousands (000)
+		  																	</digi:trn>
+																		</FONT>
+																	</td></tr>
 																	</table>
 																	</td></tr>
 																	</logic:iterate>

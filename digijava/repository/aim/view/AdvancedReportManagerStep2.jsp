@@ -6,7 +6,7 @@
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
 
-
+<script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/advanceReportManager.js"/>"></script>
 <script language="JavaScript">
 	function saveReport()
 	{
@@ -138,7 +138,7 @@ function gotoStep() {
 													<bean:define id="translation">
 														<digi:trn key="aim:clickToselectrows/hierarchies">Click here to select rows/hierarchies</digi:trn>
 													</bean:define>
-													<digi:link href="/advancedReportManager.do?check=5"  styleClass="sub-nav" title="<%=translation%>" >
+													<digi:link href="/advancedReportManager.do?check=SelectRows"  styleClass="sub-nav" title="<%=translation%>" >
 														2 : <digi:trn key="aim:SelectRows/hierarchies">Select rows/hierarchies</digi:trn>
 													</digi:link>
 												</td>										
@@ -176,7 +176,7 @@ function gotoStep() {
 										<bean:define id="translation">
 											<digi:trn key="aim:clickToGenerateReport">Click here to Generate Chart</digi:trn>
 										</bean:define>
-										<digi:link href="/advancedReportManager.do?check=5"  styleClass="sub-nav" title="<%=translation%>" >
+										<digi:link href="/advancedReportManager.do?check=5"  styleClass="sub-nav" title="<%=translation%>" onclick="javascript:alert('Charts Coming Soon...');">
 										6 : <digi:trn key="aim:GenerateChart">Generate Chart</digi:trn>
 										</digi:link>
 										</td>	
@@ -667,6 +667,7 @@ function gotoStep() {
 													
 														<%  int curr = currPage.intValue();
 															int cnt = pages.intValue();
+															//logger.info(curr + " Comparison : " + cnt);
 														%>
 														<% if( curr != cnt ) { %>
 														<bean:define id="translation">
@@ -712,7 +713,8 @@ function gotoStep() {
 											<tr bgcolor="#f4f4f2">
 												<td align="center" colspan="2" bgcolor="#f4f4f2">
 													<input type=button name=back value="<< Previous"   class="dr-menu" onclick="javascript:history.back()">
-													<input type=button name=next value="  Chart Creation  " class="dr-menu" onclick="javascript:gotoStep()" >															
+													<input type="button" name="Cancel" value=" Cancel " class="dr-menu" onclick="return quitAdvRptMngr()" >
+													<input type=button name=next value="  Chart Creation  " class="dr-menu" onclick="javascript:gotoStep()" >
 													<input type=button name=back value=" Save Report "   class="dr-menu" onclick="saveReport()">						
 													
 												</td>

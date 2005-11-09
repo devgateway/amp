@@ -6,7 +6,7 @@
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
 
-
+<script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/advanceReportManager.js"/>"></script>
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
 
 <script language="JavaScript">
@@ -146,7 +146,7 @@
 													<bean:define id="translation">
 														<digi:trn key="aim:clickToselectrows/hierarchies">Click here to select rows/hierarchies</digi:trn>
 													</bean:define>
-													<digi:link href="/advancedReportManager.do?check=charts"  styleClass="sub-nav" title="<%=translation%>" >
+													<digi:link href="/advancedReportManager.do?check=SelectRows"  styleClass="sub-nav" title="<%=translation%>" >
 														2 : <digi:trn key="aim:SelectRows/hierarchies">Select rows/hierarchies</digi:trn>
 													</digi:link>
 												</td>										
@@ -184,7 +184,7 @@
 										<bean:define id="translation">
 											<digi:trn key="aim:clickToGenerateChart">Click here to Generate Chart</digi:trn>
 										</bean:define>
-										<digi:link href="/advancedReportManager.do?check=charts"  styleClass="sub-nav3" title="<%=translation%>" >
+										<digi:link href="/advancedReportManager.do?check=charts"  styleClass="sub-nav3" title="<%=translation%>" onclick="javascript:alert('Charts Coming Soon...');">
 										6 : <digi:trn key="aim:GenerateChart">Generate Chart</digi:trn>
 										</digi:link>
 										</td>	
@@ -249,6 +249,7 @@
 																<input type=button name=back value="<< Previous"   class="dr-menu" onclick="javascript:history.back()">						
 <!--<input type="button" onclick="popup_chart()" value="Create Pie-Chart PDF" class="dr-menu"> -->
 
+																<input type="button" name="Cancel" value=" Cancel " class="dr-menu" onclick="return quitAdvRptMngr()" >
 																<input type="button" onclick="popup_barChart()" value="Create Bar-Chart PDF" class="dr-menu"> 
 
 																<input type=button name=back value=" Save Report "   class="dr-menu" onclick="saveReport()">						

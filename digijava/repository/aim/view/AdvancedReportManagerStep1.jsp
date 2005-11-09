@@ -7,6 +7,8 @@
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
 
 
+<script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/advanceReportManager.js"/>"></script>
+
 <script language="JavaScript">
 
 function moveUp(val)
@@ -43,7 +45,7 @@ function gotoStep() {
 		alert(" Please select columns to generate report ");
 	else
 	{
-		<digi:context name="step" property="context/module/moduleinstance/advancedReportManager.do?check=SelectMeasures" />
+		<digi:context name="step" property="context/module/moduleinstance/advancedReportManager.do?check=SelectRows" />
 		document.aimAdvancedReportForm.action = "<%= step %>";
 		document.aimAdvancedReportForm.target = "_self";
 		document.aimAdvancedReportForm.submit();
@@ -158,7 +160,7 @@ function checkUncheckAll2() {
 													<bean:define id="translation">
 														<digi:trn key="aim:clickToSelectColumns">Click here to Select Columns</digi:trn>
 													</bean:define>
-													<digi:link href="/advancedReportManager.do/check=forward" styleClass="sub-nav3" title="<%=translation%>"  >
+													<digi:link href="/advancedReportManager.do~check=forward" styleClass="sub-nav3" title="<%=translation%>"  >
 														1 :   Select Columns
 													</digi:link>
 												</td>											
@@ -166,7 +168,7 @@ function checkUncheckAll2() {
 													<bean:define id="translation">
 														<digi:trn key="aim:clickToselectrows/hierarchies" >Click here to select rows/hierarchies</digi:trn>
 													</bean:define>
-													<digi:link href="/advancedReportManager.do?check=forward"  styleClass="sub-nav" title="<%=translation%>" >
+													<digi:link href="/advancedReportManager.do?check=SelectRows"  styleClass="sub-nav" title="<%=translation%>" >
 														2 : <digi:trn key="aim:SelectRows/hierarchies">Select rows/hierarchies</digi:trn>
 													</digi:link>
 												</td>										
@@ -196,7 +198,7 @@ function checkUncheckAll2() {
 										<bean:define id="translation">
 											<digi:trn key="aim:clickToGenerateReport">Click here to Generate Reports</digi:trn>
 										</bean:define>
-										<digi:link href="/advancedReportManager.do?check=5"  styleClass="sub-nav" title="<%=translation%>" onclick="javascript:gotoStep()">
+										<digi:link href="/advancedReportManager.do?check=forward"  styleClass="sub-nav" title="<%=translation%>" onclick="javascript:gotoStep()">
 										5 : <digi:trn key="aim:GenerateReport">Generate Report</digi:trn>
 										</digi:link>
 										</td>	
@@ -204,7 +206,7 @@ function checkUncheckAll2() {
 										<bean:define id="translation">
 											<digi:trn key="aim:clickToGenerateReport">Click here to Generate Chart</digi:trn>
 										</bean:define>
-										<digi:link href="/advancedReportManager.do?check=forward"  styleClass="sub-nav" title="<%=translation%>" >
+										<digi:link href="/advancedReportManager.do?check=forward"  styleClass="sub-nav" title="<%=translation%>" onclick="javascript:alert('Charts Coming Soon...');">
 										6 : <digi:trn key="aim:GenerateChart">Generate Chart</digi:trn>
 										</digi:link>
 										</td>	
@@ -340,7 +342,7 @@ function checkUncheckAll2() {
 											</tr>	<!-- Add and Remove Button-->
 											<tr>
 												<td align="right" colspan="2">
-													<input type="button" name="Cancel" value="Cancel" class="dr-menu" bgcolor="#ffffff">
+													<input type="button" name="Cancel" value=" Cancel " class="dr-menu" onclick="return quitAdvRptMngr()" >
 													<input type=button value="  Next  " class="dr-menu" onclick="javascript:gotoStep()" >															
 												</td>
 											</tr>

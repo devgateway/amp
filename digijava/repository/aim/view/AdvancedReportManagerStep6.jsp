@@ -6,7 +6,7 @@
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
 
-
+<script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/advanceReportManager.js"/>"></script>
 <script language="JavaScript">
 
 function moveUp(val)
@@ -227,7 +227,7 @@ function checkUncheckAll2() {
 													<bean:define id="translation">
 														<digi:trn key="aim:clickToselectrows/hierarchies" >Click here to select rows/hierarchies</digi:trn>
 													</bean:define>
-													<digi:link href="/advancedReportManager.do?check=SelectMeasures"  styleClass="sub-nav" title="<%=translation%>" >
+													<digi:link href="/advancedReportManager.do?check=SelectRows"  styleClass="sub-nav" title="<%=translation%>" >
 														2 : <digi:trn key="aim:SelectRows/hierarchies">Select rows/hierarchies</digi:trn>
 													</digi:link>
 												</td>										
@@ -265,7 +265,7 @@ function checkUncheckAll2() {
 										<bean:define id="translation">
 											<digi:trn key="aim:clickToGenerateReport">Click here to Generate Chart</digi:trn>
 										</bean:define>
-										<digi:link href="/advancedReportManager.do?check=SelectMeasures"  styleClass="sub-nav" title="<%=translation%>" >
+										<digi:link href="/advancedReportManager.do?check=SelectMeasures"  styleClass="sub-nav" title="<%=translation%>" onclick="javascript:alert('Charts Coming Soon...');">
 										6 : <digi:trn key="aim:GenerateChart">Generate Chart</digi:trn>
 										</digi:link>
 										</td>	
@@ -404,8 +404,8 @@ function checkUncheckAll2() {
 											<tr>
 												<td align="right" colspan="2">
 													<input type=button name=back value="<< Previous"   class="dr-menu" onclick="javascript:history.back()">												
-													<input type="button" name="Cancel" value="Cancel" class="dr-menu" bgcolor="#ffffff">
-													<input type=button value="  Next  " class="dr-menu" onclick="javascript:gotoStep()" >															
+													<input type="button" name="Cancel" value=" Cancel " class="dr-menu" onclick="return quitAdvRptMngr()" >
+													<input type=button value="  Next >>" class="dr-menu" onclick="javascript:gotoStep()" >															
 												</td>
 											</tr>
 										</TABLE>

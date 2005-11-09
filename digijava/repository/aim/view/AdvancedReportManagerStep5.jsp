@@ -6,7 +6,7 @@
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
 
-
+<script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/advanceReportManager.js"/>"></script>
 <script language="JavaScript">
 
 function moveUp(val)
@@ -155,7 +155,7 @@ function deleteColumn()
 													<bean:define id="translation">
 														<digi:trn key="aim:clickToselectrows/hierarchies">Click here to select rows/hierarchies</digi:trn>
 													</bean:define>
-													<digi:link href="/advancedReportManager.do"  styleClass="sub-nav3" title="<%=translation%>" >
+													<digi:link href="/advancedReportManager.do?check=SelectRows"  styleClass="sub-nav3" title="<%=translation%>" >
 														2 : <digi:trn key="aim:SelectRows/hierarchies">Select rows/hierarchies</digi:trn>
 													</digi:link>
 												</td>										
@@ -193,7 +193,7 @@ function deleteColumn()
 										<bean:define id="translation">
 											<digi:trn key="aim:clickToGenerateReport">Click here to Generate Chart</digi:trn>
 										</bean:define>
-										<digi:link href="/advancedReportManager.do?check=charts"  styleClass="sub-nav" title="<%=translation%>" >
+										<digi:link href="/advancedReportManager.do?check=SelectRows"  styleClass="sub-nav" title="<%=translation%>" onclick="javascript:alert('Charts Coming Soon...');">
 										6 : <digi:trn key="aim:GenerateChart">Generate Chart</digi:trn>
 										</digi:link>
 										</td>	
@@ -229,16 +229,18 @@ function deleteColumn()
 																			<TABLE width="100%" cellPadding=2 cellSpacing=1 vAlign="top" align="top" bgcolor="#aaaaaa" border=0>
 																				<c:if test="${!empty aimAdvancedReportForm.addedColumns}">
 																					<logic:iterate name="aimAdvancedReportForm" id="addedColumns"	property="addedColumns" >
-																						<TR bgcolor="#ffffff">
-																							<td align="left" width="98%" valign=top>
-																								<c:out value="${addedColumns.columnName}"/>
-																							</td>
-																							<td align="right">
-																							<html:multibox property="selectedColumns">
-																							  <c:out value="${addedColumns.columnId}"/>
-					  																	    </html:multibox>
-																							</td>
-																						</tr>
+																						<c:if test="${addedColumns.columnName == 'Donor' || addedColumns.columnName == 'Sector' || addedColumns.columnName == 'Status' || addedColumns.columnName == 'Type Of Assistance' || addedColumns.columnName == 'Funding Instrument' }">
+																							<TR bgcolor="#ffffff">
+																								<td align="left" width="98%" valign=top>
+																									<c:out value="${addedColumns.columnName}"/>
+																								</td>												
+																								<td align="right">
+																								<html:multibox property="selectedColumns">
+																								  <c:out value="${addedColumns.columnId}"/>
+						  																	    </html:multibox>
+																								</td>
+																							</tr>
+																						</c:if>
 																					</logic:iterate>
 																					
 																				</c:if>
@@ -331,8 +333,8 @@ function deleteColumn()
 											<tr>
 												<td align="right" colspan="2">
 													<input type=button name=back value="<< Previous"   class="dr-menu" onclick="javascript:history.back()">												
-													<input type="button" name="Cancel" value="Cancel" class="dr-menu" bgcolor="#ffffff">
-													<input type=button value="  Next  " class="dr-menu" onclick="javascript:gotoStep()" >															
+													<input type="button" name="Cancel" value=" Cancel " class="dr-menu" onclick="return quitAdvRptMngr()" >
+													<input type=button value="  Next >>" class="dr-menu" onclick="javascript:gotoStep()" >															
 												</td>
 											</tr>
 										</TABLE>

@@ -1552,7 +1552,7 @@ public class DbUtil {
 					iter = null;
 					noActivities = true;
 				}
-			} else if (teamLeadFlag == true || ampTeam.getAccessType().equals("Management")){
+			} else if (teamLeadFlag == true || "Management".equals(ampTeam.getAccessType())){
 			/*	queryString = "select report from "
 					+ AmpReportCache.class.getName()
 					+ " report where report.ampTeamId in(" + inClause
@@ -1560,10 +1560,10 @@ public class DbUtil {
 					+ ",report.ampDonorId";    */
 				String inClause2 = null;
 				Iterator actItr = null;
-				if (teamLeadFlag)
-					actItr = DbUtil.getApprovedOrCreatorActivities(ampTeamId,ampTeamMemId).iterator();
-				else
+				if ("Management".equals(ampTeam.getAccessType()))
 					actItr = DbUtil.getApprovedOrCreatorActivities(new Long(0),ampTeamMemId).iterator();
+				else
+					actItr = DbUtil.getApprovedOrCreatorActivities(ampTeamId,ampTeamMemId).iterator();
 				while(actItr.hasNext()) {
 					Long actId = (Long) actItr.next();
 					if (inClause2 == null)

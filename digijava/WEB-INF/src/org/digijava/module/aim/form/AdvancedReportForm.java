@@ -97,6 +97,7 @@ public class AdvancedReportForm extends ActionForm
 	private String totUnDisb;
 
 	private Collection titles;
+	private Collection multiReport;
 	private String pieImageUrl="";
 	private String barImageUrl="";
 
@@ -107,6 +108,7 @@ public class AdvancedReportForm extends ActionForm
 	private String plDisbFlag;
 	private String plExpFlag;
 	private String acBalFlag;
+	private String hierarchyFlag;
 
 	private int measureCount = 0;  
 	
@@ -1183,6 +1185,14 @@ private int yrDiff;
 		acBalFlag = string;
 	}
 
+	public String getHierarchyFlag() {
+		return hierarchyFlag;
+	}
+
+	public void setHierarchyFlag(String string) {
+		hierarchyFlag = string;
+	}
+
 	public int getFundColumns() {
 		return fundColumns;
 	}
@@ -1203,6 +1213,14 @@ private int yrDiff;
 	}
 	public void setCreatedReportId(String createdReportId) {
 		this.createdReportId = createdReportId;
+	}
+
+	public Collection getMultiReport() {
+		return multiReport;
+	}
+
+	public void setMultiReport(Collection collection) {
+		multiReport = collection;
 	}
 
 } //		End of Class

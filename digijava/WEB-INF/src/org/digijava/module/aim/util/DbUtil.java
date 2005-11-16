@@ -5447,9 +5447,12 @@ public class DbUtil {
 					+ " activity where activity.team.ampTeamId in(" + inClause
 					+ ")";
 			q = session.createQuery(queryString);
+			logger.info("Activity List: " + q.list().size());
 			iterActivity = q.list().iterator();
 			while (iterActivity.hasNext()) {
 				AmpActivity ampActivity = (AmpActivity) iterActivity.next();
+				
+//				logger.info("Org Role List: " + ampActivity.getOrgrole().size());
 				iter = ampActivity.getOrgrole().iterator();
 				while (iter.hasNext()) {
 					AmpOrgRole ampOrgRole = (AmpOrgRole) iter.next();
@@ -5460,6 +5463,7 @@ public class DbUtil {
 					}
 				}
 			}
+			logger.info("Donors: " + donor.size());
 			int n = donor.size();
 			for (int i = 0; i < n - 1; i++) {
 				for (int j = 0; j < n - 1 - i; j++) {
@@ -5476,7 +5480,7 @@ public class DbUtil {
 			}
 
 		} catch (Exception ex) {
-			logger.error("Unable to get Donor " + ex.getMessage());
+			logger.info("Unable to get Donor " + ex.getMessage());
 		} finally {
 			try {
 				if (session != null) {

@@ -18,6 +18,7 @@ public class multiReport
 	private String donorAgency;
 	private int donorCount;
 	private Collection project;
+	private Collection hierarchy;
 	private String donorCommAmount;
 	private String donorDisbAmount;
 	private String donorExpAmount;
@@ -411,6 +412,16 @@ public class multiReport
 	{
 	
 		sectorExpAmount = s;
+	}
+
+	public Collection getHierarchy() 
+	{
+		return hierarchy;
+	}
+
+	public void setHierarchy(Collection c) 
+	{
+		hierarchy = c;
 	}
 
 	

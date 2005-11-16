@@ -5,6 +5,7 @@
 package org.digijava.module.aim.util;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Vector;
@@ -23,7 +24,10 @@ import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.dbentity.AmpActivity;
 import org.digijava.module.aim.dbentity.AmpColumns;
 import org.digijava.module.aim.dbentity.AmpMeasures;
+import org.digijava.module.aim.dbentity.AmpModality;
 import org.digijava.module.aim.dbentity.AmpReports;
+import org.digijava.module.aim.dbentity.AmpStatus;
+import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpPhysicalComponentReport;
 import org.digijava.module.aim.dbentity.AmpTeam;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
@@ -31,7 +35,9 @@ import org.digijava.module.aim.dbentity.AmpTeamReports;
 import org.digijava.module.aim.dbentity.AmpReportCache;
 import org.digijava.module.aim.dbentity.AmpReportSector;
 import org.digijava.module.aim.dbentity.AmpReportColumn;
+import org.digijava.module.aim.dbentity.AmpReportHierarchy;
 import org.digijava.module.aim.dbentity.AmpActor;
+import org.digijava.module.aim.dbentity.AmpTermsAssist;
 import org.digijava.module.editor.dbentity.Editor;
 import org.digijava.module.aim.dbentity.AmpSector;
 import org.digijava.module.aim.helper.AmpFund;
@@ -43,6 +49,7 @@ import org.digijava.module.aim.helper.multiReport;
 import org.digijava.module.aim.helper.Report;
 import org.digijava.module.aim.helper.ReportSelectionCriteria;
 import org.digijava.module.aim.helper.AdvancedReport;
+import org.digijava.module.aim.helper.AdvancedHierarchyReport;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.EthiopianCalendar;
 import org.digijava.module.aim.helper.AmpDonors;
@@ -10911,9 +10918,12 @@ public class ReportUtil {
 		Iterator itr=null;
 		Iterator itrColumn=null;
 		Iterator itrMeasure=null;
+		Iterator itrHierarchy=null;
 		ArrayList selection=new ArrayList();
+		ArrayList hierarchy=new ArrayList();
 		ReportSelectionCriteria rsc = new ReportSelectionCriteria();
 		rsc.setColumns(new ArrayList());
+		rsc.setHierarchy(new ArrayList());
 		Column c=null;
 		AmpReports ampReports=null;
 		try 
@@ -10934,6 +10944,7 @@ public class ReportUtil {
 				logger.info("Column Size: " + ampReports.getColumns().size());
 				itrColumn=ampReports.getColumns().iterator();
 				itrMeasure=ampReports.getMeasures().iterator();
+				itrHierarchy=ampReports.getHierarchies().iterator();
 			}
 			while (itrColumn.hasNext()) 
 			{
@@ -10958,6 +10969,28 @@ public class ReportUtil {
 			{
 				AmpMeasures report = (AmpMeasures) itrMeasure.next();
 				rsc.getMeasures().add(report.getMeasureId());
+			}
+			if(ampReports.getHierarchies().size()>0)
+			{
+				while (itrHierarchy.hasNext()) 
+				{
+					itrHierarchy.next();
+					c=new Column();
+					hierarchy.add(c);
+				}
+
+				itrHierarchy=ampReports.getHierarchies().iterator();
+				while (itrHierarchy.hasNext()) 
+				{
+					AmpReportHierarchy report = (AmpReportHierarchy) itrHierarchy.next();
+					c=new Column();
+					c.setColumnId(report.getColumn().getColumnId());
+					c.setColumnName(report.getColumn().getColumnName());
+					c.setColumnAlias(report.getColumn().getAliasName());
+					hierarchy.set((Integer.parseInt(report.getLevelId())-1),c);
+				
+				}
+				rsc.getHierarchy().addAll(hierarchy);
 			}
 		} 
 		catch(Exception e)
@@ -10985,6 +11018,7 @@ public class ReportUtil {
 		Query q = null ;
 		ArrayList ampReports = new ArrayList() ;
 		Collection columns=new ArrayList();
+		ArrayList hierarchy=new ArrayList();
 		ArrayList measures=new ArrayList();
 		Report reports=null;
 		String queryString = null;
@@ -11008,6 +11042,10 @@ public class ReportUtil {
 		String actualCompletionDate=null;
 		double[][] actualFunds=new double[yrCount][3];
 		double[][] plannedFunds=new double[yrCount][3];
+		double[][] subTotActualFunds=new double[yrCount][3];
+		double[][] subTotPlannedFunds=new double[yrCount][3];
+		double[][] totActualFunds=new double[yrCount][3];
+		double[][] totPlannedFunds=new double[yrCount][3];
 		String inClause=null;
 		String orderClause=null;
 		String title=null;
@@ -11016,7 +11054,10 @@ public class ReportUtil {
 		double toExchangeRate=1.0;
 		double fromExchangeRate=0.0;
 		double amount=0.0;
-		double totUnDisb = 0, actTotalCommit = 0, actTotalDisb = 0, actTotalExp = 0, planTotalCommit = 0, planTotalDisb = 0, planTotalExp = 0;
+		double sumUnDisb = 0, actSumCommit = 0, actSumDisb = 0, actSumExp = 0, planSumCommit = 0, planSumDisb = 0, planSumExp = 0;
+		double unDisbSubTotal = 0, actCommitSubTotal = 0, actDisbSubTotal = 0, actExpSubTotal = 0, planCommitSubTotal = 0, planDisbSubTotal = 0, planExpSubTotal = 0;
+		double unDisbTotal = 0, actCommitTotal = 0, actDisbTotal = 0, actExpTotal = 0, planCommitTotal = 0, planDisbTotal = 0, planExpTotal = 0;
+
 		int fiscalYear=0,fiscalQuarter=0;
 		int maxYear=0;
 		int minYear=0;
@@ -11025,11 +11066,16 @@ public class ReportUtil {
 		String objective=null;
 		String description=null;
 		Iterator iterSector=null;
-		
+		ArrayList activityIds=new ArrayList();
+		Iterator iterLevel1=null;
+		Iterator iterLevel2=null;
 		DecimalFormat mf = new DecimalFormat("###,###,###,###,###") ;
 		Collection currencies=null;
 		int firstColumn=0;	
 		AdvancedReport report=null;
+		AdvancedHierarchyReport ahReport=null;
+		AdvancedHierarchyReport ahTemp=null;
+		multiReport mreport=null;
 		AmpReportCache ampReportCache = null;
 		try
 		{
@@ -11054,6 +11100,7 @@ public class ReportUtil {
 
 			ReportSelectionCriteria rsc=ReportUtil.getReportSelectionCriteria(ampReportId);
 			columns=rsc.getColumns();
+			hierarchy=(ArrayList)rsc.getHierarchy();
 			measures=(ArrayList)rsc.getMeasures();
 			iter=columns.iterator();
 			while(iter.hasNext())
@@ -11081,13 +11128,12 @@ public class ReportUtil {
 			
 	//		report.setProjects(new ArrayList());
 	//		Project project=null;
-			if(q!=null)
+			if(q!=null && rsc.getHierarchy().size()==0)
 			{
 				iter = q.list().iterator();
 				while(iter.hasNext())
 				{
 					ampReportCache = (AmpReportCache) iter.next(); 
-
 					if(new Long(fiscalCalId).equals(Constants.ETH_FY) || new Long(fiscalCalId).equals(Constants.ETH_CAL))
 					{
 						if(ampReportCache.getTransactionDate()!=null)
@@ -11111,7 +11157,7 @@ public class ReportUtil {
 							logger.debug("From Year: " + fromYr);
 							logger.debug("From Year: " + toYr);
 		/*					if(fiscalYear<fromYr || fiscalYear>toYr)
-								continue;*/
+							continue;*/
 						}
 					}
 					if(!ampModalityId.equals(All))
@@ -11121,7 +11167,6 @@ public class ReportUtil {
 						if(!(ampModalityId.equals(ampReportCache.getAmpModalityId())))
 							continue;
 					}
-
 					if(!ampStatusId.equals(All))
 					{
 						if(ampReportCache.getAmpStatusId()==null)
@@ -11137,7 +11182,7 @@ public class ReportUtil {
 						if(!(ampDonorId.equals(ampReportCache.getAmpDonorId())))
 							continue;
 					}
-		
+			
 					if(!ampSectorId.equals(All))
 					{
 						int sflag=0;
@@ -11176,7 +11221,7 @@ public class ReportUtil {
 						if(location.indexOf(region)==-1)
 							continue;
 					}
-					
+						
 					if(reports==null || !(reports.getAmpActivityId().equals(ampReportCache.getAmpActivityId())))
 					{
 						if(reports!=null)
@@ -11202,7 +11247,7 @@ public class ReportUtil {
 									report.getDonors().addAll(donors);
 								}
 								if(c.getColumnId().equals(Constants.ACTUAL_START_DATE))
-									report.setActualStartDate(actualStartDate);
+								report.setActualStartDate(actualStartDate);
 								if(c.getColumnId().equals(Constants.ACTIVITY_NAME))
 									report.setTitle(title);
 								if(c.getColumnId().equals(Constants.TERM_ASSIST_NAME))
@@ -11261,27 +11306,27 @@ public class ReportUtil {
 								if(measures.indexOf(new Long(7))!=-1)
 									ampFund.setUnDisbAmount(mf.format(actualFunds[i][0]-actualFunds[i][1]));	
 								
-								actTotalCommit = actTotalCommit + actualFunds[i][0];
-								actTotalDisb = actTotalDisb + actualFunds[i][1];
-								actTotalExp = actTotalExp + actualFunds[i][2];
-								planTotalCommit = planTotalCommit + plannedFunds[i][0];
-								planTotalDisb = planTotalDisb + plannedFunds[i][1];
-								planTotalExp = planTotalExp + plannedFunds[i][2];
-								totUnDisb = totUnDisb + actualFunds[i][0]-actualFunds[i][1];
+								actSumCommit = actSumCommit + actualFunds[i][0];
+								actSumDisb = actSumDisb + actualFunds[i][1];
+								actSumExp = actSumExp + actualFunds[i][2];
+								planSumCommit = planSumCommit + plannedFunds[i][0];
+								planSumDisb = planSumDisb + plannedFunds[i][1];
+								planSumExp = planSumExp + plannedFunds[i][2];
+								sumUnDisb = sumUnDisb + (actualFunds[i][0]-actualFunds[i][1]);
 
 								
 								report.getAmpFund().add(ampFund);
 							}
 							AmpFund fund = new AmpFund();
-							fund.setCommAmount(mf.format(actTotalCommit));
-							fund.setDisbAmount(mf.format(actTotalDisb));
-							fund.setExpAmount(mf.format(actTotalExp));
-							fund.setPlCommAmount(mf.format(planTotalCommit));
-							fund.setPlDisbAmount(mf.format(planTotalDisb));
-							fund.setPlExpAmount(mf.format(planTotalExp));
-							fund.setUnDisbAmount(mf.format(totUnDisb));
+							fund.setCommAmount(mf.format(actSumCommit));
+							fund.setDisbAmount(mf.format(actSumDisb));
+							fund.setExpAmount(mf.format(actSumExp));
+							fund.setPlCommAmount(mf.format(planSumCommit));
+							fund.setPlDisbAmount(mf.format(planSumDisb));
+							fund.setPlExpAmount(mf.format(planSumExp));
+							fund.setUnDisbAmount(mf.format(sumUnDisb));
 							report.getAmpFund().add(fund) ;	
-
+	
 							
 							reports.getRecords().add(report);
 							logger.info("Reports Size: " + reports.getRecords().size());
@@ -11297,7 +11342,7 @@ public class ReportUtil {
 							regions.clear();
 							contactName=null;
 							minYear=maxYear=0;
-							totUnDisb=actTotalCommit=actTotalDisb=actTotalExp=planTotalCommit=planTotalDisb=planTotalExp = 0;
+							sumUnDisb=actSumCommit=actSumDisb=actSumExp=planSumCommit=planSumDisb=planSumExp = 0;
 							for(int i=0;i<yrCount;i++)
 							{
 								actualFunds[i][0]=actualFunds[i][1]=actualFunds[i][2]=0;
@@ -11345,12 +11390,12 @@ public class ReportUtil {
 						if(ampActivity.getDescription()!=null)
 						{
 							//Editor ed = org.digijava.module.editor.util.DbUtil.getEditor(ampReportCache.getActivityDescription(),"en");
-							//description=ed.getBody();
+								//description=ed.getBody();
 							description = ampActivity.getDescription();
 						}
 						else
 							description=" ";
-						
+							
 						if(ampActivity.getObjective()!=null)
 						{
 							Editor ed = org.digijava.module.editor.util.DbUtil.getEditor(ampActivity.getObjective(),"en");
@@ -11372,7 +11417,7 @@ public class ReportUtil {
 							contactName=contactName + " " + ampActivity.getMofedCntLastName();
 						if(contactName!=null)
 							contacts.add(contactName);
-
+	
 					}
 					logger.info("Title:" + title);
 					if(donors.indexOf(ampReportCache.getDonorName())==-1 && ampReportCache.getDonorName()!=null)
@@ -11393,44 +11438,43 @@ public class ReportUtil {
 							minYear=fiscalYear;
 						if(maxYear < fiscalYear)
 							maxYear=fiscalYear;
-
 						if(ampReportCache.getCurrencyCode().equals("USD"))
 							fromExchangeRate=1.0;
 						else
 							fromExchangeRate=DbUtil.getExchangeRate(ampReportCache.getCurrencyCode(),Constants.PLANNED,ampReportCache.getTransactionDate());
 						if(ampCurrencyCode.equals("USD"))
 							toExchangeRate=1.0;
-						else
+						else	
 							toExchangeRate=DbUtil.getExchangeRate(ampCurrencyCode,Constants.PLANNED,ampReportCache.getTransactionDate());
 						
-							if(ampReportCache.getActualCommitment().doubleValue()>0 && ampReportCache.getPerspective().equals(perspective))
+						if(ampReportCache.getActualCommitment().doubleValue()>0 && ampReportCache.getPerspective().equals(perspective))
+						{
+							amount=CurrencyWorker.convert1(ampReportCache.getActualCommitment().doubleValue(),fromExchangeRate,toExchangeRate);
+							actualCommitment=actualCommitment + amount;
+							if(fiscalYear>=fromYr && fiscalYear<=toYr)
 							{
-								amount=CurrencyWorker.convert1(ampReportCache.getActualCommitment().doubleValue(),fromExchangeRate,toExchangeRate);
-								actualCommitment=actualCommitment + amount;
-								if(fiscalYear>=fromYr && fiscalYear<=toYr)
-								{
-									if(actualFunds[fiscalYear%fromYr][0]==0)
-										actualFunds[fiscalYear%fromYr][0]=amount;
-									else
-									if(actualFunds[fiscalYear%fromYr][0]>0)
+								if(actualFunds[fiscalYear%fromYr][0]==0)
+									actualFunds[fiscalYear%fromYr][0]=amount;
+								else
+								if(actualFunds[fiscalYear%fromYr][0]>0)
 										actualFunds[fiscalYear%fromYr][0]=actualFunds[fiscalYear%fromYr][0] + amount;
-								}
 							}
-							amount=0.0;
+						}
+						amount=0.0;
 						
-							if(ampReportCache.getActualDisbursement().doubleValue()>0 && ampReportCache.getPerspective().equals(perspective))
+						if(ampReportCache.getActualDisbursement().doubleValue()>0 && ampReportCache.getPerspective().equals(perspective))
+						{
+							amount=CurrencyWorker.convert1(ampReportCache.getActualDisbursement().doubleValue(),fromExchangeRate,toExchangeRate);
+							if(fiscalYear>=fromYr && fiscalYear<=toYr)
 							{
-								amount=CurrencyWorker.convert1(ampReportCache.getActualDisbursement().doubleValue(),fromExchangeRate,toExchangeRate);
-								if(fiscalYear>=fromYr && fiscalYear<=toYr)
-								{
-									if(actualFunds[fiscalYear%fromYr][1]==0)
-										actualFunds[fiscalYear%fromYr][1]=amount;
-									else
-									if(actualFunds[fiscalYear%fromYr][1]>0)
-										actualFunds[fiscalYear%fromYr][1]=actualFunds[fiscalYear%fromYr][1] + amount;
-								}
+								if(actualFunds[fiscalYear%fromYr][1]==0)
+									actualFunds[fiscalYear%fromYr][1]=amount;
+								else
+								if(actualFunds[fiscalYear%fromYr][1]>0)
+									actualFunds[fiscalYear%fromYr][1]=actualFunds[fiscalYear%fromYr][1] + amount;
 							}
-							amount=0.0;
+						}
+						amount=0.0;
 						
 						if(measures.indexOf(new Long(3))!=-1)
 						{
@@ -11580,31 +11624,250 @@ public class ReportUtil {
 					if(measures.indexOf(new Long(7))!=-1)
 						ampFund.setUnDisbAmount(mf.format(actualFunds[i][0]-actualFunds[i][1]));
 					
-					actTotalCommit = actTotalCommit + actualFunds[i][0];
-					actTotalDisb = actTotalDisb + actualFunds[i][1];
-					actTotalExp = actTotalExp + actualFunds[i][2];
-					planTotalCommit = planTotalCommit + plannedFunds[i][0];
-					planTotalDisb = planTotalDisb + plannedFunds[i][1];
-					planTotalExp = planTotalExp + plannedFunds[i][2];
-					totUnDisb = totUnDisb + actualFunds[i][0]-actualFunds[i][1];
-
-
-					
+					actSumCommit = actSumCommit + actualFunds[i][0];
+					actSumDisb = actSumDisb + actualFunds[i][1];
+					actSumExp = actSumExp + actualFunds[i][2];
+					planSumCommit = planSumCommit + plannedFunds[i][0];
+					planSumDisb = planSumDisb + plannedFunds[i][1];
+					planSumExp = planSumExp + plannedFunds[i][2];
+					sumUnDisb = sumUnDisb + (actualFunds[i][0]-actualFunds[i][1]);
+			
 					report.getAmpFund().add(ampFund);
 				}
 				
 				AmpFund fund = new AmpFund();
-				fund.setCommAmount(mf.format(actTotalCommit));
-				fund.setDisbAmount(mf.format(actTotalDisb));
-				fund.setExpAmount(mf.format(actTotalExp));
-				fund.setPlCommAmount(mf.format(planTotalCommit));
-				fund.setPlDisbAmount(mf.format(planTotalDisb));
-				fund.setPlExpAmount(mf.format(planTotalExp));
-				fund.setUnDisbAmount(mf.format(totUnDisb));
+				fund.setCommAmount(mf.format(actSumCommit));
+				fund.setDisbAmount(mf.format(actSumDisb));
+				fund.setExpAmount(mf.format(actSumExp));
+				fund.setPlCommAmount(mf.format(planSumCommit));
+				fund.setPlDisbAmount(mf.format(planSumDisb));
+				fund.setPlExpAmount(mf.format(planSumExp));
+				fund.setUnDisbAmount(mf.format(sumUnDisb));
 				report.getAmpFund().add(fund) ;	
 
 				reports.getRecords().add(report);
 				ampReports.add(reports);
+			}
+			// Code for hierarchial report
+			if(q!=null && rsc.getHierarchy().size()>0)
+			{
+				mreport=new multiReport();
+				mreport.setHierarchy(new ArrayList());
+				if(hierarchy.size()==1)
+				{
+					Column colLevel1=(Column) hierarchy.get(0);
+					dbReturnSet=ReportUtil.getLevel1AdvancedReport(ampTeamId,colLevel1.getColumnId());
+				}
+				if(hierarchy.size()==2)
+				{
+					Column colLevel1=(Column) hierarchy.get(0);
+					Column colLevel2=(Column) hierarchy.get(1);
+					dbReturnSet=ReportUtil.getLevel2AdvancedReport(ampTeamId,colLevel1.getColumnId(),colLevel2.getColumnId());
+				}
+				iterLevel1=dbReturnSet.iterator();
+				while(iterLevel1.hasNext())
+				{
+					AdvancedHierarchyReport ahReportLevel1=(AdvancedHierarchyReport) iterLevel1.next();
+					ahReport=new AdvancedHierarchyReport();
+					ahReport.setProject(new ArrayList());
+					ahReport.setName(ahReportLevel1.getName());
+					ahReport.setLabel(ahReportLevel1.getLabel());
+					logger.info("Level 1 Name for Label " + ahReport.getLabel() + ": " + ahReport.getName());
+					//activityIds.clear();
+					activityIds=(ArrayList)ahReportLevel1.getActivities();
+					if(ahReportLevel1.getLevels()!=null)
+					{
+						logger.info("Inside Level");
+						logger.info("Number of records in level 2 " + ahReportLevel1.getLevels().size());
+						ahReport.setLevels(new ArrayList());
+						iterLevel2=ahReportLevel1.getLevels().iterator();
+						while(iterLevel2.hasNext())
+						{
+							logger.info("begin while");
+							AdvancedHierarchyReport ahReportLevel2=(AdvancedHierarchyReport) iterLevel2.next();
+							ahTemp=new AdvancedHierarchyReport();
+							ahTemp.setName(ahReportLevel2.getName());
+							ahTemp.setLabel(ahReportLevel2.getLabel());
+							ahTemp.setProject(new ArrayList());
+							//activityIds.clear();
+							activityIds=(ArrayList)ahReportLevel2.getActivities();
+							logger.info("Level 2 Name for Label " + ahTemp.getLabel() + ": " + ahTemp.getName());
+							logger.info("Number of activities at level 1: " + activityIds.size());
+							ahTemp=getAdvancedReportRecords(q.list(),activityIds,columns,measures,fromYr,toYr,perspective,fiscalCalId,ampCurrencyCode,ahTemp);
+							ahReport.getLevels().add(ahTemp);
+							Iterator iterFund = ahTemp.getFundSubTotal().iterator();
+							for(int i=0;i<=yrCount ;i++ )
+							{
+								AmpFund ampFund=(AmpFund) iterFund.next();
+
+								if(i<yrCount)
+								{
+									subTotActualFunds[i][0]=subTotActualFunds[i][0] + Double.parseDouble(DecimalToText.removeCommas(ampFund.getCommAmount()));
+									subTotActualFunds[i][1]=subTotActualFunds[i][1] + Double.parseDouble(DecimalToText.removeCommas(ampFund.getDisbAmount()));
+									subTotActualFunds[i][2]=subTotActualFunds[i][2] + Double.parseDouble(DecimalToText.removeCommas(ampFund.getExpAmount()));
+									subTotPlannedFunds[i][0]=subTotPlannedFunds[i][0] + Double.parseDouble(DecimalToText.removeCommas(ampFund.getPlCommAmount()));
+									subTotPlannedFunds[i][1]=subTotPlannedFunds[i][1] + Double.parseDouble(DecimalToText.removeCommas(ampFund.getPlDisbAmount()));
+									subTotPlannedFunds[i][2]=subTotPlannedFunds[i][2] + Double.parseDouble(DecimalToText.removeCommas(ampFund.getPlExpAmount()));
+								}
+								if(i==yrCount)						
+								{
+									actCommitSubTotal = actCommitSubTotal + Double.parseDouble(DecimalToText.removeCommas(ampFund.getCommAmount()));
+									actDisbSubTotal = actDisbSubTotal + Double.parseDouble(DecimalToText.removeCommas(ampFund.getDisbAmount()));
+									actExpSubTotal = actExpSubTotal + Double.parseDouble(DecimalToText.removeCommas(ampFund.getExpAmount()));
+									planCommitSubTotal = planCommitSubTotal  + Double.parseDouble(DecimalToText.removeCommas(ampFund.getPlCommAmount()));
+									planDisbSubTotal = planDisbSubTotal + Double.parseDouble(DecimalToText.removeCommas(ampFund.getPlDisbAmount()));
+									planExpSubTotal = planExpSubTotal + Double.parseDouble(DecimalToText.removeCommas(ampFund.getPlExpAmount()));
+									unDisbSubTotal = unDisbSubTotal + (Double.parseDouble(DecimalToText.removeCommas(ampFund.getCommAmount())) - Double.parseDouble(DecimalToText.removeCommas(ampFund.getDisbAmount())));
+								}
+	
+							}
+						}//End of Level 2 iteration
+						//logger.info("level2 size: " + ahReport.getLevels().size());
+						if(ahReport.getLevels().size()>0)
+						{
+							ahReport.setFundSubTotal(new ArrayList());
+							for(int i=0;i<yrCount;i++)
+							{
+								AmpFund ampFund=new AmpFund();
+								if(measures.indexOf(new Long(1))!=-1)
+									ampFund.setCommAmount(mf.format(subTotActualFunds[i][0])); 
+								if(measures.indexOf(new Long(2))!=-1)
+									ampFund.setDisbAmount(mf.format(subTotActualFunds[i][1])); 
+								if(measures.indexOf(new Long(3))!=-1)
+									ampFund.setExpAmount(mf.format(subTotActualFunds[i][2]));	
+								if(measures.indexOf(new Long(4))!=-1)
+									ampFund.setPlCommAmount(mf.format(subTotPlannedFunds[i][0])); 
+								if(measures.indexOf(new Long(5))!=-1)
+									ampFund.setPlDisbAmount(mf.format(subTotPlannedFunds[i][1])); 
+								if(measures.indexOf(new Long(6))!=-1)
+									ampFund.setPlExpAmount(mf.format(subTotPlannedFunds[i][2]));	
+								if(measures.indexOf(new Long(7))!=-1)
+									ampFund.setUnDisbAmount(mf.format(subTotActualFunds[i][0]-subTotActualFunds[i][1]));
+							
+								ahReport.getFundSubTotal().add(ampFund);
+	
+								totActualFunds[i][0] = totActualFunds[i][0] + subTotActualFunds[i][0];
+								totActualFunds[i][1] = totActualFunds[i][1] + subTotActualFunds[i][1];
+								totActualFunds[i][2] = totActualFunds[i][2] + subTotActualFunds[i][2];
+								totPlannedFunds[i][0] = totPlannedFunds[i][0] + subTotPlannedFunds[i][0];
+								totPlannedFunds[i][1] = totPlannedFunds[i][1] + subTotPlannedFunds[i][1];
+								totPlannedFunds[i][2] = totPlannedFunds[i][2] + subTotPlannedFunds[i][2];
+							}
+
+							AmpFund fund = new AmpFund();
+							fund.setCommAmount(mf.format(actCommitSubTotal));
+							fund.setDisbAmount(mf.format(actDisbSubTotal));
+							fund.setExpAmount(mf.format(actExpSubTotal));
+							fund.setPlCommAmount(mf.format(planCommitSubTotal));
+							fund.setPlDisbAmount(mf.format(planDisbSubTotal));
+							fund.setPlExpAmount(mf.format(planExpSubTotal));
+							fund.setUnDisbAmount(mf.format(unDisbSubTotal));
+							ahReport.getFundSubTotal().add(fund) ;	
+		
+							actCommitTotal = actCommitTotal + actCommitSubTotal;
+							actDisbTotal = actDisbTotal + actDisbSubTotal;
+							actExpTotal = actExpTotal + actExpSubTotal;
+							planCommitTotal = planCommitTotal + planCommitSubTotal;
+							planDisbTotal = planDisbTotal + planDisbSubTotal;
+							planExpTotal = planExpTotal + planExpSubTotal;
+							unDisbTotal = unDisbTotal + (actCommitTotal-actDisbTotal);
+							mreport.getHierarchy().add(ahReport);
+							unDisbSubTotal=actCommitSubTotal=actDisbSubTotal=actExpSubTotal=planCommitSubTotal=planDisbSubTotal=planExpSubTotal = 0;
+							for(int i=0;i<yrCount;i++)
+							{
+								subTotActualFunds[i][0]=subTotActualFunds[i][1]=subTotActualFunds[i][2]=0;
+								subTotPlannedFunds[i][0]=subTotPlannedFunds[i][1]=subTotPlannedFunds[i][2]=0;
+							}
+						}
+					}
+					else
+					{
+						ahReport=getAdvancedReportRecords(q.list(),activityIds,columns,measures,fromYr,toYr,perspective,fiscalCalId,ampCurrencyCode,ahReport);
+						Iterator iterFund = ahReport.getFundSubTotal().iterator();
+						for(int i=0;i<=yrCount ;i++ )
+						{
+							AmpFund ampFund=(AmpFund) iterFund.next();
+
+							if(i<yrCount)
+							{
+								totActualFunds[i][0]=totActualFunds[i][0] + Double.parseDouble(DecimalToText.removeCommas(ampFund.getCommAmount()));
+								totActualFunds[i][1]=totActualFunds[i][1] + Double.parseDouble(DecimalToText.removeCommas(ampFund.getDisbAmount()));
+								totActualFunds[i][2]=totActualFunds[i][2] + Double.parseDouble(DecimalToText.removeCommas(ampFund.getExpAmount()));
+								totPlannedFunds[i][0]=totPlannedFunds[i][0] + Double.parseDouble(DecimalToText.removeCommas(ampFund.getPlCommAmount()));
+								totPlannedFunds[i][1]=totPlannedFunds[i][1] + Double.parseDouble(DecimalToText.removeCommas(ampFund.getPlDisbAmount()));
+								totPlannedFunds[i][2]=totPlannedFunds[i][2] + Double.parseDouble(DecimalToText.removeCommas(ampFund.getPlExpAmount()));
+							}
+							if(i==yrCount)						
+							{
+								actCommitTotal = actCommitTotal + Double.parseDouble(DecimalToText.removeCommas(ampFund.getCommAmount()));
+								actDisbTotal = actDisbTotal + Double.parseDouble(DecimalToText.removeCommas(ampFund.getDisbAmount()));
+								actExpTotal = actExpTotal + Double.parseDouble(DecimalToText.removeCommas(ampFund.getExpAmount()));
+								planCommitTotal = planCommitTotal  + Double.parseDouble(DecimalToText.removeCommas(ampFund.getPlCommAmount()));
+								planDisbTotal = planDisbTotal + Double.parseDouble(DecimalToText.removeCommas(ampFund.getPlDisbAmount()));
+								planExpTotal = planExpTotal + Double.parseDouble(DecimalToText.removeCommas(ampFund.getPlExpAmount()));
+								unDisbTotal = unDisbTotal + (Double.parseDouble(DecimalToText.removeCommas(ampFund.getCommAmount())) - Double.parseDouble(DecimalToText.removeCommas(ampFund.getDisbAmount())));
+							}
+
+						}
+						mreport.getHierarchy().add(ahReport);
+	
+						actualCommitment=0;
+						actualDisbursement=0;
+						donors.clear();
+						assistance.clear();
+						modality.clear();
+						contacts.clear();
+						sectors.clear();
+						regions.clear();
+						contactName=null;
+						minYear=maxYear=0;
+
+						sumUnDisb=actSumCommit=actSumDisb=actSumExp=planSumCommit=planSumDisb=planSumExp = 0;
+						unDisbSubTotal=actCommitSubTotal=actDisbSubTotal=actExpSubTotal=planCommitSubTotal=planDisbSubTotal=planExpSubTotal = 0;
+						for(int i=0;i<yrCount;i++)
+						{
+							actualFunds[i][0]=actualFunds[i][1]=actualFunds[i][2]=0;
+							plannedFunds[i][0]=plannedFunds[i][1]=plannedFunds[i][2]=0;
+							subTotActualFunds[i][0]=subTotActualFunds[i][1]=subTotActualFunds[i][2]=0;
+							subTotPlannedFunds[i][0]=subTotPlannedFunds[i][1]=subTotPlannedFunds[i][2]=0;
+						}
+				
+					} //End of else
+					
+				}//End of iteration of levels
+				logger.info("Level 1 size: " + mreport.getHierarchy().size());
+				mreport.setFundTotal(new ArrayList());
+				for(int i=0;i<yrCount;i++)
+				{
+					AmpFund ampFund=new AmpFund();
+					if(measures.indexOf(new Long(1))!=-1)
+						ampFund.setCommAmount(mf.format(totActualFunds[i][0])); 
+					if(measures.indexOf(new Long(2))!=-1)
+						ampFund.setDisbAmount(mf.format(totActualFunds[i][1])); 
+					if(measures.indexOf(new Long(3))!=-1)
+						ampFund.setExpAmount(mf.format(totActualFunds[i][2]));	
+					if(measures.indexOf(new Long(4))!=-1)
+						ampFund.setPlCommAmount(mf.format(totPlannedFunds[i][0])); 
+					if(measures.indexOf(new Long(5))!=-1)
+						ampFund.setPlDisbAmount(mf.format(totPlannedFunds[i][1])); 
+					if(measures.indexOf(new Long(6))!=-1)
+						ampFund.setPlExpAmount(mf.format(totPlannedFunds[i][2]));	
+					if(measures.indexOf(new Long(7))!=-1)
+						ampFund.setUnDisbAmount(mf.format(totActualFunds[i][0]-totActualFunds[i][1]));
+				
+					mreport.getFundTotal().add(ampFund);
+				}
+
+				AmpFund fund = new AmpFund();
+				fund.setCommAmount(mf.format(actCommitTotal));
+				fund.setDisbAmount(mf.format(actDisbTotal));
+				fund.setExpAmount(mf.format(actExpTotal));
+				fund.setPlCommAmount(mf.format(planCommitTotal));
+				fund.setPlDisbAmount(mf.format(planDisbTotal));
+				fund.setPlExpAmount(mf.format(planExpTotal));
+				fund.setUnDisbAmount(mf.format(unDisbTotal));
+				mreport.getFundTotal().add(fund) ;	
+				ampReports.add(mreport);
 			}
 		}
 		catch(Exception ex) 		
@@ -11626,20 +11889,20 @@ public class ReportUtil {
 	}
 
 //---------New Function-----------------------------------------------------------------------------
-	public static ArrayList generateAdvancedReport(Long ampTeamId,int fromYr,int toYr, int fiscalCalId,String ampCurrencyCode, String perspective, ArrayList transc, Collection addedColumns)
+	public static ArrayList generateAdvancedReport(Long ampTeamId,int fromYr,int toYr, int fiscalCalId,String ampCurrencyCode, String perspective, ArrayList transc, Collection addedColumns, Collection addedHierarchy)
 	{
 		Session session = null ;
 		Query q = null ;
 		ArrayList ampReports = new ArrayList() ;
 		Collection columns=new ArrayList();
-
 		ArrayList measures = transc;
-
+		ArrayList hierarchy=null;
 		Report reports=null;
 		String queryString = null;
 		Iterator iter=null;
 		Iterator iterColumn=null;
 		Long All=new Long(0);
+		Long ampReportId=new Long(0);
 		double actualCommitment=0;
 		double actualDisbursement=0;
 		int flag=0;
@@ -11655,6 +11918,10 @@ public class ReportUtil {
 		String actualCompletionDate=null;
 		double[][] actualFunds=new double[yrCount][3];
 		double[][] plannedFunds=new double[yrCount][3];
+		double[][] subTotActualFunds=new double[yrCount][3];
+		double[][] subTotPlannedFunds=new double[yrCount][3];
+		double[][] totActualFunds=new double[yrCount][3];
+		double[][] totPlannedFunds=new double[yrCount][3];
 		String ampId=null;
 		String inClause=null;
 		String orderClause=null;
@@ -11671,17 +11938,26 @@ public class ReportUtil {
 		
 		double totActualComm=0;
 		double totActualDisb=0;
-		double totUnDisb = 0, actTotalCommit = 0, actTotalDisb = 0, actTotalExp = 0, planTotalCommit = 0, planTotalDisb = 0, planTotalExp = 0;
+		double sumUnDisb = 0, actSumCommit = 0, actSumDisb = 0, actSumExp = 0, planSumCommit = 0, planSumDisb = 0, planSumExp = 0;
+		double unDisbSubTotal = 0, actCommitSubTotal = 0, actDisbSubTotal = 0, actExpSubTotal = 0, planCommitSubTotal = 0, planDisbSubTotal = 0, planExpSubTotal = 0;
+		double unDisbTotal = 0, actCommitTotal = 0, actDisbTotal = 0, actExpTotal = 0, planCommitTotal = 0, planDisbTotal = 0, planExpTotal = 0;
 		String description=null;
 		String objective=null;
 		
 		Iterator iterSector=null;
+
+		ArrayList activityIds=new ArrayList();
+		Iterator iterLevel1=null;
+		Iterator iterLevel2=null;
 		
 		DecimalFormat mf = new DecimalFormat("###,###,###,###,###") ;
 		Collection currencies=null;
 		int firstColumn=0;	
 		AdvancedReport report=null;
 		AmpReportCache ampReportCache = null;
+		AdvancedHierarchyReport ahReport=null;
+		AdvancedHierarchyReport ahTemp=null;
+		multiReport mreport=null;
 		try
 		{
 //			int yrCount = toYr - fromYr;
@@ -11718,6 +11994,9 @@ public class ReportUtil {
 						orderClause= orderClause + ",report." + ampColuns.getAliasName();
 				}	
 			}
+			logger.info("Hierarchy Size: " + addedHierarchy.size());
+			if(addedHierarchy.size()>0)
+				hierarchy=(ArrayList)addedHierarchy;
 
 			currencies=DbUtil.getAmpCurrencyRate();
 			logger.info("Inclause: " + inClause);
@@ -11727,13 +12006,13 @@ public class ReportUtil {
 			q = session.createQuery(queryString);	
 			logger.info("Query Result: " + q.list().size());
 
-			if(q!=null)
+			if(q!=null && hierarchy.size()==0)
 			{
 				iter = q.list().iterator();
 				while(iter.hasNext())
 				{
 					ampReportCache = (AmpReportCache) iter.next(); 
-				
+									
 					if(reports==null || !(reports.getAmpActivityId().equals(ampReportCache.getAmpActivityId())))
 					{
 						if(reports!=null)
@@ -11741,12 +12020,12 @@ public class ReportUtil {
 							iterColumn=columns.iterator();
 							while(iterColumn.hasNext())
 							{
-								//logger.info("Begin while");
+								logger.info("Begin while");
 								report=new AdvancedReport();
 								report.setDonors(new ArrayList());
-								report.setAssistance(new ArrayList());
 								report.setSectors(new ArrayList());
 								report.setRegions(new ArrayList());
+								report.setAssistance(new ArrayList());
 								report.setModality(new ArrayList());
 								report.setContacts(new ArrayList());
 								AmpColumns c=(AmpColumns) iterColumn.next();
@@ -11759,7 +12038,7 @@ public class ReportUtil {
 									report.getDonors().addAll(donors);
 								}
 								if(c.getColumnId().equals(Constants.ACTUAL_START_DATE))
-									report.setActualStartDate(actualStartDate);
+								report.setActualStartDate(actualStartDate);
 								if(c.getColumnId().equals(Constants.ACTIVITY_NAME))
 									report.setTitle(title);
 								if(c.getColumnId().equals(Constants.TERM_ASSIST_NAME))
@@ -11797,50 +12076,52 @@ public class ReportUtil {
 								reports.getRecords().add(report);
 
 							}
-							
+							logger.info("Reports Size: " + reports.getRecords().size());
 							report=new AdvancedReport();
 							report.setAmpFund(new ArrayList());
 							for(int i=0;i<yrCount;i++)
 							{
 								AmpFund ampFund=new AmpFund();
-								
-								if(measures.indexOf(new Long(1))!=-1)
+								if(measures.indexOf(new Long(1))>=0)
 									ampFund.setCommAmount(mf.format(actualFunds[i][0])); 
-								if(measures.indexOf(new Long(2))!=-1)
+								if(measures.indexOf(new Long(2))>=0)
 									ampFund.setDisbAmount(mf.format(actualFunds[i][1])); 
-								if(measures.indexOf(new Long(3))!=-1)
+								if(measures.indexOf(new Long(3))>=0)
 									ampFund.setExpAmount(mf.format(actualFunds[i][2]));	
-								if(measures.indexOf(new Long(4))!=-1)
+								if(measures.indexOf(new Long(4))>=0)
 									ampFund.setPlCommAmount(mf.format(plannedFunds[i][0])); 
-								if(measures.indexOf(new Long(5))!=-1)
+								if(measures.indexOf(new Long(5))>=0)
 									ampFund.setPlDisbAmount(mf.format(plannedFunds[i][1])); 
-								if(measures.indexOf(new Long(6))!=-1)
+								if(measures.indexOf(new Long(6))>=0)
 									ampFund.setPlExpAmount(mf.format(plannedFunds[i][2]));	
 								if(measures.indexOf(new Long(7))!=-1)
 									ampFund.setUnDisbAmount(mf.format(actualFunds[i][0]-actualFunds[i][1]));	
 								
-								actTotalCommit = actTotalCommit + actualFunds[i][0];
-								actTotalDisb = actTotalDisb + actualFunds[i][1];
-								actTotalExp = actTotalExp + actualFunds[i][2];
-								planTotalCommit = planTotalCommit + plannedFunds[i][0];
-								planTotalDisb = planTotalDisb + plannedFunds[i][1];
-								planTotalExp = planTotalExp + plannedFunds[i][2];
-								totUnDisb = totUnDisb + actualFunds[i][0]-actualFunds[i][1];
-								 
+								actSumCommit = actSumCommit + actualFunds[i][0];
+								actSumDisb = actSumDisb + actualFunds[i][1];
+								actSumExp = actSumExp + actualFunds[i][2];
+								planSumCommit = planSumCommit + plannedFunds[i][0];
+								planSumDisb = planSumDisb + plannedFunds[i][1];
+								planSumExp = planSumExp + plannedFunds[i][2];
+								sumUnDisb = sumUnDisb + (actualFunds[i][0]-actualFunds[i][1]);
+
 								
 								report.getAmpFund().add(ampFund);
 							}
 							AmpFund fund = new AmpFund();
-							fund.setCommAmount(mf.format(actTotalCommit));
-							fund.setDisbAmount(mf.format(actTotalDisb));
-							fund.setExpAmount(mf.format(actTotalExp));
-							fund.setPlCommAmount(mf.format(planTotalCommit));
-							fund.setPlDisbAmount(mf.format(planTotalDisb));
-							fund.setPlExpAmount(mf.format(planTotalExp));
-							fund.setUnDisbAmount(mf.format(totUnDisb));
+							fund.setCommAmount(mf.format(actSumCommit));
+							fund.setDisbAmount(mf.format(actSumDisb));
+							fund.setExpAmount(mf.format(actSumExp));
+							fund.setPlCommAmount(mf.format(planSumCommit));
+							fund.setPlDisbAmount(mf.format(planSumDisb));
+							fund.setPlExpAmount(mf.format(planSumExp));
+							fund.setUnDisbAmount(mf.format(sumUnDisb));
 							report.getAmpFund().add(fund) ;	
+	
 							
 							reports.getRecords().add(report);
+							logger.info("Reports Size: " + reports.getRecords().size());
+							logger.info("Fund Size: " + report.getAmpFund().size());
 							ampReports.add(reports);
 							actualCommitment=0;
 							actualDisbursement=0;
@@ -11852,16 +12133,16 @@ public class ReportUtil {
 							regions.clear();
 							contactName=null;
 							minYear=maxYear=0;
-							totUnDisb=actTotalCommit=actTotalDisb=actTotalExp=planTotalCommit=planTotalDisb=planTotalExp = 0;
+							sumUnDisb=actSumCommit=actSumDisb=actSumExp=planSumCommit=planSumDisb=planSumExp = 0;
 							for(int i=0;i<yrCount;i++)
 							{
 								actualFunds[i][0]=actualFunds[i][1]=actualFunds[i][2]=0;
 								plannedFunds[i][0]=plannedFunds[i][1]=plannedFunds[i][2]=0;
 							}
-						} // CHECK IF REPORT != NULL
+						}
 						reports= new Report();
 						reports.setRecords(new ArrayList());
-						//logger.info("Init Record");
+						logger.info("Init Record");
 						title=ampReportCache.getActivityName();
 						ampId=ampReportCache.getAmpId();
 						reports.setAmpActivityId(ampReportCache.getAmpActivityId());
@@ -11896,20 +12177,16 @@ public class ReportUtil {
 						if(ampReportCache.getModalityName()!=null)
 							modality.add(ampReportCache.getModalityName());
 						AmpActivity ampActivity=(AmpActivity) ActivityUtil.getAmpActivity(ampReportCache.getAmpActivityId());
-						
 						//if(ampReportCache.getActivityDescription()!=null)
 						if(ampActivity.getDescription()!=null)
 						{
-							logger.info(ampActivity.getAmpId() + "<><><><><><>" + ampActivity.getDescription());
 							//Editor ed = org.digijava.module.editor.util.DbUtil.getEditor(ampReportCache.getActivityDescription(),"en");
-							//description=ed.getBody();
-							description= ampActivity.getDescription();
+								//description=ed.getBody();
+							description = ampActivity.getDescription();
 						}
 						else
-						{
-							logger.info(ampActivity.getAmpId() + "<><>NOT NULL <><><>" + ampActivity.getDescription());
 							description=" ";
-						}
+							
 						if(ampActivity.getObjective()!=null)
 						{
 							Editor ed = org.digijava.module.editor.util.DbUtil.getEditor(ampActivity.getObjective(),"en");
@@ -11917,6 +12194,7 @@ public class ReportUtil {
 						}
 						else
 							objective=" ";
+	
 						if(ampActivity.getContFirstName()!=null)
 							contactName=ampActivity.getContFirstName();
 						if(ampActivity.getContLastName()!=null)
@@ -11930,18 +12208,18 @@ public class ReportUtil {
 							contactName=contactName + " " + ampActivity.getMofedCntLastName();
 						if(contactName!=null)
 							contacts.add(contactName);
-
+	
 					}
-					//logger.info("Title:" + title);
+					logger.info("Title:" + title);
 					if(donors.indexOf(ampReportCache.getDonorName())==-1 && ampReportCache.getDonorName()!=null)
 						donors.add(ampReportCache.getDonorName());
 					if(assistance.indexOf(ampReportCache.getTermAssistName())==-1 && ampReportCache.getTermAssistName()!=null)
 						assistance.add(ampReportCache.getTermAssistName());
-					
-					//logger.info("Measure: " + measure);
+					if(modality.indexOf(ampReportCache.getModalityName())==-1 && ampReportCache.getModalityName()!=null)
+						modality.add(ampReportCache.getModalityName());
 					if(ampReportCache.getFiscalYear()!=null && ampReportCache.getFiscalQuarter()!=null)
 					{
-						//logger.info("begin if");
+						logger.info("begin if");
 						if(new Long(fiscalCalId).equals(Constants.GREGORIAN))
 						{
 							fiscalYear=ampReportCache.getFiscalYear().intValue();
@@ -11951,45 +12229,43 @@ public class ReportUtil {
 							minYear=fiscalYear;
 						if(maxYear < fiscalYear)
 							maxYear=fiscalYear;
-
 						if(ampReportCache.getCurrencyCode().equals("USD"))
 							fromExchangeRate=1.0;
 						else
 							fromExchangeRate=DbUtil.getExchangeRate(ampReportCache.getCurrencyCode(),Constants.PLANNED,ampReportCache.getTransactionDate());
 						if(ampCurrencyCode.equals("USD"))
 							toExchangeRate=1.0;
-						else
+						else	
 							toExchangeRate=DbUtil.getExchangeRate(ampCurrencyCode,Constants.PLANNED,ampReportCache.getTransactionDate());
 						
-							if(ampReportCache.getActualCommitment().doubleValue()>0 && ampReportCache.getPerspective().equals(perspective))
+						if(ampReportCache.getActualCommitment().doubleValue()>0 && ampReportCache.getPerspective().equals(perspective))
+						{
+							amount=CurrencyWorker.convert1(ampReportCache.getActualCommitment().doubleValue(),fromExchangeRate,toExchangeRate);
+							actualCommitment=actualCommitment + amount;
+							if(fiscalYear>=fromYr && fiscalYear<=toYr)
 							{
-								amount=CurrencyWorker.convert1(ampReportCache.getActualCommitment().doubleValue(),fromExchangeRate,toExchangeRate);
-								actualCommitment=actualCommitment + amount;
-								if(fiscalYear>=fromYr && fiscalYear<=toYr)
-								{
-									if(actualFunds[fiscalYear%fromYr][0]==0)
-										actualFunds[fiscalYear%fromYr][0]=amount;
-									else
-									if(actualFunds[fiscalYear%fromYr][0]>0)
+								if(actualFunds[fiscalYear%fromYr][0]==0)
+									actualFunds[fiscalYear%fromYr][0]=amount;
+								else
+								if(actualFunds[fiscalYear%fromYr][0]>0)
 										actualFunds[fiscalYear%fromYr][0]=actualFunds[fiscalYear%fromYr][0] + amount;
-								}
 							}
-							amount=0.0;
+						}
+						amount=0.0;
 						
-							if(ampReportCache.getActualDisbursement().doubleValue()>0 && ampReportCache.getPerspective().equals(perspective))
+						if(ampReportCache.getActualDisbursement().doubleValue()>0 && ampReportCache.getPerspective().equals(perspective))
+						{
+							amount=CurrencyWorker.convert1(ampReportCache.getActualDisbursement().doubleValue(),fromExchangeRate,toExchangeRate);
+							if(fiscalYear>=fromYr && fiscalYear<=toYr)
 							{
-								amount=CurrencyWorker.convert1(ampReportCache.getActualDisbursement().doubleValue(),fromExchangeRate,toExchangeRate);
-								if(fiscalYear>=fromYr && fiscalYear<=toYr)
-								{
-									if(actualFunds[fiscalYear%fromYr][1]==0)
-										actualFunds[fiscalYear%fromYr][1]=amount;
-									else
-									if(actualFunds[fiscalYear%fromYr][1]>0)
-										actualFunds[fiscalYear%fromYr][1]=actualFunds[fiscalYear%fromYr][1] + amount;
-								}
+								if(actualFunds[fiscalYear%fromYr][1]==0)
+									actualFunds[fiscalYear%fromYr][1]=amount;
+								else
+								if(actualFunds[fiscalYear%fromYr][1]>0)
+									actualFunds[fiscalYear%fromYr][1]=actualFunds[fiscalYear%fromYr][1] + amount;
 							}
-
-							amount=0.0;
+						}
+						amount=0.0;
 						
 						if(measures.indexOf(new Long(3))!=-1)
 						{
@@ -12007,9 +12283,7 @@ public class ReportUtil {
 							}
 							amount=0.0;
 						}
-
 						if(measures.indexOf(new Long(4))!=-1)
-
 						{
 							if(ampReportCache.getPlannedCommitment().doubleValue()>0 && ampReportCache.getPerspective().equals(perspective))
 							{
@@ -12024,12 +12298,10 @@ public class ReportUtil {
 										plannedFunds[fiscalYear%fromYr][0]=plannedFunds[fiscalYear%fromYr][0] + amount;
 								}
 							}
-
 							amount=0.0;
 						}
 						if(measures.indexOf(new Long(5))!=-1)
 						{
-
 							if(ampReportCache.getPlannedDisbursement().doubleValue()>0 && ampReportCache.getPerspective().equals(perspective))
 							{
 								amount=CurrencyWorker.convert1(ampReportCache.getPlannedDisbursement().doubleValue(),fromExchangeRate,toExchangeRate);
@@ -12042,12 +12314,10 @@ public class ReportUtil {
 										plannedFunds[fiscalYear%fromYr][1]=plannedFunds[fiscalYear%fromYr][1] + amount;
 								}
 							}
-
 							amount=0.0;
 						}
 						if(measures.indexOf(new Long(6))!=-1)
 						{
-
 							if(ampReportCache.getPlannedExpenditure().doubleValue()>0 && ampReportCache.getPerspective().equals(perspective))
 							{
 								amount=CurrencyWorker.convert1(ampReportCache.getPlannedExpenditure().doubleValue(),fromExchangeRate,toExchangeRate);
@@ -12066,8 +12336,7 @@ public class ReportUtil {
 						
 					}
 					
-				}// End of One AmpReportCache row........
-				
+				}
 				//logger.info("At the end");
 				iterColumn=columns.iterator();
 				while(iterColumn.hasNext())
@@ -12081,52 +12350,51 @@ public class ReportUtil {
 					report.setContacts(new ArrayList());
 					AmpColumns c=(AmpColumns) iterColumn.next();
 					if(c.getColumnId().equals(Constants.STATUS_NAME))
-									report.setStatus(status);
-								if(c.getColumnId().equals(Constants.DONOR_NAME))
-								{
-									if(donors.size()==0)
-										donors.add(" ");
-									report.getDonors().addAll(donors);
-								}
-								if(c.getColumnId().equals(Constants.ACTUAL_START_DATE))
-									report.setActualStartDate(actualStartDate);
-								if(c.getColumnId().equals(Constants.ACTIVITY_NAME))
-									report.setTitle(title);
-								if(c.getColumnId().equals(Constants.TERM_ASSIST_NAME))
-								{
-									if(assistance.size()==0)
-										assistance.add(" ");
-									report.setAssistance(assistance);
-								}
-								if(c.getColumnId().equals(Constants.LEVEL_NAME))
-									report.setLevel(level);
-								if(c.getColumnId().equals(Constants.ACTUAL_COMPLETION_DATE))
-									report.setActualCompletionDate(actualCompletionDate);
-								if(c.getColumnId().equals(Constants.SECTOR_NAME))
-									report.getSectors().addAll(sectors);
-								if(c.getColumnId().equals(Constants.REGION_NAME))
-									report.getRegions().addAll(regions);
-								if(c.getColumnId().equals(Constants.AMP_ID))
-									report.setAmpId(ampId);
-								if(c.getColumnId().equals(Constants.FUNDING_INSTRUMENT))
-								{
-									if(modality.size()==0)
-										modality.add(" ");
-									report.getModality().addAll(modality);
-								}
-								if(c.getColumnId().equals(Constants.CONTACT_NAME))
-								{
-									if(contacts.size()==0)
-										contacts.add(" ");
-									report.getContacts().addAll(contacts);
-								}
-								if(c.getColumnId().equals(Constants.OBJECTIVE))
-									report.setObjective(objective);
-								if(c.getColumnId().equals(Constants.DESCRIPTION))
-									report.setDescription(description);
+						report.setStatus(status);
+					if(c.getColumnId().equals(Constants.DONOR_NAME))
+					{
+						if(donors.size()==0)
+							donors.add(" ");
+						report.getDonors().addAll(donors);
+					}
+					if(c.getColumnId().equals(Constants.ACTUAL_START_DATE))
+						report.setActualStartDate(actualStartDate);
+					if(c.getColumnId().equals(Constants.ACTIVITY_NAME))
+						report.setTitle(title);
+					if(c.getColumnId().equals(Constants.TERM_ASSIST_NAME))
+					{
+						if(assistance.size()==0)
+							assistance.add(" ");
+						report.setAssistance(assistance);
+					}
+					if(c.getColumnId().equals(Constants.LEVEL_NAME))
+						report.setLevel(level);
+					if(c.getColumnId().equals(Constants.ACTUAL_COMPLETION_DATE))
+						report.setActualCompletionDate(actualCompletionDate);
+					if(c.getColumnId().equals(Constants.SECTOR_NAME))
+						report.getSectors().addAll(sectors);
+					if(c.getColumnId().equals(Constants.REGION_NAME))
+						report.getRegions().addAll(regions);
+					if(c.getColumnId().equals(Constants.AMP_ID))
+						report.setAmpId(ampId);
+					if(c.getColumnId().equals(Constants.FUNDING_INSTRUMENT))
+					{
+						if(modality.size()==0)
+							modality.add(" ");
+						report.getModality().addAll(modality);
+					}
+					if(c.getColumnId().equals(Constants.CONTACT_NAME))
+					{
+						if(contacts.size()==0)
+							contacts.add(" ");
+						report.getContacts().addAll(contacts);
+					}
+					if(c.getColumnId().equals(Constants.OBJECTIVE))
+						report.setObjective(objective);
+					if(c.getColumnId().equals(Constants.DESCRIPTION))
+						report.setDescription(description);
 					reports.getRecords().add(report);
 				}
-
 				report=new AdvancedReport();
 				report.setAmpFund(new ArrayList());
 				for(int i=0;i<yrCount;i++)
@@ -12146,33 +12414,251 @@ public class ReportUtil {
 						ampFund.setPlExpAmount(mf.format(plannedFunds[i][2]));	
 					if(measures.indexOf(new Long(7))!=-1)
 						ampFund.setUnDisbAmount(mf.format(actualFunds[i][0]-actualFunds[i][1]));
-						//ampFund.setUnDisbAmount("0.01");
-
-					actTotalCommit = actTotalCommit + actualFunds[i][0];
-					actTotalDisb = actTotalDisb + actualFunds[i][1];
-					actTotalExp = actTotalExp + actualFunds[i][2];
-					planTotalCommit = planTotalCommit + plannedFunds[i][0];
-					planTotalDisb = planTotalDisb + plannedFunds[i][1];
-					planTotalExp = planTotalExp + plannedFunds[i][2];
-					totUnDisb = totUnDisb + actualFunds[i][0]-actualFunds[i][1];
-
+					
+					actSumCommit = actSumCommit + actualFunds[i][0];
+					actSumDisb = actSumDisb + actualFunds[i][1];
+					actSumExp = actSumExp + actualFunds[i][2];
+					planSumCommit = planSumCommit + plannedFunds[i][0];
+					planSumDisb = planSumDisb + plannedFunds[i][1];
+					planSumExp = planSumExp + plannedFunds[i][2];
+					sumUnDisb = sumUnDisb + (actualFunds[i][0]-actualFunds[i][1]);
+			
 					report.getAmpFund().add(ampFund);
 				}
 				
 				AmpFund fund = new AmpFund();
-				fund.setCommAmount(mf.format(actTotalCommit));
-				fund.setDisbAmount(mf.format(actTotalDisb));
-				fund.setExpAmount(mf.format(actTotalExp));
-				fund.setPlCommAmount(mf.format(planTotalCommit));
-				fund.setPlDisbAmount(mf.format(planTotalDisb));
-				fund.setPlExpAmount(mf.format(planTotalExp));
-				fund.setUnDisbAmount(mf.format(totUnDisb));
+				fund.setCommAmount(mf.format(actSumCommit));
+				fund.setDisbAmount(mf.format(actSumDisb));
+				fund.setExpAmount(mf.format(actSumExp));
+				fund.setPlCommAmount(mf.format(planSumCommit));
+				fund.setPlDisbAmount(mf.format(planSumDisb));
+				fund.setPlExpAmount(mf.format(planSumExp));
+				fund.setUnDisbAmount(mf.format(sumUnDisb));
 				report.getAmpFund().add(fund) ;	
 
-				
 				reports.getRecords().add(report);
 				ampReports.add(reports);
+			}
+			// Code for hierarchial report
+			if(q!=null && hierarchy.size()>0)
+			{
+				mreport=new multiReport();
+				mreport.setHierarchy(new ArrayList());
+				if(hierarchy.size()==1)
+				{
+					AmpColumns colLevel1=(AmpColumns) hierarchy.get(0);
+					dbReturnSet=ReportUtil.getLevel1AdvancedReport(ampTeamId,colLevel1.getColumnId());
+				}
+				if(hierarchy.size()==2)
+				{
+					AmpColumns colLevel1=(AmpColumns) hierarchy.get(0);
+					AmpColumns colLevel2=(AmpColumns) hierarchy.get(1);
+					dbReturnSet=ReportUtil.getLevel2AdvancedReport(ampTeamId,colLevel1.getColumnId(),colLevel2.getColumnId());
+				}
+				iterLevel1=dbReturnSet.iterator();
+				while(iterLevel1.hasNext())
+				{
+					AdvancedHierarchyReport ahReportLevel1=(AdvancedHierarchyReport) iterLevel1.next();
+					ahReport=new AdvancedHierarchyReport();
+					ahReport.setProject(new ArrayList());
+					ahReport.setName(ahReportLevel1.getName());
+					ahReport.setLabel(ahReportLevel1.getLabel());
+					logger.info("Level 1 Name for Label " + ahReport.getLabel() + ": " + ahReport.getName());
+					//activityIds.clear();
+					activityIds=(ArrayList)ahReportLevel1.getActivities();
+					if(ahReportLevel1.getLevels()!=null)
+					{
+						logger.info("Inside Level");
+						logger.info("Number of records in level 2 " + ahReportLevel1.getLevels().size());
+						ahReport.setLevels(new ArrayList());
+						iterLevel2=ahReportLevel1.getLevels().iterator();
+						while(iterLevel2.hasNext())
+						{
+							logger.info("begin while");
+							AdvancedHierarchyReport ahReportLevel2=(AdvancedHierarchyReport) iterLevel2.next();
+							ahTemp=new AdvancedHierarchyReport();
+							ahTemp.setName(ahReportLevel2.getName());
+							ahTemp.setLabel(ahReportLevel2.getLabel());
+							ahTemp.setProject(new ArrayList());
+							//activityIds.clear();
+							activityIds=(ArrayList)ahReportLevel2.getActivities();
+							logger.info("Level 2 Name for Label " + ahTemp.getLabel() + ": " + ahTemp.getName());
+							logger.info("Number of activities at level 1: " + activityIds.size());
+							ahTemp=generateAdvancedReportRecords(q.list(),activityIds,columns,measures,fromYr,toYr,perspective,fiscalCalId,ampCurrencyCode,ahTemp);
+							ahReport.getLevels().add(ahTemp);
+							Iterator iterFund = ahTemp.getFundSubTotal().iterator();
+							for(int i=0;i<=yrCount ;i++ )
+							{
+								AmpFund ampFund=(AmpFund) iterFund.next();
 
+								if(i<yrCount)
+								{
+									subTotActualFunds[i][0]=subTotActualFunds[i][0] + Double.parseDouble(DecimalToText.removeCommas(ampFund.getCommAmount()));
+									subTotActualFunds[i][1]=subTotActualFunds[i][1] + Double.parseDouble(DecimalToText.removeCommas(ampFund.getDisbAmount()));
+									subTotActualFunds[i][2]=subTotActualFunds[i][2] + Double.parseDouble(DecimalToText.removeCommas(ampFund.getExpAmount()));
+									subTotPlannedFunds[i][0]=subTotPlannedFunds[i][0] + Double.parseDouble(DecimalToText.removeCommas(ampFund.getPlCommAmount()));
+									subTotPlannedFunds[i][1]=subTotPlannedFunds[i][1] + Double.parseDouble(DecimalToText.removeCommas(ampFund.getPlDisbAmount()));
+									subTotPlannedFunds[i][2]=subTotPlannedFunds[i][2] + Double.parseDouble(DecimalToText.removeCommas(ampFund.getPlExpAmount()));
+								}
+								if(i==yrCount)						
+								{
+									actCommitSubTotal = actCommitSubTotal + Double.parseDouble(DecimalToText.removeCommas(ampFund.getCommAmount()));
+									actDisbSubTotal = actDisbSubTotal + Double.parseDouble(DecimalToText.removeCommas(ampFund.getDisbAmount()));
+									actExpSubTotal = actExpSubTotal + Double.parseDouble(DecimalToText.removeCommas(ampFund.getExpAmount()));
+									planCommitSubTotal = planCommitSubTotal  + Double.parseDouble(DecimalToText.removeCommas(ampFund.getPlCommAmount()));
+									planDisbSubTotal = planDisbSubTotal + Double.parseDouble(DecimalToText.removeCommas(ampFund.getPlDisbAmount()));
+									planExpSubTotal = planExpSubTotal + Double.parseDouble(DecimalToText.removeCommas(ampFund.getPlExpAmount()));
+									unDisbSubTotal = unDisbSubTotal + (Double.parseDouble(DecimalToText.removeCommas(ampFund.getCommAmount())) - Double.parseDouble(DecimalToText.removeCommas(ampFund.getDisbAmount())));
+								}
+	
+							}
+						}//End of Level 2 iteration
+						//logger.info("level2 size: " + ahReport.getLevels().size());
+						if(ahReport.getLevels().size()>0)
+						{
+							ahReport.setFundSubTotal(new ArrayList());
+							for(int i=0;i<yrCount;i++)
+							{
+								AmpFund ampFund=new AmpFund();
+								if(measures.indexOf(new Long(1))!=-1)
+									ampFund.setCommAmount(mf.format(subTotActualFunds[i][0])); 
+								if(measures.indexOf(new Long(2))!=-1)
+									ampFund.setDisbAmount(mf.format(subTotActualFunds[i][1])); 
+								if(measures.indexOf(new Long(3))!=-1)
+									ampFund.setExpAmount(mf.format(subTotActualFunds[i][2]));	
+								if(measures.indexOf(new Long(4))!=-1)
+									ampFund.setPlCommAmount(mf.format(subTotPlannedFunds[i][0])); 
+								if(measures.indexOf(new Long(5))!=-1)
+									ampFund.setPlDisbAmount(mf.format(subTotPlannedFunds[i][1])); 
+								if(measures.indexOf(new Long(6))!=-1)
+									ampFund.setPlExpAmount(mf.format(subTotPlannedFunds[i][2]));	
+								if(measures.indexOf(new Long(7))!=-1)
+									ampFund.setUnDisbAmount(mf.format(subTotActualFunds[i][0]-subTotActualFunds[i][1]));
+							
+								ahReport.getFundSubTotal().add(ampFund);
+	
+								totActualFunds[i][0] = totActualFunds[i][0] + subTotActualFunds[i][0];
+								totActualFunds[i][1] = totActualFunds[i][1] + subTotActualFunds[i][1];
+								totActualFunds[i][2] = totActualFunds[i][2] + subTotActualFunds[i][2];
+								totPlannedFunds[i][0] = totPlannedFunds[i][0] + subTotPlannedFunds[i][0];
+								totPlannedFunds[i][1] = totPlannedFunds[i][1] + subTotPlannedFunds[i][1];
+								totPlannedFunds[i][2] = totPlannedFunds[i][2] + subTotPlannedFunds[i][2];
+							}
+
+							AmpFund fund = new AmpFund();
+							fund.setCommAmount(mf.format(actCommitSubTotal));
+							fund.setDisbAmount(mf.format(actDisbSubTotal));
+							fund.setExpAmount(mf.format(actExpSubTotal));
+							fund.setPlCommAmount(mf.format(planCommitSubTotal));
+							fund.setPlDisbAmount(mf.format(planDisbSubTotal));
+							fund.setPlExpAmount(mf.format(planExpSubTotal));
+							fund.setUnDisbAmount(mf.format(unDisbSubTotal));
+							ahReport.getFundSubTotal().add(fund) ;	
+		
+							actCommitTotal = actCommitTotal + actCommitSubTotal;
+							actDisbTotal = actDisbTotal + actDisbSubTotal;
+							actExpTotal = actExpTotal + actExpSubTotal;
+							planCommitTotal = planCommitTotal + planCommitSubTotal;
+							planDisbTotal = planDisbTotal + planDisbSubTotal;
+							planExpTotal = planExpTotal + planExpSubTotal;
+							unDisbTotal = unDisbTotal + (actCommitTotal-actDisbTotal);
+							mreport.getHierarchy().add(ahReport);
+							unDisbSubTotal=actCommitSubTotal=actDisbSubTotal=actExpSubTotal=planCommitSubTotal=planDisbSubTotal=planExpSubTotal = 0;
+							for(int i=0;i<yrCount;i++)
+							{
+								subTotActualFunds[i][0]=subTotActualFunds[i][1]=subTotActualFunds[i][2]=0;
+								subTotPlannedFunds[i][0]=subTotPlannedFunds[i][1]=subTotPlannedFunds[i][2]=0;
+							}
+						}
+					}
+					else
+					{
+						ahReport=generateAdvancedReportRecords(q.list(),activityIds,columns,measures,fromYr,toYr,perspective,fiscalCalId,ampCurrencyCode,ahReport);
+						Iterator iterFund = ahReport.getFundSubTotal().iterator();
+						for(int i=0;i<=yrCount ;i++ )
+						{
+							AmpFund ampFund=(AmpFund) iterFund.next();
+
+							if(i<yrCount)
+							{
+								totActualFunds[i][0]=totActualFunds[i][0] + Double.parseDouble(DecimalToText.removeCommas(ampFund.getCommAmount()));
+								totActualFunds[i][1]=totActualFunds[i][1] + Double.parseDouble(DecimalToText.removeCommas(ampFund.getDisbAmount()));
+								totActualFunds[i][2]=totActualFunds[i][2] + Double.parseDouble(DecimalToText.removeCommas(ampFund.getExpAmount()));
+								totPlannedFunds[i][0]=totPlannedFunds[i][0] + Double.parseDouble(DecimalToText.removeCommas(ampFund.getPlCommAmount()));
+								totPlannedFunds[i][1]=totPlannedFunds[i][1] + Double.parseDouble(DecimalToText.removeCommas(ampFund.getPlDisbAmount()));
+								totPlannedFunds[i][2]=totPlannedFunds[i][2] + Double.parseDouble(DecimalToText.removeCommas(ampFund.getPlExpAmount()));
+							}
+							if(i==yrCount)						
+							{
+								actCommitTotal = actCommitTotal + Double.parseDouble(DecimalToText.removeCommas(ampFund.getCommAmount()));
+								actDisbTotal = actDisbTotal + Double.parseDouble(DecimalToText.removeCommas(ampFund.getDisbAmount()));
+								actExpTotal = actExpTotal + Double.parseDouble(DecimalToText.removeCommas(ampFund.getExpAmount()));
+								planCommitTotal = planCommitTotal  + Double.parseDouble(DecimalToText.removeCommas(ampFund.getPlCommAmount()));
+								planDisbTotal = planDisbTotal + Double.parseDouble(DecimalToText.removeCommas(ampFund.getPlDisbAmount()));
+								planExpTotal = planExpTotal + Double.parseDouble(DecimalToText.removeCommas(ampFund.getPlExpAmount()));
+								unDisbTotal = unDisbTotal + (Double.parseDouble(DecimalToText.removeCommas(ampFund.getCommAmount())) - Double.parseDouble(DecimalToText.removeCommas(ampFund.getDisbAmount())));
+							}
+
+						}
+						mreport.getHierarchy().add(ahReport);
+	
+						actualCommitment=0;
+						actualDisbursement=0;
+						donors.clear();
+						assistance.clear();
+						modality.clear();
+						contacts.clear();
+						sectors.clear();
+						regions.clear();
+						contactName=null;
+						minYear=maxYear=0;
+
+						sumUnDisb=actSumCommit=actSumDisb=actSumExp=planSumCommit=planSumDisb=planSumExp = 0;
+						unDisbSubTotal=actCommitSubTotal=actDisbSubTotal=actExpSubTotal=planCommitSubTotal=planDisbSubTotal=planExpSubTotal = 0;
+						for(int i=0;i<yrCount;i++)
+						{
+							actualFunds[i][0]=actualFunds[i][1]=actualFunds[i][2]=0;
+							plannedFunds[i][0]=plannedFunds[i][1]=plannedFunds[i][2]=0;
+							subTotActualFunds[i][0]=subTotActualFunds[i][1]=subTotActualFunds[i][2]=0;
+							subTotPlannedFunds[i][0]=subTotPlannedFunds[i][1]=subTotPlannedFunds[i][2]=0;
+						}
+				
+					} //End of else
+					
+				}//End of iteration of levels
+				logger.info("Level 1 size: " + mreport.getHierarchy().size());
+				mreport.setFundTotal(new ArrayList());
+				for(int i=0;i<yrCount;i++)
+				{
+					AmpFund ampFund=new AmpFund();
+					if(measures.indexOf(new Long(1))!=-1)
+						ampFund.setCommAmount(mf.format(totActualFunds[i][0])); 
+					if(measures.indexOf(new Long(2))!=-1)
+						ampFund.setDisbAmount(mf.format(totActualFunds[i][1])); 
+					if(measures.indexOf(new Long(3))!=-1)
+						ampFund.setExpAmount(mf.format(totActualFunds[i][2]));	
+					if(measures.indexOf(new Long(4))!=-1)
+						ampFund.setPlCommAmount(mf.format(totPlannedFunds[i][0])); 
+					if(measures.indexOf(new Long(5))!=-1)
+						ampFund.setPlDisbAmount(mf.format(totPlannedFunds[i][1])); 
+					if(measures.indexOf(new Long(6))!=-1)
+						ampFund.setPlExpAmount(mf.format(totPlannedFunds[i][2]));	
+					if(measures.indexOf(new Long(7))!=-1)
+						ampFund.setUnDisbAmount(mf.format(totActualFunds[i][0]-totActualFunds[i][1]));
+				
+					mreport.getFundTotal().add(ampFund);
+				}
+
+				AmpFund fund = new AmpFund();
+				fund.setCommAmount(mf.format(actCommitTotal));
+				fund.setDisbAmount(mf.format(actDisbTotal));
+				fund.setExpAmount(mf.format(actExpTotal));
+				fund.setPlCommAmount(mf.format(planCommitTotal));
+				fund.setPlDisbAmount(mf.format(planDisbTotal));
+				fund.setPlExpAmount(mf.format(planExpTotal));
+				fund.setUnDisbAmount(mf.format(unDisbTotal));
+				mreport.getFundTotal().add(fund) ;	
+				ampReports.add(mreport);
 			}
 		}
 		catch(Exception ex) 		
@@ -12193,6 +12679,1607 @@ public class ReportUtil {
 			}
 		}
 		return ampReports ;
+	}
+
+	public static ArrayList getLevel1AdvancedReport(Long ampTeamId,Long ampColumnId) 
+	{
+		Session session = null;
+		Query q = null;
+		Iterator iter=null;
+		Iterator iterActivity=null;
+		ArrayList level=new ArrayList();
+		ArrayList activityIds=new ArrayList();
+		ArrayList ampReports=new ArrayList();
+		
+		try 
+		{
+			if(ampColumnId.equals(Constants.STATUS_NAME))
+			{
+				level=DbUtil.getAmpStatus();
+				iter=level.iterator();
+				while(iter.hasNext())
+				{
+					AmpStatus ampStatus=(AmpStatus) iter.next();
+					session = PersistenceManager.getSession();
+					String queryString = "select activity from "
+						+ AmpActivity.class.getName()
+						+ " activity where (activity.team.ampTeamId='" + ampTeamId + "') and (activity.status.ampStatusId='" + ampStatus.getAmpStatusId() + "')";
+
+					Query qry = session.createQuery(queryString);
+					logger.info("Query: " + queryString);
+					if(qry.list().size()>0)
+					{
+						AdvancedHierarchyReport ahReport= new AdvancedHierarchyReport();
+						ahReport.setId(ampStatus.getAmpStatusId());
+						ahReport.setName(ampStatus.getName());
+						ahReport.setLabel("Status ");
+						iterActivity = qry.list().iterator();
+						ahReport.setActivities(new ArrayList());
+						while(iterActivity.hasNext())
+						{
+							AmpActivity ampActivity=(AmpActivity) iterActivity.next();
+							ahReport.getActivities().add(ampActivity.getAmpActivityId());
+						}
+						ampReports.add(ahReport);
+					}
+				}
+			}
+			
+			if(ampColumnId.equals(Constants.DONOR_NAME))
+			{
+				level=DbUtil.getAmpDonors(ampTeamId);
+				iter=level.iterator();
+				while(iter.hasNext())
+				{
+					AmpOrganisation ampOrganisation=(AmpOrganisation) iter.next();
+					session = PersistenceManager.getSession();
+					String queryString = "select distinct activity from "
+						+ AmpReportCache.class.getName()
+						+ " activity where (activity.ampTeamId='" + ampTeamId 
+						+ "') and (activity.ampDonorId='" + ampOrganisation.getAmpOrgId() + "')";
+
+					Query qry = session.createQuery(queryString);
+					logger.info("Query: " + queryString);
+					if(qry.list().size()>0)
+					{
+						AdvancedHierarchyReport ahReport= new AdvancedHierarchyReport();
+						ahReport.setId(ampOrganisation.getAmpOrgId());
+						ahReport.setName(ampOrganisation.getName());
+						ahReport.setLabel("Donor ");
+						iterActivity = qry.list().iterator();
+						ahReport.setActivities(new ArrayList());
+						while(iterActivity.hasNext())
+						{
+							AmpReportCache ampReportCache=(AmpReportCache) iterActivity.next();
+							ahReport.getActivities().add(ampReportCache.getAmpActivityId());
+						}
+						ampReports.add(ahReport);
+					}
+				}
+			}
+
+			if(ampColumnId.equals(Constants.FUNDING_INSTRUMENT))
+			{
+				level=DbUtil.getAmpModality();
+				iter=level.iterator();
+				while(iter.hasNext())
+				{
+					AmpModality ampModality=(AmpModality) iter.next();
+					session = PersistenceManager.getSession();
+					String queryString = "select distinct activity from "
+						+ AmpReportCache.class.getName()
+						+ " activity where (activity.ampTeamId='" + ampTeamId 
+						+ "') and (activity.ampModalityId='" + ampModality.getAmpModalityId() + "')";
+
+					Query qry = session.createQuery(queryString);
+					logger.info("Query: " + queryString);
+					if(qry.list().size()>0)
+					{
+						AdvancedHierarchyReport ahReport= new AdvancedHierarchyReport();
+						ahReport.setId(ampModality.getAmpModalityId());
+						ahReport.setName(ampModality.getName());
+						ahReport.setLabel("Funding Instrument ");
+						iterActivity = qry.list().iterator();
+						ahReport.setActivities(new ArrayList());
+						while(iterActivity.hasNext())
+						{
+							AmpReportCache ampReportCache=(AmpReportCache) iterActivity.next();
+							ahReport.getActivities().add(ampReportCache.getAmpActivityId());
+						}
+						ampReports.add(ahReport);
+					}
+				}
+			}
+
+			if(ampColumnId.equals(Constants.SECTOR_NAME))
+			{
+				session = PersistenceManager.getSession();
+				String queryString = "select activity from "
+					+ AmpActivity.class.getName()
+					+ " activity where (activity.team.ampTeamId='" + ampTeamId + "')";
+
+				Query qry = session.createQuery(queryString);
+				logger.info("Query: " + queryString);
+				iter=qry.list().iterator();
+				while(iter.hasNext())
+				{
+					AmpActivity ampActivity=(AmpActivity) iter.next();
+					activityIds.add(ampActivity.getAmpActivityId());
+				}
+
+				queryString = "select sector from "
+					+ AmpReportSector.class.getName()
+					+ " sector order by sector.sectorName";
+				qry = session.createQuery(queryString);
+				iter=qry.list().iterator();
+				AdvancedHierarchyReport ahReport=null;
+				while(iter.hasNext())
+				{
+					AmpReportSector sector=(AmpReportSector) iter.next();
+					if(ahReport==null || !(ahReport.getId().equals(sector.getAmpSectorId())))
+					{
+						if(ahReport!=null)
+						{
+							if(ahReport.getActivities().size()>0)
+								ampReports.add(ahReport);
+						}
+						ahReport= new AdvancedHierarchyReport();
+						ahReport.setId(sector.getAmpSectorId());
+						ahReport.setName(sector.getSectorName());
+						ahReport.setLabel("Sector ");
+						ahReport.setActivities(new ArrayList());
+							
+					}
+					if(activityIds.indexOf(sector.getAmpActivityId())!=-1)
+						ahReport.getActivities().add(sector.getAmpActivityId());
+				}
+				if(ahReport.getActivities().size()>0)
+					ampReports.add(ahReport);
+			}
+
+			if(ampColumnId.equals(Constants.TERM_ASSIST_NAME))
+			{
+				level=(ArrayList)DbUtil.getAllAssistanceTypes();
+				iter=level.iterator();
+				while(iter.hasNext())
+				{
+					AmpTermsAssist ampTermsAssist=(AmpTermsAssist) iter.next();
+					session = PersistenceManager.getSession();
+					String queryString = "select distinct activity from "
+						+ AmpReportCache.class.getName()
+						+ " activity where (activity.ampTeamId='" + ampTeamId 
+						+ "') and (activity.termAssistName='" + ampTermsAssist.getTermsAssistName() + "')";
+
+					Query qry = session.createQuery(queryString);
+					logger.info("Query: " + queryString);
+					if(qry.list().size()>0)
+					{
+						AdvancedHierarchyReport ahReport= new AdvancedHierarchyReport();
+						ahReport.setId(ampTermsAssist.getAmpTermsAssistId());
+						ahReport.setName(ampTermsAssist.getTermsAssistName());
+						ahReport.setLabel("Type Of Assistance ");
+						iterActivity = qry.list().iterator();
+						ahReport.setActivities(new ArrayList());
+						while(iterActivity.hasNext())
+						{
+							AmpReportCache ampReportCache=(AmpReportCache) iterActivity.next();
+							ahReport.getActivities().add(ampReportCache.getAmpActivityId());
+						}
+						ampReports.add(ahReport);
+					}
+					
+				}
+			}
+			
+		} 
+		catch(Exception e)
+		{
+			e.printStackTrace(System.out);
+		}
+
+		finally 
+		{
+			try 
+			{
+				PersistenceManager.releaseSession(session);
+			}
+			catch (Exception ex2) 
+			{
+				logger.debug("releaseSession() failed ");
+			}
+		}
+		return ampReports;
+	}
+
+
+	public static ArrayList getLevel2AdvancedReport(Long ampTeamId,Long ampColumnId1,Long ampColumnId2) 
+	{
+		Session session = null;
+		Query q = null;
+		Iterator iter=null;
+		Iterator iterLevel=null;
+		Iterator iterActivity=null;
+		ArrayList level=new ArrayList();
+		ArrayList activityIds=new ArrayList();
+		ArrayList ampReports=new ArrayList();
+		ArrayList ahReports=new ArrayList();
+		String inClause=null;
+		AdvancedHierarchyReport ahReportLevel2=null;
+		
+		try 
+		{
+
+			ahReports=getLevel1AdvancedReport(ampTeamId,ampColumnId1);
+			iterLevel=ahReports.iterator();
+			while(iterLevel.hasNext())
+			{
+				AdvancedHierarchyReport ahReportLevel1=(AdvancedHierarchyReport) iterLevel.next();
+				ahReportLevel2=new AdvancedHierarchyReport();
+				ahReportLevel2.setId(ahReportLevel1.getId());
+				ahReportLevel2.setName(ahReportLevel1.getName());
+				ahReportLevel2.setLabel(ahReportLevel1.getLabel());
+				iterActivity=ahReportLevel1.getActivities().iterator();
+				while(iterActivity.hasNext())
+				{
+					Long id=(Long) iterActivity.next();
+					if(inClause==null)
+						inClause="'" + id + "'";
+					else
+						inClause=inClause + ",'" + id + "'";
+				}
+				ahReportLevel2.setLevels(new ArrayList());
+
+				if(ampColumnId2.equals(Constants.STATUS_NAME))
+				{
+					level=DbUtil.getAmpStatus();
+					iter=level.iterator();
+					while(iter.hasNext())
+					{
+						AmpStatus ampStatus=(AmpStatus) iter.next();
+						session = PersistenceManager.getSession();
+						String queryString = "select activity from "
+							+ AmpActivity.class.getName()
+							+ " activity where (activity.ampActivityId in(" + inClause + ")) and (activity.status.ampStatusId='" + ampStatus.getAmpStatusId() + "')";
+
+						Query qry = session.createQuery(queryString);
+						logger.info("Query: " + queryString);
+						if(qry.list().size()>0)
+						{
+							AdvancedHierarchyReport ahReport= new AdvancedHierarchyReport();
+							ahReport.setId(ampStatus.getAmpStatusId());
+							ahReport.setName(ampStatus.getName());
+							ahReport.setLabel("Status ");
+							iterActivity = qry.list().iterator();
+							ahReport.setActivities(new ArrayList());
+							while(iterActivity.hasNext())
+							{
+								AmpActivity ampActivity=(AmpActivity) iterActivity.next();
+								ahReport.getActivities().add(ampActivity.getAmpActivityId());
+							}
+							ahReportLevel2.getLevels().add(ahReport);
+						}
+					}
+				}
+			
+				if(ampColumnId2.equals(Constants.DONOR_NAME))
+				{
+					level=DbUtil.getAmpDonors(ampTeamId);
+					iter=level.iterator();
+					while(iter.hasNext())
+					{
+						AmpOrganisation ampOrganisation=(AmpOrganisation) iter.next();
+						session = PersistenceManager.getSession();
+						String queryString = "select distinct activity from "
+							+ AmpReportCache.class.getName()
+							+ " activity where (activity.ampActivityId in(" + inClause + ")) and (activity.ampDonorId='" + ampOrganisation.getAmpOrgId() + "')";
+
+						Query qry = session.createQuery(queryString);
+						logger.info("Query: " + queryString);
+						if(qry.list().size()>0)
+						{
+							AdvancedHierarchyReport ahReport= new AdvancedHierarchyReport();
+							ahReport.setId(ampOrganisation.getAmpOrgId());
+							ahReport.setName(ampOrganisation.getName());
+							ahReport.setLabel("Donor ");
+							iterActivity = qry.list().iterator();
+							ahReport.setActivities(new ArrayList());
+							while(iterActivity.hasNext())
+							{
+								AmpReportCache ampReportCache=(AmpReportCache) iterActivity.next();
+								ahReport.getActivities().add(ampReportCache.getAmpActivityId());
+							}
+							ahReportLevel2.getLevels().add(ahReport);
+						}
+					}
+				}
+
+				if(ampColumnId2.equals(Constants.FUNDING_INSTRUMENT))
+				{
+					level=DbUtil.getAmpModality();
+					iter=level.iterator();
+					while(iter.hasNext())
+					{
+						AmpModality ampModality=(AmpModality) iter.next();
+						session = PersistenceManager.getSession();
+						String queryString = "select distinct activity from "
+							+ AmpReportCache.class.getName()
+							+ " activity where (activity.ampActivityId in(" + inClause + ")) and (activity.ampModalityId='" + ampModality.getAmpModalityId() + "')";
+
+						Query qry = session.createQuery(queryString);
+						logger.info("Query: " + queryString);
+						if(qry.list().size()>0)
+						{
+							AdvancedHierarchyReport ahReport= new AdvancedHierarchyReport();
+							ahReport.setId(ampModality.getAmpModalityId());
+							ahReport.setName(ampModality.getName());
+							ahReport.setLabel("Funding Instrument ");
+							iterActivity = qry.list().iterator();
+							ahReport.setActivities(new ArrayList());
+							while(iterActivity.hasNext())
+							{
+								AmpReportCache ampReportCache=(AmpReportCache) iterActivity.next();
+								ahReport.getActivities().add(ampReportCache.getAmpActivityId());
+							}
+							ahReportLevel2.getLevels().add(ahReport);
+						}
+					}
+				}
+
+				if(ampColumnId2.equals(Constants.SECTOR_NAME))
+				{
+					session = PersistenceManager.getSession();
+					String queryString = "select activity from "
+						+ AmpActivity.class.getName()
+						+ " activity where (activity.ampActivityId in(" + inClause + "))";
+
+					Query qry = session.createQuery(queryString);
+					logger.info("Query: " + queryString);
+					iter=qry.list().iterator();
+					while(iter.hasNext())
+					{
+						AmpActivity ampActivity=(AmpActivity) iter.next();
+						activityIds.add(ampActivity.getAmpActivityId());
+					}
+
+					queryString = "select sector from "
+						+ AmpReportSector.class.getName()
+						+ " sector order by sector.sectorName";
+					qry = session.createQuery(queryString);
+					iter=qry.list().iterator();
+					AdvancedHierarchyReport ahReport=null;
+					while(iter.hasNext())
+					{
+						AmpReportSector sector=(AmpReportSector) iter.next();
+						if(ahReport==null || !(ahReport.getId().equals(sector.getAmpSectorId())))
+						{
+							if(ahReport!=null)
+							{
+								if(ahReport.getActivities().size()>0)
+									ahReportLevel2.getLevels().add(ahReport);
+							}
+							ahReport= new AdvancedHierarchyReport();
+							ahReport.setId(sector.getAmpSectorId());
+							ahReport.setName(sector.getSectorName());
+							ahReport.setLabel("Sector ");
+							ahReport.setActivities(new ArrayList());
+						}
+						if(activityIds.indexOf(sector.getAmpActivityId())!=-1)
+							ahReport.getActivities().add(sector.getAmpActivityId());
+					}
+					if(ahReport.getActivities().size()>0)
+						ahReportLevel2.getLevels().add(ahReport);
+				}
+	
+				if(ampColumnId2.equals(Constants.TERM_ASSIST_NAME))
+				{
+					level=(ArrayList)DbUtil.getAllAssistanceTypes();
+					iter=level.iterator();
+					while(iter.hasNext())
+					{
+						AmpTermsAssist ampTermsAssist=(AmpTermsAssist) iter.next();
+						session = PersistenceManager.getSession();
+						String queryString = "select distinct activity from "
+							+ AmpReportCache.class.getName()
+							+ " activity where (activity.ampActivityId in(" + inClause + ")) and (activity.termAssistName='" + ampTermsAssist.getTermsAssistName() + "')";
+
+						Query qry = session.createQuery(queryString);
+						logger.info("Query: " + queryString);
+						if(qry.list().size()>0)
+						{
+							AdvancedHierarchyReport ahReport= new AdvancedHierarchyReport();
+							ahReport.setId(ampTermsAssist.getAmpTermsAssistId());
+							ahReport.setName(ampTermsAssist.getTermsAssistName());
+							ahReport.setLabel("Type Of Assistance ");
+							iterActivity = qry.list().iterator();
+							ahReport.setActivities(new ArrayList());
+							while(iterActivity.hasNext())
+							{
+								AmpReportCache ampReportCache=(AmpReportCache) iterActivity.next();
+								ahReport.getActivities().add(ampReportCache.getAmpActivityId());
+							}
+							ahReportLevel2.getLevels().add(ahReport);
+						}
+						
+					}
+				}
+				ampReports.add(ahReportLevel2);
+				inClause=null;
+			}
+			
+		} 
+		catch(Exception e)
+		{
+			e.printStackTrace(System.out);
+		}
+
+		finally 
+		{
+			try 
+			{
+				PersistenceManager.releaseSession(session);
+			}
+			catch (Exception ex2) 
+			{
+				logger.debug("releaseSession() failed ");
+			}
+		}
+		return ampReports;
+	}
+
+
+	public static AdvancedHierarchyReport generateAdvancedReportRecords(List ampActivities,ArrayList activityIds,Collection columns,ArrayList measures,int fromYr,int toYr,String perspective,int fiscalCalId,String ampCurrencyCode,AdvancedHierarchyReport ahReport)
+	{
+		Session session = null ;
+		Query q = null ;
+		ArrayList ampReports = new ArrayList() ;
+//		Collection columns=new ArrayList();
+		ArrayList hierarchy=new ArrayList();
+//		ArrayList measures=new ArrayList();
+		Report reports=null;
+		String queryString = null;
+		Iterator iter=null;
+		Iterator iterColumn=null;
+		Long All=new Long(0);
+		double actualCommitment=0;
+		double actualDisbursement=0;
+		int flag=0;
+		int count=1;
+		int yrCount=(toYr-fromYr) +1;
+		ArrayList donors=new ArrayList();
+		ArrayList sectors=new ArrayList();
+		ArrayList assistance=new ArrayList();
+		ArrayList regions=new ArrayList();
+		ArrayList contacts=new ArrayList();
+		ArrayList modality=new ArrayList();
+		String level=null;
+		String status=null;
+		String actualStartDate=null;
+		String actualCompletionDate=null;
+		double[][] actualFunds=new double[yrCount][3];
+		double[][] plannedFunds=new double[yrCount][3];
+		double[][] subTotActualFunds=new double[yrCount][3];
+		double[][] subTotPlannedFunds=new double[yrCount][3];
+		double[][] totActualFunds=new double[yrCount][3];
+		double[][] totPlannedFunds=new double[yrCount][3];
+		String inClause=null;
+		String orderClause=null;
+		String title=null;
+		String ampId=null;
+		String contactName=null;
+		double toExchangeRate=1.0;
+		double fromExchangeRate=0.0;
+		double amount=0.0;
+		double sumUnDisb = 0, actSumCommit = 0, actSumDisb = 0, actSumExp = 0, planSumCommit = 0, planSumDisb = 0, planSumExp = 0;
+		double unDisbSubTotal = 0, actCommitSubTotal = 0, actDisbSubTotal = 0, actExpSubTotal = 0, planCommitSubTotal = 0, planDisbSubTotal = 0, planExpSubTotal = 0;
+		double unDisbTotal = 0, actCommitTotal = 0, actDisbTotal = 0, actExpTotal = 0, planCommitTotal = 0, planDisbTotal = 0, planExpTotal = 0;
+		Long columnId=null;
+		int fiscalYear=0,fiscalQuarter=0;
+		int maxYear=0;
+		int minYear=0;
+		double totActualComm=0;
+		double totActualDisb=0;
+		String objective=null;
+		String description=null;
+		Iterator iterSector=null;
+		Iterator iterLevel1=null;
+		Iterator iterLevel2=null;
+		DecimalFormat mf = new DecimalFormat("###,###,###,###,###") ;
+		Collection currencies=null;
+		int firstColumn=0;	
+		AdvancedReport report=null;
+//		AdvancedHierarchyReport ahReport=null;
+		AdvancedHierarchyReport ahTemp=null;
+		multiReport mreport=null;
+		AmpReportCache ampReportCache = null;
+		try
+		{
+			iter = ampActivities.iterator();
+			while(iter.hasNext())
+			{
+				ampReportCache = (AmpReportCache) iter.next(); 
+					if(activityIds.indexOf(ampReportCache.getAmpActivityId())==-1)
+						continue;
+
+				if(reports==null || !(reports.getAmpActivityId().equals(ampReportCache.getAmpActivityId())))
+				{
+					if(reports!=null)
+					{
+						iterColumn=columns.iterator();
+						while(iterColumn.hasNext())
+						{
+							//logger.info("Begin while");
+							report=new AdvancedReport();
+							report.setDonors(new ArrayList());
+							report.setSectors(new ArrayList());
+							report.setRegions(new ArrayList());
+							report.setAssistance(new ArrayList());
+							report.setModality(new ArrayList());
+							report.setContacts(new ArrayList());
+							AmpColumns c=(AmpColumns) iterColumn.next();
+							if(c.getColumnId().equals(Constants.STATUS_NAME))
+								report.setStatus(status);
+							if(c.getColumnId().equals(Constants.DONOR_NAME))
+							{
+								if(donors.size()==0)
+									donors.add(" ");
+								report.getDonors().addAll(donors);
+							}
+							if(c.getColumnId().equals(Constants.ACTUAL_START_DATE))
+								report.setActualStartDate(actualStartDate);
+							if(c.getColumnId().equals(Constants.ACTIVITY_NAME))
+								report.setTitle(title);
+							if(c.getColumnId().equals(Constants.TERM_ASSIST_NAME))
+							{	
+								logger.info("Inside type of assistance");
+								if(assistance.size()==0)
+									assistance.add(" ");
+								report.setAssistance(assistance);
+							}
+							if(c.getColumnId().equals(Constants.LEVEL_NAME))
+								report.setLevel(level);
+							if(c.getColumnId().equals(Constants.ACTUAL_COMPLETION_DATE))
+								report.setActualCompletionDate(actualCompletionDate);
+							if(c.getColumnId().equals(Constants.SECTOR_NAME))
+								report.getSectors().addAll(sectors);
+							if(c.getColumnId().equals(Constants.REGION_NAME))
+								report.getRegions().addAll(regions);
+							if(c.getColumnId().equals(Constants.AMP_ID))
+								report.setAmpId(ampId);
+							if(c.getColumnId().equals(Constants.FUNDING_INSTRUMENT))
+							{
+								if(modality.size()==0)
+									modality.add(" ");
+								report.getModality().addAll(modality);
+							}
+							if(c.getColumnId().equals(Constants.CONTACT_NAME))
+							{	
+								if(contacts.size()==0)
+									contacts.add(" ");
+								report.getContacts().addAll(contacts);
+							}
+							if(c.getColumnId().equals(Constants.OBJECTIVE))
+								report.setObjective(objective);
+							if(c.getColumnId().equals(Constants.DESCRIPTION))
+								report.setDescription(description);
+								reports.getRecords().add(report);
+						}
+						//logger.info("Reports Size: " + reports.getRecords().size());
+									report=new AdvancedReport();
+									report.setAmpFund(new ArrayList());
+									for(int i=0;i<yrCount;i++)
+									{
+										AmpFund ampFund=new AmpFund();
+										if(measures.indexOf(new Long(1))>=0)
+											ampFund.setCommAmount(mf.format(actualFunds[i][0])); 
+										if(measures.indexOf(new Long(2))>=0)
+											ampFund.setDisbAmount(mf.format(actualFunds[i][1])); 
+										if(measures.indexOf(new Long(3))>=0)
+											ampFund.setExpAmount(mf.format(actualFunds[i][2]));	
+										if(measures.indexOf(new Long(4))>=0)
+											ampFund.setPlCommAmount(mf.format(plannedFunds[i][0])); 
+										if(measures.indexOf(new Long(5))>=0)
+											ampFund.setPlDisbAmount(mf.format(plannedFunds[i][1])); 
+										if(measures.indexOf(new Long(6))>=0)
+											ampFund.setPlExpAmount(mf.format(plannedFunds[i][2]));	
+										if(measures.indexOf(new Long(7))!=-1)
+											ampFund.setUnDisbAmount(mf.format(actualFunds[i][0]-actualFunds[i][1]));	
+									
+										actSumCommit = actSumCommit + actualFunds[i][0];
+										actSumDisb = actSumDisb + actualFunds[i][1];
+										actSumExp = actSumExp + actualFunds[i][2];
+										planSumCommit = planSumCommit + plannedFunds[i][0];
+										planSumDisb = planSumDisb + plannedFunds[i][1];
+										planSumExp = planSumExp + plannedFunds[i][2];
+										sumUnDisb = sumUnDisb + (actualFunds[i][0]-actualFunds[i][1]);
+										report.getAmpFund().add(ampFund);
+
+										subTotActualFunds[i][0] = subTotActualFunds[i][0] + actualFunds[i][0];
+										subTotActualFunds[i][1] = subTotActualFunds[i][1] + actualFunds[i][1];
+										subTotActualFunds[i][2] = subTotActualFunds[i][2] + actualFunds[i][2];
+										subTotPlannedFunds[i][0] = subTotPlannedFunds[i][0] + plannedFunds[i][0];
+										subTotPlannedFunds[i][1] = subTotPlannedFunds[i][1] + plannedFunds[i][1];
+										subTotPlannedFunds[i][2] = subTotPlannedFunds[i][2] + plannedFunds[i][2];
+									}
+
+									actCommitSubTotal = actCommitSubTotal + actSumCommit;
+									actDisbSubTotal = actDisbSubTotal + actSumDisb;
+									actExpSubTotal = actExpSubTotal + actSumExp;
+									planCommitSubTotal = planCommitSubTotal + planSumCommit;
+									planDisbSubTotal = planDisbSubTotal + planSumDisb;
+									planExpSubTotal = planExpSubTotal + planSumExp;
+									unDisbSubTotal = unDisbSubTotal + (actCommitSubTotal-actDisbSubTotal);
+	
+									AmpFund fund = new AmpFund();
+									fund.setCommAmount(mf.format(actSumCommit));
+									fund.setDisbAmount(mf.format(actSumDisb));
+									fund.setExpAmount(mf.format(actSumExp));
+									fund.setPlCommAmount(mf.format(planSumCommit));
+									fund.setPlDisbAmount(mf.format(planSumDisb));
+									fund.setPlExpAmount(mf.format(planSumExp));
+									fund.setUnDisbAmount(mf.format(sumUnDisb));
+									report.getAmpFund().add(fund) ;	
+	
+									reports.getRecords().add(report);
+									logger.info("Reports Size: " + reports.getRecords().size());
+									//logger.info("Fund Size: " + report.getAmpFund().size());
+									ahReport.getProject().add(reports);
+									actualCommitment=0;
+									actualDisbursement=0;
+									donors.clear();
+									assistance.clear();
+									modality.clear();
+									contacts.clear();
+									sectors.clear();
+									regions.clear();
+									contactName=null;
+									minYear=maxYear=0;
+									sumUnDisb=actSumCommit=actSumDisb=actSumExp=planSumCommit=planSumDisb=planSumExp = 0;
+									for(int i=0;i<yrCount;i++)
+									{
+										actualFunds[i][0]=actualFunds[i][1]=actualFunds[i][2]=0;
+										plannedFunds[i][0]=plannedFunds[i][1]=plannedFunds[i][2]=0;
+									}
+								}
+								reports= new Report();
+								reports.setRecords(new ArrayList());
+								//logger.info("Init Record");
+								title=ampReportCache.getActivityName();
+								ampId=ampReportCache.getAmpId();
+								reports.setAmpActivityId(ampReportCache.getAmpActivityId());
+								if(ampReportCache.getLevelName().equals("Not Exist"))
+									level=" ";
+								else
+									level=ampReportCache.getLevelName();
+								if(ampReportCache.getStatusName()==null)
+									status=" ";
+								else
+									status=ampReportCache.getStatusName();
+								if(DbUtil.getAmpReportSector(ampReportCache.getAmpActivityId()).size()==0)
+									sectors.add(" ");
+								else
+									sectors.addAll(DbUtil.getAmpReportSector(ampReportCache.getAmpActivityId()));
+								if(DbUtil.getAmpReportLocation(ampReportCache.getAmpActivityId()).size()==0)
+									regions.add(" ");
+								else
+									regions.addAll(DbUtil.getAmpReportLocation(ampReportCache.getAmpActivityId()));
+								if(ampReportCache.getTermAssistName()!=null)
+									assistance.add(ampReportCache.getTermAssistName());
+								if(ampReportCache.getDonorName()!=null)
+									donors.add(ampReportCache.getDonorName());
+								if(ampReportCache.getActualStartDate()!=null)
+									actualStartDate=DateConversion.ConvertDateToString(ampReportCache.getActualStartDate());
+								else
+									actualStartDate=" ";
+								if(ampReportCache.getActualCompletionDate()!=null)
+									actualCompletionDate=DateConversion.ConvertDateToString(ampReportCache.getActualCompletionDate());
+								else
+									actualCompletionDate=" ";
+								if(ampReportCache.getModalityName()!=null)
+									modality.add(ampReportCache.getModalityName());
+								AmpActivity ampActivity=(AmpActivity) ActivityUtil.getAmpActivity(ampReportCache.getAmpActivityId());
+								//if(ampReportCache.getActivityDescription()!=null)
+								if(ampActivity.getDescription()!=null)
+								{
+									//Editor ed = org.digijava.module.editor.util.DbUtil.getEditor(ampReportCache.getActivityDescription(),"en");
+									//description=ed.getBody();
+									description = ampActivity.getDescription();
+								}
+								else
+									description=" ";
+							
+								if(ampActivity.getObjective()!=null)
+								{
+									Editor ed = org.digijava.module.editor.util.DbUtil.getEditor(ampActivity.getObjective(),"en");
+									objective=ed.getBody();
+								}
+								else
+									objective=" ";
+	
+								if(ampActivity.getContFirstName()!=null)
+									contactName=ampActivity.getContFirstName();
+								if(ampActivity.getContLastName()!=null)
+									contactName=contactName + " " + ampActivity.getContLastName();
+								if(contactName!=null)
+									contacts.add(contactName);
+								contactName=null;
+								if(ampActivity.getMofedCntFirstName()!=null)
+									contactName=ampActivity.getMofedCntFirstName();
+								if(ampActivity.getMofedCntLastName()!=null)
+									contactName=contactName + " " + ampActivity.getMofedCntLastName();
+								if(contactName!=null)
+									contacts.add(contactName);
+							}
+							//logger.info("Title:" + title);
+							if(donors.indexOf(ampReportCache.getDonorName())==-1 && ampReportCache.getDonorName()!=null)
+								donors.add(ampReportCache.getDonorName());
+							if(assistance.indexOf(ampReportCache.getTermAssistName())==-1 && ampReportCache.getTermAssistName()!=null)
+								assistance.add(ampReportCache.getTermAssistName());
+							if(modality.indexOf(ampReportCache.getModalityName())==-1 && ampReportCache.getModalityName()!=null)
+								modality.add(ampReportCache.getModalityName());
+							//Begin fund calculation
+							if(ampReportCache.getFiscalYear()!=null && ampReportCache.getFiscalQuarter()!=null)
+							{
+								logger.info("begin fund calculation");
+								if(new Long(fiscalCalId).equals(Constants.GREGORIAN))
+								{
+									fiscalYear=ampReportCache.getFiscalYear().intValue();
+									fiscalQuarter=ampReportCache.getFiscalQuarter().intValue();
+								}
+								if(minYear > fiscalYear)
+									minYear=fiscalYear;
+								if(maxYear < fiscalYear)
+									maxYear=fiscalYear;
+								if(ampReportCache.getCurrencyCode().equals("USD"))
+									fromExchangeRate=1.0;
+								else
+									fromExchangeRate=DbUtil.getExchangeRate(ampReportCache.getCurrencyCode(),Constants.PLANNED,ampReportCache.getTransactionDate());
+								if(ampCurrencyCode.equals("USD"))
+									toExchangeRate=1.0;
+								else	
+									toExchangeRate=DbUtil.getExchangeRate(ampCurrencyCode,Constants.PLANNED,ampReportCache.getTransactionDate());
+							
+								if(ampReportCache.getActualCommitment().doubleValue()>0 && ampReportCache.getPerspective().equals(perspective))
+								{
+									amount=CurrencyWorker.convert1(ampReportCache.getActualCommitment().doubleValue(),fromExchangeRate,toExchangeRate);
+									actualCommitment=actualCommitment + amount;
+									if(fiscalYear>=fromYr && fiscalYear<=toYr)
+									{
+										if(actualFunds[fiscalYear%fromYr][0]==0)
+											actualFunds[fiscalYear%fromYr][0]=amount;
+										else
+										if(actualFunds[fiscalYear%fromYr][0]>0)
+											actualFunds[fiscalYear%fromYr][0]=actualFunds[fiscalYear%fromYr][0] + amount;
+									}
+								}
+								amount=0.0;
+								
+								if(ampReportCache.getActualDisbursement().doubleValue()>0 && ampReportCache.getPerspective().equals(perspective))
+								{
+									amount=CurrencyWorker.convert1(ampReportCache.getActualDisbursement().doubleValue(),fromExchangeRate,toExchangeRate);
+									if(fiscalYear>=fromYr && fiscalYear<=toYr)
+									{
+										if(actualFunds[fiscalYear%fromYr][1]==0)
+											actualFunds[fiscalYear%fromYr][1]=amount;
+										else
+										if(actualFunds[fiscalYear%fromYr][1]>0)
+											actualFunds[fiscalYear%fromYr][1]=actualFunds[fiscalYear%fromYr][1] + amount;
+									}
+								}
+								amount=0.0;
+								
+								if(measures.indexOf(new Long(3))!=-1)
+								{
+									if(ampReportCache.getActualExpenditure().doubleValue()>0 && ampReportCache.getPerspective().equals(perspective))
+									{
+										amount=CurrencyWorker.convert1(ampReportCache.getActualExpenditure().doubleValue(),fromExchangeRate,toExchangeRate);
+										if(fiscalYear>=fromYr && fiscalYear<=toYr)
+										{
+											if(actualFunds[fiscalYear%fromYr][2]==0)
+												actualFunds[fiscalYear%fromYr][2]=amount;
+											else
+											if(actualFunds[fiscalYear%fromYr][2]>0)
+												actualFunds[fiscalYear%fromYr][2]=actualFunds[fiscalYear%fromYr][2] + amount;
+										}
+									}
+									amount=0.0;
+								}
+								if(measures.indexOf(new Long(4))!=-1)
+								{
+									if(ampReportCache.getPlannedCommitment().doubleValue()>0 && ampReportCache.getPerspective().equals(perspective))
+									{
+										amount=CurrencyWorker.convert1(ampReportCache.getPlannedCommitment().doubleValue(),fromExchangeRate,toExchangeRate);
+										actualCommitment=actualCommitment + amount;
+										if(fiscalYear>=fromYr && fiscalYear<=toYr)
+										{
+											if(plannedFunds[fiscalYear%fromYr][0]==0)
+												plannedFunds[fiscalYear%fromYr][0]=amount;
+											else
+											if(plannedFunds[fiscalYear%fromYr][0]>0)
+												plannedFunds[fiscalYear%fromYr][0]=plannedFunds[fiscalYear%fromYr][0] + amount;
+										}
+									}
+									amount=0.0;
+								}	
+								if(measures.indexOf(new Long(5))!=-1)
+								{
+									if(ampReportCache.getPlannedDisbursement().doubleValue()>0 && ampReportCache.getPerspective().equals(perspective))
+									{
+										amount=CurrencyWorker.convert1(ampReportCache.getPlannedDisbursement().doubleValue(),fromExchangeRate,toExchangeRate);
+										if(fiscalYear>=fromYr && fiscalYear<=toYr)
+										{
+											if(plannedFunds[fiscalYear%fromYr][1]==0)
+												plannedFunds[fiscalYear%fromYr][1]=amount;
+											else
+											if(plannedFunds[fiscalYear%fromYr][1]>0)
+												plannedFunds[fiscalYear%fromYr][1]=plannedFunds[fiscalYear%fromYr][1] + amount;
+										}
+									}
+									amount=0.0;
+								}
+								if(measures.indexOf(new Long(6))!=-1)
+								{
+									if(ampReportCache.getPlannedExpenditure().doubleValue()>0 && ampReportCache.getPerspective().equals(perspective))
+									{
+										amount=CurrencyWorker.convert1(ampReportCache.getPlannedExpenditure().doubleValue(),fromExchangeRate,toExchangeRate);
+										if(fiscalYear>=fromYr && fiscalYear<=toYr)
+										{
+											if(plannedFunds[fiscalYear%fromYr][2]==0)
+												plannedFunds[fiscalYear%fromYr][2]=amount;
+											else
+											if(plannedFunds[fiscalYear%fromYr][2]>0)
+												plannedFunds[fiscalYear%fromYr][2]=plannedFunds[fiscalYear%fromYr][2] + amount;
+										}
+									}
+									amount=0.0;
+								}	
+								
+							
+							} // End Fund Calculation
+	
+						} // End of activity iteration
+					
+						iterColumn=columns.iterator();
+						while(iterColumn.hasNext())
+						{
+							report=new AdvancedReport();
+							report.setDonors(new ArrayList());
+							report.setAssistance(new ArrayList());
+							report.setSectors(new ArrayList());
+							report.setRegions(new ArrayList());
+							report.setModality(new ArrayList());
+							report.setContacts(new ArrayList());
+							AmpColumns c=(AmpColumns) iterColumn.next();
+							if(c.getColumnId().equals(Constants.STATUS_NAME))
+								report.setStatus(status);
+							if(c.getColumnId().equals(Constants.DONOR_NAME))
+							{
+								if(donors.size()==0)
+									donors.add(" ");
+								report.getDonors().addAll(donors);
+							}
+							if(c.getColumnId().equals(Constants.ACTUAL_START_DATE))
+								report.setActualStartDate(actualStartDate);
+							if(c.getColumnId().equals(Constants.ACTIVITY_NAME))
+								report.setTitle(title);
+							if(c.getColumnId().equals(Constants.TERM_ASSIST_NAME))
+							{
+								if(assistance.size()==0)
+									assistance.add(" ");
+								report.setAssistance(assistance);
+							}	
+							if(c.getColumnId().equals(Constants.LEVEL_NAME))
+								report.setLevel(level);
+							if(c.getColumnId().equals(Constants.ACTUAL_COMPLETION_DATE))
+								report.setActualCompletionDate(actualCompletionDate);
+							if(c.getColumnId().equals(Constants.SECTOR_NAME))
+								report.getSectors().addAll(sectors);
+							if(c.getColumnId().equals(Constants.REGION_NAME))
+								report.getRegions().addAll(regions);
+							if(c.getColumnId().equals(Constants.AMP_ID))
+								report.setAmpId(ampId);
+							if(c.getColumnId().equals(Constants.FUNDING_INSTRUMENT))
+							{
+								if(modality.size()==0)
+									modality.add(" ");
+								report.getModality().addAll(modality);
+							}
+							if(c.getColumnId().equals(Constants.CONTACT_NAME))
+							{
+								if(contacts.size()==0)
+									contacts.add(" ");
+								report.getContacts().addAll(contacts);
+							}
+							if(c.getColumnId().equals(Constants.OBJECTIVE))
+								report.setObjective(objective);
+							if(c.getColumnId().equals(Constants.DESCRIPTION))
+								report.setDescription(description);
+							reports.getRecords().add(report);
+						}
+						report=new AdvancedReport();
+						report.setAmpFund(new ArrayList());
+						for(int i=0;i<yrCount;i++)
+						{
+							AmpFund ampFund=new AmpFund();
+							if(measures.indexOf(new Long(1))!=-1)
+								ampFund.setCommAmount(mf.format(actualFunds[i][0])); 
+							if(measures.indexOf(new Long(2))!=-1)
+								ampFund.setDisbAmount(mf.format(actualFunds[i][1])); 
+							if(measures.indexOf(new Long(3))!=-1)
+								ampFund.setExpAmount(mf.format(actualFunds[i][2]));	
+							if(measures.indexOf(new Long(4))!=-1)
+								ampFund.setPlCommAmount(mf.format(plannedFunds[i][0])); 
+							if(measures.indexOf(new Long(5))!=-1)
+								ampFund.setPlDisbAmount(mf.format(plannedFunds[i][1])); 
+							if(measures.indexOf(new Long(6))!=-1)
+								ampFund.setPlExpAmount(mf.format(plannedFunds[i][2]));	
+							if(measures.indexOf(new Long(7))!=-1)
+								ampFund.setUnDisbAmount(mf.format(actualFunds[i][0]-actualFunds[i][1]));
+							
+							actSumCommit = actSumCommit + actualFunds[i][0];
+							actSumDisb = actSumDisb + actualFunds[i][1];
+							actSumExp = actSumExp + actualFunds[i][2];
+							planSumCommit = planSumCommit + plannedFunds[i][0];
+							planSumDisb = planSumDisb + plannedFunds[i][1];
+							planSumExp = planSumExp + plannedFunds[i][2];
+							sumUnDisb = sumUnDisb + (actualFunds[i][0]-actualFunds[i][1]);
+							report.getAmpFund().add(ampFund);
+							subTotActualFunds[i][0] = subTotActualFunds[i][0] + actualFunds[i][0];
+							subTotActualFunds[i][1] = subTotActualFunds[i][1] + actualFunds[i][1];
+							subTotActualFunds[i][2] = subTotActualFunds[i][2] + actualFunds[i][2];
+							subTotPlannedFunds[i][0] = subTotPlannedFunds[i][0] + plannedFunds[i][0];
+							subTotPlannedFunds[i][1] = subTotPlannedFunds[i][1] + plannedFunds[i][1];
+							subTotPlannedFunds[i][2] = subTotPlannedFunds[i][2] + plannedFunds[i][2];
+						}	
+	
+						actCommitSubTotal = actCommitSubTotal + actSumCommit;
+						actDisbSubTotal = actDisbSubTotal + actSumDisb;
+						actExpSubTotal = actExpSubTotal + actSumExp;
+						planCommitSubTotal = planCommitSubTotal + planSumCommit;
+						planDisbSubTotal = planDisbSubTotal + planSumDisb;
+						planExpSubTotal = planExpSubTotal + planSumExp;
+						unDisbSubTotal = unDisbSubTotal + (actCommitSubTotal-actDisbSubTotal);
+						
+						AmpFund fund = new AmpFund();
+						fund.setCommAmount(mf.format(actSumCommit));
+						fund.setDisbAmount(mf.format(actSumDisb));
+						fund.setExpAmount(mf.format(actSumExp));
+						fund.setPlCommAmount(mf.format(planSumCommit));
+						fund.setPlDisbAmount(mf.format(planSumDisb));
+						fund.setPlExpAmount(mf.format(planSumExp));
+						fund.setUnDisbAmount(mf.format(sumUnDisb));
+						report.getAmpFund().add(fund) ;	
+						reports.getRecords().add(report);
+						ahReport.getProject().add(reports);
+						reports=null;
+						ahReport.setFundSubTotal(new ArrayList());
+						for(int i=0;i<yrCount;i++)
+						{
+							AmpFund ampFund=new AmpFund();
+							if(measures.indexOf(new Long(1))!=-1)
+								ampFund.setCommAmount(mf.format(subTotActualFunds[i][0])); 
+							if(measures.indexOf(new Long(2))!=-1)
+								ampFund.setDisbAmount(mf.format(subTotActualFunds[i][1])); 
+							if(measures.indexOf(new Long(3))!=-1)
+								ampFund.setExpAmount(mf.format(subTotActualFunds[i][2]));	
+							if(measures.indexOf(new Long(4))!=-1)
+								ampFund.setPlCommAmount(mf.format(subTotPlannedFunds[i][0])); 
+							if(measures.indexOf(new Long(5))!=-1)
+								ampFund.setPlDisbAmount(mf.format(subTotPlannedFunds[i][1])); 
+							if(measures.indexOf(new Long(6))!=-1)
+								ampFund.setPlExpAmount(mf.format(subTotPlannedFunds[i][2]));	
+							if(measures.indexOf(new Long(7))!=-1)
+								ampFund.setUnDisbAmount(mf.format(subTotActualFunds[i][0]-subTotActualFunds[i][1]));
+						
+							ahReport.getFundSubTotal().add(ampFund);
+
+							
+						}
+
+						fund = new AmpFund();
+						fund.setCommAmount(mf.format(actCommitSubTotal));
+						fund.setDisbAmount(mf.format(actDisbSubTotal));
+						fund.setExpAmount(mf.format(actExpSubTotal));
+						fund.setPlCommAmount(mf.format(planCommitSubTotal));
+						fund.setPlDisbAmount(mf.format(planDisbSubTotal));
+						fund.setPlExpAmount(mf.format(planExpSubTotal));
+						fund.setUnDisbAmount(mf.format(unDisbSubTotal));
+						ahReport.getFundSubTotal().add(fund) ;	
+		} 
+		catch(Exception e)
+		{
+			e.printStackTrace(System.out);
+		}
+
+		finally 
+		{
+			try 
+			{
+				PersistenceManager.releaseSession(session);
+			}
+			catch (Exception ex2) 
+			{
+				logger.debug("releaseSession() failed ");
+			}
+		}
+		return ahReport;
+	}
+
+
+	public static AdvancedHierarchyReport getAdvancedReportRecords(List ampActivities,ArrayList activityIds,Collection columns,ArrayList measures,int fromYr,int toYr,String perspective,int fiscalCalId,String ampCurrencyCode,AdvancedHierarchyReport ahReport)
+	{
+		Session session = null ;
+		Query q = null ;
+		ArrayList ampReports = new ArrayList() ;
+//		Collection columns=new ArrayList();
+		ArrayList hierarchy=new ArrayList();
+//		ArrayList measures=new ArrayList();
+		Report reports=null;
+		String queryString = null;
+		Iterator iter=null;
+		Iterator iterColumn=null;
+		Long All=new Long(0);
+		double actualCommitment=0;
+		double actualDisbursement=0;
+		int flag=0;
+		int count=1;
+		int yrCount=(toYr-fromYr) +1;
+		ArrayList donors=new ArrayList();
+		ArrayList sectors=new ArrayList();
+		ArrayList assistance=new ArrayList();
+		ArrayList regions=new ArrayList();
+		ArrayList contacts=new ArrayList();
+		ArrayList modality=new ArrayList();
+		String level=null;
+		String status=null;
+		String actualStartDate=null;
+		String actualCompletionDate=null;
+		double[][] actualFunds=new double[yrCount][3];
+		double[][] plannedFunds=new double[yrCount][3];
+		double[][] subTotActualFunds=new double[yrCount][3];
+		double[][] subTotPlannedFunds=new double[yrCount][3];
+		double[][] totActualFunds=new double[yrCount][3];
+		double[][] totPlannedFunds=new double[yrCount][3];
+		String inClause=null;
+		String orderClause=null;
+		String title=null;
+		String ampId=null;
+		String contactName=null;
+		double toExchangeRate=1.0;
+		double fromExchangeRate=0.0;
+		double amount=0.0;
+		double sumUnDisb = 0, actSumCommit = 0, actSumDisb = 0, actSumExp = 0, planSumCommit = 0, planSumDisb = 0, planSumExp = 0;
+		double unDisbSubTotal = 0, actCommitSubTotal = 0, actDisbSubTotal = 0, actExpSubTotal = 0, planCommitSubTotal = 0, planDisbSubTotal = 0, planExpSubTotal = 0;
+		double unDisbTotal = 0, actCommitTotal = 0, actDisbTotal = 0, actExpTotal = 0, planCommitTotal = 0, planDisbTotal = 0, planExpTotal = 0;
+		Long columnId=null;
+		int fiscalYear=0,fiscalQuarter=0;
+		int maxYear=0;
+		int minYear=0;
+		double totActualComm=0;
+		double totActualDisb=0;
+		String objective=null;
+		String description=null;
+		Iterator iterSector=null;
+		Iterator iterLevel1=null;
+		Iterator iterLevel2=null;
+		DecimalFormat mf = new DecimalFormat("###,###,###,###,###") ;
+		Collection currencies=null;
+		int firstColumn=0;	
+		AdvancedReport report=null;
+//		AdvancedHierarchyReport ahReport=null;
+		AdvancedHierarchyReport ahTemp=null;
+		multiReport mreport=null;
+		AmpReportCache ampReportCache = null;
+		try
+		{
+			iter = ampActivities.iterator();
+			while(iter.hasNext())
+			{
+				ampReportCache = (AmpReportCache) iter.next(); 
+					if(activityIds.indexOf(ampReportCache.getAmpActivityId())==-1)
+						continue;
+
+				if(reports==null || !(reports.getAmpActivityId().equals(ampReportCache.getAmpActivityId())))
+				{
+					if(reports!=null)
+					{
+						iterColumn=columns.iterator();
+						while(iterColumn.hasNext())
+						{
+							//logger.info("Begin while");
+							report=new AdvancedReport();
+							report.setDonors(new ArrayList());
+							report.setSectors(new ArrayList());
+							report.setRegions(new ArrayList());
+							report.setAssistance(new ArrayList());
+							report.setModality(new ArrayList());
+							report.setContacts(new ArrayList());
+							Column c=(Column) iterColumn.next();
+							if(c.getColumnId().equals(Constants.STATUS_NAME))
+								report.setStatus(status);
+							if(c.getColumnId().equals(Constants.DONOR_NAME))
+							{
+								if(donors.size()==0)
+									donors.add(" ");
+								report.getDonors().addAll(donors);
+							}
+							if(c.getColumnId().equals(Constants.ACTUAL_START_DATE))
+								report.setActualStartDate(actualStartDate);
+							if(c.getColumnId().equals(Constants.ACTIVITY_NAME))
+								report.setTitle(title);
+							if(c.getColumnId().equals(Constants.TERM_ASSIST_NAME))
+							{	
+								logger.info("Inside type of assistance");
+								if(assistance.size()==0)
+									assistance.add(" ");
+								report.setAssistance(assistance);
+							}
+							if(c.getColumnId().equals(Constants.LEVEL_NAME))
+								report.setLevel(level);
+							if(c.getColumnId().equals(Constants.ACTUAL_COMPLETION_DATE))
+								report.setActualCompletionDate(actualCompletionDate);
+							if(c.getColumnId().equals(Constants.SECTOR_NAME))
+								report.getSectors().addAll(sectors);
+							if(c.getColumnId().equals(Constants.REGION_NAME))
+								report.getRegions().addAll(regions);
+							if(c.getColumnId().equals(Constants.AMP_ID))
+								report.setAmpId(ampId);
+							if(c.getColumnId().equals(Constants.FUNDING_INSTRUMENT))
+							{
+								if(modality.size()==0)
+									modality.add(" ");
+								report.getModality().addAll(modality);
+							}
+							if(c.getColumnId().equals(Constants.CONTACT_NAME))
+							{	
+								if(contacts.size()==0)
+									contacts.add(" ");
+								report.getContacts().addAll(contacts);
+							}
+							if(c.getColumnId().equals(Constants.OBJECTIVE))
+								report.setObjective(objective);
+							if(c.getColumnId().equals(Constants.DESCRIPTION))
+								report.setDescription(description);
+								reports.getRecords().add(report);
+						}
+						//logger.info("Reports Size: " + reports.getRecords().size());
+									report=new AdvancedReport();
+									report.setAmpFund(new ArrayList());
+									for(int i=0;i<yrCount;i++)
+									{
+										AmpFund ampFund=new AmpFund();
+										if(measures.indexOf(new Long(1))>=0)
+											ampFund.setCommAmount(mf.format(actualFunds[i][0])); 
+										if(measures.indexOf(new Long(2))>=0)
+											ampFund.setDisbAmount(mf.format(actualFunds[i][1])); 
+										if(measures.indexOf(new Long(3))>=0)
+											ampFund.setExpAmount(mf.format(actualFunds[i][2]));	
+										if(measures.indexOf(new Long(4))>=0)
+											ampFund.setPlCommAmount(mf.format(plannedFunds[i][0])); 
+										if(measures.indexOf(new Long(5))>=0)
+											ampFund.setPlDisbAmount(mf.format(plannedFunds[i][1])); 
+										if(measures.indexOf(new Long(6))>=0)
+											ampFund.setPlExpAmount(mf.format(plannedFunds[i][2]));	
+										if(measures.indexOf(new Long(7))!=-1)
+											ampFund.setUnDisbAmount(mf.format(actualFunds[i][0]-actualFunds[i][1]));	
+									
+										actSumCommit = actSumCommit + actualFunds[i][0];
+										actSumDisb = actSumDisb + actualFunds[i][1];
+										actSumExp = actSumExp + actualFunds[i][2];
+										planSumCommit = planSumCommit + plannedFunds[i][0];
+										planSumDisb = planSumDisb + plannedFunds[i][1];
+										planSumExp = planSumExp + plannedFunds[i][2];
+										sumUnDisb = sumUnDisb + (actualFunds[i][0]-actualFunds[i][1]);
+										report.getAmpFund().add(ampFund);
+
+										subTotActualFunds[i][0] = subTotActualFunds[i][0] + actualFunds[i][0];
+										subTotActualFunds[i][1] = subTotActualFunds[i][1] + actualFunds[i][1];
+										subTotActualFunds[i][2] = subTotActualFunds[i][2] + actualFunds[i][2];
+										subTotPlannedFunds[i][0] = subTotPlannedFunds[i][0] + plannedFunds[i][0];
+										subTotPlannedFunds[i][1] = subTotPlannedFunds[i][1] + plannedFunds[i][1];
+										subTotPlannedFunds[i][2] = subTotPlannedFunds[i][2] + plannedFunds[i][2];
+									}
+
+									actCommitSubTotal = actCommitSubTotal + actSumCommit;
+									actDisbSubTotal = actDisbSubTotal + actSumDisb;
+									actExpSubTotal = actExpSubTotal + actSumExp;
+									planCommitSubTotal = planCommitSubTotal + planSumCommit;
+									planDisbSubTotal = planDisbSubTotal + planSumDisb;
+									planExpSubTotal = planExpSubTotal + planSumExp;
+									unDisbSubTotal = unDisbSubTotal + (actCommitSubTotal-actDisbSubTotal);
+	
+									AmpFund fund = new AmpFund();
+									fund.setCommAmount(mf.format(actSumCommit));
+									fund.setDisbAmount(mf.format(actSumDisb));
+									fund.setExpAmount(mf.format(actSumExp));
+									fund.setPlCommAmount(mf.format(planSumCommit));
+									fund.setPlDisbAmount(mf.format(planSumDisb));
+									fund.setPlExpAmount(mf.format(planSumExp));
+									fund.setUnDisbAmount(mf.format(sumUnDisb));
+									report.getAmpFund().add(fund) ;	
+	
+									reports.getRecords().add(report);
+									logger.info("Reports Size: " + reports.getRecords().size());
+									//logger.info("Fund Size: " + report.getAmpFund().size());
+									ahReport.getProject().add(reports);
+									actualCommitment=0;
+									actualDisbursement=0;
+									donors.clear();
+									assistance.clear();
+									modality.clear();
+									contacts.clear();
+									sectors.clear();
+									regions.clear();
+									contactName=null;
+									minYear=maxYear=0;
+									sumUnDisb=actSumCommit=actSumDisb=actSumExp=planSumCommit=planSumDisb=planSumExp = 0;
+									for(int i=0;i<yrCount;i++)
+									{
+										actualFunds[i][0]=actualFunds[i][1]=actualFunds[i][2]=0;
+										plannedFunds[i][0]=plannedFunds[i][1]=plannedFunds[i][2]=0;
+									}
+								}
+								reports= new Report();
+								reports.setRecords(new ArrayList());
+								//logger.info("Init Record");
+								title=ampReportCache.getActivityName();
+								ampId=ampReportCache.getAmpId();
+								reports.setAmpActivityId(ampReportCache.getAmpActivityId());
+								if(ampReportCache.getLevelName().equals("Not Exist"))
+									level=" ";
+								else
+									level=ampReportCache.getLevelName();
+								if(ampReportCache.getStatusName()==null)
+									status=" ";
+								else
+									status=ampReportCache.getStatusName();
+								if(DbUtil.getAmpReportSector(ampReportCache.getAmpActivityId()).size()==0)
+									sectors.add(" ");
+								else
+									sectors.addAll(DbUtil.getAmpReportSector(ampReportCache.getAmpActivityId()));
+								if(DbUtil.getAmpReportLocation(ampReportCache.getAmpActivityId()).size()==0)
+									regions.add(" ");
+								else
+									regions.addAll(DbUtil.getAmpReportLocation(ampReportCache.getAmpActivityId()));
+								if(ampReportCache.getTermAssistName()!=null)
+									assistance.add(ampReportCache.getTermAssistName());
+								if(ampReportCache.getDonorName()!=null)
+									donors.add(ampReportCache.getDonorName());
+								if(ampReportCache.getActualStartDate()!=null)
+									actualStartDate=DateConversion.ConvertDateToString(ampReportCache.getActualStartDate());
+								else
+									actualStartDate=" ";
+								if(ampReportCache.getActualCompletionDate()!=null)
+									actualCompletionDate=DateConversion.ConvertDateToString(ampReportCache.getActualCompletionDate());
+								else
+									actualCompletionDate=" ";
+								if(ampReportCache.getModalityName()!=null)
+									modality.add(ampReportCache.getModalityName());
+								AmpActivity ampActivity=(AmpActivity) ActivityUtil.getAmpActivity(ampReportCache.getAmpActivityId());
+								//if(ampReportCache.getActivityDescription()!=null)
+								if(ampActivity.getDescription()!=null)
+								{
+									//Editor ed = org.digijava.module.editor.util.DbUtil.getEditor(ampReportCache.getActivityDescription(),"en");
+									//description=ed.getBody();
+									description = ampActivity.getDescription();
+								}
+								else
+									description=" ";
+							
+								if(ampActivity.getObjective()!=null)
+								{
+									Editor ed = org.digijava.module.editor.util.DbUtil.getEditor(ampActivity.getObjective(),"en");
+									objective=ed.getBody();
+								}
+								else
+									objective=" ";
+	
+								if(ampActivity.getContFirstName()!=null)
+									contactName=ampActivity.getContFirstName();
+								if(ampActivity.getContLastName()!=null)
+									contactName=contactName + " " + ampActivity.getContLastName();
+								if(contactName!=null)
+									contacts.add(contactName);
+								contactName=null;
+								if(ampActivity.getMofedCntFirstName()!=null)
+									contactName=ampActivity.getMofedCntFirstName();
+								if(ampActivity.getMofedCntLastName()!=null)
+									contactName=contactName + " " + ampActivity.getMofedCntLastName();
+								if(contactName!=null)
+									contacts.add(contactName);
+							}
+							//logger.info("Title:" + title);
+							if(donors.indexOf(ampReportCache.getDonorName())==-1 && ampReportCache.getDonorName()!=null)
+								donors.add(ampReportCache.getDonorName());
+							if(assistance.indexOf(ampReportCache.getTermAssistName())==-1 && ampReportCache.getTermAssistName()!=null)
+								assistance.add(ampReportCache.getTermAssistName());
+							if(modality.indexOf(ampReportCache.getModalityName())==-1 && ampReportCache.getModalityName()!=null)
+								modality.add(ampReportCache.getModalityName());
+							//Begin fund calculation
+							if(ampReportCache.getFiscalYear()!=null && ampReportCache.getFiscalQuarter()!=null)
+							{
+								logger.info("begin fund calculation");
+								if(new Long(fiscalCalId).equals(Constants.GREGORIAN))
+								{
+									fiscalYear=ampReportCache.getFiscalYear().intValue();
+									fiscalQuarter=ampReportCache.getFiscalQuarter().intValue();
+								}
+								if(minYear > fiscalYear)
+									minYear=fiscalYear;
+								if(maxYear < fiscalYear)
+									maxYear=fiscalYear;
+								if(ampReportCache.getCurrencyCode().equals("USD"))
+									fromExchangeRate=1.0;
+								else
+									fromExchangeRate=DbUtil.getExchangeRate(ampReportCache.getCurrencyCode(),Constants.PLANNED,ampReportCache.getTransactionDate());
+								if(ampCurrencyCode.equals("USD"))
+									toExchangeRate=1.0;
+								else	
+									toExchangeRate=DbUtil.getExchangeRate(ampCurrencyCode,Constants.PLANNED,ampReportCache.getTransactionDate());
+							
+								if(ampReportCache.getActualCommitment().doubleValue()>0 && ampReportCache.getPerspective().equals(perspective))
+								{
+									amount=CurrencyWorker.convert1(ampReportCache.getActualCommitment().doubleValue(),fromExchangeRate,toExchangeRate);
+									actualCommitment=actualCommitment + amount;
+									if(fiscalYear>=fromYr && fiscalYear<=toYr)
+									{
+										if(actualFunds[fiscalYear%fromYr][0]==0)
+											actualFunds[fiscalYear%fromYr][0]=amount;
+										else
+										if(actualFunds[fiscalYear%fromYr][0]>0)
+											actualFunds[fiscalYear%fromYr][0]=actualFunds[fiscalYear%fromYr][0] + amount;
+									}
+								}
+								amount=0.0;
+								
+								if(ampReportCache.getActualDisbursement().doubleValue()>0 && ampReportCache.getPerspective().equals(perspective))
+								{
+									amount=CurrencyWorker.convert1(ampReportCache.getActualDisbursement().doubleValue(),fromExchangeRate,toExchangeRate);
+									if(fiscalYear>=fromYr && fiscalYear<=toYr)
+									{
+										if(actualFunds[fiscalYear%fromYr][1]==0)
+											actualFunds[fiscalYear%fromYr][1]=amount;
+										else
+										if(actualFunds[fiscalYear%fromYr][1]>0)
+											actualFunds[fiscalYear%fromYr][1]=actualFunds[fiscalYear%fromYr][1] + amount;
+									}
+								}
+								amount=0.0;
+								
+								if(measures.indexOf(new Long(3))!=-1)
+								{
+									if(ampReportCache.getActualExpenditure().doubleValue()>0 && ampReportCache.getPerspective().equals(perspective))
+									{
+										amount=CurrencyWorker.convert1(ampReportCache.getActualExpenditure().doubleValue(),fromExchangeRate,toExchangeRate);
+										if(fiscalYear>=fromYr && fiscalYear<=toYr)
+										{
+											if(actualFunds[fiscalYear%fromYr][2]==0)
+												actualFunds[fiscalYear%fromYr][2]=amount;
+											else
+											if(actualFunds[fiscalYear%fromYr][2]>0)
+												actualFunds[fiscalYear%fromYr][2]=actualFunds[fiscalYear%fromYr][2] + amount;
+										}
+									}
+									amount=0.0;
+								}
+								if(measures.indexOf(new Long(4))!=-1)
+								{
+									if(ampReportCache.getPlannedCommitment().doubleValue()>0 && ampReportCache.getPerspective().equals(perspective))
+									{
+										amount=CurrencyWorker.convert1(ampReportCache.getPlannedCommitment().doubleValue(),fromExchangeRate,toExchangeRate);
+										actualCommitment=actualCommitment + amount;
+										if(fiscalYear>=fromYr && fiscalYear<=toYr)
+										{
+											if(plannedFunds[fiscalYear%fromYr][0]==0)
+												plannedFunds[fiscalYear%fromYr][0]=amount;
+											else
+											if(plannedFunds[fiscalYear%fromYr][0]>0)
+												plannedFunds[fiscalYear%fromYr][0]=plannedFunds[fiscalYear%fromYr][0] + amount;
+										}
+									}
+									amount=0.0;
+								}	
+								if(measures.indexOf(new Long(5))!=-1)
+								{
+									if(ampReportCache.getPlannedDisbursement().doubleValue()>0 && ampReportCache.getPerspective().equals(perspective))
+									{
+										amount=CurrencyWorker.convert1(ampReportCache.getPlannedDisbursement().doubleValue(),fromExchangeRate,toExchangeRate);
+										if(fiscalYear>=fromYr && fiscalYear<=toYr)
+										{
+											if(plannedFunds[fiscalYear%fromYr][1]==0)
+												plannedFunds[fiscalYear%fromYr][1]=amount;
+											else
+											if(plannedFunds[fiscalYear%fromYr][1]>0)
+												plannedFunds[fiscalYear%fromYr][1]=plannedFunds[fiscalYear%fromYr][1] + amount;
+										}
+									}
+									amount=0.0;
+								}
+								if(measures.indexOf(new Long(6))!=-1)
+								{
+									if(ampReportCache.getPlannedExpenditure().doubleValue()>0 && ampReportCache.getPerspective().equals(perspective))
+									{
+										amount=CurrencyWorker.convert1(ampReportCache.getPlannedExpenditure().doubleValue(),fromExchangeRate,toExchangeRate);
+										if(fiscalYear>=fromYr && fiscalYear<=toYr)
+										{
+											if(plannedFunds[fiscalYear%fromYr][2]==0)
+												plannedFunds[fiscalYear%fromYr][2]=amount;
+											else
+											if(plannedFunds[fiscalYear%fromYr][2]>0)
+												plannedFunds[fiscalYear%fromYr][2]=plannedFunds[fiscalYear%fromYr][2] + amount;
+										}
+									}
+									amount=0.0;
+								}	
+								
+							
+							} // End Fund Calculation
+	
+						} // End of activity iteration
+					
+						iterColumn=columns.iterator();
+						while(iterColumn.hasNext())
+						{
+							report=new AdvancedReport();
+							report.setDonors(new ArrayList());
+							report.setAssistance(new ArrayList());
+							report.setSectors(new ArrayList());
+							report.setRegions(new ArrayList());
+							report.setModality(new ArrayList());
+							report.setContacts(new ArrayList());
+							Column c=(Column) iterColumn.next();
+							if(c.getColumnId().equals(Constants.STATUS_NAME))
+								report.setStatus(status);
+							if(c.getColumnId().equals(Constants.DONOR_NAME))
+							{
+								if(donors.size()==0)
+									donors.add(" ");
+								report.getDonors().addAll(donors);
+							}
+							if(c.getColumnId().equals(Constants.ACTUAL_START_DATE))
+								report.setActualStartDate(actualStartDate);
+							if(c.getColumnId().equals(Constants.ACTIVITY_NAME))
+								report.setTitle(title);
+							if(c.getColumnId().equals(Constants.TERM_ASSIST_NAME))
+							{
+								if(assistance.size()==0)
+									assistance.add(" ");
+								report.setAssistance(assistance);
+							}	
+							if(c.getColumnId().equals(Constants.LEVEL_NAME))
+								report.setLevel(level);
+							if(c.getColumnId().equals(Constants.ACTUAL_COMPLETION_DATE))
+								report.setActualCompletionDate(actualCompletionDate);
+							if(c.getColumnId().equals(Constants.SECTOR_NAME))
+								report.getSectors().addAll(sectors);
+							if(c.getColumnId().equals(Constants.REGION_NAME))
+								report.getRegions().addAll(regions);
+							if(c.getColumnId().equals(Constants.AMP_ID))
+								report.setAmpId(ampId);
+							if(c.getColumnId().equals(Constants.FUNDING_INSTRUMENT))
+							{
+								if(modality.size()==0)
+									modality.add(" ");
+								report.getModality().addAll(modality);
+							}
+							if(c.getColumnId().equals(Constants.CONTACT_NAME))
+							{
+								if(contacts.size()==0)
+									contacts.add(" ");
+								report.getContacts().addAll(contacts);
+							}
+							if(c.getColumnId().equals(Constants.OBJECTIVE))
+								report.setObjective(objective);
+							if(c.getColumnId().equals(Constants.DESCRIPTION))
+								report.setDescription(description);
+							reports.getRecords().add(report);
+						}
+						report=new AdvancedReport();
+						report.setAmpFund(new ArrayList());
+						for(int i=0;i<yrCount;i++)
+						{
+							AmpFund ampFund=new AmpFund();
+							if(measures.indexOf(new Long(1))!=-1)
+								ampFund.setCommAmount(mf.format(actualFunds[i][0])); 
+							if(measures.indexOf(new Long(2))!=-1)
+								ampFund.setDisbAmount(mf.format(actualFunds[i][1])); 
+							if(measures.indexOf(new Long(3))!=-1)
+								ampFund.setExpAmount(mf.format(actualFunds[i][2]));	
+							if(measures.indexOf(new Long(4))!=-1)
+								ampFund.setPlCommAmount(mf.format(plannedFunds[i][0])); 
+							if(measures.indexOf(new Long(5))!=-1)
+								ampFund.setPlDisbAmount(mf.format(plannedFunds[i][1])); 
+							if(measures.indexOf(new Long(6))!=-1)
+								ampFund.setPlExpAmount(mf.format(plannedFunds[i][2]));	
+							if(measures.indexOf(new Long(7))!=-1)
+								ampFund.setUnDisbAmount(mf.format(actualFunds[i][0]-actualFunds[i][1]));
+							
+							actSumCommit = actSumCommit + actualFunds[i][0];
+							actSumDisb = actSumDisb + actualFunds[i][1];
+							actSumExp = actSumExp + actualFunds[i][2];
+							planSumCommit = planSumCommit + plannedFunds[i][0];
+							planSumDisb = planSumDisb + plannedFunds[i][1];
+							planSumExp = planSumExp + plannedFunds[i][2];
+							sumUnDisb = sumUnDisb + (actualFunds[i][0]-actualFunds[i][1]);
+							report.getAmpFund().add(ampFund);
+							subTotActualFunds[i][0] = subTotActualFunds[i][0] + actualFunds[i][0];
+							subTotActualFunds[i][1] = subTotActualFunds[i][1] + actualFunds[i][1];
+							subTotActualFunds[i][2] = subTotActualFunds[i][2] + actualFunds[i][2];
+							subTotPlannedFunds[i][0] = subTotPlannedFunds[i][0] + plannedFunds[i][0];
+							subTotPlannedFunds[i][1] = subTotPlannedFunds[i][1] + plannedFunds[i][1];
+							subTotPlannedFunds[i][2] = subTotPlannedFunds[i][2] + plannedFunds[i][2];
+						}	
+	
+						actCommitSubTotal = actCommitSubTotal + actSumCommit;
+						actDisbSubTotal = actDisbSubTotal + actSumDisb;
+						actExpSubTotal = actExpSubTotal + actSumExp;
+						planCommitSubTotal = planCommitSubTotal + planSumCommit;
+						planDisbSubTotal = planDisbSubTotal + planSumDisb;
+						planExpSubTotal = planExpSubTotal + planSumExp;
+						unDisbSubTotal = unDisbSubTotal + (actCommitSubTotal-actDisbSubTotal);
+						
+						AmpFund fund = new AmpFund();
+						fund.setCommAmount(mf.format(actSumCommit));
+						fund.setDisbAmount(mf.format(actSumDisb));
+						fund.setExpAmount(mf.format(actSumExp));
+						fund.setPlCommAmount(mf.format(planSumCommit));
+						fund.setPlDisbAmount(mf.format(planSumDisb));
+						fund.setPlExpAmount(mf.format(planSumExp));
+						fund.setUnDisbAmount(mf.format(sumUnDisb));
+						report.getAmpFund().add(fund) ;	
+						reports.getRecords().add(report);
+						ahReport.getProject().add(reports);
+						reports=null;
+						ahReport.setFundSubTotal(new ArrayList());
+						for(int i=0;i<yrCount;i++)
+						{
+							AmpFund ampFund=new AmpFund();
+							if(measures.indexOf(new Long(1))!=-1)
+								ampFund.setCommAmount(mf.format(subTotActualFunds[i][0])); 
+							if(measures.indexOf(new Long(2))!=-1)
+								ampFund.setDisbAmount(mf.format(subTotActualFunds[i][1])); 
+							if(measures.indexOf(new Long(3))!=-1)
+								ampFund.setExpAmount(mf.format(subTotActualFunds[i][2]));	
+							if(measures.indexOf(new Long(4))!=-1)
+								ampFund.setPlCommAmount(mf.format(subTotPlannedFunds[i][0])); 
+							if(measures.indexOf(new Long(5))!=-1)
+								ampFund.setPlDisbAmount(mf.format(subTotPlannedFunds[i][1])); 
+							if(measures.indexOf(new Long(6))!=-1)
+								ampFund.setPlExpAmount(mf.format(subTotPlannedFunds[i][2]));	
+							if(measures.indexOf(new Long(7))!=-1)
+								ampFund.setUnDisbAmount(mf.format(subTotActualFunds[i][0]-subTotActualFunds[i][1]));
+						
+							ahReport.getFundSubTotal().add(ampFund);
+
+							
+						}
+
+						fund = new AmpFund();
+						fund.setCommAmount(mf.format(actCommitSubTotal));
+						fund.setDisbAmount(mf.format(actDisbSubTotal));
+						fund.setExpAmount(mf.format(actExpSubTotal));
+						fund.setPlCommAmount(mf.format(planCommitSubTotal));
+						fund.setPlDisbAmount(mf.format(planDisbSubTotal));
+						fund.setPlExpAmount(mf.format(planExpSubTotal));
+						fund.setUnDisbAmount(mf.format(unDisbSubTotal));
+						ahReport.getFundSubTotal().add(fund) ;	
+		} 
+		catch(Exception e)
+		{
+			e.printStackTrace(System.out);
+		}
+
+		finally 
+		{
+			try 
+			{
+				PersistenceManager.releaseSession(session);
+			}
+			catch (Exception ex2) 
+			{
+				logger.debug("releaseSession() failed ");
+			}
+		}
+		return ahReport;
 	}
 
 // end of Advanced Function	

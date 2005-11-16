@@ -33,6 +33,8 @@ function validateFunding() {
 function validateFundingDetails(comm,disb,exp) {
 	var itr = comm + disb + exp;
 	var flagcomm = 0, flagdisb = 1, flagexp = 2, noentry = 0; 
+	var commAmt = 0, disbAmt = 0, expAmt = 0;
+	
 	for (var j = 0;j < itr;j ++) {
 		var amtField = "fundingDetail[" + j + "].transactionAmount";
 		var dateField = "fundingDetail[" + j + "].transactionDate";
@@ -58,6 +60,21 @@ function validateFundingDetails(comm,disb,exp) {
 				if (checkAmountLen(temp[i].value) == false) {
 					temp[i].focus();
 					return false;
+				}
+				var type = document.getElementsByName(transType);
+				value = parseFloat(temp[i].value);
+				if (isNaN(value)) {
+					alert("Invalid amount!");
+					temp[i].focus();
+					return false;
+				}
+				else {
+					if (type.item(0).value == 0)
+						commAmt = commAmt + value;
+					if (type.item(0).value == 1)
+						disbAmt = disbAmt + value;
+					if (type.item(0).value == 2)
+						expAmt  = expAmt  + value;	
 				}
 			}
 			if (temp[i].name != null && temp[i].name == dateField) {
@@ -166,6 +183,18 @@ function validateFundingDetails(comm,disb,exp) {
 				}
 			}
 		}
+	}
+	if (disbAmt > commAmt) {
+		alert("Amount disbursed can not be greater than committed amount.");
+		return false;
+	}
+	if (expAmt > commAmt) {
+		alert("Expenditure can not be greater than committed amount.");
+		return false;
+	}
+	if (expAmt > disbAmt) {
+		alert("Expenditure can not be greater than disbursed amount.");
+		return false;
 	}
 	return true;
 }

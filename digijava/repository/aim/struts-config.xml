@@ -1218,19 +1218,29 @@
 			  validate="true"
 			  input="/showLayout.do?layout=updateWorkspace"
 			  path="/aim/updateWorkspace">
-			  <forward name="showAdd" path="/showLayout.do?layout=updateWorkspace" />
+			  <forward name="admin" path="/showLayout.do?layout=updateWorkspace" />
  			  <forward name="index" path="/aim/index.do" redirect="true" />
-			  <forward name="workspaceManager" path="/aim/workspaceManager.do" />
 	</action>
 
 	<action 
 			  name="aimUpdateWorkspaceForm"
 			  type="org.digijava.module.aim.action.UpdateWorkspace"
-			  scope="request"
-			  validate="false"
+			  scope="session"
+			  validate="true"
 			  input="/showLayout.do?layout=teamWorkspaceOverview"
-			  path="/aim/updateTeamWorkspace">
-			  <forward name="workspaceOverview" path="/aim/workspaceOverview.do" />
+			  path="/aim/updateWorkspaceForTeam">
+ 			  <forward name="index" path="/aim/index.do" redirect="true" />
+			  <forward name="teamLead" path="/showLayout.do?layout=teamWorkspaceOverview" />
+			  
+	</action>	
+
+	<action 
+			  name="aimUpdateWorkspaceForm"
+			  type="org.digijava.module.aim.action.GetWorkspace"
+			  scope="session"
+			  validate="false"
+			  path="/aim/workspaceOverview">
+			  <forward name="teamLead" path="/showLayout.do?layout=teamWorkspaceOverview" />
 			  <forward name="index" path="/aim/index.do" redirect="true" />			  
 	</action>
 
@@ -1239,9 +1249,10 @@
 			  type="org.digijava.module.aim.action.GetWorkspace"
 			  scope="session"
 			  validate="false"
-			  path="/aim/workspaceOverview">
-			  <forward name="forward" path="/showLayout.do?layout=teamWorkspaceOverview" />
+			  path="/aim/createWorkspace">
+			  <forward name="showAddWorkspace" path="/showLayout.do?layout=updateWorkspace" />
 			  <forward name="index" path="/aim/index.do" redirect="true" />			  
+			  <forward name="forward" path="/aim/workspaceManager.do" />
 	</action>
 	
 	<action 
@@ -1250,10 +1261,20 @@
 			  scope="session"
 			  validate="false"
 			  path="/aim/getWorkspace">
-			  <forward name="showWorkspace" path="/showLayout.do?layout=updateWorkspace" />
+			  <forward name="admin" path="/showLayout.do?layout=updateWorkspace" />
+			  <forward name="teamLead" path="/showLayout.do?layout=teamWorkspaceOverview" />
 			  <forward name="index" path="/aim/index.do" redirect="true" />			  
-			  <forward name="forward" path="/aim/workspaceManager.do" />
 	</action>
+
+	<action 
+			  name="aimUpdateWorkspaceForm"
+			  type="org.digijava.module.aim.action.UpdateWorkspace"
+			  scope="session"
+			  validate="false"
+			  path="/aim/deleteWorkspace">
+			  <forward name="admin" path="/aim/workspaceManager.do" />
+			  <forward name="index" path="/aim/index.do" redirect="true" />			  
+	</action>	
 
 	<action 
 			  name="aimUpdateWorkspaceForm"
@@ -1267,32 +1288,12 @@
 
 	<action 
 			  name="aimUpdateWorkspaceForm"
-			  type="org.digijava.module.aim.action.UpdateWorkspaceSubmit"
-			  scope="session"
-			  validate="false"
-			  path="/aim/updateWorkspaceSubmit">
-			  <forward name="addChild" path="/aim/addChildWorkspaces.do" />
-			  <forward name="updateWorkspace" path="/aim/updateWorkspace.do" redirect="true" />			  
-			  <forward name="removeChild" path="/aim/removeChildWorkspace.do" redirect="true" />			  
-	</action>
-	
-
-	<action 
-			  name="aimUpdateWorkspaceForm"
-			  type="org.digijava.module.aim.action.ShowEditWorkspace"
-			  scope="session"
-			  validate="false"
-			  path="/aim/showEditWorkspace">
-			  <forward name="forward" path="/showLayout.do?layout=updateWorkspace" />
-	</action>		
-
-	<action 
-			  name="aimUpdateWorkspaceForm"
 			  type="org.digijava.module.aim.action.AddChildWorkspaces"
 			  scope="session"
 			  validate="false"
 			  path="/aim/childWorkspacesAdded">
-			  <forward name="forward" path="/aim/showEditWorkspace.do" />
+			  <forward name="admin" path="/showLayout.do?layout=updateWorkspace" />
+			  <forward name="teamLead" path="/showLayout.do?layout=teamWorkspaceOverview" />
 	</action>	
 
 	<action 
@@ -1301,7 +1302,8 @@
 			  scope="session"
 			  validate="false"
 			  path="/aim/removeChildWorkspace">
-			  <forward name="forward" path="/aim/showEditWorkspace.do" />
+			  <forward name="admin" path="/showLayout.do?layout=updateWorkspace" />
+			  <forward name="teamLead" path="/showLayout.do?layout=teamWorkspaceOverview" />
 	</action>		
 	
 	<action 

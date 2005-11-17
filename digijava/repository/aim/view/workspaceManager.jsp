@@ -6,12 +6,21 @@
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
 
+
+<script langauage="JavaScript">
+	function onDelete() {
+		var flag = confirm("Delete this workspace?");
+		return flag;
+	}
+</script>
+
 <digi:instance property="aimWorkspaceForm" />
 <digi:context name="digiContext" property="context" />
 
 <!--  AMP Admin Logo -->
 <jsp:include page="teamPagesHeader.jsp" flush="true" />
 <!-- End of Logo -->
+
 
 <table bgColor=#ffffff cellPadding=0 cellSpacing=0 width=772>
 	<tr>
@@ -72,10 +81,11 @@
 													<tr>
 														<td bgcolor="#ffffff">
 															<jsp:useBean id="urlParams2" type="java.util.Map" class="java.util.HashMap"/>
-															<c:set target="${urlParams2}" property="id">
+															<c:set target="${urlParams2}" property="tId">
 															<bean:write name="workspaces" property="ampTeamId" />
 															</c:set>
-															<c:set target="${urlParams2}" property="actionEvent" value="edit" />
+															<c:set target="${urlParams2}" property="event" value="edit" />
+															<c:set target="${urlParams2}" property="dest" value="admin" />
 															<bean:define id="translation">
 																<digi:trn key="aim:clickToViewWorkspace">Click here to view Workspace</digi:trn>
 															</bean:define>
@@ -104,18 +114,24 @@
 															Activities</digi:link> ]
 														</td>
 														<td bgcolor="#ffffff" width="40" align="center">
-															<c:set target="${urlParams2}" property="actionEvent" value="edit" />
+															<%--
+															<c:set target="${urlParams2}" property="actionEvent" value="edit" />--%>
 															<bean:define id="translation">
 																<digi:trn key="aim:clickToEditWorkspace">Click here to Edit Workspace</digi:trn>
 															</bean:define>
 															[ <digi:link href="/getWorkspace.do" name="urlParams2" title="<%=translation%>" >Edit</digi:link> ]
 														</td>
 														<td bgcolor="#ffffff" width="55" align="center">
-															<c:set target="${urlParams2}" property="actionEvent" value="delete" />
+															<jsp:useBean id="urlParams4" type="java.util.Map" class="java.util.HashMap"/>
+															<c:set target="${urlParams4}" property="tId">
+																<bean:write name="workspaces" property="ampTeamId" />
+															</c:set>
+															<c:set target="${urlParams4}" property="event" value="delete"/>
 															<bean:define id="translation">
 																<digi:trn key="aim:clickToDeleteWorkspace">Click here to Delete Workspace</digi:trn>
 															</bean:define>
-															[ <digi:link href="/getWorkspace.do" name="urlParams2" title="<%=translation%>" >Delete</digi:link> ]
+															[ <digi:link href="/deleteWorkspace.do" name="urlParams4" 
+																title="<%=translation%>" onclick="return onDelete()">Delete</digi:link> ]
 														</td>
 													</tr>
 													</logic:iterate>
@@ -181,7 +197,7 @@
 												<bean:define id="translation">
 													<digi:trn key="aim:clickToAddTeams">Click here to Add Teams</digi:trn>
 												</bean:define>
-												<digi:link href="/updateWorkspace.do" title="<%=translation%>" >
+												<digi:link href="/createWorkspace.do?dest=admin" title="<%=translation%>" >
 												<digi:trn key="aim:addTeam">
 												Add Teams
 												</digi:trn>

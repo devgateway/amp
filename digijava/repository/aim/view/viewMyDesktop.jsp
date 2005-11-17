@@ -95,6 +95,7 @@ function showtip()
 
 <digi:form action="/viewMyDesktop.do" method="post">
 <html:hidden property="teamMemberId" />
+
 <input type="hidden" name="showTask" value="">
 
 <TABLE border=0 bgColor=#ffffff cellPadding=0 cellSpacing=0 width="99%" valign="top" align="left">
@@ -475,11 +476,16 @@ function showtip()
 									--%>
 									</TD>
 									<TD align="right">
+										<jsp:useBean id="urlParams" type="java.util.Map" class="java.util.HashMap"/>
+										<c:set target="${urlParams}" property="tId">
+											<bean:write name="aimMyDesktopForm" property="teamId"/>
+										</c:set>
+										<c:set target="${urlParams}" property="dest" value="teamLead"/>
 										<logic:equal name="aimMyDesktopForm" property="teamLeadFlag" value="true">
 											<bean:define id="translation">
 												<digi:trn key="aim:clickToConfigureTeamPages">Click here to Configure Team Workspace</digi:trn>
 											</bean:define>
-											<digi:link href="/workspaceOverview.do" title="<%=translation%>">
+											<digi:link href="/workspaceOverview.do" name="urlParams" title="<%=translation%>">
 												<digi:trn key="aim:teamWorkspaceSetup">Team Workspace Setup</digi:trn>
 											</digi:link>
 										</logic:equal>

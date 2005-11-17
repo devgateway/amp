@@ -4,13 +4,50 @@
 <%@ taglib uri="/taglib/struts-tiles" prefix="tiles" %>
 <%@ taglib uri="/taglib/struts-html" prefix="html" %>
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
+<%@ taglib uri="/taglib/jstl-core" prefix="c" %>
 
-<digi:errors/>
+<script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
+<script language="JavaScript">
+<!--
+
+function addChildWorkspaces() {
+		if (document.aimUpdateWorkspaceForm.workspaceType.value != "Team") { 
+			openNewWindow(650, 380);
+			<digi:context name="addChild" property="context/module/moduleinstance/addChildWorkspaces.do" />
+			document.aimUpdateWorkspaceForm.action = "<%=addChild%>?dest=teamLead";
+			document.aimUpdateWorkspaceForm.target = popupPointer.name;
+			document.aimUpdateWorkspaceForm.submit();
+		} else {
+			alert("Workspace type must be 'Management' to add teams");
+			return false;
+		}
+}
+
+function removeChildWorkspace(id) {
+	<digi:context name="update" property="context/module/moduleinstance/removeChildWorkspace.do" />
+	document.aimUpdateWorkspaceForm.action = "<%=update%>?dest=teamLead&tId="+id;
+	document.aimUpdateWorkspaceForm.target = "_self";
+	document.aimUpdateWorkspaceForm.submit();
+}
+
+function update(action) {
+	var id = document.aimUpdateWorkspaceForm.teamId.value;
+	<digi:context name="update" property="context/module/moduleinstance/updateWorkspaceForTeam.do" />
+	document.aimUpdateWorkspaceForm.action = "<%=update%>?dest=teamLead&event="+action+"&tId="+id;
+	document.aimUpdateWorkspaceForm.target = "_self";
+	document.aimUpdateWorkspaceForm.submit();
+}
+
+-->
+</script>
+
 <digi:instance property="aimUpdateWorkspaceForm" />
-<digi:form action="/updateTeamWorkspace.do" method="post">
+<digi:form action="/updateWorkspaceForTeam.do" method="post">
 
 <html:hidden property="teamId" />
 <html:hidden property="actionEvent" />
+<html:hidden property="id" />
+<html:hidden property="mainAction" />
 
 <table cellSpacing=0 cellPadding=0 vAlign="top" align="left" width="100%">
 <tr><td width="100%">
@@ -79,7 +116,7 @@
 										</tr>
 										<tr>
 											<td bgColor=#ffffff class=box-border>
-												<table border=0 cellPadding=3 cellSpacing=3 class=box-border width="100%">
+												<table border=0 cellPadding=3 cellSpacing=3 class=box-border-nopadding width="100%">
 													<tr bgColor=#dddddb>
 														<td bgColor=#dddddb colspan="2" align="center"><b>
 															<digi:trn key="aim:teamGeneralSettings">
@@ -98,6 +135,11 @@
 													</tr>
 													</logic:equal>
 													<tr>
+														<td colspan="2" align="center">
+															<digi:errors/>
+														</td>
+													</tr>													
+													<tr bgcolor="#f4f4f2">
 														<td align="right" width="30%">
 															<digi:trn key="aim:teamName">
 															Team Name
@@ -107,7 +149,7 @@
 															<html:text property="teamName" size="50" styleClass="inp-text" />
 														</td>
 													</tr>
-													<tr>
+													<tr bgcolor="#f4f4f2">
 														<td align="right" width="30%">
 															<digi:trn key="aim:teamDescription">
 															Team Description
@@ -117,7 +159,7 @@
 															<html:textarea property="description" rows="3" cols="50" styleClass="inp-text"/>
 														</td>
 													</tr>							
-													<tr>
+													<tr bgcolor="#f4f4f2">
 														<td align="right" width="30%">
 															<digi:trn key="aim:teamCategory">Team Category</digi:trn>			
 														</td>
@@ -129,7 +171,7 @@
 															</html:select>
 														</td>
 													</tr>
-													<tr>
+													<tr bgcolor="#f4f4f2">
 														<td align="right">
 															<digi:trn key="aim:workspaceType">Workspace Type</digi:trn>		
 														</td>
@@ -141,10 +183,55 @@
 															</html:select>
 														</td>
 													</tr>													
+													<tr bgcolor="#f4f4f2">
+														<td align="right" width="150" bgcolor="#f4f4f2">
+															<digi:trn key="aim:childWorkspaces">Child Workspaces</digi:trn>		
+														</td>
+														<td align="left" bgcolor="#f4f4f2">
+															<input type="button" value="Add" class="buton" onclick="addChildWorkspaces()">
+														</td>																
+													</tr>
+													<c:if test="${!empty aimUpdateWorkspaceForm.childWorkspaces}">
+													<tr>
+														<td colspan="2" align="center" bgcolor="#f4f4f2">
+															<table width="98%" cellPadding=2 cellSpacing=0 valign="top" align="center" 
+															class="box-border-nopadding">
+															<c:forEach var="workspaces" items="${aimUpdateWorkspaceForm.childWorkspaces}">
+																<tr>
+																	<td align="left">&nbsp;
+																		<c:out value="${workspaces.name}"/>
+																	</td>
+																	<td align="right" width="10">
+																		<c:if test="${aimUpdateWorkspaceForm.actionEvent != 'delete'}">
+																		<a href="javascript:removeChildWorkspace(<c:out value="${workspaces.ampTeamId}"/>)">
+																	 	<digi:img src="module/cms/images/deleteIcon.gif" 
+																		border="0" alt="Remove this child workspace"/></a>&nbsp;
+																		</c:if>
+																	</td>																	
+																</tr>															
+															</c:forEach>
+															</table>
+														</td>
+													</tr>
+													</c:if>	
+													<c:if test="${empty aimUpdateWorkspaceForm.childWorkspaces}">
+													<tr>
+														<td colspan="2" align="center" bgcolor="#f4f4f2">
+															<table width="98%" cellPadding=2 cellSpacing=0 valign="top" align="center" 
+															class="box-border-nopadding">
+															<tr>
+																<td align="left">
+																	<digi:trn key="aim:noChildTeams">No child teams</digi:trn>
+																</td>
+															</tr>
+															</table>
+														</td>
+													</tr>
+													</c:if>													
 													<tr><td>&nbsp;</td></tr>
 													<tr>
 														<td colspan="2" align="center">
-															<html:submit styleClass="dr-menu" value=" Update " />
+															<html:submit styleClass="dr-menu" value=" Update " onclick="update('edit')"/>
 														</td>
 													</tr>							
 												</table>

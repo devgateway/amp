@@ -28,14 +28,18 @@ public class AddChildWorkspaces extends Action {
 			HttpServletRequest request,HttpServletResponse response) throws Exception {
 		
 		UpdateWorkspaceForm uwForm = (UpdateWorkspaceForm) form;
-	
 		uwForm.setReset(false);
+		
+		String dest = request.getParameter("dest");
 		
 		if (uwForm.getSelChildWorkspaces() != null && uwForm.getSelChildWorkspaces().length > 0) {
 			logger.info("Selchildworkspaces.length :" + uwForm.getSelChildWorkspaces().length);
 			Collection teams = TeamUtil.getAllTeams(uwForm.getSelChildWorkspaces());
 			if (uwForm.getChildWorkspaces() == null) {
+				logger.debug("childWorkspace is null");
 				uwForm.setChildWorkspaces(new ArrayList());
+			} else {
+				logger.debug("Child workspaces size = " + uwForm.getChildWorkspaces().size());
 			}
 			
 			ArrayList temp = new ArrayList(teams);
@@ -45,8 +49,6 @@ public class AddChildWorkspaces extends Action {
 				AmpTeam	childTeam = (AmpTeam) temp.get(i);			
 				while (itr1.hasNext()) {
 					AmpTeam team = (AmpTeam) itr1.next();
-					logger.info("team.getAmpTeamId() = " + team.getAmpTeamId());
-					logger.info("childTeam.getAmpTeamId() = " + childTeam.getAmpTeamId());
 					if (team.getAmpTeamId().equals(childTeam.getAmpTeamId())) {
 						flag = true;
 						break;
@@ -57,7 +59,8 @@ public class AddChildWorkspaces extends Action {
 				}
 			}		
 		}
-		logger.info("Action :" + uwForm.getActionEvent());
-		return mapping.findForward("forward");
+		uwForm.setActionEvent("edit");
+		//return mapping.findForward("forward");
+		return mapping.findForward(dest);
 	}
 }

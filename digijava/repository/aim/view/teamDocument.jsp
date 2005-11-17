@@ -6,6 +6,10 @@
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
 
+<jsp:useBean id="bcparams" type="java.util.Map" class="java.util.HashMap"/>
+<c:set target="${bcparams}" property="tId" value="-1"/>
+<c:set target="${bcparams}" property="dest" value="teamLead"/>			
+
 <table width="100%" cellSpacing=0 cellPadding=0 valign="top" align="left">
 <tr><td width="100%" valign="top" align="left">
 <jsp:include page="teamPagesHeader.jsp" flush="true" />
@@ -29,7 +33,7 @@
 						<bean:define id="translation">
 							<digi:trn key="aim:clickToViewTeamWorkspaceSetup">Click here to view Team Workspace Setup</digi:trn>
 						</bean:define>
-						<digi:link href="/workspaceOverview.do" styleClass="comment" title="<%=translation%>" >
+						<digi:link href="/workspaceOverview.do" name="bcparams" styleClass="comment" title="<%=translation%>" >
 							<digi:trn key="aim:teamWorkspaceSetup">Team Workspace Setup</digi:trn>
 						</digi:link>
 						&nbsp;&gt;&nbsp;						

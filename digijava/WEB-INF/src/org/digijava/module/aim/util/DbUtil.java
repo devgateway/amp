@@ -1498,7 +1498,7 @@ public class DbUtil {
 					else
 						inClause = inClause + ",'" + teamId + "'";
 				}
-			} */
+			}*/ 
 			AmpTeam ampTeam=DbUtil.getAmpTeam(ampTeamId);
 			Collection temp = new ArrayList();
 			if(ampTeam.getAccessType().equals("Team"))
@@ -3348,10 +3348,13 @@ public class DbUtil {
 			    qryBuffer.append(ampTeamRep.getReport().getAmpReportId());
 			}
 			
-			queryString = "select r from " + AmpReports.class.getName() + " r " +
+			if (qryBuffer != null && qryBuffer.length() > 0) {
+				queryString = "select r from " + AmpReports.class.getName() + " r " +
 					"where r.ampReportId in (" + qryBuffer + ")";
-			qry = session.createQuery(queryString);
-			col = qry.list();
+				logger.debug("Query = " + queryString);
+				qry = session.createQuery(queryString);
+				col = qry.list();
+			}
 		} catch (Exception e) {
 			logger.debug("Exception from getAllTeamReports()");
 			logger.debug(e.toString());

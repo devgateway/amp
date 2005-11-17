@@ -41,6 +41,7 @@ public class MyDesktopForm extends ActionForm
 	private Integer documentCount;
 	private boolean write;
 	private Long teamMemberId;
+	private Long teamId;
 	
 	// Added by Akash for activity approval process
 	private String workingTeamFlag;
@@ -475,5 +476,19 @@ public class MyDesktopForm extends ActionForm
 	 */
 	public void setMyTasksColl(Collection myTasksColl) {
 		this.myTasksColl = myTasksColl;
+	}
+
+	/**
+	 * @return Returns the teamId.
+	 */
+	public Long getTeamId() {
+		return teamId;
+	}
+
+	/**
+	 * @param teamId The teamId to set.
+	 */
+	public void setTeamId(Long teamId) {
+		this.teamId = teamId;
 	}
 }

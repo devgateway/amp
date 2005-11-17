@@ -28,13 +28,17 @@
 	}
 
 	function getChildWorkspaces() {
+		var dest = document.aimUpdateWorkspaceForm.actionEvent.value;	  
 		<digi:context name="getChild" property="context/module/moduleinstance/addChildWorkspaces.do" />
-		document.aimUpdateWorkspaceForm.action = "<%= getChild %>?wType="+document.aimUpdateWorkspaceForm.childWorkspaceType.value+"&tCategory="+document.aimUpdateWorkspaceForm.childTeamCategory.value+"&popupReset=true";
+		document.aimUpdateWorkspaceForm.action = "<%= getChild %>?wType="+document.aimUpdateWorkspaceForm.childWorkspaceType.value+"&tCategory="+document.aimUpdateWorkspaceForm.childTeamCategory.value+"&popupReset=true&dest="+dest;
 		document.aimUpdateWorkspaceForm.target = "_self"
 	   document.aimUpdateWorkspaceForm.submit();
 	}
 
 	function childWorkspacesAdded() {
+		var dest = document.aimUpdateWorkspaceForm.actionEvent.value;
+		<digi:context name="addChild" property="context/module/moduleinstance/childWorkspacesAdded.do" />
+		document.aimUpdateWorkspaceForm.action = "<%=addChild%>?dest="+dest;
 		document.aimUpdateWorkspaceForm.target = window.opener.name;
 	   document.aimUpdateWorkspaceForm.submit();
 		window.close();
@@ -48,6 +52,7 @@
 <digi:form action="/childWorkspacesAdded.do" method="post">
 
 <html:hidden property="teamId" />
+<html:hidden property="actionEvent" />
 
 <table width="100%" cellSpacing=5 cellPadding=5 vAlign="top" border=0>
 	<tr><td vAlign="top">

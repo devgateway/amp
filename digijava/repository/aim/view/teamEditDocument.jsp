@@ -1,10 +1,15 @@
-%@ page pageEncoding="UTF-8" %>
+<%@ page pageEncoding="UTF-8" %>
 <%@ taglib uri="/taglib/struts-bean" prefix="bean" %>
 <%@ taglib uri="/taglib/struts-logic" prefix="logic" %>
 <%@ taglib uri="/taglib/struts-tiles" prefix="tiles" %>
 <%@ taglib uri="/taglib/struts-html" prefix="html" %>
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
+<%@ taglib uri="/taglib/jstl-core" prefix="c" %>
+
+<jsp:useBean id="bcparams" type="java.util.Map" class="java.util.HashMap"/>
+<c:set target="${bcparams}" property="tId" value="-1"/>
+<c:set target="${bcparams}" property="dest" value="teamLead"/>			
 
 <script language="JavaScript">
 
@@ -52,7 +57,7 @@
 						<bean:define id="translation">
 							<digi:trn key="aim:clickToViewTeamWorkspaceSetup">Click here to view Team Workspace Setup</digi:trn>
 						</bean:define>
-						<digi:link href="/workspaceOverview.do" styleClass="comment" title="<%=translation%>" >
+						<digi:link href="/workspaceOverview.do" name="bcparams" styleClass="comment" title="<%=translation%>" >
 							<digi:trn key="aim:teamWorkspaceSetup">Team Workspace Setup</digi:trn>
 						</digi:link>
 						&nbsp;&gt;&nbsp;						

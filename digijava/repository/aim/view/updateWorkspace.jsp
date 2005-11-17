@@ -11,30 +11,30 @@
 <!--
 
 function addChildWorkspaces() {
-		if (document.aimUpdateWorkspaceForm.currUrl.value == "") { 		  			  
+		if (document.aimUpdateWorkspaceForm.workspaceType.value != "Team") { 
 			openNewWindow(650, 380);
-			document.aimUpdateWorkspaceForm.mainAction.value = "addChild";
-			document.aimUpdateWorkspaceForm.currUrl.value = "/addChildWorkspace.do";
+			<digi:context name="addChild" property="context/module/moduleinstance/addChildWorkspaces.do" />
+			document.aimUpdateWorkspaceForm.action = "<%=addChild%>?dest=admin";
 			document.aimUpdateWorkspaceForm.target = popupPointer.name;
 			document.aimUpdateWorkspaceForm.submit();
 		} else {
-			popupPointer.focus();
+			alert("Workspace type must be 'Management' to add teams");
+			return false;
 		}
 }
 
-function removeWorkspace(id,action) {
-	document.aimUpdateWorkspaceForm.actionEvent.value = action;
-	document.aimUpdateWorkspaceForm.mainAction.value = "removeChild";
-	document.aimUpdateWorkspaceForm.id.value = id;
+function removeChildWorkspace(id) {
+	<digi:context name="update" property="context/module/moduleinstance/removeChildWorkspace.do" />
+	document.aimUpdateWorkspaceForm.action = "<%=update%>?dest=admin&tId="+id;
 	document.aimUpdateWorkspaceForm.target = "_self";
-	document.aimUpdateWorkspaceForm.submit();	
+	document.aimUpdateWorkspaceForm.submit();		  
 }
 
 function update(action) {
-	document.aimUpdateWorkspaceForm.actionEvent.value = action;		  
-	document.aimUpdateWorkspaceForm.mainAction.value = "updateWorkspace";
+	<digi:context name="update" property="context/module/moduleinstance/updateWorkspace.do" />
+	document.aimUpdateWorkspaceForm.action = "<%=update%>?dest=admin&event="+action;
 	document.aimUpdateWorkspaceForm.target = "_self";
-	document.aimUpdateWorkspaceForm.submit();	
+	document.aimUpdateWorkspaceForm.submit();
 }
 
 -->
@@ -45,7 +45,7 @@ function update(action) {
 <digi:instance property="aimUpdateWorkspaceForm" />
 <digi:context name="digiContext" property="context" />
 
-<digi:form action="/updateWorkspaceSubmit.do" method="post" name="aimUpdateWorkspaceForm" 
+<digi:form action="/updateWorkspace.do" method="post" name="aimUpdateWorkspaceForm" 
 type="org.digijava.module.aim.form.UpdateWorkspaceForm"
 onsubmit="return validateAimUpdateWorkspaceForm(this);">
 
@@ -53,6 +53,9 @@ onsubmit="return validateAimUpdateWorkspaceForm(this);">
 <html:hidden property="actionEvent" />
 <html:hidden property="id" />
 <html:hidden property="mainAction" />
+
+<input type="hidden" name="event">
+<input type="hidden" name="dest">
 
 <input type="hidden" name="currUrl">
 
@@ -228,7 +231,7 @@ onsubmit="return validateAimUpdateWorkspaceForm(this);">
 													<c:if test="${aimUpdateWorkspaceForm.actionEvent != 'delete'}">
 													<tr>
 														<td align="right" width="150" bgcolor="#f4f4f2">
-															<digi:trn key="aim:childWorkspaces">Child Workspaces</digi:trn>		
+															<digi:trn key="aim:childWorkspacesOrTeams">Child Workspaces/Teams</digi:trn>		
 														</td>
 														<td align="left" bgcolor="#f4f4f2">
 															<input type="button" value="Add" class="buton" onclick="addChildWorkspaces()">
@@ -247,8 +250,7 @@ onsubmit="return validateAimUpdateWorkspaceForm(this);">
 																	</td>
 																	<td align="right" width="10">
 																		<c:if test="${aimUpdateWorkspaceForm.actionEvent != 'delete'}">
-																		<a href="javascript:removeWorkspace(<c:out value="${workspaces.ampTeamId}"/>,
-																		'<c:out value="${aimUpdateWorkspaceForm.actionEvent}"/>')">
+																		<a href="javascript:removeChildWorkspace(<c:out value="${workspaces.ampTeamId}"/>)">
 																	 	<digi:img src="module/cms/images/deleteIcon.gif" 
 																		border="0" alt="Remove this child workspace"/></a>&nbsp;
 																		</c:if>
@@ -259,7 +261,7 @@ onsubmit="return validateAimUpdateWorkspaceForm(this);">
 														</td>
 													</tr>
 													</c:if>
-													<c:if test="${aimUpdateWorkspaceForm.actionEvent != 'delete'}">													
+													<c:if test="${aimUpdateWorkspaceForm.actionEvent != 'delete'}">
 													<tr>
 														<td colspan="2" align="center" bgcolor="#f4f4f2">
 															<table cellPadding=5>
@@ -281,63 +283,6 @@ onsubmit="return validateAimUpdateWorkspaceForm(this);">
 															</table>										
 														</td>
 													</tr>													
-													</c:if>
-													<c:if test="${aimUpdateWorkspaceForm.actionEvent == 'delete'}">
-													<tr>
-														<td colspan="2" align="center" bgcolor="#f4f4f2">
-															<c:if test="${aimUpdateWorkspaceForm.deleteFlag == 'teamMembersExist'}">
-															<table cellPadding=5>
-																<tr>
-																	<td><b>
-																		<digi:trn key="aim:cannotDeleteTeam">
-																		Cannot delete the team</digi:trn>.&nbsp;
-																		<digi:trn key="aim:teamMembersExist">
-																		Team Members Exist
-																		</digi:trn>.</b>
-																	</td>
-																</tr>
-																<tr>
-																	<td align="center">
-																		<digi:link href="/workspaceManager.do">
-																			Back</digi:link>
-																	</td>
-																</tr>
-															</table>
-															</c:if>
-															<c:if test="${aimUpdateWorkspaceForm.deleteFlag == 'activitiesExist'}">
-															<table cellPadding=5>
-																<tr>
-																	<td><b>
-																		<digi:trn key="aim:cannotDeleteTeam">
-																		Cannot delete the team</digi:trn>.&nbsp;
-																		<digi:trn key="aim:activitiesExist">
-																		Activities Exist
-																		</digi:trn>.</b>
-																	</td>
-																</tr>
-																<tr>
-																	<td align="center">
-																		<digi:link href="/workspaceManager.do">
-																			Back</digi:link>
-																	</td>
-																</tr>																
-															</table>															
-															</c:if>
-															<c:if test="${aimUpdateWorkspaceForm.deleteFlag == 'delete'}">
-															<table cellPadding=5>
-																<tr>
-																	<td>
-																		<input type="button" value="Delete" class="dr-menu"
-																		onclick="update('delete')"/>
-																	</td>
-																	<td>
-																		<html:reset value="Clear" styleClass="dr-menu"/>
-																	</td>
-																</tr>
-															</table>																									
-															</c:if>															
-														</td>
-													</tr>
 													</c:if>
 												</table>
 											</td>

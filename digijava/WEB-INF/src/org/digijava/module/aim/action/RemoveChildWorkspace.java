@@ -24,7 +24,9 @@ public class RemoveChildWorkspace extends Action {
 		
 		UpdateWorkspaceForm uwForm = (UpdateWorkspaceForm) form;
 		
-		String id = uwForm.getId();
+		String dest = request.getParameter("dest");
+		logger.debug("In Remove child workspace");
+		String id = request.getParameter("tId");
 		if (id != null && id.trim().length() > 0) {
 			long temp = Long.parseLong(id);
 			Long teamId = new Long(temp);
@@ -32,10 +34,10 @@ public class RemoveChildWorkspace extends Action {
 			tempTeam.setAmpTeamId(teamId);
 			if (uwForm.getChildWorkspaces() != null) {
 				uwForm.getChildWorkspaces().remove(tempTeam);
+				logger.debug("Child workspace removed!");
 			}
 		}
-		logger.info("Action :" + uwForm.getActionEvent());
-		
-		return mapping.findForward("forward");
+		uwForm.setActionEvent("edit");
+		return mapping.findForward(dest);
 	}
 }

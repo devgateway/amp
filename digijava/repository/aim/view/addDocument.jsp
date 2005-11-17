@@ -4,6 +4,7 @@
 <%@ taglib uri="/taglib/struts-tiles" prefix="tiles" %>
 <%@ taglib uri="/taglib/struts-html" prefix="html" %>
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
+<%@ taglib uri="/taglib/jstl-core" prefix="c" %>
 
 <digi:context name="digiContext" property="context" />
 
@@ -62,6 +63,11 @@
 <html:hidden name="aimAddDocumentForm" property="processingMode"/>
 <html:hidden name="aimAddDocumentForm" property="categoryId"/>
 
+
+<jsp:useBean id="urlParams" type="java.util.Map" class="java.util.HashMap"/>
+<c:set target="${urlParams}" property="tId" value="-1"/>
+<c:set target="${urlParams}" property="dest" value="teamLead"/>			
+
 <table cellSpacing=0 cellPadding=0 vAlign="top" align="left" width="100%">
 <tr><td width="100%">
 <jsp:include page="teamPagesHeader.jsp" flush="true" />
@@ -86,7 +92,7 @@
 						<bean:define id="translation">
 							<digi:trn key="aim:clickToViewTeamWorkspaceSetup">Click here to view Team Workspace Setup</digi:trn>
 						</bean:define>
-						<digi:link href="/workspaceOverview.do" styleClass="comment" title="<%=translation%>" >
+						<digi:link href="/workspaceOverview.do" name="urlParams" styleClass="comment" title="<%=translation%>" >
 						<digi:trn key="aim:teamWorkspaceSetup">
 						Team Workspace Setup
 						</digi:trn>

@@ -4,6 +4,11 @@
 <%@ taglib uri="/taglib/struts-tiles" prefix="tiles" %>
 <%@ taglib uri="/taglib/struts-html" prefix="html" %>
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
+<%@ taglib uri="/taglib/jstl-core" prefix="c" %>
+
+<jsp:useBean id="urlParams" type="java.util.Map" class="java.util.HashMap"/>
+<c:set target="${urlParams}" property="tId" value="-1"/>
+<c:set target="${urlParams}" property="dest" value="teamLead"/>			
 
 <table width="100%" cellPadding=0 cellSpacing=0 align="left" valign="top">
 	<tr><td height="20">
@@ -13,7 +18,7 @@
 					<bean:define id="translation">
 						<digi:trn key="aim:clickToViewWorkspaceOverview">Click here to view Workspace Overview</digi:trn>
 					</bean:define>
-					<digi:link href="/workspaceOverview.do"  styleClass="sub-nav" title="<%=translation%>" >
+					<digi:link href="/workspaceOverview.do" name="urlParams" styleClass="sub-nav" title="<%=translation%>" >
 						:: <digi:trn key="aim:workspaceOverview">Workspace Overview</digi:trn>
 					</digi:link>
 				</td>											

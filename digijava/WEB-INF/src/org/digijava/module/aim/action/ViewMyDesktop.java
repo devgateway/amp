@@ -47,11 +47,12 @@ public class ViewMyDesktop extends Action
 			return mapping.findForward("index");
 		Long ampTeamId=teamMember.getTeamId();
 		
+		
 		Long ampMemberId=teamMember.getMemberId();
 		boolean teamLeadFlag = teamMember.getTeamHead();
 		
 		MyDesktopForm formBean = (MyDesktopForm) form ;
-		
+		formBean.setTeamId(ampTeamId);
 		// clear filters
 		formBean.setFiscalYears(null);
 		formBean.setCurrency(null);

@@ -7,7 +7,7 @@
 	</smtp>
 	
 	<logon-site id="dglogin" host="amp-login.mofed.gov">
-			  http://amp-login.mofed.gov:8080/
+			  http://amp-login.mofed.gov/
    </logon-site>
      
 	

@@ -28,6 +28,8 @@ public class UpdateWorkspace extends Action {
 			HttpServletRequest request, HttpServletResponse response)
 			throws java.lang.Exception {
 
+		logger.debug("In updateWorkspace()");
+		
 		boolean permitted = false;
 		HttpSession session = request.getSession();
 		if (session.getAttribute("ampAdmin") != null) {
@@ -46,27 +48,19 @@ public class UpdateWorkspace extends Action {
 		if (!permitted) {
 			return mapping.findForward("index");
 		}
-
-		UpdateWorkspaceForm uwForm = (UpdateWorkspaceForm) form;
-		uwForm.setReset(false);
-
-		try {
-			
-		logger.info("In update workspace");
-		logger.info("Action :" + uwForm.getActionEvent());
-
-		if (uwForm.getActionEvent() == null || uwForm.getActionEvent().equals("")) {
-			uwForm.setChildWorkspaces(null);
-			uwForm.setWorkspaceType(null);
-			uwForm.setActionEvent("add");
-		}
-
 		if (session.getAttribute("ampWorkspaces") != null) {
 			session.removeAttribute("ampWorkspaces");
 		}
 
-		ActionErrors errors = new ActionErrors();
+		try {
 		
+		UpdateWorkspaceForm uwForm = (UpdateWorkspaceForm) form;
+		
+		String event = request.getParameter("event");
+		String dest = request.getParameter("dest");
+		
+			
+		ActionErrors errors = new ActionErrors();
 		AmpTeam newTeam = null;
 		if (uwForm.getTeamName() != null) {
 			newTeam = new AmpTeam();
@@ -79,40 +73,47 @@ public class UpdateWorkspace extends Action {
 			}
 			newTeam.setName(uwForm.getTeamName());
 			newTeam.setType(uwForm.getType());
-		}		
-
-		logger.info("Action :" + uwForm.getActionEvent());		
-		if (uwForm.getActionEvent().equals("add")) {
-			logger.info("Adding teams ...");
+		}
+		
+		if (event != null && event.trim().equalsIgnoreCase("add")) {
+			logger.debug("Workspace Add!");
+			uwForm.setActionEvent("add");
 			if (newTeam != null) {
 				boolean teamExist = TeamUtil.createTeam(newTeam,uwForm.getChildWorkspaces());
 				if (teamExist) {
 					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
-					"error.aim.updateWorkspace.teamNameAlreadyExist"));
+						"error.aim.updateWorkspace.teamNameAlreadyExist"));
+					saveErrors(request, errors);
+					logger.debug("Team name already exist. Error message saved to request");
+					return mapping.getInputForward();
+				} else {
+					logger.debug("Team created");
+				}
+			}
+		} else if (event != null && event.trim().equalsIgnoreCase("edit")) {
+			uwForm.setActionEvent("edit");
+			logger.debug("Workspace Update!");
+			if (newTeam != null) {
+				newTeam.setAmpTeamId(uwForm.getTeamId());
+				if (newTeam.getAccessType().equalsIgnoreCase("Team") &&
+						(uwForm.getChildWorkspaces() != null && 
+								uwForm.getChildWorkspaces().size() > 0)) {
+					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
+					"error.aim.updateWorkspace.childTeamsExistForTeam"));
 					saveErrors(request, errors);
 					return mapping.getInputForward();					
 				}
-				logger.debug("workspace added");
-				uwForm.setReset(true);
-				uwForm.reset(mapping,request);
-				return mapping.findForward("workspaceManager");
-			}
-			return mapping.findForward("showAdd");
-		} else if (uwForm.getActionEvent().equals("edit")
-				|| uwForm.getActionEvent().equals("editFromTeamPage")) {
-			logger.info("Action from edit = " + uwForm.getActionEvent());
-			if (newTeam != null) {
-				newTeam.setAmpTeamId(uwForm.getTeamId());
-				logger.info("Editing an activity " + newTeam.getAmpTeamId());
 				boolean teamExist = TeamUtil.updateTeam(newTeam,uwForm.getChildWorkspaces());
-				logger.info("Team updated, teamExist :" + teamExist);
 				if (teamExist) {
 					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
 					"error.aim.updateWorkspace.teamNameAlreadyExist"));
 					saveErrors(request, errors);
-					return mapping.getInputForward();	
+					logger.debug("Team name already exist. Error message saved to request");
+					return mapping.getInputForward();
+				} else {
+					logger.debug("Team updated");
+					uwForm.setUpdateFlag(true);
 				}
-
 				TeamMember tm = (TeamMember) session.getAttribute("currentMember");
 				if (tm != null) {
 					if (tm.getTeamId() != null) {
@@ -122,29 +123,22 @@ public class UpdateWorkspace extends Action {
 					}
 				}
 			}
-			logger.info("Action from edit = " + uwForm.getActionEvent());
-			if (uwForm.getActionEvent().equals("editFromTeamPage")) {
-				logger.debug("returning editFromTeamPage");
-				return mapping.findForward("workspaceOverview");
-			} else {
-				uwForm.setReset(true);
-				uwForm.reset(mapping,request);				
-				return mapping.findForward("workspaceManager");
-			}
-		} else if (uwForm.getActionEvent().equals("delete")) {
-			if (uwForm.getTeamId() != null) {
-				
-				TeamUtil.removeTeam(uwForm.getTeamId());
-				logger.debug("workspace deleted");
-			}
-			uwForm.setReset(true);
-			uwForm.reset(mapping,request);				
-			return mapping.findForward("workspaceManager");
-		} else
-			return null;
+		} else if (event != null && event.trim().equalsIgnoreCase("delete")) {
+			logger.debug("Workspace Delete!");
+			String tId = request.getParameter("tId");
+			Long teamId = new Long(Long.parseLong(tId));
+			TeamUtil.removeTeam(teamId);
+			logger.debug("Workspace deleted");
+			return mapping.findForward("admin");
+
+		}
+		//uwForm.setReset(true);
+		//uwForm.reset(mapping,request);
+		
+		return mapping.findForward(dest);
 		} catch (Exception e) {
 			e.printStackTrace(System.out);
 		}
-		return null; // to be removed while removing try catch
+		return null;
 	}
 }

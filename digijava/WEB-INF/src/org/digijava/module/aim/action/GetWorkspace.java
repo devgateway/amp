@@ -44,25 +44,29 @@ public class GetWorkspace extends Action {
 		}
 		
 		UpdateWorkspaceForm uwForm = (UpdateWorkspaceForm) form;
-
-		String action = request.getParameter("actionEvent");
-		Long teamId = null;
-
-		logger.info("Action = " + uwForm.getActionEvent());
-
-		if (request.getParameter("id") != null) {
-			teamId = new Long(Long.parseLong(request.getParameter("id")));
-			logger.debug("teamId : " + teamId);
-		} else if (session.getAttribute("currentMember") != null) {
-			TeamMember member = (TeamMember) session
-					.getAttribute("currentMember");
-			teamId = member.getTeamId();
-		} else {
-			return mapping.findForward("index");
+		uwForm.setUpdateFlag(false);
+		
+		String dest = request.getParameter("dest");
+		String id = request.getParameter("tId");
+		logger.debug("dest = " + dest);
+		logger.debug("id = " + id);
+		Long teamId = new Long(0);
+		try {
+			if (id != null && id.trim().length() > 0) {
+				teamId = new Long(Long.parseLong(id));	
+				if (teamId.longValue() == -1) {
+					TeamMember tm = (TeamMember) session.getAttribute("currentMember");
+					teamId = tm.getTeamId();
+				}
+			} else {
+				uwForm.setActionEvent("add");
+				return mapping.findForward("showAddWorkspace");				
+			}
+		} catch (NumberFormatException nfe) {
+			// incorrect id.
 		}
 
 		Workspace workspace =TeamUtil.getWorkspace(teamId);
-		
 		if (workspace != null) {
 			uwForm.setTeamId(new Long(workspace.getId()));
 			uwForm.setTeamName(workspace.getName());
@@ -70,34 +74,10 @@ public class GetWorkspace extends Action {
 			uwForm.setWorkspaceType(workspace.getWorkspaceType());
 			uwForm.setDescription(workspace.getDescription());
 			uwForm.setChildWorkspaces(workspace.getChildWorkspaces());
-			logger.debug("values set.");
-		}
-
-		if (action != null && action.equals("edit")) {
 			uwForm.setActionEvent("edit");
-			return mapping.findForward("showWorkspace");
-		} else if (action != null && action.equals("delete")) {
-			// check whether the team contain any members.
-			if (workspace.isHasMembers()) {
-				uwForm.setDeleteFlag("teamMembersExist");
-			} else {
-				if (workspace.isHasActivities()) {
-					uwForm.setDeleteFlag("activitiesExist");
-				} else {
-					uwForm.setDeleteFlag("delete");
-				}
-			}
-			uwForm.setActionEvent("delete");
-			return mapping.findForward("showWorkspace");
-		} else if (action != null && action.equals("view")) {
-			uwForm.setActionEvent("view");
-			return mapping.findForward("showWorkspace");
-		} else if (action == null || action.equals("editFromTeamPage")) {
-			logger.debug("no action set");
-			uwForm.setActionEvent("editFromTeamPage");
-			return mapping.findForward("forward");
-		} else {
-			return null;
-		}
+		}			
+
+		logger.debug("Dest value = " + dest);
+		return mapping.findForward(dest);
 	}
 }

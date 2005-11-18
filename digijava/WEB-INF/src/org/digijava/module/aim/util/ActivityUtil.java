@@ -924,6 +924,39 @@ public class ActivityUtil {
 		return col;
 	}
 	
+	public static Collection getRegionalFundings(Long id,Long regId) {
+		Collection col = new ArrayList();
+
+		Session  session = null;
+		try {
+			session = PersistenceManager.getSession();
+			AmpActivity activity = (AmpActivity) session.load(AmpActivity.class,id);
+			col = activity.getRegionalFundings();
+			ArrayList temp = new ArrayList(col);
+			Iterator itr = temp.iterator();
+			AmpRegionalFunding regionFunding = new AmpRegionalFunding();
+			regionFunding.setAmpRegionalFundingId(regId);
+			while (itr.hasNext()) {
+				AmpRegionalFunding regFund = (AmpRegionalFunding) itr.next();
+				if (regionFunding.equals(regFund)) {
+					col.remove(regFund);
+				}
+ 			}
+		} catch (Exception e) {
+			logger.debug("Exception in getRegionalFundings() " + e.getMessage());
+			e.printStackTrace(System.out);
+		} finally {
+			if (session != null) {
+				try {
+					PersistenceManager.releaseSession(session);
+				} catch (Exception ex) {
+					logger.debug("Exception while releasing session " + ex.getMessage());
+				}
+			}
+		}		
+		return col;
+	}	
+	
 	public static AmpActivity getActivityByName(String name) {
 		AmpActivity activity = null;
 		Session  session = null;

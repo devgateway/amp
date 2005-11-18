@@ -165,4 +165,11 @@ public class AmpRegionalFunding {
 	public void setTransactionType(Integer transactionType) {
 		this.transactionType = transactionType;
 	}
+	public boolean equals(Object arg) {
+		if (arg instanceof AmpRegionalFunding) {
+			AmpRegionalFunding regFund = (AmpRegionalFunding) arg;
+			return ampRegionalFundingId.equals(regFund.getAmpRegionalFundingId());	
+		}
+		throw new ClassCastException();
+	}
 }

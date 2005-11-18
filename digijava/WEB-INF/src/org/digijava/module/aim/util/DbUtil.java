@@ -3901,6 +3901,41 @@ public class DbUtil {
 		return col;
 	}
 
+	public static Collection getFilters(Long teamId, Long pageId) {
+		Session session = null;
+		Collection col = new ArrayList();
+
+		try {
+			session = PersistenceManager.getSession();
+			String qryStr = "select tpf.filter.ampFilterId from " +
+					AmpTeamPageFilters.class.getName() + " tpf " +
+							"where (tpf.team=:tId) and (tpf.page=:pId)";
+			Query qry = session.createQuery(qryStr);
+			qry.setParameter("tId",teamId,Hibernate.LONG);
+			qry.setParameter("pId",pageId,Hibernate.LONG);
+			
+			Iterator itr = qry.list().iterator();
+			while (itr.hasNext()) {
+				Long fId = (Long) itr.next();
+				AmpFilters filter = (AmpFilters) session.load(AmpFilters.class,fId);
+			    col.add(filter);
+			}
+		} catch (Exception e) {
+			logger.debug("Exception from getFilters()");
+			logger.debug(e.toString());
+		} finally {
+			try {
+				if (session != null) {
+					PersistenceManager.releaseSession(session);
+				}
+			} catch (Exception ex) {
+				logger.debug("releaseSession() failed");
+				logger.debug(ex.toString());
+			}
+		}
+		return col;
+	}	
+	
 	public static Collection getAllAssistanceTypes() {
 		Session session = null;
 		Collection col = null;

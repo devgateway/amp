@@ -6,8 +6,6 @@ package org.digijava.module.aim.form;
 
 import java.util.Collection;
 
-import org.apache.struts.action.ActionForm;
-
 public class RegionalFundingForm extends MainProjectDetailsForm {
 	private Collection regionalFundings;
 	private Long regionId;
@@ -16,13 +14,27 @@ public class RegionalFundingForm extends MainProjectDetailsForm {
 	private double totUnDisbursed;
 	private double totExpenditures;
 	private double totUnExpended;
+	
+	private boolean currFilter;
+	private boolean calFilter;
+	private boolean goButton;
+	
+	private String currFilterValue;
+	private long calFilterValue;
+	private Collection fiscalCalendars;
 
 	public RegionalFundingForm() {
 		totCommitments = 0;
 		totDisbursements = 0;
 		totUnDisbursed = 0;
 		totExpenditures = 0;
-		totUnExpended = 0;		
+		totUnExpended = 0;
+		currFilter = false;
+		calFilter = false;
+		goButton = false;
+		currFilterValue = "";
+		calFilterValue = -1;
+		fiscalCalendars = null;
 	}
 	
 	/**
@@ -121,6 +133,90 @@ public class RegionalFundingForm extends MainProjectDetailsForm {
 	 */
 	public void setTotUnExpended(double totUnExpended) {
 		this.totUnExpended = totUnExpended;
+	}
+
+	/**
+	 * @return Returns the calFilter.
+	 */
+	public boolean isCalFilter() {
+		return calFilter;
+	}
+
+	/**
+	 * @param calFilter The calFilter to set.
+	 */
+	public void setCalFilter(boolean calFilter) {
+		this.calFilter = calFilter;
+	}
+
+	/**
+	 * @return Returns the calFilterValue.
+	 */
+	public long getCalFilterValue() {
+		return calFilterValue;
+	}
+
+	/**
+	 * @param calFilterValue The calFilterValue to set.
+	 */
+	public void setCalFilterValue(long calFilterValue) {
+		this.calFilterValue = calFilterValue;
+	}
+
+	/**
+	 * @return Returns the currFilter.
+	 */
+	public boolean isCurrFilter() {
+		return currFilter;
+	}
+
+	/**
+	 * @param currFilter The currFilter to set.
+	 */
+	public void setCurrFilter(boolean currFilter) {
+		this.currFilter = currFilter;
+	}
+
+	/**
+	 * @return Returns the currFilterValue.
+	 */
+	public String getCurrFilterValue() {
+		return currFilterValue;
+	}
+
+	/**
+	 * @param currFilterValue The currFilterValue to set.
+	 */
+	public void setCurrFilterValue(String currFilterValue) {
+		this.currFilterValue = currFilterValue;
+	}
+
+	/**
+	 * @return Returns the fiscalCalendars.
+	 */
+	public Collection getFiscalCalendars() {
+		return fiscalCalendars;
+	}
+
+	/**
+	 * @param fiscalCalendars The fiscalCalendars to set.
+	 */
+	public void setFiscalCalendars(Collection fiscalCalendars) {
+		this.fiscalCalendars = fiscalCalendars;
+	}
+
+	/**
+	 * @return Returns the goButton.
+	 */
+	public boolean isGoButton() {
+		return goButton;
+	}
+
+	/**
+	 * @param goButton The goButton to set.
+	 */
+	public void setGoButton(boolean goButton) {
+		this.goButton = goButton;
 	}
 }
 

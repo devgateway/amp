@@ -293,7 +293,7 @@
 																					<logic:notEmpty name="regionalFunding" property="expenditures">
 																						<tr><td>
 																							<b>
-																							<digi:trn key="aim:disbursements">Expenditures</digi:trn> - (
+																							<digi:trn key="aim:expenditures">Expenditures</digi:trn> - (
 																							<digi:trn key="aim:totalActualToDate">Total actual to date
 																							</digi:trn> = 
 																							<c:out value="${aimEditActivityForm.totalExpenditures}"/> )

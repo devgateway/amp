@@ -189,6 +189,7 @@
 								<logic:notEqual name="aimMainProjectDetailsForm" property="tabIndex" value="4">
 	                    	<TD vAlign=center bgColor=#3754a1 noWrap width="153">
                    			<c:set target="${urlTabs}" property="tabIndex" value="4"/>
+                   			<c:set target="${urlTabs}" property="regionId" value="-1"/>
 <bean:define id="translation">
 	<digi:trn key="aim:clickToViewRegionalFundings">Click here to view regional fundings</digi:trn>
 </bean:define>

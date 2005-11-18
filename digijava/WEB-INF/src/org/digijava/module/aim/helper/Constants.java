@@ -94,6 +94,7 @@ public class Constants
 	public static final Long CONTACT_NAME = new Long(13) ;
 	public static final Long DESCRIPTION = new Long(14) ;
 	
-	
-
+	public static final String REGIONAL_FUNDING_PAGE_CODE = "RFS";
+	public static final String CALENDAR_FILTER = "Calendar";
+	public static final String CURRENCY_FILTER = "Currency";
 }	

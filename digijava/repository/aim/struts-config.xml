@@ -367,7 +367,7 @@
 	<action forward="/showLayout.do?layout=layoutRegionalFundingBreakdown" 
 			  path="/aim/viewRegionalFundingBreakdown" />	
 
-	<action forward="/showLayout.do?layout=layoutRegionalFundingDetails" 
+	<action name="aimRegionalFundingForm" forward="/showLayout.do?layout=layoutRegionalFundingDetails" 
 		path="/aim/viewRegFundDetails" />		
 		
 	<action forward="/showLayout.do?layout=layoutFinancingBreakdownFilter" 
@@ -480,7 +480,7 @@
 
 	<action name="aimRegionalFundingForm"
     	type="org.digijava.module.aim.action.GetRegionalFundings"
-		scope="request"
+		scope="session"
     	validate="false" 
 		path="/aim/getRegionalFundings">
 	</action>	

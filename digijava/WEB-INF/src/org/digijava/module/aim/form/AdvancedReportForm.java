@@ -17,6 +17,7 @@ public class AdvancedReportForm extends ActionForm
 	private Collection finalData = null;
 	private String reportTitle = "";
 	private String reportDescription = "";
+	private String reportType = "";
 	private String moveColumn="";
 	private Collection intermediate = null;
 	private Collection addedMeasures = null;
@@ -38,6 +39,18 @@ public class AdvancedReportForm extends ActionForm
 	private int forcastYear2 ;
 	private int forcastYear3 ;
 	private String currency ;
+	/**
+	 * @return Returns the multiReport.
+	 */
+	public Collection getMultiReport() {
+		return multiReport;
+	}
+	/**
+	 * @param multiReport The multiReport to set.
+	 */
+	public void setMultiReport(Collection multiReport) {
+		this.multiReport = multiReport;
+	}
 	private String perspective ;
 	private String perspectiveFilter ;
 	private int fiscalCalId;
@@ -1215,13 +1228,17 @@ private int yrDiff;
 		this.createdReportId = createdReportId;
 	}
 
-	public Collection getMultiReport() {
-		return multiReport;
+	/**
+	 * @return Returns the reportType.
+	 */
+	public String getReportType() {
+		return reportType;
 	}
-
-	public void setMultiReport(Collection collection) {
-		multiReport = collection;
+	/**
+	 * @param reportType The reportType to set.
+	 */
+	public void setReportType(String reportType) {
+		this.reportType = reportType;
 	}
-
 } //		End of Class
 

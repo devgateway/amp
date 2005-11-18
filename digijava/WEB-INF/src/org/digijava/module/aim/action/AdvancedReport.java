@@ -152,6 +152,12 @@ public class AdvancedReport extends Action {
 			else
 				logger.info(" AmpColumns is not NULL........");
 			
+			// Add the columns selected : Step 2
+			if(request.getParameter("check") != null && request.getParameter("check").equals("SelectCols"))
+			{
+				logger.info("inside Step 1...");
+				return mapping.findForward("SelectCols");
+			}
 			// add columns that are available
 			if(request.getParameter("check") != null && request.getParameter("check").equals("add"))
 			{
@@ -159,6 +165,7 @@ public class AdvancedReport extends Action {
 				logger.info( "Operation is : " + str);
 				updateData(formBean.getAmpColumns(), formBean.getAddedColumns(), formBean.getSelectedColumns(), formBean);
 				formBean.setSelectedColumns(null);
+				return mapping.findForward("SelectCols");
 			}
 			// Remove the columns selected
 			if(request.getParameter("check") != null && request.getParameter("check").equals("delete"))
@@ -167,6 +174,7 @@ public class AdvancedReport extends Action {
 				logger.info( "Operation is : " + str);
 				updateData(formBean.getAddedColumns(), formBean.getAmpColumns() , formBean.getRemoveColumns(), formBean);
 				formBean.setRemoveColumns(null);
+				return mapping.findForward("SelectCols");
 			}
 			
 			// Add the columns selected : Step 2
@@ -367,6 +375,21 @@ public class AdvancedReport extends Action {
 					
 					Collection pageRecords = new ArrayList();
 					int page=0;
+					
+/*					Collection aa= formBean.getColumnHierarchie();
+					System.out.println("hhhhhhhh: "+aa.size());
+					Iterator itr=aa.iterator();
+					String str="";
+					AmpColumns amp=new AmpColumns();
+					while(itr.hasNext()){
+						System.out.println("********************"+itr.next().getClass().getName());
+						if(itr.next() instanceof AmpColumns){
+							amp=(AmpColumns) itr.next();
+							System.out.println("h2h2h2h2h2h2:"+amp.getColumnName());
+						}
+					}
+*/					
+					
 					if (request.getParameter("page") == null) 
 					{
 						page = 1;

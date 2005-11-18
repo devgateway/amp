@@ -163,7 +163,8 @@ function gotoStep() {
 		int fcnt = measureSize.intValue();
 		int flag = 0;
 	%>              
-	<logic:iterate name="aimAdvancedReportForm"  property="addedMeasures" id="addedMeasures">				<c:if test="${addedMeasures.measureName == 'Cumulative Balance'}">
+	<logic:iterate name="aimAdvancedReportForm"  property="addedMeasures" id="addedMeasures">				
+	<c:if test="${addedMeasures.measureName == 'Cumulative Balance'}">
 		<%fcnt = fcnt-1;
 		flag = 1;
 		%>
@@ -505,8 +506,10 @@ function gotoStep() {
 		cnt = cnt - 1;
 		int i =0;
 	%>              
-					
-	<tr background="#F4F4F2"><td align="right"> <b> Sub Total :</b></td>
+
+<!-- for colspan -->
+		 <bean:size name="aimAdvancedReportForm" property="addedColumns" id="cols"/>					
+	<tr background="#F4F4F2"><td align="right" colspan=<bean:write name="cols"/> > <b> Sub Total :</b></td>
 	<td colspan="<%=cnt%>"> </td>
 	<logic:iterate name="aimAdvancedReportForm"  property="totFund" id="totFund" type="org.digijava.module.aim.helper.AmpFund">
 		<%i = i + 1; 
@@ -626,8 +629,9 @@ function gotoStep() {
 			
 			</c:if>
 		</logic:iterate>
+
 		<logic:iterate name="aimAdvancedReportForm"  property="fiscalYearRange" id="fiscalYearRange">
-			<td height="21" width="69" colspan="30" align="center" >
+			<td height="21" width="69" colspan=<bean:write name="aimAdvancedReportForm" property="measureCount" /> align="center" >
 			<strong><%=fiscalYearRange%></strong>
 			</td>
 		</logic:iterate>
@@ -924,7 +928,7 @@ function gotoStep() {
 						<c:if test="${addedMeasures.measureName == 'Cumulative Balance'}">
 						
 						<logic:equal name="aimAdvancedReportForm" property="acBalFlag" value="true">
-						<td align="right" height="21" width="69">
+						<td align="right" height="21" width="69"><h1>dd3</h1>
 						<logic:notEqual name="ampFund" property="unDisbAmount" value="0">
 						<bean:write name="ampFund" property="unDisbAmount" />
 						</logic:notEqual>
@@ -940,10 +944,8 @@ function gotoStep() {
 			</tr>
 		</logic:iterate>
 		
-		<bean:size name="aimAdvancedReportForm" property="addedColumns" id="mSize"/>
-					
-		<tr background="#F4F4F2"><td align="right"> <b> Sub Total :</b></td>
-		<td colspan="30">
+		<bean:size name="aimAdvancedReportForm" property="addedColumns" id="cols"/>
+		<tr background="#F4F4F2"><td align="right" colspan=<bean:write name="cols"/> > <b> Sub Total :</b></td>
 		</td>
 		<logic:iterate name="hierarchy"  property="fundSubTotal" id="fundSubTotal" type="org.digijava.module.aim.helper.AmpFund">
 				
@@ -1036,7 +1038,7 @@ function gotoStep() {
 		
 		
 		<logic:iterate name="aimAdvancedReportForm"  property="fiscalYearRange" id="fiscalYearRange">
-			<td height="21" width="69" colspan="30" align="center" >
+			<td height="21" width="69" colspan=<bean:write name="aimAdvancedReportForm" property="measureCount" /> align="center" >
 			<strong><%=fiscalYearRange%></strong>
 			</td>
 		</logic:iterate>
@@ -1266,11 +1268,26 @@ function gotoStep() {
 				<td align="center" height="21" >
 				<bean:write name="records" property="ampId" /></td></logic:notEmpty>
 				
+	<bean:size name="aimAdvancedReportForm" property="addedMeasures" id="measureSize"/>
+	<%
+		int fcnt = measureSize.intValue();
+		int flag = 0;
+	%>              
+	<logic:iterate name="aimAdvancedReportForm"  property="addedMeasures" id="addedMeasures">				
+	<c:if test="${addedMeasures.measureName == 'Cumulative Balance'}">
+		<%fcnt = fcnt-1;
+		flag = 1;
+		%>
+		</c:if>
+	</logic:iterate>
+
 				<logic:notEmpty name="records" property="ampFund">
 				<% int i=0;%>
 				<logic:iterate name="records"  property="ampFund" id="ampFund" 	type="org.digijava.module.aim.helper.AmpFund">
 					<logic:iterate name="aimAdvancedReportForm"  property="addedMeasures" id="addedMeasures">
-											
+					<%
+						i = i + 1; 
+					%>
 						<c:if test="${addedMeasures.measureName == 'Actual Commitments'}">
 						<logic:equal name="aimAdvancedReportForm" property="acCommFlag" value="true">
 						<td align="right" height="21" width="69" >
@@ -1333,28 +1350,50 @@ function gotoStep() {
 
 													
 						<c:if test="${addedMeasures.measureName == 'Cumulative Balance'}">
-						<logic:equal name="aimAdvancedReportForm" property="acBalFlag" value="true">
-						<td align="right" height="21" width="69">
-						<logic:notEqual name="ampFund" property="unDisbAmount" value="0">
-						<bean:write name="ampFund" property="unDisbAmount" />
-						</logic:notEqual>
-						</td>
-						</logic:equal>
+							<%
+								if(i > ((fcnt+1)*3))
+								{
+							%>
+							<logic:equal name="aimAdvancedReportForm" property="acBalFlag" value="true">
+							<td align="right" height="21" width="69">
+							<logic:notEqual name="ampFund" property="unDisbAmount" value="0">
+							<bean:write name="ampFund" property="unDisbAmount" />
+							</logic:notEqual>
+							</td>
+							</logic:equal>
+							<%
+								}
+							%>
 						</c:if>
+
 					</logic:iterate>
 				</logic:iterate>
 				</logic:notEmpty>								
 			</logic:iterate>
 			</tr>
 		</logic:iterate>	
+<bean:size name="aimAdvancedReportForm" property="addedMeasures" id="measureSize"/>
+	<%
+		int fcnt = measureSize.intValue();
+		int flag = 0;
+	%>              
+	<logic:iterate name="aimAdvancedReportForm"  property="addedMeasures" id="addedMeasures">				
+	<c:if test="${addedMeasures.measureName == 'Cumulative Balance'}">
+		<%fcnt = fcnt-1;
+		flag = 1;
+		%>
+		</c:if>
+	</logic:iterate>
 
-		<bean:size name="aimAdvancedReportForm" property="addedColumns" id="mSize"/>
-					
-		<tr background="#F4F4F2"><td align="right"> <b> Sub Sub Total :</b></td>
-		<td colspan="30">
-		</td>
+		<bean:size name="aimAdvancedReportForm" property="addedColumns" id="cols"/>
+		<% int i=0;%>
+		<tr background="#F4F4F2"><td align="right" colspan=<bean:write name="cols"/> > <b> Sub Sub Total :</b></td>
 		<logic:iterate name="levels"  property="fundSubTotal" id="fundSubTotal" type="org.digijava.module.aim.helper.AmpFund">
-					
+		<logic:iterate name="aimAdvancedReportForm"  property="addedMeasures" id="addedMeasures">
+		<%
+			i = i + 1; 
+		%>	
+			<c:if test="${addedMeasures.measureName == 'Actual Commitments'}">
 			<logic:equal name="aimAdvancedReportForm" property="acCommFlag" value="true">
 			<td align="right" height="21" width="69" >
 			<logic:notEqual name="fundSubTotal" property="commAmount" value="0">
@@ -1362,7 +1401,9 @@ function gotoStep() {
 			</logic:notEqual>
 			</td>
 			</logic:equal>
+			</c:if>
 
+			<c:if test="${addedMeasures.measureName == 'Actual Disbursements'}">
 			<logic:equal name="aimAdvancedReportForm" property="acDisbFlag" value="true">
 			<td align="right" height="21" width="69">
 			<logic:notEqual name="fundSubTotal" property="disbAmount" value="0">
@@ -1370,7 +1411,9 @@ function gotoStep() {
 			</logic:notEqual>
 			</td>
 			</logic:equal>
+			</c:if>
 
+			<c:if test="${addedMeasures.measureName == 'Actual Expenditures'}">
 			<logic:equal name="aimAdvancedReportForm" property="acExpFlag" value="true">
 			<td align="right" height="21" width="69">
 			<logic:notEqual name="fundSubTotal" property="expAmount" value="0">
@@ -1378,7 +1421,9 @@ function gotoStep() {
 			</logic:notEqual>
 			</td>
 			</logic:equal>
-			
+			</c:if>
+
+			<c:if test="${addedMeasures.measureName == 'Planned Commitments'}">
 			<logic:equal name="aimAdvancedReportForm" property="plCommFlag" value="true">
 			<td align="right" height="21" width="69">
 			<logic:notEqual name="fundSubTotal" property="plCommAmount" value="0">
@@ -1386,7 +1431,9 @@ function gotoStep() {
 			</logic:notEqual>
 			</td>
 			</logic:equal>
+			</c:if>
 
+			<c:if test="${addedMeasures.measureName == 'Planned Disbursements'}">
 			<logic:equal name="aimAdvancedReportForm" property="plDisbFlag" value="true">
 			<td align="right" height="21" width="69">
 			<logic:notEqual name="fundSubTotal" property="plDisbAmount" value="0">
@@ -1394,7 +1441,9 @@ function gotoStep() {
 			</logic:notEqual>
 			</td>
 			</logic:equal>
+			</c:if>
 
+			<c:if test="${addedMeasures.measureName == 'Planned Expenditures'}">
 			<logic:equal name="aimAdvancedReportForm" property="plExpFlag" value="true">
 			<td align="right" height="21" width="69">
 			<logic:notEqual name="fundSubTotal" property="plExpAmount" value="0">
@@ -1402,27 +1451,57 @@ function gotoStep() {
 			</logic:notEqual>
 			</td>
 			</logic:equal>
+			</c:if>
 
-			<logic:equal name="aimAdvancedReportForm" property="acBalFlag" value="true">
+						<c:if test="${addedMeasures.measureName == 'Cumulative Balance'}">
+							<%
+								if(i > ((fcnt+1)*3))
+								{
+							%>
+							<logic:equal name="aimAdvancedReportForm" property="acBalFlag" value="true">
+							<td align="right" height="21" width="69">
+							<logic:notEqual name="fundSubTotal" property="unDisbAmount" value="0">
+							<b><bean:write name="fundSubTotal" property="unDisbAmount" /></b>
+							</logic:notEqual>
+							</td>
+							</logic:equal>
+							<%
+								}
+							%>
+						</c:if>
+
 			
-			<td align="right" height="21" width="69" >
-			<logic:notEqual name="fundSubTotal" property="unDisbAmount" value="0">
-			<b><bean:write name="fundSubTotal" property="unDisbAmount" /></b>
-			</logic:notEqual>
-			</td>
-			
-			</logic:equal>
+		</logic:iterate>
 		</logic:iterate>
 		</tr>			
 	</logic:iterate>
 	
-	<bean:size name="aimAdvancedReportForm" property="addedColumns" id="mSize"/>
-	
-	 <tr background="#F4F4F2"><td align="right"> <b> Sub Total :</b></td>
-	 <td colspan="30">
+<bean:size name="aimAdvancedReportForm" property="addedMeasures" id="measureSize"/>
+	<%
+		int fcnt = measureSize.intValue();
+		int flag = 0;
+	%>              
+	<logic:iterate name="aimAdvancedReportForm"  property="addedMeasures" id="addedMeasures">				
+	<c:if test="${addedMeasures.measureName == 'Cumulative Balance'}">
+		<%fcnt = fcnt-1;
+		flag = 1;
+		%>
+		</c:if>
+	</logic:iterate>
+
+	<bean:size name="aimAdvancedReportForm" property="addedColumns" id="cols"/>
+	 <tr background="#F4F4F2">
+<!--	 <td colspan=<bean:write name="aimAdvancedReportForm" property="addedColumns" /> >aa
+	 </td>-->
+	 <td align="right" colspan=<bean:write name="cols"/> > <b> Sub Total :</b></td>
 	 </td>
+<% int i=0;%>
 	 <logic:iterate name="hierarchy"  property="fundSubTotal" id="fundSubTotal" type="org.digijava.module.aim.helper.AmpFund">
-			
+	<logic:iterate name="aimAdvancedReportForm"  property="addedMeasures" id="addedMeasures">
+	 <%
+		i = i + 1; 
+	 %>
+		<c:if test="${addedMeasures.measureName == 'Actual Commitments'}">			
 		<logic:equal name="aimAdvancedReportForm" property="acCommFlag" value="true">
 		<td align="right" height="21" width="69" >
 		<logic:notEqual name="fundSubTotal" property="commAmount" value="0">
@@ -1430,7 +1509,9 @@ function gotoStep() {
 		</logic:notEqual>
 		</td>
 		</logic:equal>
-		
+		</c:if>
+
+		<c:if test="${addedMeasures.measureName == 'Actual Disbursements'}">
 		<logic:equal name="aimAdvancedReportForm" property="acDisbFlag" value="true">
 		<td align="right" height="21" width="69">
 		<logic:notEqual name="fundSubTotal" property="disbAmount" value="0">
@@ -1438,7 +1519,9 @@ function gotoStep() {
 		</logic:notEqual>
 		</td>
 		</logic:equal>
+		</c:if>
 		
+		<c:if test="${addedMeasures.measureName == 'Actual Expenditures'}">
 		<logic:equal name="aimAdvancedReportForm" property="acExpFlag" value="true">
 		<td align="right" height="21" width="69">
 		<logic:notEqual name="fundSubTotal" property="expAmount" value="0">
@@ -1446,7 +1529,9 @@ function gotoStep() {
 		</logic:notEqual>
 		</td>
 		</logic:equal>
+		</c:if>
 		
+		<c:if test="${addedMeasures.measureName == 'Planned Commitments'}">
 		<logic:equal name="aimAdvancedReportForm" property="plCommFlag" value="true">
 		<td align="right" height="21" width="69">
 		<logic:notEqual name="fundSubTotal" property="plCommAmount" value="0">
@@ -1454,7 +1539,9 @@ function gotoStep() {
 		</logic:notEqual>
 		</td>
 		</logic:equal>
+		</c:if>
 		
+		<c:if test="${addedMeasures.measureName == 'Planned Disbursements'}">
 		<logic:equal name="aimAdvancedReportForm" property="plDisbFlag" value="true">
 		<td align="right" height="21" width="69">
 		<logic:notEqual name="fundSubTotal" property="plDisbAmount" value="0">
@@ -1462,7 +1549,9 @@ function gotoStep() {
 		</logic:notEqual>
 		</td>
 		</logic:equal>
+		</c:if>
 		
+		<c:if test="${addedMeasures.measureName == 'Planned Expenditures'}">
 		<logic:equal name="aimAdvancedReportForm" property="plExpFlag" value="true">
 		<td align="right" height="21" width="69">
 		<logic:notEqual name="fundSubTotal" property="plExpAmount" value="0">
@@ -1470,27 +1559,59 @@ function gotoStep() {
 		</logic:notEqual>
 		</td>
 		</logic:equal>
+		</c:if>
 		
-		<logic:equal name="aimAdvancedReportForm" property="acBalFlag" value="true">
-		
-		<td align="right" height="21" width="69" >
-		<logic:notEqual name="fundSubTotal" property="unDisbAmount" value="0">
-		<b><bean:write name="fundSubTotal" property="unDisbAmount" /></b>
-		</logic:notEqual>
-		</td>
-		
-		</logic:equal>
+						<c:if test="${addedMeasures.measureName == 'Cumulative Balance'}">
+							<%
+								if(i > ((fcnt+1)*3))
+								{
+							%>
+							<logic:equal name="aimAdvancedReportForm" property="acBalFlag" value="true">
+							<td align="right" height="21" width="69">
+							<logic:notEqual name="ampFund" property="unDisbAmount" value="0">
+							<bean:write name="ampFund" property="unDisbAmount" />
+							</logic:notEqual><logic:notEqual name="fundSubTotal" property="unDisbAmount" value="0">
+							<b><bean:write name="fundSubTotal" property="unDisbAmount" /></b>
+							</logic:notEqual>
+							</td>
+							</logic:equal>
+							<%
+								}
+							%>
+						</c:if>
+
+		</logic:iterate>
 	</logic:iterate>
 	</tr>			
 	</logic:notEmpty>
 				
  </logic:iterate>
 
- <tr background="#F4F4F2"><td align="right"> <b> Grand Total :</b></td>
- <td colspan="30">
+<bean:size name="aimAdvancedReportForm" property="addedMeasures" id="measureSize"/>
+	<%
+		int fcnt = measureSize.intValue();
+		int flag = 0;
+	%>              
+	<logic:iterate name="aimAdvancedReportForm"  property="addedMeasures" id="addedMeasures">				
+	<c:if test="${addedMeasures.measureName == 'Cumulative Balance'}">
+		<%fcnt = fcnt-1;
+		flag = 1;
+		%>
+		</c:if>
+	</logic:iterate>
+
+<bean:size name="aimAdvancedReportForm" property="addedColumns" id="cols"/>
+<% int i=0;%>
+
+ <tr background="#F4F4F2"><td align="right" colspan=<bean:write name="cols"/> > <b> Grand Total :</b></td>
  </td>
  <logic:iterate name="multiReport"  property="fundTotal" id="fundTotal" type="org.digijava.module.aim.helper.AmpFund">
-			
+	<logic:iterate name="aimAdvancedReportForm"  property="addedMeasures" id="addedMeasures">
+	<%
+		i = i + 1; 
+	%>
+
+	<c:if test="${addedMeasures.measureName == 'Actual Commitments'}">			
 	<logic:equal name="aimAdvancedReportForm" property="acCommFlag" value="true">
 	<td align="right" height="21" width="69" >
 	<logic:notEqual name="fundTotal" property="commAmount" value="0">
@@ -1498,7 +1619,9 @@ function gotoStep() {
 	</logic:notEqual>
 	</td>
 	</logic:equal>
+	</c:if>
 
+	<c:if test="${addedMeasures.measureName == 'Actual Disbursements'}">
 	<logic:equal name="aimAdvancedReportForm" property="acDisbFlag" value="true">
 	<td align="right" height="21" width="69">
 	<logic:notEqual name="fundTotal" property="disbAmount" value="0">
@@ -1506,7 +1629,9 @@ function gotoStep() {
 	</logic:notEqual>
 	</td>
 	</logic:equal>
+	</c:if>
 
+	<c:if test="${addedMeasures.measureName == 'Actual Expenditures'}">
 	<logic:equal name="aimAdvancedReportForm" property="acExpFlag" value="true">
 	<td align="right" height="21" width="69">
 	<logic:notEqual name="fundTotal" property="expAmount" value="0">
@@ -1514,7 +1639,9 @@ function gotoStep() {
 	</logic:notEqual>
 	</td>
 	</logic:equal>
+	</c:if>
 
+	<c:if test="${addedMeasures.measureName == 'Planned Commitments'}">
 	<logic:equal name="aimAdvancedReportForm" property="plCommFlag" value="true">
 	<td align="right" height="21" width="69">
 	<logic:notEqual name="fundTotal" property="plCommAmount" value="0">
@@ -1522,7 +1649,9 @@ function gotoStep() {
 	</logic:notEqual>
 	</td>
 	</logic:equal>
+	</c:if>
 
+	<c:if test="${addedMeasures.measureName == 'Planned Disbursements'}">
 	<logic:equal name="aimAdvancedReportForm" property="plDisbFlag" value="true">
 	<td align="right" height="21" width="69">
 	<logic:notEqual name="fundTotal" property="plDisbAmount" value="0">
@@ -1530,7 +1659,9 @@ function gotoStep() {
 	</logic:notEqual>
 	</td>
 	</logic:equal>
+	</c:if>
 	
+	<c:if test="${addedMeasures.measureName == 'Planned Expenditures'}">
 	<logic:equal name="aimAdvancedReportForm" property="plExpFlag" value="true">
 	<td align="right" height="21" width="69">
 	<logic:notEqual name="fundTotal" property="plExpAmount" value="0">
@@ -1538,16 +1669,25 @@ function gotoStep() {
 	</logic:notEqual>
 	</td>
 	</logic:equal>
+	</c:if>
+						<c:if test="${addedMeasures.measureName == 'Cumulative Balance'}">
+							<%
+								if(i > ((fcnt+1)*3))
+								{
+							%>
+							<logic:equal name="aimAdvancedReportForm" property="acBalFlag" value="true">
+							<td align="right" height="21" width="69">
+							<logic:notEqual name="fundTotal" property="unDisbAmount" value="0">
+							<b><bean:write name="fundTotal" property="unDisbAmount" /></b>
+							</logic:notEqual>
+							</td>
+							</logic:equal>
+							<%
+								}
+							%>
+						</c:if>
 
-	<logic:equal name="aimAdvancedReportForm" property="acBalFlag" value="true">
-	
-	<td align="right" height="21" width="69" >
-	<logic:notEqual name="fundTotal" property="unDisbAmount" value="0">
-	<b><bean:write name="fundTotal" property="unDisbAmount" /></b>
-	</logic:notEqual>
-	</td>
-	
-	</logic:equal>
+</logic:iterate>
 </logic:iterate>
 </logic:iterate>
 </tr>			

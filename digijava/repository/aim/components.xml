@@ -197,7 +197,8 @@
 	<page name="htmlPhysicalComponentReport"			title=" :Physical Component Report " />
 	
 	<!-- Advanced Report Manager -->
-	
+
+	<page name="AdvancedReportManagerStep0" title=" - Advanced Report Manager Step 0 : Select Report Type" />	
 	<page name="AdvancedReportManagerStep1" title=" - Advanced Report Manager Step 1 : Select Columns" />
 	<page name="AdvancedReportManagerStep2" title=" - Advanced Report Manager Step 2 : Generate HTML Report" />
 	<page name="AdvancedReportManagerStep4" title=" - Advanced Report Manager Step 4 : Report Details " />

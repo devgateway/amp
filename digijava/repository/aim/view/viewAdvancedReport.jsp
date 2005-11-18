@@ -1082,343 +1082,668 @@
 			      
 				</logic:notEmpty>
 
-				<!-- Hierarchy 2-->
-				<logic:notEmpty name="hierarchy"  property="levels">
+<!-- Hierarchy 2-->
+<logic:notEmpty name="hierarchy"  property="levels">
+	
+<logic:iterate name="hierarchy"  property="levels" id="levels" type="org.digijava.module.aim.helper.AdvancedHierarchyReport">
+	<tr bgcolor="#F4F4F2">
+	<!--<td align="center" height="21" width="73" ><b>Sector</b></td>-->
+	<td colspan=100 align="left" height="21" >
+	<bean:write name="levels" property="label" /> :
+	<b><u><bean:write name="levels" property="name" /></u></b>
+	</td>
+	</tr>
+
+	<logic:notEmpty name="levels" property="project">
+    <tr bgcolor="#F4F4F2">
+	<logic:iterate name="aimAdvancedReportForm"  property="titles" id="titles" type="org.digijava.module.aim.helper.Column">
+		<td align="center" height="21" width="42" ><div align="center"><strong>
+		<bean:write name="titles" property="columnName" /></strong></div>
+		</td>
+	</logic:iterate>
+	<logic:iterate name="aimAdvancedReportForm"  property="fiscalYearRange" id="fiscalYearRange">
+		<td height="21" width="69" colspan=<bean:write name="aimAdvancedReportForm" property="measureCount" /> align="center" >
+		<div align="center"><strong><%=fiscalYearRange%></strong></div>
+		</td>
+	</logic:iterate>
+	<td height="21" width="69" colspan=<bean:write name="aimAdvancedReportForm" property="fundColumns" /> align="center" >
+	<b>Total 	</b>
+	</td>
+	</tr>
+	<tr bgcolor="#FFFFFF">
+	<logic:iterate name="aimAdvancedReportForm"  property="titles" id="titles" type="org.digijava.module.aim.helper.Column">
+	<td>&nbsp;</td>
+	</logic:iterate>
+	<logic:iterate name="aimAdvancedReportForm"  property="fiscalYearRange" id="fiscalYearRange">
+		<logic:equal name="aimAdvancedReportForm" property="acCommFlag" value="true">
+		<td height="21" width="23" align="center" >
+		<a title="<digi:trn key="aim:actualCommitment">Actual Commitment</digi:trn>">
+		<digi:trn key="aim:actualCommitment">Actual Commitment</digi:trn>
+		</a>
+		</td>
+		</logic:equal>
+		<logic:equal name="aimAdvancedReportForm" property="acDisbFlag" value="true">
+		<td height="21" width="23" align="center" >
+		<a title="<digi:trn key="aim:DisbursementofFund">Release of funds to, or the purchase of goods or services for a recipient; by extension, the amount thus spent. Disbursements record the actual international transfer of financial resources, or of goods or services valued at the cost to the donor</digi:trn>">
+		<digi:trn key="aim:actualDisbursement">Actual Disbursement</digi:trn>
+		</a>
+		</td>
+		</logic:equal>
+		<logic:equal name="aimAdvancedReportForm" property="acExpFlag" value="true">
+		<td height="21" width="23" align="center" >
+		<a title="<digi:trn key="aim:ExpenditureofFunds">Amount effectively spent by the implementing agency</digi:trn>">
+		<digi:trn key="aim:actualExpenditure">Actual Expenditure</digi:trn>
+		</a>
+		</td>
+		</logic:equal>
+		<logic:equal name="aimAdvancedReportForm" property="plCommFlag" value="true">
+		<td height="21" width="23" align="center" >
+		<a title="<digi:trn key="aim:plannedCommitment">Planned Commitment</digi:trn>">
+		<digi:trn key="aim:plannedCommitment">Planned Commitment</digi:trn>
+		</a>
+		</td>
+		</logic:equal>
+		<logic:equal name="aimAdvancedReportForm" property="plDisbFlag" value="true">
+		<td height="21" width="23" align="center" >
+		<a title="<digi:trn key="aim:DisbursementofFund">Release of funds to, or the purchase of goods or services for a recipient; by extension, the amount thus spent. Disbursements record the actual international transfer of financial resources, or of goods or services valued at the cost to the donor</digi:trn>">
+		<digi:trn key="aim:plannedDisbursement">Planned Disbursement</digi:trn>
+		</a>
+		</td>
+		</logic:equal>
+		<logic:equal name="aimAdvancedReportForm" property="plExpFlag" value="true">
+		<td height="21" width="23" align="center" >
+		<a title="<digi:trn key="aim:ExpenditureofFunds">Amount effectively spent by the implementing agency</digi:trn>">
+		<digi:trn key="aim:plannedExpenditure">Planned Expenditure</digi:trn>
+		</a>
+		</td>
+		</logic:equal>
+	</logic:iterate>
 			
-				<logic:iterate name="hierarchy"  property="levels" id="levels" type="org.digijava.module.aim.helper.AdvancedHierarchyReport">
-        			<tr bgcolor="#F4F4F2">
-					<!--<td align="center" height="21" width="73" ><b>Sector</b></td>-->
-					<td colspan=100 align="left" height="21" >
-						<bean:write name="levels" property="label" /> :
-						<b><u><bean:write name="levels" property="name" /></u></b>
-					</td>
-					</tr>
-
-                    <tr bgcolor="#F4F4F2">
-					<logic:iterate name="aimAdvancedReportForm"  property="titles" id="titles" type="org.digijava.module.aim.helper.Column">
-						<td align="center" height="21" width="42" ><div align="center"><strong>
-							<bean:write name="titles" property="columnName" /></strong></div>
-						</td>
-					</logic:iterate>
-					<logic:iterate name="aimAdvancedReportForm"  property="fiscalYearRange" id="fiscalYearRange">
-						<td height="21" width="69" colspan=<bean:write name="aimAdvancedReportForm" property="measureCount" /> align="center" >
-						<div align="center"><strong><%=fiscalYearRange%></strong></div>
-						</td>
-					</logic:iterate>
-					<td height="21" width="69" colspan=<bean:write name="aimAdvancedReportForm" property="fundColumns" /> align="center" >
-					<b>Total 	</b>
-					</td>
-					</tr>
-					<tr bgcolor="#FFFFFF">
-					<logic:iterate name="aimAdvancedReportForm"  property="titles" id="titles" type="org.digijava.module.aim.helper.Column">
-						<td>&nbsp;</td>
-					</logic:iterate>
-					<logic:iterate name="aimAdvancedReportForm"  property="fiscalYearRange" id="fiscalYearRange">
-						<logic:equal name="aimAdvancedReportForm" property="acCommFlag" value="true">
-						<td height="21" width="23" align="center" >
-						<a title="<digi:trn key="aim:actualCommitment">Actual Commitment</digi:trn>">
-						<digi:trn key="aim:actualCommitment">Actual Commitment</digi:trn>
-						</a>
-						</td>
-						</logic:equal>
-						<logic:equal name="aimAdvancedReportForm" property="acDisbFlag" value="true">
-						<td height="21" width="23" align="center" >
-						<a title="<digi:trn key="aim:DisbursementofFund">Release of funds to, or the purchase of goods or services for a recipient; by extension, the amount thus spent. Disbursements record the actual international transfer of financial resources, or of goods or services valued at the cost to the donor</digi:trn>">
-						<digi:trn key="aim:actualDisbursement">Actual Disbursement</digi:trn>
-						</a>
-						</td>
-						</logic:equal>
-						<logic:equal name="aimAdvancedReportForm" property="acExpFlag" value="true">
-						<td height="21" width="23" align="center" >
-						<a title="<digi:trn key="aim:ExpenditureofFunds">Amount effectively spent by the implementing agency</digi:trn>">
-						<digi:trn key="aim:actualExpenditure">Actual Expenditure</digi:trn>
-						</a>
-						</td>
-						</logic:equal>
-						<logic:equal name="aimAdvancedReportForm" property="plCommFlag" value="true">
-						<td height="21" width="23" align="center" >
-						<a title="<digi:trn key="aim:plannedCommitment">Planned Commitment</digi:trn>">
-						<digi:trn key="aim:plannedCommitment">Planned Commitment</digi:trn>
-						</a>
-						</td>
-						</logic:equal>
-						<logic:equal name="aimAdvancedReportForm" property="plDisbFlag" value="true">
-						<td height="21" width="23" align="center" >
-						<a title="<digi:trn key="aim:DisbursementofFund">Release of funds to, or the purchase of goods or services for a recipient; by extension, the amount thus spent. Disbursements record the actual international transfer of financial resources, or of goods or services valued at the cost to the donor</digi:trn>">
-						<digi:trn key="aim:plannedDisbursement">Planned Disbursement</digi:trn>
-						</a>
-						</td>
-						</logic:equal>
-						<logic:equal name="aimAdvancedReportForm" property="plExpFlag" value="true">
-						<td height="21" width="23" align="center" >
-						<a title="<digi:trn key="aim:ExpenditureofFunds">Amount effectively spent by the implementing agency</digi:trn>">
-						<digi:trn key="aim:plannedExpenditure">Planned Expenditure</digi:trn>
-						</a>
-						</td>
-						</logic:equal>
-
-					</logic:iterate>
-			
-					<logic:equal name="aimAdvancedReportForm" property="acCommFlag" value="true">
-					<td height="21" width="23" align="center" >
-					<a title="<digi:trn key="aim:actualCommitment">Actual Commitment</digi:trn>">
-					<digi:trn key="aim:actualCommitment">Actual Commitment</digi:trn>
-					</a>
-					</td>
-					</logic:equal>
-					<logic:equal name="aimAdvancedReportForm" property="acDisbFlag" value="true">
-					<td height="21" width="23" align="center" >
-					<a title="<digi:trn key="aim:DisbursementofFund">Release of funds to, or the purchase of goods or services for a recipient; by extension, the amount thus spent. Disbursements record the actual international transfer of financial resources, or of goods or services valued at the cost to the donor</digi:trn>">
-					<digi:trn key="aim:actualDisbursement">Actual Disbursement</digi:trn>
-					</a>
-					</td>
-					</logic:equal>
-					<logic:equal name="aimAdvancedReportForm" property="acExpFlag" value="true">
-					<td height="21" width="23" align="center" >
-					<a title="<digi:trn key="aim:ExpenditureofFunds">Amount effectively spent by the implementing agency</digi:trn>">
-					<digi:trn key="aim:actualExpenditure">Actual Expenditure</digi:trn>
-					</a>
-					</td>
-					</logic:equal>
-					<logic:equal name="aimAdvancedReportForm" property="plCommFlag" value="true">
-					<td height="21" width="23" align="center" >
-					<a title="<digi:trn key="aim:plannedCommitment">Planned Commitment</digi:trn>">
-					<digi:trn key="aim:plannedCommitment">Planned Commitment</digi:trn>
-					</a>
-					</td>
-					</logic:equal>
-					<logic:equal name="aimAdvancedReportForm" property="plDisbFlag" value="true">
-					<td height="21" width="23" align="center" >
-					<a title="<digi:trn key="aim:DisbursementofFund">Release of funds to, or the purchase of goods or services for a recipient; by extension, the amount thus spent. Disbursements record the actual international transfer of financial resources, or of goods or services valued at the cost to the donor</digi:trn>">
-					<digi:trn key="aim:plannedDisbursement">Planned Disbursement</digi:trn>
-					</a>
-					</td>
-					</logic:equal>
-					<logic:equal name="aimAdvancedReportForm" property="plExpFlag" value="true">
-					<td height="21" width="23" align="center" >
-					<a title="<digi:trn key="aim:ExpenditureofFunds">Amount effectively spent by the implementing agency</digi:trn>">
-					<digi:trn key="aim:plannedExpenditure">Planned Expenditure</digi:trn>
-					</a>
-					</td>
-					</logic:equal>
-
-					<logic:equal name="aimAdvancedReportForm" property="acBalFlag" value="true">
-					<td height="21" width="23" align="center" >
-					<digi:trn key="aim:undisbursed">Undisbursed</digi:trn>
-					</td>
-					</logic:equal>
-
-					
-
-					<logic:iterate name="levels"  property="project" id="project" type="org.digijava.module.aim.helper.Report">
-						<tr bgcolor="#F4F4F2">
-						<logic:iterate name="project"  property="records" id="records" type="org.digijava.module.aim.helper.AdvancedReport">
-							<logic:notEmpty name="records" property="title">
-							<td align="center" height="21" >
-							<bean:write name="records" property="title" /></td></logic:notEmpty>
-							<logic:notEmpty name="records" property="actualStartDate">
-							<td align="center" height="21" >
-							<bean:write name="records" property="actualStartDate" />
-							</td></logic:notEmpty>
-							<logic:notEmpty name="records" property="actualCompletionDate">
-							<td align="center" height="21" >
-							<bean:write name="records" property="actualCompletionDate" /></td></logic:notEmpty>
-							<logic:notEmpty name="records" property="status">
-							<td align="center" height="21" >
-							<bean:write name="records" property="status" /></td></logic:notEmpty>
-							<logic:notEmpty name="records" property="level">
-							<td align="center" height="21" >
-							<bean:write name="records" property="level" /></td></logic:notEmpty>
-							<logic:notEmpty name="records" property="objective">
-							<td align="center" height="21" >
-							<bean:write name="records" property="objective" /></td></logic:notEmpty>
-							<logic:notEmpty name="records" property="description">
-							<td align="center" height="21" width="800">
-							<bean:define id="descriptionKey">
-							<bean:write name="records" property="description" />
-							</bean:define>						
-							<digi:edit key="<%=descriptionKey%>" />
-							</td></logic:notEmpty>
-							<logic:notEmpty name="records" property="assistance">
-							<td align="center" height="21" >
-							<logic:iterate name="records" id="assistance" property="assistance"> <%=assistance%>	
-								<br>
-							</logic:iterate></td></logic:notEmpty>
-							<logic:notEmpty name="records" property="donors">
-							<td align="center" height="21" >
-							<logic:iterate name="records" id="donors" property="donors"> <%=donors%>	
-							<br>
-							</logic:iterate></td></logic:notEmpty>
-							<logic:notEmpty name="records" property="sectors">
-							<td align="center" height="21" >
-							<logic:iterate name="records" id="sectors" property="sectors"> <%=sectors%>	
-							<br>
-							</logic:iterate></td></logic:notEmpty>
-							<logic:notEmpty name="records" property="regions">
-							<td align="center" height="21" >
-							<logic:iterate name="records" id="regions" property="regions"> <%=regions%>	
-							<br>
-							</logic:iterate></td></logic:notEmpty>
-							<logic:notEmpty name="records" property="contacts">
-							<td align="center" height="21" >
-							<logic:iterate name="records" id="contacts" property="contacts"> <%=contacts%>	
-							<br>
-							</logic:iterate></td></logic:notEmpty>
-							<logic:notEmpty name="records" property="modality">
-							<td align="center" height="21" >
-							<logic:iterate name="records" id="modality" property="modality"> <%=modality%>	
-							<br>
-							</logic:iterate></td></logic:notEmpty>
-							<logic:notEmpty name="records" property="ampId">
-							<td align="center" height="21" >
-							<bean:write name="records" property="ampId" /></td></logic:notEmpty>
-							<logic:notEmpty name="records" property="ampFund">
-							<logic:iterate name="records"  property="ampFund" id="ampFund" 	type="org.digijava.module.aim.helper.AmpFund">
-								<logic:equal name="aimAdvancedReportForm" property="acCommFlag" value="true">
-								<% i = i + 1;	%>
-								<td align="right" height="21" width="69">
-								<logic:notEqual name="ampFund" property="commAmount" value="0">
-								<bean:write name="ampFund" property="commAmount" />
-								</logic:notEqual>
-								</td>
-								</logic:equal>
-								<logic:equal name="aimAdvancedReportForm" property="acDisbFlag" 	value="true">
-								<% i = i + 1;	%>
-								<td align="right" height="21" width="69">
-								<logic:notEqual name="ampFund" property="disbAmount" value="0">
-								<bean:write name="ampFund" property="disbAmount" />
-								</logic:notEqual>
-								</td>
-								</logic:equal>
-								<logic:equal name="aimAdvancedReportForm" property="acExpFlag" 	value="true">
-								<% i = i + 1;	%>
-								<td align="right" height="21" width="69">
-								<logic:notEqual name="ampFund" property="expAmount" value="0">
-								<bean:write name="ampFund" property="expAmount" />
-								</logic:notEqual>
-								</td>
-								</logic:equal>
-								<logic:equal name="aimAdvancedReportForm" property="plCommFlag" value="true">
-								<% i = i + 1;	%>
-								<td align="right" height="21" width="69">
-								<logic:notEqual name="ampFund" property="plCommAmount" value="0">
-								<bean:write name="ampFund" property="plCommAmount" />
-								</logic:notEqual>
-								</td>
-								</logic:equal>
-								<logic:equal name="aimAdvancedReportForm" property="plDisbFlag" value="true">
-								<% i = i + 1;	%>
-								<td align="right" height="21" width="69">
-								<logic:notEqual name="ampFund" property="plDisbAmount" value="0">
-								<bean:write name="ampFund" property="plDisbAmount" />
-								</logic:notEqual>
-								</td>
-								</logic:equal>
-								<logic:equal name="aimAdvancedReportForm" property="plExpFlag" value="true">
-								<% i = i + 1;	%>
-								<td align="right" height="21" width="69" >
-								<logic:notEqual name="ampFund" property="plExpAmount" value="0">
-								<bean:write name="ampFund" property="plExpAmount" />
-								</logic:notEqual>
-								</td>
-								</logic:equal>
-								<logic:equal name="aimAdvancedReportForm" property="acBalFlag" value="true">
-								<% i = i + 1;
-								int j = Integer.parseInt(measureCnt);
-								j = j + 1;
-								if(i > (j*3))
-								{
-								%>
-								<td align="right" height="21" width="69">
-								<logic:notEqual name="ampFund" property="unDisbAmount" value="0">
-								<bean:write name="ampFund" property="unDisbAmount" />
-								</logic:notEqual>
-								</td>
-								<%
-								i = 0;
-								}
-								%>
-								</logic:equal>
-							</logic:iterate></logic:notEmpty>
-						</logic:iterate>
-						</tr>
-					</logic:iterate>
-
-			<%  i = 0; %>
-			  <tr><td align="left" colspan=<bean:write name="aimAdvancedReportForm" property="dimColumns" />><b> <bean:write name="levels" property="name" /> &nbsp;Total</b></td>
-			  <logic:iterate name="levels"  property="fundSubTotal" id="fundSubTotal" type="org.digijava.module.aim.helper.AmpFund">
-			  <logic:equal name="aimAdvancedReportForm" property="acCommFlag" value="true">
-			  <% i = i + 1;	%>
-						<td align="right" height="21" width="69">
-							<logic:notEqual name="fundSubTotal" property="commAmount" value="0">
-							<bean:write name="fundSubTotal" property="commAmount" />
-							</logic:notEqual>
-						</td>
-				</logic:equal>
-				<logic:equal name="aimAdvancedReportForm" property="acDisbFlag" value="true">
+	<logic:equal name="aimAdvancedReportForm" property="acCommFlag" value="true">
+	<td height="21" width="23" align="center" >
+	<a title="<digi:trn key="aim:actualCommitment">Actual Commitment</digi:trn>">
+	<digi:trn key="aim:actualCommitment">Actual Commitment</digi:trn>
+	</a>
+	</td>
+	</logic:equal>
+	<logic:equal name="aimAdvancedReportForm" property="acDisbFlag" value="true">
+	<td height="21" width="23" align="center" >
+	<a title="<digi:trn key="aim:DisbursementofFund">Release of funds to, or the purchase of goods or services for a recipient; by extension, the amount thus spent. Disbursements record the actual international transfer of financial resources, or of goods or services valued at the cost to the donor</digi:trn>">
+	<digi:trn key="aim:actualDisbursement">Actual Disbursement</digi:trn>
+	</a>
+	</td>
+	</logic:equal>
+	<logic:equal name="aimAdvancedReportForm" property="acExpFlag" value="true">
+	<td height="21" width="23" align="center" >
+	<a title="<digi:trn key="aim:ExpenditureofFunds">Amount effectively spent by the implementing agency</digi:trn>">
+	<digi:trn key="aim:actualExpenditure">Actual Expenditure</digi:trn>
+	</a>
+	</td>
+	</logic:equal>
+	<logic:equal name="aimAdvancedReportForm" property="plCommFlag" value="true">
+	<td height="21" width="23" align="center" >
+	<a title="<digi:trn key="aim:plannedCommitment">Planned Commitment</digi:trn>">
+	<digi:trn key="aim:plannedCommitment">Planned Commitment</digi:trn>
+	</a>
+	</td>
+	</logic:equal>
+	<logic:equal name="aimAdvancedReportForm" property="plDisbFlag" value="true">
+	<td height="21" width="23" align="center" >
+	<a title="<digi:trn key="aim:DisbursementofFund">Release of funds to, or the purchase of goods or services for a recipient; by extension, the amount thus spent. Disbursements record the actual international transfer of financial resources, or of goods or services valued at the cost to the donor</digi:trn>">
+	<digi:trn key="aim:plannedDisbursement">Planned Disbursement</digi:trn>
+	</a>
+	</td>
+	</logic:equal>
+	<logic:equal name="aimAdvancedReportForm" property="plExpFlag" value="true">
+	<td height="21" width="23" align="center" >
+	<a title="<digi:trn key="aim:ExpenditureofFunds">Amount effectively spent by the implementing agency</digi:trn>">
+	<digi:trn key="aim:plannedExpenditure">Planned Expenditure</digi:trn>
+	</a>
+	</td>
+	</logic:equal>
+	<logic:equal name="aimAdvancedReportForm" property="acBalFlag" value="true">
+	<td height="21" width="23" align="center" >
+	<digi:trn key="aim:undisbursed">Undisbursed</digi:trn>
+	</td>
+	</logic:equal>
+	<logic:iterate name="levels"  property="project" id="project" type="org.digijava.module.aim.helper.Report">
+		<tr bgcolor="#F4F4F2">
+		<logic:iterate name="project"  property="records" id="records" type="org.digijava.module.aim.helper.AdvancedReport">
+			<logic:notEmpty name="records" property="title">
+			<td align="center" height="21" >
+			<bean:write name="records" property="title" /></td></logic:notEmpty>
+			<logic:notEmpty name="records" property="actualStartDate">
+			<td align="center" height="21" >
+			<bean:write name="records" property="actualStartDate" />
+			</td></logic:notEmpty>
+			<logic:notEmpty name="records" property="actualCompletionDate">
+			<td align="center" height="21" >
+			<bean:write name="records" property="actualCompletionDate" /></td></logic:notEmpty>
+			<logic:notEmpty name="records" property="status">
+			<td align="center" height="21" >
+			<bean:write name="records" property="status" /></td></logic:notEmpty>
+			<logic:notEmpty name="records" property="level">
+			<td align="center" height="21" >
+			<bean:write name="records" property="level" /></td></logic:notEmpty>
+			<logic:notEmpty name="records" property="objective">
+			<td align="center" height="21" >
+			<bean:write name="records" property="objective" /></td></logic:notEmpty>
+			<logic:notEmpty name="records" property="description">
+			<td align="center" height="21" width="800">
+			<bean:define id="descriptionKey">
+			<bean:write name="records" property="description" />
+			</bean:define>						
+			<digi:edit key="<%=descriptionKey%>" />
+			</td></logic:notEmpty>
+			<logic:notEmpty name="records" property="assistance">
+			<td align="center" height="21" >
+			<logic:iterate name="records" id="assistance" property="assistance"> <%=assistance%>	
+			<br>
+			</logic:iterate></td></logic:notEmpty>
+			<logic:notEmpty name="records" property="donors">
+			<td align="center" height="21" >
+			<logic:iterate name="records" id="donors" property="donors"> <%=donors%>	
+			<br>
+			</logic:iterate></td></logic:notEmpty>
+			<logic:notEmpty name="records" property="sectors">
+			<td align="center" height="21" >
+			<logic:iterate name="records" id="sectors" property="sectors"> <%=sectors%>	
+			<br>
+			</logic:iterate></td></logic:notEmpty>
+			<logic:notEmpty name="records" property="regions">
+			<td align="center" height="21" >
+			<logic:iterate name="records" id="regions" property="regions"> <%=regions%>	
+			<br>
+			</logic:iterate></td></logic:notEmpty>
+			<logic:notEmpty name="records" property="contacts">
+			<td align="center" height="21" >
+			<logic:iterate name="records" id="contacts" property="contacts"> <%=contacts%>	
+			<br>
+			</logic:iterate></td></logic:notEmpty>
+			<logic:notEmpty name="records" property="modality">
+			<td align="center" height="21" >
+			<logic:iterate name="records" id="modality" property="modality"> <%=modality%>	
+			<br>
+			</logic:iterate></td></logic:notEmpty>
+			<logic:notEmpty name="records" property="ampId">
+			<td align="center" height="21" >
+			<bean:write name="records" property="ampId" /></td></logic:notEmpty>
+			<logic:notEmpty name="records" property="ampFund">
+			<logic:iterate name="records"  property="ampFund" id="ampFund" 	type="org.digijava.module.aim.helper.AmpFund">
+				<logic:equal name="aimAdvancedReportForm" property="acCommFlag" value="true">
 				<% i = i + 1;	%>
-						<td align="right" height="21" width="69">
-							<logic:notEqual name="fundSubTotal" property="disbAmount" value="0">
-							<bean:write name="fundSubTotal" property="disbAmount" />
-							</logic:notEqual>
-						</td>
+				<td align="right" height="21" width="69">
+				<logic:notEqual name="ampFund" property="commAmount" value="0">
+				<bean:write name="ampFund" property="commAmount" />
+				</logic:notEqual>
+				</td>
 				</logic:equal>
-				<logic:equal name="aimAdvancedReportForm" property="acExpFlag" value="true">
+				<logic:equal name="aimAdvancedReportForm" property="acDisbFlag" 	value="true">
 				<% i = i + 1;	%>
-						<td align="right" height="21" width="69">
-							<logic:notEqual name="fundSubTotal" property="expAmount" value="0">
-							<bean:write name="fundSubTotal" property="expAmount" />
-							</logic:notEqual>
-						</td>
+				<td align="right" height="21" width="69">
+				<logic:notEqual name="ampFund" property="disbAmount" value="0">
+				<bean:write name="ampFund" property="disbAmount" />
+				</logic:notEqual>
+				</td>
+				</logic:equal>
+				<logic:equal name="aimAdvancedReportForm" property="acExpFlag" 	value="true">
+				<% i = i + 1;	%>
+				<td align="right" height="21" width="69">
+				<logic:notEqual name="ampFund" property="expAmount" value="0">
+				<bean:write name="ampFund" property="expAmount" />
+				</logic:notEqual>
+				</td>
 				</logic:equal>
 				<logic:equal name="aimAdvancedReportForm" property="plCommFlag" value="true">
 				<% i = i + 1;	%>
-						<td align="right" height="21" width="69">
-							<logic:notEqual name="fundSubTotal" property="plCommAmount" value="0">
-							<bean:write name="fundSubTotal" property="plCommAmount" />
-							</logic:notEqual>
-						</td>
+				<td align="right" height="21" width="69">
+				<logic:notEqual name="ampFund" property="plCommAmount" value="0">
+				<bean:write name="ampFund" property="plCommAmount" />
+				</logic:notEqual>
+				</td>
 				</logic:equal>
 				<logic:equal name="aimAdvancedReportForm" property="plDisbFlag" value="true">
 				<% i = i + 1;	%>
-						<td align="right" height="21" width="69">
-							<logic:notEqual name="fundSubTotal" property="plDisbAmount" value="0">
-							<bean:write name="fundSubTotal" property="plDisbAmount" />
-							</logic:notEqual>
-						</td>
+				<td align="right" height="21" width="69">
+				<logic:notEqual name="ampFund" property="plDisbAmount" value="0">
+				<bean:write name="ampFund" property="plDisbAmount" />
+				</logic:notEqual>
+				</td>
 				</logic:equal>
 				<logic:equal name="aimAdvancedReportForm" property="plExpFlag" value="true">
 				<% i = i + 1;	%>
-						<td align="right" height="21" width="69">
-							<logic:notEqual name="fundSubTotal" property="plExpAmount" value="0">
-							<bean:write name="fundSubTotal" property="plExpAmount" />
-							</logic:notEqual>
-						</td>
+				<td align="right" height="21" width="69" >
+				<logic:notEqual name="ampFund" property="plExpAmount" value="0">
+				<bean:write name="ampFund" property="plExpAmount" />
+				</logic:notEqual>
+				</td>
 				</logic:equal>
 				<logic:equal name="aimAdvancedReportForm" property="acBalFlag" value="true">
 				<% i = i + 1;
+				int j = Integer.parseInt(measureCnt);
+				j = j + 1;
+				if(i > (j*3))
+				{
+				%>
+				<td align="right" height="21" width="69">
+				<logic:notEqual name="ampFund" property="unDisbAmount" value="0">
+				<bean:write name="ampFund" property="unDisbAmount" />
+				</logic:notEqual>
+				</td>
+				<%
+				i = 0;
+				}
+				%>
+				</logic:equal>
+			</logic:iterate></logic:notEmpty>
+		</logic:iterate>
+		</tr>
+	</logic:iterate>
+	</logic:notEmpty>
+	
+	
+	<!--code begin for hierarchy 3 -->
+	<logic:notEmpty name="levels" property="levels">
+	<logic:iterate name="levels"  property="levels" id="level" type="org.digijava.module.aim.helper.AdvancedHierarchyReport">
+		<tr bgcolor="#F4F4F2">
+		<!--<td align="center" height="21" width="73" ><b>Sector</b></td>-->
+		<td colspan=100 align="left" height="21" >
+		<bean:write name="level" property="label" /> :
+		<b><u><bean:write name="level" property="name" /></u></b>
+		</td>
+		</tr>
+					
+		<tr bgcolor="#F4F4F2">
+		<logic:iterate name="aimAdvancedReportForm"  property="titles" id="titles" type="org.digijava.module.aim.helper.Column">
+			<td align="center" height="21" width="42" ><div align="center"><strong>
+			<bean:write name="titles" property="columnName" /></strong></div>
+			</td>
+		</logic:iterate>
+		<logic:iterate name="aimAdvancedReportForm"  property="fiscalYearRange" id="fiscalYearRange">
+			<td height="21" width="69" colspan=<bean:write name="aimAdvancedReportForm" property="measureCount" /> align="center" >
+			<div align="center"><strong><%=fiscalYearRange%></strong></div>
+			</td>
+		</logic:iterate>
+		<td height="21" width="69" colspan=<bean:write name="aimAdvancedReportForm" property="fundColumns" /> align="center" >
+		<b>Total 	</b>
+		</td>
+		</tr>
+		<tr bgcolor="#FFFFFF">
+		<logic:iterate name="aimAdvancedReportForm"  property="titles" id="titles" type="org.digijava.module.aim.helper.Column">
+			<td>&nbsp;</td>
+		</logic:iterate>
+					
+		<logic:iterate name="aimAdvancedReportForm"  property="fiscalYearRange" id="fiscalYearRange">
+			<logic:equal name="aimAdvancedReportForm" property="acCommFlag" value="true">
+			<td height="21" width="23" align="center" >
+			<a title="<digi:trn key="aim:actualCommitment">Actual Commitment</digi:trn>">
+			<digi:trn key="aim:actualCommitment">Actual Commitment</digi:trn>
+			</a>
+			</td>
+			</logic:equal>
+			<logic:equal name="aimAdvancedReportForm" property="acDisbFlag" value="true">
+			<td height="21" width="23" align="center" >
+			<a title="<digi:trn key="aim:DisbursementofFund">Release of funds to, or the purchase of goods or services for a recipient; by extension, the amount thus spent. Disbursements record the actual international transfer of financial resources, or of goods or services valued at the cost to the donor</digi:trn>">
+			<digi:trn key="aim:actualDisbursement">Actual Disbursement</digi:trn>
+			</a>
+			</td>
+			</logic:equal>
+			<logic:equal name="aimAdvancedReportForm" property="acExpFlag" value="true">
+			<td height="21" width="23" align="center" >
+			<a title="<digi:trn key="aim:ExpenditureofFunds">Amount effectively spent by the implementing agency</digi:trn>">
+			<digi:trn key="aim:actualExpenditure">Actual Expenditure</digi:trn>
+			</a>
+			</td>
+			</logic:equal>
+			<logic:equal name="aimAdvancedReportForm" property="plCommFlag" value="true">
+			<td height="21" width="23" align="center" >
+			<a title="<digi:trn key="aim:plannedCommitment">Planned Commitment</digi:trn>">
+			<digi:trn key="aim:plannedCommitment">Planned Commitment</digi:trn>
+			</a>
+			</td>
+			</logic:equal>
+			<logic:equal name="aimAdvancedReportForm" property="plDisbFlag" value="true">
+			<td height="21" width="23" align="center" >
+			<a title="<digi:trn key="aim:DisbursementofFund">Release of funds to, or the purchase of goods or services for a recipient; by extension, the amount thus spent. Disbursements record the actual international transfer of financial resources, or of goods or services valued at the cost to the donor</digi:trn>">
+			<digi:trn key="aim:plannedDisbursement">Planned Disbursement</digi:trn>
+			</a>
+			</td>
+			</logic:equal>
+			<logic:equal name="aimAdvancedReportForm" property="plExpFlag" value="true">
+			<td height="21" width="23" align="center" >
+			<a title="<digi:trn key="aim:ExpenditureofFunds">Amount effectively spent by the implementing agency</digi:trn>">
+			<digi:trn key="aim:plannedExpenditure">Planned Expenditure</digi:trn>
+			</a>
+			</td>
+			</logic:equal>
+		</logic:iterate>
+			
+		<logic:equal name="aimAdvancedReportForm" property="acCommFlag" value="true">
+		<td height="21" width="23" align="center" >
+		<a title="<digi:trn key="aim:actualCommitment">Actual Commitment</digi:trn>">
+		<digi:trn key="aim:actualCommitment">Actual Commitment</digi:trn>
+		</a>
+		</td>
+		</logic:equal>
+		<logic:equal name="aimAdvancedReportForm" property="acDisbFlag" value="true">
+		<td height="21" width="23" align="center" >
+		<a title="<digi:trn key="aim:DisbursementofFund">Release of funds to, or the purchase of goods or services for a recipient; by extension, the amount thus spent. Disbursements record the actual international transfer of financial resources, or of goods or services valued at the cost to the donor</digi:trn>">
+		<digi:trn key="aim:actualDisbursement">Actual Disbursement</digi:trn>
+		</a>
+		</td>
+		</logic:equal>
+		<logic:equal name="aimAdvancedReportForm" property="acExpFlag" value="true">
+		<td height="21" width="23" align="center" >
+		<a title="<digi:trn key="aim:ExpenditureofFunds">Amount effectively spent by the implementing agency</digi:trn>">
+		<digi:trn key="aim:actualExpenditure">Actual Expenditure</digi:trn>
+		</a>
+		</td>
+		</logic:equal>
+		<logic:equal name="aimAdvancedReportForm" property="plCommFlag" value="true">
+		<td height="21" width="23" align="center" >
+		<a title="<digi:trn key="aim:plannedCommitment">Planned Commitment</digi:trn>">
+		<digi:trn key="aim:plannedCommitment">Planned Commitment</digi:trn>
+		</a>
+		</td>
+		</logic:equal>
+		<logic:equal name="aimAdvancedReportForm" property="plDisbFlag" value="true">
+		<td height="21" width="23" align="center" >
+		<a title="<digi:trn key="aim:DisbursementofFund">Release of funds to, or the purchase of goods or services for a recipient; by extension, the amount thus spent. Disbursements record the actual international transfer of financial resources, or of goods or services valued at the cost to the donor</digi:trn>">
+		<digi:trn key="aim:plannedDisbursement">Planned Disbursement</digi:trn>
+		</a>
+		</td>
+		</logic:equal>
+		<logic:equal name="aimAdvancedReportForm" property="plExpFlag" value="true">
+		<td height="21" width="23" align="center" >
+		<a title="<digi:trn key="aim:ExpenditureofFunds">Amount effectively spent by the implementing agency</digi:trn>">
+		<digi:trn key="aim:plannedExpenditure">Planned Expenditure</digi:trn>
+		</a>
+		</td>
+		</logic:equal>
+		<logic:equal name="aimAdvancedReportForm" property="acBalFlag" value="true">
+		<td height="21" width="23" align="center" >
+		<digi:trn key="aim:undisbursed">Undisbursed</digi:trn>
+		</td>
+		</logic:equal>
+
+		<logic:iterate name="level"  property="project" id="project" type="org.digijava.module.aim.helper.Report">
+			<tr bgcolor="#F4F4F2">
+			<logic:iterate name="project"  property="records" id="records" type="org.digijava.module.aim.helper.AdvancedReport">
+				<logic:notEmpty name="records" property="title">
+				<td align="center" height="21" >
+				<bean:write name="records" property="title" /></td></logic:notEmpty>
+				<logic:notEmpty name="records" property="actualStartDate">
+				<td align="center" height="21" >
+				<bean:write name="records" property="actualStartDate" />
+				</td></logic:notEmpty>
+				<logic:notEmpty name="records" property="actualCompletionDate">
+				<td align="center" height="21" >
+				<bean:write name="records" property="actualCompletionDate" /></td></logic:notEmpty>
+				<logic:notEmpty name="records" property="status">
+				<td align="center" height="21" >
+				<bean:write name="records" property="status" /></td></logic:notEmpty>
+				<logic:notEmpty name="records" property="level">
+				<td align="center" height="21" >
+				<bean:write name="records" property="level" /></td></logic:notEmpty>
+				<logic:notEmpty name="records" property="objective">
+				<td align="center" height="21" >
+				<bean:write name="records" property="objective" /></td></logic:notEmpty>
+				<logic:notEmpty name="records" property="description">
+				<td align="center" height="21" width="800">
+				<bean:define id="descriptionKey">
+				<bean:write name="records" property="description" />
+				</bean:define>						
+				<digi:edit key="<%=descriptionKey%>" />
+				</td></logic:notEmpty>
+				<logic:notEmpty name="records" property="assistance">
+				<td align="center" height="21" >
+				<logic:iterate name="records" id="assistance" property="assistance"> <%=assistance%>	
+				<br>
+				</logic:iterate></td></logic:notEmpty>
+				<logic:notEmpty name="records" property="donors">
+				<td align="center" height="21" >
+				<logic:iterate name="records" id="donors" property="donors"> <%=donors%>	
+				<br>
+				</logic:iterate></td></logic:notEmpty>
+				<logic:notEmpty name="records" property="sectors">
+				<td align="center" height="21" >
+				<logic:iterate name="records" id="sectors" property="sectors"> <%=sectors%>	
+				<br>
+				</logic:iterate></td></logic:notEmpty>
+				<logic:notEmpty name="records" property="regions">
+				<td align="center" height="21" >
+				<logic:iterate name="records" id="regions" property="regions"> <%=regions%>	
+				<br>
+				</logic:iterate></td></logic:notEmpty>
+				<logic:notEmpty name="records" property="contacts">
+				<td align="center" height="21" >
+				<logic:iterate name="records" id="contacts" property="contacts"> <%=contacts%>	
+				<br>
+				</logic:iterate></td></logic:notEmpty>
+				<logic:notEmpty name="records" property="modality">
+				<td align="center" height="21" >
+				<logic:iterate name="records" id="modality" property="modality"> <%=modality%>	
+				<br>
+				</logic:iterate></td></logic:notEmpty>
+				<logic:notEmpty name="records" property="ampId">
+				<td align="center" height="21" >
+				<bean:write name="records" property="ampId" /></td></logic:notEmpty>
+				<logic:notEmpty name="records" property="ampFund">
+				<logic:iterate name="records"  property="ampFund" id="ampFund" 	type="org.digijava.module.aim.helper.AmpFund">
+					<logic:equal name="aimAdvancedReportForm" property="acCommFlag" value="true">
+					<% i = i + 1;	%>
+					<td align="right" height="21" width="69">
+					<logic:notEqual name="ampFund" property="commAmount" value="0">
+					<bean:write name="ampFund" property="commAmount" />
+					</logic:notEqual>
+					</td>
+					</logic:equal>
+					<logic:equal name="aimAdvancedReportForm" property="acDisbFlag" 	value="true">
+					<% i = i + 1;	%>
+					<td align="right" height="21" width="69">
+					<logic:notEqual name="ampFund" property="disbAmount" value="0">
+					<bean:write name="ampFund" property="disbAmount" />
+					</logic:notEqual>
+					</td>
+					</logic:equal>
+					<logic:equal name="aimAdvancedReportForm" property="acExpFlag" 	value="true">
+					<% i = i + 1;	%>
+					<td align="right" height="21" width="69">
+					<logic:notEqual name="ampFund" property="expAmount" value="0">
+					<bean:write name="ampFund" property="expAmount" />
+					</logic:notEqual>
+					</td>
+					</logic:equal>
+					<logic:equal name="aimAdvancedReportForm" property="plCommFlag" value="true">
+					<% i = i + 1;	%>
+					<td align="right" height="21" width="69">
+					<logic:notEqual name="ampFund" property="plCommAmount" value="0">
+					<bean:write name="ampFund" property="plCommAmount" />
+					</logic:notEqual>
+					</td>
+					</logic:equal>
+					<logic:equal name="aimAdvancedReportForm" property="plDisbFlag" value="true">
+					<% i = i + 1;	%>
+					<td align="right" height="21" width="69">
+					<logic:notEqual name="ampFund" property="plDisbAmount" value="0">
+					<bean:write name="ampFund" property="plDisbAmount" />
+					</logic:notEqual>
+					</td>
+					</logic:equal>
+					<logic:equal name="aimAdvancedReportForm" property="plExpFlag" value="true">
+					<% i = i + 1;	%>
+					<td align="right" height="21" width="69" >
+					<logic:notEqual name="ampFund" property="plExpAmount" value="0">
+					<bean:write name="ampFund" property="plExpAmount" />
+					</logic:notEqual>
+					</td>
+					</logic:equal>
+					<logic:equal name="aimAdvancedReportForm" property="acBalFlag" value="true">
+					<% i = i + 1;
 					int j = Integer.parseInt(measureCnt);
 					j = j + 1;
 					if(i > (j*3))
 					{
-
-				%>
-				
-						<td align="right" height="21" width="69">
-							<logic:notEqual name="fundSubTotal" property="unDisbAmount" value="0">
-							<bean:write name="fundSubTotal" property="unDisbAmount" />
-							</logic:notEqual>
-						</td>
-						<%
-						i = 0;
-						}
-						%>
-						
-				</logic:equal>
-				</logic:iterate></tr>
-				</logic:iterate>
-				<%  i = 0; %>
-			  <tr><td align="left" colspan=<bean:write name="aimAdvancedReportForm" property="dimColumns" />><b> <bean:write name="hierarchy" property="name" /> &nbsp;Total</b></td>
+					%>
+					<td align="right" height="21" width="69">
+					<logic:notEqual name="ampFund" property="unDisbAmount" value="0">
+					<bean:write name="ampFund" property="unDisbAmount" />
+					</logic:notEqual>
+					</td>
+					<%
+					i = 0;
+					}
+					%>
+					</logic:equal>
+				</logic:iterate></logic:notEmpty>
+			</logic:iterate>
+			</tr>
+		</logic:iterate>
+		<%  i = 0; %>
+		<tr><td align="left" colspan=<bean:write name="aimAdvancedReportForm" property="dimColumns" />><b> <bean:write name="level" property="name" /> &nbsp;Total</b></td>
+		<logic:iterate name="level"  property="fundSubTotal" id="fundSubTotal" type="org.digijava.module.aim.helper.AmpFund">
+			<logic:equal name="aimAdvancedReportForm" property="acCommFlag" value="true">
+			<% i = i + 1;	%>
+			<td align="right" height="21" width="69">
+			<logic:notEqual name="fundSubTotal" property="commAmount" value="0">
+			<bean:write name="fundSubTotal" property="commAmount" />
+			</logic:notEqual>
+			</td>
+			</logic:equal>
+			<logic:equal name="aimAdvancedReportForm" property="acDisbFlag" value="true">
+			<% i = i + 1;	%>
+			<td align="right" height="21" width="69">
+			<logic:notEqual name="fundSubTotal" property="disbAmount" value="0">
+			<bean:write name="fundSubTotal" property="disbAmount" />
+			</logic:notEqual>
+			</td>
+			</logic:equal>
+			<logic:equal name="aimAdvancedReportForm" property="acExpFlag" value="true">
+			<% i = i + 1;	%>
+			<td align="right" height="21" width="69">
+			<logic:notEqual name="fundSubTotal" property="expAmount" value="0">
+			<bean:write name="fundSubTotal" property="expAmount" />
+			</logic:notEqual>
+			</td>
+			</logic:equal>
+			<logic:equal name="aimAdvancedReportForm" property="plCommFlag" value="true">
+			<% i = i + 1;	%>
+			<td align="right" height="21" width="69">
+			<logic:notEqual name="fundSubTotal" property="plCommAmount" value="0">
+			<bean:write name="fundSubTotal" property="plCommAmount" />
+			</logic:notEqual>
+			</td>
+			</logic:equal>
+			<logic:equal name="aimAdvancedReportForm" property="plDisbFlag" value="true">
+			<% i = i + 1;	%>
+			<td align="right" height="21" width="69">
+			<logic:notEqual name="fundSubTotal" property="plDisbAmount" value="0">
+			<bean:write name="fundSubTotal" property="plDisbAmount" />
+			</logic:notEqual>
+			</td>
+			</logic:equal>
+			<logic:equal name="aimAdvancedReportForm" property="plExpFlag" value="true">
+			<% i = i + 1;	%>
+			<td align="right" height="21" width="69">
+			<logic:notEqual name="fundSubTotal" property="plExpAmount" value="0">
+			<bean:write name="fundSubTotal" property="plExpAmount" />
+			</logic:notEqual>
+			</td>
+			</logic:equal>
+			<logic:equal name="aimAdvancedReportForm" property="acBalFlag" value="true">
+			<% i = i + 1;
+			int j = Integer.parseInt(measureCnt);
+			j = j + 1;
+			if(i > (j*3))
+			{
+			%>
+			<td align="right" height="21" width="69">
+			<logic:notEqual name="fundSubTotal" property="unDisbAmount" value="0">
+			<bean:write name="fundSubTotal" property="unDisbAmount" />
+			</logic:notEqual>
+			</td>
+			<%
+			i = 0;
+			}
+			%>
+			</logic:equal>
+		</logic:iterate></tr>
+	</logic:iterate>
+	</logic:notEmpty>
+	<%  i = 0; %>
+	<tr><td align="left" colspan=<bean:write name="aimAdvancedReportForm" property="dimColumns" />><b> <bean:write name="levels" property="name" /> &nbsp;Total</b></td>
+	<logic:iterate name="levels"  property="fundSubTotal" id="fundSubTotal" type="org.digijava.module.aim.helper.AmpFund">
+		<logic:equal name="aimAdvancedReportForm" property="acCommFlag" value="true">
+		<% i = i + 1;	%>
+		<td align="right" height="21" width="69">
+		<logic:notEqual name="fundSubTotal" property="commAmount" value="0">
+		<bean:write name="fundSubTotal" property="commAmount" />
+		</logic:notEqual>
+		</td>
+		</logic:equal>
+		<logic:equal name="aimAdvancedReportForm" property="acDisbFlag" value="true">
+		<% i = i + 1;	%>
+		<td align="right" height="21" width="69">
+		<logic:notEqual name="fundSubTotal" property="disbAmount" value="0">
+		<bean:write name="fundSubTotal" property="disbAmount" />
+		</logic:notEqual>
+		</td>
+		</logic:equal>
+		<logic:equal name="aimAdvancedReportForm" property="acExpFlag" value="true">
+		<% i = i + 1;	%>
+		<td align="right" height="21" width="69">
+		<logic:notEqual name="fundSubTotal" property="expAmount" value="0">
+		<bean:write name="fundSubTotal" property="expAmount" />
+		</logic:notEqual>
+		</td>
+		</logic:equal>
+		<logic:equal name="aimAdvancedReportForm" property="plCommFlag" value="true">
+		<% i = i + 1;	%>
+		<td align="right" height="21" width="69">
+		<logic:notEqual name="fundSubTotal" property="plCommAmount" value="0">
+		<bean:write name="fundSubTotal" property="plCommAmount" />
+		</logic:notEqual>
+		</td>
+		</logic:equal>
+		<logic:equal name="aimAdvancedReportForm" property="plDisbFlag" value="true">
+		<% i = i + 1;	%>
+		<td align="right" height="21" width="69">
+		<logic:notEqual name="fundSubTotal" property="plDisbAmount" value="0">
+		<bean:write name="fundSubTotal" property="plDisbAmount" />
+		</logic:notEqual>
+		</td>
+		</logic:equal>
+		<logic:equal name="aimAdvancedReportForm" property="plExpFlag" value="true">
+		<% i = i + 1;	%>
+		<td align="right" height="21" width="69">
+		<logic:notEqual name="fundSubTotal" property="plExpAmount" value="0">
+		<bean:write name="fundSubTotal" property="plExpAmount" />
+		</logic:notEqual>
+		</td>
+		</logic:equal>
+		<logic:equal name="aimAdvancedReportForm" property="acBalFlag" value="true">
+		<% i = i + 1;
+		int j = Integer.parseInt(measureCnt);
+		j = j + 1;
+		if(i > (j*3))
+		{
+		%>
+		<td align="right" height="21" width="69">
+		<logic:notEqual name="fundSubTotal" property="unDisbAmount" value="0">
+		<bean:write name="fundSubTotal" property="unDisbAmount" />
+		</logic:notEqual>
+		</td>
+		<%
+		i = 0;
+		}
+		%>
+		</logic:equal>
+	</logic:iterate></tr>
+	
+	<!-- code ends for hierarchy three -->
+</logic:iterate>
+<%  i = 0; %>
+<tr><td align="left" colspan=<bean:write name="aimAdvancedReportForm" property="dimColumns" />><b> <bean:write name="hierarchy" property="name" /> &nbsp;Total</b></td>
 			  <logic:iterate name="hierarchy"  property="fundSubTotal" id="fundSubTotal" type="org.digijava.module.aim.helper.AmpFund">
 			  <logic:equal name="aimAdvancedReportForm" property="acCommFlag" value="true">
 			  <% i = i + 1;	%>

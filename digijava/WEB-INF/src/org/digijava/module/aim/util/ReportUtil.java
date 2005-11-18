@@ -11044,6 +11044,8 @@ public class ReportUtil {
 		double[][] plannedFunds=new double[yrCount][3];
 		double[][] subTotActualFunds=new double[yrCount][3];
 		double[][] subTotPlannedFunds=new double[yrCount][3];
+		double[][] subSubTotActualFunds=new double[yrCount][3];
+		double[][] subSubTotPlannedFunds=new double[yrCount][3];
 		double[][] totActualFunds=new double[yrCount][3];
 		double[][] totPlannedFunds=new double[yrCount][3];
 		String inClause=null;
@@ -11056,6 +11058,7 @@ public class ReportUtil {
 		double amount=0.0;
 		double sumUnDisb = 0, actSumCommit = 0, actSumDisb = 0, actSumExp = 0, planSumCommit = 0, planSumDisb = 0, planSumExp = 0;
 		double unDisbSubTotal = 0, actCommitSubTotal = 0, actDisbSubTotal = 0, actExpSubTotal = 0, planCommitSubTotal = 0, planDisbSubTotal = 0, planExpSubTotal = 0;
+		double unDisbSubSubTotal = 0, actCommitSubSubTotal = 0, actDisbSubSubTotal = 0, actExpSubSubTotal = 0, planCommitSubSubTotal = 0, planDisbSubSubTotal = 0, planExpSubSubTotal = 0;
 		double unDisbTotal = 0, actCommitTotal = 0, actDisbTotal = 0, actExpTotal = 0, planCommitTotal = 0, planDisbTotal = 0, planExpTotal = 0;
 
 		int fiscalYear=0,fiscalQuarter=0;
@@ -11069,12 +11072,14 @@ public class ReportUtil {
 		ArrayList activityIds=new ArrayList();
 		Iterator iterLevel1=null;
 		Iterator iterLevel2=null;
+		Iterator iterLevel3=null;
 		DecimalFormat mf = new DecimalFormat("###,###,###,###,###") ;
 		Collection currencies=null;
 		int firstColumn=0;	
 		AdvancedReport report=null;
 		AdvancedHierarchyReport ahReport=null;
-		AdvancedHierarchyReport ahTemp=null;
+		AdvancedHierarchyReport ahTempLevel2=null;
+		AdvancedHierarchyReport ahTempLevel3=null;
 		multiReport mreport=null;
 		AmpReportCache ampReportCache = null;
 		try
@@ -11664,6 +11669,15 @@ public class ReportUtil {
 					Column colLevel2=(Column) hierarchy.get(1);
 					dbReturnSet=ReportUtil.getLevel2AdvancedReport(ampTeamId,colLevel1.getColumnId(),colLevel2.getColumnId());
 				}
+
+				if(hierarchy.size()==3)
+				{
+					Column colLevel1=(Column) hierarchy.get(0);
+					Column colLevel2=(Column) hierarchy.get(1);
+					Column colLevel3=(Column) hierarchy.get(2);
+					dbReturnSet=ReportUtil.getLevel3AdvancedReport(ampTeamId,colLevel1.getColumnId(),colLevel2.getColumnId(),colLevel3.getColumnId());
+					logger.info("Hierarchy 3 Size: " + dbReturnSet.size());
+				}
 				iterLevel1=dbReturnSet.iterator();
 				while(iterLevel1.hasNext())
 				{
@@ -11672,54 +11686,147 @@ public class ReportUtil {
 					ahReport.setProject(new ArrayList());
 					ahReport.setName(ahReportLevel1.getName());
 					ahReport.setLabel(ahReportLevel1.getLabel());
-					logger.info("Level 1 Name for Label " + ahReport.getLabel() + ": " + ahReport.getName());
-					//activityIds.clear();
 					activityIds=(ArrayList)ahReportLevel1.getActivities();
 					if(ahReportLevel1.getLevels()!=null)
 					{
-						logger.info("Inside Level");
-						logger.info("Number of records in level 2 " + ahReportLevel1.getLevels().size());
 						ahReport.setLevels(new ArrayList());
 						iterLevel2=ahReportLevel1.getLevels().iterator();
 						while(iterLevel2.hasNext())
 						{
-							logger.info("begin while");
 							AdvancedHierarchyReport ahReportLevel2=(AdvancedHierarchyReport) iterLevel2.next();
-							ahTemp=new AdvancedHierarchyReport();
-							ahTemp.setName(ahReportLevel2.getName());
-							ahTemp.setLabel(ahReportLevel2.getLabel());
-							ahTemp.setProject(new ArrayList());
-							//activityIds.clear();
+							ahTempLevel2=new AdvancedHierarchyReport();
+							ahTempLevel2.setName(ahReportLevel2.getName());
+							ahTempLevel2.setLabel(ahReportLevel2.getLabel());
+							ahTempLevel2.setProject(new ArrayList());
 							activityIds=(ArrayList)ahReportLevel2.getActivities();
-							logger.info("Level 2 Name for Label " + ahTemp.getLabel() + ": " + ahTemp.getName());
-							logger.info("Number of activities at level 1: " + activityIds.size());
-							ahTemp=getAdvancedReportRecords(q.list(),activityIds,columns,measures,fromYr,toYr,perspective,fiscalCalId,ampCurrencyCode,ahTemp);
-							ahReport.getLevels().add(ahTemp);
-							Iterator iterFund = ahTemp.getFundSubTotal().iterator();
-							for(int i=0;i<=yrCount ;i++ )
+							if(ahReportLevel2.getLevels()!=null)
 							{
-								AmpFund ampFund=(AmpFund) iterFund.next();
-
-								if(i<yrCount)
+								ahTempLevel2.setLevels(new ArrayList());
+								iterLevel3=ahReportLevel2.getLevels().iterator();
+								while(iterLevel3.hasNext())
 								{
-									subTotActualFunds[i][0]=subTotActualFunds[i][0] + Double.parseDouble(DecimalToText.removeCommas(ampFund.getCommAmount()));
-									subTotActualFunds[i][1]=subTotActualFunds[i][1] + Double.parseDouble(DecimalToText.removeCommas(ampFund.getDisbAmount()));
-									subTotActualFunds[i][2]=subTotActualFunds[i][2] + Double.parseDouble(DecimalToText.removeCommas(ampFund.getExpAmount()));
-									subTotPlannedFunds[i][0]=subTotPlannedFunds[i][0] + Double.parseDouble(DecimalToText.removeCommas(ampFund.getPlCommAmount()));
-									subTotPlannedFunds[i][1]=subTotPlannedFunds[i][1] + Double.parseDouble(DecimalToText.removeCommas(ampFund.getPlDisbAmount()));
-									subTotPlannedFunds[i][2]=subTotPlannedFunds[i][2] + Double.parseDouble(DecimalToText.removeCommas(ampFund.getPlExpAmount()));
-								}
-								if(i==yrCount)						
+									AdvancedHierarchyReport ahReportLevel3=(AdvancedHierarchyReport) iterLevel3.next();									
+									ahTempLevel3=new AdvancedHierarchyReport();
+									ahTempLevel3.setName(ahReportLevel3.getName());
+									ahTempLevel3.setLabel(ahReportLevel3.getLabel());
+									ahTempLevel3.setProject(new ArrayList());
+									activityIds=(ArrayList)ahReportLevel3.getActivities();
+									ahTempLevel3=getAdvancedReportRecords(q.list(),activityIds,columns,measures,fromYr,toYr,perspective,fiscalCalId,ampCurrencyCode,ahTempLevel3);
+									ahTempLevel2.getLevels().add(ahTempLevel3);
+									Iterator iterFund = ahTempLevel3.getFundSubTotal().iterator();
+									for(int i=0;i<=yrCount ;i++ )
+									{
+										AmpFund ampFund=(AmpFund) iterFund.next();
+		
+										if(i<yrCount)
+										{
+											subSubTotActualFunds[i][0]=subSubTotActualFunds[i][0] + Double.parseDouble(DecimalToText.removeCommas(ampFund.getCommAmount()));
+											subSubTotActualFunds[i][1]=subSubTotActualFunds[i][1] + Double.parseDouble(DecimalToText.removeCommas(ampFund.getDisbAmount()));
+											subSubTotActualFunds[i][2]=subSubTotActualFunds[i][2] + Double.parseDouble(DecimalToText.removeCommas(ampFund.getExpAmount()));
+											subSubTotPlannedFunds[i][0]=subSubTotPlannedFunds[i][0] + Double.parseDouble(DecimalToText.removeCommas(ampFund.getPlCommAmount()));
+											subSubTotPlannedFunds[i][1]=subSubTotPlannedFunds[i][1] + Double.parseDouble(DecimalToText.removeCommas(ampFund.getPlDisbAmount()));
+											subSubTotPlannedFunds[i][2]=subSubTotPlannedFunds[i][2] + Double.parseDouble(DecimalToText.removeCommas(ampFund.getPlExpAmount()));
+										}
+										if(i==yrCount)						
+										{
+											actCommitSubSubTotal = actCommitSubSubTotal + Double.parseDouble(DecimalToText.removeCommas(ampFund.getCommAmount()));
+											actDisbSubSubTotal = actDisbSubSubTotal + Double.parseDouble(DecimalToText.removeCommas(ampFund.getDisbAmount()));
+											actExpSubSubTotal = actExpSubSubTotal + Double.parseDouble(DecimalToText.removeCommas(ampFund.getExpAmount()));
+											planCommitSubSubTotal = planCommitSubSubTotal  + Double.parseDouble(DecimalToText.removeCommas(ampFund.getPlCommAmount()));
+											planDisbSubSubTotal = planDisbSubSubTotal + Double.parseDouble(DecimalToText.removeCommas(ampFund.getPlDisbAmount()));
+											planExpSubSubTotal = planExpSubSubTotal + Double.parseDouble(DecimalToText.removeCommas(ampFund.getPlExpAmount()));
+											unDisbSubSubTotal = unDisbSubSubTotal + (Double.parseDouble(DecimalToText.removeCommas(ampFund.getCommAmount())) - Double.parseDouble(DecimalToText.removeCommas(ampFund.getDisbAmount())));
+										}
+			
+									}
+								}//End of iteration of level3
+								if(ahTempLevel2.getLevels().size()>0)
 								{
-									actCommitSubTotal = actCommitSubTotal + Double.parseDouble(DecimalToText.removeCommas(ampFund.getCommAmount()));
-									actDisbSubTotal = actDisbSubTotal + Double.parseDouble(DecimalToText.removeCommas(ampFund.getDisbAmount()));
-									actExpSubTotal = actExpSubTotal + Double.parseDouble(DecimalToText.removeCommas(ampFund.getExpAmount()));
-									planCommitSubTotal = planCommitSubTotal  + Double.parseDouble(DecimalToText.removeCommas(ampFund.getPlCommAmount()));
-									planDisbSubTotal = planDisbSubTotal + Double.parseDouble(DecimalToText.removeCommas(ampFund.getPlDisbAmount()));
-									planExpSubTotal = planExpSubTotal + Double.parseDouble(DecimalToText.removeCommas(ampFund.getPlExpAmount()));
-									unDisbSubTotal = unDisbSubTotal + (Double.parseDouble(DecimalToText.removeCommas(ampFund.getCommAmount())) - Double.parseDouble(DecimalToText.removeCommas(ampFund.getDisbAmount())));
-								}
+									ahTempLevel2.setFundSubTotal(new ArrayList());
+									for(int i=0;i<yrCount;i++)
+									{
+										AmpFund ampFund=new AmpFund();
+										if(measures.indexOf(new Long(1))!=-1)
+											ampFund.setCommAmount(mf.format(subSubTotActualFunds[i][0])); 
+										if(measures.indexOf(new Long(2))!=-1)
+											ampFund.setDisbAmount(mf.format(subSubTotActualFunds[i][1])); 
+										if(measures.indexOf(new Long(3))!=-1)
+											ampFund.setExpAmount(mf.format(subSubTotActualFunds[i][2]));	
+										if(measures.indexOf(new Long(4))!=-1)
+											ampFund.setPlCommAmount(mf.format(subSubTotPlannedFunds[i][0])); 
+										if(measures.indexOf(new Long(5))!=-1)
+											ampFund.setPlDisbAmount(mf.format(subSubTotPlannedFunds[i][1])); 
+										if(measures.indexOf(new Long(6))!=-1)
+											ampFund.setPlExpAmount(mf.format(subSubTotPlannedFunds[i][2]));	
+										if(measures.indexOf(new Long(7))!=-1)
+											ampFund.setUnDisbAmount(mf.format(subSubTotActualFunds[i][0]-subSubTotActualFunds[i][1]));
+							
+										ahTempLevel2.getFundSubTotal().add(ampFund);
 	
+										subTotActualFunds[i][0] = subTotActualFunds[i][0] + subSubTotActualFunds[i][0];
+										subTotActualFunds[i][1] = subTotActualFunds[i][1] + subSubTotActualFunds[i][1];
+										subTotActualFunds[i][2] = subTotActualFunds[i][2] + subSubTotActualFunds[i][2];
+										subTotPlannedFunds[i][0] = subTotPlannedFunds[i][0] + subSubTotPlannedFunds[i][0];
+										subTotPlannedFunds[i][1] = subTotPlannedFunds[i][1] + subSubTotPlannedFunds[i][1];
+										subTotPlannedFunds[i][2] = subTotPlannedFunds[i][2] + subSubTotPlannedFunds[i][2];
+									}
+
+									AmpFund fund = new AmpFund();
+									fund.setCommAmount(mf.format(actCommitSubTotal));
+									fund.setDisbAmount(mf.format(actDisbSubTotal));
+									fund.setExpAmount(mf.format(actExpSubTotal));
+									fund.setPlCommAmount(mf.format(planCommitSubTotal));
+									fund.setPlDisbAmount(mf.format(planDisbSubTotal));
+									fund.setPlExpAmount(mf.format(planExpSubTotal));
+									fund.setUnDisbAmount(mf.format(unDisbSubTotal));
+									ahTempLevel2.getFundSubTotal().add(fund) ;	
+									actCommitSubTotal = actCommitSubTotal + actCommitSubSubTotal;
+									actDisbSubTotal = actDisbSubTotal + actDisbSubSubTotal;
+									actExpSubTotal = actExpSubTotal + actExpSubSubTotal;
+									planCommitSubTotal = planCommitSubTotal + planCommitSubSubTotal;
+									planDisbSubTotal = planDisbSubTotal + planDisbSubSubTotal;
+									planExpSubTotal = planExpSubTotal + planExpSubSubTotal;
+									unDisbSubTotal = unDisbSubTotal + (actCommitSubSubTotal-actDisbSubSubTotal);
+								}
+								ahReport.getLevels().add(ahTempLevel2);
+								unDisbSubSubTotal=actCommitSubSubTotal=actDisbSubSubTotal=actExpSubSubTotal=planCommitSubSubTotal=planDisbSubSubTotal=planExpSubSubTotal = 0;
+								for(int i=0;i<yrCount;i++)
+								{
+									subSubTotActualFunds[i][0]=subSubTotActualFunds[i][1]=subSubTotActualFunds[i][2]=0;
+									subSubTotPlannedFunds[i][0]=subSubTotPlannedFunds[i][1]=subSubTotPlannedFunds[i][2]=0;
+								}
+								
+							}
+							else
+							{
+								ahTempLevel2=getAdvancedReportRecords(q.list(),activityIds,columns,measures,fromYr,toYr,perspective,fiscalCalId,ampCurrencyCode,ahTempLevel2);
+								ahReport.getLevels().add(ahTempLevel2);
+								Iterator iterFund = ahTempLevel2.getFundSubTotal().iterator();
+								for(int i=0;i<=yrCount ;i++ )
+								{
+									AmpFund ampFund=(AmpFund) iterFund.next();
+	
+									if(i<yrCount)
+									{
+										subTotActualFunds[i][0]=subTotActualFunds[i][0] + Double.parseDouble(DecimalToText.removeCommas(ampFund.getCommAmount()));
+										subTotActualFunds[i][1]=subTotActualFunds[i][1] + Double.parseDouble(DecimalToText.removeCommas(ampFund.getDisbAmount()));
+										subTotActualFunds[i][2]=subTotActualFunds[i][2] + Double.parseDouble(DecimalToText.removeCommas(ampFund.getExpAmount()));
+										subTotPlannedFunds[i][0]=subTotPlannedFunds[i][0] + Double.parseDouble(DecimalToText.removeCommas(ampFund.getPlCommAmount()));
+										subTotPlannedFunds[i][1]=subTotPlannedFunds[i][1] + Double.parseDouble(DecimalToText.removeCommas(ampFund.getPlDisbAmount()));
+										subTotPlannedFunds[i][2]=subTotPlannedFunds[i][2] + Double.parseDouble(DecimalToText.removeCommas(ampFund.getPlExpAmount()));
+									}
+									if(i==yrCount)						
+									{
+										actCommitSubTotal = actCommitSubTotal + Double.parseDouble(DecimalToText.removeCommas(ampFund.getCommAmount()));
+										actDisbSubTotal = actDisbSubTotal + Double.parseDouble(DecimalToText.removeCommas(ampFund.getDisbAmount()));
+										actExpSubTotal = actExpSubTotal + Double.parseDouble(DecimalToText.removeCommas(ampFund.getExpAmount()));
+										planCommitSubTotal = planCommitSubTotal  + Double.parseDouble(DecimalToText.removeCommas(ampFund.getPlCommAmount()));
+										planDisbSubTotal = planDisbSubTotal + Double.parseDouble(DecimalToText.removeCommas(ampFund.getPlDisbAmount()));
+										planExpSubTotal = planExpSubTotal + Double.parseDouble(DecimalToText.removeCommas(ampFund.getPlExpAmount()));
+										unDisbSubTotal = unDisbSubTotal + (Double.parseDouble(DecimalToText.removeCommas(ampFund.getCommAmount())) - Double.parseDouble(DecimalToText.removeCommas(ampFund.getDisbAmount())));
+									}
+	
+								}
 							}
 						}//End of Level 2 iteration
 						//logger.info("level2 size: " + ahReport.getLevels().size());
@@ -11920,6 +12027,8 @@ public class ReportUtil {
 		double[][] plannedFunds=new double[yrCount][3];
 		double[][] subTotActualFunds=new double[yrCount][3];
 		double[][] subTotPlannedFunds=new double[yrCount][3];
+		double[][] subSubTotActualFunds=new double[yrCount][3];
+		double[][] subSubTotPlannedFunds=new double[yrCount][3];
 		double[][] totActualFunds=new double[yrCount][3];
 		double[][] totPlannedFunds=new double[yrCount][3];
 		String ampId=null;
@@ -11941,6 +12050,7 @@ public class ReportUtil {
 		double sumUnDisb = 0, actSumCommit = 0, actSumDisb = 0, actSumExp = 0, planSumCommit = 0, planSumDisb = 0, planSumExp = 0;
 		double unDisbSubTotal = 0, actCommitSubTotal = 0, actDisbSubTotal = 0, actExpSubTotal = 0, planCommitSubTotal = 0, planDisbSubTotal = 0, planExpSubTotal = 0;
 		double unDisbTotal = 0, actCommitTotal = 0, actDisbTotal = 0, actExpTotal = 0, planCommitTotal = 0, planDisbTotal = 0, planExpTotal = 0;
+		double unDisbSubSubTotal = 0, actCommitSubSubTotal = 0, actDisbSubSubTotal = 0, actExpSubSubTotal = 0, planCommitSubSubTotal = 0, planDisbSubSubTotal = 0, planExpSubSubTotal = 0;
 		String description=null;
 		String objective=null;
 		
@@ -11949,6 +12059,7 @@ public class ReportUtil {
 		ArrayList activityIds=new ArrayList();
 		Iterator iterLevel1=null;
 		Iterator iterLevel2=null;
+		Iterator iterLevel3=null;
 		
 		DecimalFormat mf = new DecimalFormat("###,###,###,###,###") ;
 		Collection currencies=null;
@@ -11956,7 +12067,8 @@ public class ReportUtil {
 		AdvancedReport report=null;
 		AmpReportCache ampReportCache = null;
 		AdvancedHierarchyReport ahReport=null;
-		AdvancedHierarchyReport ahTemp=null;
+		AdvancedHierarchyReport ahTempLevel2=null;
+		AdvancedHierarchyReport ahTempLevel3=null;
 		multiReport mreport=null;
 		try
 		{
@@ -12455,6 +12567,15 @@ public class ReportUtil {
 					AmpColumns colLevel2=(AmpColumns) hierarchy.get(1);
 					dbReturnSet=ReportUtil.getLevel2AdvancedReport(ampTeamId,colLevel1.getColumnId(),colLevel2.getColumnId());
 				}
+
+				if(hierarchy.size()==3)
+				{
+					AmpColumns colLevel1=(AmpColumns) hierarchy.get(0);
+					AmpColumns colLevel2=(AmpColumns) hierarchy.get(1);
+					AmpColumns colLevel3=(AmpColumns) hierarchy.get(2);
+					dbReturnSet=ReportUtil.getLevel3AdvancedReport(ampTeamId,colLevel1.getColumnId(),colLevel2.getColumnId(),colLevel3.getColumnId());
+				}
+
 				iterLevel1=dbReturnSet.iterator();
 				while(iterLevel1.hasNext())
 				{
@@ -12463,54 +12584,147 @@ public class ReportUtil {
 					ahReport.setProject(new ArrayList());
 					ahReport.setName(ahReportLevel1.getName());
 					ahReport.setLabel(ahReportLevel1.getLabel());
-					logger.info("Level 1 Name for Label " + ahReport.getLabel() + ": " + ahReport.getName());
-					//activityIds.clear();
 					activityIds=(ArrayList)ahReportLevel1.getActivities();
 					if(ahReportLevel1.getLevels()!=null)
 					{
-						logger.info("Inside Level");
-						logger.info("Number of records in level 2 " + ahReportLevel1.getLevels().size());
 						ahReport.setLevels(new ArrayList());
 						iterLevel2=ahReportLevel1.getLevels().iterator();
 						while(iterLevel2.hasNext())
 						{
-							logger.info("begin while");
 							AdvancedHierarchyReport ahReportLevel2=(AdvancedHierarchyReport) iterLevel2.next();
-							ahTemp=new AdvancedHierarchyReport();
-							ahTemp.setName(ahReportLevel2.getName());
-							ahTemp.setLabel(ahReportLevel2.getLabel());
-							ahTemp.setProject(new ArrayList());
-							//activityIds.clear();
+							ahTempLevel2=new AdvancedHierarchyReport();
+							ahTempLevel2.setName(ahReportLevel2.getName());
+							ahTempLevel2.setLabel(ahReportLevel2.getLabel());
+							ahTempLevel2.setProject(new ArrayList());
 							activityIds=(ArrayList)ahReportLevel2.getActivities();
-							logger.info("Level 2 Name for Label " + ahTemp.getLabel() + ": " + ahTemp.getName());
-							logger.info("Number of activities at level 1: " + activityIds.size());
-							ahTemp=generateAdvancedReportRecords(q.list(),activityIds,columns,measures,fromYr,toYr,perspective,fiscalCalId,ampCurrencyCode,ahTemp);
-							ahReport.getLevels().add(ahTemp);
-							Iterator iterFund = ahTemp.getFundSubTotal().iterator();
-							for(int i=0;i<=yrCount ;i++ )
+							if(ahReportLevel2.getLevels()!=null)
 							{
-								AmpFund ampFund=(AmpFund) iterFund.next();
-
-								if(i<yrCount)
+								ahTempLevel2.setLevels(new ArrayList());
+								iterLevel3=ahReportLevel2.getLevels().iterator();
+								while(iterLevel3.hasNext())
 								{
-									subTotActualFunds[i][0]=subTotActualFunds[i][0] + Double.parseDouble(DecimalToText.removeCommas(ampFund.getCommAmount()));
-									subTotActualFunds[i][1]=subTotActualFunds[i][1] + Double.parseDouble(DecimalToText.removeCommas(ampFund.getDisbAmount()));
-									subTotActualFunds[i][2]=subTotActualFunds[i][2] + Double.parseDouble(DecimalToText.removeCommas(ampFund.getExpAmount()));
-									subTotPlannedFunds[i][0]=subTotPlannedFunds[i][0] + Double.parseDouble(DecimalToText.removeCommas(ampFund.getPlCommAmount()));
-									subTotPlannedFunds[i][1]=subTotPlannedFunds[i][1] + Double.parseDouble(DecimalToText.removeCommas(ampFund.getPlDisbAmount()));
-									subTotPlannedFunds[i][2]=subTotPlannedFunds[i][2] + Double.parseDouble(DecimalToText.removeCommas(ampFund.getPlExpAmount()));
-								}
-								if(i==yrCount)						
+									AdvancedHierarchyReport ahReportLevel3=(AdvancedHierarchyReport) iterLevel3.next();									
+									ahTempLevel3=new AdvancedHierarchyReport();
+									ahTempLevel3.setName(ahReportLevel3.getName());
+									ahTempLevel3.setLabel(ahReportLevel3.getLabel());
+									ahTempLevel3.setProject(new ArrayList());
+									activityIds=(ArrayList)ahReportLevel3.getActivities();
+									ahTempLevel3=generateAdvancedReportRecords(q.list(),activityIds,columns,measures,fromYr,toYr,perspective,fiscalCalId,ampCurrencyCode,ahTempLevel3);									
+									ahTempLevel2.getLevels().add(ahTempLevel3);
+									Iterator iterFund = ahTempLevel3.getFundSubTotal().iterator();
+									for(int i=0;i<=yrCount ;i++ )
+									{
+										AmpFund ampFund=(AmpFund) iterFund.next();
+		
+										if(i<yrCount)
+										{
+											subSubTotActualFunds[i][0]=subSubTotActualFunds[i][0] + Double.parseDouble(DecimalToText.removeCommas(ampFund.getCommAmount()));
+											subSubTotActualFunds[i][1]=subSubTotActualFunds[i][1] + Double.parseDouble(DecimalToText.removeCommas(ampFund.getDisbAmount()));
+											subSubTotActualFunds[i][2]=subSubTotActualFunds[i][2] + Double.parseDouble(DecimalToText.removeCommas(ampFund.getExpAmount()));
+											subSubTotPlannedFunds[i][0]=subSubTotPlannedFunds[i][0] + Double.parseDouble(DecimalToText.removeCommas(ampFund.getPlCommAmount()));
+											subSubTotPlannedFunds[i][1]=subSubTotPlannedFunds[i][1] + Double.parseDouble(DecimalToText.removeCommas(ampFund.getPlDisbAmount()));
+											subSubTotPlannedFunds[i][2]=subSubTotPlannedFunds[i][2] + Double.parseDouble(DecimalToText.removeCommas(ampFund.getPlExpAmount()));
+										}
+										if(i==yrCount)						
+										{
+											actCommitSubSubTotal = actCommitSubSubTotal + Double.parseDouble(DecimalToText.removeCommas(ampFund.getCommAmount()));
+											actDisbSubSubTotal = actDisbSubSubTotal + Double.parseDouble(DecimalToText.removeCommas(ampFund.getDisbAmount()));
+											actExpSubSubTotal = actExpSubSubTotal + Double.parseDouble(DecimalToText.removeCommas(ampFund.getExpAmount()));
+											planCommitSubSubTotal = planCommitSubSubTotal  + Double.parseDouble(DecimalToText.removeCommas(ampFund.getPlCommAmount()));
+											planDisbSubSubTotal = planDisbSubSubTotal + Double.parseDouble(DecimalToText.removeCommas(ampFund.getPlDisbAmount()));
+											planExpSubSubTotal = planExpSubSubTotal + Double.parseDouble(DecimalToText.removeCommas(ampFund.getPlExpAmount()));
+											unDisbSubSubTotal = unDisbSubSubTotal + (Double.parseDouble(DecimalToText.removeCommas(ampFund.getCommAmount())) - Double.parseDouble(DecimalToText.removeCommas(ampFund.getDisbAmount())));
+										}
+			
+									}
+								}//End of iteration of level3
+								if(ahTempLevel2.getLevels().size()>0)
 								{
-									actCommitSubTotal = actCommitSubTotal + Double.parseDouble(DecimalToText.removeCommas(ampFund.getCommAmount()));
-									actDisbSubTotal = actDisbSubTotal + Double.parseDouble(DecimalToText.removeCommas(ampFund.getDisbAmount()));
-									actExpSubTotal = actExpSubTotal + Double.parseDouble(DecimalToText.removeCommas(ampFund.getExpAmount()));
-									planCommitSubTotal = planCommitSubTotal  + Double.parseDouble(DecimalToText.removeCommas(ampFund.getPlCommAmount()));
-									planDisbSubTotal = planDisbSubTotal + Double.parseDouble(DecimalToText.removeCommas(ampFund.getPlDisbAmount()));
-									planExpSubTotal = planExpSubTotal + Double.parseDouble(DecimalToText.removeCommas(ampFund.getPlExpAmount()));
-									unDisbSubTotal = unDisbSubTotal + (Double.parseDouble(DecimalToText.removeCommas(ampFund.getCommAmount())) - Double.parseDouble(DecimalToText.removeCommas(ampFund.getDisbAmount())));
-								}
+									ahTempLevel2.setFundSubTotal(new ArrayList());
+									for(int i=0;i<yrCount;i++)
+									{
+										AmpFund ampFund=new AmpFund();
+										if(measures.indexOf(new Long(1))!=-1)
+											ampFund.setCommAmount(mf.format(subSubTotActualFunds[i][0])); 
+										if(measures.indexOf(new Long(2))!=-1)
+											ampFund.setDisbAmount(mf.format(subSubTotActualFunds[i][1])); 
+										if(measures.indexOf(new Long(3))!=-1)
+											ampFund.setExpAmount(mf.format(subSubTotActualFunds[i][2]));	
+										if(measures.indexOf(new Long(4))!=-1)
+											ampFund.setPlCommAmount(mf.format(subSubTotPlannedFunds[i][0])); 
+										if(measures.indexOf(new Long(5))!=-1)
+											ampFund.setPlDisbAmount(mf.format(subSubTotPlannedFunds[i][1])); 
+										if(measures.indexOf(new Long(6))!=-1)
+											ampFund.setPlExpAmount(mf.format(subSubTotPlannedFunds[i][2]));	
+										if(measures.indexOf(new Long(7))!=-1)
+											ampFund.setUnDisbAmount(mf.format(subSubTotActualFunds[i][0]-subSubTotActualFunds[i][1]));
+							
+										ahTempLevel2.getFundSubTotal().add(ampFund);
 	
+										subTotActualFunds[i][0] = subTotActualFunds[i][0] + subSubTotActualFunds[i][0];
+										subTotActualFunds[i][1] = subTotActualFunds[i][1] + subSubTotActualFunds[i][1];
+										subTotActualFunds[i][2] = subTotActualFunds[i][2] + subSubTotActualFunds[i][2];
+										subTotPlannedFunds[i][0] = subTotPlannedFunds[i][0] + subSubTotPlannedFunds[i][0];
+										subTotPlannedFunds[i][1] = subTotPlannedFunds[i][1] + subSubTotPlannedFunds[i][1];
+										subTotPlannedFunds[i][2] = subTotPlannedFunds[i][2] + subSubTotPlannedFunds[i][2];
+									}
+
+									AmpFund fund = new AmpFund();
+									fund.setCommAmount(mf.format(actCommitSubTotal));
+									fund.setDisbAmount(mf.format(actDisbSubTotal));
+									fund.setExpAmount(mf.format(actExpSubTotal));
+									fund.setPlCommAmount(mf.format(planCommitSubTotal));
+									fund.setPlDisbAmount(mf.format(planDisbSubTotal));
+									fund.setPlExpAmount(mf.format(planExpSubTotal));
+									fund.setUnDisbAmount(mf.format(unDisbSubTotal));
+									ahTempLevel2.getFundSubTotal().add(fund) ;	
+									actCommitSubTotal = actCommitSubTotal + actCommitSubSubTotal;
+									actDisbSubTotal = actDisbSubTotal + actDisbSubSubTotal;
+									actExpSubTotal = actExpSubTotal + actExpSubSubTotal;
+									planCommitSubTotal = planCommitSubTotal + planCommitSubSubTotal;
+									planDisbSubTotal = planDisbSubTotal + planDisbSubSubTotal;
+									planExpSubTotal = planExpSubTotal + planExpSubSubTotal;
+									unDisbSubTotal = unDisbSubTotal + (actCommitSubSubTotal-actDisbSubSubTotal);
+								}
+								ahReport.getLevels().add(ahTempLevel2);
+								unDisbSubSubTotal=actCommitSubSubTotal=actDisbSubSubTotal=actExpSubSubTotal=planCommitSubSubTotal=planDisbSubSubTotal=planExpSubSubTotal = 0;
+								for(int i=0;i<yrCount;i++)
+								{
+									subSubTotActualFunds[i][0]=subSubTotActualFunds[i][1]=subSubTotActualFunds[i][2]=0;
+									subSubTotPlannedFunds[i][0]=subSubTotPlannedFunds[i][1]=subSubTotPlannedFunds[i][2]=0;
+								}
+								
+							}
+							else
+							{
+								ahTempLevel2=generateAdvancedReportRecords(q.list(),activityIds,columns,measures,fromYr,toYr,perspective,fiscalCalId,ampCurrencyCode,ahTempLevel2);
+								ahReport.getLevels().add(ahTempLevel2);
+								Iterator iterFund = ahTempLevel2.getFundSubTotal().iterator();
+								for(int i=0;i<=yrCount ;i++ )
+								{
+									AmpFund ampFund=(AmpFund) iterFund.next();
+	
+									if(i<yrCount)
+									{
+										subTotActualFunds[i][0]=subTotActualFunds[i][0] + Double.parseDouble(DecimalToText.removeCommas(ampFund.getCommAmount()));
+										subTotActualFunds[i][1]=subTotActualFunds[i][1] + Double.parseDouble(DecimalToText.removeCommas(ampFund.getDisbAmount()));
+										subTotActualFunds[i][2]=subTotActualFunds[i][2] + Double.parseDouble(DecimalToText.removeCommas(ampFund.getExpAmount()));
+										subTotPlannedFunds[i][0]=subTotPlannedFunds[i][0] + Double.parseDouble(DecimalToText.removeCommas(ampFund.getPlCommAmount()));
+										subTotPlannedFunds[i][1]=subTotPlannedFunds[i][1] + Double.parseDouble(DecimalToText.removeCommas(ampFund.getPlDisbAmount()));
+										subTotPlannedFunds[i][2]=subTotPlannedFunds[i][2] + Double.parseDouble(DecimalToText.removeCommas(ampFund.getPlExpAmount()));
+									}
+									if(i==yrCount)						
+									{
+										actCommitSubTotal = actCommitSubTotal + Double.parseDouble(DecimalToText.removeCommas(ampFund.getCommAmount()));
+										actDisbSubTotal = actDisbSubTotal + Double.parseDouble(DecimalToText.removeCommas(ampFund.getDisbAmount()));
+										actExpSubTotal = actExpSubTotal + Double.parseDouble(DecimalToText.removeCommas(ampFund.getExpAmount()));
+										planCommitSubTotal = planCommitSubTotal  + Double.parseDouble(DecimalToText.removeCommas(ampFund.getPlCommAmount()));
+										planDisbSubTotal = planDisbSubTotal + Double.parseDouble(DecimalToText.removeCommas(ampFund.getPlDisbAmount()));
+										planExpSubTotal = planExpSubTotal + Double.parseDouble(DecimalToText.removeCommas(ampFund.getPlExpAmount()));
+										unDisbSubTotal = unDisbSubTotal + (Double.parseDouble(DecimalToText.removeCommas(ampFund.getCommAmount())) - Double.parseDouble(DecimalToText.removeCommas(ampFund.getDisbAmount())));
+									}
+	
+								}
 							}
 						}//End of Level 2 iteration
 						//logger.info("level2 size: " + ahReport.getLevels().size());
@@ -14280,6 +14494,251 @@ public class ReportUtil {
 			}
 		}
 		return ahReport;
+	}
+
+	public static ArrayList getLevel3AdvancedReport(Long ampTeamId,Long ampColumnId1,Long ampColumnId2,Long ampColumnId3) 
+	{
+		Session session = null;
+		Query q = null;
+		Iterator iter=null;
+		Iterator iterLevel1=null;
+		Iterator iterLevel2=null;
+		Iterator iterActivity=null;
+		ArrayList level=new ArrayList();
+		ArrayList activityIds=new ArrayList();
+		ArrayList ampReports=new ArrayList();
+		ArrayList ahReports=new ArrayList();
+		String inClause=null;
+		AdvancedHierarchyReport ahReport=null;
+		
+		try 
+		{
+
+			ahReports=getLevel2AdvancedReport(ampTeamId,ampColumnId1,ampColumnId2);
+			iterLevel1=ahReports.iterator();
+			while(iterLevel1.hasNext())
+			{
+				AdvancedHierarchyReport ahReportLevel1=(AdvancedHierarchyReport) iterLevel1.next();
+				ahReport=new AdvancedHierarchyReport();
+				ahReport.setId(ahReportLevel1.getId());
+				ahReport.setName(ahReportLevel1.getName());
+				ahReport.setLabel(ahReportLevel1.getLabel());
+				ahReport.setLevels(new ArrayList());
+				iterLevel2=ahReportLevel1.getLevels().iterator();
+				while(iterLevel2.hasNext())
+				{
+					AdvancedHierarchyReport ahReportLevel2=(AdvancedHierarchyReport) iterLevel2.next();
+					AdvancedHierarchyReport ahTempLevel2 = new AdvancedHierarchyReport();
+					ahTempLevel2.setId(ahReportLevel2.getId());
+					ahTempLevel2.setName(ahReportLevel2.getName());
+					ahTempLevel2.setLabel(ahReportLevel2.getLabel());
+					iterActivity=ahReportLevel2.getActivities().iterator();
+	
+					while(iterActivity.hasNext())
+					{
+						Long id=(Long) iterActivity.next();
+						if(inClause==null)
+							inClause="'" + id + "'";
+						else
+							inClause=inClause + ",'" + id + "'";
+					}				
+					ahTempLevel2.setLevels(new ArrayList());
+
+					if(ampColumnId3.equals(Constants.STATUS_NAME))
+					{
+						level=DbUtil.getAmpStatus();
+						iter=level.iterator();
+						while(iter.hasNext())
+						{
+							AmpStatus ampStatus=(AmpStatus) iter.next();
+							session = PersistenceManager.getSession();
+							String queryString = "select activity from "
+								+ AmpActivity.class.getName()
+								+ " activity where (activity.ampActivityId in(" + inClause + ")) and (activity.status.ampStatusId='" + ampStatus.getAmpStatusId() + "')";
+							Query qry = session.createQuery(queryString);
+							logger.info("Query: " + queryString);
+							if(qry.list().size()>0)
+							{
+								AdvancedHierarchyReport ahTempLevel3= new AdvancedHierarchyReport();
+								ahTempLevel3.setId(ampStatus.getAmpStatusId());
+								ahTempLevel3.setName(ampStatus.getName());
+								ahTempLevel3.setLabel("Status ");
+								iterActivity = qry.list().iterator();
+								ahTempLevel3.setActivities(new ArrayList());
+								while(iterActivity.hasNext())
+								{
+									AmpActivity ampActivity=(AmpActivity) iterActivity.next();
+									ahTempLevel3.getActivities().add(ampActivity.getAmpActivityId());
+								}
+								logger.info("Activity Size: " + ahTempLevel3.getActivities().size());
+								ahTempLevel2.getLevels().add(ahTempLevel3);
+							}
+						}
+					}
+			
+					if(ampColumnId3.equals(Constants.DONOR_NAME))
+					{
+						level=DbUtil.getAmpDonors(ampTeamId);
+						iter=level.iterator();
+						while(iter.hasNext())
+						{
+							AmpOrganisation ampOrganisation=(AmpOrganisation) iter.next();
+							session = PersistenceManager.getSession();
+							String queryString = "select distinct activity from "
+								+ AmpReportCache.class.getName()
+								+ " activity where (activity.ampActivityId in(" + inClause + ")) and (activity.ampDonorId='" + ampOrganisation.getAmpOrgId() + "')";
+
+							Query qry = session.createQuery(queryString);
+							logger.info("Query: " + queryString);
+							if(qry.list().size()>0)
+							{
+								AdvancedHierarchyReport ahTempLevel3= new AdvancedHierarchyReport();
+								ahTempLevel3.setId(ampOrganisation.getAmpOrgId());
+								ahTempLevel3.setName(ampOrganisation.getName());
+								ahTempLevel3.setLabel("Donor ");
+								iterActivity = qry.list().iterator();
+								ahTempLevel3.setActivities(new ArrayList());
+								while(iterActivity.hasNext())
+								{
+									AmpReportCache ampReportCache=(AmpReportCache) iterActivity.next();
+									ahTempLevel3.getActivities().add(ampReportCache.getAmpActivityId());
+								}
+								ahTempLevel2.getLevels().add(ahTempLevel3);
+							}
+						}
+					}
+
+					if(ampColumnId3.equals(Constants.FUNDING_INSTRUMENT))
+					{
+						level=DbUtil.getAmpModality();
+						iter=level.iterator();
+						while(iter.hasNext())
+						{
+							AmpModality ampModality=(AmpModality) iter.next();
+							session = PersistenceManager.getSession();
+							String queryString = "select distinct activity from "
+								+ AmpReportCache.class.getName()
+								+ " activity where (activity.ampActivityId in(" + inClause + ")) and (activity.ampModalityId='" + ampModality.getAmpModalityId() + "')";
+
+							Query qry = session.createQuery(queryString);
+							logger.info("Query: " + queryString);
+							if(qry.list().size()>0)
+							{
+								AdvancedHierarchyReport ahTempLevel3= new AdvancedHierarchyReport();
+								ahTempLevel3.setId(ampModality.getAmpModalityId());
+								ahTempLevel3.setName(ampModality.getName());
+								ahTempLevel3.setLabel("Funding Instrument ");
+								iterActivity = qry.list().iterator();
+								ahTempLevel3.setActivities(new ArrayList());
+								while(iterActivity.hasNext())
+								{
+									AmpReportCache ampReportCache=(AmpReportCache) iterActivity.next();
+									ahTempLevel3.getActivities().add(ampReportCache.getAmpActivityId());
+								}
+								ahTempLevel2.getLevels().add(ahTempLevel3);
+							}
+						}
+					}
+
+					if(ampColumnId3.equals(Constants.SECTOR_NAME))
+					{
+						session = PersistenceManager.getSession();
+						String queryString = "select activity from "
+							+ AmpActivity.class.getName()
+							+ " activity where (activity.ampActivityId in(" + inClause + "))";
+	
+						Query qry = session.createQuery(queryString);
+						logger.info("Query: " + queryString);
+						iter=qry.list().iterator();
+						while(iter.hasNext())
+						{
+							AmpActivity ampActivity=(AmpActivity) iter.next();
+							activityIds.add(ampActivity.getAmpActivityId());
+						}
+						queryString = "select sector from "
+							+ AmpReportSector.class.getName()
+							+ " sector order by sector.sectorName";
+						qry = session.createQuery(queryString);
+						iter=qry.list().iterator();
+						AdvancedHierarchyReport ahTempLevel3=null;
+						while(iter.hasNext())
+						{
+							AmpReportSector sector=(AmpReportSector) iter.next();
+							if(ahReport==null || !(ahTempLevel3.getId().equals(sector.getAmpSectorId())))
+							{
+								if(ahReport!=null)
+								{
+									if(ahReport.getActivities().size()>0)
+										ahReportLevel2.getLevels().add(ahReport);
+								}
+								ahTempLevel3= new AdvancedHierarchyReport();
+								ahTempLevel3.setId(sector.getAmpSectorId());
+								ahTempLevel3.setName(sector.getSectorName());
+								ahTempLevel3.setLabel("Sector ");
+								ahTempLevel3.setActivities(new ArrayList());
+							}
+							if(activityIds.indexOf(sector.getAmpActivityId())!=-1)
+								ahTempLevel3.getActivities().add(sector.getAmpActivityId());
+						}
+						if(ahReport.getActivities().size()>0)
+							ahTempLevel2.getLevels().add(ahTempLevel3);
+					}
+	
+					if(ampColumnId3.equals(Constants.TERM_ASSIST_NAME))
+					{	
+						level=(ArrayList)DbUtil.getAllAssistanceTypes();
+						iter=level.iterator();
+						while(iter.hasNext())
+						{
+							AmpTermsAssist ampTermsAssist=(AmpTermsAssist) iter.next();
+							session = PersistenceManager.getSession();
+							String queryString = "select distinct activity from "
+								+ AmpReportCache.class.getName()
+								+ " activity where (activity.ampActivityId in(" + inClause + ")) and (activity.termAssistName='" + ampTermsAssist.getTermsAssistName() + "')";
+	
+							Query qry = session.createQuery(queryString);
+							logger.info("Query: " + queryString);
+							if(qry.list().size()>0)
+							{
+								AdvancedHierarchyReport ahTempLevel3= new AdvancedHierarchyReport();
+								ahTempLevel3.setId(ampTermsAssist.getAmpTermsAssistId());
+								ahTempLevel3.setName(ampTermsAssist.getTermsAssistName());
+								ahTempLevel3.setLabel("Type Of Assistance ");
+								iterActivity = qry.list().iterator();
+								ahTempLevel3.setActivities(new ArrayList());
+								while(iterActivity.hasNext())
+								{
+									AmpReportCache ampReportCache=(AmpReportCache) iterActivity.next();
+									ahTempLevel3.getActivities().add(ampReportCache.getAmpActivityId());
+								}
+								ahTempLevel2.getLevels().add(ahTempLevel3);
+							}
+						
+						}
+					}
+					ahReport.getLevels().add(ahTempLevel2);
+					inClause=null;
+				}
+				ampReports.add(ahReport);
+			} 
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace(System.out);
+		}
+
+		finally 
+		{
+			try 
+			{
+				PersistenceManager.releaseSession(session);
+			}
+			catch (Exception ex2) 
+			{
+				logger.debug("releaseSession() failed ");
+			}
+		}
+		return ampReports;
 	}
 
 // end of Advanced Function	

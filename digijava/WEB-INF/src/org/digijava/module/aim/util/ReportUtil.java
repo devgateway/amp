@@ -10421,13 +10421,16 @@ public class ReportUtil {
 							project.setIssues(new ArrayList());
 							project.setMeasures(new ArrayList());
 							project.setResponsibleActor(new ArrayList());
+							project.setDescription(ampReportCache.getActivityDescription());
 							if(ampReportCache.getActivityDescription()!=null)
 							{
 								Editor ed = org.digijava.module.editor.util.DbUtil.getEditor(ampReportCache.getActivityDescription(),"en");
-								project.setDescription(ed.getBody());
+								project.setDescriptionPDFXLS(getDescParsed(ed.getBody()));
+								logger.debug("the project.getDescriptionPDFXLS yields....: "+project.getDescriptionPDFXLS());
 							}
 							else
-								project.setDescription(" ");
+								project.setDescriptionPDFXLS(" ");
+
 							project.setPlannedCompletionDate(DateConversion.ConvertDateToString(ampReportCache.getPlannedCompletionDate()));
 							if(DbUtil.getAmpReportPhysicalPerformance(ampReportCache.getAmpActivityId()) !=null)
 								project.getProgress().addAll(DbUtil.getAmpReportPhysicalPerformance(ampReportCache.getAmpActivityId()));
@@ -10467,13 +10470,16 @@ public class ReportUtil {
 							project.setIssues(new ArrayList());
 							project.setMeasures(new ArrayList());
 							project.setResponsibleActor(new ArrayList());
+							project.setDescription(ampReportCache.getActivityDescription());
 							if(ampReportCache.getActivityDescription()!=null)
 							{
 								Editor ed = org.digijava.module.editor.util.DbUtil.getEditor(ampReportCache.getActivityDescription(),"en");
-								project.setDescription(ed.getBody());
+								project.setDescriptionPDFXLS(getDescParsed(ed.getBody()));
+								logger.debug("the project.getDescriptionPDFXLS yields....: "+project.getDescriptionPDFXLS());
 							}
 							else
-								project.setDescription(" ");
+								project.setDescriptionPDFXLS(" ");								
+
 							project.setPlannedCompletionDate(DateConversion.ConvertDateToString(ampReportCache.getPlannedCompletionDate()));
 							if(DbUtil.getAmpReportPhysicalPerformance(ampReportCache.getAmpActivityId()) !=null)
 								project.getProgress().addAll(DbUtil.getAmpReportPhysicalPerformance(ampReportCache.getAmpActivityId()));
@@ -10535,13 +10541,16 @@ public class ReportUtil {
 							project.setIssues(new ArrayList());
 							project.setMeasures(new ArrayList());
 							project.setResponsibleActor(new ArrayList());
+							project.setDescription(ampReportCache.getActivityDescription());
 							if(ampReportCache.getActivityDescription()!=null)
 							{
 								Editor ed = org.digijava.module.editor.util.DbUtil.getEditor(ampReportCache.getActivityDescription(),"en");
-								project.setDescription(ed.getBody());
+								project.setDescriptionPDFXLS(getDescParsed(ed.getBody()));
+								logger.debug("the project.getDescriptionPDFXLS yields....: "+project.getDescriptionPDFXLS());
 							}
 							else
-								project.setDescription(" ");
+								project.setDescriptionPDFXLS(" ");								
+
 							project.setPlannedCompletionDate(DateConversion.ConvertDateToString(ampReportCache.getPlannedCompletionDate()));
 							if(DbUtil.getAmpReportPhysicalPerformance(ampReportCache.getAmpActivityId()) !=null)
 								project.getProgress().addAll(DbUtil.getAmpReportPhysicalPerformance(ampReportCache.getAmpActivityId()));
@@ -10592,13 +10601,16 @@ public class ReportUtil {
 							project.setIssues(new ArrayList());
 							project.setMeasures(new ArrayList());
 							project.setResponsibleActor(new ArrayList());
+							project.setDescription(ampReportCache.getActivityDescription());
 							if(ampReportCache.getActivityDescription()!=null)
 							{
 								Editor ed = org.digijava.module.editor.util.DbUtil.getEditor(ampReportCache.getActivityDescription(),"en");
-								project.setDescription(ed.getBody());
+								project.setDescriptionPDFXLS(getDescParsed(ed.getBody()));
+								logger.debug("the project.getDescriptionPDFXLS yields....: "+project.getDescriptionPDFXLS());
 							}
 							else
-								project.setDescription(" ");
+								project.setDescriptionPDFXLS(" ");								
+
 							project.setPlannedCompletionDate(DateConversion.ConvertDateToString(ampReportCache.getPlannedCompletionDate()));
 							if(DbUtil.getAmpReportPhysicalPerformance(ampReportCache.getAmpActivityId()) !=null)
 								project.getProgress().addAll(DbUtil.getAmpReportPhysicalPerformance(ampReportCache.getAmpActivityId()));
@@ -10695,7 +10707,59 @@ public class ReportUtil {
 		}
 		return ampReports ;
 	}
-	
+
+//----------To parse the description and display it in the PDF & XLS version of PhysicalComponentReport
+
+	public static String getDescParsed(String str)
+	{
+		StringBuffer strbuff = new StringBuffer();
+		char[] ch = new char[str.length()];
+		
+		ch = str.toCharArray();
+
+		for(int i=0; i<ch.length; i++)
+		{
+			if(ch[i] == '<')
+			{
+				while(ch[i] != '>')
+					i++;
+			}
+			else if(ch[i] == '&')
+			{
+				if(ch[i+1] == 'n' && ch[i+2] == 'b' && ch[i+3] == 's' && ch[i+4] == 'p' && ch[i+5] == ';')
+					i = i+5;
+				else
+					strbuff.append(ch[i]);
+			}
+			else
+			{
+				if(i < ch.length)
+					strbuff.append(ch[i]);
+			}
+		}
+		str = new String(strbuff);
+		return str;
+	}
+/*		
+		for(int i=0; i<ch.length; i++)
+		{
+			if(ch[i] == '<')
+			{
+				i++;
+				while(ch[i] != '>')
+					i++;
+			}
+			if(ch[i] == '&' && ch[i+1] == 'n' && ch[i+2] == 'b' && ch[i+3] == 's' && ch[i+4] == 'p')
+				i = i+4;
+			int k = i+1;
+			if( k<ch.length && ch[k]!= '<' && ch[k] != '&')
+				strbuff.append(ch[k]);
+		}
+			str = new String(strbuff);
+			return str;
+	}
+*/	
+
 //----------Advanced Report Function--------------------------------
 
 	public static Collection getColumnList()
@@ -11391,7 +11455,6 @@ public class ReportUtil {
 						if(ampReportCache.getModalityName()!=null)
 							modality.add(ampReportCache.getModalityName());
 						AmpActivity ampActivity=(AmpActivity) ActivityUtil.getAmpActivity(ampReportCache.getAmpActivityId());
-						//if(ampReportCache.getActivityDescription()!=null)
 						if(ampActivity.getDescription()!=null)
 						{
 							//Editor ed = org.digijava.module.editor.util.DbUtil.getEditor(ampReportCache.getActivityDescription(),"en");
@@ -12289,7 +12352,7 @@ public class ReportUtil {
 						if(ampReportCache.getModalityName()!=null)
 							modality.add(ampReportCache.getModalityName());
 						AmpActivity ampActivity=(AmpActivity) ActivityUtil.getAmpActivity(ampReportCache.getAmpActivityId());
-						//if(ampReportCache.getActivityDescription()!=null)
+						
 						if(ampActivity.getDescription()!=null)
 						{
 							//Editor ed = org.digijava.module.editor.util.DbUtil.getEditor(ampReportCache.getActivityDescription(),"en");
@@ -13591,7 +13654,6 @@ public class ReportUtil {
 								if(ampReportCache.getModalityName()!=null)
 									modality.add(ampReportCache.getModalityName());
 								AmpActivity ampActivity=(AmpActivity) ActivityUtil.getAmpActivity(ampReportCache.getAmpActivityId());
-								//if(ampReportCache.getActivityDescription()!=null)
 								if(ampActivity.getDescription()!=null)
 								{
 									//Editor ed = org.digijava.module.editor.util.DbUtil.getEditor(ampReportCache.getActivityDescription(),"en");
@@ -14169,7 +14231,6 @@ public class ReportUtil {
 								if(ampReportCache.getModalityName()!=null)
 									modality.add(ampReportCache.getModalityName());
 								AmpActivity ampActivity=(AmpActivity) ActivityUtil.getAmpActivity(ampReportCache.getAmpActivityId());
-								//if(ampReportCache.getActivityDescription()!=null)
 								if(ampActivity.getDescription()!=null)
 								{
 									//Editor ed = org.digijava.module.editor.util.DbUtil.getEditor(ampReportCache.getActivityDescription(),"en");

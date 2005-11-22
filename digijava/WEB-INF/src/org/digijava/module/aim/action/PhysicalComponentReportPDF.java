@@ -26,8 +26,6 @@ import org.digijava.module.aim.helper.AmpComponent;
 import org.digijava.module.aim.helper.MultilateralDonorDatasource;
 import org.digijava.module.aim.helper.PhysicalCompReportPDF;
 
-
-
 public class PhysicalComponentReportPDF extends Action 
 {
 	private static Logger logger = Logger.getLogger(PhysicalComponentReportPDF.class) ;
@@ -149,11 +147,11 @@ public class PhysicalComponentReportPDF extends Action
 						project = (Project) projectIter.next();
 						data[row][5] = project.getName().trim();
 						calculateFieldHeight(project.getName());
-						
+
 						if(project.getDescription() != null)
 						{
-							data[row][5] = data[row][5] + "  \n\nDescription :  " +project.getDescription().trim();
-							calculateFieldHeight(project.getDescription());
+							data[row][5] = data[row][5] + "  \n\nDescription :  " +project.getDescriptionPDFXLS().trim();
+							calculateFieldHeight(project.getDescriptionPDFXLS());
 						}
 						
 						data[row][6] = project.getSignatureDate();

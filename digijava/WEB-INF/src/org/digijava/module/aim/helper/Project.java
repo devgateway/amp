@@ -31,6 +31,7 @@ public class Project
 	private Collection assistance;
 
 	private String description ;
+	private String descriptionPDFXLS ;
 	private String signatureDate;
 	private String plannedCompletionDate;
 	private Collection progress ;
@@ -111,10 +112,14 @@ public class Project
 		return description;
 	}
 	
+	public String getDescriptionPDFXLS() {
+		return descriptionPDFXLS;
+	}
 	
 	/**
 	 * @param string
 	 */
+
 	public void setName(String s) {
 		name = s;
 	}
@@ -315,6 +320,10 @@ public class Project
 		description = s;
 	}
 
+	public void setDescriptionPDFXLS(String s) {
+		descriptionPDFXLS = s;
+	}
+	
 	public void setResponsibleActor(Collection c) {
 		responsibleActor = c;
 	}

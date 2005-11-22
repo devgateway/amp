@@ -10,6 +10,7 @@
 
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/addActivity.js"/>"></script>
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
+<script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/calendar.js"/>"></script>
 
 <script language="JavaScript">
 <!--
@@ -124,11 +125,11 @@
 												<tr>
 													<td>
 														<html:text property="phyProgRepDate" readonly="true" size="10" styleClass="inp-text" 
-														tabindex="7"/>
+														tabindex="7" styleId="phyProgRepDate"/>
 													</td>
 													<td>
 														&nbsp;
-														<a href="javascript:newWindow(7)">
+														<a href="javascript:calendar('phyProgRepDate')">
 														<img src="../ampTemplate/images/show-calendar.gif" border=0
 														tabindex="3"></a>
 													</td>													

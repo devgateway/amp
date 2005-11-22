@@ -9,7 +9,7 @@
 
 <digi:instance property="aimCurrencyForm" />
 
-<script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/currency.js"/>"></script>
+<script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/calendar.js"/>"></script>
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
 
 <script language="JavaScript">
@@ -138,10 +138,10 @@ function unload() {
 										<tr>
 											<td>
 												<html:text property="exchangeRateDate" size="10" 
-												styleClass="inp-text" readonly="true"/>
+												styleClass="inp-text" readonly="true" styleId="exchangeRateDate"/>
 											</td>
 											<td align="left" vAlign="center">&nbsp;
-												<a href="javascript:newWindow(1)">
+												<a href="javascript:calendar('exchangeRateDate')">
 												<img src="../ampTemplate/images/show-calendar.gif" border=0></a>
 											</td>
 										</tr>

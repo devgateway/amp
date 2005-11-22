@@ -364,7 +364,7 @@
 	<action forward="/showLayout.do?layout=layoutFinancingBreakdown" 
 			  path="/aim/viewFinancingBreakdown" />
 
-	<action forward="/showLayout.do?layout=layoutRegionalFundingBreakdown" 
+	<action name="aimRegionalFundingForm" forward="/showLayout.do?layout=layoutRegionalFundingBreakdown" 
 			  path="/aim/viewRegionalFundingBreakdown" />	
 
 	<action name="aimRegionalFundingForm" forward="/showLayout.do?layout=layoutRegionalFundingDetails" 

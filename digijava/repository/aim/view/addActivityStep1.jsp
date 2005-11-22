@@ -9,6 +9,7 @@
 
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/addActivity.js"/>"></script>
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
+<script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/calendar.js"/>"></script>
 
 <script language="JavaScript">
 <!--
@@ -399,12 +400,12 @@ function popupwin()
 														<tr>
 															<td>
 																<a title="<digi:trn key="aim:ExpectedApprovalDatebyDonorAgency">Date (dd/mm/yy) when the project is expected to be approved by the donor agency </digi:trn>">								
-																<html:text name="aimEditActivityForm" property="originalAppDate" size="10" 
-																styleClass="inp-text" readonly="true"/>
+																<html:text name="aimEditActivityForm" property="originalAppDate" size="10"
+																styleId="originalAppDate" styleClass="inp-text" readonly="true"/>
 																</a>
 															</td>
 															<td align="left" vAlign="center">&nbsp;
-															<a href="javascript:newWindow(1)">
+															<a href="javascript:calendar('originalAppDate')">
 																<img src= "../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border=0>
 															</a>
 															</td>
@@ -423,11 +424,11 @@ function popupwin()
 															<td>
 																<a title="<digi:trn key="aim:ActualApprovalDatebyDonorAgency">Date (dd/mm/yy) when the project was approved by the donor agency</digi:trn>">
 																<html:text name="aimEditActivityForm" property="revisedAppDate" size="10" 
-																styleClass="inp-text" readonly="true"/>
+																styleId="revisedAppDate" styleClass="inp-text" readonly="true"/>
 																</a>
 															</td>
 															<td align="left" vAlign="center">&nbsp;
-																<a href="javascript:newWindow(2)">
+																<a href="javascript:calendar('revisedAppDate')">
 																<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border=0>
 																</a>
 															</td>
@@ -450,11 +451,12 @@ function popupwin()
 														<tr>
 															<td>
 																<a title="<digi:trn key="aim:ProposedDateProjectStart">Date (dd/mm/yy) when the project is expected to commence</digi:trn>">																   	
-																<html:text name="aimEditActivityForm" property="originalStartDate" size="10" styleClass="inp-text" readonly="true"/>
+																<html:text name="aimEditActivityForm" property="originalStartDate" size="10" 
+																styleId="originalStartDate" styleClass="inp-text" readonly="true"/>
 																</a>
 															</td>
 															<td align="left" vAlign="center">&nbsp;
-																<a href="javascript:newWindow(3)">
+																<a href="javascript:calendar('originalStartDate')">
 																<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border=0>
 																</a>
 															</td>
@@ -474,11 +476,11 @@ function popupwin()
 															<td>
 																<a title="<digi:trn key="aim:ActualDateofProjectStart">Date (dd/mm/yy) when the project commenced (effective start date)</digi:trn>">
 																<html:text name="aimEditActivityForm" property="revisedStartDate" size="10" 
-																styleClass="inp-text" readonly="true"/>
+																styleId="revisedStartDate" styleClass="inp-text" readonly="true"/>
 																</a>
 															</td>
 															<td align="left" vAlign="center">&nbsp;
-																<a href="javascript:newWindow(4)">
+																<a href="javascript:calendar('revisedStartDate')">
 																<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border=0>
 																</a>
 															</td>
@@ -501,13 +503,12 @@ function popupwin()
 														<tr>
 															<td>
 																<a title="<digi:trn key="aim:ExpectedCompletionDateofProject">Date (dd/mm/yy) when the project is expected to be completed</digi:trn>">
-																<html:text name="aimEditActivityForm" property="proposedCompDate" 
-																size="10" styleClass="inp-text" 
-																readonly="true"/>
+																<html:text name="aimEditActivityForm" property="proposedCompDate" size="10" 
+																styleId="proposedCompDate" styleClass="inp-text" readonly="true"/>
 																</a>
 															</td>
 															<td align="left" vAlign="center">&nbsp;
-																<a href="javascript:newWindow(9)">
+																<a href="javascript:calendar('proposedCompDate')">
 																<img src="../ampTemplate/images/show-calendar.gif" alt="Click to view the Calendar" border=0>
 																</a>
 															</td>
@@ -526,13 +527,12 @@ function popupwin()
 														<tr>
 															<td>
 																<a title="<digi:trn key="aim:CompletionDateofProject">Date (dd/mm/yy) when the project is expected to end or ended. AMP users have the possibility to update this field; AMP will keep track of the history of proposed completion dates </digi:trn>">
-																<html:text name="aimEditActivityForm" property="currentCompDate" 
-																size="10" styleClass="inp-text" 
-																readonly="true"/>
+																<html:text name="aimEditActivityForm" property="currentCompDate" size="10" 
+																styleId="currentCompDate" styleClass="inp-text" readonly="true"/>
 																</a>
 															</td>
 															<td align="left" vAlign="center">&nbsp;
-																<a href="javascript:newWindow(5)">
+																<a href="javascript:calendar('currentCompDate')">
 																<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border=0>
 																</a>
 															</td>

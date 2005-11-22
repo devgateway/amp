@@ -1,3 +1,5 @@
+var field;
+
 function y2k(number) { 
 	return (number < 1000) ? number + 1900 : number; 
 }	
@@ -6,8 +8,6 @@ var today = new Date();
 var curr_day   = today.getDate();
 var curr_month = today.getMonth();
 var curr_year  = y2k(today.getYear());
-var dateSelected;
-var index;
 
 var names = new makeArray0('January','February','March','April','May','June','July','August','September','October','November','December');
 var days  = new makeArray0(31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31);
@@ -20,7 +20,7 @@ function makeArray0() {
 
 function reload() {
 	openCalendar(curr_month,curr_year);
-	calWindow.focus();	
+	calWindow.focus();
 }
 
 
@@ -30,7 +30,8 @@ function openCalendar(month,year) {
 
 	var t = ((screen.width)-350)/2;
 	var l = ((screen.height)-270)/2;
-	calWindow = window.open('','Calendar','resizable=no,width=350,height=270,top='+l+',left='+t);		
+	
+	calWindow = window.open('','Calendar','resizable=no,width=350,height=270,top='+l+',left='+t);	
 
 	str  = '<HTML><HEAD><TITLE>Calendar</TITLE>';
 	str += '<SCRIPT LANGUAGE="JavaScript"> ';
@@ -122,59 +123,34 @@ function openCalendar(month,year) {
 }
 
 function sameAsDateClicked(value) {
-	
-}
-
-function openNewWindow(wndWidth, wndHeight){
-	window.name = "opener" + new Date().getTime();
-	if (wndWidth == null || wndWidth == 0 || wndHeight == null || wndHeight == 0) {
-		wndWidth = window.screen.availWidth/2;
-		wndHeight = window.screen.availHeight/2;
+	if (value == 1) {
+		if (document.aimEditActivityForm.actAppDateCheckBox.checked == true) {
+			document.aimEditActivityForm.actAppDate.value = document.aimEditActivityForm.propAppDate.value;
+		} else {
+		}
+	} 
+	else if (value == 2) {
+		if (document.aimEditActivityForm.actStartDateCheckBox.checked == true) {
+			document.aimEditActivityForm.actStartDate.value = document.aimEditActivityForm.propStartDate.value;
+		} else {
+		}			  
 	}
-	var t = ((screen.width)-wndWidth)/2;
-	var l = ((screen.height)-wndHeight)/2;
-	popupPointer = window.open("about:blank", "forumPopup", "height=" + wndHeight + ",width=" + wndWidth + ",top=" + l + ",left=" + t +",menubar=no,scrollbars=yes");
+	else if (value == 3) {
+		if (document.aimEditActivityForm.actCloseDateCheckBox.checked == true) {
+			document.aimEditActivityForm.actCloseDate.value = document.aimEditActivityForm.propCloseDate.value;
+		} else {
+		}			  
+	}
 }
 
 function padout(number) { return (number < 10) ? '0' + number : number; }
 
 function restart() {
-	var field = dateSelected;
-	var ind = index;
-	var str = "fundingDetail[" + ind + "].transactionDate";
-	
-	if ( field == 1 )	{
-		if (ind == 0) {
-			document.aimEditActivityForm.signatureDate.value = '' + padout(curr_day) + '/' + padout(curr_month - 0 + 1) + '/' + curr_year;
-		} else if (ind == 1) {
-			document.aimEditActivityForm.reportingDate.value = '' + padout(curr_day) + '/' + padout(curr_month - 0 + 1) + '/' + curr_year;
-		} else if (ind == 2) {
-			document.aimEditActivityForm.plannedStartDate.value = '' + padout(curr_day) + '/' + padout(curr_month - 0 + 1) + '/' + curr_year;
-		} else if (ind == 3) {
-			document.aimEditActivityForm.actualStartDate.value = '' + padout(curr_day) + '/' + padout(curr_month - 0 + 1) + '/' + curr_year;
-		} else if (ind == 4) {
-			document.aimEditActivityForm.plannedCompletionDate.value = '' + padout(curr_day) + '/' + padout(curr_month - 0 + 1) + '/' + curr_year;
-		} else if (ind == 5) {
-			document.aimEditActivityForm.actualCompletionDate.value = '' + padout(curr_day) + '/' + padout(curr_month - 0 + 1) + '/' + curr_year;
-		}
-		
-	}
-	else if ( field == 2)	{
-		var temp = new Array();
-		temp = document.aimEditActivityForm.elements;
-		for ( i = 0 ; i < temp.length ; i++ )
-		{
-  			if ( temp[i].name != null && temp[i].name == str )	{
-  				temp[i].value= '' + padout(curr_day) + '/' + padout(curr_month - 0 + 1) + '/' + curr_year;
-  			}
-  		}	
-	}
+	document.getElementById(field).value = '' + padout(curr_day) + '/' + padout(curr_month - 0 + 1) + '/' + curr_year;
 	calWindow.close();
 }
 
-function newWindow(field,ind) {
-	dateSelected = field;
-	index = ind;
+function calendar(f) {
+	field = f;
 	reload(curr_month,curr_year);
 }
-

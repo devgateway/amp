@@ -6,7 +6,7 @@
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
 
-<script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/currencyRates.js"/>"></script>
+<script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/calendar.js"/>"></script>
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
 
 <script language="JavaScript">
@@ -149,10 +149,10 @@ function selectFile() {
 												<tr>
 													<td>
 														<html:text property="filterByDateFrom" size="10" 
-														styleClass="inp-text"/>
+														styleId="filterByDateFrom" styleClass="inp-text"/>
 													</td>
 													<td align="left" vAlign="center">&nbsp;
-														<a href="javascript:newWindow(1)">
+														<a href="javascript:calendar('filterByDateFrom')">
 														<img src="../ampTemplate/images/show-calendar.gif" border=0></a>
 													</td>
 												</tr>
@@ -161,22 +161,6 @@ function selectFile() {
 										<td bgcolor="#f4f4f2" vAlign="center">
 											<digi:trn key="aim:andPrev7Days">and previous 7 days</digi:trn>
 										</td>
-										<%--
-										<td bgcolor="#f4f4f2" vAlign="center">
-											<table cellPadding=0 cellSpacing=0>
-												<tr>
-													<td>
-														<html:text property="filterByDateTo" size="10" 
-														styleClass="inp-text"/>
-													</td>
-													<td align="left" vAlign="center">&nbsp;
-														<a href="javascript:newWindow(2)">
-														<img src="../ampTemplate/images/show-calendar.gif" width=24 height=22 border=0></a>
-													</td>
-												</tr>
-											</table>
-										</td>
-										--%>
 										<td bgcolor="#f4f4f2" vAlign="center">
 											<html:submit value=" Go " styleClass="buton"/>
 										</td>	

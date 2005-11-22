@@ -1009,14 +1009,16 @@ function disable() {
 														}
 													    %>
 														 
-													 <table width="100%" cellPadding=0 cellSpacing=1>
-													 	<tr>
+													 <table width="100%" cellPadding=3 cellSpacing=1>
+													 	<tr bgcolor="#ffffff">
 															<td width="2">
 																<digi:img skipBody="true" src="<%=extension%>" border="0" align="absmiddle"/>
 															</td>
 															<td vAlign="center" align="left">
 																<c:out value="${docs.title}"/> -
 																<c:out value="${docs.fileName}"/>
+																<br>
+																<b>Desc:</b><c:out value="${docs.description}"/>
 															</td>
 														</tr>
 													 </table>
@@ -1028,7 +1030,7 @@ function disable() {
 												<table width="100%" cellSpacing="0" cellPadding="0">
 												<c:forEach var="links" items="${aimEditActivityForm.linksList}">
 													<tr><td>
-														<table width="100%" cellPadding=0 cellSpacing=1>
+														<table width="100%" cellPadding=1 cellSpacing=1>
 															<tr>
 																<td width="2">
 																	<digi:img src="module/aim/images/web-page.gif"/>
@@ -1037,6 +1039,8 @@ function disable() {
 																	<c:out value="${links.title}"/> -
 																	<a href="<c:out value="${links.url}"/>">
 																	<c:out value="${links.url}"/></a>
+																	<br>
+																	<b>Desc:</b><c:out value="${links.description}"/>
 																</td>
 															</tr>
 														</table>

@@ -4,7 +4,7 @@
 <%@ taglib uri="/taglib/struts-html" prefix="html" %>
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
 
-<script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/addActivity.js"/>"></script>
+<script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/calendar.js"/>"></script>
 <digi:instance property="aimEditActivityForm" />
 
 <script language="JavaScript">
@@ -51,10 +51,10 @@
 										<tr>
 											<td>
 												<html:text name="aimEditActivityForm" property="revisedCompDate" 
-												size="10" styleClass="inp-text" readonly="true"/>
+												styleId="revisedCompDate" size="10" styleClass="inp-text" readonly="true"/>
 											</td>
 											<td align="left" vAlign="center">&nbsp;
-												<a href="javascript:newWindow(6)">
+												<a href="javascript:calendar('revisedCompDate')">
 													<img src="../ampTemplate/images/show-calendar.gif" border=0></a>
 											</td>
 										</tr>

@@ -6,8 +6,8 @@
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
 
-<script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/addActivityStep3.js"/>"></script>
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
+<script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/calendar.js"/>"></script>
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/addFunding.js"/>"></script>
 
 <script language="JavaScript">
@@ -149,26 +149,6 @@
 								</td>								
 							</tr>
 							
-							<%--
-							<tr>
-								<td align="right" bgcolor=#ECF3FD>
-			                	<FONT color=red>*</FONT><b>Signature Date</b>
-								</td>
-								<td align="left" bgcolor=#ECF3FD>
-									<table cellPadding=0 cellSpacing=0>
-										<tr>
-											<td>
-						                	<html:text property="signatureDate" readonly="true" size="10"/>
-											</td>
-											<td align="left" vAlign="center">&nbsp;
-												<a href="javascript:newWindow(1,0)">
-												<img src="../ampTemplate/images/show-calendar.gif" width=24 height=20 border=0></a>
-											</td>
-										</tr>
-									</table>
-								</td>								
-							</tr>
-							--%>
 						</table>
 					</td>
 				</tr>
@@ -186,6 +166,8 @@
 	</td></tr>
 			
 
+	<% int tempIndex = 0; %>
+	<% String tempIndexStr = ""; %>
 	<!-- commitments -->
 	<tr>
 		<td width="100%" vAlign="top">
@@ -251,10 +233,12 @@
 									<table cellPadding=0 cellSpacing=0>
 										<tr>
 											<td>
-												<html:text name="fundingDetail" indexed="true" property="transactionDate" readonly="true" size="10"/>
+												<% tempIndexStr = "" + tempIndex; tempIndex++;%>
+												<html:text name="fundingDetail" indexed="true" property="transactionDate" 
+												styleId="<%=tempIndexStr%>" readonly="true" size="10"/>
 											</td>
 											<td align="left" vAlign="center">&nbsp;
-			             					<a href='javascript:newWindow(2,<bean:write name="fundingDetail" property="index"/>)'>	
+			             					<a href='javascript:calendar("<%=tempIndexStr%>")'>	
 		   			          			<img src="../ampTemplate/images/show-calendar.gif" border="0"></a>
 											</td>
 										</tr>
@@ -365,10 +349,12 @@
 									<table cellPadding=0 cellSpacing=0>
 										<tr>
 											<td>
-												<html:text name="fundingDetail" indexed="true" property="transactionDate" readonly="true" size="10"/>
+												<% tempIndexStr = "" + tempIndex; tempIndex++;%>
+												<html:text name="fundingDetail" indexed="true" property="transactionDate" readonly="true" 
+												styleId="<%=tempIndexStr%>" size="10"/>
 											</td>
 											<td align="left" vAlign="center">&nbsp;
-					             			<a href='javascript:newWindow(2,<bean:write name="fundingDetail" property="index"/>)'>	
+					             			<a href='javascript:calendar("<%=tempIndexStr%>")'>	
       					       			<img src="../ampTemplate/images/show-calendar.gif" border="0"></a>
 											</td>
 										</tr>
@@ -479,11 +465,14 @@
 									<table cellPadding=0 cellSpacing=0>
 										<tr>
 											<td>
-												<html:text name="fundingDetail" indexed="true" property="transactionDate" readonly="true" size="10"/>
+												<% tempIndexStr = "" + tempIndex; tempIndex++;%>
+												<html:text name="fundingDetail" indexed="true" property="transactionDate" 
+												styleId="<%=tempIndexStr%>" readonly="true" size="10"/>
 											</td>
 											<td align="left" vAlign="center">&nbsp;
-			             					<a href='javascript:newWindow(2,<bean:write name="fundingDetail" property="index"/>)'>	
+			             					<a href='javascript:calendar("<%=tempIndexStr%>")'>	
 		   			          			<img src="../ampTemplate/images/show-calendar.gif" border="0"></a>
+												<% tempIndex++; %>
 											</td>
 										</tr>
 									</table>																

@@ -93,9 +93,22 @@ public class EditActivity extends Action {
 		
 		// Checking whether the activity is already opened for editing
 		// by some other user
+		
+		Long activityId = eaForm.getActivityId();	
+		
+		eaForm.setReset(true);
+		eaForm.setOrgSelReset(true);
+		eaForm.setSectorReset(true);
+		eaForm.setLocationReset(true);
+		eaForm.setPhyProgReset(true);
+		eaForm.setDocReset(true);
+		eaForm.setComponentReset(true);
+		eaForm.reset(mapping,request);
+		
+		eaForm.setActivityId(activityId);
 		ServletContext ampContext = getServlet().getServletContext();
 		HashMap activityMap = (HashMap) ampContext.getAttribute("editActivityList");
-		if (activityMap != null && activityMap.containsValue(eaForm.getActivityId())) {
+		if (activityMap != null && activityMap.containsValue(activityId)) {
 		    // The activity is already opened for editing
 		    logger.debug("The activity is already opened by another user");
 		    ActionErrors errors = new ActionErrors();
@@ -103,7 +116,7 @@ public class EditActivity extends Action {
 				"error.aim.activityAlreadyOpenedForEdit"));
 		    saveErrors(request, errors);
 		    
-		    String url = "/aim/viewChannelOverview.do?ampActivityId="+eaForm.getActivityId()+"&tabIndex=0";
+		    String url = "/aim/viewChannelOverview.do?ampActivityId="+activityId+"&tabIndex=0";
 		    RequestDispatcher rd = getServlet().getServletContext().
 		    	getRequestDispatcher(url);
 		    rd.forward(request,response);
@@ -120,13 +133,11 @@ public class EditActivity extends Action {
 		    }
 		    sessList.add(sessId);
 		    Collections.sort(sessList);
-		    activityMap.put(sessId,eaForm.getActivityId());
+		    activityMap.put(sessId,activityId);
 		    ampContext.setAttribute("sessionList",sessList);
             ampContext.setAttribute("editActivityList",activityMap);		    
 		}
-
 		
-		eaForm.reset(mapping, request);
 		eaForm.setEditAct(true);
 		
 		// Clearing comment properties
@@ -144,9 +155,9 @@ public class EditActivity extends Action {
 		eaForm.setReset(false);
 		eaForm.setPerspectives(DbUtil.getAmpPerspective());
 		
-		logger.debug("Activity Id = " + eaForm.getActivityId());
-		if (eaForm.getActivityId() != null) {
-		    AmpActivity activity = ActivityUtil.getAmpActivity(eaForm.getActivityId());
+		logger.debug("Activity Id = " + activityId);
+		if (activityId != null) {
+		    AmpActivity activity = ActivityUtil.getAmpActivity(activityId);
 
 			if (activity != null) {
 				// set title,description and objective

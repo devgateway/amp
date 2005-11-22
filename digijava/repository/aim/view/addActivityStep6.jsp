@@ -310,7 +310,8 @@ function removeSelLinks() {
 															 align="absmiddle"/>	
 														</c:if>
 															<i>
-														<bean:write name="selDocuments" property="fileName" /></i>	
+														<bean:write name="selDocuments" property="fileName" /></i>	<br>
+														<b>Desc:</b><bean:write name="selDocuments" property="description" />
 													</td>
 												</tr>
 												</logic:iterate>
@@ -364,7 +365,8 @@ function removeSelLinks() {
 														</html:multibox>
 														<bean:write name="selWebLinks" property="title" /> - 
 														<a href="<bean:write name="selWebLinks" property="url" />" target="_blank">
-														<bean:write name="selWebLinks" property="url" />
+														<bean:write name="selWebLinks" property="url" /></a><br>
+													<b>Desc:</b><bean:write name="selDocuments" property="description" />
 													</td>
 												</tr>
 												</logic:iterate>

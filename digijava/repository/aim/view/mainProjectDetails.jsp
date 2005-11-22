@@ -184,17 +184,17 @@
 								</TD>
 								<logic:equal name="aimMainProjectDetailsForm" property="tabIndex" value="4">
 	                     <TD vAlign=center bgColor=#222e5d class="sub-nav-selected" noWrap width="153">
-									:: <digi:trn key="aim:regionalFundings">Regional Fundings</digi:trn> 									
+									:: <digi:trn key="aim:regionalFunding">Regional Funding</digi:trn> 									
 								</logic:equal>
 								<logic:notEqual name="aimMainProjectDetailsForm" property="tabIndex" value="4">
 	                    	<TD vAlign=center bgColor=#3754a1 noWrap width="153">
                    			<c:set target="${urlTabs}" property="tabIndex" value="4"/>
                    			<c:set target="${urlTabs}" property="regionId" value="-1"/>
 <bean:define id="translation">
-	<digi:trn key="aim:clickToViewRegionalFundings">Click here to view regional fundings</digi:trn>
+	<digi:trn key="aim:clickToViewRegionalFundings">Click here to view regional funding</digi:trn>
 </bean:define>
                     			<digi:link href="/viewRegionalFundingBreakdown.do" name="urlTabs" styleClass="sub-nav" title="<%=translation%>" >
-									 :: <digi:trn key="aim:regionalFundings">Regional Fundings</digi:trn> 	
+									 :: <digi:trn key="aim:regionalFunding">Regional Funding</digi:trn> 	
 									</digi:link>									
 								</logic:notEqual>
 								</TD>								

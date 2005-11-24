@@ -325,7 +325,7 @@ public class AdvancedReport extends Action {
 				logger.info("Adjustment: " + adjType.size());
 				logger.info("Transaction: " + transc.size());
 				
-				if(formBean.getColumnHierarchie().size()==0)
+				if(formBean.getColumnHierarchie()==null)
 					formBean.setHierarchyFlag("false");
 				else
 					formBean.setHierarchyFlag("true");
@@ -457,14 +457,18 @@ public class AdvancedReport extends Action {
 						for(int yr=fromYr;yr<=toYr;yr++)
 							formBean.getFiscalYearRange().add(new Integer(yr));
 						formBean.setTotalColumns(14);
-						if(formBean.getColumnHierarchie().size()==0)
+						if(formBean.getColumnHierarchie()==null)
 						{
 							formBean.setPages(pages);
 							formBean.setReport(pageRecords);
 							formBean.setPage(new Integer(page));
 						}
 						else
+						{
 							formBean.setMultiReport(reports);
+							//logger.info("multireport size...."+formBean.getMultiReport().size());
+						}
+							
 						formBean.setAllReports(reports);
 						logger.info(" page REC " + pageRecords.size());
 				 		logger.info(" REPORTS  " + reports.size());
@@ -474,7 +478,7 @@ public class AdvancedReport extends Action {
 					/*BEGIN CODE FOR GRAND TOTAL*/
 					logger.info("BEGIN CODE FOR GRAND TOTAL..............");
 					int yearRange=(toYr-fromYr)+1;
-					if(formBean.getColumnHierarchie().size()==0)
+					if(formBean.getColumnHierarchie()==null)
 					{
 						double totUnDisb = 0, actTotalCommit = 0, actTotalDisb = 0, actTotalExp = 0, planTotalCommit = 0, planTotalDisb = 0, planTotalExp = 0;
 						double[][] totFunds=new double[yearRange][7];
@@ -564,9 +568,10 @@ public class AdvancedReport extends Action {
 
 				}
 				logger.info("###----------------------------------------------------------------------#####");
-
 				return mapping.findForward("GenerateReport");
 			}
+					
+			
 
 			// Step 4 : Report Details
 			if(request.getParameter("check") != null && request.getParameter("check").equals("4"))
@@ -646,6 +651,7 @@ public class AdvancedReport extends Action {
 				}
 				
 				logger.info("  Chart Size : " +chart_coll.size());
+
 		        
 //		    	chart_coll.add("60");
 //		    	chart_coll.add("Donor 1");

@@ -1,8 +1,3 @@
-
-/*
- * AdvancedReport.java @Author Ronald B Created: 27-July-2005
- */
-
 package org.digijava.module.aim.action;
 
 
@@ -43,6 +38,9 @@ import org.digijava.kernel.persistence.PersistenceManager;
 
 import org.digijava.module.aim.helper.AmpFund;
 import org.digijava.module.aim.helper.DecimalToText;
+import org.digijava.module.aim.helper.ReportSelectionCriteria;
+import org.digijava.module.aim.helper.Column;
+import org.digijava.module.aim.helper.Constants;
 
 import org.jfree.chart.*;
 import org.jfree.chart.plot.*;
@@ -97,6 +95,7 @@ public class AdvancedReport extends Action {
 		Long ampTeamId=teamMember.getTeamId();
 		logger.debug("Team Id: " + ampTeamId);
 		String perspective = "DN";
+		Long All=new Long(0);
 		
 		if(formBean.getPerspective() == null)
 		{
@@ -365,6 +364,11 @@ public class AdvancedReport extends Action {
 				else
 					formBean.setAcBalFlag("false");
 
+				if(formBean.getAcBalFlag().equals("true"))
+					formBean.setMeasureCount(measures.size() - 1);
+				else
+					formBean.setMeasureCount(measures.size());
+
 				formBean.setFundColumns((measures.size()));
 	
 				
@@ -389,11 +393,39 @@ public class AdvancedReport extends Action {
 						}
 					}
 */					
-					
+					ReportSelectionCriteria rsc=new ReportSelectionCriteria();
+					rsc.setColumns(new ArrayList());
+					iter=formBean.getAddedColumns().iterator();
+					while(iter.hasNext())
+					{
+						AmpColumns ampColumns=(AmpColumns) iter.next();
+						Column col=new Column();
+						col.setColumnId(ampColumns.getColumnId());
+						col.setColumnName(ampColumns.getColumnName());
+						col.setColumnAlias(ampColumns.getAliasName());
+						rsc.getColumns().add(col);
+					}
+
+					rsc.setHierarchy(new ArrayList());
+					iter=formBean.getColumnHierarchie().iterator();
+					while(iter.hasNext())
+					{
+						AmpColumns ampColumns=(AmpColumns) iter.next();
+						Column col=new Column();
+						col.setColumnId(ampColumns.getColumnId());
+						col.setColumnName(ampColumns.getColumnName());
+						col.setColumnAlias(ampColumns.getAliasName());
+						rsc.getHierarchy().add(col);
+					}
+					rsc.setMeasures(transc);
+					rsc.setOption("Q");
+//					String startDate = (year-Constants.FROM_YEAR_RANGE) + "-" + 01 + "-" + 01;
+//					String closeDate = (year + Constants.TO_YEAR_RANGE) + "-" + 12 + "-" + 31;
 					if (request.getParameter("page") == null) 
 					{
 						page = 1;
-						reports=ReportUtil.generateAdvancedReport(ampTeamId,fromYr,toYr,fiscalCalId,ampCurrencyCode,perspective, transc, formBean.getAddedColumns(),formBean.getColumnHierarchie());
+//						reports=ReportUtil.generateAdvancedReport(ampTeamId,fromYr,toYr,fiscalCalId,ampCurrencyCode,perspective, transc, formBean.getAddedColumns(),formBean.getColumnHierarchie());
+						reports=ReportUtil.getAdvancedReport(ampTeamId,fromYr,toYr,perspective,ampCurrencyCode,All,All,All,All,fiscalCalId,null,null,"All",rsc);
 						logger.info("Page is NULL............................" + reports.size());
 						formBean.setFinalData(reports);
 						httpSession.setAttribute("ampReports",reports);
@@ -457,6 +489,21 @@ public class AdvancedReport extends Action {
 						for(int yr=fromYr;yr<=toYr;yr++)
 							formBean.getFiscalYearRange().add(new Integer(yr));
 						formBean.setTotalColumns(14);
+						formBean.setOption(rsc.getOption());
+						formBean.setOptions(new ArrayList());
+						if(rsc.getOption().equals(Constants.ANNUAL))
+							formBean.getOptions().add("Y");
+						else
+						{
+							formBean.getOptions().add("Q1");
+							formBean.getOptions().add("Q2");
+							formBean.getOptions().add("Q3");
+							formBean.getOptions().add("Q4");
+						}	
+						if(transc.indexOf(new Long(7))!=-1)
+							formBean.setQuarterColumns(4*(transc.size()-1));
+						else
+							formBean.setQuarterColumns(4*transc.size());
 						if(formBean.getColumnHierarchie()==null)
 						{
 							formBean.setPages(pages);

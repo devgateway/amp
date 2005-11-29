@@ -97,4 +97,7 @@ public class Constants
 	public static final String REGIONAL_FUNDING_PAGE_CODE = "RFS";
 	public static final String CALENDAR_FILTER = "Calendar";
 	public static final String CURRENCY_FILTER = "Currency";
+
+	public static final String ANNUAL = "A" ;
+	public static final String QUARTERLY = "Q" ;
 }	

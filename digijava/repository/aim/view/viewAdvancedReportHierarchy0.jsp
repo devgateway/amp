@@ -9,25 +9,56 @@
 <digi:instance property="aimAdvancedReportForm" />
            
 			    <table width="100%"  border="0" cellpadding="1" cellspacing="1" bgcolor="#C6C7C4">
+                    <logic:equal name="aimAdvancedReportForm" property="option" value="A">	
                     <tr bgcolor="#F4F4F2">
 					<logic:iterate name="aimAdvancedReportForm"  property="titles" id="titles" type="org.digijava.module.aim.helper.Column">
 					<td align="center" height="21" width="42" ><div align="center"><strong>
 					<bean:write name="titles" property="columnName" /></strong></div>
 					</td></logic:iterate>
-				<logic:iterate name="aimAdvancedReportForm"  property="fiscalYearRange" id="fiscalYearRange">
-				<td height="21" width="69" colspan=<bean:write name="aimAdvancedReportForm" property="measureCount" /> align="center" >
-				<div align="center"><strong><%=fiscalYearRange%></strong></div>
-				</td>
-			</logic:iterate>
+					<logic:iterate name="aimAdvancedReportForm"  property="fiscalYearRange" id="fiscalYearRange">
+						<td height="21" width="69" colspan=<bean:write name="aimAdvancedReportForm" property="measureCount" /> align="center" >
+						<div align="center"><strong><%=fiscalYearRange%></strong></div>
+						</td>
+					</logic:iterate>
+					
+					
 				<td height="21" width="69" colspan=<bean:write name="aimAdvancedReportForm" property="fundColumns" /> align="center" >
 					<b>Total 	</b>
 				</td>
 			
 				</tr>
+				</logic:equal>
+				<logic:equal name="aimAdvancedReportForm" property="option" value="Q">	
+                    <tr bgcolor="#F4F4F2">
+					<logic:iterate name="aimAdvancedReportForm"  property="titles" id="titles" type="org.digijava.module.aim.helper.Column">
+					<td align="center" height="21" width="42" rowspan="2" ><div align="center"><strong>
+					<bean:write name="titles" property="columnName" /></strong></div>
+					</td></logic:iterate>
+					<logic:iterate name="aimAdvancedReportForm"  property="fiscalYearRange" id="fiscalYearRange">
+						<td height="21" width="69" colspan=<bean:write name="aimAdvancedReportForm" property="quarterColumns" /> align="center"><strong><%=fiscalYearRange%></strong>
+						</td>
+					</logic:iterate>
+					
+					
+				<td height="21" width="69" colspan=<bean:write name="aimAdvancedReportForm" property="fundColumns" /> align="center" rowspan="2">
+					<b>Total 	</b>
+				</td>
+			
+				</tr>
+				<tr bgcolor="#F4F4F2">
+				<logic:iterate name="aimAdvancedReportForm"  property="fiscalYearRange" id="fiscalYearRange">
+					<td height="21" colspan=<bean:write name="aimAdvancedReportForm" property="measureCount" /> align="center"><strong>Q1</strong></td>
+					<td height="21" colspan=<bean:write name="aimAdvancedReportForm" property="measureCount" /> align="center"><strong>Q2</strong></td>
+					<td height="21" colspan=<bean:write name="aimAdvancedReportForm" property="measureCount" /> align="center"><strong>Q3</strong></td>
+					<td height="21" colspan=<bean:write name="aimAdvancedReportForm" property="measureCount" /> align="center"><strong>Q4</strong></td>
+				</logic:iterate>
+				</tr>
+				</logic:equal>
 				<tr bgcolor="#FFFFFF">
 				<logic:iterate name="aimAdvancedReportForm"  property="titles" id="titles" type="org.digijava.module.aim.helper.Column">
 			<td>&nbsp;</td></logic:iterate>
 			<logic:iterate name="aimAdvancedReportForm"  property="fiscalYearRange" id="fiscalYearRange">
+			<logic:iterate name="aimAdvancedReportForm"  property="options" id="options">
 				<logic:equal name="aimAdvancedReportForm" property="acCommFlag" value="true">
 					<td height="21" width="23" align="center" >
 					<a title="<digi:trn key="aim:actualCommitment">Actual Commitment</digi:trn>">
@@ -72,7 +103,7 @@
 					</a>
 					</td>
 				</logic:equal>
-
+			</logic:iterate>
 			</logic:iterate>
 			
 					<logic:equal name="aimAdvancedReportForm" property="acCommFlag" value="true">
@@ -213,7 +244,7 @@
 				<logic:notEmpty name="records" property="ampFund">
 				<logic:iterate name="records"  property="ampFund" id="ampFund" 	type="org.digijava.module.aim.helper.AmpFund">
 				<logic:equal name="aimAdvancedReportForm" property="acCommFlag" value="true">
-				<% i = i + 1;	%>
+
 						<td align="right" height="21" width="69">
 							<logic:notEqual name="ampFund" property="commAmount" value="0">
 							<bean:write name="ampFund" property="commAmount" />
@@ -221,7 +252,7 @@
 						</td>
 				</logic:equal>
 				<logic:equal name="aimAdvancedReportForm" property="acDisbFlag" value="true">
-				<% i = i + 1;	%>
+
 						<td align="right" height="21" width="69">
 							<logic:notEqual name="ampFund" property="disbAmount" value="0">
 							<bean:write name="ampFund" property="disbAmount" />
@@ -229,7 +260,7 @@
 						</td>
 				</logic:equal>
 				<logic:equal name="aimAdvancedReportForm" property="acExpFlag" value="true">
-				<% i = i + 1;	%>
+
 						<td align="right" height="21" width="69">
 							<logic:notEqual name="ampFund" property="expAmount" value="0">
 							<bean:write name="ampFund" property="expAmount" />
@@ -237,7 +268,7 @@
 						</td>
 				</logic:equal>
 				<logic:equal name="aimAdvancedReportForm" property="plCommFlag" value="true">
-				<% i = i + 1;	%>
+
 						<td align="right" height="21" width="69">
 							<logic:notEqual name="ampFund" property="plCommAmount" value="0">
 							<bean:write name="ampFund" property="plCommAmount" />
@@ -245,7 +276,7 @@
 						</td>
 				</logic:equal>
 				<logic:equal name="aimAdvancedReportForm" property="plDisbFlag" value="true">
-				<% i = i + 1;	%>
+
 						<td align="right" height="21" width="69">
 							<logic:notEqual name="ampFund" property="plDisbAmount" value="0">
 							<bean:write name="ampFund" property="plDisbAmount" />
@@ -253,7 +284,7 @@
 						</td>
 				</logic:equal>
 				<logic:equal name="aimAdvancedReportForm" property="plExpFlag" value="true">
-				<% i = i + 1;	%>
+
 						<td align="right" height="21" width="69" >
 							<logic:notEqual name="ampFund" property="plExpAmount" value="0">
 							<bean:write name="ampFund" property="plExpAmount" />
@@ -262,22 +293,13 @@
 				</logic:equal>
 
 				<logic:equal name="aimAdvancedReportForm" property="acBalFlag" value="true">
-				<% i = i + 1;
-					int j = Integer.parseInt(measureCnt);
-					j = j + 1;
-					if(i > (j*3))
-					{
-
-				%>
+				<logic:notEmpty name="ampFund" property="unDisbAmount">
 						<td align="right" height="21" width="69">
 							<logic:notEqual name="ampFund" property="unDisbAmount" value="0">
 							<bean:write name="ampFund" property="unDisbAmount" />
 							</logic:notEqual>
 						</td>
-						<%
-						i = 0;
-						}
-						%>
+				</logic:notEmpty>
 				</logic:equal>
 					</logic:iterate></logic:notEmpty>
 				</logic:iterate>
@@ -285,11 +307,11 @@
 			</logic:iterate>
 		
               
-              <%  i = 0; %>
+              
 			  <tr><td align="left" colspan=<bean:write name="aimAdvancedReportForm" property="dimColumns" />><b> Total</b></td>
 			  <logic:iterate name="aimAdvancedReportForm"  property="totFund" id="totFund" type="org.digijava.module.aim.helper.AmpFund">
 			  <logic:equal name="aimAdvancedReportForm" property="acCommFlag" value="true">
-			  <% i = i + 1;	%>
+			  
 						<td align="right" height="21" width="69">
 							<logic:notEqual name="totFund" property="commAmount" value="0">
 							<bean:write name="totFund" property="commAmount" />
@@ -297,7 +319,7 @@
 						</td>
 				</logic:equal>
 				<logic:equal name="aimAdvancedReportForm" property="acDisbFlag" value="true">
-				<% i = i + 1;	%>
+				
 						<td align="right" height="21" width="69">
 							<logic:notEqual name="totFund" property="disbAmount" value="0">
 							<bean:write name="totFund" property="disbAmount" />
@@ -305,7 +327,7 @@
 						</td>
 				</logic:equal>
 				<logic:equal name="aimAdvancedReportForm" property="acExpFlag" value="true">
-				<% i = i + 1;	%>
+				
 						<td align="right" height="21" width="69">
 							<logic:notEqual name="totFund" property="expAmount" value="0">
 							<bean:write name="totFund" property="expAmount" />
@@ -313,7 +335,7 @@
 						</td>
 				</logic:equal>
 				<logic:equal name="aimAdvancedReportForm" property="plCommFlag" value="true">
-				<% i = i + 1;	%>
+				
 						<td align="right" height="21" width="69">
 							<logic:notEqual name="totFund" property="plCommAmount" value="0">
 							<bean:write name="totFund" property="plCommAmount" />
@@ -321,7 +343,7 @@
 						</td>
 				</logic:equal>
 				<logic:equal name="aimAdvancedReportForm" property="plDisbFlag" value="true">
-				<% i = i + 1;	%>
+				
 						<td align="right" height="21" width="69">
 							<logic:notEqual name="totFund" property="plDisbAmount" value="0">
 							<bean:write name="totFund" property="plDisbAmount" />
@@ -329,7 +351,7 @@
 						</td>
 				</logic:equal>
 				<logic:equal name="aimAdvancedReportForm" property="plExpFlag" value="true">
-				<% i = i + 1;	%>
+				
 						<td align="right" height="21" width="69">
 							<logic:notEqual name="totFund" property="plExpAmount" value="0">
 							<bean:write name="totFund" property="plExpAmount" />
@@ -337,23 +359,14 @@
 						</td>
 				</logic:equal>
 				<logic:equal name="aimAdvancedReportForm" property="acBalFlag" value="true">
-				<% i = i + 1;
-					int j = Integer.parseInt(measureCnt);
-					j = j + 1;
-					if(i > (j*3))
-					{
-
-				%>
 				
+				<logic:notEmpty name="totFund" property="unDisbAmount">
 						<td align="right" height="21" width="69">
 							<logic:notEqual name="totFund" property="unDisbAmount" value="0">
 							<bean:write name="totFund" property="unDisbAmount" />
 							</logic:notEqual>
 						</td>
-						<%
-						i = 0;
-						}
-						%>
+				</logic:notEmpty>		
 						
 				</logic:equal>
 					</logic:iterate>

@@ -448,13 +448,13 @@
 			<td align="center"><bean:write name="donors" property="donorCount"/>.<bean:write name="project" property="count"/></td>
 				<td align="left" height="21" > 
 					<bean:write name="project" property="name"/> 
-					<logic:empty name="project" property="description">&nbsp;</logic:empty>	
+					<!--<logic:empty name="project" property="description">&nbsp;</logic:empty>	
 					<logic:notEmpty name="project" property="description">
 						<bean:define id="describeKey">
 							<bean:write name="project" property="description"/>
 						</bean:define>
 						<digi:edit key="<%=describeKey%>"/>
-					</logic:notEmpty>
+					</logic:notEmpty>-->
 				</td>
 				
 					<td align="left" height="21" width="39">

@@ -9,6 +9,7 @@
 <digi:instance property="aimAdvancedReportForm" />
 	<tr><td bgColor=#f4f4f2>
 	<TABLE width="100%" cellPadding=2 cellSpacing=0 vAlign="top" align="top" bgColor=#f4f4f2 border=1 style="border-collapse: collapse">
+	<logic:equal name="aimAdvancedReportForm" property="option" value="A">	
 	<tr bgcolor="#cccccc">
 	<c:if test="${!empty aimAdvancedReportForm.addedColumns}">
 	<logic:iterate name="aimAdvancedReportForm" id="addedColumns"	property="addedColumns" >
@@ -45,17 +46,71 @@
 	}
 	%>
 
-	<td width="69" colspan=7 align=center >
+	<td width="69" colspan=<bean:write name="aimAdvancedReportForm" property="fundColumns" /> align=center >
 	<b> Total 	</b>
 	</td>
     </tr> 	
+	</logic:equal>
+
+	<logic:equal name="aimAdvancedReportForm" property="option" value="Q">	
+	<tr bgcolor="#cccccc">
+	<c:if test="${!empty aimAdvancedReportForm.addedColumns}">
+	<logic:iterate name="aimAdvancedReportForm" id="addedColumns"	property="addedColumns" >
+		<td align="center"  class=box-title rowspan="2">
+		<c:out value="${addedColumns.columnName}"/>
+		</td>
+	</logic:iterate>
+	</c:if>
+																	
+	<bean:size name="aimAdvancedReportForm" property="addedMeasures" id="measureSize"/>
+	<%
+		int fcnt = measureSize.intValue();
+		int flag = 0;
+	%>              
+	<logic:iterate name="aimAdvancedReportForm"  property="addedMeasures" id="addedMeasures">				
+	<c:if test="${addedMeasures.measureName == 'Cumulative Balance'}">
+		<%fcnt = fcnt-1;
+		flag = 1;
+		%>
+		</c:if>
+	</logic:iterate>
 	
+	<%
+	if(flag == 0 || fcnt > 0)
+	{
+	%>
+	<logic:iterate name="aimAdvancedReportForm"  property="fiscalYearRange" id="fiscalYearRange">
+		<td height="21" width="69" colspan=<bean:write name="aimAdvancedReportForm" property="quarterColumns" /> align="center" >
+		<strong><%=fiscalYearRange%></strong>
+		</td>
+	</logic:iterate>
+
+	<%
+	}
+	%>
+
+	<td width="69" colspan=<bean:write name="aimAdvancedReportForm" property="fundColumns" /> align="center" rowspan="2">
+	<b> Total 	</b>
+	</td>
+    </tr> 
+	<tr bgcolor="#F4F4F2">
+	<logic:iterate name="aimAdvancedReportForm"  property="fiscalYearRange" id="fiscalYearRange">
+		<td height="21" colspan=<bean:write name="aimAdvancedReportForm" property="measureCount" /> align="center"><strong>Q1</strong></td>
+		<td height="21" colspan=<bean:write name="aimAdvancedReportForm" property="measureCount" /> align="center"><strong>Q2</strong></td>
+		<td height="21" colspan=<bean:write name="aimAdvancedReportForm" property="measureCount" /> align="center"><strong>Q3</strong></td>
+		<td height="21" colspan=<bean:write name="aimAdvancedReportForm" property="measureCount" /> align="center"><strong>Q4</strong></td>
+	</logic:iterate>
+	</tr>
+	</logic:equal>
+
+
 	<tr> <!-- heading start -->
 	<logic:iterate name="aimAdvancedReportForm"  property="addedColumns" id="addedColumns">
 	<td></td>
 	</logic:iterate>
 	
 	<logic:iterate name="aimAdvancedReportForm"  property="fiscalYearRange" id="fiscalYearRange">
+	<logic:iterate name="aimAdvancedReportForm"  property="options" id="options">
 		<logic:iterate name="aimAdvancedReportForm"  property="addedMeasures" id="addedMeasures">		
 
 			<c:if test="${addedMeasures.measureName == 'Actual Commitments'}">
@@ -118,6 +173,7 @@
 			</logic:equal>
 			</c:if>
 		</logic:iterate>
+	</logic:iterate>
 	</logic:iterate>
 
 	<logic:iterate name="aimAdvancedReportForm"  property="addedMeasures" id="addedMeasures">				<c:if test="${addedMeasures.measureName == 'Actual Commitments'}">

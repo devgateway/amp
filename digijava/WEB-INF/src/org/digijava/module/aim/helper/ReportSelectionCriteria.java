@@ -7,6 +7,7 @@ public class ReportSelectionCriteria {
 		  private Collection columns;
 		  private Collection measures;
 		  private Collection hierarchy;
+		  private String option;
 
 
 		  public void setColumns(Collection c) {
@@ -21,12 +22,18 @@ public class ReportSelectionCriteria {
 					 hierarchy = c;
 		  }
 
+		  public void setOption(String s) {
+					 option = s;
+		  }
+
 		  
 		  public Collection getColumns() { return columns; }
 
 		  public Collection getMeasures() { return measures; }
 
 		  public Collection getHierarchy() { return hierarchy; }
+
+		  public String getOption() { return option; }
 
 		  
 }

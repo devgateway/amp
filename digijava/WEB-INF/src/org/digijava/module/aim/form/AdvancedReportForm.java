@@ -39,6 +39,8 @@ public class AdvancedReportForm extends ActionForm
 	private int forcastYear2 ;
 	private int forcastYear3 ;
 	private String currency ;
+	private String option;
+	private Collection options;
 	/**
 	 * @return Returns the multiReport.
 	 */
@@ -124,6 +126,7 @@ public class AdvancedReportForm extends ActionForm
 	private String hierarchyFlag;
 
 	private int measureCount = 0;  
+	private int quarterColumns;
 	
 	
 	public int getMeasureCount() {
@@ -131,6 +134,13 @@ public class AdvancedReportForm extends ActionForm
 	}
 	public void setMeasureCount(int measureCount) {
 		this.measureCount = measureCount;
+	}
+
+	public int getQuarterColumns() {
+		return quarterColumns;
+	}
+	public void setQuarterColumns(int quarterColumns) {
+		this.quarterColumns = quarterColumns;
 	}
 	public String getPieImageUrl()
 	{
@@ -1240,5 +1250,22 @@ private int yrDiff;
 	public void setReportType(String reportType) {
 		this.reportType = reportType;
 	}
+
+	public String getOption() {
+		return option;
+	}
+
+	public void setOption(String string) {
+		option = string;
+	}
+
+	public Collection getOptions() {
+		return options;
+	}
+
+	public void setOptions(Collection c) {
+		options = c;
+	}
+
 } //		End of Class
 

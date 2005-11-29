@@ -19,6 +19,7 @@ function validateFunding() {
 	var numComm = document.aimEditActivityForm.numComm.value;
 	var numDisb = document.aimEditActivityForm.numDisb.value;
 	var numExp = document.aimEditActivityForm.numExp.value;
+
 	if (numComm == 0) {
 		alert ("Please enter a commitment");
 		return false;	
@@ -191,24 +192,28 @@ function validateFundingDetails(comm,disb,exp) {
 			}
 		}
 	}
+	/*
 	if (disbAmt > commAmt) {
+		alert(expAmt + " " + disbAmt);
 		alert("Amount disbursed can not be greater than committed amount.");
 		field  = "fundingDetail[" + disbIndex + "].transactionAmount";
 		document.getElementsByName(field)[0].focus();
 		return false;
 	}
 	if (expAmt > commAmt) {
+		alert(expAmt + " " + disbAmt);
 		alert("Expenditure can not be greater than committed amount.");
 		field  = "fundingDetail[" + expIndex + "].transactionAmount";
 		document.getElementsByName(field)[0].focus();
 		return false;
 	}
 	if (expAmt > disbAmt) {
+		alert(expAmt + " " + disbAmt);
 		alert("Expenditure can not be greater than disbursed amount.");
 		field  = "fundingDetail[" + expIndex + "].transactionAmount";
 		document.getElementsByName(field)[0].focus();
 		return false;
-	}
+	}*/
 	return true;
 }
 

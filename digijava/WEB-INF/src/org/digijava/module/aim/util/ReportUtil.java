@@ -11006,6 +11006,7 @@ public class ReportUtil {
 				ampReports=(AmpReports) itr.next();
 				logger.info("Report Name: " + ampReports.getName());
 				logger.info("Column Size: " + ampReports.getColumns().size());
+			//	logger.info("Report Option: " + ampReports.getOptions());
 				itrColumn=ampReports.getColumns().iterator();
 				itrMeasure=ampReports.getMeasures().iterator();
 				itrHierarchy=ampReports.getHierarchies().iterator();
@@ -11056,7 +11057,10 @@ public class ReportUtil {
 				}
 				rsc.getHierarchy().addAll(hierarchy);
 			}
-			rsc.setOption("Q");
+			if(ampReports.getOptions()==null)
+				  rsc.setOption(Constants.ANNUAL);
+			else
+				rsc.setOption(ampReports.getOptions());
 		} 
 		catch(Exception e)
 		{

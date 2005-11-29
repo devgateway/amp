@@ -18,6 +18,7 @@ public class AdvancedReportForm extends ActionForm
 	private String reportTitle = "";
 	private String reportDescription = "";
 	private String reportType = "";
+	private String reportOption;
 	private String moveColumn="";
 	private Collection intermediate = null;
 	private Collection addedMeasures = null;
@@ -1258,7 +1259,13 @@ private int yrDiff;
 	public void setOption(String string) {
 		option = string;
 	}
+	public String getReportOption() {
+		return reportOption;
+	}
 
+	public void setReportOption(String string) {
+		reportOption = string;
+	}
 	public Collection getOptions() {
 		return options;
 	}

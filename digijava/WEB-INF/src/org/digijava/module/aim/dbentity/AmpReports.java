@@ -5,6 +5,8 @@
 
 package org.digijava.module.aim.dbentity;
 
+import org.digijava.module.aim.dbentity.AmpReportsOptions;
+
 import java.util.Set;
 
 public class AmpReports implements Comparable {
@@ -15,6 +17,10 @@ public class AmpReports implements Comparable {
 
 	private String description;
 
+	private String options;
+
+	//private AmpReportsOptions ampReportsOptions;
+	
 	private Set members;
 
 	private Set columns;
@@ -45,6 +51,14 @@ public class AmpReports implements Comparable {
 		return description;
 	}
 
+	public String getOptions() {
+		return options;
+	}
+
+	/*public AmpReportsOptions getAmpReportsOptions() {
+		return ampReportsOptions;
+	}*/
+	
 	public Set getMembers() {
 		return members;
 	}
@@ -61,6 +75,14 @@ public class AmpReports implements Comparable {
 		this.description = description;
 	}
 
+	public void setOptions(String options) {
+		this.options = options;
+	}
+	
+	/*public void setAmpReportsOptions(AmpReportsOptions ampReportsOptions) {
+		this.ampReportsOptions = ampReportsOptions;
+	}*/
+	
 	public void setMembers(Set members) {
 		this.members = members;
 	}

@@ -6,6 +6,8 @@
 
 package org.digijava.module.aim.dbentity;
 
+import org.digijava.module.aim.dbentity.AmpReports;
+import org.digijava.module.aim.dbentity.AmpTeam;
 
 public class AmpTeamReports {
 

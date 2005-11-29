@@ -166,7 +166,10 @@
 		<hibernate-class>
 			org.digijava.module.aim.dbentity.AmpReportPhysicalPerformance
 		</hibernate-class>
-
+		<hibernate-class>
+			org.digijava.module.aim.dbentity.AmpReportsOptions
+ 		</hibernate-class>
+  		
 	</hibernate-classes>
         <!-- highlights classes End-->
 

@@ -418,7 +418,10 @@ public class AdvancedReport extends Action {
 						rsc.getHierarchy().add(col);
 					}
 					rsc.setMeasures(transc);
-					rsc.setOption("Q");
+					if(formBean.getReportOption()==null)
+							  rsc.setOption(Constants.ANNUAL);
+					else
+								rsc.setOption(formBean.getReportOption());
 //					String startDate = (year-Constants.FROM_YEAR_RANGE) + "-" + 01 + "-" + 01;
 //					String closeDate = (year + Constants.TO_YEAR_RANGE) + "-" + 12 + "-" + 31;
 					if (request.getParameter("page") == null) 
@@ -800,12 +803,13 @@ public class AdvancedReport extends Action {
 					if(query!=null)
 					{
 						iter = query.list().iterator();
+						logger.info("............Query is not null............");
 						while(iter.hasNext())
 						{
 							String str = (String) iter.next();
 							if( formBean.getReportTitle().trim().equals(str) )
 							{
-		                		errors.add("DuplicateReportName", new ActionError("error.aim.reportManager.DuplicateReportName"));
+		                	errors.add("DuplicateReportName", new ActionError("error.aim.reportManager.DuplicateReportName"));
 								saveErrors(request, errors);
 								found = true;
 								return mapping.findForward("MissingReportDetails");
@@ -815,14 +819,19 @@ public class AdvancedReport extends Action {
 						}
 					}
 
-	                if(found == false)
-	                {
+	           	if(found == false)
+	            {
+						logger.info("............no duplicate report title............");
 						AmpReports ampReports = new AmpReports();
 						String descr = "/"+formBean.getReportTitle().replaceAll(" " , "");
 						descr = descr + ".do";
 						ampReports.setDescription(descr);
 						ampReports.setName(formBean.getReportTitle().trim());
 						ampReports.setAmpReportId(new Long("0"));
+						if(formBean.getReportOption()==null)
+								  ampReports.setOptions(Constants.ANNUAL);
+						else
+								ampReports.setOptions(formBean.getReportOption());
 						
 						// saving the selected columns for the report
 						Set columns = new HashSet();
@@ -1003,16 +1012,26 @@ public class AdvancedReport extends Action {
 		}
 		catch(Exception e)
 		{
+			logger.info("-------------Inside Catch-----------");
 			e.printStackTrace(System.out);
 		}
-		finally {
-			if (session != null) {
-				try {
+		finally 
+		{
+			
+			if (session != null) 
+			{
+				logger.info("-------------Inside Finally....Session got-----------");
+				try 
+				{
 					PersistenceManager.releaseSession(session);
-				} catch (Exception e) {
+				} 
+				catch (Exception e) 
+				{
 					logger.error("Release session faliled :" + e);
 				}
 			}
+			else
+				logger.info("-------------Inside Finally....didn't get Session-----------");
 		}
 
 		return mapping.findForward("forward");

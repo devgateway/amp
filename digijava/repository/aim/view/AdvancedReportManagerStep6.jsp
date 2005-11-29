@@ -390,6 +390,33 @@ function checkUncheckAll2() {
 																
 															</TD>
 														</TR>
+
+														<table width="638" bgColor=#f4f4f2 class="box-border-nopadding" border=0>
+															<tr align="center">
+																<td align="center" class="box-title" rowspan="2" width="300">
+																&nbsp;&nbsp;&nbsp;&nbsp;Kind of report													
+																</td>
+																<td width="300" align="left">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+																	<html:radio property="reportOption" value="A">
+															
+																		<digi:trn key="aim:AnnualReport">
+																			&nbsp;&nbsp;Annual
+																		</digi:trn>
+																	</html:radio>
+																</td>															
+																
+																<tr align="center">
+																<td width="300" align="left">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+																	<html:radio property="reportOption" value="Q"> 
+																		<digi:trn key="aim:QuarterlyReport">
+																			&nbsp;&nbsp;Quarterly
+																		</digi:trn>
+																	</html:radio>
+																</td>
+																</tr>
+															</tr>
+														</table>
+
 													</TABLE>
 												</TD>
 											</TR>
@@ -400,7 +427,6 @@ function checkUncheckAll2() {
 												</td>
 											</tr>	<!-- Add and Remove Button-->
 											<tr>	<td height=30>	&nbsp;</td>	</tr>
-											
 											<tr>
 												<td align="right" colspan="2">
 													<input type=button name=back value="<< Previous"   class="dr-menu" onclick="javascript:history.back()">												

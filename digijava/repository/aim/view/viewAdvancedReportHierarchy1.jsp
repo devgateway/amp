@@ -312,54 +312,55 @@
 
 			  <tr><td align="left" colspan=<bean:write name="aimAdvancedReportForm" property="dimColumns" />><b> <bean:write name="hierarchy" property="name" /> &nbsp;Total</b></td>
 			  <logic:iterate name="hierarchy"  property="fundSubTotal" id="fundSubTotal" type="org.digijava.module.aim.helper.AmpFund">
-			  <logic:equal name="aimAdvancedReportForm" property="acCommFlag" value="true">
 
+			  <logic:equal name="aimAdvancedReportForm" property="acCommFlag" value="true">
 						<td align="right" height="21" width="69">
 							<logic:notEqual name="fundSubTotal" property="commAmount" value="0">
 							<bean:write name="fundSubTotal" property="commAmount" />
 							</logic:notEqual>
 						</td>
 				</logic:equal>
+			
 				<logic:equal name="aimAdvancedReportForm" property="acDisbFlag" value="true">
-
 						<td align="right" height="21" width="69">
 							<logic:notEqual name="fundSubTotal" property="disbAmount" value="0">
 							<bean:write name="fundSubTotal" property="disbAmount" />
 							</logic:notEqual>
 						</td>
 				</logic:equal>
-				<logic:equal name="aimAdvancedReportForm" property="acExpFlag" value="true">
 
+				<logic:equal name="aimAdvancedReportForm" property="acExpFlag" value="true">
 						<td align="right" height="21" width="69">
 							<logic:notEqual name="fundSubTotal" property="expAmount" value="0">
 							<bean:write name="fundSubTotal" property="expAmount" />
 							</logic:notEqual>
 						</td>
 				</logic:equal>
-				<logic:equal name="aimAdvancedReportForm" property="plCommFlag" value="true">
 
+				<logic:equal name="aimAdvancedReportForm" property="plCommFlag" value="true">
 						<td align="right" height="21" width="69">
 							<logic:notEqual name="fundSubTotal" property="plCommAmount" value="0">
 							<bean:write name="fundSubTotal" property="plCommAmount" />
 							</logic:notEqual>
 						</td>
 				</logic:equal>
-				<logic:equal name="aimAdvancedReportForm" property="plDisbFlag" value="true">
 
+				<logic:equal name="aimAdvancedReportForm" property="plDisbFlag" value="true">
 						<td align="right" height="21" width="69">
 							<logic:notEqual name="fundSubTotal" property="plDisbAmount" value="0">
 							<bean:write name="fundSubTotal" property="plDisbAmount" />
 							</logic:notEqual>
 						</td>
 				</logic:equal>
-				<logic:equal name="aimAdvancedReportForm" property="plExpFlag" value="true">
 
+				<logic:equal name="aimAdvancedReportForm" property="plExpFlag" value="true">
 						<td align="right" height="21" width="69">
 							<logic:notEqual name="fundSubTotal" property="plExpAmount" value="0">
 							<bean:write name="fundSubTotal" property="plExpAmount" />
 							</logic:notEqual>
 						</td>
 				</logic:equal>
+				
 				<logic:equal name="aimAdvancedReportForm" property="acBalFlag" value="true">
 					<logic:notEmpty name="fundSubTotal" property="unDisbAmount">				
 						<td align="right" height="21" width="69">
@@ -369,6 +370,7 @@
 						</td>
 					</logic:notEmpty>	
 				</logic:equal>
+
 				</logic:iterate></tr>
 			      
 				</logic:notEmpty>

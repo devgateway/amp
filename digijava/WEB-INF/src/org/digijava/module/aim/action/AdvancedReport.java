@@ -405,17 +405,19 @@ public class AdvancedReport extends Action {
 						col.setColumnAlias(ampColumns.getAliasName());
 						rsc.getColumns().add(col);
 					}
-
 					rsc.setHierarchy(new ArrayList());
-					iter=formBean.getColumnHierarchie().iterator();
-					while(iter.hasNext())
+					if(formBean.getColumnHierarchie()!=null)
 					{
-						AmpColumns ampColumns=(AmpColumns) iter.next();
-						Column col=new Column();
-						col.setColumnId(ampColumns.getColumnId());
-						col.setColumnName(ampColumns.getColumnName());
-						col.setColumnAlias(ampColumns.getAliasName());
-						rsc.getHierarchy().add(col);
+						iter=formBean.getColumnHierarchie().iterator();
+						while(iter.hasNext())
+						{
+							AmpColumns ampColumns=(AmpColumns) iter.next();
+							Column col=new Column();
+							col.setColumnId(ampColumns.getColumnId());
+							col.setColumnName(ampColumns.getColumnName());
+							col.setColumnAlias(ampColumns.getAliasName());
+							rsc.getHierarchy().add(col);
+						}
 					}
 					rsc.setMeasures(transc);
 					if(formBean.getReportOption()==null)
@@ -530,85 +532,166 @@ public class AdvancedReport extends Action {
 					int yearRange=(toYr-fromYr)+1;
 					if(formBean.getColumnHierarchie()==null)
 					{
-						double totUnDisb = 0, actTotalCommit = 0, actTotalDisb = 0, actTotalExp = 0, planTotalCommit = 0, planTotalDisb = 0, planTotalExp = 0;
-						double[][] totFunds=new double[yearRange][7];
-						iter = reports.iterator();			
-					//	logger.debug("Grand Total :" + grandTotal);
-						while ( iter.hasNext() )
+						if(rsc.getOption().equals(Constants.ANNUAL))
 						{
-							Report report=(Report) iter.next();
-							Iterator advIter=report.getRecords().iterator();
-							while(advIter.hasNext())
+							double totUnDisb = 0, actTotalCommit = 0, actTotalDisb = 0, actTotalExp = 0, planTotalCommit = 0, planTotalDisb = 0, planTotalExp = 0;
+							double[][] totFunds=new double[yearRange][7];
+							iter = reports.iterator() ;
+							//	logger.debug("Grand Total :" + grandTotal);
+							while ( iter.hasNext() )
 							{
-								org.digijava.module.aim.helper.AdvancedReport advancedReport=(org.digijava.module.aim.helper.AdvancedReport) advIter.next();
-								if(advancedReport.getAmpFund()!=null)
+								Report report=(Report) iter.next();
+								Iterator advIter=report.getRecords().iterator();
+								while(advIter.hasNext())
 								{
-									Iterator iterFund = advancedReport.getAmpFund().iterator();
-									for(int i=0;i<yearRange ;i++ )
+									org.digijava.module.aim.helper.AdvancedReport advancedReport=(org.digijava.module.aim.helper.AdvancedReport) advIter.next();
+									if(advancedReport.getAmpFund()!=null)
 									{
-										AmpFund ampFund=(AmpFund) iterFund.next();
-										if(measures.indexOf(new Long(1))!=-1)
-											totFunds[i][0]=totFunds[i][0] + Double.parseDouble(DecimalToText.removeCommas(ampFund.getCommAmount()));
-										if(measures.indexOf(new Long(2))!=-1)
-											totFunds[i][1]=totFunds[i][1] + Double.parseDouble(DecimalToText.removeCommas(ampFund.getDisbAmount()));
-										if(measures.indexOf(new Long(3))!=-1)
-											totFunds[i][2]=totFunds[i][2] + Double.parseDouble(DecimalToText.removeCommas(ampFund.getExpAmount()));
-										if(measures.indexOf(new Long(4))!=-1)
-											totFunds[i][3]=totFunds[i][3] + Double.parseDouble(DecimalToText.removeCommas(ampFund.getPlCommAmount()));
-										if(measures.indexOf(new Long(5))!=-1)
-											totFunds[i][4]=totFunds[i][4] + Double.parseDouble(DecimalToText.removeCommas(ampFund.getPlDisbAmount()));
-										if(measures.indexOf(new Long(6))!=-1)
-											totFunds[i][5]=totFunds[i][5] + Double.parseDouble(DecimalToText.removeCommas(ampFund.getPlExpAmount()));
-										if(measures.indexOf(new Long(7))!=-1)
-											totFunds[i][6]=totFunds[i][6] + Double.parseDouble(DecimalToText.removeCommas(ampFund.getUnDisbAmount()));
+										Iterator iterFund = advancedReport.getAmpFund().iterator();
+										for(int i=0;i<yearRange ;i++ )
+										{
+											AmpFund ampFund=(AmpFund) iterFund.next();
+											if(measures.indexOf(new Long(1))!=-1)
+												totFunds[i][0]=totFunds[i][0] + Double.parseDouble(DecimalToText.removeCommas(ampFund.getCommAmount()));
+											if(measures.indexOf(new Long(2))!=-1)
+												totFunds[i][1]=totFunds[i][1] + Double.parseDouble(DecimalToText.removeCommas(ampFund.getDisbAmount()));
+											if(measures.indexOf(new Long(3))!=-1)
+												totFunds[i][2]=totFunds[i][2] + Double.parseDouble(DecimalToText.removeCommas(ampFund.getExpAmount()));
+											if(measures.indexOf(new Long(4))!=-1)
+												totFunds[i][3]=totFunds[i][3] + Double.parseDouble(DecimalToText.removeCommas(ampFund.getPlCommAmount()));
+											if(measures.indexOf(new Long(5))!=-1)
+												totFunds[i][4]=totFunds[i][4] + Double.parseDouble(DecimalToText.removeCommas(ampFund.getPlDisbAmount()));
+											if(measures.indexOf(new Long(6))!=-1)
+												totFunds[i][5]=totFunds[i][5] + Double.parseDouble(DecimalToText.removeCommas(ampFund.getPlExpAmount()));
+								
 						
-										actTotalCommit = actTotalCommit + Double.parseDouble(DecimalToText.removeCommas(ampFund.getCommAmount()));
-										actTotalDisb = actTotalDisb +  Double.parseDouble(DecimalToText.removeCommas(ampFund.getDisbAmount()));
-										actTotalExp = actTotalExp +  Double.parseDouble(DecimalToText.removeCommas(ampFund.getExpAmount()));
-										planTotalCommit = planTotalCommit + Double.parseDouble(DecimalToText.removeCommas(ampFund.getPlCommAmount()));
-										planTotalDisb = planTotalDisb +  Double.parseDouble(DecimalToText.removeCommas(ampFund.getPlDisbAmount()));
-										planTotalExp = planTotalExp +  Double.parseDouble(DecimalToText.removeCommas(ampFund.getPlExpAmount()));
-										totUnDisb = totUnDisb + Double.parseDouble(DecimalToText.removeCommas(ampFund.getUnDisbAmount()));
-	
-									}
-								}
-							}	
-						}
-						formBean.setTotFund(new ArrayList());
-						for(int i=0;i<yearRange ;i++ )
-						{
-							AmpFund ampFund=new AmpFund();
-							if(measures.indexOf(new Long(1))!=-1){
-								ampFund.setCommAmount(mf.format(totFunds[i][0]));
-								System.out.println("GRRRRRRRRR"+totFunds[i][0]+"--------"+mf.format(totFunds[i][0]));
-							}	
-							if(measures.indexOf(new Long(2))!=-1)
-								ampFund.setDisbAmount(mf.format(totFunds[i][1])); 
-							if(measures.indexOf(new Long(3))!=-1)
-								ampFund.setExpAmount(mf.format(totFunds[i][2]));	
-							if(measures.indexOf(new Long(4))!=-1)
-								ampFund.setPlCommAmount(mf.format(totFunds[i][3])); 
-							if(measures.indexOf(new Long(5))!=-1)
-								ampFund.setPlDisbAmount(mf.format(totFunds[i][4])); 
-							if(measures.indexOf(new Long(6))!=-1)
-								ampFund.setPlExpAmount(mf.format(totFunds[i][5]));	
-							if(measures.indexOf(new Long(7))!=-1)
-								ampFund.setUnDisbAmount(mf.format(totFunds[i][6]));	
-							formBean.getTotFund().add(ampFund);
-						}
+											actTotalCommit = actTotalCommit + Double.parseDouble(DecimalToText.removeCommas(ampFund.getCommAmount()));
+											actTotalDisb = actTotalDisb + Double.parseDouble(DecimalToText.removeCommas(ampFund.getDisbAmount()));
+											actTotalExp = actTotalExp + Double.parseDouble(DecimalToText.removeCommas(ampFund.getExpAmount()));
+											planTotalCommit = planTotalCommit  + Double.parseDouble(DecimalToText.removeCommas(ampFund.getPlCommAmount()));
+											planTotalDisb = planTotalDisb + Double.parseDouble(DecimalToText.removeCommas(ampFund.getPlDisbAmount()));
+											planTotalExp = planTotalExp + Double.parseDouble(DecimalToText.removeCommas(ampFund.getPlExpAmount()));
+											totUnDisb = totUnDisb + (Double.parseDouble(DecimalToText.removeCommas(ampFund.getCommAmount())) - Double.parseDouble(DecimalToText.removeCommas(ampFund.getDisbAmount())));
 
-						AmpFund fund = new AmpFund();
-						logger.info("setting val of : actTotalCommit====="+actTotalCommit);
-						fund.setCommAmount(mf.format(actTotalCommit));
-						fund.setDisbAmount(mf.format(actTotalDisb));
-						fund.setExpAmount(mf.format(actTotalExp));
-						fund.setPlCommAmount(mf.format(planTotalCommit));
-						fund.setPlDisbAmount(mf.format(planTotalDisb));
-						fund.setPlExpAmount(mf.format(planTotalExp));
-						fund.setUnDisbAmount(mf.format(totUnDisb));
-						formBean.getTotFund().add(fund);
-					}	
+										}	
+									}
+								}	
+							}
+							formBean.setTotFund(new ArrayList());
+							for(int i=0;i<yearRange ;i++ )
+							{	
+								AmpFund ampFund=new AmpFund();
+								if(measures.indexOf(new Long(1))!=-1)
+									ampFund.setCommAmount(mf.format(totFunds[i][0])); 
+								if(measures.indexOf(new Long(2))!=-1)
+									ampFund.setDisbAmount(mf.format(totFunds[i][1])); 
+								if(measures.indexOf(new Long(3))!=-1)
+									ampFund.setExpAmount(mf.format(totFunds[i][2]));	
+								if(measures.indexOf(new Long(4))!=-1)
+									ampFund.setPlCommAmount(mf.format(totFunds[i][3])); 
+								if(measures.indexOf(new Long(5))!=-1)
+									ampFund.setPlDisbAmount(mf.format(totFunds[i][4])); 
+								if(measures.indexOf(new Long(6))!=-1)
+									ampFund.setPlExpAmount(mf.format(totFunds[i][5]));	
 					
+								formBean.getTotFund().add(ampFund);
+							}
+
+							AmpFund fund = new AmpFund();
+							fund.setCommAmount(mf.format(actTotalCommit));
+							fund.setDisbAmount(mf.format(actTotalDisb));
+							fund.setExpAmount(mf.format(actTotalExp));
+							fund.setPlCommAmount(mf.format(planTotalCommit));
+							fund.setPlDisbAmount(mf.format(planTotalDisb));
+							fund.setPlExpAmount(mf.format(planTotalExp));
+							fund.setUnDisbAmount(mf.format(totUnDisb));
+							formBean.getTotFund().add(fund);
+						}
+						else
+						{
+							double totUnDisb = 0, actTotalCommit = 0, actTotalDisb = 0, actTotalExp = 0, planTotalCommit = 0, planTotalDisb = 0, planTotalExp = 0;
+							double[][] totAcCommFunds=new double[yearRange][4];
+							double[][] totAcDisbFunds=new double[yearRange][4];
+							double[][] totAcExpFunds=new double[yearRange][4];
+							double[][] totPlCommFunds=new double[yearRange][4];
+							double[][] totPlDisbFunds=new double[yearRange][4];
+							double[][] totPlExpFunds=new double[yearRange][4];
+							iter = reports.iterator() ;
+							//	logger.debug("Grand Total :" + grandTotal);
+							while ( iter.hasNext() )
+							{
+								Report report=(Report) iter.next();
+								Iterator advIter=report.getRecords().iterator();
+								while(advIter.hasNext())
+								{
+									org.digijava.module.aim.helper.AdvancedReport advancedReport=(org.digijava.module.aim.helper.AdvancedReport) advIter.next();
+									if(advancedReport.getAmpFund()!=null)
+									{
+										Iterator iterFund = advancedReport.getAmpFund().iterator();
+										for(int i=0;i<yearRange ;i++ )
+										{
+											for(int qtr=0;qtr<4;qtr++)
+											{
+												AmpFund ampFund=(AmpFund) iterFund.next();
+												if(measures.indexOf(new Long(1))!=-1)
+													totAcCommFunds[i][qtr]=totAcCommFunds[i][qtr] + Double.parseDouble(DecimalToText.removeCommas(ampFund.getCommAmount()));
+												if(measures.indexOf(new Long(2))!=-1)
+													totAcDisbFunds[i][qtr]=totAcDisbFunds[i][qtr] + Double.parseDouble(DecimalToText.removeCommas(ampFund.getDisbAmount()));
+												if(measures.indexOf(new Long(3))!=-1)
+													totAcExpFunds[i][qtr]=totAcExpFunds[i][qtr] + Double.parseDouble(DecimalToText.removeCommas(ampFund.getExpAmount()));
+												if(measures.indexOf(new Long(4))!=-1)
+													totPlCommFunds[i][qtr]=totPlCommFunds[i][qtr] + Double.parseDouble(DecimalToText.removeCommas(ampFund.getPlCommAmount()));
+												if(measures.indexOf(new Long(5))!=-1)
+													totPlDisbFunds[i][qtr]=totPlDisbFunds[i][qtr] + Double.parseDouble(DecimalToText.removeCommas(ampFund.getPlDisbAmount()));
+												if(measures.indexOf(new Long(6))!=-1)
+													totPlExpFunds[i][qtr]=totPlExpFunds[i][qtr] + Double.parseDouble(DecimalToText.removeCommas(ampFund.getPlExpAmount()));
+							
+						
+												actTotalCommit = actTotalCommit + Double.parseDouble(DecimalToText.removeCommas(ampFund.getCommAmount()));
+												actTotalDisb = actTotalDisb + Double.parseDouble(DecimalToText.removeCommas(ampFund.getDisbAmount()));
+												actTotalExp = actTotalExp + Double.parseDouble(DecimalToText.removeCommas(ampFund.getExpAmount()));
+												planTotalCommit = planTotalCommit  + Double.parseDouble(DecimalToText.removeCommas(ampFund.getPlCommAmount()));
+												planTotalDisb = planTotalDisb + Double.parseDouble(DecimalToText.removeCommas(ampFund.getPlDisbAmount()));
+												planTotalExp = planTotalExp + Double.parseDouble(DecimalToText.removeCommas(ampFund.getPlExpAmount()));
+												totUnDisb = totUnDisb + (Double.parseDouble(DecimalToText.removeCommas(ampFund.getCommAmount())) - Double.parseDouble(DecimalToText.removeCommas(ampFund.getDisbAmount())));
+											}
+										}	
+									}
+								}	
+							}
+							formBean.setTotFund(new ArrayList());
+							for(int i=0;i<yearRange ;i++ )
+							{	
+								for(int qtr=0;qtr<4;qtr++)
+								{	
+									AmpFund ampFund=new AmpFund();
+									if(measures.indexOf(new Long(1))!=-1)
+										ampFund.setCommAmount(mf.format(totAcCommFunds[i][qtr])); 
+									if(measures.indexOf(new Long(2))!=-1)
+										ampFund.setDisbAmount(mf.format(totAcDisbFunds[i][qtr])); 
+									if(measures.indexOf(new Long(3))!=-1)
+										ampFund.setExpAmount(mf.format(totAcExpFunds[i][qtr]));	
+									if(measures.indexOf(new Long(4))!=-1)
+										ampFund.setPlCommAmount(mf.format(totPlCommFunds[i][qtr])); 
+									if(measures.indexOf(new Long(5))!=-1)
+										ampFund.setPlDisbAmount(mf.format(totPlDisbFunds[i][qtr])); 
+									if(measures.indexOf(new Long(6))!=-1)
+										ampFund.setPlExpAmount(mf.format(totPlExpFunds[i][qtr]));	
+									formBean.getTotFund().add(ampFund);
+								}	
+							}
+
+							AmpFund fund = new AmpFund();
+							fund.setCommAmount(mf.format(actTotalCommit));
+							fund.setDisbAmount(mf.format(actTotalDisb));
+							fund.setExpAmount(mf.format(actTotalExp));
+							fund.setPlCommAmount(mf.format(planTotalCommit));
+							fund.setPlDisbAmount(mf.format(planTotalDisb));
+							fund.setPlExpAmount(mf.format(planTotalExp));
+							fund.setUnDisbAmount(mf.format(actTotalCommit-actTotalDisb));
+							formBean.getTotFund().add(fund);
+						}
+					}	
 					/*END CODE FOR GRAND TOTAL*/
 					logger.info("END CODE FOR GRAND TOTAL..............");
 

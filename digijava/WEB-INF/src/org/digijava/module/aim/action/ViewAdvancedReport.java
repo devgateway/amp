@@ -574,7 +574,7 @@ public class ViewAdvancedReport extends Action
 								planTotalCommit = planTotalCommit  + Double.parseDouble(DecimalToText.removeCommas(ampFund.getPlCommAmount()));
 								planTotalDisb = planTotalDisb + Double.parseDouble(DecimalToText.removeCommas(ampFund.getPlDisbAmount()));
 								planTotalExp = planTotalExp + Double.parseDouble(DecimalToText.removeCommas(ampFund.getPlExpAmount()));
-								totUnDisb = totUnDisb + Double.parseDouble(DecimalToText.removeCommas(ampFund.getUnDisbAmount()));
+								totUnDisb = totUnDisb + (Double.parseDouble(DecimalToText.removeCommas(ampFund.getCommAmount())) - Double.parseDouble(DecimalToText.removeCommas(ampFund.getDisbAmount())));
 
 							}	
 						}
@@ -656,7 +656,7 @@ public class ViewAdvancedReport extends Action
 									planTotalCommit = planTotalCommit  + Double.parseDouble(DecimalToText.removeCommas(ampFund.getPlCommAmount()));
 									planTotalDisb = planTotalDisb + Double.parseDouble(DecimalToText.removeCommas(ampFund.getPlDisbAmount()));
 									planTotalExp = planTotalExp + Double.parseDouble(DecimalToText.removeCommas(ampFund.getPlExpAmount()));
-									totUnDisb = totUnDisb + Double.parseDouble(DecimalToText.removeCommas(ampFund.getUnDisbAmount()));
+									totUnDisb = totUnDisb + (Double.parseDouble(DecimalToText.removeCommas(ampFund.getCommAmount())) - Double.parseDouble(DecimalToText.removeCommas(ampFund.getDisbAmount())));
 								}
 							}	
 						}

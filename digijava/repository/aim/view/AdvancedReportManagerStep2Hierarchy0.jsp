@@ -9,6 +9,7 @@
 <digi:instance property="aimAdvancedReportForm" />
 	<tr><td bgColor=#f4f4f2>
 	<TABLE width="100%" cellPadding=2 cellSpacing=0 vAlign="top" align="top" bgColor=#f4f4f2 border=1 style="border-collapse: collapse">
+
 	<logic:equal name="aimAdvancedReportForm" property="option" value="A">	
 	<tr bgcolor="#cccccc">
 	<c:if test="${!empty aimAdvancedReportForm.addedColumns}">
@@ -327,11 +328,9 @@
 			<bean:write name="records" property="ampId" /></td></logic:notEmpty>
 
 			<logic:notEmpty name="records" property="ampFund">
-			<% int i=0;%>
 			<logic:iterate name="records"  property="ampFund" id="ampFund" 	type="org.digijava.module.aim.helper.AmpFund">
 				<logic:iterate name="aimAdvancedReportForm"  property="addedMeasures" id="addedMeasures">
-					<%i = i + 1; 
-					%>					
+								
 					<c:if test="${addedMeasures.measureName == 'Actual Commitments'}">
 					<logic:equal name="aimAdvancedReportForm" property="acCommFlag" value="true">
 					<td align="right" height="21" width="69" >
@@ -393,20 +392,15 @@
 					</c:if>
 
 					<c:if test="${addedMeasures.measureName == 'Cumulative Balance'}">
-					<%
-						if(i > ((fcnt+1)*3))
-						{
-					%>
 					<logic:equal name="aimAdvancedReportForm" property="acBalFlag" value="true">
+					<logic:notEmpty name="ampFund" property="unDisbAmount">
 					<td align="right" height="21" width="69">
 					<logic:notEqual name="ampFund" property="unDisbAmount" value="0">
 					<bean:write name="ampFund" property="unDisbAmount" />
 					</logic:notEqual>
 					</td>
+					</logic:notEmpty>
 					</logic:equal>
-					<%
-						}
-					%>
 					</c:if>
 						
 				</logic:iterate>
@@ -416,20 +410,14 @@
 		</tr>
 	</logic:iterate>
 										
-	<bean:size name="aimAdvancedReportForm" property="addedColumns" id="mSize"/>
-	<%
-		int cnt = mSize.intValue();
-		cnt = cnt - 1;
-		int i =0;
-	%>              
+	    
 
 <!-- for colspan -->
-		 <bean:size name="aimAdvancedReportForm" property="addedColumns" id="cols"/>					
-	<tr background="#F4F4F2"><td align="right" colspan=<bean:write name="cols"/> > <b> Sub Total :</b></td>
-<!--	<td colspan="<%=cnt%>"> </td> -->
+	<bean:size name="aimAdvancedReportForm" property="addedColumns" id="cols"/>	 					
+	<tr background="#F4F4F2"><td colspan=<bean:write name="cols"/> align="right"> <b> Grand Total :</b></td>
+
 	<logic:iterate name="aimAdvancedReportForm"  property="totFund" id="totFund" type="org.digijava.module.aim.helper.AmpFund">
-		<%i = i + 1; 
-		%>		
+			
 		<logic:equal name="aimAdvancedReportForm" property="acCommFlag" value="true">
 		<td align="right" height="21" width="69" >
 		<logic:notEqual name="totFund" property="commAmount" value="0">
@@ -479,18 +467,13 @@
 		</logic:equal>
 
 		<logic:equal name="aimAdvancedReportForm" property="acBalFlag" value="true">
-		<%
-		if(i > ((cnt+1)*3))
-		{
-		%>
+		<logic:notEmpty name="totFund" property="unDisbAmount">
 		<td align="right" height="21" width="69" >
 		<logic:notEqual name="totFund" property="unDisbAmount" value="0">
 		<b><bean:write name="totFund" property="unDisbAmount" /></b>
 		</logic:notEqual>
 		</td>
-		<%
-		}
-		%>
+		</logic:notEmpty>
 		</logic:equal>
 	</logic:iterate>
 	</tr>																

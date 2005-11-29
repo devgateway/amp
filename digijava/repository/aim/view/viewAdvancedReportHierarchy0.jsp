@@ -173,9 +173,7 @@
 			<bean:write property="measureCount" name="aimAdvancedReportForm"/>
 		</bean:define>
 	
-		<% 
-			int i = 0;
-		%>
+		
 		<logic:notEmpty name="aimAdvancedReportForm" property="report"> 
 		<logic:iterate name="aimAdvancedReportForm"  property="report" id="report" type="org.digijava.module.aim.helper.Report">
 		<tr bgcolor="#F4F4F2">

@@ -659,8 +659,8 @@ function disable() {
 
 									<tr>
 										<td class="t-name" width="30%" align="right" bgcolor="#f4f4f2">
-											<digi:trn key="aim:regionalFundings">
-											Regional Fundings</digi:trn>
+											<digi:trn key="aim:regionalFunding">
+											Regional Funding</digi:trn>
 										</td>
 										<td bgcolor="#ffffff">
 											<c:if test="${!empty aimEditActivityForm.regionalFundings}">
@@ -994,7 +994,9 @@ function disable() {
 										<td bgcolor="#ffffff">
 											<c:if test="${!empty aimEditActivityForm.documentList}">
 												<table width="100%" cellSpacing="0" cellPadding="0">
-												<c:forEach var="docs" items="${aimEditActivityForm.documentList}">
+												<c:forEach var="relLinks" items="${aimEditActivityForm.documentList}">
+					   							<bean:define id="docs" name="relLinks" 
+													property="relLink" />
 													<tr><td>
 					   								<bean:define id="fileName" name="docs" 
 														property="fileName" />
@@ -1028,7 +1030,8 @@ function disable() {
 											</c:if>
 											<c:if test="${!empty aimEditActivityForm.linksList}">
 												<table width="100%" cellSpacing="0" cellPadding="0">
-												<c:forEach var="links" items="${aimEditActivityForm.linksList}">
+												<c:forEach var="relLinks" items="${aimEditActivityForm.linksList}">
+					   							<bean:define id="links" name="relLinks" property="relLink" />
 													<tr><td>
 														<table width="100%" cellPadding=1 cellSpacing=1>
 															<tr>

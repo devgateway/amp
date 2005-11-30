@@ -269,11 +269,11 @@ bgcolor="#006699">
 		<td>
 			<IMG alt=Link height=10 src="../ampTemplate/images/arrow-th-BABAB9.gif" width=15>
 			<bean:define id="translation">
-				<digi:trn key="aim:clickToAdd/UpdateRegionalFundings">Add / Update Regional Fundings</digi:trn>
+				<digi:trn key="aim:clickToAdd/UpdateRegionalFunding">Add / Update Regional Funding</digi:trn>
 			</bean:define>
 			<a href="javascript:gotoStep(4)" class="menu" title="<%=translation%>">
-						<digi:trn key="aim:regionalFundings">
-						Regional Fundings</digi:trn>
+						<digi:trn key="aim:regionalFunding">
+						Regional Funding</digi:trn>
 			</a>
 		</td>
 		</c:if>	
@@ -286,8 +286,8 @@ bgcolor="#006699">
 					<td bgcolor="#3399ff" height="19">
 					<IMG alt=Link height=10 src="../ampTemplate/images/arrow-th-BABAB9.gif" width=15>
 					<span class="textalb">
-						<digi:trn key="aim:regionalFundings">
-						Regional Fundings</digi:trn>
+						<digi:trn key="aim:regionalFunding">
+						Regional Funding</digi:trn>
 					</span>
 					</td>
 					<td width="10" height="19"  background="module/aim/images/right-arc.gif">

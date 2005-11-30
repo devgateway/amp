@@ -24,4 +24,3 @@ public class SelectDocument extends Action {
 		return mapping.findForward("forward");
 	}
 }
-

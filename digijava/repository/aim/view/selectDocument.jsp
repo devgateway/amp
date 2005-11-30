@@ -236,7 +236,13 @@
 											</a>
 										</td>
 									</tr>
-									</logic:equal>									
+									</logic:equal>
+									<tr>
+										<td colspan=2>
+											<html:checkbox property="showInHomePage" />
+											<digi:trn key="aim:showOnPersonalHomePage">Show on my personal home page</digi:trn>
+										</td>
+									</tr>
 									<tr>
 										<td align="center" colspan=2>
 											<table cellPadding=5>
@@ -249,7 +255,7 @@
 													</td>
 													<td>
 														<input type="button" value="Close" class="dr-menu"
-														onclick="closeWindow()">																										
+														onclick="closeWindow()">
 													</td>
 												</tr>
 											</table>

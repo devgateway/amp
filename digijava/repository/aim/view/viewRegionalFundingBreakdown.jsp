@@ -35,11 +35,11 @@
 													</c:set>
 													<c:set target="${url}" property="tabIndex" value="4"/>
 													<bean:define id="translation">
-															<digi:trn key="aim:clickToViewRegionalFundings">Click here to view regional fundings</digi:trn>
+															<digi:trn key="aim:clickToViewRegionalFunding">Click here to view regional funding</digi:trn>
 													</bean:define>
 													<digi:link href="/viewRegionalFundingBreakdown.do" name="url" 
 													styleClass="comment" title="<%=translation%>" >
-													<digi:trn key="aim:regionalFundings">Regional Fundings</digi:trn>
+													<digi:trn key="aim:regionalFunding">Regional Funding</digi:trn>
 													</digi:link>&nbsp;&gt;&nbsp;
 													<digi:trn key="aim:actOverview">Overview</digi:trn>&nbsp;&gt;&nbsp;
 													<bean:write name="aimRegionalFundingForm" property="perspective"/>
@@ -89,7 +89,7 @@
 												<TABLE border="0" cellpadding="0" cellspacing="0" bgcolor="#F4F4F2">
                         	<TR bgcolor="#F4F4F2"> 
                           	<TD bgcolor="#C9C9C7" class="box-title" height="17">&nbsp;&nbsp;
-															<digi:trn key="aim:regionalFundings">Regional Fundings</digi:trn>
+															<digi:trn key="aim:regionalFunding">Regional Funding</digi:trn>
 														</TD>
 	                          <TD background="module/aim/images/corner-r.gif" 
 														height=17 width=17></TD>

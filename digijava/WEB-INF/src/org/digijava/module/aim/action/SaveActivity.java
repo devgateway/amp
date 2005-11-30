@@ -26,9 +26,6 @@ import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
-import org.digijava.kernel.entity.ModuleInstance;
-import org.digijava.kernel.user.User;
-import org.digijava.kernel.util.RequestUtils;
 import org.digijava.module.aim.dbentity.AmpActivity;
 import org.digijava.module.aim.dbentity.AmpActivityClosingDates;
 import org.digijava.module.aim.dbentity.AmpActivityInternalId;
@@ -69,15 +66,13 @@ import org.digijava.module.aim.helper.Measures;
 import org.digijava.module.aim.helper.OrgProjectId;
 import org.digijava.module.aim.helper.PhysicalProgress;
 import org.digijava.module.aim.helper.RegionalFunding;
+import org.digijava.module.aim.helper.RelatedLinks;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.helper.UpdateDB;
 import org.digijava.module.aim.util.ActivityUtil;
-import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.TeamUtil;
 import org.digijava.module.aim.util.ProgramUtil;
-import org.digijava.module.cms.dbentity.CMS;
-import org.digijava.module.cms.dbentity.CMSContentItem;
 
 /**
  * SaveActivity class creates a 'AmpActivity' object and populate the fields
@@ -98,7 +93,6 @@ public class SaveActivity extends Action {
 
 		// if user has not logged in, forward him to the home page
 		if (session.getAttribute("currentMember") == null) {
-			logger.info("From here #1");
 			return mapping.findForward("index");
 		}
 
@@ -125,7 +119,6 @@ public class SaveActivity extends Action {
 		EditActivityForm eaForm = (EditActivityForm) form;
 
 		if (eaForm.getPageId() < 0 || eaForm.getPageId() > 1) {
-			logger.info("From here #2");
 			return mapping.findForward("index");
 		}
 
@@ -136,7 +129,7 @@ public class SaveActivity extends Action {
 				AmpActivity act = ActivityUtil.getActivityByName(eaForm.getTitle());
 				if (act != null) {
 					eaForm.setActivityId(act.getAmpActivityId());
-					logger.debug("Forwarding to activityExist");
+					logger.debug("Activity with the name " + eaForm.getTitle() + " already exist.");
 					return mapping.findForward("activityExist");
 				}
 			}
@@ -210,6 +203,9 @@ public class SaveActivity extends Action {
 		    }
 		}
 		// end of Modified code
+		
+		
+		
 
 		activity.setAmpId(eaForm.getAmpId());
 		activity.setName(eaForm.getTitle());
@@ -427,8 +423,7 @@ public class SaveActivity extends Action {
 				if (ampLoc == null) {
 					ampLoc = new AmpLocation();
 					ampLoc.setCountry(loc.getCountry());
-					ampLoc
-							.setDgCountry(DbUtil.getDgCountry(loc
+					ampLoc.setDgCountry(DbUtil.getDgCountry(loc
 									.getCountryId()));
 					ampLoc.setRegion(loc.getRegion());
 					ampLoc.setAmpRegion(DbUtil.getAmpRegion(loc.getRegionId()));
@@ -450,78 +445,21 @@ public class SaveActivity extends Action {
 			}
 		}
 
-		// get cms and user details
-		ModuleInstance moduleInstance = RequestUtils.getModuleInstance(request);
-		String siteId;
-		String instanceId;
-
-		User user = RequestUtils.getUser(request);
-
-		if (moduleInstance.getRealInstance() == null) {
-			siteId = moduleInstance.getSite().getSiteId();
-			instanceId = moduleInstance.getInstanceName();
-		} else {
-			siteId = moduleInstance.getRealInstance().getSite().getSiteId();
-			instanceId = moduleInstance.getRealInstance().getInstanceName();
-		}
-
-		CMS cms = org.digijava.module.cms.util.DbUtil.getCMSItem(siteId,
-				instanceId);
-
-		// set documents & links
-		Set docs = new HashSet();
+		Collection relatedLinks = new ArrayList();
 		if (eaForm.getDocumentList() != null) {
 			Iterator itr = eaForm.getDocumentList().iterator();
 			while (itr.hasNext()) {
-				CMSContentItem cmsDoc = (CMSContentItem) itr.next();
-				CMSContentItem cmsItem = new CMSContentItem(cms);
-				cmsItem.setContentType(cmsDoc.getContentType());
-				if (cmsDoc.getDescription() == null
-						|| cmsDoc.getDescription().trim().length() == 0) {
-					cmsItem.setDescription(" ");
-				} else {
-					cmsItem.setDescription(cmsDoc.getDescription());
-				}
-				if (cmsDoc.getFile() == null) {
-					byte file[] = new byte[1];
-					file[0] = 0;
-					cmsItem.setFile(file);
-				} else {
-					cmsItem.setFile(cmsDoc.getFile());
-				}
-				cmsItem.setIsFile(true);
-				cmsItem.setFileName(cmsDoc.getFileName());
-				cmsItem.setTitle(cmsDoc.getTitle());
-				cmsItem.setAuthorUser(user);
-				cmsItem.setPublished(true);
-				docs.add(cmsItem);
+				RelatedLinks rl = (RelatedLinks) itr.next();
+				relatedLinks.add(rl);
 			}
 		}
 		if (eaForm.getLinksList() != null) {
 			Iterator itr = eaForm.getLinksList().iterator();
-			if (itr.hasNext()) {
-				CMSContentItem cmsDoc = (CMSContentItem) itr.next();
-				CMSContentItem cmsItem = new CMSContentItem(cms);
-				cmsItem.setContentType(cmsDoc.getContentType());
-				if (cmsDoc.getDescription() == null
-						|| cmsDoc.getDescription().trim().length() == 0) {
-					cmsItem.setDescription(" ");
-				} else {
-					cmsItem.setDescription(cmsDoc.getDescription());
-				}
-				byte file[] = new byte[1];
-				file[0] = 0;
-				cmsItem.setFile(file);
-
-				cmsItem.setIsFile(false);
-				cmsItem.setTitle(cmsDoc.getTitle());
-				cmsItem.setAuthorUser(user);
-				cmsItem.setUrl(cmsDoc.getUrl());
-				cmsItem.setPublished(true);
-				docs.add(cmsItem);
+			while (itr.hasNext()) {
+				RelatedLinks rl = (RelatedLinks) itr.next();
+				relatedLinks.add(rl);
 			}
 		}
-		activity.setDocuments(docs);
 
 		// if the activity is being added from a users workspace, associate the
 		// activity with the team of the current member.
@@ -564,7 +502,6 @@ public class SaveActivity extends Action {
 				ampComponent.setComponentFundings(new HashSet());
 
 				if (comp.getCommitments() != null && comp.getCommitments().size() > 0) {
-					logger.debug("Component Funding - Commitments size :" + comp.getCommitments().size());
 					Iterator itr2 = comp.getCommitments().iterator();
 					while (itr2.hasNext()) {
 						AmpComponentFunding ampCompFund = new AmpComponentFunding();
@@ -596,7 +533,6 @@ public class SaveActivity extends Action {
 				}
 				
 				if (comp.getDisbursements() != null && comp.getDisbursements().size() > 0) {
-					logger.debug("Component Funding - Disbursements size :" + comp.getDisbursements().size());					
 					Iterator itr2 = comp.getDisbursements().iterator();
 					while (itr2.hasNext()) {
 						AmpComponentFunding ampCompFund = new AmpComponentFunding();
@@ -628,7 +564,6 @@ public class SaveActivity extends Action {
 				}				
 				
 				if (comp.getExpenditures() != null && comp.getExpenditures().size() > 0) {
-					logger.debug("Component Fundings - Expenditures size :" + comp.getExpenditures().size());					
 					Iterator itr2 = comp.getExpenditures().iterator();
 					while (itr2.hasNext()) {
 						AmpComponentFunding ampCompFund = new AmpComponentFunding();
@@ -684,7 +619,6 @@ public class SaveActivity extends Action {
 					}
 				}
 				ampComponent.setPhysicalProgress(phyProgess);
-				logger.debug("Component have " + ampComponent.getComponentFundings().size() + " elements!");
 				activity.getComponents().add(ampComponent);
 			}
 		}
@@ -768,7 +702,6 @@ public class SaveActivity extends Action {
 				RegionalFunding regFund = (RegionalFunding) itr1.next();
 				if (regFund.getCommitments() != null &&
 						regFund.getCommitments().size() > 0) {
-					logger.debug("Reg. Fund - Commitments size :" + regFund.getCommitments().size());
 					Iterator itr2 = regFund.getCommitments().iterator();
 					while (itr2.hasNext()) {
 						AmpRegionalFunding ampRegFund = new AmpRegionalFunding();
@@ -809,7 +742,6 @@ public class SaveActivity extends Action {
 				
 				if (regFund.getDisbursements() != null &&
 						regFund.getDisbursements().size() > 0) {
-					logger.debug("Reg. Fund - Disbursements size :" + regFund.getDisbursements().size());					
 					Iterator itr2 = regFund.getDisbursements().iterator();
 					while (itr2.hasNext()) {
 						AmpRegionalFunding ampRegFund = new AmpRegionalFunding();
@@ -850,7 +782,7 @@ public class SaveActivity extends Action {
 				
 				if (regFund.getExpenditures() != null &&
 						regFund.getExpenditures().size() > 0) {
-					logger.debug("Reg. Fund - Expenditures size :" + regFund.getExpenditures().size());					
+			
 					Iterator itr2 = regFund.getExpenditures().iterator();
 					while (itr2.hasNext()) {
 						AmpRegionalFunding ampRegFund = new AmpRegionalFunding();
@@ -940,12 +872,14 @@ public class SaveActivity extends Action {
 		Long field = null;
 		if (eaForm.getField() != null)
 			field = eaForm.getField().getAmpFieldId();
+		
 		if (eaForm.isEditAct()) {
 			// Setting approval status of activity
 			activity.setApprovalStatus(eaForm.getApprovalStatus());
 			// update an existing activity
-			ActivityUtil.saveActivity(activity, eaForm.getActivityId(), true, eaForm.getCommentsCol(), eaForm.isSerializeFlag(), field);
-			
+			ActivityUtil.saveActivity(activity, eaForm.getActivityId(), true, 
+					eaForm.getCommentsCol(), eaForm.isSerializeFlag(), field,
+					relatedLinks,tm.getMemberId());
 			// remove the activity details from the edit activity list
 			if (toDelete == null || (!toDelete.trim().equalsIgnoreCase("true"))) {
 				ServletContext ampContext = getServlet().getServletContext();
@@ -966,7 +900,9 @@ public class SaveActivity extends Action {
 			// Setting approval status of activity
 			activity.setApprovalStatus(eaForm.getApprovalStatus());
 			// create a new activity
-			ActivityUtil.saveActivity(activity, eaForm.getCommentsCol(), eaForm.isSerializeFlag(), field);
+			ActivityUtil.saveActivity(activity, eaForm.getCommentsCol(), 
+					eaForm.isSerializeFlag(), field,
+					relatedLinks,tm.getMemberId());
 		}
 
 		eaForm.setStep("1");

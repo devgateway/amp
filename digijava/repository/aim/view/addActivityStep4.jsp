@@ -167,8 +167,8 @@
 														<tr>
 															<td width="13" height="20" background="module/aim/images/left-side.gif"></td>
 															<td vAlign="center" align ="center" class="textalb" height="20" bgcolor="#006699">
-																<digi:trn key="aim:step4of8RegionalFundings">
-																	Step 4 of 8: Regional Fundings
+																<digi:trn key="aim:step4of8RegionalFunding">
+																	Step 4 of 8: Regional Funding
 															</digi:trn>
 															</td>
 															<td width="13" height="20" background="module/aim/images/right-side.gif"></td>
@@ -187,8 +187,8 @@
 																		<td>
 																			<IMG alt=Link height=10 
 																			src="../ampTemplate/images/arrow-014E86.gif" width=15>
-																			<a title="<digi:trn key="aim:regionalFundings">Regional fundings</digi:trn>">
-																				<b><digi:trn key="aim:regionalFundings">Regional fundings</digi:trn></b>
+																			<a title="<digi:trn key="aim:regionalFunding">Regional funding</digi:trn>">
+																				<b><digi:trn key="aim:regionalFunding">Regional funding</digi:trn></b>
 																			</a>
 																		</td>
 																	</tr>

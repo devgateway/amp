@@ -5,7 +5,6 @@
 
 package org.digijava.module.aim.util;
 
-import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
@@ -50,9 +49,10 @@ import org.digijava.module.aim.helper.Location;
 import org.digijava.module.aim.helper.Measures;
 import org.digijava.module.aim.helper.PhysicalProgress;
 import org.digijava.module.aim.helper.RelOrganization;
-import org.digijava.module.aim.helper.TeamMember;
-
-import sun.security.krb5.internal.ac;
+import org.digijava.module.aim.helper.RelatedLinks;
+import org.digijava.module.cms.dbentity.CMSContentItem;
+import org.digijava.module.cms.exception.CMSException;
+import org.digijava.module.cms.util.DbUtil;
 
 /**
  * ActivityUtil is the persister class for all activity related 
@@ -69,13 +69,14 @@ public class ActivityUtil {
 	 * This function is used to create a new activity
 	 * @param activity The activity to be persisted
 	 */
-	public static void saveActivity(AmpActivity activity, ArrayList commentsCol,boolean serializeFlag, Long field) {
+	public static void saveActivity(AmpActivity activity, ArrayList commentsCol,
+			boolean serializeFlag, Long field,Collection relatedLinks,Long memberId) {
 		/*
 		 * calls saveActivity(AmpActivity activity,Long oldActivityId,boolean edit)
 		 * by passing null and false to the parameters oldActivityId and edit respectively
 		 * since this is creating a new activity
 		 */
-		saveActivity(activity,null,false,commentsCol,serializeFlag,field);
+		saveActivity(activity,null,false,commentsCol,serializeFlag,field,relatedLinks,memberId);
 	}
 	
 	/**
@@ -91,7 +92,9 @@ public class ActivityUtil {
 	 * @param edit This boolean variable represents whether to create a new
 	 * activity object or to update the existing activity object
 	 */
-	public static void saveActivity(AmpActivity activity,Long oldActivityId,boolean edit,ArrayList commentsCol,boolean serializeFlag, Long field) {
+	public static void saveActivity(AmpActivity activity,Long oldActivityId,boolean edit,
+			ArrayList commentsCol,boolean serializeFlag, Long field,
+			Collection relatedLinks,Long memberId) {
 		logger.debug("In save activity " + activity.getName());
 		Session session = null;
 		Transaction tx = null;
@@ -129,6 +132,7 @@ public class ActivityUtil {
 					}
 				}
 				
+				/* delete previous regional fundings */
 				fundSet = oldActivity.getRegionalFundings();
 				if (fundSet != null) {
 					Iterator fundSetItr = fundSet.iterator();
@@ -144,25 +148,6 @@ public class ActivityUtil {
 					Iterator compItr = comp.iterator();
 					while (compItr.hasNext()) {
 						AmpComponent ampComp = (AmpComponent) compItr.next();
-
-						/*
-						Set compFund = ampComp.getComponentFundings();
-						if (compFund != null) {
-							Iterator cfItr = compFund.iterator();
-							while (cfItr.hasNext()) {
-								AmpComponentFundings cf = (AmpComponentFundings) cfItr.next();
-								session.delete(cf);
-							}
-						}						
-						
-						Set phyProg = ampComp.getPhysicalProgress();
-						if (phyProg != null) {
-							Iterator phyProgItr = phyProg.iterator();
-							while (phyProgItr.hasNext()) {
-								AmpPhysicalPerformance phyProf = (AmpPhysicalPerformance) phyProgItr.next();
-								session.delete(phyProf);
-							}
-						}*/
 						session.delete(ampComp);
 					}
 				}
@@ -195,11 +180,11 @@ public class ActivityUtil {
 						AmpIssues issue = (AmpIssues) iItr.next();
 						session.delete(issue);
 					}
-				}								
-				
+				}	
+
 				/* delete all previous comments */
 				if (!commentsCol.isEmpty()) {
-					ArrayList col = DbUtil.getAllCommentsByField(field,oldActivity.getAmpActivityId());
+					ArrayList col = org.digijava.module.aim.util.DbUtil.getAllCommentsByField(field,oldActivity.getAmpActivityId());
 					logger.debug("col.size() [Inside deleting]: " + col.size());
 						if (col != null) {
 							Iterator itr = col.iterator();
@@ -251,7 +236,7 @@ public class ActivityUtil {
 				oldActivity.setUpdatedDate(activity.getUpdatedDate());
 				oldActivity.setClosingDates(activity.getClosingDates());
 				oldActivity.setComponents(activity.getComponents());
-				oldActivity.setDocuments(activity.getDocuments());
+				//oldActivity.setDocuments(activity.getDocuments());
 				oldActivity.setFunding(activity.getFunding());
 				oldActivity.setRegionalFundings(activity.getRegionalFundings());
 				
@@ -263,6 +248,37 @@ public class ActivityUtil {
 				
 				oldActivity.setApprovalStatus(activity.getApprovalStatus());
 			}
+
+			Iterator itr = relatedLinks.iterator();
+			AmpTeamMember member = (AmpTeamMember) session.load(AmpTeamMember.class,memberId);
+			while (itr.hasNext()) {
+				RelatedLinks rl = (RelatedLinks) itr.next();
+				CMSContentItem temp = (CMSContentItem) session.get(CMSContentItem.class, new Long(rl.getRelLink().getId()));
+				if (temp == null) {
+					logger.debug("Item doesn't exist. Creating the CMS item");
+					temp = rl.getRelLink();					 
+					session.save(temp);
+				}
+				logger.debug("CMS item = " + temp.getId());
+				if (rl.isShowInHomePage()) {
+					if (member.getLinks() == null) 
+						member.setLinks(new HashSet());
+					member.getLinks().add(temp);					
+				}
+				
+				if (edit) {
+					if (oldActivity.getDocuments() == null) {
+						oldActivity.setDocuments(new HashSet());
+					}
+					oldActivity.getDocuments().add(temp);
+				} else {
+					if (activity.getDocuments() == null) {
+						activity.setDocuments(new HashSet());
+					}
+					activity.getDocuments().add(temp);					
+				}
+			}
+			session.saveOrUpdate(member);			
 			
 			
 			/* Persists the activity */
@@ -282,7 +298,7 @@ public class ActivityUtil {
 					qry = session.createQuery(queryString);
 					qry.setParameter("teamId", teamId, Hibernate.LONG);
 					Iterator tmItr = qry.list().iterator();
-					AmpTeamMember member = new AmpTeamMember();
+					member = new AmpTeamMember();
 					while (tmItr.hasNext()) {
 						member = (AmpTeamMember) tmItr.next();
 						if (!member.getAmpMemberRole().getTeamHead().booleanValue()) {
@@ -303,7 +319,7 @@ public class ActivityUtil {
 			    }
 
 				activity.getMember().add(activity.getActivityCreator());
-				AmpTeamMember member = (AmpTeamMember) session.load(AmpTeamMember.class,
+				member = (AmpTeamMember) session.load(AmpTeamMember.class,
 				        activity.getActivityCreator().getAmpTeamMemId());
 				if (member.getActivities() == null) {
 				    member.setActivities(new HashSet());
@@ -313,6 +329,8 @@ public class ActivityUtil {
 				session.saveOrUpdate(member);
 			}
 			
+
+			
 			/* Persists comments, of type AmpComments, related to the activity */
 			if (!commentsCol.isEmpty()) {
 				logger.debug("commentsCol.size() [Inside Persisting]: " + commentsCol.size());
@@ -321,7 +339,7 @@ public class ActivityUtil {
 				if (edit && serializeFlag)
 					flag = false; */
 				logger.debug("flag [Inside Persisting comments]: " + flag);
-				Iterator itr = commentsCol.iterator();
+				itr = commentsCol.iterator();
 				while (itr.hasNext()) {
 					AmpComments comObj = (AmpComments) itr.next();
 					comObj.setAmpActivityId(activity);

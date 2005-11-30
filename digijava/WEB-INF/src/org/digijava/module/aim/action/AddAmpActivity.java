@@ -26,7 +26,6 @@ import org.digijava.module.aim.util.ProgramUtil;
 import org.digijava.module.editor.dbentity.Editor;
 import org.digijava.module.editor.util.Constants;
 
-
 public class AddAmpActivity extends Action {
 	
 	private static Logger logger = Logger.getLogger(AddAmpActivity.class);
@@ -48,8 +47,6 @@ public class AddAmpActivity extends Action {
 
 		try {
 		
-		//String fileName = getRealPath(memId);
-
 		if (!eaForm.isEditAct() || eaForm.isReset()) {
 			eaForm.reset(mapping, request);
 		}

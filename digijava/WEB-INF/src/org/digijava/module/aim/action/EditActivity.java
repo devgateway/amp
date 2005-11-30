@@ -52,6 +52,7 @@ import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.CurrencyWorker;
 import org.digijava.module.aim.helper.DateConversion;
 import org.digijava.module.aim.helper.DecimalToText;
+import org.digijava.module.aim.helper.Documents;
 import org.digijava.module.aim.helper.Funding;
 import org.digijava.module.aim.helper.FundingDetail;
 import org.digijava.module.aim.helper.FundingOrganization;
@@ -61,9 +62,11 @@ import org.digijava.module.aim.helper.Measures;
 import org.digijava.module.aim.helper.OrgProjectId;
 import org.digijava.module.aim.helper.PhysicalProgress;
 import org.digijava.module.aim.helper.RegionalFunding;
+import org.digijava.module.aim.helper.RelatedLinks;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.ActivityUtil;
 import org.digijava.module.aim.util.DbUtil;
+import org.digijava.module.aim.util.TeamUtil;
 import org.digijava.module.cms.dbentity.CMSContentItem;
 
 /**
@@ -593,6 +596,7 @@ public class EditActivity extends Action {
 					eaForm.setSelectedComponents(comp);
 				} 
 
+				Collection memLinks = TeamUtil.getMemberLinks(tm.getMemberId());
 				Collection actDocs = activity.getDocuments();
 				if (actDocs != null && actDocs.size() > 0) {
 					Collection docsList = new ArrayList();
@@ -600,11 +604,24 @@ public class EditActivity extends Action {
 
 					Iterator docItr = actDocs.iterator();
 					while (docItr.hasNext()) {
+						RelatedLinks rl = new RelatedLinks();
+						
 						CMSContentItem cmsItem = (CMSContentItem) docItr.next();
+						rl.setRelLink(cmsItem);
+						rl.setMember(DbUtil.getAmpTeamMember(tm.getMemberId()));
+						Iterator tmpItr = memLinks.iterator();
+						while (tmpItr.hasNext()) {
+							Documents doc = (Documents) tmpItr.next();
+							if (doc.getDocId().longValue() == cmsItem.getId()) {
+								rl.setShowInHomePage(true);
+								break;
+							}
+						}
+						
 						if (cmsItem.getIsFile()) {
-							docsList.add(cmsItem);
+							docsList.add(rl);
 						} else {
-							linksList.add(cmsItem);
+							linksList.add(rl);
 						}
 					}
 					eaForm.setDocumentList(docsList);

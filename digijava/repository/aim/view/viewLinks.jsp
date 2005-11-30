@@ -6,6 +6,7 @@
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
 
+<digi:context name="digiContext" property="context" />
 
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/relatedLinks.js"/>"></script>
 
@@ -76,40 +77,29 @@ function editLinks(id,nm,ln) {
 									<b>No Links</b>
 								</logic:empty>
 								<logic:notEmpty name="aimMyDesktopForm" property="documents">
-								<table width="100%" cellPadding=2 cellSpacing=0>
-									<% int i = 0; %>
-									<logic:iterate name="aimMyDesktopForm" property="documents" id="link">
-									<% if ((i % 2) == 0) { %>
-									<tr class="rowNormal">
-									<% } else { %>
-									<tr class="rowAlternate">
-									<% } i++; %>
-										<td width="3%" valign=top>
-											<html:multibox property="selLinks">
-												<c:out value="${link.docId}"/>
-											</html:multibox>
-										</td>
-										<td>
-											<table width="100%" cellPadding=2 cellSpacing=1>
-												<tr><td><c:out value="${link.title}"/></td></tr>
-												<tr><td>&nbsp;&nbsp;&nbsp;&nbsp;
-													<a href="<c:out value="${link.url}"/>" target="_blank">
-														<c:out value="${link.url}"/></a>
-												</td></tr>
-											</table>
-										</td>
-										<td width="50" align="center" valign=top>
-											<a href="javascript:editLinks('<c:out value="${link.docId}"/>','<c:out value="${link.title}"/>','<c:out value="${link.url}"/>')">
-											Edit</a>
-										</td>
-									</tr>
+									<table width="100%" cellPadding=5 cellSpacing=1 bgcolor="#aaaaaa">
+									<logic:iterate name="aimMyDesktopForm" property="documents"
+									id="document">
+										<tr bgcolor="#f4f4f2">
+											<td>
+												Title: <b><c:out value="${document.title}"/></b><br>
+												<c:if test="${!empty document.docDescription}">
+													Description: <c:out value="${document.docDescription}"/><br>
+												</c:if>
+												<c:if test="${document.isFile == false}">
+													<i>URL :
+													<a href="<c:out value="${document.url}"/>" target="_blank">
+													<c:out value="${document.url}"/></a></i>												
+												</c:if>
+												<c:if test="${document.isFile == true}">
+													<i>File :
+													<a href="<%=digiContext%>/cms/downloadFile.do?itemId=<c:out value="${document.docId}"/>">
+													<c:out value="${document.fileName}"/></i></a>
+												</c:if>												
+											</td>	
+										</tr>
 									</logic:iterate>
-									<tr>
-										<td colspan="3" align="center">
-											<html:submit value="Remove Selected Links" styleClass="buton"/>
-										</td>
-									</tr>
-								</table>
+									</table>
 								</logic:notEmpty>
 							</td>
 						</tr>

@@ -450,8 +450,8 @@
 
 									<tr>
 										<td width="30%" align="right" bgcolor="#ffffff">
-											<b><digi:trn key="aim:regionalFundings">
-											Regional Fundings</digi:trn></b>
+											<b><digi:trn key="aim:regionalFunding">
+											Regional Funding</digi:trn></b>
 										</td>
 										<td bgcolor="#ffffff">
 											<c:if test="${!empty aimEditActivityForm.regionalFundings}">

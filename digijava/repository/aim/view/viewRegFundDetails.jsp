@@ -36,11 +36,11 @@
 													<c:set target="${url}" property="tabIndex" value="4"/>
                    				<c:set target="${url}" property="regionId" value="-1"/>
 													<bean:define id="translation">
-															<digi:trn key="aim:clickToViewRegionalFundings">Click here to view regional fundings</digi:trn>
+															<digi:trn key="aim:clickToViewRegionalFunding">Click here to view regional funding</digi:trn>
 													</bean:define>
 													<digi:link href="/viewRegionalFundingBreakdown.do" name="url" 
 													styleClass="comment" title="<%=translation%>" >
-													<digi:trn key="aim:regionalFundings">Regional Fundings</digi:trn>
+													<digi:trn key="aim:regionalFunding">Regional Funding</digi:trn>
 													</digi:link>&nbsp;&gt;&nbsp;
 													<digi:trn key="aim:details">Details</digi:trn>&nbsp;&gt;&nbsp;
 													<bean:write name="aimRegionalFundingForm" property="perspective"/>

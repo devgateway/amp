@@ -285,7 +285,8 @@ function removeSelLinks() {
 										<logic:notEmpty name="aimEditActivityForm" property="documentList">
 											<table width="100%" cellSpacing=1 cellPadding=5 class="box-border-nopadding">
 												<logic:iterate name="aimEditActivityForm" property="documentList"
-												id="selDocuments" type="org.digijava.module.cms.dbentity.CMSContentItem">
+												id="relLinks" type="org.digijava.module.aim.helper.RelatedLinks">
+												<bean:define name="relLinks" id="selDocuments" property="relLink" />
 												<tr>
 													<td>
 														<html:multibox property="selDocs">
@@ -357,7 +358,8 @@ function removeSelLinks() {
 										<logic:notEmpty name="aimEditActivityForm" property="linksList">
 											<table width="100%" cellSpacing=1 cellPadding=5 class="box-border-nopadding">
 												<logic:iterate name="aimEditActivityForm" property="linksList"
-												id="selWebLinks" type="org.digijava.module.cms.dbentity.CMSContentItem">
+												id="relLinks" type="org.digijava.module.aim.helper.RelatedLinks">
+												<bean:define name="relLinks" id="selWebLinks" property="relLink" />
 												<tr>
 													<td>
 														<html:multibox property="selLinks">
@@ -366,7 +368,7 @@ function removeSelLinks() {
 														<bean:write name="selWebLinks" property="title" /> - 
 														<a href="<bean:write name="selWebLinks" property="url" />" target="_blank">
 														<bean:write name="selWebLinks" property="url" /></a><br>
-													<b>Desc:</b><bean:write name="selDocuments" property="description" />
+													<b>Desc:</b><bean:write name="selWebLinks" property="description" />
 													</td>
 												</tr>
 												</logic:iterate>

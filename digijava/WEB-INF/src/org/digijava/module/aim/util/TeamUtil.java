@@ -847,23 +847,20 @@ public class TeamUtil {
 
 		try {
 			session = PersistenceManager.getSession();
-			
-			String qryStr = "select a.id,b.title,b.url from amp_member_links a,dg_cms_content_item b " +
-					"where amp_team_mem_id = " + memberId + " and a.id = b.id";
-			Connection con = session.connection();
-			Statement stmt = con.createStatement();
-			ResultSet rs = stmt.executeQuery(qryStr);
-			while (rs.next()) {
+			AmpTeamMember tm = (AmpTeamMember) session.load(AmpTeamMember.class,
+					memberId);
+			Iterator itr = tm.getLinks().iterator();
+			while (itr.hasNext()) {
+				CMSContentItem cmsItem = (CMSContentItem) itr.next();
 				Documents document = new Documents();
-				document.setDocId(new Long(rs.getLong(1)));
-				document.setTitle(rs.getString(2));
-				document.setIsFile(false);
-				document.setUrl(rs.getString(3));
-				col.add(document);			    
+				document.setDocId(new Long(cmsItem.getId()));
+				document.setTitle(cmsItem.getTitle());
+				document.setIsFile(cmsItem.getIsFile());
+				document.setFileName(cmsItem.getFileName());
+				document.setUrl(cmsItem.getUrl());
+				document.setDocDescription(cmsItem.getDescription());
+				col.add(document);
 			}
-			rs.close();
-			stmt.close();
-			session.disconnect();
 		} catch (Exception e) {
 			logger.error("Unable to get Member links" + e.getMessage());
 			e.printStackTrace(System.out);

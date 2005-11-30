@@ -8,12 +8,18 @@ package org.digijava.module.aim.action;
 import java.util.ArrayList;
 import java.util.Collection;
 
+import javax.servlet.http.HttpSession;
+
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.upload.FormFile;
+import org.digijava.module.admin.util.DbUtil;
 import org.digijava.module.aim.form.EditActivityForm;
+import org.digijava.module.aim.helper.RelatedLinks;
+import org.digijava.module.aim.helper.TeamMember;
+import org.digijava.module.aim.util.TeamUtil;
 import org.digijava.module.cms.dbentity.CMSContentItem;
 
 public class DocumentSelected extends Action {
@@ -25,6 +31,9 @@ public class DocumentSelected extends Action {
 			javax.servlet.http.HttpServletResponse response) throws java.lang.Exception {
 
 		EditActivityForm eaForm = (EditActivityForm) form;
+		
+		HttpSession session = request.getSession();
+		TeamMember tm = (TeamMember) session.getAttribute("currentMember");
 
 		if (eaForm.getDocFileOrLink().equals("file")) {
 			if (eaForm.getDocTitle() == null || eaForm.getDocTitle().trim().length() == 0 ||
@@ -40,11 +49,13 @@ public class DocumentSelected extends Action {
 		
 		CMSContentItem cmsItem = new CMSContentItem();
 		
-		Collection prevDocs = null;
-		Collection newDocs = new ArrayList();
-		
 		cmsItem.setTitle(eaForm.getDocTitle());
-		cmsItem.setDescription(eaForm.getDocDescription());
+		if (eaForm.getDocDescription() == null ||
+				eaForm.getDocDescription().trim().length() == 0) {
+			cmsItem.setDescription(" ");
+		} else {
+			cmsItem.setDescription(eaForm.getDocDescription());	
+		}
 		
 		if (eaForm.getDocFileOrLink().equals("file")) {
 			cmsItem.setIsFile(true);
@@ -55,12 +66,12 @@ public class DocumentSelected extends Action {
 			        cmsItem.setFile(formFile.getFileData());
 			        cmsItem.setContentType(formFile.getContentType());
 				} else {
-			        cmsItem.setFile(null);
+					byte[] temp = {0};
+			        cmsItem.setFile(temp);
 			        cmsItem.setFileName(null);
 			        cmsItem.setContentType(null);
 			    }
 			}
-			prevDocs = eaForm.getDocumentList();
 		} else {
 			cmsItem.setIsFile(false);
 			String url = eaForm.getDocWebResource();
@@ -74,27 +85,28 @@ public class DocumentSelected extends Action {
 			}
 			
 			cmsItem.setUrl(url);
-			prevDocs = eaForm.getLinksList();
+			byte[] temp = {0};
+			cmsItem.setFile(temp);
 		}
 		
-		// add the cms item to the collection.
-
-		long id = 1;
-		if (prevDocs != null) { // there was some documents/links selected earlier
-			newDocs.addAll(prevDocs);
-			id = prevDocs.size() + 1;
-		}
+		cmsItem.setId(System.currentTimeMillis());
+		RelatedLinks rl = new RelatedLinks();
+		rl.setShowInHomePage(eaForm.isShowInHomePage());
+		rl.setRelLink(cmsItem);
+		rl.setMember(org.digijava.module.aim.util.DbUtil.getAmpTeamMember(tm.getMemberId()));
 		
-		cmsItem.setId(id);
-		newDocs.add(cmsItem);
-		 
-
+		
 		if (cmsItem.getIsFile()) {
-			eaForm.setDocumentList(newDocs);
+			if (eaForm.getDocumentList() == null) {
+				eaForm.setDocumentList(new ArrayList());
+			}
+			eaForm.getDocumentList().add(rl);
 		} else {
-			eaForm.setLinksList(newDocs);
+			if (eaForm.getLinksList() == null) {
+				eaForm.setLinksList(new ArrayList());
+			}
+			eaForm.getLinksList().add(rl);
 		}
-		
 		return mapping.findForward("forward");
 	}
 }

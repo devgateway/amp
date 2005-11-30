@@ -236,6 +236,7 @@ public class EditActivityForm extends ActionForm implements Serializable{
 	private String docDescription;
 	private String docFileOrLink;
 	private boolean docReset;
+	private boolean showInHomePage;
 	private int pageId;
 	private boolean editAct;
 	
@@ -244,8 +245,7 @@ public class EditActivityForm extends ActionForm implements Serializable{
 	private String componentTitle;
 	private String componentDesc;
 	private String componentAmount;
-//	private collection components;
-//	private Long[] selCompFundings;
+	
 	private String currencyCode;
 	private String componentRepDate;
 	private Long componentId;
@@ -447,6 +447,7 @@ public class EditActivityForm extends ActionForm implements Serializable{
 			docWebResource = null;
 			docTitle = null;
 			docDescription = null;
+			showInHomePage = false;
 		}
 		if (componentReset) {
 			componentTitle = null;
@@ -3003,5 +3004,19 @@ public class EditActivityForm extends ActionForm implements Serializable{
 	 */
 	public void setWorkingTeamLeadFlag(String workingTeamLeadFlag) {
 		this.workingTeamLeadFlag = workingTeamLeadFlag;
+	}
+
+	/**
+	 * @return Returns the showInHomePage.
+	 */
+	public boolean isShowInHomePage() {
+		return showInHomePage;
+	}
+
+	/**
+	 * @param showInHomePage The showInHomePage to set.
+	 */
+	public void setShowInHomePage(boolean showInHomePage) {
+		this.showInHomePage = showInHomePage;
 	}
 }

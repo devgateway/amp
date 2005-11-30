@@ -122,7 +122,7 @@
 														<option value="0" selected="true">Planned</option>
 													</c:if>					
 												</select>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="text" name="<%=field2%>" 
-												value="<c:out value="${comm.transactionAmount}"/>" size="15" class="inp-text" align="right">&nbsp;<select name="<%=field3%>" class="inp-text">
+												value="<c:out value="${comm.transactionAmount}"/>" size="15"  class='amt'>&nbsp;<select name="<%=field3%>" class="inp-text">
 													<c:forEach var="currency" items="${aimEditActivityForm.currencies}">
 														<c:if test="${comm.currencyCode == currency.currencyCode}">
 															<option selected="true" value="<c:out value="${currency.currencyCode}"/>">
@@ -188,7 +188,7 @@
 														<option value="0" selected="true">Planned</option>
 													</c:if>					
 												</select>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="text" name="<%=field2%>" 
-												value="<c:out value="${comm.transactionAmount}"/>" size="15" class="inp-text" align="right">&nbsp;<select name="<%=field3%>" class="inp-text">
+												value="<c:out value="${comm.transactionAmount}"/>" size="15"  class='amt'>&nbsp;<select name="<%=field3%>" class="inp-text">
 													<c:forEach var="currency" items="${aimEditActivityForm.currencies}">
 														<c:if test="${comm.currencyCode == currency.currencyCode}">
 															<option selected="true" value="<c:out value="${currency.currencyCode}"/>">
@@ -260,7 +260,7 @@
 														<option value="0" selected="true">Planned</option>
 													</c:if>					
 												</select>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="text" name="<%=field2%>" 
-												value="<c:out value="${comm.transactionAmount}"/>" size="15" class="inp-text" align="right">&nbsp;<select name="<%=field3%>" class="inp-text">
+												value="<c:out value="${comm.transactionAmount}"/>" size="15"  class='amt'>&nbsp;<select name="<%=field3%>" class="inp-text">
 													<c:forEach var="currency" items="${aimEditActivityForm.currencies}">
 														<c:if test="${comm.currencyCode == currency.currencyCode}">
 															<option selected="true" value="<c:out value="${currency.currencyCode}"/>">
@@ -339,9 +339,9 @@ function addCommitments()
 	s += "<option value='1'>Actual</option>";
 	s += "<option value='0'>Planned</option>";
 	s += "</select>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
-	s += "<input type='text' name='comm_" + numComm + "_2' size='15' class='inp-text' align='right'>&nbsp;";
+	s += "<input type='text' name='comm_" + numComm + "_2' size='15' class='amt'>&nbsp;";
 	s += "<select name='comm_" + numComm + "_3' class='inp-text'>&nbsp;";
-	
+
 	<% Collection col = eaForm.getCurrencies();
 		Iterator itr = col.iterator();
 		while (itr.hasNext()) 
@@ -394,7 +394,7 @@ function addDisbursement()
 	s += "<option value='1'>Actual</option>";
 	s += "<option value='0'>Planned</option>";
 	s += "</select>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
-	s += "<input type='text' name='disb_" + numDisb + "_2' size='15' class='inp-text' align='right'>&nbsp;";
+	s += "<input type='text' name='disb_" + numDisb + "_2' size='15'  class='amt'>&nbsp;";
 	s += "<select name='disb_" + numDisb + "_3' class='inp-text'>&nbsp;";
 	
 	<% col = eaForm.getCurrencies();
@@ -448,7 +448,7 @@ function addExpenditure()
 	s += "<option value='1'>Actual</option>";
 	s += "<option value='0'>Planned</option>";
 	s += "</select>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
-	s += "<input type='text' name='expn_" + numExpn + "_2' size='15' class='inp-text' align='right'>&nbsp;";
+	s += "<input type='text' name='expn_" + numExpn + "_2' size='15' class='amt'>&nbsp;";
 	s += "<select name='expn_" + numExpn + "_3' class='inp-text'>&nbsp;";
 	
 	<% col = eaForm.getCurrencies();
@@ -517,6 +517,14 @@ function addComponents()
 
 function validate() 
 {
+
+	var titleFlag = isEmpty(document.aimEditActivityForm.componentTitle.value);
+	if(titleFlag == true) {
+		alert("Please enter title");			
+		document.aimEditActivityForm.componentTitle.focus();
+		return false;
+	}
+
 	var x = document.aimEditActivityForm;
 
 	if (tempComm == 0) {

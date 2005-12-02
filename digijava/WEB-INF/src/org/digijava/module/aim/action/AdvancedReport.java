@@ -123,6 +123,7 @@ public class AdvancedReport extends Action {
 				formBean.setColumnHierarchie(null);
 				formBean.setAddedMeasures(null);
 				formBean.setReportTitle("");
+				formBean.setReportDescription("");
 				formBean.setAdjustType(null);
 				formBean.setSelAdjustType(null);
 				formBean.setSelectedAdjustmentType(null);
@@ -819,8 +820,10 @@ public class AdvancedReport extends Action {
 			}
 			
 			// Move the selected column Up : Step 1 ie Select Columns
-			if(request.getParameter("check") != null && request.getParameter("check").equals("MoveUp"))
+			if(request.getParameter("check") != null && request.getParameter("check").equals("MoveUp")){
 				moveColumns(formBean, "MoveUp");
+				return mapping.findForward("SelectCols");
+			}
 			if(request.getParameter("check") != null && request.getParameter("check").equals("Step2MoveUp"))
 			{
 				moveColumns(formBean, "Step2MoveUp");
@@ -833,8 +836,10 @@ public class AdvancedReport extends Action {
 			}
 
 			// Move the selected column Down : Step 1 ie Select Columns
-			if(request.getParameter("check") != null && request.getParameter("check").equals("MoveDown"))
+			if(request.getParameter("check") != null && request.getParameter("check").equals("MoveDown")){
 				moveColumns(formBean, "MoveDown");
+				return mapping.findForward("SelectCols");
+			}
 			if(request.getParameter("check") != null && request.getParameter("check").equals("Step2MoveDown"))
 			{
 				moveColumns(formBean, "Step2MoveDown");

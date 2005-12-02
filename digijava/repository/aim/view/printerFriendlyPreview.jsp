@@ -803,7 +803,9 @@
 											</c:if>										
 											<c:if test="${!empty aimEditActivityForm.documentList}">
 												<table width="100%" cellSpacing="0" cellPadding="0">
-												<c:forEach var="docs" items="${aimEditActivityForm.documentList}">
+												<c:forEach var="relLinks" items="${aimEditActivityForm.documentList}">
+					   							<bean:define id="docs" name="relLinks" 
+													property="relLink" />
 													<tr><td>
 					   								<bean:define id="fileName" name="docs" 
 														property="fileName" />
@@ -826,7 +828,8 @@
 															<td vAlign="center" align="left">
 																<c:out value="${docs.title}"/> -
 																<c:out value="${docs.fileName}"/>
-																<br><b>Desc:</b><c:out value="${docs.description}"/>
+																<br>
+																<b>Desc:</b><c:out value="${docs.description}"/>
 															</td>
 														</tr>
 													 </table>
@@ -836,7 +839,8 @@
 											</c:if>
 											<c:if test="${!empty aimEditActivityForm.linksList}">
 												<table width="100%" cellSpacing="0" cellPadding="0">
-												<c:forEach var="links" items="${aimEditActivityForm.linksList}">
+												<c:forEach var="relLinks" items="${aimEditActivityForm.linksList}">
+					   							<bean:define id="links" name="relLinks" property="relLink" />
 													<tr><td>
 														<table width="100%" cellPadding=1 cellSpacing=1>
 															<tr>
@@ -847,7 +851,8 @@
 																	<c:out value="${links.title}"/> -
 																	<a href="<c:out value="${links.url}"/>">
 																	<c:out value="${links.url}"/></a>
-																	<br><b>Desc:</b><c:out value="${links.description}"/>
+																	<br>
+																	<b>Desc:</b><c:out value="${links.description}"/>
 																</td>
 															</tr>
 														</table>

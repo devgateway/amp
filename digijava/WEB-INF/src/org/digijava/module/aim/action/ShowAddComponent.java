@@ -45,7 +45,8 @@ public class ShowAddComponent extends Action {
 		try
 		{
 			EditActivityForm eaForm = (EditActivityForm) form;
-		
+			eaForm.setStep("5");
+			
 			if( action != null && action.equalsIgnoreCase("show") )
 			{
 				logger.debug("Forwarding to forward");
@@ -322,6 +323,13 @@ public class ShowAddComponent extends Action {
 				}
 				if ( eaForm.getSelectedComponents().contains( compFund ) ) 
 				{
+					Iterator itr = eaForm.getSelectedComponents().iterator();
+					while (itr.hasNext()) {
+						Components comp = (Components) itr.next();
+						if (compFund.equals(comp)) {
+							compFund.setPhyProgress(comp.getPhyProgress());
+						}
+					}
 					eaForm.getSelectedComponents().remove( compFund );
 				}
 				eaForm.getSelectedComponents().add( compFund );

@@ -11,7 +11,6 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.StringTokenizer;
 
-import javax.jms.Session;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -45,6 +44,7 @@ public class AddRegionalFunding extends Action {
 		
 		try {
 		EditActivityForm eaForm = (EditActivityForm) form;	
+		eaForm.setStep("4");
 		if (action != null && action.equalsIgnoreCase("show")) {
 			logger.debug("Forarding to forward");
 			eaForm.setFundingRegionId(new Long(-1));

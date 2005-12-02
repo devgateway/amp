@@ -2,6 +2,7 @@ package org.digijava.module.aim.action;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Date;
 import java.util.Iterator;
 
@@ -24,6 +25,7 @@ import org.digijava.module.aim.helper.DecimalToText;
 import org.digijava.module.aim.helper.Funding;
 import org.digijava.module.aim.helper.FundingDetail;
 import org.digijava.module.aim.helper.FundingOrganization;
+import org.digijava.module.aim.helper.FundingValidator;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.DbUtil;
 
@@ -142,6 +144,7 @@ public class FundingAdded extends Action {
 		eaForm.setTotalCommitments(totComm);
 		eaForm.setTotalDisbursements(totDisb);
 		eaForm.setTotalExpenditures(totExp);
+		eaForm.setStep("3");
 		return mapping.findForward("forward");
 	}
 }

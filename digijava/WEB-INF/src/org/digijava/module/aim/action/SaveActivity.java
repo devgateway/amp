@@ -60,6 +60,7 @@ import org.digijava.module.aim.helper.DecimalToText;
 import org.digijava.module.aim.helper.Funding;
 import org.digijava.module.aim.helper.FundingDetail;
 import org.digijava.module.aim.helper.FundingOrganization;
+import org.digijava.module.aim.helper.FundingValidator;
 import org.digijava.module.aim.helper.Issues;
 import org.digijava.module.aim.helper.Location;
 import org.digijava.module.aim.helper.Measures;
@@ -102,19 +103,6 @@ public class SaveActivity extends Action {
 		TeamMember tm = null;
 		if (session.getAttribute("currentMember") != null)
 			tm = (TeamMember) session.getAttribute("currentMember");
-
-		/*
-		 * if (session.getAttribute("ampAdmin") == null &&
-		 * session.getAttribute("currentMember") == null) { return
-		 * mapping.findForward("index"); } else { if
-		 * (session.getAttribute("ampAdmin") != null) { String str = (String)
-		 * session.getAttribute("ampAdmin"); if (!str.equals("yes")) { if (tm !=
-		 * null) { if (tm.getTeamHead() == false) return
-		 * mapping.findForward("index"); } else { return
-		 * mapping.findForward("index"); } } } else if (tm != null) { if
-		 * (tm.getTeamHead() == false) return mapping.findForward("index"); }
-		 * else { return mapping.findForward("index"); } }
-		 */
 
 		EditActivityForm eaForm = (EditActivityForm) form;
 
@@ -204,7 +192,187 @@ public class SaveActivity extends Action {
 		}
 		// end of Modified code
 		
+		// validate donor fundings
+		Collection donorComm = new ArrayList();
+		Collection donorDisb = new ArrayList();
+		Collection donorExpn = new ArrayList();
 		
+		if (eaForm.getFundingOrganizations() != null && 
+				eaForm.getFundingOrganizations().size() > 0) {
+			Iterator itr1 = eaForm.getFundingOrganizations().iterator();
+			while (itr1.hasNext()) {
+				FundingOrganization forg = (FundingOrganization) itr1.next();
+				if (forg.getFundings() != null &&
+						forg.getFundings().size() > 0) {
+					Iterator itr2 = forg.getFundings().iterator();
+					while (itr2.hasNext()) {
+						Funding funding = (Funding) itr2.next();
+						if (funding.getFundingDetails() != null &&
+								funding.getFundingDetails().size() > 0) {
+							Iterator itr3 = funding.getFundingDetails().iterator();
+							Collection comm = new ArrayList();
+							Collection disb = new ArrayList();
+							Collection expn = new ArrayList();
+							while (itr3.hasNext()) {
+								FundingDetail fd = (FundingDetail) itr3.next();
+								switch (fd.getTransactionType()) {
+								case 0:
+									comm.add(fd);
+									donorComm.add(fd);
+									break;
+								case 1:
+									disb.add(fd);
+									donorDisb.add(fd);
+									break;
+								case 2:
+									expn.add(fd);
+									donorExpn.add(fd);
+									break;									
+								}
+							}
+							int errIndex = FundingValidator.validateFundings(comm,disb);
+							if (errIndex > 0) {
+								// invalid entry
+								errors.add("fundings",new ActionError("error.aim.addActivity.disbGreaterThanComm"));
+								saveErrors(request, errors);
+								return mapping.findForward("addActivityStep3");								
+							} else {
+								errIndex = FundingValidator.validateFundings(disb,expn);
+								if (errIndex > 0) {
+									// invalid entry
+									errors.add("fundings",new ActionError("error.aim.addActivity.expnGreaterThanDisb"));
+									saveErrors(request, errors);
+									return mapping.findForward("addActivityStep3");
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+		
+		Collection regComm = new ArrayList();
+		Collection regDisb = new ArrayList();
+		Collection regExpn = new ArrayList();
+		
+		// validate regional fundings
+		if (eaForm.getRegionalFundings() != null && 
+				eaForm.getRegionalFundings().size() > 0) {
+			Iterator itr1 = eaForm.getRegionalFundings().iterator();
+			while (itr1.hasNext()) {
+				RegionalFunding rf = (RegionalFunding) itr1.next();
+				if (rf.getCommitments() != null)
+					regComm.addAll(rf.getCommitments());
+				if (rf.getDisbursements() != null)
+					regDisb.addAll(rf.getDisbursements());
+				if (rf.getExpenditures() != null)
+					regExpn.addAll(rf.getExpenditures());
+				
+				int errIndex = FundingValidator.validateFundings(rf.getCommitments(),rf.getDisbursements());
+				if (errIndex > 0) {
+					// invalid entry
+					errors.add("fundings",new ActionError("error.aim.addActivity.disbGreaterThanComm"));
+					saveErrors(request, errors);
+					return mapping.findForward("addActivityStep4");								
+				} else {
+					errIndex = FundingValidator.validateFundings(rf.getDisbursements(),rf.getExpenditures());
+					if (errIndex > 0) {
+						// invalid entry
+						errors.add("fundings",new ActionError("error.aim.addActivity.expnGreaterThanDisb"));
+						saveErrors(request, errors);
+						return mapping.findForward("addActivityStep4");
+					}
+				}				
+			}
+		}		
+		
+		Collection compComm = new ArrayList();
+		Collection compDisb = new ArrayList();
+		Collection compExpn = new ArrayList();		
+		// validate component fundings
+		if (eaForm.getSelectedComponents() != null && 
+				eaForm.getSelectedComponents().size() > 0) {
+			Iterator itr1 = eaForm.getSelectedComponents().iterator();
+			while (itr1.hasNext()) {
+				Components comp = (Components) itr1.next();
+				if (comp.getCommitments() != null)
+					compComm.addAll(comp.getCommitments());
+				if (comp.getDisbursements() != null)
+					compDisb.addAll(comp.getDisbursements());
+				if (comp.getExpenditures() != null)
+					compExpn.addAll(comp.getExpenditures());
+
+				int errIndex = FundingValidator.validateFundings(comp.getCommitments(),comp.getDisbursements());
+				if (errIndex > 0) {
+					// invalid entry
+					errors.add("fundings",new ActionError("error.aim.addActivity.disbGreaterThanComm"));
+					saveErrors(request, errors);
+					return mapping.findForward("addActivityStep5");								
+				} else {
+					errIndex = FundingValidator.validateFundings(comp.getDisbursements(),comp.getExpenditures());
+					if (errIndex > 0) {
+						// invalid entry
+						errors.add("fundings",new ActionError("error.aim.addActivity.expnGreaterThanDisb"));
+						saveErrors(request, errors);
+						return mapping.findForward("addActivityStep5");
+					}
+				}				
+			}
+		}		
+		
+		// validate donor commitments againts regional commitments
+		int err = FundingValidator.validateFundings(donorComm,regComm);
+		if (err > 0) {
+			// regional commitments greater than actual donor commitments
+			errors.add("fundings",new ActionError("error.aim.addActivity.regCommGreaterThanDonorComm"));
+			saveErrors(request, errors);
+			return mapping.findForward("addActivityStep4");
+		}		
+		
+		// validate donor disbursements againts regional disbursements
+		err = FundingValidator.validateFundings(donorDisb,regDisb);
+		if (err > 0) {
+			// regional disbursements greater than actual donor disbursements
+			errors.add("fundings",new ActionError("error.aim.addActivity.regDisbGreaterThanDonorDisb"));
+			saveErrors(request, errors);
+			return mapping.findForward("addActivityStep4");
+		}		
+		
+		// validate donor expenditures againts regional expenditures
+		err = FundingValidator.validateFundings(donorExpn,regExpn);
+		if (err > 0) {
+			// regional expenditures greater than actual donor expenditures
+			errors.add("fundings",new ActionError("error.aim.addActivity.regExpnGreaterThanDonorExpn"));
+			saveErrors(request, errors);
+			return mapping.findForward("addActivityStep4");
+		}		
+		
+		// validate donor commitments againts component commitments
+		err = FundingValidator.validateFundings(donorComm,compComm);
+		if (err > 0) {
+			// component commitments greater than actual donor commitments
+			errors.add("fundings",new ActionError("error.aim.addActivity.compCommGreaterThanDonorComm"));
+			saveErrors(request, errors);
+			return mapping.findForward("addActivityStep5");
+		}		
+		
+		// validate donor disbursements againts component disbursements
+		err = FundingValidator.validateFundings(donorDisb,compDisb);
+		if (err > 0) {
+			// component disbursements greater than actual donor disbursements
+			errors.add("fundings",new ActionError("error.aim.addActivity.compDisbGreaterThanDonorDisb"));
+			saveErrors(request, errors);
+			return mapping.findForward("addActivityStep5");
+		}		
+		
+		// validate donor expenditures againts component expenditures
+		err = FundingValidator.validateFundings(donorExpn,compExpn);
+		if (err > 0) {
+			// component expenditures greater than actual donor expenditures
+			errors.add("fundings",new ActionError("error.aim.addActivity.compExpnGreaterThanDonorExpn"));
+			saveErrors(request, errors);
+			return mapping.findForward("addActivityStep5");
+		}				
 		
 
 		activity.setAmpId(eaForm.getAmpId());
@@ -943,4 +1111,5 @@ public class SaveActivity extends Action {
 		}
 		return null;
 	}
+	
 }

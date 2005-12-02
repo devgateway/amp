@@ -2213,6 +2213,8 @@
 			  <forward name="index" path="/aim/index.do" redirect="true" />			  
 			  <forward name="addActivityStep2" path="/showLayout.do?layout=addActivityStep2" />
 			  <forward name="addActivityStep3" path="/showLayout.do?layout=addActivityStep3" />
+			  <forward name="addActivityStep4" path="/showLayout.do?layout=addActivityStep4" />
+			  <forward name="addActivityStep5" path="/showLayout.do?layout=addActivityStep5" />
 			  <forward name="addActivityStep1" path="/showLayout.do?layout=addActivityStep1" />			  
 			  <forward name="activityExist" path="/showLayout.do?layout=activityExist" />			  
 	</action>

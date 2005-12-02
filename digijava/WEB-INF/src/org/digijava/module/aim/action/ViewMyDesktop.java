@@ -3,6 +3,8 @@ package org.digijava.module.aim.action ;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
 import java.util.StringTokenizer;
@@ -28,6 +30,7 @@ import org.digijava.module.aim.helper.AmpProject;
 import org.digijava.module.aim.helper.AmpProjectDonor;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.DecimalToText;
+import org.digijava.module.aim.helper.Documents;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.TeamUtil;
@@ -575,6 +578,7 @@ public class ViewMyDesktop extends Action
 		dbReturnSet = (ArrayList)TeamUtil.getMemberLinks(teamMember.getMemberId());
 		if (dbReturnSet.size() > 0) {
 			formBean.setDocumentCount(new Integer(dbReturnSet.size()));
+			Collections.sort(dbReturnSet,docIdComp);
 			formBean.setDocuments(dbReturnSet);
 		}
 		t2 = System.currentTimeMillis();
@@ -604,4 +608,16 @@ public class ViewMyDesktop extends Action
 		
 		return mapping.findForward("forward");
 	}
+	
+	public Comparator docIdComp = new Comparator() {
+		public int compare(Object e1,Object e2) {
+			if (e1 instanceof Documents && e2 instanceof Documents) {
+				Documents d1 = (Documents) e1;
+				Documents d2 = (Documents) e2;
+				return d2.getDocId().compareTo(d1.getDocId());
+			}
+			throw new ClassCastException();
+		}
+	};
+	
 }

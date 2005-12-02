@@ -12638,8 +12638,8 @@ public class ReportUtil {
 						orderClause= orderClause + ",report." + ampColuns.getAliasName();
 				}	
 			}
-			logger.info("Hierarchy Size: " + addedHierarchy.size());
-			if(addedHierarchy.size()>0)
+//			logger.info("Hierarchy Size: " + addedHierarchy.size());
+			if(addedHierarchy != null && addedHierarchy.size()>0)
 				hierarchy=(ArrayList)addedHierarchy;
 
 			currencies=DbUtil.getAmpCurrencyRate();
@@ -12650,7 +12650,7 @@ public class ReportUtil {
 			q = session.createQuery(queryString);	
 			logger.info("Query Result: " + q.list().size());
 
-			if(q!=null && hierarchy.size()==0)
+			if(q!=null && hierarchy==null)
 			{
 				iter = q.list().iterator();
 				while(iter.hasNext())
@@ -13084,7 +13084,7 @@ public class ReportUtil {
 				ampReports.add(reports);
 			}
 			// Code for hierarchial report
-			if(q!=null && hierarchy.size()>0)
+			if(q!=null && (hierarchy!=null && hierarchy.size()>0))
 			{
 				mreport=new multiReport();
 				mreport.setHierarchy(new ArrayList());

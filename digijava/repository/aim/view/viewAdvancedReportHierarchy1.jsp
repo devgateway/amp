@@ -1135,7 +1135,7 @@
 				</logic:notEmpty>
 				
 			 </logic:iterate>
-
+			<logic:notEmpty	name="multiReport"  property="hierarchy">
 			  <tr><td align="left" colspan=<bean:write name="aimAdvancedReportForm" property="dimColumns" />><b> Grand Total</b></td>
 			  <logic:iterate name="multiReport"  property="fundTotal" id="fundTotal" type="org.digijava.module.aim.helper.AmpFund">
 			  <logic:equal name="aimAdvancedReportForm" property="acCommFlag" value="true">
@@ -1196,10 +1196,22 @@
 				</logic:notEmpty>		
 				</logic:equal>
 				</logic:iterate>
-				   
+				</tr>
+				</logic:notEmpty>   
+				<logic:empty name="multiReport" property="hierarchy"> 
+				<tr bgcolor="#F4F4F2">
+					<!--<td align="center" height="21" width="73" ><b>Sector</b></td>-->
+					<td colspan=<bean:write name="aimAdvancedReportForm" property="totalColumns"/> align="center" height="21" >
+					<b>
+						<digi:trn key="aim:noRecords">No Records</digi:trn>
+					</b>
+					</td>
+				</tr>
+				</logic:empty>
 				</logic:iterate>	
 					
-				</tr>
+				
+			
 		</logic:notEmpty>
 	
                      </table>

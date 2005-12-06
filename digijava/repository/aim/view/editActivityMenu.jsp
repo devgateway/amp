@@ -26,14 +26,15 @@ function saveClicked() {
 	var wTLFlag   = document.aimEditActivityForm.workingTeamLeadFlag.value;
 	if (appstatus == "started") {
 		if (wTLFlag == "yes") {
-			if (confirm("Do you want to approve this activity ?"))
+			//if (confirm("Do you want to approve this activity ?"))
 				document.aimEditActivityForm.approvalStatus.value = "approved";
 		}
 		else if (confirm("Do you want to submit this activity for approval ?"))
 				document.aimEditActivityForm.approvalStatus.value = "created";
 	}
 	if (appstatus == "approved") {
-		document.aimEditActivityForm.approvalStatus.value = "edited";
+		if (wTLFlag != "yes")
+			document.aimEditActivityForm.approvalStatus.value = "edited";
 	}
 	else if (wTLFlag == "yes") {
 		if (appstatus == "created" || appstatus == "edited") {

@@ -1,4 +1,4 @@
-package org.digijava.module.aim.helper ;
+ package org.digijava.module.aim.helper ;
 
 
 public class AmpFund

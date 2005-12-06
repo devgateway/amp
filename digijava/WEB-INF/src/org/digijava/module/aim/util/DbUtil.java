@@ -7810,5 +7810,36 @@ public class DbUtil {
 		return persp;			
 	}
 
+	public static ArrayList getApprovedActivities(String inClause){
+		ArrayList actList = new ArrayList();
+		Session session = null;
+		Query q = null;
+		String queryString;
+		try {
+			
+			session = PersistenceManager.getSession();
+			
+			queryString = "select act.ampActivityId from " + AmpActivity.class.getName()
+				  + " act where (act.team.ampTeamId in(" + inClause + ")) and (act.approvalStatus=:status)";
+			q = session.createQuery(queryString);
+			q.setParameter("status", "approved", Hibernate.STRING);
+			actList=(ArrayList)q.list();
+			logger.info("Approved Activity List Size: " + actList.size());
+
+		} catch (Exception ex) {
+			logger.error("Unable to get AmpActivity [getApprovedActivities()]", ex);
+		} finally {
+			try {
+				if (session != null) {
+					PersistenceManager.releaseSession(session);
+				}
+			} catch (Exception ex) {
+				logger.debug("releaseSession() failed");
+			}
+		}
+		logger.debug("Getting Approved activities Executed successfully ");
+		return actList;
+	}
+
 
 }

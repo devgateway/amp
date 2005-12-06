@@ -254,6 +254,7 @@ public class ReportUtil {
 	{
 		Session session = null ;
 		Query q = null ;
+		ArrayList approvedActivityList=new ArrayList();
 		ArrayList ampReports = new ArrayList() ;
 		ArrayList donors = new ArrayList() ;
 		ArrayList assistance = new ArrayList() ;
@@ -299,7 +300,7 @@ public class ReportUtil {
 				}
 			}
 //			logger.debug("Inclause: " + inClause);
-
+			approvedActivityList=DbUtil.getApprovedActivities(inClause);
 			session = PersistenceManager.getSession();
 			if(startDate==null && closeDate==null)
 				queryString = "select report from " + AmpReportCache.class.getName() + " report where (report.ampTeamId in(" + inClause + ")) order by report.activityName,report.ampActivityId,report.donorName,report.fiscalYear,report.fiscalQuarter";
@@ -314,6 +315,9 @@ public class ReportUtil {
 				while(iter.hasNext())
 				{
 					AmpReportCache ampReportCache = (AmpReportCache) iter.next(); 
+
+					if(approvedActivityList.indexOf(ampReportCache.getAmpActivityId())==-1)
+						continue;
 
 					if(new Long(fiscalCalId).equals(Constants.ETH_FY) || new Long(fiscalCalId).equals(Constants.ETH_CAL))
 					{
@@ -667,6 +671,7 @@ public class ReportUtil {
 		ArrayList ampReports = new ArrayList() ;
 		ArrayList sectorAssistance = new ArrayList() ;
 		ArrayList totalAssistance = new ArrayList() ;
+		ArrayList approvedActivityList=new ArrayList();
 		String queryString = null;
 		Long All=new Long(0);
 		Iterator iter=null;
@@ -733,6 +738,7 @@ public class ReportUtil {
 				}
 			}
 			logger.debug("Inclause: " + inClauseTeam);
+			approvedActivityList=DbUtil.getApprovedActivities(inClauseTeam);
 			ArrayList sectorId=null;
 			session = PersistenceManager.getSession();
 			multiReport report =null;
@@ -1051,6 +1057,10 @@ public class ReportUtil {
 					AmpReportCache ampReportCache = (AmpReportCache) iterActivity.next();
 				/*	if(!(ampReportCache.getAmpTeamId().equals(ampTeamId)) || ampReportCache.getFiscalYear().intValue()<fromYr || ampReportCache.getFiscalYear().intValue()>toYr)		
 						continue;*/
+					
+					if(approvedActivityList.indexOf(ampReportCache.getAmpActivityId())==-1)
+						continue;
+
 					if(new Long(fiscalCalId).equals(Constants.ETH_FY) || new Long(fiscalCalId).equals(Constants.ETH_CAL))
 					{
 						if(ampReportCache.getTransactionDate()!=null)
@@ -2121,6 +2131,7 @@ public class ReportUtil {
 		Session session = null ;
 		Query q = null ;
 		ArrayList ampReports = new ArrayList() ;
+		ArrayList approvedActivityList=new ArrayList();
 		String queryString = null;
 		Iterator iter=null;
 		Long All=new Long(0);
@@ -2175,6 +2186,7 @@ public class ReportUtil {
 				}
 			}
 			logger.info("Inclause: " + inClause);
+			approvedActivityList=DbUtil.getApprovedActivities(inClause);
 			session = PersistenceManager.getSession();
 			if(startDate==null && closeDate==null)
 				queryString = "select report from " + AmpReportCache.class.getName() + " report where (report.ampTeamId in(" + inClause + ")) and (report.donorName is not null) and (report.termAssistName is not null) order by report.ampTeamId,report.donorName,report.termAssistName,report.fiscalYear";
@@ -2193,6 +2205,9 @@ public class ReportUtil {
 				while(iter.hasNext())
 				{
 					AmpReportCache ampReportCache = (AmpReportCache) iter.next(); 
+					if(approvedActivityList.indexOf(ampReportCache.getAmpActivityId())==-1)
+						continue;
+
 					if(ampReportCache.getAmpDonorId()==null)
 						continue;
 
@@ -3092,7 +3107,8 @@ public class ReportUtil {
 		String inClause=null;
 		Iterator iterSector=null;
 		DecimalFormat mf = new DecimalFormat("###,###,###,###,###") ;
-		Collection currencies=null;
+//		Collection currencies=null;
+		ArrayList approvedActivityList=new ArrayList();
 				
 		try
 		{
@@ -3114,7 +3130,8 @@ public class ReportUtil {
 						inClause=inClause + ",'" + teamId + "'";
 				}
 			}
-			currencies=DbUtil.getAmpCurrencyRate();
+//			currencies=DbUtil.getAmpCurrencyRate();
+			approvedActivityList=DbUtil.getApprovedActivities(inClause);
 			logger.debug("Inclause: " + inClause);
 			session = PersistenceManager.getSession();
 			if(startDate==null && closeDate==null)
@@ -3133,6 +3150,9 @@ public class ReportUtil {
 				while(iter.hasNext())
 				{
 					AmpReportCache ampReportCache = (AmpReportCache) iter.next(); 
+					
+					if(approvedActivityList.indexOf(ampReportCache.getAmpActivityId())==-1)
+						continue;
 
 					if(new Long(fiscalCalId).equals(Constants.ETH_FY) || new Long(fiscalCalId).equals(Constants.ETH_CAL))
 					{
@@ -3752,6 +3772,7 @@ public class ReportUtil {
 		String inClause=null;
 		Iterator iterSector=null;
 		DecimalFormat mf = new DecimalFormat("###,###,###,###,###") ;
+		ArrayList approvedActivityList=new ArrayList();
 				
 		try
 		{
@@ -3770,7 +3791,8 @@ public class ReportUtil {
 						inClause=inClause + ",'" + teamId + "'";
 				}
 			}
-			logger.debug("Inclause: " + inClause);			
+			logger.debug("Inclause: " + inClause);		
+			approvedActivityList=DbUtil.getApprovedActivities(inClause);
 			int years=0;
 
 			session = PersistenceManager.getSession();
@@ -3788,6 +3810,9 @@ public class ReportUtil {
 				while(iter.hasNext())
 				{
 					AmpReportCache ampReportCache = (AmpReportCache) iter.next(); 
+
+					if(approvedActivityList.indexOf(ampReportCache.getAmpActivityId())==-1)
+						continue;
 
 					if(new Long(fiscalCalId).equals(Constants.ETH_FY) || new Long(fiscalCalId).equals(Constants.ETH_CAL))
 					{
@@ -4221,6 +4246,7 @@ public class ReportUtil {
 		ArrayList teamAssistance=new ArrayList();
 		ArrayList donorAssistance=new ArrayList();
 		DecimalFormat mf = new DecimalFormat("###,###,###,###,###") ;
+		ArrayList approvedActivityList=new ArrayList();
 				
 		try
 		{
@@ -4240,6 +4266,7 @@ public class ReportUtil {
 				}
 			}
 			logger.debug("Inclause: " + inClause);
+			approvedActivityList=DbUtil.getApprovedActivities(inClause);
 			session = PersistenceManager.getSession();
 			if(startDate==null && closeDate==null)
 				queryString = "select report from " + AmpReportCache.class.getName() + " report where (report.donorName is not null) and (report.ampTeamId in(" + inClause + ")) order by report.donorName,report.activityName,report.ampActivityId,report.fiscalYear";
@@ -4261,6 +4288,10 @@ public class ReportUtil {
 				while(iter.hasNext())
 				{
 					AmpReportCache ampReportCache = (AmpReportCache) iter.next(); 
+					
+					if(approvedActivityList.indexOf(ampReportCache.getAmpActivityId())==-1)
+						continue;
+
 					if(new Long(fiscalCalId).equals(Constants.ETH_FY) || new Long(fiscalCalId).equals(Constants.ETH_CAL))
 					{
 						if(ampReportCache.getTransactionDate()!=null)
@@ -4746,6 +4777,10 @@ public class ReportUtil {
 									while(iterUn.hasNext())
 									{
 										AmpReportCache ampCache= (AmpReportCache) iterUn.next();
+										
+										if(approvedActivityList.indexOf(ampCache.getAmpActivityId())==-1)
+											continue;
+
 										if(!ampModalityId.equals(All))
 										{
 											if(ampCache.getAmpModalityId()==null)
@@ -5859,6 +5894,10 @@ public class ReportUtil {
 								while(iterUn.hasNext())
 								{
 									AmpReportCache ampCache= (AmpReportCache) iterUn.next();
+
+									if(approvedActivityList.indexOf(ampCache.getAmpActivityId())==-1)
+										continue;
+
 									if(!ampModalityId.equals(All))
 									{
 										if(ampCache.getAmpModalityId()==null)
@@ -6055,6 +6094,7 @@ public class ReportUtil {
 		String inClause=null;
 		String termAssistName=null;
 		DecimalFormat mf = new DecimalFormat("###,###,###,###,###") ;
+		ArrayList approvedActivityList=new ArrayList();
 				
 		try
 		{
@@ -6075,8 +6115,7 @@ public class ReportUtil {
 				}
 			}
 			logger.debug("Inclause: " + inClause);
-
-
+			approvedActivityList=DbUtil.getApprovedActivities(inClause);
 			session = PersistenceManager.getSession();
 			if(startDate==null && closeDate==null)
 				queryString = "select report from " + AmpReportCache.class.getName() + " report where (report.ampTeamId in(" + inClause + ")) and (report.donorName is not null) and (report.termAssistName is not null) order by report.ampTeamId,report.donorName,report.termAssistName,report.fiscalYear";
@@ -6096,6 +6135,9 @@ public class ReportUtil {
 				while(iter.hasNext())
 				{
 					AmpReportCache ampReportCache = (AmpReportCache) iter.next(); 
+					
+					if(approvedActivityList.indexOf(ampReportCache.getAmpActivityId())==-1)
+						continue;
 
 					if(ampReportCache.getAmpDonorId()==null)
 						continue;
@@ -7122,6 +7164,7 @@ public class ReportUtil {
 		ArrayList sectorAssistance=new ArrayList();
 		ArrayList totalAssistance=new ArrayList();
 		DecimalFormat mf = new DecimalFormat("###,###,###,###,###") ;
+		ArrayList approvedActivityList=new ArrayList();
 						
 		try
 		{
@@ -7141,6 +7184,7 @@ public class ReportUtil {
 				}
 			}
 			logger.debug("Inclause: " + inClauseTeam);
+			approvedActivityList=DbUtil.getApprovedActivities(inClauseTeam);
 			session = PersistenceManager.getSession();
 			multiReport report =null;
 			AmpTeamDonors ampTeamDonors =null;
@@ -7469,6 +7513,9 @@ public class ReportUtil {
 				while(iterActivity.hasNext())
 				{
 					AmpReportCache ampReportCache = (AmpReportCache) iterActivity.next();
+
+					if(approvedActivityList.indexOf(ampReportCache.getAmpActivityId())==-1)
+						continue;
 
 					if(new Long(fiscalCalId).equals(Constants.ETH_FY) || new Long(fiscalCalId).equals(Constants.ETH_CAL))
 					{
@@ -8520,6 +8567,7 @@ public class ReportUtil {
 		String inClause=null;
 		Iterator iterSector=null;
 		DecimalFormat mf = new DecimalFormat("###,###,###,###,###") ;
+		ArrayList approvedActivityList=new ArrayList();
 				
 		try
 		{
@@ -8540,6 +8588,7 @@ public class ReportUtil {
 				}
 			}
 			logger.debug("Inclause: " + inClause);
+			approvedActivityList=DbUtil.getApprovedActivities(inClause);
 
 			session = PersistenceManager.getSession();
 			if(startDate==null && closeDate==null)
@@ -8563,6 +8612,9 @@ public class ReportUtil {
 				while(iter.hasNext())
 				{
 					AmpReportCache ampReportCache = (AmpReportCache) iter.next(); 
+
+					if(approvedActivityList.indexOf(ampReportCache.getAmpActivityId())==-1)
+						continue;
 
 					if(new Long(fiscalCalId).equals(Constants.ETH_FY) || new Long(fiscalCalId).equals(Constants.ETH_CAL))
 					{
@@ -9025,6 +9077,10 @@ public class ReportUtil {
 								while(iterUn.hasNext())
 								{
 									AmpReportCache ampCache= (AmpReportCache) iterUn.next();
+
+									if(approvedActivityList.indexOf(ampCache.getAmpActivityId())==-1)
+										continue;
+
 									if(!ampModalityId.equals(All))
 									{
 										if(ampCache.getAmpModalityId()==null)
@@ -10137,6 +10193,10 @@ public class ReportUtil {
 							while(iterUn.hasNext())
 							{
 								AmpReportCache ampCache= (AmpReportCache) iterUn.next();
+
+								if(approvedActivityList.indexOf(ampCache.getAmpActivityId())==-1)
+									continue;
+
 								if(!ampModalityId.equals(All))
 								{
 									if(ampCache.getAmpModalityId()==null)
@@ -10282,6 +10342,7 @@ public class ReportUtil {
 		int commFlag=0;
 		Iterator iterSector=null;
 		DecimalFormat mf = new DecimalFormat("###,###,###,###,###") ;
+		ArrayList approvedActivityList=new ArrayList();
 				
 		try
 		{
@@ -10302,7 +10363,7 @@ public class ReportUtil {
 				}
 			}
 			logger.info("Inclause: " + inClause);
-
+			approvedActivityList=DbUtil.getApprovedActivities(inClause);
 			session = PersistenceManager.getSession();
 			if(startDate==null && closeDate==null)
 				queryString = "select report from " + AmpReportCache.class.getName() + " report where report.ampTeamId in(" + inClause + ") order by report.ampDonorId,report.ampActivityId,report.transactionDate";
@@ -10321,6 +10382,10 @@ public class ReportUtil {
 				while(iter.hasNext())
 				{
 					AmpReportCache ampReportCache = (AmpReportCache) iter.next(); 
+					
+					if(approvedActivityList.indexOf(ampReportCache.getAmpActivityId())==-1)
+						continue;
+
 					if(!ampModalityId.equals(All))
 					{
 						if(ampReportCache.getAmpModalityId()==null)
@@ -11086,6 +11151,7 @@ public class ReportUtil {
 		Session session = null ;
 		Query q = null ;
 		ArrayList ampReports = new ArrayList() ;
+		ArrayList approvedActivityList=new ArrayList();
 		Collection columns=new ArrayList();
 		ArrayList hierarchy=new ArrayList();
 		ArrayList measures=new ArrayList();
@@ -11217,8 +11283,9 @@ public class ReportUtil {
 						orderClause= orderClause + ",report." + c.getColumnAlias();
 				}
 			}
-			currencies=DbUtil.getAmpCurrencyRate();
+//			currencies=DbUtil.getAmpCurrencyRate();
 			logger.info("Inclause: " + inClause);
+			approvedActivityList=DbUtil.getApprovedActivities(inClause);
 			session = PersistenceManager.getSession();
 			if(startDate==null && closeDate==null)
 				queryString = "select report from " + AmpReportCache.class.getName() + " report where (report.ampTeamId in(" + inClause + ")) order by " + orderClause;
@@ -11232,6 +11299,9 @@ public class ReportUtil {
 			while(iter.hasNext())
 			{
 				ampReportCache = (AmpReportCache) iter.next(); 
+
+				if(approvedActivityList.indexOf(ampReportCache.getAmpActivityId())==-1)
+					continue;
 				if(new Long(fiscalCalId).equals(Constants.ETH_FY) || new Long(fiscalCalId).equals(Constants.ETH_CAL))
 				{
 					if(ampReportCache.getTransactionDate()!=null)

@@ -17,9 +17,11 @@ function gotoStep() {
 	{
 		alert(" Please enter report title");
 		document.aimAdvancedReportForm.reportTitle.value = ""
+
 	}
 	else
 	{
+//		alert("in here");
 		<digi:context name="step" property="context/module/moduleinstance/advancedReportManager.do?check=5" />
 		document.aimAdvancedReportForm.action = "<%= step %>";
 		document.aimAdvancedReportForm.target = "_self";
@@ -28,6 +30,15 @@ function gotoStep() {
 		document.aimAdvancedReportForm.submit();
 	}
 }
+/*added here*/
+function backStep() {
+
+		<digi:context name="step" property="context/module/moduleinstance/advancedReportManager.do?check=SelectMeasures" />
+		document.aimAdvancedReportForm.action = "<%= step %>";
+		document.aimAdvancedReportForm.target = "_self";
+		document.aimAdvancedReportForm.submit();
+}
+/*ended here*/
 </script>
 
 <digi:instance property="aimAdvancedReportForm" />
@@ -121,20 +132,30 @@ function gotoStep() {
 									<td height="20">
 										<table bgcolor="#f4f4f4" align="left" valign="bottom" cellPadding=0 cellspacing=1 height="20">
 											<tr>
+												<!--this one-->
+											<td noWrap align=left> 
+													<bean:define id="translation">
+														<digi:trn key="aim:clickToSelectReportType">Click here to Select Report Type</digi:trn>
+													</bean:define>
+													<digi:link href="/advancedReportManager.do~check=forward" styleClass="sub-nav" title="<%=translation%>"  >
+														1 :   Select Report Type
+													</digi:link>
+												</td>
+											<!--ends here-->
 												<td noWrap align=left> 
 													<bean:define id="translation">
 														<digi:trn key="aim:clickToSelectColumns">Click here to Select Columns</digi:trn>
 													</bean:define>
-													<digi:link href="/advancedReportManager.do?check=forward"   styleClass="sub-nav" title="<%=translation%>" >
-														1 :   Select Columns
+													<digi:link href="/advancedReportManager.do?check=SelectCols" styleClass="sub-nav" title="<%=translation%>"  >
+														2 :   Select Columns
 													</digi:link>
 												</td>											
 												<td noWrap align=left>
 													<bean:define id="translation">
-														<digi:trn key="aim:clickToselectrows/hierarchies">Click here to select rows/hierarchies</digi:trn>
+														<digi:trn key="aim:clickToselectrows/hierarchies" >Click here to select rows/hierarchies</digi:trn>
 													</bean:define>
 													<digi:link href="/advancedReportManager.do?check=SelectRows"  styleClass="sub-nav" title="<%=translation%>" >
-														2 : <digi:trn key="aim:SelectRows/hierarchies">Select rows/hierarchies</digi:trn>
+														3 : <digi:trn key="aim:SelectRows/hierarchies">Select rows/hierarchies</digi:trn>
 													</digi:link>
 												</td>										
 												<td noWrap align=left>
@@ -142,39 +163,42 @@ function gotoStep() {
 														<digi:trn key="aim:clickToSelectMeasures">Click here to Select Measures</digi:trn>
 													</bean:define>
 													<digi:link href="/advancedReportManager.do?check=SelectMeasures"  styleClass="sub-nav" title="<%=translation%>" > 
-													3 : <digi:trn key="aim:SelectMeasures">Select Measures</digi:trn>
+													4 : <digi:trn key="aim:SelectMeasures">Select Measures</digi:trn>
 													</digi:link>
 												</td>											
-												<td noWrap align=left> 
-													<bean:define id="translation">
-														<digi:trn key="aim:clickToViewReportDetails">Click here to view Report Details</digi:trn>
-													</bean:define>
-													<digi:link href="/advancedReportManager.do?check=4"  styleClass="sub-nav3" title="<%=translation%>" >
-														4 : <digi:trn key="aim:ReportDetails">Report Details</digi:trn>
-													</digi:link>
-												</td>
+												
 											</tr>
 										</table>	
 									</td>
 								</tr>
 								<TR>
-									<td noWrap valign=top align=left>
-									 <table cellpadding=0 cellspacing=1 valign=top align=left>	<tr>	<td valign=top>
+
+									<td noWrap valign=top align=left>	
+									 <table cellpadding=0 cellspacing=1 valign=top align=left>	<tr>	
+									 <td noWrap align=left> 
+													<bean:define id="translation">
+														<digi:trn key="aim:clickToViewReportDetails">Click here to view Report Details</digi:trn>
+													</bean:define>
+													<digi:link href="/advancedReportManager.do?check=4"  styleClass="sub-nav3" title="<%=translation%>" >
+														5 : <digi:trn key="aim:ReportDetails">Report Details</digi:trn>
+													</digi:link>
+												</td>
+									 <td valign=top>
 										<bean:define id="translation">
 											<digi:trn key="aim:clickToGenerateReport">Click here to Generate Reports</digi:trn>
 										</bean:define>
-										<digi:link href="/advancedReportManager.do?check=5"  styleClass="sub-nav" title="<%=translation%>" >
-										5 : <digi:trn key="aim:GenerateReport">Generate Report</digi:trn>
+										<digi:link  href="/advancedReportManager.do?check=4" styleClass="sub-nav" title="<%=translation%>" onclick="javascript:gotoStep()">
+										6 : <digi:trn key="aim:GenerateReport">Generate Report</digi:trn>
 										</digi:link>
-										</td>	
-										<td noWrap valign=top align=left>
+										</td>
+										<!--<td noWrap valign=top align=left>
 										<bean:define id="translation">
 											<digi:trn key="aim:clickToGenerateReport">Click here to Generate Chart</digi:trn>
 										</bean:define>
 										<digi:link href="/advancedReportManager.do?check=4"  styleClass="sub-nav" title="<%=translation%>" onclick="javascript:alert('Charts Coming Soon...');">
 										6 : <digi:trn key="aim:GenerateChart">Generate Chart</digi:trn>
 										</digi:link>
-										</td>	
+										</td>-->	
 										</tr>	</table>
 									</td>	
 								</tr>
@@ -222,7 +246,7 @@ function gotoStep() {
 											</TR>
 											<tr bgcolor="#f4f4f2">
 												<td align="center" colspan="2" bgcolor="#f4f4f2">
-													<input type=button name=back value="<< Previous"   class="dr-menu" onclick="javascript:history.back()">
+													<input type=button name=back value="<< Previous"   class="dr-menu" onclick="javascript:backStep()">
 													<input type="button" name="Cancel" value=" Cancel " class="dr-menu" onclick="return quitAdvRptMngr()" >				<input type=button name=generateReport value="  Generate Report  " class="dr-menu"  onclick="javascript:gotoStep()">															
 												</td>
 											</tr>

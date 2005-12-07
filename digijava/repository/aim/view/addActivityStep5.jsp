@@ -507,7 +507,8 @@ function removeSelComponents() {
 																				</logic:iterate>	
 																				<!-- L3 END-->
 																			</table>																		
-																		</td></tr>															
+																		</td></tr>				
+
 																	</logic:notEmpty>
 																	<logic:notEmpty name="selComponents" property="expenditures">
 																		<tr><td><b>
@@ -550,16 +551,19 @@ function removeSelComponents() {
 																			<!-- L4 END-->
 																		</table>
 																	</td></tr>
+																	
 																</logic:notEmpty>
 																
 															</table>
+															<logic:notEmpty name="selComponents" property="commitments">
 															<TR><TD>
 																<FONT color=blue>*
 																	<digi:trn key="aim:allTheAmountsInThousands">	
 																		All the amounts are in thousands (000)
 				  													</digi:trn>
 																</FONT>								
-															</TD></TR>
+															</TD></TR>															
+															</logic:notEmpty>
 														</td></tr>
 													</tr>	
 													<tr>

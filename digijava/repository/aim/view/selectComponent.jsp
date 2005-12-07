@@ -527,10 +527,12 @@ function validate()
 
 	var x = document.aimEditActivityForm;
 
+	/*
 	if (tempComm == 0) {
 		alert ("Commitment not entered.");
 		return false;			  
 	}
+	*/
 
 	if (tempExpn > 0 && tempDisb == 0) {
 		alert ("Expenditure entered without entering disbursements.");

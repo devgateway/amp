@@ -58,7 +58,7 @@ public class ViewAdvancedReport extends Action
 		String perspective = "DN";
 		if(request.getParameter("ampReportId") != null)
 		{
-			logger.info("-------------------->>>>>>>>>" + request.getParameter("ampReportId").toString());
+			logger.debug("-------------------->>>>>>>>>" + request.getParameter("ampReportId").toString());
 			formBean.setCreatedReportId(request.getParameter("ampReportId"));
 		}
 		if(formBean.getPerspective() == null)
@@ -108,8 +108,18 @@ public class ViewAdvancedReport extends Action
 		if(request.getParameter("ampReportId")!=null)
 		{
 			ampReportId=new Long(Long.parseLong(request.getParameter("ampReportId")));
-			logger.info("Report Id: " + ampReportId);
+			logger.debug("Report Id: " + ampReportId);
 		}	
+		AmpTeam ampTeam=DbUtil.getAmpTeam(ampTeamId);
+		AmpReports ampReports=DbUtil.getAmpReport(ampReportId);
+		formBean.setReportName(ampReports.getName());
+		formBean.setWorkspaceType(ampTeam.getType());
+		formBean.setWorkspaceName(ampTeam.getName());
+		if(perspective.equals("DN"))
+			formBean.setPerspective("Donor");
+		if(perspective.equals("MA"))
+			formBean.setPerspective("MOFED");
+		Long ampPageId=DbUtil.getAmpPageId(ampReports.getName());
 
 
 		//Set all the filters
@@ -128,24 +138,31 @@ public class ViewAdvancedReport extends Action
 		formBean.setAmpCloseDays(new ArrayList());
 		formBean.setFiscalYears(new ArrayList());
 
+		filters=DbUtil.getTeamPageFilters(ampTeamId,ampPageId);
+		logger.debug("Filter Size: " + filters.size());
+		if(filters.size()==0)
+			formBean.setGoFlag("false");
+
+		if(filters.size()>0)
+		{
 			formBean.setGoFlag("true");
-			//if(filters.indexOf(Constants.PERSPECTIVE)!=-1)
-			//{
+			if(filters.indexOf(Constants.PERSPECTIVE)!=-1)
+			{
 				formBean.setFilterFlag("true");
 				setFilters = setFilters + " PERSPECTIVE -";
 				filterCnt++;
-			//}
+			}
 		
-			//if(filters.indexOf(Constants.STATUS)!=-1)
-			//{
+			if(filters.indexOf(Constants.STATUS)!=-1)
+			{
 				dbReturnSet=DbUtil.getAmpStatus();
 				formBean.setStatusColl(dbReturnSet) ;
 				setFilters = setFilters + " STATUS -";
 				filterCnt++;
-			//}
+			}
 		
-			//if(filters.indexOf(Constants.SECTOR)!=-1)
-			//{
+			if(filters.indexOf(Constants.SECTOR)!=-1)
+			{
 				setFilters = setFilters + " SECTOR -";
 				filterCnt++;
 				formBean.setSectorColl(new ArrayList()) ;
@@ -175,22 +192,22 @@ public class ViewAdvancedReport extends Action
 						formBean.getSectorColl().add(ampSubSector);
 					}
 				}
-			//}
+			}
 		
-			//if(filters.indexOf(Constants.REGION)!=-1)
-			//{
+			if(filters.indexOf(Constants.REGION)!=-1)
+			{
 				setFilters = setFilters + " REGION -";
 				filterCnt++;
 				dbReturnSet=DbUtil.getAmpLocations();
 				formBean.setRegionColl(dbReturnSet) ;
-			//}
+			}
 		
-			//if(filters.indexOf(Constants.DONORS)!=-1)
-			//{
+			if(filters.indexOf(Constants.DONORS)!=-1)
+			{
 				setFilters = setFilters + " DONORS -";
 				filterCnt++;
 				dbReturnSet=DbUtil.getAmpDonors(ampTeamId);
-				logger.info("Donor Size: " + dbReturnSet.size());
+				logger.debug("Donor Size: " + dbReturnSet.size());
 				iter = dbReturnSet.iterator() ;
 				formBean.setDonorColl(new ArrayList()) ;
 				while ( iter.hasNext() )
@@ -203,41 +220,41 @@ public class ViewAdvancedReport extends Action
 					}
 					formBean.getDonorColl().add(ampOrganisation);
 				}
-			//}
+			}
 		
-			//if(filters.indexOf(Constants.FINANCING_INSTRUMENT)!=-1)
-			//{
+			if(filters.indexOf(Constants.FINANCING_INSTRUMENT)!=-1)
+			{
 				setFilters = setFilters + " MODALITY -";
 				filterCnt++;
 				dbReturnSet=DbUtil.getAmpModality();
 				formBean.setModalityColl(dbReturnSet);
-			//}	
+			}	
 		
-			//if(filters.indexOf(Constants.CURRENCY)!=-1)
-			//{
+			if(filters.indexOf(Constants.CURRENCY)!=-1)
+			{
 				setFilters = setFilters + " CURRENCY -";
 				filterCnt++;
 				dbReturnSet=DbUtil.getAmpCurrency();
 				formBean.setCurrencyColl(dbReturnSet) ;	
-			//}
+			}
 				
-			//if(filters.indexOf(Constants.CALENDAR)!=-1)
-			///{
+			if(filters.indexOf(Constants.CALENDAR)!=-1)
+			{
 				setFilters = setFilters + " CALENDAR -";
 				filterCnt+=10;
 				formBean.setFiscalYears(DbUtil.getAllFisCalenders());
-			//}
+			}
 			
-			//if(filters.indexOf(Constants.YEAR_RANGE)!=-1)
-			//{
+			if(filters.indexOf(Constants.YEAR_RANGE)!=-1)
+			{
 				for(int i=(year-Constants.FROM_YEAR_RANGE);i<=(year+Constants.TO_YEAR_RANGE);i++)
 				{
 					formBean.getAmpFromYears().add(new Long(i));
 					formBean.getAmpToYears().add(new Long(i));
 				}
-			//}
-			//if(filters.indexOf(Constants.STARTDATE_CLOSEDATE)!=-1)
-			//{
+			}
+			if(filters.indexOf(Constants.STARTDATE_CLOSEDATE)!=-1)
+			{
 				for(int i=(year-Constants.FROM_YEAR_RANGE);i<=(year+Constants.TO_YEAR_RANGE);i++)
 				{
 					formBean.getAmpStartYears().add(new Long(i));
@@ -248,8 +265,8 @@ public class ViewAdvancedReport extends Action
 					formBean.getAmpStartDays().add(new Long(i));
 					formBean.getAmpCloseDays().add(new Long(i));
 				}
-			//}
-		//}		
+			}
+		}		
 		
 		if(formBean.getAmpStatusId()==null || formBean.getAmpStatusId().intValue()==0)
 			ampStatusId=All;
@@ -397,7 +414,7 @@ public class ViewAdvancedReport extends Action
 		
 		formBean.setTitles(rsc.getColumns());
 		formBean.setDimColumns(rsc.getColumns().size());
-		logger.info("Measures: " + rsc.getMeasures().size());
+		logger.debug("Measures: " + rsc.getMeasures().size());
 		measures=(ArrayList)rsc.getMeasures();
 		if(rsc.getHierarchy().size()==0)
 			formBean.setHierarchyFlag("false");
@@ -441,7 +458,7 @@ public class ViewAdvancedReport extends Action
 
 		formBean.setFundColumns((measures.size()));
 
-		logger.info("****************************" + measures.size());
+		logger.debug("****************************" + measures.size());
 		
 		if(formBean.getAcBalFlag().equals("true"))
 			formBean.setMeasureCount(measures.size() - 1);
@@ -449,7 +466,7 @@ public class ViewAdvancedReport extends Action
 			formBean.setMeasureCount(measures.size());
 		
 //		dbReturnSet=ReportUtil.getAdvancedReport(ampTeamId,fromYr,toYr,perspective,ampCurrencyCode,ampModalityId,ampStatusId,ampOrgId,ampSectorId,fiscalCalId,startDate,closeDate,region,ampReportId);
-//		logger.info("Number of Records:" + dbReturnSet.size());
+//		logger.debug("Number of Records:" + dbReturnSet.size());
 		/*iter=dbReturnSet.iterator();
 		while(iter.hasNext())
 		{
@@ -734,15 +751,7 @@ public class ViewAdvancedReport extends Action
 			formBean.getForecastYear().add(new Integer(i));
 		
 		formBean.setFilterCnt(filterCnt);
-		AmpTeam ampTeam=DbUtil.getAmpTeam(ampTeamId);
-		AmpReports ampReports=DbUtil.getAmpReport(ampReportId);
-		formBean.setReportName(ampReports.getName());
-		formBean.setWorkspaceType(ampTeam.getType());
-		formBean.setWorkspaceName(ampTeam.getName());
-		if(perspective.equals("DN"))
-			formBean.setPerspective("Donor");
-		if(perspective.equals("MA"))
-			formBean.setPerspective("MOFED");
+		
 		return mapping.findForward("forward");
 	}
 }

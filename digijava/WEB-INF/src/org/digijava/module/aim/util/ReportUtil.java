@@ -746,7 +746,7 @@ public class ReportUtil {
 			Project project=null;
 			ProjectTermAssist termAssist=null;
 			TermFund sectorTermAssist=null;
-			logger.info("Before dbUtil");
+			logger.debug("Before dbUtil");
 			//logger.debug("Sector Size: " + DbUtil.getAmpReportSectors(ampTeamId,fromYr,toYr,perspective).size());
 			iter = DbUtil.getAmpReportSectors(inClauseTeam).iterator();
 			while(iter.hasNext())
@@ -762,17 +762,17 @@ public class ReportUtil {
 				if(report!=null)
 				{ 
 					logger.debug(report.getSector());
-					logger.info("if report not null");
+					logger.debug("if report not null");
 					if(!(ampTeamDonors.getDonorAgency().equals("Unspecified")))
 					{
-						logger.info("Inside Donor");
+						logger.debug("Inside Donor");
 						if(termFlag==1)
 						{
 							termAssist=new ProjectTermAssist();
 							termAssist.setTermAssistName(termAssistName);
 							if(sectorAssistance.indexOf(termAssist.getTermAssistName())==-1)
 							{
-								logger.info("Assistance Added:" + termAssist.getTermAssistName() + ":");
+								logger.debug("Assistance Added:" + termAssist.getTermAssistName() + ":");
 								sectorAssistance.add(termAssist.getTermAssistName());
 							}
 							termAssist.setTermAssistFund(new ArrayList());
@@ -799,7 +799,7 @@ public class ReportUtil {
 							projExpAmount=projExpAmount + totExp;
 							projPlannedDisbAmount=projPlannedDisbAmount + totPlannedDisb;
 							project.getTermAssist().add(termAssist);
-							logger.info("Term Assist:" + termAssist.getTermAssistName());
+							logger.debug("Term Assist:" + termAssist.getTermAssistName());
 					
 							for(int i=0;i<=yrCount;i++)
 							{
@@ -1047,7 +1047,7 @@ public class ReportUtil {
 					queryString = "select report from " + AmpReportCache.class.getName() + " report where (report.ampTeamId in(" + inClauseTeam + ")) and (report.ampActivityId in(" + inClause + ")) order by report.donorName,report.activityName,report.ampActivityId";
 				else
 					queryString = "select report from " + AmpReportCache.class.getName() + " report where (report.ampTeamId in(" + inClauseTeam + ")) and (report.actualStartDate='" + startDate + "' or report.actualCompletionDate='" + closeDate + "') and (report.ampActivityId in(" + inClause + ")) order by report.donorName,report.activityName,report.ampActivityId";
-				logger.info("querystring: " + queryString);
+				logger.debug("querystring: " + queryString);
 				qry = session.createQuery(queryString);
 //				qry.setParameter("ampTeamId",ampTeamId,Hibernate.LONG) ;
 				iterActivity=qry.list().iterator();
@@ -1144,7 +1144,7 @@ public class ReportUtil {
 					{
 						report = new multiReport();
 						report.setSector(ampProjectBySector.getSector().getSectorName());
-						logger.info("Sector: " + ampProjectBySector.getSector().getSectorName());
+						logger.debug("Sector: " + ampProjectBySector.getSector().getSectorName());
 						report.setDonors(new ArrayList());
 						report.setTotalSectorFund(new ArrayList());
 						report.setTotalSectorTermAssistFund(new ArrayList());
@@ -1199,8 +1199,8 @@ public class ReportUtil {
 					else
 					if(ampReportCache.getAmpFundingId()!=null && !(ampReportCache.getDonorName().equals(ampTeamDonors.getDonorAgency())))
 					{
-						logger.info("Inside Donor");
-						logger.info("Donor: " + ampTeamDonors.getDonorAgency());
+						logger.debug("Inside Donor");
+						logger.debug("Donor: " + ampTeamDonors.getDonorAgency());
 						if(!(ampTeamDonors.getDonorAgency().equals("Unspecified")))
 						{
 							if(termFlag==1)
@@ -1377,13 +1377,13 @@ public class ReportUtil {
 						termAssistName=ampReportCache.getTermAssistName();
 						termFlag=0;
 			
-						logger.info("Outside Donor");
+						logger.debug("Outside Donor");
 						
 					}
 					else
 					if(ampReportCache.getAmpFundingId()!=null && ampReportCache.getDonorName().equals(ampTeamDonors.getDonorAgency()) && !(ampReportCache.getAmpActivityId().equals(project.getAmpActivityId())))
 					{
-						logger.info("Inside Project");
+						logger.debug("Inside Project");
 						if(termFlag==1)
 						{
 							termAssist=new ProjectTermAssist();
@@ -1542,19 +1542,19 @@ public class ReportUtil {
 						}
 						project=new Project();
 						project.setName(ampReportCache.getActivityName());
-						logger.info("activity name: " + project.getName());
+						logger.debug("activity name: " + project.getName());
 						project.setAmpActivityId(ampReportCache.getAmpActivityId());
 						project.setCount(++projCount);
 						project.setAmpFund(new ArrayList());
 						project.setTermAssist(new ArrayList());
 						termAssistName=ampReportCache.getTermAssistName();
 						termFlag=0;
-						logger.info("Outside Project");
+						logger.debug("Outside Project");
 					}
 					else
 					if(ampReportCache.getAmpFundingId()!=null && ampReportCache.getDonorName().equals(ampTeamDonors.getDonorAgency()) && ampReportCache.getAmpActivityId().equals(project.getAmpActivityId()) && !(ampReportCache.getTermAssistName().equals(termAssistName)))
 					{
-						logger.info("Inside Terms");
+						logger.debug("Inside Terms");
 						if(termFlag==1)
 						{
 							termAssist=new ProjectTermAssist();
@@ -1682,10 +1682,10 @@ public class ReportUtil {
 						for(int i=0;i<yrCount;i++)
 							termFunds[i][0]=termFunds[i][1]=termFunds[i][2]=termFunds[i][3]=0;
 						totPlannedDisb=totDisb=totExp=totComm=0;
-						logger.info("Outside Terms");
+						logger.debug("Outside Terms");
 					}
-					logger.info("Fiscal Year: " + ampReportCache.getFiscalYear());
-					logger.info("Fiscal Quarter: " + ampReportCache.getFiscalQuarter());
+					logger.debug("Fiscal Year: " + ampReportCache.getFiscalYear());
+					logger.debug("Fiscal Quarter: " + ampReportCache.getFiscalQuarter());
 					if(ampReportCache.getFiscalYear()!=null && ampReportCache.getFiscalQuarter()!=null)
 					{
 						if(new Long(fiscalCalId).equals(Constants.GREGORIAN))
@@ -1773,7 +1773,7 @@ public class ReportUtil {
 						}
 						amount=0.0;
 					}
-					logger.info("Funding Complete");
+					logger.debug("Funding Complete");
 				}
 			}
 			if(!ampTeamDonors.getDonorAgency().equals("Unspecified"))
@@ -2110,7 +2110,7 @@ public class ReportUtil {
 		}
 		catch(Exception ex) 		
 		{
-			logger.info("Unable to get report names  from database " + ex.getMessage());
+			logger.debug("Unable to get report names  from database " + ex.getMessage());
 		}
 		finally 
 		{
@@ -2185,7 +2185,7 @@ public class ReportUtil {
 						inClause=inClause + ",'" + teamId + "'";
 				}
 			}
-			logger.info("Inclause: " + inClause);
+			logger.debug("Inclause: " + inClause);
 			approvedActivityList=DbUtil.getApprovedActivities(inClause);
 			session = PersistenceManager.getSession();
 			if(startDate==null && closeDate==null)
@@ -2194,7 +2194,7 @@ public class ReportUtil {
 				queryString = "select report from " + AmpReportCache.class.getName() + " report where (report.ampTeamId in(" + inClause + ")) and (report.actualStartDate='" + startDate + "' or report.actualCompletionDate='" + closeDate + "') and (report.donorName is not null) and (report.termAssistName is not null) order by report.ampTeamId,report.donorName,report.termAssistName,report.fiscalYear";
 			q = session.createQuery(queryString);	
 //			q.setParameter("ampTeamId",ampTeamId,Hibernate.LONG) ;
-			logger.info("Number of Records: " + q.list().size());
+			logger.debug("Number of Records: " + q.list().size());
 			multiReport report =null;
 			AmpTeamDonors ampTeamDonors=null;
 			TermFund donorTermAssist=null;
@@ -2230,9 +2230,9 @@ public class ReportUtil {
 								fiscalYear=(int)ec.ethYear;
 								fiscalQuarter=(int)ec.ethQtr;
 							}
-							logger.info("Ethiopian Fiscal Year: " + fiscalYear);
-							logger.info("From Year: " + fromYr);
-							logger.info("From Year: " + toYr);
+							logger.debug("Ethiopian Fiscal Year: " + fiscalYear);
+							logger.debug("From Year: " + fromYr);
+							logger.debug("From Year: " + toYr);
 						/*	if(fiscalYear<fromYr || fiscalYear>toYr)
 								continue;*/
 						}
@@ -2302,7 +2302,7 @@ public class ReportUtil {
 					}					
 					if(report==null || !(report.getAmpTeamId().equals(ampReportCache.getAmpTeamId())))
 					{
-						logger.info("New donor: " + ampReportCache.getDonorName());
+						logger.debug("New donor: " + ampReportCache.getDonorName());
 						if(report!=null)
 						{
 							if(termFlag==1)
@@ -2329,7 +2329,7 @@ public class ReportUtil {
 									donorFunds[i][2]=donorFunds[i][2] + termFunds[i][2];
 									donorFunds[i][3]=donorFunds[i][3] + termFunds[i][3];
 								}
-								logger.info("End First For");
+								logger.debug("End First For");
 						
 								donorTermAssist.setTotDonorCommAmount(mf.format(totComm));
 								donorTermAssist.setTotDonorDisbAmount(mf.format(totDisb));
@@ -2409,7 +2409,7 @@ public class ReportUtil {
 								teamFunds[i][2]=teamFunds[i][2] + donorFunds[i][2];
 								teamFunds[i][3]=teamFunds[i][3] + donorFunds[i][3];
 							}
-							logger.info("End Second For");
+							logger.debug("End Second For");
 							ampTeamDonors.setDonorCommAmount(mf.format(donorCommAmount));
 							ampTeamDonors.setDonorDisbAmount(mf.format(donorDisbAmount));
 							ampTeamDonors.setDonorExpAmount(mf.format(donorExpAmount));
@@ -2430,7 +2430,7 @@ public class ReportUtil {
 								total.setTotPlannedDisbAmount(mf.format(teamFunds[i][3]));
 								report.getTotalTeamFund().add(total);	
 							}
-							logger.info("End Third For");
+							logger.debug("End Third For");
 							report.setTeamCommAmount(mf.format(teamCommAmount));
 							report.setTeamDisbAmount(mf.format(teamDisbAmount));
 							report.setTeamExpAmount(mf.format(teamExpAmount));
@@ -2440,7 +2440,7 @@ public class ReportUtil {
 							while(teamIter.hasNext())
 							{
 								String assist=(String) teamIter.next();
-								logger.info("Assist:" + assist + ":");
+								logger.debug("Assist:" + assist + ":");
 								TermFund termFund=new TermFund();
 								if(assist.equals("Loan"))
 								{
@@ -2499,7 +2499,7 @@ public class ReportUtil {
 									termFund.setTotDonorPlannedDisbAmount(mf.format(kindTeamFunds[yrCount][3]));
 									termFund.setTotDonorUnDisbAmount(mf.format(kindTeamFunds[yrCount][0]-kindTeamFunds[yrCount][1]));
 								}
-								logger.info("Added: " + termFund.getTermAssistName());
+								logger.debug("Added: " + termFund.getTermAssistName());
 								report.getTotalTeamTermAssistFund().add(termFund);	
 							}
 							ampReports.add(report);
@@ -2520,7 +2520,7 @@ public class ReportUtil {
 							kindTeamFunds[yrCount][0]=kindTeamFunds[yrCount][1]=kindTeamFunds[yrCount][2]=kindTeamFunds[yrCount][3]=0;
 							donorCount=0;
 						}
-						//logger.info("begin intialize");
+						//logger.debug("begin intialize");
 						report = new multiReport();
 						AmpTeam ampTeam=DbUtil.getAmpTeam(ampReportCache.getAmpTeamId());
 						report.setAmpTeamId(ampReportCache.getAmpTeamId());
@@ -2537,13 +2537,13 @@ public class ReportUtil {
 						if(ampReportCache.getTermAssistName()!=null)
 							termAssistName=ampReportCache.getTermAssistName();
 						termFlag=0;
-						logger.info("end init");
+						logger.debug("end init");
 											
 					}
 
 					if(report.getAmpTeamId().equals(ampReportCache.getAmpTeamId()) && !(ampReportCache.getDonorName().equals(ampTeamDonors.getDonorAgency())))
 					{
-						logger.info("Inside donor");
+						logger.debug("Inside donor");
 						if(termFlag==1)
 						{
 							donorTermAssist=new TermFund();
@@ -2673,12 +2673,12 @@ public class ReportUtil {
 						if(ampReportCache.getTermAssistName()!=null)
 							termAssistName=ampReportCache.getTermAssistName();
 						termFlag=0;
-						logger.info("Outside donor");
+						logger.debug("Outside donor");
 					}
 					
 					if(report.getAmpTeamId().equals(ampReportCache.getAmpTeamId()) && ampReportCache.getDonorName().equals(ampTeamDonors.getDonorAgency()) && !(ampReportCache.getTermAssistName().equals(termAssistName)))
 					{
-						logger.info("different project");
+						logger.debug("different project");
 						if(termFlag==1)
 						{
 							donorTermAssist=new TermFund();
@@ -2777,10 +2777,10 @@ public class ReportUtil {
 							termAssistName=ampReportCache.getTermAssistName();
 						termFlag=0;
 					}
-					logger.info("Funding Information");
+					logger.debug("Funding Information");
 					if(ampReportCache.getFiscalYear()!=null && ampReportCache.getFiscalQuarter()!=null)
 					{
-						//logger.info("begin if");
+						//logger.debug("begin if");
 						if(new Long(fiscalCalId).equals(Constants.GREGORIAN))
 						{
 							fiscalYear=ampReportCache.getFiscalYear().intValue();
@@ -2995,7 +2995,7 @@ public class ReportUtil {
 				while(teamIter.hasNext())
 				{
 					String assist=(String) teamIter.next();
-					logger.info("Assist:" + assist + ":");
+					logger.debug("Assist:" + assist + ":");
 					TermFund termFund=new TermFund();
 					if(assist.equals("Loan"))
 					{
@@ -3054,7 +3054,7 @@ public class ReportUtil {
 						termFund.setTotDonorPlannedDisbAmount(mf.format(kindTeamFunds[yrCount][3]));
 						termFund.setTotDonorUnDisbAmount(mf.format(kindTeamFunds[yrCount][0]-kindTeamFunds[yrCount][1]));
 					}
-					logger.info("Added:" + termFund.getTermAssistName());
+					logger.debug("Added:" + termFund.getTermAssistName());
 					report.getTotalTeamTermAssistFund().add(termFund);	
 				}
 				ampReports.add(report);
@@ -3062,7 +3062,7 @@ public class ReportUtil {
 		}
 		catch(Exception ex) 		
 		{
-			logger.info("Unable to get report names  from database " + ex.getMessage());
+			logger.debug("Unable to get report names  from database " + ex.getMessage());
 		}
 		finally 
 		{
@@ -4535,7 +4535,7 @@ public class ReportUtil {
 							while(donorIter.hasNext())
 							{
 								String assist=(String) donorIter.next();
-								logger.info("Assist:" + assist + ":");
+								logger.debug("Assist:" + assist + ":");
 								TermFund termFund=new TermFund();
 								if(assist.equals("Loan"))
 								{
@@ -4630,7 +4630,7 @@ public class ReportUtil {
 							while(teamIter.hasNext())
 							{
 								String assist=(String) teamIter.next();
-								logger.info("Assist:" + assist + ":");
+								logger.debug("Assist:" + assist + ":");
 								TermFund termFund=new TermFund();
 								if(assist.equals("Loan"))
 								{
@@ -5070,7 +5070,7 @@ public class ReportUtil {
 						while(donorIter.hasNext())
 						{
 							String assist=(String) donorIter.next();
-							logger.info("Assist:" + assist + ":");
+							logger.debug("Assist:" + assist + ":");
 							TermFund termFund=new TermFund();
 							if(assist.equals("Loan"))
 							{
@@ -5688,7 +5688,7 @@ public class ReportUtil {
 						while(donorIter.hasNext())
 						{
 							String assist=(String) donorIter.next();
-							logger.info("Assist:" + assist + ":");
+							logger.debug("Assist:" + assist + ":");
 							TermFund termFund=new TermFund();
 							if(assist.equals("Loan"))
 							{
@@ -5783,7 +5783,7 @@ public class ReportUtil {
 						while(teamIter.hasNext())
 						{
 							String assist=(String) teamIter.next();
-							logger.info("Assist:" + assist + ":");
+							logger.debug("Assist:" + assist + ":");
 							TermFund termFund=new TermFund();
 							if(assist.equals("Loan"))
 							{
@@ -7205,8 +7205,8 @@ public class ReportUtil {
 				}
 				if(report!=null)
 				{ 
-					logger.info(report.getSector());
-					logger.info("if report not null");
+					logger.debug(report.getSector());
+					logger.debug("if report not null");
 					if(!(ampTeamDonors.getDonorAgency().equals("Unspecified")))
 					{
 						if(termFlag==1)
@@ -7304,7 +7304,7 @@ public class ReportUtil {
 	//						logger.debug("After term assist");
 						
 						}
-						logger.info("Start adding project");
+						logger.debug("Start adding project");
 						for(int i=0;i<yrCount;i++)
 						{
 							for(int qtr=0;qtr<4;qtr++)
@@ -7321,7 +7321,7 @@ public class ReportUtil {
 						project.setProjExpAmount(mf.format(projExpAmount));
 						project.setProjUnDisbAmount(mf.format(projCommAmount-projDisbAmount));
 						ampTeamDonors.getProject().add(project);
-						logger.info("Project Added");
+						logger.debug("Project Added");
 						for(int i=0;i<yrCount;i++)
 						{
 							for(int qtr=0;qtr<4;qtr++)
@@ -7349,9 +7349,9 @@ public class ReportUtil {
 						totalDisbAmount=totalDisbAmount + sectorDisbAmount;
 						totalExpAmount=totalExpAmount + sectorExpAmount;
 					}
-					logger.info("Adding Donor");
+					logger.debug("Adding Donor");
 					report.getDonors().add(ampTeamDonors);
-					logger.info("Donor Added");
+					logger.debug("Donor Added");
 					for(int i=0;i<yrCount;i++)
 					{
 						for(int qtr=0;qtr<4;qtr++)
@@ -7369,12 +7369,12 @@ public class ReportUtil {
 					report.setSectorUnDisbAmount(mf.format(sectorCommAmount-sectorDisbAmount));
 					
 					totalPlDisb=totalDisb=totalExp=0.0;
-					logger.info("Start Iter");
+					logger.debug("Start Iter");
 					Iterator sectorIter=sectorAssistance.iterator();
 					while(sectorIter.hasNext())
 					{
 						String assist=(String) sectorIter.next();
-						logger.info("Assist:" + assist + ":");
+						logger.debug("Assist:" + assist + ":");
 						TermFund termFund=new TermFund();
 						if(assist.equals("Loan"))
 						{
@@ -7484,7 +7484,7 @@ public class ReportUtil {
 //					donorCount=0;
 					ampReports.add(report);
 					report=null;
-					logger.info("Outside Sector");
+					logger.debug("Outside Sector");
 				}
 				
 		/*		ampStrId=ampReportSector.getAmpSectorId();
@@ -7600,7 +7600,7 @@ public class ReportUtil {
 					{
 						report = new multiReport();
 						report.setSector(ampProjectBySector.getSector().getSectorName());
-						logger.info("Sector: " + ampProjectBySector.getSector().getSectorName());
+						logger.debug("Sector: " + ampProjectBySector.getSector().getSectorName());
 						report.setDonors(new ArrayList());
 						report.setTotalSectorFund(new ArrayList());
 						report.setTotalSectorTermAssistFund(new ArrayList());
@@ -7615,7 +7615,7 @@ public class ReportUtil {
 							ampTeamDonors.setDonorAgency("Unspecified");
 						else
 							ampTeamDonors.setDonorAgency(ampReportCache.getDonorName());
-						logger.info("Donor: " + ampTeamDonors.getDonorAgency());
+						logger.debug("Donor: " + ampTeamDonors.getDonorAgency());
 						if(ampReportCache.getDonorName()!=null)
 						{	
 							project=new Project();
@@ -7656,7 +7656,7 @@ public class ReportUtil {
 					else
 					if(ampReportCache.getAmpFundingId()!=null && !(ampReportCache.getDonorName().equals(ampTeamDonors.getDonorAgency())))
 					{
-						logger.info("inside donor");
+						logger.debug("inside donor");
 						if(!ampTeamDonors.getDonorAgency().equals("Unspecified"))
 						{
 							if(termFlag==1)
@@ -7814,13 +7814,13 @@ public class ReportUtil {
 						project.setTermAssist(new ArrayList());
 						termAssistName=ampReportCache.getTermAssistName();
 						termFlag=0;
-						logger.info("Outside donor");
+						logger.debug("Outside donor");
 						
 					}
 					else
 					if(ampReportCache.getAmpFundingId()!=null && ampReportCache.getDonorName().equals(ampTeamDonors.getDonorAgency()) && !(ampReportCache.getAmpActivityId().equals(project.getAmpActivityId())))
 					{
-						logger.info("inside project");
+						logger.debug("inside project");
 						if(termFlag==1)
 						{
 							termAssist=new ProjectTermAssist();
@@ -7968,12 +7968,12 @@ public class ReportUtil {
 						project.setTermAssist(new ArrayList());
 						termAssistName=ampReportCache.getTermAssistName();
 						termFlag=0;
-						logger.info("outside project");
+						logger.debug("outside project");
 					}
 					else
 					if(ampReportCache.getAmpFundingId()!=null && ampReportCache.getDonorName().equals(ampTeamDonors.getDonorAgency()) && ampReportCache.getAmpActivityId().equals(project.getAmpActivityId()) && !(ampReportCache.getTermAssistName().equals(termAssistName)))
 					{
-						logger.info("Inside Terms");
+						logger.debug("Inside Terms");
 						if(termFlag==1)
 						{
 							termAssist=new ProjectTermAssist();
@@ -8079,7 +8079,7 @@ public class ReportUtil {
 								expTermFunds[i][qtr]=0;
 							}
 						}
-						logger.info("Outside Terms");
+						logger.debug("Outside Terms");
 					}
 					if(ampReportCache.getFiscalYear()!=null && ampReportCache.getFiscalQuarter()!=null)
 					{
@@ -10362,7 +10362,7 @@ public class ReportUtil {
 						inClause=inClause + ",'" + teamId + "'";
 				}
 			}
-			logger.info("Inclause: " + inClause);
+			logger.debug("Inclause: " + inClause);
 			approvedActivityList=DbUtil.getApprovedActivities(inClause);
 			session = PersistenceManager.getSession();
 			if(startDate==null && closeDate==null)
@@ -10371,7 +10371,7 @@ public class ReportUtil {
 				queryString = "select report from " + AmpReportCache.class.getName() + " report where report.ampTeamId in(" + inClause + ") and (report.actualStartDate='" + startDate + "' or report.actualCompletionDate='" + closeDate + "') order by report.ampDonorId,report.ampActivityId,report.transactionDate";
 				
 	
-			logger.info("querystring: " + queryString);
+			logger.debug("querystring: " + queryString);
 			q = session.createQuery(queryString);	
 			multiReport report =null;
 			AmpTeamDonors ampTeamDonors=null;
@@ -10463,7 +10463,7 @@ public class ReportUtil {
 							projCount=0;
 							commFlag=0;
 						}		
-						logger.info("Start init");
+						logger.debug("Start init");
 						report = new multiReport();
 						AmpTeam ampTeam=DbUtil.getAmpTeam(ampReportCache.getAmpTeamId());
 						report.setAmpTeamId(ampReportCache.getAmpTeamId());
@@ -10523,7 +10523,7 @@ public class ReportUtil {
 							}		
 
 						}
-						logger.info("End init");
+						logger.debug("End init");
 					}
 					if(ampReportCache.getDonorName()==null)
 					{
@@ -10580,7 +10580,7 @@ public class ReportUtil {
 					{
 						if(report.getAmpTeamId().equals(ampReportCache.getAmpTeamId()) && !(ampReportCache.getDonorName().equals(ampTeamDonors.getDonorAgency())))
 						{
-							logger.info("Inside Donor");
+							logger.debug("Inside Donor");
 							if(!(ampTeamDonors.getDonorAgency().equals("Unspecified")))
 							{
 								project.setAcCommitment(mf.format(actualCommitment));
@@ -10641,7 +10641,7 @@ public class ReportUtil {
 									}
 								}
 							}
-							logger.info("Outside Donor");
+							logger.debug("Outside Donor");
 						}
 					}
 
@@ -10649,7 +10649,7 @@ public class ReportUtil {
 					{
 						if(report.getAmpTeamId().equals(ampReportCache.getAmpTeamId()) && ampReportCache.getDonorName().equals(ampTeamDonors.getDonorAgency()) && !(ampReportCache.getAmpActivityId().equals(project.getAmpActivityId())))
 						{
-							logger.info("Inside Project");
+							logger.debug("Inside Project");
 							project.setAcCommitment(mf.format(actualCommitment));
 							project.setAcDisbursement(mf.format(actualDisbursement));
 							project.setAcUnDisbursement(mf.format(actualCommitment-actualDisbursement));
@@ -10701,13 +10701,13 @@ public class ReportUtil {
 									}
 								}
 							}
-							logger.info("Outside Project");
+							logger.debug("Outside Project");
 						}
 					}
 
 					if(ampReportCache.getFiscalYear()!=null && ampReportCache.getFiscalQuarter()!=null)
 					{	
-						logger.info("Begin if");
+						logger.debug("Begin if");
 						if(ampReportCache.getCurrencyCode().equals("USD"))
 							fromExchangeRate=1.0;
 						else
@@ -10739,7 +10739,7 @@ public class ReportUtil {
 							}
 						}		
 						amount=0.0;
-						//logger.info("End if");
+						//logger.debug("End if");
 					}		
 								
 					
@@ -10757,7 +10757,7 @@ public class ReportUtil {
 		}
 		catch(Exception ex) 		
 		{
-			logger.info("Unable to get report names  from database " + ex.getMessage());
+			logger.debug("Unable to get report names  from database " + ex.getMessage());
 		}
 		finally 
 		{
@@ -10945,12 +10945,12 @@ public class ReportUtil {
 				while(iter.hasNext())
 				{
 					String str = (String) iter.next();
-					logger.info(" >>>> " + str);
+					logger.debug(" >>>> " + str);
 				}
 				Long lg = new Long("0");
 				session = PersistenceManager.getSession();
 				String queryString = "select report from " + AmpReportCache.class.getName() + " report where (report.ampTeamId in(" + inClause + ")) ";
-				logger.info( " Query 2 :" + queryString);
+				logger.debug( " Query 2 :" + queryString);
 				Query query = session.createQuery(queryString);
 				iter = query.list().iterator();
 				int i = 0, count = 0;
@@ -10979,7 +10979,7 @@ public class ReportUtil {
 							}
 							else
 							{
-								//logger.info(  reportCachePrev.getActivityName()+ " ::" + reportCachePrev.getAmpActivityId()+ " Not Equak : " + actCommit);
+								//logger.debug(  reportCachePrev.getActivityName()+ " ::" + reportCachePrev.getAmpActivityId()+ " Not Equak : " + actCommit);
 								reportCachePrev = ampReportCache;
 								Collection tempColl = new ArrayList();
 								
@@ -11017,7 +11017,7 @@ public class ReportUtil {
 						}
 					}
 				}
-				logger.info( result.size()+ " : Record count : ");
+				logger.debug( result.size()+ " : Record count : ");
 			}
 		}
 		catch(Exception e)
@@ -11064,14 +11064,14 @@ public class ReportUtil {
 				+ " ar where (ar.ampReportId='" + ampReportId + "')";
 
 			Query qry = session.createQuery(queryString);
-			logger.info("Query: " + queryString);
+			logger.debug("Query: " + queryString);
 			itr = qry.list().iterator();
 			if(itr.hasNext())
 			{
 				ampReports=(AmpReports) itr.next();
-				logger.info("Report Name: " + ampReports.getName());
-				logger.info("Column Size: " + ampReports.getColumns().size());
-			//	logger.info("Report Option: " + ampReports.getOptions());
+				logger.debug("Report Name: " + ampReports.getName());
+				logger.debug("Column Size: " + ampReports.getColumns().size());
+			//	logger.debug("Report Option: " + ampReports.getOptions());
 				itrColumn=ampReports.getColumns().iterator();
 				itrMeasure=ampReports.getMeasures().iterator();
 				itrHierarchy=ampReports.getHierarchies().iterator();
@@ -11284,16 +11284,16 @@ public class ReportUtil {
 				}
 			}
 //			currencies=DbUtil.getAmpCurrencyRate();
-			logger.info("Inclause: " + inClause);
+			logger.debug("Inclause: " + inClause);
 			approvedActivityList=DbUtil.getApprovedActivities(inClause);
 			session = PersistenceManager.getSession();
 			if(startDate==null && closeDate==null)
 				queryString = "select report from " + AmpReportCache.class.getName() + " report where (report.ampTeamId in(" + inClause + ")) order by " + orderClause;
 			else
 				queryString = "select report from " + AmpReportCache.class.getName() + " report where (report.ampTeamId in(" + inClause + ")) and (report.actualStartDate='" + startDate + "' or report.actualCompletionDate='" + closeDate + "') order by " + orderClause;
-			logger.info("querystring: " + queryString);
+			logger.debug("querystring: " + queryString);
 			q = session.createQuery(queryString);	
-			logger.info("Query Result: " + q.list().size());
+			logger.debug("Query Result: " + q.list().size());
 			ampActivities=(ArrayList)q.list();
 			iter=ampActivities.iterator();
 			while(iter.hasNext())
@@ -11431,7 +11431,7 @@ public class ReportUtil {
 							iterColumn=columns.iterator();
 							while(iterColumn.hasNext())
 							{
-								logger.info("Begin while");
+								logger.debug("Begin while");
 								report=new AdvancedReport();
 								report.setDonors(new ArrayList());
 								report.setSectors(new ArrayList());
@@ -11487,7 +11487,7 @@ public class ReportUtil {
 								reports.getRecords().add(report);
 
 							}
-							logger.info("Reports Size: " + reports.getRecords().size());
+							logger.debug("Reports Size: " + reports.getRecords().size());
 							report=new AdvancedReport();
 							report.setAmpFund(new ArrayList());
 							if(rsc.getOption().equals(Constants.ANNUAL))
@@ -11531,8 +11531,8 @@ public class ReportUtil {
 								report.getAmpFund().add(fund) ;	
 								
 								reports.getRecords().add(report);
-								logger.info("Reports Size: " + reports.getRecords().size());
-								logger.info("Fund Size: " + report.getAmpFund().size());
+								logger.debug("Reports Size: " + reports.getRecords().size());
+								logger.debug("Fund Size: " + report.getAmpFund().size());
 							}
 							else
 							{
@@ -11577,7 +11577,7 @@ public class ReportUtil {
 								fund.setPlExpAmount(mf.format(planSumExp));
 								fund.setUnDisbAmount(mf.format(sumUnDisb));
 								report.getAmpFund().add(fund) ;	
-								logger.info("Fund Size: " + report.getAmpFund().size());			
+								logger.debug("Fund Size: " + report.getAmpFund().size());			
 								reports.getRecords().add(report);
 							}	
 							ampReports.add(reports);
@@ -11606,7 +11606,7 @@ public class ReportUtil {
 						}
 						reports= new Report();
 						reports.setRecords(new ArrayList());
-						logger.info("Init Record");
+						logger.debug("Init Record");
 						title=ampReportCache.getActivityName();
 						ampId=ampReportCache.getAmpId();
 						reports.setAmpActivityId(ampReportCache.getAmpActivityId());
@@ -11673,7 +11673,7 @@ public class ReportUtil {
 							contacts.add(contactName);
 	
 					}
-					logger.info("Title:" + title);
+					logger.debug("Title:" + title);
 					if(donors.indexOf(ampReportCache.getDonorName())==-1 && ampReportCache.getDonorName()!=null)
 						donors.add(ampReportCache.getDonorName());
 					if(assistance.indexOf(ampReportCache.getTermAssistName())==-1 && ampReportCache.getTermAssistName()!=null)
@@ -11682,7 +11682,7 @@ public class ReportUtil {
 						modality.add(ampReportCache.getModalityName());
 					if(ampReportCache.getFiscalYear()!=null && ampReportCache.getFiscalQuarter()!=null)
 					{
-						logger.info("begin if");
+						logger.debug("begin if");
 						if(new Long(fiscalCalId).equals(Constants.GREGORIAN))
 						{
 							fiscalYear=ampReportCache.getFiscalYear().intValue();
@@ -11895,12 +11895,12 @@ public class ReportUtil {
 								amount=0.0;
 							}	
 						}	
-						//logger.info("End If");
+						//logger.debug("End If");
 						
 					}
 					
 				}
-				//logger.info("At the end");
+				//logger.debug("At the end");
 				iterColumn=columns.iterator();
 				while(iterColumn.hasNext())
 				{
@@ -12045,7 +12045,7 @@ public class ReportUtil {
 					fund.setUnDisbAmount(mf.format(sumUnDisb));
 					report.getAmpFund().add(fund) ;	
 
-					logger.info("Fund Size: " + report.getAmpFund().size());
+					logger.debug("Fund Size: " + report.getAmpFund().size());
 					
 					reports.getRecords().add(report);
 				}
@@ -12074,7 +12074,7 @@ public class ReportUtil {
 					Column colLevel2=(Column) hierarchy.get(1);
 					Column colLevel3=(Column) hierarchy.get(2);
 					dbReturnSet=ReportUtil.getLevel3AdvancedReport(ampTeamId,colLevel1.getColumnId(),colLevel2.getColumnId(),colLevel3.getColumnId(),ampStatusId,ampDonorId,ampModalityId,ampSectorId);
-					logger.info("Hierarchy 3 Size: " + dbReturnSet.size());
+					logger.debug("Hierarchy 3 Size: " + dbReturnSet.size());
 				}
 				iterLevel1=dbReturnSet.iterator();
 				while(iterLevel1.hasNext())
@@ -12338,7 +12338,7 @@ public class ReportUtil {
 								}
 							}
 						}//End of Level 2 iteration
-						//logger.info("level2 size: " + ahReport.getLevels().size());
+						//logger.debug("level2 size: " + ahReport.getLevels().size());
 						if(ahReport.getLevels().size()>0)
 						{
 							ahReport.setFundSubTotal(new ArrayList());
@@ -12544,7 +12544,7 @@ public class ReportUtil {
 					} //End of else
 					
 				}//End of iteration of levels
-				logger.info("Level 1 size: " + mreport.getHierarchy().size());
+				logger.debug("Level 1 size: " + mreport.getHierarchy().size());
 				mreport.setFundTotal(new ArrayList());
 				if(rsc.getOption().equals(Constants.ANNUAL))
 				{
@@ -12613,7 +12613,7 @@ public class ReportUtil {
 		}
 		catch(Exception ex) 		
 		{
-			logger.info("Unable to get report names  from database " + ex.getMessage());
+			logger.debug("Unable to get report names  from database " + ex.getMessage());
 		}
 		finally 
 		{
@@ -12661,7 +12661,7 @@ public class ReportUtil {
 						+ " activity where (activity.team.ampTeamId='" + ampTeamId + "') and (activity.status.ampStatusId='" + ampStatus.getAmpStatusId() + "')";
 
 					Query qry = session.createQuery(queryString);
-					logger.info("Query: " + queryString);
+					logger.debug("Query: " + queryString);
 					if(qry.list().size()>0)
 					{
 						AdvancedHierarchyReport ahReport= new AdvancedHierarchyReport();
@@ -12699,7 +12699,7 @@ public class ReportUtil {
 						+ "') and (activity.ampDonorId='" + ampOrganisation.getAmpOrgId() + "')";
 
 					Query qry = session.createQuery(queryString);
-					logger.info("Query: " + queryString);
+					logger.debug("Query: " + queryString);
 					if(qry.list().size()>0)
 					{
 						AdvancedHierarchyReport ahReport= new AdvancedHierarchyReport();
@@ -12737,7 +12737,7 @@ public class ReportUtil {
 						+ "') and (activity.ampModalityId='" + ampModality.getAmpModalityId() + "')";
 
 					Query qry = session.createQuery(queryString);
-					logger.info("Query: " + queryString);
+					logger.debug("Query: " + queryString);
 					if(qry.list().size()>0)
 					{
 						AdvancedHierarchyReport ahReport= new AdvancedHierarchyReport();
@@ -12764,7 +12764,7 @@ public class ReportUtil {
 					+ " activity where (activity.team.ampTeamId='" + ampTeamId + "')";
 
 				Query qry = session.createQuery(queryString);
-				logger.info("Query: " + queryString);
+				logger.debug("Query: " + queryString);
 				iter=qry.list().iterator();
 				while(iter.hasNext())
 				{
@@ -12822,7 +12822,7 @@ public class ReportUtil {
 						+ "') and (activity.termAssistName='" + ampTermsAssist.getTermsAssistName() + "')";
 
 					Query qry = session.createQuery(queryString);
-					logger.info("Query: " + queryString);
+					logger.debug("Query: " + queryString);
 					if(qry.list().size()>0)
 					{
 						AdvancedHierarchyReport ahReport= new AdvancedHierarchyReport();
@@ -12919,7 +12919,7 @@ public class ReportUtil {
 							+ " activity where (activity.ampActivityId in(" + inClause + ")) and (activity.status.ampStatusId='" + ampStatus.getAmpStatusId() + "')";
 
 						Query qry = session.createQuery(queryString);
-						logger.info("Query: " + queryString);
+						logger.debug("Query: " + queryString);
 						if(qry.list().size()>0)
 						{
 							AdvancedHierarchyReport ahReport= new AdvancedHierarchyReport();
@@ -12956,7 +12956,7 @@ public class ReportUtil {
 							+ " activity where (activity.ampActivityId in(" + inClause + ")) and (activity.ampDonorId='" + ampOrganisation.getAmpOrgId() + "')";
 
 						Query qry = session.createQuery(queryString);
-						logger.info("Query: " + queryString);
+						logger.debug("Query: " + queryString);
 						if(qry.list().size()>0)
 						{
 							AdvancedHierarchyReport ahReport= new AdvancedHierarchyReport();
@@ -12993,7 +12993,7 @@ public class ReportUtil {
 							+ " activity where (activity.ampActivityId in(" + inClause + ")) and (activity.ampModalityId='" + ampModality.getAmpModalityId() + "')";
 
 						Query qry = session.createQuery(queryString);
-						logger.info("Query: " + queryString);
+						logger.debug("Query: " + queryString);
 						if(qry.list().size()>0)
 						{
 							AdvancedHierarchyReport ahReport= new AdvancedHierarchyReport();
@@ -13020,7 +13020,7 @@ public class ReportUtil {
 						+ " activity where (activity.ampActivityId in(" + inClause + "))";
 
 					Query qry = session.createQuery(queryString);
-					logger.info("Query: " + queryString);
+					logger.debug("Query: " + queryString);
 					iter=qry.list().iterator();
 					while(iter.hasNext())
 					{
@@ -13076,7 +13076,7 @@ public class ReportUtil {
 							+ " activity where (activity.ampActivityId in(" + inClause + ")) and (activity.termAssistName='" + ampTermsAssist.getTermsAssistName() + "')";
 
 						Query qry = session.createQuery(queryString);
-						logger.info("Query: " + queryString);
+						logger.debug("Query: " + queryString);
 						if(qry.list().size()>0)
 						{
 							AdvancedHierarchyReport ahReport= new AdvancedHierarchyReport();
@@ -13203,11 +13203,11 @@ public class ReportUtil {
 		try
 		{
 			columns=rsc.getColumns();
-			logger.info("Column Size: " + columns.size());
+			logger.debug("Column Size: " + columns.size());
 //			hierarchy=(ArrayList)rsc.getHierarchy();
 			measures=(ArrayList)rsc.getMeasures();
-			logger.info("Measure Size: " + measures.size());
-			logger.info("Number of Activities:" + ampActivities.size());
+			logger.debug("Measure Size: " + measures.size());
+			logger.debug("Number of Activities:" + ampActivities.size());
 			iter = ampActivities.iterator();
 			while(iter.hasNext())
 			{
@@ -13222,7 +13222,7 @@ public class ReportUtil {
 						iterColumn=columns.iterator();
 						while(iterColumn.hasNext())
 						{
-							logger.info("Begin while 1");
+							logger.debug("Begin while 1");
 							report=new AdvancedReport();
 							report.setDonors(new ArrayList());
 							report.setSectors(new ArrayList());
@@ -13245,7 +13245,7 @@ public class ReportUtil {
 								report.setTitle(title);
 							if(c.getColumnId().equals(Constants.TERM_ASSIST_NAME))
 							{	
-								logger.info("Inside type of assistance");
+								logger.debug("Inside type of assistance");
 								if(assistance.size()==0)
 									assistance.add(" ");
 								report.setAssistance(assistance);
@@ -13278,7 +13278,7 @@ public class ReportUtil {
 								report.setDescription(description);
 								reports.getRecords().add(report);
 						}
-						//logger.info("Reports Size: " + reports.getRecords().size());
+						//logger.debug("Reports Size: " + reports.getRecords().size());
 						report=new AdvancedReport();
 						report.setAmpFund(new ArrayList());
 						if(rsc.getOption().equals(Constants.ANNUAL))
@@ -13335,8 +13335,8 @@ public class ReportUtil {
 							report.getAmpFund().add(fund) ;	
 								
 							reports.getRecords().add(report);
-							logger.info("Reports Size: " + reports.getRecords().size());
-							logger.info("Fund Size: " + report.getAmpFund().size());
+							logger.debug("Reports Size: " + reports.getRecords().size());
+							logger.debug("Fund Size: " + report.getAmpFund().size());
 						}
 						else
 						{
@@ -13393,13 +13393,13 @@ public class ReportUtil {
 							fund.setPlExpAmount(mf.format(planSumExp));
 							fund.setUnDisbAmount(mf.format(sumUnDisb));
 							report.getAmpFund().add(fund) ;	
-							logger.info("Fund Size: " + report.getAmpFund().size());			
+							logger.debug("Fund Size: " + report.getAmpFund().size());			
 							reports.getRecords().add(report);
 						}
 
 												
-						logger.info("Reports Size: " + reports.getRecords().size());
-						//logger.info("Fund Size: " + report.getAmpFund().size());
+						logger.debug("Reports Size: " + reports.getRecords().size());
+						//logger.debug("Fund Size: " + report.getAmpFund().size());
 						ahReport.getProject().add(reports);
 						actualCommitment=0;
 						actualDisbursement=0;
@@ -13426,7 +13426,7 @@ public class ReportUtil {
 					}
 					reports= new Report();
 					reports.setRecords(new ArrayList());
-					//logger.info("Init Record");
+					//logger.debug("Init Record");
 					title=ampReportCache.getActivityName();
 					ampId=ampReportCache.getAmpId();
 					reports.setAmpActivityId(ampReportCache.getAmpActivityId());
@@ -13493,7 +13493,7 @@ public class ReportUtil {
 					if(contactName!=null)
 						contacts.add(contactName);
 				}
-				//logger.info("Title:" + title);
+				//logger.debug("Title:" + title);
 				if(donors.indexOf(ampReportCache.getDonorName())==-1 && ampReportCache.getDonorName()!=null)
 					donors.add(ampReportCache.getDonorName());
 				if(assistance.indexOf(ampReportCache.getTermAssistName())==-1 && ampReportCache.getTermAssistName()!=null)
@@ -13503,7 +13503,7 @@ public class ReportUtil {
 				//Begin fund calculation
 				if(ampReportCache.getFiscalYear()!=null && ampReportCache.getFiscalQuarter()!=null)
 				{
-					logger.info("begin fund calculation");
+					logger.debug("begin fund calculation");
 					if(new Long(fiscalCalId).equals(Constants.GREGORIAN))
 					{
 						fiscalYear=ampReportCache.getFiscalYear().intValue();
@@ -13727,7 +13727,7 @@ public class ReportUtil {
 							iterColumn=columns.iterator();
 							while(iterColumn.hasNext())
 							{
-								logger.info("begin while 2");
+								logger.debug("begin while 2");
 								report=new AdvancedReport();
 								report.setDonors(new ArrayList());
 								report.setAssistance(new ArrayList());
@@ -13736,7 +13736,7 @@ public class ReportUtil {
 								report.setModality(new ArrayList());
 								report.setContacts(new ArrayList());
 								Column c=(Column) iterColumn.next();
-								logger.info("Column Id: " + c.getColumnId());
+								logger.debug("Column Id: " + c.getColumnId());
 								if(c.getColumnId().equals(Constants.STATUS_NAME))
 									report.setStatus(status);
 								if(c.getColumnId().equals(Constants.DONOR_NAME))
@@ -13782,7 +13782,7 @@ public class ReportUtil {
 								if(c.getColumnId().equals(Constants.DESCRIPTION))
 									report.setDescription(description);
 								reports.getRecords().add(report);
-								logger.info("end while 2");
+								logger.debug("end while 2");
 							}
 							report=new AdvancedReport();
 							report.setAmpFund(new ArrayList());
@@ -13840,8 +13840,8 @@ public class ReportUtil {
 								report.getAmpFund().add(fund) ;	
 								
 								reports.getRecords().add(report);
-								logger.info("Reports Size: " + reports.getRecords().size());
-								logger.info("Fund Size: " + report.getAmpFund().size());
+								logger.debug("Reports Size: " + reports.getRecords().size());
+								logger.debug("Fund Size: " + report.getAmpFund().size());
 							}
 							else
 							{
@@ -13899,7 +13899,7 @@ public class ReportUtil {
 								fund.setPlExpAmount(mf.format(planSumExp));
 								fund.setUnDisbAmount(mf.format(sumUnDisb));
 								report.getAmpFund().add(fund) ;	
-								logger.info("Fund Size: " + report.getAmpFund().size());			
+								logger.debug("Fund Size: " + report.getAmpFund().size());			
 								reports.getRecords().add(report);
 							}
 							ahReport.getProject().add(reports);
@@ -14055,7 +14055,7 @@ public class ReportUtil {
 								+ AmpActivity.class.getName()
 								+ " activity where (activity.ampActivityId in(" + inClause + ")) and (activity.status.ampStatusId='" + ampStatus.getAmpStatusId() + "')";
 							Query qry = session.createQuery(queryString);
-							logger.info("Query: " + queryString);
+							logger.debug("Query: " + queryString);
 							if(qry.list().size()>0)
 							{
 								AdvancedHierarchyReport ahTempLevel3= new AdvancedHierarchyReport();
@@ -14069,7 +14069,7 @@ public class ReportUtil {
 									AmpActivity ampActivity=(AmpActivity) iterActivity.next();
 									ahTempLevel3.getActivities().add(ampActivity.getAmpActivityId());
 								}
-								logger.info("Activity Size: " + ahTempLevel3.getActivities().size());
+								logger.debug("Activity Size: " + ahTempLevel3.getActivities().size());
 								ahTempLevel2.getLevels().add(ahTempLevel3);
 							}
 						}
@@ -14093,7 +14093,7 @@ public class ReportUtil {
 								+ " activity where (activity.ampActivityId in(" + inClause + ")) and (activity.ampDonorId='" + ampOrganisation.getAmpOrgId() + "')";
 
 							Query qry = session.createQuery(queryString);
-							logger.info("Query: " + queryString);
+							logger.debug("Query: " + queryString);
 							if(qry.list().size()>0)
 							{
 								AdvancedHierarchyReport ahTempLevel3= new AdvancedHierarchyReport();
@@ -14130,7 +14130,7 @@ public class ReportUtil {
 								+ " activity where (activity.ampActivityId in(" + inClause + ")) and (activity.ampModalityId='" + ampModality.getAmpModalityId() + "')";
 
 							Query qry = session.createQuery(queryString);
-							logger.info("Query: " + queryString);
+							logger.debug("Query: " + queryString);
 							if(qry.list().size()>0)
 							{
 								AdvancedHierarchyReport ahTempLevel3= new AdvancedHierarchyReport();
@@ -14157,7 +14157,7 @@ public class ReportUtil {
 							+ " activity where (activity.ampActivityId in(" + inClause + "))";
 	
 						Query qry = session.createQuery(queryString);
-						logger.info("Query: " + queryString);
+						logger.debug("Query: " + queryString);
 						iter=qry.list().iterator();
 						while(iter.hasNext())
 						{
@@ -14212,7 +14212,7 @@ public class ReportUtil {
 								+ " activity where (activity.ampActivityId in(" + inClause + ")) and (activity.termAssistName='" + ampTermsAssist.getTermsAssistName() + "')";
 	
 							Query qry = session.createQuery(queryString);
-							logger.info("Query: " + queryString);
+							logger.debug("Query: " + queryString);
 							if(qry.list().size()>0)
 							{
 								AdvancedHierarchyReport ahTempLevel3= new AdvancedHierarchyReport();

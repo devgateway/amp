@@ -193,6 +193,8 @@ public class SaveActivity extends Action {
 		// end of Modified code
 		
 		// validate donor fundings
+		/*
+		
 		Collection donorComm = new ArrayList();
 		Collection donorDisb = new ArrayList();
 		Collection donorExpn = new ArrayList();
@@ -373,7 +375,7 @@ public class SaveActivity extends Action {
 			saveErrors(request, errors);
 			return mapping.findForward("addActivityStep5");
 		}				
-		
+		*/
 
 		activity.setAmpId(eaForm.getAmpId());
 		activity.setName(eaForm.getTitle());

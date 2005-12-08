@@ -434,6 +434,7 @@ function popupwin()
 															</td>
 															<td align="left" vAlign="center">&nbsp;
 																<input type="checkbox" name="sameAs1" onclick="sameAsfunction(1)">
+																Same as <digi:trn key="aim:proposedApprovalDate">Proposed Approval Date</digi:trn>
 															</td>
 														</tr>
 													</table>
@@ -486,6 +487,7 @@ function popupwin()
 															</td>
 															<td align="left" vAlign="center">&nbsp;
 																<input type="checkbox" name="sameAs2" onclick="sameAsfunction(2)">
+																Same as <digi:trn key="aim:proposedStartDate">Proposed Start Date</digi:trn>
 															</td>
 														</tr>
 													</table>

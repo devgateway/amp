@@ -174,7 +174,7 @@ type="org.digijava.module.aim.form.QuarterlyComparisonsForm" method="post">
 										<TR><TD bgColor="#ffffff">
 											<logic:equal name="aimQuarterlyComparisonsForm" property="goButtonPresent" value="true">
 
-											<TABLE cellSpacing=5 cellPadding=0 border=0 bgColor=#ffffff width="100%" vAlign="top" align="left">
+											<TABLE cellSpacing=1 cellPadding=0 border=0 bgColor=#ffffff vAlign="top" align="left">
    		              				<TR> 
 												<logic:equal name="aimQuarterlyComparisonsForm" property="currencyPresent" value="true">
       	    	       					<TD>

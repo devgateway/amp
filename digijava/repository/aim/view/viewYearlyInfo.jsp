@@ -222,7 +222,7 @@
 									bgColor="#ffffff">
 										<TR><TD bgColor="#ffffff">
 											<logic:equal name="aimYearlyInfoForm" property="goButtonPresent" value="true">
-											<TABLE cellSpacing=5 cellPadding=0 border=0 bgColor=#ffffff width="100%" vAlign="top" align="left">
+											<TABLE cellSpacing=2 cellPadding=0 border=0 bgColor=#ffffff vAlign="top" align="left">
    		              				<TR> 
 												<logic:equal name="aimYearlyInfoForm" property="currencyPresent" value="true">
       	    	       					<TD>

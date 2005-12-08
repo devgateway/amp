@@ -267,8 +267,8 @@ function showtip()
 							</TR>
 					
 				            <logic:empty name="aimMyDesktopForm" property="ampProjects"> 
-		<tr><td colspan="4">
-		&nbsp;</td></tr>
+		<tr><td colspan="4" align="center">
+		<b>No Search Results</b></td></tr>
 		</logic:empty>
 		<logic:notEmpty name="aimMyDesktopForm" property="ampProjects"> 
 							<logic:iterate name="aimMyDesktopForm" property="ampProjects"  id="ampProjects"

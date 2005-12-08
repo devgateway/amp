@@ -137,6 +137,7 @@ public class ViewAdvancedReport extends Action
 		formBean.setAmpStartDays(new ArrayList());
 		formBean.setAmpCloseDays(new ArrayList());
 		formBean.setFiscalYears(new ArrayList());
+		formBean.setColumnHierarchie(new ArrayList());
 
 		filters=DbUtil.getTeamPageFilters(ampTeamId,ampPageId);
 		logger.debug("Filter Size: " + filters.size());
@@ -416,10 +417,12 @@ public class ViewAdvancedReport extends Action
 		formBean.setDimColumns(rsc.getColumns().size());
 		logger.debug("Measures: " + rsc.getMeasures().size());
 		measures=(ArrayList)rsc.getMeasures();
-		if(rsc.getHierarchy().size()==0)
-			formBean.setHierarchyFlag("false");
-		else
+		if(rsc.getHierarchy()!= null && rsc.getHierarchy().size()>0){
 			formBean.setHierarchyFlag("true");
+			formBean.setColumnHierarchie(rsc.getHierarchy());
+		}
+		else
+			formBean.setHierarchyFlag("false");
 
 		if(measures.indexOf(new Long(1))>=0)
 			formBean.setAcCommFlag("true");

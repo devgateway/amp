@@ -10,9 +10,24 @@
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
 
 <script language="JavaScript">
+
+
 function gotoStep() {
+	
 	var temp = document.aimAdvancedReportForm.reportTitle.value;
+    var iChars = "\"*|,?_:.<>[]{}';()@&$#%!~`^-+=\\/";
+	var flag=0;
 	var desc = document.aimAdvancedReportForm.reportDescription.value;
+	//var che;
+	
+
+//		che=("([A-Za-z]+)[ ]+\1",temp,1,"True")>
+		//REFind("\"*|,?_:.<>[]{}';()@&$#%!~`^-+=\\/",temp,1,"True")
+	
+	/*if(temp.match(iChars))
+	{
+		alert("found");
+	}*/
 	if(trim(temp) == "")
 	{
 		alert(" Please enter report title");
@@ -21,13 +36,27 @@ function gotoStep() {
 	}
 	else
 	{
-//		alert("in here");
-		<digi:context name="step" property="context/module/moduleinstance/advancedReportManager.do?check=5" />
+		for (var i = 0; i < temp.length; i++) 
+		{
+			if (iChars.indexOf(temp.charAt(i)) != -1)
+			{
+				alert(" Please do not enter special characters in the Report Title");
+				
+				flag=1;
+				break;
+			}
+		}
+		if(flag==0)
+		{
+			<digi:context name="step" property="context/module/moduleinstance/advancedReportManager.do?check=5" />
 		document.aimAdvancedReportForm.action = "<%= step %>";
 		document.aimAdvancedReportForm.target = "_self";
 		document.aimAdvancedReportForm.reportTitle.value = temp;
 		document.aimAdvancedReportForm.reportDescription.value = desc;
 		document.aimAdvancedReportForm.submit();
+		}
+	
+	
 	}
 }
 /*added here*/

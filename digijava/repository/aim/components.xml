@@ -195,7 +195,9 @@
 	<page name="htmlViewProjects"				title=" :  Annual Forecasting Report " />
 	<page name="htmlViewPlannedProjects"			title=" :Quarterly Project Detail Report " />
 	<page name="htmlPhysicalComponentReport"			title=" :Physical Component Report " />
-	
+	<page name="htmlAdvancedReport"			title=" : Advanced Report " />
+	<page name="htmlAdvancedReportHierarchy0"			title=" : Advanced Report " />	
+	<page name="htmlAdvancedReportHierarchy1"			title=" : Advanced Report " />
 	<!-- Advanced Report Manager -->
 
 	<page name="AdvancedReportManagerStep0" title=" - Advanced Report Manager Step 0 : Select Report Type" />	

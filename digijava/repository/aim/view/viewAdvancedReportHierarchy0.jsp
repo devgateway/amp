@@ -81,7 +81,6 @@
 					</td>
 				</logic:equal>
 
-
 				<logic:equal name="aimAdvancedReportForm" property="plCommFlag" value="true">
 					<td height="21" width="23" align="center" >
 					<a title="<digi:trn key="aim:plannedCommitment">Planned Commitment</digi:trn>">
@@ -173,7 +172,6 @@
 			<bean:write property="measureCount" name="aimAdvancedReportForm"/>
 		</bean:define>
 	
-		
 		<logic:notEmpty name="aimAdvancedReportForm" property="report"> 
 		<logic:iterate name="aimAdvancedReportForm"  property="report" id="report" type="org.digijava.module.aim.helper.Report">
 		<tr bgcolor="#F4F4F2">
@@ -240,7 +238,7 @@
 				<bean:write name="records" property="ampId" /></td></logic:notEmpty>
 				
 				<logic:notEmpty name="records" property="ampFund">
-				<logic:iterate name="records"  property="ampFund" id="ampFund" 	type="org.digijava.module.aim.helper.AmpFund">
+				<logic:iterate name="records"  property="ampFund" id="ampFund" type="org.digijava.module.aim.helper.AmpFund">
 				<logic:equal name="aimAdvancedReportForm" property="acCommFlag" value="true">
 
 						<td align="right" height="21" width="69">

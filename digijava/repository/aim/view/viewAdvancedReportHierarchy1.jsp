@@ -312,55 +312,54 @@
 
 			  <tr><td align="left" colspan=<bean:write name="aimAdvancedReportForm" property="dimColumns" />><b> <bean:write name="hierarchy" property="name" /> &nbsp;Total</b></td>
 			  <logic:iterate name="hierarchy"  property="fundSubTotal" id="fundSubTotal" type="org.digijava.module.aim.helper.AmpFund">
-
 			  <logic:equal name="aimAdvancedReportForm" property="acCommFlag" value="true">
+
 						<td align="right" height="21" width="69">
 							<logic:notEqual name="fundSubTotal" property="commAmount" value="0">
 							<bean:write name="fundSubTotal" property="commAmount" />
 							</logic:notEqual>
 						</td>
 				</logic:equal>
-			
 				<logic:equal name="aimAdvancedReportForm" property="acDisbFlag" value="true">
+
 						<td align="right" height="21" width="69">
 							<logic:notEqual name="fundSubTotal" property="disbAmount" value="0">
 							<bean:write name="fundSubTotal" property="disbAmount" />
 							</logic:notEqual>
 						</td>
 				</logic:equal>
-
 				<logic:equal name="aimAdvancedReportForm" property="acExpFlag" value="true">
+
 						<td align="right" height="21" width="69">
 							<logic:notEqual name="fundSubTotal" property="expAmount" value="0">
 							<bean:write name="fundSubTotal" property="expAmount" />
 							</logic:notEqual>
 						</td>
 				</logic:equal>
-
 				<logic:equal name="aimAdvancedReportForm" property="plCommFlag" value="true">
+
 						<td align="right" height="21" width="69">
 							<logic:notEqual name="fundSubTotal" property="plCommAmount" value="0">
 							<bean:write name="fundSubTotal" property="plCommAmount" />
 							</logic:notEqual>
 						</td>
 				</logic:equal>
-
 				<logic:equal name="aimAdvancedReportForm" property="plDisbFlag" value="true">
+
 						<td align="right" height="21" width="69">
 							<logic:notEqual name="fundSubTotal" property="plDisbAmount" value="0">
 							<bean:write name="fundSubTotal" property="plDisbAmount" />
 							</logic:notEqual>
 						</td>
 				</logic:equal>
-
 				<logic:equal name="aimAdvancedReportForm" property="plExpFlag" value="true">
+
 						<td align="right" height="21" width="69">
 							<logic:notEqual name="fundSubTotal" property="plExpAmount" value="0">
 							<bean:write name="fundSubTotal" property="plExpAmount" />
 							</logic:notEqual>
 						</td>
 				</logic:equal>
-				
 				<logic:equal name="aimAdvancedReportForm" property="acBalFlag" value="true">
 					<logic:notEmpty name="fundSubTotal" property="unDisbAmount">				
 						<td align="right" height="21" width="69">
@@ -370,7 +369,6 @@
 						</td>
 					</logic:notEmpty>	
 				</logic:equal>
-
 				</logic:iterate></tr>
 			      
 				</logic:notEmpty>
@@ -1135,7 +1133,7 @@
 				</logic:notEmpty>
 				
 			 </logic:iterate>
-			<logic:notEmpty	name="multiReport"  property="hierarchy">
+
 			  <tr><td align="left" colspan=<bean:write name="aimAdvancedReportForm" property="dimColumns" />><b> Grand Total</b></td>
 			  <logic:iterate name="multiReport"  property="fundTotal" id="fundTotal" type="org.digijava.module.aim.helper.AmpFund">
 			  <logic:equal name="aimAdvancedReportForm" property="acCommFlag" value="true">
@@ -1196,22 +1194,10 @@
 				</logic:notEmpty>		
 				</logic:equal>
 				</logic:iterate>
-				</tr>
-				</logic:notEmpty>   
-				<logic:empty name="multiReport" property="hierarchy"> 
-				<tr bgcolor="#F4F4F2">
-					<!--<td align="center" height="21" width="73" ><b>Sector</b></td>-->
-					<td colspan=<bean:write name="aimAdvancedReportForm" property="totalColumns"/> align="center" height="21" >
-					<b>
-						<digi:trn key="aim:noRecords">No Records</digi:trn>
-					</b>
-					</td>
-				</tr>
-				</logic:empty>
+				   
 				</logic:iterate>	
 					
-				
-			
+				</tr>
 		</logic:notEmpty>
 	
                      </table>

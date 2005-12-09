@@ -290,7 +290,7 @@
 				<page>	htmlViewProjects					</page>
 				<page>	htmlViewPlannedProjects				</page>
 				<page>	htmlPhysicalComponentReport			</page>
-				
+				<page>	htmlAdvancedReport			        </page>	
 		 	</module>
 		</page-group> 
 	</site-layout>

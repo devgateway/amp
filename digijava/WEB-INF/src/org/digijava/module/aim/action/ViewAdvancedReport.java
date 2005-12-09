@@ -571,30 +571,34 @@ public class ViewAdvancedReport extends Action
 						if(advancedReport.getAmpFund()!=null)
 						{
 							Iterator iterFund = advancedReport.getAmpFund().iterator();
-							for(int i=0;i<yearRange ;i++ )
+							for(int i=0;i<=yearRange ;i++ )
 							{
 								AmpFund ampFund=(AmpFund) iterFund.next();
-								if(measures.indexOf(new Long(1))!=-1)
-									totFunds[i][0]=totFunds[i][0] + Double.parseDouble(DecimalToText.removeCommas(ampFund.getCommAmount()));
-								if(measures.indexOf(new Long(2))!=-1)
-									totFunds[i][1]=totFunds[i][1] + Double.parseDouble(DecimalToText.removeCommas(ampFund.getDisbAmount()));
-								if(measures.indexOf(new Long(3))!=-1)
-									totFunds[i][2]=totFunds[i][2] + Double.parseDouble(DecimalToText.removeCommas(ampFund.getExpAmount()));
-								if(measures.indexOf(new Long(4))!=-1)
-									totFunds[i][3]=totFunds[i][3] + Double.parseDouble(DecimalToText.removeCommas(ampFund.getPlCommAmount()));
-								if(measures.indexOf(new Long(5))!=-1)
-									totFunds[i][4]=totFunds[i][4] + Double.parseDouble(DecimalToText.removeCommas(ampFund.getPlDisbAmount()));
-								if(measures.indexOf(new Long(6))!=-1)
-									totFunds[i][5]=totFunds[i][5] + Double.parseDouble(DecimalToText.removeCommas(ampFund.getPlExpAmount()));
-								
-						
-								actTotalCommit = actTotalCommit + Double.parseDouble(DecimalToText.removeCommas(ampFund.getCommAmount()));
-								actTotalDisb = actTotalDisb + Double.parseDouble(DecimalToText.removeCommas(ampFund.getDisbAmount()));
-								actTotalExp = actTotalExp + Double.parseDouble(DecimalToText.removeCommas(ampFund.getExpAmount()));
-								planTotalCommit = planTotalCommit  + Double.parseDouble(DecimalToText.removeCommas(ampFund.getPlCommAmount()));
-								planTotalDisb = planTotalDisb + Double.parseDouble(DecimalToText.removeCommas(ampFund.getPlDisbAmount()));
-								planTotalExp = planTotalExp + Double.parseDouble(DecimalToText.removeCommas(ampFund.getPlExpAmount()));
-								totUnDisb = totUnDisb + (Double.parseDouble(DecimalToText.removeCommas(ampFund.getCommAmount())) - Double.parseDouble(DecimalToText.removeCommas(ampFund.getDisbAmount())));
+								if(i<yearRange)
+								{
+									if(measures.indexOf(new Long(1))!=-1)
+										totFunds[i][0]=totFunds[i][0] + Double.parseDouble(DecimalToText.removeCommas(ampFund.getCommAmount()));
+									if(measures.indexOf(new Long(2))!=-1)
+										totFunds[i][1]=totFunds[i][1] + Double.parseDouble(DecimalToText.removeCommas(ampFund.getDisbAmount()));
+									if(measures.indexOf(new Long(3))!=-1)
+										totFunds[i][2]=totFunds[i][2] + Double.parseDouble(DecimalToText.removeCommas(ampFund.getExpAmount()));
+									if(measures.indexOf(new Long(4))!=-1)
+										totFunds[i][3]=totFunds[i][3] + Double.parseDouble(DecimalToText.removeCommas(ampFund.getPlCommAmount()));
+									if(measures.indexOf(new Long(5))!=-1)
+										totFunds[i][4]=totFunds[i][4] + Double.parseDouble(DecimalToText.removeCommas(ampFund.getPlDisbAmount()));
+									if(measures.indexOf(new Long(6))!=-1)
+										totFunds[i][5]=totFunds[i][5] + Double.parseDouble(DecimalToText.removeCommas(ampFund.getPlExpAmount()));
+								}
+								if(i==yearRange)
+								{
+									actTotalCommit = actTotalCommit + Double.parseDouble(DecimalToText.removeCommas(ampFund.getCommAmount()));
+									actTotalDisb = actTotalDisb + Double.parseDouble(DecimalToText.removeCommas(ampFund.getDisbAmount()));
+									actTotalExp = actTotalExp + Double.parseDouble(DecimalToText.removeCommas(ampFund.getExpAmount()));
+									planTotalCommit = planTotalCommit  + Double.parseDouble(DecimalToText.removeCommas(ampFund.getPlCommAmount()));
+									planTotalDisb = planTotalDisb + Double.parseDouble(DecimalToText.removeCommas(ampFund.getPlDisbAmount()));
+									planTotalExp = planTotalExp + Double.parseDouble(DecimalToText.removeCommas(ampFund.getPlExpAmount()));
+									totUnDisb = totUnDisb + Double.parseDouble(DecimalToText.removeCommas(ampFund.getUnDisbAmount()));
+								}
 
 							}	
 						}
@@ -651,32 +655,38 @@ public class ViewAdvancedReport extends Action
 						if(advancedReport.getAmpFund()!=null)
 						{
 							Iterator iterFund = advancedReport.getAmpFund().iterator();
-							for(int i=0;i<yearRange ;i++ )
+							for(int i=0;i<=yearRange ;i++ )
 							{
-								for(int qtr=0;qtr<4;qtr++)
+								if(i<yearRange)
+								{
+									for(int qtr=0;qtr<4;qtr++)
+									{
+										AmpFund ampFund=(AmpFund) iterFund.next();
+										if(measures.indexOf(new Long(1))!=-1)
+											totAcCommFunds[i][qtr]=totAcCommFunds[i][qtr] + Double.parseDouble(DecimalToText.removeCommas(ampFund.getCommAmount()));
+										if(measures.indexOf(new Long(2))!=-1)
+											totAcDisbFunds[i][qtr]=totAcDisbFunds[i][qtr] + Double.parseDouble(DecimalToText.removeCommas(ampFund.getDisbAmount()));
+										if(measures.indexOf(new Long(3))!=-1)
+											totAcExpFunds[i][qtr]=totAcExpFunds[i][qtr] + Double.parseDouble(DecimalToText.removeCommas(ampFund.getExpAmount()));
+										if(measures.indexOf(new Long(4))!=-1)
+											totPlCommFunds[i][qtr]=totPlCommFunds[i][qtr] + Double.parseDouble(DecimalToText.removeCommas(ampFund.getPlCommAmount()));
+										if(measures.indexOf(new Long(5))!=-1)
+											totPlDisbFunds[i][qtr]=totPlDisbFunds[i][qtr] + Double.parseDouble(DecimalToText.removeCommas(ampFund.getPlDisbAmount()));
+										if(measures.indexOf(new Long(6))!=-1)
+											totPlExpFunds[i][qtr]=totPlExpFunds[i][qtr] + Double.parseDouble(DecimalToText.removeCommas(ampFund.getPlExpAmount()));
+									}
+								}	
+
+								if(i==yearRange)
 								{
 									AmpFund ampFund=(AmpFund) iterFund.next();
-									if(measures.indexOf(new Long(1))!=-1)
-										totAcCommFunds[i][qtr]=totAcCommFunds[i][qtr] + Double.parseDouble(DecimalToText.removeCommas(ampFund.getCommAmount()));
-									if(measures.indexOf(new Long(2))!=-1)
-										totAcDisbFunds[i][qtr]=totAcDisbFunds[i][qtr] + Double.parseDouble(DecimalToText.removeCommas(ampFund.getDisbAmount()));
-									if(measures.indexOf(new Long(3))!=-1)
-										totAcExpFunds[i][qtr]=totAcExpFunds[i][qtr] + Double.parseDouble(DecimalToText.removeCommas(ampFund.getExpAmount()));
-									if(measures.indexOf(new Long(4))!=-1)
-										totPlCommFunds[i][qtr]=totPlCommFunds[i][qtr] + Double.parseDouble(DecimalToText.removeCommas(ampFund.getPlCommAmount()));
-									if(measures.indexOf(new Long(5))!=-1)
-										totPlDisbFunds[i][qtr]=totPlDisbFunds[i][qtr] + Double.parseDouble(DecimalToText.removeCommas(ampFund.getPlDisbAmount()));
-									if(measures.indexOf(new Long(6))!=-1)
-										totPlExpFunds[i][qtr]=totPlExpFunds[i][qtr] + Double.parseDouble(DecimalToText.removeCommas(ampFund.getPlExpAmount()));
-						
-						
 									actTotalCommit = actTotalCommit + Double.parseDouble(DecimalToText.removeCommas(ampFund.getCommAmount()));
 									actTotalDisb = actTotalDisb + Double.parseDouble(DecimalToText.removeCommas(ampFund.getDisbAmount()));
 									actTotalExp = actTotalExp + Double.parseDouble(DecimalToText.removeCommas(ampFund.getExpAmount()));
 									planTotalCommit = planTotalCommit  + Double.parseDouble(DecimalToText.removeCommas(ampFund.getPlCommAmount()));
 									planTotalDisb = planTotalDisb + Double.parseDouble(DecimalToText.removeCommas(ampFund.getPlDisbAmount()));
 									planTotalExp = planTotalExp + Double.parseDouble(DecimalToText.removeCommas(ampFund.getPlExpAmount()));
-									totUnDisb = totUnDisb + (Double.parseDouble(DecimalToText.removeCommas(ampFund.getCommAmount())) - Double.parseDouble(DecimalToText.removeCommas(ampFund.getDisbAmount())));
+									totUnDisb = totUnDisb + Double.parseDouble(DecimalToText.removeCommas(ampFund.getUnDisbAmount()));
 								}
 							}	
 						}
@@ -711,7 +721,7 @@ public class ViewAdvancedReport extends Action
 				fund.setPlCommAmount(mf.format(planTotalCommit));
 				fund.setPlDisbAmount(mf.format(planTotalDisb));
 				fund.setPlExpAmount(mf.format(planTotalExp));
-				fund.setUnDisbAmount(mf.format(actTotalCommit-actTotalDisb));
+				fund.setUnDisbAmount(mf.format(totUnDisb));
 				formBean.getTotFund().add(fund);
 			}
 		}	

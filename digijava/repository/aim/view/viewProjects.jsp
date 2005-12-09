@@ -389,7 +389,7 @@
 					</td>
 					<td align="center" height="21" width="77"> <div align="center"><strong>
 					<a title="<digi:trn key="aim:CommitmentinTotal">Total Commitment Amount of Activity</digi:trn>">
-					<digi:trn key="aim:aim:totalCommitments">Total Commitment</digi:trn>
+					<digi:trn key="aim:totalCommitments">Total Commitment</digi:trn>
 					</a></strong></div>
 					</td>
 					<td align="center" height="21" width="91" ><div align="center"><strong>

@@ -350,6 +350,16 @@
 				<td align="center" height="21" >
 				<bean:write name="records" property="ampId" /></td></logic:notEmpty>
 
+				<logic:notEmpty name="records" property="totalCommitment">
+				<td align="center" height="21" >
+				<logic:notEqual name="records" property="totalCommitment" value="0">
+				<bean:write name="records" property="totalCommitment" /></logic:notEqual></td></logic:notEmpty>
+
+				<logic:notEmpty name="records" property="totalDisbursement">
+				<td align="center" height="21" >
+				<logic:notEqual name="records" property="totalDisbursement" value="0">
+				<bean:write name="records" property="totalDisbursement" /></logic:notEqual></td></logic:notEmpty>
+
 				<logic:notEmpty name="records" property="ampFund">
 				<% int i=0;%>
 				<logic:iterate name="records"  property="ampFund" id="ampFund" 	type="org.digijava.module.aim.helper.AmpFund">
@@ -827,6 +837,16 @@
 				<logic:notEmpty name="records" property="ampId">
 				<td align="center" height="21" >
 				<bean:write name="records" property="ampId" /></td></logic:notEmpty>
+
+				<logic:notEmpty name="records" property="totalCommitment">
+				<td align="center" height="21" >
+				<logic:notEqual name="records" property="totalCommitment" value="0">
+				<bean:write name="records" property="totalCommitment" /></logic:notEqual></td></logic:notEmpty>
+
+				<logic:notEmpty name="records" property="totalDisbursement">
+				<td align="center" height="21" >
+				<logic:notEqual name="records" property="totalDisbursement" value="0">
+				<bean:write name="records" property="totalDisbursement" /></logic:notEqual></td></logic:notEmpty>
 				
 	<bean:size name="aimAdvancedReportForm" property="addedMeasures" id="measureSize"/>
 	<%
@@ -1252,6 +1272,16 @@
 				<logic:notEmpty name="records" property="ampId">
 				<td align="center" height="21" >
 				<bean:write name="records" property="ampId" /></td></logic:notEmpty>
+
+				<logic:notEmpty name="records" property="totalCommitment">
+				<td align="center" height="21" >
+				<logic:notEqual name="records" property="totalCommitment" value="0">
+				<bean:write name="records" property="totalCommitment" /></logic:notEqual></td></logic:notEmpty>
+
+				<logic:notEmpty name="records" property="totalDisbursement">
+				<td align="center" height="21" >
+				<logic:notEqual name="records" property="totalDisbursement" value="0">
+				<bean:write name="records" property="totalDisbursement" /></logic:notEqual></td></logic:notEmpty>
 				
 	<bean:size name="aimAdvancedReportForm" property="addedMeasures" id="measureSize"/>
 	<%

@@ -45,9 +45,11 @@ public class UpdateDB {
 			Statement stmt = con.createStatement();
 			ResultSet rs = null;
 			
-
+			// Deletes all the exisiting records for ampActivityId in amp_report_cache.
 			String sql = "delete from amp_report_cache where amp_activity_id='" + ampActivityId + "'";
+			
 			// Query #1
+			// This script inserts details of activities having funding details entered from Donor perspective.
 			long t1 = System.currentTimeMillis();			
 			stmt.executeUpdate(sql);
 			long t2 = System.currentTimeMillis();
@@ -79,6 +81,7 @@ public class UpdateDB {
 			sql += " and amp_activity.amp_level_id=amp_level.amp_level_id and org_role_code='DN'";
 
 			// Query #2
+			// This script inserts details of activities having funding details entered from MOFED perspective.
 			t1 = System.currentTimeMillis();						
 			stmt.executeUpdate(sql);
 			t2 = System.currentTimeMillis();
@@ -110,6 +113,7 @@ public class UpdateDB {
 			sql += " and amp_activity.amp_level_id=amp_level.amp_level_id and org_role_code='MA'";
 			
 			// Query #3
+			// This script inserts details of activities having funding organisation but no funding details.
 			t1 = System.currentTimeMillis();			
 			stmt.executeUpdate(sql);
 			t2 = System.currentTimeMillis();
@@ -135,6 +139,7 @@ public class UpdateDB {
 			sql += "and amp_activity.amp_status_id=amp_status.amp_status_id";
 			
 			// Query #4
+			// This script inserts details of activities with no funding information.
 			t1 = System.currentTimeMillis();						
 			stmt.executeUpdate(sql);
 			t2 = System.currentTimeMillis();
@@ -155,6 +160,8 @@ public class UpdateDB {
 			sql += "and amp_activity.amp_status_id=amp_status.amp_status_id";
 
 			// Query #5
+			// This script inserts details of activities having funding details but with funding instrument or implementation level null 
+			// entered from donor perspective.
 			t1 = System.currentTimeMillis();						
 			stmt.executeUpdate(sql);
 			t2 = System.currentTimeMillis();
@@ -206,9 +213,11 @@ public class UpdateDB {
 			sql += "and amp_funding.amp_donor_org_id=amp_organisation.amp_org_id ";
 			sql += "and amp_funding.amp_terms_assist_id=amp_terms_assist.amp_terms_assist_id ";
 			sql += "and amp_funding_detail.amp_currency_id=amp_currency.amp_currency_id and amp_activity.amp_activity_id='" + ampActivityId + "' ";
-			sql += "and amp_activity.amp_status_id=amp_status.amp_status_id";
+			sql += "and amp_activity.amp_status_id=amp_status.amp_status_id and org_role_code='DN";
 			
 			// Query #6
+			// This script inserts details of activities having funding details but with funding instrument or implementation level null 
+			//entered from MOFED perspective.
 			t1 = System.currentTimeMillis();						
 			stmt.executeUpdate(sql);
 			t2 = System.currentTimeMillis();
@@ -260,9 +269,10 @@ public class UpdateDB {
 			sql += "and amp_funding.amp_donor_org_id=amp_organisation.amp_org_id ";
 			sql += "and amp_funding.amp_terms_assist_id=amp_terms_assist.amp_terms_assist_id ";
 			sql += "and amp_funding_detail.amp_currency_id=amp_currency.amp_currency_id and amp_activity.amp_activity_id='" + ampActivityId + "' ";
-			sql += "and amp_activity.amp_status_id=amp_status.amp_status_id";
+			sql += "and amp_activity.amp_status_id=amp_status.amp_status_id and org_role_code='MA";
 			
 			// Query #7
+			// Deletes all existing records from amp_report_sector for ampActivityId.
 			t1 = System.currentTimeMillis();						
 			stmt.executeUpdate(sql);
 			t2 = System.currentTimeMillis();

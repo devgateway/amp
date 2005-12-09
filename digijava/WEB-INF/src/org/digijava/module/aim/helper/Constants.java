@@ -93,6 +93,8 @@ public class Constants
 	public static final Long AMP_ID = new Long(12) ;
 	public static final Long CONTACT_NAME = new Long(13) ;
 	public static final Long DESCRIPTION = new Long(14) ;
+	public static final Long TOTAL_COMMITMENT = new Long(15) ;
+	public static final Long TOTAL_DISBURSEMENT = new Long(16) ;
 	
 	public static final String REGIONAL_FUNDING_PAGE_CODE = "RFS";
 	public static final String CALENDAR_FILTER = "Calendar";

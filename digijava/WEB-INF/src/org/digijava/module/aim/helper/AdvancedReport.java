@@ -13,6 +13,8 @@ public class AdvancedReport
 
 	private String actualStartDate;
 	private String actualCompletionDate;
+	private String totalCommitment;
+	private String totalDisbursement;
 	private String actualCommitment;
 
 	private Collection donors ;
@@ -188,6 +190,28 @@ public class AdvancedReport
 		actualCompletionDate = string;
 	}
 
+	public String getTotalCommitment() 
+	{
+		return totalCommitment;
+	}
+
+	
+	public void setTotalCommitment(String string) 
+	{
+		totalCommitment = string;
+	}
+
+	public String getTotalDisbursement() 
+	{
+		return totalDisbursement;
+	}
+
+	
+	public void setTotalDisbursement(String string) 
+	{
+		totalDisbursement = string;
+	}
+
 	public String getActualCommitment() 
 	{
 		return actualCommitment;
@@ -198,8 +222,6 @@ public class AdvancedReport
 	{
 		actualCommitment = string;
 	}
-
-	
 	
 
 	/**

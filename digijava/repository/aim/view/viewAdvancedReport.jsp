@@ -106,7 +106,7 @@
 			</td></tr>
 			
 		<!--  PDF/XLS Links -->
-		<logic:notEmpty name="aimAdvancedReportForm"  property="report">
+
 			<tr>	
 				<td valign="bottom" class="crumb">
 					&nbsp;&nbsp;<img src="../ampTemplate/images/pdf_icon.gif" border=0>
@@ -141,7 +141,7 @@
 					</digi:link>
             </td>
 	      </tr>
-		</logic:notEmpty>
+
 		<!--  PDF/XLS Links -->	
 			
 		<tr><td width="9"></td>

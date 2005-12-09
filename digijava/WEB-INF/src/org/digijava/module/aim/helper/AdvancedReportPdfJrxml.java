@@ -753,7 +753,7 @@ p2.println("</group>");
 			else
 				dcnt=measureCount;
 
-			c=3+cols+2;
+			c=3+cols+2+hcnt;
 
 				for(int i=0;i<3;i++)
 				{
@@ -771,7 +771,7 @@ p2.println("</group>");
 							p2.println("height='80'");
 							p2.println("forecolor='#000000'");
 							p2.println("backcolor='#FFFFFF'");
-							p2.println("key='textField-176'");
+							p2.println("key='textField-1766'");
 							p2.println("stretchType='NoStretch'");
 							p2.println("positionType='Float'");
 							p2.println("isPrintRepeatedValues='true'");

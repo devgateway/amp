@@ -1426,19 +1426,20 @@ public class DbUtil {
 			
 			if (new Long(0).equals(ampTeamId)) {  // for management workspace
 				queryString = "select act.ampActivityId from " + AmpActivity.class.getName()
-				  + " act where (act.approvalStatus=:status)";
+				  + " act where (act.approvalStatus=:status1 or act.approvalStatus=:status2)";
 				q = session.createQuery(queryString);
 			}
 			else {								// for regular working team
 				queryString = "select act.ampActivityId from " + AmpActivity.class.getName()
 				  			  + " act where (act.team=:ampTeamId)"
 							  + " and ( act.activityCreator=:ampTeamMemId "
-							  + " or act.approvalStatus=:status)";
+							  + " or act.approvalStatus=:status1 or act.approvalStatus=:status2)";
 			    q = session.createQuery(queryString);
 				q.setParameter("ampTeamId", ampTeamId, Hibernate.LONG);
 				q.setParameter("ampTeamMemId", ampTeamMemId, Hibernate.LONG);
 			}
-			q.setParameter("status", "approved", Hibernate.STRING);
+			q.setParameter("status1", "approved", Hibernate.STRING);
+			q.setParameter("status2", "edited", Hibernate.STRING);
 			actList = q.list();		
 
 		} catch (Exception ex) {

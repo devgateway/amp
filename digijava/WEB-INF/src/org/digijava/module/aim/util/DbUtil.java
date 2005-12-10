@@ -1499,14 +1499,14 @@ public class DbUtil {
 					else
 						inClause = inClause + ",'" + teamId + "'";
 				}
-			}*/ 
+			} */
 			AmpTeam ampTeam=DbUtil.getAmpTeam(ampTeamId);
 			Collection temp = new ArrayList();
 			if(ampTeam.getAccessType().equals("Team"))
 			{	
 				if (teamLeadFlag == false) {
-					temp = DbUtil.getApprovedOrCreatorActivities(ampTeamId,ampTeamMemId);
-					//temp =  DbUtil.getAllMemberAmpActivities(ampTeamMemId);
+					//temp = DbUtil.getApprovedOrCreatorActivities(ampTeamId,ampTeamMemId);
+					temp =  DbUtil.getAllMemberAmpActivities(ampTeamMemId);
 				}
 			}
 			//logger.debug("temp.size [from AmpActivity inside getProjectList()] : " + temp.size());
@@ -1515,11 +1515,12 @@ public class DbUtil {
 			if (temp.size() > 0) {
 				Iterator tmIter = temp.iterator();
 				while (tmIter.hasNext()) {
-					Long actId = (Long) tmIter.next();
+					//Long actId = (Long) tmIter.next();
+					AmpActivity actId = (AmpActivity) tmIter.next();
 					if (inclause1 == null)
-						inclause1 = "'" + actId + "'";
+						inclause1 = "'" + actId.getAmpActivityId() + "'";
 					else
-						inclause1 = inclause1 + ",'" + actId + "'";
+						inclause1 = inclause1 + ",'" + actId.getAmpActivityId() + "'";
 				}
 			}
 			//logger.debug("inclause1 : " + inclause1);

@@ -196,7 +196,7 @@ public class ActivityUtil {
 					logger.debug("comments deleted");
 				}
 				else
-					logger.debug("commentsCol is empty !");
+					logger.debug("commentsCol is empty");
 
 				oldActivity.getClosingDates().clear();
 				oldActivity.getComponents().clear();
@@ -287,6 +287,7 @@ public class ActivityUtil {
 			    logger.debug("updating ....");
 			    
 			    session.saveOrUpdate(oldActivity);
+			    /*
 			    // added by Akash
 			    // desc: Saving team members in amp_member_activity table in case activity is Approved
 			    // start
@@ -309,7 +310,7 @@ public class ActivityUtil {
 						session.saveOrUpdate(member);
 					}
 				}
-				// end
+				// end	*/
 				
 			} else {
 				// create the activity
@@ -347,7 +348,7 @@ public class ActivityUtil {
 					logger.debug("Comment Saved [AmpCommentId] : " + comObj.getAmpCommentId());
 				}
 			} else
-				logger.debug("commentsCol is empty !");
+				logger.debug("commentsCol is empty");
 			
 			tx.commit(); // commit the transcation
 			logger.debug("Activity saved");

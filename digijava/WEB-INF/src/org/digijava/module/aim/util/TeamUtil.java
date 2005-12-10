@@ -796,9 +796,10 @@ public class TeamUtil {
 			session = PersistenceManager.getSession();
 			
 			String queryString = "select act from " + AmpActivity.class.getName() + 
-			  " act where (act.team=:id)";
+			  " act where (act.team=:id) and (act.approvalStatus!=:status)";
 			qry = session.createQuery(queryString);
 			qry.setParameter("id",teamId,Hibernate.LONG);
+			qry.setParameter("status","started",Hibernate.STRING);
 			col = qry.list();
 			
 			member = (AmpTeamMember) session.load(AmpTeamMember.class,memberId);

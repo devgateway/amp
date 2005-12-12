@@ -213,7 +213,7 @@ public class UpdateDB {
 			sql += "and amp_funding.amp_donor_org_id=amp_organisation.amp_org_id ";
 			sql += "and amp_funding.amp_terms_assist_id=amp_terms_assist.amp_terms_assist_id ";
 			sql += "and amp_funding_detail.amp_currency_id=amp_currency.amp_currency_id and amp_activity.amp_activity_id='" + ampActivityId + "' ";
-			sql += "and amp_activity.amp_status_id=amp_status.amp_status_id and org_role_code='DN";
+			sql += "and amp_activity.amp_status_id=amp_status.amp_status_id and org_role_code='DN'";
 			
 			// Query #6
 			// This script inserts details of activities having funding details but with funding instrument or implementation level null 
@@ -269,7 +269,7 @@ public class UpdateDB {
 			sql += "and amp_funding.amp_donor_org_id=amp_organisation.amp_org_id ";
 			sql += "and amp_funding.amp_terms_assist_id=amp_terms_assist.amp_terms_assist_id ";
 			sql += "and amp_funding_detail.amp_currency_id=amp_currency.amp_currency_id and amp_activity.amp_activity_id='" + ampActivityId + "' ";
-			sql += "and amp_activity.amp_status_id=amp_status.amp_status_id and org_role_code='MA";
+			sql += "and amp_activity.amp_status_id=amp_status.amp_status_id and org_role_code='MA'";
 			
 			// Query #7
 			// Deletes all existing records from amp_report_sector for ampActivityId.

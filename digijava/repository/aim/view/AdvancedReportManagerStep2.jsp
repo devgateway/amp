@@ -279,7 +279,7 @@ function gotoStep() {
 												<td align="center" colspan="2" bgcolor="#f4f4f2">
 													<input type=button name=back value="<< Previous"   class="dr-menu" onclick="javascript:history.back()">
 													<input type="button" name="Cancel" value=" Cancel " class="dr-menu" onclick="return quitAdvRptMngr()" >
-													<input type=button name=next value="  Chart Creation  " class="dr-menu" onclick="javascript:gotoStep()" >
+<!--													<input type=button name=next value="  Chart Creation  " class="dr-menu" onclick="javascript:gotoStep()" >-->
 													<input type=button name=back value=" Save Report "   class="dr-menu" onclick="saveReport()">						
 													
 												</td>

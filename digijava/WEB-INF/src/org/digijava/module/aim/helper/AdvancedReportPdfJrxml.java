@@ -621,8 +621,30 @@ p2.println("</group>");
 					ctextkey = "c"+temp;
 					System.out.println("inside here..$$$$$$$$$$$$$$$$$$$$"+cols+":"+mcnt+":::"+temp+"-----"+ctextkey);
 				}
-				
-				p2.println("<textField isStretchWithOverflow='true' pattern='' isBlankWhenNull='false' evaluationTime='Now' hyperlinkType='None' >					<reportElement");
+
+				p2.println("<staticText>");
+				p2.println("<reportElement");
+				p2.println("mode='Opaque'");
+				p2.println("x='"+x+"'");
+				p2.println("y='0'");
+				p2.println("width='"+(measureCount*60)+"'");
+				p2.println("height='15'");
+				p2.println("forecolor='#000000'");
+				p2.println("backcolor='#CCCCCC'");
+				p2.println("key='staticText-h1'");
+				p2.println("stretchType='NoStretch'");
+				p2.println("positionType='FixRelativeToTop'");
+				p2.println("isPrintRepeatedValues='true'");
+				p2.println("isRemoveLineWhenBlank='false'");
+				p2.println("isPrintInFirstWholeBand='false'");
+				p2.println("isPrintWhenDetailOverflows='false'/>");
+				p2.println("<textElement textAlignment='Center' verticalAlignment='Middle' rotation='None' lineSpacing='Single'>");
+				p2.println("<font fontName='Arial' pdfFontName='Helvetica' size='10' isBold='true' isItalic='false' isUnderline='false' isPdfEmbedded ='false' pdfEncoding ='Cp1252' isStrikeThrough='false' />");
+				p2.println("</textElement>");
+				p2.println("<text><![CDATA[Total]]></text>");
+				p2.println("</staticText>");
+
+/*				p2.println("<textField isStretchWithOverflow='true' pattern='' isBlankWhenNull='false' evaluationTime='Now' hyperlinkType='None' >					<reportElement");
 				p2.println("mode='Opaque'");
 				p2.println("x='"+x+"'");
 				p2.println("y='0'");
@@ -642,7 +664,7 @@ p2.println("</group>");
 				p2.println("</textElement>");
 				p2.println("<textFieldExpression class='java.lang.String'><![CDATA[$F{"+ctextkey+"}]]></textFieldExpression>");
 				p2.println("</textField>");
-
+*/
 				int measureBlocks=measureCount;
 				if(undis){
 					//measureBlocks=3*(measureCount-1);

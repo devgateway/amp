@@ -71,7 +71,8 @@ method="post">
 									<TR><TD width="100%" vAlign="top" align="left">
 										<TABLE width="100%" cellPadding="5" cellSpacing="1" vAlign="top" align="left" 
 										bgcolor="#ffffff">
-                        			<logic:iterate name="aimPhysicalProgressForm" property="components" 
+											<logic:notEmpty name="aimPhysicalProgressForm" property="components">
+                    	<logic:iterate name="aimPhysicalProgressForm" property="components" 
 											id="component" type="org.digijava.module.aim.helper.Components">
 												<TR bgcolor="#f4f4f2">
 													<TD>
@@ -90,6 +91,7 @@ method="post">
 													</TD>
 												</TR>
 											</logic:iterate>
+											</logic:notEmpty>
 										</TABLE>
 									</TD></TR>
 								</TABLE>

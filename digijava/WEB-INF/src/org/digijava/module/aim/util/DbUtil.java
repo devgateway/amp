@@ -1487,7 +1487,7 @@ public class DbUtil {
 		int fiscalYear = 0, fiscalQuarter = 0;
 
 		try { 
-/*			ArrayList dbReturnSet = (ArrayList) DbUtil.getAmpLevel0Teams(ampTeamId);
+			ArrayList dbReturnSet = (ArrayList) DbUtil.getAmpLevel0Teams(ampTeamId);
 			if (dbReturnSet.size() == 0)
 				inClause = "'" + ampTeamId + "'";
 			else {
@@ -1499,7 +1499,7 @@ public class DbUtil {
 					else
 						inClause = inClause + ",'" + teamId + "'";
 				}
-			} */
+			}
 			AmpTeam ampTeam=DbUtil.getAmpTeam(ampTeamId);
 			Collection temp = new ArrayList();
 			if(ampTeam.getAccessType().equals("Team"))
@@ -1555,31 +1555,42 @@ public class DbUtil {
 					noActivities = true;
 				}
 			} else if (teamLeadFlag == true || "Management".equals(ampTeam.getAccessType())){
-			/*	queryString = "select report from "
-					+ AmpReportCache.class.getName()
-					+ " report where report.ampTeamId in(" + inClause
-					+ ") " + "order by " + fieldString
-					+ ",report.ampDonorId";    */
 				String inClause2 = null;
 				Iterator actItr = null;
-				if ("Management".equals(ampTeam.getAccessType()))
-					actItr = DbUtil.getApprovedOrCreatorActivities(new Long(0),ampTeamMemId).iterator();
-				else
-					actItr = DbUtil.getApprovedOrCreatorActivities(ampTeamId,ampTeamMemId).iterator();
-				while(actItr.hasNext()) {
-					Long actId = (Long) actItr.next();
-					if (inClause2 == null)
-						inClause2 = "'" + actId + "'";
-					else
-						inClause2 = inClause2 + ",'" + actId + "'";
+				if ("Management".equals(ampTeam.getAccessType())) {
+					//actItr = DbUtil.getApprovedOrCreatorActivities(new Long(0),ampTeamMemId).iterator();
+					queryString = "select act.ampActivityId from " + AmpActivity.class.getName()
+					  			  + " act where (act.approvalStatus=:status) and (act.team.ampTeamId in(" + inClause + ") )";
+					q = session.createQuery(queryString);
+					q.setParameter("status", "approved", Hibernate.STRING);
+					Collection ls = new ArrayList();
+					ls = q.list();
+					actItr = ls.iterator();
+					
+					while (actItr.hasNext()) {
+						Long actId = (Long) actItr.next();
+						if (inClause2 == null)
+							inClause2 = "'" + actId + "'";
+						else
+							inClause2 = inClause2 + ",'" + actId + "'";
+					}
 				}
-				//logger.debug("inClause2 : " + inClause2);
-				
+				else {
+					actItr = DbUtil.getApprovedOrCreatorActivities(ampTeamId,ampTeamMemId).iterator();
+					while(actItr.hasNext()) {
+						Long actId = (Long) actItr.next();
+						if (inClause2 == null)
+							inClause2 = "'" + actId + "'";
+						else
+							inClause2 = inClause2 + ",'" + actId + "'";
+					}
+					//logger.debug("inClause2 : " + inClause2);
+				}
 				if (inClause2 != null) {
 					queryString = "select report from " + AmpReportCache.class.getName()
 								  + " report where report.ampActivityId in(" + inClause2
 								  + ") " + "order by " + fieldString + ",report.ampDonorId";
-					//logger.debug("inClause2 : " + queryString);
+					logger.debug("inClause2 : " + queryString);
 					q = session.createQuery(queryString);
 					iter = q.list().iterator();
 				}
@@ -6046,9 +6057,9 @@ public class DbUtil {
 				logger.error("releaseSession() failed");
 			}
 		}
-		if (logger.isDebugEnabled())
+/*		if (logger.isDebugEnabled())
 			logger.debug("getExchangeRate() for currency code :" + currencyCode
-					+ "returns " + exchangeRate);
+					+ "returns " + exchangeRate); */
 		return exchangeRate.doubleValue();
 	}
 
@@ -6119,9 +6130,9 @@ public class DbUtil {
 				logger.error("releaseSession() failed");
 			}
 		}
-		if (logger.isDebugEnabled())
+/*		if (logger.isDebugEnabled())
 			logger.debug("getExchangeRate() for currency code :" + currencyCode
-					+ "returns " + exchangeRate);
+					+ "returns " + exchangeRate); */
 		return exchangeRate.doubleValue();
 	}
 

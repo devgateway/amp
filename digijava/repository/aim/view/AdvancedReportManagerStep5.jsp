@@ -251,7 +251,7 @@ function deleteColumn()
 																			<TABLE width="100%" cellPadding=2 cellSpacing=1 vAlign="top" align="top" bgcolor="#aaaaaa" border=0>
 																				<c:if test="${!empty aimAdvancedReportForm.addedColumns}">
 																					<logic:iterate name="aimAdvancedReportForm" id="addedColumns"	property="addedColumns" >
-																						<c:if test="${addedColumns.columnName == 'Donor' || addedColumns.columnName == 'Sector' || addedColumns.columnName == 'Status' || addedColumns.columnName == 'Type Of Assistance' || addedColumns.columnName == 'Funding Instrument' }">
+																						<c:if test="${addedColumns.columnName == 'Donor' || addedColumns.columnName == 'Sector' || addedColumns.columnName == 'Status' || addedColumns.columnName == 'Type Of Assistance' || addedColumns.columnName == 'Financing Instrument' }">
 																							<TR bgcolor="#ffffff">
 																								<td align="left" width="98%" valign=top>
 																									<c:out value="${addedColumns.columnName}"/>

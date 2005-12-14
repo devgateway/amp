@@ -1590,7 +1590,7 @@ public class DbUtil {
 					queryString = "select report from " + AmpReportCache.class.getName()
 								  + " report where report.ampActivityId in(" + inClause2
 								  + ") " + "order by " + fieldString + ",report.ampDonorId";
-					logger.debug("inClause2 : " + queryString);
+					//logger.debug("inClause2 : " + queryString);
 					q = session.createQuery(queryString);
 					iter = q.list().iterator();
 				}
@@ -6016,8 +6016,8 @@ public class DbUtil {
 	}
 
 	public static double getExchangeRate(String currencyCode) {
-		if (logger.isDebugEnabled())
-			logger.debug("getExchangeRate with currencyCode" + currencyCode);
+		//if (logger.isDebugEnabled())
+			//logger.debug("getExchangeRate with currencyCode" + currencyCode);
 
 		Session session = null;
 		Query q = null;
@@ -6065,8 +6065,8 @@ public class DbUtil {
 
 	public static double getExchangeRate(String currencyCode,
 			int adjustmentType, Date exchangeRateDate) {
-		if (logger.isDebugEnabled())
-			logger.debug("getExchangeRate with currencyCode" + currencyCode);
+		//if (logger.isDebugEnabled())
+			//logger.debug("getExchangeRate with currencyCode" + currencyCode);
 
 		Session session = null;
 		Query q = null;
@@ -6165,9 +6165,9 @@ public class DbUtil {
 
 	public static double getExchangeRate(Long ampFundingId, String orgRoleCode) {
 
-		if (logger.isDebugEnabled())
-			logger.debug("getExchangeRate with ampFundingId=" + ampFundingId
-					+ " orgRoleCode=" + orgRoleCode);
+		//if (logger.isDebugEnabled())
+			//logger.debug("getExchangeRate with ampFundingId=" + ampFundingId
+				//	+ " orgRoleCode=" + orgRoleCode);
 
 		Session session = null;
 		Query q = null;

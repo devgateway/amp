@@ -63,8 +63,12 @@ public class ViewChannelOverview extends TilesAction {
 			boolean teamLeadFlag    = teamMember.getTeamHead();
 			boolean workingTeamFlag = DbUtil.checkForParentTeam(ampTeamId);
 			
-		 	if ("approved".equals(actApprovalStatus) || "started".equals(actApprovalStatus))
-		 		formBean.setButtonText("edit");
+		 	if ("approved".equals(actApprovalStatus) || "started".equals(actApprovalStatus)) {
+		 		if (workingTeamFlag)
+		 			formBean.setButtonText("edit");	// In case of regular working teams
+		 		else
+		 			formBean.setButtonText("none");	// In case of management-workspace
+		 	}
 		 	else if (workingTeamFlag && teamLeadFlag)
 		 			formBean.setButtonText("validate");
 		 	     else

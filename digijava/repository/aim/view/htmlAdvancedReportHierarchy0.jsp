@@ -324,7 +324,7 @@
 									%>
 							
 									<tr>
-										<td width="8%"><strong>
+										<td width="8%" rowspan="4"><strong>
 											<%=fiscalYearRange%></strong>
 										</td>
 										<td width="4%"><strong>

@@ -56,11 +56,9 @@
 						<!-- end no hierarchy -->
 						
 						<!-- begin with hierarchy -->
-<%--						
 						<logic:equal name="aimAdvancedReportForm"  property="hierarchyFlag" value="true"> 
 							<jsp:include page="htmlAdvancedReportHierarchy1.jsp"/>	
 						</logic:equal>
---%>						
 						<!-- end with hierarchy -->
 					</td>
 				</tr>

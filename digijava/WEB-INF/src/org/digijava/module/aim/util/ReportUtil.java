@@ -267,6 +267,7 @@ public class ReportUtil {
 		double[][] projFund=new double[yrCount][4];
 		double[][] totProjFund=new double[yrCount][4];
 		double actualCommitment = 0.0 ;
+		double actualDisbursement = 0.0 ;
 		double commAmount = 0.0 ;
 		double disbAmount = 0.0 ;
 		double expAmount = 0.0 ;
@@ -431,7 +432,7 @@ public class ReportUtil {
 							ampFund.setDisbAmount(mf.format(disbAmount));
 							ampFund.setExpAmount(mf.format(expAmount));
 							ampFund.setPlannedDisbAmount(mf.format(plannedDisbAmount)); 
-							ampFund.setUnDisbAmount(mf.format(commAmount - disbAmount));
+							ampFund.setUnDisbAmount(mf.format(actualCommitment - actualDisbursement));
 							report.getAmpFund().add(ampFund) ;	
 							report.setAcCommitment(mf.format(actualCommitment));
 						
@@ -461,6 +462,7 @@ public class ReportUtil {
 							commDate.clear();
 							modality.clear();
 							actualCommitment=0.0;
+							actualDisbursement=0.0;
 							plannedDisbAmount=disbAmount=expAmount=commAmount=0.0;
 						}
 						report=new Report();
@@ -551,6 +553,7 @@ public class ReportUtil {
 						if(ampReportCache.getActualDisbursement().doubleValue()>0 && ampReportCache.getPerspective().equals(perspective))
 						{
 							amount=CurrencyWorker.convert1(ampReportCache.getActualDisbursement().doubleValue(),fromExchangeRate,toExchangeRate);
+							actualDisbursement=actualDisbursement + amount;
 							if(fiscalYear>=fromYr && fiscalYear<=toYr)
 							{
 								if(projFund[fiscalYear%fromYr][1]==0)
@@ -620,7 +623,7 @@ public class ReportUtil {
 				ampFund.setDisbAmount(mf.format(disbAmount));
 				ampFund.setExpAmount(mf.format(expAmount));
 				ampFund.setPlannedDisbAmount(mf.format(plannedDisbAmount)); 
-				ampFund.setUnDisbAmount(mf.format(commAmount - disbAmount));
+				ampFund.setUnDisbAmount(mf.format(actualCommitment - actualDisbursement));
 				report.getAmpFund().add(ampFund) ;	
 				report.setAcCommitment(mf.format(actualCommitment));
 						
@@ -12071,13 +12074,13 @@ public class ReportUtil {
 				if(hierarchy.size()==1)
 				{
 					Column colLevel1=(Column) hierarchy.get(0);
-					dbReturnSet=ReportUtil.getLevel1AdvancedReport(ampTeamId,colLevel1.getColumnId(),ampStatusId,ampDonorId,ampModalityId,ampSectorId);
+					dbReturnSet=ReportUtil.getLevel1AdvancedReport(inClause,colLevel1.getColumnId(),ampStatusId,ampDonorId,ampModalityId,ampSectorId);
 				}
 				if(hierarchy.size()==2)
 				{
 					Column colLevel1=(Column) hierarchy.get(0);
 					Column colLevel2=(Column) hierarchy.get(1);
-					dbReturnSet=ReportUtil.getLevel2AdvancedReport(ampTeamId,colLevel1.getColumnId(),colLevel2.getColumnId(),ampStatusId,ampDonorId,ampModalityId,ampSectorId);
+					dbReturnSet=ReportUtil.getLevel2AdvancedReport(inClause,colLevel1.getColumnId(),colLevel2.getColumnId(),ampStatusId,ampDonorId,ampModalityId,ampSectorId);
 				}
 
 				if(hierarchy.size()==3)
@@ -12085,7 +12088,7 @@ public class ReportUtil {
 					Column colLevel1=(Column) hierarchy.get(0);
 					Column colLevel2=(Column) hierarchy.get(1);
 					Column colLevel3=(Column) hierarchy.get(2);
-					dbReturnSet=ReportUtil.getLevel3AdvancedReport(ampTeamId,colLevel1.getColumnId(),colLevel2.getColumnId(),colLevel3.getColumnId(),ampStatusId,ampDonorId,ampModalityId,ampSectorId);
+					dbReturnSet=ReportUtil.getLevel3AdvancedReport(inClause,colLevel1.getColumnId(),colLevel2.getColumnId(),colLevel3.getColumnId(),ampStatusId,ampDonorId,ampModalityId,ampSectorId);
 					logger.debug("Hierarchy 3 Size: " + dbReturnSet.size());
 				}
 				iterLevel1=dbReturnSet.iterator();
@@ -12659,7 +12662,7 @@ public class ReportUtil {
 	}
 
 
-	public static ArrayList getLevel1AdvancedReport(Long ampTeamId,Long ampColumnId,Long ampStatusId,Long ampDonorId,Long ampModalityId,Long ampSectorId) 
+	public static ArrayList getLevel1AdvancedReport(String teamClause,Long ampColumnId,Long ampStatusId,Long ampDonorId,Long ampModalityId,Long ampSectorId) 
 	{
 		Session session = null;
 		Query q = null;
@@ -12687,7 +12690,7 @@ public class ReportUtil {
 					session = PersistenceManager.getSession();
 					String queryString = "select activity from "
 						+ AmpActivity.class.getName()
-						+ " activity where (activity.team.ampTeamId='" + ampTeamId + "') and (activity.status.ampStatusId='" + ampStatus.getAmpStatusId() + "')";
+						+ " activity where (activity.team.ampTeamId in(" + teamClause + ")) and (activity.status.ampStatusId='" + ampStatus.getAmpStatusId() + "')";
 
 					Query qry = session.createQuery(queryString);
 					logger.debug("Query: " + queryString);
@@ -12711,7 +12714,7 @@ public class ReportUtil {
 			
 			if(ampColumnId.equals(Constants.DONOR_NAME))
 			{
-				level=DbUtil.getAmpDonors(ampTeamId);
+				level=DbUtil.getAmpDonors(teamClause);
 				iter=level.iterator();
 				while(iter.hasNext())
 				{
@@ -12724,8 +12727,7 @@ public class ReportUtil {
 					session = PersistenceManager.getSession();
 					String queryString = "select distinct activity from "
 						+ AmpReportCache.class.getName()
-						+ " activity where (activity.ampTeamId='" + ampTeamId 
-						+ "') and (activity.ampDonorId='" + ampOrganisation.getAmpOrgId() + "')";
+						+ " activity where (activity.ampTeamId in(" + teamClause + ")) and (activity.ampDonorId='" + ampOrganisation.getAmpOrgId() + "')";
 
 					Query qry = session.createQuery(queryString);
 					logger.debug("Query: " + queryString);
@@ -12762,8 +12764,7 @@ public class ReportUtil {
 					session = PersistenceManager.getSession();
 					String queryString = "select distinct activity from "
 						+ AmpReportCache.class.getName()
-						+ " activity where (activity.ampTeamId='" + ampTeamId 
-						+ "') and (activity.ampModalityId='" + ampModality.getAmpModalityId() + "')";
+						+ " activity where (activity.ampTeamId in(" + teamClause + ")) and (activity.ampModalityId='" + ampModality.getAmpModalityId() + "')";
 
 					Query qry = session.createQuery(queryString);
 					logger.debug("Query: " + queryString);
@@ -12790,7 +12791,7 @@ public class ReportUtil {
 				session = PersistenceManager.getSession();
 				String queryString = "select activity from "
 					+ AmpActivity.class.getName()
-					+ " activity where (activity.team.ampTeamId='" + ampTeamId + "')";
+					+ " activity where (activity.team.ampTeamId in(" + teamClause + "))";
 
 				Query qry = session.createQuery(queryString);
 				logger.debug("Query: " + queryString);
@@ -12847,8 +12848,7 @@ public class ReportUtil {
 					session = PersistenceManager.getSession();
 					String queryString = "select distinct activity from "
 						+ AmpReportCache.class.getName()
-						+ " activity where (activity.ampTeamId='" + ampTeamId 
-						+ "') and (activity.termAssistName='" + ampTermsAssist.getTermsAssistName() + "')";
+						+ " activity where (activity.ampTeamId in(" + teamClause + ")) and (activity.termAssistName='" + ampTermsAssist.getTermsAssistName() + "')";
 
 					Query qry = session.createQuery(queryString);
 					logger.debug("Query: " + queryString);
@@ -12892,7 +12892,7 @@ public class ReportUtil {
 	}
 
 
-	public static ArrayList getLevel2AdvancedReport(Long ampTeamId,Long ampColumnId1,Long ampColumnId2,Long ampStatusId,Long ampDonorId,Long ampModalityId,Long ampSectorId) 
+	public static ArrayList getLevel2AdvancedReport(String teamClause,Long ampColumnId1,Long ampColumnId2,Long ampStatusId,Long ampDonorId,Long ampModalityId,Long ampSectorId) 
 	{
 		Session session = null;
 		Query q = null;
@@ -12910,7 +12910,7 @@ public class ReportUtil {
 		try 
 		{
 
-			ahReports=getLevel1AdvancedReport(ampTeamId,ampColumnId1,ampStatusId,ampDonorId,ampModalityId,ampSectorId);
+			ahReports=getLevel1AdvancedReport(teamClause,ampColumnId1,ampStatusId,ampDonorId,ampModalityId,ampSectorId);
 			iterLevel=ahReports.iterator();
 			while(iterLevel.hasNext())
 			{
@@ -12969,7 +12969,7 @@ public class ReportUtil {
 			
 				if(ampColumnId2.equals(Constants.DONOR_NAME))
 				{
-					level=DbUtil.getAmpDonors(ampTeamId);
+					level=DbUtil.getAmpDonors(teamClause);
 					iter=level.iterator();
 					while(iter.hasNext())
 					{
@@ -14031,7 +14031,7 @@ public class ReportUtil {
 		return ahReport;
 	}
 
-	public static ArrayList getLevel3AdvancedReport(Long ampTeamId,Long ampColumnId1,Long ampColumnId2,Long ampColumnId3,Long ampStatusId,Long ampDonorId,Long ampModalityId,Long ampSectorId) 
+	public static ArrayList getLevel3AdvancedReport(String teamClause,Long ampColumnId1,Long ampColumnId2,Long ampColumnId3,Long ampStatusId,Long ampDonorId,Long ampModalityId,Long ampSectorId) 
 	{
 		Session session = null;
 		Query q = null;
@@ -14050,7 +14050,7 @@ public class ReportUtil {
 		try 
 		{
 
-			ahReports=getLevel2AdvancedReport(ampTeamId,ampColumnId1,ampColumnId2,ampStatusId,ampDonorId,ampModalityId,ampSectorId);
+			ahReports=getLevel2AdvancedReport(teamClause,ampColumnId1,ampColumnId2,ampStatusId,ampDonorId,ampModalityId,ampSectorId);
 			iterLevel1=ahReports.iterator();
 			while(iterLevel1.hasNext())
 			{
@@ -14119,7 +14119,7 @@ public class ReportUtil {
 			
 					if(ampColumnId3.equals(Constants.DONOR_NAME))
 					{
-						level=DbUtil.getAmpDonors(ampTeamId);
+						level=DbUtil.getAmpDonors(teamClause);
 						iter=level.iterator();
 						while(iter.hasNext())
 						{

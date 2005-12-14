@@ -7896,5 +7896,67 @@ public class DbUtil {
 		return actList;
 	}
 
+	public static ArrayList getAmpDonors(String inClause) {
+		ArrayList donor = new ArrayList();
+		StringBuffer DNOrg = new StringBuffer();
+		Session session = null;
+		Query q = null;
+		Iterator iterActivity = null;
+		Iterator iter = null;
+
+		try {
+			
+			session = PersistenceManager.getSession();
+			String queryString = new String();
+			queryString = "select activity from " + AmpActivity.class.getName()
+					+ " activity where activity.team.ampTeamId in(" + inClause
+					+ ")";
+			q = session.createQuery(queryString);
+			logger.debug("Activity List: " + q.list().size());
+			iterActivity = q.list().iterator();
+			while (iterActivity.hasNext()) {
+				AmpActivity ampActivity = (AmpActivity) iterActivity.next();
+				
+//				logger.debug("Org Role List: " + ampActivity.getOrgrole().size());
+				iter = ampActivity.getOrgrole().iterator();
+				while (iter.hasNext()) {
+					AmpOrgRole ampOrgRole = (AmpOrgRole) iter.next();
+					if (ampOrgRole.getRole().getRoleCode().equals(
+							Constants.FUNDING_AGENCY)) {
+						if (donor.indexOf(ampOrgRole.getOrganisation()) == -1)
+							donor.add(ampOrgRole.getOrganisation());
+					}
+				}
+			}
+			logger.debug("Donors: " + donor.size());
+			int n = donor.size();
+			for (int i = 0; i < n - 1; i++) {
+				for (int j = 0; j < n - 1 - i; j++) {
+					AmpOrganisation firstOrg = (AmpOrganisation) donor.get(j);
+					AmpOrganisation secondOrg = (AmpOrganisation) donor
+							.get(j + 1);
+					if (firstOrg.getAcronym().compareToIgnoreCase(
+							secondOrg.getAcronym()) > 0) {
+						AmpOrganisation tempOrg = firstOrg;
+						donor.set(j, secondOrg);
+						donor.set(j + 1, tempOrg);
+					}
+				}
+			}
+
+		} catch (Exception ex) {
+			logger.debug("Unable to get Donor " + ex.getMessage());
+		} finally {
+			try {
+				if (session != null) {
+					PersistenceManager.releaseSession(session);
+				}
+			} catch (Exception ex) {
+				logger.debug("releaseSession() failed");
+			}
+		}
+		return donor;
+	}
+
 
 }

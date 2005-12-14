@@ -57,7 +57,10 @@
 								<logic:notEmpty name="records" property="description">
 									<tr><td colspan=<bean:write name="aimAdvancedReportForm" property="totalColumns"/>>
 										<strong>Description			:</strong>
-										<bean:write name="records" property="description" />
+										<bean:define id="descKey">
+											<c:out value="${records.description}"/>
+										</bean:define>
+										<digi:edit key="<%=descKey%>"></digi:edit>
 									</td></tr>
 								</logic:notEmpty>
 							</logic:iterate>
@@ -831,7 +834,10 @@
 								<logic:notEmpty name="records" property="description">
 									<tr><td colspan=<bean:write name="aimAdvancedReportForm" property="totalColumns"/>>
 										<strong>Description			:</strong>
-										<bean:write name="records" property="description" />
+										<bean:define id="descKey">
+											<c:out value="${records.description}"/>
+										</bean:define>
+										<digi:edit key="<%=descKey%>"></digi:edit>
 									</td></tr>
 								</logic:notEmpty>	
 							</logic:iterate>
@@ -1919,7 +1925,7 @@
 				<tr><td colspan=<bean:write name="aimAdvancedReportForm" property="totalColumns"/>>
 						<table border="1" bordercolor="#C0C0C0" cellspacing=1 cellpadding=1 valign=top align=left style="border-collapse:collapse">
 							<tr>
-								<td align="left" colspan=<bean:write name="aimAdvancedReportForm" property="totalColumns" />><b>
+								<td align="left" colspan=<bean:write name="aimAdvancedReportForm" property="totalColumns" /> class="head2-name"><b>
 									Grand Total</b>
 								</td>
 							</tr>
@@ -2102,7 +2108,7 @@
 									<logic:notEmpty name="hierarchy" property="ampFund">
 --%>									
 										<% int mark8=0; %>
-										<logic:iterate name="hierarchy"  property="fundTotal" id="fundTotal" type="org.digijava.module.aim.helper.AmpFund">
+										<logic:iterate name="multiReport"  property="fundTotal" id="fundTotal" type="org.digijava.module.aim.helper.AmpFund">
 		  								<%
 											mark8++;
 											if((p8==1 && q8==1) || (p8==1 && q8==2) || (p8==1 && q8==3) || (p8==1 && q8==4) || (p8==2 && q8==18) || (p8==2 && q8==19) || (p8==2 && q8==20) || (p8==2 && q8==21) || (p8==3 && q8==35) || (p8==3 && q8==36) || (p8==3 && q8==37) || (p8==3 && q8==38))

@@ -47,8 +47,11 @@
 				<logic:iterate name="report"  property="records" id="records" type="org.digijava.module.aim.helper.AdvancedReport">
 					<logic:notEmpty name="records" property="description">
 						<tr><td colspan=<bean:write name="aimAdvancedReportForm" property="totalColumns"/>>
-							<strong>Description			:</strong>
-							<bean:write name="records" property="description"/>
+							<strong>Description			:</strong> 
+							<bean:define id="descKey">
+								<c:out value="${records.description}"/>
+							</bean:define>
+							<digi:edit key="<%=descKey%>"></digi:edit>
 						</td></tr>
 					</logic:notEmpty>
 				</logic:iterate>

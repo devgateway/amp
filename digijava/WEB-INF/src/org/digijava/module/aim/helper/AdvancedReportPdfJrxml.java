@@ -6,7 +6,7 @@ public class AdvancedReportPdfJrxml
 {
 
 //static String cols[];
-public static void createJRXML(String filePath, boolean undis, String labels[],Object array[][], int cols, int measureCount, String reportName, String reportType,boolean hierarchy)
+public static void createJRXML(String filePath, boolean undis, String labels[],Object array[][], int cols, int measureCount, String reportName, String reportType,int hierarchy)
 {
 //	cols=arr;
 		System.out.println(undis + "..DYNAMIC JRXML.." + reportName);
@@ -34,8 +34,8 @@ public static void createJRXML(String filePath, boolean undis, String labels[],O
 			String ctextkey="";
 			int m=0,yr=0,yrwidth=0,temp=0,bandheight=0;
 			int loop=1,hcnt=0;
-			if(hierarchy)
-				hcnt=1;
+			if(hierarchy>0)
+				hcnt=hierarchy;
 
 			p2.println("<!-- Created with iReport - A designer for JasperReports -->");
 			p2.println("<!DOCTYPE jasperReport PUBLIC '//JasperReports//DTD Report Design//EN' 'http://jasperreports.sourceforge.net/dtds/jasperreport.dtd'>");
@@ -83,35 +83,13 @@ public static void createJRXML(String filePath, boolean undis, String labels[],O
 			else
 				lwidth=(cols+(mcnt*3)+mcnt)*60;
 
-				if(hierarchy == true)
+				if(hierarchy > 0)
 				{
-p2.println("<group  name='Hierarchy' isStartNewColumn='false' isStartNewPage='false' isResetPageNumber='false' isReprintHeaderOnEachPage='false' minHeightToStartNewPage='0' >");
+/*p2.println("<group  name='Hierarchy' isStartNewColumn='false' isStartNewPage='false' isResetPageNumber='false' isReprintHeaderOnEachPage='false' minHeightToStartNewPage='0' >");
 p2.println("<groupExpression><![CDATA[$F{c4}]]></groupExpression>");
 p2.println("<groupHeader>");
 p2.println("<band height='20' isSplitAllowed='true' >");
 
-/*p2.println("<staticText>");
-p2.println("<reportElement");
-p2.println("mode='Opaque'");
-p2.println("x='0'");
-p2.println("y='0'");
-p2.println("width='60'");
-p2.println("height='20'");
-p2.println("forecolor='#000000'");
-p2.println("backcolor='#CCCCCC'");
-p2.println("key='staticText-h1'");
-p2.println("stretchType='NoStretch'");
-p2.println("positionType='FixRelativeToTop'");
-p2.println("isPrintRepeatedValues='true'");
-p2.println("isRemoveLineWhenBlank='false'");
-p2.println("isPrintInFirstWholeBand='false'");
-p2.println("isPrintWhenDetailOverflows='false'/>");
-p2.println("<textElement textAlignment='Center' verticalAlignment='Middle' rotation='None' lineSpacing='Single'>");
-p2.println("<font fontName='Arial' pdfFontName='Helvetica' size='10' isBold='true' isItalic='false' isUnderline='false' isPdfEmbedded ='false' pdfEncoding ='Cp1252' isStrikeThrough='false' />");
-p2.println("</textElement>");
-p2.println("<text><![CDATA[Hierarchy by:]]></text>");
-p2.println("</staticText>");
-*/
 p2.println("<textField isStretchWithOverflow='true' pattern='' isBlankWhenNull='false' evaluationTime='Now' hyperlinkType='None' >					<reportElement");
 p2.println("mode='Opaque'");
 p2.println("x='0'");
@@ -141,7 +119,55 @@ p2.println("</band>");
 p2.println("</groupFooter>");
 p2.println("</group>");
 
-			}
+*/			
+					String htext="";
+					int h=3+1;
+						if(hierarchy > 0)
+						{
+						for (int i=0;i<hierarchy;i++)
+						{
+								htext="h"+i;
+								//htextkey="h"+i;
+								ctextkey="c"+(h++);
+								System.out.println("grr"+ctextkey);
+								p2.println("<group  name='"+htext+"' isStartNewColumn='false' isStartNewPage='false' isResetPageNumber='false' isReprintHeaderOnEachPage='false' minHeightToStartNewPage='0' >");
+								p2.println("<groupExpression><![CDATA[$F{"+ctextkey+"}]]></groupExpression>");
+								p2.println("<groupHeader>");
+								p2.println("<band height='20' isSplitAllowed='true' >");
+
+								p2.println("<textField isStretchWithOverflow='true' pattern='' isBlankWhenNull='false' evaluationTime='Now' hyperlinkType='None' >					<reportElement");
+								p2.println("mode='Opaque'");
+								p2.println("x='0'");
+								p2.println("y='0'");
+								p2.println("width='"+(lwidth)+"'");
+								p2.println("height='20'");
+								p2.println("forecolor='#000000'");
+								p2.println("backcolor='#CCCCCC'");
+								p2.println("key='textField'");
+								p2.println("stretchType='NoStretch'");
+								p2.println("positionType='Float'");
+								p2.println("isPrintRepeatedValues='true'");
+								p2.println("isRemoveLineWhenBlank='false'");
+								p2.println("isPrintInFirstWholeBand='false'");
+								p2.println("isPrintWhenDetailOverflows='false'/>");
+								p2.println("<textElement textAlignment='Left' verticalAlignment='Middle' rotation='None' lineSpacing='Single'>");
+								p2.println("<font fontName='Arial' pdfFontName='Helvetica' size='10' isBold='true' isItalic='false' isUnderline='false' isPdfEmbedded ='false' pdfEncoding ='Cp1252' isStrikeThrough='false' />");
+								p2.println("</textElement>");
+								p2.println("<textFieldExpression class='java.lang.String'><![CDATA[\" \"+ $F{"+ctextkey+"}]]></textFieldExpression>");
+								p2.println("</textField>");
+
+								p2.println("</band>");
+								p2.println("</groupHeader>");
+								p2.println("<groupFooter>");
+								p2.println("<band height='0'  isSplitAllowed='true' >");
+								p2.println("</band>");
+								p2.println("</groupFooter>");
+								p2.println("</group>");
+//								h++;
+							}
+					}
+					
+				}
 
 			p2.println("<background>");
 			p2.println("<band height='0'  isSplitAllowed='true' >");

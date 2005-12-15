@@ -13232,7 +13232,7 @@ public class ReportUtil {
 		try
 		{
 			columns=rsc.getColumns();
-			logger.info("Column Size: " + columns.size());
+			logger.debug("Column Size: " + columns.size());
 //			hierarchy=(ArrayList)rsc.getHierarchy();
 			measures=(ArrayList)rsc.getMeasures();
 			logger.debug("Measure Size: " + measures.size());
@@ -13260,7 +13260,7 @@ public class ReportUtil {
 							report.setModality(new ArrayList());
 							report.setContacts(new ArrayList());
 							Column c=(Column) iterColumn.next();
-							logger.info("Column Id: " + c.getColumnId());
+							logger.debug("Column Id: " + c.getColumnId());
 							if(c.getColumnId().equals(Constants.STATUS_NAME))
 								report.setStatus(status);
 							if(c.getColumnId().equals(Constants.DONOR_NAME))

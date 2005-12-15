@@ -33,13 +33,13 @@ public class QuarterlyInfoWorker {
 		ArrayList arrayList = getQuarterly(fp);
 		ArrayList ethArrList = null;
 		ArrayList filterArrList = null;
-		logger.info("#$ " + fp.getFiscalCalId().longValue());
+		logger.debug("#$ " + fp.getFiscalCalId().longValue());
 		
 		if (fp.getFiscalCalId().longValue() == Constants.ETH_CAL.longValue()
 				|| fp.getFiscalCalId().longValue() == Constants.ETH_FY.longValue()) {
 			logger.debug("** fiscal calendar is ethiopian");
 			if (fp.getFromYear() != 0 && fp.getToYear() != 0) {
-				logger.info("#$ Getting data based on th Fiscal cal "
+				logger.debug("#$ Getting data based on th Fiscal cal "
 						+ fp.getFiscalCalId().longValue());
 				filterArrList = filterByYearRange(arrayList, fp.getFromYear(),
 						fp.getToYear(), fp.getFiscalCalId());
@@ -49,7 +49,7 @@ public class QuarterlyInfoWorker {
 
 		if (fp.getFromYear() != 0 && fp.getToYear() != 0) {
 			logger.debug("** fiscal calendar is gregorian");
-			logger.info("#$ Getting data based on the Fiscal cal "
+			logger.debug("#$ Getting data based on the Fiscal cal "
 					+ Constants.GREGORIAN);
 			filterArrList = filterByYearRange(arrayList, fp.getFromYear(), fp
 					.getToYear(), Constants.GREGORIAN);
@@ -82,8 +82,8 @@ public class QuarterlyInfoWorker {
 		double targetCurrency = 1.0;
 		String selCurrency=fp.getCurrencyCode();
 		
-		logger.info("In get Quarterly frm curr = " + fromCurrency);
-		logger.info("In get Quarterly target curr = " + targetCurrency);
+		logger.debug("In get Quarterly frm curr = " + fromCurrency);
+		logger.debug("In get Quarterly target curr = " + targetCurrency);
 
 		c = DbUtil.getQuarterlyData(fp.getAmpFundingId(), fp.getPerspective(),
 				fp.getTransactionType(), Constants.PLANNED);
@@ -331,7 +331,7 @@ public class QuarterlyInfoWorker {
 		for (int i = 0; i < arrList.size(); i++) {
 			QuarterlyInfo qf = (QuarterlyInfo) arrList.get(i);
 			String strTrsDate = qf.getDateDisbursed();
-			logger.info("#$ strTrsDate dateDisbursed = " + strTrsDate);
+			logger.debug("#$ strTrsDate dateDisbursed = " + strTrsDate);
 			if (strTrsDate != null && strTrsDate.length() != 0) {
 
 				logger.debug("Gregorian Date  string " + strTrsDate);
@@ -361,7 +361,7 @@ public class QuarterlyInfoWorker {
 						+ ec1.ethYear;
 				//		logger.debug("Ethiopian date set " + ethDate);
 				qf.setDateDisbursed(ethDate);
-				logger.info("Ethiopian Date :" + ethDate);
+				logger.debug("Ethiopian Date :" + ethDate);
 			}
 		}
 		if (logger.isDebugEnabled())
@@ -397,7 +397,7 @@ public class QuarterlyInfoWorker {
 
 			QuarterlyInfo qf = (QuarterlyInfo) arrList.get(i);
 			if (qf.getAggregate() == 1) {
-				logger.info("* fiscalCalId.longValue() = " + fiscalCalId.longValue());
+				logger.debug("* fiscalCalId.longValue() = " + fiscalCalId.longValue());
 				if (fiscalCalId.longValue() == Constants.ETH_FY.longValue()) {
 					yr = qf.getFiscalYear();
 				} else { // Filter by calendar type greg or eth

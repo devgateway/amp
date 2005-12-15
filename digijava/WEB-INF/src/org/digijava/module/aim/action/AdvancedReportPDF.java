@@ -58,13 +58,13 @@ public class AdvancedReportPDF extends Action
 		
 		AdvancedReportForm formBean = (AdvancedReportForm) form;
 		//formBean = (AdvancedReportForm) form;
-		logger.debug("IN PDF generation of Advanced Report........" + formBean.getReportName().replaceAll(" ", ""));
+		//logger.debug("IN PDF generation of Advanced Report........" + formBean.getReportName().replaceAll(" ", ""));
 		
-		if (formBean.getHierarchyFlag()=="true" && formBean.getColumnHierarchie() != null) {
+	/*	if (formBean.getHierarchyFlag()=="true" && formBean.getColumnHierarchie() != null) {
 			logger.debug("PDF with HIERARCHYYYYYYYY..."+formBean.getColumnHierarchie().size());
 		} else {
 			logger.debug("PDF with NOOOOOOO HIERARCHYYYYYYYY...");
-		}
+		}*/
 		Collection reportColl = new ArrayList();
 		Collection columnColl = new ArrayList();
 		Iterator iter = null, funds = null, yearIter;
@@ -73,11 +73,12 @@ public class AdvancedReportPDF extends Action
 		boolean undisbFlag = false;
 		
 		if (formBean != null) {
-			logger.debug("formBean is not null");
+			//logger.debug("formBean is not null");
 			reportColl = formBean.getAllReports();
-		} else {
+		} 
+		/*else {
 			logger.debug("formbean is null");
-		}
+		}*/
 	
 		/*if(reportColl != null)
 		{
@@ -91,13 +92,13 @@ public class AdvancedReportPDF extends Action
 		else
 		logger.debug("Collection is NULL..........." + reportColl.size());
 		*/
-		logger.debug("All Report Size : " + formBean.getAllReports().size());
-		logger.debug("Report ID : " + formBean.getCreatedReportId());
+		//logger.debug("All Report Size : " + formBean.getAllReports().size());
+		//logger.debug("Report ID : " + formBean.getCreatedReportId());
 
 		// ReportSelectionCriteria.getColumns() - helper.Columns && ReportSelectionCriteria.getMeasures() - id(Long)
 		ReportSelectionCriteria rsc=ReportUtil.getReportSelectionCriteria(new Long(formBean.getCreatedReportId()));
-		logger.debug("Column Size : " + rsc.getColumns().size());
-		logger.debug("Measusure Size : " + rsc.getMeasures().size());
+		//logger.debug("Column Size : " + rsc.getColumns().size());
+		//logger.debug("Measusure Size : " + rsc.getMeasures().size());
 		iter = rsc.getColumns().iterator();
 		
 		int row = 0, year = 0, index = 0;
@@ -122,7 +123,7 @@ public class AdvancedReportPDF extends Action
 			columnDetails[ind][0] = column.getColumnName();
 			columnDetails[ind][1] = new String(""+ind);
 			columnColl.add(column.getColumnName());
-			logger.debug(columnDetails[ind][1] + "*************>>>" +columnDetails[ind][0]);
+			//logger.debug(columnDetails[ind][1] + "*************>>>" +columnDetails[ind][0]);
 			ind++;
 		}
 
@@ -131,7 +132,7 @@ public class AdvancedReportPDF extends Action
 		{
 			//Column column = (Column)iter.next();
 			//logger.debug("ColumnColl : " + column.getColumnName());
-			logger.debug("ColumnColl : " + iter.next());
+			//logger.debug("ColumnColl : " + iter.next());
 		}
 		
 		/*
@@ -161,28 +162,28 @@ public class AdvancedReportPDF extends Action
 				while(two.hasNext()){
 					AdvancedHierarchyReport ahr=(AdvancedHierarchyReport)two.next();
 					//if(ahr.getProject().size()>i)
-					logger.debug("project Size:::: "+ahr.getProject().size());
+					//logger.debug("project Size:::: "+ahr.getProject().size());
 					//logger.debug("project Levels:::: "+ahr.getLevels().size());
 					if(ahr.getLevels()!=null && ahr.getLevels().size()>0){
 						Iterator three = ahr.getLevels().iterator();
 						while(three.hasNext()){
 							//logger.debug("**********"+three.next().getClass().getName());
 							AdvancedHierarchyReport ahr2=(AdvancedHierarchyReport)three.next();
-							logger.debug("project Size---"+ahr2.getProject().size());
+							//logger.debug("project Size---"+ahr2.getProject().size());
 							//logger.debug("project Levels---"+ahr2.getLevels().size());
 							i+=ahr2.getProject().size();
 						}
 					}
 					i+=ahr.getProject().size();
-					logger.debug("iiiiiiiiiiiiiiii== "+i+" h ==== "+formBean.getColumnHierarchie().size());
+					//logger.debug("iiiiiiiiiiiiiiii== "+i+" h ==== "+formBean.getColumnHierarchie().size());
 				}
 			}
-			logger.debug("****dataArray size with H= "+(i+1)+" :"+(columnDetails.length + ind+ formBean.getColumnHierarchie().size()));
+			//logger.debug("****dataArray size with H= "+(i+1)+" :"+(columnDetails.length + ind+ formBean.getColumnHierarchie().size()));
 			dataArray = new Object[i+1][columnDetails.length + ind+ formBean.getColumnHierarchie().size()];
 		}
 		else{
 			dataArray = new Object[formBean.getAllReports().size()+ 1][columnDetails.length + ind];
-			logger.debug("****dataArray size no H= "+(formBean.getAllReports().size()+ 1)+" :"+(columnDetails.length + ind));
+			//logger.debug("****dataArray size no H= "+(formBean.getAllReports().size()+ 1)+" :"+(columnDetails.length + ind));
 		}		
 
 		String rowData[] = new String[columnDetails.length + ind - n];
@@ -198,11 +199,11 @@ public class AdvancedReportPDF extends Action
 		if(formBean.getHierarchyFlag()=="true"){
 			j2+=formBean.getColumnHierarchie().size();
 		}
-		logger.debug("jjjjjjjjjjjjjjj-j= "+j2);
+		//logger.debug("jjjjjjjjjjjjjjj-j= "+j2);
 		for(int j=j2; j<columnDetails.length; j++)
 		{
 			rowData[index] = columnDetails[j][0];
-			logger.debug("row dataaaaaaaaa: "+rowData[index]+" : "+index);
+			//logger.debug("row dataaaaaaaaa: "+rowData[index]+" : "+index);
 			index = index + 1;
 		}
 		yearIter = formBean.getFiscalYearRange().iterator();
@@ -212,7 +213,7 @@ public class AdvancedReportPDF extends Action
 		year = yearValue.intValue();
 		ind = 0;
 		Object temp =new Object();
-		logger.debug("i-i-i-i-i-i-i-i-i-i= "+index);
+		//logger.debug("i-i-i-i-i-i-i-i-i-i= "+index);
 		for(int i=0; i< formBean.getFiscalYearRange().size() + 1; i++)
 		{
 			
@@ -247,18 +248,18 @@ public class AdvancedReportPDF extends Action
 			
 		}
 	
-		for(int i=0; i<rowData.length; i++)
+	/*	for(int i=0; i<rowData.length; i++)
 		{
 			logger.debug("Rows Labels : " + rowData[i]);
-		}
-		logger.debug("Column Size : " + columnColl.size());
+		}*/
+		//logger.debug("Column Size : " + columnColl.size());
 		Iterator  dataIter = formBean.getAllReports().iterator();
 		
 		while(dataIter.hasNext())
 		{
 			Object obj = dataIter.next();
 			if (obj instanceof Report) {
-			logger.debug("without hierarchyyyyyy... REPORT DATA.....");
+			//logger.debug("without hierarchyyyyyy... REPORT DATA.....");
 			Report report = (Report) obj;
 
 			if(report.getRecords() != null)
@@ -372,10 +373,10 @@ public class AdvancedReportPDF extends Action
 						if(advReport.getRegions().toString().replace('[',' ').replace(']',' ').trim().length() > 0)
 							dataArray[row][position] = advReport.getRegions().toString().replace('[',' ').replace(']',' ').trim();
 							
-							logger.debug(advReport.getRegions().toString().replace('[',' ').replace(']',' ').trim().length() + " : Region : " );
+							//logger.debug(advReport.getRegions().toString().replace('[',' ').replace(']',' ').trim().length() + " : Region : " );
 					}
-					else
-						logger.debug("Region is NULL..................");
+					//else
+					//	logger.debug("Region is NULL..................");
 					
 					if(columnColl.contains("Contact Name") && advReport.getContacts() != null)
 					{
@@ -406,7 +407,7 @@ public class AdvancedReportPDF extends Action
 					}					
 					
 					position = 3 + rsc.getColumns().size()-1;
-					logger.debug("------------------------------------------"+ position);
+					//logger.debug("------------------------------------------"+ position);
 					
 					
 					if(advReport.getAmpFund() != null)
@@ -482,14 +483,14 @@ public class AdvancedReportPDF extends Action
 					}
 				} // End of Records Iteration
 				
-				logger.debug("+++++ Row ++-->"+ row);
+				//logger.debug("+++++ Row ++-->"+ row);
 				row = row + 1;
 				
 			}
 			}
 			else if (obj instanceof multiReport) {
 				row=0;
-				logger.debug("#################### HIERARCHY DATA MANIPULATION.....");
+				//logger.debug("#################### HIERARCHY DATA MANIPULATION.....");
 				multiReport mltireport = (multiReport) obj;
 				if(mltireport.getHierarchy()!=null && formBean.getColumnHierarchie().size()>0){
 					Iterator itrh=mltireport.getHierarchy().iterator();
@@ -501,22 +502,22 @@ public class AdvancedReportPDF extends Action
 							while(three.hasNext()){
 								//logger.debug("**********"+three.next().getClass().getName());
 								AdvancedHierarchyReport ahr2=(AdvancedHierarchyReport)three.next();
-								logger.debug("project Size---"+ahr2.getProject().size());
+								//logger.debug("project Size---"+ahr2.getProject().size());
 								//logger.debug("project Levels---"+ahr2.getLevels().size());
 								
-						logger.debug("********* HRRCHY:::"+ahr2.getLabel()+" ::: "+ahr2.getName());
+						//logger.debug("********* HRRCHY:::"+ahr2.getLabel()+" ::: "+ahr2.getName());
 						Iterator itrr=ahr2.getProject().iterator();
-						logger.debug("|=|=|=|=|=|=| Total No. of activities..."+ahr2.getProject().size());
+						//logger.debug("|=|=|=|=|=|=| Total No. of activities..."+ahr2.getProject().size());
 						int j=0,k=0;
 						
 						while(itrr.hasNext()){
-							logger.debug("rowwwwwwwwww:"+row+"  - ITRRRRR No."+ ++j);
+							//logger.debug("rowwwwwwwwww:"+row+"  - ITRRRRR No."+ ++j);
 							//Object obj1=(Object)itrr.next();								
 								Report report=(Report) itrr.next();
-								logger.debug("record sizezzzzz:::"+report.getRecords().size());
+								//logger.debug("record sizezzzzz:::"+report.getRecords().size());
 								if(report.getRecords() != null)
 								{
-									logger.debug("flagggg:"+ ++k);
+									//logger.debug("flagggg:"+ ++k);
 									Iterator reportIter = report.getRecords().iterator();
 									while(reportIter.hasNext())
 									{
@@ -532,10 +533,10 @@ public class AdvancedReportPDF extends Action
 										}
 										
 										dataArray[row][position] = ahr.getLabel()+" - "+ahr.getName();
-										logger.debug("Filling ahr.name H1------->"+ahr.getLabel());
+										//logger.debug("Filling ahr.name H1------->"+ahr.getLabel());
 										position++;	
 										dataArray[row][position] = ahr2.getLabel()+" - "+ahr2.getName();
-										logger.debug("Filling ahr.name H2------->"+ahr2.getLabel());
+										//logger.debug("Filling ahr.name H2------->"+ahr2.getLabel());
 										position++;	
 										
 										AdvancedReport advReport = (AdvancedReport) reportIter.next();
@@ -614,7 +615,7 @@ public class AdvancedReportPDF extends Action
 											position = getColumnIndex("Donor");
 											//logger.debug("DONORRRRRR"+advReport.getDonors().toString()+">>>"+advReport.getDonors().toString().replace('[',' ').replace(']',' ').trim()+"<><><>"+row+":"+position);
 											if(advReport.getDonors().toString().replace('[',' ').replace(']',' ').trim().length() > 0){
-												logger.debug("inserting DONOR");
+												//logger.debug("inserting DONOR");
 												dataArray[row][position] = advReport.getDonors().toString().replace('[',' ').replace(']',' ').trim();
 											}
 											
@@ -636,8 +637,8 @@ public class AdvancedReportPDF extends Action
 												
 //												//logger.debug(advReport.getRegions().toString().replace('[',' ').replace(']',' ').trim().length() + " : Region : " );
 										}
-										else
-											logger.debug("Region is NULL..................");
+									//	else
+										//	logger.debug("Region is NULL..................");
 										
 										if(columnColl.contains("Contact Name") && advReport.getContacts() != null)
 										{
@@ -670,7 +671,7 @@ public class AdvancedReportPDF extends Action
 										}					
 										
 										position = n + rsc.getColumns().size()-1;
-										logger.debug("#######################################################"+ position);
+										//logger.debug("#######################################################"+ position);
 										
 										
 										if(advReport.getAmpFund() != null)
@@ -744,7 +745,7 @@ public class AdvancedReportPDF extends Action
 										} // END Of AmpFund Iteration
 									} // End of Records Iteration
 									
-									logger.debug("&&&& Row &&&-->"+ row);
+									//logger.debug("&&&& Row &&&-->"+ row);
 									row = row + 1;
 							}
 						}
@@ -753,13 +754,13 @@ public class AdvancedReportPDF extends Action
 							
 						}
 						else{
-							logger.debug("H111111111111111111111111111111111111111111111111111111");
+							//logger.debug("H111111111111111111111111111111111111111111111111111111");
 							Iterator itrr=ahr.getProject().iterator();
 							while(itrr.hasNext()){
 								//logger.debug("rowwwwwwwwww:"+row+"  - ITRRRRR No."+ ++j);
 								//Object obj1=(Object)itrr.next();								
 									Report report=(Report) itrr.next();
-									logger.debug("record sizezzzzz:::"+report.getRecords().size());
+								//	logger.debug("record sizezzzzz:::"+report.getRecords().size());
 									if(report.getRecords() != null)
 									{
 										//logger.debug("flagggg:"+ ++k);
@@ -778,7 +779,7 @@ public class AdvancedReportPDF extends Action
 											}
 											
 											dataArray[row][position] = ahr.getLabel()+" - "+ahr.getName();
-											logger.debug("Filling ahr.name ------->"+ahr.getLabel());
+											//logger.debug("Filling ahr.name ------->"+ahr.getLabel());
 											position++;	
 											
 											AdvancedReport advReport = (AdvancedReport) reportIter.next();
@@ -857,7 +858,7 @@ public class AdvancedReportPDF extends Action
 												position = getColumnIndex("Donor");
 												//logger.debug("DONORRRRRR"+advReport.getDonors().toString()+">>>"+advReport.getDonors().toString().replace('[',' ').replace(']',' ').trim()+"<><><>"+row+":"+position);
 												if(advReport.getDonors().toString().replace('[',' ').replace(']',' ').trim().length() > 0){
-													logger.debug("inserting DONOR");
+													//logger.debug("inserting DONOR");
 													dataArray[row][position] = advReport.getDonors().toString().replace('[',' ').replace(']',' ').trim();
 												}
 												
@@ -879,8 +880,8 @@ public class AdvancedReportPDF extends Action
 													
 //													//logger.debug(advReport.getRegions().toString().replace('[',' ').replace(']',' ').trim().length() + " : Region : " );
 											}
-											else
-												logger.debug("Region is NULL..................");
+										//	else
+										//		logger.debug("Region is NULL..................");
 											
 											if(columnColl.contains("Contact Name") && advReport.getContacts() != null)
 											{
@@ -913,7 +914,7 @@ public class AdvancedReportPDF extends Action
 											}					
 											
 											position = n + rsc.getColumns().size()-1;
-											logger.debug("#######################################################"+ position);
+											//logger.debug("#######################################################"+ position);
 											
 											
 											if(advReport.getAmpFund() != null)
@@ -987,7 +988,7 @@ public class AdvancedReportPDF extends Action
 											} // END Of AmpFund Iteration
 										} // End of Records Iteration
 										
-										logger.debug("&&&& Row &&&-->"+ row);
+										//logger.debug("&&&& Row &&&-->"+ row);
 										row = row + 1;
 								}
 							}//end of foo
@@ -995,33 +996,34 @@ public class AdvancedReportPDF extends Action
 						}
 						//row++;
 						
-						if(ahr.getProject()!=null)
+					/*	if(ahr.getProject()!=null)
 						logger.debug("=======Total No of activities..."+ahr.getProject().size());
 						if(ahr.getActivities()!=null)
 						logger.debug("^^^^++^^^^"+ahr.getActivities().size());
 						if(ahr.getLevels()!=null)
-						logger.debug("^^^^--^^^^"+ahr.getLevels().size());
+						logger.debug("^^^^--^^^^"+ahr.getLevels().size());*/
 					}
 					
 					
 				}
 
-			} else
-				logger.debug("HIERARCHY DATA ERROR.....");
+			}
+			//else
+			//	logger.debug("HIERARCHY DATA ERROR.....");
 		}// End of ALlReport() Iteration
 	
-		logger.debug(dataArray.length + " ----------------: FINAL DATA START-------------- :" + dataArray[0].length);
+		//logger.debug(dataArray.length + " ----------------: FINAL DATA START-------------- :" + dataArray[0].length);
 		for(int i=0; i< dataArray.length; i++)
 		{
 			for(int j=0; j< dataArray[0].length; j++)
 			{
 				if(dataArray[i][j] == null)
 					dataArray[i][j] = "";
-				logger.debug("i="+i+" j="+j+" "+dataArray[i][j]);
+				//logger.debug("i="+i+" j="+j+" "+dataArray[i][j]);
 			}
-			logger.debug("\n");
+			//logger.debug("\n");
 		}
-		logger.debug(dataArray.length + " ----------------: FINAL DATA END-------------- :" + dataArray[0].length);
+		//logger.debug(dataArray.length + " ----------------: FINAL DATA END-------------- :" + dataArray[0].length);
 
 		if(flag == 1)
 		{
@@ -1051,7 +1053,7 @@ public class AdvancedReportPDF extends Action
 				String realPathJrxml = s.getServletContext().getRealPath(
 									 "/WEB-INF/classes/org/digijava/module/aim/reports");
 				realPathJrxml = realPathJrxml + "\\" + formBean.getReportName().replaceAll(" ", "").replaceAll("#", "")+".jrxml";
-				logger.debug("Path : " + realPathJrxml);
+				//logger.debug("Path : " + realPathJrxml);
 	
 				//calling dynamic jrxml
 				AdvancedReportPdfJrxml jrxml = new AdvancedReportPdfJrxml();
@@ -1066,12 +1068,12 @@ public class AdvancedReportPDF extends Action
 				{
 					String jasperFile = s.getServletContext().getRealPath(
 							"/WEB-INF/classes/org/digijava/module/aim/reports"+"\\"+formBean.getReportName().replaceAll(" ", "").replaceAll("#", "")+".jasper");
-					logger.debug("Jasper FIle ::::::::::::::::;" + jasperFile);
+					//logger.debug("Jasper FIle ::::::::::::::::;" + jasperFile);
 					
 					
 					Map parameters = new HashMap();
-					System.out.println(jasperFile );
-					System.out.println(parameters);
+					//System.out.println(jasperFile );
+					//System.out.println(parameters);
 					bytes = JasperRunManager.runReportToPdf( jasperFile,  parameters, dataSource);
 				}
 				catch (JRException e)
@@ -1081,7 +1083,7 @@ public class AdvancedReportPDF extends Action
 				if (bytes != null && bytes.length > 0)
 				{
 					ServletOutputStream ouputStream = response.getOutputStream();
-					System.out.println("Generating PDF");
+					//System.out.println("Generating PDF");
 					response.setContentType("application/pdf");
 					response.setHeader("Content-Disposition","inline; filename=MultilateralDonorPdf.pdf");
 					response.setContentLength(bytes.length);
@@ -1089,10 +1091,10 @@ public class AdvancedReportPDF extends Action
 					ouputStream.flush();
 					ouputStream.close();
 				}
-				else
+			/*	else
 				{
 					System.out.println("Nothing to display");
-				}
+				}*/
 			}
 			
 			
@@ -1111,7 +1113,7 @@ public class AdvancedReportPDF extends Action
 				String realPathJrxml = s.getServletContext().getRealPath(
 									 "/WEB-INF/classes/org/digijava/module/aim/reports");
 				realPathJrxml = realPathJrxml + "\\" + formBean.getReportName().replaceAll(" ", "").replaceAll("#", "")+".jrxml";
-				logger.debug("Path : " + realPathJrxml);
+				//logger.debug("Path : " + realPathJrxml);
 
 				//calling dynamic jrxml
 				AdvancedReportPdfJrxml jrxml = new AdvancedReportPdfJrxml();
@@ -1130,16 +1132,16 @@ public class AdvancedReportPDF extends Action
 					
 					String jasperFile = s.getServletContext().getRealPath(
 							"/WEB-INF/classes/org/digijava/module/aim/reports"+"\\"+formBean.getReportName().replaceAll(" ", "").replaceAll("#", "")+".jasper");
-					logger.debug("Jasper FIle ::::::::::::::::;" + jasperFile);
+					//logger.debug("Jasper FIle ::::::::::::::::;" + jasperFile);
 					JasperPrint jasperPrint = 
 						JasperFillManager.fillReport(jasperFile,parameters,dataSource);
 						response.setContentType("application/vnd.ms-excel");
 						String responseHeader = "inline; filename="+formBean.getReportName().replaceAll(" ", "").replaceAll("#", "");
-						logger.debug("--------------" + responseHeader);
+						//logger.debug("--------------" + responseHeader);
 						response.setHeader("Content-Disposition", responseHeader);
 						//response.setHeader("Content-Disposition","inline; filename=commitmentByModalityXls.xls");
 
-						logger.debug("--------------");
+						//logger.debug("--------------");
 					
 					JRXlsExporter exporter = new JRXlsExporter();
 					outputStream = response.getOutputStream();
@@ -1173,7 +1175,7 @@ public class AdvancedReportPDF extends Action
 				String realPathJrxml = s.getServletContext().getRealPath(
 									 "/WEB-INF/classes/org/digijava/module/aim/reports");
 				realPathJrxml = realPathJrxml + "\\" + formBean.getReportName().replaceAll(" ", "").replaceAll("#", "")+".jrxml";
-				logger.debug("Path : " + realPathJrxml);
+				//logger.debug("Path : " + realPathJrxml);
 
 				//calling dynamic jrxml
 				AdvancedReportPdfJrxml jrxml = new AdvancedReportPdfJrxml();
@@ -1192,16 +1194,16 @@ public class AdvancedReportPDF extends Action
 					
 					String jasperFile = s.getServletContext().getRealPath(
 							"/WEB-INF/classes/org/digijava/module/aim/reports"+"\\"+formBean.getReportName().replaceAll(" ", "").replaceAll("#", "")+".jasper");
-					logger.debug("Jasper FIle ::::::::::::::::;" + jasperFile);
+					//logger.debug("Jasper FIle ::::::::::::::::;" + jasperFile);
 					JasperPrint jasperPrint = 
 						JasperFillManager.fillReport(jasperFile,parameters,dataSource);
 						response.setContentType("application/vnd.ms-excel");
 						String responseHeader = "inline; filename="+formBean.getReportName().replaceAll(" ", "").replaceAll("#", "");
-						logger.debug("--------------" + responseHeader);
+						//logger.debug("--------------" + responseHeader);
 						response.setHeader("Content-Disposition", responseHeader);
 						//response.setHeader("Content-Disposition","inline; filename=commitmentByModalityXls.xls");
 
-						logger.debug("--------------");
+						//logger.debug("--------------");
 					
 					//JRXlsExporter exporter = new JRXlsExporter();
 						JRCsvExporter exporter = new JRCsvExporter();

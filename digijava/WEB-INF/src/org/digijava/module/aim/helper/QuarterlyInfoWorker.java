@@ -27,20 +27,19 @@ public class QuarterlyInfoWorker {
 	 * @return Collection
 	 */
 	public static Collection getQuarterlyInfo(FilterParams fp) {
-		if (logger.isDebugEnabled())
-			logger.debug("GETQUARTERLYINFO() WITH AMPFUNDINGID : "
-					+ fp.getAmpFundingId());
+		//if (logger.isDebugEnabled())
+			//logger.debug("GETQUARTERLYINFO() WITH AMPFUNDINGID : " + fp.getAmpFundingId());
 		ArrayList arrayList = getQuarterly(fp);
 		ArrayList ethArrList = null;
 		ArrayList filterArrList = null;
-		logger.debug("#$ " + fp.getFiscalCalId().longValue());
+		//logger.debug("#$ " + fp.getFiscalCalId().longValue());
 		
 		if (fp.getFiscalCalId().longValue() == Constants.ETH_CAL.longValue()
 				|| fp.getFiscalCalId().longValue() == Constants.ETH_FY.longValue()) {
-			logger.debug("** fiscal calendar is ethiopian");
+			//logger.debug("** fiscal calendar is ethiopian");
 			if (fp.getFromYear() != 0 && fp.getToYear() != 0) {
-				logger.debug("#$ Getting data based on th Fiscal cal "
-						+ fp.getFiscalCalId().longValue());
+				//logger.debug("#$ Getting data based on th Fiscal cal "
+				//		+ fp.getFiscalCalId().longValue());
 				filterArrList = filterByYearRange(arrayList, fp.getFromYear(),
 						fp.getToYear(), fp.getFiscalCalId());
 				return filterArrList;
@@ -48,24 +47,21 @@ public class QuarterlyInfoWorker {
 		}
 
 		if (fp.getFromYear() != 0 && fp.getToYear() != 0) {
-			logger.debug("** fiscal calendar is gregorian");
-			logger.debug("#$ Getting data based on the Fiscal cal "
-					+ Constants.GREGORIAN);
+			//logger.debug("** fiscal calendar is gregorian");
+			//logger.debug("#$ Getting data based on the Fiscal cal "+ Constants.GREGORIAN);
 			filterArrList = filterByYearRange(arrayList, fp.getFromYear(), fp
 					.getToYear(), Constants.GREGORIAN);
 			return filterArrList;
 		}
-		if (logger.isDebugEnabled())
-			logger.debug("GETQUARTERLYINFO() RETURNING COLLECTION OF SIZE : "
-					+ arrayList.size());
+		//if (logger.isDebugEnabled())
+			//logger.debug("GETQUARTERLYINFO() RETURNING COLLECTION OF SIZE : "	+ arrayList.size());
 		return arrayList;
 	}
 
 	public static ArrayList getQuarterly(FilterParams fp) {
 
-		if (logger.isDebugEnabled())
-			logger.debug("GETQUARTERLY() WITH AMPFUNDINGID : "
-					+ fp.getAmpFundingId());
+	//	if (logger.isDebugEnabled())
+			//logger.debug("GETQUARTERLY() WITH AMPFUNDINGID : "+ fp.getAmpFundingId());
 		Collection c = null;
 		Collection c1 = null;
 		ArrayList arrayList = new ArrayList();
@@ -82,8 +78,8 @@ public class QuarterlyInfoWorker {
 		double targetCurrency = 1.0;
 		String selCurrency=fp.getCurrencyCode();
 		
-		logger.debug("In get Quarterly frm curr = " + fromCurrency);
-		logger.debug("In get Quarterly target curr = " + targetCurrency);
+		//logger.debug("In get Quarterly frm curr = " + fromCurrency);
+		//logger.debug("In get Quarterly target curr = " + targetCurrency);
 
 		c = DbUtil.getQuarterlyData(fp.getAmpFundingId(), fp.getPerspective(),
 				fp.getTransactionType(), Constants.PLANNED);
@@ -144,9 +140,8 @@ public class QuarterlyInfoWorker {
 			}
 		}
 
-		if (logger.isDebugEnabled())
-			logger.debug("GETQUARTERLY() RETURNING COLLECTION OF SIZE : "
-					+ arrayList1.size());
+		//if (logger.isDebugEnabled())
+			//logger.debug("GETQUARTERLY() RETURNING COLLECTION OF SIZE : "	+ arrayList1.size());
 
 		return arrayList1;
 	}
@@ -154,8 +149,8 @@ public class QuarterlyInfoWorker {
 	public static ArrayList merge(ArrayList arrayList, Collection c1,
 			double fromCurrency, String selCurrency) {
 
-		if (logger.isDebugEnabled())
-			logger.debug("MERGE()<");
+	//	if (logger.isDebugEnabled())
+		//	logger.debug("MERGE()<");
 
 		Iterator iter1 = c1.iterator();
 		boolean b = false;
@@ -205,8 +200,8 @@ public class QuarterlyInfoWorker {
 				arrayList.add(qf);
 			}
 		}
-		if (logger.isDebugEnabled())
-			logger.debug("MERGE() >");
+		//if (logger.isDebugEnabled())
+			//logger.debug("MERGE() >");
 		return arrayList;
 	}
 
@@ -220,9 +215,8 @@ public class QuarterlyInfoWorker {
 	 * @return
 	 */
 	static ArrayList aggregate(ArrayList arrList) {
-		if (logger.isDebugEnabled())
-			logger.debug("aggregate() passed a collection of size : "
-					+ arrList.size());
+	//	if (logger.isDebugEnabled())
+		//	logger.debug("aggregate() passed a collection of size : "+ arrList.size());
 		if (arrList.size() != 0) {
 			ArrayList al = new ArrayList();
 			Iterator iter = arrList.iterator();
@@ -301,9 +295,8 @@ public class QuarterlyInfoWorker {
 							.getPlannedAmount());
 				}
 			}
-			if (logger.isDebugEnabled())
-				logger.debug("aggregate() returning a collection of size "
-						+ al.size());
+		//	if (logger.isDebugEnabled())
+		//		logger.debug("aggregate() returning a collection of size "	+ al.size());
 			return al;
 		} else
 			return arrList;
@@ -320,10 +313,9 @@ public class QuarterlyInfoWorker {
 	 */
 	public static ArrayList convertToEth(ArrayList arrList,long fiscalCalId) {
 
-		logger.debug("#inside convertToEth");
-		if (logger.isDebugEnabled())
-			logger.debug("CONVERTTOETH() PASSED AN ARRAYLIST OF SIZE : "
-					+ arrList.size());
+		//logger.debug("#inside convertToEth");
+	//	if (logger.isDebugEnabled())
+		//	logger.debug("CONVERTTOETH() PASSED AN ARRAYLIST OF SIZE : "+ arrList.size());
 
 		EthiopianCalendar ec = new EthiopianCalendar();
 		EthiopianCalendar ec1 = null;
@@ -331,10 +323,10 @@ public class QuarterlyInfoWorker {
 		for (int i = 0; i < arrList.size(); i++) {
 			QuarterlyInfo qf = (QuarterlyInfo) arrList.get(i);
 			String strTrsDate = qf.getDateDisbursed();
-			logger.debug("#$ strTrsDate dateDisbursed = " + strTrsDate);
+			//logger.debug("#$ strTrsDate dateDisbursed = " + strTrsDate);
 			if (strTrsDate != null && strTrsDate.length() != 0) {
 
-				logger.debug("Gregorian Date  string " + strTrsDate);
+				//logger.debug("Gregorian Date  string " + strTrsDate);
 				Date trsDate = DateConversion.getDate(strTrsDate);
 				//	logger.debug("date parsed out "+trsDate);
 				FiscalDO fdo = null;
@@ -361,12 +353,11 @@ public class QuarterlyInfoWorker {
 						+ ec1.ethYear;
 				//		logger.debug("Ethiopian date set " + ethDate);
 				qf.setDateDisbursed(ethDate);
-				logger.debug("Ethiopian Date :" + ethDate);
+				//logger.debug("Ethiopian Date :" + ethDate);
 			}
 		}
-		if (logger.isDebugEnabled())
-			logger.debug("CONVERTTOETH() RETURNING AN ARRAYLIST OF SIZE : "
-					+ arrList.size());
+		//if (logger.isDebugEnabled())
+			//logger.debug("CONVERTTOETH() RETURNING AN ARRAYLIST OF SIZE : "+ arrList.size());
 		return arrList;
 	}
 
@@ -385,9 +376,9 @@ public class QuarterlyInfoWorker {
 	 */
 	public static ArrayList filterByYearRange(ArrayList arrList, int fromYear,
 			int toYear, Long fiscalCalId) {
-		if (logger.isDebugEnabled())
-			logger.debug("FILTERBYYEARRANGE() FROMYEAR : " + fromYear
-					+ " TOYEAR : " + toYear);
+		//if (logger.isDebugEnabled())
+			//logger.debug("FILTERBYYEARRANGE() FROMYEAR : " + fromYear
+			//		+ " TOYEAR : " + toYear);
 
 		ArrayList a = new ArrayList();
 
@@ -397,12 +388,12 @@ public class QuarterlyInfoWorker {
 
 			QuarterlyInfo qf = (QuarterlyInfo) arrList.get(i);
 			if (qf.getAggregate() == 1) {
-				logger.debug("* fiscalCalId.longValue() = " + fiscalCalId.longValue());
+				//logger.debug("* fiscalCalId.longValue() = " + fiscalCalId.longValue());
 				if (fiscalCalId.longValue() == Constants.ETH_FY.longValue()) {
 					yr = qf.getFiscalYear();
 				} else { // Filter by calendar type greg or eth
 					String ds = qf.getDateDisbursed();
-					logger.debug("* Date disbursed :" + ds);
+					//logger.debug("* Date disbursed :" + ds);
 					if (ds != null)
 						yr = DateConversion.getYear(ds);
 				}
@@ -449,9 +440,9 @@ public class QuarterlyInfoWorker {
 	 */
 	public static TotalsQuarterly getTotalsQuarterly(Long ampFundingId,
 			String perspective,String currCode) {
-		if (logger.isDebugEnabled())
-			logger.debug("getTotalsQuarterly() with ampFundingId : "
-					+ ampFundingId + ", perspective : " + perspective);
+	//	if (logger.isDebugEnabled())
+		//	logger.debug("getTotalsQuarterly() with ampFundingId : "
+		//			+ ampFundingId + ", perspective : " + perspective);
 		TotalsQuarterly tq = new TotalsQuarterly();
 		Integer adjType = new Integer(Constants.ACTUAL);
 		//Total actual commitment

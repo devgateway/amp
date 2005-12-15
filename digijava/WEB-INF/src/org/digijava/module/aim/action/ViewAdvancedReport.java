@@ -54,11 +54,11 @@ public class ViewAdvancedReport extends Action
 		if(teamMember==null)
 			return mapping.findForward("index");
 		Long ampTeamId=teamMember.getTeamId();
-		logger.debug("Team Id: " + ampTeamId);
+		//logger.debug("Team Id: " + ampTeamId);
 		String perspective = "DN";
 		if(request.getParameter("ampReportId") != null)
 		{
-			logger.debug("-------------------->>>>>>>>>" + request.getParameter("ampReportId").toString());
+			//logger.debug("-------------------->>>>>>>>>" + request.getParameter("ampReportId").toString());
 			formBean.setCreatedReportId(request.getParameter("ampReportId"));
 		}
 		if(formBean.getPerspective() == null)
@@ -108,7 +108,7 @@ public class ViewAdvancedReport extends Action
 		if(request.getParameter("ampReportId")!=null)
 		{
 			ampReportId=new Long(Long.parseLong(request.getParameter("ampReportId")));
-			logger.debug("Report Id: " + ampReportId);
+			//logger.debug("Report Id: " + ampReportId);
 		}	
 		AmpTeam ampTeam=DbUtil.getAmpTeam(ampTeamId);
 		AmpReports ampReports=DbUtil.getAmpReport(ampReportId);
@@ -140,7 +140,7 @@ public class ViewAdvancedReport extends Action
 		formBean.setColumnHierarchie(new ArrayList());
 
 		filters=DbUtil.getTeamPageFilters(ampTeamId,ampPageId);
-		logger.debug("Filter Size: " + filters.size());
+		//logger.debug("Filter Size: " + filters.size());
 		if(filters.size()==0)
 			formBean.setGoFlag("false");
 
@@ -208,7 +208,7 @@ public class ViewAdvancedReport extends Action
 				setFilters = setFilters + " DONORS -";
 				filterCnt++;
 				dbReturnSet=DbUtil.getAmpDonors(ampTeamId);
-				logger.debug("Donor Size: " + dbReturnSet.size());
+				//logger.debug("Donor Size: " + dbReturnSet.size());
 				iter = dbReturnSet.iterator() ;
 				formBean.setDonorColl(new ArrayList()) ;
 				while ( iter.hasNext() )
@@ -415,7 +415,7 @@ public class ViewAdvancedReport extends Action
 		
 		formBean.setTitles(rsc.getColumns());
 		formBean.setDimColumns(rsc.getColumns().size());
-		logger.debug("Measures: " + rsc.getMeasures().size());
+		//logger.debug("Measures: " + rsc.getMeasures().size());
 		measures=(ArrayList)rsc.getMeasures();
 		if(rsc.getHierarchy()!= null && rsc.getHierarchy().size()>0){
 			formBean.setHierarchyFlag("true");
@@ -461,7 +461,7 @@ public class ViewAdvancedReport extends Action
 
 		formBean.setFundColumns((measures.size()));
 
-		logger.debug("****************************" + measures.size());
+		//logger.debug("****************************" + measures.size());
 		
 		if(formBean.getAcBalFlag().equals("true"))
 			formBean.setMeasureCount(measures.size() - 1);
@@ -544,10 +544,10 @@ public class ViewAdvancedReport extends Action
 		
 		String filterNames[] =new String[2];
 		filterNames = DbUtil.setFilterDetails(filter);
-		for(int i=0; i< filterNames.length; i++)
+	/*	for(int i=0; i< filterNames.length; i++)
 		{
 			logger.debug("Filter HTML : + " + filterNames[i]);
-		}
+		}*/
 		formBean.setFilter(filterNames);
 		
 //---------------------------------------------------		
@@ -757,8 +757,8 @@ public class ViewAdvancedReport extends Action
 		else
 			formBean.setMultiReport(reports);
 		formBean.setAllReports(reports);
-		logger.debug(" page REC " + pageRecords.size());
- 		logger.debug(" REPORTS  " + reports.size());
+		//logger.debug(" page REC " + pageRecords.size());
+ 		//logger.debug(" REPORTS  " + reports.size());
 		formBean.setForecastYear(new ArrayList());
 		for(int i=toYr;i<=(toYr+3);i++)
 			formBean.getForecastYear().add(new Integer(i));

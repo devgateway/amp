@@ -9,8 +9,8 @@ public class AdvancedReportPdfJrxml
 public static void createJRXML(String filePath, boolean undis, String labels[],Object array[][], int cols, int measureCount, String reportName, String reportType,int hierarchy)
 {
 //	cols=arr;
-		System.out.println(undis + "..DYNAMIC JRXML.." + reportName);
-		System.out.println("Cols : " + cols + ":MCOUN :" + measureCount);
+	//	System.out.println(undis + "..DYNAMIC JRXML.." + reportName);
+	//	System.out.println("Cols : " + cols + ":MCOUN :" + measureCount);
 		
 		int mcnt = measureCount;
 		String arr[][] = new String[array.length][array[0].length];
@@ -25,7 +25,7 @@ public static void createJRXML(String filePath, boolean undis, String labels[],O
 			out2 = new FileOutputStream(fopen);
 			p2 = new PrintStream(out2);
 			p2.println("<?xml version=\"1.0\" encoding=\"UTF-8\" ?>");
-			System.out.println("creating now- dynamic trend...");
+		//	System.out.println("creating now- dynamic trend...");
 
 			int n=3;//cnt;
 			int center=0;//(12-n)*30;
@@ -60,7 +60,7 @@ public static void createJRXML(String filePath, boolean undis, String labels[],O
 //			DYNAMIC CCCCCCCCC
 			String dc;
 			int colCnt = 20+cols+4*mcnt;
-			System.out.println(" Cnt = " + colCnt);
+	//		System.out.println(" Cnt = " + colCnt);
 //			 gets the no of fields = 4 constants fields + YearCnt*3 + yearCnt
 			for(int k=1; k<=colCnt; k++)
 			{
@@ -129,7 +129,7 @@ p2.println("</group>");
 								htext="h"+i;
 								//htextkey="h"+i;
 								ctextkey="c"+(h++);
-								System.out.println("grr"+ctextkey);
+							//	System.out.println("grr"+ctextkey);
 								p2.println("<group  name='"+htext+"' isStartNewColumn='false' isStartNewPage='false' isResetPageNumber='false' isReprintHeaderOnEachPage='false' minHeightToStartNewPage='0' >");
 								p2.println("<groupExpression><![CDATA[$F{"+ctextkey+"}]]></groupExpression>");
 								p2.println("<groupHeader>");
@@ -339,7 +339,7 @@ p2.println("</group>");
 
 					m=cols+2;
 					for(int j=0;j<3;j++){
-						System.out.println("grrr.."+arr[0][cols+j]);
+					//	System.out.println("grrr.."+arr[0][cols+j]);
 							ctextkey= "c"+c;
 								p2.println("<textField isStretchWithOverflow='true' pattern='' isBlankWhenNull='false' evaluationTime='Now' hyperlinkType='None' >					<reportElement");
 								p2.println("mode='Opaque'");
@@ -372,12 +372,12 @@ p2.println("</group>");
 						if(undis)
 							mcnt = measureCount-1;
 							
-						System.out.println("&&&&&&&&&&&&&&&&&&&&&&&&&&&" +mcnt);
+						//System.out.println("&&&&&&&&&&&&&&&&&&&&&&&&&&&" +mcnt);
 						for(int i=0;i<mcnt;i++){
 							//if(!labels[(temp)+i].equals("Undisbursed"))
 							{	
 								ctextkey="m"+m;
-								System.out.println("com found.."+i);
+								//System.out.println("com found.."+i);
 								p2.println("<textField isStretchWithOverflow='true' pattern='' isBlankWhenNull='false' evaluationTime='Now' hyperlinkType='None' >					<reportElement");
 								p2.println("mode='Transparent'");
 								p2.println("x='"+x1+"'");
@@ -402,7 +402,7 @@ p2.println("</group>");
 							x1+=60;
 							m++;
 							}
-							System.out.println("&&&&&&&&&&------------------" + ctextkey);
+							//System.out.println("&&&&&&&&&&------------------" + ctextkey);
 						}
 						//System.out.println("temp:"+temp++);
 						m++;
@@ -413,13 +413,13 @@ p2.println("</group>");
 						mcnt = measureCount;
 						temp=(3+cols+(mcnt*3))+1;
 						ctextkey = "c"+temp;
-						System.out.println("inside here..@@@@@@@@@@@@@@@@@@"+cols+":"+mcnt+":::"+temp+"-----"+ctextkey);
+						//System.out.println("inside here..@@@@@@@@@@@@@@@@@@"+cols+":"+mcnt+":::"+temp+"-----"+ctextkey);
 					}
 					else{
 						mcnt = measureCount;
 						temp=(3+cols+((mcnt+1)*3))+1;
 						ctextkey = "c"+temp;
-						System.out.println("inside here..$$$$$$$$$$$$$$$$$$$$"+cols+":"+mcnt+":::"+temp+"-----"+ctextkey);
+						//System.out.println("inside here..$$$$$$$$$$$$$$$$$$$$"+cols+":"+mcnt+":::"+temp+"-----"+ctextkey);
 					}
 					
 					p2.println("<textField isStretchWithOverflow='true' pattern='' isBlankWhenNull='false' evaluationTime='Now' hyperlinkType='None' >					<reportElement");
@@ -451,7 +451,7 @@ p2.println("</group>");
 						//measureBlocks=3*(measureCount);
 					}
 					
-					System.out.println("BLOCKS............."+measureBlocks+" M Value ============================" + m);
+					//System.out.println("BLOCKS............."+measureBlocks+" M Value ============================" + m);
 					for(int i=1;i<=measureBlocks;i++){
 					
 						ctextkey="m"+m;
@@ -598,12 +598,12 @@ p2.println("</group>");
 					if(undis)
 						mcnt = measureCount-1;
 						
-					System.out.println("&&&&&&&&&&&&&&&&&&&&&&&&&&&" +mcnt);
+					//System.out.println("&&&&&&&&&&&&&&&&&&&&&&&&&&&" +mcnt);
 					for(int i=0;i<mcnt;i++){
 						//if(!labels[(temp)+i].equals("Undisbursed"))
 						{	
 							ctextkey="m"+m;
-							System.out.println("com found.."+i);
+							//System.out.println("com found.."+i);
 							p2.println("<textField isStretchWithOverflow='true' pattern='' isBlankWhenNull='false' evaluationTime='Now' hyperlinkType='None' >					<reportElement");
 							p2.println("mode='Transparent'");
 							p2.println("x='"+x1+"'");
@@ -628,7 +628,7 @@ p2.println("</group>");
 						x1+=60;
 						m++;
 						}
-						System.out.println("&&&&&&&&&&------------------" + ctextkey);
+						//System.out.println("&&&&&&&&&&------------------" + ctextkey);
 					}
 					//System.out.println("temp:"+temp++);
 					m++;
@@ -639,13 +639,13 @@ p2.println("</group>");
 					mcnt = measureCount;
 					temp=(3+cols+(mcnt*3))+1;
 					ctextkey = "c"+temp;
-					System.out.println("inside here..@@@@@@@@@@@@@@@@@@"+cols+":"+mcnt+":::"+temp+"-----"+ctextkey);
+					//System.out.println("inside here..@@@@@@@@@@@@@@@@@@"+cols+":"+mcnt+":::"+temp+"-----"+ctextkey);
 				}
 				else{
 					mcnt = measureCount;
 					temp=(3+cols+((mcnt+1)*3))+1;
 					ctextkey = "c"+temp;
-					System.out.println("inside here..$$$$$$$$$$$$$$$$$$$$"+cols+":"+mcnt+":::"+temp+"-----"+ctextkey);
+					//System.out.println("inside here..$$$$$$$$$$$$$$$$$$$$"+cols+":"+mcnt+":::"+temp+"-----"+ctextkey);
 				}
 
 				p2.println("<staticText>");
@@ -699,7 +699,7 @@ p2.println("</group>");
 					//measureBlocks=3*(measureCount);
 				}
 				
-				System.out.println("BLOCKS............."+measureBlocks+" M Value ============================" + m);
+				//System.out.println("BLOCKS............."+measureBlocks+" M Value ============================" + m);
 				for(int i=1;i<=measureBlocks;i++){
 				
 					ctextkey="m"+m;
@@ -753,7 +753,7 @@ p2.println("</group>");
 
 			}
 			p2.println("</band>");
-			System.out.println("Page..........Header " + c);
+			//System.out.println("Page..........Header " + c);
 			p2.println("</pageHeader>");
 			p2.println("<columnHeader>");
 			p2.println("<band height='0'  isSplitAllowed='true' >");
@@ -840,7 +840,7 @@ p2.println("</group>");
 				}
 
 			c=3+cols+3*dcnt+3+2+hcnt;
-			System.out.println("----------------->"+c);
+			//System.out.println("----------------->"+c);
 
 					for(int j=0;j<mcnt;j++)
 					{		
@@ -906,7 +906,7 @@ p2.println("</group>");
 
 				
 			p2.println("</band>");
-			System.out.println("Detail..........Header" + c);
+			//System.out.println("Detail..........Header" + c);
 			p2.println("</detail>");
 			p2.println("<columnFooter>");
 			p2.println("<band height='0'  isSplitAllowed='true' >");

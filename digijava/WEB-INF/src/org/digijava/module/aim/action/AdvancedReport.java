@@ -75,7 +75,7 @@ public class AdvancedReport extends Action {
 	public ActionForward execute(ActionMapping mapping, ActionForm form, 
 			HttpServletRequest request, HttpServletResponse response) throws java.lang.Exception
 	{
-		logger.info("###---------------------------------------------------------------------->>>>>>>>");
+		//logger.info("###---------------------------------------------------------------------->>>>>>>>");
 		formBean = (AdvancedReportForm) form;
 		
 		httpSession = request.getSession();
@@ -89,7 +89,7 @@ public class AdvancedReport extends Action {
 		Collection coll = new ArrayList();
 		DecimalFormat mf = new DecimalFormat("###,###,###,###,###") ;
 		TeamMember teamMember=(TeamMember)httpSession.getAttribute("currentMember");
-		logger.info(teamMember.getMemberId());
+		//logger.info(teamMember.getMemberId());
 		if(teamMember==null)
 			return mapping.findForward("index");
 		Long ampTeamId=teamMember.getTeamId();
@@ -117,7 +117,7 @@ public class AdvancedReport extends Action {
 			// clears all the values once portfolio is clicked
 			if( request.getParameter("clear") != null && request.getParameter("clear").equals("true"))
 			{
-				logger.info("from ViewMyDesktop");
+				//logger.info("from ViewMyDesktop");
 				formBean.setAmpColumns(null);
 				formBean.setAddedColumns(null);
 				formBean.setColumnHierarchie(null);
@@ -149,20 +149,20 @@ public class AdvancedReport extends Action {
 				formBean.setAdjustType(tempColl);
 				*/
 			}
-			else
-				logger.info(" AmpColumns is not NULL........");
+		//	else
+		//		logger.info(" AmpColumns is not NULL........");
 			
 			// Add the columns selected : Step 2
 			if(request.getParameter("check") != null && request.getParameter("check").equals("SelectCols"))
 			{
-				logger.info("inside Step 1...");
+				//logger.info("inside Step 1...");
 				return mapping.findForward("SelectCols");
 			}
 			// add columns that are available
 			if(request.getParameter("check") != null && request.getParameter("check").equals("add"))
 			{
 				str = request.getParameter("check");
-				logger.info( "Operation is : " + str);
+				//logger.info( "Operation is : " + str);
 				updateData(formBean.getAmpColumns(), formBean.getAddedColumns(), formBean.getSelectedColumns(), formBean);
 				formBean.setSelectedColumns(null);
 				return mapping.findForward("SelectCols");
@@ -171,7 +171,7 @@ public class AdvancedReport extends Action {
 			if(request.getParameter("check") != null && request.getParameter("check").equals("delete"))
 			{
 				str = request.getParameter("check");
-				logger.info( "Operation is : " + str);
+				//logger.info( "Operation is : " + str);
 				updateData(formBean.getAddedColumns(), formBean.getAmpColumns() , formBean.getRemoveColumns(), formBean);
 				formBean.setRemoveColumns(null);
 				return mapping.findForward("SelectCols");
@@ -189,7 +189,7 @@ public class AdvancedReport extends Action {
 			if(request.getParameter("check") != null && request.getParameter("check").equals("Step2DeleteRows"))
 			{
 				str = request.getParameter("check");
-				logger.info( "Operation is : " + str);
+				//logger.info( "Operation is : " + str);
 				updateData(formBean.getColumnHierarchie(), formBean.getAddedColumns(), formBean.getRemoveColumns(), formBean);
 				formBean.setRemoveColumns(null);
 				return mapping.findForward("SelectRows");
@@ -198,7 +198,7 @@ public class AdvancedReport extends Action {
 			if(request.getParameter("check") != null && request.getParameter("check").equals("AddMeasure"))
 			{
 				str = request.getParameter("check");
-				logger.info( "Operation is : " + str);
+				//logger.info( "Operation is : " + str);
 				updateData(formBean.getAmpMeasures(), formBean.getAddedMeasures(), formBean.getSelectedColumns(), formBean);
 				formBean.setSelectedColumns(null);
 				return mapping.findForward("SelectMeasures");
@@ -208,7 +208,7 @@ public class AdvancedReport extends Action {
 			if(request.getParameter("check") != null && request.getParameter("check").equals("DeleteMeasure"))
 			{
 				str = request.getParameter("check");
-				logger.info( "Operation is : " + str);
+				//logger.info( "Operation is : " + str);
 				updateData(formBean.getAddedMeasures(), formBean.getAmpMeasures() , formBean.getRemoveColumns(), formBean);
 				formBean.setRemoveColumns(null);
 				return mapping.findForward("SelectMeasures");
@@ -238,7 +238,7 @@ public class AdvancedReport extends Action {
 			// Goto Step 2.
 			if(request.getParameter("check") != null && request.getParameter("check").equals("5"))
 			{
-				logger.info("In here  generating data..........");
+				//logger.info("In here  generating data..........");
 				int fromYr = 0, toYr = 0, year=0, fiscalCalId;
 				String ampCurrencyCode=null;
 				AmpCurrency ampCurrency=null;
@@ -290,7 +290,7 @@ public class AdvancedReport extends Action {
 					ampCurrencyCode=formBean.getAmpCurrencyCode();
 
 				
-				logger.info(fromYr + ":  From year - TO Year : " + toYr);
+				//logger.info(fromYr + ":  From year - TO Year : " + toYr);
 				// Gets the Transaction and Adjustement Type from the user
 				ArrayList adjType = new ArrayList(), transc = new ArrayList();
 				int count = 0;
@@ -315,15 +315,15 @@ public class AdvancedReport extends Action {
 					while(iter.hasNext())
 					{
 						AmpMeasures ampMeasure = (AmpMeasures) iter.next();
-						logger.info("Transaction : " + ampMeasure.getMeasureId() + "" + ampMeasure.getMeasureName());
+						//logger.info("Transaction : " + ampMeasure.getMeasureId() + "" + ampMeasure.getMeasureName());
 						transc.add(count, ampMeasure.getMeasureId());
 						selectedTransc.add(ampMeasure.getMeasureName().toString());
 						count = count + 1;
 					}
 				}
-				logger.info(transc.size() + "________________ " + adjType.size());
-				logger.info("Adjustment: " + adjType.size());
-				logger.info("Transaction: " + transc.size());
+				//logger.info(transc.size() + "________________ " + adjType.size());
+				//logger.info("Adjustment: " + adjType.size());
+				//logger.info("Transaction: " + transc.size());
 				
 				if(formBean.getColumnHierarchie()==null)
 					formBean.setHierarchyFlag("false");
@@ -432,27 +432,27 @@ public class AdvancedReport extends Action {
 						page = 1;
 //						reports=ReportUtil.generateAdvancedReport(ampTeamId,fromYr,toYr,fiscalCalId,ampCurrencyCode,perspective, transc, formBean.getAddedColumns(),formBean.getColumnHierarchie());
 						reports=ReportUtil.getAdvancedReport(ampTeamId,fromYr,toYr,perspective,ampCurrencyCode,All,All,All,All,fiscalCalId,null,null,"All",rsc);
-						logger.info("Page is NULL............................" + reports.size());
+						//logger.info("Page is NULL............................" + reports.size());
 						formBean.setFinalData(reports);
 						httpSession.setAttribute("ampReports",reports);
 						
 					}
 					else 
 					{
-						logger.info("  ------>>>>>>>>    " + formBean.getFinalData().size());
+						//logger.info("  ------>>>>>>>>    " + formBean.getFinalData().size());
 						if(request.getParameter("page").equals("all") == true)
 							allPages = true;
 						else
 						{
 							page = Integer.parseInt(request.getParameter("page"));
 							reports=(ArrayList)httpSession.getAttribute("ampReports");
-							logger.info("Page is NOT NULL.................");
+							//logger.info("Page is NOT NULL.................");
 						}
 					}
 					
 					if(allPages == true)
 					{
-						logger.info("IN ALl Records.........>>>" + formBean.getFinalData().size());
+						//logger.info("IN ALl Records.........>>>" + formBean.getFinalData().size());
 						formBean.setReport(formBean.getFinalData());
 						formBean.setFiscalYearRange(new ArrayList());
 						for(int yr=fromYr;yr<=toYr;yr++)
@@ -474,7 +474,7 @@ public class AdvancedReport extends Action {
 						{
 							pageRecords.add(vect.get(i));
 						}
-						logger.info("< For each Page Record size is ..... >" + pageRecords.size());
+						//logger.info("< For each Page Record size is ..... >" + pageRecords.size());
 						Collection pages = null;
 						int numPages=0;
 						if (reports.size() > 10) 
@@ -523,13 +523,13 @@ public class AdvancedReport extends Action {
 						}
 							
 						formBean.setAllReports(reports);
-						logger.info(" page REC " + pageRecords.size());
-				 		logger.info(" REPORTS  " + reports.size());
+						//logger.info(" page REC " + pageRecords.size());
+				 		//logger.info(" REPORTS  " + reports.size());
 					}
 
 //					---------------------------------------------------		
 					/*BEGIN CODE FOR GRAND TOTAL*/
-					logger.info("BEGIN CODE FOR GRAND TOTAL..............");
+					//logger.info("BEGIN CODE FOR GRAND TOTAL..............");
 					int yearRange=(toYr-fromYr)+1;
 					if(formBean.getColumnHierarchie()==null)
 					{
@@ -703,14 +703,14 @@ public class AdvancedReport extends Action {
 						}
 					}	
 					/*END CODE FOR GRAND TOTAL*/
-					logger.info("END CODE FOR GRAND TOTAL..............");
+				//	logger.info("END CODE FOR GRAND TOTAL..............");
 
 					formBean.setForecastYear(new ArrayList());
 					for(int i=toYr;i<=(toYr+3);i++)
 						formBean.getForecastYear().add(new Integer(i));
 
 				}
-				logger.info("###----------------------------------------------------------------------#####");
+			//	logger.info("###----------------------------------------------------------------------#####");
 				return mapping.findForward("GenerateReport");
 			}
 					
@@ -719,7 +719,7 @@ public class AdvancedReport extends Action {
 			// Step 4 : Report Details
 			if(request.getParameter("check") != null && request.getParameter("check").equals("4"))
 			{
-				logger.info("In here  Getting Report Details..........");
+				//logger.info("In here  Getting Report Details..........");
 				return mapping.findForward("ReportDetails");
 			}
 			if(request.getParameter("check") != null && request.getParameter("check").equals("SelectColumn"))
@@ -736,7 +736,7 @@ public class AdvancedReport extends Action {
 			// step 3 : 
 			if(request.getParameter("check") != null && request.getParameter("check").equals("charts"))
 			{
-				logger.info("In here  chart process####..........");
+				//logger.info("In here  chart process####..........");
 
 				//logger.info("###########################Inside GeneratePIEChart..:):)");
 				//logger.info("CHART FORMBEAN SIZE::::::::::::::::"+formBean.getFinalData().size());
@@ -764,7 +764,7 @@ public class AdvancedReport extends Action {
 							title = advReport.getTitle();
 						
 						if(advReport.getAmpFund() != null){
-								logger.info("ampFund is NOT NULL....");
+								//logger.info("ampFund is NOT NULL....");
 							fundItr = advReport.getAmpFund().iterator();
 
 							AmpFund ampFund1 = new AmpFund();
@@ -781,7 +781,7 @@ public class AdvancedReport extends Action {
 							//chart_coll.add(advReport.getActualCommitment().replaceAll("," , ""));
 						//chart_coll.add(advReport.getTitle());
 					}//end of while
-					logger.info("ZZZZZZZZZZz"+title+"<------***********------->"  + comm +"<------***********------->" +disb + "<------***********------->"  + exp );
+					//logger.info("ZZZZZZZZZZz"+title+"<------***********------->"  + comm +"<------***********------->" +disb + "<------***********------->"  + exp );
 					//chart_coll.add(new Double(commit.replaceAll(",", "")) );
 
 					chart_coll.add(new Double(comm.replaceAll(",", "")) );
@@ -793,7 +793,7 @@ public class AdvancedReport extends Action {
 
 				}
 				
-				logger.info("  Chart Size : " +chart_coll.size());
+				//logger.info("  Chart Size : " +chart_coll.size());
 
 		        
 //		    	chart_coll.add("60");
@@ -824,7 +824,7 @@ public class AdvancedReport extends Action {
 			// Step 4 : Report Details
 			if(request.getParameter("check") != null && request.getParameter("check").equals("4"))
 			{
-				logger.info("In here  Getting Report Details..........");
+				//logger.info("In here  Getting Report Details..........");
 				return mapping.findForward("ReportDetails");
 			}
 			
@@ -876,7 +876,7 @@ public class AdvancedReport extends Action {
 			if(request.getParameter("check") != null && request.getParameter("check").equals("SaveReport"))
 			{
 				boolean flag = false;
-				logger.info("---------Start--Report --- Save -------------");
+				//logger.info("---------Start--Report --- Save -------------");
 				ActionErrors errors = new ActionErrors();	
 				if(formBean.getReportTitle() != null)
 				{
@@ -893,14 +893,14 @@ public class AdvancedReport extends Action {
 				{
 					boolean found = false;
 					String queryString = "select report.name from " + AmpReports.class.getName() + " report ";
-					logger.info( " Query 2 :" + queryString);
+					//logger.info( " Query 2 :" + queryString);
 					query = session.createQuery(queryString);
 					iter = query.list().iterator();
 					int i = 0;
 					if(query!=null)
 					{
 						iter = query.list().iterator();
-						logger.info("............Query is not null............");
+						//logger.info("............Query is not null............");
 						while(iter.hasNext())
 						{
 							String str = (String) iter.next();
@@ -918,7 +918,7 @@ public class AdvancedReport extends Action {
 
 	           	if(found == false)
 	            {
-						logger.info("............no duplicate report title............");
+						//logger.info("............no duplicate report title............");
 						AmpReports ampReports = new AmpReports();
 						String descr = "/"+formBean.getReportTitle().replaceAll(" " , "");
 						descr = descr + ".do";
@@ -999,12 +999,12 @@ public class AdvancedReport extends Action {
 						ampReports.setDescription("/viewAdvancedReport.do?view=reset&ampReportId="+ampReports.getAmpReportId());
 						session.update(ampReports);
 						
-						logger.info("***************  START *******");
+						//logger.info("***************  START *******");
 
-						logger.info("is Team Head : " + teamMember.getTeamHead());
+						//logger.info("is Team Head : " + teamMember.getTeamHead());
 						if(teamMember.getTeamHead() == true)
 						{
-							logger.info(teamMember.getMemberName() + " is Team Leader ");
+							//logger.info(teamMember.getMemberName() + " is Team Leader ");
 							AmpTeamReports ampTeamReports = new AmpTeamReports();
 							ampTeamReports.setTeamView(true);
 							AmpTeam ampTeam = (AmpTeam) session.get(AmpTeam.class, teamMember.getTeamId());
@@ -1015,7 +1015,7 @@ public class AdvancedReport extends Action {
 						}
 						else
 						{
-							logger.info(teamMember.getMemberName() + " is Team Memeber ");
+							//logger.info(teamMember.getMemberName() + " is Team Memeber ");
 							Long lg = teamMember.getMemberId();
 							AmpTeamMember ampTeamMember = (AmpTeamMember) session.get(AmpTeamMember.class, lg);
 							Set reportSet = ampTeamMember.getReports();
@@ -1028,7 +1028,7 @@ public class AdvancedReport extends Action {
 						// Setting the filters for the New Report that has been created.
 						Set pageFilters = new HashSet();
 						queryString = "select filters from " + AmpFilters.class.getName() + " filters ";
-						logger.info( " Filter Query...:: " + queryString);
+						//logger.info( " Filter Query...:: " + queryString);
 						query = session.createQuery(queryString);
 						if(query!=null)
 						{
@@ -1040,17 +1040,17 @@ public class AdvancedReport extends Action {
 									filt.getFilterName().compareTo("Start Date/Close Date") !=0	&& 
 									filt.getFilterName().compareTo("Planned/Actual") != 0 )  
 								{
-									logger.info("Insertd : " + filt.getFilterName());
+									//logger.info("Insertd : " + filt.getFilterName());
 									pageFilters.add(filt);
 								}
 							}
 						}
-						logger.info("Filter size : " + pageFilters.size());
+						//logger.info("Filter size : " + pageFilters.size());
 						
 						AmpPages ampPages = new AmpPages();
 						ampPages.setFilters(pageFilters);
 						ampPages.setPageName(ampReports.getName());
-						logger.info(" Page Name  : " + ampPages.getPageName());
+						//logger.info(" Page Name  : " + ampPages.getPageName());
 						
 						String pageCode = "" + ampReports.getName().trim().charAt(0);
 						for(int j=0; j <ampReports.getName().length(); j++)
@@ -1063,7 +1063,7 @@ public class AdvancedReport extends Action {
 						
 						
 						queryString = "select filters from " + AmpFilters.class.getName() + " filters ";
-						logger.info( " Filter Query...:: " + queryString);
+						//logger.info( " Filter Query...:: " + queryString);
 						query = session.createQuery(queryString);
 						if(query!=null)
 						{
@@ -1089,7 +1089,7 @@ public class AdvancedReport extends Action {
 							}
 						}
 
-						logger.info("***************  END   *******");
+						//logger.info("***************  END   *******");
 						
 						
 						tx.commit(); // commit the transcation
@@ -1100,7 +1100,7 @@ public class AdvancedReport extends Action {
 						formBean.setAddedMeasures(null);
 						
 	                }
-					logger.info("-------------Stop-----------");
+					//logger.info("-------------Stop-----------");
 				}
 				
 				return mapping.findForward("viewMyDesktop");
@@ -1137,7 +1137,7 @@ public class AdvancedReport extends Action {
 // Function for Pie Chart
 		private static String createPieChart(Collection chart_coll){
 
-				logger.info("@@@@@@@@@@ INSIDE createPieChart...");
+				//logger.info("@@@@@@@@@@ INSIDE createPieChart...");
 				Iterator iter3 = chart_coll.iterator();
 				//logger.info("@@@@@@@@@@ flag:"+chart_coll.size());
 				String temp="";
@@ -1182,7 +1182,7 @@ public class AdvancedReport extends Action {
 //		 Function for BarChart
 		private static String createBarChart(Collection chart_coll){
 
-			logger.info("@@@@@@@@@@ INSIDE createBARRRRRR Chart...");
+			//logger.info("@@@@@@@@@@ INSIDE createBARRRRRR Chart...");
 
 			String filename = null;
 			DefaultCategoryDataset data = new DefaultCategoryDataset(); 
@@ -1223,7 +1223,7 @@ public class AdvancedReport extends Action {
 			// Write the chart image to the temporary directory 
 			ChartRenderingInfo info = new ChartRenderingInfo(new StandardEntityCollection());
 	
-			logger.info("  Chart Size : " +chart_coll.size());
+			//logger.info("  Chart Size : " +chart_coll.size());
 			int dim=chart_coll.size()/6;
 			int x=dim*30;
 			int y=dim*25;
@@ -1388,17 +1388,17 @@ public class AdvancedReport extends Action {
 		if(option.equals("MoveUp") || option.equals("MoveDown"))
 		{
 			tempColl = formBean.getAddedColumns();
-			logger.info("Step1 " + option);
+			//logger.info("Step1 " + option);
 		}
 		if(option.equals("Step2MoveUp") || option.equals("Step2MoveDown"))
 		{
 			tempColl = formBean.getColumnHierarchie();
-			logger.info("Step2 " + option);
+			//logger.info("Step2 " + option);
 		}
 		if(option.equals("MoveUpMeasure") || option.equals("MoveDownMeasure"))
 		{
 			tempColl = formBean.getAddedMeasures();
-			logger.info("Step3  : " + option);
+			//logger.info("Step3  : " + option);
 		}
 		if(option.equals("MoveUpAdjustType") || option.equals("MoveDownAdjustType"))
 			tempColl = formBean.getSelAdjustType();
@@ -1415,7 +1415,7 @@ public class AdvancedReport extends Action {
 			
 			temp.addAll(tempColl);
 			iter = temp.iterator();		
-			logger.info(lg.toString() + " <<< Field Selected >>>> " + formBean.getMoveColumn() + "??????" + tempColl.size());
+			//logger.info(lg.toString() + " <<< Field Selected >>>> " + formBean.getMoveColumn() + "??????" + tempColl.size());
 			while(iter.hasNext())
 			{
 				if(option.equals("MoveUpMeasure")== true || option.equals("MoveDownMeasure")== true
@@ -1488,7 +1488,7 @@ public class AdvancedReport extends Action {
 							}
 							else
 							{
-								logger.info("Cannot  Swap.........");
+								//logger.info("Cannot  Swap.........");
 								break;								
 							}
 						}
@@ -1498,7 +1498,7 @@ public class AdvancedReport extends Action {
 					{
 						if(lg.compareTo(ampColumns.getColumnId()) == 0 )
 						{
-							logger.info(" Found : " + temp.indexOf(ampColumns));
+							//logger.info(" Found : " + temp.indexOf(ampColumns));
 							if( (temp.indexOf(ampColumns)+1) < tempColl.size())
 							{
 								curr = (AmpColumns)temp.get(temp.indexOf(ampColumns));
@@ -1515,7 +1515,7 @@ public class AdvancedReport extends Action {
 							}
 							else
 							{
-								logger.info("Cannot  Swap.........");
+								//logger.info("Cannot  Swap.........");
 								break;								
 							}
 						}

@@ -13,8 +13,11 @@ import java.text.DecimalFormat;
 import java.sql.Timestamp;
 import java.util.GregorianCalendar;
 import java.util.Date;
+import java.util.Set;
+import java.util.HashSet;
 
 import net.sf.hibernate.Hibernate;
+import net.sf.hibernate.HibernateException;
 import net.sf.hibernate.Query;
 import net.sf.hibernate.Session;
 import net.sf.hibernate.Transaction;
@@ -30,6 +33,9 @@ import org.digijava.module.aim.dbentity.AmpStatus;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpPhysicalComponentReport;
 import org.digijava.module.aim.dbentity.AmpTeam;
+import org.digijava.module.aim.dbentity.AmpPages;
+import org.digijava.module.aim.dbentity.AmpFilters;
+import org.digijava.module.aim.dbentity.AmpTeamPageFilters;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.dbentity.AmpTeamReports;
 import org.digijava.module.aim.dbentity.AmpReportCache;
@@ -14296,6 +14302,127 @@ public class ReportUtil {
 			}
 		}
 		return ampReports;
+	}
+
+	public static void saveReport(AmpReports ampReports,Long ampTeamId,Long ampMemberId,boolean teamLead)
+	{
+		Session session = null;
+		Transaction tx = null;
+		String queryString=null;
+		Query query=null;
+		Iterator iter=null;
+		Set pageFilters = new HashSet();
+		try {
+			session = PersistenceManager.getSession();
+			tx = session.beginTransaction();
+			session.save(ampReports);
+			ampReports.setDescription("/viewAdvancedReport.do?view=reset&ampReportId="+ampReports.getAmpReportId());
+			session.update(ampReports);
+			if(teamLead == true)
+			{
+				//logger.info(teamMember.getMemberName() + " is Team Leader ");
+				AmpTeamReports ampTeamReports = new AmpTeamReports();
+				ampTeamReports.setTeamView(true);
+				AmpTeam ampTeam = (AmpTeam) session.get(AmpTeam.class, ampTeamId);
+				ampTeamReports.setTeam(ampTeam);
+				ampTeamReports.setReport(ampReports);
+				session.save(ampTeamReports);
+			}
+			else
+			{
+				//logger.info(teamMember.getMemberName() + " is Team Memeber ");
+				//Long lg = teamMember.getMemberId();
+				AmpTeamMember ampTeamMember = (AmpTeamMember) session.get(AmpTeamMember.class, ampMemberId);
+				Set reportSet = ampTeamMember.getReports();
+				reportSet.add(ampReports);
+				ampTeamMember.setReports(reportSet);
+				session.save(ampTeamMember);
+			}
+
+			queryString = "select filters from " + AmpFilters.class.getName() + " filters ";
+			//logger.info( " Filter Query...:: " + queryString);
+			query = session.createQuery(queryString);
+			if(query!=null)
+			{
+				iter = query.list().iterator();
+				while(iter.hasNext())
+				{
+					AmpFilters filt = (AmpFilters) iter.next();
+					if(filt.getFilterName().compareTo("Region") != 0 && 
+						filt.getFilterName().compareTo("Start Date/Close Date") !=0	&& 
+						filt.getFilterName().compareTo("Planned/Actual") != 0 )  
+					{
+						//logger.info("Insertd : " + filt.getFilterName());
+						pageFilters.add(filt);
+					}
+				}
+			}
+
+			AmpPages ampPages = new AmpPages();
+			ampPages.setFilters(pageFilters);
+			ampPages.setPageName(ampReports.getName());
+			//logger.info(" Page Name  : " + ampPages.getPageName());
+				
+			String pageCode = "" + ampReports.getName().trim().charAt(0);
+			for(int j=0; j <ampReports.getName().length(); j++)
+			{
+				if(ampReports.getName().charAt(j) == ' ')
+						pageCode = pageCode + ampReports.getName().charAt(j+1);
+			}
+			ampPages.setPageCode(pageCode);
+			session.save(ampPages);
+			
+			
+			queryString = "select filters from " + AmpFilters.class.getName() + " filters ";
+			//logger.info( " Filter Query...:: " + queryString);
+			query = session.createQuery(queryString);
+			if(query!=null)
+			{
+				iter = query.list().iterator();
+				while(iter.hasNext())
+				{
+					AmpFilters filt = (AmpFilters) iter.next();
+					if(filt.getFilterName().compareTo("Region") != 0 && 
+						filt.getFilterName().compareTo("Start Date/Close Date") !=0	&& 
+						filt.getFilterName().compareTo("Planned/Actual") != 0 )  
+					{
+						AmpTeamPageFilters ampTeamPageFilters = new AmpTeamPageFilters();
+						ampTeamPageFilters.setFilter(filt);
+				//		logger.info("Filter:" + filt.getFilterName());
+					
+						ampTeamPageFilters.setPage(ampPages);
+				//		logger.info("Page" + ampPages.getPageName());
+						AmpTeam ampTeam = (AmpTeam) session.get(AmpTeam.class, ampMemberId);
+						ampTeamPageFilters.setTeam(ampTeam);
+				//	logger.info("Team:" + ampTeam.getName())
+						session.save(ampTeamPageFilters);
+					}						
+				}
+			}
+			tx.commit(); 
+
+		}
+		catch (Exception ex) {
+			logger.error("Exception from saveReport()  " + ex.getMessage()); 
+			ex.printStackTrace(System.out);
+			if (tx != null) {
+				try {
+					tx.rollback();
+					logger.debug("Transaction Rollbacked");
+				}
+				catch (HibernateException e) {
+					logger.error("Rollback failed :" + e);
+				}
+			}			
+		} finally {
+			if (session != null) {
+				try {
+					PersistenceManager.releaseSession(session);
+				} catch (Exception e) {
+					logger.error("Release session faliled :" + e);
+				}
+			}
+		}
 	}
 
 // end of Advanced Function	

@@ -83,7 +83,7 @@ public class AdvancedReport extends Action {
 		Collection reports = new ArrayList();
 		Collection selectedTransc = new ArrayList();
 		Session session = null;
-		Transaction tx = null;
+	//	Transaction tx = null;
 		String sqlQuery;		
 		Iterator iter;
 		Collection coll = new ArrayList();
@@ -111,9 +111,7 @@ public class AdvancedReport extends Action {
 
 		try
 		{
-			session = PersistenceManager.getSession();
-			tx = session.beginTransaction();
-
+			
 			// clears all the values once portfolio is clicked
 			if( request.getParameter("clear") != null && request.getParameter("clear").equals("true"))
 			{
@@ -993,106 +991,8 @@ public class AdvancedReport extends Action {
 							}
 						}
 						ampReports.setMeasures(measures);
-						
-						session.save(ampReports);
-						
-						ampReports.setDescription("/viewAdvancedReport.do?view=reset&ampReportId="+ampReports.getAmpReportId());
-						session.update(ampReports);
-						
-						//logger.info("***************  START *******");
-
-						//logger.info("is Team Head : " + teamMember.getTeamHead());
-						if(teamMember.getTeamHead() == true)
-						{
-							//logger.info(teamMember.getMemberName() + " is Team Leader ");
-							AmpTeamReports ampTeamReports = new AmpTeamReports();
-							ampTeamReports.setTeamView(true);
-							AmpTeam ampTeam = (AmpTeam) session.get(AmpTeam.class, teamMember.getTeamId());
-							ampTeamReports.setTeam(ampTeam);
-							ampTeamReports.setReport(ampReports);
-							
-							session.save(ampTeamReports);
-						}
-						else
-						{
-							//logger.info(teamMember.getMemberName() + " is Team Memeber ");
-							Long lg = teamMember.getMemberId();
-							AmpTeamMember ampTeamMember = (AmpTeamMember) session.get(AmpTeamMember.class, lg);
-							Set reportSet = ampTeamMember.getReports();
-							reportSet.add(ampReports);
-							ampTeamMember.setReports(reportSet);
-							
-							session.save(ampTeamMember);
-						}
+						ReportUtil.saveReport(ampReports,teamMember.getTeamId(),teamMember.getMemberId(),teamMember.getTeamHead());
 			
-						// Setting the filters for the New Report that has been created.
-						Set pageFilters = new HashSet();
-						queryString = "select filters from " + AmpFilters.class.getName() + " filters ";
-						//logger.info( " Filter Query...:: " + queryString);
-						query = session.createQuery(queryString);
-						if(query!=null)
-						{
-							iter = query.list().iterator();
-							while(iter.hasNext())
-							{
-								AmpFilters filt = (AmpFilters) iter.next();
-								if(filt.getFilterName().compareTo("Region") != 0 && 
-									filt.getFilterName().compareTo("Start Date/Close Date") !=0	&& 
-									filt.getFilterName().compareTo("Planned/Actual") != 0 )  
-								{
-									//logger.info("Insertd : " + filt.getFilterName());
-									pageFilters.add(filt);
-								}
-							}
-						}
-						//logger.info("Filter size : " + pageFilters.size());
-						
-						AmpPages ampPages = new AmpPages();
-						ampPages.setFilters(pageFilters);
-						ampPages.setPageName(ampReports.getName());
-						//logger.info(" Page Name  : " + ampPages.getPageName());
-						
-						String pageCode = "" + ampReports.getName().trim().charAt(0);
-						for(int j=0; j <ampReports.getName().length(); j++)
-						{
-							if(ampReports.getName().charAt(j) == ' ')
-									pageCode = pageCode + ampReports.getName().charAt(j+1);
-						}
-						ampPages.setPageCode(pageCode);
-						session.save(ampPages);
-						
-						
-						queryString = "select filters from " + AmpFilters.class.getName() + " filters ";
-						//logger.info( " Filter Query...:: " + queryString);
-						query = session.createQuery(queryString);
-						if(query!=null)
-						{
-							iter = query.list().iterator();
-							while(iter.hasNext())
-							{
-								AmpFilters filt = (AmpFilters) iter.next();
-								if(filt.getFilterName().compareTo("Region") != 0 && 
-									filt.getFilterName().compareTo("Start Date/Close Date") !=0	&& 
-									filt.getFilterName().compareTo("Planned/Actual") != 0 )  
-								{
-									AmpTeamPageFilters ampTeamPageFilters = new AmpTeamPageFilters();
-									ampTeamPageFilters.setFilter(filt);
-							//		logger.info("Filter:" + filt.getFilterName());
-							
-									ampTeamPageFilters.setPage(ampPages);
-							//		logger.info("Page" + ampPages.getPageName());
-									AmpTeam ampTeam = (AmpTeam) session.get(AmpTeam.class, teamMember.getTeamId());
-									ampTeamPageFilters.setTeam(ampTeam);
-								//	logger.info("Team:" + ampTeam.getName())
-									session.save(ampTeamPageFilters);
-								}						
-							}
-						}
-
-						//logger.info("***************  END   *******");
-						
-						
-						tx.commit(); // commit the transcation
 						// Clears the values of the Previous report 
 						formBean.setAmpColumns(null);
 						formBean.setAddedColumns(null);
@@ -1100,7 +1000,7 @@ public class AdvancedReport extends Action {
 						formBean.setAddedMeasures(null);
 						
 	                }
-					//logger.info("-------------Stop-----------");
+					
 				}
 				
 				return mapping.findForward("viewMyDesktop");

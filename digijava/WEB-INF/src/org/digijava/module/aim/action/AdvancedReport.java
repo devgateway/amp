@@ -82,7 +82,7 @@ public class AdvancedReport extends Action {
 		Query query;
 		Collection reports = new ArrayList();
 		Collection selectedTransc = new ArrayList();
-		Session session = null;
+		//Session session = null;
 	//	Transaction tx = null;
 		String sqlQuery;		
 		Iterator iter;
@@ -890,11 +890,13 @@ public class AdvancedReport extends Action {
 				if(flag == false)
 				{
 					boolean found = false;
-					String queryString = "select report.name from " + AmpReports.class.getName() + " report ";
+					//String queryString = "select report.name from " + AmpReports.class.getName() + " report ";
+					int i = 0;
 					//logger.info( " Query 2 :" + queryString);
+					/*
 					query = session.createQuery(queryString);
 					iter = query.list().iterator();
-					int i = 0;
+					
 					if(query!=null)
 					{
 						iter = query.list().iterator();
@@ -912,7 +914,7 @@ public class AdvancedReport extends Action {
 							else
 								found = false;
 						}
-					}
+					}*/
 
 	           	if(found == false)
 	            {
@@ -1012,25 +1014,6 @@ public class AdvancedReport extends Action {
 			logger.info("-------------Inside Catch-----------");
 			e.printStackTrace(System.out);
 		}
-		finally 
-		{
-			
-			if (session != null) 
-			{
-				logger.info("-------------Inside Finally....Session got-----------");
-				try 
-				{
-					PersistenceManager.releaseSession(session);
-				} 
-				catch (Exception e) 
-				{
-					logger.error("Release session faliled :" + e);
-				}
-			}
-			else
-				logger.info("-------------Inside Finally....didn't get Session-----------");
-		}
-
 		return mapping.findForward("forward");
 	}// end of function execute
 	

@@ -19,7 +19,7 @@
 
 <digi:instance property="aimCommitmentbyDonorForm" />
 
-<table width="750" cellspacing=1 cellpadding=1 valign=top align=left >
+<table width="700" cellspacing=1 cellpadding=1 valign=top align=left >
 
 	<%! int stYr = 0, ind = 0; %> 
 	<%! int temp = 0, count = 0; %> 
@@ -51,93 +51,92 @@
 				</b>    
 			</td></tr> 
 
-			<logic:iterate name="aimCommitmentbyDonorForm"  property="fiscalYearRange" id="fiscalYearRange">
+			<logic:iterate name="aimCommitmentbyDonorForm"  property="forecastYear" id="forecastYear">
 			<% count++;%>
 			<% 
 			   if (stYr == 0) {
-				Integer fy = (Integer) fiscalYearRange; 
+				Integer fy = (Integer) forecastYear; 
 				stYr = fy.intValue();
 			} %>
 			</logic:iterate>
-
-			<logic:notEmpty name="aimCommitmentbyDonorForm" property="report"> 
-			<logic:iterate name="aimCommitmentbyDonorForm"  property="report" id="report" type="org.digijava.module.aim.helper.Report">
+			<logic:notEmpty name="aimCommitmentbyDonorForm" property="allReports"> 
+			<logic:iterate name="aimCommitmentbyDonorForm"  property="allReports" id="allReports" type="org.digijava.module.aim.helper.Report">
 			 <tr>
- 			  <td width=700>
+ 			  <td width=650>
 			  <table width="100%" cellspacing=1 cellpadding=1 valign=top align=left style="border-collapse: collapse" border=1 >
 
 				<tr valign=top>
-				 <td width=700 colspan=2>
+				 <td width=650 colspan=2>
 				  <table>
 				   <tr>
 				    <td align=left colspan=2>  <b> Donor(s) :</b> 
-						<logic:empty name="report" property="donors">&nbsp;
+						<logic:empty name="allReports" property="donors">&nbsp;
 						</logic:empty>
-						<logic:notEmpty name="report" property="donors">
-						<logic:iterate name="report" id="donors" property="donors"> <%=donors%>	
+						<logic:notEmpty name="allReports" property="donors">
+						<logic:iterate name="allReports" id="donors" property="donors"> <%=donors%>	
 						</logic:iterate>
 						</logic:notEmpty>
 					</td>
 				   </tr>
 	   				<tr >
 				     <td align=left colspan=2>  <b> Project Name  : </b>
-					  <bean:write name="report" property="title" />
+					  <bean:write name="allReports" property="title" />
 					 </td>
 					</tr>
 				  </table>
 				 </td>
 				
 				</tr>
-				<tr >
+				<tr>
 				 <td width=100% valign=top  >
 				  <table style="border-collapse: collapse" border=1 width="100%" cellspacing=1 cellpadding=1 border=1 valign=top >
 					<tr>
-					  <td width=200><b>
+					  <td width=150><b>
 						Sector :</b>
-							<logic:empty name="report" property="sectors">&nbsp;</logic:empty>
-							<logic:notEmpty name="report" property="sectors">
-							<logic:iterate name="report" id="sectors" property="sectors"> <%=sectors%>	
+							<logic:empty name="allReports" property="sectors">&nbsp;</logic:empty>
+							<logic:notEmpty name="allReports" property="sectors">
+							<logic:iterate name="allReports" id="sectors" property="sectors"> <%=sectors%>	
 							</logic:iterate>
 							</logic:notEmpty>
 					  </td>
-					  <td width=150 valign=top > <b>
-						Status : </b><bean:write name="report" property="status" />
+					  <td width=130 valign=top > <b>
+						Status : </b><bean:write name="allReports" property="status" />
 					  </td>
 					</tr>
 					<tr>
 					   <td width=150><b>
 							Type of Assistance : </b>
-							<logic:empty name="report" property="assistance">&nbsp;	</logic:empty>
-							<logic:notEmpty name="report" property="assistance">
-							<logic:iterate name="report" id="assistance" property="assistance"> <%=assistance%>	
+							<logic:empty name="allReports" property="assistance">&nbsp;	</logic:empty>
+							<logic:notEmpty name="allReports" property="assistance">
+							<logic:iterate name="allReports" id="assistance" property="assistance"> <%=assistance%>	
 							</logic:iterate>
 							</logic:notEmpty>
 					   </td>
-					   <td>
+					   <td width=130 valign=top >
 					     <b>	Level : </b>
-						 <bean:write name="report" property="level" />
+						 <bean:write name="allReports" property="level" />
 					   </td>
 					</tr>
 					<tr>
 					  <td width=150> <b>
-						Start Date : </b> <bean:write name="report" property="startDate" />  </td>
-					  <td width=200><b>
-						Close Date : </b> <bean:write name="report" property="closeDate" />					  </td>
+						Start Date : </b> <bean:write name="allReports" property="startDate" />  </td>
+					  <td width=130 valign=top ><b>
+						Close Date : </b> <bean:write name="allReports" property="closeDate" />					  </td>
 					</tr>
 
 					<tr>
-					  <td width=200><b>
+					  <td width=150><b>
 						Region :</b>
-						<logic:empty name="report" property="regions">&nbsp;</logic:empty>
-						<logic:notEmpty name="report" property="regions">
-						<logic:iterate name="report" id="regions" property="regions"> <%=regions%>	
+						<logic:empty name="allReports" property="regions">&nbsp;</logic:empty>
+						<logic:notEmpty name="allReports" property="regions">
+						<logic:iterate name="allReports" id="regions" property="regions"> <%=regions%>	
 						</logic:iterate>
 						</logic:notEmpty>
 					  </td>
-					  <td width=150 valign=top > <b>
+					  <td width=130 valign=top > <b>
 						Total Commitment : </b>
-						<logic:notEqual name="report" property="acCommitment" value="0">
-						<bean:write name="report" property="acCommitment" />
+						<logic:notEqual name="allReports" property="acCommitment" value="0">
+						<bean:write name="allReports" property="acCommitment" />
 						</logic:notEqual>
 					  </td>
 					</tr>
@@ -146,21 +145,21 @@
 					<tr>
 					  <td width=150> <b>
 						Total Disb. : </b> 
-						<logic:notEqual name="report" property="acDisbursement" value="0">
-						<bean:write name="report" property="acDisbursement" />
+						<logic:notEqual name="allReports" property="acDisbursement" value="0">
+						<bean:write name="allReports" property="acDisbursement" />
 						</logic:notEqual>
 					  </td>
-					  <td width=200><b>
+					  <td width=130 valign=top ><b>
 						UnDisb : </b> 						
-						<logic:notEqual name="report" property="acUnDisbursement" value="0">
-						<bean:write name="report" property="acUnDisbursement" />
+						<logic:notEqual name="allReports" property="acUnDisbursement" value="0">
+						<bean:write name="allReports" property="acUnDisbursement" />
 						</logic:notEqual>
 					  </td>
 					</tr>
 				  </table>
 				 </td>
 
-				 <td width=500 valign=top >
+				 <td width=300 valign=top >
 				  <table>
 				   <tr>
 					<td align=left align=top >
@@ -181,20 +180,12 @@
 				  <td valign=top  width=200>
 				  <% temp = stYr; %>
 			     <table cellpadding=2 cellspacing=1 border=1 style="border-collapse: collapse" valign=top >
-			 		<logic:iterate name="report"  property="ampFund" id="ampFund" 	type="org.digijava.module.aim.helper.AmpFund">
+			 		<logic:iterate name="allReports"  property="ampFund" id="ampFund" 	type="org.digijava.module.aim.helper.AmpFund">
 					<tr>
-					<% ind++; %>
-					<% if(ind > count ) {  ind=0;%>
- 					 <td width=50>
-						Total 
-					</td>
-					<% } else { %>
 	 					 <td width=40>
 						<%=temp%>
 						<%temp++;%>
 					 </td>
-
-					<%} %>
 					  <td align=right width=130>
 						<logic:notEqual name="ampFund" property="disbAmount" value="0">
 						<bean:write name="ampFund" property="disbAmount" />
@@ -215,9 +206,9 @@
 
 			<tr>
 			 <td >
-				<table width="700" cellspacing=1 cellpadding=1 valign=top align=left style="border-collapse: collapse" border=1 >
+				<table width="650" cellspacing=1 cellpadding=1 valign=top align=left style="border-collapse: collapse" border=1 >
 				 <tr>
-				 	<td width=100>
+				 	<td width=80>
 					 <b>	Total		</b>
 				    </td>
 					<td align=right width=710>

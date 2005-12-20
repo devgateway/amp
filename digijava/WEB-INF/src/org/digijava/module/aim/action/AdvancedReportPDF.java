@@ -58,13 +58,13 @@ public class AdvancedReportPDF extends Action
 		
 		AdvancedReportForm formBean = (AdvancedReportForm) form;
 		//formBean = (AdvancedReportForm) form;
-		//logger.debug("IN PDF generation of Advanced Report........" + formBean.getReportName().replaceAll(" ", ""));
+		logger.info("IN PDF generation of Advanced Report........" + formBean.getReportName().replaceAll(" ", "_"));
 		
-	/*	if (formBean.getHierarchyFlag()=="true" && formBean.getColumnHierarchie() != null) {
-			logger.debug("PDF with HIERARCHYYYYYYYY..."+formBean.getColumnHierarchie().size());
+		if (formBean.getHierarchyFlag()=="true" && formBean.getColumnHierarchie() != null) {
+			logger.info("PDF with HIERARCHYYYYYYYY..."+formBean.getColumnHierarchie().size());
 		} else {
-			logger.debug("PDF with NOOOOOOO HIERARCHYYYYYYYY...");
-		}*/
+			logger.info("PDF with NOOOOOOO HIERARCHYYYYYYYY...");
+		}
 		Collection reportColl = new ArrayList();
 		Collection columnColl = new ArrayList();
 		Iterator iter = null, funds = null, yearIter;
@@ -73,32 +73,31 @@ public class AdvancedReportPDF extends Action
 		boolean undisbFlag = false;
 		
 		if (formBean != null) {
-			//logger.debug("formBean is not null");
+			logger.info("formBean is not null");
 			reportColl = formBean.getAllReports();
-		} 
-		/*else {
-			logger.debug("formbean is null");
-		}*/
+		} else {
+			logger.info("formbean is null");
+		}
 	
 		/*if(reportColl != null)
 		{
 			if (reportColl.size() == 0) {
-				logger.debug("collection is empty");
+				logger.info("collection is empty");
 			} else {
-				logger.debug("collection is not empty");
+				logger.info("collection is not empty");
 				iter = reportColl.iterator();
 			}
 		}
 		else
-		logger.debug("Collection is NULL..........." + reportColl.size());
+		logger.info("Collection is NULL..........." + reportColl.size());
 		*/
-		//logger.debug("All Report Size : " + formBean.getAllReports().size());
-		//logger.debug("Report ID : " + formBean.getCreatedReportId());
+		logger.info("All Report Size : " + formBean.getAllReports().size());
+		logger.info("Report ID : " + formBean.getCreatedReportId());
 
 		// ReportSelectionCriteria.getColumns() - helper.Columns && ReportSelectionCriteria.getMeasures() - id(Long)
 		ReportSelectionCriteria rsc=ReportUtil.getReportSelectionCriteria(new Long(formBean.getCreatedReportId()));
-		//logger.debug("Column Size : " + rsc.getColumns().size());
-		//logger.debug("Measusure Size : " + rsc.getMeasures().size());
+		logger.info("Column Size : " + rsc.getColumns().size());
+		logger.info("Measusure Size : " + rsc.getMeasures().size());
 		iter = rsc.getColumns().iterator();
 		
 		int row = 0, year = 0, index = 0;
@@ -123,7 +122,7 @@ public class AdvancedReportPDF extends Action
 			columnDetails[ind][0] = column.getColumnName();
 			columnDetails[ind][1] = new String(""+ind);
 			columnColl.add(column.getColumnName());
-			//logger.debug(columnDetails[ind][1] + "*************>>>" +columnDetails[ind][0]);
+			logger.info(columnDetails[ind][1] + "*************>>>" +columnDetails[ind][0]);
 			ind++;
 		}
 
@@ -131,8 +130,8 @@ public class AdvancedReportPDF extends Action
 		while(iter.hasNext())
 		{
 			//Column column = (Column)iter.next();
-			//logger.debug("ColumnColl : " + column.getColumnName());
-			//logger.debug("ColumnColl : " + iter.next());
+			//logger.info("ColumnColl : " + column.getColumnName());
+			logger.info("ColumnColl : " + iter.next());
 		}
 		
 		/*
@@ -162,28 +161,28 @@ public class AdvancedReportPDF extends Action
 				while(two.hasNext()){
 					AdvancedHierarchyReport ahr=(AdvancedHierarchyReport)two.next();
 					//if(ahr.getProject().size()>i)
-					//logger.debug("project Size:::: "+ahr.getProject().size());
-					//logger.debug("project Levels:::: "+ahr.getLevels().size());
+					logger.info("project Size:::: "+ahr.getProject().size());
+					//logger.info("project Levels:::: "+ahr.getLevels().size());
 					if(ahr.getLevels()!=null && ahr.getLevels().size()>0){
 						Iterator three = ahr.getLevels().iterator();
 						while(three.hasNext()){
-							//logger.debug("**********"+three.next().getClass().getName());
+							//logger.info("**********"+three.next().getClass().getName());
 							AdvancedHierarchyReport ahr2=(AdvancedHierarchyReport)three.next();
-							//logger.debug("project Size---"+ahr2.getProject().size());
-							//logger.debug("project Levels---"+ahr2.getLevels().size());
+							logger.info("project Size---"+ahr2.getProject().size());
+							//logger.info("project Levels---"+ahr2.getLevels().size());
 							i+=ahr2.getProject().size();
 						}
 					}
 					i+=ahr.getProject().size();
-					//logger.debug("iiiiiiiiiiiiiiii== "+i+" h ==== "+formBean.getColumnHierarchie().size());
+					logger.info("iiiiiiiiiiiiiiii== "+i+" h ==== "+formBean.getColumnHierarchie().size());
 				}
 			}
-			//logger.debug("****dataArray size with H= "+(i+1)+" :"+(columnDetails.length + ind+ formBean.getColumnHierarchie().size()));
+			logger.info("****dataArray size with H= "+(i+1)+" :"+(columnDetails.length + ind+ formBean.getColumnHierarchie().size()));
 			dataArray = new Object[i+1][columnDetails.length + ind+ formBean.getColumnHierarchie().size()];
 		}
 		else{
 			dataArray = new Object[formBean.getAllReports().size()+ 1][columnDetails.length + ind];
-			//logger.debug("****dataArray size no H= "+(formBean.getAllReports().size()+ 1)+" :"+(columnDetails.length + ind));
+			logger.info("****dataArray size no H= "+(formBean.getAllReports().size()+ 1)+" :"+(columnDetails.length + ind));
 		}		
 
 		String rowData[] = new String[columnDetails.length + ind - n];
@@ -199,11 +198,11 @@ public class AdvancedReportPDF extends Action
 		if(formBean.getHierarchyFlag()=="true"){
 			j2+=formBean.getColumnHierarchie().size();
 		}
-		//logger.debug("jjjjjjjjjjjjjjj-j= "+j2);
+		logger.info("jjjjjjjjjjjjjjj-j= "+j2);
 		for(int j=j2; j<columnDetails.length; j++)
 		{
 			rowData[index] = columnDetails[j][0];
-			//logger.debug("row dataaaaaaaaa: "+rowData[index]+" : "+index);
+			logger.info("row dataaaaaaaaa: "+rowData[index]+" : "+index);
 			index = index + 1;
 		}
 		yearIter = formBean.getFiscalYearRange().iterator();
@@ -213,7 +212,7 @@ public class AdvancedReportPDF extends Action
 		year = yearValue.intValue();
 		ind = 0;
 		Object temp =new Object();
-		//logger.debug("i-i-i-i-i-i-i-i-i-i= "+index);
+		logger.info("i-i-i-i-i-i-i-i-i-i= "+index);
 		for(int i=0; i< formBean.getFiscalYearRange().size() + 1; i++)
 		{
 			
@@ -248,18 +247,18 @@ public class AdvancedReportPDF extends Action
 			
 		}
 	
-	/*	for(int i=0; i<rowData.length; i++)
+		for(int i=0; i<rowData.length; i++)
 		{
-			logger.debug("Rows Labels : " + rowData[i]);
-		}*/
-		//logger.debug("Column Size : " + columnColl.size());
+			logger.info("Rows Labels : " + rowData[i]);
+		}
+		logger.info("Column Size : " + columnColl.size());
 		Iterator  dataIter = formBean.getAllReports().iterator();
 		
 		while(dataIter.hasNext())
 		{
 			Object obj = dataIter.next();
 			if (obj instanceof Report) {
-			//logger.debug("without hierarchyyyyyy... REPORT DATA.....");
+			logger.info("without hierarchyyyyyy... REPORT DATA.....");
 			Report report = (Report) obj;
 
 			if(report.getRecords() != null)
@@ -286,7 +285,7 @@ public class AdvancedReportPDF extends Action
 						if(advReport.getStatus().replaceAll(",", "").length() > 2)
 							dataArray[row][position] = advReport.getStatus().replaceAll(",", "");
 					
-						//logger.debug(advReport.getStatus().replaceAll(",", "").length() + " : Status : " + advReport.getStatus().replaceAll(",", ""));
+						//logger.info(advReport.getStatus().replaceAll(",", "").length() + " : Status : " + advReport.getStatus().replaceAll(",", ""));
 					}
 					if(columnColl.contains("Project Title") && advReport.getTitle() != null)
 					{
@@ -294,7 +293,7 @@ public class AdvancedReportPDF extends Action
 						if(advReport.getTitle().trim().length() > 0)
 							dataArray[row][position] = advReport.getTitle().trim();
 							
-							//logger.debug("Name : " + advReport.getTitle());
+							//logger.info("Name : " + advReport.getTitle());
 					}
 					if(columnColl.contains("Actual Start Date") && advReport.getActualStartDate() != null)
 					{
@@ -302,7 +301,7 @@ public class AdvancedReportPDF extends Action
 						if(advReport.getActualStartDate().trim().length() > 0)
 							dataArray[row][position] = advReport.getActualStartDate().trim();
 							
-							//logger.debug("Start Date : " + advReport.getActualStartDate());
+							//logger.info("Start Date : " + advReport.getActualStartDate());
 					}
 					if(columnColl.contains("Actual Completion Date") && advReport.getActualCompletionDate() != null)
 					{
@@ -310,7 +309,7 @@ public class AdvancedReportPDF extends Action
 						if(advReport.getActualCompletionDate().trim().length() > 0)
 							dataArray[row][position] = advReport.getActualCompletionDate().trim();
 							
-							//logger.debug("Completion Date : " + advReport.getActualCompletionDate());
+							//logger.info("Completion Date : " + advReport.getActualCompletionDate());
 					}					
 
 					if(columnColl.contains("Level") && advReport.getLevel() != null)
@@ -319,7 +318,7 @@ public class AdvancedReportPDF extends Action
 						if(advReport.getLevel().trim().length() > 0)
 							dataArray[row][position] = advReport.getLevel().trim(); 
 							
-							//logger.debug("Level : " + advReport.getLevel());
+							//logger.info("Level : " + advReport.getLevel());
 					}
 					
 					if(columnColl.contains("Description") && advReport.getDescription() != null)
@@ -328,7 +327,7 @@ public class AdvancedReportPDF extends Action
 						if(advReport.getDescription().trim().length() > 0)
 							dataArray[row][position] = advReport.getDescription().trim(); 
 							
-							//logger.debug("Description : " + advReport.getDescription());
+							//logger.info("Description : " + advReport.getDescription());
 					}
 					
 					if(columnColl.contains("Objective") && advReport.getObjective() != null)
@@ -337,7 +336,7 @@ public class AdvancedReportPDF extends Action
 						if(advReport.getObjective().trim().length() > 0)
 							dataArray[row][position] = advReport.getObjective().trim();
 							
-							//logger.debug("Objective : " + advReport.getObjective());
+							//logger.info("Objective : " + advReport.getObjective());
 					}					
 
 					if(columnColl.contains("Type Of Assistance") && advReport.getAssistance() != null)
@@ -346,7 +345,7 @@ public class AdvancedReportPDF extends Action
 						if(advReport.getAssistance().toString().replace('[',' ').replace(']',' ').trim().length() > 0)
 							dataArray[row][position] = advReport.getAssistance().toString().replace('[',' ').replace(']',' ').trim();
 							
-							//logger.debug("TOA : " + advReport.getAssistance().toString().replace('[',' ').replace(']',' '));
+							//logger.info("TOA : " + advReport.getAssistance().toString().replace('[',' ').replace(']',' '));
 					}
 					
 					if(columnColl.contains("Donor") && advReport.getDonors() != null)
@@ -355,7 +354,7 @@ public class AdvancedReportPDF extends Action
 						if(advReport.getDonors().toString().replace('[',' ').replace(']',' ').trim().length() > 0)
 							dataArray[row][position] = advReport.getDonors().toString().replace('[',' ').replace(']',' ').trim();
 							
-							//logger.debug(advReport.getDonors().toString().replace('[',' ').replace(']',' ').trim().length() + " : Donor : " + advReport.getDonors().toString().replace('[',' ').replace(']',' '));
+							//logger.info(advReport.getDonors().toString().replace('[',' ').replace(']',' ').trim().length() + " : Donor : " + advReport.getDonors().toString().replace('[',' ').replace(']',' '));
 					}					
 
 					if(columnColl.contains("Sector"))
@@ -373,19 +372,19 @@ public class AdvancedReportPDF extends Action
 						if(advReport.getRegions().toString().replace('[',' ').replace(']',' ').trim().length() > 0)
 							dataArray[row][position] = advReport.getRegions().toString().replace('[',' ').replace(']',' ').trim();
 							
-							//logger.debug(advReport.getRegions().toString().replace('[',' ').replace(']',' ').trim().length() + " : Region : " );
+							logger.info(advReport.getRegions().toString().replace('[',' ').replace(']',' ').trim().length() + " : Region : " );
 					}
-					//else
-					//	logger.debug("Region is NULL..................");
+					else
+						logger.info("Region is NULL..................");
 					
 					if(columnColl.contains("Contact Name") && advReport.getContacts() != null)
 					{
 						position = getColumnIndex("Contact Name");
-						//logger.debug(position + "::: CONTACT NAME");
+						//logger.info(position + "::: CONTACT NAME");
 						if(advReport.getContacts().toString().replace('[',' ').replace(']',' ').trim().length() > 0)
 							dataArray[row][position] = advReport.getContacts().toString().replace('[',' ').replace(']',' ').trim();
 							
-							//logger.debug("Contact  : " + advReport.getContacts().toString().replace('[',' ').replace(']',' '));
+							//logger.info("Contact  : " + advReport.getContacts().toString().replace('[',' ').replace(']',' '));
 					}
 					
 					if(columnColl.contains("Financing Instrument") && advReport.getModality() != null)
@@ -394,7 +393,7 @@ public class AdvancedReportPDF extends Action
 						if(advReport.getModality().toString().replace('[',' ').replace(']',' ').trim().length() > 0)
 							dataArray[row][position] = advReport.getModality().toString().replace('[',' ').replace(']',' ').trim();
 							
-							//logger.debug(advReport.getModality().toString().replace('[',' ').replace(']',' ').trim().length() + " : Modality : " + advReport.getModality().toString().replace('[',' ').replace(']',' '));
+							//logger.info(advReport.getModality().toString().replace('[',' ').replace(']',' ').trim().length() + " : Modality : " + advReport.getModality().toString().replace('[',' ').replace(']',' '));
 					}
 					
 					if(columnColl.contains("Project Id") && advReport.getAmpId() != null)
@@ -403,11 +402,11 @@ public class AdvancedReportPDF extends Action
 							if(advReport.getAmpId().trim().length() > 0 )
 								dataArray[row][position] = advReport.getAmpId().trim();
 								
-							//logger.debug("ID  : " + advReport.getAmpId());
+							//logger.info("ID  : " + advReport.getAmpId());
 					}					
 					
 					position = 3 + rsc.getColumns().size()-1;
-					//logger.debug("------------------------------------------"+ position);
+					logger.info("------------------------------------------"+ position);
 					
 					
 					if(advReport.getAmpFund() != null)
@@ -483,14 +482,14 @@ public class AdvancedReportPDF extends Action
 					}
 				} // End of Records Iteration
 				
-				//logger.debug("+++++ Row ++-->"+ row);
+				logger.info("+++++ Row ++-->"+ row);
 				row = row + 1;
 				
 			}
 			}
 			else if (obj instanceof multiReport) {
 				row=0;
-				//logger.debug("#################### HIERARCHY DATA MANIPULATION.....");
+				logger.info("#################### HIERARCHY DATA MANIPULATION.....");
 				multiReport mltireport = (multiReport) obj;
 				if(mltireport.getHierarchy()!=null && formBean.getColumnHierarchie().size()>0){
 					Iterator itrh=mltireport.getHierarchy().iterator();
@@ -500,29 +499,29 @@ public class AdvancedReportPDF extends Action
 						if(ahr.getLevels()!=null && ahr.getLevels().size()>0){
 							Iterator three = ahr.getLevels().iterator();
 							while(three.hasNext()){
-								//logger.debug("**********"+three.next().getClass().getName());
+								//logger.info("**********"+three.next().getClass().getName());
 								AdvancedHierarchyReport ahr2=(AdvancedHierarchyReport)three.next();
-								//logger.debug("project Size---"+ahr2.getProject().size());
-								//logger.debug("project Levels---"+ahr2.getLevels().size());
+								logger.info("project Size---"+ahr2.getProject().size());
+								//logger.info("project Levels---"+ahr2.getLevels().size());
 								
-						//logger.debug("********* HRRCHY:::"+ahr2.getLabel()+" ::: "+ahr2.getName());
+						logger.info("********* HRRCHY:::"+ahr2.getLabel()+" ::: "+ahr2.getName());
 						Iterator itrr=ahr2.getProject().iterator();
-						//logger.debug("|=|=|=|=|=|=| Total No. of activities..."+ahr2.getProject().size());
+						logger.info("|=|=|=|=|=|=| Total No. of activities..."+ahr2.getProject().size());
 						int j=0,k=0;
 						
 						while(itrr.hasNext()){
-							//logger.debug("rowwwwwwwwww:"+row+"  - ITRRRRR No."+ ++j);
+							logger.info("rowwwwwwwwww:"+row+"  - ITRRRRR No."+ ++j);
 							//Object obj1=(Object)itrr.next();								
 								Report report=(Report) itrr.next();
-								//logger.debug("record sizezzzzz:::"+report.getRecords().size());
+								logger.info("record sizezzzzz:::"+report.getRecords().size());
 								if(report.getRecords() != null)
 								{
-									//logger.debug("flagggg:"+ ++k);
+									logger.info("flagggg:"+ ++k);
 									Iterator reportIter = report.getRecords().iterator();
 									while(reportIter.hasNext())
 									{
 										dataArray[row][0] = formBean.getWorkspaceType() + " " + formBean.getWorkspaceName();
-										//logger.debug("@@@@@@@@ WorkspaceName="+formBean.getWorkspaceName());
+										//logger.info("@@@@@@@@ WorkspaceName="+formBean.getWorkspaceName());
 										String filterName[] = new String[2];
 										position = 1;
 										filterName = formBean.getFilter();
@@ -533,10 +532,10 @@ public class AdvancedReportPDF extends Action
 										}
 										
 										dataArray[row][position] = ahr.getLabel()+" - "+ahr.getName();
-										//logger.debug("Filling ahr.name H1------->"+ahr.getLabel());
+										logger.info("Filling ahr.name H1------->"+ahr.getLabel());
 										position++;	
 										dataArray[row][position] = ahr2.getLabel()+" - "+ahr2.getName();
-										//logger.debug("Filling ahr.name H2------->"+ahr2.getLabel());
+										logger.info("Filling ahr.name H2------->"+ahr2.getLabel());
 										position++;	
 										
 										AdvancedReport advReport = (AdvancedReport) reportIter.next();
@@ -547,7 +546,7 @@ public class AdvancedReportPDF extends Action
 											if(advReport.getStatus().replaceAll(",", "").length() > 2)
 												dataArray[row][position] = advReport.getStatus().replaceAll(",", "");
 										
-											//logger.debug(advReport.getStatus().replaceAll(",", "").length() + " : Status : " + advReport.getStatus().replaceAll(",", ""));
+											//logger.info(advReport.getStatus().replaceAll(",", "").length() + " : Status : " + advReport.getStatus().replaceAll(",", ""));
 										}
 										if((columnColl.contains("Project Title") || columnColl.contains("Project Title")) && advReport.getTitle() != null)
 										{
@@ -555,7 +554,7 @@ public class AdvancedReportPDF extends Action
 											if(advReport.getTitle().trim().length() > 0)
 												dataArray[row][position] = advReport.getTitle().trim();
 												
-												//logger.debug("Name : " + advReport.getTitle());
+												//logger.info("Name : " + advReport.getTitle());
 										}
 										if(columnColl.contains("Actual Start Date") && advReport.getActualStartDate() != null)
 										{
@@ -563,7 +562,7 @@ public class AdvancedReportPDF extends Action
 											if(advReport.getActualStartDate().trim().length() > 0)
 												dataArray[row][position] = advReport.getActualStartDate().trim();
 												
-												//logger.debug("Start Date : " + advReport.getActualStartDate());
+												//logger.info("Start Date : " + advReport.getActualStartDate());
 										}
 										if(columnColl.contains("Actual Completion Date") && advReport.getActualCompletionDate() != null)
 										{
@@ -571,7 +570,7 @@ public class AdvancedReportPDF extends Action
 											if(advReport.getActualCompletionDate().trim().length() > 0)
 												dataArray[row][position] = advReport.getActualCompletionDate().trim();
 												
-												//logger.debug("Completion Date : " + advReport.getActualCompletionDate());
+												//logger.info("Completion Date : " + advReport.getActualCompletionDate());
 										}					
 
 										if(columnColl.contains("Level") && advReport.getLevel() != null)
@@ -580,7 +579,7 @@ public class AdvancedReportPDF extends Action
 											if(advReport.getLevel().trim().length() > 0)
 												dataArray[row][position] = advReport.getLevel().trim(); 
 												
-												//logger.debug("Level : " + advReport.getLevel());
+												//logger.info("Level : " + advReport.getLevel());
 										}
 										
 										if(columnColl.contains("Description") && advReport.getDescription() != null)
@@ -589,7 +588,7 @@ public class AdvancedReportPDF extends Action
 											if(advReport.getDescription().trim().length() > 0)
 												dataArray[row][position] = advReport.getDescription().trim(); 
 												
-												//logger.debug("Description : " + advReport.getDescription());
+												//logger.info("Description : " + advReport.getDescription());
 										}
 										
 										if(columnColl.contains("Objective") && advReport.getObjective() != null)
@@ -598,7 +597,7 @@ public class AdvancedReportPDF extends Action
 											if(advReport.getObjective().trim().length() > 0)
 												dataArray[row][position] = advReport.getObjective().trim();
 												
-												//logger.debug("Objective : " + advReport.getObjective());
+												//logger.info("Objective : " + advReport.getObjective());
 										}					
 
 										if(columnColl.contains("Type Of Assistance") && advReport.getAssistance() != null)
@@ -607,19 +606,19 @@ public class AdvancedReportPDF extends Action
 											if(advReport.getAssistance().toString().replace('[',' ').replace(']',' ').trim().length() > 0)
 												dataArray[row][position] = advReport.getAssistance().toString().replace('[',' ').replace(']',' ').trim();
 												
-												//logger.debug("TOA : " + advReport.getAssistance().toString().replace('[',' ').replace(']',' '));
+												//logger.info("TOA : " + advReport.getAssistance().toString().replace('[',' ').replace(']',' '));
 										}
 										
 										if(columnColl.contains("Donor") && advReport.getDonors() != null)
 										{
 											position = getColumnIndex("Donor");
-											//logger.debug("DONORRRRRR"+advReport.getDonors().toString()+">>>"+advReport.getDonors().toString().replace('[',' ').replace(']',' ').trim()+"<><><>"+row+":"+position);
+											//logger.info("DONORRRRRR"+advReport.getDonors().toString()+">>>"+advReport.getDonors().toString().replace('[',' ').replace(']',' ').trim()+"<><><>"+row+":"+position);
 											if(advReport.getDonors().toString().replace('[',' ').replace(']',' ').trim().length() > 0){
-												//logger.debug("inserting DONOR");
+												logger.info("inserting DONOR");
 												dataArray[row][position] = advReport.getDonors().toString().replace('[',' ').replace(']',' ').trim();
 											}
 											
-												//logger.debug(advReport.getDonors().toString().replace('[',' ').replace(']',' ').trim().length() + " : Donor : " + advReport.getDonors().toString().replace('[',' ').replace(']',' '));
+												//logger.info(advReport.getDonors().toString().replace('[',' ').replace(']',' ').trim().length() + " : Donor : " + advReport.getDonors().toString().replace('[',' ').replace(']',' '));
 										}					
 
 										if(columnColl.contains("Sector") && advReport.getSectors() != null)
@@ -635,19 +634,19 @@ public class AdvancedReportPDF extends Action
 											if(advReport.getRegions().toString().replace('[',' ').replace(']',' ').trim().length() > 0)
 												dataArray[row][position] = advReport.getRegions().toString().replace('[',' ').replace(']',' ').trim();
 												
-//												//logger.debug(advReport.getRegions().toString().replace('[',' ').replace(']',' ').trim().length() + " : Region : " );
+//												//logger.info(advReport.getRegions().toString().replace('[',' ').replace(']',' ').trim().length() + " : Region : " );
 										}
-									//	else
-										//	logger.debug("Region is NULL..................");
+										else
+											logger.info("Region is NULL..................");
 										
 										if(columnColl.contains("Contact Name") && advReport.getContacts() != null)
 										{
 											position = getColumnIndex("Contact Name");
-											//logger.debug(position + "::: CONTACT NAME");
+											//logger.info(position + "::: CONTACT NAME");
 											if(advReport.getContacts().toString().replace('[',' ').replace(']',' ').trim().length() > 0)
 												dataArray[row][position] = advReport.getContacts().toString().replace('[',' ').replace(']',' ').trim();
 												
-												//logger.debug("Contact  : " + advReport.getContacts().toString().replace('[',' ').replace(']',' '));
+												//logger.info("Contact  : " + advReport.getContacts().toString().replace('[',' ').replace(']',' '));
 										}
 										
 										if(columnColl.contains("Financing Instrument") && advReport.getModality() != null)
@@ -655,10 +654,10 @@ public class AdvancedReportPDF extends Action
 											position = getColumnIndex("Financing Instrument");
 											if(advReport.getModality().toString().replace('[',' ').replace(']',' ').trim().length() > 0){
 												dataArray[row][position] = advReport.getModality().toString().replace('[',' ').replace(']',' ').trim();
-												//logger.debug("Financing Instrument::::::::: "+dataArray[row][position]+" position "+ position);
+												//logger.info("Financing Instrument::::::::: "+dataArray[row][position]+" position "+ position);
 											}
 												
-												//logger.debug(advReport.getModality().toString().replace('[',' ').replace(']',' ').trim().length() + " : Modality : " + advReport.getModality().toString().replace('[',' ').replace(']',' '));
+												//logger.info(advReport.getModality().toString().replace('[',' ').replace(']',' ').trim().length() + " : Modality : " + advReport.getModality().toString().replace('[',' ').replace(']',' '));
 										}
 										
 										if(columnColl.contains("Project Id") && advReport.getAmpId() != null)
@@ -667,11 +666,11 @@ public class AdvancedReportPDF extends Action
 												if(advReport.getAmpId().trim().length() > 0 )
 													dataArray[row][position] = advReport.getAmpId().trim();
 													
-												//logger.debug("ID  : " + advReport.getAmpId());
+												//logger.info("ID  : " + advReport.getAmpId());
 										}					
 										
 										position = n + rsc.getColumns().size()-1;
-										//logger.debug("#######################################################"+ position);
+										logger.info("#######################################################"+ position);
 										
 										
 										if(advReport.getAmpFund() != null)
@@ -745,7 +744,7 @@ public class AdvancedReportPDF extends Action
 										} // END Of AmpFund Iteration
 									} // End of Records Iteration
 									
-									//logger.debug("&&&& Row &&&-->"+ row);
+									logger.info("&&&& Row &&&-->"+ row);
 									row = row + 1;
 							}
 						}
@@ -754,21 +753,21 @@ public class AdvancedReportPDF extends Action
 							
 						}
 						else{
-							//logger.debug("H111111111111111111111111111111111111111111111111111111");
+							logger.info("H111111111111111111111111111111111111111111111111111111");
 							Iterator itrr=ahr.getProject().iterator();
 							while(itrr.hasNext()){
-								//logger.debug("rowwwwwwwwww:"+row+"  - ITRRRRR No."+ ++j);
+								//logger.info("rowwwwwwwwww:"+row+"  - ITRRRRR No."+ ++j);
 								//Object obj1=(Object)itrr.next();								
 									Report report=(Report) itrr.next();
-								//	logger.debug("record sizezzzzz:::"+report.getRecords().size());
+									logger.info("record sizezzzzz:::"+report.getRecords().size());
 									if(report.getRecords() != null)
 									{
-										//logger.debug("flagggg:"+ ++k);
+										//logger.info("flagggg:"+ ++k);
 										Iterator reportIter = report.getRecords().iterator();
 										while(reportIter.hasNext())
 										{
 											dataArray[row][0] = formBean.getWorkspaceType() + " " + formBean.getWorkspaceName();
-											//logger.debug("@@@@@@@@ WorkspaceName="+formBean.getWorkspaceName());
+											//logger.info("@@@@@@@@ WorkspaceName="+formBean.getWorkspaceName());
 											String filterName[] = new String[2];
 											position = 1;
 											filterName = formBean.getFilter();
@@ -779,7 +778,7 @@ public class AdvancedReportPDF extends Action
 											}
 											
 											dataArray[row][position] = ahr.getLabel()+" - "+ahr.getName();
-											//logger.debug("Filling ahr.name ------->"+ahr.getLabel());
+											logger.info("Filling ahr.name ------->"+ahr.getLabel());
 											position++;	
 											
 											AdvancedReport advReport = (AdvancedReport) reportIter.next();
@@ -790,7 +789,7 @@ public class AdvancedReportPDF extends Action
 												if(advReport.getStatus().replaceAll(",", "").length() > 2)
 													dataArray[row][position] = advReport.getStatus().replaceAll(",", "");
 											
-												//logger.debug(advReport.getStatus().replaceAll(",", "").length() + " : Status : " + advReport.getStatus().replaceAll(",", ""));
+												//logger.info(advReport.getStatus().replaceAll(",", "").length() + " : Status : " + advReport.getStatus().replaceAll(",", ""));
 											}
 											if((columnColl.contains("Project Title") || columnColl.contains("Project Title")) && advReport.getTitle() != null)
 											{
@@ -798,7 +797,7 @@ public class AdvancedReportPDF extends Action
 												if(advReport.getTitle().trim().length() > 0)
 													dataArray[row][position] = advReport.getTitle().trim();
 													
-													//logger.debug("Name : " + advReport.getTitle());
+													//logger.info("Name : " + advReport.getTitle());
 											}
 											if(columnColl.contains("Actual Start Date") && advReport.getActualStartDate() != null)
 											{
@@ -806,7 +805,7 @@ public class AdvancedReportPDF extends Action
 												if(advReport.getActualStartDate().trim().length() > 0)
 													dataArray[row][position] = advReport.getActualStartDate().trim();
 													
-													//logger.debug("Start Date : " + advReport.getActualStartDate());
+													//logger.info("Start Date : " + advReport.getActualStartDate());
 											}
 											if(columnColl.contains("Actual Completion Date") && advReport.getActualCompletionDate() != null)
 											{
@@ -814,7 +813,7 @@ public class AdvancedReportPDF extends Action
 												if(advReport.getActualCompletionDate().trim().length() > 0)
 													dataArray[row][position] = advReport.getActualCompletionDate().trim();
 													
-													//logger.debug("Completion Date : " + advReport.getActualCompletionDate());
+													//logger.info("Completion Date : " + advReport.getActualCompletionDate());
 											}					
 
 											if(columnColl.contains("Level") && advReport.getLevel() != null)
@@ -823,7 +822,7 @@ public class AdvancedReportPDF extends Action
 												if(advReport.getLevel().trim().length() > 0)
 													dataArray[row][position] = advReport.getLevel().trim(); 
 													
-													//logger.debug("Level : " + advReport.getLevel());
+													//logger.info("Level : " + advReport.getLevel());
 											}
 											
 											if(columnColl.contains("Description") && advReport.getDescription() != null)
@@ -832,7 +831,7 @@ public class AdvancedReportPDF extends Action
 												if(advReport.getDescription().trim().length() > 0)
 													dataArray[row][position] = advReport.getDescription().trim(); 
 													
-													//logger.debug("Description : " + advReport.getDescription());
+													//logger.info("Description : " + advReport.getDescription());
 											}
 											
 											if(columnColl.contains("Objective") && advReport.getObjective() != null)
@@ -841,7 +840,7 @@ public class AdvancedReportPDF extends Action
 												if(advReport.getObjective().trim().length() > 0)
 													dataArray[row][position] = advReport.getObjective().trim();
 													
-													//logger.debug("Objective : " + advReport.getObjective());
+													//logger.info("Objective : " + advReport.getObjective());
 											}					
 
 											if(columnColl.contains("Type Of Assistance") && advReport.getAssistance() != null)
@@ -850,19 +849,19 @@ public class AdvancedReportPDF extends Action
 												if(advReport.getAssistance().toString().replace('[',' ').replace(']',' ').trim().length() > 0)
 													dataArray[row][position] = advReport.getAssistance().toString().replace('[',' ').replace(']',' ').trim();
 													
-													//logger.debug("TOA : " + advReport.getAssistance().toString().replace('[',' ').replace(']',' '));
+													//logger.info("TOA : " + advReport.getAssistance().toString().replace('[',' ').replace(']',' '));
 											}
 											
 											if(columnColl.contains("Donor") && advReport.getDonors() != null)
 											{
 												position = getColumnIndex("Donor");
-												//logger.debug("DONORRRRRR"+advReport.getDonors().toString()+">>>"+advReport.getDonors().toString().replace('[',' ').replace(']',' ').trim()+"<><><>"+row+":"+position);
+												//logger.info("DONORRRRRR"+advReport.getDonors().toString()+">>>"+advReport.getDonors().toString().replace('[',' ').replace(']',' ').trim()+"<><><>"+row+":"+position);
 												if(advReport.getDonors().toString().replace('[',' ').replace(']',' ').trim().length() > 0){
-													//logger.debug("inserting DONOR");
+													logger.info("inserting DONOR");
 													dataArray[row][position] = advReport.getDonors().toString().replace('[',' ').replace(']',' ').trim();
 												}
 												
-													//logger.debug(advReport.getDonors().toString().replace('[',' ').replace(']',' ').trim().length() + " : Donor : " + advReport.getDonors().toString().replace('[',' ').replace(']',' '));
+													//logger.info(advReport.getDonors().toString().replace('[',' ').replace(']',' ').trim().length() + " : Donor : " + advReport.getDonors().toString().replace('[',' ').replace(']',' '));
 											}					
 
 											if(columnColl.contains("Sector") && advReport.getSectors() != null)
@@ -878,19 +877,19 @@ public class AdvancedReportPDF extends Action
 												if(advReport.getRegions().toString().replace('[',' ').replace(']',' ').trim().length() > 0)
 													dataArray[row][position] = advReport.getRegions().toString().replace('[',' ').replace(']',' ').trim();
 													
-//													//logger.debug(advReport.getRegions().toString().replace('[',' ').replace(']',' ').trim().length() + " : Region : " );
+//													//logger.info(advReport.getRegions().toString().replace('[',' ').replace(']',' ').trim().length() + " : Region : " );
 											}
-										//	else
-										//		logger.debug("Region is NULL..................");
+											else
+												logger.info("Region is NULL..................");
 											
 											if(columnColl.contains("Contact Name") && advReport.getContacts() != null)
 											{
 												position = getColumnIndex("Contact Name");
-												//logger.debug(position + "::: CONTACT NAME");
+												//logger.info(position + "::: CONTACT NAME");
 												if(advReport.getContacts().toString().replace('[',' ').replace(']',' ').trim().length() > 0)
 													dataArray[row][position] = advReport.getContacts().toString().replace('[',' ').replace(']',' ').trim();
 													
-													//logger.debug("Contact  : " + advReport.getContacts().toString().replace('[',' ').replace(']',' '));
+													//logger.info("Contact  : " + advReport.getContacts().toString().replace('[',' ').replace(']',' '));
 											}
 											
 											if(columnColl.contains("Financing Instrument") && advReport.getModality() != null)
@@ -898,10 +897,10 @@ public class AdvancedReportPDF extends Action
 												position = getColumnIndex("Financing Instrument");
 												if(advReport.getModality().toString().replace('[',' ').replace(']',' ').trim().length() > 0){
 													dataArray[row][position] = advReport.getModality().toString().replace('[',' ').replace(']',' ').trim();
-													//logger.debug("Financing Instrument::::::::: "+dataArray[row][position]+" position "+ position);
+													//logger.info("Financing Instrument::::::::: "+dataArray[row][position]+" position "+ position);
 												}
 													
-													//logger.debug(advReport.getModality().toString().replace('[',' ').replace(']',' ').trim().length() + " : Modality : " + advReport.getModality().toString().replace('[',' ').replace(']',' '));
+													//logger.info(advReport.getModality().toString().replace('[',' ').replace(']',' ').trim().length() + " : Modality : " + advReport.getModality().toString().replace('[',' ').replace(']',' '));
 											}
 											
 											if(columnColl.contains("Project Id") && advReport.getAmpId() != null)
@@ -910,11 +909,11 @@ public class AdvancedReportPDF extends Action
 													if(advReport.getAmpId().trim().length() > 0 )
 														dataArray[row][position] = advReport.getAmpId().trim();
 														
-													//logger.debug("ID  : " + advReport.getAmpId());
+													//logger.info("ID  : " + advReport.getAmpId());
 											}					
 											
 											position = n + rsc.getColumns().size()-1;
-											//logger.debug("#######################################################"+ position);
+											logger.info("#######################################################"+ position);
 											
 											
 											if(advReport.getAmpFund() != null)
@@ -988,7 +987,7 @@ public class AdvancedReportPDF extends Action
 											} // END Of AmpFund Iteration
 										} // End of Records Iteration
 										
-										//logger.debug("&&&& Row &&&-->"+ row);
+										logger.info("&&&& Row &&&-->"+ row);
 										row = row + 1;
 								}
 							}//end of foo
@@ -996,35 +995,34 @@ public class AdvancedReportPDF extends Action
 						}
 						//row++;
 						
-					/*	if(ahr.getProject()!=null)
-						logger.debug("=======Total No of activities..."+ahr.getProject().size());
+						if(ahr.getProject()!=null)
+						logger.info("=======Total No of activities..."+ahr.getProject().size());
 						if(ahr.getActivities()!=null)
-						logger.debug("^^^^++^^^^"+ahr.getActivities().size());
+						logger.info("^^^^++^^^^"+ahr.getActivities().size());
 						if(ahr.getLevels()!=null)
-						logger.debug("^^^^--^^^^"+ahr.getLevels().size());*/
+						logger.info("^^^^--^^^^"+ahr.getLevels().size());
 					}
 					
 					
 				}
 
-			}
-			//else
-			//	logger.debug("HIERARCHY DATA ERROR.....");
+			} else
+				logger.info("HIERARCHY DATA ERROR.....");
 		}// End of ALlReport() Iteration
 	
-		//logger.debug(dataArray.length + " ----------------: FINAL DATA START-------------- :" + dataArray[0].length);
+/*		logger.info(dataArray.length + " ----------------: FINAL DATA START-------------- :" + dataArray[0].length);
 		for(int i=0; i< dataArray.length; i++)
 		{
 			for(int j=0; j< dataArray[0].length; j++)
 			{
 				if(dataArray[i][j] == null)
 					dataArray[i][j] = "";
-				//logger.debug("i="+i+" j="+j+" "+dataArray[i][j]);
+				logger.info("i="+i+" j="+j+" "+dataArray[i][j]);
 			}
-			//logger.debug("\n");
+			logger.info("\n");
 		}
-		//logger.debug(dataArray.length + " ----------------: FINAL DATA END-------------- :" + dataArray[0].length);
-
+		logger.info(dataArray.length + " ----------------: FINAL DATA END-------------- :" + dataArray[0].length);
+*/
 		if(flag == 1)
 		{
 
@@ -1041,7 +1039,7 @@ public class AdvancedReportPDF extends Action
 						
 				}
 			}
-			logger.debug("EXPORTING NOW......");
+			logger.info("EXPORTING NOW......");
 			if(request.getParameter("docType") != null && request.getParameter("docType").equals("pdf"))
 			{
 				AdvancedReportDatasource dataSource = new AdvancedReportDatasource(dataArray,rsc.getColumns().size(), rowData);
@@ -1052,38 +1050,38 @@ public class AdvancedReportPDF extends Action
 				System.setProperty("jasper.reports.compile.class.path",jarFile);
 				String realPathJrxml = s.getServletContext().getRealPath(
 									 "/WEB-INF/classes/org/digijava/module/aim/reports");
-				realPathJrxml = realPathJrxml + "\\" + formBean.getReportName().replaceAll(" ", "").replaceAll("#", "")+".jrxml";
-				//logger.debug("Path : " + realPathJrxml);
+				realPathJrxml = realPathJrxml + "\\" + formBean.getReportName().replaceAll(" ", "_").replaceAll("#", "")+".jrxml";
+				logger.info("Path : " + realPathJrxml);
 	
 				//calling dynamic jrxml
 				AdvancedReportPdfJrxml jrxml = new AdvancedReportPdfJrxml();
 				if(formBean.getColumnHierarchie()!=null && formBean.getColumnHierarchie().size()>0){
-					jrxml.createJRXML(realPathJrxml, undisbFlag ,rowData, dataArray, rsc.getColumns().size(), rsc.getMeasures().size(), formBean.getReportName().replaceAll(" ", "").replaceAll("#", ""), "pdf",formBean.getColumnHierarchie().size());
+					jrxml.createJRXML(realPathJrxml, undisbFlag ,rowData, dataArray, rsc.getColumns().size(), rsc.getMeasures().size(), formBean.getReportName().replaceAll(" ", "_"), "pdf",formBean.getColumnHierarchie().size());
 				}
 				else
-					jrxml.createJRXML(realPathJrxml, undisbFlag ,rowData, dataArray, rsc.getColumns().size(), rsc.getMeasures().size(), formBean.getReportName().replaceAll(" ", "").replaceAll("#", ""), "pdf",0);
+					jrxml.createJRXML(realPathJrxml, undisbFlag ,rowData, dataArray, rsc.getColumns().size(), rsc.getMeasures().size(), formBean.getReportName().replaceAll(" ", "_"), "pdf",0);
 				JasperCompileManager.compileReportToFile(realPathJrxml);
 				byte[] bytes = null;
 				try
 				{
 					String jasperFile = s.getServletContext().getRealPath(
-							"/WEB-INF/classes/org/digijava/module/aim/reports"+"\\"+formBean.getReportName().replaceAll(" ", "").replaceAll("#", "")+".jasper");
-					//logger.debug("Jasper FIle ::::::::::::::::;" + jasperFile);
+							"/WEB-INF/classes/org/digijava/module/aim/reports"+"\\"+formBean.getReportName().replaceAll(" ", "_").replaceAll("#", "")+".jasper");
+					logger.info("Jasper FIle ::::::::::::::::;" + jasperFile);
 					
 					
 					Map parameters = new HashMap();
-					//System.out.println(jasperFile );
-					//System.out.println(parameters);
+					logger.debug("jasperFile "+jasperFile );
+					logger.debug("parameters"+parameters);
 					bytes = JasperRunManager.runReportToPdf( jasperFile,  parameters, dataSource);
 				}
 				catch (JRException e)
 				{
-					System.out.println("Exception from MultilateralDonorDatasource = " + e);
+					logger.debug("Exception from MultilateralDonorDatasource = " + e);
 				}
 				if (bytes != null && bytes.length > 0)
 				{
 					ServletOutputStream ouputStream = response.getOutputStream();
-					//System.out.println("Generating PDF");
+					logger.debug("Generating PDF");
 					response.setContentType("application/pdf");
 					response.setHeader("Content-Disposition","inline; filename=MultilateralDonorPdf.pdf");
 					response.setContentLength(bytes.length);
@@ -1091,10 +1089,10 @@ public class AdvancedReportPDF extends Action
 					ouputStream.flush();
 					ouputStream.close();
 				}
-			/*	else
+				else
 				{
-					System.out.println("Nothing to display");
-				}*/
+					logger.debug("Nothing to display");
+				}
 			}
 			
 			
@@ -1112,17 +1110,17 @@ public class AdvancedReportPDF extends Action
 				System.setProperty("jasper.reports.compile.class.path",jarFile);
 				String realPathJrxml = s.getServletContext().getRealPath(
 									 "/WEB-INF/classes/org/digijava/module/aim/reports");
-				realPathJrxml = realPathJrxml + "\\" + formBean.getReportName().replaceAll(" ", "").replaceAll("#", "")+".jrxml";
-				//logger.debug("Path : " + realPathJrxml);
+				realPathJrxml = realPathJrxml + "\\" + formBean.getReportName().replaceAll(" ", "_").replaceAll("#", "")+".jrxml";
+				logger.info("Path : " + realPathJrxml);
 
 				//calling dynamic jrxml
 				AdvancedReportPdfJrxml jrxml = new AdvancedReportPdfJrxml();
-				//jrxml.createJRXML(realPathJrxml, undisbFlag ,rowData, dataArray, rsc.getColumns().size(), rsc.getMeasures().size(), formBean.getReportName().replaceAll(" ", "").replaceAll("#", " "), "xls",false);
+				//jrxml.createJRXML(realPathJrxml, undisbFlag ,rowData, dataArray, rsc.getColumns().size(), rsc.getMeasures().size(), formBean.getReportName().replaceAll(" ", "_").replaceAll("#", " "), "xls",false);
 				if(formBean.getColumnHierarchie()!=null && formBean.getColumnHierarchie().size()>0){
-					jrxml.createJRXML(realPathJrxml, undisbFlag ,rowData, dataArray, rsc.getColumns().size(), rsc.getMeasures().size(), formBean.getReportName().replaceAll(" ", "").replaceAll("#", ""), "pdf",formBean.getColumnHierarchie().size());
+					jrxml.createJRXML(realPathJrxml, undisbFlag ,rowData, dataArray, rsc.getColumns().size(), rsc.getMeasures().size(), formBean.getReportName().replaceAll(" ", "_").replaceAll("#", ""), "xls",formBean.getColumnHierarchie().size());
 				}
 				else
-					jrxml.createJRXML(realPathJrxml, undisbFlag ,rowData, dataArray, rsc.getColumns().size(), rsc.getMeasures().size(), formBean.getReportName().replaceAll(" ", "").replaceAll("#", ""), "pdf",0);				
+					jrxml.createJRXML(realPathJrxml, undisbFlag ,rowData, dataArray, rsc.getColumns().size(), rsc.getMeasures().size(), formBean.getReportName().replaceAll(" ", "_").replaceAll("#", ""), "xls",0);				
 				JasperCompileManager.compileReportToFile(realPathJrxml);
 				byte[] bytes = null;
 				ServletOutputStream outputStream = null;
@@ -1131,17 +1129,17 @@ public class AdvancedReportPDF extends Action
 					Map parameters = new HashMap();
 					
 					String jasperFile = s.getServletContext().getRealPath(
-							"/WEB-INF/classes/org/digijava/module/aim/reports"+"\\"+formBean.getReportName().replaceAll(" ", "").replaceAll("#", "")+".jasper");
-					//logger.debug("Jasper FIle ::::::::::::::::;" + jasperFile);
+							"/WEB-INF/classes/org/digijava/module/aim/reports"+"\\"+formBean.getReportName().replaceAll(" ", "_").replaceAll("#", "")+".jasper");
+					logger.info("Jasper FIle ::::::::::::::::;" + jasperFile);
 					JasperPrint jasperPrint = 
 						JasperFillManager.fillReport(jasperFile,parameters,dataSource);
 						response.setContentType("application/vnd.ms-excel");
-						String responseHeader = "inline; filename="+formBean.getReportName().replaceAll(" ", "").replaceAll("#", "");
-						//logger.debug("--------------" + responseHeader);
+						String responseHeader = "inline; filename="+formBean.getReportName().replaceAll(" ", "_").replaceAll("#", "");
+						logger.info("--------------" + responseHeader);
 						response.setHeader("Content-Disposition", responseHeader);
 						//response.setHeader("Content-Disposition","inline; filename=commitmentByModalityXls.xls");
 
-						//logger.debug("--------------");
+						logger.info("--------------");
 					
 					JRXlsExporter exporter = new JRXlsExporter();
 					outputStream = response.getOutputStream();
@@ -1174,17 +1172,17 @@ public class AdvancedReportPDF extends Action
 				System.setProperty("jasper.reports.compile.class.path",jarFile);
 				String realPathJrxml = s.getServletContext().getRealPath(
 									 "/WEB-INF/classes/org/digijava/module/aim/reports");
-				realPathJrxml = realPathJrxml + "\\" + formBean.getReportName().replaceAll(" ", "").replaceAll("#", "")+".jrxml";
-				//logger.debug("Path : " + realPathJrxml);
+				realPathJrxml = realPathJrxml + "\\" + formBean.getReportName().replaceAll(" ", "_").replaceAll("#", "")+".jrxml";
+				logger.info("Path : " + realPathJrxml);
 
 				//calling dynamic jrxml
 				AdvancedReportPdfJrxml jrxml = new AdvancedReportPdfJrxml();
-				//jrxml.createJRXML(realPathJrxml, undisbFlag ,rowData, dataArray, rsc.getColumns().size(), rsc.getMeasures().size(),	formBean.getReportName().replaceAll(" ", "").replaceAll("#", ""),"csv",false);
+				//jrxml.createJRXML(realPathJrxml, undisbFlag ,rowData, dataArray, rsc.getColumns().size(), rsc.getMeasures().size(),	formBean.getReportName().replaceAll(" ", "_").replaceAll("#", ""),"csv",false);
 				if(formBean.getColumnHierarchie()!=null && formBean.getColumnHierarchie().size()>0){
-					jrxml.createJRXML(realPathJrxml, undisbFlag ,rowData, dataArray, rsc.getColumns().size(), rsc.getMeasures().size(), formBean.getReportName().replaceAll(" ", "").replaceAll("#", ""), "pdf",formBean.getColumnHierarchie().size());
+					jrxml.createJRXML(realPathJrxml, undisbFlag ,rowData, dataArray, rsc.getColumns().size(), rsc.getMeasures().size(), formBean.getReportName().replaceAll(" ", "_").replaceAll("#", ""), "csv",formBean.getColumnHierarchie().size());
 				}
 				else
-					jrxml.createJRXML(realPathJrxml, undisbFlag ,rowData, dataArray, rsc.getColumns().size(), rsc.getMeasures().size(), formBean.getReportName().replaceAll(" ", "").replaceAll("#", ""), "pdf",0);				
+					jrxml.createJRXML(realPathJrxml, undisbFlag ,rowData, dataArray, rsc.getColumns().size(), rsc.getMeasures().size(), formBean.getReportName().replaceAll(" ", "_").replaceAll("#", ""), "csv",0);				
 				JasperCompileManager.compileReportToFile(realPathJrxml);
 				byte[] bytes = null;
 				ServletOutputStream outputStream = null;
@@ -1193,17 +1191,17 @@ public class AdvancedReportPDF extends Action
 					Map parameters = new HashMap();
 					
 					String jasperFile = s.getServletContext().getRealPath(
-							"/WEB-INF/classes/org/digijava/module/aim/reports"+"\\"+formBean.getReportName().replaceAll(" ", "").replaceAll("#", "")+".jasper");
-					//logger.debug("Jasper FIle ::::::::::::::::;" + jasperFile);
+							"/WEB-INF/classes/org/digijava/module/aim/reports"+"\\"+formBean.getReportName().replaceAll(" ", "_").replaceAll("#", "")+".jasper");
+					logger.info("Jasper FIle ::::::::::::::::;" + jasperFile);
 					JasperPrint jasperPrint = 
 						JasperFillManager.fillReport(jasperFile,parameters,dataSource);
 						response.setContentType("application/vnd.ms-excel");
-						String responseHeader = "inline; filename="+formBean.getReportName().replaceAll(" ", "").replaceAll("#", "");
-						//logger.debug("--------------" + responseHeader);
+						String responseHeader = "inline; filename="+formBean.getReportName().replaceAll(" ", "_").replaceAll("#", "");
+						logger.info("--------------" + responseHeader);
 						response.setHeader("Content-Disposition", responseHeader);
 						//response.setHeader("Content-Disposition","inline; filename=commitmentByModalityXls.xls");
 
-						//logger.debug("--------------");
+						logger.info("--------------");
 					
 					//JRXlsExporter exporter = new JRXlsExporter();
 						JRCsvExporter exporter = new JRCsvExporter();
@@ -1233,7 +1231,7 @@ public class AdvancedReportPDF extends Action
 		int i = 0, pos = 0;
 		for(i=0; i < columnDetails.length; i++)
 		{
-			//logger.debug("grrrrrrr= "+i);
+			//logger.info("grrrrrrr= "+i);
 			if(columnDetails[i][0]!=null && columnDetails[i][0].equals(str))
 			{
 				pos = Integer.parseInt(columnDetails[i][1]);
@@ -1246,18 +1244,18 @@ public class AdvancedReportPDF extends Action
 	void getHierarchyData(Iterator itrr){
 		
 /*		while(itrr.hasNext()){
-			logger.debug("rowwwwwwwwww:"+row+"  - ITRRRRR No."+ ++j);
+			logger.info("rowwwwwwwwww:"+row+"  - ITRRRRR No."+ ++j);
 			//Object obj1=(Object)itrr.next();								
 				Report report=(Report) itrr.next();
-				logger.debug("record sizezzzzz:::"+report.getRecords().size());
+				logger.info("record sizezzzzz:::"+report.getRecords().size());
 				if(report.getRecords() != null)
 				{
-					//logger.debug("flagggg:"+ ++k);
+					//logger.info("flagggg:"+ ++k);
 					Iterator reportIter = report.getRecords().iterator();
 					while(reportIter.hasNext())
 					{
 						dataArray[row][0] = formBean.getWorkspaceType() + " " + formBean.getWorkspaceName();
-						//logger.debug("@@@@@@@@ WorkspaceName="+formBean.getWorkspaceName());
+						//logger.info("@@@@@@@@ WorkspaceName="+formBean.getWorkspaceName());
 						String filterName[] = new String[2];
 						position = 1;
 						filterName = formBean.getFilter();
@@ -1268,7 +1266,7 @@ public class AdvancedReportPDF extends Action
 						}
 						
 						dataArray[row][position] = ahr.getLabel()+" - "+ahr.getName();
-						logger.debug("Filling ahr.name ------->"+ahr.getLabel());
+						logger.info("Filling ahr.name ------->"+ahr.getLabel());
 						position++;	
 						
 						AdvancedReport advReport = (AdvancedReport) reportIter.next();
@@ -1279,7 +1277,7 @@ public class AdvancedReportPDF extends Action
 							if(advReport.getStatus().replaceAll(",", "").length() > 2)
 								dataArray[row][position] = advReport.getStatus().replaceAll(",", "");
 						
-							//logger.debug(advReport.getStatus().replaceAll(",", "").length() + " : Status : " + advReport.getStatus().replaceAll(",", ""));
+							//logger.info(advReport.getStatus().replaceAll(",", "").length() + " : Status : " + advReport.getStatus().replaceAll(",", ""));
 						}
 						if((columnColl.contains("Project Title") || columnColl.contains("Project Title")) && advReport.getTitle() != null)
 						{
@@ -1287,7 +1285,7 @@ public class AdvancedReportPDF extends Action
 							if(advReport.getTitle().trim().length() > 0)
 								dataArray[row][position] = advReport.getTitle().trim();
 								
-								//logger.debug("Name : " + advReport.getTitle());
+								//logger.info("Name : " + advReport.getTitle());
 						}
 						if(columnColl.contains("Actual Start Date") && advReport.getActualStartDate() != null)
 						{
@@ -1295,7 +1293,7 @@ public class AdvancedReportPDF extends Action
 							if(advReport.getActualStartDate().trim().length() > 0)
 								dataArray[row][position] = advReport.getActualStartDate().trim();
 								
-								//logger.debug("Start Date : " + advReport.getActualStartDate());
+								//logger.info("Start Date : " + advReport.getActualStartDate());
 						}
 						if(columnColl.contains("Actual Completion Date") && advReport.getActualCompletionDate() != null)
 						{
@@ -1303,7 +1301,7 @@ public class AdvancedReportPDF extends Action
 							if(advReport.getActualCompletionDate().trim().length() > 0)
 								dataArray[row][position] = advReport.getActualCompletionDate().trim();
 								
-								//logger.debug("Completion Date : " + advReport.getActualCompletionDate());
+								//logger.info("Completion Date : " + advReport.getActualCompletionDate());
 						}					
 
 						if(columnColl.contains("Level") && advReport.getLevel() != null)
@@ -1312,7 +1310,7 @@ public class AdvancedReportPDF extends Action
 							if(advReport.getLevel().trim().length() > 0)
 								dataArray[row][position] = advReport.getLevel().trim(); 
 								
-								//logger.debug("Level : " + advReport.getLevel());
+								//logger.info("Level : " + advReport.getLevel());
 						}
 						
 						if(columnColl.contains("Description") && advReport.getDescription() != null)
@@ -1321,7 +1319,7 @@ public class AdvancedReportPDF extends Action
 							if(advReport.getDescription().trim().length() > 0)
 								dataArray[row][position] = advReport.getDescription().trim(); 
 								
-								//logger.debug("Description : " + advReport.getDescription());
+								//logger.info("Description : " + advReport.getDescription());
 						}
 						
 						if(columnColl.contains("Objective") && advReport.getObjective() != null)
@@ -1330,7 +1328,7 @@ public class AdvancedReportPDF extends Action
 							if(advReport.getObjective().trim().length() > 0)
 								dataArray[row][position] = advReport.getObjective().trim();
 								
-								//logger.debug("Objective : " + advReport.getObjective());
+								//logger.info("Objective : " + advReport.getObjective());
 						}					
 
 						if(columnColl.contains("Type Of Assistance") && advReport.getAssistance() != null)
@@ -1339,19 +1337,19 @@ public class AdvancedReportPDF extends Action
 							if(advReport.getAssistance().toString().replace('[',' ').replace(']',' ').trim().length() > 0)
 								dataArray[row][position] = advReport.getAssistance().toString().replace('[',' ').replace(']',' ').trim();
 								
-								//logger.debug("TOA : " + advReport.getAssistance().toString().replace('[',' ').replace(']',' '));
+								//logger.info("TOA : " + advReport.getAssistance().toString().replace('[',' ').replace(']',' '));
 						}
 						
 						if(columnColl.contains("Donor") && advReport.getDonors() != null)
 						{
 							position = getColumnIndex("Donor");
-							//logger.debug("DONORRRRRR"+advReport.getDonors().toString()+">>>"+advReport.getDonors().toString().replace('[',' ').replace(']',' ').trim()+"<><><>"+row+":"+position);
+							//logger.info("DONORRRRRR"+advReport.getDonors().toString()+">>>"+advReport.getDonors().toString().replace('[',' ').replace(']',' ').trim()+"<><><>"+row+":"+position);
 							if(advReport.getDonors().toString().replace('[',' ').replace(']',' ').trim().length() > 0){
-								logger.debug("inserting DONOR");
+								logger.info("inserting DONOR");
 								dataArray[row][position] = advReport.getDonors().toString().replace('[',' ').replace(']',' ').trim();
 							}
 							
-								//logger.debug(advReport.getDonors().toString().replace('[',' ').replace(']',' ').trim().length() + " : Donor : " + advReport.getDonors().toString().replace('[',' ').replace(']',' '));
+								//logger.info(advReport.getDonors().toString().replace('[',' ').replace(']',' ').trim().length() + " : Donor : " + advReport.getDonors().toString().replace('[',' ').replace(']',' '));
 						}					
 
 						if(columnColl.contains("Sector") && advReport.getSectors() != null)
@@ -1367,19 +1365,19 @@ public class AdvancedReportPDF extends Action
 							if(advReport.getRegions().toString().replace('[',' ').replace(']',' ').trim().length() > 0)
 								dataArray[row][position] = advReport.getRegions().toString().replace('[',' ').replace(']',' ').trim();
 								
-//								//logger.debug(advReport.getRegions().toString().replace('[',' ').replace(']',' ').trim().length() + " : Region : " );
+//								//logger.info(advReport.getRegions().toString().replace('[',' ').replace(']',' ').trim().length() + " : Region : " );
 						}
 						else
-							logger.debug("Region is NULL..................");
+							logger.info("Region is NULL..................");
 						
 						if(columnColl.contains("Contact Name") && advReport.getContacts() != null)
 						{
 							position = getColumnIndex("Contact Name");
-							//logger.debug(position + "::: CONTACT NAME");
+							//logger.info(position + "::: CONTACT NAME");
 							if(advReport.getContacts().toString().replace('[',' ').replace(']',' ').trim().length() > 0)
 								dataArray[row][position] = advReport.getContacts().toString().replace('[',' ').replace(']',' ').trim();
 								
-								//logger.debug("Contact  : " + advReport.getContacts().toString().replace('[',' ').replace(']',' '));
+								//logger.info("Contact  : " + advReport.getContacts().toString().replace('[',' ').replace(']',' '));
 						}
 						
 						if(columnColl.contains("Financing Instrument") && advReport.getModality() != null)
@@ -1387,10 +1385,10 @@ public class AdvancedReportPDF extends Action
 							position = getColumnIndex("Financing Instrument");
 							if(advReport.getModality().toString().replace('[',' ').replace(']',' ').trim().length() > 0){
 								dataArray[row][position] = advReport.getModality().toString().replace('[',' ').replace(']',' ').trim();
-								//logger.debug("Financing Instrument::::::::: "+dataArray[row][position]+" position "+ position);
+								//logger.info("Financing Instrument::::::::: "+dataArray[row][position]+" position "+ position);
 							}
 								
-								//logger.debug(advReport.getModality().toString().replace('[',' ').replace(']',' ').trim().length() + " : Modality : " + advReport.getModality().toString().replace('[',' ').replace(']',' '));
+								//logger.info(advReport.getModality().toString().replace('[',' ').replace(']',' ').trim().length() + " : Modality : " + advReport.getModality().toString().replace('[',' ').replace(']',' '));
 						}
 						
 						if(columnColl.contains("Project Id") && advReport.getAmpId() != null)
@@ -1399,11 +1397,11 @@ public class AdvancedReportPDF extends Action
 								if(advReport.getAmpId().trim().length() > 0 )
 									dataArray[row][position] = advReport.getAmpId().trim();
 									
-								//logger.debug("ID  : " + advReport.getAmpId());
+								//logger.info("ID  : " + advReport.getAmpId());
 						}					
 						
 						position = n + rsc.getColumns().size()-1;
-						logger.debug("#######################################################"+ position);
+						logger.info("#######################################################"+ position);
 						
 						
 						if(advReport.getAmpFund() != null)
@@ -1477,7 +1475,7 @@ public class AdvancedReportPDF extends Action
 						} // END Of AmpFund Iteration
 					} // End of Records Iteration
 					
-					logger.debug("&&&& Row &&&-->"+ row);
+					logger.info("&&&& Row &&&-->"+ row);
 					row = row + 1;
 			}
 		}//end of foo

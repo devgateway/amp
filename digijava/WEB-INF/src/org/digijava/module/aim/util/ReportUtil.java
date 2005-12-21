@@ -14425,6 +14425,50 @@ public class ReportUtil {
 		}
 	}
 
+	public static boolean checkDuplicateReportName(String reportTitle){
+		boolean found=false;
+		Session session = null;
+		Query query = null;
+		Iterator iter=null;
+		String queryString;
+		try {
+			session = PersistenceManager.getSession();
+			queryString = "select report.name from " + AmpReports.class.getName() + " report ";
+			//logger.info( " Query :" + queryString);
+			query = session.createQuery(queryString);
+	//		iter = query.list().iterator();
+			
+			if(query!=null)
+			{
+				iter = query.list().iterator();
+				//logger.info("............Query is not null............");
+				while(iter.hasNext())
+				{
+					String str = (String) iter.next();
+					if( reportTitle.trim().equals(str) )
+					{
+						found = true;
+						break;
+					}
+					else
+						found = false;
+				}
+			}
+
+		} catch (Exception ex) {
+			logger.error("Unable to get checkDupilcateReportName()", ex);
+		} finally {
+			try {
+				if (session != null) {
+					PersistenceManager.releaseSession(session);
+				}
+			} catch (Exception ex) {
+				logger.debug("releaseSession() failed");
+			}
+		}
+		return found;
+	}
+
 // end of Advanced Function	
 
 

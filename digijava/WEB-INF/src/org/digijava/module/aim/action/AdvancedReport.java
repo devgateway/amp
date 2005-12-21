@@ -135,7 +135,7 @@ public class AdvancedReport extends Action {
 				formBean.setAmpColumns(ReportUtil.getColumnList());
 				formBean.setAmpMeasures(ReportUtil.getMeasureList());
 				formBean.setReportTitle("");
-				
+				formBean.setReportDescription("");
 				/*iter = formBean.getAmpMeasures().iterator();
 				Collection tempColl = new ArrayList();
 				while(iter.hasNext())
@@ -905,6 +905,7 @@ public class AdvancedReport extends Action {
 						String descr = "/"+formBean.getReportTitle().replaceAll(" " , "");
 						descr = descr + ".do";
 						ampReports.setDescription(descr);
+						ampReports.setReportDescription(formBean.getReportDescription());
 						ampReports.setName(formBean.getReportTitle().trim());
 						ampReports.setAmpReportId(new Long("0"));
 						if(formBean.getReportOption()==null)

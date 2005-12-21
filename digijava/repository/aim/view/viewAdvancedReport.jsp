@@ -95,6 +95,11 @@
 			<tr><td colspan=3 class=subtitle-blue align=center>
 					<bean:write name="aimAdvancedReportForm" property="reportName" />
 			</td></tr>
+			<logic:notEmpty name="aimAdvancedReportForm" property="reportDescription" />
+			<tr><td colspan=3 align=center>
+					<bean:write name="aimAdvancedReportForm" property="reportDescription" />
+			</td></tr>
+			</logic:notEmpty>
 			<tr>
 				<td colspan=3 class=box-title align=center>
 				<bean:write name="aimAdvancedReportForm" property="workspaceType" />&nbsp; 

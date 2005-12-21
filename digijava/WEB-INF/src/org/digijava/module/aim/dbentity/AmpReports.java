@@ -16,6 +16,7 @@ public class AmpReports implements Comparable {
 	private String name;
 
 	private String description;
+	private String reportDescription;
 
 	private String options;
 
@@ -51,6 +52,10 @@ public class AmpReports implements Comparable {
 		return description;
 	}
 
+	public String getReportDescription() {
+		return reportDescription;
+	}
+
 	public String getOptions() {
 		return options;
 	}
@@ -73,6 +78,10 @@ public class AmpReports implements Comparable {
 
 	public void setDescription(String description) {
 		this.description = description;
+	}
+
+	public void setReportDescription(String reportDescription) {
+		this.reportDescription = reportDescription;
 	}
 
 	public void setOptions(String options) {

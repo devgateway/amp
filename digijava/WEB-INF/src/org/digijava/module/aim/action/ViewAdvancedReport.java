@@ -113,6 +113,8 @@ public class ViewAdvancedReport extends Action
 		AmpTeam ampTeam=DbUtil.getAmpTeam(ampTeamId);
 		AmpReports ampReports=DbUtil.getAmpReport(ampReportId);
 		formBean.setReportName(ampReports.getName());
+		if(ampReports.getReportDescription()!=null)
+			formBean.setReportDescription(ampReports.getReportDescription());
 		formBean.setWorkspaceType(ampTeam.getType());
 		formBean.setWorkspaceName(ampTeam.getName());
 		if(perspective.equals("DN"))

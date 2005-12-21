@@ -12,6 +12,7 @@
 		<property name="name" column="name" type="java.lang.String"/>
 		<property name="description" column="description" type="java.lang.String"/>
 		<property name="options" column="options" type="java.lang.String"/>
+		<property name="reportDescription" column="report_description" type="java.lang.String"/>
 		<!--<many-to-one name="ampReportsOptions" column="amp_option_id" class="org.digijava.module.aim.dbentity.AmpReportsOptions" not-null="true"/>
 		-->
 		<set name="members" table="amp_member_reports" lazy="true">

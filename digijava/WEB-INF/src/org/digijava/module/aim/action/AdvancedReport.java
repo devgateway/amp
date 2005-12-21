@@ -889,33 +889,15 @@ public class AdvancedReport extends Action {
 				
 				if(flag == false)
 				{
-					boolean found = false;
-					//String queryString = "select report.name from " + AmpReports.class.getName() + " report ";
 					int i = 0;
-					//logger.info( " Query 2 :" + queryString);
-					/*
-					query = session.createQuery(queryString);
-					iter = query.list().iterator();
+					boolean found = ReportUtil.checkDuplicateReportName(formBean.getReportTitle());
+					if(found==true)
+					{ 
+						errors.add("DuplicateReportName", new ActionError("error.aim.reportManager.DuplicateReportName"));
+						saveErrors(request, errors);
+						return mapping.findForward("MissingReportDetails");
+					}
 					
-					if(query!=null)
-					{
-						iter = query.list().iterator();
-						//logger.info("............Query is not null............");
-						while(iter.hasNext())
-						{
-							String str = (String) iter.next();
-							if( formBean.getReportTitle().trim().equals(str) )
-							{
-		                	errors.add("DuplicateReportName", new ActionError("error.aim.reportManager.DuplicateReportName"));
-								saveErrors(request, errors);
-								found = true;
-								return mapping.findForward("MissingReportDetails");
-							}
-							else
-								found = false;
-						}
-					}*/
-
 	           	if(found == false)
 	            {
 						//logger.info("............no duplicate report title............");
@@ -939,69 +921,69 @@ public class AdvancedReport extends Action {
 							while(iter.hasNext())
 							{
 								AmpColumns cols = (AmpColumns)iter.next();
-	
-								AmpReportColumn	temp = new AmpReportColumn();
-								temp.setColumn(cols);
-								temp.setOrderId(""+i);
-								columns.add(temp);
-								i = i + 1;
+
+									AmpReportColumn	temp = new AmpReportColumn();
+									temp.setColumn(cols);
+									temp.setOrderId(""+i);
+									columns.add(temp);
+									i = i + 1;
+								}
+								ampReports.setColumns(columns);
 							}
-							ampReports.setColumns(columns);
-						}
 						
-						if(formBean.getColumnHierarchie() != null)
-						{
-							// saving the column hierarchies in step2 
-							Set hierarchies = new HashSet();
-							iter  = formBean.getColumnHierarchie().iterator();
-							i = 1;
-							while(iter.hasNext())
+							if(formBean.getColumnHierarchie() != null)
 							{
-								AmpColumns cols = (AmpColumns)iter.next();
+								// saving the column hierarchies in step2 
+								Set hierarchies = new HashSet();
+								iter  = formBean.getColumnHierarchie().iterator();
+								i = 1;
+								while(iter.hasNext())
+								{
+									AmpColumns cols = (AmpColumns)iter.next();
 								
-								AmpReportHierarchy reportHierarchy = new AmpReportHierarchy();
-								reportHierarchy.setColumn(cols);
-								reportHierarchy.setLevelId(""+i);
-								hierarchies.add(reportHierarchy);
-								i = i + 1;
+									AmpReportHierarchy reportHierarchy = new AmpReportHierarchy();
+									reportHierarchy.setColumn(cols);
+									reportHierarchy.setLevelId(""+i);
+									hierarchies.add(reportHierarchy);
+									i = i + 1;
+								}
+								ampReports.setHierarchies(hierarchies);
 							}
-							ampReports.setHierarchies(hierarchies);
-						}
 						
-						// saving the AMp Report Measures
-						Set measures = new HashSet();
-						if(formBean.getAddedMeasures() != null)
-						{
-							iter = formBean.getAddedMeasures().iterator();
-							i = 1;
-							while(iter.hasNext())
+							// saving the AMp Report Measures
+							Set measures = new HashSet();
+							if(formBean.getAddedMeasures() != null)
 							{
-								AmpMeasures ampMeasures = (AmpMeasures) iter.next();
-								measures.add(ampMeasures);
-								i = i + 1;
+								iter = formBean.getAddedMeasures().iterator();
+								i = 1;
+								while(iter.hasNext())
+								{
+									AmpMeasures ampMeasures = (AmpMeasures) iter.next();
+									measures.add(ampMeasures);
+									i = i + 1;
+								}
 							}
-						}
 						
-						if(formBean.getSelAdjustType() != null)
-						{
-							iter = formBean.getSelAdjustType().iterator();
-							
-							while(iter.hasNext())
+							if(formBean.getSelAdjustType() != null)
 							{
-								AmpMeasures ampMeasures = (AmpMeasures) iter.next();
-								measures.add(ampMeasures);
+								iter = formBean.getSelAdjustType().iterator();
+								
+								while(iter.hasNext())
+								{
+									AmpMeasures ampMeasures = (AmpMeasures) iter.next();
+									measures.add(ampMeasures);
+								}
 							}
-						}
-						ampReports.setMeasures(measures);
-						ReportUtil.saveReport(ampReports,teamMember.getTeamId(),teamMember.getMemberId(),teamMember.getTeamHead());
-			
-						// Clears the values of the Previous report 
-						formBean.setAmpColumns(null);
-						formBean.setAddedColumns(null);
-						formBean.setColumnHierarchie(null);
-						formBean.setAddedMeasures(null);
+							ampReports.setMeasures(measures);
+							ReportUtil.saveReport(ampReports,teamMember.getTeamId(),teamMember.getMemberId(),teamMember.getTeamHead());
+				
+							// Clears the values of the Previous report 
+							formBean.setAmpColumns(null);
+							formBean.setAddedColumns(null);
+							formBean.setColumnHierarchie(null);
+							formBean.setAddedMeasures(null);
 						
-	                }
+			            }
 					
 				}
 				

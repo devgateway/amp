@@ -11,6 +11,7 @@
 <!--
 function previewClicked() {
 	document.aimEditActivityForm.step.value = "9";
+	document.aimEditActivityForm.pageId.value = "1";
 	<digi:context name="preview" property="context/module/moduleinstance/previewActivity.do?edit=true" />
 	document.aimEditActivityForm.action = "<%= preview %>";
 	document.aimEditActivityForm.target = "_self";	
@@ -59,6 +60,7 @@ function gotoStep(value) {
 <digi:instance property="aimEditActivityForm" />
 <html:hidden property="approvalStatus" />
 <html:hidden property="workingTeamLeadFlag" />
+<html:hidden property="pageId" />
 
 <table width="209" cellSpacing=0 cellPadding=0 vAlign="top" align="left" border=0>
 <tr><td width="209" height="10" background="module/aim/images/top.gif">

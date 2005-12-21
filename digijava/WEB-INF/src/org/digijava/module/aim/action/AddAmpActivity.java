@@ -51,10 +51,8 @@ public class AddAmpActivity extends Action {
 			eaForm.reset(mapping, request);
 		}
 
-		if (eaForm.getPageId() < 0 || eaForm.getPageId() > 2)
-			return mapping.findForward("index");
 		
-		if (eaForm.getPageId() == 2)
+		if (eaForm.getPageId() > 1)
 			eaForm.setStep("9");
 		
 		// added by Akash

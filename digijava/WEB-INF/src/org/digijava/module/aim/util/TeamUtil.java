@@ -814,12 +814,15 @@ public class TeamUtil {
 				Activity act = new Activity();
 				act.setActivityId(activity.getAmpActivityId());
 				act.setName(activity.getName());
+				act.setAmpId(activity.getAmpId());
 				String donors = "";
 
 				while (orgItr.hasNext()) {
 					AmpOrgRole orgRole = (AmpOrgRole) orgItr.next();
 					if (orgRole.getRole().getRoleCode().equals(Constants.DONOR)) {
-						donors += orgRole.getOrganisation().getOrgCode();
+						if (donors.trim().length() > 0)
+							donors += ", ";
+						donors += orgRole.getOrganisation().getName();
 					}
 				}
 				act.setDonors(donors);

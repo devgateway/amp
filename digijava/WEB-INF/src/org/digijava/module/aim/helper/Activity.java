@@ -7,6 +7,7 @@ public class Activity implements Comparable {
 	private Long activityId;
 	private String name;
 	private String donors;
+	private String ampId;
 	
 	private String description;
 	private String objective;
@@ -489,5 +490,17 @@ public class Activity implements Comparable {
 		
 		Activity act = (Activity) obj;
 		return this.activityId.equals(act.getActivityId());
+	}
+	/**
+	 * @return Returns the ampId.
+	 */
+	public String getAmpId() {
+		return ampId;
+	}
+	/**
+	 * @param ampId The ampId to set.
+	 */
+	public void setAmpId(String ampId) {
+		this.ampId = ampId;
 	}
 }

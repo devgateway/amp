@@ -76,27 +76,6 @@ function disable() {
 						<tr>
 							<td>
 								<span class=crumb>
-								<c:if test="${aimEditActivityForm.pageId == 0}">
-									<bean:define id="translation">
-										<digi:trn key="aim:clickToViewAdmin">Click here to go to Admin Home</digi:trn>
-									</bean:define>
-									<digi:link href="/admin.do" styleClass="comment" title="<%=translation%>">
-										<digi:trn key="aim:AmpAdminHome">
-											Admin Home
-										</digi:trn>
-									</digi:link>&nbsp;&gt;&nbsp;
-								</c:if>
-								<c:if test="${aimEditActivityForm.pageId == 1}">								
-									<bean:define id="translation">
-										<digi:trn key="aim:clickToViewMyDesktop">Click here to view MyDesktop</digi:trn>
-									</bean:define>
-									<digi:link href="/viewMyDesktop.do" styleClass="comment" title="<%=translation%>" >
-										<digi:trn key="aim:portfolio">
-											Portfolio
-										</digi:trn>
-									</digi:link>&nbsp;&gt;&nbsp;								
-								</c:if>	
-
 								<c:if test="${aimEditActivityForm.pageId == 2}">
 									<bean:define id="translation">
 										<digi:trn key="aim:clickToViewMyDesktop">Click here to view MyDesktop</digi:trn>
@@ -120,7 +99,7 @@ function disable() {
 									</digi:link>&nbsp;&gt;&nbsp;	
 								</c:if>									
 								
-								<c:if test="${aimEditActivityForm.pageId != 2}">
+								<c:if test="${aimEditActivityForm.pageId == 1}">
 								
 								<bean:define id="translation">
 									<digi:trn key="aim:clickToViewAddActivityStep1">Click here to goto Add Activity Step 1</digi:trn>
@@ -195,6 +174,57 @@ function disable() {
 									</digi:trn>
 									</digi:link>&nbsp;&gt;&nbsp;									
 								</c:if>
+
+								<c:if test="${aimEditActivityForm.pageId == 3}">
+									<bean:define id="translation">
+										<digi:trn key="aim:clickToViewMyDesktop">Click here to view MyDesktop</digi:trn>
+									</bean:define>
+									<digi:link href="/viewMyDesktop.do" styleClass="comment" title="<%=translation%>" >
+										<digi:trn key="aim:portfolio">Portfolio</digi:trn>
+									</digi:link>
+									&nbsp;&gt;&nbsp;
+									<bean:define id="translation">
+										<digi:trn key="aim:clickToConfigureTeam">Click here to Configure Team</digi:trn>
+									</bean:define>
+									<digi:link href="/configureTeam.do" styleClass="comment" title="<%=translation%>" >
+										<digi:trn key="aim:configureTeam">Configure Team</digi:trn>
+									</digi:link>
+									&nbsp;&gt;&nbsp;						
+									<bean:define id="translation">
+										<digi:trn key="aim:clickToViewActivityList">Click here to view Activity List</digi:trn>
+									</bean:define>
+									<digi:link href="/teamActivityList.do" styleClass="comment" title="<%=translation%>" >
+										<digi:trn key="aim:activityList">Activity List</digi:trn>
+									</digi:link>&nbsp;&gt;&nbsp;
+								</c:if>
+
+								<c:if test="${aimEditActivityForm.pageId == 4}">
+									<bean:define id="translation">
+										<digi:trn key="aim:clickToViewMyDesktop">Click here to view MyDesktop</digi:trn>
+									</bean:define>
+									<digi:link href="/viewMyDesktop.do" styleClass="comment" title="<%=translation%>" >
+										<digi:trn key="aim:portfolio">Portfolio</digi:trn>
+									</digi:link>
+									&nbsp;&gt;&nbsp;
+									<bean:define id="translation">
+										<digi:trn key="aim:clickToConfigureTeam">Click here to Configure Team</digi:trn>
+									</bean:define>
+									<digi:link href="/configureTeam.do" styleClass="comment" title="<%=translation%>" >
+										<digi:trn key="aim:configureTeam">Configure Team</digi:trn>
+									</digi:link>
+									&nbsp;&gt;&nbsp;						
+									<bean:define id="translation">
+										<digi:trn key="aim:clickToViewActivityList">Click here to view Activity List</digi:trn>
+									</bean:define>
+									<digi:link href="/teamActivityList.do" styleClass="comment" title="<%=translation%>" >
+										<digi:trn key="aim:activityList">Activity List</digi:trn>
+									</digi:link>&nbsp;&gt;&nbsp;
+									<digi:link href="/updateTeamActivity.do" styleClass="comment" title="<%=translation%>" >
+										<digi:trn key="aim:addActivity">
+											Add Activity
+										</digi:trn>
+									</digi:link>&nbsp;&gt;&nbsp;									
+								</c:if>								
 								<digi:trn key="aim:previewActivity">
 								Preview Activity
 								</digi:trn>							
@@ -207,7 +237,7 @@ function disable() {
 					<table width="100%" cellSpacing="0" cellPadding="0" vAlign="bottom">
 						<tr>
 							<td width="50%" align="left"> 
-								<c:if test="${aimEditActivityForm.pageId != 2}">
+								<c:if test="${aimEditActivityForm.pageId == 1}">
 								<table width="100%" cellSpacing="1" cellPadding="1" vAlign="bottom">
 									<tr>
 										<td height=16 vAlign="bottom" width="100%"><span class=subtitle-blue>
@@ -1141,7 +1171,7 @@ function disable() {
 										</td>
 									</tr>									
 									</logic:notEmpty>									
-									<c:if test="${aimEditActivityForm.pageId != 2}">	
+									<c:if test="${aimEditActivityForm.pageId == 1}">	
 									<tr><td bgColor=#ffffff align="center" colspan=2>
 										<table cellPadding=3>
 											<tr>

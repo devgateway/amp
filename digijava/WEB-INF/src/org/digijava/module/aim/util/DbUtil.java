@@ -3013,13 +3013,16 @@ public class DbUtil {
 				Iterator orgItr = activity.getOrgrole().iterator();
 				Activity act = new Activity();
 				act.setActivityId(activity.getAmpActivityId());
+				act.setAmpId(activity.getAmpId());
 				act.setName(activity.getName());
 				String donors = "";
 
 				while (orgItr.hasNext()) {
 					AmpOrgRole orgRole = (AmpOrgRole) orgItr.next();
 					if (orgRole.getRole().getRoleCode().equals(Constants.DONOR)) {
-						donors += orgRole.getOrganisation().getOrgCode();
+						if (donors.trim().length() > 0)
+							donors += ", ";
+						donors += orgRole.getOrganisation().getName();
 					}
 				}
 				act.setDonors(donors);
@@ -3250,13 +3253,17 @@ public class DbUtil {
 				Activity act = new Activity();
 				act.setActivityId(activity.getAmpActivityId());
 				act.setName(activity.getName());
+				act.setAmpId(activity.getAmpId());
+				
 				String donors = "";
 
 				while (orgItr.hasNext()) {
 					AmpOrgRole orgRole = (AmpOrgRole) orgItr.next();
-
 					if (orgRole.getRole().getRoleCode().equals(Constants.DONOR)) {
-						donors += orgRole.getOrganisation().getAcronym();
+						if (donors.trim().length() > 0) {
+							donors += ", ";
+						}
+						donors += orgRole.getOrganisation().getName();
 					}
 				}
 

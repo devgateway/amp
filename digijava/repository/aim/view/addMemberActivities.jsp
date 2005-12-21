@@ -190,12 +190,15 @@
 																<tr><td width=3 bgcolor="#dddddd">
 																	<input type="checkbox" name="checkAll" onclick="checkall()">
 																</td>
+																<td width="20%" bgcolor="#dddddd">
+																	<b><digi:trn key="aim:ampId">AMP ID</digi:trn></b>
+																</td>
 																<td valign="center" align="center" bgcolor="#dddddd">
 																	<b><digi:trn key="aim:listOfTeamActivities">
 																		List of team activities
 																	</digi:trn></b>
 																</td>
-																<td bgColor=#dddddb align="center" width="15%" bgcolor="#dddddd">
+																<td bgColor=#dddddb align="center" width="20%" bgcolor="#dddddd">
 																	<b><digi:trn key="aim:donors">
 																	Donors
 																	</digi:trn></b>
@@ -225,21 +228,25 @@
 																		<bean:write name="activities" property="activityId" />
 																	</html:multibox>
 																</td>
+																<td width="20%" bgcolor="#f4f4f2">
+																	<bean:write name="activities" property="ampId" />
+																</td>
 																<td bgcolor="#f4f4f2">
-																	<jsp:useBean id="urlParams2" type="java.util.Map" class="java.util.HashMap"/>
-																	<c:set target="${urlParams2}" property="id">
+																	<jsp:useBean id="url" type="java.util.Map" class="java.util.HashMap"/>
+																	<c:set target="${url}" property="activityId">
 																		<bean:write name="activities" property="activityId" />
-																	</c:set> 
+																	</c:set>
+																	<c:set target="${url}" property="pageId" value="3"/>
 																	<bean:define id="translation">
 																		<digi:trn key="aim:clickToViewActivityDetails">
 																		Click here to view Activity Details</digi:trn>
 																	</bean:define>
-																	<digi:link href="/getActivityDetails.do" name="urlParams2" title="<%=translation%>" 
-																	target="_blank">
+																	<digi:link href="/viewActivityPreview.do" name="url" 
+																	title="<%=translation%>">
 																		<bean:write name="activities" property="name" />
 																	</digi:link>
 																</td>
-																<td align="center" width="15%" bgcolor="#f4f4f2">
+																<td align="center" width="20%" bgcolor="#f4f4f2">
 																	<bean:write name="activities" property="donors" />
 																</td></tr>
 															</logic:iterate>

@@ -40,7 +40,10 @@
 					<logic:notEmpty name="records" property="objective">
 						<tr><td colspan=<bean:write name="aimAdvancedReportForm" property="totalColumns"/>>
 							<strong>Objective			:</strong>
-							<bean:write name="records" property="objective"/>
+							<bean:define id="objKey">
+								<c:out value="${records.objective}"/>
+							</bean:define>
+							<digi:edit key="<%=objKey%>"/>
 						</td></tr>
 					</logic:notEmpty>
 				</logic:iterate>
@@ -51,7 +54,7 @@
 							<bean:define id="descKey">
 								<c:out value="${records.description}"/>
 							</bean:define>
-							<digi:edit key="<%=descKey%>"></digi:edit>
+							<digi:edit key="<%=descKey%>"/>
 						</td></tr>
 					</logic:notEmpty>
 				</logic:iterate>

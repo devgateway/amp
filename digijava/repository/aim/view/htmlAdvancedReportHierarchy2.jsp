@@ -19,12 +19,10 @@
 
 <table border="1" bordercolor="#808080" width="90%" cellspacing=1 cellpadding=1 valign=top align=left style="border-collapse: collapse">
 	<logic:notEmpty name="aimAdvancedReportForm" property="multiReport"> 
-		<% int x = 1; %>
 		<logic:iterate name="aimAdvancedReportForm" property="multiReport" id="multiReport" type="org.digijava.module.aim.helper.multiReport">
 			<logic:iterate name="multiReport"  property="hierarchy" id="hierarchy" type="org.digijava.module.aim.helper.AdvancedHierarchyReport">
 
 <%-- 	Hierarchy 3 begins here	--%>
-				<logic:notEmpty name="hierarchy"  property="levels">
 				<logic:notEmpty name="levels" property="levels">
 					<logic:iterate name="levels"  property="levels" id="level" type="org.digijava.module.aim.helper.AdvancedHierarchyReport">
 						<tr>
@@ -46,7 +44,10 @@
 								<logic:notEmpty name="records" property="objective">
 									<tr><td colspan=<bean:write name="aimAdvancedReportForm" property="totalColumns"/>>
 										<strong>Objective			:</strong>
-										<bean:write name="records" property="objective" />
+										<bean:define id="objKey">
+											<c:out value="${records.objective}"/>
+										</bean:define>
+										<digi:edit key="<%=objKey%>"/>
 									</td></tr>
 								</logic:notEmpty>	
 							</logic:iterate>
@@ -506,10 +507,7 @@
 							%>	
 							<logic:equal name="aimAdvancedReportForm" property="option" value="A">
 								<logic:iterate name="aimAdvancedReportForm"  property="fiscalYearRange" id="fiscalYearRange">
-<%--
-									<logic:notEmpty name="hierarchy" property="ampFund">
---%>									
-										<logic:iterate name="level"  property="fundSubTotal" id="fundSubTotal" type="org.digijava.module.aim.helper.AmpFund">
+									<logic:iterate name="level"  property="fundSubTotal" id="fundSubTotal" type="org.digijava.module.aim.helper.AmpFund">
 									<%
 										if((a5==1 && b5==1) || (a5==2 && b5==6) || (a5==3 && b5==11))
 										{		
@@ -632,9 +630,6 @@
 											b5++;
 										%>	
 										</logic:iterate>
-<%--										
-									</logic:notEmpty>
---%>									
 								<%
 									a5++;
 								%>
@@ -646,10 +641,7 @@
 						%>
 							<logic:equal name="aimAdvancedReportForm" property="option" value="Q">
 								<logic:iterate name="aimAdvancedReportForm"  property="fiscalYearRange" id="fiscalYearRange">
-<%--								
-									<logic:notEmpty name="hierarchy" property="ampFund">
---%>									
-										<% int mark5=0; %>
+									<% int mark5=0; %>
 										<logic:iterate name="level"  property="fundSubTotal" id="fundSubTotal" type="org.digijava.module.aim.helper.AmpFund">
 		  								<%
 											mark5++;
@@ -783,9 +775,6 @@
 											q5++;
 										%>	
 										</logic:iterate>
-<%--												
-											</logic:notEmpty>
---%>											
 									<%
 										p5++;
 									%>
@@ -840,10 +829,7 @@
 							%>	
 							<logic:equal name="aimAdvancedReportForm" property="option" value="A">
 								<logic:iterate name="aimAdvancedReportForm"  property="fiscalYearRange" id="fiscalYearRange">
-<%--
-									<logic:notEmpty name="hierarchy" property="ampFund">
---%>									
-										<logic:iterate name="levels"  property="fundSubTotal" id="fundSubTotal" type="org.digijava.module.aim.helper.AmpFund">
+									<logic:iterate name="levels"  property="fundSubTotal" id="fundSubTotal" type="org.digijava.module.aim.helper.AmpFund">
 									<%
 										if((a6==1 && b6==1) || (a6==2 && b6==6) || (a6==3 && b6==11))
 										{		
@@ -966,9 +952,6 @@
 											b6++;
 										%>	
 										</logic:iterate>
-<%--										
-									</logic:notEmpty>
---%>									
 								<%
 									a6++;
 								%>
@@ -980,10 +963,7 @@
 						%>
 							<logic:equal name="aimAdvancedReportForm" property="option" value="Q">
 								<logic:iterate name="aimAdvancedReportForm"  property="fiscalYearRange" id="fiscalYearRange">
-<%--								
-									<logic:notEmpty name="hierarchy" property="ampFund">
---%>									
-										<% int mark6=0; %>
+									<% int mark6=0; %>
 										<logic:iterate name="levels"  property="fundSubTotal" id="fundSubTotal" type="org.digijava.module.aim.helper.AmpFund">
 		  								<%
 											mark6++;
@@ -1117,9 +1097,6 @@
 											q6++;
 										%>	
 										</logic:iterate>
-<%--												
-											</logic:notEmpty>
---%>											
 									<%
 										p6++;
 									%>
@@ -1127,7 +1104,6 @@
 							</logic:equal>
 						</table>
 					</td></tr>
-				</logic:notEmpty>
 				</logic:notEmpty>
 
 <%-- 	Hierarchy 3 ends here	--%>

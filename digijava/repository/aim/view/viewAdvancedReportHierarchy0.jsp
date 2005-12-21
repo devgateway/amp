@@ -193,8 +193,13 @@
 						<td align="center" height="21" >
 				<bean:write name="records" property="level" /></td></logic:notEmpty>
 				<logic:notEmpty name="records" property="objective">
-						<td align="center" height="21" >
-				<bean:write name="records" property="objective" /></td></logic:notEmpty>
+					<td align="center" height="21" >
+						<bean:define id="objectiveKey">
+							<bean:write name="records" property="objective" />
+						</bean:define>						
+						<digi:edit key="<%=objectiveKey%>" />
+					</td>
+				</logic:notEmpty>
 				<logic:notEmpty name="records" property="description">
 				<td align="center" height="21" width="800">
 					<bean:define id="descriptionKey">

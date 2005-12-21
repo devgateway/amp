@@ -49,17 +49,17 @@
             </tr>
 				<tr bgcolor="#FFFFFF">
             	<td valign="top" colspan="10">
-						<!-- begin no hierarchy -->
+						<%-- begin no hierarchy --%>
 						<logic:equal name="aimAdvancedReportForm"  property="hierarchyFlag" value="false"> 
 							<jsp:include page="htmlAdvancedReportHierarchy0.jsp"/>
 						</logic:equal>
-						<!-- end no hierarchy -->
+						<%-- end no hierarchy --%>
 						
-						<!-- begin with hierarchy -->
+						<%-- begin with hierarchy --%>
 						<logic:equal name="aimAdvancedReportForm"  property="hierarchyFlag" value="true"> 
 							<jsp:include page="htmlAdvancedReportHierarchy1.jsp"/>	
 						</logic:equal>
-						<!-- end with hierarchy -->
+						<%-- end with hierarchy --%>
 					</td>
 				</tr>
 				<tr bgcolor="#F4F4F2">

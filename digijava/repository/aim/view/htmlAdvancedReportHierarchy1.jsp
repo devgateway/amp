@@ -30,7 +30,6 @@
 				</tr>
 
 	<%-- Hierarchy 1 begins here	--%>
-				
 				<logic:notEmpty name="hierarchy"  property="project">
 					<tr>
 						<logic:iterate name="hierarchy"  property="project" id="project" type="org.digijava.module.aim.helper.Report">
@@ -49,7 +48,10 @@
 								<logic:notEmpty name="records" property="objective">
 									<tr><td colspan=<bean:write name="aimAdvancedReportForm" property="totalColumns"/>>
 										<strong>Objective			:</strong>
-										<bean:write name="records" property="objective" />
+										<bean:define id="objKey">
+											<c:out value="${records.objective}"/>
+										</bean:define>
+										<digi:edit key="<%=objKey%>"/>
 									</td></tr>
 								</logic:notEmpty>
 							</logic:iterate>
@@ -64,7 +66,6 @@
 									</td></tr>
 								</logic:notEmpty>
 							</logic:iterate>
-							
 							<tr>	
 								<logic:iterate name="aimAdvancedReportForm"  property="titles" id="titles" type="org.digijava.module.aim.helper.Column">
 									<logic:notEqual name="titles" property="columnName" value="Project Title">
@@ -104,6 +105,16 @@
 								<logic:notEmpty name="records" property="level">
 									<td align="center" width="9%">
 										<bean:write name="records" property="level" />
+									</td>
+								</logic:notEmpty>
+								<logic:notEmpty name="records" property="totalCommitment">
+									<td align="center" width="9%">
+										<bean:write name="records" property="totalCommitment" />
+									</td>
+								</logic:notEmpty>
+								<logic:notEmpty name="records" property="totalDisbursement">
+									<td align="center" width="9%">
+										<bean:write name="records" property="totalDisbursement" />
 									</td>
 								</logic:notEmpty>
 								<logic:notEmpty name="records" property="assistance">
@@ -317,7 +328,6 @@
 										%>
 										</logic:iterate>
 									</logic:equal>
-	
 									
 								<%
 									int p=1;
@@ -514,10 +524,7 @@
 							%>	
 							<logic:equal name="aimAdvancedReportForm" property="option" value="A">
 								<logic:iterate name="aimAdvancedReportForm"  property="fiscalYearRange" id="fiscalYearRange">
-<%--
-									<logic:notEmpty name="hierarchy" property="ampFund">
---%>									
-										<logic:iterate name="hierarchy"  property="fundSubTotal" id="fundSubTotal" type="org.digijava.module.aim.helper.AmpFund">
+									<logic:iterate name="hierarchy"  property="fundSubTotal" id="fundSubTotal" type="org.digijava.module.aim.helper.AmpFund">
 									<%
 										if((a2==1 && b2==1) || (a2==2 && b2==6) || (a2==3 && b2==11))
 										{		
@@ -640,9 +647,6 @@
 											b2++;
 										%>	
 										</logic:iterate>
-<%--										
-									</logic:notEmpty>
---%>									
 								<%
 									a2++;
 								%>
@@ -654,9 +658,6 @@
 						%>
 							<logic:equal name="aimAdvancedReportForm" property="option" value="Q">
 								<logic:iterate name="aimAdvancedReportForm"  property="fiscalYearRange" id="fiscalYearRange">
-<%--								
-									<logic:notEmpty name="hierarchy" property="ampFund">
---%>									
 										<% int mark2=0; %>
 										<logic:iterate name="hierarchy"  property="fundSubTotal" id="fundSubTotal" type="org.digijava.module.aim.helper.AmpFund">
 		  								<%
@@ -791,9 +792,6 @@
 											q2++;
 										%>	
 										</logic:iterate>
-<%--												
-											</logic:notEmpty>
---%>											
 									<%
 										p2++;
 									%>
@@ -826,7 +824,10 @@
 								<logic:notEmpty name="records" property="objective">
 									<tr><td colspan=<bean:write name="aimAdvancedReportForm" property="totalColumns"/>>
 										<strong>Objective			:</strong>
-										<bean:write name="records" property="objective" />
+										<bean:define id="objKey">
+											<c:out value="${records.objective}"/>
+										</bean:define>
+										<digi:edit key="<%=objKey%>"/>
 									</td></tr>
 								</logic:notEmpty>	
 							</logic:iterate>
@@ -1242,8 +1243,6 @@
 								</table>
 							</td></tr>
 						</logic:iterate>
-					
-
 
 					<tr><td colspan=<bean:write name="aimAdvancedReportForm" property="totalColumns"/>>
 						<table border="1" bordercolor="#C0C0C0" cellspacing=1 cellpadding=1 valign=top align=left style="border-collapse:collapse">
@@ -1288,10 +1287,7 @@
 							%>	
 							<logic:equal name="aimAdvancedReportForm" property="option" value="A">
 								<logic:iterate name="aimAdvancedReportForm"  property="fiscalYearRange" id="fiscalYearRange">
-<%--
-									<logic:notEmpty name="hierarchy" property="ampFund">
---%>									
-										<logic:iterate name="levels"  property="fundSubTotal" id="fundSubTotal" type="org.digijava.module.aim.helper.AmpFund">
+									<logic:iterate name="levels"  property="fundSubTotal" id="fundSubTotal" type="org.digijava.module.aim.helper.AmpFund">
 									<%
 										if((a4==1 && b4==1) || (a4==2 && b4==6) || (a4==3 && b4==11))
 										{		
@@ -1414,9 +1410,6 @@
 											b4++;
 										%>	
 										</logic:iterate>
-<%--										
-									</logic:notEmpty>
---%>									
 								<%
 									a4++;
 								%>
@@ -1428,9 +1421,6 @@
 						%>
 							<logic:equal name="aimAdvancedReportForm" property="option" value="Q">
 								<logic:iterate name="aimAdvancedReportForm"  property="fiscalYearRange" id="fiscalYearRange">
-<%--								
-									<logic:notEmpty name="hierarchy" property="ampFund">
---%>									
 										<% int mark4=0; %>
 										<logic:iterate name="hierarchy"  property="fundSubTotal" id="fundSubTotal" type="org.digijava.module.aim.helper.AmpFund">
 		  								<%
@@ -1565,9 +1555,6 @@
 											q4++;
 										%>	
 										</logic:iterate>
-<%--												
-											</logic:notEmpty>
---%>											
 									<%
 										p4++;
 									%>
@@ -1575,17 +1562,14 @@
 							</logic:equal>
 						</table>
 					</td></tr>
-					</logic:iterate>
-				</logic:notEmpty>
 <%-- 	Hierarchy 2 ends here	--%>
 
-
 <%-- 	Hierarchy 3 begins here	--%>
-				<logic:notEmpty name="hierarchy"  property="levels">
 					<logic:notEmpty name="levels" property="levels">
 						<jsp:include page="htmlAdvancedReportHierarchy2.jsp"/>
 					</logic:notEmpty>
-				</logic:notEmpty>
+				</logic:iterate>
+			</logic:notEmpty>	
 <%-- 	Hierarchy 3 ends here	--%>
 
 				<tr><td colspan=<bean:write name="aimAdvancedReportForm" property="totalColumns"/>>
@@ -1631,10 +1615,7 @@
 						%>	
 						<logic:equal name="aimAdvancedReportForm" property="option" value="A">
 							<logic:iterate name="aimAdvancedReportForm"  property="fiscalYearRange" id="fiscalYearRange">
-<%--
-									<logic:notEmpty name="hierarchy" property="ampFund">
---%>									
-									<logic:iterate name="hierarchy"  property="fundSubTotal" id="fundSubTotal" type="org.digijava.module.aim.helper.AmpFund">
+								<logic:iterate name="hierarchy"  property="fundSubTotal" id="fundSubTotal" type="org.digijava.module.aim.helper.AmpFund">
 									<%
 										if((a7==1 && b7==1) || (a7==2 && b7==6) || (a7==3 && b7==11))
 										{		
@@ -1757,9 +1738,6 @@
 											b7++;
 										%>	
 										</logic:iterate>
-<%--										
-									</logic:notEmpty>
---%>									
 								<%
 									a7++;
 								%>
@@ -1771,9 +1749,6 @@
 						%>
 							<logic:equal name="aimAdvancedReportForm" property="option" value="Q">
 								<logic:iterate name="aimAdvancedReportForm"  property="fiscalYearRange" id="fiscalYearRange">
-<%--								
-									<logic:notEmpty name="hierarchy" property="ampFund">
---%>									
 										<% int mark7=0; %>
 										<logic:iterate name="hierarchy"  property="fundSubTotal" id="fundSubTotal" type="org.digijava.module.aim.helper.AmpFund">
 		  								<%
@@ -1908,9 +1883,6 @@
 											q7++;
 										%>	
 										</logic:iterate>
-<%--												
-											</logic:notEmpty>
---%>											
 									<%
 										p7++;
 									%>
@@ -1918,10 +1890,9 @@
 							</logic:equal>
 						</table>
 					</td></tr>
-				</logic:iterate>
-
-
-				
+			</logic:iterate>			
+		</logic:iterate>
+					
 				<tr><td colspan=<bean:write name="aimAdvancedReportForm" property="totalColumns"/>>
 						<table border="1" bordercolor="#C0C0C0" cellspacing=1 cellpadding=1 valign=top align=left style="border-collapse:collapse">
 							<tr>
@@ -1964,10 +1935,7 @@
 							%>	
 							<logic:equal name="aimAdvancedReportForm" property="option" value="A">
 								<logic:iterate name="aimAdvancedReportForm"  property="fiscalYearRange" id="fiscalYearRange">
-<%--
-									<logic:notEmpty name="hierarchy" property="ampFund">
---%>									
-										<logic:iterate name="multiReport"  property="fundTotal" id="fundTotal" type="org.digijava.module.aim.helper.AmpFund">
+									<logic:iterate name="multiReport"  property="fundTotal" id="fundTotal" type="org.digijava.module.aim.helper.AmpFund">
 									<%
 										if((a8==1 && b8==1) || (a8==2 && b8==6) || (a8==3 && b8==11))
 										{		
@@ -2090,9 +2058,6 @@
 											b8++;
 										%>	
 										</logic:iterate>
-<%--										
-									</logic:notEmpty>
---%>									
 								<%
 									a8++;
 								%>
@@ -2104,9 +2069,6 @@
 						%>
 							<logic:equal name="aimAdvancedReportForm" property="option" value="Q">
 								<logic:iterate name="aimAdvancedReportForm"  property="fiscalYearRange" id="fiscalYearRange">
-<%--								
-									<logic:notEmpty name="hierarchy" property="ampFund">
---%>									
 										<% int mark8=0; %>
 										<logic:iterate name="multiReport"  property="fundTotal" id="fundTotal" type="org.digijava.module.aim.helper.AmpFund">
 		  								<%
@@ -2241,9 +2203,6 @@
 											q8++;
 										%>	
 										</logic:iterate>
-<%--												
-											</logic:notEmpty>
---%>											
 									<%
 										p8++;
 									%>
@@ -2251,7 +2210,6 @@
 							</logic:equal>
 						</table>
 					</td></tr>
-		</logic:iterate>
 	</logic:notEmpty>
 
 	<logic:empty name="aimAdvancedReportForm" property="multiReport"> 

@@ -11657,7 +11657,7 @@ public class ReportUtil {
 						if(ampActivity.getDescription()!=null)
 						{
 							//Editor ed = org.digijava.module.editor.util.DbUtil.getEditor(ampReportCache.getActivityDescription(),"en");
-								//description=ed.getBody();
+							//description=ed.getBody();
 							description = ampActivity.getDescription();
 						}
 						else
@@ -11665,12 +11665,13 @@ public class ReportUtil {
 							
 						if(ampActivity.getObjective()!=null)
 						{
-							Editor ed = org.digijava.module.editor.util.DbUtil.getEditor(ampActivity.getObjective(),"en");
+/*							Editor ed = org.digijava.module.editor.util.DbUtil.getEditor(ampActivity.getObjective(),"en");
 							if(ed!=null)
 								objective=ed.getBody();
 							else
 								objective=" ";
-//							objective=ampActivity.getObjective();
+*/								
+							objective=ampActivity.getObjective();
 						}
 						else
 							objective=" ";
@@ -13512,12 +13513,13 @@ public class ReportUtil {
 							
 					if(ampActivity.getObjective()!=null)
 					{
-						Editor ed = org.digijava.module.editor.util.DbUtil.getEditor(ampActivity.getObjective(),"en");
+/*						Editor ed = org.digijava.module.editor.util.DbUtil.getEditor(ampActivity.getObjective(),"en");
 						if(ed!=null)
 							objective=ed.getBody();
 						else
 							objective=" ";
-//						objective=ampActivity.getObjective();
+*/							
+						objective=ampActivity.getObjective();
 					}
 					else
 						objective=" ";

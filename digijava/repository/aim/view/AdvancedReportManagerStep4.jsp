@@ -12,30 +12,42 @@
 <script language="JavaScript">
 
 
-function gotoStep() {
+function gotoStep() 
+{
 	
 	var temp = document.aimAdvancedReportForm.reportTitle.value;
     var iChars = "\"*|,?_:.<>[]{}';()@&$#%!~`^-+=\\/";
+	var j = "0123456789";
 	var flag=0;
 	var desc = document.aimAdvancedReportForm.reportDescription.value;
-	//var che;
+	var stat=0;
+    var a = temp.charAt(0);
+	 
+	
+	/*if (isNaN(a)) {
+		alert("Not Numeric");
+	} else {
+		alert("Numeric");
+		flag=1;
+	}*/
 	
 
-//		che=("([A-Za-z]+)[ ]+\1",temp,1,"True")>
-		//REFind("\"*|,?_:.<>[]{}';()@&$#%!~`^-+=\\/",temp,1,"True")
-	
-	/*if(temp.match(iChars))
-	{
-		alert("found");
-	}*/
 	if(trim(temp) == "")
 	{
 		alert(" Please enter report title");
-		document.aimAdvancedReportForm.reportTitle.value = ""
+		document.aimAdvancedReportForm.reportTitle.value = "";
+		
 
+	}
+	else if(!(isNaN(a)))
+	{
+		alert("Report Title cannot start with a numeric value");
+		flag=1;
+		
 	}
 	else
 	{
+		
 		for (var i = 0; i < temp.length; i++) 
 		{
 			if (iChars.indexOf(temp.charAt(i)) != -1)
@@ -46,6 +58,9 @@ function gotoStep() {
 				break;
 			}
 		}
+		
+	}
+   
 		if(flag==0)
 		{
 			<digi:context name="step" property="context/module/moduleinstance/advancedReportManager.do?check=5" />
@@ -56,8 +71,8 @@ function gotoStep() {
 		document.aimAdvancedReportForm.submit();
 		}
 	
-	
-	}
+
+//	}
 }
 /*added here*/
 function backStep() {

@@ -56,10 +56,27 @@ function backStep() {
 
 function addColumn()
 {
+	
+ var count=0;
+	for (var i=0;i<document.aimAdvancedReportForm.selectedColumns.length;i++)
+	{
+		if(document.aimAdvancedReportForm.selectedColumns[i].checked)
+		{
+		count++;
+		}
+	}
+	if(count>3 )
+	{
+		alert("Please select three or less hierarchies ");
+	
+	}
+	else
+	{
 	<digi:context name="advReport" property="context/module/moduleinstance/advancedReportManager.do?check=Step2AddRows" />
 	document.aimAdvancedReportForm.action = "<%= advReport %>";
 	document.aimAdvancedReportForm.target = "_self";
 	document.aimAdvancedReportForm.submit();
+	}
 }
 
 function deleteColumn()

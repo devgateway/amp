@@ -447,8 +447,16 @@
 		</logic:iterate>
 		
 		<bean:size name="aimAdvancedReportForm" property="addedColumns" id="cols"/>
-		<tr background="#F4F4F2"><td align="right" colspan=<bean:write name="cols"/> > <b> <bean:write name="hierarchy" property="name" />&nbsp; Total :</b></td>
-		</td>
+
+		<logic:empty name="aimAdvancedReportForm" property="addedColumns">
+		<tr><td colspan=<bean:write name="cols"/> align="right"> <b> <bean:write name="hierarchy" property="name" />&nbsp; Total :</b>
+		</td></tr></logic:empty>
+
+		<tr background="#F4F4F2">
+		<logic:notEmpty name="aimAdvancedReportForm" property="addedColumns">
+		<td align="right" colspan=<bean:write name="cols"/> > <b> <bean:write name="hierarchy" property="name" />&nbsp; Total :</b></td>
+		</td></logic:notEmpty>
+		
 		<logic:iterate name="hierarchy"  property="fundSubTotal" id="fundSubTotal" type="org.digijava.module.aim.helper.AmpFund">
 				
 		<logic:equal name="aimAdvancedReportForm" property="acCommFlag" value="true">
@@ -1394,7 +1402,12 @@
 	</logic:iterate>
 
 		<bean:size name="aimAdvancedReportForm" property="addedColumns" id="cols"/>
-		<tr background="#F4F4F2"><td align="right" colspan=<bean:write name="cols"/> > <b> <bean:write name="level" property="name" />&nbsp; Total :</b></td>
+		<logic:empty name="aimAdvancedReportForm" property="addedColumns">
+		<tr><td colspan=<bean:write name="cols"/> align="right"> <b> <bean:write name="level" property="name" />&nbsp; Total :</b>
+		</td></tr></logic:empty>
+		<tr background="#F4F4F2">
+		<logic:notEmpty name="aimAdvancedReportForm" property="addedColumns">
+		<td align="right" colspan=<bean:write name="cols"/> > <b> <bean:write name="level" property="name" />&nbsp; Total :</b></td></logic:notEmpty>
 		<logic:iterate name="level"  property="fundSubTotal" id="fundSubTotal" type="org.digijava.module.aim.helper.AmpFund">
 		<logic:iterate name="aimAdvancedReportForm"  property="addedMeasures" id="addedMeasures">
 		
@@ -1492,10 +1505,14 @@
 	</logic:iterate>
 
 		<bean:size name="aimAdvancedReportForm" property="addedColumns" id="cols"/>
-		<tr background="#F4F4F2"><td align="right" colspan=<bean:write name="cols"/> > <b> <bean:write name="levels" property="name" />&nbsp; 
+		<logic:empty name="aimAdvancedReportForm" property="addedColumns">
+		<tr><td colspan=<bean:write name="cols"/> align="right"> <b> <bean:write name="levels" property="name" />&nbsp; Total :</b>
+		</td></tr></logic:empty>
+		<tr background="#F4F4F2">
+		<logic:notEmpty name="aimAdvancedReportForm" property="addedColumns"><td align="right" colspan=<bean:write name="cols"/> > <b> <bean:write name="levels" property="name" />&nbsp; 
 		<!-- h1 total -->
 		Total :
-		</b></td>
+		</b></td></logic:notEmpty>
 		<logic:iterate name="levels"  property="fundSubTotal" id="fundSubTotal" type="org.digijava.module.aim.helper.AmpFund">
 		<logic:iterate name="aimAdvancedReportForm"  property="addedMeasures" id="addedMeasures">
 			<c:if test="${addedMeasures.measureName == 'Actual Commitments'}">
@@ -1592,13 +1609,18 @@
 	</logic:iterate>
 
 	<bean:size name="aimAdvancedReportForm" property="addedColumns" id="cols"/>
+	<logic:empty name="aimAdvancedReportForm" property="addedColumns">
+		<tr><td colspan=<bean:write name="cols"/> align="right"> <b> <bean:write name="hierarchy" property="name" />&nbsp; 
+	 Total :</b>
+		</td></tr></logic:empty>
 	 <tr background="#F4F4F2">
 <!--	 <td colspan=<bean:write name="aimAdvancedReportForm" property="addedColumns" /> >aa
 	 </td>-->
+	 <logic:notEmpty name="aimAdvancedReportForm" property="addedColumns">
 	 <td align="right" colspan=<bean:write name="cols"/> > <b> <bean:write name="hierarchy" property="name" />&nbsp; 
 	<!-- h2 total -->
-	 Total :</b></td>
-	 </td>
+	 Total :</b>
+	 </td></logic:notEmpty>
 	 <logic:iterate name="hierarchy"  property="fundSubTotal" id="fundSubTotal" type="org.digijava.module.aim.helper.AmpFund">
 	<logic:iterate name="aimAdvancedReportForm"  property="addedMeasures" id="addedMeasures">
 	 	<c:if test="${addedMeasures.measureName == 'Actual Commitments'}">			
@@ -1694,10 +1716,13 @@
 	</logic:iterate>
 
 <bean:size name="aimAdvancedReportForm" property="addedColumns" id="cols"/>
+<logic:empty name="aimAdvancedReportForm" property="addedColumns">
+		<tr><td colspan=<bean:write name="cols"/> align="right"> <b> Grand Total :</b>
+		</td></tr></logic:empty>
 
-
- <tr background="#F4F4F2"><td align="right" colspan=<bean:write name="cols"/> > <b> Grand Total :</b></td>
- </td>
+ <tr background="#F4F4F2">
+ <logic:notEmpty name="aimAdvancedReportForm" property="addedColumns"><td align="right" colspan=<bean:write name="cols"/> > <b> Grand Total :</b></td>
+ </logic:notEmpty>
  <logic:iterate name="multiReport"  property="fundTotal" id="fundTotal" type="org.digijava.module.aim.helper.AmpFund">
 	<logic:iterate name="aimAdvancedReportForm"  property="addedMeasures" id="addedMeasures">
 	

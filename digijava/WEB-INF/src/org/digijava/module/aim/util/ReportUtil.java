@@ -11305,38 +11305,14 @@ public class ReportUtil {
 			//logger.debug("Query Result: " + q.list().size());
 			ampActivities=(ArrayList)q.list();
 			iter=ampActivities.iterator();
+	//		logger.info("Fiscal id: " + fiscalCalId);
 			while(iter.hasNext())
 			{
 				ampReportCache = (AmpReportCache) iter.next(); 
 
 				if(approvedActivityList.indexOf(ampReportCache.getAmpActivityId())==-1)
 					continue;
-				if(new Long(fiscalCalId).equals(Constants.ETH_FY) || new Long(fiscalCalId).equals(Constants.ETH_CAL))
-				{
-					if(ampReportCache.getTransactionDate()!=null)
-					{
-						GregorianCalendar calendar = new GregorianCalendar();
-						EthiopianCalendar ec=new EthiopianCalendar();
-						EthiopianCalendar tempDate=new EthiopianCalendar();
-						calendar.setTime(ampReportCache.getTransactionDate());
-						ec=tempDate.getEthiopianDate(calendar);
-						if(new Long(fiscalCalId).equals(Constants.ETH_FY))
-						{
-							fiscalYear=(int)ec.ethFiscalYear;
-							fiscalQuarter=(int)ec.ethFiscalQrt;
-						}
-						if(new Long(fiscalCalId).equals(Constants.ETH_CAL))
-						{
-							fiscalYear=(int)ec.ethYear;
-							fiscalQuarter=(int)ec.ethQtr;
-						}
-						//logger.debug("Ethiopian Fiscal Year: " + fiscalYear);
-						//logger.debug("From Year: " + fromYr);
-						//logger.debug("From Year: " + toYr);
-		/*				if(fiscalYear<fromYr || fiscalYear>toYr)
-						continue;*/
-					}
-				}
+				
 				if(!ampModalityId.equals(All))
 				{
 					if(ampReportCache.getAmpModalityId()==null)
@@ -11721,6 +11697,27 @@ public class ReportUtil {
 					if(ampReportCache.getFiscalYear()!=null && ampReportCache.getFiscalQuarter()!=null)
 					{
 						//logger.debug("begin if");
+						if(new Long(fiscalCalId).equals(Constants.ETH_FY) || new Long(fiscalCalId).equals(Constants.ETH_CAL))
+						{
+							if(ampReportCache.getTransactionDate()!=null)
+							{
+								GregorianCalendar calendar = new GregorianCalendar();
+								EthiopianCalendar ec=new EthiopianCalendar();
+								EthiopianCalendar tempDate=new EthiopianCalendar();
+								calendar.setTime(ampReportCache.getTransactionDate());
+								ec=tempDate.getEthiopianDate(calendar);
+								if(new Long(fiscalCalId).equals(Constants.ETH_FY))
+								{
+									fiscalYear=(int)ec.ethFiscalYear;
+									fiscalQuarter=(int)ec.ethFiscalQrt;
+								}
+								if(new Long(fiscalCalId).equals(Constants.ETH_CAL))
+								{
+									fiscalYear=(int)ec.ethYear;
+									fiscalQuarter=(int)ec.ethQtr;
+								}
+							}
+						}
 						if(new Long(fiscalCalId).equals(Constants.GREGORIAN))
 						{
 							fiscalYear=ampReportCache.getFiscalYear().intValue();
@@ -13610,6 +13607,27 @@ public class ReportUtil {
 				if(ampReportCache.getFiscalYear()!=null && ampReportCache.getFiscalQuarter()!=null)
 				{
 					//logger.debug("begin fund calculation");
+					if(new Long(fiscalCalId).equals(Constants.ETH_FY) || new Long(fiscalCalId).equals(Constants.ETH_CAL))
+					{
+						if(ampReportCache.getTransactionDate()!=null)
+						{
+							GregorianCalendar calendar = new GregorianCalendar();
+							EthiopianCalendar ec=new EthiopianCalendar();
+							EthiopianCalendar tempDate=new EthiopianCalendar();
+							calendar.setTime(ampReportCache.getTransactionDate());
+							ec=tempDate.getEthiopianDate(calendar);
+							if(new Long(fiscalCalId).equals(Constants.ETH_FY))
+							{
+								fiscalYear=(int)ec.ethFiscalYear;
+								fiscalQuarter=(int)ec.ethFiscalQrt;
+							}
+							if(new Long(fiscalCalId).equals(Constants.ETH_CAL))
+							{
+								fiscalYear=(int)ec.ethYear;
+								fiscalQuarter=(int)ec.ethQtr;
+							}
+						}
+					}
 					if(new Long(fiscalCalId).equals(Constants.GREGORIAN))
 					{
 						fiscalYear=ampReportCache.getFiscalYear().intValue();

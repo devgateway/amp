@@ -11490,9 +11490,29 @@ public class ReportUtil {
 									report.getContacts().addAll(contacts);
 								}
 								if(c.getColumnId().equals(Constants.OBJECTIVE))
+								{
 									report.setObjective(objective);
+									if(report.getObjective()!=null)
+									{
+										Editor ed = org.digijava.module.editor.util.DbUtil.getEditor(objective,"en");
+										report.setObjectivePDFXLS(getDescParsed(ed.getBody()));
+										logger.debug("the report.getObjectivePDFXLS yields....: "+report.getObjectivePDFXLS());
+									}
+									else
+										report.setObjectivePDFXLS(" ");
+								}
 								if(c.getColumnId().equals(Constants.DESCRIPTION))
+								{
 									report.setDescription(description);
+									if(report.getDescription()!=null)
+									{
+										Editor ed = org.digijava.module.editor.util.DbUtil.getEditor(description,"en");
+										report.setDescriptionPDFXLS(getDescParsed(ed.getBody()));
+										logger.debug("the report.getDescriptionPDFXLS yields....: "+report.getDescriptionPDFXLS());
+									}
+									else
+										report.setDescriptionPDFXLS(" ");
+								}
 								if(c.getColumnId().equals(Constants.TOTAL_COMMITMENT))
 									report.setTotalCommitment(mf.format(totalCommitment));
 								if(c.getColumnId().equals(Constants.TOTAL_DISBURSEMENT))
@@ -11971,9 +11991,29 @@ public class ReportUtil {
 						report.getContacts().addAll(contacts);
 					}
 					if(c.getColumnId().equals(Constants.OBJECTIVE))
+					{
 						report.setObjective(objective);
+						if(report.getObjective()!=null)
+						{
+							Editor ed = org.digijava.module.editor.util.DbUtil.getEditor(objective,"en");
+							report.setObjectivePDFXLS(getDescParsed(ed.getBody()));
+							logger.debug("the report.getObjectivePDFXLS yields....: "+report.getObjectivePDFXLS());
+						}
+						else
+							report.setObjectivePDFXLS(" ");
+					}
 					if(c.getColumnId().equals(Constants.DESCRIPTION))
+					{
 						report.setDescription(description);
+						if(report.getDescription()!=null)
+						{
+							Editor ed = org.digijava.module.editor.util.DbUtil.getEditor(description,"en");
+							report.setDescriptionPDFXLS(getDescParsed(ed.getBody()));
+							logger.debug("the report.getDescriptionPDFXLS yields....: "+report.getDescriptionPDFXLS());
+						}
+						else
+							report.setDescriptionPDFXLS(" ");
+					}
 					if(c.getColumnId().equals(Constants.TOTAL_COMMITMENT))
 						report.setTotalCommitment(mf.format(totalCommitment));
 					if(c.getColumnId().equals(Constants.TOTAL_DISBURSEMENT))
@@ -13310,9 +13350,29 @@ public class ReportUtil {
 								report.getContacts().addAll(contacts);
 							}
 							if(c.getColumnId().equals(Constants.OBJECTIVE))
+							{
 								report.setObjective(objective);
+								if(report.getObjective()!=null)
+								{
+									Editor ed = org.digijava.module.editor.util.DbUtil.getEditor(objective,"en");
+									report.setObjectivePDFXLS(getDescParsed(ed.getBody()));
+									logger.debug("the report.getObjectivePDFXLS yields....: "+report.getObjectivePDFXLS());
+								}
+								else
+									report.setObjectivePDFXLS(" ");
+							}
 							if(c.getColumnId().equals(Constants.DESCRIPTION))
+							{
 								report.setDescription(description);
+								if(report.getDescription()!=null)
+								{
+									Editor ed = org.digijava.module.editor.util.DbUtil.getEditor(description,"en");
+									report.setDescriptionPDFXLS(getDescParsed(ed.getBody()));
+									logger.debug("the report.getDescriptionPDFXLS yields....: "+report.getDescriptionPDFXLS());
+								}
+								else
+									report.setDescriptionPDFXLS(" ");
+							}
 							if(c.getColumnId().equals(Constants.TOTAL_COMMITMENT))
 								report.setTotalCommitment(mf.format(totalCommitment));
 							if(c.getColumnId().equals(Constants.TOTAL_DISBURSEMENT))
@@ -13824,9 +13884,29 @@ public class ReportUtil {
 									report.getContacts().addAll(contacts);
 								}
 								if(c.getColumnId().equals(Constants.OBJECTIVE))
+								{
 									report.setObjective(objective);
+									if(report.getObjective()!=null)
+									{
+										Editor ed = org.digijava.module.editor.util.DbUtil.getEditor(objective,"en");
+										report.setObjectivePDFXLS(getDescParsed(ed.getBody()));
+										logger.debug("the report.getObjectivePDFXLS yields....: "+report.getObjectivePDFXLS());
+									}
+									else
+										report.setObjectivePDFXLS(" ");
+								}
 								if(c.getColumnId().equals(Constants.DESCRIPTION))
+								{
 									report.setDescription(description);
+									if(report.getDescription()!=null)
+									{
+										Editor ed = org.digijava.module.editor.util.DbUtil.getEditor(description,"en");
+										report.setDescriptionPDFXLS(getDescParsed(ed.getBody()));
+										logger.debug("the report.getDescriptionPDFXLS yields....: "+report.getDescriptionPDFXLS());
+									}
+									else
+										report.setDescriptionPDFXLS(" ");
+								}
 								if(c.getColumnId().equals(Constants.TOTAL_COMMITMENT))
 									report.setTotalCommitment(mf.format(totalCommitment));
 								if(c.getColumnId().equals(Constants.TOTAL_DISBURSEMENT))

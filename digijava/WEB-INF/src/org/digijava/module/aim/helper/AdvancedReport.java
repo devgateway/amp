@@ -35,7 +35,9 @@ public class AdvancedReport
 	private String ampId;
 	private String year;
 	private String objective;
+	private String objectivePDFXLS;
 	private String description;
+	private String descriptionPDFXLS;
 
 	public Collection getDonors() 
 	{
@@ -304,6 +306,15 @@ public class AdvancedReport
 		objective = string;
 	}
 
+	public String getObjectivePDFXLS() 
+	{
+		return objectivePDFXLS;
+	}
+	public void setObjectivePDFXLS(String s) 
+	{
+		objectivePDFXLS = s;
+	}
+	
 	public String getDescription() 
 	{
 		return description;
@@ -315,5 +326,12 @@ public class AdvancedReport
 		description = string;
 	}
 
-
+	public String getDescriptionPDFXLS() 
+	{
+		return descriptionPDFXLS;
+	}
+	public void setDescriptionPDFXLS(String s) 
+	{
+		descriptionPDFXLS = s;
+	}
 }

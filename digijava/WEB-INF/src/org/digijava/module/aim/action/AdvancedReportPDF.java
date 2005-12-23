@@ -331,20 +331,20 @@ public class AdvancedReportPDF extends Action
 							//logger.info("Level : " + advReport.getLevel());
 					}
 					
-					if(columnColl.contains("Description") && advReport.getDescription() != null)
+					if(columnColl.contains("Description") && advReport.getDescriptionPDFXLS() != null)
 					{
 						position = getColumnIndex("Description");
-						if(advReport.getDescription().trim().length() > 0)
-							dataArray[row][position] = advReport.getDescription().trim(); 
+						if(advReport.getDescriptionPDFXLS().trim().length() > 0)
+							dataArray[row][position] = advReport.getDescriptionPDFXLS().trim(); 
 							
 							//logger.info("Description : " + advReport.getDescription());
 					}
 					
-					if(columnColl.contains("Objective") && advReport.getObjective() != null)
+					if(columnColl.contains("Objective") && advReport.getObjectivePDFXLS() != null)
 					{
 						position = getColumnIndex("Objective");
-						if(advReport.getObjective().trim().length() > 0)
-							dataArray[row][position] = advReport.getObjective().trim();
+						if(advReport.getObjectivePDFXLS().trim().length() > 0)
+							dataArray[row][position] = advReport.getObjectivePDFXLS().trim();
 							
 							//logger.info("Objective : " + advReport.getObjective());
 					}					
@@ -598,20 +598,20 @@ public class AdvancedReportPDF extends Action
 																//logger.info("Level : " + advReport.getLevel());
 														}
 														
-														if(columnColl.contains("Description") && advReport.getDescription() != null)
+														if(columnColl.contains("Description") && advReport.getDescriptionPDFXLS() != null)
 														{
 															position = getColumnIndex("Description");
-															if(advReport.getDescription().trim().length() > 0)
-																dataArray[row][position] = advReport.getDescription().trim(); 
+															if(advReport.getDescriptionPDFXLS().trim().length() > 0)
+																dataArray[row][position] = advReport.getDescriptionPDFXLS().trim(); 
 																
 																//logger.info("Description : " + advReport.getDescription());
 														}
 														
-														if(columnColl.contains("Objective") && advReport.getObjective() != null)
+														if(columnColl.contains("Objective") && advReport.getObjectivePDFXLS() != null)
 														{
 															position = getColumnIndex("Objective");
-															if(advReport.getObjective().trim().length() > 0)
-																dataArray[row][position] = advReport.getObjective().trim();
+															if(advReport.getObjectivePDFXLS().trim().length() > 0)
+																dataArray[row][position] = advReport.getObjectivePDFXLS().trim();
 																
 																//logger.info("Objective : " + advReport.getObjective());
 														}					
@@ -850,20 +850,20 @@ public class AdvancedReportPDF extends Action
 												//logger.info("Level : " + advReport.getLevel());
 										}
 										
-										if(columnColl.contains("Description") && advReport.getDescription() != null)
+										if(columnColl.contains("Description") && advReport.getDescriptionPDFXLS() != null)
 										{
 											position = getColumnIndex("Description");
-											if(advReport.getDescription().trim().length() > 0)
-												dataArray[row][position] = advReport.getDescription().trim(); 
+											if(advReport.getDescriptionPDFXLS().trim().length() > 0)
+												dataArray[row][position] = advReport.getDescriptionPDFXLS().trim(); 
 												
 												//logger.info("Description : " + advReport.getDescription());
 										}
 										
-										if(columnColl.contains("Objective") && advReport.getObjective() != null)
+										if(columnColl.contains("Objective") && advReport.getObjectivePDFXLS() != null)
 										{
 											position = getColumnIndex("Objective");
-											if(advReport.getObjective().trim().length() > 0)
-												dataArray[row][position] = advReport.getObjective().trim();
+											if(advReport.getObjectivePDFXLS().trim().length() > 0)
+												dataArray[row][position] = advReport.getObjectivePDFXLS().trim();
 												
 												//logger.info("Objective : " + advReport.getObjective());
 										}					
@@ -1094,20 +1094,20 @@ public class AdvancedReportPDF extends Action
 													//logger.info("Level : " + advReport.getLevel());
 											}
 											
-											if(columnColl.contains("Description") && advReport.getDescription() != null)
+											if(columnColl.contains("Description") && advReport.getDescriptionPDFXLS() != null)
 											{
 												position = getColumnIndex("Description");
-												if(advReport.getDescription().trim().length() > 0)
-													dataArray[row][position] = advReport.getDescription().trim(); 
+												if(advReport.getDescriptionPDFXLS().trim().length() > 0)
+													dataArray[row][position] = advReport.getDescriptionPDFXLS().trim(); 
 													
 													//logger.info("Description : " + advReport.getDescription());
 											}
 											
-											if(columnColl.contains("Objective") && advReport.getObjective() != null)
+											if(columnColl.contains("Objective") && advReport.getObjectivePDFXLS() != null)
 											{
 												position = getColumnIndex("Objective");
-												if(advReport.getObjective().trim().length() > 0)
-													dataArray[row][position] = advReport.getObjective().trim();
+												if(advReport.getObjectivePDFXLS().trim().length() > 0)
+													dataArray[row][position] = advReport.getObjectivePDFXLS().trim();
 													
 													//logger.info("Objective : " + advReport.getObjective());
 											}					

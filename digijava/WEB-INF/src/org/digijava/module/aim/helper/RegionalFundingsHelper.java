@@ -7,8 +7,10 @@ package org.digijava.module.aim.helper;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Date;
 import java.util.Iterator;
+import java.util.List;
 
 import org.apache.log4j.Logger;
 import org.digijava.module.aim.dbentity.AmpRegionalFunding;
@@ -110,6 +112,26 @@ public class RegionalFundingsHelper {
 					rf.setTotExpenditures(amt);						
 				}					
 			}
+			
+			List list = null;
+			if (rf.getCommitments() != null) {
+				list = new ArrayList(rf.getCommitments());
+				Collections.sort(list,FundingValidator.dateComp);
+			}
+			rf.setCommitments(list);
+			list = null;
+			if (rf.getDisbursements() != null) {
+				list = new ArrayList(rf.getDisbursements());
+				Collections.sort(list,FundingValidator.dateComp);
+			}
+			rf.setDisbursements(list);
+			list = null;
+			if (rf.getExpenditures() != null) {
+				list = new ArrayList(rf.getExpenditures());
+				Collections.sort(list,FundingValidator.dateComp);
+			}
+			rf.setExpenditures(list);
+			
 			if (index > -1) {
 				temp.set(index,rf);
 			} else {

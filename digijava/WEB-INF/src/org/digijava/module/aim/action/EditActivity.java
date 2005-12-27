@@ -11,6 +11,7 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Set;
 
 import javax.servlet.RequestDispatcher;
@@ -56,6 +57,7 @@ import org.digijava.module.aim.helper.Documents;
 import org.digijava.module.aim.helper.Funding;
 import org.digijava.module.aim.helper.FundingDetail;
 import org.digijava.module.aim.helper.FundingOrganization;
+import org.digijava.module.aim.helper.FundingValidator;
 import org.digijava.module.aim.helper.Issues;
 import org.digijava.module.aim.helper.Location;
 import org.digijava.module.aim.helper.Measures;
@@ -77,7 +79,9 @@ import org.digijava.module.cms.dbentity.CMSContentItem;
  */
 public class EditActivity extends Action {
 
-	private static Logger logger = Logger.getLogger(EditActivity.class);
+	private ServletContext ampContext = null;
+	
+	//private static Logger logger = Logger.getLogger(EditActivity.class);
 
 	public ActionForward execute(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response)
@@ -85,6 +89,8 @@ public class EditActivity extends Action {
 
 		HttpSession session = request.getSession();
 		TeamMember tm = (TeamMember) session.getAttribute("currentMember");
+		
+		ampContext = getServlet().getServletContext();
 		
 		// if user is not logged in, forward him to the home page
 		if (session.getAttribute("currentMember") == null)
@@ -109,11 +115,11 @@ public class EditActivity extends Action {
 		eaForm.reset(mapping,request);
 		
 		eaForm.setActivityId(activityId);
-		ServletContext ampContext = getServlet().getServletContext();
+
 		HashMap activityMap = (HashMap) ampContext.getAttribute("editActivityList");
 		if (activityMap != null && activityMap.containsValue(activityId)) {
 		    // The activity is already opened for editing
-		    logger.debug("The activity is already opened by another user");
+		    //logger.debug("The activity is already opened by another user");
 		    ActionErrors errors = new ActionErrors();
 		    errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
 				"error.aim.activityAlreadyOpenedForEdit"));
@@ -125,7 +131,7 @@ public class EditActivity extends Action {
 		    rd.forward(request,response);
 		} else {
 		    // Edit the activity
-		    logger.debug("User given permission to edit the activity");
+		    //logger.debug("User given permission to edit the activity");
 		    String sessId = session.getId();
 		    ArrayList sessList = (ArrayList) ampContext.getAttribute("sessionList");
 		    if (sessList == null) {
@@ -136,16 +142,18 @@ public class EditActivity extends Action {
 		    }
 		    sessList.add(sessId);
 		    Collections.sort(sessList);
-		    activityMap.put(sessId,activityId);
-		    ampContext.setAttribute("sessionList",sessList);
-            ampContext.setAttribute("editActivityList",activityMap);		    
+		    synchronized (ampContext) {
+			    activityMap.put(sessId,activityId);
+			    ampContext.setAttribute("sessionList",sessList);
+	            ampContext.setAttribute("editActivityList",activityMap);		    
+			}
 		}
 		
 		eaForm.setEditAct(true);
 		
 		// Clearing comment properties
 		String action = request.getParameter("action");
-		logger.debug("action [inside EditActivity] : " + action);
+		//logger.debug("action [inside EditActivity] : " + action);
 		if (action != null && action.trim().length() != 0) {
 			if ("edit".equals(action)) {
 				eaForm.getCommentsCol().clear();
@@ -158,7 +166,7 @@ public class EditActivity extends Action {
 		eaForm.setReset(false);
 		eaForm.setPerspectives(DbUtil.getAmpPerspective());
 		
-		logger.debug("Activity Id = " + activityId);
+		//logger.debug("Activity Id = " + activityId);
 		if (activityId != null) {
 		    AmpActivity activity = ActivityUtil.getAmpActivity(activityId);
 
@@ -392,7 +400,7 @@ public class EditActivity extends Action {
 					if (fundDetails != null
 							&& fundDetails.size() > 0) {
 						Iterator fundDetItr = fundDetails.iterator();
-						Collection fundDetail = new ArrayList();
+						List fundDetail = new ArrayList();
 						
 						while (fundDetItr.hasNext()) {
 							AmpFundingDetail fundDet = (AmpFundingDetail) fundDetItr.next();
@@ -446,7 +454,8 @@ public class EditActivity extends Action {
 									fundDet.getTransactionType().intValue());
 							fundDetail.add(fundingDetail);
 						}
-						
+						if (fundDetail != null)
+							Collections.sort(fundDetail,FundingValidator.dateComp);
 						fund.setFundingDetails(fundDetail);
 						funding.add(fund);
 					}
@@ -508,19 +517,42 @@ public class EditActivity extends Action {
 					regFunds.set(index,regFund);
 				}
 				
+				// Sort the funding details based on Transaction date.
+				Iterator itr1 = regFunds.iterator();
+				int index = 0;
+				while (itr1.hasNext()) {
+					RegionalFunding regFund = (RegionalFunding) itr1.next();
+					List list = null;
+					if (regFund.getCommitments() != null) {
+						list = new ArrayList(regFund.getCommitments());
+						Collections.sort(list,FundingValidator.dateComp);
+					}
+					regFund.setCommitments(list);
+					list = null;
+					if (regFund.getDisbursements() != null) {
+						list = new ArrayList(regFund.getDisbursements());
+						Collections.sort(list,FundingValidator.dateComp);
+					}
+					regFund.setDisbursements(list);
+					list = null;
+					if (regFund.getExpenditures() != null) {
+						list = new ArrayList(regFund.getExpenditures());
+						Collections.sort(list,FundingValidator.dateComp);
+					}
+					regFund.setExpenditures(list);
+					regFunds.set(index++,regFund);
+				}
+				
 				eaForm.setRegionalFundings(regFunds);
 				
 				eaForm.setSelectedComponents(null);
 				
 				Collection componets = activity.getComponents();
-				logger.debug("Number of components = " + componets.size());
 				if (componets != null && componets.size() > 0) {
-					Collection comp = new ArrayList();
+					ArrayList comp = new ArrayList();
 					Iterator compItr = componets.iterator();
-					logger.debug("crossed if....if satisfied");
 					while (compItr.hasNext()) {
 						AmpComponent temp = (AmpComponent) compItr.next();
-						logger.debug("Inside the while");
 						Components tempComp = new Components();
 						tempComp.setTitle(temp.getTitle());
 						tempComp.setComponentId(temp.getAmpComponentId());
@@ -529,12 +561,9 @@ public class EditActivity extends Action {
 						tempComp.setDisbursements(new ArrayList());
 						tempComp.setExpenditures(new ArrayList());
 
-				
-						logger.debug("com. fund size = " + temp.getComponentFundings().size());
 						Iterator cItr = temp.getComponentFundings().iterator();
 						while( cItr.hasNext() ) 
 						{
-							logger.debug("Inside the while 2");
 							AmpComponentFunding ampCompFund = (AmpComponentFunding) cItr.next();
 							FundingDetail fd = new FundingDetail();
 							fd.setAdjustmentType(ampCompFund.getAdjustmentType().intValue());
@@ -555,17 +584,13 @@ public class EditActivity extends Action {
 							fd.setTransactionDate(DateConversion.ConvertDateToString(ampCompFund.getTransactionDate()));
 							fd.setTransactionType(ampCompFund.getTransactionType().intValue());
 							
-							if(fd.getTransactionType() == 0)
-							{
+							if(fd.getTransactionType() == 0) {
 								tempComp.getCommitments().add(fd);
 							}
-							else if(fd.getTransactionType() == 1)
-							{
-								logger.debug("In disb");
+							else if(fd.getTransactionType() == 1) {
 								tempComp.getDisbursements().add(fd);
 							}
-							else if(fd.getTransactionType() == 2)
-							{
+							else if(fd.getTransactionType() == 2) {
 								tempComp.getExpenditures().add(fd);
 							}
 						}
@@ -592,7 +617,33 @@ public class EditActivity extends Action {
 						}
 						comp.add(tempComp);
 					}
-					logger.debug("Selected Components size = " + comp.size());
+					
+					// Sort the funding details based on Transaction date.
+					itr1 = comp.iterator();
+					index = 0;
+					while (itr1.hasNext()) {
+						Components components = (Components) itr1.next();
+						List list = null;
+						if (components.getCommitments() != null) {
+							list = new ArrayList(components.getCommitments());
+							Collections.sort(list,FundingValidator.dateComp);							
+						}
+						components.setCommitments(list);
+						list = null;
+						if (components.getDisbursements() != null) {
+							list = new ArrayList(components.getDisbursements());
+							Collections.sort(list,FundingValidator.dateComp);							
+						}
+						components.setDisbursements(list);
+						list = null;
+						if (components.getExpenditures() != null) {
+							list = new ArrayList(components.getExpenditures());
+							Collections.sort(list,FundingValidator.dateComp);							
+						}
+						components.setExpenditures(list);	
+						comp.set(index++,components);
+					}
+					
 					eaForm.setSelectedComponents(comp);
 				} 
 
@@ -652,14 +703,6 @@ public class EditActivity extends Action {
 						}
 					}
 				}
-				
-				// loading the Issues,Measures and Actors
-				if(activity.getIssues() == null) {
-					logger.debug("Issues NULL");
-				} else {
-					logger.debug("Number of issues = " + activity.getIssues().size());
-				}
-				
 				
 				if (activity.getIssues() != null &&
 						activity.getIssues().size() > 0) {

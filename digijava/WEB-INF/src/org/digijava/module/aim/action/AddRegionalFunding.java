@@ -5,9 +5,11 @@
 package org.digijava.module.aim.action;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.StringTokenizer;
 
@@ -25,6 +27,7 @@ import org.digijava.module.aim.dbentity.AmpPerspective;
 import org.digijava.module.aim.form.EditActivityForm;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.FundingDetail;
+import org.digijava.module.aim.helper.FundingValidator;
 import org.digijava.module.aim.helper.Location;
 import org.digijava.module.aim.helper.RegionalFunding;
 import org.digijava.module.aim.helper.TeamMember;
@@ -278,6 +281,26 @@ public class AddRegionalFunding extends Action {
 			if (eaForm.getRegionalFundings().contains(regFund)) {
 				eaForm.getRegionalFundings().remove(regFund);
 			}
+			
+			List list = null;
+			if (regFund.getCommitments() != null) {
+				list = new ArrayList(regFund.getCommitments());
+				Collections.sort(list,FundingValidator.dateComp);
+			}
+			regFund.setCommitments(list);
+			list = null;
+			if (regFund.getDisbursements() != null) {
+				list = new ArrayList(regFund.getDisbursements());
+				Collections.sort(list,FundingValidator.dateComp);
+			}
+			regFund.setDisbursements(list);
+			list = null;
+			if (regFund.getExpenditures() != null) {
+				list = new ArrayList(regFund.getExpenditures());
+				Collections.sort(list,FundingValidator.dateComp);
+			}
+			regFund.setExpenditures(list);
+			
 			eaForm.getRegionalFundings().add(regFund);
 			
 			return mapping.findForward("updated");

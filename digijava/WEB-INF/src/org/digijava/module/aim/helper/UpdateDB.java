@@ -8,6 +8,10 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+
+import net.sf.hibernate.Session;
+
+import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.dbentity.AmpSector;
 
@@ -29,18 +33,21 @@ public class UpdateDB {
 		logger.debug("In Update Report Cache");
 
 		Connection con = null;
+		Session session = null;
 		try {
 			
-			setConnectionProps();
+			//setConnectionProps();
 			
 			//logger.debug("JDBC Driver :" + driver);
 			//logger.debug("URL :" + url);
 			//logger.debug("Username :" + username);
 			//logger.debug("Password :" + passwd);
 			
-			Class.forName(driver).newInstance();
+			//Class.forName(driver).newInstance();
 
-			con = DriverManager.getConnection(url, username, passwd);
+			//con = DriverManager.getConnection(url, username, passwd);
+			session = PersistenceManager.getSession();
+			con = session.connection();
 
 			Statement stmt = con.createStatement();
 			ResultSet rs = null;
@@ -355,24 +362,27 @@ public class UpdateDB {
 
 			logger.debug("All the statements got executed");
 			con.close();
-		} catch (ClassNotFoundException e) {
-			logger.error("ClassNotFoundException from updateReportCache() " + e.getMessage());
-			e.printStackTrace(System.out);
 		} catch (SQLException e) {
 			logger.error("SQLException from updateReportCache() " + e.getMessage());
 			e.printStackTrace(System.out);
 		} catch (Exception e) {
 			e.printStackTrace(System.out);			
 		} finally {
-			try {
-				if (con != null) {
+			if (con != null) {
+				try {
 					con.close();
+				} catch (Exception ex) {
+					logger.error("Cannot close the connection");
 				}
-			} catch (Exception ex) {
-				logger.error("Cannot close the connection");
+			}
+			if (session != null) {
+				try {
+					PersistenceManager.releaseSession(session);
+				} catch (Exception rsf) {
+					logger.error("Release session failed");
+				}
 			}
 		}
-
 		logger.debug("updateReportCache() returning");
 
 		return 1;

@@ -14,15 +14,12 @@ import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
-import org.digijava.kernel.entity.UserLangPreferences;
-import org.digijava.kernel.request.Site;
 import org.digijava.kernel.request.SiteDomain;
 import org.digijava.kernel.security.HttpLoginManager;
 import org.digijava.kernel.user.User;
 import org.digijava.kernel.util.DgUtil;
 import org.digijava.kernel.util.RequestUtils;
 import org.digijava.kernel.util.SiteUtils;
-import org.digijava.kernel.util.UserUtils;
 import org.digijava.module.aim.dbentity.AmpApplicationSettings;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.dbentity.AmpTeamMemberRoles;
@@ -35,7 +32,7 @@ import org.digijava.module.aim.util.TeamUtil;
 public class Login extends Action {
 
 	private static Logger logger = Logger.getLogger(Login.class);
-
+	
 	public ActionForward execute(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response)
 			throws java.lang.Exception {
@@ -46,7 +43,7 @@ public class Login extends Action {
 		HttpSession session = request.getSession();
 
 		String sessionId = null;
-
+		
 		try {
 
 			if (lForm.getUserId() != null && lForm.getPassword() != null) {
@@ -106,7 +103,13 @@ public class Login extends Action {
 				User usr = DbUtil.getUser(lForm.getUserId());
 				boolean siteAdmin = DgUtil.isSiteAdministrator(request);
 
+				
+				/*
+				 * if the member is part of multiple teams the below collection contains
+				 * more than one element. Otherwise it will have only one element.
+				 */
 				Collection members = TeamUtil.getTeamMembers(lForm.getUserId());
+				
 				if (members == null || members.size() == 0) {
 					if (siteAdmin == true) {
 						session.setAttribute("ampAdmin", new String("yes"));

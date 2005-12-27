@@ -60,7 +60,6 @@ import org.digijava.module.aim.helper.DecimalToText;
 import org.digijava.module.aim.helper.Funding;
 import org.digijava.module.aim.helper.FundingDetail;
 import org.digijava.module.aim.helper.FundingOrganization;
-import org.digijava.module.aim.helper.FundingValidator;
 import org.digijava.module.aim.helper.Issues;
 import org.digijava.module.aim.helper.Location;
 import org.digijava.module.aim.helper.Measures;
@@ -85,13 +84,16 @@ import org.digijava.module.aim.util.ProgramUtil;
 public class SaveActivity extends Action {
 
 	private static Logger logger = Logger.getLogger(SaveActivity.class);
+	
+	private ServletContext ampContext = null;
 
 	public ActionForward execute(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response)
 			throws Exception {
 
 		HttpSession session = request.getSession();
-
+		ampContext = getServlet().getServletContext();
+		
 		// if user has not logged in, forward him to the home page
 		if (session.getAttribute("currentMember") == null) {
 			return mapping.findForward("index");
@@ -1052,15 +1054,16 @@ public class SaveActivity extends Action {
 					relatedLinks,tm.getMemberId());
 			// remove the activity details from the edit activity list
 			if (toDelete == null || (!toDelete.trim().equalsIgnoreCase("true"))) {
-				ServletContext ampContext = getServlet().getServletContext();
-				String sessId = session.getId(); 
-				HashMap activityMap = (HashMap) ampContext.getAttribute("editActivityList");
-				activityMap.remove(sessId);
-				ArrayList sessList = (ArrayList) ampContext.getAttribute("sessionList");
-			    sessList.remove(sessId);
-			    Collections.sort(sessList);
-	            ampContext.setAttribute("editActivityList",activityMap);		    
-			    ampContext.setAttribute("sessionList",sessList);				
+				String sessId = session.getId();
+				HashMap activityMap = (HashMap) ampContext.getAttribute("editActivityList");				
+				synchronized (ampContext) {
+					activityMap.remove(sessId);
+					ArrayList sessList = (ArrayList) ampContext.getAttribute("sessionList");
+				    sessList.remove(sessId);
+				    Collections.sort(sessList);
+		            ampContext.setAttribute("editActivityList",activityMap);		    
+				    ampContext.setAttribute("sessionList",sessList);				
+				}
 			}
 		} else {
 			AmpTeamMember teamMember = DbUtil.getAmpTeamMember(tm.getMemberId()) ;

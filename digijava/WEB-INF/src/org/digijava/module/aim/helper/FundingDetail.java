@@ -1,9 +1,6 @@
 package org.digijava.module.aim.helper;
 
 import java.io.Serializable;
-
-
-
 /**
  * @author jose
  *  

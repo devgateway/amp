@@ -7,8 +7,10 @@ package org.digijava.module.aim.util;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Set;
 
 import net.sf.hibernate.Hibernate;
@@ -44,6 +46,7 @@ import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.DateConversion;
 import org.digijava.module.aim.helper.DecimalToText;
 import org.digijava.module.aim.helper.FundingDetail;
+import org.digijava.module.aim.helper.FundingValidator;
 import org.digijava.module.aim.helper.Issues;
 import org.digijava.module.aim.helper.Location;
 import org.digijava.module.aim.helper.Measures;
@@ -845,6 +848,24 @@ public class ActivityUtil {
 	                    pp.setTitle(ampPhyPerf.getTitle());
 	                    components.getPhyProgress().add(pp);
 	                }
+	    			List list = null;
+	    			if (components.getCommitments() != null) {
+	    				list = new ArrayList(components.getCommitments());
+	    				Collections.sort(list,FundingValidator.dateComp);
+	    			}
+	    			components.setCommitments(list);
+	    			list = null;
+	    			if (components.getDisbursements() != null) {
+	    				list = new ArrayList(components.getDisbursements());
+	    				Collections.sort(list,FundingValidator.dateComp);
+	    			}
+	    			components.setDisbursements(list);
+	    			list = null;
+	    			if (components.getExpenditures() != null) {
+	    				list = new ArrayList(components.getExpenditures());
+	    				Collections.sort(list,FundingValidator.dateComp);
+	    			}
+	    			components.setExpenditures(list);	                
 	                col.add(components);
 	            }
 	        }

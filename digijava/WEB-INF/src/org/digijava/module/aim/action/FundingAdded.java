@@ -5,6 +5,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
 import java.util.Iterator;
+import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -123,7 +124,10 @@ public class FundingAdded extends Action {
 				fundDetails.add(fundDet);
 			}
 		}
-		newFund.setFundingDetails(fundDetails);
+		List sortedList = new ArrayList(fundDetails);
+		Collections.sort(sortedList,FundingValidator.dateComp);
+		
+		newFund.setFundingDetails(sortedList);
 
 		ArrayList fundList = new ArrayList();
 		if (fundOrg.getFundings() != null) {

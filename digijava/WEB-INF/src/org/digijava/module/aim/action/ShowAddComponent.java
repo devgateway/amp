@@ -5,9 +5,11 @@
 package org.digijava.module.aim.action;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.StringTokenizer;
 
@@ -25,6 +27,7 @@ import org.digijava.module.aim.form.EditActivityForm;
 import org.digijava.module.aim.helper.Components;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.FundingDetail;
+import org.digijava.module.aim.helper.FundingValidator;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.DbUtil;
 
@@ -332,6 +335,25 @@ public class ShowAddComponent extends Action {
 					}
 					eaForm.getSelectedComponents().remove( compFund );
 				}
+				
+				List list = null;
+				if (compFund.getCommitments() != null) {
+					list = new ArrayList(compFund.getCommitments());
+					Collections.sort(list,FundingValidator.dateComp);
+				}
+				compFund.setCommitments(list);
+				list = null;
+				if (compFund.getDisbursements() != null) {
+					list = new ArrayList(compFund.getDisbursements());
+					Collections.sort(list,FundingValidator.dateComp);
+				}
+				compFund.setDisbursements(list);
+				list = null;
+				if (compFund.getExpenditures() != null) {
+					list = new ArrayList(compFund.getExpenditures());
+					Collections.sort(list,FundingValidator.dateComp);
+				}
+				compFund.setExpenditures(list);				
 				eaForm.getSelectedComponents().add( compFund );
 			
 				return mapping.findForward("updated");

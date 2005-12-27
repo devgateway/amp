@@ -95,7 +95,7 @@
 			<tr><td colspan=3 class=subtitle-blue align=center>
 					<bean:write name="aimAdvancedReportForm" property="reportName" />
 			</td></tr>
-			<logic:notEmpty name="aimAdvancedReportForm" property="reportDescription" />
+			<logic:notEmpty name="aimAdvancedReportForm" property="reportDescription">
 			<tr><td colspan=3 align=center>
 					<bean:write name="aimAdvancedReportForm" property="reportDescription" />
 			</td></tr>

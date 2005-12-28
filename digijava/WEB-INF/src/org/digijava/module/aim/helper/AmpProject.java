@@ -12,8 +12,12 @@ public class AmpProject
 	private String currency;
 	private String totalCommited;
 	
+	// added by Akash
+	private String approvalStatus;
+	
 	public AmpProject() {
 		totalCommited = "0.00";
+		approvalStatus = "";
 	}
 
 	public String getName() 
@@ -86,4 +90,17 @@ public class AmpProject
 		this.totalCommited = totalCommited;
 	}
 
+	/**
+	 * @return Returns the approvalStatus.
+	 */
+	public String getApprovalStatus() {
+		return approvalStatus;
+	}
+	/**
+	 * @param approvalStatus The approvalStatus to set.
+	 */
+	public void setApprovalStatus(String approvalStatus) {
+		this.approvalStatus = approvalStatus;
+	}
+	
 }

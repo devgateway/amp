@@ -1423,21 +1423,22 @@ public class DbUtil {
 		String queryString;
 		try {
 			session = PersistenceManager.getSession();
-			
+			/*
 			if (new Long(0).equals(ampTeamId)) {  // for management workspace
 				queryString = "select act.ampActivityId from " + AmpActivity.class.getName()
 				  + " act where (act.approvalStatus=:status1 or act.approvalStatus=:status2)";
 				q = session.createQuery(queryString);
 			}
 			else {								// for regular working team
-				queryString = "select act.ampActivityId from " + AmpActivity.class.getName()
+			*/
+				queryString = "select act from " + AmpActivity.class.getName()
 				  			  + " act where (act.team=:ampTeamId)"
 							  + " and ( act.activityCreator=:ampTeamMemId "
 							  + " or act.approvalStatus=:status1 or act.approvalStatus=:status2)";
 			    q = session.createQuery(queryString);
 				q.setParameter("ampTeamId", ampTeamId, Hibernate.LONG);
 				q.setParameter("ampTeamMemId", ampTeamMemId, Hibernate.LONG);
-			}
+		/*	} */
 			q.setParameter("status1", "approved", Hibernate.STRING);
 			q.setParameter("status2", "edited", Hibernate.STRING);
 			actList = q.list();		
@@ -1478,6 +1479,8 @@ public class DbUtil {
 		double toExchangeRate = 1.0;
 		ArrayList donor = new ArrayList();
 		ArrayList project = new ArrayList();
+		ArrayList projects = new ArrayList();
+		Collection ls = new ArrayList();
 		Iterator iter = null;
 		Iterator iterSector = null;
 		String queryString = null;
@@ -1563,10 +1566,8 @@ public class DbUtil {
 					  			  + " act where (act.approvalStatus=:status) and (act.team.ampTeamId in(" + inClause + ") )";
 					q = session.createQuery(queryString);
 					q.setParameter("status", "approved", Hibernate.STRING);
-					Collection ls = new ArrayList();
 					ls = q.list();
 					actItr = ls.iterator();
-					
 					while (actItr.hasNext()) {
 						Long actId = (Long) actItr.next();
 						if (inClause2 == null)
@@ -1576,13 +1577,15 @@ public class DbUtil {
 					}
 				}
 				else {
-					actItr = DbUtil.getApprovedOrCreatorActivities(ampTeamId,ampTeamMemId).iterator();
+					ls = DbUtil.getApprovedOrCreatorActivities(ampTeamId,ampTeamMemId);
+					actItr = ls.iterator();
 					while(actItr.hasNext()) {
-						Long actId = (Long) actItr.next();
+						//Long actId = (Long) actItr.next();
+						AmpActivity actId = (AmpActivity) actItr.next();
 						if (inClause2 == null)
-							inClause2 = "'" + actId + "'";
+							inClause2 = "'" + actId.getAmpActivityId() + "'";
 						else
-							inClause2 = inClause2 + ",'" + actId + "'";
+							inClause2 = inClause2 + ",'" + actId.getAmpActivityId() + "'";
 					}
 					//logger.debug("inClause2 : " + inClause2);
 				}
@@ -1786,6 +1789,44 @@ public class DbUtil {
 						}					
 					}
 				}
+				if (ampTeam.getAccessType().equals("Team")) {
+					Iterator itr1 = null;
+					Iterator itr2 = null;
+					if (teamLeadFlag)
+						itr1 = ls.iterator();
+					else
+						itr1 = temp.iterator();
+					itr2 = project.iterator();
+					
+					logger.debug("project.size(): " + project.size());
+					while (itr2.hasNext()) {
+						AmpProject aproj = (AmpProject) itr2.next();
+						aproj.setApprovalStatus("");
+						projects.add(aproj);
+					}
+					logger.debug("projects.size(): " + projects.size());
+					
+					while (itr1.hasNext()) {
+						AmpActivity act = (AmpActivity) itr1.next();
+						itr2 = projects.iterator();
+						while (itr2.hasNext()) {
+							AmpProject aproj = (AmpProject) itr2.next();
+							if (act.getAmpActivityId().equals(aproj.getAmpActivityId())) {
+								if ("started".equals(act.getApprovalStatus())) 
+									aproj.setApprovalStatus("started");
+								else if ("created".equals(act.getApprovalStatus()))
+										aproj.setApprovalStatus("created");
+								else if ("edited".equals(act.getApprovalStatus()))
+									aproj.setApprovalStatus("edited");
+								else
+									aproj.setApprovalStatus("approved");
+								projects.set(projects.indexOf(aproj), aproj);
+							}
+						}
+					}
+				}
+				else
+					projects = project;
 			}
 			catch(Exception ex) 		
 			{
@@ -1803,7 +1844,7 @@ public class DbUtil {
 					logger.error("releaseSession() failed ");
 				}
 			}
-			return project ;
+			return projects ;
 	}
 
 	public static AmpNotes getAmpNotesDetails(Long id) {

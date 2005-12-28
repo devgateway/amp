@@ -286,6 +286,17 @@ function showtip()
 									<digi:link href="/viewChannelOverview.do" name="urlChannelOverview" title="<%=translation%>" >
 										<bean:write name="ampProjects" property="name"/>
 									</digi:link>
+									
+									<c:if test='${ampProjects.approvalStatus == "started"}'>
+										<font size="2" color="#FF0000">*</font>
+									</c:if>
+									<c:if test='${ampProjects.approvalStatus == "created"}'>
+										<font size="2" color="#008000">*</font>
+									</c:if>
+									<c:if test='${ampProjects.approvalStatus == "edited"}'>
+										<font size="2" color="#008000">**</font>
+									</c:if>
+									
 								</TD>
 								<TD>
 									<bean:write name="ampProjects"  property="ampId"/>

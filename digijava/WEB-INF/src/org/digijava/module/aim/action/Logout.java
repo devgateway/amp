@@ -38,6 +38,10 @@ public class Logout extends TilesAction {
 		if (session.getAttribute("teamLeadFlag") != null) {
 			session.removeAttribute("teamLeadFlag");
 		}
+		
+		if (session.getAttribute("ampAdmin") != null) {
+			session.removeAttribute("ampAdmin");
+		}
 
 		HttpLoginManager.logout(request, response);
 		

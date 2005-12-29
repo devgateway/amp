@@ -566,12 +566,18 @@ public class ViewCommitmentbyModality extends Action
 		//Begin code to compute grand total.
 		double totComm=0.0;
 		double unDisbAmount=0.0;
+		/*totProjFund[m][n] -> totProjFund[yearRange+1][4]
+		
+		m = yearRange+1 - > to store actual comm, actual disb, actual exp and planned disb for each year of year range 
+		+ their totals for all the years in the year range
+		
+		n = 4 -> to store actual comm[m][0], actual disb[m][1], actual exp[m][2] and planned disb[m][3]*/
 		double[][] totProjFund=new double[yearRange+1][4];
-		iter = reports.iterator() ;
-	//	logger.debug("Grand Total :" + grandTotal);
+		iter = reports.iterator() ;	//iterate report data collection
 		while ( iter.hasNext() )
 		{
 			Report report=(Report) iter.next();
+			//to get sum of total actual commitment till date of all the activities.
 			totComm=totComm + Double.parseDouble(DecimalToText.removeCommas(report.getAcCommitment()));
 			Iterator iterFund=report.getAmpFund().iterator();
 			for(int i=0;i<=yearRange ;i++ )
@@ -585,6 +591,7 @@ public class ViewCommitmentbyModality extends Action
 					unDisbAmount=unDisbAmount + Double.parseDouble(DecimalToText.removeCommas(ampFund.getUnDisbAmount()));
 			}
 		}
+		//populate formBean with grand totals.
 		formBean.setTotComm(mf.format(totComm));
 		formBean.setTotFund(new ArrayList());
 		for(int i=0;i<=yearRange ;i++ )

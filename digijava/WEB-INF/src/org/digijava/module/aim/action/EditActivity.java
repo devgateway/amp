@@ -81,7 +81,7 @@ public class EditActivity extends Action {
 
 	private ServletContext ampContext = null;
 	
-	//private static Logger logger = Logger.getLogger(EditActivity.class);
+	private static Logger logger = Logger.getLogger(EditActivity.class);
 
 	public ActionForward execute(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response)
@@ -197,7 +197,7 @@ public class EditActivity extends Action {
 				eaForm.setContractors(activity.getContractors().trim());
 				
 				Collection col = activity.getClosingDates();				
-				Collection dates = new ArrayList();
+				List dates = new ArrayList();
 				if (col != null && col.size() > 0) {
 					Iterator itr = col.iterator();
 					while (itr.hasNext()) {
@@ -210,6 +210,7 @@ public class EditActivity extends Action {
 					}
 				}
 
+				Collections.sort(dates,DateConversion.dtComp);
 				eaForm.setActivityCloseDates(dates);
 
 				// loading organizations and thier project ids.

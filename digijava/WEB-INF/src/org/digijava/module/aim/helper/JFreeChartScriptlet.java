@@ -1,18 +1,18 @@
 package org.digijava.module.aim.helper;
 
 import java.util.Collection;
+import java.util.Iterator;
 import java.util.Vector;
 
-import net.sf.jasperreports.engine.*;
+import net.sf.jasperreports.engine.JRDefaultScriptlet;
+import net.sf.jasperreports.engine.JRScriptletException;
+
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.JFreeChart;
-import org.jfree.chart.plot.*;
-import org.jfree.data.general.DefaultPieDataset;
+import org.jfree.chart.plot.PlotOrientation;
+import org.jfree.data.category.CategoryDataset;
 import org.jfree.data.category.DefaultCategoryDataset;
-import org.jfree.data.category.*;
-import java.util.Iterator;
-
-import org.jfree.util.Rotation;
+import org.jfree.data.general.DefaultPieDataset;
 
 public class JFreeChartScriptlet extends JRDefaultScriptlet
 {

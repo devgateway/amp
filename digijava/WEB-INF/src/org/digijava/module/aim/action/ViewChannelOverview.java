@@ -77,7 +77,6 @@ public class ViewChannelOverview extends TilesAction {
 			
 			String perspective = null;
 			String currCode = null;
-			Long fiscalCalId = null;
 			
 			if (teamMember.getAppSettings() != null) {
 				ApplicationSettings appSettings = teamMember.getAppSettings();
@@ -91,11 +90,6 @@ public class ViewChannelOverview extends TilesAction {
 				} else {
 					currCode = Constants.DEFAULT_CURRENCY;
 				}
-				if (appSettings.getFisCalId() != null) {
-					fiscalCalId = appSettings.getFisCalId();
-				} else {
-					fiscalCalId = Constants.GREGORIAN;
-				}
 				formBean.setPerspective(perspective);
 				formBean.setWrite(teamMember.getWrite());
 				formBean.setDelete(teamMember.getDelete());
@@ -107,10 +101,10 @@ public class ViewChannelOverview extends TilesAction {
 				}
 				
 				if (activity.getStatus().equalsIgnoreCase("Planned")) {
-					logger.info("Planned");
+					logger.debug("Planned");
 					formBean.setGrandTotal(mf.format(DbUtil.getAmpFundingAmount(activity.getActivityId(),new Integer(0),new Integer(0),perspective,currCode)));					
 				} else {
-					logger.info("Not planned");
+					logger.debug("Not planned");
 					formBean.setGrandTotal(mf.format(DbUtil.getAmpFundingAmount(activity.getActivityId(),new Integer(0),new Integer(1),perspective,currCode)));					
 				}				
 			}

@@ -3,6 +3,8 @@ package org.digijava.module.aim.helper ;
 import java.util.Date ;
 import java.text.SimpleDateFormat ;
 import org.apache.log4j.Logger ;
+
+import java.util.Comparator;
 import java.util.GregorianCalendar ;
 import java.util.Calendar ;
 
@@ -11,6 +13,24 @@ public class DateConversion
 {
 	private static Logger logger = Logger.getLogger(DateConversion.class) ;
 
+	public static Comparator dtComp = new Comparator() {
+		public int compare(Object e1,Object e2) {
+			if (e1 instanceof String &&
+					e2 instanceof String) {
+				String tdt1 = (String) e1;
+				String tdt2 = (String) e2;
+				if (tdt1 == null || tdt1.trim().length() < 1) {
+					return -1;
+				} else if (tdt2 == null || tdt2.trim().length() < 1) {
+					return 1;
+				}
+				Date dt1 = DateConversion.getDate(tdt1);
+				Date dt2 = DateConversion.getDate(tdt2);
+				return dt2.compareTo(dt1);
+			} else throw new ClassCastException();
+		}
+	};	
+	
 	public static String ConvertDateToString(Date mysqlDate )
 	{
 		String textDate ="";

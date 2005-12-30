@@ -9,8 +9,6 @@ public class CurrencyWorker {
 
 	public static DecimalFormat mf = new DecimalFormat("###,###,###,###,###");
 
-	private static double temp = 0.0;
-
 	private static double resultDbl = 0.0;
 
 	private static String resultStr = "";
@@ -90,7 +88,7 @@ public class CurrencyWorker {
 	public static boolean validateAmount(String s) {
 		boolean valid = true;
 		try {
-			double temp = Double.parseDouble(s);
+			Double.parseDouble(s);
 		} catch (NumberFormatException e) {
 			logger.error("Invalid amount " + s);
 			valid = false;

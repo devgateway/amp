@@ -24,7 +24,6 @@
 	<classpathentry exported="true" kind="lib" path="WEB-INF/lib/jai_codec.jar"/>
 	<classpathentry exported="true" kind="lib" path="WEB-INF/lib/jai_core.jar"/>
 	<classpathentry exported="true" kind="lib" path="WEB-INF/lib/jakarta-oro.jar"/>
-	<classpathentry exported="true" kind="lib" path="WEB-INF/lib/jasperreports-0.6.1.jar"/>
 	<classpathentry exported="true" kind="lib" path="WEB-INF/lib/jboss.jar"/>
 	<classpathentry exported="true" kind="lib" path="WEB-INF/lib/jboss-cache.jar"/>
 	<classpathentry exported="true" kind="lib" path="WEB-INF/lib/jboss-common-jdbc-wrapper.jar"/>
@@ -56,5 +55,8 @@
 	<classpathentry exported="true" kind="lib" path="WEB-INF/system-lib/jboss-system.jar"/>
 	<classpathentry exported="true" kind="lib" path="WEB-INF/system-lib/log4j.jar"/>
 	<classpathentry exported="true" kind="lib" path="WEB-INF/system-lib/servlet.jar"/>
+	<classpathentry kind="lib" path="WEB-INF/lib/jasperreports-0.6.8.jar"/>
+	<classpathentry kind="lib" path="WEB-INF/lib/jfreechart-1.0.0-rc1.jar"/>
+	<classpathentry kind="lib" path="WEB-INF/lib/jcommon-1.0.0-rc1.jar"/>
 	<classpathentry kind="output" path="WEB-INF/classes"/>
 </classpath>

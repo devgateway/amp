@@ -36,7 +36,7 @@ public class AddAmpActivity extends Action {
 
 		HttpSession session = request.getSession();
 		TeamMember teamMember= new TeamMember();
-		teamMember=(TeamMember)session.getAttribute("currentMember");
+		teamMember =(TeamMember) session.getAttribute("currentMember");
 
 		// if user is not logged in, forward him to the home page
 		if (session.getAttribute("currentMember") == null)

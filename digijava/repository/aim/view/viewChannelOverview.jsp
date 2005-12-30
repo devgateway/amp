@@ -549,13 +549,33 @@ type="org.digijava.module.aim.form.ChannelOverviewForm" method="post">
 																	<a href="javascript:commentWin('<c:out value="${activity.activityId}" />')">
 																		<digi:trn key="aim:comment">Comment</digi:trn></a>
 																</TD></TR>
+																<TR><TD bgcolor="#ffffff">
+																	<TABLE width="100%" cellspacing=0 cellpadding=0 valign=top align=left>
+																		<TR><TD width="170" valign=top>
+																			<digi:trn key="aim:proposedCompletionDates">Proposed Completion Dates
+																			</digi:trn> :
+																		</TD>
+																		<TD>
+																			<TABLE cellPadding=0 cellSpacing=0>
+																			<c:forEach var="closeDate" items="${activity.revCompDates}">
+																			<TR>
+																				<TD>
+																					<c:out value="${closeDate}"/>
+																				</TD>
+																			</TR>
+																			</c:forEach>
+																			</TABLE>																		
+																		</TD></TR>																		
+																	</TABLE>
+																</TD></TR>																
 															</TABLE>
 														</TD>
 													</TR>
 
 													<TR>
 														<TD>
-															<TABLE width="100%" cellPadding=2 cellSpacing=1 vAlign="top" align="left" bgcolor="#aaaaaa">
+															<TABLE width="100%" cellPadding=2 cellSpacing=1 vAlign="top" align="left" 
+															bgcolor="#aaaaaa">
 																<TR><TD bgcolor="#eeeeee" height="18">&nbsp;
 																	<IMG alt=Link height=10 src="../ampTemplate/images/arrow-014E86.gif" width=15>
 																	<b><digi:trn key="aim:typeOfAssistance">

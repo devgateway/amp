@@ -13,7 +13,11 @@
 
 <% int indexC = 0; 
  	int indexD = 0; 
-	int indexE = 0; %>
+	int indexE = 0; 
+
+ 	EditActivityForm eaForm = (EditActivityForm) session.getAttribute("siteampdefaultaimEditActivityForm");
+  	String defPers = (String) request.getAttribute("defPerspective"); 
+  	String defCurr = (String) request.getAttribute("defCurrency"); %>
 
 
 <digi:instance property="aimEditActivityForm" />
@@ -67,7 +71,9 @@
 							<logic:notEmpty name="aimEditActivityForm" property="selectedLocs">
 							<tr bgcolor="#f4f4f2">
 								<td colspan="2" class="box-border-alt1">
-										<span class="f-names">Commitments</span>&nbsp;&nbsp;
+										<span class="f-names">Commitments - (Total Actual Allocation <%=eaForm.getTotalCommitments()%>)
+										</span>
+										
 										<a href="javascript:addCommitments()">Add</a><br><br>
 												Planned/Actual&nbsp;&nbsp;&nbsp;
 												Amount&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
@@ -138,7 +144,8 @@
 							</tr>
 							<tr bgcolor="#ffffff">
 								<td colspan="2" class="box-border">
-										<span class="f-names">Disbursement</span>&nbsp;&nbsp;
+										<span class="f-names">Disbursement - (Total actual to date <%=eaForm.getTotalDisbursements()%>)
+										</span>
 										<a href="javascript:addDisbursement()">Add</a><br><br>
 												Planned/Actual&nbsp;&nbsp;&nbsp;
 												Amount&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
@@ -209,7 +216,7 @@
 							</tr>
 							<tr>
 								<td colspan="2" class="box-border-alt1">
-											<span class="f-names">Expenditure</span>
+											<span class="f-names">Expenditure - (Total actual to date <%=eaForm.getTotalExpenditures()%>)</span>
 											<a href="javascript:addExpenditure()">Add</a>&nbsp;&nbsp;
 											<br><br>
 												Planned/Actual&nbsp;&nbsp;&nbsp;
@@ -305,10 +312,6 @@
 </table>
 </digi:form>
 
-
-<% EditActivityForm eaForm = (EditActivityForm) session.getAttribute("siteampdefaultaimEditActivityForm");
-  	String defPers = (String) request.getAttribute("defPerspective"); 
-  	String defCurr = (String) request.getAttribute("defCurrency"); %>
 
 <script language="JavaScript">
 

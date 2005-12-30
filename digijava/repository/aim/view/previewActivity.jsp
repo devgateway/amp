@@ -404,7 +404,25 @@ function disable() {
 													<td align="left">
 														<c:out value="${aimEditActivityForm.currentCompDate}"/>
 													</td>
-												</tr>																								
+												</tr>															
+												<c:if test="${!empty aimEditActivityForm.activityCloseDates}">
+												<tr>
+													<td width="32%" valign=top><digi:trn key="aim:proposedCompletionDates">
+													Proposed Completion Dates</digi:trn></td>
+													<td width="1" valign=top>:</td>
+													<td align="left" valign=top>
+														<table cellPadding=0 cellSpacing=0>
+															<c:forEach var="closeDate" items="${aimEditActivityForm.activityCloseDates}">
+															<tr>
+																<td>
+																	<c:out value="${closeDate}"/>
+																</td>
+															</tr>
+															</c:forEach>
+														</table>
+													</td>
+												</tr>
+												</c:if>												
 												<tr>
 													<td colspan="3">&nbsp;</td>
 												</tr>

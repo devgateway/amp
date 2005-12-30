@@ -54,8 +54,6 @@ import org.digijava.module.aim.helper.PhysicalProgress;
 import org.digijava.module.aim.helper.RelOrganization;
 import org.digijava.module.aim.helper.RelatedLinks;
 import org.digijava.module.cms.dbentity.CMSContentItem;
-import org.digijava.module.cms.exception.CMSException;
-import org.digijava.module.cms.util.DbUtil;
 
 /**
  * ActivityUtil is the persister class for all activity related 
@@ -569,16 +567,6 @@ public class ActivityUtil {
 				
 				activity.setObjective(ampAct.getObjective());
 				
-				/*
-				if (ampAct.getObjective().length() > 200) {
-					activity.setObjective(ampAct.getObjective().substring(0,200));
-					activity.setObjMore(true);
-				} else {
-					activity.setObjective(ampAct.getObjective());
-					activity.setObjMore(false);					
-				}
-				*/
-				
 				activity.setCurrCompDate(DateConversion.
 						ConvertDateToString(ampAct.getActualCompletionDate()));
 				activity.setOrigAppDate(DateConversion.
@@ -589,6 +577,23 @@ public class ActivityUtil {
 						ConvertDateToString(ampAct.getActualApprovalDate()));
 				activity.setRevStartDate(DateConversion.
 						ConvertDateToString(ampAct.getActualStartDate()));
+
+				Collection col = ampAct.getClosingDates();				
+				List dates = new ArrayList();
+				if (col != null && col.size() > 0) {
+					Iterator itr = col.iterator();
+					while (itr.hasNext()) {
+						AmpActivityClosingDates cDate = (AmpActivityClosingDates) itr
+								.next();
+						if (cDate.getType().intValue() == Constants.REVISED.intValue()) {
+							dates.add(DateConversion.ConvertDateToString(cDate
+									.getClosingDate()));
+						}
+					}
+				}
+				Collections.sort(dates,DateConversion.dtComp);
+				activity.setRevCompDates(dates);
+				
 
 				if (ampAct.getLevel() != null) {
 					activity.setImpLevel(ampAct.getLevel().getName());	

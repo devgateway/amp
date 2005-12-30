@@ -24,6 +24,7 @@ public class Activity implements Comparable {
 	private String origStartDate;
 	private String revStartDate;
 	private String currCompDate;
+	private Collection revCompDates;
 	private Collection assistanceType;
 	private Collection modalities;
 	private String modality;
@@ -502,5 +503,17 @@ public class Activity implements Comparable {
 	 */
 	public void setAmpId(String ampId) {
 		this.ampId = ampId;
+	}
+	/**
+	 * @return Returns the revCompDates.
+	 */
+	public Collection getRevCompDates() {
+		return revCompDates;
+	}
+	/**
+	 * @param revCompDates The revCompDates to set.
+	 */
+	public void setRevCompDates(Collection revCompDates) {
+		this.revCompDates = revCompDates;
 	}
 }

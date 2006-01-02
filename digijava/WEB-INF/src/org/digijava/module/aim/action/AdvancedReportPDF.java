@@ -58,13 +58,19 @@ public class AdvancedReportPDF extends Action
 		
 		AdvancedReportForm formBean = (AdvancedReportForm) form;
 		//formBean = (AdvancedReportForm) form;
-		logger.info("IN PDF generation of Advanced Report........" + formBean.getReportName().replaceAll(" ", "_"));
+		//logger.info("IN PDF generation of Advanced Report........" + formBean.getReportName());
 		
 		if (formBean.getHierarchyFlag()=="true" && formBean.getColumnHierarchie() != null) {
 			logger.info("PDF with HIERARCHYYYYYYYY..."+formBean.getColumnHierarchie().size());
 		} else {
 			logger.info("PDF with NOOOOOOO HIERARCHYYYYYYYY...");
 		}
+		
+		if(formBean.getOption()!=null && formBean.getOption().equals("Q")){
+			logger.info(" Option= "+formBean.getOption());
+			logger.info(" QuarterlyColumns= "+formBean.getQuarterColumns());
+		}
+		
 		Collection reportColl = new ArrayList();
 		Collection columnColl = new ArrayList();
 		Iterator iter = null, funds = null, yearIter;
@@ -151,6 +157,11 @@ public class AdvancedReportPDF extends Action
 			+ formBean.getFiscalYearRange().size() + 1;
 		}
 		
+		if(formBean.getOption()!=null && formBean.getOption().equals("Q")){
+			ind+=rsc.getMeasures().size()*4;
+			logger.info("indddddddddd: "+ind);
+		}
+		
 		//Object dataArray[][];
 		if (formBean.getColumnHierarchie() != null && formBean.getColumnHierarchie().size()>0) {
 			int i=0;
@@ -188,7 +199,7 @@ public class AdvancedReportPDF extends Action
 				}
 			}
 			logger.info("****dataArray size with H= "+(i+1)+" :"+(columnDetails.length + ind+ formBean.getColumnHierarchie().size()));
-			dataArray = new Object[i+1][columnDetails.length + ind+ formBean.getColumnHierarchie().size()];
+			dataArray = new Object[i+1+10][columnDetails.length + ind+ formBean.getColumnHierarchie().size()+10];
 		}
 		else{
 			dataArray = new Object[formBean.getAllReports().size()+ 1][columnDetails.length + ind];
@@ -589,13 +600,13 @@ public class AdvancedReportPDF extends Action
 																//logger.info("Completion Date : " + advReport.getActualCompletionDate());
 														}					
 
-														if(columnColl.contains("Level") && advReport.getLevel() != null)
+														if(columnColl.contains("Implementation Level") && advReport.getLevel() != null )
 														{
-															position = getColumnIndex("Level");
+															position = getColumnIndex("Implementation Level");
 															if(advReport.getLevel().trim().length() > 0)
 																dataArray[row][position] = advReport.getLevel().trim(); 
 																
-																//logger.info("Level : " + advReport.getLevel());
+																logger.info("Implementation Level: " + advReport.getLevel());
 														}
 														
 														if(columnColl.contains("Description") && advReport.getDescriptionPDFXLS() != null)
@@ -841,9 +852,9 @@ public class AdvancedReportPDF extends Action
 												//logger.info("Completion Date : " + advReport.getActualCompletionDate());
 										}					
 
-										if(columnColl.contains("Level") && advReport.getLevel() != null)
+										if(columnColl.contains("Implementation Level") && advReport.getLevel() != null)
 										{
-											position = getColumnIndex("Level");
+											position = getColumnIndex("Implementation Level");
 											if(advReport.getLevel().trim().length() > 0)
 												dataArray[row][position] = advReport.getLevel().trim(); 
 												
@@ -1085,13 +1096,13 @@ public class AdvancedReportPDF extends Action
 													//logger.info("Completion Date : " + advReport.getActualCompletionDate());
 											}					
 
-											if(columnColl.contains("Level") && advReport.getLevel() != null)
+											if(columnColl.contains("Implementation Level") && advReport.getLevel() != null)
 											{
-												position = getColumnIndex("Level");
+												position = getColumnIndex("Implementation Level");
 												if(advReport.getLevel().trim().length() > 0)
 													dataArray[row][position] = advReport.getLevel().trim(); 
 													
-													//logger.info("Level : " + advReport.getLevel());
+													//logger.info("Implementation Level: " + advReport.getLevel());
 											}
 											
 											if(columnColl.contains("Description") && advReport.getDescriptionPDFXLS() != null)
@@ -1149,7 +1160,7 @@ public class AdvancedReportPDF extends Action
 //													//logger.info(advReport.getRegions().toString().replace('[',' ').replace(']',' ').trim().length() + " : Region : " );
 											}
 											else
-												logger.info("Region is NULL..................");
+												//logger.info("Region is NULL..................");
 											
 											if(columnColl.contains("Contact Name") && advReport.getContacts() != null)
 											{
@@ -1213,6 +1224,7 @@ public class AdvancedReportPDF extends Action
 													if(formBean.getAcCommFlag().equals("true") && ampFund.getCommAmount() != null)
 													{
 														position = position + 1;
+														logger.info("%%%%%%%%%%%%%%%%row= "+row+" position= "+position);
 														dataArray[row][position] = ampFund.getCommAmount();
 													}
 													if(formBean.getAcDisbFlag().equals("true") && ampFund.getDisbAmount() != null)
@@ -1251,7 +1263,7 @@ public class AdvancedReportPDF extends Action
 													}
 													
 													year = year + 1;
-													
+													logger.info("#### Row ###-->"+ row);
 												}
 											} // END Of AmpFund Iteration
 										} // End of Records Iteration
@@ -1380,16 +1392,16 @@ public class AdvancedReportPDF extends Action
 				String realPathJrxml = s.getServletContext().getRealPath(
 									 "/WEB-INF/classes/org/digijava/module/aim/reports");
 				realPathJrxml = realPathJrxml + "\\" + formBean.getReportName().replaceAll(" ", "_").replaceAll("#", "")+".jrxml";
-				logger.info("Path : " + realPathJrxml);
+				logger.info("XLS jrxml Path : " + realPathJrxml);
 
 				//calling dynamic jrxml
 				AdvancedReportPdfJrxml jrxml = new AdvancedReportPdfJrxml();
 				//jrxml.createJRXML(realPathJrxml, undisbFlag ,rowData, dataArray, rsc.getColumns().size(), rsc.getMeasures().size(), formBean.getReportName().replaceAll(" ", "_").replaceAll("#", " "), "xls",false);
 				if(formBean.getColumnHierarchie()!=null && formBean.getColumnHierarchie().size()>0){
-					jrxml.createJRXML(realPathJrxml, undisbFlag ,rowData, dataArray, rsc.getColumns().size(), rsc.getMeasures().size(), formBean.getReportName().replaceAll(" ", "_").replaceAll("#", ""), "xls",formBean.getColumnHierarchie().size());
+					jrxml.createJRXML(realPathJrxml, undisbFlag ,rowData, dataArray, rsc.getColumns().size(), rsc.getMeasures().size(), formBean.getReportName().replaceAll(" ", "_"), "xls",formBean.getColumnHierarchie().size());
 				}
 				else
-					jrxml.createJRXML(realPathJrxml, undisbFlag ,rowData, dataArray, rsc.getColumns().size(), rsc.getMeasures().size(), formBean.getReportName().replaceAll(" ", "_").replaceAll("#", ""), "xls",0);				
+					jrxml.createJRXML(realPathJrxml, undisbFlag ,rowData, dataArray, rsc.getColumns().size(), rsc.getMeasures().size(), formBean.getReportName().replaceAll(" ", "_"), "xls",0);				
 				JasperCompileManager.compileReportToFile(realPathJrxml);
 				byte[] bytes = null;
 				ServletOutputStream outputStream = null;
@@ -1404,11 +1416,11 @@ public class AdvancedReportPDF extends Action
 						JasperFillManager.fillReport(jasperFile,parameters,dataSource);
 						response.setContentType("application/vnd.ms-excel");
 						String responseHeader = "inline; filename="+formBean.getReportName().replaceAll(" ", "_").replaceAll("#", "");
-						logger.info("--------------" + responseHeader);
+						logger.info("XLS --------------" + responseHeader);
 						response.setHeader("Content-Disposition", responseHeader);
 						//response.setHeader("Content-Disposition","inline; filename=commitmentByModalityXls.xls");
 
-						logger.info("--------------");
+						logger.info("XLS--------------XLS");
 					
 					JRXlsExporter exporter = new JRXlsExporter();
 					outputStream = response.getOutputStream();
@@ -1473,7 +1485,7 @@ public class AdvancedReportPDF extends Action
 						logger.info("--------------");
 					
 					//JRXlsExporter exporter = new JRXlsExporter();
-						JRCsvExporter exporter = new JRCsvExporter();
+					JRCsvExporter exporter = new JRCsvExporter();
 					outputStream = response.getOutputStream();
 					exporter.setParameter(JRExporterParameter.JASPER_PRINT, jasperPrint);
 					exporter.setParameter(JRExporterParameter.OUTPUT_STREAM, outputStream);

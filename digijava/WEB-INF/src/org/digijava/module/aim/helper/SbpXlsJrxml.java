@@ -80,7 +80,7 @@ p2.println("y='1'");
 p2.println("width='"+((240*n)+82)+"'");
 p2.println("height='18'");
 p2.println("forecolor='#000000'");
-p2.println("backcolor='#CCCCCC'");
+p2.println("backcolor='#999999'");
 p2.println("key='textField'");
 p2.println("stretchType='NoStretch'");
 p2.println("positionType='Float'");
@@ -271,13 +271,13 @@ for(int j=0;j<n;j++)
 ctextkey="c"+c;
 
 p2.println("<textField isStretchWithOverflow='false' pattern='' isBlankWhenNull='false' evaluationTime='Now' hyperlinkType='None' >					<reportElement");
-p2.println("mode='Transparent'");
+p2.println("mode='Opaque'");
 p2.println("x='"+x+"'");
 p2.println("y='70'");
 p2.println("width='180'");
 p2.println("height='15'");
 p2.println("forecolor='#000000'");
-p2.println("backcolor='#FFFFFF'");
+p2.println("backcolor='#CCCCCC'");
 p2.println("key='textField-11'");
 p2.println("stretchType='NoStretch'");
 p2.println("positionType='FixRelativeToTop'");
@@ -296,7 +296,7 @@ x += 180;
 
 p2.println("<staticText>");
 p2.println("<reportElement");
-p2.println("mode='Transparent'");
+p2.println("mode='Opaque'");
 p2.println("x='"+x1+"'");
 p2.println("y='85'");
 p2.println("width='180'");
@@ -323,13 +323,13 @@ x1 += 180;
 
 p2.println("<staticText>");
 p2.println("<reportElement");
-p2.println("mode='Transparent'");
+p2.println("mode='Opaque'");
 p2.println("x='"+x+"'");
 p2.println("y='70'");
 p2.println("width='180'");
 p2.println("height='15'");
 p2.println("forecolor='#000000'");
-p2.println("backcolor='#FFFFFF'");
+p2.println("backcolor='#CCCCCC'");
 p2.println("key='textField-11'");
 p2.println("stretchType='NoStretch'");
 p2.println("positionType='FixRelativeToTop'");
@@ -346,7 +346,7 @@ p2.println("</staticText>");
 
 p2.println("<staticText>");
 p2.println("<reportElement");
-p2.println("mode='Transparent'");
+p2.println("mode='Opaque'");
 p2.println("x='"+x1+"'");
 p2.println("y='85'");
 p2.println("width='180'");

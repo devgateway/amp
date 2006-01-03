@@ -333,9 +333,9 @@ public class AdvancedReportPDF extends Action
 							//logger.info("Completion Date : " + advReport.getActualCompletionDate());
 					}					
 
-					if(columnColl.contains("Level") && advReport.getLevel() != null)
+					if(columnColl.contains("Implementation Level") && advReport.getLevel() != null)
 					{
-						position = getColumnIndex("Level");
+						position = getColumnIndex("Implementation Level");
 						if(advReport.getLevel().trim().length() > 0)
 							dataArray[row][position] = advReport.getLevel().trim(); 
 							

@@ -1599,7 +1599,7 @@
 			  input="/showLayout.do?layout=login"
 			  path="/aim/login">
 			  <forward name="forward" path="/showLayout.do?layout=login" />
-			  <forward name="index" path="/aim/index.do" redirect="true"/>
+			  <forward name="admin" path="/aim/admin.do" redirect="true"/>
 			  <forward name="viewMyDesktop" path="/aim/viewMyDesktop.do" redirect="true"/>
 			  <forward name="selectTeam" path="/showLayout.do?layout=selectTeam"/>
 			  

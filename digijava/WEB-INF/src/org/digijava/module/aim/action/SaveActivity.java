@@ -657,7 +657,6 @@ public class SaveActivity extends Action {
 
 		// set components
 		activity.setComponents(new HashSet());
-		//Set components = new HashSet();
 		if (eaForm.getSelectedComponents() != null) {
 			Iterator itr = eaForm.getSelectedComponents().iterator();
 			while (itr.hasNext()) {
@@ -1055,8 +1054,8 @@ public class SaveActivity extends Action {
 			// remove the activity details from the edit activity list
 			if (toDelete == null || (!toDelete.trim().equalsIgnoreCase("true"))) {
 				String sessId = session.getId();
-				HashMap activityMap = (HashMap) ampContext.getAttribute("editActivityList");				
 				synchronized (ampContext) {
+					HashMap activityMap = (HashMap) ampContext.getAttribute("editActivityList");					
 					activityMap.remove(sessId);
 					ArrayList sessList = (ArrayList) ampContext.getAttribute("sessionList");
 				    sessList.remove(sessId);

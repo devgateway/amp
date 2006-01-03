@@ -1,3 +1,7 @@
+/*
+ * AddAmpActivity.java 
+ */
+
 package org.digijava.module.aim.action;
 
 import java.util.Collection;
@@ -26,6 +30,16 @@ import org.digijava.module.aim.util.ProgramUtil;
 import org.digijava.module.editor.dbentity.Editor;
 import org.digijava.module.editor.util.Constants;
 
+/**
+ * Used to capture the activity details to the form bean of type org.digijava.module.aim.form.EditActivityForm
+ * 
+ * Add Activity is an eight step process with a preview at the last. The same action is used for all the eight 
+ * steps + preview. A form bean variable identified by the name 'step' is used for this purpose. When the user 
+ * clicks the next button in the jsp page, the value of the step is incremented by 1. Thus based on the value of
+ * this variable the action forwards it to the eight steps and the preview. 
+ * 
+ * @author Priyajith
+ */
 public class AddAmpActivity extends Action {
 	
 	private static Logger logger = Logger.getLogger(AddAmpActivity.class);
@@ -36,7 +50,9 @@ public class AddAmpActivity extends Action {
 
 		HttpSession session = request.getSession();
 		TeamMember teamMember= new TeamMember();
-		teamMember =(TeamMember) session.getAttribute("currentMember");
+		
+		// Get the current member who has logged in from the session
+		teamMember=(TeamMember)session.getAttribute("currentMember");
 
 		// if user is not logged in, forward him to the home page
 		if (session.getAttribute("currentMember") == null)
@@ -51,7 +67,14 @@ public class AddAmpActivity extends Action {
 			eaForm.reset(mapping, request);
 		}
 
-		
+		/*
+		 * The action 'AddAmpActivity' is used by 'Add Activity', 'View Channel Overview', and 
+		 * 'show activity details' page. In the case if 'view channel overview', and 
+		 * 'show activity details', we have to directly forward to the preview page. 
+		 * A form bean variable called pageId is used for this purpose. All the requests 
+		 * coming from pages other than 'Add activity' page will have a pageId value 
+		 * which is greater than 1.   
+		 */
 		if (eaForm.getPageId() > 1)
 			eaForm.setStep("9");
 		
@@ -97,9 +120,17 @@ public class AddAmpActivity extends Action {
 	                            request.getContextPath());
 				eaForm.setContext(url);
 		    }
-				
 
-		    
+		    /*
+		     * AMP uses the editor module of the DiGi java framework to store the description and
+		     * objectives in the html form. The editor module requires an entry in the DG_EDITOR table
+		     * for the fields which needs to be shown in html format. So a key is generated for both the 
+		     * description and objective fields. The logic for generating the key for description is to 
+		     * append teamMember id and the current time to the string "aim-desc". The logic for generating 
+		     * key for objective is to append the team member id and the current time to the string "aim-obj".
+		     * Initially the contents for both the description and objectives are set as a blank string
+		     */
+		    // Creating a new entry in the DG_EDITOR table for description with the initial value for description as " "
 		    if (eaForm.getDescription() == null || eaForm.getDescription().trim().length() == 0) {
 		        eaForm.setDescription("aim-desc-" + teamMember.getMemberId() + "-" + System.currentTimeMillis());
 				User user = RequestUtils.getUser(request);
@@ -119,7 +150,7 @@ public class AddAmpActivity extends Action {
                 org.digijava.module.editor.util.DbUtil.saveEditor(ed);
 		    }
 		        
-		    
+		    // Creating a new entry in the DG_EDITOR table for objective with the initial value for objective as " "
 		    if (eaForm.getObjectives() == null || eaForm.getObjectives().trim().length() == 0) {
 		        eaForm.setObjectives("aim-obj-" + teamMember.getMemberId() + "-" + System.currentTimeMillis());
 				User user = RequestUtils.getUser(request);
@@ -141,6 +172,7 @@ public class AddAmpActivity extends Action {
 			eaForm.setReset(false);
 			
 			Collection statusCol = null;
+			// load the status from the database
 			if(eaForm.getStatusCollection() == null) {
 				statusCol= DbUtil.getAmpStatus();
 				eaForm.setStatusCollection(statusCol);
@@ -148,11 +180,12 @@ public class AddAmpActivity extends Action {
 			else {
 				statusCol = eaForm.getStatusCollection();
 			}
-			
+			// Initailly setting the implementation level as "country"
 			if (eaForm.getImplementationLevel() == null)
 				eaForm.setImplementationLevel("country");
 
 			Collection modalColl = null;
+			// load the modalities from the database
 			if (eaForm.getModalityCollection() == null) {
 				modalColl = DbUtil.getAmpModality();
 				eaForm.setModalityCollection(modalColl);
@@ -160,6 +193,7 @@ public class AddAmpActivity extends Action {
 				modalColl = eaForm.getModalityCollection();
 			}
 
+			// Initally set the modality as "Project Support"
 			if (modalColl != null && eaForm.getModality() == null) {
 				Iterator itr = modalColl.iterator();
 				while (itr.hasNext()) {
@@ -171,6 +205,7 @@ public class AddAmpActivity extends Action {
 				}
 			}
 			Collection levelCol = null;
+			// Loading the levels from the database
 			if (eaForm.getLevelCollection() == null) {
 				levelCol = DbUtil.getAmpLevels();
 				eaForm.setLevelCollection(levelCol);
@@ -178,13 +213,20 @@ public class AddAmpActivity extends Action {
 				levelCol = eaForm.getLevelCollection();
 			}
 			
-			eaForm.setProgramCollection(ProgramUtil.getAllThemes());				
-			eaForm.setCurrencies(DbUtil.getAmpCurrency());	
+			// load all themes 
+			eaForm.setProgramCollection(ProgramUtil.getAllThemes());
+			
+			// load all the active currencies
+			eaForm.setCurrencies(DbUtil.getAmpCurrency());
+			
+			// load all the perspectives
 			eaForm.setPerspectives(DbUtil.getAmpPerspective());
+			
 			eaForm.setFundingRegionId(new Long(-1));
 			return mapping.findForward("addActivityStep1");
-		} else if (eaForm.getStep().equals("1.1")) {
+		} else if (eaForm.getStep().equals("1.1")) { // shows the edit page of the editor module
 			eaForm.setStep("1");
+			// When the contents are saved the editor module redirects to the url specified in the 'referrer' parameter
 		    String url = "/editor/showEditText.do?id="+eaForm.getEditKey()+"&referrer="+eaForm.getContext()+"/aim/addActivity.do?edit=true";
 		    response.sendRedirect(eaForm.getContext() + url);
 		} else if (eaForm.getStep().equals("2")) { // show the step 2 page.
@@ -201,12 +243,17 @@ public class AddAmpActivity extends Action {
 			return mapping.findForward("addActivityStep7");
 		} else if (eaForm.getStep().equals("8")) { // show the step 7 page.
 			return mapping.findForward("addActivityStep8");			
-		} else if (eaForm.getStep().equals("9")) { // finish wizard. add the activity details.
+		} else if (eaForm.getStep().equals("9")) { // show the preview page.
 
 			if (eaForm.getAmpId() == null) { // if AMP-ID is not generated, generate the AMP-ID
+				/*
+				 * The logic for geerating the AMP-ID is as follows:
+				 * 1. Get the donor codes, if there are any donors, DNR_CODE
+				 * 2. Get the maximum of the ampActivityId + 1, MAX_NUM
+				 * 3. Append 'DNR_CODE + "-" + MAX_NUM'  to the string "AMP-" 
+				 */
 				String ampId = "AMP";
 				if (eaForm.getFundingOrganizations() != null) {
-					
 					if (eaForm.getFundingOrganizations().size() == 1) {
 						Iterator itr = eaForm.getFundingOrganizations().iterator();
 						if (itr.hasNext()) {
@@ -222,6 +269,9 @@ public class AddAmpActivity extends Action {
 				eaForm.setAmpId(ampId);
 			}
 			
+			/*
+			 * If the mode is 'Add', set the Activity Creator as the current logged in user
+			 */
 			if ((!eaForm.isEditAct()) && 
 					(eaForm.getActAthEmail() == null || eaForm.getActAthEmail().trim().length() == 0)) {
 				User usr = DbUtil.getUser(teamMember.getEmail());

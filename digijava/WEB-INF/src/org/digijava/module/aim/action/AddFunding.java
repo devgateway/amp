@@ -22,6 +22,7 @@ public class AddFunding extends Action {
 								javax.servlet.http.HttpServletRequest request,
 								javax.servlet.http.HttpServletResponse
 								response) throws java.lang.Exception {
+		
 		EditActivityForm formBean = (EditActivityForm) form;
 		formBean.setReset(false);
 		Long orgId = formBean.getOrgId();
@@ -66,8 +67,6 @@ public class AddFunding extends Action {
 		}
 		formBean.setOrganizations(DbUtil.getAllOrganisation());
 		formBean.setEvent(null);
-		if ( logger.isDebugEnabled() )
-	        logger.debug("execute() >");
 		return mapping.findForward("forward");
 	}
 }

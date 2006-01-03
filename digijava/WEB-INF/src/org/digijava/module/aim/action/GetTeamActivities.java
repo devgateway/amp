@@ -33,8 +33,6 @@ public class GetTeamActivities extends Action {
 			HttpServletRequest request, HttpServletResponse response)
 			throws java.lang.Exception {
 
-		logger.debug("In get team activities");
-
 		TeamActivitiesForm taForm = (TeamActivitiesForm) form;
 
 		Long id = null;

@@ -29,6 +29,7 @@ import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.TeamUtil;
 
+
 /**
  * Validates a user using the user name and the password.
  * Shows the Desktop page if successfull otherwise shows them login page.
@@ -144,9 +145,10 @@ public class Login extends Action {
 						tm.setTeamName("AMP Administrator");
 						session.setAttribute("currentMember", tm);
 						// show the index page with the admin toolbar at the bottom
-						return mapping.findForward("index"); 
+						
+						return mapping.findForward("admin"); 
 					} else {
-						// The user is a regsitered user but not a team member 
+						// The user is a regsitered user but not a team member
 						lForm.setLogin(false);
 						errors.add(ActionErrors.GLOBAL_ERROR,
 								new ActionError(
@@ -242,7 +244,7 @@ public class Login extends Action {
 					/*
 					 * We use translation module in the digijava framework to switch the language. Members
 					 * language is passed as a parameter to the url '/translation/switchLanguage.do'
-					 * After switching the language, '/switchLanguage.do' will forward to the url specified 
+					 * After switching the language, '/switchLanguage.do' will redirect the request to the url specified 
 					 * in the paramater 'rfr'
 					 */
 					String url = context + "/translation/switchLanguage.do?code=" +
@@ -255,6 +257,16 @@ public class Login extends Action {
 					lForm.setMembers(members);
 					return mapping.findForward("selectTeam");
 				}
+			} else {
+		    	String siteAdmin = (String) session.getAttribute("ampAdmin");
+				TeamMember tm = (TeamMember) session.getAttribute("currentMember");
+				if (tm != null) {
+					String fwdUrl = "viewMyDesktop.do";
+					response.sendRedirect(fwdUrl);        		
+				} else if (siteAdmin != null && "yes".equals(siteAdmin)) {
+					String fwdUrl = "admin.do";
+					response.sendRedirect(fwdUrl);        		
+		    	}						
 			}
 
 		} catch (Exception e) {

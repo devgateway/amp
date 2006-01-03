@@ -72,8 +72,8 @@ import org.digijava.module.aim.util.TeamUtil;
 import org.digijava.module.cms.dbentity.CMSContentItem;
 
 /**
- * EditActivity class loads the activity details of the activity specified in
- * the form bean variable 'activityId' to the EditActivityForm bean instance
+ * Loads the activity details of the activity specified in the form bean variable 
+ * 'activityId' to the EditActivityForm bean instance
  * 
  * @author Priyajith
  */

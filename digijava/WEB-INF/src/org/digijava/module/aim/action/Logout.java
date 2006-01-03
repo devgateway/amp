@@ -1,3 +1,7 @@
+/*
+ * Logout.java
+ */
+
 package org.digijava.module.aim.action;
 
 import java.io.IOException;
@@ -13,11 +17,13 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.tiles.ComponentContext;
 import org.apache.struts.tiles.actions.TilesAction;
-import org.digijava.kernel.request.SiteDomain;
 import org.digijava.kernel.security.HttpLoginManager;
-import org.digijava.kernel.util.RequestUtils;
-import org.digijava.kernel.util.SiteUtils;
 
+/**
+ * Clears all session variables associated with the current user
+ * 
+ * @author Priyajith
+ */
 
 public class Logout extends TilesAction {
 
@@ -44,7 +50,6 @@ public class Logout extends TilesAction {
 		}
 
 		HttpLoginManager.logout(request, response);
-		
 		
 		return null;
 	}

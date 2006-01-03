@@ -1,4 +1,4 @@
-package org.digijava.module.aim.action ;
+package org.digijava.module.aim.action;
 
 import org.apache.log4j.Logger;
 import org.apache.struts.action.*;
@@ -9,36 +9,35 @@ import javax.servlet.http.*;
 
 public class AddReports extends Action {
 
-		  private static Logger logger = Logger.getLogger(AddReports.class);
+	private static Logger logger = Logger.getLogger(AddReports.class);
 
-		  public ActionForward execute(ActionMapping mapping,
-								ActionForm form,
-								HttpServletRequest request,
-								HttpServletResponse response) throws java.lang.Exception {
+	public ActionForward execute(ActionMapping mapping, ActionForm form,
+			HttpServletRequest request, HttpServletResponse response)
+			throws java.lang.Exception {
 
 		HttpSession session = request.getSession();
 		if (session.getAttribute("ampAdmin") == null) {
 			return mapping.findForward("index");
 		} else {
-			String str = (String)session.getAttribute("ampAdmin");
+			String str = (String) session.getAttribute("ampAdmin");
 			if (str.equals("no")) {
 				return mapping.findForward("index");
 			}
 		}
-					 
-					 ReportsForm repForm = (ReportsForm) form;
-					 
-					 logger.debug("In add reports");
 
-					 if (repForm.getName() != null) {
-								AmpReports ampReport = new AmpReports();
-								ampReport.setName(repForm.getName());
-								ampReport.setDescription(repForm.getDescription());
-								DbUtil.add(ampReport);
-								logger.debug("reports added");
-								
-								return mapping.findForward("added");
-					 }
-					 return mapping.findForward("forward");
-		  }
+		ReportsForm repForm = (ReportsForm) form;
+
+		logger.debug("In add reports");
+
+		if (repForm.getName() != null) {
+			AmpReports ampReport = new AmpReports();
+			ampReport.setName(repForm.getName());
+			ampReport.setDescription(repForm.getDescription());
+			DbUtil.add(ampReport);
+			logger.debug("reports added");
+
+			return mapping.findForward("added");
+		}
+		return mapping.findForward("forward");
+	}
 }

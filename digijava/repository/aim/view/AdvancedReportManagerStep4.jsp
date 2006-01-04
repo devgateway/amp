@@ -60,6 +60,11 @@ function gotoStep()
 		}
 		
 	}
+	if(temp.length > 30)
+	{
+		alert("Report title should not be greater than 30 characters including spaces.");
+		flag=1;
+	}
    
 		if(flag==0)
 		{

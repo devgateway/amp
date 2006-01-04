@@ -25,7 +25,6 @@ public class PbdXlsJrxml
 			int pagesize=(60*n)+120;
 
 
-
 			p2.println("<!-- Created with iReport - A designer for JasperReports -->");
 			p2.println("<!DOCTYPE jasperReport PUBLIC '//JasperReports//DTD Report Design//EN' 'http://jasperreports.sourceforge.net/dtds/jasperreport.dtd'>");
 			p2.println("<jasperReport");
@@ -66,14 +65,13 @@ public class PbdXlsJrxml
 			//////GROUPHEADER START///////////////////
 			p2.println("<groupExpression><![CDATA[$F{c5}]]></groupExpression>");
 			p2.println("<groupHeader>");
-			p2.println("<band height='17'  isSplitAllowed='true' >");
+			p2.println("<band height='15'  isSplitAllowed='true' >");
 			
 			p2.println("<textField isStretchWithOverflow='true' pattern='' isBlankWhenNull='false' evaluationTime='Now' hyperlinkType='None' >					<reportElement");
 			p2.println("mode='Opaque'");
 			p2.println("x='0'");
-			p2.println("y='1'");
+			p2.println("y='0'");
 			p2.println("width='"+(180+180+(n-1)*180)+"'");
-			p2.println("width='791'");
 			p2.println("height='15'");
 			p2.println("forecolor='#000000'");
 			p2.println("backcolor='#CCCCCC'");
@@ -383,16 +381,16 @@ public class PbdXlsJrxml
 			p2.println("</band>");
 			p2.println("</background>");
 p2.println("<title>");
-p2.println("<band height='116'  isSplitAllowed='true' >");
+p2.println("<band height='112'  isSplitAllowed='true' >");
 			
 			
 			p2.println("<staticText>");
 			p2.println("<reportElement");
 			p2.println("mode='Opaque'");
 			p2.println("x='0'");
-			p2.println("y='85'");
+			p2.println("y='84'");
 			p2.println("width='67'");
-			p2.println("height='29'");
+			p2.println("height='28'");
 			p2.println("forecolor='#000000'");
 			p2.println("backcolor='#CCCCCC'");
 			p2.println("key='staticText-6'");
@@ -419,7 +417,7 @@ x=(68+center);y=0;
 			p2.println("<textField isStretchWithOverflow='false' pattern='' isBlankWhenNull='false' evaluationTime='Now' hyperlinkType='None' >					<reportElement");
 			p2.println("mode='Opaque'");
 			p2.println("x='"+x+"'");
-			p2.println("y='85'");
+			p2.println("y='84'");
 			p2.println("width='180'");
 			p2.println("height='14'");
 			p2.println("forecolor='#000000'");
@@ -444,7 +442,7 @@ x=(68+center);y=0;
 			p2.println("<reportElement");
 			p2.println("mode='Transparent'");
 			p2.println("x='"+x1+"'");
-			p2.println("y='100'");
+			p2.println("y='98'");
 			p2.println("width='58'");
 			p2.println("height='14'");
 			p2.println("forecolor='#000000'");
@@ -468,7 +466,7 @@ x=(68+center);y=0;
 			p2.println("<reportElement");
 			p2.println("mode='Transparent'");
 			p2.println("x='"+x1+"'");
-			p2.println("y='100'");
+			p2.println("y='98'");
 			p2.println("width='58'");
 			p2.println("height='14'");
 			p2.println("forecolor='#000000'");
@@ -492,7 +490,7 @@ x=(68+center);y=0;
 			p2.println("<reportElement");
 			p2.println("mode='Transparent'");
 			p2.println("x='"+(x1)+"'");
-			p2.println("y='100'");
+			p2.println("y='98'");
 			p2.println("width='56'");
 			p2.println("height='14'");
 			p2.println("forecolor='#000000'");
@@ -519,7 +517,7 @@ p2.println("<staticText>");
 			p2.println("<reportElement");
 			p2.println("mode='Transparent'");
 			p2.println("x='"+x1+"'");
-			p2.println("y='100'");
+			p2.println("y='98'");
 			p2.println("width='58'");
 			p2.println("height='14'");
 			p2.println("forecolor='#000000'");
@@ -543,7 +541,7 @@ p2.println("<staticText>");
 			p2.println("<reportElement");
 			p2.println("mode='Transparent'");
 			p2.println("x='"+x1+"'");
-			p2.println("y='100'");
+			p2.println("y='98'");
 			p2.println("width='58'");
 			p2.println("height='14'");
 			p2.println("forecolor='#000000'");
@@ -567,7 +565,7 @@ p2.println("<staticText>");
 			p2.println("<reportElement");
 			p2.println("mode='Transparent'");
 			p2.println("x='"+(x1)+"'");
-			p2.println("y='100'");
+			p2.println("y='98'");
 			p2.println("width='58'");
 			p2.println("height='14'");
 			p2.println("forecolor='#000000'");
@@ -590,7 +588,7 @@ p2.println("<staticText>");
 			p2.println("<reportElement");
 			p2.println("mode='Opaque'");
 			p2.println("x='"+x+"'");
-			p2.println("y='85'");
+			p2.println("y='84'");
 			p2.println("width='184'");
 			p2.println("height='14'");
 			p2.println("forecolor='#000000'");
@@ -1065,7 +1063,6 @@ p2.println("</title>");
 			p2.println("</jasperReport>");
 
 			p2.close();
-
 		}
 		catch (Exception e)
 		{

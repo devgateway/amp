@@ -217,7 +217,7 @@ public class AdvancedReportPDF extends Action
 			logger.info("****dataArray size no H= "+(formBean.getAllReports().size()+ 1)+" :"+(columnDetails.length + ind));
 		}		
 
-		String rowData[] = new String[columnDetails.length + ind - n];
+		String rowData[] = new String[columnDetails.length + ind - n+10];
 
 		
 		/* 

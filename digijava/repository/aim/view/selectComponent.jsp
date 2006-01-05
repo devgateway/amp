@@ -85,7 +85,9 @@
 									</td></tr>
 								<tr bgcolor="#f4f4f2">
 								<td colspan="2" class="box-border-alt1">
-										<span class="f-names">Commitments</span>&nbsp;&nbsp;
+										<span class="f-names">Commitments - (Total Actual Allocation <%=eaForm.getTotalCommitments()%>)
+										</span>
+
 										<a href="javascript:addCommitments()">Add</a><br><br>
 												Planned/Actual&nbsp;&nbsp;&nbsp;
 												Amount&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
@@ -156,7 +158,8 @@
 							</tr>
 							<tr bgcolor="#ffffff">
 								<td colspan="2" class="box-border">
-										<span class="f-names">Disbursement</span>&nbsp;&nbsp;
+										<span class="f-names">Disbursement - (Total actual to date <%=eaForm.getTotalDisbursements()%>)
+										</span>
 										<a href="javascript:addDisbursement()">Add</a><br><br>
 												Planned/Actual&nbsp;&nbsp;&nbsp;
 												Amount&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
@@ -223,7 +226,7 @@
 							</tr>
 							<tr>
 								<td colspan="2" class="box-border-alt1">
-											<span class="f-names">Expenditure</span>
+											<span class="f-names">Expenditure - (Total actual to date <%=eaForm.getTotalExpenditures()%>)</span>
 											<a href="javascript:addExpenditure()">Add</a>&nbsp;&nbsp;
 											<br><br>
 												Planned/Actual&nbsp;&nbsp;&nbsp;

@@ -30,7 +30,7 @@ public class ViewAmp extends Action {
 		HttpSession session = request.getSession();
     	String siteAdmin = (String) session.getAttribute("ampAdmin");
 		TeamMember tm = (TeamMember) session.getAttribute("currentMember");
-		if (tm != null) {
+		if (tm != null && tm.getTeamId() != null && tm.getTeamId().longValue() > 0) {
 			String fwdUrl = "viewMyDesktop.do";
 			response.sendRedirect(fwdUrl);        		
 		} else if (siteAdmin != null && "yes".equals(siteAdmin)) {

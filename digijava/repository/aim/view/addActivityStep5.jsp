@@ -431,7 +431,10 @@ function removeSelComponents() {
 																	bgcolor="#d7eafd">
 																		<logic:notEmpty name="selComponents" property="commitments">
 																		<tr><td><b>
-																			<digi:trn key="aim:commitments">Commitments</digi:trn> 
+																			<digi:trn key="aim:commitments">Commitments</digi:trn> - (
+																			<digi:trn key="aim:totalActualAllocation">Total actual 
+																			allocation</digi:trn> = 
+																			<c:out value="${aimEditActivityForm.totalCommitments}"/> )
 																		</b></td></tr>
 																		<tr><td bgcolor=#ffffff>
 																			<table width="100%" cellSpacing=1 cellPadding=3 border=0 
@@ -469,7 +472,10 @@ function removeSelComponents() {
 																	</logic:notEmpty>
 																	<logic:notEmpty name="selComponents" property="disbursements">
 																		<tr><td><b>
-																			<digi:trn key="aim:disbursements">Disbursements</digi:trn>
+																			<digi:trn key="aim:disbursements">Disbursements</digi:trn> - (
+																			<digi:trn key="aim:totalActualToDate">Total actual to date
+																			</digi:trn> = 
+																			<c:out value="${aimEditActivityForm.totalDisbursements}"/> )
 																	</b>		
 																		</td></tr>
 																		<tr><td bgcolor=#ffffff>
@@ -512,7 +518,10 @@ function removeSelComponents() {
 																	</logic:notEmpty>
 																	<logic:notEmpty name="selComponents" property="expenditures">
 																		<tr><td><b>
-																			<digi:trn key="aim:expenditures">Expenditures</digi:trn> 
+																			<digi:trn key="aim:expenditures">Expenditures</digi:trn> - (
+																			<digi:trn key="aim:totalActualToDate">Total actual to date
+																			</digi:trn> = 
+																			<c:out value="${aimEditActivityForm.totalExpenditures}"/> )
 																	</b>
 																		</td></tr>
 																		<tr><td bgcolor=#ffffff>

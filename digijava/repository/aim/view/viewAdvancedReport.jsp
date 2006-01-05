@@ -9,16 +9,16 @@
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
 <script language="JavaScript">
 <!--
-
+/*
 	function openPage()
 	{
-		<digi:context name="clearVal" property="context/module/moduleinstance/htmlAdvancedReport.do" />
-		url = "<%=clearVal %>?ampReportId=" + document.aimAdvancedReportForm.createdReportId.value;
-		document.aimAdvancedReportForm.action = url;		
+		<digi:context name="printVal" property="context/module/moduleinstance/htmlAdvancedReport.do" />
+		urlprint = "<%=printVal %>?ampReportId=" + document.aimAdvancedReportForm.createdReportId.value;
+		document.aimAdvancedReportForm.action = urlprint;
 		document.aimAdvancedReportForm.target = "_blank";
 		document.aimAdvancedReportForm.submit();
 	}
-
+*/
 	function clearFilter()
 	{
 		<digi:context name="clearVal" property="context/module/moduleinstance/viewAdvancedReport.do" />
@@ -61,10 +61,8 @@
 
 <digi:errors/>
 <digi:instance property="aimAdvancedReportForm" />
-<digi:form action="/viewAdvancedReport.do" >
 <jsp:include page="teamPagesHeader.jsp" flush="true" />
 
-<html:hidden property="createdReportId"/>
 
 <table width="772" border="0" cellpadding="10" cellspacing="0" bgcolor="#FFFFFF">
 		<tr>
@@ -95,7 +93,7 @@
 			<tr><td colspan=3 class=subtitle-blue align=center>
 					<bean:write name="aimAdvancedReportForm" property="reportName" />
 			</td></tr>
-			<logic:notEmpty name="aimAdvancedReportForm" property="reportDescription">
+			<logic:notEmpty name="aimAdvancedReportForm" property="reportDescription" >
 			<tr><td colspan=3 align=center>
 					<bean:write name="aimAdvancedReportForm" property="reportDescription" />
 			</td></tr>
@@ -106,10 +104,13 @@
 				<bean:write name="aimAdvancedReportForm" property="workspaceName" />&nbsp; 
 				<!--		<digi:trn key="aim:team">Team</digi:trn>		-->
 			</td></tr>
-			<tr><td>
-				<input type="button" name="PrintPreview" value="Print Preview" class="dr-menu" onclick="openPage()">
+
+			<tr><td valign="bottom" class="crumb">
+				&nbsp;&nbsp;<img src="../ampTemplate/images/print_icon.gif">
+				<digi:link href="/htmlAdvancedReport.do" target="_blank">
+					Print
+				</digi:link>
 			</td></tr>
-			
 		<!--  PDF/XLS Links -->
 
 			<tr>	
@@ -118,10 +119,11 @@
 					<bean:define id="translation">
 						<digi:trn key="aim:clickToCreateReportInPDF">Click here to Create Report in Pdf </digi:trn>
 					</bean:define>
-					<digi:link href="" onclick="popup_pdf(''); return false;"  title="<%=translation%>"> 
+					
+					<digi:link href="" onclick="popup_pdf(''); return false;" title="<%=translation%>">
 						<digi:trn key="aim:createReportInPdf">Create Report in Pdf.</digi:trn>
 					</digi:link>
-            </td>
+	           </td>
          </tr>
 			<tr>
 				<td valign="bottom" class="crumb" >
@@ -144,12 +146,16 @@
 					<digi:link href="" onclick="popup_csv(''); return false;" title="<%=translation%>">
 					 	<digi:trn key="aim:createReportInCsv">Create Report in CSV.</digi:trn>
 					</digi:link>
+			
             </td>
 	      </tr>
 
 		<!--  PDF/XLS Links -->	
-			
-		<tr><td width="9"></td>
+
+	<digi:form action="/viewAdvancedReport.do" >
+	<html:hidden property="createdReportId"/>
+	
+		<tr>	<td width="9"></td>		
       <bean:define id="fcount" name="aimAdvancedReportForm" property="filterCnt" type="java.lang.Integer" /> 
 		<%
 			int fcnt = fcount.intValue();
@@ -327,13 +333,17 @@
       </td>
       <td width="14" class="r-dotted-lg">&nbsp;</td>
     </tr>
+    
 			
+
 	<!--		<tr>
           <td width="14" class="r-dotted-lg">&nbsp;</td>
 			<td width="2" valign="middle">&nbsp;</td>
           <td width="14" class="r-dotted-lg">&nbsp;</td>
-            </tr>					-->
+            </tr>				
+   	-->
 			
+
 	<tr>
       <td width="14" class="r-dotted-lg">&nbsp;</td>
       <td>

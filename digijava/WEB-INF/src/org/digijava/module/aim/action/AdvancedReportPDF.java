@@ -219,7 +219,20 @@ public class AdvancedReportPDF extends Action
 		}		
 
 		//String rowData[] = new String[columnDetails.length + ind - n];
-		String rowData[] = new String[columnDetails.length + (formBean.getFiscalYearRange().size()+1)*rsc.getMeasures().size()*4 ];
+		String rowData[];
+		/*if(qtrlyFlag){
+			if(undisbFlag)
+				rowData = new String[(columnDetails.length-4) + (formBean.getFiscalYearRange().size()+1)*(rsc.getMeasures().size()-1)*4];
+			else
+				rowData = new String[(columnDetails.length-4) + (formBean.getFiscalYearRange().size()+1)*rsc.getMeasures().size()*4];
+		}
+		else{
+			if(undisbFlag)
+				rowData = new String[(columnDetails.length-4) + (formBean.getFiscalYearRange().size()+1)*(rsc.getMeasures().size()-1)];
+			else
+				rowData = new String[(columnDetails.length-4) + (formBean.getFiscalYearRange().size()+1)*rsc.getMeasures().size()];
+		}*/
+		rowData = new String[(columnDetails.length-4) + (formBean.getFiscalYearRange().size()+1)*rsc.getMeasures().size()*4];
 		logger.info("...............row Data.........="+rowData.length+" ----n="+n);
 
 		
@@ -276,7 +289,7 @@ public class AdvancedReportPDF extends Action
 						rowData[index++]  = "Planned Expenditures";
 					if(formBean.getAcBalFlag().equals("true") )
 					{
-						rowData[(columnDetails.length + (formBean.getFiscalYearRange().size()+1)*rsc.getMeasures().size()*4 )-1]  = "Undisbursed";
+						rowData[((columnDetails.length-4) + (formBean.getFiscalYearRange().size()+1)*rsc.getMeasures().size()*4 )-1]  = "Undisbursed";
 						/*if(ind > formBean.getFiscalYearRange().size())
 						{
 							rowData[index++]  = "Undisbursed";
@@ -315,7 +328,7 @@ public class AdvancedReportPDF extends Action
 	
 		for(int i=0; i<rowData.length; i++)
 		{
-			logger.info("Rows Labels : " + rowData[i]);
+			logger.info("Rows Labels : i= " + i +" -- "+rowData[i]);
 		}
 		logger.info("Column Size : " + columnColl.size());
 		Iterator  dataIter = formBean.getAllReports().iterator();
@@ -777,7 +790,7 @@ public class AdvancedReportPDF extends Action
 														}					
 														
 														position = n + rsc.getColumns().size()-1;
-														logger.info("#######################################################"+ position);
+														//logger.info("#######################################################"+ position);
 														
 														
 														if(advReport.getAmpFund() != null)
@@ -1063,7 +1076,7 @@ public class AdvancedReportPDF extends Action
 										}					
 										
 										position = n + rsc.getColumns().size()-1;
-										logger.info("#######################################################"+ position);
+										//logger.info("#######################################################"+ position);
 										
 										
 										if(advReport.getAmpFund() != null)
@@ -1329,7 +1342,7 @@ public class AdvancedReportPDF extends Action
 											}					
 											
 											position = n + rsc.getColumns().size()-1;
-											logger.info("#######################################################"+ position);
+											//logger.info("#######################################################"+ position);
 											
 											if(advReport.getAmpFund() != null)
 											{
@@ -1451,7 +1464,7 @@ public class AdvancedReportPDF extends Action
 		}// End of ALlReport() Iteration
 	
 		logger.info(dataArray.length + " ----------------: FINAL DATA START-------------- :" + dataArray[0].length);
-		for(int i=0; i< dataArray.length; i++)
+/*		for(int i=0; i< dataArray.length; i++)
 		{
 			for(int j=0; j< dataArray[0].length; j++)
 			{
@@ -1460,7 +1473,7 @@ public class AdvancedReportPDF extends Action
 				logger.info("i="+i+" j="+j+" "+dataArray[i][j]);
 			}
 			logger.info("\n");
-		}
+		}*/
 		logger.info(dataArray.length + " ----------------: FINAL DATA END-------------- :" + dataArray[0].length);
 
 		if(flag == 1)

@@ -9,8 +9,8 @@ public class AdvancedReportQtrlyJrxml
 public static void createJRXML(String filePath, boolean undis, String labels[],Object array[][], int cols, int measureCount, String reportName, String reportType,int hierarchy)
 {
 //	cols=arr;
-	//	System.out.println(undis + "..DYNAMIC JRXML.." + reportName);
-	//	System.out.println("Cols : " + cols + ":MCOUN :" + measureCount);
+	//	//System.out.println(undis + "..DYNAMIC JRXML.." + reportName);
+	//	//System.out.println("Cols : " + cols + ":MCOUN :" + measureCount);
 		
 		int mcnt = measureCount;
 		String arr[][] = new String[array.length][array[0].length];
@@ -25,7 +25,7 @@ public static void createJRXML(String filePath, boolean undis, String labels[],O
 			out2 = new FileOutputStream(fopen);
 			p2 = new PrintStream(out2);
 			p2.println("<?xml version=\"1.0\" encoding=\"UTF-8\" ?>");
-		//	System.out.println("creating now- dynamic trend...");
+		//	//System.out.println("creating now- dynamic trend...");
 
 			int n=3;//cnt;
 			int center=0;//(12-n)*30;
@@ -69,11 +69,11 @@ public static void createJRXML(String filePath, boolean undis, String labels[],O
 //			DYNAMIC CCCCCCCCC
 			String dc;
 			int colCnt = 20+cols+4*mcnt*4+5;
-	//		System.out.println(" Cnt = " + colCnt);
+	//		//System.out.println(" Cnt = " + colCnt);
 //			 gets the no of fields = 4 constants fields + YearCnt*3 + yearCnt
 			for(int k=1; k<=colCnt; k++)
 			{
-//				System.out.println("k="+k);
+//				//System.out.println("k="+k);
 				dc="c"+k;
 				p2.println("<field name='"+dc+"' class='java.lang.String'/>");
 			}
@@ -82,7 +82,7 @@ public static void createJRXML(String filePath, boolean undis, String labels[],O
 			colCnt = (20+cols+4*mcnt*4+5);
 			for(int k=1; k<=colCnt; k++)
 			{
-//				System.out.println("k="+k);
+//				//System.out.println("k="+k);
 				dc="m"+k;
 				p2.println("<field name='"+dc+"' class='java.lang.String'/>");
 			}
@@ -139,7 +139,7 @@ p2.println("</group>");
 								htext="h"+i;
 								//htextkey="h"+i;
 								ctextkey="c"+(h++);
-							//	System.out.println("grr"+ctextkey);
+							//	//System.out.println("grr"+ctextkey);
 								p2.println("<group  name='"+htext+"' isStartNewColumn='false' isStartNewPage='false' isResetPageNumber='false' isReprintHeaderOnEachPage='false' minHeightToStartNewPage='0' >");
 								p2.println("<groupExpression><![CDATA[$F{"+ctextkey+"}]]></groupExpression>");
 								p2.println("<groupHeader>");
@@ -343,10 +343,10 @@ p2.println("</group>");
 				temp=cols;
 					yrwidth=(qwidth*4);
 					//yrwidth=(measureCount*60);
-					//System.out.println("****"+chek(labels));
+					////System.out.println("****"+chek(labels));
 					
 					if(undis){
-//						System.out.println("grrr.."+m);
+//						//System.out.println("grrr.."+m);
 						yrwidth=(measureCount-1)*60;
 					}
 
@@ -355,7 +355,7 @@ p2.println("</group>");
 					//m=cols+1;
 					//m++;
 					for(int j=0;j<3;j++){
-					//	System.out.println("grrr.."+arr[0][cols+j]);
+					//	//System.out.println("grrr.."+arr[0][cols+j]);
 							ctextkey= "c"+c;
 								p2.println("<textField isStretchWithOverflow='true' pattern='' isBlankWhenNull='false' evaluationTime='Now' hyperlinkType='None' >					<reportElement");
 								p2.println("mode='Opaque'");
@@ -388,13 +388,13 @@ p2.println("</group>");
 						if(undis)
 							mcnt = measureCount-1;
 							
-						//System.out.println("&&&&&&&&&&&&&&&&&&&&&&&&&&&" +mcnt);
+						////System.out.println("&&&&&&&&&&&&&&&&&&&&&&&&&&&" +mcnt);
 						int loops = (mcnt*12);
 						for(int i=0;i<mcnt;i++){
 							//if(!labels[(temp)+i].equals("Undisbursed"))
 								
 								ctextkey="m"+m;
-								//System.out.println("com found.."+i);
+								////System.out.println("com found.."+i);
 								p2.println("<textField isStretchWithOverflow='true' pattern='' isBlankWhenNull='false' evaluationTime='Now' hyperlinkType='None' >					<reportElement");
 								p2.println("mode='Transparent'");
 								p2.println("x='"+x1+"'");
@@ -419,9 +419,9 @@ p2.println("</group>");
 							x1+=60;
 							m++;
 							
-							//System.out.println("&&&&&&&&&&------------------" + ctextkey);
+							////System.out.println("&&&&&&&&&&------------------" + ctextkey);
 						}
-						//System.out.println("temp:"+temp++);
+						////System.out.println("temp:"+temp++);
 						m++;
 					}
 					
@@ -430,13 +430,13 @@ p2.println("</group>");
 						mcnt = measureCount;
 						temp=(3+cols+(mcnt*3))+1;
 						ctextkey = "c"+temp;
-						//System.out.println("inside here..@@@@@@@@@@@@@@@@@@"+cols+":"+mcnt+":::"+temp+"-----"+ctextkey);
+						////System.out.println("inside here..@@@@@@@@@@@@@@@@@@"+cols+":"+mcnt+":::"+temp+"-----"+ctextkey);
 					}
 					else{
 						mcnt = measureCount;
 						temp=(3+cols+((mcnt+1)*3))+1;
 						ctextkey = "c"+temp;
-						//System.out.println("inside here..$$$$$$$$$$$$$$$$$$$$"+cols+":"+mcnt+":::"+temp+"-----"+ctextkey);
+						////System.out.println("inside here..$$$$$$$$$$$$$$$$$$$$"+cols+":"+mcnt+":::"+temp+"-----"+ctextkey);
 					}
 					
 					p2.println("<textField isStretchWithOverflow='true' pattern='' isBlankWhenNull='false' evaluationTime='Now' hyperlinkType='None' >					<reportElement");
@@ -468,7 +468,7 @@ p2.println("</group>");
 						//measureBlocks=3*(measureCount);
 					}
 					
-					//System.out.println("BLOCKS............."+measureBlocks+" M Value ============================" + m);
+					////System.out.println("BLOCKS............."+measureBlocks+" M Value ============================" + m);
 					for(int i=1;i<=measureBlocks;i++){
 					
 						ctextkey="m"+m;
@@ -559,7 +559,7 @@ p2.println("</group>");
 				x +=60;
 				m++;
 			}
-			
+			//System.out.println("XXXXXXXX "+x);
 			int x4=x;
 
 			yr=2000;
@@ -569,19 +569,21 @@ p2.println("</group>");
 
 //				yrwidth=(measureCount*60);
 				yrwidth=(qwidth*4);
-				//System.out.println("****"+chek(labels));
+				////System.out.println("****"+chek(labels));
 				
 				if(undis){
-//					System.out.println("grrr.."+m);
+//					//System.out.println("grrr.."+m);
 					//yrwidth=(measureCount-1)*60;
 					//yrwidth=((qwidth/4)*60);
+					qwidth=((measureCount-1)*60);
+					yrwidth=qwidth*4;
 				}
 
 			c= 3+cols+1+hcnt;
 
 				m=cols+2;
 				for(int j=0;j<3;j++){
-					//System.out.println("flag test.."+arr[0][cols+j]);
+					////System.out.println("flag test.."+arr[0][cols+j]);
 						ctextkey= "c"+c;
 							p2.println("<textField isStretchWithOverflow='true' pattern='' isBlankWhenNull='false' evaluationTime='Now' hyperlinkType='None' >					<reportElement");
 
@@ -606,22 +608,31 @@ p2.println("</group>");
 							p2.println("</textField>");
 							
 							if( undis )
-								c+=measureCount*4;
+								c+=measureCount;
 							else
-								c+=measureCount*4+1;
+								c+=measureCount+1;
 
 					x+=yrwidth;
 					m--;
 					if(undis)
+					{
 						mcnt = measureCount-1;
+						//System.out.println("undis true");
+						//System.out.println("Count"+mcnt);
+						qwidth=mcnt*60;
+					}
+					else
+					{
+						qwidth=(measureCount*60);
+					}
 					y1 =110;
 						
-					//System.out.println("&&&&&&&&&&&&&&&&&&&&&&&&&&&" +mcnt);
+					////System.out.println("&&&&&&&&&&&&&&&&&&&&&&&&&&&" +mcnt);
 					for(int i=0;i<(mcnt*4);i++){
 						//if(!labels[(temp)+i].equals("Undisbursed"))
 						{	
 							ctextkey="m"+m;
-							//System.out.println("com found.."+i);
+							////System.out.println("com found.."+i);
 							p2.println("<textField isStretchWithOverflow='true' pattern='' isBlankWhenNull='false' evaluationTime='Now' hyperlinkType='None' >					<reportElement");
 							p2.println("mode='Transparent'");
 							p2.println("x='"+x1+"'");
@@ -646,13 +657,13 @@ p2.println("</group>");
 						x1+=60;
 						m++;
 						}
-						//System.out.println("&&&&&&&&&&------------------" + ctextkey);
+						////System.out.println("&&&&&&&&&&------------------" + ctextkey);
 					}
-					//System.out.println("temp:"+temp++);
+					////System.out.println("temp:"+temp++);
 					m++;
 				}
 				/////ADDED HERE/////
-				qwidth=(measureCount*60);
+				//qwidth=(measureCount*60);
 				//int x4=x1;
 				//System.out.println("x  "+x+"x1    "+x1);
 				int n2=0;
@@ -662,6 +673,7 @@ p2.println("</group>");
 							{
 							 n2=i+1;
 								ctextkey="m"+m;
+								
 								p2.println("<staticText>");
 								p2.println("<reportElement");
 								p2.println("mode='Opaque'");
@@ -683,8 +695,8 @@ p2.println("</group>");
 								p2.println("</textElement>");
 								p2.println("<text><![CDATA[Q"+n2+"]]></text>");
 								p2.println("</staticText>");
-								
-				/*				p2.println("<textField isStretchWithOverflow='true' pattern='' isBlankWhenNull='false' evaluationTime='Now' hyperlinkType='None' >					<reportElement");
+
+									/*p2.println("<textField isStretchWithOverflow='true' pattern='' isBlankWhenNull='false' evaluationTime='Now' hyperlinkType='None' >					<reportElement");
 									p2.println("mode='Transparent'");
 									p2.println("x='"+x4+"'");
 									p2.println("y='95'");
@@ -718,13 +730,13 @@ p2.println("</group>");
 					mcnt = measureCount;
 					temp=(3+cols+(mcnt*3))+1;
 					ctextkey = "c"+temp;
-					//System.out.println("inside here..@@@@@@@@@@@@@@@@@@"+cols+":"+mcnt+":::"+temp+"-----"+ctextkey);
+					////System.out.println("inside here..@@@@@@@@@@@@@@@@@@"+cols+":"+mcnt+":::"+temp+"-----"+ctextkey);
 				}
 				else{
 					mcnt = measureCount;
 					temp=(3+cols+((mcnt+1)*3))+1;
 					ctextkey = "c"+temp;
-					//System.out.println("inside here..$$$$$$$$$$$$$$$$$$$$"+cols+":"+mcnt+":::"+temp+"-----"+ctextkey);
+					////System.out.println("inside here..$$$$$$$$$$$$$$$$$$$$"+cols+":"+mcnt+":::"+temp+"-----"+ctextkey);
 				}
 
 				p2.println("<staticText>");
@@ -778,7 +790,7 @@ p2.println("</group>");
 					//measureBlocks=3*(measureCount);
 				}
 				m--;
-				//System.out.println("BLOCKS............."+measureBlocks+" M Value ============================" + m);
+				////System.out.println("BLOCKS............."+measureBlocks+" M Value ============================" + m);
 				for(int i=1;i<=measureBlocks;i++){
 				
 					ctextkey="m"+m;
@@ -861,21 +873,32 @@ p2.println("</group>");
 							//	yrwidth=(qwidth*4);
 							yrwidth=(qwidth*4);
 							int yr2 = qwidth*4;
-				//System.out.println("****"+chek(labels));
+				////System.out.println("****"+chek(labels));
 				
 				if(undis){
-//					System.out.println("grrr.."+m);
+//					//System.out.println("grrr.."+m);
 					//yrwidth=(measureCount-1)*60;
 				}
 
 			c= 3+cols+1+hcnt;
-			yrwidth=(qwidth*4);
-			//System.out.println("grrrrrrrrrrrrr"+yrwidth);
+			if(undis)
+					{
+						mcnt = measureCount-1;
+						qwidth=mcnt*60;
+						yrwidth=qwidth*4;
+					}
+					else
+					{
+					qwidth = (measureCount *60);
+					yrwidth=(qwidth*4);
+					}
+			
+			////System.out.println("grrrrrrrrrrrrr"+yrwidth);
 //			yrwidth=240;
              int x2=x;
 				m=cols+2;
 				for(int j=0;j<3;j++){
-					//System.out.println("flag test.."+arr[0][cols+j]);
+					////System.out.println("flag test.."+arr[0][cols+j]);
 					//////////////////////////////////////////yrwidth=100;
 				
 						ctextkey= "c"+c;
@@ -902,53 +925,60 @@ p2.println("</group>");
 							p2.println("</textElement>");
 							p2.println("<textFieldExpression class='java.lang.String'><![CDATA[$F{"+ctextkey+"}]]></textFieldExpression>");
 							p2.println("</textField>");
-							//System.out.println("agsdddddddd"+c);
+							////System.out.println("agsdddddddd"+c);
 							if( undis )
-								c+=(measureCount*4);
+								c+=((measureCount-1)*4)+1;
 							else
 								c+=((measureCount*4)+1);
 
 					x+=yrwidth;
 					
 					if(undis)
+					{
 						mcnt = measureCount-1;
+						qwidth=mcnt*60;
+						yrwidth=qwidth*4;
+					}
+					else
+					{
 					qwidth = (measureCount *60);
+					}
 					int n1=0;
 					for(int i=0;i<4;i++)
 					{
 					 n1=i+1;
 						ctextkey="m"+m;
-													
-							p2.println("<staticText>");
-							p2.println("<reportElement");
-							p2.println("mode='Opaque'");
+
+						p2.println("<staticText>");
+						p2.println("<reportElement");
+						p2.println("mode='Opaque'");
+						p2.println("x='"+x2+"'");
+						p2.println("y='15'");
+						p2.println("width='"+qwidth+"'");
+						p2.println("height='18'");
+						p2.println("forecolor='#000000'");
+						p2.println("backcolor='#CCCCCC'");
+						p2.println("key='staticText-h111'");
+						p2.println("stretchType='NoStretch'");
+						p2.println("positionType='FixRelativeToTop'");
+						p2.println("isPrintRepeatedValues='true'");
+						p2.println("isRemoveLineWhenBlank='false'");
+						p2.println("isPrintInFirstWholeBand='false'");
+						p2.println("isPrintWhenDetailOverflows='false'/>");
+						p2.println("<textElement textAlignment='Center' verticalAlignment='Middle' rotation='None' lineSpacing='Single'>");
+						p2.println("<font fontName='Arial' pdfFontName='Helvetica' size='10' isBold='true' isItalic='false' isUnderline='false' isPdfEmbedded ='false' pdfEncoding ='Cp1252' isStrikeThrough='false' />");
+						p2.println("</textElement>");
+						p2.println("<text><![CDATA[Q"+n1+"]]></text>");
+						p2.println("</staticText>");
+						
+							/*p2.println("<textField isStretchWithOverflow='true' pattern='' isBlankWhenNull='false' evaluationTime='Now' hyperlinkType='None' >					<reportElement");
+							p2.println("mode='Transparent'");
 							p2.println("x='"+x2+"'");
 							p2.println("y='15'");
 							p2.println("width='"+qwidth+"'");
 							p2.println("height='18'");
 							p2.println("forecolor='#000000'");
-							p2.println("backcolor='#CCCCCC'");
-							p2.println("key='staticText-h111'");
-							p2.println("stretchType='NoStretch'");
-							p2.println("positionType='FixRelativeToTop'");
-							p2.println("isPrintRepeatedValues='true'");
-							p2.println("isRemoveLineWhenBlank='false'");
-							p2.println("isPrintInFirstWholeBand='false'");
-							p2.println("isPrintWhenDetailOverflows='false'/>");
-							p2.println("<textElement textAlignment='Center' verticalAlignment='Middle' rotation='None' lineSpacing='Single'>");
-							p2.println("<font fontName='Arial' pdfFontName='Helvetica' size='10' isBold='true' isItalic='false' isUnderline='false' isPdfEmbedded ='false' pdfEncoding ='Cp1252' isStrikeThrough='false' />");
-							p2.println("</textElement>");
-							p2.println("<text><![CDATA[Q"+n1+"]]></text>");
-							p2.println("</staticText>");
-							
-							/*p2.println("<textField isStretchWithOverflow='true' pattern='' isBlankWhenNull='false' evaluationTime='Now' hyperlinkType='None' >					<reportElement"); 
-							p2.println("mode='Opaque'");
-							p2.println("x='"+x2+"'");
-							p2.println("y='15'");
-							p2.println("width='"+qwidth+"'");
-							p2.println("height='18'");
-							p2.println("forecolor='#000000'");
-							p2.println("backcolor='#CCCCCC'");
+							p2.println("backcolor='#FFFFFF'");
 							p2.println("key='textField-172'");
 							p2.println("stretchType='NoStretch'");
 							p2.println("positionType='Float'");
@@ -958,23 +988,30 @@ p2.println("</group>");
 							p2.println("isPrintWhenDetailOverflows='false'/>");
 							p2.println("<textElement textAlignment='Center' verticalAlignment='Middle' rotation='None' lineSpacing='Single'>");
 							p2.println("<font fontName='Arial' pdfFontName='Helvetica' size='8' isBold='true' isItalic='false' isUnderline='false' isPdfEmbedded ='false' pdfEncoding ='Cp1252' isStrikeThrough='false' />");
-							p2.println("</textElement>");							
+							p2.println("</textElement>");
 							p2.println("<textFieldExpression class='java.lang.String'><![CDATA[Q"+n1+"]]></textFieldExpression>");
-							p2.println("</textField>");
-					*/		
+							p2.println("</textField>");*/
 						
 						x2+=qwidth;	
 						//m++;
 					}
 						
-					//System.out.println("&&&&&&&&&&&&&&&&&&&&&&&&&&&" +mcnt);
+					////System.out.println("&&&&&&&&&&&&&&&&&&&&&&&&&&&" +mcnt);
 					//mcnt=mcnt*2;
-					int a = measureCount*4;
+					int a=0;
+					if(undis)
+					{
+					a = (measureCount-1)*4;
+					}
+					else
+					{
+						a=measureCount*4;
+					}
 					for(int i=0;i<a;i++){
 						//if(!labels[(temp)+i].equals("Undisbursed"))
 						{	
 							ctextkey="m"+m;
-							//System.out.println("com found.."+i);
+							////System.out.println("com found.."+i);
 							p2.println("<textField isStretchWithOverflow='true' pattern='' isBlankWhenNull='false' evaluationTime='Now' hyperlinkType='None' >					<reportElement");
 							p2.println("mode='Transparent'");
 							p2.println("x='"+x1+"'");
@@ -999,9 +1036,9 @@ p2.println("</group>");
 						x1+=60;	
 						m++;
 						}
-						//System.out.println("&&&&&&&&&&------------------" + ctextkey);
+						////System.out.println("&&&&&&&&&&------------------" + ctextkey);
 					}
-					//System.out.println("temp:"+temp++);
+					////System.out.println("temp:"+temp++);
 					m++;
 				}
 				
@@ -1010,13 +1047,13 @@ p2.println("</group>");
 					mcnt = measureCount;
 					temp=(3+cols+(mcnt*3))+1;
 					ctextkey = "c"+temp;
-					//System.out.println("inside here..@@@@@@@@@@@@@@@@@@"+cols+":"+mcnt+":::"+temp+"-----"+ctextkey);
+					////System.out.println("inside here..@@@@@@@@@@@@@@@@@@"+cols+":"+mcnt+":::"+temp+"-----"+ctextkey);
 				}
 				else{
 					mcnt = measureCount;
 					temp=(3+cols+((mcnt+1)*3))+1;
 					ctextkey = "c"+temp;
-					//System.out.println("inside here..$$$$$$$$$$$$$$$$$$$$"+cols+":"+mcnt+":::"+temp+"-----"+ctextkey);
+					////System.out.println("inside here..$$$$$$$$$$$$$$$$$$$$"+cols+":"+mcnt+":::"+temp+"-----"+ctextkey);
 				}
 
 				p2.println("<staticText>");
@@ -1049,7 +1086,7 @@ p2.println("</group>");
 					//measureBlocks=3*(measureCount);
 				}
 				
-				//System.out.println("BLOCKS............."+measureBlocks+" M Value ============================" + m);
+				////System.out.println("BLOCKS............."+measureBlocks+" M Value ============================" + m);
 				for(int i=1;i<=measureBlocks;i++){
 				
 					ctextkey="m"+m;
@@ -1074,7 +1111,7 @@ p2.println("</group>");
 //					p2.println("<textFieldExpression class='java.lang.String'><![CDATA[$F{"+arr[0][temp+i]+"}]]></textFieldExpression>");
 					p2.println("<textFieldExpression class='java.lang.String'><![CDATA[$F{"+ctextkey+"}]]></textFieldExpression>");
 					p2.println("</textField>");
-					
+					//System.out.println("m" +m);
 					m++;
 					x1+=60;
 					
@@ -1106,7 +1143,7 @@ p2.println("</group>");
 			
 			
 			p2.println("</band>");
-			//System.out.println("Page..........Header " + c);
+			////System.out.println("Page..........Header " + c);
 			p2.println("</pageHeader>");}
 			p2.println("<columnHeader>");
 			p2.println("<band height='0'  isSplitAllowed='true' >");
@@ -1145,14 +1182,16 @@ p2.println("</group>");
 							p2.println("</textField>");
 
 					c++;
+					//System.out.println("ccccc "+c);
 					x+=60;
 				}
 
 			int dcnt=0;
 			if(undis)
-				dcnt=(measureCount-1);
+				dcnt=((measureCount-1)*4);
 			else
 				dcnt=measureCount*4;
+			//System.out.println("dcnt"+dcnt);
 
 			c=3+cols+2+hcnt;
 
@@ -1161,7 +1200,7 @@ p2.println("</group>");
 					for(int j=0;j<dcnt;j++)
 					{		
 					ctextkey = "c"+c;
-//					System.out.println("########LOOP:: "+i+" ::"+x+":"+w+":"+arr[0][i]);
+//					//System.out.println("########LOOP:: "+i+" ::"+x+":"+w+":"+arr[0][i]);
 					w=60;
 					  
 							p2.println("<textField isStretchWithOverflow='true' pattern='' isBlankWhenNull='false' evaluationTime='Now' hyperlinkType='None' >					<reportElement");
@@ -1186,14 +1225,16 @@ p2.println("</group>");
 							p2.println("</textField>");
 
 						x +=60;
+						//System.out.println("CC111111 "+c);
 						c++;
 					}
+					//System.out.println("CC2222222 "+c);
 						c++;
 
 				}
 
 			c=3+cols+3*dcnt+3+2+hcnt;
-			//System.out.println("----------------->"+c);
+			////System.out.println("----------------->"+c);
 
 					for(int j=0;j<mcnt;j++)
 					{		
@@ -1233,7 +1274,7 @@ p2.println("</group>");
 
 				//yrwidth=(measureCount*60);
 				yrwidth=(qwidth*4);
-				//System.out.println("****"+chek(labels));
+				////System.out.println("****"+chek(labels));
 				
 				if( undis ){
 					//yrwidth=(measureCount-1)*60;
@@ -1263,7 +1304,7 @@ p2.println("</group>");
 
 				
 			p2.println("</band>");
-			//System.out.println("Detail..........Header" + c);
+			////System.out.println("Detail..........Header" + c);
 			p2.println("</detail>");
 			p2.println("<columnFooter>");
 			p2.println("<band height='0'  isSplitAllowed='true' >");

@@ -207,7 +207,7 @@ public class AdvancedReportPDF extends Action
 					logger.info("iiiiiiiiiiiiiiii== "+i+" h ==== "+formBean.getColumnHierarchie().size());
 				}
 			}
-			logger.info("::::::::: ind= "+ind+" columnDetails.lenght= "+columnDetails.length+" col hierarchy= "+formBean.getColumnHierarchie().size());
+			logger.info("::::::::: -ind= "+ind+" -columnDetails.lenght= "+columnDetails.length+" -col hierarchy= "+formBean.getColumnHierarchie().size());
 			logger.info("****dataArray size with H= "+(i+1)+" :"+(columnDetails.length + ind+ formBean.getColumnHierarchie().size()));
 				dataArray = new Object[i+1][columnDetails.length + ind+ formBean.getColumnHierarchie().size()];
 			
@@ -217,7 +217,9 @@ public class AdvancedReportPDF extends Action
 			logger.info("****dataArray size no H= "+(formBean.getAllReports().size()+ 1)+" :"+(columnDetails.length + ind));
 		}		
 
-		String rowData[] = new String[columnDetails.length + ind - n+10];
+		//String rowData[] = new String[columnDetails.length + ind - n];
+		String rowData[] = new String[columnDetails.length + (formBean.getFiscalYearRange().size()+1)*rsc.getMeasures().size()*4 ];
+		logger.info("...............row Data.........="+rowData.length+" ----n="+n);
 
 		
 		/* 
@@ -246,7 +248,7 @@ public class AdvancedReportPDF extends Action
 		logger.info("i-i-i-i-i-i-i-i-i-i= "+index);
 		for(int i=0; i<= formBean.getFiscalYearRange().size(); i++)
 		{
-			logger.info("INDDDDD====="+ind+":::"+formBean.getFiscalYearRange().size());
+			logger.info("INDDDDD====="+ind+":::"+"---INDEX===== "+index);
 			/*if(ind >= formBean.getFiscalYearRange().size())
 				rowData[index++] = "Total";
 			else{
@@ -255,7 +257,7 @@ public class AdvancedReportPDF extends Action
 				index++;
 			}*/
 					
-			//if(qtrlyFlag && (ind < formBean.getFiscalYearRange().size()))
+			if(qtrlyFlag && (ind < formBean.getFiscalYearRange().size()))
 			{
 				for(int j=0;j<4;j++)
 				{
@@ -282,7 +284,7 @@ public class AdvancedReportPDF extends Action
 					}
 				}
 			}
-			/*else
+			else
 			{
 				if(formBean.getAcCommFlag().equals("true" ))
 					rowData[index++]  =  "Actual Commitment";
@@ -305,7 +307,7 @@ public class AdvancedReportPDF extends Action
 					}
 					
 				}
-			}*/		
+			}		
 					ind = ind + 1;
 					//year = year + 1;					
 		}//for

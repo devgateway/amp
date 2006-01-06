@@ -69,16 +69,15 @@ public class AdvancedReport extends Action {
 
 	private static Logger logger = Logger.getLogger(Login.class);
 	private String str="";
-	static HttpSession httpSession= null;
-	static AdvancedReportForm formBean;
 
 	public ActionForward execute(ActionMapping mapping, ActionForm form, 
 			HttpServletRequest request, HttpServletResponse response) throws java.lang.Exception
 	{
 		//logger.info("###---------------------------------------------------------------------->>>>>>>>");
-		formBean = (AdvancedReportForm) form;
 		
-		httpSession = request.getSession();
+		AdvancedReportForm formBean = (AdvancedReportForm) form;
+		
+		HttpSession httpSession = request.getSession();
 		Query query;
 		Collection reports = new ArrayList();
 		Collection selectedTransc = new ArrayList();
@@ -1034,7 +1033,7 @@ public class AdvancedReport extends Action {
 		        String filename = "";
 		        try{
 				//logger.info("@@@@@@@@@@ IMAGE CREATION PNG:");
-				filename = ServletUtilities.saveChartAsPNG(chart, 600, 550, info, httpSession);
+				//filename = ServletUtilities.saveChartAsPNG(chart, 600, 550, info, httpSession);
 //				ServletUtilities.sendTempFile(filename, response);
 				}
 				catch(Exception e){
@@ -1080,7 +1079,8 @@ public class AdvancedReport extends Action {
 			CategoryDataset categorydataset = new DefaultCategoryDataset();
 			categorydataset = data;
 
-			String chartTitle=formBean.getReportTitle();
+			//String chartTitle=formBean.getReportTitle();
+			String chartTitle="";
 //			System.out.println("CHART TITLE----(ACTION)----------------"+chartTitle);
 			
 			JFreeChart jfreechart = ChartFactory.createBarChart(chartTitle+" - Bar Chart", "Title", "Amount(in US$)", categorydataset, PlotOrientation.VERTICAL,true, true, true);
@@ -1095,7 +1095,7 @@ public class AdvancedReport extends Action {
 			int y=dim*25;
 				System.out.println("IMG DIMMMMMMMMMMMMM: "+"dim="+dim+"x="+x+"::"+y);
 			try{
-			filename = ServletUtilities.saveChartAsPNG(jfreechart, x, y, info, httpSession);
+			//filename = ServletUtilities.saveChartAsPNG(jfreechart, x, y, info, httpSession);
 			}
 			catch(Exception e){
 					logger.info("EXCEPTION thrown at image:"+e);				

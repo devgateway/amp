@@ -161,6 +161,7 @@ public class AdvancedReportPDF extends Action
 			if(qtrlyFlag){
 				logger.info("@@@@@@@@@@@@@Quarterly dataarray...");
 				ind = rsc.getMeasures().size() * (formBean.getFiscalYearRange().size()*4 + 1)+ formBean.getFiscalYearRange().size() + 1;
+				//(formBean.getFiscalYearRange().size()+1)*rsc.getMeasures().size()*4
 			}
 			else
 				ind = rsc.getMeasures().size() * (formBean.getFiscalYearRange().size() + 1)+ formBean.getFiscalYearRange().size() + 1;
@@ -208,9 +209,9 @@ public class AdvancedReportPDF extends Action
 				}
 			}
 			logger.info("::::::::: -ind= "+ind+" -columnDetails.lenght= "+columnDetails.length+" -col hierarchy= "+formBean.getColumnHierarchie().size());
-			logger.info("****dataArray size with H= "+(i+1)+" :"+(columnDetails.length + ind+ formBean.getColumnHierarchie().size()));
-				dataArray = new Object[i+1][columnDetails.length + ind+ formBean.getColumnHierarchie().size()];
-			
+			logger.info("****dataArray size with H= "+(i+1)+" :"+(columnDetails.length + (formBean.getFiscalYearRange().size()+1)*rsc.getMeasures().size()*4+ formBean.getColumnHierarchie().size()+ formBean.getColumnHierarchie().size()));
+			//dataArray = new Object[i+1][columnDetails.length + ind+ formBean.getColumnHierarchie().size()];
+			dataArray = new Object[i+1][columnDetails.length + (formBean.getFiscalYearRange().size()+1)*rsc.getMeasures().size()*4+ formBean.getColumnHierarchie().size()];
 		}
 		else{
 			dataArray = new Object[formBean.getAllReports().size()+ 1][columnDetails.length + ind];
@@ -275,12 +276,12 @@ public class AdvancedReportPDF extends Action
 						rowData[index++]  = "Planned Expenditures";
 					if(formBean.getAcBalFlag().equals("true") )
 					{
-						if(ind > formBean.getFiscalYearRange().size())
+						rowData[(columnDetails.length + (formBean.getFiscalYearRange().size()+1)*rsc.getMeasures().size()*4 )-1]  = "Undisbursed";
+						/*if(ind > formBean.getFiscalYearRange().size())
 						{
 							rowData[index++]  = "Undisbursed";
 							undisbFlag = true;
-						}
-						
+						}*/
 					}
 				}
 			}
@@ -810,7 +811,6 @@ public class AdvancedReportPDF extends Action
 																	if(ind > (formBean.getFiscalYearRange().size()*4))
 																	{
 																		position = position + 1;
-				
 																		dataArray[row][position] = new String(" Total ");
 																	}
 																	else
@@ -1078,17 +1078,39 @@ public class AdvancedReportPDF extends Action
 											ind = 0;
 											while(funds.hasNext())
 											{	
-												ind = ind + 1;
-												if(ind > formBean.getFiscalYearRange().size())
+												logger.info(" IND intrrrrrrrrrrrrr "+ind);
+												ind ++;
+												if(qtrlyFlag)
 												{
-													position = position + 1;
-													dataArray[row][position] = new String(" Total ");
+													if(ind > (formBean.getFiscalYearRange().size()*4))
+													{
+														position = position + 1;
+														dataArray[row][position] = new String(" Total ");
+													}
+													else
+													{
+														if((ind%4)==1)
+														{	
+															position = position + 1;
+															dataArray[row][position] = new String(""+year);
+															year = year + 1;
+														}
+													}
 												}
 												else
 												{
-													position = position + 1;
-													dataArray[row][position] = new String(""+year);
-												}
+													if(ind > formBean.getFiscalYearRange().size())
+													{
+														position = position + 1;
+														dataArray[row][position] = new String(" Total ");
+													}
+													else
+													{
+															position = position + 1;
+															dataArray[row][position] = new String(""+year);
+															year = year + 1;
+													}
+												}	
 
 												AmpFund ampFund = (AmpFund) funds.next();
 												if(formBean.getAcCommFlag().equals("true") && ampFund.getCommAmount() != null)
@@ -1131,7 +1153,7 @@ public class AdvancedReportPDF extends Action
 													undisbFlag = true;
 												}
 												
-												year = year + 1;
+												//year = year + 1;
 												
 											}
 										} // END Of AmpFund Iteration
@@ -1329,7 +1351,6 @@ public class AdvancedReportPDF extends Action
 														if(ind > (formBean.getFiscalYearRange().size()*4))
 														{
 															position = position + 1;
-	
 															dataArray[row][position] = new String(" Total ");
 														}
 														else

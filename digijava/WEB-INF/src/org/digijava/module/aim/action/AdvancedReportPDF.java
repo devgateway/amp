@@ -1464,16 +1464,16 @@ public class AdvancedReportPDF extends Action
 		}// End of ALlReport() Iteration
 	
 		logger.info(dataArray.length + " ----------------: FINAL DATA START-------------- :" + dataArray[0].length);
-/*		for(int i=0; i< dataArray.length; i++)
+		for(int i=0; i< dataArray.length; i++)
 		{
 			for(int j=0; j< dataArray[0].length; j++)
 			{
 				if(dataArray[i][j] == null)
 					dataArray[i][j] = "";
-				logger.info("i="+i+" j="+j+" "+dataArray[i][j]);
+				//logger.info("i="+i+" j="+j+" "+dataArray[i][j]);
 			}
 			logger.info("\n");
-		}*/
+		}
 		logger.info(dataArray.length + " ----------------: FINAL DATA END-------------- :" + dataArray[0].length);
 
 		if(flag == 1)

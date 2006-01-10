@@ -10,15 +10,6 @@
 <script language="JavaScript">
 <!--
 
-	function openPage()
-	{
-	 	//openResisableWindow(1000, 768);
-		<digi:context name="clearVal" property="context/module/moduleinstance/htmlViewProjects.do" />
-		document.aimCommitmentbyDonorForm.action = "<%= clearVal %>";
-		document.aimCommitmentbyDonorForm.target = "_blank";
-		document.aimCommitmentbyDonorForm.submit();
-	}
-
 	function clearFilter()
 	{
 		<digi:context name="clearVal" property="context/module/moduleinstance/viewProjects.do" />
@@ -52,7 +43,7 @@
 
 <digi:errors/>
 <digi:instance property="aimCommitmentbyDonorForm" />
-<digi:form action="/viewProjects.do" >
+
 <jsp:include page="teamPagesHeader.jsp" flush="true" />
 
 <table width="772" border="0" cellpadding="10" cellspacing="0" bgcolor="#FFFFFF">
@@ -95,9 +86,12 @@
 
 			<logic:notEmpty name="aimCommitmentbyDonorForm"  property="report">
 				<tr>
-					<td>
-						<input type="button" onclick="openPage()" value="Print Preview" class="dr-menu">
-					</td>
+					<td valign="bottom" class="crumb">
+					&nbsp;&nbsp;<img src="../ampTemplate/images/print_icon.gif">
+					<digi:link href="/htmlViewProjects.do" target="_blank">
+						Print
+					</digi:link>
+				</td>
 				</tr>
 			</logic:notEmpty>			
 
@@ -130,7 +124,7 @@
 <!--  PDF/XLS Links -->	
 
 			
-			
+<digi:form action="/viewProjects.do" >			
 			<tr><td width="9">
 			</td>
         
@@ -584,12 +578,12 @@
 									<digi:link href="/viewProjects.do" name="urlParams2" title="<%=translation%>" >
 										Previous
 									</digi:link>
-									&nbsp
+									&nbsp;
 								</logic:notEqual>
 								
 								<logic:equal name="aimCommitmentbyDonorForm" property="page"
 								value="1">
-									<digi:trn key="aim:prev">Previous</digi:trn> &nbsp
+									<digi:trn key="aim:prev">Previous</digi:trn> &nbsp;
 								</logic:equal>	
 <!----------------------------------END   -----------------------------------------------     -->									
 

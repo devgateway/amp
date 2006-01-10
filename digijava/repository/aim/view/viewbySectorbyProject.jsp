@@ -10,15 +10,6 @@
 <script language="JavaScript">
 <!--
 
-	function openPage()
-	{
-//	 	openResisableWindow(1000, 768);
-		<digi:context name="clearVal" property="context/module/moduleinstance/htmlSectorbyProject.do" />
-		document.aimMulitlateralbyDonorForm.action = "<%= clearVal %>";
-		document.aimMulitlateralbyDonorForm.target = "_blank";
-		document.aimMulitlateralbyDonorForm.submit();
-	}
-
 	function clearFilter()
 	{
 		<digi:context name="clearVal" property="context/module/moduleinstance/viewbySectorbyProject.do" />
@@ -52,7 +43,7 @@
 
 <digi:errors/>
 <digi:instance property="aimMulitlateralbyDonorForm" />
-<digi:form action="/viewbySectorbyProject.do" >
+
 
 <jsp:include page="teamPagesHeader.jsp" flush="true" />
 <table width="772" border="0" cellpadding="10" cellspacing="0" bgcolor="#FFFFFF" class="r-dotted">
@@ -94,9 +85,12 @@
 
 			<logic:notEmpty name="aimMulitlateralbyDonorForm" property="multiReport">
 				<tr>
-					<td>
-						<input type="button" onclick="openPage()" value="Print Preview" class="dr-menu">
-					</td>
+					<td valign="bottom" class="crumb">
+					&nbsp;&nbsp;<img src="../ampTemplate/images/print_icon.gif">
+					<digi:link href="/htmlSectorbyProject.do" target="_blank">
+						Print
+					</digi:link>
+				</td>
 				</tr>
 			</logic:notEmpty>
 <!--  PDF/XLS Links -->		
@@ -139,6 +133,7 @@
 </logic:notEmpty>  
 <!--  PDF/XLS Links -->	
 
+<digi:form action="/viewbySectorbyProject.do" >
 			<tr><td width="9" ></td>
 			
 <bean:define id="fcount" name="aimMulitlateralbyDonorForm" property="filterCnt" type="java.lang.Integer" /> 

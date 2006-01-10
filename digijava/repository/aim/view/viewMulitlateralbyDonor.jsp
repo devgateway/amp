@@ -11,15 +11,6 @@
 <script language="JavaScript">
 <!--
 	
-	function openPage()
-	{
-	 	openResisableWindow(1000, 768);
-		<digi:context name="clearVal" property="context/module/moduleinstance/htmlMultilateralbyDonor.do" />
-		document.aimMulitlateralbyDonorForm.action = "<%= clearVal %>";
-		document.aimMulitlateralbyDonorForm.target = popupPointer.name;
-		document.aimMulitlateralbyDonorForm.submit();
-	}
-
 	function clearFilter()
 	{
 		<digi:context name="clearVal" property="context/module/moduleinstance/viewMulitlateralbyDonor.do" />
@@ -53,7 +44,7 @@
 
 <digi:errors/>
 <digi:instance property="aimMulitlateralbyDonorForm" />
-<digi:form action="/viewMulitlateralbyDonor.do" >
+
 <jsp:include page="teamPagesHeader.jsp" flush="true" />
 
 <table width="772" border="0" cellpadding="0" cellspacing="0" bgcolor="#FFFFFF">
@@ -98,12 +89,15 @@
 			</tr>
 
 			<logic:notEmpty name="aimMulitlateralbyDonorForm" property="multiReport">
+
 				<tr>
-					<td width="14" >&nbsp;</td>
-					<td align="left">
-- 						<input type="button" onclick="openPage()" value="Print Preview" class="dr-menu"> 
-					</td>
-				</tr>
+				<td width="14" >&nbsp;</td>	
+				<td valign="bottom" class="crumb">
+					&nbsp;&nbsp;&nbsp;<img src="../ampTemplate/images/print_icon.gif">
+					<digi:link href="/htmlMultilateralbyDonor.do" target="_blank">
+						Print
+					</digi:link>
+				</td></tr>
 			</logic:notEmpty>
 			
 <!--  PDF/XLS Links -->		
@@ -156,7 +150,7 @@
             </tr>
 
 <!--  PDF/XLS Links -->					
-			
+<digi:form action="/viewMulitlateralbyDonor.do" >	
 		<tr><td width="9" height="16"></td>
 	<bean:define id="fcount" name="aimMulitlateralbyDonorForm" property="filterCnt" type="java.lang.Integer" /> 
 

@@ -11,15 +11,6 @@
 <script language="JavaScript">
 <!--
 
-	function openPage()
-	{
-	 	//openResisableWindow(1000, 768);
-		<digi:context name="clearVal" property="context/module/moduleinstance/projectByDonor_NoLayout.do" />
-		document.aimMulitlateralbyDonorForm.action = "<%= clearVal %>";
-		document.aimMulitlateralbyDonorForm.target = "_blank";
-		document.aimMulitlateralbyDonorForm.submit();
-	}
-	
 	function clearFilter()
 	{
 		<digi:context name="clearVal" property="context/module/moduleinstance/viewbyProjectbyDonor.do" />
@@ -53,7 +44,7 @@
 
 <digi:errors/>
 <digi:instance property="aimMulitlateralbyDonorForm" />
-<digi:form action="/viewbyProjectbyDonor.do" >
+
 <jsp:include page="teamPagesHeader.jsp" flush="true" />
 <table width="772" border="0" cellpadding="10" cellspacing="0" bgcolor="#FFFFFF">
 <tr>
@@ -94,8 +85,11 @@
 			</tr>
 			<logic:notEmpty name="aimMulitlateralbyDonorForm" property="multiReport">
 			<tr>
-				<td>
-					<input type="button" onclick="openPage()" value="Print Preview" class="dr-menu">
+				<td valign="bottom" class="crumb">
+					<img src="../ampTemplate/images/print_icon.gif">
+					<digi:link href="/projectByDonor_NoLayout.do" target="_blank">
+						Print
+					</digi:link>
 				</td>
 			</tr>
 			</logic:notEmpty>
@@ -109,7 +103,7 @@
 					<logic:notEmpty name="aimMulitlateralbyDonorForm" property="multiReport">
 						<img src="../ampTemplate/images/pdf_icon.gif" border=0>
 						<bean:define id="translation">
-							<digi:trn key="aim:clickToCreateReportInPDF">Click here to Create Report in Pdf </digi:trn>
+						<digi:trn key="aim:clickToCreateReportInPDF">Click here to Create Report in Pdf </digi:trn>
 						</bean:define>
 						<digi:link href="" onclick="popup_warn(''); return false;" title="<%=translation%>"> 
 							<digi:trn key="aim:createReportInPdf">Create Report in Pdf.</digi:trn> 	
@@ -123,7 +117,7 @@
 					<logic:notEmpty name="aimMulitlateralbyDonorForm" property="multiReport">
 					<img src="../ampTemplate/images/pdf_icon.gif" border=0>	
 						<bean:define id="translation">
-							<digi:trn key="aim:clickToCreateReportInPDF">Click here to Create Report in Pdf </digi:trn>
+						<digi:trn key="aim:clickToCreateReportInPDF">Click here to Create Report in Pdf </digi:trn>
 						</bean:define>
 						<digi:link href="" onclick="popup_pdf(''); return false;" title="<%=translation%>"> 
 							<digi:trn key="aim:createReportInPdf">Create Report in Pdf.</digi:trn> 	
@@ -152,7 +146,7 @@
 </logic:notEmpty>
 
 
-
+<digi:form action="/viewbyProjectbyDonor.do" >
 			<tr>
 			<td width="9"></td>
 

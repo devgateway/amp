@@ -26,6 +26,16 @@
 		document.aimMulitlateralbyDonorForm.target = popupPointer.name;
 		document.aimMulitlateralbyDonorForm.submit();
 	}
+	/* CSV function start  */
+
+		function popup_csv() {
+		openResisableWindow(800, 600);
+		<digi:context name="csv" property="context/module/moduleinstance/quarterlyReportBySectorCSV.do" />
+		document.aimMulitlateralbyDonorForm.action = "<%= csv %>";
+		document.aimMulitlateralbyDonorForm.target = popupPointer.name;
+		document.aimMulitlateralbyDonorForm.submit();
+	}
+	/* CSV function end  */
 
 	function popup_xls() {
 		openResisableWindow(800, 600);
@@ -44,7 +54,6 @@
 
 <digi:errors/>
 <digi:instance property="aimMulitlateralbyDonorForm" />
-<digi:form action="/quarterlyReportBySector.do" >
 
 <jsp:include page="teamPagesHeader.jsp" flush="true" />
 <table width="772" border="0" cellpadding="10" cellspacing="0" bgcolor="#FFFFFF" class="r-dotted">
@@ -81,7 +90,10 @@
 			<logic:notEmpty name="aimMulitlateralbyDonorForm" property="multiReport">
 				<tr>
 					<td>
-						<input type="button" onclick="openPage()" value="Print Preview" class="dr-menu">
+						&nbsp;&nbsp;<img src="../ampTemplate/images/print_icon.gif">
+				<digi:link href="/htmlQuarterlyReportBySector.do" target="_blank">
+					Print
+				</digi:link>
 					</td>
 				</tr>
 			</logic:notEmpty>
@@ -113,8 +125,28 @@
                 </td>
 	          <td valign="top" >&nbsp;</td>
        </tr>
+	   <!-- CSV link -->
+			<tr>
+
+			        <td valign="bottom" class="crumb" >
+					&nbsp;	
+					<img src="../ampTemplate/images/icon_csv.gif" border=0>
+					<bean:define id="translation">
+						<digi:trn key="aim:clickToCreateReportInCVS">Click here to Create Report in CSV </digi:trn>
+					</bean:define>
+					<digi:link href="" onclick="popup_csv(''); return false;" title="<%=translation%>">
+					 	<digi:trn key="aim:createReportInCsv">Create Report in CSV.</digi:trn>
+					</digi:link>
+					
+			
+            </td>
+            </tr>
+
+
+
 </logic:notEmpty>  
 <!--  PDF/XLS Links -->	
+<digi:form action="/quarterlyReportBySector.do" >
 			
 <bean:define id="fcount" name="aimMulitlateralbyDonorForm" property="filterCnt" type="java.lang.Integer" /> 
 <%

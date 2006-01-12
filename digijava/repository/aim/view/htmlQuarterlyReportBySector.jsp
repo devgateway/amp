@@ -153,13 +153,15 @@
 					<logic:iterate name="project"  property="ampFund" id="ampFund" type="org.digijava.module.aim.helper.AmpFund">
 			
 				   <tr>
-					<% count++; %>
+<!--					<% count++; %>
 					 <%  if(count == 1)	 {	   %>
+-->
 					   <td width=30 rowspan=4 valign=middle ><b>
 						  <%=temp%>
 						  <%temp++;%></b>
 					   </td>
-					 <%	 }	%>
+<!--					 <%	 }	%>
+-->
 
 				     <td width=50>
 					  <%="Q"+i%>

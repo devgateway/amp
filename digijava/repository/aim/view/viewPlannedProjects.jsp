@@ -10,8 +10,19 @@
 
 <script language="JavaScript">
 <!--
+	
+	/* CSV function start  */
 
-function popup_xls() {
+		function popup_csv() {
+		openResisableWindow(800, 600);
+		<digi:context name="csv" property="context/module/moduleinstance/PlannedProjectCSV.do" />
+		document.aimMulitlateralbyDonorForm.action = "<%= csv %>";
+		document.aimMulitlateralbyDonorForm.target = popupPointer.name;
+		document.aimMulitlateralbyDonorForm.submit();
+	}
+	/* CSV function end  */
+
+	function popup_xls() {
 		openResisableWindow(800, 600);
 		<digi:context name="xls" property="context/module/moduleinstance/PlannedProjectXls.do" />
 		document.aimCommitmentbyDonorForm.action = "<%= xls %>";
@@ -106,6 +117,26 @@ function popup_xls() {
 		                </td>
 	          <td valign="top" class="r-dotted-lg">&nbsp;</td>
             </tr>
+
+			<!-- csv link -->
+			<tr>
+					<td width="14" class="r-dotted-lg" >&nbsp;&nbsp;</td>
+			        <td valign="bottom" class="crumb" >
+					<logic:notEmpty name="aimCommitmentbyDonorForm" property="report">
+							&nbsp;&nbsp;
+					<img src="../ampTemplate/images/icon_csv.gif" border=0>
+					
+						<!--<digi:trn key="aim:clickToCreateReportInCSV">Click here to Create Report in CSV </digi:trn>-->
+
+					<digi:link href="" onclick="popup_csv(''); return false;" title="<%=translation%>">
+					 	<digi:trn key="aim:createReportInCsv">Create Report in CSV.</digi:trn>
+					</digi:link>
+					</logic:notEmpty>
+			
+            </td>
+			<td valign="top" class="r-dotted-lg">&nbsp;</td>
+            </tr>
+			
 
 </logic:notEmpty>
 <!--  PDF/XLS Links -->

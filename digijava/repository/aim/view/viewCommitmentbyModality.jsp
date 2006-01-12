@@ -34,6 +34,17 @@
 		document.aimCommitmentbyDonorForm.submit();
 	}
 
+	/* CSV function start  */
+
+		function popup_csv() {
+		openResisableWindow(800, 600);
+		<digi:context name="csv" property="context/module/moduleinstance/commitmentByModalityCSV.do" />
+		document.aimMulitlateralbyDonorForm.action = "<%= csv %>";
+		document.aimMulitlateralbyDonorForm.target = popupPointer.name;
+		document.aimMulitlateralbyDonorForm.submit();
+	}
+	/* CSV function end  */
+
 	function popup_xls() {
 		openResisableWindow(800, 600);
 		<digi:context name="xls" property="context/module/moduleinstance/commitmentByModalityXls.do" />
@@ -51,7 +62,7 @@
 
 <digi:errors/>
 <digi:instance property="aimCommitmentbyDonorForm" />
-<digi:form action="/viewCommitmentbyModality.do" >
+
 <jsp:include page="teamPagesHeader.jsp" flush="true" />
 <table width="772" border="0" cellpadding="0" cellspacing="0" bgcolor="#FFFFFF">
 	<tr>
@@ -135,7 +146,10 @@
 				<tr>
 					<td width="14" class="r-dotted-lg">&nbsp;</td>
 					<td align="left">
-						<input type="button" onclick="openPage()" value="Print Preview" class="dr-menu">
+					&nbsp;&nbsp;<img src="../ampTemplate/images/print_icon.gif">
+				<digi:link href="/htmlCommitmentbyModality.do" target="_blank">
+					Print
+				</digi:link>
 					</td>
 				</tr>
 			</logic:notEmpty>
@@ -171,8 +185,29 @@
 	          <td valign="top" class="r-dotted-lg">&nbsp;</td>
             </tr>
 
+
+			<!-- csv link -->
+			<tr>
+					<td width="14" class="r-dotted-lg" >&nbsp;</td>
+			        <td valign="bottom" class="crumb" >
+					<logic:notEmpty name="aimCommitmentbyDonorForm" property="report">
+							&nbsp;
+					<img src="../ampTemplate/images/icon_csv.gif" border=0>
+					<bean:define id="translation">
+						<digi:trn key="aim:clickToCreateReportInCVS">Click here to Create Report in CSV </digi:trn>
+					</bean:define>
+					<digi:link href="" onclick="popup_csv(''); return false;" title="<%=translation%>">
+					 	<digi:trn key="aim:createReportInCsv">Create Report in CSV.</digi:trn>
+					</digi:link>
+					</logic:notEmpty>
+			
+            </td>
+			<td valign="top" class="r-dotted-lg">&nbsp;</td>
+            </tr>
+
 <!--  PDF/XLS Links -->	
 </logic:notEmpty>
+<digi:form action="/viewCommitmentbyModality.do" >
 			
 			<tr><td width="9"></td>
               

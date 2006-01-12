@@ -36,6 +36,17 @@
 		document.aimMulitlateralbyDonorForm.submit();
 	}
 
+	/* CSV function start  */
+
+		function popup_csv() {
+		openResisableWindow(800, 600);
+		<digi:context name="csv" property="context/module/moduleinstance/quarterlyMultilateralByDonorCSV.do" />
+		document.aimMulitlateralbyDonorForm.action = "<%= csv %>";
+		document.aimMulitlateralbyDonorForm.target = popupPointer.name;
+		document.aimMulitlateralbyDonorForm.submit();
+	}
+	/* CSV function end  */
+
 	function popup_xls() {
 		openResisableWindow(800, 600);
 		<digi:context name="xls" property="context/module/moduleinstance/quarterlyMultilaterByDonorXls.do" />
@@ -53,7 +64,7 @@
 
 <digi:errors/>
 <digi:instance property="aimMulitlateralbyDonorForm" />
-<digi:form action="/quarterlyMulitlateralbyDonor.do" >
+
 <jsp:include page="teamPagesHeader.jsp" flush="true" />
 
 <table width="772" border="0" cellpadding="0" cellspacing="0" bgcolor="#FFFFFF">
@@ -98,7 +109,10 @@
 			<logic:notEmpty name="aimMulitlateralbyDonorForm" property="multiReport">
 				<tr>
 					<td colspan=4 align="left">
-						<input type="button" onclick="openPage()" value="Print Preview" class="dr-menu">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<img src="../ampTemplate/images/print_icon.gif">
+				<digi:link href="/htmlQuarterlyMulitlateralbyDonor.do" target="_blank">
+					Print
+				</digi:link>
 					</td>
 				</tr>
 			</logic:notEmpty>				
@@ -139,7 +153,7 @@
            </tr>
 			<tr>
 				<td width="0" >&nbsp;</td>
-					<logic:greaterThan name="aimMulitlateralbyDonorForm" property="fiscalYrRange" value="4">
+					<!--<logic:greaterThan name="aimMulitlateralbyDonorForm" property="fiscalYrRange" value="4">-->
 						<td valign="bottom" class="crumb" >
 							<logic:notEmpty name="aimMulitlateralbyDonorForm" property="multiReport">
 								&nbsp;&nbsp;
@@ -152,25 +166,48 @@
 								</digi:link>
 		                	</logic:notEmpty>
 		                </td>
-		            </logic:greaterThan>    
+						
+		            <!--</logic:greaterThan>-->    
 		
-					<logic:lessEqual name="aimMulitlateralbyDonorForm" property="fiscalYrRange" value="4">
+					<!--<logic:lessEqual name="aimMulitlateralbyDonorForm" property="fiscalYrRange" value="4">-->
+					
 						<td valign="bottom" class="crumb">
 							<logic:notEmpty name="aimMulitlateralbyDonorForm" property="multiReport">
-							&nbsp;&nbsp;<img src="../ampTemplate/images/xls_icon.jpg" border=0>	
+							&nbsp;&nbsp;&nbsp;<img src="../ampTemplate/images/xls_icon.jpg" border=0>	
 								<bean:define id="translation">
 									<digi:trn key="aim:clickToCreateReportInExcel">Click here to Create Report in Excel</digi:trn>
 								</bean:define>
 								<digi:link href="" onclick="popup_xls(''); return false;" title="<%=translation%>">
 									<digi:trn key="aim:createReportInXls">Create Report in Xls.</digi:trn>
 								</digi:link>
-		                	</logic:notEmpty>
+		                <!--	</logic:notEmpty>-->
 		                </td>
 		            </logic:lessEqual>    
 	          <td valign="top" class="r-dotted-lg">&nbsp;</td>
             </tr>
+			<!-- csv link -->
+			<tr>
+					<td width="15" >&nbsp;&nbsp;</td>
+					<!--<logic:lessEqual name="aimMulitlateralbyDonorForm" property="fiscalYrRange" value="4">-->
+			        <td valign="bottom" class="crumb" >
+					<logic:notEmpty name="aimMulitlateralbyDonorForm" property="multiReport">
+							&nbsp;&nbsp;
+					<img src="../ampTemplate/images/icon_csv.gif" border=0>
+					<bean:define id="translation">
+						<digi:trn key="aim:clickToCreateReportInCSV">Click here to Create Report in CSV </digi:trn>
+					</bean:define>
+					<digi:link href="" onclick="popup_csv(''); return false;" title="<%=translation%>">
+					 	<digi:trn key="aim:createReportInCsv">Create Report in CSV.</digi:trn>
+					</digi:link>
+					</logic:notEmpty>
+			
+            </td>
+			<!--</logic:lessEqual>  -->  
+	          <td valign="top" class="r-dotted-lg">&nbsp;</td>
+            </tr>
 
 <!--  PDF/XLS Links -->		
+<digi:form action="/quarterlyMulitlateralbyDonor.do" >
 			
 		<tr><td width="9" height="16"></td>
 	<bean:define id="fcount" name="aimMulitlateralbyDonorForm" property="filterCnt" type="java.lang.Integer" /> 

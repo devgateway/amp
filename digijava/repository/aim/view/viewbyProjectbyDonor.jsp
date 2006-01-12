@@ -27,9 +27,20 @@
 		document.aimMulitlateralbyDonorForm.submit();
 	}
 
+	/* CSV function start  */
+
+		function popup_csv() {
+		openResisableWindow(800, 600);
+		<digi:context name="csv" property="context/module/moduleinstance/projectByDonorXls.do?docType=csv" />
+		document.aimMulitlateralbyDonorForm.action = "<%= csv %>";
+		document.aimMulitlateralbyDonorForm.target = popupPointer.name;
+		document.aimMulitlateralbyDonorForm.submit();
+	}
+	/* CSV function end  */
+
 	function popup_xls() {
 		openResisableWindow(800, 600);
-		<digi:context name="xls" property="context/module/moduleinstance/projectByDonorXls.do" />
+		<digi:context name="xls" property="context/module/moduleinstance/projectByDonorXls.do?docType=xls" />
 		document.aimMulitlateralbyDonorForm.action = "<%= xls %>";
 		document.aimMulitlateralbyDonorForm.target = popupPointer.name;
 		document.aimMulitlateralbyDonorForm.submit();
@@ -142,7 +153,26 @@
 
             </tr>
 
-<!--  PDF/XLS Links -->		
+			<!-- csv link -->
+			<tr>
+
+			        <td valign="bottom" class="crumb" >
+					<logic:notEmpty name="aimMulitlateralbyDonorForm" property="multiReport">
+
+					<img src="../ampTemplate/images/icon_csv.gif" border=0>
+					<bean:define id="translation">
+						<digi:trn key="aim:clickToCreateReportInCVS">Click here to Create Report in CSV </digi:trn>
+					</bean:define>
+					<digi:link href="" onclick="popup_csv(''); return false;" title="<%=translation%>">
+					 	<digi:trn key="aim:createReportInCsv">Create Report in CSV.</digi:trn>
+					</digi:link>
+					</logic:notEmpty>
+			
+            </td>
+            </tr>
+
+
+<!--  PDF/XLS/CSV Links -->					
 </logic:notEmpty>
 
 

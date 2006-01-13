@@ -40,7 +40,7 @@
 
 		function popup_csv() {
 		openResisableWindow(800, 600);
-		<digi:context name="csv" property="context/module/moduleinstance/quarterlyReportByProjectCSV.do" />
+		<digi:context name="csv" property="context/module/moduleinstance/quarterlyReportByProjectXls.do?docType=csv" />
 		document.aimMulitlateralbyDonorForm.action = "<%= csv %>";
 		document.aimMulitlateralbyDonorForm.target = popupPointer.name;
 		document.aimMulitlateralbyDonorForm.submit();
@@ -50,7 +50,7 @@
 
 	function popup_xls() {
 		openResisableWindow(800, 600);
-		<digi:context name="xls" property="context/module/moduleinstance/quarterlyReportByProjectXls.do" />
+		<digi:context name="xls" property="context/module/moduleinstance/quarterlyReportByProjectXls.do?docType=xls" />
 		document.aimMulitlateralbyDonorForm.action = "<%= xls %>";
 		document.aimMulitlateralbyDonorForm.target = popupPointer.name;
 		document.aimMulitlateralbyDonorForm.submit();

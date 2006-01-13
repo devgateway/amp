@@ -30,7 +30,7 @@
 
 		function popup_csv() {
 		openResisableWindow(800, 600);
-		<digi:context name="csv" property="context/module/moduleinstance/sectorByProjectCSV.do?docType=cvs" />
+		<digi:context name="csv" property="context/module/moduleinstance/SectorByProjectXls.do?docType=csv" />
 		document.aimMulitlateralbyDonorForm.action = "<%= csv %>";
 		document.aimMulitlateralbyDonorForm.target = popupPointer.name;
 		document.aimMulitlateralbyDonorForm.submit();

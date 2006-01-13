@@ -173,6 +173,7 @@ public class ViewProjectXLS extends Action
 				}
 			}
 
+			String fileName="ViewProjectsXls.Jrxml";
 			ViewProjectDatasource dataSource = new ViewProjectDatasource(data);
 			ActionServlet s = getServlet();
 			String jarFile = s.getServletContext().getRealPath(
@@ -183,29 +184,70 @@ public class ViewProjectXLS extends Action
 		 	logger.info( " RowCnt =  " + rowCnt);
 		 	jrxml.createJrxml(realPathJrxml, rowCnt);
 			JasperCompileManager.compileReportToFile(realPathJrxml);
-			byte[] bytes = null;
-			String jasperFile = s.getServletContext().getRealPath(
+			if(request.getParameter("docType") != null && request.getParameter("docType").equals("xls"))
+			{
+									logger.info("EXPORTING xls for Forecasting Report");
+
+				byte[] bytes = null;
+				String jasperFile = s.getServletContext().getRealPath(
 								"/WEB-INF/classes/org/digijava/module/aim/reports/viewProjectXls.jasper");
-			Map parameters = new HashMap();
-			JasperPrint jasperPrint = JasperFillManager.fillReport(jasperFile, parameters, dataSource);
-			String destFile = s.getServletContext().getRealPath("/WEB-INF/src/org/digijava/module/aim/reports/viewProjectXls.xls");
-			ServletOutputStream outputStream = null;
-			response.setContentType("application/vnd.ms-excel");
-			response.setHeader("Content-Disposition","inline; filename=viewProjectXls.xls");
-			try 
-			{
-				JRXlsExporter exporter = new JRXlsExporter();
-				outputStream = response.getOutputStream();
-				exporter.setParameter(JRExporterParameter.JASPER_PRINT, jasperPrint);
-				exporter.setParameter(JRExporterParameter.OUTPUT_STREAM, outputStream);
-				exporter.setParameter(JRXlsExporterParameter.IS_ONE_PAGE_PER_SHEET, Boolean.FALSE);
-				exporter.exportReport();
-			}	
-			catch (Exception e) 
-			{
-				if (outputStream != null) 
+				Map parameters = new HashMap();
+				JasperPrint jasperPrint = JasperFillManager.fillReport(jasperFile, parameters, dataSource);
+				String destFile = s.getServletContext().getRealPath("/WEB-INF/src/org/digijava/module/aim/reports/viewProjectXls.xls");
+				ServletOutputStream outputStream = null;
+				response.setContentType("application/vnd.ms-excel");
+				response.setHeader("Content-Disposition","inline; filename=viewProjectXls.xls");
+				try 
+				{
+					JRXlsExporter exporter = new JRXlsExporter();
+					outputStream = response.getOutputStream();
+					exporter.setParameter(JRExporterParameter.JASPER_PRINT, jasperPrint);
+					exporter.setParameter(JRExporterParameter.OUTPUT_STREAM, outputStream);
+					exporter.setParameter(JRXlsExporterParameter.IS_ONE_PAGE_PER_SHEET, Boolean.FALSE);
+					exporter.exportReport();
+				}	
+				catch (Exception e) 
+				{
+					if (outputStream != null) 
 					outputStream.close();
+				}
 			}
+				else if(request.getParameter("docType") != null && request.getParameter("docType").equals("csv"))
+				{	
+					logger.info("EXPORTING CSV for Forecasting Report");
+					ServletOutputStream outputStream = null;
+					try
+					{
+				
+						Map parameters = new HashMap();
+						byte[] bytes = null;
+						String jasperFile = s.getServletContext().getRealPath("/WEB-INF/classes/org/digijava/module/aim/reports/viewProjectXls.jasper");
+						JasperPrint jasperPrint = JasperFillManager.fillReport(jasperFile,parameters,dataSource);
+						String destFile = s.getServletContext().getRealPath("/WEB-INF/src/org/digijava/module/aim/reports/viewProjectXls.csv");
+					
+					//JasperPrint jasperPrint = JasperFillManager.fillReport(jasperFile,parameters,dataSource);
+						response.setContentType("application/vnd.ms-excel");
+						String responseHeader = "inline; filename="+destFile;
+						logger.info("--------------" + responseHeader);
+						response.setHeader("Content-Disposition", responseHeader);
+						//response.setHeader("Content-Disposition","inline; filename=commitmentByModalityXls.xls");
+						logger.info("--------------");
+					//JRXlsExporter exporter = new JRXlsExporter();
+						JRCsvExporter exporter = new JRCsvExporter();
+						outputStream = response.getOutputStream();
+						exporter.setParameter(JRExporterParameter.JASPER_PRINT, jasperPrint);
+						exporter.setParameter(JRExporterParameter.OUTPUT_STREAM, outputStream);
+					//exporter.setParameter(JRXlsExporterParameter.IS_ONE_PAGE_PER_SHEET, Boolean.FALSE);
+						exporter.exportReport();
+					}
+					catch (Exception e) 
+					{
+						if (outputStream != null) 
+						{
+							outputStream.close();
+						}	
+					}
+				}
 		}
 		return null;
 	}

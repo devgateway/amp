@@ -479,6 +479,7 @@ public class SectorByProjectXLS
 					}
 				}
 
+				String fileName="SbpXls.jrxml";
 				SectorByProjectDatasource dataSource = new SectorByProjectDatasource(data);
 				ActionServlet s = getServlet();
 				String jarFile = s.getServletContext().getRealPath(
@@ -488,6 +489,8 @@ public class SectorByProjectXLS
 				SbpXlsJrxml jrxml = new SbpXlsJrxml();
 				jrxml.createJrxml(yyCnt, realPathJrxml);
 				JasperCompileManager.compileReportToFile(realPathJrxml);
+				if(request.getParameter("docType") != null && request.getParameter("docType").equals("xls"))
+				{
 				byte[] bytes = null;
 				String jasperFile = s.getServletContext().getRealPath(
     									"/WEB-INF/classes/org/digijava/module/aim/reports/SectorByProjectXls.jasper");
@@ -499,13 +502,49 @@ public class SectorByProjectXLS
 				response.setContentType("application/vnd.ms-excel");
 				response.setHeader("Content-Disposition","inline; filename=SectorByProjectXls.xls");
 				
+					try
+					{
+						outputStream = response.getOutputStream();
+						JRXlsExporter exporter = new JRXlsExporter();
+						exporter.setParameter(JRExporterParameter.JASPER_PRINT, jasperPrint);
+						exporter.setParameter(JRExporterParameter.OUTPUT_STREAM, outputStream);
+						exporter.setParameter(JRXlsExporterParameter.IS_ONE_PAGE_PER_SHEET, Boolean.FALSE);
+						exporter.exportReport();
+					}
+					catch (Exception e) 
+					{
+						if (outputStream != null) 
+						{
+							outputStream.close();
+						}
+					}
+				}
+				else if(request.getParameter("docType") != null && request.getParameter("docType").equals("csv"))
+		{
+				logger.info("EXPORTING CSV for ProjectbyDonor");
+				ServletOutputStream outputStream = null;
 				try
 				{
+				
+					Map parameters = new HashMap();
+					byte[] bytes = null;
+					String jasperFile = s.getServletContext().getRealPath("/WEB-INF/classes/org/digijava/module/aim/reports/SectorByProjectXls.jasper");
+					JasperPrint jasperPrint = JasperFillManager.fillReport(jasperFile,parameters,dataSource);
+					String destFile = s.getServletContext().getRealPath("/WEB-INF/src/org/digijava/module/aim/reports/SectorByProjectXls.csv");
+					
+					//JasperPrint jasperPrint = JasperFillManager.fillReport(jasperFile,parameters,dataSource);
+						response.setContentType("application/vnd.ms-excel");
+						String responseHeader = "inline; filename="+destFile;
+						logger.info("--------------" + responseHeader);
+						response.setHeader("Content-Disposition", responseHeader);
+						//response.setHeader("Content-Disposition","inline; filename=commitmentByModalityXls.xls");
+						logger.info("--------------");
+					//JRXlsExporter exporter = new JRXlsExporter();
+					JRCsvExporter exporter = new JRCsvExporter();
 					outputStream = response.getOutputStream();
-					JRXlsExporter exporter = new JRXlsExporter();
 					exporter.setParameter(JRExporterParameter.JASPER_PRINT, jasperPrint);
 					exporter.setParameter(JRExporterParameter.OUTPUT_STREAM, outputStream);
-					exporter.setParameter(JRXlsExporterParameter.IS_ONE_PAGE_PER_SHEET, Boolean.FALSE);
+					//exporter.setParameter(JRXlsExporterParameter.IS_ONE_PAGE_PER_SHEET, Boolean.FALSE);
 					exporter.exportReport();
 				}
 				catch (Exception e) 
@@ -513,9 +552,10 @@ public class SectorByProjectXLS
 					if (outputStream != null) 
 					{
 						outputStream.close();
-					}
+					}	
 				}
-			}
+		}
+		}
 			return null;
 		  }
 }

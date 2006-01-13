@@ -362,29 +362,71 @@ public class MultilateralDonorXLS extends Action
 			jrxml.createJrxml( yyCount, realPathJrxml);
 
 			JasperCompileManager.compileReportToFile(realPathJrxml);
-			byte[] bytes = null;
-			String jasperFile = s.getServletContext().getRealPath("/WEB-INF/classes/org/digijava/module/aim/reports/MultilateralDonorXls.jasper");
-			Map parameters = new HashMap();
-			JasperPrint jasperPrint = JasperFillManager.fillReport(jasperFile,parameters,dataSource);
-			String destFile = s.getServletContext().getRealPath("/WEB-INF/src/org/digijava/module/aim/reports/MultilateralDonorXls.xls");
-			ServletOutputStream outputStream = null;
-			response.setContentType("application/vnd.ms-excel");
-			response.setHeader("Content-Disposition","inline; filename=MultilateralDonorXls.xls");
-			try
-			{
-				outputStream = response.getOutputStream();
-				JRXlsExporter exporter = new JRXlsExporter();
-				exporter.setParameter(JRExporterParameter.JASPER_PRINT, jasperPrint);
-				exporter.setParameter(JRExporterParameter.OUTPUT_STREAM, outputStream);
-				exporter.setParameter(JRXlsExporterParameter.IS_ONE_PAGE_PER_SHEET, Boolean.FALSE);
-				exporter.exportReport();
-				outputStream.flush();
-			}
-			catch (Exception e) {
-				if (outputStream != null) 
+			
+			if(request.getParameter("docType") != null && request.getParameter("docType").equals("xls")){
+				logger.info("EXPORTING XLS for MUltilateralbyDonor");
+				
+				byte[] bytes = null;
+				String jasperFile = s.getServletContext().getRealPath("/WEB-INF/classes/org/digijava/module/aim/reports/MultilateralDonorXls.jasper");
+				Map parameters = new HashMap();
+				JasperPrint jasperPrint = JasperFillManager.fillReport(jasperFile,parameters,dataSource);
+				String destFile = s.getServletContext().getRealPath("/WEB-INF/src/org/digijava/module/aim/reports/MultilateralDonorXls.xls");
+				ServletOutputStream outputStream = null;
+				response.setContentType("application/vnd.ms-excel");
+				response.setHeader("Content-Disposition","inline; filename=MultilateralDonorXls.xls");
+				try
 				{
-					outputStream.close();
+					outputStream = response.getOutputStream();
+					JRXlsExporter exporter = new JRXlsExporter();
+					exporter.setParameter(JRExporterParameter.JASPER_PRINT, jasperPrint);
+					exporter.setParameter(JRExporterParameter.OUTPUT_STREAM, outputStream);
+					exporter.setParameter(JRXlsExporterParameter.IS_ONE_PAGE_PER_SHEET, Boolean.FALSE);
+					exporter.exportReport();
+					outputStream.flush();
 				}
+				catch (Exception e) {
+					if (outputStream != null) 
+					{
+						outputStream.close();
+					}
+				}
+			}
+			else if(request.getParameter("docType") != null && request.getParameter("docType").equals("csv"))
+			{
+				logger.info("EXPORTING CSV for MUltilateralbyDonor");
+				ServletOutputStream outputStream = null;
+				try
+				{
+					Map parameters = new HashMap();
+					byte[] bytes = null;
+					String jasperFile = s.getServletContext().getRealPath("/WEB-INF/classes/org/digijava/module/aim/reports/MultilateralDonorXls.jasper");
+					JasperPrint jasperPrint = JasperFillManager.fillReport(jasperFile,parameters,dataSource);
+					String destFile = s.getServletContext().getRealPath("/WEB-INF/src/org/digijava/module/aim/reports/MultilateralDonorXls.csv");
+					
+					//JasperPrint jasperPrint = JasperFillManager.fillReport(jasperFile,parameters,dataSource);
+						response.setContentType("application/vnd.ms-excel");
+						String responseHeader = "inline; filename="+destFile;
+						logger.info("--------------" + responseHeader);
+						response.setHeader("Content-Disposition", responseHeader);
+						//response.setHeader("Content-Disposition","inline; filename=commitmentByModalityXls.xls");
+						logger.info("--------------");
+					//JRXlsExporter exporter = new JRXlsExporter();
+					JRCsvExporter exporter = new JRCsvExporter();
+					outputStream = response.getOutputStream();
+					exporter.setParameter(JRExporterParameter.JASPER_PRINT, jasperPrint);
+					exporter.setParameter(JRExporterParameter.OUTPUT_STREAM, outputStream);
+					//exporter.setParameter(JRXlsExporterParameter.IS_ONE_PAGE_PER_SHEET, Boolean.FALSE);
+					exporter.exportReport();
+				}
+				catch (Exception e) 
+				{
+					e.printStackTrace(System.out);
+					if (outputStream != null) 
+					{
+						outputStream.close();
+					}
+				}
+				
 			}
 		}
 		return null;

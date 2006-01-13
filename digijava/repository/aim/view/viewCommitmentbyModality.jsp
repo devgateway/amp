@@ -38,16 +38,16 @@
 
 		function popup_csv() {
 		openResisableWindow(800, 600);
-		<digi:context name="csv" property="context/module/moduleinstance/commitmentByModalityCSV.do" />
-		document.aimMulitlateralbyDonorForm.action = "<%= csv %>";
-		document.aimMulitlateralbyDonorForm.target = popupPointer.name;
-		document.aimMulitlateralbyDonorForm.submit();
+		<digi:context name="csv" property="context/module/moduleinstance/commitmentByModalityXls.do?docType=csv" />
+		document.aimCommitmentbyDonorForm.action = "<%= csv %>";
+		document.aimCommitmentbyDonorForm.target = popupPointer.name;
+		document.aimCommitmentbyDonorForm.submit();
 	}
 	/* CSV function end  */
 
 	function popup_xls() {
 		openResisableWindow(800, 600);
-		<digi:context name="xls" property="context/module/moduleinstance/commitmentByModalityXls.do" />
+		<digi:context name="xls" property="context/module/moduleinstance/commitmentByModalityXls.do?docType=xls" />
 		document.aimCommitmentbyDonorForm.action = "<%= xls %>";
 		document.aimCommitmentbyDonorForm.target = popupPointer.name;
 		document.aimCommitmentbyDonorForm.submit();

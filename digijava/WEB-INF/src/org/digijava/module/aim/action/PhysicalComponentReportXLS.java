@@ -15,6 +15,7 @@ import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.JasperRunManager;
 import net.sf.jasperreports.engine.export.JRXlsExporter;
+import net.sf.jasperreports.engine.export.JRCsvExporter;
 import net.sf.jasperreports.engine.export.JRXlsExporterParameter;
 
 import org.apache.log4j.Logger;
@@ -189,6 +190,7 @@ public class PhysicalComponentReportXLS extends Action
 		if(flag == 1)
 		{
 
+			String fileName="PhysicalComponentReport.jrxml";
 			MultilateralDonorDatasource dataSource = new MultilateralDonorDatasource(data);
 			ActionServlet s = getServlet();
 			String jarFile = s.getServletContext().getRealPath(
@@ -201,7 +203,8 @@ public class PhysicalComponentReportXLS extends Action
 			jrxml.createJrxml(height, realPathJrxml);
 			
 			JasperCompileManager.compileReportToFile(realPathJrxml);
-			
+			if(request.getParameter("docType") != null && request.getParameter("docType").equals("xls"))
+			{
 			byte[] bytes = null;
 			String jasperFile = s.getServletContext().getRealPath(
 							 "/WEB-INF/classes/org/digijava/module/aim/reports/PhysicalComponentReportXls.jasper");
@@ -228,6 +231,44 @@ public class PhysicalComponentReportXLS extends Action
 					outputStream.close();
 				System.out.println("Exception from PhysicalComponentReportXls = " + e);
 			}
+		}
+
+		else if(request.getParameter("docType") != null && request.getParameter("docType").equals("csv"))
+		{
+				logger.info("EXPORTING CSV for PhysicalComponentReport");
+				ServletOutputStream outputStream = null;
+				try
+				{
+				
+					Map parameters = new HashMap();
+					byte[] bytes = null;
+					String jasperFile = s.getServletContext().getRealPath("/WEB-INF/classes/org/digijava/module/aim/reports/PhysicalComponentReportXls.jasper");
+					JasperPrint jasperPrint = JasperFillManager.fillReport(jasperFile,parameters,dataSource);
+					String destFile = s.getServletContext().getRealPath("/WEB-INF/src/org/digijava/module/aim/reports/PhysicalComponentReportXls.csv");
+					
+					//JasperPrint jasperPrint = JasperFillManager.fillReport(jasperFile,parameters,dataSource);
+						response.setContentType("application/vnd.ms-excel");
+						String responseHeader = "inline; filename="+destFile;
+						logger.info("--------------" + responseHeader);
+						response.setHeader("Content-Disposition", responseHeader);
+						//response.setHeader("Content-Disposition","inline; filename=commitmentByModalityXls.xls");
+						logger.info("--------------");
+					//JRXlsExporter exporter = new JRXlsExporter();
+					JRCsvExporter exporter = new JRCsvExporter();
+					outputStream = response.getOutputStream();
+					exporter.setParameter(JRExporterParameter.JASPER_PRINT, jasperPrint);
+					exporter.setParameter(JRExporterParameter.OUTPUT_STREAM, outputStream);
+					//exporter.setParameter(JRXlsExporterParameter.IS_ONE_PAGE_PER_SHEET, Boolean.FALSE);
+					exporter.exportReport();
+				}
+				catch (Exception e) 
+				{
+					if (outputStream != null) 
+					{
+						outputStream.close();
+					}	
+				}
+		}
 		}
 
 		return null;

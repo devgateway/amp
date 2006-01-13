@@ -3,6 +3,7 @@ package org.digijava.module.aim.action;
 import net.sf.jasperreports.engine.*;
 import net.sf.jasperreports.engine.export.JRXlsExporter;
 import net.sf.jasperreports.engine.export.JRXlsExporterParameter;
+import net.sf.jasperreports.engine.export.JRCsvExporter;
 
 import java.util.*;
 
@@ -162,6 +163,7 @@ public class PlannedProjectXLS extends Action
 						
 				}
 			}
+			String fileName="PlannedProjectXls.jrxml";
 
 			ViewProjectDatasource dataSource = new ViewProjectDatasource(data);
 			ActionServlet s = getServlet();
@@ -172,6 +174,10 @@ public class PlannedProjectXLS extends Action
 		 	PlannedProjectXlsJrxml jrxml = new PlannedProjectXlsJrxml();
 		 	jrxml.createJrxml(realPathJrxml, yearCount);
 			JasperCompileManager.compileReportToFile(realPathJrxml);
+
+			if(request.getParameter("docType") != null && request.getParameter("docType").equals("xls"))
+			{
+				logger.info("EXPORTING XLS PLANNED PROJECTS Project");
 			byte[] bytes = null;
 			String jasperFile = s.getServletContext().getRealPath("/WEB-INF/classes/org/digijava/module/aim/reports/PlannedProjectXls.jasper");
 			Map parameters = new HashMap();
@@ -198,7 +204,43 @@ public class PlannedProjectXLS extends Action
 					outputStream.close();
 			}
 		}
-
+		else if(request.getParameter("docType") != null && request.getParameter("docType").equals("csv"))
+		{
+				logger.info("EXPORTING CSV for Quarterly TEam REport Project");
+				ServletOutputStream outputStream = null;
+				try
+				{
+				
+					Map parameters = new HashMap();
+					byte[] bytes = null;
+					String jasperFile = s.getServletContext().getRealPath("/WEB-INF/classes/org/digijava/module/aim/reports/PlannedProjectXls.jasper");
+					JasperPrint jasperPrint = JasperFillManager.fillReport(jasperFile,parameters,dataSource);
+					String destFile = s.getServletContext().getRealPath("/WEB-INF/src/org/digijava/module/aim/reports/PlannedProjectXls.csv");
+					
+					//JasperPrint jasperPrint = JasperFillManager.fillReport(jasperFile,parameters,dataSource);
+						response.setContentType("application/vnd.ms-excel");
+						String responseHeader = "inline; filename="+destFile;
+						logger.info("--------------" + responseHeader);
+						response.setHeader("Content-Disposition", responseHeader);
+						//response.setHeader("Content-Disposition","inline; filename=commitmentByModalityXls.xls");
+						logger.info("--------------");
+					//JRXlsExporter exporter = new JRXlsExporter();
+					JRCsvExporter exporter = new JRCsvExporter();
+					outputStream = response.getOutputStream();
+					exporter.setParameter(JRExporterParameter.JASPER_PRINT, jasperPrint);
+					exporter.setParameter(JRExporterParameter.OUTPUT_STREAM, outputStream);
+					//exporter.setParameter(JRXlsExporterParameter.IS_ONE_PAGE_PER_SHEET, Boolean.FALSE);
+					exporter.exportReport();
+				}
+				catch (Exception e) 
+				{
+					if (outputStream != null) 
+					{
+						outputStream.close();
+					}	
+				}
+		}
+		}
 		return null;
 	}
 }

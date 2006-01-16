@@ -21,8 +21,8 @@
 
 <table width="700" cellspacing=1 cellpadding=1 valign=top align=left >
 
-	<%! int stYr = 0, ind = 0; %> 
-	<%! int temp = 0, count = 0; %> 
+	<% int stYr = 0, temp = 0; %> 
+	<%! int ind = 0, count = 0; %> 
   <!-- Report Name -->
   <tr>
    <td class="head1-name" align=center>

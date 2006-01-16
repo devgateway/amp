@@ -131,8 +131,8 @@
 			  <bean:write name="multiReport" property="sector" />
 			</td>
 		  </tr>	
-			<%! int stYr = 0; %> 
-			<%! int temp = 0; %> 
+			<% int stYr = 0; %> 
+			<% int temp = 0; %> 
 			<logic:iterate name="aimMulitlateralbyDonorForm"  property="fiscalYearRange" id="fiscalYearRange">
 			<% 
 			   if (stYr == 0) {

@@ -605,12 +605,12 @@
 									<digi:link href="/viewProjects.do" name="urlParams2" title="<%=translation%>" >
 										Previous
 									</digi:link>
-									&nbsp
+									&nbsp;
 								</logic:notEqual>
 								
 								<logic:equal name="aimCommitmentbyDonorForm" property="page"
 								value="1">
-									<digi:trn key="aim:prev">Previous</digi:trn> &nbsp
+									<digi:trn key="aim:prev">Previous</digi:trn> &nbsp;
 								</logic:equal>	
 <!----------------------------------END   -----------------------------------------------     -->									
 

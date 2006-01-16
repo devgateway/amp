@@ -115,16 +115,17 @@
 			   </td>
 			</tr>
 
-			<%! int stYr = 0; %> 
-			<%! int temp = 0; %> 
+			<% int stYr = 0; %> 
+			<% int temp = 0; %> 
 			<logic:iterate name="aimMulitlateralbyDonorForm"  property="fiscalYearRange" id="fiscalYearRange">
 			<% 
-			   if (stYr == 0) {
-				Integer fy = (Integer) fiscalYearRange; 
-				stYr = fy.intValue();
-			} %>
+				if (stYr == 0) 
+				{
+					Integer fy = (Integer) fiscalYearRange; 
+					stYr = fy.intValue();
+				} 
+			%>
 			</logic:iterate>
-
 			<logic:iterate name="multiReport"  property="donors" id="donors" type="org.digijava.module.aim.helper.AmpTeamDonors">
 
 			 <tr>
@@ -144,6 +145,7 @@
 						<%=temp%>
 						<%temp++;%>
 					 </td>
+
 				     <td align=right width=80>
 						<logic:notEqual name="totalDonorFund" property="totCommAmount" value="0">
 							<bean:write name="totalDonorFund" property="totCommAmount" />
@@ -168,7 +170,7 @@
 						&nbsp;
 					 </td>
 				   </tr>
-				   </logic:iterate>
+					</logic:iterate>						
 				   <tr>
 				     <td width=50>
 						Total
@@ -199,7 +201,17 @@
 				 </table>
 			   </td>
 			 </tr>
-			
+		
+			 <% int stYr1=0, temp1=0; %>
+			 <logic:iterate name="aimMulitlateralbyDonorForm"  property="fiscalYearRange" id="fiscalYearRange">
+			 <% 
+				if (stYr1 == 0) 
+				{
+					Integer fy = (Integer) fiscalYearRange; 
+					stYr1 = fy.intValue();
+				} 
+			 %>
+			 </logic:iterate>
 			 <!-- Terms of Assistance -->
 			 <logic:iterate name="donors"  property="totalDonorTermAssistFund" id="totalDonorTermAssistFund" type="org.digijava.module.aim.helper.TermFund">
 			 <tr>
@@ -210,13 +222,13 @@
 				<bean:write name="totalDonorTermAssistFund" property="termAssistName"/>
 			   </td>
 			   <td width=570>
-			   <%  temp = stYr; %>
+			   <%  temp1 = stYr1; %>
 			     <table cellpadding=2 cellspacing=1 border=1 style="border-collapse: collapse">
 				   <logic:iterate name="totalDonorTermAssistFund"  property="termFundTotal" id="termFundTotal" type="org.digijava.module.aim.helper.TermFundTotal">
 				   <tr>
 				     <td width=50>
-						<%=temp%>
-						<%temp++;%>
+						<%=temp1%>
+						<%temp1++;%>
 					 </td>
 				     <td align=right width=80>
 						<logic:notEqual name="termFundTotal" property="totCommAmount" value="0">
@@ -279,6 +291,16 @@
 			</logic:iterate>
 			</logic:iterate>
 
+			<% int stYr2=0, temp2=0; %>
+			 <logic:iterate name="aimMulitlateralbyDonorForm"  property="fiscalYearRange" id="fiscalYearRange">
+			 <% 
+				if (stYr2 == 0) 
+				{
+					Integer fy = (Integer) fiscalYearRange; 
+					stYr2 = fy.intValue();
+				} 
+			 %>
+			 </logic:iterate>
 			 <!-- Total of Terms of Assistance -->
 			<logic:iterate name="multiReport"  property="totalTeamTermAssistFund" id="totalTeamTermAssistFund" type="org.digijava.module.aim.helper.TermFund">
 			 <tr>
@@ -289,13 +311,13 @@
 				Total <bean:write name="totalTeamTermAssistFund" property="termAssistName" /></b>
 			   </td>
 			   <td width=570>
-				   <%  temp = stYr; %>	
+				   <%  temp2 = stYr2; %>	
 			     <table cellpadding=2 cellspacing=1 border=1 style="border-collapse: collapse">
 				   <logic:iterate name="totalTeamTermAssistFund"  property="termFundTotal" id="termFundTotal" type="org.digijava.module.aim.helper.TermFundTotal">
 				   <tr>
 				     <td width=50>
-						<%=temp%>
-						<%temp++;%>
+						<%=temp2%>
+						<%temp2++;%>
 					 </td>
 				     <td align=right width=80>
 						<logic:notEqual name="termFundTotal" property="totCommAmount" value="0">
@@ -357,6 +379,16 @@
 			 </logic:iterate>
 			<!-- end of total terms assist -->
 
+			<% int stYr3=0, temp3=0; %>
+			 <logic:iterate name="aimMulitlateralbyDonorForm"  property="fiscalYearRange" id="fiscalYearRange">
+			 <% 
+				if (stYr3 == 0) 
+				{
+					Integer fy = (Integer) fiscalYearRange; 
+					stYr3 = fy.intValue();
+				} 
+			 %>
+			 </logic:iterate>
 			<!-- Total donor funds -->
 			 <logic:iterate name="donors"  property="totalDonorTermAssistFund" id="totalDonorTermAssistFund" type="org.digijava.module.aim.helper.TermFund">
 			 <tr>
@@ -367,13 +399,13 @@
 				Total for <bean:write name="multiReport" property="teamName" /></b>
 			   </td>
 			   <td width=570>
-			   <%  temp = stYr; %>
+			   <%  temp3 = stYr3; %>
 			     <table cellpadding=2 cellspacing=1 border=1 style="border-collapse: collapse">
 		    	   <logic:iterate name="multiReport"  property="totalTeamFund" id="totalTeamFund" type="org.digijava.module.aim.helper.FundTotal">
 				   <tr>
 				     <td width=50>
-						<%=temp%>
-						<%temp++;%>
+						<%=temp3%>
+						<%temp3++;%>
 					 </td>
 				     <td align=right width=80>
 						<logic:notEqual name="totalTeamFund" property="totCommAmount" value="0">

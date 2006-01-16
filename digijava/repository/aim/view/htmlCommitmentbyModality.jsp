@@ -20,8 +20,8 @@
 
 <table width="900" cellspacing=1 cellpadding=1 valign=top align=left>
 
-	<%! int stYr = 0, ind = 0; %> 
-	<%! int temp = 0, count = 0; %> 
+	<% int stYr = 0, temp = 0, ind = 0; %> 
+	<% int count = 0; %> 
   <!-- Report Name -->
   <tr>
    <td class="head1-name" align=center>
@@ -210,7 +210,7 @@
 
 					<% if(ind > count ) {  ind=0;%>
  					 <td width=50> <b>
-						Total	</b>
+						Total	</b> 
 					</td>
 					<% } else { %>
 	 					 <td width=40>

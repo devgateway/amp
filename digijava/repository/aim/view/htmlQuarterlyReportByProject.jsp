@@ -20,8 +20,8 @@
 <table width="650" cellspacing=1 cellpadding=1 valign=top align=left>
 
 	<% int i=1;	%>
-	<%! int stYr = 0, count = 0; %> 
-	<%! int temp = 0; %> 
+	<% int stYr = 0, temp = 0; %> 
+	<%! int count = 0; %> 
 
   <!-- Report Name -->
   <tr>

@@ -2425,55 +2425,54 @@
 
 <!-- Action for Printer Friendly HTML Reports -->
 
-
-	<action name="aimMulitlateralbyDonorForm" 
-     	type="org.digijava.module.aim.action.ViewPhysicalComponentReport" 
+	 <action name="aimMulitlateralbyDonorForm" 
+     	type="org.digijava.module.aim.action.HtmlMulitlateralbyDonorClassicReport" 
      	scope="session" validate="false" path="/aim/htmlPhysicalComponentReport">
     <forward name="forward" path="/showLayout.do?layout=htmlPhysicalComponentReport" />
-    </action>
-
+	 </action>
+	 
 	<action name="aimMulitlateralbyDonorForm" 
      	type="org.digijava.module.aim.action.HtmlMulitlateralbyDonorClassicReport" 
      	scope="session" validate="false" path="/aim/projectByDonor_NoLayout">
     <forward name="forward" path="/showLayout.do?layout=projectByDonor_NoLayout" />
     </action>
-    
-	<action name="aimCommitmentbyDonorForm" 
-    	type="org.digijava.module.aim.action.ViewCommitmentbyModality" 
+
+	 <action name="aimCommitmentbyDonorForm" 
+    	type="org.digijava.module.aim.action.HtmlCommitmentbyDonorClassicReport" 
      	scope="session" validate="false" path="/aim/htmlCommitmentbyModality">
     <forward name="forward" path="/showLayout.do?layout=htmlCommitmentbyModality" />
-    </action>
-	
+	 </action>
+	 
 	<action name="aimMulitlateralbyDonorForm" 
      	type="org.digijava.module.aim.action.HtmlMulitlateralbyDonorClassicReport" 
      	scope="session" validate="false" path="/aim/htmlMultilateralbyDonor">
     <forward name="forward" path="/showLayout.do?layout=htmlMultilateralbyDonor" />
     </action>
 
-	<action name="aimMulitlateralbyDonorForm" 
-     	type="org.digijava.module.aim.action.ViewQuarterlyMultilateralbyDonor" 
+	 <action name="aimMulitlateralbyDonorForm" 
+     	type="org.digijava.module.aim.action.HtmlMulitlateralbyDonorClassicReport" 
      	scope="session" validate="false" path="/aim/htmlQuarterlyMulitlateralbyDonor">
     <forward name="forward" path="/showLayout.do?layout=htmlQuarterlyMulitlateralbyDonor" />
-    </action>
- 
+	 </action>
+
 	 <action name="aimMulitlateralbyDonorForm" 
-     	type="org.digijava.module.aim.action.ViewQuarterlyByProject" 
+     	type="org.digijava.module.aim.action.HtmlMulitlateralbyDonorClassicReport" 
      	scope="session" validate="false" path="/aim/htmlQuarterlyReportByProject">
     <forward name="forward" path="/showLayout.do?layout=htmlQuarterlyReportByProject" />
-    </action>
-
+	 </action>
+	 
 	<action name="aimMulitlateralbyDonorForm" 
      	type="org.digijava.module.aim.action.HtmlMulitlateralbyDonorClassicReport" 
      	scope="session" validate="false" path="/aim/htmlSectorbyProject">
     <forward name="forward" path="/showLayout.do?layout=htmlSectorbyProject" />
     </action>
 
-	<action name="aimMulitlateralbyDonorForm" 
-     	type="org.digijava.module.aim.action.ViewQuarterlyBySector" 
+	 <action name="aimMulitlateralbyDonorForm" 
+     	type="org.digijava.module.aim.action.HtmlMulitlateralbyDonorClassicReport" 
      	scope="session" validate="false" path="/aim/htmlQuarterlyReportBySector">
     <forward name="forward" path="/showLayout.do?layout=htmlQuarterlyReportBySector" />
-    </action>
-
+	 </action>
+	 
 	<action name="aimCommitmentbyDonorForm" 
      	type="org.digijava.module.aim.action.HtmlCommitmentbyDonorClassicReport" 
      	scope="session" validate="false" path="/aim/htmlViewProjects">

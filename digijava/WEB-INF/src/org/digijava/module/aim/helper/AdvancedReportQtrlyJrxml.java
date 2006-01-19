@@ -39,7 +39,7 @@ public static void createJRXML(String filePath, boolean undis, String labels[],O
 			int twidth=pgwidth+cols+measureCount;
 			twidth=twidth*60;
 			pgwidth =pgwidth+cols+measureCount;
-			pgwidth=(pgwidth*60)+(measureCount*60);
+			pgwidth=((pgwidth*60)+(measureCount*60));
 			
 			qwidth = (measureCount *60);
 			if(hierarchy>0)
@@ -539,7 +539,7 @@ p2.println("</group>");
 				p2.println("mode='Opaque'");
 				p2.println("x='"+x+"'");
 				p2.println("y='"+y+"'");
-				p2.println("width='60'");
+				p2.println("width='180'");
 				p2.println("height='48'");
 				p2.println("forecolor='#000000'");
 				p2.println("backcolor='#CCCCCC'");
@@ -556,7 +556,7 @@ p2.println("</group>");
 				p2.println("<textFieldExpression class='java.lang.String'><![CDATA[$F{"+ctextkey+"}]]></textFieldExpression>");
 				p2.println("</textField>");
 
-				x +=60;
+				x +=60*3;
 				m++;
 			}
 			//System.out.println("XXXXXXXX "+x);
@@ -843,7 +843,7 @@ p2.println("</group>");
 				p2.println("x='"+x+"'");
 				p2.println("y='0'");
 				//p2.println("width='100'");
-				p2.println("width='60'");
+				p2.println("width='180'");
 				p2.println("height='50'");
 				p2.println("forecolor='#000000'");
 				p2.println("backcolor='#CCCCCC'");
@@ -860,7 +860,7 @@ p2.println("</group>");
 				p2.println("<textFieldExpression class='java.lang.String'><![CDATA[$F{"+ctextkey+"}]]></textFieldExpression>");
 				p2.println("</textField>");
 
-				x +=60;
+				x +=60*3;
 				m++;
 			}
 
@@ -1164,7 +1164,7 @@ p2.println("</group>");
 							p2.println("mode='Transparent'");
 							p2.println("x='"+x+"'");
 							p2.println("y='0'");
-							p2.println("width='60'");
+							p2.println("width='180'");
 							p2.println("height='80'");
 							p2.println("forecolor='#000000'");
 							p2.println("backcolor='#FFFFFF'");
@@ -1183,7 +1183,7 @@ p2.println("</group>");
 
 					c++;
 					//System.out.println("ccccc "+c);
-					x+=60;
+					x+=60*3;
 				}
 
 			int dcnt=0;

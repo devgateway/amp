@@ -14,10 +14,8 @@ public static void createJRXML(String filePath, boolean undis, String labels[],O
 		
 		int mcnt = measureCount;
 		String arr[][] = new String[array.length][array[0].length];
-
 		try
 			{
-		
 			FileOutputStream out2; // declare a file output object
 			PrintStream p2; // declare a print stream object
 			File fopen = new File(filePath);	
@@ -27,6 +25,7 @@ public static void createJRXML(String filePath, boolean undis, String labels[],O
 			p2.println("<?xml version=\"1.0\" encoding=\"UTF-8\" ?>");
 		//	System.out.println("creating now- dynamic trend...");
 
+			int pgwidth = (cols*60)+((measureCount+1)*4*60);
 			int n=3;//cnt;
 			int center=0;//(12-n)*30;
 			int x=(0+center),x1=0,y=0,y1=0,xl=0,yl=0;
@@ -44,7 +43,7 @@ public static void createJRXML(String filePath, boolean undis, String labels[],O
 			p2.println("columnCount='1'");
 			p2.println("printOrder='Vertical'");
 			p2.println("orientation='Landscape'");
-			p2.println("pageWidth='1190'");
+			p2.println("pageWidth='"+pgwidth+"'");
 			p2.println("pageHeight='842'");
 			p2.println("columnWidth='500'");
 			p2.println("columnSpacing='0'");
@@ -297,6 +296,7 @@ p2.println("</group>");
 				x=0;y=80;
 				w=0;
 				m=1;
+				m--;/////////m------------
 				for(int i=0;i< cols;i++)
 				{
 					w=60;
@@ -330,6 +330,7 @@ p2.println("</group>");
 //				x+=60;
 				x1+=x;
 				temp=cols;
+				
 
 					yrwidth=(measureCount*60);
 					//System.out.println("****"+chek(labels));
@@ -372,10 +373,10 @@ p2.println("</group>");
 									c+=measureCount+1;
 
 						x+=yrwidth;
-						
+								
 						if(undis)
 							mcnt = measureCount-1;
-							
+						m--;	
 						//System.out.println("&&&&&&&&&&&&&&&&&&&&&&&&&&&" +mcnt);
 						for(int i=0;i<mcnt;i++){
 							//if(!labels[(temp)+i].equals("Undisbursed"))
@@ -410,14 +411,15 @@ p2.println("</group>");
 						}
 						//System.out.println("temp:"+temp++);
 						m++;
+						System.out.println("mmm "+m);
 					}
-					
+					//// m--------------- m--;
 					temp=0;
 					if( undis ){
 						mcnt = measureCount;
 						temp=(3+cols+(mcnt*3))+1;
 						ctextkey = "c"+temp;
-						//System.out.println("inside here..@@@@@@@@@@@@@@@@@@"+cols+":"+mcnt+":::"+temp+"-----"+ctextkey);
+						 //System.out.println("inside here..@@@@@@@@@@@@@@@@@@"+cols+":"+mcnt+":::"+temp+"-----"+ctextkey);
 					}
 					else{
 						mcnt = measureCount;
@@ -454,6 +456,7 @@ p2.println("</group>");
 					else{
 						//measureBlocks=3*(measureCount);
 					}
+				m--;
 					
 					//System.out.println("BLOCKS............."+measureBlocks+" M Value ============================" + m);
 					for(int i=1;i<=measureBlocks;i++){
@@ -515,6 +518,7 @@ p2.println("</group>");
 			x=0;y=80;
 			w=0;
 			m=1;
+			
 			if(!reportType.equals("csv")){
 			for(int i=0;i< cols;i++)
 			{
@@ -591,7 +595,7 @@ p2.println("</group>");
 								c+=measureCount+1;
 
 					x+=yrwidth;
-					
+					m--;
 					if(undis)
 						mcnt = measureCount-1;
 					y1 =95;
@@ -628,7 +632,7 @@ p2.println("</group>");
 						}
 						//System.out.println("&&&&&&&&&&------------------" + ctextkey);
 					}
-					//System.out.println("temp:"+temp++);
+					System.out.println("temp:"+m);
 					m++;
 				}
 				
@@ -645,7 +649,7 @@ p2.println("</group>");
 					ctextkey = "c"+temp;
 					//System.out.println("inside here..$$$$$$$$$$$$$$$$$$$$"+cols+":"+mcnt+":::"+temp+"-----"+ctextkey);
 				}
-
+			
 				p2.println("<staticText>");
 				p2.println("<reportElement");
 				p2.println("mode='Opaque'");
@@ -696,7 +700,7 @@ p2.println("</group>");
 				else{
 					//measureBlocks=3*(measureCount);
 				}
-				
+				m--;
 				//System.out.println("BLOCKS............."+measureBlocks+" M Value ============================" + m);
 				for(int i=1;i<=measureBlocks;i++){
 				
@@ -782,7 +786,7 @@ p2.println("</group>");
 //					System.out.println("grrr.."+m);
 					yrwidth=(measureCount-1)*60;
 				}
-
+		
 			c= 3+cols+1+hcnt;
 
 				m=cols+2;
@@ -816,7 +820,7 @@ p2.println("</group>");
 								c+=measureCount+1;
 
 					x+=yrwidth;
-					
+					m--;			
 					if(undis)
 						mcnt = measureCount-1;
 						
@@ -899,7 +903,7 @@ p2.println("</group>");
 				else{
 					//measureBlocks=3*(measureCount);
 				}
-				
+				m--;
 				//System.out.println("BLOCKS............."+measureBlocks+" M Value ============================" + m);
 				for(int i=1;i<=measureBlocks;i++){
 				

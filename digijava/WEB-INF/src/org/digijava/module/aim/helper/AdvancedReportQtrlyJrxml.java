@@ -28,6 +28,7 @@ public static void createJRXML(String filePath, boolean undis, String labels[],O
 		//	//System.out.println("creating now- dynamic trend...");
 
 			int n=3;//cnt;
+			int lwidth=0;
 			int center=0;//(12-n)*30;
 			int x=(0+center),x1=0,y=0,y1=0,xl=0,yl=0;
 			int textkey=11,linekey=21,c=0;
@@ -40,6 +41,44 @@ public static void createJRXML(String filePath, boolean undis, String labels[],O
 			twidth=twidth*60;
 			pgwidth =pgwidth+cols+measureCount;
 			pgwidth=((pgwidth*60)+(measureCount*60));
+			qwidth = (measureCount *60);
+			int des =0;
+			if(reportType.equals("csv") || reportType.equals("xls"))
+			{
+					des=180;
+					if(undis)
+				{
+					//pgwidth = (cols*des)+((measureCount)*4*60*4);
+					pgwidth = des*cols + ((measureCount-1)*60*4)*3 + measureCount*60 + 60;
+					
+					System.out.println("Lwidthcls" +lwidth +" pgwidth"+pgwidth);
+				}
+				else
+				{
+					//pgwidth = des*cols *4 + measureCount*60+60;
+					pgwidth = des*cols + ((measureCount)*60*4)*3 + measureCount*60 + 60;
+					System.out.println("Lwidth222xls" +lwidth +" pgwidth"+pgwidth);
+				}
+			}
+			else
+			{
+					des=60;
+					if(undis)
+				{
+					//pgwidth = (cols*des)+((measureCount+1)*4*60*4);
+					//pgwidth = (des*cols)*3 +qwidth*(measureCount-1)*4+qwidth; 
+					//pgwidth = (cols*des + ( measureCount-1)*4*measureCount*60 + measureCount*60)+60;
+					pgwidth = des*cols + ((measureCount-1)*60*4)*3 + measureCount*60 + 60;
+					System.out.println("Lwidth" +lwidth +" pgwidth"+pgwidth);
+				}
+				else
+				{
+					//pgwidth = ((des*cols) +qwidth*measureCount*4+qwidth) +60; 
+					pgwidth = des*cols + ((measureCount)*60*4)*3 + measureCount*60 + 60;
+					System.out.println("Lwidth" +lwidth +" pgwidth"+pgwidth);
+				}
+
+			}
 			
 			qwidth = (measureCount *60);
 			if(hierarchy>0)
@@ -87,11 +126,44 @@ public static void createJRXML(String filePath, boolean undis, String labels[],O
 				p2.println("<field name='"+dc+"' class='java.lang.String'/>");
 			}
 
-			int lwidth=0;
+			
 			if(undis)
-				lwidth=((cols+((mcnt-1)*3)+mcnt)*60*4);
+				{
+					lwidth=((cols+((mcnt-1)*3)+mcnt)*60*4);
+					if(reportType.equals("csv") || reportType.equals("xls"))
+					{
+					//lwidth = des*cols *3 + (measureCount)*60;
+					lwidth = pgwidth -60;
+					System.out.println("lwidthxls111 "+lwidth+"des"+des);
+					}
+					else
+					{
+						//lwidth = (des*cols) +qwidth*(measureCount)*4+qwidth; 
+						lwidth = pgwidth -60;
+						System.out.println("lwidthpdf111 "+lwidth+"des"+des);
+					
+					}
+					
+				}
 			else
-				lwidth=((cols+(mcnt*3)+mcnt)*60*4);
+				{
+					if(reportType.equals("csv") || reportType.equals("xls"))
+					{
+					//lwidth = des*cols *4 + measureCount*60;
+					lwidth = pgwidth -60;
+					//System.out.println("lwidthxls222 "+lwidth+"des"+des);
+					}
+					else
+					{
+						//lwidth = (des*cols) +qwidth*measureCount*4+qwidth; 
+						lwidth = pgwidth -60;
+					//	System.out.println("lwidthpdf222 "+lwidth+"des"+des);
+					}
+					//lwidth=((cols+(mcnt*3)+mcnt)*60*4);
+					
+					//				System.out.println("lwidth "+lwidth+"des"+des);
+				}
+				//lwidth = pgwidth;
 
 				if(hierarchy > 0)
 				{
@@ -150,7 +222,8 @@ p2.println("</group>");
 								p2.println("x='0'");
 								p2.println("y='0'");
 								
-								p2.println("width='"+(twidth)+"'");
+								//p2.println("width='"+(twidth)+"'");
+								p2.println("width='"+lwidth+"'");
 								p2.println("height='20'");
 								p2.println("forecolor='#000000'");
 								p2.println("backcolor='#CCCCCC'");
@@ -287,7 +360,7 @@ p2.println("</group>");
 			p2.println("mode='Opaque'");
 			p2.println("x='0'");
 			p2.println("y='79'");
-			p2.println("width='"+twidth+"'");
+			p2.println("width='"+lwidth+"'");
 			p2.println("height='0'");
 			p2.println("forecolor='#000000'");
 			p2.println("backcolor='#FFFFFF'");
@@ -505,7 +578,7 @@ p2.println("</group>");
 				p2.println("mode='Opaque'");
 				p2.println("x='0'");
 				p2.println("y='"+(y+34)+"'");
-				p2.println("width='"+twidth+"'");
+				p2.println("width='"+lwidth+"'");
 				p2.println("height='0'");
 				p2.println("forecolor='#000000'");
 				p2.println("backcolor='#FFFFFF'");
@@ -539,7 +612,7 @@ p2.println("</group>");
 				p2.println("mode='Opaque'");
 				p2.println("x='"+x+"'");
 				p2.println("y='"+y+"'");
-				p2.println("width='180'");
+				p2.println("width='"+des+"'");
 				p2.println("height='48'");
 				p2.println("forecolor='#000000'");
 				p2.println("backcolor='#CCCCCC'");
@@ -556,7 +629,7 @@ p2.println("</group>");
 				p2.println("<textFieldExpression class='java.lang.String'><![CDATA[$F{"+ctextkey+"}]]></textFieldExpression>");
 				p2.println("</textField>");
 
-				x +=60*3;
+				x+=des;
 				m++;
 			}
 			//System.out.println("XXXXXXXX "+x);
@@ -843,7 +916,7 @@ p2.println("</group>");
 				p2.println("x='"+x+"'");
 				p2.println("y='0'");
 				//p2.println("width='100'");
-				p2.println("width='180'");
+				p2.println("width='"+des+"'");
 				p2.println("height='50'");
 				p2.println("forecolor='#000000'");
 				p2.println("backcolor='#CCCCCC'");
@@ -860,7 +933,7 @@ p2.println("</group>");
 				p2.println("<textFieldExpression class='java.lang.String'><![CDATA[$F{"+ctextkey+"}]]></textFieldExpression>");
 				p2.println("</textField>");
 
-				x +=60*3;
+				x+=des;
 				m++;
 			}
 
@@ -932,7 +1005,7 @@ p2.println("</group>");
 								c+=((measureCount*4)+1);
 
 					x+=yrwidth;
-					
+					m--;
 					if(undis)
 					{
 						mcnt = measureCount-1;
@@ -1007,6 +1080,7 @@ p2.println("</group>");
 					{
 						a=measureCount*4;
 					}
+					
 					for(int i=0;i<a;i++){
 						//if(!labels[(temp)+i].equals("Undisbursed"))
 						{	
@@ -1085,7 +1159,7 @@ p2.println("</group>");
 				else{
 					//measureBlocks=3*(measureCount);
 				}
-				
+				m--;
 				////System.out.println("BLOCKS............."+measureBlocks+" M Value ============================" + m);
 				for(int i=1;i<=measureBlocks;i++){
 				
@@ -1124,7 +1198,7 @@ p2.println("</group>");
 			p2.println("mode='Opaque'");
 			p2.println("x='0'");
 			p2.println("y='51'");
-			p2.println("width='"+twidth+"'");
+			p2.println("width='"+lwidth+"'");
 			p2.println("height='0'");
 			p2.println("forecolor='#000000'");
 			p2.println("backcolor='#FFFFFF'");
@@ -1164,7 +1238,7 @@ p2.println("</group>");
 							p2.println("mode='Transparent'");
 							p2.println("x='"+x+"'");
 							p2.println("y='0'");
-							p2.println("width='180'");
+							p2.println("width='"+des+"'");
 							p2.println("height='80'");
 							p2.println("forecolor='#000000'");
 							p2.println("backcolor='#FFFFFF'");
@@ -1183,7 +1257,7 @@ p2.println("</group>");
 
 					c++;
 					//System.out.println("ccccc "+c);
-					x+=60*3;
+					x+=des;
 				}
 
 			int dcnt=0;
@@ -1287,7 +1361,7 @@ p2.println("</group>");
 				p2.println("mode='Opaque'");
 				p2.println("x='0'");
 				p2.println("y='82'");
-				p2.println("width='"+twidth+"'");
+				p2.println("width='"+lwidth+"'");
 				p2.println("height='0'");
 				p2.println("forecolor='#000000'");
 				p2.println("backcolor='#FFFFFF'");
@@ -1333,5 +1407,6 @@ p2.println("</group>");
 							e.printStackTrace(System.out);
 						}
 			}//end foo
+
 
 }

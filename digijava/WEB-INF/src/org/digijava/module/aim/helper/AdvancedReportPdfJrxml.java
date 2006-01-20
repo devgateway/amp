@@ -8,11 +8,7 @@ public class AdvancedReportPdfJrxml
 //static String cols[];
 public static void createJRXML(String filePath, boolean undis, String labels[],Object array[][], int cols, int measureCount, String reportName, String reportType,int hierarchy)
 {
-//	cols=arr;
-	//	System.out.println(undis + "..DYNAMIC JRXML.." + reportName);
-	//	System.out.println("Cols : " + cols + ":MCOUN :" + measureCount);
-		
-		int mcnt = measureCount;
+	int mcnt = measureCount;
 		String arr[][] = new String[array.length][array[0].length];
 		try
 			{
@@ -33,6 +29,34 @@ public static void createJRXML(String filePath, boolean undis, String labels[],O
 			String ctextkey="";
 			int m=0,yr=0,yrwidth=0,temp=0,bandheight=0,w=0;
 			int loop=1,hcnt=0;
+			int des = 0;
+			if(reportType.equals("csv") || reportType.equals("xls"))
+				{
+					des=600;
+					if(undis)
+					{
+						pgwidth = (cols*des)+((measureCount-1)*60*3)+measureCount*60 +60;
+						System.out.println("pgwidthxlstrue" + pgwidth);
+					}
+					else
+					{
+						pgwidth = (cols*des)+((measureCount)*60*3)+measureCount*60 +60;
+						System.out.println("pgwidthxlsfalse	" + pgwidth);
+					}
+				}
+				else 
+				{
+					
+					des = 60;
+					if(undis)
+					{
+						pgwidth = (cols*des)+((measureCount-1)*60*3)+measureCount*60 +60;
+					}
+					else
+					{
+							pgwidth = (cols*des)+((measureCount)*60*3)+measureCount*60 +60;
+					}
+				}
 			if(hierarchy>0)
 				hcnt=hierarchy;
 
@@ -79,9 +103,20 @@ public static void createJRXML(String filePath, boolean undis, String labels[],O
 
 			int lwidth=0;
 			if(undis)
-				lwidth=(cols+((mcnt-1)*3)+mcnt)*60;
+				{
+							//	System.out.println("des "+des); 
+					//lwidth=(cols+((mcnt-1)*3)+mcnt)*60*2-150;
+					//lwidth = ((des*cols)+((measureCount-1)*4*60));
+					lwidth = pgwidth -60;
+				}
+
 			else
-				lwidth=(cols+(mcnt*3)+mcnt)*60;
+				{
+				//System.out.println("des "+des);
+									//lwidth = ((des*cols)+((measureCount)*4*60));
+									lwidth = pgwidth -60;
+					//lwidth=(cols+(mcnt*3)+mcnt)*60*2-150;
+				}
 
 				if(hierarchy > 0)
 				{
@@ -232,7 +267,7 @@ p2.println("</group>");
 			p2.println("mode='Opaque'");
 			p2.println("x='0'");
 			p2.println("y='40'");
-			p2.println("width='800'");
+			p2.println("width='"+lwidth+"'");
 			p2.println("height='18'");
 			p2.println("forecolor='#000000'");
 			p2.println("backcolor='#FFFFFF'");
@@ -253,7 +288,7 @@ p2.println("</group>");
 			p2.println("mode='Opaque'");
 			p2.println("x='0'");
 			p2.println("y='60'");
-			p2.println("width='800'");
+			p2.println("width='"+lwidth+"'");
 			p2.println("height='18'");
 			p2.println("forecolor='#000000'");
 			p2.println("backcolor='#FFFFFF'");
@@ -522,13 +557,14 @@ p2.println("</group>");
 			if(!reportType.equals("csv")){
 			for(int i=0;i< cols;i++)
 			{
+				
 				w=60;
 				ctextkey="m"+m;
 				p2.println("<textField isStretchWithOverflow='true' pattern='' isBlankWhenNull='false' evaluationTime='Now' hyperlinkType='None' >					<reportElement");
 				p2.println("mode='Opaque'");
 				p2.println("x='"+x+"'");
 				p2.println("y='"+y+"'");
-				p2.println("width='60'");
+				p2.println("width='"+des+"'");
 				p2.println("height='33'");
 				p2.println("forecolor='#000000'");
 				p2.println("backcolor='#CCCCCC'");
@@ -544,8 +580,8 @@ p2.println("</group>");
 				p2.println("</textElement>");
 				p2.println("<textFieldExpression class='java.lang.String'><![CDATA[$F{"+ctextkey+"}]]></textFieldExpression>");
 				p2.println("</textField>");
-
-				x +=60;
+///hereeeeeee
+				x+=des;
 				m++;
 			}
 
@@ -753,7 +789,7 @@ p2.println("</group>");
 				p2.println("mode='Opaque'");
 				p2.println("x='"+x+"'");
 				p2.println("y='0'");
-				p2.println("width='60'");
+				p2.println("width='"+des+"'");
 				p2.println("height='33'");
 				p2.println("forecolor='#000000'");
 				p2.println("backcolor='#CCCCCC'");
@@ -769,8 +805,8 @@ p2.println("</group>");
 				p2.println("</textElement>");
 				p2.println("<textFieldExpression class='java.lang.String'><![CDATA[$F{"+ctextkey+"}]]></textFieldExpression>");
 				p2.println("</textField>");
-
-				x +=60;
+				x+=des;
+				//x +=60*3;
 				m++;
 			}
 
@@ -981,7 +1017,7 @@ p2.println("</group>");
 							p2.println("mode='Transparent'");
 							p2.println("x='"+x+"'");
 							p2.println("y='0'");
-							p2.println("width='60'");
+							p2.println("width='"+des+"'");
 							p2.println("height='80'");
 							p2.println("forecolor='#000000'");
 							p2.println("backcolor='#FFFFFF'");
@@ -999,7 +1035,9 @@ p2.println("</group>");
 							p2.println("</textField>");
 
 					c++;
-					x+=60;
+					////hereeeeeeeeeeee
+					x+=des;
+					//x+=60*3;
 				}
 
 			int dcnt=0;

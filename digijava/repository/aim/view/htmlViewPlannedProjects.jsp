@@ -19,7 +19,7 @@
 <digi:instance property="aimCommitmentbyDonorForm" />
 
 
-<table width="900" cellspacing=1 cellpadding=1 valign=top align=left>
+<table width="650" cellspacing=1 cellpadding=1 valign=top align=left>
 
 	<% int stYr = 0, temp = 0; %> 
 	<%! int ind = 0, count = 0, yyCnt = 0; %> 
@@ -38,7 +38,8 @@
   <!-- Table name-->
   <tr>
    <td class="head2-name" align=center>
-	 <bean:write name="aimCommitmentbyDonorForm" property="workspaceType" />&nbsp; <bean:write name="aimCommitmentbyDonorForm" property="workspaceName" />
+	 <bean:write name="aimCommitmentbyDonorForm" property="workspaceType" />&nbsp; 
+	 <bean:write name="aimCommitmentbyDonorForm" property="workspaceName" />
    </td>
   </tr> 
 
@@ -64,13 +65,13 @@
 
 			<logic:notEmpty name="aimCommitmentbyDonorForm" property="report"> 
 			<logic:iterate name="aimCommitmentbyDonorForm"  property="report" id="report" type="org.digijava.module.aim.helper.Report">
-			 <tr colspan=2>
+			 <tr>
 			  <td colspan=2>
 			  <table width="100%" cellspacing=1 cellpadding=1 valign=top align=left style="border-collapse: collapse" border=1 >
 
 				<tr>
 				 <td>
-				  <table>
+				  <table width="100%">
 				   <tr>
 				    <td align=left >  <b> Donor(s) :</b> 
 						<logic:empty name="report" property="donors">&nbsp;
@@ -81,47 +82,18 @@
 						</logic:notEmpty>
 					</td>
 				   </tr>
-	   				<tr>
+	   			<tr>
 				     <td align=left >  <b> Title : </b>
 					  <bean:write name="report" property="title" />
 					 </td>
 					</tr>
 				  </table>
 				 </td>
-				
-				 <td align=left valign=bottom>
-					 <table cellpadding=1 cellspacing=1 border=1 style="border-collapse: collapse">
-					   <tr>
-						 <td width=130 align=center colspan=2>
-							Year
-						 </td>
-						 <td width=90 align=center>
-							<digi:trn key="aim:plannedDisbursements">Planned Disbursements</digi:trn>
-						 </td>
-						 <td width=90 align=center>
-							<digi:trn key="aim:disbursements">Disbursements</digi:trn>
-						 </td>
-						 <td width=90 align=center>
-							<digi:trn key="aim:expenditures">Expenditures</digi:trn>
-						 </td>
-					   </tr>
-					 </table>			
-				   </td>
-				   <td align=center width=110 valign=bottom>
-				     <table height=32 cellspacing=1 cellpadding=1 valign=top align=left style="border-collapse: collapse" border=1 width=100%>
-					   <tr>
-					     <td>
-							<digi:trn key="aim:undisbursed">Undisbursed</digi:trn>
-						 </td>
-					   </tr>
-					 </table>
-				   </td>
-
 				</tr>
 
 				<tr valign=top>
-				 <td width=550>
-				  <table style="border-collapse: collapse" width="100%" cellspacing=1 cellpadding=1 border=1>
+				 <td>
+				  <table width="100%" style="border-collapse: collapse" cellspacing=1 cellpadding=1 border=1>
 					<tr>
 					  <td width=100> <b>
 						Status : </b><bean:write name="report" property="status" />
@@ -149,7 +121,6 @@
 						 <bean:write name="report" property="level" />
 					   </td>
 					</tr>
-
 					<tr>
 					  <td width=100> <b>
 						Instrument of Funding : </b>
@@ -168,14 +139,12 @@
 						</logic:notEmpty>
 					  </td>
 					</tr>
-
 					<tr>
 					  <td width=100> <b>
 						Start Date : </b> <bean:write name="report" property="startDate" />  </td>
 					  <td width=100><b>
 						Close Date : </b> <bean:write name="report" property="closeDate" />					  </td>
 					</tr>
-
 					<tr>
 					  <td width=100> <b>
 						Commitment Date : </b> 
@@ -192,13 +161,50 @@
 						</logic:notEqual>
 					  </td>
 					</tr>
-
 				  </table>
 				 </td>
+				 </tr>
+				
 
-				 <td width=450 valign=top >
+				<tr align=left valign=bottom>
+				 	<td>
+					 <table width="100%" cellpadding=1 cellspacing=1 border=1 style="border-collapse: collapse">
+					   <tr>
+						 <td width=60 height=32 align=center colspan=2>
+							Year
+						 </td>
+						 <td align=center height=32 >
+							<digi:trn key="aim:plannedDisbursements">Planned Disbursements</digi:trn>
+						 </td>
+						 <td align=center height=32 >
+							<digi:trn key="aim:disbursements">Disbursements</digi:trn>
+						 </td>
+						 <td align=center height=32 >
+							<digi:trn key="aim:expenditures">Expenditures</digi:trn>
+						 </td>
+					   </tr>
+					 </table>			
+				 	</td>
+				  <td align=center valign=bottom>
+				   <table width="100%" height=32 cellspacing=1 cellpadding=1 valign=top align=left style="border-collapse: collapse" border=1>
+					   <tr>
+					     <td>
+							<digi:trn key="aim:undisbursed">Undisbursed</digi:trn>
+						 </td>
+					   </tr>
+					</table>
+				 </td>
+				</tr>
+
+
+
+
+
+
+				 
+				 <td valign=top >
 				 <% temp = stYr; %>
-			     <table cellpadding=2 cellspacing=1 border=1 style="border-collapse: collapse" valign=top>
+			     <table width="100%" cellpadding=2 cellspacing=1 border=1 style="border-collapse: collapse" valign=top>
 			 		<logic:iterate name="report"  property="ampFund" id="ampFund" 	type="org.digijava.module.aim.helper.AmpFund">
 					<% ind++; %>
 					<% yyCnt++; %>
@@ -216,19 +222,19 @@
 						else {	
 							if(yyCnt == 1){
 					%>
-	 					 <td width=50 valign=top>
+	 					 <td valign=top>
 							<%=temp%>
 							<%temp++;%>
 						 </td>
-	  					  <td align=center width=20>
+	  					  <td align=center >
 						  <%="Q"+i%>
 						  <% i = i + 1; %>
 						  </td>
 					<%		} else {	%>
-	 					 <td width=40 valign=top>
+	 					 <td valign=top>
 							
 						 </td>
- 					  <td align=right width=20 >
+ 					  <td align=right >
 						  <%="Q"+i%>
 						  <% i = i + 1; %>
 					  </td>
@@ -262,7 +268,7 @@
 				  </table>
 				 </td>
 				 <td width=110 valig=bottom>
-			      <table cellpadding=2 cellspacing=1 border=1 style="border-collapse: collapse" valign=top>
+			      <table width="100%" cellpadding=2 cellspacing=1 border=1 style="border-collapse: collapse" valign=top>
 					<logic:iterate name="report" property="ampFund" id="ampFund" type="org.digijava.module.aim.helper.AmpFund">
 					  <tr>
 					    <td align=right width=110 height=17>
@@ -282,7 +288,7 @@
 
 			<tr>
 			 <td >
-				<table width="900" cellspacing=1 cellpadding=1 valign=top align=left style="border-collapse: collapse" border=1 >
+				<table width="100%" cellspacing=1 cellpadding=1 valign=top align=left style="border-collapse: collapse" border=1 >
 				 <tr>
 				 	<td width=100 colspan=2>
 					 <b>	Total		</b>
@@ -294,18 +300,18 @@
 
 					<td width=390  align=right>
 					  <% temp = stYr; %>
-					 <table cellpadding=2 cellspacing=1 border=1 style="border-collapse: collapse" valign=top >
+					 <table width="100%" cellpadding=2 cellspacing=1 border=1 style="border-collapse: collapse" valign=top >
 					 <logic:iterate name="aimCommitmentbyDonorForm"  property="totFund" id="totFund" type="org.digijava.module.aim.helper.AmpFund">
 						<tr>
 					<% ind++; %>
 					<% yyCnt++; %>
 
 					 <% if(ind > (count*4))	{	ind=0; i=1; %>
- 					 <td width=40>
+ 					 <td >
 					   <b>
 						Total   </b>
 					 </td>
- 					  <td align=right width=50>
+ 					  <td align=right >
 						&nbsp;
 					  </td>
 
@@ -313,19 +319,19 @@
 						else {	
 							if(yyCnt == 1){
 					%>
-	 					 <td width=50 valign=top>
+	 					 <td valign=top>
 							<%=temp%>
 							<%temp++;%>
 						 </td>
-	  					  <td align=left width=50>
+	  					  <td align=left >
 						  <%="Q"+i%>
 						  <% i = i + 1; %>
 						  </td>
 					<%		} else {	%>
-	 					 <td width=50 valign=top>
+	 					 <td valign=top>
 							
 						 </td>
- 					  <td align=left width=50 >
+ 					  <td align=left>
 						  <%="Q"+i%>
 						  <% i = i + 1; %>
 					  </td>
@@ -360,7 +366,7 @@
 					  </table>
 					</td>
 				 <td width=100 valig=bottom>
-			      <table cellpadding=2 cellspacing=1 border=1 style="border-collapse: collapse" valign=top>
+			      <table width="100%" cellpadding=2 cellspacing=1 border=1 style="border-collapse: collapse" valign=top>
 					<logic:iterate name="aimCommitmentbyDonorForm"  property="totFund" id="totFund" type="org.digijava.module.aim.helper.AmpFund">
 					  <tr>
 					    <td align=right width=100 height=17>	<b>

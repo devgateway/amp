@@ -17,7 +17,7 @@
 
 <digi:instance property="aimAdvancedReportForm" />
 
-<table border="1" bordercolor="#808080" width="90%" cellspacing=1 cellpadding=1 valign=top align=left style="border-collapse: collapse">
+<table width="580" border="1" bordercolor="#808080" cellspacing=1 cellpadding=1 valign=top align=left style="border-collapse: collapse">
 	<logic:notEmpty name="aimAdvancedReportForm" property="multiReport"> 
 		<% int x = 1; %>
 		<logic:iterate name="aimAdvancedReportForm" property="multiReport" id="multiReport" type="org.digijava.module.aim.helper.multiReport">
@@ -71,16 +71,31 @@
 									<logic:notEqual name="titles" property="columnName" value="Project Title">
 										<logic:notEqual name="titles" property="columnName" value="Objective">	
 											<logic:notEqual name="titles" property="columnName" value="Description">
-												<td width="9%">
-													<div align="center"><strong>
-														<bean:write name="titles" property="columnName" />
-													</strong></div>
-												</td>
+												<logic:notEqual name="titles" property="columnName" value="Donor">
+													<logic:notEqual name="titles" property="columnName" value="Actual Completion Date">
+														<logic:notEqual name="titles" property="columnName" value="Region">
+															<logic:notEqual name="titles" property="columnName" value="Status">
+																<logic:notEqual name="titles" property="columnName" value="Cumulative Disbursements">
+																	<logic:notEqual name="titles" property="columnName" value="Type Of Assistance">
+																		<logic:notEqual name="titles" property="columnName" value="Contact Name">
+																			<td width="9%">
+																				<div align="center"><strong>
+																					<bean:write name="titles" property="columnName" />
+																				</strong></div>
+																			</td>
+																		</logic:notEqual>
+																	</logic:notEqual>
+																</logic:notEqual>
+															</logic:notEqual>
+														</logic:notEqual>
+													</logic:notEqual>
+												</logic:notEqual>
 											</logic:notEqual>
 										</logic:notEqual>
 									</logic:notEqual>
 								</logic:iterate>
 							</tr>
+							<tr>
 							<logic:iterate name="project"  property="records" id="records" type="org.digijava.module.aim.helper.AdvancedReport">
 								<logic:notEmpty name="records" property="ampId">
 									<td align="center" width="9%">
@@ -92,14 +107,11 @@
 										<bean:write name="records" property="actualStartDate" />
 									</td>
 								</logic:notEmpty>
-								<logic:notEmpty name="records" property="actualCompletionDate">
+								<logic:notEmpty name="records" property="sectors">
 									<td align="center" width="9%">
-										<bean:write name="records" property="actualCompletionDate" />
-									</td>
-								</logic:notEmpty>
-								<logic:notEmpty name="records" property="status">
-									<td align="center" width="9%">
-										<bean:write name="records" property="status" />
+										<logic:iterate name="records" id="sectors" property="sectors"> 
+											<%=sectors%>	<br>
+										</logic:iterate>
 									</td>
 								</logic:notEmpty>
 								<logic:notEmpty name="records" property="level">
@@ -109,32 +121,80 @@
 								</logic:notEmpty>
 								<logic:notEmpty name="records" property="totalCommitment">
 									<td align="center" width="9%">
-										<bean:write name="records" property="totalCommitment" />
+										<bean:write name="records" property="totalCommitment"/>
 									</td>
 								</logic:notEmpty>
-								<logic:notEmpty name="records" property="totalDisbursement">
+								<logic:notEmpty name="records" property="modality">
 									<td align="center" width="9%">
-										<bean:write name="records" property="totalDisbursement" />
-									</td>
-								</logic:notEmpty>
-								<logic:notEmpty name="records" property="assistance">
-									<td align="center" width="9%">
-										<logic:iterate name="records" id="assistance" property="assistance"> 
-											<%=assistance%>	<br>
+										<logic:iterate name="records" id="modality" property="modality"> 
+											<%=modality%>	<br>
 										</logic:iterate>
 									</td>
 								</logic:notEmpty>
-								<logic:notEmpty name="records" property="sectors">
+							</logic:iterate>
+							</tr>
+							<tr>	
+								<logic:iterate name="aimAdvancedReportForm"  property="titles" id="titles" type="org.digijava.module.aim.helper.Column">
+									<logic:notEqual name="titles" property="columnName" value="Project Title">
+										<logic:notEqual name="titles" property="columnName" value="Objective">	
+											<logic:notEqual name="titles" property="columnName" value="Description">
+												<logic:notEqual name="titles" property="columnName" value="Project Id">
+													<logic:notEqual name="titles" property="columnName" value="Actual Start Date">
+														<logic:notEqual name="titles" property="columnName" value="Sector">
+															<logic:notEqual name="titles" property="columnName" value="Implementation Level">
+																<logic:notEqual name="titles" property="columnName" value="Cumulative Commitments">
+																	<logic:notEqual name="titles" property="columnName" value="Financing Instrument">
+																		<td width="9%">
+																			<div align="center"><strong>
+																				<bean:write name="titles" property="columnName" />
+																			</strong></div>
+																		</td>
+																	</logic:notEqual>
+																</logic:notEqual>
+															</logic:notEqual>
+														</logic:notEqual>
+													</logic:notEqual>
+												</logic:notEqual>
+											</logic:notEqual>
+										</logic:notEqual>
+									</logic:notEqual>
+								</logic:iterate>
+							</tr>
+							<tr>
+							<logic:iterate name="project"  property="records" id="records" type="org.digijava.module.aim.helper.AdvancedReport">
+								<logic:notEmpty name="records" property="donors">
 									<td align="center" width="9%">
-										<logic:iterate name="records" id="sectors" property="sectors"> 
-											<%=sectors%>	<br>
+										<logic:iterate name="records" id="donors" property="donors"> 
+											<%=donors%>	<br>
 										</logic:iterate>
+									</td>
+								</logic:notEmpty>
+								<logic:notEmpty name="records" property="actualCompletionDate">
+									<td align="center" width="9%">
+										<bean:write name="records" property="actualCompletionDate" />
 									</td>
 								</logic:notEmpty>
 								<logic:notEmpty name="records" property="regions">
 									<td align="center" width="9%">
 										<logic:iterate name="records" id="regions" property="regions">
 											<%=regions%>	<br>
+										</logic:iterate>
+									</td>
+								</logic:notEmpty>
+								<logic:notEmpty name="records" property="status">
+									<td align="center" width="9%">
+										<bean:write name="records" property="status" />
+									</td>
+								</logic:notEmpty>
+								<logic:notEmpty name="records" property="totalDisbursement">
+									<td align="center" width="9%">
+										<bean:write name="records" property="totalDisbursement"/>
+									</td>
+								</logic:notEmpty>
+								<logic:notEmpty name="records" property="assistance">
+									<td align="center" width="9%">
+										<logic:iterate name="records" id="assistance" property="assistance"> 
+											<%=assistance%>	<br>
 										</logic:iterate>
 									</td>
 								</logic:notEmpty>
@@ -145,29 +205,16 @@
 										</logic:iterate>
 									</td>
 								</logic:notEmpty>
-								<logic:notEmpty name="records" property="modality">
-									<td align="center" width="9%">
-										<logic:iterate name="records" id="modality" property="modality"> 
-											<%=modality%>	<br>
-										</logic:iterate>
-									</td>
-								</logic:notEmpty>
-								<logic:notEmpty name="records" property="donors">
-									<td align="center" width="9%">
-										<logic:iterate name="records" id="donors" property="donors"> 
-											<%=donors%>	<br>
-										</logic:iterate>
-									</td>
-								</logic:notEmpty>
 							</logic:iterate>
+							</tr>
 							<tr><td colspan=<bean:write name="aimAdvancedReportForm" property="totalColumns"/>>
-								<table border="1" bordercolor="#C0C0C0" cellspacing=1 cellpadding=1 valign=top align=left style="border-collapse:collapse">
+								<table width="100%" border="1" bordercolor="#C0C0C0" cellspacing=1 cellpadding=1 valign=top align=center style="border-collapse:collapse">
 									<tr>
 										<logic:equal name="aimAdvancedReportForm" property="option" value="A">
 											<td width="12%"><strong>Year</strong></td>
 										</logic:equal>
 										<logic:equal name="aimAdvancedReportForm" property="option" value="Q">
-											<td width="12%" colspan="2"><strong>Year</strong></td>
+											<td width="15%" colspan="2"><strong>Year</strong></td>
 										</logic:equal>
 										<logic:equal name="aimAdvancedReportForm" property="acCommFlag" value="true">
 											<td width="12%"><strong>Actual Commitment</strong></td>
@@ -344,17 +391,17 @@
 								  				{		
 											%>
 													<tr>
-														<td width="7%"><strong>
+														<td width="9%"><strong>
 															<%=fiscalYearRange%></strong>
 														</td>
-														<td width="5%"><strong>
+														<td width="6%"><strong>
 														<% 
 															int temp = 0;
 															temp = mark%4;
 															if(temp == 0)
 																temp = 4;
 														%>
-														Q <%= temp%></strong>
+														Q<%= temp%></strong>
 														</td>
 														<logic:equal name="aimAdvancedReportForm" property="acCommFlag" value="true">
 															<td width="12%">
@@ -412,7 +459,7 @@
 								  					{
 												%>
 													<tr>
-														<td width="12%" colspan="2"><strong>
+														<td width="15%" colspan="2"><strong>
 															Total</strong>
 														</td>
 														<logic:equal name="aimAdvancedReportForm" property="acCommFlag" value="true">
@@ -482,7 +529,7 @@
 					</tr>
 					
 					<tr><td colspan=<bean:write name="aimAdvancedReportForm" property="totalColumns"/>>
-						<table border="1" bordercolor="#C0C0C0" cellspacing=1 cellpadding=1 valign=top align=left style="border-collapse:collapse">
+						<table width="100%" border="1" bordercolor="#C0C0C0" cellspacing=1 cellpadding=1 valign=top align=center style="border-collapse:collapse">
 							<tr>
 								<td align="left" colspan=<bean:write name="aimAdvancedReportForm" property="totalColumns" />><b>
 									<bean:write name="hierarchy" property="name"/> 
@@ -494,7 +541,7 @@
 									<td width="12%"><strong>Year</strong></td>
 								</logic:equal>
 								<logic:equal name="aimAdvancedReportForm" property="option" value="Q">
-									<td width="12%" colspan="2"><strong>Year</strong></td>
+									<td width="15%" colspan="2"><strong>Year</strong></td>
 								</logic:equal>
 								<logic:equal name="aimAdvancedReportForm" property="acCommFlag" value="true">
 									<td width="12%"><strong>Actual Commitment</strong></td>
@@ -666,17 +713,17 @@
 								  			{		
 										%>
 											<tr>
-												<td width="7%"><strong>
+												<td width="9%"><strong>
 													<%=fiscalYearRange%></strong>
 												</td>
-												<td width="5%"><strong>
+												<td width="6%"><strong>
 												<% 
 													int temp2 = 0;
 													temp2 = mark2%4;
 													if(temp2 == 0)
 													temp2 = 4;
 												%>
-												Q <%= temp2%></strong>
+												Q<%= temp2%></strong>
 												</td>
 												<logic:equal name="aimAdvancedReportForm" property="acCommFlag" value="true">
 													<td width="12%">
@@ -734,7 +781,7 @@
 						  					{
 										%>
 											<tr>
-												<td width="12%" colspan="2"><strong>
+												<td width="15%" colspan="2"><strong>
 													Total</strong>
 												</td>
 												<logic:equal name="aimAdvancedReportForm" property="acCommFlag" value="true">
@@ -847,16 +894,31 @@
 									<logic:notEqual name="titles" property="columnName" value="Project Title">
 										<logic:notEqual name="titles" property="columnName" value="Objective">	
 											<logic:notEqual name="titles" property="columnName" value="Description">
-												<td width="9%">
-													<div align="center"><strong>
-														<bean:write name="titles" property="columnName" />
-													</strong></div>
-												</td>
+												<logic:notEqual name="titles" property="columnName" value="Donor">
+													<logic:notEqual name="titles" property="columnName" value="Actual Completion Date">
+														<logic:notEqual name="titles" property="columnName" value="Region">
+															<logic:notEqual name="titles" property="columnName" value="Status">
+																<logic:notEqual name="titles" property="columnName" value="Cumulative Disbursements">
+																	<logic:notEqual name="titles" property="columnName" value="Type Of Assistance">
+																		<logic:notEqual name="titles" property="columnName" value="Contact Name">
+																			<td width="9%">
+																				<div align="center"><strong>
+																					<bean:write name="titles" property="columnName" />
+																				</strong></div>
+																			</td>
+																		</logic:notEqual>
+																	</logic:notEqual>
+																</logic:notEqual>
+															</logic:notEqual>
+														</logic:notEqual>
+													</logic:notEqual>
+												</logic:notEqual>
 											</logic:notEqual>
 										</logic:notEqual>
 									</logic:notEqual>
 								</logic:iterate>
 							</tr>
+							<tr>
 							<logic:iterate name="project"  property="records" id="records" type="org.digijava.module.aim.helper.AdvancedReport">
 								<logic:notEmpty name="records" property="ampId">
 									<td align="center" width="9%">
@@ -868,28 +930,6 @@
 										<bean:write name="records" property="actualStartDate" />
 									</td>
 								</logic:notEmpty>
-								<logic:notEmpty name="records" property="actualCompletionDate">
-									<td align="center" width="9%">
-										<bean:write name="records" property="actualCompletionDate" />
-									</td>
-								</logic:notEmpty>
-								<logic:notEmpty name="records" property="status">
-									<td align="center" width="9%">
-										<bean:write name="records" property="status" />
-									</td>
-								</logic:notEmpty>
-								<logic:notEmpty name="records" property="level">
-									<td align="center" width="9%">
-										<bean:write name="records" property="level" />
-									</td>
-								</logic:notEmpty>
-								<logic:notEmpty name="records" property="assistance">
-									<td align="center" width="9%">
-										<logic:iterate name="records" id="assistance" property="assistance"> 
-											<%=assistance%>	<br>
-										</logic:iterate>
-									</td>
-								</logic:notEmpty>
 								<logic:notEmpty name="records" property="sectors">
 									<td align="center" width="9%">
 										<logic:iterate name="records" id="sectors" property="sectors"> 
@@ -897,10 +937,87 @@
 										</logic:iterate>
 									</td>
 								</logic:notEmpty>
+								<logic:notEmpty name="records" property="level">
+									<td align="center" width="9%">
+										<bean:write name="records" property="level" />
+									</td>
+								</logic:notEmpty>
+								<logic:notEmpty name="records" property="totalCommitment">
+									<td align="center" width="9%">
+										<bean:write name="records" property="totalCommitment"/>
+									</td>
+								</logic:notEmpty>
+								<logic:notEmpty name="records" property="modality">
+									<td align="center" width="9%">
+										<logic:iterate name="records" id="modality" property="modality"> 
+											<%=modality%>	<br>
+										</logic:iterate>
+									</td>
+								</logic:notEmpty>
+							</logic:iterate>
+							</tr>
+							<tr>	
+								<logic:iterate name="aimAdvancedReportForm"  property="titles" id="titles" type="org.digijava.module.aim.helper.Column">
+									<logic:notEqual name="titles" property="columnName" value="Project Title">
+										<logic:notEqual name="titles" property="columnName" value="Objective">	
+											<logic:notEqual name="titles" property="columnName" value="Description">
+												<logic:notEqual name="titles" property="columnName" value="Project Id">
+													<logic:notEqual name="titles" property="columnName" value="Actual Start Date">
+														<logic:notEqual name="titles" property="columnName" value="Sector">
+															<logic:notEqual name="titles" property="columnName" value="Implementation Level">
+																<logic:notEqual name="titles" property="columnName" value="Cumulative Commitments">
+																	<logic:notEqual name="titles" property="columnName" value="Financing Instrument">
+																		<td width="9%">
+																			<div align="center"><strong>
+																				<bean:write name="titles" property="columnName" />
+																			</strong></div>
+																		</td>
+																	</logic:notEqual>
+																</logic:notEqual>
+															</logic:notEqual>
+														</logic:notEqual>
+													</logic:notEqual>
+												</logic:notEqual>
+											</logic:notEqual>
+										</logic:notEqual>
+									</logic:notEqual>
+								</logic:iterate>
+							</tr>
+							<tr>
+							<logic:iterate name="project"  property="records" id="records" type="org.digijava.module.aim.helper.AdvancedReport">
+								<logic:notEmpty name="records" property="donors">
+									<td align="center" width="9%">
+										<logic:iterate name="records" id="donors" property="donors"> 
+											<%=donors%>	<br>
+										</logic:iterate>
+									</td>
+								</logic:notEmpty>
+								<logic:notEmpty name="records" property="actualCompletionDate">
+									<td align="center" width="9%">
+										<bean:write name="records" property="actualCompletionDate" />
+									</td>
+								</logic:notEmpty>
 								<logic:notEmpty name="records" property="regions">
 									<td align="center" width="9%">
 										<logic:iterate name="records" id="regions" property="regions">
 											<%=regions%>	<br>
+										</logic:iterate>
+									</td>
+								</logic:notEmpty>
+								<logic:notEmpty name="records" property="status">
+									<td align="center" width="9%">
+										<bean:write name="records" property="status" />
+									</td>
+								</logic:notEmpty>
+								<logic:notEmpty name="records" property="totalDisbursement">
+									<td align="center" width="9%">
+										<bean:write name="records" property="totalDisbursement"/>
+									</td>
+								</logic:notEmpty>
+								<logic:notEmpty name="records" property="assistance">
+									<td align="center" width="9%">
+										<logic:iterate name="records" id="assistance" property="assistance"> 
+											<%=assistance%>	<br>
 										</logic:iterate>
 									</td>
 								</logic:notEmpty>
@@ -911,29 +1028,16 @@
 										</logic:iterate>
 									</td>
 								</logic:notEmpty>
-								<logic:notEmpty name="records" property="modality">
-									<td align="center" width="9%">
-										<logic:iterate name="records" id="modality" property="modality"> 
-											<%=modality%>	<br>
-										</logic:iterate>
-									</td>
-								</logic:notEmpty>
-								<logic:notEmpty name="records" property="donors">
-									<td align="center" width="9%">
-										<logic:iterate name="records" id="donors" property="donors"> 
-											<%=donors%>	<br>
-										</logic:iterate>
-									</td>
-								</logic:notEmpty>
-							</logic:iterate>	
+							</logic:iterate>
+							</tr>
 							<tr><td colspan=<bean:write name="aimAdvancedReportForm" property="totalColumns"/>>
-								<table border="1" bordercolor="#C0C0C0" cellspacing=1 cellpadding=1 valign=top align=left style="border-collapse:collapse">
+								<table width="100%" border="1" bordercolor="#C0C0C0" cellspacing=1 cellpadding=1 valign=top align=center style="border-collapse:collapse">
 									<tr>
 										<logic:equal name="aimAdvancedReportForm" property="option" value="A">
 											<td width="12%"><strong>Year</strong></td>
 										</logic:equal>
 										<logic:equal name="aimAdvancedReportForm" property="option" value="Q">
-											<td width="12%" colspan="2"><strong>Year</strong></td>
+											<td width="15%" colspan="2"><strong>Year</strong></td>
 										</logic:equal>
 										<logic:equal name="aimAdvancedReportForm" property="acCommFlag" value="true">
 											<td width="12%"><strong>Actual Commitment</strong></td>
@@ -1108,17 +1212,17 @@
 								  				{		
 											%>
 													<tr>
-														<td width="7%"><strong>
+														<td width="9%"><strong>
 															<%=fiscalYearRange%></strong>
 														</td>
-														<td width="5%"><strong>
+														<td width="6%"><strong>
 														<% 
 															int temp3 = 0;
 															temp3 = mark3%4;
 															if(temp3 == 0)
 																temp3 = 4;
 														%>
-														Q <%= temp3%></strong>
+														Q<%= temp3%></strong>
 														</td>
 														<logic:equal name="aimAdvancedReportForm" property="acCommFlag" value="true">
 															<td width="12%">
@@ -1245,7 +1349,7 @@
 						</logic:iterate>
 
 					<tr><td colspan=<bean:write name="aimAdvancedReportForm" property="totalColumns"/>>
-						<table border="1" bordercolor="#C0C0C0" cellspacing=1 cellpadding=1 valign=top align=left style="border-collapse:collapse">
+						<table width="100%" border="1" bordercolor="#C0C0C0" cellspacing=1 cellpadding=1 valign=top align=center style="border-collapse:collapse">
 							<tr>
 								<td align="left" colspan=<bean:write name="aimAdvancedReportForm" property="totalColumns" />><b>
 									<bean:write name="levels" property="name"/> 
@@ -1257,7 +1361,7 @@
 									<td width="12%"><strong>Year</strong></td>
 								</logic:equal>
 								<logic:equal name="aimAdvancedReportForm" property="option" value="Q">
-									<td width="12%" colspan="2"><strong>Year</strong></td>
+									<td width="15%" colspan="2"><strong>Year</strong></td>
 								</logic:equal>
 								<logic:equal name="aimAdvancedReportForm" property="acCommFlag" value="true">
 									<td width="12%"><strong>Actual Commitment</strong></td>
@@ -1429,17 +1533,17 @@
 								  			{		
 										%>
 											<tr>
-												<td width="7%"><strong>
+												<td width="9%"><strong>
 													<%=fiscalYearRange%></strong>
 												</td>
-												<td width="5%"><strong>
+												<td width="6%"><strong>
 												<% 
 													int temp4 = 0;
 													temp4 = mark4%4;
 													if(temp4 == 0)
 													temp4 = 4;
 												%>
-												Q <%= temp4%></strong>
+												Q<%= temp4%></strong>
 												</td>
 												<logic:equal name="aimAdvancedReportForm" property="acCommFlag" value="true">
 													<td width="12%">
@@ -1497,7 +1601,7 @@
 						  					{
 										%>
 											<tr>
-												<td width="12%" colspan="2"><strong>
+												<td width="15%" colspan="2"><strong>
 													Total</strong>
 												</td>
 												<logic:equal name="aimAdvancedReportForm" property="acCommFlag" value="true">
@@ -1573,7 +1677,7 @@
 <%-- 	Hierarchy 3 ends here	--%>
 
 				<tr><td colspan=<bean:write name="aimAdvancedReportForm" property="totalColumns"/>>
-					<table border="1" bordercolor="#C0C0C0" cellspacing=1 cellpadding=1 valign=top align=left style="border-collapse:collapse">
+					<table width="100%" border="1" bordercolor="#C0C0C0" cellspacing=1 cellpadding=1 valign=top align=center style="border-collapse:collapse">
 						<tr>
 							<td align="left" colspan=<bean:write name="aimAdvancedReportForm" property="totalColumns" />><b>
 								<bean:write name="hierarchy" property="name"/> 
@@ -1585,7 +1689,7 @@
 								<td width="12%"><strong>Year</strong></td>
 							</logic:equal>
 							<logic:equal name="aimAdvancedReportForm" property="option" value="Q">
-								<td width="12%" colspan="2"><strong>Year</strong></td>
+								<td width="15%" colspan="2"><strong>Year</strong></td>
 							</logic:equal>
 							<logic:equal name="aimAdvancedReportForm" property="acCommFlag" value="true">
 								<td width="12%"><strong>Actual Commitment</strong></td>
@@ -1757,17 +1861,17 @@
 								  			{		
 										%>
 											<tr>
-												<td width="7%"><strong>
+												<td width="9%"><strong>
 													<%=fiscalYearRange%></strong>
 												</td>
-												<td width="5%"><strong>
+												<td width="6%"><strong>
 												<% 
 													int temp7 = 0;
 													temp7 = mark7%4;
 													if(temp7 == 0)
 													temp7 = 4;
 												%>
-												Q <%= temp7%></strong>
+												Q<%= temp7%></strong>
 												</td>
 												<logic:equal name="aimAdvancedReportForm" property="acCommFlag" value="true">
 													<td width="12%">
@@ -1825,7 +1929,7 @@
 						  					{
 										%>
 											<tr>
-												<td width="12%" colspan="2"><strong>
+												<td width="15%" colspan="2"><strong>
 													Total</strong>
 												</td>
 												<logic:equal name="aimAdvancedReportForm" property="acCommFlag" value="true">
@@ -1894,7 +1998,7 @@
 		</logic:iterate>
 					
 				<tr><td colspan=<bean:write name="aimAdvancedReportForm" property="totalColumns"/>>
-						<table border="1" bordercolor="#C0C0C0" cellspacing=1 cellpadding=1 valign=top align=left style="border-collapse:collapse">
+						<table width="100%" border="1" bordercolor="#C0C0C0" cellspacing=1 cellpadding=1 valign=top align=center style="border-collapse:collapse">
 							<tr>
 								<td align="left" colspan=<bean:write name="aimAdvancedReportForm" property="totalColumns" /> class="head2-name"><b>
 									Grand Total</b>
@@ -1905,7 +2009,7 @@
 									<td width="12%"><strong>Year</strong></td>
 								</logic:equal>
 								<logic:equal name="aimAdvancedReportForm" property="option" value="Q">
-									<td width="12%" colspan="2"><strong>Year</strong></td>
+									<td width="15%" colspan="2"><strong>Year</strong></td>
 								</logic:equal>
 								<logic:equal name="aimAdvancedReportForm" property="acCommFlag" value="true">
 									<td width="12%"><strong>Actual Commitment</strong></td>
@@ -2077,17 +2181,17 @@
 								  			{		
 										%>
 											<tr>
-												<td width="7%"><strong>
+												<td width="9%"><strong>
 													<%=fiscalYearRange%></strong>
 												</td>
-												<td width="5%"><strong>
+												<td width="6%"><strong>
 												<% 
 													int temp8 = 0;
 													temp8 = mark8%4;
 													if(temp8 == 0)
 													temp8 = 4;
 												%>
-												Q <%= temp8%></strong>
+												Q<%= temp8%></strong>
 												</td>
 												<logic:equal name="aimAdvancedReportForm" property="acCommFlag" value="true">
 													<td width="12%">
@@ -2145,7 +2249,7 @@
 						  					{
 										%>
 											<tr>
-												<td width="12%" colspan="2"><strong>
+												<td width="15%" colspan="2"><strong>
 													Total</strong>
 												</td>
 												<logic:equal name="aimAdvancedReportForm" property="acCommFlag" value="true">

@@ -141,7 +141,7 @@
                 	</logic:notEmpty>
                 </td>
             </logic:lessEqual>    
-			           </tr>
+           			</tr>
 
 			<tr>
 						<td width="14" >&nbsp;</td>

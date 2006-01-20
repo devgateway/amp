@@ -401,10 +401,10 @@
 				<digi:trn key="aim:total">Total</digi:trn>
 				</td>
 			</tr>
-			<tr bgcolor="#F4F4F2">
+			<tr bgcolor="#f4f4f2">
 				<logic:iterate name="aimMulitlateralbyDonorForm"  property="fiscalYearRange" id="fiscalYearRange">
 					<td colspan=4 align="center" height="21" width="77">
-						<strong><%=fiscalYearRange%></strong>
+						<strong><%=fiscalYearRange%></strong> 
 					</td>
 				</logic:iterate>
 			</tr>
@@ -455,7 +455,7 @@
 				<digi:trn key="aim:total">Total</digi:trn>
 				</td>
 			</tr>
-			<tr bgcolor="#F4F4F2">
+			<tr bgcolor="#f4f4f2">
 				<logic:iterate name="aimMulitlateralbyDonorForm"  property="fiscalYearRange" id="fiscalYearRange">
 					<td colspan=4 align="center" height="21" width="77">
 						<strong><%=fiscalYearRange%></strong>

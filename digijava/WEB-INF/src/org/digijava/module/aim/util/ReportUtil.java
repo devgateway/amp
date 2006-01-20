@@ -11441,7 +11441,7 @@ public class ReportUtil {
 								{
 									if(assistance.size()==0)
 										assistance.add(" ");
-									report.setAssistance(assistance);
+									report.getAssistance().addAll(assistance);
 								}
 								if(c.getColumnId().equals(Constants.LEVEL_NAME))
 									report.setLevel(level);
@@ -11963,7 +11963,7 @@ public class ReportUtil {
 					{
 						if(assistance.size()==0)
 							assistance.add(" ");
-						report.setAssistance(assistance);
+						report.getAssistance().addAll(assistance);
 					}
 					if(c.getColumnId().equals(Constants.LEVEL_NAME))
 						report.setLevel(level);
@@ -13322,7 +13322,7 @@ public class ReportUtil {
 								//logger.debug("Inside type of assistance");
 								if(assistance.size()==0)
 									assistance.add(" ");
-								report.setAssistance(assistance);
+								report.getAssistance().addAll(assistance);
 							}
 							if(c.getColumnId().equals(Constants.LEVEL_NAME))
 								report.setLevel(level);
@@ -13877,7 +13877,7 @@ public class ReportUtil {
 								{
 									if(assistance.size()==0)
 										assistance.add(" ");
-									report.setAssistance(assistance);
+									report.getAssistance().addAll(assistance);
 								}	
 								if(c.getColumnId().equals(Constants.LEVEL_NAME))
 									report.setLevel(level);

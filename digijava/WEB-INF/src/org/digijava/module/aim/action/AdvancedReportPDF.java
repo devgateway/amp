@@ -198,30 +198,36 @@ public class AdvancedReportPDF extends Action
 									ahr3= (AdvancedHierarchyReport) four.next();
 									//logger.info("project Levels 3333"+ahr2.getLevels().size());
 									logger.info("project Size 3333="+ahr3.getProject().size());
-									i+=ahr3.getProject().size();									
+									i+=ahr3.getProject().size();
+									totalcnt++;
+									logger.info("iiiiiiiiiiiiiiii== "+i+" h3 ==== "+ahr3.getName()+" ==== "+formBean.getColumnHierarchie().size()+"totalcnt="+totalcnt);									
 								}//four
-								totalcnt++;
-								logger.info("iiiiiiiiiiiiiiii== "+i+" h3 ==== "+formBean.getColumnHierarchie().size()+"totalcnt="+totalcnt);
+								//totalcnt++;
+								//logger.info("iiiiiiiiiiiiiiii== "+i+" h3 ==== "+ahr2.getName()+" ==== "+formBean.getColumnHierarchie().size()+"totalcnt="+totalcnt);
 							}
 							i+=ahr2.getProject().size();
+							totalcnt++;
+							logger.info("iiiiiiiiiiiiiiii== "+i+" h2 ==== "+ahr2.getName()+" ==== "+formBean.getColumnHierarchie().size()+"totalcnt="+totalcnt);
 						}//three
-						totalcnt++;
-						logger.info("iiiiiiiiiiiiiiii== "+i+" h1 ==== "+formBean.getColumnHierarchie().size()+"totalcnt="+totalcnt);
+						//totalcnt++;
+						//logger.info("iiiiiiiiiiiiiiii== "+i+" h2 ==== "+ahr.getName()+" ==== "+formBean.getColumnHierarchie().size()+"totalcnt="+totalcnt);
 					}
 					i+=ahr.getProject().size();
+					totalcnt++;
+					logger.info("iiiiiiiiiiiiiiii== "+i+" h1 ==== "+ahr.getName()+" ==== "+formBean.getColumnHierarchie().size()+"totalcnt="+totalcnt);
 				}//two
-				totalcnt++;
-				logger.info("iiiiiiiiiiiiiiii== "+i+" h2 ==== "+formBean.getColumnHierarchie().size()+"totalcnt="+totalcnt);
+				//totalcnt++;
+				//logger.info("iiiiiiiiiiiiiiii== "+i+" h1 ==== "+formBean.getColumnHierarchie().size()+"totalcnt="+totalcnt);
 			}//one
 			
 			
 			logger.info("::::::::: -ind= "+ind+" -columnDetails.lenght= "+columnDetails.length+" -col hierarchy= "+formBean.getColumnHierarchie().size());
-			logger.info("****dataArray size with H= "+(i+1)+" :"+(columnDetails.length + (formBean.getFiscalYearRange().size()+1)*rsc.getMeasures().size()*4+ formBean.getColumnHierarchie().size()+ formBean.getColumnHierarchie().size()));
 			//dataArray = new Object[i+1][columnDetails.length + ind+ formBean.getColumnHierarchie().size()];
 			logger.info("---------TOTAL COUNT = "+totalcnt);
 			i+=totalcnt*rsc.getHierarchy().size();
-			logger.info("---------TOTAL COUNT with HRRCHY= "+totalcnt*rsc.getHierarchy().size());
+			logger.info("---------TOTAL COUNT with HRRCHY= "+totalcnt*rsc.getHierarchy().size()+"iiiiiiiiiiiiiiii="+i);
 			dataArray = new Object[i+1][columnDetails.length + (formBean.getFiscalYearRange().size()+1)*rsc.getMeasures().size()*4+ formBean.getColumnHierarchie().size()];
+			logger.info("****dataArray size with H= "+(i+1)+" :"+(columnDetails.length + (formBean.getFiscalYearRange().size()+1)*rsc.getMeasures().size()*4+ formBean.getColumnHierarchie().size()));
 		}
 		else{
 			dataArray = new Object[formBean.getAllReports().size()+ 1+rsc.getHierarchy().size()*totalcnt][columnDetails.length + ind];
@@ -928,19 +934,19 @@ public class AdvancedReportPDF extends Action
 												{
 													position = position + 1;
 													dataArray[row][position] = ampFund.getCommAmount();
-													logger.info("^^^^ row="+row+"========="+dataArray[row][position]);
+													//logger.info("^^^^ row="+row+"========="+dataArray[row][position]);
 												}
 												if(formBean.getAcDisbFlag().equals("true") && ampFund.getDisbAmount() != null)
 												{
 													position = position + 1;
 													dataArray[row][position] = ampFund.getDisbAmount();
-													logger.info("^^^^ row="+row+"========="+dataArray[row][position]);
+													//logger.info("^^^^ row="+row+"========="+dataArray[row][position]);
 												}
 												if(formBean.getAcExpFlag().equals("true") && ampFund.getExpAmount() != null)
 												{
 													position = position + 1;
 													dataArray[row][position] = ampFund.getExpAmount();
-													logger.info("^^^^ row="+row+"========="+dataArray[row][position]);
+													//logger.info("^^^^ row="+row+"========="+dataArray[row][position]);
 												}
 
 												if(formBean.getPlCommFlag().equals("true") && ampFund.getPlCommAmount() != null)
@@ -980,7 +986,7 @@ public class AdvancedReportPDF extends Action
 								
 						}//while itrr
 						
-						logger.info("-------------------------------------------------total for h2.........."+ahr2.getLabel());
+						logger.info("-------------------------------------------------total for h2.........."+ahr2.getLabel()+"rowww="+row);
 						fillTotal(row, position,ahr,ahr2,ahr3);
 						row++;
 						
@@ -1134,11 +1140,11 @@ public class AdvancedReportPDF extends Action
 						
 						if(ahr.getProject()!=null)
 						logger.info("=======Total No of activities..."+ahr.getProject().size());
-						if(ahr.getActivities()!=null)
-						logger.info("^^^^++^^^^"+ahr.getActivities().size());
+/*						if(ahr.getActivities()!=null)
+						//logger.info("^^^^++^^^^"+ahr.getActivities().size());
 						if(ahr.getLevels()!=null)
-						logger.info("^^^^--^^^^"+ahr.getLevels().size());
-					}
+						//logger.info("^^^^--^^^^"+ahr.getLevels().size());
+*/					}
 					
 					
 				}
@@ -1607,13 +1613,13 @@ public class AdvancedReportPDF extends Action
 			}
 			if(hsize==2){
 				dataArray[row][3+hsize] = "TOTAL for" +ahr.getName();
-				itrtot= ahr.getFundSubTotal().iterator();
-				logger.info("total for H1>>>>>>"+ahr.getLabel());
+				itrtot= ahr2.getFundSubTotal().iterator();
+				logger.info("total for H2>>>>>>"+ahr2.getLabel());
 			}
 			if(hsize==3){
 				dataArray[row][3+hsize] = "TOTAL for" +ahr.getName();
-				itrtot= ahr.getFundSubTotal().iterator();
-				logger.info("total for H1>>>>>>"+ahr.getLabel());
+				itrtot= ahr3.getFundSubTotal().iterator();
+				logger.info("total for H3>>>>>>"+ahr3.getLabel());
 			}
 			
 			while(itrtot.hasNext()){

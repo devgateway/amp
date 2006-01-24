@@ -281,20 +281,31 @@ public class MultilateralDonorXLS extends Action
 						
 						term = true;
 						row = row + 1;
+						logger.info("term =   "+term);
 					}
 				}
 				
 				if(term == true){
 					row = row - 1;
 					term = false;
+					logger.info("row in term = true  "+row);
 				}
-				
+			/*	else
+				{
+
 				row = row + 1;
+				logger.info("row in else  "+row);
+				}*/
 				col = 2;
+				
 				yy = yyTmp;
-				col+=1;
+				col=col + 1;
+				logger.info("row and col"+row+"   "+col);
+				
 				data[row][col] = teamName;
-				col+=1;
+				
+				logger.info("row and col"+row+"   "+col);
+				col=col+1;
 				data[row][col] = "Total for " + report.getTeamName();
 				logger.info(row + ": Total for :" + data[row][col]);
 				Collection totalTeamFunds = new ArrayList(report.getTotalTeamFund());

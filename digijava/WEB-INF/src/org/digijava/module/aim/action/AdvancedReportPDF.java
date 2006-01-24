@@ -44,6 +44,10 @@ public class AdvancedReportPDF extends Action
 	ReportSelectionCriteria rsc;
 	AdvancedHierarchyReport ahr,ahr2,ahr3;
 	
+	multiReport mltireport;
+	boolean qtrlyFlag;
+	int colsize,msize;
+	
 	private static Logger logger = Logger.getLogger(AdvancedReportPDF.class) ;
 	private static int fieldHeight = 0; 
 	private static String columnDetails [][];
@@ -73,7 +77,7 @@ public class AdvancedReportPDF extends Action
 		Long ampReportId=null;
 		int ind = 0, position = 0;
 		boolean undisbFlag = false;
-		boolean qtrlyFlag = false;
+		qtrlyFlag = false;
 
 		if(formBean.getOption()!=null && formBean.getOption().equals("Q")){
 			qtrlyFlag=true;
@@ -107,8 +111,13 @@ public class AdvancedReportPDF extends Action
 
 		// ReportSelectionCriteria.getColumns() - helper.Columns && ReportSelectionCriteria.getMeasures() - id(Long)
 		rsc=ReportUtil.getReportSelectionCriteria(new Long(formBean.getCreatedReportId()));
+		
 		logger.info("Column Size : " + rsc.getColumns().size());
+		colsize=rsc.getColumns().size();
 		logger.info("Measusure Size : " + rsc.getMeasures().size());
+		msize=rsc.getMeasures().size();
+		
+		
 		iter = rsc.getColumns().iterator();
 		
 		int row = 0, year = 0, index = 0;
@@ -172,7 +181,7 @@ public class AdvancedReportPDF extends Action
 			logger.info("indddddddddd: "+ind);
 		}
 		
-		//Object dataArray[][];
+		//Object dataArray[][]; dataaaaaaaaaaaaaaaaaaaaaa
 		if (formBean.getColumnHierarchie() != null && formBean.getColumnHierarchie().size()>0) {
 			int i=0;
 			Iterator one=formBean.getAllReports().iterator();
@@ -230,8 +239,8 @@ public class AdvancedReportPDF extends Action
 			logger.info("****dataArray size with H= "+(i+1)+" :"+(columnDetails.length + (formBean.getFiscalYearRange().size()+1)*rsc.getMeasures().size()*4+ formBean.getColumnHierarchie().size()));
 		}
 		else{
-			dataArray = new Object[formBean.getAllReports().size()+ 1+rsc.getHierarchy().size()*totalcnt][columnDetails.length + ind];
-			logger.info("****dataArray size no H= "+(formBean.getAllReports().size()+ 1)+" :"+(columnDetails.length + ind));
+			dataArray = new Object[formBean.getAllReports().size()+ 2][columnDetails.length + ind];
+			logger.info("****dataArray size no H= "+(formBean.getAllReports().size()+ 2)+" :"+(columnDetails.length + ind));
 		}		
 
 //		String rowData[] = new String[columnDetails.length + ind - n];
@@ -506,6 +515,7 @@ public class AdvancedReportPDF extends Action
 					
 					if(advReport.getAmpFund() != null)
 					{
+						
 						funds = advReport.getAmpFund().iterator();
 						yearIter = formBean.getFiscalYearRange().iterator();
 						if(yearIter.hasNext()){
@@ -517,7 +527,7 @@ public class AdvancedReportPDF extends Action
 						while(funds.hasNext())
 						{
 							
-							logger.info(" WITHOUT HRRCHY IND intrrrrrrrrrrrrr "+ind);
+							//logger.info(" WITHOUT HRRCHY IND intrrrrrrrrrrrrr "+ind);
 							ind ++;
 							
 							/*//ind = ind + 1;
@@ -615,21 +625,13 @@ public class AdvancedReportPDF extends Action
 				
 				logger.info("+++++ Row ++-->"+ row);
 				row++;
-				
-				logger.info("TOOOOOOOOOOT="+tot);
-				if(tot==report.getRecords().size()){
-					
-					logger.info("::::::::::::::::::filling TOTALS NOW::::::::k=");
-					row++;
-					
-				}//total if
-				
 			}
+			
 			}
 			else if (obj instanceof multiReport) {
 				row=0;
 				logger.info("#################### HIERARCHY DATA MANIPULATION.....");
-				multiReport mltireport = (multiReport) obj;
+				mltireport = (multiReport) obj;
 				if(mltireport.getHierarchy()!=null && formBean.getColumnHierarchie().size()>0){
 					Iterator itrh=mltireport.getHierarchy().iterator();
 					
@@ -803,41 +805,24 @@ public class AdvancedReportPDF extends Action
 														
 														
 														
-													} // End of Records Iteration
+													}
+													// End of Records Iteration
 													
-													logger.info("&&&& Row &&&-->"+ row);
+													//logger.info("&&&& Row &&&-->"+ row);
 													row = row + 1;
+													
+													
 											}//if
 												
-												/*if(k==report.getRecords().size()){	
-													logger.info("::::::::::::::::::filling TOTALS::::::::k="+k);
-													dataArray[row][0] = "TOTAL for" +ahr3.getName();
-													position = rsc.getColumns().size()+1;
-													Iterator itrtot= ahr3.getFundSubTotal().iterator();
-													while(itrtot.hasNext()){
-														AmpFund ampFund=(AmpFund)itrtot.next();
-														if(formBean.getAcCommFlag().equals("true") && ampFund.getCommAmount()!= null){
-															dataArray[row][position++] = ampFund.getCommAmount();
-															logger.info("total values.........."+row+":::"+position+"::::"+dataArray[row][position-1]);
-														}
-														if(formBean.getAcDisbFlag().equals("true") && ampFund.getCommAmount()!= null){
-															dataArray[row][position++] = ampFund.getDisbAmount();
-															logger.info("total values.........."+row+":::"+position+"::::"+dataArray[row][position-1]);
-														}
-														if(formBean.getAcExpFlag().equals("true") && ampFund.getCommAmount()!= null){
-															dataArray[row][position++] = ampFund.getExpAmount();
-															logger.info("total values.........."+row+":::"+position+"::::"+dataArray[row][position-1]);
-														}
-														//position++;
-													}
-													row++;
-												}*/
-												
 										}//while itrr3
+										
+										logger.info("$$$$$$$$$$$$$$$$$$$$$$$$$$ total for h3.........."+ahr3.getLabel()+"rowww="+row);
+										fillTotal(row, position,ahr,ahr2,ahr3,3, false);
+										row++;
 																			
 									}//while itrr4
-									
-									fillTotal(row, position, ahr,ahr2,ahr3,3);
+									logger.info("$$$$$$$$$$$$$$$$$$$$$$$$$$ total for h1.........."+ahr.getLabel()+"rowww="+row);
+									fillTotal(row, position, ahr,ahr2,ahr3,2,false);
 									row++;
 								}
 								else{
@@ -988,8 +973,10 @@ public class AdvancedReportPDF extends Action
 						}//while itrr
 						
 						logger.info("$$$$$$$$$$$$$$$$$$$$$$$$$$ total for h2.........."+ahr2.getLabel()+"rowww="+row);
-						fillTotal(row, position,ahr,ahr2,ahr3,2);
+						fillTotal(row, position,ahr,ahr2,ahr3,2,false);
 						row++;
+						
+						//fillGrandTotal(row, position, mltireport);
 						
 							}
 								
@@ -997,7 +984,7 @@ public class AdvancedReportPDF extends Action
 							}
 							
 							logger.info("$$$$$$$$$$$$$$$$$$$$$$$$$$ total for h1.........."+ahr2.getLabel()+"rowww="+row);
-							fillTotal(row, position,ahr,ahr2,ahr3,1);
+							fillTotal(row, position,ahr,ahr2,ahr3,1, false);
 							row++;
 							
 						}
@@ -1139,7 +1126,7 @@ public class AdvancedReportPDF extends Action
 								}
 							}//end of while
 							
-							fillTotal(row, position,ahr, ahr2, ahr3,1);
+							fillTotal(row, position,ahr, ahr2, ahr3,1,false);
 							row++;
 						}
 						//row++;
@@ -1154,10 +1141,66 @@ public class AdvancedReportPDF extends Action
 					
 					
 				}
+				
+				// GRAND Total
+				fillTotal(row,position,ahr,ahr2,ahr3,2,true);
 
 			} else
 				logger.info("HIERARCHY DATA ERROR.....");
-		}// End of ALlReport() Iteration
+			
+		}// End of ALLReport() Iteration
+		
+//		Adding Total @ the END for H000000000000000000000000
+		
+		dataArray[row][3] = "TOTAL";
+		position = 2+rsc.getColumns().size();
+		
+		logger.info("ROWWWWW.........."+row+":::"+"Position::::"+position);
+		Iterator itrtot=formBean.getTotFund().iterator();
+		
+		int tmp=0;
+		while(itrtot.hasNext()){
+			if(qtrlyFlag){
+				if((tmp%(msize*4))==0)
+					dataArray[row][position++] = "year";
+			}
+			else{
+				if((tmp%msize)==0){
+					logger.info("***************************"+tmp);
+					dataArray[row][position++] = "year";
+				}
+			}
+			
+			AmpFund ampFund=(AmpFund)itrtot.next();
+			tmp++;
+			
+			if(formBean.getAcCommFlag().equals("true") && ampFund.getCommAmount()!= null){
+				dataArray[row][position++] = ampFund.getCommAmount();
+				logger.info("total values.........."+row+":::"+position+"::::"+dataArray[row][position-1]);
+			}
+			if(formBean.getAcDisbFlag().equals("true") && ampFund.getDisbAmount()!= null){
+				dataArray[row][position++] = ampFund.getDisbAmount();
+				logger.info("total values.........."+row+":::"+position+"::::"+dataArray[row][position-1]);
+			}
+			if(formBean.getAcExpFlag().equals("true") && ampFund.getExpAmount()!= null){
+				dataArray[row][position++] = ampFund.getExpAmount();
+				logger.info("total values.........."+row+":::"+position+"::::"+dataArray[row][position-1]);
+			}
+			if(formBean.getPlCommFlag().equals("true") && ampFund.getPlCommAmount()!= null){
+				dataArray[row][position++] = ampFund.getPlCommAmount();
+				logger.info("total values.........."+row+":::"+position+"::::"+dataArray[row][position-1]);
+			}
+			if(formBean.getPlDisbFlag().equals("true") && ampFund.getPlDisbAmount()!= null){
+				dataArray[row][position++] = ampFund.getPlDisbAmount();
+				logger.info("total values.........."+row+":::"+position+"::::"+dataArray[row][position-1]);
+			}
+			if(formBean.getPlExpFlag().equals("true") && ampFund.getPlExpAmount()!= null){
+				dataArray[row][position++] = ampFund.getPlExpAmount();
+				logger.info("total values.........."+row+":::"+position+"::::"+dataArray[row][position-1]);
+			}
+		}
+		
+//		
 	
 		logger.info(dataArray.length + " ----------------: FINAL DATA START-------------- :" + dataArray[0].length);
 		for(int i=0; i< dataArray.length; i++)
@@ -1571,19 +1614,14 @@ public class AdvancedReportPDF extends Action
 	}
 	
 	//void fillTotal(int row, int position, AdvancedHierarchyReport ahr, AdvancedHierarchyReport ahr2, AdvancedHierarchyReport ahr3)
-	void fillTotal(int row, int position, AdvancedHierarchyReport ahr, AdvancedHierarchyReport ahr2, AdvancedHierarchyReport ahr3, int h)
+	void fillTotal(int row, int position, AdvancedHierarchyReport ahr, AdvancedHierarchyReport ahr2, AdvancedHierarchyReport ahr3, int h, boolean grand)
 	{
 		logger.info("*********************start Fill TOTAL.......... row="+row+" pos= "+position);
 		
 		int hsize=formBean.getColumnHierarchie().size();
-		//		int temp2=report.getRecords().size();
-		//logger.info("kkkkkkkkkkkkkkkkk="+k+"tempppppppppppppp2:"+temp2);
-		//if(k==temp2){	
 		dataArray[row][0] = formBean.getWorkspaceType() + " " + formBean.getWorkspaceName();
-		//logger.info("@@@@@@@@ WorkspaceName="+formBean.getWorkspaceName());
 		String filterName[] = new String[2];
 		position = 1;
-		
 		filterName = formBean.getFilter();
 		for(int i=0; i<filterName.length; i++)
 		{	
@@ -1591,67 +1629,98 @@ public class AdvancedReportPDF extends Action
 			position++;						
 		}
 		
-		
-		if(hsize>=1){
-			dataArray[row][position] = ahr.getLabel()+" - "+ahr.getName();
-			logger.info("total ahr.name H1------->"+ahr.getLabel());
-			position++;
-		}
-		if(hsize>=2){
-			dataArray[row][position] = ahr2.getLabel()+" - "+ahr2.getName();
-			logger.info("total ahr.name H2------->"+ahr2.getLabel());
-			position++;
-		}
-		if(hsize>=3){
-			dataArray[row][position] = ahr3.getLabel()+" - "+ahr3.getName();
-			logger.info("total ahr.name H3------->"+ahr3.getLabel());
-			position++;
-		}
-		
+			if(hsize>=1){
+				dataArray[row][position] = ahr.getLabel()+" - "+ahr.getName();
+				logger.info("total ahr.name H1------->"+ahr.getLabel());
+				position++;
+			}
+			if(hsize>=2){
+				dataArray[row][position] = ahr2.getLabel()+" - "+ahr2.getName();
+				logger.info("total ahr.name H2------->"+ahr2.getLabel());
+				position++;
+			}
+			if(hsize>=3){
+				dataArray[row][position] = ahr3.getLabel()+" - "+ahr3.getName();
+				logger.info("total ahr.name H3------->"+ahr3.getLabel());
+				position++;
+			}
 			
-			logger.info("::::::::::::::::::filling TOTALS::::::::k="+row);
-			
-			position = 4+rsc.getColumns().size();
+			position = 3+hsize+rsc.getColumns().size();
+		logger.info("::::::::::::::::::filling TOTALS::::::::k="+row+"possss"+position);
 			
 			Iterator itrtot= ahr.getFundSubTotal().iterator();
 			
-			if(h==1){
-				dataArray[row][3+hsize] = "TOTAL for " +ahr.getName();
-				itrtot= ahr.getFundSubTotal().iterator();
-				logger.info("total for H1>>>>>>"+ahr.getLabel());
+			if(grand){
+				dataArray[row][3+hsize] = "GRAND TOTAL";
+				itrtot= mltireport.getFundTotal().iterator();
+				logger.info("GRAND TOTAL::::::::::");
 			}
-			if(h==2){
-				dataArray[row][3+hsize] = "TOTAL for " +ahr2.getName();
-				itrtot= ahr2.getFundSubTotal().iterator();
-				logger.info("total for H2>>>>>>"+ahr2.getLabel());
-			}
-			if(h==3){
-				dataArray[row][3+hsize] = "TOTAL for " +ahr3.getName();
-				itrtot= ahr3.getFundSubTotal().iterator();
-				logger.info("total for H3>>>>>>"+ahr3.getLabel());
+			else{
+				if(h==1){
+					dataArray[row][3+hsize] = "TOTAL for " +ahr.getName();
+					itrtot= ahr.getFundSubTotal().iterator();
+					logger.info("total for H1>>>>>>"+ahr.getLabel());
+				}
+				if(h==2){
+					dataArray[row][3+hsize] = "TOTAL for " +ahr2.getName();
+					itrtot= ahr2.getFundSubTotal().iterator();
+					logger.info("total for H2>>>>>>"+ahr2.getLabel());
+				}
+				if(h==3){
+					dataArray[row][3+hsize] = "TOTAL for " +ahr3.getName();
+					itrtot= ahr3.getFundSubTotal().iterator();
+					logger.info("total for H3>>>>>>"+ahr3.getLabel());
+				}
 			}
 			
+			int tmp=0;
 			while(itrtot.hasNext()){
+				if(qtrlyFlag){
+					if((tmp%(msize*4))==0)
+						dataArray[row][position++] = "year";
+				}
+				else{
+					if((tmp%msize)==0){
+						logger.info("***************************"+tmp);
+						dataArray[row][position++] = "year";
+					}
+				}
+				
 				AmpFund ampFund=(AmpFund)itrtot.next();
+				tmp++;
+				
 				if(formBean.getAcCommFlag().equals("true") && ampFund.getCommAmount()!= null){
 					dataArray[row][position++] = ampFund.getCommAmount();
 					logger.info("total values.........."+row+":::"+position+"::::"+dataArray[row][position-1]);
 				}
-				if(formBean.getAcDisbFlag().equals("true") && ampFund.getCommAmount()!= null){
+				if(formBean.getAcDisbFlag().equals("true") && ampFund.getDisbAmount()!= null){
 					dataArray[row][position++] = ampFund.getDisbAmount();
 					logger.info("total values.........."+row+":::"+position+"::::"+dataArray[row][position-1]);
 				}
-				if(formBean.getAcExpFlag().equals("true") && ampFund.getCommAmount()!= null){
+				if(formBean.getAcExpFlag().equals("true") && ampFund.getExpAmount()!= null){
 					dataArray[row][position++] = ampFund.getExpAmount();
 					logger.info("total values.........."+row+":::"+position+"::::"+dataArray[row][position-1]);
 				}
+				if(formBean.getPlCommFlag().equals("true") && ampFund.getPlCommAmount()!= null){
+					dataArray[row][position++] = ampFund.getPlCommAmount();
+					logger.info("total values.........."+row+":::"+position+"::::"+dataArray[row][position-1]);
+				}
+				if(formBean.getPlDisbFlag().equals("true") && ampFund.getPlDisbAmount()!= null){
+					dataArray[row][position++] = ampFund.getPlDisbAmount();
+					logger.info("total values.........."+row+":::"+position+"::::"+dataArray[row][position-1]);
+				}
+				if(formBean.getPlExpFlag().equals("true") && ampFund.getPlExpAmount()!= null){
+					dataArray[row][position++] = ampFund.getPlExpAmount();
+					logger.info("total values.........."+row+":::"+position+"::::"+dataArray[row][position-1]);
+				}
+				
 			}
 			row++;
 		//}//end total
 		
 			logger.info("********************* END Fill TOTAL..........row="+row);
 	}
-
+	
 }// end of CLass
 
 	

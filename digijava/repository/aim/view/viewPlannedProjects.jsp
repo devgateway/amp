@@ -10,7 +10,15 @@
 
 <script language="JavaScript">
 <!--
-	
+
+	function popup_pdf() {
+		openResisableWindow(800, 600);
+		<digi:context name="pdf" property="context/module/moduleinstance/PlannedProjectPdf.do?docType=pdf" />
+		document.aimCommitmentbyDonorForm.action = "<%= pdf %>";
+		document.aimCommitmentbyDonorForm.target = popupPointer.name;
+		document.aimCommitmentbyDonorForm.submit();
+	}
+
 	/* CSV function start  */
 
 		function popup_csv() {
@@ -67,9 +75,9 @@
              </tr>
 		<tr>
 				<td colspan=3 class=subtitle-blue align=center>
-					<digi:trn key="aim:ViewPlannedProjectsTitle">
+				<digi:trn key="aim:ViewTitleforPlannedProjects">	
 					<bean:write name="aimCommitmentbyDonorForm" property="reportName" />
-					</digi:trn>
+				</digi:trn>
 				</td>
 			</tr>
 			<tr>

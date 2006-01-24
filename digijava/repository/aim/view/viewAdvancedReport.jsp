@@ -9,16 +9,6 @@
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
 <script language="JavaScript">
 <!--
-/*
-	function openPage()
-	{
-		<digi:context name="printVal" property="context/module/moduleinstance/htmlAdvancedReport.do" />
-		urlprint = "<%=printVal %>?ampReportId=" + document.aimAdvancedReportForm.createdReportId.value;
-		document.aimAdvancedReportForm.action = urlprint;
-		document.aimAdvancedReportForm.target = "_blank";
-		document.aimAdvancedReportForm.submit();
-	}
-*/
 	function clearFilter()
 	{
 		<digi:context name="clearVal" property="context/module/moduleinstance/viewAdvancedReport.do" />

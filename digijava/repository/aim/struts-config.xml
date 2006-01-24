@@ -2516,11 +2516,6 @@
     </action>
 
 	<action name="aimCommitmentbyDonorForm" 
-     	type="org.digijava.module.aim.action.PlannedProjectPDF" 
-     	scope="session" validate="false" path="/aim/PlannedProjectPdf">
-    </action>
-
-	<action name="aimCommitmentbyDonorForm" 
      	type="org.digijava.module.aim.action.ViewProjectPDF" 
      	scope="session" validate="false" path="/aim/viewProjectPdf">
     </action>

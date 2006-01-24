@@ -512,7 +512,7 @@ public class ViewPlannedProjects extends Action
 		
 		formBean.setFilterCnt(filterCnt);
 		AmpTeam ampTeam=DbUtil.getAmpTeam(ampTeamId);
-		formBean.setReportName("Quarterly Forecasting Report");
+		formBean.setReportName("Quarterly Team Project Detail Report");
 		formBean.setWorkspaceType(ampTeam.getType());
 		formBean.setWorkspaceName(ampTeam.getName());
 		if(perspective.equals("DN"))

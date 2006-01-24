@@ -10814,25 +10814,6 @@ public class ReportUtil {
 		str = new String(strbuff);
 		return str;
 	}
-/*		
-		for(int i=0; i<ch.length; i++)
-		{
-			if(ch[i] == '<')
-			{
-				i++;
-				while(ch[i] != '>')
-					i++;
-			}
-			if(ch[i] == '&' && ch[i+1] == 'n' && ch[i+2] == 'b' && ch[i+3] == 's' && ch[i+4] == 'p')
-				i = i+4;
-			int k = i+1;
-			if( k<ch.length && ch[k]!= '<' && ch[k] != '&')
-				strbuff.append(ch[k]);
-		}
-			str = new String(strbuff);
-			return str;
-	}
-*/	
 
 //----------Advanced Report Function--------------------------------
 

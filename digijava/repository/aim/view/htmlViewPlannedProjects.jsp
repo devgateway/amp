@@ -28,8 +28,8 @@
   <!-- Report Name -->
   <tr>
    <td class="head1-name" align=center>
-	<digi:trn key="aim:ViewPlannedProjectsTitle">
-	<bean:write name="aimCommitmentbyDonorForm" property="reportName" />
+	<digi:trn key="aim:ViewTitleforPlannedProjects">	
+		<bean:write name="aimCommitmentbyDonorForm" property="reportName" />
 	</digi:trn>
    </td>
   </tr> 

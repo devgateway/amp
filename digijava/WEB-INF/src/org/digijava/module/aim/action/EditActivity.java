@@ -379,15 +379,22 @@ public class EditActivity extends Action {
 				double totDisb = 0;
 				double totExp = 0;				
 
-				Collection fundingOrgs = new ArrayList();
+				ArrayList fundingOrgs = new ArrayList();
 				Iterator fundItr = activity.getFunding().iterator();
 				while (fundItr.hasNext()) {
 				    AmpFunding ampFunding = (AmpFunding) fundItr.next();
 					AmpOrganisation org = ampFunding.getAmpDonorOrgId();
 					FundingOrganization fundOrg = new FundingOrganization();
 					fundOrg.setAmpOrgId(org.getAmpOrgId());
-					fundOrg.setOrgName(org.getName());				    
+					fundOrg.setOrgName(org.getName());
+					int index = fundingOrgs.indexOf(fundOrg);
+					logger.info("Getting the index as " + index + " for fundorg " + fundOrg.getOrgName());
+					if (index > -1) {
+						fundOrg = (FundingOrganization) fundingOrgs.get(index);
+					}
+					
 					Funding fund = new Funding();
+					fund.setFundingId(System.currentTimeMillis());
 					fund.setAmpTermsAssist(ampFunding
 							.getAmpTermsAssistId());
 					fund.setFundingId(ampFunding.getAmpFundingId()
@@ -397,7 +404,6 @@ public class EditActivity extends Action {
 					fund.setModality(ampFunding.getModalityId());
 					fund.setConditions(ampFunding.getConditions());
 					Collection fundDetails = ampFunding.getFundingDetails();	
-					Collection funding = new ArrayList();
 					if (fundDetails != null
 							&& fundDetails.size() > 0) {
 						Iterator fundDetItr = fundDetails.iterator();
@@ -458,11 +464,21 @@ public class EditActivity extends Action {
 						if (fundDetail != null)
 							Collections.sort(fundDetail,FundingValidator.dateComp);
 						fund.setFundingDetails(fundDetail);
-						funding.add(fund);
+						//funding.add(fund);
 					}
-					fundOrg.setFundings(funding);
-					fundingOrgs.add(fundOrg);
+					if (fundOrg.getFundings() == null) 
+						fundOrg.setFundings(new ArrayList());
+					fundOrg.getFundings().add(fund);
+					
+					if (index > -1) {
+						fundingOrgs.set(index,fundOrg);
+						logger.info("Setting the fund org obj to the index :" + index);
+					} else {
+						fundingOrgs.add(fundOrg);
+						logger.info("Adding new fund org object");
+					}
 				}
+				logger.info("size = " + fundingOrgs);
 				eaForm.setFundingOrganizations(fundingOrgs);
 				eaForm.setTotalCommitments(totComm);
 				eaForm.setTotalDisbursements(totDisb);

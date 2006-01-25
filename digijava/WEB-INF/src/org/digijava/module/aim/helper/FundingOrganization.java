@@ -1,15 +1,11 @@
 package org.digijava.module.aim.helper;
 
-import java.io.Serializable;
 import java.util.Collection;
-
-import org.digijava.module.aim.dbentity.AmpOrganisation;
 
 /**
  * @author jose
  */
-public class FundingOrganization implements Serializable 
-{
+public class FundingOrganization {
 	
 	private Long ampOrgId;
 	private String orgName ;
@@ -45,5 +41,13 @@ public class FundingOrganization implements Serializable
     }
     public void setCurrentOrganization(String currentOrganization) {
         this.currentOrganization = currentOrganization;
+    }
+    
+    public boolean equals(Object e) {
+    	if (e instanceof FundingOrganization) {
+    		FundingOrganization forg = (FundingOrganization) e;
+    		return ampOrgId.longValue() == forg.getAmpOrgId().longValue();
+    	}
+    	throw new ClassCastException();
     }
 }

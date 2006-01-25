@@ -325,6 +325,7 @@ public class ResetAll extends Action
 					fundOrg.setAmpOrgId(org.getAmpOrgId());
 					fundOrg.setOrgName(org.getName());				    
 					Funding fund = new Funding();
+					fund.setFundingId(System.currentTimeMillis());
 					fund.setAmpTermsAssist(ampFunding.getAmpTermsAssistId());
 					fund.setFundingId(ampFunding.getAmpFundingId().intValue());
 					fund.setOrgFundingId(ampFunding.getFinancingId());

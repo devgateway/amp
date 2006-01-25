@@ -2646,7 +2646,16 @@
 			scope="session"
 			path="/aim/editFunding">
 			<forward name="forward" path="/showLayout.do?layout=aim_fundingPopupLayout"/>
-	</action>		
+ </action>	
+
+	<action
+			name="aimEditActivityForm"
+			type="org.digijava.module.aim.action.RemoveFunding"
+			scope="session"
+			path="/aim/removeFunding">
+			<forward name="forward" path="/aim/addActivity.do?edit=true" redirect="true"/>
+	</action> 
+ 
 	<action
 			name="aimEditActivityForm"
 			type="org.digijava.module.aim.action.FundingAdded"

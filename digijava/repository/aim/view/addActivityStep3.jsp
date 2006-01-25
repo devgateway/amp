@@ -80,6 +80,14 @@
 			popupPointer.focus();	  
 		}
 	} 
+
+	function fnOnDeleteItem(orgId,fundId)	{
+		<digi:context name="remItem" property="context/module/moduleinstance/removeFunding.do"/>
+		document.aimEditActivityForm.action = "<%= remItem %>?fundOrgId=" + orgId + "&fundId=" + fundId+"&edit=true";	
+		document.aimEditActivityForm.target = "_self";
+		document.aimEditActivityForm.submit();
+	} 
+
 	function resetAll()
 	{
 		<digi:context name="resetAll" property="context/module/moduleinstance/resetAll.do?edit=true" />
@@ -271,7 +279,7 @@
 																	
 																	<table cellSpacing=1 cellPadding=0 border=0 width="100%">
 																	<tr><td>
-																		<table width="98%" border="0" cellpadding="1"
+																		<table width="100%" border="0" cellpadding="1"
 																			bgcolor="#ffffff" cellspacing="1">
 														     					<tr>
 																            	<td bgcolor="#FFFFFF" align="left" width="150">
@@ -326,7 +334,7 @@
 																				</td>
 																			</tr>																				
 																		</table>
-																	</td></tr>																	
+																	</td></tr>
 																	</table>
 																	</td></tr>
 																	<tr><td>
@@ -441,14 +449,19 @@
 																	
 																	</td></tr>
 																	<tr><td>
-																			<table width="98%" border="0" cellpadding="1"
+																			<table border="0" cellpadding="8"
 																			bgcolor="#ffffff" cellspacing="1">
 																			<tr>
-																				<td colspan="2">
+																				<td>
 																					<a href='javascript:fnOnEditItem(<%= index %>,<bean:write name="fundingOrganization" property="ampOrgId"/>)'>
-																					<B><digi:trn key="aim:editFundingItem"> Edit Item</digi:trn></B>
+																					<B><digi:trn key="aim:editFundingItem">Edit Item</digi:trn></B>
 																					</a> 
 																				</td>
+																				<td>
+																					<a href='javascript:fnOnDeleteItem(<bean:write name="fundingOrganization" property="ampOrgId"/>,<bean:write name="funding" property="fundingId"/>)'>
+																					<B><digi:trn key="aim:deleteFundingItem">Delete Item</digi:trn></B>
+																					</a> 
+																				</td>																				
 																			</tr>
 																		</table>																	
 																	</td></tr>
@@ -463,7 +476,6 @@
 																	</td></tr>
 																	</logic:iterate>
 																	</logic:notEmpty>
-																	
 																<tr>
 																	<td>
 																		<input type="button" value="Add Funding" class="buton" 

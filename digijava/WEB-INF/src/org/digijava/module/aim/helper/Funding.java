@@ -12,7 +12,7 @@ import org.digijava.module.aim.dbentity.AmpTermsAssist;
  */
 public class Funding implements Serializable 
 {
-    private int fundingId;
+    private long fundingId;
 	private AmpTermsAssist ampTermsAssist;
 	private String orgFundingId;
 	private String signatureDate;
@@ -55,10 +55,10 @@ public class Funding implements Serializable
     public void setFundingDetails(Collection fundingDetails) {
         this.fundingDetails = fundingDetails;
     }
-    public int getFundingId() {
+    public long getFundingId() {
         return fundingId;
     }
-    public void setFundingId(int fundingId) {
+    public void setFundingId(long fundingId) {
         this.fundingId = fundingId;
     }
  
@@ -152,5 +152,13 @@ public class Funding implements Serializable
 	 */
 	public void setModality(AmpModality modality) {
 		this.modality = modality;
+	}
+	
+	public boolean equals(Object e) {
+		if (e instanceof Funding) {
+			Funding tmp = (Funding) e;
+			return fundingId == tmp.fundingId;
+		}
+		throw new ClassCastException();
 	}
 }

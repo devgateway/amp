@@ -46,7 +46,7 @@ public class AdvancedReportPDF extends Action
 	
 	multiReport mltireport;
 	boolean qtrlyFlag;
-	int colsize,msize;
+	int colsize,msize,hsize;
 	
 	private static Logger logger = Logger.getLogger(AdvancedReportPDF.class) ;
 	private static int fieldHeight = 0; 
@@ -66,8 +66,10 @@ public class AdvancedReportPDF extends Action
 		//logger.info("IN PDF generation of Advanced Report........" + formBean.getReportName());
 		
 		if (formBean.getHierarchyFlag()=="true" && formBean.getColumnHierarchie() != null) {
+			hsize=formBean.getColumnHierarchie().size();
 			logger.info("PDF with HIERARCHYYYYYYYY..."+formBean.getColumnHierarchie().size());
 		} else {
+			hsize=0;
 			logger.info("PDF with NOOOOOOO HIERARCHYYYYYYYY...");
 		}
 		
@@ -515,7 +517,7 @@ public class AdvancedReportPDF extends Action
 					
 					if(advReport.getAmpFund() != null)
 					{
-						
+						logger.info("================ AMpFUND SIZE:::"+ advReport.getAmpFund().size());
 						funds = advReport.getAmpFund().iterator();
 						yearIter = formBean.getFiscalYearRange().iterator();
 						if(yearIter.hasNext()){
@@ -525,30 +527,14 @@ public class AdvancedReportPDF extends Action
 						
 						ind = 0;
 						while(funds.hasNext())
-						{
-							
-							//logger.info(" WITHOUT HRRCHY IND intrrrrrrrrrrrrr "+ind);
+						{	
+							//logger.info(" IND intrrrrrrrrrrrrr "+ind);
 							ind ++;
-							
-							/*//ind = ind + 1;
-							if(ind > formBean.getFiscalYearRange().size())
-							{
-								logger.info(" filling total...");
-								position = position + 1;
-								dataArray[row][position] = new String(" Total ");
-							}*/
-							/*else
-							{
-								position = position + 1;
-								dataArray[row][position] = new String(""+year);
-							}*/
-							
-							/*if(qtrlyFlag)
+							if(qtrlyFlag)
 							{
 								if(ind > (formBean.getFiscalYearRange().size()*4))
 								{
 									position = position + 1;
-
 									dataArray[row][position] = new String(" Total ");
 								}
 								else
@@ -575,7 +561,7 @@ public class AdvancedReportPDF extends Action
 										year = year + 1;
 								}
 							}	
-*/
+
 							AmpFund ampFund = (AmpFund) funds.next();
 							if(formBean.getAcCommFlag().equals("true") && ampFund.getCommAmount() != null)
 							{
@@ -1150,56 +1136,57 @@ public class AdvancedReportPDF extends Action
 			
 		}// End of ALLReport() Iteration
 		
-//		Adding Total @ the END for H000000000000000000000000
-		
-		dataArray[row][3] = "TOTAL";
-		position = 2+rsc.getColumns().size();
-		
-		logger.info("ROWWWWW.........."+row+":::"+"Position::::"+position);
-		Iterator itrtot=formBean.getTotFund().iterator();
-		
-		int tmp=0;
-		while(itrtot.hasNext()){
-			if(qtrlyFlag){
-				if((tmp%(msize*4))==0)
-					dataArray[row][position++] = "year";
-			}
-			else{
-				if((tmp%msize)==0){
-					logger.info("***************************"+tmp);
-					dataArray[row][position++] = "year";
+		//		Adding Total @ the END for H000000000000000000000000
+		if(hsize==0){
+			dataArray[row][3] = "TOTAL";
+			position = 2+rsc.getColumns().size();
+			
+			logger.info("ROWWWWW.........."+row+":::"+"Position::::"+position);
+			Iterator itrtot=formBean.getTotFund().iterator();
+			
+			int tmp=0;
+			while(itrtot.hasNext()){
+				if(qtrlyFlag){
+					if((tmp%(msize*4))==0)
+						dataArray[row][position++] = "year";
+				}
+				else{
+					if((tmp%msize)==0){
+						logger.info("***************************"+tmp);
+						dataArray[row][position++] = "year";
+					}
+				}
+// NULL Pointer exception..
+				
+				AmpFund ampFund=(AmpFund)itrtot.next();
+				tmp++;
+				
+				if(formBean.getAcCommFlag().equals("true") && ampFund.getCommAmount()!= null){
+					dataArray[row][position++] = ampFund.getCommAmount();
+					logger.info("total values.........."+row+":::"+position+"::::"+dataArray[row][position-1]);
+				}
+				if(formBean.getAcDisbFlag().equals("true") && ampFund.getDisbAmount()!= null){
+					dataArray[row][position++] = ampFund.getDisbAmount();
+					logger.info("total values.........."+row+":::"+position+"::::"+dataArray[row][position-1]);
+				}
+				if(formBean.getAcExpFlag().equals("true") && ampFund.getExpAmount()!= null){
+					dataArray[row][position++] = ampFund.getExpAmount();
+					logger.info("total values.........."+row+":::"+position+"::::"+dataArray[row][position-1]);
+				}
+				if(formBean.getPlCommFlag().equals("true") && ampFund.getPlCommAmount()!= null){
+					dataArray[row][position++] = ampFund.getPlCommAmount();
+					logger.info("total values.........."+row+":::"+position+"::::"+dataArray[row][position-1]);
+				}
+				if(formBean.getPlDisbFlag().equals("true") && ampFund.getPlDisbAmount()!= null){
+					dataArray[row][position++] = ampFund.getPlDisbAmount();
+					logger.info("total values.........."+row+":::"+position+"::::"+dataArray[row][position-1]);
+				}
+				if(formBean.getPlExpFlag().equals("true") && ampFund.getPlExpAmount()!= null){
+					dataArray[row][position++] = ampFund.getPlExpAmount();
+					logger.info("total values.........."+row+":::"+position+"::::"+dataArray[row][position-1]);
 				}
 			}
-			
-			AmpFund ampFund=(AmpFund)itrtot.next();
-			tmp++;
-			
-			if(formBean.getAcCommFlag().equals("true") && ampFund.getCommAmount()!= null){
-				dataArray[row][position++] = ampFund.getCommAmount();
-				logger.info("total values.........."+row+":::"+position+"::::"+dataArray[row][position-1]);
-			}
-			if(formBean.getAcDisbFlag().equals("true") && ampFund.getDisbAmount()!= null){
-				dataArray[row][position++] = ampFund.getDisbAmount();
-				logger.info("total values.........."+row+":::"+position+"::::"+dataArray[row][position-1]);
-			}
-			if(formBean.getAcExpFlag().equals("true") && ampFund.getExpAmount()!= null){
-				dataArray[row][position++] = ampFund.getExpAmount();
-				logger.info("total values.........."+row+":::"+position+"::::"+dataArray[row][position-1]);
-			}
-			if(formBean.getPlCommFlag().equals("true") && ampFund.getPlCommAmount()!= null){
-				dataArray[row][position++] = ampFund.getPlCommAmount();
-				logger.info("total values.........."+row+":::"+position+"::::"+dataArray[row][position-1]);
-			}
-			if(formBean.getPlDisbFlag().equals("true") && ampFund.getPlDisbAmount()!= null){
-				dataArray[row][position++] = ampFund.getPlDisbAmount();
-				logger.info("total values.........."+row+":::"+position+"::::"+dataArray[row][position-1]);
-			}
-			if(formBean.getPlExpFlag().equals("true") && ampFund.getPlExpAmount()!= null){
-				dataArray[row][position++] = ampFund.getPlExpAmount();
-				logger.info("total values.........."+row+":::"+position+"::::"+dataArray[row][position-1]);
-			}
 		}
-		
 //		
 	
 		logger.info(dataArray.length + " ----------------: FINAL DATA START-------------- :" + dataArray[0].length);
@@ -1522,19 +1509,31 @@ public class AdvancedReportPDF extends Action
 		if(columnColl.contains("Description") && advReport.getDescriptionPDFXLS() != null)
 		{
 			position = getColumnIndex("Description");
-			if(advReport.getDescriptionPDFXLS().trim().length() > 0)
-				dataArray[row][position] = advReport.getDescriptionPDFXLS().trim(); 
-				
+			if(advReport.getDescriptionPDFXLS().trim().length() > 0){	
+				if(advReport.getDescriptionPDFXLS().trim().length() > 120){
+					//logger.info("Truncating Description.........");
+					dataArray[row][position] = advReport.getDescriptionPDFXLS().substring(0,120)+"...";
+				}
+				else
+					dataArray[row][position] = advReport.getDescriptionPDFXLS().trim(); 
+
 				logger.info("Description : " + advReport.getDescription());
+			}
 		}
 		
 		if(columnColl.contains("Objective") && advReport.getObjectivePDFXLS() != null)
 		{
 			position = getColumnIndex("Objective");
-			if(advReport.getObjectivePDFXLS().trim().length() > 0)
+			if(advReport.getObjectivePDFXLS().trim().length() > 0){
+				if(advReport.getObjectivePDFXLS().trim().length() > 120){
+					//logger.info("Truncating Objective..........");
+					dataArray[row][position] = advReport.getObjectivePDFXLS().substring(0,120)+"...";
+				}
+				else
 				dataArray[row][position] = advReport.getObjectivePDFXLS().trim();
 				
 				logger.info("Objective : " + advReport.getObjective());
+			}
 		}					
 
 		if(columnColl.contains("Type Of Assistance") && advReport.getAssistance() != null)
@@ -1677,12 +1676,12 @@ public class AdvancedReportPDF extends Action
 			while(itrtot.hasNext()){
 				if(qtrlyFlag){
 					if((tmp%(msize*4))==0)
-						dataArray[row][position++] = "year";
+						dataArray[row][position++] = "--";
 				}
 				else{
 					if((tmp%msize)==0){
 						logger.info("***************************"+tmp);
-						dataArray[row][position++] = "year";
+						dataArray[row][position++] = "--";
 					}
 				}
 				

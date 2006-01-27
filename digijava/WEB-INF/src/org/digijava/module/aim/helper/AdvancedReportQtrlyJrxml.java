@@ -45,7 +45,7 @@ public static void createJRXML(String filePath, boolean undis, String labels[],O
 			int des =0;
 			if(reportType.equals("csv") || reportType.equals("xls"))
 			{
-					des=180;
+					des=120;
 					if(undis)
 				{
 					//pgwidth = (cols*des)+((measureCount)*4*60*4);

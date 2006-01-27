@@ -296,7 +296,7 @@ public class MultilateralDonorPDF extends Action
 					term = false;
 				}
 				
-				row = row + 1;
+				//row = row + 1;
 				col = 2;
 				yy = yyTmp;
 				col+=1;

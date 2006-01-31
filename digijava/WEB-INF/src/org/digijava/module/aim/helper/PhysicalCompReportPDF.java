@@ -43,7 +43,7 @@ public class PhysicalCompReportPDF
 			p2.println("columnCount='1'");
 			p2.println("printOrder='Vertical'");
 			p2.println("orientation='Landscape'");
-			p2.println("pageWidth='842'");
+			p2.println("pageWidth='875'");
 			p2.println("pageHeight='595'");
 			p2.println("columnWidth='550'");
 			p2.println("columnSpacing='0'");
@@ -82,7 +82,7 @@ public class PhysicalCompReportPDF
 			p2.println("mode='Opaque'");
 			p2.println("x='0'");
 			p2.println("y='0'");
-			p2.println("width='810'");
+			p2.println("width='840'");
 			p2.println("height='20'");
 			p2.println("forecolor='#FFFFFF'");
 			p2.println("backcolor='#666666'");
@@ -115,7 +115,7 @@ public class PhysicalCompReportPDF
 			p2.println("mode='Opaque'");
 			p2.println("x='0'");
 			p2.println("y='0'");
-			p2.println("width='810'");
+			p2.println("width='840'");
 			p2.println("height='19'");
 			p2.println("forecolor='#000000'");
 			p2.println("backcolor='#CCCCCC'");
@@ -137,7 +137,7 @@ public class PhysicalCompReportPDF
 			p2.println("mode='Opaque'");
 			p2.println("x='0'");
 			p2.println("y='19'");
-			p2.println("width='810'");
+			p2.println("width='840'");
 			p2.println("height='0'");
 			p2.println("forecolor='#000000'");
 			p2.println("backcolor='#FFFFFF'");
@@ -168,7 +168,7 @@ public class PhysicalCompReportPDF
 			p2.println("mode='Opaque'");
 			p2.println("x='0'");
 			p2.println("y='0'");
-			p2.println("width='810'");
+			p2.println("width='840'");
 			p2.println("height='20'");
 			p2.println("forecolor='#000000'");
 			p2.println("backcolor='#FFFFFF'");
@@ -191,7 +191,7 @@ public class PhysicalCompReportPDF
 			p2.println("mode='Opaque'");
 			p2.println("x='0'");
 			p2.println("y='20'");
-			p2.println("width='810'");
+			p2.println("width='840'");
 			p2.println("height='15'");
 			p2.println("forecolor='#000000'");
 			p2.println("backcolor='#FFFFFF'");
@@ -217,7 +217,7 @@ public class PhysicalCompReportPDF
 			p2.println("mode='Opaque'");
 			p2.println("x='0'");
 			p2.println("y='0'");
-			p2.println("width='810'");
+			p2.println("width='840'");
 			p2.println("height='15'");
 			p2.println("forecolor='#000000'");
 			p2.println("backcolor='#CCCCCC'");
@@ -239,7 +239,7 @@ public class PhysicalCompReportPDF
 			p2.println("mode='Opaque'");
 			p2.println("x='0'");
 			p2.println("y='15'");
-			p2.println("width='810'");
+			p2.println("width='840'");
 			p2.println("height='15'");
 			p2.println("forecolor='#000000'");
 			p2.println("backcolor='#CCCCCC'");
@@ -393,7 +393,7 @@ public class PhysicalCompReportPDF
 			p2.println("mode='Opaque'");
 			p2.println("x='470'");
 			p2.println("y='30'");
-			p2.println("width='30'");
+			p2.println("width='60'");
 			p2.println("height='30'");
 			p2.println("forecolor='#000000'");
 			p2.println("backcolor='#CCCCCC'");
@@ -413,7 +413,7 @@ public class PhysicalCompReportPDF
 			p2.println("<staticText>");
 			p2.println("<reportElement");
 			p2.println("mode='Opaque'");
-			p2.println("x='500'");
+			p2.println("x='530'");
 			p2.println("y='30'");
 			p2.println("width='140'");
 			p2.println("height='30'");
@@ -435,7 +435,7 @@ public class PhysicalCompReportPDF
 			p2.println("<staticText>");
 			p2.println("<reportElement");
 			p2.println("mode='Opaque'");
-			p2.println("x='730'");
+			p2.println("x='760'");
 			p2.println("y='30'");
 			p2.println("width='80'");
 			p2.println("height='30'");
@@ -457,7 +457,7 @@ public class PhysicalCompReportPDF
 			p2.println("<staticText>");
 			p2.println("<reportElement");
 			p2.println("mode='Opaque'");
-			p2.println("x='640'");
+			p2.println("x='670'");
 			p2.println("y='30'");
 			p2.println("width='90'");
 			p2.println("height='30'");
@@ -481,7 +481,7 @@ public class PhysicalCompReportPDF
 			p2.println("mode='Opaque'");
 			p2.println("x='0'");
 			p2.println("y='30'");
-			p2.println("width='810'");
+			p2.println("width='840'");
 			p2.println("height='0'");
 			p2.println("forecolor='#000000'");
 			p2.println("backcolor='#FFFFFF'");
@@ -499,7 +499,7 @@ public class PhysicalCompReportPDF
 			p2.println("mode='Opaque'");
 			p2.println("x='0'");
 			p2.println("y='60'");
-			p2.println("width='810'");
+			p2.println("width='840'");
 			p2.println("height='0'");
 			p2.println("forecolor='#000000'");
 			p2.println("backcolor='#FFFFFF'");
@@ -603,7 +603,7 @@ public class PhysicalCompReportPDF
 			p2.println("isPrintInFirstWholeBand='false'");
 			p2.println("isPrintWhenDetailOverflows='false'/>");
 
-			p2.println("<textElement textAlignment='Right' verticalAlignment='Middle' rotation='None' lineSpacing='Single'>");
+			p2.println("<textElement textAlignment='Center' verticalAlignment='Middle' rotation='None' lineSpacing='Single'>");
 			p2.println("<font fontName='Arial' pdfFontName='Helvetica' size='8' isBold='false' isItalic='false' isUnderline='false' isPdfEmbedded ='false' pdfEncoding ='Cp1252' isStrikeThrough='false' />");
 			p2.println("</textElement>");
 			p2.println("<textFieldExpression   class='java.lang.String'><![CDATA[$F{c9}]]></textFieldExpression>");
@@ -625,7 +625,7 @@ public class PhysicalCompReportPDF
 			p2.println("isPrintInFirstWholeBand='false'");
 			p2.println("isPrintWhenDetailOverflows='false'/>");
 
-			p2.println("<textElement textAlignment='Right' verticalAlignment='Middle' rotation='None' lineSpacing='Single'>");
+			p2.println("<textElement textAlignment='Center' verticalAlignment='Middle' rotation='None' lineSpacing='Single'>");
 			p2.println("<font fontName='Arial' pdfFontName='Helvetica' size='8' isBold='false' isItalic='false' isUnderline='false' isPdfEmbedded ='false' pdfEncoding ='Cp1252' isStrikeThrough='false' />");
 			p2.println("</textElement>");
 			p2.println("<textFieldExpression   class='java.lang.String'><![CDATA[$F{c10}]]></textFieldExpression>");
@@ -647,7 +647,7 @@ public class PhysicalCompReportPDF
 			p2.println("isPrintInFirstWholeBand='false'");
 			p2.println("isPrintWhenDetailOverflows='false'/>");
 
-			p2.println("<textElement textAlignment='Right' verticalAlignment='Middle' rotation='None' lineSpacing='Single'>");
+			p2.println("<textElement textAlignment='Center' verticalAlignment='Middle' rotation='None' lineSpacing='Single'>");
 			p2.println("<font fontName='Arial' pdfFontName='Helvetica' size='8' isBold='false' isItalic='false' isUnderline='false' isPdfEmbedded ='false' pdfEncoding ='Cp1252' isStrikeThrough='false' />");
 			p2.println("</textElement>");
 			p2.println("<textFieldExpression   class='java.lang.String'><![CDATA[$F{c11}]]></textFieldExpression>");
@@ -657,7 +657,7 @@ public class PhysicalCompReportPDF
 			p2.println("mode='Transparent'");
 			p2.println("x='470'");
 			p2.println("y='0'");
-			p2.println("width='30'");
+			p2.println("width='60'");
 			p2.println("height='"+height+"'");
 			p2.println("forecolor='#000000'");
 			p2.println("backcolor='#FFFFFF'");
@@ -668,6 +668,7 @@ public class PhysicalCompReportPDF
 			p2.println("isRemoveLineWhenBlank='false'");
 			p2.println("isPrintInFirstWholeBand='false'");
 			p2.println("isPrintWhenDetailOverflows='false'/>");
+		
 			p2.println("<textElement textAlignment='Justified' verticalAlignment='Middle' rotation='None' lineSpacing='Single'>");
 			p2.println("<font fontName='Arial' pdfFontName='Helvetica' size='8' isBold='false' isItalic='false' isUnderline='false' isPdfEmbedded ='false' pdfEncoding ='Cp1252' isStrikeThrough='false' />");
 			p2.println("</textElement>");
@@ -677,7 +678,7 @@ public class PhysicalCompReportPDF
 			p2.println("<textField isStretchWithOverflow='false' pattern='' isBlankWhenNull='true' evaluationTime='Now' hyperlinkType='None'   >");
 			p2.println("<reportElement");
 			p2.println("mode='Transparent'");
-			p2.println("x='500'");
+			p2.println("x='530'");
 			p2.println("y='0'");
 			p2.println("width='140'");
 			p2.println("height='"+height+"'");
@@ -690,7 +691,7 @@ public class PhysicalCompReportPDF
 			p2.println("isRemoveLineWhenBlank='false'");
 			p2.println("isPrintInFirstWholeBand='false'");
 			p2.println("isPrintWhenDetailOverflows='false'/>");
-			p2.println("<textElement textAlignment='Justified' verticalAlignment='Middle' rotation='None' lineSpacing='Single'>");
+			p2.println("<textElement textAlignment='Center' verticalAlignment='Middle' rotation='None' lineSpacing='Single'>");
 			p2.println("<font fontName='Arial' pdfFontName='Helvetica' size='8' isBold='false' isItalic='false' isUnderline='false' isPdfEmbedded ='false' pdfEncoding ='Cp1252' isStrikeThrough='false' />");
 			p2.println("</textElement>");
 			p2.println("<textFieldExpression   class='java.lang.String'><![CDATA[$F{c13}]]></textFieldExpression>");
@@ -699,7 +700,7 @@ public class PhysicalCompReportPDF
 			p2.println("<textField isStretchWithOverflow='false' pattern='' isBlankWhenNull='true' evaluationTime='Now' hyperlinkType='None'   >");
 			p2.println("<reportElement");
 			p2.println("mode='Transparent'");
-			p2.println("x='640'");
+			p2.println("x='670'");
 			p2.println("y='0'");
 			p2.println("width='90'");
 			p2.println("height='"+height+"'");
@@ -721,7 +722,7 @@ public class PhysicalCompReportPDF
 			p2.println("<textField isStretchWithOverflow='false' pattern='' isBlankWhenNull='true' evaluationTime='Now' hyperlinkType='None'   >");
 			p2.println("<reportElement");
 			p2.println("mode='Transparent'");
-			p2.println("x='730'");
+			p2.println("x='760'");
 			p2.println("y='0'");
 			p2.println("width='80'");
 			p2.println("height='"+height+"'");
@@ -746,7 +747,7 @@ public class PhysicalCompReportPDF
 			p2.println("mode='Opaque'");
 			p2.println("x='0'");
 			p2.println("y='"+(height)+"'");
-			p2.println("width='810'");
+			p2.println("width='840'");
 			p2.println("height='0'");
 			p2.println("forecolor='#000000'");
 			p2.println("backcolor='#FFFFFF'");
@@ -793,7 +794,7 @@ public class PhysicalCompReportPDF
 			p2.println("<textField isStretchWithOverflow='false' pattern='' isBlankWhenNull='false' evaluationTime='Now' hyperlinkType='None'   >");
 			p2.println("<reportElement");
 			p2.println("mode='Transparent'");
-			p2.println("x='595'");
+			p2.println("x='625'");
 			p2.println("y='4'");
 			p2.println("width='174'");
 			p2.println("height='14'");
@@ -815,7 +816,7 @@ public class PhysicalCompReportPDF
 			p2.println("<textField isStretchWithOverflow='false' pattern='' isBlankWhenNull='false' evaluationTime='Report' hyperlinkType='None'   >");
 			p2.println("<reportElement");
 			p2.println("mode='Transparent'");
-			p2.println("x='774'");
+			p2.println("x='804'");
 			p2.println("y='4'");
 			p2.println("width='36'");
 			p2.println("height='14'");

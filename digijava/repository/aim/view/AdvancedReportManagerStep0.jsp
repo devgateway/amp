@@ -197,7 +197,7 @@ function gotoStep() {
 				</tr>
 				<tr>
 					<td>
-						<html:radio property="reportType" value="regional" disabled="true">
+						<html:radio property="reportType" value="regional" >
 							<digi:trn key="aim:regionalReport">
 								Regional Report (Regional Funding)
 							</digi:trn>
@@ -206,7 +206,7 @@ function gotoStep() {
 				</tr>
 				<tr>
 					<td>
-						<html:radio property="reportType" value="component" disabled="true">
+						<html:radio property="reportType" value="component" >
 							<digi:trn key="aim:componentReport">
 								Component Report (Component Funding)
 							</digi:trn>

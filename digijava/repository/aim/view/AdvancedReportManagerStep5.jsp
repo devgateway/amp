@@ -267,21 +267,60 @@ function deleteColumn()
 																		<TD>
 																			<TABLE width="100%" cellPadding=2 cellSpacing=1 vAlign="top" align="top" bgcolor="#aaaaaa" border=0>
 																				<c:if test="${!empty aimAdvancedReportForm.addedColumns}">
-																					<logic:iterate name="aimAdvancedReportForm" id="addedColumns"	property="addedColumns" >
-																						<c:if test="${addedColumns.columnName == 'Donor' || addedColumns.columnName == 'Sector' || addedColumns.columnName == 'Status' || addedColumns.columnName == 'Type Of Assistance' || addedColumns.columnName == 'Financing Instrument' }">
-																							<TR bgcolor="#ffffff">
-																								<td align="left" width="98%" valign=top>
-																									<c:out value="${addedColumns.columnName}"/>
-																								</td>												
-																								<td align="right">
-																								<html:multibox property="selectedColumns">
-																								  <c:out value="${addedColumns.columnId}"/>
-						  																	    </html:multibox>
-																								</td>
-																							</tr>
+
+																						<!-- Donor Funding -->
+																						<c:if test="${aimAdvancedReportForm.arReportType == 'donor' }">
+																						<logic:iterate name="aimAdvancedReportForm" id="addedColumns"	property="addedColumns" >
+																							<c:if test="${addedColumns.columnName == 'Donor' || addedColumns.columnName == 'Sector' || addedColumns.columnName == 'Status' || addedColumns.columnName == 'Type Of Assistance' || addedColumns.columnName == 'Financing Instrument' }">
+																								<TR bgcolor="#ffffff">
+																									<td align="left" width="98%" valign=top>
+																										<c:out value="${addedColumns.columnName}"/>
+																									</td>												
+																									<td align="right">
+																									<html:multibox property="selectedColumns">
+																									  <c:out value="${addedColumns.columnId}"/>
+																									</html:multibox>
+																									</td>
+																								</tr>
+																							</c:if>
+																						</logic:iterate>
 																						</c:if>
-																					</logic:iterate>
-																					
+																						
+																						<!-- Regional Funding -->
+																						<c:if test="${aimAdvancedReportForm.arReportType == 'regional' }">
+																						<logic:iterate name="aimAdvancedReportForm" id="addedColumns"	property="addedColumns" >
+																							<c:if test="${addedColumns.columnName == 'Status' || addedColumns.columnName == 'Sector' || addedColumns.columnName == 'Region' }">
+																								<tr bgcolor="#ffffff">
+																									<td align="left" width="98%" valign=top>
+																										<c:out value="${addedColumns.columnName}"/>
+																									</td>												
+																									<td align="right">
+																									<html:multibox property="selectedColumns">
+																									  <c:out value="${addedColumns.columnId}"/>
+																									</html:multibox>
+																									</td>
+																								</tr>
+																							</c:if>
+																						</logic:iterate>
+																						</c:if>
+
+																						<!-- Component Funding -->
+																						<c:if test="${aimAdvancedReportForm.arReportType == 'component' }">
+																						<logic:iterate name="aimAdvancedReportForm" id="addedColumns"	property="addedColumns" >
+																							<c:if test="${addedColumns.columnName == 'Status' || addedColumns.columnName == 'Sector' || addedColumns.columnName == 'Project Title' }">
+																								<tr bgcolor="#ffffff">
+																									<td align="left" width="98%" valign=top>
+																										<c:out value="${addedColumns.columnName}"/>
+																									</td>												
+																									<td align="right">
+																									<html:multibox property="selectedColumns">
+																									  <c:out value="${addedColumns.columnId}"/>
+																									</html:multibox>
+																									</td>
+																								</tr>
+																							</c:if>
+																						</logic:iterate>
+																						</c:if>
 																				</c:if>
 																			</TABLE>
 																		</TD>

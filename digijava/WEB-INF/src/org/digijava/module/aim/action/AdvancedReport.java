@@ -107,7 +107,7 @@ public class AdvancedReport extends Action {
 		if(perspective.equals("MOFED"))
 			perspective="MA";
 		formBean.setPerspectiveFilter(perspective);
-
+		
 		try
 		{
 			
@@ -152,6 +152,12 @@ public class AdvancedReport extends Action {
 			// Add the columns selected : Step 2
 			if(request.getParameter("check") != null && request.getParameter("check").equals("SelectCols"))
 			{
+				//Advanced Report Builder Report Type Check
+				String arReportType="Donor";
+				arReportType=request.getParameter("reportType");
+				logger.info("arReportType::::"+arReportType);
+				formBean.setArReportType(arReportType);
+				
 				//logger.info("inside Step 1...");
 				return mapping.findForward("SelectCols");
 			}

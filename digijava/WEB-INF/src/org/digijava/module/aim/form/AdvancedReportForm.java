@@ -18,6 +18,7 @@ public class AdvancedReportForm extends ActionForm
 	private String reportTitle = "";
 	private String reportDescription = "";
 	private String reportType = "";
+	private String arReportType = "";
 	private String reportOption;
 	private String moveColumn="";
 	private Collection intermediate = null;
@@ -1274,5 +1275,18 @@ private int yrDiff;
 		options = c;
 	}
 
+	
+	/**
+	 * @return Returns the arReportType.
+	 */
+	public String getArReportType() {
+		return arReportType;
+	}
+	/**
+	 * @param arReportType The arReportType to set.
+	 */
+	public void setArReportType(String arReportType) {
+		this.arReportType = arReportType;
+	}
 } //		End of Class
 

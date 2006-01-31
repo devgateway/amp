@@ -20,6 +20,8 @@ public class AmpReports implements Comparable {
 
 	private String options;
 
+	private Long type;
+
 	//private AmpReportsOptions ampReportsOptions;
 	
 	private Set members;
@@ -111,4 +113,13 @@ public class AmpReports implements Comparable {
 	public void setHierarchies(Set hierarchies) {
 		this.hierarchies = hierarchies;
 	}
+
+	public Long getType() {
+		return type;
+	}
+	public void setType(Long type) {
+		this.type = type;
+	}
+
+
 }

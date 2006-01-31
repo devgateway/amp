@@ -36,6 +36,12 @@ public class AmpReportCache {
 		  private Long ampLevelId;
 		  private String levelName;
 		  private String activityDescription;
+		  private Long ampComponentId;
+		  private String componentName;
+		  private Long ampRegionId;
+		  private String regionName;
+		  private Long reportType;
+
 		  
 		  public Long getAmpActivityId() {
 					 return ampActivityId;
@@ -166,6 +172,26 @@ public class AmpReportCache {
 					 return activityDescription;
 		  }
 
+		  public Long getAmpComponentId() {
+					 return ampComponentId;
+		  }
+
+		  public String getComponentName() {
+					 return componentName;
+		  }
+
+		  public Long getAmpRegionId() {
+					 return ampRegionId;
+		  }
+
+		  public String getRegionName() {
+					 return regionName;
+		  }
+
+		  public Long getReportType() {
+					 return reportType;
+		  }
+
 		  
 		  public void setAmpReportId(Long ampReportId) {
 					 this.ampReportId = ampReportId;
@@ -293,6 +319,26 @@ public class AmpReportCache {
 
 		  public void setActivityDescription(String activityDescription) {
 					 this.activityDescription = activityDescription;
+		  }
+
+		  public void setAmpComponentId(Long ampComponentId) {
+					 this.ampComponentId = ampComponentId;
+		  }
+
+		  public void setComponentName(String componentName) {
+					 this.componentName = componentName;
+		  }
+		  
+		  public void setAmpRegionId(Long ampRegionId) {
+					 this.ampRegionId = ampRegionId;
+		  }
+
+		  public void setRegionName(String regionName) {
+					 this.regionName = regionName;
+		  }
+
+		  public void setReportType(Long reportType) {
+					 this.reportType = reportType;
 		  }
 
 }

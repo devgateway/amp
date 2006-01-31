@@ -39,6 +39,12 @@
 		<property name="ampLevelId" column="amp_level_id" type="java.lang.Long"/>
 		<property name="levelName" column="level_name" type="java.lang.String"/>
 		<property name="activityDescription" column="activity_description" type="org.digijava.kernel.db.SafeClobType"/>
+		<property name="ampComponentId" column="amp_component_id" type="java.lang.Long"/>
+		<property name="componentName" column="component_name" type="java.lang.String"/>
+		<property name="ampRegionId" column="amp_region_id" type="java.lang.Long"/>
+		<property name="regionName" column="region_name" type="java.lang.String"/>
+		<property name="reportType" column="report_type" type="java.lang.Long"/>
+
 		
 
 		</class>

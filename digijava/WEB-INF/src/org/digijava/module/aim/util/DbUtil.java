@@ -1548,7 +1548,7 @@ public class DbUtil {
 				if (inclause1 != null) {
 					queryString = "select report from " + AmpReportCache.class.getName()
 								  + " report where report.ampActivityId in("
-								  + inclause1 + ") " + "order by " + fieldString + ",report.ampDonorId";
+								  + inclause1 + ") and (report.reportType='1') " + "order by " + fieldString + ",report.ampDonorId";
 					//logger.debug("inclause1 : " + queryString);
 					q = session.createQuery(queryString);
 					iter = q.list().iterator();
@@ -1592,7 +1592,7 @@ public class DbUtil {
 				if (inClause2 != null) {
 					queryString = "select report from " + AmpReportCache.class.getName()
 								  + " report where report.ampActivityId in(" + inClause2
-								  + ") " + "order by " + fieldString + ",report.ampDonorId";
+								  + ") and (report.reportType='1') " + "order by " + fieldString + ",report.ampDonorId";
 					//logger.debug("inClause2 : " + queryString);
 					q = session.createQuery(queryString);
 					iter = q.list().iterator();
@@ -7014,7 +7014,7 @@ public class DbUtil {
 			String queryString = "select report from "
 					+ AmpReportCache.class.getName()
 					+ " report where (report.ampTeamId in(" + inClause
-					+ ")) group by report.ampActivityId";
+					+ ")) and (report.reportType='1') group by report.ampActivityId";
 			Query qry = session.createQuery(queryString);
 			Iterator itr = qry.list().iterator();
 			inClause = null;
@@ -8006,5 +8006,6 @@ public class DbUtil {
 		return donor;
 	}
 
+	
 
 }

@@ -144,7 +144,8 @@ public class ProjectbyDonorXLS extends Action {
 			}	// End of while Donor iteration
 		}
   		rowCnt = rowCnt + drSize + (curr + 1);
-  		colCnt = 3 + 3 + yyCnt + (yyCnt *3) + 3;
+  		//ch
+  		colCnt = 3 + 3 + yyCnt + (yyCnt *3) + 3 +4;
   		logger.info("Curr Value " + curr );
   		logger.info(rowCnt +": ROW : COL " + colCnt);  		
 		Object[][] data = new Object[rowCnt+1][colCnt];
@@ -210,6 +211,9 @@ public class ProjectbyDonorXLS extends Action {
 									ampFund = (AmpFund)fundIter.next();
 									col = col+1;
 									data[row][col] = ampFund.getCommAmount();
+									//here
+									col=col+1;
+									data[row][col]= ampFund.getPlannedDisbAmount();
 									col = col+1;
 									data[row][col] = ampFund.getDisbAmount();
 									col = col+1;
@@ -220,6 +224,9 @@ public class ProjectbyDonorXLS extends Action {
 								yy = yyTmp ;
 								col = 5 + yyCnt + (yyCnt*3)+1;
 								data[row][col] = project.getProjCommAmount();
+								//here
+								col = col+1;
+								data[row][col]=project.getProjPlannedDisbAmount();
 								col = col+1;
 								data[row][col] = project.getProjDisbAmount();
 								col = col+1;
@@ -248,6 +255,9 @@ public class ProjectbyDonorXLS extends Action {
 													ampFund = (AmpFund) assistFundIter.next();
 													col = col + 2;
 													data[row][col] = ampFund.getCommAmount();
+													//here
+													col = col+1;
+													data[row][col]= ampFund.getPlannedDisbAmount();
 													col = col + 1;
 													data[row][col] = ampFund.getDisbAmount();
 													col = col + 1;
@@ -255,6 +265,9 @@ public class ProjectbyDonorXLS extends Action {
 												}
 												col = col + 1;
 												data[row][col] = projTermsAssist.getTermCommAmount();
+												//here
+												col=col+1;
+												data[row][col]= projTermsAssist.getTermPlannedDisbAmount();
 												col = col + 1;
 												data[row][col] = projTermsAssist.getTermDisbAmount();
 												col = col + 1;
@@ -291,6 +304,9 @@ public class ProjectbyDonorXLS extends Action {
 										termFundTotal = (TermFundTotal) termFundTotalIter.next();
 										col = col + 2;
 										data[row][col] = termFundTotal.getTotCommAmount();
+										//here
+										col=col+1;
+										data[row][col]= termFundTotal.getTotPlannedDisbAmount();
 										col = col + 1;
 										data[row][col] = termFundTotal.getTotDisbAmount();
 										col = col + 1;
@@ -298,6 +314,9 @@ public class ProjectbyDonorXLS extends Action {
 									}
 									col = col + 1;
 									data[row][col] =  termFund.getTotDonorCommAmount();
+									//here
+									col = col+1;
+									data[row][col]= termFund.getTotDonorPlannedDisbAmount();
 									col = col + 1;
 									data[row][col] = termFund.getTotDonorDisbAmount();
 									col = col + 1;
@@ -320,6 +339,9 @@ public class ProjectbyDonorXLS extends Action {
 							FundTotal ampFundT = (FundTotal)fundTotalIter.next();
 							col = col + 2;
 							data[row][col] = ampFundT.getTotCommAmount() ;
+							//here
+							col=col+1;
+							data[row][col]=ampFundT.getTotPlannedDisbAmount();
 							col = col + 1;
 							data[row][col] = ampFundT.getTotDisbAmount() ;
 							col = col + 1;
@@ -327,6 +349,9 @@ public class ProjectbyDonorXLS extends Action {
 						}
 						col = col+1;
 						data[row][col] = teamDonors.getDonorCommAmount();
+						//here
+						col=col+1;
+						data[row][col]= teamDonors.getDonorPlannedDisbAmount();
 						col = col+1;
 						data[row][col] = teamDonors.getDonorDisbAmount();
 						col = col+1;
@@ -357,8 +382,11 @@ public class ProjectbyDonorXLS extends Action {
 						while(termFundTotalIter.hasNext())
 						{
 							termFundTotal = (TermFundTotal) termFundTotalIter.next();
-							col = col + 2;
+							col = col + 2;							
 							data[row][col] = termFundTotal.getTotCommAmount();
+							//here
+							col = col+1;
+							data[row][col]= termFundTotal.getTotPlannedDisbAmount();
 							col = col + 1;
 							data[row][col] = termFundTotal.getTotDisbAmount();
 							col = col + 1;
@@ -366,6 +394,9 @@ public class ProjectbyDonorXLS extends Action {
 						}
 						col = col + 1;
 						data[row][col] = termFund.getTotDonorCommAmount();
+						//here
+						col = col+1;
+						data[row][col] = termFund.getTotDonorPlannedDisbAmount();
 						col = col + 1;
 						data[row][col] = termFund.getTotDonorDisbAmount();
 						col = col + 1;
@@ -385,6 +416,9 @@ public class ProjectbyDonorXLS extends Action {
 					FundTotal fundTotal = (FundTotal) totalTeamFundIter.next();
 					col = col + 2;
 					data[row][col] = fundTotal.getTotCommAmount();
+					//here	
+					col= col+1;
+					data[row][col] = fundTotal.getTotPlannedDisbAmount();
 					col = col + 1;
 					data[row][col] = fundTotal.getTotDisbAmount();
 					col = col + 1;
@@ -392,6 +426,9 @@ public class ProjectbyDonorXLS extends Action {
 				}
 				col = col + 1;
 				data[row][col] = rep.getTeamCommAmount();
+				//here
+				col=col+1;
+				data[row][col]=rep.getTeamPlannedDisbAmount();
 				col = col + 1;
 				data[row][col] = rep.getTeamDisbAmount();
 				col = col + 1;

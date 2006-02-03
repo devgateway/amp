@@ -170,7 +170,7 @@ public class SectorByProjectXLS
 			}
 			//rowCnt = rowCnt + sectorSize;
 			rowCnt = rowCnt + 1;
-			colCnt = 5 + formBean.getFiscalYearRange().size() + ( formBean.getFiscalYearRange().size() *  3) + 5;	
+			colCnt = 5 + formBean.getFiscalYearRange().size() + ( formBean.getFiscalYearRange().size() *  3) + 5+4;	
 			logger.info(rowCnt +" : Row : Col : "+ colCnt);	
 			
 			Integer year =null;
@@ -224,7 +224,6 @@ public class SectorByProjectXLS
 									col = col+ 1;
 									data[row][col] = teamDonors.getDonorAgency();
 									project = (Project)projIter.next();
-
 									col= col+ 1;
 									data[row][col] = project.getName();
 									ampFunds = new ArrayList(project.getAmpFund());
@@ -236,6 +235,9 @@ public class SectorByProjectXLS
 											col = col+1;
 											data[row][col] = Integer.toString(yy);
 											ampFund = (AmpFund)fundIter.next();
+											//////////here
+											col=col+1;
+											data[row][col] = ampFund.getCommAmount();
 											col = col+1;
 											data[row][col] = ampFund.getPlannedDisbAmount();
 											col = col+1;
@@ -246,7 +248,9 @@ public class SectorByProjectXLS
 										}
 										yy = yyTmp;
 									}
-										
+									/////////here
+									col = col+1;
+									data[row][col]= project.getProjCommAmount();	
 									col = col + 1;
 									data[row][col] = project.getProjPlannedDisbAmount();
 									col = col+1;
@@ -275,6 +279,9 @@ public class SectorByProjectXLS
 												col = col+1;
 												data[row][col] = Integer.toString(yy);
 												ampFund = (AmpFund)termAssistFdIter.next();
+												//////////here
+												col+=1;
+												data[row][col] = ampFund.getCommAmount();
 												col+=1;
 												data[row][col] = ampFund.getPlannedDisbAmount();
 												col+=1;
@@ -283,6 +290,9 @@ public class SectorByProjectXLS
 												data[row][col] = ampFund.getExpAmount();
 												yy = yy + 1;
 											}
+											////////here
+											col+=1;
+											data[row][col] = projectTermAssist.getTermCommAmount();
 											col+=1;
 											data[row][col] = projectTermAssist.getTermPlannedDisbAmount();
 											col+=1;
@@ -326,6 +336,9 @@ public class SectorByProjectXLS
 								col+=1;
 								data[row][col]  = Integer.toString(yy);
 								termFundTotal = (TermFundTotal) termFundTotalIter.next();
+								///////here
+								col+=1;
+								data[row][col] = termFundTotal.getTotCommAmount();
 								col+=1;
 								data[row][col] = termFundTotal.getTotPlannedDisbAmount();
 								col+=1;
@@ -334,6 +347,9 @@ public class SectorByProjectXLS
 								data[row][col] = termFundTotal.getTotExpAmount();
 								yy = yy + 1;
 							}
+							//////////here
+							col+=1;
+							data[row][col] = termFund.getTotDonorCommAmount();
 							col+=1;
 							data[row][col] = termFund.getTotDonorPlannedDisbAmount();
 							col+=1;
@@ -358,6 +374,9 @@ public class SectorByProjectXLS
 						col+=1;
 						data[row][col] = Integer.toString(yy);
 						fundTotal = (FundTotal)totalSectorFundIter.next();
+						//////////////here
+						col+=1;
+						data[row][col] = fundTotal.getTotCommAmount();
 						col+=1;
 						data[row][col] = fundTotal.getTotPlannedDisbAmount();
 						col = col+1;
@@ -366,6 +385,9 @@ public class SectorByProjectXLS
 						data[row][col] = fundTotal.getTotExpAmount() ;
 						yy = yy + 1;
 					}
+					////here
+					col+=1;
+					data[row][col] = multiReport.getSectorCommAmount();
 					col+=1;
 					data[row][col] = multiReport.getSectorPlannedDisbAmount();
 					col+=1;
@@ -396,6 +418,9 @@ public class SectorByProjectXLS
 								col+=1;
 								data[row][col]  = Integer.toString(yy);
 								termFundTotal = (TermFundTotal) termFundTotalIter.next();
+								//////here
+								col+=1;
+								data[row][col] = termFundTotal.getTotCommAmount();
 								col+=1;
 								data[row][col] = termFundTotal.getTotPlannedDisbAmount();
 								col+=1;
@@ -404,6 +429,9 @@ public class SectorByProjectXLS
 								data[row][col] = termFundTotal.getTotExpAmount();
 								yy = yy + 1;
 							}
+							////here
+							col+=1;
+							data[row][col] = termFund.getTotDonorCommAmount();
 							col+=1;
 							data[row][col] = termFund.getTotDonorPlannedDisbAmount();
 							col+=1;
@@ -433,6 +461,9 @@ public class SectorByProjectXLS
 								col+=1;
 								data[row][col] = Integer.toString(yy);
 								fundTotal = (FundTotal)totalTeamFundIter.next();
+								//////here
+								col+=1;
+								data[row][col] = fundTotal.getTotCommAmount();
 								col+=1;
 								data[row][col] = fundTotal.getTotPlannedDisbAmount();
 								col = col+1;
@@ -441,6 +472,9 @@ public class SectorByProjectXLS
 								data[row][col] = fundTotal.getTotExpAmount() ;
 								yy = yy + 1;
 							}
+							/////here
+							col+=1;
+							data[row][col]= multiReport.getTeamCommAmount();
 							col+=1;
 							data[row][col] = multiReport.getTeamPlannedDisbAmount();
 							col+=1;

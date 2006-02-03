@@ -81,6 +81,7 @@ public class SectorByProjectPDF	extends Action
 		boolean term = false, isProject = false;
 		String sector="", donor="'";
 		yyCnt = formBean.getFiscalYearRange().size();
+		logger.info("yycnt  "+yyCnt);
 		
 		if( coll.isEmpty() == false )
 		{
@@ -166,7 +167,8 @@ public class SectorByProjectPDF	extends Action
 		}
 		//rowCnt = rowCnt + sectorSize;
 		rowCnt = rowCnt + 1;
-		colCnt = 5 + formBean.getFiscalYearRange().size() + ( formBean.getFiscalYearRange().size() *  3) + 5;	
+		//colCnt = 5 + formBean.getFiscalYearRange().size() + ( formBean.getFiscalYearRange().size() *  3) + 5;
+		colCnt = 5 + formBean.getFiscalYearRange().size() + ( formBean.getFiscalYearRange().size() *  3) + 5+4;	
 		logger.info(rowCnt +" : Row : Col : "+ colCnt);	
 		logger.info(" Sector Size  : "+ sectorSize);
 		Integer year =null;
@@ -196,9 +198,10 @@ public class SectorByProjectPDF	extends Action
 				{
 					year = (Integer)fiscIter.next();
 					yy = year.intValue();
+					
 				}
 				yyTmp = yy;			
-				
+				/////////////logger.info("yearrrrrrrrrrrr" +yy);
 				ampDonors = new ArrayList(multiReport.getDonors());
 				donorIter = ampDonors.iterator();
 				if(ampDonors.size() > 0)
@@ -228,6 +231,7 @@ public class SectorByProjectPDF	extends Action
 								col= col+ 1;
 								data[row][col] = project.getName();
 								calculateFieldHeight(project.getName());
+								logger.info("project name" +project.getName());
 								
 								ampFunds = new ArrayList(project.getAmpFund());
 								Iterator fundIter = ampFunds.iterator();
@@ -238,16 +242,26 @@ public class SectorByProjectPDF	extends Action
 										col = col+1;
 										data[row][col] = Integer.toString(yy);
 										ampFund = (AmpFund)fundIter.next();
+										
 										col = col+1;
+										data[row][col]= ampFund.getCommAmount();
+										/////////////logger.info("dataaaaaaaaa"+ data[row][col] + "fundddddddd" + ampFund.getCommAmount());
+										col=col+1;
 										data[row][col] = ampFund.getPlannedDisbAmount();
 										col = col+1;
 										data[row][col] = ampFund.getDisbAmount();
 										col = col+1;
 										data[row][col] = ampFund.getExpAmount();
 										yy = yy + 1;
+										///////////logger.info("yearrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr"+yy);
+										logger.info("yy  "+yy);
 									}
 									yy = yyTmp;
+									////////logger.info("yearrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrrr"+yy +"temppppppyear "+yyTmp);
+									///////logger.info("row"+row+" column "+col+"  data"+ data[row][col]);
 								}
+								col = col+1;
+								data[row][col]= project.getProjCommAmount();
 									
 								col = col + 1;
 								data[row][col] = project.getProjPlannedDisbAmount();
@@ -255,6 +269,7 @@ public class SectorByProjectPDF	extends Action
 								data[row][col] = project.getProjDisbAmount();
 								col = col+1;
 								data[row][col] = project.getProjExpAmount();
+								///////logger.info("1234row"+row+" column "+col+"  data"+ data[row][col]);
 									
 								if(project.getTermAssist() != null)
 								{
@@ -278,19 +293,26 @@ public class SectorByProjectPDF	extends Action
 											data[row][col] = Integer.toString(yy);
 											ampFund = (AmpFund)termAssistFdIter.next();
 											col+=1;
+											data[row][col]= ampFund.getCommAmount();
+											col+=1;
 											data[row][col] = ampFund.getPlannedDisbAmount();
 											col+=1;
 											data[row][col] = ampFund.getDisbAmount();
 											col+=1;
 											data[row][col] = ampFund.getExpAmount();
 											yy = yy + 1;
+										//	logger.info("termAssisthas row"+row+" column "+col+"  data"+ data[row][col]);
 										}
+										yy=yyTmp;
+										col+=1;
+										data[row][col]= projectTermAssist.getTermCommAmount();
 										col+=1;
 										data[row][col] = projectTermAssist.getTermPlannedDisbAmount();
 										col+=1;
 										data[row][col] = projectTermAssist.getTermDisbAmount();
 										col+=1;
 										data[row][col] = projectTermAssist.getTermExpAmount();
+										/////////logger.info("123termAssisthas row"+row+" column "+col+"  data"+ data[row][col]);
 									} // End of TermAssistFund 
 								} // Check if TermAssist is not NULL
 								
@@ -331,19 +353,26 @@ public class SectorByProjectPDF	extends Action
 							data[row][col]  = Integer.toString(yy);
 							termFundTotal = (TermFundTotal) termFundTotalIter.next();
 							col+=1;
+							data[row][col]= termFundTotal.getTotCommAmount();
+							col+=1;
 							data[row][col] = termFundTotal.getTotPlannedDisbAmount();
 							col+=1;
 							data[row][col] = termFundTotal.getTotDisbAmount();
 							col+=1;
 							data[row][col] = termFundTotal.getTotExpAmount();
 							yy = yy + 1;
+							////////////logger.info("termFundtotaler row"+row+" column "+col+"  data"+ data[row][col]);
+							logger.info("yyyy"+yy);
 						}
+						col+=1;
+						data[row][col]= termFund.getTotDonorCommAmount();
 						col+=1;
 						data[row][col] = termFund.getTotDonorPlannedDisbAmount();
 						col+=1;
 						data[row][col] = termFund.getTotDonorDisbAmount();
 						col+=1;
 						data[row][col] = termFund.getTotDonorExpAmount();
+						//////////logger.info("123termFundtotaler row"+row+" column "+col+"  data"+ data[row][col]);
 						
 					}
 				} // Check if  TotalSectorTermAssistFund is not NULL
@@ -357,6 +386,7 @@ public class SectorByProjectPDF	extends Action
 				calculateFieldHeight(data[row][col].toString());
 				
 				yy = yyTmp;
+				//logger.info("yy11111111111  " +yy);
 				Collection totalSectorFunds = new ArrayList(multiReport.getTotalSectorFund());
 				Iterator totalSectorFundIter  = totalSectorFunds.iterator();
 				while(totalSectorFundIter.hasNext())
@@ -365,19 +395,25 @@ public class SectorByProjectPDF	extends Action
 					data[row][col] = Integer.toString(yy);
 					fundTotal = (FundTotal)totalSectorFundIter.next();
 					col+=1;
+					data[row][col]= fundTotal.getTotCommAmount();
+					col+=1;
 					data[row][col] = fundTotal.getTotPlannedDisbAmount();
 					col = col+1;
 					data[row][col] = fundTotal.getTotDisbAmount();
 					col = col+1;
 					data[row][col] = fundTotal.getTotExpAmount() ;
 					yy = yy + 1;
+					/////////logger.info("totalsectorfund row"+row+" column "+col+"  data"+ data[row][col]+"  year"+yy);
 				}
+				col+=1;
+				data[row][col]= multiReport.getSectorCommAmount();
 				col+=1;
 				data[row][col] = multiReport.getSectorPlannedDisbAmount();
 				col+=1;
 				data[row][col] = multiReport.getSectorDisbAmount();
 				col+=1;
 				data[row][col] = multiReport.getSectorExpAmount();
+				//////////logger.info("totalsectorfund row"+row+" column "+col+"  data"+ data[row][col]+"  year"+yy);
 				
 				//-----------------------------------zzz---------------------------
 
@@ -399,11 +435,14 @@ public class SectorByProjectPDF	extends Action
 						
 						Collection termFundTotals = new ArrayList(termFund.getTermFundTotal());
 						Iterator termFundTotalIter = termFundTotals.iterator();
+						yy=yyTmp;
 						while(termFundTotalIter.hasNext())
 						{
 							col+=1;
 							data[row][col]  = Integer.toString(yy);
 							termFundTotal = (TermFundTotal) termFundTotalIter.next();
+							col+=1;
+							data[row][col]= termFundTotal.getTotCommAmount();
 							col+=1;
 							data[row][col] = termFundTotal.getTotPlannedDisbAmount();
 							col+=1;
@@ -411,13 +450,18 @@ public class SectorByProjectPDF	extends Action
 							col+=1;
 							data[row][col] = termFundTotal.getTotExpAmount();
 							yy = yy + 1;
+							///////logger.info("termfund row"+row+" column "+col+"  data"+ data[row][col]+"  year"+yy);
+							logger.info("y3333"+yy);
 						}
+						col+=1;
+						data[row][col] = termFund.getTotDonorCommAmount();
 						col+=1;
 						data[row][col] = termFund.getTotDonorPlannedDisbAmount();
 						col+=1;
 						data[row][col] = termFund.getTotDonorDisbAmount();
 						col+=1;
 						data[row][col] = termFund.getTotDonorExpAmount();
+						////////logger.info("termfund row"+row+" column "+col+"  data"+ data[row][col]+"  year"+yy);
 					}
 				} // Check if  Total Team Term Assist Fund is not NULL
 				
@@ -442,13 +486,18 @@ public class SectorByProjectPDF	extends Action
 							data[row][col] = Integer.toString(yy);
 							fundTotal = (FundTotal)totalTeamFundIter.next();
 							col+=1;
+							data[row][col] = fundTotal.getTotCommAmount();
+							col+=1;
 							data[row][col] = fundTotal.getTotPlannedDisbAmount();
 							col = col+1;
 							data[row][col] = fundTotal.getTotDisbAmount();
 							col = col+1;
 							data[row][col] = fundTotal.getTotExpAmount() ;
 							yy = yy + 1;
+							logger.info("y55555"+yy);
 						}
+						col=+1;
+						data[row][col] = multiReport.getTeamCommAmount();
 						col+=1;
 						data[row][col] = multiReport.getTeamPlannedDisbAmount();
 						col+=1;
@@ -537,6 +586,13 @@ public class SectorByProjectPDF	extends Action
 		{
 			logger.info("NO PDF GENERATED ");
 		}
+		/*for(int lol= 0 ;lol<row;lol++)
+		{
+			for(int hhh = 0;hhh<col;hhh++)
+			{
+			logger.info(data[lol][hhh] + "   rowis  " +lol+"   col is  "+hhh);
+			}
+		}*/
 		return null;
 	}// end of Execute Func
 

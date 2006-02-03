@@ -1389,7 +1389,8 @@ p2.println("name='SectorByProjectPdf'");
 p2.println("columnCount='1'");
 p2.println("printOrder='Vertical'");
 p2.println("orientation='Landscape'");
-p2.println("pageWidth='842'");
+//p2.println("pageWidth='842'");
+p2.println("pageWidth='1082'");
 p2.println("pageHeight='595'");
 p2.println("columnWidth='535'");
 p2.println("columnSpacing='0'");
@@ -1413,7 +1414,7 @@ p2.println("<queryString><![CDATA[$P!{qu}]]></queryString>");
 String dc;
 int colcnt = 6+ (n*3) + n;
 
-for(int k=1;k<=((4*n)+6+4);k++)
+for(int k=1;k<=((4*n)+6+4+10);k++)
 {
 	dc="c"+k;
 	p2.println("<field name='"+dc+"' class='java.lang.String'/>");
@@ -1430,7 +1431,8 @@ p2.println("<textField isStretchWithOverflow='true' pattern='' isBlankWhenNull='
 p2.println("mode='Opaque'");
 p2.println("x='0'");
 p2.println("y='0'");
-p2.println("width='"+(442+(n-1)*180)+"'");
+//p2.println("width='"+(442+(n-1)*180)+"'");
+p2.println("width='1042'");
 p2.println("height='20'");
 p2.println("forecolor='#FFFFFF'");
 p2.println("backcolor='#666666'");
@@ -1469,7 +1471,8 @@ p2.println("<textField isStretchWithOverflow='true' pattern='' isBlankWhenNull='
 p2.println("mode='Opaque'");
 p2.println("x='0'");
 p2.println("y='0'");
-p2.println("width='"+(442+(n-1)*180)+"'");
+//p2.println("width='"+(442+(n-1)*180)+"'");
+p2.println("width='1042'");
 p2.println("height='19'");
 p2.println("forecolor='#000000'");
 p2.println("backcolor='#CCCCCC'");
@@ -1491,7 +1494,8 @@ p2.println("<reportElement");
 p2.println("mode='Opaque'");
 p2.println("x='0'");
 p2.println("y='19'");
-p2.println("width='"+(802-(3-n)*180)+"'");
+//p2.println("width='"+(802-(3-n)*180)+"'");
+p2.println("width='1042'");
 p2.println("height='0'");
 p2.println("forecolor='#000000'");
 p2.println("backcolor='#FFFFFF'");
@@ -1525,7 +1529,8 @@ p2.println("<reportElement");
 p2.println("mode='Opaque'");
 p2.println("x='0'");
 p2.println("y='0'");
-p2.println("width='691'");
+//p2.println("width='691'");
+p2.println("width='1042'");
 p2.println("height='20'");
 p2.println("forecolor='#000000'");
 p2.println("backcolor='#FFFFFF'");
@@ -1572,7 +1577,8 @@ p2.println("<band height='60'  isSplitAllowed='true' >");
 			p2.println("mode='Opaque'");
 			p2.println("x='0'");
 			p2.println("y='0'");
-			p2.println("width='"+(442+(n-1)*180)+"'");
+			//p2.println("width='"+(442+(n-1)*180)+"'");
+			p2.println("width='1042'");
 			p2.println("height='15'");
 			p2.println("forecolor='#000000'");
 			p2.println("backcolor='#CCCCCC'");
@@ -1593,7 +1599,8 @@ p2.println("<band height='60'  isSplitAllowed='true' >");
 			p2.println("mode='Opaque'");
 			p2.println("x='0'");
 			p2.println("y='15'");
-			p2.println("width='"+(442+(n-1)*180)+"'");
+			//p2.println("width='"+(442+(n-1)*180)+"'");
+			p2.println("width='1042'");
 			p2.println("height='15'");
 			p2.println("forecolor='#000000'");
 			p2.println("backcolor='#CCCCCC'");
@@ -1645,7 +1652,7 @@ p2.println("<textField isStretchWithOverflow='false' pattern='' isBlankWhenNull=
 p2.println("mode='Transparent'");
 p2.println("x='"+x+"'");
 p2.println("y='30'");
-p2.println("width='180'");
+p2.println("width='240'");
 p2.println("height='14'");
 p2.println("forecolor='#000000'");
 p2.println("backcolor='#FFFFFF'");
@@ -1662,15 +1669,16 @@ p2.println("</textElement>");
 p2.println("<textFieldExpression   class='java.lang.String'><![CDATA[\"Year: \"+$F{"+ctextkey+"}]]></textFieldExpression>");
 p2.println("</textField>");
 
-c +=4;
-x += 180;
+c +=5;
+x += 240;
+//x +=180;
 
 p2.println("<staticText>");
 p2.println("<reportElement");
 p2.println("mode='Transparent'");
 p2.println("x='"+x1+"'");
 p2.println("y='44'");
-p2.println("width='180'");
+p2.println("width='240'");
 p2.println("height='13'");
 p2.println("forecolor='#000000'");
 p2.println("backcolor='#CCCCCC'");
@@ -1681,13 +1689,14 @@ p2.println("isPrintRepeatedValues='true'");
 p2.println("isRemoveLineWhenBlank='false'");
 p2.println("isPrintInFirstWholeBand='false'");
 p2.println("isPrintWhenDetailOverflows='false'/>");
-p2.println("<textElement textAlignment='Right' verticalAlignment='Middle' rotation='None' lineSpacing='Single'>");
+p2.println("<textElement textAlignment='Center' verticalAlignment='Middle' rotation='None' lineSpacing='Single'>");
 p2.println("<font fontName='Arial' pdfFontName='Helvetica' size='8' isBold='true' isItalic='false' isUnderline='false' isPdfEmbedded ='false' pdfEncoding ='Cp1252' isStrikeThrough='false' />");
 p2.println("</textElement>");
-p2.println("<text><![CDATA[       Plan.Disb.                 Disb                      Exp.]]></text>");
+p2.println("<text><![CDATA[           Commit.               Plan.Disb.                  Disb                     Exp.]]></text>");
 p2.println("</staticText>");
 
-x1 += 180;
+x1 += 240;
+//x1 +=180;
 
 }
 //for1 -------------
@@ -1697,7 +1706,7 @@ p2.println("<reportElement");
 p2.println("mode='Transparent'");
 p2.println("x='"+x+"'");
 p2.println("y='30'");
-p2.println("width='180'");
+p2.println("width='240'");
 p2.println("height='14'");
 p2.println("forecolor='#000000'");
 p2.println("backcolor='#FFFFFF'");
@@ -1720,7 +1729,7 @@ p2.println("<reportElement");
 p2.println("mode='Transparent'");
 p2.println("x='"+x1+"'");
 p2.println("y='44'");
-p2.println("width='180'");
+p2.println("width='240'");
 p2.println("height='13'");
 p2.println("forecolor='#000000'");
 p2.println("backcolor='#CCCCCC'");
@@ -1734,7 +1743,7 @@ p2.println("isPrintWhenDetailOverflows='false'/>");
 p2.println("<textElement textAlignment='Right' verticalAlignment='Middle' rotation='None' lineSpacing='Single'>");
 p2.println("<font fontName='Arial' pdfFontName='Helvetica' size='8' isBold='true' isItalic='false' isUnderline='false' isPdfEmbedded ='false' pdfEncoding ='Cp1252' isStrikeThrough='false' />");
 p2.println("</textElement>");
-p2.println("<text><![CDATA[       Plan.Disb.                 Disb                      Exp.]]></text>");
+p2.println("<text><![CDATA[Commit.               Plan.Disb.                  Disb                     Exp.]]></text>");
 p2.println("</staticText>");
 
 //---------
@@ -1744,7 +1753,9 @@ p2.println("<reportElement");
 p2.println("mode='Opaque'");
 p2.println("x='0'");
 p2.println("y='30'");
-p2.println("width='"+(802-(3-n)*180)+"'");
+//p2.println("width='"+(802-(3-n)*180)+"'");
+
+p2.println("width='1042'");
 p2.println("height='0'");
 p2.println("forecolor='#000000'");
 p2.println("backcolor='#FFFFFF'");
@@ -1764,7 +1775,8 @@ p2.println("<reportElement");
 p2.println("mode='Opaque'");
 p2.println("x='0'");
 p2.println("y='59'");
-p2.println("width='"+(802-(3-n)*180)+"'");
+//p2.println("width='"+(802-(3-n)*180)+"'");
+p2.println("width='1042'");
 p2.println("height='0'");
 p2.println("forecolor='#000000'");
 p2.println("backcolor='#FFFFFF'");
@@ -1794,7 +1806,34 @@ x =82;y=0;
 for(int j=0;j<n;j++)
 {
 ctextkey="c"+c;
+System.out.println("cccccccc"+c);
+p2.println("<textField isStretchWithOverflow='false' pattern='' isBlankWhenNull='true' evaluationTime='Now' hyperlinkType='None' >					<reportElement");
+p2.println("mode='Transparent'");
+p2.println("x='"+x+"'");
+p2.println("y='1'");
+p2.println("width='60'");
+p2.println("height='"+height+"'");
+p2.println("forecolor='#000000'");
+p2.println("backcolor='#FFFFFF'");
+p2.println("key='textField-11'");
+p2.println("stretchType='NoStretch'");
+p2.println("positionType='FixRelativeToTop'");
+p2.println("isPrintRepeatedValues='true'");
+p2.println("isRemoveLineWhenBlank='false'");
+p2.println("isPrintInFirstWholeBand='false'");
+p2.println("isPrintWhenDetailOverflows='false'/>");
+p2.println("<textElement textAlignment='Right' verticalAlignment='Middle' rotation='None' lineSpacing='Single'>");
+p2.println("<font fontName='Arial' pdfFontName='Helvetica' size='10' isBold='false' isItalic='false' isUnderline='false' isPdfEmbedded ='false' pdfEncoding ='Cp1252' isStrikeThrough='false' />");
+p2.println("</textElement>");
+p2.println("<textFieldExpression   class='java.lang.String'><![CDATA[$F{"+ctextkey+"}]]></textFieldExpression>");
+p2.println("</textField>");
 
+x +=60;
+c++;
+
+
+ctextkey="c"+c;
+System.out.println("cccccccc"+c);
 p2.println("<textField isStretchWithOverflow='false' pattern='' isBlankWhenNull='true' evaluationTime='Now' hyperlinkType='None' >					<reportElement");
 p2.println("mode='Transparent'");
 p2.println("x='"+x+"'");
@@ -1819,6 +1858,8 @@ p2.println("</textField>");
 x +=60;
 c++;
 ctextkey="c"+c;
+System.out.println("cccccccc"+c);
+
 
 p2.println("<textField isStretchWithOverflow='false' pattern='' isBlankWhenNull='true' evaluationTime='Now' hyperlinkType='None' >					<reportElement");
 p2.println("mode='Transparent'");
@@ -1844,7 +1885,7 @@ p2.println("</textField>");
 x +=60;
 c++;
 ctextkey="c"+c;
-
+System.out.println("cccccccc"+c);
 p2.println("<textField isStretchWithOverflow='false' pattern='' isBlankWhenNull='true' evaluationTime='Now' hyperlinkType='None' >					<reportElement");
 p2.println("mode='Transparent'");
 p2.println("x='"+x+"'");
@@ -1873,12 +1914,13 @@ c += 2;
 
 // Displays the total
 
-c=6+(n*4)+1;
-x= (totalIndex*180) + 82;
+c=6+(n*5)+1;
+x= (totalIndex*240) + 82;
 y=0;
 //for3
-for(int j=0;j<3;j++)
+for(int j=0;j<4;j++)
 {
+	System.out.println("total c"+c);
 ctextkey="c"+c;
 
 p2.println("<textField isStretchWithOverflow='false' pattern='' isBlankWhenNull='true' evaluationTime='Now' hyperlinkType='None' >					<reportElement");
@@ -1933,7 +1975,8 @@ p2.println("<reportElement");
 p2.println("mode='Opaque'");
 p2.println("x='0'");
 p2.println("y='"+(height+1)+"'");
-p2.println("width='"+(802-(3-n)*180)+"'");
+//p2.println("width='"+(802-(3-n)*180)+"'");
+p2.println("width='1042'");
 p2.println("height='0'");
 p2.println("forecolor='#000000'");
 p2.println("backcolor='#FFFFFF'");
@@ -1978,7 +2021,7 @@ p2.println("<textFieldExpression   class='java.lang.String'><![CDATA[\" * All th
 p2.println("</textField>");
 p2.println("<textField isStretchWithOverflow='false' pattern='' isBlankWhenNull='false' evaluationTime='Now' hyperlinkType='None' >					<reportElement");
 p2.println("mode='Transparent'");
-p2.println("x='595'");
+p2.println("x='822'");
 p2.println("y='4'");
 p2.println("width='174'");
 p2.println("height='14'");
@@ -1998,7 +2041,7 @@ p2.println("<textFieldExpression   class='java.lang.String'><![CDATA[\"Page \" +
 p2.println("</textField>");
 p2.println("<textField isStretchWithOverflow='false' pattern='' isBlankWhenNull='false' evaluationTime='Report' hyperlinkType='None' >					<reportElement");
 p2.println("mode='Transparent'");
-p2.println("x='774'");
+p2.println("x='1001'");
 p2.println("y='4'");
 p2.println("width='36'");
 p2.println("height='14'");

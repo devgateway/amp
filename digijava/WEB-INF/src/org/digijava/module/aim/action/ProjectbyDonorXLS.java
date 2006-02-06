@@ -222,6 +222,7 @@ public class ProjectbyDonorXLS extends Action {
 								}// end of Funds loop
 								yyCnt = yy - yyTmp;
 								yy = yyTmp ;
+								//col = 5 + yyCnt + (yyCnt*3)+1;
 								col = 5 + yyCnt + (yyCnt*3)+1;
 								data[row][col] = project.getProjCommAmount();
 								//here
@@ -356,7 +357,8 @@ public class ProjectbyDonorXLS extends Action {
 						data[row][col] = teamDonors.getDonorDisbAmount();
 						col = col+1;
 						data[row][col] = teamDonors.getDonorExpAmount();
-						col = 3;
+						//col = 3;
+						col = 4;
 						row = row + 1;
 						logger.info(" Next Donor " + row);						
 					}	// End of while Donor iteration

@@ -442,7 +442,7 @@ public class ProjectbyDonorXLS extends Action {
 			flag = 1;
 		}// end of Big Loop
 
-		if(flag == 1)
+		if(flag == 1 )
 		{
 			
 			for(int i=0; i < rowCnt; i++)
@@ -453,6 +453,11 @@ public class ProjectbyDonorXLS extends Action {
 					{
 						if(data[i][j].equals("0"))
 							data[i][j] = "";
+					}
+					if(data[i][j] == null)
+					{
+						//logger.info("NULLLLLLLLLLLLLLLLLLLLLLL");
+						data[i][j]="";
 					}
 						
 				}

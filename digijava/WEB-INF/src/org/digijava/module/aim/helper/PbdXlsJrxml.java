@@ -15,7 +15,7 @@ public class PbdXlsJrxml
 			out2 = new FileOutputStream(fopen);
 			p2 = new PrintStream(out2);
 			p2.println("<?xml version=\"1.0\" encoding=\"UTF-8\" ?>");
-			//System.out.println("creating now- dynamic trend...");
+			System.out.println("creating now- dynamic trend.......................................");
 
 			int n=cnt;//cnt;
 			int center=0;//(12-n)*30;
@@ -644,7 +644,7 @@ p2.println("<staticText>");
 			p2.println("mode='Opaque'");
 			p2.println("x='"+x+"'");
 			p2.println("y='84'");
-			p2.println("width='184'");
+			p2.println("width='244'");
 			p2.println("height='14'");
 			p2.println("forecolor='#000000'");
 			p2.println("backcolor='#CCCCCC'");
@@ -1033,10 +1033,11 @@ p2.println("</title>");
 			
 			x += 59;
 			c += 2;
-			
+			System.out.println("cccccccccccccc   "+c);
 			}//for2
 			
-			c=7+(4*n);
+			c=7+(4*n)+3;
+						System.out.println("cccccccccccccc12222222   "+c);
 			for(int j=0;j<n+1;j++)
 			{
 			ctextkey="c"+c;

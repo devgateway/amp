@@ -223,7 +223,8 @@ public class ProjectbyDonorXLS extends Action {
 								yyCnt = yy - yyTmp;
 								yy = yyTmp ;
 								//col = 5 + yyCnt + (yyCnt*3)+1;
-								col = 5 + yyCnt + (yyCnt*3)+1;
+								col = 5 + yyCnt + (yyCnt*3)+1+3;
+								
 								data[row][col] = project.getProjCommAmount();
 								//here
 								col = col+1;
@@ -357,8 +358,8 @@ public class ProjectbyDonorXLS extends Action {
 						data[row][col] = teamDonors.getDonorDisbAmount();
 						col = col+1;
 						data[row][col] = teamDonors.getDonorExpAmount();
-						//col = 3;
-						col = 4;
+						col = 3;
+						//col = 4;
 						row = row + 1;
 						logger.info(" Next Donor " + row);						
 					}	// End of while Donor iteration
@@ -493,6 +494,13 @@ public class ProjectbyDonorXLS extends Action {
 					exporter.setParameter(JRXlsExporterParameter.IS_ONE_PAGE_PER_SHEET, Boolean.FALSE);
 					exporter.exportReport();
 					outputStream.flush();
+					/*for(int m = 0 ;m<row;m++)
+					{
+						for(int ll=0;ll<col;ll++)
+						{
+							logger.info("datad   "+data[m][ll] +"  row  "+m+" col "+ll);
+						}
+					}*/
 				}
 				catch (Exception e) 
 				{

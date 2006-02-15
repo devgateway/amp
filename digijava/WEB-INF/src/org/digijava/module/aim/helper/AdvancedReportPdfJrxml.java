@@ -85,7 +85,7 @@ public static void createJRXML(String filePath, boolean undis, String labels[],O
 			int colCnt = 20+cols+4*mcnt;
 	//		System.out.println(" Cnt = " + colCnt);
 //			 gets the no of fields = 4 constants fields + YearCnt*3 + yearCnt
-			for(int k=1; k<=colCnt; k++)
+			for(int k=0; k<=colCnt; k++)
 			{
 //				System.out.println("k="+k);
 				dc="c"+k;
@@ -94,7 +94,7 @@ public static void createJRXML(String filePath, boolean undis, String labels[],O
 		
 
 			colCnt = (20+cols+4*mcnt);
-			for(int k=1; k<=colCnt; k++)
+			for(int k=0; k<=colCnt; k++)
 			{
 //				System.out.println("k="+k);
 				dc="m"+k;

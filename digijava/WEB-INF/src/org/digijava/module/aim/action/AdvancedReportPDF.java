@@ -316,6 +316,7 @@ public class AdvancedReportPDF extends Action
 						if(ind > formBean.getFiscalYearRange().size())
 						{
 							rowData[index++]  = "Undisbursed";
+							logger.info("undis flag "+rowData[index]+"  row value is"+row);
 							undisbFlag = true;
 						}
 					}
@@ -347,9 +348,17 @@ public class AdvancedReportPDF extends Action
 				}
 			}//end else
 			
+			
 			ind++;
 			
 		}//for
+		if(formBean.getAcBalFlag().equals("true"))
+		{
+			logger.info("u are really dead");
+			logger.info("the index is "+index);
+			rowData[index]="Undis";
+			
+		}
 	
 		for(int i=0; i<rowData.length; i++)
 		{
@@ -1201,7 +1210,7 @@ public class AdvancedReportPDF extends Action
 			logger.info("\n");
 		}
 		logger.info(dataArray.length + " ----------------: FINAL DATA END-------------- :" + dataArray[0].length);
-
+		
 		if(flag == 1)
 		{
 
@@ -1718,6 +1727,8 @@ public class AdvancedReportPDF extends Action
 		//}//end total
 		
 			logger.info("********************* END Fill TOTAL..........row="+row);
+			
+			
 	}
 	
 }// end of CLass

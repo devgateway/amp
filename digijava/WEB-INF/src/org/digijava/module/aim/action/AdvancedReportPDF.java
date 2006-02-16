@@ -50,6 +50,8 @@ public class AdvancedReportPDF extends Action
 	
 	private static Logger logger = Logger.getLogger(AdvancedReportPDF.class) ;
 	private static int fieldHeight = 0; 
+	private static String pathDel="/";
+	
 	private static String columnDetails [][];
 	public ActionForward execute(ActionMapping mapping,
 									ActionForm form,
@@ -481,6 +483,21 @@ public class AdvancedReportPDF extends Action
 								dataArray[row][position] = advReport.getSectors().toString().replace('[',' ').replace(']',' ').trim();
 						}
 					}					
+				
+					if(columnColl.contains("Component Name") && advReport.getComponents() != null)
+					{
+						position = getColumnIndex("Component Name");
+						if(advReport.getComponents().toString().replace('[',' ').replace(']',' ').trim().length() > 0)
+							dataArray[row][position] = advReport.getComponents().toString().replace('[',' ').replace(']',' ').trim();
+							
+							logger.info(advReport.getComponents().toString().replace('[',' ').replace(']',' ').trim().length() + " : Component Name : " );
+					}
+					
+					
+					else
+						logger.info("Component is NULL..................");
+				
+					
 					if(columnColl.contains("Region") && advReport.getRegions() != null)
 					{
 						position = getColumnIndex("Region");
@@ -489,6 +506,8 @@ public class AdvancedReportPDF extends Action
 							
 							logger.info(advReport.getRegions().toString().replace('[',' ').replace(']',' ').trim().length() + " : Region : " );
 					}
+					
+					
 					else
 						logger.info("Region is NULL..................");
 					
@@ -1238,7 +1257,7 @@ public class AdvancedReportPDF extends Action
 				System.setProperty("jasper.reports.compile.class.path",jarFile);
 				String realPathJrxml = s.getServletContext().getRealPath(
 									 "/WEB-INF/classes/org/digijava/module/aim/reports");
-				realPathJrxml = realPathJrxml + "\\" + formBean.getReportName().replaceAll(" ", "_").replaceAll("#", "")+".jrxml";
+				realPathJrxml = realPathJrxml + pathDel + formBean.getReportName().replaceAll(" ", "_").replaceAll("#", "")+".jrxml";
 				logger.info("Path : " + realPathJrxml);
 	
 				//calling dynamic jrxml
@@ -1262,7 +1281,7 @@ public class AdvancedReportPDF extends Action
 				try
 				{
 					String jasperFile = s.getServletContext().getRealPath(
-							"/WEB-INF/classes/org/digijava/module/aim/reports"+"\\"+formBean.getReportName().replaceAll(" ", "_").replaceAll("#", "")+".jasper");
+							"/WEB-INF/classes/org/digijava/module/aim/reports"+pathDel+formBean.getReportName().replaceAll(" ", "_").replaceAll("#", "")+".jasper");
 					logger.info("Jasper FIle ::::::::::::::::;" + jasperFile);
 					
 					
@@ -1307,7 +1326,7 @@ public class AdvancedReportPDF extends Action
 				System.setProperty("jasper.reports.compile.class.path",jarFile);
 				String realPathJrxml = s.getServletContext().getRealPath(
 									 "/WEB-INF/classes/org/digijava/module/aim/reports");
-				realPathJrxml = realPathJrxml + "\\" + formBean.getReportName().replaceAll(" ", "_").replaceAll("#", "")+".jrxml";
+				realPathJrxml = realPathJrxml + pathDel + formBean.getReportName().replaceAll(" ", "_").replaceAll("#", "")+".jrxml";
 				logger.info("XLS jrxml Path : " + realPathJrxml);
 
 				//calling dynamic jrxml
@@ -1343,7 +1362,7 @@ public class AdvancedReportPDF extends Action
 					Map parameters = new HashMap();
 					
 					String jasperFile = s.getServletContext().getRealPath(
-							"/WEB-INF/classes/org/digijava/module/aim/reports"+"\\"+formBean.getReportName().replaceAll(" ", "_").replaceAll("#", "")+".jasper");
+							"/WEB-INF/classes/org/digijava/module/aim/reports"+ pathDel+formBean.getReportName().replaceAll(" ", "_").replaceAll("#", "")+".jasper");
 					logger.info("Jasper FIle ::::::::::::::::;" + jasperFile);
 					JasperPrint jasperPrint = 
 						JasperFillManager.fillReport(jasperFile,parameters,dataSource);
@@ -1387,7 +1406,7 @@ public class AdvancedReportPDF extends Action
 				System.setProperty("jasper.reports.compile.class.path",jarFile);
 				String realPathJrxml = s.getServletContext().getRealPath(
 									 "/WEB-INF/classes/org/digijava/module/aim/reports");
-				realPathJrxml = realPathJrxml + "\\" + formBean.getReportName().replaceAll(" ", "_").replaceAll("#", "")+".jrxml";
+				realPathJrxml = realPathJrxml + pathDel + formBean.getReportName().replaceAll(" ", "_").replaceAll("#", "")+".jrxml";
 				logger.info("Path : " + realPathJrxml);
 
 				//calling dynamic jrxml
@@ -1415,7 +1434,7 @@ public class AdvancedReportPDF extends Action
 					Map parameters = new HashMap();
 					
 					String jasperFile = s.getServletContext().getRealPath(
-							"/WEB-INF/classes/org/digijava/module/aim/reports"+"\\"+formBean.getReportName().replaceAll(" ", "_").replaceAll("#", "")+".jasper");
+							"/WEB-INF/classes/org/digijava/module/aim/reports"+pathDel+formBean.getReportName().replaceAll(" ", "_").replaceAll("#", "")+".jasper");
 					logger.info("Jasper FIle ::::::::::::::::;" + jasperFile);
 					JasperPrint jasperPrint = 
 						JasperFillManager.fillReport(jasperFile,parameters,dataSource);

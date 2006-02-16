@@ -317,8 +317,9 @@ public class UpdateDB {
 				sb.append(rs.getString("amp_sector_id"));
 				sb.append("')");
 				// Query #10
-				t1 = System.currentTimeMillis();							
-				stmt.executeUpdate(sb.toString());
+				t1 = System.currentTimeMillis();
+				Statement stmt2 = con.createStatement();
+				stmt2.executeUpdate(sb.toString());
 				t2 = System.currentTimeMillis();
 				logger.debug("Query #10 executed in " + (t2-t1) + "ms");
 				sb.delete(0,sb.length());
@@ -358,8 +359,219 @@ public class UpdateDB {
 			t1 = System.currentTimeMillis();										
 			stmt.executeUpdate(sql);
 			t2 = System.currentTimeMillis();
-			logger.debug("Query #14 executed in " + (t2-t1) + "ms");			
+			logger.debug("Query #14 executed in " + (t2-t1) + "ms");		
+			
+			sql="insert into amp_report_cache " +
+					"select '',amp_activity.amp_activity_id,amp_id,amp_activity.name 'activity_name', " +
+					"NULL 'amp_modality_id', NULL 'modality_name',amp_activity.amp_status_id 'amp_status_id',amp_status.name 'status_name', " +
+					"NULL 'term_assist_name',NULL 'donor_name',NULL 'amp_donor_id',NULL 'org_type',NULL 'amp_funding_id', " +
+					"case when transaction_type='0' and adjustment_type='0' and perspective_id='2' then transaction_amount else 0 end 'planned_commitment', " +
+					"case when transaction_type='1' and adjustment_type='0' and perspective_id='2' then transaction_amount else 0 end 'planned_disbursement', " +
+					"case when transaction_type='2' and adjustment_type='0' and perspective_id='2' then transaction_amount else 0 end 'planned_expenditure', " +
+					"case when transaction_type='0' and adjustment_type='1' and perspective_id='2' then transaction_amount else 0 end 'actual_commitment', " +
+					"case when transaction_type='1' and adjustment_type='1' and perspective_id='2' then transaction_amount else 0 end 'actual_disbursement', " +
+					"case when transaction_type='2' and adjustment_type='1' and perspective_id='2' then transaction_amount else 0 end 'actual_expenditure', " +
+					"currency_code,amp_activity.actual_start_date,amp_activity.actual_completion_date,amp_activity.proposed_start_date, " +
+					"amp_activity.proposed_approval_date,extract(YEAR from transaction_date) 'fiscal_year', " +
+					"case when extract(MONTH from transaction_date) between '1' and '3' then '1' " +
+					"when extract(MONTH from transaction_date) between '4' and '6' then '2' " +
+					"when extract(MONTH from transaction_date) between '7' and '9' then '3' " +
+					"when extract(MONTH from transaction_date) between '10' and '12' then '4' end 'fiscal_quarter', " +
+					"'MA',amp_team_id,transaction_date 'transaction_date',amp_activity.amp_level_id,amp_level.name,amp_activity.description, " +
+					"amp_components.amp_component_id,amp_components.title , NULL , NULL, 2  " +
+					"from amp_activity,amp_components,amp_component_funding,amp_status,amp_currency,amp_level " +
+					"where amp_activity.amp_activity_id=amp_components.amp_activity_id " +
+					"and amp_components.amp_component_id=amp_component_funding.amp_component_id " +
+					"and amp_activity.amp_status_id =amp_status.amp_status_id " +
+					"and amp_component_funding.currency_id=amp_currency.amp_currency_id " +
+					"and amp_activity.amp_level_id=amp_level.amp_level_id and perspective_id='2' " +
+					"and amp_activity.amp_activity_id='" + ampActivityId + "'";
 
+			//Query #15 (added by mihai)
+			t1 = System.currentTimeMillis();						
+			stmt.executeUpdate(sql);
+			t2 = System.currentTimeMillis();
+			logger.debug("Query #15 executed in " + (t2-t1) + "ms");
+			
+			
+			
+			sql="insert into amp_report_cache " +
+				"select '',amp_activity.amp_activity_id,amp_id,amp_activity.name 'activity_name', " +
+				"NULL 'amp_modality_id', NULL 'modality_name',amp_activity.amp_status_id 'amp_status_id',amp_status.name 'status_name', " +
+				"NULL 'term_assist_name',NULL 'donor_name',NULL 'amp_donor_id',NULL 'org_type',NULL 'amp_funding_id', " +
+				"case when transaction_type='0' and adjustment_type='0' and perspective_id='1' then transaction_amount else 0 end 'planned_commitment', " +
+				"case when transaction_type='1' and adjustment_type='0' and perspective_id='1' then transaction_amount else 0 end 'planned_disbursement', " +
+				"case when transaction_type='2' and adjustment_type='0' and perspective_id='1' then transaction_amount else 0 end 'planned_expenditure', " +
+				"case when transaction_type='0' and adjustment_type='1' and perspective_id='1' then transaction_amount else 0 end 'actual_commitment', " +
+				"case when transaction_type='1' and adjustment_type='1' and perspective_id='1' then transaction_amount else 0 end 'actual_disbursement', " +
+				"case when transaction_type='2' and adjustment_type='1' and perspective_id='1' then transaction_amount else 0 end 'actual_expenditure', " +
+				"currency_code,amp_activity.actual_start_date,amp_activity.actual_completion_date,amp_activity.proposed_start_date, " +
+				"amp_activity.proposed_approval_date,extract(YEAR from transaction_date) 'fiscal_year', " +
+				"case when extract(MONTH from transaction_date) between '1' and '3' then '1' " +
+				"when extract(MONTH from transaction_date) between '4' and '6' then '2' " +
+				"when extract(MONTH from transaction_date) between '7' and '9' then '3' " +
+				"when extract(MONTH from transaction_date) between '10' and '12' then '4' end 'fiscal_quarter', " +
+				"'DN',amp_team_id,transaction_date 'transaction_date',amp_activity.amp_level_id,amp_level.name,amp_activity.description, " +
+				" amp_components.amp_component_id,amp_components.title , NULL , NULL, 2 " +
+				" from amp_activity,amp_components,amp_component_funding,amp_status,amp_currency,amp_level " +
+				"where amp_activity.amp_activity_id=amp_components.amp_activity_id " +
+				"and amp_components.amp_component_id=amp_component_funding.amp_component_id " +
+				"and amp_activity.amp_status_id =amp_status.amp_status_id " +
+				"and amp_component_funding.currency_id=amp_currency.amp_currency_id " +
+				"and amp_activity.amp_level_id=amp_level.amp_level_id and perspective_id='1' " +
+				"and amp_activity.amp_activity_id='" + ampActivityId + "'";
+
+			//Query #16 (added by mihai)
+			t1 = System.currentTimeMillis();						
+			stmt.executeUpdate(sql);
+			t2 = System.currentTimeMillis();
+			logger.debug("Query #16 executed in " + (t2-t1) + "ms");
+			
+			
+			sql="insert into amp_report_cache " +
+				"select '',amp_activity.amp_activity_id,amp_id,amp_activity.name 'activity_name', " +
+				"NULL 'amp_modality_id', NULL 'modality_name',amp_activity.amp_status_id 'amp_status_id',amp_status.name 'status_name', " +
+				"NULL 'term_assist_name',NULL 'donor_name',NULL 'amp_donor_id',NULL 'org_type',NULL 'amp_funding_id', " +
+				"0 'planned_commitment',0 'planned_disbursement',0 'planned_expenditure',0 'actual_commitment',0 'actual_disbursement',0 'actual_expenditure', " +
+				"NULL,amp_activity.actual_start_date,amp_activity.actual_completion_date,amp_activity.proposed_start_date, " +
+				"amp_activity.proposed_approval_date,NULL 'fiscal_year', " +
+				"NULL 'fiscal_quarter','MA',amp_team_id,NULL 'transaction_date',amp_activity.amp_level_id,amp_level.name,amp_activity.description, " +
+				"NULL,NULL, NULL, NULL, 2  from amp_activity LEFT JOIN amp_components ON " +
+				"amp_activity.amp_activity_id=amp_components.amp_activity_id,amp_status,amp_level " +
+				"where amp_activity.amp_status_id =amp_status.amp_status_id " +
+				"and amp_activity.amp_level_id=amp_level.amp_level_id and amp_components.amp_activity_id is null " +
+				"and amp_activity.amp_activity_id='" + ampActivityId + "'";
+
+			//Query #17 (added by mihai)
+			t1 = System.currentTimeMillis();						
+			stmt.executeUpdate(sql);
+			t2 = System.currentTimeMillis();
+			logger.debug("Query #17 executed in " + (t2-t1) + "ms");
+			
+			sql="insert into amp_report_cache select '',amp_activity.amp_activity_id,amp_id,amp_activity.name 'activity_name', " +
+				"NULL 'amp_modality_id', NULL 'modality_name',amp_activity.amp_status_id 'amp_status_id',amp_status.name 'status_name', " +
+				"NULL 'term_assist_name',NULL 'donor_name',NULL 'amp_donor_id',NULL 'org_type',NULL 'amp_funding_id', " +
+				"0 'planned_commitment',0 'planned_disbursement',0 'planned_expenditure',0 'actual_commitment',0 'actual_disbursement',0 'actual_expenditure', " +
+				"NULL,amp_activity.actual_start_date,amp_activity.actual_completion_date,amp_activity.proposed_start_date, " +
+				"amp_activity.proposed_approval_date,NULL 'fiscal_year',NULL 'fiscal_quarter', " +
+				"'DN',amp_team_id,NULL 'transaction_date',amp_activity.amp_level_id,amp_level.name,amp_activity.description, " +
+				"NULL,NULL , NULL , NULL , 2 from amp_activity LEFT JOIN amp_components ON " +
+				"amp_activity.amp_activity_id=amp_components.amp_activity_id,amp_status,amp_level " +
+				"where amp_activity.amp_status_id =amp_status.amp_status_id " +
+				"and amp_activity.amp_level_id=amp_level.amp_level_id and amp_components.amp_activity_id is null " +
+				"and amp_activity.amp_activity_id='" + ampActivityId + "'";
+
+			//Query #18 (added by mihai)
+			t1 = System.currentTimeMillis();						
+			stmt.executeUpdate(sql);
+			t2 = System.currentTimeMillis();
+			logger.debug("Query #18 executed in " + (t2-t1) + "ms");
+			
+			
+			sql="insert into amp_report_cache select '',amp_activity.amp_activity_id,amp_id,amp_activity.name 'activity_name', " +
+					"NULL 'amp_modality_id', NULL 'modality_name',amp_activity.amp_status_id 'amp_status_id',amp_status.name 'status_name'," +
+					"NULL 'term_assist_name',NULL 'donor_name',NULL 'amp_donor_id',NULL 'org_type',NULL 'amp_funding_id'," +
+					"case when transaction_type='0' and adjustment_type='0' and perspective_id='2' then transaction_amount else 0 end 'planned_commitment'," +
+					"case when transaction_type='1' and adjustment_type='0' and perspective_id='2' then transaction_amount else 0 end 'planned_disbursement'," +
+					"case when transaction_type='2' and adjustment_type='0' and perspective_id='2' then transaction_amount else 0 end 'planned_expenditure'," +
+					"case when transaction_type='0' and adjustment_type='1' and perspective_id='2' then transaction_amount else 0 end 'actual_commitment'," +
+					"case when transaction_type='1' and adjustment_type='1' and perspective_id='2' then transaction_amount else 0 end 'actual_disbursement'," +
+					"case when transaction_type='2' and adjustment_type='1' and perspective_id='2' then transaction_amount else 0 end 'actual_expenditure'," +
+					"currency_code,amp_activity.actual_start_date,amp_activity.actual_completion_date,amp_activity.proposed_start_date," +
+					"amp_activity.proposed_approval_date,extract(YEAR from transaction_date) 'fiscal_year'," +
+					"case when extract(MONTH from transaction_date) between '1' and '3' then '1' " +
+					"when extract(MONTH from transaction_date) between '4' and '6' then '2' " +
+					"when extract(MONTH from transaction_date) between '7' and '9' then '3' " +
+					"when extract(MONTH from transaction_date) between '10' and '12' then '4' end 'fiscal_quarter', " +
+					"'MA',amp_team_id,transaction_date 'transaction_date',amp_activity.amp_level_id,amp_level.name,amp_activity.description, " +
+					"NULL,NULL , amp_region_id, amp_region.name , 3  " +
+					"from amp_activity,amp_region,amp_regional_funding,amp_status,amp_currency,amp_level " +
+					"where amp_activity.amp_activity_id=amp_regional_funding.activity_id " +
+					"and amp_regional_funding.region_id=amp_region.amp_region_id " +
+					"and amp_activity.amp_status_id =amp_status.amp_status_id " +
+					"and amp_regional_funding.currency_id=amp_currency.amp_currency_id " +
+					"and amp_activity.amp_level_id=amp_level.amp_level_id and perspective_id='2' "+
+					"and amp_activity.amp_activity_id='" + ampActivityId + "'";
+			
+			//Query #19 (added by mihai)
+			t1 = System.currentTimeMillis();						
+			stmt.executeUpdate(sql);
+			t2 = System.currentTimeMillis();
+			logger.debug("Query #19 executed in " + (t2-t1) + "ms");
+			
+			
+			sql="insert into amp_report_cache select '',amp_activity.amp_activity_id,amp_id,amp_activity.name 'activity_name',  " +
+				"NULL 'amp_modality_id', NULL 'modality_name',amp_activity.amp_status_id 'amp_status_id',amp_status.name 'status_name'," +
+				"NULL 'term_assist_name',NULL 'donor_name',NULL 'amp_donor_id',NULL 'org_type',NULL 'amp_funding_id'," +
+				"case when transaction_type='0' and adjustment_type='0' and perspective_id='1' then transaction_amount else 0 end 'planned_commitment'," +
+				"case when transaction_type='1' and adjustment_type='0' and perspective_id='1' then transaction_amount else 0 end 'planned_disbursement'," +
+				"case when transaction_type='2' and adjustment_type='0' and perspective_id='1' then transaction_amount else 0 end 'planned_expenditure'," +
+				"case when transaction_type='0' and adjustment_type='1' and perspective_id='1' then transaction_amount else 0 end 'actual_commitment'," +
+				"case when transaction_type='1' and adjustment_type='1' and perspective_id='1' then transaction_amount else 0 end 'actual_disbursement'," +
+				"case when transaction_type='2' and adjustment_type='1' and perspective_id='1' then transaction_amount else 0 end 'actual_expenditure'," +
+				"currency_code,amp_activity.actual_start_date,amp_activity.actual_completion_date,amp_activity.proposed_start_date," +
+				"amp_activity.proposed_approval_date,extract(YEAR from transaction_date) 'fiscal_year'," +
+				"case when extract(MONTH from transaction_date) between '1' and '3' then '1' " +
+				"when extract(MONTH from transaction_date) between '4' and '6' then '2' " +
+				"when extract(MONTH from transaction_date) between '7' and '9' then '3' " +
+				"when extract(MONTH from transaction_date) between '10' and '12' then '4' end 'fiscal_quarter', " +
+				"'DN',amp_team_id,transaction_date 'transaction_date',amp_activity.amp_level_id,amp_level.name,amp_activity.description, " +
+				"NULL ,NULL , amp_region_id, amp_region.name, 3 " +
+				"from amp_activity,amp_region,amp_regional_funding,amp_status,amp_currency,amp_level " +
+				"where amp_activity.amp_activity_id=amp_regional_funding.activity_id " +
+				"and amp_regional_funding.region_id=amp_region.amp_region_id " +
+				"and amp_activity.amp_status_id =amp_status.amp_status_id " +
+				"and amp_regional_funding.currency_id=amp_currency.amp_currency_id " +
+				"and amp_activity.amp_level_id=amp_level.amp_level_id and perspective_id='1' "+
+				"and amp_activity.amp_activity_id='" + ampActivityId + "'";
+
+
+			//Query #20 (added by mihai)
+			t1 = System.currentTimeMillis();						
+			stmt.executeUpdate(sql);
+			t2 = System.currentTimeMillis();
+			logger.debug("Query #20 executed in " + (t2-t1) + "ms");
+			
+			
+			sql="insert into amp_report_cache select '',amp_activity.amp_activity_id,amp_id,amp_activity.name 'activity_name', " +
+				"NULL 'amp_modality_id', NULL 'modality_name',amp_activity.amp_status_id 'amp_status_id',amp_status.name 'status_name', " +
+				"NULL 'term_assist_name',NULL 'donor_name',NULL 'amp_donor_id',NULL 'org_type',NULL 'amp_funding_id', " +
+				"0 'planned_commitment',0 'planned_disbursement',0 'planned_expenditure',0 'actual_commitment',0 'actual_disbursement',0 'actual_expenditure', " +
+				"NULL,amp_activity.actual_start_date,amp_activity.actual_completion_date,amp_activity.proposed_start_date, " +
+				"amp_activity.proposed_approval_date,NULL 'fiscal_year', NULL 'fiscal_quarter', " +
+				"'MA',amp_team_id,NULL 'transaction_date',amp_activity.amp_level_id,amp_level.name,amp_activity.description, " +
+				"NULL,NULL , NULL , NULL , 3  from amp_activity LEFT JOIN amp_regional_funding ON " +
+				"amp_activity.amp_activity_id=amp_regional_funding.activity_id,amp_status,amp_level where amp_activity.amp_status_id =amp_status.amp_status_id " +
+				"and amp_activity.amp_level_id=amp_level.amp_level_id and activity_id is null "+
+				"and amp_activity.amp_activity_id='" + ampActivityId + "'";
+			
+			//Query #21 (added by mihai)
+			t1 = System.currentTimeMillis();						
+			stmt.executeUpdate(sql);
+			t2 = System.currentTimeMillis();
+			logger.debug("Query #21 executed in " + (t2-t1) + "ms");
+			
+			
+			
+			sql="insert into amp_report_cache select '',amp_activity.amp_activity_id,amp_id,amp_activity.name 'activity_name', " +
+				"NULL 'amp_modality_id', NULL 'modality_name',amp_activity.amp_status_id 'amp_status_id',amp_status.name 'status_name', " +
+				"NULL 'term_assist_name',NULL 'donor_name',NULL 'amp_donor_id',NULL 'org_type',NULL 'amp_funding_id', " +
+				"0 'planned_commitment',0 'planned_disbursement',0 'planned_expenditure',0 'actual_commitment',0 'actual_disbursement',0 'actual_expenditure', " +
+				"NULL,amp_activity.actual_start_date,amp_activity.actual_completion_date,amp_activity.proposed_start_date, " +
+				"amp_activity.proposed_approval_date,NULL 'fiscal_year',NULL 'fiscal_quarter', " +
+				"'DN',amp_team_id,NULL 'transaction_date',amp_activity.amp_level_id,amp_level.name,amp_activity.description, " +
+				"NULL ,NULL , NULL , NULL , 3 from amp_activity LEFT JOIN amp_regional_funding ON amp_activity.amp_activity_id=amp_regional_funding.activity_id, " +
+				"amp_status,amp_level where amp_activity.amp_status_id =amp_status.amp_status_id and amp_activity.amp_level_id=amp_level.amp_level_id and activity_id is null " +
+				"and amp_activity.amp_activity_id='" + ampActivityId + "'";
+
+			//Query #22 (added by mihai)
+			t1 = System.currentTimeMillis();						
+			stmt.executeUpdate(sql);
+			t2 = System.currentTimeMillis();
+			logger.debug("Query #22 executed in " + (t2-t1) + "ms");
+			
+			
+			
 			logger.debug("All the statements got executed");
 			con.close();
 		} catch (SQLException e) {

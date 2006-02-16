@@ -95,6 +95,9 @@ public class Constants
 	public static final Long DESCRIPTION = new Long(14) ;
 	public static final Long TOTAL_COMMITMENT = new Long(15) ;
 	public static final Long TOTAL_DISBURSEMENT = new Long(16) ;
+	//humbly added by Mihai
+	public static final Long COMPONENT_NAME = new Long(17);
+	
 	
 	public static final String REGIONAL_FUNDING_PAGE_CODE = "RFS";
 	public static final String CALENDAR_FILTER = "Calendar";
@@ -102,4 +105,10 @@ public class Constants
 
 	public static final String ANNUAL = "A" ;
 	public static final String QUARTERLY = "Q" ;
+	
+	//humbly added by Mihai
+	public static final Long DONOR_FUNDING = new Long(1);
+	public static final Long COMPONENT_FUNDING = new Long(2);
+	public static final Long REGION_FUNDING = new Long(3);
+
 }	

@@ -10,7 +10,8 @@ public class AdvancedReport
 	private String title ;
 	private String status ;
 	private String level ;
-
+	
+	
 	private String actualStartDate;
 	private String actualCompletionDate;
 	private String totalCommitment;
@@ -19,6 +20,7 @@ public class AdvancedReport
 
 	private Collection donors ;
 	private Collection regions ;
+	private Collection components;
 	private Collection sectors;
 	private Collection projects;
 	
@@ -27,6 +29,7 @@ public class AdvancedReport
 	
 	private Collection modality;	
 	private Collection assistance;
+	private Collection assistanceCopy;
 	private Collection contacts;
 	
 	private Collection fiscalYrs;
@@ -333,5 +336,33 @@ public class AdvancedReport
 	public void setDescriptionPDFXLS(String s) 
 	{
 		descriptionPDFXLS = s;
+	}
+
+	/**
+	 * @return Returns the components.
+	 */
+	public Collection getComponents() {
+		return components;
+	}
+
+	/**
+	 * @param components The components to set.
+	 */
+	public void setComponents(Collection components) {
+		this.components = components;
+	}
+
+	/**
+	 * @return Returns the assistanceCopy.
+	 */
+	public Collection getAssistanceCopy() {
+		return assistanceCopy;
+	}
+
+	/**
+	 * @param assistanceCopy The assistanceCopy to set.
+	 */
+	public void setAssistanceCopy(Collection assistanceCopy) {
+		this.assistanceCopy = assistanceCopy;
 	}
 }

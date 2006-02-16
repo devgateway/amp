@@ -23,6 +23,10 @@ public class AmpRegion implements Serializable{
 	private String regionCode;
 	private Country country;
 	
+	public String toString() {
+		return name!=null?name:"";
+	}
+	
 	
 	/**
 	 * @return Returns the ampRegionId.

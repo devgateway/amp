@@ -8,9 +8,9 @@ public class ReportSelectionCriteria {
 		  private Collection measures;
 		  private Collection hierarchy;
 		  private String option;
+		  private Long type;
 
-
-		  public void setColumns(Collection c) {
+		public void setColumns(Collection c) {
 					 columns = c;
 		  }
 
@@ -34,6 +34,20 @@ public class ReportSelectionCriteria {
 		  public Collection getHierarchy() { return hierarchy; }
 
 		  public String getOption() { return option; }
+
+		/**
+		 * @return Returns the type.
+		 */
+		public Long getType() {
+			return type;
+		}
+
+		/**
+		 * @param type The type to set.
+		 */
+		public void setType(Long type) {
+			this.type = type;
+		}
 
 		  
 }

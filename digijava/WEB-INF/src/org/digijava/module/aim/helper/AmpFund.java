@@ -1,5 +1,7 @@
  package org.digijava.module.aim.helper ;
 
+import java.util.Collection;
+
 
 public class AmpFund
 {
@@ -11,6 +13,20 @@ public class AmpFund
 	private String plCommAmount;
 	private String plDisbAmount;
 	private String plExpAmount;
+	
+	//added to support by funding Terms breakdown (below each AmpFund will appear
+	//one row for each of the funding Termss and all funds will be summed by Terms
+	//these collections contain AmpByTypeAmountS beans
+	private Collection byTypeComm;
+	private Collection byTypeDisb;
+	private Collection byTypePlannedDisb;
+	private Collection byTypeUnDisb;
+	private Collection byTypeExp;
+	private Collection byTypePlComm;
+	private Collection byTypePlDisb;
+	private Collection byTypePlExp;
+	
+	
 	
 	
 	/**
@@ -111,5 +127,117 @@ public class AmpFund
 
 	public void setUnDisbAmount(String string) {
 		unDisbAmount = string;
+	}
+
+	/**
+	 * @return Returns the byTypeComm.
+	 */
+	public Collection getByTypeComm() {
+		return byTypeComm;
+	}
+
+	/**
+	 * @param byTypeComm The byTypeComm to set.
+	 */
+	public void setByTypeComm(Collection byTermsComm) {
+		this.byTypeComm = byTermsComm;
+	}
+
+	/**
+	 * @return Returns the byTypeDisb.
+	 */
+	public Collection getByTypeDisb() {
+		return byTypeDisb;
+	}
+
+	/**
+	 * @param byTypeDisb The byTypeDisb to set.
+	 */
+	public void setByTypeDisb(Collection byTermsDisb) {
+		this.byTypeDisb = byTermsDisb;
+	}
+
+	/**
+	 * @return Returns the byTypeExp.
+	 */
+	public Collection getByTypeExp() {
+		return byTypeExp;
+	}
+
+	/**
+	 * @param byTypeExp The byTypeExp to set.
+	 */
+	public void setByTypeExp(Collection byTermsExp) {
+		this.byTypeExp = byTermsExp;
+	}
+
+	/**
+	 * @return Returns the byTypePlannedDisb.
+	 */
+	public Collection getByTypePlannedDisb() {
+		return byTypePlannedDisb;
+	}
+
+	/**
+	 * @param byTypePlannedDisb The byTypePlannedDisb to set.
+	 */
+	public void setByTypePlannedDisb(Collection byTermsPlannedDisb) {
+		this.byTypePlannedDisb = byTermsPlannedDisb;
+	}
+
+	/**
+	 * @return Returns the byTypePlComm.
+	 */
+	public Collection getByTypePlComm() {
+		return byTypePlComm;
+	}
+
+	/**
+	 * @param byTypePlComm The byTypePlComm to set.
+	 */
+	public void setByTypePlComm(Collection byTermsPlComm) {
+		this.byTypePlComm = byTermsPlComm;
+	}
+
+	/**
+	 * @return Returns the byTypePlDisb.
+	 */
+	public Collection getByTypePlDisb() {
+		return byTypePlDisb;
+	}
+
+	/**
+	 * @param byTypePlDisb The byTypePlDisb to set.
+	 */
+	public void setByTypePlDisb(Collection byTermsPlDisb) {
+		this.byTypePlDisb = byTermsPlDisb;
+	}
+
+	/**
+	 * @return Returns the byTypePlExp.
+	 */
+	public Collection getByTypePlExp() {
+		return byTypePlExp;
+	}
+
+	/**
+	 * @param byTypePlExp The byTypePlExp to set.
+	 */
+	public void setByTypePlExp(Collection byTermsPlExp) {
+		this.byTypePlExp = byTermsPlExp;
+	}
+
+	/**
+	 * @return Returns the byTypeUnDisb.
+	 */
+	public Collection getByTypeUnDisb() {
+		return byTypeUnDisb;
+	}
+
+	/**
+	 * @param byTypeUnDisb The byTypeUnDisb to set.
+	 */
+	public void setByTypeUnDisb(Collection byTermsUnDisb) {
+		this.byTypeUnDisb = byTermsUnDisb;
 	}
 }

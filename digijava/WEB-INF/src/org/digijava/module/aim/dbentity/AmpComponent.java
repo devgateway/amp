@@ -24,6 +24,10 @@ public class AmpComponent implements Serializable {
 	private AmpActivity activity;
 	private Set physicalProgress; 
 	private Set componentFundings;
+
+	public String toString() {
+		return title!=null?title:"";
+	}
 	
 	/**
 	 * @return Returns the activity.

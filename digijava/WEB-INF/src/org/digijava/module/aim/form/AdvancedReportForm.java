@@ -1,4 +1,3 @@
-
 package org.digijava.module.aim.form ;
 
 import java.util.Collection ;
@@ -78,6 +77,7 @@ public class AdvancedReportForm extends ActionForm
 	private Long ampSectorId;
 	private Collection regionColl;
 	private String ampLocationId;
+	private String ampComponentId;
 	private Collection donorColl;
 	private Long ampOrgId;
 	private Collection modalityColl;
@@ -295,10 +295,10 @@ public class AdvancedReportForm extends ActionForm
 		totalColumns = i;
 	}
 	
-public int getYrCount() {
+	public int getYrCount() {
 	return yrCount;
 }
-public void setYrCount(int yrCount) {
+	public void setYrCount(int yrCount) {
 	this.yrCount = yrCount;
 }
 
@@ -1287,6 +1287,18 @@ private int yrDiff;
 	 */
 	public void setArReportType(String arReportType) {
 		this.arReportType = arReportType;
+	}
+	/**
+	 * @return Returns the ampComponentId.
+	 */
+	public String getAmpComponentId() {
+		return ampComponentId;
+	}
+	/**
+	 * @param ampComponentId The ampComponentId to set.
+	 */
+	public void setAmpComponentId(String ampComponentId) {
+		this.ampComponentId = ampComponentId;
 	}
 } //		End of Class
 

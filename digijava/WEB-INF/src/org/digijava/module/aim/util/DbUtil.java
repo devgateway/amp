@@ -865,6 +865,43 @@ public class DbUtil {
 		return component;
 	}
 
+	
+	
+	public static ArrayList getAmpComponents() {
+		ArrayList component = new ArrayList();
+		Query q = null;
+		Session session = null;
+		String queryString = null;
+		AmpComponent ampComponent = null;
+		Iterator iter = null;
+		try {
+			session = PersistenceManager.getSession();
+			queryString = "FROM " + AmpComponent.class.getName();
+					
+			q = session.createQuery(queryString);
+			iter = q.list().iterator();
+
+			while (iter.hasNext()) {
+				ampComponent = (AmpComponent) iter.next();
+				component.add(ampComponent);
+			}
+		} catch (Exception ex) {
+			logger.error("Unable to get Amp Components", ex);
+		} finally {
+			try {
+				if (session != null) {
+					PersistenceManager.releaseSession(session);
+				}
+			} catch (Exception ex) {
+				logger.debug("releaseSession() failed");
+			}
+		}
+		logger.debug("Getting components executed successfully "
+				+ component.size());
+		return component;
+	}
+
+	
 	public static ArrayList getAmpPhysicalProgress(Long ampActivityId) {
 		ArrayList progress = new ArrayList();
 		Query q = null;

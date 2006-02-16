@@ -398,6 +398,11 @@ public class AdvancedReport extends Action {
 					}
 */					
 					ReportSelectionCriteria rsc=new ReportSelectionCriteria();
+					
+					if ("donor".equals(formBean.getReportType())) rsc.setType(new Long(1));
+					if ("regional".equals(formBean.getReportType())) rsc.setType(new Long(3));
+					if ("component".equals(formBean.getReportType())) rsc.setType(new Long(2));
+					
 					rsc.setColumns(new ArrayList());
 					iter=formBean.getAddedColumns().iterator();
 					while(iter.hasNext())
@@ -434,7 +439,7 @@ public class AdvancedReport extends Action {
 					{
 						page = 1;
 //						reports=ReportUtil.generateAdvancedReport(ampTeamId,fromYr,toYr,fiscalCalId,ampCurrencyCode,perspective, transc, formBean.getAddedColumns(),formBean.getColumnHierarchie());
-						reports=ReportUtil.getAdvancedReport(ampTeamId,fromYr,toYr,perspective,ampCurrencyCode,All,All,All,All,fiscalCalId,null,null,"All",rsc);
+						reports=ReportUtil.getAdvancedReport(ampTeamId,fromYr,toYr,perspective,ampCurrencyCode,All,All,All,All,fiscalCalId,null,null,"All","All",rsc);
 						//logger.info("Page is NULL............................" + reports.size());
 						formBean.setFinalData(reports);
 						httpSession.setAttribute("ampReports",reports);
@@ -445,6 +450,7 @@ public class AdvancedReport extends Action {
 						//logger.info("  ------>>>>>>>>    " + formBean.getFinalData().size());
 						if(request.getParameter("page").equals("all") == true)
 							allPages = true;
+						
 						else
 						{
 							page = Integer.parseInt(request.getParameter("page"));
@@ -907,6 +913,11 @@ public class AdvancedReport extends Action {
 	            {
 						//logger.info("............no duplicate report title............");
 						AmpReports ampReports = new AmpReports();
+						
+						if ("donor".equals(formBean.getReportType())) ampReports.setType(new Long(1));
+						if ("regional".equals(formBean.getReportType())) ampReports.setType(new Long(3));
+						if ("component".equals(formBean.getReportType())) ampReports.setType(new Long(2));
+						
 						String descr = "/"+formBean.getReportTitle().replaceAll(" " , "");
 						descr = descr + ".do";
 						ampReports.setDescription(descr);

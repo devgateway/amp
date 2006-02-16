@@ -81,6 +81,7 @@ public class ViewAdvancedReport extends Action
 		Long ampOrgId=null;
 		Long ampSectorId=null;
 		String region=null;
+		String component=null;
 		Long ampModalityId=null;
 		String ampCurrencyCode=null;
 		Long All=new Long(0);
@@ -285,6 +286,14 @@ public class ViewAdvancedReport extends Action
 			region="All";
 		else
 			region=formBean.getAmpLocationId();
+	
+	
+		if(formBean.getAmpComponentId()==null || formBean.getAmpComponentId().equals("All"))
+			region="All";
+		else
+			region=formBean.getAmpComponentId();
+	
+		
 		
 		if(formBean.getAmpOrgId()==null || formBean.getAmpOrgId().intValue()==0)
 			ampOrgId=All;
@@ -398,9 +407,8 @@ public class ViewAdvancedReport extends Action
 				fiscalCalId=teamMember.getAppSettings().getFisCalId().intValue();
 				formBean.setFiscalCalId(fiscalCalId);
 				formBean.setAmpCurrencyCode(ampCurrencyCode);
-				formBean.setAmpLocationId("All");				
+				formBean.setAmpLocationId("All");
 				region="All";
-				
 			}
 		}
 		
@@ -484,7 +492,7 @@ public class ViewAdvancedReport extends Action
 		if (request.getParameter("page") == null) 
 		{
 			page = 1;
-			reports=ReportUtil.getAdvancedReport(ampTeamId,fromYr,toYr,perspective,ampCurrencyCode,ampModalityId,ampStatusId,ampOrgId,ampSectorId,fiscalCalId,startDate,closeDate,region,rsc);
+			reports=ReportUtil.getAdvancedReport(ampTeamId,fromYr,toYr,perspective,ampCurrencyCode,ampModalityId,ampStatusId,ampOrgId,ampSectorId,fiscalCalId,startDate,closeDate,region,component,rsc);
 			session.setAttribute("ampReports",reports);
 
 		}

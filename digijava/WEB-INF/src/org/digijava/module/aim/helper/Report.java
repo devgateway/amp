@@ -1,8 +1,29 @@
 package org.digijava.module.aim.helper ;
 import java.util.Collection;
+import java.util.Iterator;
 
 public class Report
 {
+	
+	public int getReportRowSpan(boolean typeAssist) {
+		if(!typeAssist) return 0;
+		int fundId;
+		//for all reports of type different than donor, we do not need rowspans because we do not show grant/loan!
+		if (type!=1) return 0;
+		if(records!=null) fundId=records.size()-1; else return 0;
+		Iterator i=records.iterator();
+		int c=0;
+		while (i.hasNext()) {
+			AdvancedReport ar = (AdvancedReport) i.next();
+			if(c++ == fundId) {
+				//last AdvancedReport holds funding info and assistanceCopy
+				if (ar.getAssistanceCopy()!=null) return ar.getAssistanceCopy().size()+1; else return 0;
+			}
+			
+		}
+		return 0;
+	}
+	
 	private Long ampActivityId;
 	private String donor ;
 	private String title ;
@@ -46,6 +67,8 @@ public class Report
 	private String country;
 	private String region;
 	private Collection assistance;
+	
+	private int type;
 	
 	private Collection fiscalYrs;
 	private Collection ampFund;
@@ -580,4 +603,18 @@ public class Report
 	 public void setObjective(String objective) {
 					 this.objective = objective;
 		  }
+
+	/**
+	 * @return Returns the type.
+	 */
+	public int getType() {
+		return type;
+	}
+
+	/**
+	 * @param type The type to set.
+	 */
+	public void setType(int type) {
+		this.type = type;
+	}
 }

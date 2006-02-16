@@ -71,6 +71,7 @@
 												<logic:notEqual name="titles" property="columnName" value="Donor">
 													<logic:notEqual name="titles" property="columnName" value="Actual Completion Date">
 														<logic:notEqual name="titles" property="columnName" value="Region">
+													<logic:notEqual name="titles" property="columnName" value="Component Name">	
 															<logic:notEqual name="titles" property="columnName" value="Status">
 																<logic:notEqual name="titles" property="columnName" value="Cumulative Disbursements">
 																	<logic:notEqual name="titles" property="columnName" value="Type Of Assistance">
@@ -88,6 +89,7 @@
 													</logic:notEqual>
 												</logic:notEqual>
 											</logic:notEqual>
+											</logic:notEqual>											
 										</logic:notEqual>
 									</logic:notEqual>
 								</logic:iterate>
@@ -136,6 +138,7 @@
 										<logic:notEqual name="titles" property="columnName" value="Objective">	
 											<logic:notEqual name="titles" property="columnName" value="Description">
 												<logic:notEqual name="titles" property="columnName" value="Project Id">
+												<logic:notEqual name="titles" property="columnName" value="Component Name">
 													<logic:notEqual name="titles" property="columnName" value="Actual Start Date">
 														<logic:notEqual name="titles" property="columnName" value="Sector">
 															<logic:notEqual name="titles" property="columnName" value="Implementation Level">
@@ -152,6 +155,7 @@
 														</logic:notEqual>
 													</logic:notEqual>
 												</logic:notEqual>
+												</logic:notEqual>												
 											</logic:notEqual>
 										</logic:notEqual>
 									</logic:notEqual>
@@ -178,6 +182,14 @@
 										</logic:iterate>
 									</td>
 								</logic:notEmpty>
+								<logic:notEmpty name="records" property="components">
+									<td align="center" width="9%">
+										<logic:iterate name="records" id="component" property="components">
+											<%=component%>	<br>
+										</logic:iterate>
+									</td>
+								</logic:notEmpty>
+
 								<logic:notEmpty name="records" property="status">
 									<td align="center" width="9%">
 										<bean:write name="records" property="status" />

@@ -7,6 +7,18 @@
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
 
 <digi:instance property="aimAdvancedReportForm" />
+
+	<%boolean typeAssist=false;%>
+	<c:if test="${!empty aimAdvancedReportForm.addedColumns}">
+	<logic:iterate name="aimAdvancedReportForm" id="addedColumns"	property="addedColumns" >
+	<c:if test="${addedColumns.columnName == 'Type Of Assistance'}">
+		<%typeAssist=true;%>
+	</c:if>
+	</logic:iterate>
+	</c:if>
+
+	<%request.setAttribute("typeAssist",new Boolean(typeAssist));%>
+		
 	<logic:empty name="aimAdvancedReportForm" property="multiReport"> 
 	<tr bgcolor="#F4F4F2">
 	<!--<td align="center" height="21" width="73" ><b>Sector</b></td>-->
@@ -24,6 +36,8 @@
 	<TABLE width="100%" cellPadding=2 cellSpacing=0 vAlign="top" align="top" bgColor=#f4f4f2 border=1 style="border-collapse: collapse">
 	<logic:iterate name="aimAdvancedReportForm"  property="multiReport" id="multiReport" type="org.digijava.module.aim.helper.multiReport">
 		<logic:iterate name="multiReport"  property="hierarchy" id="hierarchy" type="org.digijava.module.aim.helper.AdvancedHierarchyReport">
+		<TABLE width="100%" cellPadding=2 cellSpacing=0 vAlign="top" align="top" bgColor=#f4f4f2 border=1 style="border-collapse: collapse">
+
     	<tr bgcolor="#F4F4F2">
 		<!--<td align="center" height="21" width="73" ><b>Sector</b></td>-->
 		<td colspan=100 align="left" height="21" >
@@ -38,9 +52,11 @@
 	<tr bgcolor="#cccccc">
 	<c:if test="${!empty aimAdvancedReportForm.addedColumns}">
 	<logic:iterate name="aimAdvancedReportForm" id="addedColumns"	property="addedColumns" >
-		<td align="center"  class=box-title>
+	<c:if test="${addedColumns.columnName != 'Type Of Assistance'}">
+		<td align="center"  class=box-title rowspan="2">
 		<c:out value="${addedColumns.columnName}"/>
 		</td>
+	</c:if>
 	</logic:iterate>
 	</c:if>
 																	
@@ -61,6 +77,14 @@
 	if(flag == 0 || fcnt > 0)
 	{
 	%>
+	<logic:equal name="aimAdvancedReportForm" property="reportType" value="donor">
+	<logic:equal name="typeAssist" value="true">
+	<td height="21" width="89" align="center" rowspan="2">
+	<strong>Type of Assistance</strong>
+	</td>
+	</logic:equal>
+	</logic:equal>
+	
 	<logic:iterate name="aimAdvancedReportForm"  property="fiscalYearRange" id="fiscalYearRange">
 		<td height="21" width="69" colspan=<%=fcnt%> align="center" >
 		<strong><%=fiscalYearRange%></strong>
@@ -81,9 +105,11 @@
 	<tr bgcolor="#cccccc">
 	<c:if test="${!empty aimAdvancedReportForm.addedColumns}">
 	<logic:iterate name="aimAdvancedReportForm" id="addedColumns"	property="addedColumns" >
-		<td align="center"  class=box-title rowspan="2">
+		<c:if test="${addedColumns.columnName != 'Type Of Assistance'}">
+		<td align="center"  class=box-title rowspan="3">
 		<c:out value="${addedColumns.columnName}"/>
 		</td>
+		</c:if>
 	</logic:iterate>
 	</c:if>
 																	
@@ -104,6 +130,15 @@
 	if(flag == 0 || fcnt > 0)
 	{
 	%>
+	<logic:equal name="aimAdvancedReportForm" property="reportType" value="donor">
+	<logic:equal name="typeAssist" value="true">
+	<td height="21" width="89" align="center" rowspan="2">
+	<strong>Type of Assistance</strong>
+	</td>
+	</logic:equal>
+	</logic:equal>
+
+
 	<logic:iterate name="aimAdvancedReportForm"  property="fiscalYearRange" id="fiscalYearRange">
 		<td height="21" width="69" colspan=<bean:write name="aimAdvancedReportForm" property="quarterColumns" /> align="center" >
 		<strong><%=fiscalYearRange%></strong>
@@ -129,9 +164,6 @@
 	</logic:equal>
 		
 		<tr>
-		<logic:iterate name="aimAdvancedReportForm"  property="addedColumns" id="addedColumns">
-		<td></td>
-		</logic:iterate>
 		
 		<logic:iterate name="aimAdvancedReportForm"  property="fiscalYearRange" id="fiscalYearRange">
 		<logic:iterate name="aimAdvancedReportForm"  property="options" id="options">
@@ -200,7 +232,8 @@
 			</logic:iterate>
 		</logic:iterate>
 
-		<logic:iterate name="aimAdvancedReportForm"  property="addedMeasures" id="addedMeasures">			<c:if test="${addedMeasures.measureName == 'Actual Commitments'}">
+		<logic:iterate name="aimAdvancedReportForm"  property="addedMeasures" id="addedMeasures">
+			<c:if test="${addedMeasures.measureName == 'Actual Commitments'}">
 			<logic:equal name="aimAdvancedReportForm" property="acCommFlag" value="true">
 			<td height="21" width="23" align="center" >
 			<a title="<digi:trn key="aim:actualCommitment">Actual Commitment</digi:trn>">
@@ -273,177 +306,27 @@
 		<logic:iterate name="hierarchy"  property="project" id="project" type="org.digijava.module.aim.helper.Report">
 			<tr bgcolor="#F4F4F2">
 			<logic:iterate name="project"  property="records" id="records" type="org.digijava.module.aim.helper.AdvancedReport">
-				<logic:notEmpty name="records" property="title">
-				<td align="center" height="21">
-				<bean:write name="records" property="title" />
-				</td>
-				</logic:notEmpty>
 
-				<logic:notEmpty name="records" property="actualStartDate">
-				<td align="center" height="21">
-				<bean:write name="records" property="actualStartDate" /></td></logic:notEmpty>
+			<bean:define id="records" name="records" type="org.digijava.module.aim.helper.AdvancedReport" toScope="request"/>
+			<jsp:include page="columnView.jsp">
+				<jsp:param name="rowspan" value="<%=project.getReportRowSpan(typeAssist)%>" />
+			</jsp:include>
 
-				<logic:notEmpty name="records" property="actualCompletionDate">
-				<td align="center" height="21">
-				<bean:write name="records" property="actualCompletionDate" /></td></logic:notEmpty>
 
-				<logic:notEmpty name="records" property="status">
-				<td align="center" height="21">
-				<bean:write name="records" property="status" /></td></logic:notEmpty>
+			<jsp:include page="fundView.jsp"/>
 
-				<logic:notEmpty name="records" property="level">
-				<td align="center" height="21">
-				<bean:write name="records" property="level" /></td></logic:notEmpty>
 
-				<logic:notEmpty name="records" property="objective">
-				<td align="center" height="21">
-				<bean:write name="records" property="objective" /></td></logic:notEmpty>
-
-				<logic:notEmpty name="records" property="description">
-				<td align="center" height="21" width="800">
-				<bean:define id="descriptionKey">
-				<bean:write name="records" property="description" />
-				</bean:define>						
-				<digi:edit key="<%=descriptionKey%>" />
-				</td></logic:notEmpty>
-				
-				<logic:notEmpty name="records" property="assistance">
-				<td align="center" height="21">
-				<logic:iterate name="records" id="assistance" property="assistance"> <%=assistance%>	
-				<br>
-				</logic:iterate></td></logic:notEmpty>
-	
-				<logic:notEmpty name="records" property="donors">
-				<td align="center" height="21">
-				<logic:iterate name="records" id="donors" property="donors"> <%=donors%>	
-				<br>
-				</logic:iterate></td></logic:notEmpty>
-
-				<logic:notEmpty name="records" property="sectors">
-				<td align="center" height="21">
-				<logic:iterate name="records" id="sectors" property="sectors"> <%=sectors%>	
-				<br>
-				</logic:iterate></td></logic:notEmpty>
-	
-				<logic:notEmpty name="records" property="regions">
-				<td align="center" height="21">
-				<logic:iterate name="records" id="regions" property="regions"> <%=regions%>	
-				<br>
-				</logic:iterate></td></logic:notEmpty>
-
-				<logic:notEmpty name="records" property="contacts">
-				<td align="center" height="21">
-				<logic:iterate name="records" id="contacts" property="contacts"> <%=contacts%>	
-				<br>
-				</logic:iterate></td></logic:notEmpty>
-
-				<logic:notEmpty name="records" property="modality">
-				<td align="center" height="21" >
-				<logic:iterate name="records" id="modality" property="modality"> <%=modality%>	
-				<br>
-				</logic:iterate></logic:notEmpty>
-
-				<logic:notEmpty name="records" property="year">
-				<bean:write name="records" property="year" /></logic:notEmpty>
-
-				<logic:notEmpty name="records" property="ampId">
-				<td align="center" height="21" >
-				<bean:write name="records" property="ampId" /></td></logic:notEmpty>
-
-				<logic:notEmpty name="records" property="totalCommitment">
-				<td align="center" height="21" >
-				<logic:notEqual name="records" property="totalCommitment" value="0">
-				<bean:write name="records" property="totalCommitment" /></logic:notEqual></td></logic:notEmpty>
-
-				<logic:notEmpty name="records" property="totalDisbursement">
-				<td align="center" height="21" >
-				<logic:notEqual name="records" property="totalDisbursement" value="0">
-				<bean:write name="records" property="totalDisbursement" /></logic:notEqual></td></logic:notEmpty>
-
-				<logic:notEmpty name="records" property="ampFund">
-				<% int i=0;%>
-				<logic:iterate name="records"  property="ampFund" id="ampFund" 	type="org.digijava.module.aim.helper.AmpFund">
-					<logic:iterate name="aimAdvancedReportForm"  property="addedMeasures" id="addedMeasures">
-						
-						<c:if test="${addedMeasures.measureName == 'Actual Commitments'}">
-						<logic:equal name="aimAdvancedReportForm" property="acCommFlag" value="true">
-						<td align="right" height="21" width="69" >
-						<logic:notEqual name="ampFund" property="commAmount" value="0">
-						<bean:write name="ampFund" property="commAmount" />
-						</logic:notEqual>
-						</td>
-						</logic:equal>
-						</c:if>
-
-						<c:if test="${addedMeasures.measureName == 'Actual Disbursements'}">
-						<logic:equal name="aimAdvancedReportForm" property="acDisbFlag" value="true">
-						<td align="right" height="21" width="69">
-						<logic:notEqual name="ampFund" property="disbAmount" value="0">
-						<bean:write name="ampFund" property="disbAmount" />
-						</logic:notEqual>
-						</td>
-						</logic:equal>
-						</c:if>
-						
-						<c:if test="${addedMeasures.measureName == 'Actual Expenditures'}">
-						<logic:equal name="aimAdvancedReportForm" property="acExpFlag" value="true">
-						<td align="right" height="21" width="69">
-						<logic:notEqual name="ampFund" property="expAmount" value="0">
-						<bean:write name="ampFund" property="expAmount" />
-						</logic:notEqual>
-						</td>
-						</logic:equal>
-						</c:if>
-						
-						<c:if test="${addedMeasures.measureName == 'Planned Commitments'}">
-						<logic:equal name="aimAdvancedReportForm" property="plCommFlag" value="true">
-						<td align="right" height="21" width="69">
-						<logic:notEqual name="ampFund" property="plCommAmount" value="0">
-						<bean:write name="ampFund" property="plCommAmount" />
-						</logic:notEqual>
-						</td>
-						</logic:equal>
-						</c:if>
-						
-						<c:if test="${addedMeasures.measureName == 'Planned Disbursements'}">
-						<logic:equal name="aimAdvancedReportForm" property="plDisbFlag" value="true">
-						<td align="right" height="21" width="69">
-						<logic:notEqual name="ampFund" property="plDisbAmount" value="0">
-						<bean:write name="ampFund" property="plDisbAmount" />
-						</logic:notEqual>
-						</td>
-						</logic:equal>
-						</c:if>
-						
-						<c:if test="${addedMeasures.measureName == 'Planned Expenditures'}">
-						<logic:equal name="aimAdvancedReportForm" property="plExpFlag" value="true">
-						<td align="right" height="21" width="69">
-						<logic:notEqual name="ampFund" property="plExpAmount" value="0">
-						<bean:write name="ampFund" property="plExpAmount" />
-						</logic:notEqual>
-						</td>
-						</logic:equal>
-						</c:if>
-
-						<c:if test="${addedMeasures.measureName == 'Cumulative Balance'}">
-						
-						<logic:equal name="aimAdvancedReportForm" property="acBalFlag" value="true">
-						<logic:notEmpty name="ampFund" property="unDisbAmount">
-						<td align="right" height="21" width="69">
-						<logic:notEqual name="ampFund" property="unDisbAmount" value="0">
-						<bean:write name="ampFund" property="unDisbAmount" />
-						</logic:notEqual>
-						</td>
-						</logic:notEmpty>
-						</logic:equal>
-						
-						</c:if>
-						
-					</logic:iterate>
-				</logic:iterate>	
-				</logic:notEmpty>								
 			</logic:iterate>
 			</tr>
+
+			<jsp:include page="termView.jsp"/>
+			
+
+		
+		<!-- end of by terms rows for hierarchy 0 -->
+			
+
+			
 		</logic:iterate>
 		
 		<bean:size name="aimAdvancedReportForm" property="addedColumns" id="cols"/>
@@ -517,11 +400,16 @@
 		</logic:notEmpty>
 		</logic:equal>
 	</logic:iterate>
+	</td>
 	</tr>																
 	</logic:notEmpty>
 
+	<!-- end of hierarchy 0 -->
+
 	<logic:notEmpty name="hierarchy"  property="levels">
 	<logic:iterate name="hierarchy"  property="levels" id="levels" type="org.digijava.module.aim.helper.AdvancedHierarchyReport">
+		<!-- table for iterating levels > 0 -->
+		<TABLE width="100%" cellPadding=2 cellSpacing=0 vAlign="top" align="top" bgColor=#f4f4f2 border=1 style="border-collapse: collapse">
 		<tr bgcolor="#F4F4F2">
 		<!--<td align="center" height="21" width="73" ><b>Sector</b></td>-->
 		<td colspan=100 align="left" height="21" >
@@ -536,9 +424,11 @@
 	<tr bgcolor="#cccccc">
 	<c:if test="${!empty aimAdvancedReportForm.addedColumns}">
 	<logic:iterate name="aimAdvancedReportForm" id="addedColumns"	property="addedColumns" >
-		<td align="center"  class=box-title>
+		<c:if test="${addedColumns.columnName != 'Type Of Assistance'}">
+		<td align="center"  class=box-title rowspan="2">
 		<c:out value="${addedColumns.columnName}"/>
 		</td>
+		</c:if>
 	</logic:iterate>
 	</c:if>
 																	
@@ -559,6 +449,15 @@
 	if(flag == 0 || fcnt > 0)
 	{
 	%>
+	<logic:equal name="aimAdvancedReportForm" property="reportType" value="donor">
+	<logic:equal name="typeAssist" value="true">
+	<td height="21" width="89" align="center" rowspan="2">
+	<strong>Type of Assistance</strong>
+	</td>
+	</logic:equal>
+</logic:equal>
+
+
 	<logic:iterate name="aimAdvancedReportForm"  property="fiscalYearRange" id="fiscalYearRange">
 		<td height="21" width="69" colspan=<%=fcnt%> align="center" >
 		<strong><%=fiscalYearRange%></strong>
@@ -569,7 +468,7 @@
 	}
 	%>
 
-	<td width="69" colspan=<bean:write name="aimAdvancedReportForm" property="fundColumns" /> align=center >
+	<td width="69" colspan='<bean:write name="aimAdvancedReportForm" property="fundColumns" />' align='center'>
 	<b> Total 	</b>
 	</td>
     </tr> 	
@@ -579,9 +478,11 @@
 	<tr bgcolor="#cccccc">
 	<c:if test="${!empty aimAdvancedReportForm.addedColumns}">
 	<logic:iterate name="aimAdvancedReportForm" id="addedColumns"	property="addedColumns" >
-		<td align="center"  class=box-title rowspan="2">
+		<c:if test="${addedColumns.columnName != 'Type Of Assistance'}">
+		<td align="center"  class=box-title rowspan="3">
 		<c:out value="${addedColumns.columnName}"/>
 		</td>
+		</c:if>
 	</logic:iterate>
 	</c:if>
 																	
@@ -602,6 +503,15 @@
 	if(flag == 0 || fcnt > 0)
 	{
 	%>
+
+	<logic:equal name="aimAdvancedReportForm" property="reportType" value="donor">
+	<logic:equal name="typeAssist" value="true">
+	<td height="21" width="89" align="center" rowspan="2">
+	<strong>Type of Assistance</strong>
+	</td>
+	</logic:equal>
+	</logic:equal>
+
 	<logic:iterate name="aimAdvancedReportForm"  property="fiscalYearRange" id="fiscalYearRange">
 		<td height="21" width="69" colspan=<bean:write name="aimAdvancedReportForm" property="quarterColumns" /> align="center" >
 		<strong><%=fiscalYearRange%></strong>
@@ -626,10 +536,6 @@
 	</tr>
 	</logic:equal>
 		<tr>
-		<logic:iterate name="aimAdvancedReportForm"  property="addedColumns" id="addedColumns">
-			<td>
-			</td>
-		</logic:iterate>
 		
 		<logic:iterate name="aimAdvancedReportForm"  property="fiscalYearRange" id="fiscalYearRange">
 		<logic:iterate name="aimAdvancedReportForm"  property="options" id="options">
@@ -769,93 +675,12 @@
 			<tr bgcolor="#F4F4F2">
 			<logic:iterate name="project"  property="records" id="records" type="org.digijava.module.aim.helper.AdvancedReport">
 
-				<logic:notEmpty name="records" property="title">
-				<td align="center" height="21">
-				<bean:write name="records" property="title" />
-				</td>
-				</logic:notEmpty>
-				
-				<logic:notEmpty name="records" property="actualStartDate">
-				<td align="center" height="21">
-				<bean:write name="records" property="actualStartDate" /></td></logic:notEmpty>
-				
-				<logic:notEmpty name="records" property="actualCompletionDate">
-				<td align="center" height="21">
-				<bean:write name="records" property="actualCompletionDate" /></td></logic:notEmpty>
-				
-				<logic:notEmpty name="records" property="status">
-				<td align="center" height="21">
-				<bean:write name="records" property="status" /></td></logic:notEmpty>
-				
-				<logic:notEmpty name="records" property="level">
-				<td align="center" height="21">
-				<bean:write name="records" property="level" /></td></logic:notEmpty>
-				
-				<logic:notEmpty name="records" property="objective">
-				<td align="center" height="21">
-				<bean:write name="records" property="objective" /></td></logic:notEmpty>
-				
-				<logic:notEmpty name="records" property="description">
-				<td align="center" height="21" width="800">
-				<bean:define id="descriptionKey">
-				<bean:write name="records" property="description" />
-				</bean:define>						
-				<digi:edit key="<%=descriptionKey%>" />
-				</td></logic:notEmpty>
-				
-				<logic:notEmpty name="records" property="assistance">
-				<td align="center" height="21">
-				<logic:iterate name="records" id="assistance" property="assistance"> <%=assistance%>	
-				<br>
-				</logic:iterate></td></logic:notEmpty>
-				
-				<logic:notEmpty name="records" property="donors">
-				<td align="center" height="21">
-				<logic:iterate name="records" id="donors" property="donors"> <%=donors%>	
-				<br>
-				</logic:iterate></td></logic:notEmpty>
-				
-				<logic:notEmpty name="records" property="sectors">
-				<td align="center" height="21">
-				<logic:iterate name="records" id="sectors" property="sectors"> <%=sectors%>	
-				<br>
-				</logic:iterate></td></logic:notEmpty>
-				
-				<logic:notEmpty name="records" property="regions">
-				<td align="center" height="21">
-				<logic:iterate name="records" id="regions" property="regions"> <%=regions%>	
-				<br>
-				</logic:iterate></td></logic:notEmpty>
-				
-				<logic:notEmpty name="records" property="contacts">
-				<td align="center" height="21">
-				<logic:iterate name="records" id="contacts" property="contacts"> <%=contacts%>	
-				<br>
-				</logic:iterate></td></logic:notEmpty>
-				
-				<logic:notEmpty name="records" property="modality">
-				<td align="center" height="21" >
-				<logic:iterate name="records" id="modality" property="modality"> <%=modality%>	
-				<br>
-				</logic:iterate></logic:notEmpty>
-				
-				<logic:notEmpty name="records" property="year">
-				<bean:write name="records" property="year" /></logic:notEmpty>
-				
-				<logic:notEmpty name="records" property="ampId">
-				<td align="center" height="21" >
-				<bean:write name="records" property="ampId" /></td></logic:notEmpty>
+			<bean:define id="records" name="records" type="org.digijava.module.aim.helper.AdvancedReport" toScope="request"/>
+			<jsp:include page="columnView.jsp">
+				<jsp:param name="rowspan" value="<%=project.getReportRowSpan(typeAssist)%>" />
+			</jsp:include>
 
-				<logic:notEmpty name="records" property="totalCommitment">
-				<td align="center" height="21" >
-				<logic:notEqual name="records" property="totalCommitment" value="0">
-				<bean:write name="records" property="totalCommitment" /></logic:notEqual></td></logic:notEmpty>
-
-				<logic:notEmpty name="records" property="totalDisbursement">
-				<td align="center" height="21" >
-				<logic:notEqual name="records" property="totalDisbursement" value="0">
-				<bean:write name="records" property="totalDisbursement" /></logic:notEqual></td></logic:notEmpty>
-				
+	
 	<bean:size name="aimAdvancedReportForm" property="addedMeasures" id="measureSize"/>
 	<%
 		int fcnt = measureSize.intValue();
@@ -869,91 +694,17 @@
 		</c:if>
 	</logic:iterate>
 
-				<logic:notEmpty name="records" property="ampFund">
-				
-				<logic:iterate name="records"  property="ampFund" id="ampFund" 	type="org.digijava.module.aim.helper.AmpFund">
-					<logic:iterate name="aimAdvancedReportForm"  property="addedMeasures" id="addedMeasures">
-					
-						<c:if test="${addedMeasures.measureName == 'Actual Commitments'}">
-						<logic:equal name="aimAdvancedReportForm" property="acCommFlag" value="true">
-						<td align="right" height="21" width="69" >
-						<logic:notEqual name="ampFund" property="commAmount" value="0">
-						<bean:write name="ampFund" property="commAmount" />
-						</logic:notEqual>
-						</td>
-						</logic:equal>
-						</c:if>
-						
-						<c:if test="${addedMeasures.measureName == 'Actual Disbursements'}">
-						<logic:equal name="aimAdvancedReportForm" property="acDisbFlag" value="true">
-						<td align="right" height="21" width="69">
-						<logic:notEqual name="ampFund" property="disbAmount" value="0">
-						<bean:write name="ampFund" property="disbAmount" />
-						</logic:notEqual>
-						</td>
-						</logic:equal>
-						</c:if>
-						
-						<c:if test="${addedMeasures.measureName == 'Actual Expenditures'}">
-						<logic:equal name="aimAdvancedReportForm" property="acExpFlag" value="true">
-						<td align="right" height="21" width="69">
-						<logic:notEqual name="ampFund" property="expAmount" value="0">
-						<bean:write name="ampFund" property="expAmount" />
-						</logic:notEqual>
-						</td>
-						</logic:equal>
-						</c:if>
-						
-						<c:if test="${addedMeasures.measureName == 'Planned Commitments'}">
-						<logic:equal name="aimAdvancedReportForm" property="plCommFlag" value="true">
-						<td align="right" height="21" width="69">
-						<logic:notEqual name="ampFund" property="plCommAmount" value="0">
-						<bean:write name="ampFund" property="plCommAmount" />
-						</logic:notEqual>
-						</td>
-						</logic:equal>
-						</c:if>
-						
-						<c:if test="${addedMeasures.measureName == 'Planned Disbursements'}">
-						<logic:equal name="aimAdvancedReportForm" property="plDisbFlag" value="true">
-						<td align="right" height="21" width="69">
-						<logic:notEqual name="ampFund" property="plDisbAmount" value="0">
-						<bean:write name="ampFund" property="plDisbAmount" />
-						</logic:notEqual>
-						</td>
-						</logic:equal>
-						</c:if>
-						
-						<c:if test="${addedMeasures.measureName == 'Planned Expenditures'}">
-						<logic:equal name="aimAdvancedReportForm" property="plExpFlag" value="true">
-						<td align="right" height="21" width="69">
-						<logic:notEqual name="ampFund" property="plExpAmount" value="0">
-						<bean:write name="ampFund" property="plExpAmount" />
-						</logic:notEqual>
-						</td>
-						</logic:equal>
-						</c:if>
+			<jsp:include page="fundView.jsp"/>
 
-													
-						<c:if test="${addedMeasures.measureName == 'Cumulative Balance'}">
-							
-							<logic:equal name="aimAdvancedReportForm" property="acBalFlag" value="true">
-							<logic:notEmpty name="ampFund" property="unDisbAmount">
-							<td align="right" height="21" width="69">
-							<logic:notEqual name="ampFund" property="unDisbAmount" value="0">
-							<bean:write name="ampFund" property="unDisbAmount" />
-							</logic:notEqual>
-							</td>
-							</logic:notEmpty>
-							</logic:equal>
-							
-						</c:if>
 
-					</logic:iterate>
-				</logic:iterate>
-				</logic:notEmpty>								
+
 			</logic:iterate>
 			</tr>
+			<jsp:include page="termView.jsp"/>
+
+			
+
+			
 		</logic:iterate>	
 		</logic:notEmpty>
 		
@@ -971,9 +722,11 @@
 	<tr bgcolor="#cccccc">
 	<c:if test="${!empty aimAdvancedReportForm.addedColumns}">
 	<logic:iterate name="aimAdvancedReportForm" id="addedColumns"	property="addedColumns" >
-		<td align="center"  class=box-title>
+		<c:if test="${addedColumns.columnName != 'Type Of Assistance'}">
+		<td align="center"  class=box-title rowspan="2">
 		<c:out value="${addedColumns.columnName}"/>
 		</td>
+		</c:if>
 	</logic:iterate>
 	</c:if>
 																	
@@ -1014,9 +767,11 @@
 	<tr bgcolor="#cccccc">
 	<c:if test="${!empty aimAdvancedReportForm.addedColumns}">
 	<logic:iterate name="aimAdvancedReportForm" id="addedColumns"	property="addedColumns" >
+		<c:if test="${addedColumns.columnName != 'Type Of Assistance'}">
 		<td align="center"  class=box-title rowspan="2">
 		<c:out value="${addedColumns.columnName}"/>
 		</td>
+		</c:if>
 	</logic:iterate>
 	</c:if>
 																	
@@ -1037,11 +792,21 @@
 	if(flag == 0 || fcnt > 0)
 	{
 	%>
+
+	<logic:equal name="aimAdvancedReportForm" property="reportType" value="donor">
+	<logic:equal name="typeAssist" value="true">
+	<td height="21" width="89" align="center" rowspan="2">
+	<strong>Type of Assistance</strong>
+	</td>
+	</logic:equal>
+	</logic:equal>
+
 	<logic:iterate name="aimAdvancedReportForm"  property="fiscalYearRange" id="fiscalYearRange">
 		<td height="21" width="69" colspan=<bean:write name="aimAdvancedReportForm" property="quarterColumns" /> align="center" >
 		<strong><%=fiscalYearRange%></strong>
 		</td>
 	</logic:iterate>
+
 
 	<%
 	}
@@ -1061,11 +826,6 @@
 	</tr>
 	</logic:equal>
 		<tr>
-		<logic:iterate name="aimAdvancedReportForm"  property="addedColumns" id="addedColumns">
-			<td>
-			</td>
-		</logic:iterate>
-		
 		<logic:iterate name="aimAdvancedReportForm"  property="fiscalYearRange" id="fiscalYearRange">
 		<logic:iterate name="aimAdvancedReportForm"  property="options" id="options">
 			<logic:iterate name="aimAdvancedReportForm"  property="addedMeasures" id="addedMeasures">		<c:if test="${addedMeasures.measureName == 'Actual Commitments'}">
@@ -1203,93 +963,12 @@
 		<logic:iterate name="level"  property="project" id="project" type="org.digijava.module.aim.helper.Report">
 			<tr bgcolor="#F4F4F2">
 			<logic:iterate name="project"  property="records" id="records" type="org.digijava.module.aim.helper.AdvancedReport">
-
-				<logic:notEmpty name="records" property="title">
-				<td align="center" height="21">
-				<bean:write name="records" property="title" />
-				</td>
-				</logic:notEmpty>
-				
-				<logic:notEmpty name="records" property="actualStartDate">
-				<td align="center" height="21">
-				<bean:write name="records" property="actualStartDate" /></td></logic:notEmpty>
-				
-				<logic:notEmpty name="records" property="actualCompletionDate">
-				<td align="center" height="21">
-				<bean:write name="records" property="actualCompletionDate" /></td></logic:notEmpty>
-				
-				<logic:notEmpty name="records" property="status">
-				<td align="center" height="21">
-				<bean:write name="records" property="status" /></td></logic:notEmpty>
-				
-				<logic:notEmpty name="records" property="level">
-				<td align="center" height="21">
-				<bean:write name="records" property="level" /></td></logic:notEmpty>
-				
-				<logic:notEmpty name="records" property="objective">
-				<td align="center" height="21">
-				<bean:write name="records" property="objective" /></td></logic:notEmpty>
-				
-				<logic:notEmpty name="records" property="description">
-				<td align="center" height="21" width="800">
-				<bean:define id="descriptionKey">
-				<bean:write name="records" property="description" />
-				</bean:define>						
-				<digi:edit key="<%=descriptionKey%>" />
-				</td></logic:notEmpty>
-				
-				<logic:notEmpty name="records" property="assistance">
-				<td align="center" height="21">
-				<logic:iterate name="records" id="assistance" property="assistance"> <%=assistance%>	
-				<br>
-				</logic:iterate></td></logic:notEmpty>
-				
-				<logic:notEmpty name="records" property="donors">
-				<td align="center" height="21">
-				<logic:iterate name="records" id="donors" property="donors"> <%=donors%>	
-				<br>
-				</logic:iterate></td></logic:notEmpty>
-				
-				<logic:notEmpty name="records" property="sectors">
-				<td align="center" height="21">
-				<logic:iterate name="records" id="sectors" property="sectors"> <%=sectors%>	
-				<br>
-				</logic:iterate></td></logic:notEmpty>
-				
-				<logic:notEmpty name="records" property="regions">
-				<td align="center" height="21">
-				<logic:iterate name="records" id="regions" property="regions"> <%=regions%>	
-				<br>
-				</logic:iterate></td></logic:notEmpty>
-				
-				<logic:notEmpty name="records" property="contacts">
-				<td align="center" height="21">
-				<logic:iterate name="records" id="contacts" property="contacts"> <%=contacts%>	
-				<br>
-				</logic:iterate></td></logic:notEmpty>
-				
-				<logic:notEmpty name="records" property="modality">
-				<td align="center" height="21" >
-				<logic:iterate name="records" id="modality" property="modality"> <%=modality%>	
-				<br>
-				</logic:iterate></logic:notEmpty>
-				
-				<logic:notEmpty name="records" property="year">
-				<bean:write name="records" property="year" /></logic:notEmpty>
-				
-				<logic:notEmpty name="records" property="ampId">
-				<td align="center" height="21" >
-				<bean:write name="records" property="ampId" /></td></logic:notEmpty>
-
-				<logic:notEmpty name="records" property="totalCommitment">
-				<td align="center" height="21" >
-				<logic:notEqual name="records" property="totalCommitment" value="0">
-				<bean:write name="records" property="totalCommitment" /></logic:notEqual></td></logic:notEmpty>
-
-				<logic:notEmpty name="records" property="totalDisbursement">
-				<td align="center" height="21" >
-				<logic:notEqual name="records" property="totalDisbursement" value="0">
-				<bean:write name="records" property="totalDisbursement" /></logic:notEqual></td></logic:notEmpty>
+			
+			<bean:define id="records" name="records" type="org.digijava.module.aim.helper.AdvancedReport" toScope="request"/>
+			<jsp:include page="columnView.jsp">
+				<jsp:param name="rowspan" value="<%=project.getReportRowSpan(typeAssist)%>" />
+			</jsp:include>
+	
 				
 	<bean:size name="aimAdvancedReportForm" property="addedMeasures" id="measureSize"/>
 	<%
@@ -1304,95 +983,25 @@
 		</c:if>
 	</logic:iterate>
 
-				<logic:notEmpty name="records" property="ampFund">
-				<logic:iterate name="records"  property="ampFund" id="ampFund" 	type="org.digijava.module.aim.helper.AmpFund">
-					<logic:iterate name="aimAdvancedReportForm"  property="addedMeasures" id="addedMeasures">
-						<c:if test="${addedMeasures.measureName == 'Actual Commitments'}">
-						<logic:equal name="aimAdvancedReportForm" property="acCommFlag" value="true">
-						<td align="right" height="21" width="69" >
-						<logic:notEqual name="ampFund" property="commAmount" value="0">
-						<bean:write name="ampFund" property="commAmount" />
-						</logic:notEqual>
-						</td>
-						</logic:equal>
-						</c:if>
-						
-						<c:if test="${addedMeasures.measureName == 'Actual Disbursements'}">
-						<logic:equal name="aimAdvancedReportForm" property="acDisbFlag" value="true">
-						<td align="right" height="21" width="69">
-						<logic:notEqual name="ampFund" property="disbAmount" value="0">
-						<bean:write name="ampFund" property="disbAmount" />
-						</logic:notEqual>
-						</td>
-						</logic:equal>
-						</c:if>
-						
-						<c:if test="${addedMeasures.measureName == 'Actual Expenditures'}">
-						<logic:equal name="aimAdvancedReportForm" property="acExpFlag" value="true">
-						<td align="right" height="21" width="69">
-						<logic:notEqual name="ampFund" property="expAmount" value="0">
-						<bean:write name="ampFund" property="expAmount" />
-						</logic:notEqual>
-						</td>
-						</logic:equal>
-						</c:if>
-						
-						<c:if test="${addedMeasures.measureName == 'Planned Commitments'}">
-						<logic:equal name="aimAdvancedReportForm" property="plCommFlag" value="true">
-						<td align="right" height="21" width="69">
-						<logic:notEqual name="ampFund" property="plCommAmount" value="0">
-						<bean:write name="ampFund" property="plCommAmount" />
-						</logic:notEqual>
-						</td>
-						</logic:equal>
-						</c:if>
-						
-						<c:if test="${addedMeasures.measureName == 'Planned Disbursements'}">
-						<logic:equal name="aimAdvancedReportForm" property="plDisbFlag" value="true">
-						<td align="right" height="21" width="69">
-						<logic:notEqual name="ampFund" property="plDisbAmount" value="0">
-						<bean:write name="ampFund" property="plDisbAmount" />
-						</logic:notEqual>
-						</td>
-						</logic:equal>
-						</c:if>
-						
-						<c:if test="${addedMeasures.measureName == 'Planned Expenditures'}">
-						<logic:equal name="aimAdvancedReportForm" property="plExpFlag" value="true">
-						<td align="right" height="21" width="69">
-						<logic:notEqual name="ampFund" property="plExpAmount" value="0">
-						<bean:write name="ampFund" property="plExpAmount" />
-						</logic:notEqual>
-						</td>
-						</logic:equal>
-						</c:if>
 
-													
-						<c:if test="${addedMeasures.measureName == 'Cumulative Balance'}">
-							
-							<logic:equal name="aimAdvancedReportForm" property="acBalFlag" value="true">
-							<logic:notEmpty name="ampFund" property="unDisbAmount">
-							<td align="right" height="21" width="69">
-							<logic:notEqual name="ampFund" property="unDisbAmount" value="0">
-							<bean:write name="ampFund" property="unDisbAmount" />
-							</logic:notEqual>
-							</td>
-							</logic:notEmpty>
-							</logic:equal>
-							
-						</c:if>
+	<jsp:include page="fundView.jsp"/>
 
-					</logic:iterate>
-				</logic:iterate>
-				</logic:notEmpty>								
 			</logic:iterate>
 			</tr>
-		</logic:iterate>
+			
+			<!-- terms breakdown for hierarchy > 0 -->
+			<jsp:include page="termView.jsp"/>
+			
+			
+	</logic:iterate>
 		<bean:size name="aimAdvancedReportForm" property="addedMeasures" id="measureSize"/>
 	<%
 		int fcnt = measureSize.intValue();
 		int flag = 0;
 	%>              
+	
+	
+	
 	<logic:iterate name="aimAdvancedReportForm"  property="addedMeasures" id="addedMeasures">				
 	<c:if test="${addedMeasures.measureName == 'Cumulative Balance'}">
 		<%fcnt = fcnt-1;
@@ -1694,6 +1303,7 @@
 		</logic:notEmpty>
 		</logic:equal>
 		</c:if>
+		
 
 		</logic:iterate>
 	</logic:iterate>
@@ -1799,9 +1409,9 @@
 
 </logic:iterate>
 </logic:iterate>
+</tr>
 </logic:iterate>
 </tr>			
-</TABLE>
 </td>
 </tr>
 </logic:notEmpty>

@@ -64,6 +64,7 @@
 									<logic:notEqual name="titles" property="columnName" value="Project Title">
 										<logic:notEqual name="titles" property="columnName" value="Objective">	
 											<logic:notEqual name="titles" property="columnName" value="Description">
+												<logic:notEqual name="titles" property="columnName" value="Component Name">
 												<logic:notEqual name="titles" property="columnName" value="Donor">
 													<logic:notEqual name="titles" property="columnName" value="Actual Completion Date">
 														<logic:notEqual name="titles" property="columnName" value="Region">
@@ -85,11 +86,12 @@
 												</logic:notEqual>
 											</logic:notEqual>
 										</logic:notEqual>
+										</logic:notEqual>
 									</logic:notEqual>
 								</logic:iterate>
 							</tr>
 							<tr>
-							<logic:iterate name="project"  property="records" id="records" type="org.digijava.module.aim.helper.AdvancedReport">
+							<logic:iterate name="report"  property="records" id="records" type="org.digijava.module.aim.helper.AdvancedReport">
 								<logic:notEmpty name="records" property="ampId">
 									<td align="center" width="9%">
 										<bean:write name="records" property="ampId" />
@@ -130,6 +132,7 @@
 								<logic:iterate name="aimAdvancedReportForm"  property="titles" id="titles" type="org.digijava.module.aim.helper.Column">
 									<logic:notEqual name="titles" property="columnName" value="Project Title">
 										<logic:notEqual name="titles" property="columnName" value="Objective">	
+										<logic:notEqual name="titles" property="columnName" value="Component Name">
 											<logic:notEqual name="titles" property="columnName" value="Description">
 												<logic:notEqual name="titles" property="columnName" value="Project Id">
 													<logic:notEqual name="titles" property="columnName" value="Actual Start Date">
@@ -148,13 +151,14 @@
 														</logic:notEqual>
 													</logic:notEqual>
 												</logic:notEqual>
+												</logic:notEqual>
 											</logic:notEqual>
 										</logic:notEqual>
 									</logic:notEqual>
 								</logic:iterate>
 							</tr>
 							<tr>
-							<logic:iterate name="project"  property="records" id="records" type="org.digijava.module.aim.helper.AdvancedReport">
+							<logic:iterate name="report"  property="records" id="records" type="org.digijava.module.aim.helper.AdvancedReport">
 								<logic:notEmpty name="records" property="donors">
 									<td align="center" width="9%">
 										<logic:iterate name="records" id="donors" property="donors"> 

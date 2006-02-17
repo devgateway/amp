@@ -422,9 +422,17 @@ public class ViewAdvancedReport extends Action
 		
 
 		ReportSelectionCriteria rsc=ReportUtil.getReportSelectionCriteria(ampReportId);
+	
+		if (rsc.getType().intValue()==1) formBean.setReportType("donor");
+		if (rsc.getType().intValue()==3) formBean.setReportType("regional");
+		if (rsc.getType().intValue()==2) formBean.setReportType("component");
 		
+			
 		formBean.setTitles(rsc.getColumns());
 		formBean.setDimColumns(rsc.getColumns().size());
+		
+		
+		
 		//logger.debug("Measures: " + rsc.getMeasures().size());
 		measures=(ArrayList)rsc.getMeasures();
 		if(rsc.getHierarchy()!= null && rsc.getHierarchy().size()>0){

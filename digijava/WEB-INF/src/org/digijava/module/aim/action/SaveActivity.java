@@ -1055,13 +1055,25 @@ public class SaveActivity extends Action {
 			if (toDelete == null || (!toDelete.trim().equalsIgnoreCase("true"))) {
 				String sessId = session.getId();
 				synchronized (ampContext) {
-					HashMap activityMap = (HashMap) ampContext.getAttribute("editActivityList");					
+					HashMap activityMap = (HashMap) ampContext.getAttribute(Constants.EDIT_ACT_LIST);					
 					activityMap.remove(sessId);
-					ArrayList sessList = (ArrayList) ampContext.getAttribute("sessionList");
+					ArrayList sessList = (ArrayList) ampContext.getAttribute(Constants.SESSION_LIST);
 				    sessList.remove(sessId);
 				    Collections.sort(sessList);
-		            ampContext.setAttribute("editActivityList",activityMap);		    
-				    ampContext.setAttribute("sessionList",sessList);				
+		            ampContext.setAttribute(Constants.EDIT_ACT_LIST,activityMap);		    
+				    ampContext.setAttribute(Constants.SESSION_LIST,sessList);
+				    
+				    HashMap tsList = (HashMap) ampContext.getAttribute(Constants.TS_ACT_LIST);
+				    if (tsList != null) {
+				    	tsList.remove(eaForm.getActivityId());
+				    }
+				    ampContext.setAttribute(Constants.TS_ACT_LIST,tsList);
+				    HashMap uList = (HashMap) ampContext.getAttribute(Constants.USER_ACT_LIST);
+				    if (uList != null) {
+				    	uList.remove(tm.getMemberId());
+				    }
+				    ampContext.setAttribute(Constants.USER_ACT_LIST,uList);
+				    
 				}
 			}
 		} else {

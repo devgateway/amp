@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.Iterator;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletContext;
@@ -17,6 +18,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.apache.struts.action.ActionServlet;
+import org.digijava.module.aim.helper.Constants;
 
 /**
  * Overrides the default struts ActionServlet
@@ -90,12 +92,40 @@ public class AMPActionServlet extends ActionServlet {
 				if (pggrp == null || !(pggrp.trim().equalsIgnoreCase("true"))) {
 					sessionList.remove(index);
 					Collections.sort(sessionList);
+					
+					Long actId = null;
+					Long userId = null;
+					
 					synchronized (ampContext) {
 						HashMap activityMap = (HashMap) ampContext
-								.getAttribute("editActivityList");
+								.getAttribute(Constants.EDIT_ACT_LIST);
+						
+						actId = (Long) activityMap.get(sessId);
 						activityMap.remove(sessId);
-						ampContext.setAttribute("sessionList", sessionList);
-						ampContext.setAttribute("editActivityList", activityMap);
+						
+						HashMap tsaList = (HashMap) ampContext.getAttribute(Constants.TS_ACT_LIST);
+						if (tsaList != null) {
+							tsaList.remove(actId);
+						}
+						
+						HashMap uList = (HashMap) ampContext.getAttribute(Constants.USER_ACT_LIST);
+						if (uList != null) {
+							Iterator itr = uList.keySet().iterator();
+							while (itr.hasNext()) {
+								Long uId = (Long) itr.next();
+								Long tempActId = (Long) uList.get(uId);
+								if (tempActId.longValue() == actId.longValue()) {
+									uList.remove(uId);
+									break;
+								}
+							}
+						}
+						 
+						
+						ampContext.setAttribute(Constants.SESSION_LIST, sessionList);
+						ampContext.setAttribute(Constants.EDIT_ACT_LIST, activityMap);
+						ampContext.setAttribute(Constants.USER_ACT_LIST,uList);
+						ampContext.setAttribute(Constants.TS_ACT_LIST,tsaList);
 					}
 				}
 			}

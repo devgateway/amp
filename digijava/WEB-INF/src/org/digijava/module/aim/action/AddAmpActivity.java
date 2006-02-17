@@ -4,16 +4,22 @@
 
 package org.digijava.module.aim.action;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Iterator;
 
+import javax.servlet.RequestDispatcher;
+import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
 import org.apache.struts.action.Action;
+import org.apache.struts.action.ActionError;
+import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
@@ -44,11 +50,16 @@ public class AddAmpActivity extends Action {
 	
 	private static Logger logger = Logger.getLogger(AddAmpActivity.class);
 	
+	private ServletContext ampContext = null;
+	
 	public ActionForward execute(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response)
 			throws java.lang.Exception {
 
 		HttpSession session = request.getSession();
+		
+		ampContext = getServlet().getServletContext();
+		
 		TeamMember teamMember= new TeamMember();
 		
 		// Get the current member who has logged in from the session
@@ -94,6 +105,7 @@ public class AddAmpActivity extends Action {
 		// added by Akash
 		// desc: setting WorkingTeamLeadFlag & approval status in form bean
 		// start
+		
 		Long ampTeamId = teamMember.getTeamId();
 		boolean teamLeadFlag = teamMember.getTeamHead();
 		boolean workingTeamFlag = DbUtil.checkForParentTeam(ampTeamId);
@@ -107,6 +119,30 @@ public class AddAmpActivity extends Action {
 		else {
 			String actApprovalStatus = DbUtil.getActivityApprovalStatus(eaForm.getActivityId());
 			eaForm.setApprovalStatus(actApprovalStatus);
+			
+			String sessId = session.getId();
+			ArrayList sessList = (ArrayList) ampContext.getAttribute(
+					org.digijava.module.aim.helper.Constants.SESSION_LIST);
+			if (sessList.contains(sessId) == false) {
+				ActionErrors errors = new ActionErrors();
+				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
+						"error.aim.activityAlreadyOpenedForEdit"));
+				saveErrors(request, errors);
+
+				String url = "/aim/viewChannelOverview.do?ampActivityId="
+						+ eaForm.getActivityId() + "&tabIndex=0";
+				RequestDispatcher rd = getServlet().getServletContext()
+						.getRequestDispatcher(url);
+				rd.forward(request, response);				
+			}
+			
+			synchronized (ampContext) {
+				HashMap tsList = (HashMap) ampContext.getAttribute(org.digijava.module.aim.helper.Constants.TS_ACT_LIST);
+				if (tsList != null) {
+					tsList.put(eaForm.getActivityId(),new Long(System.currentTimeMillis()));
+				}
+				ampContext.setAttribute(org.digijava.module.aim.helper.Constants.TS_ACT_LIST,tsList);
+			}
 		}
 		// end
 		

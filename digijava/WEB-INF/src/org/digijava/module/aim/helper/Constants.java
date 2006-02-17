@@ -106,9 +106,16 @@ public class Constants
 	public static final String ANNUAL = "A" ;
 	public static final String QUARTERLY = "Q" ;
 	
+	
 	//humbly added by Mihai
 	public static final Long DONOR_FUNDING = new Long(1);
 	public static final Long COMPONENT_FUNDING = new Long(2);
 	public static final Long REGION_FUNDING = new Long(3);
-
+	
+	public static final String SESSION_LIST	= "sessionList";
+	public static final String EDIT_ACT_LIST = "editActivityList";
+	public static final String USER_ACT_LIST = "userActivityList";
+	public static final String TS_ACT_LIST = "timestampActivityList";
+	
+	public static final long MAX_TIME_LIMIT = 3600000;
 }	

@@ -1,8 +1,12 @@
 package org.digijava.module.aim.action;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.Iterator;
 
+import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -25,6 +29,7 @@ import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.dbentity.AmpTeamMemberRoles;
 import org.digijava.module.aim.form.LoginForm;
 import org.digijava.module.aim.helper.ApplicationSettings;
+import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.TeamUtil;
@@ -40,12 +45,14 @@ import org.digijava.module.aim.util.TeamUtil;
 public class Login extends Action {
 
 	private static Logger logger = Logger.getLogger(Login.class);
+	private ServletContext ampContext = null;
 	
 	public ActionForward execute(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response)
 			throws java.lang.Exception {
 
 		LoginForm lForm = (LoginForm) form; // login form instance
+		ampContext = getServlet().getServletContext();
 		
 		ActionErrors errors = new ActionErrors();
 		HttpSession session = request.getSession();
@@ -165,8 +172,53 @@ public class Login extends Action {
 				}
 				if (members.size() == 1) {
 					// if the user is part of just on team, load his personalized settings
+					
 					Iterator itr = members.iterator();
 					AmpTeamMember member = (AmpTeamMember) itr.next();
+
+					synchronized (ampContext) {
+						HashMap userActList = (HashMap) ampContext.getAttribute(Constants.USER_ACT_LIST);
+						if (userActList != null &&
+								userActList.containsKey(member.getAmpTeamMemId())) {
+							// expire all other entries
+							
+							//logger.info("getting the value for " + member.getAmpTeamMemId());
+							
+							Long actId = (Long) userActList.get(member.getAmpTeamMemId());
+							HashMap editActMap = (HashMap) ampContext.getAttribute(Constants.EDIT_ACT_LIST);
+							String sessId = null;
+							if (editActMap != null)  {
+								Iterator itr1 = editActMap.keySet().iterator();
+								while (itr1.hasNext()) {
+									sessId = (String) itr1.next();	
+									Long tempActId = (Long) editActMap.get(sessId);
+									
+									//logger.info("tempActId = " + tempActId + " actId = " + actId);
+									if (tempActId.longValue() == actId.longValue()) {
+										editActMap.remove(sessId);
+										//logger.info("Removed the entry for " + actId);
+										ampContext.setAttribute(Constants.EDIT_ACT_LIST,editActMap);
+										break;
+									}
+								}
+							}
+							userActList.remove(member.getAmpTeamMemId());
+							ampContext.setAttribute(Constants.USER_ACT_LIST,userActList);
+							
+							HashMap tsActList = (HashMap) ampContext.getAttribute(Constants.TS_ACT_LIST);
+							if (tsActList != null) {
+								tsActList.remove(actId);
+								ampContext.setAttribute(Constants.TS_ACT_LIST,tsActList);
+							}
+							ArrayList sessList = (ArrayList) ampContext.getAttribute(Constants.SESSION_LIST);
+							if (sessList != null) {
+								sessList.remove(sessId);
+							    Collections.sort(sessList);
+								ampContext.setAttribute(Constants.SESSION_LIST,sessList);
+							}
+						}
+					}
+					
 					// checking whether the member is a Team lead. if yes, then
 					// we set the session variable 'teamLeadFlag' as 'true' else 'false'
 					AmpTeamMemberRoles lead = org.digijava.module.aim.util.DbUtil

@@ -254,7 +254,7 @@ function checkUncheckAll2() {
 																	<tr height=10>	<td>	</td>	</tr>												
 																	<TR bgcolor="#eeeeee">
 																		<td align="center" class=box-title>
-																			Available Columns
+																			Available Columns 
 																		</td>	
 																	</tr>
 
@@ -268,8 +268,10 @@ function checkUncheckAll2() {
 																		<TD>
 																			<TABLE width="100%" cellPadding=2 cellSpacing=1 vAlign="top" align="top" bgcolor="#aaaaaa" border=0>
 																				<c:if test="${!empty aimAdvancedReportForm.ampColumns}">
-																					<logic:iterate name="aimAdvancedReportForm" id="ampColumns"	property="ampColumns" >
-																						<TR bgcolor="#ffffff">
+																					
+																						<c:if test="${aimAdvancedReportForm.arReportType == 'donor' }">
+																						<logic:iterate name="aimAdvancedReportForm" id="ampColumns"	property="ampColumns" >
+																						<tr bgcolor="#ffffff">
 																							<td align="left" width="98%" valign=top>
 																								<c:out value="${ampColumns.columnName}"/>
 																							</td>
@@ -279,7 +281,26 @@ function checkUncheckAll2() {
 					  																	    </html:multibox>
 																							</td>
 																						</tr>
-																					</logic:iterate>
+																						</logic:iterate>
+																						</c:if>
+
+																						<c:if test="${aimAdvancedReportForm.arReportType == 'regional' || aimAdvancedReportForm.arReportType == 'component'}">
+																						<logic:iterate name="aimAdvancedReportForm" id="ampColumns"	property="ampColumns" >
+																						<c:if test="${ampColumns.columnName != 'Type Of Assistance'}">
+																						<tr bgcolor="#ffffff">
+																							<td align="left" width="98%" valign=top>
+																								<c:out value="${ampColumns.columnName}"/>
+																							</td>
+																							<td align="right">
+																							<html:multibox property="selectedColumns">
+																							  <c:out value="${ampColumns.columnId}"/>
+					  																	    </html:multibox>
+																							</td>
+																						</tr>
+																						</c:if>
+																						</logic:iterate>
+																						</c:if>
+																					
 																					
 																				</c:if>
 																			</TABLE>

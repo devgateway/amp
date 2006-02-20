@@ -33,7 +33,11 @@
 				
 				<logic:notEmpty name="records" property="objective">
 				<td align="center" height="21" rowspan="<%=rowspan%>">
-				<bean:write name="records" property="objective" /></td></logic:notEmpty>
+				<bean:define id="objective">
+				<bean:write name="records" property="objective" />
+				</bean:define>						
+				<digi:edit key="<%=objective%>" />
+				</td></logic:notEmpty>
 				
 				<logic:notEmpty name="records" property="description">
 				<td align="center" height="21" rowspan="<%=rowspan%>" width="800">

@@ -246,6 +246,7 @@ public class MultilateralDonorPDF extends Action
 				yy = yyTmp;
 				ArrayList totalTeamTermAssistFund = new ArrayList(report.getTotalTeamTermAssistFund());
 				Iterator totalTeamTermAssistFd = totalTeamTermAssistFund.iterator();
+				
 				if(report.getTotalTeamTermAssistFund() != null)
 				{
 					while(totalTeamTermAssistFd.hasNext() )
@@ -296,7 +297,7 @@ public class MultilateralDonorPDF extends Action
 					term = false;
 				}
 				
-				//row = row + 1;
+				row = row + 1;
 				col = 2;
 				yy = yyTmp;
 				col+=1;
@@ -409,6 +410,7 @@ public class MultilateralDonorPDF extends Action
 				System.out.println("Nothing to display");
 			}
 		}
+	
 		return null;
 	}// end of Execute Func
 

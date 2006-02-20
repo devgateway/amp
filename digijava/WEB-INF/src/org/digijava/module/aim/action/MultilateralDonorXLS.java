@@ -296,6 +296,7 @@ public class MultilateralDonorXLS extends Action
 				row = row + 1;
 				logger.info("row in else  "+row);
 				}*/
+				row = row+1;
 				col = 2;
 				
 				yy = yyTmp;

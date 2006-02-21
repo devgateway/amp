@@ -12,6 +12,7 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
 import java.util.TreeSet;
+import java.util.List;
 
 import net.sf.hibernate.Hibernate;
 import net.sf.hibernate.HibernateException;
@@ -12594,13 +12595,13 @@ public class ReportUtil {
 				{
 					Column colLevel1=(Column) hierarchy.get(0);
 					//dbReturnSet=ReportUtil.getLevel1AdvancedReport(inClause,colLevel1.getColumnId(),ampStatusId,ampDonorId,ampModalityId,ampSectorId,region,component,approvedActivityList);
-					dbReturnSet=ReportUtil.getLevel1AdvancedReport(inClause,colLevel1.getColumnId(),ampStatusId,ampDonorId,ampModalityId,ampSectorId,region,component);
+					dbReturnSet=ReportUtil.getLevel1AdvancedReport(inClause,colLevel1.getColumnId(),ampStatusId,ampDonorId,ampModalityId,ampSectorId,region,component, approvedActivityList);
 				}
 				if(hierarchy.size()==2)
 				{
 					Column colLevel1=(Column) hierarchy.get(0);
 					Column colLevel2=(Column) hierarchy.get(1);
-					dbReturnSet=ReportUtil.getLevel2AdvancedReport(inClause,colLevel1.getColumnId(),colLevel2.getColumnId(),ampStatusId,ampDonorId,ampModalityId,ampSectorId,region,component);
+					dbReturnSet=ReportUtil.getLevel2AdvancedReport(inClause,colLevel1.getColumnId(),colLevel2.getColumnId(),ampStatusId,ampDonorId,ampModalityId,ampSectorId,region,component, approvedActivityList);
 				}
 
 				if(hierarchy.size()==3)
@@ -12608,7 +12609,7 @@ public class ReportUtil {
 					Column colLevel1=(Column) hierarchy.get(0);
 					Column colLevel2=(Column) hierarchy.get(1);
 					Column colLevel3=(Column) hierarchy.get(2);
-					dbReturnSet=ReportUtil.getLevel3AdvancedReport(inClause,colLevel1.getColumnId(),colLevel2.getColumnId(),colLevel3.getColumnId(),ampStatusId,ampDonorId,ampModalityId,ampSectorId,region,component);
+					dbReturnSet=ReportUtil.getLevel3AdvancedReport(inClause,colLevel1.getColumnId(),colLevel2.getColumnId(),colLevel3.getColumnId(),ampStatusId,ampDonorId,ampModalityId,ampSectorId,region,component, approvedActivityList);
 					//logger.debug("Hierarchy 3 Size: " + dbReturnSet.size());
 				}
 				iterLevel1=dbReturnSet.iterator();
@@ -13186,7 +13187,7 @@ public class ReportUtil {
 	}
 
 
-	public static ArrayList getLevel1AdvancedReport(String teamClause,Long ampColumnId,Long ampStatusId,Long ampDonorId,Long ampModalityId,Long ampSectorId,String region,String component) 
+	public static ArrayList getLevel1AdvancedReport(String teamClause,Long ampColumnId,Long ampStatusId,Long ampDonorId,Long ampModalityId,Long ampSectorId,String region,String component, ArrayList approvedActivityList) 
 	{
 		Session session = null;
 		Query q = null;
@@ -13196,6 +13197,7 @@ public class ReportUtil {
 		ArrayList activityIds=new ArrayList();
 		ArrayList ampReports=new ArrayList();
 		Long All=new Long(0);
+		List projTitles = new ArrayList();
 		
 		try 
 		{
@@ -13229,14 +13231,14 @@ public class ReportUtil {
 						while(iterActivity.hasNext())
 						{
 							AmpActivity ampActivity=(AmpActivity) iterActivity.next();
+							if(approvedActivityList.indexOf(ampActivity.getAmpActivityId())==-1)
+								continue;
 							ahReport.getActivities().add(ampActivity.getAmpActivityId());
 						}
 						ampReports.add(ahReport);
 					}
 				}
 			}
-			
-		
 			
 			if(ampColumnId.equals(Constants.DONOR_NAME))
 			{
@@ -13268,6 +13270,8 @@ public class ReportUtil {
 						while(iterActivity.hasNext())
 						{
 							AmpReportCache ampReportCache=(AmpReportCache) iterActivity.next();
+							if(approvedActivityList.indexOf(ampReportCache.getAmpActivityId())==-1)
+								continue;
 							ahReport.getActivities().add(ampReportCache.getAmpActivityId());
 						}
 						ampReports.add(ahReport);
@@ -13305,6 +13309,8 @@ public class ReportUtil {
 						while(iterActivity.hasNext())
 						{
 							AmpReportCache ampReportCache=(AmpReportCache) iterActivity.next();
+							if(approvedActivityList.indexOf(ampReportCache.getAmpActivityId())==-1)
+								continue;
 							ahReport.getActivities().add(ampReportCache.getAmpActivityId());
 						}
 						ampReports.add(ahReport);
@@ -13325,6 +13331,8 @@ public class ReportUtil {
 				while(iter.hasNext())
 				{
 					AmpActivity ampActivity=(AmpActivity) iter.next();
+					if(approvedActivityList.indexOf(ampActivity.getAmpActivityId())==-1)
+						continue;
 					activityIds.add(ampActivity.getAmpActivityId());
 				}
 
@@ -13389,6 +13397,8 @@ public class ReportUtil {
 						while(iterActivity.hasNext())
 						{
 							AmpReportCache ampReportCache=(AmpReportCache) iterActivity.next();
+							if(approvedActivityList.indexOf(ampReportCache.getAmpActivityId())==-1)
+								continue;
 							ahReport.getActivities().add(ampReportCache.getAmpActivityId());
 						}
 						ampReports.add(ahReport);
@@ -13427,6 +13437,8 @@ public class ReportUtil {
 						while(iterActivity.hasNext())
 						{
 							AmpReportCache ampReportCache=(AmpReportCache) iterActivity.next();
+							if(approvedActivityList.indexOf(ampReportCache.getAmpActivityId())==-1)
+								continue;
 							ahReport.getActivities().add(ampReportCache.getAmpActivityId());
 						}
 						ampReports.add(ahReport);
@@ -13465,12 +13477,47 @@ public class ReportUtil {
 						while(iterActivity.hasNext())
 						{
 							AmpReportCache ampReportCache=(AmpReportCache) iterActivity.next();
+							if(approvedActivityList.indexOf(ampReportCache.getAmpActivityId())==-1)
+								continue;
 							ahReport.getActivities().add(ampReportCache.getAmpActivityId());
 						}
 						ampReports.add(ahReport);
 					}
 				}
 			}
+			
+//			start code block for Project title column
+			if(ampColumnId.equals(Constants.ACTIVITY_NAME))
+			{
+				AdvancedHierarchyReport ahReport = null;
+				session = PersistenceManager.getSession();
+				String queryString = "select activity from "
+					+ AmpActivity.class.getName()
+					+ " activity where activity.approvalStatus='approved' and activity.team.ampTeamId in (" + teamClause + ") " ;
+
+				
+				Query qry = session.createQuery(queryString);
+				projTitles = qry.list();
+				logger.debug("Query: " + queryString);
+				if(projTitles.size()>0)
+				{
+					iterActivity = projTitles.iterator();
+					while(iterActivity.hasNext())
+					{
+						AmpActivity ampActivity=(AmpActivity) iterActivity.next();
+						ahReport= new AdvancedHierarchyReport();
+						ahReport.setActivities(new ArrayList());
+						ahReport.setId(ampActivity.getAmpActivityId());
+						ahReport.setName(ampActivity.getName());
+						ahReport.setLabel("Project Title ");
+						ahReport.getActivities().add(ampActivity.getAmpActivityId());
+						ampReports.add(ahReport);
+					}
+				}	
+				
+			} 
+// 			end code block for project-title column
+			
 
 			
 		} 
@@ -13494,7 +13541,7 @@ public class ReportUtil {
 	}
 
 
-	public static ArrayList getLevel2AdvancedReport(String teamClause,Long ampColumnId1,Long ampColumnId2,Long ampStatusId,Long ampDonorId,Long ampModalityId,Long ampSectorId,String region,String component) 
+	public static ArrayList getLevel2AdvancedReport(String teamClause,Long ampColumnId1,Long ampColumnId2,Long ampStatusId,Long ampDonorId,Long ampModalityId,Long ampSectorId,String region,String component, ArrayList approvedActivityList) 
 	{
 		Session session = null;
 		Query q = null;
@@ -13508,11 +13555,12 @@ public class ReportUtil {
 		String inClause=null;
 		AdvancedHierarchyReport ahReportLevel2=null;
 		Long All=new Long(0);
+		List projTitles = new ArrayList();
 		
 		try 
 		{
 
-			ahReports=getLevel1AdvancedReport(teamClause,ampColumnId1,ampStatusId,ampDonorId,ampModalityId,ampSectorId,region,component);
+			ahReports=getLevel1AdvancedReport(teamClause,ampColumnId1,ampStatusId,ampDonorId,ampModalityId,ampSectorId,region,component, approvedActivityList);
 			iterLevel=ahReports.iterator();
 			while(iterLevel.hasNext())
 			{
@@ -13666,6 +13714,7 @@ public class ReportUtil {
 					
 					iter=qry.list().iterator();
 					AdvancedHierarchyReport ahReport=null;
+
 					while(iter.hasNext())
 					{
 						AmpReportSector sector=(AmpReportSector) iter.next();
@@ -13683,8 +13732,11 @@ public class ReportUtil {
 								if(ahReport.getActivities()!=null && ahReport.getActivities().size()>0)
 									ahReportLevel2.getLevels().add(ahReport);
 							}
-							
-							
+							ahReport= new AdvancedHierarchyReport();
+							ahReport.setId(sector.getAmpSectorId());
+							ahReport.setName(sector.getSectorName());
+							ahReport.setLabel("Sector ");
+							ahReport.setActivities(new ArrayList());							
 						}
 						if(activityIds.indexOf(sector.getAmpActivityId())!=-1)
 							ahReport.getActivities().add(sector.getAmpActivityId());
@@ -13803,6 +13855,41 @@ public class ReportUtil {
 						
 					}
 				}
+				
+//				start code block for Project title column
+				if(ampColumnId2.equals(Constants.ACTIVITY_NAME))
+				{
+					AdvancedHierarchyReport ahReport = null;
+					session = PersistenceManager.getSession();
+					String queryString = "select activity from "
+						+ AmpActivity.class.getName()
+						+ " activity where activity.approvalStatus='approved' and activity.team.ampTeamId in (" + teamClause + ") " ;
+
+					
+					Query qry = session.createQuery(queryString);
+					projTitles = qry.list();
+					logger.debug("Query: " + queryString);
+					if(projTitles.size()>0)
+					{
+						iterActivity = projTitles.iterator();
+						while(iterActivity.hasNext())
+						{
+							AmpActivity ampActivity=(AmpActivity) iterActivity.next();
+							ahReport= new AdvancedHierarchyReport();
+							ahReport.setActivities(new ArrayList());
+							ahReport.setId(ampActivity.getAmpActivityId());
+							ahReport.setName(ampActivity.getName());
+							ahReport.setLabel("Project Title ");
+							ahReport.getActivities().add(ampActivity.getAmpActivityId());
+							ahReportLevel2.getLevels().add(ahReport);
+							// ampReports.add(ahReport);
+						}
+					}	
+					
+				} 
+//	 			end code block for project-title column
+				
+				
 				ampReports.add(ahReportLevel2);
 				inClause=null;
 			}
@@ -14944,7 +15031,7 @@ public class ReportUtil {
 		return ahReport;
 	}
 
-	public static ArrayList getLevel3AdvancedReport(String teamClause,Long ampColumnId1,Long ampColumnId2,Long ampColumnId3,Long ampStatusId,Long ampDonorId,Long ampModalityId,Long ampSectorId,String region,String component) 
+	public static ArrayList getLevel3AdvancedReport(String teamClause,Long ampColumnId1,Long ampColumnId2,Long ampColumnId3,Long ampStatusId,Long ampDonorId,Long ampModalityId,Long ampSectorId,String region,String component, ArrayList approvedActivityList) 
 	{
 		Session session = null;
 		Query q = null;
@@ -14959,11 +15046,12 @@ public class ReportUtil {
 		String inClause=null;
 		AdvancedHierarchyReport ahReport=null;
 		Long All=new Long(0);
+		List projTitles = new ArrayList();
 		
 		try 
 		{
 
-			ahReports=getLevel2AdvancedReport(teamClause,ampColumnId1,ampColumnId2,ampStatusId,ampDonorId,ampModalityId,ampSectorId,region,component);
+			ahReports=getLevel2AdvancedReport(teamClause,ampColumnId1,ampColumnId2,ampStatusId,ampDonorId,ampModalityId,ampSectorId,region,component, approvedActivityList);
 			iterLevel1=ahReports.iterator();
 			while(iterLevel1.hasNext())
 			{
@@ -15267,9 +15355,44 @@ public class ReportUtil {
 						
 						}
 					}
+
+//			start code block for Project title column
+			if(ampColumnId3.equals(Constants.ACTIVITY_NAME))
+			{
+				AdvancedHierarchyReport ahReporta = null;
+				session = PersistenceManager.getSession();
+				String queryString = "select activity from "
+					+ AmpActivity.class.getName()
+					+ " activity where activity.approvalStatus='approved' and activity.team.ampTeamId in (" + teamClause + ") " ;
+
+				
+				Query qry = session.createQuery(queryString);
+				projTitles = qry.list();
+				logger.debug("Query: " + queryString);
+				if(projTitles.size()>0)
+				{
+					iterActivity = projTitles.iterator();
+					while(iterActivity.hasNext())
+					{
+						AmpActivity ampActivity=(AmpActivity) iterActivity.next();
+						ahReporta= new AdvancedHierarchyReport();
+						ahReporta.setActivities(new ArrayList());
+						ahReporta.setId(ampActivity.getAmpActivityId());
+						ahReporta.setName(ampActivity.getName());
+						ahReporta.setLabel("Project Title ");
+						ahReporta.getActivities().add(ampActivity.getAmpActivityId());
+						ahTempLevel2.getLevels().add(ahReporta);
+						//ampReports.add(ahReport);
+					}
+				}	
+				
+			} 
+// 			end code block for project-title column
+
 					ahReport.getLevels().add(ahTempLevel2);
 					inClause=null;
 				}
+
 				ampReports.add(ahReport);
 			} 
 		}

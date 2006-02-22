@@ -35,26 +35,26 @@ public static void createJRXML(String filePath, boolean undis, String labels[],O
 					des=120;
 					if(undis)
 					{
-						pgwidth = (cols*des)+((measureCount-1)*60*3)+measureCount*60 +60;
+						pgwidth = (cols*des)+((measureCount-1)*60*4)+measureCount*60 +60;
 						System.out.println("pgwidthxlstrue" + pgwidth);
 					}
 					else
 					{
-						pgwidth = (cols*des)+((measureCount)*60*3)+measureCount*60 +60;
+						pgwidth = (cols*des)+((measureCount)*60*4)+measureCount*60 +60;
 						System.out.println("pgwidthxlsfalse	" + pgwidth);
 					}
 				}
 				else 
 				{
 					
-					des = 60;
+					des = 120;
 					if(undis)
 					{
-						pgwidth = (cols*des)+((measureCount-1)*60*3)+measureCount*60 +60;
+						pgwidth = (cols*des)+((measureCount-1)*60*4)+measureCount*60 +60;
 					}
 					else
 					{
-							pgwidth = (cols*des)+((measureCount)*60*3)+measureCount*60 +60;
+							pgwidth = (cols*des)+((measureCount)*60*4)+measureCount*60 +60;
 					}
 				}
 			if(hierarchy>0)

@@ -7,11 +7,18 @@
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
 
 
+
 <digi:instance property="aimAdvancedReportForm" />
+
+<%int rowspan=1;%>
+<logic:equal name="aimAdvancedReportForm" property="option" value="Q">
+<%rowspan=2;%>
+</logic:equal>
+					
 
 					<logic:iterate name="aimAdvancedReportForm"  property="titles" id="titles" type="org.digijava.module.aim.helper.Column">
 					<logic:notEqual name="titles" property="columnName" value="Type Of Assistance">
-						<td align="center" height="21" width="42" >
+						<td align="center" height="21" width="42" rowspan="<%=rowspan%>">
 						<div align="center">
 						<strong>
 						<bean:write name="titles" property="columnName" />
@@ -23,7 +30,7 @@
 						
 						<logic:equal name="aimAdvancedReportForm" property="reportType" value="donor">
 						<logic:equal name="typeAssist" value="true">
-						<td height="21" width="89" align="center">
+						<td height="21" width="89" align="center" rowspan="<%=rowspan%>">
 						<strong>Type of Assistance</strong>
 						</td>
 						</logic:equal>

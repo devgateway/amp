@@ -12030,6 +12030,10 @@ public class ReportUtil {
 						ampId=ampReportCache.getAmpId();
 						reports.setAmpActivityId(ampReportCache.getAmpActivityId());
 						
+						if(reports.getAmpActivityId().longValue()==100156) {
+							logger.info("bad project");
+						}
+						
 						if(DbUtil.getAmpComponent(ampReportCache.getAmpActivityId()).size()==0)
 							components.add(" ");
 						else
@@ -12509,7 +12513,15 @@ public class ReportUtil {
 						planSumDisb = planSumDisb + plannedFunds[i][1];
 						planSumExp = planSumExp + plannedFunds[i][2];
 //						sumUnDisb = sumUnDisb + (actualFunds[i][0]-actualFunds[i][1]);
-			
+
+						actSumCommitTerms.addAll(actualTerms[i][0]);
+						actSumDisbTerms.addAll(actualTerms[i][1]);
+						actSumExpTerms.addAll(actualTerms[i][2]);
+						
+						planSumCommitTerms.addAll(plannedTerms[i][0]);
+						planSumDisbTerms.addAll(plannedTerms[i][1]);
+						planSumExpTerms.addAll(plannedTerms[i][2]);
+						
 						report.getAmpFund().add(ampFund);
 					}
 					AmpFund fund = new AmpFund();
@@ -12520,6 +12532,26 @@ public class ReportUtil {
 					fund.setPlDisbAmount(mf.format(planSumDisb));
 					fund.setPlExpAmount(mf.format(planSumExp));
 					fund.setUnDisbAmount(mf.format(totalCommitment-totalDisbursement));
+
+					fund.setByTypeComm(actSumCommitTerms);
+					fund.setByTypeDisb(actSumDisbTerms);
+					fund.setByTypeExp(actSumExpTerms);
+					
+					fund.setByTypePlComm(planSumCommitTerms);
+					fund.setByTypePlDisb(planSumDisbTerms);
+					fund.setByTypePlExp(planSumExpTerms);
+		
+					
+					AmpByAssistTypeList unDisbTerm = new AmpByAssistTypeList();
+					unDisbTerm.addAll(fund.getByTypeComm());
+					unDisbTerm.addAll(fund.getByTypePlComm());
+					
+					unDisbTerm.removeAll(fund.getByTypeDisb());
+					unDisbTerm.removeAll(fund.getByTypePlDisb());
+					fund.setByTypeUnDisb(unDisbTerm);
+				
+					
+					
 					report.getAmpFund().add(fund) ;	
 
 					reports.getRecords().add(report);
@@ -12567,10 +12599,38 @@ public class ReportUtil {
 							planSumExp = planSumExp + plannedExpFunds[i][qtr];
 //							sumUnDisb = sumUnDisb + (actualCommFunds[i][qtr]-actualDisbFunds[i][qtr]);
 
+							actSumCommitTerms.addAll(actualCommTerms[i][qtr]);
+							actSumDisbTerms.addAll(actualDisbTerms[i][qtr]);
+							actSumExpTerms.addAll(actualExpTerms[i][qtr]);
+							
+							planSumCommitTerms.addAll(plannedCommTerms[i][qtr]);
+							planSumDisbTerms.addAll(plannedDisbTerms[i][qtr]);
+							planSumExpTerms.addAll(plannedExpTerms[i][qtr]);
+	
+							
 							report.getAmpFund().add(ampFund);
 						}	
 					}
 					AmpFund fund = new AmpFund();
+					
+					fund.setByTypeComm(actSumCommitTerms);
+					fund.setByTypeDisb(actSumDisbTerms);
+					fund.setByTypeExp(actSumExpTerms);
+					
+					fund.setByTypePlComm(planSumCommitTerms);
+					fund.setByTypePlDisb(planSumDisbTerms);
+					fund.setByTypePlExp(planSumExpTerms);
+		
+					
+					AmpByAssistTypeList unDisbTerm = new AmpByAssistTypeList();
+					unDisbTerm.addAll(fund.getByTypeComm());
+					unDisbTerm.addAll(fund.getByTypePlComm());
+					
+					unDisbTerm.removeAll(fund.getByTypeDisb());
+					unDisbTerm.removeAll(fund.getByTypePlDisb());
+					fund.setByTypeUnDisb(unDisbTerm);
+
+					
 					fund.setCommAmount(mf.format(actSumCommit));
 					fund.setDisbAmount(mf.format(actSumDisb));
 					fund.setExpAmount(mf.format(actSumExp));
@@ -13240,6 +13300,8 @@ public class ReportUtil {
 				}
 			}
 			
+		
+			
 			if(ampColumnId.equals(Constants.DONOR_NAME))
 			{
 				level=DbUtil.getAmpDonors(teamClause);
@@ -13471,7 +13533,7 @@ public class ReportUtil {
 						AdvancedHierarchyReport ahReport= new AdvancedHierarchyReport();
 						ahReport.setId(ampComponent.getAmpComponentId());
 						ahReport.setName(ampComponent.getTitle());
-						ahReport.setLabel("Region ");
+						ahReport.setLabel("Component Name ");
 						iterActivity = qry.list().iterator();
 						ahReport.setActivities(new ArrayList());
 						while(iterActivity.hasNext())
@@ -13485,6 +13547,8 @@ public class ReportUtil {
 					}
 				}
 			}
+			
+			
 			
 //			start code block for Project title column
 			if(ampColumnId.equals(Constants.ACTIVITY_NAME))
@@ -13518,10 +13582,8 @@ public class ReportUtil {
 			} 
 // 			end code block for project-title column
 			
-
-			
-		} 
-		catch(Exception e)
+					
+		} catch(Exception e)
 		{
 			e.printStackTrace(System.out);
 		}

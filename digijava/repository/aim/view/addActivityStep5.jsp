@@ -580,7 +580,7 @@ function removeSelComponents() {
 															<table width="100%" cellPadding=1 cellSpacing=1 vAlign="top" border=0 
 															class="box-border-nopadding">
 															<tr><td width="100%" bgcolor="#dddddd" height="15">
-																<a title="<digi:trn key="aim:PhysicalProgress">Measurable task done on a 
+																<a title="<digi:trn key="aim:physicalProgressTitleDesc">Measurable task done on a 
 																project to achieve component objectives</digi:trn>">
 																	<digi:trn key="aim:physicalProgres">Physical Progress</digi:trn>
 																</a>

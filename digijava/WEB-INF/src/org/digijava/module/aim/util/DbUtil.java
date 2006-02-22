@@ -3427,7 +3427,7 @@ public class DbUtil {
 
 	public static Collection getAllTeamReports(Long teamId) {
 		Session session = null;
-		Collection col = null;
+		Collection col = new ArrayList();
 		try {
 			session = PersistenceManager.getSession();
 			String queryString = "select tr from "

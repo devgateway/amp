@@ -45,7 +45,7 @@ method="post">
 							</bean:define>
 							<digi:link href="/viewPhysicalProgress.do" name="urlPhysicalProgress" styleClass="comment" 
 							title="<%=translation%>" >
-								<digi:trn key="aim:physicalProgress">PhysicalProgress</digi:trn>
+								<digi:trn key="aim:physicalProgress">Physical Progress</digi:trn>
 							</digi:link>
 							&gt; Details &gt; 
 							<bean:write name="aimPhysicalProgressForm" property="perspective"/> 

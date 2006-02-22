@@ -121,21 +121,14 @@ public class EditActivity extends Action {
 
 			boolean canEdit = true;
 			
-
-					
-					
 			if (activityMap != null && activityMap.containsValue(activityId)) {
+			    logger.info("activity is in activityMap " + activityId);
 				// The activity is already opened for editing
-			//logger.info("am in hereeeeeeeeeeeeeeeeeeeeeeeeee");
 				synchronized (ampContext) {
 					HashMap tsaMap = (HashMap) ampContext
 							.getAttribute(Constants.TS_ACT_LIST);
-				//	logger.info("actuial value" + Constants.TS_ACT_LIST);
-					//logger.info("tsaMAp  " + tsaMap);
 					if (tsaMap != null) {
 						Long timeStamp = (Long) tsaMap.get(activityId);
-						
-						//logger.info("current time "+System.currentTimeMillis()+"  timestamp  "+timeStamp.longValue()+"  Constants  "+ Constants.MAX_TIME_LIMIT);
 						if (timeStamp != null) {
 							
 							if ((System.currentTimeMillis() - timeStamp
@@ -181,9 +174,11 @@ public class EditActivity extends Action {
 					} else
 						canEdit = false;
 				}
-
+			} else {
+			    logger.info("activity is not present");
 			}
 
+			logger.info("CanEdit = " + canEdit);
 			if (!canEdit) {
 				ActionErrors errors = new ActionErrors();
 				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
@@ -196,52 +191,56 @@ public class EditActivity extends Action {
 						.getRequestDispatcher(url);
 				rd.forward(request, response);
 			} else {
-				// Edit the activity
-				String sessId = session.getId();
-				ArrayList sessList = (ArrayList) ampContext
-						.getAttribute(Constants.SESSION_LIST);
-				HashMap userActList = (HashMap) ampContext
-						.getAttribute(Constants.USER_ACT_LIST);
+			    logger.info("Path = " + mapping.getPath());
+			    if (!mapping.getPath().trim().endsWith("viewActivityPreview")) {
+					// Edit the activity
+			        logger.info("mapping does not end with viewActivityPreview.do");
+					String sessId = session.getId();
+					synchronized (ampContext) {				
+						ArrayList sessList = (ArrayList) ampContext.getAttribute(Constants.SESSION_LIST);
+						HashMap userActList = (HashMap) ampContext.getAttribute(Constants.USER_ACT_LIST);
 
-				HashMap tsaList = (HashMap) ampContext.getAttribute(Constants.TS_ACT_LIST);
-				
-				
-				if (sessList == null) {
-					sessList = new ArrayList();
-				}
-				if (userActList == null) {
-					userActList = new HashMap();
-				}
-				if (activityMap == null) {
-					activityMap = new HashMap();
-				}
-				if (tsaList == null) {
-					tsaList = new HashMap();
-				}
+						HashMap tsaList = (HashMap) ampContext.getAttribute(Constants.TS_ACT_LIST);
+						
+						
+						if (sessList == null) {
+							sessList = new ArrayList();
+						}
+						if (userActList == null) {
+							userActList = new HashMap();
+						}
+						if (activityMap == null) {
+							activityMap = new HashMap();
+						}
+						if (tsaList == null) {
+							tsaList = new HashMap();
+						}
 
-				sessList.add(sessId);
-				Collections.sort(sessList);
-				synchronized (ampContext) {
-					
-					
-					//logger.info("Putting AM " + sessId + "," + activityId);
-					activityMap.put(sessId, activityId);
-					
-					//logger.info("Putting UL " + tm.getMemberId() + "," + activityId);
-					userActList.put(tm.getMemberId(), activityId);
-					
-					tsaList.put(activityId,new Long(System.currentTimeMillis()));
-					
-					ampContext.setAttribute(Constants.SESSION_LIST, sessList);
-					ampContext.setAttribute(Constants.EDIT_ACT_LIST,
-							activityMap);
-					ampContext.setAttribute(Constants.USER_ACT_LIST,
-							userActList);
-					ampContext.setAttribute(Constants.TS_ACT_LIST,tsaList);
+						sessList.add(sessId);
+						Collections.sort(sessList);
+
+						//logger.info("Putting AM " + sessId + "," + activityId);
+						activityMap.put(sessId, activityId);
+						
+						//logger.info("Putting UL " + tm.getMemberId() + "," + activityId);
+						userActList.put(tm.getMemberId(), activityId);
+						
+						tsaList.put(activityId,new Long(System.currentTimeMillis()));
+						
+						ampContext.setAttribute(Constants.SESSION_LIST, sessList);
+						ampContext.setAttribute(Constants.EDIT_ACT_LIST,
+								activityMap);
+						ampContext.setAttribute(Constants.USER_ACT_LIST,
+								userActList);
+						ampContext.setAttribute(Constants.TS_ACT_LIST,tsaList);			        
+					}
+					eaForm.setEditAct(true);    
+				} else {
+				    logger.info("mapping does not end with viewActivityPreview.do");				    
 				}
 			}
 
-			eaForm.setEditAct(true);
+			
 
 			// Clearing comment properties
 			String action = request.getParameter("action");

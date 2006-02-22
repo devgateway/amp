@@ -1540,7 +1540,10 @@ public class DbUtil {
 						inClause = inClause + ",'" + teamId + "'";
 				}
 			}
-			AmpTeam ampTeam=DbUtil.getAmpTeam(ampTeamId);
+			session = PersistenceManager.getSession();
+			//AmpTeam ampTeam=DbUtil.getAmpTeam(ampTeamId);
+			AmpTeam ampTeam = (AmpTeam) session.load(AmpTeam.class, ampTeamId);
+			
 			Collection temp = new ArrayList();
 			if(ampTeam.getAccessType().equals("Team"))
 			{	
@@ -1578,7 +1581,6 @@ public class DbUtil {
 						+ ",report.ampActivityId";
 			if (sortField.equals(Total))
 				fieldString = "report.ampActivityId";
-			session = PersistenceManager.getSession();
 
 			boolean noActivities = false;
 			if (teamLeadFlag == false && ampTeam.getAccessType().equals("Team")) {
@@ -7559,12 +7561,12 @@ public class DbUtil {
 
 	public static Collection getAllOrgGroupByType(Long id) {
 		Session session = null;
-		Collection col = null;
+		Collection col = new ArrayList();
 
 		try {
 			session = PersistenceManager.getSession();
 			String queryString;
-			Query qry;
+			Query qry = null;
 			String q1 = "select l from " + AmpOrgGroup.class.getName();
 			String q2 = null;
 			if (id != null) {
@@ -7580,7 +7582,7 @@ public class DbUtil {
 			col = qry.list();
 
 		} catch (Exception ex) {
-			logger.error("Unable to get Org Group" + ex);
+			logger.error("Unable to get Org Group : " + ex.getMessage());
 		} finally {
 			try {
 				PersistenceManager.releaseSession(session);

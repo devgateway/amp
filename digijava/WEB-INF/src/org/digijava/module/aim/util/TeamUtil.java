@@ -65,8 +65,8 @@ public class TeamUtil {
 	 * @param teamCategory
 	 * @return The collection of all teams
 	 */
-	public static Collection getUnassignedWorkspaces(String workspaceType,
-			String teamCategory) {
+	public static Collection getUnassignedWorkspaces(String workspaceType, String teamCategory,
+													 String team) {
 
 		Session session = null;
 		Collection col = new ArrayList();
@@ -76,7 +76,7 @@ public class TeamUtil {
 
 			// get all teams whose 'parent id' is set to null
 			String qryStr = "select t from " + AmpTeam.class.getName() + " t"
-					+ " where t.parentTeamId is null";
+							+ " where t.parentTeamId is null and (t.teamCategory=:team) ";
 
 			boolean wTypeFlag = false;
 			boolean tCatFlag = false;
@@ -93,6 +93,7 @@ public class TeamUtil {
 			}
 
 			Query qry = session.createQuery(qryStr);
+			qry.setParameter("team", team, Hibernate.STRING);
 			if (wTypeFlag) {
 				qry.setParameter("wType", workspaceType, Hibernate.STRING);
 			}
@@ -103,8 +104,8 @@ public class TeamUtil {
 			col = qry.list();
 
 		} catch (Exception e) {
-			logger.error("Exception from getUnassignedWorkspcaes");
-			logger.error(e.getMessage());
+			logger.error("Exception from getUnassignedWorkspcaes : " + e.getMessage());
+			e.printStackTrace(System.out);
 		} finally {
 			if (session != null) {
 				try {
@@ -155,6 +156,61 @@ public class TeamUtil {
 		return col;
 	}
 
+	public static Collection getAllRelatedTeams() {
+		Session session = null;
+		Collection col = new ArrayList();
+
+		try {
+			session = PersistenceManager.getSession();
+			String query = "select team from " + AmpTeam.class.getName()
+						   + " team where (team.accessType=:accessType)";		
+			Query qry = session.createQuery(query);
+			qry.setParameter("accessType", "Team");
+			col = qry.list();
+			
+		} catch (Exception e) {
+			logger.error("Execption from getAllRelatedTeams");
+			logger.error(e.getMessage());
+		} finally {
+			if (session != null) {
+				try {
+					PersistenceManager.releaseSession(session);
+				} catch (Exception rsf) {
+					logger.error("Release session failed");
+				}
+			}
+		}
+		return col;
+	}
+	
+	public static Collection getAllRelatedTeamsByType(String type) {
+		Session session = null;
+		Collection col = new ArrayList();
+
+		try {
+			session = PersistenceManager.getSession();
+			String query = "select team from " + AmpTeam.class.getName()
+						   + " team where (team.accessType=:accessType) and (team.type=:type)";		
+			Query qry = session.createQuery(query);
+			qry.setParameter("accessType", "Team");
+			qry.setParameter("type", type);
+			col = qry.list();
+			
+		} catch (Exception e) {
+			logger.error("Execption from getAllRelatedTeamsByType");
+			logger.error(e.getMessage());
+		} finally {
+			if (session != null) {
+				try {
+					PersistenceManager.releaseSession(session);
+				} catch (Exception rsf) {
+					logger.error("Release session failed");
+				}
+			}
+		}
+		return col;
+	}
+	
 	/**
 	 * Creates a new team
 	 * 
@@ -181,8 +237,9 @@ public class TeamUtil {
 			qry.setParameter("name", team.getName(), Hibernate.STRING);
 			Collection col = qry.list();
 			if (col.size() > 0) {
-				throw new AimException("Cannot create team: The team name "
-						+ team.getName() + " already exist");
+				//throw new AimException("Cannot create team: The team name "	+ team.getName() + " already exist");
+				teamExist = true;
+				return teamExist;
 			} else {
 				// save the new team
 				session.save(team);
@@ -221,7 +278,10 @@ public class TeamUtil {
 				ampAppSettings.setCurrency(curr);
 				ampAppSettings.setFiscalCalendar(fiscal);
 				ampAppSettings.setLanguage("English");
-				ampAppSettings.setDefaultPerspective("MOFED");
+				if ("MOFED".equalsIgnoreCase(team.getTeamCategory()))
+					ampAppSettings.setDefaultPerspective("MOFED");
+				else if ("DONOR".equalsIgnoreCase(team.getTeamCategory()))
+					ampAppSettings.setDefaultPerspective("DONOR"); 
 				session.save(ampAppSettings);
 
 				// update all child workspaces parent team
@@ -237,10 +297,11 @@ public class TeamUtil {
 				// commit the changes
 				tx.commit();
 			}
-		} catch (AimException ae) {
-			teamExist = true;
-			logger.error("Execption from createTeam()");
-			logger.error(ae.getMessage());
+		} catch (Exception e) {
+			logger.error("Execption from createTeam() : " + e.getMessage());
+			e.printStackTrace(System.out);
+			/*teamExist = true;
+			logger.error(ae.getMessage()); */
 			if (tx != null) {
 				try {
 					tx.rollback();
@@ -248,7 +309,7 @@ public class TeamUtil {
 					logger.error("Rollback failed");
 				}
 			}
-		} catch (Exception e) {
+		} /*catch (Exception e) {
 			logger.error("Execption from createTeam()");
 			logger.error(e.getMessage());
 			if (tx != null) {
@@ -258,7 +319,7 @@ public class TeamUtil {
 					logger.error("Rollback failed");
 				}
 			}
-		} finally {
+		}*/ finally {
 			if (session != null) {
 				try {
 					PersistenceManager.releaseSession(session);
@@ -267,7 +328,6 @@ public class TeamUtil {
 				}
 			}
 		}
-
 		return teamExist;
 	}
 
@@ -295,8 +355,13 @@ public class TeamUtil {
 				workspace.setDescription(team.getDescription().trim());
 				workspace.setId(team.getAmpTeamId().toString());
 				workspace.setName(team.getName());
-				workspace.setTeamCategory(team.getType());
+				workspace.setTeamCategory(team.getTeamCategory());
+				workspace.setType(team.getType());
 				workspace.setWorkspaceType(team.getAccessType());
+				if (null == team.getRelatedTeamId())
+					workspace.setRelatedTeam(null);
+				else
+					workspace.setRelatedTeam(team.getRelatedTeamId().getAmpTeamId());
 				qryStr = "select count(*) from "
 						+ AmpTeamMember.class.getName() + " t "
 						+ "where (t.ampTeam=:teamId)";
@@ -341,8 +406,8 @@ public class TeamUtil {
 				workspace.setChildWorkspaces(childWorkspaces);
 			}
 		} catch (Exception e) {
-			logger.error("Exception from getWorkspace()");
-			logger.error(e.getMessage());
+			logger.error("Exception from getWorkspace() : " + e.getMessage());
+			e.printStackTrace(System.out);
 		} finally {
 			if (session != null) {
 				try {
@@ -375,15 +440,16 @@ public class TeamUtil {
 
 			// check whether a team with the same name already exist
 			String qryStr = "select t from " + AmpTeam.class.getName() + " t "
-					+ "where (t.name=:name)";
+							+ "where (t.name=:name)";
 			Query qry = session.createQuery(qryStr);
 			qry.setParameter("name", team.getName(), Hibernate.STRING);
 			Iterator tempItr = qry.list().iterator();
 			if (tempItr.hasNext()) {
 				AmpTeam tempTeam = (AmpTeam) tempItr.next();
 				if (!(tempTeam.getAmpTeamId().equals(team.getAmpTeamId()))) {
-					throw new AimException("Cannot create team: The team name "
-							+ team.getName() + " already exist");
+					//throw new AimException("Cannot create team: The team name "	+ team.getName() + " already exist");
+					teamExist =true;
+					return teamExist;
 				}
 			}
 
@@ -398,10 +464,12 @@ public class TeamUtil {
 			if (tempItr.hasNext()) {
 				logger.debug("Before update....");
 				AmpTeam updTeam = (AmpTeam) tempItr.next();
-				updTeam.setAccessType(team.getAccessType());
-				updTeam.setDescription(team.getDescription());
 				updTeam.setName(team.getName());
+				updTeam.setDescription(team.getDescription());
+				updTeam.setTeamCategory(team.getTeamCategory());
+				updTeam.setAccessType(team.getAccessType());
 				updTeam.setType(team.getType());
+				updTeam.setRelatedTeamId(team.getRelatedTeamId());
 				session.saveOrUpdate(updTeam);
 
 				qryStr = "select t from " + AmpTeam.class.getName() + " t "
@@ -434,10 +502,12 @@ public class TeamUtil {
 				tx.commit();
 			}
 
-		} catch (AimException ae) {
-			teamExist = true;
+		} catch (Exception e) {
+			logger.error("Execption from updateTeam() : " + e.getMessage());
+			e.printStackTrace(System.out);
+			/*teamExist = true;
 			logger.error("Execption from updateTeam() :" + ae.getMessage());
-			ae.printStackTrace(System.out);
+			ae.printStackTrace(System.out); */
 			if (tx != null) {
 				try {
 					tx.rollback();
@@ -445,7 +515,7 @@ public class TeamUtil {
 					logger.error("Rollback failed");
 				}
 			}
-		} catch (Exception e) {
+		} /*catch (Exception e) {
 			logger.error("Execption from updateTeam() :" + e.getMessage());
 			e.printStackTrace(System.out);
 			if (tx != null) {
@@ -455,7 +525,7 @@ public class TeamUtil {
 					logger.error("Rollback failed");
 				}
 			}
-		} finally {
+		}*/ finally {
 			if (session != null) {
 				try {
 					PersistenceManager.releaseSession(session);

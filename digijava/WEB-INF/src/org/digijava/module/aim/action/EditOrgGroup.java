@@ -23,18 +23,20 @@ public class EditOrgGroup extends Action {
 
 					 HttpSession session = request.getSession();
 					 if (session.getAttribute("ampAdmin") == null) {
+						return mapping.findForward("index");
+					 } 
+					 else {
+							String str = (String)session.getAttribute("ampAdmin");
+							if (str.equals("no")) {
 								return mapping.findForward("index");
-					 } else {
-								String str = (String)session.getAttribute("ampAdmin");
-								if (str.equals("no")) {
-										  return mapping.findForward("index");
-								}
+							}
 					 }
 					 
 					 logger.debug("In edit organization group");
 
 					 AddOrgGroupForm editForm = (AddOrgGroupForm) form;
 					 String action = request.getParameter("action");
+					 logger.debug("action : " + action);
 					 editForm.setAction(action);
 					 Collection col = DbUtil.getAllLevels();
 					 editForm.setLevel(col);
@@ -70,6 +72,7 @@ public class EditOrgGroup extends Action {
 							
 							DbUtil.add(ampGrp);
 							logger.debug("Group added");
+							
 							if (("create".equals(action)))
 								return mapping.findForward("added");
 							else {

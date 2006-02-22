@@ -47,6 +47,7 @@ public class MyDesktopForm extends ActionForm
 	private String workingTeamFlag;
 	private int myTaskSize;
 	private Collection myTasksColl;
+	private String approvalStatus;
 	
 	/* added by Priyajith 
 	 * for RelatedLinksList */
@@ -490,5 +491,17 @@ public class MyDesktopForm extends ActionForm
 	 */
 	public void setTeamId(Long teamId) {
 		this.teamId = teamId;
+	}
+	/**
+	 * @return Returns the approvalStatus.
+	 */
+	public String getApprovalStatus() {
+		return approvalStatus;
+	}
+	/**
+	 * @param approvalStatus The approvalStatus to set.
+	 */
+	public void setApprovalStatus(String approvalStatus) {
+		this.approvalStatus = approvalStatus;
 	}
 }

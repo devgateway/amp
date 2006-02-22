@@ -5,8 +5,57 @@
 <%@ taglib uri="/taglib/struts-html" prefix="html" %>
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
 
+<script language="JavaScript">
+
+	function optionChanged(flag) {
+		
+		if (flag == 'otype') {
+			var index1  = document.aimUserRegisterForm.selectedOrgType.selectedIndex;
+			var val1    = document.aimUserRegisterForm.selectedOrgType.options[index1].value;
+			var orgType = document.aimUserRegisterForm.orgType.value;
+			if ( val1 != "-1") {
+				if (val1 != orgType) {
+					document.aimUserRegisterForm.orgType.value = val1;
+					document.aimUserRegisterForm.actionFlag.value = "typeSelected";
+					<digi:context name="selectType" property="context/module/moduleinstance/showRegisterUser.do" />
+		   			document.aimUserRegisterForm.action = "<%= selectType %>";
+					document.aimUserRegisterForm.target = "_self";
+					document.aimUserRegisterForm.submit();
+				}
+				return false;
+			}
+			else
+				return false;
+		}
+		if (flag == 'ogroup') {
+			var index2  = document.aimUserRegisterForm.selectedOrgGroup.selectedIndex;
+			var val2    = document.aimUserRegisterForm.selectedOrgGroup.options[index2].value;
+			var orgGrp = document.aimUserRegisterForm.orgGrp.value;
+			if ( val2 != "-1") {
+				if (val2 != orgGrp) {
+					document.aimUserRegisterForm.orgGrp.value = val2;
+					document.aimUserRegisterForm.actionFlag.value = "groupSelected";
+					<digi:context name="selectGrp" property="context/module/moduleinstance/showRegisterUser.do" />
+		   			document.aimUserRegisterForm.action = "<%= selectGrp %>";
+					document.aimUserRegisterForm.target = "_self";
+					document.aimUserRegisterForm.submit();
+				}
+				return false;
+			}
+			else
+				return false;
+		}
+	}
+
+</script>
+
 <html:javascript formName="aimUserRegisterForm"/>
+
 <digi:form action="/registerUser.do" method="post" onsubmit="return validateAimUserRegisterForm(this);">
+
+<html:hidden property="orgType" />
+<html:hidden property="orgGrp" />
+<input type="hidden" name="actionFlag" value="">
 
 <table width="100%" valign="top" align="left" cellpadding=0 cellSpacing=0 border=0>
 <tr><td width="100%" valign="top" align="left">
@@ -134,15 +183,52 @@
 					<td align="left">
 						<html:text property="mailingAddress" size="20" styleClass="inp-text"/>
 					</td>
-				</tr>		
+				</tr>	
 				<tr>
 					<td width="3%">&nbsp;</td>				
 					<td align=right class=f-names noWrap>
+						<FONT color=red>*</FONT>
+						<digi:trn key="um:organizationType">Organization Type</digi:trn>
+					</td>
+					<td align="left">
+						<html:select property="selectedOrgType" styleClass="inp-text" onchange="optionChanged('otype')">
+							<html:option value="-1">-- <digi:trn key="um:selectType">Select a type</digi:trn> --</html:option>
+							<html:optionsCollection name="aimUserRegisterForm" property="orgTypeColl" 
+													value="ampOrgTypeId" label="orgType" />
+						</html:select>
+					</td>
+				</tr>
+				<tr>
+					<td width="3%">&nbsp;</td>				
+					<td align=right class=f-names noWrap>
+						<FONT color=red>*</FONT>
+						<digi:trn key="um:organizationGroup">Organization Group</digi:trn>
+					</td>
+					<td align="left">
+						<html:select property="selectedOrgGroup" styleClass="inp-text" onchange="optionChanged('ogroup')">
+							<html:option value="-1">-- <digi:trn key="um:selectGroup">Select a group</digi:trn> --</html:option>
+							<logic:notEmpty name="aimUserRegisterForm" property="orgGroupColl" >
+								<html:optionsCollection name="aimUserRegisterForm" property="orgGroupColl" 
+									         			value="ampOrgGrpId" label="orgGrpName" />
+							</logic:notEmpty>
+							
+						</html:select>
+					</td>
+				</tr>	
+				<tr>
+					<td width="3%">&nbsp;</td>				
+					<td align=right class=f-names noWrap>
+						<FONT color=red>*</FONT>
 						<digi:trn key="um:organizationName">Organization Name
 						</digi:trn>
 					</td>
 					<td align="left">
-						<html:text property="organizationName" size="20" styleClass="inp-text"/>
+						<html:select property="organizationName" styleClass="inp-text" >
+							<html:option value="-1">-- <digi:trn key="um:selectOrganization">Select an organization</digi:trn> --</html:option>
+							<logic:notEmpty name="aimUserRegisterForm" property="orgColl" >
+								<html:optionsCollection name="aimUserRegisterForm" property="orgColl" value="name" label="name" />
+							</logic:notEmpty>
+						</html:select>
 					</td>
 				</tr>					
 				

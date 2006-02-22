@@ -2,7 +2,7 @@
  *   DbUtil.java
  *   @Author Lasha Dolidze lasha@digijava.org
  * 	 Created:
- * 	 CVS-ID: $Id: DbUtil.java,v 1.1 2005-07-06 10:34:23 rahul Exp $
+ * 	 CVS-ID: $Id: DbUtil.java,v 1.2 2006-02-22 12:09:54 akashs Exp $
  *
  *   This file is part of DiGi project (www.digijava.org).
  *   DiGi is a multi-site portal system written in Java/J2EE.
@@ -18,6 +18,7 @@
 package org.digijava.module.um.util;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 import java.util.StringTokenizer;
@@ -43,6 +44,9 @@ import org.digijava.kernel.util.ProxyHelper;
 import org.digijava.kernel.util.ShaCrypt;
 import org.digijava.kernel.util.UnixCrypt;
 import org.digijava.kernel.util.UserUtils;
+import org.digijava.module.aim.dbentity.AmpOrgGroup;
+import org.digijava.module.aim.dbentity.AmpOrganisation;
+import org.digijava.module.aim.dbentity.AmpOrgType;
 import org.digijava.module.um.dbentity.ResetPassword;
 import org.digijava.module.um.exception.UMException;
 import net.sf.hibernate.Hibernate;
@@ -1205,5 +1209,158 @@ public class DbUtil {
         }
         return groups;
     }
+    
+    /**
+     * @author akashs
+     * retrieves all organisation groups
+     * @return col, collection of retrieved organisation groups
+     */
+    public static Collection getAllOrgGroup() {
+		Session session = null;
+		Collection col = new ArrayList();
+		try {
+			session = PersistenceManager.getSession();
+			String q = "select grp from " + AmpOrgGroup.class.getName() + " grp";
+			col = session.createQuery(q).list();
+		} catch (Exception ex) {
+			logger.error("Unable to get Org Group" + ex);
+		} finally {
+			try {
+				PersistenceManager.releaseSession(session);
+			} catch (Exception ex) {
+				logger.error("releaseSession() failed ");
+			}
+		}
+		return col;
+	}
+    
+    /**
+     * @author akashs
+     * @param Id id of organisation group
+     * retrieves all organisations under organisation group with this id
+     * @return col collection of retrieved organisations
+     */
+	public static Collection getOrgByGroup(Long Id) {
 
+		Session sess = null;
+		Collection col = new ArrayList();
+		Query qry = null;
+
+		try {
+			sess = PersistenceManager.getSession();
+			String queryString = "select o from " + AmpOrganisation.class.getName()
+								 + " o where (o.orgGrpId=:orgGrpId)";
+			qry = sess.createQuery(queryString);
+			qry.setParameter("orgGrpId", Id, Hibernate.LONG);
+			col = qry.list();
+		} catch (Exception e) {
+			logger.debug("Exception from getOrgByGroup()");
+			logger.debug(e.toString());
+		} finally {
+			try {
+				if (sess != null) {
+					PersistenceManager.releaseSession(sess);
+				}
+			} catch (Exception ex) {
+				logger.debug("releaseSession() failed");
+				logger.debug(ex.toString());
+			}
+		}
+		return col;
+	}
+
+	/**
+     * @author akashs
+     * retrieves all organisation types
+     * @return col, collection of retrieved organisation types
+     */
+    public static Collection getAllOrgTypes() {
+		Session session = null;
+		Collection col = new ArrayList();
+		try {
+			session = PersistenceManager.getSession();
+			String q = "select type from " + AmpOrgType.class.getName() + " type";
+			col = session.createQuery(q).list();
+		} catch (Exception ex) {
+			logger.error("Unable to get Org Types" + ex);
+		} finally {
+			try {
+				PersistenceManager.releaseSession(session);
+			} catch (Exception ex) {
+				logger.error("releaseSession() failed ");
+			}
+		}
+		return col;
+	}
+
+    /**
+     * @author akashs
+     * @param Id id of organisation type
+     * retrieves all organisation groups of this type with id as their PK
+     * @return col collection of retrieved organisation groups
+     */
+	public static Collection getOrgGroupByType(Long Id) {
+
+		Session sess = null;
+		Collection col = new ArrayList();
+		Query qry = null;
+
+		try {
+			sess = PersistenceManager.getSession();
+			String queryString = "select o from " + AmpOrgGroup.class.getName()
+								 + " o where (o.orgType=:orgTypeId)";
+			qry = sess.createQuery(queryString);
+			qry.setParameter("orgTypeId", Id, Hibernate.LONG);
+			col = qry.list();
+		} catch (Exception e) {
+			logger.debug("Exception from getOrgGroupByType()");
+			logger.debug(e.toString());
+		} finally {
+			try {
+				if (sess != null) {
+					PersistenceManager.releaseSession(sess);
+				}
+			} catch (Exception ex) {
+				logger.debug("releaseSession() failed");
+				logger.debug(ex.toString());
+			}
+		}
+		return col;
+	}
+
+    /**
+     * @author akashs
+     * @param Id id of organisation type
+     * retrieves all organisations of this type with id as their PK
+     * @return col collection of retrieved organisations
+     */
+	public static Collection getOrgByType(Long Id) {
+
+		Session sess = null;
+		Collection col = new ArrayList();
+		Query qry = null;
+
+		try {
+			sess = PersistenceManager.getSession();
+			String queryString = "select o from " + AmpOrganisation.class.getName()
+								 + " o where (o.orgType=:orgTypeId)";
+			qry = sess.createQuery(queryString);
+			qry.setParameter("orgTypeId", Id, Hibernate.LONG);
+			col = qry.list();
+		} catch (Exception e) {
+			logger.debug("Exception from getOrgByType()");
+			logger.debug(e.toString());
+		} finally {
+			try {
+				if (sess != null) {
+					PersistenceManager.releaseSession(sess);
+				}
+			} catch (Exception ex) {
+				logger.debug("releaseSession() failed");
+				logger.debug(ex.toString());
+			}
+		}
+		return col;
+	}
+   
 }

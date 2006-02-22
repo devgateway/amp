@@ -254,8 +254,7 @@
 				</tr>
 				<tr>
 					<td>
-						<digi:trn key="um:allMarkedRequiredField">All fields marked with an <FONT color=red><B><BIG>*</BIG>
-							</B></FONT> are required.</digi:trn>
+						<digi:trn key="um:allMarkedRequiredField">All fields marked with <font size="2" color="#FF0000">*</font> are required.</digi:trn>
 					</td>
 				</tr>
 				<tr>
@@ -293,7 +292,7 @@
 																<table width="563" border=0	 bgColor=#f4f4f2 height="363">
 																	<tr>
 																		<td width="169" align="right" height="30">
-																			<digi:trn key="aim:organizationName">Organization Name</digi:trn><FONT color=red><B><BIG>*</BIG></B></FONT>
+																			<digi:trn key="aim:organizationName">Organization Name</digi:trn><font size="2" color="#FF0000">*</font>
 																		</td>
 																	    <td width="380" height="30" colspan="2" >
 																	          <html:text name="aimAddOrgForm" property="name" size="54" />
@@ -301,7 +300,7 @@
 																	</tr>
 																	<tr>
 																		<td width="169" align="right" height="30">
-																			<digi:trn key="aim:orgAcronym">Organization Acronym</digi:trn><FONT color=red><B><BIG>*</BIG></B></FONT>
+																			<digi:trn key="aim:orgAcronym">Organization Acronym</digi:trn><font size="2" color="#FF0000">*</font>
 																		</td>
 																	    <td width="380" height="30" colspan="2" >
 																	          <html:text name="aimAddOrgForm" property="acronym" size="54" />
@@ -309,7 +308,7 @@
 																	</tr>
 																	<tr>
 																		<td width="169" align="right" height="30">
-																	        <digi:trn key="aim:organizationType">Organization Type</digi:trn><FONT color=red><B><BIG>*</BIG></B></FONT>
+																	        <digi:trn key="aim:organizationType">Organization Type</digi:trn><font size="2" color="#FF0000">*</font>
 																		</td>
 																		<td width="190" height="30">
 																           <html:select property="ampOrgTypeId" onchange="return orgTypeChanged()">
@@ -384,7 +383,7 @@
 																	</tr>
 																	<tr>
 																		<td width="169" align="right" height="30">
-                                                                   			<digi:trn key="aim:organizationCode">Organization Code</digi:trn><FONT color=red><B><BIG>*</BIG></B></FONT>
+                                                                   			<digi:trn key="aim:organizationCode">Organization Code</digi:trn><font size="2" color="#FF0000">*</font>
 																		</td>
 																	    <td width="380" height="30" colspan="2">
                                                                     		<html:text property="orgCode" size="15" />

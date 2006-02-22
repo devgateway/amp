@@ -475,17 +475,25 @@ public class ViewMyDesktop extends Action
 		 	*/
 		 	actColl = (ArrayList)session.getAttribute("ampProjects");
 		 	logger.debug("actColl.size [from Session attribute] : " + actColl.size());
-		 	// To check if this team is a regular working team not belonging to management workspace 
-		 	boolean workingTeamFlag = DbUtil.checkForParentTeam(ampTeamId);
+		 	// To check if this team is a regular working team not belonging to management workspace
+		 	boolean workingTeamFlag = false;
+		 	AmpTeam team =  DbUtil.getAmpTeam(ampTeamId);
+		 	if ("MOFED".equalsIgnoreCase(team.getTeamCategory()))
+		 		workingTeamFlag = DbUtil.checkForParentTeam(ampTeamId);
 		 	if (workingTeamFlag && teamLeadFlag)
 		 		formBean.setWorkingTeamFlag("yes");
 		 	else
 		 		formBean.setWorkingTeamFlag("no");
 		 	
 		 	// Getting activities in workflow section of Team Leader for Approval
-		 	Collection myTaskColl = DbUtil.getCreatedOrEditedActivities(ampTeamId);
-		 	formBean.setMyTasksColl(myTaskColl);
-		 	formBean.setMyTaskSize(myTaskColl.size());
+		 	if ("yes".equals(formBean.getWorkingTeamFlag())) {
+		 		Collection myTaskColl = DbUtil.getCreatedOrEditedActivities(ampTeamId);
+			 	formBean.setMyTasksColl(myTaskColl);
+			 	formBean.setMyTaskSize(myTaskColl.size());
+		 	}
+		 	
+		 	// Getting approval status
+		 	//formBean.setApprovalStatus(DbUtil.getApprovalStatus());
 		 } 
 		 // end
 		 

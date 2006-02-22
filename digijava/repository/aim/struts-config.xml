@@ -1058,8 +1058,8 @@
 			  <forward name="forward" path="/showLayout.do?layout=editOrgGroup" />
 			  <forward name="index" path="/aim/index.do" redirect="true" />
 			  <forward name="added" path="/aim/orgGroupManager.do" redirect="true" />
-			  <forward name="groupadded" path="/aim/editOrganisation.do?action=create" />
-			  <forward name="groupedited" path="/aim/editOrganisation.do?action=edit" />
+			  <forward name="groupadded" path="/aim/editOrganisation.do?actionFlag=create" />
+			  <forward name="groupedited" path="/aim/editOrganisation.do?actionFlag=edit" />
 			  <forward name="popup" path="/showLayout.do?layout=aim_addOrgGrpPopupLayout" />	  
 	</action>
 	
@@ -1220,6 +1220,7 @@
 			  path="/aim/updateWorkspace">
 			  <forward name="admin" path="/showLayout.do?layout=updateWorkspace" />
  			  <forward name="index" path="/aim/index.do" redirect="true" />
+ 			  <forward name="forward" path="/aim/workspaceManager.do" redirect="true" />
 	</action>
 
 	<action 
@@ -1683,7 +1684,7 @@
 	<action 
 			  name="aimUserRegisterForm"
 			  type="org.digijava.module.aim.action.RegisterUser"
-			  scope="request"
+			  scope="session"
 			  validate="true"
 			  input="/aim/showRegisterUser.do"
 			  path="/aim/registerUser">
@@ -1694,7 +1695,7 @@
 	<action 
 			  name="aimUserRegisterForm"
 			  type="org.digijava.module.aim.action.ShowUserRegister"
-			  scope="request"
+			  scope="session"
 			  validate="false"
 			  path="/aim/showRegisterUser">
 			  <forward name="forward" path="/showLayout.do?layout=userRegistration" />

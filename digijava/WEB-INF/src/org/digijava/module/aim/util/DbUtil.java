@@ -1382,7 +1382,7 @@ public class DbUtil {
 				ans = act.getApprovalStatus();
 			}
 		} catch (Exception ex) {
-			logger.error("Unable to get AmpTeam [getActivityApprovalStatus()]", ex);
+			logger.error("Unable to get AmpActivity [getActivityApprovalStatus()]", ex);
 		} finally {
 			try {
 				if (session != null) {
@@ -1392,7 +1392,7 @@ public class DbUtil {
 				logger.debug("releaseSession() failed");
 			}
 		}
-		logger.debug("Getting checkForParentTeam Executed successfully ");
+		logger.debug("getActivityApprovalStatus Executed successfully ");
 		return ans;
 	}
 
@@ -1597,39 +1597,79 @@ public class DbUtil {
 			} else if (teamLeadFlag == true || "Management".equals(ampTeam.getAccessType())){
 				String inClause2 = null;
 				Iterator actItr = null;
+				Iterator tmItr = null;
 				if ("Management".equals(ampTeam.getAccessType())) {
-					//actItr = DbUtil.getApprovedOrCreatorActivities(new Long(0),ampTeamMemId).iterator();
-					queryString = "select act.ampActivityId from " + AmpActivity.class.getName()
-					  			  + " act where (act.approvalStatus=:status) and (act.team.ampTeamId in(" + inClause + ") )";
-					q = session.createQuery(queryString);
-					q.setParameter("status", "approved", Hibernate.STRING);
-					ls = q.list();
-					actItr = ls.iterator();
-					while (actItr.hasNext()) {
-						Long actId = (Long) actItr.next();
-						if (inClause2 == null)
-							inClause2 = "'" + actId + "'";
-						else
-							inClause2 = inClause2 + ",'" + actId + "'";
+					if ("MOFED".equalsIgnoreCase(ampTeam.getTeamCategory())) {
+						// actItr = DbUtil.getApprovedOrCreatorActivities(new Long(0),ampTeamMemId).iterator();
+						queryString = "select act.ampActivityId from " + AmpActivity.class.getName()
+						  			  + " act where (act.approvalStatus=:status) and (act.team.ampTeamId in(" + inClause + ") )";
+						q = session.createQuery(queryString);
+						q.setParameter("status", "approved", Hibernate.STRING);
+						ls = q.list();
+						if (!ls.isEmpty()) {
+							actItr = ls.iterator();
+							while (actItr.hasNext()) {
+								Long actId = (Long) actItr.next();
+								if (inClause2 == null)
+									inClause2 = "'" + actId + "'";
+								else
+									inClause2 = inClause2 + ",'" + actId + "'";
+							}
+						}
+					}
+					else if ("DONOR".equalsIgnoreCase(ampTeam.getTeamCategory())) {
+						queryString = "select team from " + AmpTeam.class.getName()
+			  			  			  + " team where team.ampTeamId in(" + inClause + ") )";
+						q = session.createQuery(queryString);
+						ls = q.list();
+						if (!ls.isEmpty()) {
+							tmItr = ls.iterator();
+							Collection team = new ArrayList(); 
+							while (tmItr.hasNext()) {
+								AmpTeam tm = (AmpTeam) tmItr.next();
+								team.addAll(tm.getActivityList());
+							}
+							if (team.size() > 0) {
+								actItr = team.iterator();
+								while(actItr.hasNext()) {
+									while (actItr.hasNext()) {
+										AmpActivity actId = (AmpActivity) actItr.next();
+										if (inClause2 == null)
+											inClause2 = "'" + actId.getAmpActivityId() + "'";
+										else
+											inClause2 = inClause2 + ",'" + actId.getAmpActivityId() + "'";
+									}
+								}
+							}
+						}
 					}
 				}
 				else {
-					ls = DbUtil.getApprovedOrCreatorActivities(ampTeamId,ampTeamMemId);
-					actItr = ls.iterator();
-					while(actItr.hasNext()) {
-						//Long actId = (Long) actItr.next();
-						AmpActivity actId = (AmpActivity) actItr.next();
-						if (inClause2 == null)
-							inClause2 = "'" + actId.getAmpActivityId() + "'";
-						else
-							inClause2 = inClause2 + ",'" + actId.getAmpActivityId() + "'";
+					if ("MOFED".equalsIgnoreCase(ampTeam.getTeamCategory())) {
+						ls = DbUtil.getApprovedOrCreatorActivities(ampTeamId,ampTeamMemId);
+						actItr = ls.iterator();
 					}
-					//logger.debug("inClause2 : " + inClause2);
+					else if ("DONOR".equalsIgnoreCase(ampTeam.getTeamCategory())) {
+						if (null != ampTeam.getActivityList() && ampTeam.getActivityList().size() > 0) {
+							actItr = ampTeam.getActivityList().iterator();
+						}
+					}
+					if (null != actItr) {
+						while(actItr.hasNext()) {
+							//Long actId = (Long) actItr.next();
+							AmpActivity actId = (AmpActivity) actItr.next();
+							if (inClause2 == null)
+								inClause2 = "'" + actId.getAmpActivityId() + "'";
+							else
+								inClause2 = inClause2 + ",'" + actId.getAmpActivityId() + "'";
+						}
+						//logger.debug("inClause2 : " + inClause2);
+					}
 				}
 				if (inClause2 != null) {
 					queryString = "select report from " + AmpReportCache.class.getName()
 								  + " report where report.ampActivityId in(" + inClause2
-								  + ") and (report.reportType='1') " + "order by " + fieldString + ",report.ampDonorId";
+								  + ") " + "order by " + fieldString + ",report.ampDonorId";
 					//logger.debug("inClause2 : " + queryString);
 					q = session.createQuery(queryString);
 					iter = q.list().iterator();
@@ -8043,6 +8083,5 @@ public class DbUtil {
 		return donor;
 	}
 
-	
 
 }

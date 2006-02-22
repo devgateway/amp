@@ -2,7 +2,7 @@
  *   UserRegisterForm.java
  *   @Author Lasha Dolidze lasha@digijava.org
  *   Created:
- *   CVS-ID: $Id: UserRegisterForm.java,v 1.1 2005-07-06 10:34:17 rahul Exp $
+ *   CVS-ID: $Id: UserRegisterForm.java,v 1.2 2006-02-22 12:09:21 akashs Exp $
  *
  *   This file is part of DiGi project (www.digijava.org).
  *   DiGi is a multi-site portal system written in Java/J2EE.
@@ -49,6 +49,13 @@ public class UserRegisterForm
     private String organizationName;
     private Collection organizationType;
     private String selectedOrganizationType;
+    private Long selectedOrgType;		// added for Donor access
+    private Long selectedOrgGroup;		// added for Donor access
+    private Collection orgGroupColl;	// added for Donor access
+    private Collection orgTypeColl;		// added for Donor access
+    private Collection orgColl;			// added for Donor access
+    private String orgGrp;				// hidden form field - added for Donor access
+    private String orgType;				// hidden form field - added for Donor access
     private Collection howDidyouhear;
     private String howDidyouSelect;
     private String webSite;
@@ -244,8 +251,95 @@ public class UserRegisterForm
     public void setSelectedOrganizationType(String selectedOrganizationType) {
         this.selectedOrganizationType = selectedOrganizationType;
     }
-
-    public Collection getNavigationLanguages() {
+    
+	/**
+	 * @return Returns the selectedOrgType.
+	 */
+	public Long getSelectedOrgType() {
+		return selectedOrgType;
+	}
+	/**
+	 * @param selectedOrgType The selectedOrgType to set.
+	 */
+	public void setSelectedOrgType(Long selectedOrgType) {
+		this.selectedOrgType = selectedOrgType;
+	}
+	/**
+	 * @return Returns the selectedOrgGroup.
+	 */
+	public Long getSelectedOrgGroup() {
+		return selectedOrgGroup;
+	}
+	/**
+	 * @param selectedOrgGroup The selectedOrgGroup to set.
+	 */
+	public void setSelectedOrgGroup(Long selectedOrgGroup) {
+		this.selectedOrgGroup = selectedOrgGroup;
+	}
+	
+	/**
+	 * @return Returns the orgGroupColl.
+	 */
+	public Collection getOrgGroupColl() {
+		return orgGroupColl;
+	}
+	/**
+	 * @param orgGroupColl The orgGroupColl to set.
+	 */
+	public void setOrgGroupColl(Collection orgGroupColl) {
+		this.orgGroupColl = orgGroupColl;
+	}
+	
+	/**
+	 * @return Returns the orgTypeColl.
+	 */
+	public Collection getOrgTypeColl() {
+		return orgTypeColl;
+	}
+	/**
+	 * @param orgTypeColl The orgTypeColl to set.
+	 */
+	public void setOrgTypeColl(Collection orgTypeColl) {
+		this.orgTypeColl = orgTypeColl;
+	}
+	/**
+	 * @return Returns the orgColl.
+	 */
+	public Collection getOrgColl() {
+		return orgColl;
+	}
+	/**
+	 * @param orgColl The orgColl to set.
+	 */
+	public void setOrgColl(Collection orgColl) {
+		this.orgColl = orgColl;
+	}
+	
+	/**
+	 * @return Returns the orgGrp.
+	 */
+	public String getOrgGrp() {
+		return orgGrp;
+	}
+	/**
+	 * @param orgGrp The orgGrp to set.
+	 */
+	public void setOrgGrp(String orgGrp) {
+		this.orgGrp = orgGrp;
+	}
+	/**
+	 * @return Returns the orgType.
+	 */
+	public String getOrgType() {
+		return orgType;
+	}
+	/**
+	 * @param orgType The orgType to set.
+	 */
+	public void setOrgType(String orgType) {
+		this.orgType = orgType;
+	}
+	public Collection getNavigationLanguages() {
         return navigationLanguages;
     }
 
@@ -389,7 +483,17 @@ public class UserRegisterForm
                 errors.add(null, error);
             }
         }
+        
+        if (null == this.getOrgGrp() || this.getOrgGrp().trim().length() < 1) {
+        	ActionError error = new ActionError("error.registration.NoOrgGroup");
+        	errors.add(null, error);
+        }
 
+        if (null == this.getOrganizationName() || this.getOrganizationName().trim().length() < 1) {
+        	ActionError error = new ActionError("error.registration.NoOrganization");
+        	errors.add(null, error);
+        }
+        
         return errors.isEmpty() ? null : errors;
     }
 

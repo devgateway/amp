@@ -32,64 +32,84 @@ public class ShowUserRegister extends Action {
 
 		try {
 			UserRegisterForm registerForm = (UserRegisterForm) form;
+			String actionFlag = request.getParameter("actionFlag");
+			logger.debug("actionFlag: " + actionFlag);
+			
+			if ("".equals(actionFlag) || actionFlag == null) {
+				if (registerForm.getCountryResidence() == null) {
+					// set country resident data
+					List countries = DbUtil.getCountries();
+					HashMap countriesMap = new HashMap();
+					Iterator iterator = TrnUtil.getCountries(
+							RequestUtils.getNavigationLanguage(request).getCode())
+							.iterator();
+					while (iterator.hasNext()) {
+						TrnCountry item = (TrnCountry) iterator.next();
+						countriesMap.put(item.getIso(), item);
+					}
+					// sort countries
+					List sortedCountries = new ArrayList();
+					iterator = countries.iterator();
+					while (iterator.hasNext()) {
+						Country item = (Country) iterator.next();
+						sortedCountries.add(countriesMap.get(item.getIso()));
+					}
+					Collections.sort(sortedCountries, TrnUtil.countryNameComparator);
 
-			// set country resident data
-			List countries = DbUtil.getCountries();
-			HashMap countriesMap = new HashMap();
-			Iterator iterator = TrnUtil.getCountries(
-					RequestUtils.getNavigationLanguage(request).getCode())
-					.iterator();
-			while (iterator.hasNext()) {
-				TrnCountry item = (TrnCountry) iterator.next();
-				countriesMap.put(item.getIso(), item);
+					if (sortedCountries != null) {
+						//            sortedCountries.add(0, new Country( new Long( 0
+						// ),null,"Select a country",null,null,null,null ) );
+						sortedCountries
+								.add(0, new TrnCountry("-1", "-- Select a country --"));
+					}
+					registerForm.setCountryResidence(sortedCountries);
+					logger.debug("sortedCountries.size : " + sortedCountries.size());
+
+					// set default web site
+					registerForm.setWebSite("http://");
+
+					// set Navigation languages
+					Set languages = SiteUtils.getUserLanguages(RequestUtils
+							.getSite(request));
+
+					HashMap translations = new HashMap();
+					iterator = TrnUtil.getLanguages(
+							RequestUtils.getNavigationLanguage(request).getCode())
+							.iterator();
+					while (iterator.hasNext()) {
+						TrnLocale item = (TrnLocale) iterator.next();
+						translations.put(item.getCode(), item);
+					}
+					//sort languages
+					List sortedLanguages = new ArrayList();
+					iterator = languages.iterator();
+					while (iterator.hasNext()) {
+						Locale item = (Locale) iterator.next();
+						sortedLanguages.add(translations.get(item.getCode()));
+					}
+					Collections.sort(sortedLanguages, TrnUtil.localeNameComparator);
+
+					registerForm.setNavigationLanguages(sortedLanguages);
+					
+					// set organisation types
+					registerForm.setOrgTypeColl(DbUtil.getAllOrgTypes());
+				}
 			}
-			//sort countries
-			List sortedCountries = new ArrayList();
-			iterator = countries.iterator();
-			while (iterator.hasNext()) {
-				Country item = (Country) iterator.next();
-				sortedCountries.add(countriesMap.get(item.getIso()));
+			else if ("typeSelected".equals(actionFlag)) {
+				//	load organisation groups related to selected organisation-type
+				registerForm.setOrgGroupColl(DbUtil.getOrgGroupByType(registerForm.getSelectedOrgType()));
+				if (null != registerForm.getOrgColl() && registerForm.getOrgColl().size() != 0)
+					registerForm.getOrgColl().clear();				
 			}
-			Collections.sort(sortedCountries, TrnUtil.countryNameComparator);
-
-			if (sortedCountries != null) {
-				//            sortedCountries.add(0, new Country( new Long( 0
-				// ),null,"Select a country",null,null,null,null ) );
-				sortedCountries
-						.add(0, new TrnCountry("-1", "Select a country"));
-			}
-			registerForm.setCountryResidence(sortedCountries);
-
-			// set default web site
-			registerForm.setWebSite("http://");
-
-			// set Navigation languages
-			Set languages = SiteUtils.getUserLanguages(RequestUtils
-					.getSite(request));
-
-			HashMap translations = new HashMap();
-			iterator = TrnUtil.getLanguages(
-					RequestUtils.getNavigationLanguage(request).getCode())
-					.iterator();
-			while (iterator.hasNext()) {
-				TrnLocale item = (TrnLocale) iterator.next();
-				translations.put(item.getCode(), item);
-			}
-			//sort languages
-			List sortedLanguages = new ArrayList();
-			iterator = languages.iterator();
-			while (iterator.hasNext()) {
-				Locale item = (Locale) iterator.next();
-				sortedLanguages.add(translations.get(item.getCode()));
-			}
-			Collections.sort(sortedLanguages, TrnUtil.localeNameComparator);
-
-			registerForm.setNavigationLanguages(sortedLanguages);
+			else if ("groupSelected".equals(actionFlag))
+				//	load organisations related to selected organisation-group
+				registerForm.setOrgColl(DbUtil.getOrgByGroup(registerForm.getSelectedOrgGroup()));
+			
 		} catch (Exception e) {
 			logger.error("Exception from ShowUserRegister :" + e);
 			return mapping.findForward(null);
 		}
-
+		
 		return mapping.findForward("forward");
 	}
 }

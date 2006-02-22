@@ -25,11 +25,12 @@ public class EditOrganisation extends Action {
 		  			 HttpSession session = request.getSession();
 					 if (session.getAttribute("ampAdmin") == null) {
 						return mapping.findForward("index");
-					 } else {
-								String str = (String)session.getAttribute("ampAdmin");
-								if (str.equals("no")) {
-										  return mapping.findForward("index");
-								}
+					 } 
+					 else {
+							String str = (String)session.getAttribute("ampAdmin");
+							if (str.equals("no")) {
+								return mapping.findForward("index");
+							}
 					 }
 					 
 					 logger.debug("In edit organisation action");

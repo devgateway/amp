@@ -79,11 +79,6 @@
 						:: <digi:trn key="aim:configureTeamPages">Configure Team Pages</digi:trn>
 					</digi:link>
 				</td>
-				<td noWrap>
-					<digi:link href="/donorActivityList.do" styleClass="sub-nav">
-						:: <digi:trn key="aim:donorActivityList">Donor Activity List</digi:trn>
-					</digi:link>
-				</td>				
 				<td class="sub-nav" width="192">
 					&nbsp;
 				</td>

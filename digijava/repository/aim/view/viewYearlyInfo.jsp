@@ -152,12 +152,9 @@
 							<logic:equal name="aimYearlyInfoForm" property="transactionType" value="2">
                      	<digi:trn key="aim:yearlyExpenditures">Yearly Expenditures</digi:trn>
 							</logic:equal>
-							<logic:equal name="aimYearlyInfoForm" property="perspective" value="MA">
-								&gt; MOFED Perspective
-							</logic:equal>
-							<logic:equal name="aimYearlyInfoForm" property="perspective" value="DN">
-								&gt; Donor Perspective
-							</logic:equal>
+							&gt;
+							<bean:write name="aimYearlyInfoForm" property="perpsectiveName" />
+
 						</SPAN>
 								</TD>
 								<TD align="right">
@@ -203,9 +200,9 @@
 						                         	<STRONG>Perspective:</STRONG>
 														</TD>
 														<TD>
-															<html:select property="perspective" styleClass="dr-menu" onchange="formSubmit()">
-																<html:option value="MA">MOFED View</html:option>
-																<html:option value="DN">Donor View</html:option>
+															<html:select property="perspective" styleClass="dr-menu">
+																<html:optionsCollection name="aimYearlyInfoForm" 
+																property="perspectives" value="code" label="name"/>
 															</html:select>
 														</TD>								
 													</TR>

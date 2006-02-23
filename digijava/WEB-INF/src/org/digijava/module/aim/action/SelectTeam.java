@@ -81,6 +81,7 @@ public class SelectTeam extends Action {
 			tm.setRoleName(member.getAmpMemberRole().getRole());
 			tm.setTeamId(member.getAmpTeam().getAmpTeamId());
 			tm.setTeamName(member.getAmpTeam().getName());
+			tm.setTeamType(member.getAmpTeam().getTeamCategory());
 			tm.setRead(member.getReadPermission().booleanValue());
 			tm.setWrite(member.getWritePermission().booleanValue());
 			tm.setDelete(member.getDeletePermission().booleanValue());

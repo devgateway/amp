@@ -30,7 +30,7 @@ public class UpdateDB {
 	
 	public static int updateReportCache(Long ampActivityId) throws Exception {
 
-		logger.debug("In Update Report Cache");
+		logger.info("In Update Report Cache");
 
 		Connection con = null;
 		Session session = null;

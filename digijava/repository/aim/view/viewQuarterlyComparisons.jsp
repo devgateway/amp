@@ -111,13 +111,9 @@ type="org.digijava.module.aim.form.QuarterlyComparisonsForm" method="post">
 								<digi:link href="/viewFinancingBreakdown.do" name="urlFinancingBreakdown" styleClass="comment" title="<%=translation%>" >
 									<digi:trn key="aim:financialProgress">Financial Progress</digi:trn>
 								</digi:link> &gt; 
-								<digi:trn key="quarterlyAll">Quarterly All</digi:trn> &gt;
-								<logic:equal name="aimQuarterlyComparisonsForm" property="perspective" value="MA">
-									 MOFED Perspective
-								</logic:equal>
-								<logic:equal name="aimQuarterlyComparisonsForm" property="perspective" value="DN">
-									Donor Perspective
-								</logic:equal>
+								<digi:trn key="quarterlyAll">Quarterly All</digi:trn> 							
+								&gt;
+								<bean:write name="aimQuarterlyComparisonsForm" property="perpsectiveName" />							
 						</SPAN>
 								</TD>
 								<TD align="right">
@@ -154,9 +150,9 @@ type="org.digijava.module.aim.form.QuarterlyComparisonsForm" method="post">
 						                         	<STRONG>Perspective:</STRONG>
 														</TD>
 														<TD>
-				                             		<html:select property="perspective" styleClass="dr-menu" onchange="formSubmit()">
-																<html:option value="MA">MOFED View</html:option>
-																<html:option value="DN">Donor View</html:option>
+															<html:select property="perspective" styleClass="dr-menu">
+																<html:optionsCollection name="aimQuarterlyComparisonsForm" 
+																property="perspectives" value="code" label="name"/>
 															</html:select>
 														</TD>								
 													</TR>

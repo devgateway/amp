@@ -106,6 +106,9 @@ public class Constants
 	public static final String ANNUAL = "A" ;
 	public static final String QUARTERLY = "Q" ;
 	
+	public static final String APPROVED_STATUS = "approved";
+	
+	
 	
 	//humbly added by Mihai
 	public static final Long DONOR_FUNDING = new Long(1);

@@ -18,7 +18,8 @@
 
 <logic:equal name="aimFinancingBreakdownForm" property="sessionExpired" value="false">
 
-<digi:form action="/viewFinancingBreakdownFilter.do" name="aimFinancingBreakdownForm" type="org.digijava.module.aim.form.FinancingBreakdownForm" method="post">
+<digi:form action="/viewFinancingBreakdownFilter.do" name="aimFinancingBreakdownForm" 
+type="org.digijava.module.aim.form.FinancingBreakdownForm" method="post">
 
 <html:hidden property="ampActivityId" />
 <html:hidden property="ampFundingId" />
@@ -33,7 +34,7 @@
 					<TD bgcolor="#f4f4f4">
 						<TABLE width="760" cellSpacing=3 cellPadding=3 vAlign="top" align="center" bgcolor="#f4f4f4">
 							<TR bgColor=#f4f4f2>
-      	      	<TD align=left>
+      	      			<TD align=left>
 									<TABLE width="100%" cellPadding="3" cellSpacing="2" align="left" vAlign="top">
 										<TR>
 											<TD align="left">
@@ -51,7 +52,7 @@
 													<digi:trn key="aim:financialProgress">Financial Progress</digi:trn>
 													</digi:link>&nbsp;&gt;&nbsp;
 													<digi:trn key="aim:actOverview">Overview</digi:trn>&nbsp;&gt;&nbsp;
-													<bean:write name="aimFinancingBreakdownForm" property="perspective"/>
+													<bean:write name="aimFinancingBreakdownForm" property="perpsectiveName"/>
 												</SPAN>
 											</TD>
 											<TD align="right">
@@ -67,31 +68,31 @@
 									<TD vAlign="top" align="left" width="750">
 										<TABLE cellPadding=2 cellSpacing=0 vAlign="top" align="left" border=0>
 											<TR>
-                     		<logic:equal name="aimFinancingBreakdownForm" property="perspectivePresent" value="true">
-													<TD align="center">
-														<STRONG>	
-															<digi:trn key="aim:perspective">Perspective</digi:trn>
-														</STRONG>
-													</TD>
+												<logic:equal name="aimFinancingBreakdownForm" property="perspectivePresent" value="true">
+												<TD align="center">
+													<STRONG>	
+														<digi:trn key="aim:perspective">Perspective</digi:trn>
+													</STRONG>
+												</TD>
 												</logic:equal>
 												<logic:equal name="aimFinancingBreakdownForm" property="currencyPresent" value="true">
-													<TD align="center">
-														<STRONG>
-															<digi:trn key="aim:currency">Currency</digi:trn>
-														</STRONG>
-													</TD>
+												<TD align="center">
+													<STRONG>
+														<digi:trn key="aim:currency">Currency</digi:trn>
+													</STRONG>
+												</TD>
 												</logic:equal>
 												<logic:equal name="aimFinancingBreakdownForm" property="calendarPresent" value="true">
-													<TD align="center">
-														<STRONG>
-															<digi:trn key="aim:calendarType">Calendar Type</digi:trn>
-														</STRONG>					
-													</TD>
+												<TD align="center">
+													<STRONG>
+														<digi:trn key="aim:calendarType">Calendar Type</digi:trn>
+													</STRONG>					
+												</TD>
 												</logic:equal>
-			               		<logic:equal name="aimFinancingBreakdownForm" property="yearRangePresent" value="true">
+			               				<logic:equal name="aimFinancingBreakdownForm" property="yearRangePresent" value="true">
 													<TD align="center">
 														<STRONG>
-             									<digi:trn key="aim:year">Year</digi:trn>
+             											<digi:trn key="aim:year">Year</digi:trn>
 														</STRONG>								
 													</TD>
 												</logic:equal>
@@ -100,47 +101,47 @@
 												</TD>
 											</TR>
 											<TR>
-                     		<logic:equal name="aimFinancingBreakdownForm" property="perspectivePresent" value="true">
-													<TD>
-														<html:select property="perspective" styleClass="dr-menu" onchange="formSubmit()">
-															<html:option value="DN">Donor View</html:option>
-															<html:option value="MA">MOFED View</html:option>					
-														</html:select>
-													</TD>
-												</logic:equal>
-			               		<logic:equal name="aimFinancingBreakdownForm" property="currencyPresent" value="true">
-													<TD>
-                         		<html:select property="currency" styleClass="dr-menu">
-                       				<html:optionsCollection name="aimFinancingBreakdownForm" property="currencies" value="currencyCode" 
-															label="currencyName"/>
-														</html:select>
-													</TD>
-												</logic:equal>
+		                     		<logic:equal name="aimFinancingBreakdownForm" property="perspectivePresent" value="true">
 												<TD>
-													<logic:equal name="aimFinancingBreakdownForm" property="calendarPresent" value="true">
-														<html:select property="fiscalCalId" styleClass="dr-menu">
-															<html:optionsCollection name="aimFinancingBreakdownForm" 
-															property="fiscalYears" value="ampFiscalCalId" label="name"/> 
-														</html:select>
-													</logic:equal>
+													<html:select property="perspective" styleClass="dr-menu">
+														<html:optionsCollection name="aimFinancingBreakdownForm" 
+														property="perspectives" value="code" label="name"/>
+													</html:select>
 												</TD>
-			              	 	<logic:equal name="aimFinancingBreakdownForm" property="yearRangePresent" value="true">
-													<TD>
-                    				<STRONG>From</STRONG>&nbsp;
-							      				<html:select property="fromYear" styleClass="dr-menu">
-							      					<html:optionsCollection name="aimFinancingBreakdownForm" 
+											</logic:equal>
+			               			<logic:equal name="aimFinancingBreakdownForm" property="currencyPresent" value="true">
+												<TD>
+                         					<html:select property="currency" styleClass="dr-menu">
+                       							<html:optionsCollection name="aimFinancingBreakdownForm" property="currencies" value="currencyCode" 
+														label="currencyName"/>
+													</html:select>
+												</TD>
+											</logic:equal>
+											<logic:equal name="aimFinancingBreakdownForm" property="calendarPresent" value="true">
+												<TD>
+													<html:select property="fiscalCalId" styleClass="dr-menu">
+														<html:optionsCollection name="aimFinancingBreakdownForm" 
+														property="fiscalYears" value="ampFiscalCalId" label="name"/> 
+													</html:select>
+												</TD>
+											</logic:equal>
+			              	 			<logic:equal name="aimFinancingBreakdownForm" property="yearRangePresent" value="true">
+												<TD>
+   	                 						<STRONG>From</STRONG>&nbsp;
+								      				<html:select property="fromYear" styleClass="dr-menu">
+								      					<html:optionsCollection name="aimFinancingBreakdownForm" 
 															property="years" value="year" label="year"/>
 														</html:select>&nbsp;&nbsp;
-							      				<STRONG>To</STRONG>&nbsp;
+								      			<STRONG>To</STRONG>&nbsp;
 														<html:select property="toYear" styleClass="dr-menu">
 															<html:optionsCollection name="aimFinancingBreakdownForm" 
 															property="years" value="year" label="year"/>
 														</html:select>
-													</TD>
-												</logic:equal>
-												<TD width="5">
-													<html:submit value="GO" styleClass="dr-menu"/>
 												</TD>
+											</logic:equal>
+											<TD width="5">
+												<html:submit value="GO" styleClass="dr-menu"/>
+											</TD>
 											</TR>							
 										</TABLE>
 									</TD>

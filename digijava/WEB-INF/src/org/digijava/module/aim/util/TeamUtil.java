@@ -4,13 +4,11 @@
 
 package org.digijava.module.aim.util;
 
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.Set;
 import java.util.Vector;
 
 import net.sf.hibernate.Hibernate;
@@ -19,16 +17,17 @@ import net.sf.hibernate.Session;
 import net.sf.hibernate.Transaction;
 
 import org.apache.log4j.Logger;
+import org.apache.tools.ant.taskdefs.Get;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.request.Site;
 import org.digijava.kernel.user.Group;
 import org.digijava.kernel.user.User;
-import org.digijava.module.admin.util.DbUtil;
 import org.digijava.module.aim.dbentity.AmpActivity;
 import org.digijava.module.aim.dbentity.AmpApplicationSettings;
 import org.digijava.module.aim.dbentity.AmpCurrency;
 import org.digijava.module.aim.dbentity.AmpFilters;
 import org.digijava.module.aim.dbentity.AmpFiscalCalendar;
+import org.digijava.module.aim.dbentity.AmpMeasure;
 import org.digijava.module.aim.dbentity.AmpOrgRole;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpPages;
@@ -42,6 +41,7 @@ import org.digijava.module.aim.exception.AimException;
 import org.digijava.module.aim.helper.Activity;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.Documents;
+import org.digijava.module.aim.helper.DonorTeam;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.helper.UpdateDB;
 import org.digijava.module.aim.helper.Workspace;
@@ -855,9 +855,55 @@ public class TeamUtil {
 		}		
 	}
 	
+	public static Collection getUnassignedDonorMemberActivities(Long teamId,Long memberId) {
+		Collection col = new ArrayList();
+		Collection col1 = new ArrayList();
+		Session session = null;
+		try {
+			session = PersistenceManager.getSession();
+			AmpTeam team = (AmpTeam) session.load(AmpTeam.class,teamId);
+			AmpTeamMember member = (AmpTeamMember) session.load(AmpTeamMember.class,memberId);
+			
+			col1.addAll(team.getActivityList());
+			col1.removeAll(member.getActivities());
+			
+			Iterator itr1 = col1.iterator();
+			while (itr1.hasNext()) {
+				AmpActivity act = (AmpActivity) itr1.next();
+				Iterator orgItr = act.getOrgrole().iterator();
+				Activity activity = new Activity();
+				activity.setActivityId(act.getAmpActivityId());
+				activity.setName(act.getName());
+				activity.setAmpId(act.getAmpId());
+				String donors = "";
+
+				while (orgItr.hasNext()) {
+					AmpOrgRole orgRole = (AmpOrgRole) orgItr.next();
+					if (orgRole.getRole().getRoleCode().equals(Constants.DONOR)) {
+						if (donors.trim().length() > 0)
+							donors += ", ";
+						donors += orgRole.getOrganisation().getName();
+					}
+				}
+				activity.setDonors(donors);
+				col.add(activity);								
+			}
+			
+		} catch (Exception e) {
+			if (session != null) {
+				try {
+					PersistenceManager.releaseSession(session);
+				} catch (Exception rsf) {
+					logger.error("Release seesion failed " + rsf.getMessage());
+				}
+			}
+		}
+		return col;
+	}
+	
 	public static Collection getUnassignedMemberActivities(Long teamId,Long memberId) {
 		Collection col = null;
-		Collection col1 = null;
+		Collection col1 = new ArrayList();
 		Session session = null;
 		Query qry = null;
 		AmpTeamMember member = null;
@@ -1158,6 +1204,57 @@ public class TeamUtil {
 			}
 		}
 	}		
+	
+	public static void removeActivitiesFromDonorTeam(Long activities[],Long teamId) {
+		Session session = null;
+		Transaction tx = null;
+		AmpTeamMember member = null;
+
+		try {
+			session = PersistenceManager.getSession();
+			tx = session.beginTransaction();
+			
+			AmpTeam team = (AmpTeam) session.load(AmpTeam.class,teamId);
+			
+			for (int i = 0;i < activities.length;i ++) {
+			    AmpActivity activity = (AmpActivity) session.load(AmpActivity.class,
+			            activities[i]);
+			    
+			    team.getActivityList().remove(activity);
+			    Iterator membersItr = activity.getMember().iterator();
+			    while (membersItr.hasNext()) {
+			        member = (AmpTeamMember) membersItr.next();
+			        if (member.getAmpTeam().getAmpTeamId().equals(teamId)) {
+				        member.getActivities().remove(activity);
+				        session.update(member);
+			        }
+			    }
+			    session.update(team);
+			    session.flush();
+			}
+			
+			tx.commit();
+		} catch (Exception e) {
+			logger.error("Unable to remove activities" + e.getMessage());
+			e.printStackTrace(System.out);
+			if (tx != null) {
+				try {
+					tx.rollback();
+				} catch (Exception rbf) {
+					logger.error("Roll back failed");
+				}
+			}
+		} finally {
+			try {
+				if (session != null) {
+					PersistenceManager.releaseSession(session);
+				}
+			} catch (Exception ex) {
+				logger.error("releaseSession() failed");
+			}
+		}	    
+	}	
+	
 	
 	public static void removeActivitiesFromTeam(Long activities[]) {
 		Session session = null;
@@ -1501,4 +1598,277 @@ public class TeamUtil {
 		}				
 		return false;
 	}
+	
+	public static Collection getDonorTeams(Long teamId) {
+		// Check whether the team whose donor teams need to be found is a  
+		// MOFED team
+		
+		Collection col = new ArrayList();
+		Session session = null;
+
+		try {
+			session = PersistenceManager.getSession();
+			
+			AmpTeam team = (AmpTeam) session.load(AmpTeam.class,teamId);
+			if (team.getTeamCategory().equalsIgnoreCase("MOFED")) {
+				String qryStr = "select t from " + AmpTeam.class.getName() + " t " +
+						"where (t.relatedTeamId=:tId)";
+				Query qry = session.createQuery(qryStr);
+				qry.setParameter("tId",teamId,Hibernate.LONG);
+				Iterator itr = qry.list().iterator();
+				while (itr.hasNext()) {
+					AmpTeam ampTeam = (AmpTeam) itr.next();
+					DonorTeam dt = new DonorTeam();
+					dt.setTeamId(ampTeam.getAmpTeamId());
+					if (ampTeam.getTeamLead() != null) {
+						dt.setTeamMeberId(ampTeam.getTeamLead().getAmpTeamMemId());
+						dt.setTeamMemberName(ampTeam.getTeamLead().getUser().getEmail());	
+					}
+					dt.setTeamName(ampTeam.getName());
+					col.add(dt);
+				}
+			}
+			
+		} catch (Exception e) {
+			logger.error("Unable to getDonorTeams" + e.getMessage());
+			e.printStackTrace(System.out);
+		} finally {
+			try {
+				if (session != null) {
+					PersistenceManager.releaseSession(session);
+				}
+			} catch (Exception ex) {
+				logger.error("releaseSession() failed");
+			}
+		}						
+		return col;
+	}
+	
+	public static Collection getDonorTeamActivities(Long teamId) {
+		
+		Collection col = new ArrayList();
+		Session session = null;
+
+		try {
+			session = PersistenceManager.getSession();
+			
+			AmpTeam team = (AmpTeam) session.load(AmpTeam.class,teamId);
+			Iterator itr = team.getActivityList().iterator();
+			while (itr.hasNext()) {
+				AmpActivity activity = (AmpActivity) itr.next();
+				Collection temp1 = activity.getOrgrole();
+				Collection temp2 = new ArrayList();
+				Iterator temp1Itr = temp1.iterator();
+				while (temp1Itr.hasNext()) {
+					AmpOrgRole orgRole = (AmpOrgRole) temp1Itr.next();
+					if (!temp2.contains(orgRole))
+						temp2.add(orgRole);
+				}
+				
+				Iterator orgItr = temp2.iterator();
+
+				Activity act = new Activity();
+				act.setActivityId(activity.getAmpActivityId());
+				act.setName(activity.getName());
+				act.setAmpId(activity.getAmpId());
+				
+				String donors = "";
+
+				while (orgItr.hasNext()) {
+					AmpOrgRole orgRole = (AmpOrgRole) orgItr.next();
+					if (orgRole.getRole().getRoleCode().equals(Constants.DONOR)) {
+						if (donors.trim().length() > 0) {
+							donors += ", ";
+						}
+						donors += orgRole.getOrganisation().getName();
+					}
+				}
+
+				act.setDonors(donors);
+				col.add(act);				
+			}
+			
+		} catch (Exception e) {
+			logger.error("Unable to getDonorTeamActivities" + e.getMessage());
+			e.printStackTrace(System.out);
+		} finally {
+			try {
+				if (session != null) {
+					PersistenceManager.releaseSession(session);
+				}
+			} catch (Exception ex) {
+				logger.error("releaseSession() failed");
+			}
+		}						
+		return col;
+	}	
+	
+	public static Collection getDonorUnassignedActivities(Long dnrTeamId,Long teamId) {
+		
+		Collection col = new ArrayList();
+		Session session = null;
+
+		try {
+			
+			Collection temp = getDonorTeamActivities(dnrTeamId);
+			
+			session = PersistenceManager.getSession();
+			String qryStr = "select act from " + AmpActivity.class.getName() + " act where " +
+					"(act.team=:teamId) and (act.approvalStatus=:status)";
+			Query qry = session.createQuery(qryStr);
+			qry.setParameter("teamId",teamId,Hibernate.LONG);
+			qry.setParameter("status",Constants.APPROVED_STATUS,Hibernate.STRING);
+			Iterator itr = qry.list().iterator();
+			while (itr.hasNext()) {
+				Activity act = new Activity();
+				AmpActivity activity = (AmpActivity) itr.next();
+				act.setActivityId(activity.getAmpActivityId());
+				
+				if (temp.contains(act) == false) {
+					Collection temp1 = activity.getOrgrole();
+					Collection temp2 = new ArrayList();
+					Iterator temp1Itr = temp1.iterator();
+					while (temp1Itr.hasNext()) {
+						AmpOrgRole orgRole = (AmpOrgRole) temp1Itr.next();
+						if (!temp2.contains(orgRole))
+							temp2.add(orgRole);
+					}
+					
+					Iterator orgItr = temp2.iterator();
+
+					
+					
+					act.setName(activity.getName());
+					act.setAmpId(activity.getAmpId());
+					
+					String donors = "";
+
+					while (orgItr.hasNext()) {
+						AmpOrgRole orgRole = (AmpOrgRole) orgItr.next();
+						if (orgRole.getRole().getRoleCode().equals(Constants.DONOR)) {
+							if (donors.trim().length() > 0) {
+								donors += ", ";
+							}
+							donors += orgRole.getOrganisation().getName();
+						}
+					}
+
+					act.setDonors(donors);
+					col.add(act);													
+				}
+			}
+			
+		} catch (Exception e) {
+			logger.error("Unable to getDonorTeamActivities" + e.getMessage());
+			e.printStackTrace(System.out);
+		} finally {
+			try {
+				if (session != null) {
+					PersistenceManager.releaseSession(session);
+				}
+			} catch (Exception ex) {
+				logger.error("releaseSession() failed");
+			}
+		}						
+		return col;
+	}	
+
+	public static void assignActivitiesToDonor(Long dnrTeamId,Long activityId[]) {
+		Session session = null;
+		Transaction tx = null;
+
+		try {
+			session = PersistenceManager.getSession();
+			tx = session.beginTransaction();
+			
+			AmpTeam ampTeam = (AmpTeam) session.get(AmpTeam.class,dnrTeamId);
+			if (ampTeam.getActivityList() == null) {
+				ampTeam.setActivityList(new HashSet());
+			}
+			logger.info("ActivityId length = " + activityId.length);
+			for (int i = 0;i < activityId.length; i++) {
+				logger.info("Id = " + activityId[i]);
+				if (activityId[i] != null) {
+					AmpActivity ampActivity = (AmpActivity) session.get(AmpActivity.class,activityId[i]);
+					ampTeam.getActivityList().add(ampActivity);					
+				}
+			}
+			
+			session.update(ampTeam);
+			tx.commit();
+			
+		} catch (Exception e) {
+			logger.error("Unable to assignActivitiesToDonor" + e.getMessage());
+			e.printStackTrace(System.out);
+			if (tx != null) {
+				try {
+					tx.rollback();
+				} catch (Exception rbf) {
+					logger.error("Rollback failed");
+				}
+			}			
+		} finally {
+			try {
+				if (session != null) {
+					PersistenceManager.releaseSession(session);
+				}
+			} catch (Exception ex) {
+				logger.error("releaseSession() failed");
+			}
+		}						
+	}
+	
+	public static void removeActivitiesFromDonor(Long dnrTeamId,Long activityId[]) {
+		Session session = null;
+		Transaction tx = null;
+
+		try {
+			session = PersistenceManager.getSession();
+			tx = session.beginTransaction();
+			
+			AmpTeam ampTeam = (AmpTeam) session.get(AmpTeam.class,dnrTeamId);
+			Set newList = new HashSet();
+			
+			Iterator itr = ampTeam.getActivityList().iterator();
+			while (itr.hasNext()) {
+				AmpActivity act = (AmpActivity) itr.next();
+				boolean present = false;
+				for (int i = 0;i < activityId.length;i++) {
+					if (act.getAmpActivityId().longValue() == activityId[i].longValue()) {
+						present = true;
+						break;
+					}
+				}
+				if (!present) {
+					newList.add(act);
+				}
+			}
+			
+			ampTeam.setActivityList(newList);
+			
+			session.update(ampTeam);
+			tx.commit();
+			
+		} catch (Exception e) {
+			logger.error("Unable to assignActivitiesToDonor" + e.getMessage());
+			e.printStackTrace(System.out);
+			if (tx != null) {
+				try {
+					tx.rollback();
+				} catch (Exception rbf) {
+					logger.error("Rollback failed");
+				}
+			}			
+		} finally {
+			try {
+				if (session != null) {
+					PersistenceManager.releaseSession(session);
+				}
+			} catch (Exception ex) {
+				logger.error("releaseSession() failed");
+			}
+		}						
+	}	
+	
+	
 }

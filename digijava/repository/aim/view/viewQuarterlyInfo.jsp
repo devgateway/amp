@@ -164,12 +164,8 @@ type="org.digijava.module.aim.form.QuarterlyInfoForm" method="post">
 							<logic:equal name="aimQuarterlyInfoForm" property="transactionType" value="2">
                      	<digi:trn key="quarterlyExpenditures">Quarterly Expenditures</digi:trn>
 							</logic:equal>
-							<logic:equal name="aimQuarterlyInfoForm" property="perspective" value="MA">
-								&gt; MOFED Perspective
-							</logic:equal>
-							<logic:equal name="aimQuarterlyInfoForm" property="perspective" value="DN">
-								&gt; Donor Perspective
-							</logic:equal>
+							&gt;
+							<bean:write name="aimQuarterlyInfoForm" property="perpsectiveName" />							
 						</SPAN>
 								</TD>
 								<TD align="right">
@@ -213,9 +209,9 @@ type="org.digijava.module.aim.form.QuarterlyInfoForm" method="post">
 						                         	<STRONG>Perspective:</STRONG>
 														</TD>
 														<TD>
-									      				<html:select property="perspective" styleClass="dr-menu" onchange="formSubmit()">
-																<html:option value="MA">MOFED View</html:option>
-																<html:option value="DN">Donor View</html:option>
+															<html:select property="perspective" styleClass="dr-menu">
+																<html:optionsCollection name="aimQuarterlyInfoForm" 
+																property="perspectives" value="code" label="name"/>
 															</html:select>
 														</TD>								
 													</TR>

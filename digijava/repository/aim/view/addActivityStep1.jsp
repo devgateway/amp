@@ -144,6 +144,8 @@ function popupwin()
 <html:hidden property="editKey"/>
 <html:hidden property="editAct"/>
 
+<input type="hidden" name="edit" value="true">
+
 <input type="hidden" name="selectedDate" value="">
 <input type="hidden" name="currUrl">
 <input type="hidden" name="currUrl1">

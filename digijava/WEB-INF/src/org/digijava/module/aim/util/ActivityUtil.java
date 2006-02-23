@@ -38,9 +38,11 @@ import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpPhysicalPerformance;
 import org.digijava.module.aim.dbentity.AmpRegionalFunding;
 import org.digijava.module.aim.dbentity.AmpSector;
+import org.digijava.module.aim.dbentity.AmpTeam;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.helper.Activity;
 import org.digijava.module.aim.helper.ActivitySector;
+import org.digijava.module.aim.helper.AmpProjectDonor;
 import org.digijava.module.aim.helper.Components;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.DateConversion;
@@ -53,6 +55,7 @@ import org.digijava.module.aim.helper.Measures;
 import org.digijava.module.aim.helper.PhysicalProgress;
 import org.digijava.module.aim.helper.RelOrganization;
 import org.digijava.module.aim.helper.RelatedLinks;
+import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.cms.dbentity.CMSContentItem;
 
 /**
@@ -1027,6 +1030,133 @@ public class ActivityUtil {
 			}
 		}				
 		return activity;
+	}
+	
+	public static void saveDonorFundingInfo(Long actId,Set fundings) {
+		Session session = null;
+		Transaction tx = null;
+		
+		try {
+			session = PersistenceManager.getSession();
+			tx = session.beginTransaction();
+			
+			//logger.info("Before iterating");
+			Iterator itr = fundings.iterator();
+			while (itr.hasNext()) {
+				AmpFunding temp = (AmpFunding) itr.next();
+				AmpFunding fund = (AmpFunding) session.load(AmpFunding.class,temp.getAmpFundingId());
+				Iterator fItr = fund.getFundingDetails().iterator();
+				while (fItr.hasNext()) {
+					AmpFundingDetail fd = (AmpFundingDetail) fItr.next();
+					session.delete(fd);
+				}
+				fund.getFundingDetails().clear();
+				fund.setFundingDetails(temp.getFundingDetails());
+				//logger.info("Updating " + fund.getAmpFundingId());
+				session.update(fund);
+				//logger.info("Updated...");
+			}
+			tx.commit();
+			//logger.info("Donor info. saved");
+		} catch (Exception e) {
+			logger.error("Exception from saveDonorFundingInfo()");
+			e.printStackTrace(System.out);
+			if (tx != null) {
+				try {
+					tx.rollback();					
+				} catch (Exception rbf) {
+					logger.error("Rollback failed");
+				}
+			}
+		} finally {
+			if (session != null) {
+				try{
+					PersistenceManager.releaseSession(session);
+				} catch (Exception rsf) {
+					logger.error("Release session failed");
+				}
+			}
+		}
+		
+	}
+	
+	public static boolean canViewActivity(Long actId,TeamMember tm) {
+		boolean canView = false;
+		Session session = null;
+		try {
+			session = PersistenceManager.getSession();
+			if (tm.getTeamHead()) {
+				if (tm.getTeamType().equalsIgnoreCase("DONOR")) {
+					// DONOR team leader
+					AmpTeam team = (AmpTeam) session.load(AmpTeam.class,tm.getTeamId());
+					AmpActivity act = new AmpActivity();
+					act.setAmpActivityId(actId);
+					if (team.getActivityList().contains(act)) canView = true;
+				} else {
+					// MOFED team leader
+					//logger.info("Mofed team leader");
+					//logger.info("loading activity " + actId); 
+					AmpActivity act = (AmpActivity) session.load(AmpActivity.class,actId);
+					if (act.getTeam().getAmpTeamId().equals(tm.getTeamId())) {
+						logger.debug("Can view " + actId + " , team " + tm.getTeamId());
+						canView = true;
+					} else {
+						
+					}
+				}
+			} else {
+				AmpTeamMember ampTeamMem = (AmpTeamMember) session.load(AmpTeamMember.class,
+						tm.getMemberId());
+				AmpActivity act = new AmpActivity();
+				act.setAmpActivityId(actId);
+				if (ampTeamMem.getActivities().contains(act)) canView = true;
+			}
+		} catch (Exception e) {
+			logger.error("Exception from canViewActivity()");
+			e.printStackTrace(System.out);
+		} finally {
+			if (session != null) {
+				try{
+					PersistenceManager.releaseSession(session);
+				} catch (Exception rsf) {
+					logger.error("Release session failed");
+				}
+			}
+		}
+		//logger.info("Canview =" + canView);
+		return canView;
+	}
+
+	public static Collection getDonors(Long actId) {
+		Collection col = new ArrayList();
+		Session session = null;
+		try {
+			session = PersistenceManager.getSession();
+			AmpActivity act = (AmpActivity) session.load(AmpActivity.class,actId);
+			if (act.getFunding() != null) {
+				Iterator itr = act.getFunding().iterator();
+				while (itr.hasNext()) {
+					AmpFunding fund = (AmpFunding) itr.next();
+					AmpProjectDonor ampProjectDonor = new AmpProjectDonor();
+					ampProjectDonor.setDonorName(fund.getAmpDonorOrgId().getName());
+					ampProjectDonor.setAmpDonorId(fund.getAmpDonorOrgId().getAmpOrgId());
+					col.add(ampProjectDonor); 
+				}
+			}
+				
+		} catch (Exception e) {
+			logger.error("Exception from getDonors()");
+			e.printStackTrace(System.out);
+		} finally {
+			if (session != null) {
+				try{
+					PersistenceManager.releaseSession(session);
+				} catch (Exception rsf) {
+					logger.error("Release session failed");
+				}
+			}
+		}
+		return col;		
 	}
 
 } // End

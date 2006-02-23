@@ -49,6 +49,8 @@ public class MyDesktopForm extends ActionForm
 	private Collection myTasksColl;
 	private String approvalStatus;
 	
+	private boolean donorFlag;
+	
 	/* added by Priyajith 
 	 * for RelatedLinksList */
 	private Long selLinks[];
@@ -503,5 +505,19 @@ public class MyDesktopForm extends ActionForm
 	 */
 	public void setApprovalStatus(String approvalStatus) {
 		this.approvalStatus = approvalStatus;
+	}
+
+	/**
+	 * @return Returns the donorFlag.
+	 */
+	public boolean isDonorFlag() {
+		return donorFlag;
+	}
+
+	/**
+	 * @param donorFlag The donorFlag to set.
+	 */
+	public void setDonorFlag(boolean donorFlag) {
+		this.donorFlag = donorFlag;
 	}
 }

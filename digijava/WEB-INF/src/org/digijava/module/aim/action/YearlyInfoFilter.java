@@ -85,6 +85,7 @@ public class YearlyInfoFilter extends TilesAction {
 				String perspective = CommonWorker.getPerspective(apps.getPerspective());
 				fp.setPerspective(perspective);
 			}
+			formBean.setPerpsectiveName(DbUtil.getPerspective(fp.getPerspective()).getName());
 	
 			if ( formBean.getFromYear()==0 || formBean.getToYear()==0 )	{
 				int year = new GregorianCalendar().get(Calendar.YEAR);
@@ -124,6 +125,7 @@ public class YearlyInfoFilter extends TilesAction {
 			}
 			formBean.setYears(YearUtil.getYears());
 			formBean.setCurrencies(DbUtil.getAmpCurrency());
+			formBean.setPerspectives(DbUtil.getAmpPerspective());
 			formBean.setFiscalYears(new ArrayList());
 			formBean.setFiscalYears(DbUtil.getAllFisCalenders());
 		}

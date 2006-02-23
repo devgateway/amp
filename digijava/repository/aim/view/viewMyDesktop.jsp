@@ -432,6 +432,7 @@ function showtip()
 									<digi:trn key="aim:allTheAmountsInThousands">	
 									All the amounts are in thousands (000)</digi:trn></FONT>								
 								</td>
+								<c:if test="${aimMyDesktopForm.donorFlag == false}">
 								<td width="300" align="right">
 									<c:if test="${aimMyDesktopForm.write == true}">
 									<bean:define id="translation">
@@ -442,6 +443,7 @@ function showtip()
 										Add Activity</digi:trn></digi:link>
 									</c:if>								
 								</td>
+								</c:if>
 							</tr>
 						</table>
 

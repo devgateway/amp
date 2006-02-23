@@ -103,6 +103,7 @@ public class ViewFinancingBreakdown extends TilesAction {
 				fp.setToYear(year+Constants.TO_YEAR_RANGE);
 			}
 			formBean.setPerspective(fp.getPerspective());
+			formBean.setPerpsectiveName(DbUtil.getPerspective(fp.getPerspective()).getName());
 			formBean.setCurrency(fp.getCurrencyCode());
 			formBean.setFiscalCalId(fp.getFiscalCalId().longValue());
 			formBean.setFromYear(fp.getFromYear());
@@ -116,6 +117,8 @@ public class ViewFinancingBreakdown extends TilesAction {
 			formBean.setFinancingBreakdown(fb);
 			formBean.setYears(YearUtil.getYears());
 			formBean.setCurrencies(DbUtil.getAmpCurrency());
+			formBean.setPerspectives(DbUtil.getAmpPerspective());
+			
 			overallTotalCommitted = FinancingBreakdownWorker.getOverallTotal(
 					fb, Constants.COMMITMENT);
 			formBean.setTotalCommitted(overallTotalCommitted);

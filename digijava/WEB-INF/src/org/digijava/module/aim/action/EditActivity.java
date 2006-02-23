@@ -40,6 +40,7 @@ import org.digijava.module.aim.dbentity.AmpFundingDetail;
 import org.digijava.module.aim.dbentity.AmpIssues;
 import org.digijava.module.aim.dbentity.AmpLocation;
 import org.digijava.module.aim.dbentity.AmpMeasure;
+import org.digijava.module.aim.dbentity.AmpModality;
 import org.digijava.module.aim.dbentity.AmpOrgRole;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpPerspective;
@@ -68,6 +69,8 @@ import org.digijava.module.aim.helper.RelatedLinks;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.ActivityUtil;
 import org.digijava.module.aim.util.DbUtil;
+import org.digijava.module.aim.util.ProgramUtil;
+import org.digijava.module.aim.util.TeamMemberUtil;
 import org.digijava.module.aim.util.TeamUtil;
 import org.digijava.module.cms.dbentity.CMSContentItem;
 
@@ -118,11 +121,20 @@ public class EditActivity extends Action {
 			eaForm.setActivityId(activityId);
 			HashMap activityMap = (HashMap) ampContext
 					.getAttribute(Constants.EDIT_ACT_LIST);
-
-			boolean canEdit = true;
 			
+			boolean canEdit = true;
+
+			eaForm.setActivityId(activityId);
+
+			if (tm.getTeamType()
+					.equalsIgnoreCase(Constants.DEF_DNR_PERSPECTIVE)) {
+				eaForm.setDonorFlag(true);
+			} else {
+				eaForm.setDonorFlag(false);
+			}
+
 			if (activityMap != null && activityMap.containsValue(activityId)) {
-			    logger.info("activity is in activityMap " + activityId);
+			    //logger.info("activity is in activityMap " + activityId);
 				// The activity is already opened for editing
 				synchronized (ampContext) {
 					HashMap tsaMap = (HashMap) ampContext
@@ -174,11 +186,10 @@ public class EditActivity extends Action {
 					} else
 						canEdit = false;
 				}
-			} else {
-			    logger.info("activity is not present");
 			}
 
-			logger.info("CanEdit = " + canEdit);
+
+			//logger.info("CanEdit = " + canEdit);
 			if (!canEdit) {
 				ActionErrors errors = new ActionErrors();
 				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
@@ -191,10 +202,10 @@ public class EditActivity extends Action {
 						.getRequestDispatcher(url);
 				rd.forward(request, response);
 			} else {
-			    logger.info("Path = " + mapping.getPath());
+			   // logger.info("Path = " + mapping.getPath());
 			    if (!mapping.getPath().trim().endsWith("viewActivityPreview")) {
 					// Edit the activity
-			        logger.info("mapping does not end with viewActivityPreview.do");
+			        //logger.info("mapping does not end with viewActivityPreview.do");
 					String sessId = session.getId();
 					synchronized (ampContext) {				
 						ArrayList sessList = (ArrayList) ampContext.getAttribute(Constants.SESSION_LIST);
@@ -218,13 +229,8 @@ public class EditActivity extends Action {
 
 						sessList.add(sessId);
 						Collections.sort(sessList);
-
-						//logger.info("Putting AM " + sessId + "," + activityId);
 						activityMap.put(sessId, activityId);
-						
-						//logger.info("Putting UL " + tm.getMemberId() + "," + activityId);
 						userActList.put(tm.getMemberId(), activityId);
-						
 						tsaList.put(activityId,new Long(System.currentTimeMillis()));
 						
 						ampContext.setAttribute(Constants.SESSION_LIST, sessList);
@@ -236,11 +242,10 @@ public class EditActivity extends Action {
 					}
 					eaForm.setEditAct(true);    
 				} else {
-				    logger.info("mapping does not end with viewActivityPreview.do");				    
+				    //logger.info("mapping does end with viewActivityPreview.do");				    
 				}
 			}
 
-			
 
 			// Clearing comment properties
 			String action = request.getParameter("action");
@@ -252,15 +257,22 @@ public class EditActivity extends Action {
 				}
 			}
 
-			// load the activity details
-			eaForm.setStep("1");
+			if (eaForm.isDonorFlag()) {
+				eaForm.setStep("3");
+				eaForm.setFundDonor(TeamMemberUtil.getFundOrgOfUser(tm.getMemberId()));
+			} else {
+				eaForm.setStep("1");
+			}
 			eaForm.setReset(false);
 			eaForm.setPerspectives(DbUtil.getAmpPerspective());
-
-			// logger.debug("Activity Id = " + activityId);
+			
+			// load the activity details
 			if (activityId != null) {
 				AmpActivity activity = ActivityUtil.getAmpActivity(activityId);
-
+				
+				String actApprovalStatus = DbUtil.getActivityApprovalStatus(activityId);
+				eaForm.setApprovalStatus(actApprovalStatus);
+				
 				if (activity != null) {
 					// set title,description and objective
 					eaForm.setTitle(activity.getName().trim());
@@ -504,20 +516,16 @@ public class EditActivity extends Action {
 						fundOrg.setAmpOrgId(org.getAmpOrgId());
 						fundOrg.setOrgName(org.getName());
 						int index = fundingOrgs.indexOf(fundOrg);
-						logger.info("Getting the index as " + index
-								+ " for fundorg " + fundOrg.getOrgName());
+						//logger.info("Getting the index as " + index
+							//	+ " for fundorg " + fundOrg.getOrgName());
 						if (index > -1) {
 							fundOrg = (FundingOrganization) fundingOrgs
 									.get(index);
 						}
 
 						Funding fund = new Funding();
-						fund.setFundingId(System.currentTimeMillis());
-						fund
-								.setAmpTermsAssist(ampFunding
-										.getAmpTermsAssistId());
-						fund.setFundingId(ampFunding.getAmpFundingId()
-								.intValue());
+						fund.setAmpTermsAssist(ampFunding.getAmpTermsAssistId());
+						fund.setFundingId(ampFunding.getAmpFundingId().longValue());
 						fund.setOrgFundingId(ampFunding.getFinancingId());
 						fund.setModality(ampFunding.getModalityId());
 						fund.setConditions(ampFunding.getConditions());
@@ -530,6 +538,7 @@ public class EditActivity extends Action {
 								AmpFundingDetail fundDet = (AmpFundingDetail) fundDetItr
 										.next();
 								FundingDetail fundingDetail = new FundingDetail();
+								fundingDetail.setIndexId(System.currentTimeMillis());
 								int adjType = fundDet.getAdjustmentType()
 										.intValue();
 								fundingDetail.setAdjustmentType(adjType);
@@ -579,6 +588,11 @@ public class EditActivity extends Action {
 								fundingDetail.setTransactionDate(DateConversion
 										.ConvertDateToString(fundDet
 												.getTransactionDate()));
+								
+								fundingDetail.setPerspectiveCode(fundDet.getPerspectiveId().getCode());
+								fundingDetail.setPerspectiveName(fundDet.getPerspectiveId().getName());
+								
+								/*
 								fundingDetail.setPerspectiveCode(fundDet
 										.getOrgRoleCode());
 
@@ -593,6 +607,9 @@ public class EditActivity extends Action {
 												.getName());
 									}
 								}
+								*/
+								
+								
 
 								fundingDetail.setTransactionType(fundDet
 										.getTransactionType().intValue());
@@ -610,15 +627,15 @@ public class EditActivity extends Action {
 
 						if (index > -1) {
 							fundingOrgs.set(index, fundOrg);
-							logger
-									.info("Setting the fund org obj to the index :"
-											+ index);
+						//	logger
+							//		.info("Setting the fund org obj to the index :"
+								//			+ index);
 						} else {
 							fundingOrgs.add(fundOrg);
-							logger.info("Adding new fund org object");
+						//	logger.info("Adding new fund org object");
 						}
 					}
-					logger.info("size = " + fundingOrgs);
+					//logger.info("size = " + fundingOrgs);
 					eaForm.setFundingOrganizations(fundingOrgs);
 					eaForm.setTotalCommitments(totComm);
 					eaForm.setTotalDisbursements(totDisb);
@@ -628,7 +645,8 @@ public class EditActivity extends Action {
 					Iterator rItr = activity.getRegionalFundings().iterator();
 
 					while (rItr.hasNext()) {
-						AmpRegionalFunding ampRegFund = (AmpRegionalFunding) rItr.next();
+						AmpRegionalFunding ampRegFund = (AmpRegionalFunding) rItr
+								.next();
 						FundingDetail fd = new FundingDetail();
 						fd.setAdjustmentType(ampRegFund.getAdjustmentType()
 								.intValue());
@@ -958,6 +976,57 @@ public class EditActivity extends Action {
 					}
 				}
 			}
+			Collection statusCol = null;
+			// load the status from the database
+			if(eaForm.getStatusCollection() == null) {
+				statusCol= DbUtil.getAmpStatus();
+				eaForm.setStatusCollection(statusCol);
+			}
+			else {
+				statusCol = eaForm.getStatusCollection();
+			}
+			// Initailly setting the implementation level as "country"
+			if (eaForm.getImplementationLevel() == null)
+				eaForm.setImplementationLevel("country");
+
+			Collection modalColl = null;
+			// load the modalities from the database
+			if (eaForm.getModalityCollection() == null) {
+				modalColl = DbUtil.getAmpModality();
+				eaForm.setModalityCollection(modalColl);
+			} else {
+				modalColl = eaForm.getModalityCollection();
+			}
+
+			// Initally set the modality as "Project Support"
+			if (modalColl != null && eaForm.getModality() == null) {
+				Iterator itr = modalColl.iterator();
+				while (itr.hasNext()) {
+					AmpModality mod = (AmpModality) itr.next();
+					if (mod.getName().equalsIgnoreCase("Project Support")) {
+						eaForm.setModality(mod.getAmpModalityId());
+						break;
+					}
+				}
+			}
+			Collection levelCol = null;
+			// Loading the levels from the database
+			if (eaForm.getLevelCollection() == null) {
+				levelCol = DbUtil.getAmpLevels();
+				eaForm.setLevelCollection(levelCol);
+			} else {
+				levelCol = eaForm.getLevelCollection();
+			}
+			
+			// load all themes 
+			eaForm.setProgramCollection(ProgramUtil.getAllThemes());
+			
+			// load all the active currencies
+			eaForm.setCurrencies(DbUtil.getAmpCurrency());
+			
+			// load all the perspectives
+			eaForm.setPerspectives(DbUtil.getAmpPerspective());
+			
 		} catch (Exception e) {
 			e.printStackTrace(System.out);
 		}

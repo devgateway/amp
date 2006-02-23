@@ -41,7 +41,7 @@
 			if (document.aimAddOrgForm.ampOrgTypeId.options[index].text == "Ethiopian Government"
 					|| document.aimAddOrgForm.ampOrgTypeId.options[index].text == "National NGO") {
 				if (document.aimAddOrgForm.orgTypeFlag.value != "national") {
-					if (document.aimAddOrgForm.orgTypeFlag.value == "multilateral")
+					//if (document.aimAddOrgForm.orgTypeFlag.value == "multilateral")
 						flag = true;
 					document.aimAddOrgForm.orgTypeFlag.value = "national";
 				}
@@ -50,10 +50,13 @@
 			}
 			else if (document.aimAddOrgForm.ampOrgTypeId.options[index].text == "Regional Government") {
 					if (document.aimAddOrgForm.orgTypeFlag.value != "regional") {
+						/*
 						if (document.aimAddOrgForm.orgTypeFlag.value == "multilateral")
 							flag = true;
 						else
 							document.aimAddOrgForm.regionId.style.display = '';
+						*/
+						flag = true;
 						document.aimAddOrgForm.orgTypeFlag.value = "regional";
 					}
 					else
@@ -68,7 +71,7 @@
 								return false;
 				 		}
 				 		else if (document.aimAddOrgForm.orgTypeFlag.value != "others") {
-				 				if (document.aimAddOrgForm.orgTypeFlag.value == "multilateral")
+				 				//if (document.aimAddOrgForm.orgTypeFlag.value == "multilateral")
 									flag = true;
 			 					document.aimAddOrgForm.orgTypeFlag.value = "others";
 			 				}
@@ -87,16 +90,17 @@
 		}
 	}
 	
-	function countryChanged() {
+	// defunct
+	function countryChanged() {	/*
 		var index = document.aimAddOrgForm.levelId.selectedIndex;
 		document.aimAddOrgForm.regionFlag.value = "changed";
 		document.aimAddOrgForm.regionId.style.display = 'none';
 		if (document.aimAddOrgForm.levelId.options[index].text == "REGIONAL") {
 			document.aimAddOrgForm.submit();
-		}
+		} */
 	}
-	
-	function levelChanged() {
+	// defunct
+	function levelChanged() { /*
 		var index = document.aimAddOrgForm.levelId.selectedIndex;
 		if (document.aimAddOrgForm.levelId.options[index].text == "REGIONAL") {
 			document.aimAddOrgForm.levelFlag.value = "regional";
@@ -109,7 +113,7 @@
 		else {
 				document.aimAddOrgForm.regionId.style.display = 'none';
 				document.aimAddOrgForm.levelFlag.value = "others";
-		}
+		} */
 	}
 
 	function msg() {

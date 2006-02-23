@@ -9,7 +9,7 @@ public class AmpOrgGroup implements Serializable
 	private Long ampOrgGrpId;
 	private String orgGrpName;
 	private String orgGrpCode;
-	private AmpLevel levelId;
+	private AmpLevel levelId;	// defunct
 	//private Set organizations; 
 	
 	private AmpOrgType orgType;	// a mandatory field, added for donor-access

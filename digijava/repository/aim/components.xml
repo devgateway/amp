@@ -153,6 +153,12 @@
 	<page page="addFunding" name="aim_fundingPopupLayout" title="AMP - Add Funding" />
 	<page page="addRegionalFunding" name="aim_addRegionalFunding" title="AMP - Add Regional Funding" />
 	<page page="selectSector" name="aim_selSectorPopupLayout" title="AMP - Select Sector" />
+	
+	<page name="donorTeamList" title=" - Donor Teams List" />
+	<page name="donorTeamActivities" title=" - Donor Team Activities" />
+	<page name="donorTeamUnAssignedActivities" title=" - Unassigned Activities" />
+
+	
 
 	<page page="searchLocation" name="aim_searchlocPopupLayout" title="AMP - Search Location" />
 	<page page="searchSectors" name="aim_searchSectorPopupLayout" title="AMP - Search Sectors" />

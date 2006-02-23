@@ -292,8 +292,8 @@ public class AdvancedReportPDF extends Action {
                 i += (totalcnt * rsc.getHierarchy().size());
                                 
                 logger.info("---------TOTAL COUNT with HRRCHY= " + (totalcnt * rsc.getHierarchy().size()) + "iiiiiiiiiiiiiiii=" + i);
-                dataArray = new Object[i + 1+assistCnt][columnDetails.length + ((formBean.getFiscalYearRange().size() + 1) * rsc.getMeasures().size() * 4) + formBean.getColumnHierarchie().size()];
-                logger.info("****dataArray size with H= " + (i + 1) + " :" + (columnDetails.length + ((formBean.getFiscalYearRange().size() + 1) * rsc.getMeasures().size() * 4) + formBean.getColumnHierarchie().size()));
+                dataArray = new Object[i /*+1+assistCnt*/][columnDetails.length + ((formBean.getFiscalYearRange().size() + 1) * rsc.getMeasures().size() * 4) + formBean.getColumnHierarchie().size()];
+                logger.info("****dataArray size with H= " + (i) + " :" + (columnDetails.length + ((formBean.getFiscalYearRange().size() + 1) * rsc.getMeasures().size() * 4) + formBean.getColumnHierarchie().size()));
             } else {
                 // calculate no. of rows for grant/loan= assistance type rows
                

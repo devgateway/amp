@@ -958,7 +958,7 @@ public class AdvancedReportPDF extends Action {
                                                         }
 
                                                         dataArray[row][position] = ahr.getLabel() + " - " + ahr.getName();
-                                                        logger.info("Filling ahr.name - row 960 - H1------->" + ahr.getLabel());
+                                                        logger.info("Filling ahr.name - H1------->" + ahr.getLabel());
                                                         position++;
                                                         dataArray[row][position] = ahr2.getLabel() + " - " + ahr2.getName();
                                                         logger.info("ing ahr.name H2------->" + ahr2.getLabel());
@@ -1279,8 +1279,8 @@ public class AdvancedReportPDF extends Action {
                                                         position = position + 1;
                                                     }
 
-                                                    dataArray[row][position] = ahr.getLabel() + " - row 1281 " + ahr.getName();
-                                                    logger.info("Filling - row 1282 - ahr.name H1------->" + ahr.getLabel() + "-" + ahr.getName());
+                                                    dataArray[row][position] = ahr.getLabel() + " - " + ahr.getName();
+                                                    logger.info("Filling - ahr.name H1------->" + ahr.getLabel() + "-" + ahr.getName());
                                                     position++;
                                                     dataArray[row][position] = ahr2.getLabel() + " - " + ahr2.getName();
                                                     logger.info("Filling ahr.name H2------->" + ahr2.getLabel() + "-" + ahr2.getName());
@@ -1594,7 +1594,7 @@ public class AdvancedReportPDF extends Action {
                                                 position = position + 1;
                                             }
 
-                                            dataArray[row][position] = ahr.getLabel() + " row 1596 - " + ahr.getName();
+                                            dataArray[row][position] = ahr.getLabel() + " - " + ahr.getName();
                                             logger.info("Filling ahr.name ------->" + ahr.getLabel());
                                             position++;
 

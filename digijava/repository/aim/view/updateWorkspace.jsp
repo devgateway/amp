@@ -139,11 +139,13 @@ function relTeam() {
 			else
 				return false;
 		}
-		document.getElementById("relTeamRow").style.display = '';
+		if (document.getElementById("relTeamRow"))
+			document.getElementById("relTeamRow").style.display = '';
 		return false;
 	}
 	else {
-		document.getElementById("relTeamRow").style.display = 'none';
+		if (document.getElementById("relTeamRow"))
+			document.getElementById("relTeamRow").style.display = 'none';
 		return false;	
 	}
 }

@@ -142,7 +142,8 @@
 	<page name="addActivityStep7" title=" - Add Activity - Related Organizations" />
 	<page name="addActivityStep8" title=" - Add Activity - Conact Details | Conditions" />
 	<page name="activityExist" title=" - Add Activity - Activity Already Exist" />
-	<page name="locationManager" title=" - Location Manager" />
+	<page name="locationManager" title=" - Region Manager" />
+<!--	<page name="locationManager" title=" - Location Manager" />-->
 	<page page="addLocation" name="aim_addlocPopupLayout" title=" - Location Manager" />
 	<page page="addOrgGroup" name="aim_addOrgGrpPopupLayout" title=" - Add Organization Group" />
 	<page page="viewOrgDetail" name="aim_viewOrgDetailPopupLayout" title=" - Organization Detail" />

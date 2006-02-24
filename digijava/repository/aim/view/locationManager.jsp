@@ -21,8 +21,10 @@
 	
 	function newWin(val1, val2) {
 		if (document.aimAddLocationForm.currUrl.value == "") {
+			
 			<digi:context name="selectLoc" property="context/module/moduleinstance/addLocation.do" />
 			url = "<%= selectLoc %>?edLevel=" + val1 + "&edAction=" + val2;
+			
 			openLocWindow(600, 335);
 			document.aimAddLocationForm.action = url;
 			document.aimAddLocationForm.currUrl.value = "<%= selectLoc %>";
@@ -43,7 +45,10 @@
 	}
 	
 	function countryChanged() {
+		  //document.aimAddLocationForm.regionId.disabled=false;
+		 // alert(document.aimAddLocationForm.countryId.value);
 		  document.aimAddLocationForm.level.value = "region";
+
 		  <digi:context name="selectLoc" property="context/module/moduleinstance/locationManager.do" />
 		  document.aimAddLocationForm.action = "<%= selectLoc %>";
 		  document.aimAddLocationForm.target = "_self";
@@ -90,10 +95,10 @@
 	<jsp:include page="teamPagesHeader.jsp" flush="true" />
 <!-- End of Logo -->
 
-<table bgColor=#ffffff cellPadding=0 cellSpacing=0 width=636>
+<!--<table bgColor=#ffffff cellPadding=0 cellSpacing=0 width=636>
 	<tr>
 		<td class=r-dotted-lg width=14>&nbsp;</td>
-		<td align=left class=r-dotted-lg vAlign=top width=750>
+		<td align=left class=r-dotted-lg vAlign=top width=750>-->
 			<table cellPadding=5 cellSpacing=0 width="912">
 				<tr>
 					<!-- Start Navigation -->
@@ -106,15 +111,15 @@
 						Admin Home
 						</digi:trn>
 						</digi:link>&nbsp;&gt;&nbsp;
-						<digi:trn key="aim:locationManager"> Location Manager
+						<digi:trn key="aim:regionManager"> Region Manager
 						</digi:trn>
                       </span>
 					</td>
 					<!-- End navigation -->
 				</tr>
 				<tr>
-					<td height=16 vAlign=center width=1157><span class=subtitle-blue>
-						<digi:trn key="aim:locationManager">Location Manager</digi:trn>
+					<td height=16 vAlign=center width=1157 ><span class=subtitle-blue> 
+						<digi:trn key="aim:regionManager">Region Manager</digi:trn>
                       </span>
 					</td>
 				</tr>
@@ -123,48 +128,54 @@
 					<table width="965" cellspacing=1 cellSpacing=1>
 					<tr>
 						<td noWrap width=663 vAlign="top">
-							<table bgColor=#ffffff cellPadding=0 cellSpacing=0 class=box-border-nopadding width="773">
-								<tr bgColor=#f4f4f2>
+							<!--<table bgColor=#ffffff cellPadding=0 cellSpacing=0 class=box-border-nopadding width="773">
+								<!--<tr bgColor=#f4f4f2>
 									<td vAlign="top" width="771">
 										&nbsp;
 									</td>
 								</tr>
 								<tr bgColor=#f4f4f2>
-									<td valign="top" width="771">
+									<td valign="top" width="771">-->
 										<table align=center bgColor=#f4f4f2 cellPadding=0 cellSpacing=0 width="626" border=0>	
 											<tr>
 												<td bgColor=#ffffff class=box-border width="624">
 													<table border=0 cellPadding=1 cellSpacing=1 class=box-border width="784">
 														<tr bgColor=#dddddb>
 															<!-- header -->
-															<td bgColor=#dddddb height="20" align="center" colspan="2" width="776"><B>
+															<td bgColor=#ffffff height="20" align="center" colspan="2" width="776"><B>
 																
 															</td>
 															<!-- end header -->
 														</tr>
 													<!-- Page Logic -->
+													
 													<logic:greaterEqual name="aimAddLocationForm" property="impLevelValue" value="1">
 														<tr>
 															<td width="193" align="right" valign="top" height="19">
 																<digi:trn key="aim:AmpCountry">Country</digi:trn>
 															</td>
 															<td  align="left" width="539" valign="top" height="19">
-																<html:select property="countryId" onchange="countryChanged()">
+																<html:select property="countryId" onchange="countryChanged()"	>
 																	<html:option value="">-- Select Country --</html:option>
 																	<html:optionsCollection name="aimAddLocationForm" property="country" 
 																		   value="iso" label="countryName" />
 																</html:select>
+																<!--<br>
+																<digi:img src="module/aim/images/arrow-014E86.gif" 	width="15" height="10" />
+																			<a href="javascript:newWin('country','edit')">
+																				<digi:trn key="aim:AmpEditCountry">Edit this Country</digi:trn></a>-->
+
 															</td>
 														</tr>
 													</logic:greaterEqual>	
 														
-													<logic:greaterEqual name="aimAddLocationForm" property="impLevelValue" value="2">
+													<logic:greaterEqual name="aimAddLocationForm" property="impLevelValue" value="1">
 														<tr>
 															<td  width="193" align="right" valign="top" height="19">
 																<digi:trn key="aim:AmpRegion">Region</digi:trn>
 															</td>
 															<td  align="left" width="539" valign="top" height="19">
-																<html:select property="regionId" onchange="regionChanged()">
+																<html:select property="regionId"  onchange="regionChanged()">
 																	<html:option value="-1">-- Select Region --</html:option>
 																		<logic:notEmpty name="aimAddLocationForm" property="region">
 																			<html:optionsCollection name="aimAddLocationForm" property="region" 
@@ -172,9 +183,11 @@
 																		</logic:notEmpty>
 																</html:select>
 																<br>
+																<logic:notEqual name="aimAddLocationForm" property ="countryId" value ="">
 																	<digi:img src="module/aim/images/arrow-014E86.gif" 	width="15" height="10"/>
 																	<a href="javascript:newWin('region','create')">
 																		<digi:trn key="aim:AmpAddRegion">Add a region</digi:trn></a>
+																</logic:notEqual>
 																	<logic:notEqual name="aimAddLocationForm" property="regionId" value="-1">
 																		<digi:img src="module/aim/images/arrow-014E86.gif" 	width="15" height="10"/>
 																			<a href="javascript:newWin('region','edit')">
@@ -189,7 +202,7 @@
 														</tr>
 													</logic:greaterEqual>														
 																											
-													<logic:greaterEqual name="aimAddLocationForm" property="impLevelValue" value="3">
+													<logic:greaterEqual name="aimAddLocationForm" property="impLevelValue" value="1">
 														<tr>
 															<td  width="193" align="right" valign="top" height="19">
 																<digi:trn key="aim:AmpZone">Zone</digi:trn>
@@ -203,10 +216,13 @@
 																		</logic:notEmpty>
 																</html:select>
 																<br>
+																<!--here -->
+															<logic:notEqual name="aimAddLocationForm" 			property="regionId"  value="-1">
 																	<digi:img src="module/aim/images/arrow-014E86.gif" 	width="15" height="10"/>
 																	<a href="javascript:newWin('zone','create')">
 																		<digi:trn key="aim:AmpAddZone">Add a zone </digi:trn>
 																	</a>
+																</logic:notEqual>
 																	<logic:notEqual name="aimAddLocationForm" property="zoneId"  value="-1">
 																		<digi:img src="module/aim/images/arrow-014E86.gif" 	width="15" height="10"/>
 																			<a href="javascript:newWin('zone','edit')">
@@ -223,7 +239,7 @@
 														</tr>
 													</logic:greaterEqual>
 	
-													<logic:greaterEqual name="aimAddLocationForm" property="impLevelValue" value="4">
+													<logic:greaterEqual name="aimAddLocationForm" property="impLevelValue" value="1">
 														<tr>
 															<td  width="193" align="right" valign="top" height="19">
 																<digi:trn key="aim:AmpWoreda">Woreda</digi:trn>
@@ -237,10 +253,14 @@
 																		</logic:notEmpty>
 																</html:select>
 																<br>
+																<logic:notEqual name ="aimAddLocationForm"
+																property="zoneId" value="-1">
+
 																	<digi:img src="module/aim/images/arrow-014E86.gif" 	width="15" height="10"/>
 																	<a href="javascript:newWin('woreda','create')">
 																		<digi:trn key="aim:AmpAddWoreda">Add a woreda</digi:trn>
 																	</a>
+                                                                 </logic:notEqual>
 																	<logic:notEqual name="aimAddLocationForm" property="woredaId"  value="-1">
 																		<digi:img src="module/aim/images/arrow-014E86.gif" 	width="15" height="10"/>
 																			<a href="javascript:newWin('woreda','edit')">
@@ -272,16 +292,16 @@
 									</td>
 								</tr>
 								<tr>
-									<td bgColor=#f4f4f2 width="771">
+									<!--<td bgColor=#f4f4f2 width="771">
 										&nbsp;
-									</td>
+									</td>-->
 								</tr>
-							</table>
+						<!--	</table>
 						</td>
 					</tr>
 				</table>
 			</td>
-		</tr>
+		</tr>-->
 	</table>
 	</td>
 	</tr>

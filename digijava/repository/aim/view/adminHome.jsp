@@ -37,10 +37,10 @@
 											<td class=f-names noWrap>
 												<digi:img src="module/aim/images/arrow-th-BABAB9.gif" width="16"/>
 												<bean:define id="translation">
-													<digi:trn key="aim:clickToViewLocationManager">Click here to view Location Manager</digi:trn>
+													<digi:trn key="aim:clickToViewRegionManager">Click here to view Region Manager</digi:trn>
 												</bean:define>
 												<digi:link href="/locationManager.do" title="<%=translation%>" >
-												<digi:trn key="aim:locationManager">Location Manager</digi:trn>	
+												<digi:trn key="aim:regionManager">Region Manager</digi:trn>	
 												</digi:link>
 											</td>
 										</tr>

@@ -315,7 +315,7 @@ p2.println("isPrintWhenDetailOverflows='false'/>");
 p2.println("<textElement textAlignment='Center' verticalAlignment='Middle' rotation='None' lineSpacing='Single'>");
 p2.println("<font fontName='Arial' pdfFontName='Helvetica' size='8' isBold='true' isItalic='false' isUnderline='false' isPdfEmbedded ='false' pdfEncoding ='Cp1252' isStrikeThrough='false' />");
 p2.println("</textElement>");
-p2.println("<text><![CDATA[Cummulat.      Planned Disb.       Disb           Exp.]]></text>");
+p2.println("<text><![CDATA[Commit.      Planned Disb.       Disb           Exp.]]></text>");
 p2.println("</staticText>");
 
 x1 += 240;
@@ -365,7 +365,7 @@ p2.println("isPrintWhenDetailOverflows='false'/>");
 p2.println("<textElement textAlignment='Center' verticalAlignment='Middle' rotation='None' lineSpacing='Single'>");
 p2.println("<font fontName='Arial' pdfFontName='Helvetica' size='8' isBold='true' isItalic='false' isUnderline='false' isPdfEmbedded ='false' pdfEncoding ='Cp1252' isStrikeThrough='false' />");
 p2.println("</textElement>");
-p2.println("<text><![CDATA[Cummulat.       Planned Disb.        Disb          Exp.]]></text>");
+p2.println("<text><![CDATA[Commit.       Planned Disb.        Disb          Exp.]]></text>");
 p2.println("</staticText>");
 
 //---------
@@ -493,7 +493,7 @@ p2.println("</textField>");
 
 x += 60;
 c += 2;
-System.out.println("ccccccccccc  "+c);
+//System.out.println("ccccccccccc  "+c);
 }
 
 c=6+(n*4)+1+3;

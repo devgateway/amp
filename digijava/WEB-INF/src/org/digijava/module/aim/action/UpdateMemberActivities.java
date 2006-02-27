@@ -14,7 +14,6 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.digijava.module.aim.form.TeamActivitiesForm;
-import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.TeamUtil;
 
@@ -63,14 +62,9 @@ public class UpdateMemberActivities extends Action {
 
 		if (taForm.getAddActivity() != null) {
 			/* show all unassigned activities */
-			Collection col = null;
-			if (tm.getTeamType().equalsIgnoreCase(Constants.DEF_DNR_PERSPECTIVE)) {
-				col = TeamUtil.getUnassignedDonorMemberActivities(id,
-						taForm.getMemberId());
-			} else {
-				col = TeamUtil.getUnassignedMemberActivities(id,
-						taForm.getMemberId());
-			}
+			Collection col = TeamUtil.getUnassignedMemberActivities(id,
+					taForm.getMemberId());
+			
 			List temp = (List) col;
 			Collections.sort(temp);
 			col = (Collection) temp;			

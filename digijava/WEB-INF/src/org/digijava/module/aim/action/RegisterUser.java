@@ -95,8 +95,7 @@ public class RegisterUser extends Action {
 				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
 						"error.registration.emailexits"));
 				saveErrors(request, errors);
-				//return (new ActionForward(mapping.getInput()));
-				return (mapping.getInputForward());
+				return (new ActionForward(mapping.getInput()));
 			} else {
 				DbUtil.registerUser(user);
 				Site site = RequestUtils.getSite(request);

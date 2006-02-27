@@ -37,7 +37,7 @@ public class RemoveChildWorkspace extends Action {
 				logger.debug("Child workspace removed!");
 			}
 		}
-		
+		uwForm.setActionEvent("edit");
 		return mapping.findForward(dest);
 	}
 }

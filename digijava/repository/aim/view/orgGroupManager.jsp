@@ -91,7 +91,7 @@
 																			<digi:trn key="aim:orgGroupCode">Code</digi:trn></b>
 																		</td>
 																		<td height="30"width="147"><b>
-																			<digi:trn key="aim:orgGroupType">Type</digi:trn></b>
+																			<digi:trn key="aim:orgGroupLevel">Level</digi:trn></b>
 																		</td>
 																	</tr>
 																<logic:iterate name="aimOrgGroupManagerForm" property="organisation" id="organisation">
@@ -115,10 +115,10 @@
 																			</logic:notEmpty>
                                                                         </td>
 																		<td height="30" width="147">
-																			<logic:notEmpty name="organisation" property="orgType">
-                                                              					<c:out value="${organisation.orgType.orgType}" />
+																			<logic:notEmpty name="organisation" property="levelId">
+                                                              					<c:out value="${organisation.levelId.name}" />
                                                               				</logic:notEmpty>
-                                                              				<logic:empty name="organisation" property="orgType">
+                                                              				<logic:empty name="organisation" property="levelId">
                                                               					<c:out value="-" />
                                                               				</logic:empty>
 																		</td>

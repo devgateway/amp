@@ -66,7 +66,7 @@
 		}
 	} 	
 
-	function fnOnEditItem(index, orgId,fundId)	{
+	function fnOnEditItem(index, orgId)	{
 		if (document.aimEditActivityForm.currUrl.value == "" ||
 							 document.aimEditActivityForm.prevOrg.value != orgId) { 		  			  			  			  
 			openNewWindow(650, 500);
@@ -74,7 +74,6 @@
 			document.aimEditActivityForm.action = "<%= editItem %>?orgId=" + orgId + "&offset=" + index+"&edit=true";	
 			document.aimEditActivityForm.currUrl.value = "<%= addFunding %>";
 			document.aimEditActivityForm.prevOrg.value = orgId;			
-			document.aimEditActivityForm.fundingId.value = fundId;			
 			document.aimEditActivityForm.target = popupPointer.name;
 			document.aimEditActivityForm.submit();
 		} else {
@@ -116,7 +115,6 @@
 <digi:form action="/addActivity.do" method="post">
 <html:hidden property="step"/>
 <html:hidden property="orgId"/>
-<html:hidden property="fundingId"/>
 
 <input type="hidden" name="currUrl">
 <input type="hidden" name="prevOrg">
@@ -151,77 +149,46 @@
 										<digi:trn key="aim:AmpAdminHome">
 											Admin Home
 										</digi:trn>
-									</digi:link>									
-									&nbsp;&gt;&nbsp;
+									</digi:link>&nbsp;&gt;&nbsp;
 								</c:if>
 								<c:if test="${aimEditActivityForm.pageId == 1}">								
 									<bean:define id="translation">
 										<digi:trn key="aim:clickToViewMyDesktop">Click here to view MyDesktop</digi:trn>
 									</bean:define>
-
 									<digi:link href="/viewMyDesktop.do" styleClass="comment" onclick="return quitRnot()" title="<%=translation%>" >
 										<digi:trn key="aim:portfolio">
 											Portfolio
 										</digi:trn>
-									</digi:link>
-									&nbsp;&gt;&nbsp;								
+									</digi:link>&nbsp;&gt;&nbsp;								
 								</c:if>																	
 								<bean:define id="translation">
 									<digi:trn key="aim:clickToViewAddActivityStep1">Click here to go to Add Activity Step 1</digi:trn>
 								</bean:define>
+								<digi:link href="/addActivity.do?step=1&edit=true" styleClass="comment" title="<%=translation%>" >
 								
-								<c:if test="${aimEditActivityForm.donorFlag == false}">
-									<digi:link href="/addActivity.do?step=1&edit=true" styleClass="comment" title="<%=translation%>" >
-									<c:if test="${aimEditActivityForm.editAct == true}">
-										<digi:trn key="aim:editActivityStep1">
-											Edit Activity - Step 1
-										</digi:trn>
-									</c:if>
-									<c:if test="${aimEditActivityForm.editAct == false}">
-										<digi:trn key="aim:addActivityStep1">
-											Add Activity - Step 1
-										</digi:trn>
-									</c:if>																
-									</digi:link>								
+								<c:if test="${aimEditActivityForm.editAct == true}">
+									<digi:trn key="aim:editActivityStep1">
+										Edit Activity - Step 1
+									</digi:trn>
 								</c:if>
-
-								<c:if test="${aimEditActivityForm.donorFlag == true}">
-									<c:if test="${aimEditActivityForm.editAct == true}">
-										<digi:trn key="aim:editActivityStep1">
-											Edit Activity - Step 1
-										</digi:trn>
-									</c:if>
-									<c:if test="${aimEditActivityForm.editAct == false}">
-										<digi:trn key="aim:addActivityStep1">
-											Add Activity - Step 1
-										</digi:trn>
-									</c:if>																
-								</c:if>								
-								&nbsp;&gt;&nbsp;							
-
-								<c:if test="${aimEditActivityForm.donorFlag == false}">
+								<c:if test="${aimEditActivityForm.editAct == false}">
+									<digi:trn key="aim:addActivityStep1">
+										Add Activity - Step 1
+									</digi:trn>
+								</c:if>																
+								</digi:link>&nbsp;&gt;&nbsp;							
+								
 									<bean:define id="translation">
 										<digi:trn key="aim:clickToViewAddActivityStep2">Click here to goto Add Activity Step 2</digi:trn>
 									</bean:define>
 									<digi:link href="/addActivity.do?step=2&edit=true" styleClass="comment" title="<%=translation%>" >	
-										<digi:trn key="aim:addActivityStep2">
-											Step 2
-										</digi:trn>
-									</digi:link>
-								</c:if>								
-								
-								<c:if test="${aimEditActivityForm.donorFlag == true}">
-									<bean:define id="translation">
-										<digi:trn key="aim:clickToViewAddActivityStep2">Click here to goto Add Activity Step 2</digi:trn>
-									</bean:define>
 									<digi:trn key="aim:addActivityStep2">
-										Step 2
+									Step 2
 									</digi:trn>
-								</c:if>		
-								&nbsp;&gt;&nbsp;
-								<digi:trn key="aim:addActivityStep3">
-								Step 3
-								</digi:trn>
+									</digi:link>&nbsp;&gt;&nbsp;						
+									<digi:trn key="aim:addActivityStep3">
+									Step 3
+									</digi:trn>
 								</span>
 							</td>
 						</tr>
@@ -386,56 +353,24 @@
 																						<logic:iterate name="funding" property="fundingDetails" id="fundingDetail" 
 																						type="org.digijava.module.aim.helper.FundingDetail">
 																						<logic:equal name="fundingDetail" property="transactionType" value="0">
-																						
-																						<c:if test="${aimEditActivityForm.donorFlag == true}">
-																						<c:if test="${fundingDetail.perspectiveCode == 'DN'}"> 
-																						<tr bgcolor="#FFFF00">
-																						</c:if>
-																						<c:if test="${fundingDetail.perspectiveCode != 'DN'}">
 																						<tr bgcolor="#ffffff">
-																						</c:if>
-																							<td width="50">
+																							<td width="50">	
 																								<bean:write name="fundingDetail" property="adjustmentTypeName"/>
 																							</td>
 																							<td width="120" align="right">
 																								<FONT color=blue>*</FONT>
 																								<bean:write name="fundingDetail" property="transactionAmount"/>&nbsp;
 																							</td>
-																							<td width="150">
+																							<td width="150">	
 																								<bean:write name="fundingDetail" property="currencyCode"/>
 																							</td>
-																							<td width="70">
+																							<td width="70">	
 																								<bean:write name="fundingDetail" property="transactionDate"/>
 																							</td>
-																							<td>
+																							<td>	
 																								<bean:write name="fundingDetail" property="perspectiveName"/>
 																							</td>
 																						</tr>
-																						</c:if>
-																						
-																						<c:if test="${aimEditActivityForm.donorFlag == false}">
-																						<c:if test="${fundingDetail.perspectiveCode != 'DN'}">
-																						<tr bgcolor="#ffffff">
-																							<td width="50">
-																								<bean:write name="fundingDetail" property="adjustmentTypeName"/>
-																							</td>
-																							<td width="120" align="right">
-																								<FONT color=blue>*</FONT>
-																								<bean:write name="fundingDetail" property="transactionAmount"/>&nbsp;
-																							</td>
-																							<td width="150">
-																								<bean:write name="fundingDetail" property="currencyCode"/>
-																							</td>
-																							<td width="70">
-																								<bean:write name="fundingDetail" property="transactionDate"/>
-																							</td>
-																							<td>
-																								<bean:write name="fundingDetail" property="perspectiveName"/>
-																							</td>
-																						</tr>
-																						</c:if>
-																						</c:if>
-																						
 																						</logic:equal>
 																						</logic:iterate>
 																						<tr bgcolor="#ffffff">
@@ -450,57 +385,24 @@
 																	        			<logic:iterate name="funding" property="fundingDetails" 
 																						id="fundingDetail" type="org.digijava.module.aim.helper.FundingDetail">
 																						<logic:equal name="fundingDetail" property="transactionType" value="1">
-
-																						
-																						<c:if test="${aimEditActivityForm.donorFlag == true}">
-																						<c:if test="${fundingDetail.perspectiveCode == 'DN'}"> 
-																						<tr bgcolor="#FFFF00">
-																						</c:if>
-																						<c:if test="${fundingDetail.perspectiveCode != 'DN'}">
 																						<tr bgcolor="#ffffff">
-																						</c:if>
-																							<td width="50">
+																							<td>	
 																								<bean:write name="fundingDetail" property="adjustmentTypeName"/>
 																							</td>
-																							<td width="120" align="right">
+																							<td align="right">	
 																								<FONT color=blue>*</FONT>
 																								<bean:write name="fundingDetail" property="transactionAmount"/>&nbsp;
 																							</td>
-																							<td width="150">
+																							<td>	
 																								<bean:write name="fundingDetail" property="currencyCode"/>
 																							</td>
-																							<td width="70">
+																							<td>	
 																								<bean:write name="fundingDetail" property="transactionDate"/>
 																							</td>
-																							<td>
+																							<td>	
 																								<bean:write name="fundingDetail" property="perspectiveName"/>
 																							</td>
 																						</tr>
-																						</c:if>
-																						
-																						<c:if test="${aimEditActivityForm.donorFlag == false}">
-																						<c:if test="${fundingDetail.perspectiveCode != 'DN'}">
-																						<tr bgcolor="#ffffff">
-																							<td width="50">
-																								<bean:write name="fundingDetail" property="adjustmentTypeName"/>
-																							</td>
-																							<td width="120" align="right">
-																								<FONT color=blue>*</FONT>
-																								<bean:write name="fundingDetail" property="transactionAmount"/>&nbsp;
-																							</td>
-																							<td width="150">
-																								<bean:write name="fundingDetail" property="currencyCode"/>
-																							</td>
-																							<td width="70">
-																								<bean:write name="fundingDetail" property="transactionDate"/>
-																							</td>
-																							<td>
-																								<bean:write name="fundingDetail" property="perspectiveName"/>
-																							</td>
-																						</tr>
-																						</c:if>
-																						</c:if>
-																						
 																						</logic:equal>
 																						</logic:iterate>
 																						<tr bgcolor="#ffffff">
@@ -515,29 +417,21 @@
 																						<logic:iterate name="funding" property="fundingDetails" 
 																						id="fundingDetail" type="org.digijava.module.aim.helper.FundingDetail">
 																						<logic:equal name="fundingDetail" property="transactionType" value="2">
-
-																						
-																						<c:if test="${aimEditActivityForm.donorFlag == true}">
-																						<c:if test="${fundingDetail.perspectiveCode == 'DN'}"> 
-																						<tr bgcolor="#FFFF00">
-																						</c:if>
-																						<c:if test="${fundingDetail.perspectiveCode != 'DN'}">
 																						<tr bgcolor="#ffffff">
-																						</c:if>
-																							<td width="50">
+																							<td>	
 																								<bean:write name="fundingDetail" property="adjustmentTypeName"/>
 																							</td>
-																							<td width="120" align="right">
+																							<td align="right">	
 																								<FONT color=blue>*</FONT>
 																								<bean:write name="fundingDetail" property="transactionAmount"/>&nbsp;
 																							</td>
-																							<td width="150">
+																							<td>	
 																								<bean:write name="fundingDetail" property="currencyCode"/>
 																							</td>
-																							<td width="70">
+																							<td>	
 																								<bean:write name="fundingDetail" property="transactionDate"/>
 																							</td>
-																							<td>
+																							<td>	
 																								<bean:write name="fundingDetail" property="perspectiveName"/>
 																							</td>
 																						</tr>
@@ -546,38 +440,6 @@
 																								<bean:write name="fundingDetail" property="classification"/>
 																							</td>
 																						</tr>
-																						</c:if>
-																						
-																						<c:if test="${aimEditActivityForm.donorFlag == false}">
-																						<c:if test="${fundingDetail.perspectiveCode != 'DN'}">
-																						<tr bgcolor="#ffffff">
-																							<td width="50">
-																								<bean:write name="fundingDetail" property="adjustmentTypeName"/>
-																							</td>
-																							<td width="120" align="right">
-																								<FONT color=blue>*</FONT>
-																								<bean:write name="fundingDetail" property="transactionAmount"/>&nbsp;
-																							</td>
-																							<td width="150">
-																								<bean:write name="fundingDetail" property="currencyCode"/>
-																							</td>
-																							<td width="70">
-																								<bean:write name="fundingDetail" property="transactionDate"/>
-																							</td>
-																							<td>
-																								<bean:write name="fundingDetail" property="perspectiveName"/>
-																							</td>
-																						</tr>
-																						<tr>
-																							<td colspan=5 bgcolor="#ffffff">&nbsp;&nbsp;
-																								<bean:write name="fundingDetail" property="classification"/>
-																							</td>
-																						</tr>
-																						</c:if>
-																						</c:if>
-
-
-																						
 																						</logic:equal>
 																						</logic:iterate>
 																					</table>	
@@ -586,49 +448,23 @@
 																		</table>
 																	
 																	</td></tr>
-																	<c:if test="${aimEditActivityForm.donorFlag == false}">
 																	<tr><td>
-																		<table border="0" cellpadding="8"
-																		bgcolor="#ffffff" cellspacing="1">
-																		<tr>
-																			<td>
-																				<a href='javascript:fnOnEditItem(<%= index %>,
-																									 <bean:write name="fundingOrganization" property="ampOrgId"/>,
-																								<bean:write name="funding" property="fundingId"/>)'>
-																				<B><digi:trn key="aim:editFundingItem">Edit Item</digi:trn></B>
-																				</a> 
-																			</td>
-																			<td>
-																				<a href='javascript:fnOnDeleteItem(<bean:write name="fundingOrganization" 
-																									 property="ampOrgId"/>,<bean:write name="funding" 
-																									 property="fundingId"/>)'>
-																				<B><digi:trn key="aim:deleteFundingItem">Delete Item</digi:trn></B>
-																				</a> 
-																			</td>																				
-																		</tr>
+																			<table border="0" cellpadding="8"
+																			bgcolor="#ffffff" cellspacing="1">
+																			<tr>
+																				<td>
+																					<a href='javascript:fnOnEditItem(<%= index %>,<bean:write name="fundingOrganization" property="ampOrgId"/>)'>
+																					<B><digi:trn key="aim:editFundingItem">Edit Item</digi:trn></B>
+																					</a> 
+																				</td>
+																				<td>
+																					<a href='javascript:fnOnDeleteItem(<bean:write name="fundingOrganization" property="ampOrgId"/>,<bean:write name="funding" property="fundingId"/>)'>
+																					<B><digi:trn key="aim:deleteFundingItem">Delete Item</digi:trn></B>
+																					</a> 
+																				</td>																				
+																			</tr>
 																		</table>																	
 																	</td></tr>
-																	</c:if>
-
-																	<c:if test="${aimEditActivityForm.donorFlag == true}">
-																	<c:if test="${fundingOrganization.ampOrgId == aimEditActivityForm.fundDonor}">
-																	<tr><td>
-																		<table border="0" cellpadding="8"
-																		bgcolor="#ffffff" cellspacing="1">
-																		<tr>
-																			<td>
-																				<a href='javascript:fnOnEditItem(<%= index %>,
-																									 <bean:write name="fundingOrganization" property="ampOrgId"/>,
-																								<bean:write name="funding" property="fundingId"/>)'>
-																				<B><digi:trn key="aim:editFundingItem">Edit Item</digi:trn></B>
-																				</a> 
-																			</td>
-																		</tr>
-																		</table>																	
-																	</td></tr>
-																	</c:if>
-																	</c:if>
-																	
 																	<tr><td bgcolor="#ffffff">
 																		<FONT color=blue>*
 																			<digi:trn key="aim:theAmountEnteredAreInThousands">	
@@ -640,17 +476,14 @@
 																	</td></tr>
 																	</logic:iterate>
 																	</logic:notEmpty>
-																<c:if test="${aimEditActivityForm.donorFlag == false}">	
 																<tr>
 																	<td>
 																		<input type="button" value="Add Funding" class="buton" 
 																		onclick="addFunding('<bean:write name="fundingOrganization" property="ampOrgId"/>')">
 																	</td>
 																</tr>
-																</c:if>
 																</logic:iterate>
 																<tr><td>&nbsp;</td></tr>
-																<c:if test="${aimEditActivityForm.donorFlag == false}">	
 																<tr>
 																	<td>
 																		<table cellSpacing=2 cellPadding=2>
@@ -667,17 +500,14 @@
 																		</table>
 																	</td>
 																</tr>
-																</c:if>
 																</logic:notEmpty>
 																<logic:empty name="aimEditActivityForm" property="fundingOrganizations">
-																<c:if test="${aimEditActivityForm.donorFlag == false}">	
 																<tr>
 																	<td>
 																		<input type="button" value="Add Organisation" class="buton" 
 																		onclick="selectOrganisation()">
 																	</td>
 																</tr>
-																</c:if>
 																</logic:empty>
 															</table>
 														</td>
@@ -690,19 +520,12 @@
 									<td bgColor=#f4f4f2 align="center">
 										<table cellPadding=3>
 											<tr>
-												<c:if test="${aimEditActivityForm.donorFlag == true}">
-												<td>
-													<input type="button" value="Preview" class="dr-menu" onclick="previewClicked()">
-												</td>												
-												</c:if>
-												<c:if test="${aimEditActivityForm.donorFlag == false}">
 												<td>
 													<input type="submit" value=" << Back " class="dr-menu" onclick="gotoStep(2)">
 												</td>
 												<td>
 													<input type="submit" value="Next >> " class="dr-menu" onclick="gotoStep(4)">
-												</td>												
-												</c:if>													
+												</td>
 												<td>
 													<input type="reset" value="Reset" class="dr-menu" onclick="return resetAll()">
 												</td>
@@ -726,12 +549,7 @@
 						</td>
 						<td width="25%" vAlign="top" align="right">
 						<!-- edit activity form menu -->
-							<c:if test="${aimEditActivityForm.donorFlag == false}">
-								<jsp:include page="editActivityMenu.jsp" flush="true" />
-							</c:if>
-							<c:if test="${aimEditActivityForm.donorFlag == true}">
-								<jsp:include page="donorEditActivityMenu.jsp" flush="true" />
-							</c:if>
+							<jsp:include page="editActivityMenu.jsp" flush="true" />
 						<!-- end of activity form menu -->							
 						</td></tr>
 					</table>

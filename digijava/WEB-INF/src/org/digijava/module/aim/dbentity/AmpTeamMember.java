@@ -22,10 +22,7 @@ public class AmpTeamMember implements Serializable {
 	private Set activities;
 	private Set reports;
 	private Set links;
-	
-	// added for donor access
-	private Set editableFundingOrgs;	// in case of donor - allowed organisations whose funding details this TM can edit
-	
+
 	public void setReports(Set reports) {
 		this.reports = reports;
 	}
@@ -145,17 +142,4 @@ public class AmpTeamMember implements Serializable {
     public void setLinks(Set links) {
         this.links = links;
     }
-	/**
-	 * @return Returns the editableFundingOrgs.
-	 */
-	public Set getEditableFundingOrgs() {
-		return editableFundingOrgs;
-	}
-	/**
-	 * @param editableFundingOrgs The editableFundingOrgs to set.
-	 */
-	public void setEditableFundingOrgs(Set editableFundingOrgs) {
-		this.editableFundingOrgs = editableFundingOrgs;
-	}
-	
 }

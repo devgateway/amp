@@ -47,9 +47,6 @@ public class MyDesktopForm extends ActionForm
 	private String workingTeamFlag;
 	private int myTaskSize;
 	private Collection myTasksColl;
-	private String approvalStatus;
-	
-	private boolean donorFlag;
 	
 	/* added by Priyajith 
 	 * for RelatedLinksList */
@@ -493,31 +490,5 @@ public class MyDesktopForm extends ActionForm
 	 */
 	public void setTeamId(Long teamId) {
 		this.teamId = teamId;
-	}
-	/**
-	 * @return Returns the approvalStatus.
-	 */
-	public String getApprovalStatus() {
-		return approvalStatus;
-	}
-	/**
-	 * @param approvalStatus The approvalStatus to set.
-	 */
-	public void setApprovalStatus(String approvalStatus) {
-		this.approvalStatus = approvalStatus;
-	}
-
-	/**
-	 * @return Returns the donorFlag.
-	 */
-	public boolean isDonorFlag() {
-		return donorFlag;
-	}
-
-	/**
-	 * @param donorFlag The donorFlag to set.
-	 */
-	public void setDonorFlag(boolean donorFlag) {
-		this.donorFlag = donorFlag;
 	}
 }

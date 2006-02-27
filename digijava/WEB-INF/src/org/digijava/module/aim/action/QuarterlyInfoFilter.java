@@ -100,10 +100,9 @@ public class QuarterlyInfoFilter extends TilesAction	{
 				fp.setFromYear(formBean.getFromYear());
 			}
 			session.setAttribute("filterParams",fp);
-			formBean.setPerpsectiveName(DbUtil.getPerspective(fp.getPerspective()).getName());			
+			
 			formBean.setYears(YearUtil.getYears());
 			formBean.setCurrencies(DbUtil.getAmpCurrency());
-			formBean.setPerspectives(DbUtil.getAmpPerspective());
 			formBean.setFiscalYears(new ArrayList());
 			formBean.setFiscalYears(DbUtil.getAllFisCalenders());
 			

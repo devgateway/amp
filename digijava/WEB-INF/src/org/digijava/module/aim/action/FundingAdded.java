@@ -70,12 +70,7 @@ public class FundingAdded extends Action {
 		double totExp = eaForm.getTotalExpenditures();
 		
 		Funding newFund = new Funding();
-		
-		if (eaForm.getFundingId() != null && eaForm.getFundingId().longValue() > 0) {
-			newFund.setFundingId(eaForm.getFundingId().longValue());
-		} else {
-			newFund.setFundingId(System.currentTimeMillis());	
-		}
+		newFund.setFundingId(System.currentTimeMillis());
 		newFund.setAmpTermsAssist(DbUtil.getAssistanceType(eaForm
 				.getAssistanceType()));
 		newFund.setOrgFundingId(eaForm.getOrgFundingId());

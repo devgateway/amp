@@ -6,16 +6,12 @@ package org.digijava.module.aim.helper;
 
 import java.util.Collection;
 
-import org.digijava.module.aim.dbentity.AmpTeam;
-
 public class Workspace {
 	private String id;
 	private String name;
 	private String description;
-	private String teamCategory;
-	private String type;
 	private String workspaceType;
-	private Long relatedTeam;
+	private String teamCategory;
 	private boolean hasActivities;
 	private boolean hasMembers;
 	private Collection childWorkspaces; 
@@ -94,30 +90,6 @@ public class Workspace {
 	 */
 	public void setTeamCategory(String teamCategory) {
 		this.teamCategory = teamCategory;
-	}
-	/**
-	 * @return Returns the type.
-	 */
-	public String getType() {
-		return type;
-	}
-	/**
-	 * @param type The type to set.
-	 */
-	public void setType(String type) {
-		this.type = type;
-	}
-	/**
-	 * @return Returns the relatedTeam.
-	 */
-	public Long getRelatedTeam() {
-		return relatedTeam;
-	}
-	/**
-	 * @param relatedTeam The relatedTeam to set.
-	 */
-	public void setRelatedTeam(Long relatedTeam) {
-		this.relatedTeam = relatedTeam;
 	}
 	/**
 	 * @return Returns the workspaceType.

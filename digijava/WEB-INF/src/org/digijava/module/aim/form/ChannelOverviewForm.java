@@ -39,7 +39,6 @@ public class ChannelOverviewForm extends MainProjectDetailsForm
 	private Integer pageNo;
 	private String currCode;
 	private Collection modal;
-	private boolean canView;
 	
 	private Activity activity;
 	
@@ -412,19 +411,5 @@ public class ChannelOverviewForm extends MainProjectDetailsForm
 	 */
 	public void setButtonText(String buttonText) {
 		this.buttonText = buttonText;
-	}
-
-	/**
-	 * @return Returns the canView.
-	 */
-	public boolean isCanView() {
-		return canView;
-	}
-
-	/**
-	 * @param canView The canView to set.
-	 */
-	public void setCanView(boolean canView) {
-		this.canView = canView;
 	}
 }

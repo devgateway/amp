@@ -111,9 +111,13 @@ type="org.digijava.module.aim.form.YearlyComparisonsForm" method="post">
 							<digi:link href="/viewFinancingBreakdown.do" name="urlFinancingBreakdown" styleClass="comment" title="<%=translation%>" >
 								<digi:trn key="aim:financialProgress">Financial Progress</digi:trn>
 							</digi:link>
-                  	&gt; Yearly All
-							&gt; 
-							<bean:write name="aimYearlyComparisonsForm" property="perpsectiveName" />							
+                  	&gt; Yearly All &gt; 
+                  	<logic:equal name="aimYearlyComparisonsForm" property="perspective" value="MA">
+								 MOFED Perspective
+							</logic:equal>
+							<logic:equal name="aimYearlyComparisonsForm" property="perspective" value="DN">
+								 Donor Perspective
+							</logic:equal>
 						</SPAN>
 								</TD>
 								<TD align="right">
@@ -150,9 +154,9 @@ type="org.digijava.module.aim.form.YearlyComparisonsForm" method="post">
 						                         	<STRONG>Perspective:</STRONG>
 														</TD>
 														<TD>
-															<html:select property="perspective" styleClass="dr-menu">
-																<html:optionsCollection name="aimYearlyComparisonsForm" 
-																property="perspectives" value="code" label="name"/>
+															<html:select property="perspective" styleClass="dr-menu" onchange="formSubmit()">
+																<html:option value="MA">MOFED View</html:option>
+																<html:option value="DN">Donor View</html:option>
 															</html:select>
 														</TD>								
 													</TR>

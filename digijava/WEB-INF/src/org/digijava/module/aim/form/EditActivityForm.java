@@ -149,7 +149,6 @@ public class EditActivityForm extends ActionForm implements Serializable{
 	/* START FINANCIAL EDIT */
 	private Collection fundingOrganizations; // Collection of FundingOrganization objects
 	private String orgFundingId;
-	private Long fundingId;
 	private Long orgId;
 	private String orgName;
 	private String signatureDate;
@@ -279,9 +278,6 @@ public class EditActivityForm extends ActionForm implements Serializable{
 	private double totalDisbursements;
 	private double totalExpenditures;
 	
-	private boolean donorFlag; 
-	private Long fundDonor;
-	
 	public EditActivityForm() {
 		step = "1";
 		reset = false;
@@ -297,15 +293,11 @@ public class EditActivityForm extends ActionForm implements Serializable{
 		totalCommitments = 0;
 		totalDisbursements = 0;
 		totalExpenditures = 0;
-		donorFlag = false;
-		
 	}
 
 	public void reset(ActionMapping mapping, HttpServletRequest request) {
 
 		if (reset) {
-			donorFlag = false;
-			fundDonor = null;
 			createdDate = null;
 			activityId = null;
 			ampId = null;
@@ -347,7 +339,6 @@ public class EditActivityForm extends ActionForm implements Serializable{
 			pages = null;
 			alphaPages = null;
 			fundingOrganizations = null;
-			fundingId = null;
 			orgFundingId = null;
 			orgId = null;
 			orgName = null;
@@ -3027,47 +3018,5 @@ public class EditActivityForm extends ActionForm implements Serializable{
 	 */
 	public void setShowInHomePage(boolean showInHomePage) {
 		this.showInHomePage = showInHomePage;
-	}
-
-	/**
-	 * @return Returns the donorFlag.
-	 */
-	public boolean isDonorFlag() {
-		return donorFlag;
-	}
-
-	/**
-	 * @param donorFlag The donorFlag to set.
-	 */
-	public void setDonorFlag(boolean donorFlag) {
-		this.donorFlag = donorFlag;
-	}
-
-	/**
-	 * @return Returns the fundDonor.
-	 */
-	public Long getFundDonor() {
-		return fundDonor;
-	}
-
-	/**
-	 * @param fundDonor The fundDonor to set.
-	 */
-	public void setFundDonor(Long fundDonor) {
-		this.fundDonor = fundDonor;
-	}
-
-	/**
-	 * @return Returns the fundingId.
-	 */
-	public Long getFundingId() {
-		return fundingId;
-	}
-
-	/**
-	 * @param fundingId The fundingId to set.
-	 */
-	public void setFundingId(Long fundingId) {
-		this.fundingId = fundingId;
 	}
 }

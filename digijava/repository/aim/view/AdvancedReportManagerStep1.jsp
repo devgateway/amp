@@ -147,13 +147,13 @@ function checkUncheckAll2() {
 
 				<td height=16 vAlign=right align=center>
 					<span class=subtitle-blue>
-					Report Builder : Select Column
-					</span>
+					Report Builder : Select Column</span>
 				</td>
 			</tr>
 			<tr colspan="2">
-				<td class=box-title align="center" valign="top">
-
+				<td class=box-title align="right" valign="top">
+					<img src="module/aim/images/arrow-014E86.gif">Report Type :
+					<bean:write name="aimAdvancedReportForm" property="arReportType"/>
 				<td>
 			</tr>
 			<TR>

@@ -79,8 +79,8 @@ function gotoStep() {
 				</td>
 			</tr>
 			<tr colspan="2">
-				<td class=box-title align="center" valign="top">
-
+				<td class=box-title align="right" valign="top">
+					<img src="module/aim/images/arrow-014E86.gif">Report Type : Please Select
 				<td>
 			</tr>
 			<TR>

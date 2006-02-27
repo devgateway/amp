@@ -17,9 +17,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.apache.log4j.Logger;
 import org.apache.struts.action.ActionServlet;
-import org.digijava.module.aim.dbentity.AmpActor;
 import org.digijava.module.aim.helper.Constants;
 
 /**
@@ -38,7 +36,6 @@ import org.digijava.module.aim.helper.Constants;
 public class AMPActionServlet extends ActionServlet {
 
 	private ServletContext ampContext; // the application scope variable
-	private static Logger logger = Logger.getLogger(AMPActionServlet.class);
 	
 	public void init(ServletConfig servletConfig) throws ServletException {
 		ampContext = servletConfig.getServletContext();
@@ -82,7 +79,6 @@ public class AMPActionServlet extends ActionServlet {
 		 * Then the system will check whether the user is still doing the editing or is moving out of edit pages
 		 */
 		if (index > -1) {
-			logger.info("url = " + url);
 			int tempIndex = url.indexOf("/aim/");
 			if (tempIndex != -1) {
 				String pggrp = request.getParameter("edit");
@@ -94,13 +90,13 @@ public class AMPActionServlet extends ActionServlet {
 				 */
 
 				if (pggrp == null || !(pggrp.trim().equalsIgnoreCase("true"))) {
+					sessionList.remove(index);
+					Collections.sort(sessionList);
+					
+					Long actId = null;
+					Long userId = null;
+					
 					synchronized (ampContext) {
-						logger.info("Remove from ActionServlet, value of edit is " + pggrp);
-						sessionList.remove(index);
-						Collections.sort(sessionList);
-					
-						Long actId = null;
-					
 						HashMap activityMap = (HashMap) ampContext
 								.getAttribute(Constants.EDIT_ACT_LIST);
 						

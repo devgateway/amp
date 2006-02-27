@@ -58,6 +58,7 @@ public class AdvancedReportPDF extends Action {
     int colsize;
     int msize;
     int hsize;
+    int assistCnt;
 
     public int getAssistTypeCount(boolean typeAssist, Collection reports) {
     
@@ -153,7 +154,7 @@ public class AdvancedReportPDF extends Action {
 
             // Object dataArray[][];
             int n = 3;
-            int totalcnt = 1;
+            int totalcnt=0, totalcnt2=0, totalcnt3=0;
 
             if ((formBean.getHierarchyFlag() == "true") && (formBean.getColumnHierarchie() != null)) {
                 n += formBean.getColumnHierarchie().size();
@@ -221,84 +222,76 @@ public class AdvancedReportPDF extends Action {
             if ((formBean.getColumnHierarchie() != null) && (formBean.getColumnHierarchie().size() > 0)) {
                 int i = 0;
                 Iterator one = formBean.getAllReports().iterator();
-                int assistCnt=0;
+                assistCnt=0;
                 while (one.hasNext()) {
                     multiReport mr = (multiReport) one.next();
                     Iterator two = mr.getHierarchy().iterator();
-
                     while (two.hasNext()) {
                         ahr = (AdvancedHierarchyReport) two.next();
                         // Level 1
                         if(ahr.getProject().size()>0) assistCnt+=this.getAssistTypeCount(typeAssist,ahr.getProject());
-                        
                         logger.info("project Size:::: " + ahr.getProject().size());
-
                         if ((ahr.getLevels() != null) && (ahr.getLevels().size() > 0)) {
                             logger.info("project Levels:::: " + ahr.getLevels().size());
-
                             Iterator three = ahr.getLevels().iterator();
-
                             while (three.hasNext()) {
-                                // logger.info("**********"+three.next().getClass().getName());
                                 ahr2 = (AdvancedHierarchyReport) three.next();
                                 // Level 2
                                 if(ahr2.getProject().size()>0) assistCnt+=this.getAssistTypeCount(typeAssist,ahr2.getProject());
                                 logger.info("project Size---" + ahr2.getProject().size());
-
                                 if ((ahr2.getLevels() != null) && (ahr2.getLevels().size() > 0)) {
                                     logger.info("project Levels---" + ahr2.getLevels().size());
-
                                     Iterator four = ahr2.getLevels().iterator();
-
                                     while (four.hasNext()) {
                                         ahr3 = (AdvancedHierarchyReport) four.next();
-                                        if(ahr3.getProject().size()>0) assistCnt+=this.getAssistTypeCount(typeAssist,ahr3.getProject());
-                                        // logger.info("project Levels
-                                        // 3333"+ahr2.getLevels().size());
-                                        logger.info("project Size 3333=" + ahr3.getProject().size());
+                                        // Level 3
+                                        if(ahr3.getProject().size()>0) 
+                                       	assistCnt+=this.getAssistTypeCount(typeAssist,ahr3.getProject());
+                                        // logger.info("project Levels 3333"+ahr2.getLevels().size());
                                         i += ahr3.getProject().size();
-                                        totalcnt++;
-                                        logger.info("iiiiiiiiiiiiiiii== " + i + " h3 ==== " + ahr3.getName() + " ==== " + formBean.getColumnHierarchie().size() + "totalcnt=" + totalcnt);
-                                    } // four
-                                      // totalcnt++;
-                                      // logger.info("iiiiiiiiiiiiiiii== "+i+" h3
-                                      // ==== "+ahr2.getName()+" ====
-                                      // "+formBean.getColumnHierarchie().size()+"totalcnt="+totalcnt);
+                                        totalcnt3++;
+                                        //logger.info("project Size 3333=" + ahr3.getProject().size());
+                                    } 
+                                    
+                                    //logger.info("iiiiiiiiiiiiiiii== " + i + " h3 ==== " + ahr3.getName() + " ==== " + formBean.getColumnHierarchie().size() + "totalcnt=" + totalcnt);
                                 }
-
                                 i += ahr2.getProject().size();
-                                totalcnt++;
-                                logger.info("iiiiiiiiiiiiiiii== " + i + " h2 ==== " + ahr2.getName() + " ==== " + formBean.getColumnHierarchie().size() + "totalcnt=" + totalcnt);
-                            } // three
-                              // totalcnt++;
-                              // logger.info("iiiiiiiiiiiiiiii== "+i+" h2 ====
-                              // "+ahr.getName()+" ====
-                              // "+formBean.getColumnHierarchie().size()+"totalcnt="+totalcnt);
+                                totalcnt2++;
+                                //logger.info("iiiiiiiiiiiiiiii== " + i + " h2 ==== " + ahr2.getName() + " ==== " + formBean.getColumnHierarchie().size() + "totalcnt=" + totalcnt);
+                            }
+                            
                         }
-
                         i += ahr.getProject().size();
                         totalcnt++;
-                        logger.info("iiiiiiiiiiiiiiii== " + i + " h1 ==== " + ahr.getName() + " ==== " + formBean.getColumnHierarchie().size() + "totalcnt=" + totalcnt);
-                    } // two
-                      // totalcnt++;
-                      // logger.info("iiiiiiiiiiiiiiii== "+i+" h1 ====
-                      // "+formBean.getColumnHierarchie().size()+"totalcnt="+totalcnt);
+                        //logger.info("iiiiiiiiiiiiiiii== " + i + " h1 ==== " + ahr.getName() + " ==== " + formBean.getColumnHierarchie().size() + "totalcnt=" + totalcnt);
+                    }
                 } // one
 
                 logger.info("::::::::: -ind= " + ind + " -columnDetails.lenght= " + columnDetails.length + " -col hierarchy= " + formBean.getColumnHierarchie().size());
                 // dataArray = new Object[i+1][columnDetails.length + ind+
                 // formBean.getColumnHierarchie().size()];
-                logger.info("---------TOTAL COUNT = " + totalcnt);
-                i += (totalcnt * rsc.getHierarchy().size());
+                logger.info("---------TOTAL COUNT = " + totalcnt+":"+totalcnt2+":"+totalcnt3);
+                logger.info("assistCnt========="+assistCnt+" iiiiiii="+i);
+                totalcnt+=totalcnt2+totalcnt3;
+                i += (totalcnt /* * rsc.getHierarchy().size()*/)+1+assistCnt;
                                 
-                logger.info("---------TOTAL COUNT with HRRCHY= " + (totalcnt * rsc.getHierarchy().size()) + "iiiiiiiiiiiiiiii=" + i);
-                dataArray = new Object[i /*+1+assistCnt*/][columnDetails.length + ((formBean.getFiscalYearRange().size() + 1) * rsc.getMeasures().size() * 4) + formBean.getColumnHierarchie().size()];
-                logger.info("****dataArray size with H= " + (i) + " :" + (columnDetails.length + ((formBean.getFiscalYearRange().size() + 1) * rsc.getMeasures().size() * 4) + formBean.getColumnHierarchie().size()));
+                logger.info("---------TOTAL COUNT with HRRCHY= " + (totalcnt /** rsc.getHierarchy().size()*/) + "iiiiiiiiiiiiiiii=" + i);
+                
+                
+                int totCols=0;
+                
+                if (qtrlyFlag) 
+                	totCols=columnDetails.length + ((formBean.getFiscalYearRange().size() + 1) * rsc.getMeasures().size()*4) + formBean.getColumnHierarchie().size()+10;
+                else
+                	totCols=columnDetails.length + ((formBean.getFiscalYearRange().size() + 1) * rsc.getMeasures().size()) + formBean.getColumnHierarchie().size()+10;
+                
+                	dataArray = new Object[i /*+1+assistCnt*/][totCols];
+                	logger.info("****dataArray size with HHHH= " + (i) + " :::::" + totCols);
             } else {
                 // calculate no. of rows for grant/loan= assistance type rows
-               
+            	logger.info("assistCnt========="+assistCnt);
                 dataArray = new Object[this.getAssistTypeCount(typeAssist,formBean.getAllReports()) + formBean.getAllReports().size() + 2][columnDetails.length + ind];
-                logger.info("****dataArray size no H= " + (formBean.getAllReports().size() + 2) + " :" + (columnDetails.length + ind));
+                logger.info("****dataArray size NOO HHH= " + (formBean.getAllReports().size() + 2) + " :" + (columnDetails.length + ind));
             }
 
             // String rowData[] = new String[columnDetails.length + ind - n];
@@ -1690,6 +1683,157 @@ public class AdvancedReportPDF extends Action {
                                                     // ###-->"+ row);
                                                 }
                                             } // END Of AmpFund Iteration
+                                            
+                                            
+                                            logger.info("================ TYPE OF ASSIST ITERATION ==========");
+
+                                            
+                                            if (typeAssist && advReport.getAmpFund() != null) {
+                                                Iterator iac = advReport.getAssistanceCopy().iterator();
+                                                
+                                              
+                                                //for each assistance type we iterate all ampFundS
+                                                while (iac.hasNext()) {
+                                                    String assistType = (String) iac.next();
+                                                    row++;
+                                                    
+                                                    //reset vertical position
+                                                    position = (n + rsc.getColumns().size()) - 1;
+                                                    dataArray[row][position] = assistType;
+                                                    logger.info("------------------------------------------" + position);
+
+                                                    funds = advReport.getAmpFund().iterator();
+                                                    yearIter = formBean.getFiscalYearRange().iterator();
+
+                                                    if (yearIter.hasNext()) {
+                                                        yearValue = (Integer) yearIter.next();
+                                                    }
+
+                                                    year = yearValue.intValue();
+
+                                                    ind = 0;
+
+                                                    while (funds.hasNext()) {
+                                                        AmpFund ampFund = (AmpFund) funds.next();
+
+                                                        ind++;
+
+                                                        if (qtrlyFlag) {
+                                                                if ((ind % 4) == 1) {
+                                                                    position = position + 1;
+                                                                    dataArray[row][position] = new String("" + year);
+                                                                    year = year + 1;
+                                                                }
+                                                        } else {
+                                                                position = position + 1;
+                                                                dataArray[row][position] = new String("" + year);
+                                                                year = year + 1;
+                                                            }
+                                                           
+
+                                                        
+                                                        if (formBean.getAcCommFlag().equals("true") && (ampFund.getCommAmount() != null)) {
+                                                            if (ampFund.getByTypeComm() == null) {
+                                                                logger.error("bytypeComm is null at advReport " + advReport.getAmpActivityId());
+                                                            }
+
+                                                            Iterator i = ampFund.getByTypeComm().iterator();
+                                                            position = position + 1;
+
+                                                            while (i.hasNext()) {
+                                                                AmpByAssistTypeAmount ata = (AmpByAssistTypeAmount) i.next();
+
+                                                                if (ata.getFundingTerms().equals(assistType)) {
+                                                                    dataArray[row][position] = ata.toString();
+                                                                }
+                                                            }
+                                                        }
+
+                                                        if (formBean.getAcDisbFlag().equals("true") && (ampFund.getDisbAmount() != null)) {
+                                                            Iterator i = ampFund.getByTypeDisb().iterator();
+                                                            position = position + 1;
+
+                                                            while (i.hasNext()) {
+                                                                AmpByAssistTypeAmount ata = (AmpByAssistTypeAmount) i.next();
+
+                                                                if (ata.getFundingTerms().equals(assistType)) {
+                                                                    dataArray[row][position] = ata.toString();
+                                                                }
+                                                            }
+                                                        }
+
+                                                        if (formBean.getAcExpFlag().equals("true") && (ampFund.getExpAmount() != null)) {
+                                                            Iterator i = ampFund.getByTypeExp().iterator();
+                                                            position = position + 1;
+
+                                                            while (i.hasNext()) {
+                                                                AmpByAssistTypeAmount ata = (AmpByAssistTypeAmount) i.next();
+
+                                                                if (ata.getFundingTerms().equals(assistType)) {
+                                                                    dataArray[row][position] = ata.toString();
+                                                                }
+                                                            }
+                                                        }
+
+                                                        if (formBean.getPlCommFlag().equals("true") && (ampFund.getPlCommAmount() != null)) {
+                                                            Iterator i = ampFund.getByTypePlComm().iterator();
+                                                            position = position + 1;
+
+                                                            while (i.hasNext()) {
+                                                                AmpByAssistTypeAmount ata = (AmpByAssistTypeAmount) i.next();
+
+                                                                if (ata.getFundingTerms().equals(assistType)) {
+                                                                    dataArray[row][position] = ata.toString();
+                                                                }
+                                                            }
+                                                        }
+
+                                                        if (formBean.getPlDisbFlag().equals("true") && (ampFund.getPlDisbAmount() != null)) {
+                                                            Iterator i = ampFund.getByTypePlDisb().iterator();
+                                                            position = position + 1;
+
+                                                            while (i.hasNext()) {
+                                                                AmpByAssistTypeAmount ata = (AmpByAssistTypeAmount) i.next();
+
+                                                                if (ata.getFundingTerms().equals(assistType)) {
+                                                                    dataArray[row][position] = ata.toString();
+                                                                }
+                                                            }
+                                                        }
+
+                                                        if (formBean.getPlExpFlag().equals("true") && (ampFund.getPlExpAmount() != null)) {
+                                                            position = position + 1;
+
+                                                        	Iterator i = ampFund.getByTypePlExp().iterator();
+
+                                                            while (i.hasNext()) {
+                                                                AmpByAssistTypeAmount ata = (AmpByAssistTypeAmount) i.next();
+
+                                                                if (ata.getFundingTerms().equals(assistType)) {
+                                                                    dataArray[row][position] = ata.toString();
+                                                                }
+                                                            }
+                                                        }
+
+                                                        if (formBean.getAcBalFlag().equals("true") && (ampFund.getUnDisbAmount() != null) && (ind > formBean.getFiscalYearRange().size())) {
+                                                            position = position + 1;
+
+                                                        	Iterator i = ampFund.getByTypeUnDisb().iterator();
+
+                                                            while (i.hasNext()) {
+                                                                AmpByAssistTypeAmount ata = (AmpByAssistTypeAmount) i.next();
+
+                                                                if (ata.getFundingTerms().equals(assistType)) {
+                                                                    dataArray[row][position] = ata.toString();
+                                                                }
+                                                            }
+                                                        }
+
+                                                        //year = year + 1;
+                                                    } // END Of AmpFund Iteration
+                                                }
+                                            }// end assist
+                                            
                                         } // End of Records Iteration
 
                                         logger.info("&&&& Row &&&-->" + row + "--k==" + k);
@@ -2238,15 +2382,15 @@ public class AdvancedReportPDF extends Action {
             position++;
         }
 
-        /*
+        
         if (hsize >= 1) {
-            dataArray[row][position] = ahr.getLabel() + " - row 2241 " + ahr.getName();
+            dataArray[row][position] = ahr.getLabel() + " - " + ahr.getName();
             logger.info("total ahr.name H1------->" + ahr.getLabel());
             position++;
         }
 
         if (hsize >= 2) {
-            dataArray[row][position] = ahr2.getLabel() + " - row 2247 " + ahr2.getName();
+            dataArray[row][position] = ahr2.getLabel() + " - " + ahr2.getName();
             logger.info("total ahr.name H2------->" + ahr2.getLabel());
             position++;
         }
@@ -2256,7 +2400,7 @@ public class AdvancedReportPDF extends Action {
             logger.info("total ahr.name H3------->" + ahr3.getLabel());
             position++;
         }
-        */
+        
 
         position = 3 + hsize + rsc.getColumns().size();
         logger.info("::::::::::::::::::filling TOTALS::::::::k=" + row + "possss" + position);
@@ -2287,23 +2431,60 @@ public class AdvancedReportPDF extends Action {
             }
         }
 
+        //------------------------------
         int tmp = 0;
-
+        Iterator yearIter = formBean.getFiscalYearRange().iterator();
+        Integer yearValue=null;
+        int year;
+        int ind = 0;
+        
         while (itrtot.hasNext()) {
-            if (qtrlyFlag) {
+        	ind++;
+        	/*if (qtrlyFlag) {
                 if ((tmp % (msize * 4)) == 0) {
                     dataArray[row][position++] = "--";
                 }
+                //position++;
             } else {
                 if ((tmp % msize) == 0) {
                     logger.info("***************************" + tmp);
-                    dataArray[row][position++] = "--";
+                    dataArray[row][position++] = "++";
                 }
+                //position++;
+            }*/
+            
+            if (yearIter.hasNext()) {
+                yearValue = (Integer) yearIter.next();
             }
-
+            year = yearValue.intValue();
+            
+            if (qtrlyFlag) {
+                    if (ind > (formBean.getFiscalYearRange().size() * 4)) {
+                        dataArray[row][position] = new String(" Total ");
+                        position++;
+                    } else {
+                        if ((ind % 4) == 1) {
+                            dataArray[row][position] = new String("" + year);
+                            year++;
+                            position++;
+                        }
+                    }
+                } 
+            else {
+                    if (ind > formBean.getFiscalYearRange().size()) {
+                        position = position + 1;
+                        dataArray[row][position] = new String(" Total ");
+                    } else {
+                        position = position + 1;
+                        dataArray[row][position] = new String("" + year);
+                        year = year + 1;
+                    }
+                }
+            //-----------------------------------
+            
             AmpFund ampFund = (AmpFund) itrtot.next();
             tmp++;
-
+            
             if (formBean.getAcCommFlag().equals("true") && (ampFund.getCommAmount() != null)) {
                 dataArray[row][position++] = ampFund.getCommAmount();
                 logger.info("total values.........." + row + ":::" + position + "::::" + dataArray[row][position - 1]);

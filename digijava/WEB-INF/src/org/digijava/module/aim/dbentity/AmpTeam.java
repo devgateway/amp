@@ -4,8 +4,9 @@
 
 package org.digijava.module.aim.dbentity;
 
-import java.io.Serializable;
 import java.util.Set;
+import java.io.Serializable;
+
 
 public class AmpTeam  implements Serializable {
 
@@ -17,17 +18,15 @@ public class AmpTeam  implements Serializable {
 
 	private AmpTeamMember teamLead; // Denotes the Team Leader
 
-	private String type; 			// Whether Bilateral or Multilateral
+	private String type; // Whether Bilateral or Multilateral
+
+	private Set teamPageFilters;
 
 	private AmpTeam parentTeamId;
-	
-	private String accessType;  	// Management or Team
-	
-	// added for donor-access
-	private String teamCategory;	// Donor or Mofed team
-	private AmpTeam relatedTeamId;	// a donor team referring a mofed team
-	private Set activityList;		// activities assigned to donor team
-	
+
+	private String accessType;  // Management or Team
+
+	//private Set activityList;
 
 	/**
 	 * @return ampTeamId
@@ -93,6 +92,14 @@ public class AmpTeam  implements Serializable {
 		this.type = type;
 	}
 
+	public Set getTeamPageFilters() {
+		return teamPageFilters;
+	}
+
+	public void setTeamPageFilters(Set teamPageFilters) {
+		this.teamPageFilters = teamPageFilters;
+	}
+
 	/**
 	 * @return Returns the parentTeamId.
 	 */
@@ -129,41 +136,5 @@ public class AmpTeam  implements Serializable {
 		
 		AmpTeam temp = (AmpTeam) obj;
 		return (this.ampTeamId.equals(temp.getAmpTeamId()));
-	}
-	/**
-	 * @return Returns the activityList.
-	 */
-	public Set getActivityList() {
-		return activityList;
-	}
-	/**
-	 * @param activityList The activityList to set.
-	 */
-	public void setActivityList(Set activityList) {
-		this.activityList = activityList;
-	}
-	/**
-	 * @return Returns the relatedTeam.
-	 */
-	public AmpTeam getRelatedTeamId() {
-		return relatedTeamId;
-	}
-	/**
-	 * @param relatedTeam The relatedTeam to set.
-	 */
-	public void setRelatedTeamId(AmpTeam relatedTeam) {
-		this.relatedTeamId = relatedTeam;
-	}
-	/**
-	 * @return Returns the teamCategory.
-	 */
-	public String getTeamCategory() {
-		return teamCategory;
-	}
-	/**
-	 * @param teamCategory The teamCategory to set.
-	 */
-	public void setTeamCategory(String teamCategory) {
-		this.teamCategory = teamCategory;
 	}
 }

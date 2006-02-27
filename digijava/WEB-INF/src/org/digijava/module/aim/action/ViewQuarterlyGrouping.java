@@ -85,7 +85,6 @@ public class ViewQuarterlyGrouping extends TilesAction	{
 			}
 			
 			formBean.setPerspective(fp.getPerspective());
-			formBean.setPerpsectiveName(DbUtil.getPerspective(fp.getPerspective()).getName());			
 			formBean.setCurrency(fp.getCurrencyCode());
 			formBean.setFiscalCalId(fp.getFiscalCalId().longValue());
 			formBean.setFromYear(fp.getFromYear());
@@ -93,7 +92,6 @@ public class ViewQuarterlyGrouping extends TilesAction	{
 			session.setAttribute("filterParams",fp);
 			formBean.setYears(YearUtil.getYears());
 			formBean.setCurrencies(DbUtil.getAmpCurrency());
-			formBean.setPerspectives(DbUtil.getAmpPerspective());
 			
 			formBean.setFiscalYears(new ArrayList());
 			formBean.setFiscalYears(DbUtil.getAllFisCalenders());			

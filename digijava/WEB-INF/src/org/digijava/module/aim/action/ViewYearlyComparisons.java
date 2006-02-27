@@ -84,7 +84,6 @@ public class ViewYearlyComparisons extends TilesAction
 				fp.setToYear(year+Constants.TO_YEAR_RANGE);
 			}
 			formBean.setPerspective(fp.getPerspective());
-			formBean.setPerpsectiveName(DbUtil.getPerspective(fp.getPerspective()).getName());
 			formBean.setCurrency(fp.getCurrencyCode());
 			formBean.setFiscalCalId(fp.getFiscalCalId().longValue());
 			formBean.setFromYear(fp.getFromYear());
@@ -108,7 +107,6 @@ public class ViewYearlyComparisons extends TilesAction
 				formBean.setYearlyComparisons(c);
 			}
 			formBean.setCurrencies(DbUtil.getAmpCurrency());
-			formBean.setPerspectives(DbUtil.getAmpPerspective());
 			formBean.setFiscalYears(new ArrayList());
 			formBean.setFiscalYears(DbUtil.getAllFisCalenders());
 		}

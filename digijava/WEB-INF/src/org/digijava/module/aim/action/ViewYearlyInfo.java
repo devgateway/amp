@@ -17,7 +17,6 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.tiles.ComponentContext;
 import org.apache.struts.tiles.actions.TilesAction;
-import org.digijava.module.aim.dbentity.AmpPerspective;
 import org.digijava.module.aim.form.YearlyInfoForm;
 import org.digijava.module.aim.helper.ApplicationSettings;
 import org.digijava.module.aim.helper.CommonWorker;
@@ -85,7 +84,6 @@ public class ViewYearlyInfo extends TilesAction {
 				fp.setToYear(year+Constants.TO_YEAR_RANGE);
 			}
 			formBean.setPerspective(fp.getPerspective());
-			formBean.setPerpsectiveName(DbUtil.getPerspective(fp.getPerspective()).getName());
 			formBean.setCurrency(fp.getCurrencyCode());
 			formBean.setFiscalCalId(fp.getFiscalCalId().longValue());
 			formBean.setFromYear(fp.getFromYear());
@@ -124,9 +122,6 @@ public class ViewYearlyInfo extends TilesAction {
 			formBean.setExpenditureTabColor(tc.getExpenditureTabColor());
 			formBean.setYears(YearUtil.getYears());
 			formBean.setCurrencies(DbUtil.getAmpCurrency());
-			logger.info("Loading perspectives") ;
-			formBean.setPerspectives(DbUtil.getAmpPerspective());
-			logger.info("loaded " + formBean.getPerspectives().size() + " entries");
 			formBean.setFiscalYears(new ArrayList());
 			formBean.setFiscalYears(DbUtil.getAllFisCalenders());
 		}

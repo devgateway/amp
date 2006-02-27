@@ -117,10 +117,12 @@ public class AddAmpActivity extends Action {
 		if (!eaForm.isEditAct())
 			eaForm.setApprovalStatus("started");
 		else {
+			String actApprovalStatus = DbUtil.getActivityApprovalStatus(eaForm.getActivityId());
+			eaForm.setApprovalStatus(actApprovalStatus);
+			
 			String sessId = session.getId();
 			ArrayList sessList = (ArrayList) ampContext.getAttribute(
 					org.digijava.module.aim.helper.Constants.SESSION_LIST);
-			logger.info("sessList.contains(sessId) = " + sessList.contains(sessId));
 			if (sessList.contains(sessId) == false) {
 				ActionErrors errors = new ActionErrors();
 				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
@@ -142,7 +144,6 @@ public class AddAmpActivity extends Action {
 				ampContext.setAttribute(org.digijava.module.aim.helper.Constants.TS_ACT_LIST,tsList);
 			}
 		}
-		
 		// end
 		
 		if (eaForm.getStep().equals("1")) { // show the step 1 page.

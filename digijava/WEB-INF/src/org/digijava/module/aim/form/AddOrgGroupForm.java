@@ -8,14 +8,11 @@ public class AddOrgGroupForm extends ActionForm {
 	private Long ampOrgGrpId;
 	private String orgGrpName;
 	private String orgGrpCode;
-	private Long levelId;				// defunct
+	private Long levelId;
 	private String action = null;
 	private String flag = null;
-	private Collection level = null;	// defunct
+	private Collection level = null;
 	private Long ampOrgId = null;
-	
-	private Collection orgTypeColl = null;
-	private Long orgTypeId = null;
 
 	public Long getAmpOrgGrpId() {
 		return ampOrgGrpId;
@@ -79,30 +76,5 @@ public class AddOrgGroupForm extends ActionForm {
 	
 	public void setAmpOrgId(Long ampOrgId) {
 		this.ampOrgId = ampOrgId;
-	}
-	
-	/**
-	 * @return Returns the orgTypeColl.
-	 */
-	public Collection getOrgTypeColl() {
-		return orgTypeColl;
-	}
-	/**
-	 * @param orgTypeColl The orgTypeColl to set.
-	 */
-	public void setOrgTypeColl(Collection orgTypeColl) {
-		this.orgTypeColl = orgTypeColl;
-	}
-	/**
-	 * @return Returns the orgTypeId.
-	 */
-	public Long getOrgTypeId() {
-		return orgTypeId;
-	}
-	/**
-	 * @param orgTypeId The orgTypeId to set.
-	 */
-	public void setOrgTypeId(Long orgTypeId) {
-		this.orgTypeId = orgTypeId;
 	}
 }

@@ -11,16 +11,10 @@
 
 	function check() {
 		var str = document.aimAddOrgGroupForm.orgGrpName.value;
-		var type = trim(document.aimAddOrgGroupForm.orgTypeId.value);
 		str = trim(str);
-		if (str == null || str.length == 0) {
+		if (str.length == 0 || str == null) {
 			alert("Please enter name for this Group");
 			document.aimAddOrgGroupForm.orgGrpName.focus();
-			return false;
-		}
-		else if (type == "-1" || type == null || type.length == 0) {
-			alert("Please select type for this Group");
-			document.aimAddOrgGroupForm.orgTypeId.focus();
 			return false;
 		}
 		else {
@@ -103,21 +97,6 @@
 																	</tr>
 																	<tr>
 																		<td width="30%" align="right">
-																	        <digi:trn key="aim:orgGroupType">Type</digi:trn>
-																		</td>
-																		<td width="30%">
-																	          <html:select property="orgTypeId">
-																	    		<html:option value="-1">-- Select Type --</html:option>
-																	    		<logic:notEmpty name="aimAddOrgGroupForm" property="orgTypeColl">
-																					<html:optionsCollection name="aimAddOrgGroupForm" property="orgTypeColl" 
-																		   									value="ampOrgTypeId" label="orgType" />
-																		   		</logic:notEmpty>
-																			</html:select>
-																		</td>
-																	</tr>
-																	<%--
-																	<tr>
-																		<td width="30%" align="right">
 																	        <digi:trn key="aim:orgGroupLevel">Level</digi:trn>
 																		</td>
 																		<td width="30%">
@@ -129,7 +108,7 @@
 																		   		</logic:notEmpty>
 																			</html:select>
 																		</td>
-																	</tr> --%>
+																	</tr>
 																	<tr>
 																		<td colspan="2" width="60%"  align="center">
 																			<table width="100%" cellspacing="5">

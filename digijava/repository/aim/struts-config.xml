@@ -216,10 +216,6 @@
 			  type="org.digijava.module.aim.form.TeamActivitiesForm" />
 
 	<form-bean
-			  name="aimDonorTeamsForm"
-			  type="org.digijava.module.aim.form.DonorTeamsForm" />
-
-	<form-bean
 			  name="aimMemberActivitiesForm"
 			  type="org.digijava.module.aim.form.TeamActivitiesForm" />	
 	
@@ -1062,8 +1058,8 @@
 			  <forward name="forward" path="/showLayout.do?layout=editOrgGroup" />
 			  <forward name="index" path="/aim/index.do" redirect="true" />
 			  <forward name="added" path="/aim/orgGroupManager.do" redirect="true" />
-			  <forward name="groupadded" path="/aim/editOrganisation.do?actionFlag=create" />
-			  <forward name="groupedited" path="/aim/editOrganisation.do?actionFlag=edit" />
+			  <forward name="groupadded" path="/aim/editOrganisation.do?action=create" />
+			  <forward name="groupedited" path="/aim/editOrganisation.do?action=edit" />
 			  <forward name="popup" path="/showLayout.do?layout=aim_addOrgGrpPopupLayout" />	  
 	</action>
 	
@@ -1224,7 +1220,6 @@
 			  path="/aim/updateWorkspace">
 			  <forward name="admin" path="/showLayout.do?layout=updateWorkspace" />
  			  <forward name="index" path="/aim/index.do" redirect="true" />
- 			  <forward name="forward" path="/aim/workspaceManager.do" redirect="true" />
 	</action>
 
 	<action 
@@ -1474,38 +1469,6 @@
 	</action>			
 
 	<action 
-			  name="aimDonorTeamsForm"
-			  type="org.digijava.module.aim.action.GetDonorTeams"
-			  scope="request"
-			  validate="false"
-			  path="/aim/donorActivityList">
-			  <forward name="forward" path="/showLayout.do?layout=donorTeamList" />
-			  <forward name="index" path="/aim/index.do" redirect="true" />
-	</action>			
-
-	<action 
-			  name="aimTeamActivitiesForm"
-			  type="org.digijava.module.aim.action.GetDonorTeamActivities"
-			  scope="request"
-			  validate="false"
-			  path="/aim/getDonorActivityList">
-			  <forward name="assigned" path="/showLayout.do?layout=donorTeamActivities" />
-			  <forward name="unassigned" path="/showLayout.do?layout=donorTeamUnAssignedActivities" />
-			  <forward name="index" path="/aim/index.do" redirect="true" />
-	</action>				
-
-	<action 
-			  name="aimTeamActivitiesForm"
-			  type="org.digijava.module.aim.action.UpdateDonorActivities"
-			  scope="request"
-			  validate="false"
-			  path="/aim/updateDonorActivities">
-			  <forward name="forward" path="/aim/getDonorActivityList.do"/>
-			  <forward name="index" path="/aim/index.do" redirect="true" />
-	</action>				
-	
-	
-	<action 
 			  name="aimTeamReportsForm"
 			  type="org.digijava.module.aim.action.GetTeamReports"
 			  scope="request"
@@ -1720,7 +1683,7 @@
 	<action 
 			  name="aimUserRegisterForm"
 			  type="org.digijava.module.aim.action.RegisterUser"
-			  scope="session"
+			  scope="request"
 			  validate="true"
 			  input="/aim/showRegisterUser.do"
 			  path="/aim/registerUser">
@@ -1731,7 +1694,7 @@
 	<action 
 			  name="aimUserRegisterForm"
 			  type="org.digijava.module.aim.action.ShowUserRegister"
-			  scope="session"
+			  scope="request"
 			  validate="false"
 			  path="/aim/showRegisterUser">
 			  <forward name="forward" path="/showLayout.do?layout=userRegistration" />

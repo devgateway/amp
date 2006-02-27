@@ -6,7 +6,6 @@ import org.apache.log4j.Logger;
 import org.apache.struts.action.*;
 import org.digijava.module.aim.dbentity.AmpOrgGroup;
 import org.digijava.module.aim.dbentity.AmpLevel;
-import org.digijava.module.aim.dbentity.AmpOrgType;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.form.AddOrgGroupForm;
 import javax.servlet.http.*;
@@ -24,34 +23,28 @@ public class EditOrgGroup extends Action {
 
 					 HttpSession session = request.getSession();
 					 if (session.getAttribute("ampAdmin") == null) {
-						return mapping.findForward("index");
-					 } 
-					 else {
-							String str = (String)session.getAttribute("ampAdmin");
-							if (str.equals("no")) {
 								return mapping.findForward("index");
-							}
+					 } else {
+								String str = (String)session.getAttribute("ampAdmin");
+								if (str.equals("no")) {
+										  return mapping.findForward("index");
+								}
 					 }
 					 
 					 logger.debug("In edit organization group");
 
 					 AddOrgGroupForm editForm = (AddOrgGroupForm) form;
 					 String action = request.getParameter("action");
-					 logger.debug("action : " + action);
 					 editForm.setAction(action);
-					 Collection col = DbUtil.getAllOrgTypes();
-					 editForm.setOrgTypeColl(col);
-					 //Collection col = DbUtil.getAllLevels();
-					 //editForm.setLevel(col);
+					 Collection col = DbUtil.getAllLevels();
+					 editForm.setLevel(col);
 					 
 					 if ("create".equals(action) || ("createGroup".equals(action))) {
 					 	if (("createGroup".equals(action))) {
-					 		if (request.getParameter("ampOrgId") == null 
-					 				|| request.getParameter("ampOrgId").trim().length() < 1 
-					 				|| "0".equals(request.getParameter("ampOrgId")))
-					 			editForm.setAmpOrgId(null);
-					 		else
+					 		if (request.getParameter("ampOrgId") != null && request.getParameter("ampOrgId").trim().length() != 0)
 					 			editForm.setAmpOrgId(new Long(Integer.parseInt(request.getParameter("ampOrgId"))));
+					 		else
+					 			editForm.setAmpOrgId(null);
 					 	}
 					 	if (editForm.getOrgGrpName() == null) {
 						 	logger.debug("Inside IF [CREATE]");
@@ -68,27 +61,15 @@ public class EditOrgGroup extends Action {
 							AmpOrgGroup ampGrp = new AmpOrgGroup();
 							ampGrp.setOrgGrpName(editForm.getOrgGrpName());
 							ampGrp.setOrgGrpCode(editForm.getOrgGrpCode());
-							/*
 							if (!editForm.getLevelId().equals(new Long(-1))) {
 								AmpLevel al = DbUtil.getAmpLevel(editForm.getLevelId());
 								ampGrp.setLevelId(al);
 							}
 							else
-								ampGrp.setLevelId(null); */
-							if (null == editForm.getOrgTypeId() || editForm.getOrgTypeId().intValue() < 1) {
-								ampGrp.setOrgType(null);
-							}
-							else {
-								AmpOrgType ot = DbUtil.getOrgType(editForm.getOrgTypeId());
-								ampGrp.setOrgType(ot);
-							}
+								ampGrp.setLevelId(null);
 							
 							DbUtil.add(ampGrp);
 							logger.debug("Group added");
-							
-							logger.debug("action : " + action);
-							logger.debug("editForm.getAmpOrgId() : " + editForm.getAmpOrgId());
-							
 							if (("create".equals(action)))
 								return mapping.findForward("added");
 							else {
@@ -121,16 +102,11 @@ public class EditOrgGroup extends Action {
 									editForm.setOrgGrpCode(ampGrp.getOrgGrpCode());
 								else
 									editForm.setOrgGrpCode("");
-								if (ampGrp.getOrgType() != null)
-									editForm.setOrgTypeId(ampGrp.getOrgType().getAmpOrgTypeId());
-								else
-									editForm.setOrgTypeId(new Long(-1));
-								/*
 								if (ampGrp.getLevelId() != null)
 									editForm.setLevelId(ampGrp.getLevelId().getAmpLevelId());
 								else
 									editForm.setLevelId(new Long(-1));
-								*/
+								
 								return mapping.findForward("forward");
 							 }
 							 else {
@@ -140,19 +116,12 @@ public class EditOrgGroup extends Action {
 								
 								ampGrp.setOrgGrpName(editForm.getOrgGrpName());
 								ampGrp.setOrgGrpCode(editForm.getOrgGrpCode());
-								if (null != editForm.getOrgTypeId() && editForm.getOrgTypeId().intValue() < 1)
-									ampGrp.setOrgType(null);
-								else {
-									AmpOrgType ot = DbUtil.getOrgType(editForm.getOrgTypeId());
-									ampGrp.setOrgType(ot);
-								}
-								/*
 								if (editForm.getLevelId().equals(new Long(-1)))
 									ampGrp.setLevelId(null);
 								else {
 									AmpLevel al = DbUtil.getAmpLevel(editForm.getLevelId());
 									ampGrp.setLevelId(al);
-								} */
+								}
 								
 								DbUtil.update(ampGrp);
 								logger.debug("Organization Group updated");

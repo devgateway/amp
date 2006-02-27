@@ -59,7 +59,8 @@ public class AddChildWorkspaces extends Action {
 				}
 			}		
 		}
-		
+		uwForm.setActionEvent("edit");
+		//return mapping.findForward("forward");
 		return mapping.findForward(dest);
 	}
 }

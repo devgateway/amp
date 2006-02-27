@@ -1,29 +1,16 @@
 package org.digijava.module.aim.action ;
 
-import java.util.ArrayList;
+import org.apache.log4j.Logger;
+import org.apache.struts.action.*;
+import org.digijava.module.aim.dbentity.*;
+import org.digijava.kernel.dbentity.Country;
 import java.util.Collection;
 import java.util.Iterator;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-
-import org.apache.log4j.Logger;
-import org.apache.struts.action.Action;
-import org.apache.struts.action.ActionForm;
-import org.apache.struts.action.ActionForward;
-import org.apache.struts.action.ActionMapping;
-import org.digijava.module.aim.dbentity.AmpActivity;
-import org.digijava.module.aim.dbentity.AmpFiscalCalendar;
-import org.digijava.module.aim.dbentity.AmpOrgGroup;
-import org.digijava.module.aim.dbentity.AmpOrgRole;
-import org.digijava.module.aim.dbentity.AmpOrgType;
-import org.digijava.module.aim.dbentity.AmpOrganisation;
-import org.digijava.module.aim.dbentity.AmpRegion;
-import org.digijava.module.aim.dbentity.AmpSectorScheme;
-import org.digijava.module.aim.form.AddOrgForm;
 import org.digijava.module.aim.util.ActivityUtil;
 import org.digijava.module.aim.util.DbUtil;
+import org.digijava.module.aim.form.AddOrgForm;
+import javax.servlet.http.*;
 
 
 public class EditOrganisation extends Action {
@@ -38,12 +25,11 @@ public class EditOrganisation extends Action {
 		  			 HttpSession session = request.getSession();
 					 if (session.getAttribute("ampAdmin") == null) {
 						return mapping.findForward("index");
-					 } 
-					 else {
-							String str = (String)session.getAttribute("ampAdmin");
-							if (str.equals("no")) {
-								return mapping.findForward("index");
-							}
+					 } else {
+								String str = (String)session.getAttribute("ampAdmin");
+								if (str.equals("no")) {
+										  return mapping.findForward("index");
+								}
 					 }
 					 
 					 logger.debug("In edit organisation action");
@@ -51,28 +37,25 @@ public class EditOrganisation extends Action {
 					 AddOrgForm editForm = (AddOrgForm) form;
 					 
 					 String action = request.getParameter("actionFlag");
-					 logger.debug("action : " + action);
 					 editForm.setActionFlag(action);
 					 
-					 if (null == editForm.getFiscalCal() || editForm.getFiscalCal().size() < 1)
-					 	editForm.setFiscalCal(DbUtil.getAllFisCalenders());
-					 if (null == editForm.getSectorScheme() || editForm.getSectorScheme().size() < 1)
-					 	editForm.setSectorScheme(DbUtil.getAllSectorSchemes());
-					 if (null == editForm.getRegion() || editForm.getRegion().size() < 1)
-					 	editForm.setRegion(DbUtil.getAllRegionsUnderCountry(DbUtil.getCountryByName("Ethiopia").getIso()));
-					 if (null == editForm.getOrgType() || editForm.getOrgType().size() < 1)
-					 	editForm.setOrgType(DbUtil.getAllOrgTypes());
-					 if (null == editForm.getSectorScheme() || editForm.getSectorScheme().size() < 1)
-					 	editForm.setSectorScheme(DbUtil.getAllSectorSchemes());
-					 if (null == editForm.getOrgGroupColl() || editForm.getOrgGroupColl().size() < 1)
-					 	editForm.setOrgGroupColl(DbUtil.getAllOrgGroups());
-					 Collection orgGroup = new ArrayList();
-					 editForm.setOrgGroup(orgGroup);
-					 
+					 Collection fiscalColl = DbUtil.getAllFisCalenders();
+					 Collection sectorSchemeColl = DbUtil.getAllSectorSchemes();
 					 //Collection country = DbUtil.getAllCountries();
-					 //Collection level = DbUtil.getAllLevels();
+					 Collection level = DbUtil.getAllLevels();
+					 Collection region = null;
+					 //if (!editForm.getCountryId().equals("") || editForm.getCountryId().trim().length() != 0)
+					 	Country cntry = DbUtil.getCountryByName("Ethiopia"); 
+					 	region = DbUtil.getAllRegionsUnderCountry(cntry.getIso());
+					 Collection orgType = DbUtil.getAllOrgTypes();
+					 Collection orgGroup = null;
+					 editForm.setFiscalCal(fiscalColl);
+					 editForm.setSectorScheme(sectorSchemeColl);
 					 //editForm.setCountry(country);
-					 //editForm.setLevel(level);
+					 editForm.setLevel(level);
+					 editForm.setRegion(region);
+					 editForm.setOrgType(orgType);
+					 editForm.setOrgGroup(orgGroup);
 					 
 					 String otype = editForm.getOrgTypeFlag();
 					 if (!editForm.getSaveFlag().equals("yes")) {
@@ -81,7 +64,6 @@ public class EditOrganisation extends Action {
 					 			editForm.setRegionFlag("show");	// Setting style property for showing region drop-down
 					 		else
 					 			editForm.setRegionFlag("hide");	// Setting style property for hiding region drop-down
-					 		/*
 					 		if ("multilateral".equals(otype)) {
 					 			Long id = null;
 						 		Iterator itr = level.iterator();
@@ -96,18 +78,8 @@ public class EditOrganisation extends Action {
 						 		editForm.setOrgGroup(orgGroup);
 						 		if ("edit".equals(action))
 						 			editForm.setFlag("delete");
-					 		} */
-					 		//orgGroup = DbUtil.getAllOrgGroupByType(editForm.getAmpOrgTypeId());
-					 		//editForm.setOrgGroup(orgGroup);
-					 		Iterator itr = editForm.getOrgGroupColl().iterator();
-					 		while (itr.hasNext()) {
-					 			AmpOrgGroup og = (AmpOrgGroup) itr.next();
-					 			if (og.getOrgType().getAmpOrgTypeId().equals(editForm.getAmpOrgTypeId()))
-					 				editForm.getOrgGroup().add(og);
 					 		}
-					 		if ("edit".equals(action))
-					 			editForm.setFlag("delete");
-						 	return mapping.findForward("forward");
+						 		return mapping.findForward("forward");
 					 	}
 					 /*
 					 	String regionFlag = editForm.getRegionFlag();
@@ -241,7 +213,7 @@ public class EditOrganisation extends Action {
 								 	}
 								 	else if (ampOrg.getOrgTypeId().getOrgType().equals("Multilateral")) {
 								 		editForm.setOrgTypeFlag("multilateral");
-								 		/* Long id = null;
+								 		Long id = null;
 								 		Iterator itr = level.iterator();
 								 		while (itr.hasNext()) {
 								 			AmpLevel al = (AmpLevel) itr.next();
@@ -250,19 +222,11 @@ public class EditOrganisation extends Action {
 								 				break;
 								 			}
 								 		}
-								 		orgGroup = DbUtil.getAllOrgGroupByType(editForm.getAmpOrgTypeId());
-								 		editForm.setOrgGroup(orgGroup); */
+								 		orgGroup = DbUtil.getAllOrgGroupByType(id);
+								 		editForm.setOrgGroup(orgGroup);
 								 	}
-								 	else
-								 	   	editForm.setOrgTypeFlag("others");
-								 	//orgGroup = DbUtil.getAllOrgGroupByType(editForm.getAmpOrgTypeId());
-							 		//editForm.setOrgGroup(orgGroup);
-							 		Iterator itr = editForm.getOrgGroupColl().iterator();
-							 		while (itr.hasNext()) {
-							 			AmpOrgGroup og = (AmpOrgGroup) itr.next();
-							 			if (og.getOrgType().getAmpOrgTypeId().equals(editForm.getAmpOrgTypeId()))
-							 				editForm.getOrgGroup().add(og);
-							 		}
+								 		else
+								 		   	editForm.setOrgTypeFlag("others");
 								}
 								else
 									editForm.setAmpOrgTypeId(new Long(-1));
@@ -406,14 +370,13 @@ public class EditOrganisation extends Action {
 							}
 							
 							String oflag = editForm.getOrgTypeFlag();
-							/*
 							if (oflag.equals("national") || oflag.equals("regional")) {
 								//Country cntry = DbUtil.getDgCountry(editForm.getCountryId());
 								if (cntry != null)
 									ampOrg.setCountryId(cntry);
 							}	
 							else
-								ampOrg.setCountryId(null); */
+								ampOrg.setCountryId(null);
 							if (editForm.getRegionId().equals(new Long(-1)) || !oflag.equals("regional")) {
 								ampOrg.setRegionId(null);
 							}	
@@ -422,7 +385,7 @@ public class EditOrganisation extends Action {
 								if (reg != null)
 									ampOrg.setRegionId(reg);
 							}
-							/*
+							
 							if (editForm.getAmpOrgTypeId().equals(new Long(-1)) || !oflag.equals("national")
 									|| !oflag.equals("regional")) {
 								ampOrg.setLevelId(null);	
@@ -438,7 +401,7 @@ public class EditOrganisation extends Action {
 								}
 								if (lvl != null)
 									ampOrg.setLevelId(lvl);
-							} */
+							}
 							
 							if ("create".equals(action))
 								DbUtil.add(ampOrg);

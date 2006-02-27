@@ -62,18 +62,6 @@
 				<arg0 key="display.aim.selectedCountryResidence"/>
 			</field>
 
-			<field property="selectedOrgType" depends="required">
-				<arg0 key="display.aim.selectedOrgType"/>
-			</field>
-			
-			<field property="selectedOrgGroup" depends="required">
-				<arg0 key="display.aim.selectedOrgGroup"/>
-			</field>
-			
-			<field property="organizationName" depends="required">
-				<arg0 key="display.aim.organizationName"/>
-			</field>
-
 			<!--
 			<field property="mailingAddress" depends="maxlength">
 				<arg0 key="display.aim.mailingAddress"/>
@@ -143,15 +131,8 @@
             <field property="teamName" depends="required">
                     <arg0 key="display.aim.teamName"/>
             </field>
-            <!--
 			<field property="description" depends="required">
                     <arg0 key="display.aim.description"/>
-            </field> -->
-            <field property="category" depends="required">
-                    <arg0 key="display.aim.category"/>
-            </field>
-            <field property="workspaceType" depends="required">
-                    <arg0 key="display.aim.workspaceType"/>
             </field>
 	</form>
 

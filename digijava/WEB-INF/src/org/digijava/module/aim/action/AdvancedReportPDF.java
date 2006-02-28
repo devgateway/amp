@@ -723,7 +723,7 @@ public class AdvancedReportPDF extends Action {
                                     // year = year + 1;
                                 } // END Of AmpFund Iteration
 
-                                logger.info("================ TYPE OF ASSIST ITERATION ==========");
+                                logger.info("================ TYPE OF ASSIST ITERATION h0000000==========");
 
                                 
                                 if (typeAssist && advReport.getAmpFund() != null) {
@@ -1066,7 +1066,7 @@ public class AdvancedReportPDF extends Action {
                                                             }
                                                         } // END Of AmpFund
                                                           // Iteration
-                                                        logger.info("================ TYPE OF ASSIST ITERATION ==========");
+                                                        logger.info("================ TYPE OF ASSIST ITERATION h3333333==========");
 
                                                         
                                                         if (typeAssist && advReport.getAmpFund() != null) {
@@ -1077,6 +1077,16 @@ public class AdvancedReportPDF extends Action {
                                                             while (iac.hasNext()) {
                                                                 String assistType = (String) iac.next();
                                                                 row++;
+                                                                
+                                                                position=3;
+                                                                dataArray[row][position] = ahr.getLabel() + " - " + ahr.getName();
+                                                                logger.info("Filling ahr.name - H1------->" + ahr.getLabel());
+                                                                position++;
+                                                                dataArray[row][position] = ahr2.getLabel() + " - " + ahr2.getName();
+                                                                logger.info("ing ahr.name H2------->" + ahr2.getLabel());
+                                                                position++;
+                                                                dataArray[row][position] = ahr3.getLabel() + " - " + ahr3.getName();
+                                                                logger.info("Filling ahr.name H3------->" + ahr3.getLabel());
                                                                 
                                                                 //reset vertical position
                                                                 position = (n + rsc.getColumns().size()) - 1;
@@ -1272,6 +1282,7 @@ public class AdvancedReportPDF extends Action {
                                                         position = position + 1;
                                                     }
 
+                                                    
                                                     dataArray[row][position] = ahr.getLabel() + " - " + ahr.getName();
                                                     logger.info("Filling - ahr.name H1------->" + ahr.getLabel() + "-" + ahr.getName());
                                                     position++;
@@ -1378,7 +1389,7 @@ public class AdvancedReportPDF extends Action {
                                                       // Iteration
 
                                                   
-                                                    logger.info("================ TYPE OF ASSIST ITERATION ==========");
+                                                    logger.info("================ TYPE OF ASSIST ITERATION h22222==========");
 
                                                     
                                                     if (typeAssist && advReport.getAmpFund() != null) {
@@ -1390,6 +1401,14 @@ public class AdvancedReportPDF extends Action {
                                                             String assistType = (String) iac.next();
                                                             row++;
                                                             
+                                                            position=3;
+                                                            dataArray[row][position] = ahr.getLabel() + " - " + ahr.getName();
+                                                            logger.info("Filling - ahr.name H1------->" + ahr.getLabel() + "-" + ahr.getName());
+                                                            position++;
+                                                            dataArray[row][position] = ahr2.getLabel() + " - " + ahr2.getName();
+                                                            logger.info("Filling ahr.name H2------->" + ahr2.getLabel() + "-" + ahr2.getName());
+                                                            position++;
+
                                                             //reset vertical position
                                                             position = (n + rsc.getColumns().size()) - 1;
                                                             dataArray[row][position] = assistType;
@@ -1685,7 +1704,7 @@ public class AdvancedReportPDF extends Action {
                                             } // END Of AmpFund Iteration
                                             
                                             
-                                            logger.info("================ TYPE OF ASSIST ITERATION ==========");
+                                            logger.info("================ TYPE OF ASSIST ITERATION h11111111==========");
 
                                             
                                             if (typeAssist && advReport.getAmpFund() != null) {
@@ -1697,10 +1716,15 @@ public class AdvancedReportPDF extends Action {
                                                     String assistType = (String) iac.next();
                                                     row++;
                                                     
-                                                    //reset vertical position
+                                                    position=3;
+                                                    dataArray[row][position] = ahr.getLabel() + " - " + ahr.getName();
+                                                    logger.info("Filling ahr.name ------->" + ahr.getLabel());
+                                                                                                        
+//                                                  reset vertical position
                                                     position = (n + rsc.getColumns().size()) - 1;
+                                                    
                                                     dataArray[row][position] = assistType;
-                                                    logger.info("------------------------------------------" + position);
+                                                    logger.info("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa" + position +" ::: "+assistType);
 
                                                     funds = advReport.getAmpFund().iterator();
                                                     yearIter = formBean.getFiscalYearRange().iterator();
@@ -1921,6 +1945,10 @@ public class AdvancedReportPDF extends Action {
                     if (formBean.getPlExpFlag().equals("true") && (ampFund.getPlExpAmount() != null)) {
                         dataArray[row][position++] = ampFund.getPlExpAmount();
                         logger.info("total values.........." + row + ":::" + position + "::::" + dataArray[row][position - 1]);
+                    }
+                    if(formBean.getAcBalFlag().equals("true") && ampFund.getUnDisbAmount() != null){ 
+                    	dataArray[row][position++] = ampFund.getUnDisbAmount();
+                    	logger.info("total values.........." + row + ":::" + position + "::::" + dataArray[row][position - 1]);
                     }
                 }
             }
@@ -2513,6 +2541,10 @@ public class AdvancedReportPDF extends Action {
             if (formBean.getPlExpFlag().equals("true") && (ampFund.getPlExpAmount() != null)) {
                 dataArray[row][position++] = ampFund.getPlExpAmount();
                 logger.info("total values.........." + row + ":::" + position + "::::" + dataArray[row][position - 1]);
+            }
+            if(formBean.getAcBalFlag().equals("true") && ampFund.getUnDisbAmount() != null){ 
+            	dataArray[row][position++] = ampFund.getUnDisbAmount();
+            	logger.info("total values.........." + row + ":::" + position + "::::" + dataArray[row][position - 1]);
             }
         }
 

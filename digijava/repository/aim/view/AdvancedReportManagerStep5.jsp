@@ -290,7 +290,7 @@ function deleteColumn()
 																						<!-- Regional Funding -->
 																						<c:if test="${aimAdvancedReportForm.arReportType == 'regional' }">
 																						<logic:iterate name="aimAdvancedReportForm" id="addedColumns"	property="addedColumns" >
-																							<c:if test="${addedColumns.columnName == 'Status' || addedColumns.columnName == 'Sector' || addedColumns.columnName == 'Region' }">
+																							<c:if test="${addedColumns.columnName == 'Status' || addedColumns.columnName == 'Sector' || addedColumns.columnName == 'Region' || addedColumns.columnName == 'Project Title'}">
 																								<tr bgcolor="#ffffff">
 																									<td align="left" width="98%" valign=top>
 																										<c:out value="${addedColumns.columnName}"/>

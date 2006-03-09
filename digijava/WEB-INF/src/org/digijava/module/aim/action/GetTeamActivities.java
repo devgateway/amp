@@ -41,6 +41,7 @@ public class GetTeamActivities extends Action {
 		
 		boolean permitted = false;
 		HttpSession session = request.getSession();
+		TeamMember tm = (TeamMember) session.getAttribute("currentMember");
 		if (session.getAttribute("ampAdmin") != null) {
 			String key = (String) session.getAttribute("ampAdmin");
 			if (key.equalsIgnoreCase("yes")) {
@@ -74,11 +75,12 @@ public class GetTeamActivities extends Action {
 			    numRecords = appSettings.getDefaultRecordsPerPage().intValue();
 			}
 		} else if (session.getAttribute("currentMember") != null) {
-			TeamMember tm = (TeamMember) session.getAttribute("currentMember");
+			
 			id = tm.getTeamId();
 			if (tm.getAppSettings() != null)
 			    numRecords = tm.getAppSettings().getDefRecsPerPage();
 		}
+		//taForm.setTeamId(id);
 
 		if (id != null) {
 			if (request.getParameter("page") == null) {
@@ -95,7 +97,14 @@ public class GetTeamActivities extends Action {
 			taForm.setTeamName(ampTeam.getName());						    
 			
 			if (taForm.getAllActivities() == null) {
-				Collection col = DbUtil.getAllTeamActivities(id);
+				Collection col = null;
+				if (tm.getTeamType().equalsIgnoreCase(Constants.DEF_DNR_PERSPECTIVE)) {
+					col = TeamUtil.getDonorTeamActivities(id);
+					taForm.setDonorFlag(true);
+				} else {
+					col = DbUtil.getAllTeamActivities(id);
+					taForm.setDonorFlag(false);
+				}
 				logger.info("Loaded " + col.size() + " activities for the team " + ampTeam.getName());			    
 				taForm.setAllActivities(col);
 			}
@@ -168,7 +177,7 @@ public class GetTeamActivities extends Action {
 			taForm.setCurrentPage(new Integer(page));
 			taForm.setPages(pages);
 			session.setAttribute("pageno", new Integer(page));
-
+			
 			return mapping.findForward("forward");
 		} else {
 			return null;

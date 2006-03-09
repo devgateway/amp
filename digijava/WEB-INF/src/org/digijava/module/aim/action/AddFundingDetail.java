@@ -35,17 +35,22 @@ public class AddFundingDetail extends Action {
 		HttpSession session = request.getSession();
 		EditActivityForm formBean = (EditActivityForm) form;
 		formBean.setReset(false);
-		Long orgId = formBean.getOrgId();
+		//Long orgId = formBean.getOrgId();
 		event = formBean.getEvent();
 		
 		TeamMember teamMember = (TeamMember) session.getAttribute("currentMember");
-		String perspective = "MOFED";
+		
+		String perspCode = null;
+		if (formBean.isDonorFlag()) perspCode = Constants.DONOR;
+		else perspCode = Constants.MOFED;
+			
 		String currCode = Constants.DEFAULT_CURRENCY;
 		if (teamMember.getAppSettings() != null) {
 			ApplicationSettings appSettings = teamMember.getAppSettings();
+			/*
 			if (appSettings.getPerspective() != null) {
 				perspective = appSettings.getPerspective();
-			}
+			}*/
 			if (appSettings.getCurrencyId() != null) {
 				currCode = DbUtil.getCurrency(appSettings.getCurrencyId()).getCurrencyCode();
 			}
@@ -58,13 +63,19 @@ public class AddFundingDetail extends Action {
 		if (subEvent.equalsIgnoreCase("del") || subEvent.equalsIgnoreCase("add")) {
 			if (formBean.getFundingDetails() == null) {
 				fundingDetails = new ArrayList();
-				fd = getFundingDetail(perspective,currCode);
+				fd = getFundingDetail(perspCode,currCode);
 				fundingDetails.add(fd);		
 			} else {
 				fundingDetails = new ArrayList(formBean.getFundingDetails());
 				logger.info("Sub event : " + subEvent);
 				if (subEvent.equals("del")) {
 					for (int i = 0;i < fundingDetails.size();i ++) {
+						
+						FundingDetail temp = new FundingDetail();
+						temp.setIndexId(index);
+						fundingDetails.remove(temp);
+						
+						/*
 						FundingDetail temp = (FundingDetail) fundingDetails.get(i);
 						if (temp.getIndexId() == index) {
 							if (temp.getTransactionType() == 0) {
@@ -75,12 +86,12 @@ public class AddFundingDetail extends Action {
 								formBean.setNumExp(formBean.getNumExp() - 1);
 							}
 							break;
-						}
+						}*/
 					}
-					deleteFundingDetails(index);
+					//deleteFundingDetails(index);
 					logger.info("Deleted");
 				} else {
-					fd = getFundingDetail(perspective,currCode);
+					fd = getFundingDetail(perspCode,currCode);
 					fundingDetails.add(fd);							
 				}
 			}
@@ -99,8 +110,7 @@ public class AddFundingDetail extends Action {
 		return mapping.findForward("forward");
 	}
 
-	private FundingDetail getFundingDetail(String perspective,String currCode) {
-		logger.info("In add funding detail");
+	private FundingDetail getFundingDetail(String perspCode,String currCode) {
 		FundingDetail fundingDetail = new FundingDetail();
 		if (event.equalsIgnoreCase("addCommitments")) {
 			fundingDetail.setTransactionType(Constants.COMMITMENT);
@@ -114,21 +124,15 @@ public class AddFundingDetail extends Action {
 		fundingDetail.setAdjustmentType(Constants.ACTUAL);
 		fundingDetail.setIndex(fundingDetails.size());
 		fundingDetail.setIndexId(System.currentTimeMillis());
-		/*
-		if (perspective.equalsIgnoreCase("MOFED")) {
-			fundingDetail.setPerspectiveCode(Constants.MOFED);	
-		} else {
-			fundingDetail.setPerspectiveCode(Constants.DONOR);
-		}
-		*/
-		fundingDetail.setPerspectiveCode(Constants.MOFED);
+		fundingDetail.setPerspectiveCode(perspCode);	
 		
 		return fundingDetail;
 		
 	}
 
+	/*
 	private void deleteFundingDetails(long indexId) {
 		logger.info("in deleteFundingDetails ");
 		fundingDetails.remove(new FundingDetail(indexId));
-	}
+	}*/
 }

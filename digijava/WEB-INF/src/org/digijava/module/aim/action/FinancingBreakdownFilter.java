@@ -86,6 +86,7 @@ public class FinancingBreakdownFilter extends TilesAction	{
 			fp.setFromYear(formBean.getFromYear());
 		}
 		session.setAttribute("filterParams",fp); 
+		formBean.setPerpsectiveName(DbUtil.getPerspective(fp.getPerspective()).getName());
 		Long id = new Long(formBean.getAmpActivityId());
 		Collection ampFundings = DbUtil.getAmpFunding(id);
 		Collection fb = FinancingBreakdownWorker.getFinancingBreakdownList(id,ampFundings,fp);
@@ -94,6 +95,7 @@ public class FinancingBreakdownFilter extends TilesAction	{
 		formBean.setFiscalYears(new ArrayList());
 			formBean.setFiscalYears(DbUtil.getAllFisCalenders());
 		formBean.setCurrencies(DbUtil.getAmpCurrency());
+		formBean.setPerspectives(DbUtil.getAmpPerspective());
 		overallTotalCommitted = FinancingBreakdownWorker.getOverallTotal(fb,0);
 		formBean.setTotalCommitted(overallTotalCommitted);
 		overallTotalDisbursed = FinancingBreakdownWorker.getOverallTotal(fb,1);

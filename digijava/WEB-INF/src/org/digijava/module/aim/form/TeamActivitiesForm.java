@@ -23,7 +23,9 @@ public class TeamActivitiesForm extends ActionForm {
 	private int page = 0;
 	private String sort = null;
 	private String sortOrder = null;
-
+	private Long dnrTeamId;
+	private boolean donorFlag = false;
+	
 
     /**
      * @return Returns the activities.
@@ -228,5 +230,29 @@ public class TeamActivitiesForm extends ActionForm {
 	 */
 	public void setSortOrder(String sortOrder) {
 		this.sortOrder = sortOrder;
+	}
+	/**
+	 * @return Returns the dnrTeamId.
+	 */
+	public Long getDnrTeamId() {
+		return dnrTeamId;
+	}
+	/**
+	 * @param dnrTeamId The dnrTeamId to set.
+	 */
+	public void setDnrTeamId(Long dnrTeamId) {
+		this.dnrTeamId = dnrTeamId;
+	}
+	/**
+	 * @return Returns the donorFlag.
+	 */
+	public boolean isDonorFlag() {
+		return donorFlag;
+	}
+	/**
+	 * @param donorFlag The donorFlag to set.
+	 */
+	public void setDonorFlag(boolean donorFlag) {
+		this.donorFlag = donorFlag;
 	}
 }

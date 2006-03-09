@@ -13,13 +13,13 @@ import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
 import org.apache.struts.action.Action;
-import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.digijava.module.aim.dbentity.AmpActivity;
 import org.digijava.module.aim.dbentity.AmpTeam;
 import org.digijava.module.aim.form.TeamActivitiesForm;
+import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.helper.UpdateDB;
 import org.digijava.module.aim.util.DbUtil;
@@ -57,13 +57,12 @@ public class UpdateTeamActivities extends Action {
 		TeamActivitiesForm taForm = (TeamActivitiesForm) form;
 
 		Long id = null;
-		TeamMember tm = null;
+		TeamMember tm = (TeamMember) session.getAttribute("currentMember");
 
 		int numRecords = 0;
 		int page = 0;
 
 		if (session.getAttribute("currentMember") != null) {
-			tm = (TeamMember) session.getAttribute("currentMember");
 			id = tm.getTeamId();
 			numRecords = tm.getAppSettings().getDefRecsPerPage();
 		}
@@ -72,7 +71,12 @@ public class UpdateTeamActivities extends Action {
 			/* remove all selected activities */
 		    
 	        if (taForm.getSelActivities() != null) {
-	            TeamUtil.removeActivitiesFromTeam(taForm.getSelActivities());
+	        	if (tm.getTeamType().equalsIgnoreCase(Constants.DEF_DNR_PERSPECTIVE)) {
+	        		TeamUtil.removeActivitiesFromDonor(tm.getTeamId(),taForm.getSelActivities());
+	        	} else {
+	        		TeamUtil.removeActivitiesFromTeam(taForm.getSelActivities());	
+	        	}
+	            
 	        }
 	 		    
 			Long selActivities[] = taForm.getSelActivities();

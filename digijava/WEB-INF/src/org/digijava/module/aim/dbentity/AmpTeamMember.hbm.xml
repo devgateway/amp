@@ -34,6 +34,13 @@
   	            <cache usage="read-write"/>
 				<key column="amp_member_id"/>
 				<many-to-many class="org.digijava.module.aim.dbentity.AmpReports" column="amp_report_id"/>
-	 </set>		 
+	 	</set>
+	 	
+	 	<set name="editableFundingOrgs" table="amp_edit_donor_org" lazy="true">
+  	            <cache usage="read-write"/>
+				<key column="amp_team_mem_id"/>
+				<many-to-many class="org.digijava.module.aim.dbentity.AmpOrganisation" column="amp_org_id"/>
+		</set>
+	 			 
 	</class>
 </hibernate-mapping>

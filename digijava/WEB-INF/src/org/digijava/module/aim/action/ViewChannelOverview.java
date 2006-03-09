@@ -13,11 +13,16 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
+import org.apache.struts.action.ActionError;
+import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.tiles.ComponentContext;
 import org.apache.struts.tiles.actions.TilesAction;
+import org.digijava.kernel.request.SiteDomain;
+import org.digijava.kernel.util.RequestUtils;
+import org.digijava.kernel.util.SiteUtils;
 import org.digijava.module.aim.dbentity.AmpTeam;
 import org.digijava.module.aim.form.ChannelOverviewForm;
 import org.digijava.module.aim.helper.Activity;
@@ -52,7 +57,7 @@ public class ViewChannelOverview extends TilesAction {
 			else {
 				id = formBean.getId();
 			}
-			
+
 			Activity activity = ActivityUtil.getChannelOverview(id);
 			
 			// added by Akash
@@ -116,7 +121,20 @@ public class ViewChannelOverview extends TilesAction {
 				formBean.setWrite(false);
 			
 			formBean.setActivity(activity);
-			// end $1
+			formBean.setCanView(true);
+			// end $1				
+			
+			
+			/*
+			boolean canView = ActivityUtil.canViewActivity(id,teamMember);
+			if (canView) {
+			} else {
+				ActionErrors errors = new ActionErrors();
+				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
+						"error.aim.illegalActivityAccess"));
+				saveErrors(request, errors);	
+				formBean.setCanView(false);
+			}*/			
 		}
 		return null;
 	}

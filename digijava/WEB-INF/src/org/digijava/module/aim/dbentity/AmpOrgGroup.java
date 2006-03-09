@@ -9,8 +9,11 @@ public class AmpOrgGroup implements Serializable
 	private Long ampOrgGrpId;
 	private String orgGrpName;
 	private String orgGrpCode;
-	private AmpLevel levelId;
+	private AmpLevel levelId;	// defunct
 	//private Set organizations; 
+	
+	private AmpOrgType orgType;	// a mandatory field, added for donor-access
+	
 	/**
 	 * @return Returns the ampOrgGrpId.
 	 */
@@ -60,4 +63,16 @@ public class AmpOrgGroup implements Serializable
 		this.orgGrpName = orgGrpName;
 	}
 
+	/**
+	 * @return Returns the orgType.
+	 */
+	public AmpOrgType getOrgType() {
+		return orgType;
+	}
+	/**
+	 * @param orgType The orgType to set.
+	 */
+	public void setOrgType(AmpOrgType orgType) {
+		this.orgType = orgType;
+	}
 }

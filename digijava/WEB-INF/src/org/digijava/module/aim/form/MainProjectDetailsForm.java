@@ -37,11 +37,13 @@ public class MainProjectDetailsForm extends ValidatorForm
 	private long ampFundingId ;
 	private String currency ;
 	private String perspective ;
+	private String perpsectiveName;
 	private long fiscalCalId ;
 	private int fromYear ;
 	private int toYear ;
 	private Collection years ;
 	private Collection currencies;
+	private Collection perspectives;
 	private boolean calendarPresent;
 	private boolean currencyPresent;
 	private boolean perspectivePresent;
@@ -452,4 +454,32 @@ public class MainProjectDetailsForm extends ValidatorForm
     public void setType(String type) {
         this.type = type;
     }
+
+	/**
+	 * @return Returns the perspectives.
+	 */
+	public Collection getPerspectives() {
+		return perspectives;
+	}
+
+	/**
+	 * @param perspectives The perspectives to set.
+	 */
+	public void setPerspectives(Collection perspectives) {
+		this.perspectives = perspectives;
+	}
+
+	/**
+	 * @return Returns the perpsectiveName.
+	 */
+	public String getPerpsectiveName() {
+		return perpsectiveName;
+	}
+
+	/**
+	 * @param perpsectiveName The perpsectiveName to set.
+	 */
+	public void setPerpsectiveName(String perpsectiveName) {
+		this.perpsectiveName = perpsectiveName;
+	}
 }

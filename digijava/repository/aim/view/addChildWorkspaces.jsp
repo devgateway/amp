@@ -28,19 +28,21 @@
 	}
 
 	function getChildWorkspaces() {
-		var dest = document.aimUpdateWorkspaceForm.actionEvent.value;	  
+		var dest   = document.aimUpdateWorkspaceForm.dest.value;
+		var wsType = document.aimUpdateWorkspaceForm.childWorkspaceType.value;
+		var tCat   = document.aimUpdateWorkspaceForm.childTeamCategory.value;
 		<digi:context name="getChild" property="context/module/moduleinstance/addChildWorkspaces.do" />
-		document.aimUpdateWorkspaceForm.action = "<%= getChild %>?wType="+document.aimUpdateWorkspaceForm.childWorkspaceType.value+"&tCategory="+document.aimUpdateWorkspaceForm.childTeamCategory.value+"&popupReset=true&dest="+dest;
+		document.aimUpdateWorkspaceForm.action = "<%= getChild %>?wType="+wsType+"&tCategory="+tCat+"&popupReset=true&dest="+dest;
 		document.aimUpdateWorkspaceForm.target = "_self"
 	   document.aimUpdateWorkspaceForm.submit();
 	}
 
 	function childWorkspacesAdded() {
-		var dest = document.aimUpdateWorkspaceForm.actionEvent.value;
+		var dest = document.aimUpdateWorkspaceForm.dest.value;
 		<digi:context name="addChild" property="context/module/moduleinstance/childWorkspacesAdded.do" />
 		document.aimUpdateWorkspaceForm.action = "<%=addChild%>?dest="+dest;
 		document.aimUpdateWorkspaceForm.target = window.opener.name;
-	   document.aimUpdateWorkspaceForm.submit();
+	    document.aimUpdateWorkspaceForm.submit();
 		window.close();
 	}	
 
@@ -52,7 +54,7 @@
 <digi:form action="/childWorkspacesAdded.do" method="post">
 
 <html:hidden property="teamId" />
-<html:hidden property="actionEvent" />
+<html:hidden property="dest" />
 
 <table width="100%" cellSpacing=5 cellPadding=5 vAlign="top" border=0>
 	<tr><td vAlign="top">
@@ -74,8 +76,8 @@
 								</html:select>
 							</td>
 							<td width="20%" bgcolor="#ECF3FD">
-								<digi:trn key="aim:teamCategory">
-									Team Category
+								<digi:trn key="aim:teamType">
+									Team Type
 								</digi:trn>							
 							</td>
 							<td width="20%" bgcolor="#ECF3FD">

@@ -114,6 +114,7 @@ function validateFundingDetails(comm,disb,exp) {
 								{
 									if( x < y )
 									{
+										/*
 										if( ( temp[x].value == temp[y].value ) && ( compareAmount(temp[x+2].value,temp[y+2].value )) && ( temp[x+3].value == temp[y+3].value ) && ( temp[x+4].value == temp[y+4].value ) && ( temp[x+5].value == temp[y+5].value ))
 										{
 											var ret = confirm('This information is a duplicate of existing funding information. Do you wish to proceed?');
@@ -122,7 +123,7 @@ function validateFundingDetails(comm,disb,exp) {
 												temp[y+2].focus();
 												return false;
 											}
-										}
+										}*/
 									}
 								}
 							}
@@ -144,6 +145,7 @@ function validateFundingDetails(comm,disb,exp) {
 								{
 									if( x < y )
 									{
+										/*
 										if( ( temp[x].value == temp[y].value ) && ( compareAmount(temp[x+2].value,temp[y+2].value )) && ( temp[x+3].value == temp[y+3].value ) && ( temp[x+4].value == temp[y+4].value ) && ( temp[x+5].value == temp[y+5].value ))
 										{
 											var ret = confirm('This information is a duplicate of existing funding information. Do you wish to proceed?');
@@ -152,7 +154,7 @@ function validateFundingDetails(comm,disb,exp) {
 												temp[y+2].focus();
 												return false;
 											}
-										}
+										}*/
 									}
 								}
 							}
@@ -174,6 +176,7 @@ function validateFundingDetails(comm,disb,exp) {
 								{
 									if( x < y )
 									{
+										/*
 										if( ( temp[x].value == temp[y].value ) && ( compareAmount(temp[x+2].value,temp[y+2].value )) && ( temp[x+3].value == temp[y+3].value ) && ( temp[x+4].value == temp[y+4].value ) && ( temp[x+5].value == temp[y+5].value ))
 										{
 											var ret = confirm('This information is a duplicate of existing funding information. Do you wish to proceed?');
@@ -182,7 +185,7 @@ function validateFundingDetails(comm,disb,exp) {
 												temp[y+2].focus();
 												return false;
 											}
-										}
+										}*/
 									}
 								}
 							}

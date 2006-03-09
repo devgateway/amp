@@ -18,6 +18,8 @@ public class TeamMember {
 
 	private String teamName;
 
+	private String teamType; // indicates whether the team is a DONOR team or MOFED team
+	
 	private boolean teamHead;
 
 	private boolean read; /* read permission */
@@ -204,5 +206,19 @@ public class TeamMember {
 	 */
 	public void setActivities(Set activities) {
 		this.activities = activities;
+	}
+
+	/**
+	 * @return Returns the teamType.
+	 */
+	public String getTeamType() {
+		return teamType;
+	}
+
+	/**
+	 * @param teamType The teamType to set.
+	 */
+	public void setTeamType(String teamType) {
+		this.teamType = teamType;
 	}
 }

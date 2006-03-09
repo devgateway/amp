@@ -19,6 +19,7 @@
 		<td class=r-dotted-lg width=4>&nbsp;
 		</td>
 		<td align=left class=r-dotted-lg vAlign=top width=600><br>
+			
 			<table border=0 cellPadding=5 cellSpacing=3 width="100%">
 				<tr>
 					<!-- Start Navigation -->
@@ -34,6 +35,18 @@
 					</td>
 					<!-- End navigation -->
 				</tr>
+				<%-- If user is not a team leader of a working team then he is not authorised to view this page --%>
+				<logic:notEqual name="aimMyDesktopForm"  property="workingTeamFlag" value="yes">
+					<tr>
+						<td height=33 colspan="7" width="867">
+							<digi:trn key="aim:unauthorisedToView">
+								<font SIZE="2" color="#FF0000">You are not authorised to view this page.</font>
+							</digi:trn>
+						</td>			
+					</tr>
+				</logic:notEqual>
+				
+				<logic:equal name="aimMyDesktopForm"  property="workingTeamFlag" value="yes">
 				<tr><td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 					<span class="page-title">
 					<digi:trn key="aim:activityApprovalList">Activity Approval</digi:trn></span>
@@ -56,6 +69,7 @@
 					</td></tr>
 				</c:forEach>
 			</table>
+			</logic:equal>
 		</td>
 	</tr>
 </table>

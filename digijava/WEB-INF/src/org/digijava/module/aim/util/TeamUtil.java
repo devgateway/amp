@@ -4,13 +4,11 @@
 
 package org.digijava.module.aim.util;
 
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.Set;
 import java.util.Vector;
 
 import net.sf.hibernate.Hibernate;
@@ -19,16 +17,17 @@ import net.sf.hibernate.Session;
 import net.sf.hibernate.Transaction;
 
 import org.apache.log4j.Logger;
+import org.apache.tools.ant.taskdefs.Get;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.request.Site;
 import org.digijava.kernel.user.Group;
 import org.digijava.kernel.user.User;
-import org.digijava.module.admin.util.DbUtil;
 import org.digijava.module.aim.dbentity.AmpActivity;
 import org.digijava.module.aim.dbentity.AmpApplicationSettings;
 import org.digijava.module.aim.dbentity.AmpCurrency;
 import org.digijava.module.aim.dbentity.AmpFilters;
 import org.digijava.module.aim.dbentity.AmpFiscalCalendar;
+import org.digijava.module.aim.dbentity.AmpMeasure;
 import org.digijava.module.aim.dbentity.AmpOrgRole;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpPages;
@@ -42,6 +41,7 @@ import org.digijava.module.aim.exception.AimException;
 import org.digijava.module.aim.helper.Activity;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.Documents;
+import org.digijava.module.aim.helper.DonorTeam;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.helper.UpdateDB;
 import org.digijava.module.aim.helper.Workspace;
@@ -65,8 +65,8 @@ public class TeamUtil {
 	 * @param teamCategory
 	 * @return The collection of all teams
 	 */
-	public static Collection getUnassignedWorkspaces(String workspaceType,
-			String teamCategory) {
+	public static Collection getUnassignedWorkspaces(String workspaceType, String teamCategory,
+													 String team) {
 
 		Session session = null;
 		Collection col = new ArrayList();
@@ -76,7 +76,7 @@ public class TeamUtil {
 
 			// get all teams whose 'parent id' is set to null
 			String qryStr = "select t from " + AmpTeam.class.getName() + " t"
-					+ " where t.parentTeamId is null";
+							+ " where t.parentTeamId is null and (t.teamCategory=:team) ";
 
 			boolean wTypeFlag = false;
 			boolean tCatFlag = false;
@@ -93,6 +93,7 @@ public class TeamUtil {
 			}
 
 			Query qry = session.createQuery(qryStr);
+			qry.setParameter("team", team, Hibernate.STRING);
 			if (wTypeFlag) {
 				qry.setParameter("wType", workspaceType, Hibernate.STRING);
 			}
@@ -103,8 +104,8 @@ public class TeamUtil {
 			col = qry.list();
 
 		} catch (Exception e) {
-			logger.error("Exception from getUnassignedWorkspcaes");
-			logger.error(e.getMessage());
+			logger.error("Exception from getUnassignedWorkspcaes : " + e.getMessage());
+			e.printStackTrace(System.out);
 		} finally {
 			if (session != null) {
 				try {
@@ -155,6 +156,61 @@ public class TeamUtil {
 		return col;
 	}
 
+	public static Collection getAllRelatedTeams() {
+		Session session = null;
+		Collection col = new ArrayList();
+
+		try {
+			session = PersistenceManager.getSession();
+			String query = "select team from " + AmpTeam.class.getName()
+						   + " team where (team.accessType=:accessType)";		
+			Query qry = session.createQuery(query);
+			qry.setParameter("accessType", "Team");
+			col = qry.list();
+			
+		} catch (Exception e) {
+			logger.error("Execption from getAllRelatedTeams");
+			logger.error(e.getMessage());
+		} finally {
+			if (session != null) {
+				try {
+					PersistenceManager.releaseSession(session);
+				} catch (Exception rsf) {
+					logger.error("Release session failed");
+				}
+			}
+		}
+		return col;
+	}
+	
+	public static Collection getAllRelatedTeamsByType(String type) {
+		Session session = null;
+		Collection col = new ArrayList();
+
+		try {
+			session = PersistenceManager.getSession();
+			String query = "select team from " + AmpTeam.class.getName()
+						   + " team where (team.accessType=:accessType) and (team.type=:type)";		
+			Query qry = session.createQuery(query);
+			qry.setParameter("accessType", "Team");
+			qry.setParameter("type", type);
+			col = qry.list();
+			
+		} catch (Exception e) {
+			logger.error("Execption from getAllRelatedTeamsByType");
+			logger.error(e.getMessage());
+		} finally {
+			if (session != null) {
+				try {
+					PersistenceManager.releaseSession(session);
+				} catch (Exception rsf) {
+					logger.error("Release session failed");
+				}
+			}
+		}
+		return col;
+	}
+	
 	/**
 	 * Creates a new team
 	 * 
@@ -181,8 +237,9 @@ public class TeamUtil {
 			qry.setParameter("name", team.getName(), Hibernate.STRING);
 			Collection col = qry.list();
 			if (col.size() > 0) {
-				throw new AimException("Cannot create team: The team name "
-						+ team.getName() + " already exist");
+				//throw new AimException("Cannot create team: The team name "	+ team.getName() + " already exist");
+				teamExist = true;
+				return teamExist;
 			} else {
 				// save the new team
 				session.save(team);
@@ -221,7 +278,10 @@ public class TeamUtil {
 				ampAppSettings.setCurrency(curr);
 				ampAppSettings.setFiscalCalendar(fiscal);
 				ampAppSettings.setLanguage("English");
-				ampAppSettings.setDefaultPerspective("MOFED");
+				if ("MOFED".equalsIgnoreCase(team.getTeamCategory()))
+					ampAppSettings.setDefaultPerspective("MOFED");
+				else if ("DONOR".equalsIgnoreCase(team.getTeamCategory()))
+					ampAppSettings.setDefaultPerspective("DONOR"); 
 				session.save(ampAppSettings);
 
 				// update all child workspaces parent team
@@ -237,10 +297,11 @@ public class TeamUtil {
 				// commit the changes
 				tx.commit();
 			}
-		} catch (AimException ae) {
-			teamExist = true;
-			logger.error("Execption from createTeam()");
-			logger.error(ae.getMessage());
+		} catch (Exception e) {
+			logger.error("Execption from createTeam() : " + e.getMessage());
+			e.printStackTrace(System.out);
+			/*teamExist = true;
+			logger.error(ae.getMessage()); */
 			if (tx != null) {
 				try {
 					tx.rollback();
@@ -248,7 +309,7 @@ public class TeamUtil {
 					logger.error("Rollback failed");
 				}
 			}
-		} catch (Exception e) {
+		} /*catch (Exception e) {
 			logger.error("Execption from createTeam()");
 			logger.error(e.getMessage());
 			if (tx != null) {
@@ -258,7 +319,7 @@ public class TeamUtil {
 					logger.error("Rollback failed");
 				}
 			}
-		} finally {
+		}*/ finally {
 			if (session != null) {
 				try {
 					PersistenceManager.releaseSession(session);
@@ -267,7 +328,6 @@ public class TeamUtil {
 				}
 			}
 		}
-
 		return teamExist;
 	}
 
@@ -295,8 +355,13 @@ public class TeamUtil {
 				workspace.setDescription(team.getDescription().trim());
 				workspace.setId(team.getAmpTeamId().toString());
 				workspace.setName(team.getName());
-				workspace.setTeamCategory(team.getType());
+				workspace.setTeamCategory(team.getTeamCategory());
+				workspace.setType(team.getType());
 				workspace.setWorkspaceType(team.getAccessType());
+				if (null == team.getRelatedTeamId())
+					workspace.setRelatedTeam(null);
+				else
+					workspace.setRelatedTeam(team.getRelatedTeamId().getAmpTeamId());
 				qryStr = "select count(*) from "
 						+ AmpTeamMember.class.getName() + " t "
 						+ "where (t.ampTeam=:teamId)";
@@ -341,8 +406,8 @@ public class TeamUtil {
 				workspace.setChildWorkspaces(childWorkspaces);
 			}
 		} catch (Exception e) {
-			logger.error("Exception from getWorkspace()");
-			logger.error(e.getMessage());
+			logger.error("Exception from getWorkspace() : " + e.getMessage());
+			e.printStackTrace(System.out);
 		} finally {
 			if (session != null) {
 				try {
@@ -375,15 +440,16 @@ public class TeamUtil {
 
 			// check whether a team with the same name already exist
 			String qryStr = "select t from " + AmpTeam.class.getName() + " t "
-					+ "where (t.name=:name)";
+							+ "where (t.name=:name)";
 			Query qry = session.createQuery(qryStr);
 			qry.setParameter("name", team.getName(), Hibernate.STRING);
 			Iterator tempItr = qry.list().iterator();
 			if (tempItr.hasNext()) {
 				AmpTeam tempTeam = (AmpTeam) tempItr.next();
 				if (!(tempTeam.getAmpTeamId().equals(team.getAmpTeamId()))) {
-					throw new AimException("Cannot create team: The team name "
-							+ team.getName() + " already exist");
+					//throw new AimException("Cannot create team: The team name "	+ team.getName() + " already exist");
+					teamExist =true;
+					return teamExist;
 				}
 			}
 
@@ -398,10 +464,12 @@ public class TeamUtil {
 			if (tempItr.hasNext()) {
 				logger.debug("Before update....");
 				AmpTeam updTeam = (AmpTeam) tempItr.next();
-				updTeam.setAccessType(team.getAccessType());
-				updTeam.setDescription(team.getDescription());
 				updTeam.setName(team.getName());
+				updTeam.setDescription(team.getDescription());
+				updTeam.setTeamCategory(team.getTeamCategory());
+				updTeam.setAccessType(team.getAccessType());
 				updTeam.setType(team.getType());
+				updTeam.setRelatedTeamId(team.getRelatedTeamId());
 				session.saveOrUpdate(updTeam);
 
 				qryStr = "select t from " + AmpTeam.class.getName() + " t "
@@ -434,10 +502,12 @@ public class TeamUtil {
 				tx.commit();
 			}
 
-		} catch (AimException ae) {
-			teamExist = true;
+		} catch (Exception e) {
+			logger.error("Execption from updateTeam() : " + e.getMessage());
+			e.printStackTrace(System.out);
+			/*teamExist = true;
 			logger.error("Execption from updateTeam() :" + ae.getMessage());
-			ae.printStackTrace(System.out);
+			ae.printStackTrace(System.out); */
 			if (tx != null) {
 				try {
 					tx.rollback();
@@ -445,7 +515,7 @@ public class TeamUtil {
 					logger.error("Rollback failed");
 				}
 			}
-		} catch (Exception e) {
+		} /*catch (Exception e) {
 			logger.error("Execption from updateTeam() :" + e.getMessage());
 			e.printStackTrace(System.out);
 			if (tx != null) {
@@ -455,7 +525,7 @@ public class TeamUtil {
 					logger.error("Rollback failed");
 				}
 			}
-		} finally {
+		}*/ finally {
 			if (session != null) {
 				try {
 					PersistenceManager.releaseSession(session);
@@ -785,9 +855,55 @@ public class TeamUtil {
 		}		
 	}
 	
+	public static Collection getUnassignedDonorMemberActivities(Long teamId,Long memberId) {
+		Collection col = new ArrayList();
+		Collection col1 = new ArrayList();
+		Session session = null;
+		try {
+			session = PersistenceManager.getSession();
+			AmpTeam team = (AmpTeam) session.load(AmpTeam.class,teamId);
+			AmpTeamMember member = (AmpTeamMember) session.load(AmpTeamMember.class,memberId);
+			
+			col1.addAll(team.getActivityList());
+			col1.removeAll(member.getActivities());
+			
+			Iterator itr1 = col1.iterator();
+			while (itr1.hasNext()) {
+				AmpActivity act = (AmpActivity) itr1.next();
+				Iterator orgItr = act.getOrgrole().iterator();
+				Activity activity = new Activity();
+				activity.setActivityId(act.getAmpActivityId());
+				activity.setName(act.getName());
+				activity.setAmpId(act.getAmpId());
+				String donors = "";
+
+				while (orgItr.hasNext()) {
+					AmpOrgRole orgRole = (AmpOrgRole) orgItr.next();
+					if (orgRole.getRole().getRoleCode().equals(Constants.DONOR)) {
+						if (donors.trim().length() > 0)
+							donors += ", ";
+						donors += orgRole.getOrganisation().getName();
+					}
+				}
+				activity.setDonors(donors);
+				col.add(activity);								
+			}
+			
+		} catch (Exception e) {
+			if (session != null) {
+				try {
+					PersistenceManager.releaseSession(session);
+				} catch (Exception rsf) {
+					logger.error("Release seesion failed " + rsf.getMessage());
+				}
+			}
+		}
+		return col;
+	}
+	
 	public static Collection getUnassignedMemberActivities(Long teamId,Long memberId) {
 		Collection col = null;
-		Collection col1 = null;
+		Collection col1 = new ArrayList();
 		Session session = null;
 		Query qry = null;
 		AmpTeamMember member = null;
@@ -1088,6 +1204,57 @@ public class TeamUtil {
 			}
 		}
 	}		
+	
+	public static void removeActivitiesFromDonorTeam(Long activities[],Long teamId) {
+		Session session = null;
+		Transaction tx = null;
+		AmpTeamMember member = null;
+
+		try {
+			session = PersistenceManager.getSession();
+			tx = session.beginTransaction();
+			
+			AmpTeam team = (AmpTeam) session.load(AmpTeam.class,teamId);
+			
+			for (int i = 0;i < activities.length;i ++) {
+			    AmpActivity activity = (AmpActivity) session.load(AmpActivity.class,
+			            activities[i]);
+			    
+			    team.getActivityList().remove(activity);
+			    Iterator membersItr = activity.getMember().iterator();
+			    while (membersItr.hasNext()) {
+			        member = (AmpTeamMember) membersItr.next();
+			        if (member.getAmpTeam().getAmpTeamId().equals(teamId)) {
+				        member.getActivities().remove(activity);
+				        session.update(member);
+			        }
+			    }
+			    session.update(team);
+			    session.flush();
+			}
+			
+			tx.commit();
+		} catch (Exception e) {
+			logger.error("Unable to remove activities" + e.getMessage());
+			e.printStackTrace(System.out);
+			if (tx != null) {
+				try {
+					tx.rollback();
+				} catch (Exception rbf) {
+					logger.error("Roll back failed");
+				}
+			}
+		} finally {
+			try {
+				if (session != null) {
+					PersistenceManager.releaseSession(session);
+				}
+			} catch (Exception ex) {
+				logger.error("releaseSession() failed");
+			}
+		}	    
+	}	
+	
 	
 	public static void removeActivitiesFromTeam(Long activities[]) {
 		Session session = null;
@@ -1431,4 +1598,277 @@ public class TeamUtil {
 		}				
 		return false;
 	}
+	
+	public static Collection getDonorTeams(Long teamId) {
+		// Check whether the team whose donor teams need to be found is a  
+		// MOFED team
+		
+		Collection col = new ArrayList();
+		Session session = null;
+
+		try {
+			session = PersistenceManager.getSession();
+			
+			AmpTeam team = (AmpTeam) session.load(AmpTeam.class,teamId);
+			if (team.getTeamCategory().equalsIgnoreCase("MOFED")) {
+				String qryStr = "select t from " + AmpTeam.class.getName() + " t " +
+						"where (t.relatedTeamId=:tId)";
+				Query qry = session.createQuery(qryStr);
+				qry.setParameter("tId",teamId,Hibernate.LONG);
+				Iterator itr = qry.list().iterator();
+				while (itr.hasNext()) {
+					AmpTeam ampTeam = (AmpTeam) itr.next();
+					DonorTeam dt = new DonorTeam();
+					dt.setTeamId(ampTeam.getAmpTeamId());
+					if (ampTeam.getTeamLead() != null) {
+						dt.setTeamMeberId(ampTeam.getTeamLead().getAmpTeamMemId());
+						dt.setTeamMemberName(ampTeam.getTeamLead().getUser().getEmail());	
+					}
+					dt.setTeamName(ampTeam.getName());
+					col.add(dt);
+				}
+			}
+			
+		} catch (Exception e) {
+			logger.error("Unable to getDonorTeams" + e.getMessage());
+			e.printStackTrace(System.out);
+		} finally {
+			try {
+				if (session != null) {
+					PersistenceManager.releaseSession(session);
+				}
+			} catch (Exception ex) {
+				logger.error("releaseSession() failed");
+			}
+		}						
+		return col;
+	}
+	
+	public static Collection getDonorTeamActivities(Long teamId) {
+		
+		Collection col = new ArrayList();
+		Session session = null;
+
+		try {
+			session = PersistenceManager.getSession();
+			
+			AmpTeam team = (AmpTeam) session.load(AmpTeam.class,teamId);
+			Iterator itr = team.getActivityList().iterator();
+			while (itr.hasNext()) {
+				AmpActivity activity = (AmpActivity) itr.next();
+				Collection temp1 = activity.getOrgrole();
+				Collection temp2 = new ArrayList();
+				Iterator temp1Itr = temp1.iterator();
+				while (temp1Itr.hasNext()) {
+					AmpOrgRole orgRole = (AmpOrgRole) temp1Itr.next();
+					if (!temp2.contains(orgRole))
+						temp2.add(orgRole);
+				}
+				
+				Iterator orgItr = temp2.iterator();
+
+				Activity act = new Activity();
+				act.setActivityId(activity.getAmpActivityId());
+				act.setName(activity.getName());
+				act.setAmpId(activity.getAmpId());
+				
+				String donors = "";
+
+				while (orgItr.hasNext()) {
+					AmpOrgRole orgRole = (AmpOrgRole) orgItr.next();
+					if (orgRole.getRole().getRoleCode().equals(Constants.DONOR)) {
+						if (donors.trim().length() > 0) {
+							donors += ", ";
+						}
+						donors += orgRole.getOrganisation().getName();
+					}
+				}
+
+				act.setDonors(donors);
+				col.add(act);				
+			}
+			
+		} catch (Exception e) {
+			logger.error("Unable to getDonorTeamActivities" + e.getMessage());
+			e.printStackTrace(System.out);
+		} finally {
+			try {
+				if (session != null) {
+					PersistenceManager.releaseSession(session);
+				}
+			} catch (Exception ex) {
+				logger.error("releaseSession() failed");
+			}
+		}						
+		return col;
+	}	
+	
+	public static Collection getDonorUnassignedActivities(Long dnrTeamId,Long teamId) {
+		
+		Collection col = new ArrayList();
+		Session session = null;
+
+		try {
+			
+			Collection temp = getDonorTeamActivities(dnrTeamId);
+			
+			session = PersistenceManager.getSession();
+			String qryStr = "select act from " + AmpActivity.class.getName() + " act where " +
+					"(act.team=:teamId) and (act.approvalStatus=:status)";
+			Query qry = session.createQuery(qryStr);
+			qry.setParameter("teamId",teamId,Hibernate.LONG);
+			qry.setParameter("status",Constants.APPROVED_STATUS,Hibernate.STRING);
+			Iterator itr = qry.list().iterator();
+			while (itr.hasNext()) {
+				Activity act = new Activity();
+				AmpActivity activity = (AmpActivity) itr.next();
+				act.setActivityId(activity.getAmpActivityId());
+				
+				if (temp.contains(act) == false) {
+					Collection temp1 = activity.getOrgrole();
+					Collection temp2 = new ArrayList();
+					Iterator temp1Itr = temp1.iterator();
+					while (temp1Itr.hasNext()) {
+						AmpOrgRole orgRole = (AmpOrgRole) temp1Itr.next();
+						if (!temp2.contains(orgRole))
+							temp2.add(orgRole);
+					}
+					
+					Iterator orgItr = temp2.iterator();
+
+					
+					
+					act.setName(activity.getName());
+					act.setAmpId(activity.getAmpId());
+					
+					String donors = "";
+
+					while (orgItr.hasNext()) {
+						AmpOrgRole orgRole = (AmpOrgRole) orgItr.next();
+						if (orgRole.getRole().getRoleCode().equals(Constants.DONOR)) {
+							if (donors.trim().length() > 0) {
+								donors += ", ";
+							}
+							donors += orgRole.getOrganisation().getName();
+						}
+					}
+
+					act.setDonors(donors);
+					col.add(act);													
+				}
+			}
+			
+		} catch (Exception e) {
+			logger.error("Unable to getDonorTeamActivities" + e.getMessage());
+			e.printStackTrace(System.out);
+		} finally {
+			try {
+				if (session != null) {
+					PersistenceManager.releaseSession(session);
+				}
+			} catch (Exception ex) {
+				logger.error("releaseSession() failed");
+			}
+		}						
+		return col;
+	}	
+
+	public static void assignActivitiesToDonor(Long dnrTeamId,Long activityId[]) {
+		Session session = null;
+		Transaction tx = null;
+
+		try {
+			session = PersistenceManager.getSession();
+			tx = session.beginTransaction();
+			
+			AmpTeam ampTeam = (AmpTeam) session.get(AmpTeam.class,dnrTeamId);
+			if (ampTeam.getActivityList() == null) {
+				ampTeam.setActivityList(new HashSet());
+			}
+			logger.info("ActivityId length = " + activityId.length);
+			for (int i = 0;i < activityId.length; i++) {
+				logger.info("Id = " + activityId[i]);
+				if (activityId[i] != null) {
+					AmpActivity ampActivity = (AmpActivity) session.get(AmpActivity.class,activityId[i]);
+					ampTeam.getActivityList().add(ampActivity);					
+				}
+			}
+			
+			session.update(ampTeam);
+			tx.commit();
+			
+		} catch (Exception e) {
+			logger.error("Unable to assignActivitiesToDonor" + e.getMessage());
+			e.printStackTrace(System.out);
+			if (tx != null) {
+				try {
+					tx.rollback();
+				} catch (Exception rbf) {
+					logger.error("Rollback failed");
+				}
+			}			
+		} finally {
+			try {
+				if (session != null) {
+					PersistenceManager.releaseSession(session);
+				}
+			} catch (Exception ex) {
+				logger.error("releaseSession() failed");
+			}
+		}						
+	}
+	
+	public static void removeActivitiesFromDonor(Long dnrTeamId,Long activityId[]) {
+		Session session = null;
+		Transaction tx = null;
+
+		try {
+			session = PersistenceManager.getSession();
+			tx = session.beginTransaction();
+			
+			AmpTeam ampTeam = (AmpTeam) session.get(AmpTeam.class,dnrTeamId);
+			Set newList = new HashSet();
+			
+			Iterator itr = ampTeam.getActivityList().iterator();
+			while (itr.hasNext()) {
+				AmpActivity act = (AmpActivity) itr.next();
+				boolean present = false;
+				for (int i = 0;i < activityId.length;i++) {
+					if (act.getAmpActivityId().longValue() == activityId[i].longValue()) {
+						present = true;
+						break;
+					}
+				}
+				if (!present) {
+					newList.add(act);
+				}
+			}
+			
+			ampTeam.setActivityList(newList);
+			
+			session.update(ampTeam);
+			tx.commit();
+			
+		} catch (Exception e) {
+			logger.error("Unable to assignActivitiesToDonor" + e.getMessage());
+			e.printStackTrace(System.out);
+			if (tx != null) {
+				try {
+					tx.rollback();
+				} catch (Exception rbf) {
+					logger.error("Rollback failed");
+				}
+			}			
+		} finally {
+			try {
+				if (session != null) {
+					PersistenceManager.releaseSession(session);
+				}
+			} catch (Exception ex) {
+				logger.error("releaseSession() failed");
+			}
+		}						
+	}	
+	
+	
 }

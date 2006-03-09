@@ -24,7 +24,7 @@ public class AddOrgForm extends ActionForm {
 	private Long ampOrgTypeId = null;
 	private Long fiscalCalId = null;
 	private Long ampSecSchemeId = null;
-	private Long levelId = null;	//defunct
+	private Long levelId = null;		//defunct
 	private Long regionId = null;
 	private String countryId = "et";	//defunct
 	private Long ampOrgGrpId = null;
@@ -36,6 +36,7 @@ public class AddOrgForm extends ActionForm {
 	private Collection orgType = null;
 	private Collection level = null;	//defunct
 	private Collection orgGroup = null;
+	private Collection orgGroupColl = null;
 	
 	private String actionFlag = null;
 	private String flag = null;
@@ -194,6 +195,19 @@ public class AddOrgForm extends ActionForm {
 	
 	public void setOrgGroup(Collection orgGroup) {
 		this.orgGroup = orgGroup;
+	}
+	
+	/**
+	 * @return Returns the orgGroupColl.
+	 */
+	public Collection getOrgGroupColl() {
+		return orgGroupColl;
+	}
+	/**
+	 * @param orgGroupColl The orgGroupColl to set.
+	 */
+	public void setOrgGroupColl(Collection orgGroupColl) {
+		this.orgGroupColl = orgGroupColl;
 	}
 	
 	public Collection getRegion() {

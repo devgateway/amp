@@ -41,7 +41,7 @@
 			if (document.aimAddOrgForm.ampOrgTypeId.options[index].text == "Ethiopian Government"
 					|| document.aimAddOrgForm.ampOrgTypeId.options[index].text == "National NGO") {
 				if (document.aimAddOrgForm.orgTypeFlag.value != "national") {
-					if (document.aimAddOrgForm.orgTypeFlag.value == "multilateral")
+					//if (document.aimAddOrgForm.orgTypeFlag.value == "multilateral")
 						flag = true;
 					document.aimAddOrgForm.orgTypeFlag.value = "national";
 				}
@@ -50,10 +50,13 @@
 			}
 			else if (document.aimAddOrgForm.ampOrgTypeId.options[index].text == "Regional Government") {
 					if (document.aimAddOrgForm.orgTypeFlag.value != "regional") {
+						/*
 						if (document.aimAddOrgForm.orgTypeFlag.value == "multilateral")
 							flag = true;
 						else
 							document.aimAddOrgForm.regionId.style.display = '';
+						*/
+						flag = true;
 						document.aimAddOrgForm.orgTypeFlag.value = "regional";
 					}
 					else
@@ -68,7 +71,7 @@
 								return false;
 				 		}
 				 		else if (document.aimAddOrgForm.orgTypeFlag.value != "others") {
-				 				if (document.aimAddOrgForm.orgTypeFlag.value == "multilateral")
+				 				//if (document.aimAddOrgForm.orgTypeFlag.value == "multilateral")
 									flag = true;
 			 					document.aimAddOrgForm.orgTypeFlag.value = "others";
 			 				}
@@ -87,16 +90,17 @@
 		}
 	}
 	
-	function countryChanged() {
+	// defunct
+	function countryChanged() {	/*
 		var index = document.aimAddOrgForm.levelId.selectedIndex;
 		document.aimAddOrgForm.regionFlag.value = "changed";
 		document.aimAddOrgForm.regionId.style.display = 'none';
 		if (document.aimAddOrgForm.levelId.options[index].text == "REGIONAL") {
 			document.aimAddOrgForm.submit();
-		}
+		} */
 	}
-	
-	function levelChanged() {
+	// defunct
+	function levelChanged() { /*
 		var index = document.aimAddOrgForm.levelId.selectedIndex;
 		if (document.aimAddOrgForm.levelId.options[index].text == "REGIONAL") {
 			document.aimAddOrgForm.levelFlag.value = "regional";
@@ -109,7 +113,7 @@
 		else {
 				document.aimAddOrgForm.regionId.style.display = 'none';
 				document.aimAddOrgForm.levelFlag.value = "others";
-		}
+		} */
 	}
 
 	function msg() {
@@ -254,8 +258,7 @@
 				</tr>
 				<tr>
 					<td>
-						<digi:trn key="um:allMarkedRequiredField">All fields marked with an <FONT color=red><B><BIG>*</BIG>
-							</B></FONT> are required.</digi:trn>
+						<digi:trn key="um:allMarkedRequiredField">All fields marked with <font size="2" color="#FF0000">*</font> are required.</digi:trn>
 					</td>
 				</tr>
 				<tr>
@@ -293,7 +296,7 @@
 																<table width="563" border=0	 bgColor=#f4f4f2 height="363">
 																	<tr>
 																		<td width="169" align="right" height="30">
-																			<digi:trn key="aim:organizationName">Organization Name</digi:trn><FONT color=red><B><BIG>*</BIG></B></FONT>
+																			<digi:trn key="aim:organizationName">Organization Name</digi:trn><font size="2" color="#FF0000">*</font>
 																		</td>
 																	    <td width="380" height="30" colspan="2" >
 																	          <html:text name="aimAddOrgForm" property="name" size="54" />
@@ -301,7 +304,7 @@
 																	</tr>
 																	<tr>
 																		<td width="169" align="right" height="30">
-																			<digi:trn key="aim:orgAcronym">Organization Acronym</digi:trn><FONT color=red><B><BIG>*</BIG></B></FONT>
+																			<digi:trn key="aim:orgAcronym">Organization Acronym</digi:trn><font size="2" color="#FF0000">*</font>
 																		</td>
 																	    <td width="380" height="30" colspan="2" >
 																	          <html:text name="aimAddOrgForm" property="acronym" size="54" />
@@ -309,7 +312,7 @@
 																	</tr>
 																	<tr>
 																		<td width="169" align="right" height="30">
-																	        <digi:trn key="aim:organizationType">Organization Type</digi:trn><FONT color=red><B><BIG>*</BIG></B></FONT>
+																	        <digi:trn key="aim:organizationType">Organization Type</digi:trn><font size="2" color="#FF0000">*</font>
 																		</td>
 																		<td width="190" height="30">
 																           <html:select property="ampOrgTypeId" onchange="return orgTypeChanged()">
@@ -384,7 +387,7 @@
 																	</tr>
 																	<tr>
 																		<td width="169" align="right" height="30">
-                                                                   			<digi:trn key="aim:organizationCode">Organization Code</digi:trn><FONT color=red><B><BIG>*</BIG></B></FONT>
+                                                                   			<digi:trn key="aim:organizationCode">Organization Code</digi:trn><font size="2" color="#FF0000">*</font>
 																		</td>
 																	    <td width="380" height="30" colspan="2">
                                                                     		<html:text property="orgCode" size="15" />

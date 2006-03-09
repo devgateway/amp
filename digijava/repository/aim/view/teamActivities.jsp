@@ -211,6 +211,7 @@
 															</table>														
 														</td>
 													</tr>	
+													<c:if test="${aimTeamActivitiesForm.donorFlag == false}">
 													<tr>
 														<td align="center">
 															<table width="100%" cellSpacing=2 cellPadding=3 vAlign="top" align="center"
@@ -220,7 +221,8 @@
 																</td></tr>
 															</table>
 														</td>
-													</tr>	
+													</tr>									
+													</c:if>													
 													</logic:empty>
 							
 													<logic:notEmpty name="aimTeamActivitiesForm" property="activities">
@@ -264,10 +266,12 @@
 														<td align="center" colspan=2>
 															<table cellspacing="5">
 																<tr>
+																	<c:if test="${aimTeamActivitiesForm.donorFlag == false}">
 																	<td>
 																		<html:submit styleClass="dr-menu" value="Add Activity To Workspace" 
 																		property="addActivity" />
-																	</td>
+																	</td>																	
+																	</c:if>
 																	<td>	
 																		<html:submit styleClass="dr-menu" value="Remove selected activities" 
 																		property="removeActivity" onclick="return confirmDelete()"/>

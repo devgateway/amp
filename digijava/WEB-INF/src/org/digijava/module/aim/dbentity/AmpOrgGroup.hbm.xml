@@ -21,6 +21,8 @@
 			<one-to-many class="org.digijava.module.aim.dbentity.AmpOrganisation"/>
 		</set>
 		-->
+		
+		<many-to-one name="orgType" column="org_type" class="org.digijava.module.aim.dbentity.AmpOrgType" cascade="none"/>
 				
 	</class>
 </hibernate-mapping>

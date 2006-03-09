@@ -32,6 +32,7 @@ import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.DecimalToText;
 import org.digijava.module.aim.helper.Documents;
 import org.digijava.module.aim.helper.TeamMember;
+import org.digijava.module.aim.util.ActivityUtil;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.TeamUtil;
 
@@ -113,21 +114,27 @@ public class ViewMyDesktop extends Action
 		}
 		else
 			perspective = formBean.getPerspective();
-		if(perspective.equals("Donor"))
+		
+		if(perspective.equalsIgnoreCase("DONOR"))
 			perspective="DN";
-		if(perspective.equals("MOFED"))
+		if(perspective.equalsIgnoreCase("MOFED"))
 			perspective="MA";
-		if(perspective.equals("DN"))
-			formBean.setPerspective("Donor");
-		if(perspective.equals("MA"))
+		
+		if(perspective.equalsIgnoreCase("DN"))
+			formBean.setPerspective("DONOR");
+		if(perspective.equalsIgnoreCase("MA"))
 			formBean.setPerspective("MOFED");
 
+		logger.info("Perspective is " + perspective);
+		logger.info("form bean perspective = " + formBean.getPerspective());
+		
 		formBean.setTeamLeadFlag(teamLeadFlag);	
 		formBean.setAmpFromYears(new ArrayList());
 		formBean.setAmpToYears(new ArrayList());
 		formBean.setSector(new ArrayList()) ;
 		formBean.setDonor(new ArrayList()) ;
 		t2 = System.currentTimeMillis();
+		
 		logger.debug("3. at" + (t2-t1)+ "ms");
 		
 		t1 = System.currentTimeMillis();
@@ -475,19 +482,49 @@ public class ViewMyDesktop extends Action
 		 	*/
 		 	actColl = (ArrayList)session.getAttribute("ampProjects");
 		 	logger.debug("actColl.size [from Session attribute] : " + actColl.size());
-		 	// To check if this team is a regular working team not belonging to management workspace 
-		 	boolean workingTeamFlag = DbUtil.checkForParentTeam(ampTeamId);
+		 	// To check if this team is a regular working team not belonging to management workspace
+		 	boolean workingTeamFlag = false;
+		 	AmpTeam team =  DbUtil.getAmpTeam(ampTeamId);
+		 	if ("MOFED".equalsIgnoreCase(team.getTeamCategory()))
+		 		workingTeamFlag = DbUtil.checkForParentTeam(ampTeamId);
 		 	if (workingTeamFlag && teamLeadFlag)
 		 		formBean.setWorkingTeamFlag("yes");
 		 	else
 		 		formBean.setWorkingTeamFlag("no");
 		 	
 		 	// Getting activities in workflow section of Team Leader for Approval
-		 	Collection myTaskColl = DbUtil.getCreatedOrEditedActivities(ampTeamId);
-		 	formBean.setMyTasksColl(myTaskColl);
-		 	formBean.setMyTaskSize(myTaskColl.size());
+		 	if ("yes".equals(formBean.getWorkingTeamFlag())) {
+		 		Collection myTaskColl = DbUtil.getCreatedOrEditedActivities(ampTeamId);
+			 	formBean.setMyTasksColl(myTaskColl);
+			 	formBean.setMyTaskSize(myTaskColl.size());
+		 	}
+		 	
+		 	// Getting approval status
+		 	//formBean.setApprovalStatus(DbUtil.getApprovalStatus());
 		 } 
 		 // end
+		 
+
+		if (formBean.getPerspective().equalsIgnoreCase("MOFED")) {
+			perspective = Constants.MOFED;
+		} else {
+			perspective = Constants.DONOR;
+		}		 
+		 
+		 
+		 Iterator tmpItr = ampProjects.iterator();
+		 while (tmpItr.hasNext()) {
+			 AmpProject ap = (AmpProject) tmpItr.next();
+			 ap.setDonor(ActivityUtil.getDonors(ap.getAmpActivityId()));
+			 
+			 String str = mf.format(DbUtil.getAmpFundingAmount(
+					 ap.getAmpActivityId(),new Integer(0),new Integer(1),
+					 perspective,ampCurrencyCode));
+			 ap.setTotalCommited(str);
+			 logger.info(ap.getAmpActivityId() + " - " + ap.getAmpId() + " - " + ap.getName() + " - " + str);
+			 
+		 }
+		 
 		 
 		 // Pagination starts here
 		 t1 = System.currentTimeMillis();
@@ -605,6 +642,12 @@ public class ViewMyDesktop extends Action
 			formBean.setWrite(false);
 		t2 = System.currentTimeMillis();
 		logger.debug("15. at" + (t2-t1)+ "ms");
+		
+		if (teamMember.getTeamType().equalsIgnoreCase(Constants.DEF_DNR_PERSPECTIVE)) {
+			formBean.setDonorFlag(true);
+		} else {
+			formBean.setDonorFlag(false);
+		}
 		
 		return mapping.findForward("forward");
 	}

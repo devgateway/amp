@@ -10,7 +10,7 @@
 <c:set target="${urlParams}" property="tId" value="-1"/>
 <c:set target="${urlParams}" property="dest" value="teamLead"/>			
 
-<table width="100%" cellPadding=0 cellSpacing=0 align="left" valign="top">
+<table width="750" cellPadding=0 cellSpacing=1 align="left" valign="top">
 	<tr><td height="20">
 		<table bgColor=#ffffff align="left" valign="bottom" cellPadding=0 cellspacing=1 height="20">
 			<tr height="20">
@@ -54,8 +54,9 @@
 						:: <digi:trn key="aim:members">Members</digi:trn>
 					</digi:link>
 				</td>
-				<td width="40" bgColor=#3754a1 height="19">
-				</td>
+				<td class="sub-nav" width="112">
+					&nbsp;
+				</td>				
 			</tr>
 		</table>	
 	</td></tr>
@@ -78,7 +79,13 @@
 						:: <digi:trn key="aim:configureTeamPages">Configure Team Pages</digi:trn>
 					</digi:link>
 				</td>
-				<td noWrap width="329" bgColor=#3754a1 height="19">
+				<td noWrap>
+					<digi:link href="/donorActivityList.do" styleClass="sub-nav">
+						:: <digi:trn key="aim:donorActivityList">Donor Activity List</digi:trn>
+					</digi:link>
+				</td>				
+				<td class="sub-nav" width="192">
+					&nbsp;
 				</td>
 			</tr>
 		</table>													

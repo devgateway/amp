@@ -11,7 +11,7 @@
 			  
 		<many-to-one name="activity" class="org.digijava.module.aim.dbentity.AmpActivity" cascade="none"/>
 		<many-to-one name="organisation" class="org.digijava.module.aim.dbentity.AmpOrganisation" cascade="none"/>			  
-		<many-to-one name="role" class="org.digijava.module.aim.dbentity.AmpRole" cascade="none"/>			  
+		<many-to-one name="role" class="org.digijava.module.aim.dbentity.AmpRole" cascade="none"/>				  
 		
 	</class>
 </hibernate-mapping>

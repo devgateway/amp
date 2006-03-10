@@ -42,6 +42,17 @@ public class AdvancedReport
 	private String description;
 	private String descriptionPDFXLS;
 
+	// added by Rahul
+	private Collection projId;
+	
+	public Collection getProjId() {
+		return projId;
+	}
+	
+	public void setProjId(Collection projId) {
+		this.projId = projId;
+	}
+
 	public Collection getDonors() 
 	{
 		return donors;

@@ -24,6 +24,7 @@ import org.apache.log4j.Logger;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.dbentity.AmpActivity;
 import org.digijava.module.aim.dbentity.AmpActor;
+import org.digijava.module.aim.dbentity.AmpActivityInternalId;
 import org.digijava.module.aim.dbentity.AmpColumns;
 import org.digijava.module.aim.dbentity.AmpComponent;
 import org.digijava.module.aim.dbentity.AmpFilters;
@@ -11682,7 +11683,7 @@ public class ReportUtil {
 							iterColumn=columns.iterator();
 							while(iterColumn.hasNext())
 							{
-								//logger.debug("Begin while");
+								//logger.debug("begin while");
 								report=new AdvancedReport();
 								report.setDonors(new ArrayList());
 								report.setSectors(new ArrayList());
@@ -11724,8 +11725,12 @@ public class ReportUtil {
 									report.getSectors().addAll(sectors);
 								if(c.getColumnId().equals(Constants.REGION_NAME))
 									report.getRegions().addAll(regions);
-								if(c.getColumnId().equals(Constants.AMP_ID))
-									report.setAmpId(ampId);
+								if(c.getColumnId().equals(Constants.AMP_ID)){
+									//report.setAmpId(ampId);
+									//logger.info("test AMPID333.+calling pidddddddddd"+ " for:::"+ reports.getAmpActivityId());
+									//logger.info("*******"+getProjectId((reports.getAmpActivityId())));
+									report.setProjId(getProjectId(reports.getAmpActivityId()));
+								}
 								if(c.getColumnId().equals(Constants.FUNDING_INSTRUMENT))
 								{
 									if(modality.size()==0)
@@ -15641,6 +15646,57 @@ public class ReportUtil {
 		}
 		return found;
 	}
+
+
+	// added by Rahul for Project ID..
+	public static Collection getProjectId(Long activityId){
+		
+		Transaction tx=null;
+		Session session=null;
+		Query query=null;
+		String queryString=null;
+		
+		Collection pid=new ArrayList();
+		try{
+			session=PersistenceManager.getSession();
+			AmpActivity act = (AmpActivity) session.load(AmpActivity.class,activityId);
+			if (act != null) {
+				if (act.getInternalIds() != null) {
+					Iterator tmp = act.getInternalIds().iterator();
+					while (tmp.hasNext()) {
+						AmpActivityInternalId actIntId = (AmpActivityInternalId) tmp.next();
+						pid.add(actIntId.getInternalId());
+					}
+				}
+			}
+
+		}catch(Exception e){
+			logger.error("UNABLE to fetch Project Id for ActivityId: "+activityId +"==Error="+e.getMessage());
+			if(tx !=null){
+				try{
+					tx.rollback();
+				}catch(Exception exp){
+					logger.error("Transaction ROLLBACK Failed.");
+					logger.error("error="+exp.getMessage());
+				}
+			}
+		}
+		finally{
+			if(session!=null){
+				try{
+					PersistenceManager.releaseSession(session);
+				}catch(Exception ex){
+					logger.error("Failed to release session....");
+					logger.error("error="+ex.getMessage());
+				}
+			}
+		}
+		
+//		logger.info("PIDDDDDDDD SIZE........."+pid.size());
+		return pid;
+		
+	}// get projectId
+
 
 // end of Advanced Function	
 

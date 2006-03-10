@@ -10,14 +10,15 @@
 
 	<HEAD>
 		<TITLE>AMP<tiles:getAsString name="title"/></TITLE>
-		<META http-equiv="Content-Type" content="text/html; charset=UTF-8">
-		<META HTTP-EQUIV="expires" CONTENT="Wed, 09 Aug 2000 08:21:57 GMT">
-		<META HTTP-EQUIV="Cache-Control" CONTENT="no-cache">
+		<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=UTF-8">
+		<META HTTP-EQUIV="Expires" CONTENT="0">
+		<META HTTP-EQUIV="Cache-Control" CONTENT="private">		
 		<script language="javascript">
 		function quitRnot()
 		{
 		}
 		</script>
+		
 	</HEAD>
 
 	<BODY leftmargin="0" topmargin="0" rightmargin="0" bottommargin="0">

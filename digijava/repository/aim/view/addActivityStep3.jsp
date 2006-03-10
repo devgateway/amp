@@ -43,7 +43,7 @@
 			openNewWindow(650, 500);
 			<digi:context name="addFunding" property="context/module/moduleinstance/addFunding.do" />
 			document.aimEditActivityForm.orgId.value = orgId;
-			document.aimEditActivityForm.action = "<%= addFunding %>?orgId" + orgId+"&=edit=true";
+			document.aimEditActivityForm.action = "<%= addFunding %>?orgId" + orgId+"&edit=true";
 			document.aimEditActivityForm.currUrl.value = "<%= addFunding %>";
 			document.aimEditActivityForm.prevOrg.value = orgId;
 			document.aimEditActivityForm.target = popupPointer.name;

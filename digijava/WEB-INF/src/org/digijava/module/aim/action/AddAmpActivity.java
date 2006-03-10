@@ -120,7 +120,7 @@ public class AddAmpActivity extends Action {
 			String sessId = session.getId();
 			ArrayList sessList = (ArrayList) ampContext.getAttribute(
 					org.digijava.module.aim.helper.Constants.SESSION_LIST);
-			logger.info("sessList.contains(sessId) = " + sessList.contains(sessId));
+			//logger.info("sessList.contains(sessId) = " + sessList.contains(sessId));
 			if (sessList.contains(sessId) == false) {
 				ActionErrors errors = new ActionErrors();
 				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(

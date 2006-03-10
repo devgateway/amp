@@ -82,7 +82,7 @@ public class AMPActionServlet extends ActionServlet {
 		 * Then the system will check whether the user is still doing the editing or is moving out of edit pages
 		 */
 		if (index > -1) {
-			logger.info("url = " + url);
+			//logger.info("url = " + url);
 			int tempIndex = url.indexOf("/aim/");
 			if (tempIndex != -1) {
 				String pggrp = request.getParameter("edit");
@@ -95,7 +95,7 @@ public class AMPActionServlet extends ActionServlet {
 
 				if (pggrp == null || !(pggrp.trim().equalsIgnoreCase("true"))) {
 					synchronized (ampContext) {
-						logger.info("Remove from ActionServlet, value of edit is " + pggrp);
+						//logger.info("Remove from ActionServlet, value of edit is " + pggrp);
 						sessionList.remove(index);
 						Collections.sort(sessionList);
 					

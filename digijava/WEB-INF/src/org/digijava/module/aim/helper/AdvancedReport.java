@@ -42,7 +42,7 @@ public class AdvancedReport
 	private String description;
 	private String descriptionPDFXLS;
 
-	// added by Rahul
+	// added by Rahul for AMP-452
 	private Collection projId;
 	
 	public Collection getProjId() {

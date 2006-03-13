@@ -3125,9 +3125,6 @@ public class ReportUtil {
 		return ampReports ;
 	}
 
-
-
-
 	public static ArrayList getAmpReportViewProjects(Long ampTeamId,int fromYr,int toYr,String perspective,String ampCurrencyCode,Long ampModalityId,Long ampStatusId,Long ampDonorId,Long ampSectorId,int fiscalCalId,String startDate,String closeDate,String region)
 	{
 		Session session = null ;
@@ -3151,17 +3148,23 @@ public class ReportUtil {
 		double[] totDisbFund=new double[4];
 		double totActualComm=0;
 		double totActualDisb=0;
+		double commitmentbreakup=0;
+		double disbursementbreakup=0;
+		double unDisbursedbreakup=0;
+		int flagComm = 0;
+		int flagDisb = 0;
 		String inClause=null;
 		Iterator iterSector=null;
 		DecimalFormat mf = new DecimalFormat("###,###,###,###,###") ;
-//		Collection currencies=null;
 		ArrayList approvedActivityList=new ArrayList();
-				
+		AmpByAssistTypeList[][] actualTerms=new AmpByAssistTypeList[3][7];
+		for(int i = 0; i < 3; i++)
+			for(int ii = 0; ii < 7; ii++)
+				actualTerms[i][ii] = new AmpByAssistTypeList();		
+
 		try
 		{
-//			int yrCount = toYr - fromYr;
 			int years=0;
-//			yrCount = (yrCount * 2) + 2;
 			ArrayList dbReturnSet=(ArrayList)DbUtil.getAmpLevel0Teams(ampTeamId);				
 			if(dbReturnSet.size()==0)
 				inClause= "'" + ampTeamId + "'";
@@ -3177,20 +3180,14 @@ public class ReportUtil {
 						inClause=inClause + ",'" + teamId + "'";
 				}
 			}
-//			currencies=DbUtil.getAmpCurrencyRate();
 			approvedActivityList=DbUtil.getApprovedActivities(inClause);
-			logger.debug("Inclause: " + inClause);
 			session = PersistenceManager.getSession();
 			if(startDate==null && closeDate==null)
 				queryString = "select report from " + AmpReportCache.class.getName() + " report where (report.ampTeamId in(" + inClause + ")) and (report.reportType='1') order by report.activityName,report.ampActivityId,report.donorName";
 			else
 				queryString = "select report from " + AmpReportCache.class.getName() + " report where (report.ampTeamId in(" + inClause + ")) and (report.actualStartDate='" + startDate + "' or report.actualCompletionDate='" + closeDate + "') and (report.reportType='1') order by report.activityName,report.ampActivityId,report.donorName";
-			logger.debug("querystring: " + queryString);
 			q = session.createQuery(queryString);	
-//			q.setParameter("ampTeamId",ampTeamId,Hibernate.LONG) ;
 			Report report=null;
-	//		report.setProjects(new ArrayList());
-	//		Project project=null;
 			if(q!=null)
 			{
 				iter = q.list().iterator();
@@ -3220,11 +3217,6 @@ public class ReportUtil {
 								fiscalYear=(int)ec.ethYear;
 								fiscalQuarter=(int)ec.ethQtr;
 							}
-							logger.debug("Ethiopian Fiscal Year: " + fiscalYear);
-							logger.debug("From Year: " + fromYr);
-							logger.debug("From Year: " + toYr);
-		/*					if(fiscalYear<fromYr || fiscalYear>toYr)
-								continue;*/
 						}
 					}
 					if(!ampModalityId.equals(All))
@@ -3301,6 +3293,23 @@ public class ReportUtil {
 								totDisbFund[i]=totDisbFund[i] + disbFund[i];
 								report.getAmpFund().add(ampFund);
 							}
+						
+							for(int i=0; i<3; i++)
+							{
+								AmpFund ampFund = new AmpFund();
+								if(!(actualTerms[i][0].equals(null)))
+								{
+								ampFund.setByTypeComm(actualTerms[i][0]);
+								ampFund.setByTypeDisb(actualTerms[i][1]);
+								ampFund.setByTypeUnDisb(actualTerms[i][2]);
+								ampFund.setByTermsPlDisbForecast1(actualTerms[i][3]);
+								ampFund.setByTermsPlDisbForecast2(actualTerms[i][4]);
+								ampFund.setByTermsPlDisbForecast3(actualTerms[i][5]);
+								ampFund.setByTermsPlDisbForecast4(actualTerms[i][6]);
+								report.getAmpFund().add(ampFund);
+								}
+							}
+							
 							if(donors.size()==0)
 								report.getDonors().add("Unspecified");
 							else
@@ -3319,6 +3328,11 @@ public class ReportUtil {
 							assistance.clear();
 							for(int i=0;i<=yrCount;i++)
 								disbFund[i]=0;
+							for(int i = 0; i < 3; i++)
+								for(int ii = 0; ii < 7; ii++)
+									actualTerms[i][ii] = new AmpByAssistTypeList();
+							flagComm = 0;
+							flagDisb = 0;							
 							ampReports.add(report);
 						}
 						report=new Report();
@@ -3356,14 +3370,12 @@ public class ReportUtil {
 						else
 							report.setCloseDate("");
 					}
-//					logger.debug("Title:" + report.getTitle());
 					if(donors.indexOf(ampReportCache.getDonorName())==-1 && ampReportCache.getDonorName()!=null)
 						donors.add(ampReportCache.getDonorName());
 					if(assistance.indexOf(ampReportCache.getTermAssistName())==-1 && ampReportCache.getTermAssistName()!=null)
 						assistance.add(ampReportCache.getTermAssistName());
 					if(ampReportCache.getFiscalYear()!=null && ampReportCache.getFiscalQuarter()!=null)
 					{
-//						logger.debug("begin if");
 						if(new Long(fiscalCalId).equals(Constants.GREGORIAN))
 						{
 							fiscalYear=ampReportCache.getFiscalYear().intValue();
@@ -3380,15 +3392,25 @@ public class ReportUtil {
 						if(fiscalYear>=toYr && fiscalYear<=(toYr+3))
 						{						
 							if(ampReportCache.getPlannedDisbursement().doubleValue()>0 && ampReportCache.getPerspective().equals(perspective))
+							{
 								amount=CurrencyWorker.convert1(ampReportCache.getPlannedDisbursement().doubleValue(),fromExchangeRate,toExchangeRate);
+								AmpByAssistTypeAmount abt=new AmpByAssistTypeAmount(ampReportCache.getTermAssistName(),amount);
+								if(ampReportCache.getTermAssistName().equals("Grant"))
+									actualTerms[0][fiscalYear%toYr+3].add(abt);
+								else if(ampReportCache.getTermAssistName().equals("Loan"))
+									actualTerms[1][fiscalYear%toYr+3].add(abt);
+								else if(ampReportCache.getTermAssistName().equals("In Kind"))
+									actualTerms[2][fiscalYear%toYr+3].add(abt);
+							}
+							
 							if(disbFund[fiscalYear%toYr]==0)
 								disbFund[fiscalYear%toYr]=amount;
 							else
 							if(disbFund[fiscalYear%toYr]>0)
 								disbFund[fiscalYear%toYr]=disbFund[fiscalYear%toYr] + amount;
 							amount=0.0;
+
 						}
-//						logger.debug("end if");
 						if(ampReportCache.getPerspective().equals(perspective))
 						{
 							if(ampReportCache.getCurrencyCode().equals("USD"))
@@ -3399,13 +3421,68 @@ public class ReportUtil {
 								toExchangeRate=1.0;
 							else
 								toExchangeRate=DbUtil.getExchangeRate(ampCurrencyCode,Constants.ACTUAL,ampReportCache.getTransactionDate());
-							actualCommitment=actualCommitment + CurrencyWorker.convert1(ampReportCache.getActualCommitment().doubleValue(),fromExchangeRate,toExchangeRate);
+
+							commitmentbreakup = 0;
+							commitmentbreakup = CurrencyWorker.convert1(ampReportCache.getActualCommitment().doubleValue(),fromExchangeRate,toExchangeRate);
+							if(commitmentbreakup != 0)
+							{
+								AmpByAssistTypeAmount abt=new AmpByAssistTypeAmount(ampReportCache.getTermAssistName(),commitmentbreakup);
+								
+								if(ampReportCache.getTermAssistName().equals("Grant"))
+									actualTerms[0][0].add(abt);
+								else if(ampReportCache.getTermAssistName().equals("Loan"))
+									actualTerms[1][0].add(abt);
+								else if(ampReportCache.getTermAssistName().equals("In Kind"))
+									actualTerms[2][0].add(abt);
+								else
+								{
+									AmpByAssistTypeAmount abt1=new AmpByAssistTypeAmount("Unspecified",commitmentbreakup);
+									actualTerms[0][0].add(abt1);
+								}
+									
+							}
+							actualCommitment=actualCommitment +	commitmentbreakup;
 							totActualComm=totActualComm + actualCommitment;
-							actualDisbursement=actualDisbursement + CurrencyWorker.convert1(ampReportCache.getActualDisbursement().doubleValue(),fromExchangeRate,toExchangeRate);
+
+							disbursementbreakup = 0;
+							disbursementbreakup = CurrencyWorker.convert1(ampReportCache.getActualDisbursement().doubleValue(),fromExchangeRate,toExchangeRate);
+							if(disbursementbreakup != 0)
+							{
+								AmpByAssistTypeAmount abt=new AmpByAssistTypeAmount(ampReportCache.getTermAssistName(),disbursementbreakup);
+								if(ampReportCache.getTermAssistName().equals("Grant"))
+									actualTerms[0][1].add(abt);
+								else if(ampReportCache.getTermAssistName().equals("Loan"))
+									actualTerms[1][1].add(abt);
+								else if(ampReportCache.getTermAssistName().equals("In Kind"))
+									actualTerms[2][1].add(abt);
+								else
+								{
+									AmpByAssistTypeAmount abt1=new AmpByAssistTypeAmount("Unspecified",commitmentbreakup);
+									actualTerms[0][1].add(abt1);
+								}
+							}
+							actualDisbursement=actualDisbursement + disbursementbreakup;							
 							totActualDisb = totActualDisb + actualDisbursement;
+						
+							unDisbursedbreakup = 0;
+							unDisbursedbreakup = commitmentbreakup - disbursementbreakup;
+							if(unDisbursedbreakup != 0)
+							{
+								AmpByAssistTypeAmount abt=new AmpByAssistTypeAmount(ampReportCache.getTermAssistName(),unDisbursedbreakup);
+								if(ampReportCache.getTermAssistName().equals("Grant"))
+									actualTerms[0][2].add(abt);
+								else if(ampReportCache.getTermAssistName().equals("Loan"))
+									actualTerms[1][2].add(abt);
+								else if(ampReportCache.getTermAssistName().equals("In Kind"))
+									actualTerms[2][2].add(abt);
+								else
+								{
+									AmpByAssistTypeAmount abt1=new AmpByAssistTypeAmount("Unspecified",commitmentbreakup);
+									actualTerms[0][2].add(abt1);
+								}	
+							}
 						}
 					}
-					
 				}
 				for(int i=0;i<4;i++)
 				{
@@ -3414,10 +3491,20 @@ public class ReportUtil {
 					totDisbFund[i]=totDisbFund[i] + disbFund[i];
 					report.getAmpFund().add(ampFund);
 				}
-				report.setAcCommitment(mf.format(actualCommitment));
-				report.setAcDisbursement(mf.format(actualDisbursement));
-				double undisbursed = actualCommitment - actualDisbursement;
-				report.setAcUnDisbursement(mf.format(undisbursed));
+				
+				for(int i=0; i<3; i++)
+				{
+					AmpFund ampFund = new AmpFund();
+					ampFund.setByTypeComm(actualTerms[i][0]);
+					ampFund.setByTypeDisb(actualTerms[i][1]);
+					ampFund.setByTypeUnDisb(actualTerms[i][2]);
+					ampFund.setByTermsPlDisbForecast1(actualTerms[i][3]);
+					ampFund.setByTermsPlDisbForecast2(actualTerms[i][4]);
+					ampFund.setByTermsPlDisbForecast3(actualTerms[i][5]);
+					ampFund.setByTermsPlDisbForecast4(actualTerms[i][6]);
+					report.getAmpFund().add(ampFund);
+				}
+				
 				if(donors.size()==0)
 					report.getDonors().add("Unspecified");
 				else
@@ -3426,24 +3513,16 @@ public class ReportUtil {
 					report.getAssistance().add("Unspecified");
 				else
 					report.getAssistance().addAll(assistance);
-		/*		report.getProjects().add(project);
-				report.setTotComm(mf.format(totActualComm));
-				report.setTotDisb(mf.format(totActualDisb));
-				report.setTotUnDisb(mf.format(totActualComm-totActualDisb));
-				report.setTotDisbFund(new ArrayList());
-				for(int i=0;i<4;i++)
-				{
-					AmpFund ampFund=new AmpFund();
-					ampFund.setDisbAmount(mf.format(totDisbFund[i]));
-					report.getTotDisbFund().add(ampFund);
-				}*/
+				report.setAcCommitment(mf.format(actualCommitment));
+				report.setAcDisbursement(mf.format(actualDisbursement));
+				double undisbursed = actualCommitment - actualDisbursement;
+				report.setAcUnDisbursement(mf.format(undisbursed));
 				ampReports.add(report);
-
 			}
 		}
 		catch(Exception ex) 		
 		{
-			logger.debug("Unable to get report names  from database " + ex.getMessage());
+			logger.info("Unable to get report names  from database " + ex.getMessage());
 		}
 		finally 
 		{
@@ -3458,6 +3537,11 @@ public class ReportUtil {
 		}
 		return ampReports ;
 	}
+
+
+	
+	
+	// annual forecasting ends here
 
 	public static ArrayList getAmpReportQuarterlyDateRange(Long ampTeamId,int fromYr,int toYr,String perspective,String ampCurrencyCode,Long ampModalityId,Long ampStatusId,Long ampDonorId,Long ampSectorId,int fiscalCalId,String startDate,String closeDate,String region,int ampAdjustmentId)
 	{

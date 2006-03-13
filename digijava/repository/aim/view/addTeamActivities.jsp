@@ -46,6 +46,28 @@ function checkSelActivities() {
 	return true;
 }	
 
+
+	function sortMe(val) {
+		<digi:context name="sel" property="context/module/moduleinstance/updateTeamActivity.do" />
+			url = "<%= sel %>" ;
+			
+			var sval = document.aimTeamActivitiesForm.sort.value;
+			var soval = document.aimTeamActivitiesForm.sortOrder.value;
+			
+			if ( val == sval ) {
+				if (soval == "asc")
+					document.aimTeamActivitiesForm.sortOrder.value = "desc";
+				else if (soval == "desc")
+					document.aimTeamActivitiesForm.sortOrder.value = "asc";	
+			}
+			else
+				document.aimTeamActivitiesForm.sortOrder.value = "asc";
+
+			document.aimTeamActivitiesForm.sort.value = val;
+			document.aimTeamActivitiesForm.action = url;
+			document.aimTeamActivitiesForm.submit();
+	}
+
 </script>
 
 
@@ -53,6 +75,10 @@ function checkSelActivities() {
 <digi:form action="/updateTeamActivity.do" method="post">
 
 <html:hidden property="teamId" />
+
+<html:hidden property="sort" />
+<html:hidden property="sortOrder" />
+<html:hidden property="page" />
 
 <table width="100%" cellPadding=0 cellSpacing=0 vAlign="top" align="left">
 <tr><td width="100%" vAlign="top" align="left">
@@ -141,14 +167,18 @@ function checkSelActivities() {
 																	<b><digi:trn key="aim:ampId">AMP ID</digi:trn></b>
 																</td>
 																<td valign="center" align="center" bgcolor="#dddddd">
-																	<b><digi:trn key="aim:unassignedActivityList">
+																	<a href="javascript:sortMe('activity')" title="Click here to sort by Activity Details">
+																		<b><digi:trn key="aim:unassignedActivityList">
 																		List of unassigned activities
 																	</digi:trn></b>
+																	</a>																
 																</td>
 																<td bgColor=#dddddb align="center" width="20%" bgcolor="#dddddd">
-																	<b><digi:trn key="aim:donors">
-																	Donors
-																	</digi:trn></b>
+																	<a href="javascript:sortMe('donor')" title="Click here to sort by Donors">
+																		<b><digi:trn key="aim:donors">
+																			Donors
+																		</digi:trn></b>
+																	</a>																
 																</td></tr>
 															</table>
 														</td>

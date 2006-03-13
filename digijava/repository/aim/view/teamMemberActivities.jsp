@@ -52,6 +52,28 @@
 		return true;			  
 	}
 
+	function sortMe(val) {
+		var id = document.aimMemberActivitiesForm.memberId.value;
+		<digi:context name="sel" property="context/module/moduleinstance/teamMemberActivities.do" />
+			url = "<%= sel %>?id="+id ;
+			
+			var sval = document.aimMemberActivitiesForm.sort.value;
+			var soval = document.aimMemberActivitiesForm.sortOrder.value;
+			
+			if ( val == sval ) {
+				if (soval == "asc")
+					document.aimMemberActivitiesForm.sortOrder.value = "desc";
+				else if (soval == "desc")
+					document.aimMemberActivitiesForm.sortOrder.value = "asc";	
+			}
+			else
+				document.aimMemberActivitiesForm.sortOrder.value = "asc";
+
+			document.aimMemberActivitiesForm.sort.value = val;
+			document.aimMemberActivitiesForm.action = url;
+			document.aimMemberActivitiesForm.submit();
+	}
+
 	function confirmDelete() {
 		var valid = validate();
 		if (valid == true) {
@@ -75,6 +97,8 @@
 <digi:instance property="aimMemberActivitiesForm" />
 <digi:form action="/updateMemberActivity.do" method="post">
 
+<html:hidden property="sort" />
+<html:hidden property="sortOrder" />
 <html:hidden property="memberId" />
 
 <jsp:include page="teamPagesHeader.jsp" flush="true" />
@@ -201,14 +225,16 @@
 																	<b><digi:trn key="aim:ampId">AMP ID</digi:trn></b>
 																</td>																
 																<td valign="center" align="center" bgcolor="#dddddd">
-																	<b><digi:trn key="aim:activityList">Activity List</digi:trn>
+																	<a href="javascript:sortMe('activity')" title="Click here to sort by Activity Details">
+																		<b><digi:trn key="aim:activityList">Activity List</digi:trn>
 																	for the member <bean:write name="aimMemberActivitiesForm" 
 																	property="memberName" /></b>
+																	</a>
 																</td>
 																<td bgColor=#dddddb align="center" width="20%" bgcolor="#dddddd">
-																	<b><digi:trn key="aim:donors">
-																	Donors
-																	</digi:trn></b>
+																	<a href="javascript:sortMe('donor')" title="Click here to sort by Donors">
+																		<b><digi:trn key="aim:donors">Donors</digi:trn></b>
+																	</a>																
 																</td></tr>
 															</table>														
 														</td>

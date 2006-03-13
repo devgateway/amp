@@ -3,6 +3,7 @@ package org.digijava.module.aim.action;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Vector;
@@ -19,6 +20,7 @@ import org.apache.struts.action.ActionMapping;
 import org.digijava.module.aim.dbentity.AmpActivity;
 import org.digijava.module.aim.dbentity.AmpTeam;
 import org.digijava.module.aim.form.TeamActivitiesForm;
+import org.digijava.module.aim.helper.Activity;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.helper.UpdateDB;
@@ -149,26 +151,66 @@ public class UpdateTeamActivities extends Action {
 				col = (Collection) temp;
 				session.setAttribute("unassignedActivityList", col);
 			}
-
+			
 			Collection actList = (Collection) session
 					.getAttribute("unassignedActivityList");
 
+			
+			Comparator acronymComp = new Comparator() {
+				public int compare(Object o1, Object o2) {
+					Activity r1 = (Activity) o1;
+					Activity r2 = (Activity) o2;
+			        return r1.getDonors().trim().toLowerCase().compareTo(r2.getDonors().trim().toLowerCase());
+				}
+			};
+			Comparator racronymComp = new Comparator() {
+				public int compare(Object o1, Object o2) {
+					Activity r1 = (Activity) o1;
+					Activity r2 = (Activity) o2;
+					return -(r1.getDonors().trim().toLowerCase().compareTo(r2.getDonors().trim().toLowerCase()));
+				}
+			};
+			
+			List temp = (List)actList;
+			String sort = (taForm.getSort() == null) ? null : taForm.getSort().trim();
+			String sortOrder = (taForm.getSortOrder() == null) ? null : taForm.getSortOrder().trim();
+			
+			if ( sort == null || "".equals(sort) || sortOrder == null || "".equals(sortOrder)) {
+				Collections.sort(temp);
+				taForm.setSort("activity");
+				taForm.setSortOrder("asc");
+			}
+			else {
+				if ("activity".equals(sort)) {
+					if ("asc".equals(sortOrder))
+						Collections.sort(temp);
+					else
+						Collections.sort(temp,Collections.reverseOrder());
+				}
+				else if ("donor".equals(sort)) {
+					if ("asc".equals(sortOrder))
+						Collections.sort(temp, acronymComp);
+					else
+						Collections.sort(temp, racronymComp);
+				}
+			}			
+			
 			int stIndex = ((page - 1) * numRecords) + 1;
 			int edIndex = page * numRecords;
-			if (edIndex > actList.size()) {
-				edIndex = actList.size();
+			if (edIndex > temp.size()) {
+				edIndex = temp.size();
 			}
 
 			Vector vect = new Vector();
-			vect.addAll(actList);
+			vect.addAll(temp);
 
 			col = new ArrayList();
 			for (int i = (stIndex - 1); i < edIndex; i++) {
 				col.add(vect.get(i));
 			}
 
-			int numPages = actList.size() / numRecords;
-			numPages += (actList.size() % numRecords != 0) ? 1 : 0;
+			int numPages = temp.size() / numRecords;
+			numPages += (temp.size() % numRecords != 0) ? 1 : 0;
 
 			Collection pages = null;
 

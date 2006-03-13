@@ -25,6 +25,10 @@ public class AmpFund
 	private Collection byTypePlComm;
 	private Collection byTypePlDisb;
 	private Collection byTypePlExp;
+	private Collection byTermsPlDisbForecast1;
+	private Collection byTermsPlDisbForecast2;
+	private Collection byTermsPlDisbForecast3;
+	private Collection byTermsPlDisbForecast4;
 	
 	
 	
@@ -209,10 +213,57 @@ public class AmpFund
 	/**
 	 * @param byTypePlDisb The byTypePlDisb to set.
 	 */
-	public void setByTypePlDisb(Collection byTermsPlDisb) {
-		this.byTypePlDisb = byTermsPlDisb;
+	public void setByTypePlDisb(Collection byTypePlDisb) {
+		this.byTypePlDisb = byTypePlDisb;
 	}
 
+
+
+	
+	
+	
+	
+	
+	public Collection getByTermsPlDisbForecast1() 
+	{
+		return byTermsPlDisbForecast1;
+	}
+	public void setByTermsPlDisbForecast1(Collection byTermsPlDisbForecast1) 
+	{
+		this.byTermsPlDisbForecast1 = byTermsPlDisbForecast1;
+	}
+	public Collection getByTermsPlDisbForecast2() 
+	{
+		return byTermsPlDisbForecast2;
+	}
+	public void setByTermsPlDisbForecast2(Collection byTermsPlDisbForecast2) 
+	{
+		this.byTermsPlDisbForecast2 = byTermsPlDisbForecast2;
+	}
+	public Collection getByTermsPlDisbForecast3() 
+	{
+		return byTermsPlDisbForecast3;
+	}
+	public void setByTermsPlDisbForecast3(Collection byTermsPlDisbForecast3) 
+	{
+		this.byTermsPlDisbForecast3 = byTermsPlDisbForecast3;
+	}
+	public Collection getByTermsPlDisbForecast4() 
+	{
+		return byTermsPlDisbForecast4;
+	}
+	public void setByTermsPlDisbForecast4(Collection byTermsPlDisbForecast4) 
+	{
+		this.byTermsPlDisbForecast4 = byTermsPlDisbForecast4;
+	}
+
+
+
+
+
+
+
+	
 	/**
 	 * @return Returns the byTypePlExp.
 	 */

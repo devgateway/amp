@@ -57,7 +57,7 @@
 
 <jsp:include page="teamPagesHeader.jsp" flush="true" />
 
-<table width="772" border="0" cellpadding="10" cellspacing="0" bgcolor="#FFFFFF">
+<table width="100%" border="0" cellpadding="10" cellspacing="0" bgcolor="#FFFFFF">
 		<tr>
           <td width="14" class="r-dotted-lg">&nbsp;</td>
           <td width="750" align="left" valign="top" >
@@ -162,7 +162,7 @@
 	System.out.println("FC = " +fcnt);
 	
 %>              
-            <table border="0" cellspacing="0" cellpadding="2">
+            <table  border="0" cellspacing="0" cellpadding="2">
 			<TR>
 			<logic:greaterThan name="aimCommitmentbyDonorForm" property="filterCnt" value="0" >
 			<TD bgColor="black" colspan=<%= fcnt+1%> ></TD>
@@ -378,11 +378,6 @@
 					<digi:trn key="aim:sector">Sector</digi:trn>
 					</a></strong></div>
 					</td>
-					<td align="center" height="21" width="60"><div align="center"> <strong>
-					<a title="<digi:trn key="aim:TypeoftheAssist">Type of flow used to finance the project: grant, loan or in kind</digi:trn>">
-					<digi:trn key="aim:thetypeOfAssistance"> Type of Assistance </digi:trn>
-					</a></strong></div>
-					</td>
 					<td align="center" height="21" width="35"> <div align="center"><strong>
 					<a title="<digi:trn key="aim:DateofStart">Date (dd/mm/yy) when the project commenced (effective start date)</digi:trn>">
 					<digi:trn key="aim:startDate">Start Date</digi:trn>
@@ -408,54 +403,58 @@
 					<digi:trn key="aim:status">Status </digi:trn>
 					</a></strong></div>
 					</td>
-					<td align="center" height="21" width="77"> <div align="center"><strong>
+					<td align="center" height="21" width="200"><div align="center"> <strong>
+					<a title="<digi:trn key="aim:TypeoftheAssist">Type of flow used to finance the project: grant, loan or in kind</digi:trn>">
+					<digi:trn key="aim:thetypeOfAssistance"> Type of Assistance </digi:trn>
+					</a></strong></div>
+					</td>
+					<td align="center" height="21" width="200"> <div align="center"><strong>
 					<a title="<digi:trn key="aim:CommitmentinTotal">Total Commitment Amount of Activity</digi:trn>">
 					<digi:trn key="aim:totalCommitments">Total Commitment</digi:trn>
 					</a></strong></div>
 					</td>
-					<td align="center" height="21" width="91" ><div align="center"><strong>
+					<td align="center" height="21" width="200" ><div align="center"><strong>
 					<a title="<digi:trn key="aim:TotalAmtDisbursedToDate">Total Amount Disbursed as of today's date</digi:trn>">
 					<digi:trn key="aim:totalDisbursed">Total Disbursed To Date</digi:trn>
 					</a></strong></div>
 					</td>
-					<td align="center" height="21" width="86" ><div align="center"><strong>
+					<td align="center" height="21" width="200" ><div align="center"><strong>
 					<a title="<digi:trn key="aim:UndisbursedFundshere">Remaining balance of funds to be disbursed</digi:trn>">
 					<digi:trn key="aim:unDisbursedhere">Undisbursed </digi:trn>
 					</a></strong></div>
 					</td>
-					<td colspan=4 align="center" height="21" width="94" ><div align="center"><strong>
+					<td colspan=4 align="center" height="21" width="240" ><div align="center"><strong>
 					<a title="<digi:trn key="aim:PlannedDisbursementofFund">Expected disbursements</digi:trn>">
 					<digi:trn key="aim:plannedDisbursements">Planned Disbursed </digi:trn>
 					</a></strong></div>
 					</td>
 
 				</tr>
+	
 				<logic:empty name="aimCommitmentbyDonorForm" property="report"> 
-		<tr bgcolor="#F4F4F2">
-				<!--<td align="center" height="21" width="73" ><b>Sector</b></td>-->
-				<td colspan=<bean:write name="aimCommitmentbyDonorForm" property="totalColumns"/> align="center" height="21" >
-				<b>
-					<digi:trn key="aim:noRecords">No Records</digi:trn>
-				</b>
-				</td>
-			</tr>
-		</logic:empty>
+					<tr bgcolor="#F4F4F2">
+						<td colspan=<bean:write name="aimCommitmentbyDonorForm" property="totalColumns"/> align="center" height="21" >
+							<b><digi:trn key="aim:noRecords">No Records</digi:trn></b>
+						</td>
+					</tr>
+				</logic:empty>
+		
 		<logic:notEmpty name="aimCommitmentbyDonorForm"  property="report">
 				<tr bgcolor="#FFFFFF">
-				<td align="center" height="21" width="42" ></td>
-				<td align="center" height="21" width="28"> </td>
-				<td align="center" height="21" width="43"> </td>
-				<td align="center" height="21" width="60"> </td>
-				<td align="center" height="21" width="40"> </td>
-				<td align="center" height="21" width="45"> </td>
-				<td align="center" height="21" width="35"> </td>
-				<td align="center" height="21" width="39"> </td>
-				<td align="center" height="21" width="77"></td>
-				<td align="center" height="21" width="91"></td>
-				<td align="center" height="21" width="86"></td>
-				<td align="center" height="21" width="86"></td>
+				<td align="center" height="21" width="42"></td>
+				<td align="center" height="21" width="28"></td>
+				<td align="center" height="21" width="43"></td>
+				<td align="center" height="21" width="60"></td>
+				<td align="center" height="21" width="40"></td>
+				<td align="center" height="21" width="45"></td>
+				<td align="center" height="21" width="35"></td>
+				<td align="center" height="21" width="39"></td>
+				<td align="center" height="21" width="200"></td>
+				<td align="center" height="21" width="200"></td>
+				<td align="center" height="21" width="200"></td>
+				<td align="center" height="21" width="200"></td>
 				<logic:iterate name="aimCommitmentbyDonorForm"  property="forecastYear" id="forecastYear">		
-				<td align="center" height="21" width="30">
+				<td align="center" height="21" width="60">
 				<div align="center"><strong><%=forecastYear%></strong></div>
 				</td>
 				</logic:iterate>
@@ -464,7 +463,7 @@
 		<logic:iterate name="aimCommitmentbyDonorForm"  property="report" id="report" type="org.digijava.module.aim.helper.Report">
 			<tr bgcolor="#F4F4F2">
 				<td align="left" height="21" width="42" >
-				<logic:empty name="report" property="donors">&nbsp;
+					<logic:empty name="report" property="donors">&nbsp;
 					</logic:empty>
 					<logic:notEmpty name="report" property="donors">
 					<logic:iterate name="report" id="donors" property="donors"> <%=donors%>	
@@ -472,10 +471,10 @@
 					</logic:iterate>
 					</logic:notEmpty>
 				</td>
-				<td align="left" height="21" width="28">
-				<bean:write name="report" property="title" /> 
-					</td>
-					<td align="left" height="21" width="43">
+				<td align="left" height="21" width="28" >
+					<bean:write name="report" property="title" /> 
+				</td>
+				<td align="left" height="21" width="43" >
 					<logic:empty name="report" property="sectors">&nbsp;
 					</logic:empty>
 					<logic:notEmpty name="report" property="sectors">
@@ -483,27 +482,17 @@
 					<br>
 					</logic:iterate>
 					</logic:notEmpty>
-					</td>
-					<td align="left" height="21" width="60">
-					<logic:empty name="report" property="assistance">&nbsp;
-					</logic:empty>
-					<logic:notEmpty name="report" property="assistance">
-					<logic:iterate name="report" id="assistance" property="assistance"> <%=assistance%>	
-					<br>
-					</logic:iterate>
-					</logic:notEmpty>
-					</td>
-					<td align="left" height="21" width="35">
+				</td>
+				<td align="left" height="21" width="35" >
 					<bean:write name="report" property="startDate" />
-					</td>
-					<td align="left" height="21" width="39">
+				</td>
+				<td align="left" height="21" width="39" >
 					<bean:write name="report" property="closeDate" />
-					</td>
-					<td align="left" height="21" width="40"> 
+				</td>
+				<td align="left" height="21" width="40" >
 					<bean:write name="report" property="level" />
-					</td>
-					
-					<td align="left" height="21" width="45"> 
+				</td>
+				<td align="left" height="21" width="45" >
 					<logic:empty name="report" property="regions">&nbsp;
 					</logic:empty>
 					<logic:notEmpty name="report" property="regions">
@@ -511,36 +500,173 @@
 					<br>
 					</logic:iterate>
 					</logic:notEmpty>
-					</td>
-					<td align="left" height="21" width="40"> 
+				</td>
+				<td align="left" height="21" width="40" >
 					<bean:write name="report" property="status" />
-					</td>
-					<td align="right" height="21" width="77" >
-						<logic:notEqual name="report" property="acCommitment" value="0">
+				</td>
+
+
+				<td colspan="8">
+				<table width="100%"  border="0" cellpadding="1" cellspacing="1" bgcolor="#C6C7C4" height="100%">
+				<tr bgcolor="#F4F4F2">
+				<td align="left" height="21" width="200"><b>
+					Total</b>
+				</td>
+				<td align="right" height="21" width="200" >
+					<logic:notEqual name="report" property="acCommitment" value="0">
 						<bean:write name="report" property="acCommitment" />
-						</logic:notEqual>
-					</td>
-					<td align="right" height="21" width="91" >
-						<logic:notEqual name="report" property="acDisbursement" value="0">
-						<bean:write name="report" property="acDisbursement" />
-						</logic:notEqual>
-					</td>
-					<td align="right" height="21" width="86" >
-						<logic:notEqual name="report" property="acUnDisbursement" value="0">
-						<bean:write name="report" property="acUnDisbursement" />
-						</logic:notEqual>
-					</td>
-					<logic:iterate name="report"  property="ampFund" id="ampFund" type="org.digijava.module.aim.helper.AmpFund">
-				<td align="right" height="21" width="69">
-					<logic:notEqual name="ampFund" property="disbAmount" value="0">
-					<bean:write name="ampFund" property="disbAmount" />
 					</logic:notEqual>
 				</td>
-		</logic:iterate>
-		</tr>
-		</logic:iterate>
+				<td align="right" height="21" width="200" >
+					<logic:notEqual name="report" property="acDisbursement" value="0">
+						<bean:write name="report" property="acDisbursement" />
+					</logic:notEqual>
+				</td>
+				<td align="right" height="21" width="200" >
+					<logic:notEqual name="report" property="acUnDisbursement" value="0">
+						<bean:write name="report" property="acUnDisbursement" />
+					</logic:notEqual>
+				</td>
+				<% int i = 1; %>
+				<logic:iterate name="report"  property="ampFund" id="ampFund" type="org.digijava.module.aim.helper.AmpFund">
+				<%
+					if(i<5)
+			  		{		
+				%>
+					<td align="right" height="21" width="60">
+						<logic:notEqual name="ampFund" property="disbAmount" value="0">
+							<bean:write name="ampFund" property="disbAmount" />
+						</logic:notEqual>
+					</td>
+				<% 
+					}
+					i++;
+				%>
+				</logic:iterate>
+			</tr>
+
+
+
+
+
+
+
+			
+						<logic:notEmpty name="report" property="assistance">
+							<logic:iterate name="report" property="assistance" id="termsType">
+								<tr bgcolor="#F4F4F2">
+									<td align="left" height="21" width="200"><b>
+										<bean:write name="termsType"/></b>
+									</td>
+
+									<td align="right" height="21" width="200">
+									<logic:notEmpty name="report" property="ampFund">
+									<logic:iterate name="report"  property="ampFund" id="ampFund" type="org.digijava.module.aim.helper.AmpFund">
+											<logic:notEmpty name="ampFund" property="byTypeComm">
+											<logic:iterate name="ampFund" property="byTypeComm" id="terms">
+											<c:if test="${terms.fundingTerms == termsType}">
+												<bean:write name="terms"/>
+											</c:if>
+											</logic:iterate>
+											</logic:notEmpty>
+									</logic:iterate>
+									</logic:notEmpty>
+									</td>
+
+									<td align="right" height="21" width="200">
+									<logic:notEmpty name="report" property="ampFund">
+									<logic:iterate name="report"  property="ampFund" id="ampFund" type="org.digijava.module.aim.helper.AmpFund">
+											<logic:notEmpty name="ampFund" property="byTypeDisb">
+											<logic:iterate name="ampFund" property="byTypeDisb" id="terms">
+											<c:if test="${terms.fundingTerms == termsType}">
+												<bean:write name="terms"/>
+											</c:if>
+											</logic:iterate>
+											</logic:notEmpty>
+									</logic:iterate>
+									</logic:notEmpty>
+									</td>
+
+									<td align="right" height="21" width="200">
+									<logic:notEmpty name="report" property="ampFund">
+									<logic:iterate name="report"  property="ampFund" id="ampFund" type="org.digijava.module.aim.helper.AmpFund">
+											<logic:notEmpty name="ampFund" property="byTypeUnDisb">
+											<logic:iterate name="ampFund" property="byTypeUnDisb" id="terms">
+											<c:if test="${terms.fundingTerms == termsType}">
+												<bean:write name="terms"/>
+											</c:if>
+											</logic:iterate>
+											</logic:notEmpty>
+									</logic:iterate>
+									</logic:notEmpty>
+									</td>
+
+									<td align="right" height="21" width="60">
+									<logic:notEmpty name="report" property="ampFund">
+									<logic:iterate name="report"  property="ampFund" id="ampFund" type="org.digijava.module.aim.helper.AmpFund">
+											<logic:notEmpty name="ampFund" property="byTermsPlDisbForecast1">
+											<logic:iterate name="ampFund" property="byTermsPlDisbForecast1" id="terms">
+											<c:if test="${terms.fundingTerms == termsType}">
+												<bean:write name="terms"/>
+											</c:if>
+											</logic:iterate>
+											</logic:notEmpty>
+									</logic:iterate>
+									</logic:notEmpty>
+									</td>									
+
+									<td align="right" height="21" width="60">
+									<logic:notEmpty name="report" property="ampFund">
+									<logic:iterate name="report"  property="ampFund" id="ampFund" type="org.digijava.module.aim.helper.AmpFund">
+											<logic:notEmpty name="ampFund" property="byTermsPlDisbForecast2">
+											<logic:iterate name="ampFund" property="byTermsPlDisbForecast2" id="terms">
+											<c:if test="${terms.fundingTerms == termsType}">
+												<bean:write name="terms"/>
+											</c:if>
+											</logic:iterate>
+											</logic:notEmpty>
+									</logic:iterate>
+									</logic:notEmpty>
+									</td>									
+
+									<td align="right" height="21" width="60">
+									<logic:notEmpty name="report" property="ampFund">
+									<logic:iterate name="report"  property="ampFund" id="ampFund" type="org.digijava.module.aim.helper.AmpFund">
+											<logic:notEmpty name="ampFund" property="byTermsPlDisbForecast3">
+											<logic:iterate name="ampFund" property="byTermsPlDisbForecast3" id="terms">
+											<c:if test="${terms.fundingTerms == termsType}">
+												<bean:write name="terms"/>
+											</c:if>
+											</logic:iterate>
+											</logic:notEmpty>
+									</logic:iterate>
+									</logic:notEmpty>
+									</td>									
+
+									<td align="right" height="21" width="60">
+									<logic:notEmpty name="report" property="ampFund">
+									<logic:iterate name="report"  property="ampFund" id="ampFund" type="org.digijava.module.aim.helper.AmpFund">
+											<logic:notEmpty name="ampFund" property="byTermsPlDisbForecast4">
+											<logic:iterate name="ampFund" property="byTermsPlDisbForecast4" id="terms">
+											<c:if test="${terms.fundingTerms == termsType}">
+												<bean:write name="terms"/>
+											</c:if>
+											</logic:iterate>
+											</logic:notEmpty>
+									</logic:iterate>
+									</logic:notEmpty>
+									</td>									
+							</tr>
+							</logic:iterate>
+							</logic:notEmpty>
+						</table>
+					</td>
+				</tr>
+
+			</logic:iterate>
+
 		<tr><td><b>
-		<digi:trn key="aim:total">Total</digi:trn>
+		<digi:trn key="aim:grandtotal">Grand Total</digi:trn>
 		</b></td>
 		<td>&nbsp;</td>
 		<td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td>
@@ -560,7 +686,7 @@
 			</logic:notEqual>
 		</td>
 		<logic:iterate name="aimCommitmentbyDonorForm"  property="totDisbFund" id="totDisbFund" type="org.digijava.module.aim.helper.AmpFund">
-				<td align="right" height="21" width="69">
+				<td align="right" height="21" width="30">
 					<logic:notEqual name="totDisbFund" property="disbAmount" value="0">
 					<bean:write name="totDisbFund" property="disbAmount" />
 					</logic:notEqual>

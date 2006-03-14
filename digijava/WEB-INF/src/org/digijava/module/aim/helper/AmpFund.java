@@ -295,7 +295,7 @@ public class AmpFund
 	public void setByTypeUnDisb(Collection byTermsUnDisb) {
 		this.byTypeUnDisb = byTermsUnDisb;
 	}
-//starting adding here	
+//	starting adding here	
 	/**
 	 *  @param Returns the pdrTypeComm
 	 */
@@ -311,8 +311,8 @@ public class AmpFund
 	/**
 	 * @param Returns the pdrTypeDis 
 	 */
-	public Collection getpdrTypeDis(){
-		return pdrTypeDis;
+	public Collection getpdrTypeDisb(){
+		return pdrTypeDisb;
 	}
 	/**
 	 * @param pdrTypeDis The pdrTypeDis to set
@@ -321,5 +321,6 @@ public class AmpFund
 		this.pdrTypeDisb = pdrTypeDis;
 	}
 	//ending here
+
 }
 

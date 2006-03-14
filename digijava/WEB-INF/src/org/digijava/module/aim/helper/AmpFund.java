@@ -17,6 +17,7 @@ public class AmpFund
 	//added to support by funding Terms breakdown (below each AmpFund will appear
 	//one row for each of the funding Termss and all funds will be summed by Terms
 	//these collections contain AmpByTypeAmountS beans
+	
 	private Collection byTypeComm;
 	private Collection byTypeDisb;
 	private Collection byTypePlannedDisb;
@@ -30,6 +31,9 @@ public class AmpFund
 	private Collection byTermsPlDisbForecast3;
 	private Collection byTermsPlDisbForecast4;
 	
+	private Collection pdrTypeComm;
+	private Collection pdrTypeDisb;
+	private Collection pdrTypeUnDisb;
 	
 	
 	
@@ -146,7 +150,7 @@ public class AmpFund
 	public void setByTypeComm(Collection byTermsComm) {
 		this.byTypeComm = byTermsComm;
 	}
-
+//modified here
 	/**
 	 * @return Returns the byTypeDisb.
 	 */
@@ -291,4 +295,31 @@ public class AmpFund
 	public void setByTypeUnDisb(Collection byTermsUnDisb) {
 		this.byTypeUnDisb = byTermsUnDisb;
 	}
+//starting adding here	
+	/**
+	 *  @param Returns the pdrTypeComm
+	 */
+	public Collection getpdrTypeComm(){
+		return pdrTypeComm;
+	}
+	/**
+	 * @param pdrTypeComm The pdrTypeComm to set
+	 */
+	public void setpdrTypeComm(Collection pdrTypeComm){
+		this.pdrTypeComm = pdrTypeComm;
+	}
+	/**
+	 * @param Returns the pdrTypeDis 
+	 */
+	public Collection getpdrTypeDis(){
+		return pdrTypeDis;
+	}
+	/**
+	 * @param pdrTypeDis The pdrTypeDis to set
+	 */
+	public void setpdrTypeDis(Collection pdrTypeDis){
+		this.pdrTypeDisb = pdrTypeDis;
+	}
+	//ending here
 }
+

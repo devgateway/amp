@@ -21,7 +21,7 @@ function previewClicked() {
 function saveClicked() {
 	document.aimEditActivityForm.saveButton.disabled = true;	
 	<digi:context name="save" property="context/module/moduleinstance/saveActivity.do" />
-	document.aimEditActivityForm.action = "<%= save %>";
+	document.aimEditActivityForm.action = "<%= save %>?edit=true";
 	document.aimEditActivityForm.target = "_self";
 	var appstatus = document.aimEditActivityForm.approvalStatus.value;
 	var wTLFlag   = document.aimEditActivityForm.workingTeamLeadFlag.value;

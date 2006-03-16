@@ -10,6 +10,7 @@ import java.util.Collection;
 
 import javax.servlet.http.HttpSession;
 
+import org.apache.log4j.Logger;
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
@@ -24,6 +25,8 @@ import org.digijava.module.cms.dbentity.CMSContentItem;
 
 public class DocumentSelected extends Action {
 
+	private static Logger logger = Logger.getLogger(DocumentSelected.class);
+	
 	private static final String LINK_START = "http://";
 	
 	public ActionForward execute(ActionMapping mapping, ActionForm form,
@@ -61,15 +64,13 @@ public class DocumentSelected extends Action {
 			cmsItem.setIsFile(true);
 			FormFile formFile = eaForm.getDocFile();
 			if (formFile != null) {
+				cmsItem.setFileName(formFile.getFileName());
+		        cmsItem.setContentType(formFile.getContentType());
 				if (formFile.getFileSize() != 0) {
-					cmsItem.setFileName(formFile.getFileName());
 			        cmsItem.setFile(formFile.getFileData());
-			        cmsItem.setContentType(formFile.getContentType());
 				} else {
 					byte[] temp = {0};
 			        cmsItem.setFile(temp);
-			        cmsItem.setFileName(null);
-			        cmsItem.setContentType(null);
 			    }
 			}
 		} else {

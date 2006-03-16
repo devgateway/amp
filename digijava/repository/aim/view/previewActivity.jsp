@@ -24,7 +24,7 @@ function gotoStep(value) {
 }
 
 function backClicked() {
-	document.aimEditActivityForm.step.value = "7";
+	document.aimEditActivityForm.step.value = "8";
 	<digi:context name="backStep" property="context/module/moduleinstance/addActivity.do?edit=true" />
 	document.aimEditActivityForm.action = "<%= backStep %>";
 	document.aimEditActivityForm.target = "_self";		
@@ -1174,8 +1174,8 @@ function disable() {
 										<td bgcolor="#ffffff">
 											<c:if test="${!empty aimEditActivityForm.documentList}">
 												<table width="100%" cellSpacing="0" cellPadding="0">
-												<c:forEach var="relLinks" items="${aimEditActivityForm.documentList}">
-					   							<bean:define id="docs" name="relLinks" 
+												<c:forEach var="docList" items="${aimEditActivityForm.documentList}">
+					   							<bean:define id="docs" name="docList" 
 													property="relLink" />
 													<tr><td>
 					   								<bean:define id="fileName" name="docs" 
@@ -1210,8 +1210,8 @@ function disable() {
 											</c:if>
 											<c:if test="${!empty aimEditActivityForm.linksList}">
 												<table width="100%" cellSpacing="0" cellPadding="0">
-												<c:forEach var="relLinks" items="${aimEditActivityForm.linksList}">
-					   							<bean:define id="links" name="relLinks" property="relLink" />
+												<c:forEach var="docList" items="${aimEditActivityForm.linksList}">
+					   							<bean:define id="links" name="docList" property="relLink" />
 													<tr><td>
 														<table width="100%" cellPadding=1 cellSpacing=1>
 															<tr>

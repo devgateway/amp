@@ -4,15 +4,19 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 
+import org.apache.log4j.Logger;
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.digijava.module.aim.form.EditActivityForm;
+import org.digijava.module.aim.helper.RelatedLinks;
 import org.digijava.module.cms.dbentity.CMSContentItem;
 
 public class RemoveSelDocuments extends Action {
 
+	private static Logger logger = Logger.getLogger(RemoveSelDocuments.class);
+	
 	public ActionForward execute(ActionMapping mapping, ActionForm form,
 			javax.servlet.http.HttpServletRequest request,
 			javax.servlet.http.HttpServletResponse response)
@@ -34,16 +38,16 @@ public class RemoveSelDocuments extends Action {
 		
 		Iterator itr = prevDocs.iterator();
 		while (itr.hasNext()) {
-			CMSContentItem cmsItem = (CMSContentItem) itr.next();
+			RelatedLinks rl = (RelatedLinks) itr.next();
 			boolean flag = false;
 			for (int i = 0;i < selDocs.length;i ++) {
-				if (cmsItem.getId() == selDocs[i]) {
+				if (rl.getRelLink().getId() == selDocs[i]) {
 					flag = true;
 					break;
 				}
 			}
 			if (!flag) {
-				newDocs.add(cmsItem);
+				newDocs.add(rl);
 			}
 		}
 
@@ -54,7 +58,7 @@ public class RemoveSelDocuments extends Action {
 			eaForm.setSelLinks(null);
 			eaForm.setLinksList(newDocs);
 		}
-		eaForm.setStep("5");
+		eaForm.setStep("6");
 
 		return mapping.findForward("forward");
 	}

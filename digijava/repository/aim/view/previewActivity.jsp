@@ -1326,13 +1326,13 @@ function disable() {
 											<tr>
 												<c:if test="${aimEditActivityForm.donorFlag == true}">
 												<td>
-													<input type="button" value=" << Back" class="dr-menu" onclick="gotoStep(3)"
+													<input type="button" value=" << Back" class="dr-menu" onclick="javascript:history.go(-1)"
 													name="backButton">
 												</td>												
 												</c:if>
 												<c:if test="${aimEditActivityForm.donorFlag == false}">
 												<td>
-													<input type="button" value=" << Back" class="dr-menu" onclick="backClicked()"
+													<input type="button" value=" << Back" class="dr-menu" onclick="javascript:history.go(-1)"
 													name="backButton">
 												</td>												
 												</c:if>	

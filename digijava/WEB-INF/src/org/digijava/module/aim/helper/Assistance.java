@@ -5,7 +5,9 @@ public class Assistance {
 		  private String assistanceType;
 		  
 
-		
+		  public String toString() {
+			  return assistanceType;
+		  }
 		  
 		  public String getAssistanceType() {
 					 return assistanceType;

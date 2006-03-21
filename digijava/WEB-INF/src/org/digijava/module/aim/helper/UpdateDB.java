@@ -573,7 +573,7 @@ public class UpdateDB {
 			
 			
 			logger.debug("All the statements got executed");
-			con.close();
+//			con.close();
 		} catch (SQLException e) {
 			logger.error("SQLException from updateReportCache() " + e.getMessage());
 			e.printStackTrace(System.out);
@@ -582,7 +582,7 @@ public class UpdateDB {
 		} finally {
 			if (con != null) {
 				try {
-					con.close();
+//					con.close();
 				} catch (Exception ex) {
 					logger.error("Cannot close the connection");
 				}

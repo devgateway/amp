@@ -71,15 +71,20 @@ public class UpdateTeamActivities extends Action {
 
 		if (taForm.getRemoveActivity() != null) {
 			/* remove all selected activities */
-		    
+			if (taForm.getSelActivities() != null) {
+				TeamUtil.removeActivitiesFromTeam(taForm.getSelActivities());	
+			}
+			/*
 	        if (taForm.getSelActivities() != null) {
+	        	
+	        	
 	        	if (tm.getTeamType().equalsIgnoreCase(Constants.DEF_DNR_PERSPECTIVE)) {
 	        		TeamUtil.removeActivitiesFromDonor(tm.getTeamId(),taForm.getSelActivities());
 	        	} else {
 	        		TeamUtil.removeActivitiesFromTeam(taForm.getSelActivities());	
 	        	}
 	            
-	        }
+	        }*/
 	 		    
 			Long selActivities[] = taForm.getSelActivities();
 			taForm.setSelActivities(null);

@@ -81,6 +81,9 @@ public class UpdateMemberActivities extends Action {
 		} else {
 			/* show all unassigned activities */
 			Collection col = null;
+			col = TeamUtil.getUnassignedMemberActivities(id,
+					taForm.getMemberId());
+			/*
 			if (tm.getTeamType().equalsIgnoreCase(Constants.DEF_DNR_PERSPECTIVE)) {
 				col = TeamUtil.getUnassignedDonorMemberActivities(id,
 						taForm.getMemberId());
@@ -88,7 +91,7 @@ public class UpdateMemberActivities extends Action {
 				col = TeamUtil.getUnassignedMemberActivities(id,
 						taForm.getMemberId());
 			}
-			
+			*/
 			
 			Comparator acronymComp = new Comparator() {
 				public int compare(Object o1, Object o2) {

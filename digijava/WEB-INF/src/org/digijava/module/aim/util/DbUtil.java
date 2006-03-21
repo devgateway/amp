@@ -1540,10 +1540,7 @@ public class DbUtil {
 						inClause = inClause + ",'" + teamId + "'";
 				}
 			}
-			session = PersistenceManager.getSession();
-			//AmpTeam ampTeam=DbUtil.getAmpTeam(ampTeamId);
-			AmpTeam ampTeam = (AmpTeam) session.load(AmpTeam.class, ampTeamId);
-			
+			AmpTeam ampTeam=DbUtil.getAmpTeam(ampTeamId);
 			Collection temp = new ArrayList();
 			if(ampTeam.getAccessType().equals("Team"))
 			{	
@@ -1581,6 +1578,7 @@ public class DbUtil {
 						+ ",report.ampActivityId";
 			if (sortField.equals(Total))
 				fieldString = "report.ampActivityId";
+			session = PersistenceManager.getSession();
 
 			boolean noActivities = false;
 			if (teamLeadFlag == false && ampTeam.getAccessType().equals("Team")) {
@@ -1599,79 +1597,39 @@ public class DbUtil {
 			} else if (teamLeadFlag == true || "Management".equals(ampTeam.getAccessType())){
 				String inClause2 = null;
 				Iterator actItr = null;
-				Iterator tmItr = null;
 				if ("Management".equals(ampTeam.getAccessType())) {
-					if ("MOFED".equalsIgnoreCase(ampTeam.getTeamCategory())) {
-						// actItr = DbUtil.getApprovedOrCreatorActivities(new Long(0),ampTeamMemId).iterator();
-						queryString = "select act.ampActivityId from " + AmpActivity.class.getName()
-						  			  + " act where (act.approvalStatus=:status) and (act.team.ampTeamId in(" + inClause + ") )";
-						q = session.createQuery(queryString);
-						q.setParameter("status", "approved", Hibernate.STRING);
-						ls = q.list();
-						if (!ls.isEmpty()) {
-							actItr = ls.iterator();
-							while (actItr.hasNext()) {
-								Long actId = (Long) actItr.next();
-								if (inClause2 == null)
-									inClause2 = "'" + actId + "'";
-								else
-									inClause2 = inClause2 + ",'" + actId + "'";
-							}
-						}
-					}
-					else if ("DONOR".equalsIgnoreCase(ampTeam.getTeamCategory())) {
-						queryString = "select team from " + AmpTeam.class.getName()
-			  			  			  + " team where team.ampTeamId in(" + inClause + ") )";
-						q = session.createQuery(queryString);
-						ls = q.list();
-						if (!ls.isEmpty()) {
-							tmItr = ls.iterator();
-							Collection team = new ArrayList(); 
-							while (tmItr.hasNext()) {
-								AmpTeam tm = (AmpTeam) tmItr.next();
-								team.addAll(tm.getActivityList());
-							}
-							if (team.size() > 0) {
-								actItr = team.iterator();
-								while(actItr.hasNext()) {
-									while (actItr.hasNext()) {
-										AmpActivity actId = (AmpActivity) actItr.next();
-										if (inClause2 == null)
-											inClause2 = "'" + actId.getAmpActivityId() + "'";
-										else
-											inClause2 = inClause2 + ",'" + actId.getAmpActivityId() + "'";
-									}
-								}
-							}
-						}
+					//actItr = DbUtil.getApprovedOrCreatorActivities(new Long(0),ampTeamMemId).iterator();
+					queryString = "select act.ampActivityId from " + AmpActivity.class.getName()
+					  			  + " act where (act.approvalStatus=:status) and (act.team.ampTeamId in(" + inClause + ") )";
+					q = session.createQuery(queryString);
+					q.setParameter("status", "approved", Hibernate.STRING);
+					ls = q.list();
+					actItr = ls.iterator();
+					while (actItr.hasNext()) {
+						Long actId = (Long) actItr.next();
+						if (inClause2 == null)
+							inClause2 = "'" + actId + "'";
+						else
+							inClause2 = inClause2 + ",'" + actId + "'";
 					}
 				}
 				else {
-					if ("MOFED".equalsIgnoreCase(ampTeam.getTeamCategory())) {
-						ls = DbUtil.getApprovedOrCreatorActivities(ampTeamId,ampTeamMemId);
-						actItr = ls.iterator();
+					ls = DbUtil.getApprovedOrCreatorActivities(ampTeamId,ampTeamMemId);
+					actItr = ls.iterator();
+					while(actItr.hasNext()) {
+						//Long actId = (Long) actItr.next();
+						AmpActivity actId = (AmpActivity) actItr.next();
+						if (inClause2 == null)
+							inClause2 = "'" + actId.getAmpActivityId() + "'";
+						else
+							inClause2 = inClause2 + ",'" + actId.getAmpActivityId() + "'";
 					}
-					else if ("DONOR".equalsIgnoreCase(ampTeam.getTeamCategory())) {
-						if (null != ampTeam.getActivityList() && ampTeam.getActivityList().size() > 0) {
-							actItr = ampTeam.getActivityList().iterator();
-						}
-					}
-					if (null != actItr) {
-						while(actItr.hasNext()) {
-							//Long actId = (Long) actItr.next();
-							AmpActivity actId = (AmpActivity) actItr.next();
-							if (inClause2 == null)
-								inClause2 = "'" + actId.getAmpActivityId() + "'";
-							else
-								inClause2 = inClause2 + ",'" + actId.getAmpActivityId() + "'";
-						}
-						//logger.debug("inClause2 : " + inClause2);
-					}
+					//logger.debug("inClause2 : " + inClause2);
 				}
 				if (inClause2 != null) {
 					queryString = "select report from " + AmpReportCache.class.getName()
 								  + " report where report.ampActivityId in(" + inClause2
-								  + ") " + "order by " + fieldString + ",report.ampDonorId";
+								  + ") and (report.reportType='1') " + "order by " + fieldString + ",report.ampDonorId";
 					//logger.debug("inClause2 : " + queryString);
 					q = session.createQuery(queryString);
 					iter = q.list().iterator();
@@ -5396,44 +5354,6 @@ public class DbUtil {
 		return c;
 	}
 
-	
-	public static List getAmpModalityNames(Long ampActivityId) {
-		Session session = null;
-		Query q = null;
-		List c = new ArrayList();
-
-		try {
-			session = PersistenceManager.getSession();
-			String queryString = new String();
-			queryString = "select distinct f.modalityId.name from "
-					+ AmpFunding.class.getName()
-					+ " f where f.ampActivityId=:ampActivityId";
-
-			q = session.createQuery(queryString);
-			q.setParameter("ampActivityId", ampActivityId, Hibernate.LONG);
-			
-			Iterator iter = q.list().iterator();
-			while (iter.hasNext()) {
-					String modalityName = (String) iter.next();
-					c.add(modalityName);
-				
-			}
-		} catch (Exception ex) {
-			logger.error(ex);
-		} finally {
-			try {
-				if (session != null) {
-					PersistenceManager.releaseSession(session);
-				}
-			} catch (Exception ex) {
-				logger.error("releaseSession() failed");
-			}
-		}
-
-		return c;
-	}
-
-	
 	public static ArrayList getDonorSectors(Long ampSecSchemeId,
 			Long ampActivityId) {
 		logger.debug("In getDonorSectors");
@@ -7198,7 +7118,6 @@ public class DbUtil {
 		return sectors;
 	}
 
-	
 	public static Collection getAmpReportLocation(Long ampActivityId) {
 		Session session = null;
 		Collection regions = new ArrayList();
@@ -7229,10 +7148,6 @@ public class DbUtil {
 		return regions;
 	}
 
-	
-	
-	
-	
 	public static AmpLevel getAmpLevel(Long id) {
 		Session session = null;
 		AmpLevel level = null;
@@ -8167,79 +8082,4 @@ public class DbUtil {
 	}
 
 
-	public static ArrayList getAmpDonorsForActivity(Long id) {
-		ArrayList donor = new ArrayList();
-		StringBuffer DNOrg = new StringBuffer();
-		Session session = null;
-		Query q = null;
-		Iterator iterActivity = null;
-		Iterator iter = null;
-
-		try {
-			
-			session = PersistenceManager.getSession();
-			String queryString = new String();
-			queryString = "select activity from " + AmpActivity.class.getName()
-					+ " activity where (activity.ampActivityId=:id)";
-			
-			 q = session.createQuery(queryString);
-			q.setParameter("id", id, Hibernate.LONG);
-			logger.debug("Activity List: " + q.list().size());
-			iterActivity = q.list().iterator();
-			while (iterActivity.hasNext()) {
-				AmpActivity ampActivity = (AmpActivity) iterActivity.next();
-				
-//				logger.debug("Org Role List: " + ampActivity.getOrgrole().size());
-				iter = ampActivity.getOrgrole().iterator();
-				while (iter.hasNext()) {
-					AmpOrgRole ampOrgRole = (AmpOrgRole) iter.next();
-					if (ampOrgRole.getRole().getRoleCode().equals(
-							Constants.FUNDING_AGENCY)) {
-						if (donor.indexOf(ampOrgRole.getOrganisation()) == -1)
-							donor.add(ampOrgRole.getOrganisation());
-					}
-				}
-			}
-			logger.debug("Donors: " + donor.size());
-			int n = donor.size();
-			for (int i = 0; i < n - 1; i++) {
-				for (int j = 0; j < n - 1 - i; j++) {
-					AmpOrganisation firstOrg = (AmpOrganisation) donor.get(j);
-					AmpOrganisation secondOrg = (AmpOrganisation) donor
-							.get(j + 1);
-					if (firstOrg.getAcronym().compareToIgnoreCase(
-							secondOrg.getAcronym()) > 0) {
-						AmpOrganisation tempOrg = firstOrg;
-						donor.set(j, secondOrg);
-						donor.set(j + 1, tempOrg);
-					}
-				}
-			}
-
-		} catch (Exception ex) {
-			ex.printStackTrace();
-			logger.debug("Unable to get Donor " + ex.getMessage());
-		} finally {
-			try {
-				if (session != null) {
-					PersistenceManager.releaseSession(session);
-				}
-			} catch (Exception ex) {
-				logger.debug("releaseSession() failed");
-			}
-		}
-		//return donor;
-		
-		ArrayList donorString=new ArrayList();
-		Iterator i=donor.iterator();
-		while (i.hasNext()) {
-			AmpOrganisation element = (AmpOrganisation) i.next();
-			donorString.add(element.getName());
-		}
-		
-		return donorString;
-	}
-
-
-	
 }

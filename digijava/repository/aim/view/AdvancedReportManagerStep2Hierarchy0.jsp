@@ -53,12 +53,10 @@
 	if(flag == 0 || fcnt > 0)
 	{
 	%>
-	<logic:equal name="aimAdvancedReportForm" property="reportType" value="donor">
 	<logic:equal name="typeAssist" value="true">
 	<td height="21" width="89" align="center" rowspan="2">
 	<strong>Type of Assistance</strong>
 	</td>
-	</logic:equal>
 	</logic:equal>
 	<logic:iterate name="aimAdvancedReportForm"  property="fiscalYearRange" id="fiscalYearRange">
 		<td height="21" width="89" colspan=<%=fcnt%> align="center" >
@@ -105,12 +103,10 @@
 	if(flag == 0 || fcnt > 0)
 	{
 	%>
-	<logic:equal name="aimAdvancedReportForm" property="reportType" value="donor">
 	<logic:equal name="typeAssist" value="true">
 	<td height="21" width="89" rowspan="3" align="center">
 	<strong>Type of Assistance</strong>
 	</td>
-	</logic:equal>
 	</logic:equal>
 	
 	<logic:iterate name="aimAdvancedReportForm"  property="fiscalYearRange" id="fiscalYearRange">

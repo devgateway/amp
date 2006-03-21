@@ -286,7 +286,7 @@ function checkUncheckAll2() {
 
 																						<c:if test="${aimAdvancedReportForm.arReportType == 'regional' || aimAdvancedReportForm.arReportType == 'component'}">
 																						<logic:iterate name="aimAdvancedReportForm" id="ampColumns"	property="ampColumns" >
-																						<c:if test="${ampColumns.columnName != 'Type Of Assistance'}">
+
 																						<tr bgcolor="#ffffff">
 																							<td align="left" width="98%" valign=top>
 																								<c:out value="${ampColumns.columnName}"/>
@@ -297,7 +297,7 @@ function checkUncheckAll2() {
 					  																	    </html:multibox>
 																							</td>
 																						</tr>
-																						</c:if>
+																						
 																						</logic:iterate>
 																						</c:if>
 																					

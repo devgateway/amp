@@ -77,12 +77,10 @@
 	if(flag == 0 || fcnt > 0)
 	{
 	%>
-	<logic:equal name="aimAdvancedReportForm" property="reportType" value="donor">
 	<logic:equal name="typeAssist" value="true">
 	<td height="21" width="89" align="center" rowspan="2">
 	<strong>Type of Assistance</strong>
 	</td>
-	</logic:equal>
 	</logic:equal>
 	
 	<logic:iterate name="aimAdvancedReportForm"  property="fiscalYearRange" id="fiscalYearRange">
@@ -130,12 +128,10 @@
 	if(flag == 0 || fcnt > 0)
 	{
 	%>
-	<logic:equal name="aimAdvancedReportForm" property="reportType" value="donor">
 	<logic:equal name="typeAssist" value="true">
 	<td height="21" width="89" align="center" rowspan="2">
 	<strong>Type of Assistance</strong>
 	</td>
-	</logic:equal>
 	</logic:equal>
 
 
@@ -340,6 +336,7 @@
 		<td align="right" colspan=<bean:write name="cols"/> > <b> <bean:write name="hierarchy" property="name" />&nbsp; Total :</b></td>
 		</td></logic:notEmpty>
 		
+		<logic:present name="hierarchy" property="fundSubTotal">
 		<logic:iterate name="hierarchy"  property="fundSubTotal" id="fundSubTotal" type="org.digijava.module.aim.helper.AmpFund">
 				
 		<logic:equal name="aimAdvancedReportForm" property="acCommFlag" value="true">
@@ -400,6 +397,7 @@
 		</logic:notEmpty>
 		</logic:equal>
 	</logic:iterate>
+	</logic:present>
 	</td>
 	</tr>																
 	</logic:notEmpty>
@@ -449,13 +447,11 @@
 	if(flag == 0 || fcnt > 0)
 	{
 	%>
-	<logic:equal name="aimAdvancedReportForm" property="reportType" value="donor">
 	<logic:equal name="typeAssist" value="true">
 	<td height="21" width="89" align="center" rowspan="2">
 	<strong>Type of Assistance</strong>
 	</td>
 	</logic:equal>
-</logic:equal>
 
 
 	<logic:iterate name="aimAdvancedReportForm"  property="fiscalYearRange" id="fiscalYearRange">
@@ -504,12 +500,10 @@
 	{
 	%>
 
-	<logic:equal name="aimAdvancedReportForm" property="reportType" value="donor">
 	<logic:equal name="typeAssist" value="true">
 	<td height="21" width="89" align="center" rowspan="2">
 	<strong>Type of Assistance</strong>
 	</td>
-	</logic:equal>
 	</logic:equal>
 
 	<logic:iterate name="aimAdvancedReportForm"  property="fiscalYearRange" id="fiscalYearRange">
@@ -793,14 +787,12 @@
 	{
 	%>
 
-	<logic:equal name="aimAdvancedReportForm" property="reportType" value="donor">
 	<logic:equal name="typeAssist" value="true">
 	<td height="21" width="89" align="center" rowspan="2">
 	<strong>Type of Assistance</strong>
 	</td>
 	</logic:equal>
-	</logic:equal>
-
+	
 	<logic:iterate name="aimAdvancedReportForm"  property="fiscalYearRange" id="fiscalYearRange">
 		<td height="21" width="69" colspan=<bean:write name="aimAdvancedReportForm" property="quarterColumns" /> align="center" >
 		<strong><%=fiscalYearRange%></strong>
@@ -1017,6 +1009,7 @@
 		<tr background="#F4F4F2">
 		<logic:notEmpty name="aimAdvancedReportForm" property="addedColumns">
 		<td align="right" colspan=<bean:write name="cols"/> > <b> <bean:write name="level" property="name" />&nbsp; Total :</b></td></logic:notEmpty>
+		<logic:present name="level" property="fundSubTotal">
 		<logic:iterate name="level"  property="fundSubTotal" id="fundSubTotal" type="org.digijava.module.aim.helper.AmpFund">
 		<logic:iterate name="aimAdvancedReportForm"  property="addedMeasures" id="addedMeasures">
 		
@@ -1096,8 +1089,10 @@
 			
 		</logic:iterate>
 		</logic:iterate>
+		</logic:present>
 		</tr>
 		</logic:iterate>
+	
 		
 		</logic:notEmpty>
 		<bean:size name="aimAdvancedReportForm" property="addedMeasures" id="measureSize"/>
@@ -1122,6 +1117,7 @@
 		<!-- h1 total -->
 		Total :
 		</b></td></logic:notEmpty>
+		<logic:present name="levels" property="fundSubTotal">
 		<logic:iterate name="levels"  property="fundSubTotal" id="fundSubTotal" type="org.digijava.module.aim.helper.AmpFund">
 		<logic:iterate name="aimAdvancedReportForm"  property="addedMeasures" id="addedMeasures">
 			<c:if test="${addedMeasures.measureName == 'Actual Commitments'}">
@@ -1200,6 +1196,7 @@
 			
 		</logic:iterate>
 		</logic:iterate>
+		</logic:present>
 		</tr>
 
 	</logic:iterate>
@@ -1230,6 +1227,7 @@
 	<!-- h2 total -->
 	 Total :</b>
 	 </td></logic:notEmpty>
+	 <logic:present name="hierarchy" property="fundSubTotal">
 	 <logic:iterate name="hierarchy"  property="fundSubTotal" id="fundSubTotal" type="org.digijava.module.aim.helper.AmpFund">
 	<logic:iterate name="aimAdvancedReportForm"  property="addedMeasures" id="addedMeasures">
 	 	<c:if test="${addedMeasures.measureName == 'Actual Commitments'}">			
@@ -1306,7 +1304,8 @@
 		
 
 		</logic:iterate>
-	</logic:iterate>
+		</logic:iterate>
+	</logic:present>
 	</tr>			
 	</logic:notEmpty>
 				

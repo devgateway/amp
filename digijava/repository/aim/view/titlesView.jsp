@@ -12,11 +12,11 @@
 <%int rowspan = 1;%>
 <logic:equal name="aimAdvancedReportForm" property="option" value="Q">
 	<%rowspan = 2;%>
-</logic:equal>
+</logic:equal>titles
 
 
-<logic:iterate name="aimAdvancedReportForm" property="titles"
-	id="titles" type="org.digijava.module.aim.helper.Column">
+<logic:iterate name="aimAdvancedReportForm" property="addedMeasures"
+	id="titles">
 
 	<logic:equal name="titles" property="columnName"
 		value="Type Of Assistance">

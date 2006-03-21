@@ -98,9 +98,11 @@
 				</logic:equal>
 
 
+				<logic:present name="ampFund" property="byTypeUnDisb">
 				<logic:equal name="aimAdvancedReportForm" property="acBalFlag" value="true">
 				<td align="right" height="21" width="69">
 				<logic:notEqual name="ampFund" property="unDisbAmount" value="0">
+
 								<logic:iterate name="ampFund" property="byTypeUnDisb" id="terms">
 								<c:if test="${terms.fundingTerms == termsType}">
 										<bean:write name="terms"/>
@@ -109,7 +111,8 @@
 				</logic:notEqual>
 				</td>
 				</logic:equal>
-
+				</logic:present>
+				
 
 			</logic:iterate>	
 		</logic:iterate>		

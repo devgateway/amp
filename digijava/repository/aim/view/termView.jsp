@@ -67,11 +67,16 @@
 					<logic:equal name="aimAdvancedReportForm" property="plCommFlag" value="true">
 					<td align="right" height="21" width="89">
 					<logic:notEqual name="ampFund" property="plCommAmount" value="0">
+								<logic:present name="ampFund" property="byTypePlComm">
 								<logic:iterate name="ampFund" property="byTypePlComm" id="terms">
 								<c:if test="${terms.fundingTerms == termsType}">
 										<bean:write name="terms"/>
 								</c:if>
 								</logic:iterate>
+								</logic:present>
+								<logic:notPresent name="ampFund" property="byTypePlComm">
+								ERROR - byType not added!
+								</logic:notPresent>
 					</logic:notEqual>
 					</td>
 					</logic:equal>
@@ -81,11 +86,16 @@
 					<logic:equal name="aimAdvancedReportForm" property="plDisbFlag" value="true">
 					<td align="right" height="21" width="89">
 					<logic:notEqual name="ampFund" property="plDisbAmount" value="0">
+								<logic:present name="ampFund" property="byTypePlDisb">
 								<logic:iterate name="ampFund" property="byTypePlDisb" id="terms">
 								<c:if test="${terms.fundingTerms == termsType}">
 										<bean:write name="terms"/>
 								</c:if>
 								</logic:iterate>
+								</logic:present>
+								<logic:notPresent name="ampFund" property="byTypePlDisb">
+								ERROR - byType not added!
+								</logic:notPresent>
 					</logic:notEqual>
 					</td>
 					</logic:equal>

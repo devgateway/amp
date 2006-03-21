@@ -30,6 +30,7 @@
 <digi:form action="/compDateRevised.do">
 
 <input type="hidden" name="selectedDate" value="">
+<input type="hidden" name="edit" value="true">
 <table bgcolor=#f4f4f2 cellPadding=5 cellSpacing=5 width="100%" class=box-border-nopadding>
 	<tr>
 		<td align=left vAlign=top>

@@ -77,8 +77,9 @@
 <digi:instance property="aimEditActivityForm" />
 <digi:form action="/addFundingDetail.do" method="post">
 
+<input type="hidden" name="edit" value="true">
+
 <html:hidden property="event"/>
-<html:hidden property="edit" value="true"/>
 <html:hidden property="transIndexId"/>
 
 <html:hidden property="numComm"/>
@@ -119,18 +120,10 @@
 									</b>
 								</td>
 								<td align="left" bgcolor=#ECF3FD>
-									<c:if test="${aimEditActivityForm.donorFlag == true}">
-				                	<html:select property="assistanceType" styleClass="inp-text" disabled="true">
-											<html:optionsCollection name="aimEditActivityForm" property="assistanceTypes"
-											value="ampTermsAssistId" label="termsAssistName"/>
-										</html:select>									
-									</c:if>
-									<c:if test="${aimEditActivityForm.donorFlag == false}">
-				                	<html:select property="assistanceType" styleClass="inp-text">
-											<html:optionsCollection name="aimEditActivityForm" property="assistanceTypes"
-											value="ampTermsAssistId" label="termsAssistName"/>
-										</html:select>									
-									</c:if>
+			                	<html:select property="assistanceType" styleClass="inp-text">
+										<html:optionsCollection name="aimEditActivityForm" property="assistanceTypes" 
+										value="ampTermsAssistId" label="termsAssistName"/>
+									</html:select>  
 								</td>								
 							</tr>
 							<tr>
@@ -142,37 +135,19 @@
 									</b>
 								</td>
 								<td align="left" bgcolor=#ECF3FD>
-									<c:if test="${aimEditActivityForm.donorFlag == true}">
-										<html:text property="orgFundingId" size="10" disabled="true"/>
-									</c:if>
-									<c:if test="${aimEditActivityForm.donorFlag == false}">
-										<a title="<digi:trn key="aim:FundOrgId">This ID is specific to the financial operation. 
-										This item may be useful when one project has two or more different financial instruments.
-										If the project has a unique financial operation, the ID can be the same as the project ID
-										</digi:trn>">										
-			   	             	<html:text property="orgFundingId" size="10"/>  </a>									
-									</c:if>
+										<a title="<digi:trn key="aim:FundOrgId">This ID is specific to the financial operation. This item may be useful when one project has two or more different financial instruments. If the project has a unique financial operation, the ID can be the same as the project ID</digi:trn>">										
+			                	<html:text property="orgFundingId" size="10"/>  </a>
 								</td>								
 							</tr>
 							<tr>
 								<td align="right" bgcolor=#ECF3FD>
-									<a title="<digi:trn key="aim:FinanceInstrument">Method by which aid is delivered to an activity</digi:trn>">
-									<b><digi:trn key="aim:financingInstrument">Financing Instrument</digi:trn></b></a>
+									<a title="<digi:trn key="aim:FinanceInstrument">Method by which aid is delivered to an activity</digi:trn>">																									                																	 <b><digi:trn key="aim:financingInstrument">Financing Instrument</digi:trn></b></a>
 								</td>
 								<td align="left" bgcolor=#ECF3FD>
-
-									<c:if test="${aimEditActivityForm.donorFlag == true}">
-										<html:select property="modality" styleClass="inp-text" disabled="true">
-											<html:optionsCollection name="aimEditActivityForm" property="modalityCollection"
-											value="ampModalityId" label="name" />
-										</html:select>
-									</c:if>
-									<c:if test="${aimEditActivityForm.donorFlag == false}">
-										<html:select property="modality" styleClass="inp-text">
-											<html:optionsCollection name="aimEditActivityForm" property="modalityCollection"
-											value="ampModalityId" label="name" />
-										</html:select>
-									</c:if>
+									<html:select property="modality" styleClass="inp-text">
+									<html:optionsCollection name="aimEditActivityForm" property="modalityCollection" 
+									value="ampModalityId" label="name" />
+									</html:select>
 								</td>								
 							</tr>
 							
@@ -235,104 +210,54 @@
 							<c:set var="index" value="-1"/>
 						 	<c:forEach var="fundingDetail" items="${aimEditActivityForm.fundingDetails}"> 
 						 	<c:if test="${fundingDetail.transactionType==0}">
-								<c:if test="${aimEditActivityForm.donorFlag == true}">
-								 	<c:if test="${fundingDetail.perspectiveCode=='DN'}">
-									 	<tr>
-											<td valign="bottom">
-												<c:set var="index" value="${index+1}"/>
-												<html:select name="fundingDetail" indexed="true" property="adjustmentType" styleClass="inp-text">
-													<html:option value="1">Actual</html:option>	
-													<html:option value="0">Planned</html:option>
-												</html:select>
-												<html:hidden name="fundingDetail" indexed="true" property="transactionType"/>
-											</td>
-											<td valign="bottom">
-												<html:text name="fundingDetail" indexed="true" property="transactionAmount" size="17" styleClass="amt"/>
-											</td>
-											<td valign="bottom">
-												<html:select name="fundingDetail" indexed="true" property="currencyCode" styleClass="inp-text">
-													<html:optionsCollection name="aimEditActivityForm" property="currencies" value="currencyCode" 
-													label="currencyName"/>
-												</html:select>
-											</td>
-											<td vAlign="bottom">
-												<table cellPadding=0 cellSpacing=0>
-													<tr>
-														<td>
-															<% tempIndexStr = "" + tempIndex; tempIndex++;%>
-															<html:text name="fundingDetail" indexed="true" property="transactionDate" 
-															styleId="<%=tempIndexStr%>" readonly="true" size="10"/>
-														</td>
-														<td align="left" vAlign="center">&nbsp;
-						             					<a href='javascript:calendar("<%=tempIndexStr%>")'>	
-		   						          			<img src="../ampTemplate/images/show-calendar.gif" border="0"></a>
-														</td>
-													</tr>
-												</table>
-											</td>																
-											<td valign="bottom">
-												<html:select name="fundingDetail" indexed="true" property="perspectiveCode" styleClass="inp-text" >
-													<html:option value="DN">Donor</html:option>	
-													<html:option value="MA">MOFED</html:option>
-												</html:select>
-											</td>
+						 	<tr>
+								<td valign="bottom">
+									<c:set var="index" value="${index+1}"/>
+									<%--	
+									<html:checkbox name="fundingDetail" indexed="true" property="checked" value="off"/>  
+									--%>
+									<html:select name="fundingDetail" indexed="true" property="adjustmentType" styleClass="inp-text">
+										<html:option value="1">Actual</html:option>	
+										<html:option value="0">Planned</html:option>
+									</html:select>
+									<html:hidden name="fundingDetail" indexed="true" property="transactionType"/>
+								</td>
+								<td valign="bottom">
+									<html:text name="fundingDetail" indexed="true" property="transactionAmount" size="17" styleClass="amt"/>
+								</td>
+								<td valign="bottom">
+									<html:select name="fundingDetail" indexed="true" property="currencyCode" styleClass="inp-text">
+										<html:optionsCollection name="aimEditActivityForm" property="currencies" value="currencyCode" 
+										label="currencyName"/>
+									</html:select>
+								</td>
+								<td vAlign="bottom">
+									<table cellPadding=0 cellSpacing=0>
+										<tr>
 											<td>
-												<a href="javascript:removeFundingDetail(<bean:write name="fundingDetail" property="indexId"/>,0)">
-												 	<digi:img src="module/cms/images/deleteIcon.gif" border="0" alt="Delete this transaction"/>
-												</a>
+												<% tempIndexStr = "" + tempIndex; tempIndex++;%>
+												<html:text name="fundingDetail" indexed="true" property="transactionDate" 
+												styleId="<%=tempIndexStr%>" readonly="true" size="10"/>
+											</td>
+											<td align="left" vAlign="center">&nbsp;
+			             					<a href='javascript:calendar("<%=tempIndexStr%>")'>	
+		   			          			<img src="../ampTemplate/images/show-calendar.gif" border="0"></a>
 											</td>
 										</tr>
-									</c:if>
-								</c:if>
-								<c:if test="${aimEditActivityForm.donorFlag == false}">
-								 	<c:if test="${fundingDetail.perspectiveCode=='MA'}">
-									 	<tr>
-											<td valign="bottom">
-												<c:set var="index" value="${index+1}"/>
-												<html:select name="fundingDetail" indexed="true" property="adjustmentType" styleClass="inp-text">
-													<html:option value="1">Actual</html:option>	
-													<html:option value="0">Planned</html:option>
-												</html:select>
-												<html:hidden name="fundingDetail" indexed="true" property="transactionType"/>
-											</td>
-											<td valign="bottom">
-												<html:text name="fundingDetail" indexed="true" property="transactionAmount" size="17" styleClass="amt"/>
-											</td>
-											<td valign="bottom">
-												<html:select name="fundingDetail" indexed="true" property="currencyCode" styleClass="inp-text">
-													<html:optionsCollection name="aimEditActivityForm" property="currencies" value="currencyCode" 
-													label="currencyName"/>
-												</html:select>
-											</td>
-											<td vAlign="bottom">
-												<table cellPadding=0 cellSpacing=0>
-													<tr>
-														<td>
-															<% tempIndexStr = "" + tempIndex; tempIndex++;%>
-															<html:text name="fundingDetail" indexed="true" property="transactionDate" 
-															styleId="<%=tempIndexStr%>" readonly="true" size="10"/>
-														</td>
-														<td align="left" vAlign="center">&nbsp;
-						             					<a href='javascript:calendar("<%=tempIndexStr%>")'>	
-		   						          			<img src="../ampTemplate/images/show-calendar.gif" border="0"></a>
-														</td>
-													</tr>
-												</table>
-											</td>																
-											<td valign="bottom">
-												<html:select name="fundingDetail" indexed="true" property="perspectiveCode" styleClass="inp-text" >
-													<html:option value="DN">Donor</html:option>	
-													<html:option value="MA">MOFED</html:option>
-												</html:select>
-											</td>
-											<td>
-												<a href="javascript:removeFundingDetail(<bean:write name="fundingDetail" property="indexId"/>,0)">
-												 	<digi:img src="module/cms/images/deleteIcon.gif" border="0" alt="Delete this transaction"/>
-												</a>
-											</td>
-										</tr>
-									</c:if>							
-								</c:if>
+									</table>
+								</td>																
+								<td valign="bottom">
+									<html:select name="fundingDetail" indexed="true" property="perspectiveCode" styleClass="inp-text" >
+										<html:option value="DN">Donor</html:option>	
+										<html:option value="MA">MOFED</html:option>
+									</html:select>
+								</td>
+								<td>
+									<a href="javascript:removeFundingDetail(<bean:write name="fundingDetail" property="indexId"/>,0)">
+								 	<digi:img src="module/cms/images/deleteIcon.gif" border="0" alt="Delete this transaction"/>
+									</a>
+								</td>
+							</tr>
 							</c:if>
 						 	</c:forEach>
 						 	</c:if>
@@ -402,105 +327,53 @@
 							<c:if test="${ !empty aimEditActivityForm.fundingDetails}">
 							<c:forEach var="fundingDetail" items="${aimEditActivityForm.fundingDetails}"> 
 						 	<c:if test="${fundingDetail.transactionType==1}">
-						 	
-								<c:if test="${aimEditActivityForm.donorFlag == true}">
-								 	<c:if test="${fundingDetail.perspectiveCode=='DN'}">
+						 	<tr>
+								<td valign="bottom">
+								<c:set var="index" value="${index+1}"/>
+									<%--
+									<html:checkbox name="fundingDetail" indexed="true" property="checked" value="true"/> --%>
+									<html:select name="fundingDetail" indexed="true" property="adjustmentType" styleClass="inp-text" >
+										<html:option value="1">Actual</html:option>	
+										<html:option value="0">Planned</html:option>
+									</html:select>
+									<html:hidden name="fundingDetail" indexed="true" property="transactionType"/>									
+								</td>
+								<td valign="bottom">
+									<html:text name="fundingDetail" indexed="true" property="transactionAmount" size="17" styleClass="amt"/>
+								</td>
+								<td valign="bottom">
+									<html:select name="fundingDetail" indexed="true" property="currencyCode" styleClass="inp-text" >
+										<html:optionsCollection name="aimEditActivityForm" property="currencies" value="currencyCode" 
+										label="currencyName"/>
+									</html:select>
+								</td>
+								<td valign="bottom">
+									<table cellPadding=0 cellSpacing=0>
 										<tr>
-											<td valign="bottom">
-												<c:set var="index" value="${index+1}"/>
-												<html:select name="fundingDetail" indexed="true" property="adjustmentType" styleClass="inp-text" >
-													<html:option value="1">Actual</html:option>	
-													<html:option value="0">Planned</html:option>
-												</html:select>
-												<html:hidden name="fundingDetail" indexed="true" property="transactionType"/>									
-											</td>
-											<td valign="bottom">
-												<html:text name="fundingDetail" indexed="true" property="transactionAmount" size="17" styleClass="amt"/>
-											</td>
-											<td valign="bottom">
-												<html:select name="fundingDetail" indexed="true" property="currencyCode" styleClass="inp-text" >
-													<html:optionsCollection name="aimEditActivityForm" property="currencies" value="currencyCode" 
-													label="currencyName"/>
-												</html:select>
-											</td>
-											<td valign="bottom">
-												<table cellPadding=0 cellSpacing=0>
-													<tr>
-														<td>
-															<% tempIndexStr = "" + tempIndex; tempIndex++;%>
-															<html:text name="fundingDetail" indexed="true" property="transactionDate" readonly="true" 
-															styleId="<%=tempIndexStr%>" size="10"/>
-														</td>
-														<td align="left" vAlign="center">&nbsp;
-					   			          			<a href='javascript:calendar("<%=tempIndexStr%>")'>	
-      					      			 			<img src="../ampTemplate/images/show-calendar.gif" border="0"></a>
-														</td>
-													</tr>
-												</table>								
-											</td>
-											<td valign="bottom">
-												<html:select name="fundingDetail" indexed="true" property="perspectiveCode" styleClass="inp-text" >
-													<html:option value="DN">Donor</html:option>	
-													<html:option value="MA">MOFED</html:option>
-												</html:select>
-											</td>
 											<td>
-												<a href="javascript:removeFundingDetail(<bean:write name="fundingDetail" property="indexId"/>,1)">
-												 	<digi:img src="module/cms/images/deleteIcon.gif" border="0" alt="Delete this transaction"/>
-												</a>
-											</td>								
+												<% tempIndexStr = "" + tempIndex; tempIndex++;%>
+												<html:text name="fundingDetail" indexed="true" property="transactionDate" readonly="true" 
+												styleId="<%=tempIndexStr%>" size="10"/>
+											</td>
+											<td align="left" vAlign="center">&nbsp;
+					             			<a href='javascript:calendar("<%=tempIndexStr%>")'>	
+      					       			<img src="../ampTemplate/images/show-calendar.gif" border="0"></a>
+											</td>
 										</tr>
-									</c:if>
-								</c:if>
-								<c:if test="${aimEditActivityForm.donorFlag == false}">
-								 	<c:if test="${fundingDetail.perspectiveCode=='MA'}">
-										<tr>
-											<td valign="bottom">
-												<c:set var="index" value="${index+1}"/>
-												<html:select name="fundingDetail" indexed="true" property="adjustmentType" styleClass="inp-text" >
-													<html:option value="1">Actual</html:option>	
-													<html:option value="0">Planned</html:option>
-												</html:select>
-												<html:hidden name="fundingDetail" indexed="true" property="transactionType"/>									
-											</td>
-											<td valign="bottom">
-												<html:text name="fundingDetail" indexed="true" property="transactionAmount" size="17" styleClass="amt"/>
-											</td>
-											<td valign="bottom">
-												<html:select name="fundingDetail" indexed="true" property="currencyCode" styleClass="inp-text" >
-													<html:optionsCollection name="aimEditActivityForm" property="currencies" value="currencyCode" 
-													label="currencyName"/>
-												</html:select>
-											</td>
-											<td valign="bottom">
-												<table cellPadding=0 cellSpacing=0>
-													<tr>
-														<td>
-															<% tempIndexStr = "" + tempIndex; tempIndex++;%>
-															<html:text name="fundingDetail" indexed="true" property="transactionDate" readonly="true" 
-															styleId="<%=tempIndexStr%>" size="10"/>
-														</td>
-														<td align="left" vAlign="center">&nbsp;
-					   			          			<a href='javascript:calendar("<%=tempIndexStr%>")'>	
-      					      			 			<img src="../ampTemplate/images/show-calendar.gif" border="0"></a>
-														</td>
-													</tr>
-												</table>								
-											</td>
-											<td valign="bottom">
-												<html:select name="fundingDetail" indexed="true" property="perspectiveCode" styleClass="inp-text" >
-													<html:option value="DN">Donor</html:option>	
-													<html:option value="MA">MOFED</html:option>
-												</html:select>
-											</td>
-											<td>
-												<a href="javascript:removeFundingDetail(<bean:write name="fundingDetail" property="indexId"/>,1)">
-												 	<digi:img src="module/cms/images/deleteIcon.gif" border="0" alt="Delete this transaction"/>
-												</a>
-											</td>								
-										</tr>									
-									</c:if>
-								</c:if>
+									</table>								
+								</td>
+								<td valign="bottom">
+									<html:select name="fundingDetail" indexed="true" property="perspectiveCode" styleClass="inp-text" >
+										<html:option value="DN">Donor</html:option>	
+										<html:option value="MA">MOFED</html:option>
+									</html:select>
+								</td>
+								<td>
+									<a href="javascript:removeFundingDetail(<bean:write name="fundingDetail" property="indexId"/>,1)">
+								 	<digi:img src="module/cms/images/deleteIcon.gif" border="0" alt="Delete this transaction"/>
+									</a>
+								</td>								
+							</tr>
 							</c:if>
 						 	</c:forEach>
 						 	</c:if>
@@ -568,143 +441,70 @@
 							<c:if test="${ !empty aimEditActivityForm.fundingDetails}">
 						 	<c:forEach var="fundingDetail" items="${aimEditActivityForm.fundingDetails}"> 
 						 	<c:if test="${fundingDetail.transactionType==2}">
+						 	<tr>
+								<td colspan="6">
+									<table width="100%" cellSpacing=1 cellPadding=0 vAlign="top" align="left">
+										<tr bgcolor="#ffffff">
 
-								<c:if test="${aimEditActivityForm.donorFlag == true}">
-								 	<c:if test="${fundingDetail.perspectiveCode=='DN'}">
-
-									 	<tr>
-											<td colspan="6">
-												<table width="100%" cellSpacing=1 cellPadding=0 vAlign="top" align="left">
-													<tr bgcolor="#ffffff">
-														<td valign="bottom">
-															<c:set var="index" value="${index+1}"/>
-															<html:select name="fundingDetail" indexed="true" property="adjustmentType" styleClass="inp-text" >
-																<html:option value="1">Actual</html:option>	
-																<html:option value="0">Planned</html:option>
-															</html:select>
-															<html:hidden name="fundingDetail" indexed="true" property="transactionType"/>									
-														</td>
-														<td valign="bottom">
-															<html:text name="fundingDetail" indexed="true" property="transactionAmount" size="17" styleClass="amt"/>
-														</td>
-														<td valign="bottom">
-															<html:select name="fundingDetail" indexed="true" property="currencyCode" styleClass="inp-text" >
-																<html:optionsCollection name="aimEditActivityForm" property="currencies" value="currencyCode" 
-																label="currencyName"/>
-															</html:select>
-														</td>
-														<td valign="bottom">
-															<table cellPadding=0 cellSpacing=0>
-																<tr>
-																	<td>
-																		<% tempIndexStr = "" + tempIndex; tempIndex++;%>
-																		<html:text name="fundingDetail" indexed="true" property="transactionDate" 
-																		styleId="<%=tempIndexStr%>" readonly="true" size="10"/>
-																	</td>
-																	<td align="left" vAlign="center">&nbsp;
-			         						    					<a href='javascript:calendar("<%=tempIndexStr%>")'>	
-								   			          			<img src="../ampTemplate/images/show-calendar.gif" border="0"></a>
-																		<% tempIndex++; %>
-																	</td>
-																</tr>
-															</table>																
-														</td>
-														<td valign="bottom">
-															<html:select name="fundingDetail" indexed="true" property="perspectiveCode" styleClass="inp-text" >
-																<html:option value="DN">Donor</html:option>	
-																<html:option value="MA">MOFED</html:option>
-															</html:select>
-														</td>
-														<td>
-															<a href="javascript:removeFundingDetail(<bean:write name="fundingDetail" property="indexId"/>,2)">
-															 	<digi:img src="module/cms/images/deleteIcon.gif" border="0" alt="Delete this transaction"/>
-															</a>
-														</td>										
-													</tr>
-													<tr bgcolor="#ffffff">
-														<td colspan="6">
-															<b><digi:trn key="aim:classification">Classification</digi:trn></b>&nbsp;
-															<html:text name="fundingDetail" indexed="true" property="classification" 
-															size="75" styleClass="inp-text"/>
-														</td>										
-													</tr>
-													<tr>
-														<td colspan="6" bgcolor="#dddddd"></td>
-													</tr>	
-												</table>
+								<td valign="bottom">
+								<c:set var="index" value="${index+1}"/>
+									<html:select name="fundingDetail" indexed="true" property="adjustmentType" styleClass="inp-text" >
+										<html:option value="1">Actual</html:option>	
+										<html:option value="0">Planned</html:option>
+									</html:select>
+									<html:hidden name="fundingDetail" indexed="true" property="transactionType"/>									
+								</td>
+								<td valign="bottom">
+									<html:text name="fundingDetail" indexed="true" property="transactionAmount" size="17" styleClass="amt"/>
+								</td>
+								<td valign="bottom">
+									<html:select name="fundingDetail" indexed="true" property="currencyCode" styleClass="inp-text" >
+										<html:optionsCollection name="aimEditActivityForm" property="currencies" value="currencyCode" 
+										label="currencyName"/>
+									</html:select>
+								</td>
+								<td valign="bottom">
+									<table cellPadding=0 cellSpacing=0>
+										<tr>
+											<td>
+												<% tempIndexStr = "" + tempIndex; tempIndex++;%>
+												<html:text name="fundingDetail" indexed="true" property="transactionDate" 
+												styleId="<%=tempIndexStr%>" readonly="true" size="10"/>
+											</td>
+											<td align="left" vAlign="center">&nbsp;
+			             					<a href='javascript:calendar("<%=tempIndexStr%>")'>	
+		   			          			<img src="../ampTemplate/images/show-calendar.gif" border="0"></a>
+												<% tempIndex++; %>
 											</td>
 										</tr>
-									</c:if>
-								</c:if>
-								<c:if test="${aimEditActivityForm.donorFlag == false}">
-								 	<c:if test="${fundingDetail.perspectiveCode=='MA'}">
-
-									 	<tr>
+									</table>																
+								</td>
+								<td valign="bottom">
+									<html:select name="fundingDetail" indexed="true" property="perspectiveCode" styleClass="inp-text" >
+										<html:option value="DN">Donor</html:option>	
+										<html:option value="MA">MOFED</html:option>
+									</html:select>
+								</td>
+								<td>
+									<a href="javascript:removeFundingDetail(<bean:write name="fundingDetail" property="indexId"/>,2)">
+								 	<digi:img src="module/cms/images/deleteIcon.gif" border="0" alt="Delete this transaction"/>
+									</a>
+								</td>										
+										
+										</tr>
+										<tr bgcolor="#ffffff">
 											<td colspan="6">
-												<table width="100%" cellSpacing=1 cellPadding=0 vAlign="top" align="left">
-													<tr bgcolor="#ffffff">
-														<td valign="bottom">
-															<c:set var="index" value="${index+1}"/>
-															<html:select name="fundingDetail" indexed="true" property="adjustmentType" styleClass="inp-text" >
-																<html:option value="1">Actual</html:option>	
-																<html:option value="0">Planned</html:option>
-															</html:select>
-															<html:hidden name="fundingDetail" indexed="true" property="transactionType"/>									
-														</td>
-														<td valign="bottom">
-															<html:text name="fundingDetail" indexed="true" property="transactionAmount" size="17" styleClass="amt"/>
-														</td>
-														<td valign="bottom">
-															<html:select name="fundingDetail" indexed="true" property="currencyCode" styleClass="inp-text" >
-																<html:optionsCollection name="aimEditActivityForm" property="currencies" value="currencyCode" 
-																label="currencyName"/>
-															</html:select>
-														</td>
-														<td valign="bottom">
-															<table cellPadding=0 cellSpacing=0>
-																<tr>
-																	<td>
-																		<% tempIndexStr = "" + tempIndex; tempIndex++;%>
-																		<html:text name="fundingDetail" indexed="true" property="transactionDate" 
-																		styleId="<%=tempIndexStr%>" readonly="true" size="10"/>
-																	</td>
-																	<td align="left" vAlign="center">&nbsp;
-			         						    					<a href='javascript:calendar("<%=tempIndexStr%>")'>	
-								   			          			<img src="../ampTemplate/images/show-calendar.gif" border="0"></a>
-																		<% tempIndex++; %>
-																	</td>
-																</tr>
-															</table>																
-														</td>
-														<td valign="bottom">
-															<html:select name="fundingDetail" indexed="true" property="perspectiveCode" styleClass="inp-text" >
-																<html:option value="DN">Donor</html:option>	
-																<html:option value="MA">MOFED</html:option>
-															</html:select>
-														</td>
-														<td>
-															<a href="javascript:removeFundingDetail(<bean:write name="fundingDetail" property="indexId"/>,2)">
-															 	<digi:img src="module/cms/images/deleteIcon.gif" border="0" alt="Delete this transaction"/>
-															</a>
-														</td>										
-													</tr>
-													<tr bgcolor="#ffffff">
-														<td colspan="6">
-															<b><digi:trn key="aim:classification">Classification</digi:trn></b>&nbsp;
-															<html:text name="fundingDetail" indexed="true" property="classification" 
-															size="75" styleClass="inp-text"/>
-														</td>										
-													</tr>
-													<tr>
-														<td colspan="6" bgcolor="#dddddd"></td>
-													</tr>	
-												</table>
-											</td>
-										</tr>									
-									
-									</c:if>
-								</c:if>								
-							
+												<b><digi:trn key="aim:classification">Classification</digi:trn></b>&nbsp;
+												<html:text name="fundingDetail" indexed="true" property="classification" 
+												size="75" styleClass="inp-text"/>
+											</td>										
+										</tr>
+										<tr>
+											<td colspan="6" bgcolor="#dddddd"></td>
+										</tr>
+									</table>
+								</td>
+							</tr>
 							</c:if>
 						 	</c:forEach>
 						 	</c:if>

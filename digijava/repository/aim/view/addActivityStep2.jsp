@@ -65,7 +65,7 @@ function validate(field) {
 function selectLocation() {
 	if (document.aimEditActivityForm.currUrl.value == "") { 		  		  		  
 		openNewWindow(600, 500);
-		<digi:context name="selectLoc" property="context/module/moduleinstance/selectLocation.do" />
+		<digi:context name="selectLoc" property="context/module/moduleinstance/selectLocation.do?edit=true" />
 		document.aimEditActivityForm.action = "<%= selectLoc %>";
 		document.aimEditActivityForm.currUrl.value = "<%= selectLoc %>";
 		document.aimEditActivityForm.target = popupPointer.name;
@@ -78,7 +78,7 @@ function selectLocation() {
 function addSectors() {
 	if (document.aimEditActivityForm.currUrl.value == "") { 		  		  
 		openNewWindow(600, 450);
-		<digi:context name="addSector" property="context/module/moduleinstance/selectSectors.do" />
+		<digi:context name="addSector" property="context/module/moduleinstance/selectSectors.do?edit=true" />
 	  	document.aimEditActivityForm.action = "<%= addSector %>";
 		document.aimEditActivityForm.currUrl.value = "<%= addSector %>";
 		document.aimEditActivityForm.target = popupPointer.name;
@@ -91,7 +91,7 @@ function addSectors() {
 function removeSelSectors() {
 		  var flag = validate(2);
 		  if (flag == false) return false;
-		   <digi:context name="remSec" property="context/module/moduleinstance/removeSelSectors.do" />
+		   <digi:context name="remSec" property="context/module/moduleinstance/removeSelSectors.do?edit=true" />
 			document.aimEditActivityForm.action = "<%= remSec %>";
 		  	document.aimEditActivityForm.target = "_self"
 			document.aimEditActivityForm.submit();
@@ -100,7 +100,7 @@ function removeSelSectors() {
 
 function resetAll()
 {
-	<digi:context name="resetAll" property="context/module/moduleinstance/resetAll.do" />
+	<digi:context name="resetAll" property="context/module/moduleinstance/resetAll.do?edit=true" />
 	document.aimEditActivityForm.action = "<%= resetAll %>";
 	document.aimEditActivityForm.target = "_self";
 	document.aimEditActivityForm.submit();
@@ -110,7 +110,7 @@ function resetAll()
 function removeSelLocations() {
 		  var flag = validate(1);
 		  if (flag == false) return false;
-		   <digi:context name="remLocs" property="context/module/moduleinstance/removeSelLocations.do" />
+		   <digi:context name="remLocs" property="context/module/moduleinstance/removeSelLocations.do?edit=true" />
 			document.aimEditActivityForm.action = "<%= remLocs %>";
 		  	document.aimEditActivityForm.target = "_self"
 			document.aimEditActivityForm.submit();
@@ -157,6 +157,7 @@ function popupwin()
 <html:hidden property="editAct" />
 
 <input type="hidden" name="currUrl">
+<input type="hidden" name="edit" value="true">
 
 <table width="100%" cellPadding="0" cellSpacing="0" vAlign="top" align="left">
 <tr><td width="100%" vAlign="top" align="left">

@@ -14278,8 +14278,9 @@ public class ReportUtil {
 								report.getSectors().addAll(sectors);
 							if(c.getColumnId().equals(Constants.REGION_NAME))
 								report.getRegions().addAll(regions);
-							if(c.getColumnId().equals(Constants.AMP_ID))
-								report.setAmpId(ampId);
+							if(c.getColumnId().equals(Constants.AMP_ID)) {
+								report.setProjId(getProjectId(reports.getAmpActivityId()));
+							}
 							if(c.getColumnId().equals(Constants.FUNDING_INSTRUMENT))
 							{
 								if(modality.size()==0)

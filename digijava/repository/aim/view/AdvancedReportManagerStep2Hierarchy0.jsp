@@ -26,13 +26,20 @@
 	<tr bgcolor="#cccccc">
 	<c:if test="${!empty aimAdvancedReportForm.addedColumns}">
 	<logic:iterate name="aimAdvancedReportForm" id="addedColumns"	property="addedColumns" >
+		<logic:equal name="aimAdvancedReportForm" property="reportType" value="donor">	
 		<c:if test="${addedColumns.columnName != 'Type Of Assistance'}">
-
-		<td align="center" class=box-title rowspan="2">
-			<c:out value="${addedColumns.columnName}"/>
+		<td align="center"  class=box-title rowspan="2">
+		<c:out value="${addedColumns.columnName}"/>	
 		</td>
 		</c:if>
-
+		</logic:equal>
+		
+		<logic:notEqual name="aimAdvancedReportForm" property="reportType" value="donor">	
+		<td align="center" class="box-title" rowspan="2">
+		<c:out value="${addedColumns.columnName}"/>
+		</td>
+		</logic:notEqual>
+		
 	</logic:iterate>
 	</c:if>
 																	
@@ -54,9 +61,11 @@
 	{
 	%>
 	<logic:equal name="typeAssist" value="true">
+	<logic:equal name="aimAdvancedReportForm" property="reportType" value="donor">	
 	<td height="21" width="89" align="center" rowspan="2">
 	<strong>Type of Assistance</strong>
 	</td>
+	</logic:equal>
 	</logic:equal>
 	<logic:iterate name="aimAdvancedReportForm"  property="fiscalYearRange" id="fiscalYearRange">
 		<td height="21" width="89" colspan=<%=fcnt%> align="center" >
@@ -78,11 +87,21 @@
 	<tr bgcolor="#cccccc">
 	<c:if test="${!empty aimAdvancedReportForm.addedColumns}">
 	<logic:iterate name="aimAdvancedReportForm" id="addedColumns"	property="addedColumns" >
+
+		<logic:equal name="aimAdvancedReportForm" property="reportType" value="donor">	
 		<c:if test="${addedColumns.columnName != 'Type Of Assistance'}">
 		<td align="center"  class=box-title rowspan="3">
-		<c:out value="${addedColumns.columnName}"/>
+		<c:out value="${addedColumns.columnName}"/>	
 		</td>
 		</c:if>
+		</logic:equal>
+		
+		<logic:notEqual name="aimAdvancedReportForm" property="reportType" value="donor">	
+		<td align="center" class="box-title" rowspan="3">
+		<c:out value="${addedColumns.columnName}"/>
+		</td>
+		</logic:notEqual>
+		
 	</logic:iterate>
 	</c:if>
 																	
@@ -103,10 +122,12 @@
 	if(flag == 0 || fcnt > 0)
 	{
 	%>
+	<logic:equal name="aimAdvancedReportForm" property="reportType" value="donor">	
 	<logic:equal name="typeAssist" value="true">
 	<td height="21" width="89" rowspan="3" align="center">
 	<strong>Type of Assistance</strong>
 	</td>
+	</logic:equal>
 	</logic:equal>
 	
 	<logic:iterate name="aimAdvancedReportForm"  property="fiscalYearRange" id="fiscalYearRange">
@@ -192,7 +213,7 @@
 	
 			<c:if test="${addedMeasures.measureName == 'Planned Expenditures'}">
 			<logic:equal name="aimAdvancedReportForm" property="plExpFlag" value="true">
-			<td height="21" width="23" align="center" >
+			<td height="21" width="23" align="center">
 			<a title="<digi:trn key="aim:ExpenditureofFunds">Amount effectively spent by the implementing agency</digi:trn>">
 			<digi:trn key="aim:plannedExpenditure">Planned Expenditure</digi:trn>
 			</a>

@@ -122,11 +122,13 @@
 	<bean:write name="records" property="year" />
 </logic:notEmpty>
 
-<logic:notEmpty name="records" property="ampId">
-	<td align="center" height="21" rowspan="<%=rowspan%>">
-<bean:write name="records" property="ampId" />
-		</td>
-</logic:notEmpty>
+		<logic:notEmpty name="records" property="projId">
+				<td align="center" height="21" rowspan="<%=rowspan%>" >
+				<logic:iterate name="records" id="projId" property="projId" > <%=projId%>
+				<br>
+				</logic:iterate>
+				</td>
+		</logic:notEmpty>
 
 <logic:notEmpty name="records" property="totalCommitment">
 	<td align="center" height="21" rowspan="<%=rowspan%>"><logic:notEqual

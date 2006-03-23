@@ -52,12 +52,20 @@
 	<tr bgcolor="#cccccc">
 	<c:if test="${!empty aimAdvancedReportForm.addedColumns}">
 	<logic:iterate name="aimAdvancedReportForm" id="addedColumns"	property="addedColumns" >
-	<c:if test="${addedColumns.columnName != 'Type Of Assistance'}">
+<logic:equal name="aimAdvancedReportForm" property="reportType" value="donor">	
+		<c:if test="${addedColumns.columnName != 'Type Of Assistance'}">
 		<td align="center"  class=box-title rowspan="2">
+		<c:out value="${addedColumns.columnName}"/>	
+		</td>
+		</c:if>
+		</logic:equal>
+		
+		<logic:notEqual name="aimAdvancedReportForm" property="reportType" value="donor">	
+		<td align="center" class="box-title" rowspan="2">
 		<c:out value="${addedColumns.columnName}"/>
 		</td>
-	</c:if>
-	</logic:iterate>
+		</logic:notEqual>
+			</logic:iterate>
 	</c:if>
 																	
 	<bean:size name="aimAdvancedReportForm" property="addedMeasures" id="measureSize"/>
@@ -78,9 +86,11 @@
 	{
 	%>
 	<logic:equal name="typeAssist" value="true">
+	<logic:equal name="aimAdvancedReportForm" property="reportType" value="donor">	
 	<td height="21" width="89" align="center" rowspan="2">
 	<strong>Type of Assistance</strong>
 	</td>
+	</logic:equal>
 	</logic:equal>
 	
 	<logic:iterate name="aimAdvancedReportForm"  property="fiscalYearRange" id="fiscalYearRange">
@@ -103,12 +113,20 @@
 	<tr bgcolor="#cccccc">
 	<c:if test="${!empty aimAdvancedReportForm.addedColumns}">
 	<logic:iterate name="aimAdvancedReportForm" id="addedColumns"	property="addedColumns" >
+<logic:equal name="aimAdvancedReportForm" property="reportType" value="donor">	
 		<c:if test="${addedColumns.columnName != 'Type Of Assistance'}">
 		<td align="center"  class=box-title rowspan="3">
-		<c:out value="${addedColumns.columnName}"/>
+		<c:out value="${addedColumns.columnName}"/>	
 		</td>
 		</c:if>
-	</logic:iterate>
+		</logic:equal>
+		
+		<logic:notEqual name="aimAdvancedReportForm" property="reportType" value="donor">	
+		<td align="center" class="box-title" rowspan="3">
+		<c:out value="${addedColumns.columnName}"/>
+		</td>
+		</logic:notEqual>
+			</logic:iterate>
 	</c:if>
 																	
 	<bean:size name="aimAdvancedReportForm" property="addedMeasures" id="measureSize"/>
@@ -129,9 +147,11 @@
 	{
 	%>
 	<logic:equal name="typeAssist" value="true">
+	<logic:equal name="aimAdvancedReportForm" property="reportType" value="donor">	
 	<td height="21" width="89" align="center" rowspan="2">
 	<strong>Type of Assistance</strong>
 	</td>
+	</logic:equal>
 	</logic:equal>
 
 
@@ -422,12 +442,20 @@
 	<tr bgcolor="#cccccc">
 	<c:if test="${!empty aimAdvancedReportForm.addedColumns}">
 	<logic:iterate name="aimAdvancedReportForm" id="addedColumns"	property="addedColumns" >
+<logic:equal name="aimAdvancedReportForm" property="reportType" value="donor">	
 		<c:if test="${addedColumns.columnName != 'Type Of Assistance'}">
 		<td align="center"  class=box-title rowspan="2">
 		<c:out value="${addedColumns.columnName}"/>
 		</td>
 		</c:if>
-	</logic:iterate>
+		</logic:equal>
+		
+		<logic:notEqual name="aimAdvancedReportForm" property="reportType" value="donor">	
+		<td align="center" class="box-title" rowspan="2">
+		<c:out value="${addedColumns.columnName}"/>
+		</td>
+		</logic:notEqual>
+			</logic:iterate>
 	</c:if>
 																	
 	<bean:size name="aimAdvancedReportForm" property="addedMeasures" id="measureSize"/>
@@ -448,9 +476,11 @@
 	{
 	%>
 	<logic:equal name="typeAssist" value="true">
+		<logic:equal name="aimAdvancedReportForm" property="reportType" value="donor">	
 	<td height="21" width="89" align="center" rowspan="2">
 	<strong>Type of Assistance</strong>
 	</td>
+		</logic:equal>
 	</logic:equal>
 
 
@@ -474,12 +504,20 @@
 	<tr bgcolor="#cccccc">
 	<c:if test="${!empty aimAdvancedReportForm.addedColumns}">
 	<logic:iterate name="aimAdvancedReportForm" id="addedColumns"	property="addedColumns" >
+<logic:equal name="aimAdvancedReportForm" property="reportType" value="donor">	
 		<c:if test="${addedColumns.columnName != 'Type Of Assistance'}">
 		<td align="center"  class=box-title rowspan="3">
-		<c:out value="${addedColumns.columnName}"/>
+		<c:out value="${addedColumns.columnName}"/>	
 		</td>
 		</c:if>
-	</logic:iterate>
+		</logic:equal>
+		
+		<logic:notEqual name="aimAdvancedReportForm" property="reportType" value="donor">	
+		<td align="center" class="box-title" rowspan="3">
+		<c:out value="${addedColumns.columnName}"/>
+		</td>
+		</logic:notEqual>
+			</logic:iterate>
 	</c:if>
 																	
 	<bean:size name="aimAdvancedReportForm" property="addedMeasures" id="measureSize"/>
@@ -501,9 +539,11 @@
 	%>
 
 	<logic:equal name="typeAssist" value="true">
+		<logic:equal name="aimAdvancedReportForm" property="reportType" value="donor">	
 	<td height="21" width="89" align="center" rowspan="2">
 	<strong>Type of Assistance</strong>
 	</td>
+	</logic:equal>
 	</logic:equal>
 
 	<logic:iterate name="aimAdvancedReportForm"  property="fiscalYearRange" id="fiscalYearRange">
@@ -716,12 +756,20 @@
 	<tr bgcolor="#cccccc">
 	<c:if test="${!empty aimAdvancedReportForm.addedColumns}">
 	<logic:iterate name="aimAdvancedReportForm" id="addedColumns"	property="addedColumns" >
+<logic:equal name="aimAdvancedReportForm" property="reportType" value="donor">	
 		<c:if test="${addedColumns.columnName != 'Type Of Assistance'}">
 		<td align="center"  class=box-title rowspan="2">
-		<c:out value="${addedColumns.columnName}"/>
+		<c:out value="${addedColumns.columnName}"/>	
 		</td>
 		</c:if>
-	</logic:iterate>
+		</logic:equal>
+		
+		<logic:notEqual name="aimAdvancedReportForm" property="reportType" value="donor">	
+		<td align="center" class="box-title" rowspan="2">
+		<c:out value="${addedColumns.columnName}"/>
+		</td>
+		</logic:notEqual>
+			</logic:iterate>
 	</c:if>
 																	
 	<bean:size name="aimAdvancedReportForm" property="addedMeasures" id="measureSize"/>
@@ -761,12 +809,20 @@
 	<tr bgcolor="#cccccc">
 	<c:if test="${!empty aimAdvancedReportForm.addedColumns}">
 	<logic:iterate name="aimAdvancedReportForm" id="addedColumns"	property="addedColumns" >
+		<logic:equal name="aimAdvancedReportForm" property="reportType" value="donor">	
 		<c:if test="${addedColumns.columnName != 'Type Of Assistance'}">
 		<td align="center"  class=box-title rowspan="2">
-		<c:out value="${addedColumns.columnName}"/>
+		<c:out value="${addedColumns.columnName}"/>	
 		</td>
 		</c:if>
-	</logic:iterate>
+		</logic:equal>
+		
+		<logic:notEqual name="aimAdvancedReportForm" property="reportType" value="donor">	
+		<td align="center" class="box-title" rowspan="2">
+		<c:out value="${addedColumns.columnName}"/>
+		</td>
+		</logic:notEqual>
+			</logic:iterate>
 	</c:if>
 																	
 	<bean:size name="aimAdvancedReportForm" property="addedMeasures" id="measureSize"/>
@@ -788,9 +844,11 @@
 	%>
 
 	<logic:equal name="typeAssist" value="true">
+		<logic:equal name="aimAdvancedReportForm" property="reportType" value="donor">	
 	<td height="21" width="89" align="center" rowspan="2">
 	<strong>Type of Assistance</strong>
 	</td>
+	</logic:equal>
 	</logic:equal>
 	
 	<logic:iterate name="aimAdvancedReportForm"  property="fiscalYearRange" id="fiscalYearRange">

@@ -107,15 +107,13 @@
 
 <logic:notEmpty name="records" property="modality">
 	<td align="center" height="21" rowspan="<%=rowspan%>">
-	<logic:notEmpty name="modality">
 	<logic:iterate
 		name="records" id="modalities" property="modality">
 		<logic:iterate name="modalities" id="mod">
 		<%=mod%>
 		<br>
 		</logic:iterate>
-	</logic:iterate>
-	</logic:notEmpty></td>
+	</logic:iterate></td>
 </logic:notEmpty>
 
 <logic:notEmpty name="records" property="year">

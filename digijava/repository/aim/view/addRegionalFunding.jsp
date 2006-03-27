@@ -23,7 +23,7 @@
 <digi:instance property="aimEditActivityForm" />
 <digi:form action="/addRegionalFunding.do" method="post">
 
-<html:hidden property="edit" value="true"/>
+<input type="hidden" name="edit" value="true">
 
 <input type="hidden" name="regFundAct">
 

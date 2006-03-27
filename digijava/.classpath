@@ -64,7 +64,7 @@
 	<classpathentry kind="lib" path="WEB-INF/lib/commons-logging-api-1.0.2.jar"/>
 	<classpathentry kind="lib" path="WEB-INF/lib/itext-1.01.jar"/>
 	<classpathentry kind="lib" path="WEB-INF/lib/jdt-compiler.jar"/>
-	<classpathentry kind="lib" path="WEB-INF/lib/mysql-connector.jar"/>
 	<classpathentry kind="lib" path="WEB-INF/lib/poi-2.5.1-final-20040804.jar"/>
+	<classpathentry kind="lib" path="WEB-INF/lib/mysql-connector-java.jar"/>
 	<classpathentry kind="output" path="WEB-INF/classes"/>
 </classpath>

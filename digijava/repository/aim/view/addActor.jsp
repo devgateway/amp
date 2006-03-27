@@ -50,7 +50,7 @@
 <html:hidden property="measureId" />
 <html:hidden property="actorId" />
 <html:hidden property="event"/>
-<html:hidden property="edit" value="true"/>
+<input type="hidden" name="edit" value="true">
 <html:hidden property="editAct"/>
 
 <table width="100%" cellSpacing=5 cellPadding=5 vAlign="top" border=0>

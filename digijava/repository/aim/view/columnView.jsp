@@ -105,16 +105,29 @@
 	</logic:iterate></td>
 </logic:notEmpty>
 
+<logic:present name="records" property="modality">
 <logic:notEmpty name="records" property="modality">
 	<td align="center" height="21" rowspan="<%=rowspan%>">
 	<logic:iterate
 		name="records" id="modalities" property="modality">
+		
+		<% if(modalities instanceof java.util.ArrayList) {%>
+		
 		<logic:iterate name="modalities" id="mod">
 		<%=mod%>
 		<br>
 		</logic:iterate>
+	
+		<% } else { %>
+		
+		<%=modalities %>
+		<% } %>
+		
+		
 	</logic:iterate></td>
-</logic:notEmpty>
+</logic:notEmpty>	
+</logic:present>
+
 
 <logic:notEmpty name="records" property="year">
 	<bean:write name="records" property="year" />

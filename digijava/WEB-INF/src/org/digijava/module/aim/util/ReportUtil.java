@@ -14469,15 +14469,15 @@ public class ReportUtil {
 									planSumExp = planSumExp + plannedExpFunds[i][qtr];
 //									sumUnDisb = sumUnDisb + (actualCommFunds[i][qtr]-actualDisbFunds[i][qtr]);
 
-									AmpByAssistTypeList unDisbTerm = new AmpByAssistTypeList();
-									unDisbTerm.addAll(ampFund.getByTypeComm());
-									unDisbTerm.addAll(ampFund.getByTypePlComm());
+									actSumCommitTerms.addAll(actualCommTerms[i][qtr]);
+									actSumDisbTerms.addAll(actualDisbTerms[i][qtr]);
+									actSumExpTerms.addAll(actualExpTerms[i][qtr]);
 									
-									unDisbTerm.removeAll(ampFund.getByTypeDisb());
-									unDisbTerm.removeAll(ampFund.getByTypePlDisb());
-									ampFund.setByTypeUnDisb(unDisbTerm);
-						
-									
+									planSumCommitTerms.addAll(plannedCommTerms[i][qtr]);
+									planSumDisbTerms.addAll(plannedDisbTerms[i][qtr]);
+									planSumExpTerms.addAll(plannedExpTerms[i][qtr]);
+
+																
 									subTotActualCommFunds[i][qtr] = subTotActualCommFunds[i][qtr] + actualCommFunds[i][qtr];
 									subTotActualDisbFunds[i][qtr] = subTotActualDisbFunds[i][qtr] + actualDisbFunds[i][qtr];
 									subTotActualExpFunds[i][qtr] = subTotActualExpFunds[i][qtr] + actualExpFunds[i][qtr];
@@ -14497,6 +14497,23 @@ public class ReportUtil {
 							unDisbSubTotal = unDisbSubTotal + (totalCommitment-totalDisbursement);
 
 							AmpFund fund = new AmpFund();
+							
+							fund.setByTypeComm(actSumCommitTerms);
+							fund.setByTypeDisb(actSumDisbTerms);
+							fund.setByTypeExp(actSumExpTerms);
+							
+							fund.setByTypePlComm(planSumCommitTerms);
+							fund.setByTypePlDisb(planSumDisbTerms);
+							fund.setByTypePlExp(planSumExpTerms);
+
+							AmpByAssistTypeList unDisbTerm = new AmpByAssistTypeList();
+							unDisbTerm.addAll(fund.getByTypeComm());
+							unDisbTerm.addAll(fund.getByTypePlComm());
+							
+							unDisbTerm.removeAll(fund.getByTypeDisb());
+							unDisbTerm.removeAll(fund.getByTypePlDisb());
+							fund.setByTypeUnDisb(unDisbTerm);
+							
 							fund.setCommAmount(mf.format(actSumCommit));
 							fund.setDisbAmount(mf.format(actSumDisb));
 							fund.setExpAmount(mf.format(actSumExp));

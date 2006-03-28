@@ -15938,8 +15938,8 @@ public class ReportUtil {
 
 
 	// added by Rahul for Project ID..
-	public static Collection getProjectId(Long activityId){
-		
+	public static Collection getProjectId(Long activityId)
+	{
 		Transaction tx=null;
 		Session session=null;
 		Query query=null;
@@ -15949,47 +15949,65 @@ public class ReportUtil {
 		try{
 			session=PersistenceManager.getSession();
 			AmpActivity act = (AmpActivity) session.load(AmpActivity.class,activityId);
-			if (act != null) {
-				if (act.getInternalIds() != null) {
+
+			if (act != null) 
+			{
+				if (act.getInternalIds() != null) 
+				{
 					Iterator tmp = act.getInternalIds().iterator();
-					while (tmp.hasNext()) {
+					if(!tmp.hasNext())
+						pid.add(" Unspecified ");
+					
+					while (tmp.hasNext()) 
+					{
 						AmpActivityInternalId actIntId = (AmpActivityInternalId) tmp.next();
-						pid.add(actIntId.getInternalId());
+						
+						if(actIntId.getInternalId().trim().length()== 0 || actIntId.getInternalId()==" ")
+							pid.add("unspecified");
+						else
+							pid.add(actIntId.getInternalId());
 					}
 				}
+				else
+				{
+					pid.add("Unspecified");
+				}
 			}
-
-		}catch(Exception e){
+			else
+				pid.add("Unspecified");
+		}
+		catch(Exception e)
+		{
 			logger.error("UNABLE to fetch Project Id for ActivityId: "+activityId +"==Error="+e.getMessage());
-			if(tx !=null){
-				try{
+			if(tx !=null)
+			{
+				try
+				{
 					tx.rollback();
-				}catch(Exception exp){
+				}
+				catch(Exception exp)
+				{
 					logger.error("Transaction ROLLBACK Failed.");
 					logger.error("error="+exp.getMessage());
 				}
 			}
 		}
-		finally{
-			if(session!=null){
-				try{
+		finally
+		{
+			if(session!=null)
+			{
+				try
+				{
 					PersistenceManager.releaseSession(session);
-				}catch(Exception ex){
+				}
+				catch(Exception ex)
+				{
 					logger.error("Failed to release session....");
 					logger.error("error="+ex.getMessage());
 				}
 			}
 		}
-		
-//		logger.info("PIDDDDDDDD SIZE........."+pid.size());
 		return pid;
-		
 	}// get projectId
-
-
 // end of Advanced Function	
-
-
-	
-
 }

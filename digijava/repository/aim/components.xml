@@ -159,7 +159,8 @@
 	<page name="donorTeamActivities" title=" - Donor Team Activities" />
 	<page name="donorTeamUnAssignedActivities" title=" - Unassigned Activities" />
 
-	
+	<page name="meActivityList" title=" - ME Team Activity List" />
+	<page name="meActivityIndicators" title=" - ME Activity Indicator List" />
 
 	<page page="searchLocation" name="aim_searchlocPopupLayout" title="AMP - Search Location" />
 	<page page="searchSectors" name="aim_searchSectorPopupLayout" title="AMP - Search Sectors" />

@@ -216,6 +216,10 @@
 			  type="org.digijava.module.aim.form.TeamActivitiesForm" />
 
 	<form-bean
+			  name="aimUpdateIndicatorValuesForm"
+			  type="org.digijava.module.aim.form.UpdateIndicatorValuesForm" />
+	
+	<form-bean
 			  name="aimDonorTeamsForm"
 			  type="org.digijava.module.aim.form.DonorTeamsForm" />
 
@@ -1473,6 +1477,66 @@
 			  <forward name="index" path="/aim/index.do" redirect="true" />
 	</action>			
 
+	<action 
+			  name="aimTeamActivitiesForm"
+			  type="org.digijava.module.aim.action.GetTeamActivities"
+			  scope="request"
+			  validate="false"
+			  path="/aim/getTeamActivities">
+			  <forward name="forward" path="/showLayout.do?layout=meActivityList" />
+			  <forward name="index" path="/aim/index.do" redirect="true" />
+	</action>			
+
+	<action
+			  name="aimUpdateIndicatorValuesForm"
+			  type="org.digijava.module.aim.action.GetActivityIndicators"
+			  scope="session"
+			  validate="false"
+			  path="/aim/getActivityIndicators">
+			  <forward name="forward" path="/showLayout.do?layout=meActivityIndicators" />
+			  <forward name="index" path="/aim/index.do" redirect="true" />
+	</action>			
+
+	<action
+			  name="aimUpdateIndicatorValuesForm"
+			  type="org.digijava.module.aim.action.UpdateMEIndicatorValues"
+			  scope="session"
+			  validate="false"
+			  path="/aim/saveMEIndicatorValues">
+			  <forward name="forward" path="/aim/getActivityIndicators.do" />
+			  <forward name="index" path="/aim/index.do" redirect="true" />
+	</action>			
+
+	<action
+			  name="aimUpdateIndicatorValuesForm"
+			  type="org.digijava.module.aim.action.UpdateMEIndicatorValues"
+			  scope="session"
+			  validate="false"
+			  path="/aim/deleteIndicatorValue">
+			  <forward name="forward" path="/aim/getActivityIndicators.do" />
+			  <forward name="index" path="/aim/index.do" redirect="true" />
+	</action>			
+	
+	<action
+			  name="aimUpdateIndicatorValuesForm"
+			  type="org.digijava.module.aim.action.GetIndicatorValues"
+			  scope="session"
+			  validate="false"
+			  path="/aim/expandIndicator">
+			  <forward name="forward" path="/showLayout.do?layout=meActivityIndicators" />
+			  <forward name="index" path="/aim/index.do" redirect="true" />
+	</action>			
+
+	<action
+			  name="aimUpdateIndicatorValuesForm"
+			  type="org.digijava.module.aim.action.GetIndicatorValues"
+			  scope="session"
+			  validate="false"
+			  path="/aim/collapseIndicator">
+			  <forward name="forward" path="/showLayout.do?layout=meActivityIndicators" />
+			  <forward name="index" path="/aim/index.do" redirect="true" />
+	</action>			
+	
 	<action 
 			  name="aimDonorTeamsForm"
 			  type="org.digijava.module.aim.action.GetDonorTeams"

@@ -84,7 +84,12 @@
 						:: <digi:trn key="aim:donorActivityList">Donor Activity List</digi:trn>
 					</digi:link>
 				</td>				
-				<td class="sub-nav" width="192">
+				<td noWrap>
+					<digi:link href="/getTeamActivities.do" styleClass="sub-nav">
+						:: <digi:trn key="aim:m&e">M&E</digi:trn>
+					</digi:link>
+				</td>
+				<td class="sub-nav" width="150">
 					&nbsp;
 				</td>
 			</tr>

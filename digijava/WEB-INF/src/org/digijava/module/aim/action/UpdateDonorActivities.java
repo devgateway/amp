@@ -16,6 +16,7 @@ import org.apache.struts.action.ActionMapping;
 import org.digijava.module.aim.form.TeamActivitiesForm;
 import org.digijava.module.aim.util.TeamUtil;
 
+// Test
 public class UpdateDonorActivities extends Action {
 	
 	private static Logger logger = Logger.getLogger(UpdateDonorActivities.class);

@@ -25,8 +25,6 @@ import org.digijava.module.aim.util.TeamUtil;
  *
  */
 
-// Test
-
 public class GetDonorTeams extends Action {
 	private static Logger logger = Logger.getLogger(GetDonorTeams.class);
 	

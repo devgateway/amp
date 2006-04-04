@@ -117,6 +117,19 @@ function disable() {
 									<digi:trn key="aim:clickToViewAddActivityStep1">Click here to goto Add Activity Step 1</digi:trn>
 								</bean:define>
 
+								<c:if test="${aimEditActivityForm.donorFlag == true}">
+									<c:if test="${aimEditActivityForm.editAct == true}">
+										<digi:trn key="aim:editActivityStep1">
+											Edit Activity - Step 1
+										</digi:trn>
+									</c:if>
+									<c:if test="${aimEditActivityForm.editAct == false}">
+										<digi:trn key="aim:addActivityStep1">
+											Add Activity - Step 1
+										</digi:trn>
+									</c:if>																
+								</c:if>
+								<c:if test="${aimEditActivityForm.donorFlag == false}">
 									<digi:link href="/addActivity.do?step=1&edit=true" styleClass="comment" title="<%=translation%>" >
 									<c:if test="${aimEditActivityForm.editAct == true}">
 										<digi:trn key="aim:editActivityStep1">
@@ -129,9 +142,16 @@ function disable() {
 										</digi:trn>
 									</c:if>																
 									</digi:link>								
+								</c:if>
 								
 								&nbsp;&gt;&nbsp;
 
+								<c:if test="${aimEditActivityForm.donorFlag == true}">
+									<digi:trn key="aim:addActivityStep2">
+										Step 2
+									</digi:trn>
+								</c:if>
+								<c:if test="${aimEditActivityForm.donorFlag == false}">
 									<bean:define id="translation">
 										<digi:trn key="aim:clickToViewAddActivityStep2">Click here to goto Add Activity Step 2</digi:trn>
 									</bean:define>
@@ -140,6 +160,7 @@ function disable() {
 											Step 2
 										</digi:trn>
 									</digi:link>
+								</c:if>
 								
 								&nbsp;&gt;&nbsp;
 
@@ -154,6 +175,12 @@ function disable() {
 
 								&nbsp;&gt;&nbsp;
 
+								<c:if test="${aimEditActivityForm.donorFlag == true}">
+									<digi:trn key="aim:addActivityStep4">
+										Step 4
+									</digi:trn>
+								</c:if>
+								<c:if test="${aimEditActivityForm.donorFlag == false}">
 									<bean:define id="translation">
 										<digi:trn key="aim:clickToViewAddActivityStep4">Click here to goto Add Activity Step 4</digi:trn>
 									</bean:define>
@@ -162,8 +189,16 @@ function disable() {
 											Step 4
 										</digi:trn>
 									</digi:link>
+								</c:if>
 
 								&nbsp;&gt;&nbsp;
+
+								<c:if test="${aimEditActivityForm.donorFlag == true}">
+									<digi:trn key="aim:addActivityStep5">
+										Step 5
+									</digi:trn>
+								</c:if>
+								<c:if test="${aimEditActivityForm.donorFlag == false}">
 									<bean:define id="translation">
 										<digi:trn key="aim:clickToViewAddActivityStep5">Click here to goto Add Activity Step 5</digi:trn>
 									</bean:define>
@@ -172,8 +207,16 @@ function disable() {
 											Step 5
 										</digi:trn>
 									</digi:link>
+								</c:if>
 
 								&nbsp;&gt;&nbsp;
+
+								<c:if test="${aimEditActivityForm.donorFlag == true}">
+									<digi:trn key="aim:addActivityStep6">
+										Step 6
+									</digi:trn>
+								</c:if>
+								<c:if test="${aimEditActivityForm.donorFlag == false}">
 									<bean:define id="translation">
 										<digi:trn key="aim:clickToViewAddActivityStep6">Click here to goto Add Activity Step 6</digi:trn>
 									</bean:define>
@@ -182,9 +225,16 @@ function disable() {
 											Step 6
 										</digi:trn>
 									</digi:link>
+								</c:if>
 
 								&nbsp;&gt;&nbsp;
 
+								<c:if test="${aimEditActivityForm.donorFlag == true}">
+									<digi:trn key="aim:addActivityStep7">
+										Step 7
+									</digi:trn>
+								</c:if>
+								<c:if test="${aimEditActivityForm.donorFlag == false}">
 									<bean:define id="translation">
 										<digi:trn key="aim:clickToViewAddActivityStep7">Click here to goto Add Activity Step 7</digi:trn>
 									</bean:define>
@@ -193,9 +243,16 @@ function disable() {
 											Step 7
 										</digi:trn>
 									</digi:link>
+								</c:if>
 								
 								&nbsp;&gt;&nbsp;
 
+								<c:if test="${aimEditActivityForm.donorFlag == true}">
+									<digi:trn key="aim:addActivityStep8">
+										Step 8
+									</digi:trn>
+								</c:if>
+								<c:if test="${aimEditActivityForm.donorFlag == false}">
 									<bean:define id="translation">
 										<digi:trn key="aim:clickToViewAddActivityStep8">Click here to goto Add Activity Step 8</digi:trn>
 									</bean:define>
@@ -204,6 +261,7 @@ function disable() {
 											Step 8
 										</digi:trn>
 									</digi:link>
+								</c:if>								
 
 								&nbsp;&gt;&nbsp;									
 								<digi:trn key="aim:previewActivity">
@@ -579,6 +637,32 @@ function disable() {
 																						<c:if test="${fundDet.transactionType == 0}">
 																						
 																						
+																						<c:if test="${aimEditActivityForm.donorFlag == true}">
+																						<c:if test="${fundDet.perspectiveCode != 'DN'}">
+																						<tr bgcolor="#ffffff">
+																						</c:if>
+																						<c:if test="${fundDet.perspectiveCode == 'DN'}">
+																						<tr bgcolor="#ffff00">
+																						</c:if>
+																							<td width="50">
+																								<c:out value="${fundDet.adjustmentTypeName}"/>
+																							</td>
+																							<td align="right" width="100">
+																							<FONT color=blue>*</FONT>
+																								<c:out value="${fundDet.transactionAmount}"/>
+																							</td>
+																							<td>
+																								<c:out value="${fundDet.currencyCode}"/>
+																							</td>
+																							<td width="70">
+																								<c:out value="${fundDet.transactionDate}"/>
+																							</td>
+																							<td>
+																								<c:out value="${fundDet.perspectiveName}"/>
+																							</td>
+																						</tr>
+																						</c:if>
+																						<c:if test="${aimEditActivityForm.donorFlag == false}">
 																						<c:if test="${fundDet.perspectiveCode != 'DN'}">
 																						<tr bgcolor="#ffffff">
 																							<td width="50">
@@ -599,6 +683,9 @@ function disable() {
 																							</td>
 																						</tr>
 																						</c:if>
+																						</c:if>
+
+																						
 																						</c:if>
 																					</table>
 																				   </c:forEach>
@@ -615,6 +702,32 @@ function disable() {
 																					<c:forEach var="fundDet" items="${fund.fundingDetails}">
 																					<table width="100%" cellSpacing="1" cellPadding="1" bgcolor="#eeeeee">
 																						<c:if test="${fundDet.transactionType == 1}">
+																						<c:if test="${aimEditActivityForm.donorFlag == true}">
+																						<c:if test="${fundDet.perspectiveCode != 'DN'}">
+																						<tr bgcolor="#ffffff">
+																						</c:if>
+																						<c:if test="${fundDet.perspectiveCode == 'DN'}">
+																						<tr bgcolor="#ffff00">
+																						</c:if>
+																							<td width="50">
+																								<c:out value="${fundDet.adjustmentTypeName}"/>
+																							</td>
+																							<td align="right" width="100">
+																							<FONT color=blue>*</FONT>
+																								<c:out value="${fundDet.transactionAmount}"/>
+																							</td>
+																							<td>
+																								<c:out value="${fundDet.currencyCode}"/>
+																							</td>
+																							<td width="70">
+																								<c:out value="${fundDet.transactionDate}"/>
+																							</td>
+																							<td>
+																								<c:out value="${fundDet.perspectiveName}"/>
+																							</td>
+																						</tr>
+																						</c:if>
+																						<c:if test="${aimEditActivityForm.donorFlag == false}">
 																						<c:if test="${fundDet.perspectiveCode != 'DN'}">
 																						<tr bgcolor="#ffffff">
 																							<td width="50">
@@ -634,6 +747,7 @@ function disable() {
 																								<c:out value="${fundDet.perspectiveName}"/>
 																							</td>
 																						</tr>
+																						</c:if>
 																						</c:if>
 																						</c:if>
 																					</table>
@@ -651,6 +765,32 @@ function disable() {
 																					<c:forEach var="fundDet" items="${fund.fundingDetails}">
 																					<table width="100%" cellSpacing="1" cellPadding="1" bgcolor="#eeeeee">
 																						<c:if test="${fundDet.transactionType == 2}">
+																						<c:if test="${aimEditActivityForm.donorFlag == true}">
+																						<c:if test="${fundDet.perspectiveCode != 'DN'}">
+																						<tr bgcolor="#ffffff">
+																						</c:if>
+																						<c:if test="${fundDet.perspectiveCode == 'DN'}">
+																						<tr bgcolor="#ffff00">
+																						</c:if>
+																							<td width="50">
+																								<c:out value="${fundDet.adjustmentTypeName}"/>
+																							</td>
+																							<td align="right" width="100">
+																							<FONT color=blue>*</FONT>
+																								<c:out value="${fundDet.transactionAmount}"/>
+																							</td>
+																							<td>
+																								<c:out value="${fundDet.currencyCode}"/>
+																							</td>
+																							<td width="70">
+																								<c:out value="${fundDet.transactionDate}"/>
+																							</td>
+																							<td>
+																								<c:out value="${fundDet.perspectiveName}"/>
+																							</td>
+																						</tr>
+																						</c:if>
+																						<c:if test="${aimEditActivityForm.donorFlag == false}">
 																						<c:if test="${fundDet.perspectiveCode != 'DN'}">
 																						<tr bgcolor="#ffffff">
 																							<td width="50">
@@ -670,6 +810,7 @@ function disable() {
 																								<c:out value="${fundDet.perspectiveName}"/>
 																							</td>
 																						</tr>
+																						</c:if>
 																						</c:if>
 																						</c:if>
 																					</table>
@@ -1183,10 +1324,18 @@ function disable() {
 									<tr><td bgColor=#ffffff align="center" colspan=2>
 										<table cellPadding=3>
 											<tr>
+												<c:if test="${aimEditActivityForm.donorFlag == true}">
 												<td>
 													<input type="button" value=" << Back" class="dr-menu" onclick="javascript:history.go(-1)"
 													name="backButton">
 												</td>												
+												</c:if>
+												<c:if test="${aimEditActivityForm.donorFlag == false}">
+												<td>
+													<input type="button" value=" << Back" class="dr-menu" onclick="javascript:history.go(-1)"
+													name="backButton">
+												</td>												
+												</c:if>	
 												<td>
 													<input type="button" value="Save Activity" class="dr-menu" onclick="disable()"
 													name="submitButton">

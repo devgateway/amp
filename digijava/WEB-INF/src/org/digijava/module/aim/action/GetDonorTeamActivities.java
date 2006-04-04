@@ -22,6 +22,7 @@ import org.digijava.module.aim.dbentity.AmpTeam;
 import org.digijava.module.aim.form.TeamActivitiesForm;
 import org.digijava.module.aim.util.TeamUtil;
 
+// Test
 public class GetDonorTeamActivities extends Action {
 	
 	private static Logger logger = Logger.getLogger(GetDonorTeamActivities.class);

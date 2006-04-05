@@ -36,7 +36,7 @@ import org.digijava.module.aim.util.ActivityUtil;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.TeamUtil;
 
-
+// ViewMyDesktop.java
 public class ViewMyDesktop extends Action
 {
 	private static Logger logger = Logger.getLogger(ViewMyDesktop.class) ;

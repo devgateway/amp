@@ -331,13 +331,27 @@ public class AdvancedReportPDF extends Action {
             logger.info("jjjjjjjjjjjjjjj-j= " + j2);
 
             index = 0;
-
+            int shift=0;
             for (int j = j2; j < columnDetails.length; j++) {
-                rowData[index] = columnDetails[j][0];
-                logger.info("row dataaaaaaaaa: " + rowData[index] + " : " + index);
-                index++;
+				//logger.info(" column details==="+columnDetails[j][0]+"===");
+				if(columnDetails[j][0]=="Type Of Assistance" || columnDetails[j][0].equals(new String("Type Of Assistance")))
+				{
+					//logger.info("in typeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee"+(columnDetails.length-1));
+					rowData[columnDetails.length-1-j2] = "Type Of Assistance";
+					shift++;
+					continue;
+				}
+				else
+				{
+					//logger.info("@@@@@@@@@@@@@@" + index);
+					rowData[index] = columnDetails[j][0];
+					//logger.info("row dataaaaaaaaa: " + rowData[index] + " : " + index);
+					index++;
+				}
             }
 
+            index+=shift;
+            
             yearIter = formBean.getFiscalYearRange().iterator();
 
             if (yearIter.hasNext()) {
@@ -552,10 +566,19 @@ public class AdvancedReportPDF extends Action {
 
                             if (columnColl.contains("Type Of Assistance") && (advReport.getAssistance() != null)) {
                                 position = getColumnIndex("Type Of Assistance");
-
+                                if(position != columnDetails.length)
+                                {
+                                	logger.info(" NIOT EQUAL TOTAL AT ENDDDDDDDDDDDDDDDDDDDDDDD" + columnDetails.length);
+                                	dataArray[row][columnDetails.length-1]="Total";
+                                }
+                                else
+                                {
+                               // logger.info(" THIS IS THE POSITIONNNNNNNNNNNNNNNNNNNNNNNNNNNNN ......positon   "+position);
                                 dataArray[row][position]="Total";
+                                }
+                               // dataArray[row][columnDetails.length]="Total";
                             }
-
+                            
                             if (columnColl.contains("Donor") && (advReport.getDonors() != null)) {
                                 position = getColumnIndex("Donor");
 

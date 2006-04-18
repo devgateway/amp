@@ -276,7 +276,8 @@ public class PhysicalCompReportXLS
 					p2.println("<textElement textAlignment='Center' verticalAlignment='Middle' rotation='None' lineSpacing='Single'>");
 					p2.println("<font fontName='Arial' pdfFontName='Helvetica' size='10' isBold='true' isItalic='false' isUnderline='false' isPdfEmbedded ='false' pdfEncoding ='Cp1252' isStrikeThrough='false' />");
 					p2.println("</textElement>");
-					p2.println("<text><![CDATA[Completion Date]]></text>");
+					//p2.println("<text><![CDATA[Completion Date]]></text>");
+					p2.println("<text><![CDATA[Total Commitments]]></text>");
 					p2.println("</staticText>");
 					p2.println("<staticText>");
 					p2.println("<reportElement");
@@ -298,7 +299,8 @@ public class PhysicalCompReportXLS
 					p2.println("<textElement textAlignment='Center' verticalAlignment='Middle' rotation='None' lineSpacing='Single'>");
 					p2.println("<font fontName='Arial' pdfFontName='Helvetica' size='10' isBold='true' isItalic='false' isUnderline='false' isPdfEmbedded ='false' pdfEncoding ='Cp1252' isStrikeThrough='false' />");
 					p2.println("</textElement>");
-					p2.println("<text><![CDATA[Total Commitments]]></text>");
+					//p2.println("<text><![CDATA[Total Commitments]]></text>");
+					p2.println("<text><![CDATA[Completion Date]]></text>");
 					p2.println("</staticText>");
 					p2.println("<staticText>");
 					p2.println("<reportElement");

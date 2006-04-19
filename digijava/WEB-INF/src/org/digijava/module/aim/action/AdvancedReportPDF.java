@@ -59,6 +59,35 @@ public class AdvancedReportPDF extends Action {
     int msize;
     int hsize;
     int assistCnt;
+    
+    
+    public void setFundingRow(AmpFund ampFund, int type, int row, int position, boolean unDisbFlag) {
+   	 if (formBean.getFlag(type).equals("true") && (ampFund.getAmount(type) != null)) {
+            position++;
+            dataArray[row][position] = ampFund.getAmount(type);
+            if (type == AmpFund.UNDISB) unDisbFlag=true;
+   	 }
+   }
+
+    
+    
+    public void setFundingTermsRow(AmpFund ampFund, int type, int row, int position, String assistType,boolean unDisbFlag) {
+    	 if (formBean.getFlag(type).equals("true") && (ampFund.getAmount(type) != null)) {
+             Iterator i = ampFund.getByTypeAmount(type).iterator();
+             position++;
+
+             while (i.hasNext()) {
+                 AmpByAssistTypeAmount ata = (AmpByAssistTypeAmount) i.next();
+
+                 if (ata.getFundingTerms().equals(assistType)) {
+                     dataArray[row][position] = ata.toString();
+                 }
+             }
+             if (type == AmpFund.UNDISB) unDisbFlag=true;
+         }
+
+    }
+    
 
     public int getAssistTypeCount(boolean typeAssist, Collection reports) {
     
@@ -331,27 +360,13 @@ public class AdvancedReportPDF extends Action {
             logger.info("jjjjjjjjjjjjjjj-j= " + j2);
 
             index = 0;
-            int shift=0;
+
             for (int j = j2; j < columnDetails.length; j++) {
-				//logger.info(" column details==="+columnDetails[j][0]+"===");
-				if(columnDetails[j][0]=="Type Of Assistance" || columnDetails[j][0].equals(new String("Type Of Assistance")))
-				{
-					//logger.info("in typeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee"+(columnDetails.length-1));
-					rowData[columnDetails.length-1-j2] = "Type Of Assistance";
-					shift++;
-					continue;
-				}
-				else
-				{
-					//logger.info("@@@@@@@@@@@@@@" + index);
-					rowData[index] = columnDetails[j][0];
-					//logger.info("row dataaaaaaaaa: " + rowData[index] + " : " + index);
-					index++;
-				}
+                rowData[index] = columnDetails[j][0];
+                logger.info("row dataaaaaaaaa: " + rowData[index] + " : " + index);
+                index++;
             }
 
-            index+=shift;
-            
             yearIter = formBean.getFiscalYearRange().iterator();
 
             if (yearIter.hasNext()) {
@@ -566,19 +581,10 @@ public class AdvancedReportPDF extends Action {
 
                             if (columnColl.contains("Type Of Assistance") && (advReport.getAssistance() != null)) {
                                 position = getColumnIndex("Type Of Assistance");
-                                if(position != columnDetails.length)
-                                {
-                                	logger.info(" NIOT EQUAL TOTAL AT ENDDDDDDDDDDDDDDDDDDDDDDD" + columnDetails.length);
-                                	dataArray[row][columnDetails.length-1]="Total";
-                                }
-                                else
-                                {
-                               // logger.info(" THIS IS THE POSITIONNNNNNNNNNNNNNNNNNNNNNNNNNNNN ......positon   "+position);
+
                                 dataArray[row][position]="Total";
-                                }
-                               // dataArray[row][columnDetails.length]="Total";
                             }
-                            
+
                             if (columnColl.contains("Donor") && (advReport.getDonors() != null)) {
                                 position = getColumnIndex("Donor");
 
@@ -710,41 +716,10 @@ public class AdvancedReportPDF extends Action {
 
                                     AmpFund ampFund = (AmpFund) funds.next();
 
-                                    if (formBean.getAcCommFlag().equals("true") && (ampFund.getCommAmount() != null)) {
-                                        position = position + 1;
-                                        dataArray[row][position] = ampFund.getCommAmount();
-                                    }
-
-                                    if (formBean.getAcDisbFlag().equals("true") && (ampFund.getDisbAmount() != null)) {
-                                        position = position + 1;
-                                        dataArray[row][position] = ampFund.getDisbAmount();
-                                    }
-
-                                    if (formBean.getAcExpFlag().equals("true") && (ampFund.getExpAmount() != null)) {
-                                        position = position + 1;
-                                        dataArray[row][position] = ampFund.getExpAmount();
-                                    }
-
-                                    if (formBean.getPlCommFlag().equals("true") && (ampFund.getPlCommAmount() != null)) {
-                                        position = position + 1;
-                                        dataArray[row][position] = ampFund.getPlCommAmount();
-                                    }
-
-                                    if (formBean.getPlDisbFlag().equals("true") && (ampFund.getPlDisbAmount() != null)) {
-                                        position = position + 1;
-                                        dataArray[row][position] = ampFund.getPlDisbAmount();
-                                    }
-
-                                    if (formBean.getPlExpFlag().equals("true") && (ampFund.getPlExpAmount() != null)) {
-                                        position = position + 1;
-                                        dataArray[row][position] = ampFund.getPlExpAmount();
-                                    }
-
-                                    if (formBean.getAcBalFlag().equals("true") && (ampFund.getUnDisbAmount() != null) && (ind > formBean.getFiscalYearRange().size())) {
-                                        position = position + 1;
-                                        dataArray[row][position] = ampFund.getUnDisbAmount();
-                                        undisbFlag = true;
-                                    }
+                                    
+                                    for(int k=AmpFund.COMM;k<=AmpFund.UNDISB;k++)
+                                    	setFundingRow(ampFund,k,row,position,undisbFlag);
+                                    
 
                                     // year = year + 1;
                                 }                                
@@ -796,104 +771,12 @@ public class AdvancedReportPDF extends Action {
                                             }
                                            
 
+                                       
+                                        for(int k=AmpFund.COMM;k<=AmpFund.UNDISB;k++)
+                                            setFundingTermsRow(ampFund,k,row, position, assistType,undisbFlag);                                            
                                         
-                                        if (formBean.getAcCommFlag().equals("true") && (ampFund.getCommAmount() != null)) {
-                                            if (ampFund.getByTypeComm() == null) {
-                                                logger.error("bytypeComm is null at advReport " + advReport.getAmpActivityId());
-                                            }
+                                        
 
-                                            Iterator i = ampFund.getByTypeComm().iterator();
-                                            
-                                            position = position + 1;
-
-                                            while (i.hasNext()) {
-                                                AmpByAssistTypeAmount ata = (AmpByAssistTypeAmount) i.next();
-
-                                                if (ata.getFundingTerms().equals(assistType)) {
-                                                    dataArray[row][position] = ata.toString();
-                                                }
-                                            }
-                                        }
-
-                                        if (formBean.getAcDisbFlag().equals("true") && (ampFund.getDisbAmount() != null)) {
-                                            Iterator i = ampFund.getByTypeDisb().iterator();
-                                            position = position + 1;
-
-                                            while (i.hasNext()) {
-                                                AmpByAssistTypeAmount ata = (AmpByAssistTypeAmount) i.next();
-
-                                                if (ata.getFundingTerms().equals(assistType)) {
-                                                    dataArray[row][position] = ata.toString();
-                                                }
-                                            }
-                                        }
-
-                                        if (formBean.getAcExpFlag().equals("true") && (ampFund.getExpAmount() != null)) {
-                                            Iterator i = ampFund.getByTypeExp().iterator();
-                                            position = position + 1;
-
-                                            while (i.hasNext()) {
-                                                AmpByAssistTypeAmount ata = (AmpByAssistTypeAmount) i.next();
-
-                                                if (ata.getFundingTerms().equals(assistType)) {
-                                                    dataArray[row][position] = ata.toString();
-                                                }
-                                            }
-                                        }
-
-                                        if (formBean.getPlCommFlag().equals("true") && (ampFund.getPlCommAmount() != null)) {
-                                            Iterator i = ampFund.getByTypePlComm().iterator();
-                                            position = position + 1;
-
-                                            while (i.hasNext()) {
-                                                AmpByAssistTypeAmount ata = (AmpByAssistTypeAmount) i.next();
-
-                                                if (ata.getFundingTerms().equals(assistType)) {
-                                                    dataArray[row][position] = ata.toString();
-                                                }
-                                            }
-                                        }
-
-                                        if (formBean.getPlDisbFlag().equals("true") && (ampFund.getPlDisbAmount() != null)) {
-                                            Iterator i = ampFund.getByTypePlDisb().iterator();
-                                            position = position + 1;
-
-                                            while (i.hasNext()) {
-                                                AmpByAssistTypeAmount ata = (AmpByAssistTypeAmount) i.next();
-
-                                                if (ata.getFundingTerms().equals(assistType)) {
-                                                    dataArray[row][position] = ata.toString();
-                                                }
-                                            }
-                                        }
-
-                                        if (formBean.getPlExpFlag().equals("true") && (ampFund.getPlExpAmount() != null)) {
-                                            position = position + 1;
-
-                                        	Iterator i = ampFund.getByTypePlExp().iterator();
-
-                                            while (i.hasNext()) {
-                                                AmpByAssistTypeAmount ata = (AmpByAssistTypeAmount) i.next();
-
-                                                if (ata.getFundingTerms().equals(assistType)) {
-                                                    dataArray[row][position] = ata.toString();
-                                                }
-                                            }
-                                        }
-
-                                        if (formBean.getAcBalFlag().equals("true") && (ampFund.getUnDisbAmount() != null) && (ind > formBean.getFiscalYearRange().size())) {
-                                            position = position + 1;
-
-                                        	Iterator i = ampFund.getByTypeUnDisb().iterator();
-
-                                            while (i.hasNext()) {
-                                                AmpByAssistTypeAmount ata = (AmpByAssistTypeAmount) i.next();
-
-                                                if (ata.getFundingTerms().equals(assistType)) {
-                                                    dataArray[row][position] = ata.toString();
-                                                }
-                                            }
-                                        }
 
                                         //year = year + 1;
                                     } // END Of AmpFund Iteration
@@ -1048,45 +931,10 @@ public class AdvancedReportPDF extends Action {
                                                                 }
 
                                                                 AmpFund ampFund = (AmpFund) funds.next();
-                                                                
-                                                                
-
-                                                                if (formBean.getAcCommFlag().equals("true") && (ampFund.getCommAmount() != null)) {
-                                                                    position = position + 1;
-                                                                    dataArray[row][position] = ampFund.getCommAmount();
-                                                                }
-
-                                                                if (formBean.getAcDisbFlag().equals("true") && (ampFund.getDisbAmount() != null)) {
-                                                                    position = position + 1;
-                                                                    dataArray[row][position] = ampFund.getDisbAmount();
-                                                                }
-
-                                                                if (formBean.getAcExpFlag().equals("true") && (ampFund.getExpAmount() != null)) {
-                                                                    position = position + 1;
-                                                                    dataArray[row][position] = ampFund.getExpAmount();
-                                                                }
-                                                                
-                                                                if (formBean.getPlCommFlag().equals("true") && (ampFund.getPlCommAmount() != null)) {
-                                                                    position = position + 1;
-                                                                    dataArray[row][position] = ampFund.getPlCommAmount();
-                                                                }
-
-                                                                if (formBean.getPlDisbFlag().equals("true") && (ampFund.getPlDisbAmount() != null)) {
-                                                                    position = position + 1;
-                                                                    dataArray[row][position] = ampFund.getPlDisbAmount();
-                                                                }
-
-                                                                if (formBean.getPlExpFlag().equals("true") && (ampFund.getPlExpAmount() != null)) {
-                                                                    position = position + 1;
-                                                                    dataArray[row][position] = ampFund.getPlExpAmount();
-                                                                }
-
-                                                                if (formBean.getAcBalFlag().equals("true") && (ampFund.getUnDisbAmount() != null) && (ind > formBean.getFiscalYearRange().size())) {
-                                                                    position = position + 1;
-                                                                    dataArray[row][position] = ampFund.getUnDisbAmount();
-                                                                    undisbFlag = true;
-                                                                }
-
+                                                                                                                              
+                                                                for(int kk=AmpFund.COMM;kk<=AmpFund.UNDISB;kk++)
+                                                                	setFundingRow(ampFund,kk,row,position,undisbFlag);
+                                                              
                                                                 // year = year +
                                                                 // 1;
                                                             }
@@ -1149,103 +997,12 @@ public class AdvancedReportPDF extends Action {
                                                                        
 
                                                                     
-                                                                    if (formBean.getAcCommFlag().equals("true") && (ampFund.getCommAmount() != null)) {
-                                                                        if (ampFund.getByTypeComm() == null) {
-                                                                            logger.error("bytypeComm is null at advReport " + advReport.getAmpActivityId());
-                                                                        }
-
-                                                                        Iterator i = ampFund.getByTypeComm().iterator();
-                                                                        position = position + 1;
-
-                                                                        while (i.hasNext()) {
-                                                                            AmpByAssistTypeAmount ata = (AmpByAssistTypeAmount) i.next();
-
-                                                                            if (ata.getFundingTerms().equals(assistType)) {
-                                                                                dataArray[row][position] = ata.toString();
-                                                                            }
-                                                                        }
-                                                                    }
-
-                                                                    if (formBean.getAcDisbFlag().equals("true") && (ampFund.getDisbAmount() != null)) {
-                                                                        Iterator i = ampFund.getByTypeDisb().iterator();
-                                                                        position = position + 1;
-
-                                                                        while (i.hasNext()) {
-                                                                            AmpByAssistTypeAmount ata = (AmpByAssistTypeAmount) i.next();
-
-                                                                            if (ata.getFundingTerms().equals(assistType)) {
-                                                                                dataArray[row][position] = ata.toString();
-                                                                            }
-                                                                        }
-                                                                    }
-
-                                                                    if (formBean.getAcExpFlag().equals("true") && (ampFund.getExpAmount() != null)) {
-                                                                        Iterator i = ampFund.getByTypeExp().iterator();
-                                                                        position = position + 1;
-
-                                                                        while (i.hasNext()) {
-                                                                            AmpByAssistTypeAmount ata = (AmpByAssistTypeAmount) i.next();
-
-                                                                            if (ata.getFundingTerms().equals(assistType)) {
-                                                                                dataArray[row][position] = ata.toString();
-                                                                            }
-                                                                        }
-                                                                    }
-
-                                                                    if (formBean.getPlCommFlag().equals("true") && (ampFund.getPlCommAmount() != null)) {
-                                                                        Iterator i = ampFund.getByTypePlComm().iterator();
-                                                                        position = position + 1;
-
-                                                                        while (i.hasNext()) {
-                                                                            AmpByAssistTypeAmount ata = (AmpByAssistTypeAmount) i.next();
-
-                                                                            if (ata.getFundingTerms().equals(assistType)) {
-                                                                                dataArray[row][position] = ata.toString();
-                                                                            }
-                                                                        }
-                                                                    }
-
-                                                                    if (formBean.getPlDisbFlag().equals("true") && (ampFund.getPlDisbAmount() != null)) {
-                                                                        Iterator i = ampFund.getByTypePlDisb().iterator();
-                                                                        position = position + 1;
-
-                                                                        while (i.hasNext()) {
-                                                                            AmpByAssistTypeAmount ata = (AmpByAssistTypeAmount) i.next();
-
-                                                                            if (ata.getFundingTerms().equals(assistType)) {
-                                                                                dataArray[row][position] = ata.toString();
-                                                                            }
-                                                                        }
-                                                                    }
-
-                                                                    if (formBean.getPlExpFlag().equals("true") && (ampFund.getPlExpAmount() != null)) {
-                                                                        position = position + 1;
-
-                                                                    	Iterator i = ampFund.getByTypePlExp().iterator();
-
-                                                                        while (i.hasNext()) {
-                                                                            AmpByAssistTypeAmount ata = (AmpByAssistTypeAmount) i.next();
-
-                                                                            if (ata.getFundingTerms().equals(assistType)) {
-                                                                                dataArray[row][position] = ata.toString();
-                                                                            }
-                                                                        }
-                                                                    }
-
-                                                                    if (formBean.getAcBalFlag().equals("true") && (ampFund.getUnDisbAmount() != null) && (ind > formBean.getFiscalYearRange().size())) {
-                                                                        position = position + 1;
-
-                                                                    	Iterator i = ampFund.getByTypeUnDisb().iterator();
-
-                                                                        while (i.hasNext()) {
-                                                                            AmpByAssistTypeAmount ata = (AmpByAssistTypeAmount) i.next();
-
-                                                                            if (ata.getFundingTerms().equals(assistType)) {
-                                                                                dataArray[row][position] = ata.toString();
-                                                                            }
-                                                                        }
-                                                                    }
-
+                                                                    for(int kk=AmpFund.COMM;kk<=AmpFund.UNDISB;k++)
+                                                                    	setFundingTermsRow(ampFund,kk,row,position,assistType,undisbFlag);
+                                                                  
+                                                                    
+                                                                    
+                                                                  
                                                                     //year = year + 1;
                                                                 } // END Of AmpFund Iteration
                                                             }
@@ -1323,7 +1080,6 @@ public class AdvancedReportPDF extends Action {
                                                     // logger.info("#######################################################"+
                                                     // position);
                                                     
-                                                    
                                                     if (advReport.getAmpFund() != null) {
                                                         funds = advReport.getAmpFund().iterator();
                                                         yearIter = formBean.getFiscalYearRange().iterator();
@@ -1364,51 +1120,9 @@ public class AdvancedReportPDF extends Action {
 
                                                             AmpFund ampFund = (AmpFund) funds.next();
 
-                                                            if (formBean.getAcCommFlag().equals("true") && (ampFund.getCommAmount() != null)) {
-                                                                position = position + 1;
-                                                                dataArray[row][position] = ampFund.getCommAmount();
-
-                                                                // logger.info("^^^^
-                                                                // row="+row+"========="+dataArray[row][position]);
-                                                            }
-
-                                                            if (formBean.getAcDisbFlag().equals("true") && (ampFund.getDisbAmount() != null)) {
-                                                                position = position + 1;
-                                                                dataArray[row][position] = ampFund.getDisbAmount();
-
-                                                                // logger.info("^^^^
-                                                                // row="+row+"========="+dataArray[row][position]);
-                                                            }
-
-                                                            if (formBean.getAcExpFlag().equals("true") && (ampFund.getExpAmount() != null)) {
-                                                                position = position + 1;
-                                                                dataArray[row][position] = ampFund.getExpAmount();
-
-                                                                // logger.info("^^^^
-                                                                // row="+row+"========="+dataArray[row][position]);
-                                                            }
-
-                                                            if (formBean.getPlCommFlag().equals("true") && (ampFund.getPlCommAmount() != null)) {
-                                                                position = position + 1;
-                                                                dataArray[row][position] = ampFund.getPlCommAmount();
-                                                            }
-
-                                                            if (formBean.getPlDisbFlag().equals("true") && (ampFund.getPlDisbAmount() != null)) {
-                                                                position = position + 1;
-                                                                dataArray[row][position] = ampFund.getPlDisbAmount();
-                                                            }
-
-                                                            if (formBean.getPlExpFlag().equals("true") && (ampFund.getPlExpAmount() != null)) {
-                                                                position = position + 1;
-                                                                dataArray[row][position] = ampFund.getPlExpAmount();
-                                                            }
-
-                                                            if (formBean.getAcBalFlag().equals("true") && (ampFund.getUnDisbAmount() != null) && (ind > formBean.getFiscalYearRange().size())) {
-                                                                position = position + 1;
-                                                                dataArray[row][position] = ampFund.getUnDisbAmount();
-                                                                undisbFlag = true;
-                                                            }
-
+                                                            for(int m=AmpFund.COMM;m<=AmpFund.UNDISB;m++)
+                                                            	setFundingRow(ampFund,m,row,position,undisbFlag);
+                                                                                                                       
                                                             // year = year + 1;
                                                         }
                                                     } // END Of AmpFund
@@ -1469,104 +1183,10 @@ public class AdvancedReportPDF extends Action {
                                                                     }
                                                                    
 
-                                                                
-                                                                if (formBean.getAcCommFlag().equals("true") && (ampFund.getCommAmount() != null)) {
-                                                                    if (ampFund.getByTypeComm() == null) {
-                                                                        logger.error("bytypeComm is null at advReport " + advReport.getAmpActivityId());
-                                                                    }
-
-                                                                    Iterator i = ampFund.getByTypeComm().iterator();
-                                                                    position = position + 1;
-
-                                                                    while (i.hasNext()) {
-                                                                        AmpByAssistTypeAmount ata = (AmpByAssistTypeAmount) i.next();
-
-                                                                        if (ata.getFundingTerms().equals(assistType)) {
-                                                                            dataArray[row][position] = ata.toString();
-                                                                        }
-                                                                    }
-                                                                }
-
-                                                                if (formBean.getAcDisbFlag().equals("true") && (ampFund.getDisbAmount() != null)) {
-                                                                    Iterator i = ampFund.getByTypeDisb().iterator();
-                                                                    position = position + 1;
-
-                                                                    while (i.hasNext()) {
-                                                                        AmpByAssistTypeAmount ata = (AmpByAssistTypeAmount) i.next();
-
-                                                                        if (ata.getFundingTerms().equals(assistType)) {
-                                                                            dataArray[row][position] = ata.toString();
-                                                                        }
-                                                                    }
-                                                                }
-
-                                                                if (formBean.getAcExpFlag().equals("true") && (ampFund.getExpAmount() != null)) {
-                                                                    Iterator i = ampFund.getByTypeExp().iterator();
-                                                                    position = position + 1;
-
-                                                                    while (i.hasNext()) {
-                                                                        AmpByAssistTypeAmount ata = (AmpByAssistTypeAmount) i.next();
-
-                                                                        if (ata.getFundingTerms().equals(assistType)) {
-                                                                            dataArray[row][position] = ata.toString();
-                                                                        }
-                                                                    }
-                                                                }
-
-                                                                if (formBean.getPlCommFlag().equals("true") && (ampFund.getPlCommAmount() != null)) {
-                                                                    Iterator i = ampFund.getByTypePlComm().iterator();
-                                                                    position = position + 1;
-
-                                                                    while (i.hasNext()) {
-                                                                        AmpByAssistTypeAmount ata = (AmpByAssistTypeAmount) i.next();
-
-                                                                        if (ata.getFundingTerms().equals(assistType)) {
-                                                                            dataArray[row][position] = ata.toString();
-                                                                        }
-                                                                    }
-                                                                }
-
-                                                                if (formBean.getPlDisbFlag().equals("true") && (ampFund.getPlDisbAmount() != null)) {
-                                                                    Iterator i = ampFund.getByTypePlDisb().iterator();
-                                                                    position = position + 1;
-
-                                                                    while (i.hasNext()) {
-                                                                        AmpByAssistTypeAmount ata = (AmpByAssistTypeAmount) i.next();
-
-                                                                        if (ata.getFundingTerms().equals(assistType)) {
-                                                                            dataArray[row][position] = ata.toString();
-                                                                        }
-                                                                    }
-                                                                }
-
-                                                                if (formBean.getPlExpFlag().equals("true") && (ampFund.getPlExpAmount() != null)) {
-                                                                    position = position + 1;
-
-                                                                	Iterator i = ampFund.getByTypePlExp().iterator();
-
-                                                                    while (i.hasNext()) {
-                                                                        AmpByAssistTypeAmount ata = (AmpByAssistTypeAmount) i.next();
-
-                                                                        if (ata.getFundingTerms().equals(assistType)) {
-                                                                            dataArray[row][position] = ata.toString();
-                                                                        }
-                                                                    }
-                                                                }
-
-                                                                if (formBean.getAcBalFlag().equals("true") && (ampFund.getUnDisbAmount() != null) && (ind > formBean.getFiscalYearRange().size())) {
-                                                                    position = position + 1;
-
-                                                                	Iterator i = ampFund.getByTypeUnDisb().iterator();
-
-                                                                    while (i.hasNext()) {
-                                                                        AmpByAssistTypeAmount ata = (AmpByAssistTypeAmount) i.next();
-
-                                                                        if (ata.getFundingTerms().equals(assistType)) {
-                                                                            dataArray[row][position] = ata.toString();
-                                                                        }
-                                                                    }
-                                                                }
-
+                                                                for(int m=AmpFund.COMM;m<=AmpFund.UNDISB;m++)
+                                                                	setFundingTermsRow(ampFund,m,row,position,assistType,undisbFlag);
+                                                                    
+                                                           
                                                                 //year = year + 1;
                                                             } // END Of AmpFund Iteration
                                                         }
@@ -1684,45 +1304,10 @@ public class AdvancedReportPDF extends Action {
 
                                                     AmpFund ampFund = (AmpFund) funds.next();
 
-                                                    if (formBean.getAcCommFlag().equals("true") && (ampFund.getCommAmount() != null)) {
-                                                        position = position + 1;
-                                                        // logger.info("%%%%%%%%%%%%%%%%row=
-                                                        // "+row+" position=
-                                                        // "+position);
-                                                        dataArray[row][position] = ampFund.getCommAmount();
-                                                    }
-
-                                                    if (formBean.getAcDisbFlag().equals("true") && (ampFund.getDisbAmount() != null)) {
-                                                        position = position + 1;
-                                                        dataArray[row][position] = ampFund.getDisbAmount();
-                                                    }
-
-                                                    if (formBean.getAcExpFlag().equals("true") && (ampFund.getExpAmount() != null)) {
-                                                        position = position + 1;
-                                                        dataArray[row][position] = ampFund.getExpAmount();
-                                                    }
-
-                                                    if (formBean.getPlCommFlag().equals("true") && (ampFund.getPlCommAmount() != null)) {
-                                                        position = position + 1;
-                                                        dataArray[row][position] = ampFund.getPlCommAmount();
-                                                    }
-
-                                                    if (formBean.getPlDisbFlag().equals("true") && (ampFund.getPlDisbAmount() != null)) {
-                                                        position = position + 1;
-                                                        dataArray[row][position] = ampFund.getPlDisbAmount();
-                                                    }
-
-                                                    if (formBean.getPlExpFlag().equals("true") && (ampFund.getPlExpAmount() != null)) {
-                                                        position = position + 1;
-                                                        dataArray[row][position] = ampFund.getPlExpAmount();
-                                                    }
-
-                                                    if (formBean.getAcBalFlag().equals("true") && (ampFund.getUnDisbAmount() != null) && (ind > formBean.getFiscalYearRange().size())) {
-                                                        position = position + 1;
-                                                        dataArray[row][position] = ampFund.getUnDisbAmount();
-                                                        undisbFlag = true;
-                                                    }
-
+                                                    for(int m=AmpFund.COMM;m<=AmpFund.UNDISB;m++)
+                                                    	setFundingRow(ampFund,m,row,position,undisbFlag);
+                                                    
+                                                    
                                                     // year = year + 1;
                                                     // logger.info("#### Row
                                                     // ###-->"+ row);
@@ -1780,105 +1365,9 @@ public class AdvancedReportPDF extends Action {
                                                                 year = year + 1;
                                                             }
                                                            
-
+                                                        for(int m=AmpFund.COMM;m<=AmpFund.UNDISB;m++)
+                                                        	setFundingTermsRow(ampFund,m,row,position,assistType,undisbFlag);
                                                         
-                                                        if (formBean.getAcCommFlag().equals("true") && (ampFund.getCommAmount() != null)) {
-                                                            if (ampFund.getByTypeComm() == null) {
-                                                                logger.error("bytypeComm is null at advReport " + advReport.getAmpActivityId());
-                                                            }
-
-                                                            Iterator i = ampFund.getByTypeComm().iterator();
-                                                            position = position + 1;
-
-                                                            while (i.hasNext()) {
-                                                                AmpByAssistTypeAmount ata = (AmpByAssistTypeAmount) i.next();
-
-                                                                if (ata.getFundingTerms().equals(assistType)) {
-                                                                    dataArray[row][position] = ata.toString();
-                                                                }
-                                                            }
-                                                        }
-
-                                                        if (formBean.getAcDisbFlag().equals("true") && (ampFund.getDisbAmount() != null)) {
-                                                            Iterator i = ampFund.getByTypeDisb().iterator();
-                                                            position = position + 1;
-
-                                                            while (i.hasNext()) {
-                                                                AmpByAssistTypeAmount ata = (AmpByAssistTypeAmount) i.next();
-
-                                                                if (ata.getFundingTerms().equals(assistType)) {
-                                                                    dataArray[row][position] = ata.toString();
-                                                                }
-                                                            }
-                                                        }
-
-                                                        if (formBean.getAcExpFlag().equals("true") && (ampFund.getExpAmount() != null)) {
-                                                            Iterator i = ampFund.getByTypeExp().iterator();
-                                                            position = position + 1;
-
-                                                            while (i.hasNext()) {
-                                                                AmpByAssistTypeAmount ata = (AmpByAssistTypeAmount) i.next();
-
-                                                                if (ata.getFundingTerms().equals(assistType)) {
-                                                                    dataArray[row][position] = ata.toString();
-                                                                }
-                                                            }
-                                                        }
-
-                                                        if (formBean.getPlCommFlag().equals("true") && (ampFund.getPlCommAmount() != null)) {
-                                                            Iterator i = ampFund.getByTypePlComm().iterator();
-                                                            position = position + 1;
-
-                                                            while (i.hasNext()) {
-                                                                AmpByAssistTypeAmount ata = (AmpByAssistTypeAmount) i.next();
-
-                                                                if (ata.getFundingTerms().equals(assistType)) {
-                                                                    dataArray[row][position] = ata.toString();
-                                                                }
-                                                            }
-                                                        }
-
-                                                        if (formBean.getPlDisbFlag().equals("true") && (ampFund.getPlDisbAmount() != null)) {
-                                                            Iterator i = ampFund.getByTypePlDisb().iterator();
-                                                            position = position + 1;
-
-                                                            while (i.hasNext()) {
-                                                                AmpByAssistTypeAmount ata = (AmpByAssistTypeAmount) i.next();
-
-                                                                if (ata.getFundingTerms().equals(assistType)) {
-                                                                    dataArray[row][position] = ata.toString();
-                                                                }
-                                                            }
-                                                        }
-
-                                                        if (formBean.getPlExpFlag().equals("true") && (ampFund.getPlExpAmount() != null)) {
-                                                            position = position + 1;
-
-                                                        	Iterator i = ampFund.getByTypePlExp().iterator();
-
-                                                            while (i.hasNext()) {
-                                                                AmpByAssistTypeAmount ata = (AmpByAssistTypeAmount) i.next();
-
-                                                                if (ata.getFundingTerms().equals(assistType)) {
-                                                                    dataArray[row][position] = ata.toString();
-                                                                }
-                                                            }
-                                                        }
-
-                                                        if (formBean.getAcBalFlag().equals("true") && (ampFund.getUnDisbAmount() != null) && (ind > formBean.getFiscalYearRange().size())) {
-                                                            position = position + 1;
-
-                                                        	Iterator i = ampFund.getByTypeUnDisb().iterator();
-
-                                                            while (i.hasNext()) {
-                                                                AmpByAssistTypeAmount ata = (AmpByAssistTypeAmount) i.next();
-
-                                                                if (ata.getFundingTerms().equals(assistType)) {
-                                                                    dataArray[row][position] = ata.toString();
-                                                                }
-                                                            }
-                                                        }
-
                                                         //year = year + 1;
                                                     } // END Of AmpFund Iteration
                                                 }
@@ -1982,7 +1471,7 @@ public class AdvancedReportPDF extends Action {
                     // NULL Pointer exception..
                     ampFund = (AmpFund) itrtot.next();
                     tmp++;
-
+                    
                     if (formBean.getAcCommFlag().equals("true") && (ampFund.getCommAmount() != null)) {
                         dataArray[row][position++] = ampFund.getCommAmount();
                         logger.info("total values.........." + row + ":::" + position + "::::" + dataArray[row][position - 1]);

@@ -5,6 +5,48 @@ import java.util.Collection;
 
 public class AmpFund
 {
+	
+	public String getAmount(int type) {
+		switch(type) {
+		case COMM: return commAmount;
+		case DISB: return disbAmount;
+		case EXP: return expAmount;
+		case PL_COMM: return plCommAmount;
+		case PL_DISB: return plDisbAmount;
+		case PL_EXP: return plExpAmount;
+		case UNDISB: return unDisbAmount;
+		default: return null;
+		}
+		
+	}
+	
+	public Collection getByTypeAmount(int type) {
+		switch(type) {
+		case COMM: return byTypeComm;
+		case DISB: return byTypeDisb;
+		case EXP: return byTypeExp;
+		case PL_COMM: return byTypePlComm;
+		case PL_DISB: return byTypePlDisb;
+		case PL_EXP: return byTypePlExp;
+		case UNDISB: return byTypeUnDisb;
+		default: return null;
+		}
+		
+	}
+	
+	
+	
+	public static final int COMM=0;
+	public static final int DISB=1;
+	public static final int EXP=2;
+	public static final int PL_COMM=3;
+	public static final int PL_DISB=4;
+	public static final int PL_EXP=5;
+	public static final int UNDISB=6;
+	
+	
+	
+	
 	private String commAmount;
 	private String disbAmount;
 	private String plannedDisbAmount;

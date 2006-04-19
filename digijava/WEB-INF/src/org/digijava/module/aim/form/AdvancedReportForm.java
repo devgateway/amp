@@ -1,10 +1,29 @@
 package org.digijava.module.aim.form ;
 
-import java.util.Collection ;
-import org.apache.struts.action.ActionForm ;
+import java.util.Collection;
+
+import org.apache.struts.action.ActionForm;
+import org.digijava.module.aim.helper.AmpFund;
 
 public class AdvancedReportForm extends ActionForm 
 {
+
+	
+	public String getFlag(int type) {
+		switch(type) {
+		case AmpFund.COMM: return acCommFlag;
+		case AmpFund.DISB: return acDisbFlag;
+		case AmpFund.EXP: return acExpFlag;
+		case AmpFund.PL_COMM: return plCommFlag;
+		case AmpFund.PL_DISB: return plDisbFlag;
+		case AmpFund.PL_EXP: return plExpFlag;
+		case AmpFund.UNDISB: return acBalFlag;
+		default: return null;
+		}
+		
+	}
+
+	
 	private Collection ampMeasures = null; // Contains the avaliable measures from Database
 	private Collection ampColumns = null; // Contains the columns got from the DB
 	private Long selectedColumns[] = null; // list of columns after selecting.

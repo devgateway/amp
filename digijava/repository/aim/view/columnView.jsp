@@ -102,7 +102,8 @@
 	<td align="center" height="21" rowspan="<%=rowspan%>"><logic:iterate
 		name="records" id="contacts2" property="contacts">
 		<%=contacts2%>
-	</logic:iterate></td>
+	</logic:iterate>
+	</td>
 </logic:notEmpty>
 
 <logic:present name="records" property="modality">

@@ -1,4 +1,5 @@
 package org.digijava.module.aim.helper ;
+import java.util.ArrayList;
 import java.util.Collection;
 
 public class AdvancedReport
@@ -52,7 +53,8 @@ public class AdvancedReport
 	}
 	
 	public void setProjId(Collection projId) {
-		this.projId = projId;
+		if(projId!=null) this.projId = projId; else this.projId=new ArrayList();
+		
 	}
 
 	public Collection getDonors() 

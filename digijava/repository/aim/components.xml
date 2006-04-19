@@ -124,6 +124,9 @@
 	<page name="addTeamReports" title=" - Add Reports" />
 	<page name="teamMemberReports" title=" - Member Reports" />
 	<page name="addMemberReports" title=" - Add Member Reports" />
+	<page name="indicatorManager" title=" - Indicator Manager" />
+	<page page="addIndicator" name="aim_addIndicator" title="AMP - Add Indicator"/>
+	<page page="indicatorValues" name="aim_indicatorValues" title="AMP - Indicator Manager"/>
 	<page name="addDocument" title=" - Add Document" />
 	<page page="selectFile" name="aim_selectFilePopupLayout" title="AMP - Select File" />
 	<page page="selectCMSCategory" name="aim_selectCMSCategoryPopupLayout" title="AMP - Select Category" />
@@ -140,7 +143,8 @@
 	<page name="addActivityStep5" title=" - Add Activity - Components" />	
 	<page name="addActivityStep6" title=" - Add Activity - Related Documents" />
 	<page name="addActivityStep7" title=" - Add Activity - Related Organizations" />
-	<page name="addActivityStep8" title=" - Add Activity - Conact Details | Conditions" />
+	<page name="addActivityStep8" title=" - Add Activity - Contact Details | Conditions" />
+	<page name="addActivityStep9" title=" - Add Activity - Monitoring and Evaluation" />
 	<page name="activityExist" title=" - Add Activity - Activity Already Exist" />
 	<page name="locationManager" title=" - Region Manager" />
 <!--	<page name="locationManager" title=" - Location Manager" />-->
@@ -161,6 +165,7 @@
 
 	<page name="meActivityList" title=" - ME Team Activity List" />
 	<page name="meActivityIndicators" title=" - ME Activity Indicator List" />
+	<page name="selectCreateIndicators" title=" - ME Select/Create Indicators" />
 
 	<page page="searchLocation" name="aim_searchlocPopupLayout" title="AMP - Search Location" />
 	<page page="searchSectors" name="aim_searchSectorPopupLayout" title="AMP - Search Sectors" />

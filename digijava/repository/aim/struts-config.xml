@@ -250,7 +250,11 @@
 	<form-bean
 			  name="aimMemberReportsForm"
 			  type="org.digijava.module.aim.form.ReportsForm" />	
-	
+
+	<form-bean
+			  name="aimIndicatorForm"
+			  type="org.digijava.module.aim.form.IndicatorForm" />	
+
 	<form-bean
 			  name="aimAddDocumentForm"
 			  type="org.digijava.module.cms.form.CMSContentItemForm" />	
@@ -1536,7 +1540,47 @@
 			  <forward name="forward" path="/showLayout.do?layout=meActivityIndicators" />
 			  <forward name="index" path="/aim/index.do" redirect="true" />
 	</action>			
+
+	<action
+			  name="aimIndicatorForm"
+			  type="org.digijava.module.aim.action.SelectCreateIndicators"
+			  scope="session"
+			  validate="false"
+			  path="/aim/selectCreateIndicators">
+			  <forward name="forward" path="/showLayout.do?layout=selectCreateIndicators"/>
+			  <forward name="index" path="/aim/index.do" redirect="true" />
+	</action>
+
+	<action
+			  name="aimIndicatorForm"
+			  type="org.digijava.module.aim.action.SelectCreateIndicators"
+			  scope="request"
+			  validate="false"
+			  path="/aim/searchIndicators">
+			  <forward name="forward" path="/aim/selectCreateIndicators.do"/>
+			  <forward name="index" path="/aim/index.do" redirect="true"/>
+	</action>
 	
+	<action
+			  name="aimIndicatorForm"
+			  type="org.digijava.module.aim.action.AddIndicatorsTL"
+			  scope="request"
+			  validate="false"
+			  path="/aim/addIndicatorsTL">
+			  <forward name="forward" path="/aim/getActivityIndicators.do" />
+			  <forward name="index" path="/aim/index.do" redirect="true" />
+	</action>
+	
+	<action
+			  name="aimIndicatorForm"
+			  type="org.digijava.module.aim.action.AddNewIndicatorTL"
+			  scope="request"
+			  validate="false"
+			  path="/aim/addNewIndicatorTL">
+			  <forward name="forward" path="/aim/getActivityIndicators.do" />
+			  <forward name="index" path="/aim/index.do" redirect="true" />
+	</action>
+			  
 	<action 
 			  name="aimDonorTeamsForm"
 			  type="org.digijava.module.aim.action.GetDonorTeams"
@@ -1714,7 +1758,6 @@
 			  path="/aim/selectTeam">
 			  <forward name="viewMyDesktop" path="/aim/viewMyDesktop.do" redirect="true"/>
 	</action>
-
 	
 	<!--	
 	<action 
@@ -1726,6 +1769,7 @@
 			  <forward name="index" path="/aim/index.do" redirect="true" />			  
 	</action>	
 	-->
+	
 	<action 
 			  name="aimUpdateAppSettingsForm"
 			  type="org.digijava.module.aim.action.UpdateAppSettings"
@@ -1857,6 +1901,45 @@
 			  <forward name="added" path="/aim/reportsManager.do" />
 			  <forward name="index" path="/aim/index.do" redirect="true" />			  
 	</action>
+
+	<action 
+			  name="aimIndicatorForm"
+			  type="org.digijava.module.aim.action.IndicatorManager"
+			  scope="request"
+			  validate="false"
+			  path="/aim/indicatorManager">
+			  <forward name="forward" path="/showLayout.do?layout=indicatorManager" />
+			  <forward name="index" path="/aim/index.do" redirect="true" />			  
+	</action>
+
+	<action 
+			  name="aimIndicatorForm"
+			  type="org.digijava.module.aim.action.AddIndicator" 
+			  scope="request"
+			  validate="false"
+			  input="/showLayout.do?layout=aim_addIndicator"
+			  path="/aim/addIndicator">
+			  <forward name="create" path="/showLayout.do?layout=aim_addIndicator" />
+			  <forward name="forward" path="/aim/indicatorManager.do" />
+   </action>
+
+	<action 
+			  name="aimIndicatorForm"
+			  type="org.digijava.module.aim.action.SaveIndicator" 
+			  scope="request"
+			  validate="false"
+			  path="/aim/saveIndicator">
+			  <forward name="forward" path="/aim/indicatorManager.do" />
+   </action>
+
+	<action 
+			  name="aimIndicatorForm"
+			  type="org.digijava.module.aim.action.IndicatorValues" 
+			  scope="request"
+			  validate="false"
+			  path="/aim/indicatorValues">
+			  <forward name="forward" path="/showLayout.do?layout=aim_indicatorValues" />
+   </action>
 
 	<action 
 			  name="aimAddDocumentForm"
@@ -2038,6 +2121,9 @@
 			  <forward name="addActivityStep6" path="/showLayout.do?layout=addActivityStep6" />
 			  <forward name="addActivityStep7" path="/showLayout.do?layout=addActivityStep7" />
 			  <forward name="addActivityStep8" path="/showLayout.do?layout=addActivityStep8" />
+			  <!--
+			  <forward name="addActivityStep9" path="/showLayout.do?layout=addActivityStep9" />
+			  -->
 			  <forward name="added" path="/aim/addActivity.do?edit=true" redirect="true" />
 			  <forward name="index" path="/aim/index.do" redirect="true" />
 	</action>	
@@ -2466,6 +2552,7 @@
      	scope="session" validate="false" path="/aim/viewbyProjectbyDonor">
     <forward name="forward" path="/showLayout.do?layout=viewbyProjectbyDonor" />
     </action>
+
 <!--
 	<action name="aimMulitlateralbyDonorForm" 
      	type="org.digijava.module.aim.action.ViewbyProjectbyDonor" 

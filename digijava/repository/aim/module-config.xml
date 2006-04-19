@@ -169,7 +169,18 @@
 		<hibernate-class>
 			org.digijava.module.aim.dbentity.AmpReportsOptions
  		</hibernate-class>
-  		
+	  	<hibernate-class>
+			org.digijava.module.aim.dbentity.AmpMEIndicators
+		</hibernate-class>
+		<hibernate-class>
+			org.digijava.module.aim.dbentity.AmpIndicatorRiskRatings
+		</hibernate-class>
+		<hibernate-class>
+			org.digijava.module.aim.dbentity.AmpMEIndicatorValue
+		</hibernate-class>
+		<hibernate-class>
+			org.digijava.module.aim.dbentity.AmpMECurrValHistory
+ 		</hibernate-class>	
 	</hibernate-classes>
         <!-- highlights classes End-->
 

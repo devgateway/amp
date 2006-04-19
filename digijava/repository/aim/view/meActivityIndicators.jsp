@@ -13,6 +13,13 @@
 		var flag = confirm('Delete this indicator value?');
 		return flag;			  
 	}
+	function addIndicators()
+	{
+		<digi:context name="selCreateInd" property="context/module/moduleinstance/selectCreateIndicators.do?" />
+		document.aimUpdateIndicatorValuesForm.action = "<%=selCreateInd%>";
+		document.aimUpdateIndicatorValuesForm.target = "_self";
+		document.aimUpdateIndicatorValuesForm.submit();
+	}
 </script>
 
 <jsp:useBean id="bcparams" type="java.util.Map" class="java.util.HashMap"/>
@@ -25,6 +32,7 @@
 
 <html:hidden property="indicatorId" />
 <html:hidden property="indicatorValId" />
+<html:hidden property="activityId" />
 <input type="hidden" name="event" value="save">
 
 <table width="100%" cellSpacing=0 cellPadding=0 valign="top" align="left">
@@ -140,6 +148,9 @@
 																		<c:set target="${urlParams}" property="indValId">
 																			<bean:write name="indicator" property="indicatorValId" />
 																		</c:set>
+																		<c:set target="${urlParams}" property="activityId">
+																			<bean:write name="aimUpdateIndicatorValuesForm" property="activityId"/>
+																		</c:set>
 																		<digi:link href="/expandIndicator.do" name="urlParams">
 																			<img src= "../ampTemplate/images/arrow_right.gif" border=0>
 																		</digi:link>																
@@ -226,10 +237,21 @@
 																</tr>
 																</c:if>
 															</logic:iterate>
-															</table>
+														</table>
 														</td>
 													</tr>													
 													</logic:notEmpty>
+													<tr>
+														<td align="left" width="100%" valign="center">
+															<table width="100%" cellSpacing=1 cellPadding=2 vAlign="top" align="left"
+															bgcolor="#ffffff">
+																<tr><td valign="center" align="center" bgcolor="#dddddd" height="20">
+																	<input class="buton" type="button" name="addIndicator" value="Add Indicators" property="activityId"
+																	onclick="addIndicators()">
+																</td></tr>
+															</table>
+														</td>
+													</tr>
 												</table>
 											</td>
 										</tr>

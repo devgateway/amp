@@ -432,7 +432,7 @@ A.sub-nav2:hover
 	BORDER-TOP: #c9c9c7 1px solid; 
 	BORDER-LEFT: #c9c9c7 1px solid; 
 	BORDER-BOTTOM: #c9c9c7 1px solid; 
-	WHITE-SPACE: nowrap; 
+	WHITE-SPACE: normal; 
 	BACKGROUND-COLOR: #ffffff
 }
 

@@ -248,6 +248,16 @@ public class AdvancedReport extends Action {
 				GregorianCalendar c=new GregorianCalendar();
 				year=c.get(Calendar.YEAR);
 				//for storing the value of year filter 
+				/* report Title check */
+				ActionErrors errors = new ActionErrors();	
+				boolean found = ReportUtil.checkDuplicateReportName(formBean.getReportTitle());
+				if(found==true)
+				{ 
+					errors.add("DuplicateReportName", new ActionError("error.aim.reportManager.DuplicateReportName"));
+					saveErrors(request, errors);
+					return mapping.findForward("MissingReportDetails");
+				}
+				// report title check ends here
 				if(formBean.getAmpToYear()==null)
 				{
 					toYr=year;

@@ -360,12 +360,31 @@ public class AdvancedReportPDF extends Action {
             logger.info("jjjjjjjjjjjjjjj-j= " + j2);
 
             index = 0;
-
+            int shift=0;
             for (int j = j2; j < columnDetails.length; j++) {
+				//logger.info(" column details==="+columnDetails[j][0]+"===");
+				if(columnDetails[j][0]=="Type Of Assistance" || columnDetails[j][0].equals(new String("Type Of Assistance")))
+				{
+					//logger.info("in typeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee"+(columnDetails.length-1));
+					rowData[columnDetails.length-1-j2] = "Type Of Assistance";
+					shift++;
+					continue;
+				}
+				else
+				{
+					//logger.info("@@@@@@@@@@@@@@" + index);
+					rowData[index] = columnDetails[j][0];
+					//logger.info("row dataaaaaaaaa: " + rowData[index] + " : " + index);
+					index++;
+				}
+            }
+
+            index+=shift;
+           /* for (int j = j2; j < columnDetails.length; j++) {
                 rowData[index] = columnDetails[j][0];
                 logger.info("row dataaaaaaaaa: " + rowData[index] + " : " + index);
                 index++;
-            }
+            }*/
 
             yearIter = formBean.getFiscalYearRange().iterator();
 

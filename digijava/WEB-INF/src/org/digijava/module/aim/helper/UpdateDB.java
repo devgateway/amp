@@ -73,7 +73,7 @@ public class UpdateDB {
 			sql += " case when transaction_type='0' and adjustment_type='1' and org_role_code='DN' then transaction_amount else 0 end 'actual_commitment',";
 			sql += " case when transaction_type='1' and adjustment_type='1' and org_role_code='DN' then transaction_amount else 0 end 'actual_disbursement',";
 			sql += " case when transaction_type='2' and adjustment_type='1' and org_role_code='DN' then transaction_amount else 0 end 'actual_expenditure',";
-			sql += " currency_code,amp_activity.actual_start_date,amp_activity.actual_completion_date,amp_activity.proposed_start_date,amp_activity.proposed_approval_date,extract(YEAR from transaction_date) 'fiscal_year',";
+			sql += " currency_code,amp_activity.actual_start_date,amp_activity.actual_completion_date,amp_activity.proposed_start_date,amp_activity.actual_completion_date,extract(YEAR from transaction_date) 'fiscal_year',";
 			sql += " case when extract(MONTH from transaction_date) between '1' and '3' then '1'";
 			sql += " when extract(MONTH from transaction_date) between '4' and '6' then '2'";
 			sql += " when extract(MONTH from transaction_date) between '7' and '9' then '3'";
@@ -105,7 +105,7 @@ public class UpdateDB {
 			sql += " case when transaction_type='0' and adjustment_type='1' and org_role_code='MA' then transaction_amount else 0 end 'actual_commitment',";
 			sql += " case when transaction_type='1' and adjustment_type='1' and org_role_code='MA' then transaction_amount else 0 end 'actual_disbursement',";
 			sql += " case when transaction_type='2' and adjustment_type='1' and org_role_code='MA' then transaction_amount else 0 end 'actual_expenditure',";
-			sql += " currency_code,amp_activity.actual_start_date,amp_activity.actual_completion_date,amp_activity.proposed_start_date,amp_activity.proposed_approval_date,extract(YEAR from transaction_date) 'fiscal_year',";
+			sql += " currency_code,amp_activity.actual_start_date,amp_activity.actual_completion_date,amp_activity.proposed_start_date,amp_activity.actual_completion_date,extract(YEAR from transaction_date) 'fiscal_year',";
 			sql += " case when extract(MONTH from transaction_date) between '1' and '3' then '1'";
 			sql += " when extract(MONTH from transaction_date) between '4' and '6' then '2'";
 			sql += " when extract(MONTH from transaction_date) between '7' and '9' then '3'";
@@ -133,7 +133,7 @@ public class UpdateDB {
 			sql += "0 'planned_commitment',0 'planned_disbursement',0 'planned_expenditure',";
 			sql += "0 'actual_commitment',0 'actual_disbursement',0 'actual_expenditure',";
 			sql += "NULL,amp_activity.actual_start_date,amp_activity.actual_completion_date,amp_activity.proposed_start_date,";
-			sql += "amp_activity.proposed_approval_date,NULL 'fiscal_year',";
+			sql += "amp_activity.actual_completion_date,NULL 'fiscal_year',";
 			sql += "NULL 'fiscal_quarter','MA',amp_activity.amp_team_id,NULL,amp_activity.amp_level_id,case when amp_activity.amp_level_id='1' then 'REGIONAL' ";
 			sql += "when amp_activity.amp_level_id='2' then 'NATIONAL' ";
 			sql += "when amp_activity.amp_level_id='3' then 'BOTH' else 'Not Exist' end,amp_activity.description,NULL,NULL,NULL,NULL,1 ";
@@ -159,7 +159,7 @@ public class UpdateDB {
 			sql += "'status_name',NULL,NULL,NULL,NULL,NULL,";
 			sql += "0 'planned_commitment',0 'planned_disbursement',0 'planned_expenditure',";
 			sql += "0 'actual_commitment',0 'actual_disbursement',0 'actual_expenditure',";
-			sql += "NULL,amp_activity.actual_start_date,amp_activity.actual_completion_date,amp_activity.proposed_start_date,amp_activity.proposed_approval_date,NULL 'fiscal_year',";
+			sql += "NULL,amp_activity.actual_start_date,amp_activity.actual_completion_date,amp_activity.proposed_start_date,amp_activity.actual_completion_date,NULL 'fiscal_year',";
 			sql += "NULL 'fiscal_quarter','MA',amp_team_id,NULL,amp_activity.amp_level_id,case when amp_activity.amp_level_id='1' then 'REGIONAL' when amp_activity.amp_level_id='2' then 'NATIONAL' when amp_activity.amp_level_id='3' then 'BOTH' else 'Unspecified' end 'level_name',amp_activity.description,NULL,NULL,NULL,NULL,1 ";
 			sql += "from amp_activity LEFT JOIN amp_funding ON ";
 			sql += "amp_activity.amp_activity_id=amp_funding.amp_activity_id,amp_status ";
@@ -205,7 +205,7 @@ public class UpdateDB {
 			sql += "case when transaction_type='2' and adjustment_type='1' and ";
 			sql += "org_role_code='DN' then transaction_amount else 0 end ";
 			sql += "'actual_expenditure',";
-			sql += "currency_code,amp_activity.actual_start_date,amp_activity.actual_completion_date,amp_activity.proposed_start_date,amp_activity.proposed_approval_date,extract(YEAR from ";
+			sql += "currency_code,amp_activity.actual_start_date,amp_activity.actual_completion_date,amp_activity.proposed_start_date,amp_activity.actual_completion_date,extract(YEAR from ";
 			sql += "transaction_date) 'fiscal_year',case when extract(MONTH from ";
 			sql += "transaction_date) between '1' and '3' then '1' ";
 			sql += "when extract(MONTH from transaction_date) between '4' and '6' then '2' ";
@@ -261,7 +261,7 @@ public class UpdateDB {
 			sql += "case when transaction_type='2' and adjustment_type='1' and ";
 			sql += "org_role_code='MA' then transaction_amount else 0 end ";
 			sql += "'actual_expenditure',";
-			sql += "currency_code,amp_activity.actual_start_date,amp_activity.actual_completion_date,amp_activity.proposed_start_date,amp_activity.proposed_approval_date,extract(YEAR from ";
+			sql += "currency_code,amp_activity.actual_start_date,amp_activity.actual_completion_date,amp_activity.proposed_start_date,amp_activity.actual_completion_date,extract(YEAR from ";
 			sql += "transaction_date) 'fiscal_year',case when extract(MONTH from ";
 			sql += "transaction_date) between '1' and '3' then '1' ";
 			sql += "when extract(MONTH from transaction_date) between '4' and '6' then '2' ";
@@ -372,7 +372,7 @@ public class UpdateDB {
 					"case when transaction_type='1' and adjustment_type='1' and perspective_id='2' then transaction_amount else 0 end 'actual_disbursement', " +
 					"case when transaction_type='2' and adjustment_type='1' and perspective_id='2' then transaction_amount else 0 end 'actual_expenditure', " +
 					"currency_code,amp_activity.actual_start_date,amp_activity.actual_completion_date,amp_activity.proposed_start_date, " +
-					"amp_activity.proposed_approval_date,extract(YEAR from transaction_date) 'fiscal_year', " +
+					"amp_activity.actual_completion_date,extract(YEAR from transaction_date) 'fiscal_year', " +
 					"case when extract(MONTH from transaction_date) between '1' and '3' then '1' " +
 					"when extract(MONTH from transaction_date) between '4' and '6' then '2' " +
 					"when extract(MONTH from transaction_date) between '7' and '9' then '3' " +
@@ -406,7 +406,7 @@ public class UpdateDB {
 				"case when transaction_type='1' and adjustment_type='1' and perspective_id='1' then transaction_amount else 0 end 'actual_disbursement', " +
 				"case when transaction_type='2' and adjustment_type='1' and perspective_id='1' then transaction_amount else 0 end 'actual_expenditure', " +
 				"currency_code,amp_activity.actual_start_date,amp_activity.actual_completion_date,amp_activity.proposed_start_date, " +
-				"amp_activity.proposed_approval_date,extract(YEAR from transaction_date) 'fiscal_year', " +
+				"amp_activity.actual_completion_date,extract(YEAR from transaction_date) 'fiscal_year', " +
 				"case when extract(MONTH from transaction_date) between '1' and '3' then '1' " +
 				"when extract(MONTH from transaction_date) between '4' and '6' then '2' " +
 				"when extract(MONTH from transaction_date) between '7' and '9' then '3' " +
@@ -434,7 +434,7 @@ public class UpdateDB {
 				"NULL 'term_assist_name',NULL 'donor_name',NULL 'amp_donor_id',NULL 'org_type',NULL 'amp_funding_id', " +
 				"0 'planned_commitment',0 'planned_disbursement',0 'planned_expenditure',0 'actual_commitment',0 'actual_disbursement',0 'actual_expenditure', " +
 				"NULL,amp_activity.actual_start_date,amp_activity.actual_completion_date,amp_activity.proposed_start_date, " +
-				"amp_activity.proposed_approval_date,NULL 'fiscal_year', " +
+				"amp_activity.actual_completion_date,NULL 'fiscal_year', " +
 				"NULL 'fiscal_quarter','MA',amp_team_id,NULL 'transaction_date',amp_activity.amp_level_id,amp_level.name,amp_activity.description, " +
 				"NULL,NULL, NULL, NULL, 2  from amp_activity LEFT JOIN amp_components ON " +
 				"amp_activity.amp_activity_id=amp_components.amp_activity_id,amp_status,amp_level " +
@@ -453,7 +453,7 @@ public class UpdateDB {
 				"NULL 'term_assist_name',NULL 'donor_name',NULL 'amp_donor_id',NULL 'org_type',NULL 'amp_funding_id', " +
 				"0 'planned_commitment',0 'planned_disbursement',0 'planned_expenditure',0 'actual_commitment',0 'actual_disbursement',0 'actual_expenditure', " +
 				"NULL,amp_activity.actual_start_date,amp_activity.actual_completion_date,amp_activity.proposed_start_date, " +
-				"amp_activity.proposed_approval_date,NULL 'fiscal_year',NULL 'fiscal_quarter', " +
+				"amp_activity.actual_completion_date,NULL 'fiscal_year',NULL 'fiscal_quarter', " +
 				"'DN',amp_team_id,NULL 'transaction_date',amp_activity.amp_level_id,amp_level.name,amp_activity.description, " +
 				"NULL,NULL , NULL , NULL , 2 from amp_activity LEFT JOIN amp_components ON " +
 				"amp_activity.amp_activity_id=amp_components.amp_activity_id,amp_status,amp_level " +
@@ -478,7 +478,7 @@ public class UpdateDB {
 					"case when transaction_type='1' and adjustment_type='1' and perspective_id='2' then transaction_amount else 0 end 'actual_disbursement'," +
 					"case when transaction_type='2' and adjustment_type='1' and perspective_id='2' then transaction_amount else 0 end 'actual_expenditure'," +
 					"currency_code,amp_activity.actual_start_date,amp_activity.actual_completion_date,amp_activity.proposed_start_date," +
-					"amp_activity.proposed_approval_date,extract(YEAR from transaction_date) 'fiscal_year'," +
+					"amp_activity.actual_completion_date,extract(YEAR from transaction_date) 'fiscal_year'," +
 					"case when extract(MONTH from transaction_date) between '1' and '3' then '1' " +
 					"when extract(MONTH from transaction_date) between '4' and '6' then '2' " +
 					"when extract(MONTH from transaction_date) between '7' and '9' then '3' " +
@@ -510,7 +510,7 @@ public class UpdateDB {
 				"case when transaction_type='1' and adjustment_type='1' and perspective_id='1' then transaction_amount else 0 end 'actual_disbursement'," +
 				"case when transaction_type='2' and adjustment_type='1' and perspective_id='1' then transaction_amount else 0 end 'actual_expenditure'," +
 				"currency_code,amp_activity.actual_start_date,amp_activity.actual_completion_date,amp_activity.proposed_start_date," +
-				"amp_activity.proposed_approval_date,extract(YEAR from transaction_date) 'fiscal_year'," +
+				"amp_activity.actual_completion_date,extract(YEAR from transaction_date) 'fiscal_year'," +
 				"case when extract(MONTH from transaction_date) between '1' and '3' then '1' " +
 				"when extract(MONTH from transaction_date) between '4' and '6' then '2' " +
 				"when extract(MONTH from transaction_date) between '7' and '9' then '3' " +
@@ -538,7 +538,7 @@ public class UpdateDB {
 				"NULL 'term_assist_name',NULL 'donor_name',NULL 'amp_donor_id',NULL 'org_type',NULL 'amp_funding_id', " +
 				"0 'planned_commitment',0 'planned_disbursement',0 'planned_expenditure',0 'actual_commitment',0 'actual_disbursement',0 'actual_expenditure', " +
 				"NULL,amp_activity.actual_start_date,amp_activity.actual_completion_date,amp_activity.proposed_start_date, " +
-				"amp_activity.proposed_approval_date,NULL 'fiscal_year', NULL 'fiscal_quarter', " +
+				"amp_activity.actual_completion_date,NULL 'fiscal_year', NULL 'fiscal_quarter', " +
 				"'MA',amp_team_id,NULL 'transaction_date',amp_activity.amp_level_id,amp_level.name,amp_activity.description, " +
 				"NULL,NULL , NULL , NULL , 3  from amp_activity LEFT JOIN amp_regional_funding ON " +
 				"amp_activity.amp_activity_id=amp_regional_funding.activity_id,amp_status,amp_level where amp_activity.amp_status_id =amp_status.amp_status_id " +
@@ -558,7 +558,7 @@ public class UpdateDB {
 				"NULL 'term_assist_name',NULL 'donor_name',NULL 'amp_donor_id',NULL 'org_type',NULL 'amp_funding_id', " +
 				"0 'planned_commitment',0 'planned_disbursement',0 'planned_expenditure',0 'actual_commitment',0 'actual_disbursement',0 'actual_expenditure', " +
 				"NULL,amp_activity.actual_start_date,amp_activity.actual_completion_date,amp_activity.proposed_start_date, " +
-				"amp_activity.proposed_approval_date,NULL 'fiscal_year',NULL 'fiscal_quarter', " +
+				"amp_activity.actual_completion_date,NULL 'fiscal_year',NULL 'fiscal_quarter', " +
 				"'DN',amp_team_id,NULL 'transaction_date',amp_activity.amp_level_id,amp_level.name,amp_activity.description, " +
 				"NULL ,NULL , NULL , NULL , 3 from amp_activity LEFT JOIN amp_regional_funding ON amp_activity.amp_activity_id=amp_regional_funding.activity_id, " +
 				"amp_status,amp_level where amp_activity.amp_status_id =amp_status.amp_status_id and amp_activity.amp_level_id=amp_level.amp_level_id and activity_id is null " +

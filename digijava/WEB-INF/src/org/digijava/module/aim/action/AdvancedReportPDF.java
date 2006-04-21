@@ -59,7 +59,7 @@ public class AdvancedReportPDF extends Action {
     int msize;
     int hsize;
     int assistCnt;
-    
+
     
     public void setFundingRow(AmpFund ampFund, int type, int row, int position, boolean unDisbFlag) {
    	 if (formBean.getFlag(type).equals("true") && (ampFund.getAmount(type) != null)) {
@@ -1910,6 +1910,15 @@ public class AdvancedReportPDF extends Action {
             }
         }
 
+        if (columnColl.contains("Component Name") && (advReport.getComponents() != null)) {
+            position = getColumnIndex("Component Name");
+
+            if (advReport.getComponents().toString().replace('[', ' ').replace(']', ' ').trim().length() > 0) {
+                dataArray[row][position] = advReport.getComponents().toString().replace('[', ' ').replace(']', ' ').trim();
+            }
+
+        }
+        
         if (columnColl.contains("Region") && (advReport.getRegions() != null)) {
             position = getColumnIndex("Region");
 

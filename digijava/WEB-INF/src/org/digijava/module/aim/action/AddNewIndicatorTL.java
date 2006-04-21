@@ -24,41 +24,15 @@ public class AddNewIndicatorTL extends Action
 			HttpServletRequest request,HttpServletResponse response) throws Exception 
 	{
 		IndicatorForm indForm = (IndicatorForm) form;
-		AmpMEIndicatorValue ampMEIndValnew = null;
 		AmpMEIndicators ampMEIndnew = null;
-		AmpMEIndicators indFound = null;
-		AmpActivity ampAct = new AmpActivity();
-		
-		ampAct.setAmpActivityId(indForm.getActivityId());
-		
-		if(indForm.getIndicatorName().trim() != null && indForm.getIndicatorCode().trim() != null)
-		{
-			ampMEIndValnew = new AmpMEIndicatorValue();
+		if(indForm.getIndicatorName().trim() != null && indForm.getIndicatorCode().trim() != null) {
 			ampMEIndnew = new AmpMEIndicators();
-
 			ampMEIndnew.setName(indForm.getIndicatorName());
-			String indName = indForm.getIndicatorName();
 			ampMEIndnew.setCode(indForm.getIndicatorCode());
-			String indCode = indForm.getIndicatorCode();
 			ampMEIndnew.setDescription(indForm.getIndicatorDesc());
 			ampMEIndnew.setDefaultInd(false);
 
-			DbUtil.add(ampMEIndnew);
-			
-			indFound = (AmpMEIndicators) MEIndicatorsUtil.findIndicatorId(indName,indCode);
-
-			ampMEIndValnew.setActivityId(ampAct);
-			ampMEIndValnew.setMeIndicatorId(indFound);
-			ampMEIndValnew.setBaseVal(0);
-			ampMEIndValnew.setTargetVal(0);
-			ampMEIndValnew.setRevisedTargetVal(0);
-			ampMEIndValnew.setBaseValDate(null);
-			ampMEIndValnew.setTargetValDate(null);
-			ampMEIndValnew.setRevisedTargetValDate(null);
-			ampMEIndValnew.setRisk(null);
-			ampMEIndValnew.setComments(null);
-			
-			DbUtil.add(ampMEIndValnew);
+			MEIndicatorsUtil.saveMEIndicator(ampMEIndnew,indForm.getActivityId(),false);
 		}
 		return mapping.findForward("forward");
 	}

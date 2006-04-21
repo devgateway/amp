@@ -138,7 +138,12 @@
 			<put name="title">Activity - Financial Progress - Discrepancy All</put>
 			<put-item name="tabBody" module="aim" instance="default" teaser="yearlyDiscrepancyAllFilter"/>
 		</layout>
-			
+
+		<layout name="layoutActivityDashboard" extends="tabLayout">
+			<put name="title">Activity - Dashboard</put>
+			<put-item name="tabBody" module="aim" instance="default" teaser="activityDashboard"/>
+		</layout>
+		
 		<layout name="layoutChannelOverview" extends="tabLayout">
         <put name="title">Activity - Channel Overview </put>
         <put-item name="tabBody" module="aim" instance="default"

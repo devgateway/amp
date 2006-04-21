@@ -12,13 +12,18 @@ import net.sf.hibernate.Transaction;
 import org.apache.log4j.Logger;
 import org.digijava.kernel.persistence.PersistenceManager;
 
+import org.digijava.module.aim.dbentity.AmpIndicatorRiskRatings;
 import org.digijava.module.aim.dbentity.AmpMEIndicators;
 import org.digijava.module.aim.dbentity.AmpMEIndicatorValue;
 import org.digijava.module.aim.dbentity.AmpMECurrValHistory;
 import org.digijava.module.aim.dbentity.AmpActivity;
 import org.digijava.module.aim.helper.AmpMEIndicatorList;
 import org.digijava.module.aim.helper.ActivityIndicator;
+import org.digijava.module.aim.helper.AmpMEIndicatorList;
+import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.DateConversion;
+import org.digijava.module.aim.helper.MEIndicatorRisk;
+import org.digijava.module.aim.helper.MEIndicatorValue;
 
 public class MEIndicatorsUtil 
 {
@@ -250,40 +255,9 @@ public class MEIndicatorsUtil
 		return duplicatesExist;
 	}
 
-	public static Collection getActivityList()
-	{
-		Session session = null;
-		Collection col = null;
-
-		try
-		{
-			session = PersistenceManager.getSession();
-	
-			String queryString = "select ampActivityId from "
-								+ AmpActivity.class.getName() + " ampActivityId";
-			Query qry = session.createQuery(queryString);
-			col = qry.list();
-		}
-		catch(Exception ex)
-		{
-			logger.debug("UNABLE to find activity ids from AmpActivity.");
-		}
-		finally
-		{
-			try
-			{
-				PersistenceManager.releaseSession(session);
-			}
-			catch(Exception exp)
-			{
-				logger.debug("releaseSession() FAILED", exp);
-			}
-		}
-		return col;
-	}
-	
 	public static Collection searchForIndicators(String keyword) 
 	{
+		logger.info("Searching for indicators..........");
 		Session session = null;
 		Collection col = null;
 		Query qry = null;
@@ -294,7 +268,7 @@ public class MEIndicatorsUtil
 			
 			String queryString = "select ind from "
 					+ AmpMEIndicators.class.getName() + " ind "
-					+ "where (name like '%" + keyword + "%' && default_ind = 0)";
+					+ "where (ind.name like '%" + keyword + "%' && ind.defaultInd=false)";
 			
 			qry = session.createQuery(queryString);
 			col = qry.list();
@@ -491,4 +465,173 @@ public class MEIndicatorsUtil
 			}			
 		}
 	}	
+	
+	public static Collection getMEIndicatorValues(Long actId) {
+		Session session = null;
+		Collection col = new ArrayList();
+	
+		try {
+			session = PersistenceManager.getSession();
+			String qryStr = "select indVal from " + AmpMEIndicatorValue.class.getName() + "" +
+					" indVal where (indVal.activityId=:actId)" ;
+			Query qry = session.createQuery(qryStr);
+			qry.setParameter("actId",actId,Hibernate.LONG);
+			Iterator itr = qry.list().iterator();
+			while (itr.hasNext()) {
+				
+				AmpMEIndicatorValue meIndValue = (AmpMEIndicatorValue) itr.next();
+				AmpMEIndicators meInd = meIndValue.getMeIndicatorId();
+				
+				double totIndVal = meIndValue.getBaseVal() + meIndValue.getTargetVal() + meIndValue.getRevisedTargetVal();
+				
+				MEIndicatorValue baseIndVal = new MEIndicatorValue();
+				baseIndVal.setIndicatorName(meInd.getName());
+				baseIndVal.setType(Constants.ME_IND_VAL_BASE_ID);
+				if (totIndVal > 0) { 
+					baseIndVal.setValue(meIndValue.getBaseVal() * (100 / totIndVal));
+				} else { 
+					baseIndVal.setValue(0);
+				}
+				
+				MEIndicatorValue targetIndVal = new MEIndicatorValue();
+				targetIndVal.setIndicatorName(meInd.getName());
+				targetIndVal.setType(Constants.ME_IND_VAL_TARGET_ID);
+				if (totIndVal > 0) { 
+					targetIndVal.setValue(meIndValue.getTargetVal() * (100 / totIndVal));
+				} else { 
+					targetIndVal.setValue(0);
+				}
+				
+				MEIndicatorValue actIndVal = new MEIndicatorValue();
+				actIndVal.setIndicatorName(meInd.getName());
+				actIndVal.setType(Constants.ME_IND_VAL_ACTUAL_ID);
+				if (totIndVal > 0) {
+					actIndVal.setValue(meIndValue.getRevisedTargetVal() * (100 / totIndVal));	
+				} else {
+					actIndVal.setValue(0);
+				}
+				
+				col.add(baseIndVal);
+				col.add(targetIndVal);
+				col.add(actIndVal);
+			}
+			
+		} catch (Exception e) {
+			logger.error("Exception from getMEIndicatorValues() :" + e.getMessage());
+			e.printStackTrace(System.out);
+		} finally {
+			if (session != null) {
+				try {
+					PersistenceManager.releaseSession(session);
+				} catch (Exception rsf) {
+					logger.error("Failed to release session :" + rsf.getMessage());
+				}
+			}
+		}
+		return col;		
+	}
+	
+	public static Collection getMEIndicatorRisks(Long actId) {
+		Session session = null;
+		Collection col = new ArrayList();
+	
+		try {
+			session = PersistenceManager.getSession();
+			String qryStr = "select count(*), indVal.risk from " + AmpMEIndicatorValue.class.getName() + "" +
+					" indVal where (indVal.activityId=:actId)" +
+							" group by indVal.risk";
+
+			Query qry = session.createQuery(qryStr);
+
+			qry.setParameter("actId",actId,Hibernate.LONG);
+			Iterator itr = qry.list().iterator();
+			while (itr.hasNext()) {
+				Object[] obj = (Object[]) itr.next();
+				Integer riskCount = (Integer) obj[0];
+				AmpIndicatorRiskRatings riskRating = (AmpIndicatorRiskRatings) obj[1];
+				MEIndicatorRisk meRisk = new MEIndicatorRisk();
+				meRisk.setRisk(riskRating.getRatingName());
+				meRisk.setRiskCount(riskCount.intValue());
+				col.add(meRisk);
+			}
+			
+		} catch (Exception e) {
+			logger.error("Exception from getMEIndicatorRisks() :" + e.getMessage());
+			e.printStackTrace(System.out);
+		} finally {
+			if (session != null) {
+				try {
+					PersistenceManager.releaseSession(session);
+				} catch (Exception rsf) {
+					logger.error("Failed to release session :" + rsf.getMessage());
+				}
+			}
+		}
+		return col;				
+	}
+	
+	public static void saveMEIndicator(AmpMEIndicators newIndicator,Long actId,boolean defaultIndicator) {
+		Session session = null;
+		Transaction tx = null;
+		
+		try {
+			session = PersistenceManager.getSession();
+
+			tx = session.beginTransaction();
+			session.save(newIndicator);
+			if (defaultIndicator) {
+				String qryStr = "select act from " + AmpActivity.class.getName() + " act";
+				Query qry = session.createQuery(qryStr);
+				Iterator itr = qry.list().iterator();
+				while (itr.hasNext()) {
+					AmpActivity act = (AmpActivity) itr.next();
+					AmpMEIndicatorValue ampMEIndValnew = new AmpMEIndicatorValue();
+					ampMEIndValnew.setActivityId(act);
+					ampMEIndValnew.setMeIndicatorId(newIndicator);
+					ampMEIndValnew.setBaseVal(0);
+					ampMEIndValnew.setTargetVal(0);
+					ampMEIndValnew.setRevisedTargetVal(0);
+					ampMEIndValnew.setBaseValDate(null);
+					ampMEIndValnew.setTargetValDate(null);
+					ampMEIndValnew.setRevisedTargetValDate(null);
+					ampMEIndValnew.setRisk(null);
+					ampMEIndValnew.setComments(null);
+					session.save(ampMEIndValnew);
+				}
+			} else {
+				AmpActivity act = (AmpActivity) session.load(AmpActivity.class,actId);
+				AmpMEIndicatorValue ampMEIndValnew = new AmpMEIndicatorValue();
+				ampMEIndValnew.setActivityId(act);
+				ampMEIndValnew.setMeIndicatorId(newIndicator);
+				ampMEIndValnew.setBaseVal(0);
+				ampMEIndValnew.setTargetVal(0);
+				ampMEIndValnew.setRevisedTargetVal(0);
+				ampMEIndValnew.setBaseValDate(null);
+				ampMEIndValnew.setTargetValDate(null);
+				ampMEIndValnew.setRevisedTargetValDate(null);
+				ampMEIndValnew.setRisk(null);
+				ampMEIndValnew.setComments(null);
+				session.save(ampMEIndValnew);
+			}
+			tx.commit();							
+		} catch (Exception e) {
+			logger.error("Exception from saveMEIndicator() :" + e.getMessage());
+			e.printStackTrace(System.out);
+			if (tx != null) {
+				try {
+					tx.rollback();
+				} catch (Exception rbf) {
+					logger.error("Roll back failed");
+				}
+			}
+		} finally {
+			if (session != null) {
+				try {
+					PersistenceManager.releaseSession(session);
+				} catch (Exception rsf) {
+					logger.error("Failed to release session :" + rsf.getMessage());
+				}
+			}
+		}
+	}
 }

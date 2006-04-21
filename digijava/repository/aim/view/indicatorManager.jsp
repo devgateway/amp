@@ -94,19 +94,19 @@
 													
 													<logic:notEmpty name="aimIndicatorForm" property="indicators">
 														<tr><td>
-															<table width="100%" border="0" bgColor=#f4f4f2>
+															<table width="100%" bgColor=#f4f4f2 cellspacing=2 cellpadding=1>
 																<tr><td colspan="2"><b>
 																	Monitoring and Evaluation : AMP Indicators</b>
 																</td></tr>
-																<logic:iterate name="aimIndicatorForm" property="indicators" id="indicators" type="org.digijava.module.aim.helper.AmpMEIndicatorList">	
+																<logic:iterate name="aimIndicatorForm" property="indicators" id="indicators"
+																type="org.digijava.module.aim.helper.AmpMEIndicatorList">	
+
 																	<tr>
-																		<td height=1 colspan="5" bgcolor="#FFFFFF"></td>
-																	</tr>
-																	<tr>
-																	<td width="80%">
-																		<bean:write name="indicators" property="name"/>&nbsp;&nbsp;(<bean:write name="indicators" property="code"/>)
+																	<td width="100%">
+																		<bean:write name="indicators" property="name"/>&nbsp;&nbsp;(
+																							 <bean:write name="indicators" property="code"/>)
 																	</td>
-																	<td align="left">
+																	<td align="left" width="12">
 																		<jsp:useBean id="urlParams" type="java.util.Map" class="java.util.HashMap"/>
 																		<c:set target="${urlParams}" property="id">
 																			<bean:write name="indicators" property="ampMEIndId" />
@@ -115,9 +115,10 @@
 																		<bean:define id="translation">
 																			<digi:trn key="aim:clickToDeleteIndicator">Click here to Delete Indicator</digi:trn>
 																		</bean:define>
-																		[ <digi:link href="/indicatorManager.do" name="urlParams" onclick=" return deleteIndicator()" title="<%=translation%>" >
-																			<digi:trn key="aim:indicatorManagerDelete">Delete</digi:trn>
-																		</digi:link> ]
+																		<digi:link href="/indicatorManager.do" name="urlParams" 
+																		onclick=" return deleteIndicator()" title="<%=translation%>" >
+																		<img src= "../ampTemplate/images/trash_12.gif" border=0>
+																		</digi:link>
 																	</td>
 																	</tr>
 																</logic:iterate>

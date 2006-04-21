@@ -121,4 +121,14 @@ public class Constants
 	public static final String TS_ACT_LIST = "timestampActivityList";
 	
 	public static final long MAX_TIME_LIMIT = 3600000;
+	
+	public static final String ME_IND_VAL_BASE_ID = "base";
+	public static final String ME_IND_VAL_ACTUAL_ID = "actual";
+	public static final String ME_IND_VAL_TARGET_ID = "target";
+	
+	public static final String ACTIVITY_PERFORMANCE_CHART_TITLE = "Activity - Performance";
+	public static final String ACTIVITY_RISK_CHART_TITLE = "Activity - Risk";
+	
+	public static final int CHART_HEIGHT = 350;
+	public static final int CHART_WIDTH = 400;
 }	

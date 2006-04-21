@@ -115,7 +115,7 @@
 	</TR>
 	<TR>
       <TD width="100%" nowrap align="center" vAlign="bottom" height="20">
-        	<TABLE width="765"  border="0" cellpadding="0" cellspacing="0" bgcolor="#FFFFFF" class="box-border-nopadding" > 
+        	<TABLE width="810"  border="0" cellpadding="0" cellspacing="0" bgcolor="#FFFFFF" class="box-border-nopadding" > 
             <TR bgColor=#f4f4f2>
               	<TD height="20">
 						<TABLE border="0" cellpadding="0" cellspacing="1" bgcolor="#F4F4F2" height="20">
@@ -197,8 +197,23 @@
 									 :: <digi:trn key="aim:regionalFunding">Regional Funding</digi:trn> 	
 									</digi:link>									
 								</logic:notEqual>
-								</TD>								
-								<TD vAlign=middle width="100%" bgColor=#3754A1 >&nbsp;</TD>
+								</TD>		
+
+								<logic:equal name="aimMainProjectDetailsForm" property="tabIndex" value="5">
+	                     <TD vAlign=center bgColor=#222e5d class="sub-nav-selected" noWrap width="103">
+									:: <digi:trn key="aim:activityDashboard">Dashboard</digi:trn> 									
+								</logic:equal>
+								<logic:notEqual name="aimMainProjectDetailsForm" property="tabIndex" value="5">
+	                    	<TD vAlign=center bgColor=#3754a1 noWrap width="103">
+                   			<c:set target="${urlTabs}" property="tabIndex" value="5"/>
+									<bean:define id="translation">
+										<digi:trn key="aim:clickToViewActivityDashboard">Click here to view activity dashboard</digi:trn>
+									</bean:define>
+                    			<digi:link href="/viewActivityDashboard.do" name="urlTabs" styleClass="sub-nav" title="<%=translation%>" >
+									 :: <digi:trn key="aim:activityDashboard">Dashboard</digi:trn>
+									</digi:link>									
+								</logic:notEqual>
+								</TD>	
 							</TR>
 						</TABLE>
 					</TD>

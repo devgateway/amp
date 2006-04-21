@@ -45,10 +45,11 @@ public class SelectCreateIndicators extends Action
 		{
 			AmpMEIndicators tempNonDefaultInd = (AmpMEIndicators) nonDefaultItr.next();
 			Iterator activityIndItr = activityInd.iterator();
+			sameIndicator = false;			
 			while(activityIndItr.hasNext() && sameIndicator == false)
 			{
 				ActivityIndicator tempActInd = (ActivityIndicator) activityIndItr.next();
-				sameIndicator = false;
+
 				if(tempNonDefaultInd.getAmpMEIndId().equals(tempActInd.getIndicatorId()))
 					sameIndicator = true;
 			}
@@ -57,8 +58,9 @@ public class SelectCreateIndicators extends Action
 		}
 		
 		indForm.setNondefaultindicators(nonDefActInd);
-		indForm.setActivityId(indForm.getActivityId());
-
+		indForm.setActivityId(indForm.getActivityId());			
+		
+		logger.info("indForm.getSearchkey() = " + indForm.getSearchkey());
 		if(indForm.getSearchkey() != null)
 		{
 			searchkey = indForm.getSearchkey().trim();
@@ -69,10 +71,11 @@ public class SelectCreateIndicators extends Action
 			{
 				AmpMEIndicators tempSearchInd = (AmpMEIndicators) searchResultItr.next();
 				Iterator activityIndItr = activityInd.iterator();
+				sameIndicator = false;				
 				while(activityIndItr.hasNext() && sameIndicator == false)
 				{
 					ActivityIndicator tempActInd = (ActivityIndicator) activityIndItr.next();
-					sameIndicator = false;
+
 					if(tempSearchInd.getAmpMEIndId().equals(tempActInd.getIndicatorId()))
 						sameIndicator = true;
 				}

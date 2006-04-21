@@ -32,25 +32,25 @@
 		var temp = validate();
 		if (temp == true) 
 		{
+			document.aimIndicatorForm.addBtn.disabled = true;	  	
 			<digi:context name="addInd" property="context/module/moduleinstance/addIndicator.do" />
 			document.aimIndicatorForm.action = "<%=addInd%>";
+			document.aimIndicatorForm.target = "_self";
+			document.aimIndicatorForm.submit();			
 			
-			if(document.aimIndicatorForm.event.value == "create")
-			{
-				document.aimIndicatorForm.target = "_self";
-				document.aimIndicatorForm.submit();
-			}
-			else
-			{
-				document.aimIndicatorForm.target = window.opener.name;
-				document.aimIndicatorForm.submit();
-				window.close();
-			}
 		}
 		return temp;
 	}
 
-	function load(){}
+	function load(){
+		if (document.aimIndicatorForm.errorFlag.value == "false") {
+			<digi:context name="indMan" property="context/module/moduleinstance/indicatorManager.do"/>
+		   document.aimIndicatorForm.action = "<%= indMan %>";
+			document.aimIndicatorForm.target = window.opener.name;
+		   document.aimIndicatorForm.submit();
+			window.close();
+		}
+	}
 
 	function unload(){}
 
@@ -64,7 +64,7 @@
 
 <digi:form action="/addIndicator.do" method="post">
 <input type="hidden" name="create" value="false">
-<html:hidden name="aimIndicatorForm" property="event"/>
+<html:hidden name="aimIndicatorForm" property="errorFlag"/>
 <html:errors />
 
 <table bgColor=#ffffff cellPadding=0 cellSpacing=0 width="99%" align="center" border="0">
@@ -117,7 +117,7 @@
 	<tr bgColor=#ffffff><td height="30" colspan="2"></td></tr>
 	<tr bgColor=#dddddb>
 		<td bgColor=#dddddb height="25" align="center" colspan="2">
-			<input styleClass="dr-menu" type="button" value="Save" onclick="return addIndicator()">&nbsp;&nbsp;
+			<input styleClass="dr-menu" type="button" name="addBtn" value="Save" onclick="return addIndicator()">&nbsp;&nbsp;
 			<input styleClass="dr-menu" type="reset" value="Cancel">&nbsp;&nbsp;
 			<input styleClass="dr-menu" type="button" name="close" value="Close" onclick="closeWindow()">			
 		</td>

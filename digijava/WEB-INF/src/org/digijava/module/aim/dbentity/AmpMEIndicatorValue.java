@@ -6,11 +6,11 @@ public class AmpMEIndicatorValue {
 	private Long ampMeIndValId;
 	private AmpActivity activityId;
 	private AmpMEIndicators meIndicatorId;
-	private float baseVal; 
+	private float baseVal;  // BASE
 	private Date baseValDate;
-	private float targetVal;
+	private float targetVal;  // TARGET
 	private Date targetValDate;
-	private float revisedTargetVal;
+	private float revisedTargetVal; // ACTUAL
 	private Date revisedTargetValDate;
 	private String comments;
 	private AmpIndicatorRiskRatings risk;

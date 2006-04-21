@@ -385,9 +385,12 @@
 	<action forward="/showLayout.do?layout=layoutFinancingBreakdownFilter" 
 		path="/aim/viewFinancingBreakdownFilter" />
 
+	<action forward="/showLayout.do?layout=layoutActivityDashboard" 
+        path="/aim/viewActivityDashboard" />
+
 	<action forward="/showLayout.do?layout=layoutChannelOverview" 
         path="/aim/viewChannelOverview" />
-	
+
 	<action forward="/showLayout.do?layout=layoutChannelOverviewObjective" 
         path="/aim/viewChannelOverviewObjective" />
 
@@ -489,6 +492,13 @@
     	validate="false" 
 		path="/aim/financingBreakdown">
 	</action>
+
+	<action
+    	type="org.digijava.module.aim.action.ViewActivityDashboard"
+		scope="request"
+    	validate="false" 
+		path="/aim/activityDashboard">
+	</action>	
 
 	<action name="aimRegionalFundingForm"
     	type="org.digijava.module.aim.action.GetRegionalFundings"
@@ -1919,8 +1929,7 @@
 			  validate="false"
 			  input="/showLayout.do?layout=aim_addIndicator"
 			  path="/aim/addIndicator">
-			  <forward name="create" path="/showLayout.do?layout=aim_addIndicator" />
-			  <forward name="forward" path="/aim/indicatorManager.do" />
+			  <forward name="forward" path="/showLayout.do?layout=aim_addIndicator" />
    </action>
 
 	<action 

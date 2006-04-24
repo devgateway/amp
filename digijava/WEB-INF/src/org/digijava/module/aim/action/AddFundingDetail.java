@@ -67,29 +67,10 @@ public class AddFundingDetail extends Action {
 				fundingDetails.add(fd);		
 			} else {
 				fundingDetails = new ArrayList(formBean.getFundingDetails());
-				logger.info("Sub event : " + subEvent);
 				if (subEvent.equals("del")) {
-					for (int i = 0;i < fundingDetails.size();i ++) {
-						
-						FundingDetail temp = new FundingDetail();
-						temp.setIndexId(index);
-						fundingDetails.remove(temp);
-						
-						/*
-						FundingDetail temp = (FundingDetail) fundingDetails.get(i);
-						if (temp.getIndexId() == index) {
-							if (temp.getTransactionType() == 0) {
-								formBean.setNumComm(formBean.getNumComm() - 1);
-							} else if (temp.getTransactionType() == 1) {
-								formBean.setNumDisb(formBean.getNumDisb() - 1);
-							} else if (temp.getTransactionType() == 2) {
-								formBean.setNumExp(formBean.getNumExp() - 1);
-							}
-							break;
-						}*/
-					}
-					//deleteFundingDetails(index);
-					logger.info("Deleted");
+					FundingDetail temp = new FundingDetail();
+					temp.setIndexId(index);
+					fundingDetails.remove(temp);					
 				} else {
 					fd = getFundingDetail(perspCode,currCode);
 					fundingDetails.add(fd);							
@@ -97,7 +78,6 @@ public class AddFundingDetail extends Action {
 			}
 			if (fd != null && fd.getTransactionType() == 0) {
 				formBean.setNumComm(formBean.getNumComm() + 1);
-				logger.info("Setting num comm to " + formBean.getNumComm());
 			} else if (fd != null && fd.getTransactionType() == 1) {
 				formBean.setNumDisb(formBean.getNumDisb() + 1);
 			} else if (fd != null && fd.getTransactionType() == 2) {
@@ -129,10 +109,4 @@ public class AddFundingDetail extends Action {
 		return fundingDetail;
 		
 	}
-
-	/*
-	private void deleteFundingDetails(long indexId) {
-		logger.info("in deleteFundingDetails ");
-		fundingDetails.remove(new FundingDetail(indexId));
-	}*/
 }

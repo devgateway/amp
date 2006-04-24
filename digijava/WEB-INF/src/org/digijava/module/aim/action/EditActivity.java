@@ -509,6 +509,7 @@ public class EditActivity extends Action {
 
 					ArrayList fundingOrgs = new ArrayList();
 					Iterator fundItr = activity.getFunding().iterator();
+					long id = System.currentTimeMillis();
 					while (fundItr.hasNext()) {
 						AmpFunding ampFunding = (AmpFunding) fundItr.next();
 						AmpOrganisation org = ampFunding.getAmpDonorOrgId();
@@ -538,7 +539,7 @@ public class EditActivity extends Action {
 								AmpFundingDetail fundDet = (AmpFundingDetail) fundDetItr
 										.next();
 								FundingDetail fundingDetail = new FundingDetail();
-								fundingDetail.setIndexId(System.currentTimeMillis());
+								fundingDetail.setIndexId(id++);
 								int adjType = fundDet.getAdjustmentType()
 										.intValue();
 								fundingDetail.setAdjustmentType(adjType);

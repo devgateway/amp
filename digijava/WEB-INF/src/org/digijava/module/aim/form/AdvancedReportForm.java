@@ -7,7 +7,6 @@ import org.digijava.module.aim.helper.AmpFund;
 
 public class AdvancedReportForm extends ActionForm 
 {
-
 	
 	public String getFlag(int type) {
 		switch(type) {

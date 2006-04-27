@@ -137,4 +137,7 @@ public class Constants
 	
 	public static final int PORTFOLIO_CHART_HEIGHT = 400;
 	public static final int PORFOLIO_CHART_WIDTH = 730;	
+	
+	public static final String ACCESS_TYPE_TEAM = "Team";
+	public static final String ACCESS_TYPE_MNGMT = "Management";
 }	

@@ -14608,12 +14608,14 @@ public class ReportUtil {
 			session.save(ampReports);
 			ampReports.setDescription("/viewAdvancedReport.do?view=reset&ampReportId="+ampReports.getAmpReportId());
 			session.update(ampReports);
+			AmpTeam ampTeam = (AmpTeam) session.get(AmpTeam.class, ampTeamId);
+			
 			if(teamLead == true)
 			{
 				//logger.info(teamMember.getMemberName() + " is Team Leader ");
 				AmpTeamReports ampTeamReports = new AmpTeamReports();
 				ampTeamReports.setTeamView(true);
-				AmpTeam ampTeam = (AmpTeam) session.get(AmpTeam.class, ampTeamId);
+				
 				ampTeamReports.setTeam(ampTeam);
 				ampTeamReports.setReport(ampReports);
 				session.save(ampTeamReports);
@@ -14662,33 +14664,35 @@ public class ReportUtil {
 			ampPages.setPageCode(pageCode);
 			session.save(ampPages);
 			
+			pageFilters = ampPages.getFilters();
+			Iterator itr = pageFilters.iterator();
+			while (itr.hasNext()) {
+				AmpFilters filt = (AmpFilters) itr.next();
+				AmpTeamPageFilters tpf = new AmpTeamPageFilters();
+				tpf.setFilter(filt);
+				tpf.setTeam(ampTeam);
+				tpf.setPage(ampPages);
+				session.save(tpf);
+			}
 			
-			queryString = "select filters from " + AmpFilters.class.getName() + " filters ";
-			//logger.info( " Filter Query...:: " + queryString);
+			queryString = "select t from " + AmpTeam.class.getName() + " t " +
+					"where t.accessType = 'Management'";
 			query = session.createQuery(queryString);
-			if(query!=null)
-			{
-				iter = query.list().iterator();
-				while(iter.hasNext())
-				{
-					AmpFilters filt = (AmpFilters) iter.next();
-					if(filt.getFilterName().compareTo("Region") != 0 && 
-						filt.getFilterName().compareTo("Start Date/Close Date") !=0	&& 
-						filt.getFilterName().compareTo("Planned/Actual") != 0 )  
-					{
-						AmpTeamPageFilters ampTeamPageFilters = new AmpTeamPageFilters();
-						ampTeamPageFilters.setFilter(filt);
-				//		logger.info("Filter:" + filt.getFilterName());
-					
-						ampTeamPageFilters.setPage(ampPages);
-				//		logger.info("Page" + ampPages.getPageName());
-						AmpTeam ampTeam = (AmpTeam) session.get(AmpTeam.class, ampMemberId);
-						ampTeamPageFilters.setTeam(ampTeam);
-				//	logger.info("Team:" + ampTeam.getName())
-						session.save(ampTeamPageFilters);
-					}						
+			itr = query.list().iterator();
+			while (itr.hasNext()) {
+				AmpTeam t = (AmpTeam) itr.next();
+				pageFilters = ampPages.getFilters();
+				Iterator itr1 = pageFilters.iterator();
+				while (itr1.hasNext()) {
+					AmpFilters filt = (AmpFilters) itr1.next();
+					AmpTeamPageFilters tpf = new AmpTeamPageFilters();
+					tpf.setFilter(filt);
+					tpf.setTeam(t);
+					tpf.setPage(ampPages);
+					session.save(tpf);
 				}
 			}
+			
 			tx.commit(); 
 
 		}

@@ -3472,28 +3472,39 @@ public class DbUtil {
 		Collection col = new ArrayList();
 		try {
 			session = PersistenceManager.getSession();
-			String queryString = "select tr from "
+			AmpTeam team = (AmpTeam) session.load(AmpTeam.class,teamId);
+			
+			String queryString = null;
+			Query qry = null;
+			
+			if (team.getAccessType().equalsIgnoreCase(Constants.ACCESS_TYPE_MNGMT)) {
+				queryString = "select r from " + AmpReports.class.getName() + " r " +
+					"where r.ampReportId <> 7";
+				qry = session.createQuery(queryString);
+				col = qry.list();	
+			} else {
+				queryString = "select tr from "
 					+ AmpTeamReports.class.getName()
 					+ " tr where (tr.team=:teamId) and tr.report.ampReportId<>'7'";
-			Query qry = session.createQuery(queryString);
-			qry.setParameter("teamId", teamId, Hibernate.LONG);
-			Iterator itr = qry.list().iterator();
-			col = new ArrayList();
-			StringBuffer qryBuffer = new StringBuffer();
-			AmpTeamReports ampTeamRep = null;
-			while (itr.hasNext()) {
-			    ampTeamRep = (AmpTeamReports) itr.next();
-			    if (qryBuffer.length() != 0)
-			        qryBuffer.append(",");
-			    qryBuffer.append(ampTeamRep.getReport().getAmpReportId());
-			}
-			
-			if (qryBuffer != null && qryBuffer.length() > 0) {
-				queryString = "select r from " + AmpReports.class.getName() + " r " +
-					"where r.ampReportId in (" + qryBuffer + ")";
-				logger.debug("Query = " + queryString);
 				qry = session.createQuery(queryString);
-				col = qry.list();
+				qry.setParameter("teamId", teamId, Hibernate.LONG);
+				Iterator itr = qry.list().iterator();
+				col = new ArrayList();
+				StringBuffer qryBuffer = new StringBuffer();
+				AmpTeamReports ampTeamRep = null;
+				while (itr.hasNext()) {
+					ampTeamRep = (AmpTeamReports) itr.next();
+					if (qryBuffer.length() != 0)
+						qryBuffer.append(",");
+					qryBuffer.append(ampTeamRep.getReport().getAmpReportId());
+				}
+			
+				if (qryBuffer != null && qryBuffer.length() > 0) {
+					queryString = "select r from " + AmpReports.class.getName() + " r " +
+						"where r.ampReportId in (" + qryBuffer + ")";
+					qry = session.createQuery(queryString);
+					col = qry.list();
+				}				
 			}
 		} catch (Exception e) {
 			logger.debug("Exception from getAllTeamReports()");

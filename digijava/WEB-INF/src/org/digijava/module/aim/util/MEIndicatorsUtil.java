@@ -1,5 +1,8 @@
 package org.digijava.module.aim.util;
 
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
@@ -77,7 +80,7 @@ public class MEIndicatorsUtil
 	public static Collection getAllDefaultIndicators()
 	{
 		Session session = null;
-		Collection col = null;
+		Collection col = new ArrayList();
 		Query qry = null;
 		try
 		{
@@ -466,6 +469,115 @@ public class MEIndicatorsUtil
 		}
 	}	
 	
+	public static Collection getPortfolioMEIndicatorValues(Collection actIds,
+			Long indId) {
+		
+		Session session = null;
+		Collection col = new ArrayList();
+	
+		try {
+			session = PersistenceManager.getSession();
+			String qryStr = null;
+			Iterator itr = null;
+			
+			if (actIds != null && actIds.size() > 0) {
+				if (actIds.size() == 1) {
+					itr = actIds.iterator();
+					Long actId = (Long) itr.next();
+					if (indId.longValue() > 0) {
+						qryStr = "select iv.base_val,iv.target_val,iv.revised_target_val," +
+								"mi.name from amp_me_indicator_value iv inner join " +
+								"amp_me_indicators mi on (iv.me_indicator_id=mi.amp_me_indicator_id)" +
+								" where mi.default_ind = 1  and iv.activity_id=" + actId + " and " +
+								"iv.me_indicator_id=" + indId + " order by iv.activity_id,mi.name";
+					} else {
+						qryStr = "select iv.base_val,iv.target_val,iv.revised_target_val,mi.name " +
+								"from amp_me_indicator_value iv inner join amp_me_indicators mi " +
+								"on (iv.me_indicator_id=mi.amp_me_indicator_id) where mi.default_ind = 1 " +
+								"and iv.activity_id=" + actId + " order by iv.activity_id,mi.name";
+					}
+				} else {
+					itr = actIds.iterator();
+					String params = "";
+					while (itr.hasNext()) {
+						Long actId = (Long) itr.next();
+						if (params.length() > 0) params += ",";
+						params += actId;
+					}
+					if (indId.longValue() > 0) {
+						qryStr = "select iv.base_val,iv.target_val,iv.revised_target_val,a.name from " +
+								"amp_me_indicator_value iv inner join amp_me_indicators mi on " +
+								"(iv.me_indicator_id=mi.amp_me_indicator_id) inner join amp_activity a on " +
+								"(a.amp_activity_id=iv.activity_id) where mi.default_ind = 1  and " +
+								"iv.activity_id in (" + params + ") and iv.me_indicator_id=" + indId + "" +
+										" order by a.name";
+					} else {
+						qryStr = "select sum(iv.base_val),sum(iv.target_val),sum(iv.revised_target_val)," +
+								"mi.name from amp_me_indicator_value iv inner join amp_me_indicators mi on" +
+								" (iv.me_indicator_id=mi.amp_me_indicator_id) where mi.default_ind = 1 and " +
+								"iv.activity_id in ( " + params + ") group by iv.me_indicator_id " +
+										"order by iv.activity_id";
+					}					
+				}
+				
+				Connection con = session.connection();
+				Statement stmt = con.createStatement();
+				ResultSet rs = stmt.executeQuery(qryStr);
+				while (rs.next()) {
+					double baseVal = rs.getDouble(1);
+					double tarVal = rs.getDouble(2);
+					double actVal = rs.getDouble(3);
+					String key = rs.getString(4);
+					
+					double totIndVal = baseVal + tarVal + actVal;
+					
+					MEIndicatorValue baseIndVal = new MEIndicatorValue();
+					baseIndVal.setIndicatorName(key);
+					baseIndVal.setType(Constants.ME_IND_VAL_BASE_ID);
+					if (totIndVal > 0) { 
+						baseIndVal.setValue(baseVal * (100 / totIndVal));
+					} else { 
+						baseIndVal.setValue(0);
+					}
+					
+					MEIndicatorValue targetIndVal = new MEIndicatorValue();
+					targetIndVal.setIndicatorName(key);
+					targetIndVal.setType(Constants.ME_IND_VAL_TARGET_ID);
+					if (totIndVal > 0) { 
+						targetIndVal.setValue(tarVal * (100 / totIndVal));
+					} else { 
+						targetIndVal.setValue(0);
+					}
+					
+					MEIndicatorValue actIndVal = new MEIndicatorValue();
+					actIndVal.setIndicatorName(key);
+					actIndVal.setType(Constants.ME_IND_VAL_ACTUAL_ID);
+					if (totIndVal > 0) {
+						actIndVal.setValue(actVal * (100 / totIndVal));	
+					} else {
+						actIndVal.setValue(0);
+					}
+					
+					col.add(baseIndVal);
+					col.add(targetIndVal);
+					col.add(actIndVal);
+				}
+			}
+		} catch (Exception e) {
+			logger.error("Exception from getPortfolioMEIndicatorValues() :" + e.getMessage());
+			e.printStackTrace(System.out);
+		} finally {
+			if (session != null) {
+				try {
+					PersistenceManager.releaseSession(session);
+				} catch (Exception rsf) {
+					logger.error("Failed to release session :" + rsf.getMessage());
+				}
+			}
+		}
+		return col;		
+	}
+	
 	public static Collection getMEIndicatorValues(Long actId) {
 		Session session = null;
 		Collection col = new ArrayList();
@@ -482,7 +594,8 @@ public class MEIndicatorsUtil
 				AmpMEIndicatorValue meIndValue = (AmpMEIndicatorValue) itr.next();
 				AmpMEIndicators meInd = meIndValue.getMeIndicatorId();
 				
-				double totIndVal = meIndValue.getBaseVal() + meIndValue.getTargetVal() + meIndValue.getRevisedTargetVal();
+				double totIndVal = meIndValue.getBaseVal() + meIndValue.getTargetVal() + 
+						meIndValue.getRevisedTargetVal();
 				
 				MEIndicatorValue baseIndVal = new MEIndicatorValue();
 				baseIndVal.setIndicatorName(meInd.getName());
@@ -529,6 +642,56 @@ public class MEIndicatorsUtil
 			}
 		}
 		return col;		
+	}
+	
+	public static Collection getPortfolioMEIndicatorRisks(Collection actIds) {
+		Session session = null;
+		Collection col = new ArrayList();
+	
+		try {
+			session = PersistenceManager.getSession();
+			String qryStr = null;
+			Iterator itr = null;
+			
+			if (actIds != null && actIds.size() > 0) {
+				itr = actIds.iterator();
+				String params = "";
+				while (itr.hasNext()) {
+					Long id = (Long) itr.next();
+					if (params.length() > 0) params += ",";
+					params += id;
+				}
+					
+				qryStr = "select count(*), r.rating_name from amp_me_indicator_value v " +
+						"inner join amp_indicator_risk_ratings r on (r.amp_ind_risk_ratings_id=v.risk)" +
+						" where v.activity_id in (" + params + ") group by v.risk";
+				
+				Connection con = session.connection();
+				Statement stmt = con.createStatement();
+				ResultSet rs = stmt.executeQuery(qryStr);
+				while (rs.next()) {
+					int cnt = rs.getInt(1);
+					String rName = rs.getString(2);
+
+					MEIndicatorRisk meRisk = new MEIndicatorRisk();
+					meRisk.setRisk(rName);
+					meRisk.setRiskCount(cnt);
+					col.add(meRisk);
+				}
+			}
+		} catch (Exception e) {
+			logger.error("Exception from getPortfolioMEIndicatorRisk() :" + e.getMessage());
+			e.printStackTrace(System.out);
+		} finally {
+			if (session != null) {
+				try {
+					PersistenceManager.releaseSession(session);
+				} catch (Exception rsf) {
+					logger.error("Failed to release session :" + rsf.getMessage());
+				}
+			}
+		}
+		return col;				
 	}
 	
 	public static Collection getMEIndicatorRisks(Long actId) {

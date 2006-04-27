@@ -40,4 +40,15 @@ public class MEIndicatorValue {
 	public void setValue(double value) {
 		this.value = value;
 	}
+	/* (non-Javadoc)
+	 * @see java.lang.Object#equals(java.lang.Object)
+	 */
+	public boolean equals(Object obj) {
+		if (obj instanceof MEIndicatorValue) {
+			MEIndicatorValue meVal = (MEIndicatorValue) obj;
+			return meVal.getIndicatorName().equals(indicatorName) 
+					&& meVal.getType().equals(type);
+		} else throw new ClassCastException();
+	}
+	
 }

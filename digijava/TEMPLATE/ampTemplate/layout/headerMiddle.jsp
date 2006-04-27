@@ -60,5 +60,16 @@
 			<digi:img  src="images/nav-div.gif" width="2"/>
 			--%>
 		</TD>
+      <TD vAlign=center >
+			<digi:link href="/viewPortfolioDashboard.do~actId=-1~indId=-1" styleClass="nav" 
+			onclick="return quitRnot()" title="View portfolio dashboard">
+         	::: <digi:trn key="aim:dashboard">DASHBOARD</digi:trn>
+			</digi:link>
+		</TD>
+      <TD width="1" bgcolor="#999999">
+			<%--
+			<digi:img  src="images/nav-div.gif" width="2"/>
+			--%>
+		</TD>		
 	</TR>
 </TABLE>

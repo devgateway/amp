@@ -12,7 +12,7 @@
 <%
 	Long actId = (Long) request.getAttribute("actId");
 	
-	String actPerfChartFileName = ChartGenerator.generateActivityPerformanceChart(
+	String actPerfChartFileName = ChartGenerator.getActivityPerformanceChartFileName(
 						 actId,session,new PrintWriter(out));
 
 	String actPerfChartUrl = null;
@@ -23,7 +23,7 @@
 		actPerfChartUrl = request.getContextPath() + "/aim/DisplayChart.img?filename=" + actPerfChartFileName;
 	}
 	
-	String actRiskChartFileName = ChartGenerator.generateActivityRiskChart(
+	String actRiskChartFileName = ChartGenerator.getActivityRiskChartFileName(
 						 actId,session,new PrintWriter(out));
 
 	String actRiskChartUrl = null;

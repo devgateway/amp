@@ -7,6 +7,7 @@ package org.digijava.module.aim.helper;
 
 import java.awt.Color;
 import java.io.PrintWriter;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 
@@ -28,14 +29,78 @@ public class ChartGenerator {
 	
 	private static Logger logger = Logger.getLogger(ChartGenerator.class);
 	
-	public static String generateActivityRiskChart(Long actId,
+	public static String getPortfolioRiskChartFileName(HttpSession session,PrintWriter pw) {
+		
+		Collection activityIds = new ArrayList();
+		if (session.getAttribute("ampProjects") != null) {
+			ArrayList projects = (ArrayList) session.getAttribute("ampProjects");
+			for (int i = 0;i < projects.size();i ++) {
+				AmpProject proj = (AmpProject) projects.get(i);
+				activityIds.add(proj.getAmpActivityId());
+			}
+		}
+		
+		Collection col = MEIndicatorsUtil.getPortfolioMEIndicatorRisks(activityIds);
+		return generateRiskChart(col,Constants.PORTFOLIO_RISK_CHART_TITLE,
+				Constants.PORFOLIO_CHART_WIDTH,Constants.PORTFOLIO_CHART_HEIGHT,session,pw);
+	}
+	
+	public static String getActivityRiskChartFileName(Long actId,
 			HttpSession session,PrintWriter pw) {
 		
+		Collection meRisks = MEIndicatorsUtil.getMEIndicatorRisks(actId);
+		return generateRiskChart(meRisks,Constants.ACTIVITY_RISK_CHART_TITLE,Constants.CHART_WIDTH,
+				Constants.CHART_HEIGHT,session,pw);
+	}
+	
+	public static String getPortfolioPerformanceChartFileName(Long actId,Long indId,
+			Integer page,HttpSession session,PrintWriter pw) {
+	
+		Collection activityIds = new ArrayList();
+		if (actId.longValue() < 0) {
+			if (session.getAttribute("ampProjects") != null) {
+				ArrayList projects = (ArrayList) session.getAttribute("ampProjects");
+				for (int i = 0;i < projects.size();i ++) {
+					AmpProject proj = (AmpProject) projects.get(i);
+					activityIds.add(proj.getAmpActivityId());
+				}
+			}
+		} else {
+			activityIds.add(actId);
+		}
+		
+		Collection col = new ArrayList();
+		ArrayList temp = (ArrayList) MEIndicatorsUtil.getPortfolioMEIndicatorValues(activityIds,indId);
+		
+		if ((actId.longValue() > 0 && indId.longValue() <= 0) ||
+				(actId.longValue() <= 0 && indId.longValue() > 0)) {
+			int st = (page.intValue() - 1) * 30; 
+			int ed = st + 30;
+			ed = (ed > temp.size()) ? temp.size() : ed;
+			for (int i = st; i < ed;i ++) {
+				col.add(temp.get(i));
+			}
+		} else {
+			col = temp;
+		}
+		return generatePerformanceChart(col,Constants.PORTFOLIO_PERFORMANCE_CHART_TITLE,
+				Constants.PORFOLIO_CHART_WIDTH,Constants.PORTFOLIO_CHART_HEIGHT,session,pw);
+	}		
+	
+	public static String getActivityPerformanceChartFileName(Long actId,
+			HttpSession session,PrintWriter pw) {
+		
+		Collection meIndValues = MEIndicatorsUtil.getMEIndicatorValues(actId);
+		return generatePerformanceChart(meIndValues,Constants.ACTIVITY_PERFORMANCE_CHART_TITLE,
+				Constants.CHART_WIDTH,Constants.CHART_HEIGHT,session,pw);
+	}
+	
+	public static String generateRiskChart(Collection col,String title,
+			int chartWidth,int chartHeight,HttpSession session,PrintWriter pw) {
 		String fileName = null;
 		try {
-			Collection meRisks = MEIndicatorsUtil.getMEIndicatorRisks(actId);
-			if (meRisks.size() > 0) {
-				Iterator itr = meRisks.iterator();
+			if (col != null && col.size() > 0) {
+				Iterator itr = col.iterator();
 				
 				DefaultPieDataset ds = new DefaultPieDataset();
 				while (itr.hasNext()) {
@@ -44,15 +109,15 @@ public class ChartGenerator {
 				}
 				
 				JFreeChart chart = ChartFactory.createPieChart(
-						Constants.ACTIVITY_RISK_CHART_TITLE, // title
+						title, // title
 						ds,		// dataset
 						true,	// show legend
 						false,	// show tooltips
 						false);	// show urls
 				chart.setBackgroundPaint(Color.WHITE);
 				ChartRenderingInfo info = new ChartRenderingInfo(new StandardEntityCollection());
-				fileName = ServletUtilities.saveChartAsPNG(chart,Constants.CHART_WIDTH,
-						Constants.CHART_HEIGHT,info,session);
+				fileName = ServletUtilities.saveChartAsPNG(chart,chartWidth,
+						chartHeight,info,session);
 				ChartUtilities.writeImageMap(pw,fileName,info,false);
 				pw.flush();
 				
@@ -61,21 +126,20 @@ public class ChartGenerator {
 			}
 
 		} catch (Exception e) {
-			logger.error("Exception from generateActivityRisk() :" + e.getMessage());
+			logger.error("Exception from generateRisk() :" + e.getMessage());
 			e.printStackTrace(System.out);
 			fileName = "chart_error.png";
 		}		
-		return fileName;
+		return fileName;		
 	}
 	
-	public static String generateActivityPerformanceChart(Long actId,
-			HttpSession session,PrintWriter pw) {
+	public static String generatePerformanceChart(Collection col,String title,
+			int chartWidth,int chartHeight,HttpSession session,PrintWriter pw) {
 		
 		String fileName = null;
 		try {
-			Collection meIndValues = MEIndicatorsUtil.getMEIndicatorValues(actId);
-			if (meIndValues.size() > 0) {
-				Iterator itr = meIndValues.iterator();
+			if (col != null && col.size() > 0) {
+				Iterator itr = col.iterator();
 				DefaultCategoryDataset ds = new DefaultCategoryDataset();
 				while (itr.hasNext()) {
 					MEIndicatorValue meIndVal = (MEIndicatorValue) itr.next();
@@ -83,7 +147,7 @@ public class ChartGenerator {
 				}
 				
 				JFreeChart chart = ChartFactory.createStackedBarChart(
-						Constants.ACTIVITY_PERFORMANCE_CHART_TITLE, // title
+						title, // title
 						null,	// X-axis label
 						null,	// Y-axis label
 						ds,		// dataset
@@ -93,8 +157,8 @@ public class ChartGenerator {
 						false);	// show urls
 				chart.setBackgroundPaint(Color.WHITE);
 				ChartRenderingInfo info = new ChartRenderingInfo(new StandardEntityCollection());
-				fileName = ServletUtilities.saveChartAsPNG(chart,Constants.CHART_WIDTH,
-						Constants.CHART_HEIGHT,info,session);
+				fileName = ServletUtilities.saveChartAsPNG(chart,chartWidth,
+						chartHeight,info,session);
 				ChartUtilities.writeImageMap(pw,fileName,info,false);
 				pw.flush();
 				
@@ -103,10 +167,10 @@ public class ChartGenerator {
 			}
 
 		} catch (Exception e) {
-			logger.error("Exception from generateActivityPerformanceChart() :" + e.getMessage());
+			logger.error("Exception from generatePerformanceChart() :" + e.getMessage());
 			e.printStackTrace(System.out);
 			fileName = "chart_error.png";
 		}
- 		return fileName;
+ 		return fileName;		
 	}
 }

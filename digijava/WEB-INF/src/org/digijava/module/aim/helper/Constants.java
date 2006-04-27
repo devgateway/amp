@@ -128,7 +128,13 @@ public class Constants
 	
 	public static final String ACTIVITY_PERFORMANCE_CHART_TITLE = "Activity - Performance";
 	public static final String ACTIVITY_RISK_CHART_TITLE = "Activity - Risk";
+	public static final String PORTFOLIO_PERFORMANCE_CHART_TITLE = "Portfolio - Performance";
+	public static final String PORTFOLIO_RISK_CHART_TITLE = "Portfolio - Risk";	
+	
 	
 	public static final int CHART_HEIGHT = 350;
 	public static final int CHART_WIDTH = 400;
+	
+	public static final int PORTFOLIO_CHART_HEIGHT = 400;
+	public static final int PORFOLIO_CHART_WIDTH = 730;	
 }	

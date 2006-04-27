@@ -3,6 +3,7 @@
 <secondary-pages>
 
 	<page name="viewMyDesktop" title=" - Team Desktop " />
+	<page name="viewPortfolioDashboard" title=" - Portfolio Dashboard " />
 	<page name="showMyTask" title=" - My Task List " />
 	<page name="viewChannelOverviewDescription" title="AMP: Ethiopia: AIM Dashboard: Detail" />
 	<page name="editPhysicalProgress" title="AMP: Ethiopia: AIM Dashboard: Detail" />

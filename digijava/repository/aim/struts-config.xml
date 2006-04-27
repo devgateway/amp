@@ -276,8 +276,8 @@
 			  type="org.digijava.module.aim.form.CurrencyRateForm" />
 	
 	<form-bean
-      		name="aimDonorDataImportForm"
-      		type="org.digijava.module.aim.form.DonorDataImportForm" />
+      name="aimDonorDataImportForm"
+      type="org.digijava.module.aim.form.DonorDataImportForm" />
 
 	<form-bean
       	
@@ -286,9 +286,18 @@
       
             
 	<form-bean
-      	name="aimAdvancedReportForm"
+      name="aimAdvancedReportForm"
 		type="org.digijava.module.aim.form.AdvancedReportForm" />
 
+	<form-bean
+		name="aimPortfolioDashboardForm"
+		type="org.apache.struts.action.DynaActionForm">
+		<form-property name="indicatorList" type="java.util.Collection"/>
+		<form-property name="activityList" type="java.util.Collection"/>
+		<form-property name="pageList" type="java.util.Collection"/>
+		<form-property name="actId" type="java.lang.Long"/>
+		<form-property name="indId" type="java.lang.Long"/>
+	</form-bean>
       
 	</form-beans> 
 
@@ -319,6 +328,14 @@
      	type="org.digijava.module.aim.action.ViewMyDesktop" 
      	scope="session" validate="false" path="/aim/viewMyDesktop">
     	<forward name="forward" path="/showLayout.do?layout=viewMyDesktop" />
+    	<forward name="index" path="/aim/index.do" redirect="true" />
+	 </action>
+
+	 <action 
+		name="aimPortfolioDashboardForm"		
+     	type="org.digijava.module.aim.action.ViewPortfolioDashboard" 
+     	scope="session" validate="false" path="/aim/viewPortfolioDashboard">
+    	<forward name="forward" path="/showLayout.do?layout=viewPortfolioDashboard" />
     	<forward name="index" path="/aim/index.do" redirect="true" />
 	 </action>
 	 

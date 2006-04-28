@@ -135,7 +135,7 @@ type="org.digijava.module.aim.form.ChannelOverviewForm" method="post">
 						<TABLE width="100%" cellPadding=2 cellSpacing=2 vAlign="top" align="left" bgColor=#f4f4f2>
 							<TR>
 								<TD width="100%">
-									<IMG alt=Link height=10 src="../ampTemplate/images/arrow-014E86.gif" width=15>
+									<IMG  height=10 src="../ampTemplate/images/arrow-014E86.gif" width=15>
 									<b><digi:trn key="aim:objectives">Objectives</digi:trn></b>
 								</TD>
 							</TR>
@@ -161,7 +161,7 @@ type="org.digijava.module.aim.form.ChannelOverviewForm" method="post">
 						<TABLE width="100%" cellPadding=2 cellSpacing=2 vAlign="top" align="left" bgColor=#f4f4f2>
 							<TR>
 								<TD width="100%">
-									<IMG alt=Link height=10 src="../ampTemplate/images/arrow-014E86.gif" width=15>								
+									<IMG  height=10 src="../ampTemplate/images/arrow-014E86.gif" width=15>								
 									<b>
 									<digi:trn key="aim:financingInstrument">Financing Instrument</digi:trn>:</b>&nbsp;
 									<c:out value="${activity.modality}"/>
@@ -181,7 +181,7 @@ type="org.digijava.module.aim.form.ChannelOverviewForm" method="post">
 						<TABLE width="100%" cellPadding=2 cellSpacing=2 vAlign="top" align="left" bgColor=#f4f4f2>
 							<TR>
 								<TD width="100%">
-									<IMG alt=Link height=10 src="../ampTemplate/images/arrow-014E86.gif" width=15>
+									<IMG  height=10 src="../ampTemplate/images/arrow-014E86.gif" width=15>
 									<c:if test="${activity.status == 'Planned'}">
 										<b><digi:trn key="aim:plannedCommitment">
 										Planned Commitment</digi:trn> : </b>
@@ -223,7 +223,7 @@ type="org.digijava.module.aim.form.ChannelOverviewForm" method="post">
 														<TD>
 															<TABLE width="100%" cellPadding=2 cellSpacing=1 vAlign="top" align="top" bgcolor="#aaaaaa">
 																<TR><TD bgcolor="#eeeeee" height="18">&nbsp;
-																	<IMG alt=Link height=10 src="../ampTemplate/images/arrow-014E86.gif" width=15>
+																	<IMG  height=10 src="../ampTemplate/images/arrow-014E86.gif" width=15>
 																	<b><digi:trn key="aim:projectIds">Project Ids</digi:trn></b>
 																</TD></TR>
 																<c:if test="${empty activity.projectIds}">
@@ -245,7 +245,7 @@ type="org.digijava.module.aim.form.ChannelOverviewForm" method="post">
 														<TD>
 															<TABLE width="100%" cellPadding=2 cellSpacing=1 vAlign="top" align="top" bgcolor="#aaaaaa">
 																<TR><TD bgcolor="#eeeeee" height="18">&nbsp;
-																	<IMG alt=Link height=10 src="../ampTemplate/images/arrow-014E86.gif" width=15>
+																	<IMG  height=10 src="../ampTemplate/images/arrow-014E86.gif" width=15>
 																	<b><digi:trn key="aim:status">Status</digi:trn></b>
 																</TD></TR>
 																<TR><TD bgcolor="#ffffff">
@@ -263,7 +263,7 @@ type="org.digijava.module.aim.form.ChannelOverviewForm" method="post">
 														<TD>
 															<TABLE width="100%" cellPadding=2 cellSpacing=1 vAlign="top" align="top" bgcolor="#aaaaaa">
 																<TR><TD bgcolor="#eeeeee" height="18">&nbsp;
-																	<IMG alt=Link height=10 src="../ampTemplate/images/arrow-014E86.gif" width=15>
+																	<IMG  height=10 src="../ampTemplate/images/arrow-014E86.gif" width=15>
 																	<b><digi:trn key="aim:sector">Sector</digi:trn></b>
 																</TD></TR>
 																<TR><TD bgcolor="#ffffff">
@@ -293,7 +293,7 @@ type="org.digijava.module.aim.form.ChannelOverviewForm" method="post">
 														<TD>
 															<TABLE width="100%" cellPadding=2 cellSpacing=1 vAlign="top" align="left" bgcolor="#aaaaaa">
 																<TR><TD bgcolor="#eeeeee" height="18">&nbsp;
-																	<IMG alt=Link height=10 src="../ampTemplate/images/arrow-014E86.gif" width=15>
+																	<IMG  height=10 src="../ampTemplate/images/arrow-014E86.gif" width=15>
 																	<b><digi:trn key="aim:location">Location</digi:trn></b>
 																</TD></TR>
 																<TR><TD bgcolor="#ffffff">
@@ -353,7 +353,7 @@ type="org.digijava.module.aim.form.ChannelOverviewForm" method="post">
 														<TD>
 															<TABLE width="100%" cellPadding=3 cellSpacing=1 vAlign="top" align="left" bgcolor="#aaaaaa">
 																<TR><TD bgcolor="#eeeeee" height="18">&nbsp;
-																	<IMG alt=Link height=10 src="../ampTemplate/images/arrow-014E86.gif" width=15>
+																	<IMG  height=10 src="../ampTemplate/images/arrow-014E86.gif" width=15>
 																	<b><digi:trn key="aim:program">Program</digi:trn></b>
 																</TD></TR>
 																<TR><TD bgcolor="#ffffff">
@@ -371,7 +371,7 @@ type="org.digijava.module.aim.form.ChannelOverviewForm" method="post">
 														<TD>
 															<TABLE width="100%" cellPadding=3 cellSpacing=1 vAlign="top" align="top" bgcolor="#aaaaaa">
 																<TR><TD bgcolor="#eeeeee" height="18">&nbsp;
-																	<IMG alt=Link height=10 src="../ampTemplate/images/arrow-014E86.gif" width=15>
+																	<IMG  height=10 src="../ampTemplate/images/arrow-014E86.gif" width=15>
 																	<b><digi:trn key="aim:donorFundingContactInformation">
 																		Donor funding Contact Information
 																	</digi:trn></b>
@@ -397,7 +397,7 @@ type="org.digijava.module.aim.form.ChannelOverviewForm" method="post">
 														<TD>
 															<TABLE width="100%" cellPadding=3 cellSpacing=1 vAlign="top" align="top" bgcolor="#aaaaaa">
 																<TR><TD bgcolor="#eeeeee" height="18">&nbsp;
-																	<IMG alt=Link height=10 src="../ampTemplate/images/arrow-014E86.gif" width=15>
+																	<IMG  height=10 src="../ampTemplate/images/arrow-014E86.gif" width=15>
 																	<b><digi:trn key="aim:mofedContactInformation">
 																	MOFED Contact Information</digi:trn></b>
 																</TD></TR>
@@ -426,7 +426,7 @@ type="org.digijava.module.aim.form.ChannelOverviewForm" method="post">
 														<TD>
 															<TABLE width="100%" cellPadding=0 cellSpacing=1 vAlign="top" align="left" bgcolor="#aaaaaa">
 																<TR><TD bgcolor="#eeeeee" height="18">&nbsp;
-																	<IMG alt=Link height=10 src="../ampTemplate/images/arrow-014E86.gif" width=15>
+																	<IMG  height=10 src="../ampTemplate/images/arrow-014E86.gif" width=15>
 																	<b><digi:trn key="aim:relatedOrganizations">Related Organizations</digi:trn></b>
 																</TD></TR>
 																<TR><TD bgcolor="#fffff">
@@ -518,7 +518,7 @@ type="org.digijava.module.aim.form.ChannelOverviewForm" method="post">
 														<TD>
 															<TABLE width="100%" cellPadding=2 cellSpacing=1 vAlign="top" align="top" bgcolor="#aaaaaa">
 																<TR><TD bgcolor="#eeeeee" height="18">&nbsp;
-																	<IMG alt=Link height=10 src="../ampTemplate/images/arrow-014E86.gif" width=15>
+																	<IMG  height=10 src="../ampTemplate/images/arrow-014E86.gif" width=15>
 																	<b><digi:trn key="aim:keyActivityDates">Key Activity Dates</digi:trn></b>
 																</TD></TR>
 																<TR><TD bgcolor="#ffffff">
@@ -577,7 +577,7 @@ type="org.digijava.module.aim.form.ChannelOverviewForm" method="post">
 															<TABLE width="100%" cellPadding=2 cellSpacing=1 vAlign="top" align="left" 
 															bgcolor="#aaaaaa">
 																<TR><TD bgcolor="#eeeeee" height="18">&nbsp;
-																	<IMG alt=Link height=10 src="../ampTemplate/images/arrow-014E86.gif" width=15>
+																	<IMG  height=10 src="../ampTemplate/images/arrow-014E86.gif" width=15>
 																	<b><digi:trn key="aim:typeOfAssistance">
 																	Type Of Assistance</digi:trn></b>
 																</TD></TR>
@@ -596,7 +596,7 @@ type="org.digijava.module.aim.form.ChannelOverviewForm" method="post">
 														<TD>
 															<TABLE width="100%" cellPadding=2 cellSpacing=1 vAlign="top" align="left" bgcolor="#aaaaaa">
 																<TR><TD bgcolor="#eeeeee" height="18">&nbsp;
-																	<IMG alt=Link height=10 src="../ampTemplate/images/arrow-014E86.gif" width=15>
+																	<IMG  height=10 src="../ampTemplate/images/arrow-014E86.gif" width=15>
 																	<b><digi:trn key="aim:financingInstruments">
 																	Financing Instruments</digi:trn></b>
 																</TD></TR>
@@ -615,7 +615,7 @@ type="org.digijava.module.aim.form.ChannelOverviewForm" method="post">
 														<TD>
 															<TABLE width="100%" cellPadding=3 cellSpacing=1 vAlign="top" align="top" bgcolor="#aaaaaa">
 																<TR><TD bgcolor="#eeeeee" height="18">&nbsp;
-																	<IMG alt=Link height=10 src="../ampTemplate/images/arrow-014E86.gif" width=15>
+																	<IMG  height=10 src="../ampTemplate/images/arrow-014E86.gif" width=15>
 																	<b><digi:trn key="aim:activityCreationDetails">
 																	Activity creation details</digi:trn></b>
 																</TD></TR>

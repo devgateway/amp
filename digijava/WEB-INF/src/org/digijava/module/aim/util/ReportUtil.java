@@ -10732,8 +10732,10 @@ public class ReportUtil {
 							if(ampReportCache.getActivityDescription()!=null)
 							{
 								Editor ed = org.digijava.module.editor.util.DbUtil.getEditor(ampReportCache.getActivityDescription(),"en");
-								project.setDescriptionPDFXLS(getDescParsed(ed.getBody()));
-								logger.debug("the project.getDescriptionPDFXLS yields....: "+project.getDescriptionPDFXLS());
+								if (ed != null && ed.getBody() != null && ed.getBody().trim().length() > 0)
+									project.setDescriptionPDFXLS(getDescParsed(ed.getBody()));
+								else
+									project.setDescriptionPDFXLS(" ");
 							}
 							else
 								project.setDescriptionPDFXLS(" ");
@@ -10781,8 +10783,10 @@ public class ReportUtil {
 							if(ampReportCache.getActivityDescription()!=null)
 							{
 								Editor ed = org.digijava.module.editor.util.DbUtil.getEditor(ampReportCache.getActivityDescription(),"en");
-								project.setDescriptionPDFXLS(getDescParsed(ed.getBody()));
-								logger.debug("the project.getDescriptionPDFXLS yields....: "+project.getDescriptionPDFXLS());
+								if (ed != null && ed.getBody() != null && ed.getBody().trim().length() > 0)
+									project.setDescriptionPDFXLS(getDescParsed(ed.getBody()));
+								else 
+									project.setDescriptionPDFXLS(" ");								
 							}
 							else
 								project.setDescriptionPDFXLS(" ");								
@@ -10852,8 +10856,10 @@ public class ReportUtil {
 							if(ampReportCache.getActivityDescription()!=null)
 							{
 								Editor ed = org.digijava.module.editor.util.DbUtil.getEditor(ampReportCache.getActivityDescription(),"en");
-								project.setDescriptionPDFXLS(getDescParsed(ed.getBody()));
-								logger.debug("the project.getDescriptionPDFXLS yields....: "+project.getDescriptionPDFXLS());
+								if (ed != null && ed.getBody() != null && ed.getBody().trim().length() > 0)
+									project.setDescriptionPDFXLS(getDescParsed(ed.getBody()));
+								else 
+									project.setDescriptionPDFXLS(" ");
 							}
 							else
 								project.setDescriptionPDFXLS(" ");								
@@ -10912,8 +10918,11 @@ public class ReportUtil {
 							if(ampReportCache.getActivityDescription()!=null)
 							{
 								Editor ed = org.digijava.module.editor.util.DbUtil.getEditor(ampReportCache.getActivityDescription(),"en");
-								project.setDescriptionPDFXLS(getDescParsed(ed.getBody()));
-								logger.debug("the project.getDescriptionPDFXLS yields....: "+project.getDescriptionPDFXLS());
+								if (ed != null && ed.getBody() != null && ed.getBody().trim().length() > 0) {
+									project.setDescriptionPDFXLS(getDescParsed(ed.getBody()));
+								} else {
+									project.setDescriptionPDFXLS(" ");	
+								}
 							}
 							else
 								project.setDescriptionPDFXLS(" ");								
@@ -10999,7 +11008,8 @@ public class ReportUtil {
 		}
 		catch(Exception ex) 		
 		{
-			logger.debug("Unable to get report names  from database " + ex.getMessage());
+			logger.info("Unable to get report names  from database " + ex.getMessage());
+			ex.printStackTrace(System.out);
 		}
 		finally 
 		{
@@ -11866,7 +11876,6 @@ public class ReportUtil {
 								if(c.getColumnId().equals(Constants.AMP_ID)){
 									//report.setAmpId(ampId);
 									//logger.info("test AMPID333.+calling pidddddddddd"+ " for:::"+ reports.getAmpActivityId());
-									//logger.info("*******"+getProjectId((reports.getAmpActivityId())));
 									report.setProjId(getProjectId(reports.getAmpActivityId()));
 								}
 								if(c.getColumnId().equals(Constants.FUNDING_INSTRUMENT))
@@ -12275,6 +12284,7 @@ public class ReportUtil {
 						report.getRegions().addAll(regions);
 					if(c.getColumnId().equals(Constants.AMP_ID))
 						report.setAmpId(ampId);
+
 					if(c.getColumnId().equals(Constants.FUNDING_INSTRUMENT))
 					{
 						if(modality.size()==0)
@@ -12778,12 +12788,18 @@ public class ReportUtil {
 					{
 						
 						ahReport=getAdvancedReportRecords(ampActivities,activityIds,rsc,fromYr,toYr,perspective,fiscalCalId,ampCurrencyCode,ahReport,null,null);
+						
 						Iterator iterFund = ahReport.getFundSubTotal().iterator();
 						if(rsc.getOption().equals(Constants.ANNUAL))
 						{
-							for(int i=0;i<=yrCount ;i++ )
+							//logger.info("equal to annual");
+							//for(int i=0;i<=yrCount ;i++ )
+							for(int i=0;i<yrCount ;i++ )
 							{
+								//logger.info("in the for");
+								//logger.info("i have come here" + iterFund.next().toString());
 								AmpFund ampFund=(AmpFund) iterFund.next();
+								//logger.info("after iteration"+ampFund.toString());
 	
 								if(i<yrCount)
 								{
@@ -13934,11 +13950,15 @@ public class ReportUtil {
 								if(report.getObjective()!=null)
 								{
 									Editor ed = org.digijava.module.editor.util.DbUtil.getEditor(objective,"en");
-									report.setObjectivePDFXLS(getDescParsed(ed.getBody()));
-									logger.debug("the report.getObjectivePDFXLS yields....: "+report.getObjectivePDFXLS());
+									if (ed != null && ed.getBody() != null && ed.getBody().trim().length() > 0)
+										report.setObjectivePDFXLS(getDescParsed(ed.getBody()));
+									else 
+										report.setObjectivePDFXLS(" ");
 								}
 								else
+								{
 									report.setObjectivePDFXLS(" ");
+								}
 							}
 							if(c.getColumnId().equals(Constants.DESCRIPTION))
 							{
@@ -13946,8 +13966,10 @@ public class ReportUtil {
 								if(report.getDescription()!=null)
 								{
 									Editor ed = org.digijava.module.editor.util.DbUtil.getEditor(description,"en");
-									report.setDescriptionPDFXLS(getDescParsed(ed.getBody()));
-									logger.debug("the report.getDescriptionPDFXLS yields....: "+report.getDescriptionPDFXLS());
+									if (ed != null && ed.getBody() != null && ed.getBody().trim().length() > 0)
+										report.setDescriptionPDFXLS(getDescParsed(ed.getBody()));
+									else 
+										report.setDescriptionPDFXLS(" ");
 								}
 								else
 									report.setDescriptionPDFXLS(" ");
@@ -14337,8 +14359,10 @@ public class ReportUtil {
 									if(report.getObjective()!=null)
 									{
 										Editor ed = org.digijava.module.editor.util.DbUtil.getEditor(objective,"en");
-										report.setObjectivePDFXLS(getDescParsed(ed.getBody()));
-										logger.debug("the report.getObjectivePDFXLS yields....: "+report.getObjectivePDFXLS());
+										if (ed != null && ed.getBody() != null && ed.getBody().trim().length() > 0)
+											report.setObjectivePDFXLS(getDescParsed(ed.getBody()));
+										else
+											report.setObjectivePDFXLS(" ");
 									}
 									else
 										report.setObjectivePDFXLS(" ");
@@ -14349,8 +14373,10 @@ public class ReportUtil {
 									if(report.getDescription()!=null)
 									{
 										Editor ed = org.digijava.module.editor.util.DbUtil.getEditor(description,"en");
-										report.setDescriptionPDFXLS(getDescParsed(ed.getBody()));
-										logger.debug("the report.getDescriptionPDFXLS yields....: "+report.getDescriptionPDFXLS());
+										if (ed != null && ed.getBody() != null && ed.getBody().trim().length() > 0)
+											report.setDescriptionPDFXLS(getDescParsed(ed.getBody()));
+										else
+											report.setDescriptionPDFXLS(" ");
 									}
 									else
 										report.setDescriptionPDFXLS(" ");

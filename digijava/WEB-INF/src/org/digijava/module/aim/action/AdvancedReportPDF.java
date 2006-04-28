@@ -220,7 +220,7 @@ public class AdvancedReportPDF extends Action {
             while (iter.hasNext()) {
                 // Column column = (Column)iter.next();
                 // logger.info("ColumnColl : " + column.getColumnName());
-                logger.info("ColumnColl : " + iter.next());
+                logger.info("ColumnColl : **" + iter.next()+"****");
             }
 
             /*
@@ -679,14 +679,21 @@ public class AdvancedReportPDF extends Action {
                                 // ').replace(']',' '));
                             }
 
-                            if (columnColl.contains("Project Id") && (advReport.getAmpId() != null)) {
+                            if (columnColl.contains("Project Id") && (advReport.getProjId() != null)) {
                                 position = getColumnIndex("Project Id");
-
-                                if (advReport.getAmpId().trim().length() > 0) {
-                                    dataArray[row][position] = advReport.getAmpId().trim();
+                                
+                                if (advReport.getProjId().size() > 0) {
+                                	Iterator itr=advReport.getProjId().iterator();
+                                	String projids="";
+                                	while(itr.hasNext()){
+                                		projids+=(String) itr.next();
+                                		projids+="\n";
+                                	}
+                                	//dataArray[row][position] = advReport.getAmpId().trim();
+                                	logger.info("======== :) :)"+projids);
+                                	dataArray[row][position] = projids;
                                 }
-
-                                // logger.info("ID : " + advReport.getAmpId());
+                                
                             }
 
                             position = (3 + rsc.getColumns().size()) - 1;
@@ -705,12 +712,13 @@ public class AdvancedReportPDF extends Action {
                                 year = yearValue.intValue();
 
                                 ind = 0;
-
+                                	logger.info("this is first posi "+position);
+                                	position++;
                                 while (funds.hasNext()) {
                                     // logger.info(" IND intrrrrrrrrrrrrr
                                     // "+ind);
                                     ind++;
-
+                                    	
                                     if (qtrlyFlag) {
                                         if (ind > (formBean.getFiscalYearRange().size() * 4)) {
                                             position = position + 1;

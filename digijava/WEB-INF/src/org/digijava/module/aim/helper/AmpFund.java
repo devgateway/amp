@@ -19,6 +19,37 @@ public class AmpFund
 		
 	}
 	
+	public void setAmount(int type,String amount) {
+		switch(type) {
+		case COMM: commAmount=amount;break;
+		case DISB: disbAmount=amount;break;
+		case EXP: expAmount=amount;break;
+		case PL_COMM: plCommAmount=amount;break;
+		case PL_DISB: plDisbAmount=amount;break;
+		case PL_EXP: plExpAmount=amount;break;
+		case UNDISB: unDisbAmount=amount;break;
+		default: break;
+		}
+		
+	}
+	
+
+	public void setbyTypeAmount(int type,Collection amount) {
+		switch(type) {
+		case COMM: byTypeComm=amount;break;
+		case DISB: byTypeDisb=amount;break;
+		case EXP:  byTypeExp=amount;break;
+		case PL_COMM: byTypePlComm=amount;break;
+		case PL_DISB: byTypePlDisb=amount;break;
+		case PL_EXP: byTypePlExp=amount;break;
+		case UNDISB: byTypeUnDisb=amount;break;
+		default: break;
+		}
+		
+	}
+
+	
+	
 	public Collection getByTypeAmount(int type) {
 		switch(type) {
 		case COMM: return byTypeComm;

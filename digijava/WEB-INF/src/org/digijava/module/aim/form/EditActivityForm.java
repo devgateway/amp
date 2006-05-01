@@ -132,7 +132,7 @@ public class EditActivityForm extends ActionForm implements Serializable{
 	private Collection pages;
 	private String[] alphaPages;
 	
-	//	For view comment popup
+	// For view comment popup
 	private String actionFlag = null;
 	private boolean serializeFlag;
 	private boolean commentFlag;
@@ -145,6 +145,18 @@ public class EditActivityForm extends ActionForm implements Serializable{
 	// For activity approval process
 	private String approvalStatus;
 	private String workingTeamLeadFlag;
+
+	// For aid harmonization survey indicators
+	private Collection survey;
+	private List indicators = null; 	// holds collection of Indicator helper objects
+	private Collection pageColl = null;	// total number of survey pages
+	private Integer currPage = null;
+	private Integer startIndex = null;	// starting record for iteartion over indicator collection on each page
+	private String fundingOrg = null;	// acronym of funding organisation 
+	private String financingId = null;
+	private Integer surveyYear = null;
+	private Long ampSurveyId = null;
+
 	
 	/* START FINANCIAL EDIT */
 	private Collection fundingOrganizations; // Collection of FundingOrganization objects
@@ -298,7 +310,7 @@ public class EditActivityForm extends ActionForm implements Serializable{
 		totalDisbursements = 0;
 		totalExpenditures = 0;
 		donorFlag = false;
-		
+		System.out.println("Constructor for EditActivityForm is gettting executed here");
 	}
 
 	public void reset(ActionMapping mapping, HttpServletRequest request) {
@@ -3069,5 +3081,113 @@ public class EditActivityForm extends ActionForm implements Serializable{
 	 */
 	public void setFundingId(Long fundingId) {
 		this.fundingId = fundingId;
+	}
+	/**
+	 * @return Returns the ampSurveyId.
+	 */
+	public Long getAmpSurveyId() {
+		return ampSurveyId;
+	}
+	/**
+	 * @param ampSurveyId The ampSurveyId to set.
+	 */
+	public void setAmpSurveyId(Long ampSurveyId) {
+		this.ampSurveyId = ampSurveyId;
+	}
+	/**
+	 * @return Returns the currPage.
+	 */
+	public Integer getCurrPage() {
+		return currPage;
+	}
+	/**
+	 * @param currPage The currPage to set.
+	 */
+	public void setCurrPage(Integer currPage) {
+		this.currPage = currPage;
+	}
+	/**
+	 * @return Returns the financingId.
+	 */
+	public String getFinancingId() {
+		return financingId;
+	}
+	/**
+	 * @param financingId The financingId to set.
+	 */
+	public void setFinancingId(String financingId) {
+		this.financingId = financingId;
+	}
+	/**
+	 * @return Returns the fundingOrg.
+	 */
+	public String getFundingOrg() {
+		return fundingOrg;
+	}
+	/**
+	 * @param fundingOrg The fundingOrg to set.
+	 */
+	public void setFundingOrg(String fundingOrg) {
+		this.fundingOrg = fundingOrg;
+	}
+	/**
+	 * @return Returns the indicators.
+	 */
+	public List getIndicators() {
+		return indicators;
+	}
+	/**
+	 * @param indicators The indicators to set.
+	 */
+	public void setIndicators(List indicators) {
+		this.indicators = indicators;
+	}
+	/**
+	 * @return Returns the pageColl.
+	 */
+	public Collection getPageColl() {
+		return pageColl;
+	}
+	/**
+	 * @param pageColl The pageColl to set.
+	 */
+	public void setPageColl(Collection pageColl) {
+		this.pageColl = pageColl;
+	}
+	/**
+	 * @return Returns the startIndex.
+	 */
+	public Integer getStartIndex() {
+		return startIndex;
+	}
+	/**
+	 * @param startIndex The startIndex to set.
+	 */
+	public void setStartIndex(Integer startIndex) {
+		this.startIndex = startIndex;
+	}
+	/**
+	 * @return Returns the survey.
+	 */
+	public Collection getSurvey() {
+		return survey;
+	}
+	/**
+	 * @param survey The survey to set.
+	 */
+	public void setSurvey(Collection survey) {
+		this.survey = survey;
+	}
+	/**
+	 * @return Returns the surveyYear.
+	 */
+	public Integer getSurveyYear() {
+		return surveyYear;
+	}
+	/**
+	 * @param surveyYear The surveyYear to set.
+	 */
+	public void setSurveyYear(Integer surveyYear) {
+		this.surveyYear = surveyYear;
 	}
 }

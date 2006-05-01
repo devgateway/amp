@@ -129,7 +129,6 @@ public class GetTeamActivities extends Action {
 			String sortOrder = (taForm.getSortOrder() == null) ? null : taForm.getSortOrder().trim();
 			
 			if ( sort == null || "".equals(sort) || sortOrder == null || "".equals(sortOrder)) {
-				System.out.println("Inside IF [NULL]");
 				Collections.sort(temp);
 				taForm.setSort("activity");
 				taForm.setSortOrder("asc");
@@ -148,7 +147,7 @@ public class GetTeamActivities extends Action {
 						Collections.sort(temp, racronymComp);
 				}
 			}
-			taForm.setAllActivities((Collection)temp);
+			taForm.setAllActivities(temp);
 			
 			int totActivities = taForm.getAllActivities().size();
 			int stIndex = ((page - 1) * numRecords) + 1;

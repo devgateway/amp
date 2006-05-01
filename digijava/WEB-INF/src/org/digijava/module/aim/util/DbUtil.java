@@ -1,10 +1,10 @@
 package org.digijava.module.aim.util;
 
 import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.HashSet;
@@ -28,6 +28,10 @@ import org.digijava.kernel.user.User;
 import org.digijava.kernel.util.UserUtils;
 import org.digijava.module.aim.dbentity.AmpActivity;
 import org.digijava.module.aim.dbentity.AmpActivityInternalId;
+import org.digijava.module.aim.dbentity.AmpAhsurvey;
+import org.digijava.module.aim.dbentity.AmpAhsurveyIndicator;
+import org.digijava.module.aim.dbentity.AmpAhsurveyQuestion;
+import org.digijava.module.aim.dbentity.AmpAhsurveyResponse;
 import org.digijava.module.aim.dbentity.AmpApplicationSettings;
 import org.digijava.module.aim.dbentity.AmpClosingDateHistory;
 import org.digijava.module.aim.dbentity.AmpComments;
@@ -54,8 +58,8 @@ import org.digijava.module.aim.dbentity.AmpPhysicalPerformance;
 import org.digijava.module.aim.dbentity.AmpRegion;
 import org.digijava.module.aim.dbentity.AmpReportCache;
 import org.digijava.module.aim.dbentity.AmpReportLocation;
-import org.digijava.module.aim.dbentity.AmpReportSector;
 import org.digijava.module.aim.dbentity.AmpReportPhysicalPerformance;
+import org.digijava.module.aim.dbentity.AmpReportSector;
 import org.digijava.module.aim.dbentity.AmpReports;
 import org.digijava.module.aim.dbentity.AmpRole;
 import org.digijava.module.aim.dbentity.AmpSector;
@@ -83,8 +87,11 @@ import org.digijava.module.aim.helper.Documents;
 import org.digijava.module.aim.helper.EthiopianCalendar;
 import org.digijava.module.aim.helper.FilterProperties;
 import org.digijava.module.aim.helper.FiscalCalendar;
+import org.digijava.module.aim.helper.Indicator;
+import org.digijava.module.aim.helper.Question;
 import org.digijava.module.aim.helper.ReportsCollection;
 import org.digijava.module.aim.helper.Sector;
+import org.digijava.module.aim.helper.SurveyFunding;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.cms.dbentity.CMSContentItem;
 
@@ -8176,9 +8183,8 @@ public class DbUtil {
 		}
 		return donor;
 	}
-
-
-	public static ArrayList getAmpDonorsForActivity(Long id) {
+	
+		public static ArrayList getAmpDonorsForActivity(Long id) {
 		ArrayList donor = new ArrayList();
 		StringBuffer DNOrg = new StringBuffer();
 		Session session = null;
@@ -8250,7 +8256,315 @@ public class DbUtil {
 		
 		return donorString;
 	}
-
-
 	
+	public static Collection getAllSurveysByActivity( Long activityId ) {
+		ArrayList survey = new ArrayList();
+		Set fundingSet = new HashSet();
+		Set surveySet = new HashSet();
+		ArrayList donorOrgs = new ArrayList();
+		Session session = null;
+		Iterator iter1 = null;
+		Iterator iter2 = null;
+		Transaction tx = null;
+		boolean flag1 = false;
+
+		try {
+			session = PersistenceManager.getSession();
+			
+			AmpActivity activity = (AmpActivity) session.load(AmpActivity.class, activityId);
+			fundingSet = activity.getFunding();
+			surveySet = activity.getSurvey();
+			logger.debug("fundingSet.size() : " + fundingSet.size());
+			logger.debug("surveySet.size() : " + surveySet.size());
+			if (surveySet.size() < 1)
+				flag1 = true;
+			if (fundingSet.size() < 1)
+				return survey;
+			else {
+				// adding a survey per donor, having at least one funding for this activity, if there is none 
+				// or if a new donor with funding is added.
+				boolean flag2 = true;
+				tx = session.beginTransaction();
+				iter1 = fundingSet.iterator();
+				while (iter1.hasNext()) {
+					AmpFunding ampFund = (AmpFunding) iter1.next();
+					donorOrgs.add(ampFund.getAmpDonorOrgId());
+					if (!flag1) {
+						iter2 = surveySet.iterator();
+						while (iter2.hasNext()) {
+							AmpAhsurvey ahs = (AmpAhsurvey) iter2.next();
+							if (ahs.getAmpDonorOrgId().equals(ampFund.getAmpDonorOrgId())) { 
+								flag2 = false;
+								break;
+							}
+						}
+					}
+					if (flag1 || flag2) {
+						AmpAhsurvey ahsvy = new AmpAhsurvey();
+						ahsvy.setAmpActivityId(activity);
+						ahsvy.setAmpDonorOrgId(ampFund.getAmpDonorOrgId());
+						activity.getSurvey().add(ahsvy);
+						flag1 = false;
+					}
+					flag2 = true;
+				}
+				session.update(activity);
+				tx.commit();
+				
+				if (activity.getSurvey().isEmpty())
+					logger.debug("activity.getSurvey() is empty.");
+				else {
+					logger.debug("activity.getSurvey().size() : " + activity.getSurvey().size());
+					logger.debug("donorOrgs.size() : " + donorOrgs.size());
+					iter2 = activity.getSurvey().iterator();
+					while (iter2.hasNext()) {
+						AmpAhsurvey svy = (AmpAhsurvey) iter2.next();
+						// getting only those survey records where donor-org is in current funding list
+						if (donorOrgs.indexOf(svy.getAmpDonorOrgId()) != -1) {
+							SurveyFunding svfund = new SurveyFunding();
+							svfund.setSurveyId(svy.getAmpAHSurveyId());
+							svfund.setFundingOrgName(svy.getAmpDonorOrgId().getName());
+							survey.add(svfund);
+						}
+					}
+				}
+			}
+		} catch (Exception ex) {
+			if (tx != null) {
+				try {
+					tx.rollback();
+				} catch (HibernateException e) {
+					logger.debug("rollback() failed : " + e.getMessage());
+				}
+			}
+			logger.debug("Unable to get survey : " + ex.getMessage());
+			ex.printStackTrace(System.out);
+		} finally {
+			try {
+				if (session != null) {
+					PersistenceManager.releaseSession(session);
+				}
+			} catch (Exception ex) {
+				logger.debug("releaseSession() failed");
+			}
+		}
+		logger.debug("survey.size() : " + survey.size());
+		return survey;
+	}
+
+	public static List getResposesBySurvey(Long surveyId, Long activityId) {
+		ArrayList responses = new ArrayList();
+		Set response = new HashSet();
+		Collection fundingSet = new ArrayList();
+		Session session = null;
+		Iterator iter1 = null;
+		boolean flag = true;
+		
+		try {
+			session = PersistenceManager.getSession();
+			String qry = "select indc from " + AmpAhsurveyIndicator.class.getName()
+						 	+ " indc order by indicator_number asc";
+			Collection indicatorColl = session.createQuery(qry).list();
+			logger.debug("indicatorColl.size() : " + indicatorColl.size());
+			
+			AmpAhsurvey svy = (AmpAhsurvey) session.get(AmpAhsurvey.class, surveyId);
+			//response = svy.getResponses();
+			qry = "select res from " + AmpAhsurvey.class.getName()
+					+ " res left join fetch res.responses where (res.ampAHSurveyId=:surveyId)";
+			Query query = session.createQuery(qry);
+			query.setParameter("surveyId", surveyId, Hibernate.LONG);
+			response = ((AmpAhsurvey) query.list().get(0)).getResponses();
+			logger.debug("response.size() : " + response.size());
+			
+			qry = "select fund from " + AmpFunding.class.getName() 
+					+ " fund where (fund.ampDonorOrgId=:donorId) and (fund.ampActivityId=:activityId)";
+			query = session.createQuery(qry);
+			query.setParameter("donorId", svy.getAmpDonorOrgId().getAmpOrgId(), Hibernate.LONG);
+			query.setParameter("activityId", svy.getAmpActivityId().getAmpActivityId(), Hibernate.LONG);
+			fundingSet = query.list();
+			logger.debug("fundingSet.size() : " + fundingSet.size());
+			
+			if (response.size() < 1)	// new survey
+				flag = false;
+			iter1 = indicatorColl.iterator();
+			Iterator iter2 = null;
+			boolean ansFlag = false;
+			while (iter1.hasNext()) {
+				AmpAhsurveyIndicator indc = (AmpAhsurveyIndicator) iter1.next();
+				Indicator ind = new Indicator();
+				ind.setIndicatorCode(indc.getIndicatorCode());
+				ind.setName(indc.getName());
+				ind.setQuestion(new ArrayList());
+				iter2 = session.createFilter(indc.getQuestions(), "order by this.questionNumber asc").list().iterator();
+				//iter2 = session.createFilter(((AmpAhsurveyIndicator) session.load(AmpAhsurveyIndicator.class, indc.getAmpIndicatorId())).getQuestions(), 
+					//			"order by this.questionNumber asc").list().iterator();
+				Iterator iter3 = null;
+				while (iter2.hasNext()) {
+					AmpAhsurveyQuestion q = (AmpAhsurveyQuestion) iter2.next();
+					Question ques = new Question();
+					ques.setQuestionType(q.getAmpTypeId().getName());
+					ques.setQuestionId(q.getAmpQuestionId());
+					ques.setQuestionText(q.getQuestionText());
+					if (flag) {	// response is blank in case of new survey 
+						iter3 = response.iterator();
+						while (iter3.hasNext()) {
+							AmpAhsurveyResponse res = (AmpAhsurveyResponse) iter3.next();
+							if (res.getAmpQuestionId().getAmpQuestionId().equals(q.getAmpQuestionId())) {
+								if (q.getQuestionNumber().intValue() == 1) {
+									if ("yes".equalsIgnoreCase(res.getResponse()))
+										ansFlag = true;
+								}
+								// if answer to question #1 of survey is yes then calculate 
+								// difference(%) between planned & actual disbursement(s)
+								if ("calculated".equalsIgnoreCase(q.getAmpTypeId().getName())) {
+									if (q.getQuestionNumber().intValue() == 10) {
+										if (ansFlag) {
+											Iterator itr4 = fundingSet.iterator();
+											Iterator itr5 = null;
+											double actual = 0.0;
+											double planned = 0.0;
+											AmpFundingDetail fd = null;
+											while(itr4.hasNext()) {
+												AmpFunding ampf = (AmpFunding) itr4.next();
+												itr5 = ampf.getFundingDetails().iterator();
+												while(itr5.hasNext()) {
+													fd = (AmpFundingDetail) itr5.next();
+													if (fd.getTransactionType().intValue() == 1) {
+														if (fd.getAdjustmentType().intValue() == 0)
+															planned += fd.getTransactionAmount().floatValue();
+														else if (fd.getAdjustmentType().intValue() == 1)
+															actual += fd.getTransactionAmount().floatValue();
+													}
+												}
+											}
+											logger.debug("actual = " + actual + "  planned = " + planned);
+											if (planned == 0.0)
+												res.setResponse("nil");
+											else {
+												NumberFormat formatter = new DecimalFormat("#.##");
+											    Double percent = new Double((actual * 100) / planned);
+												logger.debug("percent = " + percent + " format(percent) : " + formatter.format(percent));
+												res.setResponse(formatter.format(percent));
+											}
+										}
+										else
+											res.setResponse(null);
+									}
+								}
+								ques.setResponse(res.getResponse());
+								ques.setResponseId(res.getAmpReponseId());
+								break;
+							}
+						}
+					}
+					ind.getQuestion().add(ques);
+				}
+				responses.add(ind);		
+			}
+		} catch (Exception ex) {
+			logger.debug("Unable to get survey responses : " + ex.getMessage());
+			ex.printStackTrace(System.out);
+		} finally {
+			try {
+				if (session != null) {
+					PersistenceManager.releaseSession(session);
+				}
+			} catch (Exception ex) {
+				logger.debug("releaseSession() failed");
+			}
+		}
+		logger.debug("responses.size() : " + responses.size());
+		return responses;
+	}
+	
+	public static AmpAhsurvey getAhSurvey(Long surveyId) {
+		AmpAhsurvey survey = new AmpAhsurvey();
+		Session session = null;
+
+		try {
+			session = PersistenceManager.getSession();
+			String qry = "select svy from " + AmpAhsurvey.class.getName()
+			 				+ " svy where (svy.ampAHSurveyId=:surveyId)";
+			Query q = session.createQuery(qry);
+			q.setParameter("surveyId", surveyId, Hibernate.LONG);
+			survey = (AmpAhsurvey) q.list().get(0);
+		}
+		catch (Exception ex) {
+			logger.debug("Unable to get survey : " + ex.getMessage());
+			ex.printStackTrace(System.out);
+		} finally {
+			try {
+				if (session != null) {
+					PersistenceManager.releaseSession(session);
+				}
+			} catch (Exception ex) {
+				logger.debug("releaseSession() failed");
+			}
+		}
+		return survey;
+	}
+	
+	public static void saveSurveyResponses(Long surveyId, Collection indicator) {
+		Session session = null;
+		Transaction tx = null;
+		Iterator itr1 = null;
+		Iterator itr2 = null;
+		Iterator itr3 = null;
+		String indcCode = null;
+		Collection col = null;
+		boolean flag = true;
+		
+		try {
+			session = PersistenceManager.getSession();
+			tx = session.beginTransaction();
+			
+			AmpAhsurvey survey = (AmpAhsurvey) session.get(AmpAhsurvey.class, surveyId);
+			String qry = "select count(*) from " + AmpAhsurveyResponse.class.getName()
+							+ " res where (res.ampAHSurveyId=:surveyId)";
+			Integer resposeSize = (Integer) session.createQuery(qry)
+									.setParameter("surveyId", surveyId, Hibernate.LONG)
+									.uniqueResult();
+			logger.debug("Response size : " + resposeSize.intValue());
+			if (resposeSize.intValue() < 1) {
+				flag = false;
+				logger.debug("Response set is empty");
+			}
+			
+			itr1 = indicator.iterator();
+			while (itr1.hasNext()) {
+				itr2 = ((Indicator) itr1.next()).getQuestion().iterator();
+				while (itr2.hasNext()) {
+					Question q = (Question) itr2.next();
+					AmpAhsurveyResponse res = new AmpAhsurveyResponse();
+					if (flag)
+						// res.setAmpReponseId(q.getResponseId());
+						res = (AmpAhsurveyResponse) session.load(AmpAhsurveyResponse.class, q.getResponseId());
+					res.setAmpAHSurveyId(survey);
+					AmpAhsurveyQuestion ques = (AmpAhsurveyQuestion) session.load(AmpAhsurveyQuestion.class, q.getQuestionId());
+					res.setAmpQuestionId(ques);
+					res.setResponse(q.getResponse());
+					session.saveOrUpdate(res);
+				}
+			}
+			tx.commit();
+		} catch (Exception ex) {
+			if (tx != null) {
+				try {
+					tx.rollback();
+				} catch (HibernateException e) {
+					logger.debug("rollback() failed : " + e.getMessage());
+				}
+			}
+			logger.debug("Unable to save survey response : " + ex.getMessage());
+			ex.printStackTrace(System.out);
+		} finally {
+			try {
+				if (session != null) {
+					PersistenceManager.releaseSession(session);
+				}
+			} catch (Exception ex) {
+				logger.debug("releaseSession() failed");
+			}
+		}
+	}
 }

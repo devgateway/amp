@@ -83,6 +83,8 @@ public class AmpActivity
 	
 	private String approvalStatus;
 	
+	private Set survey;
+	
 	/**
 	 * @return
 	 */
@@ -763,5 +765,18 @@ public class AmpActivity
 	 */
 	public void setApprovalStatus(String approvalStatus) {
 		this.approvalStatus = approvalStatus;
+	}
+
+	/**
+	 * @return Returns the survey.
+	 */
+	public Set getSurvey() {
+		return survey;
+	}
+	/**
+	 * @param survey The survey to set.
+	 */
+	public void setSurvey(Set survey) {
+		this.survey = survey;
 	}
 }

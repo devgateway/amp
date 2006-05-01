@@ -32,7 +32,7 @@ public class OrganisationManager extends Action {
 		 } else {
 					String str = (String)session.getAttribute("ampAdmin");
 					if (str.equals("no")) {
-							  return mapping.findForward("index");
+						return mapping.findForward("index");
 					}
 		 }
 		 

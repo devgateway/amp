@@ -1159,6 +1159,8 @@ public class SaveActivity extends Action {
 		}
 		
 
+		boolean surveyFlag = eaForm.isDonorFlag();
+		
 		eaForm.setDonorFlag(false);
 		eaForm.setFundDonor(null);
 		eaForm.setStep("1");
@@ -1186,11 +1188,17 @@ public class SaveActivity extends Action {
 		if (session.getAttribute("ampProjects") != null) {
 			session.removeAttribute("ampProjects");
 		}
-	
+		
 		if (temp == 0)
 			return mapping.findForward("adminHome");
-		else if (temp == 1)
-			return mapping.findForward("viewMyDesktop");
+		else if (temp == 1) {
+			if (surveyFlag) {	// forwarding to edit survey action for saving survey responses
+				logger.debug("forwarding to edit survey action...");
+				return mapping.findForward("saveSurvey");
+			}
+			else
+				return mapping.findForward("viewMyDesktop");
+		}
 		else
 			return null;
 		} catch (Exception e) {

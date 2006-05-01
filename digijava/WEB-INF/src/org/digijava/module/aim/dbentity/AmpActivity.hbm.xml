@@ -146,6 +146,13 @@
 		<cache usage="read-write" />
 			<key column="activity_id"/>
 			<one-to-many class="org.digijava.module.aim.dbentity.AmpRegionalFunding"/>
- 		</set>					
+ 		</set>
+ 		
+ 		<set name="survey" cascade="save-update" table="amp_ahsurvey" inverse="true">
+			<cache usage="read-write"/>
+			<key column="amp_activity_id"/>
+			<one-to-many class="org.digijava.module.aim.dbentity.AmpAhsurvey"/>
+		</set>
+ 							
 	</class>
 </hibernate-mapping>

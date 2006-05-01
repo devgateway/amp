@@ -48,7 +48,15 @@
 			<put-item name="tabHeader" module="aim" instance="default" teaser="mainProjectDetails"/>
 			<put-item name="tabBody" module="aim" instance="default" teaser="blankTeaser"/>
 	 		<put-item name="footer" layout="footerLayout"/>
-		</layout>	
+		</layout>
+		<layout name="layoutSurveyList" extends="tabLayout">
+			<put name="title">Activity - Aid Harmonization Survey Overview </put>
+			<put-item name="tabBody" module="aim" instance="default" teaser="surveyList"/> 
+	 	</layout>	
+	 	<layout name="layoutSurvey" extends="tabLayout">
+			<put name="title">Activity - Aid Harmonization Survey Overview </put>
+			<put-item name="tabBody" module="aim" instance="default" teaser="surveyIndicators"/> 
+	 	</layout>
 		<layout name="layoutFinancingBreakdown" extends="tabLayout">
 			<put name="title">Activity - Financial Progress Overview </put>
 			<put-item name="tabBody" module="aim" instance="default" teaser="financingBreakdown"/> 

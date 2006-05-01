@@ -41,6 +41,14 @@
       		name="aimViewOrgForm"
       		type="org.digijava.module.aim.form.ViewOrgForm" />
       		
+    <form-bean
+      		name="aimSurveyForm"
+      		type="org.digijava.module.aim.form.SurveyForm" />
+    
+    <form-bean
+      		name="aimEditSurveyForm"
+      		type="org.digijava.module.aim.form.EditSurveyForm" />
+    
 	<form-bean
       		name="aimMainProjectDetailsForm"
       		type="org.digijava.module.aim.form.MainProjectDetailsForm" />
@@ -390,6 +398,10 @@
     
    
   <!-- START TEASERS -->
+	<action name="aimSurveyForm" forward="/showLayout.do?layout=layoutSurveyList" 
+			  path="/aim/viewSurveyList" />
+	<action name="aimEditSurveyForm" forward="/showLayout.do?layout=layoutSurvey" 
+			  path="/aim/viewSurvey" />
 	<action forward="/showLayout.do?layout=layoutFinancingBreakdown" 
 			  path="/aim/viewFinancingBreakdown" />
 
@@ -1110,6 +1122,45 @@
 			  path="/aim/viewOrganisation">
 			  <forward name="forward" path="/showLayout.do?layout=aim_viewOrgDetailPopupLayout" />
 			  <forward name="index" path="/aim/index.do" redirect="true" />			  
+	</action>
+	
+	<action 
+			  name="aimSurveyForm"
+			  type="org.digijava.module.aim.action.GetSurveyList"
+			  scope="request"
+			  validate="false"
+			  path="/aim/getSurveyList">
+	</action>
+	
+	<action 
+			  name="aimEditSurveyForm"
+			  type="org.digijava.module.aim.action.GetSurvey"
+			  scope="session"
+			  validate="false"
+			  path="/aim/getSurvey">
+	</action>
+	
+	<action 
+			  name="aimEditActivityForm"
+			  type="org.digijava.module.aim.action.EditSurveyList"
+			  scope="session"
+			  validate="false"
+			  path="/aim/editSurveyList">
+  			  <forward name="forward" path="/showLayout.do?layout=editSurveyList" />
+			  <forward name="index" path="/aim/index.do" redirect="true" />
+			  <forward name="viewMyDesktop" path="/aim/viewMyDesktop.do" redirect="true"/>
+	</action>
+	
+	<action 
+			  name="aimEditActivityForm"
+			  type="org.digijava.module.aim.action.EditSurvey"
+			  scope="session"
+			  validate="false"
+			  path="/aim/editSurvey">
+			  <forward name="forward" path="/showLayout.do?layout=editSurvey" />
+			  <forward name="index" path="/aim/index.do" redirect="true" />
+			  <forward name="survey" path="/aim/editSurveyList.do" redirect="true"/>
+			  <forward name="viewMyDesktop" path="/aim/viewMyDesktop.do" redirect="true"/>
 	</action>
 
 	<action 
@@ -2423,7 +2474,8 @@
 			  path="/aim/saveActivity">	
 			  <forward name="adminHome" path="/admin.do" redirect="true" />
 			  <forward name="viewMyDesktop" path="/viewMyDesktop.do" redirect="true" />
-			  <forward name="index" path="/aim/index.do" redirect="true" />			  
+			  <forward name="saveSurvey" path="/editSurvey.do?action=save" />			  
+			  <forward name="index" path="/aim/index.do" redirect="true" />
 			  <forward name="addActivity" path="/aim/addActivity.do?edit=true" />
 			  <forward name="addActivityStep1" path="/showLayout.do?layout=addActivityStep1" />
 			  <forward name="addActivityStep2" path="/showLayout.do?layout=addActivityStep2" />

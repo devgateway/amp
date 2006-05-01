@@ -129,7 +129,10 @@ public class LocationManager extends Action {
 									addForm.setImpLevelValue(new Integer(3));
 									System.out.println("Inside Zone[ImpLevelValue] : " + addForm.getImpLevelValue());
 									addForm.setZone(DbUtil.getAllZonesUnderRegion(addForm.getRegionId()));
+									
 									if (addForm.getZone().isEmpty()) {
+										// Checking whether this region is currently being referenced by some activity
+										// if yes then don't show the delete link against this region by setting regionFlag='no' 
 										AmpLocation ampLoc = DbUtil.getAmpLocation(new Long(-1),addForm.getRegionId(),addForm.getZoneId(),addForm.getWoredaId());
 								   		if (ampLoc !=null) {
 								   			addForm.setRegionFlag("no");
@@ -152,6 +155,9 @@ public class LocationManager extends Action {
 									addForm.setImpLevelValue(new Integer(4));
 									System.out.println("Inside Woreda[ImpLevelValue] : " + addForm.getImpLevelValue());
 									addForm.setWoreda(DbUtil.getAllWoredasUnderZone(addForm.getZoneId()));
+									
+									// Checking whether this zone is currently being referenced by some activity
+									// if yes then don't show the delete link against this zone by setting zoneFlag='no'
 									AmpLocation ampLoc = DbUtil.getAmpLocation(new Long(-1),addForm.getRegionId(),addForm.getZoneId(),addForm.getWoredaId());
 									if (addForm.getWoreda().isEmpty()) {
 										if (ampLoc != null) {

@@ -34,6 +34,8 @@ public class AmpFunding implements Serializable
 	
 	private AmpModality modalityId;
 	
+	//private Set survey;
+	
 	
 		/**
 		 * @return

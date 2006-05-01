@@ -183,21 +183,21 @@
 								</logic:notEqual>
 								</TD>
 								<logic:equal name="aimMainProjectDetailsForm" property="tabIndex" value="4">
-	                     <TD vAlign=center bgColor=#222e5d class="sub-nav-selected" noWrap width="153">
+	                     		<TD vAlign=center bgColor=#222e5d class="sub-nav-selected" noWrap width="153">
 									:: <digi:trn key="aim:regionalFunding">Regional Funding</digi:trn> 									
 								</logic:equal>
 								<logic:notEqual name="aimMainProjectDetailsForm" property="tabIndex" value="4">
-	                    	<TD vAlign=center bgColor=#3754a1 noWrap width="153">
-                   			<c:set target="${urlTabs}" property="tabIndex" value="4"/>
-                   			<c:set target="${urlTabs}" property="regionId" value="-1"/>
-<bean:define id="translation">
-	<digi:trn key="aim:clickToViewRegionalFundings">Click here to view regional funding</digi:trn>
-</bean:define>
-                    			<digi:link href="/viewRegionalFundingBreakdown.do" name="urlTabs" styleClass="sub-nav" title="<%=translation%>" >
-									 :: <digi:trn key="aim:regionalFunding">Regional Funding</digi:trn> 	
+	                    		<TD vAlign=center bgColor=#3754a1 noWrap width="153">
+                   					<c:set target="${urlTabs}" property="tabIndex" value="4"/>
+                   					<c:set target="${urlTabs}" property="regionId" value="-1"/>
+									<bean:define id="translation">
+										<digi:trn key="aim:clickToViewRegionalFundings">Click here to view regional funding</digi:trn>
+									</bean:define>
+                    				<digi:link href="/viewRegionalFundingBreakdown.do" name="urlTabs" styleClass="sub-nav" title="<%=translation%>" >
+									 	:: <digi:trn key="aim:regionalFunding">Regional Funding</digi:trn> 	
 									</digi:link>									
 								</logic:notEqual>
-								</TD>		
+								</TD>	
 
 								<logic:equal name="aimMainProjectDetailsForm" property="tabIndex" value="5">
 	                     <TD vAlign=center bgColor=#222e5d class="sub-nav-selected" noWrap width="103">
@@ -218,6 +218,40 @@
 						</TABLE>
 					</TD>
 				</TR>
+			</TABLE>
+		</TD>
+	</TR>
+	<TR>
+      <TD width="100%" nowrap align="center" vAlign="bottom" height="20">
+        	<TABLE width="765"  border="0" cellpadding="0" cellspacing="0" bgcolor="#FFFFFF" class="box-border-nopadding" > 
+            <TR bgColor=#f4f4f2>
+              	<TD height="20">
+						<TABLE border="0" cellpadding="0" cellspacing="1" bgcolor="#F4F4F2" height="20">
+                 		<TR bgColor=#f4f4f2 height="20">
+                 			<logic:equal name="aimMainProjectDetailsForm" property="tabIndex" value="5">
+	                     		<TD vAlign=center bgColor=#222e5d class="sub-nav-selected" noWrap width="123">
+									:: <digi:trn key="aim:indicators">INDICATORS</digi:trn> 									
+								</logic:equal>
+								<logic:notEqual name="aimMainProjectDetailsForm" property="tabIndex" value="5">
+	                    		<TD vAlign=center bgColor=#3754a1 noWrap width="123">
+	                    			<jsp:useBean id="survey" type="java.util.Map" class="java.util.HashMap" />
+	                    			<c:set target="${survey}" property="ampActivityId">
+										<bean:write name="aimMainProjectDetailsForm" property="ampActivityId"/>
+									</c:set>
+                   					<c:set target="${survey}" property="tabIndex" value="5"/>
+                   					<bean:define id="translation">
+										<digi:trn key="aim:clickToViewAidEffectIndicators">Click here to view Aid Effectiveness Indicators</digi:trn>
+									</bean:define>
+                    				<digi:link href="/viewSurveyList.do" name="survey" styleClass="sub-nav" title="<%=translation%>" >
+									 	:: <digi:trn key="aim:indicators">Indicators</digi:trn> 	
+									</digi:link>									
+								</logic:notEqual>
+								</TD>
+								<TD vAlign=middle width="100%" bgColor=#3754A1 >&nbsp;</TD>
+						</TR>
+						</TABLE>
+				</TD>
+			</TR>
 			</TABLE>
 		</TD>
 	</TR>

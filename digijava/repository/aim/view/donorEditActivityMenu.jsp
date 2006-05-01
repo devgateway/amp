@@ -54,17 +54,27 @@ function gotoStep(value) {
 	document.aimEditActivityForm.submit();
 }
 
+function fnGetSurvey() {
+	<digi:context name="step" property="context/module/moduleinstance/editSurveyList.do?edit=true" />
+	document.aimEditActivityForm.action = "<%= step %>";
+	document.aimEditActivityForm.target = "_self";
+	document.aimEditActivityForm.submit();
+}
+
 -->
 </script>
 
 <digi:instance property="aimEditActivityForm" />
 <html:hidden property="approvalStatus" />
 <html:hidden property="workingTeamLeadFlag" />
+<input type="hidden" name="edit" value="true">
 <html:hidden property="pageId" />
+<html:hidden property="step" />
 
 <table width="209" cellSpacing=0 cellPadding=0 vAlign="top" align="left" border=0>
 <tr><td width="209" height="10" background="module/aim/images/top.gif">
 </td></tr>
+
 <tr><td>
 <table width="209" cellSpacing=4 cellPadding=2 vAlign="top" align="left" 
 bgcolor="#006699">
@@ -100,6 +110,37 @@ bgcolor="#006699">
 			</table>
 		</td>			
 		</c:if>				
+	</tr>
+	<tr>
+		<c:if test="${aimEditActivityForm.step != 17}">
+		<td>		
+			<IMG alt=Link height=10 src="../ampTemplate/images/arrow-th-BABAB9.gif" width=15>
+			<bean:define id="translation">
+				<digi:trn key="aim:clickToAdd/UpdateAidHarmonizationSurvey">Add / Update Aid Harmonization Survey</digi:trn>
+			</bean:define>
+			<a href="javascript:fnGetSurvey()" class="menu" title="<%=translation%>">
+				<digi:trn key="aim:indicators">Indicators</digi:trn>
+			</a>
+		</td>
+		</c:if>
+		<c:if test="${aimEditActivityForm.step == 17}">
+		<td>
+			<table width="100%" cellspacing=0 cellpadding=0 valign=top align=left border=0> 
+				<tr>
+					<td width="10" height="19" background="module/aim/images/left-arc.gif">
+					</td>
+					<td bgcolor="#3399ff" height="19">
+						<IMG alt=Link height=10 src="../ampTemplate/images/arrow-th-BABAB9.gif" width=15>
+						<span class="textalb">
+							<digi:trn key="aim:indicators">Indicators</digi:trn>
+						</span>
+					</td>
+					<td width="10" height="19"  background="module/aim/images/right-arc.gif">
+					</td>
+				</tr>
+			</table>
+		</td>			
+		</c:if>
 	</tr>
 
 	<tr>

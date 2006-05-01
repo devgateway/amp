@@ -11400,7 +11400,7 @@ public class ReportUtil {
 	
 	}
 	
-	public static double setQuarterlyFunding(AmpReportCache ampReportCache, Double value, double fromExchangeRate,
+	public static double extractQuarterlyFunding(AmpReportCache ampReportCache, Double value, double fromExchangeRate,
 			double toExchangeRate, int fromYr, int toYr, int fiscalQuarter, int fiscalYear, 
 			AmpByAssistTypeList[][] terms,
 			double[][] funds
@@ -11615,8 +11615,6 @@ public class ReportUtil {
 		double[][] totActualExpFunds=new double[yrCount][4];
 		double[][] totPlannedExpFunds=new double[yrCount][4];
 		
-		
-		
 		String inClause=null;
 		String orderClause=null;
 		String title=null;
@@ -11625,34 +11623,21 @@ public class ReportUtil {
 		double toExchangeRate=1.0;
 		double fromExchangeRate=0.0;
 		double amount=0.0;
-		double sumUnDisb = 0, actSumCommit = 0, actSumDisb = 0, actSumExp = 0, planSumCommit = 0, planSumDisb = 0, planSumExp = 0;
-		double unDisbSubTotal = 0, actCommitSubTotal = 0, actDisbSubTotal = 0, actExpSubTotal = 0, planCommitSubTotal = 0, planDisbSubTotal = 0, planExpSubTotal = 0;
-		double unDisbSubSubTotal = 0, actCommitSubSubTotal = 0, actDisbSubSubTotal = 0, actExpSubSubTotal = 0, planCommitSubSubTotal = 0, planDisbSubSubTotal = 0, planExpSubSubTotal = 0;
-		double unDisbTotal = 0, actCommitTotal = 0, actDisbTotal = 0, actExpTotal = 0, planCommitTotal = 0, planDisbTotal = 0, planExpTotal = 0;
 		
-		AmpByAssistTypeList actSumCommitTerms=new AmpByAssistTypeList();
-		AmpByAssistTypeList actSumDisbTerms=new AmpByAssistTypeList();
-		AmpByAssistTypeList actSumExpTerms=new AmpByAssistTypeList();
-		AmpByAssistTypeList planSumCommitTerms=new AmpByAssistTypeList();
-		AmpByAssistTypeList planSumDisbTerms=new AmpByAssistTypeList();
-		AmpByAssistTypeList planSumExpTerms=new AmpByAssistTypeList();
-		AmpByAssistTypeList sumUnDisbTerms=new AmpByAssistTypeList();
+		double []sum = new double[7];
+		double []subTotal= new double[7];
+		double []subSubTotal = new double[7];
+		double []total = new double[7];
 		
-		AmpByAssistTypeList actCommitSubTotalTerms=new AmpByAssistTypeList();
-		AmpByAssistTypeList actDisbSubTotalTerms=new AmpByAssistTypeList();
-		AmpByAssistTypeList actExpSubTotalTerms=new AmpByAssistTypeList();
-		AmpByAssistTypeList planCommitSubTotalTerms=new AmpByAssistTypeList();
-		AmpByAssistTypeList planDisbSubTotalTerms=new AmpByAssistTypeList();
-		AmpByAssistTypeList planExpSubTotalTerms=new AmpByAssistTypeList();
-		AmpByAssistTypeList UnDisbSubTotalTerms=new AmpByAssistTypeList();
+		AmpByAssistTypeList sumTerms[]=new AmpByAssistTypeList[7];
+		AmpByAssistTypeList subTotalTerms[]=new AmpByAssistTypeList[7];
+		AmpByAssistTypeList subSubTotalTerms[]=new AmpByAssistTypeList[7];
 		
-		AmpByAssistTypeList actCommitSubSubTotalTerms=new AmpByAssistTypeList();
-		AmpByAssistTypeList actDisbSubSubTotalTerms=new AmpByAssistTypeList();
-		AmpByAssistTypeList actExpSubSubTotalTerms=new AmpByAssistTypeList();
-		AmpByAssistTypeList planCommitSubSubTotalTerms=new AmpByAssistTypeList();
-		AmpByAssistTypeList planDisbSubSubTotalTerms=new AmpByAssistTypeList();
-		AmpByAssistTypeList planExpSubSubTotalTerms=new AmpByAssistTypeList();
-		AmpByAssistTypeList UnDisbSubSubTotalTerms=new AmpByAssistTypeList();
+		for(int i=0;i<7;i++) {
+			sumTerms[i]=new AmpByAssistTypeList();
+			subTotalTerms[i]=new AmpByAssistTypeList();
+			subSubTotalTerms[i]=new AmpByAssistTypeList();
+		}
 		
 		int fiscalYear=0,fiscalQuarter=0;
 		int maxYear=0;
@@ -11691,7 +11676,6 @@ public class ReportUtil {
 				}
 			}
 
-//			ReportSelectionCriteria rsc=ReportUtil.getReportSelectionCriteria(ampReportId);
 			columns=rsc.getColumns();
 			hierarchy=(ArrayList)rsc.getHierarchy();
 			measures=(ArrayList)rsc.getMeasures();
@@ -11707,8 +11691,6 @@ public class ReportUtil {
 						orderClause= orderClause + ",report." + c.getColumnAlias();
 				}
 			}
-//			currencies=DbUtil.getAmpCurrencyRate();
-			//logger.debug("Inclause: " + inClause);
 			approvedActivityList=DbUtil.getApprovedActivities(inClause);
 			session = PersistenceManager.getSession();
 			if(startDate==null && closeDate==null)
@@ -11813,10 +11795,6 @@ public class ReportUtil {
 				}
 			}
 
-//			q.setParameter("ampTeamId",ampTeamId,Hibernate.LONG) ;
-			
-	//		report.setProjects(new ArrayList());
-	//		Project project=null;
 			if(ampActivities!=null && rsc.getHierarchy().size()==0)
 			{
 				iter = ampActivities.iterator();
@@ -11929,37 +11907,28 @@ public class ReportUtil {
 							if(rsc.getOption().equals(Constants.ANNUAL))
 							{
 								annualFundingCompute(yrCount,measures,actualFunds,plannedFunds,
-								   		 actualTerms, plannedTerms,actSumCommit, 
-										 actSumDisb,actSumExp,planSumCommit,planSumDisb,planSumExp,
-										 actSumCommitTerms,actSumDisbTerms, actSumExpTerms,
-										 planSumCommitTerms, planSumDisbTerms, planSumExpTerms,
+								   		 actualTerms, plannedTerms,sum, 
+										 sumTerms, 
 										 totalCommitment,totalDisbursement,report, reports,
 										 subTotActualFunds,
 										 subTotPlannedFunds,
-										 actCommitSubTotal, 
-										 actDisbSubTotal ,
-										 actExpSubTotal , 
-										 planCommitSubTotal,
-										 planDisbSubTotal,
-										 planExpSubTotal,
-										 unDisbSubTotal,
+										 subTotal,
 										 false
 								);
 							}
 							else
-								quarterlyFundingCompute(yrCount,measures,
+								
+							quarterlyFundingCompute(yrCount,measures,
 										actualCommFunds, actualDisbFunds,actualExpFunds, 
 										plannedCommFunds, plannedDisbFunds,plannedExpFunds, 
 										actualCommTerms,actualDisbTerms,actualExpTerms,
-										plannedCommTerms,plannedDisbTerms,plannedExpTerms,			
-										actSumCommit, actSumDisb, actSumExp, planSumCommit,planSumDisb,planSumExp,
-										  actSumCommitTerms, actSumDisbTerms, actSumExpTerms,planSumCommitTerms, planSumDisbTerms,planSumExpTerms,
-										 totalCommitment,totalDisbursement,report, reports,
-										 subTotActualCommFunds,subTotActualDisbFunds,subTotActualExpFunds,
-										 subTotPlannedCommFunds,subTotPlannedDisbFunds,subTotPlannedExpFunds,
-										  actCommitSubTotal, actDisbSubTotal, actExpSubTotal , planCommitSubTotal,planDisbSubTotal,planExpSubTotal,unDisbSubTotal,
-										 false);
-
+										plannedCommTerms,plannedDisbTerms,plannedExpTerms,
+										sum,sumTerms,totalCommitment,totalDisbursement,report,reports,
+										subTotActualCommFunds,subTotActualDisbFunds,subTotActualExpFunds,
+										subTotPlannedCommFunds,subTotPlannedDisbFunds,subTotPlannedExpFunds,
+										subTotal,
+										false);
+								
 							ampReports.add(reports);
 							totalCommitment=0;
 							totalDisbursement=0;
@@ -11973,32 +11942,15 @@ public class ReportUtil {
 							components.clear();
 							contactName=null;
 							minYear=maxYear=0;
-							sumUnDisb=actSumCommit=actSumDisb=actSumExp=planSumCommit=planSumDisb=planSumExp = 0;
 							
-							//reset subtotals - we need fresh objects here!
-							 actSumCommitTerms=new AmpByAssistTypeList();
-							 actSumDisbTerms=new AmpByAssistTypeList();
-							 actSumExpTerms=new AmpByAssistTypeList();
-							 planSumCommitTerms=new AmpByAssistTypeList();
-							 planSumDisbTerms=new AmpByAssistTypeList();
-							 planSumExpTerms=new AmpByAssistTypeList();
-							 sumUnDisbTerms=new AmpByAssistTypeList();
-		
-							 actCommitSubTotalTerms=new AmpByAssistTypeList();
-								actDisbSubTotalTerms=new AmpByAssistTypeList();
-								actExpSubTotalTerms=new AmpByAssistTypeList();
-								planCommitSubTotalTerms=new AmpByAssistTypeList();
-								planDisbSubTotalTerms=new AmpByAssistTypeList();
-								planExpSubTotalTerms=new AmpByAssistTypeList();
-								UnDisbSubTotalTerms=new AmpByAssistTypeList();
-								
-								actCommitSubSubTotalTerms=new AmpByAssistTypeList();
-								actDisbSubSubTotalTerms=new AmpByAssistTypeList();
-								actExpSubSubTotalTerms=new AmpByAssistTypeList();
-								planCommitSubSubTotalTerms=new AmpByAssistTypeList();
-								planDisbSubSubTotalTerms=new AmpByAssistTypeList();
-								planExpSubSubTotalTerms=new AmpByAssistTypeList();
-								UnDisbSubSubTotalTerms=new AmpByAssistTypeList();
+							//reset subtotals and sums...
+							for(int t=0;t<7;t++) {
+								sum[t]=0;
+								sumTerms[t]=new AmpByAssistTypeList();
+								subTotalTerms[t]=new AmpByAssistTypeList();
+								subSubTotalTerms[t]=new AmpByAssistTypeList();
+							}
+							
 								
 							 
 							
@@ -12035,7 +11987,6 @@ public class ReportUtil {
 						reports.setRecords(new ArrayList());
 						//logger.debug("Init Record");
 						title=ampReportCache.getActivityName();
-						
 						
 						
 						ampId=ampReportCache.getAmpId();
@@ -12211,30 +12162,30 @@ public class ReportUtil {
 						else
 						{	
 							if(ampReportCache.getActualCommitment().doubleValue()>0 && ampReportCache.getPerspective().equals(perspective))
-								totalCommitment+=setQuarterlyFunding(ampReportCache, ampReportCache.getActualCommitment(), fromExchangeRate,
+								totalCommitment+=extractQuarterlyFunding(ampReportCache, ampReportCache.getActualCommitment(), fromExchangeRate,
 										toExchangeRate, fromYr, toYr, fiscalQuarter, fiscalYear, 
 										actualCommTerms,actualCommFunds);
 							
 									
 							if(ampReportCache.getActualDisbursement().doubleValue()>0 && ampReportCache.getPerspective().equals(perspective))
-								totalDisbursement+=setQuarterlyFunding(ampReportCache,  ampReportCache.getActualDisbursement(), fromExchangeRate, toExchangeRate, fromYr, toYr, fiscalQuarter, fiscalYear, actualDisbTerms,actualDisbFunds);
+								totalDisbursement+=extractQuarterlyFunding(ampReportCache,  ampReportCache.getActualDisbursement(), fromExchangeRate, toExchangeRate, fromYr, toYr, fiscalQuarter, fiscalYear, actualDisbTerms,actualDisbFunds);
 							
 								
 							if(measures.indexOf(new Long(3))!=-1)
 								if(ampReportCache.getActualExpenditure().doubleValue()>0 && ampReportCache.getPerspective().equals(perspective))
-								setQuarterlyFunding(ampReportCache, ampReportCache.getActualExpenditure(), fromExchangeRate,toExchangeRate, fromYr, toYr, fiscalQuarter, fiscalYear, actualExpTerms,actualExpFunds);								
+								extractQuarterlyFunding(ampReportCache, ampReportCache.getActualExpenditure(), fromExchangeRate,toExchangeRate, fromYr, toYr, fiscalQuarter, fiscalYear, actualExpTerms,actualExpFunds);								
 						
 							if(measures.indexOf(new Long(4))!=-1)
 								if(ampReportCache.getPlannedCommitment().doubleValue()>0 && ampReportCache.getPerspective().equals(perspective))
-								totalCommitment+=setQuarterlyFunding(ampReportCache, ampReportCache.getPlannedCommitment(), fromExchangeRate,toExchangeRate, fromYr, toYr, fiscalQuarter, fiscalYear, plannedCommTerms,plannedCommFunds);
+								totalCommitment+=extractQuarterlyFunding(ampReportCache, ampReportCache.getPlannedCommitment(), fromExchangeRate,toExchangeRate, fromYr, toYr, fiscalQuarter, fiscalYear, plannedCommTerms,plannedCommFunds);
 								
 							if(measures.indexOf(new Long(5))!=-1)
 								if(ampReportCache.getPlannedDisbursement().doubleValue()>0 && ampReportCache.getPerspective().equals(perspective))
-							    totalDisbursement+=setQuarterlyFunding(ampReportCache,  ampReportCache.getPlannedDisbursement(), fromExchangeRate,toExchangeRate, fromYr, toYr, fiscalQuarter, fiscalYear, plannedDisbTerms,plannedDisbFunds);
+							    totalDisbursement+=extractQuarterlyFunding(ampReportCache,  ampReportCache.getPlannedDisbursement(), fromExchangeRate,toExchangeRate, fromYr, toYr, fiscalQuarter, fiscalYear, plannedDisbTerms,plannedDisbFunds);
 																
 							if(measures.indexOf(new Long(6))!=-1)
 								if(ampReportCache.getPlannedExpenditure().doubleValue()>0 && ampReportCache.getPerspective().equals(perspective))
-								setQuarterlyFunding(ampReportCache, ampReportCache.getPlannedExpenditure(), fromExchangeRate,toExchangeRate, fromYr, toYr, fiscalQuarter, fiscalYear, plannedExpTerms,plannedExpFunds);
+								extractQuarterlyFunding(ampReportCache, ampReportCache.getPlannedExpenditure(), fromExchangeRate,toExchangeRate, fromYr, toYr, fiscalQuarter, fiscalYear, plannedExpTerms,plannedExpFunds);
 							
 						}	
 						//logger.debug("End If");
@@ -12336,20 +12287,12 @@ public class ReportUtil {
 				if(rsc.getOption().equals(Constants.ANNUAL))
 				{
 					annualFundingCompute(yrCount,measures,actualFunds,plannedFunds,
-					   		 actualTerms, plannedTerms,actSumCommit, 
-							 actSumDisb,actSumExp,planSumCommit,planSumDisb,planSumExp,
-							 actSumCommitTerms,actSumDisbTerms, actSumExpTerms,
-							 planSumCommitTerms, planSumDisbTerms, planSumExpTerms,
+					   		 actualTerms, plannedTerms,sum, 
+							 sumTerms, 
 							 totalCommitment,totalDisbursement,report, reports,
 							 subTotActualFunds,
 							 subTotPlannedFunds,
-							 actCommitSubTotal, 
-							 actDisbSubTotal ,
-							 actExpSubTotal , 
-							 planCommitSubTotal,
-							 planDisbSubTotal,
-							 planExpSubTotal,
-							 unDisbSubTotal,
+							 subTotal,
 							 false
 					);
 				}
@@ -12358,14 +12301,12 @@ public class ReportUtil {
 							actualCommFunds, actualDisbFunds,actualExpFunds, 
 							plannedCommFunds, plannedDisbFunds,plannedExpFunds, 
 							actualCommTerms,actualDisbTerms,actualExpTerms,
-							plannedCommTerms,plannedDisbTerms,plannedExpTerms,			
-							actSumCommit, actSumDisb, actSumExp, planSumCommit,planSumDisb,planSumExp,
-							  actSumCommitTerms, actSumDisbTerms, actSumExpTerms,planSumCommitTerms, planSumDisbTerms,planSumExpTerms,
-							 totalCommitment,totalDisbursement,report, reports,
-							 subTotActualCommFunds,subTotActualDisbFunds,subTotActualExpFunds,
-							 subTotPlannedCommFunds,subTotPlannedDisbFunds,subTotPlannedExpFunds,
-							  actCommitSubTotal, actDisbSubTotal, actExpSubTotal , planCommitSubTotal,planDisbSubTotal,planExpSubTotal,unDisbSubTotal,
-							 false);
+							plannedCommTerms,plannedDisbTerms,plannedExpTerms,
+							sum,sumTerms,totalCommitment,totalDisbursement,report,reports,
+							subTotActualCommFunds,subTotActualDisbFunds,subTotActualExpFunds,
+							subTotPlannedCommFunds,subTotPlannedDisbFunds,subTotPlannedExpFunds,
+							subTotal,
+							false);
 
 				
 				ampReports.add(reports);
@@ -12431,6 +12372,9 @@ public class ReportUtil {
 									activityIds=(ArrayList)ahReportLevel3.getActivities();
 									ahTempLevel3=getAdvancedReportRecords(ampActivities,activityIds,rsc,fromYr,toYr,perspective,fiscalCalId,ampCurrencyCode,ahTempLevel3, ahTempLevel2,ahReportLevel1);
 									ahTempLevel2.getLevels().add(ahTempLevel3);
+									
+									for(int t=0;t<7;t++) subTotal[t]=0;
+									
 									Iterator iterFund = ahTempLevel3.getFundSubTotal().iterator();
 									if(rsc.getOption().equals(Constants.ANNUAL))
 									{
@@ -12449,13 +12393,7 @@ public class ReportUtil {
 											}
 											if(i==yrCount)						
 											{
-												actCommitSubSubTotal = actCommitSubSubTotal + Double.parseDouble(DecimalToText.removeCommas(ampFund.getCommAmount()));
-												actDisbSubSubTotal = actDisbSubSubTotal + Double.parseDouble(DecimalToText.removeCommas(ampFund.getDisbAmount()));
-												actExpSubSubTotal = actExpSubSubTotal + Double.parseDouble(DecimalToText.removeCommas(ampFund.getExpAmount()));
-												planCommitSubSubTotal = planCommitSubSubTotal  + Double.parseDouble(DecimalToText.removeCommas(ampFund.getPlCommAmount()));
-												planDisbSubSubTotal = planDisbSubSubTotal + Double.parseDouble(DecimalToText.removeCommas(ampFund.getPlDisbAmount()));
-												planExpSubSubTotal = planExpSubSubTotal + Double.parseDouble(DecimalToText.removeCommas(ampFund.getPlExpAmount()));
-												unDisbSubSubTotal = unDisbSubSubTotal + Double.parseDouble(DecimalToText.removeCommas(ampFund.getUnDisbAmount()));
+												for(int t=0;t<7;t++) subSubTotal[t]+=Double.parseDouble(DecimalToText.removeCommas(ampFund.getAmount(t)));
 											}
 										}
 									}	
@@ -12479,13 +12417,8 @@ public class ReportUtil {
 											if(i==yrCount)
 											{
 												AmpFund ampFund=(AmpFund) iterFund.next();
-												actCommitSubSubTotal = actCommitSubSubTotal + Double.parseDouble(DecimalToText.removeCommas(ampFund.getCommAmount()));
-												actDisbSubSubTotal = actDisbSubSubTotal + Double.parseDouble(DecimalToText.removeCommas(ampFund.getDisbAmount()));
-												actExpSubSubTotal = actExpSubSubTotal + Double.parseDouble(DecimalToText.removeCommas(ampFund.getExpAmount()));
-												planCommitSubSubTotal = planCommitSubSubTotal  + Double.parseDouble(DecimalToText.removeCommas(ampFund.getPlCommAmount()));
-												planDisbSubSubTotal = planDisbSubSubTotal + Double.parseDouble(DecimalToText.removeCommas(ampFund.getPlDisbAmount()));
-												planExpSubSubTotal = planExpSubSubTotal + Double.parseDouble(DecimalToText.removeCommas(ampFund.getPlExpAmount()));
-												unDisbSubSubTotal = unDisbSubSubTotal +  Double.parseDouble(DecimalToText.removeCommas(ampFund.getUnDisbAmount()));
+												
+												for(int t=0;t<7;t++) subSubTotal[t]+=Double.parseDouble(DecimalToText.removeCommas(ampFund.getAmount(t)));
 											}			
 										}
 									}
@@ -12520,22 +12453,15 @@ public class ReportUtil {
 											subTotPlannedFunds[i][1] = subTotPlannedFunds[i][1] + subSubTotPlannedFunds[i][1];
 											subTotPlannedFunds[i][2] = subTotPlannedFunds[i][2] + subSubTotPlannedFunds[i][2];
 										}
-										actCommitSubTotal = actCommitSubTotal + actCommitSubSubTotal;
-										actDisbSubTotal = actDisbSubTotal + actDisbSubSubTotal;
-										actExpSubTotal = actExpSubTotal + actExpSubSubTotal;
-										planCommitSubTotal = planCommitSubTotal + planCommitSubSubTotal;
-										planDisbSubTotal = planDisbSubTotal + planDisbSubSubTotal;
-										planExpSubTotal = planExpSubTotal + planExpSubSubTotal;
-										unDisbSubTotal = unDisbSubTotal + unDisbSubSubTotal;
+										
+										for(int t=0;t<7;t++) 
+											subTotal[t] += subSubTotal[t];  
+												
 
 										AmpFund fund = new AmpFund();
-										fund.setCommAmount(mf.format(actCommitSubTotal));
-										fund.setDisbAmount(mf.format(actDisbSubTotal));
-										fund.setExpAmount(mf.format(actExpSubTotal));
-										fund.setPlCommAmount(mf.format(planCommitSubTotal));
-										fund.setPlDisbAmount(mf.format(planDisbSubTotal));
-										fund.setPlExpAmount(mf.format(planExpSubTotal));
-										fund.setUnDisbAmount(mf.format(unDisbSubTotal));
+										
+										for(int t=0;t<7;t++) fund.setAmount(t,mf.format(subTotal[t]));
+
 										ahTempLevel2.getFundSubTotal().add(fund) ;	
 									}
 									else
@@ -12568,27 +12494,23 @@ public class ReportUtil {
 												subTotPlannedExpFunds[i][qtr] = subTotPlannedExpFunds[i][qtr] + subSubTotPlannedExpFunds[i][qtr];
 											}
 										}
-										actCommitSubTotal = actCommitSubTotal + actCommitSubSubTotal;
-										actDisbSubTotal = actDisbSubTotal + actDisbSubSubTotal;
-										actExpSubTotal = actExpSubTotal + actExpSubSubTotal;
-										planCommitSubTotal = planCommitSubTotal + planCommitSubSubTotal;
-										planDisbSubTotal = planDisbSubTotal + planDisbSubSubTotal;
-										planExpSubTotal = planExpSubTotal + planExpSubSubTotal;
-										unDisbSubTotal = unDisbSubTotal + unDisbSubSubTotal;
-
+										
+										for(int t=0;t<7;t++) 
+											subTotal[t] += subSubTotal[t];  
+										
+										
 										AmpFund fund = new AmpFund();
-										fund.setCommAmount(mf.format(actCommitSubTotal));
-										fund.setDisbAmount(mf.format(actDisbSubTotal));
-										fund.setExpAmount(mf.format(actExpSubTotal));
-										fund.setPlCommAmount(mf.format(planCommitSubTotal));
-										fund.setPlDisbAmount(mf.format(planDisbSubTotal));
-										fund.setPlExpAmount(mf.format(planExpSubTotal));
-										fund.setUnDisbAmount(mf.format(unDisbSubTotal));
+										
+										for(int t=0;t<7;t++) fund.setAmount(t,mf.format(subTotal[t]));
+										
 										ahTempLevel2.getFundSubTotal().add(fund) ;	
 									}
 								}
 								ahReport.getLevels().add(ahTempLevel2);
-								unDisbSubSubTotal=actCommitSubSubTotal=actDisbSubSubTotal=actExpSubSubTotal=planCommitSubSubTotal=planDisbSubSubTotal=planExpSubSubTotal = 0;
+								
+								for(int t=0;t<7;t++) subSubTotal[t]=0;
+								
+								
 								for(int i=0;i<yrCount;i++)
 								{
 									subSubTotActualFunds[i][0]=subSubTotActualFunds[i][1]=subSubTotActualFunds[i][2]=0;
@@ -12624,15 +12546,9 @@ public class ReportUtil {
 											subTotPlannedFunds[i][2]=subTotPlannedFunds[i][2] + Double.parseDouble(DecimalToText.removeCommas(ampFund.getPlExpAmount()));
 										}
 										if(i==yrCount)						
-										{
-											actCommitSubTotal = actCommitSubTotal + Double.parseDouble(DecimalToText.removeCommas(ampFund.getCommAmount()));
-											actDisbSubTotal = actDisbSubTotal + Double.parseDouble(DecimalToText.removeCommas(ampFund.getDisbAmount()));
-											actExpSubTotal = actExpSubTotal + Double.parseDouble(DecimalToText.removeCommas(ampFund.getExpAmount()));
-											planCommitSubTotal = planCommitSubTotal  + Double.parseDouble(DecimalToText.removeCommas(ampFund.getPlCommAmount()));
-											planDisbSubTotal = planDisbSubTotal + Double.parseDouble(DecimalToText.removeCommas(ampFund.getPlDisbAmount()));
-											planExpSubTotal = planExpSubTotal + Double.parseDouble(DecimalToText.removeCommas(ampFund.getPlExpAmount()));
-											unDisbSubTotal = unDisbSubTotal + Double.parseDouble(DecimalToText.removeCommas(ampFund.getUnDisbAmount()));
-										}
+											for(int t=0;t<7;t++) subTotal[t]+= Double.parseDouble(DecimalToText.removeCommas(ampFund.getAmount(t)));
+
+										
 	
 									}
 								}
@@ -12657,13 +12573,10 @@ public class ReportUtil {
 										if(i==yrCount)
 										{
 											AmpFund ampFund=(AmpFund) iterFund.next();
-											actCommitSubTotal = actCommitSubTotal + Double.parseDouble(DecimalToText.removeCommas(ampFund.getCommAmount()));
-											actDisbSubTotal = actDisbSubTotal + Double.parseDouble(DecimalToText.removeCommas(ampFund.getDisbAmount()));
-											actExpSubTotal = actExpSubTotal + Double.parseDouble(DecimalToText.removeCommas(ampFund.getExpAmount()));
-											planCommitSubTotal = planCommitSubTotal  + Double.parseDouble(DecimalToText.removeCommas(ampFund.getPlCommAmount()));
-											planDisbSubTotal = planDisbSubTotal + Double.parseDouble(DecimalToText.removeCommas(ampFund.getPlDisbAmount()));
-											planExpSubTotal = planExpSubTotal + Double.parseDouble(DecimalToText.removeCommas(ampFund.getPlExpAmount()));
-											unDisbSubTotal = unDisbSubTotal + Double.parseDouble(DecimalToText.removeCommas(ampFund.getUnDisbAmount()));
+											
+											for(int t=0;t<7;t++) 
+												subTotal[t]+=Double.parseDouble(DecimalToText.removeCommas(ampFund.getAmount(t)));											
+											
 										}			
 									}
 								}
@@ -12701,22 +12614,17 @@ public class ReportUtil {
 									totPlannedFunds[i][2] = totPlannedFunds[i][2] + subTotPlannedFunds[i][2];
 								}
 
-								actCommitTotal = actCommitTotal + actCommitSubTotal;
-								actDisbTotal = actDisbTotal + actDisbSubTotal;
-								actExpTotal = actExpTotal + actExpSubTotal;
-								planCommitTotal = planCommitTotal + planCommitSubTotal;
-								planDisbTotal = planDisbTotal + planDisbSubTotal;
-								planExpTotal = planExpTotal + planExpSubTotal;
-								unDisbTotal = unDisbTotal + unDisbSubTotal;
-	
+								for(int t=0;t<7;t++) total[t]+=subTotal[t];
+								
+								
 								AmpFund fund = new AmpFund();
-								fund.setCommAmount(mf.format(actCommitSubTotal));
-								fund.setDisbAmount(mf.format(actDisbSubTotal));
-								fund.setExpAmount(mf.format(actExpSubTotal));
-								fund.setPlCommAmount(mf.format(planCommitSubTotal));
-								fund.setPlDisbAmount(mf.format(planDisbSubTotal));
-								fund.setPlExpAmount(mf.format(planExpSubTotal));
-								fund.setUnDisbAmount(mf.format(unDisbSubTotal));
+								fund.setCommAmount(mf.format(subTotal[AmpFund.COMM]));
+								fund.setDisbAmount(mf.format(subTotal[AmpFund.DISB]));
+								fund.setExpAmount(mf.format(subTotal[AmpFund.EXP]));
+								fund.setPlCommAmount(mf.format(subTotal[AmpFund.PL_COMM]));
+								fund.setPlDisbAmount(mf.format(subTotal[AmpFund.PL_DISB]));
+								fund.setPlExpAmount(mf.format(subTotal[AmpFund.PL_EXP]));
+								fund.setUnDisbAmount(mf.format(subTotal[AmpFund.UNDISB]));
 								ahReport.getFundSubTotal().add(fund) ;	
 							}
 							else
@@ -12749,27 +12657,25 @@ public class ReportUtil {
 										totPlannedExpFunds[i][qtr] = totPlannedExpFunds[i][qtr] + subTotPlannedExpFunds[i][qtr];
 									}
 								}
-								actCommitTotal = actCommitTotal + actCommitSubTotal;
-								actDisbTotal = actDisbTotal + actDisbSubTotal;
-								actExpTotal = actExpTotal + actExpSubTotal;
-								planCommitTotal = planCommitTotal + planCommitSubTotal;
-								planDisbTotal = planDisbTotal + planDisbSubTotal;
-								planExpTotal = planExpTotal + planExpSubTotal;
-								unDisbTotal = unDisbTotal + unDisbSubTotal;
+								
+								for(int t=0;t<7;t++) total[t]+=subTotal[t];
 	
 								AmpFund fund = new AmpFund();
-								fund.setCommAmount(mf.format(actCommitSubTotal));
-								fund.setDisbAmount(mf.format(actDisbSubTotal));
-								fund.setExpAmount(mf.format(actExpSubTotal));
-								fund.setPlCommAmount(mf.format(planCommitSubTotal));
-								fund.setPlDisbAmount(mf.format(planDisbSubTotal));
-								fund.setPlExpAmount(mf.format(planExpSubTotal));
-								fund.setUnDisbAmount(mf.format(unDisbSubTotal));
+								fund.setCommAmount(mf.format(subTotal[AmpFund.COMM]));
+								fund.setDisbAmount(mf.format(subTotal[AmpFund.DISB]));
+								fund.setExpAmount(mf.format(subTotal[AmpFund.EXP]));
+								fund.setPlCommAmount(mf.format(subTotal[AmpFund.PL_COMM]));
+								fund.setPlDisbAmount(mf.format(subTotal[AmpFund.PL_DISB]));
+								fund.setPlExpAmount(mf.format(subTotal[AmpFund.PL_EXP]));
+								fund.setUnDisbAmount(mf.format(subTotal[AmpFund.UNDISB]));
 								ahReport.getFundSubTotal().add(fund) ;	
 							}
 							
 							mreport.getHierarchy().add(ahReport);
-							unDisbSubTotal=actCommitSubTotal=actDisbSubTotal=actExpSubTotal=planCommitSubTotal=planDisbSubTotal=planExpSubTotal = 0;
+							
+							for(int t=0;t<7;t++) subTotal[t]=0; 
+								
+							
 							for(int i=0;i<yrCount;i++)
 							{
 								subTotActualFunds[i][0]=subTotActualFunds[i][1]=subTotActualFunds[i][2]=0;
@@ -12811,15 +12717,9 @@ public class ReportUtil {
 									totPlannedFunds[i][2]=totPlannedFunds[i][2] + Double.parseDouble(DecimalToText.removeCommas(ampFund.getPlExpAmount()));
 								}
 								if(i==yrCount)						
-								{
-									actCommitTotal = actCommitTotal + Double.parseDouble(DecimalToText.removeCommas(ampFund.getCommAmount()));
-									actDisbTotal = actDisbTotal + Double.parseDouble(DecimalToText.removeCommas(ampFund.getDisbAmount()));
-									actExpTotal = actExpTotal + Double.parseDouble(DecimalToText.removeCommas(ampFund.getExpAmount()));
-									planCommitTotal = planCommitTotal  + Double.parseDouble(DecimalToText.removeCommas(ampFund.getPlCommAmount()));
-									planDisbTotal = planDisbTotal + Double.parseDouble(DecimalToText.removeCommas(ampFund.getPlDisbAmount()));
-									planExpTotal = planExpTotal + Double.parseDouble(DecimalToText.removeCommas(ampFund.getPlExpAmount()));
-									unDisbTotal = unDisbTotal + Double.parseDouble(DecimalToText.removeCommas(ampFund.getUnDisbAmount()));
-								}
+									for(int t=0;t<7;t++) total[t]+=Double.parseDouble(DecimalToText.removeCommas(ampFund.getAmount(t)));
+									
+								
 							}
 						}
 						else
@@ -12844,14 +12744,7 @@ public class ReportUtil {
 								if(i==yrCount)
 								{	
 									AmpFund ampFund=(AmpFund) iterFund.next();
-									actCommitTotal = actCommitTotal + Double.parseDouble(DecimalToText.removeCommas(ampFund.getCommAmount()));
-									actDisbTotal = actDisbTotal + Double.parseDouble(DecimalToText.removeCommas(ampFund.getDisbAmount()));
-									actExpTotal = actExpTotal + Double.parseDouble(DecimalToText.removeCommas(ampFund.getExpAmount()));
-									planCommitTotal = planCommitTotal  + Double.parseDouble(DecimalToText.removeCommas(ampFund.getPlCommAmount()));
-									planDisbTotal = planDisbTotal + Double.parseDouble(DecimalToText.removeCommas(ampFund.getPlDisbAmount()));
-									planExpTotal = planExpTotal + Double.parseDouble(DecimalToText.removeCommas(ampFund.getPlExpAmount()));
-									unDisbTotal = unDisbTotal + Double.parseDouble(DecimalToText.removeCommas(ampFund.getUnDisbAmount()));
-										
+									for(int t=0;t<7;t++) total[t]+=Double.parseDouble(DecimalToText.removeCommas(ampFund.getAmount(t)));	
 								}			
 							}
 						}
@@ -12870,8 +12763,8 @@ public class ReportUtil {
 						contactName=null;
 						minYear=maxYear=0;
 
-						sumUnDisb=actSumCommit=actSumDisb=actSumExp=planSumCommit=planSumDisb=planSumExp = 0;
-						unDisbSubTotal=actCommitSubTotal=actDisbSubTotal=actExpSubTotal=planCommitSubTotal=planDisbSubTotal=planExpSubTotal = 0;
+						for(int t=0;t<7;t++) {sum[t]=0;subTotal[t]=0;}
+					
 						for(int i=0;i<yrCount;i++)
 						{
 							actualFunds[i][0]=actualFunds[i][1]=actualFunds[i][2]=0;
@@ -12911,13 +12804,9 @@ public class ReportUtil {
 						mreport.getFundTotal().add(ampFund);
 					}						
 					AmpFund fund = new AmpFund();
-					fund.setCommAmount(mf.format(actCommitTotal));
-					fund.setDisbAmount(mf.format(actDisbTotal));
-					fund.setExpAmount(mf.format(actExpTotal));
-					fund.setPlCommAmount(mf.format(planCommitTotal));
-					fund.setPlDisbAmount(mf.format(planDisbTotal));
-					fund.setPlExpAmount(mf.format(planExpTotal));
-					fund.setUnDisbAmount(mf.format(unDisbTotal));
+					
+					for(int t=0;t<7;t++) fund.setAmount(t,mf.format(total[t]));
+					
 					mreport.getFundTotal().add(fund) ;	
 				}
 				else
@@ -12943,13 +12832,9 @@ public class ReportUtil {
 						}
 					}						
 					AmpFund fund = new AmpFund();
-					fund.setCommAmount(mf.format(actCommitTotal));
-					fund.setDisbAmount(mf.format(actDisbTotal));
-					fund.setExpAmount(mf.format(actExpTotal));
-					fund.setPlCommAmount(mf.format(planCommitTotal));
-					fund.setPlDisbAmount(mf.format(planDisbTotal));
-					fund.setPlExpAmount(mf.format(planExpTotal));
-					fund.setUnDisbAmount(mf.format(unDisbTotal));
+					
+					for(int t=0;t<7;t++) fund.setAmount(t,mf.format(total[t]));
+					
 					mreport.getFundTotal().add(fund) ;	
 				}
 
@@ -13497,12 +13382,15 @@ public class ReportUtil {
 			AmpByAssistTypeList[][] actualExpTerms,
 			AmpByAssistTypeList[][] plannedCommTerms,
 			AmpByAssistTypeList[][] plannedDisbTerms,
-			AmpByAssistTypeList[][] plannedExpTerms,			
-			double actSumCommit, 
-			 double actSumDisb,double actSumExp, double planSumCommit,double planSumDisb,double planSumExp,
-			 AmpByAssistTypeList actSumCommitTerms, AmpByAssistTypeList actSumDisbTerms, AmpByAssistTypeList actSumExpTerms,
-			 AmpByAssistTypeList planSumCommitTerms, AmpByAssistTypeList planSumDisbTerms, AmpByAssistTypeList planSumExpTerms,
+			AmpByAssistTypeList[][] plannedExpTerms,
+			
+			double []sum,
+		
+			AmpByAssistTypeList [] sumTerms,
+			
 			 double totalCommitment,double totalDisbursement,AdvancedReport report, Report reports,
+			 
+			 
 			 
 			 double[][] subTotActualCommFunds,
 			 double[][] subTotActualDisbFunds,
@@ -13511,13 +13399,8 @@ public class ReportUtil {
 			 double[][] subTotPlannedCommFunds,
 			 double[][] subTotPlannedDisbFunds,
 			 double[][] subTotPlannedExpFunds,
-			 double actCommitSubTotal, 
-			 double actDisbSubTotal ,
-			 double actExpSubTotal , 
-			 double planCommitSubTotal,
-			 double planDisbSubTotal,
-			 double planExpSubTotal,
-			 double unDisbSubTotal,
+			
+			 double[] subTotal,
 			 boolean computeSubTotal)
 	{
 	
@@ -13550,22 +13433,21 @@ public class ReportUtil {
 				ampFund.setPlExpAmount(mf.format(plannedExpFunds[i][qtr]));
 				ampFund.setByTypePlExp(plannedExpTerms[i][qtr]);
 			}
-												
-			actSumCommit = actSumCommit + actualCommFunds[i][qtr];
-			actSumDisb = actSumDisb + actualDisbFunds[i][qtr];
-			actSumExp = actSumExp + actualExpFunds[i][qtr];
-			planSumCommit = planSumCommit + plannedCommFunds[i][qtr];
-			planSumDisb = planSumDisb + plannedDisbFunds[i][qtr];
-			planSumExp = planSumExp + plannedExpFunds[i][qtr];
-//			sumUnDisb = sumUnDisb + (actualCommFunds[i][qtr]-actualDisbFunds[i][qtr]);
-
-			actSumCommitTerms.addAll(actualCommTerms[i][qtr]);
-			actSumDisbTerms.addAll(actualDisbTerms[i][qtr]);
-			actSumExpTerms.addAll(actualExpTerms[i][qtr]);
+						
 			
-			planSumCommitTerms.addAll(plannedCommTerms[i][qtr]);
-			planSumDisbTerms.addAll(plannedDisbTerms[i][qtr]);
-			planSumExpTerms.addAll(plannedExpTerms[i][qtr]);
+			
+			sum[AmpFund.COMM] += actualCommFunds[i][qtr];
+			sum[AmpFund.DISB] += actualDisbFunds[i][qtr];
+			sum[AmpFund.EXP] += actualExpFunds[i][qtr];
+			
+			sum[AmpFund.PL_COMM] += plannedCommFunds[i][qtr];
+			sum[AmpFund.PL_DISB] += plannedDisbFunds[i][qtr];
+			sum[AmpFund.PL_EXP]  += plannedExpFunds[i][qtr];
+			
+			sumTerms[AmpFund.PL_COMM].addAll(plannedCommTerms[i][qtr]);
+			sumTerms[AmpFund.PL_DISB].addAll(plannedDisbTerms[i][qtr]);
+			sumTerms[AmpFund.PL_EXP].addAll(plannedExpTerms[i][qtr]);
+			
 			
 			if (computeSubTotal) {
 										
@@ -13584,28 +13466,16 @@ public class ReportUtil {
 	
 	
 	if (computeSubTotal) {
-		
-	
-	actCommitSubTotal = actCommitSubTotal + actSumCommit;
-	actDisbSubTotal = actDisbSubTotal + actSumDisb;
-	actExpSubTotal = actExpSubTotal + actSumExp;
-	planCommitSubTotal = planCommitSubTotal + planSumCommit;
-	planDisbSubTotal = planDisbSubTotal + planSumDisb;
-	planExpSubTotal = planExpSubTotal + planSumExp;
-	unDisbSubTotal = unDisbSubTotal + (totalCommitment-totalDisbursement);
-
+		for (int t=0;t<6;t++) subTotal[t]+=sum[t];
+		subTotal[AmpFund.UNDISB]+= (totalCommitment-totalDisbursement);
 	}
 	
 	AmpFund fund = new AmpFund();
 	
-	fund.setByTypeComm(actSumCommitTerms);
-	fund.setByTypeDisb(actSumDisbTerms);
-	fund.setByTypeExp(actSumExpTerms);
 	
-	fund.setByTypePlComm(planSumCommitTerms);
-	fund.setByTypePlDisb(planSumDisbTerms);
-	fund.setByTypePlExp(planSumExpTerms);
-
+	for (int t=0;t<6;t++) fund.setbyTypeAmount(t,sumTerms[t]);
+	
+	
 	AmpByAssistTypeList unDisbTerm = new AmpByAssistTypeList();
 	unDisbTerm.addAll(fund.getByTypeComm());
 	unDisbTerm.addAll(fund.getByTypePlComm());
@@ -13614,33 +13484,21 @@ public class ReportUtil {
 	unDisbTerm.removeAll(fund.getByTypePlDisb());
 	fund.setByTypeUnDisb(unDisbTerm);
 	
-	fund.setCommAmount(mf.format(actSumCommit));
-	fund.setDisbAmount(mf.format(actSumDisb));
-	fund.setExpAmount(mf.format(actSumExp));
-	fund.setPlCommAmount(mf.format(planSumCommit));
-	fund.setPlDisbAmount(mf.format(planSumDisb));
-	fund.setPlExpAmount(mf.format(planSumExp));
+	for (int t=0;t<6;t++) fund.setAmount(t,mf.format(sum[t]));
 	fund.setUnDisbAmount(mf.format(totalCommitment-totalDisbursement));
+	
 	report.getAmpFund().add(fund) ;	
 	//logger.debug("Fund Size: " + report.getAmpFund().size());			
 	reports.getRecords().add(report);
 }
 
 	public static void annualFundingCompute(int yrCount,ArrayList measures,double[][] actualFunds, double[][] plannedFunds,
-			AmpByAssistTypeList[][] actualTerms, AmpByAssistTypeList[][] plannedTerms,double actSumCommit, 
-			 double actSumDisb,double actSumExp, double planSumCommit,double planSumDisb,double planSumExp,
-			 AmpByAssistTypeList actSumCommitTerms, AmpByAssistTypeList actSumDisbTerms, AmpByAssistTypeList actSumExpTerms,
-			 AmpByAssistTypeList planSumCommitTerms, AmpByAssistTypeList planSumDisbTerms, AmpByAssistTypeList planSumExpTerms,
+			AmpByAssistTypeList[][] actualTerms, AmpByAssistTypeList[][] plannedTerms,double [] sum,
+			 AmpByAssistTypeList [] sumTerms,
 			 double totalCommitment,double totalDisbursement,AdvancedReport report, Report reports,
 			 double[][] subTotActualFunds,
 			 double[][] subTotPlannedFunds,
-			 double actCommitSubTotal, 
-			 double actDisbSubTotal ,
-			 double actExpSubTotal , 
-			 double planCommitSubTotal,
-			 double planDisbSubTotal,
-			 double planExpSubTotal,
-			 double unDisbSubTotal,
+			 double []subTotal,
 			 boolean computeSubTotal) {		
 		
 			
@@ -13680,22 +13538,22 @@ public class ReportUtil {
 			
 				
 				//summing(last column in report table)
-				actSumCommitTerms.addAll(actualTerms[i][0]);
-				actSumDisbTerms.addAll(actualTerms[i][1]);
-				actSumExpTerms.addAll(actualTerms[i][2]);
+				sumTerms[AmpFund.COMM].addAll(actualTerms[i][0]);
+				sumTerms[AmpFund.DISB].addAll(actualTerms[i][1]);
+				sumTerms[AmpFund.EXP].addAll(actualTerms[i][2]);
 				
-				planSumCommitTerms.addAll(plannedTerms[i][0]);
-				planSumDisbTerms.addAll(plannedTerms[i][1]);
-				planSumExpTerms.addAll(plannedTerms[i][2]);
+
+				sumTerms[AmpFund.PL_COMM].addAll(plannedTerms[i][0]);
+				sumTerms[AmpFund.PL_DISB].addAll(plannedTerms[i][1]);
+				sumTerms[AmpFund.PL_EXP].addAll(plannedTerms[i][2]);
+
+				sum[AmpFund.COMM] += actualFunds[i][0];
+				sum[AmpFund.DISB] += actualFunds[i][1];
+				sum[AmpFund.EXP] += actualFunds[i][2];
 				
-				
-				actSumCommit = actSumCommit + actualFunds[i][0];
-				actSumDisb = actSumDisb + actualFunds[i][1];
-				actSumExp = actSumExp + actualFunds[i][2];
-				planSumCommit = planSumCommit + plannedFunds[i][0];
-				planSumDisb = planSumDisb + plannedFunds[i][1];
-				planSumExp = planSumExp + plannedFunds[i][2];
-//				sumUnDisb = sumUnDisb + (actualFunds[i][0]-actualFunds[i][1]);
+				sum[AmpFund.PL_COMM] += plannedFunds[i][0];
+				sum[AmpFund.PL_DISB] += plannedFunds[i][1];
+				sum[AmpFund.PL_EXP]  += plannedFunds[i][2];
 				
 				if(computeSubTotal) {
 				
@@ -13712,25 +13570,15 @@ public class ReportUtil {
 			
 			
 			if (computeSubTotal) {
-			actCommitSubTotal = actCommitSubTotal + actSumCommit;
-			actDisbSubTotal = actDisbSubTotal + actSumDisb;
-			actExpSubTotal = actExpSubTotal + actSumExp;
-			planCommitSubTotal = planCommitSubTotal + planSumCommit;
-			planDisbSubTotal = planDisbSubTotal + planSumDisb;
-			planExpSubTotal = planExpSubTotal + planSumExp;
-			unDisbSubTotal = unDisbSubTotal + (totalCommitment-totalDisbursement);
+				for(int i=0;i<=6;i++) subTotal[i]+=sum[i];
+				subTotal[AmpFund.UNDISB]+= (totalCommitment-totalDisbursement);
+			
 			}
 		
 			
 			AmpFund fund = new AmpFund();
 			
-			fund.setByTypeComm(actSumCommitTerms);
-			fund.setByTypeDisb(actSumDisbTerms);
-			fund.setByTypeExp(actSumExpTerms);
-			
-			fund.setByTypePlComm(planSumCommitTerms);
-			fund.setByTypePlDisb(planSumDisbTerms);
-			fund.setByTypePlExp(planSumExpTerms);
+			for(int t=0;t<6;t++) fund.setbyTypeAmount(t,sumTerms[t]);
 			
 			
 			AmpByAssistTypeList unDisbTerm = new AmpByAssistTypeList();
@@ -13742,12 +13590,8 @@ public class ReportUtil {
 			fund.setByTypeUnDisb(unDisbTerm);
 			
 			
-			fund.setCommAmount(mf.format(actSumCommit));
-			fund.setDisbAmount(mf.format(actSumDisb));
-			fund.setExpAmount(mf.format(actSumExp));
-			fund.setPlCommAmount(mf.format(planSumCommit));
-			fund.setPlDisbAmount(mf.format(planSumDisb));
-			fund.setPlExpAmount(mf.format(planSumExp));
+			for(int t=0;t<6;t++) fund.setAmount(t,mf.format(sum[t]));
+			
 			fund.setUnDisbAmount(mf.format(totalCommitment-totalDisbursement));
 			report.getAmpFund().add(fund) ;	
 			
@@ -13833,17 +13677,17 @@ public class ReportUtil {
 		double toExchangeRate=1.0;
 		double fromExchangeRate=0.0;
 		double amount=0.0;
-		double sumUnDisb = 0, actSumCommit = 0, actSumDisb = 0, actSumExp = 0, planSumCommit = 0, planSumDisb = 0, planSumExp = 0;
-		double unDisbSubTotal = 0, actCommitSubTotal = 0, actDisbSubTotal = 0, actExpSubTotal = 0, planCommitSubTotal = 0, planDisbSubTotal = 0, planExpSubTotal = 0;
+		//double sumUnDisb = 0, actSumCommit = 0, actSumDisb = 0, actSumExp = 0, planSumCommit = 0, planSumDisb = 0, planSumExp = 0;
+		//double unDisbSubTotal = 0, actCommitSubTotal = 0, actDisbSubTotal = 0, actExpSubTotal = 0, planCommitSubTotal = 0, planDisbSubTotal = 0, planExpSubTotal = 0;
 		
-		AmpByAssistTypeList actSumCommitTerms=new AmpByAssistTypeList();
-		AmpByAssistTypeList actSumDisbTerms=new AmpByAssistTypeList();
-		AmpByAssistTypeList actSumExpTerms=new AmpByAssistTypeList();
-		AmpByAssistTypeList planSumCommitTerms=new AmpByAssistTypeList();
-		AmpByAssistTypeList planSumDisbTerms=new AmpByAssistTypeList();
-		AmpByAssistTypeList planSumExpTerms=new AmpByAssistTypeList();
-		AmpByAssistTypeList sumUnDisbTerms=new AmpByAssistTypeList();
 		
+		double []sum = new double[7];
+		double []subTotal= new double[7];
+		double []total = new double[7];
+		
+		
+		AmpByAssistTypeList sumTerms[]=new AmpByAssistTypeList[7];
+		for(int t=0;t<7;t++) sumTerms[t]=new AmpByAssistTypeList();
 		
 		int fiscalYear=0,fiscalQuarter=0;
 		String objective=null;
@@ -13989,38 +13833,28 @@ public class ReportUtil {
 						if(rsc.getOption().equals(Constants.ANNUAL))
 						
 							annualFundingCompute(yrCount,measures,actualFunds,plannedFunds,
-							   		 actualTerms, plannedTerms,actSumCommit, 
-									 actSumDisb,actSumExp,planSumCommit,planSumDisb,planSumExp,
-									 actSumCommitTerms,actSumDisbTerms, actSumExpTerms,
-									 planSumCommitTerms, planSumDisbTerms, planSumExpTerms,
+							   		 actualTerms, plannedTerms,sum, 
+									 sumTerms, 
 									 totalCommitment,totalDisbursement,report, reports,
 									 subTotActualFunds,
 									 subTotPlannedFunds,
-									 actCommitSubTotal, 
-									 actDisbSubTotal ,
-									 actExpSubTotal , 
-									 planCommitSubTotal,
-									 planDisbSubTotal,
-									 planExpSubTotal,
-									 unDisbSubTotal,
+									 subTotal,
 									 true
 							);
 						
 						else
-				
-							quarterlyFundingCompute(yrCount,measures,
+							
+						quarterlyFundingCompute(yrCount,measures,
 									actualCommFunds, actualDisbFunds,actualExpFunds, 
 									plannedCommFunds, plannedDisbFunds,plannedExpFunds, 
 									actualCommTerms,actualDisbTerms,actualExpTerms,
-									plannedCommTerms,plannedDisbTerms,plannedExpTerms,			
-									actSumCommit, actSumDisb, actSumExp, planSumCommit,planSumDisb,planSumExp,
-									  actSumCommitTerms, actSumDisbTerms, actSumExpTerms,planSumCommitTerms, planSumDisbTerms,planSumExpTerms,
-									 totalCommitment,totalDisbursement,report, reports,
-									 subTotActualCommFunds,subTotActualDisbFunds,subTotActualExpFunds,
-									 subTotPlannedCommFunds,subTotPlannedDisbFunds,subTotPlannedExpFunds,
-									  actCommitSubTotal, actDisbSubTotal, actExpSubTotal , planCommitSubTotal,planDisbSubTotal,planExpSubTotal,unDisbSubTotal,
-									 true);
-							
+									plannedCommTerms,plannedDisbTerms,plannedExpTerms,
+									sum,sumTerms,totalCommitment,totalDisbursement,report,reports,
+									subTotActualCommFunds,subTotActualDisbFunds,subTotActualExpFunds,
+									subTotPlannedCommFunds,subTotPlannedDisbFunds,subTotPlannedExpFunds,
+									subTotal,
+									true);
+													
 							
 												
 						//logger.debug("Reports Size: " + reports.getRecords().size());
@@ -14037,16 +13871,9 @@ public class ReportUtil {
 						regions.clear();
 						components.clear();
 						contactName=null;
-						sumUnDisb=actSumCommit=actSumDisb=actSumExp=planSumCommit=planSumDisb=planSumExp = 0;
 						
-						//reset subtotals - we need fresh objects here!
-						 actSumCommitTerms=new AmpByAssistTypeList();
-						 actSumDisbTerms=new AmpByAssistTypeList();
-						 actSumExpTerms=new AmpByAssistTypeList();
-						 planSumCommitTerms=new AmpByAssistTypeList();
-						 planSumDisbTerms=new AmpByAssistTypeList();
-						 planSumExpTerms=new AmpByAssistTypeList();
-						 sumUnDisbTerms=new AmpByAssistTypeList();
+						for(int t=0;t<7;t++) {sum[t]=0;sumTerms[t]=new AmpByAssistTypeList(); }	
+						
 	
 						
 						for(int i=0;i<yrCount;i++)
@@ -14253,33 +14080,33 @@ public class ReportUtil {
 					else
 					{	
 						if(ampReportCache.getActualCommitment().doubleValue()>0 && ampReportCache.getPerspective().equals(perspective))
-							totalCommitment+=setQuarterlyFunding(ampReportCache,  ampReportCache.getActualCommitment(), fromExchangeRate,
+							totalCommitment+=extractQuarterlyFunding(ampReportCache,  ampReportCache.getActualCommitment(), fromExchangeRate,
 									toExchangeRate, fromYr, toYr, fiscalQuarter, fiscalYear, 
 									actualCommTerms,actualCommFunds);
 									
 						if(ampReportCache.getActualDisbursement().doubleValue()>0 && ampReportCache.getPerspective().equals(perspective))
-							totalDisbursement+=setQuarterlyFunding(ampReportCache, ampReportCache.getActualDisbursement(), fromExchangeRate,
+							totalDisbursement+=extractQuarterlyFunding(ampReportCache, ampReportCache.getActualDisbursement(), fromExchangeRate,
 									toExchangeRate, fromYr, toYr, fiscalQuarter, fiscalYear, 
 									actualDisbTerms,actualDisbFunds);								
 						if(measures.indexOf(new Long(3))!=-1)
 							if(ampReportCache.getActualExpenditure().doubleValue()>0 && ampReportCache.getPerspective().equals(perspective))
-								setQuarterlyFunding(ampReportCache,ampReportCache.getActualExpenditure(),  fromExchangeRate,
+								extractQuarterlyFunding(ampReportCache,ampReportCache.getActualExpenditure(),  fromExchangeRate,
 										toExchangeRate, fromYr, toYr, fiscalQuarter, fiscalYear, 
 										actualExpTerms,actualExpFunds);								
 						if(measures.indexOf(new Long(4))!=-1)
 							if(ampReportCache.getPlannedCommitment().doubleValue()>0 && ampReportCache.getPerspective().equals(perspective))
-								setQuarterlyFunding(ampReportCache,ampReportCache.getPlannedCommitment(),  fromExchangeRate,
+								extractQuarterlyFunding(ampReportCache,ampReportCache.getPlannedCommitment(),  fromExchangeRate,
 										toExchangeRate, fromYr, toYr, fiscalQuarter, fiscalYear, 
 										plannedCommTerms,plannedCommFunds);
 						
 						if(measures.indexOf(new Long(5))!=-1)
 							if(ampReportCache.getPlannedDisbursement().doubleValue()>0 && ampReportCache.getPerspective().equals(perspective))
-								setQuarterlyFunding(ampReportCache,ampReportCache.getPlannedDisbursement(),  fromExchangeRate,
+								extractQuarterlyFunding(ampReportCache,ampReportCache.getPlannedDisbursement(),  fromExchangeRate,
 											toExchangeRate, fromYr, toYr, fiscalQuarter, fiscalYear, 
 											plannedDisbTerms,plannedDisbFunds);
 						if(measures.indexOf(new Long(6))!=-1)
 							if(ampReportCache.getPlannedExpenditure().doubleValue()>0 && ampReportCache.getPerspective().equals(perspective))
-									setQuarterlyFunding(ampReportCache,ampReportCache.getPlannedExpenditure(),  fromExchangeRate,
+									extractQuarterlyFunding(ampReportCache,ampReportCache.getPlannedExpenditure(),  fromExchangeRate,
 											toExchangeRate, fromYr, toYr, fiscalQuarter, fiscalYear, 
 											plannedExpTerms,plannedExpFunds);
 								
@@ -14393,39 +14220,30 @@ public class ReportUtil {
 							report.getAssistanceCopy().addAll(assistanceCopy);
 							report.setAmpFund(new ArrayList());
 							if(rsc.getOption().equals(Constants.ANNUAL))
+								
 								annualFundingCompute(yrCount,measures,actualFunds,plannedFunds,
-								   		 actualTerms, plannedTerms,actSumCommit, 
-										 actSumDisb,actSumExp,planSumCommit,planSumDisb,planSumExp,
-										 actSumCommitTerms,actSumDisbTerms, actSumExpTerms,
-										 planSumCommitTerms, planSumDisbTerms, planSumExpTerms,
+								   		 actualTerms, plannedTerms,sum, 
+										 sumTerms, 
 										 totalCommitment,totalDisbursement,report, reports,
 										 subTotActualFunds,
 										 subTotPlannedFunds,
-										 actCommitSubTotal, 
-										 actDisbSubTotal ,
-										 actExpSubTotal , 
-										 planCommitSubTotal,
-										 planDisbSubTotal,
-										 planExpSubTotal,
-										 unDisbSubTotal,
+										 subTotal,
 										 true
 								);
 							
 							else
-								quarterlyFundingCompute(yrCount,measures,
+								
+							quarterlyFundingCompute(yrCount,measures,
 										actualCommFunds, actualDisbFunds,actualExpFunds, 
 										plannedCommFunds, plannedDisbFunds,plannedExpFunds, 
 										actualCommTerms,actualDisbTerms,actualExpTerms,
-										plannedCommTerms,plannedDisbTerms,plannedExpTerms,			
-										actSumCommit, actSumDisb, actSumExp, planSumCommit,planSumDisb,planSumExp,
-										  actSumCommitTerms, actSumDisbTerms, actSumExpTerms,planSumCommitTerms, planSumDisbTerms,planSumExpTerms,
-										 totalCommitment,totalDisbursement,report, reports,
-										 subTotActualCommFunds,subTotActualDisbFunds,subTotActualExpFunds,
-										 subTotPlannedCommFunds,subTotPlannedDisbFunds,subTotPlannedExpFunds,
-										  actCommitSubTotal, actDisbSubTotal, actExpSubTotal , planCommitSubTotal,planDisbSubTotal,planExpSubTotal,unDisbSubTotal,
-										 true);
-					
-								
+										plannedCommTerms,plannedDisbTerms,plannedExpTerms,
+										sum,sumTerms,totalCommitment,totalDisbursement,report,reports,
+										subTotActualCommFunds,subTotActualDisbFunds,subTotActualExpFunds,
+										subTotPlannedCommFunds,subTotPlannedDisbFunds,subTotPlannedExpFunds,
+										subTotal,
+										true);
+										
 								
 							ahReport.getProject().add(reports);
 						}
@@ -14452,13 +14270,8 @@ public class ReportUtil {
 							}
 
 							AmpFund fund = new AmpFund();
-							fund.setCommAmount(mf.format(actCommitSubTotal));
-							fund.setDisbAmount(mf.format(actDisbSubTotal));
-							fund.setExpAmount(mf.format(actExpSubTotal));
-							fund.setPlCommAmount(mf.format(planCommitSubTotal));
-							fund.setPlDisbAmount(mf.format(planDisbSubTotal));
-							fund.setPlExpAmount(mf.format(planExpSubTotal));
-							fund.setUnDisbAmount(mf.format(unDisbSubTotal));
+							
+							for(int t=0;t<7;t++) fund.setAmount(t,mf.format(subTotal[t]));
 							ahReport.getFundSubTotal().add(fund) ;	
 						}
 						else
@@ -14485,13 +14298,9 @@ public class ReportUtil {
 							}
 
 							AmpFund fund = new AmpFund();
-							fund.setCommAmount(mf.format(actCommitSubTotal));
-							fund.setDisbAmount(mf.format(actDisbSubTotal));
-							fund.setExpAmount(mf.format(actExpSubTotal));
-							fund.setPlCommAmount(mf.format(planCommitSubTotal));
-							fund.setPlDisbAmount(mf.format(planDisbSubTotal));
-							fund.setPlExpAmount(mf.format(planExpSubTotal));
-							fund.setUnDisbAmount(mf.format(unDisbSubTotal));
+							
+							for(int t=0;t<7;t++) fund.setAmount(t,mf.format(subTotal[t]));
+							
 							ahReport.getFundSubTotal().add(fund) ;	
 						}
 		} 

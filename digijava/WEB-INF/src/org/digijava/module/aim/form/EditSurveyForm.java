@@ -133,4 +133,5 @@ public class EditSurveyForm extends ActionForm {
 	public void setReset(Boolean reset) {
 		this.reset = reset;
 	}
+
 }

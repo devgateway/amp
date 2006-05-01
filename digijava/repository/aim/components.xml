@@ -171,7 +171,6 @@
 	<page name="editSurveyList" title=" - Aid Harmonization Indicators" />
 	<page name="editSurvey" title=" - Aid Harmonization Indicators" />
 	
-
 	<page page="searchLocation" name="aim_searchlocPopupLayout" title="AMP - Search Location" />
 	<page page="searchSectors" name="aim_searchSectorPopupLayout" title="AMP - Search Sectors" />
 	

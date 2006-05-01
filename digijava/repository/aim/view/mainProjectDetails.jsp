@@ -27,6 +27,7 @@
 <digi:errors/>
 
 <digi:instance property="aimMainProjectDetailsForm" />
+
 <logic:equal name="aimMainProjectDetailsForm" property="sessionExpired" value="true">
 	
 </logic:equal>

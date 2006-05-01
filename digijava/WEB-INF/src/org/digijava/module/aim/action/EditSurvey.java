@@ -98,7 +98,6 @@ public class EditSurvey extends Action {
 				 	}
 				 	catch (NumberFormatException nex) {
 						logger.debug("incorrect page in request scope : " + nex.getMessage());
-						//return mapping.findForward("forward");
 					}
 				}
 				svForm.setCurrPage(new Integer(page));

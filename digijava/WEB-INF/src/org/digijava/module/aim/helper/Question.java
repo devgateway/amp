@@ -73,4 +73,5 @@ public class Question {
 	public void setResponseId(Long responseId) {
 		this.responseId = responseId;
 	}
+
 }

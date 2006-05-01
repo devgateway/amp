@@ -40,6 +40,7 @@
 		</layout>
 		
 		<!-- AIM TAB LAYOUT -->
+		
 		<layout name="tabLayout" file="tabLayout.jsp">
 			<put name="title">AMP Tab Layout</put>
 			<put-item name="headerTop" file="headerTop.jsp"/>	  

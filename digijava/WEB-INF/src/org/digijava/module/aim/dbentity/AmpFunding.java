@@ -36,7 +36,6 @@ public class AmpFunding implements Serializable
 	
 	//private Set survey;
 	
-	
 		/**
 		 * @return
 		 */

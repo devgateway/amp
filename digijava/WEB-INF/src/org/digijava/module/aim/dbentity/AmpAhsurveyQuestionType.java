@@ -48,4 +48,5 @@ public class AmpAhsurveyQuestionType {
 	public void setAmpTypeId(Long ampTypeId) {
 		this.ampTypeId = ampTypeId;
 	}
+
 }

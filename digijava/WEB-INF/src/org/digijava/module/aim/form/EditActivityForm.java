@@ -156,7 +156,6 @@ public class EditActivityForm extends ActionForm implements Serializable{
 	private String financingId = null;
 	private Integer surveyYear = null;
 	private Long ampSurveyId = null;
-
 	
 	/* START FINANCIAL EDIT */
 	private Collection fundingOrganizations; // Collection of FundingOrganization objects

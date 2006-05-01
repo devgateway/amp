@@ -34,4 +34,5 @@ public class SurveyFunding {
 	public void setSurveyId(Long surveyId) {
 		this.surveyId = surveyId;
 	}
+
 }

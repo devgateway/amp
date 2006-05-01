@@ -45,7 +45,6 @@ public class EditSurveyList extends Action {
 		if (form != null) {
 			
 			EditActivityForm svForm = (EditActivityForm) form;
-			
 			svForm.setStep("17");	// for indicators tab in donor-view
 			
 			if (null == svForm.getSurvey() || svForm.getSurvey().size() < 1) {

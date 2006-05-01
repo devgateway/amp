@@ -87,4 +87,5 @@ public class AmpAhsurveyQuestion {
 	public void setStatus(String status) {
 		this.status = status;
 	}
+
 }

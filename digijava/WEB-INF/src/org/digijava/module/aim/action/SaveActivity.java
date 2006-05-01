@@ -1206,5 +1206,4 @@ public class SaveActivity extends Action {
 		}
 		return null;
 	}
-	
 }

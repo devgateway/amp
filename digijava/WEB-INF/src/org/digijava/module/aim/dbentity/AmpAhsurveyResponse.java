@@ -61,4 +61,5 @@ public class AmpAhsurveyResponse {
 	public void setAmpAHSurveyId(AmpAhsurvey ampAHSurveyId) {
 		this.ampAHSurveyId = ampAHSurveyId;
 	}
+
 }

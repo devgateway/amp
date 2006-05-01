@@ -83,6 +83,7 @@ public class AmpActivity
 	
 	private String approvalStatus;
 	
+	// Aid Harmonization Survey Set
 	private Set survey;
 	
 	/**

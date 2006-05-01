@@ -49,6 +49,7 @@ public class Indicator {
 	public void setQuestion(List question) {
 		this.question = question;
 	}
+
 	/*
 	Question getQuestion(int index) {
 		int size = question.size();
@@ -59,4 +60,5 @@ public class Indicator {
 		}
 		return (Question) question.get(index);
 	} */
+
 }

@@ -84,8 +84,6 @@ public class GetSurvey extends TilesAction {
 			 	}
 			 	catch (NumberFormatException nex) {
 					logger.debug("incorrect page in request scope : " + nex.getMessage());
-					//return mapping.findForward("forward");
-					//return null;
 				}
 			}
 			svForm.setCurrentPage(new Integer(page));

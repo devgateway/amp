@@ -11,8 +11,7 @@
 		<property name="ampId" column="amp_id" type="java.lang.String"/>
 		<property name="name" column="name" type="java.lang.String"/>
 		<property name="description" column="description"  type="org.digijava.kernel.db.SafeClobType"/>
-		<property name="objective" column="objectives" type="org.digijava.kernel.db.SafeClobType"/>
-		
+		<property name="objective" column="objectives" type="org.digijava.kernel.db.SafeClobType"/>	
 		<property name="language" column="language" type="java.lang.String"/>
 		<property name="version" column="version" type="java.lang.String"/>
 		<property name="calType" column="cal_type" type="java.lang.String"/>

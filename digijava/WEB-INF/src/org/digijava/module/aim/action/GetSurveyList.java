@@ -50,8 +50,6 @@ public class GetSurveyList extends TilesAction {
 			}
 			catch (NumberFormatException nex) {
 				logger.debug("incorrect activity-id in ActionForm : " + nex.getMessage());
-				//return mapping.findForward("forward");
-				//return null;
 			}
 			
 			Comparator sfComp = new Comparator() {

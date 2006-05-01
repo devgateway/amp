@@ -142,7 +142,6 @@ bgcolor="#006699">
 		</td>			
 		</c:if>
 	</tr>
-
 	<tr>
 		<td align="center">
 		</td>

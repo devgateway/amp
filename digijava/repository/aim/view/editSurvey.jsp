@@ -27,7 +27,6 @@
 -->
 </script>
 
-
 <digi:instance property="aimEditActivityForm" />
 <digi:form action="/editSurvey.do" method="post">
 

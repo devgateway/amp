@@ -184,6 +184,7 @@ public class GetTeamActivities extends Action {
 		} catch (Exception e) {
 		    e.printStackTrace(System.out);
 		}
+		
 		return null;
 	}
 }

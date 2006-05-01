@@ -15,7 +15,6 @@
 		<!--<property name="ampFundRecepientOrgId" column="amp_fund_recipient_org_id" type="long"/>-->
 
 		<property name="financingId" column="financing_id" type="java.lang.String"/>
-
 		<property name="fundingTermsCode" column="funding_terms_code"  type="java.lang.String"/>
 		
 		<property name="plannedStartDate" column="planned_start_date" type="java.util.Date" />

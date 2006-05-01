@@ -17,7 +17,6 @@ public class AmpAhsurvey {
 	
 	private AmpActivity ampActivityId;
 	private AmpOrganisation ampDonorOrgId;
-	
 	private Set responses;
 	
 	/**

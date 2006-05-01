@@ -199,6 +199,7 @@
 	 		org.digijava.module.aim.dbentity.AmpAhsurveyQuestionType
 		</hibernate-class>
 		
+		
 	</hibernate-classes>
         <!-- highlights classes End-->
 

@@ -27,7 +27,6 @@
 -->
 </script>
 
-
 <digi:instance property="aimSurveyForm" />
 <digi:form action="/viewSurveyList.do" method="post">
 

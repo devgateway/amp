@@ -8206,7 +8206,7 @@ public class DbUtil {
 			while (iterActivity.hasNext()) {
 				AmpActivity ampActivity = (AmpActivity) iterActivity.next();
 				
-//				logger.debug("Org Role List: " + ampActivity.getOrgrole().size());
+				// logger.debug("Org Role List: " + ampActivity.getOrgrole().size());
 				iter = ampActivity.getOrgrole().iterator();
 				while (iter.hasNext()) {
 					AmpOrgRole ampOrgRole = (AmpOrgRole) iter.next();

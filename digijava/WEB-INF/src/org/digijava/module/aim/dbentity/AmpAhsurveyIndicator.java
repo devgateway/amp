@@ -102,4 +102,5 @@ public class AmpAhsurveyIndicator {
 	public void setQuestions(Set questions) {
 		this.questions = questions;
 	}
+
 }

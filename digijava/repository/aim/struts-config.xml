@@ -2975,6 +2975,7 @@
 		<forward name="SelectMeasures" path="/showLayout.do?layout=AdvancedReportManagerStep6" />
 		
 	</action>
+	
 			
 <!-- END FINANCIAL EDIT	-->
   </action-mappings>

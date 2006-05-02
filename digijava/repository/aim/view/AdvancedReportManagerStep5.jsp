@@ -308,7 +308,7 @@ function deleteColumn()
 																						<!-- Component Funding -->
 																						<c:if test="${aimAdvancedReportForm.arReportType == 'component' }">
 																						<logic:iterate name="aimAdvancedReportForm" id="addedColumns"	property="addedColumns" >
-																							<c:if test="${addedColumns.columnName == 'Status' || addedColumns.columnName == 'Sector' || addedColumns.columnName == 'Project Title'  || addedColumns.columnName == 'Component Name'}">
+																							<c:if test="${addedColumns.columnName == 'Status' || addedColumns.columnName == 'Sector' || addedColumns.columnName == 'Project Title'}">
 																								<tr bgcolor="#ffffff">
 																									<td align="left" width="98%" valign=top>
 																										<c:out value="${addedColumns.columnName}"/>

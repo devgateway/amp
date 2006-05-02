@@ -12,7 +12,7 @@
 
 <!-- start of columnView.jsp -->
 <logic:notEmpty name="records" property="title">
-	<td align="center" height="21" rowspan="<%=rowspan%>"><bean:write
+	<td align="left" height="21" rowspan="<%=rowspan%>"><bean:write
 		name="records" property="title" /></td>
 </logic:notEmpty>
 
@@ -52,21 +52,21 @@
 </logic:notEqual>
 
 <logic:notEmpty name="records" property="objective">
-	<td align="center" height="21" rowspan="<%=rowspan%>"><bean:define
+	<td align="left" height="21" rowspan="<%=rowspan%>"><bean:define
 		id="objective">
 		<bean:write name="records" property="objective" />
 	</bean:define> <digi:edit key="<%=objective%>" /></td>
 </logic:notEmpty>
 
 <logic:notEmpty name="records" property="description">
-	<td align="center" height="21" rowspan="<%=rowspan%>" width="800"><bean:define
+	<td align="left" height="21" rowspan="<%=rowspan%>" width="800"><bean:define
 		id="descriptionKey">
 		<bean:write name="records" property="description" />
 	</bean:define> <digi:edit key="<%=descriptionKey%>" /></td>
 </logic:notEmpty>
 
 <logic:notEmpty name="records" property="donors">
-	<td align="center" height="21" rowspan="<%=rowspan%>"><logic:iterate
+	<td align="left" height="21" rowspan="<%=rowspan%>"><logic:iterate
 		name="records" id="donors" property="donors">
 		<%=donors%>
 		<br>
@@ -74,7 +74,7 @@
 </logic:notEmpty>
 
 <logic:notEmpty name="records" property="sectors">
-	<td align="center" height="21" rowspan="<%=rowspan%>"><logic:iterate
+	<td align="left" height="21" rowspan="<%=rowspan%>"><logic:iterate
 		name="records" id="sectors" property="sectors">
 		<%=sectors%>
 		<br>
@@ -82,7 +82,7 @@
 </logic:notEmpty>
 
 <logic:notEmpty name="records" property="regions">
-	<td align="center" height="21" rowspan="<%=rowspan%>"><logic:iterate
+	<td align="left" height="21" rowspan="<%=rowspan%>"><logic:iterate
 		name="records" id="regions" property="regions">
 		<%=regions%>
 		<br>
@@ -91,7 +91,7 @@
 
 
 <logic:notEmpty name="records" property="components">
-	<td align="center" height="21" rowspan="<%=rowspan%>"><logic:iterate
+	<td align="left" height="21" rowspan="<%=rowspan%>"><logic:iterate
 		name="records" id="component" property="components">
 		<%=component%>
 		<br>
@@ -99,7 +99,7 @@
 </logic:notEmpty>
 
 <logic:notEmpty name="records" property="contacts">
-	<td align="center" height="21" rowspan="<%=rowspan%>"><logic:iterate
+	<td align="left" height="21" rowspan="<%=rowspan%>"><logic:iterate
 		name="records" id="contacts2" property="contacts">
 		<%=contacts2%>
 	</logic:iterate>
@@ -108,7 +108,7 @@
 
 <logic:present name="records" property="modality">
 <logic:notEmpty name="records" property="modality">
-	<td align="center" height="21" rowspan="<%=rowspan%>">
+	<td align="left" height="21" rowspan="<%=rowspan%>">
 	<logic:iterate
 		name="records" id="modalities" property="modality">
 		
@@ -135,7 +135,7 @@
 </logic:notEmpty>
 
 		<logic:notEmpty name="records" property="projId">
-				<td align="center" height="21" rowspan="<%=rowspan%>" >
+				<td align="left" height="21" rowspan="<%=rowspan%>" >
 				<logic:iterate name="records" id="projId" property="projId" > <%=projId%>
 				<br>
 				</logic:iterate>
@@ -143,14 +143,14 @@
 		</logic:notEmpty>
 
 <logic:notEmpty name="records" property="totalCommitment">
-	<td align="center" height="21" rowspan="<%=rowspan%>"><logic:notEqual
+	<td align="right" height="21" rowspan="<%=rowspan%>"><logic:notEqual
 		name="records" property="totalCommitment" value="0">
 		<bean:write name="records" property="totalCommitment" />
 	</logic:notEqual></td>
 </logic:notEmpty>
 
 <logic:notEmpty name="records" property="totalDisbursement">
-	<td align="center" height="21" rowspan="<%=rowspan%>"><logic:notEqual
+	<td align="right" height="21" rowspan="<%=rowspan%>"><logic:notEqual
 		name="records" property="totalDisbursement" value="0">
 		<bean:write name="records" property="totalDisbursement" />
 	</logic:notEqual></td>

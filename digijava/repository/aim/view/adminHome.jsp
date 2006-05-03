@@ -128,7 +128,7 @@
 											<bean:define id="translation">
 												<digi:trn key="aim:clickToViewWorkspaceManager">Click here to view Workspace Manager</digi:trn>
 											</bean:define>
-											<digi:link href="/workspaceManager.do" title="<%=translation%>" >
+											<digi:link href="/workspaceManager.do~page=1" title="<%=translation%>" >
 											<digi:trn key="aim:workspaceManager">Workspace Manager</digi:trn>	
 											</digi:link>
 											</td>

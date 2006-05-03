@@ -25,39 +25,23 @@ public class WorkspaceManager extends Action {
 			}
 		}
 
-		final int NUM_RECORDS = 10;
+		final int NUM_RECORDS = 20;
 
 		Collection workspaces = new ArrayList();
 		WorkspaceForm wsForm = (WorkspaceForm) form;
-		int page = 0;
-
-		logger.debug("path = " + mapping.getPath());
-		logger.debug("In workspace manager");
-
-		if (request.getParameter("page") == null) {
-			page = 1;
-		} else {
-			/*
-			 * check whether the page is a valid integer
-			 */
-			page = Integer.parseInt(request.getParameter("page"));
+		
+		String temp = request.getParameter("page"); 
+		if (temp != null) {
+			wsForm.setPage(Integer.parseInt(temp));
+		} else if (wsForm.getPage() <= 0) {
+			wsForm.setPage(1);
 		}
-
+		
 		Collection ampWorkspaces = (Collection) session
 				.getAttribute("ampWorkspaces");
-		logger.debug("got collection");
 		if (ampWorkspaces == null) {
-			logger.debug("collection is null ");
 			ampWorkspaces = DbUtil.getAllTeams();
-			logger
-					.debug("collection has " + ampWorkspaces.size()
-							+ " elements");
 			session.setAttribute("ampWorkspaces", ampWorkspaces);
-		} else {
-			logger.debug("collection is not null");
-			logger
-					.debug("collection has " + ampWorkspaces.size()
-							+ " elements");
 		}
 
 		int numPages = ampWorkspaces.size() / NUM_RECORDS;
@@ -68,22 +52,20 @@ public class WorkspaceManager extends Action {
 		 * error.
 		 */
 
-		int stIndex = ((page - 1) * NUM_RECORDS) + 1;
-		int edIndex = page * NUM_RECORDS;
+		int currPage = wsForm.getPage();
+		int stIndex = ((currPage - 1) * NUM_RECORDS) + 1;
+		int edIndex = currPage * NUM_RECORDS;
 		if (edIndex > ampWorkspaces.size()) {
 			edIndex = ampWorkspaces.size();
 		}
-
 		Vector vect = new Vector();
 		vect.addAll(ampWorkspaces);
 
 		for (int i = (stIndex - 1); i < edIndex; i++) {
-			logger.debug("adding col of index " + i);
 			workspaces.add(vect.get(i));
 		}
 
 		Collection pages = null;
-
 		if (numPages > 1) {
 			pages = new ArrayList();
 			for (int i = 0; i < numPages; i++) {
@@ -94,7 +76,6 @@ public class WorkspaceManager extends Action {
 		wsForm.setWorkspaces(workspaces);
 		wsForm.setPages(pages);
 
-		logger.debug("Workspace manager returning");
 		return mapping.findForward("forward");
 	}
 }

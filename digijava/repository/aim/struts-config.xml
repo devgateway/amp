@@ -1310,7 +1310,7 @@
 			  path="/aim/updateWorkspace">
 			  <forward name="admin" path="/showLayout.do?layout=updateWorkspace" />
  			  <forward name="index" path="/aim/index.do" redirect="true" />
- 			  <forward name="forward" path="/aim/workspaceManager.do" redirect="true" />
+			  <forward name="forward" path="/aim/workspaceManager.do" redirect="true"/>
 	</action>
 
 	<action 
@@ -1365,6 +1365,7 @@
 			  path="/aim/deleteWorkspace">
 			  <forward name="admin" path="/aim/workspaceManager.do" />
 			  <forward name="index" path="/aim/index.do" redirect="true" />			  
+			  <forward name="forward" path="/aim/workspaceManager.do" />
 	</action>	
 
 	<action 

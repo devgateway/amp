@@ -537,6 +537,40 @@ public class TeamUtil {
 		return teamExist;
 	}
 
+	public static boolean membersExist(Long teamId) {
+		boolean memExist = false;
+		Session session = null;
+		String qryStr = null;
+		Query qry=  null;
+		
+		try {
+			session = PersistenceManager.getSession();
+			qryStr = "select count(*) from " + AmpTeamMember.class.getName() + " tm" +
+					" where (tm.ampTeam=:teamId)";
+			qry = session.createQuery(qryStr);
+			qry.setParameter("teamId",teamId,Hibernate.LONG);
+			
+			Iterator itr = qry.list().iterator();
+			if (itr.hasNext()) {
+				Integer cnt = (Integer) itr.next();
+				logger.info("cnt.intValue = " + cnt.intValue());
+				if (cnt.intValue() > 0) memExist = true;
+			}
+			
+		} catch (Exception e) {
+			e.printStackTrace(System.out);
+		} finally {
+			try {
+				if (session != null) {
+					PersistenceManager.releaseSession(session);
+				}
+			} catch (Exception ex) {
+				logger.error("releaseSession() failed");
+			}
+		}		
+		return memExist;
+	}
+	
 	/**
 	 * Removes a team
 	 * 
@@ -546,48 +580,73 @@ public class TeamUtil {
 	public static void removeTeam(Long teamId) {
 		Session session = null;
 		Transaction tx = null;
+		String qryStr = null;
+		Query qry = null;
 
 		try {
 			session = PersistenceManager.getSession();
 			tx = session.beginTransaction();
 
-			String qryStr = "select t from " + AmpTeam.class.getName() + " t "
-					+ "where (t.ampTeamId=:id)";
-			Query qry = session.createQuery(qryStr);
-			qry.setParameter("id", teamId, Hibernate.LONG);
+			AmpTeam team = (AmpTeam) session.load(AmpTeam.class,teamId);
+			
+			// Remove reference from activity
+			qryStr = "select act from " + AmpActivity.class.getName() +" act" +
+					" where (act.team=:teamId)";
+			qry = session.createQuery(qryStr);
+			qry.setParameter("teamId",teamId,Hibernate.LONG);
 			Iterator itr = qry.list().iterator();
-
-			AmpTeam delTeam = null;
+			while (itr.hasNext()) {
+				AmpActivity act = (AmpActivity) itr.next();
+				act.setTeam(null);
+				session.update(act);
+			}
+			
+			// Remove reference from AmpTeamPageFilters
+			qryStr = "select tpf from " + AmpTeamPageFilters.class.getName() + " tpf" +
+					" where (tpf.team=:teamId)";
+			qry = session.createQuery(qryStr);
+			qry.setParameter("teamId",teamId,Hibernate.LONG);
+			itr = qry.list().iterator();
+			while (itr.hasNext()) {
+				AmpTeamPageFilters tpf = (AmpTeamPageFilters) itr.next();
+				session.delete(tpf);
+			}			
+			
+			// Remove reference from AmpTeamReports
+			qryStr = "select tr from " + AmpTeamReports.class.getName() + " tr" +
+					" where (tr.team=:teamId)";
+			qry = session.createQuery(qryStr);
+			qry.setParameter("teamId",teamId,Hibernate.LONG);
+			itr = qry.list().iterator();
+			while (itr.hasNext()) {
+				AmpTeamReports tr = (AmpTeamReports) itr.next();
+				session.delete(tr);
+			}						
+			
+			// Remove reference from AmpTeam
+			qryStr = "select t from " + AmpTeam.class.getName() + " t" +
+					" where (t.parentTeamId=:teamId)";
+			qry = session.createQuery(qryStr);
+			qry.setParameter("teamId",teamId,Hibernate.LONG);
+			itr = qry.list().iterator();
+			while (itr.hasNext()) {
+				AmpTeam t = (AmpTeam) itr.next();
+				t.setParentTeamId(null);
+				session.update(t);
+			}									
+			
+			// Remove reference from AmpApplicationSettings
+			qryStr = "select a from " + AmpApplicationSettings.class.getName() + " a " +
+					"where (a.team=:teamId)";
+			qry = session.createQuery(qryStr);
+			qry.setParameter("teamId",teamId,Hibernate.LONG);
+			itr = qry.list().iterator();
 			if (itr.hasNext()) {
-				delTeam = (AmpTeam) itr.next();
+				AmpApplicationSettings as = (AmpApplicationSettings) itr.next();
+				session.delete(as);
 			}
-
-			if (delTeam != null) {
-				qryStr = "select t from " + AmpTeam.class.getName() + " t "
-						+ "where (t.parentTeamId=:id)";
-				qry = session.createQuery(qryStr);
-				qry.setParameter("id", teamId, Hibernate.LONG);
-				itr = qry.list().iterator();
-				while (itr.hasNext()) {
-					AmpTeam childTeam = (AmpTeam) itr.next();
-					childTeam.setParentTeamId(null);
-					session.update(childTeam);
-				}
-
-				qryStr = "select app from "
-						+ AmpApplicationSettings.class.getName() + " app "
-						+ "where (app.team=:id) and app.member is null";
-				qry = session.createQuery(qryStr);
-				qry.setParameter("id", delTeam.getAmpTeamId(), Hibernate.LONG);
-				itr = qry.list().iterator();
-
-				if (itr.hasNext()) {
-					AmpApplicationSettings appSet = (AmpApplicationSettings) itr
-							.next();
-					session.delete(appSet);
-				}
-				session.delete(delTeam);
-			}
+			session.delete(team);
+			
 			tx.commit();
 		} catch (Exception e) {
 			logger.error("Execption from removeTeam() :" + e.getMessage());
@@ -1526,6 +1585,8 @@ public class TeamUtil {
 	public static void removeTeamMembers(Long id[],Long groupId) {
 		Session session = null;
 		Transaction tx = null;
+		String qryStr = null;
+		Query qry = null;
 
 		try {
 			session = PersistenceManager.getSession();
@@ -1536,18 +1597,25 @@ public class TeamUtil {
 					if (isTeamLead(ampMember)) {
 						AmpTeam team = ampMember.getAmpTeam();
 						team.setTeamLead(null);
+						session.update(team);
 					}
-					AmpApplicationSettings ampAppSettings = org.digijava.module.aim.util.DbUtil
-							.getMemberAppSettings(id[i]);
-					if (ampAppSettings == null) {
-						logger.debug("AmpAppSettings is null for id " + id[i]);
+					
+					qryStr = "select a from " + AmpApplicationSettings.class.getName() +
+							" a where (a.member=:memberId)";
+					qry = session.createQuery(qryStr);
+					qry.setParameter("memberId", id[i], Hibernate.LONG);
+					Iterator itr = qry.list().iterator();
+					if (itr.hasNext()) {
+						logger.info("Got the app settings..");
+						AmpApplicationSettings ampAppSettings = (AmpApplicationSettings) itr.next();
 						session.delete(ampAppSettings);
+						logger.info("deleted the app settings..");
 					}
+					
 					User user = (User) session.load(User.class,ampMember.getUser().getId());
 					Group group = (Group) session.load(Group.class,groupId);
-					logger.debug("Removing " + group.getName() + " from " +
-							user.getFirstNames());
 					user.getGroups().remove(group);
+					session.update(user);
 					session.delete(ampMember);
 				}				
 			}

@@ -49,6 +49,11 @@
 					</td>
 				</tr>
 				<tr>
+					<td height=16 vAlign=center width=571>
+						<html:errors />
+					</td>
+				</tr>				
+				<tr>
 					<td noWrap width=100% vAlign="top">
 					<table width="100%" cellspacing=1 cellSpacing=1 border=0>
 					<tr><td noWrap width=600 vAlign="top">

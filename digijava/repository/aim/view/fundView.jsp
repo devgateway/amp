@@ -14,7 +14,7 @@
 				<!-- this is for type Of assist -->
 				<logic:equal name="typeAssist" value="true">
 				<logic:equal name="aimAdvancedReportForm" property="reportType" value="donor">
-				<td align="left" valign="top" height="21">Total</td>
+				<td align="left" valign="center" height="21">Total</td>
 				</logic:equal>
 				</logic:equal>
 		
@@ -22,7 +22,7 @@
 					<logic:iterate name="aimAdvancedReportForm"  property="addedMeasures" id="addedMeasures">
 						<c:if test="${addedMeasures.measureName == 'Actual Commitments'}">
 						<logic:equal name="aimAdvancedReportForm" property="acCommFlag" value="true">
-						<td align="right" height="21" width="69" >
+						<td align="right" height="21" >
 						<logic:notEqual name="ampFund" property="commAmount" value="0">
 						<bean:write name="ampFund" property="commAmount" />
 						</logic:notEqual>
@@ -32,7 +32,7 @@
 						
 						<c:if test="${addedMeasures.measureName == 'Actual Disbursements'}">
 						<logic:equal name="aimAdvancedReportForm" property="acDisbFlag" value="true">
-						<td align="right" height="21" width="69">
+						<td align="right" height="21" >
 						<logic:notEqual name="ampFund" property="disbAmount" value="0">
 						<bean:write name="ampFund" property="disbAmount" />
 						</logic:notEqual>
@@ -42,7 +42,7 @@
 						
 						<c:if test="${addedMeasures.measureName == 'Actual Expenditures'}">
 						<logic:equal name="aimAdvancedReportForm" property="acExpFlag" value="true">
-						<td align="right" height="21" width="69">
+						<td align="right" height="21" >
 						<logic:notEqual name="ampFund" property="expAmount" value="0">
 						<bean:write name="ampFund" property="expAmount" />
 						</logic:notEqual>
@@ -52,7 +52,7 @@
 						
 						<c:if test="${addedMeasures.measureName == 'Planned Commitments'}">
 						<logic:equal name="aimAdvancedReportForm" property="plCommFlag" value="true">
-						<td align="right" height="21" width="69">
+						<td align="right" height="21" >
 						<logic:notEqual name="ampFund" property="plCommAmount" value="0">
 						<bean:write name="ampFund" property="plCommAmount" />
 						</logic:notEqual>
@@ -62,7 +62,7 @@
 						
 						<c:if test="${addedMeasures.measureName == 'Planned Disbursements'}">
 						<logic:equal name="aimAdvancedReportForm" property="plDisbFlag" value="true">
-						<td align="right" height="21" width="69">
+						<td align="right" height="21" >
 						<logic:notEqual name="ampFund" property="plDisbAmount" value="0">
 						<bean:write name="ampFund" property="plDisbAmount" />
 						</logic:notEqual>
@@ -72,7 +72,7 @@
 						
 						<c:if test="${addedMeasures.measureName == 'Planned Expenditures'}">
 						<logic:equal name="aimAdvancedReportForm" property="plExpFlag" value="true">
-						<td align="right" height="21" width="69">
+						<td align="right" height="21" >
 						<logic:notEqual name="ampFund" property="plExpAmount" value="0">
 						<bean:write name="ampFund" property="plExpAmount" />
 						</logic:notEqual>
@@ -84,7 +84,7 @@
 						<c:if test="${addedMeasures.measureName == 'Cumulative Balance'}">							
 							<logic:equal name="aimAdvancedReportForm" property="acBalFlag" value="true">
 							<logic:notEmpty name="ampFund" property="unDisbAmount">
-							<td align="right" height="21" width="69">
+							<td align="right" height="21" >
 							<logic:notEqual name="ampFund" property="unDisbAmount" value="0">
 							<bean:write name="ampFund" property="unDisbAmount" />
 							</logic:notEqual>

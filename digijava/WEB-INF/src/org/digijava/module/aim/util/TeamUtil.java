@@ -1376,44 +1376,34 @@ public class TeamUtil {
 			temp.add(teamId);
 			String qryStr = "";
 			Long tId = new Long(0);
+			String inclause = "";
 			
-			// get the teams
-			while (temp.size() > 0) {
-			    qryStr = "select t.ampTeamId from " + AmpTeam.class.getName() + 
-			    	" t where (t.parentTeamId=:tId)";	
-			    qry = session.createQuery(qryStr);
-			    tId = (Long) temp.get(0);
-			    qry.setParameter("tId",tId,Hibernate.LONG);
-			    
-			    Iterator itr = qry.list().iterator();
-			    while (itr.hasNext()) {
-			        teams.add((Long)itr.next());
-			        temp.add((Long)itr.next());
-			    }
-			    temp.remove(0);
-			}
-			
-			// get all activities of the teams
-			StringBuffer inclause = new StringBuffer();
-			for (int i = 0;i < teams.size();i ++) {
-			    if (i != 0) 
-			        inclause.append(",");
-			    inclause.append((Long)teams.get(i));
-			    
+			ArrayList dbReturnSet = (ArrayList) DbUtil.getAmpLevel0Teams(teamId);
+			if (dbReturnSet.size() == 0)
+				inclause = "'" + teamId + "'";
+			else {
+				Iterator iter = dbReturnSet.iterator();
+				while (iter.hasNext()) {
+					tId = (Long) iter.next();
+					if (inclause == null || inclause.trim().length() == 0) {
+						inclause = "'" + tId + "'";
+					} else {
+						inclause = inclause + ",'" + tId + "'";
+					}
+				}
 			}
 			
 			qryStr = "select act.ampActivityId from " + AmpActivity.class.getName()  + "" +
 					" act where act.team in (" + inclause.toString() + ")";
+			
 			qry = session.createQuery(qryStr);
 			Iterator itr = qry.list().iterator();
-			inclause.delete(0,inclause.length());
+			inclause = "";
 			while (itr.hasNext()) {
 			    if (inclause.length() != 0)
-			        inclause.append(",");
-			    inclause.append((Long)itr.next());
+			        inclause += ",";
+			    inclause += (Long)itr.next();
 			}
-			
-			//Connection con = session.connection();
 			
 			qryStr = "select distinct aor.organisation from " +
 					AmpOrgRole.class.getName() + " aor, " + AmpOrganisation.class.getName() + " " +
@@ -1432,29 +1422,6 @@ public class TeamUtil {
 					ampOrg.setAcronym(ampOrg.getAcronym().substring(0,20) + "...");
 				donors.add(ampOrg);			    
 			}
-			
-			
-			/*
-			qryStr = "select distinct a.amp_org_id,c.name,c.acronym from amp_org_role a,amp_role b,amp_organisation c " +
-					"where a.amp_activity_id in (" + inclause + ") and a.amp_role_id = b.amp_role_id " +
-					"and a.amp_org_id = c.amp_org_id and b.role_code = '" + Constants.FUNDING_AGENCY + "' " +
-					"order by c.c.acronym asc";
-			
-			Statement stmt = con.createStatement();
-			ResultSet rs = stmt.executeQuery(qryStr);
-			while (rs.next()) {
-				AmpOrganisation ampOrg = new AmpOrganisation();
-				ampOrg.setAmpOrgId(new Long(rs.getLong(1)));
-				ampOrg.setName(rs.getString(2));
-				ampOrg.setAcronym(rs.getString(3));
-				if(ampOrg.getAcronym().length()>20)
-					ampOrg.setAcronym(ampOrg.getAcronym().substring(0,20) + "...");
-				donors.add(ampOrg);			    
-			}
-			rs.close();
-			stmt.close();
-			session.disconnect();
-			*/
 		} catch (Exception e) {
 			logger.error("Unable to get all donors");
 			logger.debug("Exceptiion " + e);
@@ -1468,7 +1435,7 @@ public class TeamUtil {
 				logger.error("releaseSession() failed");
 			}
 		}
-		logger.debug("returning donors");
+		
 		return donors;
 	}
 	

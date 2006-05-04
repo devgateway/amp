@@ -12708,7 +12708,7 @@ public class ReportUtil {
 						{
 							//logger.info("equal to annual");
 							//for(int i=0;i<=yrCount ;i++ )
-							for(int i=0;i<yrCount ;i++ )
+							for(int i=0;i<=yrCount ;i++ )
 							{
 								//logger.info("in the for");
 								//logger.info("i have come here" + iterFund.next().toString());
@@ -12754,7 +12754,10 @@ public class ReportUtil {
 									AmpFund ampFund=(AmpFund) iterFund.next();
 									for(int t=0;t<7;t++) total[t]+=Double.parseDouble(DecimalToText.removeCommas(ampFund.getAmount(t)));	
 								}			
+				
+								
 							}
+						
 						}
 						if(ahReport.getProject().size()>0)
 							mreport.getHierarchy().add(ahReport);
@@ -12872,15 +12875,19 @@ public class ReportUtil {
 
 
 	private static void setHSectorInfo(ArrayList level,ArrayList activityIds,Long ampSectorId, Collection ampReports,
-			String teamClause,ArrayList approvedActivityList) throws HibernateException, SQLException {
+			String teamClause,ArrayList approvedActivityList, String inClause) throws HibernateException, SQLException {
 		Iterator iter=null;
 		Session session = null;
 		Long All=new Long(0);
 
+		String strClause="";
+		if(inClause!=null) strClause= " (activity.ampActivityId in(" + inClause + ")) and ";
+		
+		
 	session = PersistenceManager.getSession();
 	String queryString = "select activity from "
 		+ AmpActivity.class.getName()
-		+ " activity where (activity.team.ampTeamId in(" + teamClause + "))";
+		+ " activity where "+strClause+" (activity.team.ampTeamId in(" + teamClause + "))";
 
 	Query qry = session.createQuery(queryString);
 	//logger.debug("Query: " + queryString);
@@ -12905,6 +12912,7 @@ public class ReportUtil {
 		if(!ampSectorId.equals(All))
 		{
 			AmpSector ampSector=DbUtil.getAmpParentSector(ampSectorId);
+			if (!sector.getAmpSectorId().equals(ampSectorId)) continue;
 			if(!(sector.getAmpSectorId().equals(ampSector.getAmpSectorId())))
 				continue;
 		}
@@ -12932,11 +12940,14 @@ public class ReportUtil {
 	
 	
 	private static void setHDonorInfo(ArrayList level,ArrayList activityIds,Long ampDonorId, Collection ampReports,
-			String teamClause,ArrayList approvedActivityList) throws HibernateException, SQLException {
+			String teamClause,ArrayList approvedActivityList,String inClause) throws HibernateException, SQLException {
 		Iterator iter=null;
 		Iterator iterActivity=null;
 		Session session = null;
 		Long All=new Long(0);
+		
+		String strClause="";
+		if(inClause!=null) strClause= " (activity.ampActivityId in(" + inClause + ")) and ";
 		
 		level=DbUtil.getAmpDonors(teamClause);
 		iter=level.iterator();
@@ -12951,7 +12962,8 @@ public class ReportUtil {
 			session = PersistenceManager.getSession();
 			String queryString = "select distinct activity from "
 				+ AmpReportCache.class.getName()
-				+ " activity where (activity.ampTeamId in(" + teamClause + ")) and (activity.ampDonorId='" + ampOrganisation.getAmpOrgId() + "') and (activity.reportType='1')";
+				+ " activity where " + strClause + 
+						"(activity.ampTeamId in(" + teamClause + ")) and (activity.ampDonorId='" + ampOrganisation.getAmpOrgId() + "') and (activity.reportType='1')";
 
 			Query qry = session.createQuery(queryString);
 			//logger.debug("Query: " + queryString);
@@ -12978,12 +12990,14 @@ public class ReportUtil {
 
 
 	private static void setHFundingInstrumentInfo(ArrayList level,ArrayList activityIds,Long ampModalityId, Collection ampReports,
-			String teamClause,ArrayList approvedActivityList) throws HibernateException, SQLException {
+			String teamClause,ArrayList approvedActivityList, String inClause) throws HibernateException, SQLException {
 		Iterator iter=null;
 		Iterator iterActivity=null;
 		Session session = null;
 		Long All=new Long(0);
 
+		String strClause="";
+		if(inClause!=null) strClause= " (activity.ampActivityId in(" + inClause + ")) and ";
 		
 	level=DbUtil.getAmpModality();
 	iter=level.iterator();
@@ -12998,7 +13012,8 @@ public class ReportUtil {
 		session = PersistenceManager.getSession();
 		String queryString = "select distinct activity from "
 			+ AmpReportCache.class.getName()
-			+ " activity where (activity.ampTeamId in(" + teamClause + ")) and (activity.ampModalityId='" + ampModality.getAmpModalityId() + "') and (activity.reportType='1')";
+			+ " activity where " + strClause + 
+					"(activity.ampTeamId in(" + teamClause + ")) and (activity.ampModalityId='" + ampModality.getAmpModalityId() + "') and (activity.reportType='1')";
 
 		Query qry = session.createQuery(queryString);
 		//logger.debug("Query: " + queryString);
@@ -13024,13 +13039,16 @@ public class ReportUtil {
 	
 	
 	private static void setHTermsAssistInfo(ArrayList level,ArrayList activityIds,Collection ampReports,
-			String teamClause,ArrayList approvedActivityList) throws HibernateException, SQLException {
+			String teamClause,ArrayList approvedActivityList,String inClause) throws HibernateException, SQLException {
 	
 		Iterator iter=null;
 		Iterator iterActivity=null;
 		Session session = null;
 		Long All=new Long(0);
 	
+		String strClause="";
+		if(inClause!=null) strClause= " (activity.ampActivityId in(" + inClause + ")) and ";
+		
 	level=(ArrayList)DbUtil.getAllAssistanceTypes();
 	iter=level.iterator();
 	while(iter.hasNext())
@@ -13039,7 +13057,8 @@ public class ReportUtil {
 		session = PersistenceManager.getSession();
 		String queryString = "select distinct activity from "
 			+ AmpReportCache.class.getName()
-			+ " activity where (activity.ampTeamId in(" + teamClause + ")) and (activity.termAssistName='" + ampTermsAssist.getTermsAssistName() + "') and (activity.reportType='1')";
+			+ " activity where " + strClause + 
+					"(activity.ampTeamId in(" + teamClause + ")) and (activity.termAssistName='" + ampTermsAssist.getTermsAssistName() + "') and (activity.reportType='1')";
 
 		Query qry = session.createQuery(queryString);
 		//logger.debug("Query: " + queryString);
@@ -13065,12 +13084,14 @@ public class ReportUtil {
 	}
 	
 	private static void setHStatusInfo(ArrayList level,ArrayList activityIds,Long ampStatusId, Collection ampReports,
-			String teamClause,ArrayList approvedActivityList) throws HibernateException, SQLException {
+			String teamClause,ArrayList approvedActivityList, String inClause) throws HibernateException, SQLException {
 		Iterator iter=null;
 		Iterator iterActivity=null;
 		Session session = null;
 		Long All=new Long(0);
 		
+		String strClause="";
+		if(inClause!=null) strClause= " (activity.ampActivityId in(" + inClause + ")) and ";
 		
 	level=DbUtil.getAmpStatus();
 	iter=level.iterator();
@@ -13086,7 +13107,7 @@ public class ReportUtil {
 		session = PersistenceManager.getSession();
 		String queryString = "select activity from "
 			+ AmpActivity.class.getName()
-			+ " activity where (activity.team.ampTeamId in(" + teamClause + ")) and (activity.status.ampStatusId='" + ampStatus.getAmpStatusId() + "')";
+			+ " activity where "+ strClause+" (activity.team.ampTeamId in(" + teamClause + ")) and (activity.status.ampStatusId='" + ampStatus.getAmpStatusId() + "')";
 
 		Query qry = session.createQuery(queryString);
 		//logger.debug("Query: " + queryString);
@@ -13112,13 +13133,14 @@ public class ReportUtil {
 	}
 
 	private static void setHComponentInfo(ArrayList level,ArrayList activityIds, String component, Collection ampReports,
-			String teamClause,ArrayList approvedActivityList) throws HibernateException, SQLException {
+			String teamClause,ArrayList approvedActivityList,String inClause) throws HibernateException, SQLException {
 
 		Iterator iter=null;
 		Iterator iterActivity=null;
 		Session session = null;
 	
-
+		String strClause="";
+		if(inClause!=null) strClause= " (activity.ampActivityId in(" + inClause + ")) and ";
 		
 		level=DbUtil.getAmpComponents();
 		iter=level.iterator();
@@ -13133,7 +13155,8 @@ public class ReportUtil {
 			session = PersistenceManager.getSession();
 			String queryString = "select distinct activity from "
 				+ AmpReportCache.class.getName()
-				+ " activity where (activity.ampTeamId in(" + teamClause + ")) and (activity.ampComponentId='" + ampComponent.getAmpComponentId() + "') and (activity.reportType='2')";
+				+ " activity where " + strClause + 
+						"(activity.ampTeamId in(" + teamClause + ")) and (activity.ampComponentId='" + ampComponent.getAmpComponentId() + "') and (activity.reportType='2')";
 
 			Query qry = session.createQuery(queryString);
 			//logger.debug("Query: " + queryString);
@@ -13160,16 +13183,20 @@ public class ReportUtil {
 	}
 
 	private static void setHActivityNameInfo(ArrayList level,ArrayList activityIds,List projTitles, Collection ampReports,
-			String teamClause,ArrayList approvedActivityList) throws HibernateException, SQLException {
+			String teamClause,ArrayList approvedActivityList, String inClause) throws HibernateException, SQLException {
 		
 		AdvancedHierarchyReport ahReport = null;
 		Iterator iterActivity=null;
 		Session session = null;
+		
+		String strClause="";
+		if(inClause!=null) strClause= " (activity.ampActivityId in(" + inClause + ")) and ";
 	
 		session = PersistenceManager.getSession();
 		String queryString = "select activity from "
 			+ AmpActivity.class.getName()
-			+ " activity where activity.approvalStatus='approved' and activity.team.ampTeamId in (" + teamClause + ") " ;
+			+ " activity where " + strClause +
+					"activity.approvalStatus='approved' and activity.team.ampTeamId in (" + teamClause + ") " ;
 
 		
 		Query qry = session.createQuery(queryString);
@@ -13193,13 +13220,16 @@ public class ReportUtil {
 	}
 	
 	private static void setHRegionInfo(ArrayList level,ArrayList activityIds, String region, Collection ampReports,
-			String teamClause,ArrayList approvedActivityList) throws HibernateException, SQLException {
+			String teamClause,ArrayList approvedActivityList,String inClause) throws HibernateException, SQLException {
 
 		Iterator iter=null;
 		Iterator iterActivity=null;
 		Session session = null;
 		Long All=new Long(0);
-
+		
+		String strClause="";
+		if(inClause!=null) strClause= " (activity.ampActivityId in(" + inClause + ")) and ";
+		
 		level=DbUtil.getAmpLocations();
 		iter=level.iterator();
 		while(iter.hasNext())
@@ -13213,7 +13243,8 @@ public class ReportUtil {
 			session = PersistenceManager.getSession();
 			String queryString = "select distinct activity from "
 				+ AmpReportCache.class.getName()
-				+ " activity where (activity.ampTeamId in(" + teamClause + ")) and (activity.ampRegionId='" + ampRegion.getAmpRegionId() + "') and (activity.reportType='3')";
+				+ " activity where " + strClause + 
+						"(activity.ampTeamId in(" + teamClause + ")) and (activity.ampRegionId='" + ampRegion.getAmpRegionId() + "') and (activity.reportType='3')";
 
 			Query qry = session.createQuery(queryString);
 			//logger.debug("Query: " + queryString);
@@ -13250,31 +13281,31 @@ public class ReportUtil {
 		try 
 		{
 			if(ampColumnId.equals(Constants.STATUS_NAME))
-				setHStatusInfo(level,activityIds,ampStatusId,ampReports,teamClause,approvedActivityList);			
+				setHStatusInfo(level,activityIds,ampStatusId,ampReports,teamClause,approvedActivityList,null);			
 		
 			if(ampColumnId.equals(Constants.DONOR_NAME))
-				setHDonorInfo(level,activityIds,ampDonorId,ampReports,teamClause,approvedActivityList);	
+				setHDonorInfo(level,activityIds,ampDonorId,ampReports,teamClause,approvedActivityList,null);	
 				
 			if(ampColumnId.equals(Constants.FUNDING_INSTRUMENT))
-				setHFundingInstrumentInfo(level,activityIds,ampModalityId,ampReports,teamClause,approvedActivityList);	
+				setHFundingInstrumentInfo(level,activityIds,ampModalityId,ampReports,teamClause,approvedActivityList,null);	
 			
 			if(ampColumnId.equals(Constants.SECTOR_NAME))
-				setHSectorInfo(level,activityIds,ampSectorId,ampReports,teamClause,approvedActivityList);
+				setHSectorInfo(level,activityIds,ampSectorId,ampReports,teamClause,approvedActivityList,null);
 
 			if(ampColumnId.equals(Constants.TERM_ASSIST_NAME))
-				setHTermsAssistInfo(level,activityIds,ampReports,teamClause,approvedActivityList);
+				setHTermsAssistInfo(level,activityIds,ampReports,teamClause,approvedActivityList,null);
 
 			if(ampColumnId.equals(Constants.REGION_NAME))
-				setHRegionInfo(level,activityIds,region, ampReports,teamClause,approvedActivityList);
+				setHRegionInfo(level,activityIds,region, ampReports,teamClause,approvedActivityList,null);
 			
 			
 			if(ampColumnId.equals(Constants.COMPONENT_NAME))
-				setHComponentInfo(level,activityIds,component,ampReports,teamClause,approvedActivityList);			
+				setHComponentInfo(level,activityIds,component,ampReports,teamClause,approvedActivityList,null);			
 			
 			
 //			start code block for Project title column
 			if(ampColumnId.equals(Constants.ACTIVITY_NAME))
-				setHActivityNameInfo(level,activityIds,projTitles,ampReports,teamClause,approvedActivityList);
+				setHActivityNameInfo(level,activityIds,projTitles,ampReports,teamClause,approvedActivityList,null);
 			
 // 			end code block for project-title column
 			
@@ -13325,31 +13356,31 @@ public class ReportUtil {
 				ahReportLevel2.setLevels(new ArrayList());
 
 				if(ampColumnId2.equals(Constants.STATUS_NAME))
-					setHStatusInfo(level,activityIds,ampStatusId,ahReportLevel2.getLevels(),teamClause,approvedActivityList);			
+					setHStatusInfo(level,activityIds,ampStatusId,ahReportLevel2.getLevels(),teamClause,approvedActivityList,inClause);			
 			
 				if(ampColumnId2.equals(Constants.DONOR_NAME))
-					setHDonorInfo(level,activityIds,ampDonorId,ahReportLevel2.getLevels(),teamClause,approvedActivityList);	
+					setHDonorInfo(level,activityIds,ampDonorId,ahReportLevel2.getLevels(),teamClause,approvedActivityList,inClause);	
 					
 				if(ampColumnId2.equals(Constants.FUNDING_INSTRUMENT))
-					setHFundingInstrumentInfo(level,activityIds,ampModalityId,ahReportLevel2.getLevels(),teamClause,approvedActivityList);	
+					setHFundingInstrumentInfo(level,activityIds,ampModalityId,ahReportLevel2.getLevels(),teamClause,approvedActivityList,inClause);	
 				
 				if(ampColumnId2.equals(Constants.SECTOR_NAME))
-					setHSectorInfo(level,activityIds,ampSectorId,ahReportLevel2.getLevels(),teamClause,approvedActivityList);
+					setHSectorInfo(level,activityIds,ampSectorId,ahReportLevel2.getLevels(),teamClause,approvedActivityList,inClause);
 
 				if(ampColumnId2.equals(Constants.TERM_ASSIST_NAME))
-					setHTermsAssistInfo(level,activityIds,ahReportLevel2.getLevels(),teamClause,approvedActivityList);
+					setHTermsAssistInfo(level,activityIds,ahReportLevel2.getLevels(),teamClause,approvedActivityList,inClause);
 
 				if(ampColumnId2.equals(Constants.REGION_NAME))
-					setHRegionInfo(level,activityIds,region, ahReportLevel2.getLevels(),teamClause,approvedActivityList);
+					setHRegionInfo(level,activityIds,region, ahReportLevel2.getLevels(),teamClause,approvedActivityList,inClause);
 				
 				
 				if(ampColumnId2.equals(Constants.COMPONENT_NAME))
-					setHComponentInfo(level,activityIds,component,ahReportLevel2.getLevels(),teamClause,approvedActivityList);			
+					setHComponentInfo(level,activityIds,component,ahReportLevel2.getLevels(),teamClause,approvedActivityList,inClause);			
 				
 				
 //				start code block for Project title column
 				if(ampColumnId2.equals(Constants.ACTIVITY_NAME))
-					setHActivityNameInfo(level,activityIds,projTitles,ahReportLevel2.getLevels(),teamClause,approvedActivityList);
+					setHActivityNameInfo(level,activityIds,projTitles,ahReportLevel2.getLevels(),teamClause,approvedActivityList,inClause);
 
 				
 				
@@ -14383,31 +14414,31 @@ public class ReportUtil {
 
 
 					if(ampColumnId3.equals(Constants.STATUS_NAME))
-						setHStatusInfo(level,activityIds,ampStatusId,ahTempLevel2.getLevels(),teamClause,approvedActivityList);			
+						setHStatusInfo(level,activityIds,ampStatusId,ahTempLevel2.getLevels(),teamClause,approvedActivityList,inClause);			
 				
 					if(ampColumnId3.equals(Constants.DONOR_NAME))
-						setHDonorInfo(level,activityIds,ampDonorId,ahTempLevel2.getLevels(),teamClause,approvedActivityList);	
+						setHDonorInfo(level,activityIds,ampDonorId,ahTempLevel2.getLevels(),teamClause,approvedActivityList,inClause);	
 						
 					if(ampColumnId3.equals(Constants.FUNDING_INSTRUMENT))
-						setHFundingInstrumentInfo(level,activityIds,ampModalityId,ahTempLevel2.getLevels(),teamClause,approvedActivityList);	
+						setHFundingInstrumentInfo(level,activityIds,ampModalityId,ahTempLevel2.getLevels(),teamClause,approvedActivityList,inClause);	
 					
 					if(ampColumnId3.equals(Constants.SECTOR_NAME))
-						setHSectorInfo(level,activityIds,ampSectorId,ahTempLevel2.getLevels(),teamClause,approvedActivityList);
+						setHSectorInfo(level,activityIds,ampSectorId,ahTempLevel2.getLevels(),teamClause,approvedActivityList,inClause);
 
 					if(ampColumnId3.equals(Constants.TERM_ASSIST_NAME))
-						setHTermsAssistInfo(level,activityIds,ahTempLevel2.getLevels(),teamClause,approvedActivityList);
+						setHTermsAssistInfo(level,activityIds,ahTempLevel2.getLevels(),teamClause,approvedActivityList,inClause);
 
 					if(ampColumnId3.equals(Constants.REGION_NAME))
-						setHRegionInfo(level,activityIds,region, ahTempLevel2.getLevels(),teamClause,approvedActivityList);
+						setHRegionInfo(level,activityIds,region, ahTempLevel2.getLevels(),teamClause,approvedActivityList,inClause);
 					
 					
 					if(ampColumnId3.equals(Constants.COMPONENT_NAME))
-						setHComponentInfo(level,activityIds,component,ahTempLevel2.getLevels(),teamClause,approvedActivityList);			
+						setHComponentInfo(level,activityIds,component,ahTempLevel2.getLevels(),teamClause,approvedActivityList,inClause);			
 					
 					
 //					start code block for Project title column
 					if(ampColumnId3.equals(Constants.ACTIVITY_NAME))
-						setHActivityNameInfo(level,activityIds,projTitles,ahTempLevel2.getLevels(),teamClause,approvedActivityList);
+						setHActivityNameInfo(level,activityIds,projTitles,ahTempLevel2.getLevels(),teamClause,approvedActivityList,inClause);
 
 // 			end code block for project-title column
 

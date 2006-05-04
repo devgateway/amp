@@ -10741,6 +10741,8 @@ public class ReportUtil {
 								project.setDescriptionPDFXLS(" ");
 
 							project.setPlannedCompletionDate(DateConversion.ConvertDateToString(ampReportCache.getPlannedCompletionDate()));
+							project.setActualCompletionDate(DateConversion.ConvertDateToString(ampReportCache.getActualCompletionDate()));
+							
 							if(DbUtil.getAmpReportPhysicalPerformance(ampReportCache.getAmpActivityId()) !=null)
 								project.getProgress().addAll(DbUtil.getAmpReportPhysicalPerformance(ampReportCache.getAmpActivityId()));
 							if(ActivityUtil.getIssues(ampReportCache.getAmpActivityId())!=null)
@@ -10792,6 +10794,8 @@ public class ReportUtil {
 								project.setDescriptionPDFXLS(" ");								
 
 							project.setPlannedCompletionDate(DateConversion.ConvertDateToString(ampReportCache.getPlannedCompletionDate()));
+							project.setActualCompletionDate(DateConversion.ConvertDateToString(ampReportCache.getActualCompletionDate()));
+							
 							if(DbUtil.getAmpReportPhysicalPerformance(ampReportCache.getAmpActivityId()) !=null)
 								project.getProgress().addAll(DbUtil.getAmpReportPhysicalPerformance(ampReportCache.getAmpActivityId()));
 							project.setAcCommitment(mf.format(0));
@@ -10865,6 +10869,8 @@ public class ReportUtil {
 								project.setDescriptionPDFXLS(" ");								
 
 							project.setPlannedCompletionDate(DateConversion.ConvertDateToString(ampReportCache.getPlannedCompletionDate()));
+							project.setActualCompletionDate(DateConversion.ConvertDateToString(ampReportCache.getActualCompletionDate()));
+							
 							if(DbUtil.getAmpReportPhysicalPerformance(ampReportCache.getAmpActivityId()) !=null)
 								project.getProgress().addAll(DbUtil.getAmpReportPhysicalPerformance(ampReportCache.getAmpActivityId()));
 							if(ActivityUtil.getIssues(ampReportCache.getAmpActivityId())!=null)
@@ -10928,6 +10934,8 @@ public class ReportUtil {
 								project.setDescriptionPDFXLS(" ");								
 
 							project.setPlannedCompletionDate(DateConversion.ConvertDateToString(ampReportCache.getPlannedCompletionDate()));
+							project.setActualCompletionDate(DateConversion.ConvertDateToString(ampReportCache.getActualCompletionDate()));
+							
 							if(DbUtil.getAmpReportPhysicalPerformance(ampReportCache.getAmpActivityId()) !=null)
 								project.getProgress().addAll(DbUtil.getAmpReportPhysicalPerformance(ampReportCache.getAmpActivityId()));
 							if(ActivityUtil.getIssues(ampReportCache.getAmpActivityId())!=null)

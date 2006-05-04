@@ -494,23 +494,23 @@
 					--%>
 				</td>
 				
-					<td align="left" height="21" width="39">
+					<td align="left" height="21" width="39" valign="top">
 					<bean:write name="project" property="signatureDate" />
 					</td>
-					<td align="left" height="21" width="40"> 
-					<bean:write name="project" property="plannedCompletionDate" />
+					<td align="left" height="21" width="40" valign="top"> 
+					<bean:write name="project" property="actualCompletionDate" />
 					</td>
 					
-					<td align="right" height="21" width="45"> 
+					<td align="right" height="21" width="45" valign="top"> 
 					<bean:write name="project" property="acCommitment" />
 					</td>
-					<td align="right" height="21" width="40"> 
+					<td align="right" height="21" width="40" valign="top"> 
 					<bean:write name="project" property="acDisbursement" />
 					</td>
-					<td align="right" height="21" width="77" >
+					<td align="right" height="21" width="77" valign="top">
 						<bean:write name="project" property="acUnDisbursement" />
 					</td>
-					<td align="left" height="21" width="91" >
+					<td align="left" height="21" width="91" valign="top">
 						<logic:empty name="project" property="progress">&nbsp;
 					</logic:empty>
 					<logic:notEmpty name="project" property="progress">

@@ -34,6 +34,8 @@ public class Project
 	private String descriptionPDFXLS ;
 	private String signatureDate;
 	private String plannedCompletionDate;
+	
+	private String actualCompletionDate;
 	private Collection progress ;
 	private Collection issues ;
 	private Collection measures ;
@@ -348,6 +350,34 @@ public class Project
 	public void setPlannedCompletionDate(String s) 
 	{
 		plannedCompletionDate = s;
+	}
+
+	/**
+	 * @return Returns the actualCompletionDate.
+	 */
+	public String getActualCompletionDate() {
+		return actualCompletionDate;
+	}
+
+	/**
+	 * @param actualCompletionDate The actualCompletionDate to set.
+	 */
+	public void setActualCompletionDate(String actualCompletionDate) {
+		this.actualCompletionDate = actualCompletionDate;
+	}
+
+	/**
+	 * @return Returns the donor.
+	 */
+	public String getDonor() {
+		return donor;
+	}
+
+	/**
+	 * @param donor The donor to set.
+	 */
+	public void setDonor(String donor) {
+		this.donor = donor;
 	}
 	
 	

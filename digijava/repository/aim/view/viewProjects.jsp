@@ -790,17 +790,17 @@
 				<td align="left" height="21" width="40"><b>
 					Total</b>
 				</td>
-				<td align="right" height="21" width="100" >
+				<td align="right" height="21">
 					<logic:notEqual name="report" property="acCommitment" value="0">
 						<bean:write name="report" property="acCommitment" />
 					</logic:notEqual>
 				</td>
-				<td align="right" height="21" width="100" >
+				<td align="right" height="21">
 					<logic:notEqual name="report" property="acDisbursement" value="0">
 						<bean:write name="report" property="acDisbursement" />
 					</logic:notEqual>
 				</td>
-				<td align="right" height="21" width="100" >
+				<td align="right" height="21">
 					<logic:notEqual name="report" property="acUnDisbursement" value="0">
 						<bean:write name="report" property="acUnDisbursement" />
 					</logic:notEqual>
@@ -811,7 +811,7 @@
 					if(i<5)
 			  		{		
 				%>
-					<td align="right" height="21" width="100">
+					<td align="right" height="21">
 						<logic:notEqual name="ampFund" property="disbAmount" value="0">
 							<bean:write name="ampFund" property="disbAmount" />
 						</logic:notEqual>
@@ -845,7 +845,7 @@
 			</logic:notEqual>
 		</td>
 		<logic:iterate name="aimCommitmentbyDonorForm"  property="totDisbFund" id="totDisbFund" type="org.digijava.module.aim.helper.AmpFund">
-				<td align="right" height="21" width="30">
+				<td align="right" height="21">
 					<logic:notEqual name="totDisbFund" property="disbAmount" value="0">
 					<bean:write name="totDisbFund" property="disbAmount" />
 					</logic:notEqual>

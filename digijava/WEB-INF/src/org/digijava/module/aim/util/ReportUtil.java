@@ -12349,6 +12349,7 @@ public class ReportUtil {
 				while(iterLevel1.hasNext())
 				{
 					AdvancedHierarchyReport ahReportLevel1=(AdvancedHierarchyReport) iterLevel1.next();
+					for(int t=0;t<7;t++) subTotal[t]=0;
 					ahReport=new AdvancedHierarchyReport();
 					ahReport.setProject(new ArrayList());
 					ahReport.setName(ahReportLevel1.getName());
@@ -12369,6 +12370,8 @@ public class ReportUtil {
 							if(ahReportLevel2.getLevels()!=null)
 							{
 								ahTempLevel2.setLevels(new ArrayList());
+								
+								
 								iterLevel3=ahReportLevel2.getLevels().iterator();
 								while(iterLevel3.hasNext())
 								{
@@ -12381,7 +12384,6 @@ public class ReportUtil {
 									ahTempLevel3=getAdvancedReportRecords(ampActivities,activityIds,rsc,fromYr,toYr,perspective,fiscalCalId,ampCurrencyCode,ahTempLevel3, ahTempLevel2,ahReportLevel1);
 									ahTempLevel2.getLevels().add(ahTempLevel3);
 									
-									for(int t=0;t<7;t++) subTotal[t]=0;
 									
 									Iterator iterFund = ahTempLevel3.getFundSubTotal().iterator();
 									if(rsc.getOption().equals(Constants.ANNUAL))

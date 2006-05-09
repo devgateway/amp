@@ -61,7 +61,7 @@
 													<table border=0 cellPadding=1 cellSpacing=1 class=box-border width="100%">
 														<tr bgColor=#dddddb>
 															<!-- header -->
-															<td bgColor=#dddddb height="20" 			align="center" colspan="5"><B>
+															<td bgColor=#dddddb height="20"	align="center" colspan="5"><B>
 		<digi:trn key="aim:listOfActivityStatus">List of Activity Status Codes</digi:trn>													</td>
 															<!-- end header -->
 														</tr>

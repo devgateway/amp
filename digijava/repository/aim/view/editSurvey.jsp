@@ -31,6 +31,7 @@
 <digi:form action="/editSurvey.do" method="post">
 
 <input type="hidden" name="page" value="">
+<html:hidden property="step" />
 
 <table width="100%" cellPadding="0" cellSpacing="0" vAlign="top" align="left" border=0>
 <tr><td width="100%" vAlign="top" align="left">

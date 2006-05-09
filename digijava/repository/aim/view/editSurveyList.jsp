@@ -30,6 +30,8 @@
 
 <%-- <input type="hidden" name="surveyId" value=""> --%>
 
+<html:hidden property="step" />
+
 <table width="100%" cellPadding="0" cellSpacing="0" vAlign="top" align="left" border=0>
 <tr><td width="100%" vAlign="top" align="left">
 <!--  AMP Admin Logo -->

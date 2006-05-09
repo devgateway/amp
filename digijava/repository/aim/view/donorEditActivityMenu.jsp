@@ -69,7 +69,6 @@ function fnGetSurvey() {
 <html:hidden property="workingTeamLeadFlag" />
 <input type="hidden" name="edit" value="true">
 <html:hidden property="pageId" />
-<html:hidden property="step" />
 
 <table width="209" cellSpacing=0 cellPadding=0 vAlign="top" align="left" border=0>
 <tr><td width="209" height="10" background="module/aim/images/top.gif">

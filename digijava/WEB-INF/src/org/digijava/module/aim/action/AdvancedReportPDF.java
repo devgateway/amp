@@ -653,17 +653,25 @@ public class AdvancedReportPDF extends Action {
                                 // advReport.getModality().toString().replace('[','
                                 // ').replace(']',' '));
                             }
-
-                            if (columnColl.contains("Project Id") && (advReport.getAmpId() != null)) {
+                            
+                            if (columnColl.contains("Project Id") && (advReport.getProjId() != null)) {
                                 position = getColumnIndex("Project Id");
-
-                                if (advReport.getAmpId().trim().length() > 0) {
-                                    dataArray[row][position] = advReport.getAmpId().trim();
+                                
+                                if (advReport.getProjId().size() > 0) {
+                                	Iterator itr=advReport.getProjId().iterator();
+                                	String projids="";
+                                	while(itr.hasNext()){
+                                		projids+=(String) itr.next();
+                                		projids+="\n";
+                                	}
+                                	//dataArray[row][position] = advReport.getAmpId().trim();
+                                	logger.info("======== :) :)"+projids);
+                                	dataArray[row][position] = projids;
                                 }
-
-                                // logger.info("ID : " + advReport.getAmpId());
+                                
                             }
 
+                
                             position = (3 + rsc.getColumns().size()) - 1;
                             logger.info("------------------------------------------" + position);
 
@@ -2442,16 +2450,23 @@ public class AdvancedReportPDF extends Action {
             // '));
         }
 
-        if (columnColl.contains("Project Id") && (advReport.getAmpId() != null)) {
+
+        if (columnColl.contains("Project Id") && (advReport.getProjId() != null)) {
             position = getColumnIndex("Project Id");
-
-            if (advReport.getAmpId().trim().length() > 0) {
-                dataArray[row][position] = advReport.getAmpId().trim();
+            
+            if (advReport.getProjId().size() > 0) {
+            	Iterator itr=advReport.getProjId().iterator();
+            	String projids="";
+            	while(itr.hasNext()){
+            		projids+=(String) itr.next();
+            		projids+="\n";
+            	}
+            	//dataArray[row][position] = advReport.getAmpId().trim();
+            	logger.info("======== :) :)"+projids);
+            	dataArray[row][position] = projids;
             }
-
-            // logger.info("ID : " + advReport.getAmpId());
+            
         }
-
         // position = n + rsc.getColumns().size()-1;
         // logger.info("#######################################################"+
         // position);

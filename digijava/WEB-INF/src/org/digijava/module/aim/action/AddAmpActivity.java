@@ -336,18 +336,14 @@ public class AddAmpActivity extends Action {
 			}
 			
 			return mapping.findForward("preview");
-		} else if (eaForm.getStep().equals("10")) {
-//			eaForm.setIndicators(MEIndicatorsUtil.getAllDefaultIndicators());
-			logger.info("eaForm.getActivityId()......... : "+eaForm.getActivityId());
-			eaForm.setIndicatorsME(MEIndicatorsUtil.getActivityIndicators(eaForm.getActivityId()));
-			logger.info("yeah in the add activity. indicators added  :0 ........ ::::::::::::::");
-
+		} else if (eaForm.getStep().equals("10")) {		// show step 9 - M&E page
+			//get activity specific indicators
+			eaForm.setIndicatorsME
+			(MEIndicatorsUtil.getActivityIndicators(eaForm.getActivityId()));
 			
+			//get the levels of risks
 			if(!eaForm.getIndicatorsME().isEmpty())
-			{
 				eaForm.setRiskCollection(MEIndicatorsUtil.getAllIndicatorRisks());
-				logger.info("ADD ACTIVITY. risk also added.......");
-			}
 			return mapping.findForward("addActivityStep9");
 		}
 		else {

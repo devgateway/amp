@@ -1028,11 +1028,6 @@ public class EditActivity extends Action {
 			// load all the perspectives
 			eaForm.setPerspectives(DbUtil.getAmpPerspective());
 			
-			// load all the Activity specific M&E Indicators
-//			eaForm.setIndicators(MEIndicatorsUtil.getActivityIndicators(eaForm.getActivityId()));
-			logger.info("yeah in the edit activity......eaForm.getActivityId()... ::::::::::::::"+eaForm.getActivityId());
-//			eaForm.setRiskCollection(MEIndicatorsUtil.getAllIndicatorRisks());
-
 		} catch (Exception e) {
 			e.printStackTrace(System.out);
 		}

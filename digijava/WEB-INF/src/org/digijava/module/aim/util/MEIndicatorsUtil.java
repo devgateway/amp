@@ -189,21 +189,12 @@ public class MEIndicatorsUtil
 		try
 		{
 			session = PersistenceManager.getSession();
-			logger.info("to execute query.... :0");
 			String queryString = "select ampMECurrValHistoryId from "
 								+AmpMECurrValHistory.class.getName()
 								+" ampMECurrValHistoryId where (ampMECurrValHistoryId.meIndValue=:meIndValue)";
 			Query qry = session.createQuery(queryString);
 			qry.setParameter("meIndValue",meIndValue,Hibernate.LONG);
-			logger.info("query executed successfully....... :0");
 			col = qry.list();
-			Iterator itrtemp = qry.list().iterator();
-			while(itrtemp.hasNext())
-			{
-				AmpMECurrValHistory currtemp = new AmpMECurrValHistory();
-				currtemp = (AmpMECurrValHistory) itrtemp.next();
-				logger.info("currtemp.getAmpMECurrValHistoryId()....... : "+currtemp.getAmpMECurrValHistoryId());
-			}
 		}
 		catch(Exception e1)
 		{
@@ -423,11 +414,8 @@ public class MEIndicatorsUtil
 				AmpMEIndicatorValue meIndValue = (AmpMEIndicatorValue) itr.next();
 				ActivityIndicator actInd = new ActivityIndicator();
 				actInd.setIndicatorName(meIndValue.getMeIndicatorId().getName());
-				logger.info("meIndValue.getMeIndicatorId().getName().... : "+meIndValue.getMeIndicatorId().getName());
 				actInd.setIndicatorCode(meIndValue.getMeIndicatorId().getCode());
-				logger.info("meIndValue.getMeIndicatorId().getCode().... : "+meIndValue.getMeIndicatorId().getCode());
 				actInd.setBaseVal(meIndValue.getBaseVal());
-				logger.info("meIndValue.getBaseVal()........ : "+meIndValue.getBaseVal());
 				if (meIndValue.getBaseValDate() != null) {
 					actInd.setBaseValDate(DateConversion.
 							ConvertDateToString(meIndValue.getBaseValDate()));					
@@ -927,7 +915,6 @@ public class MEIndicatorsUtil
 		
 		try
 		{
-			logger.info("inside getPriorIndicatorValues()");
 			session = PersistenceManager.getSession();
 			String qryStr = "select pivalues from " + AmpMECurrValHistory.class.getName() + "" +
 							" pivalues where (pivalues.meIndValue=:tempId)" ;
@@ -941,10 +928,7 @@ public class MEIndicatorsUtil
 				meCurrValHis = (AmpMECurrValHistory) itr.next();
 				priorCurrVal.setCurrHistoryId(meCurrValHis.getAmpMECurrValHistoryId());
 				priorCurrVal.setCurrValue(meCurrValHis.getCurrValue());
-				logger.info("meCurrValHis.getCurrValueDate()............... : "+meCurrValHis.getCurrValueDate());
-				logger.info("DateConversion.ConvertDateToString(meCurrValHis.getCurrValueDate()).... : "+DateConversion.ConvertDateToString(meCurrValHis.getCurrValueDate()));
 				priorCurrVal.setCurrValDate(DateConversion.ConvertDateToString(meCurrValHis.getCurrValueDate()));
-				logger.info("priorCurrVal.getCurrValDate()........ : "+priorCurrVal.getCurrValDate());
 				col.add(priorCurrVal);
 			}
 		}

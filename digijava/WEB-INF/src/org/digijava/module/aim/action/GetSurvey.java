@@ -52,17 +52,10 @@ public class GetSurvey extends TilesAction {
 				logger.debug("incorrect surveyId in request scope : " + nex.getMessage());
 				nex.printStackTrace(System.out);
 			}
-			
-			if (null != request.getParameter("reset") && request.getParameter("reset").trim().length() > 1) {
-				if ("true".equalsIgnoreCase(request.getParameter("reset")))
-					svForm.setReset(new Boolean(true));
-				else
-					svForm.setReset(new Boolean(false));
-			}
 				
 			if (null == svForm.getIndicators() || svForm.getReset().booleanValue()) {
 				svForm.setIndicators(DbUtil.getResposesBySurvey(svForm.getAmpSurveyId(), svForm.getAmpActivityId()));
-				svForm.setReset(new Boolean(false));
+				svForm.setReset(Boolean.FALSE);
 				AmpAhsurvey survey = DbUtil.getAhSurvey(svForm.getAmpSurveyId());
 				svForm.setFundingOrg(survey.getAmpDonorOrgId().getAcronym());
 				

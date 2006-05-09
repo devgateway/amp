@@ -247,20 +247,26 @@ public class EditActivity extends Action {
 				}
 			}
 
-
 			// Clearing comment properties
 			String action = request.getParameter("action");
-			// logger.debug("action [inside EditActivity] : " + action);
 			if (action != null && action.trim().length() != 0) {
 				if ("edit".equals(action)) {
 					eaForm.getCommentsCol().clear();
 					eaForm.setCommentFlag(false);
 				}
 			}
-
+			logger.debug("step [before IF] : " + eaForm.getStep());
 			if (eaForm.isDonorFlag()) {
 				eaForm.setStep("3");
 				eaForm.setFundDonor(TeamMemberUtil.getFundOrgOfUser(tm.getMemberId()));
+				logger.debug("step [inside IF] : " + eaForm.getStep());
+				// Clearing aid-harmonisation-survey properties
+				if (null != eaForm.getSurveyFlag() && eaForm.getSurveyFlag().booleanValue()) {
+					eaForm.setSurvey(null);
+					eaForm.setIndicators(null);
+					eaForm.setAmpSurveyId(null);
+					eaForm.setSurveyFlag(Boolean.FALSE);
+				}
 			} else {
 				eaForm.setStep("1");
 			}
@@ -1028,6 +1034,11 @@ public class EditActivity extends Action {
 			// load all the perspectives
 			eaForm.setPerspectives(DbUtil.getAmpPerspective());
 			
+			// load all the Activity specific M&E Indicators
+//			eaForm.setIndicators(MEIndicatorsUtil.getActivityIndicators(eaForm.getActivityId()));
+			logger.info("yeah in the edit activity......eaForm.getActivityId()... ::::::::::::::"+eaForm.getActivityId());
+//			eaForm.setRiskCollection(MEIndicatorsUtil.getAllIndicatorRisks());
+
 		} catch (Exception e) {
 			e.printStackTrace(System.out);
 		}

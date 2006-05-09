@@ -106,7 +106,6 @@ public class AddAmpActivity extends Action {
 		// added by Akash
 		// desc: setting WorkingTeamLeadFlag & approval status in form bean
 		// start
-		
 		Long ampTeamId = teamMember.getTeamId();
 		boolean teamLeadFlag = teamMember.getTeamHead();
 		boolean workingTeamFlag = DbUtil.checkForParentTeam(ampTeamId);
@@ -132,7 +131,7 @@ public class AddAmpActivity extends Action {
 						+ eaForm.getActivityId() + "&tabIndex=0";
 				RequestDispatcher rd = getServlet().getServletContext()
 						.getRequestDispatcher(url);
-				rd.forward(request, response);				
+				rd.forward(request, response);		
 			}
 			
 			synchronized (ampContext) {

@@ -148,15 +148,14 @@ public class EditActivityForm extends ActionForm implements Serializable{
 	private String workingTeamLeadFlag;
 
 	// For aid harmonization survey indicators
-	private Collection survey;
+	private Collection survey = null;
 	private List indicators = null; 	// holds collection of Indicator helper objects
 	private Collection pageColl = null;	// total number of survey pages
 	private Integer currPage = null;
 	private Integer startIndex = null;	// starting record for iteartion over indicator collection on each page
 	private String fundingOrg = null;	// acronym of funding organisation 
-	private String financingId = null;
-	private Integer surveyYear = null;
 	private Long ampSurveyId = null;
+	private Boolean surveyFlag = null;	// if true then survey properties are cleared
 	
 	/* START FINANCIAL EDIT */
 	private Collection fundingOrganizations; // Collection of FundingOrganization objects
@@ -330,7 +329,6 @@ public class EditActivityForm extends ActionForm implements Serializable{
 		totalDisbursements = 0;
 		totalExpenditures = 0;
 		donorFlag = false;
-		System.out.println("Constructor for EditActivityForm is gettting executed here");
 	}
 
 	public void reset(ActionMapping mapping, HttpServletRequest request) {
@@ -3394,18 +3392,6 @@ public class EditActivityForm extends ActionForm implements Serializable{
 		this.currPage = currPage;
 	}
 	/**
-	 * @return Returns the financingId.
-	 */
-	public String getFinancingId() {
-		return financingId;
-	}
-	/**
-	 * @param financingId The financingId to set.
-	 */
-	public void setFinancingId(String financingId) {
-		this.financingId = financingId;
-	}
-	/**
 	 * @return Returns the fundingOrg.
 	 */
 	public String getFundingOrg() {
@@ -3466,16 +3452,16 @@ public class EditActivityForm extends ActionForm implements Serializable{
 		this.survey = survey;
 	}
 	/**
-	 * @return Returns the surveyYear.
+	 * @return Returns the surveyFlag.
 	 */
-	public Integer getSurveyYear() {
-		return surveyYear;
+	public Boolean getSurveyFlag() {
+		return surveyFlag;
 	}
 	/**
-	 * @param surveyYear The surveyYear to set.
+	 * @param surveyFlag The surveyFlag to set.
 	 */
-	public void setSurveyYear(Integer surveyYear) {
-		this.surveyYear = surveyYear;
+	public void setSurveyFlag(Boolean surveyFlag) {
+		this.surveyFlag = surveyFlag;
 	}
 	
 }

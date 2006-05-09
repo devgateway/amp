@@ -9,6 +9,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
+import javax.servlet.RequestDispatcher;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -43,9 +44,10 @@ public class EditSurveyList extends Action {
 		logger.debug("In edit survey list action");
 		
 		if (form != null) {
-			
 			EditActivityForm svForm = (EditActivityForm) form;
+			logger.debug("step[before] : " + svForm.getStep());
 			svForm.setStep("17");	// for indicators tab in donor-view
+			logger.debug("step[after] : " + svForm.getStep());
 			
 			if (null == svForm.getSurvey() || svForm.getSurvey().size() < 1) {
 				Comparator sfComp = new Comparator() {
@@ -56,10 +58,27 @@ public class EditSurveyList extends Action {
 					}
 				};
 				List surveyColl = (List) DbUtil.getAllSurveysByActivity(svForm.getActivityId());
+				/*
+				if (surveyColl.size() == 1) {
+					ActionForward fwd = mapping.findForward("edit");
+					StringBuffer path = new StringBuffer(fwd.getPath());
+					path.append("?edit=true&surveyId=" + ((SurveyFunding)surveyColl.get(0)).getSurveyId());
+					logger.debug("path = " + path);
+					//return new ActionForward(path.toString());
+					try {
+						RequestDispatcher rd = request.getRequestDispatcher(path.toString());
+						rd.forward(request, response);
+					}
+					catch (Exception ex) {
+						logger.debug("exception from edit survey list : " + ex);
+						ex.printStackTrace(System.out);
+					}
+				}
+				else {	*/
 				Collections.sort(surveyColl, sfComp);
 				svForm.setSurvey(surveyColl);
+				//}
 			}
-			
 			return mapping.findForward("forward");
 		}
 		else {

@@ -79,7 +79,7 @@ function fnGetSurvey() {
 <table width="209" cellSpacing=4 cellPadding=2 vAlign="top" align="left" 
 bgcolor="#006699">
 	<tr>
-		<c:if test="${aimEditActivityForm.step != 3}">
+		<c:if test="${aimEditActivityForm.step != '3'}">
 		<td>
 			<IMG alt=Link height=10 src="../ampTemplate/images/arrow-th-BABAB9.gif" width=15>
 			<bean:define id="translation">
@@ -91,7 +91,7 @@ bgcolor="#006699">
 			</a>
 		</td>
 		</c:if>	
-		<c:if test="${aimEditActivityForm.step == 3}">
+		<c:if test="${aimEditActivityForm.step == '3'}">
 		<td>
 			<table width="100%" cellspacing=0 cellpadding=0 valign=top align=left border=0> 
 				<tr>
@@ -112,7 +112,7 @@ bgcolor="#006699">
 		</c:if>				
 	</tr>
 	<tr>
-		<c:if test="${aimEditActivityForm.step != 17}">
+		<c:if test="${aimEditActivityForm.step != '17'}">
 		<td>		
 			<IMG alt=Link height=10 src="../ampTemplate/images/arrow-th-BABAB9.gif" width=15>
 			<bean:define id="translation">
@@ -123,7 +123,7 @@ bgcolor="#006699">
 			</a>
 		</td>
 		</c:if>
-		<c:if test="${aimEditActivityForm.step == 17}">
+		<c:if test="${aimEditActivityForm.step == '17'}">
 		<td>
 			<table width="100%" cellspacing=0 cellpadding=0 valign=top align=left border=0> 
 				<tr>

@@ -64,7 +64,7 @@ public class EditSurvey extends Action {
 			}
 			
 			if (null != svForm.getAmpSurveyId()) {
-				if (null == svForm.getIndicators() || flag) {
+				if (null == svForm.getIndicators() || svForm.getIndicators().size() < 1 || flag) {
 					svForm.setIndicators(DbUtil.getResposesBySurvey(svForm.getAmpSurveyId(), svForm.getActivityId()));
 					logger.debug("svForm.getIndicator().size() : " + svForm.getIndicators().size());
 					AmpAhsurvey survey = DbUtil.getAhSurvey(svForm.getAmpSurveyId());
@@ -79,13 +79,16 @@ public class EditSurvey extends Action {
 					}
 				}
 				
-				// saving survey responses
+				// saving survey responses & removing form-bean from session
 				if (null != request.getParameter("action") && "save".equalsIgnoreCase(request.getParameter("action"))) {
-					if (null != svForm.getAmpSurveyId())
-						DbUtil.saveSurveyResponses(svForm.getAmpSurveyId(), svForm.getIndicators());
+					DbUtil.saveSurveyResponses(svForm.getAmpSurveyId(), svForm.getIndicators());
+					//svForm.getSurvey().clear();
+					//svForm.getIndicators().clear();
+					//svForm.setAmpSurveyId(null);
+					//eaForm.setSurveyFlag(Boolean.FALSE);
 					//logger.debug("mapping.getAttribute() : " + mapping.getAttribute());
 					request.getSession().removeAttribute(mapping.getAttribute());
-					logger.debug("returning after saving survey responses from edit survey action...");
+					logger.debug("returning from edit survey action after saving survey responses...");
 					return mapping.findForward("viewMyDesktop");
 				}
 				
@@ -107,8 +110,10 @@ public class EditSurvey extends Action {
 				
 				return mapping.findForward("forward");
 			}
-			
-			return null;
+			else {
+				logger.debug("returning from edit survey action...");
+				return mapping.findForward("viewMyDesktop");
+			}
 		}
 		else {
 			logger.debug("ActionForm is null.");

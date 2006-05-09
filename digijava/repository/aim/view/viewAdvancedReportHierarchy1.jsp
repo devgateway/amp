@@ -364,6 +364,16 @@
 								</td>
 							</logic:notEqual>
 					</logic:iterate>
+							<% if(typeAssist) {%>
+								<td align="center" height="21" width="42" rowspan="2">
+								<div align="center">
+								<strong>
+								Type Of Assistance
+								</strong>
+								</div>
+								</td>
+							<%}%>
+
 									<logic:iterate name="aimAdvancedReportForm"
 										property="fiscalYearRange" id="fiscalYearRange">
 										<td height="21" width="69"

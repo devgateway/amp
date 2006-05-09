@@ -12350,6 +12350,8 @@ public class ReportUtil {
 				{
 					AdvancedHierarchyReport ahReportLevel1=(AdvancedHierarchyReport) iterLevel1.next();
 					for(int t=0;t<7;t++) subTotal[t]=0;
+					
+					
 					ahReport=new AdvancedHierarchyReport();
 					ahReport.setProject(new ArrayList());
 					ahReport.setName(ahReportLevel1.getName());
@@ -13611,7 +13613,7 @@ public class ReportUtil {
 			
 			
 			if (computeSubTotal) {
-				for(int i=0;i<=6;i++) subTotal[i]+=sum[i];
+				for(int i=0;i<6;i++) subTotal[i]+=sum[i];
 				subTotal[AmpFund.UNDISB]+= (totalCommitment-totalDisbursement);
 			
 			}

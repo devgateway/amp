@@ -148,25 +148,33 @@
 															<td align="center" bgcolor="#f4f4f2">
 																<table cellSpacing=2 cellPadding=3 vAlign="top" align="center"
 																bgcolor="#f4f4f2">
-																	<tr>
-																		<td bgcolor="#f4f4f2" align="right" valign="top">
-																			Indicator Name
-																		</td>
-																		<td bgcolor="#f4f4f2" align="left">
-																			<html:select property="selectedIndicators" styleClass="inp-text" size="5" multiple="true">
-																				<logic:notEmpty name="aimIndicatorForm" property="nondefaultindicators">
-																					<html:optionsCollection name="aimIndicatorForm" 
-																					property="nondefaultindicators" value="ampMEIndId" label="name"/>
-																				</logic:notEmpty>
-																			</html:select>
-																		</td>														
-																	</tr>
-																	<tr>
-																		<td bgcolor="#f4f4f2" align="center" colspan="2">
-																			<input class="buton" type="button" name="addFromList"
-																			value=" Add " onclick="addIndicatorTL()">
-																		</td>
-																	</tr>
+																	<logic:notEmpty name="aimIndicatorForm" property="nondefaultindicators">
+																		<tr>
+																			<td bgcolor="#f4f4f2" align="right" valign="center">
+																				Indicator Name
+																			</td>
+																			<td bgcolor="#f4f4f2" align="left">
+																				<html:select property="selectedIndicators" styleClass="inp-text" size="6" multiple="true">
+																					<html:option value="-1">&nbsp;[Select Indicators]&nbsp;</html:option>
+																					<logic:notEmpty name="aimIndicatorForm" property="nondefaultindicators">
+																						<html:optionsCollection name="aimIndicatorForm" 
+																						property="nondefaultindicators" value="ampMEIndId" label="name"/>
+																					</logic:notEmpty>
+																				</html:select>
+																			</td>
+																		</tr>
+																		<tr>
+																			<td bgcolor="#f4f4f2" align="center" colspan="2">
+																				<input class="buton" type="button" name="addFromList"
+																				value=" Add " onclick="addIndicatorTL()">
+																			</td>
+																		</tr>
+																	</logic:notEmpty>
+																	<logic:empty name="aimIndicatorForm" property="nondefaultindicators">
+																		<tr><td>
+																			No Indicators in the List
+																		</td></tr>
+																	</logic:empty>
 																</table>
 															</td>
 														</tr>
@@ -203,41 +211,50 @@
 																	</tr>
 																	<logic:notEmpty name="aimIndicatorForm" property="searchReturn">
 																		<tr><td bgcolor="#f4f4f2" align="center" colspan="2">
-																		<table width="100%" cellSpacing=0 cellPadding=1 vAlign="top" align="center" bgcolor="#ffffff">
+																		<table border=0 cellPadding=0 cellSpacing=0 class="box-border-nopadding" width="100%">
 																			<logic:iterate name="aimIndicatorForm" property="searchReturn" 
 																			id="searchValues" type="org.digijava.module.aim.dbentity.AmpMEIndicators">
-																				<tr bgcolor="#ffffAA">
+																				<tr bgColor=#dddddb>
+																					<td align="center" colspan="2">
+																						Search Results
+																					</td>
+																				</tr>
+																				<tr bgColor=#f4f4f2>
 																					<td align="right" width="3">
 																						<html:multibox property="selIndicators">
 																							<bean:write name="searchValues" property="ampMEIndId"/>
 																						</html:multibox>
 																					</td>
-																					<td align="left">&nbsp;
-																						<bean:write name="searchValues" property="name"/>
+																					<td valign="center" align="left">&nbsp;<b>
+																						<bean:write name="searchValues" property="name"/></b>
 																					</td>
 																				</tr>
 																			</logic:iterate>
 																		</table>
 																		</td></tr>
+																		<tr>
+																			<td bgcolor="#f4f4f2" align="center" colspan="3">
+																				<input class="buton" type="button" name="addFromSearchList" value=" Add " onclick="addIndicatorTL()">
+																			</td>
+																		</tr>
 																	</logic:notEmpty>
-																	<tr>
-																		<td bgcolor="#f4f4f2" align="center" colspan="3">
-																			<input class="buton" type="button" name="addFromSearchList" value=" Add " 
-																			onclick="addIndicatorTL()">
-																		</td>
-																	</tr>
+																	<logic:empty name="aimIndicatorForm" property="searchReturn">
+																		<logic:equal name="aimIndicatorForm" property="noSearchResult" value="true">
+																			<tr><td bgcolor="#f4f4f2" align="center" colspan="2">
+																				<table border=0 cellPadding=0 cellSpacing=0 class="box-border-nopadding" width="100%">
+																					<tr bgColor=#dddddb><td align="center">
+																						No Results to display
+																					</td></tr>
+																				</table>
+																			</td></tr>
+																		</logic:equal>
+																	</logic:empty>
 																</table>														
 															</td>
 														</tr>
-													</table>
-												</td>
-											</tr>													
-											<tr>
-												<td bgColor=#ffffff class=box-border valign="top">
-													<table width="100%" border=0 cellPadding=0 cellSpacing=1 class=box-border-nopadding width="100%">
 														<tr>
 															<td align="left" width="100%" valign="center">
-																<table width="100%" cellSpacing=1 cellPadding=2 vAlign="top" align="center"
+																<table width="100%" cellSpacing=1 cellPadding=2 vAlign="top" align="left"
 																bgcolor="#ffffff">
 																	<tr><td valign="center" align="center" bgcolor="#dddddd" height="20">
 																		<b><digi:trn key="aim:NewIndicatorCreation">3.   Create a New Indicator</digi:trn></b>
@@ -246,18 +263,24 @@
 															</td>
 														</tr>
 														<tr>
-															<td align="center" bgcolor="#f4f4f2">
-																<table cellSpacing=2 cellPadding=3 vAlign="top" align="center"
-																bgcolor="#f4f4f2" border=0>
+															<td align="center">
+																<table width="100%" cellSpacing=2 cellPadding=3 vAlign="top" align="center"
+																bgcolor="#f4f4f2">
 																	<tr>
+																		<td bgcolor="#f4f4f2" align="left">
+																			&nbsp;
+																		</td>
 																		<td bgcolor="#f4f4f2" align="right">
-																			Indicator Name<FONT color=red>*</FONT>
+																			Indicator Name
 																		</td>
 																		<td bgcolor="#f4f4f2" align="left">
-																			<html:text property="indicatorName" size="20" styleClass="inp-text"/>
+																			<html:text property="indicatorName" size="20"/>
 																		</td>																	
 																	</tr>
 																	<tr>
+																		<td bgcolor="#f4f4f2" align="left">
+																			&nbsp;
+																		</td>
 																		<td bgcolor="#f4f4f2" align="right">
 																			Description
 																		</td>
@@ -266,35 +289,39 @@
 																		</td>																	
 																	</tr>
 																	<tr>
+																		<td bgcolor="#f4f4f2" align="left">
+																			&nbsp;
+																		</td>
 																		<td bgcolor="#f4f4f2" align="right">
-																			Indicator Code<FONT color=red>*</FONT>
+																			Indicator Code
 																		</td>
 																		<td bgcolor="#f4f4f2" align="left">
 																			<html:text property="indicatorCode" size="20" styleClass="inp-text"/>
 																		</td>																	
 																	</tr>
 																	<tr>
-																		<td bgcolor="#f4f4f2" align="center" colspan="2">
-																			<input class="buton" type="button" name="addnewIndicator" 
-																			value=" Add " onclick="return addNewIndicatorTL()">
+																		<td bgcolor="#f4f4f2" align="center" colspan="3">
+																			<input class="buton" type="button" name="addnewIndicator" value=" Add " onclick="addNewIndicatorTL()">
 																		</td>
 																	</tr>
 																</table>														
 															</td>
 														</tr>
-													
-														
+														<tr>
+															<td align="left" width="100%" valign="center">
+																<table width="100%" cellSpacing=1 cellPadding=2 vAlign="top" align="left"
+																bgcolor="#ffffff">
+																	<tr><td valign="center" align="center" bgcolor="#dddddd" height="20">
+																		&nbsp;
+																	</td></tr>
+																</table>
+															</td>
+														</tr>
 													</table>
 												</td>
-
-
-												
 											</tr>
 										</table>
 									</td>
-								</tr>
-								<tr bgcolor="#f4f4f2">
-									<td>&nbsp;</td>
 								</tr>
 							</table>
 						</td>

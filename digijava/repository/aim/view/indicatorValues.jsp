@@ -6,21 +6,18 @@
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
 
+<script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/calendar.js"/>"></script>
 <script language="JavaScript">
 	<!--
 		function addingIndicators()
 		{
 			openNewWindow(500, 300);
-			<digi:context name="addIndicator" property="context/module/moduleinstance/addIndicator.do?create=true" />
-			document.aimIndicatorForm.currUrl.value = "<%= addIndicator %>";
+			<digi:context name="addIndicator" property="context/module/moduleinstance/addIndicator.do" />
 			document.aimIndicatorForm.action = "<%= addIndicator %>";
+			document.aimIndicatorForm.currUrl.value = "<%= addIndicator %>";
 			document.aimIndicatorForm.target = popupPointer.name;
 			document.aimIndicatorForm.submit();
 			return true;			
-		}
-		function deleteIndicator()
-		{
-			return(confirm(" Do you want to delete the Indicator ? Please check whether the indicator is being used by some Activity."));
 		}
 	-->
 </script>
@@ -28,10 +25,8 @@
 <digi:errors/>
 <digi:instance property="aimIndicatorForm" />
 <digi:form action="/indicatorManager.do" method="post">
-
 <digi:context name="digiContext" property="context" />
 <input type="hidden" name="currUrl">
-<input type="hidden" name="create">
 
 <!--  AMP Admin Logo -->
 <jsp:include page="teamPagesHeader.jsp" flush="true" />
@@ -94,19 +89,19 @@
 													
 													<logic:notEmpty name="aimIndicatorForm" property="indicators">
 														<tr><td>
-															<table width="100%" bgColor=#f4f4f2 cellspacing=2 cellpadding=1>
+															<table width="100%" border="0" bgColor=#f4f4f2>
 																<tr><td colspan="2"><b>
 																	Monitoring and Evaluation : AMP Indicators</b>
 																</td></tr>
-																<logic:iterate name="aimIndicatorForm" property="indicators" id="indicators"
-																type="org.digijava.module.aim.helper.AmpMEIndicatorList">	
-
+																<logic:iterate name="aimIndicatorForm" property="indicators" id="indicators" type="org.digijava.module.aim.dbentity.AmpMEIndicators">
 																	<tr>
-																	<td width="100%">
-																		<bean:write name="indicators" property="name"/>&nbsp;&nbsp;
-																					(<bean:write name="indicators" property="code"/>)
+																		<td height=1 colspan="5" bgcolor="#FFFFFF">
+																		</td>
+																	</tr>
+																	<tr>
+																	<td width="80%">
 																	</td>
-																	<td align="left" width="12">
+																	<td align="left">
 																		<jsp:useBean id="urlParams" type="java.util.Map" class="java.util.HashMap"/>
 																		<c:set target="${urlParams}" property="id">
 																			<bean:write name="indicators" property="ampMEIndId" />
@@ -115,16 +110,16 @@
 																		<bean:define id="translation">
 																			<digi:trn key="aim:clickToDeleteIndicator">Click here to Delete Indicator</digi:trn>
 																		</bean:define>
-																		<digi:link href="/indicatorManager.do" name="urlParams" 
-																		onclick=" return deleteIndicator()" title="<%=translation%>" >
-																		<img src= "../ampTemplate/images/trash_12.gif" border=0>
-																		</digi:link>
+																		[ <digi:link href="/indicatorManager.do" name="urlParams" title="<%=translation%>" >
+																			<digi:trn key="aim:indicatorManagerDelete">Delete</digi:trn>
+																		</digi:link> ]
 																	</td>
 																	</tr>
 																</logic:iterate>
 															</table>
 														</td></tr>
-													</logic:notEmpty>
+													</logic:notEmpty>												
+													
 													<logic:empty name="aimIndicatorForm" property="indicators">
 														<tr align="center"><td><b>
 															No indicators present</b></td>
@@ -153,4 +148,6 @@
 		</td>
 	</tr>
 </table>
+
 </digi:form>
+

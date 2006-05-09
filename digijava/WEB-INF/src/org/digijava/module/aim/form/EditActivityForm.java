@@ -17,6 +17,7 @@ import org.apache.struts.upload.FormFile;
 import org.digijava.module.aim.dbentity.AmpField;
 import org.digijava.module.aim.helper.FundingDetail;
 import org.digijava.module.aim.helper.OrgProjectId;
+import org.digijava.module.aim.helper.ActivityIndicator;
 
 public class EditActivityForm extends ActionForm implements Serializable{
 
@@ -132,7 +133,7 @@ public class EditActivityForm extends ActionForm implements Serializable{
 	private Collection pages;
 	private String[] alphaPages;
 	
-	// For view comment popup
+	//	For view comment popup
 	private String actionFlag = null;
 	private boolean serializeFlag;
 	private boolean commentFlag;
@@ -292,6 +293,26 @@ public class EditActivityForm extends ActionForm implements Serializable{
 	
 	private boolean donorFlag; 
 	private Long fundDonor;
+
+	private Collection indicatorsME;
+	private ActivityIndicator indicatorValues;
+	private Long indicatorId;
+	private Long indicatorValId;
+	private Long expIndicatorId;
+	private float baseVal;
+	private String baseValDate;
+	private float targetVal;
+	private String targetValDate;
+	private float revTargetVal;
+	private String revTargetValDate;
+	private float currentVal;
+	private String currentValDate;
+	private String comments;
+	private Collection riskCollection;
+	private Long indicatorRisk;
+	private Collection indHistory;
+	private Collection updateIndValues;
+	private Collection indicatorPriorValues;
 	
 	public EditActivityForm() {
 		step = "1";
@@ -422,6 +443,7 @@ public class EditActivityForm extends ActionForm implements Serializable{
 			totalCommitments = 0;
 			totalDisbursements = 0;
 			totalExpenditures = 0;
+			indicators = null;
 		}
 
 		if (orgSelReset) {
@@ -3081,7 +3103,273 @@ public class EditActivityForm extends ActionForm implements Serializable{
 	public void setFundingId(Long fundingId) {
 		this.fundingId = fundingId;
 	}
+
 	/**
+	 * @return Returns the indicatorsME.
+	 */
+	public Collection getIndicatorsME() {
+		return indicatorsME;
+	}
+
+	/**
+	 * @param indicatorsME The indicatorsME to set.
+	 */
+	public void setIndicatorsME(Collection indicatorsME) {
+		this.indicatorsME = indicatorsME;
+	}
+
+	/**
+	 * @return Returns the indicatorId.
+	 */
+	public Long getIndicatorId() {
+		return indicatorId;
+	}
+
+	/**
+	 * @param indicatorId The indicatorId to set.
+	 */
+	public void setIndicatorId(Long indicatorId) {
+		this.indicatorId = indicatorId;
+	}
+
+	/**
+	 * @return Returns the indicatorValId.
+	 */
+	public Long getIndicatorValId() {
+		return indicatorValId;
+	}
+
+	/**
+	 * @param indicatorValId The indicatorValId to set.
+	 */
+	public void setIndicatorValId(Long indicatorValId) {
+		this.indicatorValId = indicatorValId;
+	}
+
+	/**
+	 * @return Returns the expIndicatorId.
+	 */
+	public Long getExpIndicatorId() {
+		return expIndicatorId;
+	}
+
+	/**
+	 * @param expIndicatorId The expIndicatorId to set.
+	 */
+	public void setExpIndicatorId(Long expIndicatorId) {
+		this.expIndicatorId = expIndicatorId;
+	}
+
+	/**
+	 * @return Returns the indicatorValues.
+	 */
+	public ActivityIndicator getIndicatorValues() {
+		return indicatorValues;
+	}
+
+	/**
+	 * @param indicatorValues The indicatorValues to set.
+	 */
+	public void setIndicatorValues(ActivityIndicator indicatorValues) {
+		this.indicatorValues = indicatorValues;
+	}
+
+	/**
+	 * @return Returns the baseVal.
+	 */
+	public float getBaseVal() {
+		return baseVal;
+	}
+
+	/**
+	 * @param baseVal The baseVal to set.
+	 */
+	public void setBaseVal(float baseVal) {
+		this.baseVal = baseVal;
+	}
+
+	/**
+	 * @return Returns the baseValDate.
+	 */
+	public String getBaseValDate() {
+		return baseValDate;
+	}
+
+	/**
+	 * @param baseValDate The baseValDate to set.
+	 */
+	public void setBaseValDate(String baseValDate) {
+		this.baseValDate = baseValDate;
+	}
+
+	/**
+	 * @return Returns the targetVal.
+	 */
+	public float getTargetVal() {
+		return targetVal;
+	}
+
+	/**
+	 * @param targetVal The targetVal to set.
+	 */
+	public void setTargetVal(float targetVal) {
+		this.targetVal = targetVal;
+	}
+
+	/**
+	 * @return Returns the targetValDate.
+	 */
+	public String getTargetValDate() {
+		return targetValDate;
+	}
+
+	/**
+	 * @param targetValDate The targetValDate to set.
+	 */
+	public void setTargetValDate(String targetValDate) {
+		this.targetValDate = targetValDate;
+	}
+
+	/**
+	 * @return Returns the revTargetVal.
+	 */
+	public float getRevTargetVal() {
+		return revTargetVal;
+	}
+
+	/**
+	 * @param revTargetVal The revTargetVal to set.
+	 */
+	public void setRevTargetVal(float revTargetVal) {
+		this.revTargetVal = revTargetVal;
+	}
+
+	/**
+	 * @return Returns the revTargetValDate.
+	 */
+	public String getRevTargetValDate() {
+		return revTargetValDate;
+	}
+
+	/**
+	 * @param revTargetValDate The revTargetValDate to set.
+	 */
+	public void setRevTargetValDate(String revTargetValDate) {
+		this.revTargetValDate = revTargetValDate;
+	}
+
+	/**
+	 * @return Returns the comments.
+	 */
+	public String getComments() {
+		return comments;
+	}
+
+	/**
+	 * @param comments The comments to set.
+	 */
+	public void setComments(String comments) {
+		this.comments = comments;
+	}
+
+	/**
+	 * @return Returns the currentVal.
+	 */
+	public float getCurrentVal() {
+		return currentVal;
+	}
+
+	/**
+	 * @param currentVal The currentVal to set.
+	 */
+	public void setCurrentVal(float currentVal) {
+		this.currentVal = currentVal;
+	}
+
+	/**
+	 * @return Returns the riskCollection.
+	 */
+	public Collection getRiskCollection() {
+		return riskCollection;
+	}
+
+	/**
+	 * @param riskCollection The riskCollection to set.
+	 */
+	public void setRiskCollection(Collection riskCollection) {
+		this.riskCollection = riskCollection;
+	}
+
+	/**
+	 * @return Returns the indicatorRisk.
+	 */
+	public Long getIndicatorRisk() {
+		return indicatorRisk;
+	}
+
+	/**
+	 * @param indicatorRisk The indicatorRisk to set.
+	 */
+	public void setIndicatorRisk(Long indicatorRisk) {
+		this.indicatorRisk = indicatorRisk;
+	}
+
+	/**
+	 * @return Returns the currentValDate.
+	 */
+	public String getCurrentValDate() {
+		return currentValDate;
+	}
+
+	/**
+	 * @param currentValDate The currentValDate to set.
+	 */
+	public void setCurrentValDate(String currentValDate) {
+		this.currentValDate = currentValDate;
+	}
+
+	/**
+	 * @return Returns the indHistory.
+	 */
+	public Collection getIndHistory() {
+		return indHistory;
+	}
+
+	/**
+	 * @param indHistory The indHistory to set.
+	 */
+	public void setIndHistory(Collection indHistory) {
+		this.indHistory = indHistory;
+	}
+
+	/**
+	 * @return Returns the updateIndValues.
+	 */
+	public Collection getUpdateIndValues() {
+		return updateIndValues;
+	}
+
+	/**
+	 * @param updateIndValues The updateIndValues to set.
+	 */
+	public void setUpdateIndValues(Collection updateIndValues) {
+		this.updateIndValues = updateIndValues;
+	}
+
+	/**
+	 * @return Returns the indicatorPriorValues.
+	 */
+	public Collection getIndicatorPriorValues() {
+		return indicatorPriorValues;
+	}
+
+	/**
+	 * @param indicatorPriorValues The indicatorPriorValues to set.
+	 */
+	public void setIndicatorPriorValues(Collection indicatorPriorValues) {
+		this.indicatorPriorValues = indicatorPriorValues;
+	}
+		/**
 	 * @return Returns the ampSurveyId.
 	 */
 	public Long getAmpSurveyId() {
@@ -3189,4 +3477,5 @@ public class EditActivityForm extends ActionForm implements Serializable{
 	public void setSurveyYear(Integer surveyYear) {
 		this.surveyYear = surveyYear;
 	}
+	
 }

@@ -5,8 +5,9 @@ import java.util.Date;
 public class AmpMECurrValHistory {
 	private Long ampMECurrValHistoryId;
 	private AmpMEIndicatorValue meIndValue;
+	private float currValue;
 	private Date currValueDate;
-	private String comments;
+
 	/**
 	 * @return Returns the ampMECurrValHistoryId.
 	 */
@@ -20,16 +21,16 @@ public class AmpMECurrValHistory {
 		this.ampMECurrValHistoryId = ampMECurrValHistoryId;
 	}
 	/**
-	 * @return Returns the comments.
+	 * @return Returns the currValue.
 	 */
-	public String getComments() {
-		return comments;
+	public float getCurrValue() {
+		return currValue;
 	}
 	/**
-	 * @param comments The comments to set.
+	 * @param currValue The currValue to set.
 	 */
-	public void setComments(String comments) {
-		this.comments = comments;
+	public void setCurrValue(float currValue) {
+		this.currValue = currValue;
 	}
 	/**
 	 * @return Returns the currValueDate.

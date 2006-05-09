@@ -72,6 +72,7 @@ import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.ProgramUtil;
 import org.digijava.module.aim.util.TeamMemberUtil;
 import org.digijava.module.aim.util.TeamUtil;
+import org.digijava.module.aim.util.MEIndicatorsUtil;
 import org.digijava.module.cms.dbentity.CMSContentItem;
 
 /**
@@ -509,7 +510,6 @@ public class EditActivity extends Action {
 
 					ArrayList fundingOrgs = new ArrayList();
 					Iterator fundItr = activity.getFunding().iterator();
-					long id = System.currentTimeMillis();
 					while (fundItr.hasNext()) {
 						AmpFunding ampFunding = (AmpFunding) fundItr.next();
 						AmpOrganisation org = ampFunding.getAmpDonorOrgId();
@@ -539,7 +539,7 @@ public class EditActivity extends Action {
 								AmpFundingDetail fundDet = (AmpFundingDetail) fundDetItr
 										.next();
 								FundingDetail fundingDetail = new FundingDetail();
-								fundingDetail.setIndexId(id++);
+								fundingDetail.setIndexId(System.currentTimeMillis());
 								int adjType = fundDet.getAdjustmentType()
 										.intValue();
 								fundingDetail.setAdjustmentType(adjType);
@@ -1028,6 +1028,11 @@ public class EditActivity extends Action {
 			// load all the perspectives
 			eaForm.setPerspectives(DbUtil.getAmpPerspective());
 			
+			// load all the Activity specific M&E Indicators
+//			eaForm.setIndicators(MEIndicatorsUtil.getActivityIndicators(eaForm.getActivityId()));
+			logger.info("yeah in the edit activity......eaForm.getActivityId()... ::::::::::::::"+eaForm.getActivityId());
+//			eaForm.setRiskCollection(MEIndicatorsUtil.getAllIndicatorRisks());
+
 		} catch (Exception e) {
 			e.printStackTrace(System.out);
 		}

@@ -1632,11 +1632,11 @@
 
 	<action
 			  name="aimIndicatorForm"
-			  type="org.digijava.module.aim.action.SelectCreateIndicators"
+			  type="org.digijava.module.aim.action.SearchIndicators"
 			  scope="request"
 			  validate="false"
 			  path="/aim/searchIndicators">
-			  <forward name="forward" path="/aim/selectCreateIndicators.do"/>
+			  <forward name="forward" path="/showLayout.do?layout=selectCreateIndicators"/>
 			  <forward name="index" path="/aim/index.do" redirect="true"/>
 	</action>
 	
@@ -1659,7 +1659,37 @@
 			  <forward name="forward" path="/aim/getActivityIndicators.do" />
 			  <forward name="index" path="/aim/index.do" redirect="true" />
 	</action>
+	
+	<action
+			  name="aimEditActivityForm"
+			  type="org.digijava.module.aim.action.GetActivityIndicatorValues"
+			  scope="session"
+			  validate="false"
+			  path="/aim/nondetailedIndicator">
+			  <forward name="forward" path="/showLayout.do?layout=addActivityStep9" />
+			  <forward name="index" path="/aim/index.do" redirect="true" />
+  	</action>	
 			  
+  	<action
+			  name="aimEditActivityForm"
+			  type="org.digijava.module.aim.action.GetActivityIndicatorValues"
+			  scope="session"
+			  validate="false"
+			  path="/aim/detailedIndicator">
+			  <forward name="forward" path="/showLayout.do?layout=addActivityStep9" />
+			  <forward name="index" path="/aim/index.do" redirect="true" />
+	</action>			  
+	
+  	<action
+			  name="aimEditActivityForm"
+			  type="org.digijava.module.aim.action.SaveIndicatorValues"
+			  scope="session"
+			  validate="false"
+			  path="/aim/saveIndicatorValues">
+			  <forward name="forward" path="/showLayout.do?layout=addActivityStep9" />
+			  <forward name="index" path="/aim/index.do" redirect="true" />
+	</action>			  
+
 	<action 
 			  name="aimDonorTeamsForm"
 			  type="org.digijava.module.aim.action.GetDonorTeams"
@@ -2199,9 +2229,7 @@
 			  <forward name="addActivityStep6" path="/showLayout.do?layout=addActivityStep6" />
 			  <forward name="addActivityStep7" path="/showLayout.do?layout=addActivityStep7" />
 			  <forward name="addActivityStep8" path="/showLayout.do?layout=addActivityStep8" />
-			  <!--
 			  <forward name="addActivityStep9" path="/showLayout.do?layout=addActivityStep9" />
-			  -->
 			  <forward name="added" path="/aim/addActivity.do?edit=true" redirect="true" />
 			  <forward name="index" path="/aim/index.do" redirect="true" />
 	</action>	
@@ -2976,7 +3004,6 @@
 		<forward name="SelectMeasures" path="/showLayout.do?layout=AdvancedReportManagerStep6" />
 		
 	</action>
-	
 			
 <!-- END FINANCIAL EDIT	-->
   </action-mappings>

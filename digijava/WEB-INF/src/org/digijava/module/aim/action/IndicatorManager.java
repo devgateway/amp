@@ -10,6 +10,7 @@ import org.apache.struts.action.*;
 import org.digijava.module.aim.form.IndicatorForm;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.MEIndicatorsUtil;
+import org.digijava.module.aim.dbentity.AmpMECurrValHistory;
 import org.digijava.module.aim.dbentity.AmpMEIndicatorValue;
 import org.digijava.module.aim.dbentity.AmpMEIndicators;
 
@@ -37,6 +38,8 @@ public class IndicatorManager extends Action
 		String action = request.getParameter("action");
 		Collection indicators = new ArrayList();
 		Collection colMeIndValIds = null;
+		Collection ampMECurrValIds = null;
+		
 		IndicatorForm indForm = (IndicatorForm) form;
 
 		if (action != null && action.equals("delete")) 
@@ -54,6 +57,22 @@ public class IndicatorManager extends Action
 				while(itr.hasNext())
 				{
 					ampMEIndVal = (AmpMEIndicatorValue) itr.next();
+					logger.info("ampMEIndVal.getAmpMeIndValId()........ : "+ampMEIndVal.getAmpMeIndValId());
+					ampMECurrValIds = MEIndicatorsUtil.getMeCurrValIds(ampMEIndVal.getAmpMeIndValId());
+					logger.info("successfully returned.......");
+					
+					if(ampMECurrValIds != null)
+					{
+						AmpMECurrValHistory ampMECurrVal = null;
+						Iterator itrCurrVal = ampMECurrValIds.iterator();
+						while(itrCurrVal.hasNext())
+						{
+							logger.info("inside currval iterator");
+							ampMECurrVal = (AmpMECurrValHistory) itrCurrVal.next();
+							logger.info("ampMECurrVal.getAmpMECurrValHistoryId()......... : "+ampMECurrVal.getAmpMECurrValHistoryId());
+							DbUtil.delete(ampMECurrVal);
+						}
+					}
 					DbUtil.delete(ampMEIndVal);
 				}
 				DbUtil.delete(ampMEInd);

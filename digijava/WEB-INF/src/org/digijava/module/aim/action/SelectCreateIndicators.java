@@ -26,13 +26,14 @@ public class SelectCreateIndicators extends Action
 	public ActionForward execute(ActionMapping mapping,ActionForm form,
 			HttpServletRequest request,HttpServletResponse response) throws Exception 
 	{
-		String searchkey = null;
+//		String searchkey = null;
 		Collection nonDefaultInd = null;
 		Collection activityInd = null;
 		Collection nonDefActInd = new ArrayList();
-		Collection searchInd = new ArrayList();
-		Collection searchResult = null;
+//		Collection searchInd = new ArrayList();
+//		Collection searchResult = null;
 		boolean sameIndicator = false;
+//		String nsr = "yes";
 
 		IndicatorForm indForm = (IndicatorForm) form;
 		
@@ -60,8 +61,8 @@ public class SelectCreateIndicators extends Action
 		indForm.setNondefaultindicators(nonDefActInd);
 		indForm.setActivityId(indForm.getActivityId());			
 		
-		logger.info("indForm.getSearchkey() = " + indForm.getSearchkey());
-		if(indForm.getSearchkey() != null)
+/*		logger.info("indForm.getSearchkey() = " + indForm.getSearchkey());
+		if(indForm.getSearchkey().trim() != null)
 		{
 			searchkey = indForm.getSearchkey().trim();
 			searchResult = MEIndicatorsUtil.searchForIndicators(searchkey);
@@ -82,8 +83,11 @@ public class SelectCreateIndicators extends Action
 				if(sameIndicator == false)
 					searchInd.add(tempSearchInd);
 			}
+			if(searchInd == null)
+				indForm.setNoSearchResult(nsr);
 			indForm.setSearchReturn(searchInd);
 		}
+*/		
 		return mapping.findForward("forward");
 	}
 }

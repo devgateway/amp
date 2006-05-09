@@ -29,6 +29,7 @@ public class IndicatorForm extends ActionForm implements Serializable
 	private Long selIndicators[];
 	private String searchkey = null;
 	private String addswitch = null;
+	private boolean noSearchResult = false;
 	
 	public String getSameIndicatorCode() {
 		return sameIndicatorCode;
@@ -224,5 +225,19 @@ public class IndicatorForm extends ActionForm implements Serializable
 	 */
 	public void setSelIndicators(Long[] selIndicators) {
 		this.selIndicators = selIndicators;
+	}
+
+	/**
+	 * @return Returns the noSearchResult.
+	 */
+	public boolean getNoSearchResult() {
+		return noSearchResult;
+	}
+
+	/**
+	 * @param noSearchResult The noSearchResult to set.
+	 */
+	public void setNoSearchResult(boolean noSearchResult) {
+		this.noSearchResult = noSearchResult;
 	}
 }

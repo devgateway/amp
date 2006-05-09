@@ -17,6 +17,9 @@ public class ActivityIndicator {
 	
 	private String indicatorName;
 	private String indicatorCode;
+	private float currentVal;
+	private String comments;
+	private Long risk;
 	
 	/**
 	 * @return Returns the baseVal.
@@ -137,5 +140,41 @@ public class ActivityIndicator {
 	 */
 	public void setIndicatorName(String indicatorName) {
 		this.indicatorName = indicatorName;
+	}
+	/**
+	 * @return Returns the comments.
+	 */
+	public String getComments() {
+		return comments;
+	}
+	/**
+	 * @param comments The comments to set.
+	 */
+	public void setComments(String comments) {
+		this.comments = comments;
+	}
+	/**
+	 * @return Returns the currentVal.
+	 */
+	public float getCurrentVal() {
+		return currentVal;
+	}
+	/**
+	 * @param currentVal The currentVal to set.
+	 */
+	public void setCurrentVal(float currentVal) {
+		this.currentVal = currentVal;
+	}
+	/**
+	 * @return Returns the risk.
+	 */
+	public Long getRisk() {
+		return risk;
+	}
+	/**
+	 * @param risk The risk to set.
+	 */
+	public void setRisk(Long risk) {
+		this.risk = risk;
 	}
 }

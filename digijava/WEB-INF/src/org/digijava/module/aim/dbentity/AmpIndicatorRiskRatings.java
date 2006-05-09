@@ -1,14 +1,14 @@
 package org.digijava.module.aim.dbentity;
 
 public class AmpIndicatorRiskRatings {
-	private Integer ampIndRiskRatingsId;
+	private Long ampIndRiskRatingsId;
 	private String ratingName;
 	private int ratingValue;
 	
-	public Integer getAmpIndRiskRatingsId() {
+	public Long getAmpIndRiskRatingsId() {
 		return ampIndRiskRatingsId;
 	}
-	public void setAmpIndRiskRatingsId(Integer ampIndRiskRatingsId) {
+	public void setAmpIndRiskRatingsId(Long ampIndRiskRatingsId) {
 		this.ampIndRiskRatingsId = ampIndRiskRatingsId;
 	}
 	public String getRatingName() {

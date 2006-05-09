@@ -74,6 +74,12 @@ import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.TeamUtil;
 import org.digijava.module.aim.util.ProgramUtil;
 
+import org.digijava.module.aim.helper.ActivityIndicator;
+import org.digijava.module.aim.dbentity.AmpMEIndicatorValue;
+import org.digijava.module.aim.dbentity.AmpMECurrValHistory;
+import org.digijava.module.aim.util.MEIndicatorsUtil;
+
+
 /**
  * SaveActivity class creates a 'AmpActivity' object and populate the fields
  * with the values entered by the user and passes this object to the persister
@@ -1120,6 +1126,23 @@ public class SaveActivity extends Action {
 			ActivityUtil.saveActivity(activity, eaForm.getActivityId(), true, 
 					eaForm.getCommentsCol(), eaForm.isSerializeFlag(), field,
 					relatedLinks,tm.getMemberId());
+
+			AmpMEIndicatorValue meIndVal = new AmpMEIndicatorValue();
+			AmpMECurrValHistory meCurrVal = new AmpMECurrValHistory();
+			
+			meCurrVal.setCurrValue(eaForm.getCurrentVal());
+			meCurrVal.setCurrValueDate(DateConversion.getDate(eaForm.getCurrentValDate()));
+			meIndVal.setAmpMeIndValId(eaForm.getIndicatorValId());
+			meCurrVal.setMeIndValue(meIndVal);
+			DbUtil.add(meCurrVal);
+
+			ActivityIndicator actInd = new ActivityIndicator();
+			actInd.setIndicatorValId(eaForm.getIndicatorValId());
+			actInd.setRisk(eaForm.getIndicatorRisk());
+			actInd.setComments(eaForm.getComments());
+
+			MEIndicatorsUtil.saveMEIndicatorValues(actInd, 1);
+			
 			// remove the activity details from the edit activity list
 			if (toDelete == null || (!toDelete.trim().equalsIgnoreCase("true"))) {
 				String sessId = session.getId();
@@ -1188,7 +1211,7 @@ public class SaveActivity extends Action {
 		if (session.getAttribute("ampProjects") != null) {
 			session.removeAttribute("ampProjects");
 		}
-		
+	
 		if (temp == 0)
 			return mapping.findForward("adminHome");
 		else if (temp == 1) {
@@ -1206,4 +1229,5 @@ public class SaveActivity extends Action {
 		}
 		return null;
 	}
+	
 }

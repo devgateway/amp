@@ -22,7 +22,7 @@ import org.digijava.module.aim.dbentity.AmpMECurrValHistory;
 import org.digijava.module.aim.dbentity.AmpActivity;
 import org.digijava.module.aim.helper.AmpMEIndicatorList;
 import org.digijava.module.aim.helper.ActivityIndicator;
-import org.digijava.module.aim.helper.AmpMEIndicatorList;
+import org.digijava.module.aim.helper.PriorCurrentValues;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.DateConversion;
 import org.digijava.module.aim.helper.MEIndicatorRisk;
@@ -181,6 +181,48 @@ public class MEIndicatorsUtil
 		return col;
 	}
 
+	public static Collection getMeCurrValIds(Long meIndValue)
+	{
+		Session session = null;
+		Collection col = null;
+		
+		try
+		{
+			session = PersistenceManager.getSession();
+			logger.info("to execute query.... :0");
+			String queryString = "select ampMECurrValHistoryId from "
+								+AmpMECurrValHistory.class.getName()
+								+" ampMECurrValHistoryId where (ampMECurrValHistoryId.meIndValue=:meIndValue)";
+			Query qry = session.createQuery(queryString);
+			qry.setParameter("meIndValue",meIndValue,Hibernate.LONG);
+			logger.info("query executed successfully....... :0");
+			col = qry.list();
+			Iterator itrtemp = qry.list().iterator();
+			while(itrtemp.hasNext())
+			{
+				AmpMECurrValHistory currtemp = new AmpMECurrValHistory();
+				currtemp = (AmpMECurrValHistory) itrtemp.next();
+				logger.info("currtemp.getAmpMECurrValHistoryId()....... : "+currtemp.getAmpMECurrValHistoryId());
+			}
+		}
+		catch(Exception e1)
+		{
+			logger.debug("UNABLE to find meIndicatorCurrValIds for given meIndValId", e1);
+		}
+		finally
+		{
+			try
+			{
+				PersistenceManager.releaseSession(session);
+			}
+			catch(Exception e2)
+			{
+				logger.debug("releaseSession() FAILED", e2);
+			}
+		}
+		return col;
+	}
+	
 	public static AmpMEIndicators findIndicatorId(String name,String code)
 	{
 		Session session = null;
@@ -258,9 +300,40 @@ public class MEIndicatorsUtil
 		return duplicatesExist;
 	}
 
+	public static Collection getActivityList()
+	{
+		Session session = null;
+		Collection col = null;
+
+		try
+		{
+			session = PersistenceManager.getSession();
+	
+			String queryString = "select ampActivityId from "
+								+ AmpActivity.class.getName() + " ampActivityId";
+			Query qry = session.createQuery(queryString);
+			col = qry.list();
+		}
+		catch(Exception ex)
+		{
+			logger.debug("UNABLE to find activity ids from AmpActivity.");
+		}
+		finally
+		{
+			try
+			{
+				PersistenceManager.releaseSession(session);
+			}
+			catch(Exception exp)
+			{
+				logger.debug("releaseSession() FAILED", exp);
+			}
+		}
+		return col;
+	}
+	
 	public static Collection searchForIndicators(String keyword) 
 	{
-		logger.info("Searching for indicators..........");
 		Session session = null;
 		Collection col = null;
 		Query qry = null;
@@ -350,8 +423,11 @@ public class MEIndicatorsUtil
 				AmpMEIndicatorValue meIndValue = (AmpMEIndicatorValue) itr.next();
 				ActivityIndicator actInd = new ActivityIndicator();
 				actInd.setIndicatorName(meIndValue.getMeIndicatorId().getName());
+				logger.info("meIndValue.getMeIndicatorId().getName().... : "+meIndValue.getMeIndicatorId().getName());
 				actInd.setIndicatorCode(meIndValue.getMeIndicatorId().getCode());
+				logger.info("meIndValue.getMeIndicatorId().getCode().... : "+meIndValue.getMeIndicatorId().getCode());
 				actInd.setBaseVal(meIndValue.getBaseVal());
+				logger.info("meIndValue.getBaseVal()........ : "+meIndValue.getBaseVal());
 				if (meIndValue.getBaseValDate() != null) {
 					actInd.setBaseValDate(DateConversion.
 							ConvertDateToString(meIndValue.getBaseValDate()));					
@@ -386,7 +462,7 @@ public class MEIndicatorsUtil
 		return col;
 	}
 	
-	public static void saveMEIndicatorValues(ActivityIndicator actInd) 
+	public static void saveMEIndicatorValues(ActivityIndicator actInd, int chk) 
 	{
 		Session session = null;
 		Transaction tx = null;
@@ -394,16 +470,25 @@ public class MEIndicatorsUtil
 			session = PersistenceManager.getSession();
 			AmpMEIndicatorValue meIndVal = (AmpMEIndicatorValue) session.load(
 					AmpMEIndicatorValue.class,actInd.getIndicatorValId());
-			meIndVal.setBaseVal(actInd.getBaseVal());
-			meIndVal.setTargetVal(actInd.getTargetVal());
-			meIndVal.setRevisedTargetVal(actInd.getRevTargetVal());
-			meIndVal.setBaseValDate(DateConversion.getDate(actInd.getBaseValDate()));
-			meIndVal.setTargetValDate(DateConversion.getDate(actInd.getTargetValDate()));
-			meIndVal.setRevisedTargetValDate(DateConversion.getDate(actInd.getRevTargetValDate()));
+			if(chk == 0)
+			{
+				meIndVal.setBaseVal(actInd.getBaseVal());
+				meIndVal.setTargetVal(actInd.getTargetVal());
+				meIndVal.setRevisedTargetVal(actInd.getRevTargetVal());
+				meIndVal.setBaseValDate(DateConversion.getDate(actInd.getBaseValDate()));
+				meIndVal.setTargetValDate(DateConversion.getDate(actInd.getTargetValDate()));
+				meIndVal.setRevisedTargetValDate(DateConversion.getDate(actInd.getRevTargetValDate()));
+			}
+			else
+			{
+				AmpIndicatorRiskRatings indRisk = new AmpIndicatorRiskRatings();
+				indRisk.setAmpIndRiskRatingsId(actInd.getRisk());
+				meIndVal.setRisk(indRisk);
+				meIndVal.setComments(actInd.getComments());
+			}
 			tx = session.beginTransaction();
 			session.update(meIndVal);
 			tx.commit();
-			
 		} catch (Exception e) {
 			logger.error("Exception from saveMEIndicatorValues() :" + e.getMessage());
 			e.printStackTrace(System.out);		
@@ -594,8 +679,7 @@ public class MEIndicatorsUtil
 				AmpMEIndicatorValue meIndValue = (AmpMEIndicatorValue) itr.next();
 				AmpMEIndicators meInd = meIndValue.getMeIndicatorId();
 				
-				double totIndVal = meIndValue.getBaseVal() + meIndValue.getTargetVal() + 
-						meIndValue.getRevisedTargetVal();
+				double totIndVal = meIndValue.getBaseVal() + meIndValue.getTargetVal() + meIndValue.getRevisedTargetVal();
 				
 				MEIndicatorValue baseIndVal = new MEIndicatorValue();
 				baseIndVal.setIndicatorName(meInd.getName());
@@ -694,6 +778,44 @@ public class MEIndicatorsUtil
 		return col;				
 	}
 	
+	public static Collection getAllIndicatorRisks()
+	{
+		Session session = null;
+		Query qry = null;
+		Collection col = null;
+		try
+		{
+			session = PersistenceManager.getSession();
+			String queryString = "select r from " + AmpIndicatorRiskRatings.class.getName() + " r";
+			qry = session.createQuery(queryString);
+			col = qry.list();
+			
+			Iterator itr = col.iterator();
+			while(itr.hasNext())
+				logger.info("riskssss....itr.next().toString() : "+itr.next().toString());
+		} 
+		catch (Exception e) 
+		{
+			logger.error("Unable to get the risk ratings");
+			logger.debug("Exception : " + e);
+		} 
+		finally 
+		{
+			try 
+			{
+				if (session != null) 
+				{
+					PersistenceManager.releaseSession(session);
+				}
+			} 
+			catch (Exception ex) 
+			{
+				logger.debug("releaseSession() FAILED", ex);
+			}
+		}
+		return col;
+	}
+
 	public static Collection getMEIndicatorRisks(Long actId) {
 		Session session = null;
 		Collection col = new ArrayList();
@@ -731,8 +853,8 @@ public class MEIndicatorsUtil
 			}
 		}
 		return col;				
-	}
-	
+	}	
+
 	public static void saveMEIndicator(AmpMEIndicators newIndicator,Long actId,boolean defaultIndicator) {
 		Session session = null;
 		Transaction tx = null;
@@ -796,5 +918,55 @@ public class MEIndicatorsUtil
 				}
 			}
 		}
+	}	
+	
+	public static Collection getPriorIndicatorValues(Long tempId)
+	{
+		Session session = null;
+		Collection col = new ArrayList();
+		
+		try
+		{
+			logger.info("inside getPriorIndicatorValues()");
+			session = PersistenceManager.getSession();
+			String qryStr = "select pivalues from " + AmpMECurrValHistory.class.getName() + "" +
+							" pivalues where (pivalues.meIndValue=:tempId)" ;
+			Query qry = session.createQuery(qryStr);
+			qry.setParameter("tempId",tempId,Hibernate.LONG);
+			Iterator itr = qry.list().iterator();
+			while(itr.hasNext())
+			{
+				AmpMECurrValHistory meCurrValHis = new AmpMECurrValHistory();
+				PriorCurrentValues priorCurrVal = new PriorCurrentValues();
+				meCurrValHis = (AmpMECurrValHistory) itr.next();
+				priorCurrVal.setCurrHistoryId(meCurrValHis.getAmpMECurrValHistoryId());
+				priorCurrVal.setCurrValue(meCurrValHis.getCurrValue());
+				logger.info("meCurrValHis.getCurrValueDate()............... : "+meCurrValHis.getCurrValueDate());
+				logger.info("DateConversion.ConvertDateToString(meCurrValHis.getCurrValueDate()).... : "+DateConversion.ConvertDateToString(meCurrValHis.getCurrValueDate()));
+				priorCurrVal.setCurrValDate(DateConversion.ConvertDateToString(meCurrValHis.getCurrValueDate()));
+				logger.info("priorCurrVal.getCurrValDate()........ : "+priorCurrVal.getCurrValDate());
+				col.add(priorCurrVal);
+			}
+		}
+		catch(Exception e)
+		{
+			logger.error("Unable to get the prior values of the indicator");
+			logger.debug("Exception : " + e);
+		}
+		finally
+		{
+			try 
+			{
+				if (session != null) 
+				{
+					PersistenceManager.releaseSession(session);
+				}
+			} 
+			catch (Exception ex) 
+			{
+				logger.debug("releaseSession() FAILED", ex);
+			}
+		}
+		return col;
 	}
 }

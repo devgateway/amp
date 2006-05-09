@@ -32,6 +32,7 @@ import org.digijava.module.aim.form.EditActivityForm;
 import org.digijava.module.aim.helper.FundingOrganization;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.DbUtil;
+import org.digijava.module.aim.util.MEIndicatorsUtil;
 import org.digijava.module.aim.util.ProgramUtil;
 import org.digijava.module.editor.dbentity.Editor;
 import org.digijava.module.editor.util.Constants;
@@ -335,7 +336,21 @@ public class AddAmpActivity extends Action {
 			}
 			
 			return mapping.findForward("preview");
-		} else {
+		} else if (eaForm.getStep().equals("10")) {
+//			eaForm.setIndicators(MEIndicatorsUtil.getAllDefaultIndicators());
+			logger.info("eaForm.getActivityId()......... : "+eaForm.getActivityId());
+			eaForm.setIndicatorsME(MEIndicatorsUtil.getActivityIndicators(eaForm.getActivityId()));
+			logger.info("yeah in the add activity. indicators added  :0 ........ ::::::::::::::");
+
+			
+			if(!eaForm.getIndicatorsME().isEmpty())
+			{
+				eaForm.setRiskCollection(MEIndicatorsUtil.getAllIndicatorRisks());
+				logger.info("ADD ACTIVITY. risk also added.......");
+			}
+			return mapping.findForward("addActivityStep9");
+		}
+		else {
 			return mapping.findForward("adminHome");
 		}
 		} catch (Exception e) {

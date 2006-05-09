@@ -355,7 +355,7 @@
 					<logic:iterate name="aimAdvancedReportForm" property="titles"
 								id="titles" type="org.digijava.module.aim.helper.Column">
 							<logic:notEqual name="titles" property="columnName" value="Type Of Assistance">
-								<td align="center" height="21" width="42" >
+								<td align="center" height="21" width="42" rowspan="2">
 								<div align="center">
 								<strong>
 								<bean:write name="titles" property="columnName" />

@@ -14,6 +14,7 @@ import org.digijava.module.aim.dbentity.AmpActivity;
 import org.digijava.module.aim.dbentity.AmpMEIndicators;
 import org.digijava.module.aim.dbentity.AmpMEIndicatorValue;
 import org.digijava.module.aim.util.DbUtil;
+import org.digijava.module.aim.util.MEIndicatorsUtil;
 
 public class AddIndicatorsTL extends Action 
 {
@@ -50,7 +51,7 @@ public class AddIndicatorsTL extends Action
 					ampMEIndValbox.setBaseValDate(null);
 					ampMEIndValbox.setTargetValDate(null);
 					ampMEIndValbox.setRevisedTargetValDate(null);
-					ampMEIndValbox.setRisk(null);
+					ampMEIndValbox.setRisk(MEIndicatorsUtil.getLowRiskRating());
 					ampMEIndValbox.setComments(null);
 					
 					DbUtil.add(ampMEIndValbox);
@@ -76,7 +77,7 @@ public class AddIndicatorsTL extends Action
 					ampMEIndValsearch.setBaseValDate(null);
 					ampMEIndValsearch.setTargetValDate(null);
 					ampMEIndValsearch.setRevisedTargetValDate(null);
-					ampMEIndValsearch.setRisk(null);
+					ampMEIndValsearch.setRisk(MEIndicatorsUtil.getLowRiskRating());
 					ampMEIndValsearch.setComments(null);
 					
 					DbUtil.add(ampMEIndValsearch);

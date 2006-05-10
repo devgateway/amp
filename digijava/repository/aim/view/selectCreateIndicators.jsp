@@ -274,7 +274,7 @@
 																			Indicator Name
 																		</td>
 																		<td bgcolor="#f4f4f2" align="left">
-																			<html:text property="indicatorName" size="20"/>
+																			<html:text property="indicatorName" size="20" styleClass="inp-text"/>
 																		</td>																	
 																	</tr>
 																	<tr>

@@ -780,10 +780,6 @@ public class MEIndicatorsUtil
 			String queryString = "select r from " + AmpIndicatorRiskRatings.class.getName() + " r";
 			qry = session.createQuery(queryString);
 			col = qry.list();
-			
-			Iterator itr = col.iterator();
-			while(itr.hasNext())
-				logger.info("riskssss....itr.next().toString() : "+itr.next().toString());
 		} 
 		catch (Exception e) 
 		{
@@ -845,6 +841,44 @@ public class MEIndicatorsUtil
 		}
 		return col;				
 	}	
+	
+	public static AmpIndicatorRiskRatings getLowRiskRating() {
+		Session session = null;
+		AmpIndicatorRiskRatings risk = null;
+		String qryStr = null;
+		Query qry = null;
+		
+		try {
+			session = PersistenceManager.getSession();
+			qryStr = "select max(r.ratingValue) from " + AmpIndicatorRiskRatings.class.getName() + " r";
+			qry = session.createQuery(qryStr);
+			Iterator itr = qry.list().iterator();
+			int maxRating = 0;
+			if (itr.hasNext()) {
+				maxRating = ((Integer) itr.next()).intValue();
+			}
+			qryStr = "select r from " + AmpIndicatorRiskRatings.class.getName() + "" +
+					" r where (r.ratingValue=:rValue)";
+			qry = session.createQuery(qryStr);
+			qry.setParameter("rValue",new Integer(maxRating),Hibernate.INTEGER);
+			itr = qry.list().iterator();
+			if (itr.hasNext()) {
+				risk = (AmpIndicatorRiskRatings) itr.next();
+			}
+		} catch (Exception e) {
+			logger.error("Exception from getLowRiskRating() :" + e.getMessage());
+			e.printStackTrace(System.out);
+		} finally {
+			if (session != null) {
+				try {
+					PersistenceManager.releaseSession(session);
+				} catch (Exception rsf) {
+					logger.error("Failed to release session :" + rsf.getMessage());
+				}
+			}
+		}		
+		return risk;
+	}
 
 	public static void saveMEIndicator(AmpMEIndicators newIndicator,Long actId,boolean defaultIndicator) {
 		Session session = null;
@@ -870,7 +904,7 @@ public class MEIndicatorsUtil
 					ampMEIndValnew.setBaseValDate(null);
 					ampMEIndValnew.setTargetValDate(null);
 					ampMEIndValnew.setRevisedTargetValDate(null);
-					ampMEIndValnew.setRisk(null);
+					ampMEIndValnew.setRisk(getLowRiskRating());
 					ampMEIndValnew.setComments(null);
 					session.save(ampMEIndValnew);
 				}
@@ -885,7 +919,7 @@ public class MEIndicatorsUtil
 				ampMEIndValnew.setBaseValDate(null);
 				ampMEIndValnew.setTargetValDate(null);
 				ampMEIndValnew.setRevisedTargetValDate(null);
-				ampMEIndValnew.setRisk(null);
+				ampMEIndValnew.setRisk(getLowRiskRating());
 				ampMEIndValnew.setComments(null);
 				session.save(ampMEIndValnew);
 			}

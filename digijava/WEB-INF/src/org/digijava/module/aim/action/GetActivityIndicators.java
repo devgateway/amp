@@ -24,22 +24,13 @@ public class GetActivityIndicators extends Action {
 		
 		UpdateIndicatorValuesForm uIndValForm = (UpdateIndicatorValuesForm) form;
 		
-		/*
-		Long actId = new Long(-1);
-		String temp = request.getParameter("actId");
-		if (temp != null) {
-			try {
-				actId = new Long(Long.parseLong(temp));	
-			} catch (NumberFormatException nfe) {
-				logger.error("Trying to parse " + temp + " to long");
-				logger.error(nfe.getMessage());
-			}
-		}*/
-		
-		
 		uIndValForm.setActivityId(uIndValForm.getActivityId());
 		uIndValForm.setIndicators(MEIndicatorsUtil.getActivityIndicators(
 				uIndValForm.getActivityId()));
+		
+		uIndValForm.setIndicatorId(null);
+		uIndValForm.setIndicatorValId(null);
+		uIndValForm.setExpIndicatorId(new Long(-1));
 		
 		return mapping.findForward("forward");
 	}

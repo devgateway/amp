@@ -1035,9 +1035,27 @@ public class EditActivity extends Action {
 			eaForm.setPerspectives(DbUtil.getAmpPerspective());
 			
 			// load all the Activity specific M&E Indicators
-//			eaForm.setIndicators(MEIndicatorsUtil.getActivityIndicators(eaForm.getActivityId()));
-			logger.info("yeah in the edit activity......eaForm.getActivityId()... ::::::::::::::"+eaForm.getActivityId());
-//			eaForm.setRiskCollection(MEIndicatorsUtil.getAllIndicatorRisks());
+			eaForm.setIndicatorsME(
+					MEIndicatorsUtil.getActivityIndicators(eaForm.getActivityId()));
+			
+			eaForm.setIndicatorId(null);
+			eaForm.setIndicatorValId(null);
+			eaForm.setExpIndicatorId(null);
+			eaForm.setBaseVal(0);
+			eaForm.setBaseValDate(null);
+			eaForm.setTargetVal(0);
+			eaForm.setTargetValDate(null);
+			eaForm.setRevTargetVal(0);
+			eaForm.setRevTargetValDate(null);
+			eaForm.setIndicatorPriorValues(null);
+			eaForm.setCurrentVal(0);
+			eaForm.setCurrentValDate(null);
+			eaForm.setComments(null);
+			eaForm.setIndicatorRisk(null);
+			
+			//get the levels of risks
+			if(!eaForm.getIndicatorsME().isEmpty())
+				eaForm.setRiskCollection(MEIndicatorsUtil.getAllIndicatorRisks());
 
 		} catch (Exception e) {
 			e.printStackTrace(System.out);

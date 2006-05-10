@@ -20,6 +20,11 @@
 		document.aimEditActivityForm.submit();
 		return true;
 	}
+
+	function setValues(val) {
+		document.aimEditActivityForm.indicatorId.value = val;
+		document.aimEditActivityForm.submit();
+	}
 -->
 </script>
 
@@ -168,7 +173,7 @@
 							<tr><td width="100%" bgcolor="#f4f4f2">
 							<table width="100%" cellSpacing="1" cellPadding="3" vAlign="top" align="left" bgcolor="#006699">
 							<tr><td bgColor=#f4f4f2 align="center" vAlign="top">
-								<table width="95%" bgcolor="#f4f4f2">
+								<table width="95%" bgcolor="#f4f4f2" border=0>
 									<tr><td>
 										<IMG alt=Link height=10 src="../ampTemplate/images/arrow-014E86.gif" width=15>
 										<a title="<digi:trn key="aim:MonitoringnEvaluation">Monitoring and Evaluation - Indicators</digi:trn>">
@@ -217,9 +222,8 @@
 											</tr>
 											<c:if test="${aimEditActivityForm.expIndicatorId==indicator.indicatorId}">
 											<tr>
-												<td width="12%">&nbsp;</td>
-												<td>
-													<table cellspacing="0" cellpadding="3" valign="top" align="left" border=0>
+												<td colspan="2">
+													<table cellspacing="0" cellpadding="3" valign="top" align="center" width="90%">
 														<tr>
 															<td><b>Base Value</b></td>
 															<td>
@@ -308,8 +312,8 @@
 															<td><b>Risk</b></td>
 															<td>
 																<html:select property="indicatorRisk" styleClass="inp-text">
-																	<html:option value="-1">Select Risk</html:option>
-																	<html:optionsCollection name="aimEditActivityForm" property="riskCollection" value="ampIndRiskRatingsId" label="ratingName" />
+																	<html:optionsCollection name="aimEditActivityForm" property="riskCollection" 
+																	value="ampIndRiskRatingsId" label="ratingName" />
 																</html:select>
 															</td>
 														</tr>
@@ -317,7 +321,8 @@
 														<tr>
 															<td>&nbsp;</td>
 															<td colspan="3" align="center">
-																<html:submit value="Set Values"/>
+																<input type="button" class="dr-menu" value="Set Values" 
+																onclick="setValues('<c:out value="${indicator.indicatorId}" />')">
 															</td>
 															<td>&nbsp;</td>
 														</tr>

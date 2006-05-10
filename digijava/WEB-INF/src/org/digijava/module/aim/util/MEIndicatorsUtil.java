@@ -432,6 +432,9 @@ public class MEIndicatorsUtil
 					actInd.setTargetValDate(DateConversion.
 							ConvertDateToString(meIndValue.getTargetValDate()));					
 				}
+				actInd.setRisk(meIndValue.getRisk().getAmpIndRiskRatingsId());
+				actInd.setComments(meIndValue.getComments());
+				
 				col.add(actInd);
 			}
 			
@@ -952,5 +955,29 @@ public class MEIndicatorsUtil
 			}
 		}
 		return col;
+	}
+	
+	public static AmpMEIndicatorValue getMEIndicatorValue(Long id) {
+		Session session = null;
+		AmpMEIndicatorValue indVal = null;
+		
+		try {
+			session = PersistenceManager.getSession();
+			indVal = (AmpMEIndicatorValue) session.load(AmpMEIndicatorValue.class,id);
+		}
+		catch(Exception e) {
+			logger.error("Unable to get AmpMEIndicatorValue object");
+		}
+		finally {
+			try  {
+				if (session != null) {
+					PersistenceManager.releaseSession(session);
+				}
+			} 
+			catch (Exception ex)  {
+				logger.error("releaseSession() FAILED", ex);
+			}
+		}
+		return indVal;		
 	}
 }

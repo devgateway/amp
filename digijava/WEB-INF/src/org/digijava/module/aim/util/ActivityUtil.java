@@ -30,8 +30,11 @@ import org.digijava.module.aim.dbentity.AmpComponent;
 import org.digijava.module.aim.dbentity.AmpComponentFunding;
 import org.digijava.module.aim.dbentity.AmpFunding;
 import org.digijava.module.aim.dbentity.AmpFundingDetail;
+import org.digijava.module.aim.dbentity.AmpIndicatorRiskRatings;
 import org.digijava.module.aim.dbentity.AmpIssues;
 import org.digijava.module.aim.dbentity.AmpLocation;
+import org.digijava.module.aim.dbentity.AmpMECurrValHistory;
+import org.digijava.module.aim.dbentity.AmpMEIndicatorValue;
 import org.digijava.module.aim.dbentity.AmpMeasure;
 import org.digijava.module.aim.dbentity.AmpOrgRole;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
@@ -41,6 +44,7 @@ import org.digijava.module.aim.dbentity.AmpSector;
 import org.digijava.module.aim.dbentity.AmpTeam;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.helper.Activity;
+import org.digijava.module.aim.helper.ActivityIndicator;
 import org.digijava.module.aim.helper.ActivitySector;
 import org.digijava.module.aim.helper.AmpProjectDonor;
 import org.digijava.module.aim.helper.Components;
@@ -57,6 +61,8 @@ import org.digijava.module.aim.helper.RelOrganization;
 import org.digijava.module.aim.helper.RelatedLinks;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.cms.dbentity.CMSContentItem;
+
+import sun.awt.geom.Curve;
 
 /**
  * ActivityUtil is the persister class for all activity related 
@@ -80,7 +86,7 @@ public class ActivityUtil {
 		 * by passing null and false to the parameters oldActivityId and edit respectively
 		 * since this is creating a new activity
 		 */
-		saveActivity(activity,null,false,commentsCol,serializeFlag,field,relatedLinks,memberId);
+		saveActivity(activity,null,false,commentsCol,serializeFlag,field,relatedLinks,memberId,null);
 	}
 	
 	/**
@@ -98,7 +104,7 @@ public class ActivityUtil {
 	 */
 	public static void saveActivity(AmpActivity activity,Long oldActivityId,boolean edit,
 			ArrayList commentsCol,boolean serializeFlag, Long field,
-			Collection relatedLinks,Long memberId) {
+			Collection relatedLinks,Long memberId,Collection indicators) {
 		logger.debug("In save activity " + activity.getName());
 		Session session = null;
 		Transaction tx = null;
@@ -353,6 +359,36 @@ public class ActivityUtil {
 				}
 			} else
 				logger.debug("commentsCol is empty");
+			 
+			if (indicators != null && indicators.size() > 0) {
+				itr = indicators.iterator();
+				while (itr.hasNext()) {
+					ActivityIndicator actInd = (ActivityIndicator) itr.next();
+					
+					AmpMEIndicatorValue indVal = (AmpMEIndicatorValue) session.load(
+							AmpMEIndicatorValue.class,actInd.getIndicatorValId());
+					indVal.setBaseVal(actInd.getBaseVal());
+					indVal.setTargetVal(actInd.getTargetVal());
+					indVal.setRevisedTargetVal(actInd.getRevTargetVal());
+					indVal.setBaseValDate(DateConversion.getDate(actInd.getBaseValDate()));
+					indVal.setTargetValDate(DateConversion.getDate(actInd.getTargetValDate()));
+					indVal.setRevisedTargetValDate(DateConversion.getDate(actInd.getRevTargetValDate()));
+					indVal.setComments(actInd.getComments());
+					AmpIndicatorRiskRatings risk = (AmpIndicatorRiskRatings) session.load(
+							AmpIndicatorRiskRatings.class,actInd.getRisk());
+					indVal.setRisk(risk);
+					session.update(indVal);
+					if (actInd.getCurrentValDate() != null && 
+							actInd.getCurrentValDate().trim().length() > 0) {
+						logger.info("Inserting currVal " + actInd.getCurrentVal() + ", date " + actInd.getCurrentValDate());
+						AmpMECurrValHistory currValHist = new AmpMECurrValHistory();
+						currValHist.setCurrValue(actInd.getCurrentVal());
+						currValHist.setCurrValueDate(DateConversion.getDate(actInd.getCurrentValDate()));
+						currValHist.setMeIndValue(indVal);
+						session.save(currValHist);						
+					}					
+				}
+			}
 			
 			tx.commit(); // commit the transcation
 			logger.debug("Activity saved");

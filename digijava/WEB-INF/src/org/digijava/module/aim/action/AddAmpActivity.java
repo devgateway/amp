@@ -106,6 +106,9 @@ public class AddAmpActivity extends Action {
 		// added by Akash
 		// desc: setting WorkingTeamLeadFlag & approval status in form bean
 		// start
+		
+		logger.info("In AddAmpActivity, Step = " + eaForm.getStep());
+		
 		Long ampTeamId = teamMember.getTeamId();
 		boolean teamLeadFlag = teamMember.getTeamHead();
 		boolean workingTeamFlag = DbUtil.checkForParentTeam(ampTeamId);
@@ -336,13 +339,7 @@ public class AddAmpActivity extends Action {
 			
 			return mapping.findForward("preview");
 		} else if (eaForm.getStep().equals("10")) {		// show step 9 - M&E page
-			//get activity specific indicators
-			eaForm.setIndicatorsME
-			(MEIndicatorsUtil.getActivityIndicators(eaForm.getActivityId()));
-			
-			//get the levels of risks
-			if(!eaForm.getIndicatorsME().isEmpty())
-				eaForm.setRiskCollection(MEIndicatorsUtil.getAllIndicatorRisks());
+
 			return mapping.findForward("addActivityStep9");
 		}
 		else {
@@ -352,6 +349,7 @@ public class AddAmpActivity extends Action {
 			e.printStackTrace(System.out);
 			return null;
 		}
+		logger.info("Returning null #1");
 		return null;
 	}
 }

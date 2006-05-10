@@ -31,7 +31,6 @@ public class GetActivityIndicatorValues extends Action
 			try
 			{
 				indValId = new Long(Long.parseLong(temp));
-				logger.info("the indicator value Id is... : "+temp);
 				if (eaForm.getIndicatorsME() != null) 
 				{
 					Iterator itr = eaForm.getIndicatorsME().iterator();
@@ -50,10 +49,10 @@ public class GetActivityIndicatorValues extends Action
 							eaForm.setRevTargetVal(actInd.getRevTargetVal());
 							eaForm.setRevTargetValDate(actInd.getRevTargetValDate());
 							eaForm.setIndicatorPriorValues(MEIndicatorsUtil.getPriorIndicatorValues(indValId));
-							eaForm.setCurrentVal(0);
-							eaForm.setCurrentValDate(null);
-							eaForm.setComments(null);
-							eaForm.setIndicatorRisk(null);
+							eaForm.setCurrentVal(actInd.getCurrentVal());
+							eaForm.setCurrentValDate(actInd.getCurrentValDate());
+							eaForm.setComments(actInd.getComments());
+							eaForm.setIndicatorRisk(actInd.getRisk());
 							break;
 						}
 					}
@@ -61,7 +60,6 @@ public class GetActivityIndicatorValues extends Action
 			}
 			catch (NumberFormatException nfe) 
 			{
-				logger.error("Trying to parse " + temp + " to long");
 				logger.error(nfe.getMessage());
 			}
 		}

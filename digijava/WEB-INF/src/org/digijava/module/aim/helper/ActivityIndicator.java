@@ -18,6 +18,7 @@ public class ActivityIndicator {
 	private String indicatorName;
 	private String indicatorCode;
 	private float currentVal;
+	private String currentValDate;
 	private String comments;
 	private Long risk;
 	
@@ -176,5 +177,26 @@ public class ActivityIndicator {
 	 */
 	public void setRisk(Long risk) {
 		this.risk = risk;
+	}
+	/**
+	 * @return Returns the currentValDate.
+	 */
+	public String getCurrentValDate() {
+		return currentValDate;
+	}
+	/**
+	 * @param currentValDate The currentValDate to set.
+	 */
+	public void setCurrentValDate(String currentValDate) {
+		this.currentValDate = currentValDate;
+	}
+	/* (non-Javadoc)
+	 * @see java.lang.Object#equals(java.lang.Object)
+	 */
+	public boolean equals(Object obj) {
+		if (obj instanceof ActivityIndicator) {
+			ActivityIndicator actInd = (ActivityIndicator) obj;
+			return indicatorId.longValue() == actInd.getIndicatorId().longValue();
+		} else throw new ClassCastException();
 	}
 }

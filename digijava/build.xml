@@ -146,7 +146,7 @@
 
     <!-- Normal build of application -->
     <target name="compile" depends="prepare,resources">
-        <javac srcdir="${src}" destdir="${classes}" deprecation="off" debug="${debug}">
+        <javac srcdir="${src}" destdir="${classes}" deprecation="off" debug="${debug}" fork="yes" memoryMaximumSize="512m">
             <classpath refid="compile.classpath"/>
         </javac>
     </target>

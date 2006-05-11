@@ -215,11 +215,11 @@
 						<TABLE border="0" cellpadding="0" cellspacing="1" bgcolor="#F4F4F2" height="20">
                  		<TR bgColor=#f4f4f2 height="20">
                  			<logic:equal name="aimMainProjectDetailsForm" property="tabIndex" value="5">
-	                     		<TD vAlign=center bgColor=#222e5d class="sub-nav-selected" noWrap width="123">
+	                     		<TD vAlign=center bgColor=#222e5d class="sub-nav-selected" noWrap width="105">
 									:: <digi:trn key="aim:indicators">INDICATORS</digi:trn> 									
 							</logic:equal>
 							<logic:notEqual name="aimMainProjectDetailsForm" property="tabIndex" value="5">
-	                    		<TD vAlign=center bgColor=#3754a1 noWrap width="123">
+	                    		<TD vAlign=center bgColor=#3754a1 noWrap width="105">
 	                    			<jsp:useBean id="survey" type="java.util.Map" class="java.util.HashMap" />
 	                    			<c:set target="${survey}" property="ampActivityId">
 										<bean:write name="aimMainProjectDetailsForm" property="ampActivityId"/>
@@ -233,13 +233,13 @@
 									</digi:link>									
 							</logic:notEqual>
 								</TD>
-							<logic:equal name="aimMainProjectDetailsForm" property="tabIndex" value="5">
+							<logic:equal name="aimMainProjectDetailsForm" property="tabIndex" value="6">
 	                     		<TD vAlign=center bgColor=#222e5d class="sub-nav-selected" noWrap width="103">
 									:: <digi:trn key="aim:activityDashboard">Dashboard</digi:trn> 									
 							</logic:equal>
-							<logic:notEqual name="aimMainProjectDetailsForm" property="tabIndex" value="5">
+							<logic:notEqual name="aimMainProjectDetailsForm" property="tabIndex" value="6">
 	                    		<TD vAlign=center bgColor=#3754a1 noWrap width="103">
-                   				<c:set target="${urlTabs}" property="tabIndex" value="5"/>
+                   				<c:set target="${urlTabs}" property="tabIndex" value="6"/>
 									<bean:define id="translation">
 										<digi:trn key="aim:clickToViewActivityDashboard">Click here to view activity dashboard</digi:trn>
 									</bean:define>

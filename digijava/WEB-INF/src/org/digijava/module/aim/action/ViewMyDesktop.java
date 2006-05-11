@@ -34,6 +34,7 @@ import org.digijava.module.aim.helper.Documents;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.ActivityUtil;
 import org.digijava.module.aim.util.DbUtil;
+import org.digijava.module.aim.util.ReportUtil;
 import org.digijava.module.aim.util.TeamUtil;
 
 // ViewMyDesktop.java
@@ -380,9 +381,28 @@ public class ViewMyDesktop extends Action
 							if(project.getName().equalsIgnoreCase(key) || project.getName().toLowerCase().indexOf(key.toLowerCase())!=-1)
 							{
 								flag=true;
+								//logger.info("found in PROJECT-TITLE..."+project.getName());
 								 break;
 							}
-							if(project.getDonor()!=null)
+							if(project.getDescription()!=null){
+								String str=project.getDescription();
+									if(project.getDescription().equalsIgnoreCase(key) || project.getDescription().toLowerCase().indexOf(key.toLowerCase())!=-1)
+									{
+										flag=true;
+										//logger.info("found in DESCRIPTION..."+project.getDescription().substring(1,40));
+										break;
+									}
+							}
+							if(project.getObjective()!=null){
+								String str=project.getObjective();
+									if(project.getObjective().equalsIgnoreCase(key) || project.getObjective().toLowerCase().indexOf(key.toLowerCase())!=-1)
+									{
+										flag=true;
+										//logger.info("found in OBJECTIVE..."+project.getObjective().substring(1,40));
+										break;
+									}
+							}
+							/*if(project.getDonor()!=null)
 							{
 								ArrayList donor=(ArrayList)project.getDonor();
 								Iterator diter=donor.iterator();
@@ -393,6 +413,7 @@ public class ViewMyDesktop extends Action
 									if(donorName.equalsIgnoreCase(key) || donorName.toLowerCase().indexOf(key.toLowerCase())!=-1)
 									{
 										flag=true;
+										logger.info("found in Donor ..."+donorName);
 										break;
 									}
 								}
@@ -407,10 +428,11 @@ public class ViewMyDesktop extends Action
 									if(sectorName.equalsIgnoreCase(key) || sectorName.toLowerCase().indexOf(key.toLowerCase())!=-1)
 									{
 										flag=true;
+										logger.info("found in sector ..."+sectorName);
 										break;
 									}
 								}
-							}
+							}*/
 							if(flag==false)
 							{
 								AmpActivity ampActivity=DbUtil.getProjectChannelOverview(project.getAmpActivityId());

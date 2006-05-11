@@ -94,6 +94,7 @@ import org.digijava.module.aim.helper.Sector;
 import org.digijava.module.aim.helper.SurveyFunding;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.cms.dbentity.CMSContentItem;
+import org.digijava.module.editor.dbentity.Editor;
 
 public class DbUtil {
 	private static Logger logger = Logger.getLogger(DbUtil.class);
@@ -1786,6 +1787,22 @@ public class DbUtil {
 						ampProject=new AmpProject();
 						donor.clear();
 						ampProject.setName(ampReportCache.getActivityName());
+						
+						// added for Keyword Activity Search..
+						
+						//logger.info("============="+ampReportCache.getActivityDescription());
+						Editor ed = org.digijava.module.editor.util.DbUtil.getEditor(ampReportCache.getActivityDescription(),"en");
+						if(ed!=null && ed.getBody()!=null){
+							//logger.info("$$$$$$$$$$$$$$"+ed.getBody());
+							ampProject.setDescription(ed.getBody());
+						}
+						
+						Editor ed2 = org.digijava.module.editor.util.DbUtil.getEditor(getObjective(ampReportCache.getAmpActivityId()),"en");
+						if(ed!=null && ed.getBody()!=null){
+							//logger.info("$$$$$$$$$$$setting Objective.....for:"+ampReportCache.getAmpActivityId()+"=="+ed2.getBody());
+							ampProject.setObjective(ed2.getBody());
+						}
+																		
 						ampProject.setDonor(new ArrayList());
 						ampProject.setSector(new ArrayList());
 						ampProject.getSector().addAll(DbUtil.getAmpReportSector(ampReportCache.getAmpActivityId()));
@@ -1931,6 +1948,47 @@ public class DbUtil {
 				}
 			}
 			return projects ;
+	}
+	
+	// Added by Rahul for Activity Search on Mydesktop.
+	
+	public static String getObjective(Long activityId){
+		
+		Session session=null;
+		String objective=null;
+		try{
+			session=PersistenceManager.getSession();
+			AmpActivity act = (AmpActivity) session.load(AmpActivity.class,activityId);
+			
+			if(act!=null){
+				if(act.getObjective()!=null){
+					objective=act.getObjective();
+					//logger.info("$$==objective=="+objective);
+				}
+			}
+		}
+		catch(Exception e)
+		{
+			logger.error("UNABLE to fetch Project Id for ActivityId: "+activityId +"==Error="+e.getMessage());
+		
+		}
+		finally
+		{
+			if(session!=null)
+			{
+				try
+				{
+					PersistenceManager.releaseSession(session);
+				}
+				catch(Exception ex)
+				{
+					logger.error("Failed to release session....");
+					logger.error("error="+ex.getMessage());
+				}
+			}
+		}
+		
+		return objective;
 	}
 
 	public static AmpNotes getAmpNotesDetails(Long id) {

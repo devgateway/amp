@@ -12,6 +12,33 @@ public class AmpProject
 	private String currency;
 	private String totalCommited;
 	
+	private String objective;
+	private String description;
+	
+	/**
+	 * @return Returns the description.
+	 */
+	public String getDescription() {
+		return description;
+	}
+	/**
+	 * @param description The description to set.
+	 */
+	public void setDescription(String description) {
+		this.description = description;
+	}
+	/**
+	 * @return Returns the objective.
+	 */
+	public String getObjective() {
+		return objective;
+	}
+	/**
+	 * @param objective The objective to set.
+	 */
+	public void setObjective(String objective) {
+		this.objective = objective;
+	}
 	// added by Akash
 	private String approvalStatus;
 	

@@ -27,9 +27,7 @@ public class UpdateMEIndicatorValues extends Action {
 		String event = request.getParameter("event");
 		if (event != null && event.equalsIgnoreCase("save")) {
 			ActivityIndicator actInd = new ActivityIndicator();
-			logger.info("uivForm.getIndicatorValId()......... : "+uivForm.getIndicatorValId());
 			actInd.setIndicatorValId(uivForm.getIndicatorValId());
-			logger.info("actInd.getIndicatorValId()....... : "+actInd.getIndicatorValId());
 			actInd.setBaseVal(uivForm.getBaseVal());
 			actInd.setBaseValDate(uivForm.getBaseValDate());
 			actInd.setTargetVal(uivForm.getTargetVal());
@@ -41,7 +39,5 @@ public class UpdateMEIndicatorValues extends Action {
 			MEIndicatorsUtil.deleteMEIndicatorValues(uivForm.getIndicatorValId());			
 		}
 		return mapping.findForward("forward");
-
-		
 	}
 }

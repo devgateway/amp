@@ -1223,6 +1223,7 @@ public class SaveActivity extends Action {
 					// Setting approval status of activity
 					activity.setApprovalStatus(eaForm.getApprovalStatus());
 					// update an existing activity
+					/*
 					Collection ind = eaForm.getIndicatorsME();
 					Iterator itr = ind.iterator();
 					while(itr.hasNext())
@@ -1232,6 +1233,7 @@ public class SaveActivity extends Action {
 						logger.info("actInd.getCurrentVal()........ : "+actInd.getCurrentVal());
 						logger.info("actInd.getCurrentValDate()... : "+actInd.getCurrentValDate());
 					}
+					*/
 					ActivityUtil.saveActivity(activity, eaForm.getActivityId(),
 							true, eaForm.getCommentsCol(), eaForm
 									.isSerializeFlag(), field, relatedLinks, tm

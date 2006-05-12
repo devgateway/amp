@@ -10,17 +10,29 @@
 <!--
 	function searchIndicatorkey()
 	{
-		<digi:context name="searchInd" property="context/module/moduleinstance/searchIndicators.do" />
-		document.aimIndicatorForm.action = "<%=searchInd%>";
-		document.aimIndicatorForm.target = "_self";
-		document.aimIndicatorForm.submit();
+		var noSearchKey = isSearchKeyGiven();
+		if(noSearchKey == true)
+		{
+			<digi:context name="searchInd" property="context/module/moduleinstance/searchIndicators.do" />
+			document.aimIndicatorForm.action = "<%=searchInd%>";
+			document.aimIndicatorForm.target = "_self";
+			document.aimIndicatorForm.submit();
+		}
 	}
-	function addIndicatorTL()
+	function addIndicatorTL(addbutton)
 	{
-		<digi:context name="addInd" property="context/module/moduleinstance/addIndicatorsTL.do"/>
-		document.aimIndicatorForm.action = "<%=addInd%>";
-		document.aimIndicatorForm.target = "_self";
-		document.aimIndicatorForm.submit();
+		var emptychk = false;
+		if(addbutton == '1')
+			emptychk = doesItHaveValue1();
+		if(addbutton == '2')
+			emptychk = doesItHaveValue2()
+		if(emptychk == true)
+		{
+			<digi:context name="addInd" property="context/module/moduleinstance/addIndicatorsTL.do"/>
+			document.aimIndicatorForm.action = "<%=addInd%>";
+			document.aimIndicatorForm.target = "_self";
+			document.aimIndicatorForm.submit();
+		}
 	}
 
 
@@ -34,7 +46,6 @@
 			document.aimIndicatorForm.submit();				  
 		}
 		return valid;
-
 	}
 	function unload(){}
 
@@ -51,8 +62,36 @@
 			return false;
 		}
 		return true;
-	}	
-
+	}
+	function isSearchKeyGiven()
+	{
+		if(trim(document.aimIndicatorForm.searchkey.value).length == 0)
+		{
+			alert("Please give a Keyword to search");
+			document.aimIndicatorForm.searchkey.focus();
+			return false;
+		}
+		return true;
+	}
+	function doesItHaveValue1()
+	{
+		if(document.aimIndicatorForm.selectedIndicators.value == '')
+		{
+			alert("Please select an Indicator");
+			document.aimIndicatorForm.selectedIndicators.focus();
+			return false;
+		}
+		return true;
+	}
+	function doesItHaveValue2()
+	{
+		if(document.aimIndicatorForm.selIndicators.value == null)
+		{
+			alert("Please select an Indicator");
+			return false;
+		}
+		return true;
+	}
 -->
 </script>
 
@@ -166,7 +205,7 @@
 																		<tr>
 																			<td bgcolor="#f4f4f2" align="center" colspan="2">
 																				<input class="buton" type="button" name="addFromList"
-																				value=" Add " onclick="addIndicatorTL()">
+																				value=" Add " onclick="addIndicatorTL(1)">
 																			</td>
 																		</tr>
 																	</logic:notEmpty>
@@ -212,13 +251,13 @@
 																	<logic:notEmpty name="aimIndicatorForm" property="searchReturn">
 																		<tr><td bgcolor="#f4f4f2" align="center" colspan="2">
 																		<table border=0 cellPadding=0 cellSpacing=0 class="box-border-nopadding" width="100%">
+																			<tr bgColor=#dddddb>
+																				<td align="center" colspan="2">
+																					Search Results
+																				</td>
+																			</tr>
 																			<logic:iterate name="aimIndicatorForm" property="searchReturn" 
 																			id="searchValues" type="org.digijava.module.aim.dbentity.AmpMEIndicators">
-																				<tr bgColor=#dddddb>
-																					<td align="center" colspan="2">
-																						Search Results
-																					</td>
-																				</tr>
 																				<tr bgColor=#f4f4f2>
 																					<td align="right" width="3">
 																						<html:multibox property="selIndicators">
@@ -234,7 +273,7 @@
 																		</td></tr>
 																		<tr>
 																			<td bgcolor="#f4f4f2" align="center" colspan="3">
-																				<input class="buton" type="button" name="addFromSearchList" value=" Add " onclick="addIndicatorTL()">
+																				<input class="buton" type="button" name="addFromSearchList" value=" Add " onclick="addIndicatorTL(2)">
 																			</td>
 																		</tr>
 																	</logic:notEmpty>

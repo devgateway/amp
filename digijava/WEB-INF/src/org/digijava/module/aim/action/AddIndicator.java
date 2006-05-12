@@ -69,7 +69,11 @@ public class AddIndicator extends Action
 				{
 					AmpMEIndicators ampIndicators = new AmpMEIndicators();
 					ampIndicators.setName(indForm.getIndicatorName());
-					ampIndicators.setDescription(indForm.getIndicatorDesc());
+					if (indForm.getIndicatorDesc() != null &&
+							indForm.getIndicatorDesc().length() > 0)
+						ampIndicators.setDescription(indForm.getIndicatorDesc());
+					else 
+						ampIndicators.setDescription(" ");
 					ampIndicators.setCode(indForm.getIndicatorCode());
 					ampIndicators.setDefaultInd(indForm.getDefaultFlag());
 					MEIndicatorsUtil.saveMEIndicator(ampIndicators,null,ampIndicators.isDefaultInd());

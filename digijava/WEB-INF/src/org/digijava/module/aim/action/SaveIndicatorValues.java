@@ -22,7 +22,7 @@ public class SaveIndicatorValues extends Action
 	{
 		
 		EditActivityForm eaForm = (EditActivityForm) form;
-		
+
 		if (eaForm.getIndicatorsME() != null && 
 				eaForm.getIndicatorsME().size() > 0) {
 			ActivityIndicator actInd = new ActivityIndicator();
@@ -31,15 +31,31 @@ public class SaveIndicatorValues extends Action
 			while (itr.hasNext()) {
 				ActivityIndicator temp = (ActivityIndicator) itr.next();
 				if (temp.equals(actInd)) {
-					temp.setCurrentVal(eaForm.getCurrentVal());
-					temp.setCurrentValDate(eaForm.getCurrentValDate());
-					temp.setComments(eaForm.getComments());
-					temp.setRisk(eaForm.getIndicatorRisk());
-					break;
+					if(eaForm.getWorkingTeamLeadFlag().equalsIgnoreCase("no"))
+					{
+						temp.setCurrentVal(eaForm.getCurrentVal());
+						temp.setCurrentValDate(eaForm.getCurrentValDate());
+						temp.setComments(eaForm.getComments());
+						temp.setRisk(eaForm.getIndicatorRisk());
+						break;
+					}
+					if(eaForm.getWorkingTeamLeadFlag().equalsIgnoreCase("yes"))
+					{
+						temp.setBaseVal(eaForm.getBaseVal());
+						temp.setBaseValDate(eaForm.getBaseValDate());
+						temp.setTargetVal(eaForm.getTargetVal());
+						temp.setTargetValDate(eaForm.getTargetValDate());
+						temp.setRevTargetVal(eaForm.getRevTargetVal());
+						temp.setRevTargetValDate(eaForm.getRevTargetValDate());
+						temp.setCurrentVal(eaForm.getCurrentVal());
+						temp.setCurrentValDate(eaForm.getCurrentValDate());
+						temp.setComments(eaForm.getComments());
+						temp.setRisk(eaForm.getIndicatorRisk());
+						break;
+					}
 				}
 			}
 		}
-		
 		return mapping.findForward("forward");
 	}
 }

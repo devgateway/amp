@@ -26,9 +26,12 @@ public class AddNewIndicatorTL extends Action
 			ampMEIndnew = new AmpMEIndicators();
 			ampMEIndnew.setName(indForm.getIndicatorName());
 			ampMEIndnew.setCode(indForm.getIndicatorCode());
-			ampMEIndnew.setDescription(indForm.getIndicatorDesc());
+			if (indForm.getIndicatorDesc() != null
+					&& indForm.getIndicatorDesc().length() > 0)
+				ampMEIndnew.setDescription(indForm.getIndicatorDesc());
+			else 
+				ampMEIndnew.setDescription(" ");
 			ampMEIndnew.setDefaultInd(false);
-
 			MEIndicatorsUtil.saveMEIndicator(ampMEIndnew,indForm.getActivityId(),false);
 		}
 		return mapping.findForward("forward");

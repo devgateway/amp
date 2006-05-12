@@ -21,9 +21,52 @@
 		return true;
 	}
 
-	function setValues(val) {
-		document.aimEditActivityForm.indicatorId.value = val;
-		document.aimEditActivityForm.submit();
+	function setValues(val) 
+	{
+		if(document.aimEditActivityForm.workingTeamLeadFlag.value == 'no')
+		{
+			var emptybox = chkforEmptyBox();
+			if(emptybox == true)
+			{
+				document.aimEditActivityForm.indicatorId.value = val;
+				document.aimEditActivityForm.submit();
+			}
+		}
+		else
+		{
+			var emptyboxes = chkforEmptyBoxes();
+			if(emptyboxes == true)
+			{
+				document.aimEditActivityForm.indicatorId.value = val;
+				document.aimEditActivityForm.submit();
+			}
+		}
+	}
+	function chkforEmptyBox()
+	{
+		if(trim(document.aimEditActivityForm.currentVal.value) == 0)
+		{
+			alert("Please give a Current Value");
+			document.aimEditActivityForm.currentVal.focus();
+			return false;
+		}
+		return true;
+	}
+	function chkforEmptyBoxes()
+	{
+		if(trim(document.aimEditActivityForm.baseVal.value) == 0)
+		{
+			alert("Please give a Base Value");
+			document.aimEditActivityForm.baseVal.focus();
+			return false;
+		}
+		if(trim(document.aimEditActivityForm.targetVal.value) == 0)
+		{
+			alert("Please give a Target Value");
+			document.aimEditActivityForm.targetVal.focus();
+			return false;
+		}
+		return true;
 	}
 -->
 </script>
@@ -224,45 +267,100 @@
 											<tr>
 												<td colspan="2">
 													<table cellspacing="0" cellpadding="3" valign="top" align="center" width="90%">
-														<tr>
-															<td><b>Base Value</b></td>
-															<td>
-																<bean:write name="aimEditActivityForm" property="baseVal" />
-															</td>
-															<td>&nbsp;&nbsp;&nbsp;</td>
-															<td align="right">
-																Date  :
-															</td>
-															<td align="left">&nbsp;&nbsp;
-																<bean:write name="aimEditActivityForm" property="baseValDate" />
-															</td>
-														</tr>
-														<tr>
-															<td><b>Target Value</b></td>
-															<td>
-																<bean:write name="aimEditActivityForm" property="targetVal" />
-															</td>
-															<td>&nbsp;&nbsp;&nbsp;</td>
-															<td align="right">
-																Date  :
-															</td>
-															<td align="left">&nbsp;&nbsp;
-																<bean:write name="aimEditActivityForm" property="targetValDate" />
-															</td>
-														</tr>
-														<tr>
-															<td><b>Revised target Value</b></td>
-															<td>
-																<bean:write name="aimEditActivityForm" property="revTargetVal" />
-															</td>
-															<td>&nbsp;&nbsp;&nbsp;</td>
-															<td align="right">
-																Date  :
-															</td>
-															<td align="left">&nbsp;&nbsp;
-																<bean:write name="aimEditActivityForm" property="revTargetValDate" />
-															</td>
-														</tr>
+														<c:if test="${aimEditActivityForm.workingTeamLeadFlag=='no'}">
+															<tr>
+																<td><b>Base Value</b></td>
+																<td>
+																	<bean:write name="aimEditActivityForm" property="baseVal" />
+																</td>
+																<td>&nbsp;&nbsp;&nbsp;</td>
+																<td align="right">
+																	Date  :
+																</td>
+																<td align="left">&nbsp;&nbsp;
+																	<bean:write name="aimEditActivityForm" property="baseValDate" />
+																</td>
+															</tr>
+															<tr>
+																<td><b>Target Value</b></td>
+																<td>
+																	<bean:write name="aimEditActivityForm" property="targetVal" />
+																</td>
+																<td>&nbsp;&nbsp;&nbsp;</td>
+																<td align="right">
+																	Date  :
+																</td>
+																<td align="left">&nbsp;&nbsp;
+																	<bean:write name="aimEditActivityForm" property="targetValDate" />
+																</td>
+															</tr>
+															<tr>
+																<td><b>Revised target Value</b></td>
+																<td>
+																	<bean:write name="aimEditActivityForm" property="revTargetVal" />
+																</td>
+																<td>&nbsp;&nbsp;&nbsp;</td>
+																<td align="right">
+																	Date  :
+																</td>
+																<td align="left">&nbsp;&nbsp;
+																	<bean:write name="aimEditActivityForm" property="revTargetValDate" />
+																</td>
+															</tr>
+														</c:if>
+														<c:if test="${aimEditActivityForm.workingTeamLeadFlag=='yes'}">
+															<tr>
+																<td><b>Base Value</b></td>
+																<td>
+																	<html:text name="aimEditActivityForm" property="baseVal" styleClass="inp-text"/>
+																</td>
+																<td>&nbsp;&nbsp;&nbsp;</td>
+																<td align="right">
+																	Date  :
+																</td>
+																<td align="left">
+																	<html:text name="aimEditActivityForm" property="baseValDate" size="10"
+																	styleId="baseValDate" styleClass="inp-text" readonly="true"/>&nbsp;&nbsp;
+																	<a href="javascript:calendar('baseValDate')">
+																		<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border=0>
+																	</a>
+																</td>
+															</tr>
+															<tr>
+																<td><b>Target Value</b></td>
+																<td>
+																	<html:text name="aimEditActivityForm" property="targetVal" styleClass="inp-text"/>
+																</td>
+																<td>&nbsp;&nbsp;&nbsp;</td>
+																<td align="right">
+																	Date  :
+																</td>
+																<td align="left">
+																	<html:text name="aimEditActivityForm" property="targetValDate" size="10"
+																	styleId="targetValDate" styleClass="inp-text" readonly="true"/>&nbsp;&nbsp;
+																	<a href="javascript:calendar('targetValDate')">
+																		<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border=0>
+																	</a>
+																</td>
+															</tr>
+															<tr>
+																<td><b>Revised target Value</b></td>
+																<td>
+																	<html:text name="aimEditActivityForm" property="revTargetVal" styleClass="inp-text"/>
+																</td>
+																<td>&nbsp;&nbsp;&nbsp;</td>
+																<td align="right">
+																	Date  :
+																</td>
+																<td align="left">
+																	<html:text name="aimEditActivityForm" property="revTargetValDate" size="10"
+																	styleId="revTargetValDate" styleClass="inp-text" readonly="true"/>&nbsp;&nbsp;
+																	<a href="javascript:calendar('revTargetValDate')">
+																		<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border=0>
+																	</a>
+																</td>
+															</tr>
+														</c:if>
 														<logic:notEmpty name="aimEditActivityForm" property="indicatorPriorValues" >
 															<tr bgColor=#dddddb><td bgColor=#dddddb align="left" colspan="5"><b>
 																Prior Values :</b>

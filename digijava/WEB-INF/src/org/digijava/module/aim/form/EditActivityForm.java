@@ -441,7 +441,6 @@ public class EditActivityForm extends ActionForm implements Serializable{
 			totalCommitments = 0;
 			totalDisbursements = 0;
 			totalExpenditures = 0;
-			indicatorsME = null;
 		}
 
 		if (orgSelReset) {

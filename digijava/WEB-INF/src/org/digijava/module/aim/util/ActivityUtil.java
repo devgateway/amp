@@ -374,13 +374,14 @@ public class ActivityUtil {
 					indVal.setTargetValDate(DateConversion.getDate(actInd.getTargetValDate()));
 					indVal.setRevisedTargetValDate(DateConversion.getDate(actInd.getRevTargetValDate()));
 					indVal.setComments(actInd.getComments());
-					AmpIndicatorRiskRatings risk = (AmpIndicatorRiskRatings) session.load(
-							AmpIndicatorRiskRatings.class,actInd.getRisk());
+					AmpIndicatorRiskRatings risk = null;
+					if (actInd.getRisk().longValue() > 0) {
+						risk = (AmpIndicatorRiskRatings) session.load(AmpIndicatorRiskRatings.class,actInd.getRisk());
+					}
 					indVal.setRisk(risk);
 					session.update(indVal);
 					if (actInd.getCurrentValDate() != null && 
 							actInd.getCurrentValDate().trim().length() > 0) {
-						logger.info("Inserting currVal " + actInd.getCurrentVal() + ", date " + actInd.getCurrentValDate());
 						AmpMECurrValHistory currValHist = new AmpMECurrValHistory();
 						currValHist.setCurrValue(actInd.getCurrentVal());
 						currValHist.setCurrValueDate(DateConversion.getDate(actInd.getCurrentValDate()));

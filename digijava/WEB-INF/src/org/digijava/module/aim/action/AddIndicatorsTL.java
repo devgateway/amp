@@ -51,7 +51,7 @@ public class AddIndicatorsTL extends Action
 					ampMEIndValbox.setBaseValDate(null);
 					ampMEIndValbox.setTargetValDate(null);
 					ampMEIndValbox.setRevisedTargetValDate(null);
-					ampMEIndValbox.setRisk(MEIndicatorsUtil.getLowRiskRating());
+					ampMEIndValbox.setRisk(null);
 					ampMEIndValbox.setComments(null);
 					
 					DbUtil.add(ampMEIndValbox);
@@ -77,7 +77,7 @@ public class AddIndicatorsTL extends Action
 					ampMEIndValsearch.setBaseValDate(null);
 					ampMEIndValsearch.setTargetValDate(null);
 					ampMEIndValsearch.setRevisedTargetValDate(null);
-					ampMEIndValsearch.setRisk(MEIndicatorsUtil.getLowRiskRating());
+					ampMEIndValsearch.setRisk(null);
 					ampMEIndValsearch.setComments(null);
 					
 					DbUtil.add(ampMEIndValsearch);

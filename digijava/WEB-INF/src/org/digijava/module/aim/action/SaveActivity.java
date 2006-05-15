@@ -1239,25 +1239,6 @@ public class SaveActivity extends Action {
 									.isSerializeFlag(), field, relatedLinks, tm
 									.getMemberId(), eaForm.getIndicatorsME());
 
-					/*
-					AmpMEIndicatorValue meIndVal = new AmpMEIndicatorValue();
-					AmpMECurrValHistory meCurrVal = new AmpMECurrValHistory();
-
-					meCurrVal.setCurrValue(eaForm.getCurrentVal());
-					meCurrVal.setCurrValueDate(DateConversion.getDate(eaForm
-							.getCurrentValDate()));
-					meIndVal.setAmpMeIndValId(eaForm.getIndicatorValId());
-					meCurrVal.setMeIndValue(meIndVal);
-					DbUtil.add(meCurrVal);
-					*/
-					/*
-					ActivityIndicator actInd = new ActivityIndicator();
-					actInd.setIndicatorValId(eaForm.getIndicatorValId());
-					actInd.setRisk(eaForm.getIndicatorRisk());
-					actInd.setComments(eaForm.getComments());
-
-					MEIndicatorsUtil.saveMEIndicatorValues(actInd, 1);
-					*/
 
 					// remove the activity details from the edit activity list
 					if (toDelete == null

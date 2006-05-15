@@ -13,26 +13,29 @@ import org.digijava.module.aim.form.IndicatorForm;
 import org.digijava.module.aim.dbentity.AmpMEIndicators;
 import org.digijava.module.aim.util.MEIndicatorsUtil;
 
-public class AddNewIndicatorTL extends Action 
-{
+public class AddNewIndicatorTL extends Action {
 	private static Logger logger = Logger.getLogger(AddNewIndicatorTL.class);
-	
-	public ActionForward execute(ActionMapping mapping,ActionForm form,
-			HttpServletRequest request,HttpServletResponse response) throws Exception 
-	{
+
+	public ActionForward execute(ActionMapping mapping, ActionForm form,
+			HttpServletRequest request, HttpServletResponse response)
+			throws Exception {
 		IndicatorForm indForm = (IndicatorForm) form;
 		AmpMEIndicators ampMEIndnew = null;
-		if(indForm.getIndicatorName().trim() != null && indForm.getIndicatorCode().trim() != null) {
+		if (indForm.getIndicatorName().trim() != null
+				&& indForm.getIndicatorCode().trim() != null) {
 			ampMEIndnew = new AmpMEIndicators();
 			ampMEIndnew.setName(indForm.getIndicatorName());
 			ampMEIndnew.setCode(indForm.getIndicatorCode());
-			if (indForm.getIndicatorDesc() != null
-					&& indForm.getIndicatorDesc().length() > 0)
+			if (ampMEIndnew.getDescription() != null &&
+					ampMEIndnew.getDescription().length() > 0)
 				ampMEIndnew.setDescription(indForm.getIndicatorDesc());
-			else 
+			else
 				ampMEIndnew.setDescription(" ");
+			
 			ampMEIndnew.setDefaultInd(false);
-			MEIndicatorsUtil.saveMEIndicator(ampMEIndnew,indForm.getActivityId(),false);
+
+			MEIndicatorsUtil.saveMEIndicator(ampMEIndnew, indForm
+					.getActivityId(), false);
 		}
 		return mapping.findForward("forward");
 	}

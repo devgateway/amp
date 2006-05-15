@@ -56,7 +56,6 @@
 
 	function closeWindow() 
 	{
-		window.opener.document.aimIndicatorForm.currUrl.value="";
 		window.close();
 	}
 	-->
@@ -65,9 +64,9 @@
 <digi:form action="/addIndicator.do" method="post">
 <input type="hidden" name="create" value="false">
 <html:hidden name="aimIndicatorForm" property="errorFlag"/>
-<html:errors />
+<html:hidden name="aimIndicatorForm" property="indId"/>
 
-<table bgColor=#ffffff cellPadding=0 cellSpacing=0 width="99%" align="center" border="0">
+<table bgColor=#ffffff cellPadding=0 cellSpacing=0 width="100%" align="center" border="0">
 	<tr bgColor="blue"><td height="1" colspan="2"></td></tr>
 	<tr bgColor=#dddddb>
 		<td bgColor=#dddddb height="15" align="center" colspan="2"><h4>
@@ -83,10 +82,16 @@
 			</digi:trn></h5>
 		</td>
 	</tr>
-	<tr bgColor=#ffffff><td height="15" colspan="2"></td></tr>
+	<tr bgColor=#ffffff><td height="15" colspan="2" align="center">
+		<html:errors />
+	</td></tr>
+
 	<tr bgColor=#ffffff>
-		<td height="10" align="left">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-			Indicator Name  :
+		<td height="10" align="left">
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+			<digi:trn key="aim:meIndicatorName">
+			Indicator Name</digi:trn>
+			<font color="red">*</font>
 		</td>
 		<td height="10" align="left">
 			<html:text property="indicatorName" size="20"/>
@@ -94,26 +99,36 @@
 	</tr>
 	<tr bgcolor=#ffffff><td height="5"></td></tr>
 	<tr bgColor=#ffffff>
-		<td height="20" align="left">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-			Description :
+		<td height="20" align="left">
+					&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+			<digi:trn key="aim:meIndicatorDescription">
+			Description</digi:trn>
 		</td>
 		<td align="left">
 			<html:textarea property="indicatorDesc" cols="35" rows="2" styleClass="inp-text"/>
 		</td>
 	</tr>	
-	<tr bgcolor=#ffffff><td height="5"></td></tr>
 	<tr bgColor=#ffffff>
-		<td height="20" align="left">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-			Indicator Code :
+		<td height="20" align="left">
+					&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+			<digi:trn key="aim:meIndicatorCode">
+			Indicator Code</digi:trn>
+			<font color="red">*</font>
 		</td>
 		<td align="left">
 			<html:text property="indicatorCode" size="20" styleClass="inp-text"/>
 		</td>
 	</tr>
 	<tr bgcolor=#ffffff><td height="5"></td></tr>	
-	<tr><td colspan="2" align="center">
-		<input type="checkbox" name="defaultFlag">&nbsp;(Tick to consider this as a <b>default Indicator</b>)
+	<c:if test="${aimIndicatorForm.indId == null}">
+	<tr><td colspan="2" align="left">
+				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+		<html:checkbox property="defaultFlag" />&nbsp;
+		<digi:trn key="aim:meCheckToMakeIndicatorDefault">
+			Check this to make the indicator Global
+		</digi:trn>
 	</td></tr>
+	</c:if>
 	<tr bgColor=#ffffff><td height="30" colspan="2"></td></tr>
 	<tr bgColor=#dddddb>
 		<td bgColor=#dddddb height="25" align="center" colspan="2">

@@ -410,6 +410,7 @@
 															<td><b>Risk</b></td>
 															<td>
 																<html:select property="indicatorRisk" styleClass="inp-text">
+																	<option value="-1">Select Risk</option>
 																	<html:optionsCollection name="aimEditActivityForm" property="riskCollection" 
 																	value="ampIndRiskRatingsId" label="ratingName" />
 																</html:select>

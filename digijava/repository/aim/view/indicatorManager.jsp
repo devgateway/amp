@@ -8,11 +8,19 @@
 
 <script language="JavaScript">
 	<!--
+
+		function editIndicator(id) {
+			openNewWindow(500, 300);
+			<digi:context name="addIndicator" property="context/module/moduleinstance/addIndicator.do?event=edit" />
+			document.aimIndicatorForm.action = "<%= addIndicator %>&indId=" + id;
+			document.aimIndicatorForm.target = popupPointer.name;
+			document.aimIndicatorForm.submit();				  
+		}
+	
 		function addingIndicators()
 		{
 			openNewWindow(500, 300);
-			<digi:context name="addIndicator" property="context/module/moduleinstance/addIndicator.do?create=true" />
-			document.aimIndicatorForm.currUrl.value = "<%= addIndicator %>";
+			<digi:context name="addIndicator" property="context/module/moduleinstance/addIndicator.do?event=add" />
 			document.aimIndicatorForm.action = "<%= addIndicator %>";
 			document.aimIndicatorForm.target = popupPointer.name;
 			document.aimIndicatorForm.submit();
@@ -25,13 +33,13 @@
 	-->
 </script>
 
+
 <digi:errors/>
 <digi:instance property="aimIndicatorForm" />
 <digi:form action="/indicatorManager.do" method="post">
 
 <digi:context name="digiContext" property="context" />
-<input type="hidden" name="currUrl">
-<input type="hidden" name="create">
+<input type="hidden" name="event">
 
 <!--  AMP Admin Logo -->
 <jsp:include page="teamPagesHeader.jsp" flush="true" />
@@ -41,9 +49,9 @@
 	<tr>
 		<td class=r-dotted-lg width=14>&nbsp;</td>
 		<td align=left class=r-dotted-lg vAlign=top width=750>
-			<table cellPadding=5 cellSpacing=0 width="100%">
+			<table cellPadding=5 cellSpacing=0 width="100%" border=0>
 				<tr>
-					<%-- Start Navigation --%>
+					<!-- Start Navigation -->
 					<td height=33><span class=crumb>
 						<bean:define id="translation">
 							<digi:trn key="aim:clickToViewAdmin">Click here to goto Admin Home</digi:trn>
@@ -57,54 +65,63 @@
 							Indicator Manager
 						</digi:trn>
 					</td>
-					<%-- End navigation --%>
+					<!-- End navigation -->
 				</tr>
 				<tr>
-					<td height=16 vAlign=center width=571><span class=subtitle-blue>
-						<digi:trn key="aim:indicatorManager">
-							Indicator Manager
-						</digi:trn></span>
+					<td height=16 vAlign=center width=571>
+						<span class=subtitle-blue>
+						<digi:trn key="aim:meIndicatorManager">
+							M & E Indicator Manager
+						</digi:trn>
+						</span>
 					</td>
 				</tr>
 				<tr>
+					<td height=16 vAlign=center width=571>
+						<html:errors />
+					</td>
+				</tr>				
+				<tr>
 					<td noWrap width=100% vAlign="top">
-					<table width="100%" cellspacing=1 cellSpacing=1>
+					<table width="100%" cellspacing=1 cellSpacing=1 border=0>
 					<tr><td noWrap width=600 vAlign="top">
-						<table bgColor=#ffffff cellPadding=0 cellSpacing=0 class=box-border-nopadding width="100%">
-							<tr bgColor=#f4f4f2>
+						<table bgColor=#d7eafd cellPadding=1 cellSpacing=1 width="100%" valign="top">
+							<tr bgColor=#ffffff>
 								<td vAlign="top" width="100%">
-									&nbsp;
-								</td>
-							</tr>
-							<tr bgColor=#f4f4f2>
-								<td valign="top">
-									<table align=center bgColor=#f4f4f2 cellPadding=0 cellSpacing=0 width="90%" border=0>	
-										<tr>
-											<td bgColor=#ffffff class=box-border>
-												<table border=0 cellPadding=1 cellSpacing=1 class=box-border width="100%">
-													<tr bgColor=#dddddb>
-														<%-- header --%>
-														<td bgColor=#dddddb height="20" align="center" colspan="5"><B>
-															<digi:trn key="aim:indicatorList">
-															Indicator List
-															</digi:trn></B>
-														</td>
-														<%-- end header --%>
-													</tr>
-													
+									
+									<table width="100%" cellspacing=1 cellpadding=1 valign=top align=left>	
+										<tr><td bgColor=#d7eafd class=box-title height="20" align="center">
+											<!-- Table title -->
+											<digi:trn key="aim:indicatorList">
+												Indicator List
+											</digi:trn>
+											<!-- end table title -->										
+										</td></tr>
+										<tr><td>
+											<table width="100%" cellspacing=1 cellpadding=4 valign=top align=left bgcolor="#ffffff">
+
 													<logic:notEmpty name="aimIndicatorForm" property="indicators">
 														<tr><td>
-															<table width="100%" bgColor=#f4f4f2 cellspacing=2 cellpadding=1>
-																<tr><td colspan="2"><b>
-																	Monitoring and Evaluation : AMP Indicators</b>
-																</td></tr>
+															<table width="100%" cellspacing=1 cellpadding=3 bgcolor="#d7eafd">
+															
 																<logic:iterate name="aimIndicatorForm" property="indicators" id="indicators"
 																type="org.digijava.module.aim.helper.AmpMEIndicatorList">	
 
-																	<tr>
-																	<td width="100%">
-																		<bean:write name="indicators" property="name"/>&nbsp;&nbsp;
-																					(<bean:write name="indicators" property="code"/>)
+																	<tr bgcolor="#ffffff">
+																	<td width="9">
+																		<c:if test="${indicators.defaultInd == true}">
+																			<img src= "../ampTemplate/images/bullet_red.gif" border=0>
+																		</c:if>
+																		<c:if test="${indicators.defaultInd == false}">
+																			<img src= "../ampTemplate/images/bullet_grey.gif" border=0>
+																		</c:if>
+																	</td>																	
+																	<td>
+																		<a href="javascript:editIndicator('<bean:write name="indicators" property="ampMEIndId" />')">
+																			<bean:write name="indicators" property="name"/>
+																		</a>
+																			&nbsp;&nbsp;
+																		(<bean:write name="indicators" property="code"/>)
 																	</td>
 																	<td align="left" width="12">
 																		<jsp:useBean id="urlParams" type="java.util.Map" class="java.util.HashMap"/>
@@ -124,33 +141,50 @@
 																</logic:iterate>
 															</table>
 														</td></tr>
+														
 													</logic:notEmpty>
 													<logic:empty name="aimIndicatorForm" property="indicators">
-														<tr align="center"><td><b>
+														<tr align="center" bgcolor="#ffffff"><td><b>
 															No indicators present</b></td>
 														</tr>
 													</logic:empty>
 													
-													<tr bgColor=#dddddb>
-														<%-- Add Indicator Button --%>
-														<td bgColor=#dddddb height="20" align="center" colspan="5"><B>
-															<input class="buton" type="button" name="addIndicator" value="Add a New Indicator" onclick="addingIndicators()">
+													<tr bgcolor="#ffffff">
+														<td height="20" align="center"><B>
+															<input class="buton" type="button" name="addIndicator" 
+															value="Add a New Indicator" onclick="addingIndicators()">
 														</td>
 													</tr>
-													<%-- Page Logic --%>
-												</table>
-											</td>
-										</tr>
+											</table>
+										</td></tr>
 									</table>
+									
 								</td>
 							</tr>
+							
 						</table>
-					</td></tr>
-					</table>
 					</td>
 				</tr>
 			</table>
 		</td>
 	</tr>
+	<tr><td>
+		<table width="100%" cellspacing=1 cellpadding=3 bgcolor="ffffff" border=0>
+			<tr bgcolor="#ffffff">
+				<td width="9">
+					<img src= "../ampTemplate/images/bullet_red.gif" border=0>
+				</td>
+				<td width="100">
+					<digi:trn key="aim:globalIndicator">Global Indicator</digi:trn>
+				</td>
+				<td width="9">
+					<img src= "../ampTemplate/images/bullet_grey.gif" border=0>
+				</td>
+				<td>
+					<digi:trn key="aim:activitySpecificIndicator">Activity Specific Indicator</digi:trn>
+				</td>
+			</tr>																
+		</table>
+	</td></tr>	
 </table>
 </digi:form>

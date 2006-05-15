@@ -251,40 +251,46 @@ public class MEIndicatorsUtil
 		return meind;
 	}
 	
-	public static boolean checkDuplicateNameCode(String name,String code)
-	{
+	public static boolean checkDuplicateNameCode(String name,String code,Long id) {
 		Session session = null;
 		Query qry = null;
 		boolean duplicatesExist = false;
+		String queryString = null;
 		
 		try
 		{
 			session = PersistenceManager.getSession();
-			String queryString = "select count(*) from "
-								+ AmpMEIndicators.class.getName() + " meind " 
-								+ "where name like '" + name + "'"
-								+ "or code like '" + code + "'" ;
-			qry = session.createQuery(queryString);
+			if (id != null && id.longValue() > 0) {
+				queryString = "select count(*) from "
+					+ AmpMEIndicators.class.getName() + " meind " 
+					+ "where name like '" + name + "'"
+					+ " or code like '" + code + "' and " +
+							"(meind.ampMEIndId !=:id)" ;
+				qry = session.createQuery(queryString);
+				qry.setParameter("id",id,Hibernate.LONG);
+			} else {
+				queryString = "select count(*) from " 
+					+ AmpMEIndicators.class.getName() + " meind " 
+					+ "where name like '" + name + "'"
+					+ " or code like '" + code + "'" ;
+				qry = session.createQuery(queryString);								
+			}
 			Iterator itr = qry.list().iterator();
 			if (itr.hasNext()) {
 				Integer cnt = (Integer) itr.next();
 				if (cnt.intValue() > 0)
 					duplicatesExist = true;
 			}
-			
 		}
-		catch (Exception ex) 
-		{
-			logger.debug("UNABLE to find Indicators with duplicate name.", ex);
+		catch (Exception ex) {
+			logger.error("UNABLE to find Indicators with duplicate name.", ex);
+			ex.printStackTrace(System.out);
 		} 
-		finally 
-		{
-			try 
-			{
+		finally {
+			try {
 				PersistenceManager.releaseSession(session);
 			} 
-			catch (Exception ex2) 
-			{
+			catch (Exception ex2) {
 				logger.debug("releaseSession() FAILED", ex2);
 			}
 		}
@@ -842,44 +848,29 @@ public class MEIndicatorsUtil
 		return col;				
 	}	
 	
-	public static AmpIndicatorRiskRatings getLowRiskRating() {
+	public static void updateMEIndicator(AmpMEIndicators newIndicator) {
 		Session session = null;
-		AmpIndicatorRiskRatings risk = null;
-		String qryStr = null;
-		Query qry = null;
+		Transaction tx = null;
 		
 		try {
 			session = PersistenceManager.getSession();
-			qryStr = "select max(r.ratingValue) from " + AmpIndicatorRiskRatings.class.getName() + " r";
-			qry = session.createQuery(qryStr);
-			Iterator itr = qry.list().iterator();
-			int maxRating = 0;
-			if (itr.hasNext()) {
-				maxRating = ((Integer) itr.next()).intValue();
-			}
-			qryStr = "select r from " + AmpIndicatorRiskRatings.class.getName() + "" +
-					" r where (r.ratingValue=:rValue)";
-			qry = session.createQuery(qryStr);
-			qry.setParameter("rValue",new Integer(maxRating),Hibernate.INTEGER);
-			itr = qry.list().iterator();
-			if (itr.hasNext()) {
-				risk = (AmpIndicatorRiskRatings) itr.next();
-			}
+			tx = session.beginTransaction();
+			session.saveOrUpdate(newIndicator);
+			tx.commit();
 		} catch (Exception e) {
-			logger.error("Exception from getLowRiskRating() :" + e.getMessage());
+			logger.error(e.getMessage());
 			e.printStackTrace(System.out);
 		} finally {
 			if (session != null) {
 				try {
 					PersistenceManager.releaseSession(session);
 				} catch (Exception rsf) {
-					logger.error("Failed to release session :" + rsf.getMessage());
+					logger.error("Release session failed.");
 				}
 			}
-		}		
-		return risk;
-	}
-
+		}
+ 	}
+	
 	public static void saveMEIndicator(AmpMEIndicators newIndicator,Long actId,boolean defaultIndicator) {
 		Session session = null;
 		Transaction tx = null;
@@ -904,12 +895,16 @@ public class MEIndicatorsUtil
 					ampMEIndValnew.setBaseValDate(null);
 					ampMEIndValnew.setTargetValDate(null);
 					ampMEIndValnew.setRevisedTargetValDate(null);
-					ampMEIndValnew.setRisk(getLowRiskRating());
+					//ampMEIndValnew.setRisk(getLowRiskRating());
+					ampMEIndValnew.setRisk(null);
 					ampMEIndValnew.setComments(null);
 					session.save(ampMEIndValnew);
 				}
 			} else {
-				AmpActivity act = (AmpActivity) session.load(AmpActivity.class,actId);
+				AmpActivity act = null;
+				if (actId != null && actId.longValue() > 0) {
+					act = (AmpActivity) session.load(AmpActivity.class,actId);	
+				}
 				AmpMEIndicatorValue ampMEIndValnew = new AmpMEIndicatorValue();
 				ampMEIndValnew.setActivityId(act);
 				ampMEIndValnew.setMeIndicatorId(newIndicator);
@@ -919,7 +914,8 @@ public class MEIndicatorsUtil
 				ampMEIndValnew.setBaseValDate(null);
 				ampMEIndValnew.setTargetValDate(null);
 				ampMEIndValnew.setRevisedTargetValDate(null);
-				ampMEIndValnew.setRisk(getLowRiskRating());
+				//ampMEIndValnew.setRisk(getLowRiskRating());
+				ampMEIndValnew.setRisk(null);
 				ampMEIndValnew.setComments(null);
 				session.save(ampMEIndValnew);
 			}

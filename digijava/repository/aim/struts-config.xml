@@ -2015,7 +2015,7 @@
 	<action 
 			  name="aimIndicatorForm"
 			  type="org.digijava.module.aim.action.IndicatorManager"
-			  scope="request"
+			  scope="session"
 			  validate="false"
 			  path="/aim/indicatorManager">
 			  <forward name="forward" path="/showLayout.do?layout=indicatorManager" />
@@ -2025,12 +2025,12 @@
 	<action 
 			  name="aimIndicatorForm"
 			  type="org.digijava.module.aim.action.AddIndicator" 
-			  scope="request"
+			  scope="session"
 			  validate="false"
 			  input="/showLayout.do?layout=aim_addIndicator"
 			  path="/aim/addIndicator">
 			  <forward name="forward" path="/showLayout.do?layout=aim_addIndicator" />
-   </action>
+	</action>
 
 	<action 
 			  name="aimIndicatorForm"

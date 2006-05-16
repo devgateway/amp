@@ -263,8 +263,8 @@ public class MEIndicatorsUtil
 			if (id != null && id.longValue() > 0) {
 				queryString = "select count(*) from "
 					+ AmpMEIndicators.class.getName() + " meind " 
-					+ "where name like '" + name + "'"
-					+ " or code like '" + code + "' and " +
+					+ "where (name like '" + name + "'"
+					+ " or code like '" + code + "') and " +
 							"(meind.ampMEIndId !=:id)" ;
 				qry = session.createQuery(queryString);
 				qry.setParameter("id",id,Hibernate.LONG);
@@ -428,20 +428,43 @@ public class MEIndicatorsUtil
 				}
 				actInd.setIndicatorId(meIndValue.getMeIndicatorId().getAmpMEIndId());
 				actInd.setIndicatorValId(meIndValue.getAmpMeIndValId());
-				actInd.setRevTargetVal(meIndValue.getRevisedTargetVal());
-				if (meIndValue.getRevisedTargetValDate() != null) {
-					actInd.setRevTargetValDate(DateConversion.
-							ConvertDateToString(meIndValue.getRevisedTargetValDate()));
+				actInd.setActualVal(meIndValue.getActualVal());
+				if (meIndValue.getActualValDate() != null) {
+					actInd.setActualValDate(DateConversion.
+							ConvertDateToString(meIndValue.getActualValDate()));
 				}
 				actInd.setTargetVal(meIndValue.getTargetVal());
 				if (meIndValue.getTargetValDate() != null) {
 					actInd.setTargetValDate(DateConversion.
 							ConvertDateToString(meIndValue.getTargetValDate()));					
 				}
-				actInd.setRisk(meIndValue.getRisk().getAmpIndRiskRatingsId());
-				actInd.setComments(meIndValue.getComments());
+				if (meIndValue.getRisk() != null)
+					actInd.setRisk(meIndValue.getRisk().getAmpIndRiskRatingsId());
 				
+				actInd.setComments(meIndValue.getComments());
 				col.add(actInd);
+			}
+			
+			// load all global indicators which doesnt have an 
+			// entry in 'amp_me_indicator_value' table
+			
+			qryStr = "select meInd from " + AmpMEIndicators.class.getName() + " meInd " +
+					"where meInd.defaultInd = true";
+			qry = session.createQuery(qryStr);
+			itr = qry.list().iterator();
+			long t = System.currentTimeMillis();
+			while (itr.hasNext()) {
+				AmpMEIndicators meInd = (AmpMEIndicators) itr.next();
+				ActivityIndicator actInd = new ActivityIndicator();
+				actInd.setIndicatorId(meInd.getAmpMEIndId());
+				if (!col.contains(actInd)) {
+					actInd.setIndicatorName(meInd.getName());
+					actInd.setIndicatorCode(meInd.getCode());
+					actInd.setIndicatorValId(new Long(t*-1));
+					actInd.setActivityId(actId);
+					++t;
+					col.add(actInd);
+				}
 			}
 			
 		} catch (Exception e) {
@@ -465,16 +488,30 @@ public class MEIndicatorsUtil
 		Transaction tx = null;
 		try {
 			session = PersistenceManager.getSession();
-			AmpMEIndicatorValue meIndVal = (AmpMEIndicatorValue) session.load(
-					AmpMEIndicatorValue.class,actInd.getIndicatorValId());
+			AmpMEIndicatorValue meIndVal = null;
+			
+			if (actInd.getIndicatorValId() != null && 
+					actInd.getIndicatorValId().longValue() > 0) {
+				meIndVal = (AmpMEIndicatorValue) session.load(
+						AmpMEIndicatorValue.class,actInd.getIndicatorValId());				
+			} else {
+				meIndVal = new AmpMEIndicatorValue();
+				AmpActivity act = (AmpActivity) session.load(AmpActivity.class,
+						actInd.getActivityId());
+				meIndVal.setActivityId(act);
+				AmpMEIndicators meInd = (AmpMEIndicators) session.load(
+						AmpMEIndicators.class,actInd.getIndicatorId());
+				meIndVal.setMeIndicatorId(meInd);
+			}
+			
 			if(chk == 0)
 			{
 				meIndVal.setBaseVal(actInd.getBaseVal());
 				meIndVal.setTargetVal(actInd.getTargetVal());
-				meIndVal.setRevisedTargetVal(actInd.getRevTargetVal());
+				meIndVal.setActualVal(actInd.getActualVal());
 				meIndVal.setBaseValDate(DateConversion.getDate(actInd.getBaseValDate()));
 				meIndVal.setTargetValDate(DateConversion.getDate(actInd.getTargetValDate()));
-				meIndVal.setRevisedTargetValDate(DateConversion.getDate(actInd.getRevTargetValDate()));
+				meIndVal.setActualValDate(DateConversion.getDate(actInd.getActualValDate()));
 			}
 			else
 			{
@@ -484,7 +521,7 @@ public class MEIndicatorsUtil
 				meIndVal.setComments(actInd.getComments());
 			}
 			tx = session.beginTransaction();
-			session.update(meIndVal);
+			session.saveOrUpdate(meIndVal);
 			tx.commit();
 		} catch (Exception e) {
 			logger.error("Exception from saveMEIndicatorValues() :" + e.getMessage());
@@ -607,8 +644,8 @@ public class MEIndicatorsUtil
 				ResultSet rs = stmt.executeQuery(qryStr);
 				while (rs.next()) {
 					double baseVal = rs.getDouble(1);
-					double tarVal = rs.getDouble(2);
-					double actVal = rs.getDouble(3);
+					double actVal = rs.getDouble(2);
+					double tarVal = rs.getDouble(3);
 					String key = rs.getString(4);
 					
 					double totIndVal = baseVal + tarVal + actVal;
@@ -622,15 +659,6 @@ public class MEIndicatorsUtil
 						baseIndVal.setValue(0);
 					}
 					
-					MEIndicatorValue targetIndVal = new MEIndicatorValue();
-					targetIndVal.setIndicatorName(key);
-					targetIndVal.setType(Constants.ME_IND_VAL_TARGET_ID);
-					if (totIndVal > 0) { 
-						targetIndVal.setValue(tarVal * (100 / totIndVal));
-					} else { 
-						targetIndVal.setValue(0);
-					}
-					
 					MEIndicatorValue actIndVal = new MEIndicatorValue();
 					actIndVal.setIndicatorName(key);
 					actIndVal.setType(Constants.ME_IND_VAL_ACTUAL_ID);
@@ -640,9 +668,19 @@ public class MEIndicatorsUtil
 						actIndVal.setValue(0);
 					}
 					
+					MEIndicatorValue targetIndVal = new MEIndicatorValue();
+					targetIndVal.setIndicatorName(key);
+					targetIndVal.setType(Constants.ME_IND_VAL_TARGET_ID);
+					if (totIndVal > 0) { 
+						targetIndVal.setValue(tarVal * (100 / totIndVal));
+					} else { 
+						targetIndVal.setValue(0);
+					}
+					
+					
 					col.add(baseIndVal);
-					col.add(targetIndVal);
 					col.add(actIndVal);
+					col.add(targetIndVal);
 				}
 			}
 		} catch (Exception e) {
@@ -676,7 +714,7 @@ public class MEIndicatorsUtil
 				AmpMEIndicatorValue meIndValue = (AmpMEIndicatorValue) itr.next();
 				AmpMEIndicators meInd = meIndValue.getMeIndicatorId();
 				
-				double totIndVal = meIndValue.getBaseVal() + meIndValue.getTargetVal() + meIndValue.getRevisedTargetVal();
+				double totIndVal = meIndValue.getBaseVal() + meIndValue.getTargetVal() + meIndValue.getActualVal();
 				
 				MEIndicatorValue baseIndVal = new MEIndicatorValue();
 				baseIndVal.setIndicatorName(meInd.getName());
@@ -685,6 +723,15 @@ public class MEIndicatorsUtil
 					baseIndVal.setValue(meIndValue.getBaseVal() * (100 / totIndVal));
 				} else { 
 					baseIndVal.setValue(0);
+				}
+				
+				MEIndicatorValue actIndVal = new MEIndicatorValue();
+				actIndVal.setIndicatorName(meInd.getName());
+				actIndVal.setType(Constants.ME_IND_VAL_ACTUAL_ID);
+				if (totIndVal > 0) {
+					actIndVal.setValue(meIndValue.getActualVal() * (100 / totIndVal));	
+				} else {
+					actIndVal.setValue(0);
 				}
 				
 				MEIndicatorValue targetIndVal = new MEIndicatorValue();
@@ -696,18 +743,10 @@ public class MEIndicatorsUtil
 					targetIndVal.setValue(0);
 				}
 				
-				MEIndicatorValue actIndVal = new MEIndicatorValue();
-				actIndVal.setIndicatorName(meInd.getName());
-				actIndVal.setType(Constants.ME_IND_VAL_ACTUAL_ID);
-				if (totIndVal > 0) {
-					actIndVal.setValue(meIndValue.getRevisedTargetVal() * (100 / totIndVal));	
-				} else {
-					actIndVal.setValue(0);
-				}
-				
 				col.add(baseIndVal);
-				col.add(targetIndVal);
 				col.add(actIndVal);
+				col.add(targetIndVal);
+				
 			}
 			
 		} catch (Exception e) {
@@ -880,41 +919,19 @@ public class MEIndicatorsUtil
 
 			tx = session.beginTransaction();
 			session.save(newIndicator);
-			if (defaultIndicator) {
-				String qryStr = "select act from " + AmpActivity.class.getName() + " act";
-				Query qry = session.createQuery(qryStr);
-				Iterator itr = qry.list().iterator();
-				while (itr.hasNext()) {
-					AmpActivity act = (AmpActivity) itr.next();
-					AmpMEIndicatorValue ampMEIndValnew = new AmpMEIndicatorValue();
-					ampMEIndValnew.setActivityId(act);
-					ampMEIndValnew.setMeIndicatorId(newIndicator);
-					ampMEIndValnew.setBaseVal(0);
-					ampMEIndValnew.setTargetVal(0);
-					ampMEIndValnew.setRevisedTargetVal(0);
-					ampMEIndValnew.setBaseValDate(null);
-					ampMEIndValnew.setTargetValDate(null);
-					ampMEIndValnew.setRevisedTargetValDate(null);
-					//ampMEIndValnew.setRisk(getLowRiskRating());
-					ampMEIndValnew.setRisk(null);
-					ampMEIndValnew.setComments(null);
-					session.save(ampMEIndValnew);
-				}
-			} else {
-				AmpActivity act = null;
-				if (actId != null && actId.longValue() > 0) {
-					act = (AmpActivity) session.load(AmpActivity.class,actId);	
-				}
+			
+			AmpActivity act = null;
+			if (actId != null && actId.longValue() > 0) {
+				act = (AmpActivity) session.load(AmpActivity.class,actId);	
 				AmpMEIndicatorValue ampMEIndValnew = new AmpMEIndicatorValue();
 				ampMEIndValnew.setActivityId(act);
 				ampMEIndValnew.setMeIndicatorId(newIndicator);
 				ampMEIndValnew.setBaseVal(0);
 				ampMEIndValnew.setTargetVal(0);
-				ampMEIndValnew.setRevisedTargetVal(0);
+				ampMEIndValnew.setActualVal(0);
 				ampMEIndValnew.setBaseValDate(null);
 				ampMEIndValnew.setTargetValDate(null);
-				ampMEIndValnew.setRevisedTargetValDate(null);
-				//ampMEIndValnew.setRisk(getLowRiskRating());
+				ampMEIndValnew.setActualValDate(null);
 				ampMEIndValnew.setRisk(null);
 				ampMEIndValnew.setComments(null);
 				session.save(ampMEIndValnew);

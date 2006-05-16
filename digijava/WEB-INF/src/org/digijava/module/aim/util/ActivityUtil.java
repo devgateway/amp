@@ -35,6 +35,7 @@ import org.digijava.module.aim.dbentity.AmpIssues;
 import org.digijava.module.aim.dbentity.AmpLocation;
 import org.digijava.module.aim.dbentity.AmpMECurrValHistory;
 import org.digijava.module.aim.dbentity.AmpMEIndicatorValue;
+import org.digijava.module.aim.dbentity.AmpMEIndicators;
 import org.digijava.module.aim.dbentity.AmpMeasure;
 import org.digijava.module.aim.dbentity.AmpOrgRole;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
@@ -365,29 +366,47 @@ public class ActivityUtil {
 				while (itr.hasNext()) {
 					ActivityIndicator actInd = (ActivityIndicator) itr.next();
 					
-					AmpMEIndicatorValue indVal = (AmpMEIndicatorValue) session.load(
-							AmpMEIndicatorValue.class,actInd.getIndicatorValId());
-					indVal.setBaseVal(actInd.getBaseVal());
-					indVal.setTargetVal(actInd.getTargetVal());
-					indVal.setRevisedTargetVal(actInd.getRevTargetVal());
-					indVal.setBaseValDate(DateConversion.getDate(actInd.getBaseValDate()));
-					indVal.setTargetValDate(DateConversion.getDate(actInd.getTargetValDate()));
-					indVal.setRevisedTargetValDate(DateConversion.getDate(actInd.getRevTargetValDate()));
-					indVal.setComments(actInd.getComments());
-					AmpIndicatorRiskRatings risk = null;
-					if (actInd.getRisk().longValue() > 0) {
-						risk = (AmpIndicatorRiskRatings) session.load(AmpIndicatorRiskRatings.class,actInd.getRisk());
+					AmpMEIndicatorValue indVal = null;
+					if (actInd.getIndicatorValId() != null &&
+							actInd.getIndicatorValId().longValue() > 0) {
+						indVal = (AmpMEIndicatorValue) session.load(
+								AmpMEIndicatorValue.class,actInd.getIndicatorValId());
+					} else {
+						indVal = new AmpMEIndicatorValue();
+						indVal.setActivityId(activity);
+						AmpMEIndicators meInd = (AmpMEIndicators) session.load(AmpMEIndicators.class,
+								actInd.getIndicatorId());
+						indVal.setMeIndicatorId(meInd);
 					}
-					indVal.setRisk(risk);
-					session.update(indVal);
-					if (actInd.getCurrentValDate() != null && 
-							actInd.getCurrentValDate().trim().length() > 0) {
-						AmpMECurrValHistory currValHist = new AmpMECurrValHistory();
-						currValHist.setCurrValue(actInd.getCurrentVal());
-						currValHist.setCurrValueDate(DateConversion.getDate(actInd.getCurrentValDate()));
-						currValHist.setMeIndValue(indVal);
-						session.save(currValHist);						
-					}					
+					
+					if (actInd.getBaseValDate() != null &&
+							actInd.getTargetValDate() != null &&
+							actInd.getActualValDate() != null) {
+						indVal.setBaseVal(actInd.getBaseVal());
+						indVal.setTargetVal(actInd.getTargetVal());
+						indVal.setActualVal(actInd.getActualVal());
+						indVal.setBaseValDate(DateConversion.getDate(actInd.getBaseValDate()));
+						indVal.setTargetValDate(DateConversion.getDate(actInd.getTargetValDate()));
+						indVal.setActualValDate(DateConversion.getDate(actInd.getActualValDate()));
+						
+						indVal.setComments(actInd.getComments());
+						
+						AmpIndicatorRiskRatings risk = null;
+						if (actInd.getRisk() != null && 
+								actInd.getRisk().longValue() > 0) {
+							risk = (AmpIndicatorRiskRatings) session.load(AmpIndicatorRiskRatings.class,actInd.getRisk());
+						}
+						indVal.setRisk(risk);
+						session.saveOrUpdate(indVal);
+						if (actInd.getCurrentValDate() != null && 
+								actInd.getCurrentValDate().trim().length() > 0) {
+							AmpMECurrValHistory currValHist = new AmpMECurrValHistory();
+							currValHist.setCurrValue(actInd.getCurrentVal());
+							currValHist.setCurrValueDate(DateConversion.getDate(actInd.getCurrentValDate()));
+							currValHist.setMeIndValue(indVal);
+							session.save(currValHist);						
+						}						
+					}
 				}
 			}
 			

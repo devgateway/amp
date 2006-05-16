@@ -8,11 +8,12 @@ public class AmpMEIndicatorValue {
 	private AmpMEIndicators meIndicatorId;
 	private float baseVal;  // BASE
 	private Date baseValDate;
-	private float targetVal;  // TARGET
+	private float actualVal;  // ACTUAL
+	private Date actualValDate;
+	private float targetVal; // TARGET
 	private Date targetValDate;
-	private float revisedTargetVal; // ACTUAL
-	private Date revisedTargetValDate;
 	private String comments;
+	
 	private AmpIndicatorRiskRatings risk;
 	/**
 	 * @return Returns the activityId.
@@ -63,18 +64,6 @@ public class AmpMEIndicatorValue {
 		this.meIndicatorId = meIndicatorId;
 	}
 	/**
-	 * @return Returns the revisedTargetValDate.
-	 */
-	public Date getRevisedTargetValDate() {
-		return revisedTargetValDate;
-	}
-	/**
-	 * @param revisedTargetValDate The revisedTargetValDate to set.
-	 */
-	public void setRevisedTargetValDate(Date revisedTargetValDate) {
-		this.revisedTargetValDate = revisedTargetValDate;
-	}
-	/**
 	 * @return Returns the risk.
 	 */
 	public AmpIndicatorRiskRatings getRisk() {
@@ -111,18 +100,6 @@ public class AmpMEIndicatorValue {
 		this.baseVal = baseVal;
 	}
 	/**
-	 * @return Returns the revisedTargetVal.
-	 */
-	public float getRevisedTargetVal() {
-		return revisedTargetVal;
-	}
-	/**
-	 * @param revisedTargetVal The revisedTargetVal to set.
-	 */
-	public void setRevisedTargetVal(float revisedTargetVal) {
-		this.revisedTargetVal = revisedTargetVal;
-	}
-	/**
 	 * @return Returns the targetVal.
 	 */
 	public float getTargetVal() {
@@ -139,5 +116,29 @@ public class AmpMEIndicatorValue {
 	}
 	public void setComments(String comments) {
 		this.comments = comments;
+	}
+	/**
+	 * @return Returns the actualVal.
+	 */
+	public float getActualVal() {
+		return actualVal;
+	}
+	/**
+	 * @param actualVal The actualVal to set.
+	 */
+	public void setActualVal(float actualVal) {
+		this.actualVal = actualVal;
+	}
+	/**
+	 * @return Returns the actualValDate.
+	 */
+	public Date getActualValDate() {
+		return actualValDate;
+	}
+	/**
+	 * @param actualValDate The actualValDate to set.
+	 */
+	public void setActualValDate(Date actualValDate) {
+		this.actualValDate = actualValDate;
 	}
 }

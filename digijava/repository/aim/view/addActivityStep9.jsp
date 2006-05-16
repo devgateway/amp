@@ -78,6 +78,7 @@
 <html:hidden property="indicatorId" />
 <html:hidden property="indicatorValId" />
 <html:hidden property="activityId" />
+<input type="hidden" name="edit" value="true">
 
 <table width="100%" cellPadding="0" cellSpacing="0" vAlign="top" align="left">
 <tr><td width="100%" vAlign="top" align="left">
@@ -244,7 +245,7 @@
 												<td bgcolor=#f4f4f2 align="left" colspan="2">&nbsp;&nbsp;
 													<jsp:useBean id="urlParams" type="java.util.Map" class="java.util.HashMap"/>
 													<c:if test="${aimEditActivityForm.expIndicatorId==indicator.indicatorId}">
-														<digi:link href="/nondetailedIndicator.do">
+														<digi:link href="/nondetailedIndicator.do~edit=true">
 															<img src= "../ampTemplate/images/arrow_down.gif" border=0>
 														</digi:link>
 													</c:if>
@@ -255,6 +256,7 @@
 														<c:set target="${urlParams}" property="activityId">
 															<bean:write name="aimEditActivityForm" property="activityId"/>
 														</c:set>
+														<c:set target="${urlParams}" property="edit" value="true" />
 														<digi:link href="/detailedIndicator.do" name="urlParams">
 															<img src= "../ampTemplate/images/arrow_right.gif" border=0>
 														</digi:link>
@@ -282,6 +284,19 @@
 																</td>
 															</tr>
 															<tr>
+																<td><b>Actual Value</b></td>
+																<td>
+																	<bean:write name="aimEditActivityForm" property="actualVal" />
+																</td>
+																<td>&nbsp;&nbsp;&nbsp;</td>
+																<td align="right">
+																	Date  :
+																</td>
+																<td align="left">&nbsp;&nbsp;
+																	<bean:write name="aimEditActivityForm" property="actualValDate" />
+																</td>
+															</tr>															
+															<tr>
 																<td><b>Target Value</b></td>
 																<td>
 																	<bean:write name="aimEditActivityForm" property="targetVal" />
@@ -292,19 +307,6 @@
 																</td>
 																<td align="left">&nbsp;&nbsp;
 																	<bean:write name="aimEditActivityForm" property="targetValDate" />
-																</td>
-															</tr>
-															<tr>
-																<td><b>Revised target Value</b></td>
-																<td>
-																	<bean:write name="aimEditActivityForm" property="revTargetVal" />
-																</td>
-																<td>&nbsp;&nbsp;&nbsp;</td>
-																<td align="right">
-																	Date  :
-																</td>
-																<td align="left">&nbsp;&nbsp;
-																	<bean:write name="aimEditActivityForm" property="revTargetValDate" />
 																</td>
 															</tr>
 														</c:if>
@@ -327,6 +329,23 @@
 																</td>
 															</tr>
 															<tr>
+																<td><b>Actual Value</b></td>
+																<td>
+																	<html:text name="aimEditActivityForm" property="actualVal" styleClass="inp-text"/>
+																</td>
+																<td>&nbsp;&nbsp;&nbsp;</td>
+																<td align="right">
+																	Date  :
+																</td>
+																<td align="left">
+																	<html:text name="aimEditActivityForm" property="actualValDate" size="10"
+																	styleId="actualValDate" styleClass="inp-text" readonly="true"/>&nbsp;&nbsp;
+																	<a href="javascript:calendar('actualValDate')">
+																		<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border=0>
+																	</a>
+																</td>
+															</tr>															
+															<tr>
 																<td><b>Target Value</b></td>
 																<td>
 																	<html:text name="aimEditActivityForm" property="targetVal" styleClass="inp-text"/>
@@ -339,23 +358,6 @@
 																	<html:text name="aimEditActivityForm" property="targetValDate" size="10"
 																	styleId="targetValDate" styleClass="inp-text" readonly="true"/>&nbsp;&nbsp;
 																	<a href="javascript:calendar('targetValDate')">
-																		<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border=0>
-																	</a>
-																</td>
-															</tr>
-															<tr>
-																<td><b>Revised target Value</b></td>
-																<td>
-																	<html:text name="aimEditActivityForm" property="revTargetVal" styleClass="inp-text"/>
-																</td>
-																<td>&nbsp;&nbsp;&nbsp;</td>
-																<td align="right">
-																	Date  :
-																</td>
-																<td align="left">
-																	<html:text name="aimEditActivityForm" property="revTargetValDate" size="10"
-																	styleId="revTargetValDate" styleClass="inp-text" readonly="true"/>&nbsp;&nbsp;
-																	<a href="javascript:calendar('revTargetValDate')">
 																		<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border=0>
 																	</a>
 																</td>

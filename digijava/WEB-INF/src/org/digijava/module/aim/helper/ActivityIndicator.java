@@ -10,10 +10,10 @@ public class ActivityIndicator {
 	private Long indicatorValId;
 	private float baseVal;
 	private float targetVal;
-	private float revTargetVal;
+	private float actualVal;
 	private String baseValDate;
 	private String targetValDate;
-	private String revTargetValDate;
+	private String actualValDate;
 	
 	private String indicatorName;
 	private String indicatorCode;
@@ -21,6 +21,8 @@ public class ActivityIndicator {
 	private String currentValDate;
 	private String comments;
 	private Long risk;
+	
+	private Long activityId;
 	
 	/**
 	 * @return Returns the baseVal.
@@ -71,18 +73,6 @@ public class ActivityIndicator {
 		this.indicatorValId = indicatorValId;
 	}
 	/**
-	 * @return Returns the revTargetVal.
-	 */
-	public float getRevTargetVal() {
-		return revTargetVal;
-	}
-	/**
-	 * @param revTargetVal The revTargetVal to set.
-	 */
-	public void setRevTargetVal(float revTargetVal) {
-		this.revTargetVal = revTargetVal;
-	}
-	/**
 	 * @return Returns the targetVal.
 	 */
 	public float getTargetVal() {
@@ -105,18 +95,6 @@ public class ActivityIndicator {
 	 */
 	public void setTargetValDate(String targetValDate) {
 		this.targetValDate = targetValDate;
-	}
-	/**
-	 * @return Returns the revTargetValDate.
-	 */
-	public String getRevTargetValDate() {
-		return revTargetValDate;
-	}
-	/**
-	 * @param revTargetValDate The revTargetValDate to set.
-	 */
-	public void setRevTargetValDate(String revTargetValDate) {
-		this.revTargetValDate = revTargetValDate;
 	}
 	/**
 	 * @return Returns the indicatorCode.
@@ -198,5 +176,41 @@ public class ActivityIndicator {
 			ActivityIndicator actInd = (ActivityIndicator) obj;
 			return indicatorId.longValue() == actInd.getIndicatorId().longValue();
 		} else throw new ClassCastException();
+	}
+	/**
+	 * @return Returns the activityId.
+	 */
+	public Long getActivityId() {
+		return activityId;
+	}
+	/**
+	 * @param activityId The activityId to set.
+	 */
+	public void setActivityId(Long activityId) {
+		this.activityId = activityId;
+	}
+	/**
+	 * @return Returns the actualVal.
+	 */
+	public float getActualVal() {
+		return actualVal;
+	}
+	/**
+	 * @param actualVal The actualVal to set.
+	 */
+	public void setActualVal(float actualVal) {
+		this.actualVal = actualVal;
+	}
+	/**
+	 * @return Returns the actualValDate.
+	 */
+	public String getActualValDate() {
+		return actualValDate;
+	}
+	/**
+	 * @param actualValDate The actualValDate to set.
+	 */
+	public void setActualValDate(String actualValDate) {
+		this.actualValDate = actualValDate;
 	}
 }

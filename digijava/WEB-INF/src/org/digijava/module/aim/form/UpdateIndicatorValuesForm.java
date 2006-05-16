@@ -15,10 +15,10 @@ public class UpdateIndicatorValuesForm extends ActionForm {
 	private Long activityId;
 	private float baseVal;
 	private float targetVal;
-	private float revTargetVal;
+	private float actualVal;
 	private String baseValDate;
 	private String targetValDate;
-	private String revTargetValDate;
+	private String actualValDate;
 	
 	private Collection indicators;
 	private Long expIndicatorId;
@@ -108,30 +108,6 @@ public class UpdateIndicatorValuesForm extends ActionForm {
 		this.indicatorValId = indicatorValId;
 	}
 	/**
-	 * @return Returns the revTargetVal.
-	 */
-	public float getRevTargetVal() {
-		return revTargetVal;
-	}
-	/**
-	 * @param revTargetVal The revTargetVal to set.
-	 */
-	public void setRevTargetVal(float revTargetVal) {
-		this.revTargetVal = revTargetVal;
-	}
-	/**
-	 * @return Returns the revTargetValDate.
-	 */
-	public String getRevTargetValDate() {
-		return revTargetValDate;
-	}
-	/**
-	 * @param revTargetValDate The revTargetValDate to set.
-	 */
-	public void setRevTargetValDate(String revTargetValDate) {
-		this.revTargetValDate = revTargetValDate;
-	}
-	/**
 	 * @return Returns the targetVal.
 	 */
 	public float getTargetVal() {
@@ -155,6 +131,29 @@ public class UpdateIndicatorValuesForm extends ActionForm {
 	public void setTargetValDate(String targetValDate) {
 		this.targetValDate = targetValDate;
 	}
-	
+	/**
+	 * @return Returns the actualVal.
+	 */
+	public float getActualVal() {
+		return actualVal;
+	}
+	/**
+	 * @param actualVal The actualVal to set.
+	 */
+	public void setActualVal(float actualVal) {
+		this.actualVal = actualVal;
+	}
+	/**
+	 * @return Returns the actualValDate.
+	 */
+	public String getActualValDate() {
+		return actualValDate;
+	}
+	/**
+	 * @param actualValDate The actualValDate to set.
+	 */
+	public void setActualValDate(String actualValDate) {
+		this.actualValDate = actualValDate;
+	}
 }
 

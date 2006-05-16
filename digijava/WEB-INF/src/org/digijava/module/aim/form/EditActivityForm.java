@@ -302,11 +302,12 @@ public class EditActivityForm extends ActionForm implements Serializable{
 	private String baseValDate;
 	private float targetVal;
 	private String targetValDate;
-	private float revTargetVal;
-	private String revTargetValDate;
+	private float actualVal;
+	private String actualValDate;
 	private float currentVal;
 	private String currentValDate;
 	private String comments;
+	
 	private Collection riskCollection;
 	private Long indicatorRisk;
 	private Collection indHistory;
@@ -3227,33 +3228,6 @@ public class EditActivityForm extends ActionForm implements Serializable{
 		this.targetValDate = targetValDate;
 	}
 
-	/**
-	 * @return Returns the revTargetVal.
-	 */
-	public float getRevTargetVal() {
-		return revTargetVal;
-	}
-
-	/**
-	 * @param revTargetVal The revTargetVal to set.
-	 */
-	public void setRevTargetVal(float revTargetVal) {
-		this.revTargetVal = revTargetVal;
-	}
-
-	/**
-	 * @return Returns the revTargetValDate.
-	 */
-	public String getRevTargetValDate() {
-		return revTargetValDate;
-	}
-
-	/**
-	 * @param revTargetValDate The revTargetValDate to set.
-	 */
-	public void setRevTargetValDate(String revTargetValDate) {
-		this.revTargetValDate = revTargetValDate;
-	}
 
 	/**
 	 * @return Returns the comments.
@@ -3461,6 +3435,34 @@ public class EditActivityForm extends ActionForm implements Serializable{
 	 */
 	public void setSurveyFlag(Boolean surveyFlag) {
 		this.surveyFlag = surveyFlag;
+	}
+
+	/**
+	 * @return Returns the actualVal.
+	 */
+	public float getActualVal() {
+		return actualVal;
+	}
+
+	/**
+	 * @param actualVal The actualVal to set.
+	 */
+	public void setActualVal(float actualVal) {
+		this.actualVal = actualVal;
+	}
+
+	/**
+	 * @return Returns the actualValDate.
+	 */
+	public String getActualValDate() {
+		return actualValDate;
+	}
+
+	/**
+	 * @param actualValDate The actualValDate to set.
+	 */
+	public void setActualValDate(String actualValDate) {
+		this.actualValDate = actualValDate;
 	}
 	
 }

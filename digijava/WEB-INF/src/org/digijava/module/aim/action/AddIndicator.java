@@ -81,6 +81,10 @@ public class AddIndicator extends Action {
 					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
 							"error.aim.meAddIndicator.duplicateNameOrCode"));
 					saveErrors(request, errors);
+					if (indForm.getIndId() != null && indForm.getIndId().longValue() < 1) {
+						indForm.setIndId(null);
+					}
+						
 					indForm.setErrorFlag(true);
 					return mapping.findForward("forward");
 				} else {

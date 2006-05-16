@@ -45,8 +45,8 @@ public class SaveIndicatorValues extends Action
 						temp.setBaseValDate(eaForm.getBaseValDate());
 						temp.setTargetVal(eaForm.getTargetVal());
 						temp.setTargetValDate(eaForm.getTargetValDate());
-						temp.setRevTargetVal(eaForm.getRevTargetVal());
-						temp.setRevTargetValDate(eaForm.getRevTargetValDate());
+						temp.setActualVal(eaForm.getActualVal());
+						temp.setActualValDate(eaForm.getActualValDate());
 						temp.setCurrentVal(eaForm.getCurrentVal());
 						temp.setCurrentValDate(eaForm.getCurrentValDate());
 						temp.setComments(eaForm.getComments());

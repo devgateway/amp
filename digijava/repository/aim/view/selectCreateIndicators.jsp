@@ -193,8 +193,11 @@
 																				Indicator Name
 																			</td>
 																			<td bgcolor="#f4f4f2" align="left">
-																				<html:select property="selectedIndicators" styleClass="inp-text" size="6" multiple="true">
+																				<html:select property="selectedIndicators" styleClass="inp-text" 
+																				size="6" multiple="true">
+																					<%--
 																					<html:option value="-1">&nbsp;[Select Indicators]&nbsp;</html:option>
+																					--%>
 																					<logic:notEmpty name="aimIndicatorForm" property="nondefaultindicators">
 																						<html:optionsCollection name="aimIndicatorForm" 
 																						property="nondefaultindicators" value="ampMEIndId" label="name"/>

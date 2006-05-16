@@ -46,8 +46,8 @@ public class GetActivityIndicatorValues extends Action
 							eaForm.setBaseValDate(actInd.getBaseValDate());
 							eaForm.setTargetVal(actInd.getTargetVal());
 							eaForm.setTargetValDate(actInd.getTargetValDate());
-							eaForm.setRevTargetVal(actInd.getRevTargetVal());
-							eaForm.setRevTargetValDate(actInd.getRevTargetValDate());
+							eaForm.setActualVal(actInd.getActualVal());
+							eaForm.setActualValDate(actInd.getActualValDate());
 							eaForm.setIndicatorPriorValues(MEIndicatorsUtil.getPriorIndicatorValues(indValId));
 							eaForm.setCurrentVal(actInd.getCurrentVal());
 							eaForm.setCurrentValDate(actInd.getCurrentValDate());

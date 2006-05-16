@@ -15,8 +15,9 @@
 	}
 	function addIndicators()
 	{
-		<digi:context name="selCreateInd" property="context/module/moduleinstance/selectCreateIndicators.do?" />
-		document.aimUpdateIndicatorValuesForm.action = "<%=selCreateInd%>";
+		var actId = document.aimUpdateIndicatorValuesForm.activityId.value;	  
+		<digi:context name="selCreateInd" property="context/module/moduleinstance/selectCreateIndicators.do" />
+		document.aimUpdateIndicatorValuesForm.action = "<%=selCreateInd%>?activityId="+actId;
 		document.aimUpdateIndicatorValuesForm.target = "_self";
 		document.aimUpdateIndicatorValuesForm.submit();
 	}
@@ -195,6 +196,23 @@
 																				</td>
 																			</tr>
 																			<tr>
+																				<td>Actual Value</td>
+																				<td><input type="text" name="actualVal" 
+																				value="<bean:write name="indicator" property="actualVal" />"
+																				class="inp-text" size="10"></td>
+																				<td>Date</td>
+																				<td><input type="text" name="actualValDate" 
+																				value="<bean:write name="indicator" property="actualValDate" />"
+																				class="inp-text" size="10" readonly="true"
+																				id="actualValDate"></td>
+																				<td align="left" vAlign="center">
+																					<a href="javascript:calendar('actualValDate')">
+																						<img src="../ampTemplate/images/show-calendar.gif" 
+																						alt="Click to View Calendar" border=0>
+																					</a>
+																				</td>																				
+																			</tr>																						
+																			<tr>
 																				<td>Target Value</td>
 																				<td><input type="text" name="targetVal" 
 																				value="<bean:write name="indicator" property="targetVal" />"
@@ -211,23 +229,6 @@
 																					</a>
 																				</td>
 																			</tr>
-																			<tr>
-																				<td>Revised target Value</td>
-																				<td><input type="text" name="revTargetVal" 
-																				value="<bean:write name="indicator" property="revTargetVal" />"
-																				class="inp-text" size="10"></td>
-																				<td>Date</td>
-																				<td><input type="text" name="revTargetValDate" 
-																				value="<bean:write name="indicator" property="revTargetValDate" />"
-																				class="inp-text" size="10" readonly="true"
-																				id="revTargetValDate"></td>
-																				<td align="left" vAlign="center">
-																					<a href="javascript:calendar('revTargetValDate')">
-																						<img src="../ampTemplate/images/show-calendar.gif" 
-																						alt="Click to View Calendar" border=0>
-																					</a>
-																				</td>																				
-																			</tr>			
 																			<tr>
 																				<td colspan="3"><input type="submit" value="Save Values" class="buton"></td>
 																			</tr>

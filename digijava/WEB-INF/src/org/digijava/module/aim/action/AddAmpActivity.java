@@ -107,8 +107,6 @@ public class AddAmpActivity extends Action {
 		// desc: setting WorkingTeamLeadFlag & approval status in form bean
 		// start
 		
-		logger.info("In AddAmpActivity, Step = " + eaForm.getStep());
-		
 		Long ampTeamId = teamMember.getTeamId();
 		boolean teamLeadFlag = teamMember.getTeamHead();
 		boolean workingTeamFlag = DbUtil.checkForParentTeam(ampTeamId);
@@ -349,7 +347,6 @@ public class AddAmpActivity extends Action {
 			e.printStackTrace(System.out);
 			return null;
 		}
-		logger.info("Returning null #1");
 		return null;
 	}
 }

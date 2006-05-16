@@ -27,13 +27,15 @@ public class UpdateMEIndicatorValues extends Action {
 		String event = request.getParameter("event");
 		if (event != null && event.equalsIgnoreCase("save")) {
 			ActivityIndicator actInd = new ActivityIndicator();
+			actInd.setIndicatorId(uivForm.getIndicatorId());
 			actInd.setIndicatorValId(uivForm.getIndicatorValId());
 			actInd.setBaseVal(uivForm.getBaseVal());
 			actInd.setBaseValDate(uivForm.getBaseValDate());
 			actInd.setTargetVal(uivForm.getTargetVal());
 			actInd.setTargetValDate(uivForm.getTargetValDate());
-			actInd.setRevTargetVal(uivForm.getRevTargetVal());
-			actInd.setRevTargetValDate(uivForm.getRevTargetValDate());
+			actInd.setActualVal(uivForm.getActualVal());
+			actInd.setActualValDate(uivForm.getActualValDate());
+			actInd.setActivityId(uivForm.getActivityId());
 			MEIndicatorsUtil.saveMEIndicatorValues(actInd, 0);
 		} else if (event != null && event.equalsIgnoreCase("delete")) {
 			MEIndicatorsUtil.deleteMEIndicatorValues(uivForm.getIndicatorValId());			

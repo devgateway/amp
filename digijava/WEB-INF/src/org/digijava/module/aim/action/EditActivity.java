@@ -43,7 +43,6 @@ import org.digijava.module.aim.dbentity.AmpMeasure;
 import org.digijava.module.aim.dbentity.AmpModality;
 import org.digijava.module.aim.dbentity.AmpOrgRole;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
-import org.digijava.module.aim.dbentity.AmpPerspective;
 import org.digijava.module.aim.dbentity.AmpPhysicalPerformance;
 import org.digijava.module.aim.dbentity.AmpRegionalFunding;
 import org.digijava.module.aim.dbentity.AmpSector;
@@ -1045,8 +1044,8 @@ public class EditActivity extends Action {
 			eaForm.setBaseValDate(null);
 			eaForm.setTargetVal(0);
 			eaForm.setTargetValDate(null);
-			eaForm.setRevTargetVal(0);
-			eaForm.setRevTargetValDate(null);
+			eaForm.setActualVal(0);
+			eaForm.setActualValDate(null);
 			eaForm.setIndicatorPriorValues(null);
 			eaForm.setCurrentVal(0);
 			eaForm.setCurrentValDate(null);

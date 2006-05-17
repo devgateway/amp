@@ -55,7 +55,7 @@
 								<digi:link href="/viewMyDesktop.do" styleClass="comment"  onclick="return quitRnot()"  title="<%=translation%>">
 									<digi:trn key="aim:portfolio">Portfolio</digi:trn>
 								</digi:link>&nbsp;&gt;&nbsp;								
-								<digi:trn key="aim:aidHarmonizationSurvey">Aid Harmonization Survey</digi:trn>
+								<digi:trn key="aim:aidEffectivenessSurvey">Aid Effectiveness Survey</digi:trn>
 								</span>
 							</td>
 						</tr>
@@ -119,7 +119,7 @@
 									    <TD width="114"><digi:trn key="aim:termAssist">Term Assist</digi:trn></TD>
 	                         	   		<TD width="143"><digi:trn key="aim:surveyYear">Survey Year</digi:trn></TD>
 	                         	   	--%>
-	                         	   		<TD width="172"><digi:trn key="aim:ahSurvey">Aid Harmonization Survey</digi:trn></TD>
+	                         	   		<TD width="172"><digi:trn key="aim:aeSurvey">Aid Effectiveness Survey</digi:trn></TD>
 				                    	<TD width="410"><digi:trn key="aim:donorOrganization">Donor Organization</digi:trn></TD>
 									</TR>
 									<nested:empty name="aimEditActivityForm" property="survey"> 
@@ -135,11 +135,11 @@
 												<c:set target="${urlParams}" property="surveyId" value="${surveyFund.surveyId}" />
 												<c:set target="${urlParams}" property="edit" value="true" />
 												<bean:define id="translation">
-													<digi:trn key="aim:clickToViewAhSurvey">Click here to view Aid Harmonization Survey</digi:trn>
+													<digi:trn key="aim:clickToViewAESurvey">Click here to view Aid Effectiveness Survey</digi:trn>
 												</bean:define>
 												<TD width="172">
 													<digi:link href="/editSurvey.do" name="urlParams" styleClass="comment" title="<%=translation%>" >
-														AHS-<%=cntr.intValue()+1%></digi:link>
+														AES-<%=cntr.intValue()+1%></digi:link>
 												</TD>
 						               			<TD width="410"><nested:write name="surveyFund" property="fundingOrgName" /></TD>
 											<%--

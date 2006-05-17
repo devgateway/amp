@@ -50,13 +50,13 @@
 											<TD align="left">
 												<SPAN class=crumb>
 													<bean:define id="translation">
-														<digi:trn key="aim:clickToViewAhSurveys">Click here to view Aid Harmonization Surveys</digi:trn>
+														<digi:trn key="aim:clickToViewAESurveys">Click here to view Aid Effectiveness Surveys</digi:trn>
 													</bean:define>
 													<jsp:useBean id="urlParams" type="java.util.Map" class="java.util.HashMap" />
 													<c:set target="${urlParams}" property="ampActivityId" value="${aimSurveyForm.ampActivityId}" />
 													<c:set target="${urlParams}" property="tabIndex" value="${aimSurveyForm.tabIndex}" />
 													<digi:link href="/viewSurveyList.do" name="urlParams" styleClass="comment" title="<%=translation%>" >
-													<digi:trn key="aim:viewAhSurveys">Aid Harmonization Surveys</digi:trn>
+													<digi:trn key="aim:viewAESurveys">Aid Effectiveness Surveys</digi:trn>
 													</digi:link>&nbsp;&gt;&nbsp;
 													<digi:trn key="aim:actOverview">Overview</digi:trn>
 												</SPAN>
@@ -76,7 +76,7 @@
 												<TABLE border="0" cellpadding="0" cellspacing="0" bgcolor="#F4F4F2" height="17">
                         							<TR bgcolor="#F4F4F2" height="17"> 
                           	  							<TD bgcolor="#C9C9C7" class="box-title">&nbsp;&nbsp;
-															<digi:trn key="aim:viewAhSurveysList">Aid Harmonization Survey List</digi:trn>
+															<digi:trn key="aim:viewAESurveysList">Aid Effectiveness Survey List</digi:trn>
 							  							</TD>
 	                          							<TD background="module/aim/images/corner-r.gif" height=17 width=17>
                                 						 &nbsp;
@@ -95,7 +95,7 @@
 									    				<TD width="114"><digi:trn key="aim:termAssist">Term Assist</digi:trn></TD>
 	                         	   						<TD width="173"><digi:trn key="aim:surveyYear">Survey Year</digi:trn></TD>
 	                         	   					--%>
-	                         	   						<TD width="172"><digi:trn key="aim:ahSurvey">Aid Harmonization Survey</digi:trn></TD>
+	                         	   						<TD width="172"><digi:trn key="aim:aeSurvey">Aid Effectiveness Survey</digi:trn></TD>
 				                    					<TD width="410"><digi:trn key="aim:donorOrganization">Donor Organization</digi:trn></TD>
 													</TR>
 												<nested:empty name="aimSurveyForm" property="survey"> 
@@ -110,11 +110,11 @@
 														<c:set target="${urlParams}" property="surveyId" value="${surveyFund.surveyId}" />
 														<c:set target="${urlParams}" property="reset" value="true" />
 														<bean:define id="translation">
-															<digi:trn key="aim:clickToViewAhSurvey">Click here to view Aid Harmonization Survey</digi:trn>
+															<digi:trn key="aim:clickToViewAESurvey">Click here to view Aid Effectiveness Survey</digi:trn>
 														</bean:define>
 														<TD width="162">
 															<digi:link href="/viewSurvey.do" name="urlParams" styleClass="comment" title="<%=translation%>" >
-																AHS-<%=cntr.intValue()+1%></digi:link>
+																AES-<%=cntr.intValue()+1%></digi:link>
 														</TD>
 						               					<TD width="400"><nested:write name="surveyFund" property="fundingOrgName" /></TD>
 													<%--

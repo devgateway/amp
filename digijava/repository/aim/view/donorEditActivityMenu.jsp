@@ -115,10 +115,10 @@ bgcolor="#006699">
 		<td>		
 			<IMG alt=Link height=10 src="../ampTemplate/images/arrow-th-BABAB9.gif" width=15>
 			<bean:define id="translation">
-				<digi:trn key="aim:clickToAdd/UpdateAidHarmonizationSurvey">Add / Update Aid Harmonization Survey</digi:trn>
+				<digi:trn key="aim:clickToAdd/UpdateAidEffectivenessSurvey">Add / Update Aid Effectiveness Survey</digi:trn>
 			</bean:define>
 			<a href="javascript:fnGetSurvey()" class="menu" title="<%=translation%>">
-				<digi:trn key="aim:indicators">Indicators</digi:trn>
+				<digi:trn key="aim:editParisIndicators">Paris Indicators</digi:trn>
 			</a>
 		</td>
 		</c:if>
@@ -131,7 +131,7 @@ bgcolor="#006699">
 					<td bgcolor="#3399ff" height="19">
 						<IMG alt=Link height=10 src="../ampTemplate/images/arrow-th-BABAB9.gif" width=15>
 						<span class="textalb">
-							<digi:trn key="aim:indicators">Indicators</digi:trn>
+							<digi:trn key="aim:editParisIndicators">Paris Indicators</digi:trn>
 						</span>
 					</td>
 					<td width="10" height="19"  background="module/aim/images/right-arc.gif">

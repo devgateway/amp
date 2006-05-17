@@ -215,11 +215,11 @@
 						<TABLE border="0" cellpadding="0" cellspacing="1" bgcolor="#F4F4F2" height="20">
                  		<TR bgColor=#f4f4f2 height="20">
                  			<logic:equal name="aimMainProjectDetailsForm" property="tabIndex" value="5">
-	                     		<TD vAlign=center bgColor=#222e5d class="sub-nav-selected" noWrap width="105">
-									:: <digi:trn key="aim:indicators">INDICATORS</digi:trn> 									
+	                     		<TD vAlign=center bgColor=#222e5d class="sub-nav-selected" noWrap width="150">
+									:: <digi:trn key="aim:parisIndicators">PARIS INDICATORS</digi:trn> 									
 							</logic:equal>
 							<logic:notEqual name="aimMainProjectDetailsForm" property="tabIndex" value="5">
-	                    		<TD vAlign=center bgColor=#3754a1 noWrap width="105">
+	                    		<TD vAlign=center bgColor=#3754a1 noWrap width="150">
 	                    			<jsp:useBean id="survey" type="java.util.Map" class="java.util.HashMap" />
 	                    			<c:set target="${survey}" property="ampActivityId">
 										<bean:write name="aimMainProjectDetailsForm" property="ampActivityId"/>
@@ -229,7 +229,7 @@
 										<digi:trn key="aim:clickToViewAidEffectIndicators">Click here to view Aid Effectiveness Indicators</digi:trn>
 									</bean:define>
                     				<digi:link href="/viewSurveyList.do" name="survey" styleClass="sub-nav" title="<%=translation%>" >
-									 	:: <digi:trn key="aim:indicators">Indicators</digi:trn> 	
+									 	:: <digi:trn key="aim:parisIndicators">PARIS INDICATORS</digi:trn> 	
 									</digi:link>									
 							</logic:notEqual>
 								</TD>

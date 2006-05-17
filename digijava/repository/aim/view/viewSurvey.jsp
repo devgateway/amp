@@ -41,13 +41,13 @@
 											<TD align="left">
 												<SPAN class=crumb>
 													<bean:define id="translation">
-														<digi:trn key="aim:clickToViewAhSurveys">Click here to view Aid Harmonization Surveys</digi:trn>
+														<digi:trn key="aim:clickToViewAESurveys">Click here to view Aid Effectiveness Surveys</digi:trn>
 													</bean:define>
 													<jsp:useBean id="urlParams" type="java.util.Map" class="java.util.HashMap" />
 													<c:set target="${urlParams}" property="ampActivityId" value="${aimEditSurveyForm.ampActivityId}" />
 													<c:set target="${urlParams}" property="tabIndex" value="${aimEditSurveyForm.tabIndex}" />
 													<digi:link href="/viewSurveyList.do" name="urlParams" styleClass="comment" title="<%=translation%>" >
-													<digi:trn key="aim:viewAhSurveys">Aid Harmonization Surveys</digi:trn>
+													<digi:trn key="aim:viewAESurveys">Aid Effectiveness Surveys</digi:trn>
 													</digi:link>&nbsp;&gt;&nbsp;
 													<c:out value="${aimEditSurveyForm.fundingOrg}" />
 												</SPAN>
@@ -67,7 +67,7 @@
 												<TABLE border="0" cellpadding="0" cellspacing="0" bgcolor="#F4F4F2" height="17">
                         							<TR bgcolor="#F4F4F2" height="17"> 
                           	  							<TD bgcolor="#C9C9C7" class="box-title">&nbsp;&nbsp;
-															<digi:trn key="aim:aidSurveyIndicators">Aid Harmonization Survey Indicators</digi:trn>
+															<digi:trn key="aim:aidEffectIndicators">Aid Effectiveness Indicators</digi:trn>
 							  							</TD>
 	                          							<TD background="module/aim/images/corner-r.gif" height=17 width=17>
                                                         	&nbsp;
@@ -97,7 +97,12 @@
 																<TABLE width="90%" cellPadding="5" cellSpacing="1" vAlign="top" align="center" bgcolor="#ffffff">
 																	<TR>
 																		<TD width="80%">
-																			<nested:write property="questionText" />
+																			<nested:write property="questionText" /><br>
+																			<nested:equal property="questionType" value="calculated">
+																				<font color="red">
+																					<digi:trn key="aim:autoCalculated">(This is calculated automatically)</digi:trn>
+																				</font>
+																			</nested:equal>
 																		</TD>
 																		<TD width="20%">
 																			<nested:equal property="response" value="">

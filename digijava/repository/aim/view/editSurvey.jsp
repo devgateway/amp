@@ -60,9 +60,9 @@
 									<digi:trn key="aim:clickToViewSurveyList">Click here to view survey list</digi:trn>
 								</bean:define>
 								<a href="javascript:fnGetSurveyList()" class="comment"  title="<%=tip%>">
-									<digi:trn key="aim:aidHarmonizationSurvey">Aid Harmonization Survey</digi:trn>
+									<digi:trn key="aim:aidEffectivenessSurvey">Aid Effectiveness Survey</digi:trn>
 								</a>&nbsp;&gt;&nbsp;
-									<digi:trn key="aim:ahIndicators">Indicators</digi:trn>
+									<digi:trn key="aim:editParisIndicators">Paris Indicators</digi:trn>
 								</span>
 							</td>
 						</tr>
@@ -141,17 +141,22 @@
 															<TABLE width="90%" cellPadding="5" cellSpacing="1" vAlign="top" align="center" bgcolor="#ffffff">
 																<TR>
 																	<TD width="80%">
-																		<nested:write property="questionText" />
+																		<nested:write property="questionText" /><br>
+																		<nested:equal property="questionType" value="calculated">
+																			<font color="red">
+																				<digi:trn key="aim:autoCalculated">(This is calculated automatically)</digi:trn>
+																			</font>
+																		</nested:equal>
 																	</TD>
 																<nested:equal property="questionType" value="yes-no"> 
 																	<TD width="3%">
-																		<nested:radio property="response" value="yes" />
+																		<nested:radio property="response" value="Yes" />
 																	</TD>
-																	<TD width="7%">yes</TD>
+																	<TD width="7%">Yes</TD>
 																	<TD width="3%">
-																		<nested:radio property="response" value="no" />
+																		<nested:radio property="response" value="No" />
 																	</TD>
-																	<TD width="7%">no</TD>																		
+																	<TD width="7%">No</TD>																		
 																</nested:equal>
 																<nested:equal property="questionType" value="calculated">
 																	<TD width="20%">

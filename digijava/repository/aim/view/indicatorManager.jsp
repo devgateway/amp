@@ -120,9 +120,10 @@
 																		<a href="javascript:editIndicator('<bean:write name="indicators" property="ampMEIndId" />')">
 																			<bean:write name="indicators" property="name"/>
 																		</a>
-																			&nbsp;&nbsp;
-																		(<bean:write name="indicators" property="code"/>)
 																	</td>
+																	<td width="100">
+																		<bean:write name="indicators" property="code"/>
+																	</td>																	
 																	<td align="left" width="12">
 																		<jsp:useBean id="urlParams" type="java.util.Map" class="java.util.HashMap"/>
 																		<c:set target="${urlParams}" property="id">

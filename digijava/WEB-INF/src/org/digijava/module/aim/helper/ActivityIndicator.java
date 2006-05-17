@@ -23,6 +23,7 @@ public class ActivityIndicator {
 	private Long risk;
 	
 	private Long activityId;
+	private boolean defaultInd;
 	
 	/**
 	 * @return Returns the baseVal.
@@ -212,5 +213,17 @@ public class ActivityIndicator {
 	 */
 	public void setActualValDate(String actualValDate) {
 		this.actualValDate = actualValDate;
+	}
+	/**
+	 * @return Returns the defaultInd.
+	 */
+	public boolean isDefaultInd() {
+		return defaultInd;
+	}
+	/**
+	 * @param defaultInd The defaultInd to set.
+	 */
+	public void setDefaultInd(boolean defaultInd) {
+		this.defaultInd = defaultInd;
 	}
 }

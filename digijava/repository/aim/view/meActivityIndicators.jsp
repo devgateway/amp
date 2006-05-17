@@ -134,7 +134,8 @@
 													<logic:notEmpty name="aimUpdateIndicatorValuesForm" property="indicators">
 													<tr>
 														<td align="left" width="100%" valign="center">
-															<table width="100%" cellSpacing=1 cellPadding=4 vAlign="top" align="left" bgcolor="#f4f4f2">
+															<table width="100%" cellSpacing=1 cellPadding=4 vAlign="top" align="left" bgcolor="#f4f4f2"
+															border=0>
 															<logic:iterate name="aimUpdateIndicatorValuesForm" property="indicators" id="indicator" 
 															type="org.digijava.module.aim.helper.ActivityIndicator">
 																<tr bgcolor="#f4f4f2">
@@ -157,10 +158,20 @@
 																		</digi:link>																
 																	</c:if>																	
 																</td>
-																<td valign="top">
-																	<b><bean:write name="indicator" property="indicatorName" /> - 
-																	<bean:write name="indicator" property="indicatorCode" /></b>
+																<td width="9">
+																	<c:if test="${indicator.defaultInd == true}">
+																		<img src= "../ampTemplate/images/bullet_red.gif" border=0>
+																	</c:if>
+																	<c:if test="${indicator.defaultInd == false}">
+																		<img src= "../ampTemplate/images/bullet_grey.gif" border=0>
+																	</c:if>
+																</td>																
+																<td valign="top" width="100%">
+																	<b><bean:write name="indicator" property="indicatorName" /></b>
 																</td>
+																<td valign="top" width="100">
+																	<b><bean:write name="indicator" property="indicatorCode" /></b>
+																</td>																
 																<td valign="top" width="12">
 																	<jsp:useBean id="urlParams1" type="java.util.Map" class="java.util.HashMap"/>
 																	<c:set target="${urlParams1}" property="event" value="delete" />
@@ -175,7 +186,7 @@
 																<c:if test="${aimUpdateIndicatorValuesForm.expIndicatorId==indicator.indicatorId}">
 																<tr>
 																	<td width="12">&nbsp;</td>
-																	<td>
+																	<td colspan="3">
 																		<table cellspacing="0" cellpadding="3" valign="top" align="left"
 																		border=0>
 																			<tr>
@@ -230,7 +241,7 @@
 																				</td>
 																			</tr>
 																			<tr>
-																				<td colspan="3"><input type="submit" value="Save Values" class="buton"></td>
+																				<td colspan="4"><input type="submit" value="Save Values" class="buton"></td>
 																			</tr>
 																		</table>
 																	</td>
@@ -265,9 +276,28 @@
 						</table>			
 					</td>
 				</tr>
+	<tr><td>
+		<table width="100%" cellspacing=1 cellpadding=3 bgcolor="ffffff" border=0>
+			<tr bgcolor="#ffffff">
+				<td width="9">
+					<img src= "../ampTemplate/images/bullet_red.gif" border=0>
+				</td>
+				<td width="100">
+					<digi:trn key="aim:globalIndicator">Global Indicator</digi:trn>
+				</td>
+				<td width="9">
+					<img src= "../ampTemplate/images/bullet_grey.gif" border=0>
+				</td>
+				<td>
+					<digi:trn key="aim:activitySpecificIndicator">Activity Specific Indicator</digi:trn>
+				</td>
+			</tr>																
+		</table>
+	</td></tr>						
 			</table>
 		</td>
 	</tr>
+
 </table>
 </td></tr>
 </table>

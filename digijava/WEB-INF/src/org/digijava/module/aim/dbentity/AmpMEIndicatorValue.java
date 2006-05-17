@@ -12,6 +12,8 @@ public class AmpMEIndicatorValue {
 	private Date actualValDate;
 	private float targetVal; // TARGET
 	private Date targetValDate;
+	private float revisedTargetVal; // Revised TARGET
+	private Date revisedTargetValDate;
 	private String comments;
 	
 	private AmpIndicatorRiskRatings risk;
@@ -140,5 +142,29 @@ public class AmpMEIndicatorValue {
 	 */
 	public void setActualValDate(Date actualValDate) {
 		this.actualValDate = actualValDate;
+	}
+	/**
+	 * @return Returns the revisedTargetVal.
+	 */
+	public float getRevisedTargetVal() {
+		return revisedTargetVal;
+	}
+	/**
+	 * @param revisedTargetVal The revisedTargetVal to set.
+	 */
+	public void setRevisedTargetVal(float revisedTargetVal) {
+		this.revisedTargetVal = revisedTargetVal;
+	}
+	/**
+	 * @return Returns the revisedTargetValDate.
+	 */
+	public Date getRevisedTargetValDate() {
+		return revisedTargetValDate;
+	}
+	/**
+	 * @param revisedTargetValDate The revisedTargetValDate to set.
+	 */
+	public void setRevisedTargetValDate(Date revisedTargetValDate) {
+		this.revisedTargetValDate = revisedTargetValDate;
 	}
 }

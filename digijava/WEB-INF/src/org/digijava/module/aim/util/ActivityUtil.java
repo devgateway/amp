@@ -377,6 +377,8 @@ public class ActivityUtil {
 						AmpMEIndicators meInd = (AmpMEIndicators) session.load(AmpMEIndicators.class,
 								actInd.getIndicatorId());
 						indVal.setMeIndicatorId(meInd);
+						indVal.setRevisedTargetVal(actInd.getTargetVal());
+						indVal.setRevisedTargetValDate(DateConversion.getDate(actInd.getTargetValDate()));						
 					}
 					
 					if (actInd.getBaseValDate() != null &&
@@ -397,15 +399,18 @@ public class ActivityUtil {
 							risk = (AmpIndicatorRiskRatings) session.load(AmpIndicatorRiskRatings.class,actInd.getRisk());
 						}
 						indVal.setRisk(risk);
-						session.saveOrUpdate(indVal);
 						if (actInd.getCurrentValDate() != null && 
 								actInd.getCurrentValDate().trim().length() > 0) {
 							AmpMECurrValHistory currValHist = new AmpMECurrValHistory();
 							currValHist.setCurrValue(actInd.getCurrentVal());
 							currValHist.setCurrValueDate(DateConversion.getDate(actInd.getCurrentValDate()));
 							currValHist.setMeIndValue(indVal);
-							session.save(currValHist);						
-						}						
+							session.save(currValHist);
+							
+							indVal.setRevisedTargetVal(actInd.getCurrentVal());
+							indVal.setRevisedTargetValDate(DateConversion.getDate(actInd.getCurrentValDate()));
+						}
+						session.saveOrUpdate(indVal);						
 					}
 				}
 			}

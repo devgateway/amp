@@ -10,12 +10,14 @@
 		</id>
 		
 		<property name="baseVal" column="base_val" type="java.lang.Float"/>
-		<property name="actualVal" column="target_val" type="java.lang.Float"/>
-		<property name="targetVal" column="revised_target_val" type="java.lang.Float"/>
+		<property name="actualVal" column="actual_val" type="java.lang.Float"/>
+		<property name="targetVal" column="target_val" type="java.lang.Float"/>
+		<property name="revisedTargetVal" column="revised_target_val" type="java.lang.Float"/>		
 
 		<property name="baseValDate" column="base_val_date" type="java.util.Date"/>
-		<property name="actualValDate" column="target_val_date" type="java.util.Date"/>		
-		<property name="targetValDate" column="revised_target_val_date" type="java.util.Date"/>
+		<property name="actualValDate" column="actual_val_date" type="java.util.Date"/>		
+		<property name="targetValDate" column="target_val_date" type="java.util.Date"/>
+		<property name="revisedTargetValDate" column="revised_target_val_date" type="java.util.Date"/>
 
 		<property name="comments" column="Comments" type="java.lang.String"/>
 		

@@ -29,7 +29,8 @@ public class ChartGenerator {
 	
 	private static Logger logger = Logger.getLogger(ChartGenerator.class);
 	
-	public static String getPortfolioRiskChartFileName(HttpSession session,PrintWriter pw) {
+	public static String getPortfolioRiskChartFileName(HttpSession session,PrintWriter pw,
+			int chartWidth,int chartHeight) {
 		
 		Collection activityIds = new ArrayList();
 		if (session.getAttribute("ampProjects") != null) {
@@ -42,19 +43,21 @@ public class ChartGenerator {
 		
 		Collection col = MEIndicatorsUtil.getPortfolioMEIndicatorRisks(activityIds);
 		return generateRiskChart(col,Constants.PORTFOLIO_RISK_CHART_TITLE,
-				Constants.PORFOLIO_CHART_WIDTH,Constants.PORTFOLIO_CHART_HEIGHT,session,pw);
+				chartWidth,chartHeight,session,pw);
 	}
 	
 	public static String getActivityRiskChartFileName(Long actId,
-			HttpSession session,PrintWriter pw) {
+			HttpSession session,PrintWriter pw,
+			int chartWidth,int chartHeight) {
 		
 		Collection meRisks = MEIndicatorsUtil.getMEIndicatorRisks(actId);
-		return generateRiskChart(meRisks,Constants.ACTIVITY_RISK_CHART_TITLE,Constants.CHART_WIDTH,
-				Constants.CHART_HEIGHT,session,pw);
+		return generateRiskChart(meRisks,Constants.ACTIVITY_RISK_CHART_TITLE,chartWidth,
+				chartHeight,session,pw);
 	}
 	
 	public static String getPortfolioPerformanceChartFileName(Long actId,Long indId,
-			Integer page,HttpSession session,PrintWriter pw) {
+			Integer page,HttpSession session,PrintWriter pw,
+			int chartWidth,int chartHeight) {
 	
 		Collection activityIds = new ArrayList();
 		if (actId.longValue() < 0) {
@@ -84,15 +87,16 @@ public class ChartGenerator {
 			col = temp;
 		}
 		return generatePerformanceChart(col,Constants.PORTFOLIO_PERFORMANCE_CHART_TITLE,
-				Constants.PORFOLIO_CHART_WIDTH,Constants.PORTFOLIO_CHART_HEIGHT,session,pw);
+				chartWidth,chartHeight,session,pw);
 	}		
 	
 	public static String getActivityPerformanceChartFileName(Long actId,
-			HttpSession session,PrintWriter pw) {
+			HttpSession session,PrintWriter pw,
+			int chartWidth,int chartHeight) {
 		
 		Collection meIndValues = MEIndicatorsUtil.getMEIndicatorValues(actId);
 		return generatePerformanceChart(meIndValues,Constants.ACTIVITY_PERFORMANCE_CHART_TITLE,
-				Constants.CHART_WIDTH,Constants.CHART_HEIGHT,session,pw);
+				chartWidth,chartHeight,session,pw);
 	}
 	
 	public static String generateRiskChart(Collection col,String title,
@@ -120,15 +124,10 @@ public class ChartGenerator {
 						chartHeight,info,session);
 				ChartUtilities.writeImageMap(pw,fileName,info,false);
 				pw.flush();
-				
-			} else {
-				fileName = "chart_no_data.png";
 			}
-
 		} catch (Exception e) {
 			logger.error("Exception from generateRisk() :" + e.getMessage());
 			e.printStackTrace(System.out);
-			fileName = "chart_error.png";
 		}		
 		return fileName;		
 	}
@@ -161,15 +160,11 @@ public class ChartGenerator {
 						chartHeight,info,session);
 				ChartUtilities.writeImageMap(pw,fileName,info,false);
 				pw.flush();
-				
-			} else {
-				fileName = "chart_no_data.png";
 			}
 
 		} catch (Exception e) {
 			logger.error("Exception from generatePerformanceChart() :" + e.getMessage());
 			e.printStackTrace(System.out);
-			fileName = "chart_error.png";
 		}
  		return fileName;		
 	}

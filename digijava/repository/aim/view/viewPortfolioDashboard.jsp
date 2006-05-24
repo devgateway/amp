@@ -9,30 +9,34 @@
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
 
+<script language="Javascript">
+	function showPrinterFriendly(actId,indId,chartType) {
+		<digi:context name="ptUrl" property="context/module/moduleinstance/viewPortfolioDashboard.do" />
+		var url = "<%=ptUrl%>?actId="+actId+"&indId="+indId+"&cType="+chartType;
+	 	openURLinWindow(url,650,450);
+	}
+
+</script>
+
 <%
 	Long actId = (Long) request.getAttribute("activityId");
 	Long indId = (Long) request.getAttribute("indicatorId");
 	Integer pg = (Integer) request.getAttribute("page");
 	
 	String actPerfChartFileName = ChartGenerator.getPortfolioPerformanceChartFileName(
-						 actId,indId,pg,session,new PrintWriter(out));
+						 actId,indId,pg,session,new PrintWriter(out),730,400);
 
 	String actPerfChartUrl = null;
-	if (actPerfChartFileName.equals("chart_no_data.png") ||
-						 actPerfChartFileName.equals("chart_error.png")) {
-		actPerfChartUrl = request.getContextPath() + "/TEMPLATE/ampTemplate/images/" + actPerfChartFileName;
-	} else {
+	
+	if (actPerfChartFileName != null) {
 		actPerfChartUrl = request.getContextPath() + "/aim/DisplayChart.img?filename=" + actPerfChartFileName;
 	}
 	
 	String actRiskChartFileName = ChartGenerator.getPortfolioRiskChartFileName(
-						 session,new PrintWriter(out));
+						 session,new PrintWriter(out),730,400);
 
 	String actRiskChartUrl = null;
-	if (actRiskChartFileName.equals("chart_no_data.png") ||
-						 actRiskChartFileName.equals("chart_error.png")) {
-		actRiskChartUrl = request.getContextPath() + "/TEMPLATE/ampTemplate/images/" + actRiskChartFileName;
-	} else {
+	if (actRiskChartFileName != null) {
 		actRiskChartUrl = request.getContextPath() + "/aim/DisplayChart.img?filename=" + actRiskChartFileName;
 	}
 
@@ -68,7 +72,19 @@
 	</tr>
 	<tr>
 		<td width="100%">
-			<img src="<%= actPerfChartUrl %>" width=730 height=400 border=0 usemap="#<%= actPerfChartFileName %>">
+			<% if (actPerfChartUrl != null) { %>
+				<img src="<%= actPerfChartUrl %>" width=730 height=400 border=0 usemap="#<%= actPerfChartFileName %>">
+				<br><br>
+				<div align="left">
+				<input type="button" class="buton" value="Printer Friendly Version" 
+				onclick="javascript:showPrinterFriendly('<%=actId%>','<%=indId%>','P')">
+				</div>						  
+			<% } else { %>
+				<br><span class="red-log"><digi:trn key="aim:noDataPresentFor">No data present for</digi:trn>
+						  <digi:trn key="aim:portfolioPerformanceChart">Portfolio-Performance chart</digi:trn>
+						  </span><br><br>
+			<% } %>		
+
 		</td>
 	</tr>
 	<logic:notEmpty name="aimPortfolioDashboardForm" property="pageList">
@@ -88,7 +104,18 @@
 	</logic:notEmpty>
 	<tr>
 		<td width="100%">
-			<img src="<%= actRiskChartUrl %>" width=730 height=400 border=0 usemap="#<%= actRiskChartFileName %>">
+			<% if (actRiskChartUrl != null) { %>
+				<img src="<%= actRiskChartUrl %>" width=730 height=400 border=0 usemap="#<%= actRiskChartFileName %>">
+				<br><br>
+				<div align="left">
+				<input type="button" class="buton" value="Printer Friendly Version" 
+				onclick="javascript:showPrinterFriendly('<%=actId%>','<%=indId%>','R')">
+				</div>						  
+			<% } else { %>
+				<br><span class="red-log"><digi:trn key="aim:noDataPresentFor">No data present for</digi:trn>
+						  <digi:trn key="aim:portfolioRiskChart">Portfolio-Risk chart</digi:trn>
+						  </span><br><br>
+			<% } %>		
 		</td>
 	</tr>	
 </table>

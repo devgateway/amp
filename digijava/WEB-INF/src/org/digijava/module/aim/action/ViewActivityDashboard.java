@@ -24,8 +24,6 @@ public class ViewActivityDashboard extends TilesAction {
 			HttpServletResponse response) throws Exception {
 
 		Long actId = null;
-		logger.info("request.getParameter('ampActivityId') :" +
-				request.getParameter("ampActivityId"));
 		if (request.getParameter("ampActivityId") != null) {
 			actId = new Long(Long.parseLong(
 					request.getParameter("ampActivityId")));

@@ -8,6 +8,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.apache.log4j.Logger;
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
@@ -18,6 +19,8 @@ import org.digijava.module.aim.helper.AmpProject;
 import org.digijava.module.aim.util.MEIndicatorsUtil;
 
 public class ViewPortfolioDashboard extends Action {
+	
+	private static Logger logger = Logger.getLogger(ViewPortfolioDashboard.class);
 	
 	public ActionForward execute(ActionMapping mapping,ActionForm form,
 			HttpServletRequest request,HttpServletResponse response) throws Exception {
@@ -85,7 +88,21 @@ public class ViewPortfolioDashboard extends Action {
 		request.setAttribute("indicatorId",indId);
 		request.setAttribute("page",new Integer(page));
 		
+		if (request.getParameter("cType") != null) {
+			char cType = request.getParameter("cType").charAt(0);
+			if (cType == 'P') {
+				logger.info("returning portPerf");
+				return mapping.findForward("portPerf");
+			} else if (cType == 'R'){
+				logger.info("returning portRisk");
+				return mapping.findForward("portRisk");
+			}
+		} else {
+			logger.info("returning forward");
+			return mapping.findForward("forward");	
+		}
 		
-		return mapping.findForward("forward");
+		logger.info("returning null");
+		return null;
 	}
 }

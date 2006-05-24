@@ -109,7 +109,6 @@ public class Constants
 	public static final String APPROVED_STATUS = "approved";
 	
 	
-	
 	//humbly added by Mihai
 	public static final Long DONOR_FUNDING = new Long(1);
 	public static final Long COMPONENT_FUNDING = new Long(2);
@@ -140,4 +139,11 @@ public class Constants
 	
 	public static final String ACCESS_TYPE_TEAM = "Team";
 	public static final String ACCESS_TYPE_MNGMT = "Management";
+	
+	// For AMP feature turn ON/OFF, following are the feature codes.
+	public static final String ME_FEATURE = "ME"; // M & E Feature code
+	public static final String PI_FEATURE = "PI"; // Paris Indicators feature code
+	public static final String AA_FEATURE = "AA"; // Activity Approval feature code 
+	
+	
 }	

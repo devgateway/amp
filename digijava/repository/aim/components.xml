@@ -231,6 +231,14 @@
 
 	<page name="AdvancedReportManagerStep2Hierarchy0" title=" : Reports" />
 	<page name="AdvancedReportManagerStep2Hierarchyn" title=" : Reports" />
+
+	<page name="featureManager" title=" - Feature Manager" />
+	
+	<page page="printableActivityPerformance" name="aim_printActPerf" title="AMP - Activity-Performance" />
+	<page page="printableActivityRisk" name="aim_printActRisk" title="AMP - Activity-Risk" />
+	
+	<page page="printablePortPerformance" name="aim_printPortPerf" title="AMP - Portfolio-Performance" />
+	<page page="printablePortRisk" name="aim_printPortRisk" title="AMP - Portfolio-Risk" />
 		
 </secondary-pages>
 

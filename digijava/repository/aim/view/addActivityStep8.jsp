@@ -233,16 +233,16 @@ function resetAll()
 												<td>
 													<input type="button" value=" << Back " class="dr-menu" onclick="gotoStep(7)">
 												</td>
-												<c:if test="${aimEditActivityForm.editAct == true}">
+												<logic:notEmpty name="ME" scope="application">												 										
 													<td>
 														<input type="submit" value="Next >> " class="dr-menu" onclick="gotoStep(10)">
 													</td>
-												</c:if>
-												<c:if test="${aimEditActivityForm.editAct == false}">
+												</logic:notEmpty>
+												<logic:empty name="ME" scope="application">												 										
 													<td>
-														<input type="button" value="Preview" class="dr-menu" onclick="previewClicked()">
+													<input type="button" value="Preview" class="dr-menu" onclick="previewClicked()">
 													</td>
-												</c:if>
+												</logic:empty>												
 												<td>
 													<input type="reset" value="Reset" class="dr-menu" onclick="return resetAll()">
 												</td>

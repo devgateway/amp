@@ -469,6 +469,7 @@ bgcolor="#006699">
 		</c:if>		
 	</tr>
 	<c:if test="${aimEditActivityForm.editAct == true}">
+		<logic:notEmpty name="ME" scope="application">
 		<tr>
 			<c:if test="${aimEditActivityForm.step != 10}">
 			<td>
@@ -502,7 +503,8 @@ bgcolor="#006699">
 				</table>
 			</td>					
 			</c:if>		
-		</tr>	
+		</tr>
+		</logic:notEmpty>
 	</c:if>
 	<tr>
 		<td align="center">

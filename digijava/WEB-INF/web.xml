@@ -15,7 +15,7 @@
 		<listener-class>org.digijava.kernel.startup.ConfigLoaderListener</listener-class>
 	</listener>
 	<listener>
-		<listener-class>org.digijava.module.aim.helper.AMPStartupListener</listener-class>
+		<listener-class>org.digijava.module.aim.startup.AMPStartupListener</listener-class>
 	</listener>	
 	<!-- Startup servlet used for URL preloading -->
 	<servlet>
@@ -119,18 +119,18 @@
 		<load-on-startup>2</load-on-startup>
 	</servlet>	
 
-<!-- JFREE Chart Start -->
+	<!-- JFREE Chart Start -->
 	<servlet>
 		<servlet-name>DisplayChart</servlet-name>
 		<servlet-class>org.jfree.chart.servlet.DisplayChart</servlet-class>
 	</servlet>
 
-	  <servlet-mapping>
+	<servlet-mapping>
 		<servlet-name>DisplayChart</servlet-name>
 	    <url-pattern>/aim/DisplayChart.img</url-pattern>
-	  </servlet-mapping>
+	</servlet-mapping>
 
-<!-- JFREE Chart End -->
+	<!-- JFREE Chart End -->
 
 	<!-- Standard Action Servlet Mapping -->
 	<servlet-mapping>

@@ -6,6 +6,14 @@
 <form-beans>
 
   	<form-bean
+	      name="aimFeatureManagerForm"
+			type="org.apache.struts.action.DynaActionForm" > 
+			<form-property 
+					  name="features"
+					  type="java.util.Collection"/>
+	</form-bean>
+		  
+  	<form-bean
 	      	name="aimMyDesktopForm"
     		type="org.digijava.module.aim.form.MyDesktopForm" />
 
@@ -344,6 +352,8 @@
      	type="org.digijava.module.aim.action.ViewPortfolioDashboard" 
      	scope="session" validate="false" path="/aim/viewPortfolioDashboard">
     	<forward name="forward" path="/showLayout.do?layout=viewPortfolioDashboard" />
+    	<forward name="portPerf" path="/showLayout.do?layout=aim_printPortPerf" />
+    	<forward name="portRisk" path="/showLayout.do?layout=aim_printPortRisk" />
     	<forward name="index" path="/aim/index.do" redirect="true" />
 	 </action>
 	 
@@ -2013,6 +2023,16 @@
 	</action>
 
 	<action 
+			  name="aimFeatureManagerForm"
+			  type="org.digijava.module.aim.action.FeatureManager"
+			  scope="request"
+			  validate="false"
+			  path="/aim/featureManager">
+			  <forward name="forward" path="/showLayout.do?layout=featureManager" />
+			  <forward name="index" path="/aim/index.do" redirect="true" />			  
+	</action>
+
+	<action 
 			  name="aimIndicatorForm"
 			  type="org.digijava.module.aim.action.IndicatorManager"
 			  scope="session"
@@ -2021,7 +2041,7 @@
 			  <forward name="forward" path="/showLayout.do?layout=indicatorManager" />
 			  <forward name="index" path="/aim/index.do" redirect="true" />			  
 	</action>
-
+	
 	<action 
 			  name="aimIndicatorForm"
 			  type="org.digijava.module.aim.action.AddIndicator" 
@@ -3005,8 +3025,15 @@
 		<forward name="SelectMeasures" path="/showLayout.do?layout=AdvancedReportManagerStep6" />
 		
 	</action>
+
+	<action 
+		type="org.digijava.module.aim.action.ViewPrintableActivityChart"
+		path="/aim/printableActivityChart" 
+		scope="request" >
+		<forward name="actPerformance" path="/showLayout.do?layout=aim_printActPerf" />
+		<forward name="actRisk" path="/showLayout.do?layout=aim_printActRisk" />
+	</action>	
 			
-<!-- END FINANCIAL EDIT	-->
   </action-mappings>
 
 </struts-config>

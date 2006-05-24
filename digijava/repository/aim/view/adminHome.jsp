@@ -145,6 +145,7 @@
 											</td>
 										</tr>	
 
+										<logic:notEmpty name="ME" scope="application">
 										<tr>
 											<td class=f-names noWrap>
 											<digi:img src="module/aim/images/arrow-th-BABAB9.gif" width="16"/>
@@ -158,7 +159,22 @@
 											</digi:link>
 											</td>
 										</tr>
-
+										</logic:notEmpty>
+										
+				
+										<tr>
+											<td class=f-names noWrap>
+											<digi:img src="module/aim/images/arrow-th-BABAB9.gif" width="16"/>
+											<bean:define id="translation">
+												<digi:trn key="aim:clickToViewFeatureManager">Click here to view Feature Manager</digi:trn>
+											</bean:define>
+											<digi:link href="/featureManager.do" title="<%=translation%>" >
+												<digi:trn key="aim:featureManager">
+													Feature Manager
+												</digi:trn>
+											</digi:link>
+											</td>
+										</tr>
 									</table>
 								</td>
 							</tr>

@@ -83,13 +83,15 @@
 					<digi:link href="/donorActivityList.do" styleClass="sub-nav">
 						:: <digi:trn key="aim:donorActivityList">Donor Activity List</digi:trn>
 					</digi:link>
-				</td>				
+				</td>			
+				<logic:notEmpty name="ME" scope="application">				
 				<td noWrap>
 					<digi:link href="/getTeamActivities.do" styleClass="sub-nav">
 						:: <digi:trn key="aim:m&e">M&E</digi:trn>
 					</digi:link>
 				</td>
-				<td class="sub-nav" width="150">
+				</logic:notEmpty>
+				<td class="sub-nav" width="140">
 					&nbsp;
 				</td>
 			</tr>

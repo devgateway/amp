@@ -43,7 +43,7 @@
 	<bean:write name="aimMainProjectDetailsForm" property="ampActivityId"/>
 </c:set>
 	
-<TABLE width="100%" border="0" cellpadding="0" cellspacing="0" vAlign="top" align="center">
+<TABLE width="765" border="0" cellpadding="0" cellspacing="0" vAlign="top" align="center">
    <TR>
 		<TD>
 			<digi:form action="/viewProjectDetails.do">
@@ -116,7 +116,7 @@
 	</TR>
 	<TR>
       <TD width="100%" nowrap align="center" vAlign="bottom" height="20">
-        	<TABLE width="810"  border="0" cellpadding="0" cellspacing="0" bgcolor="#FFFFFF" class="box-border-nopadding" > 
+        	<TABLE width="765"  border="0" cellpadding="0" cellspacing="0" bgcolor="#FFFFFF" class="box-border-nopadding" > 
             <TR bgColor=#f4f4f2>
               	<TD height="20">
 						<TABLE border="0" cellpadding="0" cellspacing="1" bgcolor="#F4F4F2" height="20">
@@ -207,13 +207,18 @@
 			</TABLE>
 		</TD>
 	</TR>
+
+	<%
+	if (!(application.getAttribute("PI") == null && application.getAttribute("ME") == null)) { %>
+	
 	<TR>
-      <TD width="100%" nowrap align="left" vAlign="bottom" height="20">
-        	<TABLE width="810"  border="0" cellpadding="0" cellspacing="0" bgcolor="#FFFFFF" class="box-border-nopadding" > 
+      <TD width="100%" nowrap align="center" vAlign="bottom" height="20">
+        	<TABLE width="765"  border="0" cellpadding="0" cellspacing="0" bgcolor="#FFFFFF" class="box-border-nopadding" > 
             <TR bgColor=#f4f4f2>
               	<TD height="20">
 						<TABLE border="0" cellpadding="0" cellspacing="1" bgcolor="#F4F4F2" height="20">
                  		<TR bgColor=#f4f4f2 height="20">
+								<logic:notEmpty name="PI" scope="application">
                  			<logic:equal name="aimMainProjectDetailsForm" property="tabIndex" value="5">
 	                     		<TD vAlign=center bgColor=#222e5d class="sub-nav-selected" noWrap width="150">
 									:: <digi:trn key="aim:parisIndicators">PARIS INDICATORS</digi:trn> 									
@@ -233,6 +238,8 @@
 									</digi:link>									
 							</logic:notEqual>
 								</TD>
+								</logic:notEmpty>
+								<logic:notEmpty name="ME" scope="application">
 							<logic:equal name="aimMainProjectDetailsForm" property="tabIndex" value="6">
 	                     		<TD vAlign=center bgColor=#222e5d class="sub-nav-selected" noWrap width="103">
 									:: <digi:trn key="aim:activityDashboard">Dashboard</digi:trn> 									
@@ -248,6 +255,7 @@
 									</digi:link>									
 							</logic:notEqual>
 								</TD>	
+								</logic:notEmpty>
 								<TD vAlign=middle width="100%" bgColor=#3754A1 >&nbsp;</TD>
 						</TR>
 						</TABLE>
@@ -256,5 +264,6 @@
 			</TABLE>
 		</TD>
 	</TR>
+	<% } %>
 </TABLE>
 </logic:equal>								

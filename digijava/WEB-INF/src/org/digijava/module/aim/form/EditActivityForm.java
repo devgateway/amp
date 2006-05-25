@@ -48,7 +48,8 @@ public class EditActivityForm extends ActionForm implements Serializable{
 	private String revisedCompDate;
 	private String proposedCompDate;
 	private Collection activityCloseDates;	
-	
+
+	private String currentValDate;
 	private String programDescription;
 	
 	// location selector pop-up
@@ -305,7 +306,7 @@ public class EditActivityForm extends ActionForm implements Serializable{
 	private float actualVal;
 	private String actualValDate;
 	private float currentVal;
-	private String currentValDate;
+	private String currValueDate;
 	private String comments;
 	
 	private Collection riskCollection;
@@ -2499,6 +2500,19 @@ public class EditActivityForm extends ActionForm implements Serializable{
 	}
 
 	/**
+	 * @return Returns the currentValDate.
+	 */
+	public String getCurrentValDate() {
+		return currentValDate;
+	}
+	/**
+	 * @param currentValDate The currentValDate to set.
+	 */
+	public void setCurrentValDate(String currentValDate) {
+		this.currentValDate = currentValDate;
+	}
+	
+	/**
 	 * @return Returns the programDescription.
 	 */
 	public String getProgramDescription() {
@@ -3286,17 +3300,17 @@ public class EditActivityForm extends ActionForm implements Serializable{
 	}
 
 	/**
-	 * @return Returns the currentValDate.
+	 * @return Returns the currValueDate.
 	 */
-	public String getCurrentValDate() {
-		return currentValDate;
+	public String getCurrValueDate() {
+		return currValueDate;
 	}
 
 	/**
-	 * @param currentValDate The currentValDate to set.
+	 * @param currValueDate The currValueDate to set.
 	 */
-	public void setCurrentValDate(String currentValDate) {
-		this.currentValDate = currentValDate;
+	public void setCurrValueDate(String currValueDate) {
+		this.currValueDate = currValueDate;
 	}
 
 	/**

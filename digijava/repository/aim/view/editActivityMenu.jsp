@@ -468,44 +468,42 @@ bgcolor="#006699">
 		</td>					
 		</c:if>		
 	</tr>
-	<c:if test="${aimEditActivityForm.editAct == true}">
-		<logic:notEmpty name="ME" scope="application">
-		<tr>
-			<c:if test="${aimEditActivityForm.step != 10}">
-			<td>
-				<IMG alt=Link height=10 src="../ampTemplate/images/arrow-th-BABAB9.gif" width=15>
-				<bean:define id="translation">
-					<digi:trn key="aim:clickToGoToMonitoringEvaluation">Monitoring and Evaluation</digi:trn>
-				</bean:define>
-				<a href="javascript:gotoStep(10)" class="menu" title="<%=translation%>">
-					<digi:trn key="aim:MandE">
-					M & E</digi:trn>
-				</a>
-			</td>
-			</c:if>	
-			<c:if test="${aimEditActivityForm.step == 10}">
-			<td>
-				<table width="100%" cellspacing=0 cellpadding=0 valign=top align=left border=0> 
-					<tr>
-						<td width="10" height="19" background="module/aim/images/left-arc.gif">
+	<logic:notEmpty name="ME" scope="application">
+	<tr>
+		<c:if test="${aimEditActivityForm.step != 10}">
+		<td>
+			<IMG alt=Link height=10 src="../ampTemplate/images/arrow-th-BABAB9.gif" width=15>
+			<bean:define id="translation">
+				<digi:trn key="aim:clickToGoToMonitoringEvaluation">Monitoring and Evaluation</digi:trn>
+			</bean:define>
+			<a href="javascript:gotoStep(10)" class="menu" title="<%=translation%>">
+				<digi:trn key="aim:MandE">
+				M & E</digi:trn>
+			</a>
+		</td>
+		</c:if>	
+		<c:if test="${aimEditActivityForm.step == 10}">
+		<td>
+			<table width="100%" cellspacing=0 cellpadding=0 valign=top align=left border=0> 
+				<tr>
+					<td width="10" height="19" background="module/aim/images/left-arc.gif">
+					</td>
+					<td bgcolor="#3399ff" height="19">
+						<IMG alt=Link height=10 src="../ampTemplate/images/arrow-th-BABAB9.gif" width=15>
+							<span class="textalb">
+								<digi:trn key="aim:MandE">
+									M & E
+								</digi:trn>
+							</span>
 						</td>
-						<td bgcolor="#3399ff" height="19">
-							<IMG alt=Link height=10 src="../ampTemplate/images/arrow-th-BABAB9.gif" width=15>
-								<span class="textalb">
-									<digi:trn key="aim:MandE">
-										M & E
-									</digi:trn>
-								</span>
-							</td>
-						<td width="10" height="19"  background="module/aim/images/right-arc.gif">
-						</td>
-					</tr>
-				</table>
-			</td>					
-			</c:if>		
-		</tr>
-		</logic:notEmpty>
-	</c:if>
+					<td width="10" height="19"  background="module/aim/images/right-arc.gif">
+					</td>
+				</tr>
+			</table>
+		</td>					
+		</c:if>		
+	</tr>
+	</logic:notEmpty>
 	<tr>
 		<td align="center">
 		</td>

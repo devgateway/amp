@@ -20,7 +20,6 @@
 		document.aimEditActivityForm.submit();
 		return true;
 	}
-
 	function setValues(val) 
 	{
 		if(document.aimEditActivityForm.workingTeamLeadFlag.value == 'no')
@@ -44,34 +43,68 @@
 	}
 	function chkforEmptyBox()
 	{
-		if(trim(document.aimEditActivityForm.currentVal.value) == 0)
+		if(document.aimEditActivityForm.currentVal.value == 0)
 		{
-			alert("Please give a Current Value");
+			alert("Please give Current Value");
 			document.aimEditActivityForm.currentVal.focus();
+			return false;
+		}
+		if(trim(document.aimEditActivityForm.currValueDate.value) == '')
+		{
+			alert("Please give Current-Value Date");
 			return false;
 		}
 		return true;
 	}
 	function chkforEmptyBoxes()
 	{
-		if(trim(document.aimEditActivityForm.baseVal.value) == 0)
+		if(document.aimEditActivityForm.baseVal.value == 0)
 		{
-			alert("Please give a Base Value");
+			alert("Please give Base Value");
 			document.aimEditActivityForm.baseVal.focus();
 			return false;
 		}
-		if(trim(document.aimEditActivityForm.targetVal.value) == 0)
+		else if(trim(document.aimEditActivityForm.baseValDate.value) == '')
 		{
-			alert("Please give a Target Value");
+			alert("Please give Base-Value Date");
+			return false;
+		}
+		else if(document.aimEditActivityForm.actualVal.value == 0)
+		{
+			alert("Please give Actual Value");
+			document.aimEditActivityForm.actualVal.focus();
+			return false;
+		}
+		else if(trim(document.aimEditActivityForm.actualValDate.value) == '')
+		{
+			alert("Please give Actual-Value Date");
+			return false;
+		}
+		else if(document.aimEditActivityForm.targetVal.value == 0)
+		{
+			alert("Please give Target Value");
 			document.aimEditActivityForm.targetVal.focus();
 			return false;
+		}
+		else if(trim(document.aimEditActivityForm.targetValDate.value) == '')
+		{
+			alert("Please give Target-Value Date");
+			return false;
+		}
+		else
+		{
+			if((document.aimEditActivityForm.currentVal.value == 0) ^ (trim(document.aimEditActivityForm.currValueDate.value) == ''))
+			{
+				alert("Enter both Current Value and its Date");
+				document.aimEditActivityForm.currentVal.focus();
+				return false;
+			}
 		}
 		return true;
 	}
 -->
 </script>
 
-<digi:instance property="aimEditActivityForm" />
 <digi:form action="/saveIndicatorValues.do" method="post">
 <html:hidden property="step" />
 <html:hidden property="editAct" />
@@ -271,6 +304,7 @@
 													<table cellspacing="0" cellpadding="3" valign="top" align="center" width="90%">
 														<c:if test="${aimEditActivityForm.workingTeamLeadFlag=='no'}">
 															<tr>
+																<c:if test="${(aimEditActivityForm.baseVal != 0) && (aimEditActivityForm.baseValDate != null)}">
 																<td><b>Base Value</b></td>
 																<td>
 																	<bean:write name="aimEditActivityForm" property="baseVal" />
@@ -282,8 +316,10 @@
 																<td align="left">&nbsp;&nbsp;
 																	<bean:write name="aimEditActivityForm" property="baseValDate" />
 																</td>
+																</c:if>
 															</tr>
 															<tr>
+																<c:if test="${(aimEditActivityForm.actualVal != 0) && (aimEditActivityForm.actualValDate != null)}">
 																<td><b>Actual Value</b></td>
 																<td>
 																	<bean:write name="aimEditActivityForm" property="actualVal" />
@@ -295,8 +331,10 @@
 																<td align="left">&nbsp;&nbsp;
 																	<bean:write name="aimEditActivityForm" property="actualValDate" />
 																</td>
+																</c:if>
 															</tr>															
 															<tr>
+																<c:if test="${(aimEditActivityForm.targetVal != 0) && (aimEditActivityForm.targetValDate != null)}">
 																<td><b>Target Value</b></td>
 																<td>
 																	<bean:write name="aimEditActivityForm" property="targetVal" />
@@ -308,6 +346,7 @@
 																<td align="left">&nbsp;&nbsp;
 																	<bean:write name="aimEditActivityForm" property="targetValDate" />
 																</td>
+																</c:if>
 															</tr>
 														</c:if>
 														<c:if test="${aimEditActivityForm.workingTeamLeadFlag=='yes'}">
@@ -386,6 +425,11 @@
 																</tr>
 															</logic:iterate>
 														</logic:notEmpty>
+														<c:if test="${aimEditActivityForm.workingTeamLeadFlag=='no'}">
+														<c:if test="${(aimEditActivityForm.baseVal != 0)||(aimEditActivityForm.baseValDate != null)||
+																			(aimEditActivityForm.actualVal != 0)||(aimEditActivityForm.actualValDate != null)||
+		  																	(aimEditActivityForm.targetVal != 0)||(aimEditActivityForm.targetValDate != null)}">
+															
 														<tr>
 															<td><b>Current Value</b></td>
 															<td>
@@ -395,14 +439,14 @@
 															<td align="right">
 																Date  :
 															</td>
-															<td>
-																<html:text name="aimEditActivityForm" property="currentValDate" size="10"
-																styleId="currentValDate" styleClass="inp-text" readonly="true"/>&nbsp;&nbsp;
-																<a href="javascript:calendar('currentValDate')">
+															<td align="left">
+																<html:text name="aimEditActivityForm" property="currValueDate" size="10"
+																styleId="currValueDate" styleClass="inp-text" readonly="true"/>&nbsp;&nbsp;											
+																<a href="javascript:calendar('currValueDate')">
 																	<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border=0>
 																</a>
 															</td>
-														</tr>			
+														</tr>
 														<tr>
 															<td><b>Comments</b></td>
 															<td>
@@ -427,6 +471,64 @@
 															</td>
 															<td>&nbsp;</td>
 														</tr>
+														</c:if>
+														<c:if test="${(aimEditActivityForm.baseVal == 0)||(aimEditActivityForm.baseValDate == null)||
+																			(aimEditActivityForm.actualVal == 0)||(aimEditActivityForm.actualValDate == null)||
+	  																		(aimEditActivityForm.targetVal == 0)||(aimEditActivityForm.targetValDate == null)}">
+														<tr>
+															<td><b>&nbsp;</b></td>
+															<td bgcolor=#f4f4f2 align="center" colspan="2"><font color="red">
+																Base, Actual & Target Values are not given. Hence Current Values cannot be entered.
+															</td>
+															<td>&nbsp;</td>
+															<td align="right">&nbsp;</td>
+															<td align="left">&nbsp;</td>
+														</tr>
+														</c:if>
+														</c:if>
+														<c:if test="${aimEditActivityForm.workingTeamLeadFlag=='yes'}">
+														<tr>
+															<td><b>Current Value</b></td>
+															<td>
+																<html:text name="aimEditActivityForm" property="currentVal" styleClass="inp-text"/>
+															</td>
+															<td>&nbsp;&nbsp;&nbsp;</td>
+															<td align="right">
+																Date  :
+															</td>
+															<td align="left">
+																<html:text name="aimEditActivityForm" property="currValueDate" size="10"
+																styleId="currValueDate" styleClass="inp-text" readonly="true"/>&nbsp;&nbsp;											
+																<a href="javascript:calendar('currValueDate')">
+																	<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border=0>
+																</a>
+															</td>
+														</tr>
+														<tr>
+															<td><b>Comments</b></td>
+															<td>
+																<html:textarea name="aimEditActivityForm" property="comments" styleClass="inp-text"/>
+															</td>
+															<td>&nbsp;&nbsp;&nbsp;</td>
+															<td><b>Risk</b></td>
+															<td>
+																<html:select property="indicatorRisk" styleClass="inp-text">
+																	<option value="-1">Select Risk</option>
+																	<html:optionsCollection name="aimEditActivityForm" property="riskCollection" 
+																	value="ampIndRiskRatingsId" label="ratingName" />
+																</html:select>
+															</td>
+														</tr>
+														<tr><td>&nbsp;</td></tr>										
+														<tr>
+															<td>&nbsp;</td>
+															<td colspan="3" align="center">
+																<input type="button" class="dr-menu" value="Set Values" 
+																onclick="setValues('<c:out value="${indicator.indicatorId}" />')">
+															</td>
+															<td>&nbsp;</td>
+														</tr>
+														</c:if>
 													</table>
 												</td>
 											</tr>

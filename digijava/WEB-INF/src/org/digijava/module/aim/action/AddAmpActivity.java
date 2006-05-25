@@ -337,6 +337,27 @@ public class AddAmpActivity extends Action {
 			
 			return mapping.findForward("preview");
 		} else if (eaForm.getStep().equals("10")) {		// show step 9 - M&E page
+			
+			eaForm.setIndicatorsME(
+					MEIndicatorsUtil.getActivityIndicators(eaForm.getActivityId()));
+			
+			eaForm.setIndicatorId(null);
+			eaForm.setIndicatorValId(null);
+			eaForm.setExpIndicatorId(null);
+			eaForm.setBaseVal(0);
+			eaForm.setBaseValDate(null);
+			eaForm.setTargetVal(0);
+			eaForm.setTargetValDate(null);
+			eaForm.setActualVal(0);
+			eaForm.setActualValDate(null);
+			eaForm.setIndicatorPriorValues(null);
+			eaForm.setCurrentVal(0);
+			eaForm.setCurrValueDate(null);
+			eaForm.setIndicatorRisk(null);
+			
+			//get the levels of risks
+			if(!eaForm.getIndicatorsME().isEmpty())
+				eaForm.setRiskCollection(MEIndicatorsUtil.getAllIndicatorRisks());
 
 			return mapping.findForward("addActivityStep9");
 		}

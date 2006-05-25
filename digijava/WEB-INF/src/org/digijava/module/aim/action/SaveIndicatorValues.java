@@ -34,7 +34,7 @@ public class SaveIndicatorValues extends Action
 					if(eaForm.getWorkingTeamLeadFlag().equalsIgnoreCase("no"))
 					{
 						temp.setCurrentVal(eaForm.getCurrentVal());
-						temp.setCurrentValDate(eaForm.getCurrentValDate());
+						temp.setCurrentValDate(eaForm.getCurrValueDate());
 						temp.setComments(eaForm.getComments());
 						temp.setRisk(eaForm.getIndicatorRisk());
 						break;
@@ -48,7 +48,7 @@ public class SaveIndicatorValues extends Action
 						temp.setActualVal(eaForm.getActualVal());
 						temp.setActualValDate(eaForm.getActualValDate());
 						temp.setCurrentVal(eaForm.getCurrentVal());
-						temp.setCurrentValDate(eaForm.getCurrentValDate());
+						temp.setCurrentValDate(eaForm.getCurrValueDate());
 						temp.setComments(eaForm.getComments());
 						temp.setRisk(eaForm.getIndicatorRisk());
 						break;

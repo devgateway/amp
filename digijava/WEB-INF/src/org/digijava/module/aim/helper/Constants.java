@@ -167,6 +167,6 @@ public class Constants
 	public static final String ME_FEATURE = "ME"; // M & E Feature code
 	public static final String PI_FEATURE = "PI"; // Paris Indicators feature code
 	public static final String AA_FEATURE = "AA"; // Activity Approval feature code 
-	
+	public static final String CL_FEATURE = "CL"; // Calendar feature code
 	
 }	

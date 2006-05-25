@@ -69,6 +69,16 @@ public class FeatureManager extends Action {
 								}
 							}
 						}
+					} else if (feature.getCode().equalsIgnoreCase(Constants.CL_FEATURE)) {
+						synchronized (ampContext) {
+							if (feature.isActive()) {
+								ampContext.setAttribute(Constants.CL_FEATURE,featureOn);
+							} else {
+								if (ampContext.getAttribute(Constants.CL_FEATURE) != null) {
+									ampContext.removeAttribute(Constants.CL_FEATURE);
+								}
+							}
+						}
 					}
 				}
 			} catch (NumberFormatException nfe) {

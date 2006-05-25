@@ -43,6 +43,9 @@ public class AMPStartupListener extends HttpServlet
         		} else if (f.getCode().equalsIgnoreCase(Constants.PI_FEATURE)) {
         			ampContext.setAttribute(Constants.PI_FEATURE,new Boolean(true));
         			logger.info("PI Feature..");
+        		} else if (f.getCode().equalsIgnoreCase(Constants.CL_FEATURE)) {
+        			ampContext.setAttribute(Constants.CL_FEATURE,new Boolean(true));
+        			logger.info("CL Feature..");
         		}
         	}
         	

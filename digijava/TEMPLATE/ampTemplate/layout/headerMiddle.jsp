@@ -43,6 +43,7 @@
 			<digi:img  src="images/nav-div.gif" width="2"/>
 			--%>
 		</TD>
+		<logic:notEmpty name="CL" scope="application">								
       <TD vAlign=center >
              <a class="nav">
          	::: <digi:trn key="aim:calendar">CALENDAR</digi:trn></a>
@@ -52,6 +53,7 @@
 			<digi:img src="images/nav-div.gif" width="2" />
 			--%>
 		</TD>
+		</logic:notEmpty>				
       <TD vAlign=center >
 			<a class="nav">
          	::: <digi:trn key="aim:scenarios">SCENARIOS</digi:trn></a>

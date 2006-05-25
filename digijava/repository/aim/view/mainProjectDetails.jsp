@@ -43,7 +43,7 @@
 	<bean:write name="aimMainProjectDetailsForm" property="ampActivityId"/>
 </c:set>
 	
-<TABLE width="765" border="0" cellpadding="0" cellspacing="0" vAlign="top" align="center">
+<TABLE width="790" border="0" cellpadding="0" cellspacing="0" vAlign="top" align="center">
    <TR>
 		<TD>
 			<digi:form action="/viewProjectDetails.do">
@@ -116,7 +116,7 @@
 	</TR>
 	<TR>
       <TD width="100%" nowrap align="center" vAlign="bottom" height="20">
-        	<TABLE width="765"  border="0" cellpadding="0" cellspacing="0" bgcolor="#FFFFFF" class="box-border-nopadding" > 
+        	<TABLE width="100%"  border="0" cellpadding="0" cellspacing="0" bgcolor="#FFFFFF" class="box-border-nopadding" > 
             <TR bgColor=#f4f4f2>
               	<TD height="20">
 						<TABLE border="0" cellpadding="0" cellspacing="1" bgcolor="#F4F4F2" height="20">
@@ -213,7 +213,7 @@
 	
 	<TR>
       <TD width="100%" nowrap align="center" vAlign="bottom" height="20">
-        	<TABLE width="765"  border="0" cellpadding="0" cellspacing="0" bgcolor="#FFFFFF" class="box-border-nopadding" > 
+        	<TABLE width="100%"  border="0" cellpadding="0" cellspacing="0" bgcolor="#FFFFFF" class="box-border-nopadding" > 
             <TR bgColor=#f4f4f2>
               	<TD height="20">
 						<TABLE border="0" cellpadding="0" cellspacing="1" bgcolor="#F4F4F2" height="20">

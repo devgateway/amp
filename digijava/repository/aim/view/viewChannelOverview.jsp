@@ -84,11 +84,11 @@ type="org.digijava.module.aim.form.ChannelOverviewForm" method="post">
 	<TD vAlign="top" align="center">
 		<!-- contents -->
 
-			<TABLE width="760" cellSpacing=0 cellPadding=0 vAlign="top" align="center" bgcolor="#f4f4f4" class="box-border-nopadding">
+			<TABLE width="99%" cellSpacing=0 cellPadding=0 vAlign="top" align="center" bgcolor="#f4f4f4" class="box-border-nopadding">
 			<TR><TD bgcolor="#f4f4f4">
 			<bean:define id="activity" property="activity" name="aimChannelOverviewForm" />
 			
-			<TABLE width="760" cellSpacing=1 cellPadding=3 vAlign="top" align="center" bgcolor="#f4f4f4">
+			<TABLE width="100%" cellSpacing=1 cellPadding=3 vAlign="top" align="center" bgcolor="#f4f4f4">
 				<TR bgColor=#f4f4f2>
             	<TD align=left>
 						<TABLE width="100%" cellPadding="3" cellSpacing="2" align="left" vAlign="top">

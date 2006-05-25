@@ -23,7 +23,7 @@
 	Long actId = (Long) request.getAttribute("actId");
 	
 	String actPerfChartFileName = ChartGenerator.getActivityPerformanceChartFileName(
-						 actId,session,new PrintWriter(out),400,350);
+						 actId,session,new PrintWriter(out),370,350);
 
 	String actPerfChartUrl = null;
 	if (actPerfChartFileName != null) {
@@ -32,7 +32,7 @@
 
 	
 	String actRiskChartFileName = ChartGenerator.getActivityRiskChartFileName(
-						 actId,session,new PrintWriter(out),400,350);
+						 actId,session,new PrintWriter(out),370,350);
 
 	String actRiskChartUrl = null;
 
@@ -41,11 +41,32 @@
 	}
 %>
 
-<table width="100%" cellspacing="2" cellpadding="2" valign="top" align="left" border=0>
+
+
+
+<TABLE cellSpacing=0 cellPadding=0 align="center" vAlign="top" border=0 width="100%">
+<TR>
+	<TD vAlign="top" align="center">
+		<!-- contents -->
+
+			<TABLE width="99%" cellSpacing=0 cellPadding=0 vAlign="top" align="center" class="box-border-nopadding">
+			<TR><TD>
+
+			<table width="100%" cellspacing="2" cellpadding="2" valign="top" align="left" border=0>
+			
+			<tr>
+				<td width="50%" align="center" class="textalb" height="20" bgcolor="#336699">
+					Activity - Performance
+				</td>
+				<td width="50%" align="center" class="textalb" height="20" bgcolor="#336699">
+					Activity - Risk
+				</td>
+			</tr>
+			
 	<tr>
 		<td width="50%">
 			<% if (actPerfChartUrl != null) { %>
-				<img src="<%= actPerfChartUrl %>" width=400 height=350 border=0 usemap="#<%= actPerfChartFileName %>"><br><br>
+				<img src="<%= actPerfChartUrl %>" width=370 height=350 border=0 usemap="#<%= actPerfChartFileName %>"><br><br>
 				<div align="center">		  
 				<input type="button" class="buton" value="Printer Friendly Version" 
 				onclick="javascript:showPrinterFriendly('<%=actId%>','P')">
@@ -58,7 +79,7 @@
 		</td>
 		<td width="50%">
 			<% if (actRiskChartUrl != null) { %>
-				<img src="<%= actRiskChartUrl %>" width=400 height=350 border=0 usemap="#<%= actRiskChartFileName %>">
+				<img src="<%= actRiskChartUrl %>" width=370 height=350 border=0 usemap="#<%= actRiskChartFileName %>">
 				<br><br>
 				<div align="center">
 				<input type="button" class="buton" value="Printer Friendly Version" 
@@ -73,4 +94,12 @@
 	</tr>
 	</tr>
 </table>
-
+			
+			
+			</TD></TR>
+			</TABLE>
+		<!-- end -->
+	</TD>
+</TR>
+<TR><TD>&nbsp;</TD></TR>
+</TABLE>

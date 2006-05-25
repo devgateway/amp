@@ -42,15 +42,15 @@
 <c:set target="${urlDiscrepancy}" property="tabIndex" value="1"/>
 <c:set target="${urlDiscrepancy}" property="transactionType" value="0"/>
 
-<TABLE cellSpacing=0 cellPadding=0 align="center" vAlign="top" border=0 width="760">
+<TABLE cellSpacing=0 cellPadding=0 align="center" vAlign="top" border=0 width="100%">
 <TR>
 	<TD vAlign="top" align="center">
 		<!-- contents -->
 
-			<TABLE width="760" cellSpacing=0 cellPadding=0 vAlign="top" align="center" bgcolor="#f4f4f4" class="box-border-nopadding">
+			<TABLE width="99%" cellSpacing=0 cellPadding=0 vAlign="top" align="center" bgcolor="#f4f4f4" class="box-border-nopadding">
 			<TR><TD bgcolor="#f4f4f4">
 			
-			<TABLE width="760" cellSpacing=3 cellPadding=3 vAlign="top" align="center" bgcolor="#f4f4f4">
+			<TABLE width="100%" cellSpacing=3 cellPadding=3 vAlign="top" align="center" bgcolor="#f4f4f4">
 				<TR bgColor=#222e5d height="20"><TD style="COLOR: #c9c9c7" height="20"> 	
 				&nbsp;&nbsp;&nbsp;
 				<SPAN class="sub-nav2-selected">OVERVIEW</SPAN> | 

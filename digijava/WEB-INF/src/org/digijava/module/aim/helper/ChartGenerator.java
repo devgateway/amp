@@ -60,7 +60,7 @@ public class ChartGenerator {
 			int chartWidth,int chartHeight) {
 		
 		Collection meRisks = MEIndicatorsUtil.getMEIndicatorRisks(actId);
-		return generateRiskChart(meRisks,Constants.ACTIVITY_RISK_CHART_TITLE,chartWidth,
+		return generateRiskChart(meRisks,"",chartWidth,
 				chartHeight,session,pw);
 	}
 	
@@ -104,7 +104,7 @@ public class ChartGenerator {
 			int chartWidth,int chartHeight) {
 		
 		Collection meIndValues = MEIndicatorsUtil.getMEIndicatorValues(actId);
-		return generatePerformanceChart(meIndValues,Constants.ACTIVITY_PERFORMANCE_CHART_TITLE,
+		return generatePerformanceChart(meIndValues,"",
 				chartWidth,chartHeight,session,pw);
 	}
 	

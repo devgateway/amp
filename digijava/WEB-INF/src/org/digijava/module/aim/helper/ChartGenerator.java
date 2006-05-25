@@ -20,7 +20,16 @@ import org.jfree.chart.ChartRenderingInfo;
 import org.jfree.chart.ChartUtilities;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.entity.StandardEntityCollection;
+import org.jfree.chart.plot.CategoryPlot;
+import org.jfree.chart.plot.PiePlot;
+import org.jfree.chart.plot.Plot;
 import org.jfree.chart.plot.PlotOrientation;
+import org.jfree.chart.renderer.AbstractRenderer;
+import org.jfree.chart.renderer.category.AbstractCategoryItemRenderer;
+import org.jfree.chart.renderer.category.BarRenderer;
+import org.jfree.chart.renderer.category.CategoryItemRenderer;
+import org.jfree.chart.renderer.category.DefaultCategoryItemRenderer;
+import org.jfree.chart.renderer.category.StackedBarRenderer;
 import org.jfree.chart.servlet.ServletUtilities;
 import org.jfree.data.category.DefaultCategoryDataset;
 import org.jfree.data.general.DefaultPieDataset;
@@ -107,8 +116,32 @@ public class ChartGenerator {
 				Iterator itr = col.iterator();
 				
 				DefaultPieDataset ds = new DefaultPieDataset();
+				
+				Color seriesColors[] = new Color[col.size()];
+				int index = 0;
 				while (itr.hasNext()) {
 					MEIndicatorRisk risk = (MEIndicatorRisk) itr.next();
+					
+					switch (risk.getRiskRating()) {
+					case Constants.HIGHLY_SATISFACTORY:
+						seriesColors[index++] = Constants.HIGHLY_SATISFACTORY_CLR;
+						break;
+					case Constants.VERY_SATISFACTORY:
+						seriesColors[index++] = Constants.VERY_SATISFACTORY_CLR;
+						break;
+					case Constants.SATISFACTORY:
+						seriesColors[index++] = Constants.SATISFACTORY_CLR;
+						break;
+					case Constants.UNSATISFACTORY:
+						seriesColors[index++] = Constants.UNSATISFACTORY_CLR;
+						break;
+					case Constants.VERY_UNSATISFACTORY:
+						seriesColors[index++] = Constants.VERY_UNSATISFACTORY_CLR;
+						break;
+					case Constants.HIGHLY_UNSATISFACTORY:
+						seriesColors[index++] = Constants.HIGHLY_UNSATISFACTORY_CLR;
+					}
+					
 					ds.setValue(risk.getRisk(),risk.getRiskCount());
 				}
 				
@@ -119,7 +152,14 @@ public class ChartGenerator {
 						false,	// show tooltips
 						false);	// show urls
 				chart.setBackgroundPaint(Color.WHITE);
+				
+				PiePlot plot = (PiePlot) chart.getPlot();
+				for (int i = 0;i < index;i ++) {
+					plot.setSectionPaint(i,seriesColors[i]);
+				}
+
 				ChartRenderingInfo info = new ChartRenderingInfo(new StandardEntityCollection());
+				
 				fileName = ServletUtilities.saveChartAsPNG(chart,chartWidth,
 						chartHeight,info,session);
 				ChartUtilities.writeImageMap(pw,fileName,info,false);
@@ -155,6 +195,15 @@ public class ChartGenerator {
 						false,	// show tooltips
 						false);	// show urls
 				chart.setBackgroundPaint(Color.WHITE);
+				
+				CategoryPlot plot = (CategoryPlot) chart.getPlot();
+				
+				StackedBarRenderer r1 = new StackedBarRenderer();
+				r1.setSeriesPaint(0,Constants.BASE_VAL_CLR);
+				r1.setSeriesPaint(1,Constants.ACTUAL_VAL_CLR);
+				r1.setSeriesPaint(2,Constants.TARGET_VAL_CLR);
+				plot.setRenderer(r1);
+				
 				ChartRenderingInfo info = new ChartRenderingInfo(new StandardEntityCollection());
 				fileName = ServletUtilities.saveChartAsPNG(chart,chartWidth,
 						chartHeight,info,session);

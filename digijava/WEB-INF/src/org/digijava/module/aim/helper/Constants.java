@@ -1,5 +1,7 @@
 package org.digijava.module.aim.helper ;
 
+import java.awt.Color;
+
 public class Constants
 {
 	public static final int COMMITMENT = 0 ;
@@ -139,6 +141,27 @@ public class Constants
 	
 	public static final String ACCESS_TYPE_TEAM = "Team";
 	public static final String ACCESS_TYPE_MNGMT = "Management";
+	
+	// M&E Indicator Risk Ratings
+	public static final byte HIGHLY_SATISFACTORY = 3;
+	public static final byte VERY_SATISFACTORY = 2;
+	public static final byte SATISFACTORY = 1;
+	public static final byte UNSATISFACTORY = -1;
+	public static final byte VERY_UNSATISFACTORY = -2;
+	public static final byte HIGHLY_UNSATISFACTORY = -3;
+	
+	// Risk chart colors for risk ratings
+	public static final Color HIGHLY_SATISFACTORY_CLR = Color.GREEN;
+	public static final Color VERY_SATISFACTORY_CLR = Color.BLUE;
+	public static final Color SATISFACTORY_CLR = Color.CYAN;
+	public static final Color UNSATISFACTORY_CLR = Color.YELLOW;
+	public static final Color VERY_UNSATISFACTORY_CLR = Color.ORANGE;
+	public static final Color HIGHLY_UNSATISFACTORY_CLR = Color.RED;	
+	
+	// Performance chart colors
+	public static final Color BASE_VAL_CLR = Color.BLUE;
+	public static final Color ACTUAL_VAL_CLR = Color.GREEN;
+	public static final Color TARGET_VAL_CLR = Color.RED;
 	
 	// For AMP feature turn ON/OFF, following are the feature codes.
 	public static final String ME_FEATURE = "ME"; // M & E Feature code

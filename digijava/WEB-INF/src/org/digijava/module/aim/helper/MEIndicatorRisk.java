@@ -3,6 +3,7 @@ package org.digijava.module.aim.helper;
 public class MEIndicatorRisk {
 	
 	private String risk;
+	private byte riskRating;
 	private int riskCount;
 	/**
 	 * @return Returns the risk.
@@ -27,5 +28,17 @@ public class MEIndicatorRisk {
 	 */
 	public void setRiskCount(int riskCount) {
 		this.riskCount = riskCount;
+	}
+	/**
+	 * @return Returns the riskRating.
+	 */
+	public byte getRiskRating() {
+		return riskRating;
+	}
+	/**
+	 * @param riskRating The riskRating to set.
+	 */
+	public void setRiskRating(byte riskRating) {
+		this.riskRating = riskRating;
 	}		
 }

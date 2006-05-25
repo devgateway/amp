@@ -305,6 +305,10 @@
       name="aimAdvancedReportForm"
 		type="org.digijava.module.aim.form.AdvancedReportForm" />
 
+	<!--<form-bean
+      	name="aimParisIndicatorForm"
+	type="org.digijava.module.aim.form.ParisIndicatorForm" />-->
+
 	<form-bean
 		name="aimPortfolioDashboardForm"
 		type="org.apache.struts.action.DynaActionForm">
@@ -314,6 +318,20 @@
 		<form-property name="actId" type="java.lang.Long"/>
 		<form-property name="indId" type="java.lang.Long"/>
 	</form-bean>
+
+      
+
+
+	<!--Paris Incator Manager Bean -->
+	<form-bean
+      	name="aimParisIndicatorManagerForm"
+		type="org.digijava.module.aim.form.ParisIndicatorManagerForm" />
+      
+ 
+	<!-- Paris Indicator Reports Bean-->
+	<form-bean
+      	name="aimParisIndicatorForm"
+		type="org.digijava.module.aim.form.ParisIndicatorForm" />
       
 	</form-beans> 
 
@@ -3034,6 +3052,63 @@
 		<forward name="actRisk" path="/showLayout.do?layout=aim_printActRisk" />
 	</action>	
 			
+<!-- END FINANCIAL EDIT	-->
+<!-- Paris Indicator Reports -->
+	<action 	
+		name="aimParisIndicatorForm" 
+         	type="org.digijava.module.aim.action.ParisIndicatorReport1" 
+		scope="session" validate="false" path="/aim/ParisIndicatorMenu">
+		<forward name="pindicmenu" path="/showLayout.do?layout=ParisIndicatorReportMenu"/>
+	</action>
+
+	<action 
+		name="aimParisIndicatorForm" 
+	    	type="org.digijava.module.aim.action.ParisIndicatorReport1" 
+		scope="session" validate="false" path="/aim/ParisIndicatorReport1">
+		<forward name="pindicr1" path="/showLayout.do?layout=ParisIndicatorReport1"/>
+	</action>
+	
+
+<!-- ENd Paris Indicator REports -->
+
+<!-- Paris Indicator Manager Links Starts-->
+
+ 	<action
+		name="aimParisIndicatorManagerForm"
+		type="org.digijava.module.aim.action.ParisIndicatorManager"
+		scope="session"
+		validate = "false"
+		path="/aim/parisIndicatorManager">
+		<forward name ="parisIndiManager" path="/showLayout.do?layout=parisIndicatorManager"/>
+		<forward name ="parisIndiDelete" path="/showLayout.do?layout=parisIndicatorDelete"/>
+		<forward name ="parisIndiEdit" path="/showLayout.do?layout=parisIndicatorEdit"/>
+		<forward name="forward" path="/showLayout.do?layout=aim_fundingPopupLayout" />
+		<forward name ="parisEditQuest" path="/showLayout.do?layout=aim_editQuestions"/>
+		<forward name ="parisAddQuest" path="/showLayout.do?layout=aim_addQuestion"/>
+		<forward name="parisAddIndicator" path="/showLayout.do?layout=aim_addIndicator"/>
+	</action>	
+
+	<action
+		name="aimParisIndicatorManagerForm"
+		type="org.digijava.module.aim.action.ParisIndicatorAdd"
+		scope="session"
+		validate = "false"
+		path="/aim/parisIndicatorAdd">
+		<forward name="parisIndiManager" path="/aim/parisIndicatorManager.do"/>
+	</action>
+
+	<action
+		name="aimParisIndicatorManagerForm"
+		type="org.digijava.module.aim.action.ParisIndicatorAddNew"
+		scope="session"
+		validate = "false"
+		path="/aim/parisIndicatorAddNew">
+		<forward name="parisIndiManager" path="/aim/parisIndicatorManager.do"/>
+	</action>
+	
+<!-- Paris Indicator Manager Links End-->
+
+		  
   </action-mappings>
 
 </struts-config>

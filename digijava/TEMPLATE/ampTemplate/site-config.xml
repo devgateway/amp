@@ -310,7 +310,11 @@
 				<page>	htmlViewPlannedProjects				</page>
 				<page>	htmlPhysicalComponentReport			</page>
 				<page>	htmlAdvancedReport			        </page>	
-		 	</module>
+				
+				<page>aim_editQuestions</page>
+				<page>aim_addQuestion</page>
+				<page>aim_addIndicator</page>
+			</module>
 		</page-group> 
 	</site-layout>
 </site-config>

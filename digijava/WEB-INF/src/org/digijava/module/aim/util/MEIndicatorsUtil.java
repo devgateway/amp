@@ -809,7 +809,7 @@ public class MEIndicatorsUtil
 					params += id;
 				}
 					
-				qryStr = "select count(*), r.rating_name from amp_me_indicator_value v " +
+				qryStr = "select count(*), r.rating_name,r.rating_value from amp_me_indicator_value v " +
 						"inner join amp_indicator_risk_ratings r on (r.amp_ind_risk_ratings_id=v.risk)" +
 						" where v.activity_id in (" + params + ") group by v.risk";
 				
@@ -819,10 +819,12 @@ public class MEIndicatorsUtil
 				while (rs.next()) {
 					int cnt = rs.getInt(1);
 					String rName = rs.getString(2);
+					byte ratValue = rs.getByte(3);
 
 					MEIndicatorRisk meRisk = new MEIndicatorRisk();
 					meRisk.setRisk(rName);
 					meRisk.setRiskCount(cnt);
+					meRisk.setRiskRating(ratValue);
 					col.add(meRisk);
 				}
 			}
@@ -896,6 +898,7 @@ public class MEIndicatorsUtil
 				MEIndicatorRisk meRisk = new MEIndicatorRisk();
 				meRisk.setRisk(riskRating.getRatingName());
 				meRisk.setRiskCount(riskCount.intValue());
+				meRisk.setRiskRating((byte) riskRating.getRatingValue());
 				col.add(meRisk);
 			}
 			

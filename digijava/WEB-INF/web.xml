@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE web-app PUBLIC "-//Sun Microsystems, Inc.//DTD Web Application 2.3//EN" "http://java.sun.com/dtd/web-app_2_3.dtd">
-<web-app>
+<web-app xmlns="http://java.sun.com/xml/ns/j2ee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee web-app_2_4.xsd" version="2.4">
 	<display-name>DigiJava</display-name>
 	<filter>
 		<filter-name>showMasterLayout</filter-name>
@@ -52,7 +51,7 @@
   		    	<param-value>/repository/struts-config.xml,
  	    			     /repository/admin/struts-config.xml,
 						  /repository/calendar/struts-config.xml,
-							/repository/aim/struts-config.xml,						  
+							/repository/aim/struts-config.xml,
 		                 /repository/editor/struts-config.xml,
   		    		     /repository/highlights/struts-config.xml,
   		    		     /repository/news/struts-config.xml,
@@ -90,7 +89,7 @@
   		    	<param-value>/repository/struts-config.xml,
  	    			     /repository/admin/struts-config.xml,
 						  /repository/calendar/struts-config.xml,
-							/repository/aim/struts-config.xml,						  
+							/repository/aim/struts-config.xml,
 		                 /repository/editor/struts-config.xml,
   		    		     /repository/highlights/struts-config.xml,
   		    		     /repository/news/struts-config.xml,
@@ -117,17 +116,17 @@
 	    	 <param-value>org.digijava.kernel.util.DigiMessageResourcesFactory</param-value>
 		</init-param>
 		<load-on-startup>2</load-on-startup>
-	</servlet>	
+	</servlet>
 
 	<!-- JFREE Chart Start -->
 	<servlet>
-		<servlet-name>DisplayChart</servlet-name>
-		<servlet-class>org.jfree.chart.servlet.DisplayChart</servlet-class>
+	    <servlet-name>DisplayChart</servlet-name>
+	    <servlet-class>org.jfree.chart.servlet.DisplayChart</servlet-class>
 	</servlet>
 
 	<servlet-mapping>
-		<servlet-name>DisplayChart</servlet-name>
-	    <url-pattern>/aim/DisplayChart.img</url-pattern>
+	    <servlet-name>DisplayChart</servlet-name>
+    	    <url-pattern>/aim/DisplayChart.img</url-pattern>
 	</servlet-mapping>
 
 	<!-- JFREE Chart End -->
@@ -142,7 +141,7 @@
 
 	<error-page>
 		<exception-type>java.lang.Exception</exception-type>
-		<location>/exceptionHandle.do</location>	
+		<location>/exceptionHandle.do</location>
 	</error-page>
 
 	<error-page>
@@ -192,8 +191,8 @@
 		<taglib-uri>/taglib/fmt</taglib-uri>
 		<taglib-location>/WEB-INF/tld/fmt.tld</taglib-location>
 	</taglib>
-	
-	
+
+
 	<security-constraint>
 		<web-resource-collection>
 			<web-resource-name>Restricted Resources</web-resource-name>

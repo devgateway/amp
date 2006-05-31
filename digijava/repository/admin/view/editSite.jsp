@@ -150,15 +150,14 @@
 		  </TD>
 		  </TR>
           <TR>
-            <TD align=left noWrap class="title"><digi:trn key="admin:siteDomains">Site 
-            Domains</digi:trn></TD>
+            <TD align=left noWrap class="title"><digi:trn key="admin:siteDomains">Site Domains</digi:trn></TD>
             <TD align=left noWrap class=text>&nbsp;</TD>
           </TR>		  
           <TR>
             <TD align=left noWrap class=text>
           	<table cellpadding=0 cellspacing=0 border=0>
 
-             <tr><td>&nbsp;</td><td><digi:trn key="admin:domain">Domain</digi:trn></td><td>&nbsp;<digi:trn key="admin:path">Path</digi:trn></td><td>&nbsp;<digi:trn key="admin:language">Language</digi:trn></td></tr>
+             <tr><td>&nbsp;</td><td><digi:trn key="admin:domain">Domain</digi:trn></td><td>&nbsp;<digi:trn key="admin:path">Path</digi:trn></td><td>&nbsp;<digi:trn key="admin:language">Language</digi:trn></td><td>&nbsp;<digi:trn key="admin:enableSecurity">Security</digi:trn></td></tr>
     	     <logic:iterate indexId="index" name="siteForm" id="siteDomain" property="siteDomains" type="org.digijava.module.admin.form.SiteForm.SiteDomainInfo">
              <tr><td>
              <html:radio name="siteForm" property="defDomain" value='index' idName="siteDomain" />
@@ -174,6 +173,11 @@
 			    <c:set var="languages" value="${siteForm.languages}" scope="page" />
                 <html:options  collection="languages" property="code" labelProperty="name" />
               </html:select>
+              </td><td>&nbsp;<html:select name="siteDomain" property="enableSecurity" indexed="true" style="text">
+			  <html:option value="-1">Both</html:option>
+			  <html:option value="0">Unsecure</html:option>
+			  <html:option value="1">Secure</html:option>
+                   </html:select>
               </td><td>
                <a href='javascript:fnOnDeleteDomain("<%= index %>")' ><digi:trn key="admin:delete">Delete</digi:trn></a>
               </td></tr>

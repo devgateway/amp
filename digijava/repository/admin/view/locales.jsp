@@ -27,6 +27,7 @@
    <tr>
        <td noWrap width="10%" align="center" height="19"><b><digi:trn key="admin:code">Code</digi:trn></b></td>
        <td noWrap width="30%" align="center" height="19"><b><digi:trn key="admin:name">Name</digi:trn></b></td>
+       <td noWrap width="10%" align="center" height="19"><b><digi:trn key="admin:ltrLocale">Left-to-right?</digi:trn></b></td>
        <td noWrap width="10%" align="center" height="19"><b><digi:trn key="admin:available">Available</digi:trn></b></td>
    </tr>
   <c:forEach var="locale" items="${localesForm.locales}">
@@ -36,6 +37,12 @@
       <td width="20%" align="center" height="19">
         <html:hidden name="locale" indexed="true" property="code" />  
         <html:hidden name="locale" indexed="true" property="name" />
+        <html:select name="locale" indexed="true" property="leftToRight">
+  	    	<html:option  value="true" >true</html:option>
+  	    	<html:option  value="false" >false</html:option>
+        </html:select>
+       </td>
+       <td>	
         <html:select name="locale" indexed="true" property="available">
   	    	<html:option  value="false" >false</html:option>
   	    	<html:option  value="true" >true</html:option>

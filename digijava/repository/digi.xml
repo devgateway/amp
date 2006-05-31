@@ -6,9 +6,7 @@
 		 <from>system@digijava.org</from>
 	</smtp>
 	
-	<logon-site id="dglogin" host="amp-login.mofed.gov">
-			  http://amp-login.mofed.gov/
-   </logon-site>
+	<logon-site id="dglogin" host="amp-login.mofed.gov">http://amp-login.mofed.gov/</logon-site>
      
 	
 	<server-type prefix="">development</server-type>
@@ -63,29 +61,132 @@
 		<hibernate-class>org.digijava.kernel.entity.OracleLocale</hibernate-class>
 		<hibernate-class>org.digijava.kernel.entity.PrincipalPermission</hibernate-class>
 		<hibernate-class>org.digijava.kernel.entity.PrincipalPermissionParameter</hibernate-class>
-
-		<hibernate-class precache="true" filter="not (obj.key like 'cpv:%')"
-          region="org.digijava.kernel.entity.Message.id_cache">org.digijava.kernel.entity.Message</hibernate-class>
-
+		<hibernate-class precache="true" filter="not (obj.key like 'cpv:%')" region="org.digijava.kernel.entity.Message.id_cache">org.digijava.kernel.entity.Message</hibernate-class>
 		<hibernate-class>org.digijava.kernel.entity.AccessLog</hibernate-class>
-
 		<hibernate-class>org.digijava.module.common.dbentity.ItemStatus</hibernate-class>
 		<hibernate-class>org.digijava.module.common.dbentity.ModuleTeaser</hibernate-class>
+                <hibernate-class>org.digijava.kernel.entity.MailSpool</hibernate-class>
 	</hibernate-classes>
+    <!--
+    <service id="urlTouchService" class="org.digijava.kernel.services.UrlTouchService">
+        <description>This service gets one or many URLs and touches them asynchronously</description>
+        <property name="bufferSize">512</property>
+        <property name="poolSize">7</property>
+    </service>
+    -->
+    <!--
+    <service id="searchService" class="org.digijava.module.search.service.SearchService">
+        <description>Lucene-based search service</description>
+        <property name="indexLocation">/Users/lasha/searchindex</property>
+        <property name="fragmentSize">512</property>
+        <property name="indexTime">2:45 pm</property>
+        <property name="indexOnStartup">false</property>
+        <property name="indexSources">news:org.digijava.module.news.indexer.NewsDocumentHandler,
+            calendar:org.digijava.module.calendar.indexer.CalendarDocumentHandler,
+            forum:org.digijava.module.forum.indexer.ForumDocumentHandler,
+            highlights:org.digijava.module.highlights.indexer.HighlightsDocumentHandler
+        </property>
+    </service>
+    -->
+    <!--
+    <service id="quartzScheduler" class="org.digijava.kernel.quartz.SchedulerService">
+        <description>Scheduler Service</description>
+        < ! - - If you have any startup jobs which must be executed when service starts,
+        uncomment startupJobFactory property declaration and put your factory
+        there - - >
+        < ! - -
+        <property name="startupJobFactory">org.digijava.kernel.quartz.DefaultStartupJobFactoryImpl</property>
+        - - >
+        < ! - - If you have any listeners, uncomment "listener" property and put coma-delimited
+        list of class names there - - >
+        < ! - -
+        <property name="listener">org.digijava.kernel.quartz.test.TestJobListener</property>
+        - - >
+    </service>
+    -->
 
-    <!-- The following agents are not authenticated. If we would try
-    to authenticate them, they would have to go through single-signgon
-    redirects, driven by cookies, which, in case these agents are not
-    storing and/or processing cookies may result in "too many redirects"
-    on the client side. The list contains agents which most probabely
-    have problems with cookies and "hate" redirects :)
+    <service id="cacheService" class="org.digijava.kernel.cache.jbosscache.TreeCacheService" level="0">
+        <description>Tree Cache Service</description>
+        <property name="configFileName">swarmcache-treecache.xml</property>
+    </service>
 
-    If client set accept-cookies HTTP header correctly, it does not have to
-    get here, though, but do all of them? Konqueror does not... -->
-    <ignored-agents>                                                          <ignored-agent>googlebot</ignored-agent>
-	    <ignored-agent>org.digijava.kernel.startup.UrlFetcher</ignored-agent>
-	    <ignored-agent>AOLserver</ignored-agent>
-	    <ignored-agent>Konqueror</ignored-agent>
-    </ignored-agents>
+    <service id="ignoredAgentsService" class="org.digijava.kernel.request.service.IgnoredAgentsService">
+        <description>Service to determine which agents will use SSO</description> 
+        <!-- What to do if user-agent header does not exist --> 
+        <property name="ignoreUndefined">true</property> 
+        <!-- Default Behavior --> 
+        <property name="ignoreByDefault">true</property> 
+        <!-- Checking Order --> 
+        <property name="checkAllowedFirst">false</property> 
+        <!-- Allow and Ignore directives. Can contain Java expressions. 
+              There are 2 constants available: agent and agentWithCase
+          --> 
+        <property name="allowedAgents">agent.indexOf("mozilla") != -1</property> 
+        <property name="ignoredAgents">agent.indexOf("googlebot") != -1</property>
+    </service>
+    <!--
+    <service id="siteIdentityService" class="org.digijava.kernel.services.siteidentity.SiteIdentityServiceImpl">
+        <description>This service converts site identities to various form (for omniture, page access counters, etc)</description>
+        <property name="config"><![CDATA[
+            <config>
+              <service id="test" default="unknown">
+                <site id="demosite">demo1</site>
+                <site id="demo">demo2</site>
+                <site id="newdemo">demo3</site>
+              </service>
+            </config>
+            ]]>
+        </property>
+    </service>
+    -->
+    <!--
+    <service id="robotsService" class="org.digijava.kernel.robots.RobotsTxtService">
+        <description>/robots.txt generator</description>
+        <property name="config"><![CDATA[
+            <robots-configs>
+                <robots-config>
+                    <domain>www.demo.ge</domain>
+                    <content>
+                        # robots.txt for http://www.demo.ge/
 
+                        User-agent:	*
+                        Disallow:	/cgi-bin
+                    </content>
+                </robots-config>
+                <robots-config default="true">
+                    <path>/robots.txt</path>
+                </robots-config>
+            </robots-configs>
+            ]]>
+        </property>
+    </service>
+    -->
+    <!--
+    <config-bean id="translateAlert" class="org.digijava.kernel.translator.TranslateAlertConfig">
+        <property name="alertUrl">http://www.listen.com/translateListener?siteId={siteId}&amp;locale={locale}&amp;key={key}</property>
+        <property name="userAgent">digi-translator</property>
+    </config-bean>
+    -->
+        <!--
+        <config-bean id="translationConfig" class="org.digijava.module.translation.config.TranslationConfig">
+            <property name="dropdownConfig"><![CDATA[
+                <groups>
+                    <group id="childdemo">
+                        <key id="ep">E-procure</key>
+                        <key id="ec">ECommerce</key>
+                        <key id="cn">Countries</key>
+                        <key id="ln">Languages</key>
+                        <key id="ag">Agencies (short)</key>
+                        <key id="aglng">Agencies (full)</key>
+                        <key id="dacon">Dacon</key>
+                        <key id="cpvct">CPV Categories</key>
+                        <key id="param">Parameters</key>
+                    </group>
+                </groups>
+                ]]></property>
+            </config-bean>
+            -->
+        <config-bean id="proxyHelperConfig" class="org.digijava.kernel.util.ProxyHelperConfig">
+             <property name="initializeUser">false</property>
+        </config-bean>
 </digi-config>

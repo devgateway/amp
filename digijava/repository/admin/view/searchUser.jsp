@@ -28,10 +28,16 @@
  <td>
   <TABLE border="0" width="100%" >
    <TR>
-     <TH align="right"><digi:trn key="admin:userInfo">User Info:</digi:trn></TH>
+     <TH align="right" nowrap="nowrap"><digi:trn key="admin:userInfo">User Info:</digi:trn></TH>
      <TD align="left"><html:text property="searchUserInfo"/></TD>
      <TD align="right" colspan=2><html:submit value="Search"/></TD>
    </TR>
+   <tr>
+   	 <td colspan="3"><html:checkbox property="hideNonAlertable" /><digi:trn key="admin:hideNonAlertable">Hide non-alertable users</digi:trn></td>
+   </tr>
+   <tr>
+   	 <td colspan="3"><html:checkbox property="hideBanned" /><digi:trn key="admin:hideBanned">Hide banned users</digi:trn></td>
+   </tr>
   </TABLE>
  </td>
 </tr>
@@ -42,9 +48,9 @@
 <HR>
 <table border="0" cellpadding="0" cellspacing="0">
  <tr>
-    <td noWrap width="30%" align="center"><b><digi:trn key="admin:email">Email</digi:trn></b></td>
-    <td noWrap width="50%" align="center"><b><digi:trn key="admin:name">Name</digi:trn></b></td>
-    <td noWrap width="20%>&nbsp;</td> 
+    <td nowrap="nowrap" width="30%" align="center"><b><digi:trn key="admin:email">Email</digi:trn></b></td>
+    <td nowrap="nowrap" width="50%" align="center"><b><digi:trn key="admin:name">Name</digi:trn></b></td>
+    <td nowrap="nowrap" width="20%">&nbsp;</td> 
  </tr>
 </table>
 <table border="0" cellpadding="0" cellspacing="0">
@@ -63,8 +69,8 @@
 </c:forEach>
 </table>
 </c:if>
-</digi:form>
 </div>
 		</td>
 	</tr>
 </table>
+</digi:form>

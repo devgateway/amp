@@ -38,7 +38,6 @@
       <tr><td><html:checkbox name="administrateUserForm" property="alertable"><digi:trn key="admin:makeUserNonAlertable">Make user non-alertable</digi:trn></html:checkbox></td></tr>
   </table>
   <br>
-<digi:secure globalAdmin="true">
 <HR>
   <table border="0" class="border" width="30%">
     <tr>
@@ -49,12 +48,14 @@
       <td width="10%" align="right"><b><digi:trn key="admin:confirm">Confirm:</digi:trn> </b></td>
       <td width="20%"><html:password name="administrateUserForm" property="confirmnewPassword" /></td>
     </tr>
-    <br>
+    <tr><td colspan="2">&nbsp;</td></tr>
+<digi:secure globalAdmin="true">
+
       <tr><td width="100%" colspan="2"><html:checkbox name="administrateUserForm" property="globalAdmin"><digi:trn key="admin:makeUserGlobalAdmin">Make user Global Admin</digi:trn></html:checkbox></td></tr>
       <tr><td width="100%" colspan="2"><html:checkbox name="administrateUserForm" property="ban"><digi:trn key="admin:banUser">Ban a user</digi:trn></html:checkbox></td></tr>
+</digi:secure>
   </table>
   <br>
-</digi:secure>
   <table>
     <tr><td align="left"><html:submit value="Submit" /></td></tr>    
   </table>

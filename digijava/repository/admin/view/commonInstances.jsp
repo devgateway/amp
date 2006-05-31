@@ -34,7 +34,7 @@
 		<td colspan="2" class="yellow" valign="top" align="left">
 
 <digi:errors />
-<digi:form method="get" action="/saveCommonInstances.do">
+<digi:form method="post" action="/saveCommonInstances.do">
 <digi:instance property="commonInstancesForm" />
 <table border="1" cellspacing="0" cellpadding="3" bordercolor="#E3DDC1" style="border-collapse: collapse;">
 <tr>

@@ -57,9 +57,11 @@
     <action name="userChangePasswordForm" type="org.digijava.module.um.action.UserChangePassword" input="/showLayout.do?layout=userChangePassword" path="/um/userChangePassword">
       <forward name="success" path="/showLayout.do?layout=userAccount" />
     </action>
+
     <action name="userAccountForm" type="org.digijava.module.um.action.ShowUserAccount" validate="false" path="/um/showUserAccount">
       <forward name="forward" path="/showLayout.do?layout=userAccount" />
     </action>
+
     <action name="userAccountForm" type="org.digijava.module.um.action.ShowUserAccountBlank" validate="false" path="/um/showUserAccountBlank" />
     <action name="userAccountForm" type="org.digijava.module.um.action.ShowUserAccountGateway" validate="false" path="/um/showUserAccountGateway" />
     <action name="userAccountForm" type="org.digijava.module.um.action.ShowUserAccountMarket" validate="false" path="/um/showUserAccountMarket" />
@@ -82,18 +84,19 @@
       <forward name="forward" path="/showLayout.do?layout=um_popupLayout" />
     </action>
     <action name="userEmailForm" forward="/showLayout.do?layout=userEmail" validate="false" path="/um/showEmailForm" />
-    <action name="userLogonForm" type="org.digijava.module.um.action.Logout" validate="false" path="/um/logoutAction">
+    <action name="userLogonForm" forward="/showLayout.do?layout=loginPrompt" path="/um/showPrompt" scope="request" />
+    <action name="userLogonForm" type="org.digijava.module.um.action.Logout" validate="false" path="/um/logoutAction" scope="request">
       <forward name="forward" path="/showLayout.do" />
     </action>
-    <action name="userLogonForm" type="org.digijava.module.um.action.Logout" validate="false" path="/um/logout">
+    <action name="userLogonForm" type="org.digijava.module.um.action.Logout" validate="false" path="/um/logout" scope="request">
       <forward name="forward" path="/showLayout.do" />
     </action>
-    <action name="userLogonForm" type="org.digijava.module.um.action.NewSession" validate="false" path="/um/newSession" />
-    <action name="userLogonForm" type="org.digijava.module.um.action.RenderTeaser" path="/um/renderTeaser" />
-    <action name="userLogonForm" type="org.digijava.module.um.action.Login" validate="true" input="/showLayout.do" path="/um/logonAction">
+    <action name="userLogonForm" type="org.digijava.module.um.action.NewSession" validate="false" path="/um/newSession" scope="request" />
+    <action name="userLogonForm" type="org.digijava.module.um.action.RenderTeaser" path="/um/renderTeaser" scope="request" />
+    <action name="userLogonForm" type="org.digijava.module.um.action.Login" validate="true" input="/showLayout.do" path="/um/logonAction" scope="request">
       <forward name="forward" path="/showLayout.do" redirect="true" />
     </action>
-    <action name="userLogonForm" type="org.digijava.module.um.action.Login" validate="true" input="/showLayout.do" path="/um/login">
+    <action name="userLogonForm" type="org.digijava.module.um.action.Login" validate="true" input="/showLayout.do" path="/um/login" scope="request">
       <forward name="forward" path="/showLayout.do" redirect="true" />
     </action>
     <action name="userProfileForm" type="org.digijava.module.um.action.ShowUserProfile" validate="false" input="/showLayout.do?layout=srchBody" scope="session" path="/um/showUserProfile">

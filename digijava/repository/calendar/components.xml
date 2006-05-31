@@ -13,6 +13,10 @@
 	<page page="confirmation" name="confirmCalendarItems" title="Blank site page title with reject confirmation body" />
 	<page page="adminEvents" name="calendarAdmin" title="Blank site page title with administer calendar body" />
 	<page page="settings" name="calendarItemsSettings" title="Blank site page title with calendar settings body" />
+
+    <page page="viewEvents" name="viewEvents" title="View Events" />
+    <page page="showAmpEvent" name="showAmpEvent" title="Show Amp Event" />
+    <page page="previewAmpEvent" name="previewAmpEvent" title="Preview Amp Event" />
 </secondary-pages>
 
 <module>
@@ -26,6 +30,10 @@
 	<page name="confirmation">confirmation.jsp</page>
 	<page name="calendarAdmin">adminEvents.jsp</page>
 	<page name="settings">settings.jsp</page>
+
+    <page name="viewEvents">viewEvents.jsp</page>
+    <page name="showAmpEvent">showAmpEvent.jsp</page>
+    <page name="previewAmpEvent">previewAmpEvent.jsp</page>
 </module>
 
 </config>

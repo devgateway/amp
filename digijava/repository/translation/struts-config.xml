@@ -9,6 +9,7 @@
     <form-bean name="advancedTranslationForm" type="org.digijava.module.translation.form.AdvancedTranslationForm" />
     <form-bean name="translationAdminForm" type="org.digijava.module.translation.form.TranslationAdminForm" />
     <form-bean name="translationPermissionsForm" type="org.digijava.module.translation.form.TranslationPermissionsForm" />
+    <form-bean name="translatorForm" type="org.digijava.module.translation.form.TranslatorForm" />
   </form-beans>
   <action-mappings>
     <!-- Action mappings added by Shamanth -->
@@ -88,6 +89,13 @@
     <action name="translationPermissionsForm" type="org.digijava.module.translation.action.DeletePermission" scope="session" path="/translation/deletePermission">
       <forward name="forwardGroup" path="/showLayout.do?layout=translationPermLayout" />
       <forward name="forwardUser" path="/showLayout.do?layout=translationUserLayout" />
+    </action>
+    <!--translator interface-->
+    <action name="translatorForm" type="org.digijava.module.translation.action.ShowTranslate" scope="request" path="/translation/showTranslate">
+      <forward name="forward" path="/showLayout.do?layout=translatorLayout" />
+    </action>
+    <action name="translatorForm" type="org.digijava.module.translation.action.SaveTranslation" scope="request" input="/showLayout.do?layout=translatorLayout" path="/translation/saveTranslation">
+      <forward name="forward" path="/translation/showTranslate" />
     </action>
   </action-mappings>
 </struts-config>

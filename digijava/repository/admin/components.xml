@@ -30,6 +30,7 @@
 
 <module>
 	<teaser name="adminLink" action="blankForward.do">adminLink.jsp</teaser>
+	<teaser name="mailStatus" action="showMailStatus.do">mailStatus.jsp</teaser>
 </module>
 
 </config>

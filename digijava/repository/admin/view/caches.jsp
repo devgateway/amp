@@ -22,36 +22,93 @@
 
 <digi:errors/>
 <table width="100%" cellpadding="0" cellspacing="0">
+<tr><td colspan="5">&nbsp;</td></tr>
+<tr>
+   <td align= "center" colspan="3"><b><digi:trn key="admin:customCaches">Custom Caches</digi:trn></b></td>
+ </tr>   
+<tr><td colspan="5">&nbsp;</td></tr>
 <tr bgcolor="silver">
    <td align= "center"><b><digi:trn key="admin:cacheKey">Cache Key</digi:trn></b></td>
    <td align= "center"><b><digi:trn key="admin:cacheSize">Cache Size</digi:trn></b></td>
+   <td align= "center"><b><digi:trn key="admin:numberOfCacheGets">Gets</digi:trn></b></td>
+   <td align= "center"><b><digi:trn key="admin:numberOfCachePuts">Puts</digi:trn></b></td>
    <td align= "center">&nbsp;</td>   
  </tr>   
-  <logic:iterate indexId="ind" id="cachesList" name="cacheForm" property="cachesList" type="org.digijava.module.admin.form.CacheForm.CacheInfo">
+  <logic:iterate indexId="ind" id="cachesList" name="cacheForm" property="customCachesList">
     <c:set var="isEven" value="${ind % 2}"/>
     <tr 
     <c:if test="${isEven == 0}">bgcolor="#EBEBEB"</c:if>
     <c:if test="${isEven == 1}">bgcolor="#D2D2DB"</c:if>
     >
   	<td align="left" valign="top">
-  	    <c:out value="${cachesList.key}" />
+  	    <c:out value="${cachesList.regionName}" />
   	</td>
   	<td align="right" valign="top">
-  	    <c:out value="${cachesList.size}" />
+  	    <c:out value="${cachesList.cacheSize}" />
+  	</td>
+  	<td align="right" valign="top">
+  	    <c:out value="${cachesList.numberOfGets}" />
+  	</td>
+  	<td align="right" valign="top">
+  	    <c:out value="${cachesList.numberOfPuts}" />
   	</td>
   	<td align="center" valign="top">
-  	    <digi:link href="/showCaches.do" paramName="ind" paramId="index"><digi:trn key="admin:clear">clear</digi:trn></digi:link>
+            <digi:link href="/showCaches.do" paramName="cachesList" paramProperty="regionName" paramId="customKey"><digi:trn key="admin:clear">clear</digi:trn></digi:link>
   	</td>
     </tr>
   </logic:iterate> 
- <tr><td colspan="3" bgcolor="silver">&nbsp;</td></tr>
+ <tr><td colspan="5" bgcolor="silver">&nbsp;</td></tr>
  <tr>
    <td align="right"><b><digi:trn key="admin:numberOfCaches">Total number of caches</digi:trn></b></td>
-   <td align="right"><c:out value="${cacheForm.cacheCount}" /></td>
+   <td align="right"><c:out value="${cacheForm.customCacheCount}" /></td>
  </tr>   
  <tr>
    <td align="right"><b><digi:trn key="admin:numberOfItemsInCaches">Total number of items in all caches</digi:trn></b></td>
-   <td align="right"><c:out value="${cacheForm.totalCount}" /></td>
+   <td align="right"><c:out value="${cacheForm.customTotalCount}" /></td>
+ </tr>   
+<tr><td colspan="5">&nbsp;</td></tr>
+<tr>
+   <td align= "center" colspan="5"><b><digi:trn key="admin:hibernateCaches">Hibernate Caches</digi:trn></b></td>
+ </tr>   
+<tr><td colspan="5">&nbsp;</td></tr>
+<tr bgcolor="silver">
+   <td align= "center"><b><digi:trn key="admin:cacheKey">Cache Key</digi:trn></b></td>
+   <td align= "right"><b><digi:trn key="admin:cacheSize">Cache Size</digi:trn></b></td>
+   <td align= "center"><b><digi:trn key="admin:numberOfCacheGets">Gets</digi:trn></b></td>
+   <td align= "center"><b><digi:trn key="admin:numberOfCachePuts">Puts</digi:trn></b></td>
+   <td align= "center">&nbsp;</td>   
+ </tr>   
+  <logic:iterate indexId="ind" id="cachesList" name="cacheForm" property="hibernateCachesList">
+    <c:set var="isEven" value="${ind % 2}"/>
+    <tr 
+    <c:if test="${isEven == 0}">bgcolor="#EBEBEB"</c:if>
+    <c:if test="${isEven == 1}">bgcolor="#D2D2DB"</c:if>
+    >
+  	<td align="left" valign="top">
+  	    <c:out value="${cachesList.regionName}" />
+  	</td>
+  	<td align="right" valign="top">
+  	    <c:out value="${cachesList.cacheSize}" />
+  	</td>
+  	<td align="right" valign="top">
+  	    <c:out value="${cachesList.numberOfGets}" />
+  	</td>
+  	<td align="right" valign="top">
+  	    <c:out value="${cachesList.numberOfPuts}" />
+  	</td>
+  	<td align="center" valign="top">
+  	    <digi:link href="/showCaches.do" paramName="cachesList" paramProperty="regionName" paramId="hibernateKey"><digi:trn key="admin:clear">clear</digi:trn></digi:link>
+  	</td>
+    </tr>
+  </logic:iterate> 
+ <tr><td colspan="5" bgcolor="silver">&nbsp;</td></tr>
+ <tr>
+   <td align="right"><b><digi:trn key="admin:numberOfCaches">Total number of caches</digi:trn></b></td>
+   <td align="right"><c:out value="${cacheForm.hibernateCacheCount}" /></td>
+ </tr>   
+ <tr>
+   <td align="right"><b><digi:trn key="admin:numberOfItemsInCaches">Total number of items in all caches</digi:trn></b></td>
+   <td align="right"><c:out value="${cacheForm.hibernateTotalCount}" /></td>
  </tr>   
 </table>
 		</td>

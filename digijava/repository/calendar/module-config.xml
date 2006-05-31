@@ -13,6 +13,9 @@
 		<action pattern="/updateCalendarItemSettings">ADMIN</action>
 		<action pattern="/showCalendarItems">ADMIN</action>
 		<action pattern="/translateSpecial">WRITE,TRANSLATE</action>
+        <action login-required="true" pattern="/showCalendarEvent" />
+        <action login-required="true" pattern="/previewCalendarEvent" />
+        <action login-required="true" pattern="/previewCalendarEventDone" />
 	</security>
 	<action pattern="/confirmCalendarItems">
 	  <param name="activeCalendarItem" />
@@ -36,6 +39,9 @@
 		<hibernate-class>org.digijava.module.calendar.dbentity.Calendar</hibernate-class>
 		<hibernate-class>org.digijava.module.calendar.dbentity.CalendarItem</hibernate-class>
 		<hibernate-class>org.digijava.module.calendar.dbentity.CalendarSettings</hibernate-class>
+		<hibernate-class>org.digijava.module.calendar.dbentity.AmpEventType</hibernate-class>
+        <hibernate-class>org.digijava.module.calendar.dbentity.AmpCalendar</hibernate-class>
+        <hibernate-class>org.digijava.module.calendar.dbentity.AmpCalendarAttendee</hibernate-class>
 	</hibernate-classes>
 	<!-- calendar classes End -->
 

@@ -341,6 +341,16 @@
 		</attribute>
 	</tag>
 	<tag>
+        <name>logout</name>
+        <tagclass>org.digijava.kernel.taglib.html.LogOutTag</tagclass>
+        <attribute>
+            <name>returnUrl</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+    </tag>
+
+    <tag>
 		<name>link</name>
 		<tagclass>org.digijava.kernel.taglib.html.LinkTag</tagclass>
 		<attribute>
@@ -369,6 +379,16 @@
 			<rtexprvalue>true</rtexprvalue>
 		</attribute>
 		<attribute>
+            <name>module</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+        <attribute>
+            <name>instance</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+        <attribute>
 			<name>accesskey</name>
 			<required>false</required>
 			<rtexprvalue>true</rtexprvalue>
@@ -554,6 +574,16 @@
 		<tagclass>org.digijava.kernel.taglib.html.FormTag</tagclass>
 		<bodycontent>JSP</bodycontent>
 		<attribute>
+            <name>module</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+        <attribute>
+            <name>instance</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+        <attribute>
 			<name>referrer</name>
 			<required>false</required>
 			<rtexprvalue>true</rtexprvalue>
@@ -953,91 +983,6 @@
 		</attribute>
 	</tag>
 	<tag>
-		<name>form</name>
-		<tagclass>org.digijava.kernel.taglib.html.FormTag</tagclass>
-		<bodycontent>JSP</bodycontent>
-		<attribute>
-			<name>site</name>
-			<required>false</required>
-			<rtexprvalue>true</rtexprvalue>
-		</attribute>
-		<attribute>
-			<name>contextPath</name>
-			<required>false</required>
-			<rtexprvalue>true</rtexprvalue>
-		</attribute>
-		<attribute>
-			<name>action</name>
-			<required>true</required>
-			<rtexprvalue>true</rtexprvalue>
-		</attribute>
-		<attribute>
-			<name>enctype</name>
-			<required>false</required>
-			<rtexprvalue>true</rtexprvalue>
-		</attribute>
-		<attribute>
-			<name>focus</name>
-			<required>false</required>
-			<rtexprvalue>true</rtexprvalue>
-		</attribute>
-		<attribute>
-			<name>focusIndex</name>
-			<required>false</required>
-			<rtexprvalue>true</rtexprvalue>
-		</attribute>
-		<attribute>
-			<name>method</name>
-			<required>false</required>
-			<rtexprvalue>true</rtexprvalue>
-		</attribute>
-		<attribute>
-			<name>name</name>
-			<required>false</required>
-			<rtexprvalue>true</rtexprvalue>
-		</attribute>
-		<attribute>
-			<name>onreset</name>
-			<required>false</required>
-			<rtexprvalue>true</rtexprvalue>
-		</attribute>
-		<attribute>
-			<name>onsubmit</name>
-			<required>false</required>
-			<rtexprvalue>true</rtexprvalue>
-		</attribute>
-		<attribute>
-			<name>scope</name>
-			<required>false</required>
-			<rtexprvalue>true</rtexprvalue>
-		</attribute>
-		<attribute>
-			<name>style</name>
-			<required>false</required>
-			<rtexprvalue>true</rtexprvalue>
-		</attribute>
-		<attribute>
-			<name>styleClass</name>
-			<required>false</required>
-			<rtexprvalue>true</rtexprvalue>
-		</attribute>
-		<attribute>
-			<name>styleId</name>
-			<required>false</required>
-			<rtexprvalue>true</rtexprvalue>
-		</attribute>
-		<attribute>
-			<name>target</name>
-			<required>false</required>
-			<rtexprvalue>true</rtexprvalue>
-		</attribute>
-		<attribute>
-			<name>type</name>
-			<required>false</required>
-			<rtexprvalue>true</rtexprvalue>
-		</attribute>
-	</tag>
-	<tag>
 		<name>base</name>
 		<tagclass>org.digijava.kernel.taglib.html.BaseTag</tagclass>
 		<bodycontent>empty</bodycontent>
@@ -1083,6 +1028,16 @@
 		</attribute>
 	</tag>
 	<tag>
+        <name>rss</name>
+        <tagclass>org.digijava.kernel.taglib.html.RssTag</tagclass>
+        <bodycontent>empty</bodycontent>
+        <attribute>
+            <name>module</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+    </tag>
+    <tag>
 		<name>secure</name>
 		<tagclass>org.digijava.kernel.taglib.SecureTag</tagclass>
 		<bodycontent>JSP</bodycontent>
@@ -1106,6 +1061,26 @@
 			<required>false</required>
 			<rtexprvalue>false</rtexprvalue>
 		</attribute>
+        <attribute>
+            <name>idName</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+        <attribute>
+            <name>idProperty</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+        <attribute>
+            <name>idScope</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
+        <attribute>
+            <name>permissionClass</name>
+            <required>false</required>
+            <rtexprvalue>true</rtexprvalue>
+        </attribute>
 	</tag>
 	<tag>
 		<name>file</name>

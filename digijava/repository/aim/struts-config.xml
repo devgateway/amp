@@ -2065,9 +2065,9 @@
 			  type="org.digijava.module.aim.action.AddIndicator" 
 			  scope="session"
 			  validate="false"
-			  input="/showLayout.do?layout=aim_addIndicator"
+			  input="/showLayout.do?layout=aim_addMEIndicator"
 			  path="/aim/addIndicator">
-			  <forward name="forward" path="/showLayout.do?layout=aim_addIndicator" />
+			  <forward name="forward" path="/showLayout.do?layout=aim_addMEIndicator" />
 	</action>
 
 	<action 

@@ -293,7 +293,7 @@
 				<page>aim_projectDetails</page>
 				<page>viewbyProjectbyDonor_NoLayout</page>
 				<page>aim_addRegionalFunding</page>
-				<page>aim_addIndicator</page>
+				<page>aim_addMEIndicator</page>
 				<page>aim_printActPerf</page>
 				<page>aim_printActRisk</page>
 				<page>aim_printPortPerf</page>

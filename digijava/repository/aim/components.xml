@@ -126,7 +126,7 @@
 	<page name="teamMemberReports" title=" - Member Reports" />
 	<page name="addMemberReports" title=" - Add Member Reports" />
 	<page name="indicatorManager" title=" - Indicator Manager" />
-	<page page="addIndicator" name="aim_addIndicator" title="AMP - Add Indicator"/>
+	<page page="addIndicator" name="aim_addMEIndicator" title="AMP - Add Indicator"/>
 	<page page="indicatorValues" name="aim_indicatorValues" title="AMP - Indicator Manager"/>
 	<page name="addDocument" title=" - Add Document" />
 	<page page="selectFile" name="aim_selectFilePopupLayout" title="AMP - Select File" />

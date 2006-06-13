@@ -1,10 +1,9 @@
 package org.digijava.module.aim.dbentity ;
 
 import java.io.Serializable;
+import java.util.Set;
 
 import org.digijava.kernel.dbentity.Country;
-import org.digijava.module.aim.dbentity.AmpFiscalCalendar;
-import org.digijava.module.aim.dbentity.AmpSectorScheme;
 
 public class AmpOrganisation implements Comparable, Serializable
 {
@@ -34,6 +33,7 @@ public class AmpOrganisation implements Comparable, Serializable
 	private AmpLevel levelId;
 	private AmpRegion regionId;
 	
+	private Set survey;	// Collection of AmpAhsurvey dbentity objects 
 
 	/**
 	 * @return
@@ -365,5 +365,17 @@ public class AmpOrganisation implements Comparable, Serializable
 	 */
 	public void setRegionId(AmpRegion regionId) {
 		this.regionId = regionId;
+	}
+	/**
+	 * @return Returns the survey.
+	 */
+	public Set getSurvey() {
+		return survey;
+	}
+	/**
+	 * @param survey The survey to set.
+	 */
+	public void setSurvey(Set survey) {
+		this.survey = survey;
 	}
 }	

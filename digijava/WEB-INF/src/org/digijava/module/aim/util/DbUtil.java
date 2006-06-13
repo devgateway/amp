@@ -82,12 +82,14 @@ import org.digijava.module.aim.helper.Assistance;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.Currency;
 import org.digijava.module.aim.helper.CurrencyWorker;
+import org.digijava.module.aim.helper.DateConversion;
 import org.digijava.module.aim.helper.DecimalToText;
 import org.digijava.module.aim.helper.Documents;
 import org.digijava.module.aim.helper.EthiopianCalendar;
 import org.digijava.module.aim.helper.FilterProperties;
 import org.digijava.module.aim.helper.FiscalCalendar;
 import org.digijava.module.aim.helper.Indicator;
+import org.digijava.module.aim.helper.ParisIndicator;
 import org.digijava.module.aim.helper.Question;
 import org.digijava.module.aim.helper.ReportsCollection;
 import org.digijava.module.aim.helper.Sector;
@@ -7568,6 +7570,81 @@ public class DbUtil {
 		}
 		return col;
 	}
+	
+	public static Collection getAllActivityStatus() {
+		Session session = null;
+		Collection col = new ArrayList();
+
+		try {
+			session = PersistenceManager.getSession();
+			String queryString = "select c from " + AmpStatus.class.getName() + " c";
+			Query qry = session.createQuery(queryString);
+			col = qry.list();
+		} catch (Exception e) {
+			logger.debug("Exception from getAllOrgGroups()");
+			logger.debug(e.toString());
+		} finally {
+			try {
+				if (session != null) {
+					PersistenceManager.releaseSession(session);
+				}
+			} catch (Exception ex) {
+				logger.debug("releaseSession() failed");
+				logger.debug(ex.toString());
+			}
+		}
+		return col;
+	}
+	
+	public static Collection getAllTermAssist() {
+		Session session = null;
+		Collection col = new ArrayList();
+
+		try {
+			session = PersistenceManager.getSession();
+			String queryString = "select c from " + AmpTermsAssist.class.getName() + " c";
+			Query qry = session.createQuery(queryString);
+			col = qry.list();
+		} catch (Exception e) {
+			logger.debug("Exception from getAllOrgGroups()");
+			logger.debug(e.toString());
+		} finally {
+			try {
+				if (session != null) {
+					PersistenceManager.releaseSession(session);
+				}
+			} catch (Exception ex) {
+				logger.debug("releaseSession() failed");
+				logger.debug(ex.toString());
+			}
+		}
+		return col;
+	}
+	
+	public static Collection getAllFinancingInstruments() {
+		Session session = null;
+		Collection col = new ArrayList();
+
+		try {
+			session = PersistenceManager.getSession();
+			String queryString = "select c from " + AmpModality.class.getName() + " c";
+			Query qry = session.createQuery(queryString);
+			col = qry.list();
+		} catch (Exception e) {
+			logger.debug("Exception from getAllOrgGroups()");
+			logger.debug(e.toString());
+		} finally {
+			try {
+				if (session != null) {
+					PersistenceManager.releaseSession(session);
+				}
+			} catch (Exception ex) {
+				logger.debug("releaseSession() failed");
+				logger.debug(ex.toString());
+			}
+		}
+		return col;
+	}
 
 	public static Collection getAllOrgGroups() {
 		Session session = null;
@@ -8624,5 +8701,512 @@ public class DbUtil {
 				logger.debug("releaseSession() failed");
 			}
 		}
+	}
+	
+	public static Collection getAllAhSurveyIndicators() {
+		Collection responses = new ArrayList();
+		Session session = null;
+		
+		try {
+			session = PersistenceManager.getSession();
+			String qry = "select indc from " + AmpAhsurveyIndicator.class.getName()
+						 	+ " indc order by indicator_number asc";
+			responses = session.createQuery(qry).list();
+			
+		} catch (Exception ex) {
+			logger.debug("Unable to get survey indicators : " + ex.getMessage());
+			ex.printStackTrace(System.out);
+		} finally {
+			try {
+				if (session != null) {
+					PersistenceManager.releaseSession(session);
+				}
+			} catch (Exception ex) {
+				logger.debug("releaseSession() failed");
+			}
+		}
+		return responses;
+	}
+	
+	public static AmpAhsurveyIndicator getIndicatorById(Long id) {
+		AmpAhsurveyIndicator indc = new AmpAhsurveyIndicator();
+		Session session = null;
+		
+		try {
+			session = PersistenceManager.getSession();
+			String qry = "select indc from " + AmpAhsurveyIndicator.class.getName()
+						 	+ " indc where (indc.ampIndicatorId=:id)";
+			indc = (AmpAhsurveyIndicator) session.createQuery(qry)
+											.setParameter("id", id, Hibernate.LONG)
+											.list().get(0);
+			
+		} catch (Exception ex) {
+			logger.debug("Unable to get survey indicator : " + ex.getMessage());
+			ex.printStackTrace(System.out);
+		} finally {
+			try {
+				if (session != null) {
+					PersistenceManager.releaseSession(session);
+				}
+			} catch (Exception ex) {
+				logger.debug("releaseSession() failed");
+			}
+		}
+		return indc;
+	}
+	
+	public static Collection getSurveyQuestionsByIndicator(Long indcId) {
+		Collection responses = new ArrayList();
+		Session session = null;
+		
+		try {
+			session = PersistenceManager.getSession();
+			String qry = "select qs from " + AmpAhsurveyQuestion.class.getName()
+						 	+ " qs where (qs.ampIndicatorId=:indcId) order by questionNumber asc";
+			responses = session.createQuery(qry)
+							.setParameter("indcId", indcId, Hibernate.LONG)
+							.list();
+			
+		} catch (Exception ex) {
+			logger.debug("Unable to get survey indicator questions : " + ex.getMessage());
+			ex.printStackTrace(System.out);
+		} finally {
+			try {
+				if (session != null) {
+					PersistenceManager.releaseSession(session);
+				}
+			} catch (Exception ex) {
+				logger.debug("releaseSession() failed");
+			}
+		}
+		return responses;
+	}
+	 
+	public static Collection getAidSurveyReportByIndicator(String indcCode, String orgGroup, String status, int startYear, 
+			int closeYear, String currency, String termAssist, String financingInstrument) {
+	
+	ArrayList responses = new ArrayList();
+	Collection surveyDonors = new ArrayList();
+	Set surveySet = new HashSet();
+	boolean orgGroupFlag = false;
+	int NUM_ANSWER_COLUMNS = 4;
+	boolean answers[] = null;
+	double answersRow[] = null;
+	double allDnRow[] = null;
+	int index = 0;
+	double sum = 0.0;
+	String date = null;
+	int YEAR_RANGE = (closeYear - startYear + 1);
+	double fromExchangeRate = 0.0;
+	double toExchangeRate = 0.0;
+	NumberFormat formatter = new DecimalFormat("#.##");
+    Session session = null;
+	Iterator itr1 = null;
+	Iterator itr2 = null;
+	Iterator itr3 = null;
+	Iterator itr4 = null;
+	
+	try {
+		session = PersistenceManager.getSession();
+		if ("5a".equalsIgnoreCase(indcCode))
+			NUM_ANSWER_COLUMNS = 7;
+		if ("6".equalsIgnoreCase(indcCode))
+			NUM_ANSWER_COLUMNS = YEAR_RANGE;
+		if ("9".equalsIgnoreCase(indcCode))
+			NUM_ANSWER_COLUMNS = 5;
+		logger.debug("indcCode[inside getAidSurveyReportByIndicator] : " + indcCode);
+		logger.debug("startYear: " + startYear + " closeYear : " + closeYear + " YEAR_RANGE : " + YEAR_RANGE);
+		logger.debug("[inside getAidSurveyReportByIndicator()]- NUM_ANSWER_COLUMNS : " + NUM_ANSWER_COLUMNS);
+		
+		String qry = "select distinct dn.ampDonorOrgId from " + AmpAhsurvey.class.getName() + " dn";
+		surveyDonors.addAll(session.createQuery(qry).list());
+		logger.debug("total donors from AmpOrganisation[surveyDonors] : " + surveyDonors.size());
+		if (surveyDonors.size() > 0) {
+			if (null != orgGroup && orgGroup.trim().length() > 1 && !"all".equalsIgnoreCase(orgGroup))
+				orgGroupFlag = true;
+			if (!"6".equalsIgnoreCase(indcCode)) {
+				// Creating first row for all-donors in indicator report.
+				ParisIndicator all = new ParisIndicator();
+				all.setDonor("All Donors");
+				all.setAnswers(new ArrayList());
+				responses.add(all);
+				for (int i = 0; i < YEAR_RANGE; i++) {
+					answersRow = new double[NUM_ANSWER_COLUMNS];
+					answersRow[0] = startYear + i;
+					((ParisIndicator)responses.get(0)).getAnswers().add(answersRow);
+				}
+			}
+			/*logger.debug("All filters here");
+			logger.debug("-----------------");
+			logger.debug("indcCode: " + indcCode + " indcCode: " + indcCode + " status:" + status);
+			logger.debug("startYear: " + startYear + " closeYear: " + closeYear);
+			logger.debug("currency: " + currency + " termAssist: " + termAssist + " financingInstrument:" + financingInstrument);
+			*/
+			itr1 = surveyDonors.iterator();
+			while(itr1.hasNext()) {
+				AmpOrganisation dnOrg = (AmpOrganisation) itr1.next();
+				surveySet.addAll(dnOrg.getSurvey());
+				//logger.debug("dnOrg.getAmpOrgId() : " + dnOrg.getAmpOrgId() + "  dnOrg.getAcronym() : " +dnOrg.getAcronym());
+				//logger.debug("---------------------------------------------------------------------------------------------");
+				// Filtering by org-group here
+				if (orgGroupFlag) {
+					if (!orgGroup.equalsIgnoreCase(dnOrg.getOrgGrpId().getOrgGrpCode()))
+						continue;
+				}
+				ParisIndicator pi = new ParisIndicator();	// represents one row of indicator report.
+				pi.setDonor(dnOrg.getAcronym());
+				pi.setAnswers(new ArrayList());
+				if ("6".equalsIgnoreCase(indcCode))
+					answersRow = new double[NUM_ANSWER_COLUMNS];
+				logger.debug("surveySet.size() : " + surveySet.size());
+				boolean[][] answersColl = getSurveyReportAnswer(indcCode, surveySet);
+				//logger.debug("[inside getAidSurveyReportByIndicator()]- answersColl.length : " + answersColl.length);
+				for (int i = 0; i < YEAR_RANGE; i++) {
+					if (!"6".equalsIgnoreCase(indcCode)) {
+						// answersRow will represent row for one disbursement year inside answer-collection of pi helper object.
+						answersRow = new double[NUM_ANSWER_COLUMNS];
+						answersRow[0] = (startYear + i);
+						//logger.debug("[inside getAidSurveyReportByIndicator()]- YEAR : " + answersRow[0]);
+						//logger.debug("------------------------------------------------------");
+					}
+					else
+						answersRow[i] = 0;
+					itr2 = surveySet.iterator();
+					index = 0;
+					while(itr2.hasNext()) {
+						AmpAhsurvey svy = (AmpAhsurvey) itr2.next();
+						/*logger.debug("[inside getAidSurveyReportByIndicator()]- survey-id : " + svy.getAmpAHSurveyId());
+						logger.debug("[inside getAidSurveyReportByIndicator()]- activity-id : " + svy.getAmpActivityId().getAmpActivityId());
+						logger.debug("[inside getAidSurveyReportByIndicator()]- NUM_ANSWER_COLUMNS : " + NUM_ANSWER_COLUMNS);
+						logger.debug("[inside getAidSurveyReportByIndicator()]- answersColl[" + index + "]");*/
+						answers = answersColl[index++];
+						if (null != answers) {
+							for(int j = 0; j < answers.length; j++) {
+								//logger.debug("[inside getAidSurveyReportByIndicator()]- answers.length     : " + answers.length);
+								//logger.debug("[inside loop] answers[" + j + "] : " + answers[j]);
+								sum = 0.0;
+								if (answers[j]) {
+									logger.debug("inside IF");
+									// Filtering by activity status here
+									if (null != status && status.trim().length() > 1 && !"all".equalsIgnoreCase(status))
+										if (!status.equalsIgnoreCase(svy.getAmpActivityId().getStatus().getName())) {
+											logger.debug("continue: because of status");
+											continue;
+										}
+									if ("6".equalsIgnoreCase(indcCode)) {
+										answersRow[i] += 1;
+										continue;
+									}
+									itr3 = svy.getAmpActivityId().getFunding().iterator();
+									while(itr3.hasNext()) {
+										AmpFunding fund = (AmpFunding) itr3.next();
+										logger.debug("fund.getAmpFundingId() : " + fund.getAmpFundingId());
+										// Filtering by financing-instrument here
+										if (null != financingInstrument && financingInstrument.trim().length() > 1
+												&& !"all".equalsIgnoreCase(financingInstrument)) {
+											if (!financingInstrument.equalsIgnoreCase(fund.getModalityId().getName())) {
+												logger.debug("continue: because of financingInstrument");
+												continue;
+											}
+											else if ("9".equalsIgnoreCase(indcCode)) {
+												if (j == 0)
+													if (!"Direct Budget Support".equalsIgnoreCase(fund.getModalityId().getName())) {
+														logger.debug("continue[indcCode=9]: because of !Direct Budget Suppor");
+														continue;
+													}
+												if (j == 1)
+													if ("Direct Budget Support".equalsIgnoreCase(fund.getModalityId().getName())) {
+														logger.debug("continue[indcCode=9]: because of Direct Budget Suppor");
+														continue;
+													}
+											}
+										}
+										// Filtering by term-assist here
+										if (null != termAssist && termAssist.trim().length() > 1 && !"all".equalsIgnoreCase(termAssist))
+											if (!termAssist.equalsIgnoreCase(fund.getAmpTermsAssistId().getTermsAssistName())) {
+												logger.debug("continue: because of termAssist");
+												continue;
+											}
+										itr4 = fund.getFundingDetails().iterator();
+										while (itr4.hasNext()) {
+											AmpFundingDetail fundtl = (AmpFundingDetail) itr4.next();
+											logger.debug("fundtl.getAmpFundDetailId() : " + fundtl.getAmpFundDetailId());
+											date = DateConversion.ConvertDateToString(fundtl.getTransactionDate());
+											//logger.debug("date[after DateConversion.ConvertDateToString] : " + date);
+											//logger.debug("year[DateConversion.getYear(date)] : " + DateConversion.getYear(date));
+											double convYr = new Double(DateConversion.getYear(date)).doubleValue();
+											logger.debug("convYr : " + convYr);
+											// Filtering by disbursement-year here
+											if (convYr == (startYear + i)) {
+											//if (DateConversion.getYear(date) == (startYear + i)) {
+												// Filtering by AdjustmentType & TransactionType here
+												// only Actual-Disbursement is being considered.
+												if (fundtl.getAdjustmentType().intValue() != Constants.ACTUAL
+														|| fundtl.getTransactionType().intValue() != Constants.DISBURSEMENT) {
+													logger.debug("continue: because of Actual-Disbursement");
+													continue;
+												}
+												// Filtering by currency here
+												logger.debug("fromExchangeRate[before] : " + fromExchangeRate + " toExchangeRate[before] : " + toExchangeRate);
+												if ("USD".equalsIgnoreCase(fundtl.getAmpCurrencyId().getCurrencyCode()))
+													fromExchangeRate = 1.0;
+												else
+													fromExchangeRate = getExchangeRate(fundtl.getAmpCurrencyId().getCurrencyCode(),
+																			Constants.ACTUAL,fundtl.getTransactionDate());
+												if (null != currency && currency.trim().length() > 1) {
+													if ("USD".equalsIgnoreCase(currency))
+														toExchangeRate = 1.0;
+													else
+														toExchangeRate = getExchangeRate(currency,Constants.ACTUAL,fundtl.getTransactionDate());
+													//logger.debug("fromExchangeRate[after] : " + fromExchangeRate + " toExchangeRate[after] : " + toExchangeRate);
+													
+													sum += CurrencyWorker.convert1(fundtl.getTransactionAmount().doubleValue(),
+																			fromExchangeRate, toExchangeRate);
+													//logger.debug("sum[inside loop]=" + sum + ": ");
+												}
+											}
+											else
+												logger.debug("continue: because of year");
+										}
+									}
+								}
+								answersRow[j + 1] += sum;
+								//logger.debug("sum[outside loop] : " + sum);
+								//logger.debug("answersRow[" + (j + 1) + "] : " + answersRow[j + 1]);
+							}
+						}
+						else
+							logger.debug("[inside getAidSurveyReportByIndicator()]- answers array is NULL !");
+					}
+					if ("6".equalsIgnoreCase(indcCode))
+						continue;
+						
+					if ("5a".equalsIgnoreCase(indcCode)) {
+						//logger.debug("inside indicator 5a");
+						answersRow[NUM_ANSWER_COLUMNS - 2] = answersRow[NUM_ANSWER_COLUMNS - 3];
+						answersRow[NUM_ANSWER_COLUMNS - 3] = answersRow[NUM_ANSWER_COLUMNS - 4] + answersRow[NUM_ANSWER_COLUMNS - 5] 
+																	+ answersRow[NUM_ANSWER_COLUMNS - 6];
+						//logger.debug("[1]-" + answersRow[1] + ": " + "[2]-" + answersRow[2] + ": " + "[3]-" + answersRow[3] 
+							//		+ ": " + "[4]-" + answersRow[4] + ": " + "[5]-" + answersRow[5] + ": " + "[6]-" + answersRow[6] + ": ");
+					}
+					// calculating final percentage here
+					if (answersRow[NUM_ANSWER_COLUMNS - 3] == 0.0 || answersRow[NUM_ANSWER_COLUMNS - 2] == 0.0) {
+						answersRow[NUM_ANSWER_COLUMNS - 1] = 0.0;
+						//logger.debug("answersRow[NUM_ANSWER_COLUMNS - 1] is ZERO !");
+					}
+					else {
+						//logger.debug("NUM_ANSWER_COLUMNS : " + NUM_ANSWER_COLUMNS);
+						//for(int  b = 0; b < NUM_ANSWER_COLUMNS; b++)
+							//logger.debug("answersRow[" + b +"] : " + answersRow[b]);
+						Double percent = new Double((100 * answersRow[NUM_ANSWER_COLUMNS - 3]) / answersRow[NUM_ANSWER_COLUMNS - 2]);
+						//logger.debug("percent : " + percent + " percent(formatted) : " + formatter.format(percent));
+						if (percent.isNaN())
+							logger.debug("percentage is NaN");
+						else
+							answersRow[NUM_ANSWER_COLUMNS - 1] = Double.parseDouble(formatter.format(percent)); 
+					}
+					pi.getAnswers().add(answersRow);
+					
+					// getting results year-wise for all-donor row
+					allDnRow = (double[])(((ParisIndicator)responses.get(0)).getAnswers().get(i));
+					for(int n = 1;n < (NUM_ANSWER_COLUMNS - 1); n++)
+						allDnRow[n] += answersRow[n];
+					//logger.debug("--------------------END YEAR: " + answersRow[0] +"------------------------");
+				}
+				if ("6".equalsIgnoreCase(indcCode)) {
+					pi.getAnswers().add(answersRow);
+					responses.add(pi);
+				}
+				else {
+					responses.add(pi);
+					surveySet.clear();
+				}
+			}
+			if (!"6".equalsIgnoreCase(indcCode)) {
+				// calculating final percentage for all-donors row
+				for (int i = 0; i < YEAR_RANGE; i++) {
+					allDnRow = (double[])(((ParisIndicator)responses.get(0)).getAnswers().get(i));
+					if (allDnRow[NUM_ANSWER_COLUMNS - 3] == 0.0 || allDnRow[NUM_ANSWER_COLUMNS - 2] == 0.0)
+						allDnRow[NUM_ANSWER_COLUMNS - 1] = 0.0;
+					else {
+						Double percent = new Double((100 * allDnRow[NUM_ANSWER_COLUMNS - 3]) / allDnRow[NUM_ANSWER_COLUMNS - 2]);
+						logger.debug("percent : " + percent + " percent(formatted) : " + formatter.format(percent));
+						if (percent.isNaN())
+							logger.debug("NaN !!!");
+						else
+							allDnRow[NUM_ANSWER_COLUMNS - 1] = Double.parseDouble(formatter.format(percent)); 
+					}
+				}
+			}
+		}
+		else
+			logger.debug("No donor found from survey table.");
+	} catch (Exception ex) {
+		logger.debug("Unable to get donors from survey : " + ex);
+		ex.printStackTrace(System.out);
+	} finally {
+		try {
+			if (session != null) {
+				PersistenceManager.releaseSession(session);
+			}
+		} catch (Exception ex) {
+			logger.debug("releaseSession() failed");
+		}
+	}
+	logger.debug("responses.size[getAidSurveyReportByIndicator()] : " + responses.size());
+	return responses;
+	}
+	
+	/* returns a 2-D array whose each element is an array consisting of results after matching
+	 * survey-responses with required report-answers for the aid-effectiveness-indicator 
+	 * except for those indicators with code '10a', '10b'.
+	 */  
+	public static boolean[][] getSurveyReportAnswer(String indCode, Set surveys) {
+		boolean answersColl[][] = new boolean[surveys.size()][];
+		boolean answers[] = null;
+		int NUM_COLUMNS_CALCULATED = 2;
+		int index = 0;
+		int quesNum = 0;
+		Iterator itr1 = null;
+		Iterator itr2 = null;
+		
+		if ("5a".equalsIgnoreCase(indCode))
+			NUM_COLUMNS_CALCULATED = 4;
+		else if ("6".equalsIgnoreCase(indCode))
+			NUM_COLUMNS_CALCULATED = 1;
+		else if ("9".equalsIgnoreCase(indCode))
+			NUM_COLUMNS_CALCULATED = 3;
+		else
+			NUM_COLUMNS_CALCULATED = 2;
+		//logger.debug("indCode[inside getSurveyReportAnswer] : " + indCode);
+		//logger.debug("NUM_ANSWERS_CALCULATED[inside getSurveyReportAnswer] : " + NUM_COLUMNS_CALCULATED);
+		boolean flag[] = new boolean[NUM_COLUMNS_CALCULATED];
+		
+		itr1 = surveys.iterator();
+		while (itr1.hasNext()) {
+			AmpAhsurvey ahs = (AmpAhsurvey) itr1.next();
+			/*logger.debug("ahs.getAmpAHSurveyId()[inside iterator] : " + ahs.getAmpAHSurveyId());
+			logger.debug("ahs.getAmpDonorOrgId().getAmpOrgId()    : " + ahs.getAmpDonorOrgId().getAmpOrgId());
+			logger.debug("ahs.getAmpDonorOrgId().getAcronym()     : " + ahs.getAmpDonorOrgId().getAcronym());*/
+			answers = new boolean[NUM_COLUMNS_CALCULATED];
+			if (null != ahs.getResponses() && ahs.getResponses().size() > 0) {
+				//logger.debug("ahs.getResponses().size() : " + ahs.getResponses().size());
+				for (int i = 0; i < NUM_COLUMNS_CALCULATED; i++)
+					flag[i] = false;
+				itr2 = ahs.getResponses().iterator();
+				while (itr2.hasNext()) {
+					AmpAhsurveyResponse resp = (AmpAhsurveyResponse) itr2.next();
+					quesNum = resp.getAmpQuestionId().getQuestionNumber().intValue();
+					//logger.debug("quesNum : " + quesNum);
+					if ("3".equalsIgnoreCase(indCode)) {
+						if (quesNum == 2) {
+							flag[0] = true;
+							answers[0] = ("Yes".equalsIgnoreCase(resp.getResponse())) ? true : false;
+							//logger.debug("indCode: " + indCode + " q#: " + 2 + " - answers[0] : " + answers[0]);
+						}
+						if (quesNum == 1) {
+							flag[1] = true;
+							answers[1] = ("Yes".equalsIgnoreCase(resp.getResponse())) ? true : false;
+							//logger.debug("indCode: " + indCode + " q#: " + 1 + " - answers[1] : " + answers[1]);
+						}
+						if (flag[0] && flag[1]) break;
+						else continue;
+					}
+					if ("4".equalsIgnoreCase(indCode)) {
+						if (quesNum == 3) {
+							flag[0] = true;
+							answers[0] = ("Yes".equalsIgnoreCase(resp.getResponse())) ? true : false;
+							//logger.debug("indCode: " + indCode + " q#: " + 3 + " - answers[0] : " + answers[0]);
+						}
+						if (quesNum == 4) {
+							flag[1] = true;
+							answers[1] = ("Yes".equalsIgnoreCase(resp.getResponse())) ? true : false;
+							//logger.debug("indCode: " + indCode + " q#: " + 4 + " - answers[1] : " + answers[1]);
+						}
+						if (flag[0] && flag[1]) {
+							answers[0] = (answers[0] && answers[1]) ? true : false;
+							//logger.debug("indCode: " + indCode + " - final answers[0] : " + answers[0]);
+							break;
+						}
+						else continue;
+					}
+					if ("5a".equalsIgnoreCase(indCode)) {
+						if (quesNum == 5) {
+							flag[0] = true;
+							answers[0] = ("Yes".equalsIgnoreCase(resp.getResponse())) ? true : false;
+							//logger.debug("indCode: " + indCode + " q#: " + 5 + " - answers[0] : " + answers[0]);
+						}
+						if (quesNum == 6) {
+							flag[1] = true;
+							answers[1] = ("Yes".equalsIgnoreCase(resp.getResponse())) ? true : false;
+							//logger.debug("indCode: " + indCode + " q#: " + 6 + " - answers[1] : " + answers[1]);
+						}
+						if (quesNum == 7) {
+							flag[2] = true;
+							answers[2] = ("Yes".equalsIgnoreCase(resp.getResponse())) ? true : false;
+							//logger.debug("indCode: " + indCode + " q#: " + 7 + " - answers[2] : " + answers[2]);
+						}
+						if (quesNum == 1) {
+							flag[3] = true;
+							answers[3] = ("Yes".equalsIgnoreCase(resp.getResponse())) ? true : false;
+							//logger.debug("indCode: " + indCode + " q#: " + 1 + " - answers[3] : " + answers[3]);
+						}
+						if (flag[0] && flag[1] && flag[2] && flag[3]) break;
+						else continue;
+					}
+					if ("5b".equalsIgnoreCase(indCode)) {
+						if (quesNum == 8) {
+							flag[0] = true;
+							answers[0] = ("Yes".equalsIgnoreCase(resp.getResponse())) ? true : false;
+							//logger.debug("indCode: " + indCode + " q#: " + 8 + " - answers[0] : " + answers[0]);
+						}
+						if (quesNum == 1) {
+							flag[1] = true;
+							answers[1] = ("Yes".equalsIgnoreCase(resp.getResponse())) ? true : false;
+							//logger.debug("indCode: " + indCode + " q#: " + 1 + " - answers[1] : " + answers[1]);
+						}
+						if (flag[0] && flag[1]) break;
+						else continue;
+					}
+					if ("6".equalsIgnoreCase(indCode)) {
+						if (quesNum == 9) {
+							answers[0] = ("Yes".equalsIgnoreCase(resp.getResponse())) ? true : false;
+							break;
+						}
+						else continue;
+					}
+					if ("7".equalsIgnoreCase(indCode)) {
+						if (quesNum == 1) {
+							answers[0] = answers[1] = ("Yes".equalsIgnoreCase(resp.getResponse())) ? true : false;
+							break;
+						}
+						else continue;
+					}
+					if ("9".equalsIgnoreCase(indCode)) {
+						if (quesNum == 10) {
+							flag[0] = true;
+							answers[0] = answers[1] = ("Yes".equalsIgnoreCase(resp.getResponse())) ? true : false;
+						}
+						if (quesNum == 1) {
+							flag[1] = true;
+							answers[2] = ("Yes".equalsIgnoreCase(resp.getResponse())) ? true : false;
+						}
+						if (flag[0] && flag[1]) break;
+						else continue;
+					}
+				}
+				answersColl[index++] = answers;
+				/*for (int b = 0; b < NUM_COLUMNS_CALCULATED; b++)
+					logger.debug("[inside getSurveyReportAnswer()]- answers[" + b + "] : " + answers[b]);*/
+			}
+			else {
+				logger.debug("No response set found for this survey");
+				for (int b = 0; b < NUM_COLUMNS_CALCULATED; b++)
+					answers[b] = false;
+				answersColl[index++] = answers;
+			}
+		}
+		logger.debug("answersColl.length : " + answersColl.length);
+		return answersColl;
 	}
 }

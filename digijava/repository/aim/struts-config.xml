@@ -56,6 +56,10 @@
     <form-bean
       		name="aimEditSurveyForm"
       		type="org.digijava.module.aim.form.EditSurveyForm" />
+      		
+    <form-bean
+      		name="aimParisIndicatorReportForm"
+      		type="org.digijava.module.aim.form.ParisIndicatorReportForm" />
     
 	<form-bean
       		name="aimMainProjectDetailsForm"
@@ -1189,6 +1193,19 @@
 			  <forward name="forward" path="/showLayout.do?layout=editSurvey" />
 			  <forward name="index" path="/aim/index.do" redirect="true" />
 			  <forward name="survey" path="/aim/editSurveyList.do" redirect="true"/>
+			  <forward name="viewMyDesktop" path="/aim/viewMyDesktop.do" redirect="true"/>
+	</action>
+	
+	<action 
+			  name="aimParisIndicatorReportForm"
+			  type="org.digijava.module.aim.action.ParisIndicatorReport"
+			  scope="session"
+			  validate="false"
+			  path="/aim/parisIndicatorReport">
+			  <forward name="menu" path="/showLayout.do?layout=viewParisIndicatorReportMenu" />
+			  <forward name="report1" path="/showLayout.do?layout=viewParisIndicatorReportI" />
+			  <forward name="report2" path="/showLayout.do?layout=viewParisIndicatorReportII" />
+			  <forward name="index" path="/aim/index.do" redirect="true" />
 			  <forward name="viewMyDesktop" path="/aim/viewMyDesktop.do" redirect="true"/>
 	</action>
 

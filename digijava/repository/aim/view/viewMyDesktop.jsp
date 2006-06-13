@@ -586,6 +586,16 @@ function showtip()
 												</digi:link>
 											</td>
 										</tr>
+										<tr>
+											<td height= 20 >
+												<bean:define id="translation">
+													<digi:trn key="aim:clickToViewParisIndcReports">Click here to view Paris Indicator Reports</digi:trn>
+							  				 	</bean:define>
+												<digi:link href="/parisIndicatorReport.do" title="<%=translation%>">
+													<b> Paris Indicator Reports	</b>
+												</digi:link>
+											</td>
+										</tr>
 									</TABLE>	
 								</TD>
 							</TR>
@@ -594,6 +604,51 @@ function showtip()
 					</TD>
 				</TR>
 				</logic:notEmpty>
+				
+				<!-- Paris Indicators Reports Starts Here -->
+				<c:if test="${aimMyDesktopForm.donorFlag == true}">
+				<TR>
+					<TD class=r-dotted-lg-buttom vAlign=top>
+						<TABLE border=0 cellPadding=0 cellSpacing=0 width="198" >
+  		           		<TBODY>
+           					<TR>
+              					<TD>
+                 					<TABLE border=0 cellPadding=0 cellSpacing=0 >
+                 						<TR bgColor=#f4f4f2>
+                    						<TD bgColor=#c9c9c7 class=box-title width=70>
+											<a title="<digi:trn key="aim:parisIndcReports">Paris Indicators Reports</digi:trn>">
+											Reports
+											</a>
+											</TD>
+                      						<TD background="module/aim/images/corner-r.gif" 
+											height=17 width=17></TD>
+											</TR>
+
+										</TABLE>
+									</TD>
+								</TR>
+								<TR>
+							     <TD bgColor=#ffffff class=box-border align=left>
+									<TABLE border=0 cellPadding=0 cellSpacing=1 width="80%" >
+										<tr>
+											<td height= 20 >
+												<bean:define id="translation">
+													<digi:trn key="aim:clickToViewParisIndcReports">Click here to view Paris Indicator Reports</digi:trn>
+							  				 	</bean:define>
+												<digi:link href="/parisIndicatorReport.do" title="<%=translation%>">
+													<b> Paris Indicator Reports	</b>
+												</digi:link>
+											</td>
+										</tr>
+									</TABLE>	
+								</TD>
+							</TR>
+						</TBODY>
+						</TABLE>
+					</TD>
+				</TR>
+				</c:if>
+				<!-- Paris Indicators Reports Ends Here -->
 				
 				<TR>
 					<TD class=r-dotted-lg-buttom vAlign=top>

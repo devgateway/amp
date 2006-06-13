@@ -6,13 +6,15 @@
 
 package org.digijava.module.aim.action;
 
+import java.util.Collection;
+
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.digijava.module.aim.form.EditActivityForm;
 import org.digijava.module.aim.util.DbUtil;
-import java.util.Collection;
+import org.digijava.module.aim.util.SectorUtil;
 
 public class SelectSector extends Action {
 
@@ -36,7 +38,7 @@ public class SelectSector extends Action {
 			// if sector schemes not loaded or reset, load all sector schemes
 			// and reset the
 			// parent sectors and child sectors.
-			Collection secSchemes = DbUtil.getAllSectorSchemes();
+			Collection secSchemes = SectorUtil.getAllSectorSchemes();
 			eaForm.setSectorSchemes(secSchemes);
 			eaForm.setParentSectors(null);
 			eaForm.setChildSectorsLevel1(null);
@@ -50,7 +52,7 @@ public class SelectSector extends Action {
 			// scheme are not
 			// loaded, load all the parent sectors and reset the child sectors.
 			Long sectorSchemeId = eaForm.getSectorScheme();
-			Collection parentSectors = DbUtil
+			Collection parentSectors = SectorUtil
 					.getAllParentSectors(sectorSchemeId);
 			eaForm.setParentSectors(parentSectors);
 			eaForm.setChildSectorsLevel1(null);
@@ -65,7 +67,7 @@ public class SelectSector extends Action {
 			// loaded and the subsectors
 			// list is not loaded, load them
 			Long parSector = eaForm.getSector();
-			Collection childSectors = DbUtil.getAllChildSectors(parSector);
+			Collection childSectors = SectorUtil.getAllChildSectors(parSector);
 			eaForm.setChildSectorsLevel1(childSectors);
 			eaForm.setChildSectorsLevel2(null);
 			eaForm.setSubsectorLevel1(new Long(-1));
@@ -76,7 +78,7 @@ public class SelectSector extends Action {
 			// loaded and the subsectors
 			// list is not loaded, load them
 			Long parSector = eaForm.getSubsectorLevel1();
-			Collection childSectors = DbUtil.getAllChildSectors(parSector);
+			Collection childSectors = SectorUtil.getAllChildSectors(parSector);
 			eaForm.setChildSectorsLevel2(childSectors);
 			eaForm.setSubsectorLevel2(new Long(-1));			
 		}

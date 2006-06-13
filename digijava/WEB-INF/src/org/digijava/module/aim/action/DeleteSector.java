@@ -4,6 +4,7 @@ import org.apache.log4j.Logger;
 import org.apache.struts.action.*;
 import org.digijava.module.aim.dbentity.*;
 import org.digijava.module.aim.util.DbUtil;
+import org.digijava.module.aim.util.SectorUtil;
 import org.digijava.module.aim.form.AddSectorForm;
 import javax.servlet.http.*;
 import java.util.*;
@@ -38,7 +39,7 @@ public class DeleteSector extends Action {
 								 */
 								Long secId = new Long(Long.parseLong(request.getParameter("id")));
 
-								AmpSector ampSector = DbUtil.getAmpSector(secId);
+								AmpSector ampSector = SectorUtil.getAmpSector(secId);
 
 								/*
 								 * check whether ampsector is null if yes return error.
@@ -50,8 +51,8 @@ public class DeleteSector extends Action {
 								deleteSectorForm.setAmpOrganisation(ampSector.getAmpOrgId().getName());
 								deleteSectorForm.setDescription(ampSector.getDescription());
 
-								Iterator itr = DbUtil.getSubSectors(secId).iterator();
-								Iterator actItr = DbUtil.getSectorActivities(secId).iterator();
+								Iterator itr = SectorUtil.getSubSectors(secId).iterator();
+								Iterator actItr = SectorUtil.getSectorActivities(secId).iterator();
 								
 								if (itr.hasNext()) {
 										  deleteSectorForm.setFlag("subSectorExist");
@@ -64,7 +65,7 @@ public class DeleteSector extends Action {
 					 else if (request.getParameter("id") == null && deleteSectorForm.getSectorId() != null) {
 								
 								logger.debug("deleting the sector");
-								AmpSector ampSector = DbUtil.getAmpSector(deleteSectorForm.getSectorId());
+								AmpSector ampSector = SectorUtil.getAmpSector(deleteSectorForm.getSectorId());
 								DbUtil.delete(ampSector);
 								logger.debug("Sector deleted");
 								return mapping.findForward("deleted");

@@ -4,17 +4,24 @@
  */
 package org.digijava.module.aim.action;
 
-import org.apache.log4j.Logger;
-import org.apache.struts.action.*;
-import org.digijava.module.aim.dbentity.AmpComments;
-import org.digijava.module.aim.dbentity.AmpField;
-import org.digijava.module.aim.helper.TeamMember;
-import org.digijava.module.aim.util.DbUtil;
-import org.digijava.module.aim.form.EditActivityForm;
-import javax.servlet.http.*;
-
 import java.util.ArrayList;
 import java.util.Date;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+
+import org.apache.log4j.Logger;
+import org.apache.struts.action.Action;
+import org.apache.struts.action.ActionForm;
+import org.apache.struts.action.ActionForward;
+import org.apache.struts.action.ActionMapping;
+import org.digijava.module.aim.dbentity.AmpComments;
+import org.digijava.module.aim.dbentity.AmpField;
+import org.digijava.module.aim.form.EditActivityForm;
+import org.digijava.module.aim.helper.TeamMember;
+import org.digijava.module.aim.util.DbUtil;
+import org.digijava.module.aim.util.TeamMemberUtil;
 
 public class ViewComment extends Action {
 
@@ -89,7 +96,7 @@ public class ViewComment extends Action {
 						else
 							com.setComment(editForm.getCommentText());
 						com.setCommentDate(new Date());
-						com.setMemberId(DbUtil.getAmpTeamMember(member.getMemberId()));
+						com.setMemberId(TeamMemberUtil.getAmpTeamMember(member.getMemberId()));
 						 	
 						editForm.getCommentsCol().add(com);  // for setting activityId in saveAvtivity.java
 						logger.debug("editForm.getCommentsCol().size() [After Create]: " + editForm.getCommentsCol().size());

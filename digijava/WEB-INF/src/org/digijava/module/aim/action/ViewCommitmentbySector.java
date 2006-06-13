@@ -1,22 +1,26 @@
 package org.digijava.module.aim.action ;
 
-import org.apache.log4j.Logger ;
-import org.apache.struts.action.Action ;
-import org.apache.struts.action.ActionForm ;
-import org.apache.struts.action.ActionMapping ;
-import org.apache.struts.action.ActionForward ;
-import org.digijava.module.aim.dbentity.AmpActivity ;
-import org.digijava.module.aim.form.CommitmentbySectorForm ;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.List;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.apache.log4j.Logger;
+import org.apache.struts.action.Action;
+import org.apache.struts.action.ActionForm;
+import org.apache.struts.action.ActionForward;
+import org.apache.struts.action.ActionMapping;
+import org.digijava.module.aim.dbentity.AmpActivity;
+import org.digijava.module.aim.dbentity.AmpFunding;
+import org.digijava.module.aim.dbentity.AmpSector;
+import org.digijava.module.aim.form.CommitmentbySectorForm;
+import org.digijava.module.aim.helper.DateConversion;
+import org.digijava.module.aim.helper.Report;
 import org.digijava.module.aim.util.DbUtil;
-import org.digijava.module.aim.dbentity.AmpFunding ;
-import org.digijava.module.aim.dbentity.AmpSector ;
-import org.digijava.module.aim.helper.DateConversion ;
-import org.digijava.module.aim.helper.Report ;
-import javax.servlet.http.HttpServletRequest ;
-import javax.servlet.http.HttpServletResponse ;
-import java.util.* ;
-import java.util.Iterator ;
-import java.util.ArrayList ;
+import org.digijava.module.aim.util.SectorUtil;
 
 public class ViewCommitmentbySector extends Action
 {
@@ -42,7 +46,7 @@ public class ViewCommitmentbySector extends Action
 			AmpActivity activity=(AmpActivity) iter.next();
 			String sectorname = new String();
 			String subsectorname = new String();
-			List sector = DbUtil.getAmpSectors(activity.getAmpActivityId());
+			List sector = SectorUtil.getAmpSectors(activity.getAmpActivityId());
 			if(sector.size() == 0 )
 			{  
 			  logger.debug("No Sectors returned");

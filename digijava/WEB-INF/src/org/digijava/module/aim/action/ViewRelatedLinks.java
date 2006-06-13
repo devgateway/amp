@@ -21,8 +21,7 @@ import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.DbUtil;
 
-public class ViewRelatedLinks 
-extends Action {
+public class ViewRelatedLinks extends Action {
 	
 	public ActionForward execute(ActionMapping mapping,
 			ActionForm form,

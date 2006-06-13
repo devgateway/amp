@@ -16,6 +16,7 @@ import org.digijava.module.aim.form.EditActivityForm;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.Location;
 import org.digijava.module.aim.util.DbUtil;
+import org.digijava.module.aim.util.LocationUtil;
 
 public class LocationSelected extends Action {
 
@@ -65,7 +66,7 @@ public class LocationSelected extends Action {
 				AmpRegion reg;
 				Long id = new Long(System.currentTimeMillis());
 				for (int i = 0; i < rgn.length; i++) {
-					reg = DbUtil.getAmpRegion(rgn[i]);
+					reg = LocationUtil.getAmpRegion(rgn[i]);
 					if (reg != null) {
 						location[i] = new Location();
 						location[i].setLocId(id);
@@ -90,7 +91,7 @@ public class LocationSelected extends Action {
 		if (eaForm.getImpLevelValue().intValue() > 2) {
 			if (eaForm.getImpRegion() != null
 					&& (!eaForm.getImpRegion().equals(new Long(-1)))) {
-				AmpRegion reg = DbUtil.getAmpRegion(eaForm.getImpRegion());
+				AmpRegion reg = LocationUtil.getAmpRegion(eaForm.getImpRegion());
 				regnId = reg.getAmpRegionId();
 				regnName = reg.getName();
 				if (eaForm.getFundingRegions() == null) {
@@ -115,7 +116,7 @@ public class LocationSelected extends Action {
 				AmpZone zne;
 				Long id = new Long(System.currentTimeMillis());
 				for (int i = 0; i < zone.length; i++) {
-					zne = DbUtil.getAmpZone(zone[i]);
+					zne = LocationUtil.getAmpZone(zone[i]);
 					if (zne != null) {
 						logger.info("zone=" + zone[i] + ":ZONE-ID::"+ zne.getAmpZoneId() + "::ZONE-NAME::"+ zne.getName());
 						location[i] = new Location();
@@ -137,7 +138,7 @@ public class LocationSelected extends Action {
 		if (eaForm.getImpLevelValue().intValue() > 3) {
 			if (eaForm.getImpZone() != null
 					&& (!eaForm.getImpZone().equals(new Long(-1)))) {
-				AmpZone zon = DbUtil.getAmpZone(eaForm.getImpZone());
+				AmpZone zon = LocationUtil.getAmpZone(eaForm.getImpZone());
 				zoneId = zon.getAmpZoneId();
 				zoneName = zon.getName();
 				flag = false;
@@ -154,7 +155,7 @@ public class LocationSelected extends Action {
 				AmpWoreda wrda;
 				Long id = new Long(System.currentTimeMillis());
 				for (int i = 0; i < woreda.length; i++) {
-					wrda = DbUtil.getAmpWoreda(woreda[i]);
+					wrda = LocationUtil.getAmpWoreda(woreda[i]);
 					if (wrda != null) {
 						location[i] = new Location();
 						location[i].setLocId(id);

@@ -1,40 +1,35 @@
 package org.digijava.module.aim.action ;
 
-import org.apache.log4j.Logger ;
-import org.apache.struts.action.Action ;
-import org.apache.struts.action.ActionForm ;
-import org.apache.struts.action.ActionMapping ;
-import org.apache.struts.action.ActionForward ;
-import org.digijava.module.aim.form.CommitmentbyDonorForm ;
-import org.digijava.module.aim.helper.CurrencyWorker;
-import org.digijava.module.aim.util.DbUtil;
-import org.digijava.module.aim.util.ReportUtil;
-import org.digijava.module.aim.dbentity.AmpFunding ;
-import org.digijava.module.aim.dbentity.AmpActivity ;
-import org.digijava.module.aim.dbentity.AmpModality ;
-import org.digijava.module.aim.dbentity.AmpSector ;
-import org.digijava.module.aim.dbentity.AmpStatus;
-import org.digijava.module.aim.dbentity.AmpLocation;
-import org.digijava.module.aim.dbentity.AmpOrganisation;
-import org.digijava.module.aim.dbentity.AmpCurrency;
-import org.digijava.module.aim.dbentity.AmpTeam;
-import org.digijava.module.aim.helper.FilterProperties;
-import org.digijava.module.aim.helper.Report ;
-import org.digijava.module.aim.helper.AmpFund ;
-import org.digijava.module.aim.helper.DateConversion ;
-import org.digijava.module.aim.helper.fiscalYrs ;
-import org.digijava.module.aim.helper.Currency ;
-import org.digijava.module.aim.helper.Constants ;
-import org.digijava.module.aim.helper.TeamMember ;
-import org.digijava.module.aim.helper.ReportQuarterWorker;
-import javax.servlet.http.HttpServletRequest ;
-import javax.servlet.http.HttpServletResponse ;
-import javax.servlet.http.HttpSession;
-import java.util.* ;
-import java.util.Iterator ;
-import java.util.ArrayList ;
 import java.text.DecimalFormat;
-import org.digijava.module.aim.helper.EthDateWorker;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.Vector;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+
+import org.apache.log4j.Logger;
+import org.apache.struts.action.Action;
+import org.apache.struts.action.ActionForm;
+import org.apache.struts.action.ActionForward;
+import org.apache.struts.action.ActionMapping;
+import org.digijava.module.aim.dbentity.AmpCurrency;
+import org.digijava.module.aim.dbentity.AmpOrganisation;
+import org.digijava.module.aim.dbentity.AmpSector;
+import org.digijava.module.aim.dbentity.AmpTeam;
+import org.digijava.module.aim.form.CommitmentbyDonorForm;
+import org.digijava.module.aim.helper.Constants;
+import org.digijava.module.aim.helper.FilterProperties;
+import org.digijava.module.aim.helper.TeamMember;
+import org.digijava.module.aim.util.CurrencyUtil;
+import org.digijava.module.aim.util.DbUtil;
+import org.digijava.module.aim.util.LocationUtil;
+import org.digijava.module.aim.util.ReportUtil;
+import org.digijava.module.aim.util.SectorUtil;
+import org.digijava.module.aim.util.TeamUtil;
 
 public class ViewQuarterlyDateRange extends Action
 {
@@ -146,7 +141,7 @@ public class ViewQuarterlyDateRange extends Action
 				filterSet = filterSet + "SECTOR - ";
 				filterCnt++;
 				formBean.setSectorColl(new ArrayList()) ;
-				dbReturnSet=DbUtil.getAmpSectors();
+				dbReturnSet=SectorUtil.getAmpSectors();
 				iter = dbReturnSet.iterator() ;
 				while(iter.hasNext())
 				{
@@ -157,7 +152,7 @@ public class ViewQuarterlyDateRange extends Action
 						ampSector.setName(temp);
 					}
 					formBean.getSectorColl().add(ampSector);
-					dbReturnSet=DbUtil.getAmpSubSectors(ampSector.getAmpSectorId());
+					dbReturnSet=SectorUtil.getAmpSubSectors(ampSector.getAmpSectorId());
 					iterSub=dbReturnSet.iterator();
 					while(iterSub.hasNext())
 					{
@@ -178,7 +173,7 @@ public class ViewQuarterlyDateRange extends Action
 			{
 				filterSet = filterSet + "REGION - ";
 				filterCnt++;
-				dbReturnSet=DbUtil.getAmpLocations();
+				dbReturnSet=LocationUtil.getAmpLocations();
 				formBean.setRegionColl(dbReturnSet) ;
 			}
 			
@@ -213,7 +208,7 @@ public class ViewQuarterlyDateRange extends Action
 			{
 				filterSet = filterSet + "CURRENCY - ";
 				filterCnt++;
-				dbReturnSet=DbUtil.getAmpCurrency();
+				dbReturnSet=CurrencyUtil.getAmpCurrency();
 				formBean.setCurrencyColl(dbReturnSet) ;	
 			}
 			
@@ -280,7 +275,7 @@ public class ViewQuarterlyDateRange extends Action
 		
 		if(formBean.getAmpCurrencyCode()==null || formBean.getAmpCurrencyCode().equals("0"))
 		{
-			ampCurrency=DbUtil.getAmpcurrency(teamMember.getAppSettings().getCurrencyId());
+			ampCurrency=CurrencyUtil.getAmpcurrency(teamMember.getAppSettings().getCurrencyId());
 			ampCurrencyCode=ampCurrency.getCurrencyCode();
 			formBean.setAmpCurrencyCode(ampCurrencyCode);
 		}
@@ -473,7 +468,7 @@ public class ViewQuarterlyDateRange extends Action
 		formBean.setPage(new Integer(page));
 		formBean.setAllReports(reports);
 		formBean.setFilterCnt(filterCnt);
-		AmpTeam ampTeam=DbUtil.getAmpTeam(ampTeamId);
+		AmpTeam ampTeam=TeamUtil.getAmpTeam(ampTeamId);
 		formBean.setReportName("Quarterly Team Project Detail Report");
 		formBean.setWorkspaceType(ampTeam.getType());
 		formBean.setWorkspaceName(ampTeam.getName());

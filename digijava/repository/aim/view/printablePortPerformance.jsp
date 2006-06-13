@@ -17,9 +17,9 @@
 </script>
 
 <%
-	Long actId = (Long) request.getAttribute("activityId");
-	Long indId = (Long) request.getAttribute("indicatorId");
-	Integer pg = (Integer) request.getAttribute("page");
+	Long actId = (Long) session.getAttribute("activityId");
+	Long indId = (Long) session.getAttribute("indicatorId");
+	Integer pg = (Integer) session.getAttribute("page");
 	
 	String actPerfChartFileName = ChartGenerator.getPortfolioPerformanceChartFileName(
 						 actId,indId,pg,session,new PrintWriter(out),600,400);

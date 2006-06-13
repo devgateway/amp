@@ -41,6 +41,7 @@ public class ViewKnowledge extends TilesAction {
 				try {
 					long aId = Long.parseLong(actId);
 					id = new Long(aId);
+					formBean.setId(id);
 				} catch (NumberFormatException nfe) {
 					logger.error("Exception from ViewKnowledgeAction: " +
 							"Trying to parse " + actId + " to Long");

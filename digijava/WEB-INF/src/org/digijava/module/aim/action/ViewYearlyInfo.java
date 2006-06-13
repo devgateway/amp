@@ -1,9 +1,9 @@
 package org.digijava.module.aim.action;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
-import java.util.ArrayList;
 import java.util.GregorianCalendar;
 
 import javax.servlet.ServletException;
@@ -17,7 +17,6 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.tiles.ComponentContext;
 import org.apache.struts.tiles.actions.TilesAction;
-import org.digijava.module.aim.dbentity.AmpPerspective;
 import org.digijava.module.aim.form.YearlyInfoForm;
 import org.digijava.module.aim.helper.ApplicationSettings;
 import org.digijava.module.aim.helper.CommonWorker;
@@ -33,6 +32,7 @@ import org.digijava.module.aim.helper.TotalsQuarterly;
 import org.digijava.module.aim.helper.YearUtil;
 import org.digijava.module.aim.helper.YearlyDiscrepancyWorker;
 import org.digijava.module.aim.helper.YearlyInfoWorker;
+import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.aim.util.DbUtil;
 
 public class ViewYearlyInfo extends TilesAction {
@@ -65,7 +65,7 @@ public class ViewYearlyInfo extends TilesAction {
 			}
 
 			if (fp.getCurrencyCode() == null) {
-				Currency curr = DbUtil.getCurrency(apps.getCurrencyId());
+				Currency curr = CurrencyUtil.getCurrency(apps.getCurrencyId());
 				fp.setCurrencyCode(curr.getCurrencyCode());
 			}
 
@@ -123,7 +123,7 @@ public class ViewYearlyInfo extends TilesAction {
 			formBean.setDisbursementTabColor(tc.getDisbursementTabColor());
 			formBean.setExpenditureTabColor(tc.getExpenditureTabColor());
 			formBean.setYears(YearUtil.getYears());
-			formBean.setCurrencies(DbUtil.getAmpCurrency());
+			formBean.setCurrencies(CurrencyUtil.getAmpCurrency());
 			logger.info("Loading perspectives") ;
 			formBean.setPerspectives(DbUtil.getAmpPerspective());
 			logger.info("loaded " + formBean.getPerspectives().size() + " entries");

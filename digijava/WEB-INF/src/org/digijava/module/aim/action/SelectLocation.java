@@ -6,8 +6,9 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.digijava.module.aim.form.EditActivityForm;
-import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.helper.Constants;
+import org.digijava.module.aim.util.DbUtil;
+import org.digijava.module.aim.util.LocationUtil;
 
 public class SelectLocation extends Action {
 
@@ -45,12 +46,12 @@ public class SelectLocation extends Action {
 		if (fill == null || fill.trim().length() == 0) {
 			eaForm.setCountry(Constants.COUNTRY);
 			eaForm.setImpCountry(Constants.COUNTRY_ISO);
-			eaForm.setRegions(DbUtil.getAllRegionsUnderCountry(Constants.COUNTRY_ISO));
+			eaForm.setRegions(LocationUtil.getAllRegionsUnderCountry(Constants.COUNTRY_ISO));
 		} else {
 			if (fill.equals("zone")) {
 				if (eaForm.getImpRegion() != null) {
-					eaForm.setZones(DbUtil.getAllZonesUnderRegion(eaForm.getImpRegion()));
-					eaForm.setRegions(DbUtil.getAllRegionsUnderCountry(Constants.COUNTRY_ISO));
+					eaForm.setZones(LocationUtil.getAllZonesUnderRegion(eaForm.getImpRegion()));
+					eaForm.setRegions(LocationUtil.getAllRegionsUnderCountry(Constants.COUNTRY_ISO));
 					eaForm.setImpZone(null);
 					eaForm.setImpMultiWoreda(null);
 					eaForm.setImpWoreda(null);					
@@ -59,9 +60,9 @@ public class SelectLocation extends Action {
 				}
 			} else if (fill.equals("woreda")) {
 				if (eaForm.getImpZone() != null) {
-					eaForm.setWoredas(DbUtil.getAllWoredasUnderZone(eaForm.getImpZone()));
-					eaForm.setZones(DbUtil.getAllZonesUnderRegion(eaForm.getImpRegion()));
-					eaForm.setRegions(DbUtil.getAllRegionsUnderCountry(Constants.COUNTRY_ISO));
+					eaForm.setWoredas(LocationUtil.getAllWoredasUnderZone(eaForm.getImpZone()));
+					eaForm.setZones(LocationUtil.getAllZonesUnderRegion(eaForm.getImpRegion()));
+					eaForm.setRegions(LocationUtil.getAllRegionsUnderCountry(Constants.COUNTRY_ISO));
 					eaForm.setImpWoreda(null);
 				}
 			}

@@ -15,9 +15,9 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.digijava.module.aim.dbentity.AmpSector;
-import org.digijava.module.aim.helper.ActivitySector;
 import org.digijava.module.aim.form.EditActivityForm;
-import org.digijava.module.aim.util.DbUtil;
+import org.digijava.module.aim.helper.ActivitySector;
+import org.digijava.module.aim.util.SectorUtil;
 
 public class SectorSelected extends Action {
 
@@ -41,7 +41,7 @@ public class SectorSelected extends Action {
 
 		ActivitySector actSect = new ActivitySector();
 		actSect.setSectorId(sector);
-		AmpSector sec = DbUtil.getAmpSector(actSect.getSectorId());
+		AmpSector sec = SectorUtil.getAmpSector(actSect.getSectorId());
 		actSect.setSectorName(sec.getName());
 		actSect.setSubsectorLevel1Id(subsectorLevel1);
 		actSect.setSubsectorLevel2Id(subsectorLevel2);		
@@ -80,12 +80,12 @@ public class SectorSelected extends Action {
 				&& (!(actSect.getSectorId().equals(new Long(-1))))) {
 			if (actSect.getSubsectorLevel1Id() != null
 					&& (!(actSect.getSubsectorLevel1Id().equals(new Long(-1))))) {
-				sec = DbUtil.getAmpSector(actSect.getSubsectorLevel1Id());
+				sec = SectorUtil.getAmpSector(actSect.getSubsectorLevel1Id());
 				actSect.setSubsectorLevel1Name(sec.getName());
 			}
 			if (actSect.getSubsectorLevel2Id() != null
 					&& (!(actSect.getSubsectorLevel2Id().equals(new Long(-1))))) {
-				sec = DbUtil.getAmpSector(actSect.getSubsectorLevel2Id());
+				sec = SectorUtil.getAmpSector(actSect.getSubsectorLevel2Id());
 				actSect.setSubsectorLevel2Name(sec.getName());
 			}				
 			newSectors.add(actSect);

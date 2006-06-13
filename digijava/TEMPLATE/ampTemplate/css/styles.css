@@ -828,11 +828,13 @@ A.up-menu:hover
 .colHeaderOver 
 {
 	background-color: #bbbbbb;	
+	cursor: hand;
 }
 
 .colHeaderLink
 {
-	background-color: #eeeeee;
+	background-color: #dddddd;
+	cursor: arrow;
 }
 
 .rowNormal { background-color: #ffffff; } 
@@ -891,4 +893,11 @@ A.imglink:hover
 	BORDER-BOTTOM: #c9c9c7 1px solid; 
 	WHITE-SPACE: nowrap; 
 	BACKGROUND-COLOR: #f4f4f2
+}
+
+.highlight
+{
+	FONT-SIZE: 13px; 
+	FONT-FAMILY: Verdana, Arial, Helvetica, sans-serif; 		  
+	FONT-WEIGHT: bold; 
 }

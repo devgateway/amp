@@ -6,8 +6,6 @@
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
 
-<digi:instance property="aimMyDesktopForm" />
-
 <table width="100%" valign="top" align="left" cellpadding=0 cellSpacing=0 border=0>
 <tr><td width="100%" valign="top" align="left">
 <jsp:include page="teamPagesHeader.jsp" flush="true" />			
@@ -36,7 +34,10 @@
 					<!-- End navigation -->
 				</tr>
 				<%-- If user is not a team leader of a working team then he is not authorised to view this page --%>
-				<logic:notEqual name="aimMyDesktopForm"  property="workingTeamFlag" value="yes">
+
+				<bean:define id="lead" property="teamHead" name="currentMember" scope="session" />
+				
+				<c:if test="${lead != true}">
 					<tr>
 						<td height=33 colspan="7" width="867">
 							<digi:trn key="aim:unauthorisedToView">
@@ -44,14 +45,14 @@
 							</digi:trn>
 						</td>			
 					</tr>
-				</logic:notEqual>
+				</c:if>
 				
-				<logic:equal name="aimMyDesktopForm"  property="workingTeamFlag" value="yes">
+				<c:if test="${lead == true}">
 				<tr><td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 					<span class="page-title">
 					<digi:trn key="aim:activityApprovalList">Activity Approval</digi:trn></span>
 				</td></tr>			
-				<c:forEach var="activity" items="${aimMyDesktopForm.myTasksColl}">
+				<c:forEach var="activity" items="${myTasks}">
 					<tr>
 						<td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 							<IMG height=10 src="../ampTemplate/images/arrow-014E86.gif" width=15>
@@ -69,7 +70,7 @@
 					</td></tr>
 				</c:forEach>
 			</table>
-			</logic:equal>
+			</c:if>
 		</td>
 	</tr>
 </table>

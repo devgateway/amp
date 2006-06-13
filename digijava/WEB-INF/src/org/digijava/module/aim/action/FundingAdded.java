@@ -28,6 +28,7 @@ import org.digijava.module.aim.helper.FundingDetail;
 import org.digijava.module.aim.helper.FundingOrganization;
 import org.digijava.module.aim.helper.FundingValidator;
 import org.digijava.module.aim.helper.TeamMember;
+import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.aim.util.DbUtil;
 
 public class FundingAdded extends Action {
@@ -92,7 +93,7 @@ public class FundingAdded extends Action {
 				fundDet.setTransactionAmount(formattedAmt);
 				if (fundDet.getCurrencyCode() != null
 						&& fundDet.getCurrencyCode().trim().length() != 0) {
-					AmpCurrency currency = DbUtil.getCurrencyByCode(fundDet
+					AmpCurrency currency = CurrencyUtil.getCurrencyByCode(fundDet
 							.getCurrencyCode());
 					fundDet.setCurrencyName(currency.getCountryName());
 				}
@@ -115,8 +116,8 @@ public class FundingAdded extends Action {
 				else if (fundDet.getAdjustmentType() == Constants.ACTUAL) {
 					fundDet.setAdjustmentTypeName("Actual");
 					Date dt = DateConversion.getDate(fundDet.getTransactionDate());
-					double frmExRt = DbUtil.getExchangeRate(fundDet.getCurrencyCode(),1,dt);
-					double toExRt = DbUtil.getExchangeRate(DbUtil.getAmpcurrency(
+					double frmExRt = CurrencyUtil.getExchangeRate(fundDet.getCurrencyCode(),1,dt);
+					double toExRt = CurrencyUtil.getExchangeRate(CurrencyUtil.getAmpcurrency(
 							tm.getAppSettings().getCurrencyId()).getCurrencyCode(),1,dt);
 					double amt = CurrencyWorker.convert1(DecimalToText.getDouble(fundDet.getTransactionAmount()),frmExRt,toExRt);
 					if (fundDet.getTransactionType() == Constants.COMMITMENT) {

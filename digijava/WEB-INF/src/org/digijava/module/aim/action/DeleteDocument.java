@@ -18,6 +18,7 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.digijava.module.aim.dbentity.AmpActivity;
 import org.digijava.module.aim.form.RelatedLinksForm;
+import org.digijava.module.aim.util.ActivityUtil;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.cms.dbentity.CMSContentItem;
 
@@ -39,7 +40,7 @@ extends Action {
 		
 		if (actId == null || docId == null) return mapping.findForward("index");
 	
-		AmpActivity activity = DbUtil.getProjectChannelOverview(actId);
+		AmpActivity activity = ActivityUtil.getProjectChannelOverview(actId);
 		Set docList = new HashSet();
 		if (activity != null) {
 			Iterator itr = DbUtil.getActivityDocuments(actId).iterator();

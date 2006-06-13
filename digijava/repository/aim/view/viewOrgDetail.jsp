@@ -15,7 +15,7 @@
 	}
 
 	function unload() {
-		window.opener.document.getElementById("currUrl").value="";
+		//window.opener.document.getElementById("currUrl").value="";
 	}
 	
 </script>

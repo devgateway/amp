@@ -1,13 +1,21 @@
 package org.digijava.module.aim.action ;
 
+import java.util.Collection;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+
 import org.apache.log4j.Logger;
-import org.apache.struts.action.*;
-import org.digijava.module.aim.util.DbUtil;
+import org.apache.struts.action.Action;
+import org.apache.struts.action.ActionForm;
+import org.apache.struts.action.ActionForward;
+import org.apache.struts.action.ActionMapping;
 import org.digijava.module.aim.dbentity.AmpSector;
 import org.digijava.module.aim.form.SectorsForm;
 import org.digijava.module.aim.helper.Sector;
-import javax.servlet.http.*;
-import java.util.*;
+import org.digijava.module.aim.util.DbUtil;
+import org.digijava.module.aim.util.SectorUtil;
 
 public class GetSectors extends Action {
 
@@ -35,20 +43,20 @@ public class GetSectors extends Action {
 					 logger.debug("In get sector action using debug");
 					 if (request.getParameter("sectorId") == null || request.getParameter("sectorId").equals("0")) {
 								// access the top level sectors
-								sectors = DbUtil.getSubSectors(new Long(0));
+								sectors = SectorUtil.getSubSectors(new Long(0));
 								sectorsForm.setParentSector(null);
 								sectorsForm.setPrevViewedSectorId(null);
 								
 					 } else {
 								// access the sub sectors of the sector with id 'sectorId'
 								Long parentSecId = new Long(Long.parseLong(request.getParameter("sectorId")));
-								sectors = DbUtil.getSubSectors(parentSecId);
+								sectors = SectorUtil.getSubSectors(parentSecId);
 
-								Sector parentSector = DbUtil.getSector(parentSecId);
+								Sector parentSector = SectorUtil.getSector(parentSecId);
 								sectorsForm.setParentSectorId(parentSecId);
 								sectorsForm.setParentSector(parentSector.getSectorName());
 								
-								AmpSector ampSector = DbUtil.getAmpSector(parentSecId);
+								AmpSector ampSector = SectorUtil.getAmpSector(parentSecId);
 								if (ampSector == null || ampSector.getParentSectorId() == null) {
 										  sectorsForm.setPrevViewedSectorId("0");
 								} else {

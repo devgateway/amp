@@ -19,6 +19,7 @@ import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.dbentity.AmpTeamMemberRoles;
 import org.digijava.module.aim.form.TeamMemberForm;
 import org.digijava.module.aim.util.DbUtil;
+import org.digijava.module.aim.util.TeamMemberUtil;
 
 /**
  * Get the team member details passing the id of the team member
@@ -44,18 +45,18 @@ public class GetTeamMemberDetails extends Action {
 				&& request.getParameter("action") != null) {
 
 			Long id = new Long(Long.parseLong(request.getParameter("id")));
-			AmpTeamMember ampMember = DbUtil.getAmpTeamMember(id);
+			AmpTeamMember ampMember = TeamMemberUtil.getAmpTeamMember(id);
 
 			User user = ampMember.getUser();
 			upForm.setName(user.getName());
 			upForm.setTeamMemberId(ampMember.getAmpTeamMemId());
 			upForm.setTeamId(ampMember.getAmpTeam().getAmpTeamId());
 			upForm.setTeamName(ampMember.getAmpTeam().getName());
-			AmpTeamMemberRoles ampRole = DbUtil.getAmpTeamMemberRole(ampMember
+			AmpTeamMemberRoles ampRole = TeamMemberUtil.getAmpTeamMemberRole(ampMember
 					.getAmpMemberRole().getAmpTeamMemRoleId());
 
 			upForm.setRole(ampRole.getAmpTeamMemRoleId());
-			upForm.setAmpRoles(DbUtil.getAllTeamMemberRoles());
+			upForm.setAmpRoles(TeamMemberUtil.getAllTeamMemberRoles());
 			upForm.setUserId(user.getId());
 			if (ampMember.getReadPermission().booleanValue() == true) {
 				upForm.setReadPerms("on");

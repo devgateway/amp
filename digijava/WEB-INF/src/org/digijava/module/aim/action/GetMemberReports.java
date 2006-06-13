@@ -17,6 +17,7 @@ import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.form.ReportsForm;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.DbUtil;
+import org.digijava.module.aim.util.TeamMemberUtil;
 
 public class GetMemberReports extends Action {
 
@@ -63,7 +64,7 @@ public class GetMemberReports extends Action {
 
 		if (id != null) {
 			if (rForm.getReports() == null) {
-				Collection col = DbUtil.getAllMemberReports(id);
+				Collection col = TeamMemberUtil.getAllMemberReports(id);
 				List temp = (List) col;
 				Collections.sort(temp);
 				col = (Collection) temp;									
@@ -75,7 +76,7 @@ public class GetMemberReports extends Action {
 			}
 
 			
-			AmpTeamMember ampMem = DbUtil.getAmpTeamMember(id);
+			AmpTeamMember ampMem = TeamMemberUtil.getAmpTeamMember(id);
 			rForm.setMemberName(ampMem.getUser().getName());
 			return mapping.findForward("forward");
 		} else {

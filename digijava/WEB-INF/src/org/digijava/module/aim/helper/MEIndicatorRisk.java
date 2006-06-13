@@ -1,6 +1,6 @@
 package org.digijava.module.aim.helper;
 
-public class MEIndicatorRisk {
+public class MEIndicatorRisk implements Comparable {
 	
 	private String risk;
 	private byte riskRating;
@@ -40,5 +40,23 @@ public class MEIndicatorRisk {
 	 */
 	public void setRiskRating(byte riskRating) {
 		this.riskRating = riskRating;
-	}		
+	}
+	/* (non-Javadoc)
+	 * @see java.lang.Object#equals(java.lang.Object)
+	 */
+	public boolean equals(Object obj) {
+		if (obj instanceof MEIndicatorRisk) {
+			MEIndicatorRisk risk = (MEIndicatorRisk) obj;
+			return risk.getRisk().equalsIgnoreCase(this.risk);
+		} else throw new ClassCastException();
+	}
+	/* (non-Javadoc)
+	 * @see java.lang.Comparable#compareTo(java.lang.Object)
+	 */
+	public int compareTo(Object obj) {
+		if (obj instanceof MEIndicatorRisk) {
+			MEIndicatorRisk risk = (MEIndicatorRisk) obj;
+			return (risk.getRiskRating() - riskRating);
+		} else throw new ClassCastException();
+	}	
 }

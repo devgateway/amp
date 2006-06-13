@@ -13,16 +13,11 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
-import org.apache.struts.action.ActionError;
-import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.tiles.ComponentContext;
 import org.apache.struts.tiles.actions.TilesAction;
-import org.digijava.kernel.request.SiteDomain;
-import org.digijava.kernel.util.RequestUtils;
-import org.digijava.kernel.util.SiteUtils;
 import org.digijava.module.aim.dbentity.AmpTeam;
 import org.digijava.module.aim.form.ChannelOverviewForm;
 import org.digijava.module.aim.helper.Activity;
@@ -30,6 +25,7 @@ import org.digijava.module.aim.helper.ApplicationSettings;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.ActivityUtil;
+import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.TeamUtil;
 
@@ -66,7 +62,7 @@ public class ViewChannelOverview extends TilesAction {
 			String actApprovalStatus = DbUtil.getActivityApprovalStatus(id);
 			Long ampTeamId = teamMember.getTeamId();
 			boolean teamLeadFlag    = teamMember.getTeamHead();
-			boolean workingTeamFlag = DbUtil.checkForParentTeam(ampTeamId);
+			boolean workingTeamFlag = TeamUtil.checkForParentTeam(ampTeamId);
 			
 		 	if ("approved".equals(actApprovalStatus) || "started".equals(actApprovalStatus)) {
 		 		if (workingTeamFlag)
@@ -91,7 +87,7 @@ public class ViewChannelOverview extends TilesAction {
 					perspective = "MOFED";
 				}
 				if (appSettings.getCurrencyId() != null) {
-					currCode = DbUtil.getCurrency(appSettings.getCurrencyId()).getCurrencyCode();
+					currCode = CurrencyUtil.getCurrency(appSettings.getCurrencyId()).getCurrencyCode();
 				} else {
 					currCode = Constants.DEFAULT_CURRENCY;
 				}

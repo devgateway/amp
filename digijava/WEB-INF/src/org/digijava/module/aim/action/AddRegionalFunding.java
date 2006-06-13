@@ -22,7 +22,6 @@ import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
-import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.dbentity.AmpPerspective;
 import org.digijava.module.aim.form.EditActivityForm;
 import org.digijava.module.aim.helper.Constants;
@@ -31,6 +30,8 @@ import org.digijava.module.aim.helper.FundingValidator;
 import org.digijava.module.aim.helper.Location;
 import org.digijava.module.aim.helper.RegionalFunding;
 import org.digijava.module.aim.helper.TeamMember;
+import org.digijava.module.aim.util.CurrencyUtil;
+import org.digijava.module.aim.util.DbUtil;
 
 public class AddRegionalFunding extends Action {
 	
@@ -58,7 +59,7 @@ public class AddRegionalFunding extends Action {
 					equalsIgnoreCase(Constants.DEF_MFD_PERSPECTIVE)) {
 				request.setAttribute("defPerspective",Constants.MOFED);
 			}
-			String defCurr = DbUtil.getCurrency(
+			String defCurr = CurrencyUtil.getCurrency(
 					tm.getAppSettings().getCurrencyId()).getCurrencyCode();
 			request.setAttribute("defCurrency",defCurr);
 			
@@ -82,7 +83,7 @@ public class AddRegionalFunding extends Action {
 					equalsIgnoreCase(Constants.DEF_MFD_PERSPECTIVE)) {
 				request.setAttribute("defPerspective",Constants.MOFED);
 			}
-			String defCurr = DbUtil.getCurrency(
+			String defCurr = CurrencyUtil.getCurrency(
 					tm.getAppSettings().getCurrencyId()).getCurrencyCode();
 			request.setAttribute("defCurrency",defCurr);			
 			return mapping.findForward("forward");

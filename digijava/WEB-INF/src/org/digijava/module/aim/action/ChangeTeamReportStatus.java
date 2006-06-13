@@ -15,6 +15,7 @@ import org.digijava.kernel.util.SiteUtils;
 import org.digijava.module.aim.dbentity.AmpTeamReports;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.DbUtil;
+import org.digijava.module.aim.util.TeamUtil;
 
 public class ChangeTeamReportStatus extends Action {
 
@@ -66,7 +67,7 @@ public class ChangeTeamReportStatus extends Action {
 		TeamMember tm = (TeamMember) session.getAttribute("currentMember");
 		Long teamId = tm.getTeamId();
 		String status = request.getParameter("status");
-		AmpTeamReports teamReports = DbUtil.getAmpTeamReport(teamId, reportId);
+		AmpTeamReports teamReports = TeamUtil.getAmpTeamReport(teamId, reportId);
 
 		if (teamReports == null) {
 			// error. No report with id reportId exist for the team with id

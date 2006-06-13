@@ -15,6 +15,7 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.digijava.module.aim.form.ReportsForm;
 import org.digijava.module.aim.helper.TeamMember;
+import org.digijava.module.aim.util.TeamMemberUtil;
 import org.digijava.module.aim.util.TeamUtil;
 
 public class UpdateMemberReports extends Action {
@@ -61,7 +62,7 @@ public class UpdateMemberReports extends Action {
 		if (rForm.getAddReport() != null) {
 			/* show all unassigned reports */
 			
-			Collection col = TeamUtil.getUnassignedMemberReports(id,rForm.getMemberId());
+			Collection col = TeamMemberUtil.getUnassignedMemberReports(id,rForm.getMemberId());
 			List temp = (List) col;
 			Collections.sort(temp);
 			col = (Collection) temp;						
@@ -70,11 +71,11 @@ public class UpdateMemberReports extends Action {
 			return mapping.findForward("showAddReports");
 		} else if (rForm.getRemoveReports() != null) {
 			/* remove all selected reports */
-			TeamUtil.removeReportsFromMember(rForm.getMemberId(),rForm.getSelReports());
+			TeamMemberUtil.removeReportsFromMember(rForm.getMemberId(),rForm.getSelReports());
 			return mapping.findForward("forward");
 		} else if (rForm.getAssignReports() != null) {
 			/* add the selected reports */
-			TeamUtil.assignReportsToMember(rForm.getMemberId(),rForm.getSelReports());
+			TeamMemberUtil.assignReportsToMember(rForm.getMemberId(),rForm.getSelReports());
 			return mapping.findForward("forward");
 		} else {
 			return mapping.findForward(null);

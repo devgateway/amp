@@ -5,6 +5,7 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
+import javax.servlet.ServletContext;
 import javax.servlet.http.HttpSession;
 
 import org.apache.struts.action.Action;
@@ -14,6 +15,7 @@ import org.apache.struts.action.ActionMapping;
 import org.digijava.module.aim.dbentity.AmpFilters;
 import org.digijava.module.aim.dbentity.AmpPages;
 import org.digijava.module.aim.form.TeamPagesForm;
+import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.DbUtil;
 
@@ -26,6 +28,8 @@ public class ShowConfigureTeam extends Action {
 
 		TeamPagesForm tpForm = (TeamPagesForm) form;
 
+		ServletContext ampContext = getServlet().getServletContext();
+		
 		if (request.getParameter("pageId") == null)
 			return mapping.findForward("index");
 
@@ -55,6 +59,7 @@ public class ShowConfigureTeam extends Action {
 
 		/* setting all the filter applicable to a page */
 		Collection col = DbUtil.getAllPageFilters(pageId);
+		
 		List temp = (List) col;
 		Collections.sort(temp);
 		col = (Collection) temp;

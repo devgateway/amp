@@ -15,7 +15,8 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.digijava.module.aim.form.MyDesktopForm;
 import org.digijava.module.aim.helper.Documents;
-import org.digijava.module.aim.util.TeamUtil;
+import org.digijava.module.aim.util.TeamMemberUtil;
+
 
 public class DeleteLinks extends Action {
     private static Logger logger = Logger.getLogger(DeleteLinks.class);
@@ -24,7 +25,7 @@ public class DeleteLinks extends Action {
             HttpServletRequest request,HttpServletResponse response) throws Exception {
         
         MyDesktopForm mdForm = (MyDesktopForm) form;
-        TeamUtil.removeMemberLinks(mdForm.getTeamMemberId(),mdForm.getSelLinks());
+        TeamMemberUtil.removeMemberLinks(mdForm.getTeamMemberId(),mdForm.getSelLinks());
         Long temp[] = mdForm.getSelLinks();
         for (int i = 0;i < temp.length;i ++) {
             mdForm.getDocuments().remove(new Documents(temp[i]));    

@@ -29,6 +29,7 @@ import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.FundingDetail;
 import org.digijava.module.aim.helper.FundingValidator;
 import org.digijava.module.aim.helper.TeamMember;
+import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.aim.util.DbUtil;
 
 
@@ -63,7 +64,7 @@ public class ShowAddComponent extends Action {
 						equalsIgnoreCase(Constants.DEF_MFD_PERSPECTIVE)) {
 					request.setAttribute("defPerspective",Constants.MOFED);
 				}
-				String defCurr = DbUtil.getCurrency(
+				String defCurr = CurrencyUtil.getCurrency(
 						tm.getAppSettings().getCurrencyId()).getCurrencyCode();
 				request.setAttribute("defCurrency",defCurr);				
 				
@@ -92,7 +93,7 @@ public class ShowAddComponent extends Action {
 						equalsIgnoreCase(Constants.DEF_MFD_PERSPECTIVE)) {
 					request.setAttribute("defPerspective",Constants.MOFED);
 				}
-				String defCurr = DbUtil.getCurrency(
+				String defCurr = CurrencyUtil.getCurrency(
 						tm.getAppSettings().getCurrencyId()).getCurrencyCode();
 				request.setAttribute("defCurrency",defCurr);				
 				return mapping.findForward("forward");
@@ -416,7 +417,7 @@ public class ShowAddComponent extends Action {
 				logger.error("Exception :" + e);
 			}
 		}
-		eaForm.setCurrencies(DbUtil.getAmpCurrency());
+		eaForm.setCurrencies(CurrencyUtil.getAmpCurrency());
 		return mapping.findForward("forward");
 	}
 }

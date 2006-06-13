@@ -18,6 +18,7 @@ import org.digijava.module.aim.form.TeamActivitiesForm;
 import org.digijava.module.aim.helper.Activity;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.TeamMember;
+import org.digijava.module.aim.util.TeamMemberUtil;
 import org.digijava.module.aim.util.TeamUtil;
 
 public class UpdateMemberActivities extends Action {
@@ -66,14 +67,14 @@ public class UpdateMemberActivities extends Action {
 		if (taForm.getRemoveActivity() != null) {
 			/* remove all selected activities */
 			
-			TeamUtil.removeActivitiesFromMember(taForm.getMemberId(),
+			TeamMemberUtil.removeActivitiesFromMember(taForm.getMemberId(),
 					taForm.getSelActivities());
 			
 			return mapping.findForward("forward");
 		} else if (taForm.getAssignActivity() != null) {
 			/* add the selected activities to the team list */
 			
-			TeamUtil.assignActivitiesToMember(taForm.getMemberId(),
+			TeamMemberUtil.assignActivitiesToMember(taForm.getMemberId(),
 					taForm.getSelActivities());
 
 			return mapping.findForward("forward");
@@ -81,10 +82,10 @@ public class UpdateMemberActivities extends Action {
 			/* show all unassigned activities */
 			Collection col = null;
 			if (tm.getTeamType().equalsIgnoreCase(Constants.DEF_DNR_PERSPECTIVE)) {
-				col = TeamUtil.getUnassignedDonorMemberActivities(id,
+				col = TeamMemberUtil.getUnassignedDonorMemberActivities(id,
 						taForm.getMemberId());
 			} else {
-				col = TeamUtil.getUnassignedMemberActivities(id,
+				col = TeamMemberUtil.getUnassignedMemberActivities(id,
 						taForm.getMemberId());
 			}
 			

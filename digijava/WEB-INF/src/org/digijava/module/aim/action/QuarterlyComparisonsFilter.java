@@ -1,8 +1,8 @@
 package org.digijava.module.aim.action ;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
-import java.util.ArrayList;
 import java.util.GregorianCalendar;
 
 import javax.servlet.http.HttpServletRequest;
@@ -25,6 +25,7 @@ import org.digijava.module.aim.helper.QuarterlyComparisonsWorker;
 import org.digijava.module.aim.helper.QuarterlyDiscrepancyAllWorker;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.helper.YearUtil;
+import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.aim.util.DbUtil;
 
 public class QuarterlyComparisonsFilter extends Action	{
@@ -63,7 +64,7 @@ public class QuarterlyComparisonsFilter extends Action	{
 			if ( formBean.getCurrency() != null )
 				fp.setCurrencyCode(formBean.getCurrency());
 			else	{
-				Currency curr = DbUtil.getCurrency(apps.getCurrencyId());
+				Currency curr = CurrencyUtil.getCurrency(apps.getCurrencyId());
 				fp.setCurrencyCode(curr.getCurrencyCode());
 			}
 	
@@ -92,7 +93,7 @@ public class QuarterlyComparisonsFilter extends Action	{
 			session.setAttribute("filterParams",fp);
 			formBean.setPerpsectiveName(DbUtil.getPerspective(fp.getPerspective()).getName());
 			formBean.setYears(YearUtil.getYears());
-			formBean.setCurrencies(DbUtil.getAmpCurrency());
+			formBean.setCurrencies(CurrencyUtil.getAmpCurrency());
 			formBean.setPerspectives(DbUtil.getAmpPerspective());
 			formBean.setFiscalYears(new ArrayList());
 			formBean.setFiscalYears(DbUtil.getAllFisCalenders());

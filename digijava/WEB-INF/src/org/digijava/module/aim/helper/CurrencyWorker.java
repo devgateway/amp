@@ -1,8 +1,9 @@
 package org.digijava.module.aim.helper;
 
-import org.digijava.module.aim.util.DbUtil;
-import org.apache.log4j.Logger;
 import java.text.DecimalFormat;
+
+import org.apache.log4j.Logger;
+import org.digijava.module.aim.util.CurrencyUtil;
 
 public class CurrencyWorker {
 	private static Logger logger = Logger.getLogger(CurrencyWorker.class);
@@ -38,7 +39,7 @@ public class CurrencyWorker {
 		if (logger.isDebugEnabled())
 			logger.debug("convert passed amt=" + Amt + " ,currencyCode="
 					+ currencyCode);
-		exchangeRate = DbUtil.getExchangeRate(currencyCode);
+		exchangeRate = CurrencyUtil.getExchangeRate(currencyCode);
 		resultDbl = exchangeRate * Amt;
 		return resultDbl;
 	}

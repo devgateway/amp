@@ -23,6 +23,7 @@ import org.digijava.module.aim.helper.FinancialFilters;
 import org.digijava.module.aim.helper.QuarterlyDiscrepancyAllWorker;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.helper.YearUtil;
+import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.aim.util.DbUtil;
 
 public class ViewQuarterlyDiscrepancyAll extends TilesAction	{
@@ -58,7 +59,7 @@ public class ViewQuarterlyDiscrepancyAll extends TilesAction	{
 			}
 	
 			if ( fp.getCurrencyCode() == null )	{
-				Currency curr = DbUtil.getCurrency(apps.getCurrencyId());
+				Currency curr = CurrencyUtil.getCurrency(apps.getCurrencyId());
 				fp.setCurrencyCode(curr.getCurrencyCode());
 			}
 	
@@ -85,7 +86,7 @@ public class ViewQuarterlyDiscrepancyAll extends TilesAction	{
 			session.setAttribute("filterParams",fp);	
 			
 			formBean.setYears(YearUtil.getYears());
-			formBean.setCurrencies(DbUtil.getAmpCurrency());
+			formBean.setCurrencies(CurrencyUtil.getAmpCurrency());
 			
 			Collection c = QuarterlyDiscrepancyAllWorker.getDiscrepancy(fp);
 			formBean.setQuarterlyDiscrepanciesAll(c);

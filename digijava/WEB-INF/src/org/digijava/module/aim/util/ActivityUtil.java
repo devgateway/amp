@@ -63,8 +63,6 @@ import org.digijava.module.aim.helper.RelatedLinks;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.cms.dbentity.CMSContentItem;
 
-import sun.awt.geom.Curve;
-
 /**
  * ActivityUtil is the persister class for all activity related 
  * entities 
@@ -80,14 +78,14 @@ public class ActivityUtil {
 	 * This function is used to create a new activity
 	 * @param activity The activity to be persisted
 	 */
-	public static void saveActivity(AmpActivity activity, ArrayList commentsCol,
+	public static Long saveActivity(AmpActivity activity, ArrayList commentsCol,
 			boolean serializeFlag, Long field,Collection relatedLinks,Long memberId) {
 		/*
 		 * calls saveActivity(AmpActivity activity,Long oldActivityId,boolean edit)
 		 * by passing null and false to the parameters oldActivityId and edit respectively
 		 * since this is creating a new activity
 		 */
-		saveActivity(activity,null,false,commentsCol,serializeFlag,field,relatedLinks,memberId,null);
+		return saveActivity(activity,null,false,commentsCol,serializeFlag,field,relatedLinks,memberId,null);
 	}
 	
 	/**
@@ -103,7 +101,7 @@ public class ActivityUtil {
 	 * @param edit This boolean variable represents whether to create a new
 	 * activity object or to update the existing activity object
 	 */
-	public static void saveActivity(AmpActivity activity,Long oldActivityId,boolean edit,
+	public static Long saveActivity(AmpActivity activity,Long oldActivityId,boolean edit,
 			ArrayList commentsCol,boolean serializeFlag, Long field,
 			Collection relatedLinks,Long memberId,Collection indicators) {
 		logger.debug("In save activity " + activity.getName());
@@ -111,12 +109,16 @@ public class ActivityUtil {
 		Transaction tx = null;
 		AmpActivity oldActivity = null;
 		
+		Long activityId = null;
+		
 		try {
 			session = PersistenceManager.getSession();
 			tx = session.beginTransaction();
 			
 			if (edit) { /* edit an existing activity */
 			    oldActivity = (AmpActivity) session.load(AmpActivity.class,oldActivityId);
+			    
+			    activityId = oldActivityId;
 			    
 			    activity.setAmpActivityId(oldActivityId);
 				
@@ -338,6 +340,7 @@ public class ActivityUtil {
 				}
 				member.getActivities().add(activity);
 				session.save(activity);
+				activityId = activity.getAmpActivityId();
 				session.saveOrUpdate(member);
 			}
 			
@@ -438,6 +441,8 @@ public class ActivityUtil {
 				}
 			}
 		}
+		
+		return activityId;
 	}
 	
 	public static Collection getComponents(Long actId) {
@@ -1219,5 +1224,70 @@ public class ActivityUtil {
 		}
 		return col;		
 	}
+	
+	public static long getActivityMaxId() {
+		Session session = null;
+		long maxId = 0;
 
+		try {
+			session = PersistenceManager.getSession();
+
+			String queryString = "select max(act.ampActivityId) from "
+					+ AmpActivity.class.getName() + " act";
+			Query qry = session.createQuery(queryString);
+			Iterator itr = qry.list().iterator();
+			if (itr.hasNext()) {
+				Long temp = (Long) itr.next();
+				if (temp != null) {
+					maxId = temp.longValue();
+				}
+			}
+
+		} catch (Exception e) {
+			logger.error("Uanble to max id :" + e);
+		} finally {
+
+			try {
+				PersistenceManager.releaseSession(session);
+			} catch (Exception ex) {
+				logger.error("releaseSession() failed " + ex);
+			}
+		}
+		return maxId;
+	}
+
+	public static AmpActivity getProjectChannelOverview(Long id) {
+		Session session = null;
+		AmpActivity activity = null;
+
+		try {
+			logger.debug("Id is " + id);
+			session = PersistenceManager.getSession();
+
+			// modified by Priyajith
+			// Desc: removed the usage of session.load and used the select query
+			// start
+			String queryString = "select a from " + AmpActivity.class.getName()
+					+ " a " + "where (a.ampActivityId=:id)";
+			Query qry = session.createQuery(queryString);
+			qry.setParameter("id", id, Hibernate.LONG);
+			Iterator itr = qry.list().iterator();
+			while (itr.hasNext())
+				activity = (AmpActivity) itr.next();
+			// end
+		} catch (Exception ex) {
+			logger
+					.error("Unable to get Amp Activity getProjectChannelOverview() :"
+							+ ex);
+		} finally {
+			try {
+				PersistenceManager.releaseSession(session);
+			} catch (Exception ex2) {
+				logger.error("releaseSession() failed ");
+			}
+		}
+		return activity;
+	}
+
+	
 } // End

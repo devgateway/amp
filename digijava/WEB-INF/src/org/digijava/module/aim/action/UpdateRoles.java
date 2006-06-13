@@ -14,6 +14,7 @@ import org.apache.struts.action.ActionMapping;
 import org.digijava.module.aim.dbentity.AmpTeamMemberRoles;
 import org.digijava.module.aim.form.UpdateRoleForm;
 import org.digijava.module.aim.util.DbUtil;
+import org.digijava.module.aim.util.TeamMemberUtil;
 
 public class UpdateRoles extends Action {
 
@@ -50,7 +51,7 @@ public class UpdateRoles extends Action {
 		if (urForm.getAction().equals("add")) {
 			if (urForm.getRole() != null) {
 				AmpTeamMemberRoles ampRoles = null;
-				ampRoles = DbUtil.getAmpRoleByName(urForm.getRole());
+				ampRoles = TeamMemberUtil.getAmpRoleByName(urForm.getRole());
 				if (ampRoles != null) {
 					errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
 							"error.aim.updateRoles.roleAlreadyExist"));
@@ -93,7 +94,7 @@ public class UpdateRoles extends Action {
 				logger.debug("role added");
 				return mapping.findForward("roles");
 			} else {
-				AmpTeamMemberRoles ampRole = DbUtil.getAmpTeamHeadRole();
+				AmpTeamMemberRoles ampRole = TeamMemberUtil.getAmpTeamHeadRole();
 				if (ampRole == null) {
 					urForm.setTeamHeadFlag("no");
 				} else {

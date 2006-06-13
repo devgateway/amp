@@ -5,7 +5,9 @@ import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Map;
 
 import net.sf.hibernate.Hibernate;
 import net.sf.hibernate.Query;
@@ -793,39 +795,48 @@ public class MEIndicatorsUtil
 	
 	public static Collection getPortfolioMEIndicatorRisks(Collection actIds) {
 		Session session = null;
-		Collection col = new ArrayList();
-	
+		ArrayList col = new ArrayList();
+		String qryStr = null;
+		Iterator itr = null;
+		Query qry = null;
+		Map riskMap = new HashMap();
+		
 		try {
 			session = PersistenceManager.getSession();
-			String qryStr = null;
-			Iterator itr = null;
+			qryStr = "select r from " + AmpIndicatorRiskRatings.class.getName() + " r";
+			qry = session.createQuery(qryStr);
+			itr = qry.list().iterator();
+			while (itr.hasNext()) {
+				AmpIndicatorRiskRatings r = (AmpIndicatorRiskRatings) itr.next();
+				riskMap.put(new Integer(r.getRatingValue()),r.getRatingName());
+			}
 			
 			if (actIds != null && actIds.size() > 0) {
 				itr = actIds.iterator();
-				String params = "";
+				String name;
 				while (itr.hasNext()) {
 					Long id = (Long) itr.next();
-					if (params.length() > 0) params += ",";
-					params += id;
-				}
+					int value = getOverallRisk(id);
+					Integer key = new Integer(value);
 					
-				qryStr = "select count(*), r.rating_name,r.rating_value from amp_me_indicator_value v " +
-						"inner join amp_indicator_risk_ratings r on (r.amp_ind_risk_ratings_id=v.risk)" +
-						" where v.activity_id in (" + params + ") group by v.risk";
-				
-				Connection con = session.connection();
-				Statement stmt = con.createStatement();
-				ResultSet rs = stmt.executeQuery(qryStr);
-				while (rs.next()) {
-					int cnt = rs.getInt(1);
-					String rName = rs.getString(2);
-					byte ratValue = rs.getByte(3);
-
-					MEIndicatorRisk meRisk = new MEIndicatorRisk();
-					meRisk.setRisk(rName);
-					meRisk.setRiskCount(cnt);
-					meRisk.setRiskRating(ratValue);
-					col.add(meRisk);
+					if (riskMap.containsKey(key)) {
+						name = (String) riskMap.get(new Integer(value));
+						MEIndicatorRisk meRisk = new MEIndicatorRisk();
+						meRisk.setRisk(name);
+						int index = -1;
+						if (col != null && col.size() > 0) {
+							index = col.indexOf(meRisk);
+						}
+						 
+						if (index >= 0) {
+							meRisk = (MEIndicatorRisk) col.get(index);
+							meRisk.setRiskCount(meRisk.getRiskCount()+1);
+						} else {
+							meRisk.setRiskCount(1);
+							meRisk.setRiskRating((byte) value);
+							col.add(meRisk);											
+						}
+					}
 				}
 			}
 		} catch (Exception e) {
@@ -1059,4 +1070,123 @@ public class MEIndicatorsUtil
 		}
 		return indVal;		
 	}
+	
+	public static int getOverallPortfolioRisk(Collection actIds) {
+		int risk = 0;
+		try {
+		Collection col = getPortfolioMEIndicatorRisks(actIds); 
+		Iterator itr = col.iterator();
+		float temp = 0;
+		while (itr.hasNext()) {
+			MEIndicatorRisk meRisk = (MEIndicatorRisk) itr.next();
+			temp += meRisk.getRiskRating() * meRisk.getRiskCount();
+		}
+		
+		if (col.size() > 0) {
+			temp /= (float) col.size();
+			temp = Math.round(temp);
+			if (temp < 0) 
+				risk = (int) Math.floor(temp);
+			else if(temp > 0)
+				risk = (int) Math.ceil(temp);
+			else 
+				risk = -1;
+		}
+		} catch (Exception e) {
+			e.printStackTrace(System.out);
+		}
+		return risk;
+	}
+	
+	public static int getOverallRisk(Long actId) {
+		int risk = 0;
+		try {
+		Collection col = getMEIndicatorRisks(actId); 
+		Iterator itr = col.iterator();
+		float temp = 0;
+		while (itr.hasNext()) {
+			MEIndicatorRisk meRisk = (MEIndicatorRisk) itr.next();
+			temp += meRisk.getRiskRating();
+		}
+		if (col.size() > 0) {
+			temp /= (float) col.size();
+			temp = Math.round(temp);
+			if (temp < 0) 
+				risk = (int) Math.floor(temp);
+			else if(temp > 0)
+				risk = (int) Math.ceil(temp);
+			else
+				risk = -1;
+		}
+		} catch (Exception e) {
+			e.printStackTrace(System.out);
+		}
+		return risk;
+	}
+	
+	public static int getRiskRatingValue(String name) {
+		Session session = null;
+		int riskRating = 0;
+		
+		try {
+			session = PersistenceManager.getSession();
+			String qryStr = "select r.ratingValue from " + AmpIndicatorRiskRatings.class.getName() + "" +
+					" r where (r.ratingName=:name)";
+			Query qry = session.createQuery(qryStr);
+			qry.setParameter("name",name,Hibernate.STRING);
+			Iterator itr = qry.list().iterator();
+			if (itr.hasNext()) {
+				Integer temp = (Integer) itr.next();
+				riskRating = temp.intValue();
+			}
+		}
+		catch(Exception e) {
+			logger.error("Unable to get risk ratibg value");
+			e.printStackTrace(System.out);
+		}
+		finally {
+			try  {
+				if (session != null) {
+					PersistenceManager.releaseSession(session);
+				}
+			} 
+			catch (Exception ex) {
+				logger.error("releaseSession() FAILED", ex);
+			}
+		}		
+		return riskRating;
+	}
+
+	public static String getRiskRatingName(int risk) {
+		Session session = null;
+		String riskName = "";
+		
+		try {
+			session = PersistenceManager.getSession();
+			String qryStr = "select r.ratingName from " + AmpIndicatorRiskRatings.class.getName() + "" +
+					" r where (r.ratingValue=:risk)";
+			Query qry = session.createQuery(qryStr);
+			qry.setParameter("risk",new Integer(risk),Hibernate.INTEGER);
+			Iterator itr = qry.list().iterator();
+			if (itr.hasNext()) {
+				riskName = (String) itr.next();
+			}
+		}
+		catch(Exception e) {
+			logger.error("Unable to get risk ratibg value");
+			e.printStackTrace(System.out);
+		}
+		finally {
+			try  {
+				if (session != null) {
+					PersistenceManager.releaseSession(session);
+				}
+			} 
+			catch (Exception ex) {
+				logger.error("releaseSession() FAILED", ex);
+			}
+		}		
+		return riskName;
+	}	
+	
 }

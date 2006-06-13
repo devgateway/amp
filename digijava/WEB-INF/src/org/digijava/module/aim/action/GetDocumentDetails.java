@@ -16,6 +16,7 @@ import org.apache.struts.action.ActionMapping;
 import org.digijava.module.aim.dbentity.AmpActivity;
 import org.digijava.module.aim.form.RelatedLinksForm;
 import org.digijava.module.aim.helper.Documents;
+import org.digijava.module.aim.util.ActivityUtil;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.cms.dbentity.CMSContentItem;
 
@@ -58,7 +59,7 @@ extends Action {
 		if (dId != null) {
 			Documents document = new Documents();
 			CMSContentItem cmsItem = org.digijava.module.cms.util.DbUtil.getCMSContentItem(dId);
-			AmpActivity activity = DbUtil.getProjectChannelOverview(aId);
+			AmpActivity activity = ActivityUtil.getProjectChannelOverview(aId);
 			document.setActivityId(activity.getAmpActivityId());
 			document.setActivityName(activity.getName());
 			document.setTitle(cmsItem.getTitle());

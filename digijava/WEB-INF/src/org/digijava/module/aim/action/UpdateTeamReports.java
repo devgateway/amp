@@ -16,6 +16,7 @@ import org.digijava.module.aim.form.ReportsForm;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.ReportUtil;
+import org.digijava.module.aim.util.TeamUtil;
 
 public class UpdateTeamReports extends Action {
 
@@ -58,7 +59,7 @@ public class UpdateTeamReports extends Action {
 
 		if (raForm.getAddReport() != null) {
 			/* show all unassigned reports */
-			Collection col = DbUtil.getAllUnassignedTeamReports(id);
+			Collection col = TeamUtil.getAllUnassignedTeamReports(id);
 			raForm.setReports(col);
 			raForm.setTeamId(tm.getTeamId());
 			raForm.setAddReport(null);
@@ -78,7 +79,7 @@ public class UpdateTeamReports extends Action {
 			raForm.setAssignReports(null);
 			
 			/*
-			AmpTeam ampTeam = DbUtil.getAmpTeam(tm.getTeamId());
+			AmpTeam ampTeam = TeamUtil.getAmpTeam(tm.getTeamId());
 			
 			Collection reports = new ArrayList();
 			for (int i = 0; i < selReports.length; i++) {

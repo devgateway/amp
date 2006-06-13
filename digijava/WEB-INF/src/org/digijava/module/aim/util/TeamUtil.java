@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.Set;
 import java.util.Vector;
 
@@ -17,7 +18,6 @@ import net.sf.hibernate.Session;
 import net.sf.hibernate.Transaction;
 
 import org.apache.log4j.Logger;
-import org.apache.tools.ant.taskdefs.Get;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.request.Site;
 import org.digijava.kernel.user.Group;
@@ -27,7 +27,6 @@ import org.digijava.module.aim.dbentity.AmpApplicationSettings;
 import org.digijava.module.aim.dbentity.AmpCurrency;
 import org.digijava.module.aim.dbentity.AmpFilters;
 import org.digijava.module.aim.dbentity.AmpFiscalCalendar;
-import org.digijava.module.aim.dbentity.AmpMeasure;
 import org.digijava.module.aim.dbentity.AmpOrgRole;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpPages;
@@ -37,15 +36,11 @@ import org.digijava.module.aim.dbentity.AmpTeam;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.dbentity.AmpTeamPageFilters;
 import org.digijava.module.aim.dbentity.AmpTeamReports;
-import org.digijava.module.aim.exception.AimException;
 import org.digijava.module.aim.helper.Activity;
 import org.digijava.module.aim.helper.Constants;
-import org.digijava.module.aim.helper.Documents;
 import org.digijava.module.aim.helper.DonorTeam;
-import org.digijava.module.aim.helper.TeamMember;
-import org.digijava.module.aim.helper.UpdateDB;
+import org.digijava.module.aim.helper.ReportsCollection;
 import org.digijava.module.aim.helper.Workspace;
-import org.digijava.module.cms.dbentity.CMSContentItem;
 
 /**
  * Persister class for all Team/Workspaces related Objects
@@ -680,15 +675,12 @@ public class TeamUtil {
 		AmpTeam team = null;
 
 		try {
-		    t1 = System.currentTimeMillis();
 			session = PersistenceManager.getSession();
 			team = (AmpTeam) session.load(AmpTeam.class,id);
-			t2 = System.currentTimeMillis();
 		} catch (Exception e) {
 			logger.error("Unable to get team" + e.getMessage());
-			logger.debug("Exceptiion " + e);
+			logger.error("Exceptiion " + e);
 		} finally {
-		    t1 = System.currentTimeMillis();		    
 			try {
 				if (session != null) {
 					PersistenceManager.releaseSession(session);
@@ -696,8 +688,6 @@ public class TeamUtil {
 			} catch (Exception ex) {
 				logger.error("releaseSession() failed");
 			}
-			t2 = System.currentTimeMillis();
-			logger.debug("##2 at " + (t2-t1) + "ms");								
 		}
 		return team;
 	}
@@ -802,468 +792,6 @@ public class TeamUtil {
 		return memberExist;
 	}
 	
-	public static Collection getTeamMembers(String email) {
-		 User user = org.digijava.module.aim.util.DbUtil.getUser(email);
-		 if (user == null) return null;
-		
-		Session session = null;
-		Query qry = null;
-		Collection col = new ArrayList();
-
-		try {
-			session = PersistenceManager.getSession();
-			String queryString = "select tm from " + AmpTeamMember.class.getName() + 
-			  " tm where (tm.user=:user)";
-			qry = session.createQuery(queryString);
-			qry.setParameter("user",user.getId(),Hibernate.LONG);
-			col = qry.list();
-		} catch (Exception e) {
-			logger.error("Unable to get TeamMembers" + e.getMessage());
-			e.printStackTrace(System.out);
-		} finally {
-			try {
-				if (session != null) {
-					PersistenceManager.releaseSession(session);
-				}
-			} catch (Exception ex) {
-				logger.error("releaseSession() failed");
-			}
-		}
-		return col;		
-	}
-	
-	public static void assignActivitiesToMember(Long memberId,Long activities[]) {
-		Session session = null;
-		Transaction tx = null;
-		AmpTeamMember member = null;
-
-		try {
-			session = PersistenceManager.getSession();
-			member = (AmpTeamMember) session.load(AmpTeamMember.class,memberId);
-			if (member != null) {
-				tx = session.beginTransaction();
-				for (int i = 0;i < activities.length;i ++) {
-					if (activities[i] != null) {
-						AmpActivity activity = (AmpActivity)session.load(
-								AmpActivity.class,activities[i]);
-						member.getActivities().add(activity);
-					}
-				}
-				session.update(member);
-				tx.commit();
-			}
-		} catch (Exception e) {
-			logger.error("Unable to assign activities" + e.getMessage());
-			e.printStackTrace(System.out);
-			if (tx != null) {
-				try {
-					tx.rollback();
-				} catch (Exception rbf) {
-					logger.error("Roll back failed");
-				}
-			}
-		} finally {
-			try {
-				if (session != null) {
-					PersistenceManager.releaseSession(session);
-				}
-			} catch (Exception ex) {
-				logger.error("releaseSession() failed");
-			}
-		}
-	}
-	
-	public static void removeActivitiesFromMember(Long memberId,Long activities[]) {
-		Session session = null;
-		Transaction tx = null;
-		AmpTeamMember member = null;
-
-		try {
-			session = PersistenceManager.getSession();
-			member = (AmpTeamMember) session.load(AmpTeamMember.class,memberId);
-			if (member != null) {
-				tx = session.beginTransaction();
-				for (int i = 0;i < activities.length;i ++) {
-					if (activities[i] != null) {
-						AmpActivity activity = (AmpActivity)session.load(
-								AmpActivity.class,activities[i]);
-						member.getActivities().remove(activity);
-					}
-				}
-				session.update(member);
-				tx.commit();				
-			}
-		} catch (Exception e) {
-			logger.error("Unable to remove activities" + e.getMessage());
-			e.printStackTrace(System.out);
-			if (tx != null) {
-				try {
-					tx.rollback();
-				} catch (Exception rbf) {
-					logger.error("Roll back failed");
-				}
-			}
-		} finally {
-			try {
-				if (session != null) {
-					PersistenceManager.releaseSession(session);
-				}
-			} catch (Exception ex) {
-				logger.error("releaseSession() failed");
-			}
-		}		
-	}
-	
-	public static Collection getUnassignedDonorMemberActivities(Long teamId,Long memberId) {
-		Collection col = new ArrayList();
-		Collection col1 = new ArrayList();
-		Session session = null;
-		try {
-			session = PersistenceManager.getSession();
-			AmpTeam team = (AmpTeam) session.load(AmpTeam.class,teamId);
-			AmpTeamMember member = (AmpTeamMember) session.load(AmpTeamMember.class,memberId);
-			
-			col1.addAll(team.getActivityList());
-			col1.removeAll(member.getActivities());
-			
-			Iterator itr1 = col1.iterator();
-			while (itr1.hasNext()) {
-				AmpActivity act = (AmpActivity) itr1.next();
-				Iterator orgItr = act.getOrgrole().iterator();
-				Activity activity = new Activity();
-				activity.setActivityId(act.getAmpActivityId());
-				activity.setName(act.getName());
-				activity.setAmpId(act.getAmpId());
-				String donors = "";
-
-				while (orgItr.hasNext()) {
-					AmpOrgRole orgRole = (AmpOrgRole) orgItr.next();
-					if (orgRole.getRole().getRoleCode().equals(Constants.DONOR)) {
-						if (donors.trim().length() > 0)
-							donors += ", ";
-						donors += orgRole.getOrganisation().getName();
-					}
-				}
-				activity.setDonors(donors);
-				col.add(activity);								
-			}
-			
-		} catch (Exception e) {
-			if (session != null) {
-				try {
-					PersistenceManager.releaseSession(session);
-				} catch (Exception rsf) {
-					logger.error("Release seesion failed " + rsf.getMessage());
-				}
-			}
-		}
-		return col;
-	}
-	
-	public static Collection getUnassignedMemberActivities(Long teamId,Long memberId) {
-		Collection col = null;
-		Collection col1 = new ArrayList();
-		Session session = null;
-		Query qry = null;
-		AmpTeamMember member = null;
-
-		try {
-			session = PersistenceManager.getSession();
-			
-			String queryString = "select act from " + AmpActivity.class.getName() + 
-			  " act where (act.team=:id) and (act.approvalStatus!=:status)";
-			qry = session.createQuery(queryString);
-			qry.setParameter("id",teamId,Hibernate.LONG);
-			qry.setParameter("status","started",Hibernate.STRING);
-			col = qry.list();
-			
-			member = (AmpTeamMember) session.load(AmpTeamMember.class,memberId);
-			
-			col.removeAll(member.getActivities());
-			logger.debug("Collection size after remove all:" + col.size());
-			col1 = new ArrayList();
-			Iterator itr = col.iterator();
-			while (itr.hasNext()) {
-				AmpActivity activity = (AmpActivity) itr.next();
-				Iterator orgItr = activity.getOrgrole().iterator();
-				Activity act = new Activity();
-				act.setActivityId(activity.getAmpActivityId());
-				act.setName(activity.getName());
-				act.setAmpId(activity.getAmpId());
-				String donors = "";
-
-				while (orgItr.hasNext()) {
-					AmpOrgRole orgRole = (AmpOrgRole) orgItr.next();
-					if (orgRole.getRole().getRoleCode().equals(Constants.DONOR)) {
-						if (donors.trim().length() > 0)
-							donors += ", ";
-						donors += orgRole.getOrganisation().getName();
-					}
-				}
-				act.setDonors(donors);
-				col1.add(act);				
-			}			
-			
-		} catch (Exception e) {
-			logger.error("Unable to remove activities" + e.getMessage());
-			e.printStackTrace(System.out);
-		} finally {
-			try {
-				if (session != null) {
-					PersistenceManager.releaseSession(session);
-				}
-			} catch (Exception ex) {
-				logger.error("releaseSession() failed");
-			}
-		}
-		return col1;
-	}
-	
-	public static Collection getMemberLinks(Long memberId) {
-		Collection col = new ArrayList();
-		
-		Session session = null;
-
-		try {
-			session = PersistenceManager.getSession();
-			AmpTeamMember tm = (AmpTeamMember) session.load(AmpTeamMember.class,
-					memberId);
-			Iterator itr = tm.getLinks().iterator();
-			while (itr.hasNext()) {
-				CMSContentItem cmsItem = (CMSContentItem) itr.next();
-				Documents document = new Documents();
-				document.setDocId(new Long(cmsItem.getId()));
-				document.setTitle(cmsItem.getTitle());
-				document.setIsFile(cmsItem.getIsFile());
-				document.setFileName(cmsItem.getFileName());
-				document.setUrl(cmsItem.getUrl());
-				document.setDocDescription(cmsItem.getDescription());
-				col.add(document);
-			}
-		} catch (Exception e) {
-			logger.error("Unable to get Member links" + e.getMessage());
-			e.printStackTrace(System.out);
-		} finally {
-			try {
-				if (session != null) {
-					PersistenceManager.releaseSession(session);
-				}
-			} catch (Exception ex) {
-				logger.error("releaseSession() failed");
-			}
-		}
-		return col;
-	}		
-	
-	public static Collection getUnassignedMemberReports(Long teamId,Long memberId) {
-		Collection col = new ArrayList();
-		
-		Session session = null;
-		Query qry = null;
-		AmpTeamMember member = null;
-
-		try {
-			session = PersistenceManager.getSession();
-			
-			String queryString = "select rep.report from " + AmpTeamReports.class.getName() + 
-			  " rep where (rep.team=:id)";
-			qry = session.createQuery(queryString);
-			qry.setParameter("id",teamId,Hibernate.LONG);
-			Iterator itr = qry.list().iterator();
-			while (itr.hasNext()) {
-				AmpReports rep = (AmpReports) itr.next();
-				col.add(rep);
-			}
-			
-			member = (AmpTeamMember) session.load(AmpTeamMember.class,memberId);
-			col.removeAll(member.getReports());
-		} catch (Exception e) {
-			logger.error("Unable to remove activities" + e.getMessage());
-			e.printStackTrace(System.out);
-		} finally {
-			try {
-				if (session != null) {
-					PersistenceManager.releaseSession(session);
-				}
-			} catch (Exception ex) {
-				logger.error("releaseSession() failed");
-			}
-		}
-		return col;
-	}	
-	
-	
-	public static void removeMemberLinks(Long memberId,Long links[]) {
-		Session session = null;
-		Transaction tx = null;
-		AmpTeamMember member = null;
-
-		try {
-			session = PersistenceManager.getSession();
-			member = (AmpTeamMember) session.load(AmpTeamMember.class,memberId);
-			if (member != null) {
-			    Collection col = new ArrayList();
-				tx = session.beginTransaction();
-				
-				Iterator itr = member.getLinks().iterator();
-				while (itr.hasNext()) {
-				    CMSContentItem cmsItem = (CMSContentItem) itr.next();
-				    boolean flag = false;
-				    for (int i = 0;i < links.length;i ++) {
-				        if (cmsItem.getId() == links[i].longValue()) {
-				            flag = true;
-				            session.delete(cmsItem);
-				            break;
-				        }
-				    }
-				    if (!flag) {
-				        col.add(cmsItem);
-				    }
-				}
-				member.setLinks(new HashSet(col));
-				session.update(member);
-				tx.commit();
-			}
-		} catch (Exception e) {
-			logger.error("Unable to remove members link" + e.getMessage());
-			e.printStackTrace(System.out);
-			if (tx != null) {
-				try {
-					tx.rollback();
-				} catch (Exception rbf) {
-					logger.error("Roll back failed");
-				}
-			}
-		} finally {
-			try {
-				if (session != null) {
-					PersistenceManager.releaseSession(session);
-				}
-			} catch (Exception ex) {
-				logger.error("releaseSession() failed");
-			}
-		}
-	}			
-	
-	public static void addLinkToMember(Long memberId,CMSContentItem cmsItem) {
-		Session session = null;
-		Transaction tx = null;
-		AmpTeamMember member = null;
-
-		try {
-			session = PersistenceManager.getSession();
-			member = (AmpTeamMember) session.load(AmpTeamMember.class,memberId);
-			if (member != null) {
-				tx = session.beginTransaction();
-				if (member.getLinks() == null) 
-				    member.setLinks(new HashSet());
-				member.getLinks().add(cmsItem);
-				session.update(member);
-				tx.commit();
-			}
-		} catch (Exception e) {
-			logger.error("Unable to add Links to members" + e.getMessage());
-			e.printStackTrace(System.out);
-			if (tx != null) {
-				try {
-					tx.rollback();
-				} catch (Exception rbf) {
-					logger.error("Roll back failed");
-				}
-			}
-		} finally {
-			try {
-				if (session != null) {
-					PersistenceManager.releaseSession(session);
-				}
-			} catch (Exception ex) {
-				logger.error("releaseSession() failed");
-			}
-		}
-	}		
-	
-	public static void assignReportsToMember(Long memberId,Long reports[]) {
-		Session session = null;
-		Transaction tx = null;
-		AmpTeamMember member = null;
-
-		try {
-			session = PersistenceManager.getSession();
-			member = (AmpTeamMember) session.load(AmpTeamMember.class,memberId);
-			if (member != null) {
-				tx = session.beginTransaction();
-				for (int i = 0;i < reports.length;i ++) {
-					if (reports[i] != null) {
-						AmpReports report = (AmpReports)session.load(
-								AmpReports.class,reports[i]);
-						member.getReports().add(report);
-					}
-				}
-				session.update(member);
-				tx.commit();
-			}
-		} catch (Exception e) {
-			logger.error("Unable to assign reports" + e.getMessage());
-			e.printStackTrace(System.out);
-			if (tx != null) {
-				try {
-					tx.rollback();
-				} catch (Exception rbf) {
-					logger.error("Roll back failed");
-				}
-			}
-		} finally {
-			try {
-				if (session != null) {
-					PersistenceManager.releaseSession(session);
-				}
-			} catch (Exception ex) {
-				logger.error("releaseSession() failed");
-			}
-		}
-	}	
-	
-	public static void removeReportsFromMember(Long memberId,Long reports[]) {
-		Session session = null;
-		Transaction tx = null;
-		AmpTeamMember member = null;
-
-		try {
-			session = PersistenceManager.getSession();
-			member = (AmpTeamMember) session.load(AmpTeamMember.class,memberId);
-			if (member != null) {
-				tx = session.beginTransaction();
-				for (int i = 0;i < reports.length;i ++) {
-					if (reports[i] != null) {
-						AmpReports report = (AmpReports)session.load(
-								AmpReports.class,reports[i]);
-						member.getReports().remove(report);
-					}
-				}
-				session.update(member);
-				tx.commit();
-			}
-		} catch (Exception e) {
-			logger.error("Unable to remove reports" + e.getMessage());
-			e.printStackTrace(System.out);
-			if (tx != null) {
-				try {
-					tx.rollback();
-				} catch (Exception rbf) {
-					logger.error("Roll back failed");
-				}
-			}
-		} finally {
-			try {
-				if (session != null) {
-					PersistenceManager.releaseSession(session);
-				}
-			} catch (Exception ex) {
-				logger.error("releaseSession() failed");
-			}
-		}
-	}		
-	
 	public static void removeActivitiesFromDonorTeam(Long activities[],Long teamId) {
 		Session session = null;
 		Transaction tx = null;
@@ -1337,7 +865,7 @@ public class TeamUtil {
 			    activity.setMember(null); 
 			    session.update(activity);
 			    session.flush();
-			    UpdateDB.updateReportCache(activities[i]);
+			    //UpdateDB.updateReportCache(activities[i]);
 			}
 			
 			tx.commit();
@@ -1378,7 +906,7 @@ public class TeamUtil {
 			Long tId = new Long(0);
 			String inclause = "";
 			
-			ArrayList dbReturnSet = (ArrayList) DbUtil.getAmpLevel0Teams(teamId);
+			ArrayList dbReturnSet = (ArrayList) getAmpLevel0Teams(teamId);
 			if (dbReturnSet.size() == 0)
 				inclause = "'" + teamId + "'";
 			else {
@@ -1439,65 +967,7 @@ public class TeamUtil {
 		return donors;
 	}
 	
-	public static Collection getAllTeamMembersToDesktop(Long teamId) {
-		Session session = null;
-		Query qry = null;
-		Collection members = new ArrayList();
 
-		try {
-			session = PersistenceManager.getSession();
-
-			// get the team leader of the team
-			String queryString = "select t.teamLead.ampTeamMemId from " + AmpTeam.class.getName() + 
-				" t where (t.ampTeamId=:id)";
-			qry = session.createQuery(queryString);
-			qry.setParameter("id", teamId, Hibernate.LONG);
-			Iterator itr = qry.list().iterator();
-			Long id = new Long(-1);
-			if (itr.hasNext()) {
-			    Object idObj = itr.next();
-			    id = (Long) idObj;
-			}
-			logger.debug("Got team leader " + id);
-			
-			// get all members of the team and also set the team leader
-			// flag of the member who is the team leader 
-			queryString = "select tm.ampTeamMemId,usr.firstNames," +
-					"usr.lastName from " + AmpTeamMember.class.getName()
-					+ " tm, " + User.class.getName() + " usr " +
-							"where tm.user=usr.id and (tm.ampTeam=:teamId)";
-			qry = session.createQuery(queryString);
-			qry.setParameter("teamId", teamId, Hibernate.LONG);
-			itr = qry.list().iterator();
-
-			Object temp[] = null;
-			while (itr.hasNext()) {
-			    temp = (Object[]) itr.next();
-				TeamMember tm = new TeamMember();
-				Long memId = (Long)temp[0];
-				tm.setMemberId(memId);
-				tm.setMemberName((String)temp[1] + " " + (String)temp[2]);
-				if (memId.equals(id)) {
-				    tm.setTeamHead(true);
-				}
-				members.add(tm);
-			}
-		} catch (Exception e) {
-			logger.error("Unable to get all team members");
-			logger.debug("Exceptiion " + e);
-			e.printStackTrace(System.out);
-		} finally {
-			try {
-				if (session != null) {
-					PersistenceManager.releaseSession(session);
-				}
-			} catch (Exception ex) {
-				logger.error("releaseSession() failed");
-			}
-		}
-		logger.debug("returning members");
-		return members;
-	}		
 	
 	public static void updateTeamPageConfiguration(Long teamId,Long pageId,Long filters[]) {
 		Session session = null;
@@ -1549,90 +1019,7 @@ public class TeamUtil {
 			}
 		}
 	}			
-	public static void removeTeamMembers(Long id[],Long groupId) {
-		Session session = null;
-		Transaction tx = null;
-		String qryStr = null;
-		Query qry = null;
 
-		try {
-			session = PersistenceManager.getSession();
-			tx = session.beginTransaction();
-			for (int i = 0;i < id.length;i++) {
-				if (id[i] != null) {
-					AmpTeamMember ampMember = (AmpTeamMember) session.load(AmpTeamMember.class,id[i]);
-					if (isTeamLead(ampMember)) {
-						AmpTeam team = ampMember.getAmpTeam();
-						team.setTeamLead(null);
-						session.update(team);
-					}
-					
-					qryStr = "select a from " + AmpApplicationSettings.class.getName() +
-							" a where (a.member=:memberId)";
-					qry = session.createQuery(qryStr);
-					qry.setParameter("memberId", id[i], Hibernate.LONG);
-					Iterator itr = qry.list().iterator();
-					if (itr.hasNext()) {
-						logger.info("Got the app settings..");
-						AmpApplicationSettings ampAppSettings = (AmpApplicationSettings) itr.next();
-						session.delete(ampAppSettings);
-						logger.info("deleted the app settings..");
-					}
-					
-					User user = (User) session.load(User.class,ampMember.getUser().getId());
-					Group group = (Group) session.load(Group.class,groupId);
-					user.getGroups().remove(group);
-					session.update(user);
-					session.delete(ampMember);
-				}				
-			}
-			tx.commit();
-		} catch (Exception e) {
-			logger.error("Unable to removeTeamMembers " + e.getMessage());
-			e.printStackTrace(System.out);
-			if (tx != null) {
-				try {
-					tx.rollback();
-				} catch (Exception rbf) {
-					logger.error("Roll back failed");
-				}
-			}
-		} finally {
-			try {
-				if (session != null) {
-					PersistenceManager.releaseSession(session);
-				}
-			} catch (Exception ex) {
-				logger.error("releaseSession() failed");
-			}
-		}		
-	}
-	
-	private static boolean isTeamLead(AmpTeamMember member) {
-		Session session = null;
-
-		try {
-			session = PersistenceManager.getSession();
-			AmpTeam ampTeam = (AmpTeam) session.load(AmpTeam.class,
-					member.getAmpTeam().getAmpTeamId());
-			if (ampTeam.getTeamLead().getAmpTeamMemId().
-					equals(member.getAmpTeamMemId())) {
-				return true;
-			}
-		} catch (Exception e) {
-			logger.error("Unable to update team page filters" + e.getMessage());
-			e.printStackTrace(System.out);
-		} finally {
-			try {
-				if (session != null) {
-					PersistenceManager.releaseSession(session);
-				}
-			} catch (Exception ex) {
-				logger.error("releaseSession() failed");
-			}
-		}				
-		return false;
-	}
 	
 	public static Collection getDonorTeams(Long teamId) {
 		// Check whether the team whose donor teams need to be found is a  
@@ -1905,5 +1292,488 @@ public class TeamUtil {
 		}						
 	}	
 	
+	public static boolean checkForParentTeam(Long ampTeamId) {
+		Session session = null;
+		Query q = null;
+		boolean ans = false;
+		try {
+			session = PersistenceManager.getSession();
+			String qry = "select tm from " + AmpTeam.class.getName() + " tm where tm.parentTeamId=:ampTeamId";
+			q = session.createQuery(qry);
+			q.setParameter("ampTeamId", ampTeamId, Hibernate.LONG);
+			if (q != null && q.list().size() > 0)
+				ans = false;
+			else
+				ans = true;
+		} catch (Exception ex) {
+			logger.error("Unable to get AmpTeam [checkForParentTeam()]", ex);
+		} finally {
+			try {
+				if (session != null) {
+					PersistenceManager.releaseSession(session);
+				}
+			} catch (Exception ex) {
+				logger.debug("releaseSession() failed");
+			}
+		}
+		logger.debug("Getting checkForParentTeam Executed successfully ");
+		return ans;
+	}
 	
+	public static AmpTeam getTeamByName(String teamName) {
+		Session session = null;
+		Query qry = null;
+		AmpTeam team = null;
+
+		try {
+			session = PersistenceManager.getSession();
+			String queryString = "select t from " + AmpTeam.class.getName()
+					+ " t where (t.name=:teamName)";
+			qry = session.createQuery(queryString);
+			qry.setParameter("teamName", teamName, Hibernate.STRING);
+			Iterator itr = qry.list().iterator();
+			if (itr.hasNext()) {
+				team = (AmpTeam) itr.next();
+			}
+		} catch (Exception e) {
+			logger.error("Unable to get team");
+			logger.debug("Exceptiion " + e);
+		} finally {
+			try {
+				if (session != null) {
+					PersistenceManager.releaseSession(session);
+				}
+			} catch (Exception ex) {
+				logger.error("releaseSession() failed");
+			}
+		}
+		return team;
+	}
+
+
+	public static Collection getAllTeamAmpActivities(Long teamId) {
+		Session session = null;
+		Collection col = null;
+
+		try {
+			session = PersistenceManager.getSession();
+			String queryString = "select act from "
+					+ AmpActivity.class.getName()
+					+ " act where (act.team=:teamId)";
+			Query qry = session.createQuery(queryString);
+			qry.setParameter("teamId", teamId, Hibernate.LONG);
+			col = qry.list();
+		} catch (Exception e) {
+			logger.debug("Exception from getAllTeamAmpActivities()");
+			logger.debug(e.toString());
+		} finally {
+			try {
+				if (session != null) {
+					PersistenceManager.releaseSession(session);
+				}
+			} catch (Exception ex) {
+				logger.debug("releaseSession() failed");
+				logger.debug(ex.toString());
+			}
+		}
+		return col;
+	}
+
+	public static boolean hasActivities(Long teamId) {
+		Session session = null;
+		boolean flag = false;
+
+		try {
+			session = PersistenceManager.getSession();
+			String queryString = "select count(*) from "
+					+ AmpActivity.class.getName()
+					+ " act where (act.team=:teamId)";
+			Query qry = session.createQuery(queryString);
+			qry.setParameter("teamId", teamId, Hibernate.LONG);
+			Iterator itr = qry.list().iterator();
+			while (itr.hasNext()) {
+				Integer numActivities = (Integer) itr.next();
+				if (numActivities.intValue() != 0) {
+					flag = true;
+				}
+			}
+		} catch (Exception e) {
+			logger.debug("Exception from hasActivities()");
+			logger.debug(e.toString());
+		} finally {
+			try {
+				if (session != null) {
+					PersistenceManager.releaseSession(session);
+				}
+			} catch (Exception ex) {
+				logger.debug("releaseSession() failed");
+				logger.debug(ex.toString());
+			}
+		}
+		return flag;
+	}
+
+	public static Collection getAllTeamActivities(Long teamId) {
+		Session session = null;
+		Collection col = new ArrayList();
+
+		try {
+			session = PersistenceManager.getSession();
+
+			String queryString = "";
+			Query qry = null;
+			
+			if (teamId != null) {
+				queryString = "select act from " + AmpActivity.class.getName()
+								+ " act where (act.team=:teamId)";
+				qry = session.createQuery(queryString);
+				qry.setParameter("teamId", teamId, Hibernate.LONG);
+
+			} else {
+				queryString = "select act from " + AmpActivity.class.getName()
+						+ " act where act.team is null";
+				qry = session.createQuery(queryString);
+			}
+
+			Iterator itr = qry.list().iterator();
+
+			while (itr.hasNext()) {
+
+				AmpActivity activity = (AmpActivity) itr.next();
+				Collection temp1 = activity.getOrgrole();
+				Collection temp2 = new ArrayList();
+				Iterator temp1Itr = temp1.iterator();
+				while (temp1Itr.hasNext()) {
+					AmpOrgRole orgRole = (AmpOrgRole) temp1Itr.next();
+					if (!temp2.contains(orgRole))
+						temp2.add(orgRole);
+				}
+				
+				Iterator orgItr = temp2.iterator();
+
+				Activity act = new Activity();
+				act.setActivityId(activity.getAmpActivityId());
+				act.setName(activity.getName());
+				act.setAmpId(activity.getAmpId());
+				
+				String donors = "";
+
+				while (orgItr.hasNext()) {
+					AmpOrgRole orgRole = (AmpOrgRole) orgItr.next();
+					if (orgRole.getRole().getRoleCode().equals(Constants.DONOR)) {
+						if (donors.trim().length() > 0) {
+							donors += ", ";
+						}
+						donors += orgRole.getOrganisation().getName();
+					}
+				}
+
+				act.setDonors(donors);
+				col.add(act);
+
+			}
+
+		} catch (Exception e) {
+			logger.debug("Exception from getAllTeamActivities()");
+			logger.debug(e.toString());
+		} finally {
+			try {
+				if (session != null) {
+					PersistenceManager.releaseSession(session);
+				}
+			} catch (Exception ex) {
+				logger.debug("releaseSession() failed");
+				logger.debug(ex.toString());
+			}
+		}
+		return col;
+	}
+
+	/*
+	 * return ReportsCollection Object
+	 */
+	public static Collection getTeamReportsCollection(Long teamId) {
+		Session session = null;
+		Collection col = null;
+		try {
+			session = PersistenceManager.getSession();
+			String queryString = "select tr from "
+					+ AmpTeamReports.class.getName()
+					+ " tr where (tr.team=:teamId)";
+			Query qry = session.createQuery(queryString);
+			qry.setParameter("teamId", teamId, Hibernate.LONG);
+			Iterator itr = qry.list().iterator();
+			col = new ArrayList();
+			while (itr.hasNext()) {
+				AmpTeamReports ampTeamRep = (AmpTeamReports) itr.next();
+				// modified by Priyajith
+				// desc:used select query instead of session.load
+				// start
+				queryString = "select r from " + AmpReports.class.getName()
+						+ " r " + "where (r.ampReportId=:id)";
+				qry = session.createQuery(queryString);
+				qry.setParameter("id", ampTeamRep.getReport().getAmpReportId(),
+						Hibernate.LONG);
+				Iterator itrTemp = qry.list().iterator();
+				AmpReports ampReport = null;
+				while (itrTemp.hasNext()) {
+					ampReport = (AmpReports) itrTemp.next();
+				}
+				// end
+
+				ReportsCollection rc = new ReportsCollection();
+				rc.setReport(ampReport);
+				if (ampTeamRep.getTeamView() == false) {
+					rc.setTeamView(false);
+				} else {
+					rc.setTeamView(true);
+				}
+
+				col.add(rc);
+
+			}
+		} catch (Exception e) {
+			logger.debug("Exception from getTeamReportsCollection");
+			logger.debug(e.toString());
+		} finally {
+			try {
+				if (session != null) {
+					PersistenceManager.releaseSession(session);
+				}
+			} catch (Exception ex) {
+				logger.debug("releaseSession() failed");
+				logger.debug(ex.toString());
+			}
+		}
+		return col;
+	}
+
+	public static Collection getAllTeamReports(Long teamId) {
+		Session session = null;
+		Collection col = new ArrayList();
+		try {
+			session = PersistenceManager.getSession();
+			AmpTeam team = (AmpTeam) session.load(AmpTeam.class,teamId);
+			
+			String queryString = null;
+			Query qry = null;
+			
+			if (team.getAccessType().equalsIgnoreCase(Constants.ACCESS_TYPE_MNGMT)) {
+				queryString = "select r from " + AmpReports.class.getName() + " r " +
+					"where r.ampReportId <> 7";
+				qry = session.createQuery(queryString);
+				col = qry.list();	
+			} else {
+				queryString = "select tr from "
+					+ AmpTeamReports.class.getName()
+					+ " tr where (tr.team=:teamId) and tr.report.ampReportId<>'7'";
+				qry = session.createQuery(queryString);
+				qry.setParameter("teamId", teamId, Hibernate.LONG);
+				Iterator itr = qry.list().iterator();
+				col = new ArrayList();
+				StringBuffer qryBuffer = new StringBuffer();
+				AmpTeamReports ampTeamRep = null;
+				while (itr.hasNext()) {
+					ampTeamRep = (AmpTeamReports) itr.next();
+					if (qryBuffer.length() != 0)
+						qryBuffer.append(",");
+					qryBuffer.append(ampTeamRep.getReport().getAmpReportId());
+				}
+			
+				if (qryBuffer != null && qryBuffer.length() > 0) {
+					queryString = "select r from " + AmpReports.class.getName() + " r " +
+						"where r.ampReportId in (" + qryBuffer + ")";
+					qry = session.createQuery(queryString);
+					col = qry.list();
+				}				
+			}
+		} catch (Exception e) {
+			logger.debug("Exception from getAllTeamReports()");
+			logger.debug(e.toString());
+		} finally {
+			try {
+				if (session != null) {
+					PersistenceManager.releaseSession(session);
+				}
+			} catch (Exception ex) {
+				logger.debug("releaseSession() failed");
+				logger.debug(ex.toString());
+			}
+		}
+		return col;
+	}
+
+	public static AmpTeamReports getAmpTeamReport(Long teamId, Long reportId) {
+		Session session = null;
+		AmpTeamReports ampTeamRep = null;
+		try {
+			session = PersistenceManager.getSession();
+			String queryString = "select tr from "
+					+ AmpTeamReports.class.getName()
+					+ " tr where (tr.team=:teamId) and (tr.report=:reportId)";
+			Query qry = session.createQuery(queryString);
+			qry.setParameter("teamId", teamId, Hibernate.LONG);
+			qry.setParameter("reportId", reportId, Hibernate.LONG);
+			Iterator itr = qry.list().iterator();
+			if (itr.hasNext()) {
+				ampTeamRep = (AmpTeamReports) itr.next();
+			}
+		} catch (Exception e) {
+			logger.debug("Exception from getAmpTeamReport()");
+			logger.debug(e.toString());
+		} finally {
+			try {
+				if (session != null) {
+					PersistenceManager.releaseSession(session);
+				}
+			} catch (Exception ex) {
+				logger.debug("releaseSession() failed");
+				logger.debug(ex.toString());
+			}
+		}
+		return ampTeamRep;
+	}
+
+	public static Collection getAllUnassignedActivities() {
+		return getAllTeamActivities(null);
+	}
+
+	public static Collection getAllUnassignedTeamReports(Long id) {
+		Session session = null;
+		Collection col = null;
+		Collection col1 = null;
+
+		try {
+			col = DbUtil.getAllReports();
+			session = PersistenceManager.getSession();
+
+			String queryString = "select tr from "
+					+ AmpTeamReports.class.getName()
+					+ " tr where (tr.team=:teamId)";
+			Query qry = session.createQuery(queryString);
+			qry.setParameter("teamId", id, Hibernate.LONG);
+			Iterator itr = qry.list().iterator();
+			col1 = new ArrayList();
+			while (itr.hasNext()) {
+				AmpTeamReports ampTeamRep = (AmpTeamReports) itr.next();
+				// modified by Priyajith
+				// desc:used select query instead of session.load
+				// start
+				queryString = "select r from " + AmpReports.class.getName()
+						+ " r " + "where (r.ampReportId=:id)";
+				qry = session.createQuery(queryString);
+				qry.setParameter("id", ampTeamRep.getReport().getAmpReportId(),
+						Hibernate.LONG);
+				Iterator itrTemp = qry.list().iterator();
+				AmpReports ampReport = null;
+				while (itrTemp.hasNext()) {
+					ampReport = (AmpReports) itrTemp.next();
+				}
+				// end
+				col1.add(ampReport);
+			}
+
+			Iterator itr2 = col1.iterator();
+
+			while (itr2.hasNext()) {
+				AmpReports rep = (AmpReports) itr2.next();
+				Iterator itr1 = col.iterator();
+				while (itr1.hasNext()) {
+					AmpReports tempRep = (AmpReports) itr1.next();
+					if (tempRep.getAmpReportId().equals(rep.getAmpReportId())) {
+						col.remove(tempRep);
+						break;
+					}
+				}
+			}
+
+		} catch (Exception e) {
+			logger.debug("Exceptiion from getAllUnassignedTeamReports()");
+			logger.debug("Exceptiion " + e);
+		} finally {
+			try {
+				if (session != null) {
+					PersistenceManager.releaseSession(session);
+				}
+			} catch (Exception ex) {
+				logger.error("releaseSession() failed");
+			}
+		}
+		return col;
+	}	
+	
+	public static Collection getAllTeams() {
+		Session session = null;
+		Query qry = null;
+		Collection teams = new ArrayList();
+
+		try {
+			session = PersistenceManager.getSession();
+			String queryString = "select t from " + AmpTeam.class.getName()
+					+ " t";
+			qry = session.createQuery(queryString);
+			teams = qry.list();
+		} catch (Exception e) {
+			logger.debug("cannot get All teams");
+			logger.debug(e.toString());
+		} finally {
+			try {
+				if (session != null) {
+					PersistenceManager.releaseSession(session);
+				}
+			} catch (Exception ex) {
+				logger.error("releaseSession() failed");
+			}
+		}
+		return teams;
+	}
+
+	public static Collection getAmpLevel0Teams(Long ampTeamId) {
+		Session session = null;
+		Collection teams = new ArrayList();
+
+		try {
+			logger.debug("Team Id:" + ampTeamId);
+			session = PersistenceManager.getSession();
+			String queryString = "select t from " + AmpTeam.class.getName()
+					+ " t " + "where (t.parentTeamId.ampTeamId=:ampTeamId)";
+			logger.debug("Query String:" + queryString);
+			Query qry = session.createQuery(queryString);
+			qry.setParameter("ampTeamId", ampTeamId, Hibernate.LONG);
+			Iterator itrTemp = qry.list().iterator();
+			AmpTeam ampTeam = null;
+			LinkedList list = new LinkedList();
+			list.addAll(qry.list());
+			while (list.size() > 0) {
+				ampTeam = (AmpTeam) list.removeFirst();
+				if (ampTeam.getAccessType().equals("Team"))
+					teams.add(ampTeam.getAmpTeamId());
+				else {
+					queryString = "select t from " + AmpTeam.class.getName()
+							+ " t " + "where (t.parentTeamId.ampTeamId="
+							+ ampTeam.getAmpTeamId() + ")";
+					qry = session.createQuery(queryString);
+					list.addAll(qry.list());
+				}
+
+				//			  ampTeam = (AmpTeam) itrTemp.next();
+				//			  teams.add(ampTeam.getAmpTeamId());
+			}
+			logger.debug("Size: " + teams.size());
+
+		} catch (Exception e) {
+			logger.debug("Exception from getAmpLevel0Team()" + e.getMessage());
+			logger.debug(e.toString());
+		} finally {
+			try {
+				if (session != null) {
+					PersistenceManager.releaseSession(session);
+				}
+			} catch (Exception ex) {
+				logger.debug("releaseSession() failed");
+				logger.debug(ex.toString());
+			}
+		}
+		return teams;
+	}	
 }

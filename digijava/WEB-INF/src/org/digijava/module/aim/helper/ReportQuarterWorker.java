@@ -1,11 +1,12 @@
 package org.digijava.module.aim.helper ;
 
+import java.util.Collection;
+import java.util.Iterator;
+
 import org.apache.log4j.Logger;
-import org.digijava.module.aim.dbentity.AmpFundingDetail ;
-import org.digijava.module.aim.helper.FiscalDO;
-import org.digijava.module.aim.helper.CurrencyWorker;
+import org.digijava.module.aim.dbentity.AmpFundingDetail;
+import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.aim.util.DbUtil;
-import java.util.* ;
 
 public class ReportQuarterWorker
 {
@@ -46,8 +47,8 @@ public class ReportQuarterWorker
 						amt = amt + ampFundingDetail.getTransactionAmount().doubleValue();
 					}
 					else{
-						double fromCurrency = DbUtil.getExchangeRate(ampFundingDetail.getAmpCurrencyId().getCurrencyCode());
-						double toCurrency = DbUtil.getExchangeRate("USD");
+						double fromCurrency = CurrencyUtil.getExchangeRate(ampFundingDetail.getAmpCurrencyId().getCurrencyCode());
+						double toCurrency = CurrencyUtil.getExchangeRate("USD");
 						amt = amt + CurrencyWorker.convert1(ampFundingDetail.getTransactionAmount().doubleValue(),fromCurrency,toCurrency);
 					}
 					
@@ -88,8 +89,8 @@ public class ReportQuarterWorker
 						amt = amt + ampFundingDetail.getTransactionAmount().doubleValue();
 					}
 					else{
-						double fromCurrency = DbUtil.getExchangeRate(ampFundingDetail.getAmpCurrencyId().getCurrencyCode());
-						double toCurrency = DbUtil.getExchangeRate("USD");
+						double fromCurrency = CurrencyUtil.getExchangeRate(ampFundingDetail.getAmpCurrencyId().getCurrencyCode());
+						double toCurrency = CurrencyUtil.getExchangeRate("USD");
 						amt = amt + CurrencyWorker.convert1(ampFundingDetail.getTransactionAmount().doubleValue(),fromCurrency,toCurrency);
 					}
 				

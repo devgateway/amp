@@ -104,6 +104,12 @@ public class Constants
 	public static final String REGIONAL_FUNDING_PAGE_CODE = "RFS";
 	public static final String CALENDAR_FILTER = "Calendar";
 	public static final String CURRENCY_FILTER = "Currency";
+	public static final String DONOR_FILTER = "Donor";
+	public static final String REGION_FILTER = "Region";
+	public static final String SECTOR_FILTER = "Sector";
+	public static final String STATUS_FILTER = "Status";
+	public static final String PERSPECTIVE_FILTER = "Perspective";	
+	public static final String ACTIVITY_RISK_FILTER = "Activity Risk";
 
 	public static final String ANNUAL = "A" ;
 	public static final String QUARTERLY = "Q" ;
@@ -169,4 +175,24 @@ public class Constants
 	public static final String AA_FEATURE = "AA"; // Activity Approval feature code 
 	public static final String CL_FEATURE = "CL"; // Calendar feature code
 	
+	public static final String DSKTP_FLTR_CHANGED = "dsktpFltrChanged";
+	public static final String CURRENT_MEMBER = "currentMember";
+	
+	public static final String AMP_PROJECTS = "ampProjects";
+	public static final String TYPE_MNGMT = "Management";
+	public static final String TYPE_TEAM = "Team";
+	
+	public static final String MY_REPORTS = "myReports";
+	public static final String MY_TASKS = "myTasks";
+	public static final String MY_LINKS = "myLinks";
+	public static final String MY_TEAM_MEMBERS = "myTeamMembers";
+	
+	public static final byte SORT_FIELD_PROJECT = 1;
+	public static final byte SORT_FIELD_AMPID = 2;
+	public static final byte SORT_FIELD_DONOR = 3;
+	public static final byte SORT_FIELD_AMOUNT = 4;
+	
+	public static final boolean SORT_ORDER_ASC = true;
+	
+	public static final String DESKTOP_SETTINGS_CHANGED = "desktopSettingsChanged";
 }	

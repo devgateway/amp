@@ -13,7 +13,7 @@ import org.digijava.kernel.request.Site;
 import org.digijava.kernel.util.RequestUtils;
 import org.digijava.module.aim.form.TeamMemberForm;
 import org.digijava.module.aim.helper.TeamMember;
-import org.digijava.module.aim.util.DbUtil;
+import org.digijava.module.aim.util.TeamMemberUtil;
 import org.digijava.module.aim.util.TeamUtil;
 
 public class UpdateTeamMemberList extends Action {
@@ -32,7 +32,7 @@ public class UpdateTeamMemberList extends Action {
 			TeamMember tm = (TeamMember) session.getAttribute("currentMember");
 			if (tmForm.getAddMember() != null) {
 				tmForm.setTeamId(tm.getTeamId());
-				tmForm.setAmpRoles(DbUtil.getAllTeamMemberRoles());
+				tmForm.setAmpRoles(TeamMemberUtil.getAllTeamMemberRoles());
 				tmForm.setPermissions("default");
 				tmForm.setAction("teamWorkspaceSetup");
 				return mapping.findForward("showAdd");
@@ -40,7 +40,7 @@ public class UpdateTeamMemberList extends Action {
 				logger.debug("in remove members");
 				Long selMembers[] = tmForm.getSelMembers();
 				Site site = RequestUtils.getSite(request);
-				TeamUtil.removeTeamMembers(selMembers,site.getId());
+				TeamMemberUtil.removeTeamMembers(selMembers,site.getId());
 				return mapping.findForward("forward");
 			} else {
 				return mapping.findForward(null);

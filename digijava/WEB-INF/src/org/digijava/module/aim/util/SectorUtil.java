@@ -3,6 +3,7 @@ package org.digijava.module.aim.util;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.List;
 
 import net.sf.hibernate.Hibernate;
 import net.sf.hibernate.Query;
@@ -10,6 +11,8 @@ import net.sf.hibernate.Session;
 
 import org.apache.log4j.Logger;
 import org.digijava.kernel.persistence.PersistenceManager;
+import org.digijava.module.aim.dbentity.AmpActivity;
+import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpSector;
 import org.digijava.module.aim.dbentity.AmpSectorScheme;
 import org.digijava.module.aim.helper.ActivitySector;
@@ -85,4 +88,676 @@ public class SectorUtil {
 		}
 		return col;
 	}//End Search Sector.
+	
+	public static List getAmpSectors(Long id) {
+		ArrayList ampSectors = new ArrayList();
+		AmpSector ampSector = null;
+		Session session = null;
+		Iterator iter = null;
+
+		try {
+			session = PersistenceManager.getSession();
+
+			// modified by Priyajith
+			// desc:used select query instead of session.load
+			// start
+			String queryString = "select a from " + AmpActivity.class.getName()
+					+ " a " + "where (a.ampActivityId=:id)";
+			Query qry = session.createQuery(queryString);
+			qry.setParameter("id", id, Hibernate.LONG);
+			Iterator itr = qry.list().iterator();
+			AmpActivity ampActivity = null;
+			while (itr.hasNext()) {
+				ampActivity = (AmpActivity) itr.next();
+			}
+			// end
+
+			iter = ampActivity.getSectors().iterator();
+			while (iter.hasNext()) {
+				ampSector = (AmpSector) iter.next();
+				ampSectors.add(ampSector);
+			}
+		} catch (Exception ex) {
+			logger.error("Unable to get Amp sectors from database :" + ex);
+		} finally {
+			try {
+				if (session != null) {
+					PersistenceManager.releaseSession(session);
+				}
+			} catch (Exception ex) {
+				logger.error("releaseSession() failed");
+			}
+		}
+		logger.debug("Executed successfully " + ampSectors.size());
+		return ampSectors;
+	}
+
+	public static Collection getSectorActivities(Long sectorId) {
+
+		Session sess = null;
+		Collection col = null;
+
+		try {
+			sess = PersistenceManager.getSession();
+			AmpSector sector = (AmpSector) sess.load(AmpSector.class, sectorId);
+
+			Iterator itr = sector.getAidlist().iterator();
+			col = new ArrayList();
+			while (itr.hasNext()) {
+				col.add(itr.next());
+			}
+		} catch (Exception e) {
+			logger.debug("Exception from getSectorActivities()");
+			logger.debug(e.toString());
+		} finally {
+			try {
+				if (sess != null) {
+					PersistenceManager.releaseSession(sess);
+				}
+			} catch (Exception ex) {
+				logger.debug("releaseSession() failed");
+				logger.debug(ex.toString());
+			}
+		}
+		return col;
+
+	}
+
+	public static Collection getAllSectorSchemes() {
+		Session session = null;
+		Collection col = null;
+
+		try {
+			session = PersistenceManager.getSession();
+			String queryString = "select ss from "
+					+ AmpSectorScheme.class.getName() + " ss "
+					+ "order by ss.secSchemeName";
+			Query qry = session.createQuery(queryString);
+			col = qry.list();
+		} catch (Exception ex) {
+			logger.error("Unable to get all sector schemes, " + ex);
+		} finally {
+			try {
+				if (session != null)
+					PersistenceManager.releaseSession(session);
+			} catch (Exception ex) {
+				logger.error("releaseSession() failed");
+			}
+		}
+		return col;
+	}
+
+	public static Collection getAllParentSectors(Long secSchemeId) {
+		Session session = null;
+		Collection col = null;
+
+		try {
+			session = PersistenceManager.getSession();
+			String queryString = "select s from " + AmpSector.class.getName()
+					+ " s " + "where amp_sec_scheme_id = " + secSchemeId
+					+ " and parent_sector_id is null " + "order by s.name";
+			Query qry = session.createQuery(queryString);
+			col = qry.list();
+
+		} catch (Exception e) {
+			logger.error("Cannot get parent sectors, " + e);
+		} finally {
+			try {
+				if (session != null) {
+					PersistenceManager.releaseSession(session);
+				}
+			} catch (Exception ex) {
+				logger.debug("releaseSession() failed");
+			}
+		}
+		return col;
+	}
+
+	public static Collection getAllChildSectors(Long parSecId) {
+		Session session = null;
+		Collection col = null;
+
+		try {
+			session = PersistenceManager.getSession();
+			String queryString = "select s from " + AmpSector.class.getName()
+					+ " s " + "where parent_sector_id = " + parSecId
+					+ " order by s.name";
+			Query qry = session.createQuery(queryString);
+			col = qry.list();
+
+		} catch (Exception e) {
+			logger.error("Cannot get child sectors, " + e);
+		} finally {
+			try {
+				if (session != null) {
+					PersistenceManager.releaseSession(session);
+				}
+			} catch (Exception ex) {
+				logger.debug("releaseSession() failed");
+			}
+		}
+		return col;
+	}
+
+	public static void updateSectorOrganisation(Long sectorId,
+			AmpOrganisation organisation) {
+		AmpSector sector = getAmpSector(sectorId);
+		sector.setAmpOrgId(organisation);
+		DbUtil.update(sector);
+	}
+
+	public static void updateSubSectors(AmpSector sector,
+			AmpOrganisation organisation) {
+
+		int index = 0;
+		ArrayList sectorList = new ArrayList();
+		Iterator itr = null;
+
+		try {
+
+			itr = getSubSectors(sector.getAmpSectorId()).iterator();
+			while (itr.hasNext()) {
+				Sector subSec = (Sector) itr.next();
+				sectorList.add(subSec);
+			}
+			while (index < sectorList.size()) {
+				Sector sec = (Sector) sectorList.get(index++);
+				itr = getSubSectors(sec.getSectorId()).iterator();
+
+				while (itr.hasNext()) {
+					Sector subSec = (Sector) itr.next();
+					sectorList.add(subSec);
+				}
+			}
+
+			for (int i = 0; i < sectorList.size(); i++) {
+				Sector sec = (Sector) sectorList.get(i);
+				updateSectorOrganisation(sec.getSectorId(), organisation);
+			}
+		} catch (Exception e) {
+			logger.debug("Exception from updateSubSectors()");
+			logger.debug(e.toString());
+		}
+	}
+
+	// Retreives all sub-sectors within the sector with id 'parentSecId'
+	public static Collection getSubSectors(Long parentSecId) {
+
+		Session session = null;
+		Query qry = null;
+		Collection col = new ArrayList();
+		Iterator itr = null;
+		AmpSector ampSector = null;
+
+		try {
+			session = PersistenceManager.getSession();
+			String queryString = new String();
+
+			if (parentSecId.intValue() == 0) {
+				queryString = "select s from " + AmpSector.class.getName()
+						+ " s where s.parentSectorId is null order by s.name";
+
+				qry = session.createQuery(queryString);
+			} else {
+				queryString = "select s from " + AmpSector.class.getName()
+						+ " s where (s.parentSectorId=:parentSectorId) "
+						+ "order by s.name";
+
+				qry = session.createQuery(queryString);
+				qry.setParameter("parentSectorId", parentSecId, Hibernate.LONG);
+			}
+			itr = qry.list().iterator();
+
+			while (itr.hasNext()) {
+				ampSector = (AmpSector) itr.next();
+				Sector sec = new Sector(ampSector.getAmpSectorId(), ampSector
+						.getName(), ampSector.getAmpOrgId().getAmpOrgId(),
+						DbUtil.getOrganisation(ampSector.getAmpOrgId().getAmpOrgId())
+								.getName());
+
+				col.add(sec);
+			}
+
+		} catch (Exception ex) {
+			logger.error("Unable to get subsectors");
+			logger.debug("Exceptiion " + ex);
+		} finally {
+			try {
+				if (session != null) {
+					PersistenceManager.releaseSession(session);
+				}
+			} catch (Exception ex) {
+				logger.error("releaseSession() failed");
+			}
+		}
+
+		return col;
+	}
+
+	/*
+	 * Retreives the sector details for the sector with the id 'sectorId'
+	 */
+	public static Sector getSector(Long sectorId) {
+
+		Session session = null;
+		Query qry = null;
+		Iterator itr = null;
+		AmpSector ampSector = null;
+		Sector sec = null;
+
+		try {
+			session = PersistenceManager.getSession();
+			String queryString = new String();
+			queryString = "select s from " + AmpSector.class.getName()
+					+ " s where (s.ampSectorId=:ampSectorId)";
+
+			qry = session.createQuery(queryString);
+			qry.setParameter("ampSectorId", sectorId, Hibernate.LONG);
+			itr = qry.list().iterator();
+
+			if (itr.hasNext()) {
+				ampSector = (AmpSector) itr.next();
+				sec = new Sector(ampSector.getAmpSectorId(), ampSector
+						.getName(), ampSector.getAmpOrgId().getAmpOrgId(),
+						DbUtil.getOrganisation(ampSector.getAmpOrgId().getAmpOrgId())
+								.getName());
+
+			}
+
+		} catch (Exception ex) {
+			logger.error("Unable to get sector info");
+			logger.debug("Exceptiion " + ex);
+		} finally {
+			try {
+				if (session != null) {
+					PersistenceManager.releaseSession(session);
+				}
+			} catch (Exception ex) {
+				logger.error("releaseSession() failed");
+			}
+		}
+
+		return sec;
+	}
+
+	public static AmpSector getAmpSector(Long id) {
+
+		Session session = null;
+		Query qry = null;
+		Iterator itr = null;
+		AmpSector ampSector = null;
+
+		try {
+			session = PersistenceManager.getSession();
+			String queryString = new String();
+			queryString = "select s from " + AmpSector.class.getName()
+					+ " s where (s.ampSectorId=:ampSectorId)";
+
+			qry = session.createQuery(queryString);
+			qry.setParameter("ampSectorId", id, Hibernate.LONG);
+			itr = qry.list().iterator();
+
+			if (itr.hasNext()) {
+				ampSector = (AmpSector) itr.next();
+			}
+
+		} catch (Exception ex) {
+			logger.error("Unable to get amp_sector info");
+			logger.debug("Exceptiion " + ex);
+		} finally {
+			try {
+				if (session != null) {
+					PersistenceManager.releaseSession(session);
+				}
+			} catch (Exception ex) {
+				logger.error("releaseSession() failed");
+			}
+		}
+
+		return ampSector;
+
+	}
+
+	public static AmpSectorScheme getAmpSectorScheme(Long id) {
+		Session session = null;
+		Query qry = null;
+		Iterator itr = null;
+		AmpSectorScheme ampSectorScheme = null;
+		try {
+			session = PersistenceManager.getSession();
+			String queryString = new String();
+			queryString = "select s from " + AmpSectorScheme.class.getName()
+					+ " s where (s.ampSecSchemeId=:ampSectorSchemeId)";
+
+			qry = session.createQuery(queryString);
+			qry.setParameter("ampSectorSchemeId", id, Hibernate.LONG);
+			itr = qry.list().iterator();
+
+			if (itr.hasNext()) {
+				ampSectorScheme = (AmpSectorScheme) itr.next();
+			}
+
+		} catch (Exception ex) {
+			logger.error("Unable to get amp_sector_scheme info");
+			logger.debug("Exception " + ex);
+		} finally {
+			try {
+				if (session != null) {
+					PersistenceManager.releaseSession(session);
+				}
+			} catch (Exception ex) {
+				logger.error("releaseSession() failed");
+			}
+		}
+
+		return ampSectorScheme;
+
+	}
+
+	/*
+	 * update sector details
+	 */
+	public static void updateSector(AmpSector sector) {
+
+		if (sector.getParentSectorId() == null
+				&& organisationChanged(sector.getAmpSectorId(), sector
+						.getAmpOrgId()) == true) {
+
+			updateSubSectors(sector, sector.getAmpOrgId());
+		}
+		DbUtil.update(sector);
+	}	
+	
+	
+	public static ArrayList getAmpSectors() {
+		Session session = null;
+		Query q = null;
+		AmpSector ampSector = null;
+		ArrayList sector = new ArrayList();
+		String queryString = null;
+		Iterator iter = null;
+
+		try {
+			session = PersistenceManager.getSession();
+			queryString = " select Sector from "
+					+ AmpSector.class.getName()
+					+ " Sector where Sector.parentSectorId is null order by Sector.name";
+			q = session.createQuery(queryString);
+			iter = q.list().iterator();
+
+			while (iter.hasNext()) {
+
+				ampSector = (AmpSector) iter.next();
+				sector.add(ampSector);
+			}
+
+		} catch (Exception ex) {
+			logger.error("Unable to get Sector names  from database "
+					+ ex.getMessage());
+		} finally {
+			try {
+				PersistenceManager.releaseSession(session);
+			} catch (Exception ex2) {
+				logger.error("releaseSession() failed ");
+			}
+		}
+		return sector;
+	}
+
+	public static ArrayList getAmpSubSectors() {
+		Session session = null;
+		Query q = null;
+		AmpSector ampSector = null;
+		ArrayList subsector = new ArrayList();
+		String queryString = null;
+		Iterator iter = null;
+
+		try {
+			session = PersistenceManager.getSession();
+			queryString = " select Sector from "
+					+ AmpSector.class.getName()
+					+ " Sector where Sector.parentSectorId is not null order by Sector.name";
+			q = session.createQuery(queryString);
+			iter = q.list().iterator();
+			while (iter.hasNext()) {
+				ampSector = (AmpSector) iter.next();
+				subsector.add(ampSector);
+			}
+
+		} catch (Exception ex) {
+			logger.error("Unable to get Amp sector names  from database "
+					+ ex.getMessage());
+		} finally {
+			try {
+				PersistenceManager.releaseSession(session);
+			} catch (Exception ex2) {
+				logger.error("releaseSession() failed ");
+			}
+		}
+		return subsector;
+	}
+
+	public static ArrayList getAmpSubSectors(Long ampSectorId) {
+		Session session = null;
+		Query q = null;
+		AmpSector ampSector = null;
+		ArrayList subsector = new ArrayList();
+		String queryString = null;
+		Iterator iter = null;
+
+		try {
+			session = PersistenceManager.getSession();
+			queryString = " select Sector from "
+					+ AmpSector.class.getName()
+					+ " Sector where Sector.parentSectorId is not null and Sector.parentSectorId.ampSectorId=:ampSectorId";
+			q = session.createQuery(queryString);
+			q.setParameter("ampSectorId", ampSectorId, Hibernate.LONG);
+			iter = q.list().iterator();
+
+			while (iter.hasNext()) {
+
+				ampSector = (AmpSector) iter.next();
+				subsector.add(ampSector);
+			}
+
+		} catch (Exception ex) {
+			logger.error("Unable to get Amp sub sectors  from database "
+					+ ex.getMessage());
+		} finally {
+			try {
+				PersistenceManager.releaseSession(session);
+			} catch (Exception ex2) {
+				logger.error("releaseSession() failed ");
+			}
+		}
+		return subsector;
+	}
+
+	public static AmpSector getAmpParentSector(Long ampSectorId) {
+		Session session = null;
+		Query q = null;
+		AmpSector ampSector = null;
+		String queryString = null;
+		Iterator iter = null;
+
+		try {
+			session = PersistenceManager.getSession();
+			queryString = " select Sector from " + AmpSector.class.getName()
+					+ " Sector where Sector.ampSectorId=:ampSectorId";
+			q = session.createQuery(queryString);
+			q.setParameter("ampSectorId", ampSectorId, Hibernate.LONG);
+			iter = q.list().iterator();
+
+			ampSector = (AmpSector) iter.next();
+			while (ampSector.getParentSectorId() != null)
+				ampSector = ampSector.getParentSectorId();
+			//	ampSectorId=ampSector.getAmpSectorId();
+			//	logger.debug("Sector Id: " + ampSectorId);
+
+		} catch (Exception ex) {
+			logger.error("Unable to get Amp sub sectors  from database "
+					+ ex.getMessage());
+		} finally {
+			try {
+				PersistenceManager.releaseSession(session);
+			} catch (Exception ex2) {
+				logger.error("releaseSession() failed ");
+			}
+		}
+		return ampSector;
+	}
+	
+	public static ArrayList getDonorSectors(Long ampSecSchemeId,
+			Long ampActivityId) {
+		logger.debug("In getDonorSectors");
+		Session session = null;
+		Query q = null;
+		AmpSector ampSector = null;
+		ArrayList sector = new ArrayList();
+		String queryString = null;
+		Iterator iter = null;
+
+		try {
+			session = PersistenceManager.getSession();
+			//queryString = " select Sector from " + AmpSector.class.getName()
+			// + " Sector where Sector.parentSectorId is null order by
+			// Sector.name";
+
+			queryString = "select sector from "
+					+ AmpSector.class.getName()
+					+ " sector, "
+					+ AmpActivity.class.getName()
+					+ " act where (sector.ampSecSchemeId = :ampSecSchemeId) and (act.ampActivityId = :ampActivityId) and sector.parentSectorId is null";
+			//queryString = "select sector from " + AmpSector.class.getName() +
+			// " sector, " + AmpActivity.class.getName() + " act where
+			// (sector.ampSecSchemeId = :ampSecSchemeId) and (act.ampActivityId
+			// = :ampActivityId)";
+			q = session.createQuery(queryString);
+			q.setParameter("ampSecSchemeId", ampSecSchemeId, Hibernate.LONG);
+			q.setParameter("ampActivityId", ampActivityId, Hibernate.LONG);
+
+			iter = q.list().iterator();
+
+			while (iter.hasNext()) {
+				ampSector = (AmpSector) iter.next();
+				sector.add(ampSector);
+			}
+		} catch (Exception ex) {
+			logger.error("Unable to get Sector names  from database "
+					+ ex.getMessage());
+		} finally {
+			try {
+				PersistenceManager.releaseSession(session);
+			} catch (Exception ex2) {
+				logger.error("releaseSession() failed ");
+			}
+		}
+		return sector;
+	}
+
+	public static Collection searchSectorCode(String key) {
+		Session sess = null;
+		Collection col = null;
+		Query qry = null;
+
+		try {
+			sess = PersistenceManager.getSession();
+			String queryString = "select s from " + AmpSector.class.getName()
+					+ " s where s.sectorCode like '%" + key + "%'";
+			qry = sess.createQuery(queryString);
+			Iterator itr = qry.list().iterator();
+			col = new ArrayList();
+			while (itr.hasNext()) {
+				col.add(itr.next());
+			}
+
+		} catch (Exception e) {
+			logger.debug("Exception from searchSectorCode()");
+			logger.debug(e.toString());
+		} finally {
+			try {
+				if (sess != null) {
+					PersistenceManager.releaseSession(sess);
+				}
+			} catch (Exception ex) {
+				logger.debug("releaseSession() failed");
+				logger.debug(ex.toString());
+			}
+		}
+		return col;
+
+	}
+
+	public static Collection searchSectorName(String key) {
+		Session sess = null;
+		Collection col = null;
+		Query qry = null;
+
+		try {
+			sess = PersistenceManager.getSession();
+			String queryString = "select s from " + AmpSector.class.getName()
+					+ " s where s.name like '%" + key + "%'";
+			qry = sess.createQuery(queryString);
+			Iterator itr = qry.list().iterator();
+			col = new ArrayList();
+			while (itr.hasNext()) {
+				col.add(itr.next());
+			}
+
+		} catch (Exception e) {
+			logger.debug("Exception from searchSectorName()");
+			logger.debug(e.toString());
+		} finally {
+			try {
+				if (sess != null) {
+					PersistenceManager.releaseSession(sess);
+				}
+			} catch (Exception ex) {
+				logger.debug("releaseSession() failed");
+				logger.debug(ex.toString());
+			}
+		}
+		return col;
+	}
+
+	public static boolean organisationChanged(Long sectorId,
+			AmpOrganisation organisation) {
+		logger.debug("in organisationChanged()");
+		Session sess = null;
+		boolean flag = false;
+
+		try {
+			sess = PersistenceManager.getSession();
+			String qryString = "select s from " + AmpSector.class.getName()
+					+ " s where (s.ampSectorId=:ampSectorId)";
+
+			Query qry = sess.createQuery(qryString);
+			qry.setParameter("ampSectorId", sectorId, Hibernate.LONG);
+			Iterator itr = qry.list().iterator();
+
+			if (itr.hasNext()) {
+				AmpSector ampSector = (AmpSector) itr.next();
+				logger.debug(ampSector.getAmpOrgId().getName() + " !- "
+						+ organisation.getName());
+				if (ampSector.getAmpOrgId().getAmpOrgId() != organisation
+						.getAmpOrgId()) {
+					flag = true;
+				}
+			}
+		} catch (Exception e) {
+			logger.debug("Exception thrown from fn organisationChanged()");
+			logger.debug(e.toString());
+		} finally {
+			if (sess != null) {
+				try {
+					PersistenceManager.releaseSession(sess);
+				} catch (Exception ex) {
+					logger.debug("releaseSession() 2 failed");
+					logger.debug(ex.toString());
+				}
+			}
+		}
+		return flag;
+	}
+	
 }

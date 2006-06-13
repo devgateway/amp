@@ -9,6 +9,7 @@ import java.awt.Color;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Iterator;
 
 import javax.servlet.http.HttpSession;
@@ -22,15 +23,10 @@ import org.jfree.chart.JFreeChart;
 import org.jfree.chart.entity.StandardEntityCollection;
 import org.jfree.chart.plot.CategoryPlot;
 import org.jfree.chart.plot.PiePlot;
-import org.jfree.chart.plot.Plot;
 import org.jfree.chart.plot.PlotOrientation;
-import org.jfree.chart.renderer.AbstractRenderer;
-import org.jfree.chart.renderer.category.AbstractCategoryItemRenderer;
-import org.jfree.chart.renderer.category.BarRenderer;
-import org.jfree.chart.renderer.category.CategoryItemRenderer;
-import org.jfree.chart.renderer.category.DefaultCategoryItemRenderer;
 import org.jfree.chart.renderer.category.StackedBarRenderer;
 import org.jfree.chart.servlet.ServletUtilities;
+import org.jfree.chart.urls.StandardPieURLGenerator;
 import org.jfree.data.category.DefaultCategoryDataset;
 import org.jfree.data.general.DefaultPieDataset;
 
@@ -42,26 +38,29 @@ public class ChartGenerator {
 			int chartWidth,int chartHeight) {
 		
 		Collection activityIds = new ArrayList();
-		if (session.getAttribute("ampProjects") != null) {
-			ArrayList projects = (ArrayList) session.getAttribute("ampProjects");
+		if (session.getAttribute(Constants.AMP_PROJECTS) != null) {
+			ArrayList projects = (ArrayList) session.getAttribute(Constants.AMP_PROJECTS);
 			for (int i = 0;i < projects.size();i ++) {
 				AmpProject proj = (AmpProject) projects.get(i);
 				activityIds.add(proj.getAmpActivityId());
 			}
 		}
 		
-		Collection col = MEIndicatorsUtil.getPortfolioMEIndicatorRisks(activityIds);
-		return generateRiskChart(col,Constants.PORTFOLIO_RISK_CHART_TITLE,
-				chartWidth,chartHeight,session,pw);
+		ArrayList col = (ArrayList) MEIndicatorsUtil.getPortfolioMEIndicatorRisks(
+				activityIds);
+		Collections.sort(col);
+		return generateRiskChart(col,"",
+				chartWidth,chartHeight,session,pw,true);
 	}
 	
 	public static String getActivityRiskChartFileName(Long actId,
 			HttpSession session,PrintWriter pw,
 			int chartWidth,int chartHeight) {
 		
-		Collection meRisks = MEIndicatorsUtil.getMEIndicatorRisks(actId);
+		ArrayList meRisks = (ArrayList) MEIndicatorsUtil.getMEIndicatorRisks(actId);
+		Collections.sort(meRisks);
 		return generateRiskChart(meRisks,"",chartWidth,
-				chartHeight,session,pw);
+				chartHeight,session,pw,false);
 	}
 	
 	public static String getPortfolioPerformanceChartFileName(Long actId,Long indId,
@@ -70,8 +69,8 @@ public class ChartGenerator {
 	
 		Collection activityIds = new ArrayList();
 		if (actId.longValue() < 0) {
-			if (session.getAttribute("ampProjects") != null) {
-				ArrayList projects = (ArrayList) session.getAttribute("ampProjects");
+			if (session.getAttribute(Constants.AMP_PROJECTS) != null) {
+				ArrayList projects = (ArrayList) session.getAttribute(Constants.AMP_PROJECTS);
 				for (int i = 0;i < projects.size();i ++) {
 					AmpProject proj = (AmpProject) projects.get(i);
 					activityIds.add(proj.getAmpActivityId());
@@ -95,7 +94,7 @@ public class ChartGenerator {
 		} else {
 			col = temp;
 		}
-		return generatePerformanceChart(col,Constants.PORTFOLIO_PERFORMANCE_CHART_TITLE,
+		return generatePerformanceChart(col,"",
 				chartWidth,chartHeight,session,pw);
 	}		
 	
@@ -109,7 +108,8 @@ public class ChartGenerator {
 	}
 	
 	public static String generateRiskChart(Collection col,String title,
-			int chartWidth,int chartHeight,HttpSession session,PrintWriter pw) {
+			int chartWidth,int chartHeight,HttpSession session,PrintWriter pw,
+			boolean url) {
 		String fileName = null;
 		try {
 			if (col != null && col.size() > 0) {
@@ -157,7 +157,10 @@ public class ChartGenerator {
 				for (int i = 0;i < index;i ++) {
 					plot.setSectionPaint(i,seriesColors[i]);
 				}
-
+				
+				if (url) {
+					plot.setURLGenerator(new StandardPieURLGenerator("/filterDesktopActivities.do","risk"));
+				}
 				ChartRenderingInfo info = new ChartRenderingInfo(new StandardEntityCollection());
 				
 				fileName = ServletUtilities.saveChartAsPNG(chart,chartWidth,

@@ -24,6 +24,8 @@ import org.digijava.module.aim.dbentity.AmpSectorScheme;
 import org.digijava.module.aim.form.AddOrgForm;
 import org.digijava.module.aim.util.ActivityUtil;
 import org.digijava.module.aim.util.DbUtil;
+import org.digijava.module.aim.util.LocationUtil;
+import org.digijava.module.aim.util.SectorUtil;
 
 
 public class EditOrganisation extends Action {
@@ -57,13 +59,13 @@ public class EditOrganisation extends Action {
 					 if (null == editForm.getFiscalCal() || editForm.getFiscalCal().size() < 1)
 					 	editForm.setFiscalCal(DbUtil.getAllFisCalenders());
 					 if (null == editForm.getSectorScheme() || editForm.getSectorScheme().size() < 1)
-					 	editForm.setSectorScheme(DbUtil.getAllSectorSchemes());
+					 	editForm.setSectorScheme(SectorUtil.getAllSectorSchemes());
 					 if (null == editForm.getRegion() || editForm.getRegion().size() < 1)
-					 	editForm.setRegion(DbUtil.getAllRegionsUnderCountry(DbUtil.getCountryByName("Ethiopia").getIso()));
+					 	editForm.setRegion(LocationUtil.getAllRegionsUnderCountry(DbUtil.getCountryByName("Ethiopia").getIso()));
 					 if (null == editForm.getOrgType() || editForm.getOrgType().size() < 1)
 					 	editForm.setOrgType(DbUtil.getAllOrgTypes());
 					 if (null == editForm.getSectorScheme() || editForm.getSectorScheme().size() < 1)
-					 	editForm.setSectorScheme(DbUtil.getAllSectorSchemes());
+					 	editForm.setSectorScheme(SectorUtil.getAllSectorSchemes());
 					 if (null == editForm.getOrgGroupColl() || editForm.getOrgGroupColl().size() < 1)
 					 	editForm.setOrgGroupColl(DbUtil.getAllOrgGroups());
 					 Collection orgGroup = new ArrayList();
@@ -380,7 +382,7 @@ public class EditOrganisation extends Action {
 								ampOrg.setAmpFiscalCalId(null);
 							
 							if (!editForm.getAmpSecSchemeId().equals(new Long(-1))) {
-								AmpSectorScheme sector =  DbUtil.getAmpSectorScheme(editForm.getAmpSecSchemeId());
+								AmpSectorScheme sector =  SectorUtil.getAmpSectorScheme(editForm.getAmpSecSchemeId());
 								if (sector != null) {
 									ampOrg.setAmpSecSchemeId(sector);
 								}
@@ -418,7 +420,7 @@ public class EditOrganisation extends Action {
 								ampOrg.setRegionId(null);
 							}	
 							else {
-								AmpRegion reg = DbUtil.getAmpRegion(editForm.getRegionId());
+								AmpRegion reg = LocationUtil.getAmpRegion(editForm.getRegionId());
 								if (reg != null)
 									ampOrg.setRegionId(reg);
 							}

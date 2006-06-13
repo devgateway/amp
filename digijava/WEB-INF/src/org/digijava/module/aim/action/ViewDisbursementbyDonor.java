@@ -1,22 +1,26 @@
 package org.digijava.module.aim.action ;
 
-import org.apache.log4j.Logger ;
-import org.apache.struts.action.Action ;
-import org.apache.struts.action.ActionForm ;
-import org.apache.struts.action.ActionMapping ;
-import org.apache.struts.action.ActionForward ;
-import org.digijava.module.aim.dbentity.AmpActivity ;
-import org.digijava.module.aim.form.CommitmentbyDonorForm ;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Date;
+import java.util.Iterator;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.apache.log4j.Logger;
+import org.apache.struts.action.Action;
+import org.apache.struts.action.ActionForm;
+import org.apache.struts.action.ActionForward;
+import org.apache.struts.action.ActionMapping;
+import org.digijava.module.aim.dbentity.AmpActivity;
+import org.digijava.module.aim.dbentity.AmpFunding;
+import org.digijava.module.aim.dbentity.AmpSector;
+import org.digijava.module.aim.form.CommitmentbyDonorForm;
+import org.digijava.module.aim.helper.DateConversion;
+import org.digijava.module.aim.helper.Report;
 import org.digijava.module.aim.util.DbUtil;
-import org.digijava.module.aim.dbentity.AmpFunding ;
-import org.digijava.module.aim.dbentity.AmpSector ;
-import org.digijava.module.aim.helper.DateConversion ;
-import org.digijava.module.aim.helper.Report ;
-import javax.servlet.http.HttpServletRequest ;
-import javax.servlet.http.HttpServletResponse ;
-import java.util.* ;
-import java.util.Iterator ;
-import java.util.ArrayList ;
+import org.digijava.module.aim.util.SectorUtil;
 
 public class ViewDisbursementbyDonor extends Action
 {
@@ -43,7 +47,7 @@ public class ViewDisbursementbyDonor extends Action
 			logger.debug("Id :" + activity.getAmpActivityId());
 			logger.debug("Status :" + activity.getStatus().getName());
 			//get the sector for the activity.getAmpActivityId()
-			Collection Sectors = DbUtil.getAmpSectors(activity.getAmpActivityId());
+			Collection Sectors = SectorUtil.getAmpSectors(activity.getAmpActivityId());
 			logger.debug("sector size is " + Sectors.size());
 			StringBuffer SectorStr = new StringBuffer();
 			if(Sectors.size() != 0)

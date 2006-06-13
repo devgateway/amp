@@ -2,7 +2,6 @@
 <config>
 <secondary-pages>
 
-	<page name="viewMyDesktop" title=" - Team Desktop " />
 	<page name="viewPortfolioDashboard" title=" - Portfolio Dashboard " />
 	<page name="showMyTask" title=" - My Task List " />
 	<page name="viewChannelOverviewDescription" title="AMP: Ethiopia: AIM Dashboard: Detail" />
@@ -14,8 +13,6 @@
 	<page name="addAmpPhysicalProgress" title="AMP: Ethiopia: AIM Dashboard: Detail" />
 	<page name="editAmpPhysicalProgress" title="AMP: Ethiopia: AIM Dashboard: Detail" />
 	<page name="addKnowledgeDocument" title="AMP: Ethiopia: AIM Dashboard: Detail" />
-	<page name="addKnowledgeNotes" title="AMP: Ethiopia: AIM Dashboard: Detail" />
-	<page name="addAmpKnowledge" title="AMP: Ethiopia: AIM Dashboard: Detail" />
 	<page name="editAmpKnowledge" title="AMP: Ethiopia: AIM Dashboard: Detail" />
 	<page name="createKnowledgeDocument" title="AMP: Ethiopia: AIM Dashboard: Detail" />
 	<page name="createKnowledgeNotes" title="AMP: Ethiopia: AIM Dashboard: Detail" />
@@ -263,6 +260,32 @@
 </secondary-pages>
 
 <module>
+
+
+
+	<teaser name="portfolioDashboard" action="showPortfolioDashboard.do">
+		viewPortfolioDashboard.jsp
+	</teaser>
+
+	<teaser name="myDesktop" action="showDesktopActivities.do">
+		myDesktop.jsp
+	</teaser>
+
+	<teaser name="myReports" action="getDesktopReports.do">
+		myReports.jsp
+	</teaser>	
+
+	<teaser name="myLinks" action="getDesktopLinks.do">
+		myLinks.jsp
+	</teaser>
+
+	<teaser name="myTeamMembers" action="getDesktopTeamMembers.do">
+		myTeamMembers.jsp
+	</teaser>     
+
+	<teaser name="myTasks" action="getDesktopTasks.do">
+		myTasks.jsp
+	</teaser>     	
 		  <teaser name="logout" action="logoutAction.do">
 				logout.jsp
 			</teaser>
@@ -372,13 +395,6 @@
                 viewKnowledge.jsp
     </teaser>      
 
-	<teaser name="knowledgeNotes" action="knowledgeNotes.do">
-                viewKnowledgeNotes.jsp
-    </teaser>      
-
-	<teaser name="knowledgeDocument" action="knowledgeDocument.do">
-                viewKnowledgeDocument.jsp
-    </teaser>     
     <!-- Teasers Add/Edit Start	-->
     <teaser name="addEditNavigator" action="showAddEditNavigator.do">
     	addEditNavigator.jsp

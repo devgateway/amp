@@ -74,6 +74,9 @@
 					<digi:link href="/viewYearlyInfo.do" name="urlSubTabs" styleClass="sub-nav2" title="<%=translation%>" >
 					<digi:trn key="aim:expenditures">EXPENDITURES</digi:trn>
 					</digi:link>| 
+					<digi:link href="/viewYearlyDiscrepancy.do" name="urlDiscrepancy" styleClass="sub-nav2" title="<%=translation%>" >
+					<digi:trn key="aim:discrepancy">DISCREPANCY</digi:trn>
+					</digi:link> |
 					<bean:define id="translation">
 						<digi:trn key="aim:clickToViewAll">Click here to view All</digi:trn>
 					</bean:define>
@@ -95,7 +98,8 @@
 										<bean:define id="translation">
 											<digi:trn key="aim:clickToViewFinancialProgress">Click here to view Financial Progress</digi:trn>
 										</bean:define>
-										<digi:link href="/viewFinancingBreakdown.do" name="urlFinancingBreakdown" styleClass="comment" title="<%=translation%>" >
+										<digi:link href="/viewFinancingBreakdown.do" name="urlFinancingBreakdown" styleClass="comment" 
+										title="<%=translation%>" >
 										<digi:trn key="aim:financialProgress">Financial Progress</digi:trn>
 										</digi:link> &gt; Overview
 									</SPAN>								

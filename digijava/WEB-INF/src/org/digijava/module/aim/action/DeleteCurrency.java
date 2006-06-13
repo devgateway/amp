@@ -1,11 +1,18 @@
 package org.digijava.module.aim.action ;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+
 import org.apache.log4j.Logger;
-import org.apache.struts.action.*;
-import org.digijava.module.aim.dbentity.*;
-import org.digijava.module.aim.util.DbUtil;
+import org.apache.struts.action.Action;
+import org.apache.struts.action.ActionForm;
+import org.apache.struts.action.ActionForward;
+import org.apache.struts.action.ActionMapping;
+import org.digijava.module.aim.dbentity.AmpCurrency;
+import org.digijava.module.aim.dbentity.AmpCurrencyRate;
 import org.digijava.module.aim.form.AddCurrencyForm;
-import javax.servlet.http.*;
+import org.digijava.module.aim.util.CurrencyUtil;
 
 
 public class DeleteCurrency extends Action {
@@ -43,7 +50,7 @@ public class DeleteCurrency extends Action {
 								//AmpCurrencyRate ampCurrRate = DbUtil.getAmpCurrencyRate(deleteForm.getCurrencyRateId());
 								AmpCurrencyRate ampCurrRate = new AmpCurrencyRate();
 								ampCurrRate.setAmpCurrencyRateId(deleteForm.getCurrencyRateId());
-								DbUtil.deleteCurrency(ampCurr,ampCurrRate);
+								CurrencyUtil.deleteCurrency(ampCurr,ampCurrRate);
 								logger.debug("Currency deleted");
 										  
 					 }

@@ -296,7 +296,7 @@ public class ReportUtil {
 			/* ampTeamId is id of the team to which the user belongs to. If the team has access 
 			type 'management' then the following method returns collection of ids all its child teams
 			with access type 'Team' */
-			ArrayList dbReturnSet=(ArrayList)DbUtil.getAmpLevel0Teams(ampTeamId);				
+			ArrayList dbReturnSet=(ArrayList)TeamUtil.getAmpLevel0Teams(ampTeamId);				
 			if(dbReturnSet.size()==0)
 				inClause= "'" + ampTeamId + "'";	//if team access type
 			else
@@ -545,11 +545,11 @@ public class ReportUtil {
 						if(ampReportCache.getCurrencyCode().equals("USD"))
 							fromExchangeRate=1.0;
 						else
-							fromExchangeRate=DbUtil.getExchangeRate(ampReportCache.getCurrencyCode(),Constants.ACTUAL,ampReportCache.getTransactionDate());
+							fromExchangeRate=CurrencyUtil.getExchangeRate(ampReportCache.getCurrencyCode(),Constants.ACTUAL,ampReportCache.getTransactionDate());
 						if(ampCurrencyCode.equals("USD"))
 							toExchangeRate=1.0;
 						else
-							toExchangeRate=DbUtil.getExchangeRate(ampCurrencyCode,Constants.ACTUAL,ampReportCache.getTransactionDate());
+							toExchangeRate=CurrencyUtil.getExchangeRate(ampCurrencyCode,Constants.ACTUAL,ampReportCache.getTransactionDate());
 
 						if(ampReportCache.getActualCommitment().doubleValue()>0 && ampReportCache.getPerspective().equals(perspective))
 						{
@@ -600,11 +600,11 @@ public class ReportUtil {
 						if(ampReportCache.getCurrencyCode().equals("USD"))
 							fromExchangeRate=1.0;
 						else
-							fromExchangeRate=DbUtil.getExchangeRate(ampReportCache.getCurrencyCode(),Constants.PLANNED,ampReportCache.getTransactionDate());
+							fromExchangeRate=CurrencyUtil.getExchangeRate(ampReportCache.getCurrencyCode(),Constants.PLANNED,ampReportCache.getTransactionDate());
 						if(ampCurrencyCode.equals("USD"))
 							toExchangeRate=1.0;
 						else
-							toExchangeRate=DbUtil.getExchangeRate(ampCurrencyCode,Constants.PLANNED,ampReportCache.getTransactionDate());
+							toExchangeRate=CurrencyUtil.getExchangeRate(ampCurrencyCode,Constants.PLANNED,ampReportCache.getTransactionDate());
 						
 						if(ampReportCache.getPlannedDisbursement().doubleValue()>0 && ampReportCache.getPerspective().equals(perspective))
 						{
@@ -743,7 +743,7 @@ public class ReportUtil {
 						
 		try
 		{
-			ArrayList dbReturnSet=(ArrayList)DbUtil.getAmpLevel0Teams(ampTeamId);				
+			ArrayList dbReturnSet=(ArrayList)TeamUtil.getAmpLevel0Teams(ampTeamId);				
 			if(dbReturnSet.size()==0)
 				inClauseTeam= "'" + ampTeamId + "'";
 			else
@@ -776,7 +776,7 @@ public class ReportUtil {
 				AmpProjectBySector ampProjectBySector=(AmpProjectBySector) iter.next();
 				if(!ampSectorId.equals(All))
 				{
-					AmpSector ampSector=DbUtil.getAmpParentSector(ampSectorId);
+					AmpSector ampSector=SectorUtil.getAmpParentSector(ampSectorId);
 					if(!(ampProjectBySector.getSector().getAmpSectorId().equals(ampSector.getAmpSectorId())))
 						continue;
 				}
@@ -1718,11 +1718,11 @@ public class ReportUtil {
 						if(ampReportCache.getCurrencyCode().equals("USD"))
 							fromExchangeRate=1.0;
 						else
-							fromExchangeRate=DbUtil.getExchangeRate(ampReportCache.getCurrencyCode(),Constants.ACTUAL,ampReportCache.getTransactionDate());
+							fromExchangeRate=CurrencyUtil.getExchangeRate(ampReportCache.getCurrencyCode(),Constants.ACTUAL,ampReportCache.getTransactionDate());
 						if(ampCurrencyCode.equals("USD"))
 							toExchangeRate=1.0;
 						else
-							toExchangeRate=DbUtil.getExchangeRate(ampCurrencyCode,Constants.ACTUAL,ampReportCache.getTransactionDate());
+							toExchangeRate=CurrencyUtil.getExchangeRate(ampCurrencyCode,Constants.ACTUAL,ampReportCache.getTransactionDate());
 						
 						if(ampReportCache.getActualCommitment().doubleValue()>0 && ampReportCache.getPerspective().equals(perspective))
 						{
@@ -1773,11 +1773,11 @@ public class ReportUtil {
 						if(ampReportCache.getCurrencyCode().equals("USD"))
 								fromExchangeRate=1.0;
 						else
-							fromExchangeRate=DbUtil.getExchangeRate(ampReportCache.getCurrencyCode(),Constants.PLANNED,ampReportCache.getTransactionDate());
+							fromExchangeRate=CurrencyUtil.getExchangeRate(ampReportCache.getCurrencyCode(),Constants.PLANNED,ampReportCache.getTransactionDate());
 						if(ampCurrencyCode.equals("USD"))
 							toExchangeRate=1.0;
 						else
-							toExchangeRate=DbUtil.getExchangeRate(ampCurrencyCode,Constants.PLANNED,ampReportCache.getTransactionDate());
+							toExchangeRate=CurrencyUtil.getExchangeRate(ampCurrencyCode,Constants.PLANNED,ampReportCache.getTransactionDate());
 						
 						if(ampReportCache.getPlannedDisbursement().doubleValue()>0 && ampReportCache.getPerspective().equals(perspective))
 						{
@@ -2195,7 +2195,7 @@ public class ReportUtil {
 		String inClause=null;		
 		try
 		{
-			ArrayList dbReturnSet=(ArrayList)DbUtil.getAmpLevel0Teams(ampTeamId);				
+			ArrayList dbReturnSet=(ArrayList)TeamUtil.getAmpLevel0Teams(ampTeamId);				
 			if(dbReturnSet.size()==0)
 				inClause= "'" + ampTeamId + "'";
 			else
@@ -2554,7 +2554,7 @@ public class ReportUtil {
 						}
 						//logger.debug("begin intialize");
 						report = new multiReport();
-						AmpTeam ampTeam=DbUtil.getAmpTeam(ampReportCache.getAmpTeamId());
+						AmpTeam ampTeam=TeamUtil.getAmpTeam(ampReportCache.getAmpTeamId());
 						report.setAmpTeamId(ampReportCache.getAmpTeamId());
 						report.setTeamName(ampTeam.getName());
 						report.setTotalTeamFund(new ArrayList());
@@ -2834,11 +2834,11 @@ public class ReportUtil {
 						if(ampReportCache.getCurrencyCode().equals("USD"))
 							fromExchangeRate=1.0;
 						else
-							fromExchangeRate=DbUtil.getExchangeRate(ampReportCache.getCurrencyCode(),Constants.ACTUAL,ampReportCache.getTransactionDate());
+							fromExchangeRate=CurrencyUtil.getExchangeRate(ampReportCache.getCurrencyCode(),Constants.ACTUAL,ampReportCache.getTransactionDate());
 						if(ampCurrencyCode.equals("USD"))
 							toExchangeRate=1.0;
 						else
-							toExchangeRate=DbUtil.getExchangeRate(ampCurrencyCode,Constants.ACTUAL,ampReportCache.getTransactionDate());
+							toExchangeRate=CurrencyUtil.getExchangeRate(ampCurrencyCode,Constants.ACTUAL,ampReportCache.getTransactionDate());
 						if(ampReportCache.getActualCommitment().doubleValue()>0 && ampReportCache.getPerspective().equals(perspective))
 						{
 							termFlag=1;
@@ -2887,11 +2887,11 @@ public class ReportUtil {
 						if(ampReportCache.getCurrencyCode().equals("USD"))
 							fromExchangeRate=1.0;
 						else
-							fromExchangeRate=DbUtil.getExchangeRate(ampReportCache.getCurrencyCode(),Constants.PLANNED,ampReportCache.getTransactionDate());
+							fromExchangeRate=CurrencyUtil.getExchangeRate(ampReportCache.getCurrencyCode(),Constants.PLANNED,ampReportCache.getTransactionDate());
 						if(ampCurrencyCode.equals("USD"))
 							toExchangeRate=1.0;
 						else
-							toExchangeRate=DbUtil.getExchangeRate(ampCurrencyCode,Constants.PLANNED,ampReportCache.getTransactionDate());
+							toExchangeRate=CurrencyUtil.getExchangeRate(ampCurrencyCode,Constants.PLANNED,ampReportCache.getTransactionDate());
 						if(ampReportCache.getPlannedDisbursement().doubleValue()>0 && ampReportCache.getPerspective().equals(perspective))
 						{
 							amount=CurrencyWorker.convert1(ampReportCache.getPlannedDisbursement().doubleValue(),fromExchangeRate,toExchangeRate);
@@ -3171,7 +3171,7 @@ public class ReportUtil {
 		try
 		{
 			int years=0;
-			ArrayList dbReturnSet=(ArrayList)DbUtil.getAmpLevel0Teams(ampTeamId);				
+			ArrayList dbReturnSet=(ArrayList)TeamUtil.getAmpLevel0Teams(ampTeamId);				
 			if(dbReturnSet.size()==0)
 				inClause= "'" + ampTeamId + "'";
 			else
@@ -3392,11 +3392,11 @@ public class ReportUtil {
 						if(ampReportCache.getCurrencyCode().equals("USD"))
 							fromExchangeRate=1.0;
 						else
-							fromExchangeRate=DbUtil.getExchangeRate(ampReportCache.getCurrencyCode(),Constants.PLANNED,ampReportCache.getTransactionDate());
+							fromExchangeRate=CurrencyUtil.getExchangeRate(ampReportCache.getCurrencyCode(),Constants.PLANNED,ampReportCache.getTransactionDate());
 						if(ampCurrencyCode.equals("USD"))
 							toExchangeRate=1.0;
 						else
-							toExchangeRate=DbUtil.getExchangeRate(ampCurrencyCode,Constants.PLANNED,ampReportCache.getTransactionDate());
+							toExchangeRate=CurrencyUtil.getExchangeRate(ampCurrencyCode,Constants.PLANNED,ampReportCache.getTransactionDate());
 						if(fiscalYear>=toYr && fiscalYear<=(toYr+3))
 						{						
 							if(ampReportCache.getPlannedDisbursement().doubleValue()>0 && ampReportCache.getPerspective().equals(perspective))
@@ -3424,11 +3424,11 @@ public class ReportUtil {
 							if(ampReportCache.getCurrencyCode().equals("USD"))
 								fromExchangeRate=1.0;
 							else
-								fromExchangeRate=DbUtil.getExchangeRate(ampReportCache.getCurrencyCode(),Constants.ACTUAL,ampReportCache.getTransactionDate());
+								fromExchangeRate=CurrencyUtil.getExchangeRate(ampReportCache.getCurrencyCode(),Constants.ACTUAL,ampReportCache.getTransactionDate());
 							if(ampCurrencyCode.equals("USD"))
 								toExchangeRate=1.0;
 							else
-								toExchangeRate=DbUtil.getExchangeRate(ampCurrencyCode,Constants.ACTUAL,ampReportCache.getTransactionDate());
+								toExchangeRate=CurrencyUtil.getExchangeRate(ampCurrencyCode,Constants.ACTUAL,ampReportCache.getTransactionDate());
 
 							commitmentbreakup = 0;
 							commitmentbreakup = CurrencyWorker.convert1(ampReportCache.getActualCommitment().doubleValue(),fromExchangeRate,toExchangeRate);
@@ -3576,7 +3576,7 @@ public class ReportUtil {
 			double[][] commFund=new double[yrCount][4];
 			double[][] disbFund=new double[yrCount][4];
 			int fiscalYear=0,fiscalQuarter=0;
-			ArrayList dbReturnSet=(ArrayList)DbUtil.getAmpLevel0Teams(ampTeamId);				
+			ArrayList dbReturnSet=(ArrayList)TeamUtil.getAmpLevel0Teams(ampTeamId);				
 			if(dbReturnSet.size()==0)
 				inClause= "'" + ampTeamId + "'";
 			else
@@ -3760,11 +3760,11 @@ public class ReportUtil {
 							if(ampReportCache.getCurrencyCode().equals("USD"))
 								fromExchangeRate=1.0;
 							else
-								fromExchangeRate=DbUtil.getExchangeRate(ampReportCache.getCurrencyCode(),Constants.ACTUAL,ampReportCache.getTransactionDate());
+								fromExchangeRate=CurrencyUtil.getExchangeRate(ampReportCache.getCurrencyCode(),Constants.ACTUAL,ampReportCache.getTransactionDate());
 							if(ampCurrencyCode.equals("USD"))
 								toExchangeRate=1.0;
 							else
-								toExchangeRate=DbUtil.getExchangeRate(ampCurrencyCode,Constants.ACTUAL,ampReportCache.getTransactionDate());
+								toExchangeRate=CurrencyUtil.getExchangeRate(ampCurrencyCode,Constants.ACTUAL,ampReportCache.getTransactionDate());
 							if(ampReportCache.getActualCommitment().doubleValue()>0 && ampReportCache.getPerspective().equals(perspective))
 							{
 								amount=CurrencyWorker.convert1(ampReportCache.getActualCommitment().doubleValue(),fromExchangeRate,toExchangeRate);
@@ -3799,11 +3799,11 @@ public class ReportUtil {
 							if(ampReportCache.getCurrencyCode().equals("USD"))
 								fromExchangeRate=1.0;
 							else
-								fromExchangeRate=DbUtil.getExchangeRate(ampReportCache.getCurrencyCode(),Constants.PLANNED,ampReportCache.getTransactionDate());
+								fromExchangeRate=CurrencyUtil.getExchangeRate(ampReportCache.getCurrencyCode(),Constants.PLANNED,ampReportCache.getTransactionDate());
 							if(ampCurrencyCode.equals("USD"))
 								toExchangeRate=1.0;
 							else
-								toExchangeRate=DbUtil.getExchangeRate(ampCurrencyCode,Constants.PLANNED,ampReportCache.getTransactionDate());
+								toExchangeRate=CurrencyUtil.getExchangeRate(ampCurrencyCode,Constants.PLANNED,ampReportCache.getTransactionDate());
 							if(ampReportCache.getPlannedCommitment().doubleValue()>0 && ampReportCache.getPerspective().equals(perspective))
 							{
 								amount=CurrencyWorker.convert1(ampReportCache.getPlannedCommitment().doubleValue(),fromExchangeRate,toExchangeRate);
@@ -3908,7 +3908,7 @@ public class ReportUtil {
 				
 		try
 		{
-			ArrayList dbReturnSet=(ArrayList)DbUtil.getAmpLevel0Teams(ampTeamId);				
+			ArrayList dbReturnSet=(ArrayList)TeamUtil.getAmpLevel0Teams(ampTeamId);				
 			if(dbReturnSet.size()==0)
 				inClause= "'" + ampTeamId + "'";
 			else
@@ -4157,11 +4157,11 @@ public class ReportUtil {
 						if(ampReportCache.getCurrencyCode().equals("USD"))
 							fromExchangeRate=1.0;
 						else
-							fromExchangeRate=DbUtil.getExchangeRate(ampReportCache.getCurrencyCode(),Constants.ACTUAL,ampReportCache.getTransactionDate());
+							fromExchangeRate=CurrencyUtil.getExchangeRate(ampReportCache.getCurrencyCode(),Constants.ACTUAL,ampReportCache.getTransactionDate());
 						if(ampCurrencyCode.equals("USD"))
 							toExchangeRate=1.0;
 						else
-							toExchangeRate=DbUtil.getExchangeRate(ampCurrencyCode,Constants.ACTUAL,ampReportCache.getTransactionDate());
+							toExchangeRate=CurrencyUtil.getExchangeRate(ampCurrencyCode,Constants.ACTUAL,ampReportCache.getTransactionDate());
 
 						if(ampReportCache.getActualCommitment().doubleValue()>0)
 						{
@@ -4205,11 +4205,11 @@ public class ReportUtil {
 						if(ampReportCache.getCurrencyCode().equals("USD"))
 							fromExchangeRate=1.0;
 						else
-							fromExchangeRate=DbUtil.getExchangeRate(ampReportCache.getCurrencyCode(),Constants.PLANNED,ampReportCache.getTransactionDate());
+							fromExchangeRate=CurrencyUtil.getExchangeRate(ampReportCache.getCurrencyCode(),Constants.PLANNED,ampReportCache.getTransactionDate());
 						if(ampCurrencyCode.equals("USD"))
 							toExchangeRate=1.0;
 						else
-							toExchangeRate=DbUtil.getExchangeRate(ampCurrencyCode,Constants.PLANNED,ampReportCache.getTransactionDate());
+							toExchangeRate=CurrencyUtil.getExchangeRate(ampCurrencyCode,Constants.PLANNED,ampReportCache.getTransactionDate());
 						
 						if(ampReportCache.getPlannedDisbursement().doubleValue()>0 && ampReportCache.getPerspective().equals(perspective))
 						{
@@ -4396,7 +4396,7 @@ public class ReportUtil {
 				
 		try
 		{
-			ArrayList dbReturnSet=(ArrayList)DbUtil.getAmpLevel0Teams(ampTeamId);				
+			ArrayList dbReturnSet=(ArrayList)TeamUtil.getAmpLevel0Teams(ampTeamId);				
 			if(dbReturnSet.size()==0)
 				inClause= "'" + ampTeamId + "'";
 			else
@@ -5042,7 +5042,7 @@ public class ReportUtil {
 							logger.debug("Outside Team");
 						}		
 						report = new multiReport();
-						AmpTeam ampTeam=DbUtil.getAmpTeam(ampReportCache.getAmpTeamId());
+						AmpTeam ampTeam=TeamUtil.getAmpTeam(ampReportCache.getAmpTeamId());
 						report.setAmpTeamId(ampReportCache.getAmpTeamId());
 						selTeamId=ampReportCache.getAmpTeamId();
 						report.setTeamName(ampTeam.getName());
@@ -5613,11 +5613,11 @@ public class ReportUtil {
 						if(ampReportCache.getCurrencyCode().equals("USD"))
 							fromExchangeRate=1.0;
 						else
-							fromExchangeRate=DbUtil.getExchangeRate(ampReportCache.getCurrencyCode(),Constants.ACTUAL,ampReportCache.getTransactionDate());
+							fromExchangeRate=CurrencyUtil.getExchangeRate(ampReportCache.getCurrencyCode(),Constants.ACTUAL,ampReportCache.getTransactionDate());
 						if(ampCurrencyCode.equals("USD"))
 							toExchangeRate=1.0;
 						else
-							toExchangeRate=DbUtil.getExchangeRate(ampCurrencyCode,Constants.ACTUAL,ampReportCache.getTransactionDate());
+							toExchangeRate=CurrencyUtil.getExchangeRate(ampCurrencyCode,Constants.ACTUAL,ampReportCache.getTransactionDate());
 
 						
 						if(ampReportCache.getActualCommitment().doubleValue()>0 && ampReportCache.getPerspective().equals(perspective))
@@ -5662,11 +5662,11 @@ public class ReportUtil {
 						if(ampReportCache.getCurrencyCode().equals("USD"))
 							fromExchangeRate=1.0;
 						else
-							fromExchangeRate=DbUtil.getExchangeRate(ampReportCache.getCurrencyCode(),Constants.PLANNED,ampReportCache.getTransactionDate());
+							fromExchangeRate=CurrencyUtil.getExchangeRate(ampReportCache.getCurrencyCode(),Constants.PLANNED,ampReportCache.getTransactionDate());
 						if(ampCurrencyCode.equals("USD"))
 							toExchangeRate=1.0;
 						else
-							toExchangeRate=DbUtil.getExchangeRate(ampCurrencyCode,Constants.PLANNED,ampReportCache.getTransactionDate());
+							toExchangeRate=CurrencyUtil.getExchangeRate(ampCurrencyCode,Constants.PLANNED,ampReportCache.getTransactionDate());
 						if(ampReportCache.getPlannedDisbursement().doubleValue()>0 && ampReportCache.getPerspective().equals(perspective))
 						{
 							amount=CurrencyWorker.convert1(ampReportCache.getPlannedDisbursement().doubleValue(),fromExchangeRate,toExchangeRate);
@@ -6258,7 +6258,7 @@ public class ReportUtil {
 		try
 		{
 
-			ArrayList dbReturnSet=(ArrayList)DbUtil.getAmpLevel0Teams(ampTeamId);				
+			ArrayList dbReturnSet=(ArrayList)TeamUtil.getAmpLevel0Teams(ampTeamId);				
 			if(dbReturnSet.size()==0)
 				inClause= "'" + ampTeamId + "'";
 			else
@@ -6657,7 +6657,7 @@ public class ReportUtil {
 							ampReports.add(report);
 						}
 						report = new multiReport();
-						AmpTeam ampTeam=DbUtil.getAmpTeam(ampReportCache.getAmpTeamId());
+						AmpTeam ampTeam=TeamUtil.getAmpTeam(ampReportCache.getAmpTeamId());
 						report.setAmpTeamId(ampReportCache.getAmpTeamId());
 						report.setTeamName(ampTeam.getName());
 						report.setCount(++teamCount);
@@ -6932,11 +6932,11 @@ public class ReportUtil {
 						if(ampReportCache.getCurrencyCode().equals("USD"))
 							fromExchangeRate=1.0;
 						else
-							fromExchangeRate=DbUtil.getExchangeRate(ampReportCache.getCurrencyCode(),Constants.ACTUAL,ampReportCache.getTransactionDate());
+							fromExchangeRate=CurrencyUtil.getExchangeRate(ampReportCache.getCurrencyCode(),Constants.ACTUAL,ampReportCache.getTransactionDate());
 						if(ampCurrencyCode.equals("USD"))
 							toExchangeRate=1.0;
 						else
-							toExchangeRate=DbUtil.getExchangeRate(ampCurrencyCode,Constants.ACTUAL,ampReportCache.getTransactionDate());
+							toExchangeRate=CurrencyUtil.getExchangeRate(ampCurrencyCode,Constants.ACTUAL,ampReportCache.getTransactionDate());
 						
 						if(ampReportCache.getActualCommitment().doubleValue()>0 && ampReportCache.getPerspective().equals(perspective))
 						{
@@ -6986,11 +6986,11 @@ public class ReportUtil {
 						if(ampReportCache.getCurrencyCode().equals("USD"))
 							fromExchangeRate=1.0;
 						else
-							fromExchangeRate=DbUtil.getExchangeRate(ampReportCache.getCurrencyCode(),Constants.PLANNED,ampReportCache.getTransactionDate());
+							fromExchangeRate=CurrencyUtil.getExchangeRate(ampReportCache.getCurrencyCode(),Constants.PLANNED,ampReportCache.getTransactionDate());
 						if(ampCurrencyCode.equals("USD"))
 							toExchangeRate=1.0;
 						else
-							toExchangeRate=DbUtil.getExchangeRate(ampCurrencyCode,Constants.PLANNED,ampReportCache.getTransactionDate());
+							toExchangeRate=CurrencyUtil.getExchangeRate(ampCurrencyCode,Constants.PLANNED,ampReportCache.getTransactionDate());
 						if(ampReportCache.getPlannedDisbursement().doubleValue()>0 && ampReportCache.getPerspective().equals(perspective))
 						{
 							amount=CurrencyWorker.convert1(ampReportCache.getPlannedDisbursement().doubleValue(),fromExchangeRate,toExchangeRate);
@@ -7353,7 +7353,7 @@ public class ReportUtil {
 						
 		try
 		{
-			ArrayList dbReturnSet=(ArrayList)DbUtil.getAmpLevel0Teams(ampTeamId);				
+			ArrayList dbReturnSet=(ArrayList)TeamUtil.getAmpLevel0Teams(ampTeamId);				
 			if(dbReturnSet.size()==0)
 				inClauseTeam= "'" + ampTeamId + "'";
 			else
@@ -7384,7 +7384,7 @@ public class ReportUtil {
 				AmpProjectBySector ampProjectBySector = (AmpProjectBySector) iter.next(); 
 				if(!ampSectorId.equals(All))
 				{
-					AmpSector ampSector=DbUtil.getAmpParentSector(ampSectorId);
+					AmpSector ampSector=SectorUtil.getAmpParentSector(ampSectorId);
 					if(!(ampProjectBySector.getSector().getAmpSectorId().equals(ampSector.getAmpSectorId())))
 						continue;
 				}
@@ -8277,11 +8277,11 @@ public class ReportUtil {
 						if(ampReportCache.getCurrencyCode().equals("USD"))
 							fromExchangeRate=1.0;
 						else
-							fromExchangeRate=DbUtil.getExchangeRate(ampReportCache.getCurrencyCode(),Constants.ACTUAL,ampReportCache.getTransactionDate());
+							fromExchangeRate=CurrencyUtil.getExchangeRate(ampReportCache.getCurrencyCode(),Constants.ACTUAL,ampReportCache.getTransactionDate());
 						if(ampCurrencyCode.equals("USD"))
 							toExchangeRate=1.0;
 						else
-							toExchangeRate=DbUtil.getExchangeRate(ampCurrencyCode,Constants.ACTUAL,ampReportCache.getTransactionDate());
+							toExchangeRate=CurrencyUtil.getExchangeRate(ampCurrencyCode,Constants.ACTUAL,ampReportCache.getTransactionDate());
 
 						if(ampReportCache.getActualCommitment().doubleValue()>0 && ampReportCache.getPerspective().equals(perspective))
 						{
@@ -8325,11 +8325,11 @@ public class ReportUtil {
 						if(ampReportCache.getCurrencyCode().equals("USD"))
 							fromExchangeRate=1.0;
 						else
-							fromExchangeRate=DbUtil.getExchangeRate(ampReportCache.getCurrencyCode(),Constants.PLANNED,ampReportCache.getTransactionDate());
+							fromExchangeRate=CurrencyUtil.getExchangeRate(ampReportCache.getCurrencyCode(),Constants.PLANNED,ampReportCache.getTransactionDate());
 						if(ampCurrencyCode.equals("USD"))
 							toExchangeRate=1.0;
 						else
-							toExchangeRate=DbUtil.getExchangeRate(ampCurrencyCode,Constants.PLANNED,ampReportCache.getTransactionDate());
+							toExchangeRate=CurrencyUtil.getExchangeRate(ampCurrencyCode,Constants.PLANNED,ampReportCache.getTransactionDate());
 						if(ampReportCache.getPlannedDisbursement().doubleValue()>0 && ampReportCache.getPerspective().equals(perspective))
 						{
 							amount=CurrencyWorker.convert1(ampReportCache.getPlannedDisbursement().doubleValue(),fromExchangeRate,toExchangeRate);
@@ -8762,7 +8762,7 @@ public class ReportUtil {
 		try
 		{
 			logger.debug("Modality Id: " + ampModalityId);
-			ArrayList dbReturnSet=(ArrayList)DbUtil.getAmpLevel0Teams(ampTeamId);				
+			ArrayList dbReturnSet=(ArrayList)TeamUtil.getAmpLevel0Teams(ampTeamId);				
 			if(dbReturnSet.size()==0)
 				inClause= "'" + ampTeamId + "'";
 			else
@@ -9392,7 +9392,7 @@ public class ReportUtil {
 						logger.debug("Outside Team");
 					}		
 					report = new multiReport();
-					AmpTeam ampTeam=DbUtil.getAmpTeam(ampReportCache.getAmpTeamId());
+					AmpTeam ampTeam=TeamUtil.getAmpTeam(ampReportCache.getAmpTeamId());
 					report.setAmpTeamId(ampReportCache.getAmpTeamId());
 					selTeamId=ampReportCache.getAmpTeamId();
 					report.setTeamName(ampTeam.getName());
@@ -10004,11 +10004,11 @@ public class ReportUtil {
 						if(ampReportCache.getCurrencyCode().equals("USD"))
 							fromExchangeRate=1.0;
 						else
-							fromExchangeRate=DbUtil.getExchangeRate(ampReportCache.getCurrencyCode(),Constants.PLANNED,ampReportCache.getTransactionDate());
+							fromExchangeRate=CurrencyUtil.getExchangeRate(ampReportCache.getCurrencyCode(),Constants.PLANNED,ampReportCache.getTransactionDate());
 						if(ampCurrencyCode.equals("USD"))
 							toExchangeRate=1.0;
 						else
-							toExchangeRate=DbUtil.getExchangeRate(ampCurrencyCode,Constants.PLANNED,ampReportCache.getTransactionDate());
+							toExchangeRate=CurrencyUtil.getExchangeRate(ampCurrencyCode,Constants.PLANNED,ampReportCache.getTransactionDate());
 						if(ampReportCache.getPlannedDisbursement().doubleValue()>0 && ampReportCache.getPerspective().equals(perspective))
 						{
 							amount=CurrencyWorker.convert1(ampReportCache.getPlannedDisbursement().doubleValue(),fromExchangeRate,toExchangeRate);
@@ -10028,11 +10028,11 @@ public class ReportUtil {
 						if(ampReportCache.getCurrencyCode().equals("USD"))
 							fromExchangeRate=1.0;
 						else
-							fromExchangeRate=DbUtil.getExchangeRate(ampReportCache.getCurrencyCode(),Constants.ACTUAL,ampReportCache.getTransactionDate());
+							fromExchangeRate=CurrencyUtil.getExchangeRate(ampReportCache.getCurrencyCode(),Constants.ACTUAL,ampReportCache.getTransactionDate());
 						if(ampCurrencyCode.equals("USD"))
 							toExchangeRate=1.0;
 						else
-							toExchangeRate=DbUtil.getExchangeRate(ampCurrencyCode,Constants.ACTUAL,ampReportCache.getTransactionDate());
+							toExchangeRate=CurrencyUtil.getExchangeRate(ampCurrencyCode,Constants.ACTUAL,ampReportCache.getTransactionDate());
 						
 						if(ampReportCache.getActualCommitment().doubleValue()>0 && ampReportCache.getPerspective().equals(perspective))
 						{
@@ -10589,7 +10589,7 @@ public class ReportUtil {
 		try
 		{
 			logger.debug("Modality Id: " + ampModalityId);
-			ArrayList dbReturnSet=(ArrayList)DbUtil.getAmpLevel0Teams(ampTeamId);				
+			ArrayList dbReturnSet=(ArrayList)TeamUtil.getAmpLevel0Teams(ampTeamId);				
 			if(dbReturnSet.size()==0)
 				inClause= "'" + ampTeamId + "'";
 			else
@@ -10707,7 +10707,7 @@ public class ReportUtil {
 						}		
 						logger.debug("Start init");
 						report = new multiReport();
-						AmpTeam ampTeam=DbUtil.getAmpTeam(ampReportCache.getAmpTeamId());
+						AmpTeam ampTeam=TeamUtil.getAmpTeam(ampReportCache.getAmpTeamId());
 						report.setAmpTeamId(ampReportCache.getAmpTeamId());
 						report.setTeamName(ampTeam.getName());
 						report.setDonors(new ArrayList());
@@ -10970,11 +10970,11 @@ public class ReportUtil {
 						if(ampReportCache.getCurrencyCode().equals("USD"))
 							fromExchangeRate=1.0;
 						else
-							fromExchangeRate=DbUtil.getExchangeRate(ampReportCache.getCurrencyCode(),Constants.ACTUAL,ampReportCache.getTransactionDate());
+							fromExchangeRate=CurrencyUtil.getExchangeRate(ampReportCache.getCurrencyCode(),Constants.ACTUAL,ampReportCache.getTransactionDate());
 						if(ampCurrencyCode.equals("USD"))
 							toExchangeRate=1.0;
 						else
-							toExchangeRate=DbUtil.getExchangeRate(ampCurrencyCode,Constants.ACTUAL,ampReportCache.getTransactionDate());					
+							toExchangeRate=CurrencyUtil.getExchangeRate(ampCurrencyCode,Constants.ACTUAL,ampReportCache.getTransactionDate());					
 					
 						if(ampReportCache.getActualCommitment().doubleValue()>0 && ampReportCache.getPerspective().equals(perspective))
 						{
@@ -11158,7 +11158,7 @@ public class ReportUtil {
 				int ind = 0;
 				iter = coll.iterator();
 				
-				ArrayList dbReturnSet=(ArrayList)DbUtil.getAmpLevel0Teams(ampTeamId);				
+				ArrayList dbReturnSet=(ArrayList)TeamUtil.getAmpLevel0Teams(ampTeamId);				
 				if(dbReturnSet.size()==0)
 					inClause= "'" + ampTeamId + "'";
 				else
@@ -11668,7 +11668,7 @@ public class ReportUtil {
 		AmpReportCache ampReportCache = null;
 		try
 		{
-			ArrayList dbReturnSet=(ArrayList)DbUtil.getAmpLevel0Teams(ampTeamId);				
+			ArrayList dbReturnSet=(ArrayList)TeamUtil.getAmpLevel0Teams(ampTeamId);				
 			if(dbReturnSet.size()==0)
 				inClause= "'" + ampTeamId + "'";
 			else
@@ -12131,11 +12131,11 @@ public class ReportUtil {
 						if(ampReportCache.getCurrencyCode().equals("USD"))
 							fromExchangeRate=1.0;
 						else
-							fromExchangeRate=DbUtil.getExchangeRate(ampReportCache.getCurrencyCode(),Constants.PLANNED,ampReportCache.getTransactionDate());
+							fromExchangeRate=CurrencyUtil.getExchangeRate(ampReportCache.getCurrencyCode(),Constants.PLANNED,ampReportCache.getTransactionDate());
 						if(ampCurrencyCode.equals("USD"))
 							toExchangeRate=1.0;
 						else	
-							toExchangeRate=DbUtil.getExchangeRate(ampCurrencyCode,Constants.PLANNED,ampReportCache.getTransactionDate());
+							toExchangeRate=CurrencyUtil.getExchangeRate(ampCurrencyCode,Constants.PLANNED,ampReportCache.getTransactionDate());
 						
 						if(rsc.getOption().equals(Constants.ANNUAL))
 						{
@@ -12915,7 +12915,7 @@ public class ReportUtil {
 		AmpReportSector sector=(AmpReportSector) iter.next();
 		if(!ampSectorId.equals(All))
 		{
-			AmpSector ampSector=DbUtil.getAmpParentSector(ampSectorId);
+			AmpSector ampSector=SectorUtil.getAmpParentSector(ampSectorId);
 			if (!sector.getAmpSectorId().equals(ampSectorId)) continue;
 			if(!(sector.getAmpSectorId().equals(ampSector.getAmpSectorId())))
 				continue;
@@ -13234,7 +13234,7 @@ public class ReportUtil {
 		String strClause="";
 		if(inClause!=null) strClause= " (activity.ampActivityId in(" + inClause + ")) and ";
 		
-		level=DbUtil.getAmpLocations();
+		level=LocationUtil.getAmpLocations();
 		iter=level.iterator();
 		while(iter.hasNext())
 		{
@@ -14085,12 +14085,12 @@ public class ReportUtil {
 					if(ampReportCache.getCurrencyCode().equals("USD"))
 						fromExchangeRate=1.0;
 					else
-						fromExchangeRate=DbUtil.getExchangeRate(ampReportCache.getCurrencyCode(),Constants.PLANNED,ampReportCache.getTransactionDate());
+						fromExchangeRate=CurrencyUtil.getExchangeRate(ampReportCache.getCurrencyCode(),Constants.PLANNED,ampReportCache.getTransactionDate());
 				
 					if(ampCurrencyCode.equals("USD"))
 						toExchangeRate=1.0;
 					else	
-						toExchangeRate=DbUtil.getExchangeRate(ampCurrencyCode,Constants.PLANNED,ampReportCache.getTransactionDate());
+						toExchangeRate=CurrencyUtil.getExchangeRate(ampCurrencyCode,Constants.PLANNED,ampReportCache.getTransactionDate());
 					
 					if(rsc.getOption().equals(Constants.ANNUAL))
 					{

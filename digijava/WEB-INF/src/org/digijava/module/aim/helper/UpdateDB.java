@@ -13,6 +13,7 @@ import net.sf.hibernate.Session;
 
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.util.DbUtil;
+import org.digijava.module.aim.util.SectorUtil;
 import org.digijava.module.aim.dbentity.AmpSector;
 
 import org.apache.log4j.Logger;
@@ -305,7 +306,7 @@ public class UpdateDB {
 			StringBuffer sb = new StringBuffer();
 			while(rs.next())
 			{
-				AmpSector ampSector=DbUtil.getAmpParentSector(new Long(rs.getLong("amp_sector_id")));
+				AmpSector ampSector=SectorUtil.getAmpParentSector(new Long(rs.getLong("amp_sector_id")));
 				logger.debug("Sector: " + ampSector.getAmpSectorId());
 				sb.append("insert into amp_report_sector values('','");
 				sb.append(ampActivityId);

@@ -1,12 +1,22 @@
 package org.digijava.module.aim.action ;
 
+import java.util.HashMap;
+import java.util.Iterator;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+
 import org.apache.log4j.Logger;
-import org.apache.struts.action.*;
-import org.digijava.module.aim.dbentity.*;
-import org.digijava.module.aim.util.DbUtil;
+import org.apache.struts.action.Action;
+import org.apache.struts.action.ActionForm;
+import org.apache.struts.action.ActionForward;
+import org.apache.struts.action.ActionMapping;
+import org.digijava.module.aim.dbentity.AmpOrganisation;
+import org.digijava.module.aim.dbentity.AmpSector;
 import org.digijava.module.aim.form.AddSectorForm;
-import javax.servlet.http.*;
-import java.util.*;
+import org.digijava.module.aim.util.DbUtil;
+import org.digijava.module.aim.util.SectorUtil;
 
 public class EditSector extends Action {
 
@@ -36,7 +46,7 @@ public class EditSector extends Action {
 								 * check whether the id is a valid long value
 								 */
 								Long secId = new Long(Long.parseLong(request.getParameter("id")));
-								AmpSector ampSector = DbUtil.getAmpSector(secId);
+								AmpSector ampSector = SectorUtil.getAmpSector(secId);
 
 								/*
 								 * check whether ampSector is null if yes return error
@@ -71,7 +81,7 @@ public class EditSector extends Action {
 								logger.debug("Updating the sector");
 								AmpSector ampSector = new AmpSector();
 								ampSector.setAmpSectorId(editSectorForm.getSectorId());
-								ampSector.setParentSectorId(DbUtil.getAmpSector(editSectorForm.getParentSectorId()));
+								ampSector.setParentSectorId(SectorUtil.getAmpSector(editSectorForm.getParentSectorId()));
 								ampSector.setAmpOrgId(DbUtil.getOrganisation(editSectorForm.getAmpOrganisationId()));
 								ampSector.setSectorCode(editSectorForm.getSectorCode());
 								ampSector.setName(editSectorForm.getSectorName());
@@ -82,7 +92,7 @@ public class EditSector extends Action {
 										  ampSector.setDescription(editSectorForm.getDescription());
 								}
 
-								DbUtil.updateSector(ampSector);
+								SectorUtil.updateSector(ampSector);
 								logger.debug("Sector updated");
 								return mapping.findForward("edited");
 					 } else {

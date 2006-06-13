@@ -94,7 +94,7 @@ public class DocumentSelected extends Action {
 		RelatedLinks rl = new RelatedLinks();
 		rl.setShowInHomePage(eaForm.isShowInHomePage());
 		rl.setRelLink(cmsItem);
-		rl.setMember(org.digijava.module.aim.util.DbUtil.getAmpTeamMember(tm.getMemberId()));
+		rl.setMember(org.digijava.module.aim.util.TeamMemberUtil.getAmpTeamMember(tm.getMemberId()));
 		
 		
 		if (cmsItem.getIsFile()) {

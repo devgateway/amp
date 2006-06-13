@@ -1,41 +1,33 @@
 package org.digijava.module.aim.action ;
 
-import org.apache.log4j.Logger ;
-import org.apache.struts.action.Action ;
-import org.apache.struts.action.ActionForm ;
-import org.apache.struts.action.ActionMapping ;
-import org.apache.struts.action.ActionForward ;
-import org.digijava.module.aim.form.MulitlateralbyDonorForm ;
-import org.digijava.module.aim.util.DbUtil;
-import org.digijava.module.aim.util.ReportUtil;
-import org.digijava.module.aim.util.TeamUtil;
-import org.digijava.module.aim.dbentity.AmpFunding ;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
+import java.util.Iterator;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+
+import org.apache.log4j.Logger;
+import org.apache.struts.action.Action;
+import org.apache.struts.action.ActionForm;
+import org.apache.struts.action.ActionForward;
+import org.apache.struts.action.ActionMapping;
+import org.digijava.module.aim.dbentity.AmpCurrency;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpSector;
-import org.digijava.module.aim.dbentity.AmpStatus;
-import org.digijava.module.aim.dbentity.AmpModality;
-import org.digijava.module.aim.dbentity.AmpLocation;
-import org.digijava.module.aim.dbentity.AmpCurrency;
 import org.digijava.module.aim.dbentity.AmpTeam;
-import org.digijava.module.aim.helper.multiReport ;
-import org.digijava.module.aim.helper.AmpDonors ;
-import org.digijava.module.aim.helper.EthiopianCalendar;
-import org.digijava.module.aim.helper.AmpFund ;
-import org.digijava.module.aim.helper.FundTotal ;
-import org.digijava.module.aim.helper.fiscalYrs ;
-import org.digijava.module.aim.helper.ReportQuarterWorker;
-import org.digijava.module.aim.helper.Currency ;
+import org.digijava.module.aim.form.MulitlateralbyDonorForm;
 import org.digijava.module.aim.helper.Constants;
-import org.digijava.module.aim.helper.TeamMember ;
-import javax.servlet.http.HttpServletRequest ;
-import javax.servlet.http.HttpServletResponse ;
-import javax.servlet.http.HttpSession;
-import java.util.* ;
-import java.util.Iterator ;
-import java.util.ArrayList ;
-import java.text.DecimalFormat;
-import org.digijava.module.aim.helper.CurrencyWorker;
 import org.digijava.module.aim.helper.FilterProperties;
+import org.digijava.module.aim.helper.TeamMember;
+import org.digijava.module.aim.util.CurrencyUtil;
+import org.digijava.module.aim.util.DbUtil;
+import org.digijava.module.aim.util.LocationUtil;
+import org.digijava.module.aim.util.ReportUtil;
+import org.digijava.module.aim.util.SectorUtil;
+import org.digijava.module.aim.util.TeamUtil;
 
 public class ViewPhysicalComponentReport extends Action
 {
@@ -133,7 +125,7 @@ public class ViewPhysicalComponentReport extends Action
 			{
 				filterCnt++;
 				formBean.setSectorColl(new ArrayList()) ;
-				dbReturnSet=DbUtil.getAmpSectors();
+				dbReturnSet=SectorUtil.getAmpSectors();
 				iter = dbReturnSet.iterator() ;
 				while(iter.hasNext())
 				{
@@ -144,7 +136,7 @@ public class ViewPhysicalComponentReport extends Action
 						ampSector.setName(temp);
 					}
 					formBean.getSectorColl().add(ampSector);
-					dbReturnSet=DbUtil.getAmpSubSectors(ampSector.getAmpSectorId());
+					dbReturnSet=SectorUtil.getAmpSubSectors(ampSector.getAmpSectorId());
 					iterSub=dbReturnSet.iterator();
 					while(iterSub.hasNext())
 					{
@@ -162,7 +154,7 @@ public class ViewPhysicalComponentReport extends Action
 			}
 			if(filters.indexOf(Constants.REGION)!=-1)
 			{
-				dbReturnSet=DbUtil.getAmpLocations();
+				dbReturnSet=LocationUtil.getAmpLocations();
 				formBean.setRegionColl(dbReturnSet);
 				filterCnt++;
 			}
@@ -193,7 +185,7 @@ public class ViewPhysicalComponentReport extends Action
 			if(filters.indexOf(Constants.CURRENCY)!=-1)
 			{
 				filterCnt++;
-				dbReturnSet=DbUtil.getAmpCurrency();
+				dbReturnSet=CurrencyUtil.getAmpCurrency();
 				formBean.setCurrencyColl(dbReturnSet) ;	
 			}
 
@@ -265,7 +257,7 @@ public class ViewPhysicalComponentReport extends Action
 		
 		if(formBean.getAmpCurrencyCode()==null || formBean.getAmpCurrencyCode().equals("0"))
 		{
-			ampCurrency=DbUtil.getAmpcurrency(teamMember.getAppSettings().getCurrencyId());
+			ampCurrency=CurrencyUtil.getAmpcurrency(teamMember.getAppSettings().getCurrencyId());
 			ampCurrencyCode=ampCurrency.getCurrencyCode();
 			formBean.setAmpCurrencyCode(ampCurrencyCode);
 		}
@@ -420,7 +412,7 @@ public class ViewPhysicalComponentReport extends Action
 		formBean.setFilter(filterNames);
 		
 //---------------------------------------------------		
-		AmpTeam ampTeam=DbUtil.getAmpTeam(ampTeamId);
+		AmpTeam ampTeam=TeamUtil.getAmpTeam(ampTeamId);
 		formBean.setReportName("Physical Component Report");
 		formBean.setWorkspaceType(ampTeam.getType());
 		formBean.setWorkspaceName(ampTeam.getName());

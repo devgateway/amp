@@ -11,6 +11,7 @@ import java.util.Date;
 import java.util.ArrayList;
 import java.util.Comparator;
 
+import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.aim.util.DbUtil;
 
 public class FundingValidator {
@@ -44,8 +45,8 @@ public class FundingValidator {
 			double amt = Double.parseDouble(tempAmt);
 			
 			Date dt = DateConversion.getDate(fd.getTransactionDate());
-			double frmExRt = DbUtil.getExchangeRate(fd.getCurrencyCode(),1,dt);
-			double toExRt = DbUtil.getExchangeRate("USD",1,dt);
+			double frmExRt = CurrencyUtil.getExchangeRate(fd.getCurrencyCode(),1,dt);
+			double toExRt = CurrencyUtil.getExchangeRate("USD",1,dt);
 			amt = CurrencyWorker.convert1(amt,frmExRt,toExRt);			
 			
 			value += amt;
@@ -60,8 +61,8 @@ public class FundingValidator {
 			double amt = Double.parseDouble(tempAmt);
 			
 			Date dt = DateConversion.getDate(fd.getTransactionDate());
-			double frmExRt = DbUtil.getExchangeRate(fd.getCurrencyCode(),1,dt);
-			double toExRt = DbUtil.getExchangeRate("USD",1,dt);
+			double frmExRt = CurrencyUtil.getExchangeRate(fd.getCurrencyCode(),1,dt);
+			double toExRt = CurrencyUtil.getExchangeRate("USD",1,dt);
 			amt = CurrencyWorker.convert1(amt,frmExRt,toExRt);			
 			
 			value += amt;

@@ -16,7 +16,7 @@ import org.digijava.module.aim.helper.ApplicationSettings;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.FundingDetail;
 import org.digijava.module.aim.helper.TeamMember;
-import org.digijava.module.aim.util.DbUtil;
+import org.digijava.module.aim.util.CurrencyUtil;
 
 /**
  * @author jose
@@ -52,7 +52,7 @@ public class AddFundingDetail extends Action {
 				perspective = appSettings.getPerspective();
 			}*/
 			if (appSettings.getCurrencyId() != null) {
-				currCode = DbUtil.getCurrency(appSettings.getCurrencyId()).getCurrencyCode();
+				currCode = CurrencyUtil.getCurrency(appSettings.getCurrencyId()).getCurrencyCode();
 			}
 		}		
 				

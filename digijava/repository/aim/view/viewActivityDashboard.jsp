@@ -42,63 +42,52 @@
 %>
 
 
-
-
 <TABLE cellSpacing=0 cellPadding=0 align="center" vAlign="top" border=0 width="100%">
 <TR>
 	<TD vAlign="top" align="center">
-		<!-- contents -->
-
-			<TABLE width="99%" cellSpacing=0 cellPadding=0 vAlign="top" align="center" class="box-border-nopadding">
+		<TABLE width="99%" cellSpacing=0 cellPadding=0 vAlign="top" align="center" class="box-border-nopadding">
 			<TR><TD>
-
-			<table width="100%" cellspacing="2" cellpadding="2" valign="top" align="left" border=0>
-			
-			<tr>
-				<td width="50%" align="center" class="textalb" height="20" bgcolor="#336699">
-					Activity - Performance
-				</td>
-				<td width="50%" align="center" class="textalb" height="20" bgcolor="#336699">
-					Activity - Risk
-				</td>
-			</tr>
-			
-	<tr>
-		<td width="50%">
-			<% if (actPerfChartUrl != null) { %>
-				<img src="<%= actPerfChartUrl %>" width=370 height=350 border=0 usemap="#<%= actPerfChartFileName %>"><br><br>
-				<div align="center">		  
-				<input type="button" class="buton" value="Printer Friendly Version" 
-				onclick="javascript:showPrinterFriendly('<%=actId%>','P')">
-				</div>
-			<% } else { %>
-				<br><span class="red-log"><digi:trn key="aim:noDataPresentFor">No data present for</digi:trn>
+				<TABLE width="100%" cellspacing="2" cellpadding="2" valign="top" align="left" border=0>
+					<TR>
+						<TD width="50%" align="center" class="textalb" height="20" bgcolor="#336699">
+							Activity - Performance
+						</TD>
+						<TD width="50%" align="center" class="textalb" height="20" bgcolor="#336699">
+							Activity - Risk
+						</TD>
+					</TR>
+					<TR>
+						<TD width="50%">
+							<% if (actPerfChartUrl != null) { %>
+							<img src="<%= actPerfChartUrl %>" width=370 height=350 border=0 usemap="#<%= actPerfChartFileName %>"><br><br>
+							<div align="center">		  
+							<input type="button" class="buton" value="Printer Friendly Version" 
+							onclick="javascript:showPrinterFriendly('<%=actId%>','P')">
+							</div>
+							<% } else { %>
+							<br><span class="red-log"><digi:trn key="aim:noDataPresentFor">No data present for</digi:trn>
 						  <digi:trn key="aim:activityPerformanceChart">Activity-Performance chart</digi:trn>
 						  </span><br><br>
-			<% } %>
-		</td>
-		<td width="50%">
-			<% if (actRiskChartUrl != null) { %>
-				<img src="<%= actRiskChartUrl %>" width=370 height=350 border=0 usemap="#<%= actRiskChartFileName %>">
-				<br><br>
-				<div align="center">
-				<input type="button" class="buton" value="Printer Friendly Version" 
-				onclick="javascript:showPrinterFriendly('<%=actId%>','R')">
-				</div>		  
-			<% } else { %>
-				<br><span class="red-log"><digi:trn key="aim:noDataPresentFor">No data present for</digi:trn>
+							<% } %>
+						</TD>
+						<TD width="50%">
+							<% if (actRiskChartUrl != null) { %>
+							<img src="<%= actRiskChartUrl %>" width=370 height=350 border=0 usemap="#<%= actRiskChartFileName %>">
+							<br><br>
+							<div align="center">
+							<input type="button" class="buton" value="Printer Friendly Version" 
+							onclick="javascript:showPrinterFriendly('<%=actId%>','R')">
+							</div>		  
+							<% } else { %>
+							<br><span class="red-log"><digi:trn key="aim:noDataPresentFor">No data present for</digi:trn>
 						  <digi:trn key="aim:activityRiskChart">Activity-Risk chart</digi:trn>
 						  </span><br><br>
-			<% } %>		
-		</td>
-	</tr>
-	</tr>
-</table>
-			
-			
+							<% } %>		
+						</TD>
+					</TR>
+				</TABLE>
 			</TD></TR>
-			</TABLE>
-		<!-- end -->
+		</TABLE>
 	</TD>
 </TR>
 <TR><TD>&nbsp;</TD></TR>

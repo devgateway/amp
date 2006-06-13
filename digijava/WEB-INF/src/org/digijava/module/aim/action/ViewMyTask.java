@@ -14,7 +14,6 @@ import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
-import org.digijava.module.aim.form.MyDesktopForm;
 import org.digijava.module.aim.helper.TeamMember;
 
 
@@ -29,14 +28,12 @@ public class ViewMyTask extends Action {
 		HttpSession session = request.getSession();
 		TeamMember teamMember = (TeamMember) session.getAttribute("currentMember");
 		
-		MyDesktopForm formBean = (MyDesktopForm) form;
-		
 		//	If user is not logged in, forward him to the home page
 		if(teamMember == null)
 			return mapping.findForward("index");
 		
-		if ("yes".equals(formBean.getWorkingTeamFlag())) { // // checking user is a TL of a working team
-			
+		if (teamMember.getTeamHead()) { // // checking user is a TL of a working team
+
 			// If approval process is set 'off' by the admin then forward him to his portfolio
 			ampContext = getServlet().getServletContext();
 			if ("off".equals(ampContext.getAttribute("approvalStatus")))

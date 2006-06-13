@@ -32,6 +32,7 @@ import org.digijava.module.aim.helper.ApplicationSettings;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.DbUtil;
+import org.digijava.module.aim.util.TeamMemberUtil;
 import org.digijava.module.aim.util.TeamUtil;
 
 
@@ -140,7 +141,7 @@ public class Login extends Action {
 				 * The function will return null, if the user is just a site administrator or if the user is a 
 				 * registered user but has not yet been assigned a team 
 				 */
-				Collection members = TeamUtil.getTeamMembers(lForm.getUserId());
+				Collection members = TeamMemberUtil.getTeamMembers(lForm.getUserId());
 				if (members == null || members.size() == 0) {
 					if (siteAdmin == true) { // user is a site admin
 						// set the session variable 'ampAdmin' to the value 'yes'
@@ -221,7 +222,7 @@ public class Login extends Action {
 					
 					// checking whether the member is a Team lead. if yes, then
 					// we set the session variable 'teamLeadFlag' as 'true' else 'false'
-					AmpTeamMemberRoles lead = org.digijava.module.aim.util.DbUtil
+					AmpTeamMemberRoles lead = TeamMemberUtil
 							.getAmpTeamHeadRole();
 					TeamMember tm = new TeamMember();
 
@@ -266,6 +267,7 @@ public class Login extends Action {
 					tm.setTeamId(member.getAmpTeam().getAmpTeamId());
 					tm.setTeamName(member.getAmpTeam().getName());
 					tm.setTeamType(member.getAmpTeam().getTeamCategory());
+					tm.setTeamAccessType(member.getAmpTeam().getAccessType());
 					tm.setRead(member.getReadPermission().booleanValue());
 					tm.setWrite(member.getWritePermission().booleanValue());
 					tm.setDelete(member.getDeletePermission().booleanValue());
@@ -301,7 +303,7 @@ public class Login extends Action {
 					 * in the paramater 'rfr'
 					 */
 					String url = context + "/translation/switchLanguage.do?code=" +
-						tm.getAppSettings().getLanguage() +"&rfr="+context+"/aim/viewMyDesktop.do";
+						tm.getAppSettings().getLanguage() +"&rfr="+context+"/aim/showDesktop.do";
 					
 					response.sendRedirect(url);
 
@@ -314,7 +316,7 @@ public class Login extends Action {
 		    	String siteAdmin = (String) session.getAttribute("ampAdmin");
 				TeamMember tm = (TeamMember) session.getAttribute("currentMember");
 				if (tm != null) {
-					String fwdUrl = "viewMyDesktop.do";
+					String fwdUrl = "showDesktop.do";
 					response.sendRedirect(fwdUrl);        		
 				} else if (siteAdmin != null && "yes".equals(siteAdmin)) {
 					String fwdUrl = "admin.do";

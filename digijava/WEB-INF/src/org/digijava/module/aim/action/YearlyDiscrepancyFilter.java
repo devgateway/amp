@@ -23,7 +23,7 @@ import org.digijava.module.aim.helper.FinancialFilters;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.helper.YearUtil;
 import org.digijava.module.aim.helper.YearlyDiscrepancyWorker;
-import org.digijava.module.aim.util.DbUtil;
+import org.digijava.module.aim.util.CurrencyUtil;
 
 public class YearlyDiscrepancyFilter extends TilesAction	{
 	private static Logger logger = Logger.getLogger(YearlyDiscrepancyFilter.class);
@@ -60,7 +60,7 @@ public class YearlyDiscrepancyFilter extends TilesAction	{
 			if ( formBean.getCurrency() != null )
 			fp.setCurrencyCode(formBean.getCurrency());
 			else	{
-				Currency curr = DbUtil.getCurrency(apps.getCurrencyId());
+				Currency curr = CurrencyUtil.getCurrency(apps.getCurrencyId());
 				fp.setCurrencyCode(curr.getCurrencyCode());
 			}
 		
@@ -95,7 +95,7 @@ public class YearlyDiscrepancyFilter extends TilesAction	{
 			session.setAttribute("filterParams",fp);	
 			
 			formBean.setYears(YearUtil.getYears());
-			formBean.setCurrencies(DbUtil.getAmpCurrency());
+			formBean.setCurrencies(CurrencyUtil.getAmpCurrency());
 			
 			Collection c = YearlyDiscrepancyWorker.getYearlyDiscrepancy(fp);
 			formBean.setDiscrepancies(c);

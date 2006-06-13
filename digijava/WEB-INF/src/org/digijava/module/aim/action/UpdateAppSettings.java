@@ -26,9 +26,11 @@ import org.digijava.module.aim.dbentity.AmpApplicationSettings;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.form.UpdateAppSettingsForm;
 import org.digijava.module.aim.helper.ApplicationSettings;
+import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.aim.util.DbUtil;
+import org.digijava.module.aim.util.TeamMemberUtil;
 import org.digijava.module.aim.util.TeamUtil;
 
 public class UpdateAppSettings extends Action {
@@ -126,7 +128,7 @@ public class UpdateAppSettings extends Action {
 				ampAppSettings.setAmpAppSettingsId(uForm.getAppSettingsId());
 				ampAppSettings.setDefaultRecordsPerPage(new Integer(uForm
 						.getDefRecsPerPage()));
-				ampAppSettings.setCurrency(DbUtil.getAmpcurrency(uForm
+				ampAppSettings.setCurrency(CurrencyUtil.getAmpcurrency(uForm
 						.getCurrencyId()));
 				ampAppSettings.setFiscalCalendar(DbUtil
 						.getAmpFiscalCalendar(uForm.getFisCalendarId()));
@@ -134,12 +136,12 @@ public class UpdateAppSettings extends Action {
 				ampAppSettings.setDefaultPerspective(uForm.getDefPerspective());
 				ampAppSettings.setTeam(TeamUtil.getAmpTeam(tm.getTeamId()));
 				if (uForm.getType().equals("userSpecific")) {
-					ampAppSettings.setMember(DbUtil.getAmpTeamMember(tm
+					ampAppSettings.setMember(TeamMemberUtil.getAmpTeamMember(tm
 							.getMemberId()));
 					ampAppSettings.setUseDefault(new Boolean(false));
 				} else {
 					/* change all members settings whose has 'useDefault' set */
-					Iterator itr = DbUtil.getAllTeamMembers(tm.getTeamId())
+					Iterator itr = TeamMemberUtil.getAllTeamMembers(tm.getTeamId())
 							.iterator();
 					logger.debug("before while");
 					while (itr.hasNext()) {
@@ -147,7 +149,7 @@ public class UpdateAppSettings extends Action {
 						AmpApplicationSettings memSettings = DbUtil
 								.getMemberAppSettings(member.getMemberId());
 						if (memSettings.getUseDefault().booleanValue() == true) {
-							AmpTeamMember ampMember = DbUtil
+							AmpTeamMember ampMember = TeamMemberUtil
 									.getAmpTeamMember(member.getMemberId());
 							restoreApplicationSettings(memSettings,
 									ampAppSettings, ampMember);
@@ -167,7 +169,7 @@ public class UpdateAppSettings extends Action {
 						.getTeamAppSettings(tm.getTeamId());
 				AmpApplicationSettings memSettings = DbUtil
 						.getMemberAppSettings(tm.getMemberId());
-				AmpTeamMember member = DbUtil
+				AmpTeamMember member = TeamMemberUtil
 						.getAmpTeamMember(tm.getMemberId());
 				try {
 					restoreApplicationSettings(memSettings, ampAppSettings,
@@ -187,6 +189,8 @@ public class UpdateAppSettings extends Action {
 			}
 			logger.debug("settings updated");
 
+			session.setAttribute(Constants.DESKTOP_SETTINGS_CHANGED,new Boolean(true));
+			
 			uForm.setUpdateFlag(false);
 			SiteDomain currentDomain = RequestUtils.getSiteDomain(request);
 			

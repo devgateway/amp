@@ -23,6 +23,7 @@ import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.dbentity.AmpTeamMemberRoles;
 import org.digijava.module.aim.form.TeamMemberForm;
 import org.digijava.module.aim.util.DbUtil;
+import org.digijava.module.aim.util.TeamMemberUtil;
 import org.digijava.module.aim.util.TeamUtil;
 
 /**
@@ -47,7 +48,7 @@ public class AddTeamMember extends Action {
 
 		/* check if the user have entered an invalid user id */
 		if (user == null) {
-			upMemForm.setAmpRoles(DbUtil.getAllTeamMemberRoles());
+			upMemForm.setAmpRoles(TeamMemberUtil.getAllTeamMemberRoles());
 			errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
 					"error.aim.addTeamMember.invalidUser"));
 			saveErrors(request, errors);
@@ -60,7 +61,7 @@ public class AddTeamMember extends Action {
 
 		/* if user havent specified the role for the new member */
 		if (upMemForm.getRole() == null) {
-			upMemForm.setAmpRoles(DbUtil.getAllTeamMemberRoles());
+			upMemForm.setAmpRoles(TeamMemberUtil.getAllTeamMemberRoles());
 			errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
 					"error.aim.addTeamMember.roleNotSelected"));
 			saveErrors(request, errors);
@@ -75,7 +76,7 @@ public class AddTeamMember extends Action {
 		 * already exist for the team */
 		if (ampTeam.getTeamLead() != null &&
 				ampTeam.getTeamLead().getAmpMemberRole().getAmpTeamMemRoleId().equals(upMemForm.getRole())) {
-			upMemForm.setAmpRoles(DbUtil.getAllTeamMemberRoles());
+			upMemForm.setAmpRoles(TeamMemberUtil.getAllTeamMemberRoles());
 			errors.add(ActionErrors.GLOBAL_ERROR,new ActionError(
 					"error.aim.addTeamMember.teamLeadAlreadyExist"));
 			saveErrors(request, errors);
@@ -88,7 +89,7 @@ public class AddTeamMember extends Action {
 		
 		/* check if user is already part of the selected team */
 		if (TeamUtil.isMemberExisting(upMemForm.getTeamId(),upMemForm.getEmail())) {
-			upMemForm.setAmpRoles(DbUtil.getAllTeamMemberRoles());
+			upMemForm.setAmpRoles(TeamMemberUtil.getAllTeamMemberRoles());
 			errors.add(ActionErrors.GLOBAL_ERROR,new ActionError(
 					"error.aim.addTeamMember.teamMemberAlreadyExist"));
 			saveErrors(request, errors);
@@ -102,7 +103,7 @@ public class AddTeamMember extends Action {
 			}				
 		}		
 		
-		AmpTeamMemberRoles role = DbUtil.getAmpTeamMemberRole(upMemForm.getRole());
+		AmpTeamMemberRoles role = TeamMemberUtil.getAmpTeamMemberRole(upMemForm.getRole());
 		if (role != null) {
 			AmpTeamMember newMember = new AmpTeamMember();
 			newMember.setUser(user);

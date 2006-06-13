@@ -20,6 +20,8 @@ public class TeamMember {
 
 	private String teamType; // indicates whether the team is a DONOR team or MOFED team
 	
+	private String teamAccessType; // indicates whether MANAGEMENT or WORKING TEAM
+	
 	private boolean teamHead;
 
 	private boolean read; /* read permission */
@@ -220,5 +222,19 @@ public class TeamMember {
 	 */
 	public void setTeamType(String teamType) {
 		this.teamType = teamType;
+	}
+
+	/**
+	 * @return Returns the teamAccessType.
+	 */
+	public String getTeamAccessType() {
+		return teamAccessType;
+	}
+
+	/**
+	 * @param teamAccessType The teamAccessType to set.
+	 */
+	public void setTeamAccessType(String teamAccessType) {
+		this.teamAccessType = teamAccessType;
 	}
 }

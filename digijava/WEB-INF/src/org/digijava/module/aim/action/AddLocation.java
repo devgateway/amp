@@ -9,6 +9,7 @@ package org.digijava.module.aim.action;
 import org.apache.log4j.Logger;
 import org.apache.struts.action.*;
 import org.digijava.module.aim.util.DbUtil;
+import org.digijava.module.aim.util.LocationUtil;
 import org.digijava.kernel.dbentity.Country;
 import org.digijava.module.aim.dbentity.AmpRegion;
 import org.digijava.module.aim.dbentity.AmpZone;
@@ -69,7 +70,7 @@ public class AddLocation extends Action
 	 	
 	 	if (addForm.getRegionId() != null) {
 	 		System.out.println("Inside ELSE Part[RegionId] :" + addForm.getRegionId());
- 			reg = DbUtil.getAmpRegion(addForm.getRegionId());
+ 			reg = LocationUtil.getAmpRegion(addForm.getRegionId());
  		}
 	 	else
 	 		System.out.println("Inside ELSE Part[CREATE] :reg is null !");
@@ -136,7 +137,7 @@ public class AddLocation extends Action
 		 		AmpWoreda w = new AmpWoreda();
 		 		
 		 		if (addForm.getZoneId() != null) {
-		 			zon = DbUtil.getAmpZone(addForm.getZoneId());
+		 			zon = LocationUtil.getAmpZone(addForm.getZoneId());
 		 		}
 		 	
 		 		if(ctry != null) {
@@ -178,7 +179,7 @@ public class AddLocation extends Action
    	if (addForm.getName() == null || edFlag) {
 	 	logger.debug("Inside IF [EDIT]");
 			if (level.equals("region")) {
-				AmpRegion obj = DbUtil.getAmpRegion(addForm.getRegionId());
+				AmpRegion obj = LocationUtil.getAmpRegion(addForm.getRegionId());
 				if (obj.getName() != null)
 					addForm.setName(obj.getName());
 				else
@@ -205,7 +206,7 @@ public class AddLocation extends Action
 					addForm.setDescription("");
 			}
 			if (level.equals("zone")) {
-				AmpZone obj = DbUtil.getAmpZone(addForm.getZoneId());
+				AmpZone obj = LocationUtil.getAmpZone(addForm.getZoneId());
 				if (obj.getName() != null)
 					addForm.setName(obj.getName());
 				else
@@ -232,7 +233,7 @@ public class AddLocation extends Action
 					addForm.setDescription("");
 			}
 			if (level.equals("woreda")) {
-				AmpWoreda obj = DbUtil.getAmpWoreda(addForm.getWoredaId());
+				AmpWoreda obj = LocationUtil.getAmpWoreda(addForm.getWoredaId());
 				if (obj.getName() != null)
 					addForm.setName(obj.getName());
 				else
@@ -265,7 +266,7 @@ public class AddLocation extends Action
 		 	if (level.equals("region")){
 		 		AmpRegion obj = null;
 		 		if (addForm.getRegionId() != null) {
-		 			obj = DbUtil.getAmpRegion(addForm.getRegionId());
+		 			obj = LocationUtil.getAmpRegion(addForm.getRegionId());
 		 		}
 			 	else
 			 		System.out.println("Inside ELSE [EDIT] :obj is null !");
@@ -286,7 +287,7 @@ public class AddLocation extends Action
 		 	if (level.equals("zone")){
 		 		AmpZone obj = null;
 		 		if (addForm.getZoneId() != null) {
-		 			obj = DbUtil.getAmpZone(addForm.getZoneId());
+		 			obj = LocationUtil.getAmpZone(addForm.getZoneId());
 		 		}
 			 	else
 			 		System.out.println("Inside ELSE [EDIT] :obj is null !");
@@ -307,7 +308,7 @@ public class AddLocation extends Action
 		 	if (level.equals("woreda")){
 		 		AmpWoreda obj = null;
 		 		if (addForm.getWoredaId() != null) {
-		 			obj = DbUtil.getAmpWoreda(addForm.getWoredaId());
+		 			obj = LocationUtil.getAmpWoreda(addForm.getWoredaId());
 		 		}
 			 	else
 			 		System.out.println("Inside ELSE [EDIT] :obj is null !");
@@ -333,7 +334,7 @@ public class AddLocation extends Action
    		if (level.equals("region")){
    			AmpRegion obj = null;
    			if (addForm.getRegionId() != null) {
-   				obj = DbUtil.getAmpRegion(addForm.getRegionId());
+   				obj = LocationUtil.getAmpRegion(addForm.getRegionId());
    				DbUtil.delete(obj);
    			}
    			else
@@ -342,7 +343,7 @@ public class AddLocation extends Action
    		if (level.equals("zone")){
    			AmpZone obj = null;
    			if (addForm.getZoneId() != null) {
-   				obj = DbUtil.getAmpZone(addForm.getZoneId());
+   				obj = LocationUtil.getAmpZone(addForm.getZoneId());
    				DbUtil.delete(obj);
    			}
    			else
@@ -351,7 +352,7 @@ public class AddLocation extends Action
    		if (level.equals("woreda")){
    			AmpWoreda obj = null;
    			if (addForm.getWoredaId() != null) {
-   				obj = DbUtil.getAmpWoreda(addForm.getWoredaId());
+   				obj = LocationUtil.getAmpWoreda(addForm.getWoredaId());
    				DbUtil.delete(obj);
    			}
    			else

@@ -15,6 +15,7 @@ import org.digijava.module.aim.dbentity.AmpActivity;
 import org.digijava.module.aim.dbentity.AmpTeam;
 import org.digijava.module.aim.form.AssignActivityForm;
 import org.digijava.module.aim.helper.UpdateDB;
+import org.digijava.module.aim.util.ActivityUtil;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.TeamUtil;
 
@@ -43,7 +44,7 @@ public class AssignActivity extends Action {
 			Long id = new Long(Long.parseLong(request.getParameter("id")));
 			AmpTeam ampTeam = TeamUtil.getAmpTeam(id);
 
-			Collection col = DbUtil.getAllUnassignedActivities();
+			Collection col = TeamUtil.getAllUnassignedActivities();
 			aForm.setActivities(col);
 			aForm.setTeamName(ampTeam.getName());
 			aForm.setTeamId(id);
@@ -51,15 +52,13 @@ public class AssignActivity extends Action {
 		} else if (aForm.getTeamId() != null) {
 			/* assign the values selected */
 			Long selActivities[] = aForm.getSelectedActivities();
-			logger.debug("Length of selActivities = " + selActivities.length);
 			for (int i = 0; i < selActivities.length; i++) {
 				if (selActivities[i] != null) {
 					Long actId = selActivities[i];
-					AmpActivity activity = DbUtil
+					AmpActivity activity = ActivityUtil
 							.getProjectChannelOverview(actId);
 					AmpTeam ampTeam = TeamUtil.getAmpTeam(aForm.getTeamId());
 					activity.setTeam(ampTeam);
-					logger.debug("updating ...");
 					DbUtil.update(activity);
 					UpdateDB.updateReportCache(actId);
 				}

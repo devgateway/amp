@@ -31,9 +31,12 @@ import org.digijava.module.aim.dbentity.AmpModality;
 import org.digijava.module.aim.form.EditActivityForm;
 import org.digijava.module.aim.helper.FundingOrganization;
 import org.digijava.module.aim.helper.TeamMember;
+import org.digijava.module.aim.util.ActivityUtil;
+import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.MEIndicatorsUtil;
 import org.digijava.module.aim.util.ProgramUtil;
+import org.digijava.module.aim.util.TeamUtil;
 import org.digijava.module.editor.dbentity.Editor;
 import org.digijava.module.editor.util.Constants;
 
@@ -109,7 +112,7 @@ public class AddAmpActivity extends Action {
 		
 		Long ampTeamId = teamMember.getTeamId();
 		boolean teamLeadFlag = teamMember.getTeamHead();
-		boolean workingTeamFlag = DbUtil.checkForParentTeam(ampTeamId);
+		boolean workingTeamFlag = TeamUtil.checkForParentTeam(ampTeamId);
 		if (teamLeadFlag && workingTeamFlag)
 			eaForm.setWorkingTeamLeadFlag("yes");
 		else
@@ -253,7 +256,7 @@ public class AddAmpActivity extends Action {
 			eaForm.setProgramCollection(ProgramUtil.getAllThemes());
 			
 			// load all the active currencies
-			eaForm.setCurrencies(DbUtil.getAmpCurrency());
+			eaForm.setCurrencies(CurrencyUtil.getAmpCurrency());
 			
 			// load all the perspectives
 			eaForm.setPerspectives(DbUtil.getAmpPerspective());
@@ -299,7 +302,7 @@ public class AddAmpActivity extends Action {
 						}
 					}
 				}
-				long maxId = DbUtil.getActivityMaxId();
+				long maxId = ActivityUtil.getActivityMaxId();
 				maxId++;
 				ampId += "-" + maxId;
 				eaForm.setAmpId(ampId);

@@ -14,7 +14,7 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.digijava.module.aim.dbentity.AmpTeam;
 import org.digijava.module.aim.form.TeamMemberForm;
-import org.digijava.module.aim.util.DbUtil;
+import org.digijava.module.aim.util.TeamMemberUtil;
 import org.digijava.module.aim.util.TeamUtil;
 
 public class ShowAddTeamMember extends Action {
@@ -37,7 +37,7 @@ public class ShowAddTeamMember extends Action {
 				AmpTeam ampTeam = TeamUtil.getAmpTeam(id);
 				upMemForm.setTeamId(id);
 				upMemForm.setTeamName(ampTeam.getName());
-				upMemForm.setAmpRoles(DbUtil.getAllTeamMemberRoles());
+				upMemForm.setAmpRoles(TeamMemberUtil.getAllTeamMemberRoles());
 				upMemForm.setPermissions("default");
 				upMemForm.setFromPage(frmPage);
 				if (frmPage == 1) {

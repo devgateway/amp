@@ -102,7 +102,7 @@ public class GetTeamActivities extends Action {
 					col = TeamUtil.getDonorTeamActivities(id);
 					taForm.setDonorFlag(true);
 				} else {
-					col = DbUtil.getAllTeamActivities(id);
+					col = TeamUtil.getAllTeamActivities(id);
 					taForm.setDonorFlag(false);
 				}
 				logger.info("Loaded " + col.size() + " activities for the team " + ampTeam.getName());			    

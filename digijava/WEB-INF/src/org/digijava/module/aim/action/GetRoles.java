@@ -13,6 +13,7 @@ import org.apache.struts.action.ActionMapping;
 import org.digijava.module.aim.dbentity.AmpTeamMemberRoles;
 import org.digijava.module.aim.form.UpdateRoleForm;
 import org.digijava.module.aim.util.DbUtil;
+import org.digijava.module.aim.util.TeamMemberUtil;
 
 public class GetRoles extends Action {
 
@@ -31,7 +32,7 @@ public class GetRoles extends Action {
 		if (request.getParameter("id") != null) {
 
 			roleId = new Long(Long.parseLong(request.getParameter("id")));
-			AmpTeamMemberRoles ampRole = DbUtil.getAmpTeamMemberRole(roleId);
+			AmpTeamMemberRoles ampRole = TeamMemberUtil.getAmpTeamMemberRole(roleId);
 			if (ampRole != null) {
 				urForm.setRoleId(roleId);
 				urForm.setRole(ampRole.getRole());
@@ -52,7 +53,7 @@ public class GetRoles extends Action {
 			urForm.setAction("edit");
 			return mapping.findForward("showRoles");
 		} else if (action != null && action.equals("delete")) {
-			Iterator itr = DbUtil.getMembersUsingRole(roleId).iterator();
+			Iterator itr = TeamMemberUtil.getMembersUsingRole(roleId).iterator();
 			if (itr.hasNext()) {
 				urForm.setFlag("membersAssigned");
 			} else {

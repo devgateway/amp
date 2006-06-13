@@ -3,8 +3,8 @@
 <%@ taglib uri="/taglib/struts-logic" prefix="logic" %>
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
 
-<TABLE cellSpacing=0 cellPadding=0 border=0 vAlign="top" align="left" height="28">
-   <TR>
+<TABLE cellSpacing=0 cellPadding=0 border=0 vAlign="top" align="left" height="28" width="810">
+   <TR>	
    	<TD>&nbsp;&nbsp;&nbsp;</TD>
       <TD width="1" bgcolor="#999999">
 			<%--
@@ -15,7 +15,7 @@
 			<bean:define id="translation">
 				<digi:trn key="aim:enterIntoAIM">Enter in to Aid Information Module</digi:trn>
 			</bean:define>
-			<digi:link module="aim" href="/viewMyDesktop.do" styleClass="nav" onclick="return quitRnot()"	title="<%=translation%>">
+			<digi:link href="/showDesktop.do" styleClass="nav" onclick="return quitRnot()"	title="<%=translation%>">
          	::: <digi:trn key="aim:aidInformationModule">AID INFORMATION MODULE</digi:trn>
 		 	</digi:link>
 	  </TD>

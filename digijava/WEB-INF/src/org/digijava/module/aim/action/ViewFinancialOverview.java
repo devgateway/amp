@@ -25,6 +25,7 @@ import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.DateConversion;
 import org.digijava.module.aim.helper.FilterParams;
 import org.digijava.module.aim.helper.TeamMember;
+import org.digijava.module.aim.util.ActivityUtil;
 import org.digijava.module.aim.util.DbUtil;
 
 public class ViewFinancialOverview extends TilesAction {
@@ -55,7 +56,7 @@ public class ViewFinancialOverview extends TilesAction {
 				logger.debug("ampFundingId : " + ampFundingId);
 
 			Long id = new Long(formBean.getAmpActivityId());
-			AmpActivity ampActivity = DbUtil.getProjectChannelOverview(id);
+			AmpActivity ampActivity = ActivityUtil.getProjectChannelOverview(id);
 
 			Collection temp = null;
 			Iterator iter = null;

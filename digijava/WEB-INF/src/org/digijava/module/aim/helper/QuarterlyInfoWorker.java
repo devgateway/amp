@@ -9,6 +9,7 @@ import java.util.Iterator;
 
 import org.apache.log4j.Logger;
 import org.digijava.module.aim.dbentity.AmpCurrency;
+import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.aim.util.DbUtil;
 
 public class QuarterlyInfoWorker {
@@ -73,7 +74,7 @@ public class QuarterlyInfoWorker {
 		Iterator iter2 = null;
 		String strActualAmt;
 
-		double fromCurrency = DbUtil.getExchangeRate(fp.getAmpFundingId(), fp
+		double fromCurrency = CurrencyUtil.getExchangeRate(fp.getAmpFundingId(), fp
 				.getPerspective());
 		double targetCurrency = 1.0;
 		String selCurrency=fp.getCurrencyCode();
@@ -91,10 +92,10 @@ public class QuarterlyInfoWorker {
 				Date transactionDate = (Date) row[1];
 				// modified by priyajith
 				AmpCurrency curr = (AmpCurrency) row[2];
-		//		fromCurrency = DbUtil.getExchangeRate(curr.getCurrencyCode());
+		//		fromCurrency = CurrencyUtil.getExchangeRate(curr.getCurrencyCode());
 				//end
-				fromCurrency = DbUtil.getExchangeRate(curr.getCurrencyCode(),Constants.PLANNED,transactionDate);
-				targetCurrency = DbUtil.getExchangeRate(fp.getCurrencyCode(),Constants.PLANNED,transactionDate);
+				fromCurrency = CurrencyUtil.getExchangeRate(curr.getCurrencyCode(),Constants.PLANNED,transactionDate);
+				targetCurrency = CurrencyUtil.getExchangeRate(fp.getCurrencyCode(),Constants.PLANNED,transactionDate);
 				QuarterlyInfo quarterlyInfo = new QuarterlyInfo();
 				double tmpAmt = 0.0;
 				if (transactionAmount != null)
@@ -161,8 +162,8 @@ public class QuarterlyInfoWorker {
 			Date transactionDate = (Date) row[1];
 			// modified by priyajith
 			AmpCurrency curr = (AmpCurrency) row[2];
-			fromCurrency = DbUtil.getExchangeRate(curr.getCurrencyCode(),Constants.ACTUAL,transactionDate);
-			double targetCurrency = DbUtil.getExchangeRate(selCurrency,Constants.ACTUAL,transactionDate);	
+			fromCurrency = CurrencyUtil.getExchangeRate(curr.getCurrencyCode(),Constants.ACTUAL,transactionDate);
+			double targetCurrency = CurrencyUtil.getExchangeRate(selCurrency,Constants.ACTUAL,transactionDate);	
 			//end			
 			double tmpAmt = 0.0;
 			if (transactionAmount != null)
@@ -448,8 +449,8 @@ public class QuarterlyInfoWorker {
 		//Total actual commitment
 		double totCommitment = DbUtil.getTotalDonorFund(ampFundingId,
 				new Integer(Constants.COMMITMENT), adjType, perspective);
-		double fromCurrency = DbUtil.getExchangeRate(ampFundingId, perspective);
-		double targetCurrency = DbUtil
+		double fromCurrency = CurrencyUtil.getExchangeRate(ampFundingId, perspective);
+		double targetCurrency = CurrencyUtil
 				.getExchangeRate(currCode);
 		String strTotCommitment = CurrencyWorker.convert(totCommitment,
 				fromCurrency, targetCurrency);

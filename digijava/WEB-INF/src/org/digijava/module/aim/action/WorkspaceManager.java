@@ -3,6 +3,7 @@ package org.digijava.module.aim.action;
 import org.apache.log4j.Logger;
 import org.apache.struts.action.*;
 import org.digijava.module.aim.util.DbUtil;
+import org.digijava.module.aim.util.TeamUtil;
 import org.digijava.module.aim.form.WorkspaceForm;
 import javax.servlet.http.*;
 import java.util.*;
@@ -40,7 +41,7 @@ public class WorkspaceManager extends Action {
 		Collection ampWorkspaces = (Collection) session
 				.getAttribute("ampWorkspaces");
 		if (ampWorkspaces == null) {
-			ampWorkspaces = DbUtil.getAllTeams();
+			ampWorkspaces = TeamUtil.getAllTeams();
 			session.setAttribute("ampWorkspaces", ampWorkspaces);
 		}
 

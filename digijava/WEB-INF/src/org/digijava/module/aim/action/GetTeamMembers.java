@@ -15,6 +15,7 @@ import org.digijava.module.aim.dbentity.AmpTeam;
 import org.digijava.module.aim.form.TeamMemberForm;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.DbUtil;
+import org.digijava.module.aim.util.TeamMemberUtil;
 import org.digijava.module.aim.util.TeamUtil;
 
 public class GetTeamMembers extends Action {
@@ -66,7 +67,7 @@ public class GetTeamMembers extends Action {
 		
 		if (id != null) {
 			AmpTeam ampTeam = TeamUtil.getAmpTeam(id);
-			Collection col = DbUtil.getAllTeamMembers(id);
+			Collection col = TeamMemberUtil.getAllTeamMembers(id);
 			upMemForm.setTeamMembers(col);
 			upMemForm.setTeamId(id);
 			upMemForm.setTeamName(ampTeam.getName());

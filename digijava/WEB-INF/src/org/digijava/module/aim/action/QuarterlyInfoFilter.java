@@ -1,9 +1,9 @@
 package org.digijava.module.aim.action ;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
-import java.util.ArrayList;
 import java.util.GregorianCalendar;
 
 import javax.servlet.ServletException;
@@ -31,6 +31,7 @@ import org.digijava.module.aim.helper.TabColors;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.helper.TotalsQuarterly;
 import org.digijava.module.aim.helper.YearUtil;
+import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.aim.util.DbUtil;
 
 public class QuarterlyInfoFilter extends TilesAction	{
@@ -69,7 +70,7 @@ public class QuarterlyInfoFilter extends TilesAction	{
 			if ( formBean.getCurrency() != null )
 				fp.setCurrencyCode(formBean.getCurrency());
 			else	{
-				Currency curr = DbUtil.getCurrency(apps.getCurrencyId());
+				Currency curr = CurrencyUtil.getCurrency(apps.getCurrencyId());
 				fp.setCurrencyCode(curr.getCurrencyCode());
 			}
 	
@@ -102,7 +103,7 @@ public class QuarterlyInfoFilter extends TilesAction	{
 			session.setAttribute("filterParams",fp);
 			formBean.setPerpsectiveName(DbUtil.getPerspective(fp.getPerspective()).getName());			
 			formBean.setYears(YearUtil.getYears());
-			formBean.setCurrencies(DbUtil.getAmpCurrency());
+			formBean.setCurrencies(CurrencyUtil.getAmpCurrency());
 			formBean.setPerspectives(DbUtil.getAmpPerspective());
 			formBean.setFiscalYears(new ArrayList());
 			formBean.setFiscalYears(DbUtil.getAllFisCalenders());

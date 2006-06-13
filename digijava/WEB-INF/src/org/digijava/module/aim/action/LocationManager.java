@@ -15,6 +15,7 @@ import org.apache.struts.action.ActionMapping;
 import org.digijava.module.aim.dbentity.AmpLocation;
 import org.digijava.module.aim.form.AddLocationForm;
 import org.digijava.module.aim.util.DbUtil;
+import org.digijava.module.aim.util.LocationUtil;
 
 public class LocationManager extends Action {
 
@@ -114,26 +115,26 @@ public class LocationManager extends Action {
 									addForm.setImpLevelValue(new Integer(2));
 									System.out.println("Inside Region[ImpLevelValue] : " + addForm.getImpLevelValue());
 									addForm.setCountryId(addForm.getCountryId());
-									addForm.setRegion(DbUtil.getAllRegionsUnderCountry(addForm.getCountryId()));
+									addForm.setRegion(LocationUtil.getAllRegionsUnderCountry(addForm.getCountryId()));
 								}
 					 } else if (addForm.getLevel().equals("zone")) {
 								if (addForm.getCountry() == null || addForm.getRegion() == null) {
 										  return mapping.findForward("index");
 								}
 								if (!edFlag)
-									addForm.setRegion(DbUtil.getAllRegionsUnderCountry(addForm.getCountryId()));
+									addForm.setRegion(LocationUtil.getAllRegionsUnderCountry(addForm.getCountryId()));
 								if (addForm.getRegionId().intValue() == -1) {
 									addForm.setImpLevelValue(new Integer(2));
 								}
 								else {
 									addForm.setImpLevelValue(new Integer(3));
 									System.out.println("Inside Zone[ImpLevelValue] : " + addForm.getImpLevelValue());
-									addForm.setZone(DbUtil.getAllZonesUnderRegion(addForm.getRegionId()));
+									addForm.setZone(LocationUtil.getAllZonesUnderRegion(addForm.getRegionId()));
 									
 									if (addForm.getZone().isEmpty()) {
 										// Checking whether this region is currently being referenced by some activity
 										// if yes then don't show the delete link against this region by setting regionFlag='no' 
-										AmpLocation ampLoc = DbUtil.getAmpLocation(new Long(-1),addForm.getRegionId(),addForm.getZoneId(),addForm.getWoredaId());
+										AmpLocation ampLoc = LocationUtil.getAmpLocation(new Long(-1),addForm.getRegionId(),addForm.getZoneId(),addForm.getWoredaId());
 								   		if (ampLoc !=null) {
 								   			addForm.setRegionFlag("no");
 								   		} else
@@ -145,8 +146,8 @@ public class LocationManager extends Action {
 													 || addForm.getZone() == null)
 										  return mapping.findForward("index");
 								if (!edFlag) {
-									addForm.setRegion(DbUtil.getAllRegionsUnderCountry(addForm.getCountryId()));
-									addForm.setZone(DbUtil.getAllZonesUnderRegion(addForm.getRegionId()));
+									addForm.setRegion(LocationUtil.getAllRegionsUnderCountry(addForm.getCountryId()));
+									addForm.setZone(LocationUtil.getAllZonesUnderRegion(addForm.getRegionId()));
 								}
 								if (addForm.getZoneId().intValue() == -1) {
 									addForm.setImpLevelValue(new Integer(3));
@@ -154,11 +155,11 @@ public class LocationManager extends Action {
 								else {
 									addForm.setImpLevelValue(new Integer(4));
 									System.out.println("Inside Woreda[ImpLevelValue] : " + addForm.getImpLevelValue());
-									addForm.setWoreda(DbUtil.getAllWoredasUnderZone(addForm.getZoneId()));
+									addForm.setWoreda(LocationUtil.getAllWoredasUnderZone(addForm.getZoneId()));
 									
 									// Checking whether this zone is currently being referenced by some activity
 									// if yes then don't show the delete link against this zone by setting zoneFlag='no'
-									AmpLocation ampLoc = DbUtil.getAmpLocation(new Long(-1),addForm.getRegionId(),addForm.getZoneId(),addForm.getWoredaId());
+									AmpLocation ampLoc = LocationUtil.getAmpLocation(new Long(-1),addForm.getRegionId(),addForm.getZoneId(),addForm.getWoredaId());
 									if (addForm.getWoreda().isEmpty()) {
 										if (ampLoc != null) {
 								   			addForm.setZoneFlag("no");

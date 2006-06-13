@@ -14,6 +14,8 @@ import org.digijava.kernel.util.SiteUtils;
 import org.digijava.module.aim.form.ReportsForm;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.DbUtil;
+import org.digijava.module.aim.util.TeamMemberUtil;
+import org.digijava.module.aim.util.TeamUtil;
 
 public class ShowTeamReports extends Action {
 
@@ -37,10 +39,10 @@ public class ShowTeamReports extends Action {
 		}
 
 		if (tm.getTeamHead() == true)
-			dbReturnSet = new ArrayList(DbUtil
+			dbReturnSet = new ArrayList(TeamUtil
 					.getAllTeamReports(tm.getTeamId()));
 		else
-			dbReturnSet = DbUtil.getAllMemberReports(tm.getMemberId());
+			dbReturnSet = TeamMemberUtil.getAllMemberReports(tm.getMemberId());
 
 		rf.setReports(dbReturnSet);
 

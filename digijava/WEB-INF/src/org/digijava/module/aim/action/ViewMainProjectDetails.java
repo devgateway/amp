@@ -17,6 +17,7 @@ import org.digijava.module.aim.dbentity.AmpActivity;
 import org.digijava.module.aim.form.MainProjectDetailsForm;
 import org.digijava.module.aim.helper.COverSubString;
 import org.digijava.module.aim.helper.Constants;
+import org.digijava.module.aim.util.ActivityUtil;
 import org.digijava.module.aim.util.DbUtil;
 
 public class ViewMainProjectDetails extends TilesAction {
@@ -44,7 +45,7 @@ public class ViewMainProjectDetails extends TilesAction {
 			String documentsTabColor = Constants.INACTIVE_MAIN_TAB_CLASS;
 			formBean.setAmpActivityId(id.longValue());
 			formBean.setTabIndex(tabIndex);
-			AmpActivity ampActivity = DbUtil.getProjectChannelOverview(id);
+			AmpActivity ampActivity = ActivityUtil.getProjectChannelOverview(id);
 			if (ampActivity.getDescription() == null)
 				formBean.setDescription("");
 			else {

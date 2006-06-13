@@ -4,9 +4,6 @@
 
 package org.digijava.module.aim.action;
 
-import org.apache.struts.action.ActionError;
-import org.apache.struts.action.ActionErrors;
-
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
@@ -23,6 +20,8 @@ import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
 import org.apache.struts.action.Action;
+import org.apache.struts.action.ActionError;
+import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
@@ -53,6 +52,7 @@ import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.dbentity.AmpTheme;
 import org.digijava.module.aim.form.EditActivityForm;
 import org.digijava.module.aim.helper.ActivitySector;
+import org.digijava.module.aim.helper.AmpProject;
 import org.digijava.module.aim.helper.Components;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.DateConversion;
@@ -70,14 +70,14 @@ import org.digijava.module.aim.helper.RelatedLinks;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.helper.UpdateDB;
 import org.digijava.module.aim.util.ActivityUtil;
+import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.aim.util.DbUtil;
-import org.digijava.module.aim.util.TeamUtil;
+import org.digijava.module.aim.util.DesktopUtil;
+import org.digijava.module.aim.util.LocationUtil;
 import org.digijava.module.aim.util.ProgramUtil;
-
-import org.digijava.module.aim.helper.ActivityIndicator;
-import org.digijava.module.aim.dbentity.AmpMEIndicatorValue;
-import org.digijava.module.aim.dbentity.AmpMECurrValHistory;
-import org.digijava.module.aim.util.MEIndicatorsUtil;
+import org.digijava.module.aim.util.SectorUtil;
+import org.digijava.module.aim.util.TeamMemberUtil;
+import org.digijava.module.aim.util.TeamUtil;
 
 /**
  * SaveActivity class creates a 'AmpActivity' object and populate the fields
@@ -99,6 +99,8 @@ public class SaveActivity extends Action {
 		HttpSession session = request.getSession();
 		ampContext = getServlet().getServletContext();
 
+		Long actId = null;
+		
 		// if user has not logged in, forward him to the home page
 		if (session.getAttribute("currentMember") == null) {
 			return mapping.findForward("index");
@@ -173,7 +175,7 @@ public class SaveActivity extends Action {
 											ampFundDet
 													.setTransactionAmount(transAmt);
 											ampFundDet
-													.setAmpCurrencyId(DbUtil
+													.setAmpCurrencyId(CurrencyUtil
 															.getCurrencyByCode(fundDet
 																	.getCurrencyCode()));
 											if (fundDet.getTransactionType() == Constants.EXPENDITURE) {
@@ -240,7 +242,7 @@ public class SaveActivity extends Action {
 							}
 						}
 					}
-					long maxId = DbUtil.getActivityMaxId();
+					long maxId = ActivityUtil.getActivityMaxId();
 					maxId++;
 					ampId += "-" + maxId;
 					eaForm.setAmpId(ampId);
@@ -572,7 +574,7 @@ public class SaveActivity extends Action {
 
 							if (sectorId != null
 									&& (!sectorId.equals(new Long(-1)))) {
-								AmpSector sector = DbUtil
+								AmpSector sector = SectorUtil
 										.getAmpSector(sectorId);
 								sectors.add(sector);
 							}
@@ -664,7 +666,7 @@ public class SaveActivity extends Action {
 					Iterator itr = eaForm.getSelectedLocs().iterator();
 					while (itr.hasNext()) {
 						Location loc = (Location) itr.next();
-						AmpLocation ampLoc = DbUtil.getAmpLocation(loc
+						AmpLocation ampLoc = LocationUtil.getAmpLocation(loc
 								.getCountryId(), loc.getRegionId(), loc
 								.getZoneId(), loc.getWoredaId());
 
@@ -674,11 +676,11 @@ public class SaveActivity extends Action {
 							ampLoc.setDgCountry(DbUtil.getDgCountry(loc
 									.getCountryId()));
 							ampLoc.setRegion(loc.getRegion());
-							ampLoc.setAmpRegion(DbUtil.getAmpRegion(loc
+							ampLoc.setAmpRegion(LocationUtil.getAmpRegion(loc
 									.getRegionId()));
-							ampLoc.setAmpZone(DbUtil
+							ampLoc.setAmpZone(LocationUtil
 									.getAmpZone(loc.getZoneId()));
-							ampLoc.setAmpWoreda(DbUtil.getAmpWoreda(loc
+							ampLoc.setAmpWoreda(LocationUtil.getAmpWoreda(loc
 									.getWoredaId()));
 							ampLoc.setDescription(new String(" "));
 							DbUtil.add(ampLoc);
@@ -985,7 +987,7 @@ public class SaveActivity extends Action {
 																.getTransactionAmount()));
 										ampFundDet
 												.setTransactionAmount(transAmt);
-										ampFundDet.setAmpCurrencyId(DbUtil
+										ampFundDet.setAmpCurrencyId(CurrencyUtil
 												.getCurrencyByCode(fundDet
 														.getCurrencyCode()));
 										if (fundDet.getTransactionType() == Constants.EXPENDITURE) {
@@ -1219,22 +1221,12 @@ public class SaveActivity extends Action {
 				if (eaForm.getField() != null)
 					field = eaForm.getField().getAmpFieldId();
 
+				
 				if (eaForm.isEditAct()) {
 					// Setting approval status of activity
 					activity.setApprovalStatus(eaForm.getApprovalStatus());
 					// update an existing activity
-					/*
-					Collection ind = eaForm.getIndicatorsME();
-					Iterator itr = ind.iterator();
-					while(itr.hasNext())
-					{
-						ActivityIndicator actInd = (ActivityIndicator) itr.next();
-						logger.info("actInd.getBaseVal()..... : "+actInd.getBaseVal());
-						logger.info("actInd.getCurrentVal()........ : "+actInd.getCurrentVal());
-						logger.info("actInd.getCurrentValDate()... : "+actInd.getCurrentValDate());
-					}
-					*/
-					ActivityUtil.saveActivity(activity, eaForm.getActivityId(),
+					actId = ActivityUtil.saveActivity(activity, eaForm.getActivityId(),
 							true, eaForm.getCommentsCol(), eaForm
 									.isSerializeFlag(), field, relatedLinks, tm
 									.getMemberId(), eaForm.getIndicatorsME());
@@ -1275,7 +1267,7 @@ public class SaveActivity extends Action {
 						}
 					}
 				} else {
-					AmpTeamMember teamMember = DbUtil.getAmpTeamMember(tm
+					AmpTeamMember teamMember = TeamMemberUtil.getAmpTeamMember(tm
 							.getMemberId());
 					activity.setActivityCreator(teamMember);
 					Calendar cal = Calendar.getInstance();
@@ -1283,7 +1275,7 @@ public class SaveActivity extends Action {
 					// Setting approval status of activity
 					activity.setApprovalStatus(eaForm.getApprovalStatus());
 					// create a new activity
-					ActivityUtil.saveActivity(activity,
+					actId = ActivityUtil.saveActivity(activity,
 							eaForm.getCommentsCol(), eaForm.isSerializeFlag(),
 							field, relatedLinks, tm.getMemberId());
 				}
@@ -1315,10 +1307,32 @@ public class SaveActivity extends Action {
 			UpdateDB.updateReportCache(activity.getAmpActivityId());
 			eaForm.reset(mapping, request);
 
-			if (session.getAttribute("ampProjects") != null) {
-				session.removeAttribute("ampProjects");
+			if (session.getAttribute(Constants.AMP_PROJECTS) != null) {
+				Collection col = (Collection) session.getAttribute(
+						Constants.AMP_PROJECTS);
+				AmpProject project = new AmpProject();
+				project.setAmpActivityId(actId);
+				col.remove(project);
+				
+				Collection actIds = new ArrayList();
+				actIds.add(actId);
+				Iterator pItr = DesktopUtil.getAmpProjects(actIds).iterator();
+				if (pItr.hasNext()) {
+					AmpProject proj = (AmpProject) pItr.next();
+					col.add(proj);
+				}
+				session.setAttribute(Constants.AMP_PROJECTS,col);
+				if (session.getAttribute(Constants.DESKTOP_SETTINGS_CHANGED) != null) {
+					session.removeAttribute(Constants.DESKTOP_SETTINGS_CHANGED);
+				}
 			}
-
+			
+			if (tm.getTeamHead()) {
+				if (session.getAttribute(Constants.MY_TASKS) != null) {
+					session.removeAttribute(Constants.MY_TASKS);
+				}
+			}
+			
 			if (temp == 0)
 				return mapping.findForward("adminHome");
 			else if (temp == 1) {
@@ -1326,8 +1340,10 @@ public class SaveActivity extends Action {
 									// saving survey responses
 					logger.debug("forwarding to edit survey action...");
 					return mapping.findForward("saveSurvey");
-				} else
+				} else {
 					return mapping.findForward("viewMyDesktop");
+				}
+					
 			} else
 				return null;
 		} catch (Exception e) {

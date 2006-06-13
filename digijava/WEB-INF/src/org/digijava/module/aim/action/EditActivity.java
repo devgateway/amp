@@ -67,11 +67,11 @@ import org.digijava.module.aim.helper.RegionalFunding;
 import org.digijava.module.aim.helper.RelatedLinks;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.ActivityUtil;
+import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.ProgramUtil;
 import org.digijava.module.aim.util.TeamMemberUtil;
 import org.digijava.module.aim.util.TeamUtil;
-import org.digijava.module.aim.util.MEIndicatorsUtil;
 import org.digijava.module.cms.dbentity.CMSContentItem;
 
 /**
@@ -555,11 +555,11 @@ public class EditActivity extends Action {
 									fundingDetail
 											.setAdjustmentTypeName("Actual");
 									Date dt = fundDet.getTransactionDate();
-									double frmExRt = DbUtil.getExchangeRate(
+									double frmExRt = CurrencyUtil.getExchangeRate(
 											fundDet.getAmpCurrencyId()
 													.getCurrencyCode(), 1, dt);
-									double toExRt = DbUtil.getExchangeRate(
-											DbUtil.getAmpcurrency(
+									double toExRt = CurrencyUtil.getExchangeRate(
+											CurrencyUtil.getAmpcurrency(
 													tm.getAppSettings()
 															.getCurrencyId())
 													.getCurrencyCode(), 1, dt);
@@ -850,7 +850,7 @@ public class EditActivity extends Action {
 						eaForm.setSelectedComponents(comp);
 					}
 
-					Collection memLinks = TeamUtil.getMemberLinks(tm
+					Collection memLinks = TeamMemberUtil.getMemberLinks(tm
 							.getMemberId());
 					Collection actDocs = activity.getDocuments();
 					if (actDocs != null && actDocs.size() > 0) {
@@ -864,7 +864,7 @@ public class EditActivity extends Action {
 							CMSContentItem cmsItem = (CMSContentItem) docItr
 									.next();
 							rl.setRelLink(cmsItem);
-							rl.setMember(DbUtil.getAmpTeamMember(tm
+							rl.setMember(TeamMemberUtil.getAmpTeamMember(tm
 									.getMemberId()));
 							Iterator tmpItr = memLinks.iterator();
 							while (tmpItr.hasNext()) {
@@ -1028,7 +1028,7 @@ public class EditActivity extends Action {
 			eaForm.setProgramCollection(ProgramUtil.getAllThemes());
 			
 			// load all the active currencies
-			eaForm.setCurrencies(DbUtil.getAmpCurrency());
+			eaForm.setCurrencies(CurrencyUtil.getAmpCurrency());
 			
 			// load all the perspectives
 			eaForm.setPerspectives(DbUtil.getAmpPerspective());

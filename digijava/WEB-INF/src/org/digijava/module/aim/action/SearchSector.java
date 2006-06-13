@@ -4,6 +4,7 @@ import org.apache.log4j.Logger;
 import org.apache.struts.action.*;
 import org.digijava.module.aim.dbentity.*;
 import org.digijava.module.aim.util.DbUtil;
+import org.digijava.module.aim.util.SectorUtil;
 import org.digijava.module.aim.form.SearchSectorForm;
 import javax.servlet.http.*;
 import java.util.*;
@@ -25,9 +26,9 @@ public class SearchSector extends Action {
 					 if (searchForm.getSearchKey() != null && searchForm.getSearchOn() != null) {
 								Collection col = null;
 								if (searchForm.getSearchOn().equals("sectorCode")) {
-										  col = DbUtil.searchSectorCode(searchForm.getSearchKey());
+										  col = SectorUtil.searchSectorCode(searchForm.getSearchKey());
 								} else {
-										  col = DbUtil.searchSectorName(searchForm.getSearchKey());
+										  col = SectorUtil.searchSectorName(searchForm.getSearchKey());
 								}
 
 								setSearchResults(request,col);

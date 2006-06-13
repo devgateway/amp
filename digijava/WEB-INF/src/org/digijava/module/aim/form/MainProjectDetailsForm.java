@@ -301,7 +301,7 @@ public class MainProjectDetailsForm extends ValidatorForm
 			  if ( getCurrency() != null )
 				  fp.setCurrencyCode(getCurrency());
 			  else	{
-				  Currency curr = DbUtil.getCurrency(apps.getCurrencyId());
+				  Currency curr = CurrencyUtil.getCurrency(apps.getCurrencyId());
 				  if (curr != null) {
 				  		fp.setCurrencyCode(curr.getCurrencyCode());
 				  }

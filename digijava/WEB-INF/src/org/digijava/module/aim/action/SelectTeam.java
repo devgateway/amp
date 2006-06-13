@@ -16,6 +16,7 @@ import org.digijava.module.aim.form.LoginForm;
 import org.digijava.module.aim.helper.ApplicationSettings;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.DbUtil;
+import org.digijava.module.aim.util.TeamMemberUtil;
 
 public class SelectTeam extends Action {
 
@@ -31,9 +32,9 @@ public class SelectTeam extends Action {
 		
 		try {
 			Long id = new Long(Long.parseLong(temp));
-			AmpTeamMember member = DbUtil.getAmpTeamMember(id);
+			AmpTeamMember member = TeamMemberUtil.getAmpTeamMember(id);
 
-			AmpTeamMemberRoles lead = org.digijava.module.aim.util.DbUtil
+			AmpTeamMemberRoles lead = TeamMemberUtil
 					.getAmpTeamHeadRole();
 
 			TeamMember tm = new TeamMember();

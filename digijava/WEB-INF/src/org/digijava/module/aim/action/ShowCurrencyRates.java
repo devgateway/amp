@@ -17,7 +17,6 @@ import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
-import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.form.CurrencyRateForm;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.CurrencyRateLoader;
@@ -136,7 +135,7 @@ public class ShowCurrencyRates extends Action {
 		}
 		
 		crForm.setCurrentPage(new Integer(page));
-		crForm.setCurrencyCodes(DbUtil.getAmpCurrency());			
+		crForm.setCurrencyCodes(CurrencyUtil.getAmpCurrency());			
 		
 		crForm.setUpdateCRateAmount(null);
 		crForm.setUpdateCRateCode(null);

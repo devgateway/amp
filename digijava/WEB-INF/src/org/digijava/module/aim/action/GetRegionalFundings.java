@@ -25,6 +25,7 @@ import org.digijava.module.aim.helper.RegionalFunding;
 import org.digijava.module.aim.helper.RegionalFundingsHelper;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.ActivityUtil;
+import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.aim.util.DbUtil;
 
 /**
@@ -49,7 +50,7 @@ public class GetRegionalFundings extends TilesAction {
 			String currCode = "";
 			long calCode = -1;
 
-			currCode = DbUtil.getAmpcurrency(
+			currCode = CurrencyUtil.getAmpcurrency(
 					tm.getAppSettings().getCurrencyId()).getCurrencyCode();
 			calCode = tm.getAppSettings().getFisCalId().longValue();
 
@@ -91,7 +92,7 @@ public class GetRegionalFundings extends TilesAction {
 			if (rfForm.isCurrFilter()) {
 				if (rfForm.getCurrencies() == null
 						|| rfForm.getCurrencies().size() == 0) {
-					rfForm.setCurrencies(DbUtil.getAmpCurrency());
+					rfForm.setCurrencies(CurrencyUtil.getAmpCurrency());
 				}
 			}
 

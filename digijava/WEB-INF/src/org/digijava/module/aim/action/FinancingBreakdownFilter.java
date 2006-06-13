@@ -1,8 +1,8 @@
 package org.digijava.module.aim.action;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
-import java.util.ArrayList;
 import java.util.GregorianCalendar;
 
 import javax.servlet.http.HttpServletRequest;
@@ -25,6 +25,7 @@ import org.digijava.module.aim.helper.FinancialFilters;
 import org.digijava.module.aim.helper.FinancingBreakdownWorker;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.helper.YearUtil;
+import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.aim.util.DbUtil;
 
 public class FinancingBreakdownFilter extends TilesAction	{
@@ -59,7 +60,7 @@ public class FinancingBreakdownFilter extends TilesAction	{
 		if ( formBean.getCurrency() != null )
 			fp.setCurrencyCode(formBean.getCurrency());
 		else	{
-			Currency curr = DbUtil.getCurrency(apps.getCurrencyId());
+			Currency curr = CurrencyUtil.getCurrency(apps.getCurrencyId());
 			fp.setCurrencyCode(curr.getCurrencyCode());
 		}
 
@@ -94,7 +95,7 @@ public class FinancingBreakdownFilter extends TilesAction	{
 		formBean.setYears(YearUtil.getYears());
 		formBean.setFiscalYears(new ArrayList());
 			formBean.setFiscalYears(DbUtil.getAllFisCalenders());
-		formBean.setCurrencies(DbUtil.getAmpCurrency());
+		formBean.setCurrencies(CurrencyUtil.getAmpCurrency());
 		formBean.setPerspectives(DbUtil.getAmpPerspective());
 		overallTotalCommitted = FinancingBreakdownWorker.getOverallTotal(fb,0);
 		formBean.setTotalCommitted(overallTotalCommitted);

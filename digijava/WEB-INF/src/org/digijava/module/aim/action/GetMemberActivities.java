@@ -19,6 +19,7 @@ import org.digijava.module.aim.form.TeamActivitiesForm;
 import org.digijava.module.aim.helper.Activity;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.DbUtil;
+import org.digijava.module.aim.util.TeamMemberUtil;
 
 public class GetMemberActivities extends Action {
 
@@ -64,8 +65,8 @@ public class GetMemberActivities extends Action {
 		}
 
 		if (id != null) {
-			AmpTeamMember ampMem = DbUtil.getAmpTeamMember(id);
-			Collection col = DbUtil.getAllMemberActivities(id);
+			AmpTeamMember ampMem = TeamMemberUtil.getAmpTeamMember(id);
+			Collection col = TeamMemberUtil.getAllMemberActivities(id);
 			
 			
 			Comparator acronymComp = new Comparator() {

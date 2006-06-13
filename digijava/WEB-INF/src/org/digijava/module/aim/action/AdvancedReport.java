@@ -2,12 +2,12 @@ package org.digijava.module.aim.action;
 
 
 import java.text.DecimalFormat;
-import java.util.Calendar;
-import java.util.GregorianCalendar;
-import java.util.Iterator;
-import java.util.Collection;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Collection;
+import java.util.GregorianCalendar;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Set;
 import java.util.Vector;
 
@@ -15,54 +15,42 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.apache.log4j.Logger;
+import net.sf.hibernate.Query;
 
+import org.apache.log4j.Logger;
 import org.apache.struts.action.Action;
+import org.apache.struts.action.ActionError;
+import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.digijava.module.aim.dbentity.AmpColumns;
 import org.digijava.module.aim.dbentity.AmpCurrency;
-import org.digijava.module.aim.dbentity.AmpFilters;
 import org.digijava.module.aim.dbentity.AmpMeasures;
-import org.digijava.module.aim.dbentity.AmpPages;
 import org.digijava.module.aim.dbentity.AmpReportColumn;
 import org.digijava.module.aim.dbentity.AmpReportHierarchy;
-//import org.digijava.module.aim.dbentity.AmpReportMeasures;
 import org.digijava.module.aim.dbentity.AmpReports;
-import org.digijava.module.aim.dbentity.AmpTeam;
-import org.digijava.module.aim.dbentity.AmpTeamMember;
-import org.digijava.module.aim.dbentity.AmpTeamPageFilters;
-import org.digijava.module.aim.dbentity.AmpTeamReports;
-import org.digijava.kernel.persistence.PersistenceManager;
-
+import org.digijava.module.aim.form.AdvancedReportForm;
 import org.digijava.module.aim.helper.AmpFund;
-import org.digijava.module.aim.helper.DecimalToText;
-import org.digijava.module.aim.helper.ReportSelectionCriteria;
 import org.digijava.module.aim.helper.Column;
 import org.digijava.module.aim.helper.Constants;
-
-import org.jfree.chart.*;
-import org.jfree.chart.plot.*;
-import org.jfree.chart.entity.*;
-import org.jfree.chart.labels.*;
-import org.jfree.chart.urls.*;
-import org.jfree.chart.servlet.*;
-import org.jfree.data.general.DefaultPieDataset;
-import org.jfree.data.category.*;
-
-import net.sf.hibernate.Query;
-import net.sf.hibernate.Session;
-import net.sf.hibernate.Transaction;
-
-import org.digijava.module.aim.form.AdvancedReportForm;
-import org.digijava.module.aim.helper.TeamMember;
+import org.digijava.module.aim.helper.DecimalToText;
 import org.digijava.module.aim.helper.Report;
-import org.digijava.module.aim.util.DbUtil;
+import org.digijava.module.aim.helper.ReportSelectionCriteria;
+import org.digijava.module.aim.helper.TeamMember;
+import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.aim.util.ReportUtil;
-
-import org.apache.struts.action.ActionError;
-import org.apache.struts.action.ActionErrors;
+import org.jfree.chart.ChartFactory;
+import org.jfree.chart.ChartRenderingInfo;
+import org.jfree.chart.JFreeChart;
+import org.jfree.chart.entity.StandardEntityCollection;
+import org.jfree.chart.labels.StandardPieItemLabelGenerator;
+import org.jfree.chart.plot.PiePlot;
+import org.jfree.chart.plot.PlotOrientation;
+import org.jfree.chart.urls.StandardPieURLGenerator;
+import org.jfree.data.category.CategoryDataset;
+import org.jfree.data.category.DefaultCategoryDataset;
+import org.jfree.data.general.DefaultPieDataset;
 
 
 public class AdvancedReport extends Action {
@@ -295,7 +283,7 @@ public class AdvancedReport extends Action {
 				}
 				if(formBean.getAmpCurrencyCode()==null || formBean.getAmpCurrencyCode().equals("0"))
 				{
-					ampCurrency=DbUtil.getAmpcurrency(teamMember.getAppSettings().getCurrencyId());
+					ampCurrency=CurrencyUtil.getAmpcurrency(teamMember.getAppSettings().getCurrencyId());
 					ampCurrencyCode=ampCurrency.getCurrencyCode();
 					formBean.setAmpCurrencyCode(ampCurrencyCode);
 				}

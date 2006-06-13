@@ -1,38 +1,39 @@
 package org.digijava.module.aim.action ;
 
-import org.apache.log4j.Logger ;
-import org.apache.struts.action.Action ;
-import org.apache.struts.action.ActionForm ;
-import org.apache.struts.action.ActionMapping ;
-import org.apache.struts.action.ActionForward ;
-import org.digijava.module.aim.dbentity.AmpActivity ;
-import org.digijava.module.aim.form.CommitmentbyDonorForm ;
-import org.digijava.module.aim.dbentity.AmpModality ;
-import org.digijava.module.aim.dbentity.AmpFunding;
-import org.digijava.module.aim.dbentity.AmpLocation;
-import org.digijava.module.aim.dbentity.AmpSector;
-import org.digijava.module.aim.dbentity.AmpStatus;
+import java.text.DecimalFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Collection;
+import java.util.GregorianCalendar;
+import java.util.Iterator;
+import java.util.Vector;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+
+import org.apache.log4j.Logger;
+import org.apache.struts.action.Action;
+import org.apache.struts.action.ActionForm;
+import org.apache.struts.action.ActionForward;
+import org.apache.struts.action.ActionMapping;
 import org.digijava.module.aim.dbentity.AmpCurrency;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
+import org.digijava.module.aim.dbentity.AmpSector;
 import org.digijava.module.aim.dbentity.AmpTeam;
-import org.digijava.module.aim.util.DbUtil;
-import org.digijava.module.aim.util.ReportUtil;
-import org.digijava.module.aim.helper.CurrencyWorker;
-import org.digijava.module.aim.helper.FilterProperties;
-import org.digijava.module.aim.helper.Report ;
+import org.digijava.module.aim.form.CommitmentbyDonorForm;
 import org.digijava.module.aim.helper.AmpFund;
-import org.digijava.module.aim.helper.ReportQuarterWorker;
-import org.digijava.module.aim.helper.TeamMember ;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.DecimalToText;
-import org.digijava.module.aim.helper.EthiopianCalendar;
-import javax.servlet.http.HttpServletRequest ;
-import javax.servlet.http.HttpServletResponse ;
-import javax.servlet.http.HttpSession;
-import java.util.Iterator ;
-import java.util.ArrayList ;
-import java.util.* ;
-import java.text.DecimalFormat;
+import org.digijava.module.aim.helper.FilterProperties;
+import org.digijava.module.aim.helper.Report;
+import org.digijava.module.aim.helper.TeamMember;
+import org.digijava.module.aim.util.CurrencyUtil;
+import org.digijava.module.aim.util.DbUtil;
+import org.digijava.module.aim.util.LocationUtil;
+import org.digijava.module.aim.util.ReportUtil;
+import org.digijava.module.aim.util.SectorUtil;
+import org.digijava.module.aim.util.TeamUtil;
 
 
 public class ViewCommitmentbyModality extends Action
@@ -167,7 +168,7 @@ public class ViewCommitmentbyModality extends Action
 				filtersSet = filtersSet + " SECTOR - ";
 				formBean.setSectorColl(new ArrayList()) ;
 				//This method returns collection of all the sectors.
-				dbReturnSet=DbUtil.getAmpSectors();
+				dbReturnSet=SectorUtil.getAmpSectors();
 				iter = dbReturnSet.iterator() ;
 				/* Sector name can be very long. To fix layout of sector filter if sector or sub sector name 
 				size is greater then 20 then only first 20 characters are shown suffixed with "..."*/
@@ -181,7 +182,7 @@ public class ViewCommitmentbyModality extends Action
 					}
 					formBean.getSectorColl().add(ampSector);
 					// This method returns all sub sectors for sector is passed as argument.
-					dbReturnSet=DbUtil.getAmpSubSectors(ampSector.getAmpSectorId());
+					dbReturnSet=SectorUtil.getAmpSubSectors(ampSector.getAmpSectorId());
 					iterSub=dbReturnSet.iterator();
 					/* Sub sectors are prefixed by "--" and then like sector names their size is 
 					also restricted to 20 and terminated by "...".*/
@@ -204,7 +205,7 @@ public class ViewCommitmentbyModality extends Action
 			{
 				//If configured fill region filter with all the regions read from amp_region table.
 				filtersSet = filtersSet + " REGION - ";
-				dbReturnSet=DbUtil.getAmpLocations();
+				dbReturnSet=LocationUtil.getAmpLocations();
 				formBean.setRegionColl(dbReturnSet) ;
 			}
 			//If donor filter is configured.
@@ -243,7 +244,7 @@ public class ViewCommitmentbyModality extends Action
 			{
 				//currency filter is populated with all active currencies.
 				filtersSet = filtersSet + " CURRENCY - ";
-				dbReturnSet=DbUtil.getAmpCurrency();
+				dbReturnSet=CurrencyUtil.getAmpCurrency();
 				formBean.setCurrencyColl(dbReturnSet) ;	
 			}
 			
@@ -317,7 +318,7 @@ public class ViewCommitmentbyModality extends Action
 			The default currency read from application setting and selected value
 			in currency filter is set to it. The default currency is passed in filter
 			criteria.*/
-			ampCurrency=DbUtil.getAmpcurrency(teamMember.getAppSettings().getCurrencyId());
+			ampCurrency=CurrencyUtil.getAmpcurrency(teamMember.getAppSettings().getCurrencyId());
 			ampCurrencyCode=ampCurrency.getCurrencyCode();
 			formBean.setAmpCurrencyCode(ampCurrencyCode);
 		}
@@ -615,7 +616,7 @@ public class ViewCommitmentbyModality extends Action
 		 logger.debug(" page REC " + pageRecords.size());
  		 logger.debug(" REPORTS  " + reports.size());
 //		logger.debug("formBean size " + formBean.getPageCount());
-		AmpTeam ampTeam=DbUtil.getAmpTeam(ampTeamId);
+		AmpTeam ampTeam=TeamUtil.getAmpTeam(ampTeamId);
 		formBean.setReportName("Annual Project Detail Report");	//set report name as title.(**hardcoded. can be read from database)
 		formBean.setWorkspaceType(ampTeam.getType());	//set workspace type in subtitle
 		formBean.setWorkspaceName(ampTeam.getName());	//set workspace name in subtitle

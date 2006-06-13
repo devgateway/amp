@@ -12,7 +12,11 @@
 					  name="features"
 					  type="java.util.Collection"/>
 	</form-bean>
-		  
+
+  	<form-bean
+	      	name="aimDesktopForm"
+    		type="org.digijava.module.aim.form.DesktopForm" />
+
   	<form-bean
 	      	name="aimMyDesktopForm"
     		type="org.digijava.module.aim.form.MyDesktopForm" />
@@ -188,10 +192,6 @@
 			  type="org.digijava.module.aim.form.AddSectorForm" />
 
 	<form-bean
-			  name="aimAmpActivityForm"
-			  type="org.digijava.module.aim.form.AmpActivityForm" />
-	
-	<form-bean
 			  name="aimCurrencyForm"
 			  type="org.digijava.module.aim.form.CurrencyForm" />
 	
@@ -319,6 +319,8 @@
 		<form-property name="indicatorList" type="java.util.Collection"/>
 		<form-property name="activityList" type="java.util.Collection"/>
 		<form-property name="pageList" type="java.util.Collection"/>
+		<form-property name="overallRisk" type="java.lang.String"/>
+		<form-property name="fontColor" type="java.lang.String"/>
 		<form-property name="actId" type="java.lang.Long"/>
 		<form-property name="indId" type="java.lang.Long"/>
 	</form-bean>
@@ -360,7 +362,74 @@
 		scope="request" validate="false" path="/aim/index">
 		<forward name="forward" path="/showLayout.do?layout=index" />
     </action>
-   
+
+    <action 
+    	name="aimDesktopForm"
+     	type="org.digijava.module.aim.action.GetDesktopActivities" 
+		scope="session" 
+		validate="false" 
+		path="/aim/showDesktop">
+		<forward name="forward" path="/aim/viewMyDesktop.do" />
+    	<forward name="index" path="/aim/index.do" redirect="true" />
+	 </action>
+	 
+    <action 
+    	name="aimDesktopForm"
+     	type="org.digijava.module.aim.action.FilterDesktopActivities" 
+		scope="session" 
+		validate="false" 
+		path="/aim/filterDesktopActivities">
+		<forward name="forward" path="/aim/viewMyDesktop.do" />
+    	<forward name="index" path="/aim/index.do" redirect="true" />
+	 </action>
+
+    <action 
+    	name="aimDesktopForm"
+     	type="org.digijava.module.aim.action.SearchDesktopActivities" 
+		scope="session" 
+		validate="false" 
+		path="/aim/searchDesktopActivities">
+		<forward name="forward" path="/aim/viewMyDesktop.do" />
+    	<forward name="index" path="/aim/index.do" redirect="true" />
+	 </action>
+	 
+    <action 
+     	type="org.digijava.module.aim.action.GetDesktopReports" 
+		scope="session" 
+		validate="false" 
+		path="/aim/getDesktopReports">
+	 </action>	 
+
+    <action 
+     	type="org.digijava.module.aim.action.GetDesktopLinks" 
+		scope="session" 
+		validate="false" 
+		path="/aim/getDesktopLinks">
+	 </action>
+
+    <action 
+     	type="org.digijava.module.aim.action.GetDesktopTeamMembers" 
+		scope="session" 
+		validate="false" 
+		path="/aim/getDesktopTeamMembers">
+	 </action>		 
+
+    <action 
+     	type="org.digijava.module.aim.action.GetDesktopTasks" 
+		scope="session" 
+		validate="false" 
+		path="/aim/getDesktopTasks">
+	 </action>		 	 
+	 
+    <action 
+    	name="aimDesktopForm"
+     	type="org.digijava.module.aim.action.ShowDesktopActivities" 
+		scope="session" 
+		validate="false" 
+		path="/aim/showDesktopActivities">
+	 </action>	 
+	 
+	 <!--
     <action 
     	name="aimMyDesktopForm"
      	type="org.digijava.module.aim.action.ViewMyDesktop" 
@@ -368,7 +437,9 @@
     	<forward name="forward" path="/showLayout.do?layout=viewMyDesktop" />
     	<forward name="index" path="/aim/index.do" redirect="true" />
 	 </action>
+	 -->
 
+	 <!--
 	 <action 
 		name="aimPortfolioDashboardForm"		
      	type="org.digijava.module.aim.action.ViewPortfolioDashboard" 
@@ -378,13 +449,30 @@
     	<forward name="portRisk" path="/showLayout.do?layout=aim_printPortRisk" />
     	<forward name="index" path="/aim/index.do" redirect="true" />
 	 </action>
+	 -->
+	 <action 
+		name="aimPortfolioDashboardForm"
+		type="org.apache.struts.actions.ForwardAction" 
+		scope="request" path="/aim/viewPrintablePortPerf"
+		parameter="/showLayout.do?layout=aim_printPortPerf" />
+
+	 <action 
+		name="aimPortfolioDashboardForm"
+		type="org.apache.struts.actions.ForwardAction" 
+		scope="request" path="/aim/viewPrintablePortRisk"
+		parameter="/showLayout.do?layout=aim_printPortRisk" />
+
+	 <action 
+		name="aimPortfolioDashboardForm"		
+     	type="org.digijava.module.aim.action.ViewPortfolioDashboard" 
+		scope="session" validate="false" path="/aim/showPortfolioDashboard" />
+
 	 
 	 <action 
-    	name="aimMyDesktopForm"
      	type="org.digijava.module.aim.action.ViewMyTask" 
      	scope="session" validate="false" path="/aim/viewMyTask">
     	<forward name="forward" path="/showLayout.do?layout=showMyTask" />
-    	<forward name="view" path="/showLayout.do?layout=viewMyDesktop" />
+		<forward name="view" path="/aim/viewMyDesktop.do" />
     	<forward name="index" path="/aim/index.do" redirect="true" />
 	 </action>
 
@@ -408,12 +496,6 @@
     	<forward name="index" path="/aim/index.do" redirect="true" />
     </action>
 
-	<action name="aimChannelOverviewDescriptionForm"
-     	type="org.digijava.module.aim.action.ViewChannelOverviewDescription" 
-     	scope="request" validate="false" path="/aim/viewChannelOverviewDescription">
-    	<forward name="forward" path="/showLayout.do?layout=viewChannelOverviewDescription" />
-    </action>
-
 	<action name="aimMainProjectDetailsForm"
      	type="org.digijava.module.aim.action.ViewProjectDetails" 
      	scope="request" validate="false" path="/aim/viewProjectDetails">
@@ -429,7 +511,14 @@
 	
     
    
-  <!-- START TEASERS -->
+	 <!-- START TEASERS -->
+
+	<action name="aimDesktopForm" forward="/showLayout.do?layout=desktopLayout" 
+			  path="/aim/viewMyDesktop" />
+
+	<action name="aimPortfolioDashboardForm" forward="/showLayout.do?layout=portfolioDashboardLayout" 
+			  path="/aim/viewPortfolioDashboard" />	
+	
 	<action name="aimSurveyForm" forward="/showLayout.do?layout=layoutSurveyList" 
 			  path="/aim/viewSurveyList" />
 	<action name="aimEditSurveyForm" forward="/showLayout.do?layout=layoutSurvey" 
@@ -470,12 +559,6 @@
 	<action forward="/showLayout.do?layout=layoutKnowledge" 
         path="/aim/viewKnowledge" />
 
-	<action forward="/showLayout.do?layout=layoutKnowledgeNotes" 
-        path="/aim/viewKnowledgeNotes" />
-
-	<action forward="/showLayout.do?layout=layoutKnowledgeDocument" 
-        path="/aim/viewKnowledgeDocument" />
-		
 	<action forward="/showLayout.do?layout=layoutFinancialOverview" 
 		path="/aim/viewFinancialOverview" />
 		
@@ -735,13 +818,6 @@
         path="/aim/physicalProgress">
     </action>
 
-	<action name="aimPhysicalProgressForm"
-	    type="org.digijava.module.aim.action.ViewPhysicalProgressDescription"
-        validate="false" 
-        scope = "request"
-        path="/aim/physicalProgressDescription">
-    </action>
-    
     <action name="aimPhysicalProgressForm"
 	    type="org.digijava.module.aim.action.ViewComponentDescription"
         validate="false" 
@@ -755,19 +831,6 @@
         path="/aim/knowledge">
     </action>
 
-	<action name="aimKnowledgeForm"
-	    type="org.digijava.module.aim.action.ViewKnowledgeNotes"
-        validate="false" 
-        path="/aim/knowledgeNotes">
-    </action>
-
-	<action name="aimKnowledgeForm"
-	    type="org.digijava.module.aim.action.ViewKnowledgeDocument"
-        validate="false" 
-        path="/aim/knowledgeDocument">
-    </action>
-	
-	
   <!-- END TEASERS  -->
   
 	<action name="aimPhysicalProgressForm"
@@ -775,101 +838,6 @@
      	scope="request" validate="false" path="/aim/editPhysicalProgress">
     <forward name="forward" path="/showLayout.do?layout=editPhysicalProgress" />
     </action>
-
-	<action name="aimPhysicalProgressForm"   type="org.digijava.module.aim.action.ViewPhysicalProgressDescription"
-    scope="request" validate="false" path="/aim/getPhysicalProgress">
-    <forward name="forward"
-    path="/showLayout.do?layout=getPhysicalProgress" />
-	</action>
-
-	<action name="aimKnowledgeForm"
-     	type="org.digijava.module.aim.action.ViewKnowledgeDocument" 
-     	scope="request" validate="false" path="/aim/getKnowledgeDocument">
-    <forward name="forward" path="/showLayout.do?layout=getKnowledgeDocument" />
-    </action>
-
-	<action name="aimKnowledgeForm"
-     type="org.digijava.module.aim.action.ViewKnowledgeNotes" 
-     scope="request" validate="false" path="/aim/getKnowledgeNotes">
-    <forward name="forward" path="/showLayout.do?layout=getKnowledgeNotes" />
-    </action>
-
-	
-	<!-- For adding and activity -->
-
-	<action name="aimAmpActivityForm"   type="org.digijava.module.aim.action.ShowSubSectorList"
-    scope="session" validate="false" path="/aim/addSubSectorList">
-    <forward name="forward"
-    path="/showLayout.do?layout=addSubSectorList" />
-	</action>
-
-	
-	<action name="aimAmpActivityForm" type="org.digijava.module.aim.action.AddSectorList" scope="session" validate="true" path="/aim/createSectorList">
-      <forward name="forward"
-    path="/showLayout.do?layout=addSectorList" />
-	</action>
-
-	<action name="aimAmpActivityForm" type="org.digijava.module.aim.action.AddSectorList" scope="session" validate="true" path="/aim/createSubSectorList">
-      <forward name="forward"
-    path="/showLayout.do?layout=addSubSectorList" />
-	</action>
-
-
-	<action name="aimAmpActivityForm" type="org.digijava.module.aim.action.AddLocationList" scope="session" validate="true" path="/aim/createLocationList">
-      <forward name="forward"
-    path="/showLayout.do?layout=addLocationList" />
-	</action>
-
-	<action name="aimAmpActivityForm"   type="org.digijava.module.aim.action.ShowAddOrganisation"
-    scope="session" validate="true" path="/aim/addFAOrgList">
-    <forward name="forward"
-    path="/showLayout.do?layout=addFAOrgList" />
-	</action>
-
-	<action name="aimAmpActivityForm"   type="org.digijava.module.aim.action.ShowAddOrganisation"
-    scope="session" validate="true" path="/aim/addRAOrgList">
-    <forward name="forward"
-    path="/showLayout.do?layout=addRAOrgList" />
-	</action>
-
-	<action name="aimAmpActivityForm"   type="org.digijava.module.aim.action.ShowAddOrganisation"
-    scope="session" validate="true" path="/aim/addIAOrgList">
-    <forward name="forward"
-    path="/showLayout.do?layout=addIAOrgList" />
-	</action>
-
-	<action name="aimAmpActivityForm"   type="org.digijava.module.aim.action.ShowAddOrganisation"
-    scope="session" validate="true" path="/aim/addRIOrgList">
-    <forward name="forward"
-    path="/showLayout.do?layout=addRIOrgList" />
-	</action>
-
-	<action name="aimAmpActivityForm"   type="org.digijava.module.aim.action.AddOrganisationList"
-    scope="session" validate="true" path="/aim/createOrganisationList">
-    <forward name="forward"
-    path="/showLayout.do?layout=addRIOrgList" />
-	</action>
-
-	<action name="aimAmpActivityForm"   type="org.digijava.module.aim.action.AddOrganisationList"
-    scope="session" validate="true" path="/aim/createOrganisationList">
-    <forward name="forward"
-    path="/showLayout.do?layout=addFAOrgList" />
-	</action>
-
-	<action name="aimAmpActivityForm"   type="org.digijava.module.aim.action.AddOrganisationList"
-    scope="session" validate="true" path="/aim/createOrganisationList">
-    <forward name="forward"
-    path="/showLayout.do?layout=addRAOrgList" />
-	</action>
-
-	<action name="aimAmpActivityForm"   type="org.digijava.module.aim.action.AddOrganisationList"
-    scope="session" validate="true" path="/aim/createOrganisationList">
-    <forward name="forward"
-	path="/showLayout.do?layout=addIAOrgList" />
-	</action>
-
-	
-	<!-- End of activity action events -->
 
 	<action
 		name="aimRelatedLinksForm"
@@ -883,10 +851,9 @@
 
  	<action 
 	  	path="/aim/viewRelatedLinks" 
-		type="org.digijava.module.aim.action.ShowRelatedLinks" 
-		name="aimMyDesktopForm" scope="session">
-		<forward name="forward" path="/showLayout.do?layout=viewLinks"/>
-	</action>
+		type="org.apache.struts.actions.ForwardAction" 
+		scope="session"
+		parameter="/showLayout.do?layout=viewLinks" />
 	
 	<action
 		name="aimRelatedLinksForm"

@@ -16,6 +16,7 @@ import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpSector;
 import org.digijava.module.aim.form.AddSectorForm;
 import org.digijava.module.aim.util.DbUtil;
+import org.digijava.module.aim.util.SectorUtil;
 
 
 public class AddSector extends Action {
@@ -69,7 +70,7 @@ public class AddSector extends Action {
 				}
 				addSectorForm.setAmpOrganisation(null);
 			} else {
-				AmpSector ampSector = DbUtil.getAmpSector(parSecId);
+				AmpSector ampSector = SectorUtil.getAmpSector(parSecId);
 				AmpOrganisation ampOrg = DbUtil.getOrganisation(ampSector
 						.getAmpOrgId().getAmpOrgId());
 				addSectorForm.setAmpOrganisation(ampOrg.getName());
@@ -84,7 +85,7 @@ public class AddSector extends Action {
 			if (addSectorForm.getParentSectorId().intValue() == 0) {
 				ampSector.setParentSectorId(null);
 			} else {
-				ampSector.setParentSectorId(DbUtil.getAmpSector(addSectorForm
+				ampSector.setParentSectorId(SectorUtil.getAmpSector(addSectorForm
 						.getParentSectorId()));
 			}
 			ampSector.setAmpOrgId(DbUtil.getOrganisation(addSectorForm

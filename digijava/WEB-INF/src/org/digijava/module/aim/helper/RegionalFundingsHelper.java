@@ -14,7 +14,7 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 import org.digijava.module.aim.dbentity.AmpRegionalFunding;
-import org.digijava.module.aim.util.DbUtil;
+import org.digijava.module.aim.util.CurrencyUtil;
 
 /**
  * Helper class for RegionalFundings manipulation
@@ -71,8 +71,8 @@ public class RegionalFundingsHelper {
 			fd.setTransactionType(regFund.getTransactionType().intValue());
 
 			Date dt = regFund.getTransactionDate();
-			double frmExRt = DbUtil.getExchangeRate(fd.getCurrencyCode(),1,dt);
-			double toExRt = DbUtil.getExchangeRate(currCode,1,dt);
+			double frmExRt = CurrencyUtil.getExchangeRate(fd.getCurrencyCode(),1,dt);
+			double toExRt = CurrencyUtil.getExchangeRate(currCode,1,dt);
 			double amt = CurrencyWorker.convert1(regFund.getTransactionAmount().doubleValue(),frmExRt,toExRt);
 			fd.setTransactionAmount(DecimalToText.ConvertDecimalToText(amt));
 			fd.setCurrencyCode(currCode);

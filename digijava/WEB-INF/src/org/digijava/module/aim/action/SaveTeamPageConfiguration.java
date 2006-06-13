@@ -10,6 +10,7 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.digijava.module.aim.form.TeamPagesForm;
+import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.TeamUtil;
 
@@ -52,6 +53,10 @@ public class SaveTeamPageConfiguration extends Action {
 		} catch (Exception e) {
 		    logger.debug("Exception " + e);
 		    e.printStackTrace(System.out);
+		}
+		
+		if (session.getAttribute(Constants.DSKTP_FLTR_CHANGED) != null) {
+			session.removeAttribute(Constants.DSKTP_FLTR_CHANGED);
 		}
 		return mapping.findForward("forward");
 	}

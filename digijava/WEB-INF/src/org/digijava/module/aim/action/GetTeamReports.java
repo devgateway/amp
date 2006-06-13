@@ -61,7 +61,7 @@ public class GetTeamReports extends Action {
 
 		if (id != null) {
 			AmpTeam ampTeam = TeamUtil.getAmpTeam(id);
-			Collection col = DbUtil.getTeamReportsCollection(id);
+			Collection col = TeamUtil.getTeamReportsCollection(id);
 			raForm.setReports(col);
 			raForm.setTeamId(id);
 			raForm.setTeamName(ampTeam.getName());

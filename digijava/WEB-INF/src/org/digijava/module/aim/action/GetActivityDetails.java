@@ -20,8 +20,8 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.digijava.module.aim.dbentity.AmpActivity;
-import org.digijava.module.aim.dbentity.AmpFunding;
 import org.digijava.module.aim.dbentity.AmpActivityInternalId;
+import org.digijava.module.aim.dbentity.AmpFunding;
 import org.digijava.module.aim.dbentity.AmpModality;
 import org.digijava.module.aim.dbentity.AmpSector;
 import org.digijava.module.aim.form.ChannelOverviewForm;
@@ -32,7 +32,11 @@ import org.digijava.module.aim.helper.DateConversion;
 import org.digijava.module.aim.helper.FilterParams;
 import org.digijava.module.aim.helper.FinancingBreakdownWorker;
 import org.digijava.module.aim.helper.TeamMember;
+import org.digijava.module.aim.util.ActivityUtil;
+import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.aim.util.DbUtil;
+import org.digijava.module.aim.util.LocationUtil;
+import org.digijava.module.aim.util.SectorUtil;
 
 public class GetActivityDetails extends Action {
 
@@ -79,7 +83,7 @@ public class GetActivityDetails extends Action {
 			coForm.setAdd(true);
 		}
 
-		AmpActivity activity = DbUtil.getProjectChannelOverview(id);
+		AmpActivity activity = ActivityUtil.getProjectChannelOverview(id);
 
 
 		Collection dbReturnSet = null;
@@ -88,7 +92,7 @@ public class GetActivityDetails extends Action {
 		Iterator itera=null;
 		AmpSector ampSector = null;
 		String modalityCode;
-		dbReturnSet = DbUtil.getAmpSectors(activity.getAmpActivityId());
+		dbReturnSet = SectorUtil.getAmpSectors(activity.getAmpActivityId());
 		
 		if(activity != null)
 			logger.info(" Activity ID  = " + activity.getAmpId());
@@ -157,7 +161,7 @@ public class GetActivityDetails extends Action {
 			//logger.info("after level");
 			if (modality.getModalityCode().equals(Constants.PROJECT_SUPPORT)
 					|| modality.getModalityCode().equals(Constants.DIRECT_BUDGET_SUPPORT)) {
-				dbReturnSet = DbUtil.getAmpSectors(activity
+				dbReturnSet = SectorUtil.getAmpSectors(activity
 						.getAmpActivityId());
 				if (dbReturnSet.size() == 0)
 					logger.info("No sectors returned");
@@ -219,7 +223,7 @@ public class GetActivityDetails extends Action {
 		ampFundings = DbUtil.getAmpFunding(activity.getAmpActivityId());
 		ApplicationSettings appSettings = teamMember.getAppSettings();
 		if (appSettings.getCurrencyId() != null) {
-			currCode = DbUtil.getCurrency(appSettings.getCurrencyId()).getCurrencyCode();
+			currCode = CurrencyUtil.getCurrency(appSettings.getCurrencyId()).getCurrencyCode();
 		} else {
 			currCode = Constants.DEFAULT_CURRENCY;
 		}
@@ -271,7 +275,7 @@ public class GetActivityDetails extends Action {
 				coForm.setTheme(activity.getThemeId().getName());
 			//Modified by Swapnil as now the method returns country,region,zone and woreda.
 			coForm.setLocations(new ArrayList());
-			coForm.getLocations().addAll(DbUtil.getAmpLocations(activity.getAmpActivityId()));
+			coForm.getLocations().addAll(LocationUtil.getAmpLocations(activity.getAmpActivityId()));
 
 			ArrayList list = new ArrayList();
 			list = DbUtil.getOrgRole(activity.getAmpActivityId());

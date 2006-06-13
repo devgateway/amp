@@ -8,30 +8,6 @@
 
 <digi:context name="digiContext" property="context" />
 
-<script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/relatedLinks.js"/>"></script>
-
-<script language="JavaScript">
-<!--
-
-function editLinks(id,nm,ln) {
-
-	window.name = "opener" + new Date().getTime();		  
-	var t = ((screen.width)-420)/2;
-	var l = ((screen.height)-110)/2;
-	
-	editLinksWindow = window.open("","",'resizable=no,width=420,height=110,top='+l+',left='+t);
-	editLinksWindow.document.open();
-	editLinksWindow.document.write(getEditLinksWindowString(id,nm,ln));
-	editLinksWindow.document.close();
-}
-
--->
-</script>
-
-
-<digi:instance property="aimMyDesktopForm" />
-<digi:form action="/deleteLinks.do" method="post">
-<html:hidden property="teamMemberId" />
 <table width="100%" cellPadding="0" cellSpacing="0" vAlign="top" align="left" border=0>
 <tr><td width="100%" vAlign="top" align="left">
 <!--  AMP Admin Logo -->
@@ -72,14 +48,14 @@ function editLinks(id,nm,ln) {
 							</td>
 						</tr>
 						<tr bgcolor="#ffffff">
-							<td>	
-								<logic:empty name="aimMyDesktopForm" property="documents">
-									<b>No Links</b>
-								</logic:empty>
-								<logic:notEmpty name="aimMyDesktopForm" property="documents">
+							<td>
+								<bean:size id="linksCount" name="myLinks" scope="session" />
+								<c:if test="${linksCount == 0}">
+									<b>No Links</b>								
+								</c:if>
+								<c:if test="${linksCount > 0}">
 									<table width="100%" cellPadding=5 cellSpacing=1 bgcolor="#aaaaaa">
-									<logic:iterate name="aimMyDesktopForm" property="documents"
-									id="document">
+									<c:forEach var="document" items="${myLinks}">
 										<tr bgcolor="#f4f4f2">
 											<td>
 												Title: <b><c:out value="${document.title}"/></b><br>
@@ -98,9 +74,9 @@ function editLinks(id,nm,ln) {
 												</c:if>												
 											</td>	
 										</tr>
-									</logic:iterate>
-									</table>
-								</logic:notEmpty>
+									</c:forEach>
+									</table>								
+								</c:if>
 							</td>
 						</tr>
 					</table>
@@ -113,5 +89,4 @@ function editLinks(id,nm,ln) {
 </table>
 </td></tr>
 </table>
-</digi:form>
 

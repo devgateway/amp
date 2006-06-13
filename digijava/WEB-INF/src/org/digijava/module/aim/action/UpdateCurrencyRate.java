@@ -18,7 +18,6 @@ import org.digijava.module.aim.dbentity.AmpCurrencyRate;
 import org.digijava.module.aim.form.CurrencyRateForm;
 import org.digijava.module.aim.helper.DateConversion;
 import org.digijava.module.aim.util.CurrencyUtil;
-import org.digijava.module.aim.util.DbUtil;
 
 public class UpdateCurrencyRate extends Action {
 	private static Logger logger = Logger.getLogger(UpdateCurrencyRate.class);
@@ -42,7 +41,7 @@ public class UpdateCurrencyRate extends Action {
 				crForm.setUpdateCRateAmount(null);
 			}
 			if (crForm.getCurrencyCodes() == null) {
-				crForm.setCurrencyCodes(DbUtil.getAmpCurrency());
+				crForm.setCurrencyCodes(CurrencyUtil.getAmpCurrency());
 				crForm.setUpdateCRateCode(null);
 				crForm.setUpdateCRateDate(null);
 				crForm.setUpdateCRateId(null);				

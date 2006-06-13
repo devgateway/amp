@@ -24,6 +24,7 @@ import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.dbentity.AmpTeamMemberRoles;
 import org.digijava.module.aim.form.TeamMemberForm;
 import org.digijava.module.aim.util.DbUtil;
+import org.digijava.module.aim.util.TeamMemberUtil;
 import org.digijava.module.aim.util.TeamUtil;
 
 public class UpdateTeamMembers extends Action {
@@ -65,13 +66,13 @@ public class UpdateTeamMembers extends Action {
 
 				AmpTeamMember ampMember = new AmpTeamMember();
 				ampMember.setAmpTeamMemId(upForm.getTeamMemberId());
-				AmpTeamMemberRoles role = DbUtil.getAmpTeamMemberRole(upForm
+				AmpTeamMemberRoles role = TeamMemberUtil.getAmpTeamMemberRole(upForm
 						.getRole());
-				AmpTeamMemberRoles teamLead = DbUtil.getAmpTeamHeadRole();
+				AmpTeamMemberRoles teamLead = TeamMemberUtil.getAmpTeamHeadRole();
 				if (role.getRole().equals(teamLead.getRole())) {
 					logger.debug("team name = " + ampTeam.getName());
 					if (ampTeam.getTeamLead() != null) {
-						upForm.setAmpRoles(DbUtil.getAllTeamMemberRoles());
+						upForm.setAmpRoles(TeamMemberUtil.getAllTeamMemberRoles());
 						errors
 								.add(
 										ActionErrors.GLOBAL_ERROR,
@@ -110,14 +111,14 @@ public class UpdateTeamMembers extends Action {
 
 				ampMember.setUser(UserUtils.getUser(upForm.getUserId()));
 				ampMember.setAmpTeam(ampTeam);
-				Collection col = DbUtil.getAllMemberAmpActivities(upForm
+				Collection col = TeamMemberUtil.getAllMemberAmpActivities(upForm
 						.getTeamMemberId());
 				Set temp = new HashSet();
 				temp.addAll(col);
 				ampMember.setActivities(temp);
 
 				DbUtil.update(ampMember);
-				AmpTeamMember ampTeamHead = DbUtil.getTeamHead(ampTeam
+				AmpTeamMember ampTeamHead = TeamMemberUtil.getTeamHead(ampTeam
 						.getAmpTeamId());
 
 				if (ampTeam == null) {
@@ -141,7 +142,7 @@ public class UpdateTeamMembers extends Action {
 				Long selMembers[] = new Long[1];
 				selMembers[0] = upForm.getTeamMemberId();
 				Site site = RequestUtils.getSite(request);
-				TeamUtil.removeTeamMembers(selMembers,site.getId());
+				TeamMemberUtil.removeTeamMembers(selMembers,site.getId());
 				
 				if (ampTeam != null) {
 					request.setAttribute("teamId", ampTeam.getAmpTeamId());

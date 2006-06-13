@@ -2,7 +2,7 @@ package org.digijava.module.aim.helper ;
 
 import java.util.Collection;
 
-public class AmpProject
+public class AmpProject implements Comparable
 {
 	private Long ampActivityId;
 	private String ampId;
@@ -11,34 +11,10 @@ public class AmpProject
 	private Collection sector ;
 	private String currency;
 	private String totalCommited;
+	private Collection commitmentList;
+	private Long statusId;
+	private int activityRisk;
 	
-	private String objective;
-	private String description;
-	
-	/**
-	 * @return Returns the description.
-	 */
-	public String getDescription() {
-		return description;
-	}
-	/**
-	 * @param description The description to set.
-	 */
-	public void setDescription(String description) {
-		this.description = description;
-	}
-	/**
-	 * @return Returns the objective.
-	 */
-	public String getObjective() {
-		return objective;
-	}
-	/**
-	 * @param objective The objective to set.
-	 */
-	public void setObjective(String objective) {
-		this.objective = objective;
-	}
 	// added by Akash
 	private String approvalStatus;
 	
@@ -129,5 +105,75 @@ public class AmpProject
 	public void setApprovalStatus(String approvalStatus) {
 		this.approvalStatus = approvalStatus;
 	}
-	
+
+	/**
+	 * @return Returns the commitmentList.
+	 */
+	public Collection getCommitmentList() {
+		return commitmentList;
+	}
+
+	/**
+	 * @param commitmentList The commitmentList to set.
+	 */
+	public void setCommitmentList(Collection commitmentList) {
+		this.commitmentList = commitmentList;
+	}
+
+	/**
+	 * @return Returns the statusId.
+	 */
+	public Long getStatusId() {
+		return statusId;
+	}
+
+	/**
+	 * @param statusId The statusId to set.
+	 */
+	public void setStatusId(Long statusId) {
+		this.statusId = statusId;
+	}
+
+	/* (non-Javadoc)
+	 * @see java.lang.Object#equals(java.lang.Object)
+	 */
+	public boolean equals(Object obj) {
+		if (obj instanceof AmpProject) {
+			AmpProject p = (AmpProject) obj;
+			return p.getAmpActivityId().equals(ampActivityId);
+		} else throw new ClassCastException();
+	}
+
+	/**
+	 * @return Returns the activityRisk.
+	 */
+	public int getActivityRisk() {
+		return activityRisk;
+	}
+
+	/**
+	 * @param activityRisk The activityRisk to set.
+	 */
+	public void setActivityRisk(int activityRisk) {
+		this.activityRisk = activityRisk;
+	}
+
+	/* (non-Javadoc)
+	 * @see java.lang.Comparable#compareTo(java.lang.Object)
+	 */
+	public int compareTo(Object obj) {
+		if (obj instanceof AmpProject) {
+			AmpProject p = (AmpProject) obj;
+			String t1 = "";
+			String t2 = "";
+			if (name != null) {
+				t1 = name.toLowerCase();
+			}
+			if (p.getName() != null) {
+				t2 = p.getName().toLowerCase();
+			}
+			
+			return t1.compareTo(t2);
+		} else throw new ClassCastException();		
+	}
 }

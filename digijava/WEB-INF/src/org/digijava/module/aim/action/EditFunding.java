@@ -16,6 +16,7 @@ import org.digijava.module.aim.form.EditActivityForm;
 import org.digijava.module.aim.helper.Funding;
 import org.digijava.module.aim.helper.FundingDetail;
 import org.digijava.module.aim.helper.FundingOrganization;
+import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.aim.util.DbUtil;
 
 public class EditFunding extends Action {
@@ -90,7 +91,7 @@ public class EditFunding extends Action {
 		formBean.setNumDisb(numDisb);
 		formBean.setNumExp(numExp);
 		formBean.setAssistanceTypes(c);
-		formBean.setCurrencies(DbUtil.getAmpCurrency());
+		formBean.setCurrencies(CurrencyUtil.getAmpCurrency());
 		formBean.setOrganizations(DbUtil.getAllOrganisation());
 		formBean.setEditFunding(true);
 		return mapping.findForward("forward");

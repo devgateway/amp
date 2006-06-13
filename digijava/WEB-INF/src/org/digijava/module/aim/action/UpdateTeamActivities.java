@@ -24,7 +24,9 @@ import org.digijava.module.aim.helper.Activity;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.helper.UpdateDB;
+import org.digijava.module.aim.util.ActivityUtil;
 import org.digijava.module.aim.util.DbUtil;
+import org.digijava.module.aim.util.TeamMemberUtil;
 import org.digijava.module.aim.util.TeamUtil;
 
 public class UpdateTeamActivities extends Action {
@@ -87,7 +89,9 @@ public class UpdateTeamActivities extends Action {
 			if (session.getAttribute("unassignedActivityList") != null) {
 				session.removeAttribute("unassignedActivityList");
 			}
+			
 			if (session.getAttribute("ampProjects") != null) {
+				logger.info("removing ampProjects from session..");
 				session.removeAttribute("ampProjects");
 			}
 			if (session.getAttribute("teamActivityList") != null) {
@@ -99,18 +103,18 @@ public class UpdateTeamActivities extends Action {
 			return mapping.findForward("forward");
 		} else if (taForm.getAssignActivity() != null) {
 			/* add the selected activities to the team list */
-			logger.debug("in assign activity");
+			logger.info("in assign activity");
 			Long selActivities[] = taForm.getSelActivities();
 
 			if (selActivities != null) {
 				for (int i = 0; i < selActivities.length; i++) {
 					if (selActivities[i] != null) {
 						Long actId = selActivities[i];
-						AmpActivity activity = DbUtil.getProjectChannelOverview(actId);
+						AmpActivity activity = ActivityUtil.getProjectChannelOverview(actId);
 						AmpTeam ampTeam = TeamUtil.getAmpTeam(taForm.getTeamId());
 						activity.setTeam(ampTeam);
 
-						logger.debug("updating " + activity.getName());
+						logger.info("updating " + activity.getName());
 						DbUtil.update(activity);
 						UpdateDB.updateReportCache(actId);
 					}
@@ -145,7 +149,7 @@ public class UpdateTeamActivities extends Action {
 
 			Collection col = null;
 			if (session.getAttribute("unassignedActivityList") == null) {
-				col = DbUtil.getAllUnassignedActivities();
+				col = TeamUtil.getAllUnassignedActivities();
 				List temp = (List) col;
 				Collections.sort(temp);
 				col = (Collection) temp;
@@ -234,7 +238,7 @@ public class UpdateTeamActivities extends Action {
 
 	public boolean canDelete(Long actId) {
 		logger.debug("In can delete");
-		Iterator itr = DbUtil.getAllMembersUsingActivity(actId).iterator();
+		Iterator itr = TeamMemberUtil.getAllMembersUsingActivity(actId).iterator();
 		if (itr.hasNext()) {
 			logger.debug("return false");
 			return false;

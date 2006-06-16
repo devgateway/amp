@@ -9,6 +9,8 @@
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
 
+<digi:instance property="aimActivityDashboardForm" />
+
 <script language="Javascript">
 	function showPrinterFriendly(actId,chartType) {
 		<digi:context name="ptUrl" property="context/module/moduleinstance/printableActivityChart.do" />
@@ -22,8 +24,10 @@
 <%
 	Long actId = (Long) request.getAttribute("actId");
 	
+	String url = "/aim/viewIndicatorValues.do?ampActivityId="+actId+"&tabIndex=6";
+	
 	String actPerfChartFileName = ChartGenerator.getActivityPerformanceChartFileName(
-						 actId,session,new PrintWriter(out),370,350);
+						 actId,session,new PrintWriter(out),370,350,url);
 
 	String actPerfChartUrl = null;
 	if (actPerfChartFileName != null) {
@@ -32,7 +36,7 @@
 
 	
 	String actRiskChartFileName = ChartGenerator.getActivityRiskChartFileName(
-						 actId,session,new PrintWriter(out),370,350);
+						 actId,session,new PrintWriter(out),370,350,url);
 
 	String actRiskChartUrl = null;
 
@@ -41,13 +45,17 @@
 	}
 %>
 
-
 <TABLE cellSpacing=0 cellPadding=0 align="center" vAlign="top" border=0 width="100%">
 <TR>
 	<TD vAlign="top" align="center">
 		<TABLE width="99%" cellSpacing=0 cellPadding=0 vAlign="top" align="center" class="box-border-nopadding">
 			<TR><TD>
 				<TABLE width="100%" cellspacing="2" cellpadding="2" valign="top" align="left" border=0>
+					<TR><TD class="highlight" colspan="2">
+						<digi:trn key="aim:overallActivityRisk">Overall Risk</digi:trn>: 
+						<font color="<bean:write name="aimActivityDashboardForm" property="riskColor" />">
+							<bean:write name="aimActivityDashboardForm" property="overallRisk" /> 
+					</TD></TR>						
 					<TR>
 						<TD width="50%" align="center" class="textalb" height="20" bgcolor="#336699">
 							Activity - Performance

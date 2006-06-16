@@ -44,7 +44,6 @@
 <digi:form action="/addActivity.do" method="post">
 <html:hidden property="step"/>
 
-<input type="hidden" name="currUrl">
 
 <html:hidden property="editAct" />
 

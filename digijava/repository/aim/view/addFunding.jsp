@@ -13,6 +13,23 @@
 <script language="JavaScript">
 
 	<!--
+
+	function useFixedRateClicked(field1,field2) {
+		var fld1 = document.getElementById(field1);	
+		var fld2 = document.getElementById(field2);
+		if (fld1.disabled == true) {
+			fld1.disabled = false;		  
+		} else {
+			fld1.disabled = true;
+		}
+		if (fld2.disabled == true) {
+			fld2.disabled = false;		  
+		} else {
+			fld2.disabled = true;
+		}		
+	}
+	
+	
 	function trim(s) {
 		return s.replace( /^\s*/, "" ).replace( /\s*$/, "" );
    }
@@ -57,22 +74,20 @@
 	}
 
 	function load() {
-		if (window.opener.document.aimEditActivityForm.currUrl.value == "") {
-			window.opener.document.aimEditActivityForm.currUrl.value = "/addFunding";
-		}			  
+
 	}
 
 	function unload() {
-		window.opener.document.aimEditActivityForm.currUrl.value="";
 	}
 
 	function closeWindow() {
-		window.opener.document.aimEditActivityForm.currUrl.value="";
 		window.close();
 	}
 
 	-->
 </script>
+
+<%! long t = System.currentTimeMillis(); %>
 
 <digi:instance property="aimEditActivityForm" />
 <digi:form action="/addFundingDetail.do" method="post">
@@ -284,6 +299,59 @@
 												</a>
 											</td>
 										</tr>
+										<tr>
+											<td>
+												&nbsp;
+											</td>
+											<td>
+												Fixed Rate
+											</td>
+											<td>
+												Exchange Rate		
+											</td>
+											<td colspan="3">
+												Currency
+											</td>
+										</tr>										
+										<tr>
+											<td>
+												&nbsp;
+											</td>
+											<td align="right">
+												<% String exchRatefldId = "exchFld"+(t++);
+													String exchCurrfldId = "exchCurr"+(t++); 
+													String jsUrl = "useFixedRateClicked('" + exchRatefldId + "','" + exchCurrfldId + "')";
+												%>
+												<html:checkbox name="fundingDetail" indexed="true" property="useFixedRate" 
+												onclick="<%=jsUrl%>"/>
+											</td>
+											<td>
+												<logic:equal name="fundingDetail" property="useFixedRate" value="true">
+													<html:text name="fundingDetail" indexed="true" property="fixedExchangeRate" styleClass="amt" 
+													disabled="false" styleId="<%=exchRatefldId%>"/>	
+												</logic:equal>
+												<logic:equal name="fundingDetail" property="useFixedRate" value="false">
+													<html:text name="fundingDetail" indexed="true" property="fixedExchangeRate" styleClass="amt" 
+													disabled="true" styleId="<%=exchRatefldId%>"/>	
+												</logic:equal>
+											</td>
+											<td colspan="3">
+												<logic:equal name="fundingDetail" property="useFixedRate" value="true">											
+												<html:select name="fundingDetail" indexed="true" property="fixedExchangeCurrCode" styleClass="inp-text"
+												disabled="false" styleId="<%=exchCurrfldId%>">
+													<html:optionsCollection name="aimEditActivityForm" property="currencies" value="currencyCode" 
+													label="currencyName"/>
+												</html:select>
+												</logic:equal>
+												<logic:equal name="fundingDetail" property="useFixedRate" value="false">
+												<html:select name="fundingDetail" indexed="true" property="fixedExchangeCurrCode" styleClass="inp-text"
+												disabled="true" styleId="<%=exchCurrfldId%>">
+													<html:optionsCollection name="aimEditActivityForm" property="currencies" value="currencyCode" 
+													label="currencyName"/>
+												</html:select>												
+												</logic:equal>												
+											</td>
+										</tr>
 									</c:if>
 								</c:if>
 								<c:if test="${aimEditActivityForm.donorFlag == false}">
@@ -332,6 +400,63 @@
 												<a href="javascript:removeFundingDetail(<bean:write name="fundingDetail" property="indexId"/>,0)">
 												 	<digi:img src="module/cms/images/deleteIcon.gif" border="0" alt="Delete this transaction"/>
 												</a>
+											</td>
+										</tr>
+										<tr>
+											<td bgcolor="#ffff00">
+												&nbsp;
+											</td>
+											<td align="right" bgcolor="#ffff00">
+												<b>
+													<digi:trn key="aim:fixedRate">Fixed Rate</digi:trn>
+												</b>
+											</td>
+											<td bgcolor="#ffff00">
+												<b>
+													<digi:trn key="aim:fixedExchangeRate">Exchange Rate</digi:trn>
+												</b>
+											</td>
+											<td colspan="3" bgcolor="#ffff00">
+												<b><digi:trn key="aim:fixedExchangeRateCurrency">Currency</digi:trn></b>
+											</td>
+										</tr>										
+										<tr>
+											<td>
+												&nbsp;
+											</td>
+											<td align="right">
+												<% String exchRatefldId = "exchFld"+ (t++);
+													String exchCurrfldId = "exchCurr"+ (t++); 
+													String jsUrl = "useFixedRateClicked('" + exchRatefldId + "','" + exchCurrfldId + "')";
+												%>
+												<html:checkbox name="fundingDetail" indexed="true" property="useFixedRate" 
+												onclick="<%=jsUrl%>"/>
+											</td>
+											<td>
+												<logic:equal name="fundingDetail" property="useFixedRate" value="true">
+													<html:text name="fundingDetail" indexed="true" property="fixedExchangeRate" styleClass="amt" 
+													disabled="false" styleId="<%=exchRatefldId%>"/>	
+												</logic:equal>
+												<logic:equal name="fundingDetail" property="useFixedRate" value="false">
+													<html:text name="fundingDetail" indexed="true" property="fixedExchangeRate" styleClass="amt" 
+													disabled="true" styleId="<%=exchRatefldId%>"/>	
+												</logic:equal>												
+											</td>
+											<td colspan="3">
+												<logic:equal name="fundingDetail" property="useFixedRate" value="true">											
+												<html:select name="fundingDetail" indexed="true" property="fixedExchangeCurrCode" styleClass="inp-text"
+												disabled="false" styleId="<%=exchCurrfldId%>">
+													<html:optionsCollection name="aimEditActivityForm" property="currencies" value="currencyCode" 
+													label="currencyName"/>
+												</html:select>
+												</logic:equal>
+												<logic:equal name="fundingDetail" property="useFixedRate" value="false">
+												<html:select name="fundingDetail" indexed="true" property="fixedExchangeCurrCode" styleClass="inp-text"
+												disabled="true" styleId="<%=exchCurrfldId%>">
+													<html:optionsCollection name="aimEditActivityForm" property="currencies" value="currencyCode" 
+													label="currencyName"/>
+												</html:select>												
+												</logic:equal>												
 											</td>
 										</tr>
 									</c:if>							

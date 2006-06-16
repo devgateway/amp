@@ -63,29 +63,19 @@ function validate(field) {
 }
 
 function selectLocation() {
-	if (document.aimEditActivityForm.currUrl.value == "") { 		  		  		  
 		openNewWindow(600, 500);
 		<digi:context name="selectLoc" property="context/module/moduleinstance/selectLocation.do?edit=true" />
 		document.aimEditActivityForm.action = "<%= selectLoc %>";
-		document.aimEditActivityForm.currUrl.value = "<%= selectLoc %>";
 		document.aimEditActivityForm.target = popupPointer.name;
 		document.aimEditActivityForm.submit();
-	} else {
-		popupPointer.focus();	
-	}
 } 	
 
 function addSectors() {
-	if (document.aimEditActivityForm.currUrl.value == "") { 		  		  
 		openNewWindow(600, 450);
 		<digi:context name="addSector" property="context/module/moduleinstance/selectSectors.do?edit=true" />
 	  	document.aimEditActivityForm.action = "<%= addSector %>";
-		document.aimEditActivityForm.currUrl.value = "<%= addSector %>";
 		document.aimEditActivityForm.target = popupPointer.name;
 		document.aimEditActivityForm.submit();
-	} else {
-		popupPointer.focus();	
-	}
 } 	
 
 function removeSelSectors() {
@@ -156,7 +146,6 @@ function popupwin()
 <html:hidden property="country" />
 <html:hidden property="editAct" />
 
-<input type="hidden" name="currUrl">
 <input type="hidden" name="edit" value="true">
 
 <table width="100%" cellPadding="0" cellSpacing="0" vAlign="top" align="left">

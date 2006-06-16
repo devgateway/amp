@@ -55,7 +55,7 @@
 				</logic:notEmpty>
 				<logic:empty name="myReports" scope="session">
 				<TR><TD bgColor=#ffffff class=box-border align=left>
-					&nbsp;
+					No reports for this workspace
 				</TD></TR>
 				</logic:empty>
         		<TR><TD>
@@ -66,7 +66,23 @@
 						<b>Advanced Report Manager</b>
 					</digi:link>
 				</TD></TR>
+        		<TR><TD>
+					<br>
+				</TD></TR>
+				
+				<logic:notEmpty name="PI" scope="application">
+      		<TR><TD>
+									<bean:define id="translation">
+									<digi:trn key="aim:clickToViewParisIndcReports">Click here to view Paris Indicator Reports</digi:trn>
+			  				 	</bean:define>
+									<digi:link href="/parisIndicatorReport.do" title="<%=translation%>">
+										<b> Paris Indicator Reports	</b>
+									</digi:link>
+				</TD></TR>
+				</logic:notEmpty>
+				
 			</TABLE>	
 		</TD>
 	</TR>
 </TABLE>
+

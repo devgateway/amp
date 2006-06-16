@@ -46,7 +46,6 @@
 	   document.aimEditActivityForm.action = "<%= selOrg %>";
 		document.aimEditActivityForm.target = window.opener.name;
 	   document.aimEditActivityForm.submit();
-		window.opener.document.aimEditActivityForm.currUrl.value="";
 		window.close();
 		return true;
 	}	
@@ -79,18 +78,13 @@
 	}	
 
 	function load() {
-		if (window.opener.document.aimEditActivityForm.currUrl.value == "") {
-			window.opener.document.aimEditActivityForm.currUrl.value = "/selectOrg";				  
-		}
 		document.aimEditActivityForm.keyword.focus();			  
 	}
 
 	function unload() {
-		window.opener.document.aimEditActivityForm.currUrl.value="";
 	}
 
 	function closeWindow() {
-		window.opener.document.aimEditActivityForm.currUrl.value="";
 		window.close();
 	}
 	-->

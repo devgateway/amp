@@ -39,16 +39,11 @@ function checkSelOrgs() {
 }	
 
 function selectOrganisation() {
-	if (document.aimEditActivityForm.currUrl.value == "") { 		  
-		openNewWindow(600, 400);
-		<digi:context name="selectOrganization" property="context/module/moduleinstance/selectOrganization.do?orgSelReset=true&edit=true" />
-		document.aimEditActivityForm.currUrl.value = "<%= selectOrganization %>";
-		document.aimEditActivityForm.action = "<%=selectOrganization%>";
-		document.aimEditActivityForm.target = popupPointer.name;
-		document.aimEditActivityForm.submit();
-	} else {
-		popupPointer.focus();
-	}
+	openNewWindow(600, 400);
+	<digi:context name="selectOrganization" property="context/module/moduleinstance/selectOrganization.do?orgSelReset=true&edit=true" />
+	document.aimEditActivityForm.action = "<%=selectOrganization%>";
+	document.aimEditActivityForm.target = popupPointer.name;
+	document.aimEditActivityForm.submit();
 } 	
 
 function edit(key) {
@@ -59,17 +54,12 @@ function edit(key) {
 }
 
 function commentWin() {
-	if (document.aimEditActivityForm.currUrl1.value == "") { 		  
 		openNewWindow(600, 400);
 		<digi:context name="commentUrl" property="context/module/moduleinstance/viewComment.do" />
 		url = "<%=commentUrl %>?comment=" + "ccd" + "&edit=" + "true";
-		document.aimEditActivityForm.currUrl1.value = "<%=commentUrl %>";		  
 		document.aimEditActivityForm.action = url;
 		document.aimEditActivityForm.target = popupPointer.name;
 		document.aimEditActivityForm.submit();
-	} else {
-		popupPointer.focus();
-	}
 }
 
 function removeSelOrganisations() {
@@ -147,8 +137,6 @@ function popupwin()
 <input type="hidden" name="edit" value="true">
 
 <input type="hidden" name="selectedDate" value="">
-<input type="hidden" name="currUrl">
-<input type="hidden" name="currUrl1">
 
 <html:hidden property="reset" />
 

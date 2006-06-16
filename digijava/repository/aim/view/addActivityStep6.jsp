@@ -63,31 +63,21 @@ function validate(field) {
 }
 
 function addDocuments() {
-	if (document.aimEditActivityForm.currUrl.value == "") {
 		openNewWindow(600, 230);
 		document.aimEditActivityForm.docFileOrLink.value = "file";
 		<digi:context name="selDoc" property="context/module/moduleinstance/selectDocument.do?edit=true" />
 		document.aimEditActivityForm.action = "<%= selDoc %>";
-		document.aimEditActivityForm.currUrl.value = "<%= selDoc %>";
 		document.aimEditActivityForm.target = popupPointer.name;
 		document.aimEditActivityForm.submit();
-	} else {
-		popupPointer.focus();	  
-	}
 }
 
 function addLinks() {
-	if (document.aimEditActivityForm.currUrl.value == "") {
 		openNewWindow(600, 225);
 		document.aimEditActivityForm.docFileOrLink.value = "link";
 		<digi:context name="selDoc" property="context/module/moduleinstance/selectDocument.do?edit=true" />
 		document.aimEditActivityForm.action = "<%= selDoc %>";
-		document.aimEditActivityForm.currUrl.value = "<%= selDoc %>";
 		document.aimEditActivityForm.target = popupPointer.name;
 		document.aimEditActivityForm.submit();
-	} else {
-		popupPointer.focus();	  
-	}
 }
 
 function removeSelDocuments() {
@@ -129,7 +119,6 @@ function removeSelLinks() {
 <html:hidden property="step" />
 <html:hidden property="docFileOrLink" />
 
-<input type="hidden" name="currUrl">
 
 <html:hidden property="editAct" />
 

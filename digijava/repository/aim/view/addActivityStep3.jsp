@@ -38,48 +38,31 @@
 	}
 
 	function addFunding(orgId) {
-		if (document.aimEditActivityForm.currUrl.value == "" ||
-							 document.aimEditActivityForm.prevOrg.value != orgId) { 		  			  			  
 			openNewWindow(650, 500);
 			<digi:context name="addFunding" property="context/module/moduleinstance/addFunding.do" />
 			document.aimEditActivityForm.orgId.value = orgId;
 			document.aimEditActivityForm.action = "<%= addFunding %>?orgId" + orgId+"&edit=true";
-			document.aimEditActivityForm.currUrl.value = "<%= addFunding %>";
 			document.aimEditActivityForm.prevOrg.value = orgId;
 			document.aimEditActivityForm.target = popupPointer.name;
 			document.aimEditActivityForm.submit();
-		} else {
-			popupPointer.focus();
-		}
 	} 	
 
 	function selectOrganisation() {
-		if (document.aimEditActivityForm.currUrl.value == "") { 		  			  
 			openNewWindow(650, 420);
 			<digi:context name="selectOrganization" property="context/module/moduleinstance/selectOrganization.do?orgSelReset=true&edit=true" />
 			document.aimEditActivityForm.action = "<%= selectOrganization %>";
-			document.aimEditActivityForm.currUrl.value = "<%= selectOrganization %>";
 			document.aimEditActivityForm.target = popupPointer.name;
 			document.aimEditActivityForm.submit();
-		} else {
-			popupPointer.focus();
-		}
 	} 	
 
 	function fnOnEditItem(index, orgId,fundId)	{
-		if (document.aimEditActivityForm.currUrl.value == "" ||
-							 document.aimEditActivityForm.prevOrg.value != orgId) { 		  			  			  			  
 			openNewWindow(650, 500);
 			<digi:context name="editItem" property="context/module/moduleinstance/editFunding.do"/>
 			document.aimEditActivityForm.action = "<%= editItem %>?orgId=" + orgId + "&offset=" + index+"&edit=true";	
-			document.aimEditActivityForm.currUrl.value = "<%= addFunding %>";
 			document.aimEditActivityForm.prevOrg.value = orgId;			
 			document.aimEditActivityForm.fundingId.value = fundId;			
 			document.aimEditActivityForm.target = popupPointer.name;
 			document.aimEditActivityForm.submit();
-		} else {
-			popupPointer.focus();	  
-		}
 	} 
 
 	function fnOnDeleteItem(orgId,fundId)	{
@@ -118,7 +101,6 @@
 <html:hidden property="orgId"/>
 <html:hidden property="fundingId"/>
 
-<input type="hidden" name="currUrl">
 <input type="hidden" name="prevOrg">
 <input type="hidden" name="edit" value="true">
 

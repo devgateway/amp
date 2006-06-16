@@ -145,8 +145,6 @@ function validateComponents() {
 }
 
 function addPhyProgess(id,comp) {
-	if (document.aimEditActivityForm.currUrl.value == "" ||
-						 document.aimEditActivityForm.prevId.value != id) {
 		openNewWindow(610, 255);
 		<digi:context name="addPhyProg" property="context/module/moduleinstance/showAddPhyProg.do~edit=true" />
 		if (id == -1) {
@@ -155,12 +153,8 @@ function addPhyProgess(id,comp) {
 			document.aimEditActivityForm.action = "<%= addPhyProg %>~comp=" + comp + "~id=" + id;	
 		}
 		document.aimEditActivityForm.target = popupPointer.name;
-		document.aimEditActivityForm.currUrl.value = "<%=addPhyProg%>";
 		document.aimEditActivityForm.prevId.value = id;
 		document.aimEditActivityForm.submit();
-	} else {
-		popupPointer.focus();
-	}
 }
 
 function removeSelPhyProgress() {
@@ -177,7 +171,6 @@ function removeSelPhyProgress() {
 /*
 function addComponents(id) {
 
-	 if (document.aimEditActivityForm.currUrl.value == "") { 
 		<digi:context name="addComponents" property="context/module/moduleinstance/showAddComponent.do~edit=true" />
 		if (id == -1) {
 			document.aimEditActivityForm.action = "<%= addComponents %>";
@@ -187,11 +180,6 @@ function addComponents(id) {
 		openNewWindow(610, 280);
 		document.aimEditActivityForm.target = popupPointer.name;
 		document.aimEditActivityForm.submit();			  
-		document.aimEditActivityForm.currUrl.value = "<%=addComponents%>";
-	} else {
-		popupPointer.focus();
-	}
-
 }
 */
 
@@ -250,7 +238,6 @@ function removeSelComponents() {
 <html:hidden property="step" />
 <html:hidden property="componentId" />
 
-<input type="hidden" name="currUrl">
 <input type="hidden" name="prevId">
 
 <html:hidden property="editAct" />

@@ -65,18 +65,13 @@
 	}
 
 	function load() {
-		if (window.opener.document.aimEditActivityForm.currUrl.value == "") {
-			window.opener.document.aimEditActivityForm.currUrl.value = "/selectSector";
-		}
 		document.aimEditActivityForm.sectorScheme.focus();			  
 	}
 
 	function unload() {
-		window.opener.document.aimEditActivityForm.currUrl.value="";
 	}
 
 	function closeWindow() {
-		window.opener.document.aimEditActivityForm.currUrl.value="";
 		window.close();
 	}
 

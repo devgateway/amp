@@ -46,7 +46,7 @@
 	Integer pg = (Integer) session.getAttribute("page");
 	
 	String actPerfChartFileName = ChartGenerator.getPortfolioPerformanceChartFileName(
-						 actId,indId,pg,session,new PrintWriter(out),370,300);
+						 actId,indId,pg,session,new PrintWriter(out),370,300,"");
 
 	String actPerfChartUrl = null;
 	
@@ -54,8 +54,9 @@
 		actPerfChartUrl = request.getContextPath() + "/aim/DisplayChart.img?filename=" + actPerfChartFileName;
 	}
 	
+	String url = "/filterDesktopActivities.do";
 	String actRiskChartFileName = ChartGenerator.getPortfolioRiskChartFileName(
-						 session,new PrintWriter(out),370,300);
+						 session,new PrintWriter(out),370,300,url);
 
 	String actRiskChartUrl = null;
 	if (actRiskChartFileName != null) {

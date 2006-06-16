@@ -4,6 +4,7 @@ public class MEIndicatorValue {
 	private double value;
 	private String type;
 	private String indicatorName;
+	
 	/**
 	 * @return Returns the indicatorName.
 	 */
@@ -50,5 +51,4 @@ public class MEIndicatorValue {
 					&& meVal.getType().equals(type);
 		} else throw new ClassCastException();
 	}
-	
 }

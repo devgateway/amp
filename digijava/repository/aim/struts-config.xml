@@ -74,6 +74,10 @@
       		type="org.digijava.module.aim.form.ChannelOverviewForm" />
 
 	<form-bean
+      		name="aimViewIndicatorForm"
+				type="org.digijava.module.aim.form.ViewIndicatorForm" />
+	 
+	<form-bean
       		name="aimChannelOverviewDescriptionForm"
       		type="org.digijava.module.aim.form.ChannelOverviewDescriptionForm" />
 
@@ -325,6 +329,13 @@
 		<form-property name="indId" type="java.lang.Long"/>
 	</form-bean>
 
+
+		<form-bean
+		name="aimActivityDashboardForm"
+		type="org.apache.struts.action.DynaActionForm">
+		<form-property name="overallRisk" type="java.lang.String"/>
+		<form-property name="riskColor" type="java.lang.String"/>
+	</form-bean>
       
 
 
@@ -535,11 +546,14 @@
 	<action forward="/showLayout.do?layout=layoutFinancingBreakdownFilter" 
 		path="/aim/viewFinancingBreakdownFilter" />
 
-	<action forward="/showLayout.do?layout=layoutActivityDashboard" 
+	<action name="aimActivityDashboardForm" forward="/showLayout.do?layout=layoutActivityDashboard" 
         path="/aim/viewActivityDashboard" />
 
 	<action forward="/showLayout.do?layout=layoutChannelOverview" 
         path="/aim/viewChannelOverview" />
+
+	<action name="aimViewIndicatorForm" forward="/showLayout.do?layout=layoutIndicatorValues" 
+        path="/aim/viewIndicatorValues" />
 
 	<action forward="/showLayout.do?layout=layoutChannelOverviewObjective" 
         path="/aim/viewChannelOverviewObjective" />
@@ -638,6 +652,7 @@
 	</action>
 
 	<action
+		name="aimActivityDashboardForm"	  
     	type="org.digijava.module.aim.action.ViewActivityDashboard"
 		scope="request"
     	validate="false" 
@@ -796,7 +811,16 @@
 		validate="false"
 		path="/aim/yearlyDiscrepancyAllFilter">
     </action>
-	
+
+
+
+    <action name="aimViewIndicatorForm"
+	    type="org.digijava.module.aim.action.ViewIndicatorValues"
+    	scope="request" 
+        validate="false" 
+        path="/aim/meIndicatorValues">
+    </action>
+
     <action name="aimChannelOverviewForm"
 	    type="org.digijava.module.aim.action.ViewChannelOverview"
     	scope="request" 

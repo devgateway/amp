@@ -62,64 +62,11 @@ public class ViewPortfolioDashboard extends TilesAction {
 			int overallRisk = MEIndicatorsUtil.getOverallPortfolioRisk(col);
 			
 			logger.info("Overall risk = " + overallRisk);
-			
-			String fntColor = "";
-			int r = 0,g = 0,b = 0;
-			switch (overallRisk) {
-			case Constants.HIGHLY_SATISFACTORY:
-				r = Constants.HIGHLY_SATISFACTORY_CLR.getRed();
-				g = Constants.HIGHLY_SATISFACTORY_CLR.getGreen();
-				b = Constants.HIGHLY_SATISFACTORY_CLR.getBlue();
-				break;
-			case Constants.VERY_SATISFACTORY:
-				r = Constants.VERY_SATISFACTORY_CLR.getRed();
-				g = Constants.VERY_SATISFACTORY_CLR.getGreen();
-				b = Constants.VERY_SATISFACTORY_CLR.getBlue();				
-				break;
-			case Constants.SATISFACTORY:
-				r = Constants.SATISFACTORY_CLR.getRed();
-				g = Constants.SATISFACTORY_CLR.getGreen();
-				b = Constants.SATISFACTORY_CLR.getBlue();				
-				break;
-			case Constants.UNSATISFACTORY:
-				r = Constants.UNSATISFACTORY_CLR.getRed();
-				g = Constants.UNSATISFACTORY_CLR.getGreen();
-				b = Constants.UNSATISFACTORY_CLR.getBlue();				
-				break;
-			case Constants.VERY_UNSATISFACTORY:
-				r = Constants.VERY_UNSATISFACTORY_CLR.getRed();
-				g = Constants.VERY_UNSATISFACTORY_CLR.getGreen();
-				b = Constants.VERY_UNSATISFACTORY_CLR.getBlue();				
-				break;
-			case Constants.HIGHLY_UNSATISFACTORY:
-				r = Constants.HIGHLY_UNSATISFACTORY_CLR.getRed();
-				g = Constants.HIGHLY_UNSATISFACTORY_CLR.getGreen();
-				b = Constants.HIGHLY_UNSATISFACTORY_CLR.getBlue();				
-			}
-			
-			String hexR = Integer.toHexString(r);
-			String hexG = Integer.toHexString(g);
-			String hexB = Integer.toHexString(b);
-			if (hexR.equals("0"))
-				fntColor += "00";
-			else 
-				fntColor += hexR;
-			
-			if (hexG.equals("0"))
-				fntColor += "00";
-			else 
-				fntColor += hexG;
-			
-			if (hexB.equals("0"))
-				fntColor += "00";
-			else 
-				fntColor += hexB;			
-			
 			String risk = MEIndicatorsUtil.getRiskRatingName(overallRisk);
 			
 			pdForm.set("overallRisk",risk);
 			pdForm.set("activityList",projects);
-			pdForm.set("fontColor",fntColor);
+			pdForm.set("fontColor",MEIndicatorsUtil.getRiskColor(overallRisk));
 			pageListSize = projects.size() / 10;
 			pageListSize = (projects.size() % 10 == 0) ? pageListSize : pageListSize+1;
 		}

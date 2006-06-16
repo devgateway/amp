@@ -103,10 +103,12 @@ public class ViewChannelOverview extends TilesAction {
 				
 				if (activity.getStatus().equalsIgnoreCase("Planned")) {
 					logger.debug("Planned");
-					formBean.setGrandTotal(mf.format(DbUtil.getAmpFundingAmount(activity.getActivityId(),new Integer(0),new Integer(0),perspective,currCode)));					
+					formBean.setGrandTotal(mf.format(DbUtil.getAmpFundingAmount(activity.getActivityId(),
+							new Integer(0),new Integer(0),perspective,currCode)));					
 				} else {
 					logger.debug("Not planned");
-					formBean.setGrandTotal(mf.format(DbUtil.getAmpFundingAmount(activity.getActivityId(),new Integer(0),new Integer(1),perspective,currCode)));					
+					formBean.setGrandTotal(mf.format(DbUtil.getAmpFundingAmount(activity.getActivityId(),
+							new Integer(0),new Integer(1),perspective,currCode)));					
 				}				
 			}
 			

@@ -4,6 +4,8 @@
  */
 package org.digijava.module.aim.helper;
 
+import java.util.Collection;
+
 public class ActivityIndicator {
 	
 	private Long indicatorId;
@@ -21,6 +23,9 @@ public class ActivityIndicator {
 	private String currentValDate;
 	private String comments;
 	private Long risk;
+	private String riskName;
+
+	private Collection priorValues;
 	
 	private Long activityId;
 	private boolean defaultInd;
@@ -225,5 +230,29 @@ public class ActivityIndicator {
 	 */
 	public void setDefaultInd(boolean defaultInd) {
 		this.defaultInd = defaultInd;
+	}
+	/**
+	 * @return Returns the priorValues.
+	 */
+	public Collection getPriorValues() {
+		return priorValues;
+	}
+	/**
+	 * @param priorValues The priorValues to set.
+	 */
+	public void setPriorValues(Collection priorValues) {
+		this.priorValues = priorValues;
+	}
+	/**
+	 * @return Returns the riskName.
+	 */
+	public String getRiskName() {
+		return riskName;
+	}
+	/**
+	 * @param riskName The riskName to set.
+	 */
+	public void setRiskName(String riskName) {
+		this.riskName = riskName;
 	}
 }

@@ -205,7 +205,15 @@
         <put name="title">Activity - Knowledge Document </put>
         <put-item name="tabBody" module="aim" instance="default"
 			teaser="knowledgeDocument"/>
-       </layout>
+		 </layout>
+
+	   <layout name="layoutIndicatorValues" extends="tabLayout">
+        <put name="title">Activity - Indicator Values</put>
+        <put-item name="tabBody" module="aim" instance="default"
+			teaser="meIndicatorValues"/>
+		 </layout>
+		 
+		 
 			
 		<!-- END AIM LAYOUT -->
 

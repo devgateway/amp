@@ -405,6 +405,82 @@ public class MEIndicatorsUtil
 		}
 		return col;
 	}
+	/*
+	public static Collection getActivityIndicators(Collection indValIds) {
+		Session session = null;
+		Collection col = new ArrayList();
+		String qryStr = null;
+		Query qry = null;
+		
+		try {
+			if (indValIds != null && indValIds.size() > 0) {
+				String params = "";
+				Iterator itr = indValIds.iterator();
+				while (itr.hasNext()) {
+					Long indValId = (Long) itr.next();
+					if (params.length() > 0) {
+						params += ",";
+					}
+					params += indValId;
+				}
+				
+				session = PersistenceManager.getSession();
+				qryStr = "select indVal from " + AmpMEIndicatorValue.class.getName() + " indVal" +
+						" where indVal.ampMeIndValId in (" + params + ")";
+			
+				qry = session.createQuery(qryStr);
+				itr = qry.list().iterator();
+				while (itr.hasNext()) {
+					AmpMEIndicatorValue meIndValue = (AmpMEIndicatorValue) itr.next();
+					ActivityIndicator actInd = new ActivityIndicator();
+					actInd.setIndicatorName(meIndValue.getMeIndicatorId().getName());
+					actInd.setIndicatorCode(meIndValue.getMeIndicatorId().getCode());
+				
+					actInd.setBaseVal(meIndValue.getBaseVal());
+					if (meIndValue.getBaseValDate() != null) {
+						actInd.setBaseValDate(
+								DateConversion.ConvertDateToString(
+										meIndValue.getBaseValDate()));
+					}
+					actInd.setIndicatorId(meIndValue.getMeIndicatorId()
+							.getAmpMEIndId());
+					actInd.setIndicatorValId(meIndValue.getAmpMeIndValId());
+					actInd.setActualVal(meIndValue.getActualVal());
+					if (meIndValue.getActualValDate() != null) {
+						actInd.setActualValDate(DateConversion.ConvertDateToString(
+								meIndValue.getActualValDate()));
+					}
+					actInd.setTargetVal(meIndValue.getTargetVal());
+					if (meIndValue.getTargetValDate() != null) {
+							actInd.setTargetValDate(DateConversion.ConvertDateToString(
+									meIndValue.getTargetValDate()));
+					}
+					if (meIndValue.getRisk() != null) {
+						actInd.setRisk(meIndValue.getRisk().getAmpIndRiskRatingsId());
+						actInd.setRiskName(meIndValue.getRisk().getRatingName());
+					}
+						
+					
+					actInd.setComments(meIndValue.getComments());
+					actInd.setDefaultInd(meIndValue.getMeIndicatorId().isDefaultInd());
+					col.add(actInd);
+				}				
+			}
+		} catch (Exception e) {
+			logger.error("Exception from getActivityIndicators() :" + e.getMessage());
+			e.printStackTrace(System.out);
+		} finally {
+			if (session != null) {
+				try {
+					PersistenceManager.releaseSession(session);
+				} catch (Exception rsf) {
+					logger.error("Failed to release session :" + rsf.getMessage());
+				}
+			}
+		}
+		return col;		
+	}
+	*/
 
 	public static Collection getActivityIndicators(Long actId) 
 	{
@@ -496,6 +572,75 @@ public class MEIndicatorsUtil
 		}
 		return col;
 	}
+	
+	public static Collection getIndicatorsForActivity(Long actId) 
+	{
+		Session session = null;
+		Collection col = new ArrayList();
+		String qryStr = null;
+		Query qry = null;
+		
+		try {
+			session = PersistenceManager.getSession();
+			if (actId != null) {
+				qryStr = "select indVal from " + AmpMEIndicatorValue.class.getName() + " " +
+						"indVal where (indVal.activityId=:actId)" ;
+		
+				qry = session.createQuery(qryStr);
+				qry.setParameter("actId",actId,Hibernate.LONG);
+				Iterator itr = qry.list().iterator();
+				while (itr.hasNext()) {
+					AmpMEIndicatorValue meIndValue = (AmpMEIndicatorValue) itr.next();
+					ActivityIndicator actInd = new ActivityIndicator();
+					actInd.setIndicatorName(meIndValue.getMeIndicatorId().getName());
+					actInd.setIndicatorCode(meIndValue.getMeIndicatorId().getCode());
+			
+					actInd.setBaseVal(meIndValue.getBaseVal());
+					if (meIndValue.getBaseValDate() != null) {
+						actInd.setBaseValDate(
+								DateConversion.ConvertDateToString(
+										meIndValue.getBaseValDate()));
+					}
+					actInd.setIndicatorId(meIndValue.getMeIndicatorId()
+							.getAmpMEIndId());
+					actInd.setIndicatorValId(meIndValue.getAmpMeIndValId());
+					actInd.setActualVal(meIndValue.getActualVal());
+					if (meIndValue.getActualValDate() != null) {
+						actInd.setActualValDate(DateConversion
+								.ConvertDateToString(meIndValue
+										.getActualValDate()));
+					}
+					actInd.setTargetVal(meIndValue.getTargetVal());
+					if (meIndValue.getTargetValDate() != null) {
+						actInd.setTargetValDate(DateConversion
+								.ConvertDateToString(meIndValue
+										.getTargetValDate()));
+					}
+					if (meIndValue.getRisk() != null) {
+						actInd.setRisk(meIndValue.getRisk().getAmpIndRiskRatingsId());
+						actInd.setRiskName(meIndValue.getRisk().getRatingName());
+					}
+					actInd.setPriorValues(getPriorIndicatorValues(meIndValue.getAmpMeIndValId()));
+					actInd.setComments(meIndValue.getComments());
+					actInd.setDefaultInd(meIndValue.getMeIndicatorId()
+							.isDefaultInd());
+					col.add(actInd);
+				}				
+			}
+		} catch (Exception e) {
+			logger.error("Exception from getActivityIndicators() :" + e.getMessage());
+			e.printStackTrace(System.out);
+		} finally {
+			if (session != null) {
+				try {
+					PersistenceManager.releaseSession(session);
+				} catch (Exception rsf) {
+					logger.error("Failed to release session :" + rsf.getMessage());
+				}
+			}
+		}
+		return col;
+	}	
 	
 	public static void saveMEIndicatorValues(ActivityIndicator actInd, int chk) 
 	{
@@ -1069,6 +1214,62 @@ public class MEIndicatorsUtil
 			}
 		}
 		return indVal;		
+	}
+	
+	public static String getRiskColor(int overallRisk) {
+		String fntColor = "";
+		int r = 0,g = 0,b = 0;
+		switch (overallRisk) {
+		case Constants.HIGHLY_SATISFACTORY:
+			r = Constants.HIGHLY_SATISFACTORY_CLR.getRed();
+			g = Constants.HIGHLY_SATISFACTORY_CLR.getGreen();
+			b = Constants.HIGHLY_SATISFACTORY_CLR.getBlue();
+			break;
+		case Constants.VERY_SATISFACTORY:
+			r = Constants.VERY_SATISFACTORY_CLR.getRed();
+			g = Constants.VERY_SATISFACTORY_CLR.getGreen();
+			b = Constants.VERY_SATISFACTORY_CLR.getBlue();				
+			break;
+		case Constants.SATISFACTORY:
+			r = Constants.SATISFACTORY_CLR.getRed();
+			g = Constants.SATISFACTORY_CLR.getGreen();
+			b = Constants.SATISFACTORY_CLR.getBlue();				
+			break;
+		case Constants.UNSATISFACTORY:
+			r = Constants.UNSATISFACTORY_CLR.getRed();
+			g = Constants.UNSATISFACTORY_CLR.getGreen();
+			b = Constants.UNSATISFACTORY_CLR.getBlue();				
+			break;
+		case Constants.VERY_UNSATISFACTORY:
+			r = Constants.VERY_UNSATISFACTORY_CLR.getRed();
+			g = Constants.VERY_UNSATISFACTORY_CLR.getGreen();
+			b = Constants.VERY_UNSATISFACTORY_CLR.getBlue();				
+			break;
+		case Constants.HIGHLY_UNSATISFACTORY:
+			r = Constants.HIGHLY_UNSATISFACTORY_CLR.getRed();
+			g = Constants.HIGHLY_UNSATISFACTORY_CLR.getGreen();
+			b = Constants.HIGHLY_UNSATISFACTORY_CLR.getBlue();				
+		}
+		
+		String hexR = Integer.toHexString(r);
+		String hexG = Integer.toHexString(g);
+		String hexB = Integer.toHexString(b);
+		if (hexR.equals("0"))
+			fntColor += "00";
+		else 
+			fntColor += hexR;
+		
+		if (hexG.equals("0"))
+			fntColor += "00";
+		else 
+			fntColor += hexG;
+		
+		if (hexB.equals("0"))
+			fntColor += "00";
+		else 
+			fntColor += hexB;
+		
+		return fntColor;
 	}
 	
 	public static int getOverallPortfolioRisk(Collection actIds) {

@@ -393,7 +393,13 @@
     </teaser>      
 	<teaser name="knowledge" action="knowledge.do">
                 viewKnowledge.jsp
-    </teaser>      
+		  </teaser>      
+
+	<teaser name="meIndicatorValues" action="meIndicatorValues.do">
+			viewIndicatorValues.jsp
+	</teaser>      		  
+		  
+		  
 
     <!-- Teasers Add/Edit Start	-->
     <teaser name="addEditNavigator" action="showAddEditNavigator.do">

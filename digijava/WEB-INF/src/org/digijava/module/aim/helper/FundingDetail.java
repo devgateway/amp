@@ -22,6 +22,9 @@ public class FundingDetail implements Serializable
 	private String currencyName;
 	private int index;
 	private String classification;
+	private boolean useFixedRate;
+	private String fixedExchangeCurrCode;
+	private double fixedExchangeRate;
 	
 	/*
 	private Long regionId;
@@ -185,5 +188,47 @@ public class FundingDetail implements Serializable
 	 */
 	public void setClassification(String classification) {
 		this.classification = classification;
+	}
+
+	/**
+	 * @return Returns the fixedExchangeRate.
+	 */
+	public double getFixedExchangeRate() {
+		return fixedExchangeRate;
+	}
+
+	/**
+	 * @param fixedExchangeRate The fixedExchangeRate to set.
+	 */
+	public void setFixedExchangeRate(double fixedExchangeRate) {
+		this.fixedExchangeRate = fixedExchangeRate;
+	}
+
+	/**
+	 * @return Returns the fixedExchangeCurrCode.
+	 */
+	public String getFixedExchangeCurrCode() {
+		return fixedExchangeCurrCode;
+	}
+
+	/**
+	 * @param fixedExchangeCurrCode The fixedExchangeCurrCode to set.
+	 */
+	public void setFixedExchangeCurrCode(String fixedExchangeCurrCode) {
+		this.fixedExchangeCurrCode = fixedExchangeCurrCode;
+	}
+
+	/**
+	 * @return Returns the useFixedRate.
+	 */
+	public boolean isUseFixedRate() {
+		return useFixedRate;
+	}
+
+	/**
+	 * @param useFixedRate The useFixedRate to set.
+	 */
+	public void setUseFixedRate(boolean useFixedRate) {
+		this.useFixedRate = useFixedRate;
 	}
 } 

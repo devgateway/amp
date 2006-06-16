@@ -26,6 +26,8 @@ import org.jfree.chart.plot.PiePlot;
 import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.chart.renderer.category.StackedBarRenderer;
 import org.jfree.chart.servlet.ServletUtilities;
+import org.jfree.chart.urls.CategoryURLGenerator;
+import org.jfree.chart.urls.StandardCategoryURLGenerator;
 import org.jfree.chart.urls.StandardPieURLGenerator;
 import org.jfree.data.category.DefaultCategoryDataset;
 import org.jfree.data.general.DefaultPieDataset;
@@ -35,7 +37,7 @@ public class ChartGenerator {
 	private static Logger logger = Logger.getLogger(ChartGenerator.class);
 	
 	public static String getPortfolioRiskChartFileName(HttpSession session,PrintWriter pw,
-			int chartWidth,int chartHeight) {
+			int chartWidth,int chartHeight,String url) {
 		
 		Collection activityIds = new ArrayList();
 		if (session.getAttribute(Constants.AMP_PROJECTS) != null) {
@@ -50,22 +52,22 @@ public class ChartGenerator {
 				activityIds);
 		Collections.sort(col);
 		return generateRiskChart(col,"",
-				chartWidth,chartHeight,session,pw,true);
+				chartWidth,chartHeight,session,pw,url);
 	}
 	
 	public static String getActivityRiskChartFileName(Long actId,
 			HttpSession session,PrintWriter pw,
-			int chartWidth,int chartHeight) {
+			int chartWidth,int chartHeight,String url) {
 		
 		ArrayList meRisks = (ArrayList) MEIndicatorsUtil.getMEIndicatorRisks(actId);
 		Collections.sort(meRisks);
 		return generateRiskChart(meRisks,"",chartWidth,
-				chartHeight,session,pw,false);
+				chartHeight,session,pw,url);
 	}
 	
 	public static String getPortfolioPerformanceChartFileName(Long actId,Long indId,
 			Integer page,HttpSession session,PrintWriter pw,
-			int chartWidth,int chartHeight) {
+			int chartWidth,int chartHeight,String url) {
 	
 		Collection activityIds = new ArrayList();
 		if (actId.longValue() < 0) {
@@ -95,21 +97,21 @@ public class ChartGenerator {
 			col = temp;
 		}
 		return generatePerformanceChart(col,"",
-				chartWidth,chartHeight,session,pw);
+				chartWidth,chartHeight,session,pw,url);
 	}		
 	
 	public static String getActivityPerformanceChartFileName(Long actId,
 			HttpSession session,PrintWriter pw,
-			int chartWidth,int chartHeight) {
+			int chartWidth,int chartHeight,String url) {
 		
 		Collection meIndValues = MEIndicatorsUtil.getMEIndicatorValues(actId);
 		return generatePerformanceChart(meIndValues,"",
-				chartWidth,chartHeight,session,pw);
+				chartWidth,chartHeight,session,pw,url);
 	}
 	
 	public static String generateRiskChart(Collection col,String title,
 			int chartWidth,int chartHeight,HttpSession session,PrintWriter pw,
-			boolean url) {
+			String url) {
 		String fileName = null;
 		try {
 			if (col != null && col.size() > 0) {
@@ -158,8 +160,8 @@ public class ChartGenerator {
 					plot.setSectionPaint(i,seriesColors[i]);
 				}
 				
-				if (url) {
-					plot.setURLGenerator(new StandardPieURLGenerator("/filterDesktopActivities.do","risk"));
+				if (url != null && url.trim().length() > 0) {
+					plot.setURLGenerator(new StandardPieURLGenerator(url,"risk"));
 				}
 				ChartRenderingInfo info = new ChartRenderingInfo(new StandardEntityCollection());
 				
@@ -176,7 +178,8 @@ public class ChartGenerator {
 	}
 	
 	public static String generatePerformanceChart(Collection col,String title,
-			int chartWidth,int chartHeight,HttpSession session,PrintWriter pw) {
+			int chartWidth,int chartHeight,HttpSession session,PrintWriter pw,
+			String url) {
 		
 		String fileName = null;
 		try {
@@ -205,6 +208,10 @@ public class ChartGenerator {
 				r1.setSeriesPaint(0,Constants.BASE_VAL_CLR);
 				r1.setSeriesPaint(1,Constants.ACTUAL_VAL_CLR);
 				r1.setSeriesPaint(2,Constants.TARGET_VAL_CLR);
+				if (url != null && url.trim().length() > 0) {
+					CategoryURLGenerator cUrl1 = new StandardCategoryURLGenerator(url,"series","ind");
+					r1.setItemURLGenerator(cUrl1);
+				}
 				plot.setRenderer(r1);
 				
 				ChartRenderingInfo info = new ChartRenderingInfo(new StandardEntityCollection());

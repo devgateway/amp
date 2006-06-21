@@ -24,6 +24,7 @@ import org.digijava.kernel.user.User;
 import org.digijava.kernel.util.DgUtil;
 import org.digijava.kernel.util.RequestUtils;
 import org.digijava.kernel.util.SiteUtils;
+import org.digijava.kernel.util.UserUtils;
 import org.digijava.module.aim.dbentity.AmpApplicationSettings;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.dbentity.AmpTeamMemberRoles;
@@ -33,7 +34,6 @@ import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.TeamMemberUtil;
-import org.digijava.module.aim.util.TeamUtil;
 
 
 /**
@@ -255,7 +255,15 @@ public class Login extends Action {
 							.getAmpCurrencyId());
 					appSettings.setFisCalId(ampAppSettings.getFiscalCalendar()
 							.getAmpFiscalCalId());
-					appSettings.setLanguage(ampAppSettings.getLanguage());
+					
+					
+					//appSettings.setLanguage(ampAppSettings.getLanguage());
+
+					String langCode = UserUtils.getUserLangPreferences(
+							usr,RequestUtils.getSite(request)).getAlertsLanguage().getCode();
+					
+					appSettings.setLanguage(langCode);
+					
 					appSettings.setPerspective(ampAppSettings
 							.getDefaultPerspective());
 
@@ -290,6 +298,7 @@ public class Login extends Action {
 					lForm.setLogin(true);
 
 					// forward to members desktop page
+					
 					SiteDomain currentDomain = RequestUtils.getSiteDomain(request);
 					String context = SiteUtils.getSiteURL(currentDomain, request.getScheme(),
 		                            request.getServerPort(),

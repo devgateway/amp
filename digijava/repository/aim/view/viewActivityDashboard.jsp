@@ -58,10 +58,12 @@
 					</TD></TR>						
 					<TR>
 						<TD width="50%" align="center" class="textalb" height="20" bgcolor="#336699">
-							Activity - Performance
+							<digi:trn key="aim:meActivityPerformance">
+							Activity - Performance</digi:trn>
 						</TD>
 						<TD width="50%" align="center" class="textalb" height="20" bgcolor="#336699">
-							Activity - Risk
+							<digi:trn key="aim:meActivityRisk">
+							Activity - Risk</digi:trn>
 						</TD>
 					</TR>
 					<TR>

@@ -14,7 +14,6 @@
 			openNewWindow(500, 300);
 			<digi:context name="addIndicator" property="context/module/moduleinstance/addIndicator.do" />
 			document.aimIndicatorForm.action = "<%= addIndicator %>";
-			document.aimIndicatorForm.currUrl.value = "<%= addIndicator %>";
 			document.aimIndicatorForm.target = popupPointer.name;
 			document.aimIndicatorForm.submit();
 			return true;			
@@ -26,7 +25,6 @@
 <digi:instance property="aimIndicatorForm" />
 <digi:form action="/indicatorManager.do" method="post">
 <digi:context name="digiContext" property="context" />
-<input type="hidden" name="currUrl">
 
 <!--  AMP Admin Logo -->
 <jsp:include page="teamPagesHeader.jsp" flush="true" />
@@ -91,9 +89,12 @@
 														<tr><td>
 															<table width="100%" border="0" bgColor=#f4f4f2>
 																<tr><td colspan="2"><b>
-																	Monitoring and Evaluation : AMP Indicators</b>
+																	<digi:trn key="aim:meAMPIndicators">
+																	Monitoring and Evaluation : AMP Indicators</digi:trn>
+																	</b>
 																</td></tr>
-																<logic:iterate name="aimIndicatorForm" property="indicators" id="indicators" type="org.digijava.module.aim.dbentity.AmpMEIndicators">
+																<logic:iterate name="aimIndicatorForm" property="indicators" id="indicators" 
+																type="org.digijava.module.aim.dbentity.AmpMEIndicators">
 																	<tr>
 																		<td height=1 colspan="5" bgcolor="#FFFFFF">
 																		</td>
@@ -122,14 +123,16 @@
 													
 													<logic:empty name="aimIndicatorForm" property="indicators">
 														<tr align="center"><td><b>
-															No indicators present</b></td>
+															<digi:trn key="aim:meNoIndicatorsPresent">
+															No indicators present</digi:trn></b></td>
 														</tr>
 													</logic:empty>
 													
 													<tr bgColor=#dddddb>
 														<%-- Add Indicator Button --%>
 														<td bgColor=#dddddb height="20" align="center" colspan="5"><B>
-															<input class="buton" type="button" name="addIndicator" value="Add a New Indicator" onclick="addingIndicators()">
+															<input class="buton" type="button" name="addIndicator" value="Add a New Indicator"
+															onclick="addingIndicators()">
 														</td>
 													</tr>
 													<%-- Page Logic --%>

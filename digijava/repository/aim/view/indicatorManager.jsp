@@ -146,7 +146,8 @@
 													</logic:notEmpty>
 													<logic:empty name="aimIndicatorForm" property="indicators">
 														<tr align="center" bgcolor="#ffffff"><td><b>
-															No indicators present</b></td>
+															<digi:trn key="aim:noIndicatorsPresent">No indicators present</digi:trn>
+															</b></td>
 														</tr>
 													</logic:empty>
 													

@@ -28,7 +28,6 @@
 		if (flag == true) {
 			document.aimEditActivityForm.target = window.opener.name;
 			document.aimEditActivityForm.submit();
-			window.opener.document.aimEditActivityForm.currUrl.value="";
 			window.close();
 			return flag;
 		} else {

@@ -45,7 +45,6 @@
 	}
 
 	function unload() {
-		window.opener.document.aimAddLocationForm.currUrl.value="";
 	}
 	
 </script>

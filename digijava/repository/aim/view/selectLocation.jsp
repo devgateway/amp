@@ -49,7 +49,6 @@
 	    	document.aimEditActivityForm.action = "<%= selLoc %>";
 		 	document.aimEditActivityForm.target = window.opener.name;
 	    	document.aimEditActivityForm.submit();
-			window.opener.document.aimEditActivityForm.currUrl.value="";
 		 	window.close();
 		 }
 		 else
@@ -91,10 +90,8 @@
 	}
 
 	function unload() {
-		window.opener.document.aimEditActivityForm.currUrl.value="";
 	}
 	function closeWindow() {
-		window.opener.document.aimEditActivityForm.currUrl.value="";
 		window.close();			  
 	}
 
@@ -129,7 +126,6 @@
 		openNewWindow(600, 450);
 		<digi:context name="selectLoc" property="context/module/moduleinstance/searchLocation.do" />
 		document.aimEditActivityForm.action = "<%= selectLoc %>";
-		document.aimEditActivityForm.currUrl.value = "<%= selectLoc %>";
 		document.aimEditActivityForm.target = popupPointer.name;
 		document.aimEditActivityForm.submit();
 	} 

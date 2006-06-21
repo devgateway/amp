@@ -16,19 +16,14 @@
 <!--
 
 function addOrgs(value) {
-	if (document.aimEditActivityForm.currUrl.value == "" ||
-						 document.aimEditActivityForm.prevOrg.value != value) { 		  			  			  		  
 		openNewWindow(600, 400);
 		<digi:context name="selectOrganization" property="context/module/moduleinstance/selectOrganization.do~orgSelReset=true" />
 		document.aimEditActivityForm.action = "<%= selectOrganization %>~item="+value+"~edit=true";
-		document.aimEditActivityForm.currUrl.value = "<%= selectOrganization %>";
 		document.aimEditActivityForm.prevOrg.value = value;
 		document.aimEditActivityForm.target = popupPointer.name;
 		document.aimEditActivityForm.submit();
-	} else {
-		popupPointer.focus();
-	}
-} 	
+}
+	
 function resetAll()
 {
 	<digi:context name="resetAll" property="context/module/moduleinstance/resetAll.do?edit=true" />
@@ -53,7 +48,6 @@ function removeSelOrgs(value) {
 <digi:form action="/addActivity.do" method="post">
 <html:hidden property="step" />
 <html:hidden property="item" />
-<input type="hidden" name="currUrl">
 <input type="hidden" name="prevOrg">
 
 <html:hidden property="editAct" />

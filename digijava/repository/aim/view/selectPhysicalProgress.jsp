@@ -43,7 +43,6 @@
 		   document.aimEditActivityForm.action = "<%= addPhyProg %>";
 			document.aimEditActivityForm.target = window.opener.name;
 		   document.aimEditActivityForm.submit();
-		window.opener.document.aimEditActivityForm.currUrl.value="";
 			window.close();
 		}
 	}	
@@ -53,11 +52,9 @@
 	}
 
 	function unload() {
-		window.opener.document.aimEditActivityForm.currUrl.value="";
 	}
 
 	function closeWindow() {
-		window.opener.document.aimEditActivityForm.currUrl.value="";
 		window.close();
 	}
 -->

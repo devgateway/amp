@@ -121,10 +121,12 @@
 									<TABLE width="100%" cellspacing="2" cellpadding="2" valign="top" align="left" border=0>
 										<TR>
 											<TD width="50%" align="center" class="textalb" height="20" bgcolor="#336699">
-												Portfolio - Performance
+												<digi:trn key="aim:mePortfolioPerformance">
+												Portfolio - Performance</digi:trn>
 											</TD>
 											<TD width="50%" align="center" class="textalb" height="20" bgcolor="#336699">
-												Portfolio - Risk
+												<digi:trn key="aim:mePortfolioRisk">
+												Portfolio - Risk</digi:trn>
 											</TD>
 										</TR>
 										<TR>

@@ -49,7 +49,6 @@
 	}
 
 	function unload() {
-		window.opener.document.aimAddOrgForm.currUrl.value="";
 	}
 
 </script>

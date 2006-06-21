@@ -109,7 +109,7 @@
 												<b><digi:trn key="aim:meTargetValue">Target Value</digi:trn></b>
 											</TD>
 											<TD>
-												<bean:write name="indicator" property="targetVal" />	
+												<bean:write name="indicator" property="revisedTargetVal" />
 											</TD>
 											<TD>
 												<b><digi:trn key="aim:meDate">Date</digi:trn></b>
@@ -126,7 +126,7 @@
 										</TR>											
 										<logic:iterate name="indicator" property="priorValues"
 										id="pValue">
-										<TR bgcolor="#ffffff">
+										<TR bgcolor="#f4f4f2">
 											<TD>
 												&nbsp;
 											</TD>
@@ -157,7 +157,15 @@
 											<TD colspan="3">
 												<bean:write name="indicator" property="riskName" />													
 											</TD>
-										</TR>																				
+										</TR>		
+										<TR bgcolor="#ffffff">
+											<TD>
+												<b><digi:trn key="aim:meProgress">Progress</digi:trn></b>
+											</TD>
+											<TD colspan="3">
+												<bean:write name="indicator" property="progress" />
+											</TD>
+										</TR>											
 									</TABLE>
 								</TD></TR>
 							</logic:iterate>

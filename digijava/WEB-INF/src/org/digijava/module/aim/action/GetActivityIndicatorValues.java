@@ -46,11 +46,10 @@ public class GetActivityIndicatorValues extends Action
 							eaForm.setBaseValDate(actInd.getBaseValDate());
 							eaForm.setTargetVal(actInd.getTargetVal());
 							eaForm.setTargetValDate(actInd.getTargetValDate());
-							eaForm.setActualVal(actInd.getActualVal());
-							eaForm.setActualValDate(actInd.getActualValDate());
-							eaForm.setIndicatorPriorValues(MEIndicatorsUtil.getPriorIndicatorValues(indValId));
+							eaForm.setRevTargetVal(actInd.getRevisedTargetVal());
+							eaForm.setRevTargetValDate(actInd.getRevisedTargetValDate());
 							eaForm.setCurrentVal(actInd.getCurrentVal());
-							eaForm.setCurrValueDate(actInd.getCurrentValDate());
+							eaForm.setCurrentValDate(actInd.getCurrentValDate());
 							eaForm.setComments(actInd.getComments());
 							eaForm.setIndicatorRisk(actInd.getRisk());
 							break;
@@ -67,7 +66,6 @@ public class GetActivityIndicatorValues extends Action
 		{
 			eaForm.setExpIndicatorId(new Long(-1));
 		}
-		
 		return mapping.findForward("forward");
 	}
 }

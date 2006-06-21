@@ -119,6 +119,20 @@
 			<html:text property="indicatorCode" size="20" styleClass="inp-text"/>
 		</td>
 	</tr>
+	<tr bgColor=#ffffff>
+		<td height="20" align="left">
+					&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+			<digi:trn key="aim:meIndicatorType">
+			Indicator Type</digi:trn>
+			<font color="red">*</font>
+		</td>
+		<td align="left">
+			<html:select property="ascendingInd" styleClass="inp-text">
+				<html:option value="A">Ascending</html:option>
+				<html:option value="D">Descending</html:option>
+			</html:select>
+		</td>
+	</tr>	
 	<tr bgcolor=#ffffff><td height="5"></td></tr>	
 	<c:if test="${aimIndicatorForm.indId == null}">
 	<tr><td colspan="2" align="left">

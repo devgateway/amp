@@ -33,8 +33,8 @@ public class UpdateMEIndicatorValues extends Action {
 			actInd.setBaseValDate(uivForm.getBaseValDate());
 			actInd.setTargetVal(uivForm.getTargetVal());
 			actInd.setTargetValDate(uivForm.getTargetValDate());
-			actInd.setActualVal(uivForm.getActualVal());
-			actInd.setActualValDate(uivForm.getActualValDate());
+			actInd.setRevisedTargetVal(uivForm.getRevisedTargetVal());
+			actInd.setRevisedTargetValDate(uivForm.getRevisedTargetValDate());
 			actInd.setActivityId(uivForm.getActivityId());
 			MEIndicatorsUtil.saveMEIndicatorValues(actInd, 0);
 		} else if (event != null && event.equalsIgnoreCase("delete")) {

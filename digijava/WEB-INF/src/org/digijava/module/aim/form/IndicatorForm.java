@@ -1,9 +1,9 @@
 package org.digijava.module.aim.form;
 
+import java.io.Serializable;
 import java.util.Collection;
 
-import org.apache.struts.action.*;
-import java.io.Serializable;
+import org.apache.struts.action.ActionForm;
 
 
 
@@ -30,6 +30,8 @@ public class IndicatorForm extends ActionForm implements Serializable
 	private String searchkey = null;
 	private String addswitch = null;
 	private boolean noSearchResult = false;
+	
+	private char ascendingInd;
 	
 	public String getSameIndicatorCode() {
 		return sameIndicatorCode;
@@ -239,5 +241,19 @@ public class IndicatorForm extends ActionForm implements Serializable
 	 */
 	public void setNoSearchResult(boolean noSearchResult) {
 		this.noSearchResult = noSearchResult;
+	}
+
+	/**
+	 * @return Returns the ascendingInd.
+	 */
+	public char getAscendingInd() {
+		return ascendingInd;
+	}
+
+	/**
+	 * @param ascendingInd The ascendingInd to set.
+	 */
+	public void setAscendingInd(char ascendingInd) {
+		this.ascendingInd = ascendingInd;
 	}
 }

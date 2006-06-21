@@ -15,10 +15,10 @@ public class UpdateIndicatorValuesForm extends ActionForm {
 	private Long activityId;
 	private float baseVal;
 	private float targetVal;
-	private float actualVal;
+	private float revisedTargetVal;
 	private String baseValDate;
 	private String targetValDate;
-	private String actualValDate;
+	private String revisedTargetValDate;
 	
 	private Collection indicators;
 	private Long expIndicatorId;
@@ -132,28 +132,29 @@ public class UpdateIndicatorValuesForm extends ActionForm {
 		this.targetValDate = targetValDate;
 	}
 	/**
-	 * @return Returns the actualVal.
+	 * @return Returns the revisedTargetVal.
 	 */
-	public float getActualVal() {
-		return actualVal;
+	public float getRevisedTargetVal() {
+		return revisedTargetVal;
 	}
 	/**
-	 * @param actualVal The actualVal to set.
+	 * @param revisedTargetVal The revisedTargetVal to set.
 	 */
-	public void setActualVal(float actualVal) {
-		this.actualVal = actualVal;
+	public void setRevisedTargetVal(float revisedTargetVal) {
+		this.revisedTargetVal = revisedTargetVal;
 	}
 	/**
-	 * @return Returns the actualValDate.
+	 * @return Returns the revisedTargetValDate.
 	 */
-	public String getActualValDate() {
-		return actualValDate;
+	public String getRevisedTargetValDate() {
+		return revisedTargetValDate;
 	}
 	/**
-	 * @param actualValDate The actualValDate to set.
+	 * @param revisedTargetValDate The revisedTargetValDate to set.
 	 */
-	public void setActualValDate(String actualValDate) {
-		this.actualValDate = actualValDate;
+	public void setRevisedTargetValDate(String revisedTargetValDate) {
+		this.revisedTargetValDate = revisedTargetValDate;
 	}
+
 }
 

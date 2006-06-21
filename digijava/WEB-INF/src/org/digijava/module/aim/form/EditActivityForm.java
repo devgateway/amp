@@ -290,6 +290,7 @@ public class EditActivityForm extends ActionForm implements Serializable{
 	private double totalCommitments;
 	private double totalDisbursements;
 	private double totalExpenditures;
+	private String currCode;
 	
 	private boolean donorFlag; 
 	private Long fundDonor;
@@ -303,10 +304,10 @@ public class EditActivityForm extends ActionForm implements Serializable{
 	private String baseValDate;
 	private float targetVal;
 	private String targetValDate;
-	private float actualVal;
-	private String actualValDate;
+	private float revTargetVal;
+	private String revTargetValDate;
 	private float currentVal;
-	private String currValueDate;
+	private String currValDate;
 	private String comments;
 	
 	private Collection riskCollection;
@@ -3300,20 +3301,6 @@ public class EditActivityForm extends ActionForm implements Serializable{
 	}
 
 	/**
-	 * @return Returns the currValueDate.
-	 */
-	public String getCurrValueDate() {
-		return currValueDate;
-	}
-
-	/**
-	 * @param currValueDate The currValueDate to set.
-	 */
-	public void setCurrValueDate(String currValueDate) {
-		this.currValueDate = currValueDate;
-	}
-
-	/**
 	 * @return Returns the indHistory.
 	 */
 	public Collection getIndHistory() {
@@ -3452,31 +3439,60 @@ public class EditActivityForm extends ActionForm implements Serializable{
 	}
 
 	/**
-	 * @return Returns the actualVal.
+	 * @return Returns the revTargetVal.
 	 */
-	public float getActualVal() {
-		return actualVal;
+	public float getRevTargetVal() {
+		return revTargetVal;
 	}
 
 	/**
-	 * @param actualVal The actualVal to set.
+	 * @param revTargetVal The revTargetVal to set.
 	 */
-	public void setActualVal(float actualVal) {
-		this.actualVal = actualVal;
+	public void setRevTargetVal(float revTargetVal) {
+		this.revTargetVal = revTargetVal;
 	}
 
 	/**
-	 * @return Returns the actualValDate.
+	 * @return Returns the revTargetValDate.
 	 */
-	public String getActualValDate() {
-		return actualValDate;
+	public String getRevTargetValDate() {
+		return revTargetValDate;
 	}
 
 	/**
-	 * @param actualValDate The actualValDate to set.
+	 * @param revTargetValDate The revTargetValDate to set.
 	 */
-	public void setActualValDate(String actualValDate) {
-		this.actualValDate = actualValDate;
+	public void setRevTargetValDate(String revTargetValDate) {
+		this.revTargetValDate = revTargetValDate;
 	}
-	
+
+	/**
+	 * @return Returns the currValDate.
+	 */
+	public String getCurrValDate() {
+		return currValDate;
+	}
+
+	/**
+	 * @param currValDate The currValDate to set.
+	 */
+	public void setCurrValDate(String currValDate) {
+		this.currValDate = currValDate;
+	}
+
+	/**
+	 * @return Returns the currCode.
+	 */
+	public String getCurrCode() {
+		return currCode;
+	}
+
+	/**
+	 * @param currCode The currCode to set.
+	 */
+	public void setCurrCode(String currCode) {
+		this.currCode = currCode;
+	}
+
+		
 }

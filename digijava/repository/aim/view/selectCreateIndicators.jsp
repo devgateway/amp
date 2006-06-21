@@ -96,7 +96,7 @@
 </script>
 
 <digi:form action="/selectCreateIndicators.do">
-<digi:instance property="aimIndicatorForm" />
+
 <html:hidden property="activityId" />
 <html:hidden property="addswitch" />
 
@@ -342,8 +342,24 @@
 																		</td>																	
 																	</tr>
 																	<tr>
+																		<td bgcolor="#f4f4f2" align="left">
+																			&nbsp;
+																		</td>
+																		<td bgcolor="#f4f4f2" align="right">
+																			<digi:trn key="aim:meIndicatorType">
+																			Indicator Type</digi:trn>
+																		</td>
+																		<td bgcolor="#f4f4f2" align="left">
+																			<html:select property="ascendingInd" styleClass="inp-text">
+																				<html:option value="A">Ascending</html:option>
+																				<html:option value="D">Descending</html:option>
+																			</html:select>
+																		</td>																	
+																	</tr>																	
+																	<tr>
 																		<td bgcolor="#f4f4f2" align="center" colspan="3">
-																			<input class="buton" type="button" name="addnewIndicator" value=" Add " onclick="addNewIndicatorTL()">
+																			<input class="buton" type="button" name="addnewIndicator" value=" Add " 
+																			onclick="addNewIndicatorTL()">
 																		</td>
 																	</tr>
 																</table>														

@@ -31,9 +31,6 @@ public class ViewIndicatorValues extends TilesAction {
 		String ind = request.getParameter("ind");
 		String risk = request.getParameter("risk");
 		
-		logger.info("ind = " + ind);
-		logger.info("risk=  " + risk);
-		
 		Collection col = MEIndicatorsUtil.getIndicatorsForActivity(new Long(
 				viForm.getAmpActivityId()));
 		Iterator itr = col.iterator();

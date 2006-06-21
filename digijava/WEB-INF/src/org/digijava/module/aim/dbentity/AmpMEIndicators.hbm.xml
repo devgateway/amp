@@ -13,5 +13,8 @@
 		<property name="name" column="name" type="java.lang.String"/>
 		<property name="description" column="description" type="org.digijava.kernel.db.SafeClobType"/>
 		<property name="defaultInd" column="default_ind" type="java.lang.Boolean"/>
+		<property name="ascendingInd" column="ascending_ind" type="java.lang.Boolean"/>		
+		
+		
 	</class>
 </hibernate-mapping>

@@ -3,6 +3,7 @@ package org.digijava.module.aim.util;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.Statement;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -405,82 +406,6 @@ public class MEIndicatorsUtil
 		}
 		return col;
 	}
-	/*
-	public static Collection getActivityIndicators(Collection indValIds) {
-		Session session = null;
-		Collection col = new ArrayList();
-		String qryStr = null;
-		Query qry = null;
-		
-		try {
-			if (indValIds != null && indValIds.size() > 0) {
-				String params = "";
-				Iterator itr = indValIds.iterator();
-				while (itr.hasNext()) {
-					Long indValId = (Long) itr.next();
-					if (params.length() > 0) {
-						params += ",";
-					}
-					params += indValId;
-				}
-				
-				session = PersistenceManager.getSession();
-				qryStr = "select indVal from " + AmpMEIndicatorValue.class.getName() + " indVal" +
-						" where indVal.ampMeIndValId in (" + params + ")";
-			
-				qry = session.createQuery(qryStr);
-				itr = qry.list().iterator();
-				while (itr.hasNext()) {
-					AmpMEIndicatorValue meIndValue = (AmpMEIndicatorValue) itr.next();
-					ActivityIndicator actInd = new ActivityIndicator();
-					actInd.setIndicatorName(meIndValue.getMeIndicatorId().getName());
-					actInd.setIndicatorCode(meIndValue.getMeIndicatorId().getCode());
-				
-					actInd.setBaseVal(meIndValue.getBaseVal());
-					if (meIndValue.getBaseValDate() != null) {
-						actInd.setBaseValDate(
-								DateConversion.ConvertDateToString(
-										meIndValue.getBaseValDate()));
-					}
-					actInd.setIndicatorId(meIndValue.getMeIndicatorId()
-							.getAmpMEIndId());
-					actInd.setIndicatorValId(meIndValue.getAmpMeIndValId());
-					actInd.setActualVal(meIndValue.getActualVal());
-					if (meIndValue.getActualValDate() != null) {
-						actInd.setActualValDate(DateConversion.ConvertDateToString(
-								meIndValue.getActualValDate()));
-					}
-					actInd.setTargetVal(meIndValue.getTargetVal());
-					if (meIndValue.getTargetValDate() != null) {
-							actInd.setTargetValDate(DateConversion.ConvertDateToString(
-									meIndValue.getTargetValDate()));
-					}
-					if (meIndValue.getRisk() != null) {
-						actInd.setRisk(meIndValue.getRisk().getAmpIndRiskRatingsId());
-						actInd.setRiskName(meIndValue.getRisk().getRatingName());
-					}
-						
-					
-					actInd.setComments(meIndValue.getComments());
-					actInd.setDefaultInd(meIndValue.getMeIndicatorId().isDefaultInd());
-					col.add(actInd);
-				}				
-			}
-		} catch (Exception e) {
-			logger.error("Exception from getActivityIndicators() :" + e.getMessage());
-			e.printStackTrace(System.out);
-		} finally {
-			if (session != null) {
-				try {
-					PersistenceManager.releaseSession(session);
-				} catch (Exception rsf) {
-					logger.error("Failed to release session :" + rsf.getMessage());
-				}
-			}
-		}
-		return col;		
-	}
-	*/
 
 	public static Collection getActivityIndicators(Long actId) 
 	{
@@ -503,28 +428,36 @@ public class MEIndicatorsUtil
 					ActivityIndicator actInd = new ActivityIndicator();
 					actInd.setIndicatorName(meIndValue.getMeIndicatorId().getName());
 					actInd.setIndicatorCode(meIndValue.getMeIndicatorId().getCode());
-			
+					actInd.setIndicatorId(meIndValue.getMeIndicatorId()
+							.getAmpMEIndId());
+					actInd.setIndicatorValId(meIndValue.getAmpMeIndValId());
+					
 					actInd.setBaseVal(meIndValue.getBaseVal());
 					if (meIndValue.getBaseValDate() != null) {
 						actInd.setBaseValDate(
 								DateConversion.ConvertDateToString(
 										meIndValue.getBaseValDate()));
 					}
-					actInd.setIndicatorId(meIndValue.getMeIndicatorId()
-							.getAmpMEIndId());
-					actInd.setIndicatorValId(meIndValue.getAmpMeIndValId());
+
 					actInd.setActualVal(meIndValue.getActualVal());
 					if (meIndValue.getActualValDate() != null) {
 						actInd.setActualValDate(DateConversion
 								.ConvertDateToString(meIndValue
 										.getActualValDate()));
 					}
+
 					actInd.setTargetVal(meIndValue.getTargetVal());
 					if (meIndValue.getTargetValDate() != null) {
-						actInd.setTargetValDate(DateConversion
-								.ConvertDateToString(meIndValue
-										.getTargetValDate()));
+						actInd.setTargetValDate(DateConversion.ConvertDateToString(
+								meIndValue.getTargetValDate()));						
+					}					
+					
+					actInd.setRevisedTargetVal(meIndValue.getRevisedTargetVal());
+					if (meIndValue.getRevisedTargetValDate() != null) {
+						actInd.setRevisedTargetValDate(DateConversion.ConvertDateToString(
+								meIndValue.getRevisedTargetValDate()));						
 					}
+					
 					if (meIndValue.getRisk() != null)
 						actInd.setRisk(meIndValue.getRisk()
 								.getAmpIndRiskRatingsId());
@@ -532,6 +465,9 @@ public class MEIndicatorsUtil
 					actInd.setComments(meIndValue.getComments());
 					actInd.setDefaultInd(meIndValue.getMeIndicatorId()
 							.isDefaultInd());
+					
+					actInd.setPriorValues(getPriorIndicatorValues(meIndValue.getAmpMeIndValId(),true));
+					
 					col.add(actInd);
 				}				
 			}
@@ -561,7 +497,7 @@ public class MEIndicatorsUtil
 		} catch (Exception e) {
 			logger.error("Exception from getActivityIndicators() :" + e.getMessage());
 			e.printStackTrace(System.out);
-		} finally {
+		} finally { 
 			if (session != null) {
 				try {
 					PersistenceManager.releaseSession(session);
@@ -579,6 +515,7 @@ public class MEIndicatorsUtil
 		Collection col = new ArrayList();
 		String qryStr = null;
 		Query qry = null;
+		DecimalFormat df = new DecimalFormat("###.##%");
 		
 		try {
 			session = PersistenceManager.getSession();
@@ -604,26 +541,50 @@ public class MEIndicatorsUtil
 					actInd.setIndicatorId(meIndValue.getMeIndicatorId()
 							.getAmpMEIndId());
 					actInd.setIndicatorValId(meIndValue.getAmpMeIndValId());
+					
 					actInd.setActualVal(meIndValue.getActualVal());
 					if (meIndValue.getActualValDate() != null) {
 						actInd.setActualValDate(DateConversion
 								.ConvertDateToString(meIndValue
 										.getActualValDate()));
 					}
+
 					actInd.setTargetVal(meIndValue.getTargetVal());
 					if (meIndValue.getTargetValDate() != null) {
-						actInd.setTargetValDate(DateConversion
-								.ConvertDateToString(meIndValue
-										.getTargetValDate()));
+						actInd.setTargetValDate(DateConversion.ConvertDateToString(
+								meIndValue.getTargetValDate()));						
+					}					
+					
+					actInd.setRevisedTargetVal(meIndValue.getRevisedTargetVal());
+					if (meIndValue.getRevisedTargetValDate() != null) {
+						actInd.setRevisedTargetValDate(DateConversion.ConvertDateToString(
+								meIndValue.getRevisedTargetValDate()));						
 					}
-					if (meIndValue.getRisk() != null) {
-						actInd.setRisk(meIndValue.getRisk().getAmpIndRiskRatingsId());
-						actInd.setRiskName(meIndValue.getRisk().getRatingName());
-					}
-					actInd.setPriorValues(getPriorIndicatorValues(meIndValue.getAmpMeIndValId()));
+					
+					actInd.setPriorValues(getPriorIndicatorValues(meIndValue.getAmpMeIndValId(),false));
 					actInd.setComments(meIndValue.getComments());
 					actInd.setDefaultInd(meIndValue.getMeIndicatorId()
 							.isDefaultInd());
+					
+					if (meIndValue.getRisk() != null) {
+						if (meIndValue.getRisk() != null)
+							actInd.setRiskName(meIndValue.getRisk()
+									.getRatingName());
+					}					
+					
+					float progress = 0;
+					float baseVal = meIndValue.getBaseVal();
+					float targetVal = meIndValue.getRevisedTargetVal();
+					float actVal = meIndValue.getActualVal(); 
+					
+					if (targetVal == baseVal) {
+						progress = 100;
+					} else {
+						progress = (actVal - baseVal)/(targetVal - baseVal);
+						progress = (progress < 0) ? 0 : progress;
+					}
+					
+					actInd.setProgress(df.format(progress));
 					col.add(actInd);
 				}				
 			}
@@ -649,24 +610,11 @@ public class MEIndicatorsUtil
 		try {
 			session = PersistenceManager.getSession();
 			AmpMEIndicatorValue meIndVal = null;
-			boolean revValuesExist = false;
 			
 			if (actInd.getIndicatorValId() != null && 
 					actInd.getIndicatorValId().longValue() > 0) {
 				meIndVal = (AmpMEIndicatorValue) session.load(
 						AmpMEIndicatorValue.class,actInd.getIndicatorValId());
-
-				String tmp = "select count(*) from " + AmpMECurrValHistory.class.getName() + " me" +
-						" where (me.meIndValue=:id)";
-				Query qry = session.createQuery(tmp);
-				qry.setParameter("id",actInd.getIndicatorValId(),Hibernate.LONG);
-				Iterator itr = qry.list().iterator();
-				if (itr.hasNext()) {
-					int cnt = ((Integer) itr.next()).intValue();
-					if (cnt > 0) {
-						revValuesExist = true;
-					}
-				}
 			} else {
  				meIndVal = new AmpMEIndicatorValue();
 				AmpActivity act = (AmpActivity) session.load(AmpActivity.class,
@@ -678,15 +626,17 @@ public class MEIndicatorsUtil
 
 			}
 			meIndVal.setBaseVal(actInd.getBaseVal());
-			meIndVal.setTargetVal(actInd.getTargetVal());
-			meIndVal.setActualVal(actInd.getActualVal());
 			meIndVal.setBaseValDate(DateConversion.getDate(actInd.getBaseValDate()));
+			
+			meIndVal.setTargetVal(actInd.getTargetVal());
 			meIndVal.setTargetValDate(DateConversion.getDate(actInd.getTargetValDate()));
+			
+			meIndVal.setRevisedTargetVal(actInd.getRevisedTargetVal());
+			meIndVal.setRevisedTargetValDate(DateConversion.getDate(actInd.getRevisedTargetValDate()));
+
+			meIndVal.setActualVal(actInd.getActualVal());
 			meIndVal.setActualValDate(DateConversion.getDate(actInd.getActualValDate()));
-			if (!revValuesExist) {
-				meIndVal.setRevisedTargetVal(actInd.getTargetVal());
-				meIndVal.setRevisedTargetValDate(DateConversion.getDate(actInd.getTargetValDate()));
-			}
+			
 			
 			if(chk == 1) {
 				AmpIndicatorRiskRatings indRisk = new AmpIndicatorRiskRatings();
@@ -1146,7 +1096,7 @@ public class MEIndicatorsUtil
 		}
 	}	
 	
-	public static Collection getPriorIndicatorValues(Long tempId)
+	public static Collection getPriorIndicatorValues(Long tempId,boolean considerLastValue)
 	{
 		Session session = null;
 		Collection col = new ArrayList();
@@ -1154,6 +1104,17 @@ public class MEIndicatorsUtil
 		try
 		{
 			session = PersistenceManager.getSession();
+			PriorCurrentValues priorCurrVal = null;
+			if (considerLastValue) {
+				AmpMEIndicatorValue meVal = (AmpMEIndicatorValue) session.load(AmpMEIndicatorValue.class,tempId);
+				if (meVal.getActualValDate() != null) {
+					priorCurrVal = new PriorCurrentValues();
+					priorCurrVal.setCurrValue(meVal.getActualVal());
+					priorCurrVal.setCurrValDate(DateConversion.ConvertDateToString(meVal.getActualValDate()));
+					col.add(priorCurrVal);									
+				}
+			}
+			
 			String qryStr = "select pivalues from " + AmpMECurrValHistory.class.getName() + "" +
 							" pivalues where (pivalues.meIndValue=:tempId)" ;
 			Query qry = session.createQuery(qryStr);
@@ -1162,7 +1123,7 @@ public class MEIndicatorsUtil
 			while(itr.hasNext())
 			{
 				AmpMECurrValHistory meCurrValHis = new AmpMECurrValHistory();
-				PriorCurrentValues priorCurrVal = new PriorCurrentValues();
+				priorCurrVal = new PriorCurrentValues();
 				meCurrValHis = (AmpMECurrValHistory) itr.next();
 				priorCurrVal.setCurrHistoryId(meCurrValHis.getAmpMECurrValHistoryId());
 				priorCurrVal.setCurrValue(meCurrValHis.getCurrValue());

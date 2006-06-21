@@ -207,7 +207,6 @@ public class DesktopUtil {
 				String qryStr = "select a from " + AmpActivity.class.getName() + " a" +
 						" where a.ampActivityId in (" + params + ")";
 
-				logger.info("Qrystr = " + qryStr);				
 				Query qry = session.createQuery(qryStr);
 				
 				Collection temp = qry.list();

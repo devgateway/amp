@@ -33,8 +33,10 @@ public class SaveIndicatorValues extends Action
 				if (temp.equals(actInd)) {
 					if(eaForm.getWorkingTeamLeadFlag().equalsIgnoreCase("no"))
 					{
-						temp.setCurrentVal(eaForm.getCurrentVal());
-						temp.setCurrentValDate(eaForm.getCurrValueDate());
+						if (eaForm.getCurrentValDate() != null) {
+							temp.setCurrentVal(eaForm.getCurrentVal());
+							temp.setCurrentValDate(eaForm.getCurrValDate());
+						}
 						temp.setComments(eaForm.getComments());
 						temp.setRisk(eaForm.getIndicatorRisk());
 						break;
@@ -45,10 +47,12 @@ public class SaveIndicatorValues extends Action
 						temp.setBaseValDate(eaForm.getBaseValDate());
 						temp.setTargetVal(eaForm.getTargetVal());
 						temp.setTargetValDate(eaForm.getTargetValDate());
-						temp.setActualVal(eaForm.getActualVal());
-						temp.setActualValDate(eaForm.getActualValDate());
-						temp.setCurrentVal(eaForm.getCurrentVal());
-						temp.setCurrentValDate(eaForm.getCurrValueDate());
+						temp.setRevisedTargetVal(eaForm.getRevTargetVal());
+						temp.setRevisedTargetValDate(eaForm.getRevTargetValDate());
+						if (eaForm.getCurrentValDate() != null) {
+							temp.setCurrentVal(eaForm.getCurrentVal());
+							temp.setCurrentValDate(eaForm.getCurrValDate());							
+						}
 						temp.setComments(eaForm.getComments());
 						temp.setRisk(eaForm.getIndicatorRisk());
 						break;

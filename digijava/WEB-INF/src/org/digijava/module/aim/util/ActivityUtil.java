@@ -380,39 +380,42 @@ public class ActivityUtil {
 						AmpMEIndicators meInd = (AmpMEIndicators) session.load(AmpMEIndicators.class,
 								actInd.getIndicatorId());
 						indVal.setMeIndicatorId(meInd);
-						indVal.setRevisedTargetVal(actInd.getTargetVal());
-						indVal.setRevisedTargetValDate(DateConversion.getDate(actInd.getTargetValDate()));						
 					}
 					
 					if (actInd.getBaseValDate() != null &&
 							actInd.getTargetValDate() != null &&
-							actInd.getActualValDate() != null) {
-						indVal.setBaseVal(actInd.getBaseVal());
-						indVal.setTargetVal(actInd.getTargetVal());
-						indVal.setActualVal(actInd.getActualVal());
-						indVal.setBaseValDate(DateConversion.getDate(actInd.getBaseValDate()));
-						indVal.setTargetValDate(DateConversion.getDate(actInd.getTargetValDate()));
-						indVal.setActualValDate(DateConversion.getDate(actInd.getActualValDate()));
-						
+							actInd.getRevisedTargetValDate() != null) {
+
 						indVal.setComments(actInd.getComments());
+						indVal.setBaseVal(actInd.getBaseVal());
+						indVal.setBaseValDate(DateConversion.getDate(actInd.getBaseValDate()));
 						
+						indVal.setTargetVal(actInd.getTargetVal());
+						indVal.setTargetValDate(DateConversion.getDate(actInd.getTargetValDate()));
+
+						indVal.setRevisedTargetVal(actInd.getRevisedTargetVal());
+						indVal.setRevisedTargetValDate(DateConversion.getDate(actInd.getRevisedTargetValDate()));						
+						
+						if (actInd.getCurrentValDate() != null && 
+								actInd.getCurrentValDate().trim().length() > 0) {
+							if (actInd.getActualValDate() != null &&
+									actInd.getActualValDate().trim().length() > 0) {
+								AmpMECurrValHistory currValHist = new AmpMECurrValHistory();
+								currValHist.setCurrValue(actInd.getActualVal());
+								currValHist.setCurrValueDate(DateConversion.getDate(actInd.getActualValDate()));
+								currValHist.setMeIndValue(indVal);
+								session.save(currValHist);								
+							}
+							indVal.setActualVal(actInd.getCurrentVal());
+							indVal.setActualValDate(DateConversion.getDate(actInd.getCurrentValDate()));							
+						}
+											
 						AmpIndicatorRiskRatings risk = null;
 						if (actInd.getRisk() != null && 
 								actInd.getRisk().longValue() > 0) {
 							risk = (AmpIndicatorRiskRatings) session.load(AmpIndicatorRiskRatings.class,actInd.getRisk());
 						}
 						indVal.setRisk(risk);
-						if (actInd.getCurrentValDate() != null && 
-								actInd.getCurrentValDate().trim().length() > 0) {
-							AmpMECurrValHistory currValHist = new AmpMECurrValHistory();
-							currValHist.setCurrValue(actInd.getCurrentVal());
-							currValHist.setCurrValueDate(DateConversion.getDate(actInd.getCurrentValDate()));
-							currValHist.setMeIndValue(indVal);
-							session.save(currValHist);
-							
-							indVal.setRevisedTargetVal(actInd.getCurrentVal());
-							indVal.setRevisedTargetValDate(DateConversion.getDate(actInd.getCurrentValDate()));
-						}
 						session.saveOrUpdate(indVal);						
 					}
 				}
@@ -598,7 +601,6 @@ public class ActivityUtil {
 			    activity.setLocations(new HashSet(ampActivity.getLocations()));
 			    activity.setSectors(new HashSet(ampActivity.getSectors()));
 			    activity.setOrgrole(new HashSet(ampActivity.getOrgrole()));
-			    logger.debug("** Issue size = " + ampActivity.getIssues().size() + " **");
 			    activity.setIssues(new HashSet(ampActivity.getIssues()));
 			}
 		} catch (Exception e) {

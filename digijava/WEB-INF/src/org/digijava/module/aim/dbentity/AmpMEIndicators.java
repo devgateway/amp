@@ -6,6 +6,8 @@ public class AmpMEIndicators {
 	private String name;
 	private String description;
 	private boolean defaultInd;
+	private boolean ascendingInd;
+	
 	/**
 	 * @return Returns the ampMEIndId.
 	 */
@@ -65,5 +67,17 @@ public class AmpMEIndicators {
 	 */
 	public void setDescription(String description) {
 		this.description = description;
+	}
+	/**
+	 * @return Returns the ascendingInd.
+	 */
+	public boolean isAscendingInd() {
+		return ascendingInd;
+	}
+	/**
+	 * @param ascendingInd The ascendingInd to set.
+	 */
+	public void setAscendingInd(boolean ascendingInd) {
+		this.ascendingInd = ascendingInd;
 	}
 }

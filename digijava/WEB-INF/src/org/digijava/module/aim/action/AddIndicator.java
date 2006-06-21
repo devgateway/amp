@@ -99,6 +99,12 @@ public class AddIndicator extends Action {
 					
 					ampIndicators.setCode(indForm.getIndicatorCode());
 					ampIndicators.setDefaultInd(indForm.getDefaultFlag());
+					
+					if (indForm.getAscendingInd() == 'A')
+						ampIndicators.setAscendingInd(true);
+					else
+						ampIndicators.setAscendingInd(false);
+						
 					if (indForm.getIndId() != null &&
 							indForm.getIndId().longValue() > 0) {
 						MEIndicatorsUtil.updateMEIndicator(ampIndicators);

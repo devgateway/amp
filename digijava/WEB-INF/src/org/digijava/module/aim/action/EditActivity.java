@@ -71,7 +71,6 @@ import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.ProgramUtil;
 import org.digijava.module.aim.util.TeamMemberUtil;
-import org.digijava.module.aim.util.TeamUtil;
 import org.digijava.module.cms.dbentity.CMSContentItem;
 
 /**
@@ -567,6 +566,7 @@ public class EditActivity extends Action {
 											fundDet.getTransactionAmount()
 													.doubleValue(), frmExRt,
 											toExRt);
+									eaForm.setCurrCode(fundDet.getAmpCurrencyId().getCurrencyCode());
 									if (fundDet.getTransactionType().intValue() == Constants.COMMITMENT) {
 										totComm += amt;
 									} else if (fundDet.getTransactionType()

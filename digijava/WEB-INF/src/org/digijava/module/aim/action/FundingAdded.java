@@ -117,8 +117,9 @@ public class FundingAdded extends Action {
 					fundDet.setAdjustmentTypeName("Actual");
 					Date dt = DateConversion.getDate(fundDet.getTransactionDate());
 					double frmExRt = CurrencyUtil.getExchangeRate(fundDet.getCurrencyCode(),1,dt);
-					double toExRt = CurrencyUtil.getExchangeRate(CurrencyUtil.getAmpcurrency(
-							tm.getAppSettings().getCurrencyId()).getCurrencyCode(),1,dt);
+					String toCurrCode = CurrencyUtil.getAmpcurrency(tm.getAppSettings().getCurrencyId()).getCurrencyCode();
+					eaForm.setCurrCode(toCurrCode);
+					double toExRt = CurrencyUtil.getExchangeRate(toCurrCode,1,dt);
 					double amt = CurrencyWorker.convert1(DecimalToText.getDouble(fundDet.getTransactionAmount()),frmExRt,toExRt);
 					if (fundDet.getTransactionType() == Constants.COMMITMENT) {
 						totComm += amt;

@@ -1262,6 +1262,12 @@ public class SaveActivity extends Action {
 					// Setting approval status of activity
 					activity.setApprovalStatus(eaForm.getApprovalStatus());
 					// update an existing activity
+					
+					if (eaForm.getIndicatorsME() != null)
+						logger.info("Indicators ME size = " + eaForm.getIndicatorsME().size());
+					else 
+						logger.info("Indicators ME is null");
+					
 					actId = ActivityUtil.saveActivity(activity, eaForm.getActivityId(),
 							true, eaForm.getCommentsCol(), eaForm
 									.isSerializeFlag(), field, relatedLinks, tm

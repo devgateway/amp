@@ -12,9 +12,11 @@ public class ActivityIndicator {
 	private Long indicatorValId;
 	private float baseVal;
 	private float targetVal;
+	private float revisedTargetVal;
 	private float actualVal;
 	private String baseValDate;
 	private String targetValDate;
+	private String revisedTargetValDate;
 	private String actualValDate;
 	
 	private String indicatorName;
@@ -29,6 +31,9 @@ public class ActivityIndicator {
 	
 	private Long activityId;
 	private boolean defaultInd;
+	
+	private String progress;
+	
 	
 	/**
 	 * @return Returns the baseVal.
@@ -254,5 +259,41 @@ public class ActivityIndicator {
 	 */
 	public void setRiskName(String riskName) {
 		this.riskName = riskName;
+	}
+	/**
+	 * @return Returns the progress.
+	 */
+	public String getProgress() {
+		return progress;
+	}
+	/**
+	 * @param progress The progress to set.
+	 */
+	public void setProgress(String progress) {
+		this.progress = progress;
+	}
+	/**
+	 * @return Returns the revisedTargetVal.
+	 */
+	public float getRevisedTargetVal() {
+		return revisedTargetVal;
+	}
+	/**
+	 * @param revisedTargetVal The revisedTargetVal to set.
+	 */
+	public void setRevisedTargetVal(float revisedTargetVal) {
+		this.revisedTargetVal = revisedTargetVal;
+	}
+	/**
+	 * @return Returns the revisedTargetValDate.
+	 */
+	public String getRevisedTargetValDate() {
+		return revisedTargetValDate;
+	}
+	/**
+	 * @param revisedTargetValDate The revisedTargetValDate to set.
+	 */
+	public void setRevisedTargetValDate(String revisedTargetValDate) {
+		this.revisedTargetValDate = revisedTargetValDate;
 	}
 }

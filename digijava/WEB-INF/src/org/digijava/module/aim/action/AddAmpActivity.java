@@ -351,11 +351,11 @@ public class AddAmpActivity extends Action {
 			eaForm.setBaseValDate(null);
 			eaForm.setTargetVal(0);
 			eaForm.setTargetValDate(null);
-			eaForm.setActualVal(0);
-			eaForm.setActualValDate(null);
+			eaForm.setRevTargetVal(0);
+			eaForm.setRevTargetValDate(null);
 			eaForm.setIndicatorPriorValues(null);
 			eaForm.setCurrentVal(0);
-			eaForm.setCurrValueDate(null);
+			eaForm.setCurrentValDate(null);
 			eaForm.setIndicatorRisk(null);
 			
 			//get the levels of risks

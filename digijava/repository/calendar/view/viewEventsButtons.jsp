@@ -10,7 +10,7 @@
 
 <style type="text/css">
     #tbl td {
-        border:1px solid;
+        border:2px solid;
         width:100px;
     }
     #tbl td:hover {

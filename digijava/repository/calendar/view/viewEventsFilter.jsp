@@ -26,7 +26,7 @@ function submitFilterForm(view, timestamp) {
             <html:hidden name="calendarViewForm" property="view" value="${calendarViewForm.view}"/>
             <html:hidden name="calendarViewForm" property="timestamp" value="${calendarViewForm.timestamp}"/>
             <html:hidden name="calendarViewForm" property="filterInUse" value="true"/>
-            <table border="0" width="100%" style="border:1px solid">
+            <table border="0" width="100%" style="border:2px solid">
                 <tr>
                     <td colspan="2">&nbsp;Event Type</td>
                 </tr>
@@ -38,7 +38,7 @@ function submitFilterForm(view, timestamp) {
                                 <logic:iterate id="eventType" name="calendarViewForm" property="filter.eventTypes">
                                     <tr>
                                         <td valign="middle"><html:multibox name="calendarViewForm" property="filter.selectedEventTypes" value="${eventType.id}"/></td>
-                                        <td valign="middle"><div style="width:10px;height:10px;background-color:#${eventType.color};border:1px solid"></div></td>
+                                        <td valign="middle"><div style="width:10px;height:10px;background-color:#${eventType.color};border:1x solid"></div></td>
                                         <td valign="middle" nowrap="nowrap">${eventType.name}</td>
                                     </tr>
                                 </logic:iterate>

@@ -23,7 +23,7 @@ function selectCalendarType(view, type) {
 }
 </script>
 
-<table border="0" width="100%" style="border:1px solid; border-bottom:none">
+<table border="0" width="100%" style="border:2px solid; border-bottom:none">
     <tr>
         <td nowrap="nowrap">
             <table border="0" cellpadding="0" cellspacing="0">
@@ -41,7 +41,7 @@ function selectCalendarType(view, type) {
     </tr>
 </table>
 <c:if test="${calendarViewForm.view == 'custom'}">
-    <table border="0" width="100%" style="border:1px solid; border-bottom:none">
+    <table border="0" width="100%" style="border:2px solid; border-bottom:none">
         <tr>
             <td nowrap="nowrap">
                 <table border="0" cellpadding="0" cellspacing="0">
@@ -147,7 +147,7 @@ function selectCalendarType(view, type) {
     </table>
 </c:if>
 <c:if test="${calendarViewForm.view != 'custom'}">
-    <table border="0" width="100%" style="border:1px solid">
+    <table border="0" width="100%" style="border:2px solid">
         <tr>
             <td>
                 <a href="#" style="text-decoration:none" onclick="submitFilterForm('${calendarViewForm.view}', '${calendarViewForm.dateNavigator.leftTimestamp}');return(false);">&lt;</a>
@@ -185,7 +185,7 @@ function selectCalendarType(view, type) {
             </td>
         </tr>
     </table>
-    <table border="0" width="100%" style="border-left:1px solid; border-right:1px solid;">
+    <table border="0" width="100%" style="border-left:2px solid; border-right:2px solid;">
         <logic:iterate id="row" name="calendarViewForm" property="dateNavigator.items">
             <tr>
                 <logic:iterate id="item" name="row">
@@ -208,7 +208,7 @@ function selectCalendarType(view, type) {
         </logic:iterate>
     </table>
 </c:if>
-<table border="0" width="100%" style="border:1px solid">
+<table border="0" width="100%" style="border:2px solid">
     <tr>
         <td>
             &nbsp;Today&nbsp;is:&nbsp;

@@ -22,6 +22,7 @@ import org.digijava.module.calendar.entity.DateBreakDown;
 import org.digijava.module.calendar.entity.DateNavigator;
 import org.digijava.module.calendar.entity.DateNavigatorItem;
 import org.digijava.module.calendar.exception.CalendarException;
+import org.digijava.module.calendar.dbentity.AmpEventType;
 
 public class AmpUtil {
     public static CollectionSynchronizer attendeeSyncronizer = new
@@ -188,6 +189,18 @@ public class AmpUtil {
                 calendarEndTimestamp, itemStartTimestamp, itemEndTimestamp));
         }
         return ampCalendarGraph;
+    }
+
+    public static void deleteEventType(Long eventTypeId) throws CalendarException{
+        AmpEventType eventType=AmpDbUtil.getEventType(eventTypeId);
+        AmpDbUtil.deleteEventType(eventType);
+    }
+
+    public static void createEventType(String name,String color) throws CalendarException{
+        AmpEventType newEventType=new AmpEventType();
+        newEventType.setName(name);
+        newEventType.setColor(color);
+        AmpDbUtil.updateEventType(newEventType);
     }
 
     private static AmpCalendarGraph getAmpCalendarGraph(AmpCalendar ampCalendar,

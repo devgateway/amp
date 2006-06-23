@@ -17,6 +17,7 @@
     <page page="viewEvents" name="viewEvents" title="View Events" />
     <page page="showAmpEvent" name="showAmpEvent" title="Show Amp Event" />
     <page page="previewAmpEvent" name="previewAmpEvent" title="Preview Amp Event" />
+    <page page="eventTypesList" name="eventTypes" title="Event Types" />
 </secondary-pages>
 
 <module>
@@ -34,6 +35,7 @@
     <page name="viewEvents">viewEvents.jsp</page>
     <page name="showAmpEvent">showAmpEvent.jsp</page>
     <page name="previewAmpEvent">previewAmpEvent.jsp</page>
+    <page name="eventTypesList">eventTypeList.jsp</page>
 </module>
 
 </config>

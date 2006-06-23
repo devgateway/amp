@@ -12,6 +12,7 @@
 		<action pattern="/showCalendarItemsSettings">ADMIN</action>
 		<action pattern="/updateCalendarItemSettings">ADMIN</action>
 		<action pattern="/showCalendarItems">ADMIN</action>
+		<action pattern="/eventTypes">ADMIN</action>
 		<action pattern="/translateSpecial">WRITE,TRANSLATE</action>
         <action login-required="true" pattern="/showCalendarEvent" />
         <action login-required="true" pattern="/previewCalendarEvent" />

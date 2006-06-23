@@ -18,7 +18,6 @@ import org.digijava.module.calendar.exception.CalendarException;
 import net.sf.hibernate.Query;
 import net.sf.hibernate.Session;
 import net.sf.hibernate.Transaction;
-import org.digijava.kernel.exception.*;
 
 public class AmpDbUtil {
     private static Logger logger = Logger.getLogger(AmpDbUtil.class);
@@ -36,6 +35,48 @@ public class AmpDbUtil {
                 "Unable to get AmpEventType's from database", e);
         }
     }
+
+    public static void updateEventType(AmpEventType eventType)throws CalendarException{
+        Transaction tx=null;
+        try{
+            Session session = PersistenceManager.getRequestDBSession();
+            tx=session.beginTransaction();
+            session.saveOrUpdate(eventType);
+            tx.commit();
+        }catch(Exception ex){
+            if (tx!=null){
+                try {
+                    tx.rollback();
+                } catch(Exception ex2) {
+                    throw new CalendarException("Cannot rallback EventType update",ex2);
+                }
+            }
+            throw new CalendarException("Cannot insert or update EventType",ex);
+        }
+    }
+
+
+    public static void deleteEventType(AmpEventType eventType) throws
+        CalendarException {
+        Transaction tx = null;
+        try {
+            Session session = PersistenceManager.getRequestDBSession();
+            tx = session.beginTransaction();
+            session.delete(eventType);
+            tx.commit();
+        } catch(Exception ex) {
+            if(tx != null) {
+                try {
+                    tx.rollback();
+                } catch(Exception ex2) {
+                    throw new CalendarException(
+                        "Cannot rallback EventType update", ex2);
+                }
+            }
+            throw new CalendarException("Cannot Delete or update EventType", ex);
+        }
+    }
+
 
     public static AmpEventType getEventType(Long id) throws CalendarException {
         try {
@@ -99,23 +140,25 @@ public class AmpDbUtil {
         }
     }
 
-    public static void deleteAmpCalendar(Long ampCalendarId) throws CalendarException{
-        Transaction tx=null;
+    public static void deleteAmpCalendar(Long ampCalendarId) throws
+        CalendarException {
+        Transaction tx = null;
         try {
             Session session = PersistenceManager.getRequestDBSession();
-            tx=session.beginTransaction();
-            AmpCalendar cal=getAmpCalendar(ampCalendarId);
+            tx = session.beginTransaction();
+            AmpCalendar cal = getAmpCalendar(ampCalendarId);
             session.delete(cal);
             tx.commit();
         } catch(Exception ex) {
-            if (tx!=null){
+            if(tx != null) {
                 try {
                     tx.rollback();
                 } catch(Exception ex1) {
-                    throw new CalendarException("Cannot rollback delete AMPCalendar",ex1);
+                    throw new CalendarException(
+                        "Cannot rollback delete AMPCalendar", ex1);
                 }
             }
-            throw new CalendarException("Canot delete AMPCalendar",ex);
+            throw new CalendarException("Canot delete AMPCalendar", ex);
         }
     }
 
@@ -225,7 +268,7 @@ public class AmpDbUtil {
                 Iterator it = events.iterator();
                 while(it.hasNext()) {
                     Set donors = ((AmpCalendar) it.next()).getDonors();
-                    if (donors != null && !donors.isEmpty()) {
+                    if(donors != null && !donors.isEmpty()) {
                         Set selectedDonors = AmpUtil.getSelectedDonors(donors,
                             selectedDonorIds);
                         if(selectedDonors.isEmpty()) {

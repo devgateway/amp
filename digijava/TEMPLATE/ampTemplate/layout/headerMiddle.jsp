@@ -15,7 +15,7 @@
 			<bean:define id="translation">
 				<digi:trn key="aim:enterIntoAIM">Enter in to Aid Information Module</digi:trn>
 			</bean:define>
-			<digi:link href="/showDesktop.do" styleClass="nav" onclick="return quitRnot()"	title="<%=translation%>">
+			<digi:link href="/showDesktop.do" module="aim" styleClass="nav" onclick="return quitRnot()"	title="<%=translation%>">
          	::: <digi:trn key="aim:aidInformationModule">AID INFORMATION MODULE</digi:trn>
 		 	</digi:link>
 	  </TD>

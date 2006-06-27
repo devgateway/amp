@@ -19,7 +19,7 @@
 		<property name="activityStartDate" column="activity_start_date" type="java.util.Date" /> 			<!-- defunct -->
 		<property name="activityCloseDate" column="activity_close_date" type="java.util.Date" />			<!-- defunct -->
 		<property name="originalCompDate" column="original_comp_date" type="java.util.Date" />				<!-- defunct -->
-		<property name="condition" column="condition" type="org.digijava.kernel.db.SafeClobType"/> 
+		<property name="condition" column="`condition`" type="org.digijava.kernel.db.SafeClobType"/> 
 
 		<property name="contactName" column="contact_name" type="java.lang.String"/>                        <!-- defunct -->
 

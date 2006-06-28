@@ -66,19 +66,19 @@
 											</digi:link>
 											</td>
 										</tr>
-										<%--
+										
 										<tr>
 											<td class=f-names noWrap>
 											<digi:img src="module/aim/images/arrow-th-BABAB9.gif" width="16"/>
 											<bean:define id="translation">
 												<digi:trn key="aim:clickToViewSectorManager">Click here to view Sector Manager</digi:trn>
 											</bean:define>
-											<digi:link href="/sectorManager.do" title="<%=translation%>" >
-											<digi:trn key="aim:sectorManager">Sector Manager</digi:trn>
+											<digi:link href="/getSectorSchemes.do" title="<%=translation%>" >
+											<digi:trn key="aim:sectorManager">Sector Manager</digi:trn>	
 											</digi:link>
 											</td>
 										</tr>
-										--%>
+										
 										<tr>
 											<td class=f-names noWrap>
 											<digi:img src="module/aim/images/arrow-th-BABAB9.gif" width="16"/>

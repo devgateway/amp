@@ -66,10 +66,10 @@ public class DateConversion
 		int yr = Integer.parseInt(strDate.substring(curr, strDate.length()));
 		
 		GregorianCalendar gc = new GregorianCalendar(yr,mon-1,day) ;
-		if ( logger.isDebugEnabled() )
+		/*if ( logger.isDebugEnabled() )
 			logger.debug("getDate returning date with year " + gc.get(Calendar.YEAR)
 					  + " month " + gc.get(Calendar.MONTH) 
-					  + " day "  + gc.get(Calendar.DAY_OF_MONTH)) ;
+					  + " day "  + gc.get(Calendar.DAY_OF_MONTH)) ; */
 		return gc.getTime() ;	
 	}
 	
@@ -81,8 +81,8 @@ public class DateConversion
 	 */
 	public static int getYear(String s)
 	{
-		if ( logger.isDebugEnabled() )
-			logger.debug("getYear passed String" + s ) ;
+		//if ( logger.isDebugEnabled() )
+			//logger.debug("getYear passed String" + s ) ;
 		int yr = 0 ;
 		if ( s != null && s.length() != 0 )		{
 			String strYr = "" ;
@@ -97,8 +97,8 @@ public class DateConversion
 			sb.reverse() ;
 			yr= Integer.parseInt(sb.toString()) ;	
 		}
-		if ( logger.isDebugEnabled() )
-			logger.debug("getYear returning year="+yr) ; 
+		//if ( logger.isDebugEnabled() )
+			//logger.debug("getYear returning year="+yr) ; 
 		return yr ;
 	}
 	

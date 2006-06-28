@@ -4748,7 +4748,7 @@ public class DbUtil {
 			q = session.createQuery(queryString);
 			q.setParameter("status", "approved", Hibernate.STRING);
 			actList=(ArrayList)q.list();
-			logger.debug("Approved Activity List Size: " + actList.size());
+			//logger.debug("Approved Activity List Size: " + actList.size());
 
 		} catch (Exception ex) {
 			logger.error("Unable to get AmpActivity [getApprovedActivities()]", ex);
@@ -4767,7 +4767,6 @@ public class DbUtil {
 
 	public static ArrayList getAmpDonors(String inClause) {
 		ArrayList donor = new ArrayList();
-		StringBuffer DNOrg = new StringBuffer();
 		Session session = null;
 		Query q = null;
 		Iterator iterActivity = null;
@@ -4781,7 +4780,7 @@ public class DbUtil {
 					+ " activity where activity.team.ampTeamId in(" + inClause
 					+ ")";
 			q = session.createQuery(queryString);
-			logger.debug("Activity List: " + q.list().size());
+			//logger.debug("Activity List: " + q.list().size());
 			iterActivity = q.list().iterator();
 			while (iterActivity.hasNext()) {
 				AmpActivity ampActivity = (AmpActivity) iterActivity.next();
@@ -4829,7 +4828,6 @@ public class DbUtil {
 	
 		public static ArrayList getAmpDonorsForActivity(Long id) {
 		ArrayList donor = new ArrayList();
-		StringBuffer DNOrg = new StringBuffer();
 		Session session = null;
 		Query q = null;
 		Iterator iterActivity = null;
@@ -4844,7 +4842,7 @@ public class DbUtil {
 			
 			 q = session.createQuery(queryString);
 			q.setParameter("id", id, Hibernate.LONG);
-			logger.debug("Activity List: " + q.list().size());
+			//logger.debug("Activity List: " + q.list().size());
 			iterActivity = q.list().iterator();
 			while (iterActivity.hasNext()) {
 				AmpActivity ampActivity = (AmpActivity) iterActivity.next();
@@ -4917,8 +4915,8 @@ public class DbUtil {
 			AmpActivity activity = (AmpActivity) session.load(AmpActivity.class, activityId);
 			fundingSet = activity.getFunding();
 			surveySet = activity.getSurvey();
-			logger.debug("fundingSet.size() : " + fundingSet.size());
-			logger.debug("surveySet.size() : " + surveySet.size());
+			//logger.debug("fundingSet.size() : " + fundingSet.size());
+			//logger.debug("surveySet.size() : " + surveySet.size());
 			if (surveySet.size() < 1)
 				flag1 = true;
 			if (fundingSet.size() < 1)
@@ -4957,8 +4955,8 @@ public class DbUtil {
 				if (activity.getSurvey().isEmpty())
 					logger.debug("activity.getSurvey() is empty.");
 				else {
-					logger.debug("activity.getSurvey().size() : " + activity.getSurvey().size());
-					logger.debug("donorOrgs.size() : " + donorOrgs.size());
+					//logger.debug("activity.getSurvey().size() : " + activity.getSurvey().size());
+					//logger.debug("donorOrgs.size() : " + donorOrgs.size());
 					iter2 = activity.getSurvey().iterator();
 					while (iter2.hasNext()) {
 						AmpAhsurvey svy = (AmpAhsurvey) iter2.next();
@@ -5008,7 +5006,7 @@ public class DbUtil {
 			String qry = "select indc from " + AmpAhsurveyIndicator.class.getName()
 						 	+ " indc order by indicator_number asc";
 			Collection indicatorColl = session.createQuery(qry).list();
-			logger.debug("indicatorColl.size() : " + indicatorColl.size());
+			//logger.debug("indicatorColl.size() : " + indicatorColl.size());
 			
 			AmpAhsurvey svy = (AmpAhsurvey) session.get(AmpAhsurvey.class, surveyId);
 			//response = svy.getResponses();
@@ -5017,7 +5015,7 @@ public class DbUtil {
 			Query query = session.createQuery(qry);
 			query.setParameter("surveyId", surveyId, Hibernate.LONG);
 			response = ((AmpAhsurvey) query.list().get(0)).getResponses();
-			logger.debug("response.size() : " + response.size());
+			//logger.debug("response.size() : " + response.size());
 			
 			qry = "select fund from " + AmpFunding.class.getName() 
 					+ " fund where (fund.ampDonorOrgId=:donorId) and (fund.ampActivityId=:activityId)";
@@ -5025,7 +5023,7 @@ public class DbUtil {
 			query.setParameter("donorId", svy.getAmpDonorOrgId().getAmpOrgId(), Hibernate.LONG);
 			query.setParameter("activityId", svy.getAmpActivityId().getAmpActivityId(), Hibernate.LONG);
 			fundingSet = query.list();
-			logger.debug("fundingSet.size() : " + fundingSet.size());
+			//logger.debug("fundingSet.size() : " + fundingSet.size());
 			
 			if (response.size() < 1)	// new survey
 				flag = false;
@@ -5080,13 +5078,13 @@ public class DbUtil {
 													}
 												}
 											}
-											logger.debug("actual = " + actual + "  planned = " + planned);
+											//logger.debug("actual = " + actual + "  planned = " + planned);
 											if (planned == 0.0)
 												res.setResponse("nil");
 											else {
 												NumberFormat formatter = new DecimalFormat("#.##");
 											    Double percent = new Double((actual * 100) / planned);
-												logger.debug("percent = " + percent + " format(percent) : " + formatter.format(percent));
+												//logger.debug("percent = " + percent + " format(percent) : " + formatter.format(percent));
 												res.setResponse(formatter.format(percent));
 											}
 										}
@@ -5152,9 +5150,6 @@ public class DbUtil {
 		Transaction tx = null;
 		Iterator itr1 = null;
 		Iterator itr2 = null;
-		Iterator itr3 = null;
-		String indcCode = null;
-		Collection col = null;
 		boolean flag = true;
 		
 		try {
@@ -5167,7 +5162,7 @@ public class DbUtil {
 			Integer resposeSize = (Integer) session.createQuery(qry)
 									.setParameter("surveyId", surveyId, Hibernate.LONG)
 									.uniqueResult();
-			logger.debug("Response size : " + resposeSize.intValue());
+			//logger.debug("Response size : " + resposeSize.intValue());
 			if (resposeSize.intValue() < 1) {
 				flag = false;
 				logger.debug("Response set is empty");
@@ -5297,16 +5292,22 @@ public class DbUtil {
 	Collection surveyDonors = new ArrayList();
 	Set surveySet = new HashSet();
 	boolean orgGroupFlag = false;
+	boolean indc6Flag = false;
+	boolean indc5aFlag = false;
+	boolean indc7Flag = false;
 	int NUM_ANSWER_COLUMNS = 4;
 	boolean answers[] = null;
 	double answersRow[] = null;
 	double allDnRow[] = null;
 	int index = 0;
+	int j = 0;
 	double sum = 0.0;
 	String date = null;
 	int YEAR_RANGE = (closeYear - startYear + 1);
 	double fromExchangeRate = 0.0;
 	double toExchangeRate = 0.0;
+	double ansToQues4 = 0.0;
+	Double percent = null;
 	NumberFormat formatter = new DecimalFormat("#.##");
     Session session = null;
 	Iterator itr1 = null;
@@ -5316,23 +5317,30 @@ public class DbUtil {
 	
 	try {
 		session = PersistenceManager.getSession();
-		if ("5a".equalsIgnoreCase(indcCode))
-			NUM_ANSWER_COLUMNS = 7;
-		if ("6".equalsIgnoreCase(indcCode))
+		if ("5a".equalsIgnoreCase(indcCode)) {
+			NUM_ANSWER_COLUMNS = 8;
+			indc5aFlag = true;
+		}
+		else if ("6".equalsIgnoreCase(indcCode)) {
 			NUM_ANSWER_COLUMNS = YEAR_RANGE;
-		if ("9".equalsIgnoreCase(indcCode))
+			indc6Flag = true;
+		}
+		else if ("7".equalsIgnoreCase(indcCode))
+			indc7Flag = true;
+		else if ("9".equalsIgnoreCase(indcCode))
 			NUM_ANSWER_COLUMNS = 5;
-		logger.debug("indcCode[inside getAidSurveyReportByIndicator] : " + indcCode);
-		logger.debug("startYear: " + startYear + " closeYear : " + closeYear + " YEAR_RANGE : " + YEAR_RANGE);
-		logger.debug("[inside getAidSurveyReportByIndicator()]- NUM_ANSWER_COLUMNS : " + NUM_ANSWER_COLUMNS);
+		
+		//logger.debug("indcCode[inside getAidSurveyReportByIndicator] : " + indcCode);
+		//logger.debug("startYear: " + startYear + " closeYear : " + closeYear + " YEAR_RANGE : " + YEAR_RANGE);
+		//logger.debug("[inside getAidSurveyReportByIndicator()]- NUM_ANSWER_COLUMNS : " + NUM_ANSWER_COLUMNS);
 		
 		String qry = "select distinct dn.ampDonorOrgId from " + AmpAhsurvey.class.getName() + " dn";
 		surveyDonors.addAll(session.createQuery(qry).list());
-		logger.debug("total donors from AmpOrganisation[surveyDonors] : " + surveyDonors.size());
+		//logger.debug("total donors from AmpOrganisation[surveyDonors] : " + surveyDonors.size());
 		if (surveyDonors.size() > 0) {
 			if (null != orgGroup && orgGroup.trim().length() > 1 && !"all".equalsIgnoreCase(orgGroup))
 				orgGroupFlag = true;
-			if (!"6".equalsIgnoreCase(indcCode)) {
+			if (!indc6Flag) {
 				// Creating first row for all-donors in indicator report.
 				ParisIndicator all = new ParisIndicator();
 				all.setDonor("All Donors");
@@ -5364,13 +5372,13 @@ public class DbUtil {
 				ParisIndicator pi = new ParisIndicator();	// represents one row of indicator report.
 				pi.setDonor(dnOrg.getAcronym());
 				pi.setAnswers(new ArrayList());
-				if ("6".equalsIgnoreCase(indcCode))
+				if (indc6Flag)
 					answersRow = new double[NUM_ANSWER_COLUMNS];
-				logger.debug("surveySet.size() : " + surveySet.size());
+				//logger.debug("surveySet.size() : " + surveySet.size());
 				boolean[][] answersColl = getSurveyReportAnswer(indcCode, surveySet);
 				//logger.debug("[inside getAidSurveyReportByIndicator()]- answersColl.length : " + answersColl.length);
 				for (int i = 0; i < YEAR_RANGE; i++) {
-					if (!"6".equalsIgnoreCase(indcCode)) {
+					if (!indc6Flag) {
 						// answersRow will represent row for one disbursement year inside answer-collection of pi helper object.
 						answersRow = new double[NUM_ANSWER_COLUMNS];
 						answersRow[0] = (startYear + i);
@@ -5383,48 +5391,61 @@ public class DbUtil {
 					index = 0;
 					while(itr2.hasNext()) {
 						AmpAhsurvey svy = (AmpAhsurvey) itr2.next();
-						/*logger.debug("[inside getAidSurveyReportByIndicator()]- survey-id : " + svy.getAmpAHSurveyId());
-						logger.debug("[inside getAidSurveyReportByIndicator()]- activity-id : " + svy.getAmpActivityId().getAmpActivityId());
-						logger.debug("[inside getAidSurveyReportByIndicator()]- NUM_ANSWER_COLUMNS : " + NUM_ANSWER_COLUMNS);
-						logger.debug("[inside getAidSurveyReportByIndicator()]- answersColl[" + index + "]");*/
+						if ("4".equalsIgnoreCase(indcCode)) {
+							Iterator iter = svy.getResponses().iterator();
+							while (iter.hasNext()) {
+								AmpAhsurveyResponse resp = (AmpAhsurveyResponse) iter.next();
+								if (4 == resp.getAmpQuestionId().getQuestionNumber().intValue()) {
+									try {
+										ansToQues4 = Double.parseDouble(resp.getResponse());
+									}
+									catch (NumberFormatException nex) {
+										logger.debug("response to question-4 is not number.");
+										ansToQues4 = 0.0;
+									}
+									break;
+								}
+							}
+						}
+						//logger.debug("[inside getAidSurveyReportByIndicator()]- survey-id : " + svy.getAmpAHSurveyId());
+						//logger.debug("[inside getAidSurveyReportByIndicator()]- activity-id : " + svy.getAmpActivityId().getAmpActivityId());
+						//logger.debug("[inside getAidSurveyReportByIndicator()]- answersColl[" + index + "]");
 						answers = answersColl[index++];
 						if (null != answers) {
-							for(int j = 0; j < answers.length; j++) {
+							for(j = 0; j < answers.length; j++) {
 								//logger.debug("[inside getAidSurveyReportByIndicator()]- answers.length     : " + answers.length);
-								//logger.debug("[inside loop] answers[" + j + "] : " + answers[j]);
 								sum = 0.0;
 								if (answers[j]) {
-									logger.debug("inside IF");
 									// Filtering by activity status here
 									if (null != status && status.trim().length() > 1 && !"all".equalsIgnoreCase(status))
 										if (!status.equalsIgnoreCase(svy.getAmpActivityId().getStatus().getName())) {
-											logger.debug("continue: because of status");
+											//logger.debug("continue: because of status");
 											continue;
 										}
-									if ("6".equalsIgnoreCase(indcCode)) {
+									if (indc6Flag) {
 										answersRow[i] += 1;
 										continue;
 									}
 									itr3 = svy.getAmpActivityId().getFunding().iterator();
 									while(itr3.hasNext()) {
 										AmpFunding fund = (AmpFunding) itr3.next();
-										logger.debug("fund.getAmpFundingId() : " + fund.getAmpFundingId());
+										//logger.debug("fund.getAmpFundingId() : " + fund.getAmpFundingId());
 										// Filtering by financing-instrument here
 										if (null != financingInstrument && financingInstrument.trim().length() > 1
 												&& !"all".equalsIgnoreCase(financingInstrument)) {
 											if (!financingInstrument.equalsIgnoreCase(fund.getModalityId().getName())) {
-												logger.debug("continue: because of financingInstrument");
+												//logger.debug("continue: because of financingInstrument");
 												continue;
 											}
 											else if ("9".equalsIgnoreCase(indcCode)) {
 												if (j == 0)
 													if (!"Direct Budget Support".equalsIgnoreCase(fund.getModalityId().getName())) {
-														logger.debug("continue[indcCode=9]: because of !Direct Budget Suppor");
+														//logger.debug("continue[indcCode=9]: because of !Direct Budget Suppor");
 														continue;
 													}
 												if (j == 1)
 													if ("Direct Budget Support".equalsIgnoreCase(fund.getModalityId().getName())) {
-														logger.debug("continue[indcCode=9]: because of Direct Budget Suppor");
+														//logger.debug("continue[indcCode=9]: because of Direct Budget Suppor");
 														continue;
 													}
 											}
@@ -5432,38 +5453,41 @@ public class DbUtil {
 										// Filtering by term-assist here
 										if (null != termAssist && termAssist.trim().length() > 1 && !"all".equalsIgnoreCase(termAssist))
 											if (!termAssist.equalsIgnoreCase(fund.getAmpTermsAssistId().getTermsAssistName())) {
-												logger.debug("continue: because of termAssist");
+												//logger.debug("continue: because of termAssist");
 												continue;
 											}
 										itr4 = fund.getFundingDetails().iterator();
 										while (itr4.hasNext()) {
 											AmpFundingDetail fundtl = (AmpFundingDetail) itr4.next();
-											logger.debug("fundtl.getAmpFundDetailId() : " + fundtl.getAmpFundDetailId());
+											//logger.debug("fundtl.getAmpFundDetailId() : " + fundtl.getAmpFundDetailId());
 											date = DateConversion.ConvertDateToString(fundtl.getTransactionDate());
-											//logger.debug("date[after DateConversion.ConvertDateToString] : " + date);
-											//logger.debug("year[DateConversion.getYear(date)] : " + DateConversion.getYear(date));
 											double convYr = new Double(DateConversion.getYear(date)).doubleValue();
-											logger.debug("convYr : " + convYr);
 											// Filtering by disbursement-year here
 											if (convYr == (startYear + i)) {
-											//if (DateConversion.getYear(date) == (startYear + i)) {
 												// Filtering by AdjustmentType & TransactionType here
-												// only Actual-Disbursement is being considered.
-												if (fundtl.getAdjustmentType().intValue() != Constants.ACTUAL
+												// only Actual-Disbursement is being considered except for indicator-7.
+												if ((!indc7Flag && fundtl.getAdjustmentType().intValue() != Constants.ACTUAL)
+														|| (indc7Flag && j == 0 && fundtl.getAdjustmentType().intValue() != Constants.PLANNED)
+														|| (indc7Flag && j == 1 && fundtl.getAdjustmentType().intValue() != Constants.ACTUAL)
 														|| fundtl.getTransactionType().intValue() != Constants.DISBURSEMENT) {
-													logger.debug("continue: because of Actual-Disbursement");
+													//logger.debug("continue: because of AdjustmentType/TransactionType filter");
 													continue;
 												}
 												// Filtering by currency here
-												logger.debug("fromExchangeRate[before] : " + fromExchangeRate + " toExchangeRate[before] : " + toExchangeRate);
+												//logger.debug("fromExchangeRate[before] : " + fromExchangeRate + " toExchangeRate[before] : " + toExchangeRate);
 												if ("USD".equalsIgnoreCase(fundtl.getAmpCurrencyId().getCurrencyCode()))
 													fromExchangeRate = 1.0;
+												else if (indc7Flag && j == 0)
+													fromExchangeRate = CurrencyUtil.getExchangeRate(fundtl.getAmpCurrencyId().getCurrencyCode(),
+																			Constants.PLANNED,fundtl.getTransactionDate());
 												else
 													fromExchangeRate = CurrencyUtil.getExchangeRate(fundtl.getAmpCurrencyId().getCurrencyCode(),
 																			Constants.ACTUAL,fundtl.getTransactionDate());
 												if (null != currency && currency.trim().length() > 1) {
 													if ("USD".equalsIgnoreCase(currency))
 														toExchangeRate = 1.0;
+													else if (indc7Flag && j == 0)
+														toExchangeRate = CurrencyUtil.getExchangeRate(currency,Constants.PLANNED,fundtl.getTransactionDate());
 													else
 														toExchangeRate = CurrencyUtil.getExchangeRate(currency,Constants.ACTUAL,fundtl.getTransactionDate());
 													//logger.debug("fromExchangeRate[after] : " + fromExchangeRate + " toExchangeRate[after] : " + toExchangeRate);
@@ -5473,55 +5497,70 @@ public class DbUtil {
 													//logger.debug("sum[inside loop]=" + sum + ": ");
 												}
 											}
-											else
-												logger.debug("continue: because of year");
+											//else
+												//logger.debug("continue: because of year");
 										}
 									}
 								}
-								answersRow[j + 1] += sum;
-								//logger.debug("sum[outside loop] : " + sum);
-								//logger.debug("answersRow[" + (j + 1) + "] : " + answersRow[j + 1]);
+								if (!indc6Flag)
+									answersRow[j + 1] += sum;
 							}
 						}
 						else
 							logger.debug("[inside getAidSurveyReportByIndicator()]- answers array is NULL !");
 					}
-					if ("6".equalsIgnoreCase(indcCode))
+					if (indc6Flag)
 						continue;
-						
-					if ("5a".equalsIgnoreCase(indcCode)) {
-						//logger.debug("inside indicator 5a");
-						answersRow[NUM_ANSWER_COLUMNS - 2] = answersRow[NUM_ANSWER_COLUMNS - 3];
-						answersRow[NUM_ANSWER_COLUMNS - 3] = answersRow[NUM_ANSWER_COLUMNS - 4] + answersRow[NUM_ANSWER_COLUMNS - 5] 
-																	+ answersRow[NUM_ANSWER_COLUMNS - 6];
-						//logger.debug("[1]-" + answersRow[1] + ": " + "[2]-" + answersRow[2] + ": " + "[3]-" + answersRow[3] 
-							//		+ ": " + "[4]-" + answersRow[4] + ": " + "[5]-" + answersRow[5] + ": " + "[6]-" + answersRow[6] + ": ");
+					
+					if ("4".equalsIgnoreCase(indcCode)) {
+						for (j = 1; j < (answersRow.length - 1); j++)
+							answersRow[j] = Double.parseDouble(formatter.format((ansToQues4 * answersRow[j]) / 100));
 					}
-					// calculating final percentage here
+					
+					// computing last two columns of indicator-5a report
+					if (indc5aFlag) {
+						//calculating percentage for second-last column here
+						sum = answersRow[NUM_ANSWER_COLUMNS - 7] + answersRow[NUM_ANSWER_COLUMNS - 6] 
+						          + answersRow[NUM_ANSWER_COLUMNS - 5];
+						if (sum == 0.0 || answersRow[NUM_ANSWER_COLUMNS - 3] == 0.0)
+							answersRow[NUM_ANSWER_COLUMNS - 2] = 0.0;
+						else {
+							sum /= 3;
+							percent = new Double((sum * 100) / answersRow[NUM_ANSWER_COLUMNS - 3]);
+							answersRow[NUM_ANSWER_COLUMNS - 2] = Double.parseDouble(formatter.format(percent));
+						}
+						// calculating final percentage here
+						if (answersRow[NUM_ANSWER_COLUMNS - 3] == 0.0 || answersRow[NUM_ANSWER_COLUMNS - 4] == 0.0)
+							answersRow[NUM_ANSWER_COLUMNS - 1] = 0.0;
+					}
+					// calculating final percentage for rest of the indicators here
 					if (answersRow[NUM_ANSWER_COLUMNS - 3] == 0.0 || answersRow[NUM_ANSWER_COLUMNS - 2] == 0.0) {
-						answersRow[NUM_ANSWER_COLUMNS - 1] = 0.0;
-						//logger.debug("answersRow[NUM_ANSWER_COLUMNS - 1] is ZERO !");
+						if (!indc5aFlag) 
+							answersRow[NUM_ANSWER_COLUMNS - 1] = 0.0;
 					}
 					else {
-						//logger.debug("NUM_ANSWER_COLUMNS : " + NUM_ANSWER_COLUMNS);
-						//for(int  b = 0; b < NUM_ANSWER_COLUMNS; b++)
-							//logger.debug("answersRow[" + b +"] : " + answersRow[b]);
-						Double percent = new Double((100 * answersRow[NUM_ANSWER_COLUMNS - 3]) / answersRow[NUM_ANSWER_COLUMNS - 2]);
-						//logger.debug("percent : " + percent + " percent(formatted) : " + formatter.format(percent));
-						if (percent.isNaN())
+						try {
+							if (indc5aFlag)
+								percent = new Double((100 * answersRow[NUM_ANSWER_COLUMNS - 4]) / answersRow[NUM_ANSWER_COLUMNS - 3]);
+							else
+								percent = new Double((100 * answersRow[NUM_ANSWER_COLUMNS - 3]) / answersRow[NUM_ANSWER_COLUMNS - 2]);
+							answersRow[NUM_ANSWER_COLUMNS - 1] = Double.parseDouble(formatter.format(percent));
+						}
+						catch (NumberFormatException nex) {
 							logger.debug("percentage is NaN");
-						else
-							answersRow[NUM_ANSWER_COLUMNS - 1] = Double.parseDouble(formatter.format(percent)); 
+							answersRow[NUM_ANSWER_COLUMNS - 1] = 0.0;
+						}
 					}
 					pi.getAnswers().add(answersRow);
 					
 					// getting results year-wise for all-donor row
 					allDnRow = (double[])(((ParisIndicator)responses.get(0)).getAnswers().get(i));
-					for(int n = 1;n < (NUM_ANSWER_COLUMNS - 1); n++)
-						allDnRow[n] += answersRow[n];
-					//logger.debug("--------------------END YEAR: " + answersRow[0] +"------------------------");
+					for(j = 1; j < (NUM_ANSWER_COLUMNS - 1); j++) {
+						if (indc5aFlag && j == (NUM_ANSWER_COLUMNS - 2)) break;
+						allDnRow[j] += answersRow[j];
+					}
 				}
-				if ("6".equalsIgnoreCase(indcCode)) {
+				if (indc6Flag) {
 					pi.getAnswers().add(answersRow);
 					responses.add(pi);
 				}
@@ -5530,19 +5569,41 @@ public class DbUtil {
 					surveySet.clear();
 				}
 			}
-			if (!"6".equalsIgnoreCase(indcCode)) {
+			if (!indc6Flag) {
 				// calculating final percentage for all-donors row
-				for (int i = 0; i < YEAR_RANGE; i++) {
-					allDnRow = (double[])(((ParisIndicator)responses.get(0)).getAnswers().get(i));
-					if (allDnRow[NUM_ANSWER_COLUMNS - 3] == 0.0 || allDnRow[NUM_ANSWER_COLUMNS - 2] == 0.0)
-						allDnRow[NUM_ANSWER_COLUMNS - 1] = 0.0;
+				for (j = 0; j < YEAR_RANGE; j++) {
+					allDnRow = (double[])(((ParisIndicator)responses.get(0)).getAnswers().get(j));
+					if (indc5aFlag) {
+						//calculating percentage for second-last column here
+						sum = allDnRow[NUM_ANSWER_COLUMNS - 7] + allDnRow[NUM_ANSWER_COLUMNS - 6] 
+						          + allDnRow[NUM_ANSWER_COLUMNS - 5];
+						if (sum == 0.0 || allDnRow[NUM_ANSWER_COLUMNS - 3] == 0.0)
+							allDnRow[NUM_ANSWER_COLUMNS - 2] = 0.0;
+						else {
+							sum /= 3;
+							percent = new Double((sum * 100) / allDnRow[NUM_ANSWER_COLUMNS - 3]);
+							allDnRow[NUM_ANSWER_COLUMNS - 2] = Double.parseDouble(formatter.format(percent));
+						}
+						// calculating final percentage here
+						if (allDnRow[NUM_ANSWER_COLUMNS - 3] == 0.0 || allDnRow[NUM_ANSWER_COLUMNS - 4] == 0.0)
+							allDnRow[NUM_ANSWER_COLUMNS - 1] = 0.0;
+					}
+					if (allDnRow[NUM_ANSWER_COLUMNS - 3] == 0.0 || allDnRow[NUM_ANSWER_COLUMNS - 2] == 0.0) {
+						if (!indc5aFlag)
+							allDnRow[NUM_ANSWER_COLUMNS - 1] = 0.0;
+					}
 					else {
-						Double percent = new Double((100 * allDnRow[NUM_ANSWER_COLUMNS - 3]) / allDnRow[NUM_ANSWER_COLUMNS - 2]);
-						logger.debug("percent : " + percent + " percent(formatted) : " + formatter.format(percent));
-						if (percent.isNaN())
-							logger.debug("NaN !!!");
-						else
-							allDnRow[NUM_ANSWER_COLUMNS - 1] = Double.parseDouble(formatter.format(percent)); 
+						try {
+							if (indc5aFlag)
+								percent = new Double((100 * allDnRow[NUM_ANSWER_COLUMNS - 4]) / allDnRow[NUM_ANSWER_COLUMNS - 3]);
+							else
+								percent = new Double((100 * allDnRow[NUM_ANSWER_COLUMNS - 3]) / allDnRow[NUM_ANSWER_COLUMNS - 2]);
+							allDnRow[NUM_ANSWER_COLUMNS - 1] = Double.parseDouble(formatter.format(percent));
+						}
+						catch (NumberFormatException nex) {
+							logger.debug("percentage[all-donors row] is NaN");
+							allDnRow[NUM_ANSWER_COLUMNS - 1] = 0.0;
+						}
 					}
 				}
 			}
@@ -5572,14 +5633,15 @@ public class DbUtil {
 	public static boolean[][] getSurveyReportAnswer(String indCode, Set surveys) {
 		boolean answersColl[][] = new boolean[surveys.size()][];
 		boolean answers[] = null;
+		boolean flag[]    = null;
 		int NUM_COLUMNS_CALCULATED = 2;
-		int index = 0;
+		int index   = 0;
 		int quesNum = 0;
 		Iterator itr1 = null;
 		Iterator itr2 = null;
 		
 		if ("5a".equalsIgnoreCase(indCode))
-			NUM_COLUMNS_CALCULATED = 4;
+			NUM_COLUMNS_CALCULATED = 5;
 		else if ("6".equalsIgnoreCase(indCode))
 			NUM_COLUMNS_CALCULATED = 1;
 		else if ("9".equalsIgnoreCase(indCode))
@@ -5588,14 +5650,14 @@ public class DbUtil {
 			NUM_COLUMNS_CALCULATED = 2;
 		//logger.debug("indCode[inside getSurveyReportAnswer] : " + indCode);
 		//logger.debug("NUM_ANSWERS_CALCULATED[inside getSurveyReportAnswer] : " + NUM_COLUMNS_CALCULATED);
-		boolean flag[] = new boolean[NUM_COLUMNS_CALCULATED];
+		flag = new boolean[NUM_COLUMNS_CALCULATED];
 		
 		itr1 = surveys.iterator();
 		while (itr1.hasNext()) {
 			AmpAhsurvey ahs = (AmpAhsurvey) itr1.next();
-			/*logger.debug("ahs.getAmpAHSurveyId()[inside iterator] : " + ahs.getAmpAHSurveyId());
-			logger.debug("ahs.getAmpDonorOrgId().getAmpOrgId()    : " + ahs.getAmpDonorOrgId().getAmpOrgId());
-			logger.debug("ahs.getAmpDonorOrgId().getAcronym()     : " + ahs.getAmpDonorOrgId().getAcronym());*/
+			//logger.debug("ahs.getAmpAHSurveyId()[inside iterator] : " + ahs.getAmpAHSurveyId());
+			//logger.debug("ahs.getAmpDonorOrgId().getAmpOrgId()    : " + ahs.getAmpDonorOrgId().getAmpOrgId());
+			//logger.debug("ahs.getAmpDonorOrgId().getAcronym()     : " + ahs.getAmpDonorOrgId().getAcronym());
 			answers = new boolean[NUM_COLUMNS_CALCULATED];
 			if (null != ahs.getResponses() && ahs.getResponses().size() > 0) {
 				//logger.debug("ahs.getResponses().size() : " + ahs.getResponses().size());
@@ -5626,40 +5688,42 @@ public class DbUtil {
 							answers[0] = ("Yes".equalsIgnoreCase(resp.getResponse())) ? true : false;
 							//logger.debug("indCode: " + indCode + " q#: " + 3 + " - answers[0] : " + answers[0]);
 						}
-						if (quesNum == 4) {
+						if (quesNum == 1) {
 							flag[1] = true;
 							answers[1] = ("Yes".equalsIgnoreCase(resp.getResponse())) ? true : false;
-							//logger.debug("indCode: " + indCode + " q#: " + 4 + " - answers[1] : " + answers[1]);
+							//logger.debug("indCode: " + indCode + " q#: " + 1 + " - answers[1] : " + answers[1]);
 						}
-						if (flag[0] && flag[1]) {
-							answers[0] = (answers[0] && answers[1]) ? true : false;
-							//logger.debug("indCode: " + indCode + " - final answers[0] : " + answers[0]);
-							break;
-						}
+						if (flag[0] && flag[1]) break;
 						else continue;
 					}
 					if ("5a".equalsIgnoreCase(indCode)) {
-						if (quesNum == 5) {
+						if (quesNum == 1) {
 							flag[0] = true;
+							answers[4] = ("Yes".equalsIgnoreCase(resp.getResponse())) ? true : false;
+							//logger.debug("indCode: " + indCode + " q#: " + 1 + " - answers[4] : " + answers[4]);
+						}
+						if (quesNum == 5) {
+							flag[1] = true;
 							answers[0] = ("Yes".equalsIgnoreCase(resp.getResponse())) ? true : false;
 							//logger.debug("indCode: " + indCode + " q#: " + 5 + " - answers[0] : " + answers[0]);
 						}
 						if (quesNum == 6) {
-							flag[1] = true;
+							flag[2] = true;
 							answers[1] = ("Yes".equalsIgnoreCase(resp.getResponse())) ? true : false;
 							//logger.debug("indCode: " + indCode + " q#: " + 6 + " - answers[1] : " + answers[1]);
 						}
 						if (quesNum == 7) {
-							flag[2] = true;
+							flag[3] = true;
 							answers[2] = ("Yes".equalsIgnoreCase(resp.getResponse())) ? true : false;
 							//logger.debug("indCode: " + indCode + " q#: " + 7 + " - answers[2] : " + answers[2]);
 						}
-						if (quesNum == 1) {
-							flag[3] = true;
-							answers[3] = ("Yes".equalsIgnoreCase(resp.getResponse())) ? true : false;
-							//logger.debug("indCode: " + indCode + " q#: " + 1 + " - answers[3] : " + answers[3]);
+						if (flag[0] && flag[1] && flag[2] && flag[3]) {
+							if (answers[0] && answers[4]) answers[0] = true;
+							if (answers[1] && answers[4]) answers[1] = true;
+							if (answers[2] && answers[4]) answers[2] = true;
+							if (answers[0] && answers[1] && answers[2] && answers[4]) answers[3] = true;
+							break;
 						}
-						if (flag[0] && flag[1] && flag[2] && flag[3]) break;
 						else continue;
 					}
 					if ("5b".equalsIgnoreCase(indCode)) {
@@ -5679,6 +5743,7 @@ public class DbUtil {
 					if ("6".equalsIgnoreCase(indCode)) {
 						if (quesNum == 9) {
 							answers[0] = ("Yes".equalsIgnoreCase(resp.getResponse())) ? true : false;
+							//logger.debug("indCode: " + indCode + " q#: " + 9 + " - answers[0] : " + answers[0]);
 							break;
 						}
 						else continue;
@@ -5686,26 +5751,22 @@ public class DbUtil {
 					if ("7".equalsIgnoreCase(indCode)) {
 						if (quesNum == 1) {
 							answers[0] = answers[1] = ("Yes".equalsIgnoreCase(resp.getResponse())) ? true : false;
+							//logger.debug("indCode: " + indCode + " q#: " + 1 + " - answers[0]=answers[1] : " + answers[0]);
 							break;
 						}
 						else continue;
 					}
 					if ("9".equalsIgnoreCase(indCode)) {
-						if (quesNum == 10) {
-							flag[0] = true;
+						if (quesNum == 11) {
 							answers[0] = answers[1] = ("Yes".equalsIgnoreCase(resp.getResponse())) ? true : false;
+							answers[2] = true;
+							//logger.debug("indCode: " + indCode + " q#: " + 11 + " - answers[0]=answers[1] : " + answers[0]);
+							//logger.debug("indCode: " + indCode + " q#: " + 11 + " - answers[2] : " + answers[2]);
+							break;
 						}
-						if (quesNum == 1) {
-							flag[1] = true;
-							answers[2] = ("Yes".equalsIgnoreCase(resp.getResponse())) ? true : false;
-						}
-						if (flag[0] && flag[1]) break;
-						else continue;
 					}
 				}
 				answersColl[index++] = answers;
-				/*for (int b = 0; b < NUM_COLUMNS_CALCULATED; b++)
-					logger.debug("[inside getSurveyReportAnswer()]- answers[" + b + "] : " + answers[b]);*/
 			}
 			else {
 				logger.debug("No response set found for this survey");

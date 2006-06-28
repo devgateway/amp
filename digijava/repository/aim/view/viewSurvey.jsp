@@ -110,6 +110,10 @@
 																				<%--<nested:text property="response" value="NA" size="2" readonly="true" />--%>
 																			</nested:equal>
 																			<nested:notEqual property="response" value="">
+																				<nested:notEqual property="questionType" value="calculated">
+																					<nested:write property="response" />
+																					<nested:equal property="questionType" value="input">%</nested:equal>
+																				</nested:notEqual>
 																				<nested:equal property="questionType" value="calculated">
 																					<nested:equal property="response" value="nil">
 																						<digi:trn key="aim:noPlannedDisbursement">No planned disbursement</digi:trn>
@@ -118,9 +122,6 @@
 																						<nested:write property="response" />
 																					</nested:notEqual>
 																				</nested:equal>
-																				<nested:notEqual property="questionType" value="calculated">
-																					<nested:write property="response" />
-																				</nested:notEqual>
 																			</nested:notEqual>
 																		</TD>
 																	<%-- 

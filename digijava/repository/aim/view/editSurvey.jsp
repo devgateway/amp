@@ -23,6 +23,14 @@
 		document.aimEditActivityForm.target = "_self";
 		document.aimEditActivityForm.submit();
 	}
+	
+	function fnChk(frmContrl) {
+		if (isNaN(frmContrl.value)) {
+      		alert('Please enter numeric value only.');
+      		//frmContrl.focus();
+      		return false;
+      	}
+	}
 
 -->
 </script>
@@ -157,6 +165,11 @@
 																		<nested:radio property="response" value="No" />
 																	</TD>
 																	<TD width="7%">No</TD>																		
+																</nested:equal>
+																<nested:equal property="questionType" value="input">
+																	<TD width="20%">
+																		<nested:text property="response" size="2" maxlength="3" onkeyup="fnChk(this)" />%
+																	</TD>
 																</nested:equal>
 																<nested:equal property="questionType" value="calculated">
 																	<TD width="20%">

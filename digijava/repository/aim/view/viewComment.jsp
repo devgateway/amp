@@ -61,6 +61,7 @@
 	}
 
 	function unload() {
+		window.opener.document.aimEditActivityForm.currUrl1.value="";
 	}
 -->
 </script>
@@ -89,7 +90,8 @@
 									[<digi:link href="/viewComment.do" name="urlParams1"><digi:trn key="aim:createComment">Add Comment</digi:trn></digi:link>]
 
 							</td>
-						</tr>--%>			
+						</tr>--%>	
+						<%-- <%=request.getLocale()%> --%>		
 						<logic:notEmpty name="aimEditActivityForm" property="commentsCol">
 						<tr>
 							<td align=left vAlign=top>						

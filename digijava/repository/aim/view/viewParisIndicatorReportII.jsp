@@ -54,6 +54,18 @@
 	function popup_warn() {
 		alert("Year Range selected should NOT be Greater than 3 Years.");
 	}
+	
+	function chkYear(val) {
+		var stYr = document.aimParisIndicatorReportForm.startYear.value;
+		var clYr = document.aimParisIndicatorReportForm.closeYear.value;
+		if (clYr < stYr) {
+			if (val == 'start')
+				alert("Start-year can not be greater than Close-year.");
+			else
+				alert("Close-year can not be less than Start-year.");
+			return false;
+		}
+	}
 
 -->
 </script>
@@ -117,7 +129,7 @@
 							<tr bgcolor="#c0c0c0" height=30>
 								<td>
 									<bean:define id="syear" property="startYear" name="aimParisIndicatorReportForm" />
-									<select name="startYear" value="<%=syear%>" class="dr-menu">
+									<select name="startYear" value="<%=syear%>" class="dr-menu" onchange="chkYear('start')">
 										<logic:notEmpty name="aimParisIndicatorReportForm" property="yearColl">
 											<logic:iterate id="year" name="aimParisIndicatorReportForm" property="yearColl">
 												<c:if test="${syear == year}">
@@ -132,7 +144,7 @@
 								</td>
 								<td>
 									<bean:define id="cyear" property="closeYear" name="aimParisIndicatorReportForm"/>
-									<select name="closeYear" value="<%=cyear%>" class="dr-menu">
+									<select name="closeYear" value="<%=cyear%>" class="dr-menu" onchange="chkYear('close')">
 										<logic:notEmpty name="aimParisIndicatorReportForm" property="yearColl">
 											<logic:iterate id="year" name="aimParisIndicatorReportForm" property="yearColl">
 												<c:if test="${cyear == year}">
@@ -246,6 +258,7 @@
 								  <%-- Loop-1[Years] starts here --%>
 								  <c:set var="stYear" value="${aimParisIndicatorReportForm.startYear}" />
 								  <c:set var="clYear" value="${aimParisIndicatorReportForm.closeYear}" />
+								  <c:set var="yrRange" value="${clYear - stYear + 1}" />
 								  
 								  <%--<bean:define id="syear"><c:out value="${aimParisIndicatorReportForm.startYear}" /></bean:define>
 								  <bean:define id="cyear"><c:out value="${aimParisIndicatorReportForm.closeYear}" /></bean:define>
@@ -276,9 +289,10 @@
 							<c:if test="${aimParisIndicatorReportForm.indicatorCode == '7'}">
 								<tr>
 									<%-- Loop-2 starts here --%>
-									<c:set var="stYear" value="${aimParisIndicatorReportForm.startYear}" />
+									<%--<c:set var="stYear" value="${aimParisIndicatorReportForm.startYear}" />
 									<bean:define id="cntr"><c:out value="${clYear - stYear + 1}" /></bean:define>
-									<% for(int i = 0, j = Integer.parseInt(cntr); i < j; i++) {  %>
+									<% for(int i = 0, j = Integer.parseInt(cntr); i < j; i++) {  %> --%>
+									<c:forEach begin="1" end="${yrRange}" step="1">
 										<td width="15%" height="25">
 											<div align="center">
 												<strong>
@@ -300,7 +314,8 @@
 												</strong>
 											</div>
 										 </td>
-									 <% } %>
+									</c:forEach>
+									 <%-- <% } %> --%>
 									 <%-- Loop-2 ends here --%>
 								</tr>
 							</c:if>
@@ -314,7 +329,7 @@
 										<tr>
 											<td width="100%" align="center" height="65" colspan='<c:out value="${numCols}" />'>
 												<div align="center"><strong><font color="red">
-													<digi:trn key="aim:noDonorSurveyFound">There is no donor who has submitted a survey.</digi:trn>
+													<digi:trn key="aim:noSurveyDataFound">No survey data found.</digi:trn>
 												</font></strong></div>
 											</td>
 										</tr>
@@ -336,10 +351,7 @@
 												<c:if test="${aimParisIndicatorReportForm.indicatorCode == '6'}">
 													<td>
 														<div align="center">
-															<%--<fmt:formatNumber value="${rowVal}" type="number" maxFractionDigits="0"/>--%>
-															<fmt:formatNumber type="number" pattern="####" maxFractionDigits="0" >
-																<c:out value="${rowVal}"/>
-															</fmt:formatNumber>
+															<fmt:formatNumber value="${rowVal}" type="number" maxFractionDigits="0"/>
 														</div>
 													</td>
 												</c:if>
@@ -348,13 +360,11 @@
 														<td>
 															<div align="center">
 																<c:if test="${index1 == index2}">
-																	<%--<fmt:formatNumber value="${rowVal}" type="number" maxFractionDigits="0" />%--%>
-																	<fmt:formatNumber type="number" pattern="####" maxFractionDigits="0" >
-																		<c:out value="${rowVal}"/>
-																	</fmt:formatNumber>%
+																	<%--<fmt:formatNumber value="${rowVal}" type="number" pattern="####" maxFractionDigits="0" />%--%>
+																	<c:out value="${rowVal}"/>%
 																</c:if>
 																<c:if test="${index1 != index2}">
-																	<c:out value="${rowVal}"/>
+																	<fmt:formatNumber type="number" value="${rowVal}" maxFractionDigits="0" />
 																</c:if>
 															</div>
 														</td>

@@ -54,32 +54,36 @@
 				</TD></TR>
 				</logic:notEmpty>
 				<logic:empty name="myReports" scope="session">
-				<TR><TD bgColor=#ffffff class=box-border align=left>
-					No reports for this workspace
-				</TD></TR>
+					<TR><TD bgColor=#ffffff class=box-border align=left>
+						No reports for this workspace
+					</TD></TR>
 				</logic:empty>
-        		<TR><TD>
-					<bean:define id="translation">
-						<digi:trn key="aim:createAdvancedReport">Create Advanced Report </digi:trn>
-					</bean:define>
-					<digi:link href="/advancedReportManager.do?clear=true" title="<%=translation%>">
-						<b>Advanced Report Manager</b>
-					</digi:link>
-				</TD></TR>
-        		<TR><TD>
-					<br>
-				</TD></TR>
-				
-				<logic:notEmpty name="PI" scope="application">
-      		<TR><TD>
-									<bean:define id="translation">
-									<digi:trn key="aim:clickToViewParisIndcReports">Click here to view Paris Indicator Reports</digi:trn>
-			  				 	</bean:define>
-									<digi:link href="/parisIndicatorReport.do" title="<%=translation%>">
-										<b> Paris Indicator Reports	</b>
-									</digi:link>
-				</TD></TR>
-				</logic:notEmpty>
+	        		<TR><TD>
+						<bean:define id="translation">
+							<digi:trn key="aim:createAdvancedReport">Create Advanced Report </digi:trn>
+						</bean:define>
+						<digi:link href="/advancedReportManager.do?clear=true" title="<%=translation%>">
+							<b>Advanced Report Manager</b>
+						</digi:link>
+					</TD></TR>
+	        		<TR><TD>
+						<br>
+					</TD></TR>
+			
+				<!-- Paris Indicators Reports Starts Here -->
+				<c:if var="teamType" test="${currentMember.teamType == 'DONOR'}" scope="session">
+					<logic:notEmpty name="PI" scope="application">
+		      			<TR><TD>
+							<bean:define id="translation">
+								<digi:trn key="aim:clickToViewParisIndcReports">Click here to view Paris Indicator Reports</digi:trn>
+					  		</bean:define>
+							<digi:link href="/parisIndicatorReport.do" title="<%=translation%>">
+								<b> Paris Indicator Reports	</b>
+							</digi:link>
+						</TD></TR>
+					</logic:notEmpty>
+				</c:if>
+				<!-- Paris Indicators Reports ends Here -->
 				
 			</TABLE>	
 		</TD>

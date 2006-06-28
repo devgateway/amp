@@ -54,6 +54,18 @@
 	function popup_warn() {
 		alert("Year Range selected should NOT be Greater than 3 Years.");
 	}
+	
+	function chkYear(val) {
+		var stYr = document.aimParisIndicatorReportForm.startYear.value;
+		var clYr = document.aimParisIndicatorReportForm.closeYear.value;
+		if (clYr < stYr) {
+			if (val == 'start')
+				alert("Start-year can not be greater than Close-year.");
+			else
+				alert("Close-year can not be less than Start-year.");
+			return false;
+		}
+	}
 
 -->
 </script>
@@ -114,7 +126,7 @@
 							<tr bgcolor="#c0c0c0" height=30>
 								<td>
 									<bean:define id="syear" property="startYear" name="aimParisIndicatorReportForm" />
-									<select name="startYear" value="<%=syear%>" class="dr-menu">
+									<select name="startYear" value="<%=syear%>" class="dr-menu" onchange="chkYear('start')">
 										<logic:notEmpty name="aimParisIndicatorReportForm" property="yearColl">
 											<logic:iterate id="year" name="aimParisIndicatorReportForm" property="yearColl">
 												<c:if test="${syear == year}">
@@ -129,7 +141,7 @@
 								</td>
 								<td>
 									<bean:define id="cyear" property="closeYear" name="aimParisIndicatorReportForm"/>
-									<select name="closeYear" value="<%=cyear%>" class="dr-menu">
+									<select name="closeYear" value="<%=cyear%>" class="dr-menu" onchange="chkYear('close')">
 										<logic:notEmpty name="aimParisIndicatorReportForm" property="yearColl">
 											<logic:iterate id="year" name="aimParisIndicatorReportForm" property="yearColl">
 												<c:if test="${cyear == year}">
@@ -281,21 +293,28 @@
 										<td width="35%" height="33">
 											<div align="center">
 											<strong>
-											Aid flows that use national budget execution procedures
+											Aid flows to the goverment sector that use national budget execution procedures
 											</strong>
 											</div>
 										</td>
 										<td width="35%" height="33">
 											<div align="center">
 											<strong>
-											Aid flows that use national financial reporting procedures
+											Aid flows to the goverment sector that use national financial reporting procedures
 											</strong>
 											</div>
 										</td>
 										<td width="35%" height="33">
 											<div align="center">
 											<strong>
-											Aid flows that use national financial auditing procedures
+											Aid flows to the goverment sector that use national financial auditing procedures
+											</strong>
+											</div>
+										</td>
+										<td width="35%" height="33">
+											<div align="center">
+											<strong>
+											ODA that uses all 3 national PFM
 											</strong>
 											</div>
 										</td>
@@ -309,7 +328,14 @@
 										<td width="35%" height="33">
 											<div align="center">
 											<strong>
-											Total aid flows disbursed to the government sector
+											Proportion aid flows to the government sector using one of the 3 country PFM systems
+											</strong>
+											</div>
+										</td>
+										<td width="35%" height="33">
+											<div align="center">
+											<strong>
+											Proportion of aid flows to the government sector using all the 3 country PFM systems
 											</strong>
 											</div>
 										</td>
@@ -319,7 +345,7 @@
 										<td width="35%" height="33">
 											<div align="center">
 											<strong>
-											Aid flows that use country procurement systems  
+											Aid flows to the government sector that use national procurement procedures  
 											</strong>
 											</div>
 										</td>
@@ -327,6 +353,13 @@
 											<div align="center">
 											<strong>
 											Total aid flows disbursed to the government sector
+											</strong>
+											</div>
+										</td>
+										<td width="35%" height="33">
+											<div align="center">
+											<strong>
+											Proportion of aid flows to the government sector using national procurement procedures
 											</strong>
 											</div>
 										</td>
@@ -390,26 +423,30 @@
 										</td>
 									</c:if>
 									<!-- end of c:if for all the Indicators-->
-								   <td width="10%" height="33">
-										<div align="center">
-										<strong>
-										<c:out value="${aimParisIndicatorReportForm.indicatorName}"/>
-										</strong>
-										</div>
-								  </td>
+									<c:if test = "${aimParisIndicatorReportForm.indicatorCode != '5a' && 
+													aimParisIndicatorReportForm.indicatorCode != '5b'}">	
+									    <td width="10%" height="33">
+											<div align="center">
+											<strong>
+											<c:out value="${aimParisIndicatorReportForm.indicatorName}"/>
+											</strong>
+											</div>
+									  	</td>
+									</c:if>
 							</tr>
+							
 							  <c:set var="numCols" value="${aimParisIndicatorReportForm.numColsCalculated}" />
 							  <logic:empty name="aimParisIndicatorReportForm" property="donorsColl">
 								<tr>
 									<td width="100%" align="center" height="65" colspan='<c:out value="${numCols}" />' >
 										<div align="center"><strong><font color="red">
-											<digi:trn key="aim:noDonorSurveyFound">There is no donor who has submitted a survey.</digi:trn>
+											<digi:trn key="aim:noSurveyDataFound">No survey data found.</digi:trn>
 										</font></strong></div>
 									</td>
 								</tr>
 							  </logic:empty>
 							  <logic:notEmpty name="aimParisIndicatorReportForm" property="donorsColl"> 
-								<%--<c:set var="numCols" value="${aimParisIndicatorReportForm.numColsCalculated}" /> --%>
+								<%-- <fmt:setLocale value="${en_US}" /> --%>
 								<% boolean flag = false; %>	
 								<nested:iterate name="aimParisIndicatorReportForm" property="donorsColl">
 								<tr>
@@ -431,18 +468,27 @@
 										<td>
 											<div align="center">
 												<c:if test="${index == 1}">
-													<fmt:formatNumber type="number" pattern="####" maxFractionDigits="0" >
-														<c:out value="${rowVal}"/>
-													</fmt:formatNumber>
+													<fmt:formatNumber type="number" value="${rowVal}" pattern="####" maxFractionDigits="0" />
 												</c:if>
 												<c:if test="${index != 1}">
-													<c:if test="${index == numCols}">
-														 <c:out value="${rowVal}"/>% 
-														<%--<fmt:formatNumber value="${rowVal}" type="number" maxFractionDigits="0" />%--%>
-													</c:if>
-													<c:if test="${index != numCols}">
-														<c:out value="${rowVal}"/>
-													</c:if>
+													<c:choose>
+														<c:when test="${index < (numCols-1)}">
+															<fmt:formatNumber type="number" value="${rowVal}" maxFractionDigits="0" />
+														</c:when>
+														<c:when test="${index == (numCols-1)}">
+															<c:choose>
+																<c:when test="${aimParisIndicatorReportForm.indicatorCode == '5a'}">
+																	<c:out value="${rowVal}"/>%
+																</c:when>
+																<c:otherwise >
+																	<c:out value="${rowVal}"/>
+																</c:otherwise>
+															</c:choose>
+														</c:when>
+														<c:otherwise >
+															<c:out value="${rowVal}"/>%
+														</c:otherwise>
+													</c:choose>
 												</c:if>
 												<c:set var="index" value="${index + 1}" />
 											</div>

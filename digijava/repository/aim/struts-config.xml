@@ -317,6 +317,10 @@
       	name="aimParisIndicatorForm"
 	type="org.digijava.module.aim.form.ParisIndicatorForm" />-->
 
+	<form-bean 
+			  name="aimSectorSchemeForm" 
+			  type="org.digijava.module.aim.form.SectorSchemeForm" />
+
 	<form-bean
 		name="aimPortfolioDashboardForm"
 		type="org.apache.struts.action.DynaActionForm">
@@ -374,7 +378,7 @@
 		<forward name="forward" path="/showLayout.do?layout=index" />
     </action>
 
-    <action 
+ <action 
     	name="aimDesktopForm"
      	type="org.digijava.module.aim.action.GetDesktopActivities" 
 		scope="session" 
@@ -393,9 +397,9 @@
 		<forward name="forward" path="/aim/viewMyDesktop.do" />
     	<forward name="index" path="/aim/index.do" redirect="true" />
 	 </action>
-
+	
     <action 
-    	name="aimDesktopForm"
+		name="aimDesktopForm"
      	type="org.digijava.module.aim.action.SearchDesktopActivities" 
 		scope="session" 
 		validate="false" 
@@ -940,17 +944,19 @@
 			  validate="false"
 			  path="/aim/addSector">
 			  <forward name="forward" path="/showLayout.do?layout=addSector" />
+			  <forward name="done" path="/aim/getSectorSchemes.do" redirect="true" />
 			  <forward name="added" path="/aim/sectorManager.do?sectorId=0" /> 	  
   			  <forward name="index" path="/aim/index.do" redirect="true" />
 	</action>
-	
+
 	<action 
 			  name="aimAddSectorForm"
 			  type="org.digijava.module.aim.action.EditSector"
 			  scope="request"
 			  validate="false"
 			  path="/aim/editSector">
-			  <forward name="forward" path="/showLayout.do?layout=editSector" />
+			  <forward name="forward" path="/aim/updateSectorSchemes.do" redirect="true" />
+			  <!--<forward name="forward" path="/showLayout.do?layout=editSector" />-->
 			  <forward name="edited" path="/aim/sectorManager.do?sectorId=0" /> 	  
 			  <forward name="index" path="/aim/index.do" redirect="true" />			  
 	</action>
@@ -961,7 +967,8 @@
 			  scope="request"
 			  validate="false"
 			  path="/aim/deleteSector">
-			  <forward name="forward" path="/showLayout.do?layout=deleteSector" />
+			  <forward name="cantDelete" path="/aim/getSectorSchemes.do" />
+			  <forward name="forward" path="/aim/updateSectorSchemes.do" />
 			  <forward name="deleted" path="/aim/sectorManager.do?sectorId=0" /> 	  
 			  <forward name="index" path="/aim/index.do" redirect="true" />			  
 	</action>
@@ -972,9 +979,37 @@
 			  scope="request"
 			  validate="false"
 			  path="/aim/viewSectorDetails">
-			  <forward name="forward" path="/showLayout.do?layout=viewSectorDetails" />
+			  <!--<forward name="forward" path="/showLayout.do?layout=viewSectorDetails" />-->
+			  <forward name="levelOne" path="/showLayout.do?layout=addNewSector" />
+			  <forward name="levelTwo" path="/showLayout.do?layout=addNewLevel2Sector" />	
+			  <forward name="levelThree" path="/showLayout.do?layout=addNewLevel3Sector" />
 			  <forward name="index" path="/aim/index.do" redirect="true" />			  
 	</action>
+
+		<!-- sector manager with scheme action-->
+
+	<action 
+			  name="aimAddSectorForm"
+			  type="org.digijava.module.aim.action.GetSectorSchemes"
+			  scope="request"
+			  validate="false"
+			  path="/aim/getSectorSchemes">
+			  <forward name="viewSectorSchemes" path="/showLayout.do?layout=viewSectorSchemes" />
+			   
+			 			  
+	</action>
+	
+	<action 
+			  name="aimAddSectorForm"
+			  type="org.digijava.module.aim.action.UpdateSectorSchemes"
+			  scope="request"
+			  validate="false"
+			  path="/aim/updateSectorSchemes">
+			  <forward name="viewSectorSchemes" path="/aim/getSectorSchemes.do" />
+			  <forward name="addSectorScheme" path="/showLayout.do?layout=addSectorScheme" />
+			 <forward name="viewSectorSchemeLevel1" path="/showLayout.do?layout=viewSectorSchemeLevel1" /> 
+		  </action>
+         <!-- end sector schemes -->
 
 	<action 
 			  name="aimThemeForm"
@@ -3115,7 +3150,11 @@
 	</action>
 	
 <!-- Paris Indicator Manager Links End-->
-
+	<action 
+			name="aimParisIndicatorReportForm" 
+    		type="org.digijava.module.aim.action.ParisIndicatorReportPDFXLSCSV" 
+     		scope="session" validate="false" path="/aim/parisIndicatorReportPDFXLSCSV">
+	</action>
 		  
   </action-mappings>
 

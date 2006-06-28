@@ -67,5 +67,6 @@
 	<classpathentry kind="lib" path="WEB-INF/lib/poi-2.5.1-final-20040804.jar"/>
 	<classpathentry kind="lib" path="WEB-INF/lib/mysql-connector-java.jar"/>
 	<classpathentry kind="lib" path="WEB-INF/lib/postgresql-8.1-405.jdbc3.jar"/>
+	<classpathentry kind="lib" path="WEB-INF/lib/digijava-kernel.jar"/>
 	<classpathentry kind="output" path="WEB-INF/classes"/>
 </classpath>

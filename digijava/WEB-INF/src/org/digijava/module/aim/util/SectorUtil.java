@@ -8,21 +8,27 @@ import java.util.List;
 import net.sf.hibernate.Hibernate;
 import net.sf.hibernate.Query;
 import net.sf.hibernate.Session;
+import net.sf.hibernate.Transaction;
 
 import org.apache.log4j.Logger;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.dbentity.AmpActivity;
+import org.digijava.module.aim.dbentity.AmpAhsurveyQuestion;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpSector;
 import org.digijava.module.aim.dbentity.AmpSectorScheme;
 import org.digijava.module.aim.helper.ActivitySector;
 import org.digijava.module.aim.helper.Sector;
-;
+
+/**
+ * Utility class for persisting all Sector with Scheme related entities
+ * @author Govind G Dalwani
+ */
 
 
 public class SectorUtil {
 
-	private static Logger logger = Logger.getLogger(LocationUtil.class);
+	private static Logger logger = Logger.getLogger(SectorUtil.class);
 
 	public static Collection searchForSector(String keyword) {
 		Session session = null;
@@ -310,17 +316,20 @@ public class SectorUtil {
 
 			while (itr.hasNext()) {
 				ampSector = (AmpSector) itr.next();
-				Sector sec = new Sector(ampSector.getAmpSectorId(), ampSector
-						.getName(), ampSector.getAmpOrgId().getAmpOrgId(),
-						DbUtil.getOrganisation(ampSector.getAmpOrgId().getAmpOrgId())
-								.getName());
 
+				Sector sec = new Sector();
+				if (ampSector.getAmpOrgId() != null) {
+					sec.setOrgId(ampSector.getAmpOrgId().getAmpOrgId());
+					sec.setOrgName(ampSector.getAmpOrgId().getName());
+				}
+				sec.setSectorId(ampSector.getAmpSectorId());
+				sec.setSectorName(ampSector.getName());
 				col.add(sec);
 			}
 
 		} catch (Exception ex) {
 			logger.error("Unable to get subsectors");
-			logger.debug("Exceptiion " + ex);
+			ex.printStackTrace(System.out);
 		} finally {
 			try {
 				if (session != null) {
@@ -760,4 +769,251 @@ public class SectorUtil {
 		return flag;
 	}
 	
+	
+	
+// Govind's Starts from here!!	
+	/*
+	 * this is to get the sector schemes from the ampSectorScheme table
+	 */ 
+	public static Collection getSectorSchemes(){
+		String queryString = null;
+		Session session = null;
+		Collection col = null;
+		Query qry = null;
+		
+		try
+		{
+			session = PersistenceManager.getSession();
+			queryString ="select pi from "+AmpSectorScheme.class.getName()+" pi ";	
+			qry = session.createQuery(queryString);
+			col = qry.list();
+		}
+		catch(Exception ex) 		
+		{
+			logger.error("Unable to get report names  from database " + ex.getMessage());
+			ex.printStackTrace(System.out);
+		}
+		finally 
+		{
+			try 
+			{
+				PersistenceManager.releaseSession(session);
+			}
+			catch (Exception ex2) 
+			{
+				logger.error("releaseSession() failed ");
+			}
+		}
+		return col;
+	}
+	
+/*
+ * this is to get the level one sectors from the AmpSector table
+ */
+	public static Collection getSectorLevel1(Integer schemeId)
+	{
+		String queryString = null;
+		Session session = null;
+		Collection col = null;
+		Query qry = null;
+		
+		try
+		{
+			session = PersistenceManager.getSession();
+			queryString ="select pi from "+AmpSector.class.getName()+" pi where pi.ampSecSchemeId=:schemeId and pi.parentSectorId IS null";	
+			qry = session.createQuery(queryString);
+			qry.setParameter("schemeId",schemeId,Hibernate.INTEGER);
+			col = qry.list();
+		}
+		catch(Exception ex) 		
+		{
+			logger.error("Unable to get report names  from database " + ex.getMessage());
+			ex.printStackTrace(System.out);
+		}
+		finally 
+		{
+			try 
+			{
+				PersistenceManager.releaseSession(session);
+			}
+			catch (Exception ex2) 
+			{
+				logger.error("releaseSession() failed ");
+			}
+		}
+		return col;
+	}
+/*
+ * get scheme to be edited
+ */	
+	public static Collection getEditScheme(Integer schemeId)
+	{
+		String queryString = null;
+		Session session = null;
+		Collection col = null;
+		Query qry = null;
+		
+		try
+		{
+			session = PersistenceManager.getSession();
+			queryString ="select pi from "+AmpSectorScheme.class.getName()+" pi where pi.ampSecSchemeId=:schemeId";	
+			qry = session.createQuery(queryString);
+			qry.setParameter("schemeId",schemeId,Hibernate.INTEGER);
+			col = qry.list();
+		}
+		catch(Exception ex) 		
+		{
+			logger.error("Unable to get report names  from database " + ex.getMessage());
+			ex.printStackTrace(System.out);
+		}
+		finally 
+		{
+			try 
+			{
+				PersistenceManager.releaseSession(session);
+			}
+			catch (Exception ex2) 
+			{
+				logger.error("releaseSession() failed ");
+			}
+		}
+		return col;
+	}
+/*
+ * this is to delete a scheme
+ */
+	public static void deleteScheme(Long schemeId)
+	{
+		logger.info(" deleting the scheme");
+		Session session = null;
+		Transaction tx = null;
+		try 
+		{
+			session = PersistenceManager.getSession();
+			AmpSectorScheme scheme = (AmpSectorScheme) session.load(
+					AmpSectorScheme.class,schemeId);
+			tx = session.beginTransaction();
+			session.delete(scheme);
+			tx.commit();
+		} 
+		catch (Exception e) 
+		{
+			logger.error("Exception from deleteQuestion() :" + e.getMessage());
+			e.printStackTrace(System.out);		
+			if (tx != null) 
+			{
+				try 
+				{
+					tx.rollback();
+				}
+				catch (Exception trbf) 
+				{
+					logger.error("Transaction roll back failed ");
+					e.printStackTrace(System.out);
+				}
+			}
+		} 
+		finally 
+		{
+			if (session != null) 
+			{
+				try 
+				{
+					PersistenceManager.releaseSession(session);
+				} 
+				catch (Exception rsf) 
+				{
+					logger.error("Failed to release session :" + rsf.getMessage());
+				}
+			}			
+		}
+	}
+	
+	/*
+	 * this is to get the level one sectors from the AmpSector table
+	 */
+		public static AmpSectorScheme getParentSchemeId(Long id)
+		{
+			String queryString = null;
+			Session session = null;
+			Collection col = null;
+			Query qry = null;
+			AmpSectorScheme schemeId=null; 
+			
+			try
+			{
+				session = PersistenceManager.getSession();
+				
+				AmpSector sec = (AmpSector) session.load(AmpSector.class,
+						id);
+				 schemeId = sec.getAmpSecSchemeId();
+			
+			}
+			catch(Exception ex) 		
+			{
+				logger.error("Unable to get report names  from database " + ex.getMessage());
+				ex.printStackTrace(System.out);
+			}
+			finally 
+			{
+				try 
+				{
+					PersistenceManager.releaseSession(session);
+				}
+				catch (Exception ex2) 
+				{
+					logger.error("releaseSession() failed ");
+				}
+			}
+			return schemeId;
+		}
+	/*
+	 * this is to delete a sector
+	 */	
+		public static void deleteSector(Long schemeId)
+		{
+			logger.info(" deleting the scheme");
+			Session session = null;
+			Transaction tx = null;
+			try 
+			{
+				session = PersistenceManager.getSession();
+				AmpSector scheme = (AmpSector) session.load(
+						AmpSectorScheme.class,schemeId);
+				tx = session.beginTransaction();
+				session.delete(scheme);
+				tx.commit();
+			} 
+			catch (Exception e) 
+			{
+				logger.error("Exception from deleteQuestion() :" + e.getMessage());
+				e.printStackTrace(System.out);		
+				if (tx != null) 
+				{
+					try 
+					{
+						tx.rollback();
+					}
+					catch (Exception trbf) 
+					{
+						logger.error("Transaction roll back failed ");
+						e.printStackTrace(System.out);
+					}
+				}
+			} 
+			finally 
+			{
+				if (session != null) 
+				{
+					try 
+					{
+						PersistenceManager.releaseSession(session);
+					} 
+					catch (Exception rsf) 
+					{
+						logger.error("Failed to release session :" + rsf.getMessage());
+					}
+				}			
+			}
+		}
 }

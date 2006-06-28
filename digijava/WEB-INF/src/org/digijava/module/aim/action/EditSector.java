@@ -40,6 +40,7 @@ public class EditSector extends Action {
 					 AddSectorForm editSectorForm = (AddSectorForm) form;
 
 					 logger.debug("In edit sector action");
+					 logger.info("In edit sector action");
 
 					 if (request.getParameter("id") != null) {
 								/*
@@ -54,8 +55,15 @@ public class EditSector extends Action {
 
 								editSectorForm.setSectorId(secId);
 								HashMap map = null;
-								
-								if (ampSector.getParentSectorId() == null) {
+								logger.info(" this is the sector name....."+ editSectorForm.getSectorName());
+								logger.info(" this is the sectorCode....."+ editSectorForm.getSectorCode());
+								logger.info(" thi sis the id...."+ secId);
+								ampSector.setName(editSectorForm.getSectorName());
+								ampSector.setSectorCode(editSectorForm.getSectorCode());
+								logger.info(" here");
+								DbUtil.update(ampSector);
+								logger.info(" update sector Complete");
+								/*if (ampSector.getParentSectorId() == null) {
 										  editSectorForm.setParentSectorId(null);
 										  Iterator itr = DbUtil.getAllOrganisation().iterator();
 										  map = new HashMap();
@@ -73,9 +81,9 @@ public class EditSector extends Action {
 								editSectorForm.setSectorName(ampSector.getName());
 								editSectorForm.setAmpOrganisationId(ampSector.getAmpOrgId().getAmpOrgId());
 								editSectorForm.setDescription(ampSector.getDescription());
-								editSectorForm.setOrganisationList(map);
+								editSectorForm.setOrganisationList(map);*/
 					 }
-					 else if (request.getParameter("id") == null && editSectorForm.getSectorId() != null) {
+					 /*else if (request.getParameter("id") == null && editSectorForm.getSectorId() != null) {
 								// update the sector details to the database
 								
 								logger.debug("Updating the sector");
@@ -97,7 +105,7 @@ public class EditSector extends Action {
 								return mapping.findForward("edited");
 					 } else {
 								logger.debug("No action selected");
-					 }
+					 }*/
 
 					 return mapping.findForward("forward");
 		  }

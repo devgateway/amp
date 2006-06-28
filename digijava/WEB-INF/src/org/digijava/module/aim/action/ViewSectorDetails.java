@@ -9,6 +9,7 @@ import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
+import java.util.*;
 import org.digijava.module.aim.dbentity.AmpSector;
 import org.digijava.module.aim.form.AddSectorForm;
 import org.digijava.module.aim.util.SectorUtil;
@@ -35,8 +36,46 @@ public class ViewSectorDetails extends Action {
 					 AddSectorForm viewSectorForm = (AddSectorForm) form;
 
 					 logger.debug("In view sector action");
-
-					 if (request.getParameter("id") != null) {
+					 logger.debug("In add sector action");
+						String sectId = request.getParameter("ampSectorId");
+						String event = request.getParameter("event");
+						String level = request.getParameter("level");
+						Long parentId = new Long(sectId);
+						logger.info(" this is the sector id....." +parentId);
+						
+						viewSectorForm.setSubSectors(SectorUtil.getAllChildSectors(parentId));
+						if(event!=null)
+						{
+							if(event.equals("edit"))
+							{
+								logger.info(" inside editing the sector...");
+								AmpSector editSector = new AmpSector();
+								editSector = SectorUtil.getAmpSector(parentId);
+								logger.info(" this is the name ....."+editSector.getName());
+								logger.info(" this is the code ....."+ editSector.getSectorCode());
+								logger.info("this is the sector id...."+editSector.getAmpSectorId());
+								viewSectorForm.setSectorCode(editSector.getSectorCode());
+								viewSectorForm.setSectorName(editSector.getName());
+								viewSectorForm.setSectorId(editSector.getAmpSectorId());
+								
+								if(level.equals("one"))
+								{
+									return mapping.findForward("levelOne");
+								}
+								if(level.equals("two"))
+								{
+									return mapping.findForward("levelTwo");
+								}
+								if(level.equals("three"))
+								{
+									return mapping.findForward("levelThree");
+								}
+									
+							}
+							
+							
+						}
+					/* if (request.getParameter("id") != null) {
 								Long secId = new Long(Long.parseLong(request.getParameter("id")));
 								AmpSector ampSector = SectorUtil.getAmpSector(secId);
 
@@ -55,8 +94,8 @@ public class ViewSectorDetails extends Action {
 								} else {
 										  viewSectorForm.setParentSectorName(ampSector.getParentSectorId().getName());
 								}
-					 }
-					 return mapping.findForward("forward");
+					 }*/
+					 return mapping.findForward("levelOne");
 		  }
 		  
 		  

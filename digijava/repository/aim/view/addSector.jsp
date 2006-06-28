@@ -4,12 +4,39 @@
 <%@ taglib uri="/taglib/struts-tiles" prefix="tiles" %>
 <%@ taglib uri="/taglib/struts-html" prefix="html" %>
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
-
+<script langauage="JavaScript">
+	function onDelete() {
+		var flag = confirm("Delete this Scheme?");
+		return flag;
+	}
+	function updateScheme(id) {
+			  alert(" this is it");
+			  alert(id);
+			 if(isEmpty(document.aimAddSectorForm.sectorName.value)==true)
+			 {
+						alert("please enter a sector name:");
+			 }	
+			 else if(isEmpty(document.aimAddSectorForm.sectorCode.value)==true)
+			 {
+						alert("please enter a sector code:");
+			 }	
+			 else
+			 {
+			<digi:context name="addSector" property="context/module/moduleinstance/addSector.do?event=addSector" />
+			document.aimAddSectorForm.action = "<%= addSector%>&id="+id;
+			document.aimAddSectorForm.target = "_self";
+			document.aimAddSectorForm.submit();
+			 }
+	
+	}
+</script>
 <digi:errors/>
 <digi:instance property="aimAddSectorForm" />
 <digi:form action="/addSector.do" method="post">
 
-<html:hidden property="parentSectorId" />
+<html:hidden property="sectorId" />
+<html:hidden property="levelType" />
+<html:hidden property="parentId" />
 
 <!--  AMP Admin Logo -->
 <jsp:include page="teamPagesHeader.jsp" flush="true" />
@@ -104,7 +131,7 @@
 																		</td>
 																	</tr>
 																	<tr>
-		<td width="30%" align="right">
+		<%--<td width="30%" align="right">
 			<digi:trn key="aim:sectorOrganisation">Organisation</digi:trn>		
 		</td>
 		<td width="30%" align="left">
@@ -120,14 +147,16 @@
 				<html:hidden property="ampOrganisationId" />
 				<b><bean:write name="aimAddSectorForm" property="ampOrganisation" /></b>
 			</logic:notEmpty>
-		</td>
+		</td>--%>
 	</tr>	
 	<tr>
 		<td colspan="2" width="60%">
 			<table width="100%" cellspacing="5">
 				<tr>
 					<td width="50%" align="right">
-						<html:submit value="Save" styleClass="dr-menu"/>
+					<%--
+						<html:submit value="Save" styleClass="dr-menu"/>--%>
+							<input  type="button" name="addBtn" value="Save" onclick="updateScheme('<bean:write name="aimAddSectorForm" property="parentId" />')"
 					</td>
 					<td width="50%" align="left">
 						<html:reset value="Cancel" styleClass="dr-menu"/>

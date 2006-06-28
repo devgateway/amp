@@ -2,9 +2,22 @@ package org.digijava.module.aim.form;
 
 import org.apache.struts.action.*;
 import java.util.*;
-
+/*
+ *@ Author Govind G Dalwani 
+ */
 public class AddSectorForm extends ActionForm {
-		  
+	
+	private Collection subSectors = null;	  
+	private Long parentId = null;
+	private String levelType = null;
+	Collection formSectorSchemes;
+	Collection formFirstLevelSectors;
+	Long secSchemeId;
+	String secSchemeName;
+	String secSchemeCode;
+	boolean deleteSchemeFlag = true;
+	private String idGot;
+	
 	private Long sectorId = null;  
 	private Long parentSectorId = null;
 	private String parentSectorName = null;
@@ -17,6 +30,122 @@ public class AddSectorForm extends ActionForm {
 	private HashMap organisationList = null;
 	private String flag = null;
 	
+
+	
+	
+	
+
+	public String getIdGot() {
+		return idGot;
+	}
+
+	public void setIdGot(String idGot) {
+		this.idGot = idGot;
+	}
+
+		/*
+	 * get the Scheme COde
+	 */	
+		public String getSecSchemeCode() {
+			return secSchemeCode;
+		}
+
+	/*
+	 * sets the Scheme Code
+	 */
+		public void setSecSchemeCode(String secSchemeCode) {
+			this.secSchemeCode = secSchemeCode;
+		}
+
+	/*
+	 * gets the Scheme Name
+	 */
+		public String getSecSchemeName() {
+			return secSchemeName;
+		}
+
+	/*
+	 * sets the Scheme Name
+	 */
+		public void setSecSchemeName(String secSchemeName) {
+			this.secSchemeName = secSchemeName;
+		}
+
+	/*
+	 * gets the first level sectors
+	 */
+		public Collection getFormFirstLevelSectors() {
+			return formFirstLevelSectors;
+		}
+
+	/*
+	 * sets the first level sectors
+	 */
+		public void setFormFirstLevelSectors(Collection formFirstLevelSectors) {
+			this.formFirstLevelSectors = formFirstLevelSectors;
+		}
+
+	/*
+	 * gets the Schemes
+	 */
+		public Collection getFormSectorSchemes() {
+			return formSectorSchemes;
+		}
+
+	/*
+	 * sets the schemes
+	 */
+		public void setFormSectorSchemes(Collection formSectorSchemes) {
+			this.formSectorSchemes = formSectorSchemes;
+		}
+
+	/*
+	 * gets the scheme Id
+	 */
+		public Long getSecSchemeId() {
+			return secSchemeId;
+		}
+
+	/*
+	 * sets the scheme Id
+	 */
+		public void setSecSchemeId(Long secSchemeId) {
+			this.secSchemeId = secSchemeId;
+		}
+
+		public boolean isDeleteSchemeFlag() {
+			return deleteSchemeFlag;
+		}
+
+		public void setDeleteSchemeFlag(boolean deleteSchemeFlag) {
+			this.deleteSchemeFlag = deleteSchemeFlag;
+		}	
+	
+public String getLevelType() {
+		return levelType;
+	}
+
+	public void setLevelType(String levelType) {
+		this.levelType = levelType;
+	}
+
+public Long getParentId() {
+		return parentId;
+	}
+
+	public void setParentId(Long parentId) {
+		this.parentId = parentId;
+	}
+
+public Collection getSubSectors() {
+		return subSectors;
+	}
+
+	public void setSubSectors(Collection subSectors) {
+		this.subSectors = subSectors;
+	}
+
+	///previously done  	
 	public Long getSectorId() {
 		return (this.sectorId);
 	}

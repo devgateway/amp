@@ -23,11 +23,11 @@
 		document.aimParisIndicatorReportForm.target = "_self";
 		document.aimParisIndicatorReportForm.submit();
 	}
-
-	function popup_pdf() {
+	function popup_pdf(val) {
+		
 		openResisableWindow(800, 600);
-		<digi:context name="pdf" property="context/module/moduleinstance/projectByDonorPdf.do" />
-		document.aimParisIndicatorReportForm.action = "<%= pdf %>";
+		<digi:context name="pdf" property="context/module/moduleinstance/parisIndicatorReportPDFXLSCSV.do?docType=pdf" />
+		document.aimParisIndicatorReportForm.action = "<%= pdf %>&pid="+val;
 		document.aimParisIndicatorReportForm.target = popupPointer.name;
 		document.aimParisIndicatorReportForm.submit();
 	}
@@ -36,17 +36,18 @@
 
 		function popup_csv() {
 		openResisableWindow(800, 600);
-		<digi:context name="csv" property="context/module/moduleinstance/projectByDonorXls.do?docType=csv" />
-		document.aimParisIndicatorReportForm.action = "<%= csv %>";
+		<digi:context name="csv" property="context/module/moduleinstance/parisIndicatorReportPDFXLSCSV.do?docType=csv" />
+		document.aimParisIndicatorReportForm.action = "<%= csv %>&pid="+val;
 		document.aimParisIndicatorReportForm.target = popupPointer.name;
 		document.aimParisIndicatorReportForm.submit();
 	}
 	/* CSV function end  */
 
-	function popup_xls() {
+	function popup_xls(val) {
+		
 		openResisableWindow(800, 600);
-		<digi:context name="xls" property="context/module/moduleinstance/projectByDonorXls.do?docType=xls" />
-		document.aimParisIndicatorReportForm.action = "<%= xls %>";
+		<digi:context name="xls" property="context/module/moduleinstance/parisIndicatorReportPDFXLSCSV.do?docType=xls" />
+		document.aimParisIndicatorReportForm.action = "<%= xls %>&pid="+val;
 		document.aimParisIndicatorReportForm.target = popupPointer.name;
 		document.aimParisIndicatorReportForm.submit();
 	}
@@ -67,7 +68,9 @@
 		}
 	}
 
+
 -->
+</script>
 </script>
 
 <digi:errors/>
@@ -112,7 +115,55 @@
 					<td colspan=3 class=box-title align=center>
 					</td>
 				</tr>
+				<!--  PDF/XLS Links -->		
+			<tr>	
 
+			<logic:greaterThan name="aimParisIndicatorReportForm" property="yearColl" value="3">
+				<td valign="bottom" class="crumb">
+					<%--<logic:notEmpty name="aimMulitlateralbyDonorForm" property="multiReport">--%>
+						<img src="../ampTemplate/images/pdf_icon.gif" border=0>
+						<bean:define id="translation">
+							<digi:trn key="aim:clickToCreateReportInPDF">Click here to Create Report in Pdf </digi:trn>
+						</bean:define>
+						 <a href="javascript:popup_pdf('<bean:write name="aimParisIndicatorReportForm" property="indicatorCode" />')"> Create Report in Pdf. </a> &nbsp;&nbsp;
+		        	<%--</logic:notEmpty>--%>
+                </td>
+            </logic:greaterThan>    
+
+			
+
+           </tr>
+			<tr>
+						<td valign="bottom" class="crumb">
+							<%--<logic:notEmpty name="aimParisIndicatorReportForm" property="multiReport">--%>
+							<img src="../ampTemplate/images/xls_icon.jpg" border=0>	
+								<bean:define id="translation">
+									<digi:trn key="aim:clickToCreateReportInExcel">Click here to Create Report in Excel </digi:trn>
+								</bean:define>
+							 <a href="javascript:popup_xls('<bean:write name="aimParisIndicatorReportForm" property="indicatorCode" />')"> Create Report in Xls. </a> &nbsp;&nbsp;
+		                	<%--</logic:notEmpty>--%>
+		                </td>
+
+            </tr>
+
+			<!-- CSV link 
+			<tr>
+
+			        <td valign="bottom" class="crumb" >
+					
+					<img src="../ampTemplate/images/icon_csv.gif" border=0>
+					<bean:define id="translation">
+						<digi:trn key="aim:clickToCreateReportInCVS">Click here to Create Report in CSV </digi:trn>
+					</bean:define>
+					<digi:link href="" onclick="popup_csv(''); return false;" title="<%=translation%>">
+					 	<digi:trn key="aim:createReportInCsv">Create Report in CSV.</digi:trn>
+					</digi:link>
+					
+			
+            </td>
+            </tr>
+
+<!--  PDF/XLS Links -->	
 	<digi:form action="/parisIndicatorReport.do" >
 	<html:hidden property="filterFlag" />
 	<html:hidden property="indicatorId" />

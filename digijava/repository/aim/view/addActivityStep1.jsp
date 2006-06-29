@@ -219,8 +219,8 @@ function popupwin()
 											<td width="13" height="20" background="module/aim/images/left-side.gif">
 											</td>
 											<td vAlign="center" align ="center" class="textalb" height="20" bgcolor="#006699">
-												<digi:trn key="aim:step1of8IdentificationAndPlanning">
-													Step 1 of 8: Identification | Planning</digi:trn>
+												<digi:trn key="aim:step1of9IdentificationAndPlanning">
+													Step 1 of 9: Identification | Planning</digi:trn>
 											</td>
 											<td width="13" height="20" background="module/aim/images/right-side.gif">
 											</td>

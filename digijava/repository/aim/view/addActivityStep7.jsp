@@ -186,8 +186,8 @@ function removeSelOrgs(value) {
 											<td width="13" height="20" background="module/aim/images/left-side.gif">
 											</td>
 											<td vAlign="center" align ="center" class="textalb" height="20" bgcolor="#006699">
-												<digi:trn key="aim:step7of8RelatedOrganizations">
-													Step 7 of 8: Related Organizations
+												<digi:trn key="aim:step7of9RelatedOrganizations">
+													Step 7 of 9: Related Organizations
 												</digi:trn>
 											</td>
 											<td width="13" height="20" background="module/aim/images/right-side.gif">

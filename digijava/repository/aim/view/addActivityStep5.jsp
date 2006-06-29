@@ -363,7 +363,7 @@ function removeSelComponents() {
 											<td width="13" height="20" background="module/aim/images/left-side.gif">
 											</td>
 											<td vAlign="center" align ="center" class="textalb" height="20" bgcolor="#006699">
-												<digi:trn key="aim:step5of8Components">Step 5 of 8: Components</digi:trn>
+												<digi:trn key="aim:step5of9Components">Step 5 of 9: Components</digi:trn>
 											</td>
 											<td width="13" height="20" background="module/aim/images/right-side.gif">
 											</td>

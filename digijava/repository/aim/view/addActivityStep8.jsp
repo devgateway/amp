@@ -145,8 +145,8 @@ function resetAll()
 											<td width="13" height="20" background="module/aim/images/left-side.gif">
 											</td>
 											<td vAlign="center" align ="center" class="textalb" height="20" bgcolor="#006699">
-												<digi:trn key="aim:step8of8ContactInformation">
-													Step 8 of 8: Contact Information
+												<digi:trn key="aim:step8of9ContactInformation">
+													Step 8 of 9: Contact Information
 												</digi:trn>
 											</td>
 											<td width="13" height="20" background="module/aim/images/right-side.gif">

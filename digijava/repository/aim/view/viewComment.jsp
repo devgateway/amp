@@ -61,7 +61,7 @@
 	}
 
 	function unload() {
-		window.opener.document.aimEditActivityForm.currUrl1.value="";
+		//window.opener.document.aimEditActivityForm.currUrl1.value="";
 	}
 -->
 </script>

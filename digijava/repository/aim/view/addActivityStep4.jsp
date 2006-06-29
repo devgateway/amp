@@ -166,8 +166,8 @@
 														<tr>
 															<td width="13" height="20" background="module/aim/images/left-side.gif"></td>
 															<td vAlign="center" align ="center" class="textalb" height="20" bgcolor="#006699">
-																<digi:trn key="aim:step4of8RegionalFunding">
-																	Step 4 of 8: Regional Funding
+																<digi:trn key="aim:step4of9RegionalFunding">
+																	Step 4 of 9: Regional Funding
 															</digi:trn>
 															</td>
 															<td width="13" height="20" background="module/aim/images/right-side.gif"></td>

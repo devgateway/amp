@@ -246,8 +246,8 @@ function removeSelLinks() {
 											<td width="13" height="20" background="module/aim/images/left-side.gif">
 											</td>
 											<td vAlign="center" align ="center" class="textalb" height="20" bgcolor="#006699">
-												<digi:trn key="aim:step6of8RelatedDocumentsandLinks">								
-													Step 6 of 8: Related Documents and Links
+												<digi:trn key="aim:step6of9RelatedDocumentsandLinks">								
+													Step 6 of 9: Related Documents and Links
 												</digi:trn>
 											</td>
 											<td width="13" height="20" background="module/aim/images/right-side.gif">

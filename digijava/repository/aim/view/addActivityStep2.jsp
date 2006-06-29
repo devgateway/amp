@@ -247,8 +247,8 @@ function popupwin()
 											<td width="13" height="20" background="module/aim/images/left-side.gif">
 											</td>
 											<td vAlign="center" align ="center" class="textalb" height="20" bgcolor="#006699">
-												<digi:trn key="aim:step2of8LocationAndSectors">
-													Step 2 of 8: Location | Sectors
+												<digi:trn key="aim:step2of9LocationAndSectors">
+													Step 2 of 9: Location | Sectors
 												</digi:trn>
 											</td>
 											<td width="13" height="20" background="module/aim/images/right-side.gif">

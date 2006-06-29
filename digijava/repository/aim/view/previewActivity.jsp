@@ -263,7 +263,26 @@ function disable() {
 									</digi:link>
 								</c:if>								
 
-								&nbsp;&gt;&nbsp;									
+								&nbsp;&gt;&nbsp;		
+
+								<c:if test="${aimEditActivityForm.donorFlag == true}">
+									<digi:trn key="aim:addActivityStep9">
+										Step 9
+									</digi:trn>
+								</c:if>
+								<c:if test="${aimEditActivityForm.donorFlag == false}">
+									<bean:define id="translation">
+										<digi:trn key="aim:clickToViewAddActivityStep9">Click here to goto Add Activity Step 9</digi:trn>
+									</bean:define>
+									<digi:link href="/addActivity.do?step=10&edit=true" styleClass="comment" title="<%=translation%>" >
+										<digi:trn key="aim:addActivityStep9">
+											Step 9
+										</digi:trn>
+									</digi:link>
+								</c:if>								
+
+								&nbsp;&gt;&nbsp;	
+								
 								<digi:trn key="aim:previewActivity">
 									Preview Activity
 								</digi:trn>																
@@ -503,8 +522,8 @@ function disable() {
 									</tr>																											
 									<tr>
 										<td class="t-name" width="30%" align="right" bgcolor="#f4f4f2">
-											<digi:trn key="aim:locations">
-											Locations</digi:trn>
+											<digi:trn key="aim:location">
+											Location</digi:trn>
 										</td>
 										<td bgcolor="#ffffff">
 											<c:if test="${!empty aimEditActivityForm.selectedLocs}">
@@ -531,8 +550,8 @@ function disable() {
 									</tr>		
 									<tr>
 										<td class="t-name" width="30%" align="right" bgcolor="#f4f4f2">
-											<digi:trn key="aim:sectors">
-											Sectors</digi:trn>
+											<digi:trn key="aim:sector">
+											Sector</digi:trn>
 										</td>
 										<td bgcolor="#ffffff">
 											<c:if test="${!empty aimEditActivityForm.activitySectors}">
@@ -571,8 +590,8 @@ function disable() {
 									
 									<tr>
 										<td class="t-name" width="30%" align="right" bgcolor="#f4f4f2">
-											<digi:trn key="aim:fundings">
-											Fundings</digi:trn>
+											<digi:trn key="aim:funding">
+											Funding</digi:trn>
 										</td>
 										<td bgcolor="#ffffff">
 											<c:if test="${!empty aimEditActivityForm.fundingOrganizations}">

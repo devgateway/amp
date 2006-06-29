@@ -216,8 +216,8 @@
 									<tr>
 										<td  width="140" align="right" bgcolor="#ffffff">
 											<b>
-											<digi:trn key="aim:locations">
-											Locations</digi:trn></b>
+											<digi:trn key="aim:location">
+											Location</digi:trn></b>
 										</td>
 										<td bgcolor="#ffffff" >
 											<c:if test="${!empty aimEditActivityForm.selectedLocs}">
@@ -248,8 +248,8 @@
 									<tr>
 										<td  width="140" align="right" bgcolor="#ffffff">
 											<b>
-											<digi:trn key="aim:sectors">
-											Sectors</digi:trn></b>
+											<digi:trn key="aim:sector">
+											Sector</digi:trn></b>
 										</td>
 										<td bgcolor="#ffffff" >
 											<c:if test="${!empty aimEditActivityForm.activitySectors}">
@@ -292,8 +292,8 @@
 									<tr>
 										<td  width="140" align="right" bgcolor="#ffffff">
 											<b>
-											<digi:trn key="aim:fundings">
-											Fundings</digi:trn></b>
+											<digi:trn key="aim:funding">
+											Funding</digi:trn></b>
 										</td>
 										<td bgcolor="#ffffff" >
 											<c:if test="${!empty aimEditActivityForm.fundingOrganizations}">

@@ -557,16 +557,15 @@ public class EditActivity extends Action {
 									double frmExRt = CurrencyUtil.getExchangeRate(
 											fundDet.getAmpCurrencyId()
 													.getCurrencyCode(), 1, dt);
-									double toExRt = CurrencyUtil.getExchangeRate(
-											CurrencyUtil.getAmpcurrency(
-													tm.getAppSettings()
-															.getCurrencyId())
-													.getCurrencyCode(), 1, dt);
+									String toCurrCode = CurrencyUtil.getAmpcurrency(
+											tm.getAppSettings()
+											.getCurrencyId()).getCurrencyCode();
+									double toExRt = CurrencyUtil.getExchangeRate(toCurrCode, 1, dt);
 									double amt = CurrencyWorker.convert1(
 											fundDet.getTransactionAmount()
 													.doubleValue(), frmExRt,
 											toExRt);
-									eaForm.setCurrCode(fundDet.getAmpCurrencyId().getCurrencyCode());
+									eaForm.setCurrCode(toCurrCode);
 									if (fundDet.getTransactionType().intValue() == Constants.COMMITMENT) {
 										totComm += amt;
 									} else if (fundDet.getTransactionType()

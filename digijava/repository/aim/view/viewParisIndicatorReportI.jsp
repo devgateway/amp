@@ -336,7 +336,7 @@
 										<td width="35%" height="33">
 											<div align="center">
 											<strong>
-											Total volume of technical co-operation for capacity development provided 
+											Total volume of technical co-operation provided 
 											</strong>
 											</div>
 										</td>

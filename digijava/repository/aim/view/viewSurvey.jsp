@@ -50,8 +50,14 @@
 													<digi:trn key="aim:viewAESurveys">Aid Effectiveness Surveys</digi:trn>
 													</digi:link>&nbsp;&gt;&nbsp;
 													<c:out value="${aimEditSurveyForm.fundingOrg}" />
-												</SPAN>
+												</SPAN>				
 											</TD>
+											<td>
+						<img src="../ampTemplate/images/print_icon.gif">
+				<digi:link href="/ParisIndicatorPrintSurvey.do" target="_blank">
+					Print
+				</digi:link>
+				</td>
 											<TD align="right">
 												&nbsp;
 											</TD>

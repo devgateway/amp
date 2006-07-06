@@ -3154,7 +3154,13 @@
 			name="aimParisIndicatorReportForm" 
     		type="org.digijava.module.aim.action.ParisIndicatorReportPDFXLSCSV" 
      		scope="session" validate="false" path="/aim/parisIndicatorReportPDFXLSCSV">
-	</action>
+ </action>
+
+  <action name="aimEditSurveyForm" 
+     	type="org.digijava.module.aim.action.ParisIndicatorPrintSurvey" 
+     	scope="session" validate="false" path="/aim/ParisIndicatorPrintSurvey">
+    <forward name="forward" path="/showLayout.do?layout=aim_pIPrintSurvey" />
+	 </action>
 		  
   </action-mappings>
 

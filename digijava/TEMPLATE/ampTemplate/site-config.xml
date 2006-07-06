@@ -346,6 +346,7 @@
 				<page>aim_editQuestions</page>
 				<page>aim_addQuestion</page>
 				<page>aim_addIndicator</page>
+				<page>aim_pIPrintSurvey</page>
 			</module>
 		</page-group> 
 	</site-layout>

@@ -213,7 +213,10 @@
 	<page page="parisAddQuestion" name="aim_addQuestion" title="ParisIndicator Add Question"/>
 	<page page="parisAddIndicator" name="aim_addIndicator" title="Add New Paris Indicator"/>
 	
+	
 	<!-- Printer Friendly HTML Reports -->
+	<page page="pIPrintSurvey" name="aim_pIPrintSurvey" title="AMP - Preview Activity" />	
+	<page name="forward" title="Print IndicatorSurvey"/>
 	<page name="projectByDonor_NoLayout" title=" : Annual Report By Project " />
 	<page name="htmlCommitmentbyModality"	title=" : Annual Project Detail Report " />
 	<page name="htmlMultilateralbyDonor"		title=" : Annual Report By Type of Assistance " />

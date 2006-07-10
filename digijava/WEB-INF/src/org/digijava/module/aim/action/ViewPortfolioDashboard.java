@@ -50,11 +50,13 @@ public class ViewPortfolioDashboard extends TilesAction {
 				col.add(tempP.getAmpActivityId());
 				AmpProject proj = new AmpProject();
 				proj.setAmpActivityId(tempP.getAmpActivityId());
+				proj.setName(tempP.getName());
+				/*
 				if (tempP.getName().length() > 30) {
 					proj.setName(tempP.getName().substring(0,30) + "...");
 				} else {
 					proj.setName(tempP.getName());
-				}
+				}*/
 				projects.add(proj);
 			}
 			Collections.sort(projects);
@@ -75,9 +77,11 @@ public class ViewPortfolioDashboard extends TilesAction {
 		Iterator itr = col.iterator();
 		while (itr.hasNext()) {
 			AmpMEIndicators meInd = (AmpMEIndicators) itr.next();
+			meInd.setName(meInd.getName());
+			/*
 			if (meInd.getName().length() > 30) {
 				meInd.setName(meInd.getName().substring(0,30) + "...");
-			}
+			}*/
 		}
 		pdForm.set("indicatorList",col);
 		

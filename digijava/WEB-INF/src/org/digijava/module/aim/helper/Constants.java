@@ -160,7 +160,7 @@ public class Constants
 	public static final Color HIGHLY_SATISFACTORY_CLR = Color.GREEN;
 	public static final Color VERY_SATISFACTORY_CLR = Color.BLUE;
 	public static final Color SATISFACTORY_CLR = Color.CYAN;
-	public static final Color UNSATISFACTORY_CLR = Color.YELLOW;
+	public static final Color UNSATISFACTORY_CLR = new Color(0,0,83); // dark blue
 	public static final Color VERY_UNSATISFACTORY_CLR = Color.ORANGE;
 	public static final Color HIGHLY_UNSATISFACTORY_CLR = Color.RED;	
 	

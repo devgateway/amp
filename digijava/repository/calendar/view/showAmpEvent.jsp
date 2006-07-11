@@ -9,9 +9,9 @@
 <digi:instance property="calendarEventForm"/>
 
 <link rel="stylesheet" href="<digi:file src="module/calendar/css/main.css"/>">
-
-<script type="text/javascript" src="<digi:file src="module/calendar/js/main.js"/>"></script>
-<script type="text/javascript">
+<script language="JavaScript" type="text/javascript" src="<digi:file src="module/calendar/js/calendar.js"/>"></script>
+<script language="JavaScript" type="text/javascript" src="<digi:file src="module/calendar/js/main.js"/>"></script>
+<script language="JavaScript" type="text/javascript">
 function addGuest(guest) {
     var list = document.getElementById('selectedAttendeeGuests');
     if (list == null || guest == null || guest.value == null || guest.value == "") {
@@ -51,6 +51,7 @@ function selectGuests() {
         list.options[i].selected = true;
     }
 }
+
 </script>
 
 <table border="0" align="center" width="80%">
@@ -82,7 +83,7 @@ function selectGuests() {
 
         </td>
         <td align="right">
-            <c:if test="${calendarEventForm.ampCalendarId != null}">
+             <c:if test="${calendarEventForm.ampCalendarId != null && calendarEventForm.ampCalendarId != 0}">
                 <digi:form action="/DeleteEvent.do~ampCalendarId=${calendarEventForm.ampCalendarId}">
                     <html:submit value="Delete" style="width:80px" onclick="if(confirm('Are You sure?')){return true}else{return false};"/>
                 </digi:form>
@@ -142,8 +143,15 @@ function selectGuests() {
                         </script>
                         <td nowrap="nowrap">
                             <table cellpadding="0" cellspacing="0">
-                                <td nowrap="nowrap"><html:text styleId="selectedStartDate" name="calendarEventForm" property="selectedStartDate" style="width:80px"/></td>
-                                <td nowrap="nowrap">&nbsp;<img id="startDateImg" name="startDateImg" src="/thirdparty/CalendarPopup/img/cal.gif" alt="STARTDATE" onclick="startDateCalendar.select(document.getElementById('selectedStartDate'), 'startDateImg', 'dd/MM/yyyy');return false;">&nbsp;</td>
+                                <td nowrap="nowrap">
+                                    <html:text styleId="selectedStartDate" name="calendarEventForm" property="selectedStartDate" style="width:80px"/>
+                                </td>
+                                <td>
+                                    <a href="javascript:calendar('selectedStartDate');">
+                                        <img src=" ../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border=0>
+                                    </a>
+                                </td>
+                                <td nowrap="nowrap">&nbsp;&nbsp;<img id="startDateImg" name="startDateImg" src="/thirdparty/CalendarPopup/img/cal.gif" alt="STARTDATE" onclick="startDateCalendar.select(document.getElementById('selectedStartDate'), 'startDateImg', 'dd/MM/yyyy');return false;">&nbsp;</td>
                                 <td>
                                     <select id="selectedStartHour" onchange="updateTime(document.getElementById('selectedStartTime'), 'hour', this.value)">
                                         <c:forEach var="hour" begin="0" end="23">
@@ -245,8 +253,15 @@ function selectGuests() {
                         </script>
                         <td nowrap="nowrap">
                             <table cellpadding="0" cellspacing="0">
-                                <td nowrap="nowrap"><html:text styleId="selectedEndDate" name="calendarEventForm" property="selectedEndDate" style="width:80px"/></td>
-                                <td nowrap="nowrap">&nbsp;<img id="endDateImg" name="endDateImg" src="/thirdparty/CalendarPopup/img/cal.gif" alt="ENDDATE" onclick="endDateCalendar.select(document.getElementById('selectedEndDate'), 'endDateImg', 'dd/MM/yyyy');return false;">&nbsp;</td>
+                                <td nowrap="nowrap">
+                                    <html:text styleId="selectedEndDate" name="calendarEventForm" property="selectedEndDate" style="width:80px"/>
+                                </td>
+                                <td>
+                                    <a href="javascript:calendar('selectedEndDate')">
+                                        <img src=" ../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border=0>
+                                    </a>
+                                </td>
+                                <td nowrap="nowrap">&nbsp;&nbsp;<img id="endDateImg" name="endDateImg" src="/thirdparty/CalendarPopup/img/cal.gif" alt="ENDDATE" onclick="endDateCalendar.select(document.getElementById('selectedEndDate'), 'endDateImg', 'dd/MM/yyyy');return false;">&nbsp;</td>
                                 <td>
                                     <select id="selectedEndHour" onchange="updateTime(document.getElementById('selectedEndTime'), 'hour', this.value)">
                                         <c:forEach var="hour" begin="0" end="23">

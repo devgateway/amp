@@ -10,8 +10,8 @@
 		return flag;
 	}
 	function updateScheme(id) {
-			  alert(" this is it");
-			  alert(id);
+			  
+			  
 			 if(isEmpty(document.aimAddSectorForm.sectorName.value)==true)
 			 {
 						alert("please enter a sector name:");

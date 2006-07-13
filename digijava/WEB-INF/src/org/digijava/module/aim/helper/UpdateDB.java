@@ -65,7 +65,7 @@ public class UpdateDB {
 			
 
 			sql = "insert into amp_report_cache ";
-			sql += " select '',amp_activity.amp_activity_id,amp_id,amp_activity.name 'activity_name',amp_funding.amp_modality_id 'amp_modality_id',amp_modality.name 'modality_name',";
+			sql += " select NULL,amp_activity.amp_activity_id,amp_id,amp_activity.name 'activity_name',amp_funding.amp_modality_id 'amp_modality_id',amp_modality.name 'modality_name',";
 			sql += " amp_activity.amp_status_id 'amp_status_id',amp_status.name 'status_name',";
 			sql += " amp_terms_assist.terms_assist_name,amp_organisation.name 'donor_name',amp_organisation.amp_org_id 'amp_donor_id',amp_organisation.org_type 'org_type',amp_funding.amp_funding_id,";
 			sql += " case when transaction_type='0' and adjustment_type='0' and org_role_code='DN' then transaction_amount else 0 end 'planned_commitment',";
@@ -88,6 +88,7 @@ public class UpdateDB {
 			sql += " and amp_funding_detail.amp_currency_id=amp_currency.amp_currency_id and amp_activity.amp_activity_id='" + ampActivityId + "'";
 			sql += " and amp_activity.amp_level_id=amp_level.amp_level_id and org_role_code='DN'";
 
+			logger.debug(sql);
 			// Query #2
 			// This script inserts details of activities having funding details entered from MOFED perspective.
 			t1 = System.currentTimeMillis();						
@@ -97,7 +98,7 @@ public class UpdateDB {
 			
 
 			sql = "insert into amp_report_cache ";
-			sql += " select '',amp_activity.amp_activity_id,amp_id,amp_activity.name 'activity_name',amp_funding.amp_modality_id 'amp_modality_id',amp_modality.name 'modality_name',";
+			sql += " select NULL,amp_activity.amp_activity_id,amp_id,amp_activity.name 'activity_name',amp_funding.amp_modality_id 'amp_modality_id',amp_modality.name 'modality_name',";
 			sql += " amp_activity.amp_status_id 'amp_status_id',amp_status.name 'status_name',";
 			sql += " amp_terms_assist.terms_assist_name,amp_organisation.name 'donor_name',amp_organisation.amp_org_id 'amp_donor_id',amp_organisation.org_type 'org_type',amp_funding.amp_funding_id,";
 			sql += " case when transaction_type='0' and adjustment_type='0' and org_role_code='MA' then transaction_amount else 0 end 'planned_commitment',";
@@ -120,6 +121,7 @@ public class UpdateDB {
 			sql += " and amp_funding_detail.amp_currency_id=amp_currency.amp_currency_id and amp_activity.amp_activity_id='" + ampActivityId + "'";
 			sql += " and amp_activity.amp_level_id=amp_level.amp_level_id and org_role_code='MA'";
 			
+			logger.debug(sql);
 			// Query #3
 			// This script inserts details of activities having funding organisation but no funding details.
 			t1 = System.currentTimeMillis();			
@@ -129,7 +131,7 @@ public class UpdateDB {
 
 			
 			sql = "insert into amp_report_cache ";
-			sql += "select '',amp_activity.amp_activity_id,amp_activity.amp_id,amp_activity.name,NULL,NULL, ";
+			sql += "select NULL,amp_activity.amp_activity_id,amp_activity.amp_id,amp_activity.name,NULL,NULL, ";
 			sql += "amp_activity.amp_status_id,amp_status.name,NULL,amp_organisation.name,amp_org_role.organisation,amp_organisation.org_type,NULL,";
 			sql += "0 'planned_commitment',0 'planned_disbursement',0 'planned_expenditure',";
 			sql += "0 'actual_commitment',0 'actual_disbursement',0 'actual_expenditure',";
@@ -146,6 +148,7 @@ public class UpdateDB {
 			sql += "and amp_org_role.organisation=amp_organisation.amp_org_id ";
 			sql += "and amp_activity.amp_status_id=amp_status.amp_status_id";
 			
+			logger.debug(sql);
 			// Query #4
 			// This script inserts details of activities with no funding information.
 			t1 = System.currentTimeMillis();						
@@ -154,7 +157,7 @@ public class UpdateDB {
 			logger.debug("Query #4 executed in " + (t2-t1) + "ms");			
 
 			sql = "insert into amp_report_cache ";
-			sql += "select distinct ' ',";
+			sql += "select distinct NULL,";
 			sql += "amp_activity.amp_activity_id,amp_id,amp_activity.name,NULL,NULL, ";
 			sql += "amp_activity.amp_status_id,amp_status.name ";
 			sql += "'status_name',NULL,NULL,NULL,NULL,NULL,";
@@ -167,6 +170,7 @@ public class UpdateDB {
 			sql += "where amp_funding.amp_funding_id is null and amp_activity.amp_activity_id='" + ampActivityId + "' ";
 			sql += "and amp_activity.amp_status_id=amp_status.amp_status_id";
 
+			logger.debug(sql);
 			// Query #5
 			// This script inserts details of activities having funding details but with funding instrument or implementation level null 
 			// entered from donor perspective.
@@ -176,7 +180,7 @@ public class UpdateDB {
 			logger.debug("Query #5 executed in " + (t2-t1) + "ms");			
 			
 			sql = "insert into amp_report_cache select ";
-			sql += "'',amp_activity.amp_activity_id,amp_id,amp_activity.name,amp_funding.amp_modality_id,case ";
+			sql += "NULL,amp_activity.amp_activity_id,amp_id,amp_activity.name,amp_funding.amp_modality_id,case ";
 			sql += "when amp_funding.amp_modality_id='1' then 'Direct Budget Support' ";
 			sql += "when amp_funding.amp_modality_id='2' then 'Pool Fund' ";
 			sql += "when amp_funding.amp_modality_id='3' then 'Project Support' ";
@@ -223,6 +227,7 @@ public class UpdateDB {
 			sql += "and amp_funding_detail.amp_currency_id=amp_currency.amp_currency_id and amp_activity.amp_activity_id='" + ampActivityId + "' ";
 			sql += "and amp_activity.amp_status_id=amp_status.amp_status_id and org_role_code='DN'";
 			
+			logger.debug(sql);
 			// Query #6
 			// This script inserts details of activities having funding details but with funding instrument or implementation level null 
 			//entered from MOFED perspective.
@@ -232,7 +237,7 @@ public class UpdateDB {
 			logger.debug("Query #6 executed in " + (t2-t1) + "ms");			
 			
 			sql = "insert into amp_report_cache select ";
-			sql += "'',amp_activity.amp_activity_id,amp_id,amp_activity.name,amp_funding.amp_modality_id,case ";
+			sql += "NULL,amp_activity.amp_activity_id,amp_id,amp_activity.name,amp_funding.amp_modality_id,case ";
 			sql += "when amp_funding.amp_modality_id='1' then 'Direct Budget Support' ";
 			sql += "when amp_funding.amp_modality_id='2' then 'Pool Fund' ";
 			sql += "when amp_funding.amp_modality_id='3' then 'Project Support' ";
@@ -279,6 +284,7 @@ public class UpdateDB {
 			sql += "and amp_funding_detail.amp_currency_id=amp_currency.amp_currency_id and amp_activity.amp_activity_id='" + ampActivityId + "' ";
 			sql += "and amp_activity.amp_status_id=amp_status.amp_status_id and org_role_code='MA'";
 			
+			logger.debug(sql);
 			// Query #7
 			// Deletes all existing records from amp_report_sector for ampActivityId.
 			t1 = System.currentTimeMillis();						
@@ -308,13 +314,13 @@ public class UpdateDB {
 			{
 				AmpSector ampSector=SectorUtil.getAmpParentSector(new Long(rs.getLong("amp_sector_id")));
 				logger.debug("Sector: " + ampSector.getAmpSectorId());
-				sb.append("insert into amp_report_sector values('','");
+				sb.append("insert into amp_report_sector values(NULL,'");
 				sb.append(ampActivityId);
 				sb.append("','");
 				sb.append(ampSector.getName());
 				sb.append("','");
 				sb.append(ampSector.getAmpSectorId());
-				sb.append("','','','");
+				sb.append("',NULL,NULL,'");
 				sb.append(rs.getString("amp_sector_id"));
 				sb.append("')");
 				// Query #10
@@ -334,10 +340,11 @@ public class UpdateDB {
 			logger.debug("Query #11 executed in " + (t2-t1) + "ms");			
 
 			sql= "insert into amp_report_location ";
-			sql += "select distinct '',amp_activity_id,country,region ";
+			sql += "select distinct NULL,amp_activity_id,country,region ";
 			sql += "from amp_activity_location,amp_location ";
 			sql += "where amp_activity_location.amp_location_id=amp_location.amp_location_id and amp_activity_id='" + ampActivityId + "'";
 			
+			logger.debug(sql);
 			// Query #12
 			t1 = System.currentTimeMillis();										
 			stmt.executeUpdate(sql);
@@ -352,10 +359,11 @@ public class UpdateDB {
 			logger.debug("Query #13 executed in " + (t2-t1) + "ms");			
 			
 			sql  = "insert into amp_report_physical_performance ";
-			sql += "select '',amp_activity.amp_activity_id,amp_physical_performance.title,amp_physical_performance.description ";
+			sql += "select NULL,amp_activity.amp_activity_id,amp_physical_performance.title,amp_physical_performance.description ";
 			sql += "from amp_activity,amp_components,amp_physical_performance ";
 			sql += "where amp_activity.amp_activity_id=amp_components.amp_activity_id ";
 			sql += "and amp_components.amp_component_id=amp_physical_performance.amp_component_id and amp_activity.amp_activity_id='" + ampActivityId + "'";
+			logger.debug(sql);
 			// Query #14
 			t1 = System.currentTimeMillis();										
 			stmt.executeUpdate(sql);
@@ -363,7 +371,7 @@ public class UpdateDB {
 			logger.debug("Query #14 executed in " + (t2-t1) + "ms");		
 			
 			sql="insert into amp_report_cache " +
-					"select '',amp_activity.amp_activity_id,amp_id,amp_activity.name 'activity_name', " +
+					"select NULL,amp_activity.amp_activity_id,amp_id,amp_activity.name 'activity_name', " +
 					"NULL 'amp_modality_id', NULL 'modality_name',amp_activity.amp_status_id 'amp_status_id',amp_status.name 'status_name', " +
 					"NULL 'term_assist_name',NULL 'donor_name',NULL 'amp_donor_id',NULL 'org_type',NULL 'amp_funding_id', " +
 					"case when transaction_type='0' and adjustment_type='0' and perspective_id='2' then transaction_amount else 0 end 'planned_commitment', " +
@@ -388,6 +396,7 @@ public class UpdateDB {
 					"and amp_activity.amp_level_id=amp_level.amp_level_id and perspective_id='2' " +
 					"and amp_activity.amp_activity_id='" + ampActivityId + "'";
 
+			logger.debug(sql);
 			//Query #15 (added by mihai)
 			t1 = System.currentTimeMillis();						
 			stmt.executeUpdate(sql);
@@ -397,7 +406,7 @@ public class UpdateDB {
 			
 			
 			sql="insert into amp_report_cache " +
-				"select '',amp_activity.amp_activity_id,amp_id,amp_activity.name 'activity_name', " +
+				"select NULL,amp_activity.amp_activity_id,amp_id,amp_activity.name 'activity_name', " +
 				"NULL 'amp_modality_id', NULL 'modality_name',amp_activity.amp_status_id 'amp_status_id',amp_status.name 'status_name', " +
 				"NULL 'term_assist_name',NULL 'donor_name',NULL 'amp_donor_id',NULL 'org_type',NULL 'amp_funding_id', " +
 				"case when transaction_type='0' and adjustment_type='0' and perspective_id='1' then transaction_amount else 0 end 'planned_commitment', " +
@@ -422,6 +431,7 @@ public class UpdateDB {
 				"and amp_activity.amp_level_id=amp_level.amp_level_id and perspective_id='1' " +
 				"and amp_activity.amp_activity_id='" + ampActivityId + "'";
 
+			logger.debug(sql);
 			//Query #16 (added by mihai)
 			t1 = System.currentTimeMillis();						
 			stmt.executeUpdate(sql);
@@ -430,7 +440,7 @@ public class UpdateDB {
 			
 			
 			sql="insert into amp_report_cache " +
-				"select '',amp_activity.amp_activity_id,amp_id,amp_activity.name 'activity_name', " +
+				"select NULL,amp_activity.amp_activity_id,amp_id,amp_activity.name 'activity_name', " +
 				"NULL 'amp_modality_id', NULL 'modality_name',amp_activity.amp_status_id 'amp_status_id',amp_status.name 'status_name', " +
 				"NULL 'term_assist_name',NULL 'donor_name',NULL 'amp_donor_id',NULL 'org_type',NULL 'amp_funding_id', " +
 				"0 'planned_commitment',0 'planned_disbursement',0 'planned_expenditure',0 'actual_commitment',0 'actual_disbursement',0 'actual_expenditure', " +
@@ -443,13 +453,14 @@ public class UpdateDB {
 				"and amp_activity.amp_level_id=amp_level.amp_level_id and amp_components.amp_activity_id is null " +
 				"and amp_activity.amp_activity_id='" + ampActivityId + "'";
 
+			logger.debug(sql);
 			//Query #17 (added by mihai)
 			t1 = System.currentTimeMillis();						
 			stmt.executeUpdate(sql);
 			t2 = System.currentTimeMillis();
 			logger.debug("Query #17 executed in " + (t2-t1) + "ms");
 			
-			sql="insert into amp_report_cache select '',amp_activity.amp_activity_id,amp_id,amp_activity.name 'activity_name', " +
+			sql="insert into amp_report_cache select NULL,amp_activity.amp_activity_id,amp_id,amp_activity.name 'activity_name', " +
 				"NULL 'amp_modality_id', NULL 'modality_name',amp_activity.amp_status_id 'amp_status_id',amp_status.name 'status_name', " +
 				"NULL 'term_assist_name',NULL 'donor_name',NULL 'amp_donor_id',NULL 'org_type',NULL 'amp_funding_id', " +
 				"0 'planned_commitment',0 'planned_disbursement',0 'planned_expenditure',0 'actual_commitment',0 'actual_disbursement',0 'actual_expenditure', " +
@@ -462,6 +473,7 @@ public class UpdateDB {
 				"and amp_activity.amp_level_id=amp_level.amp_level_id and amp_components.amp_activity_id is null " +
 				"and amp_activity.amp_activity_id='" + ampActivityId + "'";
 
+			logger.debug(sql);
 			//Query #18 (added by mihai)
 			t1 = System.currentTimeMillis();						
 			stmt.executeUpdate(sql);
@@ -469,7 +481,7 @@ public class UpdateDB {
 			logger.debug("Query #18 executed in " + (t2-t1) + "ms");
 			
 			
-			sql="insert into amp_report_cache select '',amp_activity.amp_activity_id,amp_id,amp_activity.name 'activity_name', " +
+			sql="insert into amp_report_cache select NULL,amp_activity.amp_activity_id,amp_id,amp_activity.name 'activity_name', " +
 					"NULL 'amp_modality_id', NULL 'modality_name',amp_activity.amp_status_id 'amp_status_id',amp_status.name 'status_name'," +
 					"NULL 'term_assist_name',NULL 'donor_name',NULL 'amp_donor_id',NULL 'org_type',NULL 'amp_funding_id'," +
 					"case when transaction_type='0' and adjustment_type='0' and perspective_id='2' then transaction_amount else 0 end 'planned_commitment'," +
@@ -494,6 +506,7 @@ public class UpdateDB {
 					"and amp_activity.amp_level_id=amp_level.amp_level_id and perspective_id='2' "+
 					"and amp_activity.amp_activity_id='" + ampActivityId + "'";
 			
+			logger.debug(sql);
 			//Query #19 (added by mihai)
 			t1 = System.currentTimeMillis();						
 			stmt.executeUpdate(sql);
@@ -501,7 +514,7 @@ public class UpdateDB {
 			logger.debug("Query #19 executed in " + (t2-t1) + "ms");
 			
 			
-			sql="insert into amp_report_cache select '',amp_activity.amp_activity_id,amp_id,amp_activity.name 'activity_name',  " +
+			sql="insert into amp_report_cache select NULL,amp_activity.amp_activity_id,amp_id,amp_activity.name 'activity_name',  " +
 				"NULL 'amp_modality_id', NULL 'modality_name',amp_activity.amp_status_id 'amp_status_id',amp_status.name 'status_name'," +
 				"NULL 'term_assist_name',NULL 'donor_name',NULL 'amp_donor_id',NULL 'org_type',NULL 'amp_funding_id'," +
 				"case when transaction_type='0' and adjustment_type='0' and perspective_id='1' then transaction_amount else 0 end 'planned_commitment'," +
@@ -527,6 +540,7 @@ public class UpdateDB {
 				"and amp_activity.amp_activity_id='" + ampActivityId + "'";
 
 
+			logger.debug(sql);
 			//Query #20 (added by mihai)
 			t1 = System.currentTimeMillis();						
 			stmt.executeUpdate(sql);
@@ -534,7 +548,7 @@ public class UpdateDB {
 			logger.debug("Query #20 executed in " + (t2-t1) + "ms");
 			
 			
-			sql="insert into amp_report_cache select '',amp_activity.amp_activity_id,amp_id,amp_activity.name 'activity_name', " +
+			sql="insert into amp_report_cache select NULL,amp_activity.amp_activity_id,amp_id,amp_activity.name 'activity_name', " +
 				"NULL 'amp_modality_id', NULL 'modality_name',amp_activity.amp_status_id 'amp_status_id',amp_status.name 'status_name', " +
 				"NULL 'term_assist_name',NULL 'donor_name',NULL 'amp_donor_id',NULL 'org_type',NULL 'amp_funding_id', " +
 				"0 'planned_commitment',0 'planned_disbursement',0 'planned_expenditure',0 'actual_commitment',0 'actual_disbursement',0 'actual_expenditure', " +
@@ -546,6 +560,7 @@ public class UpdateDB {
 				"and amp_activity.amp_level_id=amp_level.amp_level_id and activity_id is null "+
 				"and amp_activity.amp_activity_id='" + ampActivityId + "'";
 			
+			logger.debug(sql);
 			//Query #21 (added by mihai)
 			t1 = System.currentTimeMillis();						
 			stmt.executeUpdate(sql);
@@ -554,7 +569,7 @@ public class UpdateDB {
 			
 			
 			
-			sql="insert into amp_report_cache select '',amp_activity.amp_activity_id,amp_id,amp_activity.name 'activity_name', " +
+			sql="insert into amp_report_cache select NULL,amp_activity.amp_activity_id,amp_id,amp_activity.name 'activity_name', " +
 				"NULL 'amp_modality_id', NULL 'modality_name',amp_activity.amp_status_id 'amp_status_id',amp_status.name 'status_name', " +
 				"NULL 'term_assist_name',NULL 'donor_name',NULL 'amp_donor_id',NULL 'org_type',NULL 'amp_funding_id', " +
 				"0 'planned_commitment',0 'planned_disbursement',0 'planned_expenditure',0 'actual_commitment',0 'actual_disbursement',0 'actual_expenditure', " +
@@ -565,6 +580,7 @@ public class UpdateDB {
 				"amp_status,amp_level where amp_activity.amp_status_id =amp_status.amp_status_id and amp_activity.amp_level_id=amp_level.amp_level_id and activity_id is null " +
 				"and amp_activity.amp_activity_id='" + ampActivityId + "'";
 
+			logger.debug(sql);
 			//Query #22 (added by mihai)
 			t1 = System.currentTimeMillis();						
 			stmt.executeUpdate(sql);

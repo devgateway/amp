@@ -338,7 +338,7 @@
 								 
 							</tr>
 							<c:if test="${aimParisIndicatorReportForm.indicatorCode == '7'}">
-								<tr>
+								<tr align="center"  bgcolor="#F4F4F2">
 									<%-- Loop-2 starts here --%>
 									<%--<c:set var="stYear" value="${aimParisIndicatorReportForm.startYear}" />
 									<bean:define id="cntr"><c:out value="${clYear - stYear + 1}" /></bean:define>
@@ -411,8 +411,8 @@
 														<td>
 															<div align="center">
 																<c:if test="${index1 == index2}">
-																	<%--<fmt:formatNumber value="${rowVal}" type="number" pattern="####" maxFractionDigits="0" />%--%>
-																	<c:out value="${rowVal}"/>%
+																	<fmt:formatNumber value="${rowVal}" type="number" maxFractionDigits="0" />%
+																	<%-- <c:out value="${rowVal}"/>% --%>
 																</c:if>
 																<c:if test="${index1 != index2}">
 																	<fmt:formatNumber type="number" value="${rowVal}" maxFractionDigits="0" />

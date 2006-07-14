@@ -5329,7 +5329,7 @@ public class DbUtil {
 		
 		String qry = "select distinct dn.ampDonorOrgId from " + AmpAhsurvey.class.getName() + " dn";
 		surveyDonors.addAll(session.createQuery(qry).list());
-		logger.debug("total donors from AmpOrganisation[surveyDonors] : " + surveyDonors.size());
+		//logger.debug("total donors from AmpOrganisation[surveyDonors] : " + surveyDonors.size());
 		if (surveyDonors.size() > 0) {
 			if (null != orgGroup && orgGroup.trim().length() > 1 && !"all".equalsIgnoreCase(orgGroup))
 				orgGroupFlag = true;
@@ -5356,7 +5356,7 @@ public class DbUtil {
 				AmpOrganisation dnOrg = (AmpOrganisation) itr1.next();
 				surveySet.addAll(dnOrg.getSurvey());
 				//logger.debug("dnOrg.getAmpOrgId() : " + dnOrg.getAmpOrgId() + "  dnOrg.getAcronym() : " +dnOrg.getAcronym());
-				//logger.debug("---------------------------------------------------------------------------------------------");
+				//logger.debug("----------------------------------------------------------------------------------------------");
 				// Filtering by org-group here
 				if (orgGroupFlag) {
 					if (!orgGroup.equalsIgnoreCase(dnOrg.getOrgGrpId().getOrgGrpCode()))
@@ -5375,8 +5375,8 @@ public class DbUtil {
 						// answersRow will represent row for one disbursement year inside answer-collection of pi helper object.
 						answersRow = new double[NUM_ANSWER_COLUMNS];
 						answersRow[0] = (startYear + i);
-						//logger.debug("[inside getAidSurveyReportByIndicator()]- YEAR : " + answersRow[0]);
-						//logger.debug("---------------------------------------------------------");
+						//logger.debug("YEAR : " + answersRow[0]);
+						//logger.debug("----------------");
 					}
 					else
 						answersRow[i] = 0;
@@ -5384,6 +5384,8 @@ public class DbUtil {
 					index = 0;
 					while(itr2.hasNext()) {
 						AmpAhsurvey svy = (AmpAhsurvey) itr2.next();
+						//logger.debug("survey-id : " + svy.getAmpAHSurveyId() + " activity-id : " + 
+							//			svy.getAmpActivityId().getAmpActivityId());
 						if ("4".equalsIgnoreCase(indcCode)) {
 							Iterator iter = svy.getResponses().iterator();
 							while (iter.hasNext()) {
@@ -5391,6 +5393,8 @@ public class DbUtil {
 								if (4 == resp.getAmpQuestionId().getQuestionNumber().intValue()) {
 									try {
 										ansToQues4 = Double.parseDouble(resp.getResponse());
+										ansToQues4 /= 100;
+										//logger.debug("ansToQues4 : " + ansToQues4);
 									}
 									catch (NumberFormatException nex) {
 										logger.debug("response to question-4 is not a number.");
@@ -5400,13 +5404,9 @@ public class DbUtil {
 								}
 							}
 						}
-						//logger.debug("[inside getAidSurveyReportByIndicator()]- survey-id : " + svy.getAmpAHSurveyId());
-						//logger.debug("[inside getAidSurveyReportByIndicator()]- activity-id : " + svy.getAmpActivityId().getAmpActivityId());
-						//logger.debug("[inside getAidSurveyReportByIndicator()]- answersColl[" + index + "]");
 						answers = answersColl[index++];
 						if (null != answers) {
 							for(j = 0; j < answers.length; j++) {
-								//logger.debug("j = " + j + " answers.length: " + answers.length);
 								sum = 0.0;
 								if (answers[j]) {
 									// Filtering by activity status here
@@ -5422,41 +5422,38 @@ public class DbUtil {
 									itr3 = svy.getAmpActivityId().getFunding().iterator();
 									while(itr3.hasNext()) {
 										AmpFunding fund = (AmpFunding) itr3.next();
+										//logger.debug("FundingId: " + fund.getAmpFundingId());
 										if (0 == dnOrg.getAmpOrgId().compareTo(fund.getAmpDonorOrgId().getAmpOrgId())) {
-											//logger.debug("AmpFundingId[inside-IF]: " + fund.getAmpFundingId());
-											// Filtering by financing-instrument here
+											/* Filtering by financing-instrument here
 											if (null != financingInstrument && financingInstrument.trim().length() > 1
 													&& !"all".equalsIgnoreCase(financingInstrument)) {
-												if (!financingInstrument.equalsIgnoreCase(fund.getModalityId().getName())) {
-													//logger.debug("continue: because of financingInstrument");
+												if (!financingInstrument.equalsIgnoreCase(fund.getModalityId().getName()))
 													continue;
-												}
-												else if ("9".equalsIgnoreCase(indcCode)) {
-													if (j == 0)
-														if (!"Direct Budget Support".equalsIgnoreCase(fund.getModalityId().getName())) {
-															//logger.debug("continue[indcCode=9]: because of !Direct Budget Suppor");
-															continue;
-														}
-													if (j == 1)
-														if ("Direct Budget Support".equalsIgnoreCase(fund.getModalityId().getName())) {
-															//logger.debug("continue[indcCode=9]: because of Direct Budget Suppor");
-															continue;
-														}
-												}
 											}
-											// Filtering by term-assist here
+											*/
+											if ("9".equalsIgnoreCase(indcCode)) {
+												if (j == 0)
+													if (!"Direct Budget Support".equalsIgnoreCase(fund.getModalityId().getName())) {
+														//logger.debug("continue[indcCode=9]: because of !Direct Budget Suppor");
+														continue;
+													}
+												if (j == 1)
+													if ("Direct Budget Support".equalsIgnoreCase(fund.getModalityId().getName())) {
+														//logger.debug("continue[indcCode=9]: because of Direct Budget Suppor");
+														continue;
+													}
+											}
+											/* Filtering by term-assist here
 											if (null != termAssist && termAssist.trim().length() > 1 && !"all".equalsIgnoreCase(termAssist))
-												if (!termAssist.equalsIgnoreCase(fund.getAmpTermsAssistId().getTermsAssistName())) {
-													//logger.debug("continue: because of termAssist");
+												if (!termAssist.equalsIgnoreCase(fund.getAmpTermsAssistId().getTermsAssistName()))
 													continue;
-												}
+											*/
 											itr4 = fund.getFundingDetails().iterator();
 											while (itr4.hasNext()) {
 												AmpFundingDetail fundtl = (AmpFundingDetail) itr4.next();
-												//logger.debug("fundtl.getAmpFundDetailId() : " + fundtl.getAmpFundDetailId());
+												//logger.debug("FundDetailId: " + fundtl.getAmpFundDetailId());
 												date = DateConversion.ConvertDateToString(fundtl.getTransactionDate());
 												double convYr = new Double(DateConversion.getYear(date)).doubleValue();
-												//logger.debug("convYr : " + convYr);
 												// Filtering by disbursement-year here
 												if (convYr == (startYear + i)) {
 													// Filtering by AdjustmentType & TransactionType here
@@ -5465,12 +5462,11 @@ public class DbUtil {
 															|| (indcFlag == 7 && j == 0 && fundtl.getAdjustmentType().intValue() != Constants.PLANNED)
 															|| (indcFlag == 7 && j == 1 && fundtl.getAdjustmentType().intValue() != Constants.ACTUAL)
 															|| fundtl.getTransactionType().intValue() != Constants.DISBURSEMENT) {
-														//logger.debug("continue: because of Adj/Trans: indcFlag : " + indcFlag + " j: " + j);
-														//logger.debug("AdjustmentType: " + fundtl.getAdjustmentType().intValue() + " TransactionType: " + fundtl.getTransactionType().intValue());
+														//logger.debug("continue: " + indcFlag + " j: " + j + " AdjustmentType: " + 
+															//	fundtl.getAdjustmentType().intValue() + " TransactionType: " + fundtl.getTransactionType().intValue());
 														continue;
 													}
 													// Filtering by currency here
-													//logger.debug("fromExchangeRate[before] : " + fromExchangeRate + " toExchangeRate[before] : " + toExchangeRate);
 													if ("USD".equalsIgnoreCase(fundtl.getAmpCurrencyId().getCurrencyCode()))
 														fromExchangeRate = 1.0;
 													else if (indcFlag == 7 && j == 0)
@@ -5486,24 +5482,22 @@ public class DbUtil {
 															toExchangeRate = CurrencyUtil.getExchangeRate(currency,Constants.PLANNED,fundtl.getTransactionDate());
 														else
 															toExchangeRate = CurrencyUtil.getExchangeRate(currency,Constants.ACTUAL,fundtl.getTransactionDate());
-														//logger.debug("fromExchangeRate[after] : " + fromExchangeRate + " toExchangeRate[after] : " + toExchangeRate);
-														
-														sum += CurrencyWorker.convert1(fundtl.getTransactionAmount().doubleValue(),
-																				fromExchangeRate, toExchangeRate);
-														//logger.debug("sum[inside loop]=" + sum + ": ");
-													}
-													//else
-														//logger.debug("currency-condition failed !!");
+													}	
+													sum += CurrencyWorker.convert1(fundtl.getTransactionAmount().doubleValue(),
+																			fromExchangeRate, toExchangeRate);
 												}
-												//else
-													//logger.debug("continue: because of year");
 											}
 										}
 									}
 								}
-								//else
-									//logger.debug("answers[j=" + j + "]: " + answers[j]);
 								if (indcFlag != 6) {
+									if ("4".equalsIgnoreCase(indcCode)) {
+										//logger.debug("survey-id: " + svy.getAmpAHSurveyId() + " ansYoQues4: " + ansToQues4);
+										//logger.debug("sum[before-mult]: " + sum);
+										percent = new Double(sum * ansToQues4);
+										sum = Double.parseDouble(formatter.format(percent));
+										//logger.debug("sum[after-mult] : " + sum);
+									}
 									answersRow[j + 1] += sum;
 									//logger.debug("answersRow[" + (j + 1) + "]: " + answersRow[j + 1] + " sum : " + sum);
 								}
@@ -5514,11 +5508,6 @@ public class DbUtil {
 					}
 					if (indcFlag == 6)
 						continue;
-					
-					if ("4".equalsIgnoreCase(indcCode)) {
-						for (j = 1; j < (answersRow.length - 1); j++)
-							answersRow[j] = Double.parseDouble(formatter.format((ansToQues4 * answersRow[j]) / 100));
-					}
 					
 					// computing last two columns of indicator-5a report
 					if (indcFlag == 5) {
@@ -5545,6 +5534,8 @@ public class DbUtil {
 						try {
 							if (indcFlag == 5)
 								percent = new Double((100 * answersRow[NUM_ANSWER_COLUMNS - 4]) / answersRow[NUM_ANSWER_COLUMNS - 3]);
+							else if (indcFlag == 7)
+								percent = new Double((100 * answersRow[NUM_ANSWER_COLUMNS - 2]) / answersRow[NUM_ANSWER_COLUMNS - 3]);
 							else if (indcFlag == 9) {
 								sum = answersRow[NUM_ANSWER_COLUMNS - 4] + answersRow[NUM_ANSWER_COLUMNS - 3];
 								percent = new Double((100 * sum) / answersRow[NUM_ANSWER_COLUMNS - 2]);
@@ -5604,6 +5595,8 @@ public class DbUtil {
 						try {
 							if (indcFlag == 5)
 								percent = new Double((100 * allDnRow[NUM_ANSWER_COLUMNS - 4]) / allDnRow[NUM_ANSWER_COLUMNS - 3]);
+							else if (indcFlag == 7)
+								percent = new Double((100 * allDnRow[NUM_ANSWER_COLUMNS - 2]) / allDnRow[NUM_ANSWER_COLUMNS - 3]);
 							else if (indcFlag == 9) {
 								sum = allDnRow[NUM_ANSWER_COLUMNS - 4] + allDnRow[NUM_ANSWER_COLUMNS - 3];
 								percent = new Double((100 * sum) / allDnRow[NUM_ANSWER_COLUMNS - 2]);
@@ -5668,8 +5661,8 @@ public class DbUtil {
 		itr1 = surveys.iterator();
 		while (itr1.hasNext()) {
 			AmpAhsurvey ahs = (AmpAhsurvey) itr1.next();
-			logger.debug("[inside iterator]-SurveyId: " + ahs.getAmpAHSurveyId() + " AmpOrgId: " + ahs.getAmpDonorOrgId().getAmpOrgId()
-							+ " Acronym: " + ahs.getAmpDonorOrgId().getAcronym());
+			//logger.debug("[inside iterator]-SurveyId: " + ahs.getAmpAHSurveyId() + " AmpOrgId: " + ahs.getAmpDonorOrgId().getAmpOrgId()
+				//			+ " Acronym: " + ahs.getAmpDonorOrgId().getAcronym());
 			answers = new boolean[NUM_COLUMNS_CALCULATED];
 			if (null != ahs.getResponses() && ahs.getResponses().size() > 0) {
 				//logger.debug("ahs.getResponses().size() : " + ahs.getResponses().size());
@@ -5733,10 +5726,10 @@ public class DbUtil {
 							//logger.debug("indCode: " + indCode + " q#: " + 7 + " - answers[2] : " + answers[2]);
 						}
 						if (flag[0] && flag[1] && flag[2] && flag[3]) {
-							if (answers[0] && answers[4]) answers[0] = true;
-							if (answers[1] && answers[4]) answers[1] = true;
-							if (answers[2] && answers[4]) answers[2] = true;
-							if (answers[0] && answers[1] && answers[2] && answers[4]) answers[3] = true;
+							answers[0] = (answers[0] && answers[4]) ? true : false;
+							answers[1] = (answers[1] && answers[4]) ? true : false;
+							answers[2] = (answers[2] && answers[4]) ? true : false;
+							answers[3] = (answers[0] && answers[1] && answers[2] && answers[4]) ? true : false;
 							break;
 						}
 						else continue;

@@ -308,14 +308,14 @@
 								<!--Start of Indicator headers selection here-->
 									<!-- Indicator 3 -->
 									<c:if test = "${aimParisIndicatorReportForm.indicatorCode == '3'}">
-									 <td width="35%" height="33">
+									 <td width="27%" height="33">
 											<div align="center">
 											<strong>
 											Aid flows to the government sector reported on the government's budget
 											</strong>
 											</div>
 										</td>
-										<td width="35%" height="33">
+										<td width="26%" height="33">
 											<div align="center">
 											<strong>
 											Total Aid flows disbursed to the government sector
@@ -326,66 +326,73 @@
 										
 									<!--Indicator 4 -->
 									<c:if test = "${aimParisIndicatorReportForm.indicatorCode == '4'}">
-										<td width="35%" height="33">
+										<td width="27%" height="33">
 											<div align="center">
 											<strong>
 											Volume of technical co-operation for capacity development provided through co-ordinated programmes 
 											</strong>
 											</div>
 										</td>
-										<td width="35%" height="33">
+										<td width="26%" height="33">
 											<div align="center">
 											<strong>
 											Total volume of technical co-operation provided 
 											</strong>
 											</div>
 										</td>
+										<td width="27%" height="33">
+											<div align="center">
+											<strong>
+											% of TC for capacity development provided through coordinated programmes consistent with national development strategies 
+											</strong>
+											</div>
+										</td>
 									</c:if>
 									<!--Indicator 5a -->
 									<c:if test = "${aimParisIndicatorReportForm.indicatorCode == '5a'}">
-										<td width="35%" height="33">
+										<td width="11%" height="33">
 											<div align="center">
 											<strong>
 											Aid flows to the goverment sector that use national budget execution procedures
 											</strong>
 											</div>
 										</td>
-										<td width="35%" height="33">
+										<td width="11%" height="33">
 											<div align="center">
 											<strong>
 											Aid flows to the goverment sector that use national financial reporting procedures
 											</strong>
 											</div>
 										</td>
-										<td width="35%" height="33">
+										<td width="11%" height="33">
 											<div align="center">
 											<strong>
 											Aid flows to the goverment sector that use national financial auditing procedures
 											</strong>
 											</div>
 										</td>
-										<td width="35%" height="33">
+										<td width="11%" height="33">
 											<div align="center">
 											<strong>
 											ODA that uses all 3 national PFM
 											</strong>
 											</div>
 										</td>
-										<td width="35%" height="33">
+										<td width="11%" height="33">
 											<div align="center">
 											<strong>
-											Aid flows that use national PFMS
+											Total aid flows disbursed to the government sector
 											</strong>
 											</div>
 										</td>
-										<td width="35%" height="33">
+										<td width="11%" height="33">
 											<div align="center">
 											<strong>
 											Proportion aid flows to the government sector using one of the 3 country PFM systems
 											</strong>
 											</div>
 										</td>
-										<td width="35%" height="33">
+										<td width="11%" height="33">
 											<div align="center">
 											<strong>
 											Proportion of aid flows to the government sector using all the 3 country PFM systems
@@ -395,21 +402,21 @@
 									</c:if>
 									<!--Indicator 5b -->
 									<c:if test = "${aimParisIndicatorReportForm.indicatorCode == '5b'}">
-										<td width="35%" height="33">
+										<td width="27%" height="33">
 											<div align="center">
 											<strong>
 											Aid flows to the government sector that use national procurement procedures  
 											</strong>
 											</div>
 										</td>
-										<td width="35%" height="33">
+										<td width="26%" height="33">
 											<div align="center">
 											<strong>
 											Total aid flows disbursed to the government sector
 											</strong>
 											</div>
 										</td>
-										<td width="35%" height="33">
+										<td width="27%" height="33">
 											<div align="center">
 											<strong>
 											Proportion of aid flows to the government sector using national procurement procedures
@@ -419,38 +426,45 @@
 									</c:if>
 									<!--Indicator 9 -->
 									<c:if test = "${aimParisIndicatorReportForm.indicatorCode == '9'}">
-										<td width="35%" height="33">
+										<td width="20%" height="33">
 											<div align="center">
 											<strong>
 											Budget support aid flows provided in the context of programme based approach 
 											</strong>
 											</div>
 										</td>
-										<td width="35%" height="33">
+										<td width="20%" height="33">
 											<div align="center">
 											<strong>
 											Other aid flows provided in the context of programme based approach	
 											</strong>
 											</div>
 										</td>
-										<td width="35%" height="33">
+										<td width="20%" height="33">
 											<div align="center">
 											<strong>
 											Total aid flows provided
 											</strong>
 											</div>
 										</td>
+										<td width="20%" height="33">
+											<div align="center">
+											<strong>
+											Propotion of aid flows provided in the context of programme based approach
+											</strong>
+											</div>
+										</td>
 									</c:if>
 									<!--Indicator 10a -->
 									<c:if test = "${aimParisIndicatorReportForm.indicatorCode == '10a'}">
-										<td width="35%" height="33">
+										<td width="27%" height="33">
 											<div align="center">
 											<strong>
 											Number of missions to the field that are joint  
 											</strong>
 											</div>
 										</td>
-										<td width="35%" height="33">
+										<td width="26%" height="33">
 											<div align="center">
 											<strong>
 											Total number of missions to the field
@@ -458,16 +472,16 @@
 											</div>
 										</td>
 									</c:if>
-									<!--Indicator 10a -->
+									<!--Indicator 10b -->
 									<c:if test = "${aimParisIndicatorReportForm.indicatorCode == '10b'}">
-										<td width="35%" height="33">
+										<td width="27%" height="33">
 											<div align="center">
 											<strong>
 											Number of country analytic reports that are joint  
 											</strong>
 											</div>
 										</td>
-										<td width="35%" height="33">
+										<td width="26%" height="33">
 											<div align="center">
 											<strong>
 											Total number of country analytic reports
@@ -475,10 +489,13 @@
 											</div>
 										</td>
 									</c:if>
+									
 									<!-- end of c:if for all the Indicators-->
-									<c:if test = "${aimParisIndicatorReportForm.indicatorCode != '5a' && 
-													aimParisIndicatorReportForm.indicatorCode != '5b'}">	
-									    <td width="10%" height="33">
+									<c:if test = "${aimParisIndicatorReportForm.indicatorCode != '4'  &&
+													aimParisIndicatorReportForm.indicatorCode != '5a' &&
+													aimParisIndicatorReportForm.indicatorCode != '5b' &&
+													aimParisIndicatorReportForm.indicatorCode != '9'}">
+									    <td width="27%" height="33">
 											<div align="center">
 											<strong>
 											<c:out value="${aimParisIndicatorReportForm.indicatorName}"/>
@@ -531,15 +548,18 @@
 														<c:when test="${index == (numCols-1)}">
 															<c:choose>
 																<c:when test="${aimParisIndicatorReportForm.indicatorCode == '5a'}">
-																	<c:out value="${rowVal}"/>%
+																	<fmt:formatNumber type="number" value="${rowVal}" maxFractionDigits="0" />%
+																	<%-- <c:out value="${rowVal}"/>% --%>
 																</c:when>
 																<c:otherwise >
-																	<c:out value="${rowVal}"/>
+																	<fmt:formatNumber type="number" value="${rowVal}" maxFractionDigits="0" />
+																	<%-- <c:out value="${rowVal}"/> --%>
 																</c:otherwise>
 															</c:choose>
 														</c:when>
 														<c:otherwise >
-															<c:out value="${rowVal}"/>%
+															<fmt:formatNumber type="number" value="${rowVal}" maxFractionDigits="0" />%
+															<%-- <c:out value="${rowVal}"/>% --%>
 														</c:otherwise>
 													</c:choose>
 												</c:if>

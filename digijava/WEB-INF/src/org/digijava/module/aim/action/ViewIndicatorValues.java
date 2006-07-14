@@ -34,10 +34,19 @@ public class ViewIndicatorValues extends TilesAction {
 		Collection col = MEIndicatorsUtil.getIndicatorsForActivity(new Long(
 				viForm.getAmpActivityId()));
 		Iterator itr = col.iterator();
+		Long indId = null;
 		if (ind != null) {
 			while (itr.hasNext()) {
+				try {
+					long temp = Long.parseLong(ind);
+					indId = new Long(temp);
+				} catch (NumberFormatException nfe) {
+					logger.error("Trying to parse " + ind + " to long");
+				}
+				
 				ActivityIndicator ai = (ActivityIndicator) itr.next();
-				if (ind.equalsIgnoreCase(ai.getIndicatorName())) {
+				if (indId.equals(ai.getIndicatorId())) {
+				//if (ind.equalsIgnoreCase(ai.getIndicatorName())) {
 					viForm.getIndicators().add(ai);
 					break;
 				}

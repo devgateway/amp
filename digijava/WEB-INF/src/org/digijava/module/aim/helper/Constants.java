@@ -187,6 +187,8 @@ public class Constants
 	public static final String MY_LINKS = "myLinks";
 	public static final String MY_TEAM_MEMBERS = "myTeamMembers";
 	
+	public static final String INDICATOR_NAMES = "indicatorNames";
+	
 	public static final byte SORT_FIELD_PROJECT = 1;
 	public static final byte SORT_FIELD_AMPID = 2;
 	public static final byte SORT_FIELD_DONOR = 3;

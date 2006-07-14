@@ -10,7 +10,9 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Map;
 
 import javax.servlet.http.HttpSession;
 
@@ -168,6 +170,7 @@ public class ChartGenerator {
 				fileName = ServletUtilities.saveChartAsPNG(chart,chartWidth,
 						chartHeight,info,session);
 				ChartUtilities.writeImageMap(pw,fileName,info,false);
+				
 				pw.flush();
 			}
 		} catch (Exception e) {
@@ -182,13 +185,17 @@ public class ChartGenerator {
 			String url) {
 		
 		String fileName = null;
+		Map items = new HashMap();
 		try {
 			if (col != null && col.size() > 0) {
 				Iterator itr = col.iterator();
 				DefaultCategoryDataset ds = new DefaultCategoryDataset();
 				while (itr.hasNext()) {
 					MEIndicatorValue meIndVal = (MEIndicatorValue) itr.next();
-					ds.addValue(meIndVal.getValue(),meIndVal.getType(),meIndVal.getIndicatorName());
+					if (items.get(meIndVal.getIndId()) == null) {
+						items.put(meIndVal.getIndId(),meIndVal.getIndicatorName());
+					}
+					ds.addValue(meIndVal.getValue(),meIndVal.getType(),meIndVal.getIndId());
 				}
 				
 				JFreeChart chart = ChartFactory.createStackedBarChart(
@@ -219,6 +226,8 @@ public class ChartGenerator {
 						chartHeight,info,session);
 				ChartUtilities.writeImageMap(pw,fileName,info,false);
 				pw.flush();
+				
+				session.setAttribute(Constants.INDICATOR_NAMES,items);
 			}
 
 		} catch (Exception e) {

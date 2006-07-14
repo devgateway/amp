@@ -728,13 +728,13 @@ public class MEIndicatorsUtil
 					itr = actIds.iterator();
 					Long actId = (Long) itr.next();
 					if (indId.longValue() > 0) {
-						qryStr = "select iv.base_val,iv.actual_val,iv.revised_target_val," +
+						qryStr = "select mi.amp_me_indicator_id,iv.base_val,iv.actual_val,iv.revised_target_val," +
 								"mi.name from amp_me_indicator_value iv inner join " +
 								"amp_me_indicators mi on (iv.me_indicator_id=mi.amp_me_indicator_id)" +
 								" where mi.default_ind = 1  and iv.activity_id=" + actId + " and " +
 								"iv.me_indicator_id=" + indId + " order by iv.activity_id,mi.name";
 					} else {
-						qryStr = "select iv.base_val,iv.actual_val,iv.revised_target_val,mi.name " +
+						qryStr = "select mi.amp_me_indicator_id,iv.base_val,iv.actual_val,iv.revised_target_val,mi.name " +
 								"from amp_me_indicator_value iv inner join amp_me_indicators mi " +
 								"on (iv.me_indicator_id=mi.amp_me_indicator_id) where mi.default_ind = 1 " +
 								"and iv.activity_id=" + actId + " order by iv.activity_id,mi.name";
@@ -748,14 +748,14 @@ public class MEIndicatorsUtil
 						params += actId;
 					}
 					if (indId.longValue() > 0) {
-						qryStr = "select iv.base_val,iv.actual_val,iv.revised_target_val,a.name from " +
+						qryStr = "select mi.amp_me_indicator_id,iv.base_val,iv.actual_val,iv.revised_target_val,a.name from " +
 								"amp_me_indicator_value iv inner join amp_me_indicators mi on " +
 								"(iv.me_indicator_id=mi.amp_me_indicator_id) inner join amp_activity a on " +
 								"(a.amp_activity_id=iv.activity_id) where mi.default_ind = 1  and " +
 								"iv.activity_id in (" + params + ") and iv.me_indicator_id=" + indId + "" +
 										" order by a.name";
 					} else {
-						qryStr = "select sum(iv.base_val),sum(iv.actual_val),sum(iv.revised_target_val)," +
+						qryStr = "select mi.amp_me_indicator_id,sum(iv.base_val),sum(iv.actual_val),sum(iv.revised_target_val)," +
 								"mi.name from amp_me_indicator_value iv inner join amp_me_indicators mi on" +
 								" (iv.me_indicator_id=mi.amp_me_indicator_id) where mi.default_ind = 1 and " +
 								"iv.activity_id in ( " + params + ") group by iv.me_indicator_id " +
@@ -767,14 +767,16 @@ public class MEIndicatorsUtil
 				Statement stmt = con.createStatement();
 				ResultSet rs = stmt.executeQuery(qryStr);
 				while (rs.next()) {
-					double baseVal = rs.getDouble(1);
-					double actVal = rs.getDouble(2);
-					double tarVal = rs.getDouble(3);
-					String key = rs.getString(4);
+					long id = rs.getLong(1);
+					double baseVal = rs.getDouble(2);
+					double actVal = rs.getDouble(3);
+					double tarVal = rs.getDouble(4);
+					String key = rs.getString(5);
 					
 					double totIndVal = baseVal + tarVal + actVal;
 					
 					MEIndicatorValue baseIndVal = new MEIndicatorValue();
+					baseIndVal.setIndId(new Long(id));
 					baseIndVal.setIndicatorName(key);
 					baseIndVal.setType(Constants.ME_IND_VAL_BASE_ID);
 					if (totIndVal > 0) { 
@@ -784,6 +786,7 @@ public class MEIndicatorsUtil
 					}
 					
 					MEIndicatorValue actIndVal = new MEIndicatorValue();
+					actIndVal.setIndId(new Long(id));
 					actIndVal.setIndicatorName(key);
 					actIndVal.setType(Constants.ME_IND_VAL_ACTUAL_ID);
 					if (totIndVal > 0) {
@@ -793,6 +796,7 @@ public class MEIndicatorsUtil
 					}
 					
 					MEIndicatorValue targetIndVal = new MEIndicatorValue();
+					targetIndVal.setIndId(new Long(id));
 					targetIndVal.setIndicatorName(key);
 					targetIndVal.setType(Constants.ME_IND_VAL_TARGET_ID);
 					if (totIndVal > 0) { 
@@ -841,6 +845,7 @@ public class MEIndicatorsUtil
 				double totIndVal = meIndValue.getBaseVal() + meIndValue.getRevisedTargetVal() + meIndValue.getActualVal();
 				
 				MEIndicatorValue baseIndVal = new MEIndicatorValue();
+				baseIndVal.setIndId(meInd.getAmpMEIndId());
 				baseIndVal.setIndicatorName(meInd.getName());
 				baseIndVal.setType(Constants.ME_IND_VAL_BASE_ID);
 				if (totIndVal > 0) { 
@@ -850,6 +855,7 @@ public class MEIndicatorsUtil
 				}
 				
 				MEIndicatorValue actIndVal = new MEIndicatorValue();
+				actIndVal.setIndId(meInd.getAmpMEIndId());
 				actIndVal.setIndicatorName(meInd.getName());
 				actIndVal.setType(Constants.ME_IND_VAL_ACTUAL_ID);
 				if (totIndVal > 0) {
@@ -859,6 +865,7 @@ public class MEIndicatorsUtil
 				}
 				
 				MEIndicatorValue targetIndVal = new MEIndicatorValue();
+				targetIndVal.setIndId(meInd.getAmpMEIndId());
 				targetIndVal.setIndicatorName(meInd.getName());
 				targetIndVal.setType(Constants.ME_IND_VAL_TARGET_ID);
 				if (totIndVal > 0) { 

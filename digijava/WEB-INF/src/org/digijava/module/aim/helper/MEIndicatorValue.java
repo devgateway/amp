@@ -1,6 +1,7 @@
 package org.digijava.module.aim.helper;
 
 public class MEIndicatorValue {
+	private Long indId;
 	private double value;
 	private String type;
 	private String indicatorName;
@@ -50,5 +51,17 @@ public class MEIndicatorValue {
 			return meVal.getIndicatorName().equals(indicatorName) 
 					&& meVal.getType().equals(type);
 		} else throw new ClassCastException();
+	}
+	/**
+	 * @return Returns the indId.
+	 */
+	public Long getIndId() {
+		return indId;
+	}
+	/**
+	 * @param indId The indId to set.
+	 */
+	public void setIndId(Long indId) {
+		this.indId = indId;
 	}
 }

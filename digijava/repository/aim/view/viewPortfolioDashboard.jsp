@@ -1,6 +1,6 @@
 <%@ page pageEncoding="UTF-8" %>
 <%@ page import = "org.digijava.module.aim.helper.ChartGenerator" %>
-<%@ page import = "java.io.PrintWriter" %>
+<%@ page import = "java.io.PrintWriter, java.util.*" %>
 <%@ taglib uri="/taglib/struts-bean" prefix="bean" %>
 <%@ taglib uri="/taglib/struts-logic" prefix="logic" %>
 <%@ taglib uri="/taglib/struts-tiles" prefix="tiles" %>
@@ -175,6 +175,17 @@
 							</TABLE>
 						</TD>
 					</TR>
+					<TR><TD>
+						<%
+						Map items = (HashMap) session.getAttribute("indicatorNames");
+						Iterator itr = items.keySet().iterator();
+						while (itr.hasNext()) {
+							Long l = (Long) itr.next();
+							String value = (String) items.get(l); %>
+								 <font color="#0000FF"><%=l%> - <%=value%></font><br>
+						<%}
+						%>
+					</TD></TR>
 					<TR><TD>&nbsp;</TD></TR>
 				</TABLE>
 			</TD></TR>

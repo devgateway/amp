@@ -60,7 +60,7 @@
         </c:if>
     </tr>
 </table>
-<table border="0" width="100%" cellpadding="0" cellspacing="0" style="border:2px solid">
+<table border="0" width="100%" cellpadding="0" cellspacing="0" style="border:2px solid; border-color: #484846;">
     <tr>
         <td align="center" width="140" <c:if test="${calendarViewForm.view == 'monthly'}">rowspan="2"</c:if>>Event Name</td>
         <c:if test="${calendarViewForm.view != 'custom'}">

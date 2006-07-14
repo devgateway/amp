@@ -26,13 +26,13 @@ function submitFilterForm(view, timestamp) {
             <html:hidden name="calendarViewForm" property="view" value="${calendarViewForm.view}"/>
             <html:hidden name="calendarViewForm" property="timestamp" value="${calendarViewForm.timestamp}"/>
             <html:hidden name="calendarViewForm" property="filterInUse" value="true"/>
-            <table border="0" width="100%" style="border:2px solid">
+            <table border="0" width="100%" style="border:2px solid; border-color: #484846;">
                 <tr>
                     <td colspan="2">&nbsp;Event Type</td>
                 </tr>
                 <tr>
                     <td colspan="2">
-                        <div style="width:200px;height:80px;border:1px solid;overflow:auto">
+                        <div style="width:200px;height:80px;border:1px solid;overflow:auto; border-color: #484846;">
                             <logic:notEmpty name="calendarViewForm" property="filter.eventTypes">
                                 <table border="0">
                                 <logic:iterate id="eventType" name="calendarViewForm" property="filter.eventTypes">
@@ -52,7 +52,7 @@ function submitFilterForm(view, timestamp) {
                 </tr>
                 <tr>
                     <td colspan="2">
-                        <div style="width:200px;height:80px;border:1px solid;overflow:auto">
+                        <div style="width:200px;height:80px;border:1px solid;overflow:auto; border-color: #484846;">
                             <logic:notEmpty name="calendarViewForm" property="filter.donors">
                                 <table border="0">
                                 <logic:iterate id="donor" name="calendarViewForm" property="filter.donors">

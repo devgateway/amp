@@ -25,6 +25,9 @@ import org.digijava.kernel.user.User;
 import org.digijava.module.aim.dbentity.AmpActivity;
 import org.digijava.module.aim.dbentity.AmpActivityClosingDates;
 import org.digijava.module.aim.dbentity.AmpActor;
+import org.digijava.module.aim.dbentity.AmpAhsurvey;
+import org.digijava.module.aim.dbentity.AmpAhsurveyResponse;
+import org.digijava.module.aim.dbentity.AmpClosingDateHistory;
 import org.digijava.module.aim.dbentity.AmpComments;
 import org.digijava.module.aim.dbentity.AmpComponent;
 import org.digijava.module.aim.dbentity.AmpComponentFunding;
@@ -37,10 +40,16 @@ import org.digijava.module.aim.dbentity.AmpMECurrValHistory;
 import org.digijava.module.aim.dbentity.AmpMEIndicatorValue;
 import org.digijava.module.aim.dbentity.AmpMEIndicators;
 import org.digijava.module.aim.dbentity.AmpMeasure;
+import org.digijava.module.aim.dbentity.AmpNotes;
 import org.digijava.module.aim.dbentity.AmpOrgRole;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
+import org.digijava.module.aim.dbentity.AmpPhysicalComponentReport;
 import org.digijava.module.aim.dbentity.AmpPhysicalPerformance;
 import org.digijava.module.aim.dbentity.AmpRegionalFunding;
+import org.digijava.module.aim.dbentity.AmpReportCache;
+import org.digijava.module.aim.dbentity.AmpReportLocation;
+import org.digijava.module.aim.dbentity.AmpReportPhysicalPerformance;
+import org.digijava.module.aim.dbentity.AmpReportSector;
 import org.digijava.module.aim.dbentity.AmpSector;
 import org.digijava.module.aim.dbentity.AmpTeam;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
@@ -1291,5 +1300,518 @@ public class ActivityUtil {
 		return activity;
 	}
 
+	/* 
+	 * get the list of all the activities 
+	 * to display in the activity manager of Admin 
+	*/
+	public static Collection getAllActivitiesList()
+	{
+		Collection col = null;
+		Session session = null;
+		Query qry = null;
+		
+		try
+		{
+			session = PersistenceManager.getSession();
+			String queryString = "select ampAct from " + AmpActivity.class.getName() + " ampAct";
+			qry = session.createQuery(queryString);
+			col = qry.list();
+			logger.info("the size of the ampActivity : "+col.size());
+		}
+		catch(Exception e1)
+		{
+			logger.error("Could not retrieve the activities list");
+			e1.printStackTrace(System.out);
+		}
+		finally
+		{
+			if(session != null)
+			{
+				try
+				{
+					PersistenceManager.releaseSession(session);
+				}
+				catch(Exception e2)
+				{
+					logger.error("Release session failed");
+				}
+			}
+		}
+		return col;
+	}
 	
+	/* functions to DELETE an activity by Admin start here.... */
+	public static void deleteActivity(Long ampActId)
+	{
+		Session session = null;
+
+		try
+		{
+			session = PersistenceManager.getSession();
+			AmpActivity ampAct = (AmpActivity) session.load(
+				AmpActivity.class,ampActId);
+			
+			ampAct.setAmpActivityId(ampActId);
+			
+			if (ampAct == null) 
+				logger.debug("Activity is null. Hence no activity with id : "+ampActId);
+			else
+			{
+				/* delete fundings and funding details */
+				Set fundSet = ampAct.getFunding();
+				if (fundSet != null) 
+				{
+					Iterator fundSetItr = fundSet.iterator();
+					while (fundSetItr.hasNext()) 
+					{
+						AmpFunding fund = (AmpFunding) fundSetItr.next();
+						Set fundDetSet = fund.getFundingDetails();
+						if (fundDetSet != null) 
+						{
+							Iterator fundDetItr = fundDetSet.iterator();
+							while (fundDetItr.hasNext()) 
+							{
+								AmpFundingDetail ampFundingDetail = (AmpFundingDetail) fundDetItr.next();
+								session.delete(ampFundingDetail);
+							}
+						}
+						Set closingDate = fund.getClosingDateHistory();
+						if(closingDate != null)
+						{
+							Iterator closingDateItr = closingDate.iterator();
+							while(closingDateItr.hasNext())
+							{
+								AmpClosingDateHistory closeHistory = (AmpClosingDateHistory) closingDateItr.next();
+								session.delete(closeHistory);
+							}
+						}
+						session.delete(fund);
+					}
+				}
+				
+				/* delete regional fundings */
+				fundSet = ampAct.getRegionalFundings();
+				if (fundSet != null) 
+				{
+					Iterator fundSetItr = fundSet.iterator();
+					while (fundSetItr.hasNext()) 
+					{
+						AmpRegionalFunding regFund = (AmpRegionalFunding) fundSetItr.next();
+						session.delete(regFund);
+					}
+				}
+				
+				/* delete components */
+				Set comp = ampAct.getComponents();
+				if (comp != null) 
+				{
+					Iterator compItr = comp.iterator();
+					while (compItr.hasNext()) 
+					{
+						AmpComponent ampComp = (AmpComponent) compItr.next();
+						Set compFund = ampComp.getComponentFundings();
+						if(compFund != null)
+						{
+							Iterator compFundItr = compFund.iterator();
+							while(compFundItr.hasNext())
+							{
+								AmpComponentFunding ampCompFund = (AmpComponentFunding) compFundItr.next();
+								session.delete(ampCompFund);
+							}
+						}
+						Set phyProgress = ampComp.getPhysicalProgress();
+						if(phyProgress != null)
+						{
+							Iterator phyProgressItr = phyProgress.iterator();
+							while(phyProgressItr.hasNext())
+							{
+								AmpPhysicalPerformance phyPerformance = (AmpPhysicalPerformance) phyProgressItr.next();
+								session.delete(phyPerformance);
+							}
+						}
+						session.delete(ampComp);
+					}
+				}
+				
+				/* delete org roles */
+				Set orgrole = ampAct.getOrgrole();
+				if (orgrole != null) 
+				{
+					Iterator orgroleItr = orgrole.iterator();
+					while (orgroleItr.hasNext()) 
+					{
+						AmpOrgRole ampOrgrole = (AmpOrgRole) orgroleItr.next();
+						session.delete(ampOrgrole);
+					}
+				}				
+				
+				/* delete closing dates */
+				Set closeDates = ampAct.getClosingDates();
+				if (closeDates != null) 
+				{
+					Iterator dtItr = closeDates.iterator();
+					while (dtItr.hasNext()) 
+					{
+						AmpActivityClosingDates date = (AmpActivityClosingDates) dtItr.next();
+						session.delete(date);
+					}
+				}				
+	
+				/* delete issues,measures,actors */
+				Set issues = ampAct.getIssues();
+				if (issues != null) 
+				{
+					Iterator iItr = issues.iterator();
+					while (iItr.hasNext()) 
+					{
+						AmpIssues issue = (AmpIssues) iItr.next();
+						Set measure = issue.getMeasures();
+						if(measure != null)
+						{
+							Iterator measureItr = measure.iterator();
+							while(measureItr.hasNext())
+							{
+								AmpMeasure ampMeasure = (AmpMeasure) measureItr.next();
+								Set actor = ampMeasure.getActors();
+								if(actor != null)
+								{
+									Iterator actorItr = actor.iterator();
+									while(actorItr.hasNext())
+									{
+										AmpActor ampActor = (AmpActor) actorItr.next();
+										session.delete(ampActor);
+									}
+								}
+								session.delete(ampMeasure);
+							}
+						}
+						session.delete(issue);
+					}
+				}	
+	
+				
+				/* delete activity internal id 
+				Set internalIds = ampAct.getInternalIds();
+				if(internalIds != null)
+				{
+					Iterator interIdItr = internalIds.iterator();
+					while(interIdItr.hasNext())
+					{
+						AmpActivityInternalId ampInternalId = (AmpActivityInternalId) interIdItr.next();
+						logger.info("internal id : "+ampInternalId.getInternalId());
+						session.delete(ampInternalId);
+					}
+				}
+				*/
+				
+				/* delete AMP activity Survey */
+				Set ampSurvey = ampAct.getSurvey();
+				if(ampSurvey != null)
+				{
+					Iterator surveyItr = ampSurvey.iterator();
+					while(surveyItr.hasNext())
+					{
+						AmpAhsurvey ahSurvey = (AmpAhsurvey) surveyItr.next();
+						Set ahAmpSurvey = ahSurvey.getResponses();
+						if(ahSurvey != null)
+						{
+							Iterator ahSurveyItr = ahAmpSurvey.iterator();
+							while(ahSurveyItr.hasNext())
+							{
+								AmpAhsurveyResponse surveyResp = (AmpAhsurveyResponse) ahSurveyItr.next();
+								session.delete(surveyResp);
+							}
+						}
+						session.delete(ahSurvey);
+					}
+				}
+	
+				/* delete the activity relevant notes */
+				Set notesSet = ampAct.getNotes();
+				if(notesSet != null)
+				{
+					Iterator notesItr = notesSet.iterator();
+					while(notesItr.hasNext())
+					{
+						AmpNotes notesAmp = (AmpNotes) notesItr.next();
+						session.delete(notesAmp);
+					}
+				}
+			}
+			session.delete(ampAct);
+		}
+		catch(Exception e1)
+		{
+			logger.error("Could not delete the activity with id : "+ampActId);
+			e1.printStackTrace(System.out);
+		}
+		finally
+		{
+			if(session != null)
+			{
+				try
+				{
+					PersistenceManager.releaseSession(session);
+				}
+				catch(Exception e2)
+				{
+					logger.error("Release session failed");
+				}
+			}
+		}
+	}
+
+	public static void deleteActivityAmpComments(Collection commentId)
+	{
+		Session session = null;
+		try
+		{
+			session = PersistenceManager.getSession();
+			if(commentId != null)
+			{
+				Iterator commentItr = commentId.iterator();
+				while(commentItr.hasNext())
+				{
+					AmpComments ampComment = (AmpComments) commentItr.next();
+					AmpComments ampComm = (AmpComments) session.load
+											(AmpComments.class,ampComment.getAmpCommentId());
+					session.delete(ampComm);
+				}
+			}
+			
+		}
+		catch(Exception e1)
+		{
+			logger.error("Could not delete/find the comments revelant to the activity");
+			e1.printStackTrace(System.out);
+		}
+		finally
+		{
+			try
+			{
+				PersistenceManager.releaseSession(session);
+			}
+			catch(Exception e2)
+			{
+				logger.error("Release session failed");
+			}
+		}
+	}
+	
+	public static void deleteActivityPhysicalComponentReport(Collection phyCompReport)
+	{
+		Session session = null;
+		try
+		{
+			session = PersistenceManager.getSession();
+			if(phyCompReport != null)
+			{
+				Iterator phyReportItr = phyCompReport.iterator();
+				while(phyReportItr.hasNext())
+				{
+					AmpPhysicalComponentReport phyReport = (AmpPhysicalComponentReport) phyReportItr.next();
+					AmpPhysicalComponentReport physicalReport = (AmpPhysicalComponentReport) session.load
+																	(AmpPhysicalComponentReport.class,phyReport.getAmpReportId());
+					session.delete(physicalReport);
+				}
+			}
+		}
+		catch(Exception e1)
+		{
+			logger.error("could not delete/find the physical component report activities");
+			e1.printStackTrace(System.out);
+		}
+		finally
+		{
+			try
+			{
+				PersistenceManager.releaseSession(session);
+			}
+			catch(Exception e2)
+			{
+				logger.error("Release session failed");
+			}
+		}
+	}
+	
+	public static void deleteActivityAmpReportCache(Collection repCache)
+	{
+		Session session = null;
+		try
+		{
+			session = PersistenceManager.getSession();
+			if(repCache != null)
+			{
+				Iterator repCacheItr = repCache.iterator();
+				while(repCacheItr.hasNext())
+				{
+					AmpReportCache reportCache = (AmpReportCache) repCacheItr.next();
+					AmpReportCache ampReportCache = (AmpReportCache) session.load
+													(AmpReportCache.class,reportCache.getAmpReportId());
+					session.delete(ampReportCache);
+				}
+			}
+		}
+		catch(Exception e1)
+		{
+			logger.error("could not delete/find the physical component report activities");
+			e1.printStackTrace(System.out);
+		}
+		finally
+		{
+			try
+			{
+				PersistenceManager.releaseSession(session);
+			}
+			catch(Exception e2)
+			{
+				logger.error("Release session failed");
+			}
+		}
+	}
+	
+	public static void deleteActivityReportLocation(Collection repLoc)
+	{
+		Session session = null;
+		try
+		{
+			session = PersistenceManager.getSession();
+			if(repLoc != null)
+			{
+				Iterator repLocItr = repLoc.iterator();
+				while(repLocItr.hasNext())
+				{
+					AmpReportLocation repLocTemp = (AmpReportLocation) repLocItr.next();
+					AmpReportLocation amprepLoc = (AmpReportLocation) session.load
+													(AmpReportLocation.class,repLocTemp.getAmpReportId());
+					session.delete(amprepLoc);
+				}
+			}
+		}
+		catch(Exception e1)
+		{
+			logger.error("could not delete/find the physical component report activities");
+			e1.printStackTrace(System.out);
+		}
+		finally
+		{
+			try
+			{
+				PersistenceManager.releaseSession(session);
+			}
+			catch(Exception e2)
+			{
+				logger.error("Release session failed");
+			}
+		}
+	}
+	
+	public static void deleteActivityReportPhyPerformance(Collection phyPerform)
+	{
+		Session session = null;
+		try
+		{
+			session = PersistenceManager.getSession();
+			if(phyPerform != null)
+			{
+				Iterator phyPerformItr = phyPerform.iterator();
+				while(phyPerformItr.hasNext())
+				{
+					AmpReportPhysicalPerformance repPhyTemp = (AmpReportPhysicalPerformance) phyPerformItr.next();
+					AmpReportPhysicalPerformance repPhyPerform = (AmpReportPhysicalPerformance) session.load
+																	(AmpReportPhysicalPerformance.class,repPhyTemp.getAmpPpId());
+					session.delete(repPhyPerform);
+				}
+			}
+		}
+		catch(Exception e1)
+		{
+			logger.error("could not delete/find the physical component report activities");
+			e1.printStackTrace(System.out);
+		}
+		finally
+		{
+			try
+			{
+				PersistenceManager.releaseSession(session);
+			}
+			catch(Exception e2)
+			{
+				logger.error("Release session failed");
+			}
+		}
+	}
+	
+	public static void deleteActivityReportSector(Collection repSector)
+	{
+		Session session = null;
+		try
+		{
+			session = PersistenceManager.getSession();
+			if(repSector != null)
+			{
+				Iterator repSectorItr = repSector.iterator();
+				while(repSectorItr.hasNext())
+				{
+					AmpReportSector repSecTemp = (AmpReportSector) repSectorItr.next();
+					AmpReportSector ampRepSector = (AmpReportSector) session.load
+													(AmpReportSector.class,repSecTemp.getAmpReportId());
+					session.delete(ampRepSector);
+				}
+			}
+		}
+		catch(Exception e1)
+		{
+			logger.error("could not delete/find the physical component report activities");
+			e1.printStackTrace(System.out);
+		}
+		finally
+		{
+			try
+			{
+				PersistenceManager.releaseSession(session);
+			}
+			catch(Exception e2)
+			{
+				logger.error("Release session failed");
+			}
+		}
+	}
+	
+	public static void deleteActivityIndicatorVal(Collection indVal)
+	{
+		Session session = null;
+		try
+		{
+			session = PersistenceManager.getSession();
+			if(indVal != null)
+			{
+				Iterator indValItr = indVal.iterator();
+				while(indValItr.hasNext())
+				{
+					AmpMEIndicatorValue indValue = (AmpMEIndicatorValue) indValItr.next();
+					AmpMEIndicatorValue indicatorVal = (AmpMEIndicatorValue) session.load
+														(AmpMEIndicatorValue.class,indValue.getAmpMeIndValId());
+					session.delete(indicatorVal);
+				}
+			}
+		}
+		catch(Exception e1)
+		{
+			logger.error("could not delete/find the physical component report activities");
+			e1.printStackTrace(System.out);
+		}
+		finally
+		{
+			try
+			{
+				PersistenceManager.releaseSession(session);
+			}
+			catch(Exception e2)
+			{
+				logger.error("Release session failed");
+			}
+		}
+	}
+	/* functions to DELETE an activity by Admin end here.... */	
 } // End

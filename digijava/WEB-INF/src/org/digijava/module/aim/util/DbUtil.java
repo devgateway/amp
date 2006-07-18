@@ -38,6 +38,7 @@ import org.digijava.module.aim.dbentity.AmpFiscalCalendar;
 import org.digijava.module.aim.dbentity.AmpFunding;
 import org.digijava.module.aim.dbentity.AmpFundingDetail;
 import org.digijava.module.aim.dbentity.AmpLevel;
+import org.digijava.module.aim.dbentity.AmpMEIndicatorValue;
 import org.digijava.module.aim.dbentity.AmpModality;
 import org.digijava.module.aim.dbentity.AmpOrgGroup;
 import org.digijava.module.aim.dbentity.AmpOrgRole;
@@ -45,6 +46,7 @@ import org.digijava.module.aim.dbentity.AmpOrgType;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpPages;
 import org.digijava.module.aim.dbentity.AmpPerspective;
+import org.digijava.module.aim.dbentity.AmpPhysicalComponentReport;
 import org.digijava.module.aim.dbentity.AmpPhysicalPerformance;
 import org.digijava.module.aim.dbentity.AmpRegion;
 import org.digijava.module.aim.dbentity.AmpReportCache;
@@ -5786,4 +5788,277 @@ public class DbUtil {
 		logger.debug("answersColl.length : " + answersColl.length);
 		return answersColl;
 	}
+
+	/* 
+	 * Methods called to retrieve data 
+	 * that have to be deleted 
+	 * while an activity is deleted by Admin
+	 * start here 
+	*/
+	/* get amp comments of a particular activity specified by ampActId */
+	public static Collection getActivityAmpComments(Long ampActId)
+	{
+		Session session = null;
+		Collection col = null;
+		Query qry = null;
+		try
+		{
+			session = PersistenceManager.getSession();
+			String queryString = "select com from " + AmpComments.class.getName()
+					+ " com " + " where (com.ampActivityId=:ampActId)";
+			qry = session.createQuery(queryString);
+			qry.setParameter("ampActId", ampActId, Hibernate.LONG);
+			col = qry.list();
+			logger.info("amp comments col size : "+col.size());
+		}
+		catch(Exception e1)
+		{
+			logger.error("could not retrieve AmpComments "+e1.getMessage());
+			e1.printStackTrace(System.out);
+		}
+		finally
+		{
+			try
+			{
+				PersistenceManager.releaseSession(session);
+			}
+			catch(Exception e2)
+			{
+				logger.error("Release Session Failed "+e2.getMessage());
+			}
+		}
+		return col;
+	}
+
+	/* get ampActivity physical component report of a particular activity specified by ampActId */
+	public static Collection getActivityPhysicalComponentReport(Long ampActId)
+	{
+		Session session = null;
+		Collection col = null;
+		Query qry = null;
+		try
+		{
+			session = PersistenceManager.getSession();
+			String queryString = "select phyCompReport from " 
+									+ AmpPhysicalComponentReport.class.getName()
+									+ " phyCompReport " 
+									+ " where (phyCompReport.ampActivityId=:ampActId)";
+			qry = session.createQuery(queryString);
+			qry.setParameter("ampActId", ampActId, Hibernate.LONG);
+			col = qry.list();
+			logger.info("phy comp report col size : "+col.size());
+		}
+		catch(Exception e1)
+		{
+			logger.error("could not retrieve AmpPhysicalComponentReport "+e1.getMessage());
+			e1.printStackTrace(System.out);
+		}
+		finally
+		{
+			try
+			{
+				PersistenceManager.releaseSession(session);
+			}
+			catch(Exception e2)
+			{
+				logger.error("Release Session Failed "+e2.getMessage());
+			}
+		}
+		return col;
+	}
+
+	/* get amp report cache of a particular activity specified by ampActId */
+	public static Collection getActivityReportCache(Long ampActId)
+	{
+		Session session = null;
+		Collection col = null;
+		Query qry = null;
+		try
+		{
+			session = PersistenceManager.getSession();
+			String queryString = "select repCache from "
+									+ AmpReportCache.class.getName()
+									+ " repCache "
+									+ " where (repCache.ampActivityId=:ampActId)";
+			qry = session.createQuery(queryString);
+			qry.setParameter("ampActId", ampActId, Hibernate.LONG);
+			col = qry.list();
+			logger.info("amp report cache col size : "+col.size());
+		}
+		catch(Exception e1)
+		{
+			logger.error("could not retrieve AmpReportCache "+e1.getMessage());
+			e1.printStackTrace(System.out);
+		}
+		finally
+		{
+			try
+			{
+				PersistenceManager.releaseSession(session);
+			}
+			catch(Exception e2)
+			{
+				logger.error("Release Session Failed "+e2.getMessage());
+			}
+		}
+		return col;
+	}
+
+	/* get amp report location of a particular activity specified by ampActId */
+	public static Collection getActivityReportLocation(Long ampActId)
+	{
+		Session session = null;
+		Collection col = null;
+		Query qry = null;
+		try
+		{
+			session = PersistenceManager.getSession();
+			String queryString = "select repLoc from "
+									+ AmpReportLocation.class.getName()
+									+ " repLoc "
+									+ " where (repLoc.ampActivityId=:ampActId)";
+			qry = session.createQuery(queryString);
+			qry.setParameter("ampActId",ampActId,Hibernate.LONG);
+			col = qry.list();
+			logger.info("amp report location col size : "+col.size());
+		}
+		catch(Exception e1)
+		{
+			logger.error("could not retrieve AmpReportLocation "+e1.getMessage());
+			e1.printStackTrace(System.out);
+		}
+		finally
+		{
+			try
+			{
+				PersistenceManager.releaseSession(session);
+			}
+			catch(Exception e2)
+			{
+				logger.error("Release Session Failed "+e2.getMessage());
+			}
+		}
+		return col;
+	}
+	
+	/* get amp activity report physical performance of a particular activity specified by ampActId */
+	public static Collection getActivityRepPhyPerformance(Long ampActId)
+	{
+		Session session = null;
+		Collection col = null;
+		Query qry = null;
+		try
+		{
+			session = PersistenceManager.getSession();
+			String queryString = "select phyPer from "
+									+ AmpReportPhysicalPerformance.class.getName()
+									+ " phyPer "
+									+ " where (phyPer.ampActivityId=:ampActId)";
+			qry = session.createQuery(queryString);
+			qry.setParameter("ampActId",ampActId,Hibernate.LONG);
+			col = qry.list();
+			logger.info("amp phy performance col size : "+col.size());
+		}
+		catch(Exception e1)
+		{
+			logger.error("could not retrieve AmpReportPhysicalPerformance "+e1.getMessage());
+			e1.printStackTrace(System.out);
+		}
+		finally
+		{
+			try
+			{
+				PersistenceManager.releaseSession(session);
+			}
+			catch(Exception e2)
+			{
+				logger.error("Release Session Failed "+e2.getMessage());
+			}
+		}
+		return col;
+	}
+
+	/* get amp activity report sector of a particular activity specified by ampActId */
+	public static Collection getActivityReportSector(Long ampActId)
+	{
+		Session session = null;
+		Collection col = null;
+		Query qry = null;
+		try
+		{
+			session = PersistenceManager.getSession();
+			String queryString = "select repSector from "
+									+ AmpReportSector.class.getName()
+									+ " repSector "
+									+ " where (repSector.ampActivityId=:ampActId)";
+			qry = session.createQuery(queryString);
+			qry.setParameter("ampActId",ampActId,Hibernate.LONG);
+			col = qry.list();
+			logger.info("amp report sector col size : "+col.size());
+		}
+		catch(Exception e1)
+		{
+			logger.error("could not retrieve AmpReportSector "+e1.getMessage());
+			e1.printStackTrace(System.out);
+		}
+		finally
+		{
+			try
+			{
+				PersistenceManager.releaseSession(session);
+			}
+			catch(Exception e2)
+			{
+				logger.error("Release Session Failed "+e2.getMessage());
+			}
+		}
+		return col;
+	}
+	
+	/* get amp ME indicator value of a particular activity specified by ampActId */
+	public static Collection getActivityMEIndValue(Long ampActId)
+	{
+		Session session = null;
+		Collection col = null;
+		Query qry = null;
+		try
+		{
+			session = PersistenceManager.getSession();
+			String queryString = "select indVal from "
+									+ AmpMEIndicatorValue.class.getName()
+									+ " indVal "
+									+ " where (indVal.activityId=:ampActId)";
+			logger.info("1...........");
+			qry = session.createQuery(queryString);
+			logger.info("2...........");
+			qry.setParameter("ampActId",ampActId,Hibernate.LONG);
+			logger.info("3...........");
+			col = qry.list();
+			logger.info("ME indicator value col size : "+col.size());
+		}
+		catch(Exception e1)
+		{
+			logger.error("could not retrieve AmpMEIndicatorValues "+e1.getMessage());
+			e1.printStackTrace(System.out);
+		}
+		finally
+		{
+			try
+			{
+				PersistenceManager.releaseSession(session);
+			}
+			catch(Exception e2)
+			{
+				logger.error("Release Session Failed "+e2.getMessage());
+			}
+		}
+		return col;
+	}
+
+	/* 
+	 * Methods called to retrieve data 
+	 * that have to be deleted 
+	 * while an activity is deleted by Admin
+	 * end here 
+	*/
 }

@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionMapping;
+import org.apache.struts.upload.FormFile;
 
 public class CurrencyRateForm extends ActionForm {
 	private Collection currencyCodes;
@@ -37,6 +38,8 @@ public class CurrencyRateForm extends ActionForm {
 	private String ratesFile;
 	
 	private boolean reset;
+	
+	private FormFile currRateFile;
 	
 	/**
 	 * @return Returns the allRates.
@@ -299,5 +302,17 @@ public class CurrencyRateForm extends ActionForm {
 	 */
 	public void setRatesFile(String ratesFile) {
 		this.ratesFile = ratesFile;
+	}
+	/**
+	 * @return Returns the currRateFile.
+	 */
+	public FormFile getCurrRateFile() {
+		return currRateFile;
+	}
+	/**
+	 * @param currRateFile The currRateFile to set.
+	 */
+	public void setCurrRateFile(FormFile currRateFile) {
+		this.currRateFile = currRateFile;
 	}
 }

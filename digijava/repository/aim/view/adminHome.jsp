@@ -14,14 +14,14 @@
 		<td align=left class=r-dotted-lg vAlign=top width=750>
 			<table cellPadding=5 cellSpacing=0 width="100%">
 				<tr>
-					<td height=33><span class=crumb>
+					<td height=15><span class=crumb>
 						<digi:trn key="aim:AmpAdminHome">
 						Admin Home
 						</digi:trn>
 					</td>
 				</tr>
 				<tr>
-					<td height=16 vAlign=center align=center><span class=subtitle-blue>Admin Tools</span>
+					<td height=10 vAlign=center align=center><span class=subtitle-blue>Admin Tools</span>
 					</td>
 				</tr>
 				<tr>
@@ -192,6 +192,18 @@
 											<digi:link href="/featureManager.do" title="<%=translation%>" >
 											<digi:trn key="aim:featureManager">Feature Manager</digi:trn>
 											</digi:link>
+											</td>
+										</tr>
+
+										<tr>
+											<td class=f-names noWrap>
+												<digi:img src="module/aim/images/arrow-th-BABAB9.gif" width="16"/>
+												<bean:define id="translation">
+													<digi:trn key="aim:clickToViewActivityManager">Click here to view Activity Manager</digi:trn>
+												</bean:define>
+												<digi:link href="/activityManager.do" title="<%=translation%>" >
+												<digi:trn key="aim:activityManager">Activity Manager</digi:trn>	
+												</digi:link>
 											</td>
 										</tr>
 									</table>

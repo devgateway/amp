@@ -262,6 +262,10 @@
 	<form-bean
 			  name="aimUserRegisterForm"
 			  type="org.digijava.module.um.form.UserRegisterForm" />
+
+	<form-bean
+			  name="aimActivityForm"
+			  type="org.digijava.module.aim.form.ActivityForm" />
 	
 	<form-bean
 			  name="aimReportsForm"
@@ -1925,7 +1929,7 @@
 			  input="/showLayout.do?layout=login"
 			  path="/aim/login">
 			  <forward name="forward" path="/showLayout.do?layout=login" />
-			 			  <forward name="admin" path="/aim/admin.do" redirect="true"/>
+ 			  <forward name="admin" path="/aim/admin.do" redirect="true"/>
 			  <forward name="viewMyDesktop" path="/aim/viewMyDesktop.do" redirect="true"/>
 			  <forward name="selectTeam" path="/showLayout.do?layout=selectTeam"/>
 			  
@@ -2027,6 +2031,16 @@
 			  <forward name="index" path="/aim/index.do" redirect="true" />			  
 	</action>	
 
+	<action 
+			  name="aimActivityForm"
+			  type="org.digijava.module.aim.action.ActivityManager"
+			  scope="request"
+			  validate="false"
+			  path="/aim/activityManager">
+			  <forward name="forward" path="/showLayout.do?layout=activityManager" />
+			  <forward name="index" path="/aim/index.do" redirect="true" />			  
+	</action>
+		  
 	<action 
 			  name="aimReportsForm"
 			  type="org.digijava.module.aim.action.ReportsManager"
@@ -3030,15 +3044,16 @@
 			scope="session"
 			path="/aim/removeFunding">
 			<forward name="forward" path="/aim/addActivity.do?edit=true" redirect="true"/>
-	</action> 
- 
+	</action>
+
 	<action
 			name="aimEditActivityForm"
 			type="org.digijava.module.aim.action.FundingAdded"
 			scope="session"
 			path="/aim/fundingAdded">	
 			<forward name="forward" path="/aim/addActivity.do?edit=true" redirect="true" />
-	</action>	
+	</action>
+
 	<action
 			name="aimEditActivityForm"
 			type="org.digijava.module.aim.action.AddFundingDetail"

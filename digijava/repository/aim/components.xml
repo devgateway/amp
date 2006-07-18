@@ -119,6 +119,7 @@
 	<page name="editReports" title=" - Edit Reports " />
 	<page name="deleteReports" title=" - Delete Reports" />
 	<page name="teamReports" title=" - Team Report List" />
+	<page name="activityManager" title=" - Activity Manager" />
 	<page name="addTeamReports" title=" - Add Reports" />
 	<page name="teamMemberReports" title=" - Member Reports" />
 	<page name="addMemberReports" title=" - Add Member Reports" />
@@ -212,7 +213,6 @@
 	<page page="parisEditQuestion" name="aim_editQuestions" title="ParisIndicator Question Editor"/>
 	<page page="parisAddQuestion" name="aim_addQuestion" title="ParisIndicator Add Question"/>
 	<page page="parisAddIndicator" name="aim_addIndicator" title="Add New Paris Indicator"/>
-	
 	
 	<!-- Printer Friendly HTML Reports -->
 	<page page="pIPrintSurvey" name="aim_pIPrintSurvey" title="AMP - Preview Activity" />	

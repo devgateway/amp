@@ -14540,6 +14540,7 @@ public class ReportUtil {
 						pageCode = pageCode + ampReports.getName().charAt(j+1);
 			}
 			ampPages.setPageCode(pageCode);
+			ampPages.setAmpTeamId(ampTeamId);
 			session.save(ampPages);
 			
 			pageFilters = ampPages.getFilters();

@@ -12,6 +12,7 @@ public class AmpPages implements Serializable {
     private Long ampPageId;
     private String pageName;
     private String pageCode;
+    private Long ampTeamId;
     private Set filters;
 
     public Long getAmpPageId() {
@@ -51,5 +52,19 @@ public class AmpPages implements Serializable {
     public void setPageCode(String string) {
         pageCode = string;
     }
+
+	/**
+	 * @return Returns the ampTeamId.
+	 */
+	public Long getAmpTeamId() {
+		return ampTeamId;
+	}
+
+	/**
+	 * @param ampTeamId The ampTeamId to set.
+	 */
+	public void setAmpTeamId(Long ampTeamId) {
+		this.ampTeamId = ampTeamId;
+	}
 
 }

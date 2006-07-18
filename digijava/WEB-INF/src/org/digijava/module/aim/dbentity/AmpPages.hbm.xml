@@ -11,7 +11,7 @@
 						
 					 <property name="pageName" column="page_name" type="java.lang.String"/>
 					 <property name="pageCode" column="page_code" type="java.lang.String"/>
-
+					 <property name="ampTeamId" column="amp_Team_Id" type="java.lang.Long"/>
 
 					 <set name="filters" table="amp_page_filters" lazy="true">
 								<cache usage="read-write"/>

@@ -27,6 +27,19 @@ function loadExchangeRate() {
 	document.aimCurrencyRateForm.submit();
 } 	
 
+function updateRates()
+{
+	if(confirm("Do you want to update the Currency rates from the uploaded file ?"))
+	{
+		<digi:context name="updateRates" property="context/module/moduleinstance/saveCurrencyRate.do~doAction=file"/>
+		document.aimCurrencyRateForm.action = "<%= updateRates %>";
+		document.aimCurrencyRateForm.target = "_self";
+		document.aimCurrencyRateForm.submit();
+	}
+	else
+		return false;
+}
+
 function editExchangeRate(date,code) {
 	openNewWindow(420, 180);
 	<digi:context name="addExchangeRate" property="context/module/moduleinstance/showAddExchangeRates.do~reset=true" />
@@ -178,9 +191,29 @@ function selectFile() {
 										</td>											
 										<td bgcolor="#f4f4f2" vAlign="left" align="center">
 											<html:submit value=" View " styleClass="buton"/>
-										</td>	
+										</td>
 									</tr>
-								</table>								
+								</table>							
+								</td></tr>
+
+								<tr><td bgcolor="#f4f4f2">
+								<table cellPadding=0 cellSpacing=2 align="left" border=0 vAlign="center">
+								<tr>		
+								<td bgcolor="#f4f4f2" vAlign="left" align="center">
+								<FONT color=red>*</FONT>
+								<a title="<digi:trn key="aim:LocationoftheFile">URI Location of the document to be attached</digi:trn>">					  						<digi:trn key="aim:file">File</digi:trn>
+								</a>
+								</td>
+								<td bgcolor="#f4f4f2" vAlign="left" width="170" align="center">
+								<a title="<digi:trn key="aim:FileLocation">Location of the document to be attached</digi:trn>">
+								<html:file name="aimCurrencyRateForm" property="currRateFile" size="50"/>
+								</a>
+								</td>
+								<td bgcolor="#f4f4f2" vAlign="left" align="right">
+								<input type="button" value="Update Values" class="buton" onclick="return updateRates()">	
+								</td>
+								</tr>
+								</table>
 								</td></tr>
 								
 								</table>

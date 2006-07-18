@@ -5,11 +5,11 @@
 <%@ taglib uri="/taglib/struts-html" prefix="html" %>
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
 
-<table cellpadding="0" cellspacing="0" width="100%" background="module/aim/images/bg-home-intro.gif">
+<table cellpadding="0" cellspacing="0" width="100%" background="module/aim/images/bg-home.jpg">
 	<tr>
 		<td valign="top">
-			<table class=r-dotted height=166 cellSpacing=0 cellPadding=0 width=772 
-			background="module/aim/images/bg-home-intro.gif" valign="top">
+			<table class=r-dotted height=93 cellSpacing=0 cellPadding=0 width=757 
+			background="module/aim/images/bg-home.jpg" valign="top">
 				<tr>
 					<td>
 						<table cellSpacing=0 cellPadding=0 width=475>
@@ -40,7 +40,7 @@
 		</td>
 	</tr>
 </table>
-<table bgColor=#ffffff border=0 cellPadding=0 cellSpacing=0 width=772>
+<table bgColor=#ffffff border=0 cellPadding=0 cellSpacing=0 width=757>
 	<tr>
 		<td class=r-dotted-lg width=14>&nbsp;
 		</td>

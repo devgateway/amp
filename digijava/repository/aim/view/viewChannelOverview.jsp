@@ -79,7 +79,7 @@ type="org.digijava.module.aim.form.ChannelOverviewForm" method="post">
 
 <logic:equal name="aimChannelOverviewForm" property="validLogin" value="true">
 
-<TABLE cellSpacing=0 cellPadding=0 align="center" vAlign="top" border=0 width="100%">
+<TABLE cellSpacing=0 cellPadding=0 align="left" vAlign="top" border=0 width=770>
 <TR>
 	<TD vAlign="top" align="center">
 		<!-- contents -->

@@ -5,8 +5,10 @@
 <%@ taglib uri="/taglib/struts-html" prefix="html" %>
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
 
+<%--
 <TABLE class="padding" cellSpacing=0 cellPadding=0 width="100%" border=0>
 	<TR><TD>
+	--%>
 		<TABLE class="padding" cellSpacing=0 cellPadding=0 width="100%" border=0>
 		  	<TR bgColor=#484846><TD bgColor=#484846 align="center">
 	      	<TABLE cellSpacing=0 cellPadding=0 width="100%" border=0>
@@ -73,12 +75,14 @@
 				</TABLE>			
 			</TD></TR>
 		</TABLE>
+		<%--
 	</TD></TR>
-	<%--
+
 	<TR><TD align="center">
 		<digi:insert attribute="flatLangSwitch" >
 			<tiles:put name="redirectToRoot" value="True" />
 		</digi:insert>	
 	</TD></TR>
-	--%>
+
 </TABLE>
+--%>

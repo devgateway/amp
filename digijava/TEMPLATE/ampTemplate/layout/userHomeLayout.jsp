@@ -28,7 +28,7 @@
 		<TABLE cellSpacing=0 cellPadding=0 width="100%" border=0 valign="top" align="left">
 			<TBODY>
 			<TR>
-				<TD width="100%" bgColor=#323232 vAlign="center" align="left" height="40">
+				<TD width="100%" bgColor=#323232 vAlign="center" align="left" height="15">
 					<digi:insert attribute="headerTop" />
 				</TD>
 			</TR>
@@ -36,11 +36,11 @@
 				<TD width="100%" align="center" vAlign="top" bgcolor="#5a5a58">
 					<TABLE cellSpacing=0 cellPadding=0 width="98%" border=0 vAlign="center" bgcolor="#5a5a58">
 						<TBODY>
-						  	<TR bgColor=#5a5a58 height="28">
-						   	<TD align="left" vAlign="center" height="28">
+						  	<TR bgColor=#5a5a58 height="15">
+						   	<TD align="left" vAlign="center" height="15">
 									<digi:insert attribute="headerMiddle" />
 								</TD>	
-							  	<TD align="right" vAlign="top" height="28">
+							  	<TD align="right" vAlign="top" height="15">
 									<digi:insert attribute="dropdownLangSwitch" />
 								</TD>
 							</TR>

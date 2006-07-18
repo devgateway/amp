@@ -19,10 +19,10 @@ function showUserProfile(id)
 -->
 </script>
 
-<table cellpadding="0" cellspacing="0" height="65" width="100%" background="module/aim/images/bg-header.gif" border=0>
+<table cellpadding="0" cellspacing="0" height="60" width="100%" background="module/aim/images/bg-header.gif" border=0>
 	<tr>
 		<td valign="top">
-			<table cellpadding="0" cellSpacing="0" height="65" width="772" 
+			<table cellpadding="0" cellSpacing="0" height="55" width="772" 
 			background="module/aim/images/my-desktop.gif" vAlign="top" class=r-dotted>
 				<tr>
 					<td width="10">

@@ -43,7 +43,7 @@
 	<bean:write name="aimMainProjectDetailsForm" property="ampActivityId"/>
 </c:set>
 	
-<TABLE width="790" border="0" cellpadding="0" cellspacing="0" vAlign="top" align="center">
+<TABLE width="765" border="0" cellpadding="0" cellspacing="0" vAlign="top" align="left">
    <TR>
 		<TD>
 			<digi:form action="/viewProjectDetails.do">
@@ -77,36 +77,33 @@
    <TR>
 		<TD>
 
-			<TABLE width="100%" cellSpacing="3" cellPadding="3" vAlign="top">
-				<TR>
-					<TD height=16 vAlign=center width="100%"><span class=subtitle-blue>
-						<bean:write name="aimMainProjectDetailsForm" property="ampId"/></span>
-					</TD>
-				</TR>				
-				<TR>
-					<TD height=16 vAlign=center width="100%"><span class=subtitle-blue>
-						<bean:write name="aimMainProjectDetailsForm" property="name"/></span>
-					</TD>
-				</TR>	
+			<TABLE width="100%" cellSpacing="0" cellPadding="0" vAlign="top">
 				<TR>
 					<TD>
 						<TABLE cellpadding=0 cellspacing=0 valign=top align=left>
 							<TR>
-								<TD>
+							<TD height=16 vAlign=center width="550"><span class=subtitle-blue>
+								<bean:write name="aimMainProjectDetailsForm" property="name"/></span>
+							</TD>
+							<TD>
+								<SPAN class=crumb>
 									<bean:define id="translation">
 										<digi:trn key="aim:clickToViewProjectDescription">Click here to View Project Description</digi:trn>
 									</bean:define>	
 									<a href="javascript:viewProjectDetails('Desc','<c:out value="${aimMainProjectDetailsForm.description}"/>')" class="comment" title="<%=translation%>">
-										<digi:trn key="aim:viewDescription">View Description</digi:trn></a>
-									&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;									
-								</TD>
-								<TD>
+										<digi:trn key="aim:viewDescription">View Description</digi:trn></a></SPAN>
+									&nbsp;&nbsp;
+							</TD>
+							
+							<TD>
+								<SPAN class=crumb>
 									<bean:define id="translation">
 										<digi:trn key="aim:clickToViewProjectObjectives">Click here to View Project Objectives</digi:trn>
 									</bean:define>					
 									<a href="javascript:viewProjectDetails('Obj','<c:out value="${aimMainProjectDetailsForm.objectives}"/>')" class="comment" title="<%=translation%>">
 										<digi:trn key="aim:viewObjectives">View Objectives</digi:trn></a>
-								</TD>
+								</SPAN>
+							</TD>
 							</TR>
 						</TABLE>
 					</TD>
@@ -115,8 +112,8 @@
 		</TD>
 	</TR>
 	<TR>
-      <TD width="100%" nowrap align="center" vAlign="bottom" height="20">
-        	<TABLE width="100%"  border="0" cellpadding="0" cellspacing="0" bgcolor="#FFFFFF" class="box-border-nopadding" > 
+      <TD width="100%" nowrap align="left" vAlign="bottom" height="20">
+        	<TABLE width="760"  border="0" cellpadding="0" cellspacing="0" bgcolor="#FFFFFF" class="box-border-nopadding" > 
             <TR bgColor=#f4f4f2>
               	<TD height="20">
 						<TABLE border="0" cellpadding="0" cellspacing="1" bgcolor="#F4F4F2" height="20">
@@ -213,7 +210,7 @@
 	
 	<TR>
       <TD width="100%" nowrap align="center" vAlign="bottom" height="20">
-        	<TABLE width="100%"  border="0" cellpadding="0" cellspacing="0" bgcolor="#FFFFFF" class="box-border-nopadding" > 
+        	<TABLE width="765"  border="0" cellpadding="0" cellspacing="0" bgcolor="#FFFFFF" class="box-border-nopadding" > 
             <TR bgColor=#f4f4f2>
               	<TD height="20">
 						<TABLE border="0" cellpadding="0" cellspacing="1" bgcolor="#F4F4F2" height="20">

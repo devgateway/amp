@@ -3,7 +3,7 @@
 <%@ taglib uri="/taglib/struts-logic" prefix="logic" %>
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
 
-<TABLE cellSpacing=0 cellPadding=0 border=0 vAlign="top" align="left" height="28" width="810">
+<TABLE cellSpacing=0 cellPadding=0 border=0 vAlign="top" align="left" height="15">
    <TR>	
    	<TD>&nbsp;&nbsp;&nbsp;</TD>
       <TD width="1" bgcolor="#999999">
@@ -15,7 +15,7 @@
 			<bean:define id="translation">
 				<digi:trn key="aim:enterIntoAIM">Enter in to Aid Information Module</digi:trn>
 			</bean:define>
-			<digi:link href="/showDesktop.do" module="aim" styleClass="nav" onclick="return quitRnot()"	title="<%=translation%>">
+			<digi:link href="/viewMyDesktop.do" styleClass="nav" onclick="return quitRnot()"	title="<%=translation%>">
          	::: <digi:trn key="aim:aidInformationModule">AID INFORMATION MODULE</digi:trn>
 		 	</digi:link>
 	  </TD>
@@ -25,10 +25,10 @@
 			--%>
 		</TD>
       <TD valign=center>
-			<digi:link module="aim" href="/viewTeamReports.do" styleClass="nav" onclick="return quitRnot()" title="View public team reports">
+			<digi:link href="/viewTeamReports.do" styleClass="nav" onclick="return quitRnot()" title="View public team reports">
 			:::  <digi:trn key="aim:reports">REPORTS</digi:trn>
 		 	</digi:link>			
-		</TD>
+		</TD>	  
       <TD width="1" bgcolor="#999999">
 			<%--
 			<digi:img  src="images/nav-div.gif" width="2"/>
@@ -43,18 +43,15 @@
 			<digi:img  src="images/nav-div.gif" width="2"/>
 			--%>
 		</TD>
-		<logic:notEmpty name="CL" scope="application">								
       <TD vAlign=center >
-                <digi:link module="calendar" href="/showCalendarView.do" styleClass="nav" onclick="return quitRnot()"	title="<%=translation%>">
-         	::: <digi:trn key="aim:calendar">CALENDAR</digi:trn>
-		</digi:link>
+             <a class="nav">
+         	::: <digi:trn key="aim:calendar">CALENDAR</digi:trn></a>
 		</TD>
       <TD width="1" bgcolor="#999999">
 			<%--
 			<digi:img src="images/nav-div.gif" width="2" />
 			--%>
 		</TD>
-		</logic:notEmpty>				
       <TD vAlign=center >
 			<a class="nav">
          	::: <digi:trn key="aim:scenarios">SCENARIOS</digi:trn></a>
@@ -66,7 +63,7 @@
 		</TD>
 		<logic:notEmpty name="ME" scope="application">						
       <TD vAlign=center >
-			<digi:link module="aim" href="/viewPortfolioDashboard.do~actId=-1~indId=-1" styleClass="nav" 
+			<digi:link href="/viewPortfolioDashboard.do~actId=-1~indId=-1" styleClass="nav" 
 			onclick="return quitRnot()" title="View portfolio dashboard">
          	::: <digi:trn key="aim:dashboard">DASHBOARD</digi:trn>
 			</digi:link>

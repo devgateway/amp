@@ -41,7 +41,8 @@ A.h-box
 
 A.heading 
 {
-	FONT-SIZE: 23px; 
+	FONT-SIZE: 19px;
+	FONT-WEIGHT: bold; 
 	TEXT-TRANSFORM: uppercase; 
 	COLOR: #d6d6d6; 
 	FONT-FAMILY: "Times New Roman", Times, serif; 
@@ -51,7 +52,8 @@ A.heading
 
 A.heading:visited 
 {
-	FONT-SIZE: 23px; 
+	FONT-SIZE: 19px;
+	FONT-WEIGHT: bold; 
 	TEXT-TRANSFORM: uppercase; 
 	COLOR: #d6d6d6; 
 	FONT-FAMILY: "Times New Roman", Times, serif; 
@@ -61,7 +63,8 @@ A.heading:visited
 
 A.heading:hover 
 {
-	FONT-SIZE: 23px; 
+	FONT-SIZE: 19px;
+	FONT-WEIGHT: bold; 
 	TEXT-TRANSFORM: uppercase; 
 	COLOR: #d6d6d6; 
 	FONT-FAMILY: "Times New Roman", Times, serif; 
@@ -71,56 +74,56 @@ A.heading:hover
 
 A.nav 
 {
-	PADDING-TOP: 7px; 	
+	PADDING-TOP: 0px; 	
 	PADDING-RIGHT: 7px; 
-	PADDING-LEFT: 20px; 
-	PADDING-BOTTOM: 7px; 
+	PADDING-LEFT: 9px; 
+	PADDING-BOTTOM: 0px; 
 	FONT-WEIGHT: normal; 
-	FONT-SIZE: 11px; 
+	FONT-SIZE: 9px; 
 	TEXT-TRANSFORM: uppercase; 
-	COLOR: #b5b5b2; 
+	COLOR: #ffffff; 
 	FONT-FAMILY: Verdana, Arial, Helvetica, sans-serif; 
 	WHITE-SPACE: nowrap; 
 	LETTER-SPACING: 0px; 
 	BACKGROUND-COLOR: #5a5b5a; 
 	TEXT-DECORATION: none;
-	HEIGHT: 28px;
+	HEIGHT: 13px;
 }
 
 A.nav:visited 
 {
-	PADDING-TOP: 7px; 
+	PADDING-TOP: 0px; 
 	PADDING-RIGHT: 7px; 
-	PADDING-LEFT: 20px; 
-	PADDING-BOTTOM: 7px; 	
+	PADDING-LEFT: 9px; 
+	PADDING-BOTTOM: 0px; 	
 	FONT-WEIGHT: normal; 
-	FONT-SIZE: 11px; 
+	FONT-SIZE: 9px; 
 	TEXT-TRANSFORM: uppercase; 
-	COLOR: #b5b5b2; 
+	COLOR: #ffffff; 
 	FONT-FAMILY: Verdana, Arial, Helvetica, sans-serif; 
 	WHITE-SPACE: nowrap; 
 	LETTER-SPACING: 0px; 
 	BACKGROUND-COLOR: #5a5b5a; 
 	TEXT-DECORATION: none;
-	HEIGHT: 28px;
+	HEIGHT: 13px;
 }
 
 A.nav:hover 
 {
-	PADDING-TOP: 7px; 
+	PADDING-TOP: 0px; 
 	PADDING-RIGHT: 7px; 
-	PADDING-LEFT: 20px; 
-	PADDING-BOTTOM: 7px; 
+	PADDING-LEFT: 9px; 
+	PADDING-BOTTOM: 0px; 
 	FONT-WEIGHT: normal; 
-	FONT-SIZE: 11px; 
+	FONT-SIZE: 9px; 
 	TEXT-TRANSFORM: uppercase; 
-	COLOR: #fdfdfa; 
+	COLOR: #ffffff; 
 	FONT-FAMILY: Verdana, Arial, Helvetica, sans-serif; 
 	WHITE-SPACE: nowrap; 
 	LETTER-SPACING: 0px; 
 	BACKGROUND-COLOR: #4a4a48; 
-	TEXT-DECORATION: none
-	HEIGHT: 28px;
+	TEXT-DECORATION: none;
+	HEIGHT: 13px;
 }
 
 A.nav1 
@@ -392,12 +395,12 @@ A.sub-nav2:hover
 	COLOR: #c6c6c6
 }
 
-
 .home-bg-header 
 {
-	FONT-SIZE: 23px; 
+	FONT-WEIGHT: bold; 
+	FONT-SIZE: 17px; 
 	COLOR: #91a3b1; 
-	PADDING-TOP: 23px; 
+	PADDING-TOP: 0px; 
 	FONT-FAMILY: Arial, Helvetica, sans-serif; 
 	TEXT-DECORATION: none
 }
@@ -408,9 +411,9 @@ A.sub-nav2:hover
 	FONT-SIZE: 10px; 
 	COLOR: #d0d9df; 
 	LINE-HEIGHT: 13px; 
-	PADDING-TOP: 17px; 
+	PADDING-TOP: 5px; 
 	FONT-FAMILY: Verdana, Arial, Helvetica, sans-serif; 
-	HEIGHT: 55px
+	HEIGHT: 20px
 }
 
 .bg-header 
@@ -757,7 +760,7 @@ A.menu:hover
 
 A.header
 {
-	FONT-SIZE: 23px; 
+	FONT-SIZE: 18px;
 	COLOR: #91a3b1; 
 	PADDING-TOP: 23px; 
 	LETTER-SPACING: 1px; 
@@ -767,7 +770,7 @@ A.header
 
 A.header:visited 
 {
-	FONT-SIZE: 23px; 
+	FONT-SIZE: 18px;
 	COLOR: #91a3b1; 
 	PADDING-TOP: 23px; 
 	LETTER-SPACING: 1px; 
@@ -777,7 +780,7 @@ A.header:visited
 
 A.header:hover 
 {
-	FONT-SIZE: 23px; 
+	FONT-SIZE: 18px;
 	COLOR: #91a3b1; 
 	PADDING-TOP: 23px; 
 	LETTER-SPACING: 1px; 
@@ -828,13 +831,11 @@ A.up-menu:hover
 .colHeaderOver 
 {
 	background-color: #bbbbbb;	
-	cursor: hand;
 }
 
 .colHeaderLink
 {
-	background-color: #dddddd;
-	cursor: arrow;
+	background-color: #eeeeee;
 }
 
 .rowNormal { background-color: #ffffff; } 
@@ -893,11 +894,4 @@ A.imglink:hover
 	BORDER-BOTTOM: #c9c9c7 1px solid; 
 	WHITE-SPACE: nowrap; 
 	BACKGROUND-COLOR: #f4f4f2
-}
-
-.highlight
-{
-	FONT-SIZE: 13px; 
-	FONT-FAMILY: Verdana, Arial, Helvetica, sans-serif; 		  
-	FONT-WEIGHT: bold; 
 }

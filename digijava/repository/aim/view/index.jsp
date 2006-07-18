@@ -26,7 +26,7 @@
 </tr>
 <tr><td width="100%" valign="top" align="left">
 <digi:form action="/login.do" method="post" name="aimLoginForm" type="org.digijava.module.aim.form.LoginForm" onsubmit="return validateAimLoginForm(this);">
-<table bgColor=#ffffff border=0 cellPadding=0 cellSpacing=0 width=772>
+<table bgColor=#ffffff border=0 cellPadding=0 cellSpacing=0 width=757>
 	<tr>
 		<td class=r-dotted-lg width=5>&nbsp;
 		</td>
@@ -140,7 +140,6 @@
           		<td vAlign=top>&nbsp;</td>
   				</tr>
 	      </table>
-		  <TR>
 		</td>
 	</tr>
 </digi:form>

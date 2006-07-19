@@ -16,8 +16,8 @@
 	}
 
 	function validate() {
-		if (isEmpty(document.aimUpdateIndicatorValuesForm.baseVal.value) == true) {
-			alert("Base value not entered");
+		if (containsValidNumericValue(document.aimUpdateIndicatorValuesForm.baseVal) == false) {
+			alert("Invalid Base value or Base value not entered");
 			document.aimUpdateIndicatorValuesForm.baseVal.focus();
 			return false;
 		}
@@ -26,8 +26,9 @@
 			document.aimUpdateIndicatorValuesForm.baseValDate.focus();
 			return false;
 		}		
-		if (isEmpty(document.aimUpdateIndicatorValuesForm.targetVal.value) == true) {
-			alert("Target value not entered");
+		if (containsValidNumericValue(document.aimUpdateIndicatorValuesForm.targetVal) == false &&
+							 document.aimUpdateIndicatorValuesForm.targetVal.disabled == false) {
+			alert("Invalid Target value or Target value not entered");
 			document.aimUpdateIndicatorValuesForm.targetVal.focus();
 			return false;
 		}
@@ -36,15 +37,17 @@
 			document.aimUpdateIndicatorValuesForm.targetValDate.focus();
 			return false;
 		}				
-		if (isEmpty(document.aimUpdateIndicatorValuesForm.revisedTargetVal.value) == true) {
-			alert("Revised target value not entered");
-			document.aimUpdateIndicatorValuesForm.revisedTargetVal.focus();
-			return false;
-		}
-		if (isEmpty(document.aimUpdateIndicatorValuesForm.revisedTargetValDate.value) == true) {
-			alert("Revised target value date not entered");
-			document.aimUpdateIndicatorValuesForm.revisedTargetValDate.focus();
-			return false;
+		if (document.aimUpdateIndicatorValuesForm.revisedTargetVal != null) {
+			if (containsValidNumericValue(document.aimUpdateIndicatorValuesForm.revisedTargetVal) == false) {
+				alert("Invalid Revised target value or Revised target value not entered");
+				document.aimUpdateIndicatorValuesForm.revisedTargetVal.focus();
+				return false;
+			}
+			if (isEmpty(document.aimUpdateIndicatorValuesForm.revisedTargetValDate.value) == true) {
+				alert("Revised target value date not entered");
+				document.aimUpdateIndicatorValuesForm.revisedTargetValDate.focus();
+				return false;
+			}				  
 		}
 		return true;
 	}
@@ -251,23 +254,48 @@
 																				<td><digi:trn key="aim:meTargetValue">Target Value</digi:trn>
 																				<font color="red">*</font>
 																				</td>
-																				<td><input type="text" name="targetVal" 
-																				value="<bean:write name="indicator" property="targetVal" />"
-																				class="inp-text" size="10"></td>
+																				<c:if test="${indicator.targetValDate != null}">
+																				<td>
+																					<input type="text" name="targetVal" 
+																					value="<bean:write name="indicator" property="targetVal" />"
+																					class="inp-text" size="10" disabled="true">
+																				</td>
 																				<td><digi:trn key="aim:meDate">Date</digi:trn>
 																				<font color="red">*</font></td>
-																				<td><input type="text" name="targetValDate" 
-																				value="<bean:write name="indicator" property="targetValDate" />"
-																				class="inp-text" size="10" readonly="true"
-																				id="targetValDate"></td>
+																				<td>
+																					<input type="text" name="targetValDate" 
+																					value="<bean:write name="indicator" property="targetValDate" />"
+																					class="inp-text" size="10" disabled="true"
+																					id="targetValDate">
+																				</td>																				
+																				<td align="left" vAlign="center">
+																					&nbsp;
+																				</td>																				
+																				</c:if>
+																				<c:if test="${indicator.targetValDate == null}">
+																				<td>
+																					<input type="text" name="targetVal" 
+																					value="<bean:write name="indicator" property="targetVal" />"
+																					class="inp-text" size="10">
+																				</td>
+																				<td><digi:trn key="aim:meDate">Date</digi:trn>
+																				<font color="red">*</font></td>
+																				<td>
+																					<input type="text" name="targetValDate" 
+																					value="<bean:write name="indicator" property="targetValDate" />"
+																					class="inp-text" size="10" readonly="true"
+																					id="targetValDate">
+																				</td>						
 																				<td align="left" vAlign="center">
 																					<a href="javascript:calendar('targetValDate')">
 																						<img src="../ampTemplate/images/show-calendar.gif" 
 																						alt="Click to View Calendar" border=0>
 																					</a>
-																				</td>
+																				</td>																				
+																				</c:if>
 																			</tr>
-																			<tr>
+																			<c:if test="${indicator.targetValDate != null}">
+																			<tr> 
 																				<td><digi:trn key="aim:meRevisedTargetValue">Revised Target Value</digi:trn>
 																				<font color="red">*</font>
 																				</td>
@@ -287,6 +315,7 @@
 																					</a>
 																				</td>
 																			</tr>
+																			</c:if>
 																			<tr>
 																				<td colspan="4">
 																					<input type="submit" value="Save Values" class="buton" 

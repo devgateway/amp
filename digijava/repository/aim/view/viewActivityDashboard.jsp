@@ -99,6 +99,7 @@
 			</TD></TR>
 <TR><TD>
 <%
+	if (actPerfChartUrl != null) { 
 	Map items = (HashMap) session.getAttribute("indicatorNames");
 	Iterator itr = items.keySet().iterator();
 	while (itr.hasNext()) {
@@ -106,6 +107,7 @@
 		String value = (String) items.get(l); %>
 		 &nbsp;<font color="#0000FF"><%=l%> - <%=value%></font><br>
 	<%}
+	}
 %>
 </TD></TR>			
 <TR><TD>&nbsp;</TD></TR>

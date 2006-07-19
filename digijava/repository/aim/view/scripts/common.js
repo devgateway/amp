@@ -58,6 +58,18 @@ function checkNumeric(objName,period) {
 	}
 }
 
+function containsValidNumericValue(objName) {
+	if (chkNumeric(objName) == true) {
+		if (objName.value == 0) {
+			return false;
+		} else {
+			return true;
+		}
+	} else {
+		return false;
+	}
+}
+
 function chkNumeric(objName)
 {
 	var checkOK = "0123456789.";
@@ -86,12 +98,7 @@ function chkNumeric(objName)
 		}
 	}
 	
-	if (!allValid) {	
-		alertsay = "Please enter only these values \""
-		alertsay = alertsay + checkOK + "\" in the \"" + checkStr.name + "\" field."
-		alert(alertsay);
-		return (false);
-	}
+	return allValid;
 }
 
 

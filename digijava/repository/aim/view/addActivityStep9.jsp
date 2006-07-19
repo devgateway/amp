@@ -20,80 +20,82 @@
 		document.aimEditActivityForm.submit();
 		return true;
 	}
-	function setValues(val) 
-	{
-		if(document.aimEditActivityForm.workingTeamLeadFlag.value == 'no')
-		{
-			var emptybox = chkforEmptyBox();
-			if(emptybox == true)
-			{
-				document.aimEditActivityForm.indicatorId.value = val;
-				document.aimEditActivityForm.submit();
-			}
-		}
-		else
-		{
-			var emptyboxes = chkforEmptyBoxes();
-			if(emptyboxes == true)
-			{
-				document.aimEditActivityForm.indicatorId.value = val;
-				document.aimEditActivityForm.submit();
-			}
-		}
-	}
-	function chkforEmptyBox()
-	{
-	
-			if(document.aimEditActivityForm.currentVal.value == 0)
-			{
-				alert("Please give Current Value");
-				document.aimEditActivityForm.currentVal.focus();
-				return false;
-			}
-			if(trim(document.aimEditActivityForm.currValDate.value) == '')
-			{
-				alert("Please give Current-Value Date");
-				return false;
-			}				  
 
-		return true;
-	}
-	function chkforEmptyBoxes()
-	{
-		if(document.aimEditActivityForm.baseVal.value == 0)
-		{
-			alert("Please give Base Value");
+	function validateEntryByLeader() {
+		if (containsValidNumericValue(document.aimEditActivityForm.baseVal) == false) {
+			alert("Invalid Base value or Base value not entered");
 			document.aimEditActivityForm.baseVal.focus();
 			return false;
 		}
-		else if(trim(document.aimEditActivityForm.baseValDate.value) == '')
-		{
-			alert("Please give Base-Value Date");
+		if (isEmpty(document.aimEditActivityForm.baseValDate.value) == true) {
+			alert("Base value date not entered");
+			document.aimEditActivityForm.baseValDate.focus();
 			return false;
-		}
-		else if(document.aimEditActivityForm.targetVal.value == 0)
-		{
-			alert("Please give Target Value");
+		}		
+		if (containsValidNumericValue(document.aimEditActivityForm.targetVal) == false) {
+			alert("Invalid Target value or Target value not entered");
 			document.aimEditActivityForm.targetVal.focus();
 			return false;
 		}
-		else if(trim(document.aimEditActivityForm.targetValDate.value) == '')
-		{
-			alert("Please give Target-Value Date");
+		if (isEmpty(document.aimEditActivityForm.targetValDate.value) == true) {
+			alert("Target value date not entered");
+			document.aimEditActivityForm.targetValDate.focus();
 			return false;
 		}
-		else
-		{
-				if((document.aimEditActivityForm.currentVal.value == 0) ^ (trim(document.aimEditActivityForm.currValDate.value) == ''))
-				{
-					alert("Enter both Current Value and its Date");
-					document.aimEditActivityForm.currentVal.focus();
-					return false;
-				}					  
-
+		if (document.aimEditActivityForm.revTargetValDate != null) {
+			if (containsValidNumericValue(document.aimEditActivityForm.revTargetVal) == false) {
+				alert("Invalid Revised target value or Revised target value not entered");
+				document.aimEditActivityForm.revTargetVal.focus();
+				return false;
+			}
+			if (isEmpty(document.aimEditActivityForm.revTargetValDate.value) == true) {
+				alert("Revised target value date not entered");
+				document.aimEditActivityForm.revTargetValDate.focus();
+				return false;
+			}				  
 		}
+
+		if (containsValidNumericValue(document.aimEditActivityForm.currentVal) == false) {
+			alert("Invalid Current value or Current value not entered");
+			document.aimEditActivityForm.currentVal.focus();
+			return false;
+		}
+		if (isEmpty(document.aimEditActivityForm.currValDate.value) == true) {
+			alert("Current value date not entered");
+			document.aimEditActivityForm.currValDate.focus();
+			return false;
+		}		
 		return true;
 	}
+
+	function validateEntryByMember() {
+		if (containsValidNumericValue(document.aimEditActivityForm.currentVal) == false) {
+			alert("Invalid Current value or Current value not entered");
+			document.aimEditActivityForm.currentVal.focus();
+			return false;
+		}
+		if (isEmpty(document.aimEditActivityForm.currValDate.value) == true) {
+			alert("Current value date not entered");
+			document.aimEditActivityForm.currValDate.focus();
+			return false;
+		}		
+		return true;			  
+	}
+
+	function setValues(val) {
+		var valid;
+		if(document.aimEditActivityForm.workingTeamLeadFlag.value == 'no') {
+			valid = validateEntryByMember();
+		} else {
+			valid = validateEntryByLeader();
+		}
+		if (valid == true) {
+			document.aimEditActivityForm.indicatorId.value = val;
+			document.aimEditActivityForm.submit();				  
+		}
+	}
+
+
 -->
 </script>
 
@@ -131,7 +133,8 @@
 									</digi:link>&nbsp;&gt;&nbsp;
 								</c:if>
 								<c:if test="${aimEditActivityForm.pageId == 1}">								
-									<digi:link href="/viewMyDesktop.do" styleClass="comment" onclick="return quitRnot()" title="Click here to view MyDesktop ">
+									<digi:link href="/viewMyDesktop.do" styleClass="comment" onclick="return quitRnot()" 
+									title="Click here to view MyDesktop ">
 										<digi:trn key="aim:portfolio">
 											Portfolio
 										</digi:trn>
@@ -301,13 +304,14 @@
 														<c:if test="${aimEditActivityForm.workingTeamLeadFlag=='no'}">
 															<tr>
 																<td><b>
-																	<digi:trn key="aim:meBaseValue">Base Value</digi:trn></b></td>
+																	<digi:trn key="aim:meBaseValue">Base Value</digi:trn></b>
+																</td>
 																<td>
 																	<bean:write name="indicator" property="baseVal" />
 																</td>
 																<td>&nbsp;&nbsp;&nbsp;</td>
 																<td align="right">
-																	<digi:trn key="aim:meDate">Date</digi:trn>:
+																	<digi:trn key="aim:meDate">Date</digi:trn>
 																</td>
 																<td align="left">&nbsp;&nbsp;
 																	<bean:write name="indicator" property="baseValDate" />
@@ -315,14 +319,14 @@
 															</tr>
 															<tr>
 																<td><b>
-																	<digi:trn key="aim:meTargetValue">Target Value</digi:trn>	
-																</b></td>
+																	<digi:trn key="aim:meTargetValue">Target Value</digi:trn></b>
+																</td>
 																<td>
 																	<bean:write name="indicator" property="targetVal" />
 																</td>
 																<td>&nbsp;&nbsp;&nbsp;</td>
 																<td align="right">
-																	<digi:trn key="aim:meDate">Date</digi:trn>:
+																	<digi:trn key="aim:meDate">Date</digi:trn>
 																</td>
 																<td align="left">&nbsp;&nbsp;
 																	<bean:write name="indicator" property="targetValDate" />
@@ -330,24 +334,26 @@
 															</tr>															
 															<tr>
 																<td><b>
-																	<digi:trn key="aim:meRevisedTargetValue">Revised Target Value</digi:trn>
-																</b></td>
+																	<digi:trn key="aim:meRevisedTargetValue">Revised Target Value</digi:trn></b>
+																</td>
 																<td>
 																	<bean:write name="indicator" property="revisedTargetVal" />
 																</td>
 																<td>&nbsp;&nbsp;&nbsp;</td>
 																<td align="right">
-																	<digi:trn key="aim:meDate">Date</digi:trn>:
+																	<digi:trn key="aim:meDate">Date</digi:trn>
 																</td>
 																<td align="left">&nbsp;&nbsp;
 																	<bean:write name="indicator" property="revisedTargetValDate" />
 																</td>
 															</tr>
 														</c:if>
+														
 														<c:if test="${aimEditActivityForm.workingTeamLeadFlag=='yes'}">
 															<tr>
 																<td><b>																
-																	<digi:trn key="aim:meBaseValue">Base Value</digi:trn></b></td>
+																	<digi:trn key="aim:meBaseValue">Base Value</digi:trn></b>
+																	<font color="red">*</font></td>
 																<td>
 																	<input type="text" name="baseVal" 
 																	value="<bean:write name="indicator" property="baseVal" />"
@@ -355,7 +361,8 @@
 																</td>
 																<td>&nbsp;&nbsp;&nbsp;</td>
 																<td align="right">
-																	<digi:trn key="aim:meDate">Date</digi:trn>:
+																	<digi:trn key="aim:meDate">Date</digi:trn>
+																	<font color="red">*</font>
 																</td>
 																<td align="left">
 																	<input type="text" name="baseValDate" 
@@ -369,7 +376,9 @@
 															<tr>
 																<td><b>
 																	<digi:trn key="aim:meTargetValue">Target Value</digi:trn>	
-																</b></td>
+																	</b><font color="red">*</font>
+																</td>
+																<c:if test="${indicator.targetValDate == null}">
 																<td>
 																	<input type="text" name="targetVal" 
 																	value="<bean:write name="indicator" property="targetVal" />"
@@ -377,7 +386,8 @@
 																</td>
 																<td>&nbsp;&nbsp;&nbsp;</td>
 																<td align="right">
-																	<digi:trn key="aim:meDate">Date</digi:trn>:
+																	<digi:trn key="aim:meDate">Date</digi:trn>
+																	<font color="red">*</font>
 																</td>
 																<td align="left">
 																	<input type="text" name="targetValDate" 
@@ -387,11 +397,30 @@
 																		<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border=0>
 																	</a>
 																</td>
-															</tr>															
+																</c:if>
+																<c:if test="${indicator.targetValDate != null}">
+																<td>
+																	<input type="text" name="targetVal" 
+																	value="<bean:write name="indicator" property="targetVal" />"
+																	class="inp-text" size="10" disabled="true">
+																</td>
+																<td>&nbsp;&nbsp;&nbsp;</td>
+																<td align="right">
+																	<digi:trn key="aim:meDate">Date</digi:trn>
+																</td>
+																<td align="left">
+																	<input type="text" name="targetValDate" 
+																	value="<bean:write name="indicator" property="targetValDate" />"
+																	class="inp-text" size="10" readonly="true" id="targetValDate">&nbsp;&nbsp;
+																</td>
+																</c:if>																
+															</tr>
+															<c:if test="${indicator.targetValDate != null}">
 															<tr>
 																<td><b>
 																	<digi:trn key="aim:meRevisedTargetValue">Revised Target Value</digi:trn>
-																</b></td>
+																	</b><font color="red">*</font>
+																</td>
 																<td>
 																	<input type="text" name="revTargetVal" 
 																	value="<bean:write name="indicator" property="revisedTargetVal" />"
@@ -399,7 +428,8 @@
 																</td>
 																<td>&nbsp;&nbsp;&nbsp;</td>
 																<td align="right">
-																	<digi:trn key="aim:meDate">Date</digi:trn>:
+																	<digi:trn key="aim:meDate">Date</digi:trn>
+																	<font color="red">*</font>
 																</td>
 																<td align="left">
 																	<input type="text" name="revTargetValDate" 
@@ -409,8 +439,11 @@
 																		<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border=0>
 																	</a>
 																</td>
-															</tr>
+															</tr>															
+															</c:if>
+
 														</c:if>
+														
 														<logic:notEmpty name="indicator" property="priorValues" >
 															<tr bgColor=#dddddb><td bgColor=#dddddb align="left" colspan="5"><b>
 																<digi:trn key="aim:mePriorValues">Prior Values</digi:trn> :</b>
@@ -434,10 +467,17 @@
 																</tr>
 															</logic:iterate>
 														</logic:notEmpty>
+
+														<c:if test="${aimEditActivityForm.workingTeamLeadFlag=='yes' ||
+																indicator.baseValDate!=null}">
+														
+														<%--		
 														<logic:notEmpty name="indicator" property="baseValDate">
+														--%>
 															<tr>
 																<td><b>
 																	<digi:trn key="aim:meCurrentValue">Current Value</digi:trn>
+																	<font color="red">*</font>
 																</b></td>
 																<td>
 																	<input type="text" name="currentVal" 
@@ -446,7 +486,8 @@
 																</td>
 																<td>&nbsp;&nbsp;&nbsp;</td>
 																<td align="right">
-																	<digi:trn key="aim:meDate">Date</digi:trn>:
+																	<digi:trn key="aim:meDate">Date</digi:trn>
+																	<font color="red">*</font>																	
 																</td>
 																<td align="left">
 																	<input type="text" name="currValDate" 
@@ -478,12 +519,15 @@
 														<tr>
 															<td>&nbsp;</td>
 															<td colspan="3" align="center">
-																<input type="button" class="dr-menu" value="Set Values" 
+																<input type="button" class="buton" value="Set Values" 
 																onclick="setValues('<c:out value="${indicator.indicatorId}" />')">
 															</td>
 															<td>&nbsp;</td>
 														</tr>
+														<%--
 														</logic:notEmpty>
+														--%>
+														</c:if>
 													</table>
 												</td>
 											</tr>

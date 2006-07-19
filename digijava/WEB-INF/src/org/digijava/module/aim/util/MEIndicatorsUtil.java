@@ -440,10 +440,14 @@ public class MEIndicatorsUtil
 					}
 
 					actInd.setActualVal(meIndValue.getActualVal());
+					actInd.setCurrentVal(meIndValue.getActualVal());
 					if (meIndValue.getActualValDate() != null) {
 						actInd.setActualValDate(DateConversion
 								.ConvertDateToString(meIndValue
 										.getActualValDate()));
+						actInd.setCurrentValDate(DateConversion
+								.ConvertDateToString(meIndValue
+										.getActualValDate()));						
 					}
 
 					actInd.setTargetVal(meIndValue.getTargetVal());
@@ -1112,6 +1116,7 @@ public class MEIndicatorsUtil
 		{
 			session = PersistenceManager.getSession();
 			PriorCurrentValues priorCurrVal = null;
+			/*
 			if (considerLastValue) {
 				AmpMEIndicatorValue meVal = (AmpMEIndicatorValue) session.load(AmpMEIndicatorValue.class,tempId);
 				if (meVal.getActualValDate() != null) {
@@ -1121,6 +1126,7 @@ public class MEIndicatorsUtil
 					col.add(priorCurrVal);									
 				}
 			}
+			*/
 			
 			String qryStr = "select pivalues from " + AmpMECurrValHistory.class.getName() + "" +
 							" pivalues where (pivalues.meIndValue=:tempId)" ;

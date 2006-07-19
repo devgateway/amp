@@ -42,6 +42,8 @@ public class GetIndicatorValues extends Action {
 							uIndValForm.setIndicatorId(actInd.getIndicatorId());
 							uIndValForm.setIndicatorValId(actInd.getIndicatorValId());
 							uIndValForm.setExpIndicatorId(actInd.getIndicatorId());
+							uIndValForm.setRevisedTargetVal(actInd.getRevisedTargetVal());
+							uIndValForm.setRevisedTargetValDate(actInd.getRevisedTargetValDate());
 							//uIndValForm.setActivityId(actInd.getActivityId());
 							break;
 						}

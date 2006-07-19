@@ -27,6 +27,7 @@ import org.digijava.kernel.request.SiteDomain;
 import org.digijava.kernel.user.User;
 import org.digijava.kernel.util.RequestUtils;
 import org.digijava.kernel.util.SiteUtils;
+import org.digijava.module.aim.dbentity.AmpActivity;
 import org.digijava.module.aim.dbentity.AmpModality;
 import org.digijava.module.aim.form.EditActivityForm;
 import org.digijava.module.aim.helper.FundingOrganization;

@@ -408,7 +408,10 @@ public class ActivityUtil {
 						if (actInd.getCurrentValDate() != null && 
 								actInd.getCurrentValDate().trim().length() > 0) {
 							if (actInd.getActualValDate() != null &&
-									actInd.getActualValDate().trim().length() > 0) {
+									actInd.getActualValDate().trim().length() > 0
+									&& (actInd.getActualVal() != actInd.getCurrentVal() ||
+											!actInd.getActualValDate().equals(
+													actInd.getCurrentValDate()))) { 
 								AmpMECurrValHistory currValHist = new AmpMECurrValHistory();
 								currValHist.setCurrValue(actInd.getActualVal());
 								currValHist.setCurrValueDate(DateConversion.getDate(actInd.getActualValDate()));

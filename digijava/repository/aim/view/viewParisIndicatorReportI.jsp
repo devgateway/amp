@@ -261,7 +261,7 @@
 					</td>
 					
 				</tr>
-	</digi:form>
+	
 				<tr>
 				
 					<td width="100%">
@@ -548,18 +548,21 @@
 														<c:when test="${index == (numCols-1)}">
 															<c:choose>
 																<c:when test="${aimParisIndicatorReportForm.indicatorCode == '5a'}">
-																	<fmt:formatNumber type="number" value="${rowVal}" maxFractionDigits="0" />%
-																	<%-- <c:out value="${rowVal}"/>% --%>
+																	<c:if test="${rowVal == -1}">n.a.</c:if>
+																	<c:if test="${rowVal != -1}">
+																		<fmt:formatNumber type="number" value="${rowVal}" maxFractionDigits="0" />%
+																	</c:if>
 																</c:when>
 																<c:otherwise >
 																	<fmt:formatNumber type="number" value="${rowVal}" maxFractionDigits="0" />
-																	<%-- <c:out value="${rowVal}"/> --%>
 																</c:otherwise>
 															</c:choose>
 														</c:when>
 														<c:otherwise >
-															<fmt:formatNumber type="number" value="${rowVal}" maxFractionDigits="0" />%
-															<%-- <c:out value="${rowVal}"/>% --%>
+															<c:if test="${rowVal == -1}">n.a.</c:if>
+															<c:if test="${rowVal != -1}">
+																<fmt:formatNumber type="number" value="${rowVal}" maxFractionDigits="0" />%
+															</c:if>
 														</c:otherwise>
 													</c:choose>
 												</c:if>
@@ -579,6 +582,7 @@
 					</td>
 					 
 				</tr>
+				<tr><td><font color="blue">* All the amounts are in thousands (000)</font></td></tr>
 <%-----------------------------------------------------------------------------------------------------------------------------------------------------%>
 						</table>
 					</td>
@@ -594,18 +598,37 @@
 			<logic:notEmpty name="aimParisIndicatorReportForm" property="donorsColl">
 			<table width="100%" cellspacing="0" cellpadding="0" border="0">
 				<c:if test="${aimParisIndicatorReportForm.indicatorCode == '5a' || aimParisIndicatorReportForm.indicatorCode == '5b'}">
+				<c:set var="range" value="${aimParisIndicatorReportForm.closeYear - aimParisIndicatorReportForm.startYear + 1}" />
+				<c:set var="cntr" value="0" />
 					<tr>
-						<%--<td width="24" class="r-dotted-lg">&nbsp;</td>--%>
 						<td align="center" colspan='<c:out value="${numCols + 1}" />' >
-							<table border="1" width="50%" cellspacing="0" cellpadding="0">					
-								<c:set var="flag" value="true" />
+							<table border="1" width="50%" cellspacing="0" cellpadding="0">
+								<c:set var="flag" value="true" />				
 								<nested:iterate name="aimParisIndicatorReportForm" property="donorsCollIndc5">
 									<c:if test="${flag == true}">
 										<tr bgcolor="#F4F4F2">
 											<nested:iterate id="rowVal">
-												<td align="center">
-													<strong><c:out value="${rowVal}"/></strong>
-												</td>
+												<c:if test="${cntr == 0}">
+													<td align="center" rowspan="2">
+														<strong><c:out value="${rowVal}"/></strong>
+													</td>
+													<td align="center" colspan='<c:out value="${range}" />' >
+														<c:if test="${aimParisIndicatorReportForm.indicatorCode == '5a'}">
+															<strong>Percent of donors that use national procurement systems</strong>
+														</c:if>
+														<c:if test="${aimParisIndicatorReportForm.indicatorCode == '5b'}">
+															<strong>Percent of donors that use all 3 country PFM systems</strong>
+														</c:if>
+													</td>
+												</c:if>
+												<c:if test="${cntr != 0}">
+													<c:if test="${cntr == 1}"><tr></c:if>
+													<td align="center">
+														<strong><c:out value="${rowVal}"/></strong>
+													</td>
+													<c:if test="${cntr == range}"></tr></c:if>
+												</c:if>
+												<c:set var="cntr" value="${cntr + 1}" />
 											</nested:iterate>
 										</tr>
 									</c:if>
@@ -619,7 +642,7 @@
 												</c:if>
 												<c:if test="${flag == true}">
 													<td align="center">
-														<c:out value="${rowVal}"/>
+														<fmt:formatNumber type="number" value="${rowVal}" maxFractionDigits="0" />
 													</td>
 												</c:if>
 												<c:set var="flag" value="true" />
@@ -638,4 +661,5 @@
 		</td>
 		<td width="14" class="r-dotted-lg">
 	</tr>
+</digi:form>
 </table>

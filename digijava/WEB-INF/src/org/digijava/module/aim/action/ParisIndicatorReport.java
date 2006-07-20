@@ -79,7 +79,6 @@ public class ParisIndicatorReport extends Action {
 				if (null == svForm.getFinancingInstrumentColl() || svForm.getFinancingInstrumentColl().size() < 1)
 					svForm.setFinancingInstrumentColl(DbUtil.getAllFinancingInstruments());
 				
-				//if (!indcId.equalsIgnoreCase(svForm.getIndicatorId()) || svForm.getFilterFlag().booleanValue()) {
 				try {
 					AmpAhsurveyIndicator indc = DbUtil.getIndicatorById(Long.valueOf(indcId));
 					svForm.setIndicatorId(indcId);
@@ -100,9 +99,8 @@ public class ParisIndicatorReport extends Action {
 					
 					if ("5a".equalsIgnoreCase(svForm.getIndicatorCode()) || "5b".equalsIgnoreCase(svForm.getIndicatorCode())) {
 						if (!svForm.getDonorsColl().isEmpty()) {
-							logger.debug("svForm.getNumColsCalculated() : " + svForm.getNumColsCalculated());
+							int dnSize = svForm.getDonorsColl().size() - 1;
 							int lastIndex = Integer.parseInt(svForm.getNumColsCalculated()) - 1;
-							logger.debug("lastIndex : " + lastIndex);
 							int numCols = svForm.getCloseYear().intValue() - svForm.getStartYear().intValue() + 1;
 							String donor[] = {"Less than 10%", "From 10 to 50%", "From 50 to 90%", "More than 90%"};
 							String dnIndc5Row[] = null;
@@ -116,13 +114,14 @@ public class ParisIndicatorReport extends Action {
 							dnIndc5Row = new String[numCols + 1];
 							
 							// creating header row
-							dnIndc5Row[0] = "Donor(s)";
+							if ("5a".equalsIgnoreCase(svForm.getIndicatorCode()))
+								dnIndc5Row[0] = "Percent of ODA using all three partners PFM procedures";
+							else
+								dnIndc5Row[0] = "Percent of ODA using national procurement system";
+							
 							for(; j < numCols; j++)
 								dnIndc5Row[j + 1] = Integer.toString(svForm.getStartYear().intValue() + j);
 							svForm.getDonorsCollIndc5().add(dnIndc5Row);
-							
-							for(j = 0; j < answers.length; j++)
-								answers[j] = 0;
 							
 							for (int cntr = 0; cntr < donor.length; cntr++) {
 								dnIndc5Row = new String[numCols + 1];
@@ -148,13 +147,12 @@ public class ParisIndicatorReport extends Action {
 													break;
 											case 3: if (temp[lastIndex] > 90)
 														answers[j] += 1;
-													break;
 										}
 										j++;
 									}
 								}
 								for(j = 0; j < numCols; j++) {
-									dnIndc5Row[j + 1] = Integer.toString(answers[j]);
+									dnIndc5Row[j + 1] = Double.toString((100 * answers[j]) / dnSize);
 									answers[j] = 0;
 								}
 								svForm.getDonorsCollIndc5().add(dnIndc5Row);

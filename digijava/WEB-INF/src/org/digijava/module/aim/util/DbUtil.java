@@ -2,6 +2,7 @@ package org.digijava.module.aim.util;
 
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
@@ -5297,9 +5298,8 @@ public class DbUtil {
 	boolean orgGroupFlag = false;
 	int NUM_ANSWER_COLUMNS = 4;
 	int YEAR_RANGE = (closeYear - startYear + 1);
-	int indcFlag = 0, index = 0, j = 0;
-	double sum = 0.0;
-	double fromExchangeRate = 0.0, toExchangeRate = 0.0, ansToQues4 = 0.0;
+	int indcFlag = 0, index = 0, j = 0, convYr = 0;
+	double sum = 0.0, fromExchangeRate = 0.0, toExchangeRate = 0.0, ansToQues4 = 0.0;
 	double answersRow[] = null;
 	double allDnRow[] = null;
 	boolean answers[] = null;
@@ -5325,9 +5325,6 @@ public class DbUtil {
 			indcFlag = 9;
 		}
 		//logger.debug("indcCode[inside getAidSurveyReportByIndicator] : " + indcCode);
-		//logger.debug("indcFlag[inside getAidSurveyReportByIndicator] : " + indcFlag);
-		//logger.debug("startYear: " + startYear + " closeYear : " + closeYear + " YEAR_RANGE : " + YEAR_RANGE);
-		//logger.debug("[inside getAidSurveyReportByIndicator()]- NUM_ANSWER_COLUMNS : " + NUM_ANSWER_COLUMNS);
 		
 		String qry = "select distinct dn.ampDonorOrgId from " + AmpAhsurvey.class.getName() + " dn";
 		surveyDonors.addAll(session.createQuery(qry).list());
@@ -5335,24 +5332,21 @@ public class DbUtil {
 		if (surveyDonors.size() > 0) {
 			if (null != orgGroup && orgGroup.trim().length() > 1 && !"all".equalsIgnoreCase(orgGroup))
 				orgGroupFlag = true;
+			// Creating first row for all-donors in indicator report.
+			ParisIndicator all = new ParisIndicator();
+			all.setDonor("All Donors");
+			all.setAnswers(new ArrayList());
+			responses.add(all);
 			if (indcFlag != 6) {
-				// Creating first row for all-donors in indicator report.
-				ParisIndicator all = new ParisIndicator();
-				all.setDonor("All Donors");
-				all.setAnswers(new ArrayList());
-				responses.add(all);
 				for (int i = 0; i < YEAR_RANGE; i++) {
 					answersRow = new double[NUM_ANSWER_COLUMNS];
 					answersRow[0] = startYear + i;
 					((ParisIndicator)responses.get(0)).getAnswers().add(answersRow);
 				}
 			}
-			/*logger.debug("All filters here");
-			logger.debug("-----------------");
-			logger.debug("indcCode: " + indcCode + " indcCode: " + indcCode + " status:" + status);
-			logger.debug("startYear: " + startYear + " closeYear: " + closeYear);
-			logger.debug("currency: " + currency + " termAssist: " + termAssist + " financingInstrument:" + financingInstrument);
-			*/
+			else
+				((ParisIndicator)responses.get(0)).getAnswers().add(new double[NUM_ANSWER_COLUMNS]);
+			
 			itr1 = surveyDonors.iterator();
 			while(itr1.hasNext()) {
 				AmpOrganisation dnOrg = (AmpOrganisation) itr1.next();
@@ -5371,7 +5365,6 @@ public class DbUtil {
 					answersRow = new double[NUM_ANSWER_COLUMNS];
 				//logger.debug("surveySet.size() : " + surveySet.size());
 				boolean[][] answersColl = getSurveyReportAnswer(indcCode, surveySet);
-				//logger.debug("[inside getAidSurveyReportByIndicator()]- answersColl.length : " + answersColl.length);
 				for (int i = 0; i < YEAR_RANGE; i++) {
 					if (indcFlag != 6) {
 						// answersRow will represent row for one disbursement year inside answer-collection of pi helper object.
@@ -5386,8 +5379,7 @@ public class DbUtil {
 					index = 0;
 					while(itr2.hasNext()) {
 						AmpAhsurvey svy = (AmpAhsurvey) itr2.next();
-						//logger.debug("survey-id : " + svy.getAmpAHSurveyId() + " activity-id : " + 
-							//			svy.getAmpActivityId().getAmpActivityId());
+						//logger.debug("survey-id : " + svy.getAmpAHSurveyId() + " activity-id : " + svy.getAmpActivityId().getAmpActivityId());
 						if ("4".equalsIgnoreCase(indcCode)) {
 							Iterator iter = svy.getResponses().iterator();
 							while (iter.hasNext()) {
@@ -5418,21 +5410,23 @@ public class DbUtil {
 											continue;
 										}
 									if (indcFlag == 6) {
-										answersRow[i] += 1;
-										continue;
+										convYr = (startYear + i);
+										if (convYr == DateConversion.getYear(DateConversion.ConvertDateToString(svy.getAmpActivityId().getActualStartDate()))
+												|| convYr == DateConversion.getYear(DateConversion.ConvertDateToString(svy.getAmpActivityId().getActualCompletionDate())))
+											answersRow[i] += 1;
+										break;
 									}
 									itr3 = svy.getAmpActivityId().getFunding().iterator();
 									while(itr3.hasNext()) {
 										AmpFunding fund = (AmpFunding) itr3.next();
 										//logger.debug("FundingId: " + fund.getAmpFundingId());
 										if (0 == dnOrg.getAmpOrgId().compareTo(fund.getAmpDonorOrgId().getAmpOrgId())) {
-											/* Filtering by financing-instrument here
+											// Filtering by financing-instrument here
 											if (null != financingInstrument && financingInstrument.trim().length() > 1
 													&& !"all".equalsIgnoreCase(financingInstrument)) {
 												if (!financingInstrument.equalsIgnoreCase(fund.getModalityId().getName()))
 													continue;
 											}
-											*/
 											if ("9".equalsIgnoreCase(indcCode)) {
 												if (j == 0)
 													if (!"Direct Budget Support".equalsIgnoreCase(fund.getModalityId().getName())) {
@@ -5455,7 +5449,7 @@ public class DbUtil {
 												AmpFundingDetail fundtl = (AmpFundingDetail) itr4.next();
 												//logger.debug("FundDetailId: " + fundtl.getAmpFundDetailId());
 												date = DateConversion.ConvertDateToString(fundtl.getTransactionDate());
-												double convYr = new Double(DateConversion.getYear(date)).doubleValue();
+												convYr = DateConversion.getYear(date);
 												// Filtering by disbursement-year here
 												if (convYr == (startYear + i)) {
 													// Filtering by AdjustmentType & TransactionType here
@@ -5494,14 +5488,10 @@ public class DbUtil {
 								}
 								if (indcFlag != 6) {
 									if ("4".equalsIgnoreCase(indcCode)) {
-										//logger.debug("survey-id: " + svy.getAmpAHSurveyId() + " ansYoQues4: " + ansToQues4);
-										//logger.debug("sum[before-mult]: " + sum);
 										percent = new Double(sum * ansToQues4);
 										sum = Double.parseDouble(formatter.format(percent));
-										//logger.debug("sum[after-mult] : " + sum);
 									}
 									answersRow[j + 1] += sum;
-									//logger.debug("answersRow[" + (j + 1) + "]: " + answersRow[j + 1] + " sum : " + sum);
 								}
 							}
 						}
@@ -5516,22 +5506,19 @@ public class DbUtil {
 						//calculating percentage for second-last column here
 						sum = answersRow[NUM_ANSWER_COLUMNS - 7] + answersRow[NUM_ANSWER_COLUMNS - 6] 
 						          + answersRow[NUM_ANSWER_COLUMNS - 5];
-						if (sum == 0.0 || answersRow[NUM_ANSWER_COLUMNS - 3] == 0.0)
-							answersRow[NUM_ANSWER_COLUMNS - 2] = 0.0;
+						if (answersRow[NUM_ANSWER_COLUMNS - 3] == 0.0)
+							answersRow[NUM_ANSWER_COLUMNS - 2] = -1.0;
 						else {
 							sum /= 3;
 							percent = new Double((sum * 100) / answersRow[NUM_ANSWER_COLUMNS - 3]);
 							answersRow[NUM_ANSWER_COLUMNS - 2] = Double.parseDouble(formatter.format(percent));
 						}
-						// calculating final percentage here
-						if (answersRow[NUM_ANSWER_COLUMNS - 3] == 0.0 || answersRow[NUM_ANSWER_COLUMNS - 4] == 0.0)
-							answersRow[NUM_ANSWER_COLUMNS - 1] = 0.0;
 					}
 					// calculating final percentage here
-					if (answersRow[NUM_ANSWER_COLUMNS - 3] == 0.0 || answersRow[NUM_ANSWER_COLUMNS - 2] == 0.0) {
-						if (indcFlag != 5) 
-							answersRow[NUM_ANSWER_COLUMNS - 1] = 0.0;
-					}
+					if ((indcFlag == 5 || indcFlag == 7) && answersRow[NUM_ANSWER_COLUMNS - 3] == 0.0)
+						answersRow[NUM_ANSWER_COLUMNS - 1] = -1.0;
+					else if ((indcFlag == 0 || indcFlag == 9) && answersRow[NUM_ANSWER_COLUMNS - 2] == 0.0)
+						answersRow[NUM_ANSWER_COLUMNS - 1] = -1.0;
 					else {
 						try {
 							if (indcFlag == 5)
@@ -5564,6 +5551,10 @@ public class DbUtil {
 				if (indcFlag == 6) {
 					pi.getAnswers().add(answersRow);
 					responses.add(pi);
+					allDnRow = (double[])(((ParisIndicator)responses.get(0)).getAnswers().get(0));
+					for(j = 0; j < NUM_ANSWER_COLUMNS; j++) {
+						allDnRow[j] += answersRow[j];
+					}
 				}
 				else {
 					responses.add(pi);
@@ -5578,21 +5569,19 @@ public class DbUtil {
 						//calculating percentage for second-last column here
 						sum = allDnRow[NUM_ANSWER_COLUMNS - 7] + allDnRow[NUM_ANSWER_COLUMNS - 6] 
 						          + allDnRow[NUM_ANSWER_COLUMNS - 5];
-						if (sum == 0.0 || allDnRow[NUM_ANSWER_COLUMNS - 3] == 0.0)
-							allDnRow[NUM_ANSWER_COLUMNS - 2] = 0.0;
+						if (allDnRow[NUM_ANSWER_COLUMNS - 3] == 0.0)
+							allDnRow[NUM_ANSWER_COLUMNS - 2] = -1.0;
 						else {
 							sum /= 3;
 							percent = new Double((sum * 100) / allDnRow[NUM_ANSWER_COLUMNS - 3]);
 							allDnRow[NUM_ANSWER_COLUMNS - 2] = Double.parseDouble(formatter.format(percent));
 						}
-						// calculating final percentage here
-						if (allDnRow[NUM_ANSWER_COLUMNS - 3] == 0.0 || allDnRow[NUM_ANSWER_COLUMNS - 4] == 0.0)
-							allDnRow[NUM_ANSWER_COLUMNS - 1] = 0.0;
 					}
-					if (allDnRow[NUM_ANSWER_COLUMNS - 3] == 0.0 || allDnRow[NUM_ANSWER_COLUMNS - 2] == 0.0) {
-						if (indcFlag != 5)
-							allDnRow[NUM_ANSWER_COLUMNS - 1] = 0.0;
-					}
+					// calculating final percentage here
+					if ((indcFlag == 5 || indcFlag == 7) && allDnRow[NUM_ANSWER_COLUMNS - 3] == 0.0)
+						allDnRow[NUM_ANSWER_COLUMNS - 1] = -1.0;
+					else if ((indcFlag == 0 || indcFlag == 9) && allDnRow[NUM_ANSWER_COLUMNS - 2] == 0.0)
+						allDnRow[NUM_ANSWER_COLUMNS - 1] = -1.0;
 					else {
 						try {
 							if (indcFlag == 5)

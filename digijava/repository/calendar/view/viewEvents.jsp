@@ -23,7 +23,7 @@
             </table>
             </digi:form>
         </td>
-        <td valign="top" width="790">
+        <td valign="top" width="100%">
             <table border="0" width="100%">
                 <tr>
                     <td valign="top"><jsp:include page="viewEventsButtons.jsp" flush="true"/></td>

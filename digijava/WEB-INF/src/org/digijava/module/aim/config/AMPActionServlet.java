@@ -55,7 +55,7 @@ public class AMPActionServlet extends ActionServlet {
         HttpSession session = request.getSession();
         String sessId = session.getId();
         String url = request.getRequestURL().toString();
-        
+
         /*
 		 * Check whether user have initiated an edit session.
 		 * When ever user starts an edit session, his session id is stored in an application
@@ -82,7 +82,7 @@ public class AMPActionServlet extends ActionServlet {
 		 * Then the system will check whether the user is still doing the editing or is moving out of edit pages
 		 */
 		if (index > -1) {
-			int tempIndex = url.indexOf("/aim/");
+			int tempIndex = url.indexOf("/" + Constants.AIM_MODULE_KEY + "/");
 			if (tempIndex != -1) {
 				String pggrp = request.getParameter("edit");
 				/*

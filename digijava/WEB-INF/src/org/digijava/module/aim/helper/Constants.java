@@ -197,4 +197,6 @@ public class Constants
 	public static final boolean SORT_ORDER_ASC = true;
 	
 	public static final String DESKTOP_SETTINGS_CHANGED = "desktopSettingsChanged";
+	
+	public static final String AIM_MODULE_KEY = "aim";
 }	

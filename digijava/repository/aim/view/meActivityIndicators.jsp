@@ -150,7 +150,7 @@
 															<table width="100%" cellSpacing=1 cellPadding=2 vAlign="top" align="left"
 															bgcolor="#ffffff">
 																<tr><td valign="center" align="center" bgcolor="#dddddd" height="20">
-																	<b><digi:trn key="aim:indicators">Indicators</digi:trn></b>
+																	<b><digi:trn key="aim:meIndicators">Indicators</digi:trn></b>
 																</td></tr>
 															</table>
 														</td>
@@ -206,7 +206,12 @@
 																	</c:if>
 																</td>																
 																<td valign="top" width="100%">
-																	<b><bean:write name="indicator" property="indicatorName" /></b>
+																	<b>
+																		<bean:define id="indName">
+																			<bean:write name="indicator" property="indicatorName"/>
+																		</bean:define>
+																		<digi:trn key="<%=indName%>"><%=indName%></digi:trn>
+																	</b>
 																</td>
 																<td valign="top" width="100">
 																	<b><bean:write name="indicator" property="indicatorCode" /></b>

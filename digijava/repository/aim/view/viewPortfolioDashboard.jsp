@@ -115,7 +115,10 @@
 								<TR><TD class="highlight">
 									<digi:trn key="aim:overallPortfolioRisk">Overall Risk</digi:trn>: 
 									<font color="<bean:write name="aimPortfolioDashboardForm" property="fontColor" />">
-									<bean:write name="aimPortfolioDashboardForm" property="overallRisk" /> 
+									<bean:define id="riskName">
+										<bean:write name="aimPortfolioDashboardForm" property="overallRisk" />
+									</bean:define>
+									<digi:trn key="<%=riskName%>"><%=riskName%></digi:trn>
 								</TD></TR>								
 								<TR><TD>
 									<TABLE width="100%" cellspacing="2" cellpadding="2" valign="top" align="left" border=0>

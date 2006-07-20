@@ -125,9 +125,12 @@
 										</tr>
 										<tr>
 											<td class=f-names noWrap>
+											<bean:define id="translation">
+												<digi:trn key="aim:clickToViewCurrencyRatesManager">Click here to view Currency Rates Manager</digi:trn>
+											</bean:define>											
 											<digi:img src="module/aim/images/arrow-th-BABAB9.gif" width="16"/>
-											<digi:link href="/showCurrencyRates.do" title="Click here to view Currency Rates Manager" >
-											<digi:trn key="aim:currencyRateManager">Currency Rate Manager</digi:trn>
+											<digi:link href="/showCurrencyRates.do" title="<%=translation%>">
+												<digi:trn key="aim:currencyRateManager">Currency Rate Manager</digi:trn>
 											</digi:link>
 											</td>
 										</tr>

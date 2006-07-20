@@ -293,7 +293,10 @@
 															<img src= "../ampTemplate/images/arrow_right.gif" border=0>
 														</digi:link>
 													</c:if>&nbsp;&nbsp;&nbsp;<b>
-													<bean:write name="indicator" property="indicatorName" /></b> - 
+													<bean:define id="indName">
+														<bean:write name="indicator" property="indicatorName"/>
+													</bean:define>
+													<digi:trn key="<%=indName%>"><%=indName%></digi:trn></b> - 
 													<bean:write name="indicator" property="indicatorCode" />
 												</td>
 											</tr>

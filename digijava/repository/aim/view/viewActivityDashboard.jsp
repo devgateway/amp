@@ -52,9 +52,7 @@
 			<TR><TD>
 				<TABLE width="100%" cellspacing="2" cellpadding="2" valign="top" align="left" border=0>
 					<TR><TD class="highlight" colspan="2">
-						<digi:trn key="aim:overallActivityRisk">Overall Risk</digi:trn>: 
-						<font color="<bean:write name="aimActivityDashboardForm" property="riskColor" />">
-							<bean:write name="aimActivityDashboardForm" property="overallRisk" /> 
+
 					</TD></TR>						
 					<TR>
 						<TD width="50%" align="center" class="textalb" height="20" bgcolor="#336699">
@@ -82,6 +80,13 @@
 						</TD>
 						<TD width="50%">
 							<% if (actRiskChartUrl != null) { %>
+							<digi:trn key="aim:overallActivityRisk">Overall Risk</digi:trn>: 
+							<font color="<bean:write name="aimActivityDashboardForm" property="riskColor" />">
+							<bean:define id="riskName">
+								<bean:write name="aimActivityDashboardForm" property="overallRisk" />
+							</bean:define>
+							<b><digi:trn key="<%=riskName%>"><%=riskName%></digi:trn></b>
+						
 							<img src="<%= actRiskChartUrl %>" width=370 height=350 border=0 usemap="#<%= actRiskChartFileName %>">
 							<br><br>
 							<div align="center">

@@ -118,7 +118,11 @@
 																	</td>																	
 																	<td>
 																		<a href="javascript:editIndicator('<bean:write name="indicators" property="ampMEIndId" />')">
-																			<bean:write name="indicators" property="name"/>
+																			<bean:define id="indName">
+																				<bean:write name="indicators" property="name"/>
+																			</bean:define>
+																			<digi:trn key="<%=indName%>">	
+																			<bean:write name="indicators" property="name"/></digi:trn>
 																		</a>
 																	</td>
 																	<td width="100">

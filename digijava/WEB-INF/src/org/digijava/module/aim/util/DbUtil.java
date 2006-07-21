@@ -1443,16 +1443,17 @@ public class DbUtil {
 		return col;
 	}
 
-	public static Collection getAllConfigurablePages() {
+	public static Collection getAllConfigurablePages(Long teamId) {
 		Session session = null;
 		Query qry = null;
 		Collection pages = new ArrayList();
-
+		
 		try {
 			session = PersistenceManager.getSession();
-			String queryString = "select p from " + AmpPages.class.getName()
-					+ " p";
+			String queryString = "select p from " + AmpPages.class.getName() 
+									+ " p where (p.ampTeamId is null) or (p.ampTeamId=:teamId)";
 			qry = session.createQuery(queryString);
+			qry.setParameter("teamId", teamId, Hibernate.LONG);
 			pages = qry.list();
 		} catch (Exception e) {
 			logger.error("Unable to get all configurable pages");

@@ -4,14 +4,17 @@ import java.util.Collection;
 
 import javax.servlet.http.HttpSession;
 
+import org.apache.log4j.Logger;
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.digijava.module.aim.form.TeamPagesForm;
+import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.DbUtil;
 
 public class ShowConfigureTeamPage extends Action {
+	private static Logger logger = Logger.getLogger(ShowConfigureTeamPage.class);
 
 	public ActionForward execute(ActionMapping mapping, ActionForm form,
 			javax.servlet.http.HttpServletRequest request,
@@ -35,11 +38,14 @@ public class ShowConfigureTeamPage extends Action {
 				}
 			}
 		}
+		
+		TeamMember tm = (TeamMember) session.getAttribute("currentMember");
+
 		if (!permitted) {
 			return mapping.findForward("index");
 		}
 
-		Collection col = DbUtil.getAllConfigurablePages();
+		Collection col = DbUtil.getAllConfigurablePages(tm.getTeamId());
 		tpForm.setPages(col);
 
 		return mapping.findForward("showConfigurePages");

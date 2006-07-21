@@ -145,7 +145,7 @@
 											</digi:link>
 											</td>
 										</tr>
-										<tr>
+									<%--	<tr>
 											<td class=f-names noWrap>
 											<digi:img src="module/aim/images/arrow-th-BABAB9.gif" width="16"/>
 											<bean:define id="translation">
@@ -155,7 +155,7 @@
 											<digi:trn key="aim:reportsManager">Reports Manager</digi:trn>
 											</digi:link>
 											</td>
-										</tr>
+										</tr>--%>
 								<logic:notEmpty name="ME" scope="application">
 										<tr>
 											<td class=f-names noWrap>

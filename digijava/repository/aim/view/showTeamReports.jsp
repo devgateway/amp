@@ -45,6 +45,7 @@
 								<td valign="top">
 									<table align=center bgColor=#f4f4f2 cellPadding=0 cellSpacing=0 width="90%">	
 										<tr>
+										<digi:errors/>
 											<td bgColor=#ffffff class=box-border>
 												<table border=0 cellPadding=3 cellSpacing=3 class=box-border width="100%" >
 													<tr bgColor=#dddddb>
@@ -69,6 +70,20 @@
 												<bean:write name="reports" property="name"/>
 												</digi:link>
 											</TD>
+											 <% String s = (String)session.getAttribute("teamLeadFlag"); %>
+												<% if(s.equals("true")){ %>
+											
+											<td>
+												<jsp:useBean id="urlParams" type="java.util.Map" class="java.util.HashMap"/>
+												<c:set target="${urlParams}" property="rid">
+													<bean:write name="reports" property="ampReportId" />
+												</c:set>
+												<c:set target="${urlParams}" property="event" value="edit" />
+											[ <digi:link href="/deleteAllReports.do" name="urlParams" title="<%=translation%>" >
+												<digi:trn key="aim:reportDelete">Delete</digi:trn>
+											</digi:link> ]												
+											</td>
+											<% } %>
 										</TR>
 										
 										

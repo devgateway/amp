@@ -2,7 +2,6 @@ package org.digijava.module.aim.util;
 
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
@@ -10,8 +9,6 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
-
-import javax.ejb.ObjectNotFoundException;
 
 import net.sf.hibernate.Hibernate;
 import net.sf.hibernate.HibernateException;
@@ -60,7 +57,6 @@ import org.digijava.module.aim.dbentity.AmpReports;
 import org.digijava.module.aim.dbentity.AmpRole;
 import org.digijava.module.aim.dbentity.AmpSector;
 import org.digijava.module.aim.dbentity.AmpStatus;
-import org.digijava.module.aim.dbentity.AmpTeam;
 import org.digijava.module.aim.dbentity.AmpTeamPageFilters;
 import org.digijava.module.aim.dbentity.AmpTeamReports;
 import org.digijava.module.aim.dbentity.AmpTermsAssist;
@@ -74,7 +70,6 @@ import org.digijava.module.aim.helper.FilterProperties;
 import org.digijava.module.aim.helper.FiscalCalendar;
 import org.digijava.module.aim.helper.Indicator;
 import org.digijava.module.aim.helper.ParisIndicator;
-import org.digijava.module.aim.helper.ParisIndicatorReportHelper;
 import org.digijava.module.aim.helper.Question;
 import org.digijava.module.aim.helper.SurveyFunding;
 import org.digijava.module.cms.dbentity.CMSContentItem;
@@ -164,6 +159,108 @@ public class DbUtil {
 		return internalId;
 	}
 
+	
+	
+	
+	
+	/*
+	 * this is to delete a report completely by a team lead
+	 */
+	public static void deleteReportsCompletely(Long qid)
+	{
+		Session session = null;
+		Transaction tx = null;
+		String queryString = null;
+		Query qry = null;
+		Collection col = null;
+		try 
+		{
+			session = PersistenceManager.getSession();
+			tx = session.beginTransaction();
+			AmpReports ampReports = null;
+			// loading the 3 tables from where the deletion has to be done
+			try
+			{
+				logger.info(" this is the utils's qid "+qid);
+				ampReports = (AmpReports) session.load(AmpReports.class,qid);
+				AmpTeamReports ampTeamReports = null;
+				AmpReportSector ampReportSector = null;
+				queryString = "select tr from " + AmpTeamReports.class.getName() + " tr " +
+						"where tr.report=:qid ";
+				qry = session.createQuery(queryString);
+				qry.setParameter("qid", qid, Hibernate.LONG);
+				Iterator itr = qry.list().iterator();
+				col = new ArrayList();
+				while (itr.hasNext()) {
+					ampTeamReports = (AmpTeamReports) itr.next();
+					session.delete(ampTeamReports);
+					}
+				
+				queryString = "select tr from " + AmpTeamReports.class.getName() + " tr " +
+				"where tr.report=:qid ";
+					qry = session.createQuery(queryString);
+					qry.setParameter("qid", qid, Hibernate.LONG);
+					Iterator itr1 = qry.list().iterator();
+					col = new ArrayList();
+					while (itr1.hasNext()) {
+						ampReportSector = (AmpReportSector) itr.next();
+					session.delete(ampReportSector);
+					}				
+				session.delete(ampReports);
+				tx.commit();
+			}
+			catch(net.sf.hibernate.ObjectNotFoundException onfe)
+			{
+				logger.error("Exception from deleteQuestion() :" + onfe.getMessage());
+				if (tx != null) 
+				{
+					try 
+					{
+						tx.rollback();
+					}
+					catch (Exception trbf) 
+					{
+						logger.error("Transaction roll back failed ");
+						onfe.printStackTrace(System.out);
+					}
+				}
+			}
+		} 
+		catch (Exception e) 
+		{
+			logger.error("Exception from deleteQuestion() :" + e.getMessage());
+			e.printStackTrace(System.out);		
+			if (tx != null) 
+			{
+				try 
+				{
+					tx.rollback();
+				}
+				catch (Exception trbf) 
+				{
+					logger.error("Transaction roll back failed ");
+					e.printStackTrace(System.out);
+				}
+			}
+		} 
+		finally 
+		{
+			if (session != null) 
+			{
+				try 
+				{
+					PersistenceManager.releaseSession(session);
+				} 
+				catch (Exception rsf) 
+				{
+					logger.error("Failed to release session :" + rsf.getMessage());
+				}
+			}			
+		}
+	}
+		
+	
+	
 	public static Collection getOrganizations(Long actId, String orgCode) {
 		Session session = null;
 		Collection orgs = new ArrayList();
@@ -5775,653 +5872,6 @@ public class DbUtil {
 		//logger.debug("answersColl.length : " + answersColl.length);
 		return answersColl;
 	}
-
-	/* 
-	 * Methods called to retrieve data 
-	 * that have to be deleted 
-	 * while an activity is deleted by Admin
-	 * start here 
-	*/
-	/* get amp comments of a particular activity specified by ampActId */
-	public static Collection getActivityAmpComments(Long ampActId)
-	{
-		Session session = null;
-		Collection col = null;
-		Query qry = null;
-		try
-		{
-			session = PersistenceManager.getSession();
-			String queryString = "select com from " + AmpComments.class.getName()
-					+ " com " + " where (com.ampActivityId=:ampActId)";
-			qry = session.createQuery(queryString);
-			qry.setParameter("ampActId", ampActId, Hibernate.LONG);
-			col = qry.list();
-			logger.info("amp comments col size : "+col.size());
-		}
-		catch(Exception e1)
-		{
-			logger.error("could not retrieve AmpComments "+e1.getMessage());
-			e1.printStackTrace(System.out);
-		}
-		finally
-		{
-			try
-			{
-				PersistenceManager.releaseSession(session);
-			}
-			catch(Exception e2)
-			{
-				logger.error("Release Session Failed "+e2.getMessage());
-			}
-		}
-		return col;
-	}
-
-	/* get ampActivity physical component report of a particular activity specified by ampActId */
-	public static Collection getActivityPhysicalComponentReport(Long ampActId)
-	{
-		Session session = null;
-		Collection col = null;
-		Query qry = null;
-		try
-		{
-			session = PersistenceManager.getSession();
-			String queryString = "select phyCompReport from " 
-									+ AmpPhysicalComponentReport.class.getName()
-									+ " phyCompReport " 
-									+ " where (phyCompReport.ampActivityId=:ampActId)";
-			qry = session.createQuery(queryString);
-			qry.setParameter("ampActId", ampActId, Hibernate.LONG);
-			col = qry.list();
-			logger.info("phy comp report col size : "+col.size());
-		}
-		catch(Exception e1)
-		{
-			logger.error("could not retrieve AmpPhysicalComponentReport "+e1.getMessage());
-			e1.printStackTrace(System.out);
-		}
-		finally
-		{
-			try
-			{
-				PersistenceManager.releaseSession(session);
-			}
-			catch(Exception e2)
-			{
-				logger.error("Release Session Failed "+e2.getMessage());
-			}
-		}
-		return col;
-	}
-
-	/* get amp report cache of a particular activity specified by ampActId */
-	public static Collection getActivityReportCache(Long ampActId)
-	{
-		Session session = null;
-		Collection col = null;
-		Query qry = null;
-		try
-		{
-			session = PersistenceManager.getSession();
-			String queryString = "select repCache from "
-									+ AmpReportCache.class.getName()
-									+ " repCache "
-									+ " where (repCache.ampActivityId=:ampActId)";
-			qry = session.createQuery(queryString);
-			qry.setParameter("ampActId", ampActId, Hibernate.LONG);
-			col = qry.list();
-			logger.info("amp report cache col size : "+col.size());
-		}
-		catch(Exception e1)
-		{
-			logger.error("could not retrieve AmpReportCache "+e1.getMessage());
-			e1.printStackTrace(System.out);
-		}
-		finally
-		{
-			try
-			{
-				PersistenceManager.releaseSession(session);
-			}
-			catch(Exception e2)
-			{
-				logger.error("Release Session Failed "+e2.getMessage());
-			}
-		}
-		return col;
-	}
-
-	/* get amp report location of a particular activity specified by ampActId */
-	public static Collection getActivityReportLocation(Long ampActId)
-	{
-		Session session = null;
-		Collection col = null;
-		Query qry = null;
-		try
-		{
-			session = PersistenceManager.getSession();
-			String queryString = "select repLoc from "
-									+ AmpReportLocation.class.getName()
-									+ " repLoc "
-									+ " where (repLoc.ampActivityId=:ampActId)";
-			qry = session.createQuery(queryString);
-			qry.setParameter("ampActId",ampActId,Hibernate.LONG);
-			col = qry.list();
-			logger.info("amp report location col size : "+col.size());
-		}
-		catch(Exception e1)
-		{
-			logger.error("could not retrieve AmpReportLocation "+e1.getMessage());
-			e1.printStackTrace(System.out);
-		}
-		finally
-		{
-			try
-			{
-				PersistenceManager.releaseSession(session);
-			}
-			catch(Exception e2)
-			{
-				logger.error("Release Session Failed "+e2.getMessage());
-			}
-		}
-		return col;
-	}
-	
-	/* get amp activity report physical performance of a particular activity specified by ampActId */
-	public static Collection getActivityRepPhyPerformance(Long ampActId)
-	{
-		Session session = null;
-		Collection col = null;
-		Query qry = null;
-		try
-		{
-			session = PersistenceManager.getSession();
-			String queryString = "select phyPer from "
-									+ AmpReportPhysicalPerformance.class.getName()
-									+ " phyPer "
-									+ " where (phyPer.ampActivityId=:ampActId)";
-			qry = session.createQuery(queryString);
-			qry.setParameter("ampActId",ampActId,Hibernate.LONG);
-			col = qry.list();
-			logger.info("amp phy performance col size : "+col.size());
-		}
-		catch(Exception e1)
-		{
-			logger.error("could not retrieve AmpReportPhysicalPerformance "+e1.getMessage());
-			e1.printStackTrace(System.out);
-		}
-		finally
-		{
-			try
-			{
-				PersistenceManager.releaseSession(session);
-			}
-			catch(Exception e2)
-			{
-				logger.error("Release Session Failed "+e2.getMessage());
-			}
-		}
-		return col;
-	}
-
-	/* get amp activity report sector of a particular activity specified by ampActId */
-	public static Collection getActivityReportSector(Long ampActId)
-	{
-		Session session = null;
-		Collection col = null;
-		Query qry = null;
-		try
-		{
-			session = PersistenceManager.getSession();
-			String queryString = "select repSector from "
-									+ AmpReportSector.class.getName()
-									+ " repSector "
-									+ " where (repSector.ampActivityId=:ampActId)";
-			qry = session.createQuery(queryString);
-			qry.setParameter("ampActId",ampActId,Hibernate.LONG);
-			col = qry.list();
-			logger.info("amp report sector col size : "+col.size());
-		}
-		catch(Exception e1)
-		{
-			logger.error("could not retrieve AmpReportSector "+e1.getMessage());
-			e1.printStackTrace(System.out);
-		}
-		finally
-		{
-			try
-			{
-				PersistenceManager.releaseSession(session);
-			}
-			catch(Exception e2)
-			{
-				logger.error("Release Session Failed "+e2.getMessage());
-			}
-		}
-		return col;
-	}
-	
-	/* get amp ME indicator value of a particular activity specified by ampActId */
-	public static Collection getActivityMEIndValue(Long ampActId)
-	{
-		Session session = null;
-		Collection col = null;
-		Query qry = null;
-		try
-		{
-			session = PersistenceManager.getSession();
-			String queryString = "select indVal from "
-									+ AmpMEIndicatorValue.class.getName()
-									+ " indVal "
-									+ " where (indVal.activityId=:ampActId)";
-			logger.info("1...........");
-			qry = session.createQuery(queryString);
-			logger.info("2...........");
-			qry.setParameter("ampActId",ampActId,Hibernate.LONG);
-			logger.info("3...........");
-			col = qry.list();
-			logger.info("ME indicator value col size : "+col.size());
-		}
-		catch(Exception e1)
-		{
-			logger.error("could not retrieve AmpMEIndicatorValues "+e1.getMessage());
-			e1.printStackTrace(System.out);
-		}
-		finally
-		{
-			try
-			{
-				PersistenceManager.releaseSession(session);
-			}
-			catch(Exception e2)
-			{
-				logger.error("Release Session Failed "+e2.getMessage());
-			}
-		}
-		return col;
-	}
-
-	/* 
-	 * Methods called to retrieve data 
-	 * that have to be deleted 
-	 * while an activity is deleted by Admin
-	 * end here 
-	*/
-	
-	
-	
-	
-	/*
-	 * this is to delete a report completely by a team lead
-	 */
-	public static void deleteReportsCompletely(Long qid)
-	{
-		Session session = null;
-		Transaction tx = null;
-		String queryString = null;
-		Query qry = null;
-		Collection col = null;
-		try 
-		{
-			session = PersistenceManager.getSession();
-			tx = session.beginTransaction();
-			AmpReports ampReports = null;
-			// loading the 3 tables from where the deletion has to be done
-			try
-			{
-				logger.info(" this is the utils's qid "+qid);
-				ampReports = (AmpReports) session.load(AmpReports.class,qid);
-				AmpTeamReports ampTeamReports = null;
-				AmpReportSector ampReportSector = null;
-				queryString = "select tr from " + AmpTeamReports.class.getName() + " tr " +
-						"where tr.report=:qid ";
-				qry = session.createQuery(queryString);
-				qry.setParameter("qid", qid, Hibernate.LONG);
-				Iterator itr = qry.list().iterator();
-				col = new ArrayList();
-				while (itr.hasNext()) {
-					ampTeamReports = (AmpTeamReports) itr.next();
-					session.delete(ampTeamReports);
-					}
-				
-				queryString = "select tr from " + AmpTeamReports.class.getName() + " tr " +
-				"where tr.report=:qid ";
-					qry = session.createQuery(queryString);
-					qry.setParameter("qid", qid, Hibernate.LONG);
-					Iterator itr1 = qry.list().iterator();
-					col = new ArrayList();
-					while (itr1.hasNext()) {
-						ampReportSector = (AmpReportSector) itr.next();
-					session.delete(ampReportSector);
-					}				
-				session.delete(ampReports);
-				tx.commit();
-			}
-			catch(net.sf.hibernate.ObjectNotFoundException onfe)
-			{
-				logger.error("Exception from deleteQuestion() :" + onfe.getMessage());
-				if (tx != null) 
-				{
-					try 
-					{
-						tx.rollback();
-					}
-					catch (Exception trbf) 
-					{
-						logger.error("Transaction roll back failed ");
-						onfe.printStackTrace(System.out);
-					}
-				}
-			}
-		} 
-		catch (Exception e) 
-		{
-			logger.error("Exception from deleteQuestion() :" + e.getMessage());
-			e.printStackTrace(System.out);		
-			if (tx != null) 
-			{
-				try 
-				{
-					tx.rollback();
-				}
-				catch (Exception trbf) 
-				{
-					logger.error("Transaction roll back failed ");
-					e.printStackTrace(System.out);
-				}
-			}
-		} 
-		finally 
-		{
-			if (session != null) 
-			{
-				try 
-				{
-					PersistenceManager.releaseSession(session);
-				} 
-				catch (Exception rsf) 
-				{
-					logger.error("Failed to release session :" + rsf.getMessage());
-				}
-			}			
-		}
-	}
-		
-	
-
-	/* 
-	 * Methods called to retrieve data 
-	 * that have to be deleted 
-	 * while an activity is deleted by Admin
-	 * start here 
-	*/
-	/* get amp comments of a particular activity specified by ampActId */
-	public static Collection getActivityAmpComments(Long ampActId)
-	{
-		Session session = null;
-		Collection col = null;
-		Query qry = null;
-		try
-		{
-			session = PersistenceManager.getSession();
-			String queryString = "select com from " + AmpComments.class.getName()
-					+ " com " + " where (com.ampActivityId=:ampActId)";
-			qry = session.createQuery(queryString);
-			qry.setParameter("ampActId", ampActId, Hibernate.LONG);
-			col = qry.list();
-			logger.info("amp comments col size : "+col.size());
-		}
-		catch(Exception e1)
-		{
-			logger.error("could not retrieve AmpComments "+e1.getMessage());
-			e1.printStackTrace(System.out);
-		}
-		finally
-		{
-			try
-			{
-				PersistenceManager.releaseSession(session);
-			}
-			catch(Exception e2)
-			{
-				logger.error("Release Session Failed "+e2.getMessage());
-			}
-		}
-		return col;
-	}
-
-	/* get ampActivity physical component report of a particular activity specified by ampActId */
-	public static Collection getActivityPhysicalComponentReport(Long ampActId)
-	{
-		Session session = null;
-		Collection col = null;
-		Query qry = null;
-		try
-		{
-			session = PersistenceManager.getSession();
-			String queryString = "select phyCompReport from " 
-									+ AmpPhysicalComponentReport.class.getName()
-									+ " phyCompReport " 
-									+ " where (phyCompReport.ampActivityId=:ampActId)";
-			qry = session.createQuery(queryString);
-			qry.setParameter("ampActId", ampActId, Hibernate.LONG);
-			col = qry.list();
-			logger.info("phy comp report col size : "+col.size());
-		}
-		catch(Exception e1)
-		{
-			logger.error("could not retrieve AmpPhysicalComponentReport "+e1.getMessage());
-			e1.printStackTrace(System.out);
-		}
-		finally
-		{
-			try
-			{
-				PersistenceManager.releaseSession(session);
-			}
-			catch(Exception e2)
-			{
-				logger.error("Release Session Failed "+e2.getMessage());
-			}
-		}
-		return col;
-	}
-
-	/* get amp report cache of a particular activity specified by ampActId */
-	public static Collection getActivityReportCache(Long ampActId)
-	{
-		Session session = null;
-		Collection col = null;
-		Query qry = null;
-		try
-		{
-			session = PersistenceManager.getSession();
-			String queryString = "select repCache from "
-									+ AmpReportCache.class.getName()
-									+ " repCache "
-									+ " where (repCache.ampActivityId=:ampActId)";
-			qry = session.createQuery(queryString);
-			qry.setParameter("ampActId", ampActId, Hibernate.LONG);
-			col = qry.list();
-			logger.info("amp report cache col size : "+col.size());
-		}
-		catch(Exception e1)
-		{
-			logger.error("could not retrieve AmpReportCache "+e1.getMessage());
-			e1.printStackTrace(System.out);
-		}
-		finally
-		{
-			try
-			{
-				PersistenceManager.releaseSession(session);
-			}
-			catch(Exception e2)
-			{
-				logger.error("Release Session Failed "+e2.getMessage());
-			}
-		}
-		return col;
-	}
-
-	/* get amp report location of a particular activity specified by ampActId */
-	public static Collection getActivityReportLocation(Long ampActId)
-	{
-		Session session = null;
-		Collection col = null;
-		Query qry = null;
-		try
-		{
-			session = PersistenceManager.getSession();
-			String queryString = "select repLoc from "
-									+ AmpReportLocation.class.getName()
-									+ " repLoc "
-									+ " where (repLoc.ampActivityId=:ampActId)";
-			qry = session.createQuery(queryString);
-			qry.setParameter("ampActId",ampActId,Hibernate.LONG);
-			col = qry.list();
-			logger.info("amp report location col size : "+col.size());
-		}
-		catch(Exception e1)
-		{
-			logger.error("could not retrieve AmpReportLocation "+e1.getMessage());
-			e1.printStackTrace(System.out);
-		}
-		finally
-		{
-			try
-			{
-				PersistenceManager.releaseSession(session);
-			}
-			catch(Exception e2)
-			{
-				logger.error("Release Session Failed "+e2.getMessage());
-			}
-		}
-		return col;
-	}
-	
-	/* get amp activity report physical performance of a particular activity specified by ampActId */
-	public static Collection getActivityRepPhyPerformance(Long ampActId)
-	{
-		Session session = null;
-		Collection col = null;
-		Query qry = null;
-		try
-		{
-			session = PersistenceManager.getSession();
-			String queryString = "select phyPer from "
-									+ AmpReportPhysicalPerformance.class.getName()
-									+ " phyPer "
-									+ " where (phyPer.ampActivityId=:ampActId)";
-			qry = session.createQuery(queryString);
-			qry.setParameter("ampActId",ampActId,Hibernate.LONG);
-			col = qry.list();
-			logger.info("amp phy performance col size : "+col.size());
-		}
-		catch(Exception e1)
-		{
-			logger.error("could not retrieve AmpReportPhysicalPerformance "+e1.getMessage());
-			e1.printStackTrace(System.out);
-		}
-		finally
-		{
-			try
-			{
-				PersistenceManager.releaseSession(session);
-			}
-			catch(Exception e2)
-			{
-				logger.error("Release Session Failed "+e2.getMessage());
-			}
-		}
-		return col;
-	}
-
-	/* get amp activity report sector of a particular activity specified by ampActId */
-	public static Collection getActivityReportSector(Long ampActId)
-	{
-		Session session = null;
-		Collection col = null;
-		Query qry = null;
-		try
-		{
-			session = PersistenceManager.getSession();
-			String queryString = "select repSector from "
-									+ AmpReportSector.class.getName()
-									+ " repSector "
-									+ " where (repSector.ampActivityId=:ampActId)";
-			qry = session.createQuery(queryString);
-			qry.setParameter("ampActId",ampActId,Hibernate.LONG);
-			col = qry.list();
-			logger.info("amp report sector col size : "+col.size());
-		}
-		catch(Exception e1)
-		{
-			logger.error("could not retrieve AmpReportSector "+e1.getMessage());
-			e1.printStackTrace(System.out);
-		}
-		finally
-		{
-			try
-			{
-				PersistenceManager.releaseSession(session);
-			}
-			catch(Exception e2)
-			{
-				logger.error("Release Session Failed "+e2.getMessage());
-			}
-		}
-		return col;
-	}
-	
-	/* get amp ME indicator value of a particular activity specified by ampActId */
-	public static Collection getActivityMEIndValue(Long ampActId)
-	{
-		Session session = null;
-		Collection col = null;
-		Query qry = null;
-		try
-		{
-			session = PersistenceManager.getSession();
-			String queryString = "select indVal from "
-									+ AmpMEIndicatorValue.class.getName()
-									+ " indVal "
-									+ " where (indVal.activityId=:ampActId)";
-			logger.info("1...........");
-			qry = session.createQuery(queryString);
-			logger.info("2...........");
-			qry.setParameter("ampActId",ampActId,Hibernate.LONG);
-			logger.info("3...........");
-			col = qry.list();
-			logger.info("ME indicator value col size : "+col.size());
-		}
-		catch(Exception e1)
-		{
-			logger.error("could not retrieve AmpMEIndicatorValues "+e1.getMessage());
-			e1.printStackTrace(System.out);
-		}
-		finally
-		{
-			try
-			{
-				PersistenceManager.releaseSession(session);
-			}
-			catch(Exception e2)
-			{
-				logger.error("Release Session Failed "+e2.getMessage());
-			}
-		}
-		return col;
-	}
-
-	/* 
-	 * Methods called to retrieve data 
-	 * that have to be deleted 
-	 * while an activity is deleted by Admin
-	 * end here 
-	*/
 
 	/* 
 	 * Methods called to retrieve data 

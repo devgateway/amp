@@ -50,6 +50,7 @@
 		</td>
 	</tr>
 	</logic:notEmpty>
+	<%--
 	<tr><td>
 	<%
 	Map items = (HashMap) session.getAttribute("indicatorNames");
@@ -61,6 +62,7 @@
 	<%}
 	%>
 	</td></tr>	
+	--%>
 	<tr>
 		<td width="50%" align="right">
 			<a href="javascript:window.close()">

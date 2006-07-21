@@ -102,6 +102,7 @@
 					</TR>
 				</TABLE>
 			</TD></TR>
+			<%--
 <TR><TD>
 <%
 	if (actPerfChartUrl != null) { 
@@ -114,7 +115,8 @@
 	<%}
 	}
 %>
-</TD></TR>			
+</TD></TR>	
+--%>
 <TR><TD>&nbsp;</TD></TR>
 		</TABLE>
 	</TD>

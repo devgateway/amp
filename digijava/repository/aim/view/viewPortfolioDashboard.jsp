@@ -178,6 +178,7 @@
 							</TABLE>
 						</TD>
 					</TR>
+					<%--
 					<TR><TD>
 						<%
 						Map items = (HashMap) session.getAttribute("indicatorNames");
@@ -189,6 +190,7 @@
 						<%}
 						%>
 					</TD></TR>
+					--%>
 					<TR><TD>&nbsp;</TD></TR>
 				</TABLE>
 			</TD></TR>

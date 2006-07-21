@@ -36,6 +36,7 @@
 			<img src="<%= actPerfChartUrl %>" width="600" height="400" border=0 usemap="#<%= actPerfChartFileName %>"><br><br>
 		</td>
 	</tr>
+	<%--
 	<tr><td>
 	<%
 	Map items = (HashMap) session.getAttribute("indicatorNames");
@@ -47,6 +48,7 @@
 	<%}
 	%>
 	</td></tr>	
+	--%>
 	<tr>
 		<td width="50%" align="right">
 			<a href="javascript:window.close()">

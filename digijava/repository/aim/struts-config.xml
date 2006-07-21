@@ -1819,7 +1819,15 @@
 			  <forward name="showAddReport" path="/showLayout.do?layout=addTeamReports" />
 			  <forward name="index" path="/aim/index.do" redirect="true" />			  
 	</action>	
-	
+	<!--govind for deletion of reports -->
+		<action 
+			  name="aimTeamReportsForm"
+			  type="org.digijava.module.aim.action.DeleteAllReports"
+			  scope="session"
+			  validate="false"
+			  path="/aim/deleteAllReports">
+			  <forward name="forward" path="/aim/viewTeamReports.do" />
+	</action>		
 	<action 
 			  name="aimTeamActivitiesForm"
 			  type="org.digijava.module.aim.action.UpdateTeamActivities"
@@ -3175,6 +3183,13 @@
      	type="org.digijava.module.aim.action.ParisIndicatorPrintSurvey" 
      	scope="session" validate="false" path="/aim/ParisIndicatorPrintSurvey">
     <forward name="forward" path="/showLayout.do?layout=aim_pIPrintSurvey" />
+	 </action>
+
+	 <action name="aimParisIndicatorReportForm" 
+     	type="org.digijava.module.aim.action.ParisIndicatorPrintReports" 
+     	scope="session" validate="false" path="/aim/ParisIndicatorPrintReports">
+    <forward name="pi" path="/showLayout.do?layout=aim_pIPrintReports" />
+	<forward name="pi2" path="/showLayout.do?layout=aim_pIPrintReports2" />
 	 </action>
 		  
   </action-mappings>

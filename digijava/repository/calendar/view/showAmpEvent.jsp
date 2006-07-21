@@ -54,10 +54,15 @@ function selectGuests() {
 
 </script>
 
-<table border="0" align="center" width="80%">
-    <tr>
+<table border="0" width="100%" cellPadding=0 cellSpacing=0>
+        <tr>
+          <td colspan="3"><jsp:include page="teamPagesHeader.jsp" flush="true"/><td>
+       </tr>
 
-        <td valign="top" width="230">
+       <table class="r-dotted-lg">
+       <tr>
+       <td class="r-dotted-lg">&nbsp;</td>
+         <td valign="top" width="230">
             <table border="0" style="border:1px solid">
                 <tr>
                     <td nowrap="nowrap">
@@ -91,14 +96,15 @@ function selectGuests() {
         </td>
     </tr>
     <tr>
-        <td colspan="2">
+      <td class="r-dotted-lg">&nbsp;</td>
+        <td colspan="3">
             <html:errors/>
             <digi:form action="/previewCalendarEvent.do" onsubmit="selectGuests()">
             <html:hidden name="calendarEventForm" property="selectedCalendarTypeId" value="${calendarEventForm.selectedCalendarTypeId}"/>
             <html:hidden name="calendarEventForm" property="ampCalendarId" value="${calendarEventForm.ampCalendarId}"/>
-            <table border="0" style="border:1px solid" width="100%">
+            <table border="0" style="border:1px solid" width="756px">
                 <tr>
-                    <td colspan="2" nowrap="nowrap">&nbsp;Details&nbsp;&nbsp;</td>
+                    <td colspan="3" nowrap="nowrap">&nbsp;Details&nbsp;&nbsp;</td>
                 </tr>
                 <tr>
                     <td nowrap="nowrap">&nbsp;<span class="redbold">*</span>Event Title&nbsp;&nbsp;</td>
@@ -428,6 +434,7 @@ function selectGuests() {
                 </tr>
             </table>
             </digi:form>
-        </td>
+       </td>
     </tr>
+    </table>
 </table>

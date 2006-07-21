@@ -6,9 +6,12 @@
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
 
-<table border="0">
-    <tr>
-        <td valign="top" width="230">
+<table border="0"  width="100%" cellPadding=0 cellSpacing=0>
+       <tr>
+          <td colspan="2" valign="top"><jsp:include page="teamPagesHeader.jsp" flush="true"/><td>
+       </tr>
+        <tr>
+        <td valign="top" width="230" >
             <digi:form action="/showCalendarView.do" styleId="filterForm">
             <table border="0" width="100%">
                 <tr>

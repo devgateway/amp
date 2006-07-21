@@ -74,8 +74,8 @@ public class ParisIndicatorReport extends Action {
 					svForm.setOrgGroupColl(DbUtil.getAllOrgGroups());
 				if (null == svForm.getStatusColl() || svForm.getStatusColl().size() < 1)
 					svForm.setStatusColl(DbUtil.getAllActivityStatus());
-				if (null == svForm.getTermAssistColl() || svForm.getTermAssistColl().size() < 1)
-					svForm.setTermAssistColl(DbUtil.getAllTermAssist());
+				//if (null == svForm.getTermAssistColl() || svForm.getTermAssistColl().size() < 1)
+					//svForm.setTermAssistColl(DbUtil.getAllTermAssist());
 				if (null == svForm.getFinancingInstrumentColl() || svForm.getFinancingInstrumentColl().size() < 1)
 					svForm.setFinancingInstrumentColl(DbUtil.getAllFinancingInstruments());
 				
@@ -95,7 +95,7 @@ public class ParisIndicatorReport extends Action {
 					//svForm.setQuestionsColl(DbUtil.getSurveyQuestionsByIndicator(Long.valueOf(indcId)));
 					svForm.setDonorsColl(DbUtil.getAidSurveyReportByIndicator(svForm.getIndicatorCode(),svForm.getOrgGroup(),svForm.getStatus(),
 							svForm.getStartYear().intValue(),svForm.getCloseYear().intValue(),svForm.getCurrency(),
-							svForm.getTermAssist(),svForm.getFinancingInstrument()));
+							svForm.getTermAssist(),svForm.getFinancingInstrument(),svForm.getPerspective()));
 					
 					if ("5a".equalsIgnoreCase(svForm.getIndicatorCode()) || "5b".equalsIgnoreCase(svForm.getIndicatorCode())) {
 						if (!svForm.getDonorsColl().isEmpty()) {

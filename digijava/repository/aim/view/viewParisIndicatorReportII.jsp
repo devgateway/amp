@@ -215,6 +215,12 @@
 										</logic:notEmpty>
 									</select>
 								</td>
+								<td>
+									<html:select property="perspective" name="aimParisIndicatorReportForm" styleClass="dr-menu" >
+										<html:option value="ma">MOFED</html:option>
+										<html:option value="dn">DONOR</html:option>
+									</html:select>
+								<td>
 								<c:if test="${aimParisIndicatorReportForm.indicatorCode != '6'}">
 									<td>
 										<html:select property="currency" name="aimParisIndicatorReportForm" styleClass="dr-menu" >
@@ -235,6 +241,7 @@
 									</html:select>
 								<td>
 								<c:if test="${aimParisIndicatorReportForm.indicatorCode != '6'}">
+							<%--
 									<td>
 										<html:select property="termAssist" name="aimParisIndicatorReportForm" styleClass="dr-menu" >
 											<html:option value="all">All Term Assist</html:option>
@@ -244,6 +251,7 @@
 											</logic:notEmpty>
 										</html:select>
 									</td>
+							--%>
 									<td>
 										<html:select property="financingInstrument" name="aimParisIndicatorReportForm" styleClass="dr-menu" >
 											<html:option value="all">All Financing Instruments</html:option>

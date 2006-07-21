@@ -22,8 +22,6 @@ public class ParisIndicatorReportForm extends ActionForm {
 	private String indicatorName = null;
 	private String numColsCalculated = null;	// number of columns in one donor-row
 	
-	private Collection questionsColl = null;	// defunct for now
-	
 	// holds collection of ParisIndicator helper objects for first report-table of all but indicator-7 
 	private Collection donorsColl = null;
 	// holds collection of ParisIndicator helper objects for second report-table of indicator-5a & 5b
@@ -33,9 +31,10 @@ public class ParisIndicatorReportForm extends ActionForm {
 	private Integer startYear = null;
 	private Integer closeYear = null;
 	private String currency = null;
+	private String perspective = null;
 	private String orgGroup = null;
-	private String status = null;
-	private String termAssist = null;
+	private String status = null;			
+	private String termAssist = null;			// defunct
 	private String financingInstrument = null;
 	private Collection yearColl = null;
 	private Collection currencyColl = null;
@@ -52,6 +51,7 @@ public class ParisIndicatorReportForm extends ActionForm {
 			startYear = new Integer(Calendar.getInstance().get(Calendar.YEAR) - 2);
 			closeYear = new Integer(Calendar.getInstance().get(Calendar.YEAR));
 			currency = "USD";
+			perspective = "ma";
 			orgGroup = "all";
 			status = "all";
 			termAssist = "all";
@@ -97,18 +97,6 @@ public class ParisIndicatorReportForm extends ActionForm {
 	 */
 	public void setDonorsColl(Collection donorsColl) {
 		this.donorsColl = donorsColl;
-	}
-	/**
-	 * @return Returns the questionsColl.
-	 */
-	public Collection getQuestionsColl() {
-		return questionsColl;
-	}
-	/**
-	 * @param questionsColl The questionsColl to set.
-	 */
-	public void setQuestionsColl(Collection questionsColl) {
-		this.questionsColl = questionsColl;
 	}
 	
 	/**
@@ -171,18 +159,13 @@ public class ParisIndicatorReportForm extends ActionForm {
 	public void setFinancingInstrumentColl(Collection financingInstrumentColl) {
 		this.financingInstrumentColl = financingInstrumentColl;
 	}
-	/**
-	 * @return Returns the orgGroup.
-	 */
+	/*
 	public String getOrgGroup() {
 		return orgGroup;
 	}
-	/**
-	 * @param orgGroup The orgGroup to set.
-	 */
 	public void setOrgGroup(String orgGroup) {
 		this.orgGroup = orgGroup;
-	}
+	}*/
 	/**
 	 * @return Returns the orgGroupColl.
 	 */
@@ -231,18 +214,13 @@ public class ParisIndicatorReportForm extends ActionForm {
 	public void setStatusColl(Collection statusColl) {
 		this.statusColl = statusColl;
 	}
-	/**
-	 * @return Returns the termAssist.
-	 */
+	/*
 	public String getTermAssist() {
 		return termAssist;
 	}
-	/**
-	 * @param termAssist The termAssist to set.
-	 */
 	public void setTermAssist(String termAssist) {
 		this.termAssist = termAssist;
-	}
+	} */
 	/**
 	 * @return Returns the termAssistColl.
 	 */
@@ -339,5 +317,29 @@ public class ParisIndicatorReportForm extends ActionForm {
 	 */
 	public void setNumColsCalculated(String numColsCalculated) {
 		this.numColsCalculated = numColsCalculated;
+	}
+
+	public String getPerspective() {
+		return perspective;
+	}
+
+	public void setPerspective(String perspective) {
+		this.perspective = perspective;
+	}
+
+	public String getOrgGroup() {
+		return orgGroup;
+	}
+
+	public void setOrgGroup(String orgGroup) {
+		this.orgGroup = orgGroup;
+	}
+
+	public String getTermAssist() {
+		return termAssist;
+	}
+
+	public void setTermAssist(String termAssist) {
+		this.termAssist = termAssist;
 	}
 }

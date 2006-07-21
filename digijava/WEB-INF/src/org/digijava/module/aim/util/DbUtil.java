@@ -5290,7 +5290,7 @@ public class DbUtil {
 	}
 	 
 	public static Collection getAidSurveyReportByIndicator(String indcCode, String orgGroup, String status, int startYear, 
-			int closeYear, String currency, String termAssist, String financingInstrument) {
+			int closeYear, String currency, String termAssist, String financingInstrument, String perspective) {
 	
 	Session session = null;
 	ArrayList responses = new ArrayList();
@@ -5310,29 +5310,28 @@ public class DbUtil {
 	Iterator itr1 = null, itr2 = null, itr3 = null, itr4 = null;
 	
 	try {
+		// logger.debug("indcCode[inside getAidSurveyReportByIndicator] : " + indcCode);
 		session = PersistenceManager.getSession();
-		if ("5a".equalsIgnoreCase(indcCode)) {
-			NUM_ANSWER_COLUMNS = 8;
-			indcFlag = 5;
-		}
-		else if ("6".equalsIgnoreCase(indcCode)) {
-			NUM_ANSWER_COLUMNS = YEAR_RANGE;
-			indcFlag = 6;
-		}
-		else if ("7".equalsIgnoreCase(indcCode))
-			indcFlag = 7;
-		else if ("9".equalsIgnoreCase(indcCode)) {
-			NUM_ANSWER_COLUMNS = 5;
-			indcFlag = 9;
-		}
-		//logger.debug("indcCode[inside getAidSurveyReportByIndicator] : " + indcCode);
-		
 		String qry = "select distinct dn.ampDonorOrgId from " + AmpAhsurvey.class.getName() + " dn";
 		surveyDonors.addAll(session.createQuery(qry).list());
 		//logger.debug("total donors from AmpOrganisation[surveyDonors] : " + surveyDonors.size());
 		if (surveyDonors.size() > 0) {
 			if (null != orgGroup && orgGroup.trim().length() > 1 && !"all".equalsIgnoreCase(orgGroup))
 				orgGroupFlag = true;
+			if ("5a".equalsIgnoreCase(indcCode)) {
+				NUM_ANSWER_COLUMNS = 8;
+				indcFlag = 5;
+			}
+			else if ("6".equalsIgnoreCase(indcCode)) {
+				NUM_ANSWER_COLUMNS = YEAR_RANGE;
+				indcFlag = 6;
+			}
+			else if ("7".equalsIgnoreCase(indcCode))
+				indcFlag = 7;
+			else if ("9".equalsIgnoreCase(indcCode)) {
+				NUM_ANSWER_COLUMNS = 5;
+				indcFlag = 9;
+			}
 			// Creating first row for all-donors in indicator report.
 			ParisIndicator all = new ParisIndicator();
 			all.setDonor("All Donors");
@@ -5448,40 +5447,40 @@ public class DbUtil {
 											itr4 = fund.getFundingDetails().iterator();
 											while (itr4.hasNext()) {
 												AmpFundingDetail fundtl = (AmpFundingDetail) itr4.next();
-												//logger.debug("FundDetailId: " + fundtl.getAmpFundDetailId());
-												date = DateConversion.ConvertDateToString(fundtl.getTransactionDate());
-												convYr = DateConversion.getYear(date);
-												// Filtering by disbursement-year here
-												if (convYr == (startYear + i)) {
-													// Filtering by AdjustmentType & TransactionType here
-													// only Actual-Disbursement is being considered except for indicator-7.
-													if ((indcFlag != 7 && fundtl.getAdjustmentType().intValue() != Constants.ACTUAL)
-															|| (indcFlag == 7 && j == 0 && fundtl.getAdjustmentType().intValue() != Constants.PLANNED)
-															|| (indcFlag == 7 && j == 1 && fundtl.getAdjustmentType().intValue() != Constants.ACTUAL)
-															|| fundtl.getTransactionType().intValue() != Constants.DISBURSEMENT) {
-														//logger.debug("continue: " + indcFlag + " j: " + j + " AdjustmentType: " + 
-															//	fundtl.getAdjustmentType().intValue() + " TransactionType: " + fundtl.getTransactionType().intValue());
-														continue;
-													}
-													// Filtering by currency here
-													if ("USD".equalsIgnoreCase(fundtl.getAmpCurrencyId().getCurrencyCode()))
-														fromExchangeRate = 1.0;
-													else if (indcFlag == 7 && j == 0)
-														fromExchangeRate = CurrencyUtil.getExchangeRate(fundtl.getAmpCurrencyId().getCurrencyCode(),
-																				Constants.PLANNED,fundtl.getTransactionDate());
-													else
-														fromExchangeRate = CurrencyUtil.getExchangeRate(fundtl.getAmpCurrencyId().getCurrencyCode(),
-																				Constants.ACTUAL,fundtl.getTransactionDate());
-													if (null != currency && currency.trim().length() > 1) {
-														if ("USD".equalsIgnoreCase(currency))
-															toExchangeRate = 1.0;
+												// Filtering by perspective here
+												if (perspective.equalsIgnoreCase(fundtl.getPerspectiveId().getCode())) {
+													date = DateConversion.ConvertDateToString(fundtl.getTransactionDate());
+													convYr = DateConversion.getYear(date);
+													// Filtering by disbursement-year here
+													if (convYr == (startYear + i)) {
+														// Filtering by AdjustmentType & TransactionType here
+														// only Actual-Disbursement is being considered except for indicator-7.
+														if ((indcFlag != 7 && fundtl.getAdjustmentType().intValue() != Constants.ACTUAL)
+																|| (indcFlag == 7 && j == 0 && fundtl.getAdjustmentType().intValue() != Constants.PLANNED)
+																|| (indcFlag == 7 && j == 1 && fundtl.getAdjustmentType().intValue() != Constants.ACTUAL)
+																|| fundtl.getTransactionType().intValue() != Constants.DISBURSEMENT) {
+															continue;
+														}
+														// Filtering by currency here
+														if ("USD".equalsIgnoreCase(fundtl.getAmpCurrencyId().getCurrencyCode()))
+															fromExchangeRate = 1.0;
 														else if (indcFlag == 7 && j == 0)
-															toExchangeRate = CurrencyUtil.getExchangeRate(currency,Constants.PLANNED,fundtl.getTransactionDate());
+															fromExchangeRate = CurrencyUtil.getExchangeRate(fundtl.getAmpCurrencyId().getCurrencyCode(),
+																					Constants.PLANNED,fundtl.getTransactionDate());
 														else
-															toExchangeRate = CurrencyUtil.getExchangeRate(currency,Constants.ACTUAL,fundtl.getTransactionDate());
-													}	
-													sum += CurrencyWorker.convert1(fundtl.getTransactionAmount().doubleValue(),
-																			fromExchangeRate, toExchangeRate);
+															fromExchangeRate = CurrencyUtil.getExchangeRate(fundtl.getAmpCurrencyId().getCurrencyCode(),
+																					Constants.ACTUAL,fundtl.getTransactionDate());
+														if (null != currency && currency.trim().length() > 1) {
+															if ("USD".equalsIgnoreCase(currency))
+																toExchangeRate = 1.0;
+															else if (indcFlag == 7 && j == 0)
+																toExchangeRate = CurrencyUtil.getExchangeRate(currency,Constants.PLANNED,fundtl.getTransactionDate());
+															else
+																toExchangeRate = CurrencyUtil.getExchangeRate(currency,Constants.ACTUAL,fundtl.getTransactionDate());
+														}	
+														sum += CurrencyWorker.convert1(fundtl.getTransactionAmount().doubleValue(),
+																				fromExchangeRate, toExchangeRate);
+													}
 												}
 											}
 										}
@@ -5684,17 +5683,10 @@ public class DbUtil {
 					}
 					if ("4".equalsIgnoreCase(indCode)) {
 						if (quesNum == 3) {
-							flag[0] = true;
 							answers[0] = ("Yes".equalsIgnoreCase(resp.getResponse())) ? true : false;
-							//logger.debug("indCode: " + indCode + " q#: " + 3 + " - answers[0] : " + answers[0]);
+							answers[1] = true;
+							break;
 						}
-						if (quesNum == 1) {
-							flag[1] = true;
-							answers[1] = ("Yes".equalsIgnoreCase(resp.getResponse())) ? true : false;
-							//logger.debug("indCode: " + indCode + " q#: " + 1 + " - answers[1] : " + answers[1]);
-						}
-						if (flag[0] && flag[1]) break;
-						else continue;
 					}
 					if ("5a".equalsIgnoreCase(indCode)) {
 						if (quesNum == 1) {
@@ -5775,7 +5767,7 @@ public class DbUtil {
 				answersColl[index++] = answers;
 			}
 		}
-		logger.debug("answersColl.length : " + answersColl.length);
+		//logger.debug("answersColl.length : " + answersColl.length);
 		return answersColl;
 	}
 

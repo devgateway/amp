@@ -208,6 +208,12 @@
 									</select>
 								</td>
 								<td>
+									<html:select property="perspective" name="aimParisIndicatorReportForm" styleClass="dr-menu" >
+										<html:option value="ma">MOFED</html:option>
+										<html:option value="dn">DONOR</html:option>
+									</html:select>
+								<td>
+								<td>
 									<html:select property="currency" name="aimParisIndicatorReportForm" styleClass="dr-menu" >
 										<logic:notEmpty name="aimParisIndicatorReportForm" property="currencyColl">
 											<html:optionsCollection name="aimParisIndicatorReportForm" property="currencyColl" 
@@ -224,6 +230,7 @@
 										</logic:notEmpty>							
 									</html:select>
 								<td>
+							<%--
 								<td>
 									<html:select property="termAssist" name="aimParisIndicatorReportForm" styleClass="dr-menu" >
 										<html:option value="all">All Term Assist</html:option>
@@ -233,6 +240,7 @@
 										</logic:notEmpty>
 									</html:select>
 								</td>
+							--%>
 								<td>
 									<html:select property="financingInstrument" name="aimParisIndicatorReportForm" styleClass="dr-menu" >
 										<html:option value="all">All Financing Instruments</html:option>

@@ -146,6 +146,17 @@
 
             </tr>
 
+				<%--	<logic:notEmpty name="aimMulitlateralbyDonorForm" property="multiReport">--%>
+				<tr>
+					<td colspan=4 align="left">
+						<img src="../ampTemplate/images/print_icon.gif">
+							<digi:link href="/ParisIndicatorPrintReports.do" target="_blank">
+								Print
+							</digi:link>
+					</td>
+				</tr>
+			<%-- </logic:notEmpty>--%>		
+
 			<!-- CSV link 
 			<tr>
 
@@ -162,6 +173,7 @@
 			
             </td>
             </tr>
+				
 
 <!--  PDF/XLS Links -->		
 

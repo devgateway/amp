@@ -153,6 +153,15 @@
 
             </tr>
 
+			<tr>
+					<td colspan=4 align="left">
+						<img src="../ampTemplate/images/print_icon.gif">
+							<digi:link href="/ParisIndicatorPrintReports.do" target="_blank">
+								Print
+							</digi:link>
+					</td>
+				</tr>
+
 			<!-- CSV link 
 			<tr>
 

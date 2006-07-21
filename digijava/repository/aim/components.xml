@@ -216,6 +216,8 @@
 	
 	<!-- Printer Friendly HTML Reports -->
 	<page page="pIPrintSurvey" name="aim_pIPrintSurvey" title="AMP - Preview Activity" />	
+	<page  page="pIPrintReports" name="aim_pIPrintReports" title="Print Paris Indicator Reports" />
+	<page  page="pIPrintReports2" name="aim_pIPrintReports2" title="Print Paris Indicator Report" />
 	<page name="forward" title="Print IndicatorSurvey"/>
 	<page name="projectByDonor_NoLayout" title=" : Annual Report By Project " />
 	<page name="htmlCommitmentbyModality"	title=" : Annual Project Detail Report " />

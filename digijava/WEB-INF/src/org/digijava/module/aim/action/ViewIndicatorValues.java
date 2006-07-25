@@ -45,8 +45,8 @@ public class ViewIndicatorValues extends TilesAction {
 				}
 				
 				ActivityIndicator ai = (ActivityIndicator) itr.next();
-				if (indId.equals(ai.getIndicatorId())) {
-				//if (ind.equalsIgnoreCase(ai.getIndicatorName())) {
+				//if (indId.equals(ai.getIndicatorId())) {
+				if (ind.equalsIgnoreCase(ai.getIndicatorName())) {
 					viForm.getIndicators().add(ai);
 					break;
 				}

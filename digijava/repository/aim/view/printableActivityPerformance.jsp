@@ -21,7 +21,7 @@
 	Long actId = (Long) request.getAttribute("actId");
 	
 	String actPerfChartFileName = ChartGenerator.getActivityPerformanceChartFileName(
-						 actId,session,new PrintWriter(out),600,400,"");
+						 actId,session,new PrintWriter(out),600,450,"",false);
 
 	String actPerfChartUrl = null;
 	if (actPerfChartFileName != null) {
@@ -33,22 +33,10 @@
 <table width="100%" cellspacing="2" cellpadding="2" valign="top" align="center" border=0>
 	<tr>
 		<td colspan="2">
-			<img src="<%= actPerfChartUrl %>" width="600" height="400" border=0 usemap="#<%= actPerfChartFileName %>"><br><br>
+			<img src="<%= actPerfChartUrl %>" width="600" height="450" border=0 usemap="#<%= actPerfChartFileName %>"><br><br>
 		</td>
 	</tr>
-	<%--
-	<tr><td>
-	<%
-	Map items = (HashMap) session.getAttribute("indicatorNames");
-	Iterator itr = items.keySet().iterator();
-	while (itr.hasNext()) {
-		Long l = (Long) itr.next();
-		String value = (String) items.get(l); %>
-		 &nbsp;<font color="#0000FF"><%=l%> - <%=value%></font><br>
-	<%}
-	%>
-	</td></tr>	
-	--%>
+
 	<tr>
 		<td width="50%" align="right">
 			<a href="javascript:window.close()">

@@ -7,6 +7,7 @@ package org.digijava.module.aim.helper;
 
 import java.awt.Color;
 import java.io.PrintWriter;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -20,6 +21,9 @@ import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartRenderingInfo;
 import org.jfree.chart.ChartUtilities;
 import org.jfree.chart.JFreeChart;
+import org.jfree.chart.axis.CategoryAxis;
+import org.jfree.chart.axis.CategoryLabelPositions;
+import org.jfree.chart.axis.NumberAxis;
 import org.jfree.chart.entity.StandardEntityCollection;
 import org.jfree.chart.plot.CategoryPlot;
 import org.jfree.chart.plot.PiePlot;
@@ -51,8 +55,16 @@ public class ChartGenerator {
 		ArrayList col = (ArrayList) MEIndicatorsUtil.getPortfolioMEIndicatorRisks(
 				activityIds);
 		Collections.sort(col);
-		return generateRiskChart(col,"",
-				chartWidth,chartHeight,session,pw,url);
+		ChartParams cp = new ChartParams();
+		cp.setChartHeight(chartHeight);
+		cp.setChartWidth(chartWidth);
+		cp.setData(col);
+		cp.setTitle("");
+		cp.setSession(session);
+		cp.setWriter(pw);
+		cp.setUrl(url);
+		
+		return generateRiskChart(cp);
 	}
 	
 	public static String getActivityRiskChartFileName(Long actId,
@@ -61,13 +73,20 @@ public class ChartGenerator {
 		
 		ArrayList meRisks = (ArrayList) MEIndicatorsUtil.getMEIndicatorRisks(actId);
 		Collections.sort(meRisks);
-		return generateRiskChart(meRisks,"",chartWidth,
-				chartHeight,session,pw,url);
+		ChartParams cp = new ChartParams();
+		cp.setChartHeight(chartHeight);
+		cp.setChartWidth(chartWidth);
+		cp.setData(meRisks);
+		cp.setTitle("");
+		cp.setSession(session);
+		cp.setWriter(pw);
+		cp.setUrl(url);		
+		return generateRiskChart(cp);
 	}
 	
 	public static String getPortfolioPerformanceChartFileName(Long actId,Long indId,
 			Integer page,HttpSession session,PrintWriter pw,
-			int chartWidth,int chartHeight,String url) {
+			int chartWidth,int chartHeight,String url,boolean includeBaseline) {
 	
 		Collection activityIds = new ArrayList();
 		if (actId.longValue() < 0) {
@@ -83,7 +102,8 @@ public class ChartGenerator {
 		}
 		
 		Collection col = new ArrayList();
-		ArrayList temp = (ArrayList) MEIndicatorsUtil.getPortfolioMEIndicatorValues(activityIds,indId);
+		ArrayList temp = (ArrayList) MEIndicatorsUtil.getPortfolioMEIndicatorValues(
+				activityIds,indId,includeBaseline);
 		
 		if ((actId.longValue() > 0 && indId.longValue() <= 0) ||
 				(actId.longValue() <= 0 && indId.longValue() > 0)) {
@@ -96,23 +116,40 @@ public class ChartGenerator {
 		} else {
 			col = temp;
 		}
-		return generatePerformanceChart(col,"",
-				chartWidth,chartHeight,session,pw,url);
+		
+		ChartParams cp = new ChartParams();
+		cp.setChartHeight(chartHeight);
+		cp.setChartWidth(chartWidth);
+		cp.setData(col);
+		cp.setTitle("");
+		cp.setSession(session);
+		cp.setWriter(pw);
+		cp.setUrl(url);
+		
+		return generatePerformanceChart(cp,includeBaseline);
 	}		
 	
 	public static String getActivityPerformanceChartFileName(Long actId,
 			HttpSession session,PrintWriter pw,
-			int chartWidth,int chartHeight,String url) {
+			int chartWidth,int chartHeight,String url,boolean includeBaseline) {
 		
-		Collection meIndValues = MEIndicatorsUtil.getMEIndicatorValues(actId);
-		return generatePerformanceChart(meIndValues,"",
-				chartWidth,chartHeight,session,pw,url);
+		Collection meIndValues = MEIndicatorsUtil.getMEIndicatorValues(actId,includeBaseline);
+		
+		ChartParams cp = new ChartParams();
+		cp.setChartHeight(chartHeight);
+		cp.setChartWidth(chartWidth);
+		cp.setData(meIndValues);
+		cp.setTitle("");
+		cp.setSession(session);
+		cp.setWriter(pw);
+		cp.setUrl(url);
+		
+		return generatePerformanceChart(cp,includeBaseline);
 	}
 	
-	public static String generateRiskChart(Collection col,String title,
-			int chartWidth,int chartHeight,HttpSession session,PrintWriter pw,
-			String url) {
+	public static String generateRiskChart(ChartParams cp) {
 		String fileName = null;
+		Collection col = cp.getData();
 		try {
 			if (col != null && col.size() > 0) {
 				Iterator itr = col.iterator();
@@ -148,7 +185,7 @@ public class ChartGenerator {
 				}
 				
 				JFreeChart chart = ChartFactory.createPieChart(
-						title, // title
+						cp.getTitle(), // title
 						ds,		// dataset
 						true,	// show legend
 						false,	// show tooltips
@@ -160,16 +197,17 @@ public class ChartGenerator {
 					plot.setSectionPaint(i,seriesColors[i]);
 				}
 				
+				String url = cp.getUrl();
 				if (url != null && url.trim().length() > 0) {
 					plot.setURLGenerator(new StandardPieURLGenerator(url,"risk"));
 				}
 				ChartRenderingInfo info = new ChartRenderingInfo(new StandardEntityCollection());
 				
-				fileName = ServletUtilities.saveChartAsPNG(chart,chartWidth,
-						chartHeight,info,session);
-				ChartUtilities.writeImageMap(pw,fileName,info,false);
+				fileName = ServletUtilities.saveChartAsPNG(chart,cp.getChartWidth(),
+						cp.getChartHeight(),info,cp.getSession());
+				ChartUtilities.writeImageMap(cp.getWriter(),fileName,info,false);
 				
-				pw.flush();
+				cp.getWriter().flush();
 			}
 		} catch (Exception e) {
 			logger.error("Exception from generateRisk() :" + e.getMessage());
@@ -178,11 +216,10 @@ public class ChartGenerator {
 		return fileName;		
 	}
 	
-	public static String generatePerformanceChart(Collection col,String title,
-			int chartWidth,int chartHeight,HttpSession session,PrintWriter pw,
-			String url) {
+	public static String generatePerformanceChart(ChartParams cp,boolean includeBaseLine) {
 		
 		String fileName = null;
+		Collection col = cp.getData();
 		try {
 			if (col != null && col.size() > 0) {
 				Iterator itr = col.iterator();
@@ -193,7 +230,7 @@ public class ChartGenerator {
 				}
 				
 				JFreeChart chart = ChartFactory.createStackedBarChart(
-						title, // title
+						cp.getTitle(), // title
 						null,	// X-axis label
 						null,	// Y-axis label
 						ds,		// dataset
@@ -206,20 +243,34 @@ public class ChartGenerator {
 				CategoryPlot plot = (CategoryPlot) chart.getPlot();
 				
 				StackedBarRenderer r1 = new StackedBarRenderer();
-				r1.setSeriesPaint(0,Constants.BASE_VAL_CLR);
-				r1.setSeriesPaint(1,Constants.ACTUAL_VAL_CLR);
-				r1.setSeriesPaint(2,Constants.TARGET_VAL_CLR);
+				
+				if (includeBaseLine) {
+					r1.setSeriesPaint(0,Constants.BASE_VAL_CLR);
+					r1.setSeriesPaint(1,Constants.ACTUAL_VAL_CLR);
+					r1.setSeriesPaint(2,Constants.TARGET_VAL_CLR);					
+				} else {
+					r1.setSeriesPaint(0,Constants.ACTUAL_VAL_CLR);
+					r1.setSeriesPaint(1,Constants.TARGET_VAL_CLR);					
+				}
+
+				String url = cp.getUrl();
 				if (url != null && url.trim().length() > 0) {
 					CategoryURLGenerator cUrl1 = new StandardCategoryURLGenerator(url,"series","ind");
 					r1.setItemURLGenerator(cUrl1);
 				}
+				
 				plot.setRenderer(r1);
+				CategoryAxis axis = plot.getDomainAxis();
+				axis.setCategoryLabelPositions(CategoryLabelPositions.UP_45);
+				NumberAxis numAxis = (NumberAxis) plot.getRangeAxis();
+				numAxis.setRange(0D,1D);
+				numAxis.setNumberFormatOverride(new DecimalFormat("###%"));
 				
 				ChartRenderingInfo info = new ChartRenderingInfo(new StandardEntityCollection());
-				fileName = ServletUtilities.saveChartAsPNG(chart,chartWidth,
-						chartHeight,info,session);
-				ChartUtilities.writeImageMap(pw,fileName,info,false);
-				pw.flush();
+				fileName = ServletUtilities.saveChartAsPNG(chart,cp.getChartWidth(),
+						cp.getChartHeight(),info,cp.getSession());
+				ChartUtilities.writeImageMap(cp.getWriter(),fileName,info,false);
+				cp.getWriter().flush();
 			}
 
 		} catch (Exception e) {

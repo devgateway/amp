@@ -717,7 +717,7 @@ public class MEIndicatorsUtil
 	}	
 	
 	public static Collection getPortfolioMEIndicatorValues(Collection actIds,
-			Long indId) {
+			Long indId,boolean includeBaseLine) {
 		
 		Session session = null;
 		Collection col = new ArrayList();
@@ -777,42 +777,42 @@ public class MEIndicatorsUtil
 					double tarVal = rs.getDouble(4);
 					String key = rs.getString(5);
 					
-					double totIndVal = baseVal + tarVal + actVal;
-					
-					MEIndicatorValue baseIndVal = new MEIndicatorValue();
-					baseIndVal.setIndId(new Long(id));
-					baseIndVal.setIndicatorName(key);
-					baseIndVal.setType(Constants.ME_IND_VAL_BASE_ID);
-					if (totIndVal > 0) { 
-						baseIndVal.setValue(baseVal * (100 / totIndVal));
-					} else { 
-						baseIndVal.setValue(0);
-					}
-					
-					MEIndicatorValue actIndVal = new MEIndicatorValue();
-					actIndVal.setIndId(new Long(id));
-					actIndVal.setIndicatorName(key);
-					actIndVal.setType(Constants.ME_IND_VAL_ACTUAL_ID);
-					if (totIndVal > 0) {
-						actIndVal.setValue(actVal * (100 / totIndVal));	
+					if (includeBaseLine) {
+						MEIndicatorValue baseIndVal = new MEIndicatorValue();
+						baseIndVal.setIndId(new Long(id));
+						baseIndVal.setIndicatorName(key);
+						baseIndVal.setType(Constants.ME_IND_VAL_BASE_ID);
+						if (tarVal > 0) { 
+							baseIndVal.setValue(baseVal / tarVal);
+							col.add(baseIndVal);
+						}
+						MEIndicatorValue actIndVal = new MEIndicatorValue();
+						actIndVal.setIndId(new Long(id));
+						actIndVal.setIndicatorName(key);
+						actIndVal.setType(Constants.ME_IND_VAL_ACTUAL_ID);
+						if (tarVal > 0) {
+							actIndVal.setValue(actVal / tarVal);
+							col.add(actIndVal);
+						}						
 					} else {
-						actIndVal.setValue(0);
+						MEIndicatorValue actIndVal = new MEIndicatorValue();
+						actIndVal.setIndId(new Long(id));
+						actIndVal.setIndicatorName(key);
+						actIndVal.setType(Constants.ME_IND_VAL_ACTUAL_ID);
+						if (tarVal > 0) {
+							actIndVal.setValue((actVal - baseVal)/(tarVal - baseVal));
+							col.add(actIndVal);
+						}
 					}
 					
 					MEIndicatorValue targetIndVal = new MEIndicatorValue();
 					targetIndVal.setIndId(new Long(id));
 					targetIndVal.setIndicatorName(key);
 					targetIndVal.setType(Constants.ME_IND_VAL_TARGET_ID);
-					if (totIndVal > 0) { 
-						targetIndVal.setValue(tarVal * (100 / totIndVal));
-					} else { 
-						targetIndVal.setValue(0);
+					if (tarVal > 0) { 
+						targetIndVal.setValue(1);
+						col.add(targetIndVal);						
 					}
-					
-					
-					col.add(baseIndVal);
-					col.add(actIndVal);
-					col.add(targetIndVal);
 				}
 			}
 		} catch (Exception e) {
@@ -830,7 +830,7 @@ public class MEIndicatorsUtil
 		return col;		
 	}
 	
-	public static Collection getMEIndicatorValues(Long actId) {
+	public static Collection getMEIndicatorValues(Long actId,boolean includeBaseline) {
 		Session session = null;
 		Collection col = new ArrayList();
 	
@@ -846,42 +846,48 @@ public class MEIndicatorsUtil
 				AmpMEIndicatorValue meIndValue = (AmpMEIndicatorValue) itr.next();
 				AmpMEIndicators meInd = meIndValue.getMeIndicatorId();
 				
-				double totIndVal = meIndValue.getBaseVal() + meIndValue.getRevisedTargetVal() + meIndValue.getActualVal();
+				float tarVal = meIndValue.getTargetVal();
 				
-				MEIndicatorValue baseIndVal = new MEIndicatorValue();
-				baseIndVal.setIndId(meInd.getAmpMEIndId());
-				baseIndVal.setIndicatorName(meInd.getName());
-				baseIndVal.setType(Constants.ME_IND_VAL_BASE_ID);
-				if (totIndVal > 0) { 
-					baseIndVal.setValue(meIndValue.getBaseVal() * (100 / totIndVal));
-				} else { 
-					baseIndVal.setValue(0);
-				}
-				
-				MEIndicatorValue actIndVal = new MEIndicatorValue();
-				actIndVal.setIndId(meInd.getAmpMEIndId());
-				actIndVal.setIndicatorName(meInd.getName());
-				actIndVal.setType(Constants.ME_IND_VAL_ACTUAL_ID);
-				if (totIndVal > 0) {
-					actIndVal.setValue(meIndValue.getActualVal() * (100 / totIndVal));	
+				if (includeBaseline) {
+					MEIndicatorValue baseIndVal = new MEIndicatorValue();
+					baseIndVal.setIndId(meInd.getAmpMEIndId());
+					baseIndVal.setIndicatorName(meInd.getName());
+					baseIndVal.setType(Constants.ME_IND_VAL_BASE_ID);
+					if (tarVal > 0) { 
+						baseIndVal.setValue(meIndValue.getBaseVal() / tarVal);
+						col.add(baseIndVal);
+					}
+
+					MEIndicatorValue actIndVal = new MEIndicatorValue();
+					actIndVal.setIndId(meInd.getAmpMEIndId());
+					actIndVal.setIndicatorName(meInd.getName());
+					actIndVal.setType(Constants.ME_IND_VAL_ACTUAL_ID);
+					if (tarVal > 0) {
+						actIndVal.setValue(meIndValue.getActualVal() / tarVal);
+						col.add(actIndVal);
+					}					
 				} else {
-					actIndVal.setValue(0);
+					MEIndicatorValue actIndVal = new MEIndicatorValue();
+					actIndVal.setIndId(meInd.getAmpMEIndId());
+					actIndVal.setIndicatorName(meInd.getName());
+					actIndVal.setType(Constants.ME_IND_VAL_ACTUAL_ID);
+					float bVal = meIndValue.getBaseVal();
+					float aVal = meIndValue.getActualVal();
+					if (tarVal > 0) {
+						actIndVal.setValue((aVal-bVal)/(tarVal-bVal));
+						col.add(actIndVal);
+					}					
 				}
 				
+
 				MEIndicatorValue targetIndVal = new MEIndicatorValue();
 				targetIndVal.setIndId(meInd.getAmpMEIndId());
 				targetIndVal.setIndicatorName(meInd.getName());
 				targetIndVal.setType(Constants.ME_IND_VAL_TARGET_ID);
-				if (totIndVal > 0) { 
-					targetIndVal.setValue(meIndValue.getRevisedTargetVal() * (100 / totIndVal));
-				} else { 
-					targetIndVal.setValue(0);
+				if (tarVal > 0) { 
+					targetIndVal.setValue(1);
+					col.add(targetIndVal);
 				}
-				
-				col.add(baseIndVal);
-				col.add(actIndVal);
-				col.add(targetIndVal);
-				
 			}
 			
 		} catch (Exception e) {

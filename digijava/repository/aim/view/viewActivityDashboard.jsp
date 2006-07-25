@@ -15,7 +15,7 @@
 	function showPrinterFriendly(actId,chartType) {
 		<digi:context name="ptUrl" property="context/module/moduleinstance/printableActivityChart.do" />
 		var url = "<%=ptUrl%>?ampActivityId="+actId+"&cType="+chartType;
-	 	openURLinWindow(url,650,450);
+	 	openURLinWindow(url,650,500);
 	}
 
 </script>
@@ -27,7 +27,7 @@
 	String url = "/aim/viewIndicatorValues.do?ampActivityId="+actId+"&tabIndex=6";
 	
 	String actPerfChartFileName = ChartGenerator.getActivityPerformanceChartFileName(
-						 actId,session,new PrintWriter(out),370,350,url);
+						 actId,session,new PrintWriter(out),370,450,url,false);
 
 	String actPerfChartUrl = null;
 	if (actPerfChartFileName != null) {
@@ -67,7 +67,7 @@
 					<TR>
 						<TD width="50%">
 							<% if (actPerfChartUrl != null) { %>
-							<img src="<%= actPerfChartUrl %>" width=370 height=350 border=0 usemap="#<%= actPerfChartFileName %>"><br><br>
+							<img src="<%= actPerfChartUrl %>" width=370 height=450 border=0 usemap="#<%= actPerfChartFileName %>"><br><br>
 							<div align="center">		  
 							<input type="button" class="buton" value="Printer Friendly Version" 
 							onclick="javascript:showPrinterFriendly('<%=actId%>','P')">
@@ -78,13 +78,17 @@
 						  </span><br><br>
 							<% } %>
 						</TD>
-						<TD width="50%">
+						<TD width="50%" valign="top">
 							<% if (actRiskChartUrl != null) { %>
 							<digi:trn key="aim:overallActivityRisk">Overall Risk</digi:trn>: 
 							<font color="<bean:write name="aimActivityDashboardForm" property="riskColor" />">
-							<bean:define id="riskName">
+							
+							<bean:define id="riskName" name="aimActivityDashboardForm" property="overallRisk" toScope="page"
+							type="java.lang.String"/>
+							<%--
 								<bean:write name="aimActivityDashboardForm" property="overallRisk" />
 							</bean:define>
+							--%>
 							<b><digi:trn key="<%=riskName%>"><%=riskName%></digi:trn></b>
 						
 							<img src="<%= actRiskChartUrl %>" width=370 height=350 border=0 usemap="#<%= actRiskChartFileName %>">
@@ -102,21 +106,6 @@
 					</TR>
 				</TABLE>
 			</TD></TR>
-			<%--
-<TR><TD>
-<%
-	if (actPerfChartUrl != null) { 
-	Map items = (HashMap) session.getAttribute("indicatorNames");
-	Iterator itr = items.keySet().iterator();
-	while (itr.hasNext()) {
-		Long l = (Long) itr.next();
-		String value = (String) items.get(l); %>
-		 &nbsp;<font color="#0000FF"><%=l%> - <%=value%></font><br>
-	<%}
-	}
-%>
-</TD></TR>	
---%>
 <TR><TD>&nbsp;</TD></TR>
 		</TABLE>
 	</TD>

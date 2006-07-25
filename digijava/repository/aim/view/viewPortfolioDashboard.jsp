@@ -13,23 +13,10 @@
 <digi:context name="digiContext" property="context" />
 
 <script language="Javascript">
-	/*
-	function showPrinterFriendlyPortPerf(actId,indId,chartType) {
-		<digi:context name="ptUrl" property="context/module/moduleinstance/viewPortfolioDashboard.do" />
-		var url = "<%=ptUrl%>?actId="+actId+"&indId="+indId+"&cType="+chartType;
-	 	openURLinWindow(url,650,450);
-	}
-
-	function showPrinterFriendlyPortRisk(actId,indId,chartType) {
-		<digi:context name="ptUrl" property="context/module/moduleinstance/viewPortfolioDashboard.do" />
-		var url = "<%=ptUrl%>?actId="+actId+"&indId="+indId+"&cType="+chartType;
-	 	openURLinWindow(url,650,450);
-	}*/
-
 	function showPrinterFriendlyPortPerf() {
 		<digi:context name="ptUrl" property="context/module/moduleinstance/viewPrintablePortPerf.do" />
 		var url = "<%=ptUrl%>";
-	 	openURLinWindow(url,650,450);
+	 	openURLinWindow(url,650,500);
 	}
 
 	function showPrinterFriendlyPortRisk() {
@@ -46,7 +33,7 @@
 	Integer pg = (Integer) session.getAttribute("page");
 	
 	String actPerfChartFileName = ChartGenerator.getPortfolioPerformanceChartFileName(
-						 actId,indId,pg,session,new PrintWriter(out),370,300,"");
+						 actId,indId,pg,session,new PrintWriter(out),400,500,"",false);
 
 	String actPerfChartUrl = null;
 	
@@ -56,7 +43,7 @@
 	
 	String url = "/filterDesktopActivities.do";
 	String actRiskChartFileName = ChartGenerator.getPortfolioRiskChartFileName(
-						 session,new PrintWriter(out),370,300,url);
+						 session,new PrintWriter(out),370,400,url);
 
 	String actRiskChartUrl = null;
 	if (actRiskChartFileName != null) {
@@ -90,7 +77,7 @@
 						<TD vAlign="top" align="center">
 							<TABLE width="99%" cellSpacing=0 cellPadding=0 vAlign="top" align="center">
 								<TR><TD>
-									<TABLE width="100%" cellspacing="2" cellpadding="2" valign="top" align="left" border=0>
+									<TABLE width="780" cellspacing="0" cellpadding="2" valign="top" align="left" border=0>
 										<TR>
 											<TD width="100%" align="left">
 												<logic:notEmpty name="aimPortfolioDashboardForm" property="activityList">
@@ -116,28 +103,26 @@
 									<digi:trn key="aim:overallPortfolioRisk">Overall Risk</digi:trn>: 
 									<font color="<bean:write name="aimPortfolioDashboardForm" property="fontColor" />">
 
-									<bean:define id="riskName" name="aimPortfolioDashboardForm" property="overallRisk" toScope="page"  type="java.lang.String"/>
-									<bean:write name="aimPortfolioDashboardForm" property="overallRisk"/>
-
-
+									<bean:define id="riskName" name="aimPortfolioDashboardForm" property="overallRisk" toScope="page"
+									type="java.lang.String"/>
 									<digi:trn key="<%=riskName%>"><%=riskName%></digi:trn>
 								</TD></TR>								
 								<TR><TD>
-									<TABLE width="100%" cellspacing="2" cellpadding="2" valign="top" align="left" border=0>
+									<TABLE cellspacing="2" cellpadding="2" valign="top" align="left" border=0>
 										<TR>
-											<TD width="50%" align="center" class="textalb" height="20" bgcolor="#336699">
+											<TD align="center" class="textalb" height="20" bgcolor="#336699">
 												<digi:trn key="aim:mePortfolioPerformance">
 												Portfolio - Performance</digi:trn>
 											</TD>
-											<TD width="50%" align="center" class="textalb" height="20" bgcolor="#336699">
+											<TD align="center" class="textalb" height="20" bgcolor="#336699">
 												<digi:trn key="aim:mePortfolioRisk">
 												Portfolio - Risk</digi:trn>
 											</TD>
 										</TR>
 										<TR>
-											<TD width="50%">
+											<TD>
 												<% if (actPerfChartUrl != null) { %>
-													<img src="<%= actPerfChartUrl %>" width=370 height=300 border=0 usemap="#<%= actPerfChartFileName %>">
+													<img src="<%= actPerfChartUrl %>" width=400 height=500 border=0 usemap="#<%= actPerfChartFileName %>">
 													<br><br>
 													<div align="center">
 													<input type="button" class="buton" value="Printer Friendly Version" 
@@ -160,9 +145,9 @@
 													</logic:iterate>
 												</logic:notEmpty>							
 											</TD>
-											<TD width="50%">
+											<TD valign="top">
 												<% if (actRiskChartUrl != null) { %>
-													<img src="<%= actRiskChartUrl %>" width=370 height=300 border=0 usemap="#<%= actRiskChartFileName %>">
+													<img src="<%= actRiskChartUrl %>" width=370 height=400 border=0 usemap="#<%= actRiskChartFileName %>">
 													<br><br>
 													<div align="center">
 													<input type="button" class="buton" value="Printer Friendly Version" 
@@ -180,19 +165,6 @@
 							</TABLE>
 						</TD>
 					</TR>
-					<%--
-					<TR><TD>
-						<%
-						Map items = (HashMap) session.getAttribute("indicatorNames");
-						Iterator itr = items.keySet().iterator();
-						while (itr.hasNext()) {
-							Long l = (Long) itr.next();
-							String value = (String) items.get(l); %>
-								 <font color="#0000FF"><%=l%> - <%=value%></font><br>
-						<%}
-						%>
-					</TD></TR>
-					--%>
 					<TR><TD>&nbsp;</TD></TR>
 				</TABLE>
 			</TD></TR>

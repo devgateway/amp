@@ -155,7 +155,13 @@
 												<b><digi:trn key="aim:meRisk">Risk</digi:trn></b>
 											</TD>
 											<TD colspan="3">
+												<bean:define id="riskName" name="indicator" property="riskName" 
+												type="java.lang.String" />
+												
+												<digi:trn key="<%=riskName%>"><%=riskName%></digi:trn>
+												<%--
 												<bean:write name="indicator" property="riskName" />													
+												--%>
 											</TD>
 										</TR>		
 										<TR bgcolor="#ffffff">

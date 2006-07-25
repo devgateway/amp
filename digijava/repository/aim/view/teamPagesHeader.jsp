@@ -38,8 +38,8 @@ function showUserProfile(id)
 						<a href="javascript:showUserProfile(<c:out value="${teamMember.memberId}"/>)" class="header" title="<%=translation%>">
 						 	<bean:write name="teamMember" property="teamName" /> :
 							<bean:write name="teamMember" property="memberName" />
-						</logic:notEmpty>
 						</a>
+						</logic:notEmpty>
 					</td>
 					<td align="right">
 						<bean:define id="translation">

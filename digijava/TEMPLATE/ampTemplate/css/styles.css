@@ -775,7 +775,6 @@ A.header
 {
 	FONT-SIZE: 18px;
 	COLOR: #91a3b1; 
-	PADDING-TOP: 23px; 
 	LETTER-SPACING: 1px; 
 	FONT-FAMILY: Arial, Helvetica, sans-serif; 
 	TEXT-DECORATION: none
@@ -785,7 +784,6 @@ A.header:visited
 {
 	FONT-SIZE: 18px;
 	COLOR: #91a3b1; 
-	PADDING-TOP: 23px; 
 	LETTER-SPACING: 1px; 
 	FONT-FAMILY: Arial, Helvetica, sans-serif; 
 	TEXT-DECORATION: none
@@ -795,7 +793,6 @@ A.header:hover
 {
 	FONT-SIZE: 18px;
 	COLOR: #91a3b1; 
-	PADDING-TOP: 23px; 
 	LETTER-SPACING: 1px; 
 	FONT-FAMILY: Arial, Helvetica, sans-serif; 
 	TEXT-DECORATION: none

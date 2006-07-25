@@ -53,7 +53,6 @@
 	<classpathentry exported="true" kind="lib" path="WEB-INF/system-lib/log4j.jar"/>
 	<classpathentry exported="true" kind="lib" path="WEB-INF/system-lib/servlet.jar"/>
 	<classpathentry kind="lib" path="WEB-INF/lib/jasperreports-0.6.8.jar"/>
-	<classpathentry kind="lib" path="WEB-INF/lib/jcommon-1.0.0-rc1.jar"/>
 	<classpathentry kind="lib" path="WEB-INF/lib/commons-beanutils-1.5.jar"/>
 	<classpathentry kind="lib" path="WEB-INF/lib/commons-collections-2.1.jar"/>
 	<classpathentry kind="lib" path="WEB-INF/lib/itext-1.01.jar"/>

@@ -13,7 +13,9 @@
 								<td>&nbsp;&nbsp;&nbsp;&nbsp;</td>	
 								<td class=home-bg-header rowSpan=2 width="100%" valign="top">
 										<P>
-										<digi:trn key="aim:ministryfinanceandeconomicdevelopment:ethiopia">MINISTRY OF FINANCE AND ECONOMIC DEVELOPMENT: <br>ETHIOPIA</digi:trn>
+										<digi:trn key="aim:ampSiteTitle">
+											MINISTRY OF FINANCE AND ECONOMIC DEVELOPMENT: ETHIOPIA
+										</digi:trn>
 										</P> 
 								</td>
 							</tr>      

@@ -12,13 +12,15 @@
 			background="module/aim/images/bg-home.jpg" valign="top">
 				<tr>
 					<td>
-						<table cellSpacing=0 cellPadding=0 width=475>
+						<table cellSpacing=0 cellPadding=0 width="100%">
 							<tr>
 								<td>&nbsp;&nbsp;&nbsp;&nbsp;</td>	
 								<td class=home-bg-header rowSpan=2 width="100%" valign="top">
-										<P>
-										<digi:trn key="aim:ministryoffinanceandeconomicdevelopment:ethiopia">MINISTRY OF FINANCE AND ECONOMIC DEVELOPMENT: ETHIOPIA</digi:trn>
-										</P> 
+									<P>
+										<digi:trn key="aim:ampSiteTitle">
+											MINISTRY OF FINANCE AND ECONOMIC DEVELOPMENT: ETHIOPIA
+										</digi:trn>
+									</P> 
 
 								</td>
 							</tr>      

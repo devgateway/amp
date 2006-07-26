@@ -44,7 +44,6 @@ import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartRenderingInfo;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.entity.StandardEntityCollection;
-import org.jfree.chart.labels.StandardPieItemLabelGenerator;
 import org.jfree.chart.plot.PiePlot;
 import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.chart.urls.StandardPieURLGenerator;
@@ -815,14 +814,14 @@ public class AdvancedReport extends Action {
 				}
 */				
 				// calling Piechart
-				String piechartname=createPieChart(chart_coll);
+				//String piechartname=createPieChart(chart_coll);
 				//logger.info("@@@@@@@@@@IMAGE FILE NAME:"+piechartname);
-				formBean.setPieImageUrl(piechartname);
+				//formBean.setPieImageUrl(piechartname);
 
 				// calling Barchart
-				String barchartname=createBarChart(chart_coll);
+				//String barchartname=createBarChart(chart_coll);
 				//logger.info("@@@@@@@@@@IMAGE FILE NAME:"+piechartname);
-				formBean.setBarImageUrl(barchartname);
+				//formBean.setBarImageUrl(barchartname);
 
 				return mapping.findForward("GenerateChart");
 			}
@@ -1015,6 +1014,7 @@ public class AdvancedReport extends Action {
 	}// end of function execute
 	
 // Function for Pie Chart
+	/*
 		private static String createPieChart(Collection chart_coll){
 
 				//logger.info("@@@@@@@@@@ INSIDE createPieChart...");
@@ -1057,9 +1057,11 @@ public class AdvancedReport extends Action {
 
 			return filename;
 		}
+		*/
 // end pie chart function.
 
 //		 Function for BarChart
+	/*
 		private static String createBarChart(Collection chart_coll){
 
 			//logger.info("@@@@@@@@@@ INSIDE createBARRRRRR Chart...");
@@ -1120,8 +1122,10 @@ public class AdvancedReport extends Action {
 
 			return filename;
 		}
+		*/
 // end barchart function.
 
+	
 	public void updateData(Collection src, Collection dest, Long []selCol, AdvancedReportForm formBean)
 	{
 		if(str.equals("delete"))
@@ -1256,6 +1260,7 @@ public class AdvancedReport extends Action {
 			e.printStackTrace(System.out);
 		}
 	}// end of Function ...........
+	
 	
 	// Function to move Columns Up and Down
 	

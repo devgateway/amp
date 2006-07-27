@@ -637,7 +637,7 @@
 															<strong>Percent of donors that use national procurement systems</strong>
 														</c:if>
 														<c:if test="${aimParisIndicatorReportForm.indicatorCode == '5b'}">
-															<strong>Percent of donors that use all 3 country PFM systems</strong>
+															<strong>Percent of donors that use national procurement systems</strong>
 														</c:if>
 													</td>
 												</c:if>

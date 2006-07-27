@@ -5472,11 +5472,7 @@ public class DbUtil {
 						// answersRow will represent row for one disbursement year inside answer-collection of pi helper object.
 						answersRow = new double[NUM_ANSWER_COLUMNS];
 						answersRow[0] = (startYear + i);
-						//logger.debug("YEAR : " + answersRow[0]);
-						//logger.debug("----------------");
 					}
-					else
-						answersRow[i] = 0;
 					itr2 = surveySet.iterator();
 					index = 0;
 					while(itr2.hasNext()) {
@@ -5658,10 +5654,9 @@ public class DbUtil {
 						allDnRow[j] += answersRow[j];
 					}
 				}
-				else {
+				else
 					responses.add(pi);
-					surveySet.clear();
-				}
+				surveySet.clear();
 			}
 			if (indcFlag != 6) {
 				// calculating final percentage for all-donors row
@@ -5721,7 +5716,7 @@ public class DbUtil {
 			logger.debug("releaseSession() failed");
 		}
 	}
-	logger.debug("responses.size[getAidSurveyReportByIndicator()] : " + responses.size());
+	//logger.debug("responses.size[getAidSurveyReportByIndicator()] : " + responses.size());
 	return responses;
 	}
 	

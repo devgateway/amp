@@ -107,6 +107,7 @@ public class ParisIndicatorReport extends Action {
 							int answers[] = new int[numCols];
 							double temp[]   = new double[lastIndex + 1];
 							int j = 0;
+							double val = 0.0;
 							Iterator itr1 = null;
 							Iterator itr2 = null;
 							
@@ -115,9 +116,9 @@ public class ParisIndicatorReport extends Action {
 							
 							// creating header row
 							if ("5a".equalsIgnoreCase(svForm.getIndicatorCode()))
-								dnIndc5Row[0] = "Percent of ODA using all three partners PFM procedures";
+								dnIndc5Row[0] = "Percent of ODA using all three partner's PFM procedures";
 							else
-								dnIndc5Row[0] = "Percent of ODA using national procurement system";
+								dnIndc5Row[0] = "Percent of ODA using national procurement systems";
 							
 							for(; j < numCols; j++)
 								dnIndc5Row[j + 1] = Integer.toString(svForm.getStartYear().intValue() + j);
@@ -152,7 +153,11 @@ public class ParisIndicatorReport extends Action {
 									}
 								}
 								for(j = 0; j < numCols; j++) {
-									dnIndc5Row[j + 1] = Double.toString((100 * answers[j]) / dnSize);
+									val = (100 * answers[j]) / dnSize ;
+									if ((val - (int) val) < 0.5)
+										dnIndc5Row[j + 1] = Integer.toString((int) val);
+									else
+										dnIndc5Row[j + 1] = Long.toString(Math.round(val));
 									answers[j] = 0;
 								}
 								svForm.getDonorsCollIndc5().add(dnIndc5Row);

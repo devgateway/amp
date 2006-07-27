@@ -461,7 +461,9 @@
 					</td>
 					 
 				</tr>
-				<tr><td><font color="blue">* All the amounts are in thousands (000)</font></td></tr>
+				<c:if test="${aimParisIndicatorReportForm.indicatorCode != '6'}">
+					<tr><td><font color="blue">* All the amounts are in thousands (000)</font></td></tr>
+				</c:if>
 <%----------------------------------------------------------------------------------------------------------------%>
 						</table>
 					</td>

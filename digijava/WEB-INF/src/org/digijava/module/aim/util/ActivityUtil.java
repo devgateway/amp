@@ -309,6 +309,7 @@ public class ActivityUtil {
 			    logger.debug("updating ....");
 			    
 			    session.saveOrUpdate(oldActivity);
+			    activity = oldActivity;
 			    /*
 			    // added by Akash
 			    // desc: Saving team members in amp_member_activity table in case activity is Approved

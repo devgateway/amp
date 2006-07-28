@@ -39,47 +39,53 @@ A.h-box
 	FONT-FAMILY: Verdana, Arial, Helvetica, sans-serif
 }
 
+.heading 
+{
+	TEXT-TRANSFORM: uppercase;
+   FONT-FAMILY: Verdana, Arial, Helvetica, sans-serif;
+	COLOR: #d6d6d6; 
+   TEXT-DECORATION: none;
+   LETTER-SPACING: 2px;
+   FONT-SIZE: 20px;
+}
+
+
 A.heading 
 {
 	FONT-SIZE: 19px;
-	FONT-WEIGHT: bold; 
 	TEXT-TRANSFORM: uppercase; 
 	COLOR: #d6d6d6; 
-	FONT-FAMILY: "Times New Roman", Times, serif; 
-	LETTER-SPACING: 1px; 
+   FONT-FAMILY: Verdana, Arial, Helvetica, sans-serif;
+	LETTER-SPACING: 2px; 
 	TEXT-DECORATION: none
 }
 
 A.heading:visited 
 {
 	FONT-SIZE: 19px;
-	FONT-WEIGHT: bold; 
 	TEXT-TRANSFORM: uppercase; 
 	COLOR: #d6d6d6; 
-	FONT-FAMILY: "Times New Roman", Times, serif; 
-	LETTER-SPACING: 1px; 
+	LETTER-SPACING: 2px; 
 	TEXT-DECORATION: none
 }
 
 A.heading:hover 
 {
 	FONT-SIZE: 19px;
-	FONT-WEIGHT: bold; 
 	TEXT-TRANSFORM: uppercase; 
 	COLOR: #d6d6d6; 
-	FONT-FAMILY: "Times New Roman", Times, serif; 
-	LETTER-SPACING: 1px; 
+	LETTER-SPACING: 2px; 
 	TEXT-DECORATION: none
 }
 
 A.nav 
 {
-	PADDING-TOP: 0px; 	
+	PADDING-TOP: 5px; 	
 	PADDING-RIGHT: 7px; 
 	PADDING-LEFT: 9px; 
-	PADDING-BOTTOM: 0px; 
+	PADDING-BOTTOM: 5px; 
 	FONT-WEIGHT: normal; 
-	FONT-SIZE: 9px; 
+	FONT-SIZE: 10px; 
 	TEXT-TRANSFORM: uppercase; 
 	COLOR: #ffffff; 
 	FONT-FAMILY: Verdana, Arial, Helvetica, sans-serif; 
@@ -92,12 +98,12 @@ A.nav
 
 A.nav:visited 
 {
-	PADDING-TOP: 0px; 
+	PADDING-TOP: 5px; 
 	PADDING-RIGHT: 7px; 
 	PADDING-LEFT: 9px; 
-	PADDING-BOTTOM: 0px; 	
+	PADDING-BOTTOM: 5px; 	
 	FONT-WEIGHT: normal; 
-	FONT-SIZE: 9px; 
+	FONT-SIZE: 10px; 
 	TEXT-TRANSFORM: uppercase; 
 	COLOR: #ffffff; 
 	FONT-FAMILY: Verdana, Arial, Helvetica, sans-serif; 
@@ -110,18 +116,18 @@ A.nav:visited
 
 A.nav:hover 
 {
-	PADDING-TOP: 0px; 
+	PADDING-TOP: 5px; 
 	PADDING-RIGHT: 7px; 
 	PADDING-LEFT: 9px; 
-	PADDING-BOTTOM: 0px; 
+	PADDING-BOTTOM: 5px; 
 	FONT-WEIGHT: normal; 
-	FONT-SIZE: 9px; 
+	FONT-SIZE: 10px; 
 	TEXT-TRANSFORM: uppercase; 
 	COLOR: #ffffff; 
 	FONT-FAMILY: Verdana, Arial, Helvetica, sans-serif; 
 	WHITE-SPACE: nowrap; 
 	LETTER-SPACING: 0px; 
-	BACKGROUND-COLOR: #4a4a48; 
+	BACKGROUND-COLOR: #003399; 
 	TEXT-DECORATION: none;
 	HEIGHT: 13px;
 }
@@ -140,8 +146,8 @@ A.nav1
 	WHITE-SPACE: nowrap; 
 	LETTER-SPACING: 0px; 
 	BACKGROUND-COLOR: #4a4a48; 
-	TEXT-DECORATION: none
 	HEIGHT: 28px; 
+	TEXT-DECORATION: none
 }
 
 A.nav1:visited 
@@ -158,8 +164,8 @@ A.nav1:visited
 	WHITE-SPACE: nowrap; 
 	LETTER-SPACING: 0px; 
 	BACKGROUND-COLOR: #5a5b5a; 
-	TEXT-DECORATION: none
 	HEIGHT: 28px; 
+	TEXT-DECORATION: none
 }
 
 
@@ -278,8 +284,8 @@ A.sub-nav3:hover
 	WHITE-SPACE: nowrap; 
 	LETTER-SPACING: 0px; 
 	HEIGHT: 20px; 
-	TEXT-DECORATION: none
 	BACKGROUND-COLOR: #333366; 
+	TEXT-DECORATION: none
 }
 
 A.sub-nav:visited 
@@ -346,8 +352,8 @@ A.sub-nav:hover
 	WHITE-SPACE: nowrap; 
 	LETTER-SPACING: 0px; 
 	HEIGHT: 20px; 
-	TEXT-DECORATION: none
 	BACKGROUND-COLOR: #222e5d; 
+	TEXT-DECORATION: none
 }
 
 A.sub-nav2 
@@ -904,4 +910,14 @@ A.imglink:hover
 	BORDER-BOTTOM: #c9c9c7 1px solid; 
 	WHITE-SPACE: nowrap; 
 	BACKGROUND-COLOR: #f4f4f2
+}
+
+.headerLink
+{
+	background-color: #5a5b5a;	
+}
+
+.headerLinkOver
+{
+	background-color: #006699;
 }

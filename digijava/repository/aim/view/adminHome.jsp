@@ -209,6 +209,20 @@
 												</digi:link>
 											</td>
 										</tr>
+
+										<tr>
+											<td class=f-names noWrap>
+												<digi:img src="module/aim/images/arrow-th-BABAB9.gif" width="16"/>
+												<bean:define id="translation">
+													<digi:trn key="aim:clickToUploadFlags">Click here to upload and select flags</digi:trn>
+												</bean:define>
+												<digi:link href="/flagUploader.do" title="<%=translation%>" >
+												<digi:trn key="aim:flagUploaderSelector">
+													Flag uploader/selector
+												</digi:trn>	
+												</digi:link>
+											</td>
+										</tr>										
 									</table>
 								</td>
 							</tr>

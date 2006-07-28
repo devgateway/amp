@@ -53,7 +53,7 @@ import org.digijava.module.editor.util.Constants;
  */
 public class AddAmpActivity extends Action {
 	
-	private static Logger logger = Logger.getLogger(AddAmpActivity.class);
+	//private static Logger logger = Logger.getLogger(AddAmpActivity.class);
 	
 	private ServletContext ampContext = null;
 	
@@ -98,7 +98,6 @@ public class AddAmpActivity extends Action {
 		// desc: clearing comment properties
 		// start
 		String action = request.getParameter("action");
-		logger.debug("action [inside AddAmpActivity] : " + action);
 		if (action != null && action.trim().length() != 0) {
 			if ("create".equals(action)) {
 				eaForm.getCommentsCol().clear();
@@ -125,7 +124,6 @@ public class AddAmpActivity extends Action {
 			String sessId = session.getId();
 			ArrayList sessList = (ArrayList) ampContext.getAttribute(
 					org.digijava.module.aim.helper.Constants.SESSION_LIST);
-			//logger.info("sessList.contains(sessId) = " + sessList.contains(sessId));
 			if (sessList.contains(sessId) == false) {
 				ActionErrors errors = new ActionErrors();
 				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
@@ -319,8 +317,6 @@ public class AddAmpActivity extends Action {
 					eaForm.setActAthFirstName(usr.getFirstNames());
 					eaForm.setActAthLastName(usr.getLastName());
 					eaForm.setActAthEmail(usr.getEmail());
-				} else {
-					logger.debug("Usr is null");					
 				}
 			}
 			

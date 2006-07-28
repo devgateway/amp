@@ -24,7 +24,9 @@
 -->
 </script>
 
+<%--
 <digi:errors/>
+--%>
 
 <digi:instance property="aimMainProjectDetailsForm" />
 

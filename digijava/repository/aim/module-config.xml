@@ -201,6 +201,9 @@
 		
 		<hibernate-class> 		
 	 		org.digijava.module.aim.dbentity.AmpFeature
+		 </hibernate-class>
+ 		<hibernate-class> 		
+	 		org.digijava.module.aim.dbentity.AmpSiteFlag
 		</hibernate-class>
 		
 	</hibernate-classes>

@@ -325,6 +325,11 @@
 			  name="aimSectorSchemeForm" 
 			  type="org.digijava.module.aim.form.SectorSchemeForm" />
 
+
+	<form-bean 
+			  name="aimFlagUploaderForm" 
+			  type="org.digijava.module.aim.form.FlagUploaderForm" />
+	
 	<form-bean
 		name="aimPortfolioDashboardForm"
 		type="org.apache.struts.action.DynaActionForm">
@@ -1367,6 +1372,43 @@
 			  <forward name="index" path="/aim/index.do" redirect="true" />			  
 	</action>
 
+	<action 
+			  type="org.digijava.module.aim.action.SetDefaultFlag"
+			  scope="request"
+			  validate="false"
+			  path="/aim/setDefaultFlag">
+			  <forward name="forward" path="/aim/flagUploader.do" redirect="true" />
+			  <forward name="index" path="/aim/index.do" redirect="true" />			  
+	</action>
+	
+	<action 
+			  name="aimFlagUploaderForm"
+			  type="org.digijava.module.aim.action.GetAllFlags"
+			  scope="request"
+			  validate="false"
+			  path="/aim/flagUploader">
+			  <forward name="forward" path="/showLayout.do?layout=flagUploader" />
+			  <forward name="index" path="/aim/index.do" redirect="true" />			  
+	</action>
+
+	<action 
+			  name="aimFlagUploaderForm"	
+			  type="org.digijava.module.aim.action.UploadFlag"
+			  scope="request"
+			  validate="false"
+			  path="/aim/uploadFlag">
+			  <forward name="forward" path="/aim/flagUploader.do" redirect="true" />
+			  <forward name="index" path="/aim/index.do" redirect="true" />
+	</action>
+
+	<action 
+			  name="aimFlagUploaderForm"	
+			  type="org.digijava.module.aim.action.DisplayFlag"
+			  scope="request"
+			  validate="false"
+			  path="/aim/displayFlag">
+	</action>
+	
 	<action 
 			  name="aimWorkspaceForm"
 			  type="org.digijava.module.aim.action.WorkspaceManager"
@@ -2605,9 +2647,9 @@
 			  type="org.digijava.module.aim.action.SaveActivity"
 			  scope="session"
 			  path="/aim/saveActivity">	
-			  <forward name="adminHome" path="/admin.do" redirect="true" />
-			  <forward name="viewMyDesktop" path="/viewMyDesktop.do" redirect="true" />
-			  <forward name="saveSurvey" path="/editSurvey.do?action=save" />			  
+			  <forward name="adminHome" path="/aim/admin.do" redirect="true" />
+			  <forward name="viewMyDesktop" path="/aim/viewMyDesktop.do" redirect="true" />
+			  <forward name="saveSurvey" path="/aim/editSurvey.do?action=save" />			  
 			  <forward name="index" path="/aim/index.do" redirect="true" />
 			  <forward name="addActivity" path="/aim/addActivity.do?edit=true" />
 			  <forward name="addActivityStep1" path="/showLayout.do?layout=addActivityStep1" />

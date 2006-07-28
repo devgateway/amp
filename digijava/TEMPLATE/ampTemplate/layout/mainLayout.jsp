@@ -25,7 +25,7 @@
 		<TABLE cellSpacing=0 cellPadding=0 width="100%" border=0 valign="top" align="left">
 			<TBODY>
 			<TR>
-				<TD width="100%" bgColor=#323232 vAlign="center" align="left" height="10">
+				<TD width="100%" bgColor=#323232 vAlign="center" align="left">
 					<digi:insert attribute="headerTop" />
 				</TD>
 			</TR>

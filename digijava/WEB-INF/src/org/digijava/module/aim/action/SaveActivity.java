@@ -26,6 +26,8 @@ import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
+import org.digijava.kernel.request.Site;
+import org.digijava.kernel.util.RequestUtils;
 import org.digijava.module.aim.dbentity.AmpActivity;
 import org.digijava.module.aim.dbentity.AmpActivityClosingDates;
 import org.digijava.module.aim.dbentity.AmpActivityInternalId;
@@ -1263,17 +1265,11 @@ public class SaveActivity extends Action {
 					activity.setApprovalStatus(eaForm.getApprovalStatus());
 					// update an existing activity
 					
-					if (eaForm.getIndicatorsME() != null)
-						logger.info("Indicators ME size = " + eaForm.getIndicatorsME().size());
-					else 
-						logger.info("Indicators ME is null");
-					
 					actId = ActivityUtil.saveActivity(activity, eaForm.getActivityId(),
 							true, eaForm.getCommentsCol(), eaForm
 									.isSerializeFlag(), field, relatedLinks, tm
 									.getMemberId(), eaForm.getIndicatorsME());
-
-
+					
 					// remove the activity details from the edit activity list
 					if (toDelete == null
 							|| (!toDelete.trim().equalsIgnoreCase("true"))) {
@@ -1320,6 +1316,7 @@ public class SaveActivity extends Action {
 					actId = ActivityUtil.saveActivity(activity,
 							eaForm.getCommentsCol(), eaForm.isSerializeFlag(),
 							field, relatedLinks, tm.getMemberId());
+					
 				}
 			}
 
@@ -1350,6 +1347,7 @@ public class SaveActivity extends Action {
 			eaForm.reset(mapping, request);
 
 			if (session.getAttribute(Constants.AMP_PROJECTS) != null) {
+				
 				Collection col = (Collection) session.getAttribute(
 						Constants.AMP_PROJECTS);
 				AmpProject project = new AmpProject();
@@ -1358,15 +1356,15 @@ public class SaveActivity extends Action {
 				
 				Collection actIds = new ArrayList();
 				actIds.add(actId);
-				Iterator pItr = DesktopUtil.getAmpProjects(actIds).iterator();
+				Collection dirtyActivities = DesktopUtil.getAmpProjects(actIds);
+				Iterator pItr = dirtyActivities.iterator();
 				if (pItr.hasNext()) {
 					AmpProject proj = (AmpProject) pItr.next();
 					col.add(proj);
 				}
 				session.setAttribute(Constants.AMP_PROJECTS,col);
-				if (session.getAttribute(Constants.DESKTOP_SETTINGS_CHANGED) != null) {
-					session.removeAttribute(Constants.DESKTOP_SETTINGS_CHANGED);
-				}
+				session.setAttribute(Constants.DIRTY_ACTIVITY_LIST,dirtyActivities);
+				session.setAttribute(Constants.DESKTOP_SETTINGS_CHANGED,new Boolean(true));
 			}
 			
 			if (tm.getTeamHead()) {
@@ -1385,9 +1383,10 @@ public class SaveActivity extends Action {
 				} else {
 					return mapping.findForward("viewMyDesktop");
 				}
-					
-			} else
+			} else {
+				logger.info("returning null....");
 				return null;
+			}
 		} catch (Exception e) {
 			e.printStackTrace(System.out);
 		}

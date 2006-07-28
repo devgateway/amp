@@ -38,7 +38,7 @@ import org.digijava.module.aim.helper.Constants;
 public class AMPActionServlet extends ActionServlet {
 
 	private ServletContext ampContext; // the application scope variable
-	private static Logger logger = Logger.getLogger(AMPActionServlet.class);
+	//private static Logger logger = Logger.getLogger(AMPActionServlet.class);
 	
 	public void init(ServletConfig servletConfig) throws ServletException {
 		ampContext = servletConfig.getServletContext();
@@ -83,7 +83,7 @@ public class AMPActionServlet extends ActionServlet {
 		 */
 		if (index > -1) {
 			int tempIndex = url.indexOf("/" + Constants.AIM_MODULE_KEY + "/");
-			if (tempIndex != -1) {
+			if (tempIndex != -1 && (!url.endsWith("displayFlag.do"))) {
 				String pggrp = request.getParameter("edit");
 				/*
 				 * The value of the request parameter 'edit tells the system, whether the user is still in the edit 

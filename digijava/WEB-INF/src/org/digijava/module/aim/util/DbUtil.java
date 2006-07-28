@@ -2295,8 +2295,7 @@ public class DbUtil {
 			tx.commit();
 		} catch (Exception e) {
 			logger.error("Unable to add");
-			logger.debug(e.toString());
-
+			e.printStackTrace(System.out);
 			if (tx != null) {
 				try {
 					tx.rollback();

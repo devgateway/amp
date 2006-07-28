@@ -55,9 +55,10 @@ public class GetDesktopActivities extends Action {
 					tm.getTeamHead());
 			session.setAttribute(Constants.AMP_PROJECTS,col);
 		}
-		dForm.setActivities(new ArrayList(col));
 		dForm.setTotalCalculated(false);
 		dForm.setSearchKey(null);
+		Collection col1 = (Collection) session.getAttribute(Constants.AMP_PROJECTS);
+		dForm.setActivities(new ArrayList(col1));		
 		
 		return mapping.findForward("forward");
 	}

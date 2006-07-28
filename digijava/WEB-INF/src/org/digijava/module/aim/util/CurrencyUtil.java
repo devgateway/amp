@@ -23,6 +23,7 @@ import org.digijava.module.aim.dbentity.AmpCurrency;
 import org.digijava.module.aim.dbentity.AmpCurrencyRate;
 import org.digijava.module.aim.dbentity.AmpFunding;
 import org.digijava.module.aim.dbentity.AmpFundingDetail;
+import org.digijava.module.aim.exception.AimException;
 import org.digijava.module.aim.helper.Currency;
 import org.digijava.module.aim.helper.CurrencyRates;
 import org.digijava.module.aim.helper.DateConversion;
@@ -507,7 +508,7 @@ public class CurrencyUtil {
 	}
 	
 	public static void addCurrency(AmpCurrency ampCurr,
-			AmpCurrencyRate ampCurrRate) {
+			AmpCurrencyRate ampCurrRate) throws AimException {
 		DbUtil.add(ampCurr);
 		DbUtil.add(ampCurrRate);
 	}

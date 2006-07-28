@@ -268,8 +268,13 @@
 	<page name="parisIndicatorManager" title=" : Paris Indicator Manager" />
 	<page name="parisIndicatorDelete" title=" : Paris Indicator Delete" />
 	<page name="parisIndicatorEdit" title=" : Paris Indicator Edit" />
+
 	<!-- Paris Indiacator Manager ends-->
-			
+	<page name="flagUploader" title=" - Flag uploader/selector" />
+	<!--
+	<page page="uploadFlag" name="aim_uploadFlag" title=" - Upload Flag" />
+	-->
+
 </secondary-pages>
 
 <module>

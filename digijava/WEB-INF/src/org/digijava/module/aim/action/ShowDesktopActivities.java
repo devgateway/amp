@@ -18,6 +18,8 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.tiles.actions.TilesAction;
+import org.digijava.kernel.request.Site;
+import org.digijava.kernel.util.RequestUtils;
 import org.digijava.module.aim.dbentity.AmpCurrency;
 import org.digijava.module.aim.dbentity.AmpFilters;
 import org.digijava.module.aim.dbentity.AmpPerspective;
@@ -40,14 +42,27 @@ public class ShowDesktopActivities extends TilesAction {
 	
 	public ActionForward execute(ActionMapping mapping,ActionForm form,
 			HttpServletRequest request,HttpServletResponse response) throws Exception {
-		
-		DecimalFormat mf = new DecimalFormat("###,###,###,###,###") ;
-		
-		ServletContext ampContext = getServlet().getServletContext();
+
 		
 		HttpSession session = request.getSession();
+		
+		DecimalFormat mf = new DecimalFormat("###,###,###,###,###") ;
+
+		ServletContext ampContext = getServlet().getServletContext();
+		
 		TeamMember tm = (TeamMember) session.getAttribute(Constants.CURRENT_MEMBER);
 		DesktopForm dForm = (DesktopForm) form;
+		
+		if (session.getAttribute(Constants.DIRTY_ACTIVITY_LIST) != null) {
+			Collection col = (Collection) session.getAttribute(Constants.DIRTY_ACTIVITY_LIST);
+			if (dForm.getActivities() != null) {
+				dForm.getActivities().removeAll(col);
+			} else {
+				dForm.setActivities(new ArrayList());
+			}
+			dForm.getActivities().addAll(col);
+			session.removeAttribute(Constants.DIRTY_ACTIVITY_LIST);
+		}
 		
 		int currPage = 1;
 		byte srtField = Constants.SORT_FIELD_PROJECT;
@@ -197,18 +212,18 @@ public class ShowDesktopActivities extends TilesAction {
 				dForm.setSrtFld(srtField);
 				dForm.setSrtAsc(true);
 			}
+			
+			if (dForm.getSrtFld() == Constants.SORT_FIELD_PROJECT) {
+				Collections.sort(dForm.getActivities(),projNameComparator);
+			} else if (dForm.getSrtFld() == Constants.SORT_FIELD_AMPID) {
+				Collections.sort(dForm.getActivities(),ampIdComparator);
+			} else if (dForm.getSrtFld() == Constants.SORT_FIELD_DONOR) {
+				Collections.sort(dForm.getActivities(),donorComparator);
+			} else if (dForm.getSrtFld() == Constants.SORT_FIELD_AMOUNT) {
+				Collections.sort(dForm.getActivities(),amountComparator);
+			}
 			if (!dForm.isSrtAsc()) {
 				Collections.reverse(dForm.getActivities());
-			} else {
-				if (dForm.getSrtFld() == Constants.SORT_FIELD_PROJECT) {
-					Collections.sort(dForm.getActivities(),projNameComparator);
-				} else if (dForm.getSrtFld() == Constants.SORT_FIELD_AMPID) {
-					Collections.sort(dForm.getActivities(),ampIdComparator);
-				} else if (dForm.getSrtFld() == Constants.SORT_FIELD_DONOR) {
-					Collections.sort(dForm.getActivities(),donorComparator);
-				} else if (dForm.getSrtFld() == Constants.SORT_FIELD_AMOUNT) {
-					Collections.sort(dForm.getActivities(),amountComparator);
-				}					
 			}			
 		} else if ((dForm.isTotalCalculated() == false) || 
 				(settingsChanged != null && settingsChanged.booleanValue() == true)) {
@@ -257,6 +272,7 @@ public class ShowDesktopActivities extends TilesAction {
 			dForm.setDefCurrency(currCode);
 			dForm.setPages(new ArrayList());
 			dForm.setCurrentPage(new Integer(currPage));
+			
 			int actSize = dForm.getActivities().size();
 			int numRecs = tm.getAppSettings().getDefRecsPerPage();
 			
@@ -276,6 +292,10 @@ public class ShowDesktopActivities extends TilesAction {
 			dForm.setTotalCalculated(true);
 			dForm.setSrtFld(srtField);
 			session.setAttribute(Constants.DESKTOP_SETTINGS_CHANGED,new Boolean(false));
+		} else {
+			Collections.sort(dForm.getActivities(),projNameComparator);
+			dForm.setSrtAsc(true);
+			dForm.setSrtFld(srtField);			
 		}
 		return null;
 	}

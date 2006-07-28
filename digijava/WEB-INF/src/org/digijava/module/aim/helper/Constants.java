@@ -175,10 +175,13 @@ public class Constants
 	public static final String AA_FEATURE = "AA"; // Activity Approval feature code 
 	public static final String CL_FEATURE = "CL"; // Calendar feature code
 	
+	public static final String DEF_FLAG_EXIST = "defFlagExist"; 
+	
 	public static final String DSKTP_FLTR_CHANGED = "dsktpFltrChanged";
 	public static final String CURRENT_MEMBER = "currentMember";
 	
 	public static final String AMP_PROJECTS = "ampProjects";
+	public static final String DIRTY_ACTIVITY_LIST = "dirtyActivityList";
 	public static final String TYPE_MNGMT = "Management";
 	public static final String TYPE_TEAM = "Team";
 	
@@ -199,4 +202,9 @@ public class Constants
 	public static final String DESKTOP_SETTINGS_CHANGED = "desktopSettingsChanged";
 	
 	public static final String AIM_MODULE_KEY = "aim";
+	
+	public static final String EVENT_EDIT = "edit";
+	public static final String EVENT_ADD = "add";
+	public static final String EVENT_SHOW_ADD = "showAdd";
+	public static final String EVENT_SHOW_EDIT = "showEdit";
 }	

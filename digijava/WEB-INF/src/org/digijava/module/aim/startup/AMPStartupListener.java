@@ -36,18 +36,20 @@ public class AMPStartupListener extends HttpServlet
         		AmpFeature f = (AmpFeature) itr.next();
         		if (f.getCode().equalsIgnoreCase(Constants.ME_FEATURE)) {
         			ampContext.setAttribute(Constants.ME_FEATURE,new Boolean(true));
-        			logger.info("ME Feature..");
+        			//logger.debug("ME Feature..");
         		} else if (f.getCode().equalsIgnoreCase(Constants.AA_FEATURE)) {
         			ampContext.setAttribute(Constants.AA_FEATURE,new Boolean(true));
-        			logger.info("AA Feature..");        			
+        			//logger.debug("AA Feature..");        			
         		} else if (f.getCode().equalsIgnoreCase(Constants.PI_FEATURE)) {
         			ampContext.setAttribute(Constants.PI_FEATURE,new Boolean(true));
-        			logger.info("PI Feature..");
+        			//logger.debug("PI Feature..");
         		} else if (f.getCode().equalsIgnoreCase(Constants.CL_FEATURE)) {
         			ampContext.setAttribute(Constants.CL_FEATURE,new Boolean(true));
-        			logger.info("CL Feature..");
+        			//logger.debug("CL Feature..");
         		}
         	}
+        	boolean defFlagExist = FeaturesUtil.defaultFlagExist();
+        	ampContext.setAttribute(Constants.DEF_FLAG_EXIST,new Boolean(defFlagExist));
         	
     	} catch (Exception e) {
     		logger.error("Exception while initialising AMP :" + e.getMessage());

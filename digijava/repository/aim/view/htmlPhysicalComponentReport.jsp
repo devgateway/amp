@@ -149,13 +149,13 @@
 					</tr>
 						<tr>
 						   <td width=40 >	    &nbsp;		   </td>
-						 <td width=120 valign=top>  <b>Status : </b> </td>
+						 <td width=120 valign=top>  <b>Status </b> </td>
 	 					 <td> <b> : </b> </td>						 
-						 <td align="left" width=560 >
-
+						 <td align="left" width=560 ><b>
+						 	<bean:write name="project" property="status"/> - </b>
 							<logic:empty name="project" property="progress"> 
 							</logic:empty>
-							<logic:notEmpty name="project" property="progress">
+							<logic:notEmpty name="project" property="progress"> 
 							<logic:iterate name="project" id="progress" property="progress">* <%=progress%>	
 							</logic:iterate>
 							</logic:notEmpty>

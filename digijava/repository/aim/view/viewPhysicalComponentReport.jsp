@@ -478,39 +478,30 @@
 		<logic:iterate name="donors"  property="project" id="project" type="org.digijava.module.aim.helper.Project">
 			<tr bgcolor="white">
 			<td align="center"><bean:write name="donors" property="donorCount"/>.<bean:write name="project" property="count"/></td>
-				<td align="left" height="21" > 
-					<bean:write name="project" property="name"/> <br>
-					<b>Description:</b>
-					<bean:write name="project" property="descriptionPDFXLS"/>
-					<%--
-					<logic:empty name="project" property="descriptionPDFXLS">&nbsp;</logic:empty>	
-					<logic:notEmpty name="project" property="descriptionPDFXLS">
-						<bean:define id="describeKey" type="java.lang.String">
-							<bean:write name="project" property="descriptionPDFXLS"/>
-						</bean:define>
-						<digi:edit key="<%=describeKey%>"/>
-						
-					</logic:notEmpty>
-					--%>
-				</td>
+					<td align="left" height="21" > 
+						<bean:write name="project" property="name"/> <br>
+						<b>Description:</b>
+						<bean:write name="project" property="descriptionPDFXLS"/>
+					</td>
 				
 					<td align="left" height="21" width="39" valign="top">
-					<bean:write name="project" property="signatureDate" />
+						<bean:write name="project" property="signatureDate" />
 					</td>
 					<td align="left" height="21" width="40" valign="top"> 
-					<bean:write name="project" property="actualCompletionDate" />
+						<bean:write name="project" property="actualCompletionDate" />
 					</td>
 					
 					<td align="right" height="21" width="45" valign="top"> 
-					<bean:write name="project" property="acCommitment" />
+						<bean:write name="project" property="acCommitment" />
 					</td>
 					<td align="right" height="21" width="40" valign="top"> 
-					<bean:write name="project" property="acDisbursement" />
+						<bean:write name="project" property="acDisbursement" />
 					</td>
 					<td align="right" height="21" width="77" valign="top">
 						<bean:write name="project" property="acUnDisbursement" />
 					</td>
-					<td align="left" height="21" width="91" valign="top">
+					<td align="left" height="21" width="91" valign="top"><b>
+						<bean:write name="project" property="status"/></b> :<br>
 						<logic:empty name="project" property="progress">&nbsp;
 					</logic:empty>
 					<logic:notEmpty name="project" property="progress">

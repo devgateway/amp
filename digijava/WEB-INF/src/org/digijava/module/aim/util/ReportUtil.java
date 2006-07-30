@@ -29,6 +29,8 @@ import org.digijava.module.aim.dbentity.AmpActor;
 import org.digijava.module.aim.dbentity.AmpColumns;
 import org.digijava.module.aim.dbentity.AmpComponent;
 import org.digijava.module.aim.dbentity.AmpFilters;
+import org.digijava.module.aim.dbentity.AmpFunding;
+import org.digijava.module.aim.dbentity.AmpFundingDetail;
 import org.digijava.module.aim.dbentity.AmpMeasures;
 import org.digijava.module.aim.dbentity.AmpModality;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
@@ -10607,24 +10609,24 @@ public class ReportUtil {
 			logger.debug("Inclause: " + inClause);
 			approvedActivityList=DbUtil.getApprovedActivities(inClause);
 			session = PersistenceManager.getSession();
+
 			if(startDate==null && closeDate==null)
 				queryString = "select report from " + AmpReportCache.class.getName() + " report where report.ampTeamId in(" + inClause + ") and (report.reportType='1') order by report.ampDonorId,report.ampActivityId,report.transactionDate";
 			else
 				queryString = "select report from " + AmpReportCache.class.getName() + " report where report.ampTeamId in(" + inClause + ") and (report.actualStartDate='" + startDate + "' or report.actualCompletionDate='" + closeDate + "') and (report.reportType='1') order by report.ampDonorId,report.ampActivityId,report.transactionDate";
-				
-	
+			
 			logger.debug("querystring: " + queryString);
 			q = session.createQuery(queryString);	
 			multiReport report =null;
 			AmpTeamDonors ampTeamDonors=null;
 			Project project=null;
+			
 			if(q!=null)
 			{
 				iter = q.list().iterator();
 				while(iter.hasNext())
 				{
 					AmpReportCache ampReportCache = (AmpReportCache) iter.next(); 
-					
 					if(approvedActivityList.indexOf(ampReportCache.getAmpActivityId())==-1)
 						continue;
 
@@ -10742,6 +10744,7 @@ public class ReportUtil {
 
 							project.setPlannedCompletionDate(DateConversion.ConvertDateToString(ampReportCache.getPlannedCompletionDate()));
 							project.setActualCompletionDate(DateConversion.ConvertDateToString(ampReportCache.getActualCompletionDate()));
+							project.setStatus(ampReportCache.getStatusName());
 							
 							if(DbUtil.getAmpReportPhysicalPerformance(ampReportCache.getAmpActivityId()) !=null)
 								project.getProgress().addAll(DbUtil.getAmpReportPhysicalPerformance(ampReportCache.getAmpActivityId()));
@@ -10795,6 +10798,7 @@ public class ReportUtil {
 
 							project.setPlannedCompletionDate(DateConversion.ConvertDateToString(ampReportCache.getPlannedCompletionDate()));
 							project.setActualCompletionDate(DateConversion.ConvertDateToString(ampReportCache.getActualCompletionDate()));
+							project.setStatus(ampReportCache.getStatusName());
 							
 							if(DbUtil.getAmpReportPhysicalPerformance(ampReportCache.getAmpActivityId()) !=null)
 								project.getProgress().addAll(DbUtil.getAmpReportPhysicalPerformance(ampReportCache.getAmpActivityId()));
@@ -10870,6 +10874,7 @@ public class ReportUtil {
 
 							project.setPlannedCompletionDate(DateConversion.ConvertDateToString(ampReportCache.getPlannedCompletionDate()));
 							project.setActualCompletionDate(DateConversion.ConvertDateToString(ampReportCache.getActualCompletionDate()));
+							project.setStatus(ampReportCache.getStatusName());
 							
 							if(DbUtil.getAmpReportPhysicalPerformance(ampReportCache.getAmpActivityId()) !=null)
 								project.getProgress().addAll(DbUtil.getAmpReportPhysicalPerformance(ampReportCache.getAmpActivityId()));
@@ -10935,6 +10940,7 @@ public class ReportUtil {
 
 							project.setPlannedCompletionDate(DateConversion.ConvertDateToString(ampReportCache.getPlannedCompletionDate()));
 							project.setActualCompletionDate(DateConversion.ConvertDateToString(ampReportCache.getActualCompletionDate()));
+							project.setStatus(ampReportCache.getStatusName());
 							
 							if(DbUtil.getAmpReportPhysicalPerformance(ampReportCache.getAmpActivityId()) !=null)
 								project.getProgress().addAll(DbUtil.getAmpReportPhysicalPerformance(ampReportCache.getAmpActivityId()));
@@ -10963,7 +10969,7 @@ public class ReportUtil {
 							logger.debug("Outside Project");
 						}
 					}
-
+					
 					if(ampReportCache.getFiscalYear()!=null && ampReportCache.getFiscalQuarter()!=null)
 					{	
 						logger.debug("Begin if");
@@ -10975,7 +10981,34 @@ public class ReportUtil {
 							toExchangeRate=1.0;
 						else
 							toExchangeRate=CurrencyUtil.getExchangeRate(ampCurrencyCode,Constants.ACTUAL,ampReportCache.getTransactionDate());					
-					
+
+						if(actualCommitment==0 && actualDisbursement==0)
+						{
+							Collection fundIds = DbUtil.getFundingByActivity(ampReportCache.getAmpActivityId());
+							Iterator fundIdsItr = fundIds.iterator();
+							while(fundIdsItr.hasNext())
+							{
+								AmpFunding tempAmpFund = (AmpFunding) fundIdsItr.next();
+								Collection fundDetailIds = DbUtil.getFundingDetails(tempAmpFund.getAmpFundingId());
+								Iterator fundDetailItr = fundDetailIds.iterator();
+								while(fundDetailItr.hasNext())
+								{
+									AmpFundingDetail tempFundDetail = (AmpFundingDetail) fundDetailItr.next();
+									if(tempFundDetail.getTransactionType().intValue() == 0
+											&& tempFundDetail.getAdjustmentType().intValue() == 1)
+										actualCommitment = actualCommitment + 
+															CurrencyWorker.convert1
+															(tempFundDetail.getTransactionAmount().doubleValue(),
+															fromExchangeRate,toExchangeRate);
+									if(tempFundDetail.getTransactionType().intValue() == 1
+											&& tempFundDetail.getAdjustmentType().intValue() == 1)
+										actualDisbursement = actualDisbursement + 
+																CurrencyWorker.convert1
+																(tempFundDetail.getTransactionAmount().doubleValue(),
+																fromExchangeRate,toExchangeRate);
+								}
+							}
+						}
 						if(ampReportCache.getActualCommitment().doubleValue()>0 && ampReportCache.getPerspective().equals(perspective))
 						{
 							if(commFlag==0)
@@ -10983,25 +11016,8 @@ public class ReportUtil {
 								project.setSignatureDate(DateConversion.ConvertDateToString(ampReportCache.getTransactionDate()));
 								commFlag=1;
 							}
-							amount=CurrencyWorker.convert1(ampReportCache.getActualCommitment().doubleValue(),fromExchangeRate,toExchangeRate);
-							actualCommitment=actualCommitment + amount;
 						}
-
-						amount=0.0;
-					
-						if(ampReportCache.getActualDisbursement().doubleValue()>0 && ampReportCache.getPerspective().equals(perspective))
-						{
-							if(ampReportCache.getFiscalYear().intValue()>=fromYr && ampReportCache.getFiscalYear().intValue()<=toYr)
-							{
-								amount=CurrencyWorker.convert1(ampReportCache.getActualDisbursement().doubleValue(),fromExchangeRate,toExchangeRate);
-								actualDisbursement=actualDisbursement + amount;
-							}
-						}		
-						amount=0.0;
-						//logger.debug("End if");
 					}		
-								
-					
 				}
 				if(report!=null)
 				{

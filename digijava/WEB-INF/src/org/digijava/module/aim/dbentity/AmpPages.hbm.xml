@@ -13,7 +13,7 @@
 					 <property name="pageCode" column="page_code" type="java.lang.String"/>
 					 <property name="ampTeamId" column="amp_Team_Id" type="java.lang.Long"/>
 
-					 <set name="filters" table="amp_page_filters" lazy="true">
+					 <set name="filters" table="AMP_PAGE_FILTERS" lazy="true">
 								<cache usage="read-write"/>
 								<key column="amp_page_id"/>
 								<many-to-many class="org.digijava.module.aim.dbentity.AmpFilters" column="amp_filter_id"/>

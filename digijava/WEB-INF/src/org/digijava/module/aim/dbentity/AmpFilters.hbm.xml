@@ -11,7 +11,7 @@
 						
 					 <property name="filterName" column="filter_name" type="java.lang.String"/>
 
-					 <set name="pages" table="amp_page_filters" lazy="true">
+					 <set name="pages" table="AMP_PAGE_FILTERS" lazy="true">
 								<cache usage="read-write"/>
 								<key column="amp_filter_id"/>
 								<many-to-many class="org.digijava.module.aim.dbentity.AmpPages" column="amp_page_id"/>

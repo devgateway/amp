@@ -17,7 +17,7 @@
 		<property name="country" column="country" type="java.lang.String"/>
 		<property name="region" column="region" type="java.lang.String"/>
 
-		<set name="aidlocation" table="amp_activity_location" lazy="true">
+		<set name="aidlocation" table="AMP_ACTIVITY_LOCATION" lazy="true">
   	            <cache usage="read-write"/>
 				<key column="amp_location_id"/>
 				<many-to-many class="org.digijava.module.aim.dbentity.AmpActivity" column="amp_activity_id"/>

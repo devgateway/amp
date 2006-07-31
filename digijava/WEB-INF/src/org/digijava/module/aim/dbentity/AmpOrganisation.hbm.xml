@@ -46,7 +46,7 @@
 		<many-to-one name="ampSecSchemeId" column="amp_sec_scheme_id" class="org.digijava.module.aim.dbentity.AmpSectorScheme" cascade="none"/>
 		<property name="orgTypeCode" column="org_type_code"  type="java.lang.String"/>	
 		
-		<set name="survey" table="amp_ahsurvey" inverse="true" lazy="true" cascade="none">
+		<set name="survey" table="AMP_AHSURVEY" inverse="true" lazy="true" cascade="none">
 			<cache usage="read-write" />
 			<key column="amp_org_id"/>
 			<one-to-many class="org.digijava.module.aim.dbentity.AmpAhsurvey"/>

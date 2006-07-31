@@ -12,7 +12,7 @@
 		<property column="aliasName" name="aliasName" type="java.lang.String"/>
 		<property column="type" name="type" type="java.lang.String"/>
 
-		<set name="reports" table="amp_report_measures" lazy="true">
+		<set name="reports" table="AMP_REPORT_MEASURES" lazy="true">
 			<cache usage="read-write"/>
 			<key column="measureId"/>
 			<many-to-many class="org.digijava.module.aim.dbentity.AmpReports" column="amp_report_id"/>

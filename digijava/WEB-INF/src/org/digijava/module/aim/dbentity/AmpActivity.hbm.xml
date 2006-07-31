@@ -78,19 +78,19 @@
 			<one-to-many class="org.digijava.module.aim.dbentity.AmpOrgRole"/>
  		</set>			
 
-		<set name="sectors" table="amp_activity_sector" lazy="true">
+		<set name="sectors" table="AMP_ACTIVITY_SECTOR" lazy="true">
 			<cache usage="read-write"/>
 			<key column="amp_activity_id"/>
 			<many-to-many class="org.digijava.module.aim.dbentity.AmpSector" column="amp_sector_id"/>
 		</set>
 
-		<set name="locations" table="amp_activity_location" lazy="true" cascade="all">
+		<set name="locations" table="AMP_ACTIVITY_LOCATION" lazy="true" cascade="all">
 			<cache usage="read-write"/>
 			<key column="amp_activity_id"/>
 			<many-to-many class="org.digijava.module.aim.dbentity.AmpLocation" column="amp_location_id"/>
 		</set>
 
-		<set name="internalIds" table="amp_activity_internal_id">
+		<set name="internalIds" table="AMP_ACTIVITY_INTERNAL_ID">
 			<key column="amp_activity_id"/>
 			<composite-element class="org.digijava.module.aim.dbentity.AmpActivityInternalId">
 				<many-to-one name="organisation" class="org.digijava.module.aim.dbentity.AmpOrganisation" 
@@ -111,13 +111,13 @@
 			<one-to-many class="org.digijava.module.aim.dbentity.AmpComponent"/>
  		</set>	
 
- 		<set name="documents" table="amp_activity_km_documents" lazy="true" cascade="none">
+ 		<set name="documents" table="AMP_ACTIVITY_KM_DOCUMENTS" lazy="true" cascade="none">
   	            <cache usage="read-write"/>
 				<key column="amp_activity_id"/>
 				<many-to-many class="org.digijava.module.cms.dbentity.CMSContentItem" column="id"/>
 		</set>	
 		
-		<set name="member" table="amp_member_activities" lazy="true" inverse="true">
+		<set name="member" table="AMP_MEMBER_ACTIVITIES" lazy="true" inverse="true">
   	            <cache usage="read-write"/>
 				<key column="amp_activity_id"/>
 				<many-to-many class="org.digijava.module.aim.dbentity.AmpTeamMember" column="amp_member_id"/>
@@ -147,7 +147,7 @@
 			<one-to-many class="org.digijava.module.aim.dbentity.AmpRegionalFunding"/>
  		</set>
  		
- 		<set name="survey" cascade="save-update" table="amp_ahsurvey" inverse="true">
+ 		<set name="survey" cascade="save-update" table="AMP_AHSURVEY" inverse="true">
 			<cache usage="read-write"/>
 			<key column="amp_activity_id"/>
 			<one-to-many class="org.digijava.module.aim.dbentity.AmpAhsurvey"/>

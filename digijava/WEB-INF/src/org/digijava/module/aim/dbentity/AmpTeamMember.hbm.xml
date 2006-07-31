@@ -17,26 +17,26 @@
 		<many-to-one name="ampTeam" column="amp_team_id" class="org.digijava.module.aim.dbentity.AmpTeam" cascade="none"/>
 		<many-to-one name="ampMemberRole" column="amp_member_role_id" class="org.digijava.module.aim.dbentity.AmpTeamMemberRoles" cascade="none"/>
 
-		<set name="activities" table="amp_member_activities" lazy="true">
+		<set name="activities" table="AMP_MEMBER_ACTIVITIES" lazy="true">
   	            <cache usage="read-write"/>
 				<key column="amp_member_id"/>
 				<many-to-many class="org.digijava.module.aim.dbentity.AmpActivity" column="amp_activity_id"/>
 	 	</set>	
 
-		<set name="links" table="amp_member_links" lazy="true" cascade="all">
+		<set name="links" table="AMP_MEMBER_LINKS" lazy="true" cascade="all">
   	    	<cache usage="read-write"/>
 			<key column="amp_team_mem_id"/>
 			<many-to-many class="org.digijava.module.cms.dbentity.CMSContentItem" column="id"/>
 		</set>		 
 	 
 
-		<set name="reports" table="amp_member_reports" lazy="true">
+		<set name="reports" table="AMP_MEMBER_REPORTS" lazy="true">
   	            <cache usage="read-write"/>
 				<key column="amp_member_id"/>
 				<many-to-many class="org.digijava.module.aim.dbentity.AmpReports" column="amp_report_id"/>
 	 	</set>
 	 	
-	 	<set name="editableFundingOrgs" table="amp_edit_donor_org" lazy="true">
+	 	<set name="editableFundingOrgs" table="AMP_EDIT_DONOR_ORG" lazy="true">
   	            <cache usage="read-write"/>
 				<key column="amp_team_mem_id"/>
 				<many-to-many class="org.digijava.module.aim.dbentity.AmpOrganisation" column="amp_org_id"/>

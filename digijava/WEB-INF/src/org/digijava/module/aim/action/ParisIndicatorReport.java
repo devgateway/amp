@@ -153,7 +153,7 @@ public class ParisIndicatorReport extends Action {
 									}
 								}
 								for(j = 0; j < numCols; j++) {
-									val = (100 * answers[j]) / dnSize ;
+									val = (100.0 * answers[j]) / dnSize ;
 									if ((val - (int) val) < 0.5)
 										dnIndc5Row[j + 1] = Integer.toString((int) val);
 									else

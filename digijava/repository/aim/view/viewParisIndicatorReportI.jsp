@@ -662,7 +662,10 @@
 												</c:if>
 												<c:if test="${flag == true}">
 													<td align="center">
+														<c:out value="${rowVal}"/>
+														<%--
 														<fmt:formatNumber type="number" value="${rowVal}" maxFractionDigits="0" />
+														--%>
 													</td>
 												</c:if>
 												<c:set var="flag" value="true" />

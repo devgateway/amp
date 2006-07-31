@@ -5411,7 +5411,7 @@ public class DbUtil {
 	Iterator itr1 = null, itr2 = null, itr3 = null, itr4 = null;
 	
 	try {
-		// logger.debug("indcCode[inside getAidSurveyReportByIndicator] : " + indcCode);
+		//logger.debug("indcCode[inside getAidSurveyReportByIndicator] : " + indcCode);
 		session = PersistenceManager.getSession();
 		String qry = "select distinct dn.ampDonorOrgId from " + AmpAhsurvey.class.getName() + " dn";
 		surveyDonors.addAll(session.createQuery(qry).list());
@@ -5497,6 +5497,7 @@ public class DbUtil {
 						}
 						answers = answersColl[index++];
 						if (null != answers) {
+							indc6Break:
 							for(j = 0; j < answers.length; j++) {
 								sum = 0.0;
 								if (answers[j]) {
@@ -5506,17 +5507,17 @@ public class DbUtil {
 											//logger.debug("continue: because of status");
 											continue;
 										}
-									if (indcFlag == 6) {
+								/*	if (indcFlag == 6) {
 										convYr = (startYear + i);
 										if (convYr == DateConversion.getYear(DateConversion.ConvertDateToString(svy.getAmpActivityId().getActualStartDate()))
 												|| convYr == DateConversion.getYear(DateConversion.ConvertDateToString(svy.getAmpActivityId().getActualCompletionDate())))
 											answersRow[i] += 1;
 										break;
 									}
+								*/
 									itr3 = svy.getAmpActivityId().getFunding().iterator();
 									while(itr3.hasNext()) {
 										AmpFunding fund = (AmpFunding) itr3.next();
-										//logger.debug("FundingId: " + fund.getAmpFundingId());
 										if (0 == dnOrg.getAmpOrgId().compareTo(fund.getAmpDonorOrgId().getAmpOrgId())) {
 											// Filtering by financing-instrument here
 											if (null != financingInstrument && financingInstrument.trim().length() > 1
@@ -5550,13 +5551,18 @@ public class DbUtil {
 													convYr = DateConversion.getYear(date);
 													// Filtering by disbursement-year here
 													if (convYr == (startYear + i)) {
-														// Filtering by AdjustmentType & TransactionType here
-														// only Actual-Disbursement is being considered except for indicator-7.
+														// Filtering by AdjustmentType & TransactionType here -
+														// only 'Actual Disbursement' is considered except for indicator-7.
 														if ((indcFlag != 7 && fundtl.getAdjustmentType().intValue() != Constants.ACTUAL)
 																|| (indcFlag == 7 && j == 0 && fundtl.getAdjustmentType().intValue() != Constants.PLANNED)
 																|| (indcFlag == 7 && j == 1 && fundtl.getAdjustmentType().intValue() != Constants.ACTUAL)
 																|| fundtl.getTransactionType().intValue() != Constants.DISBURSEMENT) {
 															continue;
+														}
+														// For indc-6: (Q9 = yes) & there is an actual-disb in the year
+														if (indcFlag == 6) {
+															answersRow[i] += 1;
+															break indc6Break;
 														}
 														// Filtering by currency here
 														if ("USD".equalsIgnoreCase(fundtl.getAmpCurrencyId().getCurrencyCode()))
@@ -5857,7 +5863,7 @@ public class DbUtil {
 				answersColl[index++] = answers;
 			}
 			else {
-				logger.debug("No response set found for this survey");
+				//logger.debug("No response set found for this survey");
 				for (int b = 0; b < NUM_COLUMNS_CALCULATED; b++)
 					answers[b] = false;
 				answersColl[index++] = answers;

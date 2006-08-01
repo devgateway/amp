@@ -55,6 +55,21 @@
 					</td>
 					
 				</tr>
+				<tr>
+					<td colspan=3 class=subtitle-blue align=center>
+						<digi:trn key="aim:parisIndicator">Paris Indicator</digi:trn>&nbsp;
+						<c:out value="${aimParisIndicatorReportForm.indicatorCode}" />&nbsp;
+						<digi:trn key="aim:report">Report</digi:trn>
+					</td>
+				</tr>
+				<c:if test="${aimParisIndicatorReportForm.indicatorCode == 6}">
+					<tr>
+						<td colspan=3 class=subtitle-blue-2 align=center>
+							[<digi:trn key="aim:numParallelPIU">Number Of Parallel PIUs</digi:trn>]&nbsp;
+						</td>
+					</tr>
+				</c:if>
+				<tr>
 	</digi:form>
 				<tr>
 				
@@ -127,7 +142,7 @@
 								 
 							</tr>
 							<c:if test="${aimParisIndicatorReportForm.indicatorCode == '7'}">
-								<tr>
+								<tr align="center"  bgcolor="#F4F4F2">
 									<%-- Loop-2 starts here --%>
 									<%--<c:set var="stYear" value="${aimParisIndicatorReportForm.startYear}" />
 									<bean:define id="cntr"><c:out value="${clYear - stYear + 1}" /></bean:define>
@@ -200,8 +215,10 @@
 														<td>
 															<div align="center">
 																<c:if test="${index1 == index2}">
-																	<%--<fmt:formatNumber value="${rowVal}" type="number" pattern="####" maxFractionDigits="0" />%--%>
-																	<c:out value="${rowVal}"/>%
+																	<c:if test="${rowVal == -1}">n.a.</c:if>
+																	<c:if test="${rowVal != -1}">
+																		<fmt:formatNumber type="number" value="${rowVal}" maxFractionDigits="0" />%
+																	</c:if>
 																</c:if>
 																<c:if test="${index1 != index2}">
 																	<fmt:formatNumber type="number" value="${rowVal}" maxFractionDigits="0" />
@@ -221,7 +238,12 @@
 							</tr>
 						</table>
 <%--***********************************************************************************************************--%>
-				
+					</td>
+					 
+				</tr>
+				<c:if test="${aimParisIndicatorReportForm.indicatorCode != '6'}">
+					<tr><td><font color="black">* All the amounts are in thousands (000)</font></td></tr>
+				</c:if>
 					</td>
 					
 				</tr>			

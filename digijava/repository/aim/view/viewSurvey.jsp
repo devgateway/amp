@@ -102,22 +102,41 @@
 																<TD colspan="2" width="90%">
 																<TABLE width="90%" cellPadding="5" cellSpacing="1" vAlign="top" align="center" bgcolor="#ffffff">
 																	<TR>
+																		<c:choose>
+																			<c:when test="${indicators.indicatorCode == '7' }">
 																		<TD width="80%">
-																			<nested:write property="questionText" /><br>
-																			<nested:equal property="questionType" value="calculated">
-																				<font color="red">
-																					<digi:trn key="aim:autoCalculated">(This is calculated automatically)</digi:trn>
-																				</font>
-																			</nested:equal>
+																					<digi:trn key="aim:noQuestioPI7">
+																					No question here. This indicator is calculated by the system based on <br>
+																					information entered for disbursements for this project/programme
+																					</digi:trn>
+																			</c:when>
+																			<c:when test="${indicators.indicatorCode == '10a' }">
+																		<TD width="100%">
+																					<digi:trn key="aim:noQuestionPI10a">
+																					No question at the activity level; this indicator is calculated using the Calendar Module
+																					</digi:trn>
+																			</c:when>
+																			<c:when test="${indicators.indicatorCode == '10b' }">
+																		<TD width="100%">
+																					 <digi:trn key="aim:noQuestionPI10b">
+																					No question at the activity level; this indicator is calculated using the Document Management Module
+																					</digi:trn>
+																			</c:when>
+																			<c:otherwise>
+																		<TD width="80%">
+																					<nested:write property="questionText" /><br>
+																			</c:otherwise>
+																		</c:choose>
 																		</TD>
 																		<TD width="20%">
 																			<nested:equal property="response" value="">
 																				<c:out value="-" />
-																				<%--<nested:text property="response" value="NA" size="2" readonly="true" />--%>
 																			</nested:equal>
 																			<nested:notEqual property="response" value="">
 																				<nested:notEqual property="questionType" value="calculated">
-																					<nested:write property="response" />
+																					<c:if test="${indicators.indicatorCode != '10a' && indicators.indicatorCode != '10b' }">
+																						<nested:write property="response" />
+																					</c:if>
 																					<nested:equal property="questionType" value="input">%</nested:equal>
 																				</nested:notEqual>
 																				<nested:equal property="questionType" value="calculated">
@@ -130,22 +149,6 @@
 																				</nested:equal>
 																			</nested:notEqual>
 																		</TD>
-																	<%-- 
-																	<nested:equal property="questionType" value="yes-no"> 
-																		<TD width="3%">
-																			<nested:radio property="response" disabled="false" value="yes" />
-																		</TD>
-																		<TD width="7%">yes</TD>
-																		<TD width="3%">
-																			<nested:radio property="response" disabled="false" value="no" />
-																		</TD>
-																		<TD width="7%">no</TD>																		
-																	</nested:equal>
-																	<nested:equal property="questionType" value="calculated">
-																		<TD width="20%">
-																			<nested:text name="question" property="response" indexed="true" size="5" readonly="true" />
-																		</TD>
-																	</nested:equal> --%>
 																	</TR>
 																</TABLE>
 																</TD>

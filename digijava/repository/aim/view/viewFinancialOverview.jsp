@@ -122,10 +122,10 @@
 					                    	<TABLE cellSpacing=0 cellPadding=0 bgColor=#f4f4f2 border=0>
 			      	                		<TR bgColor=#f4f4f2>
 			                        			<TD class=box-title noWrap bgColor=#c9c9c7 height="17">&nbsp;
-															<digi:trn key="aim:referenceInformation">Reference Information</digi:trn>
-			                          			</TD>
+																			<digi:trn key="aim:referenceInformation">Reference Information</digi:trn>
+			                          		</TD>
 			                        			<TD background="module/aim/images/corner-r.gif" height="17" width="17">
-			                          			</TD>
+			                          		</TD>
 			                          		</TR>
 			                  			</TABLE>
 			                  		</TD>

@@ -6,6 +6,17 @@
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
 
+<script language="Javascript">
+<!--
+	
+		function formSubmit()
+		{
+				document.aimQuarterlyDiscrepancyForm.submit();
+		}		
+
+-->
+</script>
+
 <html:errors/>
 <digi:instance property="aimQuarterlyDiscrepancyForm" />
 <digi:context name="digiContext" property="context"/>
@@ -103,19 +114,19 @@
 				</tr>		
 				<tr bgcolor="#F4F4F2" > 
 					<td>
-					<jsp:useBean id="urlFinancingBreakdown" type="java.util.Map" class="java.util.HashMap"/>
-					<c:set target="${urlFinancingBreakdown}" property="ampActivityId">
-					<bean:write name="aimQuarterlyDiscrepancyForm" property="ampActivityId"/>
-					</c:set>
-					<c:set target="${urlFinancingBreakdown}" property="tabIndex" value="1"/>
-					<bean:define id="translation">
-						<digi:trn key="aim:clickToViewFinancialProgress">Click here to view Financial Progress</digi:trn>
-					</bean:define>
-					<digi:link href="/viewFinancingBreakdown.do" name="urlFinancingBreakdown" styleClass="comment" title="<%=translation%>" >
-						<digi:trn key="aim:financialProgress">Financial Progress</digi:trn>
-					</digi:link> &gt; 
-					<digi:trn key="aim:discrepancyPerspective">Discrepancy Perspective</digi:trn>  
-				   	</td>
+						<jsp:useBean id="urlFinancingBreakdown" type="java.util.Map" class="java.util.HashMap"/>
+						<c:set target="${urlFinancingBreakdown}" property="ampActivityId">
+							<bean:write name="aimQuarterlyDiscrepancyForm" property="ampActivityId"/>
+						</c:set>
+						<c:set target="${urlFinancingBreakdown}" property="tabIndex" value="1"/>
+						<bean:define id="translation">
+							<digi:trn key="aim:clickToViewFinancialProgress">Click here to view Financial Progress</digi:trn>
+						</bean:define>
+						<digi:link href="/viewFinancingBreakdown.do" name="urlFinancingBreakdown" styleClass="comment" title="<%=translation%>" >
+							<digi:trn key="aim:financialProgress">Financial Progress</digi:trn>
+						</digi:link> &gt; 
+						<digi:trn key="aim:discrepancyPerspective">Discrepancy Perspective</digi:trn>  
+			   	</td>
 				</tr>
 				<tr bgcolor="#F4F4F2" > 
 					<td align="right" >
@@ -135,12 +146,12 @@
 				              				<td>&nbsp;</td>
 				              				<td> 
 				              					<html:select property="transactionType" styleClass="dr-menu" onchange="formSubmit()">
-												<html:option value="0">Commitments</html:option>
-												<html:option value="1">Disbursements</html:option>
-												<html:option value="2">Expenditures</html:option>
-												</html:select>
-												<html:hidden property="ampActivityId" />
-												<html:hidden property="tabIndex" />
+																	<html:option value="0">Commitments</html:option>
+																	<html:option value="1">Disbursements</html:option>
+																	<html:option value="2">Expenditures</html:option>
+																</html:select>
+																<html:hidden property="ampActivityId" />
+																<html:hidden property="tabIndex" />
 				                			</td>
 				              				<td>&nbsp;</td>
 				            			</tr>
@@ -175,14 +186,14 @@
 				              				<td valign="middle"> 
 				              					<logic:equal name="aimQuarterlyDiscrepancyForm" property="currencyPresent" value="true">
 			                           			<strong><digi:trn key="aim:currency">Currency</digi:trn>:</strong>
-			                           			</logic:equal>
+			                     				</logic:equal>
 				                			</td>
 				              				<td>
 				              					<logic:equal name="aimQuarterlyDiscrepancyForm" property="currencyPresent" value="true">
 				                      			<html:select property="currency" styleClass="dr-menu">
 				                      				<html:optionsCollection name="aimQuarterlyDiscrepancyForm" property="currencies" value="currencyCode" label="currencyName"/>
-												</html:select>
-												</logic:equal>
+																		</html:select>
+																</logic:equal>
 				               				</td>
 				              				<td>
 				              					<logic:equal name="aimQuarterlyDiscrepancyForm" property="calendarPresent" value="true">
@@ -281,76 +292,76 @@
 							              	</td>
 				            			</tr>
 				            			<logic:empty name="aimQuarterlyDiscrepancyForm" property="discrepancies" >
-			                        		<tr valign="top"> 
-			                          			<td colspan="8" align="center"><span class="note">No records!</td>
-			                          		</tr>
-			                        	</logic:empty>
+			                        <tr valign="top"> 
+			                        		<td colspan="8" align="center"><span class="note">No records!</td>
+			                        </tr>
+			                    </logic:empty>
 				            			<logic:notEmpty name="aimQuarterlyDiscrepancyForm" property="discrepancies">
-										<logic:iterate name="aimQuarterlyDiscrepancyForm" property="discrepancies" id="discrepancy" type="org.digijava.module.aim.helper.QuarterlyDiscrepancy">
-							            <tr valign="top"> 
-							              <td height="30">
-							              <logic:equal name="discrepancy" property="aggregate" value="0">
-							              	<logic:equal name="discrepancy" property="fiscalYear" value="0">
+													<logic:iterate name="aimQuarterlyDiscrepancyForm" property="discrepancies" id="discrepancy" type="org.digijava.module.aim.helper.QuarterlyDiscrepancy">
+							            	<tr valign="top"> 
+							              	<td height="30">
+							              		<logic:equal name="discrepancy" property="aggregate" value="0">
+							              			<logic:equal name="discrepancy" property="fiscalYear" value="0">
 				                          		NA
-				                          	</logic:equal>
-				                          	<logic:notEqual  name="discrepancy" property="fiscalYear" value="0">
-												<bean:write name="discrepancy" property="fiscalYear" />
-											</logic:notEqual>
-							  
-							              	</logic:equal>
-							              </td>
-							              <td>
-							              	<logic:equal name="discrepancy" property="aggregate" value="0">
-							              		<logic:equal name="discrepancy" property="fiscalQuarter" value="0">
+				                          </logic:equal>
+				                          <logic:notEqual  name="discrepancy" property="fiscalYear" value="0">
+																			<bean:write name="discrepancy" property="fiscalYear" />
+																	</logic:notEqual>
+							              		</logic:equal>
+							              	</td>
+							              	<td>
+							              		<logic:equal name="discrepancy" property="aggregate" value="0">
+							              			<logic:equal name="discrepancy" property="fiscalQuarter" value="0">
 		                          			 		NA
-		                          			 	</logic:equal>
-							              		<logic:equal name="discrepancy" property="fiscalQuarter" value="1">
+		                          		</logic:equal>
+							              			<logic:equal name="discrepancy" property="fiscalQuarter" value="1">
 		                          			 		1st quarter
-		                          			 	</logic:equal>
-		                           			 	<logic:equal name="discrepancy" property="fiscalQuarter" value="2">
-		                          			 		2nd quarter
-		                          			 	</logic:equal>
-		                          			 	<logic:equal name="discrepancy" property="fiscalQuarter" value="3">
+		                          		</logic:equal>
+		                           		<logic:equal name="discrepancy" property="fiscalQuarter" value="2">
+		                          		 			2nd quarter
+		                          		</logic:equal>
+		                          		<logic:equal name="discrepancy" property="fiscalQuarter" value="3">
 		                          			 		3rd quarter
-		                          			 	</logic:equal>
-		                           			 	<logic:equal name="discrepancy" property="fiscalQuarter" value="4">
+		                          		</logic:equal>
+		                           		<logic:equal name="discrepancy" property="fiscalQuarter" value="4">
 		                          			 		4th quarter
-		                          			 	</logic:equal>
-							              	</logic:equal>
-							              	<logic:equal name="discrepancy" property="aggregate" value="1">
-							              		&nbsp;&nbsp;&nbsp;<bean:write name="discrepancy" property="transactionDate"/>
-							              	</logic:equal>
-							              </td>
-							              <td>
-							              	<div align="right">
-							              		<bean:write name="discrepancy" property="donorPlanned"/>
-							              	</div>
-							              </td>
-							              <td>
-							              	<div align="center">
-							              		<bean:write name="discrepancy" property="implAgencyPlanned"/>
-							              	</div>
-							              </td>
-							              <td>
-							              	<div align="right"> 
-							                  <bean:write name="discrepancy" property="mofedPlanned"/>
-							                </div></td>
-							              <td>
-							              	<div align="right">
-							              		<bean:write name="discrepancy" property="donorActual"/>
-							              	</div>
-							              </td>
-							              <td>
-							              	<div align="center">
-							              		<bean:write name="discrepancy" property="implAgencyActual"/>
-							              	</div>
-							              </td>
-							              <td>
-							              	<div align="right"> 
-							                  <bean:write name="discrepancy" property="mofedActual"/>
-							                </div>
-							              </td>
-							            </tr>
+		                          		</logic:equal>
+							              		</logic:equal>
+							              		<logic:equal name="discrepancy" property="aggregate" value="1">&nbsp;&nbsp;&nbsp;
+																		<bean:write name="discrepancy" property="transactionDate"/>
+							              		</logic:equal>
+							              	</td>
+							              	<td>
+							              		<div align="right">
+							              			<bean:write name="discrepancy" property="donorPlanned"/>
+							              		</div>
+							              	</td>
+							              	<td>
+							              		<div align="center">
+							              			<bean:write name="discrepancy" property="implAgencyPlanned"/>
+							              		</div>
+							              	</td>
+							              	<td>
+							              		<div align="right"> 
+							                  	<bean:write name="discrepancy" property="mofedPlanned"/>
+							                	</div>
+															</td>
+							              	<td>
+							              		<div align="right">
+							              			<bean:write name="discrepancy" property="donorActual"/>
+							              		</div>
+							              	</td>
+							              	<td>
+							              		<div align="center">
+							              			<bean:write name="discrepancy" property="implAgencyActual"/>
+							              		</div>
+							              	</td>
+							              	<td>
+							              		<div align="right"> 
+							                  	<bean:write name="discrepancy" property="mofedActual"/>
+							                	</div>
+							              	</td>
+							            	</tr>
 							            </logic:iterate>
 							            </logic:notEmpty>
 				       				</table>
@@ -360,33 +371,31 @@
 				    </td>
 				</tr>
 				<tr bgcolor="#F4F4F2" > 
-                	<td valign="top">
+        	<td valign="top">
 						<table width="90%"  border="0" align="center" cellpadding="0" cellspacing="0" bgcolor="#F4F4F2">
-                     		<tr bgcolor="#F4F4F2"> 
-                        		<td width="43%" bgcolor="#F4F4F2">
-							
-								</td>
-                        		<td width="57%" align="right" bgcolor="#F4F4F2">
+           		<tr bgcolor="#F4F4F2"> 
+             		<td width="43%" bgcolor="#F4F4F2"></td>
+             		<td width="57%" align="right" bgcolor="#F4F4F2">
 									<digi:img src="module/aim/images/arrow-014E86.gif" width="15" height="10"/>
 									<c:set target="${urlSubTabs}" property="transactionType">
-		        						<bean:write name='aimQuarterlyDiscrepancyForm' property='transactionType'/>
-		        					</c:set>
-		<bean:define id="translation">
-			<digi:trn key="aim:clickToViewYearlyDiscrepancy">Click here to view Yearly Discrepancy</digi:trn>
-		</bean:define>
-		        					<digi:link href="/viewYearlyDiscrepancy.do" name="urlSubTabs" title="<%=translation%>" >
-		        						<strong>
+        						<bean:write name='aimQuarterlyDiscrepancyForm' property='transactionType'/>
+        					</c:set>
+									<bean:define id="translation">
+										<digi:trn key="aim:clickToViewYearlyDiscrepancy">Click here to view Yearly Discrepancy</digi:trn>
+									</bean:define>
+		        			<digi:link href="/viewYearlyDiscrepancy.do" name="urlSubTabs" title="<%=translation%>" >
+		        				<strong>
 										Show Yearly 
 										</strong>
-		        					</digi:link>
+		        			</digi:link>
 								</td>
-                      		</tr>
-                      		<tr bgcolor="#F4F4F2"> 
-                        		<td  bgcolor="#F4F4F2">&nbsp;</td>
-                        		<td align="right" bgcolor="#F4F4F2">&nbsp;</td>
-                      		</tr>
-                    	</table>
+              </tr>
+              <tr bgcolor="#F4F4F2"> 
+              	<td  bgcolor="#F4F4F2">&nbsp;</td>
+                <td align="right" bgcolor="#F4F4F2">&nbsp;</td>
+              </tr>
+            </table>
 					</td>
-                </tr>
-        	</digi:form>
+        </tr>
+      </digi:form>
 </logic:equal>

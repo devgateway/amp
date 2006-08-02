@@ -118,9 +118,12 @@
 	              		<digi:trn key="aim:expenditures">EXPENDITURES</digi:trn>
 	              	</span>
               	</logic:equal>	| 
-<bean:define id="translation">
-	<digi:trn key="aim:clickToViewAll">Click here to view All</digi:trn>
-</bean:define>
+								<digi:link href="/viewYearlyDiscrepancy.do" name="urlDiscrepancy" styleClass="sub-nav2" title="<%=translation%>" >
+									<digi:trn key="aim:discrepancy">DISCREPANCY</digi:trn>
+								</digi:link>		|
+			<bean:define id="translation">
+				<digi:trn key="aim:clickToViewAll">Click here to view All</digi:trn>
+			</bean:define>
               	<digi:link href="/viewYearlyComparisons.do" name="urlAll" styleClass="sub-nav2" title="<%=translation%>" >
 						<digi:trn key="aim:all">ALL</digi:trn>
 					</digi:link>

@@ -155,8 +155,7 @@
 				              				<td height="17" nowrap bgcolor="#C9C9C7" class="box-title">
 				              					&nbsp;<digi:trn key="aim:quarterlyAmounts">Quarterly Amounts</digi:trn>
 				              				</td>
-				              				<td width="17" height="17" 
-											background="<%= digiContext %>/repository/aim/images/corner-r.gif">
+				              				<td width="17" height="17" background="<%= digiContext %>/repository/aim/images/corner-r.gif">
 				            			</tr>
 				          			</table>
 				          		</td>
@@ -173,7 +172,7 @@
 				              				<td>
 				              					<logic:equal name="aimQuarterlyDiscrepancyAllForm" property="currencyPresent" value="true">
 				                      			<html:select property="currency" styleClass="dr-menu">
-				                      				<html:optionsCollection name="aimQuarterlyDiscrepancyAllForm" property="currencies" value="currencyCode" label="currencyName/>
+				                      				<html:optionsCollection name="aimQuarterlyDiscrepancyAllForm" property="currencies" value="currencyCode" label="currencyName"/>
 												</html:select>
 												</logic:equal>
 				               				</td>

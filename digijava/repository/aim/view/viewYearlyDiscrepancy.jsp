@@ -6,6 +6,17 @@
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
 
+<script language="Javascript">
+<!--
+	
+	function formSubmit()
+	{
+		document.aimYearlyDiscrepancyForm.submit();
+	}		
+
+-->
+</script>
+
 <html:errors/>
 <digi:instance property="aimYearlyDiscrepancyForm" />
 <digi:context name="digiContext" property="context"/>
@@ -133,12 +144,12 @@
 				              				<td>&nbsp;</td>
 				              				<td> 
 				              					<html:select property="transactionType" styleClass="dr-menu" onchange="formSubmit()">
-												<html:option value="0">Commitments</html:option>
-												<html:option value="1">Disbursements</html:option>
-												<html:option value="2">Expenditures</html:option>
-												</html:select>
-												<html:hidden property="ampActivityId" />
-												<html:hidden property="tabIndex" />
+																	<html:option value="0">Commitments</html:option>
+																	<html:option value="1">Disbursements</html:option>
+																	<html:option value="2">Expenditures</html:option>
+																</html:select>
+																<html:hidden property="ampActivityId" />
+																<html:hidden property="tabIndex" />
 				                			</td>
 				              				<td>&nbsp;</td>
 				            			</tr>

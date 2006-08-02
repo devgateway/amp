@@ -89,7 +89,10 @@ type="org.digijava.module.aim.form.YearlyComparisonsForm" method="post">
 		</bean:define>
 		  			<digi:link href="/viewYearlyInfo.do" name="urlSubTabs" styleClass="sub-nav2" title="<%=translation%>" >
 		  				<digi:trn key="aim:expenditures">EXPENDITURES</digi:trn>
-		  			</digi:link>| 
+		  			</digi:link>|
+					 <digi:link href="/viewYearlyDiscrepancy.do" name="urlDiscrepancy" styleClass="sub-nav2" title="<%=translation%>" >
+									<digi:trn key="aim:discrepancy">DISCREPANCY</digi:trn>
+								</digi:link>		|	
               	<span class="sub-nav2-selected">
               		<digi:trn key="aim:all">ALL</digi:trn>
               	</span>

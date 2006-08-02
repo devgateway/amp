@@ -6,6 +6,7 @@
 package org.digijava.module.aim.action;
 
 import java.util.ArrayList;
+import java.util.GregorianCalendar;
 import java.util.Iterator;
 
 import javax.servlet.http.HttpServletRequest;
@@ -17,12 +18,17 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.digijava.module.aim.dbentity.AmpAhsurveyIndicator;
+import org.digijava.module.aim.dbentity.AmpSector;
 import org.digijava.module.aim.form.ParisIndicatorReportForm;
+import org.digijava.module.aim.helper.ApplicationSettings;
+import org.digijava.module.aim.helper.CommonWorker;
 import org.digijava.module.aim.helper.Constants;
+import org.digijava.module.aim.helper.EthiopianCalendar;
 import org.digijava.module.aim.helper.ParisIndicator;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.aim.util.DbUtil;
+import org.digijava.module.aim.util.SectorUtil;
 
 public class ParisIndicatorReport extends Action {
 
@@ -58,9 +64,17 @@ public class ParisIndicatorReport extends Action {
 			
 			String indcId = request.getParameter("indcId");
 			
+			// Populating indicator-report filters here
 			if ((null != indcId && indcId.trim().length() > 0) || svForm.getFilterFlag().booleanValue()) {
 				
-				// Populating indicator-report filters here
+				ApplicationSettings apps = null;
+				if (null != tm) {
+					apps = tm.getAppSettings();
+					svForm.setPerspective(CommonWorker.getPerspective(apps.getPerspective()));
+					svForm.setCalendar(apps.getFisCalId().toString());
+					svForm.setCurrency(CurrencyUtil.getAmpcurrency(apps.getCurrencyId()).getCurrencyCode());
+				}
+				
 				if (null == svForm.getYearColl() || svForm.getYearColl().size() < 1) {
 					int startYear = svForm.getStartYear().intValue() - Constants.FROM_YEAR_RANGE + 2;
 					int closeYear = svForm.getCloseYear().intValue() + Constants.TO_YEAR_RANGE;
@@ -78,6 +92,44 @@ public class ParisIndicatorReport extends Action {
 					//svForm.setTermAssistColl(DbUtil.getAllTermAssist());
 				if (null == svForm.getFinancingInstrumentColl() || svForm.getFinancingInstrumentColl().size() < 1)
 					svForm.setFinancingInstrumentColl(DbUtil.getAllFinancingInstruments());
+				if (null == svForm.getCalendarColl() || svForm.getCalendarColl().size() < 1)
+					svForm.setCalendarColl(DbUtil.getAllFisCalenders());
+				if (null == svForm.getDonorColl() || svForm.getDonorColl().size() < 1)
+					svForm.setDonorColl(DbUtil.getAllDonorOrgs());
+				if (null == svForm.getSectorColl() || svForm.getSectorColl().size() < 1) {
+					svForm.setSectorColl(new ArrayList());
+					Iterator iter = SectorUtil.getAmpSectors().iterator() ;
+					while(iter.hasNext()) {
+						AmpSector ampSector = (AmpSector) iter.next();
+						if(ampSector.getName().length() > 30) {
+							String temp=ampSector.getName().substring(0,35) + "...";
+							ampSector.setName(temp);
+						}
+						svForm.getSectorColl().add(ampSector);
+							
+						Iterator iter1 = SectorUtil.getAmpSubSectors(ampSector.getAmpSectorId()).iterator(); 
+						while(iter1.hasNext()) {
+							AmpSector ampSubSector = (AmpSector) iter1.next();
+							if(ampSubSector.getName().length() > 35) {
+								ampSubSector.setName("--" + ampSubSector.getName().substring(0,35) + "...");
+							} else {
+								ampSubSector.setName("--" + ampSubSector.getName());	
+							}
+							svForm.getSectorColl().add(ampSubSector);
+							
+							Iterator iter2 = SectorUtil.getAmpSubSectors(ampSubSector.getAmpSectorId()).iterator();
+							while(iter2.hasNext()) {
+								AmpSector ampSubSubSector = (AmpSector) iter2.next();
+								if(ampSubSubSector.getName().length() > 35) {
+									ampSubSubSector.setName("----" + ampSubSubSector.getName().substring(0,35) + "...");
+								} else {
+									ampSubSubSector.setName("----" + ampSubSubSector.getName());	
+								}
+								svForm.getSectorColl().add(ampSubSubSector);
+							}
+						}
+					}
+				}
 				
 				try {
 					AmpAhsurveyIndicator indc = DbUtil.getIndicatorById(Long.valueOf(indcId));
@@ -93,9 +145,10 @@ public class ParisIndicatorReport extends Action {
 					else if ("9".equalsIgnoreCase(svForm.getIndicatorCode()))
 						svForm.setNumColsCalculated("5");
 					//svForm.setQuestionsColl(DbUtil.getSurveyQuestionsByIndicator(Long.valueOf(indcId)));
-					svForm.setDonorsColl(DbUtil.getAidSurveyReportByIndicator(svForm.getIndicatorCode(),svForm.getOrgGroup(),svForm.getStatus(),
-							svForm.getStartYear().intValue(),svForm.getCloseYear().intValue(),svForm.getCurrency(),
-							svForm.getTermAssist(),svForm.getFinancingInstrument(),svForm.getPerspective()));
+					svForm.setDonorsColl(DbUtil.getAidSurveyReportByIndicator(svForm.getIndicatorCode(),svForm.getDonor(),
+							svForm.getOrgGroup(),svForm.getStatus(),svForm.getStartYear().intValue(),svForm.getCloseYear().intValue(),
+							svForm.getCurrency(),svForm.getTermAssist(),svForm.getFinancingInstrument(),
+							svForm.getPerspective(),svForm.getSector(),svForm.getCalendar()));
 					
 					if ("5a".equalsIgnoreCase(svForm.getIndicatorCode()) || "5b".equalsIgnoreCase(svForm.getIndicatorCode())) {
 						if (!svForm.getDonorsColl().isEmpty()) {

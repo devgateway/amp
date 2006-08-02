@@ -184,95 +184,134 @@
 				<tr>
 					<td>
 <%--===========================================================================================================================================--%>					
-						<table border="0" cellspacing="0" cellpadding="2" width="750">
+						<table border="0" cellspacing="0" cellpadding="0" width="750">
 							
-
-
-							<tr bgcolor="#c0c0c0" height=30>
+							<tr bgcolor="#c0c0c0" height=20>
 								<td>
-									<bean:define id="syear" property="startYear" name="aimParisIndicatorReportForm" />
-									<select name="startYear" value="<%=syear%>" class="dr-menu" onchange="chkYear('start')">
-										<logic:notEmpty name="aimParisIndicatorReportForm" property="yearColl">
-											<logic:iterate id="year" name="aimParisIndicatorReportForm" property="yearColl">
-												<c:if test="${syear == year}">
-													<option value="<%=year%>" selected><%=year%></option>
-												</c:if>
-												<c:if test="${syear != year}">
-													<option value="<%=year%>"><%=year%></option>
-												</c:if>
-											</logic:iterate>
-										</logic:notEmpty>
-									</select>
+									<table>
+										<tr>
+											<td>
+												<bean:define id="syear" property="startYear" name="aimParisIndicatorReportForm" />
+												<select name="startYear" value="<%=syear%>" class="dr-menu" onchange="chkYear('start')">
+													<logic:notEmpty name="aimParisIndicatorReportForm" property="yearColl">
+														<logic:iterate id="year" name="aimParisIndicatorReportForm" property="yearColl">
+															<c:if test="${syear == year}">
+																<option value="<%=year%>" selected><%=year%></option>
+															</c:if>
+															<c:if test="${syear != year}">
+																<option value="<%=year%>"><%=year%></option>
+															</c:if>
+														</logic:iterate>
+													</logic:notEmpty>
+												</select>
+											</td>
+											<td>
+												<bean:define id="cyear" property="closeYear" name="aimParisIndicatorReportForm"/>
+												<select name="closeYear" value="<%=cyear%>" class="dr-menu" onchange="chkYear('close')">
+													<logic:notEmpty name="aimParisIndicatorReportForm" property="yearColl">
+														<logic:iterate id="year" name="aimParisIndicatorReportForm" property="yearColl">
+															<c:if test="${cyear == year}">
+																<option value="<%=year%>" selected><%=year%></option>
+															</c:if>
+															<c:if test="${cyear != year}">
+																<option value="<%=year%>"><%=year%></option>
+															</c:if>
+														</logic:iterate>
+													</logic:notEmpty>
+												</select>
+											</td>
+											<td>
+												<html:select property="calendar" name="aimParisIndicatorReportForm" styleClass="dr-menu" >
+													<logic:notEmpty name="aimParisIndicatorReportForm" property="calendarColl">
+														<html:optionsCollection name="aimParisIndicatorReportForm" property="calendarColl" 
+																				value="ampFiscalCalId" label="name"/> 
+													</logic:notEmpty>
+												</html:select>
+											</td>
+											<td>
+												<html:select property="perspective" name="aimParisIndicatorReportForm" styleClass="dr-menu" >
+													<html:option value="MA">MOFED</html:option>
+													<html:option value="DN">DONOR</html:option>
+												</html:select>
+											</td>
+											<td>
+												<html:select property="currency" name="aimParisIndicatorReportForm" styleClass="dr-menu" >
+													<logic:notEmpty name="aimParisIndicatorReportForm" property="currencyColl">
+														<html:optionsCollection name="aimParisIndicatorReportForm" property="currencyColl" 
+																				value="currencyCode" label="currencyName"/> 
+													</logic:notEmpty>
+												</html:select>
+											</td>
+											<td>
+												<html:select property="donor" name="aimParisIndicatorReportForm" styleClass="dr-menu" >
+													<html:option value="all">All Donors</html:option>
+													<logic:notEmpty name="aimParisIndicatorReportForm" property="donorColl">
+														<html:optionsCollection name="aimParisIndicatorReportForm" property="donorColl" 
+																				value="ampOrgId" label="acronym"/>
+													</logic:notEmpty>							
+												</html:select>
+											</td>
+											<td>
+												<html:select property="status" name="aimParisIndicatorReportForm" styleClass="dr-menu" >
+													<html:option value="all">All Status</html:option>
+													<logic:notEmpty name="aimParisIndicatorReportForm" property="statusColl">
+														<html:optionsCollection name="aimParisIndicatorReportForm" property="statusColl" 
+																				value="name" label="name"  /> 
+													</logic:notEmpty>
+												</html:select>
+											</td>
+										<%--
+											<td>
+												<html:select property="termAssist" name="aimParisIndicatorReportForm" styleClass="dr-menu" >
+													<html:option value="all">All Term Assist</html:option>
+													<logic:notEmpty name="aimParisIndicatorReportForm" property="termAssistColl">
+														<html:optionsCollection name="aimParisIndicatorReportForm" property="termAssistColl" 
+																				value="termsAssistName" label="termsAssistName"  /> 
+													</logic:notEmpty>
+												</html:select>
+											</td>
+										--%>
+										</tr>
+									</table>
 								</td>
+							</tr>
+							<tr bgcolor="#c0c0c0" height=20>
 								<td>
-									<bean:define id="cyear" property="closeYear" name="aimParisIndicatorReportForm"/>
-									<select name="closeYear" value="<%=cyear%>" class="dr-menu" onchange="chkYear('close')">
-										<logic:notEmpty name="aimParisIndicatorReportForm" property="yearColl">
-											<logic:iterate id="year" name="aimParisIndicatorReportForm" property="yearColl">
-												<c:if test="${cyear == year}">
-													<option value="<%=year%>" selected><%=year%></option>
-												</c:if>
-												<c:if test="${cyear != year}">
-													<option value="<%=year%>"><%=year%></option>
-												</c:if>
-											</logic:iterate>
-										</logic:notEmpty>
-									</select>
-								</td>
-								<td>
-									<html:select property="perspective" name="aimParisIndicatorReportForm" styleClass="dr-menu" >
-										<html:option value="ma">MOFED</html:option>
-										<html:option value="dn">DONOR</html:option>
-									</html:select>
-								<td>
-								<td>
-									<html:select property="currency" name="aimParisIndicatorReportForm" styleClass="dr-menu" >
-										<logic:notEmpty name="aimParisIndicatorReportForm" property="currencyColl">
-											<html:optionsCollection name="aimParisIndicatorReportForm" property="currencyColl" 
-																	value="currencyCode" label="currencyName"/> 
-										</logic:notEmpty>
-									</html:select>
-								</td>
-								<td>
-									<html:select property="orgGroup" name="aimParisIndicatorReportForm" styleClass="dr-menu" >
-										<html:option value="all">All Groups</html:option>
-										<logic:notEmpty name="aimParisIndicatorReportForm" property="orgGroupColl">
-											<html:optionsCollection name="aimParisIndicatorReportForm" property="orgGroupColl" 
-																	value="orgGrpCode" label="orgGrpName"/>
-										</logic:notEmpty>							
-									</html:select>
-								<td>
-							<%--
-								<td>
-									<html:select property="termAssist" name="aimParisIndicatorReportForm" styleClass="dr-menu" >
-										<html:option value="all">All Term Assist</html:option>
-										<logic:notEmpty name="aimParisIndicatorReportForm" property="termAssistColl">
-											<html:optionsCollection name="aimParisIndicatorReportForm" property="termAssistColl" 
-																	value="termsAssistName" label="termsAssistName"  /> 
-										</logic:notEmpty>
-									</html:select>
-								</td>
-							--%>
-								<td>
-									<html:select property="financingInstrument" name="aimParisIndicatorReportForm" styleClass="dr-menu" >
-										<html:option value="all">All Financing Instruments</html:option>
-										<logic:notEmpty name="aimParisIndicatorReportForm" property="financingInstrumentColl">
-											<html:optionsCollection name="aimParisIndicatorReportForm" property="financingInstrumentColl" 
-																	value="name" label="name"  /> 
-										</logic:notEmpty>
-									</html:select>
-								</td>
-								<td>
-									<html:select property="status" name="aimParisIndicatorReportForm" styleClass="dr-menu" >
-										<html:option value="all">All Status</html:option>
-										<logic:notEmpty name="aimParisIndicatorReportForm" property="statusColl">
-											<html:optionsCollection name="aimParisIndicatorReportForm" property="statusColl" 
-																	value="name" label="name"  /> 
-										</logic:notEmpty>
-									</html:select>
-								</td>
-								<td>
-									<input type="button" value="GO" class="dr-menu" onclick="clearFilter()">
+									<table>
+										<tr>
+											<td>
+												<html:select property="orgGroup" name="aimParisIndicatorReportForm" styleClass="dr-menu" >
+													<html:option value="all">All Groups</html:option>
+													<logic:notEmpty name="aimParisIndicatorReportForm" property="orgGroupColl">
+														<html:optionsCollection name="aimParisIndicatorReportForm" property="orgGroupColl" 
+																				value="orgGrpCode" label="orgGrpName"/>
+													</logic:notEmpty>							
+												</html:select>
+											</td>
+											<td>
+												<html:select property="financingInstrument" name="aimParisIndicatorReportForm" styleClass="dr-menu" >
+													<html:option value="all">All Financing Instruments</html:option>
+													<logic:notEmpty name="aimParisIndicatorReportForm" property="financingInstrumentColl">
+														<html:optionsCollection name="aimParisIndicatorReportForm" property="financingInstrumentColl" 
+																				value="name" label="name"  /> 
+													</logic:notEmpty>
+												</html:select>
+											</td>
+											<td>
+												<html:select property="sector" name="aimParisIndicatorReportForm" styleClass="dr-menu" >
+													<html:option value="all">All Sectors</html:option>
+													<logic:notEmpty name="aimParisIndicatorReportForm" property="sectorColl">
+														<html:optionsCollection name="aimParisIndicatorReportForm" property="sectorColl" 
+																				value="ampSectorId" label="name"  /> 
+													</logic:notEmpty>
+												</html:select>
+											</td>
+											
+											<td>
+												<input type="button" value="GO" class="dr-menu" onclick="clearFilter()">
+											</td>
+										</tr>
+									</table>
 								</td>
 							</tr>
 

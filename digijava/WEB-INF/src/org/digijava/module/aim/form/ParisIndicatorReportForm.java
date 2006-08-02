@@ -13,6 +13,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionMapping;
+import org.digijava.module.aim.helper.Constants;
 
 public class ParisIndicatorReportForm extends ActionForm {
 	
@@ -36,12 +37,18 @@ public class ParisIndicatorReportForm extends ActionForm {
 	private String status = null;			
 	private String termAssist = null;			// defunct
 	private String financingInstrument = null;
+	private String calendar = null;
+	private String donor = null;
+	private String sector = null;
 	private Collection yearColl = null;
 	private Collection currencyColl = null;
 	private Collection orgGroupColl = null;
 	private Collection statusColl = null;
 	private Collection termAssistColl = null;
 	private Collection financingInstrumentColl = null;
+	private Collection calendarColl = null;
+	private Collection donorColl = null;
+	private Collection sectorColl = null;
 	
 	private Boolean reset = Boolean.FALSE;
 	private Boolean filterFlag = Boolean.FALSE;
@@ -50,11 +57,14 @@ public class ParisIndicatorReportForm extends ActionForm {
 		if (reset.booleanValue()) {
 			startYear = new Integer(Calendar.getInstance().get(Calendar.YEAR) - 2);
 			closeYear = new Integer(Calendar.getInstance().get(Calendar.YEAR));
-			currency = "USD";
-			perspective = "ma";
+			currency = Constants.DEFAULT_CURRENCY;
+			perspective = "MA";
 			orgGroup = "all";
 			status = "all";
 			termAssist = "all";
+			calendar = "";
+			donor = "all";
+			sector = "all";
 			financingInstrument = "all";
 			numColsCalculated = "4";
 			reset = Boolean.FALSE;
@@ -341,5 +351,53 @@ public class ParisIndicatorReportForm extends ActionForm {
 
 	public void setTermAssist(String termAssist) {
 		this.termAssist = termAssist;
+	}
+
+	public String getSector() {
+		return sector;
+	}
+
+	public void setSector(String sector) {
+		this.sector = sector;
+	}
+
+	public Collection getSectorColl() {
+		return sectorColl;
+	}
+
+	public void setSectorColl(Collection sectorColl) {
+		this.sectorColl = sectorColl;
+	}
+
+	public String getCalendar() {
+		return calendar;
+	}
+
+	public void setCalendar(String calendar) {
+		this.calendar = calendar;
+	}
+
+	public Collection getCalendarColl() {
+		return calendarColl;
+	}
+
+	public void setCalendarColl(Collection calendarColl) {
+		this.calendarColl = calendarColl;
+	}
+
+	public String getDonor() {
+		return donor;
+	}
+
+	public void setDonor(String donor) {
+		this.donor = donor;
+	}
+
+	public Collection getDonorColl() {
+		return donorColl;
+	}
+
+	public void setDonorColl(Collection donorColl) {
+		this.donorColl = donorColl;
 	}
 }

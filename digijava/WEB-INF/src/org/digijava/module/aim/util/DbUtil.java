@@ -71,6 +71,7 @@ import org.digijava.module.aim.helper.FiscalCalendar;
 import org.digijava.module.aim.helper.Indicator;
 import org.digijava.module.aim.helper.ParisIndicator;
 import org.digijava.module.aim.helper.Question;
+import org.digijava.module.aim.helper.Sector;
 import org.digijava.module.aim.helper.SurveyFunding;
 import org.digijava.module.cms.dbentity.CMSContentItem;
 
@@ -4321,8 +4322,8 @@ public class DbUtil {
 			Query qry = session.createQuery(queryString);
 			col = qry.list();
 		} catch (Exception e) {
-			logger.debug("Exception from getAllOrgGroups()");
-			logger.debug(e.toString());
+			logger.debug("Exception from getAllOrgGroups() : " + e);
+			e.printStackTrace(System.out);
 		} finally {
 			try {
 				if (session != null) {
@@ -4336,6 +4337,31 @@ public class DbUtil {
 		return col;
 	}
 
+	public static Collection getAllDonorOrgs() {
+		Session session = null;
+		Collection col = new ArrayList();
+
+		try {
+			session = PersistenceManager.getSession();
+			String queryString = "select distinct org.ampDonorOrgId from " + AmpFunding.class.getName() 
+								 + " org";
+			Query qry = session.createQuery(queryString);
+			col = qry.list();
+		} catch (Exception ex) {
+			logger.debug("Exception from getAllDonorOrgs() : " + ex);
+			ex.printStackTrace(System.out);
+		} finally {
+			try {
+				if (session != null) {
+					PersistenceManager.releaseSession(session);
+				}
+			} catch (Exception ex) {
+				logger.debug("releaseSession() failed : " + ex);
+			}
+		}
+		return col;
+	}
+	
 	public static Collection getAllOrgGroups() {
 		Session session = null;
 		Collection col = new ArrayList();
@@ -5390,8 +5416,9 @@ public class DbUtil {
 		return responses;
 	}
 	 
-	public static Collection getAidSurveyReportByIndicator(String indcCode, String orgGroup, String status, int startYear, 
-			int closeYear, String currency, String termAssist, String financingInstrument, String perspective) {
+	public static Collection getAidSurveyReportByIndicator(String indcCode, String donor, String orgGroup, 
+			String status, int startYear, int closeYear, String currency, String termAssist, String financingInstrument,
+			String perspective, String sector, String calendar) {
 	
 	Session session = null;
 	ArrayList responses = new ArrayList();
@@ -5451,6 +5478,11 @@ public class DbUtil {
 			itr1 = surveyDonors.iterator();
 			while(itr1.hasNext()) {
 				AmpOrganisation dnOrg = (AmpOrganisation) itr1.next();
+				// Filtering by donor-organisation here
+				if (null != donor && donor.trim().length() > 1 && !"all".equalsIgnoreCase(donor)) {
+					if (!donor.equals(dnOrg.getAmpOrgId().toString()))
+						continue;
+				}
 				surveySet.addAll(dnOrg.getSurvey());
 				//logger.debug("dnOrg.getAmpOrgId() : " + dnOrg.getAmpOrgId() + "  dnOrg.getAcronym() : " +dnOrg.getAcronym());
 				//logger.debug("----------------------------------------------------------------------------------------------");
@@ -5476,7 +5508,20 @@ public class DbUtil {
 					index = 0;
 					while(itr2.hasNext()) {
 						AmpAhsurvey svy = (AmpAhsurvey) itr2.next();
-						//logger.debug("survey-id : " + svy.getAmpAHSurveyId() + " activity-id : " + svy.getAmpActivityId().getAmpActivityId());
+						// Filtering by activity-status here
+						if (null != status && status.trim().length() > 1 && !"all".equalsIgnoreCase(status)) {
+							if (!status.equalsIgnoreCase(svy.getAmpActivityId().getStatus().getName()))
+								continue;
+						}
+						// Filtering by activity-sector here
+						if (null != sector && sector.trim().length() > 1 && !"all".equalsIgnoreCase(sector)) {
+							if (null != svy.getAmpActivityId().getSectors()) {
+								Iterator secItr = svy.getAmpActivityId().getSectors().iterator();
+								AmpSector sec = (AmpSector) secItr.next();
+								if (!sector.equals(sec.getAmpSectorId().toString()))
+									continue;
+							}
+						}
 						if ("4".equalsIgnoreCase(indcCode)) {
 							Iterator iter = svy.getResponses().iterator();
 							while (iter.hasNext()) {
@@ -5501,20 +5546,15 @@ public class DbUtil {
 							for(j = 0; j < answers.length; j++) {
 								sum = 0.0;
 								if (answers[j]) {
-									// Filtering by activity status here
-									if (null != status && status.trim().length() > 1 && !"all".equalsIgnoreCase(status))
-										if (!status.equalsIgnoreCase(svy.getAmpActivityId().getStatus().getName())) {
-											//logger.debug("continue: because of status");
-											continue;
-										}
-								/*	if (indcFlag == 6) {
+									/*
+									 if (indcFlag == 6) {
 										convYr = (startYear + i);
 										if (convYr == DateConversion.getYear(DateConversion.ConvertDateToString(svy.getAmpActivityId().getActualStartDate()))
 												|| convYr == DateConversion.getYear(DateConversion.ConvertDateToString(svy.getAmpActivityId().getActualCompletionDate())))
 											answersRow[i] += 1;
 										break;
 									}
-								*/
+									*/
 									itr3 = svy.getAmpActivityId().getFunding().iterator();
 									while(itr3.hasNext()) {
 										AmpFunding fund = (AmpFunding) itr3.next();

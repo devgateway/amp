@@ -257,8 +257,9 @@
 	<page page="printablePortPerformance" name="aim_printPortPerf" title="AMP - Portfolio-Performance" />
 	<page page="printablePortRisk" name="aim_printPortRisk" title="AMP - Portfolio-Risk" />
 		
-
-
+	<page page="portPerformanceWithoutBase" name="aim_portPerfWithoutBase" title="AMP - Portfolio-Performance" />
+	<page page="activityPerformanceWithoutBase" name="aim_actPerfWithoutBase" title="AMP - Activity-Performance" />
+	
 	<!--- Paris Indicator Reports. -->
 	<page name="ParisIndicatorReport1" title=" : Paris Indicator Reports" />
 	<page name="ParisIndicatorReportMenu" title=" : Paris Indicator Reports Menu" />

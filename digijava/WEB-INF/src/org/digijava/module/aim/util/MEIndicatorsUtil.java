@@ -778,29 +778,21 @@ public class MEIndicatorsUtil
 					String key = rs.getString(5);
 					
 					if (includeBaseLine) {
-						MEIndicatorValue baseIndVal = new MEIndicatorValue();
-						baseIndVal.setIndId(new Long(id));
-						baseIndVal.setIndicatorName(key);
-						baseIndVal.setType(Constants.ME_IND_VAL_BASE_ID);
-						if (tarVal > 0) { 
-							baseIndVal.setValue(baseVal / tarVal);
-							col.add(baseIndVal);
-						}
-						MEIndicatorValue actIndVal = new MEIndicatorValue();
-						actIndVal.setIndId(new Long(id));
-						actIndVal.setIndicatorName(key);
-						actIndVal.setType(Constants.ME_IND_VAL_ACTUAL_ID);
-						if (tarVal > 0) {
-							actIndVal.setValue(actVal / tarVal);
-							col.add(actIndVal);
-						}						
-					} else {
 						MEIndicatorValue actIndVal = new MEIndicatorValue();
 						actIndVal.setIndId(new Long(id));
 						actIndVal.setIndicatorName(key);
 						actIndVal.setType(Constants.ME_IND_VAL_ACTUAL_ID);
 						if (tarVal > 0) {
 							actIndVal.setValue((actVal - baseVal)/(tarVal - baseVal));
+							col.add(actIndVal);
+						}
+					} else {
+						MEIndicatorValue actIndVal = new MEIndicatorValue();
+						actIndVal.setIndId(new Long(id));
+						actIndVal.setIndicatorName(key);
+						actIndVal.setType(Constants.ME_IND_VAL_ACTUAL_ID);
+						if (tarVal > 0) {
+							actIndVal.setValue(actVal/tarVal);
 							col.add(actIndVal);
 						}
 					}
@@ -849,21 +841,14 @@ public class MEIndicatorsUtil
 				float tarVal = meIndValue.getTargetVal();
 				
 				if (includeBaseline) {
-					MEIndicatorValue baseIndVal = new MEIndicatorValue();
-					baseIndVal.setIndId(meInd.getAmpMEIndId());
-					baseIndVal.setIndicatorName(meInd.getName());
-					baseIndVal.setType(Constants.ME_IND_VAL_BASE_ID);
-					if (tarVal > 0) { 
-						baseIndVal.setValue(meIndValue.getBaseVal() / tarVal);
-						col.add(baseIndVal);
-					}
-
 					MEIndicatorValue actIndVal = new MEIndicatorValue();
 					actIndVal.setIndId(meInd.getAmpMEIndId());
 					actIndVal.setIndicatorName(meInd.getName());
 					actIndVal.setType(Constants.ME_IND_VAL_ACTUAL_ID);
+					float bVal = meIndValue.getBaseVal();
+					float aVal = meIndValue.getActualVal();
 					if (tarVal > 0) {
-						actIndVal.setValue(meIndValue.getActualVal() / tarVal);
+						actIndVal.setValue((aVal-bVal)/(tarVal-bVal));
 						col.add(actIndVal);
 					}					
 				} else {
@@ -874,7 +859,7 @@ public class MEIndicatorsUtil
 					float bVal = meIndValue.getBaseVal();
 					float aVal = meIndValue.getActualVal();
 					if (tarVal > 0) {
-						actIndVal.setValue((aVal-bVal)/(tarVal-bVal));
+						actIndVal.setValue(aVal/tarVal);
 						col.add(actIndVal);
 					}					
 				}

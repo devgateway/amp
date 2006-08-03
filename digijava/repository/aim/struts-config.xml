@@ -474,6 +474,14 @@
     	<forward name="index" path="/aim/index.do" redirect="true" />
 	 </action>
 	 -->
+
+	<action 
+		type="org.digijava.module.aim.action.ViewPrintableActivityChart"
+		path="/aim/viewActWithoutBase"
+		scope="request" >
+		<forward name="actPerformance" path="/showLayout.do?layout=aim_actPerfWithoutBase" />
+	</action>	
+	
 	 <action 
 		name="aimPortfolioDashboardForm"
 		type="org.apache.struts.actions.ForwardAction" 
@@ -485,6 +493,12 @@
 		type="org.apache.struts.actions.ForwardAction" 
 		scope="request" path="/aim/viewPrintablePortRisk"
 		parameter="/showLayout.do?layout=aim_printPortRisk" />
+
+	 <action 
+		name="aimPortfolioDashboardForm"
+		type="org.apache.struts.actions.ForwardAction" 
+		scope="request" path="/aim/viewPortPerfWithoutBase"
+		parameter="/showLayout.do?layout=aim_portPerfWithoutBase" />
 
 	 <action 
 		name="aimPortfolioDashboardForm"		

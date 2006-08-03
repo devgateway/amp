@@ -18,6 +18,12 @@
 	 	openURLinWindow(url,650,500);
 	}
 
+	function actPerfWithoutBaseline(actId,chartType) {
+		<digi:context name="ptUrl" property="context/module/moduleinstance/viewActWithoutBase.do" />
+		var url = "<%=ptUrl%>?ampActivityId="+actId+"&cType="+chartType;
+	 	openURLinWindow(url,650,500);			  
+	}
+
 </script>
 
 
@@ -27,7 +33,7 @@
 	String url = "/aim/viewIndicatorValues.do?ampActivityId="+actId+"&tabIndex=6";
 	
 	String actPerfChartFileName = ChartGenerator.getActivityPerformanceChartFileName(
-						 actId,session,new PrintWriter(out),370,450,url,false);
+						 actId,session,new PrintWriter(out),370,450,url,true);
 
 	String actPerfChartUrl = null;
 	if (actPerfChartFileName != null) {
@@ -69,8 +75,10 @@
 							<% if (actPerfChartUrl != null) { %>
 							<img src="<%= actPerfChartUrl %>" width=370 height=450 border=0 usemap="#<%= actPerfChartFileName %>"><br><br>
 							<div align="center">		  
-							<input type="button" class="buton" value="Printer Friendly Version" 
+							<input type="button" class="buton" value="Printer Friendly"
 							onclick="javascript:showPrinterFriendly('<%=actId%>','P')">
+							<input type="button" class="buton" value="Without Baseline"
+							onclick="javascript:actPerfWithoutBaseline('<%=actId%>','P')">
 							</div>
 							<% } else { %>
 							<br><span class="red-log"><digi:trn key="aim:noDataPresentFor">No data present for</digi:trn>
@@ -94,7 +102,7 @@
 							<img src="<%= actRiskChartUrl %>" width=370 height=350 border=0 usemap="#<%= actRiskChartFileName %>">
 							<br><br>
 							<div align="center">
-							<input type="button" class="buton" value="Printer Friendly Version" 
+							<input type="button" class="buton" value="Printer Friendly" 
 							onclick="javascript:showPrinterFriendly('<%=actId%>','R')">
 							</div>		  
 							<% } else { %>

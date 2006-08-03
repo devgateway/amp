@@ -24,6 +24,12 @@
 		var url = "<%=ptUrl%>";
 	 	openURLinWindow(url,650,450);
 	}
+	
+	function portPerfWithoutBaseline() {
+		<digi:context name="ptUrl" property="context/module/moduleinstance/viewPortPerfWithoutBase.do" />
+		var url = "<%=ptUrl%>";
+	 	openURLinWindow(url,650,500);			  
+	}
 
 </script>
 
@@ -33,7 +39,7 @@
 	Integer pg = (Integer) session.getAttribute("page");
 	
 	String actPerfChartFileName = ChartGenerator.getPortfolioPerformanceChartFileName(
-						 actId,indId,pg,session,new PrintWriter(out),400,500,"",false);
+						 actId,indId,pg,session,new PrintWriter(out),400,500,"",true);
 
 	String actPerfChartUrl = null;
 	
@@ -125,9 +131,11 @@
 													<img src="<%= actPerfChartUrl %>" width=400 height=500 border=0 usemap="#<%= actPerfChartFileName %>">
 													<br><br>
 													<div align="center">
-													<input type="button" class="buton" value="Printer Friendly Version" 
+													<input type="button" class="buton" value="Printer Friendly"
 													onclick="javascript:showPrinterFriendlyPortPerf()">
-													</div>						  
+													<input type="button" class="buton" value="Without Baseline"
+													onclick="javascript:portPerfWithoutBaseline()">													
+													</div>
 												<% } else { %>
 													<br><span class="red-log"><digi:trn key="aim:noDataPresentFor">No data present for</digi:trn>
 													<digi:trn key="aim:portfolioPerformanceChart">Portfolio-Performance chart</digi:trn>
@@ -150,7 +158,7 @@
 													<img src="<%= actRiskChartUrl %>" width=370 height=400 border=0 usemap="#<%= actRiskChartFileName %>">
 													<br><br>
 													<div align="center">
-													<input type="button" class="buton" value="Printer Friendly Version" 
+													<input type="button" class="buton" value="Printer Friendly" 
 													onclick="javascript:showPrinterFriendlyPortRisk()">
 													</div>						  
 												<% } else { %>

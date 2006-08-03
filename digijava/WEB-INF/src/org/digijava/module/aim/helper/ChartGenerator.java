@@ -126,7 +126,7 @@ public class ChartGenerator {
 		cp.setWriter(pw);
 		cp.setUrl(url);
 		
-		return generatePerformanceChart(cp,includeBaseline);
+		return generatePerformanceChart(cp);
 	}		
 	
 	public static String getActivityPerformanceChartFileName(Long actId,
@@ -144,7 +144,7 @@ public class ChartGenerator {
 		cp.setWriter(pw);
 		cp.setUrl(url);
 		
-		return generatePerformanceChart(cp,includeBaseline);
+		return generatePerformanceChart(cp);
 	}
 	
 	public static String generateRiskChart(ChartParams cp) {
@@ -216,7 +216,7 @@ public class ChartGenerator {
 		return fileName;		
 	}
 	
-	public static String generatePerformanceChart(ChartParams cp,boolean includeBaseLine) {
+	public static String generatePerformanceChart(ChartParams cp) {
 		
 		String fileName = null;
 		Collection col = cp.getData();
@@ -244,6 +244,10 @@ public class ChartGenerator {
 				
 				StackedBarRenderer r1 = new StackedBarRenderer();
 				
+				r1.setSeriesPaint(0,Constants.ACTUAL_VAL_CLR);
+				r1.setSeriesPaint(1,Constants.TARGET_VAL_CLR);									
+				
+				/*
 				if (includeBaseLine) {
 					r1.setSeriesPaint(0,Constants.BASE_VAL_CLR);
 					r1.setSeriesPaint(1,Constants.ACTUAL_VAL_CLR);
@@ -251,7 +255,7 @@ public class ChartGenerator {
 				} else {
 					r1.setSeriesPaint(0,Constants.ACTUAL_VAL_CLR);
 					r1.setSeriesPaint(1,Constants.TARGET_VAL_CLR);					
-				}
+				}*/
 
 				String url = cp.getUrl();
 				if (url != null && url.trim().length() > 0) {

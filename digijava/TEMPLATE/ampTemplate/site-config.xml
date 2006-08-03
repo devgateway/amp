@@ -349,6 +349,10 @@
 				<page>aim_pIPrintSurvey</page>
 				<page>aim_pIPrintReports</page>
 				<page>aim_pIPrintReports2</page>
+
+				<page>aim_actPerfWithoutBase</page>
+				<page>aim_portPerfWithoutBase</page>
+				
 			</module>
 		</page-group> 
 	</site-layout>

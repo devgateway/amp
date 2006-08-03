@@ -138,7 +138,9 @@
 																    offset="start" length="5">
 														<tr>
 															<td bgcolor=#ECF3FD width="5%">
-																<b><nested:write property="indicatorCode" /></b>
+																<c:if test="${indicators.indicatorCode != '7' }">
+																	<b><nested:write property="indicatorCode" /></b>
+																</c:if>
 															</td>
 															<td bgcolor=#ECF3FD width="95%"><b>
 																<nested:write property="name" />

@@ -11,6 +11,8 @@ public class AmpColumns  implements Serializable
 	private String columnName ;
 	private String aliasName;
 	private Set reports;
+	private String cellType;
+	private String extractorView;
 	
 
 	public String getAliasName() {
@@ -36,5 +38,29 @@ public class AmpColumns  implements Serializable
 	}
 	public void setReports(Set reports) {
 		this.reports = reports;
+	}
+	/**
+	 * @return Returns the cellType.
+	 */
+	public String getCellType() {
+		return cellType;
+	}
+	/**
+	 * @param cellType The cellType to set.
+	 */
+	public void setCellType(String extractorClass) {
+		this.cellType = extractorClass;
+	}
+	/**
+	 * @return Returns the extractorView.
+	 */
+	public String getExtractorView() {
+		return extractorView;
+	}
+	/**
+	 * @param extractorView The extractorView to set.
+	 */
+	public void setExtractorView(String extractorView) {
+		this.extractorView = extractorView;
 	}
 }

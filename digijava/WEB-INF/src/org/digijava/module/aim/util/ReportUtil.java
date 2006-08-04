@@ -9442,7 +9442,7 @@ public class ReportUtil {
 								termFund.setCommAmount(mf.format(termFunds[i][0])); 
 								termFund.setDisbAmount(mf.format(termFunds[i][1]));
 								termFund.setExpAmount(mf.format(termFunds[i][2]));
-								termFund.setExpAmount(mf.format(termFunds[i][3]));
+								termFund.setPlannedDisbAmount(mf.format(termFunds[i][3]));
 								termAssist.getTermAssistFund().add(termFund);
 								totComm=totComm + termFunds[i][0];
 								totDisb=totDisb + termFunds[i][1];
@@ -9752,7 +9752,6 @@ public class ReportUtil {
 							termAssist.setTermExpAmount(mf.format(totExp));
 							termAssist.setTermPlannedDisbAmount(mf.format(totPlannedDisb));
 							termAssist.setTermUnDisbAmount(mf.format(actualCommitment - actualDisbursement));
-
 							projCommAmount=projCommAmount + totComm;
 							projDisbAmount=projDisbAmount + totDisb;
 							projExpAmount=projExpAmount + totExp;

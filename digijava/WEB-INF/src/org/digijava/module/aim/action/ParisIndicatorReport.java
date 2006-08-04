@@ -58,7 +58,7 @@ public class ParisIndicatorReport extends Action {
 			}
 			
 			if (svForm.getReset().booleanValue()) {
-				svForm.setReset(Boolean.TRUE);
+				//svForm.setReset(Boolean.TRUE);
 				svForm.reset(mapping, request);
 			}
 			
@@ -67,14 +67,15 @@ public class ParisIndicatorReport extends Action {
 			// Populating indicator-report filters here
 			if ((null != indcId && indcId.trim().length() > 0) || svForm.getFilterFlag().booleanValue()) {
 				
-				ApplicationSettings apps = null;
-				if (null != tm) {
-					apps = tm.getAppSettings();
-					svForm.setPerspective(CommonWorker.getPerspective(apps.getPerspective()));
-					svForm.setCalendar(apps.getFisCalId().toString());
-					svForm.setCurrency(CurrencyUtil.getAmpcurrency(apps.getCurrencyId()).getCurrencyCode());
+				if (!svForm.getFilterFlag().booleanValue()) {
+					ApplicationSettings apps = null;
+					if (null != tm) {
+						apps = tm.getAppSettings();
+						svForm.setPerspective(CommonWorker.getPerspective(apps.getPerspective()));
+						svForm.setCalendar(apps.getFisCalId().toString());
+						svForm.setCurrency(CurrencyUtil.getAmpcurrency(apps.getCurrencyId()).getCurrencyCode());
+					}
 				}
-				
 				if (null == svForm.getYearColl() || svForm.getYearColl().size() < 1) {
 					int startYear = svForm.getStartYear().intValue() - Constants.FROM_YEAR_RANGE + 2;
 					int closeYear = svForm.getCloseYear().intValue() + Constants.TO_YEAR_RANGE;

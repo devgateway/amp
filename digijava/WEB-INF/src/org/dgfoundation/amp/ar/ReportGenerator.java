@@ -22,7 +22,7 @@ public abstract class ReportGenerator {
 
 	protected GroupColumn rawColumns;
 	protected GroupReportData report;
-	protected String condition;
+	protected Filter filter;
 	
 	protected static Logger logger = Logger.getLogger(ReportGenerator.class);
 	
@@ -74,17 +74,17 @@ public abstract class ReportGenerator {
 	}
 
 	/**
-	 * @return Returns the condition.
+	 * @return Returns the filter.
 	 */
-	public String getCondition() {
-		return condition;
+	public Filter getFilter() {
+		return filter;
 	}
 
 	/**
-	 * @param condition The condition to set.
+	 * @param filter The filter to set.
 	 */
-	public void setCondition(String condition) {
-		this.condition = condition;
+	public void setFilter(Filter filter) {
+		this.filter = filter;
 	}
 
 }

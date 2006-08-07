@@ -17,6 +17,7 @@ import org.dgfoundation.amp.ar.exception.IncompatibleColumnException;
 import org.dgfoundation.amp.ar.exception.UnidentifiedItemException;
 import org.dgfoundation.amp.ar.workers.ColumnWorker;
 import org.digijava.module.aim.dbentity.AmpColumns;
+import org.digijava.module.aim.dbentity.AmpReportColumn;
 import org.digijava.module.aim.dbentity.AmpReportHierarchy;
 import org.digijava.module.aim.dbentity.AmpReports;
 
@@ -29,7 +30,6 @@ import org.digijava.module.aim.dbentity.AmpReports;
 public class AmpReportGenerator extends ReportGenerator {
 
 	protected AmpReports reportMetadata;
-
 
 	/**
 	 * returns categories for a given column. If the column has no categories, the returned list will hold 0 elements.
@@ -48,6 +48,15 @@ public class AmpReportGenerator extends ReportGenerator {
 			if (!annual)
 				ret.add("Quarter");
 			ret.add("Funding Type");
+			
+			Iterator i=reportMetadata.getColumns().iterator();
+			while (i.hasNext()) {
+				AmpReportColumn element = (AmpReportColumn) i.next();
+				if(element.getColumn().getColumnName().equals("Type Of Assistance")) {
+					ret.add("Terms of Assistance");
+					break;
+				}
+			}
 		}
 		return ret;
 	}
@@ -115,7 +124,7 @@ public class AmpReportGenerator extends ReportGenerator {
 
 					Constructor ceCons = ceClass.getConstructors()[0];
 					ce = (ColumnWorker) ceCons.newInstance(new Object[] {
-							condition, extractorView, columnName });
+							filter.getGeneratedFilterQuery(), extractorView, columnName });
 				} else {
 					Constructor ceCons = ceClass.getConstructors()[0];
 					ce = (ColumnWorker) ceCons.newInstance(new Object[] {
@@ -253,11 +262,11 @@ public class AmpReportGenerator extends ReportGenerator {
 	 * @param reportMetadata
 	 * @param condition
 	 */
-	public AmpReportGenerator(AmpReports reportMetadata, String condition) {
+	public AmpReportGenerator(AmpReports reportMetadata, AmpNewFilter filter) {
 		super();
 		this.reportMetadata = reportMetadata;
 		rawColumns = new GroupColumn();
-		this.condition = condition;
+		this.filter=filter;
 		
 		reportMetadata.createOrderedColumns();
 		

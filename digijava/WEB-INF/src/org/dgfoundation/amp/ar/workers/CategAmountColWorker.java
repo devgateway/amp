@@ -50,6 +50,7 @@ public class CategAmountColWorker extends ColumnWorker {
 		int adj_type=rs.getInt("adjustment_type");
 		double tr_amount=rs.getDouble("transaction_amount");
 		java.sql.Date td=rs.getDate("transaction_date");
+		String termsAssist=rs.getString("terms_assist_name");
 		
 		acc.setAmount(tr_amount);
 		
@@ -72,12 +73,15 @@ public class CategAmountColWorker extends ColumnWorker {
 		MetaInfo qMs=new MetaInfo("Quarter","Q"+new Integer(c.get(Calendar.MONTH)/4 + 1));
 		MetaInfo aMs=new MetaInfo("Year",new Integer(c.get(Calendar.YEAR)));
 		
+		MetaInfo termsAssistMeta=new MetaInfo("Terms of Assistance",termsAssist);
+		
 		
 		acc.getMetaData().add(adjMs);
 		acc.getMetaData().add(trMs);
 		acc.getMetaData().add(fundMs);
 		acc.getMetaData().add(aMs);
 		acc.getMetaData().add(qMs);
+		acc.getMetaData().add(termsAssistMeta);
 		
 		return acc;
 	}

@@ -48,20 +48,10 @@ public class ARTester {
 			session = PersistenceManager.getSession();
 			
 			Transaction tx = session.beginTransaction();
-			/*
-			Query q = session
-					.createQuery("SELECT r from AmpReports r WHERE r.ampReportId = :id");
-			q.setInteger("id", 2);
+			
 
-			List result = q.list();
-
-			*/
-			AmpReports r=(AmpReports) session.get(AmpReports.class,new Long(91));
-			
-			
-			AmpReportGenerator arg=new AmpReportGenerator(r,"select amp_activity_id from amp_activity");
-			
-			arg.generate();
+			session.delete("select from AmpActivity");
+	
 
 			tx.commit();
 			session.close();

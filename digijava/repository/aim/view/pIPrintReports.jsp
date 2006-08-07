@@ -373,7 +373,7 @@ function load()
 					</td>
 					 
 				</tr>
-					<tr><td><font color="black">* All the amounts are in thousands (000)</font></td></tr>
+					<tr><td><font color="black">* All the amounts are in thousands (000)  <bean:write name="aimParisIndicatorReportForm" property="currency"/></font></td></tr>
 <%-----------------------------------------------------------------------------------------------------------------------------------------------------%>
 						<!--</table>
 					</td>

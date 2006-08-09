@@ -66,15 +66,22 @@ public class ShowCalendarEvent
                 calendarEventForm.setSelectedEventTypeId(ampCalendar.
                     getEventType().getId());
                 // selected donors
+                calendarEventForm.setDonors(new ArrayList());
                 if(ampCalendar.getDonors() != null) {
                     Iterator it = ampCalendar.getDonors().iterator();
-                    String[] donorIds = new String[ampCalendar.getDonors().size()];
-                    int counter = 0;
                     while(it.hasNext()) {
                         AmpOrganisation donor = (AmpOrganisation) it.next();
-                        donorIds[counter++] = donor.getAmpOrgId().toString();
+                        LabelValueBean lvb = new LabelValueBean(donor.getName(),
+                            donor.getAmpOrgId().toString());
+                        calendarEventForm.getDonors().add(lvb);
                     }
-                    calendarEventForm.setSelectedDonors(donorIds);
+//                    String[] donorIds = new String[ampCalendar.getDonors().size()];
+//                    int counter = 0;
+//                    while(it.hasNext()) {
+//                        AmpOrganisation donor = (AmpOrganisation) it.next();
+//                        donorIds[counter++] = donor.getAmpOrgId().toString();
+//                    }
+//                    calendarEventForm.setSelectedDonors(donorIds);
                 }
                 // selected start date
                 GregorianCalendar startDate = new GregorianCalendar();
@@ -127,17 +134,17 @@ public class ShowCalendarEvent
             List eventTypesList = AmpDbUtil.getEventTypes();
             calendarEventForm.setEventTypesList(eventTypesList);
             // donors
-            Collection organisations = org.digijava.module.aim.util.DbUtil.
-                getDonors();
-            List donors = new ArrayList();
-            Iterator it = organisations.iterator();
-            while(it.hasNext()) {
-                AmpOrganisation org = (AmpOrganisation) it.next();
-                LabelValueBean lvb = new LabelValueBean(org.getName(),
-                    org.getAmpOrgId().toString());
-                donors.add(lvb);
-            }
-            calendarEventForm.setDonors(donors);
+//            Collection organisations = org.digijava.module.aim.util.DbUtil.
+//                getDonors();
+//            List donors = new ArrayList();
+//            Iterator it = organisations.iterator();
+//            while(it.hasNext()) {
+//                AmpOrganisation org = (AmpOrganisation) it.next();
+//                LabelValueBean lvb = new LabelValueBean(org.getName(),
+//                    org.getAmpOrgId().toString());
+//                donors.add(lvb);
+//            }
+//            calendarEventForm.setDonors(donors);
             // start date
             GregorianCalendar startDate = DateBreakDown.
                 createValidGregorianCalendar(selectedCalendarType,
@@ -169,10 +176,10 @@ public class ShowCalendarEvent
             calendarEventForm.setSelectedEndTime(endDateBreakDown.
                                                  formatTimeString());
             // attendee users
-            it = AmpDbUtil.getUsers().iterator();
+            Iterator userIt = AmpDbUtil.getUsers().iterator();
             List attendeeUsers = new ArrayList();
-            while(it.hasNext()) {
-                User user = (User) it.next();
+            while(userIt.hasNext()) {
+                User user = (User) userIt.next();
                 LabelValueBean lvb = new LabelValueBean(user.getFirstNames() +
                     " " +
                     user.getLastName(), user.getId().toString());

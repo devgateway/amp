@@ -263,7 +263,7 @@ public class AmpDbUtil {
                 query.setString("siteId", siteId);
             }
             List events = query.list();
-            if(events != null && !events.isEmpty() && selectedDonorIds != null &&
+            /*if(events != null && !events.isEmpty() && selectedDonorIds != null &&
                selectedDonorIds.length != 0) {
                 Iterator it = events.iterator();
                 while(it.hasNext()) {
@@ -276,7 +276,7 @@ public class AmpDbUtil {
                         }
                     }
                 }
-            }
+            }*/
             return events;
         } catch(Exception ex) {
             logger.debug("Unable to get amp calendar events", ex);

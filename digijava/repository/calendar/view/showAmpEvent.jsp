@@ -12,6 +12,18 @@
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/calendar/js/calendar.js"/>"></script>
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/calendar/js/main.js"/>"></script>
 <script language="JavaScript" type="text/javascript">
+
+function addOrganisation(orgId, orgName){
+    var list = document.getElementById('organizationList');
+    if (list == null || orgId == "" || orgName == "") {
+        return;
+    }
+    var option = document.createElement("OPTION");
+    option.value = orgId;
+    option.text = orgName;
+    list.options.add(option);
+}
+
 function addGuest(guest) {
     var list = document.getElementById('selectedAttendeeGuests');
     if (list == null || guest == null || guest.value == null || guest.value == "") {
@@ -21,7 +33,7 @@ function addGuest(guest) {
     option.value = guest.value;
     option.text = guest.value;
     list.options.add(option);
-    guest.value = null;
+    guest.value = "";
 }
 
 function removeGuest() {
@@ -52,6 +64,42 @@ function selectGuests() {
     }
 }
 
+function edit(key) {
+	document.calendarEditActivityForm.step.value = "1.1";
+	document.calendarEditActivityForm.editKey.value = key;
+	document.calendarEditActivityForm.target = "_self";
+	document.calendarEditActivityForm.submit();
+}
+
+function removeSelOrganisations() {
+    var list = document.getElementById('organizationList');
+    if (list == null) {
+        return false;
+    }
+    var index = list.selectedIndex;
+    if (index != -1) {
+        for(var i = list.length - 1; i >= 0; i--) {
+            if (list.options[i].selected) {
+                list.options[i] = null;
+            }
+        }
+        if (list.length > 0) {
+            list.selectedIndex = index == 0 ? 0 : index - 1;
+        }
+    }
+    return false;
+}
+
+function selectAllOrgs() {
+    var lsItem;
+    var orglist = document.getElementById('organizationList');
+    for(var ind=0; ind<orglist.options.length; ind++){
+      lsItem=orglist.options[ind];
+      lsItem.selected=true;
+    }
+    //document.getElementById('organizationList').option.selectAll;
+    return true;
+}
 </script>
 
 <table border="0" width="100%" cellPadding=0 cellSpacing=0>
@@ -92,7 +140,7 @@ function selectGuests() {
                 <digi:form action="/DeleteEvent.do~ampCalendarId=${calendarEventForm.ampCalendarId}">
                     <html:submit value="Delete" style="width:80px" onclick="if(confirm('Are You sure?')){return true}else{return false};"/>
                 </digi:form>
-            </c:if>
+             </c:if>
         </td>
     </tr>
     <tr>
@@ -124,14 +172,29 @@ function selectGuests() {
                     </td>
                 </tr>
                 <tr>
-                    <td nowrap="nowrap" valign="top">&nbsp;Donors&nbsp;&nbsp;</td>
+                    <td nowrap="nowrap" valign="top"><br />&nbsp;Organisations&nbsp;&nbsp;</td>
                     <td>
-                        <html:select name="calendarEventForm" property="selectedDonors" multiple="multiple" size="5">
+
+                      <a title="Facilitates tracking activities in donors' internal databases">
+                       <br />
+                       <digi:link href="/selectOrganization.do?orgSelReset=true&edit=true" onclick="window.open(this.href, 'users', 'HEIGHT=500,resizable=yes,scrollbars=yes,WIDTH=500');return false;">
+                        Add Organisation
+                       </digi:link>
+                       &nbsp
+                      <a href="#" onclick="return removeSelOrganisations();">
+                        Delete Organisation
+                      </a>
+                        </a>
+                        <br /><br />
+                        <html:select name="calendarEventForm" property="selectedDonors" multiple="multiple" size="5" styleId="organizationList" style="width: 61%;">
                             <logic:notEmpty name="calendarEventForm" property="donors">
                                 <bean:define id="donors" name="calendarEventForm" property="donors" type="java.util.List"/>
                                 <html:options collection="donors" property="value" labelProperty="label"/>
                             </logic:notEmpty>
                         </html:select>
+
+                    </td>
+
                     </td>
                 </tr>
                 <tr>
@@ -154,7 +217,7 @@ function selectGuests() {
                                 </td>
                                 <td>
                                     <a href="javascript:calendar('selectedStartDate');">
-                                        <img src=" ../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border=0>
+                                        <img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border=0>
                                     </a>
                                 </td>
                                 <td nowrap="nowrap">&nbsp;&nbsp;<img id="startDateImg" name="startDateImg" src="/thirdparty/CalendarPopup/img/cal.gif" alt="STARTDATE" onclick="startDateCalendar.select(document.getElementById('selectedStartDate'), 'startDateImg', 'dd/MM/yyyy');return false;">&nbsp;</td>
@@ -429,7 +492,7 @@ function selectGuests() {
                 <tr>
                     <td>&nbsp;</td>
                     <td>
-                        <input type="submit" value="Preview">
+                        <input type="submit" value="Preview" onclick="selectAllOrgs()">
                     </td>
                 </tr>
             </table>

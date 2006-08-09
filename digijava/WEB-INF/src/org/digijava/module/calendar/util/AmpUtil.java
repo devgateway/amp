@@ -23,6 +23,7 @@ import org.digijava.module.calendar.entity.DateNavigator;
 import org.digijava.module.calendar.entity.DateNavigatorItem;
 import org.digijava.module.calendar.exception.CalendarException;
 import org.digijava.module.calendar.dbentity.AmpEventType;
+import org.digijava.module.aim.util.DbUtil;
 
 public class AmpUtil {
     public static CollectionSynchronizer attendeeSyncronizer = new
@@ -68,8 +69,9 @@ public class AmpUtil {
     public static Set getSelectedDonors(String[] donorIds) {
         Set result = new HashSet();
         try {
-            Collection allDonors = org.digijava.module.aim.util.DbUtil.
-                getDonors();
+//            Collection allDonors = org.digijava.module.aim.util.DbUtil.
+//                getDonors();
+            Collection allDonors = DbUtil.getAmpOrganisations();
             result = getSelectedDonors(allDonors, donorIds);
         } catch(Exception ex) {
 

@@ -160,10 +160,6 @@ public class DbUtil {
 		return internalId;
 	}
 
-	
-	
-	
-	
 	/*
 	 * this is to delete a report completely by a team lead
 	 */

@@ -134,6 +134,7 @@ public class MEIndicatorsUtil
 		{
 			logger.error("Unable to get non-default indicators");
 			logger.debug("Exception : " + e);
+			e.printStackTrace();
 		}
 		finally
 		{

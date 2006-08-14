@@ -6,7 +6,7 @@
 		<id name="ampComponentFundingId" column="amp_component_funding_id" type="java.lang.Long">
 			<generator class="native">
 				<param name="sequence">AMP_COMP_FUNDING_seq</param>
-			</generator>
+			</generator> 
 		</id>
 
 		<property name="transactionType" column="transaction_type"  type="java.lang.Integer"/>

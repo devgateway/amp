@@ -294,7 +294,7 @@ public class TeamMemberUtil {
 				tm.setMemberName(name);
 				tm.setRoleName(role);
 				tm.setEmail(user.getEmail());
-				if (ampRole.getAmpTeamMemRoleId().equals(
+				if (headRole!=null && ampRole.getAmpTeamMemRoleId().equals(
 						headRole.getAmpTeamMemRoleId())) {
 					tm.setTeamHead(true);
 				} else {

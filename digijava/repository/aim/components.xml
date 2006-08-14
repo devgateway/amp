@@ -243,6 +243,7 @@
 	<page name="AdvancedReportManagerStep5" title=" - Advanced Report Manager Step  :  Select Rows/Hierarchies" />
 	<page name="AdvancedReportManagerStep6" title=" - Advanced Report Manager Step  :  Select Measures" />
 	<page name="viewAdvancedReport" title=" : Reports" />
+	<page name="viewNewAdvancedReport" title=" : Reports" />
 	<page name="viewAdvancedReportHierarchy1" title=" : Reports" />
 	<page name="viewAdvancedReportHierarchy0" title=" : Reports" />
 

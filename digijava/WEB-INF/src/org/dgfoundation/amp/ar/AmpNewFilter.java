@@ -31,10 +31,10 @@ public class AmpNewFilter implements Filter {
 	private int closeDay = 0;
 	
 	private String generatedFilterQuery="SELECT amp_activity_id FROM amp_activity WHERE";
-	private int initalQueryLength=generatedFilterQuery.length();
+	private int initialQueryLength=generatedFilterQuery.length();
 	
 	private void queryAppend(String filter) {
-		generatedFilterQuery+= (initalQueryLength==generatedFilterQuery.length()?"":" AND ") + " amp_activity_id IN ("+filter+")";
+		generatedFilterQuery+= (initialQueryLength==generatedFilterQuery.length()?"":" AND ") + " amp_activity_id IN ("+filter+")";
 	}
 	
 	public AmpNewFilter() {
@@ -49,13 +49,13 @@ public class AmpNewFilter implements Filter {
 		String REGION_FILTER="SELECT amp_activity_id FROM v_regions WHERE name='"+region;
 		String FINANCING_INSTR_FILTER="SELECT amp_activity_id FROM v_financing_instrument WHERE modality_code='"+ampModalityId;
 		//currency is not a filter but a currency transformation
-		String START_YEAR_FILTER="SELECT amp_activity_id FROM v_actual_start_date WHERE date_format(actual_start_date,_latin1'%Y')='"+startYear;
-		String START_MONTH_FILTER="SELECT amp_activity_id FROM v_actual_start_date WHERE date_format(actual_start_date,_latin1'%m')='"+startMonth;
-		String START_DAY_FILTER="SELECT amp_activity_id FROM v_actual_start_date WHERE date_format(actual_start_date,_latin1'%d')='"+startDay;
+		String START_YEAR_FILTER="SELECT amp_activity_id FROM v_actual_start_date WHERE date_format(actual_start_date,_latin1'%Y')>='"+startYear+"'";
+		String START_MONTH_FILTER="SELECT amp_activity_id FROM v_actual_start_date WHERE date_format(actual_start_date,_latin1'%m')>='"+startMonth+"'";
+		String START_DAY_FILTER="SELECT amp_activity_id FROM v_actual_start_date WHERE date_format(actual_start_date,_latin1'%d')>='"+startDay+"'";
 	
-		String CLOSE_YEAR_FILTER="SELECT amp_activity_id FROM v_actual_completion_date WHERE date_format(actual_completion_date,_latin1'%Y')='"+startYear;
-		String CLOSE_MONTH_FILTER="SELECT amp_activity_id FROM v_actual_completion_date WHERE date_format(actual_completion_date,_latin1'%m')='"+startMonth;
-		String CLOSE_DAY_FILTER="SELECT amp_activity_id FROM v_actual_completion_date WHERE date_format(actual_completion_date,_latin1'%d')='"+startDay;
+		String CLOSE_YEAR_FILTER="SELECT amp_activity_id FROM v_actual_completion_date WHERE date_format(actual_completion_date,_latin1'%Y')<='"+closeYear+"'";
+		String CLOSE_MONTH_FILTER="SELECT amp_activity_id FROM v_actual_completion_date WHERE date_format(actual_completion_date,_latin1'%m')<='"+closeMonth+"'";
+		String CLOSE_DAY_FILTER="SELECT amp_activity_id FROM v_actual_completion_date WHERE date_format(actual_completion_date,_latin1'%d')<='"+closeDay+"'";
 	
 		if(ampStatusId.longValue()!=0) queryAppend(STATUS_FILTER);
 		if(ampOrgId.longValue()!=0) queryAppend(ORG_FILTER);
@@ -270,10 +270,10 @@ public class AmpNewFilter implements Filter {
 	}
 
 	/**
-	 * @return Returns the initalQueryLength.
+	 * @return Returns the initialQueryLength.
 	 */
-	public int getInitalQueryLength() {
-		return initalQueryLength;
+	public int getInitialQueryLength() {
+		return initialQueryLength;
 	}
 
 }

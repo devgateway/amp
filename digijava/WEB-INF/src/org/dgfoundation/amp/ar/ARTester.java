@@ -11,7 +11,6 @@ import org.digijava.kernel.exception.DgException;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.util.DigiConfigManager;
 import org.digijava.kernel.util.resource.ResourceStreamHandlerFactory;
-import org.digijava.module.aim.dbentity.AmpReports;
 
 /**
  * ARTester.java

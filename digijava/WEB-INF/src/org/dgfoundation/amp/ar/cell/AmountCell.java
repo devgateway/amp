@@ -12,7 +12,6 @@ import java.util.Set;
 import java.util.TreeSet;
 
 import org.dgfoundation.amp.ar.MetaInfo;
-import org.digijava.module.aim.helper.Currency;
 
 /**
  * 
@@ -32,22 +31,25 @@ public class AmountCell extends Cell {
 		return this.getId().compareTo(ac.getId());
 	}
 
-	// TODO: implement currency !
-	protected Currency currency;
+	protected double fromExchangeRate;
+	
+	protected double toExchangeRate;
+	
+	protected String currencyCode;
+	
 
 	/**
-	 * @return Returns the currency.
+	 * @return Returns the toExchangeRate.
 	 */
-	public Currency getCurrency() {
-		return currency;
+	public double getToExchangeRate() {
+		return toExchangeRate;
 	}
 
 	/**
-	 * @param currency
-	 *            The currency to set.
+	 * @param toExchangeRate The toExchangeRate to set.
 	 */
-	public void setCurrency(Currency currency) {
-		this.currency = currency;
+	public void setToExchangeRate(double toExchangeRate) {
+		this.toExchangeRate = toExchangeRate;
 	}
 
 	/**
@@ -140,7 +142,7 @@ public class AmountCell extends Cell {
 	public double getAmount() {
 		double ret = 0;
 		if (id != null)
-			return amount;
+			return convert();
 		Iterator i = mergedCells.iterator();
 		while (i.hasNext()) {
 			AmountCell element = (AmountCell) i.next();
@@ -168,4 +170,48 @@ public class AmountCell extends Cell {
 		return mergedCells;
 	}
 
+	/**
+	 * @return Returns the currencyCode.
+	 */
+	public String getCurrencyCode() {
+		return currencyCode;
+	}
+
+	/**
+	 * @param currencyCode The currencyCode to set.
+	 */
+	public void setCurrencyCode(String currencyCode) {
+		this.currencyCode = currencyCode;
+	}
+
+	/**
+	 * @return Returns the fromExchangeRate.
+	 */
+	public double getFromExchangeRate() {
+		return fromExchangeRate;
+	}
+
+	/**
+	 * @param fromExchangeRate The fromExchangeRate to set.
+	 */
+	public void setFromExchangeRate(double exchangeRate) {
+		this.fromExchangeRate = exchangeRate;
+	}
+
+
+	public double convert() {
+		double resultDbl = 0.0;
+		if (fromExchangeRate != toExchangeRate) {
+			double inter = 1 / fromExchangeRate;
+			inter = inter * amount;
+			resultDbl = inter * toExchangeRate;
+		} else {
+			resultDbl = amount;
+		}
+		return Math.round(resultDbl);
+	}
+
+
 }
+
+

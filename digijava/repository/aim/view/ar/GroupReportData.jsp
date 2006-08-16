@@ -8,10 +8,13 @@
 
 <bean:define id="groupReport" name="viewable" type="org.dgfoundation.amp.ar.GroupReportData" scope="request" toScope="page"/>
 
+<logic:present name="groupReport" property="parent">
 <tr><td colspan='<bean:write name="groupReport" property="totalDepth"/>'>
-<bean:write name="groupReport" property="name"/>
+<b><bean:write name="groupReport" property="name"/></b>
 </td></tr>
+</logic:present>
 <tr><td>
+
 <logic:iterate name="groupReport"  property="items" id="item" scope="page">
 	<bean:define id="viewable" name="item" type="org.dgfoundation.amp.ar.Viewable" scope="page" toScope="request"/>
 	<jsp:include page="<%=viewable.getViewerPath()%>"/>	
@@ -19,9 +22,11 @@
 </td></tr>
 
 <!-- generate total row -->
+<logic:present name="groupReport" property="parent">
 <bean:define id="viewable" name="groupReport" type="org.dgfoundation.amp.ar.GroupReportData" scope="page" toScope="request"/>
 <jsp:include page="TrailCells.jsp"/>
 
 <tr><td colspan='<bean:write name="groupReport" property="totalDepth"/>'>
 &nbsp;
 </td></tr>
+</logic:present>

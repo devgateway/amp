@@ -286,6 +286,7 @@ public class GroupColumn extends Column {
 	 */
 	public int getColumnSpan() {
 		Column c=this.getColumn(0);
+		if(c==null) return 0; else;
 		return 1+c.getColumnSpan();
 	}
 

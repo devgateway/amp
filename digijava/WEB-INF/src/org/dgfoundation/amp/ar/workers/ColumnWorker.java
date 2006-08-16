@@ -19,6 +19,7 @@ import org.apache.log4j.Logger;
 import org.dgfoundation.amp.ar.CellColumn;
 import org.dgfoundation.amp.ar.Column;
 import org.dgfoundation.amp.ar.GroupColumn;
+import org.dgfoundation.amp.ar.ReportGenerator;
 import org.dgfoundation.amp.ar.TotalAmountColumn;
 import org.dgfoundation.amp.ar.cell.Cell;
 import org.digijava.kernel.persistence.PersistenceManager;
@@ -41,6 +42,7 @@ public abstract class ColumnWorker {
 
 	protected Connection conn;
 	
+	protected ReportGenerator generator;
 	
 	
 	protected ResultSetMetaData rsmd;
@@ -49,18 +51,20 @@ public abstract class ColumnWorker {
 
 	protected static Logger logger = Logger.getLogger(ColumnWorker.class);
 
-	public ColumnWorker(String condition,String viewName,String columnName) {
+	public ColumnWorker(String condition,String viewName,String columnName,ReportGenerator generator) {
 		this.condition = condition;
 		this.columnName=columnName;
 		this.viewName= viewName;
 		this.sourceGroup=null;
 		extractor=true;
+		this.generator=generator;
 	}	
 	
-	public ColumnWorker(String destName,GroupColumn source) {
+	public ColumnWorker(String destName,GroupColumn source,ReportGenerator generator) {
 		this.columnName=destName;
 		this.sourceGroup=source;
 		extractor=false;
+		this.generator=generator;
 	}
 	
 	public Column populateCellColumn() {

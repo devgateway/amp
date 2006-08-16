@@ -8,7 +8,7 @@
 <bean:define id="ownerId" name="ownerId" type="java.lang.Long" scope="request" toScope="page"/>
 
 <% Cell c=cellColumn.getByOwner(ownerId);%>
-<td valign="top">
+<td valign="top" class=clsTableCellData>
 <% if(c!=null) {
 	request.setAttribute("cell",c);
 %> 

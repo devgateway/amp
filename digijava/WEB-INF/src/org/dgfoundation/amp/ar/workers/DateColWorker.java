@@ -10,6 +10,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Date;
 
+import org.dgfoundation.amp.ar.ReportGenerator;
 import org.dgfoundation.amp.ar.cell.Cell;
 import org.dgfoundation.amp.ar.cell.DateCell;
 
@@ -26,8 +27,8 @@ public class DateColWorker extends ColumnWorker {
 	 * @param viewName
 	 * @param columnName
 	 */
-	public DateColWorker(String condition, String viewName, String columnName) {
-		super(condition, viewName, columnName);
+	public DateColWorker(String condition, String viewName, String columnName,ReportGenerator generator) {
+		super(condition, viewName, columnName,generator);
 		// TODO Auto-generated constructor stub
 	}
 

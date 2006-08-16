@@ -10,6 +10,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import org.dgfoundation.amp.ar.GroupColumn;
+import org.dgfoundation.amp.ar.ReportGenerator;
 import org.dgfoundation.amp.ar.cell.Cell;
 
 /**
@@ -26,8 +27,8 @@ public class TotalAmountColWorker extends ColumnWorker {
 	 * @param columnName
 	 */
 	public TotalAmountColWorker(String condition, String viewName,
-			String columnName) {
-		super(condition, viewName, columnName);
+			String columnName,ReportGenerator generator) {
+		super(condition, viewName, columnName,generator);
 		// TODO Auto-generated constructor stub
 	}
 
@@ -35,8 +36,8 @@ public class TotalAmountColWorker extends ColumnWorker {
 	 * @param destName
 	 * @param sourceGroup
 	 */
-	public TotalAmountColWorker(String destName, GroupColumn source) {
-		super(destName, source);
+	public TotalAmountColWorker(String destName, GroupColumn source,ReportGenerator generator) {
+		super(destName, source,generator);
 		// TODO Auto-generated constructor stub
 	}
 

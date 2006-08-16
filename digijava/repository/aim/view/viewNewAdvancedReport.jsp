@@ -5,7 +5,10 @@
 <%@ taglib uri="/taglib/struts-html" prefix="html"%>
 <%@ taglib uri="/taglib/digijava" prefix="digi"%>
 <%@ taglib uri="/taglib/jstl-core" prefix="c"%>
-<table border="1">
+
+<link rel="stylesheet" href="<digi:file src="module/aim/css/newamp.css"/>">
+
+<table class=clsTable cellSpacing=0 cellPadding=0 width="100%" border=0>
 	<!-- attach filters -->
 	<tr>
 		<td>
@@ -15,7 +18,7 @@
 
 	<tr>
 		<td><!-- begin big report table -->
-		<table border="1">
+		<table class=clsInnerTable cellSpacing=0 cellPadding=0 width="100%" border=0>
 			<bean:define id="viewable" name="report"
 				type="org.dgfoundation.amp.ar.Viewable" toScope="request" />
 			<jsp:include page="/repository/aim/view/ar/viewableItem.jsp" />

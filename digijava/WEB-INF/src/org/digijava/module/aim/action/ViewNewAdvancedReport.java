@@ -444,6 +444,7 @@ public class ViewNewAdvancedReport extends Action {
 		anf.setStartMonth(startMonth);
 		anf.setStartYear(startYear);
 		
+		
 		anf.generateFilterQuery();
 		
 		

@@ -9,7 +9,7 @@
 <bean:define id="columnReport" name="viewable" type="org.dgfoundation.amp.ar.ColumnReportData" scope="request" toScope="page"/>
 
 <tr><td colspan='<bean:write name="columnReport" property="totalDepth"/>'>
-<bean:write name="columnReport" property="name"/>
+<i><bean:write name="columnReport" property="name"/></i>
 </td></tr>
 
 
@@ -21,7 +21,7 @@
 	<% column.setCurrentDepth(curDepth);%>
 	<% int rowsp=column.getCurrentRowSpan(); %>
 	<logic:iterate name="column" property="subColumnList" id="subColumn" scope="page">
-	<td align="center" rowspan="<%=rowsp%>" colspan='<bean:write name="subColumn" property="width"/>'>
+	<td align="center" class=clsTableTitleCol rowspan="<%=rowsp%>" colspan='<bean:write name="subColumn" property="width"/>'>
 		<b><bean:write name="subColumn" property="name"/></b>
 	</td>
 	</logic:iterate>

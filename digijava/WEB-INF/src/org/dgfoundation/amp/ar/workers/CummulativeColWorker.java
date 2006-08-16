@@ -10,6 +10,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import org.dgfoundation.amp.ar.GroupColumn;
+import org.dgfoundation.amp.ar.ReportGenerator;
 import org.dgfoundation.amp.ar.cell.CategAmountCell;
 import org.dgfoundation.amp.ar.cell.Cell;
 
@@ -25,8 +26,8 @@ public class CummulativeColWorker extends ColumnWorker {
 	 * @param destName
 	 * @param sourceGroup
 	 */
-	public CummulativeColWorker(String destName, GroupColumn source) {
-		super(destName, source);
+	public CummulativeColWorker(String destName, GroupColumn source,ReportGenerator generator) {
+		super(destName, source,generator);
 		sourceName="Funding";
 	}
 

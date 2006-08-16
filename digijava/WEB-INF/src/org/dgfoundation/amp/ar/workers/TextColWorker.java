@@ -9,6 +9,7 @@ package org.dgfoundation.amp.ar.workers;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+import org.dgfoundation.amp.ar.ReportGenerator;
 import org.dgfoundation.amp.ar.cell.Cell;
 import org.dgfoundation.amp.ar.cell.TextCell;
 
@@ -23,8 +24,8 @@ public class TextColWorker extends ColumnWorker {
 	/**
 	 * @param condition
 	 */
-	public TextColWorker(String condition,String viewName,String columnName) {
-		super(condition,viewName, columnName);
+	public TextColWorker(String condition,String viewName,String columnName,ReportGenerator generator) {
+		super(condition,viewName, columnName,generator);
 		// TODO Auto-generated constructor stub
 	}
 

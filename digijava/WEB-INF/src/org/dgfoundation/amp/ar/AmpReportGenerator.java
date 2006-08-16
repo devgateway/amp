@@ -124,11 +124,11 @@ public class AmpReportGenerator extends ReportGenerator {
 
 					Constructor ceCons = ceClass.getConstructors()[0];
 					ce = (ColumnWorker) ceCons.newInstance(new Object[] {
-							filter.getGeneratedFilterQuery(), extractorView, columnName });
+							filter.getGeneratedFilterQuery(), extractorView, columnName,this });
 				} else {
 					Constructor ceCons = ceClass.getConstructors()[0];
 					ce = (ColumnWorker) ceCons.newInstance(new Object[] {
-							columnName, rawColumns });
+							columnName, rawColumns,this});
 
 				}
 
@@ -194,7 +194,15 @@ public class AmpReportGenerator extends ReportGenerator {
 		rawColumns.addColumn(newcol);
 	}
 
+	
+	protected void applyExchangeRate() {
+		
+	}
+	
 	protected void prepareData() {
+		
+		applyExchangeRate();
+		
 		createTotals();
 
 		categorizeData();
@@ -211,7 +219,8 @@ public class AmpReportGenerator extends ReportGenerator {
 
 		// perform postprocessing - cell grouping and other tasks
 		report.postProcess();
-
+		
+		//remove one unneded laye
 	}
  
 	/**
@@ -235,7 +244,6 @@ public class AmpReportGenerator extends ReportGenerator {
 				logger.error(e);
 				e.printStackTrace();
 			}
-
 		}
 	}
 
@@ -267,6 +275,8 @@ public class AmpReportGenerator extends ReportGenerator {
 		this.reportMetadata = reportMetadata;
 		rawColumns = new GroupColumn();
 		this.filter=filter;
+		
+		logger.info("Master report query:"+filter.getGeneratedFilterQuery());
 		
 		reportMetadata.createOrderedColumns();
 		

@@ -10,11 +10,11 @@
 
 <!-- generate total row -->
 <tr>
-	<td colspan='<bean:write name="reportData" property="sourceColsCount"/>'>
-	<b>TOTALS FOR <bean:write name="reportData" property="name"/></b>
+	<td class=clsTableL1SubTotalEndSectionLabel colspan='<bean:write name="reportData" property="sourceColsCount"/>'>
+	TOTALS FOR <bean:write name="reportData" property="name"/>
 	</td>
 	<logic:iterate name="reportData" property="trailCells" id="cell" scope="page">
-		<td>
+		<td class=clsTableL1SubTotalEndSection>
 		<bean:define id="viewable" name="cell" type="org.dgfoundation.amp.ar.Viewable" scope="page" toScope="request"/>
 		<jsp:include page="<%=viewable.getViewerPath()%>"/>	
 		</td>

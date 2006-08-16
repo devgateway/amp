@@ -45,7 +45,7 @@ function showUserProfile(id)
 						<bean:define id="translation">
 							<digi:trn key="aim:clickToLogoutTheSystem">Click here to logout from the system</digi:trn>
 						</bean:define>
-						<digi:link href="/logout.do" styleClass="up-menu" onclick="return quitRnot()" title="<%=translation%>">
+						<digi:link module="aim" href="/logout.do" styleClass="up-menu" onclick="return quitRnot()" title="<%=translation%>">
 						<digi:trn key="aim:logout">Logout</digi:trn>
 						</digi:link>&nbsp;&nbsp;&nbsp;&nbsp;
 					</td>

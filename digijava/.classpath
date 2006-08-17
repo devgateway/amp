@@ -86,8 +86,6 @@
 	<classpathentry kind="lib" path="WEB-INF/lib/lucene_highlight.jar"/>
 	<classpathentry kind="lib" path="WEB-INF/lib/lucene-1.4.3.jar"/>
 	<classpathentry kind="lib" path="WEB-INF/lib/mail.jar"/>
-	<classpathentry kind="lib" path="WEB-INF/lib/mysql-connector-java.jar"/>
-	<classpathentry kind="lib" path="WEB-INF/lib/mysql-connector-java-5.0.2-beta-bin.jar"/>
 	<classpathentry kind="lib" path="WEB-INF/lib/namespace.jar"/>
 	<classpathentry kind="lib" path="WEB-INF/lib/ocrs12.zip"/>
 	<classpathentry kind="lib" path="WEB-INF/lib/odmg.jar"/>
@@ -133,5 +131,6 @@
 	<classpathentry kind="lib" path="WEB-INF/system-lib/pf-joi-full.jar"/>
 	<classpathentry kind="lib" path="WEB-INF/system-lib/servlet.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
+	<classpathentry kind="lib" path="WEB-INF/lib/mysql-connector-java-5.0.3-bin.jar"/>
 	<classpathentry kind="output" path="WEB-INF/classes"/>
 </classpath>

@@ -61,6 +61,7 @@
     </action>
     <action name="calendarViewForm" path="/calendar/showCalendarView" scope="request" type="org.digijava.module.calendar.action.ShowCalendarView" validate="false">
       <forward name="success" path="/showLayout.do?layout=viewEvents" />
+      <forward name="forward" path="/showLayout.do?layout=noEvents" />
     </action>
     <action name="calendarEventForm" path="/calendar/showCalendarEvent" scope="request" type="org.digijava.module.calendar.action.ShowCalendarEvent" validate="false">
       <forward name="success" path="/showLayout.do?layout=showAmpEvent" />

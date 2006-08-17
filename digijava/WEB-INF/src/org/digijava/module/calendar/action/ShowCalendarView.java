@@ -37,6 +37,7 @@ public class ShowCalendarView
 
         // calendar type
         List calendarTypesList = DateNavigator.getCalendarTypes();
+
         calendarViewForm.setCalendarTypes(calendarTypesList);
         // selected calendar type
         int selectedCalendarType = calendarViewForm.getSelectedCalendarType();
@@ -128,6 +129,10 @@ public class ShowCalendarView
         EventsFilter filter = calendarViewForm.getFilter();
         // event types
         List eventTypes = AmpDbUtil.getEventTypes();
+
+        if(eventTypes.size()<=0){
+            return mapping.findForward("forward");
+        }
         filter.setEventTypes(eventTypes);
         // donors
         Collection organisations = org.digijava.module.aim.util.DbUtil.
@@ -177,6 +182,7 @@ public class ShowCalendarView
         List ampCalendarGraphs = AmpUtil.getAmpCalendarGraphs(ampCalendarEvents,
             navigator, view);
         calendarViewForm.setAmpCalendarGraphs(ampCalendarGraphs);
+
         return mapping.findForward("success");
     }
 }

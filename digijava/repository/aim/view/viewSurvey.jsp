@@ -105,8 +105,8 @@
 																		<c:choose>
 																			<c:when test="${indicators.indicatorCode == '7' }">
 																				<TD width="100%">
-																					<digi:trn key="aim:noQuestioPI7">
-																					No question here. This indicator is calculated by the system based on <br>
+																					<digi:trn key="aim:noQuestionPI7">
+																					No question here. This indicator is calculated by the system based on 
 																					information entered for disbursements for this project/programme
 																					</digi:trn>
 																			</c:when>

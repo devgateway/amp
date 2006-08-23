@@ -108,7 +108,7 @@
 												<digi:trn key="aim:clickToViewFiscalCalendarManager">Click here to view Fiscal Calendar Manager</digi:trn>
 											</bean:define>
 											<digi:link href="/fiscalCalendarManager.do" title="<%=translation%>" >
-											<digi:trn key="aim:fiscalCalendarManager">Fiscal Calendar Manager</digi:trn>
+											<digi:trn key="aim:CalendarManager">Calendar Manager</digi:trn>
 											</digi:link>
 											</td>
 										</tr>

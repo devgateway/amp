@@ -148,7 +148,7 @@ public class ProjectbyDonorXLS extends Action {
   		colCnt = 3 + 3 + yyCnt + (yyCnt *3) + 3 +4;
   		logger.info("Curr Value " + curr );
   		logger.info(rowCnt +": ROW : COL " + colCnt);  		
-		Object[][] data = new Object[rowCnt+1][colCnt];
+		Object[][] data = new Object[rowCnt+1][colCnt+1];
 		StringBuffer sb = new StringBuffer();
 		StringBuffer sb2= new StringBuffer();
 		col = row = 0;
@@ -168,6 +168,8 @@ public class ProjectbyDonorXLS extends Action {
 			{
 				rep = (multiReport)iter.next();
 				col = col + 1;
+				
+				
 				data[row][col] = rep.getTeamName();
 				ampFisYears = new ArrayList((formBean.getFiscalYearRange()));
 				yyCnt = ampFisYears.size();
@@ -195,6 +197,17 @@ public class ProjectbyDonorXLS extends Action {
 							{	
 								
 								col = col + 1;
+								if(col >= 26)
+								{
+									logger.info(" this is why" +col);
+									col=col-1;
+									break;
+									
+								}
+								else
+								{
+									logger.info(" you are lucky");
+								}
 								data[row][col] = teamDonors.getDonorAgency();
 								drName = teamDonors.getDonorAgency();
 								logger.info(row +":  DR : " + data[row][col]);

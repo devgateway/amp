@@ -48,6 +48,7 @@ public class ProjectbyDonorPDF extends Action {
 	{
 		MulitlateralbyDonorForm formBean = (MulitlateralbyDonorForm) form;
 		Collection coll = new ArrayList();
+		logger.info(" in here project by donor pdf ");
 		if (formBean != null) {
 			logger.info("formBean is not null");
 			coll= formBean.getMultiReport();
@@ -157,8 +158,20 @@ public class ProjectbyDonorPDF extends Action {
 				
 			while(iter.hasNext())
 			{
+				
 				rep = (multiReport)iter.next();
 				col = col + 1;
+				if(col >= 26)
+				{
+					logger.info(" this is why" +col);
+					col=col-1;
+					break;
+				}
+				else
+				{
+					logger.info(" thi is col "+ col);
+				}
+				logger.info(" row.. "+row+"  col... "+col);
 				data[row][col] = rep.getTeamName();
 				ampFisYears = new ArrayList((formBean.getFiscalYearRange()));
 				yyCnt = ampFisYears.size();
@@ -387,6 +400,7 @@ public class ProjectbyDonorPDF extends Action {
 				row = row - 1;
 				if(rep.getTotalTeamTermAssistFund() != null)
 				{
+					
 					col = 5;
 					//data[row][4] = teamDonors.getDonorAgency();
 					totalTeamTermAssistFund = new ArrayList(rep.getTotalTeamTermAssistFund());

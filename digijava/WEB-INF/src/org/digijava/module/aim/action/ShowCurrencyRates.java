@@ -56,7 +56,7 @@ public class ShowCurrencyRates extends Action {
 				CurrencyUtil.saveCurrencyRates(currRates);
 				crForm.setDoAction("");
 				crForm.setAllRates(null);
-			}					
+			}
 		}
 
 		int page = 1;

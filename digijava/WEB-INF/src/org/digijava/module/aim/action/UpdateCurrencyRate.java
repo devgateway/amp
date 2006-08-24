@@ -26,6 +26,10 @@ import org.digijava.module.aim.util.CurrencyUtil;
 
 
 public class UpdateCurrencyRate extends Action {
+	
+	private static final long SEVEN_DAYS = 604800000; // in miliseconds 
+	// 7 * 24 * 60 * 60 * 1000
+	
 	private static Logger logger = Logger.getLogger(UpdateCurrencyRate.class);
 	
 	public ActionForward execute(ActionMapping mapping,ActionForm form,
@@ -75,8 +79,14 @@ public class UpdateCurrencyRate extends Action {
 				}
 			}
 			CurrencyUtil.saveCurrencyRates(col);
+			
+			Date toDate = DateConversion.getDate(crForm.getFilterByDateFrom());
+			long stDt = toDate.getTime();
+			stDt -= SEVEN_DAYS;
+			Date fromDate = new Date(stDt); 
+			crForm.setAllRates(CurrencyUtil.getActiveRates(fromDate,toDate));
 
-			return mapping.findForward("forward");
+			return mapping.findForward("fileload");
 		}
 		/*	
 		 * 	Ends here

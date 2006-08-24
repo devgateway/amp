@@ -1292,7 +1292,7 @@
 			  scope="session"
 			  validate="false"
 			  path="/aim/saveCurrencyRate">
-			  <forward name="forward" path="/aim/showCurrencyRates.do" />
+			  <forward name="fileload" path="/aim/showCurrencyRates.do" redirect="true"/>
 	</action>	
 
 	<action 

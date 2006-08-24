@@ -128,31 +128,27 @@
 																			</c:otherwise>
 																		</c:choose>
 																		</TD>
-																		<TD width="20%">
-																			<nested:equal property="response" value="">
-																				<c:if test="${indicators.indicatorCode != '7' }">
+																		<c:if test="${indicators.indicatorCode != '7' && indicators.indicatorCode != '10a' && indicators.indicatorCode != '10b' }">
+																			<TD width="20%">
+																				<nested:equal property="response" value="">
 																					<c:out value="-" />
-																				</c:if>
-																			</nested:equal>
-																			<nested:notEqual property="response" value="">
-																				<nested:notEqual property="questionType" value="calculated">
-																					<c:if test="${indicators.indicatorCode != '10a' && indicators.indicatorCode != '10b' }">
+																				</nested:equal>
+																				<nested:notEqual property="response" value="">
+																					<nested:notEqual property="questionType" value="calculated">
 																						<nested:write property="response" />
-																					</c:if>
-																					<nested:equal property="questionType" value="input">%</nested:equal>
-																				</nested:notEqual>
-																				<nested:equal property="questionType" value="calculated">
-																					<c:if test="${indicators.indicatorCode != '7' }">
+																						<nested:equal property="questionType" value="input">%</nested:equal>
+																					</nested:notEqual>
+																					<nested:equal property="questionType" value="calculated">
 																						<nested:equal property="response" value="nil">
 																							<digi:trn key="aim:noPlannedDisbursement">No planned disbursement</digi:trn>
 																						</nested:equal>
 																						<nested:notEqual property="response" value="nil">
 																							<nested:write property="response" />
 																						</nested:notEqual>
-																					</c:if>
-																				</nested:equal>
-																			</nested:notEqual>
-																		</TD>
+																					</nested:equal>
+																				</nested:notEqual>
+																			</TD>
+																		</c:if>
 																	</TR>
 																</TABLE>
 																</TD>

@@ -32,6 +32,11 @@ public class AddNewIndicatorTL extends Action {
 			else
 				ampMEIndnew.setDescription(" ");
 			
+			if (indForm.getAscendingInd() == 'A')
+				ampMEIndnew.setAscendingInd(true);
+			else
+				ampMEIndnew.setAscendingInd(false);
+			
 			ampMEIndnew.setDefaultInd(false);
 
 			MEIndicatorsUtil.saveMEIndicator(ampMEIndnew, indForm

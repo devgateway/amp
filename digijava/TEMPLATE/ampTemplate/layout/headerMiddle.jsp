@@ -38,12 +38,14 @@
 		</TD>
 		<TD width="1" bgcolor="#999999">
 		</TD>
+		<%--
       <TD vAlign=center>
 			<a class="nav">
          	::: <digi:trn key="aim:scenarios">SCENARIOS</digi:trn></a>
 		</TD>
       <TD width="1" bgcolor="#999999">
 		</TD>
+		--%>
 		<logic:notEmpty name="ME" scope="application">
       <TD vAlign="center"
 				class="headerLink" onMouseOver="this.className='headerLinkOver'" onMouseOut="this.className='headerLink'">

@@ -1,3 +1,4 @@
+
 A:link 
 {
 	FONT-SIZE: 10px; 
@@ -920,4 +921,51 @@ A.imglink:hover
 .headerLinkOver
 {
 	background-color: #006699;
+}
+
+#navlinks {
+ height:1.3em;
+ line-height:1.3em;
+ width:770px;
+ BACKGROUND-COLOR: #3754a1; 
+ color:#ffffff;
+}
+
+#navlinks ul{
+ margin: 0px;
+ padding: 0 0px;
+  BACKGROUND-COLOR: #3754a1;  
+}
+
+#navlinks li{
+ margin: 0px;
+ padding: 0px;
+ font-family: Verdana,Tahoma,Arial,sans-serif;
+ font-size: 11px;
+ float:left;
+ list-style-type:none;
+ border-right:1px solid #ffffff;
+  BACKGROUND-COLOR: #3754a1; 
+ white-space:nowrap;
+}
+
+#navlinks li a {
+ padding:4 10 4 10px;		  
+ font-size: 11px;
+ display:block;
+ font-weight:normal;
+ text-align: center ;
+ text-transform:uppercase;
+ text-decoration:none;
+ BACKGROUND-COLOR: #3754a1; 
+ color: #ffffff;
+}
+
+#navlinks .selected,#navlinks a:hover{
+ padding:4 10 4 10px;
+ font-weight:normal;
+ text-transform:uppercase;
+ text-decoration:none;
+ color: #ffffff;
+ background-color:#222e5d;
 }

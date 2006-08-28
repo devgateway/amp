@@ -13,6 +13,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.apache.log4j.Logger;
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
@@ -27,6 +28,8 @@ import org.digijava.module.aim.util.DesktopUtil;
 import org.digijava.module.aim.util.MEIndicatorsUtil;
 
 public class FilterDesktopActivities extends Action {
+	
+	//private static Logger logger = Logger.getLogger(FilterDesktopActivities.class);
 	
 	public ActionForward execute(ActionMapping mapping,ActionForm form,
 			HttpServletRequest request,HttpServletResponse response) throws Exception {
@@ -55,59 +58,103 @@ public class FilterDesktopActivities extends Action {
 			
 		}
 		boolean flag = false;
-		if (dForm.getFltrDonor() > 0) {
+		if (dForm.getFltrDonor() != null
+				&& dForm.getFltrDonor().length > 0) {
 			// Filter activities based on Donors
-			if (activities != null && activities.size() > 0) {
-				for (int i = 0;i < activities.size();i ++) {
-					AmpProject proj = (AmpProject) activities.get(i);
-					Iterator itr = proj.getDonor().iterator();
-					while (itr.hasNext()) {
-						AmpProjectDonor pDnr = (AmpProjectDonor) itr.next();
-						if (pDnr.getAmpDonorId().longValue() == dForm.getFltrDonor()) {
-							flag = true;
-							break;
-						}
-					}
-					if (!flag) {
-						activities.remove(proj);
-						i--;
-					}
-					flag = false;
-				}					
+			long dnr[] = dForm.getFltrDonor();
+			boolean allSelected = false;
+			for (int i = 0; i < dnr.length;i++) {
+				if (dnr[i] == -1) {
+					allSelected = true;
+					break;
+				}
 			}
-		}
-		if (dForm.getFltrStatus() > 0) {
-			// Filter activities based on Status
-			if (activities != null && activities.size() > 0) {
-				for (int i = 0;i < activities.size();i ++) {
-					AmpProject proj = (AmpProject) activities.get(i);
-					if (proj.getStatusId().longValue() != dForm.getFltrStatus()) {
-						activities.remove(proj);
-						i--;
-					}
+			
+			if (!allSelected) {
+				if (activities != null && activities.size() > 0) {
+					for (int i = 0;i < activities.size();i ++) {
+						AmpProject proj = (AmpProject) activities.get(i);
+						Iterator itr = proj.getDonor().iterator();
+						while (itr.hasNext()) {
+							AmpProjectDonor pDnr = (AmpProjectDonor) itr.next();
+							for (int j = 0;j < dnr.length;j ++) {
+								if (pDnr.getAmpDonorId().longValue() == dnr[j]) {
+									flag = true;
+									break;	
+								}							
+							}
+							if (flag) break;
+
+						}
+						if (!flag) {
+							activities.remove(proj);
+							i--;
+						}
+						flag = false;
+					}					
 				}
 			}				
 		}
-		if (dForm.getFltrSector() > 0) {
-			// Filter activities based on Sector
-			if (activities != null && activities.size() > 0) {
-				for (int i = 0;i < activities.size();i ++) {
-					AmpProject proj = (AmpProject) activities.get(i);
-					Iterator itr = proj.getSector().iterator();
-					while (itr.hasNext()) {
-						Sector sec = (Sector) itr.next();
-						if (sec.getSectorId().longValue() == dForm.getFltrSector()) {
-							flag = true;
-							break;
+				
+		if (dForm.getFltrStatus() != null &&
+				dForm.getFltrStatus().length > 0) {
+			// Filter activities based on Status
+			long sts[] = dForm.getFltrStatus();
+			boolean allSelected = false;
+			for (int i = 0; i < sts.length;i++) {
+				if (sts[i] == -1) {
+					allSelected = true;
+					break;
+				}
+			}			
+			if (!allSelected) {
+				if (activities != null && activities.size() > 0) {
+					for (int i = 0;i < activities.size();i ++) {
+						AmpProject proj = (AmpProject) activities.get(i);
+						for (int j = 0;j < sts.length;j ++) {
+							if (proj.getStatusId().longValue() != sts[j]) {
+								activities.remove(proj);
+								i--;
+							}						
 						}
 					}
-					if (!flag) {
-						activities.remove(proj);
-						i--;
-					}
-					flag = false;
+				}				
+			}
+		}
+		if (dForm.getFltrSector() != null &&
+				dForm.getFltrSector().length > 0) {
+			// Filter activities based on Sector
+			long secs[] = dForm.getFltrSector();
+			boolean allSelected = false;
+			for (int i = 0; i < secs.length;i++) {
+				if (secs[i] == -1) {
+					allSelected = true;
+					break;
 				}
-			}								
+			}
+			if (!allSelected) {
+				if (activities != null && activities.size() > 0) {
+					for (int i = 0;i < activities.size();i ++) {
+						AmpProject proj = (AmpProject) activities.get(i);
+						Iterator itr = proj.getSector().iterator();
+						while (itr.hasNext()) {
+							Sector sec = (Sector) itr.next();
+							for (int j = 0;j < secs.length;j ++) {
+								if (sec.getSectorId().longValue() == secs[j]) {
+									flag = true;
+									break;
+								}							
+							}
+							if (flag) break;
+						}
+						if (!flag) {
+							activities.remove(proj);
+							i--;
+						}
+						flag = false;
+					}
+				}				
+			}
 		}
 		if (request.getParameter("risk") != null) {
 			String risk = request.getParameter("risk");

@@ -171,6 +171,7 @@
 	<form-bean 
 			name="aimCommitmentbyDonorForm" 
 			type="org.digijava.module.aim.form.CommitmentbyDonorForm" />
+			
 	<form-bean 
 			name="aimMulitlateralbyDonorForm" 
 			type="org.digijava.module.aim.form.MulitlateralbyDonorForm" />

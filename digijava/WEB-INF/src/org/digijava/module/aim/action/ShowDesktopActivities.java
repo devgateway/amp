@@ -124,8 +124,8 @@ public class ShowDesktopActivities extends TilesAction {
 						dForm.setFltrCurrency(currCode);
 					} else if (filter.getFilterName().equalsIgnoreCase(Constants.DONOR_FILTER)) {
 						// adding donor filter
-						dForm.setDonors(TeamUtil.getAllDonorsToDesktop(tm.getTeamId()));						
-						dForm.setFltrDonor(-1);
+						dForm.setDonors(TeamUtil.getAllDonorsToDesktop(tm.getTeamId()));
+						dForm.setFltrDonor(null);
 					} else if (filter.getFilterName().equalsIgnoreCase(Constants.SECTOR_FILTER)) {
 						// adding sector filter
 						dForm.setSectors(new ArrayList());
@@ -164,7 +164,7 @@ public class ShowDesktopActivities extends TilesAction {
 						}								
 					} else if (filter.getFilterName().equalsIgnoreCase(Constants.STATUS_FILTER)) {
 						dForm.setStatus(DbUtil.getAmpStatus());
-						dForm.setFltrStatus(-1);
+						dForm.setFltrStatus(null);
 					} else if (filter.getFilterName().equalsIgnoreCase(Constants.PERSPECTIVE_FILTER)) {
 						dForm.setPerspectives(DbUtil.getAmpPerspective());
 					} else if (filter.getFilterName().equalsIgnoreCase(Constants.ACTIVITY_RISK_FILTER)) {

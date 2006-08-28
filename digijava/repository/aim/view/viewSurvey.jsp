@@ -26,7 +26,7 @@
 <html:hidden property="ampActivityId" />
 <html:hidden property="tabIndex" />
 
-<TABLE cellSpacing=0 cellPadding=0 align="center" vAlign="top" border=0 width="100%">
+<TABLE cellSpacing=0 cellPadding=0 align="center" vAlign="top" border=0 width="760">
 	<TR>
 		<TD vAlign="top" align="center">
 			<!-- contents -->

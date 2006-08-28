@@ -55,15 +55,15 @@
 			</TR>
 			<TR>
 				<TD width="100%" vAlign="top" align="left">
-					<TABLE bgColor=#ffffff cellPadding=0 cellSpacing=0 width="790" vAlign="top" align="left" border=0>
+					<TABLE bgColor=#ffffff cellPadding=0 cellSpacing=0 width="770" vAlign="top" align="left" border=0>
 						<TR>
 							<TD class=r-dotted-lg width="10">&nbsp;</td>
-							<TD align=center vAlign=top class=r-dotted-lg width="790">
-								<TABLE width="790" cellPadding=0 cellSpacing=0 vAlign="top" align="left" border="0">
-									<TR><TD vAlign="bottom" align="center" width="790">
+							<TD align=center vAlign=top class=r-dotted-lg width="770">
+								<TABLE width="760" cellPadding=0 cellSpacing=0 vAlign="top" align="left" border="0">
+									<TR><TD vAlign="bottom" align="center" width="770">
 										<digi:insert attribute="tabHeader" />
 									</TD></TR>
-									<TR><TD vAlign="top" align="center" width="790">
+									<TR><TD vAlign="top" align="center" width="770">
 										<digi:insert attribute="tabBody" />										
 									</TD></TR>
 								</TABLE>

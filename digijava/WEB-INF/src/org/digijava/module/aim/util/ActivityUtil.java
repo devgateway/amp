@@ -136,12 +136,13 @@ public class ActivityUtil {
 					logger.debug("Previous Activity is null");
 				}
 				
-				/* delete previos fundings and funding details */
+				// delete previos fundings and funding details 
 				Set fundSet = oldActivity.getFunding();
 				if (fundSet != null) {
 					Iterator fundSetItr = fundSet.iterator();
 					while (fundSetItr.hasNext()) {
 						AmpFunding fund = (AmpFunding) fundSetItr.next();
+						/*
 						Set fundDetSet = fund.getFundingDetails();
 						if (fundDetSet != null) {
 							Iterator fundDetItr = fundDetSet.iterator();
@@ -149,12 +150,12 @@ public class ActivityUtil {
 								AmpFundingDetail ampFundingDetail = (AmpFundingDetail) fundDetItr.next();
 								session.delete(ampFundingDetail);
 							}
-						}
+						}*/
 						session.delete(fund);
 					}
 				}
 				
-				/* delete previous regional fundings */
+				// delete previous regional fundings 
 				fundSet = oldActivity.getRegionalFundings();
 				if (fundSet != null) {
 					Iterator fundSetItr = fundSet.iterator();
@@ -164,7 +165,7 @@ public class ActivityUtil {
 					}
 				}
 				
-				/* delete all previous components */
+				// delete all previous components 
 				Set comp = oldActivity.getComponents();
 				if (comp != null) {
 					Iterator compItr = comp.iterator();
@@ -174,7 +175,7 @@ public class ActivityUtil {
 					}
 				}
 				
-				/* delete all previous org roles */
+				// delete all previous org roles 
 				Set orgrole = oldActivity.getOrgrole();
 				if (orgrole != null) {
 					Iterator orgroleItr = orgrole.iterator();
@@ -184,7 +185,7 @@ public class ActivityUtil {
 					}
 				}				
 				
-				/* delete all previous closing dates */
+				// delete all previous closing dates
 				Set closeDates = oldActivity.getClosingDates();
 				if (closeDates != null) {
 					Iterator dtItr = closeDates.iterator();
@@ -194,7 +195,7 @@ public class ActivityUtil {
 					}
 				}				
 
-				/* delete all previous issues */
+				// delete all previous issues 
 				Set issues = oldActivity.getIssues();
 				if (issues != null) {
 					Iterator iItr = issues.iterator();
@@ -204,7 +205,7 @@ public class ActivityUtil {
 					}
 				}	
 
-				/* delete all previous comments */
+				// delete all previous comments
 				if (!commentsCol.isEmpty()) {
 					ArrayList col = org.digijava.module.aim.util.DbUtil.getAllCommentsByField(field,oldActivity.getAmpActivityId());
 					logger.debug("col.size() [Inside deleting]: " + col.size());
@@ -219,6 +220,7 @@ public class ActivityUtil {
 				}
 				else
 					logger.debug("commentsCol is empty");
+					
 
 				oldActivity.getClosingDates().clear();
 				oldActivity.getComponents().clear();
@@ -227,7 +229,7 @@ public class ActivityUtil {
 				oldActivity.getInternalIds().clear();
 				oldActivity.getLocations().clear();
 				oldActivity.getOrgrole().clear();
-				oldActivity.getSectors().clear();				
+				oldActivity.getSectors().clear();
 				
 				oldActivity.setActualApprovalDate(activity.getActualApprovalDate());
 				oldActivity.setActualCompletionDate(activity.getActualCompletionDate());

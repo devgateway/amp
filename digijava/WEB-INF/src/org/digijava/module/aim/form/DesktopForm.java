@@ -9,9 +9,9 @@ public class DesktopForm extends ActionForm {
 	// desktop filters
 	private long fltrCalendar;
 	private String fltrCurrency;
-	private long fltrDonor;
-	private long fltrSector;
-	private long fltrStatus;
+	private long fltrDonor[];
+	private long fltrSector[];
+	private long fltrStatus[];
 	private int fltrFrmYear;
 	private int fltrToYear;
 	private long fltrPrespective;
@@ -161,13 +161,13 @@ public class DesktopForm extends ActionForm {
 	/**
 	 * @return Returns the fltrDonor.
 	 */
-	public long getFltrDonor() {
+	public long[] getFltrDonor() {
 		return fltrDonor;
 	}
 	/**
 	 * @param fltrDonor The fltrDonor to set.
 	 */
-	public void setFltrDonor(long fltrDonor) {
+	public void setFltrDonor(long fltrDonor[]) {
 		this.fltrDonor = fltrDonor;
 	}
 	/**
@@ -197,25 +197,25 @@ public class DesktopForm extends ActionForm {
 	/**
 	 * @return Returns the fltrSector.
 	 */
-	public long getFltrSector() {
+	public long[] getFltrSector() {
 		return fltrSector;
 	}
 	/**
 	 * @param fltrSector The fltrSector to set.
 	 */
-	public void setFltrSector(long fltrSector) {
+	public void setFltrSector(long fltrSector[]) {
 		this.fltrSector = fltrSector;
 	}
 	/**
 	 * @return Returns the fltrStatus.
 	 */
-	public long getFltrStatus() {
+	public long[] getFltrStatus() {
 		return fltrStatus;
 	}
 	/**
 	 * @param fltrStatus The fltrStatus to set.
 	 */
-	public void setFltrStatus(long fltrStatus) {
+	public void setFltrStatus(long fltrStatus[]) {
 		this.fltrStatus = fltrStatus;
 	}
 	/**

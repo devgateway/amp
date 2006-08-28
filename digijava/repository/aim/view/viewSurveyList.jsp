@@ -35,10 +35,11 @@
 <html:hidden property="tabIndex" />
 <input type="hidden" name="surveyId" value=""> --%>
 
-<TABLE cellSpacing=0 cellPadding=0 align="center" vAlign="top" border=0 width="100%">
+<TABLE cellSpacing=0 cellPadding=0 align="center" vAlign="top" border=0 width="760">
 	<TR>
 		<TD vAlign="top" align="center">
 			<!-- contents -->
+			
 			<TABLE width="99%" cellSpacing=0 cellPadding=0 vAlign="top" align="center" bgcolor="#f4f4f4" class="box-border-nopadding">
 				<TR>
 					<TD bgcolor="#f4f4f4">
@@ -148,6 +149,5 @@
 			</TABLE>
 		</TD>
 	</TR>
-	<TR><TD>&nbsp;</TD></TR>	
 </TABLE>
 </digi:form>

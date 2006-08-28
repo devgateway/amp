@@ -7,8 +7,13 @@
 	height="34">
 	<tbody>
    	<tr bgColor="#323232">
-   			<td valign="center" height="34">&nbsp;
-   			<digi:link href="/" styleClass="heading" onclick="return quitRnot()" title="Aid Management Platform">
+   		<td valign="top" align="left" width="36" height="34"> 
+   			<digi:link href="/" site="amp" onclick="return quitRnot()">
+         		<digi:img src="images/amp-logo.gif" border="0" alt="AMP" />
+				</digi:link>
+			</td>
+			<td valign="center" height="34">&nbsp;
+   			<digi:link href="/" module="aim" styleClass="heading" onclick="return quitRnot()" title="Aid Management Platform">
 					<digi:trn key="aim:aidManagementPlatform">Aid Management Platform (AMP)</digi:trn>
 				</digi:link>
 			</td>

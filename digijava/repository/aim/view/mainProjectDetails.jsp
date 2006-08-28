@@ -45,7 +45,7 @@
 	<bean:write name="aimMainProjectDetailsForm" property="ampActivityId"/>
 </c:set>
 	
-<TABLE width="765" border="0" cellpadding="0" cellspacing="0" vAlign="top" align="left">
+<TABLE width="100%" border="0" cellpadding="0" cellspacing="0" vAlign="top" align="left">
    <TR>
 		<TD>
 			<digi:form action="/viewProjectDetails.do">
@@ -114,155 +114,147 @@
 		</TD>
 	</TR>
 	<TR>
-      <TD width="100%" nowrap align="left" vAlign="bottom" height="20">
-        	<TABLE width="760"  border="0" cellpadding="0" cellspacing="0" bgcolor="#FFFFFF" class="box-border-nopadding" > 
-            <TR bgColor=#f4f4f2>
-              	<TD height="20">
-						<TABLE border="0" cellpadding="0" cellspacing="1" bgcolor="#F4F4F2" height="20">
-                 		<TR bgColor=#f4f4f2 height="20">
-								<logic:equal name="aimMainProjectDetailsForm" property="tabIndex" value="0">
-	                     <TD vAlign=center bgColor=#222e5d class="sub-nav-selected" noWrap width="149">
-									:: <digi:trn key="aim:channelOverview">Channel Overview</digi:trn>									
-								</logic:equal>
-								<logic:notEqual name="aimMainProjectDetailsForm" property="tabIndex" value="0">
-	                     <TD vAlign=center bgColor=#3754a1 noWrap width="149">
-									<bean:define id="translation">
-										<digi:trn key="aim:clickToViewChannelOverview">Click here to view Channel Overview</digi:trn>
-									</bean:define>
-									<digi:link href="/viewChannelOverview.do" name="urlTabs" styleClass="sub-nav" title="<%=translation%>" >
-										:: <digi:trn key="aim:channelOverview">Channel Overview</digi:trn>
-									</digi:link>									
-								</logic:notEqual>
-								</TD>
-									
-								<logic:equal name="aimMainProjectDetailsForm" property="tabIndex" value="1">
-	                     <TD vAlign=center bgColor=#222e5d class="sub-nav-selected" noWrap width="159">
-									:: <digi:trn key="aim:financialProgress">Financial Progress</digi:trn>								
-								</logic:equal>
-								<logic:notEqual name="aimMainProjectDetailsForm" property="tabIndex" value="1">
-                    		<TD vAlign=center bgColor=#3754a1 noWrap width="159">
-              					<c:set target="${urlTabs}" property="tabIndex" value="1"/>
-<bean:define id="translation">
-	<digi:trn key="aim:clickToViewFinancialProgress">Click here to view Financial Progress</digi:trn>
-</bean:define>
-              					<digi:link href="/viewFinancingBreakdown.do" name="urlTabs" styleClass="sub-nav" title="<%=translation%>" >
-										:: <digi:trn key="aim:financialProgress">Financial Progress</digi:trn>
-									</digi:link>								
-								</logic:notEqual>
-								</TD>
-									
-								<logic:equal name="aimMainProjectDetailsForm" property="tabIndex" value="2">
-	                      <TD vAlign=center bgColor=#222e5d class="sub-nav-selected" noWrap width="154">
-									:: <digi:trn key="aim:physicalProgress">Physical Progress</digi:trn>  
-								</logic:equal>
-								<logic:notEqual name="aimMainProjectDetailsForm" property="tabIndex" value="2">
-                    		<TD vAlign=center bgColor=#3754a1 noWrap width="154">
-                   			<c:set target="${urlTabs}" property="tabIndex" value="2"/>
-<bean:define id="translation">
-	<digi:trn key="aim:clickToViewPhysicalProgress">Click here to view Physical Progress</digi:trn>
-</bean:define>
-                    			<digi:link href="/viewPhysicalProgress.do" name="urlTabs" styleClass="sub-nav" title="<%=translation%>" >
-                    				:: <digi:trn key="aim:physicalProgress">Physical Progress</digi:trn> 
-                    			</digi:link>								
-								</logic:notEqual>
-								</TD>
-									
-								<logic:equal name="aimMainProjectDetailsForm" property="tabIndex" value="3">
-	                     		<TD vAlign=center bgColor=#222e5d class="sub-nav-selected" noWrap width="102">
-									:: <digi:trn key="aim:documents">Documents</digi:trn> 									
-								</logic:equal>
-								<logic:notEqual name="aimMainProjectDetailsForm" property="tabIndex" value="3">
-	                    		<TD vAlign=center bgColor=#3754a1 noWrap width="102">
-                   					<c:set target="${urlTabs}" property="tabIndex" value="3"/>
-									<bean:define id="translation">
-										<digi:trn key="aim:clickToViewDocuments">Click here to view Documents</digi:trn>
-									</bean:define>
-                    			<digi:link href="/viewKnowledge.do" name="urlTabs" styleClass="sub-nav" title="<%=translation%>" >
-									 :: <digi:trn key="aim:documents">Documents</digi:trn>	
-									</digi:link>									
-								</logic:notEqual>
-								</TD>
-								<logic:equal name="aimMainProjectDetailsForm" property="tabIndex" value="4">
-	                     		<TD vAlign=center bgColor=#222e5d class="sub-nav-selected" noWrap width="153">
-									:: <digi:trn key="aim:regionalFunding">Regional Funding</digi:trn> 									
-								</logic:equal>
-								<logic:notEqual name="aimMainProjectDetailsForm" property="tabIndex" value="4">
-	                    		<TD vAlign=center bgColor=#3754a1 noWrap width="153">
-                   					<c:set target="${urlTabs}" property="tabIndex" value="4"/>
-                   					<c:set target="${urlTabs}" property="regionId" value="-1"/>
-									<bean:define id="translation">
-										<digi:trn key="aim:clickToViewRegionalFundings">Click here to view regional funding</digi:trn>
-									</bean:define>
-                    				<digi:link href="/viewRegionalFundingBreakdown.do" name="urlTabs" styleClass="sub-nav" title="<%=translation%>" >
-									 	:: <digi:trn key="aim:regionalFunding">Regional Funding</digi:trn> 	
-									</digi:link>									
-								</logic:notEqual>
-								</TD>
-								<TD vAlign=middle width="100%" bgColor=#3754A1 >&nbsp;</TD>
-							</TR>
-						</TABLE>
-					</TD>
-				</TR>
-			</TABLE>
-		</TD>
-	</TR>
+		<TD width="100%" nowrap align="left" vAlign="bottom" height="20">
+			<TABLE width="100%" cellspacing="1" cellpadding=0 border=0>
+			  	<TR><TD bgcolor="#3754a1">
+				<DIV id="navlinks">
+					<UL>
+						<logic:equal name="aimMainProjectDetailsForm" property="tabIndex" value="0">
+					   <LI class="selected">
+							:: <digi:trn key="aim:channelOverview">Channel Overview</digi:trn>
+						</LI>
+						 </logic:equal>
+						<logic:notEqual name="aimMainProjectDetailsForm" property="tabIndex" value="0">
+						<bean:define id="translation">
+							<digi:trn key="aim:clickToViewChannelOverview">Click here to view Channel Overview</digi:trn>
+						</bean:define>
+						<LI>
+						<digi:link href="/viewChannelOverview.do" name="urlTabs" title="<%=translation%>">
+							:: <digi:trn key="aim:channelOverview">Channel Overview</digi:trn>
+						</digi:link>
+						</LI>
+						</logic:notEqual>
 
-	<%
-	if (!(application.getAttribute("PI") == null && application.getAttribute("ME") == null)) { %>
-	
-	<TR>
-      <TD width="100%" nowrap align="center" vAlign="bottom" height="20">
-        	<TABLE width="765"  border="0" cellpadding="0" cellspacing="0" bgcolor="#FFFFFF" class="box-border-nopadding" > 
-            <TR bgColor=#f4f4f2>
-              	<TD height="20">
-						<TABLE border="0" cellpadding="0" cellspacing="1" bgcolor="#F4F4F2" height="20">
-                 		<TR bgColor=#f4f4f2 height="20">
-								<logic:notEmpty name="PI" scope="application">
-                 			<logic:equal name="aimMainProjectDetailsForm" property="tabIndex" value="5">
-	                     		<TD vAlign=center bgColor=#222e5d class="sub-nav-selected" noWrap width="150">
-									:: <digi:trn key="aim:parisIndicators">PARIS INDICATORS</digi:trn> 									
-							</logic:equal>
-							<logic:notEqual name="aimMainProjectDetailsForm" property="tabIndex" value="5">
-	                    		<TD vAlign=center bgColor=#3754a1 noWrap width="150">
-	                    			<jsp:useBean id="survey" type="java.util.Map" class="java.util.HashMap" />
-	                    			<c:set target="${survey}" property="ampActivityId">
-										<bean:write name="aimMainProjectDetailsForm" property="ampActivityId"/>
-									</c:set>
-                   					<c:set target="${survey}" property="tabIndex" value="5"/>
-                   					<bean:define id="translation">
-										<digi:trn key="aim:clickToViewAidEffectIndicators">Click here to view Aid Effectiveness Indicators</digi:trn>
-									</bean:define>
-                    				<digi:link href="/viewSurveyList.do" name="survey" styleClass="sub-nav" title="<%=translation%>" >
-									 	:: <digi:trn key="aim:parisIndicators">PARIS INDICATORS</digi:trn> 	
-									</digi:link>									
-							</logic:notEqual>
-								</TD>
-								</logic:notEmpty>
-								<logic:notEmpty name="ME" scope="application">
-							<logic:equal name="aimMainProjectDetailsForm" property="tabIndex" value="6">
-	                     		<TD vAlign=center bgColor=#222e5d class="sub-nav-selected" noWrap width="103">
-									:: <digi:trn key="aim:activityDashboard">Dashboard</digi:trn> 									
-							</logic:equal>
-							<logic:notEqual name="aimMainProjectDetailsForm" property="tabIndex" value="6">
-	                    		<TD vAlign=center bgColor=#3754a1 noWrap width="103">
-                   				<c:set target="${urlTabs}" property="tabIndex" value="6"/>
-									<bean:define id="translation">
-										<digi:trn key="aim:clickToViewActivityDashboard">Click here to view activity dashboard</digi:trn>
-									</bean:define>
-                    			<digi:link href="/viewActivityDashboard.do" name="urlTabs" styleClass="sub-nav" title="<%=translation%>" >
-									 :: <digi:trn key="aim:activityDashboard">Dashboard</digi:trn>
-									</digi:link>									
-							</logic:notEqual>
-								</TD>	
-								</logic:notEmpty>
-								<TD vAlign=middle width="100%" bgColor=#3754A1 >&nbsp;</TD>
-						</TR>
-						</TABLE>
-				</TD>
-			</TR>
+						<logic:equal name="aimMainProjectDetailsForm" property="tabIndex" value="1">
+					   <LI class="selected">
+							:: <digi:trn key="aim:financialProgress">Financial Progress</digi:trn>								
+						</LI>
+						</logic:equal>
+						<logic:notEqual name="aimMainProjectDetailsForm" property="tabIndex" value="1">
+     					<c:set target="${urlTabs}" property="tabIndex" value="1"/>
+						<bean:define id="translation">
+							<digi:trn key="aim:clickToViewFinancialProgress">Click here to view Financial Progress</digi:trn>
+						</bean:define>
+						<LI>
+              		<digi:link href="/viewFinancingBreakdown.do" name="urlTabs" title="<%=translation%>" >
+							:: <digi:trn key="aim:financialProgress">Financial Progress</digi:trn>
+						</digi:link>								
+						</LI>
+						</logic:notEqual>
+
+						<logic:equal name="aimMainProjectDetailsForm" property="tabIndex" value="2">
+					   <LI class="selected">
+							:: <digi:trn key="aim:physicalProgress">Physical Progress</digi:trn>  
+						</LI>
+						</logic:equal>
+						<logic:notEqual name="aimMainProjectDetailsForm" property="tabIndex" value="2">
+                  <c:set target="${urlTabs}" property="tabIndex" value="2"/>
+						<bean:define id="translation">
+							<digi:trn key="aim:clickToViewPhysicalProgress">Click here to view Physical Progress</digi:trn>
+						</bean:define>
+						<LI>
+                 	<digi:link href="/viewPhysicalProgress.do" name="urlTabs" title="<%=translation%>" >
+                 		:: <digi:trn key="aim:physicalProgress">Physical Progress</digi:trn>
+                 	</digi:link>
+						</LI>
+						</logic:notEqual>
+						
+						<logic:equal name="aimMainProjectDetailsForm" property="tabIndex" value="3">
+					   <LI class="selected">
+							:: <digi:trn key="aim:documents">Documents</digi:trn>
+						</logic:equal>
+						</LI>
+						<logic:notEqual name="aimMainProjectDetailsForm" property="tabIndex" value="3">
+     					<c:set target="${urlTabs}" property="tabIndex" value="3"/>
+						<bean:define id="translation">
+							<digi:trn key="aim:clickToViewDocuments">Click here to view Documents</digi:trn>
+						</bean:define>
+						<LI>
+           			<digi:link href="/viewKnowledge.do" name="urlTabs" title="<%=translation%>" >
+							:: <digi:trn key="aim:documents">Documents</digi:trn>	
+						</digi:link>
+						</LI>
+						</logic:notEqual>
+						
+						<logic:equal name="aimMainProjectDetailsForm" property="tabIndex" value="4">
+					   <LI class="selected">
+							:: <digi:trn key="aim:regionalFunding">Regional Funding</digi:trn>
+						</LI>
+						</logic:equal>
+						<logic:notEqual name="aimMainProjectDetailsForm" property="tabIndex" value="4">
+						<c:set target="${urlTabs}" property="tabIndex" value="4"/>
+						<c:set target="${urlTabs}" property="regionId" value="-1"/>
+						<bean:define id="translation">
+							<digi:trn key="aim:clickToViewRegionalFundings">Click here to view regional funding</digi:trn>
+						</bean:define>
+						<LI>
+						<digi:link href="/viewRegionalFundingBreakdown.do" name="urlTabs" title="<%=translation%>" >
+							:: <digi:trn key="aim:regionalFunding">Regional Funding</digi:trn> 	
+						</digi:link>
+						</LI>
+						</logic:notEqual>
+					</UL>
+				</DIV>
+				</TD></TR>
+			  	<TR><TD bgcolor="#3754a1">
+				<DIV id="navlinks">
+					<UL>
+						<logic:notEmpty name="PI" scope="application">
+						<logic:equal name="aimMainProjectDetailsForm" property="tabIndex" value="5">
+						   <LI class="selected">						
+							:: <digi:trn key="aim:parisIndicators">Paris Indicators</digi:trn>
+							</LI>
+						</logic:equal>
+						<logic:notEqual name="aimMainProjectDetailsForm" property="tabIndex" value="5">
+           			<jsp:useBean id="survey" type="java.util.Map" class="java.util.HashMap" />
+						<c:set target="${survey}" property="ampActivityId">
+							<bean:write name="aimMainProjectDetailsForm" property="ampActivityId"/>
+						</c:set>
+						<c:set target="${survey}" property="tabIndex" value="5"/>
+						<bean:define id="translation">
+							<digi:trn key="aim:clickToViewAidEffectIndicators">Click here to view Aid Effectiveness Indicators</digi:trn>
+						</bean:define>
+						<LI>	
+						<digi:link href="/viewSurveyList.do" name="survey" title="<%=translation%>" >
+							:: <digi:trn key="aim:parisIndicators">Paris Indicators</digi:trn> 	
+						</digi:link>									
+						</LI>
+						</logic:notEqual>
+						</logic:notEmpty>
+								
+						<logic:notEmpty name="ME" scope="application">
+						<logic:equal name="aimMainProjectDetailsForm" property="tabIndex" value="6">
+							<LI class="selected">
+							:: <digi:trn key="aim:activityDashboard">Dashboard</digi:trn>
+							</LI>
+						</logic:equal>
+						<logic:notEqual name="aimMainProjectDetailsForm" property="tabIndex" value="6">
+						<c:set target="${urlTabs}" property="tabIndex" value="6"/>
+						<bean:define id="translation">
+							<digi:trn key="aim:clickToViewActivityDashboard">Click here to view activity dashboard</digi:trn>
+						</bean:define>
+						<LI>
+						<digi:link href="/viewActivityDashboard.do" name="urlTabs" title="<%=translation%>" >
+							:: <digi:trn key="aim:activityDashboard">Dashboard</digi:trn>
+						</digi:link>
+						</LI>
+						</logic:notEqual>
+						</logic:notEmpty>
+					</UL>		
+				</DIV>	
+				</TD></TR>
 			</TABLE>
 		</TD>
 	</TR>
-	<% } %>
 </TABLE>
 </logic:equal>								

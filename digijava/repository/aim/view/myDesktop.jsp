@@ -72,15 +72,15 @@
 						</c:if>
 	
 						<c:if test="${!empty aimDesktopForm.sectors}">
-							<html:select property="fltrSector" styleClass="inp-text">
-								<option value="0">All Sectors</option>
+							<html:select property="fltrSector" styleClass="inp-text" multiple="true" size="2">
+								<html:option value="-1">--All--</html:option>
 								<html:optionsCollection property="sectors" value="ampSectorId" label="name" />
 							</html:select>
 						</c:if>
 						
 						<c:if test="${!empty aimDesktopForm.donors}">
-							<html:select property="fltrDonor" styleClass="inp-text">
-								<option value="0">All Donors</option>
+							<html:select property="fltrDonor" styleClass="inp-text" multiple="true" size="2">
+								<html:option value="-1">--All--</html:option>							
 								<html:optionsCollection property="donors" value="ampOrgId" label="acronym"/>
 							</html:select>
 						</c:if>
@@ -92,8 +92,8 @@
 						</c:if>
 
 						<c:if test="${!empty aimDesktopForm.status}">
-							<html:select property="fltrStatus" styleClass="inp-text">
-								<option value="0">All Status</option>
+							<html:select property="fltrStatus" styleClass="inp-text" multiple="true" size="2">
+								<html:option value="-1">--All--</html:option>
 								<html:optionsCollection property="status" value="ampStatusId" label="name" />
 							</html:select>
 						</c:if>

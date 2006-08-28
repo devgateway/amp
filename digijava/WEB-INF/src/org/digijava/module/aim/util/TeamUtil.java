@@ -6,6 +6,7 @@ package org.digijava.module.aim.util;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -1499,7 +1500,7 @@ public class TeamUtil {
 			session = PersistenceManager.getSession();
 			String queryString = "select tr from "
 					+ AmpTeamReports.class.getName()
-					+ " tr where (tr.team=:teamId)";
+					+ " tr where (tr.team=:teamId) order by tr.report";
 			Query qry = session.createQuery(queryString);
 			qry.setParameter("teamId", teamId, Hibernate.LONG);
 			Iterator itr = qry.list().iterator();
@@ -1510,7 +1511,7 @@ public class TeamUtil {
 				// desc:used select query instead of session.load
 				// start
 				queryString = "select r from " + AmpReports.class.getName()
-						+ " r " + "where (r.ampReportId=:id)";
+						+ " r " + "where (r.ampReportId=:id) order by r.name";
 				qry = session.createQuery(queryString);
 				qry.setParameter("id", ampTeamRep.getReport().getAmpReportId(),
 						Hibernate.LONG);
@@ -1560,13 +1561,13 @@ public class TeamUtil {
 			
 			if (team.getAccessType().equalsIgnoreCase(Constants.ACCESS_TYPE_MNGMT)) {
 				queryString = "select r from " + AmpReports.class.getName() + " r " +
-					"where r.ampReportId <> 7";
+					"where r.ampReportId <> 7" + "order by r.name";
 				qry = session.createQuery(queryString);
 				col = qry.list();	
 			} else {
 				queryString = "select tr from "
 					+ AmpTeamReports.class.getName()
-					+ " tr where (tr.team=:teamId) and tr.report.ampReportId<>'7'";
+					+ " tr where (tr.team=:teamId) and tr.report.ampReportId<>'7'" + "order by tr.report" ;
 				qry = session.createQuery(queryString);
 				qry.setParameter("teamId", teamId, Hibernate.LONG);
 				Iterator itr = qry.list().iterator();
@@ -1582,10 +1583,11 @@ public class TeamUtil {
 			
 				if (qryBuffer != null && qryBuffer.length() > 0) {
 					queryString = "select r from " + AmpReports.class.getName() + " r " +
-						"where r.ampReportId in (" + qryBuffer + ")";
+						"where r.ampReportId in (" + qryBuffer + ")" + "order by r.name";
 					qry = session.createQuery(queryString);
 					col = qry.list();
-				}				
+				}
+				Collections.sort((ArrayList) col);
 			}
 		} catch (Exception e) {
 			logger.debug("Exception from getAllTeamReports()");

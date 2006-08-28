@@ -7,6 +7,7 @@ package org.digijava.module.aim.util;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Vector;
@@ -493,9 +494,11 @@ public class TeamMemberUtil {
 					col.add(ampReports);
 				}
 			}
+			Collections.sort(col);
 		} catch (Exception e) {
-			logger.debug("Exception from getAllMemberReports()");
-			logger.debug(e.toString());
+			logger.error("Exception from getAllMemberReports()");
+			logger.error(e.toString());
+			e.printStackTrace(System.out);
 		} finally {
 			try {
 				if (session != null) {

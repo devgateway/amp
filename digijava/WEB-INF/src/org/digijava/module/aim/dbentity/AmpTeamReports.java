@@ -9,7 +9,7 @@ package org.digijava.module.aim.dbentity;
 import org.digijava.module.aim.dbentity.AmpReports;
 import org.digijava.module.aim.dbentity.AmpTeam;
 
-public class AmpTeamReports {
+public class AmpTeamReports implements Comparable {
 
 		  private Long ampTeamReportsId;
 		  private AmpTeam team;
@@ -39,4 +39,12 @@ public class AmpTeamReports {
 		  public AmpReports getReport()  { return report; }
 
 		  public boolean getTeamView() { return teamView; }
+
+		public int compareTo(Object o) {
+			
+			 if (!(o instanceof AmpTeamReports)) throw new ClassCastException();
+			 AmpTeamReports ampRep = (AmpTeamReports) o;
+			 return (this.report.getName().compareTo(ampRep.report.getName()));
+			// TODO Auto-generated method stub
+		}
 } 

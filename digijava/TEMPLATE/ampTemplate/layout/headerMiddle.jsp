@@ -4,7 +4,7 @@
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
 
 <TABLE cellSpacing=0 cellPadding=0 border=0 vAlign="top" align="left" height="20">
-   <TR>	
+   <TR>
    	<TD>&nbsp;&nbsp;&nbsp;</TD>
       <TD width="1" bgcolor="#999999">
 	  </TD>
@@ -32,7 +32,7 @@
       <TD width="1" bgcolor="#999999">
 		</TD>
       <TD vAlign=center>
-                <digi:link module="calendar" href="/showCalendarView.do" styleClass="nav" onclick="return quitRnot()"	title="<%=translation%>">
+                <digi:link module="calendar" href="/showCalendarView.do" styleClass="nav" onclick="return quitRnot()"	title="View Planning Calendar">
          	::: <digi:trn key="aim:calendar">CALENDAR</digi:trn>
 		</digi:link>
 		</TD>

@@ -46,15 +46,15 @@
       <TD width="1" bgcolor="#999999">
 		</TD>
 		--%>
-		<logic:notEmpty name="ME" scope="application">
+	<logic:notEmpty name="ME" scope="application">
       <TD vAlign="center"
 				class="headerLink" onMouseOver="this.className='headerLinkOver'" onMouseOut="this.className='headerLink'">
 			<digi:link href="/viewPortfolioDashboard.do~actId=-1~indId=-1" module="aim" styleClass="nav"
-			onclick="return quitRnot()" title="View portfolio dashboard">
-         	::: <digi:trn key="aim:dashboard">DASHBOARD</digi:trn>
+			onclick="return quitRnot()" title="View M&E Dashboard">
+         	::: <digi:trn key="aim:medashboard">M & E DASHBOARD</digi:trn>
 			</digi:link>
 		</TD>
-		</logic:notEmpty>
+    </logic:notEmpty>
       <TD width="1" bgcolor="#999999">
 		</TD>
 	</TR>

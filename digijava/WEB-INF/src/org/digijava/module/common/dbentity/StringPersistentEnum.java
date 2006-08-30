@@ -30,10 +30,10 @@ import net.sf.hibernate.type.NullableType;
  * <pre>&lt;property name="gender" type="com.foo.Gender"&gt;</pre></p>
  *
  * <p><code>
- * $Id: StringPersistentEnum.java,v 1.1 2005-07-06 10:34:19 rahul Exp $
+ * $Id: StringPersistentEnum.java,v 1.2 2006-08-30 14:27:41 steve Exp $
  * </pre></p>
  *
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  * @author &Oslash;rjan Nygaard Austvold
  */
 public abstract class StringPersistentEnum extends PersistentEnum {
@@ -76,7 +76,13 @@ public abstract class StringPersistentEnum extends PersistentEnum {
         if (other == this) {
             return 0;
         }
-        return ((String) getEnumCode()).compareTo(((PersistentEnum) other).getEnumCode());
+        if (other instanceof StringPersistentEnum) {
+            String thisEnumCode = (String) getEnumCode();
+            String anotherEnumCode = (String)((PersistentEnum) other).getEnumCode();
+            return thisEnumCode.compareTo(anotherEnumCode);
+        } else {
+            return this.getClass().getName().compareTo(other.getClass().getName());
+        }
     }
 
 

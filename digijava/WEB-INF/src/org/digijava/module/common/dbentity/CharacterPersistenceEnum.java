@@ -29,10 +29,10 @@ import net.sf.hibernate.type.NullableType;
  * <pre>&lt;property name="gender" type="com.foo.Gender"&gt;</pre></p>
  *
  * <p><code>
- * $Id: CharacterPersistenceEnum.java,v 1.1 2005-07-06 10:34:19 rahul Exp $
+ * $Id: CharacterPersistenceEnum.java,v 1.2 2006-08-30 14:27:41 steve Exp $
  * </pre></p>
  *
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  * @author &Oslash;rjan Nygaard Austvold
  */
 public abstract class CharacterPersistenceEnum extends PersistentEnum {
@@ -65,7 +65,13 @@ public abstract class CharacterPersistenceEnum extends PersistentEnum {
         if (other == this) {
             return 0;
         }
-        return ((Character) getEnumCode()).compareTo(((PersistentEnum) other).getEnumCode());
+        if (other instanceof CharacterPersistenceEnum) {
+            Character thisCode = (Character) getEnumCode();
+            Character anotherCode = (Character)((PersistentEnum) other).getEnumCode();
+            return thisCode.compareTo(anotherCode);
+        } else {
+            return this.getClass().getName().compareTo(other.getClass().getName());
+        }
     }
 
 

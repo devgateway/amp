@@ -18,7 +18,7 @@ import net.sf.hibernate.type.NullableType;
 /**
  * The source was taken from http://www.hibernate.org/203.html
  * with a little bit of changes
- * 
+ *
  * Provides a base class for implementations of persistable, type-safe,
  * comparable and serializable enums with a custom persisted representation.
  *
@@ -26,10 +26,10 @@ import net.sf.hibernate.type.NullableType;
  * implementation.</p>
  *
  * <p><code>
- * $Id: PersistentEnum.java,v 1.1 2005-07-06 10:34:19 rahul Exp $
+ * $Id: PersistentEnum.java,v 1.2 2006-08-30 14:27:41 steve Exp $
  * </pre></p>
  *
- * @version $Revision: 1.1 $
+ * @version $Revision: 1.2 $
  * @author &Oslash;rjan Nygaard Austvold
  */
 public abstract class PersistentEnum implements Comparable, Serializable, UserType {
@@ -88,7 +88,7 @@ public abstract class PersistentEnum implements Comparable, Serializable, UserTy
         entries.put(enumCode, this);
     }
 
-    
+
 
     /**
      * @see java.lang.Object#hashCode()
@@ -102,10 +102,10 @@ public abstract class PersistentEnum implements Comparable, Serializable, UserTy
      * @see java.lang.Object#equals(java.lang.Object)
      */
     public final boolean equals(Object other) {
-        
+
         //@author J.Brown 31.08.2004
         //An instanceof check is probably wise..
- 
+
         if (!(other instanceof PersistentEnum)) {
             return false;
         }
@@ -125,8 +125,8 @@ public abstract class PersistentEnum implements Comparable, Serializable, UserTy
             } catch (ClassCastException ex) {
                 // use reflection
                 try {
-                    Method mth = other.getClass().getMethod("getEnumCode", null);
-                    Serializable enumCode = (Serializable) mth.invoke(other, null);
+                    Method mth = other.getClass().getMethod("getEnumCode", new Class[] {});
+                    Serializable enumCode = (Serializable) mth.invoke(other, new Object[] {});
                     return this.enumCode.equals(enumCode);
                 } catch (Exception ignore) { // NoSuchMethod-, IllegalAccess-, InvocationTargetException
                 }
@@ -147,14 +147,14 @@ public abstract class PersistentEnum implements Comparable, Serializable, UserTy
         return enumCode;
     }
 
-    
+
     public static Object getEnum(Class enumClass, Serializable enumCode) {
-   	
+
     	Map entries = (Map) enumClasses.get(enumClass);
 
     	return (entries == null ? null : entries.get(enumCode));
     }
-    
+
     /**
      * Resolves this enumeration into a already staticly instantiated enum.
      *
@@ -277,9 +277,9 @@ public abstract class PersistentEnum implements Comparable, Serializable, UserTy
         }
 
         Serializable enumCode = null;
-        
-        if (value != null) enumCode = ((PersistentEnum) value).getEnumCode(); 
-        
+
+        if (value != null) enumCode = ((PersistentEnum) value).getEnumCode();
+
         getNullableType().nullSafeSet(st, enumCode, index);
     }
 }

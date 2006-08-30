@@ -30,6 +30,7 @@ import org.digijava.module.aim.dbentity.AmpReports;
 public class AmpReportGenerator extends ReportGenerator {
 
 	protected AmpReports reportMetadata;
+	protected int extractableCount;
 
 	/**
 	 * returns categories for a given column. If the column has no categories, the returned list will hold 0 elements.
@@ -74,19 +75,26 @@ public class AmpReportGenerator extends ReportGenerator {
 		List colNames = reportMetadata.getOrderedColumns();
 		Iterator i = colNames.iterator();
 		while (i.hasNext()) {
-			AmpColumns element = (AmpColumns) i.next();
+			AmpReportColumn element2 = (AmpReportColumn) i.next();
+			AmpColumns element=element2.getColumn();
 			if (element.getExtractorView() != null)
-				extractable.add(element);
+				extractable.add(element2);
 			else
-				generated.add(element);
+				generated.add(element2);
 		}
+		
+		extractableCount=extractable.size();
 
 		//also add hierarchical columns to extractable:
 		i=reportMetadata.getHierarchies().iterator();
 		while (i.hasNext()) {
 			AmpReportHierarchy element = (AmpReportHierarchy) i.next();
-			extractable.add(element.getColumn());	
+			AmpReportColumn arc=new AmpReportColumn();
+			arc.setColumn(element.getColumn());
+			arc.setOrderId(new String("1"));
+			extractable.add(arc);	
 		}
+		
 		
 		createDataForColumns(extractable);
 		createDataForColumns(generated);
@@ -102,7 +110,8 @@ public class AmpReportGenerator extends ReportGenerator {
 		try {
 
 			while (i.hasNext()) {
-				AmpColumns col = (AmpColumns) i.next();
+				AmpReportColumn rcol = (AmpReportColumn) i.next();
+				AmpColumns col=rcol.getColumn();
 				String cellTypeName = col.getCellType();
 				String extractorView = col.getExtractorView();
 				String columnName = col.getColumnName();
@@ -129,11 +138,10 @@ public class AmpReportGenerator extends ReportGenerator {
 					Constructor ceCons = ceClass.getConstructors()[0];
 					ce = (ColumnWorker) ceCons.newInstance(new Object[] {
 							columnName, rawColumns,this});
-
 				}
 
 				Column column = ce.populateCellColumn();
-				rawColumns.addColumn(column);
+				rawColumns.addColumn(new Integer(rcol.getOrderId()),column);
 			}
 
 		} catch (ClassNotFoundException e) {
@@ -159,7 +167,10 @@ public class AmpReportGenerator extends ReportGenerator {
 	}
 
 	protected void attachFundingMeta() {
+		AmpReportColumn arc=new AmpReportColumn();
 		AmpColumns ac = new AmpColumns();
+		arc.setColumn(ac);
+		arc.setOrderId(new String("0"));
 		ac.setCellType("org.dgfoundation.amp.ar.cell.CategAmountCell");
 		ac.setColumnName("Funding");
 		if (reportMetadata.getType().intValue() == 1)
@@ -169,7 +180,16 @@ public class AmpReportGenerator extends ReportGenerator {
 		if (reportMetadata.getType().intValue() == 3)
 			ac.setExtractorView("v_regional_funding");
 
-		reportMetadata.getOrderedColumns().add(ac);
+		reportMetadata.getOrderedColumns().add(arc);
+		
+		//ugly but useful :) get cummulative columns right before funding:
+		Iterator i=reportMetadata.getOrderedColumns().iterator();
+		while (i.hasNext()) {
+			AmpReportColumn element = (AmpReportColumn) i.next();
+			if(element.getColumn().getColumnName().indexOf("Cumulative")!=-1) 
+				element.setOrderId(Integer.toString(reportMetadata.getOrderedColumns().size()-1));
+		}
+		
 		
 	}
 
@@ -208,7 +228,7 @@ public class AmpReportGenerator extends ReportGenerator {
 		categorizeData();
 		
 		report = new GroupReportData(reportMetadata.getName());
-		report.setSourceColsCount(new Integer(reportMetadata.getColumns().size()));
+		report.setSourceColsCount(new Integer(extractableCount-1));
 		
 		ColumnReportData reportChild = new ColumnReportData(reportMetadata.getName());
 		reportChild.addColumns(rawColumns.getItems());
@@ -253,7 +273,7 @@ public class AmpReportGenerator extends ReportGenerator {
 	protected void categorizeData() {
 		Iterator i = reportMetadata.getOrderedColumns().iterator();
 		while (i.hasNext()) {
-			AmpColumns element = (AmpColumns) i.next();
+			AmpColumns element = ((AmpReportColumn) i.next()).getColumn();
 			String colName = element.getColumnName();
 			List cats = getColumnSubCategories(element
 					.getColumnName());

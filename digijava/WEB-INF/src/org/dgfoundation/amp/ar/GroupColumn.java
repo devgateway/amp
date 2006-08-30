@@ -180,6 +180,13 @@ public class GroupColumn extends Column {
         items.add(c);
         c.setParent(this);
     }
+    
+    public void addColumn(Integer idx,Column c){
+    	if(items.size()<idx.intValue()|| idx.intValue()==0) addColumn(c);else {
+    	items.add(idx.intValue()+1,c);
+    	c.setParent(this);
+    	}
+    }
 
     /**
      * Returns a specific column based on its ColumnId. The ColumnId is an arbitrary object that uniquely identifies this

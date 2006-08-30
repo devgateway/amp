@@ -5,7 +5,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
-import java.lang.*;
+
 import javax.servlet.ServletOutputStream;
 
 import net.sf.jasperreports.engine.JRException;
@@ -44,7 +44,6 @@ public class AdvancedReportPDF extends Action {
     private static int fieldHeight = 0;
     private static String pathDel = "/";
     private static String[][] columnDetails;
-    private static String[][] newCol;
     Object[][] dataArray;
     Collection columnColl;
     AdvancedReport advReport;
@@ -160,78 +159,25 @@ public class AdvancedReportPDF extends Action {
             if ((formBean.getHierarchyFlag() == "true") && (formBean.getColumnHierarchie() != null)) {
                 n += formBean.getColumnHierarchie().size();
             }
-            newCol = new String[rsc.getColumns().size() + n][2];
-            
-            
-            //columnDetails = new String[rsc.getColumns().size() + n][2];
-/* changed
+
+            columnDetails = new String[rsc.getColumns().size() + n][2];
+
             columnDetails[0][0] = formBean.getWorkspaceType() + " " + formBean.getWorkspaceName();
             columnDetails[0][1] = new String("" + 0);
             columnDetails[1][0] = formBean.getFilter()[0];
             columnDetails[1][1] = new String("" + 1);
             columnDetails[2][0] = formBean.getFilter()[1];
-            columnDetails[2][1] = new String("" + 2);*/
+            columnDetails[2][1] = new String("" + 2);
 
-            
-            
             ind = 3 + formBean.getColumnHierarchie().size();
-            int a = ind;
-            //change...
-           /*while (iter.hasNext()) {
+
+            while (iter.hasNext()) {
                 Column column = (Column) iter.next();
                 columnDetails[ind][0] = column.getColumnName();
                 columnDetails[ind][1] = new String("" + ind);
                 columnColl.add(column.getColumnName());
                 logger.info(columnDetails[ind][1] + "************* >>>" + columnDetails[ind][0]);
                 ind++;
-            }*/
-            while (iter.hasNext()) {
-                Column column = (Column) iter.next();
-                newCol[ind][0] = column.getColumnName();
-                newCol[ind][1] = new String("" + ind);
-                columnColl.add(column.getColumnName());
-                logger.info(newCol[ind][1] + "************* >>>" + newCol[ind][0]);
-                ind++;
-            }
-            columnDetails = new String[rsc.getColumns().size() + n][2];
-            logger.info("ind"+ind);
-            for(int i=a;i<ind;i++)
-            {
-            	
-            	if(newCol[i][0].equals("Type Of Assistance"))
-            	{
-            		logger.info(" yes type sel;ected");
-            		String inp1 = columnDetails[i][0];
-            		String inp2 = columnDetails[i][1];
-            		
-            		//newCol[ind-1][0] = columnDetails[i][0];
-            		//newCol[ind-1][1] = columnDetails[i][1];
-            		for(int j=i;j<ind-1;j++)
-            		{
-            			logger.info("iiii "+j+" jjjj "+j+1);
-            			columnDetails[j][0]=newCol[j+1][0];
-            			columnDetails[j][1]=newCol[j][1];
-            			logger.info("fff"+newCol[j][0]+" asdas "+ columnDetails[j+1][0]);
-            			
-            		}
-            		columnDetails[ind-1][0] = newCol[i][0];
-            		columnDetails[ind-1][1]=newCol[ind-1][1];
-            		logger.info(" columnDetails[i][0]  "+columnDetails[i][0] +" hhhh "+newCol[ind-1][0]);
-            		
-            		//System.arraycopy(columnDetails,i+1,newCol,i,ind-1);
-            		break;
-            	}
-            	else
-            	{
-            		logger.info(" hereqweqwe");
-            		columnDetails[i][0]=newCol[i][0];
-            		columnDetails[i][1]=newCol[i][1];
-            	}
-            	
-            }
-            for(int i=a;i<ind;i++)
-            {
-            	logger.info(columnDetails[i][1]+" @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ "+columnDetails[i][0]);
             }
 
             boolean typeAssist = false;
@@ -722,12 +668,6 @@ public class AdvancedReportPDF extends Action {
                                 	logger.info("======== :) :)"+projids);
                                 	dataArray[row][position] = projids;
                                 }
-                                
-                            }
-                            if (columnColl.contains("Component Name") && (advReport.getProjId() != null)) {
-                                position = getColumnIndex("Component Name");
-                                
-                               //logger.info(" yes is does **************************************************************" + position);
                                 
                             }
 
@@ -1698,7 +1638,6 @@ public class AdvancedReportPDF extends Action {
                                                      i++) {
                                                 dataArray[row][position] = filterName[i];
                                                 position = position + 1;
-                                                logger.info(" filter got --- "+dataArray[row][position]);
                                             }
 
                                             dataArray[row][position] = ahr.getLabel() + " - " + ahr.getName();
@@ -2438,20 +2377,10 @@ public class AdvancedReportPDF extends Action {
         if (columnColl.contains("Type Of Assistance") && (advReport.getAssistance() != null)) {
             position = getColumnIndex("Type Of Assistance");
 
-            /*if (advReport.getAssistance().toString().replace('[', ' ').replace(']', ' ').trim().length() > 0) {
+            if (advReport.getAssistance().toString().replace('[', ' ').replace(']', ' ').trim().length() > 0) {
                 dataArray[row][position] = advReport.getAssistance().toString().replace('[', ' ').replace(']', ' ').trim();
-            }*/
-            if(position != columnDetails.length)
-            {
-            	logger.info(" NIOT EQUAL TOTAL AT ENDDDDDDDDDDDDDDDDDDDDDDD" + columnDetails.length);
-            	dataArray[row][columnDetails.length-1]=advReport.getAssistance().toString().replace('[', ' ').replace(']', ' ').trim();
             }
-            else
-            {
-           // logger.info(" THIS IS THE POSITIONNNNNNNNNNNNNNNNNNNNNNNNNNNNN ......positon   "+position);
-            dataArray[row][position]=advReport.getAssistance().toString().replace('[', ' ').replace(']', ' ').trim();
-            }
-//Govind
+
             // logger.info("TOA : " +
             // advReport.getAssistance().toString().replace('[','
             // ').replace(']',' '));
@@ -2533,52 +2462,9 @@ public class AdvancedReportPDF extends Action {
             		projids+="\n";
             	}
             	//dataArray[row][position] = advReport.getAmpId().trim();
-            	logger.info("======== :) :) asdjklfsdhfkasdhlfjkashkdjlfh"+projids);
+            	logger.info("======== :) :)"+projids);
             	dataArray[row][position] = projids;
             }
-            
-        }
-        //govind
-        if (columnColl.contains("Component Name") && (advReport.getComponents() != null)) {
-            position = getColumnIndex("Component Name");
-            if (advReport.getComponents().toString().replace('[', ' ').replace(']', ' ').trim().length() > 0) {
-                dataArray[row][position] = advReport.getComponents().toString().replace('[', ' ').replace(']', ' ').trim();
-
-                // logger.info("Financing Instrument:::::::::
-                // "+dataArray[row][position]+" position "+ position);
-            }
-
-            logger.info("here ********************************************* "+position);
-            
-            
-            
-        }
-        if (columnColl.contains("Cumulative Commitment") && (advReport.getTotalCommitment() != null)) {
-            position = getColumnIndex("Cumulative Commitment");
-            if (advReport.getTotalCommitment().toString().replace('[', ' ').replace(']', ' ').trim().length() > 0) {
-                dataArray[row][position] = advReport.getTotalCommitment().toString().replace('[', ' ').replace(']', ' ').trim();
-
-                // logger.info("Financing Instrument:::::::::
-                // "+dataArray[row][position]+" position "+ position);
-            }
-
-            logger.info("COMMIT ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ "+position);
-            
-            
-            
-        }
-        if (columnColl.contains("Cumulative Disbursement") && (advReport.getTotalDisbursement() != null)) {
-            position = getColumnIndex("Cumulative Disbursement");
-            if (advReport.getTotalDisbursement().toString().replace('[', ' ').replace(']', ' ').trim().length() > 0) {
-                dataArray[row][position] = advReport.getTotalDisbursement().toString().replace('[', ' ').replace(']', ' ').trim();
-
-                // logger.info("Financing Instrument:::::::::
-                // "+dataArray[row][position]+" position "+ position);
-            }
-
-            logger.info("DISB $$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$"+position+ " data "+dataArray[row][position]);
-            
-            
             
         }
         // position = n + rsc.getColumns().size()-1;

@@ -41,12 +41,10 @@ public class AmpReports implements Comparable {
 			while (i.hasNext()) {
 				AmpReportColumn element = (AmpReportColumn) i.next();
 				int order= Integer.parseInt(element.getOrderId());
-				if(order-1==x) orderedColumns.add(element.getColumn()); 				
+				if(order-1==x) orderedColumns.add(element); 				
 			}
 		}
-		
-		
-		}
+	}
 	
 	public Set getMeasures() {
 		return measures;

@@ -36,7 +36,7 @@ public class TotalAmountColWorker extends ColumnWorker {
 	 * @param destName
 	 * @param sourceGroup
 	 */
-	public TotalAmountColWorker(String destName, GroupColumn source,ReportGenerator generator) {
+	public TotalAmountColWorker(String destName, GroupColumn source,ReportGenerator generator, Integer position) {
 		super(destName, source,generator);
 		// TODO Auto-generated constructor stub
 	}

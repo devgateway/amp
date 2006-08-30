@@ -63,12 +63,29 @@
 				                 	 			<IMG alt=Link height=10 src="../ampTemplate/images/arrow-gr.gif" 
 												width=10>
 												<bean:define name="reports" id="link"  property="description" type="java.lang.String"/>
+												<bean:define name="reports" id="link2"  property="description" type="java.lang.String"/>
+												<% link2=link2.replaceFirst("viewAdvancedReport","viewNewAdvancedReport"); %>
 												<bean:define id="translation">
 													<digi:trn key="aim:clickToViewReport">Click here view Report</digi:trn>
 												</bean:define>
-												<digi:link href="<%=link%>" styleClass="h-box" title="<%=translation%>" >
+												
+												<% if(link.equals(link2)) { %>
+												<br>
+												
+												
+												
+												<digi:link href="<%=link%>" styleClass="h-box" title="<%=translation%>" target="_blank">
 												<bean:write name="reports" property="name"/>
 												</digi:link>
+												<% } else {%>
+
+												<digi:link href="<%=link2%>" styleClass="h-box" title="<%=translation%>" target="_blank">
+												<bean:write name="reports" property="name"/>
+												</digi:link>
+												
+												<% } %>
+
+
 											</TD>
 											 <% String s = (String)session.getAttribute("teamLeadFlag"); %>
 												<% if(s.equals("true")){ %>

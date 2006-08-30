@@ -71,7 +71,7 @@ public class ViewNewAdvancedReport extends Action {
 	 * @return false if we need to redirect to homepage
 	 * @throws java.lang.Exception
 	 */
-	public AmpNewFilter createFilter( AmpReports ampReports, ActionMapping mapping, ActionForm form, 
+	public static AmpNewFilter createFilter( AmpReports ampReports, ActionMapping mapping, ActionForm form, 
 	HttpServletRequest request, HttpServletResponse response) throws java.lang.Exception {
 		HttpSession httpSession = request.getSession();
 		TeamMember teamMember=(TeamMember)httpSession.getAttribute("currentMember");
@@ -457,8 +457,6 @@ public class ViewNewAdvancedReport extends Action {
 			HttpServletRequest request, HttpServletResponse response) throws java.lang.Exception
 			{
 				String ampReportId=request.getParameter("ampReportId");
-				
-
 				
 				logger.info("Report id requested for viewing:"+ampReportId);
 				Session session = PersistenceManager.getSession();

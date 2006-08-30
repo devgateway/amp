@@ -213,5 +213,3 @@ public class AmountCell extends Cell {
 
 
 }
-
-

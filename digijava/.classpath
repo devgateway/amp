@@ -2,7 +2,6 @@
 <classpath>
 	<classpathentry kind="src" path="WEB-INF/src"/>
 	<classpathentry kind="lib" path="WEB-INF/lib/activation.jar"/>
-	<classpathentry kind="lib" path="WEB-INF/lib/amp-ar-core.jar"/>
 	<classpathentry kind="lib" path="WEB-INF/lib/ant.jar"/>
 	<classpathentry kind="lib" path="WEB-INF/lib/ant-contrib.jar"/>
 	<classpathentry kind="lib" path="WEB-INF/lib/aspectjrt.jar"/>
@@ -132,5 +131,11 @@
 	<classpathentry kind="lib" path="WEB-INF/system-lib/servlet.jar"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="lib" path="WEB-INF/lib/mysql-connector-java-5.0.3-bin.jar"/>
+	<classpathentry kind="lib" path="WEB-INF/lib/itext-1.4.3.jar"/>
+	<classpathentry kind="lib" path="WEB-INF/lib/c3p0-0.8.5-pre8.jar"/>
+	<classpathentry kind="lib" path="WEB-INF/lib/jackrabbit-core-1.0.1.jar"/>
+	<classpathentry kind="lib" path="WEB-INF/lib/jackrabbit-jcr-commons-1.0.1.jar"/>
+	<classpathentry kind="lib" path="WEB-INF/lib/jackrabbit-jcr-rmi-1.0.1.jar"/>
+	<classpathentry kind="lib" path="WEB-INF/lib/jcr-1.0.jar"/>
 	<classpathentry kind="output" path="WEB-INF/classes"/>
 </classpath>

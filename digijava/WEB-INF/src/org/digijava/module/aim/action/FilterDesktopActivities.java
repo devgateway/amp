@@ -7,6 +7,8 @@ package org.digijava.module.aim.action;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.Iterator;
 
 import javax.servlet.http.HttpServletRequest;
@@ -21,10 +23,14 @@ import org.apache.struts.action.ActionMapping;
 import org.digijava.module.aim.form.DesktopForm;
 import org.digijava.module.aim.helper.AmpProject;
 import org.digijava.module.aim.helper.AmpProjectDonor;
+import org.digijava.module.aim.helper.Commitments;
 import org.digijava.module.aim.helper.Constants;
+import org.digijava.module.aim.helper.DateConversion;
+import org.digijava.module.aim.helper.EthiopianCalendar;
 import org.digijava.module.aim.helper.Sector;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.DesktopUtil;
+import org.digijava.module.aim.util.FiscalCalendarUtil;
 import org.digijava.module.aim.util.MEIndicatorsUtil;
 
 public class FilterDesktopActivities extends Action {
@@ -40,21 +46,58 @@ public class FilterDesktopActivities extends Action {
 		DesktopForm dForm = (DesktopForm) form;
 		
 		ArrayList activities = null;
-		Collection temp = null;
-		
-		if (session.getAttribute(Constants.AMP_PROJECTS) == null) {
-			temp = (Collection) DesktopUtil.getDesktopActivities(
-					tm.getTeamId(),tm.getMemberId(),tm.getTeamHead());
-			session.setAttribute(Constants.AMP_PROJECTS,temp);
-		} else {
-			temp = (Collection) session.getAttribute(Constants.AMP_PROJECTS);
-		}			
+		Collection temp = DesktopUtil.getDesktopActivities(tm.getTeamId(),tm.getMemberId(),
+				tm.getTeamHead());
 		
 		activities = new ArrayList(temp);
-		if (dForm.getFltrFrmYear() > 0) {
+		long calId = dForm.getFltrCalendar();
+		if (dForm.getFltrFrmYear() > 0 || 
+				dForm.getFltrToYear() > 0) {
 			
-		}
-		if (dForm.getFltrToYear() > 0) {
+			int fromYear = (dForm.getFltrFrmYear() > 0) ? dForm.getFltrFrmYear() : 0;
+			int toYear = (dForm.getFltrToYear() > 0) ? dForm.getFltrToYear() : 9999;
+			
+			if (calId == Constants.ETH_CAL.longValue() ||
+					calId == Constants.ETH_FY.longValue()) {
+				
+				for (int i = 0;i < activities.size();i ++) {
+					AmpProject proj = (AmpProject) activities.get(i);
+					Collection newComm = new ArrayList();
+					if (proj.getCommitmentList() != null) {
+						Iterator itr = proj.getCommitmentList().iterator();
+						while (itr.hasNext()) {
+							Commitments comm = (Commitments) itr.next();
+							GregorianCalendar gc = new GregorianCalendar();
+							gc.setTime(comm.getTransactionDate());
+							EthiopianCalendar ethCal = (new EthiopianCalendar()).getEthiopianDate(gc);
+							if (ethCal.ethFiscalYear >= fromYear && ethCal.ethFiscalYear <= toYear) {
+								newComm.add(comm);
+							}								
+						}
+					}
+					proj.setCommitmentList(newComm);
+				}
+			} else {
+				for (int i = 0;i < activities.size();i ++) {
+					AmpProject proj = (AmpProject) activities.get(i);
+					Collection newComm = new ArrayList();
+					if (proj.getCommitmentList() != null) {
+						Iterator itr = proj.getCommitmentList().iterator();
+						while (itr.hasNext()) {
+							Commitments comm = (Commitments) itr.next();
+							Date tDate = comm.getTransactionDate();
+							Date calStDate = FiscalCalendarUtil.getCalendarStartDate(new Long(calId),fromYear);
+							Date calEdDate = FiscalCalendarUtil.getCalendarEndDate(new Long(calId),toYear);
+							
+							if ((tDate.after(calStDate) || (tDate.equals(calStDate)))
+									&& (tDate.before(calEdDate) || (tDate.equals(calEdDate)))) {
+								newComm.add(comm);
+							}								
+						}
+					}
+					proj.setCommitmentList(newComm);
+				}				
+			}
 			
 		}
 		boolean flag = false;

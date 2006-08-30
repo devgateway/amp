@@ -103,9 +103,9 @@ public class ShowDesktopActivities extends TilesAction {
 							yearRange[j] = i;
 						}
 						dForm.setYearRange(yearRange);
-						dForm.setFltrFrmYear(yearRange[0]);
-						dForm.setFltrToYear(yearRange[yearRange.length-1]);						
-						dForm.setFltrCalendar(tm.getAppSettings().getFisCalId().longValue());
+						//dForm.setFltrFrmYear(yearRange[0]);
+						//dForm.setFltrToYear(yearRange[yearRange.length-1]);						
+						//dForm.setFltrCalendar(tm.getAppSettings().getFisCalId().longValue());
 					} else if (filter.getFilterName().equalsIgnoreCase(Constants.CURRENCY_FILTER)) {
 						// adding currency filter
 						Collection col = CurrencyUtil.getAmpCurrency();

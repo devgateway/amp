@@ -4,10 +4,13 @@ import org.apache.log4j.Logger;
 import java.util.Date;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
+
+import org.digijava.module.aim.dbentity.AmpFiscalCalendar;
 import org.digijava.module.aim.helper.FiscalCalendar;
 import org.digijava.module.aim.helper.FiscalDO;
 import org.digijava.module.aim.helper.EthiopianCalendar;
 import org.digijava.module.aim.util.DbUtil;
+import org.digijava.module.aim.util.FiscalCalendarUtil;
 
 public class FiscalCalendarWorker
 {
@@ -22,17 +25,16 @@ public class FiscalCalendarWorker
 	 */
 	public static FiscalDO getFiscalYrQtr(Date d, Long fiscalCalId)
 	{
-		if ( logger.isDebugEnabled() )
-			logger.debug("getFiscalYrQtr() with date = "+d+", fiscalCalId = "+fiscalCalId) ;
-		int fiscalYear = 0 ;
-		int qtr = 0 ;
 		FiscalDO fdo  = null ;
-		FiscalCalendar fc = null ;
+		AmpFiscalCalendar fc = null;
+		
+		//logger.info("fiscal cal id = " + fiscalCalId);
 		
 		if ( d != null )	{
 			//If not Ethiopian calendar
 			if ( fiscalCalId.longValue() != Constants.ETH_FY.longValue())
-				fc = DbUtil.getFiscalCalendar(fiscalCalId) ;
+				fc = FiscalCalendarUtil.getAmpFiscalCalendar(fiscalCalId);
+			
 			
 			EthiopianCalendar ec = new EthiopianCalendar() ;
 			EthiopianCalendar ec1 = null ;
@@ -44,22 +46,72 @@ public class FiscalCalendarWorker
 			//Ethiopian calendar
 			if ( fiscalCalId.longValue() == Constants.ETH_FY.longValue() )
 			{
-				logger.info("Setting year and quarter for Ethiopian Fiscal Year");				
+				//logger.info("Setting year and quarter for Ethiopian Fiscal Year");				
 				ec1 = ec.getEthiopianDate(gc) ;
 				fdo.setFiscalYear(ec1.ethFiscalYear) ;
 				fdo.setFiscalQuarter(ec1.ethFiscalQrt) ;
-				logger.info("Year :" + fdo.getFiscalYear() + ",Qtr : " + fdo.getFiscalQuarter());
+				//logger.info("Year :" + fdo.getFiscalYear() + ",Qtr : " + fdo.getFiscalQuarter());
 			} else if (fiscalCalId.longValue() == Constants.ETH_CAL.longValue()) {
-				logger.info("Setting year and quarter for Ethiopian Calendar");
+				//logger.info("Setting year and quarter for Ethiopian Calendar");
 				ec1 = ec.getEthiopianDate(gc) ;
 				fdo.setFiscalYear(ec1.ethYear) ;
 				fdo.setFiscalQuarter(ec1.ethQtr) ;				
-				logger.info("Year :" + fdo.getFiscalYear() + ",Qtr : " + fdo.getFiscalQuarter());
+				//logger.info("Year :" + fdo.getFiscalYear() + ",Qtr : " + fdo.getFiscalQuarter());
 			}
 			else
 			{
-				if ( fc.getStartDay() != -1 && fc.getStartMonth() != -1 )	{
+				if ( fc.getStartDayNum().intValue()!= -1 && 
+						fc.getStartMonthNum().intValue() != -1 )	{
 					//Zero index month
+					int fiscalYr = 0;
+					
+					int year = gc.get(Calendar.YEAR);
+					int stDay = fc.getStartDayNum().intValue();
+					int stMnt = fc.getStartMonthNum().intValue();
+					//logger.info("Stday = " + stDay + ", stMnt = " + stMnt);
+					String bsDate = stDay + "/" + stMnt + "/" + year;
+					Date baseDate = DateConversion.getDate(bsDate); 
+
+					if (d.after(baseDate) || d.equals(baseDate)) {
+						fiscalYr = year;	
+					} else {
+						fiscalYr = year-1;
+					}
+					//logger.info("Fiscal Yr = " + fiscalYr);
+					int fiscalQtr = 0;
+					bsDate = stDay + "/" + stMnt + "/" + fiscalYr;
+					///logger.info("Base date got = " + bsDate);
+					baseDate = DateConversion.getDate(bsDate);
+					GregorianCalendar gc1 = new GregorianCalendar();
+					gc1.setTime(baseDate);
+					boolean found = false;
+					
+					while (found == false && fiscalQtr < 4) {
+						logger.info("** fiscalQtr:" + fiscalQtr);
+						logger.info(DateConversion.ConvertDateToString(d) + " & " + DateConversion.ConvertDateToString(gc1.getTime()));
+						if (d.after(gc1.getTime()) || d.equals(gc1.getTime())) {
+							fiscalQtr ++;
+						} else {
+							found = true;
+							logger.info("found the qrtr " + fiscalQtr);
+							break;							
+						}
+						if (!found) {
+							int prevMnth = gc1.get(Calendar.MONTH); 
+							int month = (prevMnth + 3) % 12; 
+							gc1.set(Calendar.MONTH,month);			
+							if (month < prevMnth) {
+								gc1.set(Calendar.YEAR,(gc1.get(Calendar.YEAR) + 1));
+							}
+						}
+					}
+					//logger.info("Setting fiscal year as " + fiscalYr);
+					fdo.setFiscalYear(fiscalYr) ;
+					//logger.info("Setting fiscal qtr as " + fiscalQtr);
+					fdo.setFiscalQuarter(fiscalQtr) ;					
+					
+					
+					/*
 					  int month = gc.get(Calendar.MONTH) ;
 					  if ( month < (fc.startMonth-1) )
 					  {
@@ -87,6 +139,7 @@ public class FiscalCalendarWorker
 					  }
 					  fdo.setFiscalYear(fiscalYear) ;
 					  fdo.setFiscalQuarter(qtr) ;
+				*/
 				}
 				else	{
 					fdo.setFiscalYear(-1) ;
@@ -99,8 +152,7 @@ public class FiscalCalendarWorker
 			fdo.setFiscalYear(0);
 			fdo.setFiscalQuarter(0);
 		}
-		if ( logger.isDebugEnabled() )
-			logger.debug("Fiscal year = "+fdo.getFiscalYear()+"  quarter= "+fdo.getFiscalQuarter()) ;
+		logger.info("Date = " + DateConversion.ConvertDateToString(d) +", Fiscal year = "+fdo.getFiscalYear()+", quarter= "+fdo.getFiscalQuarter()) ;
 		return fdo ;
 	}
 }

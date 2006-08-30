@@ -11,6 +11,7 @@ import org.apache.log4j.Logger;
 import org.digijava.module.aim.dbentity.AmpCurrency;
 import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.aim.util.DbUtil;
+import org.digijava.module.aim.util.FiscalCalendarUtil;
 
 public class QuarterlyInfoWorker {
 
@@ -28,19 +29,13 @@ public class QuarterlyInfoWorker {
 	 * @return Collection
 	 */
 	public static Collection getQuarterlyInfo(FilterParams fp) {
-		//if (logger.isDebugEnabled())
-			//logger.debug("GETQUARTERLYINFO() WITH AMPFUNDINGID : " + fp.getAmpFundingId());
 		ArrayList arrayList = getQuarterly(fp);
 		ArrayList ethArrList = null;
 		ArrayList filterArrList = null;
-		//logger.debug("#$ " + fp.getFiscalCalId().longValue());
 		
 		if (fp.getFiscalCalId().longValue() == Constants.ETH_CAL.longValue()
 				|| fp.getFiscalCalId().longValue() == Constants.ETH_FY.longValue()) {
-			//logger.debug("** fiscal calendar is ethiopian");
 			if (fp.getFromYear() != 0 && fp.getToYear() != 0) {
-				//logger.debug("#$ Getting data based on th Fiscal cal "
-				//		+ fp.getFiscalCalId().longValue());
 				filterArrList = filterByYearRange(arrayList, fp.getFromYear(),
 						fp.getToYear(), fp.getFiscalCalId());
 				return filterArrList;
@@ -48,14 +43,10 @@ public class QuarterlyInfoWorker {
 		}
 
 		if (fp.getFromYear() != 0 && fp.getToYear() != 0) {
-			//logger.debug("** fiscal calendar is gregorian");
-			//logger.debug("#$ Getting data based on the Fiscal cal "+ Constants.GREGORIAN);
 			filterArrList = filterByYearRange(arrayList, fp.getFromYear(), fp
-					.getToYear(), Constants.GREGORIAN);
+					.getToYear(), fp.getFiscalCalId());
 			return filterArrList;
 		}
-		//if (logger.isDebugEnabled())
-			//logger.debug("GETQUARTERLYINFO() RETURNING COLLECTION OF SIZE : "	+ arrayList.size());
 		return arrayList;
 	}
 
@@ -106,7 +97,7 @@ public class QuarterlyInfoWorker {
 				String strDate = DateConversion.ConvertDateToString(transactionDate);
 				quarterlyInfo.setDateDisbursed(strDate);
 				FiscalDO fdo = FiscalCalendarWorker.getFiscalYrQtr(
-						transactionDate, Constants.GREGORIAN);
+						transactionDate, fp.getFiscalCalId());
 				quarterlyInfo.setFiscalYear(fdo.getFiscalYear());
 				quarterlyInfo.setFiscalQuarter(fdo.getFiscalQuarter());
 				quarterlyInfo.setAggregate(1);
@@ -120,7 +111,7 @@ public class QuarterlyInfoWorker {
 				fp.getTransactionType(), Constants.ACTUAL);
 		
 		if (arrayList.size() > 0 || c1.size() > 0) {
-			arrayList1 = merge(arrayList, c1, fromCurrency, selCurrency);
+			arrayList1 = merge(arrayList, c1, fromCurrency, selCurrency,fp.getFiscalCalId());
 			if (fp.getFiscalCalId().longValue() == Constants.ETH_CAL.longValue()
 					|| fp.getFiscalCalId().longValue() == Constants.ETH_FY.longValue()) {
 				//ethArrList = convertToEth(arrayList1);
@@ -141,14 +132,12 @@ public class QuarterlyInfoWorker {
 			}
 		}
 
-		//if (logger.isDebugEnabled())
-			//logger.debug("GETQUARTERLY() RETURNING COLLECTION OF SIZE : "	+ arrayList1.size());
-
 		return arrayList1;
 	}
 
+
 	public static ArrayList merge(ArrayList arrayList, Collection c1,
-			double fromCurrency, String selCurrency) {
+			double fromCurrency, String selCurrency,Long fiscalId) {
 
 	//	if (logger.isDebugEnabled())
 		//	logger.debug("MERGE()<");
@@ -172,8 +161,7 @@ public class QuarterlyInfoWorker {
 					targetCurrency);
 			String strDate = DateConversion
 					.ConvertDateToString(transactionDate);
-			FiscalDO fdo = FiscalCalendarWorker.getFiscalYrQtr(transactionDate,
-					Constants.GREGORIAN);
+			FiscalDO fdo = FiscalCalendarWorker.getFiscalYrQtr(transactionDate,fiscalId);
 
 			for (int i = 0; i < arrayList.size(); i++) {
 				QuarterlyInfo quarterlyInfo = (QuarterlyInfo) arrayList.get(i);
@@ -377,9 +365,6 @@ public class QuarterlyInfoWorker {
 	 */
 	public static ArrayList filterByYearRange(ArrayList arrList, int fromYear,
 			int toYear, Long fiscalCalId) {
-		//if (logger.isDebugEnabled())
-			//logger.debug("FILTERBYYEARRANGE() FROMYEAR : " + fromYear
-			//		+ " TOYEAR : " + toYear);
 
 		ArrayList a = new ArrayList();
 
@@ -389,14 +374,17 @@ public class QuarterlyInfoWorker {
 
 			QuarterlyInfo qf = (QuarterlyInfo) arrList.get(i);
 			if (qf.getAggregate() == 1) {
-				//logger.debug("* fiscalCalId.longValue() = " + fiscalCalId.longValue());
 				if (fiscalCalId.longValue() == Constants.ETH_FY.longValue()) {
 					yr = qf.getFiscalYear();
 				} else { // Filter by calendar type greg or eth
 					String ds = qf.getDateDisbursed();
-					//logger.debug("* Date disbursed :" + ds);
-					if (ds != null)
-						yr = DateConversion.getYear(ds);
+					if (ds != null) {
+						if (fiscalCalId.longValue() == Constants.ETH_CAL.longValue()) {
+							yr = DateConversion.getYear(ds);
+						} else {
+							yr = FiscalCalendarUtil.getYear(fiscalCalId,ds);
+						}
+					}
 				}
 				if (yr >= fromYear && yr <= toYear) {
 					a.add(qf);
@@ -424,10 +412,6 @@ public class QuarterlyInfoWorker {
 		if (a.size() != 0) {
 			Collections.sort(a, new QuarterlyInfoComparator());
 		}
-		if (logger.isDebugEnabled())
-			logger
-					.debug("FILTERBYYEARRANGE() RETURNING AN ARRAYLIST OF SIZE ; "
-							+ a.size());
 		return a;
 	}
 	

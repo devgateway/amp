@@ -58,15 +58,21 @@
 								<html:optionsCollection property="calendars" value="ampFiscalCalId" label="name"/>
 							</html:select>
 							<html:select property="fltrFrmYear" styleClass="inp-text">
-								<option value="0">From Year</option>
-								<c:forEach var="yrs" items="${aimDesktopForm.yearRange}">	
-									<option value='<c:out value="${yrs}"/>'><c:out value="${yrs}"/></option>
+								<html:option value="0">From Year</html:option>
+								<c:forEach var="yrs" items="${aimDesktopForm.yearRange}">
+									<bean:define id="yr">
+										<c:out value="${yrs}"/>
+									</bean:define>
+									<html:option value="<%=yr%>"><c:out value="${yrs}"/></html:option>
 								</c:forEach>
 							</html:select>
 							<html:select property="fltrToYear" styleClass="inp-text">
-								<option value="0">To Year</option>
-								<c:forEach var="yrs" items="${aimDesktopForm.yearRange}">	
-									<option value='<c:out value="${yrs}"/>'><c:out value="${yrs}"/></option>
+								<html:option value="0">To Year</html:option>
+								<c:forEach var="yrs" items="${aimDesktopForm.yearRange}">
+									<bean:define id="yr">
+										<c:out value="${yrs}"/>
+									</bean:define>
+									<html:option value="<%=yr%>"><c:out value="${yrs}"/></html:option>
 								</c:forEach>
 							</html:select>
 						</c:if>

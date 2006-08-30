@@ -1,5 +1,5 @@
 /*
- * EditActivity.java 
+ * EditActivity.java
  * Created: Feb 10, 2005
  */
 
@@ -72,11 +72,14 @@ import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.ProgramUtil;
 import org.digijava.module.aim.util.TeamMemberUtil;
 import org.digijava.module.cms.dbentity.CMSContentItem;
+import org.digijava.kernel.request.Site;
+import org.digijava.module.aim.util.DocumentUtil;
+import org.digijava.kernel.util.RequestUtils;
 
 /**
  * Loads the activity details of the activity specified in the form bean
  * variable 'activityId' to the EditActivityForm bean instance
- * 
+ *
  * @author Priyajith
  */
 public class EditActivity extends Action {
@@ -120,7 +123,7 @@ public class EditActivity extends Action {
 			eaForm.setActivityId(activityId);
 			HashMap activityMap = (HashMap) ampContext
 					.getAttribute(Constants.EDIT_ACT_LIST);
-			
+
 			boolean canEdit = true;
 
 			eaForm.setActivityId(activityId);
@@ -141,13 +144,13 @@ public class EditActivity extends Action {
 					if (tsaMap != null) {
 						Long timeStamp = (Long) tsaMap.get(activityId);
 						if (timeStamp != null) {
-							
+
 							if ((System.currentTimeMillis() - timeStamp
 									.longValue()) > Constants.MAX_TIME_LIMIT) {
 								// time limit has execeeded. invalidate the activity references
 								tsaMap.remove(activityId);
 								HashMap userActList = (HashMap) ampContext
-									.getAttribute(Constants.USER_ACT_LIST);								
+									.getAttribute(Constants.USER_ACT_LIST);
 								Iterator itr = userActList.keySet().iterator();
 								while (itr.hasNext()) {
 									Long userId = (Long) itr.next();
@@ -166,18 +169,18 @@ public class EditActivity extends Action {
 									if (actId.longValue() == activityId.longValue()) {
 										activityMap.remove(sessId);
 										break;
-									}									
+									}
 								}
 								ArrayList sessList = (ArrayList) ampContext
 										.getAttribute(Constants.SESSION_LIST);
 								sessList.remove(sessId);
 								Collections.sort(sessList);
-								
+
 								ampContext.setAttribute(Constants.EDIT_ACT_LIST,activityMap);
 								ampContext.setAttribute(Constants.USER_ACT_LIST,userActList);
 								ampContext.setAttribute(Constants.SESSION_LIST,sessList);
 								ampContext.setAttribute(Constants.TS_ACT_LIST,tsaMap);
-								
+
 							} else
 								canEdit = false;
 						} else
@@ -206,13 +209,13 @@ public class EditActivity extends Action {
 					// Edit the activity
 			        //logger.info("mapping does not end with viewActivityPreview.do");
 					String sessId = session.getId();
-					synchronized (ampContext) {				
+					synchronized (ampContext) {
 						ArrayList sessList = (ArrayList) ampContext.getAttribute(Constants.SESSION_LIST);
 						HashMap userActList = (HashMap) ampContext.getAttribute(Constants.USER_ACT_LIST);
 
 						HashMap tsaList = (HashMap) ampContext.getAttribute(Constants.TS_ACT_LIST);
-						
-						
+
+
 						if (sessList == null) {
 							sessList = new ArrayList();
 						}
@@ -231,17 +234,17 @@ public class EditActivity extends Action {
 						activityMap.put(sessId, activityId);
 						userActList.put(tm.getMemberId(), activityId);
 						tsaList.put(activityId,new Long(System.currentTimeMillis()));
-						
+
 						ampContext.setAttribute(Constants.SESSION_LIST, sessList);
 						ampContext.setAttribute(Constants.EDIT_ACT_LIST,
 								activityMap);
 						ampContext.setAttribute(Constants.USER_ACT_LIST,
 								userActList);
-						ampContext.setAttribute(Constants.TS_ACT_LIST,tsaList);			        
+						ampContext.setAttribute(Constants.TS_ACT_LIST,tsaList);
 					}
-					eaForm.setEditAct(true);    
+					eaForm.setEditAct(true);
 				} else {
-				    //logger.info("mapping does end with viewActivityPreview.do");				    
+				    //logger.info("mapping does end with viewActivityPreview.do");
 				}
 			}
 
@@ -270,19 +273,32 @@ public class EditActivity extends Action {
 			}
 			eaForm.setReset(false);
 			eaForm.setPerspectives(DbUtil.getAmpPerspective());
-			
+
 			// load the activity details
 			if (activityId != null) {
 				AmpActivity activity = ActivityUtil.getAmpActivity(activityId);
-				
+
 				String actApprovalStatus = DbUtil.getActivityApprovalStatus(activityId);
 				eaForm.setApprovalStatus(actApprovalStatus);
-				
+
 				if (activity != null) {
 					// set title,description and objective
 					eaForm.setTitle(activity.getName().trim());
 					eaForm.setDescription(activity.getDescription().trim());
 					eaForm.setObjectives(activity.getObjective().trim());
+                    if(activity.getDocumentSpace() == null ||
+                       activity.getDocumentSpace().trim().length() == 0) {
+                        if(DocumentUtil.isDMEnabled()) {
+                            eaForm.setDocumentSpace("aim-document-space-" +
+                                                    tm.getMemberId() +
+                                                    "-" + System.currentTimeMillis());
+                            Site currentSite = RequestUtils.getSite(request);
+                            DocumentUtil.createDocumentSpace(currentSite,
+                                                             eaForm.getDocumentSpace());
+                        }
+                    } else {
+                        eaForm.setDocumentSpace(activity.getDocumentSpace().trim());
+                    }
 					eaForm.setAmpId(activity.getAmpId());
 					eaForm.setStatusReason(activity.getStatusReason());
 
@@ -593,10 +609,10 @@ public class EditActivity extends Action {
 								fundingDetail.setTransactionDate(DateConversion
 										.ConvertDateToString(fundDet
 												.getTransactionDate()));
-								
+
 								fundingDetail.setPerspectiveCode(fundDet.getPerspectiveId().getCode());
 								fundingDetail.setPerspectiveName(fundDet.getPerspectiveId().getName());
-								
+
 								/*
 								fundingDetail.setPerspectiveCode(fundDet
 										.getOrgRoleCode());
@@ -613,8 +629,8 @@ public class EditActivity extends Action {
 									}
 								}
 								*/
-								
-								
+
+
 
 								fundingDetail.setTransactionType(fundDet
 										.getTransactionType().intValue());
@@ -884,6 +900,10 @@ public class EditActivity extends Action {
 						eaForm.setDocumentList(docsList);
 						eaForm.setLinksList(linksList);
 					}
+                    Site currentSite = RequestUtils.getSite(request);
+                    eaForm.setManagedDocumentList(DocumentUtil.getDocumentsForActivity(
+                        currentSite, activity));
+
 
 					// loading the related organizations
 					eaForm.setExecutingAgencies(new ArrayList());
@@ -1022,16 +1042,16 @@ public class EditActivity extends Action {
 			} else {
 				levelCol = eaForm.getLevelCollection();
 			}
-			
-			// load all themes 
+
+			// load all themes
 			eaForm.setProgramCollection(ProgramUtil.getAllThemes());
-			
+
 			// load all the active currencies
 			eaForm.setCurrencies(CurrencyUtil.getAmpCurrency());
-			
+
 			// load all the perspectives
 			eaForm.setPerspectives(DbUtil.getAmpPerspective());
-			
+
 		} catch (Exception e) {
 			e.printStackTrace(System.out);
 		}

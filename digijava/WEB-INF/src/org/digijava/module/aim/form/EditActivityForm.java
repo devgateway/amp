@@ -6,18 +6,18 @@
 package org.digijava.module.aim.form;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import java.util.ArrayList;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.upload.FormFile;
 import org.digijava.module.aim.dbentity.AmpField;
+import org.digijava.module.aim.helper.ActivityIndicator;
 import org.digijava.module.aim.helper.FundingDetail;
 import org.digijava.module.aim.helper.OrgProjectId;
-import org.digijava.module.aim.helper.ActivityIndicator;
 
 public class EditActivityForm extends ActionForm implements Serializable{
 
@@ -26,6 +26,7 @@ public class EditActivityForm extends ActionForm implements Serializable{
 	private String title = null;
 	private String description = null;
 	private String objectives = null;
+    private String documentSpace = null;
 	private String condition = null;
 	private Long status = null;
 	private String statusReason = null;
@@ -36,7 +37,7 @@ public class EditActivityForm extends ActionForm implements Serializable{
 	private Long assistanceType = null;
 	private String createdDate;
 	private Collection perspectives;
-	
+
 	private Long program;
 	private Collection programCollection;
 
@@ -47,31 +48,31 @@ public class EditActivityForm extends ActionForm implements Serializable{
 	private String currentCompDate;
 	private String revisedCompDate;
 	private String proposedCompDate;
-	private Collection activityCloseDates;	
+	private Collection activityCloseDates;
 
 	private String currentValDate;
 	private String programDescription;
-	
+
 	// location selector pop-up
 	private Long selLocs[] = null; // location selected from step 2 page to
 	// remove from the locations list
-	private Collection selectedLocs = null; // list of locations to be added to	
+	private Collection selectedLocs = null; // list of locations to be added to
 	//the activity
 	private Collection searchLocs = null; // list of searched locations.
 	private Long searchedLocs[] = null; // locations selected by user to be added in activity after searching
-	
+
 	private Collection searchedSectors = null; // list of searched Sectors.
 	private Long selSectors[] = null; // sectors selected by user to be added in activity after searching
-	
+
 	private Long selOrgs[] = null;
 	private List selectedOrgs = null; // list of organisations to be added to the activity
-	
+
 	private Collection levelCollection = null;
 	private Collection modalityCollection = null;
 	private Collection assistanceTypes = null;
-	
+
 	private String step = null;
-	
+
 	private Collection activitySectors; // sectors related to the activity
 	private int numResults;
 
@@ -85,9 +86,11 @@ public class EditActivityForm extends ActionForm implements Serializable{
 	private Collection selectedPhysicalProgress;
 	private Long selPhyProg[];
 	private Collection documentList;
+    private Collection managedDocumentList;
 	private long selDocs[];
 	private Collection linksList;
 	private long selLinks[];
+    private String selManagedDocs[];
 	private OrgProjectId selectedOrganizations[];
 	private Collection executingAgencies;
 	private Long selExAgencies[];
@@ -97,7 +100,7 @@ public class EditActivityForm extends ActionForm implements Serializable{
 	private Long selContractors[];
 	private Collection reportingOrgs;
 	private Long selReportingOrgs[];
-	
+
 	private String contFirstName;
 	private String contLastName;
 	private String email;
@@ -112,10 +115,10 @@ public class EditActivityForm extends ActionForm implements Serializable{
 	private String actAthFirstName;
 	private String actAthLastName;
 	private String actAthEmail;
-	
+
 	private String conditions;
 	private int item;
-	
+
 	//private Collection selectedComponents;
 	//private Long selComp[];
 
@@ -133,7 +136,7 @@ public class EditActivityForm extends ActionForm implements Serializable{
 	// pop-up organisation selector window
 	private Collection pages;
 	private String[] alphaPages;
-	
+
 	//	For view comment popup
 	private String actionFlag = null;
 	private boolean serializeFlag;
@@ -143,7 +146,7 @@ public class EditActivityForm extends ActionForm implements Serializable{
 	private String fieldName;
 	private AmpField field = null;
 	private ArrayList commentsCol = new ArrayList();
-	
+
 	// For activity approval process
 	private String approvalStatus;
 	private String workingTeamLeadFlag;
@@ -154,10 +157,10 @@ public class EditActivityForm extends ActionForm implements Serializable{
 	private Collection pageColl = null;	// total number of survey pages
 	private Integer currPage = null;
 	private Integer startIndex = null;	// starting record for iteartion over indicator collection on each page
-	private String fundingOrg = null;	// acronym of funding organisation 
+	private String fundingOrg = null;	// acronym of funding organisation
 	private Long ampSurveyId = null;
 	private Boolean surveyFlag = null;	// if true then survey properties are cleared
-	
+
 	/* START FINANCIAL EDIT */
 	private Collection fundingOrganizations; // Collection of FundingOrganization objects
 	private String orgFundingId;
@@ -179,11 +182,11 @@ public class EditActivityForm extends ActionForm implements Serializable{
 	private int offset;
 	private long transIndexId;
 	private Long selFundingOrgs[];
-	
+
 	private int numComm;
 	private int numDisb;
 	private int numExp;
-	
+
 	private String contractors;
 
 	/* END FINANCIAL EDIT */
@@ -205,7 +208,7 @@ public class EditActivityForm extends ActionForm implements Serializable{
 	private Long impMultiZone[]; // Implementation zone
 
 	private Long impWoreda; // Implementation woreda
-	private Long impMultiWoreda[];	
+	private Long impMultiWoreda[];
 
 	private Collection countries;
 
@@ -216,7 +219,7 @@ public class EditActivityForm extends ActionForm implements Serializable{
 	private Collection woredas;
 
 	private boolean locationReset;
-	
+
 	private String country;
 
 	// FOR SELECT SECTOR POPUP
@@ -239,7 +242,7 @@ public class EditActivityForm extends ActionForm implements Serializable{
 	private String phyProgDesc;
 
 	private String phyProgRepDate;
-	
+
 	private Long phyProgId;
 
 	// FOR ADD DOCUMENT POPUP
@@ -252,28 +255,28 @@ public class EditActivityForm extends ActionForm implements Serializable{
 	private boolean showInHomePage;
 	private int pageId;
 	private boolean editAct;
-	
+
 	// FOR ADD COMPONENTS
 	private boolean componentReset;
 	private String componentTitle;
 	private String componentDesc;
 	private String componentAmount;
-	
+
 	private String currencyCode;
 	private String componentRepDate;
 	private Long componentId;
 	private Collection selectedComponents;
 	private Long[] selComp;
 
-	
+
 	private String author;
 	private String context;
-	
+
 	private Collection regionalFundings;
 	private Long[] selRegFundings;
 	private Collection fundingRegions;
 	private Long fundingRegionId;
-	
+
 	private ArrayList issues;
 	private Long[] selIssues;
 	private String issue;
@@ -284,15 +287,15 @@ public class EditActivityForm extends ActionForm implements Serializable{
 	private Long[] selActors;
 	private String actor;
 	private Long actorId;
-	
+
 	private String editKey;
-	
+
 	private double totalCommitments;
 	private double totalDisbursements;
 	private double totalExpenditures;
 	private String currCode;
-	
-	private boolean donorFlag; 
+
+	private boolean donorFlag;
 	private Long fundDonor;
 
 	private Collection indicatorsME;
@@ -309,13 +312,13 @@ public class EditActivityForm extends ActionForm implements Serializable{
 	private float currentVal;
 	private String currValDate;
 	private String comments;
-	
+
 	private Collection riskCollection;
 	private Long indicatorRisk;
 	private Collection indHistory;
 	private Collection updateIndValues;
 	private Collection indicatorPriorValues;
-	
+
 	public EditActivityForm() {
 		step = "1";
 		reset = false;
@@ -345,6 +348,7 @@ public class EditActivityForm extends ActionForm implements Serializable{
 			title = null;
 			description = null;
 			objectives = null;
+            documentSpace = null;
 			condition = null;
 			status = null;
 			statusReason = null;
@@ -373,9 +377,11 @@ public class EditActivityForm extends ActionForm implements Serializable{
 			componentDesc = null;
 			selPhyProg = null;
 			documentList = null;
+            managedDocumentList = null;
 			selDocs = null;
 			linksList = null;
 			selLinks = null;
+            selManagedDocs = null;
 			selectedOrganizations = null;
 			pages = null;
 			alphaPages = null;
@@ -391,7 +397,7 @@ public class EditActivityForm extends ActionForm implements Serializable{
 			actualStartDate = null;
 			actualCompletionDate = null;
 			fundingConditions = null;
-			event = null;	
+			event = null;
 			currencies = null;
 			organizations = null;
 			fundingDetails = null;
@@ -425,7 +431,7 @@ public class EditActivityForm extends ActionForm implements Serializable{
 			currentCompDate = null;
 			proposedCompDate = null;
 			revisedCompDate = null;
-			activityCloseDates = null;			
+			activityCloseDates = null;
 			author = null;
 			dnrCntEmail = null;
 			dnrCntFirstName = null;
@@ -496,7 +502,7 @@ public class EditActivityForm extends ActionForm implements Serializable{
 			componentDesc = null;
 			componentAmount = null;
 			currencyCode = null;
-			componentRepDate = null;			
+			componentRepDate = null;
 		}
 	}
 
@@ -633,7 +639,7 @@ public class EditActivityForm extends ActionForm implements Serializable{
 	public void setCols(Collection cols) {
 		this.cols = cols;
 	}
-	
+
 	/**
 	 * @return Returns the colsAlpha.
 	 */
@@ -1128,7 +1134,7 @@ public class EditActivityForm extends ActionForm implements Serializable{
 	public void setAlphaPages(String[] pages) {
 		this.alphaPages = pages;
 	}
-	
+
 	/**
 	 * @return Returns the alphaPages.
 	 */
@@ -1977,7 +1983,7 @@ public class EditActivityForm extends ActionForm implements Serializable{
 	public void setItem(int item) {
 		this.item = item;
 	}
-	
+
 	/**
 	 * @return Returns the reportingOrgs.
 	 */
@@ -2110,7 +2116,7 @@ public class EditActivityForm extends ActionForm implements Serializable{
 	public void setComponentId(Long componentId) {
 		this.componentId = componentId;
 	}
-	
+
 	/**
 	 * @return Returns the impMultiRegion.
 	 */
@@ -2134,7 +2140,7 @@ public class EditActivityForm extends ActionForm implements Serializable{
 	 */
 	public void setImpMultiZone(Long[] impMultiZone) {
 		this.impMultiZone = impMultiZone;
-	}	
+	}
 	/**
 	 * @return Returns the impMultiWoreda.
 	 */
@@ -2512,7 +2518,7 @@ public class EditActivityForm extends ActionForm implements Serializable{
 	public void setCurrentValDate(String currentValDate) {
 		this.currentValDate = currentValDate;
 	}
-	
+
 	/**
 	 * @return Returns the programDescription.
 	 */
@@ -2525,7 +2531,7 @@ public class EditActivityForm extends ActionForm implements Serializable{
 	public void setProgramDescription(String programDescription) {
 		this.programDescription = programDescription;
 	}
-	
+
 	/**
 	 * @return Returns the field.
 	 */
@@ -2598,7 +2604,7 @@ public class EditActivityForm extends ActionForm implements Serializable{
 	public void setAmpCommentId(Long ampCommentId) {
 		this.ampCommentId = ampCommentId;
 	}
-	
+
 	/**
 	 * @return Returns the serializeFlag.
 	 */
@@ -2756,7 +2762,7 @@ public class EditActivityForm extends ActionForm implements Serializable{
 	public void setCreatedDate(String createdDate) {
 		this.createdDate = createdDate;
 	}
- 
+
     /**
      * @return Returns the context.
      */
@@ -3487,12 +3493,35 @@ public class EditActivityForm extends ActionForm implements Serializable{
 		return currCode;
 	}
 
-	/**
+    public String getDocumentSpace() {
+        return documentSpace;
+    }
+
+    public Collection getManagedDocumentList() {
+        return managedDocumentList;
+    }
+
+    public String[] getSelManagedDocs() {
+        return selManagedDocs;
+    }
+
+    /**
 	 * @param currCode The currCode to set.
 	 */
 	public void setCurrCode(String currCode) {
 		this.currCode = currCode;
 	}
 
-		
+    public void setDocumentSpace(String documentSpace) {
+        this.documentSpace = documentSpace;
+    }
+
+    public void setManagedDocumentList(Collection managedDocumentList) {
+        this.managedDocumentList = managedDocumentList;
+    }
+
+    public void setSelManagedDocs(String[] selManagedDocs) {
+        this.selManagedDocs = selManagedDocs;
+    }
+
 }

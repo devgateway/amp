@@ -127,7 +127,7 @@
 	function addDocument() 
 	{
 		var resourceFlag, docFlag;
-		if(document.aimEditActivityForm.docFileOrLink.value == "file")
+		if(document.aimEditActivityForm.docFileOrLink.value == "file" || document.aimEditActivityForm.docFileOrLink.value == "document")
 		{
 			docFlag = validateDocument();
 			
@@ -177,6 +177,10 @@
 									<digi:trn key="aim:selectWebResource">
 									Select web resource</digi:trn>
 								</logic:equal>								
+								<logic:equal name="aimEditActivityForm" property="docFileOrLink" value="document">
+									<digi:trn key="aim:selectManagedDocument">
+									Select DM-Managed document</digi:trn>
+								</logic:equal>
 							</td></tr>
 						<tr>
 							<td align="center" bgcolor=#ECF3FD>
@@ -234,6 +238,20 @@
 										</td>
 									</tr>
 									</logic:equal>
+									<logic:equal name="aimEditActivityForm" property="docFileOrLink" value="document">
+									<tr>
+										<td>
+										<FONT color=red>*</FONT>
+											<a title="<digi:trn key="aim:DMFileLocation">Location of the DM-managed document to be attached</digi:trn>">										  <digi:trn key="aim:file">File</digi:trn>
+											</a>
+										</td>
+										<td>
+											<a title="<digi:trn key="aim:DMFileLocation">Location of the DM-managed document to be attached</digi:trn>">
+											<html:file name="aimEditActivityForm" property="docFile" size="50"/>
+											</a>
+										</td>
+									</tr>
+									</logic:equal>									
 									<tr>
 										<td colspan=2>
 											<html:checkbox property="showInHomePage" />

@@ -46,23 +46,26 @@ import org.digijava.module.aim.helper.PhysicalProgress;
 import org.digijava.module.aim.util.ActivityUtil;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.cms.dbentity.CMSContentItem;
+import org.digijava.kernel.util.RequestUtils;
+import org.digijava.kernel.request.Site;
+import org.digijava.module.aim.util.DocumentUtil;
 
 /*
- * ResetAll.java 
+ * ResetAll.java
  */
 
 /**
- * ResetAll class resets and loads the activity details of the activity when an add or 
+ * ResetAll class resets and loads the activity details of the activity when an add or
  * edit is performed on the details of the activity
  */
 
-public class ResetAll extends Action 
+public class ResetAll extends Action
 {
 
 	private static Logger logger = Logger.getLogger(ResetAll.class);
 	public ActionForward execute(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response)
-			throws Exception 
+			throws Exception
     {
 		HttpSession session = request.getSession();
 		// if user is not logged in, forward him to the home page
@@ -80,6 +83,7 @@ public class ResetAll extends Action
 			   eaForm.setTitle(null);
 				eaForm.setDescription(null);
 				eaForm.setObjectives(null);
+                eaForm.setDocumentSpace(null);
 				eaForm.setSelectedOrganizations(null);
 				eaForm.setOriginalAppDate(null);
 				eaForm.setRevisedAppDate(null);
@@ -117,6 +121,7 @@ public class ResetAll extends Action
 	    	{
 	    		eaForm.setDocumentList(null);
 	    		eaForm.setLinksList(null);
+                eaForm.setManagedDocumentList(null);
 	    	}
 	    	if(eaForm.getStep().equals("6"))
 	    	{
@@ -142,6 +147,7 @@ public class ResetAll extends Action
 				eaForm.setTitle(activity.getName().trim());
 				eaForm.setDescription(activity.getDescription().trim());
 				eaForm.setObjectives(activity.getObjective().trim());
+                eaForm.setDocumentSpace(activity.getDocumentSpace().trim());
 				eaForm.setCreatedDate(DateConversion.ConvertDateToString(activity.getCreatedDate()));
 				eaForm.setOriginalAppDate(DateConversion.ConvertDateToString(activity.getProposedApprovalDate()));
 				eaForm.setRevisedAppDate(DateConversion.ConvertDateToString(activity.getActualApprovalDate()));
@@ -151,11 +157,11 @@ public class ResetAll extends Action
 				eaForm.setStatus(activity.getStatus().getAmpStatusId());
 				eaForm.setStatusReason(activity.getStatusReason());
 				Set orgProjIdsSet = activity.getInternalIds();
-				if (orgProjIdsSet != null) 
+				if (orgProjIdsSet != null)
 				{
 					Iterator projIdItr = orgProjIdsSet.iterator();
 					Collection temp = new ArrayList();
-					while (projIdItr.hasNext()) 
+					while (projIdItr.hasNext())
 					{
 						AmpActivityInternalId actIntId = (AmpActivityInternalId) projIdItr.next();
 						OrgProjectId projId = new OrgProjectId();
@@ -164,11 +170,11 @@ public class ResetAll extends Action
 						projId.setProjectId(actIntId.getInternalId());
 						temp.add(projId);
 					}
-					if (temp != null && temp.size() > 0) 
+					if (temp != null && temp.size() > 0)
 					{
 						OrgProjectId orgProjectIds[] = new OrgProjectId[temp.size()];
 						Object arr[] = temp.toArray();
-						for (int i = 0; i < arr.length; i++) 
+						for (int i = 0; i < arr.length; i++)
 						{
 							orgProjectIds[i] = (OrgProjectId) arr[i];
 						}
@@ -182,7 +188,7 @@ public class ResetAll extends Action
 					eaForm.setLevel(activity.getLevel().getAmpLevelId());
 				int impLevel = 0;
 				Collection ampLocs = activity.getLocations();
-				if (ampLocs != null && ampLocs.size() > 0) 
+				if (ampLocs != null && ampLocs.size() > 0)
 				{
 					Collection locs = new ArrayList();
 					Iterator locIter = ampLocs.iterator();
@@ -190,40 +196,40 @@ public class ResetAll extends Action
 					while (locIter.hasNext())
 					{
 						AmpLocation loc = (AmpLocation) locIter.next();
-						if (!maxLevel) 
+						if (!maxLevel)
 						{
-							if (loc.getAmpWoreda() != null) 
+							if (loc.getAmpWoreda() != null)
 							{
 								impLevel = 3;
 								maxLevel = true;
-							} 
-							else if (loc.getAmpZone() != null && impLevel < 2) 
+							}
+							else if (loc.getAmpZone() != null && impLevel < 2)
 							{
 								impLevel = 2;
-							} 
-							else if (loc.getAmpRegion() != null && impLevel < 1) 
+							}
+							else if (loc.getAmpRegion() != null && impLevel < 1)
 							{
 								impLevel = 1;
 							}
 						}
-						if (loc != null) 
+						if (loc != null)
 						{
 							Location location = new Location();
 							location.setLocId(loc.getAmpLocationId());
 							Country cntry = DbUtil.getDgCountry(Constants.COUNTRY_ISO);
 							location.setCountryId(cntry.getCountryId());
 							location.setCountry(cntry.getCountryName());
-							if (loc.getAmpRegion() != null) 
+							if (loc.getAmpRegion() != null)
 							{
 								location.setRegion(loc.getAmpRegion().getName());
 								location.setRegionId(loc.getAmpRegion().getAmpRegionId());
 							}
-							if (loc.getAmpZone() != null) 
+							if (loc.getAmpZone() != null)
 							{
 								location.setZone(loc.getAmpZone().getName());
 								location.setZoneId(loc.getAmpZone().getAmpZoneId());
 							}
-							if (loc.getAmpWoreda() != null) 
+							if (loc.getAmpWoreda() != null)
 							{
 								location.setWoreda(loc.getAmpWoreda().getName());
 								location.setWoredaId(loc.getAmpWoreda().getAmpWoredaId());
@@ -233,7 +239,7 @@ public class ResetAll extends Action
 					}
 					eaForm.setSelectedLocs(locs);
 				}
-				switch (impLevel) 
+				switch (impLevel)
 				{
 					case 0:
 						eaForm.setImplementationLevel("country");
@@ -253,49 +259,49 @@ public class ResetAll extends Action
 
 				Collection sectors = activity.getSectors();
 
-				if (sectors != null && sectors.size() > 0) 
+				if (sectors != null && sectors.size() > 0)
 				{
 					Collection activitySectors = new ArrayList();
 
 					Iterator sectItr = sectors.iterator();
-					while (sectItr.hasNext()) 
+					while (sectItr.hasNext())
 					{
 						AmpSector sec = (AmpSector) sectItr.next();
-						if (sec != null) 
+						if (sec != null)
 						{
 							AmpSector parent = null;
 							AmpSector subsectorLevel1 = null;
 							AmpSector subsectorLevel2 = null;
-							if (sec.getParentSectorId() != null) 
+							if (sec.getParentSectorId() != null)
 							{
-								if (sec.getParentSectorId().getParentSectorId() != null) 
+								if (sec.getParentSectorId().getParentSectorId() != null)
 								{
 									subsectorLevel2 = sec;
 									subsectorLevel1 = sec.getParentSectorId();
 									parent = sec.getParentSectorId()
 											.getParentSectorId();
-								} 
-								else 
+								}
+								else
 								{
 									subsectorLevel1 = sec;
 									parent = sec.getParentSectorId();
 								}
-							} 
-							else 
+							}
+							else
 							{
 								parent = sec;
 							}
 							ActivitySector actSect = new ActivitySector();
-							if (parent != null) 
+							if (parent != null)
 							{
 								actSect.setId(parent.getAmpSectorId());
 								actSect.setSectorId(parent.getAmpSectorId());
 								actSect.setSectorName(parent.getName());
-								if (subsectorLevel1 != null) 
+								if (subsectorLevel1 != null)
 								{
 									actSect.setSubsectorLevel1Id(subsectorLevel1.getAmpSectorId());
 									actSect.setSubsectorLevel1Name(subsectorLevel1.getName());
-									if (subsectorLevel2 != null) 
+									if (subsectorLevel2 != null)
 									{
 										actSect.setSubsectorLevel2Id(subsectorLevel2.getAmpSectorId());
 										actSect.setSubsectorLevel2Name(subsectorLevel2.getName());
@@ -307,23 +313,23 @@ public class ResetAll extends Action
 					}
 					eaForm.setActivitySectors(activitySectors);
 				}
-				if (activity.getThemeId() != null) 
+				if (activity.getThemeId() != null)
 				{
 					eaForm.setProgram(activity.getThemeId().getAmpThemeId());
 				}
-				eaForm.setProgramDescription(activity.getProgramDescription().trim());	
+				eaForm.setProgramDescription(activity.getProgramDescription().trim());
 		    }
 		    if(eaForm.getStep().equals("3"))
 		    {
 				Collection fundingOrgs = new ArrayList();
 				Iterator fundItr = activity.getFunding().iterator();
-				while (fundItr.hasNext()) 
+				while (fundItr.hasNext())
 				{
 				   AmpFunding ampFunding = (AmpFunding) fundItr.next();
 					AmpOrganisation org = ampFunding.getAmpDonorOrgId();
 					FundingOrganization fundOrg = new FundingOrganization();
 					fundOrg.setAmpOrgId(org.getAmpOrgId());
-					fundOrg.setOrgName(org.getName());				    
+					fundOrg.setOrgName(org.getName());
 					Funding fund = new Funding();
 					fund.setFundingId(System.currentTimeMillis());
 					fund.setAmpTermsAssist(ampFunding.getAmpTermsAssistId());
@@ -331,28 +337,28 @@ public class ResetAll extends Action
 					fund.setOrgFundingId(ampFunding.getFinancingId());
 					fund.setModality(ampFunding.getModalityId());
 					fund.setConditions(ampFunding.getConditions());
-					Collection fundDetails = ampFunding.getFundingDetails();	
+					Collection fundDetails = ampFunding.getFundingDetails();
 					Collection funding = new ArrayList();
-					if (fundDetails != null && fundDetails.size() > 0) 
+					if (fundDetails != null && fundDetails.size() > 0)
 					{
 						Iterator fundDetItr = fundDetails.iterator();
 						Collection fundDetail = new ArrayList();
-						
-						while (fundDetItr.hasNext()) 
+
+						while (fundDetItr.hasNext())
 						{
 							AmpFundingDetail fundDet = (AmpFundingDetail) fundDetItr.next();
 							FundingDetail fundingDetail = new FundingDetail();
 							int adjType = fundDet.getAdjustmentType().intValue();
 							fundingDetail.setAdjustmentType(adjType);
-							if (adjType == Constants.PLANNED) 
+							if (adjType == Constants.PLANNED)
 							{
 								fundingDetail.setAdjustmentTypeName("Planned");
-							} 
-							else if (adjType == Constants.ACTUAL) 
+							}
+							else if (adjType == Constants.ACTUAL)
 							{
 								fundingDetail.setAdjustmentTypeName("Actual");
 							}
-							if (fundDet.getTransactionType().intValue() == Constants.EXPENDITURE) 
+							if (fundDet.getTransactionType().intValue() == Constants.EXPENDITURE)
 							{
 								fundingDetail.setClassification(fundDet.getExpCategory());
 							}
@@ -363,7 +369,7 @@ public class ResetAll extends Action
 							fundingDetail.setPerspectiveCode(fundDet.getOrgRoleCode());
 							if (fundDet.getOrgRoleCode().equals(Constants.DONOR))
 								fundingDetail.setPerspectiveName("Donor");
-							else if (fundDet.getOrgRoleCode().equals(Constants.MOFED))							
+							else if (fundDet.getOrgRoleCode().equals(Constants.MOFED))
 								fundingDetail.setPerspectiveName("MOFED");
 							else if (fundDet.getOrgRoleCode().equals(Constants.IMPLEMENTING_AGENCY))
 								fundingDetail.setPerspectiveName("Implementing Agency");
@@ -383,11 +389,11 @@ public class ResetAll extends Action
 		    {
 				Collection componets = activity.getComponents();
 				logger.debug("Components Size = " + componets.size());
-				if (componets != null && componets.size() > 0) 
+				if (componets != null && componets.size() > 0)
 				{
 					Collection comp = new ArrayList();
 					Iterator compItr = componets.iterator();
-					while (compItr.hasNext()) 
+					while (compItr.hasNext())
 					{
 						AmpComponent temp = (AmpComponent) compItr.next();
 						Components tempComp = new Components();
@@ -399,11 +405,11 @@ public class ResetAll extends Action
 						tempComp.setDescription(temp.getDescription().trim());
 						tempComp.setReportingDate(DateConversion.ConvertDateToString(temp.getReportingDate()));
 						Collection phyProgess = temp.getPhysicalProgress();
-						if (phyProgess != null && phyProgess.size() > 0) 
+						if (phyProgess != null && phyProgess.size() > 0)
 						{
 							Collection physicalProgress = new ArrayList();
 							Iterator phyProgItr = phyProgess.iterator();
-							while (phyProgItr.hasNext()) 
+							while (phyProgItr.hasNext())
 							{
 								AmpPhysicalPerformance phyPerf = (AmpPhysicalPerformance) phyProgItr.next();
 								PhysicalProgress phyProg = new PhysicalProgress();
@@ -421,32 +427,32 @@ public class ResetAll extends Action
 				}
 				ArrayList list = new ArrayList();
 				Set issues = activity.getIssues();
-				if (issues != null && issues.size() > 0) 
+				if (issues != null && issues.size() > 0)
 				{
 					Iterator iItr = issues.iterator();
-					while (iItr.hasNext()) 
+					while (iItr.hasNext())
 					{
 						AmpIssues ampIssue = (AmpIssues) iItr.next();
 						Issues issue = new Issues();
 						issue.setId(ampIssue.getAmpIssueId());
 						issue.setName(ampIssue.getName());
 						ArrayList mList = new ArrayList();
-						if (ampIssue.getMeasures() != null && ampIssue.getMeasures().size() > 0) 
+						if (ampIssue.getMeasures() != null && ampIssue.getMeasures().size() > 0)
 						{
 							Iterator mItr = ampIssue.getMeasures().iterator() ;
-							while (mItr.hasNext()) 
+							while (mItr.hasNext())
 							{
 								AmpMeasure ampMeasure = (AmpMeasure) mItr.next();
 								Measures measure = new Measures();
 								measure.setId(ampMeasure.getAmpMeasureId());
 								measure.setName(ampMeasure.getName());
 								ArrayList aList = new ArrayList();
-								if (ampMeasure.getActors() != null && ampMeasure.getActors().size() > 0) 
+								if (ampMeasure.getActors() != null && ampMeasure.getActors().size() > 0)
 								{
 									Iterator aItr = ampMeasure.getActors().iterator();
-									while (aItr.hasNext()) 
+									while (aItr.hasNext())
 									{
-										AmpActor actor = (AmpActor) aItr.next();	
+										AmpActor actor = (AmpActor) aItr.next();
 										aList.add(actor);
 									}
 								}
@@ -463,25 +469,27 @@ public class ResetAll extends Action
 		    if(eaForm.getStep().equals("5"))
 		    {
 				Collection actDocs = activity.getDocuments();
-//				if (actDocs != null && actDocs.size() > 0) 
+//				if (actDocs != null && actDocs.size() > 0)
 //				{
 					Collection docsList = new ArrayList();
 					Collection linksList = new ArrayList();
 					Iterator docItr = actDocs.iterator();
-					while (docItr.hasNext()) 
+					while (docItr.hasNext())
 					{
 						CMSContentItem cmsItem = (CMSContentItem) docItr.next();
-						if (cmsItem.getIsFile()) 
+						if (cmsItem.getIsFile())
 						{
 							docsList.add(cmsItem);
-						} 
-						else 
+						}
+						else
 						{
 							linksList.add(cmsItem);
 						}
 					}
 					eaForm.setDocumentList(docsList);
-					eaForm.setLinksList(linksList);		
+					eaForm.setLinksList(linksList);
+                    Site currentSite = RequestUtils.getSite(request);
+                    eaForm.setManagedDocumentList(DocumentUtil.getDocumentsForActivity(currentSite, activity));
 //				}
 		    }
 		    if(eaForm.getStep().equals("6"))
@@ -490,23 +498,23 @@ public class ResetAll extends Action
 				eaForm.setImpAgencies(new ArrayList());
 				eaForm.setReportingOrgs(new ArrayList());
 				Set relOrgs = activity.getOrgrole();
-				if (relOrgs != null) 
+				if (relOrgs != null)
 				{
 					Iterator relOrgsItr = relOrgs.iterator();
-					while (relOrgsItr.hasNext()) 
+					while (relOrgsItr.hasNext())
 					{
 						AmpOrgRole orgRole = (AmpOrgRole) relOrgsItr.next();
 						if (orgRole.getRole().getRoleCode().equals(
 								Constants.EXECUTING_AGENCY) && (!eaForm.getExecutingAgencies().contains(orgRole.getOrganisation()))) 							{
 							eaForm.getExecutingAgencies().add(orgRole.getOrganisation());
-						} 
+						}
 						else if (orgRole.getRole().getRoleCode().equals(
-								Constants.IMPLEMENTING_AGENCY) && (!eaForm.getImpAgencies().contains(orgRole.getOrganisation()))) 
+								Constants.IMPLEMENTING_AGENCY) && (!eaForm.getImpAgencies().contains(orgRole.getOrganisation())))
 						{
 							eaForm.getImpAgencies().add(orgRole.getOrganisation());
-						} 
+						}
 						else if (orgRole.getRole().getRoleCode().equals(
-								Constants.REPORTING_AGENCY) && (!eaForm.getReportingOrgs().contains(orgRole.getOrganisation()))) 
+								Constants.REPORTING_AGENCY) && (!eaForm.getReportingOrgs().contains(orgRole.getOrganisation())))
 						{
 							eaForm.getReportingOrgs().add(orgRole.getOrganisation());
 						}
@@ -519,10 +527,10 @@ public class ResetAll extends Action
 				eaForm.setDnrCntFirstName(activity.getContFirstName());
 				eaForm.setDnrCntLastName(activity.getContLastName());
 				eaForm.setDnrCntEmail(activity.getEmail());
-				
+
 				eaForm.setMfdCntFirstName(activity.getMofedCntFirstName());
 				eaForm.setMfdCntLastName(activity.getMofedCntLastName());
-				eaForm.setMfdCntEmail(activity.getMofedCntEmail());	
+				eaForm.setMfdCntEmail(activity.getMofedCntEmail());
 		    }
 		}
 		return mapping.findForward("forward");

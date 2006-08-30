@@ -1,7 +1,8 @@
 package org.digijava.module.aim.form ;
 
-import org.apache.struts.action.ActionForm ;
-import java.util.*;
+import java.util.Collection;
+
+import org.apache.struts.action.ActionForm;
 
 public class KnowledgeForm extends ActionForm
 {
@@ -11,6 +12,7 @@ public class KnowledgeForm extends ActionForm
 	private String name ;
 	private String description ;
 	private Collection documents ;
+    private Collection managedDocuments;
 	private Collection notes ;
 	private int flag;
 	private int dflag;
@@ -18,83 +20,83 @@ public class KnowledgeForm extends ActionForm
 	private String ndisplay;
 	private boolean validLogin;
 	private String perspective;
-	
+
 	public Long getId()
 	{
-		return id ;	
+		return id ;
 	}
 
-	public String getDisplay() 
+	public String getDisplay()
 	{
 		return display;
 	}
 
-	public String getNdisplay() 
+	public String getNdisplay()
 	{
 		return ndisplay;
 	}
 
 	public Long getAmpKmId()
 	{
-		return ampKmId ;	
+		return ampKmId ;
 	}
 
 	public Long getAmpNotesId()
 	{
-		return ampNotesId ;	
+		return ampNotesId ;
 	}
-	
-	public String getDescription() 
+
+	public String getDescription()
 	{
 		return description;
 	}
 
-	public String getName() 
+	public String getName()
 	{
 		return name;
 	}
 
-	public int getFlag() 
+	public int getFlag()
 	{
 		return flag;
 	}
 
-	public int getDflag() 
+	public int getDflag()
 	{
 		return dflag;
 	}
 
-	public boolean getValidLogin() 
+	public boolean getValidLogin()
 	{
 		return validLogin;
 	}
 
-	public String getPerspective() 
+	public String getPerspective()
 	{
 		return perspective;
 	}
 
-	public void setDescription(String description) 
+	public void setDescription(String description)
 	{
 		this.description = description ;
 	}
-	
-	public void setName(String name) 
+
+	public void setName(String name)
 	{
 		this.name = name ;
 	}
 
-	public void setId(Long id) 
+	public void setId(Long id)
 	{
 		this.id = id ;
 	}
 
-	public void setAmpKmId(Long id) 
+	public void setAmpKmId(Long id)
 	{
 		this.ampKmId = id ;
 	}
 
-	public void setAmpNotesId(Long id) 
+	public void setAmpNotesId(Long id)
 	{
 		this.ampNotesId = id ;
 	}
@@ -109,7 +111,7 @@ public class KnowledgeForm extends ActionForm
 		this.dflag = dflag;
 	}
 
-	public void setValidLogin(boolean bool) 
+	public void setValidLogin(boolean bool)
 	{
 		this.validLogin = bool ;
 	}
@@ -118,7 +120,7 @@ public class KnowledgeForm extends ActionForm
 	/**
 	 * @return
 	 */
-	public Collection getDocuments() 
+	public Collection getDocuments()
 	{
 		return documents;
 	}
@@ -126,15 +128,19 @@ public class KnowledgeForm extends ActionForm
 	/**
 	 * @return
 	 */
-	public Collection getNotes() 
+	public Collection getNotes()
 	{
 		return notes;
 	}
 
-	/**
+    public Collection getManagedDocuments() {
+        return managedDocuments;
+    }
+
+    /**
 	 * @param collection
 	 */
-	public void setNotes(Collection notes) 
+	public void setNotes(Collection notes)
 	{
 		this.notes = notes;
 	}
@@ -142,21 +148,25 @@ public class KnowledgeForm extends ActionForm
 	/**
 	 * @param collection
 	 */
-	public void setDocuments(Collection documents) 
+	public void setDocuments(Collection documents)
 	{
 		this.documents=documents;
 	}
-	public void setDisplay(String display) 
+	public void setDisplay(String display)
 	{
 		this.display = display;
 	}
-	public void setNdisplay(String ndisplay) 
+	public void setNdisplay(String ndisplay)
 	{
 		this.ndisplay = ndisplay;
 	}
 
-	public void setPerspective(String perspective) 
+	public void setPerspective(String perspective)
 	{
 		this.perspective = perspective ;
 	}
+
+    public void setManagedDocuments(Collection managedDocuments) {
+        this.managedDocuments = managedDocuments;
+    }
 }

@@ -16,6 +16,12 @@ import org.apache.struts.tiles.actions.TilesAction;
 import org.digijava.module.aim.form.KnowledgeForm;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.DbUtil;
+import org.digijava.module.aim.util.ActivityUtil;
+import org.digijava.module.aim.dbentity.AmpActivity;
+import org.digijava.module.aim.util.DocumentUtil;
+import org.digijava.kernel.util.RequestUtils;
+import org.digijava.kernel.request.Site;
+import java.util.ArrayList;
 
 
 public class ViewKnowledge extends TilesAction {
@@ -23,8 +29,8 @@ public class ViewKnowledge extends TilesAction {
 
 	public ActionForward execute(ComponentContext context,
 			ActionMapping mapping, ActionForm form, HttpServletRequest request,
-			HttpServletResponse response) throws IOException, ServletException {
-		
+			HttpServletResponse response) throws Exception {
+
 		HttpSession session = request.getSession();
 		TeamMember teamMember = (TeamMember) session
 				.getAttribute("currentMember");
@@ -35,7 +41,7 @@ public class ViewKnowledge extends TilesAction {
 		} else {
 			formBean.setValidLogin(true);
 			String actId = request.getParameter("ampActivityId");
-			
+
 			Long id = null;
 			if (actId != null) {
 				try {
@@ -47,9 +53,17 @@ public class ViewKnowledge extends TilesAction {
 							"Trying to parse " + actId + " to Long");
 				}
 			}
-			
+
+            formBean.setManagedDocuments(null);
 			if (id != null) {
 				formBean.setDocuments(DbUtil.getKnowledgeDocuments(id));
+                if (DocumentUtil.isDMEnabled()) {
+                    AmpActivity activity = ActivityUtil.getAmpActivity(id);
+                    Site currentSite = RequestUtils.getSite(request);
+                    formBean.setManagedDocuments(DocumentUtil.
+                                                 getDocumentsForActivity(
+                        currentSite, activity));
+                }
 			}
 		}
 

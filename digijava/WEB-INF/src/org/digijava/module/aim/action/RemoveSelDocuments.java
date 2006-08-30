@@ -12,22 +12,41 @@ import org.apache.struts.action.ActionMapping;
 import org.digijava.module.aim.form.EditActivityForm;
 import org.digijava.module.aim.helper.RelatedLinks;
 import org.digijava.module.cms.dbentity.CMSContentItem;
+import org.digijava.kernel.request.Site;
+import org.digijava.kernel.util.RequestUtils;
+import org.digijava.module.aim.util.DocumentUtil;
 
 public class RemoveSelDocuments extends Action {
 
 	private static Logger logger = Logger.getLogger(RemoveSelDocuments.class);
-	
+
 	public ActionForward execute(ActionMapping mapping, ActionForm form,
 			javax.servlet.http.HttpServletRequest request,
 			javax.servlet.http.HttpServletResponse response)
 			throws java.lang.Exception {
 
 		EditActivityForm eaForm = (EditActivityForm) form;
-		
+
 		Collection prevDocs = null;
 		Collection newDocs = new ArrayList();
 		long selDocs[] = null;
-		
+
+        if (eaForm.getDocFileOrLink().equals("document")) {
+            Site currentSite = RequestUtils.getSite(request);
+            if (eaForm.getSelManagedDocs() != null) {
+                for(int i = 0; i < eaForm.getSelManagedDocs().length; i++) {
+                    String managedDocId = eaForm.getSelManagedDocs()[i];
+                    DocumentUtil.removeDocument(currentSite, eaForm.getDocumentSpace(), managedDocId);
+                }
+                eaForm.setManagedDocumentList(DocumentUtil.getDocumentsForSpace(currentSite, eaForm.getDocumentSpace()));
+                eaForm.setSelManagedDocs(null);
+            }
+            eaForm.setStep("6");
+
+            return mapping.findForward("forward");
+
+        }
+
 		if (eaForm.getDocFileOrLink().equals("file")) {
 			prevDocs = eaForm.getDocumentList();
 			selDocs = eaForm.getSelDocs();
@@ -35,7 +54,7 @@ public class RemoveSelDocuments extends Action {
 			prevDocs = eaForm.getLinksList();
 			selDocs = eaForm.getSelLinks();
 		}
-		
+
 		Iterator itr = prevDocs.iterator();
 		while (itr.hasNext()) {
 			RelatedLinks rl = (RelatedLinks) itr.next();

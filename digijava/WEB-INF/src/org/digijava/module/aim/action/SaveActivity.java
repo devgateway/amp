@@ -82,12 +82,14 @@ import org.digijava.module.aim.util.ProgramUtil;
 import org.digijava.module.aim.util.SectorUtil;
 import org.digijava.module.aim.util.TeamMemberUtil;
 import org.digijava.module.aim.util.TeamUtil;
+import org.digijava.module.aim.util.DocumentUtil;
+import javax.jcr.Node;
 
 /**
  * SaveActivity class creates a 'AmpActivity' object and populate the fields
  * with the values entered by the user and passes this object to the persister
  * class.
- * 
+ *
  * @author Priyajith
  */
 public class SaveActivity extends Action {
@@ -104,7 +106,7 @@ public class SaveActivity extends Action {
 		ampContext = getServlet().getServletContext();
 
 		Long actId = null;
-		
+
 		// if user has not logged in, forward him to the home page
 		if (session.getAttribute("currentMember") == null) {
 			return mapping.findForward("index");
@@ -172,7 +174,7 @@ public class SaveActivity extends Action {
 											ampFundDet.setOrgRoleCode(fundDet
 													.getPerspectiveCode());
 
-											
+
 											boolean useFixedRate = false;
 											if (fundDet.getTransactionType() == Constants.COMMITMENT) {
 												if (fundDet.isUseFixedRate() &&
@@ -180,7 +182,7 @@ public class SaveActivity extends Action {
 													useFixedRate = true;
 												}
 											}
-											
+
 											if (!useFixedRate) {
 												Double transAmt = new Double(
 														DecimalToText.getDouble(fundDet.getTransactionAmount()));
@@ -190,11 +192,11 @@ public class SaveActivity extends Action {
 											} else {
 												// Use the fixed exchange rate
 												double transAmt = DecimalToText.getDouble(fundDet.getTransactionAmount());
-												
+
 												Date trDate = DateConversion.getDate(fundDet.getTransactionDate());
 												double frmExRt = CurrencyUtil.getExchangeRate(
 														fundDet.getCurrencyCode(),1,trDate);
-												
+
 												double amt = CurrencyWorker.convert1(transAmt, frmExRt,1);
 												amt *= fundDet.getFixedExchangeRate();
 												ampFundDet.setTransactionAmount(new Double(amt));
@@ -205,7 +207,7 @@ public class SaveActivity extends Action {
 											if (fundDet.getTransactionType() == Constants.EXPENDITURE) {
 												ampFundDet.setExpCategory(
 														fundDet.getClassification());
-											}											
+											}
 											fundDeatils.add(ampFundDet);
 										}
 									}
@@ -325,10 +327,10 @@ public class SaveActivity extends Action {
 
 				// validate donor fundings
 				/*
-				 * 
+				 *
 				 * Collection donorComm = new ArrayList(); Collection donorDisb =
 				 * new ArrayList(); Collection donorExpn = new ArrayList();
-				 * 
+				 *
 				 * if (eaForm.getFundingOrganizations() != null &&
 				 * eaForm.getFundingOrganizations().size() > 0) { Iterator itr1 =
 				 * eaForm.getFundingOrganizations().iterator(); while
@@ -357,7 +359,7 @@ public class SaveActivity extends Action {
 				 * ActionError("error.aim.addActivity.expnGreaterThanDisb"));
 				 * saveErrors(request, errors); return
 				 * mapping.findForward("addActivityStep3"); } } } } } } }
-				 * 
+				 *
 				 * Collection regComm = new ArrayList(); Collection regDisb =
 				 * new ArrayList(); Collection regExpn = new ArrayList();
 				 *  // validate regional fundings if
@@ -371,7 +373,7 @@ public class SaveActivity extends Action {
 				 * regDisb.addAll(rf.getDisbursements()); if
 				 * (rf.getExpenditures() != null)
 				 * regExpn.addAll(rf.getExpenditures());
-				 * 
+				 *
 				 * int errIndex =
 				 * FundingValidator.validateFundings(rf.getCommitments(),rf.getDisbursements());
 				 * if (errIndex > 0) { // invalid entry
@@ -385,7 +387,7 @@ public class SaveActivity extends Action {
 				 * ActionError("error.aim.addActivity.expnGreaterThanDisb"));
 				 * saveErrors(request, errors); return
 				 * mapping.findForward("addActivityStep4"); } } } }
-				 * 
+				 *
 				 * Collection compComm = new ArrayList(); Collection compDisb =
 				 * new ArrayList(); Collection compExpn = new ArrayList(); //
 				 * validate component fundings if
@@ -399,7 +401,7 @@ public class SaveActivity extends Action {
 				 * compDisb.addAll(comp.getDisbursements()); if
 				 * (comp.getExpenditures() != null)
 				 * compExpn.addAll(comp.getExpenditures());
-				 * 
+				 *
 				 * int errIndex =
 				 * FundingValidator.validateFundings(comp.getCommitments(),comp.getDisbursements());
 				 * if (errIndex > 0) { // invalid entry
@@ -475,6 +477,13 @@ public class SaveActivity extends Action {
 				} else {
 					activity.setObjective(eaForm.getObjectives());
 				}
+                if(eaForm.getDocumentSpace() == null
+                   || eaForm.getDocumentSpace().trim().length() == 0) {
+                    activity.setDocumentSpace(new String(" "));
+                } else {
+                    activity.setDocumentSpace(eaForm.getDocumentSpace());
+                }
+
 				if (eaForm.getConditions() == null
 						|| eaForm.getConditions().trim().length() == 0) {
 					activity.setCondition(" ");
@@ -1007,7 +1016,7 @@ public class SaveActivity extends Action {
 												useFixedRate = true;
 											}
 										}
-										
+
 										if (!useFixedRate) {
 											Double transAmt = new Double(
 													DecimalToText.getDouble(fundDet.getTransactionAmount()));
@@ -1017,23 +1026,23 @@ public class SaveActivity extends Action {
 										} else {
 											// Use the fixed exchange rate
 											double transAmt = DecimalToText.getDouble(fundDet.getTransactionAmount());
-											
+
 											Date trDate = DateConversion.getDate(fundDet.getTransactionDate());
 											double frmExRt = CurrencyUtil.getExchangeRate(
 													fundDet.getCurrencyCode(),1,trDate);
-											
+
 											double amt = CurrencyWorker.convert1(transAmt, frmExRt,1);
 											amt *= fundDet.getFixedExchangeRate();
 											ampFundDet.setTransactionAmount(new Double(amt));
 											ampFundDet.setAmpCurrencyId(
-													CurrencyUtil.getCurrencyByCode(fundDet.getFixedExchangeCurrCode()));			
+													CurrencyUtil.getCurrencyByCode(fundDet.getFixedExchangeCurrCode()));
 										}
 										ampFundDet.setAmpFundingId(ampFunding);
 										if (fundDet.getTransactionType() == Constants.EXPENDITURE) {
 											ampFundDet.setExpCategory(
 													fundDet.getClassification());
-										}											
-										fundDeatils.add(ampFundDet);										
+										}
+										fundDeatils.add(ampFundDet);
 									}
 								}
 								ampFunding.setFundingDetails(fundDeatils);
@@ -1259,17 +1268,17 @@ public class SaveActivity extends Action {
 				if (eaForm.getField() != null)
 					field = eaForm.getField().getAmpFieldId();
 
-				
+
 				if (eaForm.isEditAct()) {
 					// Setting approval status of activity
 					activity.setApprovalStatus(eaForm.getApprovalStatus());
 					// update an existing activity
-					
+
 					actId = ActivityUtil.saveActivity(activity, eaForm.getActivityId(),
 							true, eaForm.getCommentsCol(), eaForm
 									.isSerializeFlag(), field, relatedLinks, tm
 									.getMemberId(), eaForm.getIndicatorsME());
-					
+
 					// remove the activity details from the edit activity list
 					if (toDelete == null
 							|| (!toDelete.trim().equalsIgnoreCase("true"))) {
@@ -1316,11 +1325,20 @@ public class SaveActivity extends Action {
 					actId = ActivityUtil.saveActivity(activity,
 							eaForm.getCommentsCol(), eaForm.isSerializeFlag(),
 							field, relatedLinks, tm.getMemberId());
-					
+
 				}
 			}
 
-			boolean surveyFlag = eaForm.isDonorFlag();
+            if(DocumentUtil.isDMEnabled()) {
+                Site currentSite = RequestUtils.getSite(request);
+                Node spaceNode = DocumentUtil.getDocumentSpace(currentSite,
+                    activity.getDocumentSpace());
+                DocumentUtil.renameNode(spaceNode, activity.getName());
+            }
+            /**
+             * @todo give name to document space
+             */
+            boolean surveyFlag = eaForm.isDonorFlag();
 
 			eaForm.setDonorFlag(false);
 			eaForm.setFundDonor(null);
@@ -1347,13 +1365,13 @@ public class SaveActivity extends Action {
 			eaForm.reset(mapping, request);
 
 			if (session.getAttribute(Constants.AMP_PROJECTS) != null) {
-				
+
 				Collection col = (Collection) session.getAttribute(
 						Constants.AMP_PROJECTS);
 				AmpProject project = new AmpProject();
 				project.setAmpActivityId(actId);
 				col.remove(project);
-				
+
 				Collection actIds = new ArrayList();
 				actIds.add(actId);
 				Collection dirtyActivities = DesktopUtil.getAmpProjects(actIds);
@@ -1366,13 +1384,13 @@ public class SaveActivity extends Action {
 				session.setAttribute(Constants.DIRTY_ACTIVITY_LIST,dirtyActivities);
 				session.setAttribute(Constants.DESKTOP_SETTINGS_CHANGED,new Boolean(true));
 			}
-			
+
 			if (tm.getTeamHead()) {
 				if (session.getAttribute(Constants.MY_TASKS) != null) {
 					session.removeAttribute(Constants.MY_TASKS);
 				}
 			}
-			
+
 			if (temp == 0)
 				return mapping.findForward("adminHome");
 			else if (temp == 1) {

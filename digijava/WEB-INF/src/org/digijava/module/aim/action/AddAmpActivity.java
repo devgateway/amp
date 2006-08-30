@@ -1,5 +1,5 @@
 /*
- * AddAmpActivity.java 
+ * AddAmpActivity.java
  */
 
 package org.digijava.module.aim.action;
@@ -40,33 +40,35 @@ import org.digijava.module.aim.util.ProgramUtil;
 import org.digijava.module.aim.util.TeamUtil;
 import org.digijava.module.editor.dbentity.Editor;
 import org.digijava.module.editor.util.Constants;
+import org.digijava.module.aim.util.DocumentUtil;
+import org.digijava.kernel.request.Site;
 
 /**
  * Used to capture the activity details to the form bean of type org.digijava.module.aim.form.EditActivityForm
- * 
- * Add Activity is an eight step process with a preview at the last. The same action is used for all the eight 
- * steps + preview. A form bean variable identified by the name 'step' is used for this purpose. When the user 
+ *
+ * Add Activity is an eight step process with a preview at the last. The same action is used for all the eight
+ * steps + preview. A form bean variable identified by the name 'step' is used for this purpose. When the user
  * clicks the next button in the jsp page, the value of the step is incremented by 1. Thus based on the value of
- * this variable the action forwards it to the eight steps and the preview. 
- * 
+ * this variable the action forwards it to the eight steps and the preview.
+ *
  * @author Priyajith
  */
 public class AddAmpActivity extends Action {
-	
+
 	//private static Logger logger = Logger.getLogger(AddAmpActivity.class);
-	
+
 	private ServletContext ampContext = null;
-	
+
 	public ActionForward execute(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response)
 			throws java.lang.Exception {
 
 		HttpSession session = request.getSession();
-		
+
 		ampContext = getServlet().getServletContext();
-		
+
 		TeamMember teamMember= new TeamMember();
-		
+
 		// Get the current member who has logged in from the session
 		teamMember=(TeamMember)session.getAttribute("currentMember");
 
@@ -75,25 +77,25 @@ public class AddAmpActivity extends Action {
 			return mapping.findForward("index");
 
 		EditActivityForm eaForm = (EditActivityForm) form;
-		
+
 
 		try {
-		
+
 		if (!eaForm.isEditAct() || eaForm.isReset()) {
 			eaForm.reset(mapping, request);
 		}
 
 		/*
-		 * The action 'AddAmpActivity' is used by 'Add Activity', 'View Channel Overview', and 
-		 * 'show activity details' page. In the case if 'view channel overview', and 
-		 * 'show activity details', we have to directly forward to the preview page. 
-		 * A form bean variable called pageId is used for this purpose. All the requests 
-		 * coming from pages other than 'Add activity' page will have a pageId value 
-		 * which is greater than 1.   
+		 * The action 'AddAmpActivity' is used by 'Add Activity', 'View Channel Overview', and
+		 * 'show activity details' page. In the case if 'view channel overview', and
+		 * 'show activity details', we have to directly forward to the preview page.
+		 * A form bean variable called pageId is used for this purpose. All the requests
+		 * coming from pages other than 'Add activity' page will have a pageId value
+		 * which is greater than 1.
 		 */
 		if (eaForm.getPageId() > 1)
 			eaForm.setStep("9");
-		
+
 		// added by Akash
 		// desc: clearing comment properties
 		// start
@@ -105,11 +107,11 @@ public class AddAmpActivity extends Action {
 			}
 		}
 		// end
-		
+
 		// added by Akash
 		// desc: setting WorkingTeamLeadFlag & approval status in form bean
 		// start
-		
+
 		Long ampTeamId = teamMember.getTeamId();
 		boolean teamLeadFlag = teamMember.getTeamHead();
 		boolean workingTeamFlag = TeamUtil.checkForParentTeam(ampTeamId);
@@ -117,7 +119,7 @@ public class AddAmpActivity extends Action {
 			eaForm.setWorkingTeamLeadFlag("yes");
 		else
 			eaForm.setWorkingTeamLeadFlag("no");
-		
+
 		if (!eaForm.isEditAct())
 			eaForm.setApprovalStatus("started");
 		else {
@@ -134,9 +136,9 @@ public class AddAmpActivity extends Action {
 						+ eaForm.getActivityId() + "&tabIndex=0";
 				RequestDispatcher rd = getServlet().getServletContext()
 						.getRequestDispatcher(url);
-				rd.forward(request, response);		
+				rd.forward(request, response);
 			}
-			
+
 			synchronized (ampContext) {
 				HashMap tsList = (HashMap) ampContext.getAttribute(org.digijava.module.aim.helper.Constants.TS_ACT_LIST);
 				if (tsList != null) {
@@ -145,14 +147,14 @@ public class AddAmpActivity extends Action {
 				ampContext.setAttribute(org.digijava.module.aim.helper.Constants.TS_ACT_LIST,tsList);
 			}
 		}
-		
+
 		// end
-		
+
 		if (eaForm.getStep().equals("1")) { // show the step 1 page.
-			
+
 		    if (eaForm.getContext() == null) {
 				SiteDomain currentDomain = RequestUtils.getSiteDomain(request);
-				
+
 				String url = SiteUtils.getSiteURL(currentDomain, request.getScheme(),
 	                            request.getServerPort(),
 	                            request.getContextPath());
@@ -162,9 +164,9 @@ public class AddAmpActivity extends Action {
 		    /*
 		     * AMP uses the editor module of the DiGi java framework to store the description and
 		     * objectives in the html form. The editor module requires an entry in the DG_EDITOR table
-		     * for the fields which needs to be shown in html format. So a key is generated for both the 
-		     * description and objective fields. The logic for generating the key for description is to 
-		     * append teamMember id and the current time to the string "aim-desc". The logic for generating 
+		     * for the fields which needs to be shown in html format. So a key is generated for both the
+		     * description and objective fields. The logic for generating the key for description is to
+		     * append teamMember id and the current time to the string "aim-desc". The logic for generating
 		     * key for objective is to append the team member id and the current time to the string "aim-obj".
 		     * Initially the contents for both the description and objectives are set as a blank string
 		     */
@@ -187,7 +189,7 @@ public class AddAmpActivity extends Action {
                 ed.setGroupName(Constants.GROUP_OTHER);
                 org.digijava.module.editor.util.DbUtil.saveEditor(ed);
 		    }
-		        
+
 		    // Creating a new entry in the DG_EDITOR table for objective with the initial value for objective as " "
 		    if (eaForm.getObjectives() == null || eaForm.getObjectives().trim().length() == 0) {
 		        eaForm.setObjectives("aim-obj-" + teamMember.getMemberId() + "-" + System.currentTimeMillis());
@@ -205,10 +207,25 @@ public class AddAmpActivity extends Action {
 	                    request);
                 ed.setLastModDate(new Date());
                 ed.setGroupName(Constants.GROUP_OTHER);
-                org.digijava.module.editor.util.DbUtil.saveEditor(ed);		        
+                org.digijava.module.editor.util.DbUtil.saveEditor(ed);
 		    }
+
+            // Exectly as description/objectives, AMP is using DigiJava's document
+            // management module to store documents (if enabled). Before storing
+            // Documents, we need to create space there.
+            // Later, we will give to space user-friendly name
+            if(DocumentUtil.isDMEnabled()) {
+                if(eaForm.getDocumentSpace() == null ||
+                   eaForm.getDocumentSpace().trim().length() == 0) {
+                    eaForm.setDocumentSpace("aim-document-space-" +
+                                            teamMember.getMemberId() +
+                                            "-" + System.currentTimeMillis());
+                    Site currentSite = RequestUtils.getSite(request);
+                    DocumentUtil.createDocumentSpace(currentSite, eaForm.getDocumentSpace());
+                }
+            }
 			eaForm.setReset(false);
-			
+
 			Collection statusCol = null;
 			// load the status from the database
 			if(eaForm.getStatusCollection() == null) {
@@ -250,16 +267,16 @@ public class AddAmpActivity extends Action {
 			} else {
 				levelCol = eaForm.getLevelCollection();
 			}
-			
-			// load all themes 
+
+			// load all themes
 			eaForm.setProgramCollection(ProgramUtil.getAllThemes());
-			
+
 			// load all the active currencies
 			eaForm.setCurrencies(CurrencyUtil.getAmpCurrency());
-			
+
 			// load all the perspectives
 			eaForm.setPerspectives(DbUtil.getAmpPerspective());
-			
+
 			eaForm.setFundingRegionId(new Long(-1));
 			return mapping.findForward("addActivityStep1");
 		} else if (eaForm.getStep().equals("1.1")) { // shows the edit page of the editor module
@@ -280,7 +297,7 @@ public class AddAmpActivity extends Action {
 		} else if (eaForm.getStep().equals("7")) { // show the step 7 page.
 			return mapping.findForward("addActivityStep7");
 		} else if (eaForm.getStep().equals("8")) { // show the step 7 page.
-			return mapping.findForward("addActivityStep8");			
+			return mapping.findForward("addActivityStep8");
 		} else if (eaForm.getStep().equals("9")) { // show the preview page.
 
 			if (eaForm.getAmpId() == null) { // if AMP-ID is not generated, generate the AMP-ID
@@ -288,7 +305,7 @@ public class AddAmpActivity extends Action {
 				 * The logic for geerating the AMP-ID is as follows:
 				 * 1. Get the donor codes, if there are any donors, DNR_CODE
 				 * 2. Get the maximum of the ampActivityId + 1, MAX_NUM
-				 * 3. Append 'DNR_CODE + "-" + MAX_NUM'  to the string "AMP-" 
+				 * 3. Append 'DNR_CODE + "-" + MAX_NUM'  to the string "AMP-"
 				 */
 				String ampId = "AMP";
 				if (eaForm.getFundingOrganizations() != null) {
@@ -306,11 +323,11 @@ public class AddAmpActivity extends Action {
 				ampId += "-" + maxId;
 				eaForm.setAmpId(ampId);
 			}
-			
+
 			/*
 			 * If the mode is 'Add', set the Activity Creator as the current logged in user
 			 */
-			if ((!eaForm.isEditAct()) && 
+			if ((!eaForm.isEditAct()) &&
 					(eaForm.getActAthEmail() == null || eaForm.getActAthEmail().trim().length() == 0)) {
 				User usr = DbUtil.getUser(teamMember.getEmail());
 				if (usr != null) {
@@ -319,7 +336,7 @@ public class AddAmpActivity extends Action {
 					eaForm.setActAthEmail(usr.getEmail());
 				}
 			}
-			
+
 			if(eaForm.getStatusCollection() == null) {
 				eaForm.setStatusCollection(DbUtil.getAmpStatus());
 			}
@@ -330,17 +347,17 @@ public class AddAmpActivity extends Action {
 			if (eaForm.getLevelCollection() == null) {
 				eaForm.setLevelCollection(DbUtil.getAmpLevels());
 			}
-				
+
 			if (eaForm.getProgramCollection() == null) {
-				eaForm.setProgramCollection(ProgramUtil.getAllThemes());				
+				eaForm.setProgramCollection(ProgramUtil.getAllThemes());
 			}
-			
+
 			return mapping.findForward("preview");
 		} else if (eaForm.getStep().equals("10")) {		// show step 9 - M&E page
-			
+
 			eaForm.setIndicatorsME(
 					MEIndicatorsUtil.getActivityIndicators(eaForm.getActivityId()));
-			
+
 			eaForm.setIndicatorId(null);
 			eaForm.setIndicatorValId(null);
 			eaForm.setExpIndicatorId(null);
@@ -354,7 +371,7 @@ public class AddAmpActivity extends Action {
 			eaForm.setCurrentVal(0);
 			eaForm.setCurrentValDate(null);
 			eaForm.setIndicatorRisk(null);
-			
+
 			//get the levels of risks
 			if(!eaForm.getIndicatorsME().isEmpty())
 				eaForm.setRiskCollection(MEIndicatorsUtil.getAllIndicatorRisks());

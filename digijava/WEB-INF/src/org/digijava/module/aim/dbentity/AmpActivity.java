@@ -1,18 +1,14 @@
 package org.digijava.module.aim.dbentity ;
 
-import org.digijava.module.aim.dbentity.AmpStatus ;
-import org.digijava.module.aim.dbentity.AmpLevel ;
-import org.digijava.module.aim.dbentity.AmpModality ;
-import org.digijava.module.aim.dbentity.AmpTheme ;
+import java.io.Serializable;
+import java.util.Date;
+import java.util.Set;
+
 import org.digijava.kernel.dbentity.Country;
 import org.digijava.kernel.user.User;
 
-import java.io.Serializable;
-import java.util.Date; 
-import java.util.Set ;
 
-
-public class AmpActivity 
+public class AmpActivity
 		  implements Comparable, Serializable {
 
 	private Long ampActivityId ;
@@ -20,6 +16,7 @@ public class AmpActivity
 	private String name ;
 	private String description ;
 	private String objective ;
+    private String documentSpace;
 	private AmpStatus status ;
 	private String language ;
 	private String version ;
@@ -28,7 +25,7 @@ public class AmpActivity
 	private Date activityApprovalDate;  // defunct
 	private Date activityStartDate ;    // defunct
 	private Date activityCloseDate ;    // defunct
-	private Date originalCompDate;      // defunct 
+	private Date originalCompDate;      // defunct
 	private Set sectors ;
 	private Set locations ;
 	private Set orgrole;
@@ -45,47 +42,47 @@ public class AmpActivity
 	private AmpTeam team;
 	private Set member;
 	private Country country;
-	private String contactName ; // use contFirstName and contLastName instead. 
+	private String contactName ; // use contFirstName and contLastName instead.
 								 // The field is defunct
-	
+
 	// Donor contact information
 	private String contFirstName;
 	private String contLastName;
 	private String email;
-	
+
 	// MOFED contact information
 	private String mofedCntFirstName;
 	private String mofedCntLastName;
 	private String mofedCntEmail;
-	
+
 	private String comments ;
 	private String statusReason;
 	private Set components;
-	
+
 	private Date proposedStartDate;
 	private Date actualStartDate;
 	private Date proposedApprovalDate;
 	private Date actualApprovalDate;
 	private Date actualCompletionDate;
 	private Set closingDates;
-	
+
 	private User author;                        // use activityCreator instead
 														  // This field is defunct
 
 	private AmpTeamMember activityCreator;
 	private Date createdDate;
 	private Date updatedDate;
-	
+
 	//private Set teamList;
 	private String contractors;
-	
+
 	private Set regionalFundings;
-	
+
 	private String approvalStatus;
-	
+
 	// Aid Harmonization Survey Set
 	private Set survey;
-	
+
 	/**
 	 * @return
 	 */
@@ -216,7 +213,7 @@ public class AmpActivity
 		funding = set;
 	}
 
-	
+
 	/**
 	 * @param set
 	 */
@@ -269,7 +266,7 @@ public class AmpActivity
 	public void setOrgrole(Set set) {
 		orgrole = set;
 	}
-	
+
 
 	/**
 	 * @param set
@@ -364,7 +361,7 @@ public class AmpActivity
 	public AmpModality getModality() {
 			return modality;
 	}
-	
+
 	public void setModality(AmpModality modality) {
 			this.modality = modality;
 	}
@@ -435,12 +432,12 @@ public class AmpActivity
 
 	public int compareTo(Object o) {
 			  if (!(o instanceof AmpActivity)) throw new ClassCastException();
-			
+
 			  AmpActivity act = (AmpActivity) o;
 			  return (this.name.trim().toLowerCase().
 									compareTo(act.name.trim().toLowerCase()));
 
-	}		  	
+	}
 	/**
 	 * @return
 	 */
@@ -727,14 +724,14 @@ public class AmpActivity
 	public void setMofedCntLastName(String mofedCntLastName) {
 		this.mofedCntLastName = mofedCntLastName;
 	}
-	
+
 	public boolean equals(Object obj) {
 		if (obj == null)
 			throw new NullPointerException();
-		
+
 		if (!(obj instanceof AmpActivity))
 			throw new ClassCastException();
-		
+
 		AmpActivity act = (AmpActivity) obj;
 		return this.ampActivityId.equals(act.getAmpActivityId());
 	}
@@ -774,10 +771,19 @@ public class AmpActivity
 	public Set getSurvey() {
 		return survey;
 	}
-	/**
+
+    public String getDocumentSpace() {
+        return documentSpace;
+    }
+
+    /**
 	 * @param survey The survey to set.
 	 */
 	public void setSurvey(Set survey) {
 		this.survey = survey;
 	}
+
+    public void setDocumentSpace(String documentSpace) {
+        this.documentSpace = documentSpace;
+    }
 }

@@ -13,7 +13,6 @@ function login()
     document.aimKnowledgeForm.submit();
 }
 </script>
-
 <digi:context name="digiContext" property="context" />
 <digi:instance property="aimKnowledgeForm" />
 <logic:equal name="aimKnowledgeForm" property="validLogin" value="false">
@@ -211,7 +210,65 @@ function login()
 						</TABLE>
 					</TD>
 				</TR>					
+				<c:if test="${aimKnowledgeForm.managedDocuments != null}">
+                <TR bgColor=#f4f4f2>
+					<TD vAlign="top" align="center" width="100%">
+						<TABLE width="98%" cellPadding=0 cellSpacing=0 vAlign="top" align="center" bgColor=#f4f4f2>
+							<TR>
+								<TD width="100%" bgcolor="#F4F4F2" height="17">
+									<TABLE border="0" cellpadding="0" cellspacing="0" bgcolor="#F4F4F2" height="17">
+                           	<TR bgcolor="#F4F4F2" height="17"> 
+                              	<TD bgcolor="#C9C9C7" class="box-title">&nbsp;&nbsp;
+											<digi:trn key="aim:managedDocuments">DM-Managed Documents</digi:trn></TD>
+	                              <TD><IMG src="../ampTemplate/images/corner-r.gif" width="17" height="17"></TD>
+   	                        </TR>
+      	                  </TABLE>									
+								</TD>
+							</TR>
+							<TR>
+								<TD width="100%" bgcolor="#F4F4F2" align="center">
+									<TABLE width="100%" cellPadding="2" cellSpacing="2" vAlign="top" align="center" bgColor=#f4f4f2
+									class="box-border-nopadding">
+										<TR>
+											<TD width="100%" vAlign="top" align="left">
+												<TABLE width="100%" cellPadding="4" cellSpacing="1" vAlign="top" align="left" bgcolor="#ffffff">
+													<TR bgcolor="#dddddd">
+														<TD width="100%" colspan="2" align="center"><b>
+															<digi:trn key="aim:item">Item</digi:trn></b>
+														</TD>
+													</TR>
+													<logic:iterate name="aimKnowledgeForm"  property="managedDocuments" 
+													id="document">
+													
+													<TR bgcolor="#f4f4f2">
+														<TD align="right">
+															<IMG alt=Link height=10 src="../ampTemplate/images/arrow-gr.gif"></TD>
+														<TD width="98%" align="left">
+															<b>
+															<bean:write name="document" property="name"/></b> - 
+															<i>File :
 
+															<c:out value="${document.fileName}"/></i>
+														</TD>
+													</TR>
+													<c:if test="${!empty document.description}">
+													<TR bgcolor="#f4f4f2">
+														<TD width="98%" align="left" colspan="2">
+															&nbsp;&nbsp;&nbsp;&nbsp;<c:out value="${document.description}"/>
+														</TD>
+													</TR>	
+													</c:if>
+													</logic:iterate>              
+												</TABLE>
+											</TD>
+										</TR>
+									</TABLE>
+								</TD>
+							</TR>
+						</TABLE>
+					</TD>
+				</TR>				
+                </c:if>
 			</TABLE>
 
 			</TD></TR>

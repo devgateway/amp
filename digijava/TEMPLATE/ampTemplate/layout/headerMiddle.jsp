@@ -31,11 +31,13 @@
 		 </TD>
       <TD width="1" bgcolor="#999999">
 		</TD>
-      <TD vAlign=center>
+        <logic:notEmpty name="CL" scope="application">
+          <TD vAlign=center>
                 <digi:link module="calendar" href="/showCalendarView.do" styleClass="nav" onclick="return quitRnot()"	title="View Planning Calendar">
-         	::: <digi:trn key="aim:calendar">CALENDAR</digi:trn>
-		</digi:link>
-		</TD>
+                  ::: <digi:trn key="aim:calendar">CALENDAR</digi:trn>
+                </digi:link>
+          </TD>
+        </logic:notEmpty>
 		<TD width="1" bgcolor="#999999">
 		</TD>
 		<%--

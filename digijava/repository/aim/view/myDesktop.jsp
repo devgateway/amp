@@ -53,6 +53,28 @@
 				<c:if test="${aimDesktopForm.filtersPresent == true}">
 					<TR><TD>
 					<!-- Filters -->
+
+						<c:if test="${!empty aimDesktopForm.sectors}">
+							<html:select property="fltrSector" styleClass="inp-text" multiple="true" size="3">
+								<html:option value="-1">--All--</html:option>
+								<html:optionsCollection property="sectors" value="ampSectorId" label="name" />
+							</html:select>
+						</c:if>
+						
+						<c:if test="${!empty aimDesktopForm.donors}">
+							<html:select property="fltrDonor" styleClass="inp-text" multiple="true" size="3">
+								<html:option value="-1">--All--</html:option>							
+								<html:optionsCollection property="donors" value="ampOrgId" label="acronym"/>
+							</html:select>
+						</c:if>
+
+						<c:if test="${!empty aimDesktopForm.status}">
+							<html:select property="fltrStatus" styleClass="inp-text" multiple="true" size="3">
+								<html:option value="-1">--All--</html:option>
+								<html:optionsCollection property="status" value="ampStatusId" label="name" />
+							</html:select>
+						</c:if>	<br>
+					
 						<c:if test="${!empty aimDesktopForm.calendars}">
 							<html:select property="fltrCalendar" styleClass="inp-text">
 								<html:optionsCollection property="calendars" value="ampFiscalCalId" label="name"/>
@@ -77,30 +99,9 @@
 							</html:select>
 						</c:if>
 	
-						<c:if test="${!empty aimDesktopForm.sectors}">
-							<html:select property="fltrSector" styleClass="inp-text" multiple="true" size="2">
-								<html:option value="-1">--All--</html:option>
-								<html:optionsCollection property="sectors" value="ampSectorId" label="name" />
-							</html:select>
-						</c:if>
-						
-						<c:if test="${!empty aimDesktopForm.donors}">
-							<html:select property="fltrDonor" styleClass="inp-text" multiple="true" size="2">
-								<html:option value="-1">--All--</html:option>							
-								<html:optionsCollection property="donors" value="ampOrgId" label="acronym"/>
-							</html:select>
-						</c:if>
-										
 						<c:if test="${!empty aimDesktopForm.currencies}">
 							<html:select property="fltrCurrency" styleClass="inp-text">
 								<html:optionsCollection property="currencies" value="currencyCode" label="currencyName"/>
-							</html:select>
-						</c:if>
-
-						<c:if test="${!empty aimDesktopForm.status}">
-							<html:select property="fltrStatus" styleClass="inp-text" multiple="true" size="2">
-								<html:option value="-1">--All--</html:option>
-								<html:optionsCollection property="status" value="ampStatusId" label="name" />
 							</html:select>
 						</c:if>
 						

@@ -93,6 +93,11 @@
                                     <legend><digi:trn key="calendar:addNewType">Add a new type</digi:trn></legend>
                                     <table width="100%">
                                         <tr>
+                                          <td colspan="2" align="left">
+                                            <digi:errors />
+                                          </td>
+                                        </tr>
+                                        <tr>
                                             <td><digi:trn key="calendar:typeName">Name</digi:trn></td>
                                             <td><html:text property="addName" /></td>
                                         </tr>
@@ -101,7 +106,9 @@
                                             <td><html:text property="addColor" /></td>
                                         </tr>
                                         <tr>
-                                            <td colspan="2" align="right"><html:submit value="Add" onclick="setActionMethod('addType')"/></td></td>
+                                            <td colspan="2" align="right">
+                                               <html:submit value="Add" onclick="setActionMethod('addType')"/>
+                                            </td></td>
                                         </tr>
                                     </table>
                                 </fieldset>

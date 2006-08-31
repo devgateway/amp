@@ -98,12 +98,23 @@ public class GetTeamActivities extends Action {
 			
 			if (taForm.getAllActivities() == null) {
 				Collection col = null;
-				if (tm.getTeamType().equalsIgnoreCase(Constants.DEF_DNR_PERSPECTIVE)) {
+				if (tm.getTeamType() == null) {
+					if (ampTeam.getAccessType().equalsIgnoreCase(Constants.ACCESS_TYPE_MNGMT)) {
+						col = TeamUtil.getManagementTeamActivities(id);
+						taForm.setDonorFlag(true);												
+					} else if (ampTeam.getTeamCategory().equalsIgnoreCase(Constants.DEF_DNR_PERSPECTIVE)) {
+						col = TeamUtil.getDonorTeamActivities(id);
+						taForm.setDonorFlag(true);						
+					} else {
+						col = TeamUtil.getAllTeamActivities(id);
+						taForm.setDonorFlag(false);											
+					}
+				} else if (tm.getTeamType().equalsIgnoreCase(Constants.DEF_DNR_PERSPECTIVE)) {
 					col = TeamUtil.getDonorTeamActivities(id);
 					taForm.setDonorFlag(true);
 				} else {
 					col = TeamUtil.getAllTeamActivities(id);
-					taForm.setDonorFlag(false);
+					taForm.setDonorFlag(false);					
 				}
 				logger.info("Loaded " + col.size() + " activities for the team " + ampTeam.getName());			    
 				taForm.setAllActivities(col);

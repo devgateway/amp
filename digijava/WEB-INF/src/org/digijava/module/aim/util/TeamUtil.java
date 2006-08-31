@@ -19,6 +19,7 @@ import net.sf.hibernate.Session;
 import net.sf.hibernate.Transaction;
 
 import org.apache.log4j.Logger;
+import org.digijava.kernel.config.ParamSafeHTML;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.request.Site;
 import org.digijava.kernel.user.Group;
@@ -1067,6 +1068,8 @@ public class TeamUtil {
 		return col;
 	}
 	
+	
+	
 	public static Collection getDonorTeamActivities(Long teamId) {
 		
 		Collection col = new ArrayList();
@@ -1412,6 +1415,83 @@ public class TeamUtil {
 			}
 		}
 		return flag;
+	}
+	
+	public static Collection getManagementTeamActivities(Long teamId) {
+		Session session = null;
+		Collection col = new ArrayList();
+		String queryString = "";
+		Query qry = null;
+
+		try {
+			session = PersistenceManager.getSession();
+			Collection childIds = DesktopUtil.getAllChildrenIds(teamId);
+			if (childIds != null && childIds.size() > 0) {
+				Iterator itr = childIds.iterator();
+				String params = "";
+				while (itr.hasNext()) {
+					Long id = (Long) itr.next();
+					if (params.length() > 0) {
+						params += ",";
+					}
+					params += id;
+				}
+				queryString = "select act from " + AmpActivity.class.getName() + " " +
+						"act where act.team in (" + params + ")";
+				qry = session.createQuery(queryString);
+				
+				itr = qry.list().iterator();
+				while (itr.hasNext()) {
+
+					AmpActivity activity = (AmpActivity) itr.next();
+					Collection temp1 = activity.getOrgrole();
+					Collection temp2 = new ArrayList();
+					Iterator temp1Itr = temp1.iterator();
+					while (temp1Itr.hasNext()) {
+						AmpOrgRole orgRole = (AmpOrgRole) temp1Itr.next();
+						if (!temp2.contains(orgRole))
+							temp2.add(orgRole);
+					}
+					
+					Iterator orgItr = temp2.iterator();
+
+					Activity act = new Activity();
+					act.setActivityId(activity.getAmpActivityId());
+					act.setName(activity.getName());
+					act.setAmpId(activity.getAmpId());
+					
+					String donors = "";
+
+					while (orgItr.hasNext()) {
+						AmpOrgRole orgRole = (AmpOrgRole) orgItr.next();
+						if (orgRole.getRole().getRoleCode().equals(Constants.DONOR)) {
+							if (donors.trim().length() > 0) {
+								donors += ", ";
+							}
+							donors += orgRole.getOrganisation().getName();
+						}
+					}
+
+					act.setDonors(donors);
+					col.add(act);
+
+				}				
+				
+			}
+		} catch (Exception e) {
+			logger.debug("Exception from getAllTeamActivities()");
+			logger.debug(e.toString());
+		} finally {
+			try {
+				if (session != null) {
+					PersistenceManager.releaseSession(session);
+				}
+			} catch (Exception ex) {
+				logger.debug("releaseSession() failed");
+				logger.debug(ex.toString());
+			}
+		}
+		return col;		
 	}
 
 	public static Collection getAllTeamActivities(Long teamId) {

@@ -1641,13 +1641,13 @@ public class TeamUtil {
 			
 			if (team.getAccessType().equalsIgnoreCase(Constants.ACCESS_TYPE_MNGMT)) {
 				queryString = "select r from " + AmpReports.class.getName() + " r " +
-					"where r.ampReportId <> 7" + "order by r.name";
+					"where r.ampReportId <> 7 order by r.name";
 				qry = session.createQuery(queryString);
 				col = qry.list();	
 			} else {
 				queryString = "select tr from "
 					+ AmpTeamReports.class.getName()
-					+ " tr where (tr.team=:teamId) and tr.report.ampReportId<>'7'" + "order by tr.report" ;
+					+ " tr where (tr.team=:teamId) and tr.report.ampReportId<>'7'" ;
 				qry = session.createQuery(queryString);
 				qry.setParameter("teamId", teamId, Hibernate.LONG);
 				Iterator itr = qry.list().iterator();
@@ -1663,7 +1663,7 @@ public class TeamUtil {
 			
 				if (qryBuffer != null && qryBuffer.length() > 0) {
 					queryString = "select r from " + AmpReports.class.getName() + " r " +
-						"where r.ampReportId in (" + qryBuffer + ")" + "order by r.name";
+						"where r.ampReportId in (" + qryBuffer + ") order by r.name";
 					qry = session.createQuery(queryString);
 					col = qry.list();
 				}

@@ -304,71 +304,6 @@
 							</html:select>
 						</td>
 						</logic:notEmpty>
-
-						<logic:notEmpty name="aimMulitlateralbyDonorForm" property="ampStartDays">
-						<td>
-						
-	 						<html:select property="startDay" styleClass="dr-menu">
-								<option value="0">DD</option>
-								<html:options name="aimMulitlateralbyDonorForm" 	property="ampStartDays" /> 
-							</html:select>
-							
-		 				</td>
-						<td>
-	 						<html:select property="startMonth" styleClass="dr-menu">
-								<option value="0">MON</option>
-	 							<html:option value="1">Jan</html:option>
-								<html:option value="2">Feb</html:option>
-								<html:option value="3">March</html:option>
-								<html:option value="4">April</html:option>
-								<html:option value="5">May</html:option>
-								<html:option value="6">June</html:option>
-								<html:option value="7">July</html:option>
-								<html:option value="8">Aug</html:option>
-								<html:option value="9">Sept</html:option>
-								<html:option value="10">Oct</html:option>
-								<html:option value="11">Nov</html:option>
-								<html:option value="12">Dec</html:option>
-							</html:select>
-	 					</td>
-						<td>
-	 						<html:select property="startYear" styleClass="dr-menu">
-							<option value="0">YYYY</option>
-							<html:options name="aimMulitlateralbyDonorForm" property="ampStartYears" /> 
-							</html:select> 
-		 				</td>
-						</logic:notEmpty>
-						<logic:notEmpty name="aimMulitlateralbyDonorForm" property="ampCloseDays">
-						<td>
-	 						<html:select property="closeDay" styleClass="dr-menu">
-							<option value="0">DD</option>
-							<html:options name="aimMulitlateralbyDonorForm" property="ampCloseDays" /> 
-							</html:select> 
-	 					</td>
-						<td>
-	 						<html:select property="closeMonth" styleClass="dr-menu">
-	 						<option value="0">MON</option>
-	 						<html:option value="1">Jan</html:option>
-							<html:option value="2">Feb</html:option>
-							<html:option value="3">March</html:option>
-							<html:option value="4">April</html:option>
-							<html:option value="5">May</html:option>
-							<html:option value="6">June</html:option>
-							<html:option value="7">July</html:option>
-							<html:option value="8">Aug</html:option>
-							<html:option value="9">Sept</html:option>
-							<html:option value="10">Oct</html:option>
-							<html:option value="11">Nov</html:option>
-							<html:option value="12">Dec</html:option>
-							</html:select>
-	 					</td>
-						<td>
-							<html:select property="closeYear" styleClass="dr-menu">
-							<option value="0">YYYY</option>
-							<html:options name="aimMulitlateralbyDonorForm" property="ampCloseYears" /> 
-							</html:select> 
-						</td>
-						</logic:notEmpty>
 						<logic:equal name="aimMulitlateralbyDonorForm" property="goFlag" value="true">
 						<td>
 						<input type="button" name="GOButton" value=" GO " class="dr-menu" onclick="clearFilter()">
@@ -400,7 +335,7 @@
 
 </tr>
 <tr bgcolor="#F4F4F2">
-	<td align="center" height="21"  ><div align="center"><strong>
+	<td align="center" height="21"><div align="center"><strong>
 					Serial No
 					</strong></div>
 					</td>

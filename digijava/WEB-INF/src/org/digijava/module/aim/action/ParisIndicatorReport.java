@@ -141,11 +141,15 @@ public class ParisIndicatorReport extends Action {
 						svForm.setFilterFlag(Boolean.FALSE);
 						svForm.setNumColsCalculated("4");
 					}
+					if ("10a".equalsIgnoreCase(svForm.getIndicatorCode())) {
+						svForm.setDonorsColl(DbUtil.getAidSurveyReportByIndicator10a(svForm.getOrgGroup(), svForm.getDonor(), 
+								svForm.getStartYear().intValue(),svForm.getCloseYear().intValue()));
+						return mapping.findForward("report1");
+					}
 					if ("5a".equalsIgnoreCase(svForm.getIndicatorCode()))
 						svForm.setNumColsCalculated("8");
 					else if ("9".equalsIgnoreCase(svForm.getIndicatorCode()))
 						svForm.setNumColsCalculated("5");
-					//svForm.setQuestionsColl(DbUtil.getSurveyQuestionsByIndicator(Long.valueOf(indcId)));
 					svForm.setDonorsColl(DbUtil.getAidSurveyReportByIndicator(svForm.getIndicatorCode(),svForm.getDonor(),
 							svForm.getOrgGroup(),svForm.getStatus(),svForm.getStartYear().intValue(),svForm.getCloseYear().intValue(),
 							svForm.getCurrency(),svForm.getTermAssist(),svForm.getFinancingInstrument(),

@@ -64,7 +64,7 @@
 										<logic:notEmpty name="aimParisIndicatorReportForm"  property="indicatorsColl">
 											<logic:iterate id="report" name="aimParisIndicatorReportForm"  property="indicatorsColl" 
 													   type="org.digijava.module.aim.dbentity.AmpAhsurveyIndicator">
-											<c:if test="${report.indicatorCode != '10a' && report.indicatorCode != '10b'}">
+											<c:if test="${report.indicatorCode != '10b'}">
 												<TR><TD>
 													<IMG alt=Link height=10 src="../ampTemplate/images/arrow-gr.gif" width=10>
 													<strong>[<c:out value="${report.indicatorCode}"/>]</strong>

@@ -220,6 +220,7 @@
 													</logic:notEmpty>
 												</select>
 											</td>
+										<c:if test = "${aimParisIndicatorReportForm.indicatorCode != '10a'}">
 											<td>
 												<html:select property="calendar" name="aimParisIndicatorReportForm" styleClass="dr-menu" >
 													<logic:notEmpty name="aimParisIndicatorReportForm" property="calendarColl">
@@ -242,6 +243,7 @@
 													</logic:notEmpty>
 												</html:select>
 											</td>
+										</c:if>
 											<td>
 												<html:select property="donor" name="aimParisIndicatorReportForm" styleClass="dr-menu" >
 													<html:option value="all">All Donors</html:option>
@@ -251,6 +253,7 @@
 													</logic:notEmpty>							
 												</html:select>
 											</td>
+										<c:if test = "${aimParisIndicatorReportForm.indicatorCode != '10a'}">
 											<td>
 												<html:select property="status" name="aimParisIndicatorReportForm" styleClass="dr-menu" >
 													<html:option value="all">All Status</html:option>
@@ -260,6 +263,21 @@
 													</logic:notEmpty>
 												</html:select>
 											</td>
+										</c:if>
+										<c:if test = "${aimParisIndicatorReportForm.indicatorCode == '10a'}">
+											<td>
+												<html:select property="orgGroup" name="aimParisIndicatorReportForm" styleClass="dr-menu" >
+													<html:option value="all">All Groups</html:option>
+													<logic:notEmpty name="aimParisIndicatorReportForm" property="orgGroupColl">
+														<html:optionsCollection name="aimParisIndicatorReportForm" property="orgGroupColl" 
+																				value="orgGrpCode" label="orgGrpName"/>
+													</logic:notEmpty>							
+												</html:select>
+											</td>
+											<td>
+												<input type="button" value="GO" class="dr-menu" onclick="clearFilter()">
+											</td>
+										</c:if>
 										<%--
 											<td>
 												<html:select property="termAssist" name="aimParisIndicatorReportForm" styleClass="dr-menu" >
@@ -275,6 +293,7 @@
 									</table>
 								</td>
 							</tr>
+						<c:if test = "${aimParisIndicatorReportForm.indicatorCode != '10a'}">
 							<tr bgcolor="#c0c0c0" height=20>
 								<td>
 									<table>
@@ -314,7 +333,7 @@
 									</table>
 								</td>
 							</tr>
-
+						</c:if>
 						</table>
 <%--============================================================================================================================================--%>
 					</td>
@@ -639,9 +658,11 @@
 						</table>
 <%--*********************************************************************************************************************************************--%>
 					</td>
-					 
 				</tr>
-				<tr><td><font color="blue">* All the amounts are in thousands (000)</font></td></tr>
+				<c:if test = "${aimParisIndicatorReportForm.indicatorCode != '10a' &&
+									aimParisIndicatorReportForm.indicatorCode != '10b'}">
+					<tr><td><font color="blue">* All the amounts are in thousands (000)</font></td></tr>
+				</c:if>
 <%-----------------------------------------------------------------------------------------------------------------------------------------------------%>
 						</table>
 					</td>

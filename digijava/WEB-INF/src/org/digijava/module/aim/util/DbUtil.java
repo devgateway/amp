@@ -2,9 +2,11 @@ package org.digijava.module.aim.util;
 
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
@@ -71,8 +73,9 @@ import org.digijava.module.aim.helper.FiscalCalendar;
 import org.digijava.module.aim.helper.Indicator;
 import org.digijava.module.aim.helper.ParisIndicator;
 import org.digijava.module.aim.helper.Question;
-import org.digijava.module.aim.helper.Sector;
 import org.digijava.module.aim.helper.SurveyFunding;
+import org.digijava.module.calendar.dbentity.AmpCalendar;
+import org.digijava.module.calendar.dbentity.Calendar;
 import org.digijava.module.cms.dbentity.CMSContentItem;
 
 public class DbUtil {
@@ -5182,6 +5185,8 @@ public class DbUtil {
 									if ("yes".equalsIgnoreCase(res.getResponse()))
 										ansFlag = true;
 								}
+								
+						/* -------------------------------- Defunct now ------------------------------------- */
 								// if answer to question #1 of survey is yes then calculate 
 								// difference(%) between planned & actual disbursement(s)
 								if ("calculated".equalsIgnoreCase(q.getAmpTypeId().getName())) {
@@ -5219,6 +5224,8 @@ public class DbUtil {
 											res.setResponse(null);
 									}
 								}
+						/* -------------------------------- Defunct now ------------------------------------- */
+								
 								ques.setResponse(res.getResponse());
 								ques.setResponseId(res.getAmpReponseId());
 								break;
@@ -5411,7 +5418,7 @@ public class DbUtil {
 		}
 		return responses;
 	}
-	 
+	
 	public static Collection getAidSurveyReportByIndicator(String indcCode, String donor, String orgGroup, 
 			String status, int startYear, int closeYear, String currency, String termAssist, String financingInstrument,
 			String perspective, String sector, String calendar) {
@@ -5744,7 +5751,7 @@ public class DbUtil {
 			}
 		}
 		else
-			logger.debug("No donor found from survey table.");
+			logger.debug("No donor found from amp_ahsurvey table.");
 	} catch (Exception ex) {
 		logger.debug("Unable to get donors from survey : " + ex);
 		ex.printStackTrace(System.out);
@@ -5759,6 +5766,121 @@ public class DbUtil {
 	}
 	//logger.debug("responses.size[getAidSurveyReportByIndicator()] : " + responses.size());
 	return responses;
+	}
+	
+	public static Collection getAidSurveyReportByIndicator10a(String orgGroup, String donor, int startYear, int closeYear) {
+		Session session = null;
+		ArrayList responses = new ArrayList();
+		Collection surveyDonors = new ArrayList();
+		boolean orgGroupFlag = false;
+		int NUM_ANSWER_COLUMNS = 4, i = 0, j = 0;
+		int YEAR_RANGE = (closeYear - startYear + 1);
+		double answersRow[] = null;
+		double allDnRow[] = null;
+		Iterator itr1 = null, itr2 = null;
+		Double percent = null;
+		NumberFormat formatter = new DecimalFormat("#.##");
+		SimpleDateFormat year = new SimpleDateFormat("yyyy");
+		
+		try {
+			session = PersistenceManager.getSession();
+			String qry = "select distinct dn.ampDonorOrgId from " + AmpAhsurvey.class.getName() + " dn";
+			surveyDonors.addAll(session.createQuery(qry).list());
+			if (surveyDonors.size() > 0) {
+				if (null != orgGroup && orgGroup.trim().length() > 1 && !"all".equalsIgnoreCase(orgGroup))
+					orgGroupFlag = true;
+				// Creating first row for all-donors in indicator report.
+				ParisIndicator all = new ParisIndicator();
+				all.setDonor("All Donors");
+				all.setAnswers(new ArrayList());
+				responses.add(all);
+				for (i = 0; i < YEAR_RANGE; i++) {
+					answersRow = new double[NUM_ANSWER_COLUMNS];
+					answersRow[0] = startYear + i;
+					((ParisIndicator)responses.get(0)).getAnswers().add(answersRow);
+				}
+				itr1 = surveyDonors.iterator();
+				while(itr1.hasNext()) {
+					AmpOrganisation dnOrg = (AmpOrganisation) itr1.next();
+					// Filtering by donor-organisation here
+					if (null != donor && donor.trim().length() > 1 && !"all".equalsIgnoreCase(donor)) {
+						if (!donor.equals(dnOrg.getAmpOrgId().toString()))
+							continue;
+					}
+					if (orgGroupFlag) {
+						if (!orgGroup.equalsIgnoreCase(dnOrg.getOrgGrpId().getOrgGrpCode()))
+							continue;
+					}
+					if (null == dnOrg.getCalendar())
+						continue;
+					
+					ParisIndicator pi = new ParisIndicator();	// represents one row of indicator report.
+					pi.setDonor(dnOrg.getAcronym());
+					pi.setAnswers(new ArrayList());
+					for (i = 0; i < YEAR_RANGE; i++) {
+						allDnRow = (double[])(((ParisIndicator)responses.get(0)).getAnswers().get(i));
+						// answersRow will represent row for one disbursement year inside answer-collection of pi helper object.
+						answersRow = new double[NUM_ANSWER_COLUMNS];
+						answersRow[0] = (startYear + i);
+						itr2 = dnOrg.getCalendar().iterator();
+						while (itr2.hasNext()) {
+							AmpCalendar ampCal = (AmpCalendar) itr2.next();
+							//logger.debug("cal-id: " + ampCal.getCalendarPK().getCalendar().getId() + " Event-Name: " + ampCal.getEventType().getName());
+							if ("Mission".equalsIgnoreCase(ampCal.getEventType().getName())) {
+								Calendar cal = (Calendar) ampCal.getCalendarPK().getCalendar();
+								//logger.debug("Year: " + answersRow[0] + " start-yr: " + year.format(cal.getStartDate()) + 
+										//" end-yr:" + year.format(cal.getEndDate()));
+								if (answersRow[0] == Double.parseDouble(year.format(cal.getStartDate())) || 
+										answersRow[0] == Double.parseDouble(year.format(cal.getEndDate()))) {
+									// checking if the Mission is joint
+									if (null != ampCal.getDonors() && ampCal.getDonors().size() > 1) {
+										answersRow[1] += 1;
+										allDnRow[1] += 1;
+									}
+									// total number of Missions
+									answersRow[2] += 1;
+									allDnRow[2] += 1;
+								}
+							}
+						}
+						// calculating final percentage here
+						if (answersRow[2] == 0)
+							answersRow[NUM_ANSWER_COLUMNS - 1] = -1.0;
+						else {
+							percent = new Double((100 * answersRow[1]) / answersRow[2]);
+							answersRow[NUM_ANSWER_COLUMNS - 1] = Double.parseDouble(formatter.format(percent));
+						}
+						//logger.debug("final-% : " + answersRow[NUM_ANSWER_COLUMNS - 1]);
+						pi.getAnswers().add(answersRow);
+					}
+					responses.add(pi);
+				}
+				// calculating final percentage for all-donors row
+				for (j = 0; j < YEAR_RANGE; j++) {
+					allDnRow = (double[])(((ParisIndicator)responses.get(0)).getAnswers().get(j));
+					if (allDnRow[2] == 0)
+						allDnRow[NUM_ANSWER_COLUMNS - 1] = -1.0;
+					else {
+						percent = new Double((100 * allDnRow[1]) / allDnRow[2]);
+						allDnRow[NUM_ANSWER_COLUMNS - 1] = Double.parseDouble(formatter.format(percent));
+					}
+					//logger.debug("final-%[all-donors row] : " + allDnRow[NUM_ANSWER_COLUMNS - 1]);
+				}
+			}
+			else
+				logger.debug("No donor found from amp_ahsurvey table");
+		} catch (Exception ex) {
+			logger.debug("Unable to get AidSurveyReportByIndicator10a: " + ex);
+			ex.printStackTrace(System.out);
+		} finally {
+			try {
+				if (session != null)
+					PersistenceManager.releaseSession(session);
+			} catch (Exception nex) {
+				logger.debug("releaseSession() failed");
+			}
+		}
+		return responses;
 	}
 	
 	/* returns a 2-D array whose each element is an array consisting of results after matching

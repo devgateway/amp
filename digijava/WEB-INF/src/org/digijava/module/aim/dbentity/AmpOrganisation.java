@@ -34,6 +34,7 @@ public class AmpOrganisation implements Comparable, Serializable
 	private AmpRegion regionId;
 	
 	private Set survey;	// Collection of AmpAhsurvey dbentity objects 
+	private Set calendar;
 
 	/**
 	 * @return
@@ -377,5 +378,13 @@ public class AmpOrganisation implements Comparable, Serializable
 	 */
 	public void setSurvey(Set survey) {
 		this.survey = survey;
+	}
+
+	public Set getCalendar() {
+		return calendar;
+	}
+
+	public void setCalendar(Set calendar) {
+		this.calendar = calendar;
 	}
 }	

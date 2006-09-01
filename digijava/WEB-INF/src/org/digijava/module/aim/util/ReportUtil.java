@@ -769,6 +769,9 @@ public class ReportUtil {
 			Project project=null;
 			ProjectTermAssist termAssist=null;
 			TermFund sectorTermAssist=null;
+			double grandTotalLoanUndisb=0,grandTotalGrantUndisb=0,grandTotalKindUndisb=0,grandTotalUndisb=0;
+			double undisbLoan=0,undisbGrant=0,undisbKind=0,undisbTotal=0;
+			double sectorTotalLoanUndisb=0,sectorTotalGrantUndisb=0,sectorTotalKindUndisb=0,sectorTotalUndisb=0;
 			logger.debug("Before dbUtil");
 			//logger.debug("Sector Size: " + DbUtil.getAmpReportSectors(ampTeamId,fromYr,toYr,perspective).size());
 			iter = DbUtil.getAmpReportSectors(inClauseTeam).iterator();
@@ -776,6 +779,9 @@ public class ReportUtil {
 			{
 //				AmpReportSector ampReportSector = (AmpReportSector) iter.next(); 
 				AmpProjectBySector ampProjectBySector=(AmpProjectBySector) iter.next();
+				
+				sectorTotalLoanUndisb=0; sectorTotalGrantUndisb=0; sectorTotalKindUndisb=0; sectorTotalUndisb=0;
+				
 				if(!ampSectorId.equals(All))
 				{
 					AmpSector ampSector=SectorUtil.getAmpParentSector(ampSectorId);
@@ -816,7 +822,13 @@ public class ReportUtil {
 							termAssist.setTermDisbAmount(mf.format(totDisb));
 							termAssist.setTermExpAmount(mf.format(totExp));
 							termAssist.setTermPlannedDisbAmount(mf.format(totPlannedDisb));
-							termAssist.setTermUnDisbAmount(mf.format(totComm - totDisb));
+							//termAssist.setTermUnDisbAmount(mf.format(totComm - totDisb).concat("..1.."));
+							if(termAssist.getTermAssistName().equalsIgnoreCase("Loan"))
+								termAssist.setTermUnDisbAmount(mf.format(undisbLoan));
+							if(termAssist.getTermAssistName().equalsIgnoreCase("Grant"))
+								termAssist.setTermUnDisbAmount(mf.format(undisbGrant));
+							if(termAssist.getTermAssistName().equalsIgnoreCase("In Kind"))
+								termAssist.setTermUnDisbAmount(mf.format(undisbKind));
 							projCommAmount=projCommAmount + totComm;
 							projDisbAmount=projDisbAmount + totDisb;
 							projExpAmount=projExpAmount + totExp;
@@ -925,7 +937,8 @@ public class ReportUtil {
 						project.setProjDisbAmount(mf.format(projDisbAmount));
 						project.setProjExpAmount(mf.format(projExpAmount));
 						project.setProjPlannedDisbAmount(mf.format(projPlannedDisbAmount));
-						project.setProjUnDisbAmount(mf.format(projCommAmount - projDisbAmount));
+						//project.setProjUnDisbAmount(mf.format(projCommAmount - projDisbAmount).concat("..2.."));
+						project.setProjUnDisbAmount(mf.format(undisbTotal));
 						project.setRowspan(project.getTermAssist().size()+1);
 						ampTeamDonors.getProject().add(project);
 						for(int i=0;i<yrCount;i++)
@@ -965,7 +978,8 @@ public class ReportUtil {
 					report.setSectorDisbAmount(mf.format(sectorDisbAmount));
 					report.setSectorExpAmount(mf.format(sectorExpAmount));
 					report.setSectorPlannedDisbAmount(mf.format(sectorPlannedDisbAmount));
-					report.setSectorUnDisbAmount(mf.format(sectorCommAmount - sectorDisbAmount));
+					//report.setSectorUnDisbAmount(mf.format(sectorCommAmount - sectorDisbAmount).concat("..3.."));
+					report.setSectorUnDisbAmount(mf.format(sectorTotalUndisb));
 					Iterator termIter=sectorAssistance.iterator();
 					while(termIter.hasNext())
 					{
@@ -989,7 +1003,8 @@ public class ReportUtil {
 							termFund.setTotDonorDisbAmount(mf.format(loanSectorFunds[yrCount][1]));
 							termFund.setTotDonorExpAmount(mf.format(loanSectorFunds[yrCount][2]));
 							termFund.setTotDonorPlannedDisbAmount(mf.format(loanSectorFunds[yrCount][3]));
-							termFund.setTotDonorUnDisbAmount(mf.format(loanSectorFunds[yrCount][0] - loanSectorFunds[yrCount][1]));
+							//termFund.setTotDonorUnDisbAmount(mf.format(loanSectorFunds[yrCount][0] - loanSectorFunds[yrCount][1]).concat("..4.."));
+							termFund.setTotDonorUnDisbAmount(mf.format(sectorTotalLoanUndisb));
 						}
 						if(assist.equals("Grant"))
 						{
@@ -1010,7 +1025,8 @@ public class ReportUtil {
 							termFund.setTotDonorDisbAmount(mf.format(grantSectorFunds[yrCount][1]));
 							termFund.setTotDonorExpAmount(mf.format(grantSectorFunds[yrCount][2]));
 							termFund.setTotDonorPlannedDisbAmount(mf.format(grantSectorFunds[yrCount][3]));
-							termFund.setTotDonorUnDisbAmount(mf.format(grantSectorFunds[yrCount][0] - grantSectorFunds[yrCount][1]));
+							//termFund.setTotDonorUnDisbAmount(mf.format(grantSectorFunds[yrCount][0] - grantSectorFunds[yrCount][1]).concat("..5.."));
+							termFund.setTotDonorUnDisbAmount(mf.format(sectorTotalGrantUndisb));
 						}
 						if(assist.equals("In Kind"))
 						{
@@ -1029,7 +1045,8 @@ public class ReportUtil {
 							termFund.setTotDonorDisbAmount(mf.format(kindSectorFunds[yrCount][1]));
 							termFund.setTotDonorExpAmount(mf.format(kindSectorFunds[yrCount][2]));
 							termFund.setTotDonorPlannedDisbAmount(mf.format(kindSectorFunds[yrCount][3]));
-							termFund.setTotDonorUnDisbAmount(mf.format(kindSectorFunds[yrCount][0] - kindSectorFunds[yrCount][1]));
+							//termFund.setTotDonorUnDisbAmount(mf.format(kindSectorFunds[yrCount][0] - kindSectorFunds[yrCount][1]).concat("..6.."));
+							termFund.setTotDonorUnDisbAmount(mf.format(sectorTotalKindUndisb));
 						}
 //						logger.debug("Added:'" + termFund.getTermAssistName());
 						report.getTotalSectorTermAssistFund().add(termFund);	
@@ -1075,11 +1092,14 @@ public class ReportUtil {
 //				qry.setParameter("ampTeamId",ampTeamId,Hibernate.LONG) ;
 				iterActivity=qry.list().iterator();
 				inClause=null;
+				Long actId = null;
+			
 				while(iterActivity.hasNext())
 				{
 					AmpReportCache ampReportCache = (AmpReportCache) iterActivity.next();
 				/*	if(!(ampReportCache.getAmpTeamId().equals(ampTeamId)) || ampReportCache.getFiscalYear().intValue()<fromYr || ampReportCache.getFiscalYear().intValue()>toYr)		
 						continue;*/
+					double actCommL=0,actDisbL=0,actCommG=0,actDisbG=0,actCommI=0,actDisbI=0;
 					
 					if(approvedActivityList.indexOf(ampReportCache.getAmpActivityId())==-1)
 						continue;
@@ -1252,7 +1272,13 @@ public class ReportUtil {
 								termAssist.setTermDisbAmount(mf.format(totDisb));
 								termAssist.setTermExpAmount(mf.format(totExp));
 								termAssist.setTermPlannedDisbAmount(mf.format(totPlannedDisb));
-								termAssist.setTermUnDisbAmount(mf.format(totComm - totDisb));
+								//termAssist.setTermUnDisbAmount(mf.format(totComm - totDisb).concat("..7.."));
+								if(termAssist.getTermAssistName().equalsIgnoreCase("Loan"))
+									termAssist.setTermUnDisbAmount(mf.format(undisbLoan));
+								if(termAssist.getTermAssistName().equalsIgnoreCase("Grant"))
+									termAssist.setTermUnDisbAmount(mf.format(undisbGrant));
+								if(termAssist.getTermAssistName().equalsIgnoreCase("In Kind"))
+									termAssist.setTermUnDisbAmount(mf.format(undisbKind));
 								projCommAmount=projCommAmount + totComm;
 								projDisbAmount=projDisbAmount + totDisb;
 								projExpAmount=projExpAmount + totExp;
@@ -1260,85 +1286,85 @@ public class ReportUtil {
 								project.getTermAssist().add(termAssist);
 		//						logger.debug("Term Assist:" + termAssist.getTermAssistName());
 						
-							for(int i=0;i<=yrCount;i++)
-							{
-								if(termAssist.getTermAssistName().equals("Loan"))
+								for(int i=0;i<=yrCount;i++)
 								{
-									if(i<yrCount)
+									if(termAssist.getTermAssistName().equals("Loan"))
 									{
-										loanSectorFunds[i][0]=loanSectorFunds[i][0] + termFunds[i][0];
-										loanSectorFunds[i][1]=loanSectorFunds[i][1] + termFunds[i][1];
-										loanSectorFunds[i][2]=loanSectorFunds[i][2] + termFunds[i][2];
-										loanSectorFunds[i][3]=loanSectorFunds[i][3] + termFunds[i][3];
-										loanTotalFunds[i][0]=loanTotalFunds[i][0] + termFunds[i][0];
-										loanTotalFunds[i][1]=loanTotalFunds[i][1] + termFunds[i][1];
-										loanTotalFunds[i][2]=loanTotalFunds[i][2] + termFunds[i][2];
-										loanTotalFunds[i][3]=loanTotalFunds[i][3] + termFunds[i][3];
+										if(i<yrCount)
+										{
+											loanSectorFunds[i][0]=loanSectorFunds[i][0] + termFunds[i][0];
+											loanSectorFunds[i][1]=loanSectorFunds[i][1] + termFunds[i][1];
+											loanSectorFunds[i][2]=loanSectorFunds[i][2] + termFunds[i][2];
+											loanSectorFunds[i][3]=loanSectorFunds[i][3] + termFunds[i][3];
+											loanTotalFunds[i][0]=loanTotalFunds[i][0] + termFunds[i][0];
+											loanTotalFunds[i][1]=loanTotalFunds[i][1] + termFunds[i][1];
+											loanTotalFunds[i][2]=loanTotalFunds[i][2] + termFunds[i][2];
+											loanTotalFunds[i][3]=loanTotalFunds[i][3] + termFunds[i][3];
+										}
+										if(i==yrCount)
+										{
+											loanSectorFunds[i][0]=loanSectorFunds[i][0] + totComm;
+											loanSectorFunds[i][1]=loanSectorFunds[i][1] + totDisb;
+											loanSectorFunds[i][2]=loanSectorFunds[i][2] + totExp;
+											loanSectorFunds[i][3]=loanSectorFunds[i][3] + totPlannedDisb;
+											loanTotalFunds[i][0]=loanTotalFunds[i][0] + totComm;
+											loanTotalFunds[i][1]=loanTotalFunds[i][1] + totDisb;
+											loanTotalFunds[i][2]=loanTotalFunds[i][2] + totExp;
+											loanTotalFunds[i][3]=loanTotalFunds[i][3] + totPlannedDisb;
+	
+										}
 									}
-									if(i==yrCount)
+									if(termAssist.getTermAssistName().equals("Grant"))
 									{
-										loanSectorFunds[i][0]=loanSectorFunds[i][0] + totComm;
-										loanSectorFunds[i][1]=loanSectorFunds[i][1] + totDisb;
-										loanSectorFunds[i][2]=loanSectorFunds[i][2] + totExp;
-										loanSectorFunds[i][3]=loanSectorFunds[i][3] + totPlannedDisb;
-										loanTotalFunds[i][0]=loanTotalFunds[i][0] + totComm;
-										loanTotalFunds[i][1]=loanTotalFunds[i][1] + totDisb;
-										loanTotalFunds[i][2]=loanTotalFunds[i][2] + totExp;
-										loanTotalFunds[i][3]=loanTotalFunds[i][3] + totPlannedDisb;
-
+										if(i<yrCount)
+										{
+											grantSectorFunds[i][0]=grantSectorFunds[i][0] + termFunds[i][0];
+											grantSectorFunds[i][1]=grantSectorFunds[i][1] + termFunds[i][1];
+											grantSectorFunds[i][2]=grantSectorFunds[i][2] + termFunds[i][2];
+											grantSectorFunds[i][3]=grantSectorFunds[i][3] + termFunds[i][3];
+											grantTotalFunds[i][0]=grantTotalFunds[i][0] + termFunds[i][0];
+											grantTotalFunds[i][1]=grantTotalFunds[i][1] + termFunds[i][1];
+											grantTotalFunds[i][2]=grantTotalFunds[i][2] + termFunds[i][2];
+											grantTotalFunds[i][3]=grantTotalFunds[i][3] + termFunds[i][3];
+										}
+										if(i==yrCount)
+										{
+											grantSectorFunds[i][0]=grantSectorFunds[i][0] + totComm;
+											grantSectorFunds[i][1]=grantSectorFunds[i][1] + totDisb;
+											grantSectorFunds[i][2]=grantSectorFunds[i][2] + totExp;
+											grantSectorFunds[i][3]=grantSectorFunds[i][3] + totPlannedDisb;
+											grantTotalFunds[i][0]=grantTotalFunds[i][0] + totComm;
+											grantTotalFunds[i][1]=grantTotalFunds[i][1] + totDisb;
+											grantTotalFunds[i][2]=grantTotalFunds[i][2] + totExp;
+											grantTotalFunds[i][3]=grantTotalFunds[i][3] + totPlannedDisb;
+										}
+									}
+									if(termAssist.getTermAssistName().equals("In Kind"))
+									{
+										if(i<yrCount)
+										{
+											kindSectorFunds[i][0]=kindSectorFunds[i][0] + termFunds[i][0];
+											kindSectorFunds[i][1]=kindSectorFunds[i][1] + termFunds[i][1];
+											kindSectorFunds[i][2]=kindSectorFunds[i][2] + termFunds[i][2];
+											kindSectorFunds[i][3]=kindSectorFunds[i][3] + termFunds[i][3];
+											kindTotalFunds[i][0]=kindTotalFunds[i][0] + termFunds[i][0];
+											kindTotalFunds[i][1]=kindTotalFunds[i][1] + termFunds[i][1];
+											kindTotalFunds[i][2]=kindTotalFunds[i][2] + termFunds[i][2];
+											kindTotalFunds[i][3]=kindTotalFunds[i][3] + termFunds[i][3];
+										}
+										if(i==yrCount)
+										{
+											kindSectorFunds[i][0]=kindSectorFunds[i][0] + totComm;
+											kindSectorFunds[i][1]=kindSectorFunds[i][1] + totDisb;
+											kindSectorFunds[i][2]=kindSectorFunds[i][2] + totExp;
+											kindSectorFunds[i][3]=kindSectorFunds[i][3] + totPlannedDisb;
+											kindTotalFunds[i][0]=kindTotalFunds[i][0] + totComm;
+											kindTotalFunds[i][1]=kindTotalFunds[i][1] + totDisb;
+											kindTotalFunds[i][2]=kindTotalFunds[i][2] + totExp;
+											kindTotalFunds[i][3]=kindTotalFunds[i][3] + totPlannedDisb;
+										}
 									}
 								}
-								if(termAssist.getTermAssistName().equals("Grant"))
-								{
-									if(i<yrCount)
-									{
-										grantSectorFunds[i][0]=grantSectorFunds[i][0] + termFunds[i][0];
-										grantSectorFunds[i][1]=grantSectorFunds[i][1] + termFunds[i][1];
-										grantSectorFunds[i][2]=grantSectorFunds[i][2] + termFunds[i][2];
-										grantSectorFunds[i][3]=grantSectorFunds[i][3] + termFunds[i][3];
-										grantTotalFunds[i][0]=grantTotalFunds[i][0] + termFunds[i][0];
-										grantTotalFunds[i][1]=grantTotalFunds[i][1] + termFunds[i][1];
-										grantTotalFunds[i][2]=grantTotalFunds[i][2] + termFunds[i][2];
-										grantTotalFunds[i][3]=grantTotalFunds[i][3] + termFunds[i][3];
-									}
-									if(i==yrCount)
-									{
-										grantSectorFunds[i][0]=grantSectorFunds[i][0] + totComm;
-										grantSectorFunds[i][1]=grantSectorFunds[i][1] + totDisb;
-										grantSectorFunds[i][2]=grantSectorFunds[i][2] + totExp;
-										grantSectorFunds[i][3]=grantSectorFunds[i][3] + totPlannedDisb;
-										grantTotalFunds[i][0]=grantTotalFunds[i][0] + totComm;
-										grantTotalFunds[i][1]=grantTotalFunds[i][1] + totDisb;
-										grantTotalFunds[i][2]=grantTotalFunds[i][2] + totExp;
-										grantTotalFunds[i][3]=grantTotalFunds[i][3] + totPlannedDisb;
-									}
-								}
-								if(termAssist.getTermAssistName().equals("In Kind"))
-								{
-									if(i<yrCount)
-									{
-										kindSectorFunds[i][0]=kindSectorFunds[i][0] + termFunds[i][0];
-										kindSectorFunds[i][1]=kindSectorFunds[i][1] + termFunds[i][1];
-										kindSectorFunds[i][2]=kindSectorFunds[i][2] + termFunds[i][2];
-										kindSectorFunds[i][3]=kindSectorFunds[i][3] + termFunds[i][3];
-										kindTotalFunds[i][0]=kindTotalFunds[i][0] + termFunds[i][0];
-										kindTotalFunds[i][1]=kindTotalFunds[i][1] + termFunds[i][1];
-										kindTotalFunds[i][2]=kindTotalFunds[i][2] + termFunds[i][2];
-										kindTotalFunds[i][3]=kindTotalFunds[i][3] + termFunds[i][3];
-									}
-									if(i==yrCount)
-									{
-										kindSectorFunds[i][0]=kindSectorFunds[i][0] + totComm;
-										kindSectorFunds[i][1]=kindSectorFunds[i][1] + totDisb;
-										kindSectorFunds[i][2]=kindSectorFunds[i][2] + totExp;
-										kindSectorFunds[i][3]=kindSectorFunds[i][3] + totPlannedDisb;
-										kindTotalFunds[i][0]=kindTotalFunds[i][0] + totComm;
-										kindTotalFunds[i][1]=kindTotalFunds[i][1] + totDisb;
-										kindTotalFunds[i][2]=kindTotalFunds[i][2] + totExp;
-										kindTotalFunds[i][3]=kindTotalFunds[i][3] + totPlannedDisb;
-									}
-								}
-							}
 		//						logger.debug("After term assist");
 								for(int i=0;i<yrCount;i++)
 								{
@@ -1361,7 +1387,8 @@ public class ReportUtil {
 							project.setProjDisbAmount(mf.format(projDisbAmount));
 							project.setProjExpAmount(mf.format(projExpAmount));
 							project.setProjPlannedDisbAmount(mf.format(projPlannedDisbAmount));
-							project.setProjUnDisbAmount(mf.format(projCommAmount - projDisbAmount));
+							//project.setProjUnDisbAmount(mf.format(projCommAmount - projDisbAmount).concat("..8.."));
+							project.setProjUnDisbAmount(mf.format(undisbTotal));
 							project.setRowspan(project.getTermAssist().size()+1);
 							ampTeamDonors.getProject().add(project);
 							for(int i=0;i<yrCount;i++)
@@ -1433,7 +1460,13 @@ public class ReportUtil {
 							termAssist.setTermDisbAmount(mf.format(totDisb));
 							termAssist.setTermExpAmount(mf.format(totExp));
 							termAssist.setTermPlannedDisbAmount(mf.format(totPlannedDisb));
-							termAssist.setTermUnDisbAmount(mf.format(totComm - totDisb));
+							//termAssist.setTermUnDisbAmount(mf.format(totComm - totDisb).concat("..9.."));
+							if(termAssist.getTermAssistName().equalsIgnoreCase("Loan"))
+								termAssist.setTermUnDisbAmount(mf.format(undisbLoan));
+							if(termAssist.getTermAssistName().equalsIgnoreCase("Grant"))
+								termAssist.setTermUnDisbAmount(mf.format(undisbGrant));
+							if(termAssist.getTermAssistName().equalsIgnoreCase("In Kind"))
+								termAssist.setTermUnDisbAmount(mf.format(undisbKind));
 							projCommAmount=projCommAmount + totComm;
 							projDisbAmount=projDisbAmount + totDisb;
 							projExpAmount=projExpAmount + totExp;
@@ -1542,7 +1575,8 @@ public class ReportUtil {
 						project.setProjDisbAmount(mf.format(projDisbAmount));
 						project.setProjExpAmount(mf.format(projExpAmount));
 						project.setProjPlannedDisbAmount(mf.format(projPlannedDisbAmount));
-						project.setProjUnDisbAmount(mf.format(projCommAmount - projDisbAmount));
+						//project.setProjUnDisbAmount(mf.format(projCommAmount - projDisbAmount).concat("..10.."));
+						project.setProjUnDisbAmount(mf.format(undisbTotal));
 						project.setRowspan(project.getTermAssist().size()+1);
 						ampTeamDonors.getProject().add(project);
 						for(int i=0;i<yrCount;i++)
@@ -1604,7 +1638,13 @@ public class ReportUtil {
 							termAssist.setTermDisbAmount(mf.format(totDisb));
 							termAssist.setTermExpAmount(mf.format(totExp));
 							termAssist.setTermPlannedDisbAmount(mf.format(totPlannedDisb));
-							termAssist.setTermUnDisbAmount(mf.format(totComm - totDisb));
+							//termAssist.setTermUnDisbAmount(mf.format(totComm - totDisb).concat("..11.."));
+							if(termAssist.getTermAssistName().equalsIgnoreCase("Loan"))
+								termAssist.setTermUnDisbAmount(mf.format(undisbLoan));
+							if(termAssist.getTermAssistName().equalsIgnoreCase("Grant"))
+								termAssist.setTermUnDisbAmount(mf.format(undisbGrant));
+							if(termAssist.getTermAssistName().equalsIgnoreCase("In Kind"))
+								termAssist.setTermUnDisbAmount(mf.format(undisbKind));
 							projCommAmount=projCommAmount + totComm;
 							projDisbAmount=projDisbAmount + totDisb;
 							projExpAmount=projExpAmount + totExp;
@@ -1707,6 +1747,134 @@ public class ReportUtil {
 						totPlannedDisb=totDisb=totExp=totComm=0;
 						logger.debug("Outside Terms");
 					}
+					
+					if( !(ampReportCache.getAmpActivityId().equals(actId)) )
+					{
+						actId = ampReportCache.getAmpActivityId();
+												
+						Collection fundIds = DbUtil.getFundingByActivity(ampReportCache.getAmpActivityId());
+						Iterator fundIdsItr = fundIds.iterator();
+						while(fundIdsItr.hasNext())
+						{
+							AmpFunding tempAmpFund = (AmpFunding) fundIdsItr.next();
+							if(tempAmpFund.getAmpTermsAssistId().getTermsAssistName().equalsIgnoreCase("Loan"))
+							{
+								Collection fundDetailIds = DbUtil.getFundingDetails(tempAmpFund.getAmpFundingId());
+								Iterator fundDetailItr = fundDetailIds.iterator();
+								while(fundDetailItr.hasNext())
+								{
+									AmpFundingDetail tempFundDetail = (AmpFundingDetail) fundDetailItr.next();
+									
+									if(tempFundDetail.getAmpCurrencyId().getCurrencyCode().equals("USD"))
+										fromExchangeRate=1.0;
+									else
+										fromExchangeRate=CurrencyUtil.getExchangeRate
+															(tempFundDetail.getAmpCurrencyId().getCurrencyCode(),
+															Constants.ACTUAL,tempFundDetail.getTransactionDate());
+									if(ampCurrencyCode.equals("USD"))
+										toExchangeRate=1.0;
+									else
+										toExchangeRate=CurrencyUtil.getExchangeRate
+															(ampCurrencyCode,Constants.ACTUAL,
+																	tempFundDetail.getTransactionDate());
+									
+									if(tempFundDetail.getTransactionType().intValue() == 0
+											&& tempFundDetail.getAdjustmentType().intValue() == 1)
+										actCommL = actCommL + CurrencyWorker.convert1
+															(tempFundDetail.getTransactionAmount().doubleValue(),
+															fromExchangeRate,toExchangeRate);
+									if(tempFundDetail.getTransactionType().intValue() == 1
+											&& tempFundDetail.getAdjustmentType().intValue() == 1)
+										actDisbL = actDisbL + CurrencyWorker.convert1
+															(tempFundDetail.getTransactionAmount().doubleValue(),
+															fromExchangeRate,toExchangeRate);
+								}
+							}
+							if(tempAmpFund.getAmpTermsAssistId().getTermsAssistName().equalsIgnoreCase("Grant"))
+							{
+								Collection fundDetailIds = DbUtil.getFundingDetails(tempAmpFund.getAmpFundingId());
+								Iterator fundDetailItr = fundDetailIds.iterator();
+								while(fundDetailItr.hasNext())
+								{
+									AmpFundingDetail tempFundDetail = (AmpFundingDetail) fundDetailItr.next();
+									
+									if(tempFundDetail.getAmpCurrencyId().getCurrencyCode().equals("USD"))
+										fromExchangeRate=1.0;
+									else
+										fromExchangeRate=CurrencyUtil.getExchangeRate
+															(tempFundDetail.getAmpCurrencyId().getCurrencyCode(),
+															Constants.ACTUAL,tempFundDetail.getTransactionDate());
+									if(ampCurrencyCode.equals("USD"))
+										toExchangeRate=1.0;
+									else
+										toExchangeRate=CurrencyUtil.getExchangeRate
+															(ampCurrencyCode,Constants.ACTUAL,
+																	tempFundDetail.getTransactionDate());
+									
+									if(tempFundDetail.getTransactionType().intValue() == 0
+											&& tempFundDetail.getAdjustmentType().intValue() == 1)
+										actCommG = actCommG + CurrencyWorker.convert1
+															(tempFundDetail.getTransactionAmount().doubleValue(),
+															fromExchangeRate,toExchangeRate);
+									if(tempFundDetail.getTransactionType().intValue() == 1
+											&& tempFundDetail.getAdjustmentType().intValue() == 1)
+										actDisbG = actDisbG + CurrencyWorker.convert1
+															(tempFundDetail.getTransactionAmount().doubleValue(),
+															fromExchangeRate,toExchangeRate);
+								}
+							}
+							if(tempAmpFund.getAmpTermsAssistId().getTermsAssistName().equalsIgnoreCase("In Kind"))
+							{
+								Collection fundDetailIds = DbUtil.getFundingDetails(tempAmpFund.getAmpFundingId());
+								Iterator fundDetailItr = fundDetailIds.iterator();
+								while(fundDetailItr.hasNext())
+								{
+									AmpFundingDetail tempFundDetail = (AmpFundingDetail) fundDetailItr.next();
+									
+									if(tempFundDetail.getAmpCurrencyId().getCurrencyCode().equals("USD"))
+										fromExchangeRate=1.0;
+									else
+										fromExchangeRate=CurrencyUtil.getExchangeRate
+															(tempFundDetail.getAmpCurrencyId().getCurrencyCode(),
+															Constants.ACTUAL,tempFundDetail.getTransactionDate());
+									if(ampCurrencyCode.equals("USD"))
+										toExchangeRate=1.0;
+									else
+										toExchangeRate=CurrencyUtil.getExchangeRate
+															(ampCurrencyCode,Constants.ACTUAL,
+																	tempFundDetail.getTransactionDate());
+									
+									if(tempFundDetail.getTransactionType().intValue() == 0
+											&& tempFundDetail.getAdjustmentType().intValue() == 1)
+										actCommI = actCommI + CurrencyWorker.convert1
+															(tempFundDetail.getTransactionAmount().doubleValue(),
+															fromExchangeRate,toExchangeRate);
+									if(tempFundDetail.getTransactionType().intValue() == 1
+											&& tempFundDetail.getAdjustmentType().intValue() == 1)
+										actDisbI = actDisbI + CurrencyWorker.convert1
+															(tempFundDetail.getTransactionAmount().doubleValue(),
+															fromExchangeRate,toExchangeRate);
+								}
+							}
+						}
+						undisbLoan = actCommL-actDisbL;
+						undisbGrant = actCommG-actDisbG;
+						undisbKind = actCommI-actDisbI;
+						undisbTotal = (actCommL+actCommG+actCommI)-(actDisbL+actDisbG+actDisbI);
+						
+						sectorTotalLoanUndisb = sectorTotalLoanUndisb+undisbLoan;
+						sectorTotalGrantUndisb = sectorTotalGrantUndisb+undisbGrant;
+						sectorTotalKindUndisb = sectorTotalKindUndisb+undisbKind;
+						sectorTotalUndisb = sectorTotalUndisb+undisbTotal;
+						
+						grandTotalLoanUndisb = grandTotalLoanUndisb+sectorTotalLoanUndisb;
+						grandTotalGrantUndisb = grandTotalGrantUndisb+sectorTotalGrantUndisb;
+						grandTotalKindUndisb = grandTotalKindUndisb+sectorTotalKindUndisb;
+						grandTotalUndisb = grandTotalUndisb+sectorTotalUndisb;
+						
+						actCommL=0; actDisbL=0; actCommG=0; actDisbG=0; actCommI=0; actDisbI=0;
+					}
+					
 					logger.debug("Fiscal Year: " + ampReportCache.getFiscalYear());
 					logger.debug("Fiscal Quarter: " + ampReportCache.getFiscalQuarter());
 					if(ampReportCache.getFiscalYear()!=null && ampReportCache.getFiscalQuarter()!=null)
@@ -1827,7 +1995,13 @@ public class ReportUtil {
 					termAssist.setTermDisbAmount(mf.format(totDisb));
 					termAssist.setTermExpAmount(mf.format(totExp));
 					termAssist.setTermPlannedDisbAmount(mf.format(totPlannedDisb));
-					termAssist.setTermUnDisbAmount(mf.format(totComm - totDisb));
+					//termAssist.setTermUnDisbAmount(mf.format(totComm - totDisb).concat("..12.."));
+					if(termAssist.getTermAssistName().equalsIgnoreCase("Loan"))
+						termAssist.setTermUnDisbAmount(mf.format(undisbLoan));
+					if(termAssist.getTermAssistName().equalsIgnoreCase("Grant"))
+						termAssist.setTermUnDisbAmount(mf.format(undisbGrant));
+					if(termAssist.getTermAssistName().equalsIgnoreCase("In Kind"))
+						termAssist.setTermUnDisbAmount(mf.format(undisbKind));
 					projCommAmount=projCommAmount + totComm;
 					projDisbAmount=projDisbAmount + totDisb;
 					projExpAmount=projExpAmount + totExp;
@@ -1935,7 +2109,8 @@ public class ReportUtil {
 				project.setProjDisbAmount(mf.format(projDisbAmount));
 				project.setProjExpAmount(mf.format(projExpAmount));
 				project.setProjPlannedDisbAmount(mf.format(projPlannedDisbAmount));
-				project.setProjUnDisbAmount(mf.format(projCommAmount - projDisbAmount));
+				//project.setProjUnDisbAmount(mf.format(projCommAmount - projDisbAmount).concat("..13.."));
+				project.setProjUnDisbAmount(mf.format(undisbTotal));
 				project.setRowspan(project.getTermAssist().size()+1);
 				ampTeamDonors.getProject().add(project);
 				for(int i=0;i<yrCount;i++)
@@ -1976,7 +2151,8 @@ public class ReportUtil {
 				report.setSectorDisbAmount(mf.format(sectorDisbAmount));
 				report.setSectorExpAmount(mf.format(sectorExpAmount));
 				report.setSectorPlannedDisbAmount(mf.format(sectorPlannedDisbAmount));
-				report.setSectorUnDisbAmount(mf.format(sectorCommAmount - sectorDisbAmount));
+				//report.setSectorUnDisbAmount(mf.format(sectorCommAmount - sectorDisbAmount).concat("..14.."));
+				report.setSectorUnDisbAmount(mf.format(sectorTotalUndisb));
 				for(int i=0;i<yrCount;i++)
 				{
 					FundTotal total=new FundTotal();
@@ -1990,7 +2166,8 @@ public class ReportUtil {
 				report.setTeamDisbAmount(mf.format(totalDisbAmount));
 				report.setTeamExpAmount(mf.format(totalExpAmount));
 				report.setTeamPlannedDisbAmount(mf.format(totalPlannedDisbAmount));
-				report.setTeamUnDisbAmount(mf.format(totalCommAmount - totalDisbAmount));
+				//report.setTeamUnDisbAmount(mf.format(totalCommAmount - totalDisbAmount).concat("..15.."));
+				report.setTeamUnDisbAmount(mf.format(grandTotalUndisb));
 				Iterator termIter=sectorAssistance.iterator();
 				while(termIter.hasNext())
 				{
@@ -2014,7 +2191,8 @@ public class ReportUtil {
 						termFund.setTotDonorDisbAmount(mf.format(loanSectorFunds[yrCount][1]));
 						termFund.setTotDonorExpAmount(mf.format(loanSectorFunds[yrCount][2]));
 						termFund.setTotDonorPlannedDisbAmount(mf.format(loanSectorFunds[yrCount][3]));
-						termFund.setTotDonorUnDisbAmount(mf.format(loanSectorFunds[yrCount][0] - loanSectorFunds[yrCount][1]));
+						//termFund.setTotDonorUnDisbAmount(mf.format(loanSectorFunds[yrCount][0] - loanSectorFunds[yrCount][1]).concat("..16.."));
+						termFund.setTotDonorUnDisbAmount(mf.format(sectorTotalLoanUndisb));
 					}
 					if(assist.equals("Grant"))
 					{
@@ -2035,7 +2213,7 @@ public class ReportUtil {
 						termFund.setTotDonorDisbAmount(mf.format(grantSectorFunds[yrCount][1]));
 						termFund.setTotDonorExpAmount(mf.format(grantSectorFunds[yrCount][2]));
 						termFund.setTotDonorPlannedDisbAmount(mf.format(grantSectorFunds[yrCount][3]));
-						termFund.setTotDonorUnDisbAmount(mf.format(grantSectorFunds[yrCount][0] - grantSectorFunds[yrCount][1]));
+						termFund.setTotDonorUnDisbAmount(mf.format(sectorTotalGrantUndisb));
 					}
 					if(assist.equals("In Kind"))
 					{
@@ -2054,7 +2232,7 @@ public class ReportUtil {
 						termFund.setTotDonorDisbAmount(mf.format(kindSectorFunds[yrCount][1]));
 						termFund.setTotDonorExpAmount(mf.format(kindSectorFunds[yrCount][2]));
 						termFund.setTotDonorPlannedDisbAmount(mf.format(kindSectorFunds[yrCount][3]));
-						termFund.setTotDonorUnDisbAmount(mf.format(kindSectorFunds[yrCount][0] - kindSectorFunds[yrCount][1]));
+						termFund.setTotDonorUnDisbAmount(mf.format(sectorTotalKindUndisb));
 					}
 		//			logger.debug("Added:'" + termFund.getTermAssistName());
 					report.getTotalSectorTermAssistFund().add(termFund);	
@@ -2083,7 +2261,7 @@ public class ReportUtil {
 						termFund.setTotDonorDisbAmount(mf.format(loanTotalFunds[yrCount][1]));
 						termFund.setTotDonorExpAmount(mf.format(loanTotalFunds[yrCount][2]));
 						termFund.setTotDonorPlannedDisbAmount(mf.format(loanTotalFunds[yrCount][3]));
-						termFund.setTotDonorUnDisbAmount(mf.format(loanTotalFunds[yrCount][0] - loanTotalFunds[yrCount][1]));
+						termFund.setTotDonorUnDisbAmount(mf.format(grandTotalLoanUndisb));
 					}
 					if(assist.equals("Grant"))
 					{
@@ -2104,7 +2282,7 @@ public class ReportUtil {
 						termFund.setTotDonorDisbAmount(mf.format(grantTotalFunds[yrCount][1]));
 						termFund.setTotDonorExpAmount(mf.format(grantTotalFunds[yrCount][2]));
 						termFund.setTotDonorPlannedDisbAmount(mf.format(grantTotalFunds[yrCount][3]));
-						termFund.setTotDonorUnDisbAmount(mf.format(grantTotalFunds[yrCount][0] - grantTotalFunds[yrCount][1]));
+						termFund.setTotDonorUnDisbAmount(mf.format(grandTotalGrantUndisb));
 					}
 					if(assist.equals("In Kind"))
 					{
@@ -2123,7 +2301,7 @@ public class ReportUtil {
 						termFund.setTotDonorDisbAmount(mf.format(kindTotalFunds[yrCount][1]));
 						termFund.setTotDonorExpAmount(mf.format(kindTotalFunds[yrCount][2]));
 						termFund.setTotDonorPlannedDisbAmount(mf.format(kindTotalFunds[yrCount][3]));
-						termFund.setTotDonorUnDisbAmount(mf.format(kindTotalFunds[yrCount][0] - kindTotalFunds[yrCount][1]));
+						termFund.setTotDonorUnDisbAmount(mf.format(grandTotalKindUndisb));
 					}
 		//			logger.debug("Added:'" + termFund.getTermAssistName());
 					report.getTotalTeamTermAssistFund().add(termFund);	
@@ -3895,6 +4073,7 @@ public class ReportUtil {
 		double disbAmount = 0.0 ;
 		double expAmount = 0.0 ;
 		double projComm = 0.0 ;
+		double actualComm=0,actualDisb=0;
 		
 		int yrCount = 3;
 
@@ -3943,7 +4122,7 @@ public class ReportUtil {
 				while(iter.hasNext())
 				{
 					AmpReportCache ampReportCache = (AmpReportCache) iter.next(); 
-
+					
 					if(approvedActivityList.indexOf(ampReportCache.getAmpActivityId())==-1)
 						continue;
 
@@ -4059,9 +4238,12 @@ public class ReportUtil {
 							ampFund.setPlannedDisbAmount(mf.format(plannedDisbAmount)); 
 							ampFund.setDisbAmount(mf.format(disbAmount));
 							ampFund.setExpAmount(mf.format(expAmount));
-							ampFund.setUnDisbAmount(mf.format(projComm - disbAmount));
+							//ampFund.setUnDisbAmount(mf.format(projComm - disbAmount).concat("11"));
+							ampFund.setUnDisbAmount(mf.format(actualComm-actualDisb));
 							report.getAmpFund().add(ampFund) ;	
 							report.setAcCommitment(mf.format(actualCommitment));
+							
+							actualComm=0;actualDisb=0;
 						
 							if(donors.size()==0)
 								report.getDonors().add("Unspecified");
@@ -4226,10 +4408,47 @@ public class ReportUtil {
 							}
 						}
 						amount=0.0;
-					
-					}
-					
 
+						if( actualComm==0 && actualDisb==0 )
+						{
+							Collection fundIds = DbUtil.getFundingByActivity(ampReportCache.getAmpActivityId());
+							Iterator fundIdsItr = fundIds.iterator();
+							while(fundIdsItr.hasNext())
+							{
+								AmpFunding tempAmpFund = (AmpFunding) fundIdsItr.next();
+								Collection fundDetailIds = DbUtil.getFundingDetails(tempAmpFund.getAmpFundingId());
+								Iterator fundDetailItr = fundDetailIds.iterator();
+								while(fundDetailItr.hasNext())
+								{
+									AmpFundingDetail tempFundDetail = (AmpFundingDetail) fundDetailItr.next();
+									
+									if(tempFundDetail.getAmpCurrencyId().getCurrencyCode().equals("USD"))
+										fromExchangeRate=1.0;
+									else
+										fromExchangeRate=CurrencyUtil.getExchangeRate
+															(tempFundDetail.getAmpCurrencyId().getCurrencyCode(),
+															Constants.ACTUAL,tempFundDetail.getTransactionDate());
+									if(ampCurrencyCode.equals("USD"))
+										toExchangeRate=1.0;
+									else
+										toExchangeRate=CurrencyUtil.getExchangeRate
+															(ampCurrencyCode,Constants.ACTUAL,
+																	tempFundDetail.getTransactionDate());
+									
+									if(tempFundDetail.getTransactionType().intValue() == 0
+											&& tempFundDetail.getAdjustmentType().intValue() == 1)
+										actualComm = actualComm + CurrencyWorker.convert1
+																(tempFundDetail.getTransactionAmount().doubleValue(),
+																		fromExchangeRate,toExchangeRate);
+									if(tempFundDetail.getTransactionType().intValue() == 1
+											&& tempFundDetail.getAdjustmentType().intValue() == 1)
+										actualDisb = actualDisb + CurrencyWorker.convert1
+																(tempFundDetail.getTransactionAmount().doubleValue(),
+																		fromExchangeRate,toExchangeRate);
+								}
+							}
+						}
+					}
 				}
 				for(int i=0;i<yrCount;i++)
 				{
@@ -4249,9 +4468,12 @@ public class ReportUtil {
 				ampFund.setPlannedDisbAmount(mf.format(plannedDisbAmount)); 
 				ampFund.setDisbAmount(mf.format(disbAmount));
 				ampFund.setExpAmount(mf.format(expAmount));
-				ampFund.setUnDisbAmount(mf.format(projComm - disbAmount));
+				//ampFund.setUnDisbAmount(mf.format(projComm - disbAmount).concat("22"));
+				ampFund.setUnDisbAmount(mf.format(actualComm - actualDisb));
 				report.getAmpFund().add(ampFund) ;	
 				report.setAcCommitment(mf.format(actualCommitment));
+				
+				actualComm=0;actualDisb=0;
 						
 				if(donors.size()==0)
 					report.getDonors().add("Unspecified");
@@ -4429,6 +4651,10 @@ public class ReportUtil {
 			ProjectTermAssist termAssist=null;
 			TermFund donorTermAssist=null;
 			TermFund teamTermAssist=null;
+			Long actId = null;
+			double actCommL=0,actDisbL=0,actCommG=0,actDisbG=0,actCommI=0,actDisbI=0;
+			double grandTotalLoanUndisb=0,grandTotalGrantUndisb=0,grandTotalKindUndisb=0,grandTotalUndisb=0;
+			double undisbLoan=0,undisbGrant=0,undisbKind=0,undisbTotal=0;
 
 			if(q!=null)
 			{
@@ -4569,7 +4795,13 @@ public class ReportUtil {
 								termAssist.setTermPlannedDisbAmount(mf.format(totalPlDisb));
 								termAssist.setTermDisbAmount(mf.format(totalDisb));
 								termAssist.setTermExpAmount(mf.format(totalExp));
-								termAssist.setTermUnDisbAmount(mf.format(actualCommitment - actualDisbursement));
+								//termAssist.setTermUnDisbAmount(mf.format(actualCommitment - actualDisbursement).concat("..1.."));
+								if(termAssist.getTermAssistName().equals("Loan"))
+									termAssist.setTermUnDisbAmount(mf.format(undisbLoan));
+								if(termAssist.getTermAssistName().equals("Grant"))
+									termAssist.setTermUnDisbAmount(mf.format(undisbGrant));
+								if(termAssist.getTermAssistName().equals("In Kind"))
+									termAssist.setTermUnDisbAmount(mf.format(undisbKind));
 
 								//projCommAmount=projCommAmount + termComm;
 								projPlannedDisbAmount=projPlannedDisbAmount + totalPlDisb;
@@ -4631,7 +4863,8 @@ public class ReportUtil {
 							project.setProjPlannedDisbAmount(mf.format(projPlannedDisbAmount));
 							project.setProjDisbAmount(mf.format(projDisbAmount));
 							project.setProjExpAmount(mf.format(projExpAmount));
-							project.setProjUnDisbAmount(mf.format(projUnDisbAmount));
+							//project.setProjUnDisbAmount(mf.format(projUnDisbAmount).concat("..2.."));
+							project.setProjUnDisbAmount(mf.format(undisbTotal));
 							ampTeamDonors.getProject().add(project);
 							for(int i=0;i<yrCount;i++)
 							{
@@ -4663,7 +4896,8 @@ public class ReportUtil {
 							ampTeamDonors.setDonorPlannedDisbAmount(mf.format(donorPlannedDisbAmount));
 							ampTeamDonors.setDonorDisbAmount(mf.format(donorDisbAmount));
 							ampTeamDonors.setDonorExpAmount(mf.format(donorExpAmount));
-							ampTeamDonors.setDonorUnDisbAmount(mf.format(donorUnDisbAmount));
+							//ampTeamDonors.setDonorUnDisbAmount(mf.format(donorUnDisbAmount).concat("..3.."));
+							ampTeamDonors.setDonorUnDisbAmount(mf.format(undisbTotal));
 //							ampTeamDonors.getTotalDonorTermAssistFund().addAll(donorTotal);
 							for(int i=0;i<yrCount;i++)
 							{
@@ -4713,7 +4947,8 @@ public class ReportUtil {
 									termFund.setTotDonorDisbAmount(mf.format(totalDisb));
 									termFund.setTotDonorExpAmount(mf.format(totalExp));
 									termFund.setTotDonorPlannedDisbAmount(mf.format(totalPlDisb));
-									termFund.setTotDonorUnDisbAmount(mf.format(loanUnDisbDonorFund));
+									//termFund.setTotDonorUnDisbAmount(mf.format(loanUnDisbDonorFund).concat("..4.."));
+									termFund.setTotDonorUnDisbAmount(mf.format(undisbLoan));
 									totalPlDisb=totalDisb=totalExp=0.0;
 								}
 								if(assist.equals("Grant"))
@@ -4741,7 +4976,8 @@ public class ReportUtil {
 									termFund.setTotDonorDisbAmount(mf.format(totalDisb));
 									termFund.setTotDonorExpAmount(mf.format(totalExp));
 									termFund.setTotDonorPlannedDisbAmount(mf.format(totalPlDisb));
-									termFund.setTotDonorUnDisbAmount(mf.format(grantUnDisbDonorFund));
+									//termFund.setTotDonorUnDisbAmount(mf.format(grantUnDisbDonorFund).concat("..5.."));
+									termFund.setTotDonorUnDisbAmount(mf.format(undisbGrant));
 									totalPlDisb=totalDisb=totalExp=0.0;
 								}
 								if(assist.equals("In Kind"))
@@ -4769,7 +5005,8 @@ public class ReportUtil {
 									termFund.setTotDonorDisbAmount(mf.format(totalDisb));
 									termFund.setTotDonorExpAmount(mf.format(totalExp));
 									termFund.setTotDonorPlannedDisbAmount(mf.format(totalPlDisb));
-									termFund.setTotDonorUnDisbAmount(mf.format(kindUnDisbDonorFund));
+									//termFund.setTotDonorUnDisbAmount(mf.format(kindUnDisbDonorFund).concat("..6.."));
+									termFund.setTotDonorUnDisbAmount(mf.format(undisbKind));
 									totalPlDisb=totalDisb=totalExp=0.0;
 								}
 	//							logger.debug("Added:'" + termFund.getTermAssistName());
@@ -4804,7 +5041,8 @@ public class ReportUtil {
 									termFund.setTotDonorDisbAmount(mf.format(totalDisb));
 									termFund.setTotDonorExpAmount(mf.format(totalExp));
 									termFund.setTotDonorPlannedDisbAmount(mf.format(totalPlDisb));
-									termFund.setTotDonorUnDisbAmount(mf.format(loanUnDisbTeamFund));
+									//termFund.setTotDonorUnDisbAmount(mf.format(loanUnDisbTeamFund).concat("..7.."));
+									termFund.setTotDonorUnDisbAmount(mf.format(undisbLoan));
 									totalPlDisb=totalDisb=totalExp=0.0;
 								}
 								if(assist.equals("Grant"))
@@ -4828,7 +5066,8 @@ public class ReportUtil {
 									termFund.setTotDonorDisbAmount(mf.format(totalDisb));
 									termFund.setTotDonorExpAmount(mf.format(totalExp));
 									termFund.setTotDonorPlannedDisbAmount(mf.format(totalPlDisb));
-									termFund.setTotDonorUnDisbAmount(mf.format(grantUnDisbTeamFund));
+									//termFund.setTotDonorUnDisbAmount(mf.format(grantUnDisbTeamFund).concat("..8.."));
+									termFund.setTotDonorUnDisbAmount(mf.format(undisbGrant));
 									totalPlDisb=totalDisb=totalExp=0.0;
 								}
 								if(assist.equals("In Kind"))
@@ -4852,7 +5091,8 @@ public class ReportUtil {
 									termFund.setTotDonorDisbAmount(mf.format(totalDisb));
 									termFund.setTotDonorExpAmount(mf.format(totalExp));
 									termFund.setTotDonorPlannedDisbAmount(mf.format(totalPlDisb));
-									termFund.setTotDonorUnDisbAmount(mf.format(kindUnDisbTeamFund));
+									//termFund.setTotDonorUnDisbAmount(mf.format(kindUnDisbTeamFund).concat("..9.."));
+									termFund.setTotDonorUnDisbAmount(mf.format(undisbKind));
 									totalPlDisb=totalDisb=totalExp=0.0;
 								}	
 								report.getTotalTeamTermAssistFund().add(termFund);	
@@ -4871,7 +5111,8 @@ public class ReportUtil {
 							report.setTeamPlannedDisbAmount(mf.format(teamPlannedDisbAmount));
 							report.setTeamDisbAmount(mf.format(teamDisbAmount));
 							report.setTeamExpAmount(mf.format(teamExpAmount));
-							report.setTeamUnDisbAmount(mf.format(teamUnDisbAmount));
+							//report.setTeamUnDisbAmount(mf.format(teamUnDisbAmount).concat("..10.."));
+							report.setTeamUnDisbAmount(mf.format(undisbTotal));
 
 							projCommAmount=projPlannedDisbAmount=projDisbAmount=projExpAmount=projUnDisbAmount=0;
 							donorCommAmount=donorPlannedDisbAmount=donorDisbAmount=donorExpAmount=0;
@@ -5106,7 +5347,13 @@ public class ReportUtil {
 							termAssist.setTermPlannedDisbAmount(mf.format(totalPlDisb));
 							termAssist.setTermDisbAmount(mf.format(totalDisb));
 							termAssist.setTermExpAmount(mf.format(totalExp));
-							termAssist.setTermUnDisbAmount(mf.format(termComm - totalDisb));
+							//termAssist.setTermUnDisbAmount(mf.format(termComm - totalDisb).concat("..11.."));
+							if(termAssist.getTermAssistName().equals("Loan"))
+								termAssist.setTermUnDisbAmount(mf.format(undisbLoan));
+							if(termAssist.getTermAssistName().equals("Grant"))
+								termAssist.setTermUnDisbAmount(mf.format(undisbGrant));
+							if(termAssist.getTermAssistName().equals("In Kind"))
+								termAssist.setTermUnDisbAmount(mf.format(undisbKind));
 							projCommAmount = projCommAmount + termComm;
 							projPlannedDisbAmount=projPlannedDisbAmount + totalPlDisb;
 							projDisbAmount=projDisbAmount + totalDisb;
@@ -5166,7 +5413,8 @@ public class ReportUtil {
 						project.setProjPlannedDisbAmount(mf.format(projPlannedDisbAmount));
 						project.setProjDisbAmount(mf.format(projDisbAmount));
 						project.setProjExpAmount(mf.format(projExpAmount));
-						project.setProjUnDisbAmount(mf.format(projCommAmount - projDisbAmount));
+						//project.setProjUnDisbAmount(mf.format(projCommAmount - projDisbAmount).concat("..12.."));
+						project.setProjUnDisbAmount(mf.format(undisbTotal));
 						ampTeamDonors.getProject().add(project);
 						for(int i=0;i<yrCount;i++)
 						{
@@ -5197,7 +5445,9 @@ public class ReportUtil {
 						ampTeamDonors.setDonorPlannedDisbAmount(mf.format(donorPlannedDisbAmount));
 						ampTeamDonors.setDonorDisbAmount(mf.format(donorDisbAmount));
 						ampTeamDonors.setDonorExpAmount(mf.format(donorExpAmount));
-						ampTeamDonors.setDonorUnDisbAmount(mf.format(donorCommAmount - donorDisbAmount));
+						//ampTeamDonors.setDonorUnDisbAmount(mf.format(donorCommAmount - donorDisbAmount).concat("..13.."));
+						ampTeamDonors.setDonorUnDisbAmount(mf.format(grandTotalUndisb));
+						grandTotalUndisb=0;
 //						ampTeamDonors.getTotalDonorTermAssistFund().addAll(donorTotal);
 						for(int i=0;i<yrCount;i++)
 						{
@@ -5247,7 +5497,9 @@ public class ReportUtil {
 								termFund.setTotDonorDisbAmount(mf.format(totalDisb));
 								termFund.setTotDonorExpAmount(mf.format(totalExp));
 								termFund.setTotDonorPlannedDisbAmount(mf.format(totalPlDisb));
-								termFund.setTotDonorUnDisbAmount(mf.format(loanCommDonorAmount-totalDisb));
+								//termFund.setTotDonorUnDisbAmount(mf.format(loanCommDonorAmount-totalDisb).concat("..14.."));
+								termFund.setTotDonorUnDisbAmount(mf.format(grandTotalLoanUndisb));
+								grandTotalLoanUndisb=0;
 								totalPlDisb=totalDisb=totalExp=0.0;
 							}
 							if(assist.equals("Grant"))
@@ -5275,7 +5527,9 @@ public class ReportUtil {
 								termFund.setTotDonorDisbAmount(mf.format(totalDisb));
 								termFund.setTotDonorExpAmount(mf.format(totalExp));
 								termFund.setTotDonorPlannedDisbAmount(mf.format(totalPlDisb));
-								termFund.setTotDonorUnDisbAmount(mf.format(grantCommDonorAmount-totalDisb));
+								//termFund.setTotDonorUnDisbAmount(mf.format(grantCommDonorAmount-totalDisb).concat("..15.."));
+								termFund.setTotDonorUnDisbAmount(mf.format(grandTotalGrantUndisb));
+								grandTotalGrantUndisb=0;
 								totalPlDisb=totalDisb=totalExp=0.0;
 							}
 							if(assist.equals("In Kind"))
@@ -5303,7 +5557,9 @@ public class ReportUtil {
 								termFund.setTotDonorDisbAmount(mf.format(totalDisb));
 								termFund.setTotDonorExpAmount(mf.format(totalExp));
 								termFund.setTotDonorPlannedDisbAmount(mf.format(totalPlDisb));
-								termFund.setTotDonorUnDisbAmount(mf.format(kindCommDonorAmount-totalDisb));
+								//termFund.setTotDonorUnDisbAmount(mf.format(kindCommDonorAmount-totalDisb).concat("..16.."));
+								termFund.setTotDonorUnDisbAmount(mf.format(grandTotalKindUndisb));
+								grandTotalKindUndisb=0;
 								totalPlDisb=totalDisb=totalExp=0.0;
 							}
 //							logger.debug("Added:'" + termFund.getTermAssistName());
@@ -5396,7 +5652,13 @@ public class ReportUtil {
 							termAssist.setTermPlannedDisbAmount(mf.format(totalPlDisb));
 							termAssist.setTermDisbAmount(mf.format(totalDisb));
 							termAssist.setTermExpAmount(mf.format(totalExp));
-							termAssist.setTermUnDisbAmount(mf.format(termComm-totalDisb));
+							//termAssist.setTermUnDisbAmount(mf.format(termComm-totalDisb).concat("..17.."));
+							if(termAssist.getTermAssistName().equals("Loan"))
+								termAssist.setTermUnDisbAmount(mf.format(undisbLoan));
+							if(termAssist.getTermAssistName().equals("Grant"))
+								termAssist.setTermUnDisbAmount(mf.format(undisbGrant));
+							if(termAssist.getTermAssistName().equals("In Kind"))
+								termAssist.setTermUnDisbAmount(mf.format(undisbKind));
 							projCommAmount=projCommAmount + termComm;
 							projPlannedDisbAmount=projPlannedDisbAmount + totalPlDisb;
 							projDisbAmount=projDisbAmount + totalDisb;
@@ -5457,7 +5719,8 @@ public class ReportUtil {
 						project.setProjPlannedDisbAmount(mf.format(projPlannedDisbAmount));
 						project.setProjDisbAmount(mf.format(projDisbAmount));
 						project.setProjExpAmount(mf.format(projExpAmount));
-						project.setProjUnDisbAmount(mf.format(projCommAmount - projDisbAmount));
+						//project.setProjUnDisbAmount(mf.format(projCommAmount - projDisbAmount).concat("..18.."));
+						project.setProjUnDisbAmount(mf.format(undisbTotal));
 						ampTeamDonors.getProject().add(project);
 						for(int i=0;i<yrCount;i++)
 						{
@@ -5539,7 +5802,13 @@ public class ReportUtil {
 								termAssist.setTermPlannedDisbAmount(mf.format(totalPlDisb));
 								termAssist.setTermDisbAmount(mf.format(totalDisb));
 								termAssist.setTermExpAmount(mf.format(totalExp));
-								termAssist.setTermUnDisbAmount(mf.format(termComm - totalDisb));
+								//termAssist.setTermUnDisbAmount(mf.format(termComm - totalDisb).concat("..19.."));
+								if(termAssist.getTermAssistName().equals("Loan"))
+									termAssist.setTermUnDisbAmount(mf.format(undisbLoan));
+								if(termAssist.getTermAssistName().equals("Grant"))
+									termAssist.setTermUnDisbAmount(mf.format(undisbGrant));
+								if(termAssist.getTermAssistName().equals("In Kind"))
+									termAssist.setTermUnDisbAmount(mf.format(undisbKind));
 								projCommAmount=projCommAmount + termComm;
 								projPlannedDisbAmount=projPlannedDisbAmount + totalPlDisb;
 								projDisbAmount=projDisbAmount + totalDisb;
@@ -5675,6 +5944,129 @@ public class ReportUtil {
 							}
 						}
 						amount=0.0;
+						
+						if( !(ampReportCache.getAmpActivityId().equals(actId)) )
+						{
+							actId = ampReportCache.getAmpActivityId();
+							undisbLoan=undisbGrant=undisbKind=undisbTotal=0;
+													
+							Collection fundIds = DbUtil.getFundingByActivity(ampReportCache.getAmpActivityId());
+							Iterator fundIdsItr = fundIds.iterator();
+							while(fundIdsItr.hasNext())
+							{
+								AmpFunding tempAmpFund = (AmpFunding) fundIdsItr.next();
+								if(tempAmpFund.getAmpTermsAssistId().getTermsAssistName().equalsIgnoreCase("Loan"))
+								{
+									Collection fundDetailIds = DbUtil.getFundingDetails(tempAmpFund.getAmpFundingId());
+									Iterator fundDetailItr = fundDetailIds.iterator();
+									while(fundDetailItr.hasNext())
+									{
+										AmpFundingDetail tempFundDetail = (AmpFundingDetail) fundDetailItr.next();
+										
+										if(tempFundDetail.getAmpCurrencyId().getCurrencyCode().equals("USD"))
+											fromExchangeRate=1.0;
+										else
+											fromExchangeRate=CurrencyUtil.getExchangeRate
+																(tempFundDetail.getAmpCurrencyId().getCurrencyCode(),
+																Constants.ACTUAL,tempFundDetail.getTransactionDate());
+										if(ampCurrencyCode.equals("USD"))
+											toExchangeRate=1.0;
+										else
+											toExchangeRate=CurrencyUtil.getExchangeRate
+																(ampCurrencyCode,Constants.ACTUAL,
+																		tempFundDetail.getTransactionDate());
+										
+										if(tempFundDetail.getTransactionType().intValue() == 0
+												&& tempFundDetail.getAdjustmentType().intValue() == 1)
+											actCommL = actCommL + CurrencyWorker.convert1
+																(tempFundDetail.getTransactionAmount().doubleValue(),
+																fromExchangeRate,toExchangeRate);
+										if(tempFundDetail.getTransactionType().intValue() == 1
+												&& tempFundDetail.getAdjustmentType().intValue() == 1)
+											actDisbL = actDisbL + CurrencyWorker.convert1
+																(tempFundDetail.getTransactionAmount().doubleValue(),
+																fromExchangeRate,toExchangeRate);
+									}
+								}
+								if(tempAmpFund.getAmpTermsAssistId().getTermsAssistName().equalsIgnoreCase("Grant"))
+								{
+									Collection fundDetailIds = DbUtil.getFundingDetails(tempAmpFund.getAmpFundingId());
+									Iterator fundDetailItr = fundDetailIds.iterator();
+									while(fundDetailItr.hasNext())
+									{
+										AmpFundingDetail tempFundDetail = (AmpFundingDetail) fundDetailItr.next();
+										
+										if(tempFundDetail.getAmpCurrencyId().getCurrencyCode().equals("USD"))
+											fromExchangeRate=1.0;
+										else
+											fromExchangeRate=CurrencyUtil.getExchangeRate
+																(tempFundDetail.getAmpCurrencyId().getCurrencyCode(),
+																Constants.ACTUAL,tempFundDetail.getTransactionDate());
+										if(ampCurrencyCode.equals("USD"))
+											toExchangeRate=1.0;
+										else
+											toExchangeRate=CurrencyUtil.getExchangeRate
+																(ampCurrencyCode,Constants.ACTUAL,
+																		tempFundDetail.getTransactionDate());
+										
+										if(tempFundDetail.getTransactionType().intValue() == 0
+												&& tempFundDetail.getAdjustmentType().intValue() == 1)
+											actCommG = actCommG + CurrencyWorker.convert1
+																(tempFundDetail.getTransactionAmount().doubleValue(),
+																fromExchangeRate,toExchangeRate);
+										if(tempFundDetail.getTransactionType().intValue() == 1
+												&& tempFundDetail.getAdjustmentType().intValue() == 1)
+											actDisbG = actDisbG + CurrencyWorker.convert1
+																(tempFundDetail.getTransactionAmount().doubleValue(),
+																fromExchangeRate,toExchangeRate);
+									}
+								}
+								if(tempAmpFund.getAmpTermsAssistId().getTermsAssistName().equalsIgnoreCase("In Kind"))
+								{
+									Collection fundDetailIds = DbUtil.getFundingDetails(tempAmpFund.getAmpFundingId());
+									Iterator fundDetailItr = fundDetailIds.iterator();
+									while(fundDetailItr.hasNext())
+									{
+										AmpFundingDetail tempFundDetail = (AmpFundingDetail) fundDetailItr.next();
+										
+										if(tempFundDetail.getAmpCurrencyId().getCurrencyCode().equals("USD"))
+											fromExchangeRate=1.0;
+										else
+											fromExchangeRate=CurrencyUtil.getExchangeRate
+																(tempFundDetail.getAmpCurrencyId().getCurrencyCode(),
+																Constants.ACTUAL,tempFundDetail.getTransactionDate());
+										if(ampCurrencyCode.equals("USD"))
+											toExchangeRate=1.0;
+										else
+											toExchangeRate=CurrencyUtil.getExchangeRate
+																(ampCurrencyCode,Constants.ACTUAL,
+																		tempFundDetail.getTransactionDate());
+										
+										if(tempFundDetail.getTransactionType().intValue() == 0
+												&& tempFundDetail.getAdjustmentType().intValue() == 1)
+											actCommI = actCommI + CurrencyWorker.convert1
+																(tempFundDetail.getTransactionAmount().doubleValue(),
+																fromExchangeRate,toExchangeRate);
+										if(tempFundDetail.getTransactionType().intValue() == 1
+												&& tempFundDetail.getAdjustmentType().intValue() == 1)
+											actDisbI = actDisbI + CurrencyWorker.convert1
+																(tempFundDetail.getTransactionAmount().doubleValue(),
+																fromExchangeRate,toExchangeRate);
+									}
+								}
+							}
+							undisbLoan = actCommL-actDisbL;
+							undisbGrant = actCommG-actDisbG;
+							undisbKind = actCommI-actDisbI;
+							undisbTotal = (actCommL+actCommG+actCommI)-(actDisbL+actDisbG+actDisbI);
+							
+							grandTotalLoanUndisb = grandTotalLoanUndisb+undisbLoan;
+							grandTotalGrantUndisb = grandTotalGrantUndisb+undisbGrant;
+							grandTotalKindUndisb = grandTotalKindUndisb+undisbKind;
+							grandTotalUndisb = grandTotalUndisb+undisbTotal;
+							
+							actCommL=0; actDisbL=0; actCommG=0; actDisbG=0; actCommI=0; actDisbI=0;
+						}
 					}
 				}
 				if(report!=null)
@@ -5714,7 +6106,13 @@ public class ReportUtil {
 						termAssist.setTermPlannedDisbAmount(mf.format(totalPlDisb));
 						termAssist.setTermDisbAmount(mf.format(totalDisb));
 						termAssist.setTermExpAmount(mf.format(totalExp));
-						termAssist.setTermUnDisbAmount(mf.format(termComm-totalDisb));
+						//termAssist.setTermUnDisbAmount(mf.format(termComm-totalDisb).concat("..20.."));
+						if(termAssist.getTermAssistName().equals("Loan"))
+							termAssist.setTermUnDisbAmount(mf.format(undisbLoan));
+						if(termAssist.getTermAssistName().equals("Grant"))
+							termAssist.setTermUnDisbAmount(mf.format(undisbGrant));
+						if(termAssist.getTermAssistName().equals("In Kind"))
+							termAssist.setTermUnDisbAmount(mf.format(undisbKind));
 						projCommAmount=projCommAmount + termComm;
 						projPlannedDisbAmount=projPlannedDisbAmount + totalPlDisb;
 						projDisbAmount=projDisbAmount + totalDisb;
@@ -5774,7 +6172,8 @@ public class ReportUtil {
 					project.setProjPlannedDisbAmount(mf.format(projPlannedDisbAmount));
 					project.setProjDisbAmount(mf.format(projDisbAmount));
 					project.setProjExpAmount(mf.format(projExpAmount));
-					project.setProjUnDisbAmount(mf.format(projCommAmount-projDisbAmount));
+					//project.setProjUnDisbAmount(mf.format(projCommAmount-projDisbAmount).concat("..21.."));
+					project.setProjUnDisbAmount(mf.format(undisbTotal));
 					ampTeamDonors.getProject().add(project);
 					for(int i=0;i<yrCount;i++)
 					{
@@ -5804,7 +6203,8 @@ public class ReportUtil {
 					ampTeamDonors.setDonorPlannedDisbAmount(mf.format(donorPlannedDisbAmount));
 					ampTeamDonors.setDonorDisbAmount(mf.format(donorDisbAmount));
 					ampTeamDonors.setDonorExpAmount(mf.format(donorExpAmount));
-					ampTeamDonors.setDonorUnDisbAmount(mf.format(donorCommAmount-donorDisbAmount));
+					//ampTeamDonors.setDonorUnDisbAmount(mf.format(donorCommAmount-donorDisbAmount).concat("..22.."));
+					ampTeamDonors.setDonorUnDisbAmount(mf.format(undisbTotal));
 					//ampTeamDonors.getTotalDonorTermAssistFund().addAll(donorTotal);
 					for(int i=0;i<yrCount;i++)
 					{
@@ -5853,7 +6253,8 @@ public class ReportUtil {
 							termFund.setTotDonorDisbAmount(mf.format(totalDisb));
 							termFund.setTotDonorExpAmount(mf.format(totalExp));
 							termFund.setTotDonorPlannedDisbAmount(mf.format(totalPlDisb));
-							termFund.setTotDonorUnDisbAmount(mf.format(loanCommDonorAmount-totalDisb));
+							//termFund.setTotDonorUnDisbAmount(mf.format(loanCommDonorAmount-totalDisb).concat("..23.."));
+							termFund.setTotDonorUnDisbAmount(mf.format(undisbLoan));
 							totalPlDisb=totalDisb=totalExp=0.0;
 						}
 						if(assist.equals("Grant"))
@@ -5881,7 +6282,8 @@ public class ReportUtil {
 							termFund.setTotDonorDisbAmount(mf.format(totalDisb));
 							termFund.setTotDonorExpAmount(mf.format(totalExp));
 							termFund.setTotDonorPlannedDisbAmount(mf.format(totalPlDisb));
-							termFund.setTotDonorUnDisbAmount(mf.format(grantCommDonorAmount-totalDisb));
+							//termFund.setTotDonorUnDisbAmount(mf.format(grantCommDonorAmount-totalDisb).concat("..24.."));
+							termFund.setTotDonorUnDisbAmount(mf.format(undisbGrant));
 							totalPlDisb=totalDisb=totalExp=0.0;
 						}
 						if(assist.equals("In Kind"))
@@ -5909,7 +6311,8 @@ public class ReportUtil {
 							termFund.setTotDonorDisbAmount(mf.format(totalDisb));
 							termFund.setTotDonorExpAmount(mf.format(totalExp));
 							termFund.setTotDonorPlannedDisbAmount(mf.format(totalPlDisb));
-							termFund.setTotDonorUnDisbAmount(mf.format(kindCommDonorAmount-totalDisb));
+							//termFund.setTotDonorUnDisbAmount(mf.format(kindCommDonorAmount-totalDisb).concat("..25.."));
+							termFund.setTotDonorUnDisbAmount(mf.format(undisbKind));
 							totalPlDisb=totalDisb=totalExp=0.0;
 						}
 						//logger.debug("Added:'" + termFund.getTermAssistName());
@@ -5945,7 +6348,9 @@ public class ReportUtil {
 							termFund.setTotDonorDisbAmount(mf.format(totalDisb));
 							termFund.setTotDonorExpAmount(mf.format(totalExp));
 							termFund.setTotDonorPlannedDisbAmount(mf.format(totalPlDisb));
-							termFund.setTotDonorUnDisbAmount(mf.format(loanCommTeamAmount-totalDisb));
+							//termFund.setTotDonorUnDisbAmount(mf.format(loanCommTeamAmount-totalDisb).concat("..26.."));
+							termFund.setTotDonorUnDisbAmount(mf.format(grandTotalLoanUndisb));
+							grandTotalLoanUndisb=0;
 							totalPlDisb=totalDisb=totalExp=0.0;
 						}
 						if(assist.equals("Grant"))
@@ -5970,7 +6375,9 @@ public class ReportUtil {
 							termFund.setTotDonorDisbAmount(mf.format(totalDisb));
 							termFund.setTotDonorExpAmount(mf.format(totalExp));
 							termFund.setTotDonorPlannedDisbAmount(mf.format(totalPlDisb));
-							termFund.setTotDonorUnDisbAmount(mf.format(grantCommTeamAmount-totalDisb));
+							//termFund.setTotDonorUnDisbAmount(mf.format(grantCommTeamAmount-totalDisb).concat("..27.."));
+							termFund.setTotDonorUnDisbAmount(mf.format(grandTotalGrantUndisb));
+							grandTotalGrantUndisb=0;
 							totalPlDisb=totalDisb=totalExp=0.0;
 						}
 						if(assist.equals("In Kind"))
@@ -5994,7 +6401,9 @@ public class ReportUtil {
 							termFund.setTotDonorDisbAmount(mf.format(totalDisb));
 							termFund.setTotDonorExpAmount(mf.format(totalExp));
 							termFund.setTotDonorPlannedDisbAmount(mf.format(totalPlDisb));
-							termFund.setTotDonorUnDisbAmount(mf.format(kindCommTeamAmount-totalDisb));
+							//termFund.setTotDonorUnDisbAmount(mf.format(kindCommTeamAmount-totalDisb).concat("..28.."));
+							termFund.setTotDonorUnDisbAmount(mf.format(grandTotalKindUndisb));
+							grandTotalKindUndisb=0;
 							totalPlDisb=totalDisb=totalExp=0.0;
 						}
 						//logger.debug("Added:'" + termFund.getTermAssistName());
@@ -6016,7 +6425,9 @@ public class ReportUtil {
 					report.setTeamPlannedDisbAmount(mf.format(teamPlannedDisbAmount));
 					report.setTeamDisbAmount(mf.format(teamDisbAmount));
 					report.setTeamExpAmount(mf.format(teamExpAmount));
-					report.setTeamUnDisbAmount(mf.format(teamCommAmount-teamDisbAmount));
+					//report.setTeamUnDisbAmount(mf.format(teamCommAmount-teamDisbAmount).concat("..29.."));
+					report.setTeamUnDisbAmount(mf.format(grandTotalUndisb));
+					grandTotalUndisb=0;
 					projCount=0;
 									
 					ampTeamDonors=null;
@@ -7359,6 +7770,9 @@ public class ReportUtil {
 			Project project=null;
 			ProjectTermAssist termAssist=null;
 			TermFund sectorTermAssist=null;
+			double grandTotalLoanUndisb=0,grandTotalGrantUndisb=0,grandTotalKindUndisb=0,grandTotalUndisb=0;
+			double undisbLoan=0,undisbGrant=0,undisbKind=0,undisbTotal=0;
+			double sectorTotalLoanUndisb=0,sectorTotalGrantUndisb=0,sectorTotalKindUndisb=0,sectorTotalUndisb=0;
 //			logger.debug("Before dbUtil");
 			//logger.debug("Sector Size: " + DbUtil.getAmpReportSectors(ampTeamId,fromYr,toYr,perspective).size());
 			iter = DbUtil.getAmpReportSectors(inClauseTeam).iterator();
@@ -7407,7 +7821,13 @@ public class ReportUtil {
 							termAssist.setTermPlannedDisbAmount(mf.format(totalPlDisb));
 							termAssist.setTermDisbAmount(mf.format(totalDisb));
 							termAssist.setTermExpAmount(mf.format(totalExp));
-							termAssist.setTermUnDisbAmount(mf.format(termComm-totalDisb));
+							//termAssist.setTermUnDisbAmount(mf.format(termComm-totalDisb).concat("..1.."));
+							if(termAssist.getTermAssistName().equals("Loan"))
+								termAssist.setTermUnDisbAmount(mf.format(undisbLoan));
+							if(termAssist.getTermAssistName().equals("Grant"))
+								termAssist.setTermUnDisbAmount(mf.format(undisbGrant));
+							if(termAssist.getTermAssistName().equals("In Kind"))
+								termAssist.setTermUnDisbAmount(mf.format(undisbKind));
 							projCommAmount=projCommAmount + termComm;
 							projPlannedDisbAmount=projPlannedDisbAmount + totalPlDisb;
 							projDisbAmount=projDisbAmount + totalDisb;
@@ -7487,7 +7907,8 @@ public class ReportUtil {
 						project.setProjPlannedDisbAmount(mf.format(projPlannedDisbAmount));
 						project.setProjDisbAmount(mf.format(projDisbAmount));
 						project.setProjExpAmount(mf.format(projExpAmount));
-						project.setProjUnDisbAmount(mf.format(projCommAmount-projDisbAmount));
+						//project.setProjUnDisbAmount(mf.format(projCommAmount-projDisbAmount).concat("..2.."));
+						project.setProjUnDisbAmount(mf.format(undisbTotal));
 						ampTeamDonors.getProject().add(project);
 						logger.debug("Project Added");
 						for(int i=0;i<yrCount;i++)
@@ -7534,7 +7955,8 @@ public class ReportUtil {
 					report.setSectorPlannedDisbAmount(mf.format(sectorPlannedDisbAmount));
 					report.setSectorDisbAmount(mf.format(sectorDisbAmount));
 					report.setSectorExpAmount(mf.format(sectorExpAmount));
-					report.setSectorUnDisbAmount(mf.format(sectorCommAmount-sectorDisbAmount));
+					//report.setSectorUnDisbAmount(mf.format(sectorCommAmount-sectorDisbAmount).concat("..3.."));
+					report.setSectorUnDisbAmount(mf.format(sectorTotalUndisb));
 					
 					totalPlDisb=totalDisb=totalExp=0.0;
 					logger.debug("Start Iter");
@@ -7565,7 +7987,8 @@ public class ReportUtil {
 							termFund.setTotDonorDisbAmount(mf.format(totalDisb));
 							termFund.setTotDonorExpAmount(mf.format(totalExp));
 							termFund.setTotDonorPlannedDisbAmount(mf.format(totalPlDisb));
-							termFund.setTotDonorUnDisbAmount(mf.format(loanCommSectorAmount-totalDisb));
+							//termFund.setTotDonorUnDisbAmount(mf.format(loanCommSectorAmount-totalDisb).concat("..4.."));
+							termFund.setTotDonorUnDisbAmount(mf.format(sectorTotalLoanUndisb));
 							totalPlDisb=totalDisb=totalExp=0.0;
 						}
 						if(assist.equals("Grant"))
@@ -7589,7 +8012,8 @@ public class ReportUtil {
 							termFund.setTotDonorDisbAmount(mf.format(totalDisb));
 							termFund.setTotDonorExpAmount(mf.format(totalExp));
 							termFund.setTotDonorPlannedDisbAmount(mf.format(totalPlDisb));
-							termFund.setTotDonorUnDisbAmount(mf.format(grantCommSectorAmount-totalDisb));
+							//termFund.setTotDonorUnDisbAmount(mf.format(grantCommSectorAmount-totalDisb).concat("..5.."));
+							termFund.setTotDonorUnDisbAmount(mf.format(sectorTotalGrantUndisb));
 							totalPlDisb=totalDisb=totalExp=0.0;
 						}
 						if(assist.equals("In Kind"))
@@ -7613,7 +8037,8 @@ public class ReportUtil {
 							termFund.setTotDonorDisbAmount(mf.format(totalDisb));
 							termFund.setTotDonorExpAmount(mf.format(totalExp));
 							termFund.setTotDonorPlannedDisbAmount(mf.format(totalPlDisb));
-							termFund.setTotDonorUnDisbAmount(mf.format(kindCommSectorAmount-totalDisb));
+							//termFund.setTotDonorUnDisbAmount(mf.format(kindCommSectorAmount-totalDisb).concat("..6.."));
+							termFund.setTotDonorUnDisbAmount(mf.format(sectorTotalKindUndisb));
 							totalPlDisb=totalDisb=totalExp=0.0;
 						}
 //						logger.debug("Added:'" + termFund.getTermAssistName());
@@ -7675,13 +8100,17 @@ public class ReportUtil {
 					queryString = "select report from " + AmpReportCache.class.getName() + " report where (report.ampTeamId in(" + inClauseTeam + ")) and (report.actualStartDate='" + startDate + "' or report.actualCompletionDate='" + closeDate + "') and (report.ampActivityId in(" + inClause + ")) and (report.reportType='1') order by report.donorName,report.activityName,report.ampActivityId";
 				logger.debug("querystring: " + queryString);
 				inClause=null;
+				Long actId = null;
 				qry = session.createQuery(queryString);
 		//		qry.setParameter("ampTeamId",ampTeamId,Hibernate.LONG) ;
 				iterActivity=qry.list().iterator();
+				
 				while(iterActivity.hasNext())
 				{
 					AmpReportCache ampReportCache = (AmpReportCache) iterActivity.next();
 
+					double actCommL=0,actDisbL=0,actCommG=0,actDisbG=0,actCommI=0,actDisbI=0;
+					
 					if(approvedActivityList.indexOf(ampReportCache.getAmpActivityId())==-1)
 						continue;
 
@@ -7856,7 +8285,13 @@ public class ReportUtil {
 								termAssist.setTermPlannedDisbAmount(mf.format(totalPlDisb));
 								termAssist.setTermDisbAmount(mf.format(totalDisb));
 								termAssist.setTermExpAmount(mf.format(totalExp));
-								termAssist.setTermUnDisbAmount(mf.format(termComm-totalDisb));
+								//termAssist.setTermUnDisbAmount(mf.format(termComm-totalDisb).concat("..7.."));
+								if(termAssist.getTermAssistName().equals("Loan"))
+									termAssist.setTermUnDisbAmount(mf.format(undisbLoan));
+								if(termAssist.getTermAssistName().equals("Grant"))
+									termAssist.setTermUnDisbAmount(mf.format(undisbGrant));
+								if(termAssist.getTermAssistName().equals("In Kind"))
+									termAssist.setTermUnDisbAmount(mf.format(undisbKind));
 								projCommAmount=projCommAmount + termComm;
 								projPlannedDisbAmount=projPlannedDisbAmount + totalPlDisb;
 								projDisbAmount=projDisbAmount + totalDisb;
@@ -7933,7 +8368,8 @@ public class ReportUtil {
 							project.setProjPlannedDisbAmount(mf.format(projPlannedDisbAmount));
 							project.setProjDisbAmount(mf.format(projDisbAmount));
 							project.setProjExpAmount(mf.format(projExpAmount));
-							project.setProjUnDisbAmount(mf.format(projCommAmount-projDisbAmount));
+							//project.setProjUnDisbAmount(mf.format(projCommAmount-projDisbAmount).concat("..8.."));
+							project.setProjUnDisbAmount(mf.format(undisbTotal));
 							ampTeamDonors.getProject().add(project);
 							for(int i=0;i<yrCount;i++)
 							{
@@ -8018,7 +8454,13 @@ public class ReportUtil {
 							termAssist.setTermPlannedDisbAmount(mf.format(totalPlDisb));
 							termAssist.setTermDisbAmount(mf.format(totalDisb));
 							termAssist.setTermExpAmount(mf.format(totalExp));
-							termAssist.setTermUnDisbAmount(mf.format(termComm-totalDisb));
+							//termAssist.setTermUnDisbAmount(mf.format(termComm-totalDisb).concat("..9.."));
+							if(termAssist.getTermAssistName().equals("Loan"))
+								termAssist.setTermUnDisbAmount(mf.format(undisbLoan));
+							if(termAssist.getTermAssistName().equals("Grant"))
+								termAssist.setTermUnDisbAmount(mf.format(undisbGrant));
+							if(termAssist.getTermAssistName().equals("In Kind"))
+								termAssist.setTermUnDisbAmount(mf.format(undisbKind));
 
 							projCommAmount=projCommAmount + termComm;
 							projPlannedDisbAmount=projPlannedDisbAmount + totalPlDisb;
@@ -8097,7 +8539,8 @@ public class ReportUtil {
 						project.setProjPlannedDisbAmount(mf.format(projPlannedDisbAmount));
 						project.setProjDisbAmount(mf.format(projDisbAmount));
 						project.setProjExpAmount(mf.format(projExpAmount));
-						project.setProjUnDisbAmount(mf.format(projCommAmount-projDisbAmount));
+						//project.setProjUnDisbAmount(mf.format(projCommAmount-projDisbAmount).concat("..10.."));
+						project.setProjUnDisbAmount(mf.format(undisbTotal));
 						ampTeamDonors.getProject().add(project);
 						for(int i=0;i<yrCount;i++)
 						{
@@ -8171,7 +8614,13 @@ public class ReportUtil {
 							termAssist.setTermPlannedDisbAmount(mf.format(totalPlDisb));
 							termAssist.setTermDisbAmount(mf.format(totalDisb));
 							termAssist.setTermExpAmount(mf.format(totalExp));
-							termAssist.setTermUnDisbAmount(mf.format(termComm-totalDisb));
+							//termAssist.setTermUnDisbAmount(mf.format(termComm-totalDisb).concat("..11.."));
+							if(termAssist.getTermAssistName().equals("Loan"))
+								termAssist.setTermUnDisbAmount(mf.format(undisbLoan));
+							if(termAssist.getTermAssistName().equals("Grant"))
+								termAssist.setTermUnDisbAmount(mf.format(undisbGrant));
+							if(termAssist.getTermAssistName().equals("In Kind"))
+								termAssist.setTermUnDisbAmount(mf.format(undisbKind));
 
 							projCommAmount=projCommAmount + termComm;
 							projPlannedDisbAmount=projPlannedDisbAmount + totalPlDisb;
@@ -8327,7 +8776,133 @@ public class ReportUtil {
 							}
 						}
 						amount=0.0;
+						
+						if( !(ampReportCache.getAmpActivityId().equals(actId)) )
+						{
+							actId = ampReportCache.getAmpActivityId();
+													
+							Collection fundIds = DbUtil.getFundingByActivity(ampReportCache.getAmpActivityId());
+							Iterator fundIdsItr = fundIds.iterator();
+							while(fundIdsItr.hasNext())
+							{
+								AmpFunding tempAmpFund = (AmpFunding) fundIdsItr.next();
+								if(tempAmpFund.getAmpTermsAssistId().getTermsAssistName().equalsIgnoreCase("Loan"))
+								{
+									Collection fundDetailIds = DbUtil.getFundingDetails(tempAmpFund.getAmpFundingId());
+									Iterator fundDetailItr = fundDetailIds.iterator();
+									while(fundDetailItr.hasNext())
+									{
+										AmpFundingDetail tempFundDetail = (AmpFundingDetail) fundDetailItr.next();
 										
+										if(tempFundDetail.getAmpCurrencyId().getCurrencyCode().equals("USD"))
+											fromExchangeRate=1.0;
+										else
+											fromExchangeRate=CurrencyUtil.getExchangeRate
+																(tempFundDetail.getAmpCurrencyId().getCurrencyCode(),
+																Constants.ACTUAL,tempFundDetail.getTransactionDate());
+										if(ampCurrencyCode.equals("USD"))
+											toExchangeRate=1.0;
+										else
+											toExchangeRate=CurrencyUtil.getExchangeRate
+																(ampCurrencyCode,Constants.ACTUAL,
+																		tempFundDetail.getTransactionDate());
+										
+										if(tempFundDetail.getTransactionType().intValue() == 0
+												&& tempFundDetail.getAdjustmentType().intValue() == 1)
+											actCommL = actCommL + CurrencyWorker.convert1
+																(tempFundDetail.getTransactionAmount().doubleValue(),
+																fromExchangeRate,toExchangeRate);
+										if(tempFundDetail.getTransactionType().intValue() == 1
+												&& tempFundDetail.getAdjustmentType().intValue() == 1)
+											actDisbL = actDisbL + CurrencyWorker.convert1
+																(tempFundDetail.getTransactionAmount().doubleValue(),
+																fromExchangeRate,toExchangeRate);
+									}
+								}
+								if(tempAmpFund.getAmpTermsAssistId().getTermsAssistName().equalsIgnoreCase("Grant"))
+								{
+									Collection fundDetailIds = DbUtil.getFundingDetails(tempAmpFund.getAmpFundingId());
+									Iterator fundDetailItr = fundDetailIds.iterator();
+									while(fundDetailItr.hasNext())
+									{
+										AmpFundingDetail tempFundDetail = (AmpFundingDetail) fundDetailItr.next();
+										
+										if(tempFundDetail.getAmpCurrencyId().getCurrencyCode().equals("USD"))
+											fromExchangeRate=1.0;
+										else
+											fromExchangeRate=CurrencyUtil.getExchangeRate
+																(tempFundDetail.getAmpCurrencyId().getCurrencyCode(),
+																Constants.ACTUAL,tempFundDetail.getTransactionDate());
+										if(ampCurrencyCode.equals("USD"))
+											toExchangeRate=1.0;
+										else
+											toExchangeRate=CurrencyUtil.getExchangeRate
+																(ampCurrencyCode,Constants.ACTUAL,
+																		tempFundDetail.getTransactionDate());
+										
+										if(tempFundDetail.getTransactionType().intValue() == 0
+												&& tempFundDetail.getAdjustmentType().intValue() == 1)
+											actCommG = actCommG + CurrencyWorker.convert1
+																(tempFundDetail.getTransactionAmount().doubleValue(),
+																fromExchangeRate,toExchangeRate);
+										if(tempFundDetail.getTransactionType().intValue() == 1
+												&& tempFundDetail.getAdjustmentType().intValue() == 1)
+											actDisbG = actDisbG + CurrencyWorker.convert1
+																(tempFundDetail.getTransactionAmount().doubleValue(),
+																fromExchangeRate,toExchangeRate);
+									}
+								}
+								if(tempAmpFund.getAmpTermsAssistId().getTermsAssistName().equalsIgnoreCase("In Kind"))
+								{
+									Collection fundDetailIds = DbUtil.getFundingDetails(tempAmpFund.getAmpFundingId());
+									Iterator fundDetailItr = fundDetailIds.iterator();
+									while(fundDetailItr.hasNext())
+									{
+										AmpFundingDetail tempFundDetail = (AmpFundingDetail) fundDetailItr.next();
+										
+										if(tempFundDetail.getAmpCurrencyId().getCurrencyCode().equals("USD"))
+											fromExchangeRate=1.0;
+										else
+											fromExchangeRate=CurrencyUtil.getExchangeRate
+																(tempFundDetail.getAmpCurrencyId().getCurrencyCode(),
+																Constants.ACTUAL,tempFundDetail.getTransactionDate());
+										if(ampCurrencyCode.equals("USD"))
+											toExchangeRate=1.0;
+										else
+											toExchangeRate=CurrencyUtil.getExchangeRate
+																(ampCurrencyCode,Constants.ACTUAL,
+																		tempFundDetail.getTransactionDate());
+										
+										if(tempFundDetail.getTransactionType().intValue() == 0
+												&& tempFundDetail.getAdjustmentType().intValue() == 1)
+											actCommI = actCommI + CurrencyWorker.convert1
+																(tempFundDetail.getTransactionAmount().doubleValue(),
+																fromExchangeRate,toExchangeRate);
+										if(tempFundDetail.getTransactionType().intValue() == 1
+												&& tempFundDetail.getAdjustmentType().intValue() == 1)
+											actDisbI = actDisbI + CurrencyWorker.convert1
+																(tempFundDetail.getTransactionAmount().doubleValue(),
+																fromExchangeRate,toExchangeRate);
+									}
+								}
+							}
+							undisbLoan = actCommL-actDisbL;
+							undisbGrant = actCommG-actDisbG;
+							undisbKind = actCommI-actDisbI;
+							undisbTotal = (actCommL+actCommG+actCommI)-(actDisbL+actDisbG+actDisbI);
+							
+							sectorTotalLoanUndisb = sectorTotalLoanUndisb+undisbLoan;
+							sectorTotalGrantUndisb = sectorTotalGrantUndisb+undisbGrant;
+							sectorTotalKindUndisb = sectorTotalKindUndisb+undisbKind;
+							sectorTotalUndisb = sectorTotalUndisb+undisbTotal;
+							
+							grandTotalLoanUndisb = grandTotalLoanUndisb+sectorTotalLoanUndisb;
+							grandTotalGrantUndisb = grandTotalGrantUndisb+sectorTotalGrantUndisb;
+							grandTotalKindUndisb = grandTotalKindUndisb+sectorTotalKindUndisb;
+							grandTotalUndisb = grandTotalUndisb+sectorTotalUndisb;
+							
+							actCommL=0; actDisbL=0; actCommG=0; actDisbG=0; actCommI=0; actDisbI=0;
+						}
 					}
 
 				}			
@@ -8363,7 +8938,13 @@ public class ReportUtil {
 					termAssist.setTermPlannedDisbAmount(mf.format(totalPlDisb));
 					termAssist.setTermDisbAmount(mf.format(totalDisb));
 					termAssist.setTermExpAmount(mf.format(totalExp));
-					termAssist.setTermUnDisbAmount(mf.format(termComm-totalDisb));
+					//termAssist.setTermUnDisbAmount(mf.format(termComm-totalDisb).concat("..12.."));
+					if(termAssist.getTermAssistName().equals("Loan"))
+						termAssist.setTermUnDisbAmount(mf.format(undisbLoan));
+					if(termAssist.getTermAssistName().equals("Grant"))
+						termAssist.setTermUnDisbAmount(mf.format(undisbGrant));
+					if(termAssist.getTermAssistName().equals("In Kind"))
+						termAssist.setTermUnDisbAmount(mf.format(undisbKind));
 					projPlannedDisbAmount=projPlannedDisbAmount + totalPlDisb;
 					projDisbAmount=projDisbAmount + totalDisb;
 					projExpAmount=projExpAmount + totalExp;
@@ -8439,7 +9020,8 @@ public class ReportUtil {
 				project.setProjPlannedDisbAmount(mf.format(projPlannedDisbAmount));
 				project.setProjDisbAmount(mf.format(projDisbAmount));
 				project.setProjExpAmount(mf.format(projExpAmount));
-				project.setProjUnDisbAmount(mf.format(projCommAmount-projDisbAmount));
+				//project.setProjUnDisbAmount(mf.format(projCommAmount-projDisbAmount).concat("..13.."));
+				project.setProjUnDisbAmount(mf.format(undisbTotal));
 				ampTeamDonors.getProject().add(project);
 				for(int i=0;i<yrCount;i++)
 				{
@@ -8483,7 +9065,8 @@ public class ReportUtil {
 			report.setSectorPlannedDisbAmount(mf.format(sectorPlannedDisbAmount));
 			report.setSectorDisbAmount(mf.format(sectorDisbAmount));
 			report.setSectorExpAmount(mf.format(sectorExpAmount));
-			report.setSectorUnDisbAmount(mf.format(sectorCommAmount-sectorDisbAmount));
+			//report.setSectorUnDisbAmount(mf.format(sectorCommAmount-sectorDisbAmount).concat("..14.."));
+			report.setSectorUnDisbAmount(mf.format(sectorTotalUndisb));
 			for(int i=0;i<yrCount;i++)
 			{
 				for(int qtr=0;qtr<4;qtr++)
@@ -8498,7 +9081,8 @@ public class ReportUtil {
 			report.setTeamPlannedDisbAmount(mf.format(totalPlannedDisbAmount));
 			report.setTeamDisbAmount(mf.format(totalDisbAmount));
 			report.setTeamExpAmount(mf.format(totalExpAmount));
-			report.setTeamUnDisbAmount(mf.format(totalCommAmount-totalDisbAmount));
+			//report.setTeamUnDisbAmount(mf.format(totalCommAmount-totalDisbAmount).concat("..15.."));
+			report.setTeamUnDisbAmount(mf.format(grandTotalUndisb));
 			termComm=totalPlDisb=totalDisb=totalExp=0.0;
 			Iterator sectorIter=sectorAssistance.iterator();
 			while(sectorIter.hasNext())
@@ -8527,7 +9111,8 @@ public class ReportUtil {
 					termFund.setTotDonorDisbAmount(mf.format(totalDisb));
 					termFund.setTotDonorExpAmount(mf.format(totalExp));
 					termFund.setTotDonorPlannedDisbAmount(mf.format(totalPlDisb));
-					termFund.setTotDonorUnDisbAmount(mf.format(loanCommSectorAmount-totalDisb));
+					//termFund.setTotDonorUnDisbAmount(mf.format(loanCommSectorAmount-totalDisb).concat("..16.."));
+					termFund.setTotDonorUnDisbAmount(mf.format(sectorTotalLoanUndisb));
 					totalPlDisb=totalDisb=totalExp=0.0;
 				}
 				if(assist.equals("Grant"))
@@ -8551,7 +9136,8 @@ public class ReportUtil {
 					termFund.setTotDonorDisbAmount(mf.format(totalDisb));
 					termFund.setTotDonorExpAmount(mf.format(totalExp));
 					termFund.setTotDonorPlannedDisbAmount(mf.format(totalPlDisb));
-					termFund.setTotDonorUnDisbAmount(mf.format(grantCommSectorAmount-totalDisb));
+					//termFund.setTotDonorUnDisbAmount(mf.format(grantCommSectorAmount-totalDisb).concat("..17.."));
+					termFund.setTotDonorUnDisbAmount(mf.format(sectorTotalGrantUndisb));
 					totalPlDisb=totalDisb=totalExp=0.0;
 				}
 				if(assist.equals("In Kind"))
@@ -8575,7 +9161,8 @@ public class ReportUtil {
 					termFund.setTotDonorDisbAmount(mf.format(totalDisb));
 					termFund.setTotDonorExpAmount(mf.format(totalExp));
 					termFund.setTotDonorPlannedDisbAmount(mf.format(totalPlDisb));
-					termFund.setTotDonorUnDisbAmount(mf.format(kindCommSectorAmount-totalDisb));
+					//termFund.setTotDonorUnDisbAmount(mf.format(kindCommSectorAmount-totalDisb).concat("..18.."));
+					termFund.setTotDonorUnDisbAmount(mf.format(sectorTotalKindUndisb));
 					totalPlDisb=totalDisb=totalExp=0.0;
 				}
 				logger.debug("Added:'" + termFund.getTermAssistName());
@@ -8609,7 +9196,8 @@ public class ReportUtil {
 					termFund.setTotDonorDisbAmount(mf.format(totalDisb));
 					termFund.setTotDonorExpAmount(mf.format(totalExp));
 					termFund.setTotDonorPlannedDisbAmount(mf.format(totalPlDisb));
-					termFund.setTotDonorUnDisbAmount(mf.format(loanCommTotalAmount-totalDisb));
+					//termFund.setTotDonorUnDisbAmount(mf.format(loanCommTotalAmount-totalDisb).concat("..19.."));
+					termFund.setTotDonorUnDisbAmount(mf.format(grandTotalLoanUndisb));
 					totalPlDisb=totalDisb=totalExp=0.0;
 				}
 				if(assist.equals("Grant"))
@@ -8633,7 +9221,8 @@ public class ReportUtil {
 					termFund.setTotDonorDisbAmount(mf.format(totalDisb));
 					termFund.setTotDonorExpAmount(mf.format(totalExp));
 					termFund.setTotDonorPlannedDisbAmount(mf.format(totalPlDisb));
-					termFund.setTotDonorUnDisbAmount(mf.format(grantCommTotalAmount-totalDisb));
+					//termFund.setTotDonorUnDisbAmount(mf.format(grantCommTotalAmount-totalDisb).concat("..20.."));
+					termFund.setTotDonorUnDisbAmount(mf.format(grandTotalGrantUndisb));
 					totalPlDisb=totalDisb=totalExp=0.0;
 				}
 				if(assist.equals("In Kind"))
@@ -8657,7 +9246,8 @@ public class ReportUtil {
 					termFund.setTotDonorDisbAmount(mf.format(totalDisb));
 					termFund.setTotDonorExpAmount(mf.format(totalExp));
 					termFund.setTotDonorPlannedDisbAmount(mf.format(totalPlDisb));
-					termFund.setTotDonorUnDisbAmount(mf.format(kindCommTotalAmount-totalDisb));
+					//termFund.setTotDonorUnDisbAmount(mf.format(kindCommTotalAmount-totalDisb).concat("..21.."));
+					termFund.setTotDonorUnDisbAmount(mf.format(grandTotalKindUndisb));
 					totalPlDisb=totalDisb=totalExp=0.0;
 				}
 				logger.debug("Added:'" + termFund.getTermAssistName());

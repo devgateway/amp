@@ -1,0 +1,66 @@
+/**
+ * XLSExportAction.java
+ * (c) 2006 Development Gateway Foundation
+ * @author Mihai Postelnicu - mpostelnicu@dgfoundation.org
+ * 
+ */
+package org.digijava.module.aim.action;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.apache.poi.hssf.usermodel.HSSFRow;
+import org.apache.poi.hssf.usermodel.HSSFSheet;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.struts.action.Action;
+import org.apache.struts.action.ActionForm;
+import org.apache.struts.action.ActionForward;
+import org.apache.struts.action.ActionMapping;
+import org.dgfoundation.amp.ar.ARUtil;
+import org.dgfoundation.amp.ar.GenericViews;
+import org.dgfoundation.amp.ar.GroupReportData;
+import org.dgfoundation.amp.ar.view.xls.GroupReportDataXLS;
+import org.dgfoundation.amp.ar.view.xls.IntWrapper;
+
+/**
+ * 
+ * @author Mihai Postelnicu - mpostelnicu@dgfoundation.org
+ * @since Sep 1, 2006
+ * 
+ */
+public class XLSExportAction extends Action {
+
+	public ActionForward execute(ActionMapping mapping, ActionForm form,
+			HttpServletRequest request, HttpServletResponse response)
+			throws java.lang.Exception {
+
+		GroupReportData rd = ARUtil.generateReport(mapping, form, request,
+				response);
+
+		rd.setCurrentView(GenericViews.XLS);
+		
+	     response.setContentType("application/msexcel");
+	        response.setHeader("Content-Disposition",
+	                "inline; filename=AMPExport.xls");
+
+		
+		HSSFWorkbook wb = new HSSFWorkbook();
+		HSSFSheet sheet = wb.createSheet(rd.getName());
+		
+		
+		IntWrapper rowId=new IntWrapper();
+		IntWrapper colId=new IntWrapper();
+		
+		HSSFRow row = sheet.createRow(rowId.intValue());
+		
+		GroupReportDataXLS grdx=new GroupReportDataXLS(sheet, row, rowId,
+			colId,  null, rd);
+		
+		grdx.generate();
+	   
+	    wb.write(response.getOutputStream());
+
+		return null;
+	}
+
+}

@@ -49,7 +49,7 @@ public abstract class Viewable implements Cloneable {
 			//get the exporter class for this Viewable
 			String viewer=getViewerPath();
 			Class c=Class.forName(viewer);
-			//get the first constructor - it SHOULD be the one that receives an Exporter object
+			//get the first constructor - it SHOULD be the one that receives an Exporter object (parent)
 			Constructor cons=c.getConstructors()[0];
 			//instantiate an exporter object with reference to the parent
 			Exporter exp=(Exporter) cons.newInstance(new Object[]{parent,this});

@@ -14,7 +14,6 @@ package org.dgfoundation.amp.ar;
  */
 public abstract class Exporter {
 
-	
 	protected Exporter parent;
 	protected Viewable item;
 	

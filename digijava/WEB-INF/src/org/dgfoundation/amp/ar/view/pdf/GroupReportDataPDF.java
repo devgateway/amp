@@ -1,5 +1,5 @@
 /**
- * GroupReportDataPDF.java
+ * GroupReportDataXLS.java
  * (c) 2006 Development Gateway Foundation
  * @author Mihai Postelnicu - mpostelnicu@dgfoundation.org
  * 
@@ -11,7 +11,6 @@ import java.util.Iterator;
 import org.dgfoundation.amp.ar.Exporter;
 import org.dgfoundation.amp.ar.GroupReportData;
 import org.dgfoundation.amp.ar.Viewable;
-import org.dgfoundation.amp.ar.cell.Cell;
 
 import com.lowagie.text.Font;
 import com.lowagie.text.Paragraph;
@@ -48,10 +47,8 @@ public class GroupReportDataPDF extends PDFExporter {
 	public void generate() {
 		GroupReportData grd=(GroupReportData) item;
 		
-		
 		Font titleFont = new Font(Font.COURIER, Font.DEFAULTSIZE, Font.BOLD);
-		
-		
+				
 		if(grd.getParent()!=null) {
 			PdfPCell pdfc = new PdfPCell(new Paragraph(grd.getName(),titleFont));
 			pdfc.setColspan(grd.getTotalDepth());
@@ -63,17 +60,14 @@ public class GroupReportDataPDF extends PDFExporter {
 			element.invokeExporter(this);			
 		}
 
-		
 		//add trail cells
 		TrailCellsPDF trails=new TrailCellsPDF(this,grd);
 		trails.generate();
 
-//		add an empty row
+		//add an empty row
 		PdfPCell pdfc2 = new PdfPCell(new Paragraph(" "));
 		pdfc2.setColspan(grd.getTotalDepth());
 		table.addCell(pdfc2);
-		
-		
 	}
 
 }

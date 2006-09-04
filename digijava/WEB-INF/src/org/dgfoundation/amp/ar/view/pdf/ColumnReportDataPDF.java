@@ -13,6 +13,7 @@ import org.dgfoundation.amp.ar.ColumnReportData;
 import org.dgfoundation.amp.ar.Exporter;
 import org.dgfoundation.amp.ar.Viewable;
 
+import com.lowagie.text.Element;
 import com.lowagie.text.Font;
 import com.lowagie.text.Paragraph;
 import com.lowagie.text.pdf.PdfPCell;
@@ -79,6 +80,7 @@ public class ColumnReportDataPDF extends PDFExporter {
 					Column element2 = (Column) ii.next();
 					PdfPCell pdfc = new PdfPCell(new Paragraph(element2
 							.getName(),font));
+					pdfc.setVerticalAlignment(Element.ALIGN_CENTER);
 					pdfc.setColspan(element2.getWidth());
 					table.addCell(pdfc);
 				} else {
@@ -90,8 +92,6 @@ public class ColumnReportDataPDF extends PDFExporter {
 		}
 
 		// add data
-
-
 
 		Iterator i = columnReport.getOwnerIds().iterator();
 		while (i.hasNext()) {

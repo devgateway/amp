@@ -16,6 +16,7 @@ import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
+import org.dgfoundation.amp.ar.ARUtil;
 import org.dgfoundation.amp.ar.AmpNewFilter;
 import org.dgfoundation.amp.ar.AmpReportGenerator;
 import org.dgfoundation.amp.ar.GenericViews;
@@ -40,30 +41,10 @@ public class PDFExportAction extends Action {
 	public ActionForward execute(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response)
 			throws java.lang.Exception {
-
-		String ampReportId = request.getParameter("ampReportId");
-
-	
-		Session session = PersistenceManager.getSession();
-		HttpSession hs = request.getSession();
-
-		AmpReports r = (AmpReports) session.get(AmpReports.class, new Long(
-				ampReportId));
-
-		AmpNewFilter af = ViewNewAdvancedReport.createFilter(r, mapping, form, request, response);
-		if (af == null)
-			mapping.findForward("index");
-
-		AmpReportGenerator arg = new AmpReportGenerator(r, af);
-
-		arg.generate();
-
-		GroupReportData rd = arg.getReport();
+		
+		GroupReportData rd=ARUtil.generateReport(mapping,form,request,response);
+		
 		rd.setCurrentView(GenericViews.PDF);
-
-		hs.setAttribute("report", rd);
-
-		session.close();
 
 		Document document = new Document(PageSize.A0.rotate(),10, 10, 10, 10);
 	
@@ -92,21 +73,13 @@ public class PDFExportAction extends Action {
 		PdfPTable table = new PdfPTable(widths);
 		
 		
-		
-		
-		
 		GroupReportDataPDF grdp=new GroupReportDataPDF(table,rd,null);
 		
 		
-		
-		
-		grdp.generate();
-		
+		grdp.generate();		
 		
 		document.add(table);
 		document.close();
-		
-		
 
 		return null;
 

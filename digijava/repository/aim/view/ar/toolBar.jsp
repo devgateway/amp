@@ -29,14 +29,14 @@
 
 				<TD noWrap align=left valign="center">	
 				<digi:img src="images/pdf_icon.gif" border="0" alt="Export to PDF"/>
-				<digi:link href="/pdfExport.do" paramName="ampReportId" paramId="ampReportId">
+				<digi:link href="/pdfExport.do?view=reset" paramName="ampReportId" paramId="ampReportId">
 				Export to PDF
 				</digi:link>
 				</TD>
 			
 				<TD noWrap align=left valign="center">	
 				<digi:img src="images/xls_icon.jpg" border="0" alt="Export to Excel"/>
-				<digi:link href="/xlsExport.do" paramName="ampReportId" paramId="ampReportId">
+				<digi:link href="/xlsExport.do?view=reset" paramName="ampReportId" paramId="ampReportId">
 				Export to Excel
 				</digi:link>
 				</TD>

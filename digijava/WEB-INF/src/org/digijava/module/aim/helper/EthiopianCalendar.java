@@ -26,9 +26,9 @@ public class EthiopianCalendar
 	 */
 	public EthiopianCalendar getEthiopianDate(GregorianCalendar gc)
 	{
-		if ( logger.isDebugEnabled() )
-		logger.debug("GregorianCalendar passed in day " + gc.get(Calendar.DAY_OF_MONTH) +
-					 " month " + gc.get(Calendar.MONTH) ) ;
+		//if ( logger.isDebugEnabled() )
+		//logger.debug("GregorianCalendar passed in day " + gc.get(Calendar.DAY_OF_MONTH) +
+		//			 " month " + gc.get(Calendar.MONTH) ) ;
 		EthiopianCalendar  obj = new EthiopianCalendar();	
 		
 		String endingEthYrStart = "11-Sep";

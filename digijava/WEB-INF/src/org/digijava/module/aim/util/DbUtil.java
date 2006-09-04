@@ -68,6 +68,7 @@ import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.CurrencyWorker;
 import org.digijava.module.aim.helper.DateConversion;
 import org.digijava.module.aim.helper.Documents;
+import org.digijava.module.aim.helper.EthiopianCalendar;
 import org.digijava.module.aim.helper.FilterProperties;
 import org.digijava.module.aim.helper.FiscalCalendar;
 import org.digijava.module.aim.helper.Indicator;
@@ -5439,6 +5440,7 @@ public class DbUtil {
 	NumberFormat formatter = new DecimalFormat("#.##");
 	String date = null;
 	Iterator itr1 = null, itr2 = null, itr3 = null, itr4 = null;
+	Date startDate = null, endDate = null;
 	
 	try {
 		//logger.debug("indcCode[inside getAidSurveyReportByIndicator] : " + indcCode);
@@ -5462,6 +5464,11 @@ public class DbUtil {
 			else if ("9".equalsIgnoreCase(indcCode)) {
 				NUM_ANSWER_COLUMNS = 5;
 				indcFlag = 9;
+			}
+			if (!(calendar.equals(Long.toString(Constants.ETH_CAL.longValue())) || 
+					calendar.equals(Long.toString(Constants.ETH_FY.longValue())))) {
+				startDate = FiscalCalendarUtil.getCalendarStartDate(new Long(calendar),startYear);
+				endDate   = FiscalCalendarUtil.getCalendarEndDate(new Long(calendar),closeYear);
 			}
 			// Creating first row for all-donors in indicator report.
 			ParisIndicator all = new ParisIndicator();
@@ -5590,10 +5597,13 @@ public class DbUtil {
 												AmpFundingDetail fundtl = (AmpFundingDetail) itr4.next();
 												// Filtering by perspective here
 												if (perspective.equalsIgnoreCase(fundtl.getPerspectiveId().getCode())) {
+													/* 
 													date = DateConversion.ConvertDateToString(fundtl.getTransactionDate());
 													convYr = DateConversion.getYear(date);
 													// Filtering by disbursement-year here
-													if (convYr == (startYear + i)) {
+													if (convYr == (startYear + i)) { 
+													*/
+													if (isValidTransactionDate(startYear + i, fundtl.getTransactionDate(), startDate, endDate)) {
 														// Filtering by AdjustmentType & TransactionType here -
 														// only 'Actual Disbursement' is considered except for indicator-7.
 														if ((indcFlag != 7 && fundtl.getAdjustmentType().intValue() != Constants.ACTUAL)
@@ -5766,6 +5776,26 @@ public class DbUtil {
 	}
 	//logger.debug("responses.size[getAidSurveyReportByIndicator()] : " + responses.size());
 	return responses;
+	}
+	
+	public static boolean isValidTransactionDate(int year, Date transactionDate, Date startDate, Date endDate) {
+		boolean result = false;
+		if (startDate == null || endDate == null) {
+			GregorianCalendar gc = new GregorianCalendar();
+			gc.setTime(transactionDate);
+			EthiopianCalendar ethCal = (new EthiopianCalendar()).getEthiopianDate(gc);
+			result = (ethCal.ethFiscalYear == year) ? true : false; 
+		}
+		else {
+			if ((transactionDate.after(startDate) || (transactionDate.equals(startDate)))
+					&& (transactionDate.before(endDate) || (transactionDate.equals(endDate)))) {
+				if (year == DateConversion.getYear(DateConversion.ConvertDateToString(transactionDate)))
+					result = true;
+				else
+					result = false;
+			}
+		}
+		return result;
 	}
 	
 	public static Collection getAidSurveyReportByIndicator10a(String orgGroup, String donor, int startYear, int closeYear) {

@@ -19,17 +19,19 @@
 			}
 		}
 		else { // many
-			var length = document.calendarEditActivityForm.selOrganisations.length;
-			var flag = 0;
-			for (i = 0;i < length;i ++) {
-				if (document.calendarEditActivityForm.selOrganisations[i].checked == true) {
-					flag = 1;
-					break;
-				}
-			}
+           var length=document.getElementById('tempNumResults').value;
+           var flag = 0;
+           for (i = 0;i < length;i++) {
+             if(document.getElementById('chkBox' + i)!=null){
+               if (document.getElementById('chkBox' + i).checked) {
+                 flag = 1;
+                 break;
+               }
+             }
+           }
 
 			if (flag == 0) {
-
+              return false;
 			}
 		}
 		return true;
@@ -38,22 +40,27 @@
 	function selectOrganization() {
       var length=document.getElementById('tempNumResults').value;
       var flag = 0;
-      for (i = 0;i < length;i ++) {
-        if (document.calendarEditActivityForm.selOrganisations[i].checked == true) {
-          flag = 1;
-          break;
+      for (i = 0;i < length;i++) {
+        if(document.getElementById('chkBox' + i)!=null){
+          if (document.getElementById('chkBox' + i).checked) {
+            flag = 1;
+            break;
           }
         }
+      }
+
         if (flag == 0) {
           alert("Please choose an organization to add");
           return false;
           }
 
-        for(var i=1; i<document.getElementById('tempNumResults').value;i++){
-          if(document.getElementById('chkBox' + i).checked){
-            window.opener.addOrganisation(document.getElementById('chkBox' + i).value,document.getElementById('orgName' + i).innerHTML);
+         for(var i=1; i<length;i++){
+          if(document.getElementById('chkBox' + i)!=null){
+            if(document.getElementById('chkBox' + i).checked){
+              window.opener.addOrganisation(document.getElementById('chkBox' + i).value,document.getElementById('orgName' + i).innerHTML);
+            }
           }
-       }
+        }
        window.close();
 	}
 
@@ -84,12 +91,14 @@
 		}
 	}
 
-/*	function load() {
-		document.calendarEditActivityForm.keyword.focus();
-	}
+	function load() {
+		//document.calendarEditActivityForm.keyword.focus();
+        return;
+    }
 
 	function unload() {
-	}*/
+      return;
+    }
 
 	function closeWindow() {
 		window.close();

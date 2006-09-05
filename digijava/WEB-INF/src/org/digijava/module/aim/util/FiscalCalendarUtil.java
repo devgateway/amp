@@ -51,7 +51,7 @@ public class FiscalCalendarUtil {
 			session = PersistenceManager.getSession();
 			AmpFiscalCalendar fisCal = (AmpFiscalCalendar) session.get(AmpFiscalCalendar.class,
 					id);
-			String stDate = fisCal.getStartDayNum() + "/" + fisCal.getStartMonthNum() + "/" + year;
+			String stDate = fisCal.getStartDayNum() + "/" + fisCal.getStartMonthNum() + "/" + (year + 1);
 			d = DateConversion.getDate(stDate);
 			GregorianCalendar gc = new GregorianCalendar();
 			gc.setTime(d);

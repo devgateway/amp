@@ -11,6 +11,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import net.sf.hibernate.Session;
+
 import org.apache.log4j.Logger;
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
@@ -19,6 +21,8 @@ import org.apache.struts.action.ActionMapping;
 import org.dgfoundation.amp.ar.ARUtil;
 import org.dgfoundation.amp.ar.GenericViews;
 import org.dgfoundation.amp.ar.GroupReportData;
+import org.digijava.kernel.persistence.PersistenceManager;
+import org.digijava.module.aim.dbentity.AmpReports;
 
 /**
  * 
@@ -45,12 +49,19 @@ public class ViewNewAdvancedReport extends Action {
 
 				GroupReportData rd=ARUtil.generateReport(mapping,form,request,response);
 				HttpSession hs = request.getSession();
+				String ampReportId = request.getParameter("ampReportId");
 				
 				if (rd==null) return mapping.findForward("index");
 		
+				Session session = PersistenceManager.getSession();
+				
+				AmpReports reportMeta = (AmpReports) session.get(AmpReports.class, new Long(ampReportId));
+				
 				rd.setCurrentView(GenericViews.HTML);
 				hs.setAttribute("report",rd);
+				hs.setAttribute("reportMeta",reportMeta);
 				
+				session.close();
 				
 				return mapping.findForward("forward");
 			}

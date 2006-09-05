@@ -8,6 +8,7 @@
 
 <link rel="stylesheet" href="<digi:file src="module/aim/css/newamp.css"/>">
 
+
 <table class=clsTable cellSpacing=0 cellPadding=0 width="100%" border=0>
 	<!-- attach filters -->
 	<tr>
@@ -20,6 +21,19 @@
 		 <jsp:include page="/repository/aim/view/ar/NewFilters.jsp"/>
 		</td>
 	</tr>
+
+	<tr>
+		<td>
+			<b><bean:write scope="session" name="reportMeta" property="name"/></b>
+		</td>
+	</tr>
+
+	<tr>
+		<td>
+			<i><bean:write scope="session" name="reportMeta" property="reportDescription"/></i>
+		</td>
+	</tr>
+
 
 	<tr>
 		<td><!-- begin big report table -->

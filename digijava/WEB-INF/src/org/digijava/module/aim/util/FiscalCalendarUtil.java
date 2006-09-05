@@ -109,7 +109,8 @@ public class FiscalCalendarUtil {
 			Date baseDate = DateConversion.getDate(bsDate); 
 			Date transDate = DateConversion.getDate(date);
 
-			if (transDate.after(baseDate) || transDate.equals(baseDate)) {
+			if (transDate.after(baseDate) || transDate.equals(baseDate) ||
+					(stDay == 1 && stMnt == 1)) {
 				fiscalYr = year;	
 			} else {
 				fiscalYr = year-1;

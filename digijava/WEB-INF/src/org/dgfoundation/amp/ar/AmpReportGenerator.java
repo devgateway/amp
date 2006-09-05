@@ -12,6 +12,8 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
+import org.dgfoundation.amp.ar.cell.AmountCell;
+import org.dgfoundation.amp.ar.cell.CategAmountCell;
 import org.dgfoundation.amp.ar.cell.Cell;
 import org.dgfoundation.amp.ar.exception.IncompatibleColumnException;
 import org.dgfoundation.amp.ar.exception.UnidentifiedItemException;
@@ -116,8 +118,11 @@ public class AmpReportGenerator extends ReportGenerator {
 				String extractorView = col.getExtractorView();
 				String columnName = col.getColumnName();
 
+				logger.debug("Seeking class "+cellTypeName);
+				
 				Class cellType = Class.forName(cellTypeName);
-
+				
+				
 				// create an instance of the cell that is of type described
 				Constructor cellc = cellType.getConstructors()[0];
 				Cell cell = (Cell) cellc.newInstance(new Object[] {});
@@ -208,6 +213,31 @@ public class AmpReportGenerator extends ReportGenerator {
 		AmountCellColumn funding = (AmountCellColumn) rawColumns.getColumn("Funding");
 
 		Column newcol = GroupColumn.verticalSplitByCategs(funding, cats, true);
+		
+		
+		
+		//we create the cummulative balance (undisbursed) = commitment - disbursement
+		//iterate each owner
+
+		TotalAmountColumn tac=new TotalAmountColumn("Cumulative Balance");
+		Iterator i=newcol.getOwnerIds().iterator();
+		while (i.hasNext()) {
+			Long ownerId=(Long)i.next();
+			AmountCell acCumul=new AmountCell(ownerId);
+			acCumul.setId(ownerId);
+			//get each other total column
+			Iterator icol=newcol.getItems().iterator();
+			while (icol.hasNext()) {
+				CellColumn cellCol = (CellColumn) icol.next();
+				AmountCell cac=(AmountCell) cellCol.getByOwner(ownerId);
+				if(cac==null) continue;
+				if(cellCol.getName().indexOf("Commitment")!=-1) acCumul.rawAdd(cac.getAmount());
+				if(cellCol.getName().indexOf("Disbursement")!=-1) acCumul.rawAdd(-cac.getAmount());
+			}
+			tac.addCell(acCumul);
+		}
+		
+		newcol.getItems().add(tac);
 		
 		newcol.setName("Total");
 

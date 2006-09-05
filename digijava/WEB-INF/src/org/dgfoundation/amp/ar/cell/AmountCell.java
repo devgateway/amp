@@ -118,7 +118,7 @@ public class AmountCell extends Cell {
 	/*
 	 * (non-Javadoc)
 	 * 
-	 * @see org.dgfoundation.amp.ar.cell.Cell#add(org.dgfoundation.amp.ar.cell.Cell)
+	 * @see org.dgfoundation.amp.ar.cell.Cell#merge(org.dgfoundation.amp.ar.cell.Cell)
 	 */
 	public Cell merge(Cell c) {
 		AmountCell ret = new AmountCell();
@@ -211,5 +211,12 @@ public class AmountCell extends Cell {
 		return Math.round(resultDbl);
 	}
 
-
+	/**
+	 * Adds amount directly to the amount property. Do not use this to perform horizontal totals, use merge() instead !
+	 * @param amount the amount to be added to the internal property.
+	 */
+	public void rawAdd(double amount) {
+		this.amount+=amount;
+	}
+	
 }

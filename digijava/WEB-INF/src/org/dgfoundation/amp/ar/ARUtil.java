@@ -50,7 +50,6 @@ public final class ARUtil {
 		String ampReportId = request.getParameter("ampReportId");
 
 		Session session = PersistenceManager.getSession();
-		HttpSession hs = request.getSession();
 
 		AmpReports r = (AmpReports) session.get(AmpReports.class, new Long(
 				ampReportId));

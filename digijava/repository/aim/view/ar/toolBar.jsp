@@ -5,9 +5,11 @@
 
 <% String ampReportId=request.getParameter("ampReportId");
 	 request.setAttribute("ampReportId",ampReportId);
+   String viewParam="";
+   if("reset".equals(request.getParameter("view"))) viewParam="?view=reset";
+   String viewParamXLS="/xlsExport.do"+viewParam;
+   String viewParamPDF="/pdfExport.do"+viewParam;
 %>
-
-
 
    <TABLE class=toolbar id=toolbartable cellSpacing=0 cellPadding=0 
       width="100%" bgColor=#c0c0c0 border=0 name="toolbartable">
@@ -29,14 +31,14 @@
 
 				<TD noWrap align=left valign="center">	
 				<digi:img src="images/pdf_icon.gif" border="0" alt="Export to PDF"/>
-				<digi:link href="/pdfExport.do?view=reset" paramName="ampReportId" paramId="ampReportId">
+				<digi:link href="<%=viewParamPDF%>" paramName="ampReportId" paramId="ampReportId">
 				Export to PDF
 				</digi:link>
 				</TD>
 			
 				<TD noWrap align=left valign="center">	
 				<digi:img src="images/xls_icon.jpg" border="0" alt="Export to Excel"/>
-				<digi:link href="/xlsExport.do?view=reset" paramName="ampReportId" paramId="ampReportId">
+				<digi:link href="<%=viewParamXLS%>" paramName="ampReportId" paramId="ampReportId">
 				Export to Excel
 				</digi:link>
 				</TD>

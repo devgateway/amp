@@ -21,7 +21,4 @@ public final class GenericViews {
 
 	public static final String currentViewable="currentViewable";
 
-	public static final String expandName(String viewerName,String viewType) {
-		return null;
-	}
 }

@@ -14,7 +14,7 @@ package org.dgfoundation.amp.ar;
  */
 public final class ArConstants {
 	public final static MetaInfo []prefixes=new MetaInfo[] {
-		new MetaInfo(GenericViews.HTML,"/repository/aim/view/ar/"),
+		new MetaInfo(GenericViews.HTML,"/repository/aim/view/ar/html/"),
 		new MetaInfo(GenericViews.XLS,"org.dgfoundation.amp.ar.view.xls."),
 		new MetaInfo(GenericViews.PDF,"org.dgfoundation.amp.ar.view.pdf."),
 		};

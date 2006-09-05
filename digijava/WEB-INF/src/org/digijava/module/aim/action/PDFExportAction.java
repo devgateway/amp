@@ -8,22 +8,15 @@ package org.digijava.module.aim.action;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-
-import net.sf.hibernate.Session;
 
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.dgfoundation.amp.ar.ARUtil;
-import org.dgfoundation.amp.ar.AmpNewFilter;
-import org.dgfoundation.amp.ar.AmpReportGenerator;
 import org.dgfoundation.amp.ar.GenericViews;
 import org.dgfoundation.amp.ar.GroupReportData;
 import org.dgfoundation.amp.ar.view.pdf.GroupReportDataPDF;
-import org.digijava.kernel.persistence.PersistenceManager;
-import org.digijava.module.aim.dbentity.AmpReports;
 
 import com.lowagie.text.Document;
 import com.lowagie.text.PageSize;
@@ -58,8 +51,7 @@ public class PDFExportAction extends Action {
 		
 		document.open();
 
-		//	create source cols spanning:
-		
+		//	create source cols spanning:		
 		float[] widths = new float[rd.getTotalDepth()];		
 		for (int k = 0; k < rd.getSourceColsCount().intValue(); k++) {
 			widths[k]=0.125f;
@@ -75,7 +67,7 @@ public class PDFExportAction extends Action {
 		
 		GroupReportDataPDF grdp=new GroupReportDataPDF(table,rd,null);
 		
-		
+		//generate a PDF output of the report structure:
 		grdp.generate();		
 		
 		document.add(table);

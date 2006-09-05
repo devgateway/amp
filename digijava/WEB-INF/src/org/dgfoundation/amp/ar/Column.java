@@ -19,7 +19,6 @@ import org.dgfoundation.amp.ar.workers.ColumnWorker;
  * Wraps the items that can be displayed in a report column. A Column can hold
  * CellS,other ColumnS or some more exotic structures that are yet to be defined
  * ...
- * 
  * @author Mihai Postelnicu - mpostelnicu@dgfoundation.org
  * @since May 31, 2006
  * 
@@ -256,7 +255,6 @@ public abstract class Column extends Viewable implements ColumnIdentifiable {
 	 * displayed at the bottom of the column. For AmountCellColumnS this is the
 	 * place to display totals. However, other types of behaviour can be
 	 * implemented, like error reporting for debugging purposes
-	 * 
 	 * @return the list of trail cells
 	 */
 	public abstract List getTrailCells();

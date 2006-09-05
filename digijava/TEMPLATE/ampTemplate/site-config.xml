@@ -1,6 +1,13 @@
 <?xml version="1.0"?>
 <site-config>
 	<site-layout>
+		<layout name="footerLayout" file="footerLayout.jsp">
+		    <put name="version">1.1BETA1</put>
+		   <put-item name="transmode" module="translation" instance="default" teaser="modeSwitch"/>
+			<put-item name="ampAdminLink" file="ampAdminLink.jsp"/>
+			<put-item name="adminLink" module="admin" instance="default" teaser="adminLink"/>
+			<put-item name="flatLangSwitch" module="translation" instance="default" teaser="flatLangSwitch"/>
+		</layout>
 		<layout name="default">
 			<put name="title">AMP Default Template</put>
 			<put-item name="headerTop" file="headerTop.jsp"/>
@@ -16,12 +23,6 @@
 			<put-item name="headerMiddle" file="headerMiddle.jsp"/>
 			<put-item name="dropdownLangSwitch" module="translation" instance="default" teaser="dropdownLangSwitch"/>
 			<put-item name="footer" layout="footerLayout"/>
-			<put-item name="flatLangSwitch" module="translation" instance="default" teaser="flatLangSwitch"/>
-		</layout>
-		<layout name="footerLayout" file="footerLayout.jsp">
-		   <put-item name="transmode" module="translation" instance="default" teaser="modeSwitch"/>
-			<put-item name="ampAdminLink" file="ampAdminLink.jsp"/>
-			<put-item name="adminLink" module="admin" instance="default" teaser="adminLink"/>
 			<put-item name="flatLangSwitch" module="translation" instance="default" teaser="flatLangSwitch"/>
 		</layout>
 		<layout name="bodyHeaderLayout" file="bodyHeader.jsp">

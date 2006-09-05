@@ -21,6 +21,7 @@
 						</TD>
           			<TD align=right>
 							<FONT color="#FFFFFF">
+							AMP version <b><tiles:getAsString name="version"/></b> -
 							<digi:trn key="aim:ampDevelepmentCredits">
 								Developed in partnership with OECD, UNDP, WB and DGF
 							</digi:trn>

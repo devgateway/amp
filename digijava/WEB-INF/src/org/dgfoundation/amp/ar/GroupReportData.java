@@ -23,18 +23,18 @@ import org.dgfoundation.amp.ar.exception.UnidentifiedItemException;
 public class GroupReportData extends ReportData {
 
 	protected String currentView;
-	
+
 	protected Integer sourceColsCount;
 
-	
 	public GroupReportData(GroupReportData d) {
 		super(d.getName());
-		this.parent=d.getParent();
-		this.sourceColsCount=d.getSourceColsCount();
+		this.parent = d.getParent();
+		this.sourceColsCount = d.getSourceColsCount();
 	}
-	
+
 	/**
-	 * @param sourceColsCount The sourceColsCount to set.
+	 * @param sourceColsCount
+	 *            The sourceColsCount to set.
 	 */
 	public void setSourceColsCount(Integer sourceColsNumber) {
 		this.sourceColsCount = sourceColsNumber;
@@ -102,40 +102,42 @@ public class GroupReportData extends ReportData {
 			ReportData element = (ReportData) i.next();
 			element.postProcess();
 		}
-		
-		
-		
-			
-		
-		//create trail cells
+
+		// create trail cells
 		trailCells = new ArrayList();
-		ReportData firstRd=(ReportData)items.iterator().next();
-		for(int k=0;k<firstRd.getTrailCells().size();k++) trailCells.add(new AmountCell());
-		i = items.iterator();
-		while (i.hasNext()) {
-			ReportData element = (ReportData) i.next();			            
+		if (items.size() > 0) {
+			ReportData firstRd = (ReportData) items.iterator().next();
+			for (int k = 0; k < firstRd.getTrailCells().size(); k++)
+				trailCells.add(new AmountCell());
+			i = items.iterator();
+			while (i.hasNext()) {
+				ReportData element = (ReportData) i.next();
 				for (int j = 0; j < trailCells.size(); j++) {
-					Cell c=(Cell) trailCells.get(j);
-					Cell c2=(Cell) element.getTrailCells().get(j);
-					Cell newc=c.merge(c2);
+					Cell c = (Cell) trailCells.get(j);
+					Cell c2 = (Cell) element.getTrailCells().get(j);
+					Cell newc = c.merge(c2);
 					newc.setColumn(c2.getColumn());
 					trailCells.remove(j);
-					trailCells.add(j,newc);
+					trailCells.add(j, newc);
 				}
+			}
 		}
-		
-		
+
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see org.dgfoundation.amp.ar.ReportData#getTotalDepth()
 	 */
 	public int getTotalDepth() {
-		ReportData rd=(ReportData) items.get(0);
+		ReportData rd = (ReportData) items.get(0);
 		return rd.getTotalDepth();
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see org.dgfoundation.amp.ar.ReportData#getSourceColsCount()
 	 */
 	public Integer getSourceColsCount() {
@@ -145,6 +147,4 @@ public class GroupReportData extends ReportData {
 			return parent.getSourceColsCount();
 	}
 
-	
-	
 }

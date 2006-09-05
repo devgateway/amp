@@ -5465,8 +5465,8 @@ public class DbUtil {
 				NUM_ANSWER_COLUMNS = 5;
 				indcFlag = 9;
 			}
-			if (!(calendar.equals(Long.toString(Constants.ETH_CAL.longValue())) || 
-					calendar.equals(Long.toString(Constants.ETH_FY.longValue())))) {
+			if (!(calendar.equals(Constants.ETH_CAL.toString()) || 
+					calendar.equals(Constants.ETH_FY.toString()))) {
 				startDate = FiscalCalendarUtil.getCalendarStartDate(new Long(calendar),startYear);
 				endDate   = FiscalCalendarUtil.getCalendarEndDate(new Long(calendar),closeYear);
 			}
@@ -5784,17 +5784,23 @@ public class DbUtil {
 			GregorianCalendar gc = new GregorianCalendar();
 			gc.setTime(transactionDate);
 			EthiopianCalendar ethCal = (new EthiopianCalendar()).getEthiopianDate(gc);
-			result = (ethCal.ethFiscalYear == year) ? true : false; 
+			if (ethCal.ethFiscalYear == year)
+				result =  true; 
 		}
 		else {
-			if ((transactionDate.after(startDate) || (transactionDate.equals(startDate)))
-					&& (transactionDate.before(endDate) || (transactionDate.equals(endDate)))) {
+			if ((transactionDate.after(startDate) || chkEqualDates(transactionDate, startDate))
+					&& (transactionDate.before(endDate) || chkEqualDates(transactionDate, endDate))) {
 				if (year == DateConversion.getYear(DateConversion.ConvertDateToString(transactionDate)))
 					result = true;
-				else
-					result = false;
 			}
 		}
+		return result;
+	}
+	
+	public static boolean chkEqualDates(Date d1, Date d2) {
+		boolean result = false;
+		SimpleDateFormat formatter = new SimpleDateFormat("M/d/y");
+		result = (formatter.format(d1).equalsIgnoreCase(formatter.format(d2))) ? true : false;
 		return result;
 	}
 	

@@ -831,12 +831,14 @@ p2.println("isPrintRepeatedValues='true'");
 p2.println("isRemoveLineWhenBlank='false'");
 p2.println("isPrintInFirstWholeBand='false'");
 p2.println("isPrintWhenDetailOverflows='false'/>");
-p2.println("<textElement textAlignment='Center' verticalAlignment='Middle' rotation='None' lineSpacing='Single'>");
+p2.println("<textElement textAlignment='Center' verticalAlignment='Top' rotation='None' lineSpacing='Single'>");
 p2.println("<font fontName='Arial' pdfFontName='Helvetica' size='8' isBold='true' isItalic='false' isUnderline='false' isPdfEmbedded ='false' pdfEncoding ='Cp1252' isStrikeThrough='false' />");
 p2.println("</textElement>");
 p2.println("<text><![CDATA[Q1");
 p2.println("Q2");
+p2.println("");
 p2.println("Q3");
+
 p2.println("Q4]]></text>");
 p2.println("</staticText>");
 

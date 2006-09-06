@@ -1554,7 +1554,7 @@ public class DbUtil {
 		try {
 			session = PersistenceManager.getSession();
 			String queryString = "select p from " + AmpPages.class.getName() 
-									+ " p where (p.ampTeamId is null) or (p.ampTeamId=:teamId)";
+									+ " p where (p.ampTeamId is null) or (p.ampTeamId=:teamId)" + " order by p.pageName";
 			qry = session.createQuery(queryString);
 			qry.setParameter("teamId", teamId, Hibernate.LONG);
 			pages = qry.list();

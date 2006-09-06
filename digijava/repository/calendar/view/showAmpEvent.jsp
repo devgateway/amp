@@ -111,7 +111,7 @@ function selectAllOrgs() {
        <tr>
        <td class="r-dotted-lg">&nbsp;</td>
          <td valign="top" width="230">
-            <table border="0" style="border:1px solid">
+            <table border="0" style="border:1px solid; border-color: #484846;">
                 <tr>
                     <td nowrap="nowrap">
                         <table border="0" cellpadding="0" cellspacing="0">
@@ -150,7 +150,7 @@ function selectAllOrgs() {
             <digi:form action="/previewCalendarEvent.do" onsubmit="selectGuests()">
             <html:hidden name="calendarEventForm" property="selectedCalendarTypeId" value="${calendarEventForm.selectedCalendarTypeId}"/>
             <html:hidden name="calendarEventForm" property="ampCalendarId" value="${calendarEventForm.ampCalendarId}"/>
-            <table border="0" style="border:1px solid" width="756px">
+            <table border="0" style="border:1px solid; border-color: #484846;" width="756px">
                 <tr>
                     <td colspan="3" nowrap="nowrap">&nbsp;Details&nbsp;&nbsp;</td>
                 </tr>
@@ -215,12 +215,13 @@ function selectAllOrgs() {
                                 <td nowrap="nowrap">
                                     <html:text styleId="selectedStartDate" name="calendarEventForm" property="selectedStartDate" style="width:80px"/>
                                 </td>
+                                <td>&nbsp;</td>
                                 <td>
                                     <a href="javascript:calendar('selectedStartDate');">
                                         <img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border=0>
                                     </a>
                                 </td>
-                                <td nowrap="nowrap">&nbsp;&nbsp;<img id="startDateImg" name="startDateImg" src="/thirdparty/CalendarPopup/img/cal.gif" alt="STARTDATE" onclick="startDateCalendar.select(document.getElementById('selectedStartDate'), 'startDateImg', 'dd/MM/yyyy');return false;">&nbsp;</td>
+                                <td>&nbsp;&nbsp;</td>
                                 <td>
                                     <select id="selectedStartHour" onchange="updateTime(document.getElementById('selectedStartTime'), 'hour', this.value)">
                                         <c:forEach var="hour" begin="0" end="23">
@@ -325,12 +326,13 @@ function selectAllOrgs() {
                                 <td nowrap="nowrap">
                                     <html:text styleId="selectedEndDate" name="calendarEventForm" property="selectedEndDate" style="width:80px"/>
                                 </td>
+                                <td>&nbsp;</td>
                                 <td>
                                     <a href="javascript:calendar('selectedEndDate')">
-                                        <img src=" ../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border=0>
+                                        <img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border=0>
                                     </a>
                                 </td>
-                                <td nowrap="nowrap">&nbsp;&nbsp;<img id="endDateImg" name="endDateImg" src="/thirdparty/CalendarPopup/img/cal.gif" alt="ENDDATE" onclick="endDateCalendar.select(document.getElementById('selectedEndDate'), 'endDateImg', 'dd/MM/yyyy');return false;">&nbsp;</td>
+                                <td>&nbsp;&nbsp;</td>
                                 <td>
                                     <select id="selectedEndHour" onchange="updateTime(document.getElementById('selectedEndTime'), 'hour', this.value)">
                                         <c:forEach var="hour" begin="0" end="23">
@@ -426,7 +428,7 @@ function selectAllOrgs() {
                 <tr>
                     <td nowrap="nowrap" valign="top">&nbsp;Attendees&nbsp;&nbsp;</td>
                     <td>
-                        <table border="0" style="border:1px solid">
+                        <table border="0" style="border:1px solid; border-color: #484846;">
                             <tr>
                                 <td valign="top">
                                     <table border="0" width="100%">

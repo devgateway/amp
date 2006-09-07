@@ -88,7 +88,7 @@ public class GroupColumn extends Column {
     		while (i.hasNext()) {
 				Column element = (Column) i.next();
 				GroupColumn splitted=verticalSplitByCateg(element,category,ids,generateTotalCols);
-				dest.addColumn(splitted);
+				if(splitted!=null) dest.addColumn(splitted); else dest.addColumn(element);
 			}
     		return dest;
     	}
@@ -111,7 +111,9 @@ public class GroupColumn extends Column {
         Iterator i = src.iterator();
         while (i.hasNext()) {
             Categorizable element = (Categorizable) i.next();
-            metaSet.add(element.getMetaInfo(category));
+            MetaInfo minfo=element.getMetaInfo(category);
+            if(minfo==null) return null;
+            metaSet.add(minfo);
         }
 
         // iterate the set and create a subColumn for each of the metainfo

@@ -70,6 +70,10 @@ public class ListCell extends Cell {
 		value.add(c);
 	}
 	
+	public Iterator iterator() {
+		return ((Collection)value).iterator();
+	}
+	
 	public void addCells(Collection cells) throws IncompatibleCellException {
 		Iterator i=cells.iterator();
 		while (i.hasNext()) {

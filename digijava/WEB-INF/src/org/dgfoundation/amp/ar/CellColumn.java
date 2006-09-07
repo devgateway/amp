@@ -14,7 +14,6 @@ import java.util.TreeSet;
 
 import org.dgfoundation.amp.ar.cell.Cell;
 import org.dgfoundation.amp.ar.cell.ListCell;
-import org.dgfoundation.amp.ar.cell.TextCell;
 import org.dgfoundation.amp.ar.exception.IncompatibleCellException;
 import org.dgfoundation.amp.ar.workers.ColumnWorker;
 
@@ -189,4 +188,13 @@ public class CellColumn extends Column {
 		return 1;
 	}
 	
+
+	public void replaceCell(Cell oldCell, Cell newCell) {
+		int idx = items.indexOf(oldCell);
+		items.remove(idx);
+		items.add(idx, newCell);
+		newCell.setColumn(this);
+	}
 }
+
+

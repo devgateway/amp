@@ -123,6 +123,7 @@ public class AmountCell extends Cell {
 	public Cell merge(Cell c) {
 		AmountCell ret = new AmountCell();
 		AmountCell ac = (AmountCell) c;
+		ret.setOwnerId(c.getOwnerId());
 		if (ac.getId() == null)
 			ret.getMergedCells().addAll(ac.getMergedCells());
 		else

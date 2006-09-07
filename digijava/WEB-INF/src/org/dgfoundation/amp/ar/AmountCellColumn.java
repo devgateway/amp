@@ -12,6 +12,7 @@ import java.util.List;
 
 import org.dgfoundation.amp.ar.cell.AmountCell;
 import org.dgfoundation.amp.ar.cell.Cell;
+import org.dgfoundation.amp.ar.cell.ListCell;
 import org.dgfoundation.amp.ar.workers.ColumnWorker;
 
 /**
@@ -45,7 +46,7 @@ public class AmountCellColumn extends CellColumn {
 		super(source);
 		// TODO Auto-generated constructor stub
 	}
-
+ 
 	/**
 	 * @param parent
 	 * @param name
@@ -54,7 +55,29 @@ public class AmountCellColumn extends CellColumn {
 		super(parent, name);
 		// TODO Auto-generated constructor stub
 	}
+	
+	public Column postProcess() {
+		AmountCellColumn res=(AmountCellColumn) super.postProcess();
+		//now we get rid of those ListCellS, we merge the content - we can do that now because there is no forking in the future
+		Iterator i=res.iterator();
+		while (i.hasNext()) {
+			Cell element = (Cell) i.next();
+			if(element instanceof ListCell) {
+				Cell repl=new AmountCell();
+				Iterator ii=((ListCell)element).iterator();
+				while (ii.hasNext()) {
+					AmountCell ac = (AmountCell) ii.next();
+					repl=repl.merge(ac);
+				}
+				res.replaceCell(element,repl);				
+			}		
+		}
+		return res;
+	}
 
+	
+
+	
 	public List getTrailCells() {
 		ArrayList ar=new ArrayList();
 		Cell ac=new AmountCell();		

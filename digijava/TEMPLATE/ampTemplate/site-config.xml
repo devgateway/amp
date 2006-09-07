@@ -346,7 +346,6 @@
 				<page>	htmlViewPlannedProjects				</page>
 				<page>	htmlPhysicalComponentReport			</page>
 				<page>	htmlAdvancedReport			        </page>
-				<page>viewNewAdvancedReport</page>
 
 				<page>aim_editQuestions</page>
 				<page>aim_addQuestion</page>

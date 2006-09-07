@@ -5,10 +5,13 @@ import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
 
@@ -5470,6 +5473,14 @@ public class DbUtil {
 				startDate = FiscalCalendarUtil.getCalendarStartDate(new Long(calendar),startYear);
 				endDate   = FiscalCalendarUtil.getCalendarEndDate(new Long(calendar),closeYear);
 			}
+			Comparator dnComp = new Comparator() {
+				public int compare(Object o1, Object o2) {
+					AmpOrganisation r1 = (AmpOrganisation) o1;
+					AmpOrganisation r2 = (AmpOrganisation) o2;
+			        return r1.getAcronym().trim().toLowerCase().compareTo(r2.getAcronym().trim().toLowerCase());
+				}
+			};
+			Collections.sort((List) surveyDonors, dnComp);
 			// Creating first row for all-donors in indicator report.
 			ParisIndicator all = new ParisIndicator();
 			all.setDonor("All Donors");
@@ -5806,8 +5817,11 @@ public class DbUtil {
 	
 	public static Collection getAidSurveyReportByIndicator10a(String orgGroup, String donor, int startYear, int closeYear) {
 		Session session = null;
+		String qry = null;
 		ArrayList responses = new ArrayList();
-		Collection surveyDonors = new ArrayList();
+		Collection calDonorsList = new ArrayList();
+		Set donors = new HashSet();
+		List sortedDonors = new LinkedList();
 		boolean orgGroupFlag = false;
 		int NUM_ANSWER_COLUMNS = 4, i = 0, j = 0;
 		int YEAR_RANGE = (closeYear - startYear + 1);
@@ -5820,9 +5834,26 @@ public class DbUtil {
 		
 		try {
 			session = PersistenceManager.getSession();
-			String qry = "select distinct dn.ampDonorOrgId from " + AmpAhsurvey.class.getName() + " dn";
-			surveyDonors.addAll(session.createQuery(qry).list());
-			if (surveyDonors.size() > 0) {
+			qry = "select cal from " + AmpCalendar.class.getName() + " cal";
+			calDonorsList.addAll(session.createQuery(qry).list());
+			if (calDonorsList.size() > 0) {
+				itr1 = calDonorsList.iterator();
+				while (itr1.hasNext()) {
+					AmpCalendar cal = (AmpCalendar) itr1.next();
+					if (cal.getDonors() != null)
+						donors.addAll(cal.getDonors());
+				}
+			}
+			if (donors.size() > 0) {
+				Comparator dnComp = new Comparator() {
+					public int compare(Object o1, Object o2) {
+						AmpOrganisation r1 = (AmpOrganisation) o1;
+						AmpOrganisation r2 = (AmpOrganisation) o2;
+				        return r1.getAcronym().trim().toLowerCase().compareTo(r2.getAcronym().trim().toLowerCase());
+					}
+				};
+				sortedDonors.addAll(donors);
+				Collections.sort(sortedDonors, dnComp);
 				if (null != orgGroup && orgGroup.trim().length() > 1 && !"all".equalsIgnoreCase(orgGroup))
 					orgGroupFlag = true;
 				// Creating first row for all-donors in indicator report.
@@ -5835,7 +5866,7 @@ public class DbUtil {
 					answersRow[0] = startYear + i;
 					((ParisIndicator)responses.get(0)).getAnswers().add(answersRow);
 				}
-				itr1 = surveyDonors.iterator();
+				itr1 = sortedDonors.iterator();
 				while(itr1.hasNext()) {
 					AmpOrganisation dnOrg = (AmpOrganisation) itr1.next();
 					// Filtering by donor-organisation here

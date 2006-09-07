@@ -4796,7 +4796,6 @@ public class ReportUtil {
 								termAssist.setTermPlannedDisbAmount(mf.format(totalPlDisb));
 								termAssist.setTermDisbAmount(mf.format(totalDisb));
 								termAssist.setTermExpAmount(mf.format(totalExp));
-								//termAssist.setTermUnDisbAmount(mf.format(actualCommitment - actualDisbursement).concat("..1.."));
 								if(termAssist.getTermAssistName().equals("Loan"))
 									termAssist.setTermUnDisbAmount(mf.format(undisbLoan));
 								if(termAssist.getTermAssistName().equals("Grant"))
@@ -4804,7 +4803,6 @@ public class ReportUtil {
 								if(termAssist.getTermAssistName().equals("In Kind"))
 									termAssist.setTermUnDisbAmount(mf.format(undisbKind));
 
-								//projCommAmount=projCommAmount + termComm;
 								projPlannedDisbAmount=projPlannedDisbAmount + totalPlDisb;
 								projDisbAmount=projDisbAmount + totalDisb;
 								projExpAmount=projExpAmount + totalExp;
@@ -4864,7 +4862,6 @@ public class ReportUtil {
 							project.setProjPlannedDisbAmount(mf.format(projPlannedDisbAmount));
 							project.setProjDisbAmount(mf.format(projDisbAmount));
 							project.setProjExpAmount(mf.format(projExpAmount));
-							//project.setProjUnDisbAmount(mf.format(projUnDisbAmount).concat("..2.."));
 							project.setProjUnDisbAmount(mf.format(undisbTotal));
 							ampTeamDonors.getProject().add(project);
 							for(int i=0;i<yrCount;i++)
@@ -4877,7 +4874,6 @@ public class ReportUtil {
 								}
 							}
 
-//							donorCommAmount=donorCommAmount + projCommAmount;
 							donorPlannedDisbAmount=donorPlannedDisbAmount + projPlannedDisbAmount;
 							donorDisbAmount=donorDisbAmount + projDisbAmount;
 							donorExpAmount=donorExpAmount + projExpAmount;
@@ -4897,9 +4893,7 @@ public class ReportUtil {
 							ampTeamDonors.setDonorPlannedDisbAmount(mf.format(donorPlannedDisbAmount));
 							ampTeamDonors.setDonorDisbAmount(mf.format(donorDisbAmount));
 							ampTeamDonors.setDonorExpAmount(mf.format(donorExpAmount));
-							//ampTeamDonors.setDonorUnDisbAmount(mf.format(donorUnDisbAmount).concat("..3.."));
 							ampTeamDonors.setDonorUnDisbAmount(mf.format(undisbTotal));
-//							ampTeamDonors.getTotalDonorTermAssistFund().addAll(donorTotal);
 							for(int i=0;i<yrCount;i++)
 							{
 								for(int qtr=0;qtr<4;qtr++)
@@ -4909,13 +4903,11 @@ public class ReportUtil {
 									expTeamFund[i][qtr]=expTeamFund[i][qtr] + expDonorFund[i][qtr];
 								}
 							}
-//							teamCommAmount=teamCommAmount + donorCommAmount;
 							teamPlannedDisbAmount=teamPlannedDisbAmount + donorPlannedDisbAmount;
 							teamDisbAmount=teamDisbAmount + donorDisbAmount;
 							teamExpAmount=teamExpAmount + donorExpAmount;
 							teamUnDisbAmount=teamUnDisbAmount + donorUnDisbAmount;
-//							ampTeamDonors.setTotalDonorTermAssistFund(new ArrayList());
-	//						logger.debug("Size of Assistance:" + assistance.size() + ":");
+							//logger.debug("Size of Assistance:" + assistance.size() + ":");
 							totalPlDisb=totalDisb=totalExp=0.0;
 							Iterator donorIter=donorAssistance.iterator();
 							while(donorIter.hasNext())
@@ -4948,7 +4940,6 @@ public class ReportUtil {
 									termFund.setTotDonorDisbAmount(mf.format(totalDisb));
 									termFund.setTotDonorExpAmount(mf.format(totalExp));
 									termFund.setTotDonorPlannedDisbAmount(mf.format(totalPlDisb));
-									//termFund.setTotDonorUnDisbAmount(mf.format(loanUnDisbDonorFund).concat("..4.."));
 									termFund.setTotDonorUnDisbAmount(mf.format(undisbLoan));
 									totalPlDisb=totalDisb=totalExp=0.0;
 								}
@@ -4977,7 +4968,6 @@ public class ReportUtil {
 									termFund.setTotDonorDisbAmount(mf.format(totalDisb));
 									termFund.setTotDonorExpAmount(mf.format(totalExp));
 									termFund.setTotDonorPlannedDisbAmount(mf.format(totalPlDisb));
-									//termFund.setTotDonorUnDisbAmount(mf.format(grantUnDisbDonorFund).concat("..5.."));
 									termFund.setTotDonorUnDisbAmount(mf.format(undisbGrant));
 									totalPlDisb=totalDisb=totalExp=0.0;
 								}
@@ -5006,11 +4996,10 @@ public class ReportUtil {
 									termFund.setTotDonorDisbAmount(mf.format(totalDisb));
 									termFund.setTotDonorExpAmount(mf.format(totalExp));
 									termFund.setTotDonorPlannedDisbAmount(mf.format(totalPlDisb));
-									//termFund.setTotDonorUnDisbAmount(mf.format(kindUnDisbDonorFund).concat("..6.."));
 									termFund.setTotDonorUnDisbAmount(mf.format(undisbKind));
 									totalPlDisb=totalDisb=totalExp=0.0;
 								}
-	//							logger.debug("Added:'" + termFund.getTermAssistName());
+								//logger.debug("Added:'" + termFund.getTermAssistName());
 								ampTeamDonors.getTotalDonorTermAssistFund().add(termFund);	
 							}
 							report.getDonors().add(ampTeamDonors);
@@ -5042,7 +5031,6 @@ public class ReportUtil {
 									termFund.setTotDonorDisbAmount(mf.format(totalDisb));
 									termFund.setTotDonorExpAmount(mf.format(totalExp));
 									termFund.setTotDonorPlannedDisbAmount(mf.format(totalPlDisb));
-									//termFund.setTotDonorUnDisbAmount(mf.format(loanUnDisbTeamFund).concat("..7.."));
 									termFund.setTotDonorUnDisbAmount(mf.format(undisbLoan));
 									totalPlDisb=totalDisb=totalExp=0.0;
 								}
@@ -5067,7 +5055,6 @@ public class ReportUtil {
 									termFund.setTotDonorDisbAmount(mf.format(totalDisb));
 									termFund.setTotDonorExpAmount(mf.format(totalExp));
 									termFund.setTotDonorPlannedDisbAmount(mf.format(totalPlDisb));
-									//termFund.setTotDonorUnDisbAmount(mf.format(grantUnDisbTeamFund).concat("..8.."));
 									termFund.setTotDonorUnDisbAmount(mf.format(undisbGrant));
 									totalPlDisb=totalDisb=totalExp=0.0;
 								}
@@ -5092,7 +5079,6 @@ public class ReportUtil {
 									termFund.setTotDonorDisbAmount(mf.format(totalDisb));
 									termFund.setTotDonorExpAmount(mf.format(totalExp));
 									termFund.setTotDonorPlannedDisbAmount(mf.format(totalPlDisb));
-									//termFund.setTotDonorUnDisbAmount(mf.format(kindUnDisbTeamFund).concat("..9.."));
 									termFund.setTotDonorUnDisbAmount(mf.format(undisbKind));
 									totalPlDisb=totalDisb=totalExp=0.0;
 								}	
@@ -5112,7 +5098,6 @@ public class ReportUtil {
 							report.setTeamPlannedDisbAmount(mf.format(teamPlannedDisbAmount));
 							report.setTeamDisbAmount(mf.format(teamDisbAmount));
 							report.setTeamExpAmount(mf.format(teamExpAmount));
-							//report.setTeamUnDisbAmount(mf.format(teamUnDisbAmount).concat("..10.."));
 							report.setTeamUnDisbAmount(mf.format(undisbTotal));
 
 							projCommAmount=projPlannedDisbAmount=projDisbAmount=projExpAmount=projUnDisbAmount=0;
@@ -5348,7 +5333,6 @@ public class ReportUtil {
 							termAssist.setTermPlannedDisbAmount(mf.format(totalPlDisb));
 							termAssist.setTermDisbAmount(mf.format(totalDisb));
 							termAssist.setTermExpAmount(mf.format(totalExp));
-							//termAssist.setTermUnDisbAmount(mf.format(termComm - totalDisb).concat("..11.."));
 							if(termAssist.getTermAssistName().equals("Loan"))
 								termAssist.setTermUnDisbAmount(mf.format(undisbLoan));
 							if(termAssist.getTermAssistName().equals("Grant"))
@@ -5414,7 +5398,6 @@ public class ReportUtil {
 						project.setProjPlannedDisbAmount(mf.format(projPlannedDisbAmount));
 						project.setProjDisbAmount(mf.format(projDisbAmount));
 						project.setProjExpAmount(mf.format(projExpAmount));
-						//project.setProjUnDisbAmount(mf.format(projCommAmount - projDisbAmount).concat("..12.."));
 						project.setProjUnDisbAmount(mf.format(undisbTotal));
 						ampTeamDonors.getProject().add(project);
 						for(int i=0;i<yrCount;i++)
@@ -5446,7 +5429,6 @@ public class ReportUtil {
 						ampTeamDonors.setDonorPlannedDisbAmount(mf.format(donorPlannedDisbAmount));
 						ampTeamDonors.setDonorDisbAmount(mf.format(donorDisbAmount));
 						ampTeamDonors.setDonorExpAmount(mf.format(donorExpAmount));
-						//ampTeamDonors.setDonorUnDisbAmount(mf.format(donorCommAmount - donorDisbAmount).concat("..13.."));
 						ampTeamDonors.setDonorUnDisbAmount(mf.format(grandTotalUndisb));
 						totalGrandUndisb = totalGrandUndisb + grandTotalUndisb;
 						grandTotalUndisb = 0;
@@ -5499,7 +5481,6 @@ public class ReportUtil {
 								termFund.setTotDonorDisbAmount(mf.format(totalDisb));
 								termFund.setTotDonorExpAmount(mf.format(totalExp));
 								termFund.setTotDonorPlannedDisbAmount(mf.format(totalPlDisb));
-								//termFund.setTotDonorUnDisbAmount(mf.format(loanCommDonorAmount-totalDisb).concat("..14.."));
 								termFund.setTotDonorUnDisbAmount(mf.format(grandTotalLoanUndisb));
 								totalGrandLoanUndisb = totalGrandLoanUndisb + grandTotalLoanUndisb;
 								grandTotalLoanUndisb=0;
@@ -5530,7 +5511,6 @@ public class ReportUtil {
 								termFund.setTotDonorDisbAmount(mf.format(totalDisb));
 								termFund.setTotDonorExpAmount(mf.format(totalExp));
 								termFund.setTotDonorPlannedDisbAmount(mf.format(totalPlDisb));
-								//termFund.setTotDonorUnDisbAmount(mf.format(grantCommDonorAmount-totalDisb).concat("..15.."));
 								termFund.setTotDonorUnDisbAmount(mf.format(grandTotalGrantUndisb));
 								totalGrandGrantUndisb = totalGrandGrantUndisb + grandTotalGrantUndisb;
 								grandTotalGrantUndisb=0;
@@ -5561,13 +5541,12 @@ public class ReportUtil {
 								termFund.setTotDonorDisbAmount(mf.format(totalDisb));
 								termFund.setTotDonorExpAmount(mf.format(totalExp));
 								termFund.setTotDonorPlannedDisbAmount(mf.format(totalPlDisb));
-								//termFund.setTotDonorUnDisbAmount(mf.format(kindCommDonorAmount-totalDisb).concat("..16.."));
 								termFund.setTotDonorUnDisbAmount(mf.format(grandTotalKindUndisb));
 								totalGrandKindUndisb = totalGrandKindUndisb + grandTotalKindUndisb;
 								grandTotalKindUndisb=0;
 								totalPlDisb=totalDisb=totalExp=0.0;
 							}
-//							logger.debug("Added:'" + termFund.getTermAssistName());
+							//logger.debug("Added:'" + termFund.getTermAssistName());
 							ampTeamDonors.getTotalDonorTermAssistFund().add(termFund);	
 						}
 						report.getDonors().add(ampTeamDonors);
@@ -5657,7 +5636,6 @@ public class ReportUtil {
 							termAssist.setTermPlannedDisbAmount(mf.format(totalPlDisb));
 							termAssist.setTermDisbAmount(mf.format(totalDisb));
 							termAssist.setTermExpAmount(mf.format(totalExp));
-							//termAssist.setTermUnDisbAmount(mf.format(termComm-totalDisb).concat("..17.."));
 							if(termAssist.getTermAssistName().equals("Loan"))
 								termAssist.setTermUnDisbAmount(mf.format(undisbLoan));
 							if(termAssist.getTermAssistName().equals("Grant"))
@@ -5724,7 +5702,6 @@ public class ReportUtil {
 						project.setProjPlannedDisbAmount(mf.format(projPlannedDisbAmount));
 						project.setProjDisbAmount(mf.format(projDisbAmount));
 						project.setProjExpAmount(mf.format(projExpAmount));
-						//project.setProjUnDisbAmount(mf.format(projCommAmount - projDisbAmount).concat("..18.."));
 						project.setProjUnDisbAmount(mf.format(undisbTotal));
 						ampTeamDonors.getProject().add(project);
 						for(int i=0;i<yrCount;i++)
@@ -5807,7 +5784,6 @@ public class ReportUtil {
 								termAssist.setTermPlannedDisbAmount(mf.format(totalPlDisb));
 								termAssist.setTermDisbAmount(mf.format(totalDisb));
 								termAssist.setTermExpAmount(mf.format(totalExp));
-								//termAssist.setTermUnDisbAmount(mf.format(termComm - totalDisb).concat("..19.."));
 								if(termAssist.getTermAssistName().equals("Loan"))
 									termAssist.setTermUnDisbAmount(mf.format(undisbLoan));
 								if(termAssist.getTermAssistName().equals("Grant"))
@@ -6111,7 +6087,6 @@ public class ReportUtil {
 						termAssist.setTermPlannedDisbAmount(mf.format(totalPlDisb));
 						termAssist.setTermDisbAmount(mf.format(totalDisb));
 						termAssist.setTermExpAmount(mf.format(totalExp));
-						//termAssist.setTermUnDisbAmount(mf.format(termComm-totalDisb).concat("..20.."));
 						if(termAssist.getTermAssistName().equals("Loan"))
 							termAssist.setTermUnDisbAmount(mf.format(undisbLoan));
 						if(termAssist.getTermAssistName().equals("Grant"))
@@ -6177,7 +6152,6 @@ public class ReportUtil {
 					project.setProjPlannedDisbAmount(mf.format(projPlannedDisbAmount));
 					project.setProjDisbAmount(mf.format(projDisbAmount));
 					project.setProjExpAmount(mf.format(projExpAmount));
-					//project.setProjUnDisbAmount(mf.format(projCommAmount-projDisbAmount).concat("..21.."));
 					project.setProjUnDisbAmount(mf.format(undisbTotal));
 					ampTeamDonors.getProject().add(project);
 					for(int i=0;i<yrCount;i++)
@@ -6208,7 +6182,6 @@ public class ReportUtil {
 					ampTeamDonors.setDonorPlannedDisbAmount(mf.format(donorPlannedDisbAmount));
 					ampTeamDonors.setDonorDisbAmount(mf.format(donorDisbAmount));
 					ampTeamDonors.setDonorExpAmount(mf.format(donorExpAmount));
-					//ampTeamDonors.setDonorUnDisbAmount(mf.format(donorCommAmount-donorDisbAmount).concat("..22.."));
 					ampTeamDonors.setDonorUnDisbAmount(mf.format(undisbTotal));
 					totalGrandUndisb = totalGrandUndisb+undisbTotal;
 					//ampTeamDonors.getTotalDonorTermAssistFund().addAll(donorTotal);
@@ -6259,7 +6232,6 @@ public class ReportUtil {
 							termFund.setTotDonorDisbAmount(mf.format(totalDisb));
 							termFund.setTotDonorExpAmount(mf.format(totalExp));
 							termFund.setTotDonorPlannedDisbAmount(mf.format(totalPlDisb));
-							//termFund.setTotDonorUnDisbAmount(mf.format(loanCommDonorAmount-totalDisb).concat("..23.."));
 							termFund.setTotDonorUnDisbAmount(mf.format(undisbLoan));
 							totalGrandLoanUndisb = totalGrandLoanUndisb+undisbLoan;
 							totalPlDisb=totalDisb=totalExp=0.0;
@@ -6289,7 +6261,6 @@ public class ReportUtil {
 							termFund.setTotDonorDisbAmount(mf.format(totalDisb));
 							termFund.setTotDonorExpAmount(mf.format(totalExp));
 							termFund.setTotDonorPlannedDisbAmount(mf.format(totalPlDisb));
-							//termFund.setTotDonorUnDisbAmount(mf.format(grantCommDonorAmount-totalDisb).concat("..24.."));
 							termFund.setTotDonorUnDisbAmount(mf.format(undisbGrant));
 							totalGrandGrantUndisb = totalGrandGrantUndisb+undisbGrant;
 							totalPlDisb=totalDisb=totalExp=0.0;
@@ -6319,7 +6290,6 @@ public class ReportUtil {
 							termFund.setTotDonorDisbAmount(mf.format(totalDisb));
 							termFund.setTotDonorExpAmount(mf.format(totalExp));
 							termFund.setTotDonorPlannedDisbAmount(mf.format(totalPlDisb));
-							//termFund.setTotDonorUnDisbAmount(mf.format(kindCommDonorAmount-totalDisb).concat("..25.."));
 							termFund.setTotDonorUnDisbAmount(mf.format(undisbKind));
 							totalGrandKindUndisb = totalGrandKindUndisb+undisbKind;
 							totalPlDisb=totalDisb=totalExp=0.0;
@@ -6357,7 +6327,6 @@ public class ReportUtil {
 							termFund.setTotDonorDisbAmount(mf.format(totalDisb));
 							termFund.setTotDonorExpAmount(mf.format(totalExp));
 							termFund.setTotDonorPlannedDisbAmount(mf.format(totalPlDisb));
-							//termFund.setTotDonorUnDisbAmount(mf.format(loanCommTeamAmount-totalDisb).concat("..26.."));
 							termFund.setTotDonorUnDisbAmount(mf.format(totalGrandLoanUndisb));
 							grandTotalLoanUndisb=0;
 							totalPlDisb=totalDisb=totalExp=0.0;
@@ -6384,7 +6353,6 @@ public class ReportUtil {
 							termFund.setTotDonorDisbAmount(mf.format(totalDisb));
 							termFund.setTotDonorExpAmount(mf.format(totalExp));
 							termFund.setTotDonorPlannedDisbAmount(mf.format(totalPlDisb));
-							//termFund.setTotDonorUnDisbAmount(mf.format(grantCommTeamAmount-totalDisb).concat("..27.."));
 							termFund.setTotDonorUnDisbAmount(mf.format(totalGrandGrantUndisb));
 							grandTotalGrantUndisb=0;
 							totalPlDisb=totalDisb=totalExp=0.0;
@@ -6410,7 +6378,6 @@ public class ReportUtil {
 							termFund.setTotDonorDisbAmount(mf.format(totalDisb));
 							termFund.setTotDonorExpAmount(mf.format(totalExp));
 							termFund.setTotDonorPlannedDisbAmount(mf.format(totalPlDisb));
-							//termFund.setTotDonorUnDisbAmount(mf.format(kindCommTeamAmount-totalDisb).concat("..28.."));
 							termFund.setTotDonorUnDisbAmount(mf.format(totalGrandKindUndisb));
 							grandTotalKindUndisb=0;
 							totalPlDisb=totalDisb=totalExp=0.0;
@@ -6434,7 +6401,6 @@ public class ReportUtil {
 					report.setTeamPlannedDisbAmount(mf.format(teamPlannedDisbAmount));
 					report.setTeamDisbAmount(mf.format(teamDisbAmount));
 					report.setTeamExpAmount(mf.format(teamExpAmount));
-					//report.setTeamUnDisbAmount(mf.format(teamCommAmount-teamDisbAmount).concat("..29.."));
 					report.setTeamUnDisbAmount(mf.format(totalGrandUndisb));
 					grandTotalUndisb=0;
 					projCount=0;

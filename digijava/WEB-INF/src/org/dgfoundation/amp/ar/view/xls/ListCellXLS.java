@@ -61,6 +61,7 @@ public class ListCellXLS extends XLSExporter {
 		while (i.hasNext()) {
 			Cell element = (Cell) i.next();
 			res+=element.toString();
+			if(i.hasNext())res+=", ";
 		}
 		
 		HSSFCell cell=row.createCell(colId.shortValue());

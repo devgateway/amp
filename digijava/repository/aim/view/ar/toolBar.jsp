@@ -9,6 +9,7 @@
    if("reset".equals(request.getParameter("view"))) viewParam="?view=reset";
    String viewParamXLS="/xlsExport.do"+viewParam;
    String viewParamPDF="/pdfExport.do"+viewParam;
+   String viewParamCSV="/csvExport.do"+viewParam;
 %>
 
    <TABLE class=toolbar id=toolbartable cellSpacing=0 cellPadding=0 
@@ -43,6 +44,13 @@
 				</digi:link>
 				</TD>
 				
+
+				<TD noWrap align=left valign="center">	
+				<digi:img src="images/icon_csv.gif" border="0" alt="Export to CSV"/>
+				<digi:link href="<%=viewParamCSV%>" paramName="ampReportId" paramId="ampReportId">
+				Export to CSV
+				</digi:link>
+				</TD>
 				
 				
 

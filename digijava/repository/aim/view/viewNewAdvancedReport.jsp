@@ -24,13 +24,7 @@
 
 	<tr>
 		<td>
-			<b><bean:write scope="session" name="reportMeta" property="name"/></b>
-		</td>
-	</tr>
-
-	<tr>
-		<td>
-			<i><bean:write scope="session" name="reportMeta" property="reportDescription"/></i>
+			Description: <i><bean:write scope="session" name="reportMeta" property="reportDescription"/></i>
 		</td>
 	</tr>
 

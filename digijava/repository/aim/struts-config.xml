@@ -2880,6 +2880,9 @@
      	type="org.digijava.module.aim.action.XLSExportAction" 
      	scope="session" validate="false" path="/aim/xlsExport"/>
 
+	<action name="aimAdvancedReportForm"
+     	type="org.digijava.module.aim.action.CSVExportAction" 
+     	scope="session" validate="false" path="/aim/csvExport"/>
 
 	<action name="aimMulitlateralbyDonorForm" 
      	type="org.digijava.module.aim.action.ViewPhysicalComponentReport" 

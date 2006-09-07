@@ -9,6 +9,7 @@ import net.sf.hibernate.Session;
 import org.apache.log4j.Logger;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.dbentity.AmpFiscalCalendar;
+import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.DateConversion;
 
 public class FiscalCalendarUtil {
@@ -51,7 +52,12 @@ public class FiscalCalendarUtil {
 			session = PersistenceManager.getSession();
 			AmpFiscalCalendar fisCal = (AmpFiscalCalendar) session.get(AmpFiscalCalendar.class,
 					id);
-			String stDate = fisCal.getStartDayNum() + "/" + fisCal.getStartMonthNum() + "/" + (year + 1);
+			String stDate = null;
+			if (fisCal.getStartDayNum().intValue() == 1 && fisCal.getStartMonthNum().intValue() == 1)
+				stDate = fisCal.getStartDayNum() + "/" + fisCal.getStartMonthNum() + "/" + (year + 1);
+			else 
+				stDate = fisCal.getStartDayNum() + "/" + fisCal.getStartMonthNum() + "/" + (year);
+			
 			d = DateConversion.getDate(stDate);
 			GregorianCalendar gc = new GregorianCalendar();
 			gc.setTime(d);

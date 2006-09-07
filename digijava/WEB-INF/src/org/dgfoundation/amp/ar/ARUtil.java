@@ -404,12 +404,12 @@ public final class ARUtil {
 				formBean.setCloseYear(All);
 				formBean.setCloseMonth(All);
 				formBean.setCloseDay(All);
-				startYear = year - 15;
-				startMonth = 1;
-				startDay = 1;
-				closeYear = year;
-				closeMonth = 12;
-				closeDay = 31;
+				startYear = 0;
+				startMonth = 0;
+				startDay = 0;
+				closeYear = 0;
+				closeMonth =0;
+				closeDay = 0;
 				fiscalCalId = teamMember.getAppSettings().getFisCalId()
 						.intValue();
 				formBean.setFiscalCalId(fiscalCalId);

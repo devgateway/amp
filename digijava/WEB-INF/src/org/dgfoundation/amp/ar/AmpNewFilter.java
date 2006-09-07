@@ -29,11 +29,12 @@ public class AmpNewFilter implements Filter {
 	private int closeMonth = 0;
 	private int closeDay = 0;
 	
-	private String generatedFilterQuery="SELECT amp_activity_id FROM amp_activity WHERE";
+	private String generatedFilterQuery="SELECT amp_activity_id FROM amp_activity WHERE 1";
 	private int initialQueryLength=generatedFilterQuery.length();
 	
 	private void queryAppend(String filter) {
-		generatedFilterQuery+= (initialQueryLength==generatedFilterQuery.length()?"":" AND ") + " amp_activity_id IN ("+filter+")";
+		//generatedFilterQuery+= (initialQueryLength==generatedFilterQuery.length()?"":" AND ") + " amp_activity_id IN ("+filter+")";
+		generatedFilterQuery+= " AND amp_activity_id IN ("+filter+")";
 	}
 	
 	public AmpNewFilter() {

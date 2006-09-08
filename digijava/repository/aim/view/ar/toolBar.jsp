@@ -10,6 +10,7 @@
    String viewParamXLS="/xlsExport.do"+viewParam;
    String viewParamPDF="/pdfExport.do"+viewParam;
    String viewParamCSV="/csvExport.do"+viewParam;
+   String viewParamPrint="/htmlAdvancedReport.do";
 %>
 
    <TABLE class=toolbar id=toolbartable cellSpacing=0 cellPadding=0 
@@ -52,6 +53,15 @@
 				</digi:link>
 				</TD>
 				
+
+				<TD noWrap align=left valign="center">	
+				<digi:img src="images/print_icon.gif" border="0" alt="Printer Friendly"/>
+				<digi:link href="<%=viewParamPrint%>" paramName="ampReportId" paramId="ampReportId">
+				Printer Friendly
+				</digi:link>
+				</TD>
+				
+
 				
 
               </TR>

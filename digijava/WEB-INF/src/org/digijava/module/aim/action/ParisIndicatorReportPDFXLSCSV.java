@@ -1,5 +1,6 @@
 package org.digijava.module.aim.action;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
@@ -51,6 +52,8 @@ public class ParisIndicatorReportPDFXLSCSV extends Action {
 
 	private static int fieldHeight = 0;
 
+	DecimalFormat mf = new DecimalFormat("###,###,###,###,###") ;
+	
 	public ActionForward execute(ActionMapping mapping, ActionForm form,
 			javax.servlet.http.HttpServletRequest request,
 			javax.servlet.http.HttpServletResponse response)
@@ -125,17 +128,15 @@ public class ParisIndicatorReportPDFXLSCSV extends Action {
 					for (int j = 0; j < test.length; j++) {
 						col++;
 						double val = test[j];
+						
 						if(val==-1)
 						{
-							logger.info(" it is -1");
 							data2[row][col] = "na";
 						}
 						else
 						{
-						data2[row][col] = "" + val;
+							data2[row][col] = mf.format(val);
 						}
-						logger.info("data" + test[j] + " row.... " + row
-								+ " col..." + col);
 					}
 				}
 				col = 0;

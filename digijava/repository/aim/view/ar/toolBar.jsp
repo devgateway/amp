@@ -33,14 +33,14 @@
 
 				<TD noWrap align=left valign="center">	
 				<digi:img src="images/pdf_icon.gif" border="0" alt="Export to PDF"/>
-				<digi:link href="<%=viewParamPDF%>" paramName="ampReportId" paramId="ampReportId">
+				<digi:link href="<%=viewParamPDF%>" paramName="ampReportId" paramId="ampReportId" target="_blank">
 				Export to PDF
 				</digi:link>
 				</TD>
 			
 				<TD noWrap align=left valign="center">	
 				<digi:img src="images/xls_icon.jpg" border="0" alt="Export to Excel"/>
-				<digi:link href="<%=viewParamXLS%>" paramName="ampReportId" paramId="ampReportId">
+				<digi:link href="<%=viewParamXLS%>" paramName="ampReportId" paramId="ampReportId" target="_blank">
 				Export to Excel
 				</digi:link>
 				</TD>
@@ -48,7 +48,7 @@
 
 				<TD noWrap align=left valign="center">	
 				<digi:img src="images/icon_csv.gif" border="0" alt="Export to CSV"/>
-				<digi:link href="<%=viewParamCSV%>" paramName="ampReportId" paramId="ampReportId">
+				<digi:link href="<%=viewParamCSV%>" paramName="ampReportId" paramId="ampReportId" target="_blank"> 
 				Export to CSV
 				</digi:link>
 				</TD>
@@ -56,7 +56,7 @@
 
 				<TD noWrap align=left valign="center">	
 				<digi:img src="images/print_icon.gif" border="0" alt="Printer Friendly"/>
-				<digi:link href="<%=viewParamPrint%>" paramName="ampReportId" paramId="ampReportId">
+				<digi:link href="<%=viewParamPrint%>" paramName="ampReportId" paramId="ampReportId" target="_blank">
 				Printer Friendly
 				</digi:link>
 				</TD>

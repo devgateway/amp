@@ -555,11 +555,12 @@ public class EditActivity extends Action {
 							Iterator fundDetItr = fundDetails.iterator();
 							List fundDetail = new ArrayList();
 
+							long indexId = System.currentTimeMillis();
 							while (fundDetItr.hasNext()) {
 								AmpFundingDetail fundDet = (AmpFundingDetail) fundDetItr
 										.next();
 								FundingDetail fundingDetail = new FundingDetail();
-								fundingDetail.setIndexId(System.currentTimeMillis());
+								fundingDetail.setIndexId(indexId++);
 								int adjType = fundDet.getAdjustmentType()
 										.intValue();
 								fundingDetail.setAdjustmentType(adjType);

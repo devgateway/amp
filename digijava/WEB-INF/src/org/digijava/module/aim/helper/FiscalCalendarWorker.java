@@ -14,7 +14,7 @@ import org.digijava.module.aim.util.FiscalCalendarUtil;
 
 public class FiscalCalendarWorker
 {
-	private static Logger logger = Logger.getLogger(FiscalCalendarWorker.class) ;
+	//private static Logger logger = Logger.getLogger(FiscalCalendarWorker.class) ;
 	
 	/**@author jose 
 	 * This method will return fiscal year and quarter this date 
@@ -87,13 +87,10 @@ public class FiscalCalendarWorker
 					boolean found = false;
 					
 					while (found == false && fiscalQtr < 4) {
-						logger.info("** fiscalQtr:" + fiscalQtr);
-						logger.info(DateConversion.ConvertDateToString(d) + " & " + DateConversion.ConvertDateToString(gc1.getTime()));
 						if (d.after(gc1.getTime()) || d.equals(gc1.getTime())) {
 							fiscalQtr ++;
 						} else {
 							found = true;
-							logger.info("found the qrtr " + fiscalQtr);
 							break;							
 						}
 						if (!found) {
@@ -152,7 +149,6 @@ public class FiscalCalendarWorker
 			fdo.setFiscalYear(0);
 			fdo.setFiscalQuarter(0);
 		}
-		logger.info("Date = " + DateConversion.ConvertDateToString(d) +", Fiscal year = "+fdo.getFiscalYear()+", quarter= "+fdo.getFiscalQuarter()) ;
 		return fdo ;
 	}
 }

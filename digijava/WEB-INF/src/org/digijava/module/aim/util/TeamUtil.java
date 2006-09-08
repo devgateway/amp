@@ -10,6 +10,7 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Set;
 import java.util.Vector;
 
@@ -19,7 +20,6 @@ import net.sf.hibernate.Session;
 import net.sf.hibernate.Transaction;
 
 import org.apache.log4j.Logger;
-import org.digijava.kernel.config.ParamSafeHTML;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.request.Site;
 import org.digijava.kernel.user.Group;
@@ -1575,7 +1575,7 @@ public class TeamUtil {
 	 */
 	public static Collection getTeamReportsCollection(Long teamId) {
 		Session session = null;
-		Collection col = null;
+		ArrayList col = null;
 		try {
 			session = PersistenceManager.getSession();
 			String queryString = "select tr from "
@@ -1601,7 +1601,6 @@ public class TeamUtil {
 					ampReport = (AmpReports) itrTemp.next();
 				}
 				// end
-
 				ReportsCollection rc = new ReportsCollection();
 				rc.setReport(ampReport);
 				if (ampTeamRep.getTeamView() == false) {
@@ -1609,10 +1608,11 @@ public class TeamUtil {
 				} else {
 					rc.setTeamView(true);
 				}
-
+				
 				col.add(rc);
 
 			}
+			Collections.sort(col);
 		} catch (Exception e) {
 			logger.debug("Exception from getTeamReportsCollection");
 			logger.debug(e.toString());

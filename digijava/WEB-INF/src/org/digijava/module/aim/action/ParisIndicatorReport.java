@@ -72,7 +72,10 @@ public class ParisIndicatorReport extends Action {
 					if (null != tm) {
 						apps = tm.getAppSettings();
 						svForm.setPerspective(CommonWorker.getPerspective(apps.getPerspective()));
-						svForm.setCalendar(apps.getFisCalId().toString());
+						if (null != apps.getFisCalId())
+							svForm.setCalendar(apps.getFisCalId().toString());
+						else
+							svForm.setCalendar(DbUtil.getBaseFiscalCalendar().toString());
 						svForm.setCurrency(CurrencyUtil.getAmpcurrency(apps.getCurrencyId()).getCurrencyCode());
 					}
 				}

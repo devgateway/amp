@@ -1251,6 +1251,35 @@ public class DbUtil {
 		}
 		return fisCals;
 	}
+	
+	public static Long getBaseFiscalCalendar() {
+		Session session = null;
+		Query qry = null;
+		Long fid = new Long(4);
+		
+		try {
+			session = PersistenceManager.getSession();
+			String queryString = "select f from " + AmpFiscalCalendar.class.getName() 
+									+ " where (f.startMonthNum=:start) and (f.startDayNum=:start) and (f.yearOffset=:offset)";
+			qry = session.createQuery(queryString);
+			qry.setParameter("start", new Integer(1), Hibernate.INTEGER);
+			qry.setParameter("offset", new Integer(0), Hibernate.INTEGER);
+			if (null != qry.list())
+				fid = ((AmpFiscalCalendar) qry.list().get(0)).getAmpFiscalCalId();
+		} catch (Exception ex) {
+			logger.error("Unable to get base fiscal calendar" + ex);
+			ex.printStackTrace(System.out);
+		} finally {
+			try {
+				if (session != null) {
+					PersistenceManager.releaseSession(session);
+				}
+			} catch (Exception ex) {
+				logger.error("releaseSession() failed");
+			}
+		}
+		return fid;
+	}
 
 	public static Collection getAllActivities() {
 		Session session = null;
@@ -5436,6 +5465,8 @@ public class DbUtil {
 	int YEAR_RANGE = (closeYear - startYear + 1);
 	int indcFlag = 0, index = 0, j = 0, convYr = 0;
 	double sum = 0.0, fromExchangeRate = 0.0, toExchangeRate = 0.0, ansToQues4 = 0.0;
+	Date startDates[] = null;
+	Date endDates[] = null;
 	double answersRow[] = null;
 	double allDnRow[] = null;
 	boolean answers[] = null;
@@ -5443,7 +5474,6 @@ public class DbUtil {
 	NumberFormat formatter = new DecimalFormat("#.##");
 	String date = null;
 	Iterator itr1 = null, itr2 = null, itr3 = null, itr4 = null;
-	Date startDate = null, endDate = null;
 	
 	try {
 		//logger.debug("indcCode[inside getAidSurveyReportByIndicator] : " + indcCode);
@@ -5468,11 +5498,9 @@ public class DbUtil {
 				NUM_ANSWER_COLUMNS = 5;
 				indcFlag = 9;
 			}
-			if (!(calendar.equals(Constants.ETH_CAL.toString()) || 
-					calendar.equals(Constants.ETH_FY.toString()))) {
-				startDate = FiscalCalendarUtil.getCalendarStartDate(new Long(calendar),startYear);
-				endDate   = FiscalCalendarUtil.getCalendarEndDate(new Long(calendar),closeYear);
-			}
+			startDates = new Date[YEAR_RANGE];
+			endDates = new Date[YEAR_RANGE];
+			//logger.debug("calendar: " + calendar);
 			Comparator dnComp = new Comparator() {
 				public int compare(Object o1, Object o2) {
 					AmpOrganisation r1 = (AmpOrganisation) o1;
@@ -5525,6 +5553,15 @@ public class DbUtil {
 						answersRow = new double[NUM_ANSWER_COLUMNS];
 						answersRow[0] = (startYear + i);
 					}
+					if (startDates[i] == null || endDates[i] == null) {
+						if (!(calendar.equals(Constants.ETH_CAL.toString()) || 
+								calendar.equals(Constants.ETH_FY.toString()))) {
+							startDates[i] = FiscalCalendarUtil.getCalendarStartDate(new Long(calendar), startYear+i);
+							endDates[i]   = FiscalCalendarUtil.getCalendarEndDate(new Long(calendar), startYear+i);
+						}
+					}
+					//logger.debug("year: " + (startYear+i) + " startDates[" + i + "]: " + startDates[i] 
+					  //               + " endDates[" + i + "]: " + endDates[i]);
 					itr2 = surveySet.iterator();
 					index = 0;
 					while(itr2.hasNext()) {
@@ -5614,7 +5651,7 @@ public class DbUtil {
 													// Filtering by disbursement-year here
 													if (convYr == (startYear + i)) { 
 													*/
-													if (isValidTransactionDate(startYear + i, fundtl.getTransactionDate(), startDate, endDate)) {
+													if (isValidTransactionDate(startYear+i, fundtl.getTransactionDate(), startDates[i], endDates[i])) {
 														// Filtering by AdjustmentType & TransactionType here -
 														// only 'Actual Disbursement' is considered except for indicator-7.
 														if ((indcFlag != 7 && fundtl.getAdjustmentType().intValue() != Constants.ACTUAL)
@@ -5791,6 +5828,7 @@ public class DbUtil {
 	
 	public static boolean isValidTransactionDate(int year, Date transactionDate, Date startDate, Date endDate) {
 		boolean result = false;
+		//logger.debug("year: " + year + " transactionDate: " + transactionDate);
 		if (startDate == null || endDate == null) {
 			GregorianCalendar gc = new GregorianCalendar();
 			gc.setTime(transactionDate);
@@ -5801,9 +5839,12 @@ public class DbUtil {
 		else {
 			if ((transactionDate.after(startDate) || chkEqualDates(transactionDate, startDate))
 					&& (transactionDate.before(endDate) || chkEqualDates(transactionDate, endDate))) {
-				if (year == DateConversion.getYear(DateConversion.ConvertDateToString(transactionDate)))
-					result = true;
+				result = true;
+				/*if (year == DateConversion.getYear(DateConversion.ConvertDateToString(transactionDate)))
+					result = true;*/
 			}
+			//else
+				//logger.debug("[isValidTransactionDate] date-range mismatch !");
 		}
 		return result;
 	}
@@ -5812,6 +5853,7 @@ public class DbUtil {
 		boolean result = false;
 		SimpleDateFormat formatter = new SimpleDateFormat("M/d/y");
 		result = (formatter.format(d1).equalsIgnoreCase(formatter.format(d2))) ? true : false;
+		//logger.debug("[chkEqualDates] date1: " + d1 + " date2:" + d2 + " result: " + result);
 		return result;
 	}
 	

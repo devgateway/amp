@@ -200,11 +200,6 @@ function popupwin()
 						</tr>	
 					</table>
 				</td></tr>
-				<tr><td>
-					&nbsp;
-					<digi:trn key="um:allMarkedRequiredField">All fields marked with an <FONT color=red><B><BIG>*</BIG>
-					</B></FONT> are required.</digi:trn>					
-				</td></tr>
 				<tr> <td>
 					<digi:errors/>
 				</td></tr>

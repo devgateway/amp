@@ -445,7 +445,7 @@ function checkUncheckAll2() {
 																					<td width="300" align="left">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 																						<html:radio property="reportOption" value="A">
 																							<digi:trn key="aim:AnnualReport">
-																								&nbsp;&nbsp;Annual
+																								Annual
 																							</digi:trn>
 																						</html:radio>
 																					</td>
@@ -453,7 +453,7 @@ function checkUncheckAll2() {
 																					<td width="300" align="left">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 																						<html:radio property="reportOption" value="Q"> 
 																							<digi:trn key="aim:QuarterlyReport">
-																								&nbsp;&nbsp;Quarterly
+																								Quarterly
 																							</digi:trn>
 																						</html:radio>
 																					</td>

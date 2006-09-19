@@ -6,6 +6,7 @@
  */
 package org.dgfoundation.amp.ar;
 
+import java.lang.reflect.Constructor;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
@@ -18,6 +19,7 @@ import javax.servlet.http.HttpSession;
 
 import net.sf.hibernate.Session;
 
+import org.apache.log4j.Logger;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionMapping;
 import org.digijava.kernel.persistence.PersistenceManager;
@@ -43,6 +45,17 @@ import org.digijava.module.aim.util.TeamUtil;
  */
 public final class ARUtil {
 
+	protected static Logger logger = Logger.getLogger(ARUtil.class);
+	
+	public static Constructor getConstrByParamNo(Class c,int paramNo) {
+		Constructor[] clist = c.getConstructors();
+		for (int j = 0; j < clist.length; j++) {
+			if(clist[j].getParameterTypes().length==paramNo) return clist[j];
+		}
+		logger.error("Cannot find a constructor with "+paramNo+" parameters for class "+c.getName());
+		return null;
+	}
+	
 	public static GroupReportData generateReport(ActionMapping mapping,
 			ActionForm form, HttpServletRequest request,
 			HttpServletResponse response) throws java.lang.Exception {

@@ -13,7 +13,6 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.dgfoundation.amp.ar.cell.AmountCell;
-import org.dgfoundation.amp.ar.cell.CategAmountCell;
 import org.dgfoundation.amp.ar.cell.Cell;
 import org.dgfoundation.amp.ar.exception.IncompatibleColumnException;
 import org.dgfoundation.amp.ar.exception.UnidentifiedItemException;
@@ -123,8 +122,9 @@ public class AmpReportGenerator extends ReportGenerator {
 				Class cellType = Class.forName(cellTypeName);
 				
 				
+				Constructor cellc=ARUtil.getConstrByParamNo(cellType,0);
+				
 				// create an instance of the cell that is of type described
-				Constructor cellc = cellType.getConstructors()[0];
 				Cell cell = (Cell) cellc.newInstance(new Object[] {});
 
 				// column worker is a class returned by getWorker method of each
@@ -136,11 +136,11 @@ public class AmpReportGenerator extends ReportGenerator {
 				ColumnWorker ce = null;
 				if (extractorView != null) {
 
-					Constructor ceCons = ceClass.getConstructors()[0];
+					Constructor ceCons = ARUtil.getConstrByParamNo(ceClass,4);
 					ce = (ColumnWorker) ceCons.newInstance(new Object[] {
 							filter.getGeneratedFilterQuery(), extractorView, columnName,this });
 				} else {
-					Constructor ceCons = ceClass.getConstructors()[0];
+					Constructor ceCons = ARUtil.getConstrByParamNo(ceClass,3);
 					ce = (ColumnWorker) ceCons.newInstance(new Object[] {
 							columnName, rawColumns,this});
 				}

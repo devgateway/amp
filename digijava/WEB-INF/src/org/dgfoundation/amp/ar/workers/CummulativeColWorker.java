@@ -26,16 +26,20 @@ public class CummulativeColWorker extends ColumnWorker {
 	 * @param destName
 	 * @param sourceGroup
 	 */
-	public CummulativeColWorker(String destName, GroupColumn source,ReportGenerator generator) {
-		super(destName, source,generator);
+	public CummulativeColWorker(String condition,String viewName,String columnName,ReportGenerator generator) {
+		super(condition,viewName, columnName,generator);
+	}
+
+	public CummulativeColWorker(String columnName,GroupColumn rawColumns,ReportGenerator generator) {
+		super(columnName,rawColumns,generator);
 		sourceName="Funding";
 	}
 
+	
 	/* (non-Javadoc)
 	 * @see org.dgfoundation.amp.ar.workers.ColumnWorker#getCellFromRow(java.sql.ResultSet)
 	 */
 	protected Cell getCellFromRow(ResultSet rs) throws SQLException {
-		// TODO Auto-generated method stub
 		return null;
 	}
 

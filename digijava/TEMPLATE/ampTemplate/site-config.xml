@@ -2,7 +2,7 @@
 <site-config>
 	<site-layout>
 		<layout name="footerLayout" file="footerLayout.jsp">
-		    <put name="version">1.05</put>
+		    <put name="version">1.05a</put>
 		   <put-item name="transmode" module="translation" instance="default" teaser="modeSwitch"/>
 			<put-item name="ampAdminLink" file="ampAdminLink.jsp"/>
 			<put-item name="adminLink" module="admin" instance="default" teaser="adminLink"/>

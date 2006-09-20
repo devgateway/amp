@@ -149,7 +149,7 @@
 												<table border="0" cellPadding=3 cellSpacing=0 width="100%">
 													<tr bgColor=#f4f4f2>
 														<td bgColor=#c9c9c7 class=box-title>
-															<digi:trn key="aim:activityListforTeam">&nbsp;
+															<digi:trn key="aim:activityListforTeam">
 															Activity List for Team
 															</digi:trn>
 															<c:out value="${aimTeamActivitiesForm.teamName}" />

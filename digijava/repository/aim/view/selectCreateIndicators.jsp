@@ -159,7 +159,7 @@
 													<table border="0" cellPadding=0 cellSpacing=0 width=237>
 														<tr bgColor=#f4f4f2>
 															<td bgColor=#c9c9c7 class=box-title width=220>
-																<digi:trn key="aim:monitoringAndEvaluation">&nbsp;
+																<digi:trn key="aim:monitoringAndEvaluation">
 																	Monitoring & Evaluation	
 																</digi:trn>
 															</td>

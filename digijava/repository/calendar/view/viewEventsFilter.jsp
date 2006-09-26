@@ -26,7 +26,7 @@ function submitFilterForm(view, timestamp) {
             <html:hidden name="calendarViewForm" property="view" value="${calendarViewForm.view}"/>
             <html:hidden name="calendarViewForm" property="timestamp" value="${calendarViewForm.timestamp}"/>
             <html:hidden name="calendarViewForm" property="filterInUse" value="true"/>
-            <table border="0" width="100%" style="border:2px solid; border-color: #484846;">
+            <table border="0" width="100%" style="border:1px solid; border-color: #484846;">
                 <tr>
                     <td colspan="2">&nbsp;Event Type</td>
                 </tr>

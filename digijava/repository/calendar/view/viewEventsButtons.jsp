@@ -10,7 +10,7 @@
 
 <style type="text/css">
     #tbl td {
-        border:2px solid;
+        border:1px solid;
         border-color: #484846;
         width:100px;
     }

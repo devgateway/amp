@@ -212,9 +212,7 @@ function selectCalendarType(view, type) {
     <tr>
         <td>
             &nbsp;Today&nbsp;is:&nbsp;
-            ${calendarViewForm.currentDateBreakDown.monthNameLong}&nbsp;
-            ${calendarViewForm.currentDateBreakDown.dayOfMonth},&nbsp;
-            ${calendarViewForm.currentDateBreakDown.year}
+            ${calendarViewForm.currentDateBreakDown.dayOfMonth}/${calendarViewForm.currentDateBreakDown.month}/${calendarViewForm.currentDateBreakDown.year}
         </td>
     <tr>
 </table>

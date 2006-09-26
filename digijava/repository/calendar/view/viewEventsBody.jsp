@@ -60,7 +60,7 @@
         </c:if>
     </tr>
 </table>
-<table border="0" width="100%" cellpadding="0" cellspacing="0" style="border:2px solid; border-color: #484846;">
+<table border="0" width="100%" cellpadding="0" cellspacing="0" style="border:1px solid; border-color: #484846;">
     <tr>
         <td align="center" width="140" <c:if test="${calendarViewForm.view == 'monthly'}">rowspan="2"</c:if>>Event Name</td>
         <c:if test="${calendarViewForm.view != 'custom'}">
@@ -69,7 +69,7 @@
                     <c:set var="firstItem" value="true"/>
                     <logic:iterate id="item" name="row">
                         <c:if test="${firstItem}">
-                            <td colspan="7" style="border-left:1px solid;border-bottom:1px solid">&nbsp;${item.month}&nbsp;${item.dayOfMonth}</td>
+                            <td colspan="7" style="border-left:1px solid;">&nbsp;${item.month}&nbsp;${item.dayOfMonth}</td>
                         </c:if>
                         <c:set var="firstItem" value="false"/>
                     </logic:iterate>
@@ -80,7 +80,7 @@
                 <logic:iterate id="item" name="row">
                     <c:choose>
                         <c:when test="${calendarViewForm.view == 'yearly'}">
-                            <td align="center" style="border-left:2px solid" <c:if test="${item.nolink}">bgcolor="#ffbebe"</c:if>>
+                            <td align="center" style="border-left:1px solid" <c:if test="${item.nolink}">bgcolor="#ffbebe"</c:if>>
                                 <a href="#" style="text-decoration:none" onclick="submitFilterForm('${calendarViewForm.view}', '${item.timestamp}');return(false);">${item.month}</a>
                             </td>
                         </c:when>
@@ -124,7 +124,7 @@
     </tr>
     <logic:iterate id="ampCalendarGraph" name="calendarViewForm" property="ampCalendarGraphs">
         <tr>
-            <td align="center" style="border-top:2px solid;" width="80">
+            <td align="center" style="border-top:1px solid;" width="80">
                 <div style="width:140;overflow:hidden">
                     <digi:link href="/showCalendarEvent.do~ampCalendarId=${ampCalendarGraph.ampCalendar.calendarPK.calendar.id}">
                         <logic:iterate id="ampCalendarEventItem" name="ampCalendarGraph" property="ampCalendar.calendarPK.calendar.calendarItem">
@@ -161,14 +161,14 @@
                         <tr>
             </c:if>
             <logic:iterate id="ampCalendarGraphItem" name="ampCalendarGraph" property="graphItems">
-                <td align="center" valign="middle" <c:if test="${calendarViewForm.view == 'custom'}">width="25%"</c:if><c:if test="${calendarViewForm.view != 'custom'}">style="border-top:2px solid;"</c:if>>
+                <td align="center" valign="middle" <c:if test="${calendarViewForm.view == 'custom'}">width="25%"</c:if><c:if test="${calendarViewForm.view != 'custom'}">style="border-top:1px solid; border-left:1px solid"</c:if>>
                     <table cellpadding="0" cellspacing="0" width="100%" border="0">
                         <tr>
                             <c:if test="${ampCalendarGraphItem.left > 0}">
                                 <td width="${ampCalendarGraphItem.left}%"><digi:img src="module/calendar/images/spacer.gif"/></td>
                             </c:if>
                             <c:if test="${ampCalendarGraphItem.center > 0}">
-                                <td width="${ampCalendarGraphItem.center}%"><digi:img src="module/calendar/images/spacer.gif" style="width:100%;height:5px;background-color:#${ampCalendarGraphItem.color}"/></td>
+                                <td width="${ampCalendarGraphItem.center}%"><digi:img src="module/calendar/images/spacer.gif" style="width:100%;height:7px;background-color:#${ampCalendarGraphItem.color}"/></td>
                             </c:if>
                             <c:if test="${ampCalendarGraphItem.right > 0}">
                                 <td width="${ampCalendarGraphItem.right}%"><digi:img src="module/calendar/images/spacer.gif"/></td>

@@ -64,8 +64,9 @@ public abstract class Viewable implements Cloneable {
 			Class c = Class.forName(viewer);
 			// get the first constructor - it SHOULD be the one that receives an
 			// Exporter object (parent)
-			Constructor cons = c.getConstructors()[0];
+			Constructor cons = ARUtil.getConstrByParamNo(c,2);
 			// instantiate an exporter object with reference to the parent
+			ARUtil.getConstrByParamNo(c,2);
 			Exporter exp = (Exporter) cons.newInstance(new Object[] { parent,
 					this });
 			// invoke generate method to this object

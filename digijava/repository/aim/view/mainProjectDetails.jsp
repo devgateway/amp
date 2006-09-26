@@ -56,18 +56,14 @@
 				<TR>
 					<TD>
 						<SPAN class=crumb>
-							<bean:define id="translation">
-								<digi:trn key="aim:clickToViewMyDesktop">Click here to view MyDesktop</digi:trn>
-							</bean:define>
-							<digi:link href="/viewMyDesktop.do" styleClass="comment" title="<%=translation%>" >
+							<div id="gen" title='<digi:trn key="aim:clickToViewMyDesktop">Click here to view MyDesktop</digi:trn>'>
+							<digi:link href="/viewMyDesktop.do" styleClass="comment">
 								<digi:trn key="aim:portfolio">Portfolio</digi:trn>
-							</digi:link>&nbsp;&gt;&nbsp;
-							<bean:define id="translation">
-								<digi:trn key="aim:clickToViewActivity">Click here to view Activity</digi:trn>
-							</bean:define>
-		            	<digi:link href="/viewChannelOverview.do" name="urlTabs" styleClass="comment" title="<%=translation%>" >
+							</digi:link></div>&nbsp;&gt;&nbsp;
+							<div id="gen" title='<digi:trn key="aim:clickToViewActivity">Click here to view Activity</digi:trn>'>
+		            	<digi:link href="/viewChannelOverview.do" name="urlTabs" styleClass="comment">
         						<digi:trn key="aim:activity">Activity</digi:trn>
-							</digi:link>&nbsp;&gt;&nbsp;
+							</digi:link></div>&nbsp;&gt;&nbsp;
         					<digi:trn key="aim:activityDetails">Details</digi:trn>
 						</SPAN>
 					</TD>
@@ -82,29 +78,23 @@
 			<TABLE width="100%" cellSpacing="0" cellPadding="0" vAlign="top">
 				<TR>
 					<TD>
-						<TABLE cellpadding=0 cellspacing=0 valign=top align=left>
+						<TABLE cellpadding=0 cellspacing=0 valign=top align=left width="100%"> 
 							<TR>
-							<TD height=16 vAlign=center width="550"><span class=subtitle-blue>
+							<TD vAlign=center><span class=subtitle-blue>
 								<bean:write name="aimMainProjectDetailsForm" property="name"/></span>
 							</TD>
-							<TD>
+							<TD align="right">
 								<SPAN class=crumb>
-									<bean:define id="translation">
-										<digi:trn key="aim:clickToViewProjectDescription">Click here to View Project Description</digi:trn>
-									</bean:define>	
-									<a href="javascript:viewProjectDetails('Desc','<c:out value="${aimMainProjectDetailsForm.description}"/>')" class="comment" title="<%=translation%>">
-										<digi:trn key="aim:viewDescription">View Description</digi:trn></a></SPAN>
+									<div id="gen" title='<digi:trn key="aim:clickToViewProjectDescription">Click here to View Project Description</digi:trn>'>
+									<a href="javascript:viewProjectDetails('Desc','<c:out value="${aimMainProjectDetailsForm.description}"/>')" 
+									class="comment">
+									<digi:trn key="aim:viewDescription">View Description</digi:trn></a></div>
 									&nbsp;&nbsp;
-							</TD>
-							
-							<TD>
-								<SPAN class=crumb>
-									<bean:define id="translation">
-										<digi:trn key="aim:clickToViewProjectObjectives">Click here to View Project Objectives</digi:trn>
-									</bean:define>					
-									<a href="javascript:viewProjectDetails('Obj','<c:out value="${aimMainProjectDetailsForm.objectives}"/>')" class="comment" title="<%=translation%>">
-										<digi:trn key="aim:viewObjectives">View Objectives</digi:trn></a>
-								</SPAN>
+									<div id="gen" title='<digi:trn key="aim:clickToViewProjectObjectives">Click here to View Project Objectives</digi:trn>'>
+									<a href="javascript:viewProjectDetails('Obj','<c:out value="${aimMainProjectDetailsForm.objectives}"/>')" 
+									class="comment">
+										<digi:trn key="aim:viewObjectives">View Objectives</digi:trn></a></div>
+								</SPAN>									
 							</TD>
 							</TR>
 						</TABLE>
@@ -125,13 +115,11 @@
 						</LI>
 						 </logic:equal>
 						<logic:notEqual name="aimMainProjectDetailsForm" property="tabIndex" value="0">
-						<bean:define id="translation">
-							<digi:trn key="aim:clickToViewChannelOverview">Click here to view Channel Overview</digi:trn>
-						</bean:define>
 						<LI>
-						<digi:link href="/viewChannelOverview.do" name="urlTabs" title="<%=translation%>">
+						<div id="gen" title='<digi:trn key="aim:clickToViewChannelOverview">Click here to view Channel Overview</digi:trn>'>
+						<digi:link href="/viewChannelOverview.do" name="urlTabs">
 							:: <digi:trn key="aim:channelOverview">Channel Overview</digi:trn>
-						</digi:link>
+						</digi:link></div>
 						</LI>
 						</logic:notEqual>
 
@@ -142,13 +130,11 @@
 						</logic:equal>
 						<logic:notEqual name="aimMainProjectDetailsForm" property="tabIndex" value="1">
      					<c:set target="${urlTabs}" property="tabIndex" value="1"/>
-						<bean:define id="translation">
-							<digi:trn key="aim:clickToViewFinancialProgress">Click here to view Financial Progress</digi:trn>
-						</bean:define>
 						<LI>
-              		<digi:link href="/viewFinancingBreakdown.do" name="urlTabs" title="<%=translation%>" >
+						<div id="gen" title='<digi:trn key="aim:clickToViewFinancialProgress">Click here to view Financial Progress</digi:trn>'>
+              		<digi:link href="/viewFinancingBreakdown.do" name="urlTabs">
 							:: <digi:trn key="aim:financialProgress">Financial Progress</digi:trn>
-						</digi:link>								
+						</digi:link></div>
 						</LI>
 						</logic:notEqual>
 
@@ -159,13 +145,11 @@
 						</logic:equal>
 						<logic:notEqual name="aimMainProjectDetailsForm" property="tabIndex" value="2">
                   <c:set target="${urlTabs}" property="tabIndex" value="2"/>
-						<bean:define id="translation">
-							<digi:trn key="aim:clickToViewPhysicalProgress">Click here to view Physical Progress</digi:trn>
-						</bean:define>
 						<LI>
-                 	<digi:link href="/viewPhysicalProgress.do" name="urlTabs" title="<%=translation%>" >
+						<div id="gen" title='<digi:trn key="aim:clickToViewPhysicalProgress">Click here to view Physical Progress</digi:trn>'>
+                 	<digi:link href="/viewPhysicalProgress.do" name="urlTabs">
                  		:: <digi:trn key="aim:physicalProgress">Physical Progress</digi:trn>
-                 	</digi:link>
+                 	</digi:link></div>
 						</LI>
 						</logic:notEqual>
 						
@@ -176,13 +160,11 @@
 						</LI>
 						<logic:notEqual name="aimMainProjectDetailsForm" property="tabIndex" value="3">
      					<c:set target="${urlTabs}" property="tabIndex" value="3"/>
-						<bean:define id="translation">
-							<digi:trn key="aim:clickToViewDocuments">Click here to view Documents</digi:trn>
-						</bean:define>
 						<LI>
-           			<digi:link href="/viewKnowledge.do" name="urlTabs" title="<%=translation%>" >
+						<div id="gen" title='<digi:trn key="aim:clickToViewDocuments">Click here to view Documents</digi:trn>'>
+           			<digi:link href="/viewKnowledge.do" name="urlTabs">
 							:: <digi:trn key="aim:documents">Documents</digi:trn>	
-						</digi:link>
+						</digi:link></div>
 						</LI>
 						</logic:notEqual>
 						
@@ -194,13 +176,11 @@
 						<logic:notEqual name="aimMainProjectDetailsForm" property="tabIndex" value="4">
 						<c:set target="${urlTabs}" property="tabIndex" value="4"/>
 						<c:set target="${urlTabs}" property="regionId" value="-1"/>
-						<bean:define id="translation">
-							<digi:trn key="aim:clickToViewRegionalFundings">Click here to view regional funding</digi:trn>
-						</bean:define>
 						<LI>
-						<digi:link href="/viewRegionalFundingBreakdown.do" name="urlTabs" title="<%=translation%>" >
+						<div id="gen" title='<digi:trn key="aim:clickToViewRegionalFundings">Click here to view regional funding</digi:trn>'>
+						<digi:link href="/viewRegionalFundingBreakdown.do" name="urlTabs">
 							:: <digi:trn key="aim:regionalFunding">Regional Funding</digi:trn> 	
-						</digi:link>
+						</digi:link></div>
 						</LI>
 						</logic:notEqual>
 					</UL>
@@ -221,13 +201,12 @@
 							<bean:write name="aimMainProjectDetailsForm" property="ampActivityId"/>
 						</c:set>
 						<c:set target="${survey}" property="tabIndex" value="5"/>
-						<bean:define id="translation">
-							<digi:trn key="aim:clickToViewAidEffectIndicators">Click here to view Aid Effectiveness Indicators</digi:trn>
-						</bean:define>
 						<LI>	
-						<digi:link href="/viewSurveyList.do" name="survey" title="<%=translation%>" >
+						<div id="gen" 
+						title='<digi:trn key="aim:clickToViewAidEffectIndicators">Click here to view Aid Effectiveness Indicators</digi:trn>'>
+						<digi:link href="/viewSurveyList.do" name="survey">
 							:: <digi:trn key="aim:parisIndicators">Paris Indicators</digi:trn> 	
-						</digi:link>									
+						</digi:link></div>
 						</LI>
 						</logic:notEqual>
 						</logic:notEmpty>
@@ -240,13 +219,11 @@
 						</logic:equal>
 						<logic:notEqual name="aimMainProjectDetailsForm" property="tabIndex" value="6">
 						<c:set target="${urlTabs}" property="tabIndex" value="6"/>
-						<bean:define id="translation">
-							<digi:trn key="aim:clickToViewActivityDashboard">Click here to view activity dashboard</digi:trn>
-						</bean:define>
 						<LI>
-						<digi:link href="/viewActivityDashboard.do" name="urlTabs" title="<%=translation%>" >
+						<div id="gen" title='<digi:trn key="aim:clickToViewActivityDashboard">Click here to view activity dashboard</digi:trn>'>
+						<digi:link href="/viewActivityDashboard.do" name="urlTabs">
 							:: <digi:trn key="aim:activityDashboard">Dashboard</digi:trn>
-						</digi:link>
+						</digi:link></div>
 						</LI>
 						</logic:notEqual>
 						</logic:notEmpty>

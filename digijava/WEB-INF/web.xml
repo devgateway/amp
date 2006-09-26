@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <web-app xmlns="http://java.sun.com/xml/ns/j2ee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee web-app_2_4.xsd" version="2.4">
 	<display-name>DigiJava</display-name>
+    <context-param>
+		<param-name>patchAMP</param-name>
+		<param-value>org.digijava.module.aim.patches.DBPatcher:patchAMPDB</param-value>
+    </context-param>
 	<filter>
 		<filter-name>showMasterLayout</filter-name>
 		<filter-class>org.digijava.kernel.request.ShowMasterLayout</filter-class>

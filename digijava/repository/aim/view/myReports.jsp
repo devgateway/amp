@@ -12,9 +12,9 @@
         		<TR><TD>
               	<TABLE border=0 cellPadding=0 cellSpacing=0 >
               		<TR bgColor=#f4f4f2>
-                 		<TD bgColor=#c9c9c7 class=box-title width=70>
-								<A title="<digi:trn key="aim:PortfolioOfReports">Portfolio Reports </digi:trn>">
-								Reports</A>
+                 		<TD bgColor=#c9c9c7 class=box-title
+							title='<digi:trn key="aim:PortfolioOfReports">Portfolio Reports </digi:trn>'>
+								<digi:trn key="aim:portfolioReports">Reports</digi:trn>
 							</TD>
                     	<TD background="module/aim/images/corner-r.gif" 
 							height=17 width=17></TD>
@@ -22,30 +22,27 @@
 					</TABLE>
 				</TD></TR>
 				<% int rCount = 0; %>
+				<bean:define id="translation">
+					<digi:trn key="aim:clickToViewReport">Click here to view Report</digi:trn>
+				</bean:define>				
 				<logic:notEmpty name="myReports" scope="session">
 				<TR><TD bgColor=#ffffff class=box-border align=left>
 					<TABLE border=0 cellPadding=1 cellSpacing=1 width="100%" >
 					<logic:iterate name="myReports" id="report" scope="session" 
 					type="org.digijava.module.aim.dbentity.AmpReports"> 
 						<% if (rCount < 5) { rCount ++; %>
-						<TR><TD>
+						<TR><TD title='<%=translation%>'>
 							<IMG alt=Link height=10 src="../ampTemplate/images/arrow-gr.gif" width=10>
 							<bean:define name="report" id="desc" property="description" type="java.lang.String"/>
-							<bean:define id="translation">
-								<digi:trn key="aim:clickToViewReport">Click here to view Report</digi:trn>
-							</bean:define>
-							<digi:link href="<%=desc%>" title="<%=translation%>">
+							<digi:link href="<%=desc%>">
 							<bean:write name="report" property="name"/></digi:link>
 						</TD></TR>
 						<% } %>
 					</logic:iterate>
 					<bean:size id="repCount" name="myReports" scope="session" />
 					<c:if test="${repCount > 5}">
-						<TR><TD>
-							<bean:define id="translation">
-								<digi:trn key="aim:clickToViewMoreReports">Click here to view More Reports</digi:trn>
-							</bean:define>
-							<digi:link href="/viewTeamReports.do" title="<%=translation%>" >
+						<TR><TD title='<digi:trn key="aim:clickToViewMoreReports">Click here to view More Reports</digi:trn>'>
+							<digi:link href="/viewTeamReports.do">
 								<digi:trn key="aim:more">..more</digi:trn>
 							</digi:link>							
 						</TD></TR>
@@ -58,12 +55,9 @@
 						No reports for this workspace
 					</TD></TR>
 				</logic:empty>
-	        		<TR><TD>
-						<bean:define id="translation">
-							<digi:trn key="aim:createAdvancedReport">Create Advanced Report </digi:trn>
-						</bean:define>
-						<digi:link href="/advancedReportManager.do?clear=true" title="<%=translation%>">
-							<b>Advanced Report Manager</b>
+	        		<TR><TD title='<digi:trn key="aim:createAdvancedReport">Create Advanced Report </digi:trn>'>
+						<digi:link href="/advancedReportManager.do?clear=true">
+							<b><digi:trn key="aim:advancedReportManager">Advanced Report Manager</digi:trn></b>
 						</digi:link>
 					</TD></TR>
 	        		<TR><TD>
@@ -73,12 +67,9 @@
 				<!-- Paris Indicators Reports Starts Here -->
 				<c:if var="teamType" test="${currentMember.teamType == 'DONOR'}" scope="session">
 					<logic:notEmpty name="PI" scope="application">
-		      			<TR><TD>
-							<bean:define id="translation">
-								<digi:trn key="aim:clickToViewParisIndcReports">Click here to view Paris Indicator Reports</digi:trn>
-					  		</bean:define>
-							<digi:link href="/parisIndicatorReport.do" title="<%=translation%>">
-								<b> Paris Indicator Reports	</b>
+		      			<TR><TD title='<digi:trn key="aim:clickToViewParisIndcReports">Click here to view Paris Indicator Reports</digi:trn>'>
+							<digi:link href="/parisIndicatorReport.do">
+								<b><digi:trn key="aim:parisIndicatorReports">Paris Indicator Reports</digi:trn></b>
 							</digi:link>
 						</TD></TR>
 					</logic:notEmpty>

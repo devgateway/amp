@@ -2,62 +2,29 @@
 <%@ taglib uri="/taglib/struts-bean" prefix="bean" %>
 <%@ taglib uri="/taglib/struts-logic" prefix="logic" %>
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
-
-<TABLE cellSpacing=0 cellPadding=0 border=0 vAlign="top" align="left" height="20">
-   <TR>
-   	<TD>&nbsp;&nbsp;&nbsp;</TD>
-      <TD width="1" bgcolor="#999999">
-	  </TD>
-      <TD valign=center>
-			<bean:define id="translation">
-				<digi:trn key="aim:enterIntoAIM">Enter in to Aid Information Module</digi:trn>
-			</bean:define>
-			<digi:link href="/showDesktop.do" module="aim" styleClass="nav" onclick="return quitRnot()"	title="<%=translation%>">
-         	::: <digi:trn key="aim:aidInformationModule">AID INFORMATION MODULE</digi:trn>
-		 	</digi:link>
-	  </TD>
-      <TD width="1" bgcolor="#999999">
-		</TD>
-      <TD valign=center>
-			<digi:link href="/viewTeamReports.do" module="aim" styleClass="nav" onclick="return quitRnot()" title="View public team reports">
-			:::  <digi:trn key="aim:reports">REPORTS</digi:trn>
-		 	</digi:link>
-		</TD>
-      <TD width="1" bgcolor="#999999">
-		</TD>
-      <TD valign=center>
-					<a class="nav">
-			::: <digi:trn key="aim:documentsHeader">DOCUMENTS</digi:trn></a>
-		 </TD>
-      <TD width="1" bgcolor="#999999">
-		</TD>
-        <logic:notEmpty name="CL" scope="application">
-          <TD vAlign=center>
-                <digi:link module="calendar" href="/showCalendarView.do" styleClass="nav" onclick="return quitRnot()"	title="View Planning Calendar">
-                  ::: <digi:trn key="aim:calendar">CALENDAR</digi:trn>
-                </digi:link>
-          </TD>
-        </logic:notEmpty>
-		<TD width="1" bgcolor="#999999">
-		</TD>
-		<%--
-      <TD vAlign=center>
-			<a class="nav">
-         	::: <digi:trn key="aim:scenarios">SCENARIOS</digi:trn></a>
-		</TD>
-      <TD width="1" bgcolor="#999999">
-		</TD>
-		--%>
-	<logic:notEmpty name="ME" scope="application">
-      <TD vAlign="center"
-				class="headerLink" onMouseOver="this.className='headerLinkOver'" onMouseOut="this.className='headerLink'">
-			<digi:link href="/viewPortfolioDashboard.do~actId=-1~indId=-1" module="aim" styleClass="nav"
-			onclick="return quitRnot()" title="View M&E Dashboard">
-         	::: <digi:trn key="aim:medashboard">M & E DASHBOARD</digi:trn>
-			</digi:link>
-		</TD>
-    </logic:notEmpty>
-      <TD width="1" bgcolor="#999999">
-		</TD>
-	</TR>
-</TABLE>
+			
+<DIV id="menu">
+	<UL>
+		<LI class="noLink">&nbsp;</LI>
+		<LI>
+			<div id="gen" title='<digi:trn key="aim:enterIntoAIM">Enter in to Aid Information Module</digi:trn>'>
+			<digi:link styleClass="head-menu-link" href="/showDesktop.do" module="aim" onclick="return quitRnot()">
+			::: <digi:trn key="aim:aidInformationModule">AID INFORMATION MODULE</digi:trn>
+			</digi:link></div></LI> 
+		<LI>
+			<div id="gen"  title='<digi:trn key="aim:viewPublicReports">View public team reports</digi:trn>'>
+			<digi:link styleClass="head-menu-link" href="/viewTeamReports.do" module="aim" onclick="return quitRnot()">
+			::: <digi:trn key="aim:reports">REPORTS</digi:trn></digi:link></div></LI> 
+		<LI><a class="head-menu-link">::: <digi:trn key="aim:documentsHeader">DOCUMENTS</digi:trn></a></LI>
+		<LI>
+			<div id="gen" title='<digi:trn key="aim:viewPlanningCalendar">View Planning Calendar</digi:trn>'>
+			<digi:link styleClass="head-menu-link" module="calendar" href="/showCalendarView.do" onclick="return quitRnot()">
+			::: <digi:trn key="aim:calendar">CALENDAR</digi:trn></digi:link></div></LI> 
+		<logic:notEmpty name="ME" scope="application">
+    	<LI>
+			<div id="gen"  title='<digi:trn key="aim:viewMEDashboard">View M&E Dashboard</digi:trn>'>
+			<digi:link styleClass="head-menu-link" href="/viewPortfolioDashboard.do~actId=-1~indId=-1" module="aim" onclick="return quitRnot()">
+			::: <digi:trn key="aim:medashboard">M & E DASHBOARD</digi:trn></digi:link></div></LI>
+		</logic:notEmpty>
+	</UL>
+</DIV>

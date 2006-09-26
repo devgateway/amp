@@ -3,6 +3,8 @@
  */
 package org.digijava.module.aim.startup;
 
+import java.lang.reflect.Method;
+import java.util.Enumeration;
 import java.util.Iterator;
 
 import javax.servlet.ServletContext;
@@ -19,6 +21,8 @@ import org.digijava.module.aim.util.FeaturesUtil;
 public class AMPStartupListener extends HttpServlet 
 	implements ServletContextListener {
     
+	private static final String PATCH_METHOD_KEY = "patchAMP";
+	
     private static Logger logger = Logger.getLogger(
             AMPStartupListener.class);
     
@@ -30,6 +34,7 @@ public class AMPStartupListener extends HttpServlet
     	
     	try {
         	ampContext = sce.getServletContext();
+        	
         	Iterator itr = FeaturesUtil.
         		getActiveFeatures().iterator();
         	while (itr.hasNext()) {
@@ -51,6 +56,36 @@ public class AMPStartupListener extends HttpServlet
         	boolean defFlagExist = FeaturesUtil.defaultFlagExist();
         	ampContext.setAttribute(Constants.DEF_FLAG_EXIST,new Boolean(defFlagExist));
         	
+        	Enumeration params = ampContext.getInitParameterNames();
+        	if (params != null) {
+        		logger.info("params is not null");
+        		while (params.hasMoreElements()) {
+        			String paramName = (String) params.nextElement();
+        			logger.info("Param Name :" + paramName);
+        			if (paramName.startsWith(PATCH_METHOD_KEY)) {
+        	        	String patchMethod = ampContext.getInitParameter(PATCH_METHOD_KEY);
+        	        	int index = patchMethod.indexOf(':');
+        	        	if (index > -1) {
+        	        		String className = patchMethod.substring(0,index);
+        	        		String methodName = patchMethod.substring(index+1,patchMethod.length());
+        	        		logger.info("ClassName :" + className);
+        	        		logger.info("MethodName :" + methodName);
+        	        		try {
+        	        			Class c = Class.forName(className);
+        	        			Object obj = c.newInstance();
+        	        			Method m = c.getMethod(methodName,null);
+        	        			m.invoke(obj,null);
+        	        		} catch (ClassNotFoundException cnfe) {
+        	        			logger.error("Cannot find the patching class:" + className);
+        	        		}
+        	        	} else {
+        	        		logger.error("Wrong paramater values specified for patchMethod");
+        	        	}        				
+        			}
+        		}
+        	} else {
+        		logger.info("params is null");
+        	}
     	} catch (Exception e) {
     		logger.error("Exception while initialising AMP :" + e.getMessage());
     		e.printStackTrace(System.out);

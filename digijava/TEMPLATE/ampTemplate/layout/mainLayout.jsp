@@ -11,8 +11,9 @@
 	<HEAD>
 		<TITLE>AMP<tiles:getAsString name="title"/></TITLE>
 		<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=UTF-8">
-		<META HTTP-EQUIV="Expires" CONTENT="0">
-		<META HTTP-EQUIV="Cache-Control" CONTENT="private">		
+		<META HTTP-EQUIV="PRAGMA" CONTENT="NO-CACHE">
+     	<META HTTP-EQUIV="EXPIRES" CONTENT="0">
+		
 		<script language="javascript">
 		function quitRnot()
 		{
@@ -30,19 +31,22 @@
 				</TD>
 			</TR>
 			<TR>
-				<TD width="100%" align="center" vAlign="top" bgcolor="#5a5a58">
-					<TABLE cellSpacing=0 cellPadding=0 width="98%" border=0 vAlign="center" bgcolor="#5a5a58">
+				<TD align="left" vAlign="top" bgcolor="#5a5a58" width="100%">
+					<DIV id="head-middle">
+					<TABLE cellSpacing=0 cellPadding=0 width="98%"
+					vAlign="center">
 						<TBODY>
-						  	<TR bgColor=#5a5a58 height="10">
-						   	<TD align="left" vAlign="center" height="10">
+						  	<TR bgColor=#5a5a58>
+						   	<TD align="left" vAlign="center">
 									<digi:insert attribute="headerMiddle" />
 								</TD>	
-							  	<TD align="right" vAlign="top" height="10">
+							  	<TD align="right" vAlign="top">
 										<digi:insert attribute="dropdownLangSwitch" />
 								</TD>
 							</TR>
 						</TBODY>
 					</TABLE>
+					</DIV>
 				</TD>
 			</TR>
 			<TR>

@@ -12,9 +12,9 @@
         		<TR><TD>
               	<TABLE border=0 cellPadding=0 cellSpacing=0 >
               		<TR bgColor=#f4f4f2>
-                 		<TD bgColor=#c9c9c7 class=box-title width=70>
-								<A title="<digi:trn key="aim:myTaskListOfTeamLeader">List of activities pending for approval</digi:trn>">
-								<digi:trn key="aim:myTaskList">My Tasks</digi:trn></A>
+                 		<TD bgColor=#c9c9c7 class=box-title
+							title='<digi:trn key="aim:myTaskListOfTeamLeader">List of activities pending for approval</digi:trn>'>
+								<digi:trn key="aim:myTaskList">My Tasks</digi:trn>
 							</TD>
                     	<TD background="module/aim/images/corner-r.gif" 
 							height=17 width=17></TD>

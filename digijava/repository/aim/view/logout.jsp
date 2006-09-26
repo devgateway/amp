@@ -58,11 +58,8 @@
 				</tr>
 				<tr>
 					<td>&nbsp;</td>				
-					<td align=center>
-					<bean:define id="translation">
-						<digi:trn key="aim:clickToGoBackToHomePage">Click here to go back to the Home Page</digi:trn>
-					</bean:define>
-					<digi:link href="/" title="<%=translation%>" >
+					<td align=center title='<digi:trn key="aim:clickToGoBackToHomePage">Click here to go back to the Home Page</digi:trn>'>
+					<digi:link href="/">
 					<digi:trn key="aim:goBackToHomePage">
 					Click here to go back to the home page
 					</digi:trn>

@@ -11,8 +11,8 @@
 	<HEAD>
 		<TITLE>AMP - <tiles:getAsString name="title"/></TITLE>
 		<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=UTF-8">
-		<META HTTP-EQUIV="Expires" CONTENT="0">
-		<META HTTP-EQUIV="Cache-Control" CONTENT="private">
+		<META HTTP-EQUIV="PRAGMA" CONTENT="NO-CACHE">
+     	<META HTTP-EQUIV="EXPIRES" CONTENT="0">
 
 		<SCRIPT type="text/javascript">
 			function formSubmit()	{
@@ -37,10 +37,10 @@
 					<TABLE cellSpacing=0 cellPadding=0 width="98%" border=0 vAlign="top" align="top">
 						<TBODY>
 						  	<TR bgColor=#5a5a58 height="15">
-						   	<TD align="left" vAlign="center" height="15">
+						   	<TD align="left" vAlign="center">
 									<digi:insert attribute="headerMiddle" />
 								</TD>	
-							  	<TD align="right" vAlign="top" height="15">
+							  	<TD align="right" vAlign="top">
 										<digi:insert attribute="dropdownLangSwitch" />
 								</TD>
 							</TR>

@@ -926,7 +926,6 @@ A.imglink:hover
 #navlinks {
  height:1.3em;
  line-height:1.3em;
- width:770px;
  BACKGROUND-COLOR: #3754a1; 
  color:#ffffff;
 }
@@ -945,11 +944,11 @@ A.imglink:hover
  float:left;
  list-style-type:none;
  border-right:1px solid #ffffff;
-  BACKGROUND-COLOR: #3754a1; 
+ BACKGROUND-COLOR: #3754a1; 
  white-space:nowrap;
 }
 
-#navlinks li a {
+#navlinks a {
  padding:4 10 4 10px;		  
  font-size: 11px;
  display:block;
@@ -968,4 +967,62 @@ A.imglink:hover
  text-decoration:none;
  color: #ffffff;
  background-color:#222e5d;
+}
+
+#menu {
+ height:1.3em;
+ line-height:1.3em;
+ color:#ffffff;
+}
+
+#menu ul{
+ margin: 0px;
+ padding: 0 0px;
+}
+
+#menu li{
+height:22px;		  
+ margin: 0px;
+ padding: 0px;
+ border-right:1px solid #aaaaaa; 
+ font-family: Verdana,Tahoma,Arial,sans-serif;
+ font-size: 7pt;
+ float:left;
+ list-style-type:none;
+ white-space:nowrap;
+}
+
+#menu .noLink{
+ font-weight:normal;
+ text-align: center ;
+ text-transform:uppercase;
+ text-decoration:none;
+ color: #ffffff;
+}
+
+A.head-menu-link,A.head-menu-link:active, A.head-menu-link:visited{
+ position:relative;
+ top: 5px;
+ padding: 5 10 5 10px;
+ font-family: Verdana,Tahoma,Arial,sans-serif;
+ font-size: 7pt;		  
+ font-weight:normal;
+ text-align: center ;
+ text-transform:uppercase;
+ text-decoration:none;
+ color: #ffffff;
+}
+
+
+A.head-menu-link:hover {
+ color: #ffffff;
+ background-color:#222e5d; 
+}
+
+#gen {
+	display: inline;		  
+}
+
+#head-middle		{
+ height:22px;
 }

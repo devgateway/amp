@@ -40,7 +40,7 @@
       	<TR><TD>
            	<TABLE border=0 cellPadding=0 cellSpacing=0 >
            		<TR>
-              		<TD bgColor=#c9c9c7 class=box-title width=80>
+              		<TD bgColor=#c9c9c7 class=box-title>
 							&nbsp;<digi:trn key="aim:portfolio">Portfolio</digi:trn>
 						</TD>
                  	<TD background="module/aim/images/corner-r.gif" 
@@ -121,10 +121,9 @@
 						<TR bgcolor="#DDDDDD" height="30">
 							<TD class="colHeaderLink" onMouseOver="this.className='colHeaderOver'" 
 							onMouseOut="this.className='colHeaderLink'" width="40%"
-							onClick="window.document.location='/aim/viewMyDesktop.do?view=sorted&srt=1'">
-								<A title="<digi:trn key="aim:ProjectNames">Complete List of Projects for Team</digi:trn>">
-									<digi:trn key="aim:project">Project</digi:trn>
-								</A>&nbsp;
+							onClick="window.document.location='/aim/viewMyDesktop.do?view=sorted&srt=1'" 
+							title='<digi:trn key="aim:ProjectNames">Complete List of Projects for Team</digi:trn>'>
+								<digi:trn key="aim:project">Project</digi:trn>
 								<c:if test="${aimDesktopForm.srtFld == 1}">
 									<c:if test="${aimDesktopForm.srtAsc == true}">
 										<img src= "../ampTemplate/images/down.gif" align=absmiddle border=0>
@@ -136,10 +135,9 @@
 							</TD>
 							<TD class="colHeaderLink" onMouseOver="this.className='colHeaderOver'" 
 							onMouseOut="this.className='colHeaderLink'"  width="14%"
-							onClick="window.document.location='/aim/viewMyDesktop.do?view=sorted&srt=2'">
-								<A title="<digi:trn key="aim:IdforAMP">System Generated Project ID</digi:trn>">
-									<digi:trn key="aim:ampId">AMP ID</digi:trn>
-								</A>&nbsp;
+							onClick="window.document.location='/aim/viewMyDesktop.do?view=sorted&srt=2'"
+							title='<digi:trn key="aim:IdforAMP">System Generated Project ID</digi:trn>'>
+								<digi:trn key="aim:ampId">AMP ID</digi:trn>
 								<c:if test="${aimDesktopForm.srtFld == 2}">
 									<c:if test="${aimDesktopForm.srtAsc == true}">
 										<img src= "../ampTemplate/images/down.gif" align=absmiddle border=0>
@@ -151,10 +149,9 @@
 							</TD>
 							<TD class="colHeaderLink" onMouseOver="this.className='colHeaderOver'" 
 							onMouseOut="this.className='colHeaderLink'"  width="28%"
-							onClick="window.document.location='/aim/viewMyDesktop.do?view=sorted&srt=3'">
-								<A title="<digi:trn key="aim:FundingDonor">Funding Donor for Project</digi:trn>">
-									<digi:trn key="aim:donor">Donor(s)</digi:trn>
-								</A>&nbsp;
+							onClick="window.document.location='/aim/viewMyDesktop.do?view=sorted&srt=3'"
+							title='<digi:trn key="aim:FundingDonor">Funding Donor for Project</digi:trn>'>
+								<digi:trn key="aim:donor">Donor(s)</digi:trn>
 								<c:if test="${aimDesktopForm.srtFld == 3}">
 									<c:if test="${aimDesktopForm.srtAsc == true}">
 										<img src= "../ampTemplate/images/down.gif" align=absmiddle border=0>
@@ -166,11 +163,10 @@
 							</TD>
 							<TD class="colHeaderLink" onMouseOver="this.className='colHeaderOver'" 
 							onMouseOut="this.className='colHeaderLink'"  width="18%"
-							onClick="window.document.location='/aim/viewMyDesktop.do?view=sorted&srt=4'">							
-								<A title="<digi:trn key="aim:TotalCommitMade">Total Committed Amount of Project</digi:trn>">
-									<FONT color="blue">*</FONT>
-									<digi:trn key="aim:totalCommitments">Total Commitments</digi:trn>
-								</A>&nbsp;
+							onClick="window.document.location='/aim/viewMyDesktop.do?view=sorted&srt=4'"
+							title='<digi:trn key="aim:TotalCommitMade">Total Committed Amount of Project</digi:trn>'>
+								<FONT color="blue">*</FONT>
+								<digi:trn key="aim:totalCommitments">Total Commitments</digi:trn>
 								<c:if test="${aimDesktopForm.srtFld == 4}">
 									<c:if test="${aimDesktopForm.srtAsc == true}">
 										<img src= "../ampTemplate/images/down.gif" align=absmiddle border=0>
@@ -181,6 +177,9 @@
 								</c:if>								
 							</TD>
 						</TR>
+						<bean:define id="translation">
+							<digi:trn key="aim:clickToViewProjectDetails">Click here to view Project Details</digi:trn>
+						</bean:define>						
 						<logic:notEmpty name="aimDesktopForm" property="activities">
 							<c:forEach var="project" items="${aimDesktopForm.activities}"
 							begin="${aimDesktopForm.stIndex}" end="${aimDesktopForm.edIndex - 1}">
@@ -191,12 +190,10 @@
 											<bean:write name="project" property="ampActivityId"/>
 										</c:set>
 										<c:set target="${urlChannelOverview}" property="tabIndex" value="0"/>
-										<bean:define id="translation">
-											<digi:trn key="aim:clickToViewProjectDetails">Click here to view Project Details</digi:trn>
-										</bean:define>
-										<digi:link href="/viewChannelOverview.do" name="urlChannelOverview" title="<%=translation%>" >
+										<div title='<%=translation%>'>
+										<digi:link href="/viewChannelOverview.do" name="urlChannelOverview">
 											<c:out value="${project.name}" />
-										</digi:link>
+										</digi:link></div>
 										<c:if test='${project.approvalStatus == "started"}'>
 											<FONT size="2" color="#FF0000">*</FONT>
 										</c:if>
@@ -315,9 +312,10 @@
 					<bean:define id="translation">
 						<digi:trn key="aim:clickToAddNewActivity">Click here to Add New Activity</digi:trn>
 					</bean:define>
-					<digi:link href="/addActivity.do~pageId=1~reset=true~action=create" title="<%=translation%>">
+					<div title='<%=translation%>'>
+					<digi:link href="/addActivity.do~pageId=1~reset=true~action=create">
 					<digi:trn key="aim:addActivity">
-					Add Activity</digi:trn></digi:link>
+					Add Activity</digi:trn></digi:link></div>
 				</TD>
 				</c:if>
 			</TR>
@@ -342,9 +340,10 @@
 						<bean:define id="translation">
 							<digi:trn key="aim:clickToConfigureTeamPages">Click here to Configure Team Workspace</digi:trn>
 						</bean:define>
-						<digi:link href="/workspaceOverview.do" name="urlParams" title="<%=translation%>">
+						<div title='<%=translation%>'>
+						<digi:link href="/workspaceOverview.do" name="urlParams">
 							<digi:trn key="aim:teamWorkspaceSetup">Team Workspace Setup</digi:trn>
-						</digi:link>
+						</digi:link></div>
 					</logic:equal>
 				</TD>
 			</TR>

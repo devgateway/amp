@@ -35,19 +35,21 @@ function showUserProfile(id)
 						<bean:define id="translation">
 							<digi:trn key="aim:clickToViewMemberDetails">Click here to view Member Details</digi:trn>
 						</bean:define>
-						<a href="javascript:showUserProfile(<c:out value="${teamMember.memberId}"/>)" class="header" title="<%=translation%>">
+						<div title='<%=translation%>'>
+						<a href="javascript:showUserProfile(<c:out value="${teamMember.memberId}"/>)" class="header">
 						 	<bean:write name="teamMember" property="teamName" /> :
 							<bean:write name="teamMember" property="memberName" />
-						</a>
+						</a></div>
 						</logic:notEmpty>
 					</td>
 					<td align="right">
 						<bean:define id="translation">
 							<digi:trn key="aim:clickToLogoutTheSystem">Click here to logout from the system</digi:trn>
 						</bean:define>
-						<digi:link href="/logout.do" styleClass="up-menu" onclick="return quitRnot()" title="<%=translation%>">
+						<div title='<%=translation%>'>
+						<digi:link href="/logout.do" styleClass="up-menu" onclick="return quitRnot()">
 						<digi:trn key="aim:logout">Logout</digi:trn>
-						</digi:link>&nbsp;&nbsp;&nbsp;&nbsp;
+						</digi:link></div>&nbsp;&nbsp;&nbsp;&nbsp;
 					</td>
 				</tr>
 			</table>

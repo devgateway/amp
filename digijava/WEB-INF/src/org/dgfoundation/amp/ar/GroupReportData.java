@@ -131,6 +131,7 @@ public class GroupReportData extends ReportData {
 	 * @see org.dgfoundation.amp.ar.ReportData#getTotalDepth()
 	 */
 	public int getTotalDepth() {
+		if(items.size()==0) logger.error("Total Depth cannot be computed - no report data present");
 		ReportData rd = (ReportData) items.get(0);
 		return rd.getTotalDepth();
 	}

@@ -70,7 +70,6 @@
 												</bean:define>
 												
 												<% if(link.equals(link2)) { %>
-												<br>
 												
 												
 												

@@ -23,6 +23,13 @@
 	</tr>
 
 	<tr>
+		<td align="left">
+			<font size="+1">Report Name: <b><bean:write scope="session" name="reportMeta" property="name"/></b></font>
+		</td>
+	</tr>
+
+
+	<tr>
 		<td>
 			Description: <i><bean:write scope="session" name="reportMeta" property="reportDescription"/></i>
 		</td>

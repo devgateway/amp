@@ -8,14 +8,17 @@
 
 <bean:define id="columnReport" name="viewable" type="org.dgfoundation.amp.ar.ColumnReportData" scope="request" toScope="page"/>
 
+<script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/arFunctions.js"/>"></script>
+
 <tr><td colspan='<bean:write name="columnReport" property="totalDepth"/>'>
 <i><bean:write name="columnReport" property="name"/></i>
 </td></tr>
 
+<% int rowIdx=2; %>
 
 <!-- generate report headings -->
 <%int maxDepth=columnReport.getMaxColumnDepth(); %>
-<%for(int curDepth=0;curDepth<=columnReport.getMaxColumnDepth();curDepth++) {%>
+<%for(int curDepth=0;curDepth<=columnReport.getMaxColumnDepth();curDepth++,rowIdx++) {%>
 <tr>
 <logic:iterate name="columnReport" property="items" id="column" scope="page" type="org.dgfoundation.amp.ar.Column">
 	<% column.setCurrentDepth(curDepth);%>
@@ -30,8 +33,10 @@
 <% } %>
 
 <!-- generate report data -->
+
 <logic:iterate name="columnReport" property="ownerIds" id="ownerId" scope="page">
-<tr>
+<%rowIdx++; %>
+<tr onmouseover="setPointer(this, <%=rowIdx%>, 'over', '#FFFFFF', '#CCFFCC', '#FECC99');" onmouseout="setPointer(this, <%=rowIdx%>, 'out', '#FFFFFF', '#CCFFCC', '#FFCC99');" onmousedown="setPointer(this, <%=rowIdx%>, 'click', '#FFFFFF', '#CCFFCC', '#FFCC99');">
 	<logic:iterate name="columnReport" property="items" id="column" scope="page">
 		<bean:define id="viewable" name="column" type="org.dgfoundation.amp.ar.Viewable" scope="page" toScope="request"/>
 		<bean:define id="ownerId" name="ownerId" type="java.lang.Long" scope="page" toScope="request"/>

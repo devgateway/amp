@@ -6,6 +6,8 @@
  */
 package org.dgfoundation.amp.ar;
 
+import java.util.List;
+
 /**
  * Filtering bean. Holds info about filtering parameters and creates the filtering query
  * @author Mihai Postelnicu - mpostelnicu@dgfoundation.org
@@ -24,6 +26,7 @@ public class AmpNewFilter implements Filter {
 	private int startYear = 0;
 	private int startMonth = 0;
 	private int startDay = 0;
+	private List ampTeams=null;
 
 	private int closeYear = 0;
 	private int closeMonth = 0;
@@ -43,6 +46,7 @@ public class AmpNewFilter implements Filter {
 	}
 	
 	public void generateFilterQuery() {
+		String TEAM_FILTER="SELECT amp_activity_id FROM v_status WHERE amp_team_id IN ("+ARUtil.toSQLEnum(ampTeams)+")";
 		String STATUS_FILTER="SELECT amp_activity_id FROM v_status WHERE amp_status_id="+ampStatusId;
 		String ORG_FILTER = "SELECT amp_activity_id FROM v_donors WHERE amp_donor_org_id="+ampOrgId;
 		String SECTOR_FILTER="SELECT amp_activity_id FROM v_sectors WHERE amp_sector_id="+ampSectorId;
@@ -57,6 +61,7 @@ public class AmpNewFilter implements Filter {
 		String CLOSE_MONTH_FILTER="SELECT amp_activity_id FROM v_actual_completion_date WHERE date_format(actual_completion_date,_latin1'%m')<='"+closeMonth+"'";
 		String CLOSE_DAY_FILTER="SELECT amp_activity_id FROM v_actual_completion_date WHERE date_format(actual_completion_date,_latin1'%d')<='"+closeDay+"'";
 	
+		if(ampTeams!=null) queryAppend(TEAM_FILTER);
 		if(ampStatusId.longValue()!=0) queryAppend(STATUS_FILTER);
 		if(ampOrgId.longValue()!=0) queryAppend(ORG_FILTER);
 		if(ampSectorId.longValue()!=0) queryAppend(SECTOR_FILTER);
@@ -274,6 +279,20 @@ public class AmpNewFilter implements Filter {
 	 */
 	public int getInitialQueryLength() {
 		return initialQueryLength;
+	}
+
+	/**
+	 * @return Returns the ampTeams.
+	 */
+	public List getAmpTeams() {
+		return ampTeams;
+	}
+
+	/**
+	 * @param ampTeams The ampTeams to set.
+	 */
+	public void setAmpTeams(List ampTeams) {
+		this.ampTeams = ampTeams;
 	}
 
 }

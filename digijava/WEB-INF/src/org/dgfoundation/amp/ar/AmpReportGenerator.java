@@ -270,7 +270,6 @@ public class AmpReportGenerator extends ReportGenerator {
 		// perform postprocessing - cell grouping and other tasks
 		report.postProcess();
 		
-		//remove one unneded laye
 	}
  
 	/**

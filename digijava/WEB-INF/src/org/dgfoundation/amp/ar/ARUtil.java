@@ -45,6 +45,19 @@ import org.digijava.module.aim.util.TeamUtil;
  */
 public final class ARUtil {
 
+	public static String toSQLEnum(Collection col) {
+		String ret="";
+		if (col==null || col.size()==0) return ret;
+		Iterator i=col.iterator();
+		while (i.hasNext()) {
+			Object element = (Object) i.next();
+			if(element instanceof String) ret+="'"+(String)element+"'"; else
+				ret+=element.toString();
+			if(i.hasNext()) ret+=",";
+		}
+		return ret;
+	}
+	
 	protected static Logger logger = Logger.getLogger(ARUtil.class);
 	
 	public static Constructor getConstrByParamNo(Class c,int paramNo) {
@@ -441,6 +454,11 @@ public final class ARUtil {
 				&& formBean.getCloseYear().intValue() > 0)
 			closeDate = closeYear + "-" + closeMonth + "-" + closeDay;
 
+		
+		//get the team list
+		dbReturnSet=(ArrayList)TeamUtil.getAmpLevel0Teams(ampTeamId);
+		dbReturnSet.add(ampTeamId);
+		
 		// create the ampFilter bean
 		AmpNewFilter anf = new AmpNewFilter();
 		anf.setAmpCurrencyCode(ampCurrencyCode);
@@ -455,6 +473,8 @@ public final class ARUtil {
 		anf.setStartDay(startDay);
 		anf.setStartMonth(startMonth);
 		anf.setStartYear(startYear);
+		anf.setAmpTeams(dbReturnSet);
+		
 
 		anf.generateFilterQuery();
 

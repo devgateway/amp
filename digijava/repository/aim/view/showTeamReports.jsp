@@ -70,17 +70,20 @@
 												</bean:define>
 												
 												<% if(link.equals(link2)) { %>
-												
-												
-												
-												<digi:link href="<%=link%>" styleClass="h-box" title="<%=translation%>" target="_blank">
-												<bean:write name="reports" property="name"/>
-												</digi:link>
+
+												<a styleClass="h-box" href="javascript:window.open('<%=link%>','','channelmode=no,directories=no,menubar=no,resizable=yes,status=no,toolbar=no,scrollbars=yes',false);" >
+												<b>
+												<bean:write name="reports" property="name"/>												
+												</b>
+												</a> 
+
 												<% } else {%>
 
-												<digi:link href="<%=link2%>" styleClass="h-box" title="<%=translation%>" target="_blank">
-												<bean:write name="reports" property="name"/>
-												</digi:link>
+												<a styleClass="h-box" href="javascript:window.open('<%=link2%>','','channelmode=no,directories=no,menubar=no,resizable=yes,status=no,toolbar=no,scrollbars=yes',false);" >
+												<b>
+												<bean:write name="reports" property="name"/>												
+												</b>
+												</a> 
 												
 												<% } %>
 

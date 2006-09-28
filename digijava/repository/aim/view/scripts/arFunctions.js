@@ -1,3 +1,5 @@
+var lastClickedRow=-1;
+
 /**
  * Sets/unsets the pointer and marker in browse mode
  *
@@ -14,6 +16,9 @@ function setPointer(theRow, theRowNum, theAction, theDefaultColor, thePointerCol
 {
     var theCells = null;
 	var marked_row = new Array;
+	var lastClickedCells = null;
+
+
 
     // 1. Pointer and mark feature are disabled or the browser can't get the
     //    row -> exits
@@ -25,9 +30,11 @@ function setPointer(theRow, theRowNum, theAction, theDefaultColor, thePointerCol
     // 2. Gets the current row and exits if the browser can't get it
     if (typeof(document.getElementsByTagName) != 'undefined') {
         theCells = theRow.getElementsByTagName('td');
+        if (lastClickedRow != -1) lastClickedCells=lastClickedRow.getElementsByTagName('td');
     }
     else if (typeof(theRow.cells) != 'undefined') {
         theCells = theRow.cells;
+        if (lastClickedRow != -1) lastClickedCells=lastClickedRow.cells;
     }
     else {
         return false;
@@ -115,12 +122,18 @@ function setPointer(theRow, theRowNum, theAction, theDefaultColor, thePointerCol
         if (domDetect) {
             for (c = 0; c < rowCellsCnt; c++) { 
                 theCells[c].setAttribute('bgcolor', newColor, 0);
+                 if (lastClickedRow != -1)  lastClickedCells[c].setAttribute('bgcolor', theDefaultColor, 0);
+                 lastClickedRow=theRow;
+				
             } // end for
         }
         // 5.2 ... with other browsers
         else {
             for (c = 0; c < rowCellsCnt; c++) {
                 theCells[c].style.backgroundColor = newColor;
+             	if (lastClickedRow != -1)  lastClickedCells[c].setAttribute('bgcolor', theDefaultColor, 0);
+                lastClickedRow=theRow;
+				
             }
         }
     } // end 5

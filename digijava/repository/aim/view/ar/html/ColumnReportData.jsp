@@ -36,7 +36,7 @@
 
 <logic:iterate name="columnReport" property="ownerIds" id="ownerId" scope="page">
 <%rowIdx++; %>
-<tr onmouseover="setPointer(this, <%=rowIdx%>, 'over', '#FFFFFF', '#CCFFCC', '#FECC99');" onmouseout="setPointer(this, <%=rowIdx%>, 'out', '#FFFFFF', '#CCFFCC', '#FFCC99');" onmousedown="setPointer(this, <%=rowIdx%>, 'click', '#FFFFFF', '#CCFFCC', '#FFCC99');">
+<tr onmousedown="setPointer(this, <%=rowIdx%>, 'click', '#FFFFFF', '#FFFFFF', '#FFFF00');">
 	<logic:iterate name="columnReport" property="items" id="column" scope="page">
 		<bean:define id="viewable" name="column" type="org.dgfoundation.amp.ar.Viewable" scope="page" toScope="request"/>
 		<bean:define id="ownerId" name="ownerId" type="java.lang.Long" scope="page" toScope="request"/>

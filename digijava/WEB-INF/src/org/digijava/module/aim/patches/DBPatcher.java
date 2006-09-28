@@ -2,6 +2,9 @@ package org.digijava.module.aim.patches;
 
 import java.sql.Connection;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashSet;
 import java.util.Iterator;
 
 import net.sf.hibernate.Query;
@@ -9,8 +12,13 @@ import net.sf.hibernate.Session;
 
 import org.apache.log4j.Logger;
 import org.digijava.kernel.persistence.PersistenceManager;
+import org.digijava.module.aim.dbentity.AmpFilters;
 import org.digijava.module.aim.dbentity.AmpIndicatorRiskRatings;
+import org.digijava.module.aim.dbentity.AmpPages;
+import org.digijava.module.aim.dbentity.AmpTeam;
+import org.digijava.module.aim.dbentity.AmpTeamPageFilters;
 import org.digijava.module.aim.dbentity.AmpTermsAssist;
+import org.digijava.module.aim.helper.Constants;
 
 public class DBPatcher {
 	
@@ -22,6 +30,7 @@ public class DBPatcher {
 		String qryStr = null;
 		Query qry = null;
 		String newTypeOfAssistance = "Treasury";
+		String filterName = Constants.ACTIVITY_RISK_FILTER;
 		
 		final int RATING_CRITICAL_KEY = -3;
 		final String RATING_CRITICAL_VALUE = "Critical"; 
@@ -55,6 +64,58 @@ public class DBPatcher {
 				 }
 			 }
 			 
+			 qryStr = "select count(*) from " + AmpFilters.class.getName() + " f " +
+			 		"where (f.filterName=:name)";
+			 qry = session.createQuery(qryStr);
+			 qry.setParameter("name",filterName);
+			 itr = qry.list().iterator();
+			 AmpFilters f = null;
+			 if (itr.hasNext()) {
+				 Integer count = (Integer) itr.next();
+				 if (count.intValue() == 0) {
+					 f = new AmpFilters();
+					 f.setFilterName(filterName);
+				 }
+			 }
+			 
+			 if (f != null) {
+				 qryStr = "select p from " + AmpPages.class.getName() + " p " +
+				 		"where (p.pageCode!=:code)";
+				 qry = session.createQuery(qryStr);
+				 qry.setParameter("code","FP");
+				 itr = qry.list().iterator();
+				 Collection temp = new ArrayList();
+				 AmpPages p = null;
+				 while (itr.hasNext()) {
+					 p = (AmpPages) itr.next();
+					 temp.add(p);
+					 if (f.getPages() == null) {
+						 f.setPages(new HashSet());
+					 }
+					 f.getPages().add(p);
+				 }
+				 session.save(f);
+				 
+				 qryStr = "select t from " + AmpTeam.class.getName() + " t ";
+				 qry = session.createQuery(qryStr);
+				 itr = qry.list().iterator();
+				 while (itr.hasNext()) {
+					 AmpTeam team = (AmpTeam) itr.next();
+					 
+					 Iterator t1 = temp.iterator();
+					 while (t1.hasNext()) {
+						 AmpPages ps = (AmpPages) t1.next();
+						 AmpTeamPageFilters tpf = new AmpTeamPageFilters();
+						 tpf.setFilter(f);
+						 tpf.setPage(ps);
+						 tpf.setTeam(team);
+						 session.save(tpf);
+					 }
+					 
+				 }
+				 session.flush();				 
+			 }
+			 			 
 			 qryStr = "select r from " + AmpIndicatorRiskRatings.class.getName() + " r";
 			 qry = session.createQuery(qryStr);
 			 itr = qry.list().iterator();
@@ -79,7 +140,6 @@ public class DBPatcher {
 				case RATING_VLOW_KEY:
 					rr.setRatingName(RATING_VLOW_VALUE);
 				}
-				 logger.info("Updating " + rr.getAmpIndRiskRatingsId()+ " ," + rr.getRatingName());
 				 session.update(rr);
 				 session.flush();
 				 

@@ -27,11 +27,17 @@
 		document.aimDesktopForm.submit();
 	}
 
+	function resetFilters() {
+		document.aimDesktopForm.resetFliters.value = "true";	  
+	}
+
 </script>
 
 <digi:errors/>
 
 <digi:form action="/filterDesktopActivities.do">
+
+<html:hidden name="aimDesktopForm" property="resetFliters" />
 
 <TABLE width="99%" cellspacing="1" cellpadding="4" valign="top" align="center">
 
@@ -107,12 +113,13 @@
 						
 						<c:if test="${!empty aimDesktopForm.activityRisks}">
 							<html:select property="fltrActivityRisks" styleClass="inp-text">
-								<option value="0">All Risks</option>
+								<html:option value="0">All Risks</html:option>							
 								<html:optionsCollection property="activityRisks" value="ratingValue" label="ratingName" />
 							</html:select>
 						</c:if>	
 						
 						<input type="submit" value="Go" class="dr-menu">
+						<html:submit value="Reset" styleClass="dr-menu" onclick="resetFilters()" />
 					</TD></TR>
 				</c:if>
 				<!-- Project List -->

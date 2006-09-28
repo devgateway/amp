@@ -3,10 +3,12 @@ package org.digijava.module.aim.form;
 import java.util.ArrayList;
 import java.util.Collection;
 
+import org.apache.log4j.Logger;
 import org.apache.struts.action.ActionForm;
 
 public class DesktopForm extends ActionForm {
 	// desktop filters
+	
 	private long fltrCalendar;
 	private String fltrCurrency;
 	private long fltrDonor[];
@@ -15,7 +17,7 @@ public class DesktopForm extends ActionForm {
 	private int fltrFrmYear;
 	private int fltrToYear;
 	private long fltrPrespective;
-	private int fltrActivityRisks;
+	private Integer fltrActivityRisks;
 	
 	private Integer currentPage;
 	
@@ -49,6 +51,8 @@ public class DesktopForm extends ActionForm {
 	
 	private int stIndex;
 	private int edIndex;
+	
+	private String resetFliters;
 	
 	/**
 	 * @return Returns the activities.
@@ -413,13 +417,13 @@ public class DesktopForm extends ActionForm {
 	/**
 	 * @return Returns the fltrActivityRisks.
 	 */
-	public int getFltrActivityRisks() {
+	public Integer getFltrActivityRisks() {
 		return fltrActivityRisks;
 	}
 	/**
 	 * @param fltrActivityRisks The fltrActivityRisks to set.
 	 */
-	public void setFltrActivityRisks(int fltrActivityRisks) {
+	public void setFltrActivityRisks(Integer fltrActivityRisks) {
 		this.fltrActivityRisks = fltrActivityRisks;
 	}
 	/**
@@ -433,6 +437,18 @@ public class DesktopForm extends ActionForm {
 	 */
 	public void setActivityRisks(Collection activityRisks) {
 		this.activityRisks = activityRisks;
+	}
+	/**
+	 * @return Returns the resetFliters.
+	 */
+	public String getResetFliters() {
+		return resetFliters;
+	}
+	/**
+	 * @param resetFliters The resetFliters to set.
+	 */
+	public void setResetFliters(String resetFliters) {
+		this.resetFliters = resetFliters;
 	}
 	
 }

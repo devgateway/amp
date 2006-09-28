@@ -71,7 +71,7 @@
 												
 												<% if(link.equals(link2)) { %>
 
-												<a styleClass="h-box" href="javascript:window.open('<%=link%>','','channelmode=no,directories=no,menubar=no,resizable=yes,status=no,toolbar=no,scrollbars=yes',false);" >
+												<a styleClass="h-box" onclick="javascript:window.open('<%=link%>','','channelmode=no,directories=no,menubar=no,resizable=yes,status=no,toolbar=no,scrollbars=yes',false);">
 												<b>
 												<bean:write name="reports" property="name"/>												
 												</b>
@@ -79,7 +79,7 @@
 
 												<% } else {%>
 
-												<a styleClass="h-box" href="javascript:window.open('<%=link2%>','','channelmode=no,directories=no,menubar=no,resizable=yes,status=no,toolbar=no,scrollbars=yes',false);" >
+												<a styleClass="h-box" onclick="javascript:window.open('<%=link2%>','','channelmode=no,directories=no,menubar=no,resizable=yes,status=no,toolbar=no,scrollbars=yes',false);">
 												<b>
 												<bean:write name="reports" property="name"/>												
 												</b>

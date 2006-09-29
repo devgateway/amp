@@ -27,6 +27,10 @@ public class AmpNewFilter implements Filter {
 	private int startMonth = 0;
 	private int startDay = 0;
 	private List ampTeams=null;
+	
+	private int fromYear = 0;
+	private int toYear= 0;
+	
 
 	private int closeYear = 0;
 	private int closeMonth = 0;
@@ -50,30 +54,38 @@ public class AmpNewFilter implements Filter {
 		String STATUS_FILTER="SELECT amp_activity_id FROM v_status WHERE amp_status_id="+ampStatusId;
 		String ORG_FILTER = "SELECT amp_activity_id FROM v_donors WHERE amp_donor_org_id="+ampOrgId;
 		String SECTOR_FILTER="SELECT amp_activity_id FROM v_sectors WHERE amp_sector_id="+ampSectorId;
-		String REGION_FILTER="SELECT amp_activity_id FROM v_regions WHERE name='"+region;
+		String REGION_FILTER="SELECT amp_activity_id FROM v_regions WHERE name='"+region+"'";
 		String FINANCING_INSTR_FILTER="SELECT amp_activity_id FROM v_financing_instrument WHERE modality_code='"+ampModalityId+"'";
 		//currency is not a filter but a currency transformation
-		String START_YEAR_FILTER="SELECT amp_activity_id FROM v_actual_start_date WHERE date_format(actual_start_date,_latin1'%Y')>='"+startYear+"'";
-		String START_MONTH_FILTER="SELECT amp_activity_id FROM v_actual_start_date WHERE date_format(actual_start_date,_latin1'%m')>='"+startMonth+"'";
-		String START_DAY_FILTER="SELECT amp_activity_id FROM v_actual_start_date WHERE date_format(actual_start_date,_latin1'%d')>='"+startDay+"'";
+		//String START_YEAR_FILTER="SELECT amp_activity_id FROM v_actual_start_date WHERE date_format(actual_start_date,_latin1'%Y')>='"+startYear+"'";
+		//String START_MONTH_FILTER="SELECT amp_activity_id FROM v_actual_start_date WHERE date_format(actual_start_date,_latin1'%m')>='"+startMonth+"'";
+		//String START_DAY_FILTER="SELECT amp_activity_id FROM v_actual_start_date WHERE date_format(actual_start_date,_latin1'%d')>='"+startDay+"'";
 	
-		String CLOSE_YEAR_FILTER="SELECT amp_activity_id FROM v_actual_completion_date WHERE date_format(actual_completion_date,_latin1'%Y')<='"+closeYear+"'";
-		String CLOSE_MONTH_FILTER="SELECT amp_activity_id FROM v_actual_completion_date WHERE date_format(actual_completion_date,_latin1'%m')<='"+closeMonth+"'";
-		String CLOSE_DAY_FILTER="SELECT amp_activity_id FROM v_actual_completion_date WHERE date_format(actual_completion_date,_latin1'%d')<='"+closeDay+"'";
+		//String CLOSE_YEAR_FILTER="SELECT amp_activity_id FROM v_actual_completion_date WHERE date_format(actual_completion_date,_latin1'%Y')<='"+closeYear+"'";
+		//String CLOSE_MONTH_FILTER="SELECT amp_activity_id FROM v_actual_completion_date WHERE date_format(actual_completion_date,_latin1'%m')<='"+closeMonth+"'";
+		//String CLOSE_DAY_FILTER="SELECT amp_activity_id FROM v_actual_completion_date WHERE date_format(actual_completion_date,_latin1'%d')<='"+closeDay+"'";
 	
-		if(ampTeams!=null) queryAppend(TEAM_FILTER);
-		if(ampStatusId.longValue()!=0) queryAppend(STATUS_FILTER);
-		if(ampOrgId.longValue()!=0) queryAppend(ORG_FILTER);
-		if(ampSectorId.longValue()!=0) queryAppend(SECTOR_FILTER);
-		if(!region.equals("All")) queryAppend(REGION_FILTER);
-		if(ampModalityId.longValue()!=0) queryAppend(FINANCING_INSTR_FILTER);
-		if(startYear!=0) queryAppend(START_YEAR_FILTER);
-		if(startMonth!=0) queryAppend(START_MONTH_FILTER);
-		if(startDay!=0) queryAppend(START_DAY_FILTER);
 		
-		if(closeYear!=0) queryAppend(CLOSE_YEAR_FILTER);
-		if(closeMonth!=0) queryAppend(CLOSE_MONTH_FILTER);
-		if(closeDay!=0) queryAppend(CLOSE_DAY_FILTER);	
+		String FROM_YEAR_FILTER="SELECT amp_activity_id FROM v_actual_start_date WHERE date_format(actual_start_date,_latin1'%Y')>='"+fromYear+"'";
+		String TO_YEAR_FILTER="SELECT amp_activity_id FROM v_actual_start_date WHERE date_format(actual_completion_date,_latin1'%Y')<='"+toYear+"'";
+		
+		if(ampTeams!=null) queryAppend(TEAM_FILTER);
+		if(ampStatusId!=null && ampStatusId.intValue()!=0) queryAppend(STATUS_FILTER);
+		if(ampOrgId!=null && ampOrgId.intValue()!=0) queryAppend(ORG_FILTER);
+		if(ampSectorId!=null && ampSectorId.intValue()!=0) queryAppend(SECTOR_FILTER);
+		if(region!=null && !region.equals("All")) queryAppend(REGION_FILTER);
+		if(ampModalityId!=null && ampModalityId.intValue()!=0) queryAppend(FINANCING_INSTR_FILTER);
+		
+		if(fromYear!=0) queryAppend(FROM_YEAR_FILTER);
+		if(toYear!=0) queryAppend(TO_YEAR_FILTER);
+		
+		//if(startYear!=0) queryAppend(START_YEAR_FILTER);
+		//if(startMonth!=0) queryAppend(START_MONTH_FILTER);
+		//if(startDay!=0) queryAppend(START_DAY_FILTER);
+		
+		//if(closeYear!=0) queryAppend(CLOSE_YEAR_FILTER);
+		//if(closeMonth!=0) queryAppend(CLOSE_MONTH_FILTER);
+		//if(closeDay!=0) queryAppend(CLOSE_DAY_FILTER);	
 	}
 	
 	
@@ -293,6 +305,34 @@ public class AmpNewFilter implements Filter {
 	 */
 	public void setAmpTeams(List ampTeams) {
 		this.ampTeams = ampTeams;
+	}
+
+	/**
+	 * @return Returns the fromYear.
+	 */
+	public int getFromYear() {
+		return fromYear;
+	}
+
+	/**
+	 * @param fromYear The fromYear to set.
+	 */
+	public void setFromYear(int fromYear) {
+		this.fromYear = fromYear;
+	}
+
+	/**
+	 * @return Returns the toYear.
+	 */
+	public int getToYear() {
+		return toYear;
+	}
+
+	/**
+	 * @param toYear The toYear to set.
+	 */
+	public void setToYear(int toYear) {
+		this.toYear = toYear;
 	}
 
 }

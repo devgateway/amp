@@ -459,22 +459,32 @@ public final class ARUtil {
 		dbReturnSet=(ArrayList)TeamUtil.getAmpLevel0Teams(ampTeamId);
 		dbReturnSet.add(ampTeamId);
 		
+		
 		// create the ampFilter bean
 		AmpNewFilter anf = new AmpNewFilter();
+		anf.setAmpTeams(dbReturnSet);
+		
+		if (!"reset".equals(request.getParameter("view"))) {
 		anf.setAmpCurrencyCode(ampCurrencyCode);
 		anf.setAmpModalityId(ampModalityId);
 		anf.setAmpOrgId(ampOrgId);
 		anf.setAmpSectorId(ampSectorId);
 		anf.setAmpStatusId(ampStatusId);
-		anf.setCloseDay(closeDay);
-		anf.setCloseMonth(closeMonth);
-		anf.setCloseYear(closeYear);
-		anf.setRegion(region);
-		anf.setStartDay(startDay);
-		anf.setStartMonth(startMonth);
-		anf.setStartYear(startYear);
-		anf.setAmpTeams(dbReturnSet);
+
+		//anf.setCloseDay(closeDay);
+		//anf.setCloseMonth(closeMonth);
+		//anf.setCloseYear(closeYear);
 		
+		//anf.setStartDay(startDay);
+		//anf.setStartMonth(startMonth);
+		//anf.setStartYear(startYear);
+		
+		anf.setFromYear(fromYr);
+		anf.setToYear(toYr);
+		
+		
+		anf.setRegion(region);
+		}
 
 		anf.generateFilterQuery();
 

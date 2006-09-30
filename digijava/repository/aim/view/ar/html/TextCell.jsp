@@ -6,6 +6,6 @@
 	type="org.dgfoundation.amp.ar.cell.TextCell" scope="request"
 	toScope="page" />
 <div align="left">
-<bean:write name="textCell" />
+<bean:write name="textCell" filter="false"/>
 &nbsp;
 </div>

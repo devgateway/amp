@@ -5,6 +5,38 @@
 		<param-name>patchAMP</param-name>
 		<param-value>org.digijava.module.aim.patches.DBPatcher:patchAMPDB</param-value>
     </context-param>
+
+  <context-param>
+    <param-name>contextConfigLocation</param-name>
+    <param-value>/WEB-INF/spring/application-context.xml</param-value>
+  </context-param>
+
+  <filter>
+    <filter-name>Acegi Filter Chain Proxy</filter-name>
+    <filter-class>org.acegisecurity.util.FilterToBeanProxy</filter-class>
+    <init-param>
+      <param-name>targetClass</param-name>
+      <param-value>org.acegisecurity.util.FilterChainProxy</param-value>
+    </init-param>
+  </filter>
+  <filter-mapping>
+    <filter-name>Acegi Filter Chain Proxy</filter-name>
+    <url-pattern>/*</url-pattern>
+  </filter-mapping>
+
+  <filter>
+    <filter-name>Acegi Authentication</filter-name>
+    <filter-class>org.acegisecurity.util.FilterToBeanProxy</filter-class>
+    <init-param>
+      <param-name>targetBean</param-name>
+      <param-value>authenticationProcessingFilter</param-value>
+    </init-param>
+  </filter>
+  <filter-mapping>
+    <filter-name>Acegi Authentication</filter-name>
+    <url-pattern>/*</url-pattern>
+  </filter-mapping>
+
 	<filter>
 		<filter-name>showMasterLayout</filter-name>
 		<filter-class>org.digijava.kernel.request.ShowMasterLayout</filter-class>
@@ -19,7 +51,11 @@
 	</listener>
 	<listener>
 		<listener-class>org.digijava.module.aim.startup.AMPStartupListener</listener-class>
-	</listener>	
+	</listener>
+        <listener>
+                <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+        </listener>
+	
 	<!-- Startup servlet used for URL preloading -->
 	<servlet>
           <servlet-name>url-preloader</servlet-name>
@@ -99,6 +135,7 @@
   		    		     /repository/news/struts-config.xml,
   		    		     /repository/poll/struts-config.xml,
   		    		     /repository/sdm/struts-config.xml,
+  		    		     /repository/dm/struts-config.xml,
 		                 /repository/translation/struts-config.xml,
   		    		     /repository/um/struts-config.xml,
 				     	/repository/forum/struts-config.xml,
@@ -194,6 +231,10 @@
 	<taglib>
 		<taglib-uri>/taglib/fmt</taglib-uri>
 		<taglib-location>/WEB-INF/tld/fmt.tld</taglib-location>
+	</taglib>
+	<taglib>
+		<taglib-uri>/taglib/displaytag</taglib-uri>
+		<taglib-location>/WEB-INF/tld/displaytag-11.tld</taglib-location>
 	</taglib>
 
 

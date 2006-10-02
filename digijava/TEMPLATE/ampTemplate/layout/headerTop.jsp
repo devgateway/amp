@@ -1,7 +1,7 @@
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
 <%@ taglib uri="/taglib/struts-logic" prefix="logic" %>
 
-<digi:context name="displayFlag" property="context/module/moduleinstance/displayFlag.do" />
+<digi:context name="displayFlag" property="context/aim/default/displayFlag.do" />
 
 <table cellspacing="0" cellPadding="0" border="0" width="100%" bgcolor="#323232" vAlign="top"
 	height="34">

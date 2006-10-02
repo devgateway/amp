@@ -40,33 +40,37 @@ import org.digijava.module.aim.util.TeamMemberUtil;
  * Validates a user using the user name and the password.
  * Shows the Desktop page if successfull otherwise shows them login page.
  * If the user belongs to multiple teams, a 'select team' page is shown.
- * 
+ *
  * @author Priyajith
  */
 public class Login extends Action {
 
 	private static Logger logger = Logger.getLogger(Login.class);
 	private ServletContext ampContext = null;
-	
+
 	public ActionForward execute(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response)
 			throws java.lang.Exception {
 
+        if (true) {
+            throw new IllegalAccessException("This code must not be accessed any more");
+        }
+
 		LoginForm lForm = (LoginForm) form; // login form instance
 		ampContext = getServlet().getServletContext();
-		
+
 		ActionErrors errors = new ActionErrors();
 		HttpSession session = request.getSession();
 
 		String sessionId = null;
-		
+
 		try {
 
 			if (lForm.getUserId() != null && lForm.getPassword() != null) {
 
 				/*
 				 * Validates the user with the username and password and stores the login
-				 * result in an object cache which can be accessed by the sessionId which 
+				 * result in an object cache which can be accessed by the sessionId which
 				 * the function returns.
 				 */
 				sessionId = HttpLoginManager.loginByCredentials(request,
@@ -74,7 +78,7 @@ public class Login extends Action {
 								.getPassword(), false);
 
 				if (sessionId != null) {
-					
+
 					/*
 					 * Used to get the login reult from the sessionId returned by the
 					 * HttpLoginManager.loginByCredentials(...) function
@@ -99,7 +103,7 @@ public class Login extends Action {
 						return mapping.getInputForward();
 					} else if (loginInfo.getLoginResult() == HttpLoginManager.LOGIN_RESULT_OK) {
 						// valid user.
-						
+
 						// clear the session variables
 						if (session.getAttribute("currentMember") != null) {
 							session.removeAttribute("currentMember");
@@ -126,20 +130,20 @@ public class Login extends Action {
 					saveErrors(request, errors);
 					return mapping.getInputForward();
 				}
-				
-				
+
+
 				// Get the DgUser object from the username
 				User usr = DbUtil.getUser(lForm.getUserId());
-				
-				// Check whether the user is a site admin or not 
+
+				// Check whether the user is a site admin or not
 				boolean siteAdmin = DgUtil.isSiteAdministrator(request);
 
 				/*
-				 * if the member is part of multiple teams the below collection contains more than one element. 
+				 * if the member is part of multiple teams the below collection contains more than one element.
 				 * Otherwise it will have only one element.
 				 * The following function will return objects of type org.digijava.module.aim.dbentity.AmpTeamMember
-				 * The function will return null, if the user is just a site administrator or if the user is a 
-				 * registered user but has not yet been assigned a team 
+				 * The function will return null, if the user is just a site administrator or if the user is a
+				 * registered user but has not yet been assigned a team
 				 */
 				Collection members = TeamMemberUtil.getTeamMembers(lForm.getUserId());
 				if (members == null || members.size() == 0) {
@@ -153,8 +157,8 @@ public class Login extends Action {
 						tm.setTeamName("AMP Administrator");
 						session.setAttribute("currentMember", tm);
 						// show the index page with the admin toolbar at the bottom
-						
-						return mapping.findForward("admin"); 
+
+						return mapping.findForward("admin");
 					} else {
 						// The user is a regsitered user but not a team member
 						lForm.setLogin(false);
@@ -173,7 +177,7 @@ public class Login extends Action {
 				}
 				if (members.size() == 1) {
 					// if the user is part of just on team, load his personalized settings
-					
+
 					Iterator itr = members.iterator();
 					AmpTeamMember member = (AmpTeamMember) itr.next();
 
@@ -182,18 +186,18 @@ public class Login extends Action {
 						if (userActList != null &&
 								userActList.containsKey(member.getAmpTeamMemId())) {
 							// expire all other entries
-							
+
 							//logger.info("getting the value for " + member.getAmpTeamMemId());
-							
+
 							Long actId = (Long) userActList.get(member.getAmpTeamMemId());
 							HashMap editActMap = (HashMap) ampContext.getAttribute(Constants.EDIT_ACT_LIST);
 							String sessId = null;
 							if (editActMap != null)  {
 								Iterator itr1 = editActMap.keySet().iterator();
 								while (itr1.hasNext()) {
-									sessId = (String) itr1.next();	
+									sessId = (String) itr1.next();
 									Long tempActId = (Long) editActMap.get(sessId);
-									
+
 									//logger.info("tempActId = " + tempActId + " actId = " + actId);
 									if (tempActId.longValue() == actId.longValue()) {
 										editActMap.remove(sessId);
@@ -205,7 +209,7 @@ public class Login extends Action {
 							}
 							userActList.remove(member.getAmpTeamMemId());
 							ampContext.setAttribute(Constants.USER_ACT_LIST,userActList);
-							
+
 							HashMap tsActList = (HashMap) ampContext.getAttribute(Constants.TS_ACT_LIST);
 							if (tsActList != null) {
 								tsActList.remove(actId);
@@ -219,7 +223,7 @@ public class Login extends Action {
 							}
 						}
 					}
-					
+
 					// checking whether the member is a Team lead. if yes, then
 					// we set the session variable 'teamLeadFlag' as 'true' else 'false'
 					AmpTeamMemberRoles lead = TeamMemberUtil
@@ -255,15 +259,15 @@ public class Login extends Action {
 							.getAmpCurrencyId());
 					appSettings.setFisCalId(ampAppSettings.getFiscalCalendar()
 							.getAmpFiscalCalId());
-					
-					
+
+
 					//appSettings.setLanguage(ampAppSettings.getLanguage());
 
 					String langCode = UserUtils.getUserLangPreferences(
 							usr,RequestUtils.getSite(request)).getAlertsLanguage().getCode();
-					
+
 					appSettings.setLanguage(langCode);
-					
+
 					appSettings.setPerspective(ampAppSettings
 							.getDefaultPerspective());
 
@@ -284,7 +288,7 @@ public class Login extends Action {
 						tm.setEmail(usr.getEmail());
 					}
 
-					// Check whether the user is a transalator for the amp site. 
+					// Check whether the user is a transalator for the amp site.
 					// if yes, the system has to show the translator toolbar at the bottom of the pages
 					if (DbUtil.isUserTranslator(member.getUser().getId()) == true) {
 						tm.setTranslator(true);
@@ -292,28 +296,28 @@ public class Login extends Action {
 						tm.setTranslator(false);
 					}
 					session.setAttribute("currentMember", tm);
-					
+
 					// Set the session infinite. i.e. session never timeouts
 					session.setMaxInactiveInterval(-1);
 					lForm.setLogin(true);
 
 					// forward to members desktop page
-					
+
 					SiteDomain currentDomain = RequestUtils.getSiteDomain(request);
 					String context = SiteUtils.getSiteURL(currentDomain, request.getScheme(),
 		                            request.getServerPort(),
 		                            request.getContextPath());
-					
+
 					// Users language should be selected for all his pages
 					/*
 					 * We use translation module in the digijava framework to switch the language. Members
 					 * language is passed as a parameter to the url '/translation/switchLanguage.do'
-					 * After switching the language, '/switchLanguage.do' will redirect the request to the url specified 
+					 * After switching the language, '/switchLanguage.do' will redirect the request to the url specified
 					 * in the paramater 'rfr'
 					 */
 					String url = context + "/translation/switchLanguage.do?code=" +
 						tm.getAppSettings().getLanguage() +"&rfr="+context+"/aim/showDesktop.do";
-					
+
 					response.sendRedirect(url);
 
 				} else if (members.size() > 1) {
@@ -326,11 +330,11 @@ public class Login extends Action {
 				TeamMember tm = (TeamMember) session.getAttribute("currentMember");
 				if (tm != null) {
 					String fwdUrl = "showDesktop.do";
-					response.sendRedirect(fwdUrl);        		
+					response.sendRedirect(fwdUrl);
 				} else if (siteAdmin != null && "yes".equals(siteAdmin)) {
 					String fwdUrl = "admin.do";
-					response.sendRedirect(fwdUrl);        		
-		    	}						
+					response.sendRedirect(fwdUrl);
+		    	}
 			}
 
 		} catch (Exception e) {

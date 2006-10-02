@@ -21,7 +21,7 @@ import org.digijava.kernel.security.HttpLoginManager;
 
 /**
  * Clears all session variables associated with the current user
- * 
+ *
  * @author Priyajith
  */
 
@@ -32,7 +32,8 @@ public class Logout extends TilesAction {
 	public ActionForward execute(ComponentContext context,
 			ActionMapping mapping, ActionForm form, HttpServletRequest request,
 			HttpServletResponse response) throws IOException, ServletException {
-
+        // Code was moved to org.digijava.module.aim.auth.AmpLogoutHandler
+/*
 		logger.debug("logout");
 
 		HttpSession session = request.getSession();
@@ -44,13 +45,13 @@ public class Logout extends TilesAction {
 		if (session.getAttribute("teamLeadFlag") != null) {
 			session.removeAttribute("teamLeadFlag");
 		}
-		
+
 		if (session.getAttribute("ampAdmin") != null) {
 			session.removeAttribute("ampAdmin");
 		}
 
 		HttpLoginManager.logout(request, response);
-		
+*/
 		return null;
 	}
 }

@@ -39,6 +39,21 @@
 		<layout name="popup" file="aimPopupLayout.jsp">
 			<put name="title">Popup</put>
 		</layout>
+		<!-- login page Layout -->
+		<layout name="login">
+			<put name="title">-Home</put>
+			<put-item name="headerTop" file="headerTop.jsp"/>
+			<put-item name="headerMiddle" file="headerMiddle.jsp"/>
+			<put-item name="dropdownLangSwitch" module="translation" instance="default" teaser="dropdownLangSwitch"/>
+			<put-item name="footer" layout="footerLayout"/>
+			<put-item name="body" file="loginLayout.jsp"/>
+		</layout>
+		<layout name="loginBody" file="loginLayout.jsp">
+			<put name="title">Please log in</put>
+			<put-item name="header" layout="headerLayout"/>
+			<put-item name="footer"/>
+			<put-item name="body" module="um" instance="user"/>
+		</layout>
 
 		<!-- AIM TAB LAYOUT -->
 

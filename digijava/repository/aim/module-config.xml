@@ -2,6 +2,13 @@
 <module-config>
 
 	<name>aim</name>
+	<security login-required="true" default="READ">
+  		<action login-required="false" pattern="/showEmailForm" />
+		<action login-required="false" pattern="/showChangePassword" />
+		<action login-required="false" pattern="/showRegisterUser" />
+		<action login-required="false" pattern="/logout" />
+		<action login-required="false" pattern="/logoutAction" />
+        </security>
 	
 	<!-- highlights classes Begin-->
 	<hibernate-classes required="false">

@@ -9,6 +9,7 @@ package org.dgfoundation.amp.ar;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.ar.exception.IncompatibleColumnException;
@@ -31,8 +32,14 @@ public abstract class ReportData extends Viewable {
 	protected List items;
 	
 	protected ReportData parent;
+	
+	public abstract Set getOwnerIds();
 
 	public abstract Integer getSourceColsCount();
+	
+	public int getTotalUniqueRows() {
+		return getOwnerIds().size();
+	}
 	
 	/**
 	 * @return Returns the parent.

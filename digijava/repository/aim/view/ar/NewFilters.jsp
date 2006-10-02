@@ -91,6 +91,7 @@
 				<logic:notEmpty name="aimAdvancedReportForm" property="ampFromYears">
 					<td>	 					
 						<html:select property="ampFromYear" styleClass="dr-menu">
+							<html:option value="0">All</html:option>
 							<html:options name="aimAdvancedReportForm" property="ampFromYears" /> 
 						</html:select> 
 					</td>
@@ -99,6 +100,7 @@
 				<logic:notEmpty name="aimAdvancedReportForm" property="ampToYears">
 					<td>	 					
 						<html:select property="ampToYear" styleClass="dr-menu">
+							<html:option value="0">All</html:option>
 							<html:options name="aimAdvancedReportForm" property="ampToYears" /> 
 						</html:select> 
 					</td>

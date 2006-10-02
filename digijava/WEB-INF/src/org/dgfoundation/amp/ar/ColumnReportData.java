@@ -152,6 +152,9 @@ public class ColumnReportData extends ReportData {
 		}
 	}
 
+	/* (non-Javadoc)
+	 * @see org.dgfoundation.amp.ar.ReportData#getOwnerIds()
+	 */
 	public Set getOwnerIds() {
 		Set ret=new TreeSet();
 		Iterator i=items.iterator();

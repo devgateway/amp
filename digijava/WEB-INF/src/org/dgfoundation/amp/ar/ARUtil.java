@@ -349,13 +349,13 @@ public final class ARUtil {
 
 		// for storing the value of year filter
 		if (formBean.getAmpToYear() == null) {
-			toYr = year;
+			toYr = 0;
 			formBean.setAmpToYear(new Long(toYr));
 		} else
 			toYr = formBean.getAmpToYear().intValue();
 
 		if (formBean.getAmpFromYear() == null) {
-			fromYr = toYr - 2;
+			fromYr = 0;
 			formBean.setAmpFromYear(new Long(fromYr));
 		} else
 			fromYr = formBean.getAmpFromYear().intValue();
@@ -420,8 +420,9 @@ public final class ARUtil {
 				ampSectorId = All;
 				formBean.setAmpModalityId(All);
 				ampModalityId = All;
-				toYr = year;
-				fromYr = toYr - 2;
+				toYr = 0;
+				fromYr = 0;
+				
 				formBean.setAmpFromYear(new Long(fromYr));
 				formBean.setAmpToYear(new Long(toYr));
 				formBean.setStartYear(All);

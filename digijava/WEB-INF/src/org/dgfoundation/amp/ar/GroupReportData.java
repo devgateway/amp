@@ -8,6 +8,8 @@ package org.dgfoundation.amp.ar;
 
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.Set;
+import java.util.TreeSet;
 
 import org.dgfoundation.amp.ar.cell.AmountCell;
 import org.dgfoundation.amp.ar.cell.Cell;
@@ -146,6 +148,21 @@ public class GroupReportData extends ReportData {
 			return sourceColsCount;
 		else
 			return parent.getSourceColsCount();
+	}
+
+	
+	
+	/* (non-Javadoc)
+	 * @see org.dgfoundation.amp.ar.ReportData#getOwnerIds()
+	 */
+	public Set getOwnerIds() {
+		Set ret=new TreeSet();
+		Iterator i=items.iterator();
+		while (i.hasNext()) {
+			ReportData element = (ReportData) i.next();
+			ret.addAll(element.getOwnerIds());
+		}
+		return ret;
 	}
 
 }

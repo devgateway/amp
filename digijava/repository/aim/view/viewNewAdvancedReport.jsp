@@ -36,7 +36,9 @@
 	</tr>
 
 
-	<logic:notEqual name="report" property="totalDepth" value="-1">
+
+
+	<logic:notEqual name="report" property="totalUniqueRows" value="0">
 	<tr>
 		<td><!-- begin big report table -->
 		<table class=clsInnerTable cellSpacing=0 cellPadding=0 width="100%" border=0>
@@ -47,7 +49,7 @@
 		<!-- end of big report table --></td>
 	</tr>
 	</logic:notEqual>
-	<logic:equal name="report" property="totalDepth" value="-1">
+	<logic:equal name="report" property="totalUniqueRows" value="0">
 	<tr>
 		<td>
 		<b>The specified filtered report does not hold any data. Either pick a different filter criteria or use another report.</b>

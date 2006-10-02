@@ -72,7 +72,6 @@
 						</html:select>
 					</td>
 				</logic:equal>
-
 				<logic:notEmpty name="aimAdvancedReportForm" property="currencyColl">
 					<td>						
 						<html:select property="ampCurrencyCode" styleClass="dr-menu" >
@@ -225,6 +224,12 @@
 					</td>						
 				</logic:equal>
           </tr>
+      	<tr>
+      		<td>
+      		All shown funding items are in <bean:write name="aimAdvancedReportForm" property="ampCurrencyCode"/> currency.     	
+      		</td>
+      	</tr>    
+      
         </table>
     </tr>
 			

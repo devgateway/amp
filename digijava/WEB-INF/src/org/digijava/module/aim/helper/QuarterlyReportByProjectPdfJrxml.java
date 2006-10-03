@@ -296,10 +296,10 @@ public class QuarterlyReportByProjectPdfJrxml
 			p2.println("isRemoveLineWhenBlank='false'");
 			p2.println("isPrintInFirstWholeBand='false'");
 			p2.println("isPrintWhenDetailOverflows='false'/>");
-			p2.println("<textElement textAlignment='Center' verticalAlignment='Middle' rotation='None' lineSpacing='Single'>");
+			p2.println("<textElement textAlignment='Left' verticalAlignment='Middle' rotation='None' lineSpacing='Single'>");
 			p2.println("<font fontName='Arial' pdfFontName='Helvetica' size='8' isBold='true' isItalic='false' isUnderline='false' isPdfEmbedded ='false' pdfEncoding ='Cp1252' isStrikeThrough='false' />");
 			p2.println("</textElement>");
-			p2.println("<text><![CDATA[Planned Disb              Kill                  Exp]]></text>");
+			p2.println("<text><![CDATA[Planned Disb              Disb.                  Exp]]></text>");
 			p2.println("</staticText>");
 
 			x1 += 180;

@@ -990,6 +990,10 @@ public class AdvancedReport extends Action {
 							}
 							ampReports.setMeasures(measures);
 							ReportUtil.saveReport(ampReports,teamMember.getTeamId(),teamMember.getMemberId(),teamMember.getTeamHead());
+							
+							HttpSession hs = request.getSession();
+							hs.removeAttribute(Constants.MY_REPORTS);
+							
 				
 							// Clears the values of the Previous report 
 							formBean.setAmpColumns(null);

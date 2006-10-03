@@ -8,6 +8,7 @@ package org.digijava.module.aim.action;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
@@ -17,9 +18,13 @@ import org.dgfoundation.amp.ar.ARUtil;
 import org.dgfoundation.amp.ar.GenericViews;
 import org.dgfoundation.amp.ar.GroupReportData;
 import org.dgfoundation.amp.ar.view.pdf.GroupReportDataPDF;
+import org.digijava.module.aim.dbentity.AmpReports;
 
 import com.lowagie.text.Document;
+import com.lowagie.text.Font;
 import com.lowagie.text.PageSize;
+import com.lowagie.text.Paragraph;
+import com.lowagie.text.pdf.PdfPCell;
 import com.lowagie.text.pdf.PdfPTable;
 import com.lowagie.text.pdf.PdfWriter;
 
@@ -48,6 +53,8 @@ public class PDFExportAction extends Action {
 		PdfWriter.getInstance(document,
 				response.getOutputStream());
 
+		HttpSession session=request.getSession();
+		AmpReports r=(AmpReports) session.getAttribute("reportMeta");
 		
 		document.open();
 
@@ -63,6 +70,17 @@ public class PDFExportAction extends Action {
 		
 		
 		PdfPTable table = new PdfPTable(widths);
+		
+		Font titleFont = new Font(Font.COURIER, 16, Font.BOLD);
+		
+		PdfPCell pdfc = new PdfPCell(new Paragraph("Report Name: "+r.getName(),titleFont));
+		pdfc.setColspan(rd.getTotalDepth());
+		table.addCell(pdfc);
+		
+		pdfc = new PdfPCell(new Paragraph("Report Description: "+r.getReportDescription()));
+		pdfc.setColspan(rd.getTotalDepth());
+		table.addCell(pdfc);
+		
 		
 		
 		GroupReportDataPDF grdp=new GroupReportDataPDF(table,rd,null);

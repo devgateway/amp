@@ -51,6 +51,7 @@ public class ListCellPDF extends PDFExporter {
 		while (i.hasNext()) {
 			Cell element = (Cell) i.next();
 			res+=element.toString();
+			if(i.hasNext()) res+=", ";
 		}
 		PdfPCell pdfc = new PdfPCell(new Paragraph(res));
 		table.addCell(pdfc);

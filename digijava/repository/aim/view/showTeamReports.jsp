@@ -8,6 +8,22 @@
 
 <digi:instance property="aimTeamReportsForm" />
 
+<SCRIPT TYPE="text/javascript">
+<!--
+function popup(mylink, windowname)
+{
+if (! window.focus)return true;
+var href;
+if (typeof(mylink) == 'string')
+   href=mylink;
+else
+   href=mylink.href;
+window.open(href, windowname,'channelmode=no,directories=no,menubar=no,resizable=yes,status=no,toolbar=no,scrollbars=yes');
+return false;
+}
+//-->
+</SCRIPT>
+
 <jsp:include page="teamPagesHeader.jsp" flush="true" />
 <table bgColor=#ffffff cellPadding=0 cellSpacing=0 width=772>
 	<tr>
@@ -71,15 +87,15 @@
 												
 												<% if(link.equals(link2)) { %>
 
-												<a styleClass="h-box" onclick="javascript:window.open('<%=link%>','','channelmode=no,directories=no,menubar=no,resizable=yes,status=no,toolbar=no,scrollbars=yes',false);">
+												<a href="<%=link%>" styleClass="h-box" onclick="return popup(this,'');">
 												<b>
 												<bean:write name="reports" property="name"/>												
 												</b>
-												</a> 
+												</a>
 
 												<% } else {%>
 
-												<a styleClass="h-box" onclick="javascript:window.open('<%=link2%>','','channelmode=no,directories=no,menubar=no,resizable=yes,status=no,toolbar=no,scrollbars=yes',false);">
+												<a href="<%=link2%>" styleClass="h-box" onclick="return popup(this,'');">
 												<b>
 												<bean:write name="reports" property="name"/>												
 												</b>

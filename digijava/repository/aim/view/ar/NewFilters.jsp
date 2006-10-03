@@ -9,7 +9,7 @@
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
 <script language="JavaScript">
 <!--
-	function clearFilter()
+	function submitFilter()
 	{
 		<digi:context name="clearVal" property="context/module/moduleinstance/viewNewAdvancedReport.do" />
 		url = "<%=clearVal %>?ampReportId=" + document.aimAdvancedReportForm.createdReportId.value;
@@ -17,6 +17,16 @@
 		document.aimAdvancedReportForm.target = "_self";
 		document.aimAdvancedReportForm.submit();
 	}
+
+	function clearFilter()
+	{
+		<digi:context name="clearVal" property="context/module/moduleinstance/viewNewAdvancedReport.do" />
+		url = "<%=clearVal %>?view=reset&ampReportId=" + document.aimAdvancedReportForm.createdReportId.value;
+		document.aimAdvancedReportForm.action = url;
+		document.aimAdvancedReportForm.target = "_self";
+		document.aimAdvancedReportForm.submit();
+	}
+
 
 	function popup_pdf() {
 		openResisableWindow(800, 600);
@@ -222,8 +232,12 @@
 
 				<logic:equal name="aimAdvancedReportForm" property="goFlag" value="true">
 					<td>						
-						<input type="button" name="GoButton" value=" GO " class="dr-menu" onclick="clearFilter()">
+						<input type="button" name="GoButton" value=" GO " class="dr-menu" onclick="submitFilter()">
 					</td>						
+					<td>						
+						<input type="button" name="reset" value="Reset" class="dr-menu" onclick="clearFilter()">
+					</td>						
+
 				</logic:equal>
           </tr>
       	<tr>

@@ -495,7 +495,7 @@
 																<td align="left">
 																	<input type="text" name="currValDate" 
 																	value="<bean:write name="indicator" property="currentValDate" />"
-																	class="inp-text" size="10" readonly="true" id="revisedTargetValDate">&nbsp;&nbsp;
+																	class="inp-text" size="10" readonly="true" id="currValDate">&nbsp;&nbsp;
 																	<a href="javascript:calendar('currValDate')">
 																		<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border=0>
 																	</a>

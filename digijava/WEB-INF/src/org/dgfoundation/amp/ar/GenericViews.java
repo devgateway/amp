@@ -16,7 +16,7 @@ public final class GenericViews {
 	public static final String HTML="html";
 	public static final String PDF="pdf";
 	public static final String CSV="csv";
-	public static final String HTML_PRINTABLE="html_printable";
+	public static final String PRINT="print";
 	public static final String XLS="xls";
 
 	public static final String currentViewable="currentViewable";

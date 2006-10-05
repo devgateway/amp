@@ -10,6 +10,8 @@
 
 
 <table class=clsTable cellSpacing=0 cellPadding=0 width="100%" border=0>
+
+<logic:notEqual name="viewFormat" scope="request" value="print">
 	<!-- attach filters -->
 	<tr>
 		<td>
@@ -21,6 +23,17 @@
 		 <jsp:include page="/repository/aim/view/ar/NewFilters.jsp"/>
 		</td>
 	</tr>
+</logic:notEqual>	
+<logic:equal name="viewFormat" scope="request" value="print">
+<script language="JavaScript">
+	function load() 
+	{
+		window.print();
+	}
+
+	function unload() {}
+</script>
+</logic:equal>
 
 	<tr>
 		<td align="left">

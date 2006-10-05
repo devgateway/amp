@@ -264,6 +264,27 @@ public abstract class Column extends Viewable implements ColumnIdentifiable {
 	
 	public abstract int getColumnDepth();
 
+	/**
+	 * Counts the leafs (Cells) in the column tree
+	 * @return the cell count
+	 */
+	public abstract int getCellCount();
 
+	/**
+	 * Counts the leafs (Cells) in the column tree that are visible (toString not empty)
+	 * @param ownerId TODO
+	 * @return the cell count
+	 */
+	public abstract int getVisibleCellCount(Long ownerId);
+	
+	/**
+	 * Returns the full column name for this column. This means that, if this column has a parent
+	 * it wil append its name to the output
+	 * @return the complete column name as seen in the header
+	 */
+	public String getAbsoluteColumnName(){
+		if (parent!=null && parent instanceof Column) return ((Column)parent).getAbsoluteColumnName()+" -- "+ this.name;
+		else return this.name;
+	}
 	
 }

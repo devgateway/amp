@@ -10,7 +10,7 @@
    String viewParamXLS="/xlsExport.do"+viewParam;
    String viewParamPDF="/pdfExport.do"+viewParam;
    String viewParamCSV="/csvExport.do"+viewParam;
-   String viewParamPrint="/htmlAdvancedReport.do";
+   String viewParamPrint="/viewNewAdvancedReport.do"+viewParam+"&viewFormat=print";
 %>
 
    <TABLE class=toolbar id=toolbartable cellSpacing=0 cellPadding=0 

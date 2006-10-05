@@ -361,4 +361,36 @@ public class GroupColumn extends Column {
 		return ret;
 	}
 
+	
+	public int getRowSpan() {
+		return 1+items.size();
+	}
+
+	/* (non-Javadoc)
+	 * @see org.dgfoundation.amp.ar.Column#cellCount()
+	 */
+	public int getCellCount() {
+		int count=0;
+		Iterator i=items.iterator();
+		while (i.hasNext()) {
+			Column element = (Column) i.next();
+			count+=element.getCellCount();
+		}
+		return count;
+	}
+
+	/* (non-Javadoc)
+	 * @see org.dgfoundation.amp.ar.Column#getVisibleCellCount()
+	 */
+	public int getVisibleCellCount(Long ownerId) {
+		int count=0;
+		Iterator i=items.iterator();
+		while (i.hasNext()) {
+			Column element = (Column) i.next();
+			count+=element.getVisibleCellCount(ownerId);
+		}
+		return count;
+	}
+
+	
 }

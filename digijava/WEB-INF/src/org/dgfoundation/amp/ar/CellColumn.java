@@ -195,6 +195,27 @@ public class CellColumn extends Column {
 		items.add(idx, newCell);
 		newCell.setColumn(this);
 	}
+
+	/* (non-Javadoc)
+	 * @see org.dgfoundation.amp.ar.Column#cellCount()
+	 */
+	public int getCellCount() {
+		return items.size();
+	}
+
+	/* (non-Javadoc)
+	 * @see org.dgfoundation.amp.ar.Column#getVisibleCellCount()
+	 */
+	public int getVisibleCellCount(Long ownerId) {
+		int count=0;
+		Iterator i=items.iterator();
+		while (i.hasNext()) {
+			Cell element = (Cell) i.next();
+			if(element.getOwnerId().equals(ownerId) && !(element.toString().trim().equals(""))) count++;
+		}
+		return count;
+	}
+
 }
 
 

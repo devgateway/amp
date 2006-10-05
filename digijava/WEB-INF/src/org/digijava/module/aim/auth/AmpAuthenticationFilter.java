@@ -342,6 +342,7 @@ public class AmpAuthenticationFilter
                          .getAmpTeamMemRoleId());
             tm.setRoleName(member.getAmpMemberRole().getRole());
             tm.setTeamId(member.getAmpTeam().getAmpTeamId());
+            session.setAttribute(Constants.TEAM_ID,tm.getTeamId());
             tm.setTeamName(member.getAmpTeam().getName());
             tm.setTeamType(member.getAmpTeam().getTeamCategory());
             tm.setTeamAccessType(member.getAmpTeam().getAccessType());

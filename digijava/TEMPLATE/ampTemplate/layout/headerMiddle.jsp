@@ -14,7 +14,7 @@
 				</digi:link>				
 			</logic:notEmpty>
 			<logic:empty name="TID" scope="session">
-				<digi:link styleClass="head-menu-link" href="/login.do" module="aim" onclick="return quitRnot()">			
+				<digi:link styleClass="head-menu-link" href="/" module="aim" onclick="return quitRnot()">			
 					::: <digi:trn key="aim:aidInformationModule">AID INFORMATION MODULE</digi:trn>
 				</digi:link>				
 			</logic:empty>			
@@ -26,7 +26,7 @@
 				::: <digi:trn key="aim:reports">REPORTS</digi:trn></digi:link>				
 			</logic:notEmpty>
 			<logic:empty name="TID" scope="session">
-				<digi:link styleClass="head-menu-link" href="/login.do" module="aim" onclick="return quitRnot()">
+				<digi:link styleClass="head-menu-link" href="/" module="aim" onclick="return quitRnot()">
 				::: <digi:trn key="aim:reports">REPORTS</digi:trn></digi:link>
 			</logic:empty>			
 			</div></LI> 
@@ -38,7 +38,7 @@
 				::: <digi:trn key="aim:calendar">CALENDAR</digi:trn></digi:link>
 			</logic:notEmpty>
 			<logic:empty name="TID" scope="session">
-				<digi:link styleClass="head-menu-link" href="/login.do" module="aim" onclick="return quitRnot()">
+				<digi:link styleClass="head-menu-link" href="/" module="aim" onclick="return quitRnot()">
 				::: <digi:trn key="aim:calendar">CALENDAR</digi:trn></digi:link>
 			</logic:empty>			
 			</div></LI> 
@@ -50,7 +50,7 @@
 				::: <digi:trn key="aim:medashboard">M & E DASHBOARD</digi:trn></digi:link>
 			</logic:notEmpty>
 			<logic:empty name="TID" scope="session">
-				<digi:link styleClass="head-menu-link" href="/login.do" module="aim" onclick="return quitRnot()">			
+				<digi:link styleClass="head-menu-link" href="/" module="aim" onclick="return quitRnot()">			
 				::: <digi:trn key="aim:medashboard">M & E DASHBOARD</digi:trn></digi:link>
 			</logic:empty>						
 			</div></LI>

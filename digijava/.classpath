@@ -137,5 +137,10 @@
 	<classpathentry kind="lib" path="WEB-INF/lib/jackrabbit-jcr-commons-1.0.1.jar"/>
 	<classpathentry kind="lib" path="WEB-INF/lib/jackrabbit-jcr-rmi-1.0.1.jar"/>
 	<classpathentry kind="lib" path="WEB-INF/lib/jcr-1.0.jar"/>
+	<classpathentry kind="lib" path="WEB-INF/lib/acegi-security-1.0.1.jar"/>
+	<classpathentry kind="lib" path="WEB-INF/lib/acegi-security-cas-1.0.1.jar"/>
+	<classpathentry kind="lib" path="WEB-INF/lib/casclient.jar"/>
+	<classpathentry kind="lib" path="WEB-INF/lib/digijava-dm.jar"/>
+	<classpathentry kind="lib" path="WEB-INF/lib/ehcache.jar"/>
 	<classpathentry kind="output" path="WEB-INF/classes"/>
 </classpath>

@@ -14,6 +14,7 @@ import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.dbentity.AmpTeamMemberRoles;
 import org.digijava.module.aim.form.LoginForm;
 import org.digijava.module.aim.helper.ApplicationSettings;
+import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.TeamMemberUtil;
@@ -81,6 +82,7 @@ public class SelectTeam extends Action {
 			tm.setRoleId(member.getAmpMemberRole().getAmpTeamMemRoleId());
 			tm.setRoleName(member.getAmpMemberRole().getRole());
 			tm.setTeamId(member.getAmpTeam().getAmpTeamId());
+			session.setAttribute(Constants.TEAM_ID,tm.getTeamId());
 			tm.setTeamName(member.getAmpTeam().getName());
 			tm.setTeamType(member.getAmpTeam().getTeamCategory());
 			tm.setRead(member.getReadPermission().booleanValue());

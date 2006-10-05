@@ -122,6 +122,8 @@ public class Constants
 	public static final Long COMPONENT_FUNDING = new Long(2);
 	public static final Long REGION_FUNDING = new Long(3);
 	
+	public static final String TEAM_ID = "TID";
+	
 	public static final String SESSION_LIST	= "sessionList";
 	public static final String EDIT_ACT_LIST = "editActivityList";
 	public static final String USER_ACT_LIST = "userActivityList";

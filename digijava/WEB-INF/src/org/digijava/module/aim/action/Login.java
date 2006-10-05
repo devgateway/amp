@@ -277,6 +277,7 @@ public class Login extends Action {
 							.getAmpTeamMemRoleId());
 					tm.setRoleName(member.getAmpMemberRole().getRole());
 					tm.setTeamId(member.getAmpTeam().getAmpTeamId());
+					session.setAttribute(Constants.TEAM_ID,tm.getTeamId());
 					tm.setTeamName(member.getAmpTeam().getName());
 					tm.setTeamType(member.getAmpTeam().getTeamCategory());
 					tm.setTeamAccessType(member.getAmpTeam().getAccessType());
@@ -328,7 +329,7 @@ public class Login extends Action {
 			} else {
 		    	String siteAdmin = (String) session.getAttribute("ampAdmin");
 				TeamMember tm = (TeamMember) session.getAttribute("currentMember");
-				if (tm != null) {
+				if (tm != null && session.getAttribute(Constants.TEAM_ID) != null) {
 					String fwdUrl = "showDesktop.do";
 					response.sendRedirect(fwdUrl);
 				} else if (siteAdmin != null && "yes".equals(siteAdmin)) {

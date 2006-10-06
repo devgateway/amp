@@ -34,6 +34,8 @@ public class GetDesktopActivities extends Action {
 		TeamMember tm = (TeamMember) session.getAttribute(Constants.CURRENT_MEMBER);
 		DesktopForm dForm = (DesktopForm) form;
 		
+		session.setAttribute(Constants.TEAM_ID,tm.getTeamId());
+		
 		if (Constants.ACCESS_TYPE_MNGMT.equalsIgnoreCase(tm.getTeamAccessType()) ||
 				"Donor".equalsIgnoreCase(tm.getTeamType())) {
 			dForm.setShowAddActivityLink(false);

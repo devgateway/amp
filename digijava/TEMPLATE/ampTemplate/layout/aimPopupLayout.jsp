@@ -13,7 +13,7 @@
 <head>
 	<logic:present name="extraTitle" scope="request">
 		<bean:define id="extTitle" name="extraTitle" scope="request" type="java.lang.String" />
-		<TITLE>AMP - <%=extTitle%></TITLE>
+		<TITLE>AMP : <%=extTitle%></TITLE>
 	</logic:present>
 	<logic:notPresent name="extraTitle" scope="request">
 		<title><tiles:getAsString name="title"/></title>

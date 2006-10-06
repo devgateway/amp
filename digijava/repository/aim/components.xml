@@ -52,17 +52,17 @@
 	<page name="addStatus" title=" - Add Status" />	
 	<page name="updateStatus" title=" - Update Status" />	
 	<page name="deleteStatus" title=" - Delete Status" />	
-	<page name="viewCommitmentbyModality" title=" - Reports" />
-	<page name="viewMulitlateralbyDonor" title=" - Reports" />
-	<page name="quarterlyMulitlateralbyDonor" title=" - Reports" />
-	<page name="viewbyProjectbyDonor" title=" : Reports" />
-	<page name="viewbySectorbyProject" title=" : Reports" />
-	<page name="viewQuarterlyDateRange" title=" : Quaterly Reports" />
-	<page name="viewProjects" title=" : Reports" />
-	<page name="viewPhysicalComponentReport" title=" : Reports" />
-	<page name="viewPlannedProjects" title=" : Reports" />
-	<page name="quarterlyReportByProject" title=" : Reports" />
-	<page name="quarterlyReportBySector" title=" : Reports" />
+	<page name="viewCommitmentbyModality" title=" - Annual Project Detail Report" />
+	<page name="viewMulitlateralbyDonor" title=" - Annual Report by Type of Assistance" />
+	<page name="quarterlyMulitlateralbyDonor" title=" - Quarterly Report by Type of Assistance" />
+	<page name="viewbyProjectbyDonor" title=" : Annual Report by Project" />
+	<page name="viewbySectorbyProject" title=" : Annual Report by Sector" />
+	<page name="viewQuarterlyDateRange" title=" : Quarterly Reports" />
+	<page name="viewProjects" title=" : Annual Forecasting Report" />
+	<page name="viewPhysicalComponentReport" title=" : Physical Component Report" />
+	<page name="viewPlannedProjects" title=" : Quarterly Team Project Detail Report" />
+	<page name="quarterlyReportByProject" title=" : Quarterly Report by Project" />
+	<page name="quarterlyReportBySector" title=" : Quarterly Report by Sector" />
 	<page name="themeManager" title=" - Program Manager" />	
 	<page name="addTheme" title=" - Add Program" />	
 	<page name="editTheme" title=" - Edit Program" />	

@@ -61,7 +61,6 @@ public class ViewNewAdvancedReport extends Action {
 				request.setAttribute("viewFormat",viewFormat);
 				
 				AmpReports reportMeta = (AmpReports) session.get(AmpReports.class, new Long(ampReportId));
-
 				request.setAttribute("extraTitle",reportMeta.getName());
 				
 				rd.setCurrentView(viewFormat);

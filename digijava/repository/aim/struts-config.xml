@@ -842,6 +842,7 @@
       <forward name="addActivityStep7" path="/showLayout.do?layout=addActivityStep7" />
       <forward name="addActivityStep8" path="/showLayout.do?layout=addActivityStep8" />
       <forward name="addActivityStep9" path="/showLayout.do?layout=addActivityStep9" />
+      <forward name="preview" path="/showLayout.do?layout=previewActivity" />
       <forward name="added" path="/aim/addActivity.do?edit=true" redirect="true" />
       <forward name="index" path="/aim/index.do" redirect="true" />
     </action>

@@ -198,13 +198,12 @@
 					</td>
 				</tr>				
 				<tr>
-					<digi:context name="indexUrl" property="context" />
 					<td nowrap class="navigarionBarDefault" 
 							   onMouseOver="navMouseOver(this)"
 							   onMouseOut="navMouseOut(this)"
 							   onMouseDown="navMouseDown(this)"
 							   onMouseUp="navMouseUp(this)"
-							   onClick="gotoNavigation('<%= indexUrl %>')">
+							   onClick="gotoNavigation('<digi:site property="url"/>')">
 						&nbsp;<b><digi:trn key="admin:mainPage">Main Page</digi:trn></b>
 					</td>
 				</tr>

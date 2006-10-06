@@ -87,8 +87,12 @@ public class ViewAmp
                                                 HttpServletResponse response,
                                                 User usr, Site site) throws
         NotTeamMemberException, DgException {
+    	
         HttpSession session = request.getSession();
-
+        if (session.getAttribute(Constants.TEAM_ID) != null) {
+        	session.removeAttribute(Constants.TEAM_ID);
+        }
+        
         ServletContext ampContext = session.getServletContext();
 
         Subject subject = RequestUtils.getSubject(request);
@@ -241,6 +245,7 @@ public class ViewAmp
                          .getAmpTeamMemRoleId());
             tm.setRoleName(member.getAmpMemberRole().getRole());
             tm.setTeamId(member.getAmpTeam().getAmpTeamId());
+            session.setAttribute(Constants.TEAM_ID,tm.getTeamId());
             tm.setTeamName(member.getAmpTeam().getName());
             tm.setTeamType(member.getAmpTeam().getTeamCategory());
             tm.setTeamAccessType(member.getAmpTeam().getAccessType());

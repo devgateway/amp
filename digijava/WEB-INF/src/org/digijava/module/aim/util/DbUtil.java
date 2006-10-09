@@ -6160,7 +6160,6 @@ public class DbUtil {
 			qry = session.createQuery(queryString);
 			qry.setParameter("ampActId", ampActId, Hibernate.LONG);
 			col = qry.list();
-			logger.info("amp comments col size : "+col.size());
 		}
 		catch(Exception e1)
 		{
@@ -6197,7 +6196,6 @@ public class DbUtil {
 			qry = session.createQuery(queryString);
 			qry.setParameter("ampActId", ampActId, Hibernate.LONG);
 			col = qry.list();
-			logger.info("phy comp report col size : "+col.size());
 		}
 		catch(Exception e1)
 		{
@@ -6234,7 +6232,6 @@ public class DbUtil {
 			qry = session.createQuery(queryString);
 			qry.setParameter("ampActId", ampActId, Hibernate.LONG);
 			col = qry.list();
-			logger.info("amp report cache col size : "+col.size());
 		}
 		catch(Exception e1)
 		{
@@ -6271,7 +6268,6 @@ public class DbUtil {
 			qry = session.createQuery(queryString);
 			qry.setParameter("ampActId",ampActId,Hibernate.LONG);
 			col = qry.list();
-			logger.info("amp report location col size : "+col.size());
 		}
 		catch(Exception e1)
 		{
@@ -6308,7 +6304,6 @@ public class DbUtil {
 			qry = session.createQuery(queryString);
 			qry.setParameter("ampActId",ampActId,Hibernate.LONG);
 			col = qry.list();
-			logger.info("amp phy performance col size : "+col.size());
 		}
 		catch(Exception e1)
 		{
@@ -6345,7 +6340,6 @@ public class DbUtil {
 			qry = session.createQuery(queryString);
 			qry.setParameter("ampActId",ampActId,Hibernate.LONG);
 			col = qry.list();
-			logger.info("amp report sector col size : "+col.size());
 		}
 		catch(Exception e1)
 		{
@@ -6379,13 +6373,9 @@ public class DbUtil {
 									+ AmpMEIndicatorValue.class.getName()
 									+ " indVal "
 									+ " where (indVal.activityId=:ampActId)";
-			logger.info("1...........");
 			qry = session.createQuery(queryString);
-			logger.info("2...........");
 			qry.setParameter("ampActId",ampActId,Hibernate.LONG);
-			logger.info("3...........");
 			col = qry.list();
-			logger.info("ME indicator value col size : "+col.size());
 		}
 		catch(Exception e1)
 		{

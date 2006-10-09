@@ -1324,7 +1324,7 @@ public class ActivityUtil {
 			String queryString = "select ampAct from " + AmpActivity.class.getName() + " ampAct";
 			qry = session.createQuery(queryString);
 			col = qry.list();
-			logger.info("the size of the ampActivity : "+col.size());
+			logger.debug("the size of the ampActivity : "+col.size());
 		}
 		catch(Exception e1)
 		{
@@ -1352,14 +1352,15 @@ public class ActivityUtil {
 	public static void deleteActivity(Long ampActId)
 	{
 		Session session = null;
+		Transaction tx = null;
 
 		try
 		{
 			session = PersistenceManager.getSession();
+			tx = session.beginTransaction();
+			
 			AmpActivity ampAct = (AmpActivity) session.load(
 				AmpActivity.class,ampActId);
-
-			ampAct.setAmpActivityId(ampActId);
 
 			if (ampAct == null)
 				logger.debug("Activity is null. Hence no activity with id : "+ampActId);
@@ -1497,7 +1498,6 @@ public class ActivityUtil {
 					}
 				}
 
-
 				/* delete activity internal id
 				Set internalIds = ampAct.getInternalIds();
 				if(internalIds != null)
@@ -1547,6 +1547,8 @@ public class ActivityUtil {
 				}
 			}
 			session.delete(ampAct);
+			tx.commit();
+			session.flush();
 		}
 		catch(Exception e1)
 		{
@@ -1586,7 +1588,6 @@ public class ActivityUtil {
 					session.delete(ampComm);
 				}
 			}
-
 		}
 		catch(Exception e1)
 		{

@@ -104,7 +104,7 @@
 																			<digi:trn key="aim:clickToDeletetheActivity">Click here to Delete Activity</digi:trn>
 																		</bean:define>
 																		<digi:link href="/activityManager.do" name="urlParams" 
-																		onclick=" return deleteIndicator()" title="<%=translation%>" >
+																		onclick="return deleteIndicator()" title="<%=translation%>" >
 																		<img src= "../ampTemplate/images/trash_12.gif" border=0>
 																		</digi:link>
 																	</td>

@@ -36,7 +36,7 @@ public class ActivityManager extends Action
 		}
 
 		ActivityForm actForm = (ActivityForm) form;
-		
+
 		if(action != null && action.equals("delete"))
 		{
 			Long ampActId = new Long(Long.parseLong(request.getParameter("id")));

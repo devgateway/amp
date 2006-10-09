@@ -31,15 +31,19 @@ public class UpdateMEIndicatorValues extends Action {
 			actInd.setIndicatorValId(uivForm.getIndicatorValId());
 			actInd.setBaseVal(uivForm.getBaseVal());
 			actInd.setBaseValDate(uivForm.getBaseValDate());
+			actInd.setBaseValComments(uivForm.getBaseValComments());
 			actInd.setTargetVal(uivForm.getTargetVal());
 			actInd.setTargetValDate(uivForm.getTargetValDate());
+			actInd.setTargetValComments(uivForm.getTargetValComments());
 			if (uivForm.getRevisedTargetValDate() != null &&
 					uivForm.getRevisedTargetVal() != 0) {
 				actInd.setRevisedTargetVal(uivForm.getRevisedTargetVal());
-				actInd.setRevisedTargetValDate(uivForm.getRevisedTargetValDate());				
+				actInd.setRevisedTargetValDate(uivForm.getRevisedTargetValDate());
+				actInd.setRevisedTargetValComments(uivForm.getRevisedTargetValComments());
 			} else {
 				actInd.setRevisedTargetVal(uivForm.getTargetVal());
 				actInd.setRevisedTargetValDate(uivForm.getTargetValDate());
+				actInd.setRevisedTargetValComments(uivForm.getTargetValComments());
 			}
 
 			actInd.setActivityId(uivForm.getActivityId());

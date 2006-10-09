@@ -11,6 +11,7 @@
 		
 		<property name="currValue" column="curr_val" type="java.lang.Float"/>
 		<property name="currValueDate" column="curr_val_date" type="java.util.Date"/>
+		<property name="comments" column="comments" type="java.lang.String"/>
 		
 		<many-to-one name="meIndValue" column="me_ind_value" 
 		class="org.digijava.module.aim.dbentity.AmpMEIndicatorValue" cascade="none"/>		

@@ -51,6 +51,7 @@ public class EditActivityForm extends ActionForm implements Serializable{
 	private Collection activityCloseDates;
 
 	private String currentValDate;
+	private String currentValComments;
 	private String programDescription;
 
 	// location selector pop-up
@@ -305,12 +306,16 @@ public class EditActivityForm extends ActionForm implements Serializable{
 	private Long expIndicatorId;
 	private float baseVal;
 	private String baseValDate;
+	private String baseValComments;
 	private float targetVal;
 	private String targetValDate;
+	private String targetValComments;
 	private float revTargetVal;
 	private String revTargetValDate;
+	private String revTargetValComments;
 	private float currentVal;
 	private String currValDate;
+	private String currValComments;
 	private String comments;
 
 	private Collection riskCollection;
@@ -3523,5 +3528,75 @@ public class EditActivityForm extends ActionForm implements Serializable{
     public void setSelManagedDocs(String[] selManagedDocs) {
         this.selManagedDocs = selManagedDocs;
     }
+
+	/**
+	 * @return Returns the baseValComments.
+	 */
+	public String getBaseValComments() {
+		return baseValComments;
+	}
+
+	/**
+	 * @param baseValComments The baseValComments to set.
+	 */
+	public void setBaseValComments(String baseValComments) {
+		this.baseValComments = baseValComments;
+	}
+
+	/**
+	 * @return Returns the currValComments.
+	 */
+	public String getCurrValComments() {
+		return currValComments;
+	}
+
+	/**
+	 * @param currValComments The currValComments to set.
+	 */
+	public void setCurrValComments(String currValComments) {
+		this.currValComments = currValComments;
+	}
+
+	/**
+	 * @return Returns the revTargetValComments.
+	 */
+	public String getRevTargetValComments() {
+		return revTargetValComments;
+	}
+
+	/**
+	 * @param revTargetValComments The revTargetValComments to set.
+	 */
+	public void setRevTargetValComments(String revTargetValComments) {
+		this.revTargetValComments = revTargetValComments;
+	}
+
+	/**
+	 * @return Returns the targetValComments.
+	 */
+	public String getTargetValComments() {
+		return targetValComments;
+	}
+
+	/**
+	 * @param targetValComments The targetValComments to set.
+	 */
+	public void setTargetValComments(String targetValComments) {
+		this.targetValComments = targetValComments;
+	}
+
+	/**
+	 * @return Returns the currentValComments.
+	 */
+	public String getCurrentValComments() {
+		return currentValComments;
+	}
+
+	/**
+	 * @param currentValComments The currentValComments to set.
+	 */
+	public void setCurrentValComments(String currentValComments) {
+		this.currentValComments = currentValComments;
+	}
 
 }

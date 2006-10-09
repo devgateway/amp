@@ -19,6 +19,9 @@ public class UpdateIndicatorValuesForm extends ActionForm {
 	private String baseValDate;
 	private String targetValDate;
 	private String revisedTargetValDate;
+	private String baseValComments;
+	private String targetValComments;
+	private String revisedTargetValComments;	
 	
 	private Collection indicators;
 	private Long expIndicatorId;
@@ -154,6 +157,42 @@ public class UpdateIndicatorValuesForm extends ActionForm {
 	 */
 	public void setRevisedTargetValDate(String revisedTargetValDate) {
 		this.revisedTargetValDate = revisedTargetValDate;
+	}
+	/**
+	 * @return Returns the baseValComments.
+	 */
+	public String getBaseValComments() {
+		return baseValComments;
+	}
+	/**
+	 * @param baseValComments The baseValComments to set.
+	 */
+	public void setBaseValComments(String baseValComments) {
+		this.baseValComments = baseValComments;
+	}
+	/**
+	 * @return Returns the revisedTargetValComments.
+	 */
+	public String getRevisedTargetValComments() {
+		return revisedTargetValComments;
+	}
+	/**
+	 * @param revisedTargetValComments The revisedTargetValComments to set.
+	 */
+	public void setRevisedTargetValComments(String revisedTargetValComments) {
+		this.revisedTargetValComments = revisedTargetValComments;
+	}
+	/**
+	 * @return Returns the targetValComments.
+	 */
+	public String getTargetValComments() {
+		return targetValComments;
+	}
+	/**
+	 * @param targetValComments The targetValComments to set.
+	 */
+	public void setTargetValComments(String targetValComments) {
+		this.targetValComments = targetValComments;
 	}
 
 }

@@ -8,11 +8,15 @@ public class AmpMEIndicatorValue {
 	private AmpMEIndicators meIndicatorId;
 	private float baseVal;  // BASE
 	private Date baseValDate;
+	private String baseValComments;
 	private float actualVal;  // ACTUAL
 	private Date actualValDate;
+	private String actualValComments;
 	private float targetVal; // TARGET
 	private Date targetValDate;
+	private String targetValComments;
 	private float revisedTargetVal; // Revised TARGET
+	private String revisedTargetValComments;
 	private Date revisedTargetValDate;
 	private String comments;
 	
@@ -166,5 +170,53 @@ public class AmpMEIndicatorValue {
 	 */
 	public void setRevisedTargetValDate(Date revisedTargetValDate) {
 		this.revisedTargetValDate = revisedTargetValDate;
+	}
+	/**
+	 * @return Returns the actualValComments.
+	 */
+	public String getActualValComments() {
+		return actualValComments;
+	}
+	/**
+	 * @param actualValComments The actualValComments to set.
+	 */
+	public void setActualValComments(String actualValComments) {
+		this.actualValComments = actualValComments;
+	}
+	/**
+	 * @return Returns the baseValComments.
+	 */
+	public String getBaseValComments() {
+		return baseValComments;
+	}
+	/**
+	 * @param baseValComments The baseValComments to set.
+	 */
+	public void setBaseValComments(String baseValComments) {
+		this.baseValComments = baseValComments;
+	}
+	/**
+	 * @return Returns the revisedTargetValComments.
+	 */
+	public String getRevisedTargetValComments() {
+		return revisedTargetValComments;
+	}
+	/**
+	 * @param revisedTargetValComments The revisedTargetValComments to set.
+	 */
+	public void setRevisedTargetValComments(String revisedTargetValComments) {
+		this.revisedTargetValComments = revisedTargetValComments;
+	}
+	/**
+	 * @return Returns the targetValComments.
+	 */
+	public String getTargetValComments() {
+		return targetValComments;
+	}
+	/**
+	 * @param targetValComments The targetValComments to set.
+	 */
+	public void setTargetValComments(String targetValComments) {
+		this.targetValComments = targetValComments;
 	}
 }

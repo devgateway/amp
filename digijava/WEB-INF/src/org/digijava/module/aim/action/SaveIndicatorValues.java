@@ -36,8 +36,8 @@ public class SaveIndicatorValues extends Action
 						if (eaForm.getCurrentValDate() != null) {
 							temp.setCurrentVal(eaForm.getCurrentVal());
 							temp.setCurrentValDate(eaForm.getCurrValDate());
+							temp.setCurrentValComments(eaForm.getCurrentValComments());
 						}
-						temp.setComments(eaForm.getComments());
 						temp.setRisk(eaForm.getIndicatorRisk());
 						break;
 					}
@@ -45,21 +45,26 @@ public class SaveIndicatorValues extends Action
 					{
 						temp.setBaseVal(eaForm.getBaseVal());
 						temp.setBaseValDate(eaForm.getBaseValDate());
+						temp.setBaseValComments(eaForm.getBaseValComments());
 						temp.setTargetVal(eaForm.getTargetVal());
 						temp.setTargetValDate(eaForm.getTargetValDate());
+						temp.setTargetValComments(eaForm.getTargetValComments());
 						if (eaForm.getRevTargetValDate() != null) {
 							temp.setRevisedTargetVal(eaForm.getRevTargetVal());
-							temp.setRevisedTargetValDate(eaForm.getRevTargetValDate());							
+							temp.setRevisedTargetValDate(eaForm.getRevTargetValDate());
+							temp.setRevisedTargetValComments(eaForm.getRevTargetValComments());
 						} else {
 							temp.setRevisedTargetVal(eaForm.getTargetVal());
-							temp.setRevisedTargetValDate(eaForm.getTargetValDate());							
+							temp.setRevisedTargetValDate(eaForm.getTargetValDate());
+							temp.setRevisedTargetValComments(eaForm.getTargetValComments());
 						}
 
 						if (eaForm.getCurrentValDate() != null) {
+							logger.info("Setting currValComments :" + eaForm.getCurrentValComments());
 							temp.setCurrentVal(eaForm.getCurrentVal());
-							temp.setCurrentValDate(eaForm.getCurrValDate());							
+							temp.setCurrentValDate(eaForm.getCurrValDate());
+							temp.setCurrentValComments(eaForm.getCurrentValComments());
 						}
-						temp.setComments(eaForm.getComments());
 						temp.setRisk(eaForm.getIndicatorRisk());
 						break;
 					}

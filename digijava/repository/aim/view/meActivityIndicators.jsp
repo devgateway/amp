@@ -254,6 +254,13 @@
 																					</a>
 																				</td>
 																			</tr>
+																			<tr>
+																				<td><digi:trn key="aim:meBaseValueComments">Comments</digi:trn>
+																				</td>
+																				<td colspan="4">
+																					<textarea name="baseValComments" class="inp-text" rows="2" cols="38"><bean:write name="indicator" property="baseValComments" /></textarea>
+																				</td>
+																			</tr>																			
 
 																			<tr>
 																				<td><digi:trn key="aim:meTargetValue">Target Value</digi:trn>
@@ -299,6 +306,13 @@
 																				</td>																				
 																				</c:if>
 																			</tr>
+																			<tr>
+																				<td><digi:trn key="aim:meTargetValComments">Comments</digi:trn>
+																				</td>
+																				<td colspan="4">
+																					<textarea name="targetValComments" class="inp-text" rows="2" cols="38"><bean:write name="indicator" property="targetValComments" /></textarea>
+																				</td>
+																			</tr>																			
 																			<c:if test="${indicator.targetValDate != null}">
 																			<tr> 
 																				<td><digi:trn key="aim:meRevisedTargetValue">Revised Target Value</digi:trn>
@@ -320,6 +334,13 @@
 																					</a>
 																				</td>
 																			</tr>
+																			<tr>
+																				<td><digi:trn key="aim:meRevisedTargetValComments">Comments</digi:trn>
+																				</td>
+																				<td colspan="4">
+																					<textarea name="revisedTargetValComments" class="inp-text" rows="2" cols="38"><bean:write name="indicator" property="revisedTargetValComments" /></textarea>
+																				</td>
+																			</tr>																			
 																			</c:if>
 																			<tr>
 																				<td colspan="4">

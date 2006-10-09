@@ -7,6 +7,7 @@ public class AmpMECurrValHistory {
 	private AmpMEIndicatorValue meIndValue;
 	private float currValue;
 	private Date currValueDate;
+	private String comments;
 
 	/**
 	 * @return Returns the ampMECurrValHistoryId.
@@ -55,6 +56,18 @@ public class AmpMECurrValHistory {
 	 */
 	public void setMeIndValue(AmpMEIndicatorValue meIndValue) {
 		this.meIndValue = meIndValue;
+	}
+	/**
+	 * @return Returns the comments.
+	 */
+	public String getComments() {
+		return comments;
+	}
+	/**
+	 * @param comments The comments to set.
+	 */
+	public void setComments(String comments) {
+		this.comments = comments;
 	}
 	
 }

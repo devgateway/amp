@@ -399,31 +399,39 @@ public class ActivityUtil {
 							actInd.getTargetValDate() != null &&
 							actInd.getRevisedTargetValDate() != null) {
 
-						indVal.setComments(actInd.getComments());
 						indVal.setBaseVal(actInd.getBaseVal());
 						indVal.setBaseValDate(DateConversion.getDate(actInd.getBaseValDate()));
+						indVal.setBaseValComments(actInd.getBaseValComments());
 
 						indVal.setTargetVal(actInd.getTargetVal());
 						indVal.setTargetValDate(DateConversion.getDate(actInd.getTargetValDate()));
+						indVal.setTargetValComments(actInd.getTargetValComments());
 
 						indVal.setRevisedTargetVal(actInd.getRevisedTargetVal());
 						indVal.setRevisedTargetValDate(DateConversion.getDate(actInd.getRevisedTargetValDate()));
+						indVal.setRevisedTargetValComments(actInd.getRevisedTargetValComments());
 
 						if (actInd.getCurrentValDate() != null &&
 								actInd.getCurrentValDate().trim().length() > 0) {
+							logger.info("Here 1");
 							if (actInd.getActualValDate() != null &&
 									actInd.getActualValDate().trim().length() > 0
 									&& (actInd.getActualVal() != actInd.getCurrentVal() ||
 											!actInd.getActualValDate().equals(
 													actInd.getCurrentValDate()))) {
+								logger.info("Here 2");
 								AmpMECurrValHistory currValHist = new AmpMECurrValHistory();
 								currValHist.setCurrValue(actInd.getActualVal());
 								currValHist.setCurrValueDate(DateConversion.getDate(actInd.getActualValDate()));
+								currValHist.setComments(actInd.getActualValComments());
 								currValHist.setMeIndValue(indVal);
 								session.save(currValHist);
 							}
+							logger.info("Here 3");
 							indVal.setActualVal(actInd.getCurrentVal());
 							indVal.setActualValDate(DateConversion.getDate(actInd.getCurrentValDate()));
+							indVal.setActualValComments(actInd.getCurrentValComments());
+							logger.info("Here 4");
 						}
 
 						AmpIndicatorRiskRatings risk = null;

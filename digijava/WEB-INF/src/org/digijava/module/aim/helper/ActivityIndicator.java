@@ -18,12 +18,17 @@ public class ActivityIndicator {
 	private String targetValDate;
 	private String revisedTargetValDate;
 	private String actualValDate;
+	private String baseValComments;
+	private String targetValComments;
+	private String revisedTargetValComments;
+	private String actualValComments;	
 	
 	private String indicatorName;
 	private String indicatorCode;
 	private float currentVal;
 	private String currentValDate;
-	private String comments;
+	private String currentValComments;
+	//private String comments;
 	private Long risk;
 	private String riskName;
 
@@ -130,18 +135,6 @@ public class ActivityIndicator {
 	 */
 	public void setIndicatorName(String indicatorName) {
 		this.indicatorName = indicatorName;
-	}
-	/**
-	 * @return Returns the comments.
-	 */
-	public String getComments() {
-		return comments;
-	}
-	/**
-	 * @param comments The comments to set.
-	 */
-	public void setComments(String comments) {
-		this.comments = comments;
 	}
 	/**
 	 * @return Returns the currentVal.
@@ -295,5 +288,65 @@ public class ActivityIndicator {
 	 */
 	public void setRevisedTargetValDate(String revisedTargetValDate) {
 		this.revisedTargetValDate = revisedTargetValDate;
+	}
+	/**
+	 * @return Returns the actualValComments.
+	 */
+	public String getActualValComments() {
+		return actualValComments;
+	}
+	/**
+	 * @param actualValComments The actualValComments to set.
+	 */
+	public void setActualValComments(String actualValComments) {
+		this.actualValComments = actualValComments;
+	}
+	/**
+	 * @return Returns the baseValComments.
+	 */
+	public String getBaseValComments() {
+		return baseValComments;
+	}
+	/**
+	 * @param baseValComments The baseValComments to set.
+	 */
+	public void setBaseValComments(String baseValComments) {
+		this.baseValComments = baseValComments;
+	}
+	/**
+	 * @return Returns the revisedTargetValComments.
+	 */
+	public String getRevisedTargetValComments() {
+		return revisedTargetValComments;
+	}
+	/**
+	 * @param revisedTargetValComments The revisedTargetValComments to set.
+	 */
+	public void setRevisedTargetValComments(String revisedTargetValComments) {
+		this.revisedTargetValComments = revisedTargetValComments;
+	}
+	/**
+	 * @return Returns the targetValComments.
+	 */
+	public String getTargetValComments() {
+		return targetValComments;
+	}
+	/**
+	 * @param targetValComments The targetValComments to set.
+	 */
+	public void setTargetValComments(String targetValComments) {
+		this.targetValComments = targetValComments;
+	}
+	/**
+	 * @return Returns the currentValComments.
+	 */
+	public String getCurrentValComments() {
+		return currentValComments;
+	}
+	/**
+	 * @param currentValComments The currentValComments to set.
+	 */
+	public void setCurrentValComments(String currentValComments) {
+		this.currentValComments = currentValComments;
 	}
 }

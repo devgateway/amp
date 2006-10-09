@@ -91,6 +91,14 @@
 											</TD>											
 										</TR>
 										<TR bgcolor="#ffffff">
+											<TD width="125">
+												<b><digi:trn key="aim:meBaseValueComments">Comments</digi:trn></b>
+											</TD>
+											<TD colspan="3">
+												<bean:write name="indicator" property="baseValComments" />
+											</TD>
+										</TR>										
+										<TR bgcolor="#ffffff">
 											<TD>
 												<b><digi:trn key="aim:meActualValue">Actual Value</digi:trn></b>
 											</TD>
@@ -103,6 +111,14 @@
 											<TD>
 												<bean:write name="indicator" property="actualValDate" />	
 											</TD>											
+										</TR>	
+										<TR bgcolor="#ffffff">
+											<TD width="125">
+												<b><digi:trn key="aim:meActualValueComments">Comments</digi:trn></b>
+											</TD>
+											<TD colspan="3">
+												<bean:write name="indicator" property="actualValComments" />
+											</TD>
 										</TR>										
 										<TR bgcolor="#ffffff">
 											<TD>
@@ -118,6 +134,14 @@
 												<bean:write name="indicator" property="targetValDate" />	
 											</TD>											
 										</TR>
+										<TR bgcolor="#ffffff">
+											<TD width="125">
+												<b><digi:trn key="aim:meTargetValueComments">Comments</digi:trn></b>
+											</TD>
+											<TD colspan="3">
+												<bean:write name="indicator" property="targetValComments" />
+											</TD>
+										</TR>										
 										<logic:notEmpty name="indicator" property="priorValues">
 										<TR bgcolor="#ffffff">
 											<TD colspan="4">
@@ -140,16 +164,17 @@
 												<bean:write name="pValue" property="currValDate" />	
 											</TD>
 										</TR>
-										</logic:iterate>
-										</logic:notEmpty>
-										<TR bgcolor="#ffffff">
+										<TR bgcolor="#f4f4f2">
 											<TD>
-												<b><digi:trn key="aim:meComments">Comments</digi:trn></b>
+												&nbsp;
 											</TD>
 											<TD colspan="3">
-												<bean:write name="indicator" property="comments" />													
+												&nbsp;<bean:write name="pValue" property="comments" />
 											</TD>
 										</TR>										
+										</logic:iterate>
+										</logic:notEmpty>
+										
 										<TR bgcolor="#ffffff">
 											<TD>
 												<b><digi:trn key="aim:meRisk">Risk</digi:trn></b>

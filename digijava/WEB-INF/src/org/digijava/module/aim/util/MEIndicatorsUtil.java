@@ -439,6 +439,7 @@ public class MEIndicatorsUtil
 								DateConversion.ConvertDateToString(
 										meIndValue.getBaseValDate()));
 					}
+					actInd.setBaseValComments(meIndValue.getBaseValComments());
 
 					actInd.setActualVal(meIndValue.getActualVal());
 					actInd.setCurrentVal(meIndValue.getActualVal());
@@ -450,24 +451,27 @@ public class MEIndicatorsUtil
 								.ConvertDateToString(meIndValue
 										.getActualValDate()));						
 					}
+					actInd.setActualValComments(meIndValue.getActualValComments());
+					actInd.setCurrentValComments(meIndValue.getActualValComments());
 
 					actInd.setTargetVal(meIndValue.getTargetVal());
 					if (meIndValue.getTargetValDate() != null) {
 						actInd.setTargetValDate(DateConversion.ConvertDateToString(
 								meIndValue.getTargetValDate()));						
 					}					
+					actInd.setTargetValComments(meIndValue.getTargetValComments());
 					
 					actInd.setRevisedTargetVal(meIndValue.getRevisedTargetVal());
 					if (meIndValue.getRevisedTargetValDate() != null) {
 						actInd.setRevisedTargetValDate(DateConversion.ConvertDateToString(
 								meIndValue.getRevisedTargetValDate()));						
 					}
+					actInd.setRevisedTargetValComments(meIndValue.getRevisedTargetValComments());
 					
 					if (meIndValue.getRisk() != null)
 						actInd.setRisk(meIndValue.getRisk()
 								.getAmpIndRiskRatingsId());
 
-					actInd.setComments(meIndValue.getComments());
 					actInd.setDefaultInd(meIndValue.getMeIndicatorId()
 							.isDefaultInd());
 					
@@ -543,6 +547,8 @@ public class MEIndicatorsUtil
 								DateConversion.ConvertDateToString(
 										meIndValue.getBaseValDate()));
 					}
+					actInd.setBaseValComments(meIndValue.getBaseValComments());
+					
 					actInd.setIndicatorId(meIndValue.getMeIndicatorId()
 							.getAmpMEIndId());
 					actInd.setIndicatorValId(meIndValue.getAmpMeIndValId());
@@ -553,21 +559,23 @@ public class MEIndicatorsUtil
 								.ConvertDateToString(meIndValue
 										.getActualValDate()));
 					}
+					actInd.setActualValComments(meIndValue.getActualValComments());
 
 					actInd.setTargetVal(meIndValue.getTargetVal());
 					if (meIndValue.getTargetValDate() != null) {
 						actInd.setTargetValDate(DateConversion.ConvertDateToString(
 								meIndValue.getTargetValDate()));						
-					}					
+					}
+					actInd.setTargetValComments(meIndValue.getTargetValComments());
 					
 					actInd.setRevisedTargetVal(meIndValue.getRevisedTargetVal());
 					if (meIndValue.getRevisedTargetValDate() != null) {
 						actInd.setRevisedTargetValDate(DateConversion.ConvertDateToString(
 								meIndValue.getRevisedTargetValDate()));						
 					}
+					actInd.setRevisedTargetValComments(meIndValue.getRevisedTargetValComments());
 					
 					actInd.setPriorValues(getPriorIndicatorValues(meIndValue.getAmpMeIndValId(),false));
-					actInd.setComments(meIndValue.getComments());
 					actInd.setDefaultInd(meIndValue.getMeIndicatorId()
 							.isDefaultInd());
 					
@@ -632,22 +640,25 @@ public class MEIndicatorsUtil
 			}
 			meIndVal.setBaseVal(actInd.getBaseVal());
 			meIndVal.setBaseValDate(DateConversion.getDate(actInd.getBaseValDate()));
+			meIndVal.setBaseValComments(actInd.getBaseValComments());
 			
 			meIndVal.setTargetVal(actInd.getTargetVal());
 			meIndVal.setTargetValDate(DateConversion.getDate(actInd.getTargetValDate()));
+			meIndVal.setTargetValComments(actInd.getTargetValComments());
 			
 			meIndVal.setRevisedTargetVal(actInd.getRevisedTargetVal());
 			meIndVal.setRevisedTargetValDate(DateConversion.getDate(actInd.getRevisedTargetValDate()));
+			meIndVal.setRevisedTargetValComments(actInd.getRevisedTargetValComments());
 
 			meIndVal.setActualVal(actInd.getActualVal());
 			meIndVal.setActualValDate(DateConversion.getDate(actInd.getActualValDate()));
+			meIndVal.setActualValComments(actInd.getActualValComments());
 			
 			
 			if(chk == 1) {
 				AmpIndicatorRiskRatings indRisk = new AmpIndicatorRiskRatings();
 				indRisk.setAmpIndRiskRatingsId(actInd.getRisk());
 				meIndVal.setRisk(indRisk);
-				meIndVal.setComments(actInd.getComments());
 			}
 			tx = session.beginTransaction();
 			session.saveOrUpdate(meIndVal);
@@ -1133,6 +1144,7 @@ public class MEIndicatorsUtil
 				priorCurrVal.setCurrHistoryId(meCurrValHis.getAmpMECurrValHistoryId());
 				priorCurrVal.setCurrValue(meCurrValHis.getCurrValue());
 				priorCurrVal.setCurrValDate(DateConversion.ConvertDateToString(meCurrValHis.getCurrValueDate()));
+				priorCurrVal.setComments(meCurrValHis.getComments());
 				col.add(priorCurrVal);
 			}
 		}

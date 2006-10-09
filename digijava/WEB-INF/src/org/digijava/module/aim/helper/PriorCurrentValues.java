@@ -5,6 +5,8 @@ public class PriorCurrentValues
 	private Long currHistoryId;
 	private float currValue;
 	private String currValDate;
+	private String comments;
+	
 	/**
 	 * @return Returns the currHistoryId.
 	 */
@@ -40,6 +42,18 @@ public class PriorCurrentValues
 	 */
 	public void setCurrValue(float currValue) {
 		this.currValue = currValue;
+	}
+	/**
+	 * @return Returns the comments.
+	 */
+	public String getComments() {
+		return comments;
+	}
+	/**
+	 * @param comments The comments to set.
+	 */
+	public void setComments(String comments) {
+		this.comments = comments;
 	}
 	
 	

@@ -321,6 +321,13 @@
 																</td>
 															</tr>
 															<tr>
+																<td><digi:trn key="aim:meBaseValueComments">Comments</digi:trn>
+																</td>
+																<td colspan="4">
+																	<bean:write name="indicator" property="baseValComments" />
+																</td>
+															</tr>																
+															<tr>
 																<td><b>
 																	<digi:trn key="aim:meTargetValue">Target Value</digi:trn></b>
 																</td>
@@ -333,6 +340,13 @@
 																</td>
 																<td align="left">&nbsp;&nbsp;
 																	<bean:write name="indicator" property="targetValDate" />
+																</td>
+															</tr>	
+															<tr>
+																<td><digi:trn key="aim:meTargetValComments">Comments</digi:trn>
+																</td>
+																<td colspan="4">
+																	<bean:write name="indicator" property="targetValComments" />
 																</td>
 															</tr>															
 															<tr>
@@ -350,6 +364,13 @@
 																	<bean:write name="indicator" property="revisedTargetValDate" />
 																</td>
 															</tr>
+															<tr>
+																<td><digi:trn key="aim:meRevisedTargetValComments">Comments</digi:trn>
+																</td>
+																<td colspan="4">
+																	<bean:write name="indicator" property="revisedTargetValComments" />
+																</td>
+															</tr>															
 														</c:if>
 														
 														<c:if test="${aimEditActivityForm.workingTeamLeadFlag=='yes'}">
@@ -376,6 +397,13 @@
 																	</a>
 																</td>
 															</tr>
+															<tr>
+																<td><digi:trn key="aim:meBaseValueComments">Comments</digi:trn>
+																</td>
+																<td colspan="4">
+																	<textarea name="baseValComments" class="inp-text" rows="2" cols="38"><bean:write name="indicator" property="baseValComments" /></textarea>
+																</td>
+															</tr>															
 															<tr>
 																<td><b>
 																	<digi:trn key="aim:meTargetValue">Target Value</digi:trn>	
@@ -418,6 +446,13 @@
 																</td>
 																</c:if>																
 															</tr>
+															<tr>
+																<td><digi:trn key="aim:meTargetValComments">Comments</digi:trn>
+																</td>
+																<td colspan="4">
+																<textarea name="targetValComments" class="inp-text" rows="2" cols="38"><bean:write name="indicator" property="targetValComments" /></textarea>
+																</td>
+															</tr>															
 															<c:if test="${indicator.targetValDate != null}">
 															<tr>
 																<td><b>
@@ -442,7 +477,14 @@
 																		<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border=0>
 																	</a>
 																</td>
-															</tr>															
+															</tr>
+															<tr>
+																<td><digi:trn key="aim:meRevisedTargetValComments">Comments</digi:trn>
+																</td>
+																<td colspan="4">
+																	<textarea name="revTargetValComments" class="inp-text" rows="2" cols="38"><bean:write name="indicator" property="revisedTargetValComments" /></textarea>
+																</td>
+															</tr>
 															</c:if>
 
 														</c:if>
@@ -468,6 +510,13 @@
 																		<bean:write name="priorValues" property="currValDate" format="yyyy-mm-dd"/>
 																	</td>
 																</tr>
+																<tr>
+																	<td><digi:trn key="aim:meCurrentValComments">Comments</digi:trn>
+																	</td>
+																	<td colspan="4">
+																		<bean:write name="priorValues" property="comments" />
+																	</td>
+																</tr>																
 															</logic:iterate>
 														</logic:notEmpty>
 
@@ -500,14 +549,23 @@
 																		<img src="../ampTemplate/images/show-calendar.gif" alt="Click to View Calendar" border=0>
 																	</a>
 																</td>
-															</tr>														
+															</tr>	
+															<tr>
+																<td><digi:trn key="aim:meCurrentValComments">Comments</digi:trn>
+																</td>
+																<td colspan="4">
+																	<textarea name="currentValComments" class="inp-text" rows="2" cols="38"><bean:write name="indicator" property="currentValComments" /></textarea>
+																</td>
+															</tr>															
 														<tr>
+															<%--
 															<td><b>
 																<digi:trn key="aim:meComments">Comments</digi:trn>
 															</b></td>
 															<td>
 																<html:textarea name="aimEditActivityForm" property="comments" styleClass="inp-text"/>
 															</td>
+															--%>
 															<td>&nbsp;&nbsp;&nbsp;</td>
 															<td><b>Risk</b></td>
 															<td>

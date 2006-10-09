@@ -1,6 +1,6 @@
 package org.digijava.module.aim.patches;
 
-import java.sql.Connection;
+import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -48,6 +48,44 @@ public class DBPatcher {
 		try {
 			  
 			 session = PersistenceManager.getSession();
+			 
+			 Statement stmt = session.connection().createStatement();
+			 
+			 try {
+				 qryStr = "ALTER TABLE AMP_ME_INDICATOR_VALUE " +
+			 		"ADD base_val_comments VARCHAR(255)," +
+			 		"ADD actual_val_comments VARCHAR(255)," +
+			 		"ADD target_val_comments VARCHAR(255)," +
+			 		"ADD revised_target_val_comments VARCHAR(255)";
+				 stmt.executeUpdate(qryStr);
+			 
+				 qryStr = "ALTER TABLE AMP_ME_CURR_VAL_HISTORY " +
+				 	"ADD comments VARCHAR(255)";
+				 stmt.executeUpdate(qryStr);	 
+			 } catch (SQLException sqle) {
+				 logger.info("ME Tables already altered");
+			 }
+			 
+			 try {
+				 qryStr = "ALTER TABLE AMP_ME_INDICATORS " +
+				 		"MODIFY ASCENDING_IND TINYINT(1)";
+				 stmt.executeUpdate(qryStr);
+			 
+				 qryStr = "UPDATE AMP_ME_INDICATORS" +
+				 		"SET ASCENDING_IND=1 WHERE ASCENDING_IND IS NULL";
+				 stmt.executeUpdate(qryStr);	 
+			 } catch (SQLException sqle) {
+				 logger.info("ME Tables already altered");
+			 }			 
+			 
+			 try {
+				 qryStr = "ALTER TABLE AMP_FUNDING_DETAIL " +
+				 		"MODIFY AMP_FUNDING_ID BIGINT(10) NULL";
+				 stmt.executeUpdate(qryStr);
+			 } catch (SQLException sqle) {
+				 logger.info("FundingDetails Tables already altered");
+			 }			 
+			 
 			 qryStr = "select count(*) from " + AmpTermsAssist.class.getName() + " ta " +
 			 		"where (ta.termsAssistName=:name)";
 			 qry = session.createQuery(qryStr);
@@ -145,8 +183,6 @@ public class DBPatcher {
 				 
 				 qryStr = "delete from dg_message where message_utf8 " +
 				 		"like '%&nbsp%'";
-				 Connection con = session.connection();
-				 Statement stmt = con.createStatement();
 				 stmt.executeUpdate(qryStr);
 			 }
 				

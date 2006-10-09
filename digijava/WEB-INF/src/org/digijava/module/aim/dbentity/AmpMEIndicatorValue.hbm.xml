@@ -19,6 +19,11 @@
 		<property name="targetValDate" column="target_val_date" type="java.util.Date"/>
 		<property name="revisedTargetValDate" column="revised_target_val_date" type="java.util.Date"/>
 
+		<property name="baseValComments" column="base_val_comments" type="java.lang.String"/>
+		<property name="actualValComments" column="actual_val_comments" type="java.lang.String"/>		
+		<property name="targetValComments" column="target_val_comments" type="java.lang.String"/>
+		<property name="revisedTargetValComments" column="revised_target_val_comments" type="java.lang.String"/>
+
 		<property name="comments" column="Comments" type="java.lang.String"/>
 		
 		<many-to-one name="activityId" column="activity_id" 

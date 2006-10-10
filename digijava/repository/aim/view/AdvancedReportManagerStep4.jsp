@@ -11,6 +11,16 @@
 
 <script language="JavaScript">
 
+function saveReport()
+{
+		alert("Your report is being saved");
+		<digi:context name="step" property="context/module/moduleinstance/advancedReportManager.do?check=SaveReport" />
+		document.aimAdvancedReportForm.action = "<%= step %>";
+		document.aimAdvancedReportForm.target = "_self";
+		document.aimAdvancedReportForm.submit();
+}
+
+
 
 function gotoStep() 
 {
@@ -297,7 +307,8 @@ function backStep() {
 											<tr bgcolor="#f4f4f2">
 												<td align="center" colspan="2" bgcolor="#f4f4f2">
 													<input type=button name=back value="<< Previous"   class="dr-menu" onclick="javascript:backStep()">
-													<input type="button" name="Cancel" value=" Cancel " class="dr-menu" onclick="return quitAdvRptMngr()" >				<input type=button name=generateReport value="  Generate Report  " class="dr-menu"  onclick="javascript:gotoStep()">															
+													<input type="button" name="Cancel" value=" Cancel " class="dr-menu" onclick="return quitAdvRptMngr()" >	
+													<input type=button name=generateReport value="  Generate Report  " class="dr-menu"  onclick="javascript:saveReport()">															
 												</td>
 											</tr>
 										</TABLE>

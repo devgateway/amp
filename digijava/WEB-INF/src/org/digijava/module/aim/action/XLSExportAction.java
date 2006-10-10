@@ -62,7 +62,7 @@ public class XLSExportAction extends Action {
 		
 		GroupReportDataXLS grdx=new GroupReportDataXLS(sheet, row, rowId,
 				colId,  null, rd);
-			
+		grdx.setMetadata(r);
 			
 		
 		//show title+desc

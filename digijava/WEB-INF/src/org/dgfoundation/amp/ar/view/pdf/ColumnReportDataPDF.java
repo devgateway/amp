@@ -93,8 +93,9 @@ public class ColumnReportDataPDF extends PDFExporter {
 
 		// add data
 
-		if(metadata.getHideActivities()==null || metadata.getHideActivities().booleanValue()==false) {
-		Iterator i = columnReport.getOwnerIds().iterator();
+		if (metadata.getHideActivities() == null
+				|| metadata.getHideActivities().booleanValue() == false) {
+			Iterator i = columnReport.getOwnerIds().iterator();
 		while (i.hasNext()) {
 			Long element = (Long) i.next();
 			this.setOwnerId(element);

@@ -64,7 +64,9 @@ public class CSVExportAction extends Action {
 
 		GroupReportDataXLS grdx = new GroupReportDataXLS(sheet, row, rowId,
 				colId, null, rd);
-		
+
+		grdx.setMetadata(r);
+
 		
 		//show title+desc
 		rowId.inc();

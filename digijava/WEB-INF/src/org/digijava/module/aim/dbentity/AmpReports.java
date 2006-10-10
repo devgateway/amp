@@ -6,8 +6,6 @@
 package org.digijava.module.aim.dbentity;
 
 
-import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
@@ -39,18 +37,6 @@ public class AmpReports implements Comparable {
 	private Set hierarchies;
 	private Set measures;
 	
-	
-	public void createOrderedColumns() {
-		orderedColumns=new ArrayList(columns.size());
-		for(int x=0;x<columns.size();x++) {
-			Iterator i=columns.iterator();
-			while (i.hasNext()) {
-				AmpReportColumn element = (AmpReportColumn) i.next();
-				int order= Integer.parseInt(element.getOrderId());
-				if(order-1==x) orderedColumns.add(element); 				
-			}
-		}
-	}
 	
 	public Set getMeasures() {
 		return measures;

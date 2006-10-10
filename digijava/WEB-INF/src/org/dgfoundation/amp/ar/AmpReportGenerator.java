@@ -281,7 +281,8 @@ public class AmpReportGenerator extends ReportGenerator {
 	 * 
 	 */
 	protected void createHierarchies() {
-		Iterator i = reportMetadata.getHierarchies().iterator();
+		List orderedHierarchies=ARUtil.createOrderedHierarchies(reportMetadata.getHierarchies());
+		Iterator i = orderedHierarchies.iterator();
 		while (i.hasNext()) {
 			AmpReportHierarchy element = (AmpReportHierarchy) i.next();
 			// TODO: the set is NOT a list, so the hierarchies are unordered.
@@ -329,7 +330,7 @@ public class AmpReportGenerator extends ReportGenerator {
 		
 		logger.info("Master report query:"+filter.getGeneratedFilterQuery());
 		
-		reportMetadata.createOrderedColumns();
+		reportMetadata.setOrderedColumns(ARUtil.createOrderedColumns(reportMetadata.getColumns()));
 		
 		attachFundingMeta();
 	}

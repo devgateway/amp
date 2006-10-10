@@ -12,6 +12,7 @@ import java.util.Calendar;
 import java.util.Collection;
 import java.util.GregorianCalendar;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
@@ -26,6 +27,8 @@ import org.apache.struts.action.ActionMapping;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.dbentity.AmpCurrency;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
+import org.digijava.module.aim.dbentity.AmpReportColumn;
+import org.digijava.module.aim.dbentity.AmpReportHierarchy;
 import org.digijava.module.aim.dbentity.AmpReports;
 import org.digijava.module.aim.dbentity.AmpSector;
 import org.digijava.module.aim.dbentity.AmpTeam;
@@ -69,6 +72,7 @@ public final class ARUtil {
 		logger.error("Cannot find a constructor with "+paramNo+" parameters for class "+c.getName());
 		return null;
 	}
+	
 	
 	public static GroupReportData generateReport(ActionMapping mapping,
 			ActionForm form, HttpServletRequest request,
@@ -508,5 +512,34 @@ public final class ARUtil {
 		anf.generateFilterQuery();
 
 		return anf;
+	}
+
+
+	
+	
+	public static List createOrderedHierarchies(Collection columns) {
+		List orderedColumns=new ArrayList(columns.size());
+		for(int x=0;x<columns.size();x++) {
+			Iterator i=columns.iterator();
+			while (i.hasNext()) {
+				AmpReportHierarchy element = (AmpReportHierarchy) i.next();
+				int order= Integer.parseInt(element.getLevelId());
+				if(order-1==x) orderedColumns.add(element); 				
+			}
+		}
+		return orderedColumns;
+	}
+	
+	public static List createOrderedColumns(Collection columns) {
+		List orderedColumns=new ArrayList(columns.size());
+		for(int x=0;x<columns.size();x++) {
+			Iterator i=columns.iterator();
+			while (i.hasNext()) {
+				AmpReportColumn element = (AmpReportColumn) i.next();
+				int order= Integer.parseInt(element.getOrderId());
+				if(order-1==x) orderedColumns.add(element); 				
+			}
+		}
+		return orderedColumns;
 	}
 }

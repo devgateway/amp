@@ -5,6 +5,8 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.acegisecurity.Authentication;
 import org.acegisecurity.ui.logout.LogoutHandler;
+import org.digijava.module.aim.helper.Constants;
+
 import javax.servlet.http.HttpSession;
 
 public class AmpLogoutHandler
@@ -25,14 +27,26 @@ public class AmpLogoutHandler
         if(session.getAttribute("currentMember") != null) {
             session.removeAttribute("currentMember");
         }
-
         if(session.getAttribute("teamLeadFlag") != null) {
             session.removeAttribute("teamLeadFlag");
         }
-
         if(session.getAttribute("ampAdmin") != null) {
             session.removeAttribute("ampAdmin");
         }
-
+        if (session.getAttribute(Constants.AMP_PROJECTS) != null) {
+        	session.removeAttribute(Constants.AMP_PROJECTS);
+        }
+        if (session.getAttribute(Constants.MY_LINKS) != null) {
+        	session.removeAttribute(Constants.MY_LINKS);
+        }
+        if (session.getAttribute(Constants.MY_REPORTS) != null) {
+        	session.removeAttribute(Constants.MY_REPORTS);
+        }
+        if (session.getAttribute(Constants.MY_TASKS) != null) {
+        	session.removeAttribute(Constants.MY_TASKS);
+        }
+        if (session.getAttribute(Constants.MY_TEAM_MEMBERS) != null) {
+        	session.removeAttribute(Constants.MY_TEAM_MEMBERS);
+        }
     }
 }

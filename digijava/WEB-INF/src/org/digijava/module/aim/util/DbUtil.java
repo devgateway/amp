@@ -1582,17 +1582,45 @@ public class DbUtil {
 		Session session = null;
 		Query qry = null;
 		Collection pages = new ArrayList();
+		String qryStr = null;
 		
 		try {
 			session = PersistenceManager.getSession();
-			String queryString = "select p from " + AmpPages.class.getName() 
-									+ " p where (p.ampTeamId is null) or (p.ampTeamId=:teamId)" + " order by p.pageName";
-			qry = session.createQuery(queryString);
-			qry.setParameter("teamId", teamId, Hibernate.LONG);
+			qryStr = "select p from " + AmpPages.class.getName() 
+									+ " p where p.pageCode in ('" + Constants.DESKTOP_PG_CODE 
+									+ "','" + Constants.FINANCIAL_PG_CODE + "')";
+			qry = session.createQuery(qryStr);
 			pages = qry.list();
+			
+			qryStr = "select tr from " + AmpTeamReports.class.getName() + " tr " +
+					"where (tr.team=:tId)";
+			qry = session.createQuery(qryStr);
+			qry.setParameter("tId",teamId,Hibernate.LONG);
+			Iterator tempItr = qry.list().iterator();
+			String params = "";
+			while (tempItr.hasNext()) {
+				AmpTeamReports tr = (AmpTeamReports) tempItr.next();
+				if (params.length() > 0) {
+					params += ",";
+				}
+				params += "'" + tr.getReport().getName().replaceAll("'","''") + "'";
+			}
+			if (params.length() > 0) {
+				logger.info("Params :" + params);
+				
+				qryStr = "select p from " + AmpPages.class.getName() + " p " +
+						"where p.pageName in (" + params + ")";
+				Iterator itr = session.createQuery(qryStr).list().iterator();
+				while (itr.hasNext()) {
+					AmpPages p = (AmpPages) itr.next();
+					pages.add(p);	
+				}
+			}
+			
 		} catch (Exception e) {
 			logger.error("Unable to get all configurable pages");
-			logger.debug("Exceptiion is :" + e);
+			logger.error("Exceptiion is :" + e);
+			e.printStackTrace(System.out);
 		} finally {
 			try {
 				if (session != null) {

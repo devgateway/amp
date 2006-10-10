@@ -209,4 +209,7 @@ public class Constants
 	public static final String EVENT_ADD = "add";
 	public static final String EVENT_SHOW_ADD = "showAdd";
 	public static final String EVENT_SHOW_EDIT = "showEdit";
+	
+	public static final String DESKTOP_PG_CODE = "DTP";
+	public static final String FINANCIAL_PG_CODE = "FP";
 }	

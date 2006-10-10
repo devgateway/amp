@@ -71,7 +71,7 @@ public class DBPatcher {
 				 		"MODIFY ASCENDING_IND TINYINT(1)";
 				 stmt.executeUpdate(qryStr);
 			 
-				 qryStr = "UPDATE AMP_ME_INDICATORS" +
+				 qryStr = "UPDATE AMP_ME_INDICATORS " +
 				 		"SET ASCENDING_IND=1 WHERE ASCENDING_IND IS NULL";
 				 stmt.executeUpdate(qryStr);	 
 			 } catch (SQLException sqle) {
@@ -84,6 +84,15 @@ public class DBPatcher {
 				 stmt.executeUpdate(qryStr);
 			 } catch (SQLException sqle) {
 				 logger.info("FundingDetails Tables already altered");
+			 }			 
+			 
+			 try {
+				 qryStr = "UPDATE AMP_FUNDING_DETAIL " +
+				 		"SET PERSPECTIVE_ID=2 " +
+				 		"WHERE PERSPECTIVE_ID IS NULL";
+				 stmt.executeUpdate(qryStr);
+			 } catch (SQLException sqle) {
+				 logger.info("Perspective not updated :" + sqle.getMessage());
 			 }			 
 			 
 			 qryStr = "select count(*) from " + AmpTermsAssist.class.getName() + " ta " +

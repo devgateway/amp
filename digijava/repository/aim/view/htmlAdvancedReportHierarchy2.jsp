@@ -65,33 +65,11 @@
 
 							<tr>	
 								<logic:iterate name="aimAdvancedReportForm"  property="titles" id="titles" type="org.digijava.module.aim.helper.Column">
-									<logic:notEqual name="titles" property="columnName" value="Project Title">
-										<logic:notEqual name="titles" property="columnName" value="Objective">	
-											<logic:notEqual name="titles" property="columnName" value="Description">
-												<logic:notEqual name="titles" property="columnName" value="Donor">
-													<logic:notEqual name="titles" property="columnName" value="Actual Completion Date">
-														<logic:notEqual name="titles" property="columnName" value="Region">
-													<logic:notEqual name="titles" property="columnName" value="Component Name">	
-															<logic:notEqual name="titles" property="columnName" value="Status">
-																<logic:notEqual name="titles" property="columnName" value="Cumulative Disbursements">
-																	<logic:notEqual name="titles" property="columnName" value="Type Of Assistance">
-																		<logic:notEqual name="titles" property="columnName" value="Contact Name">
 																			<td width="9%">
 																				<div align="center"><strong>
 																					<bean:write name="titles" property="columnName" />
 																				</strong></div>
 																			</td>
-																		</logic:notEqual>
-																	</logic:notEqual>
-																</logic:notEqual>
-															</logic:notEqual>
-														</logic:notEqual>
-													</logic:notEqual>
-												</logic:notEqual>
-											</logic:notEqual>
-											</logic:notEqual>											
-										</logic:notEqual>
-									</logic:notEqual>
 								</logic:iterate>
 							</tr>
 							<tr>
@@ -134,31 +112,11 @@
 							</tr>
 							<tr>	
 								<logic:iterate name="aimAdvancedReportForm"  property="titles" id="titles" type="org.digijava.module.aim.helper.Column">
-									<logic:notEqual name="titles" property="columnName" value="Project Title">
-										<logic:notEqual name="titles" property="columnName" value="Objective">	
-											<logic:notEqual name="titles" property="columnName" value="Description">
-												<logic:notEqual name="titles" property="columnName" value="Project Id">
-												<logic:notEqual name="titles" property="columnName" value="Component Name">
-													<logic:notEqual name="titles" property="columnName" value="Actual Start Date">
-														<logic:notEqual name="titles" property="columnName" value="Sector">
-															<logic:notEqual name="titles" property="columnName" value="Implementation Level">
-																<logic:notEqual name="titles" property="columnName" value="Cumulative Commitments">
-																	<logic:notEqual name="titles" property="columnName" value="Financing Instrument">
 																		<td width="9%">
 																			<div align="center"><strong>
 																				<bean:write name="titles" property="columnName" />
 																			</strong></div>
 																		</td>
-																	</logic:notEqual>
-																</logic:notEqual>
-															</logic:notEqual>
-														</logic:notEqual>
-													</logic:notEqual>
-												</logic:notEqual>
-												</logic:notEqual>												
-											</logic:notEqual>
-										</logic:notEqual>
-									</logic:notEqual>
 								</logic:iterate>
 							</tr>
 							<tr>

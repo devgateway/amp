@@ -84,6 +84,7 @@ public class PDFExportAction extends Action {
 		
 		
 		GroupReportDataPDF grdp=new GroupReportDataPDF(table,rd,null);
+		grdp.setMetadata(r);
 		
 		//generate a PDF output of the report structure:
 		grdp.generate();		

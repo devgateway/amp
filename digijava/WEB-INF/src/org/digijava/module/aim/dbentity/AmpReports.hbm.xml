@@ -14,6 +14,8 @@
 		<property name="options" column="options" type="java.lang.String"/>
 		<property name="reportDescription" column="report_description" type="java.lang.String"/>
 		<property name="type" column="type" type="java.lang.Long"/>
+		<property name="hideActivities" column="hide_activities" type="java.lang.Boolean"/>
+		
 		<!--<many-to-one name="ampReportsOptions" column="amp_option_id" class="org.digijava.module.aim.dbentity.AmpReportsOptions" not-null="true"/>
 		-->
 		<set name="members" table="AMP_MEMBER_REPORTS" lazy="true">
@@ -42,6 +44,8 @@
 			<key column="amp_report_id"/>
 			<many-to-many class="org.digijava.module.aim.dbentity.AmpMeasures" column="measureId"/>
 		</set>
+
+	<many-to-one name="defaultFilter" column="default_filter_id" class="org.dgfoundation.amp.ar.AmpARFilter" not-null="false"/>
 					
 	</class>
 </hibernate-mapping>

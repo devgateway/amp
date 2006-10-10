@@ -1,12 +1,12 @@
 /**
- * AmpNewFilter.java
+ * AmpARFilter.java
  * (c) 2006 Development Gateway Foundation
  * @author Mihai Postelnicu - mpostelnicu@dgfoundation.org
  * 
  */
 package org.dgfoundation.amp.ar;
 
-import java.util.List;
+import java.util.Set;
 
 /**
  * Filtering bean. Holds info about filtering parameters and creates the filtering query
@@ -14,8 +14,9 @@ import java.util.List;
  * @since Aug 5, 2006
  *
  */
-public class AmpNewFilter implements Filter {
+public class AmpARFilter implements Filter {
 	
+	private Long id;
 	
 	private Long ampStatusId=null;
 	private Long ampOrgId=null;
@@ -23,18 +24,11 @@ public class AmpNewFilter implements Filter {
 	private String region=null;
 	private Long ampModalityId=null;
 	private String ampCurrencyCode=null;
-	private int startYear = 0;
-	private int startMonth = 0;
-	private int startDay = 0;
-	private List ampTeams=null;
+	private Set ampTeams=null;
 	
-	private int fromYear = 0;
-	private int toYear= 0;
+	private Integer fromYear;
+	private Integer toYear;
 	
-
-	private int closeYear = 0;
-	private int closeMonth = 0;
-	private int closeDay = 0;
 	
 	private String generatedFilterQuery="SELECT amp_activity_id FROM amp_activity WHERE 1";
 	private int initialQueryLength=generatedFilterQuery.length();
@@ -44,7 +38,7 @@ public class AmpNewFilter implements Filter {
 		generatedFilterQuery+= " AND amp_activity_id IN ("+filter+")";
 	}
 	
-	public AmpNewFilter() {
+	public AmpARFilter() {
 		super();
 		
 	}
@@ -76,8 +70,8 @@ public class AmpNewFilter implements Filter {
 		if(region!=null && !region.equals("All")) queryAppend(REGION_FILTER);
 		if(ampModalityId!=null && ampModalityId.intValue()!=0) queryAppend(FINANCING_INSTR_FILTER);
 		
-		if(fromYear!=0) queryAppend(FROM_YEAR_FILTER);
-		if(toYear!=0) queryAppend(TO_YEAR_FILTER);
+		if(fromYear!=null) queryAppend(FROM_YEAR_FILTER);
+		if(toYear!=null) queryAppend(TO_YEAR_FILTER);
 		
 		//if(startYear!=0) queryAppend(START_YEAR_FILTER);
 		//if(startMonth!=0) queryAppend(START_MONTH_FILTER);
@@ -170,53 +164,6 @@ public class AmpNewFilter implements Filter {
 
 
 	/**
-	 * @return Returns the closeDay.
-	 */
-	public int getCloseDay() {
-		return closeDay;
-	}
-
-
-	/**
-	 * @param closeDay The closeDay to set.
-	 */
-	public void setCloseDay(int closeDay) {
-		this.closeDay = closeDay;
-	}
-
-
-	/**
-	 * @return Returns the closeMonth.
-	 */
-	public int getCloseMonth() {
-		return closeMonth;
-	}
-
-
-	/**
-	 * @param closeMonth The closeMonth to set.
-	 */
-	public void setCloseMonth(int closeMonth) {
-		this.closeMonth = closeMonth;
-	}
-
-
-	/**
-	 * @return Returns the closeYear.
-	 */
-	public int getCloseYear() {
-		return closeYear;
-	}
-
-
-	/**
-	 * @param closeYear The closeYear to set.
-	 */
-	public void setCloseYear(int closeYear) {
-		this.closeYear = closeYear;
-	}
-
-	/**
 	 * @return Returns the region.
 	 */
 	public String getRegion() {
@@ -229,54 +176,6 @@ public class AmpNewFilter implements Filter {
 	 */
 	public void setRegion(String region) {
 		this.region = region;
-	}
-
-
-	/**
-	 * @return Returns the startDay.
-	 */
-	public int getStartDay() {
-		return startDay;
-	}
-
-
-	/**
-	 * @param startDay The startDay to set.
-	 */
-	public void setStartDay(int startDay) {
-		this.startDay = startDay;
-	}
-
-
-	/**
-	 * @return Returns the startMonth.
-	 */
-	public int getStartMonth() {
-		return startMonth;
-	}
-
-
-	/**
-	 * @param startMonth The startMonth to set.
-	 */
-	public void setStartMonth(int startMonth) {
-		this.startMonth = startMonth;
-	}
-
-
-	/**
-	 * @return Returns the startYear.
-	 */
-	public int getStartYear() {
-		return startYear;
-	}
-
-
-	/**
-	 * @param startYear The startYear to set.
-	 */
-	public void setStartYear(int startYear) {
-		this.startYear = startYear;
 	}
 
 	/**
@@ -296,43 +195,59 @@ public class AmpNewFilter implements Filter {
 	/**
 	 * @return Returns the ampTeams.
 	 */
-	public List getAmpTeams() {
+	public Set getAmpTeams() {
 		return ampTeams;
 	}
 
 	/**
 	 * @param ampTeams The ampTeams to set.
 	 */
-	public void setAmpTeams(List ampTeams) {
+	public void setAmpTeams(Set ampTeams) {
 		this.ampTeams = ampTeams;
 	}
+
+
 
 	/**
 	 * @return Returns the fromYear.
 	 */
-	public int getFromYear() {
+	public Integer getFromYear() {
 		return fromYear;
 	}
 
 	/**
 	 * @param fromYear The fromYear to set.
 	 */
-	public void setFromYear(int fromYear) {
+	public void setFromYear(Integer fromYear) {
 		this.fromYear = fromYear;
 	}
 
 	/**
 	 * @return Returns the toYear.
 	 */
-	public int getToYear() {
+	public Integer getToYear() {
 		return toYear;
 	}
 
 	/**
 	 * @param toYear The toYear to set.
 	 */
-	public void setToYear(int toYear) {
+	public void setToYear(Integer toYear) {
 		this.toYear = toYear;
+	}
+
+	/**
+	 * @return Returns the id.
+	 */
+	public Long getId() {
+		return id;
+	}
+
+	/**
+	 * @param id The id to set.
+	 */
+	public void setId(Long id) {
+		this.id = id;
 	}
 
 }

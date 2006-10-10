@@ -172,6 +172,8 @@ public class AmpReportGenerator extends ReportGenerator {
 	}
 
 	protected void attachFundingMeta() {
+		
+		//generate on-the-fly a customized AmpReportColumn - we need it for later steps
 		AmpReportColumn arc=new AmpReportColumn();
 		AmpColumns ac = new AmpColumns();
 		arc.setColumn(ac);
@@ -319,7 +321,7 @@ public class AmpReportGenerator extends ReportGenerator {
 	 * @param reportMetadata
 	 * @param condition
 	 */
-	public AmpReportGenerator(AmpReports reportMetadata, AmpNewFilter filter) {
+	public AmpReportGenerator(AmpReports reportMetadata, AmpARFilter filter) {
 		super();
 		this.reportMetadata = reportMetadata;
 		rawColumns = new GroupColumn();

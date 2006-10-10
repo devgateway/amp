@@ -2833,7 +2833,7 @@ public class DbUtil {
 
 		try {
 			ArrayList dbReturnSet = (ArrayList) TeamUtil
-					.getAmpLevel0Teams(ampTeamId);
+					.getAmpLevel0TeamIds(ampTeamId);
 			if (dbReturnSet.size() == 0)
 				inClause = "'" + ampTeamId + "'";
 			else {

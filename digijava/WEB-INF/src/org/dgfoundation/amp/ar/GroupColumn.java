@@ -185,7 +185,8 @@ public class GroupColumn extends Column {
     
     public void addColumn(Integer idx,Column c){
     	if(items.size()<idx.intValue()|| idx.intValue()==0) addColumn(c);else {
-    	items.add(idx.intValue()+1,c);
+    	if(idx.intValue()+1>items.size()) items.add(idx.intValue()-1,c);else
+    			items.add(idx.intValue(),c);
     	c.setParent(this);
     	}
     }

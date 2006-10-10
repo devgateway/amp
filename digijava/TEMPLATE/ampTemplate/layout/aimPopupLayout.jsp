@@ -19,7 +19,27 @@
 		<title><tiles:getAsString name="title"/></title>
 	</logic:notPresent>
 </head>
-<body bgcolor="#ffffff" onload="load()" onunload="unload()">
+<body bgcolor="#ffffff" body onLoad="init()" onunload="unload()">
+<div id="loading" style="position:absolute; width:100%; text-align:center; top:300px;"><img src="/TEMPLATE/ampTemplate/images/amploading.gif" border=0/>Loading...</div>
+<script>
+ var ld=(document.all);
+ var ns4=document.layers;
+ var ns6=document.getElementById&&!document.all;
+ var ie4=document.all;
+ if (ns4)
+ ld=document.loading;
+ else if (ns6)
+ ld=document.getElementById("loading").style;
+ else if (ie4)
+ ld=document.all.loading.style;
+ 
+ function init()
+ {
+ if(ns4){ld.visibility="hidden";}
+ else if (ns6||ie4) ld.display="none";
+ }
+ </script>
+
 <digi:insert attribute="body" />
 </body>
 </html>

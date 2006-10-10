@@ -16,7 +16,7 @@
 
 
 <!-- generate report data -->
-
+<logic:notEqual name="reportMeta" property="hideActivities" value="true">
 <logic:iterate name="columnReport" property="ownerIds" id="ownerId" scope="page">
 <tr><td>
 	<table width="600" cellpadding="5" cellspacing="0" bgcolor="#FFFFFF">
@@ -30,7 +30,7 @@
 	</table>
 </td></tr>
 </logic:iterate>
-
+</logic:notEqual>
 
 <!-- generate total row -->
 

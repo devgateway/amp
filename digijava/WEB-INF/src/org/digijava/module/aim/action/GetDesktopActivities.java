@@ -52,11 +52,11 @@ public class GetDesktopActivities extends Action {
 		 * org.digijava.module.aim.helper.Constants. 
 		 */
 		Collection col = (Collection) session.getAttribute(Constants.AMP_PROJECTS);
-		if (col == null) {
+		//if (col == null) {
 			col = DesktopUtil.getDesktopActivities(tm.getTeamId(),tm.getMemberId(),
 					tm.getTeamHead());
 			session.setAttribute(Constants.AMP_PROJECTS,col);
-		}
+		//}
 		dForm.setTotalCalculated(false);
 		dForm.setSearchKey(null);
 		Collection col1 = (Collection) session.getAttribute(Constants.AMP_PROJECTS);

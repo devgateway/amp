@@ -93,6 +93,7 @@ public class ColumnReportDataPDF extends PDFExporter {
 
 		// add data
 
+		if(metadata.getHideActivities()==null || metadata.getHideActivities().booleanValue()==false) {
 		Iterator i = columnReport.getOwnerIds().iterator();
 		while (i.hasNext()) {
 			Long element = (Long) i.next();
@@ -102,6 +103,7 @@ public class ColumnReportDataPDF extends PDFExporter {
 				Viewable velement = (Viewable) ii.next();
 				velement.invokeExporter(this);
 			}
+		}
 		}
 		
 		//add trail cells

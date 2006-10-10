@@ -12,6 +12,7 @@ import java.util.Calendar;
 import java.util.Collection;
 import java.util.GregorianCalendar;
 import java.util.Iterator;
+import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -80,7 +81,7 @@ public final class ARUtil {
 		AmpReports r = (AmpReports) session.get(AmpReports.class, new Long(
 				ampReportId));
 
-		AmpNewFilter af = ARUtil.createFilter(r, mapping, form, request,
+		AmpARFilter af = ARUtil.createFilter(r, mapping, form, request,
 				response);
 		if (af == null)
 			return null;
@@ -107,12 +108,14 @@ public final class ARUtil {
 	 * @return false if we need to redirect to homepage
 	 * @throws java.lang.Exception
 	 */
-	public static AmpNewFilter createFilter(AmpReports ampReports,
+	public static AmpARFilter createFilter(AmpReports ampReports,
 			ActionMapping mapping, ActionForm form, HttpServletRequest request,
 			HttpServletResponse response) throws java.lang.Exception {
 		HttpSession httpSession = request.getSession();
 		TeamMember teamMember = (TeamMember) httpSession
 				.getAttribute("currentMember");
+		
+		
 		ArrayList filters = null;
 		Iterator iter = null;
 		String setFilters = "";
@@ -457,13 +460,28 @@ public final class ARUtil {
 
 		
 		//get the team list
-		dbReturnSet=(ArrayList)TeamUtil.getAmpLevel0Teams(ampTeamId);
-		dbReturnSet.add(ampTeamId);
+		Set teams=TeamUtil.getAmpLevel0Teams(ampTeamId);
+		teams.add(ampTeam);
+
+		//if the report metadata has a defaultFilter attached, use that as the first filter
+		if ("reset".equals(request.getParameter("view")) && ampReports.getDefaultFilter()!=null) {
+			AmpARFilter defFilt=ampReports.getDefaultFilter();
+			if(defFilt.getAmpCurrencyCode()!=null) formBean.setCurrency(defFilt.getAmpCurrencyCode());
+			if(defFilt.getAmpModalityId()!=null) formBean.setAmpModalityId(defFilt.getAmpModalityId());
+			if(defFilt.getAmpOrgId()!=null) formBean.setAmpOrgId(defFilt.getAmpOrgId());
+			if(defFilt.getAmpSectorId()!=null) formBean.setAmpSectorId(defFilt.getAmpSectorId());
+			if(defFilt.getAmpStatusId()!=null) formBean.setAmpStatusId(defFilt.getAmpStatusId());
+			if(defFilt.getFromYear()!=null) formBean.setAmpFromYear(new Long(defFilt.getFromYear().longValue()));
+			if(defFilt.getToYear()!=null) formBean.setAmpToYear(new Long(defFilt.getToYear().longValue()));
+			if(defFilt.getRegion()!=null) formBean.setAmpLocationId(defFilt.getRegion());
+			return defFilt;
+		}
+
 		
 		
 		// create the ampFilter bean
-		AmpNewFilter anf = new AmpNewFilter();
-		anf.setAmpTeams(dbReturnSet);
+		AmpARFilter anf = new AmpARFilter();
+		anf.setAmpTeams(teams);
 		
 		if (!"reset".equals(request.getParameter("view"))) {
 		anf.setAmpCurrencyCode(ampCurrencyCode);
@@ -480,8 +498,8 @@ public final class ARUtil {
 		//anf.setStartMonth(startMonth);
 		//anf.setStartYear(startYear);
 		
-		anf.setFromYear(fromYr);
-		anf.setToYear(toYr);
+		anf.setFromYear(fromYr==0?null:new Integer(fromYr));
+		anf.setToYear(toYr==0?null:new Integer(toYr));
 		
 		
 		anf.setRegion(region);

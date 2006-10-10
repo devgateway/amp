@@ -34,6 +34,7 @@
 
 <!-- generate report data -->
 
+<logic:notEqual name="reportMeta" property="hideActivities" value="true">
 <logic:iterate name="columnReport" property="ownerIds" id="ownerId" scope="page">
 <%rowIdx++; %>
 <tr onmousedown="setPointer(this, <%=rowIdx%>, 'click', '#FFFFFF', '#FFFFFF', '#FFFF00');">
@@ -44,6 +45,7 @@
 	</logic:iterate>
 </tr>
 </logic:iterate>
+</logic:notEqual>
 
 
 <!-- generate total row -->

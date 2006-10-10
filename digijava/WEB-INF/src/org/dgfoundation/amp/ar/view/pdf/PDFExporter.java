@@ -27,6 +27,7 @@ public abstract class PDFExporter extends Exporter {
 		PDFExporter pdfParent=(PDFExporter) parent;
 		this.table=pdfParent.getTable();
 		this.ownerId=pdfParent.getOwnerId();
+
 	}
 	
 	public PDFExporter(PdfPTable table, Viewable item,Long ownerId) {
@@ -76,7 +77,7 @@ public abstract class PDFExporter extends Exporter {
 	public void setTable(PdfPTable table) {
 		this.table = table;
 	}
-	
+
 	
 
 }

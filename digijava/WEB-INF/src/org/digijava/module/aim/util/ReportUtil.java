@@ -298,7 +298,7 @@ public class ReportUtil {
 			/* ampTeamId is id of the team to which the user belongs to. If the team has access 
 			type 'management' then the following method returns collection of ids all its child teams
 			with access type 'Team' */
-			ArrayList dbReturnSet=(ArrayList)TeamUtil.getAmpLevel0Teams(ampTeamId);				
+			ArrayList dbReturnSet=(ArrayList)TeamUtil.getAmpLevel0TeamIds(ampTeamId);				
 			if(dbReturnSet.size()==0)
 				inClause= "'" + ampTeamId + "'";	//if team access type
 			else
@@ -745,7 +745,7 @@ public class ReportUtil {
 						
 		try
 		{
-			ArrayList dbReturnSet=(ArrayList)TeamUtil.getAmpLevel0Teams(ampTeamId);				
+			ArrayList dbReturnSet=(ArrayList)TeamUtil.getAmpLevel0TeamIds(ampTeamId);				
 			if(dbReturnSet.size()==0)
 				inClauseTeam= "'" + ampTeamId + "'";
 			else
@@ -2375,7 +2375,7 @@ public class ReportUtil {
 		String inClause=null;		
 		try
 		{
-			ArrayList dbReturnSet=(ArrayList)TeamUtil.getAmpLevel0Teams(ampTeamId);				
+			ArrayList dbReturnSet=(ArrayList)TeamUtil.getAmpLevel0TeamIds(ampTeamId);				
 			if(dbReturnSet.size()==0)
 				inClause= "'" + ampTeamId + "'";
 			else
@@ -3351,7 +3351,7 @@ public class ReportUtil {
 		try
 		{
 			int years=0;
-			ArrayList dbReturnSet=(ArrayList)TeamUtil.getAmpLevel0Teams(ampTeamId);				
+			ArrayList dbReturnSet=(ArrayList)TeamUtil.getAmpLevel0TeamIds(ampTeamId);				
 			if(dbReturnSet.size()==0)
 				inClause= "'" + ampTeamId + "'";
 			else
@@ -3756,7 +3756,7 @@ public class ReportUtil {
 			double[][] commFund=new double[yrCount][4];
 			double[][] disbFund=new double[yrCount][4];
 			int fiscalYear=0,fiscalQuarter=0;
-			ArrayList dbReturnSet=(ArrayList)TeamUtil.getAmpLevel0Teams(ampTeamId);				
+			ArrayList dbReturnSet=(ArrayList)TeamUtil.getAmpLevel0TeamIds(ampTeamId);				
 			if(dbReturnSet.size()==0)
 				inClause= "'" + ampTeamId + "'";
 			else
@@ -4089,7 +4089,7 @@ public class ReportUtil {
 				
 		try
 		{
-			ArrayList dbReturnSet=(ArrayList)TeamUtil.getAmpLevel0Teams(ampTeamId);				
+			ArrayList dbReturnSet=(ArrayList)TeamUtil.getAmpLevel0TeamIds(ampTeamId);				
 			if(dbReturnSet.size()==0)
 				inClause= "'" + ampTeamId + "'";
 			else
@@ -4620,7 +4620,7 @@ public class ReportUtil {
 				
 		try
 		{
-			ArrayList dbReturnSet=(ArrayList)TeamUtil.getAmpLevel0Teams(ampTeamId);				
+			ArrayList dbReturnSet=(ArrayList)TeamUtil.getAmpLevel0TeamIds(ampTeamId);				
 			if(dbReturnSet.size()==0)
 				inClause= "'" + ampTeamId + "'";
 			else
@@ -6627,7 +6627,7 @@ public class ReportUtil {
 		try
 		{
 
-			ArrayList dbReturnSet=(ArrayList)TeamUtil.getAmpLevel0Teams(ampTeamId);				
+			ArrayList dbReturnSet=(ArrayList)TeamUtil.getAmpLevel0TeamIds(ampTeamId);				
 			if(dbReturnSet.size()==0)
 				inClause= "'" + ampTeamId + "'";
 			else
@@ -7722,7 +7722,7 @@ public class ReportUtil {
 						
 		try
 		{
-			ArrayList dbReturnSet=(ArrayList)TeamUtil.getAmpLevel0Teams(ampTeamId);				
+			ArrayList dbReturnSet=(ArrayList)TeamUtil.getAmpLevel0TeamIds(ampTeamId);				
 			if(dbReturnSet.size()==0)
 				inClauseTeam= "'" + ampTeamId + "'";
 			else
@@ -9310,7 +9310,7 @@ public class ReportUtil {
 		try
 		{
 			logger.debug("Modality Id: " + ampModalityId);
-			ArrayList dbReturnSet=(ArrayList)TeamUtil.getAmpLevel0Teams(ampTeamId);				
+			ArrayList dbReturnSet=(ArrayList)TeamUtil.getAmpLevel0TeamIds(ampTeamId);				
 			if(dbReturnSet.size()==0)
 				inClause= "'" + ampTeamId + "'";
 			else
@@ -11136,7 +11136,7 @@ public class ReportUtil {
 		try
 		{
 			logger.debug("Modality Id: " + ampModalityId);
-			ArrayList dbReturnSet=(ArrayList)TeamUtil.getAmpLevel0Teams(ampTeamId);				
+			ArrayList dbReturnSet=(ArrayList)TeamUtil.getAmpLevel0TeamIds(ampTeamId);				
 			if(dbReturnSet.size()==0)
 				inClause= "'" + ampTeamId + "'";
 			else
@@ -11719,7 +11719,7 @@ public class ReportUtil {
 				int ind = 0;
 				iter = coll.iterator();
 				
-				ArrayList dbReturnSet=(ArrayList)TeamUtil.getAmpLevel0Teams(ampTeamId);				
+				ArrayList dbReturnSet=(ArrayList)TeamUtil.getAmpLevel0TeamIds(ampTeamId);				
 				if(dbReturnSet.size()==0)
 					inClause= "'" + ampTeamId + "'";
 				else
@@ -12229,7 +12229,7 @@ public class ReportUtil {
 		AmpReportCache ampReportCache = null;
 		try
 		{
-			ArrayList dbReturnSet=(ArrayList)TeamUtil.getAmpLevel0Teams(ampTeamId);				
+			ArrayList dbReturnSet=(ArrayList)TeamUtil.getAmpLevel0TeamIds(ampTeamId);				
 			if(dbReturnSet.size()==0)
 				inClause= "'" + ampTeamId + "'";
 			else

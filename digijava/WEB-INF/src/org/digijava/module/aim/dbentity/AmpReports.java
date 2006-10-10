@@ -11,10 +11,14 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
+import org.dgfoundation.amp.ar.AmpARFilter;
+
 public class AmpReports implements Comparable {
 
 	private Long ampReportId;
 
+	private AmpARFilter defaultFilter;
+	
 	private String name;
 
 	private String description;
@@ -22,6 +26,8 @@ public class AmpReports implements Comparable {
 
 	private String options;
 
+	private Boolean hideActivities;
+	
 	private Long type;
 
 	//private AmpReportsOptions ampReportsOptions;
@@ -147,6 +153,41 @@ public class AmpReports implements Comparable {
 	 */
 	public void setOrderedColumns(List orderedColumns) {
 		this.orderedColumns = orderedColumns;
+	}
+
+	/**
+	 * @return Returns the defaultFilter.
+	 */
+	public AmpARFilter getDefaultFilter() {
+		return defaultFilter;
+	}
+
+	/**
+	 * @param defaultFilter The defaultFilter to set.
+	 */
+	public void setDefaultFilter(AmpARFilter defaultFilter) {
+		this.defaultFilter = defaultFilter;
+	}
+
+	/**
+	 * @return Returns the hideActivities.
+	 */
+	public Boolean isHideActivities() {
+		return hideActivities;
+	}
+
+	/**
+	 * @param hideActivities The hideActivities to set.
+	 */
+	public void setHideActivities(Boolean hideActivities) {
+		this.hideActivities = hideActivities;
+	}
+
+	/**
+	 * @return Returns the hideActivities.
+	 */
+	public Boolean getHideActivities() {
+		return hideActivities;
 	}
 
 

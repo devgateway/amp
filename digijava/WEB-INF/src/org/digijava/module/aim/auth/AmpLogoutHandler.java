@@ -48,5 +48,14 @@ public class AmpLogoutHandler
         if (session.getAttribute(Constants.MY_TEAM_MEMBERS) != null) {
         	session.removeAttribute(Constants.MY_TEAM_MEMBERS);
         }
+        if (session.getAttribute(Constants.DIRTY_ACTIVITY_LIST) != null) {
+        	session.removeAttribute(Constants.DIRTY_ACTIVITY_LIST);
+        }
+        if (session.getAttribute(Constants.DESKTOP_SETTINGS_CHANGED) != null) {
+        	session.removeAttribute(Constants.DESKTOP_SETTINGS_CHANGED);
+        }
+        if (session.getAttribute(Constants.DSKTP_FLTR_CHANGED) != null) {
+        	session.removeAttribute(Constants.DSKTP_FLTR_CHANGED);
+        }
     }
 }

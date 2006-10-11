@@ -1,6 +1,8 @@
 <%@ page contentType="text/html; charset=UTF-8" %> 
 <%@ taglib uri="/taglib/struts-tiles" prefix="tiles" %>
 <%@ taglib uri="/taglib/struts-html" prefix="html" %>
+<%@ taglib uri="/taglib/struts-logic" prefix="logic" %>
+<%@ taglib uri="/taglib/struts-bean" prefix="bean" %>
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
 
 <HTML>
@@ -9,7 +11,16 @@
 	<digi:context name="digiContext" property="context"/>
 
 	<HEAD>
-		<TITLE>AMP<tiles:getAsString name="title"/></TITLE>
+
+		<logic:present name="extraTitle" scope="request">
+			<bean:define id="extTitle" name="extraTitle" scope="request" type="java.lang.String" />
+			<TITLE>AMP<tiles:getAsString name="title"/> <%=extTitle%></TITLE>
+		</logic:present>
+		<logic:notPresent name="extraTitle" scope="request">
+			<TITLE>AMP <tiles:getAsString name="title"/></TITLE>
+		</logic:notPresent>
+		
+		<META HTTP-EQUIV="CACHE-CONTROL" CONTENT="NO-CACHE">		
 		<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=UTF-8">
 		<META HTTP-EQUIV="PRAGMA" CONTENT="NO-CACHE">
      	<META HTTP-EQUIV="EXPIRES" CONTENT="0">

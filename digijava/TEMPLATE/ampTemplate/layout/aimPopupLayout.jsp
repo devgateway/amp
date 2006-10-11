@@ -18,6 +18,12 @@
 	<logic:notPresent name="extraTitle" scope="request">
 		<title><tiles:getAsString name="title"/></title>
 	</logic:notPresent>
+
+		<META HTTP-EQUIV="CACHE-CONTROL" CONTENT="NO-CACHE">		
+		<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=UTF-8">
+		<META HTTP-EQUIV="PRAGMA" CONTENT="NO-CACHE">
+     	<META HTTP-EQUIV="EXPIRES" CONTENT="0">	
+	
 </head>
 <body bgcolor="#ffffff" body onLoad="init()" onunload="unload()">
 <div id="loading" style="position:absolute; width:100%; text-align:center; top:300px;"><img src="/TEMPLATE/ampTemplate/images/amploading.gif" border=0/>Loading...</div>

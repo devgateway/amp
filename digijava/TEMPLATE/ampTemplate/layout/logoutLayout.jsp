@@ -10,9 +10,17 @@
 
 	<HEAD>
 		<TITLE><tiles:getAsString name="title"/></TITLE>
+		<META HTTP-EQUIV="CACHE-CONTROL" CONTENT="NO-CACHE">		
 		<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset=UTF-8">
-		<META HTTP-EQUIV="Expires" CONTENT="0">
-		<META HTTP-EQUIV="Cache-Control" CONTENT="private">
+		<META HTTP-EQUIV="PRAGMA" CONTENT="NO-CACHE">
+     	<META HTTP-EQUIV="EXPIRES" CONTENT="0">
+
+		<script language="javascript">
+		function quitRnot()
+		{
+		}
+		</script>		
+		
 	</HEAD>
 
 	<BODY leftmargin="0" topmargin="0" rightmargin="0" bottommargin="0">

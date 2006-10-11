@@ -76,23 +76,24 @@ public class ViewAmp
         LoginForm lForm = (LoginForm) form; // login form instance
         Collection members = TeamMemberUtil.getTeamMembers(user.getEmail());
         lForm.setMembers(members);
-        response.sendRedirect("showSelectTeam.do");
+        //response.sendRedirect("showSelectTeam.do");
+        return mapping.findForward("selectTeam");
 
         //throw new AuthenticationException("Please log in") {
         //};
-        return null;
+        //return null;
     }
 
     public static void initializeTeamMembership(HttpServletRequest request,
                                                 HttpServletResponse response,
                                                 User usr, Site site) throws
         NotTeamMemberException, DgException {
-    	
+
         HttpSession session = request.getSession();
         if (session.getAttribute(Constants.TEAM_ID) != null) {
         	session.removeAttribute(Constants.TEAM_ID);
         }
-        
+
         ServletContext ampContext = session.getServletContext();
 
         Subject subject = RequestUtils.getSubject(request);

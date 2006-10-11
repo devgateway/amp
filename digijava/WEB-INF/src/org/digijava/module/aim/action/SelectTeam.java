@@ -30,7 +30,7 @@ public class SelectTeam extends Action {
 		HttpSession session = request.getSession();
 		LoginForm lForm = (LoginForm) form;
 		String temp = request.getParameter("id");
-		
+
 		try {
 			Long id = new Long(Long.parseLong(temp));
 			AmpTeamMember member = TeamMemberUtil.getAmpTeamMember(id);
@@ -103,6 +103,6 @@ public class SelectTeam extends Action {
 			e.printStackTrace(System.out);
 		}
 
-		return mapping.findForward("viewMyDesktop");
+		return mapping.findForward("forward");
 	}
 }

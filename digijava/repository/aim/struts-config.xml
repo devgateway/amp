@@ -109,6 +109,7 @@
     </action>
     <action name="aimLoginForm" path="/aim/index" scope="request" type="org.digijava.module.aim.action.ViewAmp" validate="false">
       <forward name="forward" path="/showLayout.do?layout=index" />
+      <forward name="selectTeam" path="/showLayout.do?layout=selectTeam" />
     </action>
     <action name="aimDesktopForm" path="/aim/showDesktop" scope="session" type="org.digijava.module.aim.action.GetDesktopActivities" validate="false">
       <forward name="forward" path="/aim/viewMyDesktop.do" />
@@ -681,9 +682,8 @@
       <forward name="viewMyDesktop" path="/aim/viewMyDesktop.do" redirect="true" />
       <forward name="selectTeam" path="/showLayout.do?layout=selectTeam" />
     </action>
-    <action forward="/showLayout.do?layout=selectTeam/showLayout.do?layout=selectTea" path="/aim/showSelectTeam" />
     <action name="aimLoginForm" path="/aim/selectTeam" scope="request" type="org.digijava.module.aim.action.SelectTeam" validate="false">
-      <forward name="viewMyDesktop" path="/aim/viewMyDesktop.do" redirect="true" />
+      <forward name="forward" path="/aim/showDesktop.do" redirect="true" />
     </action>
     <action name="aimUpdateAppSettingsForm" path="/aim/defaultSettings" scope="request" type="org.digijava.module.aim.action.UpdateAppSettings" validate="false">
       <forward name="showDefaultSettings" path="/showLayout.do?layout=updateAppSettings" />

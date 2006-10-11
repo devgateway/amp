@@ -439,7 +439,7 @@ function checkUncheckAll2() {
 																		<TR><TD colspan="2">
 																			<table width="638" bgColor=#f4f4f2 class="box-border-nopadding" border=0>
 																				<tr align="center">
-																					<td align="center" class="box-title" rowspan="2" width="300">
+																					<td align="center" class="box-title" rowspan="2" width="300">		
 																						&nbsp;&nbsp;&nbsp;&nbsp;Kind of report													
 																					</td>
 																					<td width="300" align="left">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
@@ -458,6 +458,16 @@ function checkUncheckAll2() {
 																						</html:radio>
 																					</td>
 																				</tr>
+																				<tr align="center">
+																					<td width="300" align="left">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+																						<html:checkbox property="hideActivities"> 
+																							<digi:trn key="aim:summaryReport">
+																								Summary Report
+																							</digi:trn>
+																						</html:checkbox>
+																					</td>
+																				</tr>
+																	
 																			</table>
 																		</TD></TR>
 																	</TABLE>

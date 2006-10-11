@@ -24,7 +24,7 @@ public class AdvancedReportForm extends ActionForm
 
 	
 	
-	private Boolean hideActivities;
+	private Boolean hideActivities = null;
 	private Collection ampMeasures = null; // Contains the avaliable measures from Database
 	private Collection ampColumns = null; // Contains the columns got from the DB
 	private Long selectedColumns[] = null; // list of columns after selecting.

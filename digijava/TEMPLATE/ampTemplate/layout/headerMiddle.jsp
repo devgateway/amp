@@ -34,7 +34,7 @@
 		<LI>
 			<div id="gen" title='<digi:trn key="aim:viewPlanningCalendar">View Planning Calendar</digi:trn>'>
 			<logic:notEmpty name="TID" scope="session">
-				<digi:link styleClass="head-menu-link" href="/showCalendarView.do" module="aim" onclick="return quitRnot()">
+				<digi:link styleClass="head-menu-link" href="/showCalendarView.do" module="calendar" onclick="return quitRnot()">
 				::: <digi:trn key="aim:calendar">CALENDAR</digi:trn></digi:link>
 			</logic:notEmpty>
 			<logic:empty name="TID" scope="session">

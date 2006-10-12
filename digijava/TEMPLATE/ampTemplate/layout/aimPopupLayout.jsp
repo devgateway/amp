@@ -11,6 +11,8 @@
 <digi:ref href="css/styles.css" type="text/css" rel="stylesheet" />
 
 <head>
+<script language="JavaScript1.2" type="text/javascript" src="<digi:file src="module/aim/scripts/dscript120.js"/>"></script>
+
 	<logic:present name="extraTitle" scope="request">
 		<bean:define id="extTitle" name="extraTitle" scope="request" type="java.lang.String" />
 		<TITLE>AMP - <%=extTitle%></TITLE>

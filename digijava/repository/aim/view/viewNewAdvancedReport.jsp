@@ -8,6 +8,11 @@
 
 <link rel="stylesheet" href="<digi:file src="module/aim/css/newamp.css"/>"/>
 
+<!-- this is for the nice tooltip widgets -->
+<DIV id="TipLayer" style="visibility:hidden;position:absolute;z-index:1000;top:-100;"></DIV>
+<script language="JavaScript1.2" type="text/javascript" src="<digi:file src="module/aim/scripts/dscript120_ar_style.js"/>"></script>
+
+
 
 <table class=clsTable cellSpacing=0 cellPadding=0 width="100%" border=0>
 

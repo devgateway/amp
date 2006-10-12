@@ -122,7 +122,8 @@
 																					<html:submit styleClass="dr-menu"> Save </html:submit>
 																				</td>
 																					<td width="50%" align="left">
-																						<html:reset styleClass="dr-menu" value="Cancel" />
+																						<html:reset styleClass="dr-menu" value="Cancel" 
+																						onclick="javascript:history.go(-1)"/>
 																					</td>
 																				</tr>
 																			</table>

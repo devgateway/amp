@@ -176,6 +176,8 @@ public class Constants
 	public static final String PI_FEATURE = "PI"; // Paris Indicators feature code
 	public static final String AA_FEATURE = "AA"; // Activity Approval feature code 
 	public static final String CL_FEATURE = "CL"; // Calendar feature code
+	public static final String DC_FEATURE = "DC"; // Documents feature code
+	public static final String SC_FEATURE = "SC"; // Scenarios feature code
 	
 	public static final String DEF_FLAG_EXIST = "defFlagExist"; 
 	

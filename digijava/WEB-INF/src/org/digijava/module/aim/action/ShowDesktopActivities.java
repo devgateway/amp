@@ -18,8 +18,6 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.tiles.actions.TilesAction;
-import org.digijava.kernel.request.Site;
-import org.digijava.kernel.util.RequestUtils;
 import org.digijava.module.aim.dbentity.AmpCurrency;
 import org.digijava.module.aim.dbentity.AmpFilters;
 import org.digijava.module.aim.dbentity.AmpPerspective;
@@ -53,6 +51,7 @@ public class ShowDesktopActivities extends TilesAction {
 		TeamMember tm = (TeamMember) session.getAttribute(Constants.CURRENT_MEMBER);
 		DesktopForm dForm = (DesktopForm) form;
 		
+		
 		if (session.getAttribute(Constants.DIRTY_ACTIVITY_LIST) != null) {
 			Collection col = (Collection) session.getAttribute(Constants.DIRTY_ACTIVITY_LIST);
 			if (dForm.getActivities() != null) {
@@ -63,6 +62,20 @@ public class ShowDesktopActivities extends TilesAction {
 			dForm.getActivities().addAll(col);
 			session.removeAttribute(Constants.DIRTY_ACTIVITY_LIST);
 		}
+		
+		if ("true".equals(dForm.getResetFliters())) {
+			dForm.setFltrActivityRisks(new Integer(0));
+			dForm.setFltrCalendar(tm.getAppSettings().getFisCalId().longValue());
+			dForm.setFltrCurrency(CurrencyUtil.getCurrency(tm.getAppSettings().getCurrencyId()).getCurrencyCode());
+			dForm.setFltrDonor(null);
+			dForm.setFltrFrmYear(0);
+			dForm.setFltrSector(null);
+			dForm.setFltrStatus(null);
+			dForm.setFltrToYear(0);		
+			dForm.setResetFliters("false");
+		}
+
+		logger.info("FltrSector : " + dForm.getFltrSector());
 		
 		int currPage = 1;
 		byte srtField = Constants.SORT_FIELD_PROJECT;
@@ -230,7 +243,8 @@ public class ShowDesktopActivities extends TilesAction {
 			dForm.setCurrentPage(new Integer(1));
 			String currCode = null;
 			Iterator itr = null;
-			if (dForm.getCurrencies() != null) {
+			if (dForm.getCurrencies() != null && dForm.getFltrCurrency() != null
+					&& dForm.getFltrCurrency().trim().length() > 0) {
 				currCode = dForm.getFltrCurrency();
 			} else {
 				itr = CurrencyUtil.getAmpCurrency().iterator();
@@ -238,6 +252,7 @@ public class ShowDesktopActivities extends TilesAction {
 					AmpCurrency curr = (AmpCurrency) itr.next();
 					if (curr.getAmpCurrencyId().equals(tm.getAppSettings().getCurrencyId())) {
 						currCode = curr.getCurrencyCode();
+						dForm.setFltrCurrency(currCode);
 						break;
 					}
 				}			

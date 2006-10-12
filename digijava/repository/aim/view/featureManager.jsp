@@ -98,11 +98,11 @@
 																	</td>																	
 																	<td align="left" height="11" align="center">
 																		<c:if test="${feature.active == true}">
-																			<input type="button" class="buton" value="OFF"
+																			<input type="button" class="buton" value="Disable"
 																			onclick="javascript:toggleFeature('<bean:write name="feature" property="ampFeatureId"/>')">
 																		</c:if>
 																		<c:if test="${feature.active == false}">
-																			<input type="button" class="buton" value="ON"
+																			<input type="button" class="buton" value="Enable"
 																			onclick="javascript:toggleFeature('<bean:write name="feature" property="ampFeatureId"/>')">
 																		</c:if>
 																	</td>

@@ -30,7 +30,12 @@
 				::: <digi:trn key="aim:reports">REPORTS</digi:trn></digi:link>
 			</logic:empty>			
 			</div></LI> 
-		<LI><a class="head-menu-link">::: <digi:trn key="aim:documentsHeader">DOCUMENTS</digi:trn></a></LI>
+		<logic:notEmpty name="DC" scope="application">
+	    	<LI><a class="head-menu-link">::: <digi:trn key="aim:documentsHeader">DOCUMENTS</digi:trn></a></LI>
+		</logic:notEmpty>	
+		<logic:notEmpty name="SC" scope="application">
+	    	<LI><a class="head-menu-link">::: <digi:trn key="aim:scenarios">SCENARIOS</digi:trn></a></LI>
+		</logic:notEmpty>		
 		<LI>
 			<div id="gen" title='<digi:trn key="aim:viewPlanningCalendar">View Planning Calendar</digi:trn>'>
 			<logic:notEmpty name="TID" scope="session">

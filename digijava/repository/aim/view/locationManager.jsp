@@ -20,8 +20,6 @@
 	}
 	
 	function newWin(val1, val2) {
-		if (document.aimAddLocationForm.currUrl.value == "") {
-			
 			<digi:context name="selectLoc" property="context/module/moduleinstance/addLocation.do" />
 			url = "<%= selectLoc %>?edLevel=" + val1 + "&edAction=" + val2;
 			
@@ -30,8 +28,6 @@
 			document.aimAddLocationForm.currUrl.value = "<%= selectLoc %>";
 			document.aimAddLocationForm.target = popupPointer.name;
 			document.aimAddLocationForm.submit();
-		} else
-			popupPointer.focus();
 	}
 	
 	function delet(val1, val2) {

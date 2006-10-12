@@ -36,7 +36,7 @@ import org.digijava.module.aim.util.MEIndicatorsUtil;
 
 public class FilterDesktopActivities extends Action {
 	
-	//private static Logger logger = Logger.getLogger(FilterDesktopActivities.class);
+	private static Logger logger = Logger.getLogger(FilterDesktopActivities.class);
 	
 	public ActionForward execute(ActionMapping mapping,ActionForm form,
 			HttpServletRequest request,HttpServletResponse response) throws Exception {
@@ -46,14 +46,7 @@ public class FilterDesktopActivities extends Action {
 		ArrayList activities = null;
 		DesktopForm dForm = (DesktopForm) form;
 		if ("true".equals(dForm.getResetFliters())) {
-			dForm.setFltrActivityRisks(new Integer(0));
-			dForm.setFltrCalendar(tm.getAppSettings().getFisCalId().longValue());
-			dForm.setFltrCurrency(CurrencyUtil.getCurrency(tm.getAppSettings().getCurrencyId()).getCurrencyCode());
-			dForm.setFltrDonor(null);
-			dForm.setFltrFrmYear(0);
-			dForm.setFltrSector(null);
-			dForm.setFltrStatus(null);
-			dForm.setFltrToYear(0);
+
 			activities = (ArrayList) session.getAttribute(Constants.AMP_PROJECTS);
 		} else {
 			Collection temp = DesktopUtil.getDesktopActivities(tm.getTeamId(),tm.getMemberId(),
@@ -234,6 +227,8 @@ public class FilterDesktopActivities extends Action {
 		dForm.setActivities(activities);
 		dForm.setTotalCalculated(false);
 		dForm.setSearchKey(null);
+		
+		logger.info("FltrSector : " + dForm.getFltrSector());
 		
 		return mapping.findForward("forward");
 	}

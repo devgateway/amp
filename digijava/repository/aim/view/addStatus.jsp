@@ -120,7 +120,8 @@
 																					
 																					</td>
 																					<td width="50%" align="left">
-																						<html:reset value="Cancel" styleClass="dr-menu" />
+																						<html:reset value="Cancel" styleClass="dr-menu" 
+																							onclick="javascript:history.go(-1)"/>
 																					</td>
 																				</tr>
 																			</table>

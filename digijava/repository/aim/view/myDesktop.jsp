@@ -28,16 +28,16 @@
 	}
 
 	function resetFilters() {
-		document.aimDesktopForm.resetFliters.value = "true";	  
+		document.aimDesktopForm.resetFliters.value = "true";
 	}
 
 </script>
 
 <digi:errors/>
 
-<digi:form action="/filterDesktopActivities.do">
+<digi:form action="/filterDesktopActivities.do" method="get">
 
-<html:hidden name="aimDesktopForm" property="resetFliters" />
+<html:hidden name="aimDesktopForm" property="resetFliters" value="false"/>
 
 <TABLE width="99%" cellspacing="1" cellpadding="4" valign="top" align="center">
 
@@ -73,7 +73,6 @@
 								<html:optionsCollection property="donors" value="ampOrgId" label="acronym"/>
 							</html:select>
 						</c:if>
-
 						<c:if test="${!empty aimDesktopForm.status}">
 							<html:select property="fltrStatus" styleClass="inp-text" multiple="true" size="3">
 								<html:option value="-1">--All--</html:option>
@@ -119,7 +118,7 @@
 						</c:if>	
 						
 						<input type="submit" value="Go" class="dr-menu">
-						<html:submit value="Reset" styleClass="dr-menu" onclick="resetFilters()" />
+						<input type="submit" value="Reset" class="dr-menu" onclick="resetFilters()">
 					</TD></TR>
 				</c:if>
 				<!-- Project List -->

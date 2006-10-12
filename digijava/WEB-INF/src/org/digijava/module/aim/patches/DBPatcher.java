@@ -1,5 +1,6 @@
 package org.digijava.module.aim.patches;
 
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
@@ -94,6 +95,29 @@ public class DBPatcher {
 			 } catch (SQLException sqle) {
 				 logger.info("Perspective not updated :" + sqle.getMessage());
 			 }			 
+			 
+			 try {
+				 qryStr = "SELECT COUNT(*) FROM AMP_FEATURE WHERE NAME LIKE 'Documents'";
+				 ResultSet rs = stmt.executeQuery(qryStr);
+				 if (rs.next()) {
+					 int cnt = rs.getInt(1);
+					 if (cnt == 0) {
+						 qryStr = "INSERT INTO AMP_FEATURE (NAME,CODE,ACTIVE) VALUES ('Documents','DC',0)";
+						 stmt.executeUpdate(qryStr);
+					 }
+				 }
+				 qryStr = "SELECT COUNT(*) FROM AMP_FEATURE WHERE NAME LIKE 'Scenarios'";
+				 rs = stmt.executeQuery(qryStr);
+				 if (rs.next()) {
+					 int cnt = rs.getInt(1);
+					 if (cnt == 0) {
+						 qryStr = "INSERT INTO AMP_FEATURE (NAME,CODE,ACTIVE) VALUES ('Scenarios','SC',0)";
+						 stmt.executeUpdate(qryStr);
+					 }
+				 }
+			 } catch (SQLException sqle) {
+				 logger.info("Exception :" + sqle.getMessage());
+			 }			 			 
 			 
 			 qryStr = "select count(*) from " + AmpTermsAssist.class.getName() + " ta " +
 			 		"where (ta.termsAssistName=:name)";

@@ -35,7 +35,7 @@
 
 <digi:errors/>
 
-<digi:form action="/filterDesktopActivities.do" method="get">
+<digi:form action="/filterDesktopActivities.do" method="POST">
 
 <html:hidden name="aimDesktopForm" property="resetFliters" value="false"/>
 

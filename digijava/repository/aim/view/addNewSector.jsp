@@ -122,8 +122,8 @@
 										
 										<tr><td bgColor=#d7eafd class=box-title height="20" align="center">
 											<!-- Table title -->
-											<digi:trn key="aim:LeveloneSectors">
-												Level One Sectors
+											<digi:trn key="aim:LeveltwoSectors">
+												Level Two Sectors
 											</digi:trn>
 											<!-- end table title -->										
 										</td></tr>

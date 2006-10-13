@@ -94,7 +94,7 @@
 															<bean:define id="translation">
 																<digi:trn key="aim:clickToViewSchemes">Click here to view Schemes</digi:trn>
 															</bean:define>
-															<digi:link href="/getSectorSchemes.do" name="urlParams2" title="<%=translation%>" >
+															<digi:link href="/updateSectorSchemes.do" name="urlParams2" title="<%=translation%>" >
 															<bean:write name="sectorScheme" property="secSchemeName"/></digi:link>
 														</td>
 														

@@ -13,8 +13,7 @@
 		return flag;
 	}
 	function updateScheme(id) {
-			  alert(" this is level 3");
-			  alert(id);
+			 
 			<digi:context name="updateSector" property="context/module/moduleinstance/editSector.do?event=updateScheme" />
 			document.aimAddSectorForm.action = "<%= updateSector%>&id="+id;
 			document.aimAddSectorForm.target = "_self";

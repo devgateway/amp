@@ -1848,7 +1848,7 @@ public class DbUtil {
 		try {
 			session = PersistenceManager.getSession();
 			String queryString = "select c from " + Country.class.getName()
-					+ " c";
+					+ " c order by c.countryName";
 			Query qry = session.createQuery(queryString);
 			col = qry.list();
 		} catch (Exception e) {
@@ -1864,8 +1864,9 @@ public class DbUtil {
 				logger.debug(ex.toString());
 			}
 		}
+		
 		return col;
-	}
+	}	
 
 	public static Country getDgCountry(String iso) {
 		Session session = null;

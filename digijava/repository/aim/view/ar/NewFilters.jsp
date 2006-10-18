@@ -161,75 +161,7 @@
 					<td>
 				</logic:notEmpty>
 
-				<logic:notEmpty name="aimAdvancedReportForm" property="ampStartDays">
-					<a title="<digi:trn key="aim:DateofStart">Date (dd/mm/yy) when the project commenced (effective start date)
-					</digi:trn>">
-						<td>
-							<html:select property="startDay" styleClass="dr-menu">
-								<option value="0">DD</option>
-								<html:options name="aimAdvancedReportForm" 	property="ampStartDays" /> 
-							</html:select>
-						</td>
-						<td>
-	 						<html:select property="startMonth" styleClass="dr-menu">
-								<option value="0">MON</option>
-	 							<html:option value="1">Jan</html:option>
-								<html:option value="2">Feb</html:option>
-								<html:option value="3">March</html:option>
-								<html:option value="4">April</html:option>
-								<html:option value="5">May</html:option>
-								<html:option value="6">June</html:option>
-								<html:option value="7">July</html:option>
-								<html:option value="8">Aug</html:option>
-								<html:option value="9">Sept</html:option>
-								<html:option value="10">Oct</html:option>
-								<html:option value="11">Nov</html:option>
-								<html:option value="12">Dec</html:option>
-							</html:select>
-	 					</td>
-						<td>
-	 						<html:select property="startYear" styleClass="dr-menu">
-								<option value="0">YYYY</option>
-								<html:options name="aimAdvancedReportForm" property="ampStartYears" /> 
-							</html:select> 
-		 				</td>
-					</a>
-				</logic:notEmpty>
-				
-				<logic:notEmpty name="aimAdvancedReportForm" property="ampCloseDays">
-					<a title="<digi:trn key="aim:DateofClose">Date (dd/mm/yy) in which the project ended or is expected to end</digi:trn>">
-						<td>
-	 						<html:select property="closeDay" styleClass="dr-menu">
-								<option value="0">DD</option>
-								<html:options name="aimAdvancedReportForm" property="ampCloseDays" /> 
-							</html:select> 
-	 					</td>
-						<td>
-	 						<html:select property="closeMonth" styleClass="dr-menu">
-	 							<option value="0">MON</option>
-	 							<html:option value="1">Jan</html:option>
-								<html:option value="2">Feb</html:option>
-								<html:option value="3">March</html:option>
-								<html:option value="4">April</html:option>
-								<html:option value="5">May</html:option>
-								<html:option value="6">June</html:option>
-								<html:option value="7">July</html:option>
-								<html:option value="8">Aug</html:option>
-								<html:option value="9">Sept</html:option>
-								<html:option value="10">Oct</html:option>
-								<html:option value="11">Nov</html:option>
-								<html:option value="12">Dec</html:option>
-							</html:select>
-	 					</td>
-						<td>
-							<html:select property="closeYear" styleClass="dr-menu">
-								<option value="0">YYYY</option>
-								<html:options name="aimAdvancedReportForm" property="ampCloseYears" /> 
-							</html:select> 
-						</td>
-					</a>
-				</logic:notEmpty>
-
+			
 				<logic:equal name="aimAdvancedReportForm" property="goFlag" value="true">
 					<td>						
 						<input type="button" name="GoButton" value=" GO " class="dr-menu" onclick="submitFilter()">

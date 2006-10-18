@@ -192,6 +192,7 @@ public final class ARUtil {
 		formBean.setAmpStartDays(new ArrayList());
 		formBean.setAmpCloseDays(new ArrayList());
 		formBean.setFiscalYears(new ArrayList());
+		formBean.setRisks(new ArrayList());
 		formBean.setColumnHierarchie(new ArrayList());
 
 		filters = DbUtil.getTeamPageFilters(ampTeamId, ampPageId);
@@ -291,6 +292,7 @@ public final class ARUtil {
 				formBean.setFiscalYears(DbUtil.getAllFisCalenders());
 			}
 
+					
 			if (filters.indexOf(Constants.YEAR_RANGE) != -1) {
 				for (int i = (year - Constants.FROM_YEAR_RANGE); i <= (year + Constants.TO_YEAR_RANGE); i++) {
 					formBean.getAmpFromYears().add(new Long(i));

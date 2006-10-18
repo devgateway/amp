@@ -117,6 +117,7 @@ public class AdvancedReportForm extends ActionForm
 	private Collection ampStartDays;
 	private Collection ampCloseDays;
 	private Collection fiscalYears;
+	private Collection risks;
 	private int fromYear;
 	private int toYear;
 	private String workspaceName;
@@ -1331,6 +1332,12 @@ private int yrDiff;
 	 */
 	public void setHideActivities(Boolean hideActivities) {
 		this.hideActivities = hideActivities;
+	}
+	public Collection getRisks() {
+		return risks;
+	}
+	public void setRisks(Collection risks) {
+		this.risks = risks;
 	}
 } //		End of Class
 

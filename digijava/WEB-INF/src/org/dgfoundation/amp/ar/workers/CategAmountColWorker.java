@@ -84,6 +84,7 @@ public class CategAmountColWorker extends ColumnWorker {
 
 		acc.setAmount(tr_amount);
 		acc.setFromExchangeRate(exchangeRate);
+		acc.setCurrencyDate(td);
 		acc.setCurrencyCode(currencyCode);
 		//put toExchangeRate
 		acc.setToExchangeRate(1);

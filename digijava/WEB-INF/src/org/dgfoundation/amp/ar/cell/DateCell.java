@@ -6,6 +6,7 @@
  */
 package org.dgfoundation.amp.ar.cell;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import org.dgfoundation.amp.ar.MetaInfo;
@@ -20,6 +21,8 @@ import org.dgfoundation.amp.ar.workers.DateColWorker;
  */
 public class DateCell extends Cell {
 
+	private static SimpleDateFormat sdt=new SimpleDateFormat("dd/MM/yyyy");
+	
 	protected Date value;
 	
 	/**
@@ -78,4 +81,8 @@ public class DateCell extends Cell {
 		throw new UnsupportedOperationException("DateCellS do not support merging");
 	}
 
+	public String toString() {
+		return value!=null?sdt.format(value):"";
+	}
+	
 }

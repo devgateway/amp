@@ -7,6 +7,7 @@
 package org.dgfoundation.amp.ar.cell;
 
 import java.text.DecimalFormat;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.Set;
 import java.util.TreeSet;
@@ -36,6 +37,8 @@ public class AmountCell extends Cell {
 	protected double toExchangeRate;
 	
 	protected String currencyCode;
+	
+	protected Date currencyDate;
 	
 
 	/**
@@ -218,6 +221,14 @@ public class AmountCell extends Cell {
 	 */
 	public void rawAdd(double amount) {
 		this.amount+=amount;
+	}
+
+	public Date getCurrencyDate() {
+		return currencyDate;
+	}
+
+	public void setCurrencyDate(Date CurrencyDate) {
+		this.currencyDate = CurrencyDate;
 	}
 	
 }

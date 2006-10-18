@@ -221,7 +221,7 @@ public class AmpReportGenerator extends ReportGenerator {
 		//we create the cummulative balance (undisbursed) = commitment - disbursement
 		//iterate each owner
 		
-		TotalAmountColumn tac=new TotalAmountColumn("Cumulative Balance");
+		TotalAmountColumn tac=new TotalAmountColumn("Undisbursed Balance");
 		Iterator i=newcol.getOwnerIds().iterator();
 		while (i.hasNext()) {
 			Long ownerId=(Long)i.next();

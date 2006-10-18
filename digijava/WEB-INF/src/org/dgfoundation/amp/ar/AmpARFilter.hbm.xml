@@ -10,7 +10,6 @@
 		</id>
 		<property name="ampStatusId" column="amp_status_id" type="java.lang.Long" />
 		<property name="ampOrgId" column="amp_org_id" type="java.lang.Long" />
-		<property name="ampSectorId" column="amp_sector_id" type="java.lang.Long" />
 		<property name="region" column="region" type="java.lang.String" />
 		<property name="ampModalityId" column="amp_modality_id" type="java.lang.Long" />
 		<property name="ampCurrencyCode" column="amp_currency_code"

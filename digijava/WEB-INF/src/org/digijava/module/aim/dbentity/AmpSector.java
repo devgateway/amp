@@ -6,7 +6,7 @@ import org.digijava.module.aim.dbentity.AmpOrganisation ;
 import org.digijava.module.aim.dbentity.AmpSectorScheme ;
 
 
-public class AmpSector implements Serializable
+public class AmpSector implements Serializable, Comparable
 {
 	private Long ampSectorId ;
 	private AmpSector parentSectorId ;
@@ -192,4 +192,13 @@ public void setAmpOrgId(AmpOrganisation org) {
 		ampSecSchemeId = scheme;
 	}
 
+
+	public int compareTo(Object o) {
+		return ampSectorId.compareTo(((AmpSector)o).getAmpSectorId());
+	}
+	
+	public String toString() {
+		return ampSectorId.toString();
+	}
+	
 }

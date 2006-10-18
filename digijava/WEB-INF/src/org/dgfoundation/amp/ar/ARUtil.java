@@ -14,6 +14,7 @@ import java.util.GregorianCalendar;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
+import java.util.TreeSet;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -197,25 +198,16 @@ public final class ARUtil {
 
 		filters = DbUtil.getTeamPageFilters(ampTeamId, ampPageId);
 		// logger.debug("Filter Size: " + filters.size());
-		if (filters.size() == 0)
-			formBean.setGoFlag("false");
-
-		if (filters.size() > 0) {
+				
 			formBean.setGoFlag("true");
-			if (filters.indexOf(Constants.PERSPECTIVE) != -1) {
 				formBean.setFilterFlag("true");
 				setFilters = setFilters + " PERSPECTIVE -";
-				filterCnt++;
-			}
 
-			if (filters.indexOf(Constants.STATUS) != -1) {
 				dbReturnSet = DbUtil.getAmpStatus();
 				formBean.setStatusColl(dbReturnSet);
 				setFilters = setFilters + " STATUS -";
 				filterCnt++;
-			}
 
-			if (filters.indexOf(Constants.SECTOR) != -1) {
 				setFilters = setFilters + " SECTOR -";
 				filterCnt++;
 				formBean.setSectorColl(new ArrayList());
@@ -243,16 +235,12 @@ public final class ARUtil {
 						formBean.getSectorColl().add(ampSubSector);
 					}
 				}
-			}
 
-			if (filters.indexOf(Constants.REGION) != -1) {
 				setFilters = setFilters + " REGION -";
 				filterCnt++;
 				dbReturnSet = LocationUtil.getAmpLocations();
 				formBean.setRegionColl(dbReturnSet);
-			}
 
-			if (filters.indexOf(Constants.DONORS) != -1) {
 				setFilters = setFilters + " DONORS -";
 				filterCnt++;
 				dbReturnSet = DbUtil.getAmpDonors(ampTeamId);
@@ -270,36 +258,27 @@ public final class ARUtil {
 					}
 					formBean.getDonorColl().add(ampOrganisation);
 				}
-			}
 
-			if (filters.indexOf(Constants.FINANCING_INSTRUMENT) != -1) {
 				setFilters = setFilters + " MODALITY -";
 				filterCnt++;
 				dbReturnSet = DbUtil.getAmpModality();
 				formBean.setModalityColl(dbReturnSet);
-			}
 
-			if (filters.indexOf(Constants.CURRENCY) != -1) {
 				setFilters = setFilters + " CURRENCY -";
 				filterCnt++;
 				dbReturnSet = CurrencyUtil.getAmpCurrency();
 				formBean.setCurrencyColl(dbReturnSet);
-			}
 
-			if (filters.indexOf(Constants.CALENDAR) != -1) {
 				setFilters = setFilters + " CALENDAR -";
 				filterCnt += 10;
 				formBean.setFiscalYears(DbUtil.getAllFisCalenders());
-			}
 
 					
-			if (filters.indexOf(Constants.YEAR_RANGE) != -1) {
 				for (int i = (year - Constants.FROM_YEAR_RANGE); i <= (year + Constants.TO_YEAR_RANGE); i++) {
 					formBean.getAmpFromYears().add(new Long(i));
 					formBean.getAmpToYears().add(new Long(i));
 				}
-			}
-			if (filters.indexOf(Constants.STARTDATE_CLOSEDATE) != -1) {
+			
 				for (int i = (year - Constants.FROM_YEAR_RANGE); i <= (year + Constants.TO_YEAR_RANGE); i++) {
 					formBean.getAmpStartYears().add(new Long(i));
 					formBean.getAmpCloseYears().add(new Long(i));
@@ -308,8 +287,8 @@ public final class ARUtil {
 					formBean.getAmpStartDays().add(new Long(i));
 					formBean.getAmpCloseDays().add(new Long(i));
 				}
-			}
-		}
+			
+		
 
 		if (formBean.getAmpStatusId() == null
 				|| formBean.getAmpStatusId().intValue() == 0)
@@ -469,13 +448,14 @@ public final class ARUtil {
 		Set teams=TeamUtil.getAmpLevel0Teams(ampTeamId);
 		teams.add(ampTeam);
 
+		
 		//if the report metadata has a defaultFilter attached, use that as the first filter
 		if ("reset".equals(request.getParameter("view")) && ampReports.getDefaultFilter()!=null) {
 			AmpARFilter defFilt=ampReports.getDefaultFilter();
 			if(defFilt.getAmpCurrencyCode()!=null) formBean.setCurrency(defFilt.getAmpCurrencyCode());
 			if(defFilt.getAmpModalityId()!=null) formBean.setAmpModalityId(defFilt.getAmpModalityId());
 			if(defFilt.getAmpOrgId()!=null) formBean.setAmpOrgId(defFilt.getAmpOrgId());
-			if(defFilt.getAmpSectorId()!=null) formBean.setAmpSectorId(defFilt.getAmpSectorId());
+			//DEFAULT SECTOR NOT IMPLEMENTED!!
 			if(defFilt.getAmpStatusId()!=null) formBean.setAmpStatusId(defFilt.getAmpStatusId());
 			if(defFilt.getFromYear()!=null) formBean.setAmpFromYear(new Long(defFilt.getFromYear().longValue()));
 			if(defFilt.getToYear()!=null) formBean.setAmpToYear(new Long(defFilt.getToYear().longValue()));
@@ -487,14 +467,25 @@ public final class ARUtil {
 		
 		// create the ampFilter bean
 		AmpARFilter anf = new AmpARFilter();
+		
+//		get the sector list
+		if(ampSectorId.longValue()!=0) {
+		Set sectors = new TreeSet(SectorUtil.getAllChildSectors(ampSectorId));
+		sectors.add(SectorUtil.getAmpSector(ampSectorId));
+		anf.setSectors(sectors);
+		}
+		
+		
+		
 		anf.setAmpTeams(teams);
 		
 		if (!"reset".equals(request.getParameter("view"))) {
 		anf.setAmpCurrencyCode(ampCurrencyCode);
 		anf.setAmpModalityId(ampModalityId);
 		anf.setAmpOrgId(ampOrgId);
-		anf.setAmpSectorId(ampSectorId);
-		anf.setAmpStatusId(ampStatusId);
+		
+		
+anf.setAmpStatusId(ampStatusId);
 
 		//anf.setCloseDay(closeDay);
 		//anf.setCloseMonth(closeMonth);

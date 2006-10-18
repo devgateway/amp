@@ -61,18 +61,15 @@
 
 	<digi:form action="/viewNewAdvancedReport.do" >
 	<html:hidden property="createdReportId"/>
+
 	
       <bean:define id="fcount" name="aimAdvancedReportForm" property="filterCnt" type="java.lang.Integer" /> 
+
 		<%
 			int fcnt = fcount.intValue();
 			System.out.println("FC = " +fcnt);
 		%>              
       <table border="0" cellspacing="0" cellpadding="2">
-			<tr>
-				<logic:greaterThan name="aimAdvancedReportForm" property="filterCnt" value="0" >
-					<TD bgColor="black" colspan=<%= fcnt+1%> ></TD>
-				</logic:greaterThan>
-			</tr>
 			<tr bgcolor="#c0c0c0" height=30>	
 				<logic:equal name="aimAdvancedReportForm" property="filterFlag" value="true">
 					<td>			

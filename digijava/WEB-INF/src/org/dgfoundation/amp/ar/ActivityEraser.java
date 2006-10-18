@@ -13,7 +13,7 @@ import org.digijava.kernel.util.DigiConfigManager;
 import org.digijava.kernel.util.resource.ResourceStreamHandlerFactory;
 
 /**
- * ARTester.java
+ * ActivityEraser.java
  * (c) 2006 Development Gateway Foundation
  * @author Mihai Postelnicu - mpostelnicu@dgfoundation.org
  * 
@@ -25,7 +25,7 @@ import org.digijava.kernel.util.resource.ResourceStreamHandlerFactory;
  * @since Jul 6, 2006
  * 
  */
-public class ARTester {
+public class ActivityEraser {
 
 	SessionFactory sessionFactory;
 

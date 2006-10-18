@@ -20,7 +20,7 @@ public class AmpARFilter implements Filter {
 	
 	private Long ampStatusId=null;
 	private Long ampOrgId=null;
-	private Long ampSectorId=null;
+	private Set sectors=null;
 	private String region=null;
 	private Long ampModalityId=null;
 	private String ampCurrencyCode=null;
@@ -47,7 +47,7 @@ public class AmpARFilter implements Filter {
 		String TEAM_FILTER="SELECT amp_activity_id FROM v_status WHERE amp_team_id IN ("+ARUtil.toSQLEnum(ampTeams)+")";
 		String STATUS_FILTER="SELECT amp_activity_id FROM v_status WHERE amp_status_id="+ampStatusId;
 		String ORG_FILTER = "SELECT amp_activity_id FROM v_donors WHERE amp_donor_org_id="+ampOrgId;
-		String SECTOR_FILTER="SELECT amp_activity_id FROM v_sectors WHERE amp_sector_id="+ampSectorId;
+		String SECTOR_FILTER="SELECT amp_activity_id FROM v_sectors WHERE amp_sector_id IN ("+ARUtil.toSQLEnum(sectors)+")";
 		String REGION_FILTER="SELECT amp_activity_id FROM v_regions WHERE name='"+region+"'";
 		String FINANCING_INSTR_FILTER="SELECT amp_activity_id FROM v_financing_instrument WHERE modality_code='"+ampModalityId+"'";
 		//currency is not a filter but a currency transformation
@@ -66,7 +66,7 @@ public class AmpARFilter implements Filter {
 		if(ampTeams!=null) queryAppend(TEAM_FILTER);
 		if(ampStatusId!=null && ampStatusId.intValue()!=0) queryAppend(STATUS_FILTER);
 		if(ampOrgId!=null && ampOrgId.intValue()!=0) queryAppend(ORG_FILTER);
-		if(ampSectorId!=null && ampSectorId.intValue()!=0) queryAppend(SECTOR_FILTER);
+		if(sectors!=null && sectors.size()!=0) queryAppend(SECTOR_FILTER);
 		if(region!=null && !region.equals("All")) queryAppend(REGION_FILTER);
 		if(ampModalityId!=null && ampModalityId.intValue()!=0) queryAppend(FINANCING_INSTR_FILTER);
 		
@@ -130,22 +130,21 @@ public class AmpARFilter implements Filter {
 		this.ampOrgId = ampOrgId;
 	}
 
+ 
 
 	/**
-	 * @return Returns the ampSectorId.
+	 * @return Returns the sectors.
 	 */
-	public Long getAmpSectorId() {
-		return ampSectorId;
+	public Set getSectors() {
+		return sectors;
 	}
-
 
 	/**
-	 * @param ampSectorId The ampSectorId to set.
+	 * @param sectors The sectors to set.
 	 */
-	public void setAmpSectorId(Long ampSectorId) {
-		this.ampSectorId = ampSectorId;
+	public void setSectors(Set sectors) {
+		this.sectors = sectors;
 	}
-
 
 	/**
 	 * @return Returns the ampStatusId.

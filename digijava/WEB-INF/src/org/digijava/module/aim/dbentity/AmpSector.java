@@ -21,6 +21,16 @@ public class AmpSector implements Serializable
 	private String version ;
 	private Set aidlist ;
 	
+	private String segmentCode;
+	
+	public String getSegmentCode() {
+		return segmentCode;
+	}
+
+	public void setSegmentCode(String segmentCode) {
+		this.segmentCode = segmentCode;
+	}
+
 	/**
 	 * @return
 	 */

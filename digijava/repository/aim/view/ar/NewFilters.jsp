@@ -171,7 +171,11 @@
           </tr>
       	<tr>
       		<td>
-      		All shown funding items are in <bean:write name="aimAdvancedReportForm" property="ampCurrencyCode"/> currency.     	
+      		<ul>
+      		<li>All shown funding items are in <bean:write name="aimAdvancedReportForm" property="ampCurrencyCode"/> currency. </li>
+      		<li>All calendaristic date cells are shown using DD/MM/YYYY format.</li>
+      		<li>All amounts are in thousands.</li>
+      		</ul>
       		</td>
       	</tr>    
       

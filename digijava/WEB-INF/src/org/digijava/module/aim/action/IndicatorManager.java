@@ -57,9 +57,7 @@ public class IndicatorManager extends Action
 				while(itr.hasNext())
 				{
 					ampMEIndVal = (AmpMEIndicatorValue) itr.next();
-					logger.info("ampMEIndVal.getAmpMeIndValId()........ : "+ampMEIndVal.getAmpMeIndValId());
 					ampMECurrValIds = MEIndicatorsUtil.getMeCurrValIds(ampMEIndVal.getAmpMeIndValId());
-					logger.info("successfully returned.......");
 					
 					if(ampMECurrValIds != null)
 					{
@@ -67,9 +65,7 @@ public class IndicatorManager extends Action
 						Iterator itrCurrVal = ampMECurrValIds.iterator();
 						while(itrCurrVal.hasNext())
 						{
-							logger.info("inside currval iterator");
 							ampMECurrVal = (AmpMECurrValHistory) itrCurrVal.next();
-							logger.info("ampMECurrVal.getAmpMECurrValHistoryId()......... : "+ampMECurrVal.getAmpMECurrValHistoryId());
 							DbUtil.delete(ampMECurrVal);
 						}
 					}

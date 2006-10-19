@@ -53,7 +53,7 @@ public class CummulativeColWorker extends ColumnWorker {
 		if(columnName.equalsIgnoreCase("Cumulative Commitment")) trStr="Commitment";
 		if(columnName.equalsIgnoreCase("Cumulative Disbursement")) trStr="Disbursement";
 	
-		if(c.getMetaInfo("Transaction Type").getValue().equals(trStr)) return src;
+		if(c.getMetaInfo("Transaction Type").getValue().equals(trStr) && c.getMetaInfo("Adjustment Type").getValue().equals("Actual")) return src;
 		else return null;	
 	}
 

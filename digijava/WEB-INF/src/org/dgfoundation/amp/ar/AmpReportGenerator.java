@@ -233,8 +233,8 @@ public class AmpReportGenerator extends ReportGenerator {
 				CellColumn cellCol = (CellColumn) icol.next();
 				AmountCell cac=(AmountCell) cellCol.getByOwner(ownerId);
 				if(cac==null) continue;
-				if(cellCol.getName().indexOf("Commitment")!=-1) acCumul.rawAdd(cac.getAmount());
-				if(cellCol.getName().indexOf("Disbursement")!=-1) acCumul.rawAdd(-cac.getAmount());
+				if(cellCol.getName().indexOf("Actual Commitment")!=-1) acCumul.rawAdd(cac.getAmount());
+				if(cellCol.getName().indexOf("Actual Disbursement")!=-1) acCumul.rawAdd(-cac.getAmount());
 			}
 			tac.addCell(acCumul);
 		}

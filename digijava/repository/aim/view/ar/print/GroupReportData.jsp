@@ -15,12 +15,12 @@
 </logic:present>
 
 
-<tr><td>
+<br/>
 <logic:iterate name="groupReport"  property="items" id="item" scope="page">
 	<bean:define id="viewable" name="item" type="org.dgfoundation.amp.ar.Viewable" scope="page" toScope="request"/>
 	<jsp:include page="<%=viewable.getViewerPath()%>"/>	
 </logic:iterate>
-</td></tr>
+<br/>
 
 <!-- generate total row -->
 <logic:present name="groupReport" property="parent">

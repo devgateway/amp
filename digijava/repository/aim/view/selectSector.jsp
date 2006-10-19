@@ -15,11 +15,15 @@
 	<!--
 
 	function selectSector() {
+		var check = checkSectorEmpty();
+		if(check)
+		{
 		<digi:context name="selSector" property="context/module/moduleinstance/sectorSelected.do?edit=true"/>
 	    document.aimEditActivityForm.action = "<%= selSector %>";
 		 document.aimEditActivityForm.target = window.opener.name;
 	    document.aimEditActivityForm.submit();
 		window.close();
+		}
 	}	
 
 	function reloadSector(value) {
@@ -36,7 +40,16 @@
 	    document.aimEditActivityForm.action = "<%= selSector %>";
   		document.aimEditActivityForm.submit();									
 	}	
-
+	function checkSectorEmpty()
+	{
+		var sectorFlag = true;
+		if(document.aimEditActivityForm.sector.value == -1)
+		{
+			alert("Please Select a sector First")
+			sectorFlag = false;
+		}
+		return sectorFlag;
+	}
 	function checkEmpty() {
 		var flag=true;
 		if(trim(document.aimEditActivityForm.keyword.value) == "")

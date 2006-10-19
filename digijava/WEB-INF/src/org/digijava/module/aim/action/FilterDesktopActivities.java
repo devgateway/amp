@@ -35,12 +35,12 @@ import org.digijava.module.aim.util.FiscalCalendarUtil;
 import org.digijava.module.aim.util.MEIndicatorsUtil;
 
 public class FilterDesktopActivities extends Action {
-	
+
 	private static Logger logger = Logger.getLogger(FilterDesktopActivities.class);
-	
+
 	public ActionForward execute(ActionMapping mapping,ActionForm form,
 			HttpServletRequest request,HttpServletResponse response) throws Exception {
-		
+
 		HttpSession session = request.getSession();
 		TeamMember tm  = (TeamMember) session.getAttribute(Constants.CURRENT_MEMBER);
 		ArrayList activities = null;
@@ -51,19 +51,19 @@ public class FilterDesktopActivities extends Action {
 		} else {
 			Collection temp = DesktopUtil.getDesktopActivities(tm.getTeamId(),tm.getMemberId(),
 					tm.getTeamHead());
-			
+
 			activities = new ArrayList(temp);
 			long calId = dForm.getFltrCalendar();
-			
-			if (dForm.getFltrFrmYear() > 0 || 
+
+			if (dForm.getFltrFrmYear() > 0 ||
 					dForm.getFltrToYear() > 0) {
-				
+
 				int fromYear = (dForm.getFltrFrmYear() > 0) ? dForm.getFltrFrmYear() : 0;
 				int toYear = (dForm.getFltrToYear() > 0) ? dForm.getFltrToYear() : 9999;
-				
+
 				if (calId == Constants.ETH_CAL.longValue() ||
 						calId == Constants.ETH_FY.longValue()) {
-					
+
 					for (int i = 0;i < activities.size();i ++) {
 						AmpProject proj = (AmpProject) activities.get(i);
 						Collection newComm = new ArrayList();
@@ -76,7 +76,7 @@ public class FilterDesktopActivities extends Action {
 								EthiopianCalendar ethCal = (new EthiopianCalendar()).getEthiopianDate(gc);
 								if (ethCal.ethFiscalYear >= fromYear && ethCal.ethFiscalYear <= toYear) {
 									newComm.add(comm);
-								}								
+								}
 							}
 						}
 						proj.setCommitmentList(newComm);
@@ -92,17 +92,17 @@ public class FilterDesktopActivities extends Action {
 								Date tDate = comm.getTransactionDate();
 								Date calStDate = FiscalCalendarUtil.getCalendarStartDate(new Long(calId),fromYear);
 								Date calEdDate = FiscalCalendarUtil.getCalendarEndDate(new Long(calId),toYear);
-								
+
 								if ((tDate.after(calStDate) || (tDate.equals(calStDate)))
 										&& (tDate.before(calEdDate) || (tDate.equals(calEdDate)))) {
 									newComm.add(comm);
-								}								
+								}
 							}
 						}
 						proj.setCommitmentList(newComm);
-					}				
+					}
 				}
-				
+
 			}
 			boolean flag = false;
 			if (dForm.getFltrDonor() != null
@@ -116,7 +116,7 @@ public class FilterDesktopActivities extends Action {
 						break;
 					}
 				}
-				
+
 				if (!allSelected) {
 					if (activities != null && activities.size() > 0) {
 						for (int i = 0;i < activities.size();i ++) {
@@ -127,8 +127,8 @@ public class FilterDesktopActivities extends Action {
 								for (int j = 0;j < dnr.length;j ++) {
 									if (pDnr.getAmpDonorId().longValue() == dnr[j]) {
 										flag = true;
-										break;	
-									}							
+										break;
+									}
 								}
 								if (flag) break;
 
@@ -138,11 +138,11 @@ public class FilterDesktopActivities extends Action {
 								i--;
 							}
 							flag = false;
-						}					
+						}
 					}
-				}				
+				}
 			}
-					
+
 			if (dForm.getFltrStatus() != null &&
 					dForm.getFltrStatus().length > 0) {
 				// Filter activities based on Status
@@ -153,7 +153,7 @@ public class FilterDesktopActivities extends Action {
 						allSelected = true;
 						break;
 					}
-				}			
+				}
 				if (!allSelected) {
 					if (activities != null && activities.size() > 0) {
 						for (int i = 0;(i < activities.size() && i >= 0);i ++) {
@@ -162,10 +162,10 @@ public class FilterDesktopActivities extends Action {
 								if (proj.getStatusId().longValue() != sts[j]) {
 									activities.remove(proj);
 									i--;
-								}						
+								}
 							}
 						}
-					}				
+					}
 				}
 			}
 			if (dForm.getFltrSector() != null &&
@@ -190,7 +190,7 @@ public class FilterDesktopActivities extends Action {
 									if (sec.getSectorId().longValue() == secs[j]) {
 										flag = true;
 										break;
-									}							
+									}
 								}
 								if (flag) break;
 							}
@@ -200,15 +200,15 @@ public class FilterDesktopActivities extends Action {
 							}
 							flag = false;
 						}
-					}				
+					}
 				}
 			}
 			if (request.getParameter("risk") != null) {
 				String risk = request.getParameter("risk");
 				int riskValue = MEIndicatorsUtil.getRiskRatingValue(risk);
 				dForm.setFltrActivityRisks(new Integer(riskValue));
-			}		
-			if (dForm.getFltrActivityRisks().intValue() != 0) {
+			}
+			if (dForm.getFltrActivityRisks() != null && dForm.getFltrActivityRisks().intValue() != 0) {
 				// Filter activities based on activity risk
 				if (activities != null && activities.size() > 0) {
 					for (int i = 0;i < activities.size();i ++) {
@@ -218,18 +218,18 @@ public class FilterDesktopActivities extends Action {
 							i--;
 						}
 					}
-				}								
-			}			
+				}
+			}
 		}
-		
+
 
 
 		dForm.setActivities(activities);
 		dForm.setTotalCalculated(false);
 		dForm.setSearchKey(null);
-		
+
 		logger.info("FltrSector : " + dForm.getFltrSector());
-		
+
 		return mapping.findForward("forward");
 	}
 }

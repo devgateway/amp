@@ -29,6 +29,19 @@
 		</td>
 	</tr>
 </logic:notEqual>	
+
+<tr>
+	<td>
+			<ul>
+		      <bean:define id="currency" name="reportCurrencyCode" toScope="page" scope="session" type="java.lang.String" /> 
+      		<li>All shown funding items are in <bean:write name="reportCurrencyCode"/> currency. </li>
+      		<li>All calendaristic date cells are shown using DD/MM/YYYY format.</li>
+      		<li>All amounts are in thousands.</li>
+      		</ul>
+	</td>
+
+</tr>
+
 <logic:equal name="viewFormat" scope="request" value="print">
 <script language="JavaScript">
 	function load() 

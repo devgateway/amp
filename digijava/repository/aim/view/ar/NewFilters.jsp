@@ -64,6 +64,7 @@
 
 	
       <bean:define id="fcount" name="aimAdvancedReportForm" property="filterCnt" type="java.lang.Integer" /> 
+      <bean:define id="reportCurrencyCode" name="aimAdvancedReportForm" toScope="session" property="ampCurrencyCode" type="java.lang.String" /> 
 
 		<%
 			int fcnt = fcount.intValue();
@@ -171,11 +172,7 @@
           </tr>
       	<tr>
       		<td>
-      		<ul>
-      		<li>All shown funding items are in <bean:write name="aimAdvancedReportForm" property="ampCurrencyCode"/> currency. </li>
-      		<li>All calendaristic date cells are shown using DD/MM/YYYY format.</li>
-      		<li>All amounts are in thousands.</li>
-      		</ul>
+      	
       		</td>
       	</tr>    
       

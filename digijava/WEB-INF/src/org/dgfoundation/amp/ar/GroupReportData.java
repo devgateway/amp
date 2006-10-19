@@ -104,16 +104,21 @@ public class GroupReportData extends ReportData {
 			ReportData element = (ReportData) i.next();
 			element.postProcess();
 		}
-
+try {
 		// create trail cells
 		trailCells = new ArrayList();
 		if (items.size() > 0) {
 			ReportData firstRd = (ReportData) items.iterator().next();
 			for (int k = 0; k < firstRd.getTrailCells().size(); k++)
 				trailCells.add(new AmountCell());
+			logger.debug("GroupTrail.size="+trailCells.size());
+			
 			i = items.iterator();
 			while (i.hasNext()) {
 				ReportData element = (ReportData) i.next();
+				logger.error("ReportTrail.size="+element.getTrailCells().size());
+				if(element.getTrailCells().size()<trailCells.size()) logger.error("INVALID Reoport TrailCells size "+element.getParent().getName()+"->"+element.getName());
+				else
 				for (int j = 0; j < trailCells.size(); j++) {
 					Cell c = (Cell) trailCells.get(j);
 					Cell c2 = (Cell) element.getTrailCells().get(j);
@@ -124,6 +129,9 @@ public class GroupReportData extends ReportData {
 				}
 			}
 		}
+} catch(Exception e) {
+	e.printStackTrace();
+}
 
 	}
 

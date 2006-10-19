@@ -52,14 +52,6 @@ public class EditFunding extends Action {
 							if (funding != null) {
 								formBean.setAssistanceType(funding.getAmpTermsAssist().getAmpTermsAssistId());
 								formBean.setOrgFundingId(funding.getOrgFundingId());
-								/*
-								formBean.setSignatureDate(funding.getSignatureDate());
-								formBean.setReportingDate(funding.getReportingDate());
-								formBean.setPlannedCompletionDate(funding.getPropCloseDate());
-								formBean.setPlannedStartDate(funding.getPropStartDate());
-								formBean.setActualCompletionDate(funding.getActCloseDate());
-								formBean.setActualStartDate(funding.getActStartDate());
-								*/
 								formBean.setModality(funding.getModality().getAmpModalityId());
 								formBean.setFundingConditions(funding.getConditions());
 								
@@ -94,6 +86,12 @@ public class EditFunding extends Action {
 		formBean.setCurrencies(CurrencyUtil.getAmpCurrency());
 		formBean.setOrganizations(DbUtil.getAllOrganisation());
 		formBean.setEditFunding(true);
+		formBean.setDupFunding(true);
+		formBean.setTransAmtZeroOrEmpty(false);
+		formBean.setTransAmtLarge(false);
+		formBean.setTransAmtInvalid(false);
+		formBean.setTransDateEmpty(false);
+		formBean.setFirstSubmit(false);
 		return mapping.findForward("forward");
 	}
 }

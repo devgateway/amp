@@ -28,6 +28,7 @@ public class AddFunding extends Action {
 		Long orgId = formBean.getOrgId();
 		 if ( logger.isDebugEnabled() )
 		        logger.debug("< orgId=" + orgId);
+		 
 		formBean.setAssistanceType(null);
 		formBean.setOrgFundingId("");
 		formBean.setSignatureDate("");
@@ -67,6 +68,12 @@ public class AddFunding extends Action {
 		}
 		formBean.setOrganizations(DbUtil.getAllOrganisation());
 		formBean.setEvent(null);
+		formBean.setDupFunding(true);
+		formBean.setTransAmtZeroOrEmpty(false);
+		formBean.setTransAmtLarge(false);
+		formBean.setTransAmtInvalid(false);
+		formBean.setTransDateEmpty(false);
+		formBean.setFirstSubmit(false);
 		return mapping.findForward("forward");
 	}
 }

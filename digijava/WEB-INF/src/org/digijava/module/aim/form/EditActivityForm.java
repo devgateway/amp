@@ -179,6 +179,11 @@ public class EditActivityForm extends ActionForm implements Serializable{
 	private Collection currencies;
 	private Collection organizations;
 	private List fundingDetails; //Collection of FundingDetail objects
+	private boolean dupFunding;
+	private boolean transAmtZeroOrEmpty;
+	private boolean transAmtLarge;
+	private boolean transAmtInvalid;
+	private boolean transDateEmpty;
 	private boolean editFunding;
 	private int offset;
 	private long transIndexId;
@@ -256,6 +261,7 @@ public class EditActivityForm extends ActionForm implements Serializable{
 	private boolean showInHomePage;
 	private int pageId;
 	private boolean editAct;
+	private boolean firstSubmit;
 
 	// FOR ADD COMPONENTS
 	private boolean componentReset;
@@ -778,6 +784,90 @@ public class EditActivityForm extends ActionForm implements Serializable{
 	 */
 	public void setFundingDetails(List fundingDetails) {
 		this.fundingDetails = fundingDetails;
+	}
+
+	/**
+	 * @return Returns the dupFunding.
+	 */
+	public boolean isDupFunding() {
+		return dupFunding;
+	}
+
+	/**
+	 * @param dupFunding The dupFunding to set.
+	 */
+	public void setDupFunding(boolean dupFunding) {
+		this.dupFunding = dupFunding;
+	}
+
+	/**
+	 * @return Returns the transAmtInvalid.
+	 */
+	public boolean isTransAmtInvalid() {
+		return transAmtInvalid;
+	}
+
+	/**
+	 * @param transAmtInvalid The transAmtInvalid to set.
+	 */
+	public void setTransAmtInvalid(boolean transAmtInvalid) {
+		this.transAmtInvalid = transAmtInvalid;
+	}
+
+	/**
+	 * @return Returns the transAmtLarge.
+	 */
+	public boolean isTransAmtLarge() {
+		return transAmtLarge;
+	}
+
+	/**
+	 * @param transAmtLarge The transAmtLarge to set.
+	 */
+	public void setTransAmtLarge(boolean transAmtLarge) {
+		this.transAmtLarge = transAmtLarge;
+	}
+
+	/**
+	 * @return Returns the transAmtZeroOrEmpty.
+	 */
+	public boolean isTransAmtZeroOrEmpty() {
+		return transAmtZeroOrEmpty;
+	}
+
+	/**
+	 * @param transAmtZeroOrEmpty The transAmtZeroOrEmpty to set.
+	 */
+	public void setTransAmtZeroOrEmpty(boolean transAmtZeroOrEmpty) {
+		this.transAmtZeroOrEmpty = transAmtZeroOrEmpty;
+	}
+
+	/**
+	 * @return Returns the transDateEmpty.
+	 */
+	public boolean isTransDateEmpty() {
+		return transDateEmpty;
+	}
+
+	/**
+	 * @param transDateEmpty The transDateEmpty to set.
+	 */
+	public void setTransDateEmpty(boolean transDateEmpty) {
+		this.transDateEmpty = transDateEmpty;
+	}
+
+	/**
+	 * @return Returns the firstSubmit.
+	 */
+	public boolean isFirstSubmit() {
+		return firstSubmit;
+	}
+
+	/**
+	 * @param firstSubmit The firstSubmit to set.
+	 */
+	public void setFirstSubmit(boolean firstSubmit) {
+		this.firstSubmit = firstSubmit;
 	}
 
 	/**

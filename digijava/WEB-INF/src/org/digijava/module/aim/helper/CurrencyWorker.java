@@ -86,6 +86,25 @@ public class CurrencyWorker {
 		
 	}
 	
+	public static double formatToDouble(String amt)
+	{
+		if(amt==null)
+			return 0;
+		String fmt = amt.trim();
+		fmt = fmt.replaceAll(",", "");
+		double value = 0;
+		try
+		{
+			value = Double.parseDouble(fmt);
+		}
+		catch(NumberFormatException e)
+		{
+			logger.error("Trying to parse " + fmt + " to double :" + e);
+			return -1;
+		}
+		return value;
+	}
+	
 	public static boolean validateAmount(String s) {
 		boolean valid = true;
 		try {

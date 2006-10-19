@@ -32,16 +32,37 @@
 	
 	function trim(s) {
 		return s.replace( /^\s*/, "" ).replace( /\s*$/, "" );
-   }
+  }
+
+	function fundingValidation()
+	{
+		var fundId = trim(document.aimEditActivityForm.orgFundingId.value);
+		if (fundId.length == 0) {
+			alert ("Funding Id not entered");
+			document.aimEditActivityForm.orgFundingId.focus();
+			return false;
+		}
+		var numComm = document.aimEditActivityForm.numComm.value;
+		var numDisb = document.aimEditActivityForm.numDisb.value;
+		var numExp = document.aimEditActivityForm.numExp.value;
+		if (numComm == 0) {
+			alert ("Please enter a commitment");
+			return false;	
+		}
+		if (numExp > 0 && numDisb == 0) {
+			alert ("Expenditure entered without entering Disbursement");
+			return false;		
+		}
+		return true;
+	}
 
 	function addFunding() {
-		var flag = validateFunding();
+		var flag = fundingValidation();
 		if (flag == false) return false;
 		<digi:context name="fundAdded" property="context/module/moduleinstance/fundingAdded.do?edit=true" />;
 		document.aimEditActivityForm.action = "<%= fundAdded %>";
-		document.aimEditActivityForm.target = window.opener.name;
-	   document.aimEditActivityForm.submit();
-		window.close();
+		document.aimEditActivityForm.target = "_self";
+	  document.aimEditActivityForm.submit();
 		return true;
 	}	
 
@@ -70,11 +91,85 @@
 			document.aimEditActivityForm.transIndexId.value=index;
 			document.aimEditActivityForm.submit();
 		}
-
 	}
 
-	function load() {
+	function load() 
+	{
+		var amtZeroOrEmpty = document.aimEditActivityForm.transAmtZeroOrEmpty.value;
+		var amtLarge = document.aimEditActivityForm.transAmtLarge.value;
+		var amtInvalid = document.aimEditActivityForm.transAmtInvalid.value;
+		var dateEmpty = document.aimEditActivityForm.transDateEmpty.value;
 
+		if(document.aimEditActivityForm.dupFunding.value == "false") 
+		{
+			if((amtZeroOrEmpty == "false") && (amtLarge  == "false") &&
+			(amtInvalid  == "false") && (dateEmpty == "false"))
+			{
+				<digi:context name="addAct" property="context/module/moduleinstance/addActivity.do?edit=true"/>
+				document.aimEditActivityForm.action = "<%=addAct%>";
+				document.aimEditActivityForm.target = window.opener.name;
+				document.aimEditActivityForm.submit();
+				window.close();
+			}
+			else
+			{
+				if(amtZeroOrEmpty == "true")
+					alert("Please enter the Amount for transaction");
+				if(amtLarge == "true")
+				{
+					if(confirm("All funding information should be entered in thousands(000). Do you wish to proceed with your entry ?"))
+					{
+						<digi:context name="addAct" property="context/module/moduleinstance/addActivity.do?edit=true"/>
+						document.aimEditActivityForm.action = "<%=addAct%>";
+						document.aimEditActivityForm.target = window.opener.name;
+						document.aimEditActivityForm.submit();
+						window.close();	
+					}
+				}
+				if(amtInvalid == "true")
+					alert("Invalid Amount !");
+				if(dateEmpty == "true")
+					alert("Please enter the Date for transaction");
+			}
+		}
+		if(document.aimEditActivityForm.dupFunding.value == "true") 
+		{
+			if((amtZeroOrEmpty == "false") && (amtLarge  == "false") &&
+			(amtInvalid  == "false") && (dateEmpty == "false"))
+			{
+				if(document.aimEditActivityForm.firstSubmit.value == "true")
+				{
+					if(confirm("This information is a duplicate of existing funding information. Do you wish to proceed?"))
+					{
+						<digi:context name="addAct" property="context/module/moduleinstance/addActivity.do?edit=true"/>
+						document.aimEditActivityForm.action = "<%=addAct%>";
+						document.aimEditActivityForm.target = window.opener.name;
+						document.aimEditActivityForm.submit();
+						window.close();	
+					}
+				}
+			}
+			else
+			{
+				if(amtZeroOrEmpty == "true")
+					alert("Please enter the Amount for transaction");
+				if(amtLarge == "true")
+				{
+					if(confirm("All funding information should be entered in thousands(000). Do you wish to proceed with your entry ?"))
+					{
+						<digi:context name="addAct" property="context/module/moduleinstance/addActivity.do?edit=true"/>
+						document.aimEditActivityForm.action = "<%=addAct%>";
+						document.aimEditActivityForm.target = window.opener.name;
+						document.aimEditActivityForm.submit();
+						window.close();	
+					}
+				}
+				if(amtInvalid == "true")
+					alert("Invalid Amount !");
+				if(dateEmpty == "true")
+					alert("Please enter the Date for transaction");
+			}
+		}
 	}
 
 	function unload() {
@@ -93,14 +188,18 @@
 <digi:form action="/addFundingDetail.do" method="post">
 
 <input type="hidden" name="edit" value="true">
-
+<html:hidden name="aimEditActivityForm" property="dupFunding"/>
+<html:hidden name="aimEditActivityForm" property="transAmtZeroOrEmpty"/>
+<html:hidden name="aimEditActivityForm" property="transAmtLarge"/>
+<html:hidden name="aimEditActivityForm" property="transAmtInvalid"/>
+<html:hidden name="aimEditActivityForm" property="transDateEmpty"/>
 <html:hidden property="event"/>
 <html:hidden property="transIndexId"/>
-
 <html:hidden property="numComm"/>
 <html:hidden property="numDisb"/>
 <html:hidden property="numExp"/>
 <html:hidden property="editAct"/>
+<html:hidden property="firstSubmit"/>
 
 <table width="100%" border="0" cellspacing="2" cellpadding="2" align="center" class=box-border-nopadding>
 	<!-- funding -->

@@ -35,9 +35,8 @@ public class AddFundingDetail extends Action {
 		HttpSession session = request.getSession();
 		EditActivityForm formBean = (EditActivityForm) form;
 		formBean.setReset(false);
-		//Long orgId = formBean.getOrgId();
 		event = formBean.getEvent();
-		
+		logger.info("EVENT : "+event);
 		TeamMember teamMember = (TeamMember) session.getAttribute("currentMember");
 		
 		String perspCode = null;
@@ -47,10 +46,6 @@ public class AddFundingDetail extends Action {
 		String currCode = Constants.DEFAULT_CURRENCY;
 		if (teamMember.getAppSettings() != null) {
 			ApplicationSettings appSettings = teamMember.getAppSettings();
-			/*
-			if (appSettings.getPerspective() != null) {
-				perspective = appSettings.getPerspective();
-			}*/
 			if (appSettings.getCurrencyId() != null) {
 				currCode = CurrencyUtil.getCurrency(appSettings.getCurrencyId()).getCurrencyCode();
 			}
@@ -85,8 +80,13 @@ public class AddFundingDetail extends Action {
 			}
 			formBean.setFundingDetails(fundingDetails);			
 		}
-		
 		formBean.setEvent(null);
+		formBean.setDupFunding(true);
+		formBean.setTransAmtZeroOrEmpty(false);
+		formBean.setTransAmtLarge(false);
+		formBean.setTransAmtInvalid(false);
+		formBean.setTransDateEmpty(false);
+		formBean.setFirstSubmit(false);
 		return mapping.findForward("forward");
 	}
 
@@ -105,8 +105,6 @@ public class AddFundingDetail extends Action {
 		fundingDetail.setIndex(fundingDetails.size());
 		fundingDetail.setIndexId(System.currentTimeMillis());
 		fundingDetail.setPerspectiveCode(perspCode);	
-		
 		return fundingDetail;
-		
 	}
 }

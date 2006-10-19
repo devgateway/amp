@@ -1136,8 +1136,8 @@
     <action name="aimEditActivityForm" path="/aim/removeFunding" scope="session" type="org.digijava.module.aim.action.RemoveFunding">
       <forward name="forward" path="/aim/addActivity.do?edit=true" redirect="true" />
     </action>
-    <action name="aimEditActivityForm" path="/aim/fundingAdded" scope="session" type="org.digijava.module.aim.action.FundingAdded">
-      <forward name="forward" path="/aim/addActivity.do?edit=true" redirect="true" />
+    <action input="/showLyout.do?layout=aim_fundingPopupLayout" name="aimEditActivityForm" path="/aim/fundingAdded" scope="session" type="org.digijava.module.aim.action.FundingAdded" validate="false">
+      <forward name="forward" path="/showLayout.do?layout=aim_fundingPopupLayout"/>
     </action>
     <action name="aimEditActivityForm" path="/aim/addFundingDetail" scope="session" type="org.digijava.module.aim.action.AddFundingDetail">
       <forward name="forward" path="/showLayout.do?layout=aim_fundingPopupLayout" />

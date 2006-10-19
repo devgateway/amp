@@ -115,9 +115,11 @@ try {
 			
 			i = items.iterator();
 			while (i.hasNext()) {
-				ReportData element = (ReportData) i.next();
-				logger.error("ReportTrail.size="+element.getTrailCells().size());
-				if(element.getTrailCells().size()<trailCells.size()) logger.error("INVALID Reoport TrailCells size "+element.getParent().getName()+"->"+element.getName());
+				ReportData element = (ReportData) i.next();				
+				if(element.getTrailCells().size()<trailCells.size()) { 
+					logger.error("INVALID Report TrailCells size for report: "+element.getParent().getName()+"->"+element.getName());
+					logger.error("ReportTrail.getTrailCells().size()="+element.getTrailCells().size());
+				}
 				else
 				for (int j = 0; j < trailCells.size(); j++) {
 					Cell c = (Cell) trailCells.get(j);

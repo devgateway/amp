@@ -32,12 +32,9 @@
 
 <tr>
 	<td>
-			<ul>
-		      <bean:define id="currency" name="reportCurrencyCode" toScope="page" scope="session" type="java.lang.String" /> 
-      		<li>All shown funding items are in <bean:write name="reportCurrencyCode"/> currency. </li>
-      		<li>All calendaristic date cells are shown using DD/MM/YYYY format.</li>
-      		<li>All amounts are in thousands.</li>
-      		</ul>
+			
+	        <bean:define id="currency" name="reportCurrencyCode" toScope="page" scope="session" type="java.lang.String" /> 
+			NOTE: <i>All shown funding items are in <bean:write name="reportCurrencyCode"/> currency. All calendaristic date cells are shown using DD/MM/YYYY format. All amounts are in thousands.</i>
 	</td>
 
 </tr>

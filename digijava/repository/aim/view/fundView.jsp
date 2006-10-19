@@ -81,7 +81,7 @@
 						</c:if>
 
 													
-						<c:if test="${addedMeasures.measureName == 'Cumulative Balance'}">							
+						<c:if test="${addedMeasures.measureName == 'Undisbursed Balance'}">							
 							<logic:equal name="aimAdvancedReportForm" property="acBalFlag" value="true">
 							<logic:notEmpty name="ampFund" property="unDisbAmount">
 							<td align="right" height="21" >

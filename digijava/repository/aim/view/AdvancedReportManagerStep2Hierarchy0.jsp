@@ -49,7 +49,7 @@
 		int flag = 0;
 	%>              
 	<logic:iterate name="aimAdvancedReportForm"  property="addedMeasures" id="addedMeasures">				
-	<c:if test="${addedMeasures.measureName == 'Cumulative Balance'}">
+	<c:if test="${addedMeasures.measureName == 'Undisbursed Balance'}">
 		<%fcnt = fcnt-1;
 		flag = 1;
 		%>
@@ -111,7 +111,7 @@
 		int flag = 0;
 	%>              
 	<logic:iterate name="aimAdvancedReportForm"  property="addedMeasures" id="addedMeasures">				
-	<c:if test="${addedMeasures.measureName == 'Cumulative Balance'}">
+	<c:if test="${addedMeasures.measureName == 'Undisbursed Balance'}">
 		<%fcnt = fcnt-1;
 		flag = 1;
 		%>

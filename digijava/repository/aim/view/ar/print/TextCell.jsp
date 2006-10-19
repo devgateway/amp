@@ -5,7 +5,6 @@
 <bean:define id="textCell" name="viewable"
 	type="org.dgfoundation.amp.ar.cell.TextCell" scope="request"
 	toScope="page" />
-<div align="left">
 <bean:write name="textCell" filter="false"/>
-</div>
+
 

@@ -41,7 +41,7 @@ public class ViewChannelOverview extends TilesAction {
 		TeamMember teamMember = (TeamMember) session.getAttribute("currentMember");
 		ChannelOverviewForm formBean = (ChannelOverviewForm) form;
 		DecimalFormat mf = new DecimalFormat("###,###,###,###,###") ;
-			
+
 		if (teamMember == null) {
 			formBean.setValidLogin(false);
 		} else {
@@ -55,7 +55,7 @@ public class ViewChannelOverview extends TilesAction {
 			}
 
 			Activity activity = ActivityUtil.getChannelOverview(id);
-			
+
 			// added by Akash
 			// desc: approval status check
 			// start
@@ -63,9 +63,9 @@ public class ViewChannelOverview extends TilesAction {
 			Long ampTeamId = teamMember.getTeamId();
 			boolean teamLeadFlag    = teamMember.getTeamHead();
 			boolean workingTeamFlag = TeamUtil.checkForParentTeam(ampTeamId);
-			
+
 		 	if ("approved".equals(actApprovalStatus) || "started".equals(actApprovalStatus)) {
-		 		if (workingTeamFlag)
+		 		if (workingTeamFlag && teamMember.getWrite())
 		 			formBean.setButtonText("edit");	// In case of regular working teams
 		 		else
 		 			formBean.setButtonText("none");	// In case of management-workspace
@@ -75,10 +75,10 @@ public class ViewChannelOverview extends TilesAction {
 		 	     else
 		 			formBean.setButtonText("approvalAwaited");
 		 	// end
-			
+
 			String perspective = null;
 			String currCode = null;
-			
+
 			if (teamMember.getAppSettings() != null) {
 				ApplicationSettings appSettings = teamMember.getAppSettings();
 				if (appSettings.getPerspective() != null) {
@@ -100,29 +100,29 @@ public class ViewChannelOverview extends TilesAction {
 				} else {
 					perspective = Constants.DONOR;
 				}
-				
+
 				if (activity.getStatus().equalsIgnoreCase("Planned")) {
 					logger.debug("Planned");
 					formBean.setGrandTotal(mf.format(DbUtil.getAmpFundingAmount(activity.getActivityId(),
-							new Integer(0),new Integer(0),perspective,currCode)));					
+							new Integer(0),new Integer(0),perspective,currCode)));
 				} else {
 					logger.debug("Not planned");
 					formBean.setGrandTotal(mf.format(DbUtil.getAmpFundingAmount(activity.getActivityId(),
-							new Integer(0),new Integer(1),perspective,currCode)));					
-				}				
+							new Integer(0),new Integer(1),perspective,currCode)));
+				}
 			}
-			
+
 			AmpTeam team = TeamUtil.getAmpTeam(teamMember.getTeamId());
 			if(team.getAccessType().equals("Team"))
 				formBean.setWrite(true);
 			else
 				formBean.setWrite(false);
-			
+
 			formBean.setActivity(activity);
 			formBean.setCanView(true);
-			// end $1				
-			
-			
+			// end $1
+
+
 			/*
 			boolean canView = ActivityUtil.canViewActivity(id,teamMember);
 			if (canView) {
@@ -130,9 +130,9 @@ public class ViewChannelOverview extends TilesAction {
 				ActionErrors errors = new ActionErrors();
 				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
 						"error.aim.illegalActivityAccess"));
-				saveErrors(request, errors);	
+				saveErrors(request, errors);
 				formBean.setCanView(false);
-			}*/			
+			}*/
 		}
 		return null;
 	}

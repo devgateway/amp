@@ -36,12 +36,12 @@ for (int i = 0;i < obj.length;i ++) {
 	//System.out.println();
 }
 colCnt = obj[0].length;
-logger.info("this is colCnt!!!!!!"+colCnt);
+logger.info("this is colCnt!!!!!!"+ colCnt);
 name = new String[colCnt];
 for(int i=0; i<colCnt; i++)
 {
 	name[i]= "m" + Integer.toString(i+1);
-	logger.info(name[i]);
+	//logger.info(name[i]);
 }
 }
 

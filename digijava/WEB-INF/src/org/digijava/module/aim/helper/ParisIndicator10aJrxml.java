@@ -2,7 +2,7 @@ package org.digijava.module.aim.helper;
 
 import java.io.*;
 
-public class Parisindicator3Jrxml
+public class ParisIndicator10aJrxml
 {
 	
 	public void createJrxml(String filePath, int cols, int rows,String type)
@@ -25,7 +25,7 @@ public class Parisindicator3Jrxml
 				p2.println("<!-- Created with iReport - A designer for JasperReports -->");
 				p2.println("<!DOCTYPE jasperReport PUBLIC '//JasperReports//DTD Report Design//EN' 'http://jasperreports.sourceforge.net/dtds/jasperreport.dtd'>");
 				p2.println("<jasperReport");
-				p2.println("		 name='indicator3pdf'");
+				p2.println("		 name='indicator10apdf'");
 				p2.println("		 columnCount='1'");
 				p2.println("		 printOrder='Vertical'");
 				p2.println("		 orientation='Portrait'");
@@ -101,7 +101,7 @@ public class Parisindicator3Jrxml
 					p2.println("					<textElement textAlignment='Center' verticalAlignment='Middle' rotation='None' lineSpacing='Single'>");
 					p2.println("						<font fontName='Arial' pdfFontName='Helvetica' size='18' isBold='true' isItalic='false' isUnderline='false' isPdfEmbedded ='false' pdfEncoding ='Cp1252' isStrikeThrough='false' />");
 					p2.println("					</textElement>");
-					p2.println("				<text><![CDATA[PARIS REPORT 3]]></text>");
+					p2.println("				<text><![CDATA[PARIS REPORT 10a]]></text>");
 					p2.println("				</staticText>");
 					p2.println("			</band>");
 					p2.println("		</title>");
@@ -190,7 +190,7 @@ public class Parisindicator3Jrxml
 					p2.println("					<textElement textAlignment='Center' verticalAlignment='Middle' rotation='None' lineSpacing='Single'>");
 					p2.println("						<font fontName='Arial' pdfFontName='Helvetica' size='10' isBold='true' isItalic='false' isUnderline='false' isPdfEmbedded ='false' pdfEncoding ='Cp1252' isStrikeThrough='false' />");
 					p2.println("					</textElement>");
-					p2.println("				<text><![CDATA[ Aid flows to the government sector reported on the government's budget]]></text>");
+					p2.println("				<text><![CDATA[  Number of missions to the field that are joint]]></text>");
 					p2.println("				</staticText>");
 					p2.println("				<staticText>");
 					p2.println("					<reportElement");
@@ -211,7 +211,7 @@ public class Parisindicator3Jrxml
 					p2.println("					<textElement textAlignment='Center' verticalAlignment='Middle' rotation='None' lineSpacing='Single'>");
 					p2.println("						<font fontName='Arial' pdfFontName='Helvetica' size='10' isBold='true' isItalic='false' isUnderline='false' isPdfEmbedded ='false' pdfEncoding ='Cp1252' isStrikeThrough='false' />");
 					p2.println("					</textElement>");
-					p2.println("				<text><![CDATA[ Total Aid flows disbursed to the government sector]]></text>");
+					p2.println("				<text><![CDATA[  Total number of missions to the field]]></text>");
 					p2.println("				</staticText>");
 					p2.println("				<staticText>");
 					p2.println("					<reportElement");
@@ -232,7 +232,7 @@ public class Parisindicator3Jrxml
 					p2.println("					<textElement textAlignment='Center' verticalAlignment='Middle' rotation='None' lineSpacing='Single'>");
 					p2.println("						<font fontName='Arial' pdfFontName='Helvetica' size='10' isBold='true' isItalic='false' isUnderline='false' isPdfEmbedded ='false' pdfEncoding ='Cp1252' isStrikeThrough='false' />");
 					p2.println("					</textElement>");
-					p2.println("				<text><![CDATA[ Total Aid flows disbursed to the government sector]]></text>");
+					p2.println("				<text><![CDATA[  Proportion of donor missions that are joint]]></text>");
 					p2.println("				</staticText>");
 					if(type.equals("pdf"))
 					 {

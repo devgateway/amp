@@ -24,24 +24,18 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.action.ActionServlet;
-import org.digijava.module.aim.form.MulitlateralbyDonorForm;
 import org.digijava.module.aim.form.ParisIndicatorReportForm;
-import org.digijava.module.aim.helper.AmpTeamDonors;
-import org.digijava.module.aim.helper.TermFund;
-import org.digijava.module.aim.helper.TermFundTotal;
-import org.digijava.module.aim.helper.multiReport;
-import org.digijava.module.aim.helper.Project;
-import org.digijava.module.aim.helper.fiscalYrs;
-import org.digijava.module.aim.helper.FundTotal;
-import org.digijava.module.aim.helper.ParisIndicatorDataSource;
+import org.digijava.module.aim.helper.ParisIndicator;
 import org.digijava.module.aim.helper.Parisindicator3Jrxml;
 import org.digijava.module.aim.helper.ParisIndicator4Jrxml;
+import org.digijava.module.aim.helper.ParisIndicator5aJrxml;
+import org.digijava.module.aim.helper.ParisIndicator5bJrxml;
 import org.digijava.module.aim.helper.ParisIndicator6Jrxml;
 import org.digijava.module.aim.helper.ParisIndicator7Jrxml;
 import org.digijava.module.aim.helper.ParisIndicator9Jrxml;
-import org.digijava.module.aim.helper.ParisIndicator5aJrxml;
-import org.digijava.module.aim.helper.ParisIndicator5bJrxml;
-import org.digijava.module.aim.helper.ParisIndicator;
+import org.digijava.module.aim.helper.ParisIndicator10aJrxml;
+import org.digijava.module.aim.helper.ParisIndicatorDataSource;
+
 
 /*
  *@author Govind G Dalwani
@@ -60,8 +54,7 @@ public class ParisIndicatorReportPDFXLSCSV extends Action {
 			throws java.lang.Exception {
 		String pId = request.getParameter("pid");
 		String type = request.getParameter("docType");
-		logger.info("this is val " + request.getParameter("pid")
-				+ "  this is the type...." + type);
+		
 		int row, col;
 		ParisIndicatorReportForm formBean = (ParisIndicatorReportForm) form;
 		Collection coll = null;
@@ -103,9 +96,9 @@ public class ParisIndicatorReportPDFXLSCSV extends Action {
 				b1++;
 			}
 		}
-		logger.info(" this is b1 here..." + b1 + " colcount size...." + b1
-				/ coll.size());
+		
 		colCnt1 = b1 / coll.size();
+		//logger.info(" this is b1 here..." + b1 + " colcount size...." + b1coll.size() + "COLL CNT 1 is    "+ colCnt1 + " row size  "+rowCnt1);
 		Object[][] data2 = new Object[rowCnt1][colCnt1];
 
 		if (coll.size() > 0) {
@@ -115,13 +108,11 @@ public class ParisIndicatorReportPDFXLSCSV extends Action {
 				ParisIndicator pi = (ParisIndicator) iter1.next();
 				ans = pi.getAnswers();
 				int arrSize = ans.size();
-				logger.info("bean   " + pi.getDonor() + " row and col " + row
-						+ col);
+			
 				// rowCnt1 = rowCnt1+1;
 				String name = pi.getDonor();
 				data2[row][col] = name;
-				logger.info(" this is the internal size "
-						+ ans.toArray().length);
+				
 				for (int i = 0; i < arrSize; i++) {
 					double test[] = (double[]) ans.get(i);
 
@@ -144,24 +135,19 @@ public class ParisIndicatorReportPDFXLSCSV extends Action {
 			}
 		}
 		if (pId.equals("6")) {
-			logger.info(" came inside the 6th god damn report");
+			////logger.info(" came inside the 6th god damn report");
 			
 			if (coll.size() > 0) {
 				iter1 = coll.iterator();
 				row = col = 0;
-				 data2 = new Object[rowCnt1][colCnt1+3];
+				data2 = new Object[rowCnt1][b1];
 				int yr = formBean.getStartYear().intValue();
 				while (iter1.hasNext()) {
 					ParisIndicator pi = (ParisIndicator) iter1.next();
 					ans = pi.getAnswers();
 					int arrSize = ans.size();
-					logger.info("bean   " + pi.getDonor() + " row and col "
-							+ row + col +"  this is the start year in the form bean  "+ formBean.getStartYear());
 					String name = pi.getDonor();
 					data2[row][col] = name;
-					
-					logger.info(" this is the internal size "
-							+ ans.toArray().length);
 					for (int i = 0; i < arrSize; i++) {
 						double test[] = (double[]) ans.get(i);
 						for (int j = 0; j < test.length; j++) {
@@ -170,21 +156,16 @@ public class ParisIndicatorReportPDFXLSCSV extends Action {
 							data2[row][col]= ""+yr;							
 							col++;
 							data2[row][col] = "" + val;							
-							logger.info("data" + test[j] + " row.... " + row
-									+ " col..." + col);
-							
 							yr=yr+1;
 						}
 					}
 					col = 0;
-					
 					row = row + 1;
 				}
 			}
 		}
-		logger.info("got out of that!!! rowcount " + rowCnt1);
 		if (pId.equals("3")) {
-			logger.info("in the 3rd report");
+			//logger.info("in the 3rd report");
 			String jasperFile = null;
 			ParisIndicatorDataSource dataSource = new ParisIndicatorDataSource(
 					data2);
@@ -193,7 +174,7 @@ public class ParisIndicatorReportPDFXLSCSV extends Action {
 					"/WEB-INF/lib/jasperreports-0.6.1.jar");
 			System.setProperty("jasper.reports.compile.class.path", jarFile);
 
-			logger.info("coming Into the 3rd report!!!!");
+			//logger.info("coming Into the 3rd report!!!!");
 			String realPathJrxml = s
 					.getServletContext()
 					.getRealPath(
@@ -386,7 +367,7 @@ public class ParisIndicatorReportPDFXLSCSV extends Action {
 		 */
 
 		if (pId.equals("6")) {
-			logger.info("in the 6th report");
+			//logger.info("in the 6th report");
 			String jasperFile = null;
 			ParisIndicatorDataSource dataSource = new ParisIndicatorDataSource(
 					data2);
@@ -399,10 +380,10 @@ public class ParisIndicatorReportPDFXLSCSV extends Action {
 					.getRealPath(
 							"/WEB-INF/classes/org/digijava/module/aim/reports/indicator6pdf.jrxml");
 			ParisIndicator6Jrxml jrxml = new ParisIndicator6Jrxml();
-			jrxml.createJrxml(realPathJrxml, colCnt1+3, rowCnt1, type);
-			logger.info("got back here");
+			jrxml.createJrxml(realPathJrxml, b1-1, rowCnt1, type);
+			//logger.info("got back here");
 			JasperCompileManager.compileReportToFile(realPathJrxml);
-			logger.info("is it here??");
+			//logger.info("is it here??");
 			byte[] bytes = null;
 			if (type.equals("pdf")) {
 				try {
@@ -483,7 +464,7 @@ public class ParisIndicatorReportPDFXLSCSV extends Action {
 		 */
 
 		if (pId.equals("7")) {
-			logger.info("in the 7th report");
+			//logger.info("in the 7th report");
 			String jasperFile = null;
 			ParisIndicatorDataSource dataSource = new ParisIndicatorDataSource(
 					data2);
@@ -497,9 +478,9 @@ public class ParisIndicatorReportPDFXLSCSV extends Action {
 							"/WEB-INF/classes/org/digijava/module/aim/reports/indicator7pdf.jrxml");
 			ParisIndicator7Jrxml jrxml = new ParisIndicator7Jrxml();
 			jrxml.createJrxml(realPathJrxml, colCnt1, rowCnt1, type);
-			logger.info("got back here");
+			//logger.info("got back here");
 			JasperCompileManager.compileReportToFile(realPathJrxml);
-			logger.info("is it here??");
+			//logger.info("is it here??");
 			byte[] bytes = null;
 			if (type.equals("pdf")) {
 				try {
@@ -577,7 +558,7 @@ public class ParisIndicatorReportPDFXLSCSV extends Action {
 		 * this is for the 9th indicator
 		 */
 		if (pId.equals("9")) {
-			logger.info("in the 9th report");
+			//logger.info("in the 9th report");
 			String jasperFile = null;
 			ParisIndicatorDataSource dataSource = new ParisIndicatorDataSource(
 					data2);
@@ -586,16 +567,16 @@ public class ParisIndicatorReportPDFXLSCSV extends Action {
 					"/WEB-INF/lib/jasperreports-0.6.1.jar");
 			System.setProperty("jasper.reports.compile.class.path", jarFile);
 
-			logger.info("coming Into the 3rd report!!!!");
+			//logger.info("coming Into the 3rd report!!!!");
 			String realPathJrxml = s
 					.getServletContext()
 					.getRealPath(
 							"/WEB-INF/classes/org/digijava/module/aim/reports/indicator9pdf.jrxml");
 			ParisIndicator9Jrxml jrxml = new ParisIndicator9Jrxml();
 			jrxml.createJrxml(realPathJrxml, colCnt1, rowCnt1, type);
-			logger.info("got back here");
+			//logger.info("got back here");
 			JasperCompileManager.compileReportToFile(realPathJrxml);
-			logger.info("is it here??");
+			//logger.info("is it here??");
 			byte[] bytes = null;
 			if (type.equals("pdf")) {
 				try {
@@ -676,7 +657,7 @@ public class ParisIndicatorReportPDFXLSCSV extends Action {
 		 */
 		
 		if (pId.equals("5a")) {
-			logger.info("in the 5th report");
+			//logger.info("in the 5th report");
 			String jasperFile = null;
 			ParisIndicatorDataSource dataSource = new ParisIndicatorDataSource(
 					data2);
@@ -685,17 +666,17 @@ public class ParisIndicatorReportPDFXLSCSV extends Action {
 					"/WEB-INF/lib/jasperreports-0.6.1.jar");
 			System.setProperty("jasper.reports.compile.class.path", jarFile);
 
-			logger.info("coming Into the 5a report!!!!");
+			//logger.info("coming Into the 5a report!!!!");
 			String realPathJrxml = s
 					.getServletContext()
 					.getRealPath(
 							"/WEB-INF/classes/org/digijava/module/aim/reports/indicator5apdf.jrxml");
 			ParisIndicator5aJrxml jrxml = new ParisIndicator5aJrxml();
-			logger.info(" the type is .... "+ type);
+			//logger.info(" the type is .... "+ type);
 			jrxml.createJrxml(realPathJrxml, colCnt1, rowCnt1, type);
-			logger.info("got back here");
+			//logger.info("got back here");
 			JasperCompileManager.compileReportToFile(realPathJrxml);
-			logger.info("is it here??");
+			//logger.info("is it here??");
 			byte[] bytes = null;
 			if (type.equals("pdf")) {
 				try {
@@ -776,7 +757,7 @@ public class ParisIndicatorReportPDFXLSCSV extends Action {
 		 */
 		
 		if (pId.equals("5b")) {
-			logger.info("in the 5th report");
+			//logger.info("in the 5th report");
 			String jasperFile = null;
 			ParisIndicatorDataSource dataSource = new ParisIndicatorDataSource(
 					data2);
@@ -816,7 +797,7 @@ public class ParisIndicatorReportPDFXLSCSV extends Action {
 					System.out.println("Generating PDF");
 					response.setContentType("application/pdf");
 					response.setHeader("Content-Disposition",
-							"inline; filename=ParisIndicator3.pdf");
+							"inline; filename=ParisIndicator5b.pdf");
 
 					response.setContentLength(bytes.length);
 					ouputStream.write(bytes, 0, bytes.length);
@@ -848,6 +829,107 @@ public class ParisIndicatorReportPDFXLSCSV extends Action {
 						.getServletContext()
 						.getRealPath(
 								"/WEB-INF/classes/org/digijava/module/aim/reports/indicator5bpdf.xls");
+
+				try {
+					outputStream = response.getOutputStream();
+					JRXlsExporter exporter = new JRXlsExporter();
+					exporter.setParameter(JRExporterParameter.JASPER_PRINT,
+							jasperPrint);
+					exporter.setParameter(JRExporterParameter.OUTPUT_STREAM,
+							outputStream);
+					exporter.setParameter(
+							JRXlsExporterParameter.IS_ONE_PAGE_PER_SHEET,
+							Boolean.FALSE);
+					exporter.exportReport();
+				}
+
+				catch (JRException e) {
+					if (outputStream != null)
+						outputStream.close();
+					System.out
+							.println("Exception from PhysicalComponentReportXls = "
+									+ e);
+				}
+			}
+
+		}
+		
+		/*
+		 * report 10a
+		 */
+		if (pId.equals("10a")) {
+			//logger.info("in the 5th report");
+			String jasperFile = null;
+			ParisIndicatorDataSource dataSource = new ParisIndicatorDataSource(
+					data2);
+			ActionServlet s = getServlet();
+			String jarFile = s.getServletContext().getRealPath(
+					"/WEB-INF/lib/jasperreports-0.6.1.jar");
+			System.setProperty("jasper.reports.compile.class.path", jarFile);
+			String realPathJrxml = s
+					.getServletContext()
+					.getRealPath(
+							"/WEB-INF/classes/org/digijava/module/aim/reports/indicator10apdf.jrxml");
+			ParisIndicator10aJrxml jrxml = new ParisIndicator10aJrxml();
+			jrxml.createJrxml(realPathJrxml, colCnt1, rowCnt1, type);
+			JasperCompileManager.compileReportToFile(realPathJrxml);
+			byte[] bytes = null;
+			if (type.equals("pdf")) {
+				try {
+
+					jasperFile = s
+							.getServletContext()
+							.getRealPath(
+									"/WEB-INF/classes/org/digijava/module/aim/reports/indicator10apdf.jasper");
+
+					Map parameters = new HashMap();
+					System.out.println(jasperFile);
+					System.out.println(parameters);
+					bytes = JasperRunManager.runReportToPdf(jasperFile,
+							parameters, dataSource);
+				} catch (JRException e) {
+					System.out
+							.println("Exception from MultilateralDonorDatasource = "
+									+ e);
+				}
+				if (bytes != null && bytes.length > 0) {
+					ServletOutputStream ouputStream = response
+							.getOutputStream();
+					System.out.println("Generating PDF");
+					response.setContentType("application/pdf");
+					response.setHeader("Content-Disposition",
+							"inline; filename=ParisIndicator10a.pdf");
+
+					response.setContentLength(bytes.length);
+					ouputStream.write(bytes, 0, bytes.length);
+					ouputStream.flush();
+					ouputStream.close();
+				} else {
+					System.out.println("Nothing to display");
+				}
+			}
+			// xls
+			else if (type.equals("xls")) {
+
+				jasperFile = s
+						.getServletContext()
+						.getRealPath(
+								"/WEB-INF/classes/org/digijava/module/aim/reports/indicator10apdf.jasper");
+
+				Map parameters = new HashMap();
+				JasperPrint jasperPrint = JasperFillManager.fillReport(
+						jasperFile, parameters, dataSource);
+				String destFile = null;
+				// s.getServletContext().getRealPath("/WEB-INF/classes/org/digijava/module/aim/reports/indicator3pdf.xls");
+				ServletOutputStream outputStream = null;
+				response.setContentType("application/vnd.ms-excel");
+
+				response.setHeader("Content-Disposition",
+						"inline; filename=ParisIndicator10a.xls");
+				destFile = s
+						.getServletContext()
+						.getRealPath(
+								"/WEB-INF/classes/org/digijava/module/aim/reports/indicator10apdf.xls");
 
 				try {
 					outputStream = response.getOutputStream();

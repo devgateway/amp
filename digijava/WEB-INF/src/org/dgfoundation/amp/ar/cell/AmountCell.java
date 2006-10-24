@@ -39,7 +39,23 @@ public class AmountCell extends Cell {
 	protected String currencyCode;
 	
 	protected Date currencyDate;
+
+	protected boolean show;
 	
+
+	/**
+	 * @return Returns the show.
+	 */
+	public boolean isShow() {
+		return show;
+	}
+
+	/**
+	 * @param show The show to set.
+	 */
+	public void setShow(boolean show) {
+		this.show = show;
+	}
 
 	/**
 	 * @return Returns the toExchangeRate.
@@ -60,6 +76,7 @@ public class AmountCell extends Cell {
 	 */
 	public AmountCell() {
 		super();
+		show=true;
 		mergedCells = new TreeSet();
 		// TODO Auto-generated constructor stub
 	}
@@ -69,6 +86,7 @@ public class AmountCell extends Cell {
 	 */
 	public AmountCell(Long id) {
 		super(id);
+		show=true;
 		mergedCells = new TreeSet();
 		// TODO Auto-generated constructor stub
 	}

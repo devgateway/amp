@@ -116,7 +116,7 @@ public class UpdateTeamActivities extends Action {
 
 						logger.info("updating " + activity.getName());
 						DbUtil.update(activity);
-						UpdateDB.updateReportCache(actId);
+						//UpdateDB.updateReportCache(actId);
 					}
 				}
 			} else {

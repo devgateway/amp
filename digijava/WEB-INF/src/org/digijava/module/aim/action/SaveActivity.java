@@ -1361,7 +1361,7 @@ public class SaveActivity extends Action {
 
 			int temp = eaForm.getPageId();
 			eaForm.setPageId(-1);
-			UpdateDB.updateReportCache(activity.getAmpActivityId());
+			//UpdateDB.updateReportCache(activity.getAmpActivityId());
 			eaForm.reset(mapping, request);
 
 			if (session.getAttribute(Constants.AMP_PROJECTS) != null) {

@@ -60,7 +60,7 @@ public class AssignActivity extends Action {
 					AmpTeam ampTeam = TeamUtil.getAmpTeam(aForm.getTeamId());
 					activity.setTeam(ampTeam);
 					DbUtil.update(activity);
-					UpdateDB.updateReportCache(actId);
+				//UpdateDB.updateReportCache(actId);
 				}
 			}
 			request.setAttribute("teamId", aForm.getTeamId());

@@ -55,6 +55,7 @@ public class CategAmountColWorker extends ColumnWorker {
 		java.sql.Date td = rs.getDate("transaction_date");
 		double exchangeRate=rs.getDouble("exchange_rate");
 		String currencyCode=rs.getString("currency_code");
+		String donorName=rs.getString("donor_name");
 
 		
 
@@ -89,6 +90,8 @@ public class CategAmountColWorker extends ColumnWorker {
 		//put toExchangeRate
 		acc.setToExchangeRate(1);
 		
+		MetaInfo donorMs=new MetaInfo("Donor",donorName);
+		
 		MetaInfo adjMs = new MetaInfo("Adjustment Type",
 				adj_type == 0 ? "Planned" : "Actual");
 		String trStr = null;
@@ -117,11 +120,14 @@ public class CategAmountColWorker extends ColumnWorker {
 				+ new Integer(c.get(Calendar.MONTH) / 4 + 1));
 		MetaInfo aMs = new MetaInfo("Year", new Integer(c.get(Calendar.YEAR)));
 
+		
+		//add the newly created metainfo objects to the virtual funding object
 		acc.getMetaData().add(adjMs);
 		acc.getMetaData().add(trMs);
 		acc.getMetaData().add(fundMs);
 		acc.getMetaData().add(aMs);
 		acc.getMetaData().add(qMs);
+		acc.getMetaData().add(donorMs);
 
 		return acc;
 	}

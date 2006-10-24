@@ -49,7 +49,19 @@ public class AmpReportGenerator extends ReportGenerator {
 			ret.add("Year");
 			if (!annual)
 				ret.add("Quarter");
+			
+			
 			ret.add("Funding Type");
+
+			//if hierarchical donor, then add Donor subcategorization
+			boolean hasDonor=false;
+			Iterator ii=reportMetadata.getHierarchies().iterator();
+			while (ii.hasNext()) {
+				AmpReportHierarchy element = (AmpReportHierarchy) ii.next();
+				if(element.getColumn().getColumnName().equals("Donor")) {hasDonor=true;break;}
+			}
+			if(hasDonor) ret.add("Donor");
+
 			
 			Iterator i=reportMetadata.getColumns().iterator();
 			while (i.hasNext()) {

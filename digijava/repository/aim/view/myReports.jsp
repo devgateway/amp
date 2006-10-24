@@ -5,6 +5,23 @@
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
 
+<SCRIPT TYPE="text/javascript">
+<!--
+function popup(mylink, windowname)
+{
+if (! window.focus)return true;
+var href;
+if (typeof(mylink) == 'string')
+   href=mylink;
+else
+   href=mylink.href;
+window.open(href, windowname,'channelmode=no,directories=no,menubar=no,resizable=yes,status=no,toolbar=no,scrollbars=yes');
+return false;
+}
+//-->
+</SCRIPT>
+
+
 <TABLE align=center border=0 cellPadding=2 cellSpacing=3 width="100%" bgcolor="#f4f4f2">
 	<TR>
 		<TD class=r-dotted-lg-buttom vAlign=top>
@@ -35,8 +52,9 @@
 							<IMG alt=Link height=10 src="../ampTemplate/images/arrow-gr.gif" width=10>
 							<bean:define name="report" id="desc" property="description" type="java.lang.String"/>
 							<% desc=desc.replaceFirst("viewAdvancedReport","viewNewAdvancedReport"); %>
-							<digi:link href="<%=desc%>">
-							<bean:write name="report" property="name"/></digi:link>
+				<%		//	<digi:link href="<%=desc " onclick="return popup(this,'');"> %>
+							<a href="<%=desc%>" styleClass="h-box" onclick="return popup(this,'');">
+							<bean:write name="report" property="name"/><%//</digi:link>%>
 						</TD></TR>
 						<% } %>
 					</logic:iterate>

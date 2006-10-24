@@ -14,11 +14,11 @@
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/calendar.js"/>"></script>
 
-<% EditActivityForm eaForm = (EditActivityForm) session.getAttribute("siteampdefaultaimEditActivityForm"); 
-  	String defPers = (String) request.getAttribute("defPerspective"); 
-  	String defCurr = (String) request.getAttribute("defCurrency"); 
+<% EditActivityForm eaForm = (EditActivityForm) session.getAttribute("siteampdefaultaimEditActivityForm");
+  	String defPers = (String) request.getAttribute("defPerspective");
+  	String defCurr = (String) request.getAttribute("defCurrency");
  int indexC = 0;
- int indexD = 0; 
+ int indexD = 0;
  int indexE = 0; %>
 
 
@@ -45,7 +45,7 @@
 					<table bgcolor=#f4f4f2 cellPadding=0 cellSpacing=0 width="100%" class=box-border-nopadding>
 						<tr bgcolor="#006699">
 							<td vAlign="center" width="100%" align ="center" class="textalb" height="20">
-							<a title="<digi:trn key="aim:ComponentofProject">A smaller sub project of a donor approved project</digi:trn>">								
+							<a title="<digi:trn key="aim:ComponentofProject">A smaller sub project of a donor approved project</digi:trn>">
 							<digi:trn key="aim:addComponent">Add Component</digi:trn></a>
 							</td></tr>
 						<tr>
@@ -54,7 +54,7 @@
 									<tr>
 										<td>
 											<FONT color=red>*</FONT>
-											<a title="<digi:trn key="aim:TitleforComponent">Title of the project component specified</digi:trn>">					
+											<a title="<digi:trn key="aim:TitleforComponent">Title of the project component specified</digi:trn>">
 											<digi:trn key="aim:title">Title</digi:trn>
 											</a>
 										</td>
@@ -63,10 +63,10 @@
 											<html:text property="componentTitle" styleClass="inp-text" tabindex="1"/>
 											</a>
 										</td>
-									</tr>								
+									</tr>
 									<tr>
 										<td>
-										<a title="<digi:trn key="aim:ComponentDescribe">Descriptive text as to the component objectives and tasks</digi:trn>">							
+										<a title="<digi:trn key="aim:ComponentDescribe">Descriptive text as to the component objectives and tasks</digi:trn>">
 										<digi:trn key="aim:description">Description</digi:trn>
 										</a>
 										</td>
@@ -75,7 +75,7 @@
 											<html:textarea property="componentDesc" cols="50" rows="4" styleClass="inp-text" tabindex="2"/>
 											</a>
 										</td>
-									</tr>			
+									</tr>
 									<tr><td colspan=2>
 										<FONT color=blue><BIG>*</BIG>
 											<digi:trn key="aim:pleaseEnterTheAmountInThousands">
@@ -104,14 +104,14 @@
 
 											<c:forEach var="comm" items="${fundComp.commitments}">
 
-											
-											<% String tNameBase = "comm_" + indexC + "_"; 
+
+											<% String tNameBase = "comm_" + indexC + "_";
 												String divName = "comm_" + indexC;
 												indexC++;
 												%>
-												<% String field1 = tNameBase + "1"; 
-												 String field2 = tNameBase + "2"; 
-												 String field3 = tNameBase + "3"; 
+												<% String field1 = tNameBase + "1";
+												 String field2 = tNameBase + "2";
+												 String field3 = tNameBase + "3";
 												 String field4 = tNameBase + "4";
 												 String field5 = tNameBase + "5"; %>
 												 <div id="<%=divName%>">
@@ -123,8 +123,8 @@
 													<c:if test="${comm.adjustmentType == 0}">
 														<option value="1">Actual</option>
 														<option value="0" selected="true">Planned</option>
-													</c:if>					
-												</select>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="text" name="<%=field2%>" 
+													</c:if>
+												</select>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="text" name="<%=field2%>"
 												value="<c:out value="${comm.transactionAmount}"/>" size="15"  class='amt'>&nbsp;<select name="<%=field3%>" class="inp-text">
 													<c:forEach var="currency" items="${aimEditActivityForm.currencies}">
 														<c:if test="${comm.currencyCode == currency.currencyCode}">
@@ -146,11 +146,11 @@
 															<option value="<c:out value="${pers.code}"/>">
 														</c:if>
 														<c:out value="${pers.name}"/>
-														</option>	
+														</option>
 													</c:forEach>
-												</select>&nbsp;<input type='button' value='Delete' class='inp-text' 
+												</select>&nbsp;<input type='button' value='Delete' class='inp-text'
 												onclick="removeCommitment('<%=divName%>')"></div>
-											</c:forEach>	
+											</c:forEach>
 											</c:if>
 											</c:forEach>
 										</c:if>
@@ -173,13 +173,13 @@
 											<c:forEach var="fundComp" items="${aimEditActivityForm.selectedComponents}">
 											<c:if test="${aimEditActivityForm.componentId == fundComp.componentId}">
 											<c:forEach var="comm" items="${fundComp.disbursements}">
-											<% String tNameBase = "disb_" + indexD + "_"; 
+											<% String tNameBase = "disb_" + indexD + "_";
 												String divName = "disb_" + indexD;
 												indexD++;
 												%>
-												<% String field1 = tNameBase + "1"; 
-												 String field2 = tNameBase + "2"; 
-												 String field3 = tNameBase + "3"; 
+												<% String field1 = tNameBase + "1";
+												 String field2 = tNameBase + "2";
+												 String field3 = tNameBase + "3";
 												 String field4 = tNameBase + "4";
 												 String field5 = tNameBase + "5"; %>
 												 <div id="<%=divName%>">
@@ -191,8 +191,8 @@
 													<c:if test="${comm.adjustmentType == 0}">
 														<option value="1">Actual</option>
 														<option value="0" selected="true">Planned</option>
-													</c:if>					
-												</select>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="text" name="<%=field2%>" 
+													</c:if>
+												</select>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="text" name="<%=field2%>"
 												value="<c:out value="${comm.transactionAmount}"/>" size="15"  class='amt'>&nbsp;<select name="<%=field3%>" class="inp-text">
 													<c:forEach var="currency" items="${aimEditActivityForm.currencies}">
 														<c:if test="${comm.currencyCode == currency.currencyCode}">
@@ -204,8 +204,8 @@
 															<c:out value="${currency.currencyName}"/>
 														</option>
 													</c:forEach>
-												</select>&nbsp;<input type="text" name="<%=field4%>" id="<%=field4%>" readonly="true" 
-												value="<c:out value="${comm.transactionDate}"/>" size="10"  class="inp-text">&nbsp;<a href=javascript:calendar("<%=field4%>")><img src='../ampTemplate/images/show-calendar.gif' border='0'></a>&nbsp;<select name="<%=field5%>" 
+												</select>&nbsp;<input type="text" name="<%=field4%>" id="<%=field4%>" readonly="true"
+												value="<c:out value="${comm.transactionDate}"/>" size="10"  class="inp-text">&nbsp;<a href=javascript:calendar("<%=field4%>")><img src='../ampTemplate/images/show-calendar.gif' border='0'></a>&nbsp;<select name="<%=field5%>"
 												class="inp-text">
 													<c:forEach var="pers" items="${aimEditActivityForm.perspectives}">
 														<c:if test="${comm.perspectiveCode == pers.code}">
@@ -215,11 +215,11 @@
 															<option value="<c:out value="${pers.code}"/>">
 														</c:if>
 														<c:out value="${pers.name}"/>
-														</option>	
-													</c:forEach>				
-												</select>&nbsp;<input type='button' value='Delete' class='inp-text' 
+														</option>
+													</c:forEach>
+												</select>&nbsp;<input type='button' value='Delete' class='inp-text'
 												onclick="removeDisbursement('<%=divName%>')"></div>
-											</c:forEach>	
+											</c:forEach>
 											</c:if>
 											</c:forEach>
 										</c:if>
@@ -245,14 +245,14 @@
 
 											<c:forEach var="comm" items="${fundComp.expenditures}">
 
-											
-											<% String tNameBase = "expn_" + indexE + "_"; 
+
+											<% String tNameBase = "expn_" + indexE + "_";
 												String divName = "expn_" + indexE;
 												indexE++;
 												%>
-												<% String field1 = tNameBase + "1"; 
-												 String field2 = tNameBase + "2"; 
-												 String field3 = tNameBase + "3"; 
+												<% String field1 = tNameBase + "1";
+												 String field2 = tNameBase + "2";
+												 String field3 = tNameBase + "3";
 												 String field4 = tNameBase + "4";
 												 String field5 = tNameBase + "5"; %>
 												 <div id="<%=divName%>">
@@ -264,8 +264,8 @@
 													<c:if test="${comm.adjustmentType == 0}">
 														<option value="1">Actual</option>
 														<option value="0" selected="true">Planned</option>
-													</c:if>					
-												</select>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="text" name="<%=field2%>" 
+													</c:if>
+												</select>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="text" name="<%=field2%>"
 												value="<c:out value="${comm.transactionAmount}"/>" size="15"  class='amt'>&nbsp;<select name="<%=field3%>" class="inp-text">
 													<c:forEach var="currency" items="${aimEditActivityForm.currencies}">
 														<c:if test="${comm.currencyCode == currency.currencyCode}">
@@ -277,7 +277,7 @@
 															<c:out value="${currency.currencyName}"/>
 														</option>
 													</c:forEach>
-												</select>&nbsp;<input type="text" name="<%=field4%>" id="<%=field4%>" readonly="true" 
+												</select>&nbsp;<input type="text" name="<%=field4%>" id="<%=field4%>" readonly="true"
 												value="<c:out value="${comm.transactionDate}"/>" size="10"  class="inp-text">&nbsp;<a href=javascript:calendar("<%=field4%>")><img src='../ampTemplate/images/show-calendar.gif' border='0'></a>&nbsp;<select name="<%=field5%>" value="<c:out value="${comm.perspectiveCode}"/>" class="inp-text">
 													<c:forEach var="pers" items="${aimEditActivityForm.perspectives}">
 														<c:if test="${comm.perspectiveCode == pers.code}">
@@ -287,16 +287,16 @@
 															<option value="<c:out value="${pers.code}"/>">
 														</c:if>
 														<c:out value="${pers.name}"/>
-														</option>	
+														</option>
 													</c:forEach>
-												</select>&nbsp;<input type='button' value='Delete' class='inp-text' 
+												</select>&nbsp;<input type='button' value='Delete' class='inp-text'
 												onclick="removeExpenditure('<%=divName%>')"></div>
-											</c:forEach>	
+											</c:forEach>
 											</c:if>
 											</c:forEach>
-										</c:if>									
+										</c:if>
 									</div>
-								</td>									
+								</td>
 							</tr>
 							<tr>
 								<td colspan="2" align="center">
@@ -313,10 +313,10 @@
 											</td>
 										</tr>
 									</table>
-								</td>									
+								</td>
 							</tr>
 							</td>
-						</tr>					
+						</tr>
 					</table>
 				</td>
 			</tr>
@@ -335,7 +335,7 @@ var tempComm = numComm;
 var tempDisb = numDisb;
 var tempExpn = numExpn;
 
-function addCommitments() 
+function addCommitments()
 {
 	var ni = document.getElementById('comm');
 	var divname = "comm_" + numComm;
@@ -350,32 +350,32 @@ function addCommitments()
 
 	<% Collection col = eaForm.getCurrencies();
 		Iterator itr = col.iterator();
-		while (itr.hasNext()) 
+		while (itr.hasNext())
 		{
-			AmpCurrency curr = (AmpCurrency) itr.next();	
+			AmpCurrency curr = (AmpCurrency) itr.next();
 			if (curr.getCurrencyCode().equalsIgnoreCase(defCurr)) { %>
 				s += "<option value='<%=curr.getCurrencyCode()%>' selected='true'><%=curr.getCurrencyName()%></option>";
 			<% } else { %>
-				s += "<option value='<%=curr.getCurrencyCode()%>'><%=curr.getCurrencyName()%></option>";				  			
+				s += "<option value='<%=curr.getCurrencyCode()%>'><%=curr.getCurrencyName()%></option>";
 			<% }
 		 }%>
-	
+
 	s += "</select>&nbsp;";
 	s += "<input type='text' name='comm_" + numComm + "_4' id='comm_" + numComm + "_4' size='10' class='inp-text'>&nbsp;";
 	s += "<a href=javascript:calendar('comm_" + numComm + "_4')><img src='../ampTemplate/images/show-calendar.gif' border='0'></a>&nbsp;";
 	s += "<select name='comm_" + numComm + "_5' class='inp-text'>";
 	<% itr = eaForm.getPerspectives().iterator();
-		while (itr.hasNext()) { 
+		while (itr.hasNext()) {
 			AmpPerspective pers = (AmpPerspective) itr.next();
 			if (pers.getCode().equalsIgnoreCase(defPers)) { %>
 				s += "<option value='<%=pers.getCode()%>' selected='true'><%=pers.getName()%></option>";
 			<% } else { %>
 				s += "<option value='<%=pers.getCode()%>'><%=pers.getName()%></option>";
-			<% } 
-		} %>	
+			<% }
+		} %>
 	s += "</select>&nbsp;";
 	s += "<input type='button' value='Delete' class='inp-text' onclick=removeCommitment('" + divname + "')><br>";
-	
+
 	newdiv.innerHTML = s;
 	ni.appendChild(newdiv);
 	numComm++;
@@ -390,7 +390,7 @@ function removeCommitment(divname)
 	tempComm--;
 }
 
-function addDisbursement() 
+function addDisbursement()
 {
 	var ni = document.getElementById('disb');
 	var divname = "disb_" + numDisb;
@@ -402,34 +402,34 @@ function addDisbursement()
 	s += "</select>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
 	s += "<input type='text' name='disb_" + numDisb + "_2' size='15'  class='amt'>&nbsp;";
 	s += "<select name='disb_" + numDisb + "_3' class='inp-text'>&nbsp;";
-	
+
 	<% col = eaForm.getCurrencies();
 		itr = col.iterator();
 		while (itr.hasNext()) {
-			AmpCurrency curr = (AmpCurrency) itr.next();	
+			AmpCurrency curr = (AmpCurrency) itr.next();
 			if (curr.getCurrencyCode().equalsIgnoreCase(defCurr)) { %>
 				s += "<option value='<%=curr.getCurrencyCode()%>' selected='true'><%=curr.getCurrencyName()%></option>";
 			<% } else { %>
-				s += "<option value='<%=curr.getCurrencyCode()%>'><%=curr.getCurrencyName()%></option>";				  			
+				s += "<option value='<%=curr.getCurrencyCode()%>'><%=curr.getCurrencyName()%></option>";
 			<% }
 		 }%>
-	
+
 	s += "</select>&nbsp;";
 	s += "<input type='text' name='disb_" + numDisb + "_4' id='disb_" + numDisb + "_4' size='10' class='inp-text'>&nbsp;";
 	s += "<a href=javascript:calendar('disb_" + numDisb + "_4')><img src='../ampTemplate/images/show-calendar.gif' border='0'></a>&nbsp;";
 	s += "<select name='disb_" + numDisb + "_5' class='inp-text'>";
 	<% itr = eaForm.getPerspectives().iterator();
-		while (itr.hasNext()) { 
+		while (itr.hasNext()) {
 			AmpPerspective pers = (AmpPerspective) itr.next();
 			if (pers.getCode().equalsIgnoreCase(defPers)) { %>
 				s += "<option value='<%=pers.getCode()%>' selected='true'><%=pers.getName()%></option>";
 			<% } else { %>
 				s += "<option value='<%=pers.getCode()%>'><%=pers.getName()%></option>";
-			<% } 
+			<% }
 		} %>
 	s += "</select>&nbsp;";
 	s += "<input type='button' value='Delete' class='inp-text' onclick=removeDisbursement('" + divname + "')><br>";
-	
+
 	newdiv.innerHTML = s;
 	ni.appendChild(newdiv);
 	numDisb++;
@@ -444,7 +444,7 @@ function removeDisbursement(divname)
 	tempDisb--;
 }
 
-function addExpenditure() 
+function addExpenditure()
 {
 	var ni = document.getElementById('expn');
 	var divname = "expn_" + numExpn;
@@ -456,34 +456,34 @@ function addExpenditure()
 	s += "</select>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;";
 	s += "<input type='text' name='expn_" + numExpn + "_2' size='15' class='amt'>&nbsp;";
 	s += "<select name='expn_" + numExpn + "_3' class='inp-text'>&nbsp;";
-	
+
 	<% col = eaForm.getCurrencies();
 		itr = col.iterator();
 		while (itr.hasNext()) {
-			AmpCurrency curr = (AmpCurrency) itr.next();	
+			AmpCurrency curr = (AmpCurrency) itr.next();
 			if (curr.getCurrencyCode().equalsIgnoreCase(defCurr)) { %>
 				s += "<option value='<%=curr.getCurrencyCode()%>' selected='true'><%=curr.getCurrencyName()%></option>";
 			<% } else { %>
-				s += "<option value='<%=curr.getCurrencyCode()%>'><%=curr.getCurrencyName()%></option>";				  			
+				s += "<option value='<%=curr.getCurrencyCode()%>'><%=curr.getCurrencyName()%></option>";
 			<% }
 		 }%>
-	
+
 	s += "</select>&nbsp;";
 	s += "<input type='text' name='expn_" + numExpn + "_4' id='expn_" + numExpn + "_4' size='10' class='inp-text'>&nbsp;";
 	s += "<a href=javascript:calendar('expn_" + numExpn + "_4')><img src='../ampTemplate/images/show-calendar.gif' border='0'></a>&nbsp;";
 	s += "<select name='expn_" + numExpn + "_5' class='inp-text'>";
 	<% itr = eaForm.getPerspectives().iterator();
-		while (itr.hasNext()) { 
+		while (itr.hasNext()) {
 			AmpPerspective pers = (AmpPerspective) itr.next();
 			if (pers.getCode().equalsIgnoreCase(defPers)) { %>
 				s += "<option value='<%=pers.getCode()%>' selected='true'><%=pers.getName()%></option>";
 			<% } else { %>
 				s += "<option value='<%=pers.getCode()%>'><%=pers.getName()%></option>";
-			<% } 
+			<% }
 		} %>
 	s += "</select>&nbsp;";
 	s += "<input type='button' value='Delete' class='inp-text' onclick=removeExpenditure('" + divname + "')><br>";
-	
+
 	newdiv.innerHTML = s;
 	ni.appendChild(newdiv);
 	numExpn++;
@@ -500,33 +500,33 @@ function removeExpenditure(divname)
 
 
 
-function addComponents() 
+function addComponents()
 {
 	var flag = validate();
-	if (flag == true) 
+	if (flag == true)
 	{
-			  
+
 /*		document.aimEditActivityForm.target = window.opener.name;
 		document.aimEditActivityForm.compFundAct.value = "update";
 	   document.aimEditActivityForm.submit();
-		window.close();			  
-*/	
+		window.close();
+*/
 
 	<digi:context name="addComp" property="context/module/moduleinstance/showAddComponent.do?edit=true&compFundAct=update"/>
 	document.aimEditActivityForm.action = "<%= addComp %>";
 	document.aimEditActivityForm.target = window.opener.name;
 	document.aimEditActivityForm.submit();
-	window.close();			  
+	window.close();
 	}
 	return flag;
 }
 
-function validate() 
+function validate()
 {
 
 	var titleFlag = isEmpty(document.aimEditActivityForm.componentTitle.value);
 	if(titleFlag == true) {
-		alert("Please enter title");			
+		alert("Please enter title");
 		document.aimEditActivityForm.componentTitle.focus();
 		return false;
 	}
@@ -536,15 +536,15 @@ function validate()
 	/*
 	if (tempComm == 0) {
 		alert ("Commitment not entered.");
-		return false;			  
+		return false;
 	}
 	*/
 
 	if (tempExpn > 0 && tempDisb == 0) {
 		alert ("Expenditure entered without entering disbursements.");
-		return false;			  			  
+		return false;
 	}
-	
+
 	for (index = 0;index < x.elements.length;index++) {
 		var str = x.elements[index].name;
 		if (str.match("comm_[0-9]*_2")) {
@@ -559,33 +559,15 @@ function validate()
 				x.elements[index].focus();
 				return false;
 			}
-			
-		} else if (str.match("comm_[0-9]*_4")) { 
-			// validate date	  
+
+		} else if (str.match("comm_[0-9]*_4")) {
+			// validate date
 			if (trim(x.elements[index].value) == "") {
 				alert ("Date not entered.");
 				x.elements[index].focus();
 				return false;
 			}
-		} else if (str.match("disb_[0-9]*_2")) { 
-			// validate amount
-			if (trim(x.elements[index].value) == "") {
-				alert ("Amount not entered.");
-				x.elements[index].focus();
-				return false;				  
-			}
-			if (checkAmount(x.elements[index].value) == false) {
-				alert ("Invalid amount entered.");
-				x.elements[index].focus();
-				return false;
-			}			
-		} else if (str.match("disb_[0-9]*_4")) { 
-			if (trim(x.elements[index].value) == "") {
-				alert ("Date not entered.");
-				x.elements[index].focus();
-				return false;
-			}				  
-		} else if (str.match("expn_[0-9]*_2")) { 
+		} else if (str.match("disb_[0-9]*_2")) {
 			// validate amount
 			if (trim(x.elements[index].value) == "") {
 				alert ("Amount not entered.");
@@ -596,26 +578,49 @@ function validate()
 				alert ("Invalid amount entered.");
 				x.elements[index].focus();
 				return false;
-			}			
-		} else if (str.match("expn_[0-9]*_4")) { 
+			}
+		} else if (str.match("disb_[0-9]*_4")) {
 			if (trim(x.elements[index].value) == "") {
 				alert ("Date not entered.");
 				x.elements[index].focus();
 				return false;
-			}				  
+			}
+		} else if (str.match("expn_[0-9]*_2")) {
+			// validate amount
+			if (trim(x.elements[index].value) == "") {
+				alert ("Amount not entered.");
+				x.elements[index].focus();
+				return false;
+			}
+			if (checkAmount(x.elements[index].value) == false) {
+				alert ("Invalid amount entered.");
+				x.elements[index].focus();
+				return false;
+			}
+		} else if (str.match("expn_[0-9]*_4")) {
+			if (trim(x.elements[index].value) == "") {
+				alert ("Date not entered.");
+				x.elements[index].focus();
+				return false;
+			}
 		}
-				  
+
 	}
-	return true;	
+	return true;
 }
 
-
+function checkAmount(val){
+  if(val.match("[^0-9.,]")){
+    return false;
+  }
+  return true;
+}
 
 /*
 function validate() {
 		var titleFlag = isEmpty(document.aimEditActivityForm.componentTitle.value);
 		if(titleFlag == true) {
-			alert("Please enter title");			
+			alert("Please enter title");
 			document.aimEditActivityForm.componentTitle.focus();
 			return false;
 		}
@@ -624,17 +629,17 @@ function validate() {
 			if(amtFlag == false) {
 				amtFlag = checkAmount(document.aimEditActivityForm.componentAmount.value);
 				if(amtFlag != true) {
-					alert("Please enter valid amount");	
+					alert("Please enter valid amount");
 					document.aimEditActivityForm.componentAmount.focus();
 					return false;
 				} else {
 					if (document.aimEditActivityForm.currencyCode.value == "-1") {
-						alert("Please select a currency");	
+						alert("Please select a currency");
 						document.aimEditActivityForm.currencyCode.focus();
 						return false;
 					}
 				}
-			}				  
+			}
 		}
 
 		return true;
@@ -650,7 +655,7 @@ function validate() {
 		} else {
 			return false;
 		}
-	}	
+	}
 */
 
 
@@ -663,7 +668,7 @@ function validate() {
 	function closeWindow() {
 		window.close();
 	}
-	function trim(s) 
+	function trim(s)
 	{
 		return s.replace( /^\s*/, "" ).replace( /\s*$/, "" );
    }

@@ -60,8 +60,8 @@ public class AmpARFilter implements Filter {
 		//String CLOSE_DAY_FILTER="SELECT amp_activity_id FROM v_actual_completion_date WHERE date_format(actual_completion_date,_latin1'%d')<='"+closeDay+"'";
 	
 		
-		String FROM_YEAR_FILTER="SELECT amp_activity_id FROM v_actual_start_date WHERE date_format(actual_start_date,_latin1'%Y')>='"+fromYear+"'";
-		String TO_YEAR_FILTER="SELECT amp_activity_id FROM v_actual_start_date WHERE date_format(actual_completion_date,_latin1'%Y')<='"+toYear+"'";
+		String FROM_YEAR_FILTER="SELECT f.amp_activity_id FROM amp_funding f, amp_funding_detail fd WHERE f.amp_funding_id=fd.AMP_FUNDING_ID and date_format(fd.transaction_date,_latin1'%Y')>='"+fromYear+"'";
+		String TO_YEAR_FILTER="SELECT f.amp_activity_id FROM amp_funding f, amp_funding_detail fd WHERE f.amp_funding_id=fd.AMP_FUNDING_ID and date_format(fd.transaction_date,_latin1'%Y')<='"+toYear+"'";
 		
 		if(ampTeams!=null) queryAppend(TEAM_FILTER);
 		if(ampStatusId!=null && ampStatusId.intValue()!=0) queryAppend(STATUS_FILTER);

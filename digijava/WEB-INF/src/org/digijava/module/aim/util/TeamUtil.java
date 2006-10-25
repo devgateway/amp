@@ -106,7 +106,7 @@ public class TeamUtil {
 		} catch (Exception e) {
 			logger.error("Exception from getUnassignedWorkspcaes : "
 					+ e.getMessage());
-			e.printStackTrace(System.out);
+            throw new RuntimeException(e);
 		} finally {
 			if (session != null) {
 				try {
@@ -143,8 +143,7 @@ public class TeamUtil {
 				col = qry.list();
 			}
 		} catch (Exception e) {
-			logger.error("Execption from getAllTeams");
-			logger.error(e.getMessage());
+            throw new RuntimeException(e);
 		} finally {
 			if (session != null) {
 				try {
@@ -170,8 +169,8 @@ public class TeamUtil {
 			col = qry.list();
 
 		} catch (Exception e) {
-			logger.error("Execption from getAllRelatedTeams");
-			logger.error(e.getMessage());
+            throw new RuntimeException(e);
+
 		} finally {
 			if (session != null) {
 				try {
@@ -199,8 +198,8 @@ public class TeamUtil {
 			col = qry.list();
 
 		} catch (Exception e) {
-			logger.error("Execption from getAllRelatedTeamsByType");
-			logger.error(e.getMessage());
+            throw new RuntimeException(e);
+
 		} finally {
 			if (session != null) {
 				try {
@@ -302,8 +301,6 @@ public class TeamUtil {
 				tx.commit();
 			}
 		} catch (Exception e) {
-			logger.error("Execption from createTeam() : " + e.getMessage());
-			e.printStackTrace(System.out);
 			/*
 			 * teamExist = true; logger.error(ae.getMessage());
 			 */
@@ -314,6 +311,8 @@ public class TeamUtil {
 					logger.error("Rollback failed");
 				}
 			}
+            throw new RuntimeException(e);
+
 		} /*
 			 * catch (Exception e) { logger.error("Execption from
 			 * createTeam()"); logger.error(e.getMessage()); if (tx != null) {
@@ -407,8 +406,8 @@ public class TeamUtil {
 				workspace.setChildWorkspaces(childWorkspaces);
 			}
 		} catch (Exception e) {
-			logger.error("Exception from getWorkspace() : " + e.getMessage());
-			e.printStackTrace(System.out);
+            throw new RuntimeException(e);
+
 		} finally {
 			if (session != null) {
 				try {
@@ -505,8 +504,7 @@ public class TeamUtil {
 			}
 
 		} catch (Exception e) {
-			logger.error("Execption from updateTeam() : " + e.getMessage());
-			e.printStackTrace(System.out);
+
 			/*
 			 * teamExist = true; logger.error("Execption from updateTeam() :" +
 			 * ae.getMessage()); ae.printStackTrace(System.out);
@@ -518,6 +516,8 @@ public class TeamUtil {
 					logger.error("Rollback failed");
 				}
 			}
+            throw new RuntimeException(e);
+
 		} /*
 			 * catch (Exception e) { logger.error("Execption from updateTeam() :" +
 			 * e.getMessage()); e.printStackTrace(System.out); if (tx != null) {
@@ -557,7 +557,7 @@ public class TeamUtil {
 			}
 
 		} catch (Exception e) {
-			e.printStackTrace(System.out);
+            throw new RuntimeException(e);
 		} finally {
 			try {
 				if (session != null) {
@@ -657,7 +657,7 @@ public class TeamUtil {
 				}
                 throw new RuntimeException(e);
 			}
-
+            throw new RuntimeException(e);
 		} finally {
 			if (session != null) {
 				try {
@@ -686,8 +686,8 @@ public class TeamUtil {
 			session = PersistenceManager.getSession();
 			team = (AmpTeam) session.load(AmpTeam.class, id);
 		} catch (Exception e) {
-			logger.error("Unable to get team" + e.getMessage());
-			logger.error("Exceptiion " + e);
+            throw new RuntimeException(e);
+
 		} finally {
 			try {
 				if (session != null) {
@@ -738,6 +738,8 @@ public class TeamUtil {
 					logger.error("Rollback failed :" + rbf);
 				}
 			}
+            throw new RuntimeException(e);
+
 		} finally {
 			if (session != null) {
 				try {
@@ -786,8 +788,8 @@ public class TeamUtil {
 				}
 			}
 		} catch (Exception e) {
-			logger.error("Exception from isMemberExisting()");
-			e.printStackTrace(System.out);
+            throw new RuntimeException(e);
+
 		} finally {
 			if (session != null) {
 				try {
@@ -832,8 +834,7 @@ public class TeamUtil {
 
 			tx.commit();
 		} catch (Exception e) {
-			logger.error("Unable to remove activities" + e.getMessage());
-			e.printStackTrace(System.out);
+
 			if (tx != null) {
 				try {
 					tx.rollback();
@@ -841,6 +842,7 @@ public class TeamUtil {
 					logger.error("Roll back failed");
 				}
 			}
+            throw new RuntimeException(e);
 		} finally {
 			try {
 				if (session != null) {
@@ -888,6 +890,7 @@ public class TeamUtil {
 					logger.error("Roll back failed");
 				}
 			}
+            throw new RuntimeException(e);
 		} finally {
 			try {
 				if (session != null) {
@@ -963,9 +966,8 @@ public class TeamUtil {
 				donors.add(ampOrg);
 			}
 		} catch (Exception e) {
-			logger.error("Unable to get all donors");
-			logger.debug("Exceptiion " + e);
-			e.printStackTrace(System.out);
+            throw new RuntimeException(e);
+
 		} finally {
 			try {
 				if (session != null) {
@@ -1022,6 +1024,7 @@ public class TeamUtil {
 					logger.error("Roll back failed");
 				}
 			}
+            throw new RuntimeException(e);
 		} finally {
 			try {
 				if (session != null) {
@@ -1066,8 +1069,8 @@ public class TeamUtil {
 			}
 
 		} catch (Exception e) {
-			logger.error("Unable to getDonorTeams" + e.getMessage());
-			e.printStackTrace(System.out);
+            throw new RuntimeException(e);
+
 		} finally {
 			try {
 				if (session != null) {
@@ -1126,7 +1129,7 @@ public class TeamUtil {
 
 		} catch (Exception e) {
 			logger.error("Unable to getDonorTeamActivities" + e.getMessage());
-			e.printStackTrace(System.out);
+            throw new RuntimeException(e);
 		} finally {
 			try {
 				if (session != null) {
@@ -1198,7 +1201,7 @@ public class TeamUtil {
 
 		} catch (Exception e) {
 			logger.error("Unable to getDonorTeamActivities" + e.getMessage());
-			e.printStackTrace(System.out);
+            throw new RuntimeException(e);
 		} finally {
 			try {
 				if (session != null) {
@@ -1247,6 +1250,7 @@ public class TeamUtil {
 					logger.error("Rollback failed");
 				}
 			}
+            throw new RuntimeException(e);
 		} finally {
 			try {
 				if (session != null) {
@@ -1301,6 +1305,7 @@ public class TeamUtil {
 					logger.error("Rollback failed");
 				}
 			}
+            throw new RuntimeException(e);
 		} finally {
 			try {
 				if (session != null) {
@@ -1328,6 +1333,7 @@ public class TeamUtil {
 				ans = true;
 		} catch (Exception ex) {
 			logger.error("Unable to get AmpTeam [checkForParentTeam()]", ex);
+            throw new RuntimeException(ex);
 		} finally {
 			try {
 				if (session != null) {
@@ -1359,6 +1365,7 @@ public class TeamUtil {
 		} catch (Exception e) {
 			logger.error("Unable to get team");
 			logger.debug("Exceptiion " + e);
+            throw new RuntimeException(e);
 		} finally {
 			try {
 				if (session != null) {
@@ -1386,6 +1393,7 @@ public class TeamUtil {
 		} catch (Exception e) {
 			logger.debug("Exception from getAllTeamAmpActivities()");
 			logger.debug(e.toString());
+            throw new RuntimeException(e);
 		} finally {
 			try {
 				if (session != null) {
@@ -1420,6 +1428,7 @@ public class TeamUtil {
 		} catch (Exception e) {
 			logger.debug("Exception from hasActivities()");
 			logger.debug(e.toString());
+            throw new RuntimeException(e);
 		} finally {
 			try {
 				if (session != null) {
@@ -1498,6 +1507,7 @@ public class TeamUtil {
 		} catch (Exception e) {
 			logger.debug("Exception from getAllTeamActivities()");
 			logger.debug(e.toString());
+            throw new RuntimeException(e);
 		} finally {
 			try {
 				if (session != null) {
@@ -1574,6 +1584,7 @@ public class TeamUtil {
 		} catch (Exception e) {
 			logger.debug("Exception from getAllTeamActivities()");
 			logger.debug(e.toString());
+            throw new RuntimeException(e);
 		} finally {
 			try {
 				if (session != null) {
@@ -1633,6 +1644,7 @@ public class TeamUtil {
 		} catch (Exception e) {
 			logger.debug("Exception from getTeamReportsCollection");
 			logger.debug(e.toString());
+            throw new RuntimeException(e);
 		} finally {
 			try {
 				if (session != null) {
@@ -1691,7 +1703,7 @@ public class TeamUtil {
 		} catch (Exception e) {
 			logger.debug("Exception from getAllTeamReports()");
 			logger.error(e.toString());
-			e.printStackTrace();
+            throw new RuntimeException(e);
 		} finally {
 			try {
 				if (session != null) {
@@ -1723,6 +1735,7 @@ public class TeamUtil {
 		} catch (Exception e) {
 			logger.debug("Exception from getAmpTeamReport()");
 			logger.debug(e.toString());
+            throw new RuntimeException(e);
 		} finally {
 			try {
 				if (session != null) {
@@ -1792,6 +1805,7 @@ public class TeamUtil {
 		} catch (Exception e) {
 			logger.debug("Exceptiion from getAllUnassignedTeamReports()");
 			logger.debug("Exceptiion " + e);
+            throw new RuntimeException(e);
 		} finally {
 			try {
 				if (session != null) {
@@ -1818,6 +1832,7 @@ public class TeamUtil {
 		} catch (Exception e) {
 			logger.debug("cannot get All teams");
 			logger.debug(e.toString());
+            throw new RuntimeException(e);
 		} finally {
 			try {
 				if (session != null) {
@@ -1825,6 +1840,7 @@ public class TeamUtil {
 				}
 			} catch (Exception ex) {
 				logger.error("releaseSession() failed");
+                throw new RuntimeException(ex);
 			}
 		}
 		return teams;
@@ -1866,6 +1882,7 @@ public class TeamUtil {
 		} catch (Exception e) {
 			logger.debug("Exception from getAmpLevel0Team()" + e.getMessage());
 			logger.debug(e.toString());
+            throw new RuntimeException(e);
 		} finally {
 			try {
 				if (session != null) {

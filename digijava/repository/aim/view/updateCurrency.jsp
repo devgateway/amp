@@ -15,37 +15,35 @@
 <script language="JavaScript">
 
 function validate() {
-	if (isEmpty(document.aimCurrencyForm.currencyCode.value) == true) {
-		alert("Currency code not entered");
+	if (isEmpty(document.aimCurrencyForm.currencyCode.value) ||
+        checkCode(document.aimCurrencyForm.currencyCode.value)== false) {
+		alert("Invalid currency code entered");
 		document.aimCurrencyForm.currencyCode.focus();
 		return false;
 	}
-	if (isEmpty(document.aimCurrencyForm.currencyName.value) == true) {
-		alert("Currency name not entered");
+	if (isEmpty(document.aimCurrencyForm.currencyName.value) ||
+        checkName(document.aimCurrencyForm.currencyName.value)== false) {
+		alert("Invalid currency name entered");
 		document.aimCurrencyForm.currencyName.focus();
 		return false;
 	}
-	if (isEmpty(document.aimCurrencyForm.countryName.value) == true) {
+	if (isEmpty(document.aimCurrencyForm.countryName.value)) {
 		alert("Country name not entered");
 		document.aimCurrencyForm.countryName.focus();
 		return false;
 	}
 	if (document.aimCurrencyForm.id.value == -1) {
-		if (isEmpty(document.aimCurrencyForm.exchangeRateDate.value) == true) {
+		if (isEmpty(document.aimCurrencyForm.exchangeRateDate.value)) {
 			alert("Exchange rate date not entered");
 			document.aimCurrencyForm.exchangeRateDate.focus();
 			return false;
-		}			  
-		if (isEmpty(document.aimCurrencyForm.exchangeRate.value) == true) {
-			alert("Exchange rate not entered");
+		}
+		if (isEmpty(document.aimCurrencyForm.exchangeRate.value) ||
+            checkRate(document.aimCurrencyForm.exchangeRate.value) == false) {
+			alert("Invalid Exchange rate");
 			document.aimCurrencyForm.exchangeRate.focus();
 			return false;
-		}			  		
-		if (checkAmount(document.aimCurrencyForm.exchangeRate.value) == false) {
-			alert("Invalid exchange rate entered");
-			document.aimCurrencyForm.exchangeRate.focus();					  
-			return false;
-		}		
+		}
 	}
 	return true;
 }
@@ -55,10 +53,33 @@ function saveCurrency() {
 	if (valid != false) {
 		document.aimCurrencyForm.target = window.opener.name;
 		document.aimCurrencyForm.submit();
-		window.close();			  
+		window.close();
 	}
 	return valid;
 
+}
+
+function checkRate(val){
+  if(val.match("[^0-9.,]")){
+    return false;
+  }
+  return true;
+}
+
+function checkName(val){
+  if(val.match("[^a-zA-Z ]")){
+    return false;
+  }
+  return true;
+}
+
+function checkCode(val){
+  if(val.match("[^A-Z]")){
+    return false;
+  }else if(val.length>3){
+    return false;
+  }
+  return true;
 }
 
 function closePopup() {
@@ -103,7 +124,7 @@ function unload() {
 								</td>
 								<td align="left" valign="middle">
 									<html:text property="currencyCode" styleClass="inp-text" size="7"/>
-								</td>								
+								</td>
 							</tr>
 							<tr bgcolor="#f4f4f2">
 								<td align="right" valign="middle" width="50%">
@@ -112,7 +133,7 @@ function unload() {
 								</td>
 								<td align="left" valign="middle">
 									<html:text property="currencyName" styleClass="inp-text" size="20"/>
-								</td>								
+								</td>
 							</tr>
 							<tr bgcolor="#f4f4f2">
 								<td align="right" valign="middle" width="50%">
@@ -122,10 +143,10 @@ function unload() {
 								<td align="left" valign="middle">
 									<html:select property="countryName" styleClass="inp-text">
 										<html:option value="">Select a country</html:option>
-										<html:optionsCollection name="aimCurrencyForm" property="countries" 
+										<html:optionsCollection name="aimCurrencyForm" property="countries"
 										value="name" label="name" />&nbsp;&nbsp;&nbsp;
-									</html:select>								
-								</td>								
+									</html:select>
+								</td>
 							</tr>
 							<c:if test="${aimCurrencyForm.id == -1}">
 							<tr bgcolor="#f4f4f2">
@@ -137,7 +158,7 @@ function unload() {
 									<table cellPadding=0 cellSpacing=0>
 										<tr>
 											<td>
-												<html:text property="exchangeRateDate" size="10" 
+												<html:text property="exchangeRateDate" size="10"
 												styleClass="inp-text" readonly="true" styleId="exchangeRateDate"/>
 											</td>
 											<td align="left" vAlign="center">&nbsp;
@@ -146,7 +167,7 @@ function unload() {
 											</td>
 										</tr>
 									</table>
-								</td>								
+								</td>
 							</tr>
 							<tr bgcolor="#f4f4f2">
 								<td align="right" valign="middle" width="50%">
@@ -157,8 +178,8 @@ function unload() {
 									<html:text property="exchangeRate" styleClass="amt" size="7"/>
 									<FONT color=red>
 									<digi:trn key="aim:USD">USD</digi:trn></FONT>
-								</td>								
-							</tr>							
+								</td>
+							</tr>
 							</c:if>
 							<tr bgcolor="#ffffff">
 								<td colspan="2">
@@ -176,7 +197,7 @@ function unload() {
 							</tr>
 						</table>
 					</td>
-				</tr>		
+				</tr>
 				<tr>
 					<td>&nbsp;&nbsp;
 						<digi:trn key="um:allMarkedRequiredField">All fields marked with an <FONT color=red><B><BIG>*</BIG>

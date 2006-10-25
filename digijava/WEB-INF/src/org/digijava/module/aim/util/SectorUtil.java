@@ -51,9 +51,7 @@ public class SectorUtil {
 						+ keyword
 						+ "%' and " + "country.iso = region.country"; */
 
-				String qryStr = "select sector.name, sector.type "
-					+ "from "
-					+ AmpSector.class.getName()
+				String qryStr = "select sector from " + AmpSector.class.getName()
 					+ " sector , "
 					+ AmpSectorScheme.class.getName()
 					+ " sscheme"
@@ -70,14 +68,11 @@ public class SectorUtil {
 				tempIncr = 0;
 				
 				while (itr.hasNext()) {
-					Object obj[] = (Object[]) itr.next();
-					System.out.println("object of type:"+obj[0].getClass().getName());
-					String sName = (String) obj[0];
-					
+					AmpSector as=(AmpSector) itr.next();
 					sectr = new ActivitySector();
-					sectr.setSectorId(new Long(System.currentTimeMillis()+(tempIncr++)));
-					logger.info("sector id set as " + sectr.getSectorId());
-					sectr.setSectorName(sName);
+					sectr.setSectorId(as.getAmpSectorId());
+					logger.info("sector id set as " + as.getAmpSectorId());
+					sectr.setSectorName(as.getName());
 					logger.info("sector name set as " +	 sectr.getSectorName());
 					logger.info("adding sector now...");
 					col.add(sectr);

@@ -134,3 +134,141 @@ function isEmpty(value)
 	else
 		return true;	
 }
+
+
+function checkAmount(amt)
+{
+	var len = amt.length;
+	var valid = false;
+	var cnt=0;
+	for (i = 0;i < amt.length;i++)
+	{
+		if(amt.charCodeAt(i) >=48 && amt.charCodeAt(i)<=57 || amt.charCodeAt(i)<=46 || amt.charCodeAt(i)<=44)
+		{
+			valid = true;
+			if(amt.charCodeAt(i) == 46)
+			{
+				cnt = cnt + 1;
+				if(cnt > 1)
+				{
+					valid = false;
+					break;
+				}
+			}
+		}
+		else
+		{
+			valid = false;
+			break;
+		}
+	}
+	return valid;
+}
+
+function checkAmountLen(amt)
+{
+	var len = amt.length;
+	var valid = false;
+	var cnt = 0;
+	for (var x = 0;x < amt.length;x++)
+	{
+		if(amt.charCodeAt(x) == 44)
+		{
+			len = len - 1;
+		}
+	}
+	for (i = 0;i < amt.length; i++)
+	{
+		if(amt.charCodeAt(i) == 46)
+		{
+			if(i > 6)
+			{
+				cnt = i;
+				for(j = 0;j < i; j++)
+				{
+					if(amt.charCodeAt(j) == 44)
+						cnt = cnt - 1;
+				}
+				if(cnt > 6)
+				{
+					valid = confirm('All funding information should be entered in thousands "000". Do you wish to proceed with your entry?');
+				}
+				return valid;
+			}
+			else
+				return true;
+		}
+	}
+	if(len > 6)
+	{
+		valid = confirm('All funding information should be entered in thousands "000". Do you wish to proceed with your entry?');
+		return valid;			
+	}
+}
+
+function compareAmount( num1, num2)
+{
+	if( num1 == num2 )
+		return true;
+	else
+	{
+		if( num1.length >= num2.length )
+			var len1 = num1.length;
+		else
+			var len2 = num2.length;
+		for( var x=0,y=0; (x<len1 || y<len2) ; x++,y++ )
+		{
+			if( num1.charCodeAt(x) == num2.charCodeAt(y) )
+				continue;
+			else
+			{
+				if( num1.charCodeAt(x) == 44 )
+				{
+					x++;
+					if( num1.charCodeAt(x) == num2.charCodeAt(y) )
+						continue;
+					else
+						return false;
+				}
+				if( num1.charCodeAt(y) == 44 )
+				{
+					y++;
+					if( num1.charCodeAt(x) == num2.charCodeAt(y) )
+						continue;
+					else
+						return false;
+				}
+				if( num1.charCodeAt(x) == 46 )
+				{
+					x++;
+					if( num1.charCodeAt(x) == 48 )
+					{
+						x++;
+						if( num1.charCodeAt(x) == 48 || num1.charCodeAt(x) == 32)
+							return true;
+						else
+							return false;
+					}
+					else
+						return false;
+				}
+				if( num2.charCodeAt(y) == 46 )
+				{
+					y++;
+					if( num2.charCodeAt(y) == 48 )
+					{
+						y++;
+						if( num2.charCodeAt(y) == 48 || num2.charCodeAt(y) == 32)
+							return true;
+						else
+							return false;
+					}
+					else
+						return false;
+				}
+				return false;
+			}
+		}
+	}
+	return true;
+}

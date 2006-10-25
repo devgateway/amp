@@ -46,7 +46,7 @@ import org.digijava.module.aim.helper.Workspace;
 
 /**
  * Persister class for all Team/Workspaces related Objects
- * 
+ *
  * @author priyajith
  */
 public class TeamUtil {
@@ -57,11 +57,12 @@ public class TeamUtil {
 	 * The function will get all the teams/workspaces which is unassociated with
 	 * a parent team. It will also filter the teams based on the 'workspace
 	 * type' and 'team category'
-	 * 
+	 *
 	 * @param workspaceType
 	 * @param teamCategory
 	 * @return The collection of all teams
 	 */
+
 	public static Collection getUnassignedWorkspaces(String workspaceType,
 			String teamCategory, String team) {
 
@@ -214,7 +215,7 @@ public class TeamUtil {
 
 	/**
 	 * Creates a new team
-	 * 
+	 *
 	 * @param team
 	 *            The team object which is to be persisted
 	 * @param childTeams
@@ -332,7 +333,7 @@ public class TeamUtil {
 
 	/**
 	 * Retreives the team/workspace information
-	 * 
+	 *
 	 * @param id
 	 *            The teamId
 	 * @return The Workspace object
@@ -423,7 +424,7 @@ public class TeamUtil {
 
 	/**
 	 * Updates a team/workspace
-	 * 
+	 *
 	 * @param team
 	 * @param childTeams
 	 * @return
@@ -571,7 +572,7 @@ public class TeamUtil {
 
 	/**
 	 * Removes a team
-	 * 
+	 *
 	 * @param teamId
 	 *            The team id of the team to be removed
 	 */
@@ -654,7 +655,9 @@ public class TeamUtil {
 				} catch (Exception rbf) {
 					logger.error("Rollback failed");
 				}
+                throw new RuntimeException(e);
 			}
+
 		} finally {
 			if (session != null) {
 				try {
@@ -668,7 +671,7 @@ public class TeamUtil {
 
 	/**
 	 * Return an AmpTeam object corresponding to the id
-	 * 
+	 *
 	 * @param id
 	 *            The id of the team whose object is to be returned.
 	 * @return The AmpTeam object

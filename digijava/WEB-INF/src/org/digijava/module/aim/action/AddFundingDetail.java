@@ -36,7 +36,6 @@ public class AddFundingDetail extends Action {
 		EditActivityForm formBean = (EditActivityForm) form;
 		formBean.setReset(false);
 		event = formBean.getEvent();
-		logger.info("EVENT : "+event);
 		TeamMember teamMember = (TeamMember) session.getAttribute("currentMember");
 		
 		String perspCode = null;
@@ -52,7 +51,6 @@ public class AddFundingDetail extends Action {
 		}		
 				
 		long index = formBean.getTransIndexId();
-		logger.info("Index = " + index);
 		String subEvent = event.substring(0,3);
 		FundingDetail fd = null;
 		if (subEvent.equalsIgnoreCase("del") || subEvent.equalsIgnoreCase("add")) {
@@ -82,10 +80,6 @@ public class AddFundingDetail extends Action {
 		}
 		formBean.setEvent(null);
 		formBean.setDupFunding(true);
-		formBean.setTransAmtZeroOrEmpty(false);
-		formBean.setTransAmtLarge(false);
-		formBean.setTransAmtInvalid(false);
-		formBean.setTransDateEmpty(false);
 		formBean.setFirstSubmit(false);
 		return mapping.findForward("forward");
 	}

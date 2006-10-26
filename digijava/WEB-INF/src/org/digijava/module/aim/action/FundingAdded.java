@@ -85,48 +85,12 @@ public class FundingAdded extends Action {
 		newFund.setOrgFundingId(eaForm.getOrgFundingId());
 		newFund.setModality(DbUtil.getModality(eaForm.getModality()));
 		newFund.setConditions(eaForm.getFundingConditions());
-
-		eaForm.setTransAmtZeroOrEmpty(false);
-		eaForm.setTransAmtLarge(false);
-		eaForm.setTransAmtInvalid(false);
-		eaForm.setTransDateEmpty(false);
 		
 		Collection fundDetails = new ArrayList();
 		if (eaForm.getFundingDetails() != null) {
 			Iterator itr = eaForm.getFundingDetails().iterator();
 			while (itr.hasNext()) {
 				FundingDetail fundDet = (FundingDetail) itr.next();
-				
-				if(fundDet.getTransactionAmount().trim() == null || 
-				fundDet.getTransactionAmount().trim().length() == 0)
-				{
-					eaForm.setTransAmtZeroOrEmpty(true);
-					return mapping.findForward("forward");
-				}
-				else
-				{
-					double fundAmt = CurrencyWorker.formatToDouble(
-						fundDet.getTransactionAmount());
-					if(fundAmt == 0)
-					{
-						eaForm.setTransAmtZeroOrEmpty(true);
-						return mapping.findForward("forward");
-					}
-					if(fundAmt > 999999)
-						eaForm.setTransAmtLarge(true);
-					if(fundAmt == -1)
-					{
-						eaForm.setTransAmtInvalid(true);
-						return mapping.findForward("forward");
-					}
-				}
-				if(fundDet.getTransactionDate().trim() == null || 
-				fundDet.getTransactionDate().trim().length() == 0)
-				{
-					eaForm.setTransDateEmpty(true);
-					return mapping.findForward("forward");
-				}
-				
 				String formattedAmt = CurrencyWorker.formatAmount(
 						fundDet.getTransactionAmount());
 				fundDet.setTransactionAmount(formattedAmt);
@@ -211,7 +175,6 @@ public class FundingAdded extends Action {
 						(fundDetItr2.getTransactionDate().equalsIgnoreCase(fundDetItr1.getTransactionDate()))&&
 						(fundDetItr2.getTransactionType()==fundDetItr1.getTransactionType()))
 						{
-							fundOrg.setFundings(fundList);
 							eaForm.setDupFunding(true);
 							eaForm.setFirstSubmit(true);
 						}

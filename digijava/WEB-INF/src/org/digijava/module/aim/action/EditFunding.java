@@ -87,10 +87,6 @@ public class EditFunding extends Action {
 		formBean.setOrganizations(DbUtil.getAllOrganisation());
 		formBean.setEditFunding(true);
 		formBean.setDupFunding(true);
-		formBean.setTransAmtZeroOrEmpty(false);
-		formBean.setTransAmtLarge(false);
-		formBean.setTransAmtInvalid(false);
-		formBean.setTransDateEmpty(false);
 		formBean.setFirstSubmit(false);
 		return mapping.findForward("forward");
 	}

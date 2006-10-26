@@ -1,5 +1,6 @@
+drop function getExchange;
 delimiter $
-CREATE OR REPLACE FUNCTION getExchange(currency char(3), cdate datetime) RETURNS double
+CREATE FUNCTION getExchange(currency char(3), cdate datetime) RETURNS double
 begin
 declare r double;
 if currency='USD' then return 1;

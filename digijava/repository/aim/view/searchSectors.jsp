@@ -15,7 +15,7 @@
 <script language="JavaScript">
 <!--
 	function validate() {
-			var length = document.aimEditActivityForm.selSectors.length;	  
+			var length = document.aimEditActivityForm.selSectors.length;
 			var flag = 0;
 
 			for (i = 0;i < length;i ++) {
@@ -26,22 +26,21 @@
 			}
 			if (flag > 1) {
 				alert("Please choose only ONE Sector to add....");
-				return false;					  
+				return false;
 			}
 		return true;
 	}
 
 	function addSector() {
-				
+
 		var flag = validate();
 		if (flag == false)
 			return false;
-		
 		document.aimEditActivityForm.target = window.opener.name;
 		document.aimEditActivityForm.submit();
 		window.close();
 		return true;
-	}	
+	}
 
 	function checkEmpty() {
 		var flag=true;
@@ -63,7 +62,7 @@
 
 		var flg=checkEmpty();
 		if(flg)
-		{		
+		{
 		if (document.aimEditActivityForm.tempNumResults.value == 0) {
 			  alert ("Invalid value at 'Number of results per page'");
 			  document.aimEditActivityForm.tempNumResults.focus();
@@ -81,7 +80,7 @@
 		<digi:context name="selectLoc" property="context/module/moduleinstance/selectSectors.do?edit=true" />
 		document.aimEditActivityForm.action = "<%= selectLoc %>";
 		document.aimEditActivityForm.submit();
-	} 
+	}
 
 	function load() {
 		document.aimEditActivityForm.keyword.focus();
@@ -94,13 +93,14 @@
 		window.close();
 	}
 
--->	
+-->
 </script>
 
 <digi:instance property="aimEditActivityForm" />
 <digi:form action="/addSelectedSectors.do" method="post">
 <html:hidden property="locationReset" value="false" />
 <html:hidden property="fill" />
+<input type="hidden" name="edit" value="true" />
 
 
 <table width="100%" cellSpacing=5 cellPadding=5 vAlign="top" border=0>
@@ -156,18 +156,18 @@
 						<tr bgcolor="#006699">
 							<td vAlign="center" width="100%" align ="center" class="textalb" height="20">
 								<digi:trn key="aim:SectorList">
-								List of Sectors</digi:trn> 
+								List of Sectors</digi:trn>
 					<br>(no of records =<bean:size id="aa" name="aimEditActivityForm" property="searchedSectors" />
 					<c:out value="${aa}"/>
 					)
 							</td>
-						</tr>	
+						</tr>
 <!-- 1 -->
 						<logic:notEmpty name="aimEditActivityForm" property="pagedCol">
 						<tr>
-							<td align=left vAlign=top>						
+							<td align=left vAlign=top>
 							<table width="100%" cellPadding=3 cellspacing=0>
-							<logic:iterate name="aimEditActivityForm" id="searchedSectors" property="pagedCol" 
+							<logic:iterate name="aimEditActivityForm" id="searchedSectors" property="pagedCol"
 									type="org.digijava.module.aim.helper.ActivitySector">
 										<tr>
 											<td bgcolor=#ECF3FD>
@@ -220,7 +220,7 @@
 										</c:set>
 										<c:set target="${urlParams1}" property="locSelReset" value="false"/>
 										<c:set target="${urlParams1}" property="edit" value="true"/>
-										
+
 										<c:if test="${aimEditActivityForm.currentPage == pages}">
 											<font color="#FF0000"><%=pages%></font>
 										</c:if>
@@ -230,16 +230,16 @@
 											</bean:define>
 											<digi:link href="/searchSectors.do" name="urlParams1" title="<%=translation%>" >
 												<%=pages%>
-											</digi:link>					
-										</c:if>										
-										|&nbsp; 
+											</digi:link>
+										</c:if>
+										|&nbsp;
 									</logic:iterate>
 									</td></tr>
 									</table>
 								</td>
 							</tr>
-					</logic:notEmpty>						
-					</table>				
+					</logic:notEmpty>
+					</table>
 				</td>
 			</tr>
 		</table>

@@ -156,7 +156,7 @@
     <action name="aimYearlyComparisonsForm" path="/aim/yearlyComparisonsFilter" scope="request" type="org.digijava.module.aim.action.YearlyComparisonsFilter" validate="false">
       <forward name="forward" path="/showLayout.do?layout=viewYearlyComparisons" />
     </action>
-    <action forward="/showLayout.do?layout=desktopLayout" name="aimDesktopForm" path="/aim/viewMyDesktop" />
+    <action forward="/showLayout.do?layout=desktopLayout" path="/aim/viewMyDesktop" />
     <action forward="/showLayout.do?layout=portfolioDashboardLayout" name="aimPortfolioDashboardForm" path="/aim/viewPortfolioDashboard" />
     <action forward="/showLayout.do?layout=layoutSurveyList" name="aimSurveyForm" path="/aim/viewSurveyList" />
     <action forward="/showLayout.do?layout=layoutSurvey" name="aimEditSurveyForm" path="/aim/viewSurvey" />
@@ -369,8 +369,8 @@
     <action name="aimEditActivityForm" path="/aim/editSurvey" scope="session" type="org.digijava.module.aim.action.EditSurvey" validate="false">
       <forward name="forward" path="/showLayout.do?layout=editSurvey" />
       <forward name="index" path="/aim/index.do" redirect="true" />
-      <forward name="survey" path="/aim/editSurveyList.do" redirect="true" />
-      <forward name="viewMyDesktop" path="/aim/viewMyDesktop.do" redirect="true" />
+      <forward name="survey" path="/aim/editSurveyList.do" />
+      <forward name="viewMyDesktop" path="/aim/viewMyDesktop.do" />
     </action>
     <action name="aimParisIndicatorReportForm" path="/aim/parisIndicatorReport" scope="session" type="org.digijava.module.aim.action.ParisIndicatorReport" validate="false">
       <forward name="menu" path="/showLayout.do?layout=viewParisIndicatorReportMenu" />
@@ -1137,7 +1137,7 @@
       <forward name="forward" path="/aim/addActivity.do?edit=true" redirect="true" />
     </action>
     <action input="/showLyout.do?layout=aim_fundingPopupLayout" name="aimEditActivityForm" path="/aim/fundingAdded" scope="session" type="org.digijava.module.aim.action.FundingAdded" validate="false">
-      <forward name="forward" path="/showLayout.do?layout=aim_fundingPopupLayout"/>
+      <forward name="forward" path="/showLayout.do?layout=aim_fundingPopupLayout" />
     </action>
     <action name="aimEditActivityForm" path="/aim/addFundingDetail" scope="session" type="org.digijava.module.aim.action.AddFundingDetail">
       <forward name="forward" path="/showLayout.do?layout=aim_fundingPopupLayout" />

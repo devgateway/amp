@@ -97,7 +97,7 @@ public abstract class Column extends Viewable implements ColumnIdentifiable {
 	 * @return the Column name or "-"
 	 */
 	public String getName(Boolean hideContent) {
-		if(hasTrailCells() || !hideContent.booleanValue()) return getName(); 
+		if(hasTrailCells() || hideContent==null || !hideContent.booleanValue()) return getName(); 
 		return "-";
 	}
 	

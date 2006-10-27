@@ -21,11 +21,16 @@ import org.dgfoundation.amp.ar.view.pdf.GroupReportDataPDF;
 import org.digijava.module.aim.dbentity.AmpReports;
 
 import com.lowagie.text.Document;
+import com.lowagie.text.ExceptionConverter;
 import com.lowagie.text.Font;
 import com.lowagie.text.PageSize;
 import com.lowagie.text.Paragraph;
+import com.lowagie.text.Rectangle;
+import com.lowagie.text.pdf.BaseFont;
+import com.lowagie.text.pdf.PdfContentByte;
 import com.lowagie.text.pdf.PdfPCell;
 import com.lowagie.text.pdf.PdfPTable;
+import com.lowagie.text.pdf.PdfPageEvent;
 import com.lowagie.text.pdf.PdfWriter;
 
 /**
@@ -34,24 +39,24 @@ import com.lowagie.text.pdf.PdfWriter;
  * @since Aug 28, 2006
  * 
  */
-public class PDFExportAction extends Action {
+public class PDFExportAction extends Action implements PdfPageEvent{
 
 	public ActionForward execute(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response)
 			throws java.lang.Exception {
 		
 		GroupReportData rd=ARUtil.generateReport(mapping,form,request,response);
-		
 		rd.setCurrentView(GenericViews.PDF);
 
-		Document document = new Document(PageSize.A0.rotate(),10, 10, 10, 10);
+		Document document = new Document(PageSize.A0.rotate(),10, 10, 10, 40);
 	
 	     response.setContentType("application/pdf");
 	        response.setHeader("Content-Disposition",
 	                "inline; filename=AMPExport.pdf");
 	   
-		PdfWriter.getInstance(document,
+		PdfWriter writer=PdfWriter.getInstance(document,
 				response.getOutputStream());
+		writer.setPageEvent(new PDFExportAction());
 
 		HttpSession session=request.getSession();
 		AmpReports r=(AmpReports) session.getAttribute("reportMeta");
@@ -88,11 +93,107 @@ public class PDFExportAction extends Action {
 		
 		//generate a PDF output of the report structure:
 		grdp.generate();		
-		
+		this.onEndPage(writer,document);
+		//this.onEndPage(writer, document);
 		document.add(table);
 		document.close();
 
 		return null;
 
+	}
+
+	public void onOpenDocument(PdfWriter arg0, Document arg1) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void onStartPage(PdfWriter arg0, Document arg1) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void onEndPage(PdfWriter writer, Document document) {
+		try {
+            Rectangle page = document.getPageSize();
+                     
+            //cb.setFontAndSize(titleFont.);
+         /*   PdfPTable foot = new PdfPTable(2);
+            foot.addCell(AmpReports.NOTE);
+            foot.addCell((new Integer(writer.getPageNumber())).toString());
+            foot.setTotalWidth(page.width() - document.leftMargin() - document.rightMargin());
+            foot.writeSelectedRows(0, -1, document.leftMargin(), document.bottomMargin(),
+                writer.getDirectContent());
+            
+             */
+           BaseFont helv = BaseFont.createFont("Helvetica", BaseFont.WINANSI, false);
+            PdfContentByte cb = writer.getDirectContent();
+            cb.saveState();
+            String text = "Page " + writer.getPageNumber();
+            float textSize = helv.getWidthPoint(text, 12);
+            float textBase = document.bottom() - 35;
+            
+            cb.beginText();
+            cb.setFontAndSize(helv, 12);
+            float adjust = helv.getWidthPoint("0", 12);
+            cb.setTextMatrix(document.left(), textBase);
+            cb.showText(AmpReports.NOTE);
+            cb.endText();
+            
+            textSize = helv.getWidthPoint(text, 12);
+            textBase = document.bottom() - 15;
+            cb.beginText();
+            cb.setFontAndSize(helv, 12);
+            adjust = helv.getWidthPoint("0", 12);
+            cb.setTextMatrix(document.right() - textSize - adjust, textBase);
+            cb.showText(text);
+            cb.endText();
+            
+            
+            
+        }
+        catch (Exception e) {
+            throw new ExceptionConverter(e);
+        }
+		
+	}
+
+	public void onCloseDocument(PdfWriter arg0, Document arg1) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void onParagraph(PdfWriter arg0, Document arg1, float arg2) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void onParagraphEnd(PdfWriter arg0, Document arg1, float arg2) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void onChapter(PdfWriter arg0, Document arg1, float arg2, Paragraph arg3) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void onChapterEnd(PdfWriter arg0, Document arg1, float arg2) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void onSection(PdfWriter arg0, Document arg1, float arg2, int arg3, Paragraph arg4) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void onSectionEnd(PdfWriter arg0, Document arg1, float arg2) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void onGenericTag(PdfWriter arg0, Document arg1, Rectangle arg2, String arg3) {
+		// TODO Auto-generated method stub
+		
 	}
 }

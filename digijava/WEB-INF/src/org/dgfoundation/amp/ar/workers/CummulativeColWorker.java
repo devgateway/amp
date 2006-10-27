@@ -9,8 +9,10 @@ package org.dgfoundation.amp.ar.workers;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+import org.dgfoundation.amp.ar.CellColumn;
 import org.dgfoundation.amp.ar.GroupColumn;
 import org.dgfoundation.amp.ar.ReportGenerator;
+import org.dgfoundation.amp.ar.TotalAmountColumn;
 import org.dgfoundation.amp.ar.cell.CategAmountCell;
 import org.dgfoundation.amp.ar.cell.Cell;
 
@@ -35,6 +37,11 @@ public class CummulativeColWorker extends ColumnWorker {
 		sourceName="Funding";
 	}
 
+
+	public CellColumn newColumnInstance() {
+		TotalAmountColumn cc=new TotalAmountColumn(columnName,false);
+		return cc;
+	}
 	
 	/* (non-Javadoc)
 	 * @see org.dgfoundation.amp.ar.workers.ColumnWorker#getCellFromRow(java.sql.ResultSet)

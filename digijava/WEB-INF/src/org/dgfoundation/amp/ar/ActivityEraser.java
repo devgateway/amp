@@ -51,8 +51,19 @@ public class ActivityEraser {
 
 			session.delete("select from AmpActivity");
 	
+				
+			tx.commit();
+			
+			
+			tx = session.beginTransaction();
+			
+
+			session.delete("select from AmpReports");
+	
 
 			tx.commit();
+
+			
 			session.close();
 			
 

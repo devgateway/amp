@@ -27,6 +27,7 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionMapping;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.dbentity.AmpCurrency;
+import org.digijava.module.aim.dbentity.AmpMeasures;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpReportColumn;
 import org.digijava.module.aim.dbentity.AmpReportHierarchy;
@@ -508,6 +509,14 @@ anf.setAmpStatusId(ampStatusId);
 	}
 
 
+	public static boolean containsMeasure(String measureName,Set measures) {
+		Iterator i=measures.iterator();
+		while (i.hasNext()) {
+			AmpMeasures element = (AmpMeasures) i.next();
+			if(element.getMeasureName().indexOf(measureName)!=-1) return true;
+		}
+		return false;
+	}
 	
 	
 	public static List createOrderedHierarchies(Collection columns) {

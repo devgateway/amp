@@ -24,6 +24,7 @@ import org.dgfoundation.amp.ar.workers.ColumnWorker;
  * 
  */
 public abstract class Column extends Viewable implements ColumnIdentifiable {
+	
 	protected int spanCount = 0;
 
 	protected List items;
@@ -31,7 +32,11 @@ public abstract class Column extends Viewable implements ColumnIdentifiable {
 	protected Viewable parent;
 
 	protected int rowSpan;
+	
+	protected boolean visible;
 
+	protected String contentCategory;
+	
 	protected int currentDepth = 0;
 
 	protected String name;
@@ -106,27 +111,23 @@ public abstract class Column extends Viewable implements ColumnIdentifiable {
 		this.name = name;
 		items = new ArrayList();
 		this.parent = parent;
-
 	}
 
 	public Column(ColumnWorker worker) {
 		super();
 		this.worker = worker;
 		items = new ArrayList();
-
 	}
 
 	public Column(String name) {
 		super();
 		items = new ArrayList();
 		this.name = name;
-
 	}
 
 	public Column() {
 		super();
 		items = new ArrayList();
-
 	}
 
 	/**
@@ -285,6 +286,48 @@ public abstract class Column extends Viewable implements ColumnIdentifiable {
 	public String getAbsoluteColumnName(){
 		if (parent!=null && parent instanceof Column) return ((Column)parent).getAbsoluteColumnName()+" -- "+ this.name;
 		else return this.name;
+	}
+
+	/**
+	 * @param contentCategory The contentCategory to set.
+	 */
+	public void setContentCategory(String categ) {
+		if(this.contentCategory!=null) return;
+		this.contentCategory = categ;
+		//logger.info("Column "+this.getAbsoluteColumnName()+" has categ="+categ);
+	}
+
+	
+	
+	/**
+	 * 
+	 * @param measures
+	 * @param category
+	 */
+	public void applyVisibility(Set measures,String category) {
+		if(!category.equals(this.contentCategory)) {visible=true;return;}
+		if(!ARUtil.containsMeasure(name,measures)) visible=false;else visible=true; 
+	}
+
+	/**
+	 * @return Returns the visible.
+	 */
+	public boolean isVisible() {
+		return visible;
+	}
+
+	/**
+	 * @param visible The visible to set.
+	 */
+	public void setVisible(boolean visible) {
+		this.visible = visible;
+	}
+
+	/**
+	 * @return Returns the contentCategory.
+	 */
+	public String getContentCategory() {
+		return contentCategory;
 	}
 	
 }

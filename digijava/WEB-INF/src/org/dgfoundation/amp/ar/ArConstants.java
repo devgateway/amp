@@ -28,4 +28,22 @@ public final class ArConstants {
 		new MetaInfo(GenericViews.PDF,"PDF"),
 		new MetaInfo(GenericViews.PRINT,".jsp"),
 		};
+
+	//metainfo categs:
+	public final static String ADJUSTMENT_TYPE="Adjustment Type";
+	public final static String TRANSACTION_TYPE="Transaction Type";
+	public final static String FUNDING_TYPE="Funding Type";
+	public final static String DONOR="Donor";
+	
+	//metainfo values:
+	public final static String COMMITMENT="Commitment";
+	public final static String DISBURSEMENT="Disbursement";
+	public final static String EXPENDITURE="Expenditure";
+	
+	public final static String PLANNED="Planned";
+	public final static String ACTUAL="Actual";
+	
+	public final static String UNDISBURSED_BALANCE="Undisbursed Balance";
+	
+	
 }

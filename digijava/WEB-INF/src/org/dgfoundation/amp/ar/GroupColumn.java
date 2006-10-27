@@ -79,7 +79,7 @@ public class GroupColumn extends Column {
      * @see verticalSplitByCategs
      */
     private static GroupColumn verticalSplitByCateg(Column src, 
-            String category,Set ids, boolean generateTotalCols) {
+            String category,Set ids, boolean generateTotalCols) {    
     	if(src instanceof CellColumn || src instanceof AmountCellColumn) return verticalSplitByCateg((CellColumn)src,category,ids,generateTotalCols);
     	else {
     		GroupColumn srcG=(GroupColumn) src;
@@ -88,6 +88,7 @@ public class GroupColumn extends Column {
     		while (i.hasNext()) {
 				Column element = (Column) i.next();
 				GroupColumn splitted=verticalSplitByCateg(element,category,ids,generateTotalCols);
+				splitted.setContentCategory(category);
 				if(splitted!=null) dest.addColumn(splitted); else dest.addColumn(element);
 			}
     		return dest;
@@ -122,11 +123,11 @@ public class GroupColumn extends Column {
             MetaInfo element = (MetaInfo) i.next();
             CellColumn cc = null;
             if (generateTotalCols)
-                cc = new TotalAmountColumn(element.getValue().toString());
+                cc = new TotalAmountColumn(element.getValue().toString(),true);
             else
                 cc = new AmountCellColumn( element.getValue().toString());
-            ret.addColumn(cc);
-            
+            ret.addColumn(cc);           
+            cc.setContentCategory(category);
             //iterate the src column and add the items with same MetaInfo
             Iterator ii=src.iterator();
             while (ii.hasNext()) {
@@ -134,13 +135,6 @@ public class GroupColumn extends Column {
     			if(item.hasMetaInfo(element)) cc.addCell(item);
     		}
             
-            //add remaining 0 amount items to meet the Set of owner Ids
-            ii=ids.iterator();
-            while (ii.hasNext()) {
-				Long id = (Long) ii.next();
-				Cell c=cc.getByOwner(id);
-				//if(c==null) 
-			}
         
         }
         
@@ -156,7 +150,7 @@ public class GroupColumn extends Column {
      */
     public GroupColumn(Column src) {
         super(src.getParent(),src.getName());
-        // TODO Auto-generated constructor stub
+        this.setContentCategory(src.getContentCategory());
     }
     
     /**
@@ -393,5 +387,23 @@ public class GroupColumn extends Column {
 		return count;
 	}
 
+	
+	/**
+	 * @see
+	 * @param measures org.dgfoundation.amp.ar.Column#applyVisibility()
+	 * @param category
+	 */
+	public void applyVisibility(Set measures,String category) {
+		super.applyVisibility(measures,category);
+		Iterator i=items.iterator();
+		while (i.hasNext()) {
+			Column element = (Column) i.next();
+			element.applyVisibility(measures,category);
+			if(!element.isVisible()) i.remove();
+			if(element.getItems().size()==0 && element instanceof GroupColumn) i.remove();
+			
+		}
+			
+	}
 	
 }

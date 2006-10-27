@@ -8,6 +8,7 @@ package org.dgfoundation.amp.ar;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
+import java.util.Set;
 
 /**
  * Class describing a viewable behaviour. Viewable objects always have a viewer
@@ -101,4 +102,6 @@ public abstract class Viewable implements Cloneable {
 	 */
 	public abstract String getCurrentView();
 
+
+	
 }

@@ -56,4 +56,8 @@ public class MetaInfo implements Comparable {
 		return -1;
 	}
 
+	
+	public String toString() {
+		return category+": "+value;
+	}
 }

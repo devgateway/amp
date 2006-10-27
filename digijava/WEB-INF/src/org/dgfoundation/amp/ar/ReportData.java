@@ -14,6 +14,7 @@ import java.util.Set;
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.ar.exception.IncompatibleColumnException;
 import org.dgfoundation.amp.ar.exception.UnidentifiedItemException;
+import org.digijava.module.aim.dbentity.AmpReports;
 
 /**
  * 
@@ -32,6 +33,8 @@ public abstract class ReportData extends Viewable {
 	protected List items;
 	
 	protected ReportData parent;
+	
+	protected AmpReports reportMetadata;
 	
 	public abstract Set getOwnerIds();
 
@@ -71,7 +74,7 @@ public abstract class ReportData extends Viewable {
 	}
 	
 	/**
-	 * Hierarchy generator. This method splits horizontally a report into subReprots,
+	 * Hierarchy generator. This method splits horizontally a report into subReports,
 	 * based on categories (hierarchies). Descendants will support this for any type
 	 * of ReportData object (nested or plain). 
 	 * @param columnName
@@ -81,6 +84,11 @@ public abstract class ReportData extends Viewable {
 	 */
 	public abstract GroupReportData horizSplitByCateg(String columnName)  throws UnidentifiedItemException,IncompatibleColumnException;
 	
+	/**
+	 * Performs report data post processing. These are several customized processing tasks performed after the
+	 * main structure is already defined and populated.
+	 *
+	 */
 	public abstract void postProcess();
 		
 	public ReportData(String name) {
@@ -118,6 +126,21 @@ public abstract class ReportData extends Viewable {
 	}
 	
 	public abstract int getTotalDepth();
+
+	/**
+	 * @return Returns the reportMetadata.
+	 */
+	public AmpReports getReportMetadata() {
+		if(reportMetadata==null) return parent.getReportMetadata();else
+			return reportMetadata;
+	}
+
+	/**
+	 * @param reportMetadata The reportMetadata to set.
+	 */
+	public void setReportMetadata(AmpReports reportMetadata) {
+		this.reportMetadata = reportMetadata;
+	}
 	
 	
 	

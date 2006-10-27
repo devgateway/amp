@@ -9,6 +9,7 @@ package org.dgfoundation.amp.ar;
 import java.util.List;
 
 import org.apache.log4j.Logger;
+import org.digijava.module.aim.dbentity.AmpReports;
 
 /**
  * 
@@ -22,7 +23,10 @@ public abstract class ReportGenerator {
 
 	protected GroupColumn rawColumns;
 	protected GroupReportData report;
+	
 	protected Filter filter;
+	
+	protected AmpReports reportMetadata;
 	
 	protected static Logger logger = Logger.getLogger(ReportGenerator.class);
 	
@@ -85,6 +89,20 @@ public abstract class ReportGenerator {
 	 */
 	public void setFilter(Filter filter) {
 		this.filter = filter;
+	}
+
+	/**
+	 * @return Returns the reportMetadata.
+	 */
+	public AmpReports getReportMetadata() {
+		return reportMetadata;
+	}
+
+	/**
+	 * @param reportMetadata The reportMetadata to set.
+	 */
+	public void setReportMetadata(AmpReports reportMetadata) {
+		this.reportMetadata = reportMetadata;
 	}
 
 }

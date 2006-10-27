@@ -23,7 +23,7 @@ import org.dgfoundation.amp.ar.exception.UnidentifiedItemException;
  * @since Jun 28, 2006
  * 
  */
-public class ColumnReportData extends ReportData {	
+public class ColumnReportData extends ReportData {
 	/**
 	 * @param name
 	 */
@@ -35,18 +35,17 @@ public class ColumnReportData extends ReportData {
 	public void addColumn(Column col) {
 		items.add(col);
 		col.setParent(this);
-		
+
 	}
-	
+
 	public void addColumns(Collection col) {
-		Iterator i=col.iterator();
+		Iterator i = col.iterator();
 		while (i.hasNext()) {
 			Column element = (Column) i.next();
 			addColumn(element);
 		}
-		
+
 	}
-	
 
 	public Column getColumn(Object columnId) {
 		Iterator i = items.iterator();
@@ -64,60 +63,64 @@ public class ColumnReportData extends ReportData {
 	 * @see org.dgfoundation.amp.ar.ReportData#categorizeBy(org.dgfoundation.amp.ar.cell.Cell)
 	 */
 	public GroupReportData horizSplitByCateg(String columnName)
-			throws UnidentifiedItemException,IncompatibleColumnException {
+			throws UnidentifiedItemException, IncompatibleColumnException {
 		GroupReportData dest = new GroupReportData(this.getName());
 
 		// create set with unique values for the filtered col:
 		Column keyCol = getColumn(columnName);
-		
+
 		removeColumn(columnName);
-		
-		if(keyCol instanceof GroupColumn) 
-			throw new IncompatibleColumnException("GroupColumnS cannot be used as filter keys!");
+
+		if (keyCol instanceof GroupColumn)
+			throw new IncompatibleColumnException(
+					"GroupColumnS cannot be used as filter keys!");
 		if (keyCol == null)
 			throw new UnidentifiedItemException(
 					"Cannot found a Column with Id " + columnName
 							+ " in this ReportData");
-		TreeSet cats=new TreeSet();
-		Iterator i=keyCol.iterator();
+		TreeSet cats = new TreeSet();
+		Iterator i = keyCol.iterator();
 		while (i.hasNext()) {
 			Cell element = (Cell) i.next();
-			//TODO: i do not like this but i have no choice !
-		//		if(element instanceof ListCell) cats.addAll((Collection)
-//					element.getValue());
-	//		else 
-				cats.add(element);
+			// TODO: i do not like this but i have no choice !
+			// if(element instanceof ListCell) cats.addAll((Collection)
+			// element.getValue());
+			// else
+			cats.add(element);
 		}
-		
-		
-		//we iterate each category from the set and search for matching rows
+
+		// we iterate each category from the set and search for matching rows
 		i = cats.iterator();
 		while (i.hasNext()) {
 			Cell cat = (Cell) i.next();
-			ColumnReportData crd=new ColumnReportData((String) cat.getColumnId()+": "+cat.toString());
+			ColumnReportData crd = new ColumnReportData((String) cat
+					.getColumnId()
+					+ ": " + cat.toString());
 			dest.addReport(crd);
-					
+
 			// construct the Set of ids that match the filter:
 			Set ids = new TreeSet();
-			//TODO: we do not allow GroupColumnS for keyColumns
-			Iterator ii=keyCol.iterator();
+			// TODO: we do not allow GroupColumnS for keyColumns
+			Iterator ii = keyCol.iterator();
 			while (ii.hasNext()) {
 				Cell element = (Cell) ii.next();
-				if(element.compareTo(cat)==0) ids.add(element.getOwnerId());
+				if (element.compareTo(cat) == 0)
+					ids.add(element.getOwnerId());
 			}
 
-			//now we get each column and get the dest column by applying the filter
-			ii=this.getItems().iterator();
+			// now we get each column and get the dest column by applying the
+			// filter
+			ii = this.getItems().iterator();
 			while (ii.hasNext()) {
 				Column col = (Column) ii.next();
-				crd.addColumn(col.filterCopy(cat,ids));
+				crd.addColumn(col.filterCopy(cat, ids));
 			}
-			
+
 		}
-		
+
 		return dest;
 	}
-	
+
 	public void replaceColumn(String name, Column column) {
 		int idx = items.indexOf(getColumn(name));
 		items.remove(idx);
@@ -125,106 +128,124 @@ public class ColumnReportData extends ReportData {
 		column.setParent(this);
 	}
 
-
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see org.dgfoundation.amp.ar.ReportData#postProcess()
 	 */
 	public void postProcess() {
-		Iterator i=items.iterator();
-		List destCols=new ArrayList();
+		Iterator i = items.iterator();
+		List destCols = new ArrayList();
 		while (i.hasNext()) {
 			Column element = (Column) i.next();
- 			Column res=element.postProcess();
+			Column res = element.postProcess();
+			res.applyVisibility(this.getReportMetadata().getMeasures(),ArConstants.FUNDING_TYPE);
+			
+			//just remove all non visible columns (we might need to change this in the future)
+			if(!res.isVisible()) continue;
+			
 			destCols.add(res);
 		}
-		
-		items=destCols;
-		
+
+		items = destCols;
+
 		prepareAspect();
-		
-		//create trail cells...
-		trailCells=new ArrayList();
-		i=items.iterator();
+
+		// create trail cells...
+		trailCells = new ArrayList();
+		i = items.iterator();
 		while (i.hasNext()) {
 			Column element = (Column) i.next();
-			List l=element.getTrailCells();
-			if (l!=null) trailCells.addAll(l);
+			List l = element.getTrailCells();
+			if (l != null)
+				trailCells.addAll(l);
 		}
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see org.dgfoundation.amp.ar.ReportData#getOwnerIds()
 	 */
 	public Set getOwnerIds() {
-		Set ret=new TreeSet();
-		Iterator i=items.iterator();
+		Set ret = new TreeSet();
+		Iterator i = items.iterator();
 		while (i.hasNext()) {
 			Column element = (Column) i.next();
 			ret.addAll(element.getOwnerIds());
 		}
 		return ret;
 	}
-	
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see org.dgfoundation.amp.ar.Viewable#getCurrentView()
 	 */
 	public String getCurrentView() {
 		return parent.getCurrentView();
 	}
 
-	
 	public int getMaxColumnDepth() {
-		Iterator i=items.iterator();
-		int ret=0;
+		Iterator i = items.iterator();
+		int ret = 0;
 		while (i.hasNext()) {
 			Column element = (Column) i.next();
-			int c=element.getColumnSpan();
-			if(c>ret) ret=c;
+			int c = element.getColumnSpan();
+			if (c > ret)
+				ret = c;
 		}
 		return ret;
 	}
-	
-	/* (non-Javadoc)
+
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see org.dgfoundation.amp.ar.ReportData#getTotalDepth()
 	 */
 	public int getTotalDepth() {
-		Iterator i=items.iterator();
-		int ret=0;
+		Iterator i = items.iterator();
+		int ret = 0;
 		while (i.hasNext()) {
 			Column element = (Column) i.next();
-			ret+=element.getColumnDepth();
+			ret += element.getColumnDepth();
 		}
 		return ret;
 	}
 
 	public List getColumnsByDepth() {
-		List ret=new ArrayList();
-		
-		
-		
+		List ret = new ArrayList();
+
 		return ret;
 	}
 
-
+	/**
+	 * Sets the rowspan for each column. This will be used only by viewers, 
+	 * to correctly render the heading of the column.
+	 */
 	public void prepareAspect() {
-		int maxDepth=getMaxColumnDepth();
-		Iterator i=items.iterator();
+		int maxDepth = getMaxColumnDepth();
+		Iterator i = items.iterator();
 		while (i.hasNext()) {
 			Column element = (Column) i.next();
-			element.setRowSpan(maxDepth+1);
+			element.setRowSpan(maxDepth + 1);
 		}
 	}
 
 	public void removeColumn(String name) {
-		Iterator i=items.iterator();
+		Iterator i = items.iterator();
 		while (i.hasNext()) {
 			Column element = (Column) i.next();
-			if(element.getName().equals(name)) {i.remove();return;}
+			if (element.getName().equals(name)) {
+				i.remove();
+				return;
+			}
 		}
 	}
 
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see org.dgfoundation.amp.ar.ReportData#getSourceColsCount()
 	 */
 	public Integer getSourceColsCount() {

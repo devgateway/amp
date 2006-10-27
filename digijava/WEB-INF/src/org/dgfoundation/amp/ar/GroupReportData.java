@@ -31,6 +31,7 @@ public class GroupReportData extends ReportData {
 	public GroupReportData(GroupReportData d) {
 		super(d.getName());
 		this.parent = d.getParent();
+		this.reportMetadata=d.getReportMetadata();
 		this.sourceColsCount = d.getSourceColsCount();
 	}
 
@@ -45,7 +46,6 @@ public class GroupReportData extends ReportData {
 	public void addReport(ReportData rd) {
 		items.add(rd);
 		rd.setParent(this);
-
 	}
 
 	/**
@@ -104,36 +104,43 @@ public class GroupReportData extends ReportData {
 			ReportData element = (ReportData) i.next();
 			element.postProcess();
 		}
-try {
 		// create trail cells
-		trailCells = new ArrayList();
-		if (items.size() > 0) {
-			ReportData firstRd = (ReportData) items.iterator().next();
-			for (int k = 0; k < firstRd.getTrailCells().size(); k++)
-				trailCells.add(new AmountCell());
-			logger.debug("GroupTrail.size="+trailCells.size());
-			
-			i = items.iterator();
-			while (i.hasNext()) {
-				ReportData element = (ReportData) i.next();				
-				if(element.getTrailCells().size()<trailCells.size()) { 
-					logger.error("INVALID Report TrailCells size for report: "+element.getParent().getName()+"->"+element.getName());
-					logger.error("ReportTrail.getTrailCells().size()="+element.getTrailCells().size());
-				}
-				else
-				for (int j = 0; j < trailCells.size(); j++) {
-					Cell c = (Cell) trailCells.get(j);
-					Cell c2 = (Cell) element.getTrailCells().get(j);
-					Cell newc = c.merge(c2);
-					newc.setColumn(c2.getColumn());
-					trailCells.remove(j);
-					trailCells.add(j, newc);
+		try {
+
+			trailCells = new ArrayList();
+			if (items.size() > 0) {
+				ReportData firstRd = (ReportData) items.iterator().next();
+				for (int k = 0; k < firstRd.getTrailCells().size(); k++)
+					trailCells.add(new AmountCell());
+				logger.debug("GroupTrail.size=" + trailCells.size());
+
+				i = items.iterator();
+				while (i.hasNext()) {
+					ReportData element = (ReportData) i.next();
+					if (element.getTrailCells().size() < trailCells.size()) {
+						logger
+								.error("INVALID Report TrailCells size for report: "
+										+ element.getParent().getName()
+										+ "->"
+										+ element.getName());
+						logger.error("ReportTrail.getTrailCells().size()="
+								+ element.getTrailCells().size());
+					} else
+						for (int j = 0; j < trailCells.size(); j++) {
+							Cell c = (Cell) trailCells.get(j);
+							Cell c2 = (Cell) element.getTrailCells().get(j);
+							Cell newc = c.merge(c2);
+							newc.setColumn(c2.getColumn());
+							trailCells.remove(j);
+							trailCells.add(j, newc);
+						}
 				}
 			}
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
-} catch(Exception e) {
-	e.printStackTrace();
-}
+		
+		
 
 	}
 
@@ -143,7 +150,8 @@ try {
 	 * @see org.dgfoundation.amp.ar.ReportData#getTotalDepth()
 	 */
 	public int getTotalDepth() {
-		if(items.size()==0) return -1;
+		if (items.size() == 0)
+			return -1;
 		ReportData rd = (ReportData) items.get(0);
 		return rd.getTotalDepth();
 	}
@@ -160,14 +168,14 @@ try {
 			return parent.getSourceColsCount();
 	}
 
-	
-	
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see org.dgfoundation.amp.ar.ReportData#getOwnerIds()
 	 */
 	public Set getOwnerIds() {
-		Set ret=new TreeSet();
-		Iterator i=items.iterator();
+		Set ret = new TreeSet();
+		Iterator i = items.iterator();
 		while (i.hasNext()) {
 			ReportData element = (ReportData) i.next();
 			ret.addAll(element.getOwnerIds());

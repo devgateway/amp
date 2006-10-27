@@ -13,7 +13,6 @@ import net.sf.hibernate.Transaction;
 import org.apache.log4j.Logger;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.dbentity.AmpActivity;
-import org.digijava.module.aim.dbentity.AmpAhsurveyQuestion;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpSector;
 import org.digijava.module.aim.dbentity.AmpSectorScheme;

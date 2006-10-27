@@ -34,12 +34,12 @@ public class CellColumn extends Column {
 
 	public CellColumn(Column source) {
 		super(source.getParent(),source.getName());
-		// TODO Auto-generated constructor stub
+		this.contentCategory=source.getContentCategory();
 	}
 	
 	public CellColumn(Column parent, String name) {
 		super(parent, name);
-		// TODO Auto-generated constructor stub
+		this.contentCategory=parent.getContentCategory();
 	}
 
 	public Cell getByOwner(Long ownerId) {

@@ -13,19 +13,41 @@ import org.dgfoundation.amp.ar.workers.ColumnWorker;
 
 public class TotalAmountColumn extends AmountCellColumn {
 
-    public TotalAmountColumn(ColumnWorker worker) {
+	public boolean filterShowable; 
+	
+    /**
+	 * @return Returns the filterShowable.
+	 */
+	public boolean isFilterShowable() {
+		return filterShowable;
+	}
+
+	/**
+	 * @param filterShowable The filterShowable to set.
+	 */
+	public void setFilterShowable(boolean filterShowable) {
+		this.filterShowable = filterShowable;
+	}
+
+	public TotalAmountColumn(ColumnWorker worker) {
         super(worker);
-        // TODO Auto-generated constructor stub
+        filterShowable=false;
     }
 
     public TotalAmountColumn(String name) {
         super(name);
-        // TODO Auto-generated constructor stub
+        filterShowable=false;
     }
 
+    public TotalAmountColumn(String name,boolean filterShowable) {
+        super(name);
+        this.filterShowable=filterShowable;
+    }
+
+    
     public TotalAmountColumn(Column parent, String name) {
         super(parent, name);
-        // TODO Auto-generated constructor stub
+        filterShowable=false;
     }
     
     /**
@@ -33,11 +55,12 @@ public class TotalAmountColumn extends AmountCellColumn {
 	 */
 	public TotalAmountColumn(Column source) {
 		super(source);
-		// TODO Auto-generated constructor stub
+		filterShowable=false;
 	}
 
-    public void addCell(Object c) {
+	public void addCell(Object c) {
         AmountCell ac=(AmountCell) c;
+        if(filterShowable && !ac.isShow()) return; 
         Iterator i=items.iterator();
         Cell freshc=null;
         while (i.hasNext()) {

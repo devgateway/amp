@@ -9,8 +9,11 @@ package org.dgfoundation.amp.ar.workers;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Calendar;
+import java.util.Set;
 
+import org.dgfoundation.amp.ar.ARUtil;
 import org.dgfoundation.amp.ar.AmountCellColumn;
+import org.dgfoundation.amp.ar.ArConstants;
 import org.dgfoundation.amp.ar.CellColumn;
 import org.dgfoundation.amp.ar.MetaInfo;
 import org.dgfoundation.amp.ar.ReportGenerator;
@@ -36,6 +39,17 @@ public class CategAmountColWorker extends ColumnWorker {
 		// TODO Auto-generated constructor stub
 	}
 
+	/**
+	 * Decides if the CategAmountCell is showable or not, based on the measures selected
+	 * in the report wizard.
+	 * @param cac the given CategAmountCell
+	 * @return true if showable
+	 */
+	public boolean isShowable(CategAmountCell cac) {
+		Set measures=generator.getReportMetadata().getMeasures();
+		return ARUtil.containsMeasure(cac.getMetaValueString(ArConstants.FUNDING_TYPE),measures);
+	}
+	
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -56,8 +70,6 @@ public class CategAmountColWorker extends ColumnWorker {
 		double exchangeRate=rs.getDouble("exchange_rate");
 		String currencyCode=rs.getString("currency_code");
 		String donorName=rs.getString("donor_name");
-
-		
 
 
 		try {
@@ -92,24 +104,24 @@ public class CategAmountColWorker extends ColumnWorker {
 		
 		MetaInfo donorMs=new MetaInfo("Donor",donorName);
 		
-		MetaInfo adjMs = new MetaInfo("Adjustment Type",
-				adj_type == 0 ? "Planned" : "Actual");
+		MetaInfo adjMs = new MetaInfo(ArConstants.ADJUSTMENT_TYPE,
+				adj_type == 0 ? ArConstants.PLANNED : ArConstants.ACTUAL);
 		String trStr = null;
 
 		switch (tr_type) {
 		case 0:
-			trStr = "Commitment";
+			trStr = ArConstants.COMMITMENT;
 			break;
 		case 1:
-			trStr = "Disbursement";
+			trStr = ArConstants.DISBURSEMENT;
 			break;
 		case 2:
-			trStr = "Expenditure";
+			trStr = ArConstants.EXPENDITURE;
 			break;
 		}
 
-		MetaInfo trMs = new MetaInfo("Transaction Type", trStr);
-		MetaInfo fundMs = new MetaInfo("Funding Type", (String) adjMs
+		MetaInfo trMs = new MetaInfo(ArConstants.TRANSACTION_TYPE, trStr);
+		MetaInfo fundMs = new MetaInfo(ArConstants.FUNDING_TYPE, (String) adjMs
 				.getValue()
 				+ " " + (String) trMs.getValue());
 
@@ -129,6 +141,9 @@ public class CategAmountColWorker extends ColumnWorker {
 		acc.getMetaData().add(qMs);
 		acc.getMetaData().add(donorMs);
 
+		//set the showable flag, based on selected measures
+		acc.setShow(isShowable(acc));
+		
 		return acc;
 	}
 

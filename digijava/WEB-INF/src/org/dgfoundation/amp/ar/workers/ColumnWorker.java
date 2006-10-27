@@ -20,7 +20,6 @@ import org.dgfoundation.amp.ar.CellColumn;
 import org.dgfoundation.amp.ar.Column;
 import org.dgfoundation.amp.ar.GroupColumn;
 import org.dgfoundation.amp.ar.ReportGenerator;
-import org.dgfoundation.amp.ar.TotalAmountColumn;
 import org.dgfoundation.amp.ar.cell.Cell;
 import org.digijava.kernel.persistence.PersistenceManager;
 
@@ -72,14 +71,18 @@ public abstract class ColumnWorker {
 			return generateCellColumn();
 	}
 	
+	/**
+	 * Returns the column intance to be used by the ColumnWorker. By default, this is the regular CellColumn. Override
+	 * this in subclasses if u need a different Column instance.
+	 * @return the new instantiated column instance. The column name is taken from the ColumnWorker's columnName property.
+	 */
 	public CellColumn newColumnInstance() {
 		return new CellColumn(columnName);
 	}
 	
 	protected Column generateCellColumn() {
         CellColumn dest=null;
-        if(extractor) dest=newColumnInstance(); else
-            dest=new TotalAmountColumn(columnName);
+        dest=newColumnInstance();
         Column sourceCol=sourceGroup.getColumn(sourceName);
 		Iterator i=sourceCol.iterator();
 		while (i.hasNext()) {

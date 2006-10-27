@@ -56,6 +56,7 @@ public class AmpReportGenerator extends ReportGenerator {
 			ret.add("Funding Type");
 
 			// if hierarchical donor, then add Donor subcategorization
+			/**
 			boolean hasDonor = false;
 			Iterator ii = reportMetadata.getHierarchies().iterator();
 			while (ii.hasNext()) {
@@ -67,6 +68,7 @@ public class AmpReportGenerator extends ReportGenerator {
 			}
 			if (hasDonor)
 				ret.add("Donor");
+			*/
 
 			Iterator i = reportMetadata.getColumns().iterator();
 			while (i.hasNext()) {

@@ -86,6 +86,22 @@ public abstract class Column extends Viewable implements ColumnIdentifiable {
 	}
 
 	/**
+	 * Returns true for ColumnS that can generate trail cells
+	 * @return true if the column can generate trail cells
+	 */
+	public abstract boolean hasTrailCells();
+	
+	/**
+	 * Gets the name of the current Column based on the hideContent parameter and hasTrailCells property
+	 * @param hideContent true if we are hiding content rows (summary report)
+	 * @return the Column name or "-"
+	 */
+	public String getName(Boolean hideContent) {
+		if(hasTrailCells() || !hideContent.booleanValue()) return getName(); 
+		return "-";
+	}
+	
+	/**
 	 * returns the cell with the specified list position
 	 * 
 	 * @param indexPos

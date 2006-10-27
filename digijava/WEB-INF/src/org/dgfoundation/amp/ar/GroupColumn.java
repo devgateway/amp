@@ -405,5 +405,14 @@ public class GroupColumn extends Column {
 		}
 			
 	}
+
+	public boolean hasTrailCells() {
+		Iterator i=items.iterator();
+		while (i.hasNext()) {
+			Column element = (Column) i.next();
+			if(element.hasTrailCells()) return true;
+		}
+		return false;
+	}
 	
 }

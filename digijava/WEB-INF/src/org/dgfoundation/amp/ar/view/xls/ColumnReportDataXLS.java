@@ -80,7 +80,7 @@ public class ColumnReportDataXLS extends XLSExporter {
 					while (ii.hasNext()) {
 						Column element2 = (Column) ii.next();
 						HSSFCell cell = row.createCell(colId.shortValue());
-						cell.setCellValue(element2.getName());
+						cell.setCellValue(element2.getName(metadata.getHideActivities()));
 						// System.out.println("["+rowId.intValue()+"]["+colId.intValue()+"]
 						// depth="+curDepth+" "+element2.getName());
 						// create spanning

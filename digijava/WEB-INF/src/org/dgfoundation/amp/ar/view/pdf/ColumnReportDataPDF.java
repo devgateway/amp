@@ -79,7 +79,7 @@ public class ColumnReportDataPDF extends PDFExporter {
 				while (ii.hasNext()) {
 					Column element2 = (Column) ii.next();
 					PdfPCell pdfc = new PdfPCell(new Paragraph(element2
-							.getName(),font));
+							.getName(metadata.getHideActivities()),font));
 					pdfc.setVerticalAlignment(Element.ALIGN_CENTER);
 					pdfc.setColspan(element2.getWidth());
 					table.addCell(pdfc);

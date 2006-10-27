@@ -7,6 +7,7 @@
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
 
 <bean:define id="columnReport" name="viewable" type="org.dgfoundation.amp.ar.ColumnReportData" scope="request" toScope="page"/>
+<bean:define id="reportMeta" name="reportMeta" type="org.digijava.module.aim.dbentity.AmpReports" scope="session" toScope="page"/>
 
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/arFunctions.js"/>"></script>
 
@@ -23,10 +24,11 @@
 <logic:iterate name="columnReport" property="items" id="column" scope="page" type="org.dgfoundation.amp.ar.Column">
 	<% column.setCurrentDepth(curDepth);%>
 	<% int rowsp=column.getCurrentRowSpan(); %>
-	<logic:iterate name="column" property="subColumnList" id="subColumn" scope="page">
+	<logic:iterate name="column" property="subColumnList" id="subColumn" scope="page" type="org.dgfoundation.amp.ar.Column">
 	<td align="center" class=clsTableTitleCol rowspan="<%=rowsp%>" colspan='<bean:write name="subColumn" property="width"/>'>
-		<b><bean:write name="subColumn" property="name"/></b>
+	<%=subColumn.getName(reportMeta.getHideActivities())%>
 	</td>
+	
 	</logic:iterate>
 </logic:iterate>
 </tr>

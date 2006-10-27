@@ -97,4 +97,8 @@ public class AmountCellColumn extends CellColumn {
 		return new AmountCellColumn(this);
 	}
 	
+	public boolean hasTrailCells() {
+		return true;
+		}
+	
 }

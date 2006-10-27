@@ -216,6 +216,11 @@ public class CellColumn extends Column {
 		return count;
 	}
 
+	public boolean hasTrailCells() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
 }
 
 

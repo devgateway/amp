@@ -9,6 +9,8 @@ package org.digijava.module.aim.dbentity;
 import java.util.List;
 import java.util.Set;
 
+import javax.servlet.http.HttpSession;
+
 import org.dgfoundation.amp.ar.AmpARFilter;
 
 public class AmpReports implements Comparable {
@@ -38,6 +40,9 @@ public class AmpReports implements Comparable {
 	private Set measures;
 	
 	public static final String NOTE="NOTE: All shown funding items are in USD currency. All calendaristic date cells are shown using DD/MM/YYYY format. All amounts are in thousands.";
+	
+	public String getNote(HttpSession session)
+	{ return "NOTE: All shown funding items are in USD currency. All calendaristic date cells are shown using DD/MM/YYYY format. All amounts are in thousands."+session.getAttribute("reportCurrencyCode");}
 	
 	public Set getMeasures() {
 		return measures;

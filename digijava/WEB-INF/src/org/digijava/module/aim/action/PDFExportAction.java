@@ -41,6 +41,9 @@ import com.lowagie.text.pdf.PdfWriter;
  */
 public class PDFExportAction extends Action implements PdfPageEvent{
 
+//	private HttpSession session;
+	private String noteFromSession;
+	
 	public ActionForward execute(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response)
 			throws java.lang.Exception {
@@ -59,6 +62,7 @@ public class PDFExportAction extends Action implements PdfPageEvent{
 		writer.setPageEvent(new PDFExportAction());
 
 		HttpSession session=request.getSession();
+		noteFromSession=AmpReports.getNote(request.getSession());
 		AmpReports r=(AmpReports) session.getAttribute("reportMeta");
 		
 		document.open();
@@ -94,7 +98,6 @@ public class PDFExportAction extends Action implements PdfPageEvent{
 		//generate a PDF output of the report structure:
 		grdp.generate();		
 		this.onEndPage(writer,document);
-		//this.onEndPage(writer, document);
 		document.add(table);
 		document.close();
 
@@ -116,16 +119,7 @@ public class PDFExportAction extends Action implements PdfPageEvent{
 		try {
             Rectangle page = document.getPageSize();
                      
-            //cb.setFontAndSize(titleFont.);
-         /*   PdfPTable foot = new PdfPTable(2);
-            foot.addCell(AmpReports.NOTE);
-            foot.addCell((new Integer(writer.getPageNumber())).toString());
-            foot.setTotalWidth(page.width() - document.leftMargin() - document.rightMargin());
-            foot.writeSelectedRows(0, -1, document.leftMargin(), document.bottomMargin(),
-                writer.getDirectContent());
-            
-             */
-           BaseFont helv = BaseFont.createFont("Helvetica", BaseFont.WINANSI, false);
+            BaseFont helv = BaseFont.createFont("Helvetica", BaseFont.WINANSI, false);
             PdfContentByte cb = writer.getDirectContent();
             cb.saveState();
             String text = "Page " + writer.getPageNumber();
@@ -136,7 +130,7 @@ public class PDFExportAction extends Action implements PdfPageEvent{
             cb.setFontAndSize(helv, 12);
             float adjust = helv.getWidthPoint("0", 12);
             cb.setTextMatrix(document.left(), textBase);
-            cb.showText(AmpReports.NOTE);
+            cb.showText(noteFromSession);
             cb.endText();
             
             textSize = helv.getWidthPoint(text, 12);
@@ -147,7 +141,6 @@ public class PDFExportAction extends Action implements PdfPageEvent{
             cb.setTextMatrix(document.right() - textSize - adjust, textBase);
             cb.showText(text);
             cb.endText();
-            
             
             
         }

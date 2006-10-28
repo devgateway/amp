@@ -34,7 +34,7 @@
 	<td>
 			
 	        <bean:define id="reportMeta" name="reportMeta" type="org.digijava.module.aim.dbentity.AmpReports" scope="session" toScope="page"/>
-			<ul><li><%=reportMeta.getNote(session)%></li></ul>
+			<ul><li><%=org.digijava.module.aim.dbentity.AmpReports.getNote(session)%></li></ul>
 	</td>
 
 </tr>

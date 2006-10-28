@@ -39,10 +39,10 @@ public class AmpReports implements Comparable {
 	private Set hierarchies;
 	private Set measures;
 	
-	public static final String NOTE="NOTE: All shown funding items are in USD currency. All calendaristic date cells are shown using DD/MM/YYYY format. All amounts are in thousands.";
+	//public static final String NOTE="NOTE: All shown funding items are in USD currency. All calendaristic date cells are shown using DD/MM/YYYY format. All amounts are in thousands.";
 	
-	public String getNote(HttpSession session)
-	{ return "NOTE: All shown funding items are in USD currency. All calendaristic date cells are shown using DD/MM/YYYY format. All amounts are in thousands."+session.getAttribute("reportCurrencyCode");}
+	public static String getNote(HttpSession session)
+	{ return "NOTE: All shown funding items are in "+session.getAttribute("reportCurrencyCode")+" currency. All calendaristic date cells are shown using DD/MM/YYYY format. All amounts are in thousands.";}
 	
 	public Set getMeasures() {
 		return measures;

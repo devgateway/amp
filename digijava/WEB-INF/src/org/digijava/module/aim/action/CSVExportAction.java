@@ -73,6 +73,13 @@ public class CSVExportAction extends Action {
 		colId.reset();
 		row=sheet.createRow(rowId.shortValue());
 		HSSFCell cell=row.createCell(colId.shortValue());
+		cell.setCellValue(AmpReports.getNote(session) + "\n");
+		grdx.makeColSpan(rd.getTotalDepth());
+		rowId.inc();
+		colId.reset();
+		
+		row=sheet.createRow(rowId.shortValue());
+		cell=row.createCell(colId.shortValue());
 		cell.setCellValue("Report Name: "+r.getName());
 		grdx.makeColSpan(rd.getTotalDepth());
 		rowId.inc();

@@ -50,7 +50,10 @@
 						Admin Home
 						</digi:trn>
 						</digi:link>&nbsp;&gt;&nbsp;
-						<digi:link href="/getSectorSchemes.do" styleClass="comment" title="<%=translation%>" >
+						<bean:define id="Scheme">
+							<digi:trn key="aim:schemes">Click here to View Schemes</digi:trn>
+						</bean:define>
+						<digi:link href="/getSectorSchemes.do" styleClass="comment" title="<%=Scheme%>" >
 						<digi:trn key="aim:schemes">
 						Schemes
 						</digi:trn>

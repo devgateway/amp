@@ -210,7 +210,7 @@ function login()
 						</TABLE>
 					</TD>
 				</TR>					
-				<c:if test="${aimKnowledgeForm.managedDocuments != null}">
+				<c:if test="${aimKnowledgeForm.managedDocuments != null && !empty aimKnowledgeForm.managedDocuments}">
                 <TR bgColor=#f4f4f2>
 					<TD vAlign="top" align="center" width="100%">
 						<TABLE width="98%" cellPadding=0 cellSpacing=0 vAlign="top" align="center" bgColor=#f4f4f2>

@@ -412,6 +412,7 @@ function removeSelLinks() {
 										&nbsp;
 									</td></tr>
 									<!-- Managed Documents -->
+									<c:if test="${!empty aimEditActivityForm.documentSpace}">
 									<tr><td>
 										<IMG alt=Link height=10 src="../ampTemplate/images/arrow-014E86.gif" width=15>
 										<a title="<digi:trn key="aim:DMDocumentsRelated">DM - Managed Document related to the project</digi:trn>">
@@ -482,6 +483,7 @@ function removeSelLinks() {
 											</table>
 										</logic:empty>										
 									</td></tr>
+									</c:if>
 									<tr><td>
 										&nbsp;
 									</td></tr>

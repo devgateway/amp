@@ -25,6 +25,23 @@
 			return false;
 	}
 -->
+function fnEditProject(id)
+{
+	<digi:context name="addUrl" property="context/module/moduleinstance/editActivity.do" />
+   document.aimSurveyForm.action = "<%=addUrl%>~pageId=1~action=edit~surveyFlag=true~activityId=" + id;
+	document.aimSurveyForm.target = "_self";    
+   document.aimSurveyForm.submit();
+}
+
+function preview(id)
+{
+
+	<digi:context name="addUrl" property="context/module/moduleinstance/viewActivityPreview.do" />
+   document.aimSurveyForm.action = "<%=addUrl%>~pageId=2~activityId=" + id;
+	document.aimSurveyForm.target = "_self";
+   document.aimSurveyForm.submit();
+}
+
 </script>
 
 <digi:instance property="aimSurveyForm" />
@@ -64,6 +81,12 @@
 											</TD>
 											<TD align="right">
 												&nbsp;
+											</TD>
+											<TD align=right>
+												<input type="button" value="Preview" class="dr-menu"
+												onclick="preview(<c:out value="${aimSurveyForm.ampActivityId}"/>)">
+												<input type="button" value="Edit" class="dr-menu"
+												onclick="fnEditProject(<c:out value="${aimSurveyForm.ampActivityId}"/>)">
 											</TD>
 										</TR>
 									</TABLE>										

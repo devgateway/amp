@@ -24,6 +24,22 @@
 	 	openURLinWindow(url,650,500);			  
 	}
 
+	function fnEditProject(id)
+{
+	<digi:context name="addUrl" property="context/module/moduleinstance/editActivity.do" />
+   document.aimActivityForm.action = "<%=addUrl%>~pageId=1~action=edit~surveyFlag=true~activityId=" + id;
+	document.aimActivityForm.target = "_self";    
+   document.aimActivityForm.submit();
+}
+
+function preview(id)
+{
+	<digi:context name="addUrl" property="context/module/moduleinstance/viewActivityPreview.do" />
+    document.aimActivityForm.action = "<%=addUrl%>~pageId=2~activityId=" + id;
+	document.aimActivityForm.target = "_self";
+    document.aimActivityForm.submit();
+}
+
 </script>
 
 
@@ -50,12 +66,22 @@
 		actRiskChartUrl = request.getContextPath() + "/aim/DisplayChart.img?filename=" + actRiskChartFileName;
 	}
 %>
-
+<digi:form action="/viewActivityDashboard.do" name="aimActivityForm" type="org.digijava.module.aim.form.aimActivityForm" 
+method="post">
 <TABLE cellSpacing=0 cellPadding=0 align="center" vAlign="top" border=0 width="100%">
+<TR>
+						<TD align=right>
+												<input type="button" value="Preview" class="dr-menu"
+												onclick="preview('<%=actId%>')">
+												<input type="button" value="Edit" class="dr-menu"
+												onclick="fnEditProject('<%=actId%>')">
+								</TD>
+</TR>
 <TR>
 	<TD vAlign="top" align="center">
 		<TABLE width="99%" cellSpacing=0 cellPadding=0 vAlign="top" align="center" class="box-border-nopadding">
-			<TR><TD>
+			<TR>
+			
 				<TABLE width="100%" cellspacing="2" cellpadding="2" valign="top" align="left" border=0>
 					<TR><TD class="highlight" colspan="2">
 
@@ -121,3 +147,4 @@
 
 <TR><TD>&nbsp;</TD></TR>
 </TABLE>
+</digi:form>

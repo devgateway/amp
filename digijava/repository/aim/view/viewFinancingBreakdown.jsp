@@ -6,6 +6,28 @@
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
 
+<script type="text/javascript">
+	
+function fnEditProject(id)
+{
+	<digi:context name="addUrl" property="context/module/moduleinstance/editActivity.do" />
+   document.aimFinancingBreakdownForm.action = "<%=addUrl%>~pageId=1~action=edit~surveyFlag=true~activityId=" + id;
+	document.aimFinancingBreakdownForm.target = "_self";    
+   document.aimFinancingBreakdownForm.submit();
+}
+
+function preview(id)
+{
+
+	<digi:context name="addUrl" property="context/module/moduleinstance/viewActivityPreview.do" />
+   document.aimFinancingBreakdownForm.action = "<%=addUrl%>~pageId=2~activityId=" + id;
+	document.aimFinancingBreakdownForm.target = "_self";
+   document.aimFinancingBreakdownForm.submit();
+}
+
+</script>
+
+
 <html:errors/>
 
 <digi:instance property="aimFinancingBreakdownForm" />
@@ -24,6 +46,7 @@ type="org.digijava.module.aim.form.FinancingBreakdownForm" method="post">
 <html:hidden property="ampActivityId" />
 <html:hidden property="ampFundingId" />
 <html:hidden property="tabIndex" />
+
 
 <TABLE cellSpacing=0 cellPadding=0 align="center" vAlign="top" border=0 width="100%">
 	<TR>
@@ -58,6 +81,17 @@ type="org.digijava.module.aim.form.FinancingBreakdownForm" method="post">
 											<TD align="right">
 												&nbsp;
 											</TD>
+
+
+											<TD align="right">
+												<input type="button" value="Preview" class="dr-menu"
+												onclick="preview(<c:out value="${aimFinancingBreakdownForm.ampActivityId}"/>)">
+												<input type="button" value="Edit" class="dr-menu"
+														onclick="fnEditProject(<c:out value="${aimFinancingBreakdownForm.ampActivityId}"/>)">
+												
+											</TD>
+
+
 										</TR>
 									</TABLE>										
 								</TD>

@@ -13,6 +13,23 @@ function login()
     document.aimPhysicalProgressForm.action = "<%=addUrl%>";
     document.aimPhysicalProgressForm.submit();
 }
+
+function fnEditProject(id)
+{
+	<digi:context name="addUrl" property="context/module/moduleinstance/editActivity.do" />
+   document.aimPhysicalProgressForm.action = "<%=addUrl%>~pageId=1~action=edit~surveyFlag=true~activityId=" + id;
+	document.aimPhysicalProgressForm.target = "_self";    
+   document.aimPhysicalProgressForm.submit();
+}
+
+function preview(id)
+{
+	<digi:context name="addUrl" property="context/module/moduleinstance/viewActivityPreview.do" />
+    document.aimPhysicalProgressForm.action = "<%=addUrl%>~pageId=2~activityId=" + id;
+	document.aimPhysicalProgressForm.target = "_self";
+    document.aimPhysicalProgressForm.submit();
+}
+
 </script>
 <digi:errors/>
 <digi:instance property="aimPhysicalProgressForm" />
@@ -23,7 +40,8 @@ method="post">
 <h3 align="center"> Invalid Login. Please Login Again. </h3><p align="center"><html:submit styleClass="dr-menu" value="Log In" onclick="login()" /></p>
 </digi:form>
 </logic:equal>
-
+<digi:form action="/viewPhysicalProgress.do" name="aimPhysicalProgressForm" type="org.digijava.module.aim.form.PhysicalProgressForm" 
+method="post">
 <logic:equal name="aimPhysicalProgressForm" property="validLogin" value="true">
 
 <TABLE cellSpacing=0 cellPadding=0 align="center" vAlign="top" border=0 width="100%">
@@ -33,25 +51,40 @@ method="post">
 		class="box-border-nopadding">
 			<TR><TD bgcolor="#f4f4f4">
 				<TABLE width="100%" cellSpacing=3 cellPadding=3 vAlign="top" align="center" bgcolor="#f4f4f4" border=0>
-					<TR bgColor=#f4f4f2><TD align=left>
-						<SPAN class=crumb>					
-							<jsp:useBean id="urlPhysicalProgress" type="java.util.Map" class="java.util.HashMap"/>
-							<c:set target="${urlPhysicalProgress}" property="ampActivityId">
-								<bean:write name="aimPhysicalProgressForm" property="ampActivityId"/>
-							</c:set>
-							<c:set target="${urlPhysicalProgress}" property="tabIndex" value="2"/>
-							<bean:define id="translation">
-								<digi:trn key="aim:clickToViewPhysicalProgress">Click here to view Physical Progress</digi:trn>
-							</bean:define>
-							<digi:link href="/viewPhysicalProgress.do" name="urlPhysicalProgress" styleClass="comment" 
-							title="<%=translation%>" >
-								<digi:trn key="aim:physicalProgress">Physical Progress</digi:trn>
-							</digi:link>
-							&gt; Overview &gt; 
-							<bean:write name="aimPhysicalProgressForm" property="perspective"/> 
-							Perspective
-						</SPAN>
-					</TD></TR>
+					<TR bgColor=#f4f4f2><TD align=left >
+						<TABLE width="100%" cellPadding="3" cellSpacing="2" align="left" vAlign="top">
+							<TR>
+								<TD align="left">
+									<SPAN class=crumb>					
+										<jsp:useBean id="urlPhysicalProgress" type="java.util.Map" class="java.util.HashMap"/>
+										<c:set target="${urlPhysicalProgress}" property="ampActivityId">
+											<bean:write name="aimPhysicalProgressForm" property="ampActivityId"/>
+										</c:set>
+										<c:set target="${urlPhysicalProgress}" property="tabIndex" value="2"/>
+										<bean:define id="translation">
+											<digi:trn key="aim:clickToViewPhysicalProgress">Click here to view Physical Progress</digi:trn>
+										</bean:define>
+										<digi:link href="/viewPhysicalProgress.do" name="urlPhysicalProgress" styleClass="comment" 
+										title="<%=translation%>" >
+											<digi:trn key="aim:physicalProgress">Physical Progress</digi:trn>
+										</digi:link>
+										&gt; Overview &gt; 
+										<bean:write name="aimPhysicalProgressForm" property="perspective"/> 
+										Perspective
+									</SPAN>
+								</TD>
+								<TD align=right>
+												<input type="button" value="Preview" class="dr-menu"
+												onclick="preview(<c:out value="${aimPhysicalProgressForm.ampActivityId}"/>)">
+												<input type="button" value="Edit" class="dr-menu"
+												onclick="fnEditProject(<c:out value="${aimPhysicalProgressForm.ampActivityId}"/>)">
+								</TD>
+							</TR>
+						</TABLE>
+					</TD>
+									
+					
+					</TR>
 					<TR bgColor=#f4f4f2><TD vAlign="top" align="center" width="100%">
 						<TABLE width="98%" cellPadding=0 cellSpacing=0 vAlign="top" align="center" bgColor=#f4f4f2>
 							<TR><TD width="100%" bgcolor="#F4F4F2" height="17">
@@ -97,7 +130,8 @@ method="post">
 								</TABLE>
 							</TD></TR>
 						</TABLE>
-					</TD></TR>				
+					</TD>
+					</TR>				
 				</TABLE>
 				<TR><TD bgcolor="#F4F4F2">
 					<!-- issues --> 
@@ -191,3 +225,4 @@ method="post">
 </TABLE>
 
 </logic:equal>	
+</digi:form>

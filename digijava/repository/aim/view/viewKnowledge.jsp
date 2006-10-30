@@ -12,6 +12,23 @@ function login()
     document.aimKnowledgeForm.action = "<%=addUrl%>";
     document.aimKnowledgeForm.submit();
 }
+function fnEditProject(id)
+{
+	<digi:context name="addUrl" property="context/module/moduleinstance/editActivity.do" />
+   document.aimKnowledgeForm.action = "<%=addUrl%>~pageId=1~action=edit~surveyFlag=true~activityId=" + id;
+	document.aimKnowledgeForm.target = "_self";    
+   document.aimKnowledgeForm.submit();
+}
+
+function preview(id)
+{
+
+	<digi:context name="addUrl" property="context/module/moduleinstance/viewActivityPreview.do" />
+    document.aimKnowledgeForm.action = "<%=addUrl%>~pageId=2~activityId=" + id;
+	document.aimKnowledgeForm.target = "_self";
+    document.aimKnowledgeForm.submit();
+}
+
 </script>
 <digi:context name="digiContext" property="context" />
 <digi:instance property="aimKnowledgeForm" />
@@ -24,9 +41,10 @@ function login()
 		<p align="center"><input type="button" class="dr-menu" value="Log In" onclick="login()" /></p>
 	</digi:form>
 </logic:equal>
-
+<html:hidden property="id" />
 <logic:equal name="aimKnowledgeForm" property="validLogin" value="true">
-
+<digi:form action="/viewKnowledge.do" name="aimKnowledgeForm" 
+	type="org.digijava.module.aim.form.KnowledgeForm" method="post">
 <TABLE cellSpacing=0 cellPadding=0 align="center" vAlign="top" border=0 width="100%">
 <TR>
 	<TD vAlign="top" align="center">
@@ -37,22 +55,34 @@ function login()
 			
 			<TABLE width="100%" cellSpacing=3 cellPadding=3 vAlign="top" align="center" bgcolor="#f4f4f4">
 				<TR bgColor=#f4f4f2>
-            	<TD align=left>
-						<SPAN class=crumb>					
-						<jsp:useBean id="urlKnowledge" type="java.util.Map" class="java.util.HashMap"/>
-						<c:set target="${urlKnowledge}" property="ampActivityId">
-							<bean:write name="aimKnowledgeForm" property="id"/>
-						</c:set>
-						<c:set target="${urlKnowledge}" property="tabIndex" value="3"/>
-						<bean:define id="translation">
-							<digi:trn key="aim:clickToViewKnowledge">Click here to view Knowledge</digi:trn>
-						</bean:define>
-						<digi:link href="/viewKnowledge.do" name="urlKnowledge" styleClass="comment" title="<%=translation%>" >
-							<digi:trn key="aim:knowledge">Knowledge</digi:trn>
-						</digi:link>
-						&gt; Overview &gt; <bean:write name="aimKnowledgeForm" property="perspective"/> Perspective
-						</SPAN>
-					</TD>
+            	<TD align="left" >
+					<TABLE width="100%" cellPadding="3" cellSpacing="2" align="left" vAlign="top">
+						<TR>
+							<TD align="left">
+								<SPAN class=crumb>					
+									<jsp:useBean id="urlKnowledge" type="java.util.Map" class="java.util.HashMap"/>
+									<c:set target="${urlKnowledge}" property="ampActivityId">
+										<bean:write name="aimKnowledgeForm" property="id"/>
+									</c:set>
+									<c:set target="${urlKnowledge}" property="tabIndex" value="3"/>
+									<bean:define id="translation">
+										<digi:trn key="aim:clickToViewKnowledge">Click here to view Knowledge</digi:trn>
+									</bean:define>
+									<digi:link href="/viewKnowledge.do" name="urlKnowledge" styleClass="comment" title="<%=translation%>" >
+										<digi:trn key="aim:knowledge">Knowledge</digi:trn>
+									</digi:link>
+									&gt; Overview &gt; <bean:write name="aimKnowledgeForm" property="perspective"/> Perspective
+								</SPAN>
+							</TD>
+							<TD align=right>
+												<input type="button" value="Preview" class="dr-menu"
+												onclick="preview(<c:out value="${aimKnowledgeForm.id}"/>)">
+												<input type="button" value="Edit" class="dr-menu"
+												onclick="fnEditProject(<c:out value="${aimKnowledgeForm.id}"/>)">
+							</TD>
+						</TR>
+					</table>
+				</TD>
 				</TR>
 				<TR bgColor=#f4f4f2>
 					<TD vAlign="top" align="center" width="100%">
@@ -281,4 +311,5 @@ function login()
 	<TD>&nbsp;</TD>
 </TR>
 </TABLE>
+</digi:form>
 </logic:equal>

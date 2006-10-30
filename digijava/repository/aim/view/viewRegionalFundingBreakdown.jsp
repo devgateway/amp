@@ -5,6 +5,26 @@
 <%@ taglib uri="/taglib/struts-html" prefix="html" %>
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
+<script type="text/javascript">
+	
+function fnEditProject(id)
+{
+	<digi:context name="addUrl" property="context/module/moduleinstance/editActivity.do" />
+   document.aimRegionalFundingForm.action = "<%=addUrl%>~pageId=1~action=edit~surveyFlag=true~activityId=" + id;
+	document.aimRegionalFundingForm.target = "_self";    
+   document.aimRegionalFundingForm.submit();
+}
+
+function preview(id)
+{
+
+	<digi:context name="addUrl" property="context/module/moduleinstance/viewActivityPreview.do" />
+   document.aimRegionalFundingForm.action = "<%=addUrl%>~pageId=2~activityId=" + id;
+	document.aimRegionalFundingForm.target = "_self";
+   document.aimRegionalFundingForm.submit();
+}
+
+</script>
 
 <html:errors/>
 
@@ -48,11 +68,17 @@
 											<TD align="right">
 												&nbsp;
 											</TD>
+											<TD align=right>
+												<input type="button" value="Preview" class="dr-menu"
+												onclick="preview(<c:out value="${aimRegionalFundingForm.ampActivityId}"/>)">
+												<input type="button" value="Edit" class="dr-menu"
+												onclick="fnEditProject(<c:out value="${aimRegionalFundingForm.ampActivityId}"/>)">
+											</TD>
 										</TR>
 									</TABLE>										
 								</TD>
 							</TR>
-							
+
 							<c:if test="${aimRegionalFundingForm.goButton == true}">
 							<TR bgColor=#f4f4f2>
       	      	<TD align=left>

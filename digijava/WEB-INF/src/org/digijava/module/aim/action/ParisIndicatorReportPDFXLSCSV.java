@@ -6,7 +6,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
-
+import java.lang.*;
 import javax.servlet.ServletOutputStream;
 
 import net.sf.jasperreports.engine.JRException;
@@ -78,6 +78,7 @@ public class ParisIndicatorReportPDFXLSCSV extends Action {
 			iter = coll.iterator();
 		}
 		int colCnt1 = coll.size();
+		logger.info(" this is the initail col count "+ colCnt1);
 		ArrayList ans = new ArrayList();
 		int rowCnt1 = 0;
 		int b1 = 0;
@@ -93,61 +94,78 @@ public class ParisIndicatorReportPDFXLSCSV extends Action {
 						b1++;
 					}
 				}
-				b1++;
+				if(!(pId.equals("6")))
+				{
+					b1++;
+				}
 			}
 		}
 		
 		colCnt1 = b1 / coll.size();
-		//logger.info(" this is b1 here..." + b1 + " colcount size...." + b1coll.size() + "COLL CNT 1 is    "+ colCnt1 + " row size  "+rowCnt1);
+		logger.info(" this is b1 here..." + b1 + " colcount size...." + coll.size() + "COLL CNT 1 is    "+ colCnt1 + " row size  "+rowCnt1);
 		Object[][] data2 = new Object[rowCnt1][colCnt1];
-
-		if (coll.size() > 0) {
-			iter1 = coll.iterator();
-			row = col = 0;
-			while (iter1.hasNext()) {
-				ParisIndicator pi = (ParisIndicator) iter1.next();
-				ans = pi.getAnswers();
-				int arrSize = ans.size();
-			
-				// rowCnt1 = rowCnt1+1;
-				String name = pi.getDonor();
-				data2[row][col] = name;
-				
-				for (int i = 0; i < arrSize; i++) {
-					double test[] = (double[]) ans.get(i);
-
-					for (int j = 0; j < test.length; j++) {
-						col++;
-						double val = test[j];
-						
-						if(val==-1)
-						{
-							data2[row][col] = "na";
-						}
-						else
-						{
-							data2[row][col] = mf.format(val);
-						}
-					}
-				}
-				col = 0;
-				row = row + 1;
-			}
-		}
-		if (pId.equals("6")) {
-			////logger.info(" came inside the 6th god damn report");
-			
+		if(!(pId.equals("6")))
+		{
+			logger.info("not the 6th one.....");
 			if (coll.size() > 0) {
 				iter1 = coll.iterator();
 				row = col = 0;
+				while (iter1.hasNext()) {
+					ParisIndicator pi = (ParisIndicator) iter1.next();
+					ans = pi.getAnswers();
+					int arrSize = ans.size();
+				
+					// rowCnt1 = rowCnt1+1;
+					String name = pi.getDonor();
+					data2[row][col] = name;
+					
+					for (int i = 0; i < arrSize; i++) {
+						double test[] = (double[]) ans.get(i);
+	
+						for (int j = 0; j < test.length; j++) {
+							col++;
+							double val = test[j];
+							
+							if(val==-1)
+							{
+								data2[row][col] = "na";
+							}
+							else
+							{
+								double d = Math.round(val);
+								int temp1 = (int)d;
+								data2[row][col]= temp1+"";
+								//data2[row][col] = mf.format(temp1);
+							}
+						}
+					}
+					col = 0;
+					row = row + 1;
+				}
+			}
+		}
+	
+		if (pId.equals("6")) {
+			logger.info(" came inside the 6th god damn report");
+			colCnt1=0;
+			
+			if (coll.size() > 0) {
+				iter1 = coll.iterator();
+				
+				row = col = 0;
 				data2 = new Object[rowCnt1][b1];
 				int yr = formBean.getStartYear().intValue();
+				int yr2 =formBean.getCloseYear().intValue();
+				logger.info(" this is the end year "+(yr2-yr));
+				colCnt1 = (yr2-yr)+1;
+				colCnt1 = (colCnt1*2)+1;
 				while (iter1.hasNext()) {
 					ParisIndicator pi = (ParisIndicator) iter1.next();
 					ans = pi.getAnswers();
 					int arrSize = ans.size();
 					String name = pi.getDonor();
 					data2[row][col] = name;
+					
 					for (int i = 0; i < arrSize; i++) {
 						double test[] = (double[]) ans.get(i);
 						for (int j = 0; j < test.length; j++) {
@@ -157,6 +175,8 @@ public class ParisIndicatorReportPDFXLSCSV extends Action {
 							col++;
 							data2[row][col] = "" + val;							
 							yr=yr+1;
+							
+							logger.info(" this is the 6th report "+b1+"  data  "+data2[row][col]);
 						}
 					}
 					col = 0;
@@ -164,6 +184,7 @@ public class ParisIndicatorReportPDFXLSCSV extends Action {
 				}
 			}
 		}
+		logger.info(" this is the 6th ka count "+colCnt1);
 		if (pId.equals("3")) {
 			//logger.info("in the 3rd report");
 			String jasperFile = null;
@@ -380,7 +401,7 @@ public class ParisIndicatorReportPDFXLSCSV extends Action {
 					.getRealPath(
 							"/WEB-INF/classes/org/digijava/module/aim/reports/indicator6pdf.jrxml");
 			ParisIndicator6Jrxml jrxml = new ParisIndicator6Jrxml();
-			jrxml.createJrxml(realPathJrxml, b1-1, rowCnt1, type);
+			jrxml.createJrxml(realPathJrxml, colCnt1, rowCnt1, type);
 			//logger.info("got back here");
 			JasperCompileManager.compileReportToFile(realPathJrxml);
 			//logger.info("is it here??");

@@ -119,7 +119,7 @@ public class FeaturesUtil {
 		
 		try {
 			session = PersistenceManager.getSession();
-			qryStr = "select c.countryId,c.countryName from " + Country.class.getName() + " c";
+			qryStr = "select c.countryId,c.countryName from " + Country.class.getName() + " c order by c.countryName";
 			qry = session.createQuery(qryStr);
 			Iterator itr = qry.list().iterator();
 			while (itr.hasNext()) {

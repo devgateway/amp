@@ -217,15 +217,18 @@
 																	<b><bean:write name="indicator" property="indicatorCode" /></b>
 																</td>																
 																<td valign="top" width="12">
+																	<c:if test="${indicator.indicatorValId > 0}">
 																	<jsp:useBean id="urlParams1" type="java.util.Map" class="java.util.HashMap"/>
 																	<c:set target="${urlParams1}" property="event" value="delete" />
 																	<c:set target="${urlParams1}" property="indicatorValId">
 																		<bean:write name="indicator" property="indicatorValId" />
 																	</c:set>
+																	
 																	<digi:link href="/deleteIndicatorValue.do" name="urlParams1" 
 																	onclick="return confirmDelete()">
 																		<img src= "../ampTemplate/images/trash_12.gif" border=0>
-																	</digi:link>
+																	</digi:link>																	
+																	</c:if>
 																</td></tr>																
 																<c:if test="${aimUpdateIndicatorValuesForm.expIndicatorId==indicator.indicatorId}">
 																<tr>

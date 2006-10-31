@@ -38,7 +38,7 @@
 						<bean:define id="translation">
 							<digi:trn key="aim:clickToViewSectorManager">Click here to view Sector Manager</digi:trn>
 						</bean:define>
-						<digi:link href="/sectorManager.do" styleClass="comment" title="<%=translation%>" >
+						<digi:link href="/getSectorSchemes.do" styleClass="comment" title="<%=translation%>" >
 						<digi:trn key="aim:sectorManager">
 						Sector Manager
 						</digi:trn>

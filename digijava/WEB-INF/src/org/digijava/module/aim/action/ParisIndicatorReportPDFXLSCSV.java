@@ -128,13 +128,13 @@ public class ParisIndicatorReportPDFXLSCSV extends Action {
 							
 							if(val==-1)
 							{
-								data2[row][col] = "na";
+								data2[row][col] = "n.a.";
 							}
 							else
 							{
 								double d = Math.round(val);
 								int temp1 = (int)d;
-								data2[row][col]= temp1+"";
+								data2[row][col]= temp1+"%";
 								//data2[row][col] = mf.format(temp1);
 							}
 						}

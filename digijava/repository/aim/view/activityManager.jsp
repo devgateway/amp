@@ -80,6 +80,16 @@
 													<logic:notEmpty name="aimActivityForm" property="activityList">
 														<tr><td>
 															<table width="100%" cellspacing=1 cellpadding=3 bgcolor="#d7eafd">
+																<tr bgcolor="#ffffff">
+																		<td width="9" height="15">&nbsp;</td>
+																		<td><b>
+																				Activity Name</b>
+																		</td>
+																		<td width="100"><b>
+																				Activity Id</b>
+																		</td>
+																		<td align="left" width="12">&nbsp;</td>
+																</tr>
 															
 																<logic:iterate name="aimActivityForm" property="activityList" id="activities"
 																type="org.digijava.module.aim.dbentity.AmpActivity">	
@@ -92,7 +102,7 @@
 																		<bean:write name="activities" property="name"/>
 																	</td>
 																	<td width="100">
-																		<bean:write name="activities" property="ampActivityId"/>
+																		<bean:write name="activities" property="ampId"/>
 																	</td>																	
 																	<td align="left" width="12">
 																		<jsp:useBean id="urlParams" type="java.util.Map" class="java.util.HashMap"/>

@@ -6,8 +6,8 @@
 	<page name="showMyTask" title=" - My Task List " />
 	<page name="viewChannelOverviewDescription" title="AMP: Ethiopia: AIM Dashboard: Detail" />
 	<page name="editPhysicalProgress" title="AMP: Ethiopia: AIM Dashboard: Detail" />
-	<page name="addAmpProjectDetails" title="AMP: Ethiopia: AIM Dashboard: Detail" /> 
-	<page name="editAmpProjectDetails" title="AMP: Ethiopia: AIM Dashboard: Detail" /> 
+	<page name="addAmpProjectDetails" title="AMP: Ethiopia: AIM Dashboard: Detail" />
+	<page name="editAmpProjectDetails" title="AMP: Ethiopia: AIM Dashboard: Detail" />
 	<page name="createPhysicalProgress" title="AMP: Ethiopia: AIM Dashboard: Detail" />
 	<page name="addPhysicalProgress" title="AMP: Ethiopia: AIM Dashboard: Detail" />
 	<page name="addAmpPhysicalProgress" title="AMP: Ethiopia: AIM Dashboard: Detail" />
@@ -37,21 +37,21 @@
 	<page name="createSectorList" title="AMP: Ethiopia: AIM Dashboard: Detail" />
 	<page name="deleteSectorList" title="AMP: Ethiopia: AIM Dashboard: Detail" />
 	<page name="createSubSectorList" title="AMP: Ethiopia: AIM Dashboard: Detail" />
-	<page name="addAmpProjectOthers" title="AMP: Ethiopia: AIM Dashboard: Detail" /> 
-	<page name="editAmpProjectOthers" title="AMP: Ethiopia: AIM Dashboard: Detail" /> 
-	<page name="sectorManager" title=" - Sector Manager" />	
-	<page name="addSector" title=" - Add Sector" />	
-	<page name="updateAmpActivity" title=" - Add Sector" />	
-	<page name="addSectorList" title=" - Add Sector" />	
-	<page name="addSubSectorList" title=" - Add Sector" />	
-	<page name="editSector" title=" - Edit Sector" />	
-	<page name="deleteSector" title=" - Delete Sector" />	
-	<page name="viewSectorDetails" title=" - View Sector Details" />	
-	<page name="adminHome" title=" - Admin Home" />	
-	<page name="statusManager" title=" - Status Manager" />	
-	<page name="addStatus" title=" - Add Status" />	
-	<page name="updateStatus" title=" - Update Status" />	
-	<page name="deleteStatus" title=" - Delete Status" />	
+	<page name="addAmpProjectOthers" title="AMP: Ethiopia: AIM Dashboard: Detail" />
+	<page name="editAmpProjectOthers" title="AMP: Ethiopia: AIM Dashboard: Detail" />
+	<page name="sectorManager" title=" - Sector Manager" />
+	<page name="addSector" title=" - Add Sector" />
+	<page name="updateAmpActivity" title=" - Add Sector" />
+	<page name="addSectorList" title=" - Add Sector" />
+	<page name="addSubSectorList" title=" - Add Sector" />
+	<page name="editSector" title=" - Edit Sector" />
+	<page name="deleteSector" title=" - Delete Sector" />
+	<page name="viewSectorDetails" title=" - View Sector Details" />
+	<page name="adminHome" title=" - Admin Home" />
+	<page name="statusManager" title=" - Status Manager" />
+	<page name="addStatus" title=" - Add Status" />
+	<page name="updateStatus" title=" - Update Status" />
+	<page name="deleteStatus" title=" - Delete Status" />
 	<page name="viewCommitmentbyModality" title=" - Annual Project Detail Report" />
 	<page name="viewMulitlateralbyDonor" title=" - Annual Report by Type of Assistance" />
 	<page name="quarterlyMulitlateralbyDonor" title=" - Quarterly Report by Type of Assistance" />
@@ -63,10 +63,10 @@
 	<page name="viewPlannedProjects" title=" : Quarterly Team Project Detail Report" />
 	<page name="quarterlyReportByProject" title=" : Quarterly Report by Project" />
 	<page name="quarterlyReportBySector" title=" : Quarterly Report by Sector" />
-	<page name="themeManager" title=" - Program Manager" />	
-	<page name="addTheme" title=" - Add Program" />	
-	<page name="editTheme" title=" - Edit Program" />	
-	<page name="deleteTheme" title=" - Delete Program" />	
+	<page name="themeManager" title=" - Program Manager" />
+	<page name="addTheme" title=" - Add Program" />
+	<page name="editTheme" title=" - Edit Program" />
+	<page name="deleteTheme" title=" - Delete Program" />
 	<page name="viewTheme" title=" - View Program" />
 	<page name="fiscalCalendarManager" title=" - Fiscal Calendar Manager" />
 	<page name="addFiscalCalendar" title=" - Fiscal Calendar Manager" />
@@ -104,7 +104,7 @@
 	<page name="teamMembers" title=" - Team Workspace Setup" />
 	<page name="index" title=" - Home" />
 	<page name="changePassword" title=" - Change Password" />
-	<page name="changePasswordSuccess" title=" - Change Password Success" />	
+	<page name="changePasswordSuccess" title=" - Change Password Success" />
 	<page name="viewAmpActivityPreview" title="AMP: Ethiopia: Preview" />
 	<page name="userRegistration" title=" - New User Registration" />
 	<page name="teamMemberDetails" title=" - Team Member Details" />
@@ -134,34 +134,35 @@
 	<page name="showTeamReports" title=" - Public Team Reports" />
 	<page name="teamConfiguration" title=" - Configure Team" />
 	<page name="viewProjectPdf" title=" - View Project PDF " />
-	<page page="viewActivityDetails" name="aim_viewActivityDetails" title="AMP - View Activity Details" />	
-	<page name="addActivityStep1" title=" - Add Activity - Identification | Planning" />	
-	<page name="addActivityStep2" title=" - Add Activity - Location | Sectors" />	
-	<page name="addActivityStep3" title=" - Add Activity - Funding" />	
-	<page name="addActivityStep4" title=" - Add Activity - Regional Funding" />	
-	<page name="addActivityStep5" title=" - Add Activity - Components" />	
+	<page page="viewActivityDetails" name="aim_viewActivityDetails" title="AMP - View Activity Details" />
+	<page name="addActivityStep1" title=" - Add Activity - Identification | Planning" />
+	<page name="addActivityStep2" title=" - Add Activity - Location | Sectors" />
+	<page name="addActivityStep3" title=" - Add Activity - Funding" />
+	<page name="addActivityStep4" title=" - Add Activity - Regional Funding" />
+	<page name="addActivityStep5" title=" - Add Activity - Components" />
 	<page name="addActivityStep6" title=" - Add Activity - Related Documents" />
 	<page name="addActivityStep7" title=" - Add Activity - Related Organizations" />
 	<page name="addActivityStep8" title=" - Add Activity - Contact Details | Conditions" />
 	<page name="addActivityStep9" title=" - Add Activity - Monitoring and Evaluation" />
 	<page name="activityExist" title=" - Add Activity - Activity Already Exist" />
 	<page name="locationManager" title=" - Region Manager" />
+    <page name="editActivityDenyed" title=" - Edit Activity Access Denyed" />
 <!--	<page name="locationManager" title=" - Location Manager" />-->
 	<page page="addLocation" name="aim_addlocPopupLayout" title=" - Location Manager" />
 	<page page="addOrgGroup" name="aim_addOrgGrpPopupLayout" title=" - Add Organization Group" />
 	<page page="viewOrgDetail" name="aim_viewOrgDetailPopupLayout" title=" - Organization Detail" />
 	<page page="viewComment" name="aim_viewCommentPopupLayout" title=" - Comment Detail" />
 	<page page="viewCommentOverview" name="aim_viewCommentOverviewPopupLayout" title=" - Comment Detail" />
-	<page page="selectLocation" name="aim_locPopupLayout" title="AMP - Select Location" />		
-	<page page="selectOrganization" name="aim_orgPopupLayout" title="AMP - Select Organization" />		
+	<page page="selectLocation" name="aim_locPopupLayout" title="AMP - Select Location" />
+	<page page="selectOrganization" name="aim_orgPopupLayout" title="AMP - Select Organization" />
 	<page page="addFunding" name="aim_fundingPopupLayout" title="AMP - Add Funding" />
 	<page page="addRegionalFunding" name="aim_addRegionalFunding" title="AMP - Add Regional Funding" />
 	<page page="selectSector" name="aim_selSectorPopupLayout" title="AMP - Select Sector" />
-	
+
 	<page name="donorTeamList" title=" - Donor Teams List" />
 	<page name="donorTeamActivities" title=" - Donor Team Activities" />
 	<page name="donorTeamUnAssignedActivities" title=" - Unassigned Activities" />
-	
+
 	<page name="meActivityList" title=" - ME Team Activity List" />
 	<page name="meActivityIndicators" title=" - ME Activity Indicator List" />
 	<page name="selectCreateIndicators" title=" - ME Select/Create Indicators" />
@@ -171,10 +172,10 @@
 	<page name="viewParisIndicatorReportMenu" title=" - Aid Effectiveness Indicators Reports" />
 	<page name="viewParisIndicatorReportI" title=" - Aid Effectiveness Indicators Reports" />
 	<page name="viewParisIndicatorReportII" title=" - Aid Effectiveness Indicators Reports" />
-	
+
 	<page page="searchLocation" name="aim_searchlocPopupLayout" title="AMP - Search Location" />
 	<page page="searchSectors" name="aim_searchSectorPopupLayout" title="AMP - Search Sectors" />
-	
+
 	<!-- sector manager with schemes -->
 	<page name="viewSectorSchemes" title=": View Sector Scheme" />
 	<page name="viewSectorSchemeLevel1" title=": View Sector Level 1" />
@@ -182,40 +183,40 @@
 	<page name="addNewSector" title=" : Add New Sector "/>
 	<page name="addNewLevel2Sector" title=" : Add New Level 2 Sector "/>
 	<page name="addNewLevel3Sector" title=" : Add New Level 3Sector "/>
-	
-	<page name="donorDataImport" title="AMP: Ethiopia: AIM Dashboard: Donor Data Import" /> 
-	<page page="selectPhysicalProgress" name="aim_addPhyProgPopupLayout" title="AMP - Add Physical Progress" />	
-	<page page="selectComponent" name="aim_addCompPopupLayout" title="AMP - Add Components" />	
-	<page page="selectDocument" name="aim_selectDocument" title="AMP - Add Documents and Links" />	
-	<page page="reviseCompDate" name="aim_reviseCloseDate" title="AMP - Revise Completion Date" />	
-	<page page="addChildWorkspaces" name="aim_addChildWorkspaces" title="AMP - Select Child Workspaces" />	
-	<page page="viewUserProfile" name="aim_viewUserProfile" title="AMP - User Profile" />	
-	<page name="previewActivity" title=" - Preview Activity" />	
+
+	<page name="donorDataImport" title="AMP: Ethiopia: AIM Dashboard: Donor Data Import" />
+	<page page="selectPhysicalProgress" name="aim_addPhyProgPopupLayout" title="AMP - Add Physical Progress" />
+	<page page="selectComponent" name="aim_addCompPopupLayout" title="AMP - Add Components" />
+	<page page="selectDocument" name="aim_selectDocument" title="AMP - Add Documents and Links" />
+	<page page="reviseCompDate" name="aim_reviseCloseDate" title="AMP - Revise Completion Date" />
+	<page page="addChildWorkspaces" name="aim_addChildWorkspaces" title="AMP - Select Child Workspaces" />
+	<page page="viewUserProfile" name="aim_viewUserProfile" title="AMP - User Profile" />
+	<page name="previewActivity" title=" - Preview Activity" />
 	<page name="viewRelatedLinks" title=" - Related Documents and Links" />
 	<page name="viewDocument" title=" - Document Details" />
-	<page name="teamDocument" title=" - Document Details" />	
-	<page name="teamEditDocument" title=" - Edit Document Details" />		
-	<page name="moreDocuments" title=" - Related Documents and Links" />		
-	<page name="customizePersonalSettings" title=" - Customized Personal Settings" />		
-	<page name="viewLinks" title=" - Related Links" />		
-	
-	<page page="updateCurrencyRates" name="aim_addExchangeRate" title="AMP - Currency Rate Editor" />	
-	<page page="updateCurrency" name="aim_updateCurrency" title="AMP - Currency Editor" />	
-	<page page="loadCurrencyRates" name="aim_loadCurrencyRates" title="AMP - Load Currency Rates" />	
-	<page page="printerFriendlyPreview" name="aim_printerFriendlyPreview" title="AMP - Preview Activity" />	
-	<page page="viewProjectDescObj" name="aim_projectDetails" title="AMP - Project Details" />	
-	
-	<page page="addIssue" name="aim_addIssue" title="AMP - Add Issue" />	
+	<page name="teamDocument" title=" - Document Details" />
+	<page name="teamEditDocument" title=" - Edit Document Details" />
+	<page name="moreDocuments" title=" - Related Documents and Links" />
+	<page name="customizePersonalSettings" title=" - Customized Personal Settings" />
+	<page name="viewLinks" title=" - Related Links" />
+
+	<page page="updateCurrencyRates" name="aim_addExchangeRate" title="AMP - Currency Rate Editor" />
+	<page page="updateCurrency" name="aim_updateCurrency" title="AMP - Currency Editor" />
+	<page page="loadCurrencyRates" name="aim_loadCurrencyRates" title="AMP - Load Currency Rates" />
+	<page page="printerFriendlyPreview" name="aim_printerFriendlyPreview" title="AMP - Preview Activity" />
+	<page page="viewProjectDescObj" name="aim_projectDetails" title="AMP - Project Details" />
+
+	<page page="addIssue" name="aim_addIssue" title="AMP - Add Issue" />
 	<page page="addMeasure" name="aim_addMeasure" title="AMP - Add Measure" />
 	<page page="addActor" name="aim_addActor" title="AMP - Add Actor" />
-	
+
 	<!-- for Paris -->
 	<page page="parisEditQuestion" name="aim_editQuestions" title="ParisIndicator Question Editor"/>
 	<page page="parisAddQuestion" name="aim_addQuestion" title="ParisIndicator Add Question"/>
 	<page page="parisAddIndicator" name="aim_addIndicator" title="Add New Paris Indicator"/>
-	
+
 	<!-- Printer Friendly HTML Reports -->
-	<page page="pIPrintSurvey" name="aim_pIPrintSurvey" title="AMP - Preview Activity" />	
+	<page page="pIPrintSurvey" name="aim_pIPrintSurvey" title="AMP - Preview Activity" />
 	<page  page="pIPrintReports" name="aim_pIPrintReports" title="Print Paris Indicator Reports" />
 	<page  page="pIPrintReports2" name="aim_pIPrintReports2" title="Print Paris Indicator Report" />
 	<page name="forward" title="Print IndicatorSurvey"/>
@@ -230,12 +231,12 @@
 	<page name="htmlViewPlannedProjects"			title=" :Quarterly Project Detail Report " />
 	<page name="htmlPhysicalComponentReport"			title=" :Physical Component Report " />
 	<page name="htmlAdvancedReport"			title=" : Advanced Report " />
-	<page name="htmlAdvancedReportHierarchy0"			title=" : Advanced Report " />	
+	<page name="htmlAdvancedReportHierarchy0"			title=" : Advanced Report " />
 	<page name="htmlAdvancedReportHierarchy1"			title=" : Advanced Report " />
 	<page name="htmlAdvancedReportHierarchy2"			title=" : Advanced Report " />
 	<!-- Advanced Report Manager -->
 
-	<page name="AdvancedReportManagerStep0" title=" - Advanced Report Manager Step 0 : Select Report Type" />	
+	<page name="AdvancedReportManagerStep0" title=" - Advanced Report Manager Step 0 : Select Report Type" />
 	<page name="AdvancedReportManagerStep1" title=" - Advanced Report Manager Step 1 : Select Columns" />
 	<page name="AdvancedReportManagerStep2" title=" - Advanced Report Manager Step 2 : Generate HTML Report" />
 	<page name="AdvancedReportManagerStep4" title=" - Advanced Report Manager Step 4 : Report Details " />
@@ -251,21 +252,21 @@
 	<page name="AdvancedReportManagerStep2Hierarchyn" title=" : Reports" />
 
 	<page name="featureManager" title=" - Feature Manager" />
-	
+
 	<page page="printableActivityPerformance" name="aim_printActPerf" title="AMP - Activity-Performance" />
 	<page page="printableActivityRisk" name="aim_printActRisk" title="AMP - Activity-Risk" />
-	
+
 	<page page="printablePortPerformance" name="aim_printPortPerf" title="AMP - Portfolio-Performance" />
 	<page page="printablePortRisk" name="aim_printPortRisk" title="AMP - Portfolio-Risk" />
-		
+
 	<page page="portPerformanceWithoutBase" name="aim_portPerfWithoutBase" title="AMP - Portfolio-Performance" />
 	<page page="activityPerformanceWithoutBase" name="aim_actPerfWithoutBase" title="AMP - Activity-Performance" />
-	
+
 	<!--- Paris Indicator Reports. -->
 	<page name="ParisIndicatorReport1" title=" : Paris Indicator Reports" />
 	<page name="ParisIndicatorReportMenu" title=" : Paris Indicator Reports Menu" />
 	<!-- Paris Indicator Reports end-->
-	
+
 	<!-- Paris Indiacator Manager-->
 	<page name="parisIndicatorManager" title=" : Paris Indicator Manager" />
 	<page name="parisIndicatorDelete" title=" : Paris Indicator Delete" />
@@ -293,7 +294,7 @@
 
 	<teaser name="myReports" action="getDesktopReports.do">
 		myReports.jsp
-	</teaser>	
+	</teaser>
 
 	<teaser name="myLinks" action="getDesktopLinks.do">
 		myLinks.jsp
@@ -301,21 +302,21 @@
 
 	<teaser name="myTeamMembers" action="getDesktopTeamMembers.do">
 		myTeamMembers.jsp
-	</teaser>     
+	</teaser>
 
 	<teaser name="myTasks" action="getDesktopTasks.do">
 		myTasks.jsp
-	</teaser>     	
+	</teaser>
 		  <teaser name="logout" action="logoutAction.do">
 				logout.jsp
 			</teaser>
-	
+
 	<teaser name="surveyList" action="getSurveyList.do">
 		viewSurveyList.jsp
 	</teaser>
 	<teaser name="surveyIndicators" action="getSurvey.do">
 		viewSurvey.jsp
-	</teaser> 
+	</teaser>
 	<teaser name="mainProjectDetails" action="mainProjectDetails.do">
 		mainProjectDetails.jsp
 	</teaser>
@@ -324,10 +325,10 @@
 	</teaser>
 	<teaser name="regionalFundingBreakdown" action="getRegionalFundings.do">
 		viewRegionalFundingBreakdown.jsp
-	</teaser>	
+	</teaser>
 	<teaser name="regionalFundingDetails" action="getRegionalFundings.do">
 		viewRegFundDetails.jsp
-	</teaser>		
+	</teaser>
 	<teaser name="financingBreakdownFilter" action="financingBreakdownFilter.do">
 		viewFinancingBreakdown.jsp
 	</teaser>
@@ -388,38 +389,38 @@
 
 	<teaser name="activityDashboard" action="activityDashboard.do">
 		viewActivityDashboard.jsp
-	</teaser>     	
-		  
+	</teaser>
+
 	<teaser name="channelOverview" action="channelOverview.do">
                 viewChannelOverview.jsp
-    </teaser>      
+    </teaser>
 
 	<teaser name="channelOverviewObjective" action="channelOverviewObjective.do">
                 viewChannelOverviewObjective.jsp
-    </teaser>      
+    </teaser>
 
 	<teaser name="physicalProgress" action="physicalProgress.do">
                 viewPhysicalProgress.jsp
-		  </teaser> 
+		  </teaser>
 
 	<teaser name="physicalProgressDetails" action="physicalProgress.do">
                 viewPhysicalProgressDetails.jsp
-    </teaser> 		  
+    </teaser>
 	<teaser name="physicalProgressDescription" action="physicalProgressDescription.do">
                 viewPhysicalProgressDescription.jsp
     </teaser>
     <teaser name="componentDescription" action="componentDescription.do">
                 viewComponentDescription.jsp
-    </teaser>      
+    </teaser>
 	<teaser name="knowledge" action="knowledge.do">
                 viewKnowledge.jsp
-		  </teaser>      
+		  </teaser>
 
 	<teaser name="meIndicatorValues" action="meIndicatorValues.do">
 			viewIndicatorValues.jsp
-	</teaser>      		  
-		  
-		  
+	</teaser>
+
+
 
     <!-- Teasers Add/Edit Start	-->
     <teaser name="addEditNavigator" action="showAddEditNavigator.do">
@@ -428,8 +429,8 @@
     <teaser name="dummy" action="dummyAction.do">
     	blank.jsp
     </teaser>
-  
-    <!-- Teasers Add/Edit End	--> 
+
+    <!-- Teasers Add/Edit End	-->
 </module>
 
 </config>

@@ -101,6 +101,9 @@ public class EditActivity extends Action {
 		if (session.getAttribute("currentMember") == null)
 			return mapping.findForward("index");
 
+        if(!tm.getWrite()){
+            return mapping.findForward("accessDenyed");
+        }
 		EditActivityForm eaForm = (EditActivityForm) form; // form bean
 		// instance
 

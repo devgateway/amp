@@ -128,15 +128,59 @@ public class ParisIndicatorReportPDFXLSCSV extends Action {
 							
 							if(val==-1)
 							{
-								data2[row][col] = "n.a.";
+								data2[row][col] = "na";
+									System.out.println(" this sis where na is coming "+ col);
 							}
 							else
 							{
 								double d = Math.round(val);
 								int temp1 = (int)d;
-								data2[row][col]= temp1+"%";
+								data2[row][col]= temp1+"";
 								//data2[row][col] = mf.format(temp1);
 							}
+						}
+					}
+					if(pId.equals("3")||pId.equals("4")||pId.equals("7")||pId.equals("10a")||pId.equals("5b"))
+						{
+							int c =4;
+							for(int i=0;i<arrSize;i++)
+							{
+								System.out.println(" i am dead "+data2[row][i]+"   i       "+i);
+								if(!data2[row][c].equals("na"))
+								{
+									data2[row][c]=data2[row][c]+"%";
+								}
+								c=c+4;
+								
+							}
+						}
+					if(pId.equals("9"))
+					{
+						int c =5;
+						for(int i=0;i<arrSize;i++)
+						{
+							System.out.println(" i am dead "+data2[row][i]+"   i       "+i);
+							if(!data2[row][c].equals("na"))
+							{
+								data2[row][c]=data2[row][c]+"%";
+							}
+							c=c+5;
+							
+						}
+					}
+					if(pId.equals("5a"))
+					{
+						int c =7;
+						for(int i=0;i<arrSize;i++)
+						{
+							System.out.println(" i am dead "+data2[row][i]+"   i       "+i);
+							if(!data2[row][c].equals("na"))
+							{
+								data2[row][c]=data2[row][c]+"%";
+								data2[row][c+1]=data2[row][c+1]+"%";
+							}
+							c=c+8;
+							
 						}
 					}
 					col = 0;

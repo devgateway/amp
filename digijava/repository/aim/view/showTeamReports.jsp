@@ -18,7 +18,9 @@ if (typeof(mylink) == 'string')
    href=mylink;
 else
    href=mylink.href;
-window.open(href, windowname,'channelmode=no,directories=no,menubar=no,resizable=yes,status=no,toolbar=no,scrollbars=yes');
+
+  window.open(href,windowname,'channelmode=no,directories=no,menubar=no,resizable=yes,status=no,toolbar=no,scrollbars=yes,location=yes');
+
 return false;
 }
 //-->
@@ -28,7 +30,7 @@ return false;
 <table bgColor=#ffffff cellPadding=0 cellSpacing=0 width=772>
 	<tr>
 		<td class=r-dotted-lg width=14>&nbsp;</td>
-	
+
 		<td align=left class=r-dotted-lg vAlign=top width=750>
 		
 			<table cellPadding=5 cellSpacing=0 width="100%">

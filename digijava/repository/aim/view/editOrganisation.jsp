@@ -18,26 +18,31 @@
 		}
 		popupPointer = window.open("about:blank", "orgPopup", "height=" + wndHeight + ",width=" + wndWidth + ",menubar=no,scrollbars=no");
 	}
-	
+
 	function newWin() {
-	if (document.aimAddOrgForm.currUrl.value == "") {
+	//if (document.aimAddOrgForm.currUrl.value == "") {
 			<digi:context name="selectLoc" property="context/module/moduleinstance/editOrgGroup.do" />
 			var id = document.aimAddOrgForm.ampOrgId.value;
 			url = "<%= selectLoc %>?action=createGroup&ampOrgId=" + id;
 			openOrgWindow(610, 190);
+            var oldAct=document.aimAddOrgForm.action;
+            var oldCurrUrl=document.aimAddOrgForm.currUrl.value;
 			document.aimAddOrgForm.action = url;
 			document.aimAddOrgForm.currUrl.value = "<%= selectLoc %>";
-			document.aimAddOrgForm.target = popupPointer.name;
+            document.aimAddOrgForm.target = popupPointer.name;
 			document.aimAddOrgForm.submit();
-		} else
-			popupPointer.focus();
+            document.aimAddOrgForm.target="";
+            document.aimAddOrgForm.action=oldAct;
+            document.aimAddOrgForm.currUrl.value=oldCurrUrl;
+		//} //else
+			//popupPointer.focus();
 	}
-	
+
 	function orgTypeChanged() {
 		var flag = false;
 		var index = document.aimAddOrgForm.ampOrgTypeId.selectedIndex;
 		if (document.aimAddOrgForm.ampOrgTypeId.options[index].value != "-1") {
-			document.aimAddOrgForm.regionId.style.display = 'none';	
+			document.aimAddOrgForm.regionId.style.display = 'none';
 			if (document.aimAddOrgForm.ampOrgTypeId.options[index].text == "Ethiopian Government"
 					|| document.aimAddOrgForm.ampOrgTypeId.options[index].text == "National NGO") {
 				if (document.aimAddOrgForm.orgTypeFlag.value != "national") {
@@ -49,7 +54,7 @@
 					return false;
 			}
 			else if (document.aimAddOrgForm.ampOrgTypeId.options[index].text == "Regional Government") {
-					if (document.aimAddOrgForm.orgTypeFlag.value != "regional") {
+              if (document.aimAddOrgForm.orgTypeFlag.value != "regional") {
 						/*
 						if (document.aimAddOrgForm.orgTypeFlag.value == "multilateral")
 							flag = true;
@@ -77,9 +82,9 @@
 			 				}
 			 		 		else
 			 		 			return false;
-			 		 			
+
 			if (flag == true) {
-				document.aimAddOrgForm.submit();
+                document.aimAddOrgForm.submit();
 			}
 		}
 		else {
@@ -89,7 +94,7 @@
 			return false;
 		}
 	}
-	
+
 	// defunct
 	function countryChanged() {	/*
 		var index = document.aimAddOrgForm.levelId.selectedIndex;
@@ -125,13 +130,13 @@
 		else
 			return false;
 	}
-	
+
 	function move() {
 		<digi:context name="selectLoc" property="context/module/moduleinstance/organisationManager.do" />
 		url = "<%= selectLoc %>?orgSelReset=true";
 		document.location.href = url;
 	}
-	
+
 	function check() {
 		var str1 = document.aimAddOrgForm.name.value;
 		str1 = trim(str1);
@@ -145,7 +150,7 @@
 		var val4 = document.aimAddOrgForm.regionId.options[index4].value;
 		var val5 = trim(document.aimAddOrgForm.acronym.value);
 		var val6 = trim(document.aimAddOrgForm.orgCode.value);
-		
+
 		if (str1.length == 0 || str1 == null) {
 			alert("Please enter name for this Organization.");
 			document.aimAddOrgForm.name.focus();
@@ -175,7 +180,7 @@
 		document.aimAddOrgForm.name.value = str1;
 		document.aimAddOrgForm.submit();
 	}
-	
+
 	function trim ( inputStringTrim ) {
 		fixedTrim = "";
 		lastCh = " ";
@@ -215,7 +220,7 @@
 				<tr>
 					<!-- Start Navigation -->
 					<td height=33><span class=crumb>
-	
+
 						<digi:link href="/admin.do" styleClass="comment">
 						<digi:trn key="aim:AmpAdminHome">
 						Admin Home
@@ -227,12 +232,12 @@
 						</digi:trn>
 						</digi:link>&nbsp;&gt;&nbsp;
 						<logic:equal name="aimAddOrgForm" property="actionFlag" value="create" >
-							<digi:trn key="aim:addOrganization">Add Organization</digi:trn>	
+							<digi:trn key="aim:addOrganization">Add Organization</digi:trn>
 						</logic:equal>
 						<logic:equal name="aimAddOrgForm" property="actionFlag" value="edit" >
-							<digi:trn key="aim:editOrganization">Edit Organization</digi:trn>	
+							<digi:trn key="aim:editOrganization">Edit Organization</digi:trn>
 						</logic:equal>
-                      </span>	
+                      </span>
 					</td>
 					<!-- End navigation -->
 				</tr>
@@ -274,7 +279,7 @@
 								</tr>
 								<tr bgColor=#f4f4f2>
 									<td valign="top">
-										<table align=center bgColor=#f4f4f2 cellPadding=0 cellSpacing=0 width="562" border=0>	
+										<table align=center bgColor=#f4f4f2 cellPadding=0 cellSpacing=0 width="562" border=0>
 											<tr>
 												<td bgColor=#ffffff class=box-border width="560">
 													<table border=0 cellPadding=1 cellSpacing=1 class="box-border" width="100%">
@@ -282,17 +287,17 @@
 															<td bgColor=#dddddb height="20" align="center" colspan="5">
 																<logic:equal name="aimAddOrgForm" property="actionFlag" value="create" >
 																	<b><digi:trn key="aim:addOrganization">Add
-                                                                    Organization</digi:trn></b>	
+                                                                    Organization</digi:trn></b>
 																</logic:equal>
 																<logic:equal name="aimAddOrgForm" property="actionFlag" value="edit" >
                                                           			<b><digi:trn key="aim:editOrganization">Edit
-                                                                    Organization</digi:trn></b>	
+                                                                    Organization</digi:trn></b>
 																</logic:equal>
 															</td>
 														</tr>
 														<!-- Page Logic -->
 														<tr>
-															<td width="100%">	
+															<td width="100%">
 																<table width="563" border=0	 bgColor=#f4f4f2 height="363">
 																	<tr>
 																		<td width="169" align="right" height="30">
@@ -318,7 +323,7 @@
 																           <html:select property="ampOrgTypeId" onchange="return orgTypeChanged()">
 																				<html:option value="-1">-- Organization Type --</html:option>
 																				<logic:notEmpty name="aimAddOrgForm" property="orgType">
-																					<html:optionsCollection name="aimAddOrgForm" property="orgType" 
+																					<html:optionsCollection name="aimAddOrgForm" property="orgType"
 																		   				value="ampOrgTypeId" label="orgType" />
 																		   		</logic:notEmpty>
 																			</html:select>
@@ -328,7 +333,7 @@
 																			<html:select property="regionId" style="display:none">
 																	    			<html:option value="-1">-- Specify Region --</html:option>
 																					<logic:notEmpty name="aimAddOrgForm" property="region">
-																						<html:optionsCollection name="aimAddOrgForm" property="region" 
+																						<html:optionsCollection name="aimAddOrgForm" property="region"
 																		   					value="ampRegionId" label="name" />
 																		   			</logic:notEmpty>
 																			</html:select>
@@ -337,7 +342,7 @@
 																			<html:select property="regionId" style="display:block">
 																	    			<html:option value="-1">-- Specify Region --</html:option>
 																					<logic:notEmpty name="aimAddOrgForm" property="region">
-																						<html:optionsCollection name="aimAddOrgForm" property="region" 
+																						<html:optionsCollection name="aimAddOrgForm" property="region"
 																		   					value="ampRegionId" label="name" />
 																		   			</logic:notEmpty>
 																			</html:select>
@@ -352,7 +357,7 @@
                                                                     		<html:select property="ampOrgGrpId">
                                                                     			<html:option value="-1">-- Select Group --</html:option>
 																	    		<logic:notEmpty name="aimAddOrgForm" property="orgGroup">
-																					<html:optionsCollection name="aimAddOrgForm" property="orgGroup" 
+																					<html:optionsCollection name="aimAddOrgForm" property="orgGroup"
 																		   				value="ampOrgGrpId" label="orgGrpName" />
 																		   		</logic:notEmpty>
 																			</html:select>
@@ -401,7 +406,7 @@
 																	    <td width="380" height="30" colspan="2">
 																	    	<html:select property="countryId" onchange="countryChanged()">
 																	    		<logic:notEmpty name="aimAddOrgForm" property="country">
-																					<html:optionsCollection name="aimAddOrgForm" property="country" 
+																					<html:optionsCollection name="aimAddOrgForm" property="country"
 																		   				value="iso" label="countryName" />
 																		   		</logic:notEmpty>
 																			</html:select>
@@ -416,7 +421,7 @@
 																	    	<html:select property="levelId" onchange="levelChanged()">
 																	    		<html:option value="-1">-- Select Level --</html:option>
 																	    		<logic:notEmpty name="aimAddOrgForm" property="level">
-																					<html:optionsCollection name="aimAddOrgForm" property="level" 
+																					<html:optionsCollection name="aimAddOrgForm" property="level"
 																		   				value="ampLevelId" label="name" />
 																		   		</logic:notEmpty>
 																			</html:select>
@@ -425,7 +430,7 @@
 																	    		<html:select property="regionId">
 																	    			<html:option value="-1">-- Specify Region --</html:option>
 																					<logic:notEmpty name="aimAddOrgForm" property="region">
-																						<html:optionsCollection name="aimAddOrgForm" property="region" 
+																						<html:optionsCollection name="aimAddOrgForm" property="region"
 																		   					value="ampRegionId" label="name" />
 																		   			</logic:notEmpty>
 																				</html:select>
@@ -439,7 +444,7 @@
                                                                     			<html:select property="fiscalCalId">
 																					<html:option value="-1">-- Fiscal Calendar --</html:option>
 																					<logic:notEmpty name="aimAddOrgForm" property="fiscalCal">
-																						<html:optionsCollection name="aimAddOrgForm" property="fiscalCal" 
+																						<html:optionsCollection name="aimAddOrgForm" property="fiscalCal"
 																		   					value="ampFiscalCalId" label="name" />
 																		   			</logic:notEmpty>
 																				</html:select>&nbsp;&nbsp;
@@ -456,10 +461,10 @@
                                                                     			<html:select property="ampSecSchemeId">
 																					<html:option value="-1">-- Sector Scheme --</html:option>
 																					<logic:notEmpty name="aimAddOrgForm" property="sectorScheme">
-																						<html:optionsCollection name="aimAddOrgForm" property="sectorScheme" 
+																						<html:optionsCollection name="aimAddOrgForm" property="sectorScheme"
 																		   				value="ampSecSchemeId" label="secSchemeName" />
 																		   			</logic:notEmpty>
-																				</html:select>	
+																				</html:select>
 																		</td>
 																	</tr>
 																	<tr>
@@ -550,14 +555,14 @@
 																			</td>
 																		</tr>
 																	</logic:equal>
-																</table>	
+																</table>
 															</td>
 														</tr>
 													<!-- end page logic -->
 													</table>
 												</td>
 											</tr>
-											
+
 										</table>
 									</td>
 								</tr>

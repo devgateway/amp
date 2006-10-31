@@ -27,10 +27,11 @@
 			document.aimAddOrgGroupForm.orgGrpName.value = str;
 			document.aimAddOrgGroupForm.target = window.opener.name;
 			document.aimAddOrgGroupForm.submit();
+            //window.opener.location.reload(true);
 			window.close();
 		}
 	}
-	
+
 	function trim ( inputStringTrim ) {
 		fixedTrim = "";
 		lastCh = " ";
@@ -43,9 +44,9 @@
 			fixedTrim = fixedTrim.substring(0, fixedTrim.length - 1); }
 		return fixedTrim;
 	}
-	
+
 	function load() {
-		document.aimAddOrgGroupForm.orgGrpName.focus();			  
+		document.aimAddOrgGroupForm.orgGrpName.focus();
 	}
 
 	function unload() {
@@ -69,20 +70,20 @@
 								</tr>
 								<tr bgColor=#f4f4f2>
 									<td valign="top" width="610">
-										<table align=center bgColor=#f4f4f2 cellPadding=0 cellSpacing=0 width="90%" border=0>	
+										<table align=center bgColor=#f4f4f2 cellPadding=0 cellSpacing=0 width="90%" border=0>
 											<tr>
 												<td bgColor=#ffffff class=box-border>
 													<table border=0 cellPadding=1 cellSpacing=1 class=box-border width="100%">
 														<tr bgColor=#dddddb>
 															<td bgColor=#dddddb height="20" align="center" colspan="5">
-																<b><digi:trn key="aim:addOrgGroup">Add 
-                                                                    Organization 
-                                                                    Group</digi:trn></b>	
+																<b><digi:trn key="aim:addOrgGroup">Add
+                                                                    Organization
+                                                                    Group</digi:trn></b>
 															</td>
 														</tr>
 														<!-- Page Logic -->
 														<tr>
-															<td width="100%">	
+															<td width="100%">
 																<table width="100%" border=0	 bgColor=#f4f4f2>
 																	<tr>
 																		<td width="30%" align="right">
@@ -108,7 +109,7 @@
 																	          <html:select property="orgTypeId">
 																	    		<html:option value="-1">-- Select Type --</html:option>
 																	    		<logic:notEmpty name="aimAddOrgGroupForm" property="orgTypeColl">
-																					<html:optionsCollection name="aimAddOrgGroupForm" property="orgTypeColl" 
+																					<html:optionsCollection name="aimAddOrgGroupForm" property="orgTypeColl"
 																		   									value="ampOrgTypeId" label="orgType" />
 																		   		</logic:notEmpty>
 																			</html:select>
@@ -123,7 +124,7 @@
 																	          <html:select property="levelId">
 																	    		<html:option value="-1">-- Select Level --</html:option>
 																	    		<logic:notEmpty name="aimAddOrgGroupForm" property="level">
-																					<html:optionsCollection name="aimAddOrgGroupForm" property="level" 
+																					<html:optionsCollection name="aimAddOrgGroupForm" property="level"
 																		   				value="ampLevelId" label="name" />
 																		   		</logic:notEmpty>
 																			</html:select>
@@ -146,14 +147,14 @@
 																			</table>
 																		</td>
 																	</tr>
-																</table>	
+																</table>
 															</td>
 														</tr>
 													<!-- end page logic -->
 													</table>
 												</td>
 											</tr>
-											
+
 										</table>
 									</td>
 								</tr>

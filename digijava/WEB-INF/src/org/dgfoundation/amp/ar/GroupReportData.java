@@ -11,7 +11,6 @@ import java.util.Iterator;
 import java.util.Set;
 import java.util.TreeSet;
 
-import org.dgfoundation.amp.ar.cell.AmountCell;
 import org.dgfoundation.amp.ar.cell.Cell;
 import org.dgfoundation.amp.ar.exception.IncompatibleColumnException;
 import org.dgfoundation.amp.ar.exception.UnidentifiedItemException;
@@ -110,8 +109,11 @@ public class GroupReportData extends ReportData {
 			trailCells = new ArrayList();
 			if (items.size() > 0) {
 				ReportData firstRd = (ReportData) items.iterator().next();
-				for (int k = 0; k < firstRd.getTrailCells().size(); k++)
-					trailCells.add(new AmountCell());
+				for (int k = 0; k < firstRd.getTrailCells().size(); k++) {
+					Cell c=(Cell) firstRd.getTrailCells().get(k);
+					trailCells.add(c.newInstance());
+				}
+					
 				logger.debug("GroupTrail.size=" + trailCells.size());
 
 				i = items.iterator();

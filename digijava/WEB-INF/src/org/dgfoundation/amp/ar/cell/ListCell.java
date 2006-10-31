@@ -150,5 +150,10 @@ public class ListCell extends Cell {
 		}
 		return ret;
 	}
+
+
+	public Cell newInstance() {
+		return new ListCell();
+	}
 	
 }

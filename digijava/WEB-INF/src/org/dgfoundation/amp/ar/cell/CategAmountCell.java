@@ -90,8 +90,16 @@ public class CategAmountCell extends AmountCell implements Categorizable {
 	}
 	
 	
-	public Cell filter(Cell metaCell) {
-		return this;
+	public Cell filter(Cell metaCell,Set ids) {
+		CategAmountCell ret=(CategAmountCell) super.filter(metaCell,ids);
+		if(ret==null) return null;
+		if(metaCell.getColumn().getName().equals("Donor")) {
+				if(!metaCell.getValue().toString().equals(ret.getMetaValueString("Donor")))
+			return null;
+		}
+		if(ret.getMergedCells().size()>0) 
+			logger.info(ret.getMergedCells());
+		return ret;
 	}
 
 	/* (non-Javadoc)

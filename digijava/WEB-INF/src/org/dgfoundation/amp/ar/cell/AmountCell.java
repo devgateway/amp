@@ -39,7 +39,8 @@ public class AmountCell extends Cell {
 	protected String currencyCode;
 	
 	protected Date currencyDate;
-
+	
+	//isShowable static duplicate, just to speed things up 
 	protected boolean show;
 	
 
@@ -247,6 +248,24 @@ public class AmountCell extends Cell {
 
 	public void setCurrencyDate(Date CurrencyDate) {
 		this.currencyDate = CurrencyDate;
+	}
+	
+	public Cell filter(Cell metaCell,Set ids) {
+		 AmountCell ret=(AmountCell) super.filter(metaCell,ids);
+		 if(ret==null || ret.getMergedCells().size()==0) return ret;
+		 //we need to filter the merged cells too...
+		 AmountCell realRet=new AmountCell(ret.getOwnerId());
+		 Iterator i=ret.getMergedCells().iterator();
+		 while (i.hasNext()) {
+			AmountCell element = (AmountCell) i.next();
+			AmountCell filtered=(AmountCell) element.filter(metaCell,ids);
+			if(filtered!=null) realRet.getMergedCells().add(filtered);
+		}
+		 return realRet;
+	}
+
+	public Cell newInstance() {
+		return new AmountCell();
 	}
 	
 }

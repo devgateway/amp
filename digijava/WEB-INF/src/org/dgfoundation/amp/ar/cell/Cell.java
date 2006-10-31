@@ -7,6 +7,7 @@ package org.dgfoundation.amp.ar.cell;
 
 import java.util.Set;
 
+import org.apache.log4j.Logger;
 import org.dgfoundation.amp.ar.Column;
 import org.dgfoundation.amp.ar.ColumnIdentifiable;
 import org.dgfoundation.amp.ar.RowIdentifiable;
@@ -27,6 +28,8 @@ public abstract class Cell extends Viewable implements RowIdentifiable, ColumnId
 	protected Long ownerId;
 	protected Long id;
 	protected Column column;
+	
+	protected static Logger logger = Logger.getLogger(Cell.class);
 	
 	/**
 	 * Returns worker class assigned for this type of Cell. The Worker class
@@ -138,5 +141,7 @@ public abstract class Cell extends Viewable implements RowIdentifiable, ColumnId
 		
 	
 	public abstract Cell merge(Cell c);
+	
+	public abstract Cell newInstance();
 	
 }

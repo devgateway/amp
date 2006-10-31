@@ -56,5 +56,9 @@ public class TextCell extends Cell {
 		return ret;
 		
 	}
+
+	public Cell newInstance() {
+		return new TextCell();
+	}
 	
 }

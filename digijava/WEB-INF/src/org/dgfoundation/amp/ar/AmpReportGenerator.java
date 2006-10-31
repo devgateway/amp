@@ -240,32 +240,19 @@ public class AmpReportGenerator extends ReportGenerator {
 
 		Column newcol = GroupColumn.verticalSplitByCategs(funding, cats, true);
 
-		// we create the cummulative balance (undisbursed) = commitment -
-		// disbursement
+		// we create the cummulative balance (undisbursed) = act commitment -
+		// act disbursement
 		// iterate each owner
 
 		if (ARUtil.containsMeasure(ArConstants.UNDISBURSED_BALANCE,reportMetadata.getMeasures())) {
 
-			TotalAmountColumn tac = new TotalAmountColumn(
+			UndisbursedTotalAmountColumn tac = new UndisbursedTotalAmountColumn(
 					ArConstants.UNDISBURSED_BALANCE);
-			Iterator i = newcol.getOwnerIds().iterator();
+			Iterator i=funding.iterator();
 			while (i.hasNext()) {
-				Long ownerId = (Long) i.next();
-				AmountCell acCumul = new AmountCell(ownerId);
-				acCumul.setId(ownerId);
-				// get each other total column
-				Iterator icol = newcol.getItems().iterator();
-				while (icol.hasNext()) {
-					CellColumn cellCol = (CellColumn) icol.next();
-					AmountCell cac = (AmountCell) cellCol.getByOwner(ownerId);
-					if (cac == null)
-						continue;
-					if (cellCol.getName().indexOf("Actual Commitment") != -1)
-						acCumul.rawAdd(cac.getAmount());
-					if (cellCol.getName().indexOf("Actual Disbursement") != -1)
-						acCumul.rawAdd(-cac.getAmount());
-				}
-				tac.addCell(acCumul);
+				AmountCell element = (AmountCell) i.next();
+				//we do not care here about filtering commitments, that is done at UndisbursedAmountCell level
+				tac.addCell(element);
 			}
 
 			newcol.getItems().add(tac);

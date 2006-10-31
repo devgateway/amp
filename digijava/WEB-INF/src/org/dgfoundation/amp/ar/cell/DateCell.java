@@ -84,5 +84,9 @@ public class DateCell extends Cell {
 	public String toString() {
 		return value!=null?sdt.format(value):"";
 	}
+
+	public Cell newInstance() {
+		return new DateCell();
+	}
 	
 }

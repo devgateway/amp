@@ -10,34 +10,40 @@
 
 <script language="JavaScript">
 
-	function openOrgWindow(wndWidth, wndHeight){
-		window.name = "opener" + new Date().getTime();
-		if (wndWidth == null || wndWidth == 0 || wndHeight == null || wndHeight == 0) {
-			wndWidth = window.screen.availWidth/2;
-			wndHeight = window.screen.availHeight/2;
-		}
-		popupPointer = window.open("about:blank", "orgPopup", "height=" + wndHeight + ",width=" + wndWidth + ",menubar=no,scrollbars=no");
-	}
+function openOrgWindow(wndWidth, wndHeight){
+  window.name = "opener" + new Date().getTime();
+  if (wndWidth == null || wndWidth == 0 || wndHeight == null || wndHeight == 0) {
+    wndWidth = window.screen.availWidth/2;
+    wndHeight = window.screen.availHeight/2;
+  }
+  popupPointer = window.open("about:blank", "orgPopup", "height=" + wndHeight + ",width=" + wndWidth + ",menubar=no,scrollbars=no");
+}
 
-	function newWin() {
-	//if (document.aimAddOrgForm.currUrl.value == "") {
-			<digi:context name="selectLoc" property="context/module/moduleinstance/editOrgGroup.do" />
-			var id = document.aimAddOrgForm.ampOrgId.value;
-			url = "<%= selectLoc %>?action=createGroup&ampOrgId=" + id;
-			openOrgWindow(610, 190);
-            var oldAct=document.aimAddOrgForm.action;
-            var oldCurrUrl=document.aimAddOrgForm.currUrl.value;
-			document.aimAddOrgForm.action = url;
-			document.aimAddOrgForm.currUrl.value = "<%= selectLoc %>";
-            document.aimAddOrgForm.target = popupPointer.name;
-			document.aimAddOrgForm.submit();
-            document.aimAddOrgForm.target="";
-            document.aimAddOrgForm.action=oldAct;
-            document.aimAddOrgForm.currUrl.value=oldCurrUrl;
-		//} //else
-			//popupPointer.focus();
-	}
+function newWin() {
+  if (document.aimAddOrgForm.currUrl.value == "") {
+    loadPage();
+  } else
+  if(!popupPointer==null){
+    popupPointer.focuce();
+  }else{
+    loadPage();
+  }
+}
 
+function loadPage(){
+  <digi:context name="selectLoc" property="context/module/moduleinstance/editOrgGroup.do" />
+  var id = document.aimAddOrgForm.ampOrgId.value;
+  url = "<%= selectLoc %>?action=createGroup&ampOrgId=" + id;
+  openOrgWindow(610, 190);
+  var oldAct=document.aimAddOrgForm.action;
+  var oldCurrUrl=document.aimAddOrgForm.currUrl.value;
+  document.aimAddOrgForm.action = url;
+  document.aimAddOrgForm.currUrl.value = "<%= selectLoc %>";
+  document.aimAddOrgForm.target = popupPointer.name;
+  document.aimAddOrgForm.submit();
+  document.aimAddOrgForm.target="";
+  document.aimAddOrgForm.action=oldAct;
+}
 	function orgTypeChanged() {
 		var flag = false;
 		var index = document.aimAddOrgForm.ampOrgTypeId.selectedIndex;

@@ -8,7 +8,7 @@
 <digi:ref href="css/styles.css" type="text/css" rel="stylesheet" />
 
 <script language="JavaScript">
-
+    window.onunload=unload;
 	function check() {
 		var str = document.aimAddOrgGroupForm.orgGrpName.value;
 		var type = trim(document.aimAddOrgGroupForm.orgTypeId.value);
@@ -27,7 +27,6 @@
 			document.aimAddOrgGroupForm.orgGrpName.value = str;
 			document.aimAddOrgGroupForm.target = window.opener.name;
 			document.aimAddOrgGroupForm.submit();
-            //window.opener.location.reload(true);
 			window.close();
 		}
 	}
@@ -50,6 +49,7 @@
 	}
 
 	function unload() {
+      window.opener.document.aimAddOrgForm.currUrl.value="";
 	}
 
 </script>

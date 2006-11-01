@@ -161,6 +161,20 @@ public class UpdateWorkspace extends Action {
             if(event != null && event.trim().equalsIgnoreCase("add")) {
                 uwForm.setActionEvent("add");
                 if(newTeam != null) {
+                	if(uwForm.getChildWorkspaces()==null && uwForm.getWorkspaceType().compareTo("Management")==0)
+                    {
+                 	   errors
+                        .add(
+                            ActionErrors.GLOBAL_ERROR,
+                            new ActionError(
+                                "error.aim.updateWorkspace.noManagementChildSelected"));
+                    saveErrors(request, errors);
+                    logger
+                        .debug(
+                        "error.aim.updateWorkspace.noManagementChildSelected !!!!!");
+                    return mapping.getInputForward();
+                    }
+                	
                     boolean teamExist = TeamUtil.createTeam(newTeam, uwForm
                         .getChildWorkspaces());
                     if(teamExist) {

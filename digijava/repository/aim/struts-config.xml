@@ -390,7 +390,7 @@
       <forward name="forward" path="/showLayout.do?layout=aim_addExchangeRate" />
     </action>
     <action name="aimCurrencyRateForm" path="/aim/saveCurrencyRate" scope="session" type="org.digijava.module.aim.action.UpdateCurrencyRate" validate="false">
-      <forward name="fileload" path="/aim/showCurrencyRates.do" redirect="true" />
+      <forward name="forward" path="/aim/showCurrencyRates.do" redirect="true" />
     </action>
     <action name="aimCurrencyRateForm" path="/aim/showCurrencyRates" scope="session" type="org.digijava.module.aim.action.ShowCurrencyRates" validate="false">
       <forward name="forward" path="/showLayout.do?layout=currencyRates" />

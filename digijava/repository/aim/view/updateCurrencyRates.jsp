@@ -56,10 +56,6 @@ function unload() {
 }
 
 function closePopup() {
-	<digi:context name="back" property="context/module/moduleinstance/showCurrencyRates.do~reset=true" />
-  	document.aimCurrencyRateForm.action = "<%= back %>";
-	document.aimCurrencyRateForm.target = window.opener;
-	document.aimCurrencyRateForm.submit();		  
 	window.close();
 }
 

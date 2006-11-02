@@ -28,14 +28,14 @@ public class LocationUtil {
 		Session session = null;
 		Collection col = new ArrayList();
 		
-		logger.info("INSIDE Search Location DBUTIL..... ");
+		//logger.info("INSIDE Search Location DBUTIL..... ");
 	
 		try {
 			
 			session = PersistenceManager.getSession();
 			int tempIncr = 0;
 			if (implevel == 2) {
-				logger.info("searching regions........");
+				//logger.info("searching regions........");
 				String qryStr = "select country.countryId,country.countryName,region.ampRegionId,region.name "
 						+ "from "
 						+ Country.class.getName()
@@ -65,7 +65,7 @@ public class LocationUtil {
 					col.add(loc);
 				}
 			} else if (implevel == 3) {
-				logger.info("searching zones........");
+				//logger.info("searching zones........");
 				
 /*				String qryStr = "select country.countryId,country.countryName,region.ampRegionId,region.name "
 					+ "from "
@@ -106,7 +106,7 @@ public class LocationUtil {
 					
 					Location loc = new Location();
 					loc.setLocId(new Long(System.currentTimeMillis()+(tempIncr++)));
-					logger.info("Loc id set as " + loc.getLocId());
+					//logger.info("Loc id set as " + loc.getLocId());
 					loc.setCountry(cName);
 					loc.setCountryId(cId);
 					loc.setRegion(rName);
@@ -117,7 +117,7 @@ public class LocationUtil {
 				}
 				
 			} else if (implevel == 4) {
-				logger.info("searching Woredas........");
+				//logger.info("searching Woredas........");
 				
 				String qryStr = "select country.countryId,country.countryName,region.ampRegionId, region.name, zone.ampZoneId, zone.name, woreda.ampWoredaId, woreda.name "
 					+ "from "
@@ -235,7 +235,6 @@ public class LocationUtil {
 				queryString += " woreda_id = " + woredaId;
 			}
 
-			System.out.println("query is " + queryString);
 			Query qry = session.createQuery(queryString);
 			Iterator itr = qry.list().iterator();
 			while (itr.hasNext())
@@ -276,22 +275,22 @@ public class LocationUtil {
 				ampActivity = (AmpActivity) iter.next();
 			}
 			// end
-			logger.debug("Activity: " + ampActivity.getAmpActivityId());
+			//logger.debug("Activity: " + ampActivity.getAmpActivityId());
 			iter = ampActivity.getLocations().iterator();
 			while (iter.hasNext()) {
 				ampLocation = (AmpLocation) iter.next();
 				AmpLocations location = new AmpLocations();
 				location.setCountry(ampLocation.getCountry());
-				logger.debug("Country: " + location.getCountry());
+				//logger.debug("Country: " + location.getCountry());
 				if (ampLocation.getAmpRegion() != null)
 					location.setRegion(ampLocation.getAmpRegion().getName());
-				logger.debug("Region: " + location.getRegion());
+				//logger.debug("Region: " + location.getRegion());
 				if (ampLocation.getAmpZone() != null)
 					location.setZone(ampLocation.getAmpZone().getName());
-				logger.debug("Zone: " + location.getZone());
+				//logger.debug("Zone: " + location.getZone());
 				if (ampLocation.getAmpWoreda() != null)
 					location.setWoreda(ampLocation.getAmpWoreda().getName());
-				logger.debug("Woreda: " + location.getWoreda());
+				//logger.debug("Woreda: " + location.getWoreda());
 				ampLocations.add(location);
 			}
 		} catch (Exception ex) {
@@ -589,6 +588,58 @@ public class LocationUtil {
 			}
 		}
 		return region;
+	}
+	
+	public static Long getDgCountryWithMaxCountryId() {
+		Session session = null;
+		Long id = null;
+		try {
+			session = PersistenceManager.getSession();
+			String queryString = "select max(c.countryId) from " + Country.class.getName() + " c";
+			id = (Long) session.createQuery(queryString).list().get(0);
+		} catch (Exception ex) {
+			logger.debug("Exception from getDgCountry()" + ex);
+		} finally {
+			try {
+				if (session != null) {
+					PersistenceManager.releaseSession(session);
+				}
+			} catch (Exception ex) {
+				logger.debug("releaseSession() failed" + ex);
+			}
+		}
+		return id;
+	}
+	
+	public static boolean chkDuplicateIso(String name, String iso, String iso3) {
+		boolean result = true;
+		Session session = null;
+		try {
+			session = PersistenceManager.getSession();
+			String queryString = "select c from " + Country.class.getName() 
+									+ " c where (c.countryName=:name) or (c.iso=:iso) or (c.iso3=:iso3)";
+			Query q = session.createQuery(queryString);
+			q.setParameter("name", name, Hibernate.STRING);
+			q.setParameter("iso", iso, Hibernate.STRING);
+			q.setParameter("iso3", iso3, Hibernate.STRING);
+			if (null != q.list() && q.list().size() > 0)
+				result = false;
+		}
+		catch (Exception ex) {
+			logger.debug("Exception from chkDuplicateIso(): " + ex);
+			ex.printStackTrace(System.out);
+		}
+		finally {
+			if (session != null) {
+				try {
+					PersistenceManager.releaseSession(session);
+				}
+				catch (Exception e) {
+					logger.debug("releaseSession() failed : " + e);
+				}
+			}
+		}
+		return result;
 	}
 
 }

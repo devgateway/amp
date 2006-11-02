@@ -6,11 +6,12 @@
 package org.digijava.module.aim.form;
 
 import org.apache.struts.action.*;
+import org.apache.struts.validator.ValidatorForm;
 
 import java.util.Collection;
 import javax.servlet.http.HttpServletRequest;
 
-public class AddLocationForm extends ActionForm {
+public class AddLocationForm extends ValidatorForm {
 
 		  private Collection country;
 		  private Collection region;
@@ -19,6 +20,8 @@ public class AddLocationForm extends ActionForm {
 		  
 		  private Long id;
 		  private String name = null;
+		  private String iso;
+		  private String iso3;
 		  private String code;
 		  private String description;
 		  private String gsLat;
@@ -39,7 +42,70 @@ public class AddLocationForm extends ActionForm {
 		  private String regionFlag = null;
 		  private String zoneFlag = null;
 		  private String woredaFlag = null;
-		  		  
+		  
+		  public void reset(ActionMapping mapping, HttpServletRequest request) {
+			  regionFlag = null;
+			  zoneFlag = null;
+			  woredaFlag = null;
+			  if (start) {
+				level = "country";
+				impLevelValue = new Integer(1);
+				countryId = "";
+				regionId = new Long(-1);
+				zoneId = new Long(-1);
+				woredaId = new Long(-1);
+				region = null;
+				zone = null;
+				woreda = null;
+			}
+			if (edFlag != null && edFlag.equals("yes")) {
+				name = null;
+  			 	code = null;
+  			 	geoCode = null;
+  			 	gsLat = null;
+  			 	gsLong = null;
+  			 	description = null;
+  			 	iso = null;
+  			 	iso3 = null;
+			}
+	  	}
+		
+		public ActionErrors validate(ActionMapping mapping, HttpServletRequest req) {
+			ActionErrors errors = new ActionErrors();
+			if ("cancl".equalsIgnoreCase(edFlag)) {
+				edFlag = null;
+				name = null;
+  			 	code = null;
+  			 	geoCode = null;
+  			 	gsLat = null;
+  			 	gsLong = null;
+  			 	description = null;
+  			 	iso = null;
+  			 	iso3 = null;
+			}
+			else if ("off".equalsIgnoreCase(edFlag)) {
+				if (null == name || "".equals(name))
+					errors.add("name", new ActionError("error.aim.addLocation.noName"));
+				if ("country".equalsIgnoreCase(edLevel)) {
+					//errors = super.validate(mapping, req);
+					if (null == iso || "".equals(iso))
+						errors.add("iso", new ActionError("error.aim.addLocation.noIso"));
+					else if (!iso.matches("[a-zA-Z]+"))
+						errors.add("iso", new ActionError("error.aim.addLocation.noAlphaIso"));
+					else if (iso.length() != 2)
+						errors.add("iso", new ActionError("error.aim.addLocation.wrongIsoLength"));
+					if (null == iso3 || "".equals(iso3))
+						errors.add("Iso3", new ActionError("error.aim.addLocation.noIso3"));
+					else if (!iso3.matches("[a-zA-Z]+"))
+						errors.add("iso3", new ActionError("error.aim.addLocation.noAlphaIso3"));
+					else if (iso3.length() != 3)
+						errors.add("iso3", new ActionError("error.aim.addLocation.wrongIso3Length"));
+				}
+				edFlag = null;
+			}
+			return (errors.isEmpty())? null : errors;
+		}
+		  
 		  public String getRegionFlag() {
 			return regionFlag;
 		  }
@@ -230,32 +296,22 @@ public class AddLocationForm extends ActionForm {
 
 		  public void setWoredaId(Long woredaId) {
 			 this.woredaId = woredaId;
-		  }
-		  
-		  public void reset(ActionMapping mapping, HttpServletRequest request) {
-		  	regionFlag = null;
-		  	zoneFlag = null;
-		  	woredaFlag = null;
-		  	
-			if (start) {
-				level = "country";
-				impLevelValue = new Integer(1);
-				countryId = "";
-				regionId = new Long(-1);
-				zoneId = new Long(-1);
-				woredaId = new Long(-1);
-				region = null;
-				zone = null;
-				woreda = null;
-			}
-			if (edFlag != null && edFlag.equals("yes")) {
-  			 	name = null;
-  			 	code = null;
-  			 	geoCode = null;
-  			 	gsLat = null;
-  			 	gsLong = null;
-  			 	description = null;
-			}
-		  }
+		  } 
+
+		public String getIso() {
+			return iso;
+		}
+
+		public void setIso(String iso) {
+			this.iso = iso;
+		}
+			
+		public String getIso3() {
+			return iso3;
+		}
+
+		public void setIso3(String iso3) {
+			this.iso3 = iso3;
+		}
 }
 

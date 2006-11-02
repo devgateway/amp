@@ -312,8 +312,8 @@
       <forward name="forward" path="/aim/themeManager.do?page=1" />
       <forward name="index" path="/aim/index.do" redirect="true" />
     </action>
-    <action name="aimAddLocationForm" path="/aim/addLocation" scope="session" type="org.digijava.module.aim.action.AddLocation" validate="false">
-      <forward name="forward" path="/showLayout.do?layout=aim_addlocPopupLayout" />
+    <action input="/showLayout.do?layout=addLocation" name="aimAddLocationForm" path="/aim/addLocation" scope="session" type="org.digijava.module.aim.action.AddLocation" validate="true">
+      <forward name="forward" path="/showLayout.do?layout=addLocation" />
       <forward name="added" path="/aim/locationManager.do" redirect="true" />
     </action>
     <action name="aimAddLocationForm" path="/aim/locationManager" scope="session" type="org.digijava.module.aim.action.LocationManager" validate="false">

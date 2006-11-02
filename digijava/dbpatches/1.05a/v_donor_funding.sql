@@ -3,7 +3,7 @@ CREATE OR REPLACE VIEW `v_donor_funding` AS select `f`.`amp_activity_id` AS `amp
 `fd`.`transaction_type` AS `transaction_type`,`fd`.`adjustment_type` AS `adjustment_type`,
 d.name as `donor_name`, date_format(`fd`.`transaction_date`,_latin1'%Y-%m-%d') AS `transaction_date`,
 `fd`.`transaction_amount` AS `transaction_amount`,`c`.`currency_code` AS `currency_code`,
-`ta`.`terms_assist_name` AS `terms_assist_name`,`amp_staging`.`getExchange`(`c`.`currency_code`,`fd`.`transaction_date`) 
+`ta`.`terms_assist_name` AS `terms_assist_name`,`getExchange`(`c`.`currency_code`,`fd`.`transaction_date`) 
 AS `exchange_rate` from ((((`amp_funding` `f` join `amp_funding_detail` `fd`) join `amp_terms_assist` `ta`) 
 join `amp_currency` `c`) join `amp_organisation` d)  where ((`c`.`amp_currency_id` = `fd`.`amp_currency_id`) 
 and (`f`.`amp_funding_id` = `fd`.`AMP_FUNDING_ID`) and 

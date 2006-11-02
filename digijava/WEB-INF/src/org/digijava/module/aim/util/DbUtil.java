@@ -1848,7 +1848,7 @@ public class DbUtil {
 		try {
 			session = PersistenceManager.getSession();
 			String queryString = "select c from " + Country.class.getName()
-					+ " c order by c.countryName";
+					+ " c order by c.countryName asc";
 			Query qry = session.createQuery(queryString);
 			col = qry.list();
 		} catch (Exception e) {
@@ -1864,9 +1864,8 @@ public class DbUtil {
 				logger.debug(ex.toString());
 			}
 		}
-		
 		return col;
-	}	
+	}
 
 	public static Country getDgCountry(String iso) {
 		Session session = null;
@@ -1960,7 +1959,7 @@ public class DbUtil {
 		}
 		return country;
 	}
-
+	
 	public static ArrayList getAmpModality() {
 		Session session = null;
 		Query q = null;
@@ -5927,7 +5926,7 @@ public class DbUtil {
 				Collections.sort(sortedDonors, dnComp);
 				if (null != orgGroup && orgGroup.trim().length() > 1 && !"all".equalsIgnoreCase(orgGroup))
 					orgGroupFlag = true;
-				// Creating first row for all-donors in indicator report.
+				// Creating first row for 'all-donors' in indicator report.
 				ParisIndicator all = new ParisIndicator();
 				all.setDonor("All Donors");
 				all.setAnswers(new ArrayList());
@@ -5963,21 +5962,18 @@ public class DbUtil {
 						itr2 = dnOrg.getCalendar().iterator();
 						while (itr2.hasNext()) {
 							AmpCalendar ampCal = (AmpCalendar) itr2.next();
-							//logger.debug("cal-id: " + ampCal.getCalendarPK().getCalendar().getId() + " Event-Name: " + ampCal.getEventType().getName());
 							if ("Mission".equalsIgnoreCase(ampCal.getEventType().getName())) {
 								Calendar cal = (Calendar) ampCal.getCalendarPK().getCalendar();
-								//logger.debug("Year: " + answersRow[0] + " start-yr: " + year.format(cal.getStartDate()) + 
-										//" end-yr:" + year.format(cal.getEndDate()));
 								if (answersRow[0] == Double.parseDouble(year.format(cal.getStartDate())) || 
 										answersRow[0] == Double.parseDouble(year.format(cal.getEndDate()))) {
-									// checking if the Mission is joint
+									// checking if the Mission is 'joint'
 									if (null != ampCal.getDonors() && ampCal.getDonors().size() > 1) {
 										answersRow[1] += 1;
-										allDnRow[1] += 1;
+										//allDnRow[1] += 1;
 									}
 									// total number of Missions
 									answersRow[2] += 1;
-									allDnRow[2] += 1;
+									//allDnRow[2] += 1;
 								}
 							}
 						}
@@ -5988,10 +5984,29 @@ public class DbUtil {
 							percent = new Double((100 * answersRow[1]) / answersRow[2]);
 							answersRow[NUM_ANSWER_COLUMNS - 1] = Double.parseDouble(formatter.format(percent));
 						}
-						//logger.debug("final-% : " + answersRow[NUM_ANSWER_COLUMNS - 1]);
 						pi.getAnswers().add(answersRow);
 					}
 					responses.add(pi);
+				}
+				// calculating total joint missions & all missions for 'all-donors' row
+				for (j = 0; j < YEAR_RANGE; j++) {
+					allDnRow = (double[])(((ParisIndicator)responses.get(0)).getAnswers().get(j));
+					Iterator itr = calDonorsList.iterator();
+					while (itr.hasNext()) {
+						AmpCalendar acal = (AmpCalendar) itr.next();
+						if ("Mission".equalsIgnoreCase(acal.getEventType().getName())) {
+							Calendar cal = (Calendar) acal.getCalendarPK().getCalendar();
+							if (allDnRow[0] == Double.parseDouble(year.format(cal.getStartDate())) || 
+									allDnRow[0] == Double.parseDouble(year.format(cal.getEndDate()))) {
+								if (null != acal.getDonors()) {
+									if (acal.getDonors().size() > 1)	// checking if the Mission is 'joint'
+										allDnRow[1] += 1;
+									if (!acal.getDonors().isEmpty())
+										allDnRow[2] += 1;				// total number of Missions
+								}
+							}
+						}
+					}
 				}
 				// calculating final percentage for all-donors row
 				for (j = 0; j < YEAR_RANGE; j++) {
@@ -6002,11 +6017,10 @@ public class DbUtil {
 						percent = new Double((100 * allDnRow[1]) / allDnRow[2]);
 						allDnRow[NUM_ANSWER_COLUMNS - 1] = Double.parseDouble(formatter.format(percent));
 					}
-					//logger.debug("final-%[all-donors row] : " + allDnRow[NUM_ANSWER_COLUMNS - 1]);
 				}
 			}
 			else
-				logger.debug("No donor found from amp_ahsurvey table");
+				logger.debug("[getAidSurveyReportByIndicator10a()] No donor org found");
 		} catch (Exception ex) {
 			logger.debug("Unable to get AidSurveyReportByIndicator10a: " + ex);
 			ex.printStackTrace(System.out);

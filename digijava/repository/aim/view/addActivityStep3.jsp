@@ -639,11 +639,11 @@
 																		<table cellSpacing=2 cellPadding=2>
 																			<tr>
 																				<td>
-																					<input type="button" value="Add Organisation" class="buton" 
+																					<input type="button" value="Add Organization" class="buton" 
 																				   onclick="selectOrganisation()">
 																				</td>
 																				<td>
-																					<input type="button" value="Remove Organisations" class="buton" 
+																					<input type="button" value="Remove Organizations" class="buton" 
 																				   onclick="return removeSelOrganisations()">
 																				</td>
 																			</tr>
@@ -656,7 +656,7 @@
 																<c:if test="${aimEditActivityForm.donorFlag == false}">	
 																<tr>
 																	<td>
-																		<input type="button" value="Add Organisation" class="buton" 
+																		<input type="button" value="Add Organization" class="buton" 
 																		onclick="selectOrganisation()">
 																	</td>
 																</tr>

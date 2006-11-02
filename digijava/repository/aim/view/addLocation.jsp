@@ -81,8 +81,6 @@
 	
 </script>
 
-<html:javascript formName="aimAddLocationForm"/>
-
 <!--  AMP Admin Logo -->
 	<jsp:include page="teamPagesHeader.jsp" flush="true" />
 <!-- End of Logo -->

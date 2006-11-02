@@ -84,7 +84,7 @@ return false;
 					</TD></TR>
 			
 				<!-- Paris Indicators Reports Starts Here -->
-				<c:if var="teamType" test="${currentMember.teamType == 'DONOR'}" scope="session">
+				<%-- <c:if var="teamType" test="${currentMember.teamType == 'DONOR'}" scope="session"> --%>
 					<logic:notEmpty name="PI" scope="application">
 		      			<TR><TD title='<digi:trn key="aim:clickToViewParisIndcReports">Click here to view Paris Indicator Reports</digi:trn>'>
 							<digi:link href="/parisIndicatorReport.do">
@@ -92,7 +92,7 @@ return false;
 							</digi:link>
 						</TD></TR>
 					</logic:notEmpty>
-				</c:if>
+				<%-- </c:if>  --%>
 				<!-- Paris Indicators Reports ends Here -->
 				
 			</TABLE>	

@@ -135,8 +135,8 @@ public class ActivityUtil {
 				if (oldActivity == null) {
 					logger.debug("Previous Activity is null");
 				}
-				
-				// delete previos fundings and funding details 
+
+				// delete previos fundings and funding details
 				Set fundSet = oldActivity.getFunding();
 				if (fundSet != null) {
 					Iterator fundSetItr = fundSet.iterator();
@@ -154,8 +154,8 @@ public class ActivityUtil {
 						session.delete(fund);
 					}
 				}
-				
-				// delete previous regional fundings 
+
+				// delete previous regional fundings
 				fundSet = oldActivity.getRegionalFundings();
 				if (fundSet != null) {
 					Iterator fundSetItr = fundSet.iterator();
@@ -164,8 +164,8 @@ public class ActivityUtil {
 						session.delete(regFund);
 					}
 				}
-				
-				// delete all previous components 
+
+				// delete all previous components
 				Set comp = oldActivity.getComponents();
 				if (comp != null) {
 					Iterator compItr = comp.iterator();
@@ -174,8 +174,8 @@ public class ActivityUtil {
 						session.delete(ampComp);
 					}
 				}
-				
-				// delete all previous org roles 
+
+				// delete all previous org roles
 				Set orgrole = oldActivity.getOrgrole();
 				if (orgrole != null) {
 					Iterator orgroleItr = orgrole.iterator();
@@ -183,8 +183,8 @@ public class ActivityUtil {
 						AmpOrgRole ampOrgrole = (AmpOrgRole) orgroleItr.next();
 						session.delete(ampOrgrole);
 					}
-				}				
-				
+				}
+
 				// delete all previous closing dates
 				Set closeDates = oldActivity.getClosingDates();
 				if (closeDates != null) {
@@ -195,7 +195,7 @@ public class ActivityUtil {
 					}
 				}
 
-				// delete all previous issues 
+				// delete all previous issues
 				Set issues = oldActivity.getIssues();
 				if (issues != null) {
 					Iterator iItr = issues.iterator();
@@ -220,7 +220,7 @@ public class ActivityUtil {
 				}
 				else
 					logger.debug("commentsCol is empty");
-					
+
 
 				oldActivity.getClosingDates().clear();
 				oldActivity.getComponents().clear();
@@ -230,7 +230,7 @@ public class ActivityUtil {
 				oldActivity.getLocations().clear();
 				oldActivity.getOrgrole().clear();
 				oldActivity.getSectors().clear();
-				
+
 				oldActivity.setActualApprovalDate(activity.getActualApprovalDate());
 				oldActivity.setActualCompletionDate(activity.getActualCompletionDate());
 				oldActivity.setActualStartDate(activity.getActualStartDate());
@@ -346,15 +346,17 @@ public class ActivityUtil {
 			    }
 
 				activity.getMember().add(activity.getActivityCreator());
+                /*
 				member = (AmpTeamMember) session.load(AmpTeamMember.class,
 				        activity.getActivityCreator().getAmpTeamMemId());
 				if (member.getActivities() == null) {
 				    member.setActivities(new HashSet());
 				}
 				member.getActivities().add(activity);
+            */
 				session.save(activity);
 				activityId = activity.getAmpActivityId();
-				session.saveOrUpdate(member);
+				//session.saveOrUpdate(member);
 			}
 
 
@@ -1366,7 +1368,7 @@ public class ActivityUtil {
 		{
 			session = PersistenceManager.getSession();
 			tx = session.beginTransaction();
-			
+
 			AmpActivity ampAct = (AmpActivity) session.load(
 				AmpActivity.class,ampActId);
 

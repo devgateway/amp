@@ -184,6 +184,11 @@
 	<page name="addNewLevel2Sector" title=" : Add New Level 2 Sector "/>
 	<page name="addNewLevel3Sector" title=" : Add New Level 3Sector "/>
 
+	<!-- for Components Manager -->
+	<page name="viewComponents" title=": - AMP Components"/>
+	<page name="editComponents" title=": - Editing AMP Components"/>
+	<page name="addComponents" title=": - Adding AMP Components"/>
+
 	<page name="donorDataImport" title="AMP: Ethiopia: AIM Dashboard: Donor Data Import" />
 	<page page="selectPhysicalProgress" name="aim_addPhyProgPopupLayout" title="AMP - Add Physical Progress" />
 	<page page="selectComponent" name="aim_addCompPopupLayout" title="AMP - Add Components" />

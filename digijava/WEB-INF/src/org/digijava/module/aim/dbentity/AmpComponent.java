@@ -24,6 +24,10 @@ public class AmpComponent implements Serializable {
 	private AmpActivity activity;
 	private Set physicalProgress; 
 	private Set componentFundings;
+	private String code;
+	private String type;
+	
+	private Set activities;
 
 	public String toString() {
 		return title!=null?title:"";
@@ -131,5 +135,47 @@ public class AmpComponent implements Serializable {
 	}
 	public void setComponentFundings(Set componentFundings) {
 		this.componentFundings = componentFundings;
+	}
+
+	/**
+	 * @return Returns the code.
+	 */
+	public String getCode() {
+		return code;
+	}
+
+	/**
+	 * @param code The code to set.
+	 */
+	public void setCode(String code) {
+		this.code = code;
+	}
+
+	/**
+	 * @return Returns the type.
+	 */
+	public String getType() {
+		return type;
+	}
+
+	/**
+	 * @param type The type to set.
+	 */
+	public void setType(String type) {
+		this.type = type;
+	}
+
+	/**
+	 * @return Returns the activities.
+	 */
+	public Set getActivities() {
+		return activities;
+	}
+
+	/**
+	 * @param activities The activities to set.
+	 */
+	public void setActivities(Set activities) {
+		this.activities = activities;
 	}	
 }

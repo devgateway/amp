@@ -106,10 +106,10 @@
 			<one-to-many class="org.digijava.module.aim.dbentity.AmpFunding"/>
 		</set>
 
-		<set name="components" cascade="all" inverse="true" order-by="amp_component_id asc">
+		<set name="components" table="AMP_ACTIVITY_COMPONENTS" lazy="true" cascade="none">
 		<cache usage="read-write" />
 			<key column="amp_activity_id"/>
-			<one-to-many class="org.digijava.module.aim.dbentity.AmpComponent"/>
+			<many-to-many class="org.digijava.module.aim.dbentity.AmpComponent" column="amp_component_id"/>
  		</set>
 
  		<set name="documents" table="AMP_ACTIVITY_KM_DOCUMENTS" lazy="true" cascade="none">

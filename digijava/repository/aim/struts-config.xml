@@ -83,7 +83,12 @@
     <form-bean name="aimAdvancedReportForm" type="org.digijava.module.aim.form.AdvancedReportForm" />
     <form-bean name="aimSectorSchemeForm" type="org.digijava.module.aim.form.SectorSchemeForm" />
     <form-bean name="aimFlagUploaderForm" type="org.digijava.module.aim.form.FlagUploaderForm" />
-    <form-bean name="aimPortfolioDashboardForm" type="org.apache.struts.action.DynaActionForm">
+    <!-- herer-->
+    <form-bean name="aimComponentsForm" type="org.digijava.module.aim.form.ComponentsForm" />
+    <form-bean name="aimUpdateComponentsForm" type="org.digijava.module.aim.form.UpdateComponentsForm" />
+    
+    <form-bean name="aimPortfolioDashboardForm" type="org.apache.struts.action.DynaActionForm">   
+   
       <form-property name="indicatorList" type="java.util.Collection" />
       <form-property name="activityList" type="java.util.Collection" />
       <form-property name="pageList" type="java.util.Collection" />
@@ -1192,6 +1197,19 @@
       <forward name="pi" path="/showLayout.do?layout=aim_pIPrintReports" />
       <forward name="pi2" path="/showLayout.do?layout=aim_pIPrintReports2" />
     </action>
+    
+    
+    <action name="aimComponentsForm" path="/aim/getComponents" scope="session" type="org.digijava.module.aim.action.GetComponents" validate="false">
+      <forward name="default" path="/showLayout.do?layout=viewComponents" />
+    </action>
+    <action name="aimUpdateComponentsForm" path="/aim/updateComponents" scope="session" type="org.digijava.module.aim.action.UpdateComponents" validate="false">
+      <forward name="default" path="/showLayout.do?layout=viewComponents" />
+      <forward name="editComponent" path="/showLayout.do?layout=editComponents" />
+      <forward name="addComponent" path="/showLayout.do?layout=addComponents" />
+      <forward name="comps" path="/aim/getComponents.do" />
+    </action>
+    
+    
   </action-mappings>
 </struts-config>
 

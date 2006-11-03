@@ -145,6 +145,17 @@
 											</digi:link>
 											</td>
 										</tr>
+										<tr>
+											<td class=f-names noWrap>
+											<digi:img src="module/aim/images/arrow-th-BABAB9.gif" width="16"/>
+											<bean:define id="translation">
+												<digi:trn key="aim:clickToViewcomponentsManager">Click here to view Components Manager</digi:trn>
+											</bean:define>
+											<digi:link href="/getComponents.do" title="<%=translation%>" >
+											<digi:trn key="aim:componentsManager">Components Manager</digi:trn>
+											</digi:link>
+											</td>
+										</tr>
 									<%--	<tr>
 											<td class=f-names noWrap>
 											<digi:img src="module/aim/images/arrow-th-BABAB9.gif" width="16"/>

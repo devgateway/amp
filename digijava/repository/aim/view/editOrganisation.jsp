@@ -128,7 +128,7 @@ function loadPage(){
 	}
 
 	function msg() {
-		if (confirm("Are you sure about deleting this organisationq ?")) {
+		if (confirm("Are you sure about deleting this organisation ?")) {
 			document.aimAddOrgForm.actionFlag.value = "delete";
 			document.aimAddOrgForm.saveFlag.value = "yes";
 			document.aimAddOrgForm.submit();

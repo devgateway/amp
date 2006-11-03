@@ -110,7 +110,7 @@ public class ParisIndicator4Jrxml
 	p2.println("			</band>");
 	p2.println("		</pageHeader>");
 	p2.println("		<columnHeader>");
-	p2.println("			<band height='36'  isSplitAllowed='true' >");
+	p2.println("			<band height='51'  isSplitAllowed='true' >");
 	p2.println("				<staticText>");
 	p2.println("					<reportElement");
 	p2.println("						mode='Opaque'");
@@ -138,7 +138,7 @@ public class ParisIndicator4Jrxml
 	p2.println("						x='117'");
 	p2.println("						y='0'");
 	p2.println("						width='146'");
-	p2.println("						height='35'");
+	p2.println("						height='50'");
 	p2.println("						forecolor='#000000'");
 	p2.println("						backcolor='#CCCCCC'");
 	p2.println("						key='staticText-3'");
@@ -159,7 +159,7 @@ public class ParisIndicator4Jrxml
 	p2.println("						x='263'");
 	p2.println("						y='0'");
 	p2.println("						width='146'");
-	p2.println("						height='35'");
+	p2.println("						height='50'");
 	p2.println("						forecolor='#000000'");
 	p2.println("						backcolor='#CCCCCC'");
 	p2.println("						key='staticText-4'");
@@ -180,7 +180,7 @@ public class ParisIndicator4Jrxml
 	p2.println("						x='409'");
 	p2.println("						y='0'");
 	p2.println("						width='146'");
-	p2.println("						height='35'");
+	p2.println("						height='50'");
 	p2.println("						forecolor='#000000'");
 	p2.println("						backcolor='#CCCCCC'");
 	p2.println("						key='staticText-5'");
@@ -201,7 +201,7 @@ public class ParisIndicator4Jrxml
 	p2.println("						x='555'");
 	p2.println("						y='0'");
 	p2.println("						width='146'");
-	p2.println("						height='35'");
+	p2.println("						height='50'");
 	p2.println("						forecolor='#000000'");
 	p2.println("						backcolor='#CCCCCC'");
 	p2.println("						key='staticText-6'");
@@ -222,7 +222,7 @@ public class ParisIndicator4Jrxml
 				p2.println("					<reportElement");
 				p2.println("						mode='Opaque'");
 				p2.println("						x='0'");
-				p2.println("						y='35'");
+				p2.println("						y='50'");
 				p2.println("						width='701'");
 				p2.println("						height='0'");
 				p2.println("						forecolor='#000000'");
@@ -240,7 +240,7 @@ public class ParisIndicator4Jrxml
 				p2.println("					<reportElement");
 				p2.println("						mode='Opaque'");
 				p2.println("						x='0'");
-				p2.println("						y='35'");
+				p2.println("						y='50'");
 				p2.println("						width='701'");
 				p2.println("						height='0'");
 				p2.println("						forecolor='#000000'");
@@ -260,7 +260,7 @@ public class ParisIndicator4Jrxml
 				p2.println("						x='117'");
 				p2.println("						y='1'");
 				p2.println("						width='0'");
-				p2.println("						height='34'");
+				p2.println("						height='49'");
 				p2.println("						forecolor='#000000'");
 				p2.println("						backcolor='#FFFFFF'");
 				p2.println("						key='line-9'");
@@ -278,7 +278,7 @@ public class ParisIndicator4Jrxml
 				p2.println("						x='263'");
 				p2.println("						y='1'");
 				p2.println("						width='0'");
-				p2.println("						height='34'");
+				p2.println("						height='49'");
 				p2.println("						forecolor='#000000'");
 				p2.println("						backcolor='#FFFFFF'");
 				p2.println("						key='line-10'");
@@ -296,7 +296,7 @@ public class ParisIndicator4Jrxml
 				p2.println("						x='409'");
 				p2.println("						y='1'");
 				p2.println("						width='0'");
-				p2.println("						height='34'");
+				p2.println("						height='49'");
 				p2.println("						forecolor='#000000'");
 				p2.println("						backcolor='#FFFFFF'");
 				p2.println("						key='line-11'");
@@ -314,7 +314,7 @@ public class ParisIndicator4Jrxml
 				p2.println("						x='555'");
 				p2.println("						y='1'");
 				p2.println("						width='0'");
-				p2.println("						height='34'");
+				p2.println("						height='49'");
 				p2.println("						forecolor='#000000'");
 				p2.println("						backcolor='#FFFFFF'");
 				p2.println("						key='line-12'");
@@ -332,7 +332,7 @@ public class ParisIndicator4Jrxml
 				p2.println("						x='701'");
 				p2.println("						y='0'");
 				p2.println("						width='0'");
-				p2.println("						height='35'");
+				p2.println("						height='49'");
 				p2.println("						forecolor='#000000'");
 				p2.println("						backcolor='#FFFFFF'");
 				p2.println("						key='line-13'");
@@ -350,7 +350,7 @@ public class ParisIndicator4Jrxml
 				p2.println("						x='0'");
 				p2.println("						y='0'");
 				p2.println("						width='0'");
-				p2.println("						height='35'");
+				p2.println("						height='49'");
 				p2.println("						forecolor='#000000'");
 				p2.println("						backcolor='#FFFFFF'");
 				p2.println("						key='line-16'");

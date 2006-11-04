@@ -52,7 +52,9 @@ public class XLSExportAction extends Action {
 	        
 		
 		HSSFWorkbook wb = new HSSFWorkbook();
-		HSSFSheet sheet = wb.createSheet(rd.getName());
+		String sheetName=rd.getName();
+		if(sheetName.length()>31) sheetName=sheetName.substring(0,31);
+		HSSFSheet sheet = wb.createSheet(sheetName);
 		
 		
 		IntWrapper rowId=new IntWrapper();

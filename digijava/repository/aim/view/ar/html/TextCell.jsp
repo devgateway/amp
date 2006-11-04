@@ -1,1 +1,6 @@
-<%@ page pageEncoding="UTF-8"%><%@ taglib uri="/taglib/struts-bean" prefix="bean"%><%@ taglib uri="/taglib/struts-logic" prefix="logic"%><%@ taglib uri="/taglib/struts-html" prefix="html"%><bean:define id="textCell" name="viewable" type="org.dgfoundation.amp.ar.cell.TextCell" scope="request" toScope="page" /><div align="left"><bean:write name="textCell" filter="false"/></div>
+<%@ page pageEncoding="UTF-8"%>
+<%@ taglib uri="/taglib/struts-bean" prefix="bean"%>
+<%@ taglib uri="/taglib/struts-logic" prefix="logic"%>
+<%@ taglib uri="/taglib/struts-html" prefix="html"%>
+<bean:define id="textCell" name="viewable" type="org.dgfoundation.amp.ar.cell.TextCell" scope="request" toScope="page" />
+<div align="left"><bean:write name="textCell" filter="false"/>&nbsp;</div>

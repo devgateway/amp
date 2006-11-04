@@ -114,6 +114,7 @@ public abstract class ColumnWorker {
 			ResultSet rs = ps.executeQuery();
 			rsmd=rs.getMetaData();
 			
+			
 			while (rs.next()) {
 				Cell c=getCellFromRow(rs);
 				//logger.info("Added cell for ownerId="+c.getOwnerId());

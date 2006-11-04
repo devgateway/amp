@@ -69,7 +69,9 @@ public class CategAmountColWorker extends ColumnWorker {
 		java.sql.Date td = rs.getDate("transaction_date");
 		double exchangeRate=rs.getDouble("exchange_rate");
 		String currencyCode=rs.getString("currency_code");
-		String donorName=rs.getString("donor_name");
+		
+		//the most important meta name, the source name (donor name, region name, component name)
+		String headMetaName=rsmd.getColumnName(4);
 
 
 		try {
@@ -80,19 +82,22 @@ public class CategAmountColWorker extends ColumnWorker {
 		} catch (SQLException e) {
 
 		}
-		try {
-			String regionName = rs.getString("region_name");
-			MetaInfo regionMeta = new MetaInfo("Region", regionName);
-			acc.getMetaData().add(regionMeta);
-		} catch (SQLException e) {
-		}
 
-		try {
+		MetaInfo headMeta=null;
 		
-		String componentName = rs.getString("component_name");
-		MetaInfo compMeta = new MetaInfo("Component", componentName);
-		acc.getMetaData().add(compMeta);
-		} catch (SQLException e) {
+		if("region_name".equals(headMetaName)){
+			String regionName = rs.getString("region_name");
+			headMeta= new MetaInfo("Region", regionName);			
+		}
+		
+		if("component_name".equals(headMetaName)){
+			String componentName = rs.getString("component_name");
+			headMeta= new MetaInfo("Component", componentName);			
+		}
+	
+		if("donor_name".equals(headMetaName)){
+			String donorName = rs.getString("donor_name");
+			headMeta= new MetaInfo("Donor", donorName);			
 		}
 
 		acc.setAmount(tr_amount);
@@ -102,7 +107,6 @@ public class CategAmountColWorker extends ColumnWorker {
 		//put toExchangeRate
 		acc.setToExchangeRate(1);
 		
-		MetaInfo donorMs=new MetaInfo("Donor",donorName);
 		
 		MetaInfo adjMs = new MetaInfo(ArConstants.ADJUSTMENT_TYPE,
 				adj_type == 0 ? ArConstants.PLANNED : ArConstants.ACTUAL);
@@ -139,7 +143,7 @@ public class CategAmountColWorker extends ColumnWorker {
 		acc.getMetaData().add(fundMs);
 		acc.getMetaData().add(aMs);
 		acc.getMetaData().add(qMs);
-		acc.getMetaData().add(donorMs);
+		acc.getMetaData().add(headMeta);
 
 		//set the showable flag, based on selected measures
 		acc.setShow(isShowable(acc));

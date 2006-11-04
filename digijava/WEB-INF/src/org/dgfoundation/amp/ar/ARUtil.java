@@ -500,7 +500,7 @@ anf.setAmpStatusId(ampStatusId);
 		anf.setToYear(toYr==0?null:new Integer(toYr));
 		
 		
-		anf.setRegion(region);
+		anf.setRegion(formBean.getAmpLocationId());
 		}
 
 		anf.generateFilterQuery();

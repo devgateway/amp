@@ -9,6 +9,8 @@ import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
 import org.apache.struts.action.Action;
+import org.apache.struts.action.ActionError;
+import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
@@ -99,8 +101,8 @@ public class GetWorkspace extends Action {
 						Iterator itr = col.iterator();
 						while (itr.hasNext()) {
 							AmpTeam team = (AmpTeam) itr.next();
-							/*
-							if (uwtype.equalsIgnoreCase(team.getType())) {
+							
+						/*if (uwtype.equalsIgnoreCase(team.getType())) {
 								if ("Bilateral".equalsIgnoreCase(uwtype))
 									uwForm.getRelatedTeamBilatColl().add(team);
 								else if ("Multilateral".equalsIgnoreCase(uwtype))
@@ -127,6 +129,8 @@ public class GetWorkspace extends Action {
 		}			
 
 		logger.debug("Dest value = " + dest);
+		System.out.println("AM AJUNS AICI FRATE **************************");
 		return mapping.findForward(dest);
 	}
+	
 }

@@ -279,6 +279,9 @@ public class ShowDesktopActivities extends TilesAction {
 				}			
 			}
 			
+			//add perspective name to seession
+			session.setAttribute("currentPerspective",tm.getAppSettings().getPerspective());
+			
 			double grandTotal = DesktopUtil.updateProjectTotals(
 					dForm.getActivities(),pers.getAmpPerspectiveId(),
 					currCode);

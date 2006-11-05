@@ -38,8 +38,6 @@ function removeChildWorkspace(id) {
 	document.aimUpdateWorkspaceForm.submit();		  
 }
 
-//save action
-//aimUpdateWorkspaceForm.childWorkspaces
 
 function update(action) {
 	var event	= document.aimUpdateWorkspaceForm.actionEvent.value;

@@ -105,7 +105,7 @@ function update(action) {
 													<tr bgColor=#f4f4f2>
 														<td bgColor=#c9c9c7 class=box-title width=100>
 															<digi:trn key="aim:teamSettings">
-															Team Settings 
+															Team Settings
 															</digi:trn>
 														</td>
 														<td background="module/aim/images/corner-r.gif" height="17" width=17>

@@ -119,7 +119,6 @@
 		</set>
 
 		<set name="member" table="AMP_MEMBER_ACTIVITIES" lazy="true">
-  	            <cache usage="read-write"/>
 				<key column="amp_activity_id"/>
 				<many-to-many class="org.digijava.module.aim.dbentity.AmpTeamMember" column="amp_member_id"/>
 		</set>

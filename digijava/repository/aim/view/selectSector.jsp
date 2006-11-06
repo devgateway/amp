@@ -218,10 +218,10 @@
 									<tr>
 										<td>
 											<digi:trn key="aim:enterKeyword">
-											Enter a keyword</digi:trn>
+											Enter a keyword </digi:trn>
 										</td>
 										<td>
-											<html:text property="keyword" styleClass="inp-text" />
+											<html:text property="keyword"  styleClass="inp-text" />
 										</td>
 									</tr>
 									<tr>

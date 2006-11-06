@@ -1338,8 +1338,7 @@ public class ActivityUtil {
 		}
 		catch(Exception e1)
 		{
-			logger.error("Could not retrieve the activities list");
-			e1.printStackTrace(System.out);
+			throw new RuntimeException(e1);
 		}
 		finally
 		{

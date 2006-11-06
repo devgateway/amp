@@ -725,6 +725,9 @@ public class AmpActivity
 		this.mofedCntLastName = mofedCntLastName;
 	}
 
+//Commented by Mikheil - in general, Hibernate classes do not need to overrride
+//this method, because it may lead to incorrect functinoality
+/*
 	public boolean equals(Object obj) {
 		if (obj == null)
 			throw new NullPointerException();
@@ -735,6 +738,7 @@ public class AmpActivity
 		AmpActivity act = (AmpActivity) obj;
 		return this.ampActivityId.equals(act.getAmpActivityId());
 	}
+    */
 
 	/**
 	 * @return Returns the regionalFundings.

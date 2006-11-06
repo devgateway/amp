@@ -342,6 +342,7 @@ public class EditActivityForm extends ActionForm implements Serializable{
 		totalDisbursements = 0;
 		totalExpenditures = 0;
 		donorFlag = false;
+		keyword=null;
 	}
 
 	public void reset(ActionMapping mapping, HttpServletRequest request) {
@@ -457,6 +458,7 @@ public class EditActivityForm extends ActionForm implements Serializable{
 			totalCommitments = 0;
 			totalDisbursements = 0;
 			totalExpenditures = 0;
+			keyword=null;
 		}
 
 		if (orgSelReset) {

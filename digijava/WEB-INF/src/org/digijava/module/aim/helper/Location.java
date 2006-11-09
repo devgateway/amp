@@ -7,7 +7,7 @@ package org.digijava.module.aim.helper;
 
 import java.io.Serializable;
 
-public class Location implements Serializable 
+public class Location implements Serializable, Comparable
 {
 	
 	private Long locId;
@@ -163,5 +163,27 @@ public class Location implements Serializable
 
 		return equal;
 
+	}
+
+	public int compareTo(Object arg0) {
+		// TODO Auto-generated method stub
+		Location l=(Location)arg0;
+		if( this.getCountry() != null)
+			if(this.getCountry().compareTo(l.getCountry())!=0) return this.getCountry().compareTo(l.getCountry());
+			else
+				  if ( this.getRegion()!=null)
+					  if(this.getRegion().compareTo(l.getRegion())!=0) return this.getRegion().compareTo(l.getRegion());
+					  else 
+						  if (this.getZone()!=null)
+							  if(this.getZone().compareTo(l.getZone())!=0) return this.getZone().compareTo(l.getZone());
+							  else 
+								  if (this.getWoreda()!=null)
+									  if(this.getWoreda().compareTo(l.getWoreda())!=0) return this.getWoreda().compareTo(l.getWoreda());
+									  else return 0;
+								  else return 0;
+						  else return 0;  
+				  else return 0; 
+		else return -1;
+					  
 	}
 }

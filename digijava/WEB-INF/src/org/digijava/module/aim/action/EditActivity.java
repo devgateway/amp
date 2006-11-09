@@ -13,6 +13,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
+import java.util.TreeSet;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletContext;
@@ -28,7 +29,9 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.digijava.kernel.dbentity.Country;
+import org.digijava.kernel.request.Site;
 import org.digijava.kernel.user.User;
+import org.digijava.kernel.util.RequestUtils;
 import org.digijava.module.aim.dbentity.AmpActivity;
 import org.digijava.module.aim.dbentity.AmpActivityClosingDates;
 import org.digijava.module.aim.dbentity.AmpActivityInternalId;
@@ -69,12 +72,10 @@ import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.ActivityUtil;
 import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.aim.util.DbUtil;
+import org.digijava.module.aim.util.DocumentUtil;
 import org.digijava.module.aim.util.ProgramUtil;
 import org.digijava.module.aim.util.TeamMemberUtil;
 import org.digijava.module.cms.dbentity.CMSContentItem;
-import org.digijava.kernel.request.Site;
-import org.digijava.module.aim.util.DocumentUtil;
-import org.digijava.kernel.util.RequestUtils;
 
 /**
  * Loads the activity details of the activity specified in the form bean
@@ -386,7 +387,7 @@ public class EditActivity extends Action {
 					Collection ampLocs = activity.getLocations();
 
 					if (ampLocs != null && ampLocs.size() > 0) {
-						Collection locs = new ArrayList();
+						Collection locs = new TreeSet();
 
 						Iterator locIter = ampLocs.iterator();
 						boolean maxLevel = false;

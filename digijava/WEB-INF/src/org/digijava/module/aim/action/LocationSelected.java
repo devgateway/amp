@@ -2,6 +2,7 @@ package org.digijava.module.aim.action;
 
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.TreeSet;
 
 import org.apache.log4j.Logger;
 import org.apache.struts.action.Action;
@@ -194,7 +195,7 @@ public class LocationSelected extends Action {
 				if (!present) eaForm.getSelectedLocs().add(location[i]);				
 			}
 		} else {
-			eaForm.setSelectedLocs(new ArrayList());
+			eaForm.setSelectedLocs(new TreeSet());
 			for (int i = 0;i < location.length;i ++) {
 				eaForm.getSelectedLocs().add(location[i]);
 			}

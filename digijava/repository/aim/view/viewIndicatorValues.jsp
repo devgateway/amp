@@ -117,7 +117,7 @@
 												<b><digi:trn key="aim:meActualValueComments">Comments</digi:trn></b>
 											</TD>
 											<TD colspan="3">
-												<bean:write name="indicator" property="actualValComments" />
+												<bean:write name="indicator" property="targetValComments" />
 											</TD>
 										</TR>										
 										<TR bgcolor="#ffffff">
@@ -139,7 +139,7 @@
 												<b><digi:trn key="aim:meTargetValueComments">Comments</digi:trn></b>
 											</TD>
 											<TD colspan="3">
-												<bean:write name="indicator" property="targetValComments" />
+												<bean:write name="indicator" property="revisedTargetValComments" />
 											</TD>
 										</TR>										
 										<logic:notEmpty name="indicator" property="priorValues">

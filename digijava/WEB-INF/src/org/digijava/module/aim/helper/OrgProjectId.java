@@ -2,7 +2,7 @@ package org.digijava.module.aim.helper;
 
 import java.io.Serializable;
 
-public class OrgProjectId implements Serializable 
+public class OrgProjectId implements Serializable, Comparable
 {
 
 	private Long ampOrgId;
@@ -50,5 +50,11 @@ public class OrgProjectId implements Serializable
 	 */
 	public void setProjectId(String projectId) {
 		this.projectId = projectId;
+	}
+
+	public int compareTo(Object arg0) {
+		// TODO Auto-generated method stub
+		OrgProjectId oPId=(OrgProjectId)arg0;
+		return this.name.compareTo(oPId.getName());
 	}
 }

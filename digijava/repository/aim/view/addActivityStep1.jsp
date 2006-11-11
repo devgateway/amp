@@ -318,7 +318,9 @@ function popupwin()
 											<logic:notEmpty name="aimEditActivityForm" property="selectedOrganizations">
 											<td>
 												<table cellSpacing=1 cellPadding=1 border=0 width="500">
-													<c:forEach var="selectedOrganizations" items="${aimEditActivityForm.selectedOrganizations}" >
+												<logic:iterate name="aimEditActivityForm"
+													property="selectedOrganizationsList" id="selectedOrganizations"
+													type="org.digijava.module.aim.helper.OrgProjectId">
 														<tr>
 															<td align="left" width=3> 	
 																<html:multibox property="selOrgs">
@@ -334,8 +336,8 @@ function popupwin()
 																styleClass="inp-text" size="15"/>
 															</td>															
 														</td></tr>
-													</c:forEach>													
-													<tr><td colspan="3">
+														</logic:iterate>
+ 													<tr><td colspan="3"> 
 														<table cellSpacing=2 cellPadding=2>
 															<tr>
 																<td>

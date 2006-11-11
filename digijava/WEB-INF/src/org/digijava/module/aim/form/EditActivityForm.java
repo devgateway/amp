@@ -9,6 +9,8 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.TreeSet;
+
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.struts.action.ActionForm;
@@ -93,6 +95,7 @@ public class EditActivityForm extends ActionForm implements Serializable{
 	private long selLinks[];
     private String selManagedDocs[];
 	private OrgProjectId selectedOrganizations[];
+	private Collection selectedOrganizationsList;
 	private Collection executingAgencies;
 	private Long selExAgencies[];
 	private Collection impAgencies;
@@ -343,6 +346,7 @@ public class EditActivityForm extends ActionForm implements Serializable{
 		totalExpenditures = 0;
 		donorFlag = false;
 		keyword=null;
+		selectedOrganizationsList=null;
 	}
 
 	public void reset(ActionMapping mapping, HttpServletRequest request) {
@@ -459,6 +463,7 @@ public class EditActivityForm extends ActionForm implements Serializable{
 			totalDisbursements = 0;
 			totalExpenditures = 0;
 			keyword=null;
+			selectedOrganizationsList=null;
 		}
 
 		if (orgSelReset) {
@@ -3629,6 +3634,19 @@ public class EditActivityForm extends ActionForm implements Serializable{
 	 */
 	public void setCurrentValComments(String currentValComments) {
 		this.currentValComments = currentValComments;
+	}
+
+	public Collection getSelectedOrganizationsList() {
+		
+		selectedOrganizationsList=new TreeSet();
+		for(int i=0; i<selectedOrganizations.length;i++)
+			selectedOrganizationsList.add(selectedOrganizations[i]);
+		
+		return selectedOrganizationsList;
+	}
+
+	public void setSelectedOrganizationsList(Collection selectedOrganizationsList) {
+		this.selectedOrganizationsList = selectedOrganizationsList;
 	}
 
 }

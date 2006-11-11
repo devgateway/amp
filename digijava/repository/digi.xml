@@ -1,17 +1,12 @@
 <?xml version="1.0"?>
 <digi-config>
-
     <smtp>
 		 <host>gnyan.ncb.ernet.in</host>
 		 <from>system@digijava.org</from>
 	</smtp>
-	
-	<logon-site id="dglogin" host="amp-login.mofed.gov">http://amp-login.mofed.gov/</logon-site>
-     
-	
+    <logon-site id="dglogin" host="amp-login.code.ro">http://amp-staging-login.ro:8080</logon-site>
 	<server-type prefix="">development</server-type>
 
-	<!-- Digi ver 0.1beta setting. Alpha version has this removed and uses old view-rendering -->
 	<site-config>repository</site-config>
 
 	<forward-emails enabled="false">
@@ -68,6 +63,13 @@
 		<hibernate-class>org.digijava.module.common.dbentity.ModuleTeaser</hibernate-class>
                 <hibernate-class>org.digijava.kernel.entity.MailSpool</hibernate-class>
 	</hibernate-classes>
+	
+	 <service id="digiFeedService" class="org.digijava.module.digifeed.core.DigifeedService">
+            <description>Digi's feed publishing service</description>
+     </service>
+	
+	
+	
     <!--
     <service id="urlTouchService" class="org.digijava.kernel.services.UrlTouchService">
         <description>This service gets one or many URLs and touches them asynchronously</description>

@@ -1,0 +1,7 @@
+<?xml version="1.0"?>
+<module-config>
+	<name>digifeed</name>
+	
+	<hibernate-classes required="false">
+	</hibernate-classes>
+</module-config>

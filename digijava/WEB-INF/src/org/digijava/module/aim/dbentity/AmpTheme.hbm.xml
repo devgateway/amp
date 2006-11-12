@@ -8,11 +8,17 @@
 				<param name="sequence">AMP_THEME_seq</param>
 			</generator>
 		</id>
+		<many-to-one name="parentThemeId" column="parent_theme_id" class="org.digijava.module.aim.dbentity.AmpTheme" cascade="none"/>
 		<property name="themeCode" column="theme_code" type="java.lang.String"/>
 		<property name="name" column="name" type="java.lang.String"/>
 		<property name="type" column="type" type="java.lang.String"/>
 		<property name="description" column="description"  type="org.digijava.kernel.db.SafeClobType"/>
 		<property name="language" column="language" type="java.lang.String"/>
 		<property name="version" column="version" type="java.lang.String"/>
+		<set name="indicators" table="AMP_THEME_INDICATOR" lazy="true" cascade="none">
+			<cache usage="read-write"/>
+			<key column="amp_theme_id"/>
+			<many-to-many class="org.digijava.module.aim.dbentity.AmpMEIndicators" column="amp_me_indicator_id"/>
+		</set>
 	</class>
 </hibernate-mapping>

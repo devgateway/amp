@@ -14,7 +14,6 @@
 	<!--
 	function saveProgram(id)
 	{
-			alert("saving ind...."+id);
 			<digi:context name="addThmInd" property="context/module/moduleinstance/addThemeIndicator.do?event=save"/>
 			document.aimThemeForm.action = "<%=addThmInd%>&themeId=" +id;
 			document.aimThemeForm.target = "_self";

@@ -4,6 +4,9 @@
 
 package org.digijava.module.aim.action;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Iterator;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -14,8 +17,9 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.digijava.module.aim.dbentity.AmpTheme;
-import org.digijava.module.aim.form.AddThemeForm;
+import org.digijava.module.aim.form.ThemeForm;
 import org.digijava.module.aim.util.DbUtil;
+import org.digijava.module.aim.util.ProgramUtil;
 
 
 public class EditTheme extends Action {
@@ -36,29 +40,74 @@ public class EditTheme extends Action {
 			}
 		}
 
-		AddThemeForm editThemeForm = (AddThemeForm) form;
-
-		logger.debug("In edit theme");
-
-		if (editThemeForm.getThemeId() != null) {
-			if (session.getAttribute("ampThemes") != null)
-				session.removeAttribute("ampThemes");
-
-			AmpTheme ampTheme = new AmpTheme();
-			ampTheme.setAmpThemeId(editThemeForm.getThemeId());
-			ampTheme.setThemeCode(editThemeForm.getThemeCode());
-			ampTheme.setName(editThemeForm.getThemeName());
-			ampTheme.setType(editThemeForm.getType());
-			if (editThemeForm.getDescription() == null
-					|| editThemeForm.getDescription().trim().equals("")) {
-				ampTheme.setDescription(new String(" "));
-			} else {
-				ampTheme.setDescription(editThemeForm.getDescription());
-			}
-
-			DbUtil.update(ampTheme);
-			logger.debug("Theme updated");
+		ThemeForm themeForm = (ThemeForm) form;
+		String event = request.getParameter("event");
+		Long id = new Long(Long.parseLong(request.getParameter("themeId")));
+		
+		if (event != null && event.equals("edit"))
+		{
+			AmpTheme ampTheme = ProgramUtil.getTheme(id);
+			themeForm.setThemeId(id);
+			themeForm.setProgramName(ampTheme.getName());
+			themeForm.setProgramCode(ampTheme.getThemeCode());
+			themeForm.setProgramDescription(ampTheme.getDescription());
+			themeForm.setProgramType(ampTheme.getType());
+			if(ampTheme.getParentThemeId() != null)
+				themeForm.setPrgParentThemeId(ampTheme.getParentThemeId().getAmpThemeId());
+			else
+				themeForm.setPrgParentThemeId(null);
+			return mapping.findForward("editProgram");
 		}
-		return mapping.findForward("forward");
+		else if (event != null && event.equals("update"))
+		{
+			AmpTheme ampTheme = new AmpTheme();
+			ampTheme = ProgramUtil.getTheme(id);
+			ampTheme.setName(themeForm.getProgramName());
+			ampTheme.setThemeCode(themeForm.getProgramCode());
+			ampTheme.setDescription(themeForm.getProgramDescription());
+			ampTheme.setType(themeForm.getProgramType());
+			if(ampTheme.getParentThemeId() != null)
+				ampTheme.setParentThemeId(ampTheme.getParentThemeId());
+			else
+				ampTheme.setParentThemeId(null);
+			ampTheme.setLanguage(null);
+			ampTheme.setVersion(null);
+			DbUtil.update(ampTheme);
+			return mapping.findForward("forward");
+		}
+		else if (event != null && event.equals("delete"))
+		{
+			Collection colTheme = getRelatedThemes(id);
+			Iterator colThemeItr = colTheme.iterator();
+			while(colThemeItr.hasNext())
+			{
+				AmpTheme tempTheme = (AmpTheme) colThemeItr.next();
+				DbUtil.delete(tempTheme);			
+			}
+			return mapping.findForward("forward");
+		}
+		else
+			return mapping.findForward("forward");
+	}
+	
+	Collection temp = new ArrayList();
+	
+	public Collection getRelatedThemes(Long id)
+	{
+		AmpTheme ampTheme = new AmpTheme();
+		ampTheme = ProgramUtil.getTheme(id);
+		Collection themeCol = ProgramUtil.getSubThemes(id);
+		temp.add(ampTheme);
+		if(!themeCol.isEmpty())
+		{
+			Iterator itr = themeCol.iterator();
+			AmpTheme tempTheme = new AmpTheme();
+			while(itr.hasNext())
+			{
+				tempTheme = (AmpTheme) itr.next();
+				getRelatedThemes(tempTheme.getAmpThemeId());
+			}
+		}
+		return temp;
 	}
 }

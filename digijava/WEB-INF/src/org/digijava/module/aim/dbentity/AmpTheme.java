@@ -1,16 +1,19 @@
 package org.digijava.module.aim.dbentity ;
 
 import java.io.Serializable;
+import java.util.Set;
 
 public class AmpTheme implements Serializable
 {
 	private Long ampThemeId ;
+	private AmpTheme parentThemeId ;
 	private String themeCode ;
 	private String name ;
 	private String type ;
 	private String description ;
 	private String language ;
-	private String version ;	
+	private String version ;
+	private Set indicators;
 			
 	public AmpTheme()
 	{
@@ -21,6 +24,13 @@ public class AmpTheme implements Serializable
 	 */
 	public Long getAmpThemeId() {
 		return ampThemeId;
+	}
+
+	/**
+	 * @return Returns the parentThemeId.
+	 */
+	public AmpTheme getParentThemeId() {
+		return parentThemeId;
 	}
 
 	/**
@@ -70,6 +80,13 @@ public class AmpTheme implements Serializable
 	}
 
 	/**
+	 * @param parentThemeId The parentThemeId to set.
+	 */
+	public void setParentThemeId(AmpTheme parentThemeId) {
+		this.parentThemeId = parentThemeId;
+	}
+
+	/**
 	 * @param string
 	 */
 	public void setDescription(String string) {
@@ -106,6 +123,20 @@ public class AmpTheme implements Serializable
 	 */
 	public void setVersion(String string) {
 		version = string;
+	}
+
+	/**
+	 * @return Returns the indicators.
+	 */
+	public Set getIndicators() {
+		return indicators;
+	}
+
+	/**
+	 * @param indicators The indicators to set.
+	 */
+	public void setIndicators(Set indicators) {
+		this.indicators = indicators;
 	}
 
 }	

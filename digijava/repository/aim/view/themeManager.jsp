@@ -28,7 +28,6 @@
 		}
 		function assignIndicators(id)
 		{
-			alert("to assign indicators : "+id);
 			openNewWindow(650, 500);
 			<digi:context name="indAssign" property="context/module/moduleinstance/addThemeIndicator.do"/>
 			document.aimThemeForm.action = "<%= indAssign %>?themeId=" + id;

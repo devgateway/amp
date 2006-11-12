@@ -9,47 +9,43 @@
 <script language="JavaScript">
 <!--
 
-function validate() {
-	if (trim(document.aimAddThemeForm.themeName.value).length == 0) {
-		alert("Program name not entered");
-		document.aimAddThemeForm.themeName.focus;
-		return false;
-	} else {
-		return true;
+	function saveProgram(id)
+	{
+			<digi:context name="editThm" property="context/module/moduleinstance/editTheme.do?event=update"/>
+			document.aimThemeForm.action = "<%=editThm%>&themeId=" + id;
+			document.aimThemeForm.target = "_self";
+			document.aimThemeForm.submit();
+			return true;
 	}
-}
+	function load(){}
 
-function cancel() {
-	<digi:context name="cancel" property="context/module/moduleinstance/themeManager.do" />
-	document.aimAddThemeForm.action = "<%= cancel %>";
-	document.aimAddThemeForm.target = "_self"
-	document.aimAddThemeForm.submit();	
-}
+	function unload(){}
+
+	function closeWindow() 
+	{
+		window.close();
+	}
 
 -->
 </script>
 
-<digi:instance property="aimAddThemeForm" />
-<digi:form action="/editTheme.do" method="post">
-
-<html:hidden property="themeId" />
-
-<table width="100%" cellSpacing=0 cellPadding=0 vAlign="top" align="left">
-<tr><td>
-<!--  AMP Admin Logo -->
+<digi:errors/>
+<digi:instance property="aimThemeForm" />
+<digi:form action="/themeManager.do" method="post">
+<digi:context name="digiContext" property="context" />
+<input type="hidden" name="event">
+<%--  AMP Admin Logo --%>
 <jsp:include page="teamPagesHeader.jsp" flush="true" />
-<!-- End of Logo -->
-</td></tr>
-<tr><td>
-<table bgColor=#ffffff cellPadding=0 cellSpacing=0 width=772>
+<%-- End of Logo --%>
+
+<table bgColor=#ffffff cellPadding=0 cellSpacing=0 width=757>
 	<tr>
 		<td class=r-dotted-lg width=14>&nbsp;</td>
-		<td align=left class=r-dotted-lg vAlign=top width=750>
+		<td align=left class=r-dotted-lg vAlign=top width=300>
 			<table cellPadding=5 cellSpacing=0 width="100%">
 				<tr>
-					<!-- Start Navigation -->
+					<%-- Start Navigation --%>
 					<td height=33><span class=crumb>
-	
 						<bean:define id="translation">
 							<digi:trn key="aim:clickToViewAdmin">Click here to goto Admin Home</digi:trn>
 						</bean:define>
@@ -59,144 +55,79 @@ function cancel() {
 						</digi:trn>
 						</digi:link>&nbsp;&gt;&nbsp;
 						<bean:define id="translation">
-							<digi:trn key="aim:clickToViewThemeManager">Click here to view Theme Manager</digi:trn>
+							<digi:trn key="aim:clickToViewProgramManager">Click here to goto Program Manager</digi:trn>
 						</bean:define>
-						<digi:link href="/themeManager.do" styleClass="comment" title="<%=translation%>" >
-						<digi:trn key="aim:programManager">	
-						Program Manager
+						<digi:link href="/themeManager.do" styleClass="comment" title="<%=translation%>">
+						<digi:trn key="aim:programManager">
+							Program Manager
 						</digi:trn>
 						</digi:link>&nbsp;&gt;&nbsp;
-						<digi:trn key="aim:editProgram">Edit Program</digi:trn>
-					</td>
-					<!-- End navigation -->
-				</tr>
-				<tr>
-					<td height=16 vAlign=center width=571><span class=subtitle-blue>
-						<digi:trn key="aim:programManager">	
-						Program Manager
+						<digi:trn key="aim:editProgram">
+							Edit Program
 						</digi:trn>
-						</span>
 					</td>
+					<%-- End navigation --%>
 				</tr>
-				<tr>
-					<td noWrap width=100% vAlign="top">
-					<table width="100%" cellspacing=0 cellSpacing=0>
-					<tr>
-						<td noWrap width=600 vAlign="top">
-							<table bgColor=#ffffff cellPadding=0 cellSpacing=0 class=box-border-nopadding width="100%">
-								<tr bgColor=#f4f4f2>
-									<td vAlign="top" width="100%">
-										&nbsp;
-									</td>
-								</tr>
-								<tr bgColor=#f4f4f2>
-									<td valign="top">
-										<table align=center bgColor=#f4f4f2 cellPadding=0 cellSpacing=0 width="97%" border=0>	
-											<tr>
-												<td>
-													<digi:errors/>
-												</td>
-											</tr>
-											<tr>
-												<td bgColor=#ffffff>
-													<table border=0 cellPadding=0 cellSpacing=0 width="100%" bgcolor="#dddddd">
-														<tr bgColor=#dddddb>
-															<!-- header -->
-															<td bgColor=#dddddb height="20"	align="center" colspan="5"><B>
-																<digi:trn key="aim:editProgram">Edit Program</digi:trn>
-															<!-- end header -->
-														</tr>
-														<!-- Page Logic -->
-														<tr bgcolor="#dddddd">
-															<td width="100%">	
-																<table width="100%" border="0" vAlign="top" align="left"
-																cellPadding=4 cellSpacing=1 bgcolor="#dddddd">
-																	<tr>
-																		<td align="right" bgcolor="#f4f4f2">
-																		<FONT color=red>*</FONT>
-																		<digi:trn key="aim:programName">Program Name</digi:trn>	</td>
-																	    <td bgcolor="#f4f4f2">
-																	          <html:text property="themeName" size="50" styleClass="inp-text"/>
-																	    </td>
-																	</tr>
-																	<tr>
-																		<td align="right" bgcolor="#f4f4f2">
-																	        <digi:trn key="aim:programCode">Program Code</digi:trn>	
-																		</td>
-																	    <td bgcolor="#f4f4f2">
-																           <html:text property="themeCode" size="10" styleClass="inp-text"/>
-																		</td>
-																	</tr>
-																	<tr>
-																		<td align="right" bgcolor="#f4f4f2">
-																	        <digi:trn key="aim:description">Description</digi:trn>	
-																		</td>
-																		<td bgcolor="#f4f4f2">
-																           <html:textarea property="description" rows="3" cols="65" styleClass="inp-text"/>
-																		</td>
-																	</tr>
-																	<tr>
-																		<td align="right" bgcolor="#f4f4f2">
-																	        <digi:trn key="aim:themeType">Type
-																			</digi:trn>		
-																		</td>
-																		<td bgcolor="#f4f4f2">
-																	          <html:text property="type" size="20" styleClass="inp-text"/>
-																		</td>
-																	</tr>
-																	<tr>
-																		<td align="left" bgcolor="#f4f4f2" colspan="2">
-																			<digi:trn key="aim:allMarkedRequiredField">
-																			All fields marked with an <FONT color=red><B><BIG>*</BIG>
-																			</B></FONT> are required.</digi:trn>
-																		</td>
-																	</tr>																	
-																	<tr>
-																		<td colspan="2" align="center" bgcolor="#ffffff">
-																			<table cellspacing="5" border=0>
-																				<tr>
-																					<td align="right" width="50">
-																						<html:submit styleClass="dr-menu" value="Save" 
-																						onclick="return validate()"/>
-																					</td>
-																					<td align="center" width="50">
-																						<html:reset value="Reset" styleClass="dr-menu"/>
-																					</td>
-																					<td align="left" width="50">
-																						<input type="button" value="Cancel" class="dr-menu" onclick="cancel()">
-																					</td>
-																				</tr>
-																			</table>																			
-																		</td>
-																	</tr>
-																</table>	
-															</td>
-														</tr>
-													<!-- end page logic -->
-													</table>
-												</td>
-											</tr>
-											
-										</table>
-									</td>
-								</tr>
-								<tr>
-									<td bgColor=#f4f4f2>
-										&nbsp;
-									</td>
-								</tr>
-							</table>
+				<tr bgColor=#dddddb>
+				<td bgColor=#dddddb height="10" align="center" colspan="2"><h4>
+						<digi:trn key="aim:editProgram">
+									Edit Program
+						</digi:trn> </h4>
+				</td>
+				</tr>
+				<tr bgColor=#ffffff><td height="10" colspan="2"></td></tr>
+
+				<tr bgColor=#ffffff>
+						<td height="10" align="center">
+								&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+								<digi:trn key="aim:programName">
+										Program Name</digi:trn>
+								<font color="red">*</font>
 						</td>
-						<td noWrap width=100% vAlign="top">
+						<td height="10" align="left">
+								<html:text property="programName" size="20"/>
 						</td>
-					</tr>
-				</table>
-			</td>
-		</tr>
-	</table>
-	</td>
-	</tr>
-</table>
-</td></tr>
-</table>
+				</tr>
+				<tr bgcolor=#ffffff><td height="5"></td></tr>
+				<tr bgColor=#ffffff>
+				<td height="20" align="center">
+						&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+						<digi:trn key="aim:programDescription">
+						Description</digi:trn>
+				</td>
+				<td align="left">
+						<html:textarea property="programDescription" cols="35" rows="2" styleClass="inp-text"/>
+				</td>
+				</tr>	
+				<tr bgColor=#ffffff>
+				<td height="20" align="center">
+						&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+						<digi:trn key="aim:programCode">
+						Program Code</digi:trn>
+						<font color="red">*</font>
+				</td>
+				<td align="left">
+						<html:text property="programCode" size="20" styleClass="inp-text"/>
+				</td>
+				</tr>
+				<tr bgColor=#ffffff>
+				<td height="20" align="center">
+						&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+						<digi:trn key="aim:programType">
+						Program Type</digi:trn>
+						<font color="red">*</font>
+				</td>
+				<td align="left">
+						<html:text property="programType" size="20" styleClass="inp-text"/>
+				</td>
+				</tr>	
+				<tr bgcolor=#ffffff><td height="5"></td></tr>	
+				<tr bgColor=#ffffff><td height="30" colspan="2"></td></tr>
+				<tr bgColor=#dddddb>
+				<td bgColor=#dddddb height="25" align="center" colspan="2">
+						<input styleClass="dr-menu" type="button" name="addBtn" value="Save" onclick="return saveProgram('<bean:write name="aimThemeForm" property="themeId"/>')">&nbsp;&nbsp;
+						<input styleClass="dr-menu" type="reset" value="Cancel">&nbsp;&nbsp;
+				</td>
+				</tr>	
+		</table>
 </digi:form>

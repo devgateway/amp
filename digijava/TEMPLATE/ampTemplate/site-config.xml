@@ -318,11 +318,11 @@
 				<page>aim_orgPopupLayout</page>
 				<page>aim_fundingPopupLayout</page>
 				<page>aim_locPopupLayout</page>
-			   <page>aim_selectFilePopupLayout</page>
+		    <page>aim_selectFilePopupLayout</page>
 				<page>aim_selectCMSCategoryPopupLayout</page>
 				<page>aim_selSectorPopupLayout</page>
 				<page>aim_addPhyProgPopupLayout</page>
-		  		<page>aim_selectDocument</page>
+	  		<page>aim_selectDocument</page>
 				<page>aim_addlocPopupLayout</page>
 				<page>aim_addCompPopupLayout</page>
 				<page>aim_reviseCloseDate</page>
@@ -345,6 +345,8 @@
 				<page>viewbyProjectbyDonor_NoLayout</page>
 				<page>aim_addRegionalFunding</page>
 				<page>aim_addMEIndicator</page>
+				<page>aim_addProgram</page>
+				<page>aim_addPrgIndicator</page>
 				<page>aim_printActPerf</page>
 				<page>aim_printActRisk</page>
 				<page>aim_printPortPerf</page>

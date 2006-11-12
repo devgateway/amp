@@ -294,21 +294,33 @@
       <forward name="forward" path="/showLayout.do?layout=themeManager" />
       <forward name="index" path="/aim/index.do" redirect="true" />
     </action>
-    <action input="/showLayout.do?layout=addTheme" name="aimAddThemeForm" path="/aim/addTheme" scope="request" type="org.digijava.module.aim.action.AddTheme" validate="false">
-      <forward name="forward" path="/showLayout.do?layout=addTheme" />
-      <forward name="added" path="/aim/themeManager.do?page=1" />
-      <forward name="index" path="/aim/index.do" redirect="true" />
-    </action>
+		<action name="aimThemeForm" path="/aim/addTheme" scope="request" type="org.digijava.module.aim.action.AddTheme" validate="false">
+			<forward name="saveIt" path="/aim/themeManager.do" />
+			<forward name="forward" path="/showLayout.do?layout=aim_addProgram" />
+		</action>
+		<action name="aimThemeForm" path="/aim/addSubTheme" scope="request" type="org.digijava.module.aim.action.AddSubTheme" validate="false">
+			<forward name="forward" path="/showLayout.do?layout=addSubTheme"/>
+			<forward name="index" path="/aim/index.do" redirect="true"/>			
+		</action>
+		<action name="aimThemeForm" path="/aim/editTheme" scope="request" type="org.digijava.module.aim.action.EditTheme" validate="false">
+			<forward name="editProgram" path="/showLayout.do?layout=editTheme"/>
+			<forward name="forward" path="/aim/themeManager.do"/>
+			<forward name="index" path="/aim/index.do" redirect="true"/>
+		</action>
+		<action name="aimThemeForm" path="/aim/addThemeIndicator" scope="request" type="org.digijava.module.aim.action.AddThemeIndicator" validate="false">
+			<forward name="forward" path="/showLayout.do?layout=aim_addPrgIndicator"/>
+		</action>
+		<!--
     <action name="aimAddThemeForm" path="/aim/getTheme" scope="request" type="org.digijava.module.aim.action.GetTheme" validate="false">
       <forward name="editTheme" path="/showLayout.do?layout=editTheme" />
       <forward name="themeManager" path="/aim/themeManager.do?page=1" />
       <forward name="deleteTheme" path="/showLayout.do?layout=deleteTheme" />
       <forward name="index" path="/aim/index.do" redirect="true" />
-    </action>
+		</action>
     <action name="aimAddThemeForm" path="/aim/editTheme" scope="request" type="org.digijava.module.aim.action.EditTheme" validate="false">
       <forward name="forward" path="/aim/themeManager.do?page=1" />
       <forward name="index" path="/aim/index.do" redirect="true" />
-    </action>
+		</action>
     <action name="aimAddThemeForm" path="/aim/viewTheme" scope="request" type="org.digijava.module.aim.action.GetTheme" validate="false">
       <forward name="forward" path="/showLayout.do?layout=viewTheme" />
       <forward name="index" path="/aim/index.do" redirect="true" />
@@ -316,7 +328,8 @@
     <action name="aimAddThemeForm" path="/aim/deleteTheme" scope="request" type="org.digijava.module.aim.action.DeleteTheme" validate="false">
       <forward name="forward" path="/aim/themeManager.do?page=1" />
       <forward name="index" path="/aim/index.do" redirect="true" />
-    </action>
+		</action>
+		-->
     <action name="aimAddLocationForm" path="/aim/addLocation" scope="session" type="org.digijava.module.aim.action.AddLocation" validate="false">
       <forward name="forward" path="/showLayout.do?layout=aim_addlocPopupLayout" />
       <forward name="added" path="/aim/locationManager.do" redirect="true" />

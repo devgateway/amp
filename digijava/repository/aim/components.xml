@@ -64,7 +64,9 @@
 	<page name="quarterlyReportByProject" title=" : Quarterly Report by Project" />
 	<page name="quarterlyReportBySector" title=" : Quarterly Report by Sector" />
 	<page name="themeManager" title=" - Program Manager" />
-	<page name="addTheme" title=" - Add Program" />
+	<page page="addTheme" name="aim_addProgram" title="AMP - Add Program"/>
+	<page page="addThemeIndicator" name="aim_addPrgIndicator" title="AMP - Add Program Indicator"/>
+	<page name="addSubTheme" title=" - Add Sub Program"/>
 	<page name="editTheme" title=" - Edit Program" />
 	<page name="deleteTheme" title=" - Delete Program" />
 	<page name="viewTheme" title=" - View Program" />

@@ -172,7 +172,7 @@ function selectAllOrgs() {
                     </td>
                 </tr>
                 <tr>
-                    <td nowrap="nowrap" valign="top"><br />&nbsp;Organisations&nbsp;&nbsp;</td>
+                    <td nowrap="nowrap" valign="top"><br />&nbsp;Organizations&nbsp;&nbsp;</td>
                     <td>
 
                       <a title="Facilitates tracking activities in donors' internal databases">

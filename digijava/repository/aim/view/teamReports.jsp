@@ -113,7 +113,7 @@
 												<table border="0" cellPadding=0 cellSpacing=0 width=167>
 													<tr bgColor=#f4f4f2>
 														<td bgColor=#c9c9c7 class=box-title width=150>
-															<digi:trn key="aim:reportList">Report List</digi:trn>
+															<digi:trn key="aim:reportListWorkspace">List of Reports in the Workspace</digi:trn>
 														</td>
 														<td background="module/aim/images/corner-r.gif" height="17" width=17>
 														</td>
@@ -132,7 +132,7 @@
 																	<input type="checkbox" name="checkAll" onclick="checkall()">
 																</td>
 																<td valign="center" align="center" bgcolor="#dddddd">
-																	<b><digi:trn key="aim:reportList">Report List</digi:trn></b>
+																	<b><digi:trn key="aim:reportListWorkspace">List of Reports in the Workspace</digi:trn></b>
 																</td>
 															</table>
 														</td>
@@ -146,7 +146,7 @@
 													<tr><td>&nbsp;</td></tr>
 													<tr>
 														<td align="center">
-															<html:submit styleClass="dr-menu" value="Add report" property="addReport" />
+															<html:submit styleClass="dr-menu" value="List of Unassigned Reports" property="addReport" />
 														</td>
 													</tr>	
 													</logic:empty>							
@@ -217,7 +217,7 @@
 															<table cellspacing="5">
 																<tr>
 																	<td>
-																		<html:submit styleClass="dr-menu" value="Add report" 
+																		<html:submit styleClass="dr-menu" value="List of Unassigned Reports" 
 																		property="addReport" />
 																	</td>
 																	<td>	

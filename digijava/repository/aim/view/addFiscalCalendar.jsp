@@ -207,7 +207,7 @@
 																		<tr>
 																			<td colspan="2" width="60%"  align="center">
 																				<b><digi:trn key="aim:cannotDeleteFisCalMsg1"><font color="#FF0000">
-																						Can not delete this fiscal calendar since some organisation references it !</font>
+																						Can not delete this fiscal calendar since some organization references it !</font>
 																					</digi:trn>
 																				</b>
 																			</td>

@@ -178,7 +178,7 @@ function selectAllOrgs() {
                       <a title="Facilitates tracking activities in donors' internal databases">
                        <br />
                        <digi:link href="/selectOrganization.do?orgSelReset=true&edit=true" onclick="window.open(this.href, 'users', 'HEIGHT=500,resizable=yes,scrollbars=yes,WIDTH=500');return false;">
-                        Add Organization
+                        Add Organizations
                        </digi:link>
                        &nbsp
                       <a href="#" onclick="return removeSelOrganisations();">

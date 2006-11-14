@@ -141,6 +141,7 @@
 				     	/repository/forum/struts-config.xml,
 				     	/repository/cms/struts-config.xml,
 				     	/repository/exception/struts-config.xml,
+				     	/repository/digifeed/struts-config.xml,
 				     	/repository/syndication/struts-config.xml
 			</param-value>
 		</init-param>

@@ -15,10 +15,10 @@
 		<property name="description" column="description"  type="org.digijava.kernel.db.SafeClobType"/>
 		<property name="language" column="language" type="java.lang.String"/>
 		<property name="version" column="version" type="java.lang.String"/>
-		<set name="indicators" table="AMP_THEME_INDICATOR" lazy="true" cascade="none">
+		<set name="indicators" table="AMP_THEME_INDICATOR" lazy="true" inverse="true">
 			<cache usage="read-write"/>
 			<key column="amp_theme_id"/>
-			<many-to-many class="org.digijava.module.aim.dbentity.AmpMEIndicators" column="amp_me_indicator_id"/>
+			<many-to-many class="org.digijava.module.aim.dbentity.AmpThemeIndicators" column="amp_theme_ind_id"/>
 		</set>
 	</class>
 </hibernate-mapping>

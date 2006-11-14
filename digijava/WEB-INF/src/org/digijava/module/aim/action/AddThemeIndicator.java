@@ -4,8 +4,6 @@
 
 package org.digijava.module.aim.action;
 
-import java.util.Set;
-import java.util.HashSet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -16,11 +14,8 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.digijava.module.aim.form.ThemeForm;
-import org.digijava.module.aim.helper.DateConversion;
-import org.digijava.module.aim.dbentity.AmpMEIndicators;
-import org.digijava.module.aim.dbentity.AmpTheme;
+import org.digijava.module.aim.helper.AmpPrgIndicator;
 import org.digijava.module.aim.util.ProgramUtil;
-import org.digijava.module.aim.util.DbUtil;
 
 public class AddThemeIndicator extends Action 
 {
@@ -47,32 +42,24 @@ public class AddThemeIndicator extends Action
 		Long id = new Long(Long.parseLong(request.getParameter("themeId")));
 		String event = request.getParameter("event");
 		themeForm.setThemeId(id);
-		AmpTheme ampTheme = ProgramUtil.getTheme(id);
 		
 		if(event!=null && event.equals("save"))
 		{
-			Set ampThemeSet = new HashSet();
-			Set ampIndSet = new HashSet();
-			ampThemeSet.add(ampTheme);
-			AmpMEIndicators ampMEInd = new AmpMEIndicators();
-			ampMEInd.setValueType(themeForm.getValueType());
-			ampMEInd.setCode(themeForm.getCode());
-			ampMEInd.setName(themeForm.getName());
-			ampMEInd.setType(themeForm.getType());
-			ampMEInd.setDescription(themeForm.getIndicatorDescription());
-			ampMEInd.setCreationDate(DateConversion.getDate(themeForm.getCreationDate()));
-			ampMEInd.setIndicatorCategory(themeForm.getCategory());
-			ampMEInd.setNpIndicator(themeForm.isNpIndicator());
-			ampMEInd.setThemes(ampThemeSet);
-			DbUtil.add(ampMEInd);
-			//ampMEInd.setThemes(ampThemeSet);
-			ampIndSet.add(ampMEInd);
-			ampTheme.setIndicators(ampIndSet);
-			DbUtil.update(ampTheme);
+			AmpPrgIndicator ampPrgInd = new AmpPrgIndicator();
+			ampPrgInd.setName(themeForm.getName());
+			ampPrgInd.setCode(themeForm.getCode());
+			ampPrgInd.setType(themeForm.getType());
+			ampPrgInd.setCreationDate(themeForm.getCreationDate());
+			ampPrgInd.setValueType(themeForm.getValueType());
+			ampPrgInd.setCategory(themeForm.getCategory());
+			ampPrgInd.setNpIndicator(themeForm.isNpIndicator());
+			ampPrgInd.setDescription(themeForm.getIndicatorDescription());
+			ProgramUtil.saveThemeIndicators(ampPrgInd,id);
 		}
 		themeForm.setValueType(0);
 		themeForm.setCode(null);
 		themeForm.setName(null);
+		themeForm.setType(null);
 		themeForm.setProgramType(null);
 		themeForm.setIndicatorDescription(null);
 		themeForm.setCreationDate(null);

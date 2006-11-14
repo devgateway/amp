@@ -8,9 +8,9 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.Set;
+import java.util.HashSet;
 
 import net.sf.hibernate.Hibernate;
-import net.sf.hibernate.HibernateException;
 import net.sf.hibernate.Query;
 import net.sf.hibernate.Session;
 import net.sf.hibernate.Transaction;
@@ -18,7 +18,8 @@ import net.sf.hibernate.Transaction;
 import org.apache.log4j.Logger;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.helper.AmpPrgIndicator;
-import org.digijava.module.aim.dbentity.AmpMEIndicators;
+import org.digijava.module.aim.helper.DateConversion;
+import org.digijava.module.aim.dbentity.AmpThemeIndicators;
 import org.digijava.module.aim.dbentity.AmpTheme;
 
 public class ProgramUtil {
@@ -121,21 +122,18 @@ public class ProgramUtil {
 			session = PersistenceManager.getSession();
 			tempAmpTheme = (AmpTheme) session.load(AmpTheme.class,ampThemeId);
 			Set themeIndSet = tempAmpTheme.getIndicators();
-			logger.info("themeIndSet.size()... : "+themeIndSet.size());
 			Iterator itrIndSet = themeIndSet.iterator();
 			while(itrIndSet.hasNext())
 			{
-				AmpMEIndicators tempMEInd = (AmpMEIndicators) itrIndSet.next();
+				AmpThemeIndicators tempThemeInd = (AmpThemeIndicators) itrIndSet.next();
 				AmpPrgIndicator tempPrgInd = new AmpPrgIndicator();
-				tempPrgInd.setIndicatorId(tempMEInd.getAmpMEIndId());
-				tempPrgInd.setCode(tempMEInd.getCode());
-				tempPrgInd.setName(tempMEInd.getName());
-				tempPrgInd.setCreationDate(tempMEInd.getCreationDate().toString());
-				tempPrgInd.setType(tempMEInd.getType());
+				tempPrgInd.setIndicatorId(tempThemeInd.getAmpThemeIndId());
+				tempPrgInd.setName(tempThemeInd.getName());
+				tempPrgInd.setCode(tempThemeInd.getCode());
+				tempPrgInd.setCreationDate(DateConversion.ConvertDateToString(tempThemeInd.getCreationDate()));
+				tempPrgInd.setType(tempThemeInd.getType());
 				themeInd.add(tempPrgInd);
 			}
-			session.flush();
-			session.close();
 		}
 		catch(Exception ex)
 		{
@@ -194,5 +192,65 @@ public class ProgramUtil {
 			}
 		}
 		return subThemes;
+	}
+	
+	public static void saveThemeIndicators(AmpPrgIndicator tempPrgInd, Long ampThemeId)
+	{
+		Session session = null;
+		Transaction tx = null;
+		try
+		{
+			session = PersistenceManager.getSession();
+			AmpTheme tempAmpTheme = null;
+			tempAmpTheme = (AmpTheme) session.load(AmpTheme.class,ampThemeId);
+			AmpThemeIndicators ampThemeInd = new AmpThemeIndicators();
+			ampThemeInd.setName(tempPrgInd.getName());
+			ampThemeInd.setCode(tempPrgInd.getCode());
+			ampThemeInd.setType(tempPrgInd.getType());
+			ampThemeInd.setCreationDate(DateConversion.getDate(tempPrgInd.getCreationDate()));
+			ampThemeInd.setValueType(tempPrgInd.getValueType());
+			ampThemeInd.setCategory(tempPrgInd.getCategory());
+			ampThemeInd.setNpIndicator(tempPrgInd.isNpIndicator());
+			ampThemeInd.setDescription(tempPrgInd.getDescription());
+			Set ampThemeSet = new HashSet();
+			ampThemeSet.add(tempAmpTheme);
+			ampThemeInd.setThemes(ampThemeSet);
+			tx = session.beginTransaction();
+			session.save(ampThemeInd);
+			tempAmpTheme.getIndicators().add(ampThemeInd);
+			session.saveOrUpdate(tempAmpTheme);
+			tx.commit();
+		}
+		catch(Exception ex)
+		{
+			logger.error("Exception from saveThemeIndicators() : " + ex.getMessage());
+			ex.printStackTrace(System.out);		
+			if (tx != null) 
+			{
+				try 
+				{
+					tx.rollback();
+				} 
+				catch (Exception trbf) 
+				{
+					logger.error("Transaction roll back failed : "+trbf.getMessage());
+					trbf.printStackTrace(System.out);
+				}
+			}
+		}
+		finally
+		{
+			if (session != null) 
+			{
+				try 
+				{
+					PersistenceManager.releaseSession(session);
+				} 
+				catch (Exception rsf) 
+				{
+					logger.error("Failed to release session :" + rsf.getMessage());
+				}
+			}
+		}
 	}
 }

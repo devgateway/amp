@@ -53,6 +53,9 @@
 			org.digijava.module.aim.dbentity.AmpTheme
 		</hibernate-class>
 		<hibernate-class>
+			org.digijava.module.aim.dbentity.AmpThemeIndicators
+		</hibernate-class>
+		<hibernate-class>
 			org.digijava.module.aim.dbentity.AmpFiscalCalendar
 		</hibernate-class>
 		<hibernate-class>

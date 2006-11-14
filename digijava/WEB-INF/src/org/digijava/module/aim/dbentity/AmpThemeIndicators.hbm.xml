@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 2.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-2.0.dtd">
+<hibernate-mapping>
+	<class name="org.digijava.module.aim.dbentity.AmpThemeIndicators" table="AMP_THEME_INDICATORS">
+		<cache usage="read-write" />
+		<id name="ampThemeIndId" column="amp_theme_ind_id" type="java.lang.Long">
+			<generator class="native">
+				<param name="sequence">AMP_THEME_IND_VAL_seq</param>			
+			</generator>
+		</id>
+		<property name="name" column="name" type="java.lang.String"/>
+		<property name="code" column="code" type="java.lang.String"/>
+		<property name="type" column="type" type="java.lang.String"/>
+		<property name="creationDate" column="creation_date" type="java.util.Date"/>
+		<property name="valueType" column="value_type" type="java.lang.Integer"/>
+		<property name="category" column="category" type="java.lang.Integer"/>
+		<property name="npIndicator" column="np_indicator" type="java.lang.Boolean"/>
+		<property name="description" column="description" type="org.digijava.kernel.db.SafeClobType"/>
+		<set name="themes" table="AMP_THEME_INDICATOR" lazy="true">
+			<cache usage="read-write"/>
+			<key column="amp_theme_ind_id"/>
+			<many-to-many class="org.digijava.module.aim.dbentity.AmpTheme" column="amp_theme_id"/>
+		</set>
+	</class>
+</hibernate-mapping>

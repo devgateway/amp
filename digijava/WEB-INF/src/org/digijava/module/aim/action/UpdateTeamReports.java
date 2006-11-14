@@ -59,6 +59,7 @@ public class UpdateTeamReports extends Action {
 
 		if (raForm.getAddReport() != null) {
 			/* show all unassigned reports */
+			
 			Collection col = TeamUtil.getAllUnassignedTeamReports(id);
 			raForm.setReports(col);
 			raForm.setTeamId(tm.getTeamId());

@@ -13,6 +13,13 @@
 <script type="text/javascript">
 
 <!--
+	function listReports()
+	{
+		document.aimTeamReportsForm.addReport.value="List of Unassigned Reports";
+		document.aimTeamReportsForm.action="/updateTeamReports.do";		
+		document.aimTeamReportsForm.submit();
+	}
+
 
 	function checkall() {
 		var selectbox = document.aimTeamReportsForm.checkAll;
@@ -57,7 +64,7 @@
 
 <digi:instance property="aimTeamReportsForm" />
 <digi:form action="/updateTeamReports.do" method="post">
-
+<html:hidden property="addReport"/>
 <table width="100%" cellPadding=0 cellSpacing=0 vAlign="top" align="left">
 <tr><td width="100%" vAlign="top" align="left">
 <jsp:include page="teamPagesHeader.jsp" flush="true" />
@@ -213,14 +220,13 @@
 														</td>
 													</tr>
 													<tr>
-														<td align="center">
-															<table cellspacing="5">
+														<td align="left">
+															<table cellspacing="5" width="100%">
 																<tr>
-																	<td>
-																		<html:submit styleClass="dr-menu" value="List of Unassigned Reports" 
-																		property="addReport" />
+																	<td align="left">
+													                    <a href="javascript:listReports()"> List of Unassigned Reports </a>
 																	</td>
-																	<td>	
+																	<td >	
 																		<html:submit styleClass="dr-menu" value="Remove selected reports" 
 																		property="removeReports" onclick="return validate()"/>
 																	</td>
@@ -245,7 +251,7 @@
 														</td>
 													</tr>
 													<tr>
-														<td>
+													<td>
 															<font color="blue">
 															<digi:trn key="aim:reportMemberSpecific">*M</digi:trn>
 															Indicates the report is viewable by selected team members, 

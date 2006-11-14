@@ -129,7 +129,6 @@ public class GetWorkspace extends Action {
 		}			
 
 		logger.debug("Dest value = " + dest);
-		System.out.println("AM AJUNS AICI FRATE **************************");
 		return mapping.findForward(dest);
 	}
 	

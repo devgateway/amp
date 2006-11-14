@@ -83,8 +83,10 @@
 
 	function load() {
 		if (document.aimEditActivityForm.impLevelValue.value == 2) {
+			document.aimEditActivityForm.impMultiRegion.value=-1;
 			document.aimEditActivityForm.impMultiRegion.focus();
 		} else if (document.aimEditActivityForm.impLevelValue.value > 2){
+			document.aimEditActivityForm.impRegion.value=-1;
 			document.aimEditActivityForm.impRegion.focus();
 		}
 	}

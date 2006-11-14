@@ -35,6 +35,10 @@
 			document.aimThemeForm.submit();
 			return true;
 		}
+		function deleteProgram()
+		{
+			return confirm("Do you want to delete the Program ?");
+		}
 	-->
 </script>
 
@@ -108,16 +112,16 @@
 																			<td bgcolor="#f4f4f2" width="50">
 																					<bean:write name="themes" property="themeCode"/>
 																			</td>
-																			<td align="center" bgcolor="#f4f4f2">
+																			<td align="left" bgcolor="#f4f4f2">
 																					<jsp:useBean id="urlParams" type="java.util.Map" class="java.util.HashMap"/>
 																					<c:set target="${urlParams}" property="themeId">
 																							<bean:write name="themes" property="ampThemeId" />
 																					</c:set><b>
-																					<a href="javascript:addSubProgram('<bean:write name="themes" property="ampThemeId" />')">
+																					<a href="javascript:addSubProgram('<bean:write name="themes" property="ampThemeId" />')" title="Click here to add Sub-Programs">
 																							<bean:write name="themes" property="name"/>
 																					</a></b>
 																			</td>
-																			<td align="center" bgcolor="#f4f4f2" width="100">
+																			<td align="right" bgcolor="#f4f4f2" width="75">
 																					<input class="buton" type="button" name="addIndicator" 
 																					value="Indicator" onclick="assignIndicators('<bean:write name="themes" property="ampThemeId" />')">
 																			</td>
@@ -135,7 +139,7 @@
 																									Click here to Delete Program
 																							</digi:trn>
 																					</bean:define>
-																					<digi:link href="/editTheme.do?event=delete" name="urlParams" title="<%=translation%>">
+																					<digi:link href="/editTheme.do?event=delete" name="urlParams" title="<%=translation%>" onclick="return deleteProgram()">
 																							<img src= "../ampTemplate/images/trash_12.gif" border=0>
 																					</digi:link>
 																			</td>

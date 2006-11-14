@@ -284,6 +284,8 @@
 	<!--
 	<page page="uploadFlag" name="aim_uploadFlag" title=" - Upload Flag" />
 	-->
+    <page name="addProposedProjFunding" title="Proposed Project Cost" />
+    <page name="printMyDesktop" title="Print Desktop" />
 
 </secondary-pages>
 

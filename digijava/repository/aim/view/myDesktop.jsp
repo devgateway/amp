@@ -49,7 +49,7 @@
               		<TD bgColor=#c9c9c7 class=box-title>
 							&nbsp;<digi:trn key="aim:portfolio">Portfolio</digi:trn>
 						</TD>
-                 	<TD background="module/aim/images/corner-r.gif" 
+                 	<TD background="module/aim/images/corner-r.gif"
 						height=17 width=17></TD>
 					</TR>
 				</TABLE>
@@ -66,10 +66,10 @@
 								<html:optionsCollection property="sectors" value="ampSectorId" label="name" />
 							</html:select>
 						</c:if>
-						
+
 						<c:if test="${!empty aimDesktopForm.donors}">
 							<html:select property="fltrDonor" styleClass="inp-text" multiple="true" size="3">
-								<html:option value="-1">--All--</html:option>							
+								<html:option value="-1">--All--</html:option>
 								<html:optionsCollection property="donors" value="ampOrgId" label="acronym"/>
 							</html:select>
 						</c:if>
@@ -79,7 +79,7 @@
 								<html:optionsCollection property="status" value="ampStatusId" label="name" />
 							</html:select>
 						</c:if>	<br>
-					
+
 						<c:if test="${!empty aimDesktopForm.calendars}">
 							<html:select property="fltrCalendar" styleClass="inp-text">
 								<html:optionsCollection property="calendars" value="ampFiscalCalId" label="name"/>
@@ -103,20 +103,20 @@
 								</c:forEach>
 							</html:select>
 						</c:if>
-	
+
 						<c:if test="${!empty aimDesktopForm.currencies}">
 							<html:select property="fltrCurrency" styleClass="inp-text">
 								<html:optionsCollection property="currencies" value="currencyCode" label="currencyName"/>
 							</html:select>
 						</c:if>
-						
+
 						<c:if test="${!empty aimDesktopForm.activityRisks}">
 							<html:select property="fltrActivityRisks" styleClass="inp-text">
-								<html:option value="0">All Risks</html:option>							
+								<html:option value="0">All Risks</html:option>
 								<html:optionsCollection property="activityRisks" value="ratingValue" label="ratingName" />
 							</html:select>
-						</c:if>	
-						
+						</c:if>
+
 						<input type="submit" value="Go" class="dr-menu">
 						<input type="submit" value="Reset" class="dr-menu" onclick="resetFilters()">
 					</TD></TR>
@@ -125,9 +125,9 @@
 				<TR><TD>
 					<TABLE width="100%" cellpadding="4" cellSpacing="1" bgcolor="#ffffff" valign="top" align="left">
 						<TR bgcolor="#DDDDDD" height="30">
-							<TD class="colHeaderLink" onMouseOver="this.className='colHeaderOver'" 
+							<TD class="colHeaderLink" onMouseOver="this.className='colHeaderOver'"
 							onMouseOut="this.className='colHeaderLink'" width="40%"
-							onClick="window.document.location='/aim/viewMyDesktop.do?view=sorted&srt=1'" 
+							onClick="window.document.location='/aim/viewMyDesktop.do?view=sorted&srt=1'"
 							title='<digi:trn key="aim:ProjectNames">Complete List of Projects for Team</digi:trn>'>
 								<digi:trn key="aim:project">Project</digi:trn>
 								<c:if test="${aimDesktopForm.srtFld == 1}">
@@ -139,7 +139,7 @@
 									</c:if>
 								</c:if>
 							</TD>
-							<TD class="colHeaderLink" onMouseOver="this.className='colHeaderOver'" 
+							<TD class="colHeaderLink" onMouseOver="this.className='colHeaderOver'"
 							onMouseOut="this.className='colHeaderLink'"  width="14%"
 							onClick="window.document.location='/aim/viewMyDesktop.do?view=sorted&srt=2'"
 							title='<digi:trn key="aim:IdforAMP">System Generated Project ID</digi:trn>'>
@@ -151,9 +151,9 @@
 									<c:if test="${aimDesktopForm.srtAsc == false}">
 										<img src= "../ampTemplate/images/up.gif" align=absmiddle border=0>
 									</c:if>
-								</c:if>								
+								</c:if>
 							</TD>
-							<TD class="colHeaderLink" onMouseOver="this.className='colHeaderOver'" 
+							<TD class="colHeaderLink" onMouseOver="this.className='colHeaderOver'"
 							onMouseOut="this.className='colHeaderLink'"  width="28%"
 							onClick="window.document.location='/aim/viewMyDesktop.do?view=sorted&srt=3'"
 							title='<digi:trn key="aim:FundingDonor">Funding Donor for Project</digi:trn>'>
@@ -165,9 +165,9 @@
 									<c:if test="${aimDesktopForm.srtAsc == false}">
 										<img src= "../ampTemplate/images/up.gif" align=absmiddle border=0>
 									</c:if>
-								</c:if>								
+								</c:if>
 							</TD>
-							<TD class="colHeaderLink" onMouseOver="this.className='colHeaderOver'" 
+							<TD class="colHeaderLink" onMouseOver="this.className='colHeaderOver'"
 							onMouseOut="this.className='colHeaderLink'"  width="18%"
 							onClick="window.document.location='/aim/viewMyDesktop.do?view=sorted&srt=4'"
 							title='<digi:trn key="aim:TotalCommitMade">Total Committed Amount of Project</digi:trn>'>
@@ -180,12 +180,12 @@
 									<c:if test="${aimDesktopForm.srtAsc == false}">
 										<img src= "../ampTemplate/images/up.gif" align=absmiddle border=0>
 									</c:if>
-								</c:if>								
+								</c:if>
 							</TD>
 						</TR>
 						<bean:define id="translation">
 							<digi:trn key="aim:clickToViewProjectDetails">Click here to view Project Details</digi:trn>
-						</bean:define>						
+						</bean:define>
 						<logic:notEmpty name="aimDesktopForm" property="activities">
 							<c:forEach var="project" items="${aimDesktopForm.activities}"
 							begin="${aimDesktopForm.stIndex}" end="${aimDesktopForm.edIndex - 1}">
@@ -208,10 +208,10 @@
 										</c:if>
 										<c:if test='${project.approvalStatus == "edited"}'>
 											<FONT size="2" color="#008000">**</FONT>
-										</c:if>														
+										</c:if>
 									</TD>
 									<TD>
-										<c:out value="${project.ampId}" />													
+										<c:out value="${project.ampId}" />
 									</TD>
 									<TD>
 										<c:if test="${!empty project.donor}">
@@ -229,22 +229,22 @@
 										</c:if>
 									</TD>
 									<TD align="right">
-										<c:out value="${project.totalCommited}" />													
-									</TD>												
-								</TR>				
+										<c:out value="${project.totalCommited}" />
+									</TD>
+								</TR>
 							</c:forEach>
 						</logic:notEmpty>
-			
+
 						<TR bgcolor="#FFFFFF">
 							<TD>&nbsp;</TD>
 							<TD>
-								<b><c:out value="${aimDesktopForm.defCurrency}" /></b>	
+								<b><c:out value="${aimDesktopForm.defCurrency}" /></b>
 							</TD>
 							<TD align="right">
 								<b><digi:trn key="aim:total">Total</digi:trn></b>
 							</TD>
 							<TD align="right">
-								<b><c:out value="${aimDesktopForm.totalCommitments}" /></b>	
+								<b><c:out value="${aimDesktopForm.totalCommitments}" /></b>
 							</TD>
 						</TR>
 						<TR bgcolor="#FFFFFF">
@@ -252,18 +252,18 @@
 								<bean:size id="totPages" name="aimDesktopForm" property="pages" />
 
 								<c:if test="${totPages > 1}">
-								
+
 								<jsp:useBean id="pageUrl" type="java.util.Map" class="java.util.HashMap"/>
 								<c:set target="${pageUrl}" property="view" value="page" />
 								<c:if test="${aimDesktopForm.currentPage == 1}">
-									<digi:trn key="aim:previousPage">Previous</digi:trn> 
+									<digi:trn key="aim:previousPage">Previous</digi:trn>
 								</c:if>
 								<c:if test="${aimDesktopForm.currentPage != 1}">
 									<c:set target="${pageUrl}" property="page">
 										<c:out value="${aimDesktopForm.currentPage - 1}" />
 									</c:set>
 									<digi:link href="/viewMyDesktop.do" name="pageUrl">
-										<digi:trn key="aim:previousPage">Previous</digi:trn> 
+										<digi:trn key="aim:previousPage">Previous</digi:trn>
 									</digi:link>
 								</c:if>
 
@@ -278,7 +278,7 @@
 										</c:set>
 										<digi:link href="/viewMyDesktop.do" name="pageUrl">
 											<c:out value="${pg}" />
-										</digi:link> 
+										</digi:link>
 									</c:if>
 								</c:forEach> |
 
@@ -291,18 +291,18 @@
 									</c:set>
 									<digi:link href="/viewMyDesktop.do" name="pageUrl">
 										<digi:trn key="aim:nextPage">Next</digi:trn>
-									</digi:link>								
+									</digi:link>
 								</c:if>
 
 								</c:if>
 							</TD>
-						</TR>																		
-					</TABLE>	
+						</TR>
+					</TABLE>
 				</TD></TR>
-				
+
 				</TABLE>
 			</TD></TR>
-		</TABLE>	
+		</TABLE>
 	</TD></TR>
 
 	<TR><TD>
@@ -310,8 +310,8 @@
 			<TR>
 				<TD>
 					<FONT color=blue>*
-					<digi:trn key="aim:allTheAmountsInThousands">	
-					All the amounts are in thousands (000)</digi:trn></FONT>								
+					<digi:trn key="aim:allTheAmountsInThousands">
+					All the amounts are in thousands (000)</digi:trn></FONT>
 				</TD>
 				<c:if test="${aimDesktopForm.showAddActivityLink == true}">
 				<TD width="300" align="right">
@@ -349,13 +349,17 @@
 						<div title='<%=translation%>'>
 						<digi:link href="/workspaceOverview.do" name="urlParams">
 							<digi:trn key="aim:teamWorkspaceSetup">Team Workspace Setup</digi:trn>
+						</digi:link></div><br />
+                        <div title='<%=translation%>'>
+						<digi:link href="/previewPrintMyDesktop.do">
+							<digi:trn key="aim:PreviewPrintMyDesktop">Print</digi:trn>
 						</digi:link></div>
 					</logic:equal>
 				</TD>
 			</TR>
 		</TABLE>
 	</TD></TR>
-	
+
 </TABLE>
 
 </digi:form>

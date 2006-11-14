@@ -75,6 +75,7 @@ import org.digijava.module.cms.dbentity.CMSContentItem;
 import org.digijava.kernel.request.Site;
 import org.digijava.module.aim.util.DocumentUtil;
 import org.digijava.kernel.util.RequestUtils;
+import org.digijava.module.aim.form.ProposedProjCost;
 
 /**
  * Loads the activity details of the activity specified in the form bean
@@ -130,6 +131,21 @@ public class EditActivity extends Action {
 			boolean canEdit = true;
 
 			eaForm.setActivityId(activityId);
+            eaForm.setReset(false);
+
+            ProposedProjCost propProjCost=null;
+            if(eaForm.getProProjCost()!=null){
+                propProjCost=new ProposedProjCost();
+                propProjCost=eaForm.getProProjCost();
+                if(propProjCost.getActID()==null &&
+                   propProjCost.getCurrencyCode()==null &&
+                   propProjCost.getFunAmount()==null &&
+                   propProjCost.getFunDate()==null &&
+                   propProjCost.getFundingID()==null &&
+                   propProjCost.getUsID()==null){
+                    eaForm.setProProjCost(null);
+                }
+        }
 
 			if (tm.getTeamType()
 					.equalsIgnoreCase(Constants.DEF_DNR_PERSPECTIVE)) {
@@ -286,6 +302,9 @@ public class EditActivity extends Action {
 
 				if (activity != null) {
 					// set title,description and objective
+
+                    eaForm.setProProjCost(activity.getPropProjCost());
+
 					eaForm.setTitle(activity.getName().trim());
 					eaForm.setDescription(activity.getDescription().trim());
 					eaForm.setObjectives(activity.getObjective().trim());

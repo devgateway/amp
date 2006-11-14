@@ -1,6 +1,7 @@
 package org.digijava.module.aim.helper;
+import java.util.*;
 
-import java.util.Collection;
+import org.digijava.module.aim.form.*;
 
 public class Activity implements Comparable {
 
@@ -8,7 +9,7 @@ public class Activity implements Comparable {
 	private String name;
 	private String donors;
 	private String ampId;
-	
+
 	private String description;
 	private String objective;
 	private boolean objMore;
@@ -41,10 +42,10 @@ public class Activity implements Comparable {
 	private String actAthLastName;
 	private String actAthEmail;
 	private String createdDate;
-	
+	private ProposedProjCost propProjCost;
 	private String contractors;
-	
-	
+
+
 	/**
 	 * @return Returns the programDescription.
 	 */
@@ -95,9 +96,9 @@ public class Activity implements Comparable {
 		if (this.name != null) {
 			if (act.name != null) {
 				return (this.name.trim().toLowerCase().compareTo(act.name.trim()
-						.toLowerCase()));							
+						.toLowerCase()));
 			} else {
-				return (this.name.trim().toLowerCase().compareTo(""));			 
+				return (this.name.trim().toLowerCase().compareTo(""));
 			}
 
 		} else {
@@ -481,14 +482,14 @@ public class Activity implements Comparable {
 	public void setCreatedDate(String createdDate) {
 		this.createdDate = createdDate;
 	}
-	
+
 	public boolean equals(Object obj) {
 		if (obj == null)
 			throw new NullPointerException();
-		
+
 		if (!(obj instanceof Activity))
 			throw new ClassCastException();
-		
+
 		Activity act = (Activity) obj;
 		return this.activityId.equals(act.getActivityId());
 	}
@@ -510,10 +511,19 @@ public class Activity implements Comparable {
 	public Collection getRevCompDates() {
 		return revCompDates;
 	}
-	/**
+
+    public ProposedProjCost getPropProjCost() {
+        return propProjCost;
+    }
+
+    /**
 	 * @param revCompDates The revCompDates to set.
 	 */
 	public void setRevCompDates(Collection revCompDates) {
 		this.revCompDates = revCompDates;
 	}
+
+    public void setPropProjCost(ProposedProjCost propProjCost) {
+        this.propProjCost = propProjCost;
+    }
 }

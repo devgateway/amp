@@ -121,6 +121,8 @@ public class SaveActivity extends Action {
 			EditActivityForm eaForm = (EditActivityForm) form;
 			AmpActivity activity = new AmpActivity();
 
+            activity.setPropProjCost(eaForm.getProProjCost());
+
 			if (eaForm.getPageId() < 0 || eaForm.getPageId() > 1) {
 				return mapping.findForward("index");
 			}
@@ -462,6 +464,8 @@ public class SaveActivity extends Action {
 				 * saveErrors(request, errors); return
 				 * mapping.findForward("addActivityStep5"); }
 				 */
+
+                activity.setPropProjCost(eaForm.getProProjCost());
 
 				activity.setAmpId(eaForm.getAmpId());
 				activity.setName(eaForm.getTitle());

@@ -1,12 +1,11 @@
 package org.digijava.module.aim.dbentity ;
 
-import java.io.Serializable;
-import java.util.Date;
-import java.util.Set;
+import java.io.*;
+import java.util.*;
 
-import org.digijava.kernel.dbentity.Country;
-import org.digijava.kernel.user.User;
-
+import org.digijava.kernel.dbentity.*;
+import org.digijava.kernel.user.*;
+import org.digijava.module.aim.form.ProposedProjCost;
 
 public class AmpActivity
 		  implements Comparable, Serializable {
@@ -42,7 +41,9 @@ public class AmpActivity
 	private AmpTeam team;
 	private Set member;
 	private Country country;
-	private String contactName ; // use contFirstName and contLastName instead.
+	private String contactName;
+    private ProposedProjCost propProjCost;
+    // use contFirstName and contLastName instead.
 								 // The field is defunct
 
 	// Donor contact information
@@ -776,6 +777,10 @@ public class AmpActivity
         return documentSpace;
     }
 
+    public ProposedProjCost getPropProjCost() {
+        return propProjCost;
+    }
+
     /**
 	 * @param survey The survey to set.
 	 */
@@ -785,5 +790,9 @@ public class AmpActivity
 
     public void setDocumentSpace(String documentSpace) {
         this.documentSpace = documentSpace;
+    }
+
+    public void setPropProjCost(ProposedProjCost propProjCost) {
+        this.propProjCost = propProjCost;
     }
 }

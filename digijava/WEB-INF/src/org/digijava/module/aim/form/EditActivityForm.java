@@ -18,6 +18,7 @@ import org.digijava.module.aim.dbentity.AmpField;
 import org.digijava.module.aim.helper.ActivityIndicator;
 import org.digijava.module.aim.helper.FundingDetail;
 import org.digijava.module.aim.helper.OrgProjectId;
+import org.digijava.module.aim.form.ProposedProjCost;
 
 public class EditActivityForm extends ActionForm implements Serializable{
 
@@ -325,8 +326,9 @@ public class EditActivityForm extends ActionForm implements Serializable{
 	private Collection indHistory;
 	private Collection updateIndValues;
 	private Collection indicatorPriorValues;
+    private ProposedProjCost proProjCost;
 
-	public EditActivityForm() {
+    public EditActivityForm() {
 		step = "1";
 		reset = false;
 		editAct = false;
@@ -3622,11 +3624,18 @@ public class EditActivityForm extends ActionForm implements Serializable{
 		return currentValComments;
 	}
 
-	/**
+    public ProposedProjCost getProProjCost() {
+        return proProjCost;
+    }
+
+    /**
 	 * @param currentValComments The currentValComments to set.
 	 */
 	public void setCurrentValComments(String currentValComments) {
 		this.currentValComments = currentValComments;
 	}
 
+    public void setProProjCost(ProposedProjCost proProjCost) {
+        this.proProjCost = proProjCost;
+    }
 }

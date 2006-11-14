@@ -42,7 +42,7 @@ import org.digijava.module.editor.dbentity.Editor;
 import org.digijava.module.editor.util.Constants;
 import org.digijava.module.aim.util.DocumentUtil;
 import org.digijava.kernel.request.Site;
-
+import org.digijava.module.aim.form.ProposedProjCost;
 /**
  * Used to capture the activity details to the form bean of type org.digijava.module.aim.form.EditActivityForm
  *
@@ -78,8 +78,21 @@ public class AddAmpActivity extends Action {
 
 		EditActivityForm eaForm = (EditActivityForm) form;
 
+        ProposedProjCost propProjCost=null;
+        if(eaForm.getProProjCost()!=null){
+            propProjCost=new ProposedProjCost();
+            propProjCost=eaForm.getProProjCost();
+            if(propProjCost.getActID()==null &&
+               propProjCost.getCurrencyCode()==null &&
+               propProjCost.getFunAmount()==null &&
+               propProjCost.getFunDate()==null &&
+               propProjCost.getFundingID()==null &&
+               propProjCost.getUsID()==null){
+                eaForm.setProProjCost(null);
+            }
+        }
 
-		try {
+    try {
 
 		if (!eaForm.isEditAct() || eaForm.isReset()) {
 			eaForm.reset(mapping, request);

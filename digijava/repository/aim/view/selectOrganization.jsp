@@ -11,7 +11,7 @@
 <script language="JavaScript">
 
 	<!-- 
-
+	
 	function validate() {
 		if (document.aimEditActivityForm.selOrganisations.checked != null) { // only one
 			if (document.aimEditActivityForm.selOrganisations.checked == false) {
@@ -70,14 +70,20 @@
 			  return false;
 		} else {
 			 <digi:context name="searchOrg" property="context/module/moduleinstance/searchOrganisation.do"/>
-			 url = "<%= searchOrg %>?alpha=" + val + "&orgSelReset=false&edit=true";
-		     document.aimEditActivityForm.action = url;
+			// url = "<%= searchOrg %>?alpha=viewAll&orgSelReset=false&edit=true";
+			
+		    // document.aimEditActivityForm.action = url;
+		    document.aimEditActivityForm.action = "<%= searchOrg %>";
+		      var aux= document.aimEditActivityForm.tempNumResults.value;
+		      document.aimEditActivityForm.tempNumResults.value=1000000;
 		     document.aimEditActivityForm.submit();
+		      document.aimEditActivityForm.tempNumResults.value=aux;
 			  return true;
 		}
 	}	
 
 	function load() {
+		document.aimEditActivityForm.tempNumResults.value=10;
 		document.aimEditActivityForm.keyword.focus();			  
 	}
 

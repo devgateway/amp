@@ -18,6 +18,7 @@ import org.dgfoundation.amp.ar.exception.IncompatibleColumnException;
 import org.dgfoundation.amp.ar.exception.UnidentifiedItemException;
 import org.dgfoundation.amp.ar.workers.ColumnWorker;
 import org.digijava.module.aim.dbentity.AmpColumns;
+import org.digijava.module.aim.dbentity.AmpMeasure;
 import org.digijava.module.aim.dbentity.AmpReportColumn;
 import org.digijava.module.aim.dbentity.AmpReportHierarchy;
 import org.digijava.module.aim.dbentity.AmpReports;
@@ -283,12 +284,21 @@ public class AmpReportGenerator extends ReportGenerator {
 				.getName());
 		reportChild.addColumns(rawColumns.getItems());
 		report.addReport(reportChild);
+
+		//perform removal of funding column if no measure except undisbursed balance is selected. in such case,we just need totals
+		if(reportMetadata.getMeasures().size()==1 && ARUtil.containsMeasure(ArConstants.UNDISBURSED_BALANCE,reportMetadata.getMeasures())) 
+			reportChild.removeColumn("Funding");
+		
+
+		
 		// find out if this is a hierarchical report or not:
 		if (reportMetadata.getHierarchies().size() != 0)
 			createHierarchies();
 
 		// perform postprocessing - cell grouping and other tasks
 		report.postProcess();
+		
+		
 
 	}
 

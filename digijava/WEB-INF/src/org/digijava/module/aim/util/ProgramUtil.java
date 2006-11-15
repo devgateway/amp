@@ -253,4 +253,36 @@ public class ProgramUtil {
 			}
 		}
 	}
+	
+	public static void deleteTheme(Long themeId)
+	{
+		Collection colTheme = getRelatedThemes(themeId);
+		Iterator colThemeItr = colTheme.iterator();
+		while(colThemeItr.hasNext())
+		{
+			AmpTheme tempTheme = (AmpTheme) colThemeItr.next();
+			DbUtil.delete(tempTheme);
+		}
+	}
+
+	static Collection tempPrg = new ArrayList();
+	
+	public static Collection getRelatedThemes(Long id)
+	{
+		AmpTheme ampTheme = new AmpTheme();
+		ampTheme = ProgramUtil.getTheme(id);
+		Collection themeCol = ProgramUtil.getSubThemes(id);
+		tempPrg.add(ampTheme);
+		if(!themeCol.isEmpty())
+		{
+			Iterator itr = themeCol.iterator();
+			AmpTheme tempTheme = new AmpTheme();
+			while(itr.hasNext())
+			{
+				tempTheme = (AmpTheme) itr.next();
+				getRelatedThemes(tempTheme.getAmpThemeId());
+			}
+		}
+		return tempPrg;
+	}
 }

@@ -4,9 +4,6 @@
 
 package org.digijava.module.aim.action;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Iterator;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -77,37 +74,10 @@ public class EditTheme extends Action {
 		}
 		else if (event != null && event.equals("delete"))
 		{
-			Collection colTheme = getRelatedThemes(id);
-			Iterator colThemeItr = colTheme.iterator();
-			while(colThemeItr.hasNext())
-			{
-				AmpTheme tempTheme = (AmpTheme) colThemeItr.next();
-				DbUtil.delete(tempTheme);			
-			}
+			ProgramUtil.deleteTheme(id);
 			return mapping.findForward("forward");
 		}
 		else
 			return mapping.findForward("forward");
-	}
-	
-	Collection temp = new ArrayList();
-	
-	public Collection getRelatedThemes(Long id)
-	{
-		AmpTheme ampTheme = new AmpTheme();
-		ampTheme = ProgramUtil.getTheme(id);
-		Collection themeCol = ProgramUtil.getSubThemes(id);
-		temp.add(ampTheme);
-		if(!themeCol.isEmpty())
-		{
-			Iterator itr = themeCol.iterator();
-			AmpTheme tempTheme = new AmpTheme();
-			while(itr.hasNext())
-			{
-				tempTheme = (AmpTheme) itr.next();
-				getRelatedThemes(tempTheme.getAmpThemeId());
-			}
-		}
-		return temp;
 	}
 }

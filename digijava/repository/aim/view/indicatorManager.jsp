@@ -61,8 +61,8 @@
 							Admin Home
 						</digi:trn>
 						</digi:link>&nbsp;&gt;&nbsp;
-						<digi:trn key="aim:indicatorManager">
-							Indicator Manager
+						<digi:trn key="aim:projectmeIndicatorManager">
+							Project M & E Indicator Manager
 						</digi:trn>
 					</td>
 					<!-- End navigation -->
@@ -70,8 +70,8 @@
 				<tr>
 					<td height=16 vAlign=center width=571>
 						<span class=subtitle-blue>
-						<digi:trn key="aim:meIndicatorManager">
-							M & E Indicator Manager
+						<digi:trn key="aim:projectmeIndicatorManager">
+							Project M & E Indicator Manager
 						</digi:trn>
 						</span>
 					</td>
@@ -92,8 +92,8 @@
 									<table width="100%" cellspacing=1 cellpadding=1 valign=top align=left>	
 										<tr><td bgColor=#d7eafd class=box-title height="20" align="center">
 											<!-- Table title -->
-											<digi:trn key="aim:indicatorList">
-												Indicator List
+											<digi:trn key="aim:projectIndicatorList">
+												Project Indicator List
 											</digi:trn>
 											<!-- end table title -->										
 										</td></tr>
@@ -150,7 +150,7 @@
 													</logic:notEmpty>
 													<logic:empty name="aimIndicatorForm" property="indicators">
 														<tr align="center" bgcolor="#ffffff"><td><b>
-															<digi:trn key="aim:noIndicatorsPresent">No indicators present</digi:trn>
+															<digi:trn key="aim:noProjectIndicatorsPresent">No Project indicators present</digi:trn>
 															</b></td>
 														</tr>
 													</logic:empty>

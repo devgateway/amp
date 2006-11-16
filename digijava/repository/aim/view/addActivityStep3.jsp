@@ -269,9 +269,7 @@
 								</tr>
  							<tr>
                             <td bgColor=#f4f4f2 align="center" vAlign="top">
-                            <logic:notEmpty name="aimEditActivityForm" property="statusCollection">
-                              <c:forEach var="statusColl" items="${aimEditActivityForm.statusCollection}">
-                                <c:if test="${statusColl.statusCode==1 && statusColl.name=='Planned'}">
+                              <c:if test="${aimEditActivityForm.status==1}">
                                 <table width="95%" bgcolor="#f4f4f2">
                                   <tr>
                                     <td>
@@ -333,8 +331,6 @@
                                   <tr><td>&nbsp;</td></tr>
                                 </table>
                                 </c:if>
-                              </c:forEach>
-                            </logic:notEmpty>
 										<table width="95%" bgcolor="#f4f4f2">
 											<tr>
 												<td>

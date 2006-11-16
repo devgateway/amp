@@ -580,10 +580,9 @@ function popupwin()
 												<img src="../ampTemplate/images/help.gif" alt="Click to get help on Status" width=10 height=10 border=0></a>
 												</td>
 												<td bgcolor="#ffffff">
-														<html:select property="status" styleClass="inp-text">
+                                                    <html:select property="status" styleClass="inp-text">
 														<html:option value="-1">Please select the status</html:option>
-														<html:optionsCollection name="aimEditActivityForm" property="statusCollection"
-														value="ampStatusId" label="name" />
+														<html:optionsCollection name="aimEditActivityForm" property="statusCollection" value="ampStatusId" label="name" />
 													</html:select>
 													<br><br>
 													If there have been some changes in the status, explain below the reasons :

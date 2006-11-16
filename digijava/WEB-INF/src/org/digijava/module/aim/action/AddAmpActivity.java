@@ -117,6 +117,7 @@ public class AddAmpActivity extends Action {
 			if ("create".equals(action)) {
 				eaForm.getCommentsCol().clear();
 				eaForm.setCommentFlag(false);
+                eaForm.setProProjCost(null);
 			}
 		}
 		// end

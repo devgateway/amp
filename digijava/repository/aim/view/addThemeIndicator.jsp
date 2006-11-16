@@ -139,24 +139,24 @@
 				<logic:notEmpty name="aimThemeForm" property="prgIndicators">
 						<tr><td>
 								<table width="100%" bgColor="#d7eafd" cellPadding=3 cellSpacing=1>
+										<tr bgcolor="#ffffff">
+											<td width="9" height="15" bgcolor="#f4f4f2">
+												&nbsp;
+											</td>
+											<td bgcolor="#f4f4f2" width="50">
+												Code
+											</td>
+											<td align="left" bgcolor="#f4f4f2">
+												Name
+											</td>
+											<td align="left" width="60" bgcolor="#f4f4f2">
+												Date
+											</td>
+											<td align="left" width="30" bgcolor="#f4f4f2">
+												Type
+											</td>
+										</tr>
 										<logic:iterate name="aimThemeForm" property="prgIndicators" id="prgIndicators" type="org.digijava.module.aim.helper.AmpPrgIndicator">
-												<tr bgcolor="#ffffff">
-														<td width="9" height="15" bgcolor="#f4f4f2">
-																&nbsp;
-														</td>
-														<td bgcolor="#f4f4f2" width="50">
-																Code
-														</td>
-														<td align="left" bgcolor="#f4f4f2">
-																Name
-														</td>
-														<td align="left" width="60" bgcolor="#f4f4f2">
-																Date
-														</td>
-														<td align="left" width="30" bgcolor="#f4f4f2">
-																Type
-														</td>
-												</tr>
 												<tr bgcolor="#ffffff">
 														<td width="9" height="15" bgcolor="#f4f4f2">
 																<img src= "../ampTemplate/images/arrow_right.gif" border=0>

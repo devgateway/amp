@@ -42,7 +42,9 @@ public class AmpActivity
 	private Set member;
 	private Country country;
 	private String contactName;
-    private ProposedProjCost propProjCost;
+    private Double funAmount;
+    private String currencyCode;
+    private String funDate;
     // use contFirstName and contLastName instead.
 								 // The field is defunct
 
@@ -777,8 +779,16 @@ public class AmpActivity
         return documentSpace;
     }
 
-    public ProposedProjCost getPropProjCost() {
-        return propProjCost;
+    public String getCurrencyCode() {
+        return currencyCode;
+    }
+
+    public Double getFunAmount() {
+        return funAmount;
+    }
+
+    public String getFunDate() {
+        return funDate;
     }
 
     /**
@@ -792,7 +802,15 @@ public class AmpActivity
         this.documentSpace = documentSpace;
     }
 
-    public void setPropProjCost(ProposedProjCost propProjCost) {
-        this.propProjCost = propProjCost;
+    public void setCurrencyCode(String currenyCode) {
+        this.currencyCode = currenyCode;
+    }
+
+    public void setFunAmount(Double funAmount) {
+        this.funAmount = funAmount;
+    }
+
+    public void setFunDate(String funDate) {
+        this.funDate = funDate;
     }
 }

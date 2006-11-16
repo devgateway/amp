@@ -303,7 +303,11 @@ public class EditActivity extends Action {
 				if (activity != null) {
 					// set title,description and objective
 
-                    eaForm.setProProjCost(activity.getPropProjCost());
+                    ProposedProjCost pg=new ProposedProjCost();
+                    pg.setFunAmount(activity.getFunAmount());
+                    pg.setCurrencyCode(activity.getCurrencyCode());
+                    pg.setFunDate(activity.getFunDate());
+                    eaForm.setProProjCost(pg);
 
 					eaForm.setTitle(activity.getName().trim());
 					eaForm.setDescription(activity.getDescription().trim());

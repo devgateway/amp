@@ -71,6 +71,7 @@ import org.digijava.module.aim.helper.RelOrganization;
 import org.digijava.module.aim.helper.RelatedLinks;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.cms.dbentity.CMSContentItem;
+import org.digijava.module.aim.form.ProposedProjCost;
 
 /**
  * ActivityUtil is the persister class for all activity related
@@ -270,7 +271,11 @@ public class ActivityUtil {
 				oldActivity.setOrgrole(activity.getOrgrole());
 				oldActivity.setSectors(activity.getSectors());
 				oldActivity.setIssues(activity.getIssues());
-                oldActivity.setPropProjCost(activity.getPropProjCost());
+
+                ProposedProjCost pg=new ProposedProjCost();
+                oldActivity.setFunAmount(activity.getFunAmount());
+                oldActivity.setCurrencyCode(activity.getCurrencyCode());
+                oldActivity.setFunDate(activity.getFunDate());
 
 				oldActivity.setApprovalStatus(activity.getApprovalStatus());
 			}
@@ -617,7 +622,10 @@ public class ActivityUtil {
 			    activity.setThemeId(ampActivity.getThemeId());
 			    activity.setUpdatedDate(ampActivity.getUpdatedDate());
 			    activity.setVersion(ampActivity.getVersion());
-                activity.setPropProjCost(ampActivity.getPropProjCost());
+
+                activity.setFunAmount(ampActivity.getFunAmount());
+                activity.setFunDate(ampActivity.getFunDate());
+                activity.setCurrencyCode(ampActivity.getCurrencyCode());
 
 			    activity.setClosingDates(new HashSet(ampActivity.getClosingDates()));
 			    activity.setComponents(new HashSet(ampActivity.getComponents()));

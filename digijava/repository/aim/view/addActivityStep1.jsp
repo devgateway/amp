@@ -21,7 +21,7 @@ function checkSelOrgs() {
 			return false;
 		}
 	} else { // many org. present
-		var length = document.aimEditActivityForm.selOrgs.length;	  
+		var length = document.aimEditActivityForm.selOrgs.length;
 		var flag = 0;
 		for (i = 0;i < length;i ++) {
 			if (document.aimEditActivityForm.selOrgs[i].checked == true) {
@@ -32,11 +32,11 @@ function checkSelOrgs() {
 
 		if (flag == 0) {
 			alert("Please choose an organization to remove");
-			return false;					  
+			return false;
 		}
 	}
 	return true;
-}	
+}
 
 function selectOrganisation() {
 	openNewWindow(600, 400);
@@ -44,7 +44,7 @@ function selectOrganisation() {
 	document.aimEditActivityForm.action = "<%=selectOrganization%>";
 	document.aimEditActivityForm.target = popupPointer.name;
 	document.aimEditActivityForm.submit();
-} 	
+}
 
 function edit(key) {
 	document.aimEditActivityForm.step.value = "1.1";
@@ -102,7 +102,7 @@ function reviseCloseDate() {
 	<digi:context name="rev" property="context/module/moduleinstance/reviseCompDate.do?edit=true" />
 	document.aimEditActivityForm.action = "<%= rev %>";
 	document.aimEditActivityForm.target = popupPointer.name;
-	document.aimEditActivityForm.submit();		  
+	document.aimEditActivityForm.submit();
 }
 
 function popupwin()
@@ -120,7 +120,7 @@ function popupwin()
 	winpopup.document.write('<ul><li><b>Planned:</b> from the conceptual stage to just prior to official commitment.</li><li><b>On-going:</b> the project is committed, is active but not yet completed.</li><li><b>Completed:</b> the project is finished, with all approved assistance provided.</li><li><b>Cancelled:</b> the project was committed but was terminated prior to planned completion.</li><li><b>Suspended:</b> the project has been suspended.</li></ul>\n');
 	winpopup.document.write('</font>\n');
 	winpopup.document.write('</font>\n</body>\n</html>\n');
-	winpopup.document.close();	
+	winpopup.document.close();
 }
 
 -->
@@ -167,20 +167,20 @@ function popupwin()
 										</digi:trn>
 									</digi:link>&nbsp;&gt;&nbsp;
 								</c:if>
-								<c:if test="${aimEditActivityForm.pageId == 1}">								
+								<c:if test="${aimEditActivityForm.pageId == 1}">
 									<bean:define id="translation">
 										<digi:trn key="aim:clickToViewMyDesktop">Click here to view MyDesktop </digi:trn>
 									</bean:define>
 									<digi:link href="/viewMyDesktop.do" styleClass="comment"  onclick="return quitRnot()" title="<%=translation%>">
 										<digi:trn key="aim:portfolio">Portfolio</digi:trn>
-									</digi:link>&nbsp;&gt;&nbsp;								
+									</digi:link>&nbsp;&gt;&nbsp;
 								</c:if>
 								<c:if test="${aimEditActivityForm.editAct == true}">
 									<digi:trn key="aim:editActivityStep1">Edit Activity - Step 1</digi:trn>
 								</c:if>
 								<c:if test="${aimEditActivityForm.editAct == false}">
 									<digi:trn key="aim:addActivityStep1">Add Activity - Step 1</digi:trn>
-								</c:if>								
+								</c:if>
 								</span>
 							</td>
 						</tr>
@@ -192,12 +192,12 @@ function popupwin()
 							<td height=16 vAlign=center width="100%"><span class=subtitle-blue>
 								<c:if test="${aimEditActivityForm.editAct == false}">
 									<digi:trn key="aim:addNewActivity">Add New Activity</digi:trn>
-								</c:if>			
+								</c:if>
 								<c:if test="${aimEditActivityForm.editAct == true}">
 									<digi:trn key="aim:editActivity">Edit Activity</digi:trn>
-								</c:if>										
+								</c:if>
 							</td>
-						</tr>	
+						</tr>
 					</table>
 				</td></tr>
 				<tr> <td>
@@ -243,12 +243,12 @@ function popupwin()
 												</a>
 											</td>
 											<td valign="top" align="left">
-												<a title="<digi:trn key="aim:TitleInDonorsOrMoFEDInternalSystems"> 
+												<a title="<digi:trn key="aim:TitleInDonorsOrMoFEDInternalSystems">
 												Title used in donors or MoFED internal systems
 												</digi:trn>">
 												<html:textarea property="title" cols="60" rows="2" styleClass="inp-text"/>
 												</a>
-											</td></tr>									
+											</td></tr>
 											<tr bgcolor="#ffffff"><td valign="top" align="left">
 												<a title="<digi:trn key="aim:ObjectivesAndComponentsofProject">The key objectives and main components of the project</digi:trn>">
 												<digi:trn key="aim:objective">Objective</digi:trn>
@@ -258,14 +258,14 @@ function popupwin()
 												<bean:define id="objKey">
 													<c:out value="${aimEditActivityForm.objectives}"/>
 												</bean:define>
-												
+
 												<digi:edit key="<%=objKey%>"/>
 												<%--
 												<a href="<c:out value="${aimEditActivityForm.context}"/>/editor/showEditText.do?id=<%=objKey%>&referrer=<c:out value="${aimEditActivityForm.context}"/>/aim/addActivity.do?edit=true">Edit</a>
 												--%>
 												<a href="javascript:edit('<%=objKey%>')">
 												Edit</a>
-											</td></tr>																				
+											</td></tr>
 											<tr bgcolor="#ffffff"><td valign="top" align="left">
 												<a title="<digi:trn key="aim:DescriptionofProject">Summary information describing the project</digi:trn>">
 												<digi:trn key="aim:description">
@@ -282,27 +282,27 @@ function popupwin()
 												<bean:define id="descKey">
 													<c:out value="${aimEditActivityForm.description}"/>
 												</bean:define>
-												
+
 												<digi:edit key="<%=descKey%>"/>
 												<%--
 												<a href="<c:out value="${aimEditActivityForm.context}"/>/editor/showEditText.do?id=<%=descKey%>&referrer=<c:out value="${aimEditActivityForm.context}"/>/aim/addActivity.do?edit=true">Edit</a>--%>
-												
+
 												<a href="javascript:edit('<%=descKey%>')">
-												Edit</a>												
-											</td></tr>																				
+												Edit</a>
+											</td></tr>
 										</table>
 									</td></tr>
 									<tr><td>
 										&nbsp;
 									</td></tr>
 									<tr><td>
-									
+
 										<table cellPadding=5 cellSpacing=1 border=0 width="100%" bgcolor="#d7eafd">
 											<tr>
 												<td align="left"><b>
 													<a title="<digi:trn key="aim:TrackActivitiesintheDonorsInternalDatabase">Facilitates tracking activities in donors' internal databases </digi:trn>">
 													<digi:trn key="aim:orgsAndProjectIds">Organizations and Project IDs</digi:trn>
-													</a></b>												
+													</a></b>
 												</td>
 											</tr>
 											<tr>
@@ -320,7 +320,7 @@ function popupwin()
 												<table cellSpacing=1 cellPadding=1 border=0 width="500">
 													<c:forEach var="selectedOrganizations" items="${aimEditActivityForm.selectedOrganizations}" >
 														<tr>
-															<td align="left" width=3> 	
+															<td align="left" width=3>
 																<html:multibox property="selOrgs">
 																	<c:out value="${selectedOrganizations.ampOrgId}"/>
 																</html:multibox>
@@ -329,21 +329,21 @@ function popupwin()
 																<c:out value="${selectedOrganizations.name}"/>
 															</td>
 															<td align="left" width="130">
-																<html:text name="selectedOrganizations" 
-																property="projectId" indexed="true" 
+																<html:text name="selectedOrganizations"
+																property="projectId" indexed="true"
 																styleClass="inp-text" size="15"/>
-															</td>															
+															</td>
 														</td></tr>
-													</c:forEach>													
+													</c:forEach>
 													<tr><td colspan="3">
 														<table cellSpacing=2 cellPadding=2>
 															<tr>
 																<td>
-																	<input type="button" value="Add Organization" class="buton" 
+																	<input type="button" value="Add Organization" class="buton"
 																		onclick="selectOrganisation()">
 																</td>
 																<td>
-																	<input type="button" value="Remove Organizations" class="buton" 
+																	<input type="button" value="Remove Organizations" class="buton"
 																		onclick="return removeSelOrganisations()">
 																</td>
 															</tr>
@@ -354,13 +354,13 @@ function popupwin()
 											</logic:notEmpty>
 											</tr>
 										</table>
-												
+
 												</td>
 											</tr>
 										</table>
 
-										
-									
+
+
 									</td></tr>
 									<tr><td>
 										&nbsp;
@@ -371,7 +371,7 @@ function popupwin()
 									</td></tr>
 									<tr><td>
 										&nbsp;
-									</td></tr>		
+									</td></tr>
 									<tr><td>
 										<table width="100%" bgcolor="#cccccc" cellSpacing=1 cellPadding=5>
 											<tr>
@@ -379,12 +379,12 @@ function popupwin()
 													<a title="<digi:trn key="aim:ExpectedApprovalDatebyDonorAgency">Date (dd/mm/yy) when the project is expected to be approved by the donor agency</digi:trn>">&nbsp;
 													<digi:trn key="aim:proposedApprovalDate">Proposed Approval Date</digi:trn>
 													</a>
-												</td>												
+												</td>
 												<td bgcolor="#ffffff">
 													<table cellPadding=0 cellSpacing=0>
 														<tr>
 															<td>
-																<a title="<digi:trn key="aim:ExpectedApprovalDatebyDonorAgency">Date (dd/mm/yy) when the project is expected to be approved by the donor agency </digi:trn>">								
+																<a title="<digi:trn key="aim:ExpectedApprovalDatebyDonorAgency">Date (dd/mm/yy) when the project is expected to be approved by the donor agency </digi:trn>">
 																<html:text name="aimEditActivityForm" property="originalAppDate" size="10"
 																styleId="originalAppDate" styleClass="inp-text" readonly="true"/>
 																</a>
@@ -401,14 +401,14 @@ function popupwin()
 											<tr>
 												<td width=200 bgcolor="#ffffff">
 													<a title="<digi:trn key="aim:ActualApprovalDatebyDonorAgency">Date (dd/mm/yy) when the project was approved by the donor agency</digi:trn>">&nbsp;
-												<digi:trn key="aim:actualApprovalDate">Actual Approval Date </digi:trn></a>					
+												<digi:trn key="aim:actualApprovalDate">Actual Approval Date </digi:trn></a>
 												</td>
 												<td bgcolor="#ffffff">
 													<table cellPadding=0 cellSpacing=0>
 														<tr>
 															<td>
 																<a title="<digi:trn key="aim:ActualApprovalDatebyDonorAgency">Date (dd/mm/yy) when the project was approved by the donor agency</digi:trn>">
-																<html:text name="aimEditActivityForm" property="revisedAppDate" size="10" 
+																<html:text name="aimEditActivityForm" property="revisedAppDate" size="10"
 																styleId="revisedAppDate" styleClass="inp-text" readonly="true"/>
 																</a>
 															</td>
@@ -425,19 +425,19 @@ function popupwin()
 													</table>
 												</td>
 											</tr>
-																						
+
 											<tr>
 												<td width=200 bgcolor="#ffffff">
 													<a title="<digi:trn key="aim:ProposedDateProjectStart">Date (dd/mm/yy) when the project is expected to commence</digi:trn>">&nbsp;
    												<digi:trn key="aim:proposedStartDate">Proposed Start Date</digi:trn>
-													</a>					
+													</a>
 												</td>
 												<td bgcolor="#ffffff">
 													<table cellPadding=0 cellSpacing=0>
 														<tr>
 															<td>
-																<a title="<digi:trn key="aim:ProposedDateProjectStart">Date (dd/mm/yy) when the project is expected to commence</digi:trn>">																   	
-																<html:text name="aimEditActivityForm" property="originalStartDate" size="10" 
+																<a title="<digi:trn key="aim:ProposedDateProjectStart">Date (dd/mm/yy) when the project is expected to commence</digi:trn>">
+																<html:text name="aimEditActivityForm" property="originalStartDate" size="10"
 																styleId="originalStartDate" styleClass="inp-text" readonly="true"/>
 																</a>
 															</td>
@@ -461,7 +461,7 @@ function popupwin()
 														<tr>
 															<td>
 																<a title="<digi:trn key="aim:ActualDateofProjectStart">Date (dd/mm/yy) when the project commenced (effective start date)</digi:trn>">
-																<html:text name="aimEditActivityForm" property="revisedStartDate" size="10" 
+																<html:text name="aimEditActivityForm" property="revisedStartDate" size="10"
 																styleId="revisedStartDate" styleClass="inp-text" readonly="true"/>
 																</a>
 															</td>
@@ -490,7 +490,7 @@ function popupwin()
 														<tr>
 															<td>
 																<a title="<digi:trn key="aim:ExpectedCompletionDateofProject">Date (dd/mm/yy) when the project is expected to be completed</digi:trn>">
-																<html:text name="aimEditActivityForm" property="proposedCompDate" size="10" 
+																<html:text name="aimEditActivityForm" property="proposedCompDate" size="10"
 																styleId="proposedCompDate" styleClass="inp-text" readonly="true"/>
 																</a>
 															</td>
@@ -502,7 +502,7 @@ function popupwin()
 														</tr>
 													</table>
 												</td>
-											</tr>											
+											</tr>
 											<tr>
 												<td width=200 bgcolor="#ffffff">	&nbsp;
 												<a title="<digi:trn key="aim:CompletionDateofProject">Date (dd/mm/yy) when the project is expected to end or ended. AMP users have the possibility to update this field; AMP will keep track of the history of proposed completion dates </digi:trn>">
@@ -514,7 +514,7 @@ function popupwin()
 														<tr>
 															<td>
 																<a title="<digi:trn key="aim:CompletionDateofProject">Date (dd/mm/yy) when the project is expected to end or ended. AMP users have the possibility to update this field; AMP will keep track of the history of proposed completion dates </digi:trn>">
-																<html:text name="aimEditActivityForm" property="currentCompDate" size="10" 
+																<html:text name="aimEditActivityForm" property="currentCompDate" size="10"
 																styleId="currentCompDate" styleClass="inp-text" readonly="true"/>
 																</a>
 															</td>
@@ -540,8 +540,8 @@ function popupwin()
 														<table cellPadding=0 cellSpacing=0>
 															<tr>
 																<td>
-																	<html:text name="aimEditActivityForm" property="currentCompDate" 
-																	size="10" styleClass="inp-text" 
+																	<html:text name="aimEditActivityForm" property="currentCompDate"
+																	size="10" styleClass="inp-text"
 																	readonly="true"/>
 																</td>
 																<td align="left" vAlign="center">&nbsp;
@@ -554,7 +554,7 @@ function popupwin()
 															</tr>
 														</table>
 													</td>
-												</tr>											
+												</tr>
 												<c:if test="${!empty aimEditActivityForm.activityCloseDates}">
 												<tr>
 													<td width=200 bgcolor="#ffffff">&nbsp;
@@ -582,20 +582,20 @@ function popupwin()
 												<td bgcolor="#ffffff">
 														<html:select property="status" styleClass="inp-text">
 														<html:option value="-1">Please select the status</html:option>
-														<html:optionsCollection name="aimEditActivityForm" property="statusCollection" 
+														<html:optionsCollection name="aimEditActivityForm" property="statusCollection"
 														value="ampStatusId" label="name" />
-													</html:select>													
+													</html:select>
 													<br><br>
 													If there have been some changes in the status, explain below the reasons :
 													<a title="<digi:trn key="aim:ReasonforStatusofProject">Use this space to provide explanations as to why that status was selected. Used primarily in the case of cancelled and suspended projects</digi:trn>">
-													<br>														
+													<br>
 													<html:textarea property="statusReason" cols="50" rows="3" styleClass="inp-text" />
-													</a>														
+													</a>
 												</td>
-											</tr>											
+											</tr>
 										</table>
-									</td></tr>									
-									<tr><td bgColor=#f4f4f2>&nbsp;</td></tr>									
+									</td></tr>
+									<tr><td bgColor=#f4f4f2>&nbsp;</td></tr>
 									<tr><td bgColor=#f4f4f2 align="center">
 										<table cellPadding=3>
 											<tr>
@@ -607,19 +607,19 @@ function popupwin()
 												</td>
 											</tr>
 										</table>
-									</td></tr>									
+									</td></tr>
 								</table>
 
 								<!-- end contents -->
 							</td></tr>
 							</table>
-							</td></tr>							
-						</table>						
+							</td></tr>
+						</table>
 						</td>
 						<td width="25%" vAlign="top" align="right">
 						<!-- edit activity form menu -->
 							<jsp:include page="editActivityMenu.jsp" flush="true" />
-						<!-- end of activity form menu -->							
+						<!-- end of activity form menu -->
 						</td></tr>
 					</table>
 				</td></tr>

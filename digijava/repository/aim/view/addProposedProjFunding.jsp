@@ -73,7 +73,7 @@
                           <html:text property="proProjCost.funAmount" style="width:100%;"/>
                         </td>
                         <td valign="center" align="center">
-                          <html:select property="currencyCode" styleClass="inp-text">
+                          <html:select property="proProjCost.currencyCode" styleClass="inp-text">
                             <html:optionsCollection name="aimEditActivityForm" property="currencies" value="currencyCode" label="currencyName" style="width:100%;"/>
                           </html:select>
                         </td>

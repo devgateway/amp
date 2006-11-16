@@ -9,11 +9,22 @@
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/calendar.js"/>"></script>
 <script language="JavaScript" type="text/javascript">
 	function addPropFunding() {
+      var fna=aimEditActivityForm.funAmount.value;
+      if(fna==""){
+        alert("Please enter amount");
+        return false;
+      }else if(fna.match("[^0-9]")){
+        alert("Invalid amount value");
+        return false;
+      }
+      if(funDate.value==""){
+        alert("Please select date");
+        return false;
+      }
       <digi:context name="fundAdded" property="context/module/moduleinstance/addProposedFunding.do" />;
       document.aimEditActivityForm.action = "<%= fundAdded %>";
       document.aimEditActivityForm.target=window.opener.name;
       document.aimEditActivityForm.submit();
-      //window.opener.location.reload(true);
       window.close();
       return true;
 	}
@@ -70,7 +81,7 @@
                         Planned
                         </td>
                         <td valign="center" align="center">
-                          <html:text property="proProjCost.funAmount" style="width:100%;"/>
+                          <html:text property="proProjCost.funAmount" styleId="funAmount" style="width:100%;"/>
                         </td>
                         <td valign="center" align="center">
                           <html:select property="proProjCost.currencyCode" styleClass="inp-text">

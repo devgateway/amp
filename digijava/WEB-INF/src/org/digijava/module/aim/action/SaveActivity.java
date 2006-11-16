@@ -121,9 +121,16 @@ public class SaveActivity extends Action {
 			EditActivityForm eaForm = (EditActivityForm) form;
 			AmpActivity activity = new AmpActivity();
 
-            activity.setFunAmount(eaForm.getProProjCost().getFunAmount());
-            activity.setFunDate(eaForm.getProProjCost().getFunDate());
-            activity.setCurrencyCode(eaForm.getProProjCost().getCurrencyCode());
+            if(eaForm.getProProjCost()==null){
+                activity.setFunAmount(null);
+                activity.setFunDate(null);
+                activity.setCurrencyCode(null);
+            }else{
+                activity.setFunAmount(eaForm.getProProjCost().getFunAmount());
+                activity.setFunDate(eaForm.getProProjCost().getFunDate());
+                activity.setCurrencyCode(eaForm.getProProjCost().getCurrencyCode());
+            }
+
 
 			if (eaForm.getPageId() < 0 || eaForm.getPageId() > 1) {
 				return mapping.findForward("index");
@@ -466,11 +473,15 @@ public class SaveActivity extends Action {
 				 * saveErrors(request, errors); return
 				 * mapping.findForward("addActivityStep5"); }
 				 */
-
-                activity.setFunAmount(eaForm.getProProjCost().getFunAmount());
-                activity.setFunDate(eaForm.getProProjCost().getFunDate());
-                activity.setCurrencyCode(eaForm.getProProjCost().getCurrencyCode());
-
+                if(eaForm.getProProjCost()==null){
+                    activity.setFunAmount(null);
+                    activity.setFunDate(null);
+                    activity.setCurrencyCode(null);
+                }else{
+                    activity.setFunAmount(eaForm.getProProjCost().getFunAmount());
+                    activity.setFunDate(eaForm.getProProjCost().getFunDate());
+                    activity.setCurrencyCode(eaForm.getProProjCost().getCurrencyCode());
+                }
 				activity.setAmpId(eaForm.getAmpId());
 				activity.setName(eaForm.getTitle());
 				if (eaForm.getDescription() == null

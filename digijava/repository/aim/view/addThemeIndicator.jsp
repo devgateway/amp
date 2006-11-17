@@ -12,12 +12,44 @@
 
 <script language="JavaScript">
 	<!--
+	function validate() 
+	{
+		if (trim(document.aimThemeForm.name.value).length == 0) 
+		{
+			alert("Please enter Indicator name");
+			document.aimThemeForm.name.focus();
+			return false;
+		}	
+		if (trim(document.aimThemeForm.code.value).length == 0) 
+		{
+			alert("Please enter Indicator code");
+			document.aimThemeForm.code.focus();
+			return false;
+		}			
+		if (trim(document.aimThemeForm.type.value).length == 0) 
+		{
+			alert("Please enter Indicator type");
+			document.aimThemeForm.type.focus();
+			return false;
+		}
+		if (trim(document.aimThemeForm.creationDate.value).length == 0) 
+		{
+			alert("Please enter the date of creation of the Indicator");
+			document.aimThemeForm.creationDate.focus();
+			return false;
+		}
+		return true;
+	}
 	function saveProgram(id)
 	{
-			<digi:context name="addThmInd" property="context/module/moduleinstance/addThemeIndicator.do?event=save"/>
-			document.aimThemeForm.action = "<%=addThmInd%>&themeId=" +id;
-			document.aimThemeForm.target = "_self";
-			document.aimThemeForm.submit();
+			var temp = validate();
+			if (temp == true) 
+			{
+				<digi:context name="addThmInd" property="context/module/moduleinstance/addThemeIndicator.do?event=save"/>
+				document.aimThemeForm.action = "<%=addThmInd%>&themeId=" +id;
+				document.aimThemeForm.target = "_self";
+				document.aimThemeForm.submit();
+			}
 			return true;	
 	}
 	
@@ -70,7 +102,7 @@
 				<tr bgcolor=#ffffff><td height="5" colspan="4"></td></tr>	
 				<tr bgColor=#ffffff>
 				<td height="20" align="right">
-						<b>Indicator Name</b>&nbsp;
+						<b>Indicator Name</b><font color="red">*</font>&nbsp;
 				</td>
 				<td align="left" colspan="3">
 						<html:text name="aimThemeForm" property="name" size="30"/>
@@ -79,19 +111,25 @@
 				<tr bgcolor=#ffffff><td height="5" colspan="4"></td></tr>
 				<tr bgColor=#ffffff>
 				<td height="20" align="right">
-						<b>Indicator Code</b>&nbsp;
+						<b>Indicator Code</b><font color="red">*</font>&nbsp;
 				</td>
 				<td align="left">
 						<html:text name="aimThemeForm" property="code" size="20" styleClass="inp-text"/>
-						&nbsp;&nbsp;&nbsp;
-						<b>Indicator Type</b>&nbsp;
-						<html:text name="aimThemeForm" property="type" size="17" styleClass="inp-text"/>
+				</td>
+				</tr>
+				<tr bgcolor=#ffffff><td height="5" colspan="4"></td></tr>
+				<tr bgColor=#ffffff>
+				<td height="20" align="right">
+						<b>Indicator Type</b><font color="red">*</font>&nbsp;
+				</td>
+				<td align="left">
+						<html:text name="aimThemeForm" property="type" size="20" styleClass="inp-text"/>
 				</td>
 				</tr>
 				<tr bgcolor=#ffffff><td height="5" colspan="4"></td></tr>
 				<tr bgColor=#ffffff>
 				<td height="20" align="right">&nbsp;
-						<b>Creation Date</b>&nbsp;
+						<b>Creation Date</b><font color="red">*</font>&nbsp;
 				</td>
 				<td align="left">
 						<table cellPadding=0 cellSpacing=0>
@@ -104,14 +142,18 @@
 				          			<img src="../ampTemplate/images/show-calendar.gif" border="0">
 										</a>
 								</td>
-								<td>&nbsp;&nbsp;&nbsp;&nbsp;
-										<b>National Planning Indicator</b>&nbsp;
-										<html:checkbox name="aimThemeForm" property="npIndicator" />
-								</td>
 								</tr>
 						</table>
 				</td>
-				</tr>	
+				</tr>
+				<tr bgcolor=#ffffff><td height="5" colspan="4"></td></tr>
+				<tr bgColor=#ffffff>
+				<td height="20" align="right">
+						<b>National Planning Indicator</b>
+				</td>
+				<td align="left">
+						<html:checkbox name="aimThemeForm" property="npIndicator"/>
+				</td>	
 				<tr bgcolor=#ffffff><td height="5" colspan="4"></td></tr>
 				<tr bgColor=#ffffff>
 				<td height="20" align="right"><b>

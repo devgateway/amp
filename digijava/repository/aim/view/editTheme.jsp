@@ -8,13 +8,38 @@
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
 <script language="JavaScript">
 <!--
-
+	function validate() 
+	{
+		if (trim(document.aimThemeForm.programName.value).length == 0) 
+		{
+			alert("Please enter Program name");
+			document.aimThemeForm.programName.focus();
+			return false;
+		}	
+		if (trim(document.aimThemeForm.programCode.value).length == 0) 
+		{
+			alert("Please enter Program code");
+			document.aimThemeForm.programCode.focus();
+			return false;
+		}			
+		if (trim(document.aimThemeForm.programType.value).length == 0) 
+		{
+			alert("Please enter Program type");
+			document.aimThemeForm.programType.focus();
+			return false;
+		}
+		return true;
+	}
 	function saveProgram(id)
 	{
-			<digi:context name="editThm" property="context/module/moduleinstance/editTheme.do?event=update"/>
-			document.aimThemeForm.action = "<%=editThm%>&themeId=" + id;
-			document.aimThemeForm.target = "_self";
-			document.aimThemeForm.submit();
+			var temp = validate();
+			if(temp == true)
+			{
+				<digi:context name="editThm" property="context/module/moduleinstance/editTheme.do?event=update"/>
+				document.aimThemeForm.action = "<%=editThm%>&themeId=" + id;
+				document.aimThemeForm.target = "_self";
+				document.aimThemeForm.submit();
+			}
 			return true;
 	}
 	function load(){}

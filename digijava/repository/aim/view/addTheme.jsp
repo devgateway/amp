@@ -10,15 +10,40 @@
 
 <script language="JavaScript">
 	<!--
-
+	function validate() 
+	{
+		if (trim(document.aimThemeForm.programName.value).length == 0) 
+		{
+			alert("Please enter Program name");
+			document.aimThemeForm.programName.focus();
+			return false;
+		}	
+		if (trim(document.aimThemeForm.programCode.value).length == 0) 
+		{
+			alert("Please enter Program code");
+			document.aimThemeForm.programCode.focus();
+			return false;
+		}			
+		if (trim(document.aimThemeForm.programType.value).length == 0) 
+		{
+			alert("Please enter Program type");
+			document.aimThemeForm.programType.focus();
+			return false;
+		}
+		return true;
+	}
 	function saveProgram()
 	{
-			document.aimThemeForm.addBtn.disabled = true;	  	
-			<digi:context name="addThm" property="context/module/moduleinstance/addTheme.do"/>
-			document.aimThemeForm.action = "<%=addThm%>";
-			document.aimThemeForm.target = window.opener.name;
-			document.aimThemeForm.submit();
-			window.close();
+			var temp = validate();
+			if (temp == true) 
+			{
+				document.aimThemeForm.addBtn.disabled = true;	  	
+				<digi:context name="addThm" property="context/module/moduleinstance/addTheme.do"/>
+				document.aimThemeForm.action = "<%=addThm%>";
+				document.aimThemeForm.target = window.opener.name;
+				document.aimThemeForm.submit();
+				window.close();
+			}
 			return true;
 	}
 	function load(){}

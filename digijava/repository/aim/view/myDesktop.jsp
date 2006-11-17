@@ -14,11 +14,17 @@
 
 	function newWin(val) {
 		<digi:context name="selectLoc" property="context/module/moduleinstance/viewOrganisation.do" />
-		url = "<%= selectLoc %>?ampOrgId=" + val;
+		var url = "<%= selectLoc %>?ampOrgId=" + val;
 		openNewWindow(635, 600);
 		//obj.target = popupPointer.name;
 		popupPointer.document.location.href = url;
 		//obj.href = url;
+	}
+
+    function perviewPrint(val) {
+        <digi:context name="printLoc" property="context/module/moduleinstance/previewPrintMyDesktop.do" />
+        document.aimDesktopForm.action = printLoc;
+		document.aimDesktopForm.submit();
 	}
 
 	function searchActivity() {
@@ -119,6 +125,7 @@
 
 						<input type="submit" value="Go" class="dr-menu">
 						<input type="submit" value="Reset" class="dr-menu" onclick="resetFilters()">
+                        <input type="button" value="Print" class="dr-menu" onclick="perviewPrint()">
 					</TD></TR>
 				</c:if>
 				<!-- Project List -->
@@ -351,9 +358,6 @@
 							<digi:trn key="aim:teamWorkspaceSetup">Team Workspace Setup</digi:trn>
 						</digi:link></div><br />
                         <div title='<%=translation%>'>
-						<digi:link href="/previewPrintMyDesktop.do">
-							<digi:trn key="aim:PreviewPrintMyDesktop">Print</digi:trn>
-						</digi:link></div>
 					</logic:equal>
 				</TD>
 			</TR>

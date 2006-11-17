@@ -95,25 +95,42 @@ public class EditActivity extends Action {
 
 		HttpSession session = request.getSession();
 		TeamMember tm = (TeamMember) session.getAttribute("currentMember");
-
+		ActionErrors errors = new ActionErrors();
+		
 		ampContext = getServlet().getServletContext();
 
 		// if user is not logged in, forward him to the home page
 		if (session.getAttribute("currentMember") == null)
 			return mapping.findForward("index");
+		EditActivityForm eaForm = (EditActivityForm) form; // form bean instance
+		Long activityId = eaForm.getActivityId();
+		
+		if (!mapping.getPath().trim().endsWith("viewActivityPreview")
+				|| tm.getWrite() == false) { 
+			logger.info("User dont have privilege to edit the activity...");
+			if (!("Team".equalsIgnoreCase(tm.getTeamAccessType()))) {
+				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
+					"error.aim.noWriteAccessForUser"));
+				saveErrors(request, errors);
 
-        if(!tm.getWrite()){
+				String url = "/aim/viewChannelOverview.do?ampActivityId="
+					+ activityId + "&tabIndex=0";
+				RequestDispatcher rd = getServlet().getServletContext()
+					.getRequestDispatcher(url);
+				rd.forward(request, response);				
+			}
+		}
+        if(!tm.getWrite() && "".equals(tm.getTeamAccessType())){
             return mapping.findForward("accessDenyed");
         }
-		EditActivityForm eaForm = (EditActivityForm) form; // form bean
-		// instance
+		
 
 		try {
 
 			// Checking whether the activity is already opened for editing
 			// by some other user
 
-			Long activityId = eaForm.getActivityId();
+			
 
 			eaForm.setReset(true);
 			eaForm.setOrgSelReset(true);
@@ -197,7 +214,7 @@ public class EditActivity extends Action {
 
 			//logger.info("CanEdit = " + canEdit);
 			if (!canEdit) {
-				ActionErrors errors = new ActionErrors();
+				
 				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
 						"error.aim.activityAlreadyOpenedForEdit"));
 				saveErrors(request, errors);

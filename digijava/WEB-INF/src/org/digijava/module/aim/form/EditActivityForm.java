@@ -8,6 +8,7 @@ package org.digijava.module.aim.form;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Iterator;
 import java.util.List;
 import java.util.TreeSet;
 
@@ -19,6 +20,7 @@ import org.apache.struts.upload.FormFile;
 import org.digijava.module.aim.dbentity.AmpField;
 import org.digijava.module.aim.helper.ActivityIndicator;
 import org.digijava.module.aim.helper.FundingDetail;
+import org.digijava.module.aim.helper.FundingOrganization;
 import org.digijava.module.aim.helper.OrgProjectId;
 
 public class EditActivityForm extends ActionForm implements Serializable{
@@ -167,6 +169,7 @@ public class EditActivityForm extends ActionForm implements Serializable{
 
 	/* START FINANCIAL EDIT */
 	private Collection fundingOrganizations; // Collection of FundingOrganization objects
+	private Collection orderedFundingOrganizations;
 	private String orgFundingId;
 	private Long fundingId;
 	private Long orgId;
@@ -398,6 +401,7 @@ public class EditActivityForm extends ActionForm implements Serializable{
 			pages = null;
 			alphaPages = null;
 			fundingOrganizations = null;
+			orderedFundingOrganizations = null;
 			fundingId = null;
 			orgFundingId = null;
 			orgId = null;
@@ -821,6 +825,22 @@ public class EditActivityForm extends ActionForm implements Serializable{
 	 * @return Returns the fundingOrganizations.
 	 */
 	public Collection getFundingOrganizations() {
+		
+		/*TreeSet orderedFundingOrganizations=new TreeSet();
+		try{
+			for (Iterator it=fundingOrganizations.iterator(); it.hasNext(); ) 
+			{
+				Object o=it.next();
+				orderedFundingOrganizations.addAll(fundingOrganizations);
+			}
+			}
+			catch (Exception e)
+			{
+				System.out.println("getFundingOrganizations -> "+e.fillInStackTrace());
+			}
+			
+		return orderedFundingOrganizations;
+		*/
 		return fundingOrganizations;
 	}
 
@@ -3647,6 +3667,27 @@ public class EditActivityForm extends ActionForm implements Serializable{
 
 	public void setSelectedOrganizationsList(Collection selectedOrganizationsList) {
 		this.selectedOrganizationsList = selectedOrganizationsList;
+	}
+
+	public Collection getOrderedFundingOrganizations() {
+		TreeSet orderedFundingOrganizations=new TreeSet();
+		try{
+			for (Iterator it=fundingOrganizations.iterator(); it.hasNext(); ) 
+			{
+				Object o=it.next();
+				orderedFundingOrganizations.addAll(fundingOrganizations);
+			}
+			}
+			catch (Exception e)
+			{
+				System.out.println("getFundingOrganizations -> "+e.fillInStackTrace());
+			}
+			
+		return orderedFundingOrganizations;
+	}
+
+	public void setOrderedFundingOrganizations(Collection orderedFundingOrganizations) {
+		this.orderedFundingOrganizations = orderedFundingOrganizations;
 	}
 
 }

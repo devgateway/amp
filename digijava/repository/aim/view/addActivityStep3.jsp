@@ -276,7 +276,7 @@
 															<td>
 																<table cellSpacing=1 cellPadding=5 border=0 width="100%" class="box-border-nopadding">
 																	<logic:notEmpty name="aimEditActivityForm" property="fundingOrganizations">
-																	<logic:iterate name="aimEditActivityForm" property="fundingOrganizations" 
+																	<logic:iterate name="aimEditActivityForm" property="orderedFundingOrganizations" 
 																	id="fundingOrganization" type="org.digijava.module.aim.helper.FundingOrganization">
 																	<tr>
 																		<td> 

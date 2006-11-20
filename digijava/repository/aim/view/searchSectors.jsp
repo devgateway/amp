@@ -157,9 +157,7 @@
 							<td vAlign="center" width="100%" align ="center" class="textalb" height="20">
 								<digi:trn key="aim:SectorList">
 								List of Sectors</digi:trn>
-					<br>(no of records =<bean:size id="aa" name="aimEditActivityForm" property="searchedSectors" />
-					<c:out value="${aa}"/>
-					)
+					
 							</td>
 						</tr>
 <!-- 1 -->

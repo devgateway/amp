@@ -174,9 +174,7 @@
 								<digi:trn key="aim:locationList">
 								List of Locations</digi:trn> 
 					(<bean:write name="aimEditActivityForm" property="implementationLevel" />)
-					<br>(no of records =<bean:size id="aa" name="aimEditActivityForm" property="searchLocs" />
-					<c:out value="${aa}"/>
-					)
+					
 							</td>
 						</tr>
 						<logic:notEmpty name="aimEditActivityForm" property="pagedCol">

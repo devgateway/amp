@@ -16,7 +16,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.apache.log4j.Logger;
+import org.digijava.kernel.util.collections.CollectionUtils;
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionError;
 import org.apache.struts.action.ActionErrors;
@@ -43,6 +43,11 @@ import org.digijava.module.editor.util.Constants;
 import org.digijava.module.aim.util.DocumentUtil;
 import org.digijava.kernel.request.Site;
 import org.digijava.module.aim.form.ProposedProjCost;
+import org.digijava.module.aim.dbentity.AmpTheme;
+import org.digijava.module.aim.form.ThemeForm;
+import java.util.Comparator;
+import org.digijava.kernel.util.collections.HierarchyDefinition;
+
 /**
  * Used to capture the activity details to the form bean of type org.digijava.module.aim.form.EditActivityForm
  *
@@ -283,7 +288,13 @@ public class AddAmpActivity extends Action {
 			}
 
 			// load all themes
-			eaForm.setProgramCollection(ProgramUtil.getAllThemes());
+            Collection themes=new ArrayList();
+            themes = ProgramUtil.getAllThemes();
+            themes = CollectionUtils.getFlatHierarchy(themes, true, new HierarchicalDefinition(), new ProgramComparator());
+
+            eaForm.setProgramCollection(themes);
+
+			//eaForm.setProgramCollection(ProgramUtil.getAllThemes());
 
 			// load all the active currencies
 			eaForm.setCurrencies(CurrencyUtil.getAmpCurrency());
@@ -363,7 +374,9 @@ public class AddAmpActivity extends Action {
 			}
 
 			if (eaForm.getProgramCollection() == null) {
-				eaForm.setProgramCollection(ProgramUtil.getAllThemes());
+                Collection themes=new ArrayList();
+                themes = ProgramUtil.getAllThemes();
+                eaForm.setProgramCollection(themes);
 			}
 
 			return mapping.findForward("preview");
@@ -401,4 +414,32 @@ public class AddAmpActivity extends Action {
 		}
 		return null;
 	}
+}
+class ProgramComparator
+    implements Comparator {
+    public int compare(Object o1, Object o2) {
+        AmpTheme i1 = (AmpTheme) o1;
+        AmpTheme i2 = (AmpTheme) o2;
+
+        Long sk1 = i1.getAmpThemeId();
+        Long sk2 = i2.getAmpThemeId();
+
+        return sk1.compareTo(sk2);
+    }
+}
+
+class HierarchicalDefinition implements HierarchyDefinition {
+    public Object getObjectIdentity(Object object) {
+        AmpTheme i = (AmpTheme) object;
+        return i.getAmpThemeId();
+
+    }
+    public Object getParentIdentity(Object object) {
+        AmpTheme i = (AmpTheme) object;
+        if (i.getParentThemeId() == null) {
+            return null;
+        } else {
+            return i.getParentThemeId().getAmpThemeId();
+        }
+    }
 }

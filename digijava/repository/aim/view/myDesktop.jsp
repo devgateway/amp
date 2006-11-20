@@ -23,7 +23,7 @@
 
     function perviewPrint(val) {
         <digi:context name="printLoc" property="context/module/moduleinstance/previewPrintMyDesktop.do" />
-        document.aimDesktopForm.action = printLoc;
+        document.aimDesktopForm.action ="<%=printLoc%>";
 		document.aimDesktopForm.submit();
 	}
 

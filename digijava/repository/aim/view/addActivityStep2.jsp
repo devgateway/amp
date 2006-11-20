@@ -20,21 +20,21 @@ function validate(field) {
 			if (document.aimEditActivityForm.selLocs.checked == false) {
 				alert("Please choose a location to remove");
 				return false;
-			}				  
+			}
 		} else {
-			var length = document.aimEditActivityForm.selLocs.length;	  
+			var length = document.aimEditActivityForm.selLocs.length;
 			var flag = 0;
 			for (i = 0;i < length;i ++) {
 				if (document.aimEditActivityForm.selLocs[i].checked == true) {
 					flag = 1;
 					break;
 				}
-			}		
+			}
 
 			if (flag == 0) {
 				alert("Please choose a location to remove");
-				return false;					  
-			}				  
+				return false;
+			}
 		}
 		return true;
 	} else { // validate sector
@@ -42,23 +42,23 @@ function validate(field) {
 			if (document.aimEditActivityForm.selActivitySectors.checked == false) {
 				alert("Please choose a sector to remove");
 				return false;
-			}				  
+			}
 		} else {
-			var length = document.aimEditActivityForm.selActivitySectors.length;	  
+			var length = document.aimEditActivityForm.selActivitySectors.length;
 			var flag = 0;
 			for (i = 0;i < length;i ++) {
 				if (document.aimEditActivityForm.selActivitySectors[i].checked == true) {
 					flag = 1;
 					break;
 				}
-			}		
+			}
 
 			if (flag == 0) {
 				alert("Please choose a sector to remove");
-				return false;					  
-			}				  
+				return false;
+			}
 		}
-		return true;			  
+		return true;
 	}
 }
 
@@ -68,7 +68,7 @@ function selectLocation() {
 		document.aimEditActivityForm.action = "<%= selectLoc %>";
 		document.aimEditActivityForm.target = popupPointer.name;
 		document.aimEditActivityForm.submit();
-} 	
+}
 
 function addSectors() {
 		openNewWindow(600, 450);
@@ -76,7 +76,7 @@ function addSectors() {
 	  	document.aimEditActivityForm.action = "<%= addSector %>";
 		document.aimEditActivityForm.target = popupPointer.name;
 		document.aimEditActivityForm.submit();
-} 	
+}
 
 function removeSelSectors() {
 		  var flag = validate(2);
@@ -86,7 +86,7 @@ function removeSelSectors() {
 		  	document.aimEditActivityForm.target = "_self"
 			document.aimEditActivityForm.submit();
 			return true;
-} 	
+}
 
 function resetAll()
 {
@@ -105,7 +105,7 @@ function removeSelLocations() {
 		  	document.aimEditActivityForm.target = "_self"
 			document.aimEditActivityForm.submit();
 			return true;
-} 	
+}
 
 function validateForm() {
 	if (document.aimEditActivityForm.selActivitySectors == null) {
@@ -132,7 +132,7 @@ function popupwin()
 	winpopup.document.write('The OECD/DAC Creditor Reporting System(CRS) codes are used by all 23 OECD/DAC members when they report on their aid activities to the DAC Secretariat. The complete list of CRS codes and definitions and principles can be found in Annex 3.<ul><li>In the CRS,data on the sector of destination are recorded using 5-digit purpose codes. The first three digits of the code refer to the main sector or category (i.e.112 for Basic education, or 210 for Transpost and storage). The last two digits of the CRS purpose code allow providing more detailed classification(i.e. 11240 for Early childhood education, or 21020 for Rail transport).</li><li>For the purpose of AMP, if the 5-digits codificaton is too detailed and not relevant, only 3-digits codes may be used.</li><li>One and only one purpose code should be applied to each project. In case of multi-sector projects, use the CRS codes 400xx.</li><li>Non-sector activities (i.e. general budget support, debt, emergency aid, NGOs) are covered by the CRS, under codes 500xx to 900xx.</li></ul>\n');
 	winpopup.document.write('</font>\n');
 	winpopup.document.write('</body>\n</html>\n');
-	winpopup.document.close();	
+	winpopup.document.close();
 }
 
 -->
@@ -175,7 +175,7 @@ function popupwin()
 										</digi:trn>
 									</digi:link>&nbsp;&gt;&nbsp;
 								</c:if>
-								<c:if test="${aimEditActivityForm.pageId == 1}">								
+								<c:if test="${aimEditActivityForm.pageId == 1}">
 									<bean:define id="translation">
 										<digi:trn key="aim:clickToViewMyDesktop">Click here to view MyDesktop</digi:trn>
 									</bean:define>
@@ -183,9 +183,9 @@ function popupwin()
 										<digi:trn key="aim:portfolio">
 											Portfolio
 										</digi:trn>
-									</digi:link>&nbsp;&gt;&nbsp;								
-								</c:if>																
-	
+									</digi:link>&nbsp;&gt;&nbsp;
+								</c:if>
+
 								<bean:define id="translation">
 									<digi:trn key="aim:clickToViewAddActivityStep1">Click here to goto Add Activity Step 1</digi:trn>
 								</bean:define>
@@ -199,8 +199,8 @@ function popupwin()
 									<digi:trn key="aim:addActivityStep1">
 										Add Activity - Step 1
 									</digi:trn>
-								</c:if>																
-								</digi:link>&nbsp;&gt;&nbsp;						
+								</c:if>
+								</digi:link>&nbsp;&gt;&nbsp;
 								<digi:trn key="aim:addActivityStep2">
 									Step 2
 								</digi:trn>
@@ -217,28 +217,28 @@ function popupwin()
 									<digi:trn key="aim:addNewActivity">
 										Add New Activity
 									</digi:trn>
-								</c:if>			
+								</c:if>
 								<c:if test="${aimEditActivityForm.editAct == true}">
 									<digi:trn key="aim:editActivity">
 										Edit Activity
 									</digi:trn>
-								</c:if>										
+								</c:if>
 							</td>
-						</tr>	
+						</tr>
 					</table>
 				</td></tr>
 				<tr><td>
 					&nbsp;
 					<digi:trn key="um:allMarkedRequiredField">All fields marked with an <FONT color=red><B><BIG>*</BIG>
-					</B></FONT> are required.</digi:trn>					
+					</B></FONT> are required.</digi:trn>
 				</td></tr>
 				<tr> <td>
 					<digi:errors/>
 				</td></tr>
-				
+
 				<tr><td>
 					<table width="100%" cellSpacing="5" cellPadding="3" vAlign="top">
-						<tr><td width="75%" vAlign="top">	
+						<tr><td width="75%" vAlign="top">
 						<table cellPadding=0 cellSpacing=0 width="100%">
 							<tr>
 								<td width="100%">
@@ -255,7 +255,7 @@ function popupwin()
 											</td>
 										</tr>
 									</table>
-								</td>							
+								</td>
 							</tr>
 							<tr><td width="100%" bgcolor="#f4f4f2">
 							<table width="100%" cellSpacing="1" cellPadding="3" vAlign="top" align="left" bgcolor="#006699">
@@ -263,7 +263,7 @@ function popupwin()
 								<!-- contents -->
 
 								<table width="95%" bgcolor="#f4f4f2">
-																	
+
 									<tr><td>
 										<IMG alt=Link height=10 src="../ampTemplate/images/arrow-014E86.gif" width=15>
 										<b><digi:trn key="aim:location">Location</digi:trn></b>
@@ -271,7 +271,7 @@ function popupwin()
 									<tr><td>
 										<digi:trn key="aim:chooseLocation">
 										Choose the area covered by the project.</digi:trn>
-									</td></tr>									
+									</td></tr>
 									<tr><td>
 										&nbsp;
 									</td></tr>
@@ -286,10 +286,10 @@ function popupwin()
 										<td>
 										<html:select property="level" styleClass="inp-text">
 										<html:option value="-1">Select Level</html:option>
-											<html:optionsCollection name="aimEditActivityForm" property="levelCollection" 
+											<html:optionsCollection name="aimEditActivityForm" property="levelCollection"
 											value="ampLevelId" label="name" />
-										</html:select>										
-									</td></tr>									
+										</html:select>
+									</td></tr>
 					<tr>
 					<td vAlign="center" colspan=5>
 							<b></b>
@@ -297,7 +297,7 @@ function popupwin()
 					</td>
 					</tr>
 									<tr><td vAlign="center">
-										<a title="<digi:trn key="aim:impLocation">The regions, zones and woredas in which the project is implemented</digi:trn>"> 
+										<a title="<digi:trn key="aim:impLocation">The regions, zones and woredas in which the project is implemented</digi:trn>">
 										<digi:trn key="aim:implementationLoc">Implementation Location </digi:trn></a>&nbsp;
 										</td>
 										<td vAlign="center">
@@ -328,7 +328,7 @@ function popupwin()
 													<logic:empty name="aimEditActivityForm" property="selectedLocs">
 														<tr>
 															<td bgcolor="#ffffff">
-																<input type="button" value="Add Location" class="buton" 
+																<input type="button" value="Add Location" class="buton"
 																onclick="selectLocation()">
 															</td>
 														</tr>
@@ -339,13 +339,13 @@ function popupwin()
 																<table cellSpacing=0 cellPadding=0 border=0 bgcolor="#ffffff" width="100%">
 																<logic:iterate name="aimEditActivityForm" property="selectedLocs" id="selectedLocs"
 																type="org.digijava.module.aim.helper.Location">
-																	<tr><td width="100%"> 
+																	<tr><td width="100%">
 																		<table width="100%" cellSpacing=1 cellPadding=1 vAlign="top" align="left">
 																			<tr>
 																				<td width="3" vAlign="center">
 																					<html:multibox property="selLocs">
 																						<bean:write name="selectedLocs" property="locId" />
-																					</html:multibox>																		
+																					</html:multibox>
 																				</td>
 																				<td vAlign="center" align="left">
 																					<c:if test="${!empty selectedLocs.country}">
@@ -359,9 +359,9 @@ function popupwin()
 																					</c:if>
 																					<c:if test="${!empty selectedLocs.woreda}">
 																						[<bean:write name="selectedLocs" property="woreda"/>]
-																					</c:if>																		
+																					</c:if>
 																				</td>
-																			</tr>	
+																			</tr>
 																		</table>
 																	</td></tr>
 																</logic:iterate>
@@ -369,11 +369,11 @@ function popupwin()
 																	<table cellSpacing=2 cellPadding=2>
 																		<tr>
 																			<td>
-																				<input type="button" value="Add Location" class="buton" 
+																				<input type="button" value="Add Location" class="buton"
 																				onclick="selectLocation()">
 																			</td>
 																			<td>
-																				<input type="button" value="Remove Location" class="buton" 
+																				<input type="button" value="Remove Location" class="buton"
 																				onclick="return removeSelLocations()">
 																			</td>
 																		</tr>
@@ -386,8 +386,8 @@ function popupwin()
 													</table>
 												</td>
 											</tr>
-										</table>						
-										
+										</table>
+
 										<!-- Add Location -->
 									</td></tr>
 									<tr><td>
@@ -427,14 +427,14 @@ function popupwin()
 																onclick="addSectors()">
 															</td>
 														</tr>
-													</logic:empty> 
+													</logic:empty>
 													<logic:notEmpty name="aimEditActivityForm" property="activitySectors">
 														<tr>
 															<td>
 																<table cellSpacing=0 cellPadding=0 border=0 bgcolor="#ffffff" width="100%">
-																<logic:iterate name="aimEditActivityForm" property="activitySectors" 
+																<logic:iterate name="aimEditActivityForm" property="activitySectors"
 																id="actSect" type="org.digijava.module.aim.helper.ActivitySector">
-																	<tr><td> 
+																	<tr><td>
 																			<table width="100%" cellSpacing=1 cellPadding=1 vAlign="top" align="left">
 																				<tr>
 																					<td width="3" vAlign="center">
@@ -453,7 +453,7 @@ function popupwin()
 																							[<bean:write name="actSect" property="subsectorLevel2Name"/>]
 																						</c:if>
 																					</td>
-																				</tr>	
+																				</tr>
 																			</table>
 																	</td></tr>
 																</logic:iterate>
@@ -462,12 +462,12 @@ function popupwin()
 																		<tr>
 																			<%--
 																			<td>
-																				<input type="button" value="Add Sectors" class="buton" 
+																				<input type="button" value="Add Sectors" class="buton"
 																				onclick="addSectors()">
 																			</td>
 																			--%>
 																			<td>
-																				<input type="button" value="Remove Sector" class="buton" 
+																				<input type="button" value="Remove Sector" class="buton"
 																				onclick="return removeSelSectors()">
 																			</td>
 																		</tr>
@@ -483,37 +483,45 @@ function popupwin()
 										</table>
 
 										<!-- Add Sectors -->
-									</td></tr>									
+									</td></tr>
 									<tr><td>
 										&nbsp;
-									</td></tr>									
+									</td></tr>
 									<tr><td>
 										<IMG alt=Link height=10 src="../ampTemplate/images/arrow-014E86.gif" width=15>
-										<a title="<digi:trn key="aim:ProgramImp">Set of policies, projects and strategies grouped by area</digi:trn>"> 
+										<a title="<digi:trn key="aim:ProgramImp">Set of policies, projects and strategies grouped by area</digi:trn>">
 										<b><digi:trn key="aim:program">Program</digi:trn></b>
 										</a>
 									</td></tr>
 									<tr><td>
 										<digi:trn key="aim:selectProgram">
 										Select the program from the list.</digi:trn>
-									</td></tr>	
+									</td></tr>
 									<tr><td>
 										<html:select property="program" styleClass="inp-text">
 											<html:option value="-1">--- Select program ---</html:option>
-											<html:optionsCollection name="aimEditActivityForm" property="programCollection" 
-											value="ampThemeId" label="name" />
+                                            <c:forEach var="theProgram" items="${aimEditActivityForm.programCollection}">
+                                              <html:option value="${theProgram.member.ampThemeId}">
+                                              <c:if test="${theProgram.level > 0}">
+                                                <c:forEach begin="1" end="${theProgram.level}">
+                                                &nbsp;
+                                                </c:forEach>
+                                              </c:if>
+                                                ${theProgram.member.name}
+                                              </html:option>
+                                            </c:forEach>
 										</html:select>
 									</td></tr>
 									<tr><td>
 									<a title="<digi:trn key="aim:ProgramDesc">Description of program, objectives, or associated projects</digi:trn>">
 									Description
 									</a>
-									</td></tr>	
+									</td></tr>
 									<tr><td>
 									<a title="<digi:trn key="aim:ProgramDesc">Description of program, objectives, or associated projects</digi:trn>">
 										<html:textarea property="programDescription" rows="3" cols="75" styleClass="inp-text"/>
 									</a>
-									</td></tr>									 
+									</td></tr>
 									<tr><td>&nbsp;</td></tr>
 									<tr><td bgColor=#f4f4f2 align="center">
 										<table cellPadding=3>
@@ -535,13 +543,13 @@ function popupwin()
 								<!-- end contents -->
 							</td></tr>
 							</table>
-							</td></tr>							
-						</table>						
+							</td></tr>
+						</table>
 						</td>
 						<td width="25%" vAlign="top" align="right">
 						<!-- edit activity form menu -->
 							<jsp:include page="editActivityMenu.jsp" flush="true" />
-						<!-- end of activity form menu -->							
+						<!-- end of activity form menu -->
 						</td></tr>
 					</table>
 				</td></tr>

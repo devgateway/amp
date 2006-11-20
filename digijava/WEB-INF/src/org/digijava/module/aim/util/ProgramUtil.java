@@ -55,7 +55,7 @@ public class ProgramUtil {
 		return theme;
 	}
 
-	public static Collection getAllThemes() {
+	public static Collection getParentThemes() {
 		Session session = null;
 		Query qry = null;
 		Collection themes = new ArrayList();
@@ -79,6 +79,32 @@ public class ProgramUtil {
 			}
 		}
 		return themes;
+	}
+
+    public static Collection getAllThemes() {
+        Session session = null;
+        Query qry = null;
+        Collection themes = new ArrayList();
+
+        try {
+            session = PersistenceManager.getSession();
+            String queryString = "select t from " + AmpTheme.class.getName() + " t";
+            qry = session.createQuery(queryString);
+            themes = qry.list();
+        } catch (Exception e) {
+           logger.error("Unable to get all themes");
+            logger.debug("Exceptiion " + e);
+        } finally {
+            try {
+                if (session != null) {
+                    PersistenceManager.releaseSession(session);
+                }
+            } catch (Exception ex) {
+                logger.error("releaseSession() failed");
+            }
+        }
+
+        return themes;
 	}
 
 	public static AmpTheme getTheme(Long ampThemeId) {
@@ -110,13 +136,13 @@ public class ProgramUtil {
 		}
 		return ampTheme;
 	}
-	
+
 	public static Collection getThemeIndicators(Long ampThemeId)
 	{
 		Session session = null;
 		AmpTheme tempAmpTheme = null;
 		Collection themeInd = new ArrayList();
-		
+
 		try
 		{
 			session = PersistenceManager.getSession();
@@ -142,13 +168,13 @@ public class ProgramUtil {
 		}
 		finally
 		{
-			if (session != null) 
+			if (session != null)
 			{
-				try 
+				try
 				{
 					PersistenceManager.releaseSession(session);
-				} 
-				catch (Exception e) 
+				}
+				catch (Exception e)
 				{
 					logger.error("Release session faliled :" + e);
 				}
@@ -156,13 +182,13 @@ public class ProgramUtil {
 		}
 		return themeInd;
 	}
-	
+
 	public static Collection getSubThemes(Long parentThemeId)
 	{
 		Session session = null;
 		Query qry = null;
 		Collection subThemes = new ArrayList();
-		
+
 		try
 		{
 			session = PersistenceManager.getSession();
@@ -193,7 +219,7 @@ public class ProgramUtil {
 		}
 		return subThemes;
 	}
-	
+
 	public static void saveThemeIndicators(AmpPrgIndicator tempPrgInd, Long ampThemeId)
 	{
 		Session session = null;
@@ -224,14 +250,14 @@ public class ProgramUtil {
 		catch(Exception ex)
 		{
 			logger.error("Exception from saveThemeIndicators() : " + ex.getMessage());
-			ex.printStackTrace(System.out);		
-			if (tx != null) 
+			ex.printStackTrace(System.out);
+			if (tx != null)
 			{
-				try 
+				try
 				{
 					tx.rollback();
-				} 
-				catch (Exception trbf) 
+				}
+				catch (Exception trbf)
 				{
 					logger.error("Transaction roll back failed : "+trbf.getMessage());
 					trbf.printStackTrace(System.out);
@@ -240,20 +266,20 @@ public class ProgramUtil {
 		}
 		finally
 		{
-			if (session != null) 
+			if (session != null)
 			{
-				try 
+				try
 				{
 					PersistenceManager.releaseSession(session);
-				} 
-				catch (Exception rsf) 
+				}
+				catch (Exception rsf)
 				{
 					logger.error("Failed to release session :" + rsf.getMessage());
 				}
 			}
 		}
 	}
-	
+
 	public static void deleteTheme(Long themeId)
 	{
 		Collection colTheme = getRelatedThemes(themeId);
@@ -266,7 +292,7 @@ public class ProgramUtil {
 	}
 
 	static Collection tempPrg = new ArrayList();
-	
+
 	public static Collection getRelatedThemes(Long id)
 	{
 		AmpTheme ampTheme = new AmpTheme();

@@ -1071,7 +1071,10 @@ public class EditActivity extends Action {
 			}
 
 			// load all themes
-			eaForm.setProgramCollection(ProgramUtil.getAllThemes());
+            Collection themes=new ArrayList();
+            themes = ProgramUtil.getAllThemes();
+            eaForm.setProgramCollection(themes);
+			//eaForm.setProgramCollection(ProgramUtil.getAllThemes());
 
 			// load all the active currencies
 			eaForm.setCurrencies(CurrencyUtil.getAmpCurrency());

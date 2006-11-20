@@ -41,7 +41,7 @@ public class ThemeManager extends Action {
 		Collection themes = new ArrayList();
 		ThemeForm themeForm = (ThemeForm) form;
 
-		themes = ProgramUtil.getAllThemes();
+		themes = ProgramUtil.getParentThemes();
 		themeForm.setThemes(themes);
 
 		return mapping.findForward("forward");

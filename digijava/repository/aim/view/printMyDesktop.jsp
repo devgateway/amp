@@ -14,7 +14,6 @@
 <digi:form action="/filterDesktopActivities.do" method="POST">
 <html:hidden name="aimDesktopForm" property="resetFliters" value="false"/>
 <TABLE width="99%" cellspacing="1" cellpadding="4" valign="top" align="center">
-
 	<TR><TD>
 		<TABLE border=0 cellPadding=0 cellSpacing=0 width="580" align=center>
       	<TR><TD>
@@ -28,11 +27,50 @@
 					</TR>
 				</TABLE>
 			</TD></TR>
+
 			<TR><TD bgColor=#ffffff class=box-border align=center>
 				<TABLE border=0 cellPadding=4 cellSpacing=1 width="580" >
+                  <tr>
+                    <td style="width:150pt;">
+                      <b>
+                        <c:if test="${!empty aimDesktopForm.selSectors}">
+                          <c:forEach var="theSectors" items="${aimDesktopForm.selSector}">
+                          ${theSectors.ampSectorId}
+                          </c:forEach>
+                        </c:if>
+                        <c:if test="${empty aimDesktopForm.selSectors}">
+                        --ALL--
+                        </c:if>
+                      </b>
+                    </td>
+                    <td style="width:150pt;">
+                      <b>
+                        <c:if test="${!empty aimDesktopForm.selDonors}">
+                          <c:forEach var="theDonors" items="${aimDesktopForm.selDonors}">
+                          ${theDonors.ampOrgId}
+                          </c:forEach>
+                        </c:if>
+                        <c:if test="${empty aimDesktopForm.selDonors}">
+                        --ALL--
+                        </c:if>
+                      </b>
+                    </td>
+                    <td style="width:150pt;">
+                      <b>
+                        <c:if test="${!empty aimDesktopForm.selStatus}">
+                          <c:forEach var="theStatus" items="${aimDesktopForm.selStatus}">
+                          ${theStatus.ampStatusId}
+                          </c:forEach>
+                        </c:if>
+                        <c:if test="${empty aimDesktopForm.selStatus}">
+                        --ALL--
+                        </c:if>
+                      </b>
+                    </td>
+                  </tr>
 
 				<!-- Project List -->
-				<TR><TD>
+				<TR><TD colspan="3">
 					<TABLE width="100%" cellpadding="4" cellSpacing="1" bgcolor="#ffffff" valign="top" align="left">
 						<TR bgcolor="#DDDDDD" height="30">
 							<TD class="colHeaderLink" onMouseOver="this.className='colHeaderOver'"

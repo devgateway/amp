@@ -1,14 +1,12 @@
 package org.digijava.module.aim.form;
 
-import java.util.ArrayList;
-import java.util.Collection;
+import java.util.*;
 
-import org.apache.log4j.Logger;
-import org.apache.struts.action.ActionForm;
+import org.apache.struts.action.*;
 
 public class DesktopForm extends ActionForm {
 	// desktop filters
-	
+
 	private long fltrCalendar;
 	private String fltrCurrency;
 	private long fltrDonor[];
@@ -18,9 +16,9 @@ public class DesktopForm extends ActionForm {
 	private int fltrToYear;
 	private long fltrPrespective;
 	private Integer fltrActivityRisks;
-	
+
 	private Integer currentPage;
-	
+
 	// desktop filter select box data collection
 	private Collection calendars;
 	private Collection currencies;
@@ -30,30 +28,34 @@ public class DesktopForm extends ActionForm {
 	private Collection perspectives;
 	private int[] yearRange;
 	private Collection activityRisks;
-	
+
 	private boolean filtersPresent;
 	private Long teamId;
 	private boolean teamHead;
 	private boolean totalCalculated;
-	
+
 	private String searchKey;
 
 	private ArrayList activities;
 	private Collection pages;
-	
+
 	private String totalCommitments;
 	private String defCurrency;
-	
+
 	private byte srtFld;
 	private boolean srtAsc;
-	
+
 	private boolean showAddActivityLink;
-	
+
 	private int stIndex;
 	private int edIndex;
-	
+
+    private Collection selDonors;
+    private Collection selSectors;
+    private Collection selStatus;
+
 	private String resetFliters;
-	
+
 	/**
 	 * @return Returns the activities.
 	 */
@@ -444,11 +446,36 @@ public class DesktopForm extends ActionForm {
 	public String getResetFliters() {
 		return resetFliters;
 	}
-	/**
+
+    public Collection getSelDonors() {
+        return selDonors;
+    }
+
+    public Collection getSelStatus() {
+        return selStatus;
+    }
+
+    public Collection getSelSectors() {
+        return selSectors;
+    }
+
+    /**
 	 * @param resetFliters The resetFliters to set.
 	 */
 	public void setResetFliters(String resetFliters) {
 		this.resetFliters = resetFliters;
 	}
-	
+
+    public void setSelDonors(Collection selDonors) {
+        this.selDonors = selDonors;
+    }
+
+    public void setSelSectors(Collection selSectors) {
+        this.selSectors = selSectors;
+    }
+
+    public void setSelStatus(Collection selStatus) {
+        this.selStatus = selStatus;
+    }
+
 }

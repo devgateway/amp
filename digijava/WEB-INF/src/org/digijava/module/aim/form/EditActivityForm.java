@@ -476,7 +476,7 @@ public class EditActivityForm extends ActionForm implements Serializable{
 			keyword = null;
 			setOrgType("");
 			setAmpOrgTypeId(null);
-			setTempNumResults(10);
+			//setTempNumResults(10);
 		}
 
 		if (sectorReset) {

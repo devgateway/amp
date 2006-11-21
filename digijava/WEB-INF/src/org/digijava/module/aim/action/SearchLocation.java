@@ -32,19 +32,16 @@ public class SearchLocation extends Action {
 		eaForm.setOrgPopupReset(false);
 
 		eaForm.setNumResults(eaForm.getTempNumResults());
-
-		System.out.println("ORG ID: "+eaForm.getOrgId());
-		System.out.println("KeyWOrd= "+eaForm.getKeyword());
-
+		//eaForm.setTempNumResults(10);
+		System.out.println("tempNumResults----->"+eaForm.getTempNumResults());
+			
+		if(eaForm.getKeyword()!=null) request.getSession().setAttribute("keywordForLocation",eaForm.getKeyword());
+		else eaForm.setKeyword((String)request.getSession().getAttribute("keywordForLocation"));
+			
 		Collection col = new ArrayList();
-		eaForm.setNumResults(eaForm.getTempNumResults());
-
-		logger.info("INSIDE Search Location JAVA.....");
-		logger.info("Imp. level value = " + eaForm.getImpLevelValue());
-		logger.info("Imp. level = " + eaForm.getImplementationLevel());
+		//eaForm.setNumResults(eaForm.getTempNumResults());
 
 		int page = 0;
-		logger.info("page= "+request.getParameter("page"));
 		if (request.getParameter("page") == null) {
 			page = 1;
 		} else {
@@ -54,24 +51,25 @@ public class SearchLocation extends Action {
 		eaForm.setCurrentPage(new Integer(page));
 
 		int implvl=eaForm.getImpLevelValue().intValue();
-		logger.info("implvl = " + implvl);
+		if(eaForm.getKeyword()!=null)
+		
 		if (eaForm.getKeyword().trim().length() != 0) {
 			// search based on the given keyword only.
 			
 		col=(LocationUtil.searchForLocation(eaForm.getKeyword().trim(),implvl));
 
-		System.out.println("colllllllllll size: "+col.size());
-
 		int stIndex = 1;
 		int edIndex = eaForm.getNumResults();
 
-		if (eaForm.getNumResults() == 0 || eaForm.isOrgSelReset() == true) {
+		if (eaForm.getNumResults() == 0 || eaForm.isLocationReset() == true) {
+			System.out.println("AM AJUNS AICI::: tempnumresults:"+eaForm.getTempNumResults()+" getnumresults:"+eaForm.getNumResults());
 			eaForm.setTempNumResults(10);
+			System.out.println("AM AJUNS AICI::: tempnumresults:"+eaForm.getTempNumResults()+" getnumresults:"+eaForm.getNumResults());
 		} else {
-			stIndex = ((page - 1) * eaForm.getNumResults()) + 1;
-			edIndex = page * eaForm.getNumResults();
+			stIndex = ((page - 1) * eaForm.getTempNumResults()) + 1;
+			edIndex = page * eaForm.getTempNumResults();
 		}
-		
+		System.out.println("start->"+stIndex);
 		Vector vect = new Vector();
 		int numPages=0;
 		
@@ -98,27 +96,19 @@ public class SearchLocation extends Action {
 				pages.add(pageNum);
 			}
 		}
-
+		
 		eaForm.setSearchLocs(col);
 
 		eaForm.setCols(col);
 		eaForm.setPagedCol(tempCol);
 		eaForm.setPages(pages);
-			
-
-//		eaForm.setSearchLocs(col);
-//		eaForm.setPagedCol(tempCol);
-//		eaForm.setPages(pages);
-//		eaForm.setCurrentPage(new Integer(1));
-
-			//eaForm.setSearchLocs(LocationUtil.searchForLocation(eaForm.getKeyword().trim(),implvl));
-
-
-
+		eaForm.setCurrentPage(new Integer(page));
+		
 		} 
 		else {
-			System.out.println("no input in keyword field.....");
+			System.out.println("keyword field \"\"");
 		}
+		else System.out.println("no input in keyword field.....");
 
 		return mapping.findForward("forward");
 	}

@@ -102,6 +102,7 @@
 
 	function load() {
 		document.aimEditActivityForm.keyword.focus();
+		
 	}
 
 	function unload() {

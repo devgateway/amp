@@ -9,7 +9,7 @@
 
 <script langauage="JavaScript">
 	function onDelete() {
-		var flag = confirm("Delete this Scheme ?");
+		var flag = confirm("Delete this Sector ?");
 		return flag;
 	}
 </script>

@@ -85,7 +85,6 @@
 		} else {
 			 <digi:context name="searchOrg" property="context/module/moduleinstance/searchOrganisation.do"/>
 			// url = "<%= searchOrg %>?alpha=viewAll&orgSelReset=false&edit=true";
-			
 		    // document.aimEditActivityForm.action = url;
 		    document.aimEditActivityForm.action = "<%= searchOrg %>";
 		      var aux= document.aimEditActivityForm.tempNumResults.value;

@@ -596,7 +596,7 @@ function disable() {
 										<td bgcolor="#ffffff">
 											<c:if test="${!empty aimEditActivityForm.fundingOrganizations}">
 												<table width="100%" cellSpacing="1" cellPadding="3" bgcolor="#aaaaaa">
-												<c:forEach var="fundOrgs" items="${aimEditActivityForm.fundingOrganizations}">
+												<c:forEach var="fundOrgs" items="${aimEditActivityForm.orderedFundingOrganizations}">
 													<tr><td bgcolor="#ffffff">
 														<table width="100%" cellSpacing="1" cellPadding="1">
 															<tr><td bgcolor="#ffffff"><b>

@@ -62,9 +62,7 @@ public class SearchLocation extends Action {
 		int edIndex = eaForm.getNumResults();
 
 		if (eaForm.getNumResults() == 0 || eaForm.isLocationReset() == true) {
-			System.out.println("AM AJUNS AICI::: tempnumresults:"+eaForm.getTempNumResults()+" getnumresults:"+eaForm.getNumResults());
 			eaForm.setTempNumResults(10);
-			System.out.println("AM AJUNS AICI::: tempnumresults:"+eaForm.getTempNumResults()+" getnumresults:"+eaForm.getNumResults());
 		} else {
 			stIndex = ((page - 1) * eaForm.getTempNumResults()) + 1;
 			edIndex = page * eaForm.getTempNumResults();

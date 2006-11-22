@@ -100,28 +100,6 @@
 										</TR>										
 										<TR bgcolor="#ffffff">
 											<TD>
-												<b><digi:trn key="aim:meActualValue">Actual Value</digi:trn></b>
-											</TD>
-											<TD>
-												<bean:write name="indicator" property="actualVal" />	
-											</TD>
-											<TD>
-												<b><digi:trn key="aim:meDate">Date</digi:trn></b>
-											</TD>
-											<TD>
-												<bean:write name="indicator" property="actualValDate" />	
-											</TD>											
-										</TR>	
-										<TR bgcolor="#ffffff">
-											<TD width="125">
-												<b><digi:trn key="aim:meActualValueComments">Comments</digi:trn></b>
-											</TD>
-											<TD colspan="3">
-												<bean:write name="indicator" property="targetValComments" />
-											</TD>
-										</TR>										
-										<TR bgcolor="#ffffff">
-											<TD>
 												<b><digi:trn key="aim:meTargetValue">Target Value</digi:trn></b>
 											</TD>
 											<TD>
@@ -142,6 +120,29 @@
 												<bean:write name="indicator" property="revisedTargetValComments" />
 											</TD>
 										</TR>										
+										<TR bgcolor="#ffffff">
+											<TD>
+												<b><digi:trn key="aim:meActualValue">Actual Value</digi:trn></b>
+											</TD>
+											<TD>
+												<bean:write name="indicator" property="actualVal" />	
+											</TD>
+											<TD>
+												<b><digi:trn key="aim:meDate">Date</digi:trn></b>
+											</TD>
+											<TD>
+												<bean:write name="indicator" property="actualValDate" />	
+											</TD>											
+										</TR>	
+										<TR bgcolor="#ffffff">
+											<TD width="125">
+												<b><digi:trn key="aim:meActualValueComments">Comments</digi:trn></b>
+											</TD>
+											<TD colspan="3">
+												<bean:write name="indicator" property="actualValComments" />
+											</TD>
+										</TR>										
+
 										<logic:notEmpty name="indicator" property="priorValues">
 										<TR bgcolor="#ffffff">
 											<TD colspan="4">

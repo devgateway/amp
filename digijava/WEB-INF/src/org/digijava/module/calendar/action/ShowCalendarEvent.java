@@ -1,7 +1,6 @@
 package org.digijava.module.calendar.action;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.GregorianCalendar;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -66,15 +65,17 @@ public class ShowCalendarEvent
                 calendarEventForm.setSelectedEventTypeId(ampCalendar.
                     getEventType().getId());
                 // selected donors
-                calendarEventForm.setDonors(new ArrayList());
-                if(ampCalendar.getDonors() != null) {
-                    Iterator it = ampCalendar.getDonors().iterator();
-                    while(it.hasNext()) {
-                        AmpOrganisation donor = (AmpOrganisation) it.next();
-                        LabelValueBean lvb = new LabelValueBean(donor.getName(),
-                            donor.getAmpOrgId().toString());
-                        calendarEventForm.getDonors().add(lvb);
-                    }
+                if(calendarEventForm.getDonors()==null){
+                    calendarEventForm.setDonors(new ArrayList());
+                    if(ampCalendar.getDonors() != null) {
+                        Iterator it = ampCalendar.getDonors().iterator();
+                        while(it.hasNext()) {
+                            AmpOrganisation donor = (AmpOrganisation) it.next();
+                            LabelValueBean lvb = new LabelValueBean(donor.
+                                getName(),
+                                donor.getAmpOrgId().toString());
+                            calendarEventForm.getDonors().add(lvb);
+                        }
 //                    String[] donorIds = new String[ampCalendar.getDonors().size()];
 //                    int counter = 0;
 //                    while(it.hasNext()) {
@@ -82,6 +83,7 @@ public class ShowCalendarEvent
 //                        donorIds[counter++] = donor.getAmpOrgId().toString();
 //                    }
 //                    calendarEventForm.setSelectedDonors(donorIds);
+                    }
                 }
                 // selected start date
                 GregorianCalendar startDate = new GregorianCalendar();

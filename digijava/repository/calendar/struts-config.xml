@@ -59,24 +59,24 @@
     <action name="calendarAdminForm" path="/calendar/updateCalendarItemsSettings" scope="session" type="org.digijava.module.calendar.action.UpdateCalendarItemsSettings" validate="false">
       <forward name="forward" path="/calendar/viewEvents.do" redirect="true" />
     </action>
-    <action name="calendarViewForm" path="/calendar/showCalendarView" scope="request" type="org.digijava.module.calendar.action.ShowCalendarView" validate="false">
+    <action name="calendarViewForm" path="/calendar/showCalendarView" scope="session" type="org.digijava.module.calendar.action.ShowCalendarView" validate="false">
       <forward name="success" path="/showLayout.do?layout=viewEvents" />
       <forward name="forward" path="/showLayout.do?layout=noEvents" />
     </action>
-    <action name="calendarEventForm" path="/calendar/showCalendarEvent" scope="request" type="org.digijava.module.calendar.action.ShowCalendarEvent" validate="false">
+    <action name="calendarEventForm" path="/calendar/showCalendarEvent" scope="session" type="org.digijava.module.calendar.action.ShowCalendarEvent" validate="false">
       <forward name="success" path="/showLayout.do?layout=showAmpEvent" />
       <forward name="failure" path="/calendar/showCalendarView.do" />
     </action>
-    <action input="/calendar/showCalendarEvent.do" name="calendarEventForm" path="/calendar/previewCalendarEvent" scope="request" type="org.digijava.module.calendar.action.PreviewCalendarEvent" validate="true">
+    <action input="/calendar/showCalendarEvent.do" name="calendarEventForm" path="/calendar/previewCalendarEvent" scope="session" type="org.digijava.module.calendar.action.PreviewCalendarEvent" validate="true">
       <forward name="success" path="/showLayout.do?layout=previewAmpEvent" />
       <forward name="failure" path="/calendar/showCalendarEvent.do" />
     </action>
-    <action name="calendarEventForm" parameter="method" path="/calendar/previewCalendarEventDone" scope="request" type="org.digijava.module.calendar.action.PreviewCalendarEventDone" validate="false">
+    <action name="calendarEventForm" parameter="method" path="/calendar/previewCalendarEventDone" scope="session" type="org.digijava.module.calendar.action.PreviewCalendarEventDone" validate="false">
       <forward name="edit" path="/calendar/showCalendarEvent.do" />
       <forward name="save" path="/calendar/showCalendarView.do" redirect="true" />
       <forward name="failure" path="/calendar/showCalendarView.do" />
     </action>
-    <action name="calendarEventForm" path="/calendar/DeleteEvent" scope="request" type="org.digijava.module.calendar.action.DeleteEvent" validate="false">
+    <action name="calendarEventForm" path="/calendar/DeleteEvent" scope="session" type="org.digijava.module.calendar.action.DeleteEvent" validate="false">
       <forward name="success" path="/calendar/showCalendarView.do" redirect="true" />
     </action>
     <action name="calendarEventTypeForm" parameter="method" path="/calendar/eventTypes" scope="session" type="org.digijava.module.calendar.action.EventTypeAction" validate="false">

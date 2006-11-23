@@ -26,6 +26,9 @@
 			org.digijava.module.aim.dbentity.AmpSector
 		</hibernate-class>
 		<hibernate-class>
+			org.digijava.module.aim.dbentity.AmpActivitySector
+		</hibernate-class>
+		<hibernate-class>
 			org.digijava.module.aim.dbentity.AmpLocation
 		</hibernate-class>
 		<hibernate-class>

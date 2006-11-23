@@ -55,6 +55,10 @@ public class DesktopForm extends ActionForm {
     private Collection selStatus;
 
 	private String resetFliters;
+	
+	private String lineMinRank;
+	private String planMinRank;
+	private Collection actRankColl;
 
 	/**
 	 * @return Returns the activities.
@@ -477,5 +481,23 @@ public class DesktopForm extends ActionForm {
     public void setSelStatus(Collection selStatus) {
         this.selStatus = selStatus;
     }
+	public Collection getActRankColl() {
+		return actRankColl;
+	}
+	public void setActRankColl(Collection actRankColl) {
+		this.actRankColl = actRankColl;
+	}
+	public String getLineMinRank() {
+		return lineMinRank;
+	}
+	public void setLineMinRank(String lineMinRank) {
+		this.lineMinRank = lineMinRank;
+	}
+	public String getPlanMinRank() {
+		return planMinRank;
+	}
+	public void setPlanMinRank(String planMinRank) {
+		this.planMinRank = planMinRank;
+	}
 
 }

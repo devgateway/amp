@@ -327,6 +327,10 @@ public class EditActivityForm extends ActionForm implements Serializable{
 	private Collection updateIndValues;
 	private Collection indicatorPriorValues;
     private ProposedProjCost proProjCost;
+    
+    private String lineMinRank;
+	private String planMinRank;
+	private Collection actRankCollection;
 
     public EditActivityForm() {
 		step = "1";
@@ -3638,4 +3642,28 @@ public class EditActivityForm extends ActionForm implements Serializable{
     public void setProProjCost(ProposedProjCost proProjCost) {
         this.proProjCost = proProjCost;
     }
+
+	public Collection getActRankCollection() {
+		return actRankCollection;
+	}
+
+	public void setActRankCollection(Collection actRankCollection) {
+		this.actRankCollection = actRankCollection;
+	}
+
+	public String getLineMinRank() {
+		return lineMinRank;
+	}
+
+	public void setLineMinRank(String lineMinRank) {
+		this.lineMinRank = lineMinRank;
+	}
+
+	public String getPlanMinRank() {
+		return planMinRank;
+	}
+
+	public void setPlanMinRank(String planMinRank) {
+		this.planMinRank = planMinRank;
+	}
 }

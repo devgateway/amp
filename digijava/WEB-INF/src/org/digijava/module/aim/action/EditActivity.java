@@ -105,32 +105,31 @@ public class EditActivity extends Action {
 		EditActivityForm eaForm = (EditActivityForm) form; // form bean instance
 		Long activityId = eaForm.getActivityId();
 		
-		if (!mapping.getPath().trim().endsWith("viewActivityPreview")
-				|| tm.getWrite() == false) { 
-			logger.info("User dont have privilege to edit the activity...");
+		String errorMsgKey = "";
+		if (!mapping.getPath().trim().endsWith("viewActivityPreview")) { 
 			if (!("Team".equalsIgnoreCase(tm.getTeamAccessType()))) {
-				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
-					"error.aim.noWriteAccessForUser"));
-				saveErrors(request, errors);
-
-				String url = "/aim/viewChannelOverview.do?ampActivityId="
-					+ activityId + "&tabIndex=0";
-				RequestDispatcher rd = getServlet().getServletContext()
-					.getRequestDispatcher(url);
-				rd.forward(request, response);				
+				errorMsgKey = "error.aim.editActivity.userPartOfManagementTeam";
+			} else if (tm.getWrite() == false) {
+				errorMsgKey = "error.aim.editActivity.noWritePermissionForUser";
 			}
 		}
-        if(!tm.getWrite() && "".equals(tm.getTeamAccessType())){
-            return mapping.findForward("accessDenyed");
-        }
 		
+		if (errorMsgKey.trim().length() > 0) {
+			errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
+					errorMsgKey));
+			saveErrors(request, errors);
 
+			String url = "/aim/viewChannelOverview.do?ampActivityId="
+				+ activityId + "&tabIndex=0";
+			RequestDispatcher rd = getServlet().getServletContext()
+				.getRequestDispatcher(url);
+			rd.forward(request, response);							
+		}
+		
 		try {
 
 			// Checking whether the activity is already opened for editing
 			// by some other user
-
-			
 
 			eaForm.setReset(true);
 			eaForm.setOrgSelReset(true);

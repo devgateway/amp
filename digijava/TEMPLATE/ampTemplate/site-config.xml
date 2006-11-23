@@ -347,6 +347,7 @@
 				<page>aim_addMEIndicator</page>
 				<page>aim_addProgram</page>
 				<page>aim_addPrgIndicator</page>
+				<page>aim_editAllIndicator</page>
 				<page>aim_printActPerf</page>
 				<page>aim_printActRisk</page>
 				<page>aim_printPortPerf</page>

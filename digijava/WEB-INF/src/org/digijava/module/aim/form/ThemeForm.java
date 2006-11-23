@@ -19,6 +19,7 @@ public class ThemeForm extends ActionForm {
 		  private String version; 
 		  private String event;
 		  private int valueType;
+		  private Long indicatorId;
 		  private String code;
 		  private String name;
 		  private String type;
@@ -26,6 +27,7 @@ public class ThemeForm extends ActionForm {
 		  private String creationDate;
 		  private int category;
 		  private boolean npIndicator;
+		  private String saveType;
 		  
 
 		/**
@@ -239,6 +241,20 @@ public class ThemeForm extends ActionForm {
 		}
 
 		/**
+		 * @return Returns the indicatorId.
+		 */
+		public Long getIndicatorId() {
+			return indicatorId;
+		}
+
+		/**
+		 * @param indicatorId The indicatorId to set.
+		 */
+		public void setIndicatorId(Long indicatorId) {
+			this.indicatorId = indicatorId;
+		}
+
+		/**
 		 * @return Returns the code.
 		 */
 		public String getCode() {
@@ -320,6 +336,20 @@ public class ThemeForm extends ActionForm {
 		 */
 		public void setValueType(int valueType) {
 			this.valueType = valueType;
+		}
+
+		/**
+		 * @return Returns the saveType.
+		 */
+		public String getSaveType() {
+			return saveType;
+		}
+
+		/**
+		 * @param saveType The saveType to set.
+		 */
+		public void setSaveType(String saveType) {
+			this.saveType = saveType;
 		}
 }
 

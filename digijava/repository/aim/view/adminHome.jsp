@@ -105,6 +105,19 @@
 											<td class=f-names noWrap>
 											<digi:img src="module/aim/images/arrow-th-BABAB9.gif" width="16"/>
 											<bean:define id="translation">
+												<digi:trn key="aim:clickToViewIndicatorManager">Click here to view Indicator Manager</digi:trn>
+											</bean:define>
+											<digi:link href="/overallIndicatorManager.do" title="<%=translation%>" >
+												<digi:trn key="aim:indicatorManager">
+													Indicator Manager
+												</digi:trn>
+											</digi:link>
+											</td>
+										</tr>
+										<tr>
+											<td class=f-names noWrap>
+											<digi:img src="module/aim/images/arrow-th-BABAB9.gif" width="16"/>
+											<bean:define id="translation">
 												<digi:trn key="aim:clickToViewFiscalCalendarManager">Click here to view Fiscal Calendar Manager</digi:trn>
 											</bean:define>
 											<digi:link href="/fiscalCalendarManager.do" title="<%=translation%>" >
@@ -167,7 +180,7 @@
 											</digi:link>
 											</td>
 										</tr>--%>
-								<logic:notEmpty name="ME" scope="application">
+									<logic:notEmpty name="ME" scope="application">
 										<tr>
 											<td class=f-names noWrap>
 											<digi:img src="module/aim/images/arrow-th-BABAB9.gif" width="16"/>
@@ -182,7 +195,7 @@
 											</td>
 										</tr>
 									</logic:notEmpty>
-										<!--paris indicators report manager-->
+										<%--paris indicators report manager--%>
 									<logic:notEmpty name="PI" scope="application">
 										<tr>
 											<td class=f-names noWrap>

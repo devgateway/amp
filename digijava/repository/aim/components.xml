@@ -70,6 +70,8 @@
 	<page name="editTheme" title=" - Edit Program" />
 	<page name="deleteTheme" title=" - Delete Program" />
 	<page name="viewTheme" title=" - View Program" />
+	<page name="overallIndicatorManager" title=" - Indicator Manager" />
+	<page page="editAllIndicator" name="aim_editAllIndicator" title="AMP - Edit Indicator"/>
 	<page name="fiscalCalendarManager" title=" - Fiscal Calendar Manager" />
 	<page name="addFiscalCalendar" title=" - Fiscal Calendar Manager" />
 	<page name="organisationManager" title=" - Organisation Manager" />
@@ -125,9 +127,9 @@
 	<page name="addTeamReports" title=" - Add Reports" />
 	<page name="teamMemberReports" title=" - Member Reports" />
 	<page name="addMemberReports" title=" - Add Member Reports" />
-	<page name="indicatorManager" title=" - Indicator Manager" />
+	<page name="indicatorManager" title=" - Project Indicator Manager" />
 	<page page="addIndicator" name="aim_addMEIndicator" title="AMP - Add Indicator"/>
-	<page page="indicatorValues" name="aim_indicatorValues" title="AMP - Indicator Manager"/>
+	<page page="indicatorValues" name="aim_indicatorValues" title="AMP - Project Indicator Manager"/>
 	<page name="addDocument" title=" - Add Document" />
 	<page page="selectFile" name="aim_selectFilePopupLayout" title="AMP - Select File" />
 	<page page="selectCMSCategory" name="aim_selectCMSCategoryPopupLayout" title="AMP - Select Category" />

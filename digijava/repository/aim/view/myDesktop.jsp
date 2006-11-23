@@ -123,6 +123,39 @@
 							</html:select>
 						</c:if>
 
+						<html:select name="aimDesktopForm" property="lineMinRank" styleClass="inp-text">
+							<html:option value="-1">LMR</html:option>
+							<c:forEach var="lmr" items="${aimDesktopForm.actRankColl}" >
+								<c:choose>
+									<c:when test="${lmr == aimDesktopForm.lineMinRank}">
+										<option value='<c:out value="${lmr}" />' selected><c:out value="${lmr}"/></option>
+									</c:when>
+									<c:otherwise>
+										<option value='<c:out value="${lmr}" />'><c:out value="${lmr}"/></option>
+									</c:otherwise>
+								</c:choose>
+							</c:forEach>
+							<%--
+							<html:option value="-2">LMR+</html:option>
+							<html:option value="-3">LMR-</html:option>	--%>
+						</html:select>
+						<html:select name="aimDesktopForm" property="planMinRank" styleClass="inp-text">
+							<html:option value="-1">PMR</html:option>
+							<c:forEach var="mpr" items="${aimDesktopForm.actRankColl}" >
+								<c:choose>
+									<c:when test="${mpr == aimDesktopForm.planMinRank}">
+										<option value='<c:out value="${mpr}" />' selected><c:out value="${mpr}"/></option>
+									</c:when>
+									<c:otherwise>
+										<option value='<c:out value="${mpr}" />'><c:out value="${mpr}"/></option>
+									</c:otherwise>
+								</c:choose>
+							</c:forEach>
+							<%--
+							<html:option value="-2">PMR+</html:option>
+							<html:option value="-3">PMR-</html:option>	--%>
+						</html:select>
+						
 						<input type="submit" value="Go" class="dr-menu">
 						<input type="submit" value="Reset" class="dr-menu" onclick="resetFilters()">
                         <input type="button" value="Print" class="dr-menu" onclick="perviewPrint()">

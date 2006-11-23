@@ -28,6 +28,7 @@ import org.digijava.kernel.user.Group;
 import org.digijava.kernel.user.User;
 import org.digijava.module.aim.dbentity.AmpActivity;
 import org.digijava.module.aim.dbentity.AmpActivityInternalId;
+import org.digijava.module.aim.dbentity.AmpActivitySector;
 import org.digijava.module.aim.dbentity.AmpAhsurvey;
 import org.digijava.module.aim.dbentity.AmpAhsurveyIndicator;
 import org.digijava.module.aim.dbentity.AmpAhsurveyQuestion;
@@ -5604,7 +5605,8 @@ public class DbUtil {
 						if (null != sector && sector.trim().length() > 1 && !"all".equalsIgnoreCase(sector)) {
 							if (null != svy.getAmpActivityId().getSectors()) {
 								Iterator secItr = svy.getAmpActivityId().getSectors().iterator();
-								AmpSector sec = (AmpSector) secItr.next();
+								//AmpSector sec = (AmpSector) secItr.next();
+								AmpSector sec = ((AmpActivitySector) secItr.next()).getSectorId();
 								if (!sector.equals(sec.getAmpSectorId().toString()))
 									continue;
 							}

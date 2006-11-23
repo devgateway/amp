@@ -17,6 +17,7 @@ import org.apache.struts.action.ActionMapping;
 import org.digijava.kernel.dbentity.Country;
 import org.digijava.module.aim.dbentity.AmpActivity;
 import org.digijava.module.aim.dbentity.AmpActivityInternalId;
+import org.digijava.module.aim.dbentity.AmpActivitySector;
 import org.digijava.module.aim.dbentity.AmpComponent;
 import org.digijava.module.aim.dbentity.AmpIssues;
 import org.digijava.module.aim.dbentity.AmpMeasure;
@@ -266,7 +267,8 @@ public class ResetAll extends Action
 					Iterator sectItr = sectors.iterator();
 					while (sectItr.hasNext())
 					{
-						AmpSector sec = (AmpSector) sectItr.next();
+						//AmpSector sec = (AmpSector) sectItr.next();
+						AmpSector sec = ((AmpActivitySector) sectItr.next()).getSectorId();
 						if (sec != null)
 						{
 							AmpSector parent = null;

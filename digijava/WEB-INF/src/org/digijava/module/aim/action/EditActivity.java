@@ -32,6 +32,7 @@ import org.digijava.kernel.user.User;
 import org.digijava.module.aim.dbentity.AmpActivity;
 import org.digijava.module.aim.dbentity.AmpActivityClosingDates;
 import org.digijava.module.aim.dbentity.AmpActivityInternalId;
+import org.digijava.module.aim.dbentity.AmpActivitySector;
 import org.digijava.module.aim.dbentity.AmpActor;
 import org.digijava.module.aim.dbentity.AmpComponent;
 import org.digijava.module.aim.dbentity.AmpComponentFunding;
@@ -327,6 +328,19 @@ public class EditActivity extends Action {
                     }
 					eaForm.setAmpId(activity.getAmpId());
 					eaForm.setStatusReason(activity.getStatusReason());
+					
+					if (null != activity.getLineMinRank())
+						eaForm.setLineMinRank(activity.getLineMinRank().toString());
+					else 
+						eaForm.setLineMinRank("-1");
+					if (null != activity.getPlanMinRank())
+						eaForm.setPlanMinRank(activity.getPlanMinRank().toString());
+					else
+						eaForm.setPlanMinRank("-1");
+					eaForm.setActRankCollection(new ArrayList());
+					for (int i = 1; i < 6; i++) {
+						eaForm.getActRankCollection().add(new Integer(i));
+					}
 
 					eaForm.setCreatedDate(DateConversion
 							.ConvertDateToString(activity.getCreatedDate()));
@@ -489,22 +503,19 @@ public class EditActivity extends Action {
 
 					if (sectors != null && sectors.size() > 0) {
 						Collection activitySectors = new ArrayList();
-
 						Iterator sectItr = sectors.iterator();
 						while (sectItr.hasNext()) {
-							AmpSector sec = (AmpSector) sectItr.next();
+							AmpActivitySector ampActSect = (AmpActivitySector) sectItr.next();
+							AmpSector sec = ampActSect.getSectorId();
 							if (sec != null) {
 								AmpSector parent = null;
 								AmpSector subsectorLevel1 = null;
 								AmpSector subsectorLevel2 = null;
 								if (sec.getParentSectorId() != null) {
-									if (sec.getParentSectorId()
-											.getParentSectorId() != null) {
+									if (sec.getParentSectorId().getParentSectorId() != null) {
 										subsectorLevel2 = sec;
-										subsectorLevel1 = sec
-												.getParentSectorId();
-										parent = sec.getParentSectorId()
-												.getParentSectorId();
+										subsectorLevel1 = sec.getParentSectorId();
+										parent = sec.getParentSectorId().getParentSectorId();
 									} else {
 										subsectorLevel1 = sec;
 										parent = sec.getParentSectorId();
@@ -515,26 +526,17 @@ public class EditActivity extends Action {
 								ActivitySector actSect = new ActivitySector();
 								if (parent != null) {
 									actSect.setId(parent.getAmpSectorId());
-									actSect
-											.setSectorId(parent
-													.getAmpSectorId());
+									actSect.setSectorId(parent.getAmpSectorId());
 									actSect.setSectorName(parent.getName());
 									if (subsectorLevel1 != null) {
-										actSect
-												.setSubsectorLevel1Id(subsectorLevel1
-														.getAmpSectorId());
-										actSect
-												.setSubsectorLevel1Name(subsectorLevel1
-														.getName());
+										actSect.setSubsectorLevel1Id(subsectorLevel1.getAmpSectorId());
+										actSect.setSubsectorLevel1Name(subsectorLevel1.getName());
 										if (subsectorLevel2 != null) {
-											actSect
-													.setSubsectorLevel2Id(subsectorLevel2
-															.getAmpSectorId());
-											actSect
-													.setSubsectorLevel2Name(subsectorLevel2
-															.getName());
+											actSect.setSubsectorLevel2Id(subsectorLevel2.getAmpSectorId());
+											actSect.setSubsectorLevel2Name(subsectorLevel2.getName());
 										}
 									}
+									actSect.setSectorPercentage(ampActSect.getSectorPercentage().toString());
 								}
 								activitySectors.add(actSect);
 							}

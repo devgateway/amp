@@ -85,6 +85,10 @@ public class AmpActivity
 
 	// Aid Harmonization Survey Set
 	private Set survey;
+	
+	private Integer lineMinRank;
+	private Integer planMinRank;
+	private Collection actRankColl;
 
 	/**
 	 * @return
@@ -813,4 +817,28 @@ public class AmpActivity
     public void setFunDate(String funDate) {
         this.funDate = funDate;
     }
+
+	public Integer getLineMinRank() {
+		return lineMinRank;
+	}
+
+	public void setLineMinRank(Integer lineMinRank) {
+		this.lineMinRank = lineMinRank;
+	}
+
+	public Integer getPlanMinRank() {
+		return planMinRank;
+	}
+
+	public void setPlanMinRank(Integer planMinRank) {
+		this.planMinRank = planMinRank;
+	}
+
+	public Collection getActRankColl() {
+		return actRankColl;
+	}
+
+	public void setActRankColl(Collection actRankColl) {
+		this.actRankColl = actRankColl;
+	}
 }

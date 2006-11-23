@@ -13,6 +13,7 @@ import net.sf.hibernate.Transaction;
 import org.apache.log4j.Logger;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.dbentity.AmpActivity;
+import org.digijava.module.aim.dbentity.AmpActivitySector;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpSector;
 import org.digijava.module.aim.dbentity.AmpSectorScheme;
@@ -114,7 +115,8 @@ public class SectorUtil {
 
 			iter = ampActivity.getSectors().iterator();
 			while (iter.hasNext()) {
-				ampSector = (AmpSector) iter.next();
+				//ampSector = (AmpSector) iter.next();
+				ampSector = ((AmpActivitySector) iter.next()).getSectorId();
 				ampSectors.add(ampSector);
 			}
 		} catch (Exception ex) {

@@ -13,6 +13,7 @@ import net.sf.hibernate.Session;
 import org.apache.log4j.Logger;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.dbentity.AmpActivity;
+import org.digijava.module.aim.dbentity.AmpActivitySector;
 import org.digijava.module.aim.dbentity.AmpFunding;
 import org.digijava.module.aim.dbentity.AmpFundingDetail;
 import org.digijava.module.aim.dbentity.AmpSector;
@@ -122,13 +123,16 @@ public class DesktopUtil {
 						AmpStatus status = act.getStatus();
 						project.setStatusId(status.getAmpStatusId());
 						project.setActivityRisk(MEIndicatorsUtil.getOverallRisk(act.getAmpActivityId()));
+						project.setLineMinRank(act.getLineMinRank());
+						project.setPlanMinRank(act.getPlanMinRank());
 						
 						project.setSector(new ArrayList());
 						Set sectSect = act.getSectors();
 						if (sectSect != null) {
 							Iterator sItr = sectSect.iterator();
 							while (sItr.hasNext()) {
-								AmpSector sect = (AmpSector) sItr.next();
+								//AmpSector sect = (AmpSector) sItr.next();
+								AmpSector sect = ((AmpActivitySector) sItr.next()).getSectorId();
 								Sector sector = new Sector();
 								sector.setSectorId(sect.getAmpSectorId());
 								sector.setSectorName(sect.getName());
@@ -228,7 +232,8 @@ public class DesktopUtil {
 						if (sectSect != null) {
 							Iterator sItr = sectSect.iterator();
 							while (sItr.hasNext()) {
-								AmpSector sect = (AmpSector) sItr.next();
+								//AmpSector sect = (AmpSector) sItr.next();
+								AmpSector sect = ((AmpActivitySector) sItr.next()).getSectorId();
 								Sector sector = new Sector();
 								sector.setSectorId(sect.getAmpSectorId());
 								sector.setSectorName(sect.getName());

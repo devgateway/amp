@@ -15,6 +15,9 @@ public class AmpProject implements Comparable
 	private Long statusId;
 	private int activityRisk;
 	
+	private Integer lineMinRank;
+	private Integer planMinRank;
+	
 	// added by Akash
 	private String approvalStatus;
 	
@@ -175,5 +178,21 @@ public class AmpProject implements Comparable
 			
 			return t1.compareTo(t2);
 		} else throw new ClassCastException();		
+	}
+
+	public Integer getLineMinRank() {
+		return lineMinRank;
+	}
+
+	public void setLineMinRank(Integer lineMinRank) {
+		this.lineMinRank = lineMinRank;
+	}
+
+	public Integer getPlanMinRank() {
+		return planMinRank;
+	}
+
+	public void setPlanMinRank(Integer planMinRank) {
+		this.planMinRank = planMinRank;
 	}
 }

@@ -7,6 +7,8 @@ package org.digijava.module.aim.action;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.Iterator;
@@ -25,11 +27,9 @@ import org.digijava.module.aim.helper.AmpProject;
 import org.digijava.module.aim.helper.AmpProjectDonor;
 import org.digijava.module.aim.helper.Commitments;
 import org.digijava.module.aim.helper.Constants;
-import org.digijava.module.aim.helper.DateConversion;
 import org.digijava.module.aim.helper.EthiopianCalendar;
 import org.digijava.module.aim.helper.Sector;
 import org.digijava.module.aim.helper.TeamMember;
-import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.aim.util.DesktopUtil;
 import org.digijava.module.aim.util.FiscalCalendarUtil;
 import org.digijava.module.aim.util.MEIndicatorsUtil;
@@ -220,8 +220,67 @@ public class FilterDesktopActivities extends Action {
 					}
 				}
 			}
+			// Filtering by Line Ministry Rank here
+			try {
+				if (activities != null && activities.size() > 0) {
+					int rank = Integer.parseInt(dForm.getLineMinRank());
+					logger.debug("LineMinRank: " + rank);
+					if (rank > 0 && rank < 6) {
+						for (int i = 0;i < activities.size();i ++) {
+							AmpProject proj = (AmpProject) activities.get(i);
+							if (null == proj.getLineMinRank() || 
+									proj.getLineMinRank().intValue() != rank) {
+								activities.remove(proj);
+								i--;
+							}
+						}
+					} 
+					/*
+					// Sorting in ascending order by Line Ministry Rank here
+					if (rank == -2) {
+						Collections.sort(activities, actLineRankComparator);
+					}
+					// Sorting in descending order by Line Ministry Rank here
+					if (rank == -3) {
+						Collections.sort(activities, ractLineRankComparator);
+					}	*/
+				}
+			}
+			catch (NumberFormatException nex) {
+				logger.debug("Line Ministry rank is not a number: " + nex);
+				nex.printStackTrace(System.out);
+			}
+			// Filtering by Plan Ministry Rank here
+			try {
+				if (activities != null && activities.size() > 0) {
+					int rank = Integer.parseInt(dForm.getPlanMinRank());
+					logger.debug("planMinRank: " + rank);
+					if (rank > 0 && rank < 6) {
+						for (int i = 0;i < activities.size();i ++) {
+							AmpProject proj = (AmpProject) activities.get(i);
+							if (null == proj.getPlanMinRank() || 
+									proj.getPlanMinRank().intValue() != rank) {
+								activities.remove(proj);
+								i--;
+							}
+						}
+					}
+					/*
+					// Sorting in ascending order by Plan Ministry Rank here
+					if (rank == -2) {
+						Collections.sort(activities, actPlanRankComparator);
+					}
+					// Sorting in descending order by Plan Ministry Rank here
+					if (rank == -3) {
+						Collections.sort(activities, ractPlanRankComparator);
+					}	*/
+				}
+			}
+			catch (NumberFormatException nex) {
+				logger.debug("Plan Ministry rank is not a number: " + nex);
+				nex.printStackTrace(System.out);
+			}
 		}
-
 
 
 		dForm.setActivities(activities);
@@ -232,4 +291,45 @@ public class FilterDesktopActivities extends Action {
 
 		return mapping.findForward("forward");
 	}
+	/*
+	private static Comparator actLineRankComparator = new Comparator() {
+		public int compare(Object o1,Object o2) {
+			AmpProject p1 = (AmpProject) o1;
+			AmpProject p2 = (AmpProject) o2;
+			if (p1.getLineMinRank() != null && p2.getLineMinRank() != null)
+				return p1.getLineMinRank().compareTo(p2.getLineMinRank());
+			else
+				return 0;
+		}
+	};
+	private static Comparator ractLineRankComparator = new Comparator() {
+		public int compare(Object o1,Object o2) {
+			AmpProject p1 = (AmpProject) o1;
+			AmpProject p2 = (AmpProject) o2;
+			if (p1.getLineMinRank() != null && p2.getLineMinRank() != null)
+				return -(p1.getLineMinRank().compareTo(p2.getLineMinRank()));
+			else
+				return 0;
+		}
+	};
+	private static Comparator actPlanRankComparator = new Comparator() {
+		public int compare(Object o1,Object o2) {
+			AmpProject p1 = (AmpProject) o1;
+			AmpProject p2 = (AmpProject) o2;
+			if (p1.getPlanMinRank() != null && p2.getPlanMinRank() != null)
+				return p1.getPlanMinRank().compareTo(p2.getPlanMinRank());
+			else
+				return 0;
+		}
+	};
+	private static Comparator ractPlanRankComparator = new Comparator() {
+		public int compare(Object o1,Object o2) {
+			AmpProject p1 = (AmpProject) o1;
+			AmpProject p2 = (AmpProject) o2;
+			if (p1.getPlanMinRank() != null && p2.getPlanMinRank() != null)
+				return -(p1.getPlanMinRank().compareTo(p2.getPlanMinRank()));
+			else
+				return 0;
+		}
+	};	*/
 }

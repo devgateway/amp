@@ -31,6 +31,7 @@ import org.digijava.kernel.util.RequestUtils;
 import org.digijava.module.aim.dbentity.AmpActivity;
 import org.digijava.module.aim.dbentity.AmpActivityClosingDates;
 import org.digijava.module.aim.dbentity.AmpActivityInternalId;
+import org.digijava.module.aim.dbentity.AmpActivitySector;
 import org.digijava.module.aim.dbentity.AmpActor;
 import org.digijava.module.aim.dbentity.AmpComponent;
 import org.digijava.module.aim.dbentity.AmpComponentFunding;
@@ -313,6 +314,44 @@ public class SaveActivity extends Action {
 					eaForm.setStep("2");
 					return mapping.findForward("addActivity");
 				}
+				
+				boolean secPer = false;
+				double percent = 0.0;
+				Iterator secPerItr = eaForm.getActivitySectors().iterator();
+				while (secPerItr.hasNext()) {
+					ActivitySector actSect = (ActivitySector) secPerItr.next();
+					if (null == actSect.getSectorPercentage() 
+							|| "".equals(actSect.getSectorPercentage())) {
+						errors.add("sectorPercentageEmpty", 
+								new ActionError("error.aim.addActivity.sectorPercentageEmpty"));
+						secPer = true;
+					}
+					// sector percentage is not a number 
+					else { 
+						try {
+							percent += Double.parseDouble(actSect.getSectorPercentage());
+						}
+						catch (NumberFormatException nex) {
+							logger.debug("sector percentage is not a number : " + nex);
+							errors.add("sectorPercentageNonNumeric", 
+									new ActionError("error.aim.addActivity.sectorPercentageNonNumeric"));
+							secPer = true;
+						}
+					}
+					if (secPer) {
+						saveErrors(request, errors);
+						eaForm.setStep("2");
+						return mapping.findForward("addActivity");
+					}
+				}
+				// Total sector percentage is not equal to 100%
+				if (percent != 100) {
+					errors.add("sectorPercentageSumWrong", 
+							new ActionError("error.aim.addActivity.sectorPercentageSumWrong"));
+					saveErrors(request, errors);
+					eaForm.setStep("2");
+					return mapping.findForward("addActivity");
+				}
 
 				if (eaForm.getFundingOrganizations() != null
 						&& eaForm.getFundingOrganizations().size() > 0) {
@@ -509,6 +548,29 @@ public class SaveActivity extends Action {
 				} else {
 					activity.setCondition(eaForm.getConditions());
 				}
+				
+				try {
+					activity.setLineMinRank(Integer.valueOf(eaForm.getLineMinRank()));
+					if (activity.getLineMinRank().intValue() < 1 || activity.getLineMinRank().intValue() > 5) {
+						logger.debug("Line Ministry Rank is out of permisible range (1 to 5)");
+						activity.setLineMinRank(null);
+					}
+				}
+				catch (NumberFormatException nex) {
+					logger.debug("Line Ministry Rank is not a number : " + nex);
+					activity.setLineMinRank(null);
+				}
+				try {
+					activity.setPlanMinRank(Integer.valueOf(eaForm.getPlanMinRank()));
+					if (activity.getPlanMinRank().intValue() < 1 || activity.getPlanMinRank().intValue() > 5) {
+						logger.debug("Plan Ministry Rank is out of permisible range (1 to 5)");
+						activity.setPlanMinRank(null);
+					}
+				}
+				catch (NumberFormatException nex) {
+					logger.debug("Plan Ministry Rank is not a number : " + nex);
+					activity.setPlanMinRank(null);
+				}
 
 				activity.setProposedApprovalDate(DateConversion.getDate(eaForm
 						.getOriginalAppDate()));
@@ -604,27 +666,23 @@ public class SaveActivity extends Action {
 					if (eaForm.getActivitySectors() != null) {
 						Iterator itr = eaForm.getActivitySectors().iterator();
 						while (itr.hasNext()) {
-							ActivitySector actSect = (ActivitySector) itr
-									.next();
+							ActivitySector actSect = (ActivitySector) itr.next();
 							Long sectorId = null;
 							if (actSect.getSubsectorLevel2Id() != null
-									&& (!actSect.getSubsectorLevel2Id().equals(
-											new Long(-1)))) {
+									&& (!actSect.getSubsectorLevel2Id().equals(new Long(-1)))) {
 								sectorId = actSect.getSubsectorLevel2Id();
 							} else if (actSect.getSubsectorLevel1Id() != null
-									&& (!actSect.getSubsectorLevel1Id().equals(
-											new Long(-1)))) {
+									&& (!actSect.getSubsectorLevel1Id().equals(new Long(-1)))) {
 								sectorId = actSect.getSubsectorLevel1Id();
 							} else {
 								sectorId = actSect.getSectorId();
 							}
-
-							if (sectorId != null
-									&& (!sectorId.equals(new Long(-1)))) {
-								AmpSector sector = SectorUtil
-										.getAmpSector(sectorId);
-								sectors.add(sector);
-							}
+							AmpActivitySector amps = new AmpActivitySector();
+							amps.setActivityId(activity);
+							if (sectorId != null && (!sectorId.equals(new Long(-1))))
+								amps.setSectorId(SectorUtil.getAmpSector(sectorId));
+							amps.setSectorPercentage(Integer.valueOf(actSect.getSectorPercentage()));
+							sectors.add(amps);
 						}
 					}
 					activity.setSectors(sectors);

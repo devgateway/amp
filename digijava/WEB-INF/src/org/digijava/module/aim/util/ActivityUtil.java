@@ -24,6 +24,7 @@ import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.user.User;
 import org.digijava.module.aim.dbentity.AmpActivity;
 import org.digijava.module.aim.dbentity.AmpActivityClosingDates;
+import org.digijava.module.aim.dbentity.AmpActivitySector;
 import org.digijava.module.aim.dbentity.AmpActor;
 import org.digijava.module.aim.dbentity.AmpAhsurvey;
 import org.digijava.module.aim.dbentity.AmpAhsurveyResponse;
@@ -205,6 +206,15 @@ public class ActivityUtil {
 						session.delete(issue);
 					}
 				}
+				
+				// delete all previous sectors
+				if (oldActivity.getSectors() != null) {
+					Iterator iItr = oldActivity.getSectors().iterator();
+					while (iItr.hasNext()) {
+						AmpActivitySector sec = (AmpActivitySector) iItr.next();
+						session.delete(sec);
+					}
+				}
 
 				// delete all previous comments
 				if (!commentsCol.isEmpty()) {
@@ -232,6 +242,8 @@ public class ActivityUtil {
 				oldActivity.getOrgrole().clear();
 				oldActivity.getSectors().clear();
 
+				oldActivity.setLineMinRank(activity.getLineMinRank());
+				oldActivity.setPlanMinRank(activity.getPlanMinRank());
 				oldActivity.setActualApprovalDate(activity.getActualApprovalDate());
 				oldActivity.setActualCompletionDate(activity.getActualCompletionDate());
 				oldActivity.setActualStartDate(activity.getActualStartDate());
@@ -583,6 +595,8 @@ public class ActivityUtil {
 
 			if (ampActivity != null) {
 			    activity = new AmpActivity();
+			    activity.setLineMinRank(ampActivity.getLineMinRank());
+			    activity.setPlanMinRank(ampActivity.getPlanMinRank());
 			    activity.setActivityApprovalDate(ampActivity.getActivityApprovalDate());
 			    activity.setActivityCloseDate(ampActivity.getActivityCloseDate());
 			    activity.setActivityCreator(ampActivity.getActivityCreator());
@@ -774,7 +788,8 @@ public class ActivityUtil {
 				if (ampAct.getSectors() != null) {
 					Iterator sectItr = ampAct.getSectors().iterator();
 					while (sectItr.hasNext()) {
-						AmpSector sec = (AmpSector) sectItr.next();
+						//AmpSector sec = (AmpSector) sectItr.next();
+						AmpSector sec = ((AmpActivitySector) sectItr.next()).getSectorId();
 						ActivitySector actSect = new ActivitySector();
 						if (sec.getParentSectorId() == null) {
 							actSect.setSectorName(sec.getName());

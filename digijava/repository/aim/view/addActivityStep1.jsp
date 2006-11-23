@@ -376,6 +376,66 @@ function popupwin()
 										<table width="100%" bgcolor="#cccccc" cellSpacing=1 cellPadding=5>
 											<tr>
 												<td width=200 bgcolor="#ffffff">
+													<a title="<digi:trn key="aim:lineMinistryRank">Line Ministry Rank</digi:trn>">&nbsp;
+													<digi:trn key="aim:lineMinistryRank">Line Ministry Rank</digi:trn>
+													</a>
+												</td>
+												<td bgcolor="#ffffff">
+													<table cellPadding=0 cellSpacing=0>
+														<tr>
+															<td>
+																<a title="<digi:trn key="aim:lineMinistryRank">Line Ministry Rank</digi:trn>">
+																	<html:select name="aimEditActivityForm" property="lineMinRank" styleClass="inp-text">
+																		<html:option value="-1">-Select Rank-</html:option>
+																		<c:forEach var="lmr" items="${aimEditActivityForm.actRankCollection}" >
+																			<c:choose>
+																				<c:when test="${lmr == aimEditActivityForm.lineMinRank}">
+																					<option value='<c:out value="${lmr}" />' selected><c:out value="${lmr}"/></option>
+																				</c:when>
+																				<c:otherwise>
+																					<option value='<c:out value="${lmr}" />'><c:out value="${lmr}"/></option>
+																				</c:otherwise>
+																			</c:choose>
+																		</c:forEach>
+																	</html:select>
+																</a>
+															</td>
+														</tr>
+													</table>
+												</td>
+											</tr>
+											<tr>
+												<td width=200 bgcolor="#ffffff">
+													<a title="<digi:trn key="aim:planMinistryRank">Ministry of Planning Rank</digi:trn>">&nbsp;
+													<digi:trn key="aim:planMinistryRank">Ministry of Planning Rank</digi:trn>
+													</a>
+												</td>
+												<td bgcolor="#ffffff">
+													<table cellPadding=0 cellSpacing=0>
+														<tr>
+															<td>
+																<a title="<digi:trn key="aim:planMinistryRank">Ministry of Planning Rank</digi:trn>">
+																	<html:select property="planMinRank" styleClass="inp-text">
+																		<html:option value="-1">-Select Rank-</html:option>
+																		<c:forEach var="mpr" items="${aimEditActivityForm.actRankCollection}" >
+																			<c:choose>
+																				<c:when test="${mpr == aimEditActivityForm.planMinRank}">
+																					<option value='<c:out value="${mpr}" />' selected><c:out value="${mpr}"/></option>
+																				</c:when>
+																				<c:otherwise>
+																					<option value='<c:out value="${mpr}" />'><c:out value="${mpr}"/></option>
+																				</c:otherwise>
+																			</c:choose>
+																		</c:forEach>
+																	</html:select>
+																</a>
+															</td>
+														</tr>
+													</table>
+												</td>
+											</tr>
+											<tr>
+												<td width=200 bgcolor="#ffffff">
 													<a title="<digi:trn key="aim:ExpectedApprovalDatebyDonorAgency">Date (dd/mm/yy) when the project is expected to be approved by the donor agency</digi:trn>">&nbsp;
 													<digi:trn key="aim:proposedApprovalDate">Proposed Approval Date</digi:trn>
 													</a>

@@ -190,6 +190,14 @@ public class ShowDesktopActivities extends TilesAction {
 				// filters not present
 				dForm.setFiltersPresent(false);
 			}
+			
+			// Loading Line Ministry & Ministry of Planning rank drop-downs
+			dForm.setLineMinRank("-1");
+			dForm.setPlanMinRank("-1");
+			dForm.setActRankColl(new ArrayList());
+			for (int i = 1; i < 6; i++) {
+				dForm.getActRankColl().add(new Integer(i));
+			}
 		}		
 		
 		String view = request.getParameter("view");

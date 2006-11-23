@@ -5,6 +5,7 @@
 <%@ taglib uri="/taglib/struts-html" prefix="html" %>
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
+<%@ taglib uri="/taglib/struts-nested" prefix="nested" %>
 
 
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/addActivity.js"/>"></script>
@@ -113,6 +114,9 @@ function validateForm() {
 		document.aimEditActivityForm.addSec.focus();
 		return false;
 	}
+	if (!validateSectorPercentage())
+		return false;
+		
 	gotoStep(3);
 	return true;
 }
@@ -135,6 +139,43 @@ function popupwin()
 	winpopup.document.close();
 }
 
+function validateSectorPercentage() {
+	flag = false;
+	i = 0;
+	sum = 0;
+	cnt = document.aimEditActivityForm.sizeActSectors.value;
+	while (i < cnt) {
+		sid = "activitySectors[" + i + "].sectorPercentage";
+		val = (document.aimEditActivityForm.elements)[sid].value;
+		if (val == "" || val == null) {
+			alert("Please add sector-percentage");
+			flag = true;
+			break;
+		}
+		sum = sum + parseFloat(val);
+		i = i + 1;
+	}
+	if (flag == true) {
+		(document.aimEditActivityForm.elements)[sid].focus();
+		return false;
+	}
+	else if (sum != 100) {
+		alert("Sum of sector percentages should be 100");
+		(document.aimEditActivityForm.elements)[sid].focus();
+		return false;
+	}
+	return true;
+}
+
+	function fnChk(frmContrl) {
+		if (isNaN(frmContrl.value)) {
+      		alert('Please enter numeric value only.');
+      		frmContrl.value = "";
+      		//frmContrl.focus();
+      		return false;
+      	}
+	}
+
 -->
 </script>
 
@@ -147,6 +188,14 @@ function popupwin()
 <html:hidden property="editAct" />
 
 <input type="hidden" name="edit" value="true">
+
+<logic:empty name="aimEditActivityForm" property="activitySectors">
+	<input type="hidden" name="sizeActSectors" value="0">
+</logic:empty>
+<logic:notEmpty name="aimEditActivityForm" property="activitySectors">
+	<bean:size id ="actSectSize" name="aimEditActivityForm" property="activitySectors" />
+	<input type="hidden" name="sizeActSectors" value='<%=actSectSize%>'>
+</logic:notEmpty>
 
 <table width="100%" cellPadding="0" cellSpacing="0" vAlign="top" align="left">
 <tr><td width="100%" vAlign="top" align="left">
@@ -420,63 +469,68 @@ function popupwin()
 											<tr>
 												<td bgcolor="#ffffff" width="100%">
 													<table cellPadding=1 cellSpacing=1 border=0 bgcolor="#ffffff" width="100%">
-		 											<logic:empty name="aimEditActivityForm" property="activitySectors">
+		 											<nested:empty name="aimEditActivityForm" property="activitySectors">
 														<tr>
 															<td bgcolor="#ffffff">
 																<input type="button" value="Add Sector" class="buton" name="addSec"
-																onclick="addSectors()">
+																		onclick="addSectors()">
 															</td>
-														</tr>
-													</logic:empty>
-													<logic:notEmpty name="aimEditActivityForm" property="activitySectors">
+														</tr>																			
+													</nested:empty>
+													<nested:notEmpty name="aimEditActivityForm" property="activitySectors">
 														<tr>
 															<td>
 																<table cellSpacing=0 cellPadding=0 border=0 bgcolor="#ffffff" width="100%">
-																<logic:iterate name="aimEditActivityForm" property="activitySectors"
-																id="actSect" type="org.digijava.module.aim.helper.ActivitySector">
-																	<tr><td>
-																			<table width="100%" cellSpacing=1 cellPadding=1 vAlign="top" align="left">
-																				<tr>
-																					<td width="3" vAlign="center">
-																						<html:multibox property="selActivitySectors">
-																							<bean:write name="actSect" property="id" />
-																						</html:multibox>
-																					</td>
-																					<td vAlign="center" align="left">
-																						<c:if test="${!empty actSect.sectorName}">
-																							[<bean:write name="actSect" property="sectorName"/>]
-																						</c:if>
-																						<c:if test="${!empty actSect.subsectorLevel1Name}">
-																							[<bean:write name="actSect" property="subsectorLevel1Name"/>]
-																						</c:if>
-																						<c:if test="${!empty actSect.subsectorLevel2Name}">
-																							[<bean:write name="actSect" property="subsectorLevel2Name"/>]
-																						</c:if>
-																					</td>
-																				</tr>
-																			</table>
-																	</td></tr>
-																</logic:iterate>
-																<tr><td>
-																	<table cellSpacing=2 cellPadding=2>
+																	<nested:iterate name="aimEditActivityForm" property="activitySectors" id="actSect"
+																					type="org.digijava.module.aim.helper.ActivitySector">
 																		<tr>
-																			<%--
 																			<td>
-																				<input type="button" value="Add Sectors" class="buton"
-																				onclick="addSectors()">
-																			</td>
-																			--%>
-																			<td>
-																				<input type="button" value="Remove Sector" class="buton"
-																				onclick="return removeSelSectors()">
+																				<table width="100%" cellSpacing=1 cellPadding=1 vAlign="top" align="left">
+																					<tr>
+																						<td width="3%" vAlign="center">
+																							<html:multibox property="selActivitySectors">
+																								<nested:write name="actSect" property="id" />
+																							</html:multibox>
+																						</td>
+																						<td  width="87%" vAlign="center" align="left">
+																							<c:if test="${!empty actSect.sectorName}">
+																								[<nested:write name="actSect" property="sectorName" />]
+																							</c:if>
+																							<c:if test="${!empty actSect.subsectorLevel1Name}">
+																								[<nested:write name="actSect" property="subsectorLevel1Name" />]
+																							</c:if>
+																							<c:if test="${!empty actSect.subsectorLevel2Name}">
+																								[<nested:write name="actSect" property="subsectorLevel2Name" />]
+																							</c:if>
+																						</td>
+																						<td width="10%">
+																							<nested:text property="sectorPercentage" size="2" maxlength="3" 
+																									   onkeyup="fnChk(this)"/>
+																						</td>
+																					</tr>
+																				</table>
 																			</td>
 																		</tr>
-																	</table>
-																</td></tr>
-																</table>
-															</td>
-														</tr>
-													</logic:notEmpty>
+																	</nested:iterate>
+																<tr>
+																	<td>
+																		<table cellSpacing=2 cellPadding=2>
+																			<tr>
+																				<td>
+																					<input type="button" value="Add Sectors" class="buton" 
+																							onclick="addSectors()">
+																				</td>
+																				<td><input type="button" value="Remove Sector" class="buton"
+																							onclick="return removeSelSectors()">
+																				</td>
+																			</tr>
+																		</table>
+																	</td>
+																</tr>
+															</table>
+														</td>
+													</tr>
+													</nested:notEmpty>
 													</table>
 												</td>
 											</tr>

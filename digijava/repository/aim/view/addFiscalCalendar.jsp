@@ -62,7 +62,7 @@
           alert("Invalid Year Offset value");
           document.aimAddFiscalCalForm.yearOffset.focus();
           return false;
-        }else if(ya>0){
+        }else if(yr>0){
           alert("Invalid Year Offset value");
           document.aimAddFiscalCalForm.yearOffset.focus();
           return false;

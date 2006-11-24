@@ -42,6 +42,7 @@ public class AmpActivity
 	private Set member;
 	private Country country;
 	private String contactName;
+
     private Double funAmount;
     private String currencyCode;
     private String funDate;

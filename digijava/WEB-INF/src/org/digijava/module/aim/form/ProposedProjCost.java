@@ -3,6 +3,7 @@ import java.util.*;
 
 import org.apache.struts.action.*;
 import java.text.DecimalFormat;
+import java.text.*;
 
 /**
  * <p>Title: </p>
@@ -17,6 +18,7 @@ import java.text.DecimalFormat;
  * @version 1.0
  */
 public class ProposedProjCost extends ActionForm{
+
     private Long actID;
     private String usID;
     private Long fundingID;
@@ -25,8 +27,18 @@ public class ProposedProjCost extends ActionForm{
     private String funAmount;
     private String funDate;
 
+
     public String getFunAmount() {
         return funAmount;
+    }
+
+    public Double getFunAmountAsDouble() {
+        DecimalFormat form=new DecimalFormat();
+        try {
+            return form.parse(funAmount).doubleValue();
+        } catch(ParseException ex) {
+            return null;
+        }
     }
 
     public String getFunDate() {
@@ -70,6 +82,14 @@ public class ProposedProjCost extends ActionForm{
         }
     }
 
+    public void setFunAmountAsDouble(Double funAmount) {
+        if(funAmount!=null){
+            DecimalFormat format = new DecimalFormat();
+            this.funAmount = format.format(funAmount);
+        }else{
+            this.funAmount=funAmount.toString();
+        }
+    }
     public void setActID(Long actID) {
         this.actID = actID;
     }

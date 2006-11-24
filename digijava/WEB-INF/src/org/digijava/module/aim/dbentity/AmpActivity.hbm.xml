@@ -49,7 +49,8 @@
 
 		<property name="programDescription" column="program_description"  type="org.digijava.kernel.db.SafeClobType"/>
 		<property name="contractors" column="contractors" type="org.digijava.kernel.db.SafeClobType"/>
-		<property name="funAmount" column="proj_cost_amount" type="java.lang.Double"/>
+
+        <property name="funAmount" column="proj_cost_amount" type="java.lang.Double"/>
         <property name="currencyCode" column="proj_cost_currcode" type="java.lang.String"/>
         <property name="funDate" column="proj_cost_date" type="java.lang.String"/>
 
@@ -65,7 +66,7 @@
 			class="org.digijava.module.aim.dbentity.AmpTeamMember" cascade="none"/>
 
 		<property name="approvalStatus" column="approval_status" type="java.lang.String"/>
-		
+
 		<property name="lineMinRank" column="line_min_rank" type="java.lang.Integer"/>
 		<property name="planMinRank" column="plan_min_rank" type="java.lang.Integer"/>
 

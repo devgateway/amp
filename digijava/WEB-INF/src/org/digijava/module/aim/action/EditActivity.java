@@ -305,7 +305,7 @@ public class EditActivity extends Action {
 					// set title,description and objective
 
                     ProposedProjCost pg=new ProposedProjCost();
-                    pg.setFunAmount(activity.getFunAmount());
+                    pg.setFunAmountAsDouble(activity.getFunAmount());
                     pg.setCurrencyCode(activity.getCurrencyCode());
                     pg.setFunDate(activity.getFunDate());
                     eaForm.setProProjCost(pg);
@@ -328,10 +328,10 @@ public class EditActivity extends Action {
                     }
 					eaForm.setAmpId(activity.getAmpId());
 					eaForm.setStatusReason(activity.getStatusReason());
-					
+
 					if (null != activity.getLineMinRank())
 						eaForm.setLineMinRank(activity.getLineMinRank().toString());
-					else 
+					else
 						eaForm.setLineMinRank("-1");
 					if (null != activity.getPlanMinRank())
 						eaForm.setPlanMinRank(activity.getPlanMinRank().toString());

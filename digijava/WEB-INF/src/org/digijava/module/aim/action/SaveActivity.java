@@ -127,7 +127,7 @@ public class SaveActivity extends Action {
                 activity.setFunDate(null);
                 activity.setCurrencyCode(null);
             }else{
-                activity.setFunAmount(eaForm.getProProjCost().getFunAmount());
+                activity.setFunAmount(eaForm.getProProjCost().getFunAmountAsDouble());
                 activity.setFunDate(eaForm.getProProjCost().getFunDate());
                 activity.setCurrencyCode(eaForm.getProProjCost().getCurrencyCode());
             }
@@ -314,26 +314,26 @@ public class SaveActivity extends Action {
 					eaForm.setStep("2");
 					return mapping.findForward("addActivity");
 				}
-				
+
 				boolean secPer = false;
 				double percent = 0.0;
 				Iterator secPerItr = eaForm.getActivitySectors().iterator();
 				while (secPerItr.hasNext()) {
 					ActivitySector actSect = (ActivitySector) secPerItr.next();
-					if (null == actSect.getSectorPercentage() 
+					if (null == actSect.getSectorPercentage()
 							|| "".equals(actSect.getSectorPercentage())) {
-						errors.add("sectorPercentageEmpty", 
+						errors.add("sectorPercentageEmpty",
 								new ActionError("error.aim.addActivity.sectorPercentageEmpty"));
 						secPer = true;
 					}
-					// sector percentage is not a number 
-					else { 
+					// sector percentage is not a number
+					else {
 						try {
 							percent += Double.parseDouble(actSect.getSectorPercentage());
 						}
 						catch (NumberFormatException nex) {
 							logger.debug("sector percentage is not a number : " + nex);
-							errors.add("sectorPercentageNonNumeric", 
+							errors.add("sectorPercentageNonNumeric",
 									new ActionError("error.aim.addActivity.sectorPercentageNonNumeric"));
 							secPer = true;
 						}
@@ -346,7 +346,7 @@ public class SaveActivity extends Action {
 				}
 				// Total sector percentage is not equal to 100%
 				if (percent != 100) {
-					errors.add("sectorPercentageSumWrong", 
+					errors.add("sectorPercentageSumWrong",
 							new ActionError("error.aim.addActivity.sectorPercentageSumWrong"));
 					saveErrors(request, errors);
 					eaForm.setStep("2");
@@ -517,7 +517,7 @@ public class SaveActivity extends Action {
                     activity.setFunDate(null);
                     activity.setCurrencyCode(null);
                 }else{
-                    activity.setFunAmount(eaForm.getProProjCost().getFunAmount());
+                    activity.setFunAmount(eaForm.getProProjCost().getFunAmountAsDouble());
                     activity.setFunDate(eaForm.getProProjCost().getFunDate());
                     activity.setCurrencyCode(eaForm.getProProjCost().getCurrencyCode());
                 }
@@ -548,7 +548,7 @@ public class SaveActivity extends Action {
 				} else {
 					activity.setCondition(eaForm.getConditions());
 				}
-				
+
 				try {
 					activity.setLineMinRank(Integer.valueOf(eaForm.getLineMinRank()));
 					if (activity.getLineMinRank().intValue() < 1 || activity.getLineMinRank().intValue() > 5) {

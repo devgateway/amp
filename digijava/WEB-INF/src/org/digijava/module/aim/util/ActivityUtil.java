@@ -206,7 +206,7 @@ public class ActivityUtil {
 						session.delete(issue);
 					}
 				}
-				
+
 				// delete all previous sectors
 				if (oldActivity.getSectors() != null) {
 					Iterator iItr = oldActivity.getSectors().iterator();
@@ -284,7 +284,7 @@ public class ActivityUtil {
 				oldActivity.setSectors(activity.getSectors());
 				oldActivity.setIssues(activity.getIssues());
 
-                ProposedProjCost pg=new ProposedProjCost();
+                //ProposedProjCost pg=new ProposedProjCost();
                 oldActivity.setFunAmount(activity.getFunAmount());
                 oldActivity.setCurrencyCode(activity.getCurrencyCode());
                 oldActivity.setFunDate(activity.getFunDate());

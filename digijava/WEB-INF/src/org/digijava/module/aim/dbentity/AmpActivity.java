@@ -85,7 +85,7 @@ public class AmpActivity
 
 	// Aid Harmonization Survey Set
 	private Set survey;
-	
+
 	private Integer lineMinRank;
 	private Integer planMinRank;
 	private Collection actRankColl;

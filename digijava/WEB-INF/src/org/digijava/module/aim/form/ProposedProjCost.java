@@ -2,6 +2,7 @@ package org.digijava.module.aim.form;
 import java.util.*;
 
 import org.apache.struts.action.*;
+import java.text.DecimalFormat;
 
 /**
  * <p>Title: </p>
@@ -21,10 +22,10 @@ public class ProposedProjCost extends ActionForm{
     private Long fundingID;
     private Long currencyID;
     private String currencyCode;
-    private Double funAmount;
+    private String funAmount;
     private String funDate;
 
-    public Double getFunAmount() {
+    public String getFunAmount() {
         return funAmount;
     }
 
@@ -60,8 +61,13 @@ public class ProposedProjCost extends ActionForm{
         this.funDate = funDate;
     }
 
-    public void setFunAmount(Double funAmount) {
-        this.funAmount = funAmount;
+    public void setFunAmount(String funAmount) {
+        if(funAmount!=null){
+            DecimalFormat format = new DecimalFormat();
+            this.funAmount = format.format(Double.valueOf(funAmount));
+        }else{
+            this.funAmount=funAmount;
+        }
     }
 
     public void setActID(Long actID) {

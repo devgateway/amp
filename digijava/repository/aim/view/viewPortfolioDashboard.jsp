@@ -73,8 +73,13 @@
 						</TD>
                  	<TD background="module/aim/images/corner-r.gif" 
 						height=17 width=17></TD>
+              		<TD bgColor=#c9c9c7 class=box-title width=220 nowrap="nowrap">
+							&nbsp;<digi:link href="/nationalPlaningDashboard.do"><digi:trn key="aim:npDashboard">National Planing Dashboard</digi:trn></digi:link>
+						</TD>
+                 	<TD background="module/aim/images/corner-r.gif" 
+						height=17 width=17></TD>
 					</TR>
-				</TABLE>
+		</TABLE>
 			</TD></TR>
 			<TR><TD bgColor=#ffffff class=box-border align=left>
 

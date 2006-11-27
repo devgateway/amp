@@ -168,6 +168,7 @@
 			<put name="title">Activity - Dashboard</put>
 			<put-item name="tabBody" module="aim" instance="default" teaser="activityDashboard"/>
 		</layout>
+                
 
 		<layout name="layoutChannelOverview" extends="tabLayout">
         <put name="title">Activity - Channel Overview </put>
@@ -257,6 +258,13 @@
 			<put-item name="body" module="aim" instance="default" teaser="portfolioDashboard"/>
 		</layout>
 
+                <page-group masterLayout="desktopLayout" tile="body">
+                        <module name="aim">
+                           <page>amp_viewNationalPlaningDashboard</page>
+                        </module>
+                </page-group>
+
+
 		<!-- START ADD/EDIT LAYOUT	-->
 		<layout name="addEditLayout" file="addEditLayout.jsp">
 			<put name="title">AMP</put>
@@ -286,6 +294,8 @@
 			<put name="title">Translation</put>
 			<put-item name="body" module="translate" instance="global" teaser="globalTranslation"/>
 		</layout>
+
+
 		<!-- TRANSLATE LAYOUT -->
 		<page-group masterLayout="default" tile="body"/>
 		<page-group masterLayout="admin" tile="body">

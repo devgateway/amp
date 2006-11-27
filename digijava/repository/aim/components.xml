@@ -288,6 +288,9 @@
 	-->
     <page name="addProposedProjFunding" title="Proposed Project Cost" />
     <page name="printMyDesktop" title="Print Desktop" />
+       
+        <!-- National Planing Dashboard -->
+        <page page="viewNationalPlaningDashboard" name="amp_viewNationalPlaningDashboard" title=" : National Planing Dashboard" />
 
 </secondary-pages>
 

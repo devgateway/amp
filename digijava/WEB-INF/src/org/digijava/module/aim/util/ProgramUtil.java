@@ -23,6 +23,7 @@ import org.digijava.module.aim.helper.AmpPrgIndicator;
 import org.digijava.module.aim.helper.DateConversion;
 import org.digijava.module.aim.dbentity.AmpThemeIndicators;
 import org.digijava.module.aim.dbentity.AmpTheme;
+import java.util.List;
 
 public class ProgramUtil {
 
@@ -82,14 +83,14 @@ public class ProgramUtil {
 		}
 		return themes;
 	}
-	
-	public static Collection getAllThemes() {
+
+	public static List getAllThemes() {
 		Session session = null;
 		Query qry = null;
-		Collection themes = new ArrayList();
+		List themes = new ArrayList();
 
 		try {
-			session = PersistenceManager.getSession();
+			session = PersistenceManager.getRequestDBSession();
 			String queryString = "select t from " + AmpTheme.class.getName()
 					+ " t where t.parentThemeId is null";
 			qry = session.createQuery(queryString);
@@ -97,14 +98,6 @@ public class ProgramUtil {
 		} catch (Exception e) {
 			logger.error("Unable to get all themes");
 			logger.debug("Exceptiion " + e);
-		} finally {
-			try {
-				if (session != null) {
-					PersistenceManager.releaseSession(session);
-				}
-			} catch (Exception ex) {
-				logger.error("releaseSession() failed");
-			}
 		}
 		return themes;
 	}
@@ -114,11 +107,11 @@ public class ProgramUtil {
 		Session session = null;
 		Query qry = null;
 		Collection allTheme = new ArrayList();
-		
+
 		try
 		{
 			session = PersistenceManager.getSession();
-			String queryString = "select tInd from " 
+			String queryString = "select tInd from "
 								+ AmpTheme.class.getName() + " tInd";
 			qry = session.createQuery(queryString);
 			Iterator themeItr = qry.list().iterator();
@@ -163,57 +156,37 @@ public class ProgramUtil {
 		}
 		finally
 		{
-			try 
+			try
 			{
-				if (session != null) 
+				if (session != null)
 				{
 					PersistenceManager.releaseSession(session);
 				}
-			} 
-			catch (Exception ex) 
+			}
+			catch (Exception ex)
 			{
 				logger.error("releaseSession() failed");
 			}
 		}
 		return allTheme;
 	}
-	
+
 	public static AmpTheme getTheme(Long ampThemeId) {
 		Session session = null;
-		Query qry = null;
-		AmpTheme ampTheme = null;
-
 		try {
-			session = PersistenceManager.getSession();
-			String queryString = "select t from " + AmpTheme.class.getName()
-					+ " t where (t.ampThemeId=:ampThemeId)";
-			qry = session.createQuery(queryString);
-			qry.setParameter("ampThemeId", ampThemeId, Hibernate.LONG);
-			Iterator itr = qry.list().iterator();
-			if (itr.hasNext()) {
-				ampTheme = (AmpTheme) itr.next();
-			}
+			session = PersistenceManager.getRequestDBSession();
+            return (AmpTheme)session.load(AmpTheme.class, ampThemeId);
 		} catch (Exception e) {
-			logger.error("Unable to get theme");
-			logger.debug("Exceptiion " + e);
-		} finally {
-			try {
-				if (session != null) {
-					PersistenceManager.releaseSession(session);
-				}
-			} catch (Exception ex) {
-				logger.error("releaseSession() failed");
-			}
+            throw new RuntimeException(e);
 		}
-		return ampTheme;
 	}
-	
+
 	public static Collection getThemeIndicators(Long ampThemeId)
 	{
 		Session session = null;
 		AmpTheme tempAmpTheme = null;
 		Collection themeInd = new ArrayList();
-		
+
 		try
 		{
 			session = PersistenceManager.getSession();
@@ -239,13 +212,13 @@ public class ProgramUtil {
 		}
 		finally
 		{
-			if (session != null) 
+			if (session != null)
 			{
-				try 
+				try
 				{
 					PersistenceManager.releaseSession(session);
-				} 
-				catch (Exception e) 
+				}
+				catch (Exception e)
 				{
 					logger.error("Release session faliled :" + e);
 				}
@@ -253,13 +226,13 @@ public class ProgramUtil {
 		}
 		return themeInd;
 	}
-	
+
 	public static Collection getSubThemes(Long parentThemeId)
 	{
 		Session session = null;
 		Query qry = null;
 		Collection subThemes = new ArrayList();
-		
+
 		try
 		{
 			session = PersistenceManager.getSession();
@@ -290,7 +263,7 @@ public class ProgramUtil {
 		}
 		return subThemes;
 	}
-	
+
 	public static void saveThemeIndicators(AmpPrgIndicator tempPrgInd, Long ampThemeId)
 	{
 		Session session = null;
@@ -321,14 +294,14 @@ public class ProgramUtil {
 		catch(Exception ex)
 		{
 			logger.error("Exception from saveThemeIndicators() : " + ex.getMessage());
-			ex.printStackTrace(System.out);		
-			if (tx != null) 
+			ex.printStackTrace(System.out);
+			if (tx != null)
 			{
-				try 
+				try
 				{
 					tx.rollback();
-				} 
-				catch (Exception trbf) 
+				}
+				catch (Exception trbf)
 				{
 					logger.error("Transaction roll back failed : "+trbf.getMessage());
 					trbf.printStackTrace(System.out);
@@ -337,20 +310,20 @@ public class ProgramUtil {
 		}
 		finally
 		{
-			if (session != null) 
+			if (session != null)
 			{
-				try 
+				try
 				{
 					PersistenceManager.releaseSession(session);
-				} 
-				catch (Exception rsf) 
+				}
+				catch (Exception rsf)
 				{
 					logger.error("Failed to release session :" + rsf.getMessage());
 				}
 			}
 		}
 	}
-	
+
 	public static void deleteTheme(Long themeId)
 	{
 		Collection colTheme = getRelatedThemes(themeId);
@@ -366,7 +339,7 @@ public class ProgramUtil {
 	{
 		Session session = null;
 		AllPrgIndicators tempPrgInd = new AllPrgIndicators();
-		
+
 		try
 		{
 			session = PersistenceManager.getSession();
@@ -402,7 +375,7 @@ public class ProgramUtil {
 		}
 		return tempPrgInd;
 	}
-	
+
 	public static void saveIndicator(AllPrgIndicators allPrgInd)
 	{
 		Session session = null;
@@ -426,14 +399,14 @@ public class ProgramUtil {
 		catch(Exception ex)
 		{
 			logger.error("Exception from saveIndicator() : " + ex.getMessage());
-			ex.printStackTrace(System.out);		
-			if (tx != null) 
+			ex.printStackTrace(System.out);
+			if (tx != null)
 			{
-				try 
+				try
 				{
 					tx.rollback();
-				} 
-				catch (Exception trbf) 
+				}
+				catch (Exception trbf)
 				{
 					logger.error("Transaction roll back failed : "+trbf.getMessage());
 					trbf.printStackTrace(System.out);
@@ -442,20 +415,20 @@ public class ProgramUtil {
 		}
 		finally
 		{
-			if (session != null) 
+			if (session != null)
 			{
-				try 
+				try
 				{
 					PersistenceManager.releaseSession(session);
-				} 
-				catch (Exception rsf) 
+				}
+				catch (Exception rsf)
 				{
 					logger.error("Failed to release session :" + rsf.getMessage());
 				}
 			}
 		}
 	}
-	
+
 	public static void deletePrgIndicator(Long indId)
 	{
 		Session session = null;
@@ -472,14 +445,14 @@ public class ProgramUtil {
 		catch(Exception ex)
 		{
 			logger.error("Exception from deletePrgIndicator() : " + ex.getMessage());
-			ex.printStackTrace(System.out);		
-			if (tx != null) 
+			ex.printStackTrace(System.out);
+			if (tx != null)
 			{
-				try 
+				try
 				{
 					tx.rollback();
-				} 
-				catch (Exception trbf) 
+				}
+				catch (Exception trbf)
 				{
 					logger.error("Transaction roll back failed : "+trbf.getMessage());
 					trbf.printStackTrace(System.out);
@@ -488,22 +461,22 @@ public class ProgramUtil {
 		}
 		finally
 		{
-			if (session != null) 
+			if (session != null)
 			{
-				try 
+				try
 				{
 					PersistenceManager.releaseSession(session);
-				} 
-				catch (Exception rsf) 
+				}
+				catch (Exception rsf)
 				{
 					logger.error("Failed to release session :" + rsf.getMessage());
 				}
 			}
 		}
 	}
-	
+
 	static Collection tempPrg = new ArrayList();
-	
+
 	public static Collection getRelatedThemes(Long id)
 	{
 		AmpTheme ampTheme = new AmpTheme();

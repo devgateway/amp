@@ -102,6 +102,7 @@
     </form-bean>
     <form-bean name="aimParisIndicatorManagerForm" type="org.digijava.module.aim.form.ParisIndicatorManagerForm" />
     <form-bean name="aimParisIndicatorForm" type="org.digijava.module.aim.form.ParisIndicatorForm" />
+    <form-bean name="aimNationalPlaningDashboardForm" type="org.digijava.module.aim.form.NationalPlaningDashboardForm" />
   </form-beans>
   <global-forwards>
     <forward name="viewMyDesktop" path="/aim/viewMyDesktop.do" />
@@ -1241,8 +1242,12 @@
       <forward name="comps" path="/aim/getComponents.do" />
     </action>
 
-
-    <action forward="/showLayout.do?layout=printMyDesktop" path="/aim/previewPrintMyDesktop" />
+    <action name="aimNationalPlaningDashboardForm" parameter="actionMethod" path="/aim/nationalPlaningDashboard" scope="request" type="org.digijava.module.aim.action.NationalPlaningDashboardAction" unknown="true" validate="false">
+      <forward name="viewNPDDashboard" path="/showLayout.do?layout=amp_viewNationalPlaningDashboard" />
+    </action>
+    <action name="aimDesktopForm" path="/aim/previewPrintMyDesktop" scope="session" type="org.digijava.module.aim.action.PreviewPrintDesktop" validate="false">
+      <forward name="forward" path="/showLayout.do?layout=printMyDesktop" />
+    </action>
   </action-mappings>
 </struts-config>
 

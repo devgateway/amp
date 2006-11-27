@@ -51,7 +51,7 @@ function validateFunding() {
 			if (ch==".") 
 			{
 				if (i==0) {allValid=false; break;}
-				contor++; alert(contor);
+				contor++;
 				if (contor>1) {allValid=false; break;}
 				
 			}
@@ -69,7 +69,7 @@ function validateFunding() {
 		}
 		if (!allValid)
 		{	
-			alertsay = "Please enter only numbers in the \"Exchage rate\" field or a valid decimal number using \".\" "
+			alertsay = "Please enter only numbers in the \"Exchange rate\" field or a valid decimal number using \".\" "
 			alert(alertsay);
 			return (false);
 		}

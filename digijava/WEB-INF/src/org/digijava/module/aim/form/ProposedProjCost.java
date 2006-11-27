@@ -35,7 +35,7 @@ public class ProposedProjCost extends ActionForm{
     public Double getFunAmountAsDouble() {
         DecimalFormat form=new DecimalFormat();
         try {
-            return form.parse(funAmount).doubleValue();
+            return new Double(form.parse(funAmount).doubleValue());
         } catch(ParseException ex) {
             return null;
         }

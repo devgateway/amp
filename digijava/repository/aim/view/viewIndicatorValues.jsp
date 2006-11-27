@@ -113,10 +113,10 @@
 											</TD>											
 										</TR>
 										<TR bgcolor="#ffffff">
-											<TD width="125">
+											<TD width="125"> 
 												<b><digi:trn key="aim:meTargetValueComments">Comments</digi:trn></b>
 											</TD>
-											<TD colspan="3">
+											<TD colspan="3">  
 												<bean:write name="indicator" property="revisedTargetValComments" />
 											</TD>
 										</TR>										

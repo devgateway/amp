@@ -1,6 +1,7 @@
 package org.digijava.module.aim.form;
 
 import java.util.ArrayList;
+import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.struts.action.ActionErrors;
@@ -14,7 +15,7 @@ public class NationalPlaningDashboardForm
     private ArrayList programs;
     private AmpTheme currentProgram;
     private Long currentProgramId;
-    private ArrayList activities;
+    private List activities;
     private String actionMethod;
     private boolean showChart;
 
@@ -39,7 +40,7 @@ public class NationalPlaningDashboardForm
         return currentProgramId;
     }
 
-    public ArrayList getActivities() {
+    public List getActivities() {
         return activities;
     }
 
@@ -63,7 +64,7 @@ public class NationalPlaningDashboardForm
         this.currentProgramId = currentProgramId;
     }
 
-    public void setActivities(ArrayList activities) {
+    public void setActivities(List activities) {
         this.activities = activities;
     }
 

@@ -31,6 +31,12 @@ import org.jfree.data.category.CategoryDataset;
 import org.jfree.chart.ChartUtilities;
 import org.digijava.module.aim.dbentity.AmpIndicatorRiskRatings;
 import org.digijava.module.aim.dbentity.AmpThemeIndicators;
+import net.sf.hibernate.Query;
+import org.digijava.module.aim.dbentity.AmpActivity;
+import org.digijava.kernel.persistence.PersistenceManager;
+import net.sf.hibernate.Session;
+import net.sf.hibernate.HibernateException;
+import java.sql.SQLException;
 
 public class NationalPlaningDashboardAction
     extends DispatchAction {
@@ -56,6 +62,9 @@ public class NationalPlaningDashboardAction
 
         npdForm.setPrograms(new ArrayList(sortedThemes));
 
+        if (currentTheme != null) {
+            npdForm.setActivities(getActivities(currentTheme));
+        }
         return mapping.findForward("viewNPDDashboard");
     }
 
@@ -210,7 +219,19 @@ public class NationalPlaningDashboardAction
         // OPTIONAL CUSTOMISATION COMPLETED.
 
         return chart;
+    }
 
+    public static List getActivities(AmpTheme theme) throws HibernateException,
+        SQLException {
+        Session session = null;
+        Query qry = null;
+
+        session = PersistenceManager.getSession();
+        String queryString = "from " + AmpActivity.class.getName() +
+            " ampAct where ampAct.themeId.ampThemeId=:ampThemeId order by ampAct.name";
+        qry = session.createQuery(queryString);
+        qry.setParameter("ampThemeId", theme.getAmpThemeId());
+        return qry.list();
     }
 
 }

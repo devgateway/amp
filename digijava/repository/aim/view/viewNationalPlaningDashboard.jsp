@@ -55,9 +55,10 @@ function showChart(argument) {
             <TD bgColor=#ffffff class=box-border align=left>
               <table width="100%" cellspacing="5" cellpadding="5">
                 <tr>
-                  <td bgColor=#c9c9c7 class=box-title width=220 nowrap="nowrap">                    &nbsp;
-${aimNationalPlaningDashboardForm.currentProgram.name}                  </td>
-                  <td bgColor=#c9c9c7 class=box-title width=220 nowrap="nowrap">                    &nbsp;
+                  <td align="center" class="textalb" height="20" bgcolor="#336699" width=220 nowrap="nowrap">
+                    ${aimNationalPlaningDashboardForm.currentProgram.name}
+                  </td>
+                  <td align="center" class="textalb" height="20" bgcolor="#336699" width=220 nowrap="nowrap">
                     <digi:trn key="aim:npObjectives">National Planing Objectives</digi:trn>
                   </td>
                 </tr>
@@ -65,7 +66,7 @@ ${aimNationalPlaningDashboardForm.currentProgram.name}                  </td>
                   <td valign="top" width="550">
                     <table width="100%">
                       <tr>
-                        <td align="center" class="box-title" bgcolor="#c9c9c7">
+                        <td align="center" class="textalb" height="20" bgcolor="#336699">
                           <c:if test="${aimNationalPlaningDashboardForm.showChart}">
                             <a href="#" onclick="return showChart(false)">
                               <digi:trn key="aim:npData">Data</digi:trn>
@@ -75,7 +76,7 @@ ${aimNationalPlaningDashboardForm.currentProgram.name}                  </td>
                             <digi:trn key="aim:npData">Data</digi:trn>
                           </c:if>
                         </td>
-                        <td align="center" class="box-title" bgcolor="#c9c9c7">
+                        <td align="center" class="textalb" height="20" bgcolor="#336699">
                           <c:if test="${!aimNationalPlaningDashboardForm.showChart}">
                             <a href="#" onclick="return showChart(true)">
                               <digi:trn key="aim:npChart">Chart</digi:trn>
@@ -112,6 +113,53 @@ ${aimNationalPlaningDashboardForm.currentProgram.name}                  </td>
                         <li style="left: 0px;"> <c:if test="${themeMember.level > 0}"> <c:forEach begin="1" end="${themeMember.level}"> &nbsp; </c:forEach> </c:if> <a href="#" onclick="return browseProgram(${themeMember.member.ampThemeId})">${themeMember.member.name}</a> <br/> <c:if test="${themeMember.level > 0}"> <c:forEach begin="1" end="${themeMember.level}"> &nbsp; </c:forEach> </c:if> <ul> <c:forEach var="indicator" items="${themeMember.member.indicators}"> <li>${indicator.name}</li> </c:forEach> </ul> </li>
                       </c:forEach>
                     </ul>
+                  </td>
+                </tr>
+                <tr>
+                  <td colspan="2">
+                    <table width="100%" cellpadding="4" cellSpacing="1" bgcolor="#ffffff" valign="top" align="left">
+                      <tr bgcolor="#DDDDDD">
+                        <td class="colHeaderLink" onMouseOver="this.className='colHeaderOver'"
+                        onMouseOut="this.className='colHeaderLink'" width="40%" nowrap="nowrap">
+                        <digi:trn key="aim:npActivitiesForSector">Activities for sector</digi:trn>: ${aimNationalPlaningDashboardForm.currentProgram.name}
+                        </td>
+
+                        <td class="colHeaderLink" onMouseOver="this.className='colHeaderOver'"
+                        onMouseOut="this.className='colHeaderLink'" width="40%" nowrap="nowrap">
+                        <digi:trn key="aim:npDonor">Donor</digi:trn>
+                        </td>
+
+                        <td class="colHeaderLink" onMouseOver="this.className='colHeaderOver'"
+                        onMouseOut="this.className='colHeaderLink'" width="40%" nowrap="nowrap">
+                        <digi:trn key="aim:npFromYear">From Year</digi:trn>
+                        </td>
+
+                        <td class="colHeaderLink" onMouseOver="this.className='colHeaderOver'"
+                        onMouseOut="this.className='colHeaderLink'" width="40%" nowrap="nowrap">
+                        <digi:trn key="aim:npToYear">To Year</digi:trn>
+                        </td>
+
+                        <td class="colHeaderLink" onMouseOver="this.className='colHeaderOver'"
+                        onMouseOut="this.className='colHeaderLink'" width="40%" nowrap="nowrap">
+                        <digi:trn key="aim:npStatus">Status</digi:trn>
+                        </td>
+
+                        <td class="colHeaderLink" onMouseOver="this.className='colHeaderOver'"
+                        onMouseOut="this.className='colHeaderLink'" width="40%" nowrap="nowrap">
+                        <digi:trn key="aim:npCurrency">Currency</digi:trn>
+                        </td>
+                      </tr>
+                      <c:forEach var="activity" items="${aimNationalPlaningDashboardForm.activities}">
+                        <tr>
+                          <td>${activity.name}</td>
+                          <td>&nbsp;</td>
+                          <td>${activity.activityStartDate}</td>
+                          <td>${activity.originalCompDate}</td>
+                          <td>${activity.status.name}</td>
+                          <td>${activity.currencyCode}</td>
+                        </tr>
+                      </c:forEach>
+                    </table>
                   </td>
                 </tr>
               </table>

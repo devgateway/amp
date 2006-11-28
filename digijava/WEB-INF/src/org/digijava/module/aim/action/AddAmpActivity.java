@@ -6,6 +6,7 @@ package org.digijava.module.aim.action;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -16,37 +17,35 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.digijava.kernel.util.collections.CollectionUtils;
+import org.apache.log4j.Logger;
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionError;
 import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
+import org.digijava.kernel.request.Site;
 import org.digijava.kernel.request.SiteDomain;
 import org.digijava.kernel.user.User;
 import org.digijava.kernel.util.RequestUtils;
 import org.digijava.kernel.util.SiteUtils;
-import org.digijava.module.aim.dbentity.AmpActivity;
+import org.digijava.kernel.util.collections.CollectionUtils;
+import org.digijava.kernel.util.collections.HierarchyDefinition;
 import org.digijava.module.aim.dbentity.AmpModality;
+import org.digijava.module.aim.dbentity.AmpTheme;
 import org.digijava.module.aim.form.EditActivityForm;
+import org.digijava.module.aim.form.ProposedProjCost;
 import org.digijava.module.aim.helper.FundingOrganization;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.ActivityUtil;
 import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.aim.util.DbUtil;
+import org.digijava.module.aim.util.DocumentUtil;
 import org.digijava.module.aim.util.MEIndicatorsUtil;
 import org.digijava.module.aim.util.ProgramUtil;
 import org.digijava.module.aim.util.TeamUtil;
 import org.digijava.module.editor.dbentity.Editor;
 import org.digijava.module.editor.util.Constants;
-import org.digijava.module.aim.util.DocumentUtil;
-import org.digijava.kernel.request.Site;
-import org.digijava.module.aim.form.ProposedProjCost;
-import org.digijava.module.aim.dbentity.AmpTheme;
-import org.digijava.module.aim.form.ThemeForm;
-import java.util.Comparator;
-import org.digijava.kernel.util.collections.HierarchyDefinition;
 
 /**
  * Used to capture the activity details to the form bean of type org.digijava.module.aim.form.EditActivityForm
@@ -67,7 +66,7 @@ public class AddAmpActivity extends Action {
 	public ActionForward execute(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response)
 			throws java.lang.Exception {
-
+		
 		HttpSession session = request.getSession();
 
 		ampContext = getServlet().getServletContext();
@@ -114,6 +113,12 @@ public class AddAmpActivity extends Action {
 		if (eaForm.getPageId() > 1)
 			eaForm.setStep("9");
 
+		// clearing Line & Plan Ministry Ranking
+		if (!eaForm.isEditAct()) {
+			eaForm.setLineMinRank(null);
+			eaForm.setPlanMinRank(null);
+		}
+		
 		// added by Akash
 		// desc: clearing comment properties
 		// start

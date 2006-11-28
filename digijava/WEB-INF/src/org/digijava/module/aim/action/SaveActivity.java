@@ -1435,6 +1435,8 @@ public class SaveActivity extends Action {
 			eaForm.setWorkingTeamLeadFlag("no");
 			eaForm.setFundingRegions(null);
 			eaForm.setRegionalFundings(null);
+			eaForm.setLineMinRank(null);
+			eaForm.setPlanMinRank(null);
 
 			int temp = eaForm.getPageId();
 			eaForm.setPageId(-1);

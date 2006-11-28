@@ -15,6 +15,13 @@
 
 <!--
 
+	function listActivities()
+		{
+			//document.aimTeamActivitiesForm.addActivity.value="List of Unassigned Activities";
+			document.aimTeamActivitiesForm.action="/updateTeamActivity.do";		
+			document.aimTeamActivitiesForm.submit();
+		}
+
 	function checkall() {
 		var selectbox = document.aimTeamActivitiesForm.checkAll;
 		var items = document.aimTeamActivitiesForm.selActivities;
@@ -132,7 +139,7 @@
 							<digi:trn key="aim:teamWorkspaceSetup">Team Workspace Setup</digi:trn>
 						</digi:link>
 						&nbsp;&gt;&nbsp;						
-						<digi:trn key="aim:activityList">Activity List</digi:trn>
+						<digi:trn key="aim:activityListinWorkspace">List of Activities in the Workspace</digi:trn>
 					</td>
 				</tr>
 				<tr>
@@ -187,7 +194,7 @@
 																</td>																
 																<td valign="center" align="center" bgcolor="#dddddd">
 																	<a href="javascript:sortMe('activity')" title="Click here to sort by Activity Details">
-																		<b><digi:trn key="aim:activityList">Activity List</digi:trn></b>
+																		<b><digi:trn key="aim:activityListinWorkspace">List of Activities in the Workspace</digi:trn></b>
 																	</a>
 																</td>
 																<td bgColor=#dddddb align="center" width="20%" bgcolor="#dddddd">
@@ -216,8 +223,8 @@
 														<td align="center">
 															<table width="100%" cellSpacing=2 cellPadding=3 vAlign="top" align="center"
 															bgcolor="#ffffff">
-																<tr><td bgcolor="#ffffff" align="center">
-																	<html:submit styleClass="dr-menu" value="Add Activity To Workspace" property="addActivity" />
+																<tr><td bgcolor="#ffffff" align="left">
+																      <a href="javascript:listActivities()"> List of Unassigned Activities </a>
 																</td></tr>
 															</table>
 														</td>
@@ -264,12 +271,11 @@
 													</tr>													
 													<tr>
 														<td align="center" colspan=2>
-															<table cellspacing="5">
+															<table cellspacing="5" width="100%">
 																<tr>
 																	<c:if test="${aimTeamActivitiesForm.donorFlag == false}">
-																	<td>
-																		<html:submit styleClass="dr-menu" value="Add Activity To Workspace" 
-																		property="addActivity" />
+																	<td align="left">
+																	   <a href="javascript:listActivities()"> List of Unassigned Activities </a>
 																	</td>																	
 																	</c:if>
 																	<td>	

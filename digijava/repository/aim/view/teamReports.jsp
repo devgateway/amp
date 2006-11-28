@@ -153,7 +153,7 @@
 													<tr><td>&nbsp;</td></tr>
 													<tr>
 														<td align="center">
-															<html:submit styleClass="dr-menu" value="List of Unassigned Reports" property="addReport" />
+															<a href="javascript:listReports()"> List of Unassigned Reports </a>
 														</td>
 													</tr>	
 													</logic:empty>							

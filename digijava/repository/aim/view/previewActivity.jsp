@@ -32,8 +32,10 @@ function backClicked() {
 }
 
 function disable() {
-	document.aimEditActivityForm.submitButton.disabled = true;
-	document.aimEditActivityForm.backButton.disabled = true;
+	document.aimEditActivityForm.submitButton.disabled = true;	
+	<digi:context name="save" property="context/module/moduleinstance/saveActivity.do" />
+	document.aimEditActivityForm.action = "<%= save %>?edit=true";
+	document.aimEditActivityForm.target = "_self";
 	var appstatus = document.aimEditActivityForm.approvalStatus.value;
 	var wTLFlag   = document.aimEditActivityForm.workingTeamLeadFlag.value;
 	if (appstatus == "started") {
@@ -55,14 +57,15 @@ function disable() {
 		}
 	}
 	document.aimEditActivityForm.submit();
-	return true;
 }
 -->
 
 </script>
 
-<digi:form action="/saveActivity.do" method="post">
+<digi:form action="/addActivity.do" method="post">
+<%--
 <html:hidden property="step" />
+--%>
 <html:hidden property="editAct" />
 <html:hidden property="approvalStatus" />
 <html:hidden property="workingTeamLeadFlag" />

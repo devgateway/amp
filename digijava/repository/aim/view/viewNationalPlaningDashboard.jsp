@@ -5,6 +5,18 @@
 <%@taglib uri="/taglib/struts-html" prefix="html"%>
 <%@taglib uri="/taglib/digijava" prefix="digi"%>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
+<script type="text/javascript">
+	function newWin(val) {
+		<digi:context name="selectLoc" property="context/module/moduleinstance/viewOrganisation.do" />
+		var url = "<%= selectLoc %>?ampOrgId=" + val;
+		openNewWindow(635, 600);
+		//obj.target = popupPointer.name;
+		popupPointer.document.location.href = url;
+		//obj.href = url;
+	}
+</script>
+
 <script language="javascript" type="text/javascript">
 function setActionMethod(methodName) {
   document.getElementsByName('actionMethod')[0].value=methodName;
@@ -19,8 +31,14 @@ function browseProgram(programId) {
 }
 
 function showChart(argument) {
-  setActionMethod('display');
+  setActionMethod('displayWithFilter');
   document.getElementsByName('showChart')[0].value=argument;
+  document.forms['aimNationalPlaningDashboardForm'].submit();
+  return false;
+}
+
+function doFilter() {
+  setActionMethod('displayWithFilter');
   document.forms['aimNationalPlaningDashboardForm'].submit();
   return false;
 }
@@ -66,6 +84,11 @@ function showChart(argument) {
                   <td valign="top" width="550">
                     <table width="100%">
                       <tr>
+                        <td colspan="2" align="center">
+                          <input type="button" value="GO" onclick="return doFilter()" />
+                        </td>
+                      </tr>
+                      <tr>
                         <td align="center" class="textalb" height="20" bgcolor="#336699">
                           <c:if test="${aimNationalPlaningDashboardForm.showChart}">
                             <a href="#" onclick="return showChart(false)">
@@ -87,6 +110,7 @@ function showChart(argument) {
                           </c:if>
                         </td>
                       </tr>
+                      <!-- chart -->
                       <c:if test="${aimNationalPlaningDashboardForm.showChart}">
                       <tr>
                         <td colspan="2" align="center">
@@ -94,6 +118,9 @@ function showChart(argument) {
                         <c:url var="fullShowChartUrl" scope="page" value="${showChart}">
                           <c:param name="actionMethod" value="displayChart" />
                           <c:param name="currentProgramId" value="${aimNationalPlaningDashboardForm.currentProgramId}" />
+                          <c:forEach var="selVal" items="${aimNationalPlaningDashboardForm.selectedIndicators}">
+                            <c:param name="selectedIndicators" value="${selVal}" />
+                          </c:forEach>
                         </c:url>
                         <img alt="chart" src="${fullShowChartUrl}" width="500" />
                         </td>
@@ -105,12 +132,38 @@ function showChart(argument) {
                         </td>
                       </tr>
                       </c:if>
+                      <!-- end of chart-->
                     </table>
                   </td>
                   <td valign="top" class="highlight" align="left" width="100">
                     <ul style="list-style : none; padding-left : 0px;">
                       <c:forEach var="themeMember" items="${aimNationalPlaningDashboardForm.programs}">
-                        <li style="left: 0px;"> <c:if test="${themeMember.level > 0}"> <c:forEach begin="1" end="${themeMember.level}"> &nbsp; </c:forEach> </c:if> <a href="#" onclick="return browseProgram(${themeMember.member.ampThemeId})">${themeMember.member.name}</a> <br/> <c:if test="${themeMember.level > 0}"> <c:forEach begin="1" end="${themeMember.level}"> &nbsp; </c:forEach> </c:if> <ul> <c:forEach var="indicator" items="${themeMember.member.indicators}"> <li>${indicator.name}</li> </c:forEach> </ul> </li>
+                        <li style="left: 0px;">
+                          <c:if test="${themeMember.level > 0}">
+                            <c:forEach begin="1" end="${themeMember.level}"> &nbsp; </c:forEach>
+                          </c:if>
+                          <a href="#" onclick="return browseProgram(${themeMember.member.ampThemeId})">${themeMember.member.name}</a>
+                          <br/>
+                          <c:if test="${themeMember.level > 0}">
+                            <c:forEach begin="1" end="${themeMember.level}"> &nbsp; </c:forEach>
+                          </c:if>
+                          <c:if test="${aimNationalPlaningDashboardForm.currentProgramId != themeMember.member.ampThemeId}">
+                          <ul style="margin-left : 10px;">
+                            <c:forEach var="indicator" items="${themeMember.member.indicators}">
+                              <li>${indicator.name}</li>
+                            </c:forEach>
+                          </ul>
+                          </c:if>
+                          <c:if test="${aimNationalPlaningDashboardForm.currentProgramId == themeMember.member.ampThemeId}">
+                          <ul style="list-style : none; margin-left : 10px; padding-left : 0px;">
+                            <c:forEach var="indicator" items="${themeMember.member.indicators}">
+                              <li>
+                              <html:multibox property="selectedIndicators" value="${indicator.ampThemeIndId}" />${indicator.name}
+                              </li>
+                            </c:forEach>
+                          </ul>
+                          </c:if>
+                        </li>
                       </c:forEach>
                     </ul>
                   </td>
@@ -121,7 +174,7 @@ function showChart(argument) {
                       <tr bgcolor="#DDDDDD">
                         <td class="colHeaderLink" onMouseOver="this.className='colHeaderOver'"
                         onMouseOut="this.className='colHeaderLink'" width="40%" nowrap="nowrap">
-                        <digi:trn key="aim:npActivitiesForSector">Activities for sector</digi:trn>: ${aimNationalPlaningDashboardForm.currentProgram.name}
+                        <digi:trn key="aim:npPlannedActivitiesFor">Planned activities for</digi:trn>: ${aimNationalPlaningDashboardForm.currentProgram.name}
                         </td>
 
                         <td class="colHeaderLink" onMouseOver="this.className='colHeaderOver'"
@@ -141,22 +194,33 @@ function showChart(argument) {
 
                         <td class="colHeaderLink" onMouseOver="this.className='colHeaderOver'"
                         onMouseOut="this.className='colHeaderLink'" width="40%" nowrap="nowrap">
-                        <digi:trn key="aim:npStatus">Status</digi:trn>
-                        </td>
-
-                        <td class="colHeaderLink" onMouseOver="this.className='colHeaderOver'"
-                        onMouseOut="this.className='colHeaderLink'" width="40%" nowrap="nowrap">
-                        <digi:trn key="aim:npCurrency">Currency</digi:trn>
+                        <digi:trn key="aim:npAmountAndCurrency">Amount&amp;Currency</digi:trn>
                         </td>
                       </tr>
                       <c:forEach var="activity" items="${aimNationalPlaningDashboardForm.activities}">
                         <tr>
-                          <td>${activity.name}</td>
-                          <td>&nbsp;</td>
-                          <td>${activity.activityStartDate}</td>
-                          <td>${activity.originalCompDate}</td>
-                          <td>${activity.status.name}</td>
-                          <td>${activity.currencyCode}</td>
+                          <td valign="top">${activity.name}</td>
+                          <td>
+								<c:if test="${!empty activity.funding}">
+											<TABLE cellspacing=1 cellpadding=1>
+												<c:forEach var="dnr" items="${activity.funding}">
+													<TR><TD>
+														<a href="javascript:newWin('${dnr.ampDonorOrgId.ampOrgId}')">
+														${dnr.ampDonorOrgId.name}</a>
+													</TD></TR>
+												</c:forEach>
+											</TABLE>
+										</c:if>
+										<c:if test="${empty activity.funding}">
+											<digi:trn key="aim:unspecified">Unspecified</digi:trn>
+										</c:if>
+                          </td>
+                          <td valign="top">${activity.activityStartDate}</td>
+                          <td valign="top">${activity.originalCompDate}</td>
+                          <td valign="top">
+                          <fmt:formatNumber var="funAmount" maxFractionDigits="2" minFractionDigits="2" groupingUsed="true" value="${activity.funAmount}" />
+                          ${funAmount} ${activity.currencyCode}
+                          </td>
                         </tr>
                       </c:forEach>
                     </table>

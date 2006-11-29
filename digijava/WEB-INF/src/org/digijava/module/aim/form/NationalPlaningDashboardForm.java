@@ -18,9 +18,11 @@ public class NationalPlaningDashboardForm
     private List activities;
     private String actionMethod;
     private boolean showChart;
+    private long[] selectedIndicators;
 
     public void reset(ActionMapping mapping, HttpServletRequest request) {
         currentProgramId = null;
+        selectedIndicators = null;
     }
 
     public ActionErrors validate(ActionMapping mapping,
@@ -52,6 +54,10 @@ public class NationalPlaningDashboardForm
         return showChart;
     }
 
+    public long[] getSelectedIndicators() {
+        return selectedIndicators;
+    }
+
     public void setPrograms(ArrayList programs) {
         this.programs = programs;
     }
@@ -74,5 +80,9 @@ public class NationalPlaningDashboardForm
 
     public void setShowChart(boolean showChart) {
         this.showChart = showChart;
+    }
+
+    public void setSelectedIndicators(long[] selectedIndicators) {
+        this.selectedIndicators = selectedIndicators;
     }
 }

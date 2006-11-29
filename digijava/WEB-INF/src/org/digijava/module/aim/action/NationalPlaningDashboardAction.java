@@ -1,42 +1,48 @@
 
 package org.digijava.module.aim.action;
 
-import org.apache.struts.actions.DispatchAction;
+import java.sql.SQLException;
+import java.text.DecimalFormat;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Comparator;
+import java.util.Iterator;
+import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import java.awt.Color;
+import java.awt.GradientPaint;
+
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
-import org.digijava.module.aim.form.NationalPlaningDashboardForm;
-import java.util.Comparator;
-import org.digijava.kernel.util.collections.HierarchyDefinition;
-import org.digijava.module.aim.dbentity.AmpTheme;
+import org.apache.struts.actions.DispatchAction;
+import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.util.collections.CollectionUtils;
-import java.util.Collection;
-import java.util.ArrayList;
+import org.digijava.kernel.util.collections.HierarchyDefinition;
+import org.digijava.module.aim.dbentity.AmpActivity;
+import org.digijava.module.aim.dbentity.AmpTheme;
+import org.digijava.module.aim.dbentity.AmpThemeIndicators;
+import org.digijava.module.aim.form.NationalPlaningDashboardForm;
 import org.digijava.module.aim.util.ProgramUtil;
-import java.util.*;
+import org.jfree.chart.ChartFactory;
+import org.jfree.chart.ChartUtilities;
+import org.jfree.chart.JFreeChart;
+import org.jfree.chart.axis.CategoryAxis;
+import org.jfree.chart.axis.CategoryLabelPositions;
 import org.jfree.chart.axis.NumberAxis;
 import org.jfree.chart.plot.CategoryPlot;
-import org.jfree.chart.renderer.category.BarRenderer;
 import org.jfree.chart.plot.PlotOrientation;
-import java.awt.GradientPaint;
-import org.jfree.chart.ChartFactory;
-import org.jfree.chart.axis.CategoryLabelPositions;
-import org.jfree.data.category.DefaultCategoryDataset;
-import org.jfree.chart.axis.CategoryAxis;
-import org.jfree.chart.JFreeChart;
-import java.awt.Color;
+import org.jfree.chart.renderer.category.BarRenderer;
 import org.jfree.data.category.CategoryDataset;
-import org.jfree.chart.ChartUtilities;
-import org.digijava.module.aim.dbentity.AmpIndicatorRiskRatings;
-import org.digijava.module.aim.dbentity.AmpThemeIndicators;
-import net.sf.hibernate.Query;
-import org.digijava.module.aim.dbentity.AmpActivity;
-import org.digijava.kernel.persistence.PersistenceManager;
-import net.sf.hibernate.Session;
+import org.jfree.data.category.DefaultCategoryDataset;
 import net.sf.hibernate.HibernateException;
-import java.sql.SQLException;
+import net.sf.hibernate.Query;
+import net.sf.hibernate.Session;
+import java.util.Arrays;
+import java.util.Set;
+import java.util.*;
 
 public class NationalPlaningDashboardAction
     extends DispatchAction {
@@ -45,8 +51,25 @@ public class NationalPlaningDashboardAction
                                  HttpServletRequest request,
                                  HttpServletResponse response) throws
         Exception {
+        return doDisplay(mapping, form, request, response, false);
+    }
+
+    public ActionForward displayWithFilter(ActionMapping mapping, ActionForm form,
+                                 HttpServletRequest request,
+                                 HttpServletResponse response) throws
+        Exception {
+        return doDisplay(mapping, form, request, response, true);
+    }
+
+
+    protected ActionForward doDisplay(ActionMapping mapping, ActionForm form,
+                                 HttpServletRequest request,
+                                 HttpServletResponse response, boolean filter) throws
+        Exception {
         NationalPlaningDashboardForm npdForm =
             (NationalPlaningDashboardForm) form;
+
+
         // load all themes
         List themes = ProgramUtil.getAllThemes();
         Collection sortedThemes = CollectionUtils.getFlatHierarchy(themes, true,
@@ -60,13 +83,36 @@ public class NationalPlaningDashboardAction
         }
         npdForm.setCurrentProgram(currentTheme);
 
+
         npdForm.setPrograms(new ArrayList(sortedThemes));
 
-        if (currentTheme != null) {
+        if(currentTheme != null) {
+            if(!filter) {
+                long[] ids = getIndicatorIds(currentTheme);
+                npdForm.setSelectedIndicators(ids);
+            }
+
             npdForm.setActivities(getActivities(currentTheme));
         }
         return mapping.findForward("viewNPDDashboard");
     }
+
+    private long[] getIndicatorIds(AmpTheme currentTheme) {
+        long[] ids = null;
+            Set indicators = currentTheme.getIndicators();
+            if (indicators == null) {
+            } else {
+                ids = new long[indicators.size()];
+                int i=0;
+                Iterator iter = indicators.iterator();
+                while(iter.hasNext()) {
+                    AmpThemeIndicators item = (AmpThemeIndicators) iter.next();
+                    ids[i++] = item.getAmpThemeIndId().longValue();
+                }
+            }
+        return ids;
+    }
+
 
     public ActionForward displayChart(ActionMapping mapping, ActionForm form,
                                       HttpServletRequest request,
@@ -78,7 +124,7 @@ public class NationalPlaningDashboardAction
         Long currentThemeId = npdForm.getCurrentProgramId();
         AmpTheme currentTheme = ProgramUtil.getTheme(currentThemeId);
 
-        CategoryDataset dataset = createDataset(currentTheme);
+        CategoryDataset dataset = createDataset(currentTheme, npdForm.getSelectedIndicators());
         JFreeChart chart = createChart(dataset);
 
         response.setContentType("image/png");
@@ -128,24 +174,31 @@ public class NationalPlaningDashboardAction
         return display(mapping, form, request, response);
     }
 
-    private static CategoryDataset createDataset(AmpTheme currentTheme) {
+    private static CategoryDataset createDataset(AmpTheme currentTheme, long[] selectedIndicators) {
 
         // row keys...
         String series1 = "Base";
         String series2 = "Actual";
         String series3 = "Target";
 
+        Arrays.sort(selectedIndicators);
+
         DefaultCategoryDataset dataset = new DefaultCategoryDataset();
 
         Iterator iter = currentTheme.getIndicators().iterator();
         while(iter.hasNext()) {
             AmpThemeIndicators item = (AmpThemeIndicators) iter.next();
-            String displayLabel = item.getName();
 
-            dataset.addValue(Math.random()*100, series1, displayLabel);
-            dataset.addValue(Math.random()*100, series2, displayLabel);
-            dataset.addValue(Math.random()*100, series3, displayLabel);
+            int pos = Arrays.binarySearch(selectedIndicators,
+                                          item.getAmpThemeIndId().longValue());
+            if (pos >= 0) {
 
+                String displayLabel = item.getName();
+
+                dataset.addValue(Math.random(), series1, displayLabel);
+                dataset.addValue(Math.random(), series2, displayLabel);
+                dataset.addValue(Math.random(), series3, displayLabel);
+            }
         }
 
         return dataset;
@@ -164,38 +217,28 @@ public class NationalPlaningDashboardAction
         // create the chart...
         JFreeChart chart = ChartFactory.createBarChart(
             null, // chart title
-            "Indicator", // domain axis label
-            "Percent", // range axis label
+            null, // domain axis label
+            null, // range axis label
             dataset, // data
             PlotOrientation.VERTICAL, // orientation
             true, // include legend
-            true, // tooltips?
+            false, // tooltips?
             false // URLs?
             );
 
         // NOW DO SOME OPTIONAL CUSTOMISATION OF THE CHART...
 
         // set the background color for the chart...
-        chart.setBackgroundPaint(Color.white);
+        chart.setBackgroundPaint(Color.WHITE);
 
         // get a reference to the plot for further customisation...
         CategoryPlot plot = chart.getCategoryPlot();
-        plot.setBackgroundPaint(Color.lightGray);
-        plot.setDomainGridlinePaint(Color.white);
-        plot.setDomainGridlinesVisible(true);
-        plot.setRangeGridlinePaint(Color.white);
-
-        // ******************************************************************
-        //  More than 150 demo applications are included with the JFreeChart
-        //  Developer Guide...for more information, see:
-        //
-        //  >   http://www.object-refinery.com/jfreechart/guide.html
-        //
-        // ******************************************************************
 
         // set the range axis to display integers only...
         final NumberAxis rangeAxis = (NumberAxis) plot.getRangeAxis();
-        rangeAxis.setStandardTickUnits(NumberAxis.createIntegerTickUnits());
+        rangeAxis.setRange(0D,1D);
+        rangeAxis.setNumberFormatOverride(new DecimalFormat("###%"));
+
 
         // disable bar outlines...
         BarRenderer renderer = (BarRenderer) plot.getRenderer();
@@ -228,9 +271,13 @@ public class NationalPlaningDashboardAction
 
         session = PersistenceManager.getSession();
         String queryString = "from " + AmpActivity.class.getName() +
-            " ampAct where ampAct.themeId.ampThemeId=:ampThemeId order by ampAct.name";
+            " ampAct where ampAct.themeId.ampThemeId=:ampThemeId " +
+            " and ampAct.status.statusCode=:statusCode order by ampAct.name";
+
         qry = session.createQuery(queryString);
         qry.setParameter("ampThemeId", theme.getAmpThemeId());
+        qry.setParameter("statusCode", "1"); // 1 stands for "Planned"
+
         return qry.list();
     }
 

@@ -288,12 +288,11 @@ function checkNumeric(objName,comma,period,hyphen)
 									<logic:greaterEqual name="aimEditActivityForm" property="impLevelValue" value="4">
 										<tr>
 											<td>
-												<digi:trn key="aim:woreda">
-												Woreda</digi:trn>
+												<digi:trn key="aim:district">District </digi:trn>
 											</td>
 											<td>
 												<html:select property="impMultiWoreda"  styleClass="inp-text" size="5" multiple="true">
-													<html:option value="-1">&nbsp;&nbsp;Select Woreda&nbsp;&nbsp;</html:option>
+													<html:option value="-1">&nbsp;&nbsp;Select <digi:trn key="aim:district">District </digi:trn>&nbsp;&nbsp;</html:option>
 													<logic:notEmpty name="aimEditActivityForm" property="woredas">
 														<html:optionsCollection name="aimEditActivityForm" property="woredas"
 														value="ampWoredaId" label="name" />
@@ -344,7 +343,16 @@ function checkNumeric(objName,comma,period,hyphen)
 							<td vAlign="center" width="100%" align ="center" class="textalb" height="20">
 								<digi:trn key="aim:searchLocations">
 								Search Locations</digi:trn>
-							(<bean:write name="aimEditActivityForm" property="implementationLevel" />)
+							(<script language="JavaScript">
+								{
+										switch(document.aimEditActivityForm.impLevelValue.value)
+										{
+											case '1':case '2':case '3':	document.write('<bean:write name="aimEditActivityForm" property="implementationLevel" />');break;
+											case '4': document.write('<digi:trn key="aim:district">District </digi:trn>');break;																					
+										}
+										
+								}
+							</script>)
 							</td></tr>
 						<tr>
 							<td align="center" bgcolor=#ECF3FD>

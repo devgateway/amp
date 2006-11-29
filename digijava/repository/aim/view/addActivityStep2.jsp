@@ -316,7 +316,7 @@ function popupwin()
 																		<html:option value="country">Country</html:option>
 																		<html:option value="region">Region</html:option>
 																		<html:option value="zone">Zone</html:option>
-																		<html:option value="woreda">Woreda</html:option>
+																		<html:option value="woreda"><digi:trn key="aim:district">District </digi:trn></html:option>
 																	</html:select></td>
 																</tr>
 															</table>

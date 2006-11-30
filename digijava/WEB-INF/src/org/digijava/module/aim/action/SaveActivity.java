@@ -1485,9 +1485,8 @@ public class SaveActivity extends Action {
 				return null;
 			}
 		} catch (Exception e) {
-			e.printStackTrace(System.out);
+            throw new RuntimeException("Save Activity Error",e);
 		}
-		return null;
 	}
 
 }

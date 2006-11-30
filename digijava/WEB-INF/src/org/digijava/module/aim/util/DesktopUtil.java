@@ -29,15 +29,15 @@ import org.digijava.module.aim.helper.Sector;
 import org.digijava.module.editor.dbentity.Editor;
 
 public class DesktopUtil {
-	
+
 	private static Logger logger = Logger.getLogger(DesktopUtil.class);
-	
+
 
 	public static Collection getAllChildrenIds(Long teamId) {
 		Session session = null;
 		Collection childTeamId = new ArrayList();
 		Collection col = new ArrayList();
-		
+
 		try {
 			session = PersistenceManager.getSession();
 			String qryStr = "select t.ampTeamId from " + AmpTeam.class.getName() + " t where" +
@@ -52,7 +52,7 @@ public class DesktopUtil {
 				while (itr.hasNext()) {
 					Long tId = (Long) itr.next();
 					childTeamId.add(tId);
-					if (qryParam.length() != 0) 
+					if (qryParam.length() != 0)
 						qryParam += ",";
 					qryParam += tId;
 				}
@@ -70,20 +70,20 @@ public class DesktopUtil {
 				try {
 					PersistenceManager.releaseSession(session);
 				} catch (Exception rsf) {
-					logger.error("Release session failed " + 
+					logger.error("Release session failed " +
 							rsf.getMessage());
 				}
-			} 
+			}
 		}
 		return childTeamId;
 	}
-	
+
 	public static Collection getActivities(Collection teamIds,boolean team,Long memberId) {
 		Session session = null;
 		Collection col = new ArrayList();
 		String qryStr = null;
 		Query qry = null;
-		
+
 		try {
 			session = PersistenceManager.getSession();
 			if (teamIds != null) {
@@ -97,7 +97,7 @@ public class DesktopUtil {
 					param += teamId;
 				}
 
-				
+
 				if (team) {
 					qryStr = "select a from " + AmpActivity.class.getName() + " a" +
 							" where a.team in (" + param + ") and (a.activityCreator=:mId " +
@@ -109,7 +109,7 @@ public class DesktopUtil {
 							"where a.team in (" + param + ") and a.approvalStatus like 'approved'";
 					qry = session.createQuery(qryStr);
 				}
-				
+
 				Collection temp = qry.list();
 				if (temp != null && temp.size() > 0) {
 					itr = temp.iterator();
@@ -125,13 +125,12 @@ public class DesktopUtil {
 						project.setActivityRisk(MEIndicatorsUtil.getOverallRisk(act.getAmpActivityId()));
 						project.setLineMinRank(act.getLineMinRank());
 						project.setPlanMinRank(act.getPlanMinRank());
-						
+
 						project.setSector(new ArrayList());
 						Set sectSect = act.getSectors();
 						if (sectSect != null) {
 							Iterator sItr = sectSect.iterator();
 							while (sItr.hasNext()) {
-								//AmpSector sect = (AmpSector) sItr.next();
 								AmpSector sect = ((AmpActivitySector) sItr.next()).getSectorId();
 								Sector sector = new Sector();
 								sector.setSectorId(sect.getAmpSectorId());
@@ -139,10 +138,10 @@ public class DesktopUtil {
 								project.getSector().add(sector);
 							}
 						}
-						
+
 						project.setCommitmentList(new ArrayList());
 						project.setDonor(new ArrayList());
-						
+
 						Set fundings = act.getFunding();
 						if (fundings != null) {
 							Iterator fItr = fundings.iterator();
@@ -153,11 +152,11 @@ public class DesktopUtil {
 								projDonor.setDonorName(funding.getAmpDonorOrgId().getName());
 								if (project.getDonor().contains(projDonor) == false)
 									project.getDonor().add(projDonor);
-								
+
 								Iterator fdItr = funding.getFundingDetails().iterator();
 								while (fdItr.hasNext()) {
 									AmpFundingDetail fd = (AmpFundingDetail) fdItr.next();
-									if (fd.getAdjustmentType().intValue() == Constants.ACTUAL && 
+									if (fd.getAdjustmentType().intValue() == Constants.ACTUAL &&
 											fd.getTransactionType().intValue() == Constants.COMMITMENT) {
 										Commitments comm = new Commitments();
 										comm.setDonorId(funding.getAmpDonorOrgId().getAmpOrgId());
@@ -173,28 +172,27 @@ public class DesktopUtil {
 						project.setTotalCommited("");
 						col.add(project);
 					}
-				}				
+				}
 			}
 		} catch (Exception e) {
-			logger.error("Exception from getActivities() " + e.getMessage());
-			e.printStackTrace(System.out);
+            throw new RuntimeException("Exception from getActivities()", e);
 		} finally {
 			if (session != null) {
 				try {
 					PersistenceManager.releaseSession(session);
 				} catch (Exception rsf) {
-					logger.error("Release session failed " + 
+					logger.error("Release session failed " +
 							rsf.getMessage());
 				}
-			} 
+			}
 		}
-		return col;		
+		return col;
 	}
-	
+
 	public static Collection getAmpProjects(Collection actIds) {
 		Session session = null;
 		Collection col = new ArrayList();
-		
+
 		try {
 			session = PersistenceManager.getSession();
 			if (actIds != null && actIds.size() > 0) {
@@ -207,12 +205,12 @@ public class DesktopUtil {
 					}
 					params += actId;
 				}
-				
+
 				String qryStr = "select a from " + AmpActivity.class.getName() + " a" +
 						" where a.ampActivityId in (" + params + ")";
 
 				Query qry = session.createQuery(qryStr);
-				
+
 				Collection temp = qry.list();
 				if (temp != null && temp.size() > 0) {
 					itr = temp.iterator();
@@ -226,7 +224,7 @@ public class DesktopUtil {
 						AmpStatus status = act.getStatus();
 						project.setStatusId(status.getAmpStatusId());
 						project.setActivityRisk(MEIndicatorsUtil.getOverallRisk(act.getAmpActivityId()));
-						
+
 						project.setSector(new ArrayList());
 						Set sectSect = act.getSectors();
 						if (sectSect != null) {
@@ -240,10 +238,10 @@ public class DesktopUtil {
 								project.getSector().add(sector);
 							}
 						}
-						
+
 						project.setCommitmentList(new ArrayList());
 						project.setDonor(new ArrayList());
-						
+
 						Set fundings = act.getFunding();
 						if (fundings != null) {
 							Iterator fItr = fundings.iterator();
@@ -254,11 +252,11 @@ public class DesktopUtil {
 								projDonor.setDonorName(funding.getAmpDonorOrgId().getName());
 								if (project.getDonor().contains(projDonor) == false)
 									project.getDonor().add(projDonor);
-								
+
 								Iterator fdItr = funding.getFundingDetails().iterator();
 								while (fdItr.hasNext()) {
 									AmpFundingDetail fd = (AmpFundingDetail) fdItr.next();
-									if (fd.getAdjustmentType().intValue() == Constants.ACTUAL && 
+									if (fd.getAdjustmentType().intValue() == Constants.ACTUAL &&
 											fd.getTransactionType().intValue() == Constants.COMMITMENT) {
 										Commitments comm = new Commitments();
 										comm.setDonorId(funding.getAmpDonorOrgId().getAmpOrgId());
@@ -274,52 +272,51 @@ public class DesktopUtil {
 						project.setTotalCommited("");
 						col.add(project);
 					}
-				}								
+				}
 			}
 		} catch (Exception e) {
-			logger.error("Exception from getAmpProjects " + e.getMessage());
-			e.printStackTrace(System.out);
+            throw new RuntimeException("Exception from getAmpProjects", e);
 		} finally {
 			if (session != null) {
 				try {
 					PersistenceManager.releaseSession(session);
 				} catch (Exception rsf) {
-					logger.error("Release session failed " + 
+					logger.error("Release session failed " +
 							rsf.getMessage());
 				}
-			} 
+			}
 		}
-		return col;		
+		return col;
 	}
-	
+
 	public static Collection getDesktopActivities(Long teamId,
 			Long memberId,boolean teamLead) {
-	
+
 		Session session = null;
 		Collection projects = new ArrayList();
-		
+
 		try {
 			session = PersistenceManager.getSession();
-			
+
 			if (teamLead) {
 				// Load activities for the team leader
 				AmpTeam team = (AmpTeam) session.load(AmpTeam.class,teamId);
-				
+
 				if (team.getTeamCategory() != null && team.getTeamCategory().
 						equalsIgnoreCase(Constants.DEF_DNR_PERSPECTIVE)) {
 					// Donor team
 					if (team.getAccessType() != null && team.getAccessType().
 							equalsIgnoreCase(Constants.TYPE_MNGMT)) {
 						// Management team
-						logger.info("Loading activities for Donor managemnet team leader");						
+						logger.info("Loading activities for Donor managemnet team leader");
 						Collection childTeamId = getAllChildrenIds(teamId);
-						
+
 						Iterator temp = childTeamId.iterator();
 						while (temp.hasNext()) {
 							Long id = (Long) temp.next();
 							logger.info("id = " + id);
 						}
-						
+
 						projects = getActivities(childTeamId,false,memberId);
 					} else {
 						// Working team
@@ -330,7 +327,7 @@ public class DesktopUtil {
 							Collection actIds = new ArrayList();
 							while (actItr.hasNext()) {
 								AmpActivity tmpAct = (AmpActivity) actItr.next();
-								actIds.add(tmpAct.getAmpActivityId());	
+								actIds.add(tmpAct.getAmpActivityId());
 							}
 							projects = getAmpProjects(actIds);
 						}
@@ -362,24 +359,23 @@ public class DesktopUtil {
 					projects = getAmpProjects(actIds);
 				}
 			}
-			
+
 		} catch (Exception e) {
-			logger.error("Exception from getDesktopActivties " +
-					"" + e.getMessage());			
+            throw new RuntimeException("Exception from getDesktopActivties", e);
 		} finally {
 			if (session != null) {
 				try {
 					PersistenceManager.releaseSession(session);
 				} catch (Exception rsf) {
-					logger.error("Release session failed " + 
+					logger.error("Release session failed " +
 							rsf.getMessage());
 				}
 			}
 		}
-		
+
 		return projects;
 	}
-	
+
 	public static Collection getPaginatedActivityList(ArrayList actList,int numRecords,int pageNo) {
 		Collection col = new ArrayList();
 		int stIndex = (pageNo - 1) * numRecords;
@@ -388,15 +384,15 @@ public class DesktopUtil {
 		for (int i = stIndex;i < edIndex;i ++) {
 			col.add(actList.get(i));
 		}
-		
+
 		return col;
 	}
-	
+
 	public static double updateProjectTotals(Collection activities,Long persId,
 			String currCode) {
-		
+
 		logger.info("updateProjectTotals called with currcode =" + currCode);
-		
+
 		DecimalFormat mf = new DecimalFormat("###,###,###,###,###") ;
 		double grandTotal = 0;
 		if (activities != null) {
@@ -412,7 +408,7 @@ public class DesktopUtil {
 						if (comm.getPerspectiveId().equals(persId)) {
 							double toCurrency = CurrencyUtil.getExchangeRate(currCode,0,comm.getTransactionDate());
 							double fromCurrency = CurrencyUtil.getExchangeRate(comm.getCurrencyCode(),0,comm.getTransactionDate());
-							totAmount += CurrencyWorker.convert1(comm.getAmount(),fromCurrency, toCurrency);								
+							totAmount += CurrencyWorker.convert1(comm.getAmount(),fromCurrency, toCurrency);
 						}
 					}
 				}
@@ -420,20 +416,20 @@ public class DesktopUtil {
 				if (totAmount <= 0) {
 					project.setTotalCommited("");
 				} else {
-					project.setTotalCommited(mf.format(totAmount));	
+					project.setTotalCommited(mf.format(totAmount));
 				}
 			}
 		}
 		return grandTotal;
 	}
-	
+
 	public static ArrayList searchActivities(Collection actIds,String searchKey) {
 		Session session = null;
 		ArrayList col = new ArrayList();
 		String qryStr = null;
 		Query qry = null;
 		Collection act = new ArrayList();
-		
+
 		try {
 			session = PersistenceManager.getSession();
 			String params = "";
@@ -443,10 +439,10 @@ public class DesktopUtil {
 					Long id = (Long) itr.next();
 					if (params.length() > 0) {
 						params += ",";
-					}					
+					}
 					params += id;
 				}
-				
+
 				qryStr = "select a.ampActivityId,a.description,a.objective from " +
 						"" + AmpActivity.class.getName() + " a where a.ampActivityId in (" +
 								"" + params + ")";
@@ -472,12 +468,12 @@ public class DesktopUtil {
 						if (temp.indexOf(searchKey) > -1) {
 							act.add(actId);
 						}
-					} 
+					}
 				}
 				if (act.size() > 0)
 					col = (ArrayList) getAmpProjects(act);
 			}
-			
+
 		} catch (Exception e) {
 			logger.error("Exception from searchActivities " + e.getMessage());
 			e.printStackTrace(System.out);
@@ -486,11 +482,11 @@ public class DesktopUtil {
 				try {
 					PersistenceManager.releaseSession(session);
 				} catch (Exception rsf) {
-					logger.error("Release session failed " + 
+					logger.error("Release session failed " +
 							rsf.getMessage());
 				}
-			} 
+			}
 		}
-		return col;		
+		return col;
 	}
 }

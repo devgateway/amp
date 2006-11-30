@@ -86,12 +86,9 @@ public class AddAmpActivity extends Action {
         if(eaForm.getProProjCost()!=null){
             propProjCost=new ProposedProjCost();
             propProjCost=eaForm.getProProjCost();
-            if(propProjCost.getActID()==null &&
-               propProjCost.getCurrencyCode()==null &&
+            if(propProjCost.getCurrencyCode()==null &&
                propProjCost.getFunAmount()==null &&
-               propProjCost.getFunDate()==null &&
-               propProjCost.getFundingID()==null &&
-               propProjCost.getUsID()==null){
+               propProjCost.getFunDate()==null){
                 eaForm.setProProjCost(null);
             }
         }

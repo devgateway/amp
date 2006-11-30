@@ -2,27 +2,17 @@ package org.digijava.module.aim.util;
 /*
  * @author Govind G Dalwani
  */
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 
-import net.sf.hibernate.Hibernate;
-import net.sf.hibernate.Query;
-import net.sf.hibernate.Session;
-import net.sf.hibernate.Transaction;
-
-import org.apache.log4j.Logger;
-import org.digijava.kernel.persistence.PersistenceManager;
-import org.digijava.module.aim.dbentity.AmpComponent;
-import org.digijava.module.aim.dbentity.AmpSector;
-import org.digijava.module.aim.dbentity.AmpSectorScheme;
-
+import org.apache.log4j.*;
+import org.digijava.kernel.persistence.*;
+import org.digijava.module.aim.dbentity.*;
+import net.sf.hibernate.*;
 
 public class ComponentsUtil{
-	
+
 	private static Logger logger = Logger.getLogger(ComponentsUtil.class);
-	
+
 	public static Collection getAmpComponents()
 	{
 		Collection col = null;
@@ -32,23 +22,23 @@ public class ComponentsUtil{
 		try
 		{
 			session = PersistenceManager.getSession();
-			queryString ="select distinct co from "+AmpComponent.class.getName()+" co order by co.title";	
+			queryString ="select distinct co from "+AmpComponent.class.getName()+" co order by co.title";
 			qry = session.createQuery(queryString);
-			
+
 			col = qry.list();
 		}
-		catch(Exception ex) 		
+		catch(Exception ex)
 		{
 			logger.error("Unable to get Components  from database " + ex.getMessage());
 			ex.printStackTrace(System.out);
 		}
-		finally 
+		finally
 		{
-			try 
+			try
 			{
 				PersistenceManager.releaseSession(session);
 			}
-			catch (Exception ex2) 
+			catch (Exception ex2)
 			{
 				logger.error("releaseSession() failed ");
 			}
@@ -64,46 +54,46 @@ public class ComponentsUtil{
 		try
 		{
 			session = PersistenceManager.getSession();
-			queryString ="select co from "+AmpComponent.class.getName()+" co where co.ampComponentId=:id";	
+			queryString ="select co from "+AmpComponent.class.getName()+" co where co.ampComponentId=:id";
 			qry = session.createQuery(queryString);
 			qry.setParameter("id",id,Hibernate.LONG);
-			
+
 			col = qry.list();
 		}
-		catch(Exception ex) 		
+		catch(Exception ex)
 		{
 			logger.error("Unable to get Component for editing from database " + ex.getMessage());
 			ex.printStackTrace(System.out);
 		}
-		finally 
+		finally
 		{
-			try 
+			try
 			{
 				PersistenceManager.releaseSession(session);
 			}
-			catch (Exception ex2) 
+			catch (Exception ex2)
 			{
 				logger.error("releaseSession() failed ");
 			}
 		}
 		return col;
 	}
-	
+
 	/*
 	 * update component details
 	 */
 	public static void updateComponents(AmpComponent ampComp) {
 		DbUtil.update(ampComp);
-	}	
-	
+	}
+
 	/*
 	 * add a new Component
 	 */
 	public static void addNewComponent(AmpComponent ampComp){
 			DbUtil.add(ampComp);
-		
+
 	}
-	
+
 	/*
 	 * delete a Component
 	 */
@@ -112,7 +102,7 @@ public class ComponentsUtil{
 
 		Session session = null;
 		Transaction tx = null;
-		try 
+		try
 		{
 			session = PersistenceManager.getSession();
 			AmpComponent ampComp = (AmpComponent) session.load(
@@ -122,38 +112,38 @@ public class ComponentsUtil{
 			logger.info("here");
 			session.delete(ampComp);
 			tx.commit();
-		} 
-		catch (Exception e) 
+		}
+		catch (Exception e)
 		{
 			logger.error("Exception from deleteComponent() :" + e.getMessage());
-			e.printStackTrace(System.out);		
-			if (tx != null) 
+			e.printStackTrace(System.out);
+			if (tx != null)
 			{
-				try 
+				try
 				{
 					tx.rollback();
 				}
-				catch (Exception trbf) 
+				catch (Exception trbf)
 				{
 					logger.error("Transaction roll back failed ");
 					e.printStackTrace(System.out);
 				}
 			}
-		} 
-		finally 
+		}
+		finally
 		{
-			if (session != null) 
+			if (session != null)
 			{
-				try 
+				try
 				{
 					PersistenceManager.releaseSession(session);
-				} 
-				catch (Exception rsf) 
+				}
+				catch (Exception rsf)
 				{
 					logger.error("Failed to release session :" + rsf.getMessage());
 				}
-			}			
+			}
 		}
 	}
-	
+
 }

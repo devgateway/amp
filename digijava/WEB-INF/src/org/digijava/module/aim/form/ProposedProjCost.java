@@ -1,9 +1,7 @@
 package org.digijava.module.aim.form;
-import java.util.*;
+import java.text.*;
 
 import org.apache.struts.action.*;
-import java.text.DecimalFormat;
-import java.text.*;
 
 /**
  * <p>Title: </p>
@@ -19,24 +17,19 @@ import java.text.*;
  */
 public class ProposedProjCost extends ActionForm{
 
-    private Long actID;
-    private String usID;
-    private Long fundingID;
-    private Long currencyID;
     private String currencyCode;
     private String funAmount;
     private String funDate;
-
 
     public String getFunAmount() {
         return funAmount;
     }
 
     public Double getFunAmountAsDouble() {
-        DecimalFormat form=new DecimalFormat();
         try {
-            return new Double(form.parse(funAmount).doubleValue());
-        } catch(ParseException ex) {
+            DecimalFormat format = new DecimalFormat();
+            return Double.valueOf(format.parse(funAmount).doubleValue());
+        } catch(Exception ex) {
             return null;
         }
     }
@@ -45,28 +38,8 @@ public class ProposedProjCost extends ActionForm{
         return funDate;
     }
 
-    public Long getFundingID() {
-        return fundingID;
-    }
-
-    public Long getActID() {
-        return actID;
-    }
-
-    public String getUsID() {
-        return usID;
-    }
-
     public String getCurrencyCode() {
         return currencyCode;
-    }
-
-    public Long getCurrencyID() {
-        return currencyID;
-    }
-
-    public void setFundingID(Long fundingID) {
-        this.fundingID = fundingID;
     }
 
     public void setFunDate(String funDate) {
@@ -74,36 +47,25 @@ public class ProposedProjCost extends ActionForm{
     }
 
     public void setFunAmount(String funAmount) {
-        if(funAmount!=null){
+        try{
             DecimalFormat format = new DecimalFormat();
             this.funAmount = format.format(Double.valueOf(funAmount));
-        }else{
-            this.funAmount=funAmount;
+        }catch(Exception ex){
+            this.funAmount = null;
         }
     }
 
     public void setFunAmountAsDouble(Double funAmount) {
-        if(funAmount!=null){
+        try{
             DecimalFormat format = new DecimalFormat();
-            this.funAmount = format.format(funAmount);
-        }else{
-            this.funAmount=funAmount.toString();
+            this.funAmount = format.format(Double.valueOf(funAmount));
+        }catch(Exception ex){
+            this.funAmount = null;
         }
-    }
-    public void setActID(Long actID) {
-        this.actID = actID;
-    }
-
-    public void setUsID(String usID) {
-        this.usID = usID;
     }
 
     public void setCurrencyCode(String currencyCode) {
         this.currencyCode = currencyCode;
-    }
-
-    public void setCurrencyID(Long currencyID) {
-        this.currencyID = currencyID;
     }
 
 }

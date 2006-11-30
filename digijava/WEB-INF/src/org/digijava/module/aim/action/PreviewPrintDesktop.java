@@ -35,56 +35,66 @@ public class PreviewPrintDesktop
                                  javax.servlet.http.HttpServletResponse
                                  response) throws java.lang.Exception {
 
-        DesktopForm eaform=(DesktopForm)form;
-        ArrayList newColl=new ArrayList();
-        ArrayList oldColl=new ArrayList();
+        DesktopForm eaform = (DesktopForm) form;
+        ArrayList newColl = null;
+        ArrayList oldColl = null;
 
         ListIterator itr = null;
         if(eaform.getFltrDonor() != null) {
-            oldColl=(ArrayList)eaform.getDonors();
+            newColl=new ArrayList();
+            oldColl = new ArrayList(eaform.getDonors());
             itr = oldColl.listIterator();
             while(itr.hasNext()) {
+                AmpOrganisation org = (AmpOrganisation) itr.next();
                 for(int i = 0; i < eaform.getFltrSector().length; i++) {
-                    if(itr.nextIndex()==eaform.getFltrDonor()[i]) {
-                        AmpOrganisation org = (AmpOrganisation) itr.next();
+                    if(org.getAmpOrgId() == eaform.getFltrDonor()[i]) {
                         newColl.add(org);
                     }
                 }
             }
+            eaform.setSelDonors(newColl);
+            newColl = null;
+            oldColl = null;
+            itr = null;
+
         }
-        eaform.setSelDonors(newColl);
-        newColl.clear();
 
         if(eaform.getFltrSector() != null) {
-            oldColl=(ArrayList)eaform.getDonors();
+            newColl=new ArrayList();
+            oldColl = new ArrayList(eaform.getSectors());
             itr = oldColl.listIterator();
             while(itr.hasNext()) {
+                AmpSector sec = (AmpSector) itr.next();
                 for(int i = 0; i < eaform.getFltrSector().length; i++) {
-                    if(itr.nextIndex()==eaform.getFltrSector()[i]) {
-                        AmpSector sec = (AmpSector) itr.next();
+                    if(sec.getAmpSectorId() == eaform.getFltrSector()[i]) {
                         newColl.add(sec);
                     }
                 }
             }
+            eaform.setSelSectors(newColl);
+            newColl = null;
+            oldColl = null;
+            itr = null;
         }
-        eaform.setSelSectors(newColl);
-        newColl.clear();
 
         if(eaform.getFltrStatus() != null) {
-           oldColl=(ArrayList)eaform.getStatus();
-           itr = oldColl.listIterator();
-           while(itr.hasNext()) {
-               for(int i = 0; i < eaform.getFltrStatus().length; i++) {
-                   if(itr.nextIndex()==eaform.getFltrStatus()[i]) {
-                       AmpStatus st = (AmpStatus) itr.next();
-                       newColl.add(st);
-                   }
-               }
-           }
-       }
-       eaform.setSelStatus(newColl);
-       newColl.clear();
+            newColl=new ArrayList();
+            oldColl = new ArrayList(eaform.getStatus());
+            itr = oldColl.listIterator();
+            while(itr.hasNext()) {
+                AmpStatus st = (AmpStatus) itr.next();
+                for(int i = 0; i < eaform.getFltrStatus().length; i++) {
+                    if(st.getAmpStatusId() == eaform.getFltrStatus()[i]) {
+                        newColl.add(st);
+                    }
+                }
+            }
+            eaform.setSelStatus(newColl);
+            newColl = null;
+            oldColl = null;
+            itr = null;
+        }
 
-       return mapping.findForward("forward");
+        return mapping.findForward("forward");
     }
 }

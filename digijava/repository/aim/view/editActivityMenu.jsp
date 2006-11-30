@@ -14,12 +14,12 @@ function previewClicked() {
 	document.aimEditActivityForm.pageId.value = "1";
 	<digi:context name="preview" property="context/module/moduleinstance/previewActivity.do?edit=true" />
 	document.aimEditActivityForm.action = "<%= preview %>";
-	document.aimEditActivityForm.target = "_self";	
+	document.aimEditActivityForm.target = "_self";
 	document.aimEditActivityForm.submit();
 }
 
 function saveClicked() {
-	document.aimEditActivityForm.saveButton.disabled = true;	
+	document.aimEditActivityForm.saveButton.disabled = true;
 	<digi:context name="save" property="context/module/moduleinstance/saveActivity.do" />
 	document.aimEditActivityForm.action = "<%= save %>?edit=true";
 	document.aimEditActivityForm.target = "_self";
@@ -63,15 +63,15 @@ function gotoStep(value) {
 <html:hidden property="pageId" />
 <html:hidden property="currentValDate" />
 
-<table width="209" cellSpacing=0 cellPadding=0 vAlign="top" align="left" border=0>
-<tr><td width="209" height="10" background="module/aim/images/top.gif">
+<table width="220" cellSpacing=0 cellPadding=0 vAlign="top" align="left" border=0>
+<tr><td width="220" height="10" background="module/aim/images/top.gif">
 </td></tr>
 <tr><td>
-<table width="209" cellSpacing=4 cellPadding=2 vAlign="top" align="left" 
+<table width="220" cellSpacing=4 cellPadding=2 vAlign="top" align="left"
 bgcolor="#006699">
 	<tr>
 		<c:if test="${aimEditActivityForm.step != 1}">
-		<td>
+		<td nowrap="nowrap">
 			<IMG alt=Link height=10 src="../ampTemplate/images/arrow-th-BABAB9.gif" width=15>
 			<bean:define id="translation">
 				<digi:trn key="aim:clickToAdd/UpdateActivityIdentificationFields">Add / Update Activity Identification fields</digi:trn>
@@ -81,10 +81,10 @@ bgcolor="#006699">
 				Identification</digi:trn>
 			</a>
 		</td>
-		</c:if>	
+		</c:if>
 		<c:if test="${aimEditActivityForm.step == 1}">
-		<td>
-			<table width="100%" cellspacing=0 cellpadding=0 valign=top align=left border=0> 
+		<td nowrap="nowrap">
+			<table width="100%" cellspacing=0 cellpadding=0 valign=top align=left border=0>
 				<tr>
 					<td width="10" height="19" background="module/aim/images/left-arc.gif">
 					</td>
@@ -100,11 +100,11 @@ bgcolor="#006699">
 				</tr>
 			</table>
 		</td>
-		</c:if>				
+		</c:if>
 	</tr>
 	<tr>
 		<c:if test="${aimEditActivityForm.step != 1}">
-		<td>
+		<td nowrap="nowrap">
 			<IMG alt=Link height=10 src="../ampTemplate/images/arrow-th-BABAB9.gif" width=15>
 			<bean:define id="translation">
 				<digi:trn key="aim:clickToAdd/UpdateActivityPlanningFields">Add / Update Activity Planning fields</digi:trn>
@@ -114,14 +114,14 @@ bgcolor="#006699">
 				Planning</digi:trn>
 			</a>
 		</td>
-		</c:if>	
+		</c:if>
 		<c:if test="${aimEditActivityForm.step == 1}">
-		<td>
-			<table width="100%" cellspacing=0 cellpadding=0 valign=top align=left border=0> 
+		<td nowrap="nowrap">
+			<table width="100%" cellspacing=0 cellpadding=0 valign=top align=left border=0>
 				<tr>
 					<td width="10" height="19" background="module/aim/images/left-arc.gif">
 					</td>
-					<td bgcolor="#3399ff" height="19">
+					<td bgcolor="#3399ff" height="19" nowrap="nowrap">
 						<IMG alt=Link height=10 src="../ampTemplate/images/arrow-th-BABAB9.gif" width=15>
 						<span class="textalb">
 							<digi:trn key="aim:planning">
@@ -132,12 +132,12 @@ bgcolor="#006699">
 					</td>
 				</tr>
 			</table>
-		</td>		
-		</c:if>				
+		</td>
+		</c:if>
 	</tr>
 	<tr>
 		<c:if test="${aimEditActivityForm.step != 2}">
-		<td>
+		<td nowrap="nowrap">
 			<IMG alt=Link height=10 src="../ampTemplate/images/arrow-th-BABAB9.gif" width=15>
 			<bean:define id="translation">
 				<digi:trn key="aim:clickToAdd/UpdateLocation">Add / Update Location</digi:trn>
@@ -147,10 +147,10 @@ bgcolor="#006699">
 				Location</digi:trn>
 			</a>
 		</td>
-		</c:if>	
+		</c:if>
 		<c:if test="${aimEditActivityForm.step == 2}">
-		<td>
-			<table width="100%" cellspacing=0 cellpadding=0 valign=top align=left border=0> 
+		<td nowrap="nowrap">
+			<table width="100%" cellspacing=0 cellpadding=0 valign=top align=left border=0>
 				<tr>
 					<td width="10" height="19" background="module/aim/images/left-arc.gif">
 					</td>
@@ -165,12 +165,12 @@ bgcolor="#006699">
 					</td>
 				</tr>
 			</table>
-		</td>		
-		</c:if>				
+		</td>
+		</c:if>
 	</tr>
 	<tr>
 		<c:if test="${aimEditActivityForm.step != 2}">
-		<td>
+		<td nowrap="nowrap">
 			<IMG alt=Link height=10 src="../ampTemplate/images/arrow-th-BABAB9.gif" width=15>
 			<bean:define id="translation">
 				<digi:trn key="aim:clickToAdd/UpdateSectorsandSubsectors">Add / Update Sectors and Sub sectors</digi:trn>
@@ -180,10 +180,10 @@ bgcolor="#006699">
 				Sectors</digi:trn>
 			</a>
 		</td>
-		</c:if>	
+		</c:if>
 		<c:if test="${aimEditActivityForm.step == 2}">
-		<td>
-			<table width="100%" cellspacing=0 cellpadding=0 valign=top align=left border=0> 
+		<td nowrap="nowrap">
+			<table width="100%" cellspacing=0 cellpadding=0 valign=top align=left border=0>
 				<tr>
 					<td width="10" height="19" background="module/aim/images/left-arc.gif">
 					</td>
@@ -198,12 +198,12 @@ bgcolor="#006699">
 					</td>
 				</tr>
 			</table>
-		</td>				
-		</c:if>				
+		</td>
+		</c:if>
 	</tr>
 	<tr>
 		<c:if test="${aimEditActivityForm.step != 2}">
-		<td>
+		<td nowrap="nowrap">
 			<IMG alt=Link height=10 src="../ampTemplate/images/arrow-th-BABAB9.gif" width=15>
 			<bean:define id="translation">
 				<digi:trn key="aim:clickToAdd/UpdateProgram">Add / Update Program</digi:trn>
@@ -213,10 +213,10 @@ bgcolor="#006699">
 				Program</digi:trn>
 			</a>
 		</td>
-		</c:if>	
+		</c:if>
 		<c:if test="${aimEditActivityForm.step == 2}">
-		<td>
-			<table width="100%" cellspacing=0 cellpadding=0 valign=top align=left border=0> 
+		<td nowrap="nowrap">
+			<table width="100%" cellspacing=0 cellpadding=0 valign=top align=left border=0>
 				<tr>
 					<td width="10" height="19" background="module/aim/images/left-arc.gif">
 					</td>
@@ -231,12 +231,12 @@ bgcolor="#006699">
 					</td>
 				</tr>
 			</table>
-		</td>						
-		</c:if>				
-	</tr>	
+		</td>
+		</c:if>
+	</tr>
 	<tr>
 		<c:if test="${aimEditActivityForm.step != 3}">
-		<td>
+		<td nowrap="nowrap">
 			<IMG alt=Link height=10 src="../ampTemplate/images/arrow-th-BABAB9.gif" width=15>
 			<bean:define id="translation">
 				<digi:trn key="aim:clickToAdd/UpdateFundingDetails">Add / Update Funding details</digi:trn>
@@ -246,10 +246,10 @@ bgcolor="#006699">
 				Funding</digi:trn>
 			</a>
 		</td>
-		</c:if>	
+		</c:if>
 		<c:if test="${aimEditActivityForm.step == 3}">
-		<td>
-			<table width="100%" cellspacing=0 cellpadding=0 valign=top align=left border=0> 
+		<td nowrap="nowrap">
+			<table width="100%" cellspacing=0 cellpadding=0 valign=top align=left border=0>
 				<tr>
 					<td width="10" height="19" background="module/aim/images/left-arc.gif">
 					</td>
@@ -264,13 +264,13 @@ bgcolor="#006699">
 					</td>
 				</tr>
 			</table>
-		</td>			
-		</c:if>				
+		</td>
+		</c:if>
 	</tr>
 
 	<tr>
 		<c:if test="${aimEditActivityForm.step != 4}">
-		<td>
+		<td nowrap="nowrap">
 			<IMG alt=Link height=10 src="../ampTemplate/images/arrow-th-BABAB9.gif" width=15>
 			<bean:define id="translation">
 				<digi:trn key="aim:clickToAdd/UpdateRegionalFunding">Add / Update Regional Funding</digi:trn>
@@ -280,10 +280,10 @@ bgcolor="#006699">
 						Regional Funding</digi:trn>
 			</a>
 		</td>
-		</c:if>	
+		</c:if>
 		<c:if test="${aimEditActivityForm.step == 4}">
-		<td>
-			<table width="100%" cellspacing=0 cellpadding=0 valign=top align=left border=0> 
+		<td nowrap="nowrap">
+			<table width="100%" cellspacing=0 cellpadding=0 valign=top align=left border=0>
 				<tr>
 					<td width="10" height="19" background="module/aim/images/left-arc.gif">
 					</td>
@@ -298,13 +298,13 @@ bgcolor="#006699">
 					</td>
 				</tr>
 			</table>
-		</td>				
+		</td>
 		</c:if>
-	</tr>	
+	</tr>
 
 	<tr>
 		<c:if test="${aimEditActivityForm.step != 5}">
-		<td>
+		<td nowrap="nowrap">
 			<IMG alt=Link height=10 src="../ampTemplate/images/arrow-th-BABAB9.gif" width=15>
 			<bean:define id="translation">
 				<digi:trn key="aim:clickToAdd/UpdateComponents">Add / Update Components</digi:trn>
@@ -314,10 +314,10 @@ bgcolor="#006699">
 				Components</digi:trn>
 			</a>
 		</td>
-		</c:if>	
+		</c:if>
 		<c:if test="${aimEditActivityForm.step == 5}">
-		<td>
-			<table width="100%" cellspacing=0 cellpadding=0 valign=top align=left border=0> 
+		<td nowrap="nowrap">
+			<table width="100%" cellspacing=0 cellpadding=0 valign=top align=left border=0>
 				<tr>
 					<td width="10" height="19" background="module/aim/images/left-arc.gif">
 					</td>
@@ -332,12 +332,12 @@ bgcolor="#006699">
 					</td>
 				</tr>
 			</table>
-		</td>				
+		</td>
 		</c:if>
 	</tr>
 	<tr>
 		<c:if test="${aimEditActivityForm.step != 5}">
-		<td>
+		<td nowrap="nowrap">
 			<IMG alt=Link height=10 src="../ampTemplate/images/arrow-th-BABAB9.gif" width=15>
 			<bean:define id="translation">
 				<digi:trn key="aim:clickToAdd/UpdateIssues">Add / Update Issues</digi:trn>
@@ -347,10 +347,10 @@ bgcolor="#006699">
 				Issues</digi:trn>
 			</a>
 		</td>
-		</c:if>	
+		</c:if>
 		<c:if test="${aimEditActivityForm.step == 5}">
-		<td>
-			<table width="100%" cellspacing=0 cellpadding=0 valign=top align=left border=0> 
+		<td nowrap="nowrap">
+			<table width="100%" cellspacing=0 cellpadding=0 valign=top align=left border=0>
 				<tr>
 					<td width="10" height="19" background="module/aim/images/left-arc.gif">
 					</td>
@@ -365,13 +365,13 @@ bgcolor="#006699">
 					</td>
 				</tr>
 			</table>
-		</td>				
+		</td>
 		</c:if>
-	</tr>	
-	
+	</tr>
+
 	<tr>
 		<c:if test="${aimEditActivityForm.step != 6}">
-		<td>
+		<td nowrap="nowrap">
 			<IMG alt=Link height=10 src="../ampTemplate/images/arrow-th-BABAB9.gif" width=15>
 			<bean:define id="translation">
 				<digi:trn key="aim:clickToAdd/UpdateDocumentsAndLinks">Add / Update the documents and links</digi:trn>
@@ -381,10 +381,10 @@ bgcolor="#006699">
 				Related Documents</digi:trn>
 			</a>
 		</td>
-		</c:if>	
+		</c:if>
 		<c:if test="${aimEditActivityForm.step == 6}">
-		<td>
-			<table width="100%" cellspacing=0 cellpadding=0 valign=top align=left border=0> 
+		<td nowrap="nowrap">
+			<table width="100%" cellspacing=0 cellpadding=0 valign=top align=left border=0>
 				<tr>
 					<td width="10" height="19" background="module/aim/images/left-arc.gif">
 					</td>
@@ -399,12 +399,12 @@ bgcolor="#006699">
 					</td>
 				</tr>
 			</table>
-		</td>						
+		</td>
 		</c:if>
 	</tr>
 	<tr>
 		<c:if test="${aimEditActivityForm.step != 7}">
-		<td>
+		<td nowrap="nowrap">
 			<IMG alt=Link height=10 src="../ampTemplate/images/arrow-th-BABAB9.gif" width=15>
 			<bean:define id="translation">
 				<digi:trn key="aim:clickToAdd/UpdateOrganizationsInvolved">Add / Update the organizations involved</digi:trn>
@@ -414,10 +414,10 @@ bgcolor="#006699">
 				Related Organizations</digi:trn>
 			</a>
 		</td>
-		</c:if>	
+		</c:if>
 		<c:if test="${aimEditActivityForm.step == 7}">
-		<td>
-			<table width="100%" cellspacing=0 cellpadding=0 valign=top align=left border=0> 
+		<td nowrap="nowrap">
+			<table width="100%" cellspacing=0 cellpadding=0 valign=top align=left border=0>
 				<tr>
 					<td width="10" height="19" background="module/aim/images/left-arc.gif">
 					</td>
@@ -432,12 +432,12 @@ bgcolor="#006699">
 					</td>
 				</tr>
 			</table>
-		</td>				
-		</c:if>	
-	</tr>	
+		</td>
+		</c:if>
+	</tr>
 	<tr>
 		<c:if test="${aimEditActivityForm.step != 8}">
-		<td>
+		<td nowrap="nowrap">
 			<IMG alt=Link height=10 src="../ampTemplate/images/arrow-th-BABAB9.gif" width=15>
 			<bean:define id="translation">
 				<digi:trn key="aim:clickToAdd/UpdateContactPersonDetails">Add / Update the contact person details</digi:trn>
@@ -447,10 +447,10 @@ bgcolor="#006699">
 				Contact Information</digi:trn>
 			</a>
 		</td>
-		</c:if>	
+		</c:if>
 		<c:if test="${aimEditActivityForm.step == 8}">
-		<td>
-			<table width="100%" cellspacing=0 cellpadding=0 valign=top align=left border=0> 
+		<td nowrap="nowrap">
+			<table width="100%" cellspacing=0 cellpadding=0 valign=top align=left border=0>
 				<tr>
 					<td width="10" height="19" background="module/aim/images/left-arc.gif">
 					</td>
@@ -465,13 +465,13 @@ bgcolor="#006699">
 					</td>
 				</tr>
 			</table>
-		</td>					
-		</c:if>		
+		</td>
+		</c:if>
 	</tr>
 	<logic:notEmpty name="ME" scope="application">
 	<tr>
 		<c:if test="${aimEditActivityForm.step != 10}">
-		<td>
+		<td nowrap="nowrap">
 			<IMG alt=Link height=10 src="../ampTemplate/images/arrow-th-BABAB9.gif" width=15>
 			<bean:define id="translation">
 				<digi:trn key="aim:clickToGoToMonitoringEvaluation">Monitoring and Evaluation</digi:trn>
@@ -481,10 +481,10 @@ bgcolor="#006699">
 				M & E</digi:trn>
 			</a>
 		</td>
-		</c:if>	
+		</c:if>
 		<c:if test="${aimEditActivityForm.step == 10}">
-		<td>
-			<table width="100%" cellspacing=0 cellpadding=0 valign=top align=left border=0> 
+		<td nowrap="nowrap">
+			<table width="100%" cellspacing=0 cellpadding=0 valign=top align=left border=0>
 				<tr>
 					<td width="10" height="19" background="module/aim/images/left-arc.gif">
 					</td>
@@ -500,26 +500,26 @@ bgcolor="#006699">
 					</td>
 				</tr>
 			</table>
-		</td>					
-		</c:if>		
+		</td>
+		</c:if>
 	</tr>
 	</logic:notEmpty>
 	<tr>
 		<td align="center">
 		</td>
-	</tr>	
+	</tr>
 	<tr>
 		<td align="center">
 			<input type="button" value="Preview" class="buton" onclick="previewClicked()">
 		</td>
-	</tr>	
+	</tr>
 	<tr>
 		<td align="center">
 			<input type="button" value="Save" name="saveButton" class="buton" onclick="saveClicked()">
 		</td>
-	</tr>		
+	</tr>
 </table>
 </td></tr>
-<tr><td width="209" height="10" background="module/aim/images/bottom.gif">
+<tr><td width="220" height="10" background="module/aim/images/bottom.gif">
 </td></tr>
 </table>

@@ -34,8 +34,8 @@
                     <td style="width:150pt;">
                       <b>
                         <c:if test="${!empty aimDesktopForm.selSectors}">
-                          <c:forEach var="theSectors" items="${aimDesktopForm.selSector}">
-                          ${theSectors.ampSectorId}
+                          <c:forEach var="theSectors" items="${aimDesktopForm.selSectors}">
+                          ${theSectors.name}
                           </c:forEach>
                         </c:if>
                         <c:if test="${empty aimDesktopForm.selSectors}">
@@ -46,8 +46,8 @@
                     <td style="width:150pt;">
                       <b>
                         <c:if test="${!empty aimDesktopForm.selDonors}">
-                          <c:forEach var="theDonors" items="${aimDesktopForm.selDonors}">
-                          ${theDonors.ampOrgId}
+                          <c:forEach var="slDonors" items="${aimDesktopForm.selDonors}">
+                          ${slDonors.name}
                           </c:forEach>
                         </c:if>
                         <c:if test="${empty aimDesktopForm.selDonors}">
@@ -59,7 +59,7 @@
                       <b>
                         <c:if test="${!empty aimDesktopForm.selStatus}">
                           <c:forEach var="theStatus" items="${aimDesktopForm.selStatus}">
-                          ${theStatus.ampStatusId}
+                          ${theStatus.name}
                           </c:forEach>
                         </c:if>
                         <c:if test="${empty aimDesktopForm.selStatus}">

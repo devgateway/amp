@@ -66,10 +66,10 @@
                         <td align="center" valign="middle" width="75">
                           <b><font color="white">Planned</font></b>
                         </td>
-                        <td align="center" valign="middle" width="120">
+                        <td align="center" valign="middle" width="100">
                           <b><font color="white">Amount</font></b>
                         </td>
-                        <td align="center" valign="middle" width="120">
+                        <td align="center" valign="middle" width="100">
                           <b><font color="white">Currency</font></b>
                         </td>
                         <td align="center" valign="middle" width="120" colspan="2">
@@ -81,7 +81,7 @@
                         Planned
                         </td>
                         <td valign="center" align="center">
-                          <html:text property="proProjCost.funAmount" styleId="funAmount" style="width:100%;"/>
+                          <html:text property="proProjCost.funAmount" styleId="funAmount" style="width:100px;"/>
                         </td>
                         <td valign="center" align="center">
                           <html:select property="proProjCost.currencyCode" styleClass="inp-text">
@@ -89,7 +89,7 @@
                           </html:select>
                         </td>
                         <td valign="center" align="center">
-                          <html:text property="proProjCost.funDate" styleId="funDate" readonly="true" style="width:100%;"/>
+                          <html:text property="proProjCost.funDate" styleId="funDate" readonly="true" style="width:100px;"/>
                         </td>
                         <td valign="center" align="center">
                           <a href='javascript:calendar("funDate")'><img  align="right" src="../ampTemplate/images/show-calendar.gif" border="0"></a>

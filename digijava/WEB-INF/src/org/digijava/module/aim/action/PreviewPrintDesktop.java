@@ -47,7 +47,7 @@ public class PreviewPrintDesktop
             while(itr.hasNext()) {
                 AmpOrganisation org = (AmpOrganisation) itr.next();
                 for(int i = 0; i < eaform.getFltrSector().length; i++) {
-                    if(org.getAmpOrgId() == eaform.getFltrDonor()[i]) {
+                    if(org.getAmpOrgId().longValue() == eaform.getFltrDonor()[i]) {
                         newColl.add(org);
                     }
                 }
@@ -66,7 +66,7 @@ public class PreviewPrintDesktop
             while(itr.hasNext()) {
                 AmpSector sec = (AmpSector) itr.next();
                 for(int i = 0; i < eaform.getFltrSector().length; i++) {
-                    if(sec.getAmpSectorId() == eaform.getFltrSector()[i]) {
+                    if(sec.getAmpSectorId().longValue() == eaform.getFltrSector()[i]) {
                         newColl.add(sec);
                     }
                 }
@@ -84,7 +84,7 @@ public class PreviewPrintDesktop
             while(itr.hasNext()) {
                 AmpStatus st = (AmpStatus) itr.next();
                 for(int i = 0; i < eaform.getFltrStatus().length; i++) {
-                    if(st.getAmpStatusId() == eaform.getFltrStatus()[i]) {
+                    if(st.getAmpStatusId().longValue() == eaform.getFltrStatus()[i]) {
                         newColl.add(st);
                     }
                 }

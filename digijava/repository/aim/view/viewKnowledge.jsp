@@ -15,7 +15,7 @@ function login()
 function fnEditProject(id)
 {
 	<digi:context name="addUrl" property="context/module/moduleinstance/editActivity.do" />
-   document.aimKnowledgeForm.action = "<%=addUrl%>~pageId=1~action=edit~surveyFlag=true~activityId=" + id;
+   document.aimKnowledgeForm.action = "<%=addUrl%>~pageId=1~step=6~action=edit~surveyFlag=true~activityId=" + id;
 	document.aimKnowledgeForm.target = "_self";    
    document.aimKnowledgeForm.submit();
 }

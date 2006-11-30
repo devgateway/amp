@@ -1,3 +1,4 @@
+
 <%@ page pageEncoding="UTF-8" %>
 <%@ taglib uri="/taglib/struts-bean" prefix="bean" %>
 <%@ taglib uri="/taglib/struts-logic" prefix="logic" %>
@@ -193,7 +194,8 @@ function popupwin()
 									<digi:trn key="aim:addNewActivity">Add New Activity</digi:trn>
 								</c:if>			
 								<c:if test="${aimEditActivityForm.editAct == true}">
-									<digi:trn key="aim:editActivity">Edit Activity</digi:trn>
+									<digi:trn key="aim:editActivity">Edit Activity</digi:trn>:
+										<bean:write name="aimEditActivityForm" property="title"/>
 								</c:if>										
 							</td>
 						</tr>	

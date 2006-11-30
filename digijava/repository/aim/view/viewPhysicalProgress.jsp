@@ -17,7 +17,7 @@ function login()
 function fnEditProject(id)
 {
 	<digi:context name="addUrl" property="context/module/moduleinstance/editActivity.do" />
-   document.aimPhysicalProgressForm.action = "<%=addUrl%>~pageId=1~action=edit~surveyFlag=true~activityId=" + id;
+   document.aimPhysicalProgressForm.action = "<%=addUrl%>~pageId=1~step=5~action=edit~surveyFlag=true~activityId=" + id;
 	document.aimPhysicalProgressForm.target = "_self";    
    document.aimPhysicalProgressForm.submit();
 }

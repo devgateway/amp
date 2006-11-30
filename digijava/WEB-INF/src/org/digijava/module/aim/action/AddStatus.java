@@ -2,14 +2,21 @@ package org.digijava.module.aim.action ;
 
 import org.apache.log4j.Logger ;
 import org.apache.struts.action.Action ;
+import org.apache.struts.action.ActionError;
+import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionForm ;
 import org.apache.struts.action.ActionMapping ;
 import org.apache.struts.action.ActionForward ;
+import java.util.Collection;
+import java.util.Iterator;
 
 import org.digijava.module.aim.form.StatusItemForm ;
 import org.digijava.module.aim.dbentity.AmpStatus;
 
 import org.digijava.module.aim.util.DbUtil;
+
+
+
 import javax.servlet.http.* ;
 
 
@@ -29,10 +36,32 @@ public class AddStatus extends Action
 			if (str.equals("no")) {
 				return mapping.findForward("index");
 			}
-		}				  
+		}	
+			boolean Flag = true;
 			StatusItemForm formBean = (StatusItemForm) form ; 	
 			AmpStatus statusItem = new AmpStatus() ;
+			String code = formBean.getStatusCode();
+			logger.info(code);
+			Collection col = DbUtil.getStatusCodes();
+			Iterator itr = col.iterator();
+			while(itr.hasNext())
+			{
+				AmpStatus amp=  (AmpStatus) itr.next();
+				String a = amp.getStatusCode();
+				logger.info("this is a "+a);
+				if(a.equals(code))
+				{
+					logger.info(" therer is a match....");
+					Flag = false;
+				}
+				else
+				{
+					logger.info("COOL u can proceed!!!!");
+				}
+				
+			}
 			
+		if(Flag){
 			if (formBean.getStatusCode() != null)
 			{
 				statusItem.setName(formBean.getName()) ;
@@ -62,5 +91,13 @@ public class AddStatus extends Action
 		else 			
 			return mapping.findForward("forward") ;
 		}
+		else{ 
+			ActionErrors errors = new ActionErrors();
+			errors.add("title", new ActionError(
+					"error.aim.addStatus.statusAdded"));
+			saveErrors(request, errors);
+			return mapping.findForward("forward");
+		}
+	 }
 
 }

@@ -225,8 +225,9 @@ function popupwin()
 									</digi:trn>
 									</c:if> <c:if test="${aimEditActivityForm.editAct == true}">
 										<digi:trn key="aim:editActivity">
-										Edit Activity
-									</digi:trn>
+										Edit Activity 
+									</digi:trn>:
+									<bean:write name="aimEditActivityForm" property="title"/>
 									</c:if></td>
 								</tr>
 							</table>

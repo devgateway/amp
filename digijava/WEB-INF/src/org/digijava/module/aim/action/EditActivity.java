@@ -145,7 +145,11 @@ public class EditActivity extends Action {
 					.getAttribute(Constants.EDIT_ACT_LIST);
 
 			boolean canEdit = true;
-
+			/*
+			 * modified by Govind
+			 */
+			String step= request.getParameter("step");
+			
 			eaForm.setActivityId(activityId);
 
 			if (tm.getTeamType()
@@ -289,6 +293,11 @@ public class EditActivity extends Action {
 					eaForm.setSurveyFlag(Boolean.FALSE);
 				}
 			} else {
+				if(!step.equals(null))
+				{
+					eaForm.setStep(step);
+				}
+				else
 				eaForm.setStep("1");
 			}
 			eaForm.setReset(false);

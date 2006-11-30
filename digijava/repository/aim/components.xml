@@ -176,6 +176,9 @@
 	<page page="searchLocation" name="aim_searchlocPopupLayout" title="AMP - Search Location" />
 	<page page="searchSectors" name="aim_searchSectorPopupLayout" title="AMP - Search Sectors" />
 
+	<!-- global settings-->
+	<page name="viewGlobalSettings"  title ="AMP - Global Settings " />
+
 	<!-- sector manager with schemes -->
 	<page name="viewSectorSchemes" title=": View Sector Scheme" />
 	<page name="viewSectorSchemeLevel1" title=": View Sector Level 1" />

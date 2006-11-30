@@ -169,7 +169,8 @@ function removeSelOrgs(value) {
 								<c:if test="${aimEditActivityForm.editAct == true}">
 									<digi:trn key="aim:editActivity">
 										Edit Activity
-									</digi:trn>
+									</digi:trn>:
+										<bean:write name="aimEditActivityForm" property="title"/>
 								</c:if>				
 							</td>
 						</tr>	

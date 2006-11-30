@@ -10,7 +10,7 @@
 function fnEditProject(id)
 {
 	<digi:context name="addUrl" property="context/module/moduleinstance/editActivity.do" />
-   document.aimRegionalFundingForm.action = "<%=addUrl%>~pageId=1~action=edit~surveyFlag=true~activityId=" + id;
+   document.aimRegionalFundingForm.action = "<%=addUrl%>~pageId=1~step=4~action=edit~surveyFlag=true~activityId=" + id;
 	document.aimRegionalFundingForm.target = "_self";    
    document.aimRegionalFundingForm.submit();
 }

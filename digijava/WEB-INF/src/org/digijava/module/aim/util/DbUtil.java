@@ -6445,4 +6445,28 @@ public class DbUtil {
 	 * while an activity is deleted by Admin
 	 * end here 
 	*/
+	
+	/* To check for Status code 
+	 * modified by Govind
+	 */
+	public static Collection getStatusCodes()
+	{
+		logger.info(" in getting the Status codes...");
+		Session session = null;
+		Collection col = null;
+		Query qry = null;
+		try
+		{
+			session = PersistenceManager.getSession();
+			String queryString = "select st from "+AmpStatus.class.getName() + " st ";
+			qry=session.createQuery(queryString);
+			col=qry.list();
+		}
+		catch(Exception e1)
+		{
+			logger.error("could not retrieve Statuc codes... "+e1.getMessage());
+			e1.printStackTrace(System.out);
+		}
+		return col;
+	}
 }

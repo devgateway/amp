@@ -97,7 +97,8 @@
       <form-property name="riskColor" type="java.lang.String" />
     </form-bean>
     <form-bean name="aimParisIndicatorManagerForm" type="org.digijava.module.aim.form.ParisIndicatorManagerForm" />
-    <form-bean name="aimParisIndicatorForm" type="org.digijava.module.aim.form.ParisIndicatorForm" />
+	 <form-bean name="aimParisIndicatorForm" type="org.digijava.module.aim.form.ParisIndicatorForm" />
+	 <form-bean name="aimGlobalSettingsForm" type="org.digijava.module.aim.form.GlobalSettingsForm" />
   </form-beans>
   <global-forwards>
     <forward name="viewMyDesktop" path="/aim/viewMyDesktop.do" />
@@ -1013,14 +1014,14 @@
       <forward name="editforward" path="/showLayout.do?layout=updateStatus" />
     </action>
     <action name="aimStatusItemForm" path="/aim/updateStatus" scope="request" type="org.digijava.module.aim.action.UpdateStatus" validate="false">
-      <forward name="forward" path="/aim/statusManager.do" />
+      <forward name="forward" path="/aim/statusManager.do" redirect="true" />
     </action>
-    <action name="aimStatusItemForm" path="/aim/addStatus" scope="request" type="org.digijava.module.aim.action.AddStatus" validate="false">
-      <forward name="addforward" path="/aim/statusManager.do" />
-      <forward name="forward" path="/showLayout.do?layout=addStatus" />
+    <action name="aimStatusItemForm" path="/aim/addStatus" scope="request" type="org.digijava.module.aim.action.AddStatus" validate="false" >
+		<forward name="addforward" path="/aim/statusManager.do" redirect="true"/>
+      <forward name="forward" path="/showLayout.do?layout=addStatus"/>
     </action>
     <action name="aimStatusItemForm" path="/aim/deleteStatus" scope="request" type="org.digijava.module.aim.action.DeleteStatus" validate="false">
-      <forward name="forward" path="/aim/statusManager.do" />
+      <forward name="forward" path="/aim/statusManager.do" redirect="true"/>
     </action>
     <action name="aimCommitmentbyDonorForm" path="/aim/viewCommitmentbyModality" scope="session" type="org.digijava.module.aim.action.ViewCommitmentbyModality" validate="false">
       <forward name="forward" path="/showLayout.do?layout=viewCommitmentbyModality" />
@@ -1191,6 +1192,9 @@
     <action name="aimParisIndicatorReportForm" path="/aim/ParisIndicatorPrintReports" scope="session" type="org.digijava.module.aim.action.ParisIndicatorPrintReports" validate="false">
       <forward name="pi" path="/showLayout.do?layout=aim_pIPrintReports" />
       <forward name="pi2" path="/showLayout.do?layout=aim_pIPrintReports2" />
+    </action>
+    <action name="aimGlobalSettingsForm" path="/aim/GlobalSettings" scope="session" type="org.digijava.module.aim.action.GlobalSettings" validate="false">
+      <forward name="viewGS" path="/showLayout.do?layout=viewGlobalSettings" />
     </action>
   </action-mappings>
 </struts-config>

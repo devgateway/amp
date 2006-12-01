@@ -10,7 +10,7 @@
 <script language="JavaScript">
 
 	function msg() {
-		if (confirm("Are you sure about deleting this fiscal calendar ?")) {
+		if (confirm("Are you sure about deleting this calendar ?")) {
 			document.aimAddFiscalCalForm.action.value = "delete";
 			document.aimAddFiscalCalForm.submit();
 		}
@@ -233,7 +233,7 @@
 																	<logic:equal name="aimAddFiscalCalForm" property="flag" value="delete" >
 																		<tr>
 																			<td colspan="2" width="60%"  align="center">
-																				<input type="button" value="Delete this Fiscal Calendar" class="dr-menu" onclick="msg()">
+																				<input type="button" value="Delete this Calendar" class="dr-menu" onclick="msg()">
 																			</td>
 																		</tr>
 																	</logic:equal>
@@ -241,7 +241,7 @@
 																		<tr>
 																			<td colspan="2" width="60%"  align="center">
 																				<b><digi:trn key="aim:cannotDeleteFisCalMsg1"><font color="#FF0000">
-																						Can not delete this fiscal calendar since some organization references it !</font>
+																						Can not delete this calendar since some organization references it !</font>
 																					</digi:trn>
 																				</b>
 																			</td>

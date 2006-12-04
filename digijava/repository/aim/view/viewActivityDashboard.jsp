@@ -68,83 +68,75 @@ function preview(id)
 %>
 <digi:form action="/viewActivityDashboard.do" name="aimActivityForm" type="org.digijava.module.aim.form.aimActivityForm" 
 method="post">
+
 <TABLE cellSpacing=0 cellPadding=0 align="center" vAlign="top" border=0 width="100%">
-<TR>
-						<TD align=right>
-												<input type="button" value="Preview" class="dr-menu"
-												onclick="preview('<%=actId%>')">
-												<input type="button" value="Edit" class="dr-menu"
-												onclick="fnEditProject('<%=actId%>')">
-								</TD>
-</TR>
-<TR>
-	<TD vAlign="top" align="center">
-		<TABLE width="99%" cellSpacing=0 cellPadding=0 vAlign="top" align="center" class="box-border-nopadding">
-			<TR>
-			
-				<TABLE width="100%" cellspacing="2" cellpadding="2" valign="top" align="left" border=0>
-					<TR><TD class="highlight" colspan="2">
-
-					</TD></TR>						
-					<TR>
-						<TD width="50%" align="center" class="textalb" height="20" bgcolor="#336699">
-							<digi:trn key="aim:meActivityPerformance">
-							Activity - Performance</digi:trn>
-						</TD>
-						<TD width="50%" align="center" class="textalb" height="20" bgcolor="#336699">
-							<digi:trn key="aim:meActivityRisk">
-							Activity - Risk</digi:trn>
-						</TD>
-					</TR>
-					<TR>
-						<TD width="50%">
-							<% if (actPerfChartUrl != null) { %>
-							<img src="<%= actPerfChartUrl %>" width=370 height=450 border=0 usemap="#<%= actPerfChartFileName %>"><br><br>
-							<div align="center">		  
-							<input type="button" class="buton" value="Printer Friendly"
-							onclick="javascript:showPrinterFriendly('<%=actId%>','P')">
-							<input type="button" class="buton" value="Without Baseline"
-							onclick="javascript:actPerfWithoutBaseline('<%=actId%>','P')">
-							</div>
-							<% } else { %>
-							<br><span class="red-log"><digi:trn key="aim:noDataPresentFor">No data present for</digi:trn>
-						  <digi:trn key="aim:activityPerformanceChart">Activity-Performance chart</digi:trn>
-						  </span><br><br>
-							<% } %>
-						</TD>
-						<TD width="50%" valign="top">
-							<% if (actRiskChartUrl != null) { %>
-							<digi:trn key="aim:overallActivityRisk">Overall Risk</digi:trn>: 
-							<font color="<bean:write name="aimActivityDashboardForm" property="riskColor" />">
-							
-							<bean:define id="riskName" name="aimActivityDashboardForm" property="overallRisk" toScope="page"
-							type="java.lang.String"/>
-							<%--
-								<bean:write name="aimActivityDashboardForm" property="overallRisk" />
-							</bean:define>
-							--%>
-							<b><digi:trn key="<%=riskName%>"><%=riskName%></digi:trn></b>
+	<TR>
+		<TD align=right>
+			<input type="button" value="Preview" class="dr-menu" onclick="preview('<%=actId%>')">
+			<input type="button" value="Edit" class="dr-menu" onclick="fnEditProject('<%=actId%>')">
+		</TD>
+	</TR>
+	<TR>
+		<TD vAlign="top" align="center">
+			<TABLE width="99%" cellSpacing=0 cellPadding=0 vAlign="top" align="center" class="box-border-nopadding">
+				<TR><TD>
+					<TABLE width="100%" cellspacing="2" cellpadding="2" valign="top" align="left" border=0>
+						<TR><TD class="highlight" colspan="2">
+						</TD></TR>						
+						<TR>
+							<TD width="50%" align="center" class="textalb" height="20" bgcolor="#336699">
+								<digi:trn key="aim:meActivityPerformance">
+								Activity - Performance</digi:trn>
+							</TD>
+							<TD width="50%" align="center" class="textalb" height="20" bgcolor="#336699">
+								<digi:trn key="aim:meActivityRisk">
+								Activity - Risk</digi:trn>
+							</TD>
+						</TR>
+						<TR>
+							<TD width="50%">
+								<% if (actPerfChartUrl != null) { %>
+								<img src="<%= actPerfChartUrl %>" width=370 height=450 border=0 usemap="#<%= actPerfChartFileName %>"><br><br>
+								<div align="center">		  
+								<input type="button" class="buton" value="Printer Friendly"
+								onclick="javascript:showPrinterFriendly('<%=actId%>','P')">
+								<input type="button" class="buton" value="Without Baseline"
+								onclick="javascript:actPerfWithoutBaseline('<%=actId%>','P')">
+								</div>
+								<% } else { %>
+								<br><span class="red-log"><digi:trn key="aim:noDataPresentFor">No data present for</digi:trn>
+							  <digi:trn key="aim:activityPerformanceChart">Activity-Performance chart</digi:trn>
+							  </span><br><br>
+								<% } %>
+							</TD>
+							<TD width="50%" valign="top">
+								<% if (actRiskChartUrl != null) { %>
+								<digi:trn key="aim:overallActivityRisk">Overall Risk</digi:trn>: 
+								<font color="<bean:write name="aimActivityDashboardForm" property="riskColor" />">
+								
+								<bean:define id="riskName" name="aimActivityDashboardForm" property="overallRisk" toScope="page"
+								type="java.lang.String"/>
+								<b><digi:trn key="<%=riskName%>"><%=riskName%></digi:trn></b>
 						
-							<img src="<%= actRiskChartUrl %>" width=370 height=350 border=0 usemap="#<%= actRiskChartFileName %>">
-							<br><br>
-							<div align="center">
-							<input type="button" class="buton" value="Printer Friendly" 
-							onclick="javascript:showPrinterFriendly('<%=actId%>','R')">
-							</div>		  
-							<% } else { %>
-							<br><span class="red-log"><digi:trn key="aim:noDataPresentFor">No data present for</digi:trn>
-						  <digi:trn key="aim:activityRiskChart">Activity-Risk chart</digi:trn>
-						  </span><br><br>
-							<% } %>		
-						</TD>
-					</TR>
-				</TABLE>
-			</TD></TR>
-<TR><TD>&nbsp;</TD></TR>
-		</TABLE>
-	</TD>
-</TR>
-
-<TR><TD>&nbsp;</TD></TR>
+								<img src="<%= actRiskChartUrl %>" width=370 height=350 border=0 usemap="#<%= actRiskChartFileName %>">
+								<br><br>
+								<div align="center">
+								<input type="button" class="buton" value="Printer Friendly" 
+								onclick="javascript:showPrinterFriendly('<%=actId%>','R')">
+								</div>		  
+								<% } else { %>
+								<br><span class="red-log"><digi:trn key="aim:noDataPresentFor">No data present for</digi:trn>
+							  <digi:trn key="aim:activityRiskChart">Activity-Risk chart</digi:trn>
+							  </span><br><br>
+								<% } %>		
+							</TD>
+						</TR>
+					</TABLE>
+				</TD></TR>
+				<TR><TD>&nbsp;</TD></TR>
+			</TABLE>
+		</TD>
+	</TR>
+	<TR><TD>&nbsp;</TD></TR>
 </TABLE>
 </digi:form>

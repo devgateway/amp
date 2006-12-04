@@ -850,7 +850,7 @@ public class MEIndicatorsUtil
 				AmpMEIndicatorValue meIndValue = (AmpMEIndicatorValue) itr.next();
 				AmpMEIndicators meInd = meIndValue.getMeIndicatorId();
 				
-				float tarVal = meIndValue.getTargetVal();
+				float tarVal = meIndValue.getRevisedTargetVal();
 				
 				if (includeBaseline) {
 					MEIndicatorValue actIndVal = new MEIndicatorValue();

@@ -90,6 +90,10 @@
 		document.aimEditActivityForm.submit();
 		return true;
 	} 	
+
+	function validateForm() {
+		return true;
+	}
 	
 	-->
 	

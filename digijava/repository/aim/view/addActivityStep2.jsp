@@ -115,7 +115,7 @@ function validateForm() {
 		document.aimEditActivityForm.addSec.focus();
 		return false;
 	}
-	gotoStep(3);
+	document.aimEditActivityForm.step.value="3";
 	return true;
 }
 
@@ -552,7 +552,7 @@ function popupwin()
 															<table cellPadding=3>
 																<tr>
 																	<td><input type="submit" value=" << Back "
-																		class="dr-menu" onclick="gotoStep(1)"></td>
+																		class="dr-menu" onclick="return gotoStep(1)"></td>
 																	<td><input type="submit" value="Next >> "
 																		class="dr-menu" onclick="return validateForm()"></td>
 																	<td><input type="reset" value="Reset" class="dr-menu"

@@ -36,6 +36,10 @@
 		document.aimEditActivityForm.submit();	
 	}
 
+	function validateForm() {
+		return true;
+	}
+
 	-->
 	
 </script>

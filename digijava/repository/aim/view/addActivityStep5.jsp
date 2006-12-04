@@ -14,6 +14,10 @@
 <script language="JavaScript">
 <!--
 
+	function validateForm() {
+		return true;
+	}
+
 function checkallIssues() {
 	var selectbox = document.aimEditActivityForm.checkAllIssues;
 	var items = document.aimEditActivityForm.selIssues;

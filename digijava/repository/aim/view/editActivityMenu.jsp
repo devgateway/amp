@@ -10,48 +10,58 @@
 <script language="JavaScript">
 <!--
 function previewClicked() {
-	document.aimEditActivityForm.step.value = "9";
-	document.aimEditActivityForm.pageId.value = "1";
-	<digi:context name="preview" property="context/module/moduleinstance/previewActivity.do?edit=true" />
-	document.aimEditActivityForm.action = "<%= preview %>";
-	document.aimEditActivityForm.target = "_self";	
-	document.aimEditActivityForm.submit();
+	var flag = validateForm();  
+	if (flag == true) {		  
+		document.aimEditActivityForm.step.value = "9";
+		document.aimEditActivityForm.pageId.value = "1";
+		<digi:context name="preview" property="context/module/moduleinstance/previewActivity.do?edit=true" />
+		document.aimEditActivityForm.action = "<%= preview %>";
+		document.aimEditActivityForm.target = "_self";	
+		document.aimEditActivityForm.submit();
+	}
 }
 
 function saveClicked() {
-	document.aimEditActivityForm.saveButton.disabled = true;	
-	<digi:context name="save" property="context/module/moduleinstance/saveActivity.do" />
-	document.aimEditActivityForm.action = "<%= save %>?edit=true";
-	document.aimEditActivityForm.target = "_self";
-	var appstatus = document.aimEditActivityForm.approvalStatus.value;
-	var wTLFlag   = document.aimEditActivityForm.workingTeamLeadFlag.value;
-	if (appstatus == "started") {
-		if (wTLFlag == "yes") {
-			//if (confirm("Do you want to approve this activity ?"))
+	var flag = validateForm();  
+	if (flag == true) {		  
+		document.aimEditActivityForm.saveButton.disabled = true;	
+		<digi:context name="save" property="context/module/moduleinstance/saveActivity.do" />
+		document.aimEditActivityForm.action = "<%= save %>?edit=true";
+		document.aimEditActivityForm.target = "_self";
+		var appstatus = document.aimEditActivityForm.approvalStatus.value;
+		var wTLFlag   = document.aimEditActivityForm.workingTeamLeadFlag.value;
+		if (appstatus == "started") {
+			if (wTLFlag == "yes") {
+				//if (confirm("Do you want to approve this activity ?"))
 				document.aimEditActivityForm.approvalStatus.value = "approved";
-		}
-		else if (confirm("Do you want to submit this activity for approval ?"))
+			}
+			else if (confirm("Do you want to submit this activity for approval ?"))
 				document.aimEditActivityForm.approvalStatus.value = "created";
-	}
-	if (appstatus == "approved") {
-		if (wTLFlag != "yes")
-			document.aimEditActivityForm.approvalStatus.value = "edited";
-	}
-	else if (wTLFlag == "yes") {
-		if (appstatus == "created" || appstatus == "edited") {
-			if (confirm("Do you want to approve this activity ?"))
-				document.aimEditActivityForm.approvalStatus.value = "approved";
 		}
+		if (appstatus == "approved") {
+			if (wTLFlag != "yes")
+				document.aimEditActivityForm.approvalStatus.value = "edited";
+		}
+		else if (wTLFlag == "yes") {
+			if (appstatus == "created" || appstatus == "edited") {
+				if (confirm("Do you want to approve this activity ?"))
+					document.aimEditActivityForm.approvalStatus.value = "approved";
+			}
+		}
+		document.aimEditActivityForm.submit();			  
 	}
-	document.aimEditActivityForm.submit();
 }
 
 function gotoStep(value) {
-	document.aimEditActivityForm.step.value = value;
-	<digi:context name="step" property="context/module/moduleinstance/addActivity.do?edit=true" />
-	document.aimEditActivityForm.action = "<%= step %>";
-	document.aimEditActivityForm.target = "_self";
-	document.aimEditActivityForm.submit();
+	var flag = validateForm();  
+	if (flag == true) {
+		document.aimEditActivityForm.step.value = value;
+		<digi:context name="step" property="context/module/moduleinstance/addActivity.do?edit=true" />
+		document.aimEditActivityForm.action = "<%= step %>";
+		document.aimEditActivityForm.target = "_self";
+		document.aimEditActivityForm.submit();			  
+	}
+
 }
 
 -->

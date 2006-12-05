@@ -13,7 +13,7 @@
 
 <script language="JavaScript">
 
-<!-- 
+<!--
 
 function gotoStep(value) {
 	document.aimEditActivityForm.step.value = value;
@@ -27,7 +27,7 @@ function backClicked() {
 	document.aimEditActivityForm.step.value = "8";
 	<digi:context name="backStep" property="context/module/moduleinstance/addActivity.do?edit=true" />
 	document.aimEditActivityForm.action = "<%= backStep %>";
-	document.aimEditActivityForm.target = "_self";		
+	document.aimEditActivityForm.target = "_self";
 	document.aimEditActivityForm.submit();
 }
 
@@ -93,8 +93,8 @@ function disable() {
 										<digi:trn key="aim:portfolio">
 											Portfolio
 										</digi:trn>
-									</digi:link>&nbsp;&gt;&nbsp;	
-									
+									</digi:link>&nbsp;&gt;&nbsp;
+
 									<jsp:useBean id="urlParam" type="java.util.Map" class="java.util.HashMap"/>
 									<c:set target="${urlParam}" property="ampActivityId">
 										<c:out value="${aimEditActivityForm.activityId}"/>
@@ -105,14 +105,14 @@ function disable() {
 									</bean:define>
 									<digi:link href="/viewChannelOverview.do" styleClass="comment" name="urlParam" title="<%=translation%>" >
 										<digi:trn key="aim:channelOverview">Channel Overview</digi:trn>
-									</digi:link>&nbsp;&gt;&nbsp;	
+									</digi:link>&nbsp;&gt;&nbsp;
 									<digi:trn key="aim:previewActivity">
 									Preview Activity
-									</digi:trn>										
-								</c:if>									
-								
+									</digi:trn>
+								</c:if>
+
 								<c:if test="${aimEditActivityForm.pageId == 1}">
-								
+
 								<bean:define id="translation">
 									<digi:trn key="aim:clickToViewAddActivityStep1">Click here to goto Add Activity Step 1</digi:trn>
 								</bean:define>
@@ -127,7 +127,7 @@ function disable() {
 										<digi:trn key="aim:addActivityStep1">
 											Add Activity - Step 1
 										</digi:trn>
-									</c:if>																
+									</c:if>
 								</c:if>
 								<c:if test="${aimEditActivityForm.donorFlag == false}">
 									<digi:link href="/addActivity.do?step=1&edit=true" styleClass="comment" title="<%=translation%>" >
@@ -140,10 +140,10 @@ function disable() {
 										<digi:trn key="aim:addActivityStep1">
 											Add Activity - Step 1
 										</digi:trn>
-									</c:if>																
-									</digi:link>								
+									</c:if>
+									</digi:link>
 								</c:if>
-								
+
 								&nbsp;&gt;&nbsp;
 
 								<c:if test="${aimEditActivityForm.donorFlag == true}">
@@ -155,23 +155,23 @@ function disable() {
 									<bean:define id="translation">
 										<digi:trn key="aim:clickToViewAddActivityStep2">Click here to goto Add Activity Step 2</digi:trn>
 									</bean:define>
-									<digi:link href="/addActivity.do?step=2&edit=true" styleClass="comment" title="<%=translation%>" >						
+									<digi:link href="/addActivity.do?step=2&edit=true" styleClass="comment" title="<%=translation%>" >
 										<digi:trn key="aim:addActivityStep2">
 											Step 2
 										</digi:trn>
 									</digi:link>
 								</c:if>
-								
+
 								&nbsp;&gt;&nbsp;
 
 								<bean:define id="translation">
 									<digi:trn key="aim:clickToViewAddActivityStep3">Click here to goto Add Activity Step 3</digi:trn>
 								</bean:define>
-								<digi:link href="/addActivity.do?step=3&edit=true" styleClass="comment" title="<%=translation%>" >						
+								<digi:link href="/addActivity.do?step=3&edit=true" styleClass="comment" title="<%=translation%>" >
 									<digi:trn key="aim:addActivityStep3">
 										Step 3
 									</digi:trn>
-								</digi:link>								
+								</digi:link>
 
 								&nbsp;&gt;&nbsp;
 
@@ -184,7 +184,7 @@ function disable() {
 									<bean:define id="translation">
 										<digi:trn key="aim:clickToViewAddActivityStep4">Click here to goto Add Activity Step 4</digi:trn>
 									</bean:define>
-									<digi:link href="/addActivity.do?step=4&edit=true" styleClass="comment" title="<%=translation%>" >						
+									<digi:link href="/addActivity.do?step=4&edit=true" styleClass="comment" title="<%=translation%>" >
 										<digi:trn key="aim:addActivityStep4">
 											Step 4
 										</digi:trn>
@@ -220,7 +220,7 @@ function disable() {
 									<bean:define id="translation">
 										<digi:trn key="aim:clickToViewAddActivityStep6">Click here to goto Add Activity Step 6</digi:trn>
 									</bean:define>
-									<digi:link href="/addActivity.do?step=6&edit=true" styleClass="comment" title="<%=translation%>" >						
+									<digi:link href="/addActivity.do?step=6&edit=true" styleClass="comment" title="<%=translation%>" >
 										<digi:trn key="aim:addActivityStep6">
 											Step 6
 										</digi:trn>
@@ -244,7 +244,7 @@ function disable() {
 										</digi:trn>
 									</digi:link>
 								</c:if>
-								
+
 								&nbsp;&gt;&nbsp;
 
 								<c:if test="${aimEditActivityForm.donorFlag == true}">
@@ -261,9 +261,9 @@ function disable() {
 											Step 8
 										</digi:trn>
 									</digi:link>
-								</c:if>								
+								</c:if>
 
-								&nbsp;&gt;&nbsp;		
+								&nbsp;&gt;&nbsp;
 
 								<c:if test="${aimEditActivityForm.donorFlag == true}">
 									<digi:trn key="aim:addActivityStep9">
@@ -279,13 +279,13 @@ function disable() {
 											Step 9
 										</digi:trn>
 									</digi:link>
-								</c:if>								
+								</c:if>
 
-								&nbsp;&gt;&nbsp;	
-								
+								&nbsp;&gt;&nbsp;
+
 								<digi:trn key="aim:previewActivity">
 									Preview Activity
-								</digi:trn>																
+								</digi:trn>
 								</c:if>
 								</span>
 							</td>
@@ -295,7 +295,7 @@ function disable() {
 				<tr><td>
 					<table width="100%" cellSpacing="0" cellPadding="0" vAlign="bottom">
 						<tr>
-							<td width="50%" align="left"> 
+							<td width="50%" align="left">
 								<c:if test="${aimEditActivityForm.pageId == 1}">
 								<table width="100%" cellSpacing="1" cellPadding="1" vAlign="bottom">
 									<tr>
@@ -304,18 +304,18 @@ function disable() {
 												<digi:trn key="aim:addNewActivity">
 													Add New Activity
 												</digi:trn>
-											</c:if>			
+											</c:if>
 											<c:if test="${aimEditActivityForm.editAct == true}">
 												<digi:trn key="aim:editActivity">
 													Edit Activity
 												</digi:trn>
 											</c:if></span>
-										</td>									
+										</td>
 									</tr>
 								</table>
 								</c:if>
 							</td>
-							<td width="50%" align="right"> 
+							<td width="50%" align="right">
 								<table cellSpacing="1" cellPadding="1" vAlign="bottom" border=0>
 									<tr>
 										<td height=16 vAlign=bottom align="right">
@@ -327,16 +327,16 @@ function disable() {
 													Print
 												</digi:trn>
 											</digi:link>&nbsp;
-										</td>									
+										</td>
 									</tr>
-								</table>							
+								</table>
 							</td>
 						</tr>
 					</table>
 				</td></tr>
 				<tr><td>
 					<table width="100%" cellSpacing="5" cellPadding="3" vAlign="top">
-						<tr><td width="100%" vAlign="top">	
+						<tr><td width="100%" vAlign="top">
 						<table width="100%" cellSpacing=0 cellPadding=0 vAlign="top" align="left">
 							<tr>
 								<td width="100%">
@@ -353,7 +353,7 @@ function disable() {
 											</td>
 										</tr>
 									</table>
-								</td>							
+								</td>
 							</tr>
 							<tr><td width="100%" bgcolor="#f4f4f2">
 							<table width="100%" cellSpacing="1" cellPadding="3" vAlign="top" align="left" bgcolor="#006699">
@@ -367,7 +367,7 @@ function disable() {
 										<td class="v-name" bgcolor="#ffffff">
 											<c:out value="${aimEditActivityForm.ampId}"/>
 										</td>
-									</tr>								
+									</tr>
 									<tr>
 										<td class="t-name" width="30%" align="right" bgcolor="#fffff0">
 											<digi:trn key="aim:projectTitle">
@@ -400,7 +400,7 @@ function disable() {
 											</bean:define>
 											<digi:edit key="<%=descKey%>"></digi:edit>
 										</td>
-									</tr>		
+									</tr>
 									<tr>
 										<td class="t-name" width="30%" align="right" bgcolor="#f4f4f2">
 											<digi:trn key="aim:orgsAndProjectIds">
@@ -411,9 +411,9 @@ function disable() {
 											<c:if test="${!empty aimEditActivityForm.selectedOrganizations}">
 												<table cellSpacing=2 cellPadding=2 border=0>
 													<c:forEach var="selectedOrganizations" items="${aimEditActivityForm.selectedOrganizations}" >
-														<tr><td>	
+														<tr><td>
 														<c:out value="${selectedOrganizations.name}"/> :
-														<c:out value="${selectedOrganizations.projectId}"/>				
+														<c:out value="${selectedOrganizations.projectId}"/>
 														</td></tr>
 													</c:forEach>
 												</table>
@@ -455,7 +455,7 @@ function disable() {
 													<td align="left">
 														<c:out value="${aimEditActivityForm.revisedStartDate}"/>
 													</td>
-												</tr>												
+												</tr>
 												<tr>
 													<td width="32%"><digi:trn key="aim:currentCompletionDate">
 													Current Completion Date</digi:trn></td>
@@ -463,7 +463,7 @@ function disable() {
 													<td align="left">
 														<c:out value="${aimEditActivityForm.currentCompDate}"/>
 													</td>
-												</tr>															
+												</tr>
 												<c:if test="${!empty aimEditActivityForm.activityCloseDates}">
 												<tr>
 													<td width="32%" valign=top><digi:trn key="aim:proposedCompletionDates">
@@ -481,7 +481,7 @@ function disable() {
 														</table>
 													</td>
 												</tr>
-												</c:if>												
+												</c:if>
 												<tr>
 													<td colspan="3">&nbsp;</td>
 												</tr>
@@ -498,13 +498,13 @@ function disable() {
 															</c:if>
 														</c:if>
 													</td>
-												</tr>																								
+												</tr>
 												<tr>
 													<td colspan="3"><c:out value="${aimEditActivityForm.statusReason}"/></td>
 												</tr>
 											</table>
 										</td>
-									</tr>											
+									</tr>
 									<tr>
 										<td class="t-name" width="30%" align="right" bgcolor="#f4f4f2">
 											<digi:trn key="aim:level">
@@ -513,13 +513,13 @@ function disable() {
 										<td bgcolor="#ffffff">
 											<c:if test="${!empty aimEditActivityForm.levelCollection}">
 												<c:forEach var="tempLevel" items="${aimEditActivityForm.levelCollection}">
-													<c:if test="${tempLevel.ampLevelId == aimEditActivityForm.level}">												
+													<c:if test="${tempLevel.ampLevelId == aimEditActivityForm.level}">
 														<c:out value="${tempLevel.name}"/>
 													</c:if>
 												</c:forEach>
-											</c:if>										
+											</c:if>
 										</td>
-									</tr>																											
+									</tr>
 									<tr>
 										<td class="t-name" width="30%" align="right" bgcolor="#f4f4f2">
 											<digi:trn key="aim:location">
@@ -547,7 +547,7 @@ function disable() {
 												</table>
 											</c:if>
 										</td>
-									</tr>		
+									</tr>
 									<tr>
 										<td class="t-name" width="30%" align="right" bgcolor="#f4f4f2">
 											<digi:trn key="aim:sector">
@@ -578,16 +578,16 @@ function disable() {
 											<digi:trn key="aim:program">Program</digi:trn>
 										</td>
 										<td bgcolor="#ffffff">
-											<c:if test="${!empty aimEditActivityForm.programCollection}">
-												<c:forEach var="tempPgm" items="${aimEditActivityForm.programCollection}">
-													<c:if test="${tempPgm.ampThemeId == aimEditActivityForm.program}">
-														<c:out value="${tempPgm.name}"/>
-													</c:if>
-												</c:forEach>
-											</c:if>
+                                          <c:if test="${!empty aimEditActivityForm.programCollection}">
+                                              <c:forEach var="tempPgm" items="${aimEditActivityForm.programCollection}">
+                                                  <c:if test="${tempPgm.member.ampThemeId == aimEditActivityForm.program}">
+                                                    <c:out value="${tempPgm.member.name}"/>
+                                                  </c:if>
+                                              </c:forEach>
+                                          </c:if>
 										</td>
-									</tr>											
-									
+									</tr>
+
 									<tr>
 										<td class="t-name" width="30%" align="right" bgcolor="#f4f4f2">
 											<digi:trn key="aim:funding">
@@ -615,7 +615,7 @@ function disable() {
 																				<td align="left">
 																					<c:out value="${fund.orgFundingId}"/>
 																				</td>
-																			</tr>																		
+																			</tr>
 																			<tr>
 																				<td width="31%">
 																					<digi:trn key="aim:typeOfAssistance">
@@ -634,7 +634,7 @@ function disable() {
 																				<td width="1">:</td>
 																				<td align="left">
 																					<c:if test="${!empty aimEditActivityForm.modalityCollection}">
-																						<c:forEach var="tempModality" 
+																						<c:forEach var="tempModality"
 																						items="${aimEditActivityForm.modalityCollection}">
 																						<c:if test="${tempModality.ampModalityId == fund.modality.ampModalityId}">
 																							<c:out value="${tempModality.name}"/>
@@ -642,7 +642,7 @@ function disable() {
 																						</c:forEach>
 																					</c:if>
 																				</td>
-																			</tr>																			
+																			</tr>
 																			<c:if test="${!empty fund.fundingDetails}">
 																			<tr><td colspan="3">
 																			<table width="100%" cellSpacing=1 cellPadding=1 bgcolor="#dddddd">
@@ -654,8 +654,8 @@ function disable() {
 																					<c:forEach var="fundDet" items="${fund.fundingDetails}">
 																					<table width="100%" cellSpacing="1" cellPadding="1" bgcolor="#eeeeee">
 																						<c:if test="${fundDet.transactionType == 0}">
-																						
-																						
+
+
 																						<c:if test="${aimEditActivityForm.donorFlag == true}">
 																						<c:if test="${fundDet.perspectiveCode != 'DN'}">
 																						<tr bgcolor="#ffffff">
@@ -704,7 +704,7 @@ function disable() {
 																						</c:if>
 																						</c:if>
 
-																						
+
 																						</c:if>
 																					</table>
 																				   </c:forEach>
@@ -773,7 +773,7 @@ function disable() {
 																				   </c:forEach>
 																				</td></tr>
 																			</table>
-																			</td></tr>	
+																			</td></tr>
 																			<tr><td colspan="3">
 																			<table width="100%" cellSpacing=1 cellPadding=1 bgcolor="#dddddd">
 																				<tr><td valign="top" width="100" bgcolor="#ffffff">
@@ -836,7 +836,7 @@ function disable() {
 																				   </c:forEach>
 																				</td></tr>
 																			</table>
-																			</td></tr>																			
+																			</td></tr>
 																			</c:if>
 																		</table>
 																	</td></tr>
@@ -847,13 +847,13 @@ function disable() {
 												</c:forEach>
 												<tr><td bgcolor="#ffffff">
 													<FONT color=blue>*
-													<digi:trn key="aim:theAmountEnteredAreInThousands">	
+													<digi:trn key="aim:theAmountEnteredAreInThousands">
 													The amount entered are in thousands (000)</digi:trn></FONT>
 												</td></tr>
 												</table>
 											</c:if>
 										</td>
-									</tr>	
+									</tr>
 
 
 									<tr>
@@ -940,7 +940,7 @@ function disable() {
 																			</td>
 																		</tr>
 																	</table>
-																</td></tr>															
+																</td></tr>
 															</c:if>
 															<c:if test="${!empty regFunds.expenditures}">
 																<tr><td bgcolor="#ffffff">
@@ -976,21 +976,21 @@ function disable() {
 																			</td>
 																		</tr>
 																	</table>
-																</td></tr>															
-															</c:if>															
+																</td></tr>
+															</c:if>
 														</table>
 													</td></tr>
 												</c:forEach>
 												<tr><td bgcolor="#ffffff">
 													<FONT color=blue>*
-													<digi:trn key="aim:theAmountEnteredAreInThousands">	
+													<digi:trn key="aim:theAmountEnteredAreInThousands">
 													The amount entered are in thousands (000)</digi:trn></FONT>
 												</td></tr>
 												</table>
 											</c:if>
 										</td>
-									</tr>	
-									
+									</tr>
+
 									<tr>
 										<td class="t-name" width="30%" align="right" bgcolor="#f4f4f2">
 											<digi:trn key="aim:components">
@@ -1013,7 +1013,7 @@ function disable() {
 															</td></tr>
 															<tr><td bgcolor="#f4f4f2">
 																<b><digi:trn key="aim:fundingOfTheComponent">Finance of the component</digi:trn></b>
-															</td></tr>															
+															</td></tr>
 															<c:if test="${!empty comp.commitments}">
 																<tr><td bgcolor="#ffffff">
 																	<table width="100%" cellSpacing="1" cellPadding="0" class="box-border-nopadding">
@@ -1084,7 +1084,7 @@ function disable() {
 																			</td>
 																		</tr>
 																	</table>
-																</td></tr>															
+																</td></tr>
 															</c:if>
 															<c:if test="${!empty comp.expenditures}">
 																<tr><td bgcolor="#ffffff">
@@ -1116,15 +1116,15 @@ function disable() {
 																							</td>
 																						</tr>
 																					</c:forEach>
-																				</table>	
+																				</table>
 																			</td>
 																		</tr>
 																	</table>
-																</td></tr>															
+																</td></tr>
 															</c:if>
 															<tr><td bgcolor="#ffffff">
 																<FONT color=blue>*
-																	<digi:trn key="aim:theAmountEnteredAreInThousands">	
+																	<digi:trn key="aim:theAmountEnteredAreInThousands">
 																		The amount entered are in thousands (000)
 		  															</digi:trn>
 																</FONT>
@@ -1139,12 +1139,12 @@ function disable() {
 																		<b>
 																			<c:out value="${phyProg.title}"/></b> -
 																			<c:out value="${phyProg.reportingDate}"/>
-																	</td></tr>	
+																	</td></tr>
 																	<tr><td>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 																		<i>
 																		<digi:trn key="aim:description">Description</digi:trn> :</i>
 																		<c:out value="${phyProg.description}"/>
-																	</td></tr>															
+																	</td></tr>
 																</c:forEach>
 															</c:if>
 														</table>
@@ -1153,7 +1153,7 @@ function disable() {
 												</c:forEach>
 											</c:if>
 										</td>
-									</tr>	
+									</tr>
 									<tr>
 										<td class="t-name" width="30%" align="right" bgcolor="#f4f4f2">
 											<digi:trn key="aim:issues">
@@ -1170,21 +1170,21 @@ function disable() {
 														<c:forEach var="measure" items="${issue.measures}">
 															<tr><td>
 																<li class="level2"><i><c:out value="${measure.name}"/></i></li>
-															</td></tr>	
+															</td></tr>
 															<c:if test="${!empty measure.actors}">
 																<c:forEach var="actor" items="${measure.actors}">
 																	<tr><td>
 																		<li class="level3"><c:out value="${actor.name}"/></li>
-																	</td></tr>	
+																	</td></tr>
 																</c:forEach>
-															</c:if>															
+															</c:if>
 														</c:forEach>
 													</c:if>
 												</c:forEach>
 												</table>
 											</c:if>
-										</td>										
-									</tr>										
+										</td>
+									</tr>
 									<tr>
 										<td class="t-name" width="30%" align="right" bgcolor="#f4f4f2">
 											<digi:trn key="aim:relatedDocuments">
@@ -1194,22 +1194,22 @@ function disable() {
 											<c:if test="${!empty aimEditActivityForm.documentList}">
 												<table width="100%" cellSpacing="0" cellPadding="0">
 												<c:forEach var="docList" items="${aimEditActivityForm.documentList}">
-					   							<bean:define id="docs" name="docList" 
+					   							<bean:define id="docs" name="docList"
 													property="relLink" />
 													<tr><td>
-					   								<bean:define id="fileName" name="docs" 
+					   								<bean:define id="fileName" name="docs"
 														property="fileName" />
 													    <%
 														int index2;
 														String extension = null;
-														index2 = ((String)fileName).lastIndexOf(".");	
+														index2 = ((String)fileName).lastIndexOf(".");
 														if( index2 >= 0 ) {
-														   extension = "module/cms/images/extensions/" + 
+														   extension = "module/cms/images/extensions/" +
 															((String)fileName).substring(
 															index2 + 1,((String)fileName).length()) + ".gif";
 														}
 													    %>
-														 
+
 													 <table width="100%" cellPadding=3 cellSpacing=1>
 													 	<tr bgcolor="#ffffff">
 															<td width="2">
@@ -1249,7 +1249,7 @@ function disable() {
 													</td></tr>
 												</c:forEach>
 												</table>
-											</c:if>											
+											</c:if>
 										</td>
 									</tr>
 									<tr>
@@ -1260,10 +1260,10 @@ function disable() {
 										<td bgcolor="#ffffff">
 											<c:if test="${!empty aimEditActivityForm.executingAgencies}">
 												<table width="100%" cellpadding="2" cellspacing="2" valign="top" align="left">
-													<c:forEach var="exAgency" items="${aimEditActivityForm.executingAgencies}"> 
+													<c:forEach var="exAgency" items="${aimEditActivityForm.executingAgencies}">
 														<tr><td>
 															<c:out value="${exAgency.name}"/>
-														</td></tr>												
+														</td></tr>
 													</c:forEach>
 												</table>
 											</c:if>
@@ -1277,13 +1277,13 @@ function disable() {
 										<td bgcolor="#ffffff">
 											<c:if test="${!empty aimEditActivityForm.impAgencies}">
 												<table width="100%" cellpadding="2" cellspacing="2" valign="top" align="left">
-													<c:forEach var="impAgency" items="${aimEditActivityForm.impAgencies}"> 
+													<c:forEach var="impAgency" items="${aimEditActivityForm.impAgencies}">
 														<tr><td>
 															<c:out value="${impAgency.name}"/>
-														</td></tr>												
+														</td></tr>
 													</c:forEach>
 												</table>
-											</c:if>										
+											</c:if>
 										</td>
 									</tr>
 									<tr>
@@ -1294,7 +1294,7 @@ function disable() {
 										<td bgcolor="#ffffff">
 											<c:out value="${aimEditActivityForm.contractors}"/>
 										</td>
-									</tr>									
+									</tr>
 									<tr>
 										<td class="t-name" width="30%" align="right" bgcolor="#f4f4f2">
 											<digi:trn key="aim:donorFundingContactInformation">
@@ -1305,7 +1305,7 @@ function disable() {
 											<c:out value="${aimEditActivityForm.dnrCntLastName}"/> -
 											<c:out value="${aimEditActivityForm.dnrCntEmail}"/>
 										</td>
-									</tr>	
+									</tr>
 									<tr>
 										<td class="t-name" width="30%" align="right" bgcolor="#f4f4f2">
 											<digi:trn key="aim:mofedContactInformation">
@@ -1316,7 +1316,7 @@ function disable() {
 											<c:out value="${aimEditActivityForm.mfdCntLastName}"/> -
 											<c:out value="${aimEditActivityForm.mfdCntEmail}"/>
 										</td>
-									</tr>										
+									</tr>
 									<tr>
 										<td class="t-name" width="30%" align="right" bgcolor="#f4f4f2">
 											<digi:trn key="aim:activityCreatedBy">
@@ -1327,7 +1327,7 @@ function disable() {
 											<c:out value="${aimEditActivityForm.actAthLastName}"/> -
 											<c:out value="${aimEditActivityForm.actAthEmail}"/>
 										</td>
-									</tr>																			
+									</tr>
 									<logic:notEmpty name="aimEditActivityForm" property="createdDate">
 									<tr>
 										<td class="t-name" width="30%" align="right" bgcolor="#f4f4f2">
@@ -1337,9 +1337,9 @@ function disable() {
 										<td bgcolor="#ffffff">
 											<c:out value="${aimEditActivityForm.createdDate}"/>
 										</td>
-									</tr>									
-									</logic:notEmpty>									
-									<c:if test="${aimEditActivityForm.pageId == 1}">	
+									</tr>
+									</logic:notEmpty>
+									<c:if test="${aimEditActivityForm.pageId == 1}">
 									<tr><td bgColor=#ffffff align="center" colspan=2>
 										<table cellPadding=3>
 											<tr>
@@ -1347,14 +1347,14 @@ function disable() {
 												<td>
 													<input type="button" value=" << Back" class="dr-menu" onclick="javascript:history.go(-1)"
 													name="backButton">
-												</td>												
+												</td>
 												</c:if>
 												<c:if test="${aimEditActivityForm.donorFlag == false}">
 												<td>
 													<input type="button" value=" << Back" class="dr-menu" onclick="javascript:history.go(-1)"
 													name="backButton">
-												</td>												
-												</c:if>	
+												</td>
+												</c:if>
 												<td>
 													<input type="button" value="Save Activity" class="dr-menu" onclick="disable()"
 													name="submitButton">
@@ -1363,7 +1363,7 @@ function disable() {
 										</table>
 									</td></tr>
 									</c:if>
-									<c:if test="${aimEditActivityForm.pageId > 2}">	
+									<c:if test="${aimEditActivityForm.pageId > 2}">
 									<tr><td bgColor=#ffffff align="center" colspan=2>
 										<input type="button" value="Back" class="dr-menu" onclick="javascript:history.go(-1)">
 									</td></tr>
@@ -1371,7 +1371,7 @@ function disable() {
 								</table>
 							</td></tr>
 							</table>
-							</td></tr>							
+							</td></tr>
 						</table>
 						</td></tr>
 					</table>

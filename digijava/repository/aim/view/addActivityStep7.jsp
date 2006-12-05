@@ -23,7 +23,7 @@ function addOrgs(value) {
 		document.aimEditActivityForm.target = popupPointer.name;
 		document.aimEditActivityForm.submit();
 }
-	
+
 function resetAll()
 {
 	<digi:context name="resetAll" property="context/module/moduleinstance/resetAll.do?edit=true" />
@@ -80,7 +80,7 @@ function removeSelOrgs(value) {
 										</digi:trn>
 									</digi:link>&nbsp;&gt;&nbsp;
 								</c:if>
-								<c:if test="${aimEditActivityForm.pageId == 1}">								
+								<c:if test="${aimEditActivityForm.pageId == 1}">
 									<bean:define id="translation">
 										<digi:trn key="aim:clickToViewMyDesktop">Click here to view MyDesktop</digi:trn>
 									</bean:define>
@@ -88,13 +88,13 @@ function removeSelOrgs(value) {
 										<digi:trn key="aim:portfolio">
 											Portfolio
 										</digi:trn>
-									</digi:link>&nbsp;&gt;&nbsp;								
-								</c:if>				
+									</digi:link>&nbsp;&gt;&nbsp;
+								</c:if>
 								<bean:define id="translation">
 									<digi:trn key="aim:clickToViewAddActivityStep1">Click here to go to Add Activity Step 1</digi:trn>
 								</bean:define>
 								<digi:link href="/addActivity.do?step=1&edit=true" styleClass="comment" title="<%=translation%>" >
-								
+
 								<c:if test="${aimEditActivityForm.editAct == true}">
 									<digi:trn key="aim:editActivityStep1">
 										Edit Activity - Step 1
@@ -104,33 +104,33 @@ function removeSelOrgs(value) {
 									<digi:trn key="aim:addActivityStep1">
 										Add Activity - Step 1
 									</digi:trn>
-								</c:if>																
-								</digi:link>&nbsp;&gt;&nbsp;						
+								</c:if>
+								</digi:link>&nbsp;&gt;&nbsp;
 								<bean:define id="translation">
 									<digi:trn key="aim:clickToViewAddActivityStep2">Click here to go to Add Activity Step 2</digi:trn>
 								</bean:define>
-								<digi:link href="/addActivity.do?step=2&edit=true" styleClass="comment" title="<%=translation%>" >						
+								<digi:link href="/addActivity.do?step=2&edit=true" styleClass="comment" title="<%=translation%>" >
 									<digi:trn key="aim:addActivityStep2">
 									Step 2
 									</digi:trn>
-									</digi:link>&nbsp;&gt;&nbsp;			
+									</digi:link>&nbsp;&gt;&nbsp;
 									<bean:define id="translation">
 										<digi:trn key="aim:clickToViewAddActivityStep3">Click here to go to Add Activity Step 3</digi:trn>
 									</bean:define>
-									<digi:link href="/addActivity.do?step=3&edit=true" styleClass="comment" title="<%=translation%>" >						
+									<digi:link href="/addActivity.do?step=3&edit=true" styleClass="comment" title="<%=translation%>" >
 									<digi:trn key="aim:addActivityStep3">
 									Step 3
 									</digi:trn>
-									</digi:link>&nbsp;&gt;&nbsp;							
+									</digi:link>&nbsp;&gt;&nbsp;
 									<bean:define id="translation">
 										<digi:trn key="aim:clickToViewAddActivityStep4">Click here to go to Add Activity Step 4</digi:trn>
 									</bean:define>
-									<digi:link href="/addActivity.do?step=4&edit=true" styleClass="comment" title="<%=translation%>" >						
+									<digi:link href="/addActivity.do?step=4&edit=true" styleClass="comment" title="<%=translation%>" >
 									<digi:trn key="aim:addActivityStep4">
 									Step 4
 									</digi:trn>
 									</digi:link>&nbsp;&gt;&nbsp;
-									
+
 									<bean:define id="translation">
 										<digi:trn key="aim:clickToViewAddActivityStep5">Click here to go to Add Activity Step 5</digi:trn>
 									</bean:define>
@@ -138,7 +138,7 @@ function removeSelOrgs(value) {
 									<digi:trn key="aim:addActivityStep5">
 									Step 5
 									</digi:trn>
-									</digi:link>&nbsp;&gt;&nbsp;			
+									</digi:link>&nbsp;&gt;&nbsp;
 
 									<bean:define id="translation">
 										<digi:trn key="aim:clickToViewAddActivityStep6">Click here to go to Add Activity Step 6</digi:trn>
@@ -148,7 +148,7 @@ function removeSelOrgs(value) {
 									Step 6
 									</digi:trn>
 									</digi:link>&nbsp;&gt;&nbsp;
-									
+
 									<digi:trn key="aim:addActivityStep7">
 									Step 7
 									</digi:trn>
@@ -165,19 +165,19 @@ function removeSelOrgs(value) {
 									<digi:trn key="aim:addNewActivity">
 										Add New Activity
 									</digi:trn>
-								</c:if>			
+								</c:if>
 								<c:if test="${aimEditActivityForm.editAct == true}">
 									<digi:trn key="aim:editActivity">
 										Edit Activity
 									</digi:trn>
-								</c:if>				
+								</c:if>
 							</td>
-						</tr>	
+						</tr>
 					</table>
 				</td></tr>
 				<tr><td>
 					<table width="100%" cellSpacing="5" cellPadding="3" vAlign="top">
-						<tr><td width="75%" vAlign="top">	
+						<tr><td width="75%" vAlign="top">
 						<table cellPadding=0 cellSpacing=0 width="100%">
 							<tr>
 								<td width="100%">
@@ -194,7 +194,7 @@ function removeSelOrgs(value) {
 											</td>
 										</tr>
 									</table>
-								</td>							
+								</td>
 							</tr>
 							<tr><td width="100%" bgcolor="#f4f4f2">
 							<table width="100%" cellSpacing="1" cellPadding="3" vAlign="top" align="left" bgcolor="#006699">
@@ -210,7 +210,7 @@ function removeSelOrgs(value) {
 									</td></tr>
 									<tr><td bgColor=#f4f4f2>
 										&nbsp;
-									</td></tr>									
+									</td></tr>
 									<tr><td>
 										<logic:notEmpty name="aimEditActivityForm" property="executingAgencies">
 											<table width="100%" cellSpacing=1 cellPadding=5 class="box-border-nopadding">
@@ -222,7 +222,7 @@ function removeSelOrgs(value) {
 															<td width="3">
 																<html:multibox property="selExAgencies">
 																	<bean:write name="exAgency" property="ampOrgId" />
-																</html:multibox>															
+																</html:multibox>
 															</td>
 															<td align="left">
 																<bean:write name="exAgency" property="name" />
@@ -235,29 +235,29 @@ function removeSelOrgs(value) {
 													<table cellSpacing=1 cellPadding=1>
 														<tr>
 															<td>
-																<input type="button" value="Add Organizations" class="buton" 
+																<input type="button" value="Add Organisations" class="buton"
 																onclick="addOrgs(1)" class="buton">
 															</td>
 															<td>
-																<input type="button" value="Remove Selected Organizations" class="buton" 
+																<input type="button" value="Remove Selected Organisations" class="buton"
 																onclick="return removeSelOrgs(1)" class="buton">
 															</td>
 														</tr>
 													</table>
 												</td></tr>
-											</table>											
+											</table>
 										</logic:notEmpty>
-										
+
 										<logic:empty name="aimEditActivityForm" property="executingAgencies">
 											<table width="100%" bgcolor="#cccccc" cellSpacing=1 cellPadding=5>
 												<tr>
 													<td bgcolor="#ffffff">
-														<input type="button" value="Add Organizations" class="buton" 
+														<input type="button" value="Add Organisations" class="buton"
 														onclick="addOrgs(1)">
 													</td>
 												</tr>
 											</table>
-										</logic:empty>										
+										</logic:empty>
 									</td></tr>
 									<tr><td>
 										&nbsp;
@@ -265,12 +265,12 @@ function removeSelOrgs(value) {
 
 									<tr><td>
 										<IMG alt=Link height=10 src="../ampTemplate/images/arrow-014E86.gif" width=15>
-										<a title="<digi:trn key="aim:AgencyImplementing">The organization that directly implements the activity</digi:trn>">
+										<a title="<digi:trn key="aim:AgencyImplementing">The organisation that directly implements the activity</digi:trn>">
 										<b><digi:trn key="aim:implementingAgency">Implementing Agency</digi:trn></b></a>
 									</td></tr>
 									<tr><td bgColor=#f4f4f2>
 										&nbsp;
-									</td></tr>									
+									</td></tr>
 									<tr><td>
 										<logic:notEmpty name="aimEditActivityForm" property="impAgencies">
 											<table width="100%" cellSpacing=1 cellPadding=5 class="box-border-nopadding">
@@ -282,7 +282,7 @@ function removeSelOrgs(value) {
 															<td width="3">
 																<html:multibox property="selImpAgencies">
 																	<bean:write name="impAgency" property="ampOrgId" />
-																</html:multibox>															
+																</html:multibox>
 															</td>
 															<td align="left">
 																<bean:write name="impAgency" property="name" />
@@ -295,11 +295,11 @@ function removeSelOrgs(value) {
 													<table cellSpacing=1 cellPadding=1>
 														<tr>
 															<td>
-																<input type="button" value="Add Organizations" class="buton" 
+																<input type="button" value="Add Organisations" class="buton"
 																onclick="addOrgs(2)" class="buton">
 															</td>
 															<td>
-																<input type="button" value="Remove Selected Organizations" class="buton" 
+																<input type="button" value="Remove Selected Organisations" class="buton"
 																onclick="return removeSelOrgs(2)" class="buton">
 															</td>
 														</tr>
@@ -307,12 +307,12 @@ function removeSelOrgs(value) {
 												</td></tr>
 											</table>
 										</logic:notEmpty>
-										
+
 										<logic:empty name="aimEditActivityForm" property="impAgencies">
 											<table width="100%" bgcolor="#cccccc" cellSpacing=1 cellPadding=5>
 												<tr>
 													<td bgcolor="#ffffff">
-														<input type="button" value="Add Organizations" class="buton" 
+														<input type="button" value="Add Organisations" class="buton"
 														onclick="addOrgs(2)">
 													</td>
 												</tr>
@@ -331,9 +331,9 @@ function removeSelOrgs(value) {
 										<a title="<digi:trn key="aim:ContractAgency">The third party outside of the implementing agency</digi:trn>">
 										<html:text property="contractors" size="60" styleClass="inp-text"/>
 										</a>
-									</td></tr>									
+									</td></tr>
 									<tr><td bgColor=#f4f4f2 align="center">&nbsp;
-									</td></tr>																		
+									</td></tr>
 									<tr><td bgColor=#f4f4f2 align="center">
 										<table cellPadding=3>
 											<tr>
@@ -348,19 +348,19 @@ function removeSelOrgs(value) {
 												</td>
 											</tr>
 										</table>
-									</td></tr>									
+									</td></tr>
 								</table>
 
 								<!-- end contents -->
 							</td></tr>
 							</table>
-							</td></tr>							
+							</td></tr>
 						</table>
 						</td>
 						<td width="25%" vAlign="top" align="right">
 						<!-- edit activity form menu -->
 							<jsp:include page="editActivityMenu.jsp" flush="true" />
-						<!-- end of activity form menu -->							
+						<!-- end of activity form menu -->
 						</td></tr>
 					</table>
 				</td></tr>

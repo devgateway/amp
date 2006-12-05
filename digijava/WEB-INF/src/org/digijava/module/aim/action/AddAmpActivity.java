@@ -66,7 +66,7 @@ public class AddAmpActivity extends Action {
 	public ActionForward execute(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response)
 			throws java.lang.Exception {
-		
+
 		HttpSession session = request.getSession();
 
 		ampContext = getServlet().getServletContext();
@@ -115,7 +115,7 @@ public class AddAmpActivity extends Action {
 			eaForm.setLineMinRank(null);
 			eaForm.setPlanMinRank(null);
 		}
-		
+
 		// added by Akash
 		// desc: clearing comment properties
 		// start
@@ -293,7 +293,6 @@ public class AddAmpActivity extends Action {
             Collection themes=new ArrayList();
             themes = ProgramUtil.getAllThemes();
             themes = CollectionUtils.getFlatHierarchy(themes, true, new HierarchicalDefinition(), new ProgramComparator());
-
             eaForm.setProgramCollection(themes);
 
 			//eaForm.setProgramCollection(ProgramUtil.getAllThemes());
@@ -378,6 +377,7 @@ public class AddAmpActivity extends Action {
 			if (eaForm.getProgramCollection() == null) {
                 Collection themes=new ArrayList();
                 themes = ProgramUtil.getAllThemes();
+                themes = CollectionUtils.getFlatHierarchy(themes, true, new HierarchicalDefinition(), new ProgramComparator());
                 eaForm.setProgramCollection(themes);
 			}
 

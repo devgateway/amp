@@ -31,7 +31,7 @@
 				maxOccurs="unbounded" />
 			<xs:element name="measure" type="ar:measureType" minOccurs="0"
 					maxOccurs="unbounded" />				
-			<xs:element name="description" type="xs:string" minOccurs="1" maxOccurs="1"/>
+			<xs:element name="description" type="xs:string" minOccurs="0" maxOccurs="1"/>
 		</xs:sequence>
 		<xs:attribute name="id" type="xs:long" use="required" />
 		<xs:attribute name="name" type="xs:string" use="required" />

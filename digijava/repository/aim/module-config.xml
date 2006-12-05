@@ -70,9 +70,6 @@
 		<hibernate-class>
 			org.digijava.module.aim.dbentity.AmpTeam
 		</hibernate-class>
-		<hibernate-class>
-			org.dgfoundation.amp.ar.AmpARFilter
-		</hibernate-class>
 
 		<hibernate-class>
 			org.digijava.module.aim.dbentity.AmpTeamMemberRoles

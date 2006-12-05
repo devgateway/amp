@@ -7,8 +7,10 @@
 package org.dgfoundation.amp.ar.view.xls;
 
 import org.apache.poi.hssf.usermodel.HSSFCell;
+import org.apache.poi.hssf.usermodel.HSSFCellStyle;
 import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.dgfoundation.amp.ar.Exporter;
 import org.dgfoundation.amp.ar.Viewable;
 import org.dgfoundation.amp.ar.cell.TextCell;
@@ -38,9 +40,9 @@ public class TextCellXLS extends XLSExporter {
 	 * @param ownerId
 	 * @param item
 	 */
-	public TextCellXLS(HSSFSheet sheet, HSSFRow row, IntWrapper rowId,
+	public TextCellXLS(HSSFWorkbook wb ,HSSFSheet sheet, HSSFRow row, IntWrapper rowId,
 			IntWrapper colId, Long ownerId, Viewable item) {
-		super(sheet, row, rowId, colId, ownerId, item);
+		super(wb, sheet, row, rowId, colId, ownerId, item);
 		// TODO Auto-generated constructor stub
 	}
 
@@ -49,8 +51,8 @@ public class TextCellXLS extends XLSExporter {
 	 */
 	public void generate() {
 		TextCell c=(TextCell) item;
-		HSSFCell cell=row.createCell(colId.shortValue());
-		cell.setCellValue(c.toString());
+		HSSFCell cell=this.getRegularCell();
+		cell.setCellValue(c.toString());		
 		colId.inc();
 	}
 

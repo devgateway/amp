@@ -6,10 +6,13 @@
  */
 package org.digijava.module.aim.action;
 
+import java.util.Iterator;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.apache.log4j.Logger;
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
@@ -18,9 +21,12 @@ import org.dgfoundation.amp.ar.ARUtil;
 import org.dgfoundation.amp.ar.GenericViews;
 import org.dgfoundation.amp.ar.GroupReportData;
 import org.dgfoundation.amp.ar.view.pdf.GroupReportDataPDF;
+import org.dgfoundation.amp.ar.view.pdf.PDFExporter;
 import org.digijava.module.aim.dbentity.AmpReports;
+import org.digijava.module.aim.form.AdvancedReportForm;
 
 import com.lowagie.text.Document;
+import com.lowagie.text.DocumentException;
 import com.lowagie.text.ExceptionConverter;
 import com.lowagie.text.Font;
 import com.lowagie.text.PageSize;
@@ -44,15 +50,29 @@ public class PDFExportAction extends Action implements PdfPageEvent{
 //	private HttpSession session;
 	private String noteFromSession;
 	
+	protected static Logger logger = Logger.getLogger(PDFExportAction.class);
+	
 	public ActionForward execute(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response)
 			throws java.lang.Exception {
 		
 		GroupReportData rd=ARUtil.generateReport(mapping,form,request,response);
 		rd.setCurrentView(GenericViews.PDF);
+		
+		AdvancedReportForm formBean = (AdvancedReportForm) form;
+		String pageSize=formBean.getPdfPageSize();
 
-		Document document = new Document(PageSize.A0.rotate(),10, 10, 10, 40);
-	
+		
+		
+		Rectangle page=PageSize.A4;
+		if(pageSize.equals("A0")) page=PageSize.A0;
+		if(pageSize.equals("A1")) page=PageSize.A1;
+		if(pageSize.equals("A2")) page=PageSize.A2;
+		if(pageSize.equals("A3")) page=PageSize.A3;
+		if(pageSize.equals("A4")) page=PageSize.A4;
+		
+		Document document = new Document(page.rotate(),5, 5, 5, 5);		
+
 	     response.setContentType("application/pdf");
 	        response.setHeader("Content-Disposition",
 	                "inline; filename=AMPExport.pdf");
@@ -68,17 +88,18 @@ public class PDFExportAction extends Action implements PdfPageEvent{
 		document.open();
 
 		//	create source cols spanning:		
-		float[] widths = new float[rd.getTotalDepth()];		
+		PDFExporter.widths=new float[rd.getTotalDepth()];		
 		for (int k = 0; k < rd.getSourceColsCount().intValue(); k++) {
-			widths[k]=0.125f;
+			PDFExporter.widths[k]=0.125f;
 		}
 		
 		for (int k = rd.getSourceColsCount().intValue();k<rd.getTotalDepth() ; k++) {
-			widths[k]=0.05f;
+			PDFExporter.widths[k]=0.05f;
 		}
 		
 		
-		PdfPTable table = new PdfPTable(widths);
+		PdfPTable table = new PdfPTable(PDFExporter.widths);
+		table.setWidthPercentage(100);
 		
 		Font titleFont = new Font(Font.COURIER, 16, Font.BOLD);
 		
@@ -99,6 +120,7 @@ public class PDFExportAction extends Action implements PdfPageEvent{
 		grdp.generate();		
 		this.onEndPage(writer,document);
 		document.add(table);
+		document.setMargins(5,5,5,5);
 		document.close();
 
 		return null;
@@ -110,8 +132,26 @@ public class PDFExportAction extends Action implements PdfPageEvent{
 		
 	}
 
-	public void onStartPage(PdfWriter arg0, Document arg1) {
-		// TODO Auto-generated method stub
+	public void onStartPage(PdfWriter writer, Document arg1) {
+		arg1.setMargins(5,5,5,5);
+		if(PDFExporter.headingCells==null) return;
+		  PdfContentByte cb = writer.getDirectContent();
+          cb.saveState();
+         if(writer.getPageNumber()==1) return;
+        
+			Iterator i=PDFExporter.headingCells.iterator();
+			PdfPTable table = new PdfPTable(PDFExporter.widths);
+			table.setWidthPercentage(100);
+			while (i.hasNext()) {
+				PdfPCell element = (PdfPCell) i.next();
+				table.addCell(element);
+			}
+			try {
+				arg1.add(table);
+			} catch (DocumentException e) {
+				e.printStackTrace();
+				logger.error(e);
+			}
 		
 	}
 
@@ -156,7 +196,7 @@ public class PDFExportAction extends Action implements PdfPageEvent{
 	}
 
 	public void onParagraph(PdfWriter arg0, Document arg1, float arg2) {
-		// TODO Auto-generated method stub
+		arg1.setMargins(5,5,5,5);
 		
 	}
 

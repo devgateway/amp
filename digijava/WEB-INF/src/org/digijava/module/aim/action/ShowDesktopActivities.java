@@ -292,6 +292,7 @@ public class ShowDesktopActivities extends TilesAction {
 			dForm.setCurrentPage(new Integer(currPage));
 			
 			int actSize = dForm.getActivities().size();
+			dForm.setActivityCount(actSize);
 			int numRecs = tm.getAppSettings().getDefRecsPerPage();
 			
 			int stIndex = (dForm.getCurrentPage().intValue()-1) * numRecs;

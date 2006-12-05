@@ -18,7 +18,8 @@
 <% int rowIdx=2; %>
 
 <!-- generate report headings -->
-<%int maxDepth=columnReport.getMaxColumnDepth(); %>
+<logic:equal name="columnReport" property="globalHeadingsDisplayed" value="false">
+<%int maxDepth=columnReport.getMaxColumnDepth(); columnReport.setGlobalHeadingsDisplayed(new Boolean(true)); %>
 <%for(int curDepth=0;curDepth<=columnReport.getMaxColumnDepth();curDepth++,rowIdx++) {%>
 <tr>
 <logic:iterate name="columnReport" property="items" id="column" scope="page" type="org.dgfoundation.amp.ar.Column">
@@ -33,6 +34,7 @@
 </logic:iterate>
 </tr>
 <% } %>
+</logic:equal>
 
 <!-- generate report data -->
 

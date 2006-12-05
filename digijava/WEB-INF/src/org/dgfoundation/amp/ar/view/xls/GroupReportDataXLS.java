@@ -11,11 +11,11 @@ import java.util.Iterator;
 import org.apache.poi.hssf.usermodel.HSSFCell;
 import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.dgfoundation.amp.ar.Exporter;
 import org.dgfoundation.amp.ar.GroupReportData;
 import org.dgfoundation.amp.ar.Viewable;
 
-import com.lowagie.text.Font;
 
 /**
  * 
@@ -42,9 +42,9 @@ public class GroupReportDataXLS extends XLSExporter {
 	 * @param ownerId
 	 * @param item
 	 */
-	public GroupReportDataXLS(HSSFSheet sheet, HSSFRow row, IntWrapper rowId,
+	public GroupReportDataXLS(HSSFWorkbook wb,HSSFSheet sheet, HSSFRow row, IntWrapper rowId,
 			IntWrapper colId, Long ownerId, Viewable item) {
-		super(sheet, row, rowId, colId, ownerId, item);
+		super(wb, sheet, row, rowId, colId, ownerId, item);
 		// TODO Auto-generated constructor stub
 	}
 
@@ -62,7 +62,7 @@ public class GroupReportDataXLS extends XLSExporter {
 			rowId.inc();
 			colId.reset();
 			HSSFRow row=sheet.createRow(rowId.shortValue());
-			HSSFCell cell=row.createCell(colId.shortValue());
+			HSSFCell cell=this.getCell(row,getHighlightedStyle(true));
 			cell.setCellValue(grd.getName());
 			makeColSpan(grd.getTotalDepth());
 		}
@@ -84,7 +84,7 @@ public class GroupReportDataXLS extends XLSExporter {
 		rowId.inc();
 		colId.reset();
 		HSSFRow row=sheet.createRow(rowId.shortValue());
-		HSSFCell cell=row.createCell(colId.shortValue());
+		HSSFCell cell=this.getRegularCell(row);
 		cell.setCellValue(" ");
 		makeColSpan(grd.getTotalDepth());
 	}

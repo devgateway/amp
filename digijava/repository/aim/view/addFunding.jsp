@@ -307,7 +307,7 @@
 											</td>																
 											<td valign="bottom">
 												<html:select name="fundingDetail" indexed="true" property="perspectiveCode" styleClass="inp-text" 
-												disabled="true">
+												disabled="false">
 													<html:option value="DN">Donor</html:option>	
 													<html:option value="MA">MOFED</html:option>
 												</html:select>
@@ -410,7 +410,7 @@
 											</td>																
 											<td valign="bottom">
 												<html:select name="fundingDetail" indexed="true" property="perspectiveCode" styleClass="inp-text" 
-												disabled="true">
+												disabled="false">
 													<html:option value="DN">Donor</html:option>	
 													<html:option value="MA">MOFED</html:option>
 												</html:select>
@@ -587,7 +587,7 @@
 											</td>
 											<td valign="bottom">
 												<html:select name="fundingDetail" indexed="true" property="perspectiveCode" styleClass="inp-text" 
-												disabled="true">
+												disabled="false">
 													<html:option value="DN">Donor</html:option>	
 													<html:option value="MA">MOFED</html:option>
 												</html:select>
@@ -637,7 +637,7 @@
 											</td>
 											<td valign="bottom">
 												<html:select name="fundingDetail" indexed="true" property="perspectiveCode" styleClass="inp-text" 
-												disabled="true">
+												disabled="false">
 													<html:option value="DN">Donor</html:option>	
 													<html:option value="MA">MOFED</html:option>
 												</html:select>
@@ -760,7 +760,7 @@
 														</td>
 														<td valign="bottom">
 															<html:select name="fundingDetail" indexed="true" property="perspectiveCode" styleClass="inp-text"
-															disabled="true">
+															disabled="false">
 																<html:option value="DN">Donor</html:option>	
 																<html:option value="MA">MOFED</html:option>
 															</html:select>
@@ -828,7 +828,7 @@
 														</td>
 														<td valign="bottom">
 															<html:select name="fundingDetail" indexed="true" property="perspectiveCode" styleClass="inp-text" 
-															disabled="true">
+															disabled="false">
 																<html:option value="DN">Donor</html:option>	
 																<html:option value="MA">MOFED</html:option>
 															</html:select>

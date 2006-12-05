@@ -17,26 +17,56 @@
 
 <!-- generate report data -->
 <logic:notEqual name="reportMeta" property="hideActivities" value="true">
+<table width="700" cellpadding="1" cellspacing="0" bgcolor="#FFFFFF">
 <logic:iterate name="columnReport" property="ownerIds" id="ownerId" scope="page">
-<tr><td>
-	<table width="600" cellpadding="5" cellspacing="0" bgcolor="#FFFFFF">
+<tr><td colspan="2">
+<br/>
+</td></tr>
+<tr><td align="left" valign="top"> 
+	<table cellpadding="0" cellspacing="0" bgcolor="#FFFFFF">
 	<logic:iterate name="columnReport" property="items" id="column" scope="page">
+	<logic:equal name="column" property="name" value="Total">
+	<tr><td>
+	<br/>
+	</td></tr>	
+	</logic:equal>
+	<logic:notEqual name="column" property="name" value="Funding">
 	<tr><td>
 		<bean:define id="viewable" name="column" type="org.dgfoundation.amp.ar.Viewable" scope="page" toScope="request"/>
 		<bean:define id="ownerId" name="ownerId" type="java.lang.Long" scope="page" toScope="request"/>
 		<jsp:include page="<%=viewable.getViewerPath()%>"/>			
 	</td></tr>
+	</logic:notEqual>
+	</logic:iterate>
+	</table>
+</td><td align="left" valign="top">
+	<table cellpadding="0" cellspacing="0" bgcolor="#FFFFFF">
+	<logic:iterate name="columnReport" property="items" id="column" scope="page">
+	<logic:equal name="column" property="name" value="Funding">
+	<tr><td>
+		<bean:define id="viewable" name="column" type="org.dgfoundation.amp.ar.Viewable" scope="page" toScope="request"/>
+		<bean:define id="ownerId" name="ownerId" type="java.lang.Long" scope="page" toScope="request"/>
+		<jsp:include page="<%=viewable.getViewerPath()%>"/>			
+	</td></tr>
+	</logic:equal>
 	</logic:iterate>
 	</table>
 </td></tr>
+<tr><td colspan="2">
+<hr/>
+</td></tr>
 </logic:iterate>
+</table>
 </logic:notEqual>
 
 <!-- generate total row -->
 
-<bean:define id="viewable" name="columnReport" type="org.dgfoundation.amp.ar.ColumnReportData" scope="page" toScope="request"/>
-<jsp:include page="TrailCells.jsp"/>
+<tr><td>
+<br/>
+</td></tr>
 
+<bean:define id="viewable" name="columnReport" type="org.dgfoundation.amp.ar.ColumnReportData" scope="page" toScope="request"/>
+<jsp:include page="TrailCells.jsp"/>	
 
 <tr><td>
 <hr/>

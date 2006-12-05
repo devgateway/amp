@@ -7,6 +7,7 @@
 package org.dgfoundation.amp.ar;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
@@ -24,31 +25,32 @@ import org.dgfoundation.amp.ar.workers.ColumnWorker;
  */
 public class CellColumn extends Column {
 
+	protected HashMap itemsMap; 
+	
 	public CellColumn(ColumnWorker worker) {
 		super(worker);
+		itemsMap=new HashMap();
 	}
 
 	public CellColumn(String name) {
 		super(name);
+		itemsMap=new HashMap();
 	}
 
 	public CellColumn(Column source) {
 		super(source.getParent(),source.getName());
 		this.contentCategory=source.getContentCategory();
+		itemsMap=new HashMap();
 	}
 	
 	public CellColumn(Column parent, String name) {
 		super(parent, name);
 		this.contentCategory=parent.getContentCategory();
+		itemsMap=new HashMap();
 	}
 
 	public Cell getByOwner(Long ownerId) {
-		Iterator i=items.iterator();
-		while (i.hasNext()) {
-			Cell element = (Cell) i.next();
-			if(element.getOwnerId().equals(ownerId)) return element;
-		}
-		return null;
+		return (Cell) itemsMap.get(ownerId);
 	}
 	
 	public Cell getCell(int i) {
@@ -58,6 +60,7 @@ public class CellColumn extends Column {
 	public void addCell(Object cc) {
 		Cell c = (Cell) cc;
 		c.setColumn(this);
+		itemsMap.put(c.getOwnerId(),c);
 		items.add(c);
 	}
 
@@ -193,6 +196,8 @@ public class CellColumn extends Column {
 		int idx = items.indexOf(oldCell);
 		items.remove(idx);
 		items.add(idx, newCell);
+		itemsMap.remove(oldCell.getOwnerId());
+		itemsMap.put(newCell.getOwnerId(),newCell);
 		newCell.setColumn(this);
 	}
 

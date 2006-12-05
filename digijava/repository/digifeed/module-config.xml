@@ -2,6 +2,8 @@
 <module-config>
 	<name>digifeed</name>
 	
-	<hibernate-classes required="false">
+		<security login-required="false" />
+	
+	<hibernate-classes required="true">
 	</hibernate-classes>
 </module-config>

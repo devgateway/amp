@@ -236,7 +236,11 @@
 						</logic:notEmpty>
 			
 						<TR bgcolor="#FFFFFF">
-							<TD>&nbsp;</TD>
+							<TD><b>
+							<font class="home-bg-header">
+							<c:out value="${aimDesktopForm.activityCount}" />&nbsp;<digi:trn key="aim:activityCount">activities in your portofolio.</digi:trn>
+							</font>
+							</b></TD>
 							<TD>
 								<b><c:out value="${aimDesktopForm.defCurrency}" /></b>	
 							</TD>

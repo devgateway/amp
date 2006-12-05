@@ -11,6 +11,8 @@ import java.util.Date;
 
 import org.dgfoundation.amp.ar.MetaInfo;
 import org.dgfoundation.amp.ar.workers.DateColWorker;
+import org.digijava.module.aim.helper.EthDateWorker;
+
 
 /**
  * 
@@ -23,13 +25,22 @@ public class DateCell extends Cell {
 
 	private static SimpleDateFormat sdt=new SimpleDateFormat("dd/MM/yyyy");
 	
+	protected boolean ethiopianDate;
+	
 	protected Date value;
+	
+	public String getEthDate()
+	{
+		return EthDateWorker.getEthDate(value);
+	}
+	
 	
 	/**
 	 * 
 	 */
 	public DateCell() {
 		super();
+		ethiopianDate=false;
 		// TODO Auto-generated constructor stub
 	}
 
@@ -39,6 +50,7 @@ public class DateCell extends Cell {
 	 */
 	public DateCell(Long id) {
 		super(id);
+		ethiopianDate=false;
 		// TODO Auto-generated constructor stub
 	}
 
@@ -82,11 +94,26 @@ public class DateCell extends Cell {
 	}
 
 	public String toString() {
+		if(ethiopianDate) return getEthDate();
 		return value!=null?sdt.format(value):"";
 	}
 
 	public Cell newInstance() {
 		return new DateCell();
+	}
+
+	/**
+	 * @return Returns the ethiopianDate.
+	 */
+	public boolean isEthiopianDate() {
+		return ethiopianDate;
+	}
+
+	/**
+	 * @param ethiopianDate The ethiopianDate to set.
+	 */
+	public void setEthiopianDate(boolean ethiopianDate) {
+		this.ethiopianDate = ethiopianDate;
 	}
 	
 }

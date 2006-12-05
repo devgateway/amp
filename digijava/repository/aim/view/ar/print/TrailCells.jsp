@@ -10,12 +10,10 @@
 	type="org.dgfoundation.amp.ar.ReportData" scope="request"
 	toScope="page" />
 
-<table width="600" cellpadding="5" cellspacing="0" bgcolor="#FFFFFF">
+<table border="1" width="700" cellpadding="0" cellspacing="0" bgcolor="#FFFFFF">
 	<!-- generate total row -->
 	<tr>
-		<td><b>TOTALS FOR </b></td>
-		<td>
-		<div align="right"><b><bean:write name="reportData" property="name" /></b></div>
+		<td align="center" colspan="2"><b>TOTALS FOR <bean:write name="reportData" property="name" /></b></div>
 		</td>
 
 		<logic:iterate name="reportData" property="trailCells" id="cell"
@@ -25,9 +23,9 @@
 				toScope="request" />
 			<logic:notEqual name="viewable" property="amount" value="0">
 				<tr>
-					<td><b><bean:write name="viewable"
+					<td width="75%"><b><bean:write name="viewable"
 						property="column.absoluteColumnName" /></b></td>
-					<td><jsp:include page="<%=viewable.getViewerPath()%>" /></td>
+					<td width="25%"><jsp:include page="<%=viewable.getViewerPath()%>" /></td>
 				</tr>
 			</logic:notEqual>
 		</logic:iterate>

@@ -397,4 +397,10 @@ public class AmpOrganisation implements Comparable, Serializable
 	public void setCalendar(Set calendar) {
 		this.calendar = calendar;
 	}
+
+
+	
+	public String toString() {
+		return this.getAmpOrgId().toString();
+	}
 }	

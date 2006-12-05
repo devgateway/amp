@@ -7,6 +7,10 @@
 package org.dgfoundation.amp.ar;
 
 import java.lang.reflect.Constructor;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
@@ -20,19 +24,24 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import net.sf.hibernate.HibernateException;
 import net.sf.hibernate.Session;
+import net.sf.swarmcache.ObjectCache;
 
 import org.apache.log4j.Logger;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionMapping;
 import org.digijava.kernel.persistence.PersistenceManager;
+import org.digijava.kernel.util.DigiCacheManager;
 import org.digijava.module.aim.dbentity.AmpCurrency;
 import org.digijava.module.aim.dbentity.AmpMeasures;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
+import org.digijava.module.aim.dbentity.AmpRegion;
 import org.digijava.module.aim.dbentity.AmpReportColumn;
 import org.digijava.module.aim.dbentity.AmpReportHierarchy;
 import org.digijava.module.aim.dbentity.AmpReports;
 import org.digijava.module.aim.dbentity.AmpSector;
+import org.digijava.module.aim.dbentity.AmpStatus;
 import org.digijava.module.aim.dbentity.AmpTeam;
 import org.digijava.module.aim.form.AdvancedReportForm;
 import org.digijava.module.aim.helper.Constants;
@@ -52,40 +61,52 @@ import org.digijava.module.aim.util.TeamUtil;
 public final class ARUtil {
 
 	public static String toSQLEnum(Collection col) {
-		String ret="";
-		if (col==null || col.size()==0) return ret;
-		Iterator i=col.iterator();
+		String ret = "";
+		if (col == null || col.size() == 0)
+			return ret;
+		Iterator i = col.iterator();
 		while (i.hasNext()) {
 			Object element = (Object) i.next();
-			if(element instanceof String) ret+="'"+(String)element+"'"; else
-				ret+=element.toString();
-			if(i.hasNext()) ret+=",";
+			if (element instanceof String)
+				ret += "'" + (String) element + "'";
+			else
+				ret += element.toString();
+			if (i.hasNext())
+				ret += ",";
 		}
 		return ret;
 	}
-	
+
 	protected static Logger logger = Logger.getLogger(ARUtil.class);
-	
-	public static Constructor getConstrByParamNo(Class c,int paramNo) {
+
+	public static Constructor getConstrByParamNo(Class c, int paramNo) {
 		Constructor[] clist = c.getConstructors();
 		for (int j = 0; j < clist.length; j++) {
-			if(clist[j].getParameterTypes().length==paramNo) return clist[j];
+			if (clist[j].getParameterTypes().length == paramNo)
+				return clist[j];
 		}
-		logger.error("Cannot find a constructor with "+paramNo+" parameters for class "+c.getName());
+		logger.error("Cannot find a constructor with " + paramNo
+				+ " parameters for class " + c.getName());
 		return null;
 	}
-	
-	
+
 	public static GroupReportData generateReport(ActionMapping mapping,
 			ActionForm form, HttpServletRequest request,
 			HttpServletResponse response) throws java.lang.Exception {
 
 		String ampReportId = request.getParameter("ampReportId");
-
+		HttpSession httpSession = request.getSession();
 		Session session = PersistenceManager.getSession();
+
+		TeamMember teamMember = (TeamMember) httpSession
+				.getAttribute("currentMember");
 
 		AmpReports r = (AmpReports) session.get(AmpReports.class, new Long(
 				ampReportId));
+
+		logger.info("Report '" + r.getName() + "' requested by user "
+				+ teamMember.getEmail() + " from team "
+				+ teamMember.getTeamName());
 
 		AmpARFilter af = ARUtil.createFilter(r, mapping, form, request,
 				response);
@@ -95,11 +116,31 @@ public final class ARUtil {
 		AmpReportGenerator arg = new AmpReportGenerator(r, af);
 
 		arg.generate();
-		
+
 		session.close();
 
 		return arg.getReport();
 
+	}
+
+	public static Collection getFilterDonors(AmpTeam ampTeam) {
+		ArrayList dbReturnSet = null;
+		ArrayList ret = new ArrayList();
+		dbReturnSet = DbUtil.getAmpDonors(ampTeam.getAmpTeamId());
+		// logger.debug("Donor Size: " + dbReturnSet.size());
+		Iterator iter = dbReturnSet.iterator();
+
+		while (iter.hasNext()) {
+			AmpOrganisation ampOrganisation = (AmpOrganisation) iter.next();
+			if (ampOrganisation.getAcronym().length() > 20) {
+				String temp = ampOrganisation.getAcronym().substring(0, 20)
+						+ "...";
+				ampOrganisation.setAcronym(temp);
+			}
+			ret.add(ampOrganisation);
+		}
+
+		return ret;
 	}
 
 	/**
@@ -120,6 +161,8 @@ public final class ARUtil {
 		HttpSession httpSession = request.getSession();
 		TeamMember teamMember = (TeamMember) httpSession
 				.getAttribute("currentMember");
+
+		Session session = PersistenceManager.getSession();
 		
 		
 		ArrayList filters = null;
@@ -132,7 +175,6 @@ public final class ARUtil {
 		Long ampStatusId = null;
 		Long ampOrgId = null;
 		Long ampSectorId = null;
-		String region = null;
 		String component = null;
 		Long ampModalityId = null;
 		String ampCurrencyCode = null;
@@ -173,10 +215,6 @@ public final class ARUtil {
 			formBean.setReportDescription(ampReports.getReportDescription());
 		formBean.setWorkspaceType(ampTeam.getType());
 		formBean.setWorkspaceName(ampTeam.getName());
-		if (perspective.equals("DN"))
-			formBean.setPerspective("Donor");
-		if (perspective.equals("MA"))
-			formBean.setPerspective("MOFED");
 		Long ampPageId = DbUtil.getAmpPageId(ampReports.getName());
 
 		// Set all the filters
@@ -199,97 +237,92 @@ public final class ARUtil {
 
 		filters = DbUtil.getTeamPageFilters(ampTeamId, ampPageId);
 		// logger.debug("Filter Size: " + filters.size());
-				
-			formBean.setGoFlag("true");
-				formBean.setFilterFlag("true");
-				setFilters = setFilters + " PERSPECTIVE -";
 
-				dbReturnSet = DbUtil.getAmpStatus();
-				formBean.setStatusColl(dbReturnSet);
-				setFilters = setFilters + " STATUS -";
-				filterCnt++;
+		formBean.setGoFlag("true");
+		formBean.setFilterFlag("true");
+		setFilters = setFilters + " PERSPECTIVE -";
 
-				setFilters = setFilters + " SECTOR -";
-				filterCnt++;
-				formBean.setSectorColl(new ArrayList());
-				dbReturnSet = SectorUtil.getAmpSectors();
-				iter = dbReturnSet.iterator();
-				while (iter.hasNext()) {
-					AmpSector ampSector = (AmpSector) iter.next();
-					if (ampSector.getName().length() > 20) {
-						String temp = ampSector.getName().substring(0, 20)
-								+ "...";
-						ampSector.setName(temp);
-					}
-					formBean.getSectorColl().add(ampSector);
-					dbReturnSet = SectorUtil.getAmpSubSectors(ampSector
-							.getAmpSectorId());
-					iterSub = dbReturnSet.iterator();
-					while (iterSub.hasNext()) {
-						AmpSector ampSubSector = (AmpSector) iterSub.next();
-						String temp = " -- " + ampSubSector.getName();
-						if (temp.length() > 20) {
-							temp = temp.substring(0, 20) + "...";
-							ampSubSector.setName(temp);
-						}
-						ampSubSector.setName(temp);
-						formBean.getSectorColl().add(ampSubSector);
-					}
+		dbReturnSet = DbUtil.getAmpStatus();
+		formBean.setStatusColl(dbReturnSet);
+		setFilters = setFilters + " STATUS -";
+		filterCnt++;
+
+		setFilters = setFilters + " SECTOR -";
+		filterCnt++;
+		formBean.setSectorColl(new ArrayList());
+		dbReturnSet = SectorUtil.getAmpSectors();
+		iter = dbReturnSet.iterator();
+		while (iter.hasNext()) {
+			AmpSector ampSector = (AmpSector) iter.next();
+			if (ampSector.getName().length() > 20) {
+				String temp = ampSector.getName().substring(0, 20) + "...";
+				ampSector.setName(temp);
+			}
+			formBean.getSectorColl().add(ampSector);
+			dbReturnSet = SectorUtil.getAmpSubSectors(ampSector
+					.getAmpSectorId());
+			iterSub = dbReturnSet.iterator();
+			while (iterSub.hasNext()) {
+				AmpSector ampSubSector = (AmpSector) iterSub.next();
+				String temp = " -- " + ampSubSector.getName();
+				if (temp.length() > 20) {
+					temp = temp.substring(0, 20) + "...";
+					ampSubSector.setName(temp);
 				}
+				ampSubSector.setName(temp);
+				formBean.getSectorColl().add(ampSubSector);
+			}
+		}
 
-				setFilters = setFilters + " REGION -";
-				filterCnt++;
-				dbReturnSet = LocationUtil.getAmpLocations();
-				formBean.setRegionColl(dbReturnSet);
+		setFilters = setFilters + " REGION -";
+		filterCnt++;
+		dbReturnSet = LocationUtil.getAmpLocations();
+		formBean.setRegionColl(dbReturnSet);
 
-				setFilters = setFilters + " DONORS -";
-				filterCnt++;
-				dbReturnSet = DbUtil.getAmpDonors(ampTeamId);
-				// logger.debug("Donor Size: " + dbReturnSet.size());
-				iter = dbReturnSet.iterator();
-				formBean.setDonorColl(new ArrayList());
-				while (iter.hasNext()) {
-					AmpOrganisation ampOrganisation = (AmpOrganisation) iter
-							.next();
-					if (ampOrganisation.getAcronym().length() > 20) {
-						String temp = ampOrganisation.getAcronym().substring(0,
-								20)
-								+ "...";
-						ampOrganisation.setAcronym(temp);
-					}
-					formBean.getDonorColl().add(ampOrganisation);
-				}
+		setFilters = setFilters + " DONORS -";
+		filterCnt++;
+		dbReturnSet = DbUtil.getAmpDonors(ampTeamId);
+		// logger.debug("Donor Size: " + dbReturnSet.size());
+		iter = dbReturnSet.iterator();
+		formBean.setDonorColl(getFilterDonors(ampTeam));
 
-				setFilters = setFilters + " MODALITY -";
-				filterCnt++;
-				dbReturnSet = DbUtil.getAmpModality();
-				formBean.setModalityColl(dbReturnSet);
+		while (iter.hasNext()) {
+			AmpOrganisation ampOrganisation = (AmpOrganisation) iter.next();
+			if (ampOrganisation.getAcronym().length() > 20) {
+				String temp = ampOrganisation.getAcronym().substring(0, 20)
+						+ "...";
+				ampOrganisation.setAcronym(temp);
+			}
+			formBean.getDonorColl().add(ampOrganisation);
+		}
 
-				setFilters = setFilters + " CURRENCY -";
-				filterCnt++;
-				dbReturnSet = CurrencyUtil.getAmpCurrency();
-				formBean.setCurrencyColl(dbReturnSet);
+		setFilters = setFilters + " MODALITY -";
+		filterCnt++;
+		dbReturnSet = DbUtil.getAmpModality();
+		formBean.setModalityColl(dbReturnSet);
 
-				setFilters = setFilters + " CALENDAR -";
-				filterCnt += 10;
-				formBean.setFiscalYears(DbUtil.getAllFisCalenders());
+		setFilters = setFilters + " CURRENCY -";
+		filterCnt++;
+		dbReturnSet = CurrencyUtil.getAmpCurrency();
+		formBean.setCurrencyColl(dbReturnSet);
 
-					
-				for (int i = (year - Constants.FROM_YEAR_RANGE); i <= (year + Constants.TO_YEAR_RANGE); i++) {
-					formBean.getAmpFromYears().add(new Long(i));
-					formBean.getAmpToYears().add(new Long(i));
-				}
-			
-				for (int i = (year - Constants.FROM_YEAR_RANGE); i <= (year + Constants.TO_YEAR_RANGE); i++) {
-					formBean.getAmpStartYears().add(new Long(i));
-					formBean.getAmpCloseYears().add(new Long(i));
-				}
-				for (int i = 1; i <= 31; i++) {
-					formBean.getAmpStartDays().add(new Long(i));
-					formBean.getAmpCloseDays().add(new Long(i));
-				}
-			
-		
+		setFilters = setFilters + " CALENDAR -";
+		filterCnt += 10;
+		formBean.setFiscalYears(DbUtil.getAllFisCalenders());
+
+		for (int i = (year - Constants.FROM_YEAR_RANGE); i <= (year + Constants.TO_YEAR_RANGE); i++) {
+			formBean.getAmpFromYears().add(new Long(i));
+			formBean.getAmpToYears().add(new Long(i));
+		}
+
+		for (int i = (year - Constants.FROM_YEAR_RANGE); i <= (year + Constants.TO_YEAR_RANGE); i++) {
+			formBean.getAmpStartYears().add(new Long(i));
+			formBean.getAmpCloseYears().add(new Long(i));
+		}
+		for (int i = 1; i <= 31; i++) {
+			formBean.getAmpStartDays().add(new Long(i));
+			formBean.getAmpCloseDays().add(new Long(i));
+		}
 
 		if (formBean.getAmpStatusId() == null
 				|| formBean.getAmpStatusId().intValue() == 0)
@@ -302,18 +335,6 @@ public final class ARUtil {
 			ampSectorId = All;
 		else
 			ampSectorId = formBean.getAmpSectorId();
-
-		if (formBean.getAmpLocationId() == null
-				|| formBean.getAmpLocationId().equals("All"))
-			region = "All";
-		else
-			region = formBean.getAmpLocationId();
-
-		if (formBean.getAmpComponentId() == null
-				|| formBean.getAmpComponentId().equals("All"))
-			region = "All";
-		else
-			region = formBean.getAmpComponentId();
 
 		if (formBean.getAmpOrgId() == null
 				|| formBean.getAmpOrgId().intValue() == 0)
@@ -411,6 +432,11 @@ public final class ARUtil {
 				ampModalityId = All;
 				toYr = 0;
 				fromYr = 0;
+
+				ampCurrency = CurrencyUtil.getAmpcurrency(teamMember
+						.getAppSettings().getCurrencyId());
+				ampCurrencyCode = ampCurrency.getCurrencyCode();
+	
 				
 				formBean.setAmpFromYear(new Long(fromYr));
 				formBean.setAmpToYear(new Long(toYr));
@@ -420,18 +446,24 @@ public final class ARUtil {
 				formBean.setCloseYear(All);
 				formBean.setCloseMonth(All);
 				formBean.setCloseDay(All);
+				formBean.setPdfPageSize("default");
+				
+				formBean.setStatuses(null);
+				formBean.setRegions(null);
+				formBean.setSectors(null);
+				formBean.setDonors(null);
+				
 				startYear = 0;
 				startMonth = 0;
 				startDay = 0;
 				closeYear = 0;
-				closeMonth =0;
+				closeMonth = 0;
 				closeDay = 0;
 				fiscalCalId = teamMember.getAppSettings().getFisCalId()
 						.intValue();
 				formBean.setFiscalCalId(fiscalCalId);
 				formBean.setAmpCurrencyCode(ampCurrencyCode);
 				formBean.setAmpLocationId("All");
-				region = "All";
 			}
 		}
 
@@ -444,63 +476,115 @@ public final class ARUtil {
 				&& formBean.getCloseYear().intValue() > 0)
 			closeDate = closeYear + "-" + closeMonth + "-" + closeDay;
 
-		
-		//get the team list
-		Set teams=TeamUtil.getAmpLevel0Teams(ampTeamId);
+		// get the team list
+		Set teams = TeamUtil.getAmpLevel0Teams(ampTeamId);
 		teams.add(ampTeam);
 
-		
-		//if the report metadata has a defaultFilter attached, use that as the first filter
-		if ("reset".equals(request.getParameter("view")) && ampReports.getDefaultFilter()!=null) {
-			AmpARFilter defFilt=ampReports.getDefaultFilter();
-			if(defFilt.getAmpCurrencyCode()!=null) formBean.setCurrency(defFilt.getAmpCurrencyCode());
-			if(defFilt.getAmpModalityId()!=null) formBean.setAmpModalityId(defFilt.getAmpModalityId());
-			if(defFilt.getAmpOrgId()!=null) formBean.setAmpOrgId(defFilt.getAmpOrgId());
-			//DEFAULT SECTOR NOT IMPLEMENTED!!
-			if(defFilt.getAmpStatusId()!=null) formBean.setAmpStatusId(defFilt.getAmpStatusId());
-			if(defFilt.getFromYear()!=null) formBean.setAmpFromYear(new Long(defFilt.getFromYear().longValue()));
-			if(defFilt.getToYear()!=null) formBean.setAmpToYear(new Long(defFilt.getToYear().longValue()));
-			if(defFilt.getRegion()!=null) formBean.setAmpLocationId(defFilt.getRegion());
+		// if the report metadata has a defaultFilter attached, use that as the
+		// first filter
+	
+		if ("reset".equals(request.getParameter("view"))
+				&& ampReports.getDefaultFilter() != null) {
+			AmpARFilter defFilt = ampReports.getDefaultFilter();
+			if (defFilt.getAmpCurrencyCode() != null)
+				formBean.setCurrency(defFilt.getAmpCurrencyCode());
+			if (defFilt.getFromYear() != null)
+				formBean.setAmpFromYear(new Long(defFilt.getFromYear()
+						.longValue()));
+			if (defFilt.getToYear() != null)
+				formBean
+						.setAmpToYear(new Long(defFilt.getToYear().longValue()));
 			return defFilt;
 		}
 
-		
-		
 		// create the ampFilter bean
 		AmpARFilter anf = new AmpARFilter();
+
+		// get the sector list
+		if (ampSectorId.longValue() != 0) {
+			Set sectors = new TreeSet(SectorUtil
+					.getAllChildSectors(ampSectorId));
+			sectors.add(SectorUtil.getAmpSector(ampSectorId));
+			anf.setSectors(sectors);
+		}
+
 		
-//		get the sector list
-		if(ampSectorId.longValue()!=0) {
-		Set sectors = new TreeSet(SectorUtil.getAllChildSectors(ampSectorId));
-		sectors.add(SectorUtil.getAmpSector(ampSectorId));
-		anf.setSectors(sectors);
+		if (formBean.getSectors() != null) {
+			Set sectors = new TreeSet();
+			
+			for (int x = 0; x < formBean.getSectors().length; x++) {
+				AmpSector sector=SectorUtil.getAmpParentSector(new Long(formBean.getSectors()[x]));
+				Set childSectors = new TreeSet(SectorUtil
+						.getAllChildSectors(sector.getAmpSectorId()));
+				sectors.add(sector);
+				sectors.addAll(childSectors);
+			}
+
+			anf.setSectors(sectors);
+		}
+
+		
+		
+		if (formBean.getDonors() != null) {
+			Collection alldonors = getFilterDonors(ampTeam);
+			Set donors = new TreeSet();
+			
+			for (int x = 0; x < formBean.getDonors().length; x++) {
+				Iterator i = alldonors.iterator();
+				while (i.hasNext()) {
+					AmpOrganisation element = (AmpOrganisation) i.next();
+					if (element.getAmpOrgId().longValue() == formBean
+							.getDonors()[x])
+						donors.add(element);
+				}
+			}
+			anf.setDonors(donors);
+		}
+
+		
+		if (formBean.getStatuses() != null) {
+			Set statuses = new TreeSet();
+			
+			for (int x = 0; x < formBean.getStatuses().length; x++) {
+				AmpStatus status=(AmpStatus) session.get(AmpStatus.class, new Long(formBean.getStatuses()[x]));
+				statuses.add(status);
+			}
+
+			anf.setStatuses(statuses);
+		}
+
+		if (formBean.getRegions() != null) {
+			Collection allRegions = LocationUtil.getAmpLocations();
+			Set regions = new TreeSet();
+			
+			for (int x = 0; x < formBean.getRegions().length; x++) {
+				Iterator i = allRegions.iterator();
+				while (i.hasNext()) {
+					AmpRegion element = (AmpRegion) i.next();
+					if (element.getName().equals(formBean.getRegions()[x]))
+						regions.add(element.getName());
+				}
+			}
+			anf.setRegions(regions);
 		}
 		
-		
-		
 		anf.setAmpTeams(teams);
-		
-		if (!"reset".equals(request.getParameter("view"))) {
-		anf.setAmpCurrencyCode(ampCurrencyCode);
-		anf.setAmpModalityId(ampModalityId);
-		anf.setAmpOrgId(ampOrgId);
-		
-		
-anf.setAmpStatusId(ampStatusId);
+		anf.setPerspectiveCode(formBean.getPerspectiveFilter());
 
-		//anf.setCloseDay(closeDay);
-		//anf.setCloseMonth(closeMonth);
-		//anf.setCloseYear(closeYear);
+		if (!"reset".equals(request.getParameter("view"))) {
+			anf.setAmpCurrencyCode(ampCurrencyCode);
+			anf.setAmpModalityId(ampModalityId);
+			// anf.setAmpOrgId(ampOrgId);
+
+			anf.setCalendarType(new Integer(formBean.getFiscalCalId()));
+
+			anf.setFromYear(fromYr == 0 ? null : new Integer(fromYr));
+			anf.setToYear(toYr == 0 ? null : new Integer(toYr));
+			
+
+			// perform ethiopian to gregorian year conversion
+
 		
-		//anf.setStartDay(startDay);
-		//anf.setStartMonth(startMonth);
-		//anf.setStartYear(startYear);
-		
-		anf.setFromYear(fromYr==0?null:new Integer(fromYr));
-		anf.setToYear(toYr==0?null:new Integer(toYr));
-		
-		
-		anf.setRegion(formBean.getAmpLocationId());
 		}
 
 		anf.generateFilterQuery();
@@ -508,40 +592,95 @@ anf.setAmpStatusId(ampStatusId);
 		return anf;
 	}
 
+	public static double getExchange(String currency, java.sql.Date currencyDate) {
+		Connection conn = null;
+		double ret = 1;
 
-	public static boolean containsMeasure(String measureName,Set measures) {
-		Iterator i=measures.iterator();
+		// we try the digi cache:
+		ObjectCache ratesCache = DigiCacheManager.getInstance().getCache(
+				"EXCHANGE_RATES_CACHE");
+
+		Double cacheRet = (Double) ratesCache.get(new String(currency
+				+ currencyDate));
+		if (cacheRet != null)
+			return cacheRet.doubleValue();
+
+		try {
+			conn = PersistenceManager.getSession().connection();
+		} catch (HibernateException e) {
+			logger.error(e);
+			e.printStackTrace();
+		} catch (SQLException e) {
+			logger.error(e);
+			e.printStackTrace();
+		}
+
+		String query = "SELECT getExchange(?,?)";
+		PreparedStatement ps;
+		try {
+			ps = conn.prepareStatement(query);
+			ps.setString(1, currency);
+			ps.setDate(2, currencyDate);
+
+			ResultSet rs = ps.executeQuery();
+
+			if (rs.next())
+				ret = rs.getDouble(1);
+
+			rs.close();
+
+		} catch (SQLException e) {
+			logger.error("Unable to get exchange rate for currencty "
+					+ currency + " for the date " + currencyDate);
+			logger.error(e);
+			e.printStackTrace();
+		}
+		logger.info("rate for " + currency + " to USD on " + currencyDate
+				+ " is " + ret);
+		if (ret != 1)
+			ratesCache
+					.put(new String(currency + currencyDate), new Double(ret));
+
+		return ret;
+
+	}
+
+	public static boolean containsMeasure(String measureName, Set measures) {
+		Iterator i = measures.iterator();
 		while (i.hasNext()) {
 			AmpMeasures element = (AmpMeasures) i.next();
-			if(element.getMeasureName().indexOf(measureName)!=-1) return true;
+			if (element.getMeasureName().indexOf(measureName) != -1)
+				return true;
 		}
 		return false;
 	}
-	
-	
+
 	public static List createOrderedHierarchies(Collection columns) {
-		List orderedColumns=new ArrayList(columns.size());
-		for(int x=0;x<columns.size();x++) {
-			Iterator i=columns.iterator();
+		List orderedColumns = new ArrayList(columns.size());
+		for (int x = 0; x < columns.size(); x++) {
+			Iterator i = columns.iterator();
 			while (i.hasNext()) {
 				AmpReportHierarchy element = (AmpReportHierarchy) i.next();
-				int order= Integer.parseInt(element.getLevelId());
-				if(order-1==x) orderedColumns.add(element); 				
+				int order = Integer.parseInt(element.getLevelId());
+				if (order - 1 == x)
+					orderedColumns.add(element);
 			}
 		}
 		return orderedColumns;
 	}
-	
+
 	public static List createOrderedColumns(Collection columns) {
-		List orderedColumns=new ArrayList(columns.size());
-		for(int x=0;x<columns.size();x++) {
-			Iterator i=columns.iterator();
+		List orderedColumns = new ArrayList(columns.size());
+		for (int x = 0; x < columns.size(); x++) {
+			Iterator i = columns.iterator();
 			while (i.hasNext()) {
 				AmpReportColumn element = (AmpReportColumn) i.next();
-				int order= Integer.parseInt(element.getOrderId());
-				if(order-1==x) orderedColumns.add(element); 				
+				int order = Integer.parseInt(element.getOrderId());
+				if (order - 1 == x)
+					orderedColumns.add(element);
 			}
 		}
 		return orderedColumns;
 	}
+
 }

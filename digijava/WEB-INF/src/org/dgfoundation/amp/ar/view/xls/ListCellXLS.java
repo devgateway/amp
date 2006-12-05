@@ -12,10 +12,10 @@ import java.util.List;
 import org.apache.poi.hssf.usermodel.HSSFCell;
 import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.dgfoundation.amp.ar.Exporter;
 import org.dgfoundation.amp.ar.Viewable;
 import org.dgfoundation.amp.ar.cell.Cell;
-import org.dgfoundation.amp.ar.cell.DateCell;
 import org.dgfoundation.amp.ar.cell.ListCell;
 
 /**
@@ -43,9 +43,9 @@ public class ListCellXLS extends XLSExporter {
 	 * @param ownerId
 	 * @param item
 	 */
-	public ListCellXLS(HSSFSheet sheet, HSSFRow row, IntWrapper rowId,
+	public ListCellXLS(HSSFWorkbook wb ,HSSFSheet sheet, HSSFRow row, IntWrapper rowId,
 			IntWrapper colId, Long ownerId, Viewable item) {
-		super(sheet, row, rowId, colId, ownerId, item);
+		super(wb, sheet, row, rowId, colId, ownerId, item);
 		// TODO Auto-generated constructor stub
 	}
 
@@ -55,16 +55,16 @@ public class ListCellXLS extends XLSExporter {
 	public void generate() {
 		ListCell lc=(ListCell) item;
 		List items=(List) lc.getValue();
-		String res="";
+		String res=" - ";
 		
 		Iterator i=items.iterator();		
 		while (i.hasNext()) {
 			Cell element = (Cell) i.next();
 			res+=element.toString();
-			if(i.hasNext())res+=", ";
+			if(i.hasNext())res+="\n - ";
 		}
 		
-		HSSFCell cell=row.createCell(colId.shortValue());
+		HSSFCell cell=this.getRegularCell();
 		cell.setCellValue(res);
 		colId.inc();
 	}

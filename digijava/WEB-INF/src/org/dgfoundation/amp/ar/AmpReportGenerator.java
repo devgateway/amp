@@ -18,7 +18,6 @@ import org.dgfoundation.amp.ar.exception.IncompatibleColumnException;
 import org.dgfoundation.amp.ar.exception.UnidentifiedItemException;
 import org.dgfoundation.amp.ar.workers.ColumnWorker;
 import org.digijava.module.aim.dbentity.AmpColumns;
-import org.digijava.module.aim.dbentity.AmpMeasure;
 import org.digijava.module.aim.dbentity.AmpReportColumn;
 import org.digijava.module.aim.dbentity.AmpReportHierarchy;
 import org.digijava.module.aim.dbentity.AmpReports;
@@ -76,7 +75,7 @@ public class AmpReportGenerator extends ReportGenerator {
 				AmpReportColumn element = (AmpReportColumn) i.next();
 				if (element.getColumn().getColumnName().equals(
 						"Type Of Assistance")) {
-					ret.add("Terms of Assistance");
+					ret.add(ArConstants.TERMS_OF_ASSISTANCE);
 					break;
 				}
 			}
@@ -239,7 +238,7 @@ public class AmpReportGenerator extends ReportGenerator {
 		AmountCellColumn funding = (AmountCellColumn) rawColumns
 				.getColumn("Funding");
 
-		Column newcol = GroupColumn.verticalSplitByCategs(funding, cats, true);
+		Column newcol = GroupColumn.verticalSplitByCategs(funding, cats, true,this.reportMetadata);
 
 		// we create the cummulative balance (undisbursed) = act commitment -
 		// act disbursement
@@ -298,7 +297,6 @@ public class AmpReportGenerator extends ReportGenerator {
 		// perform postprocessing - cell grouping and other tasks
 		report.postProcess();
 		
-		
 
 	}
 
@@ -341,7 +339,7 @@ public class AmpReportGenerator extends ReportGenerator {
 			CellColumn src = (CellColumn) rawColumns.getColumn(colName);
 			if (cats.size() != 0) {
 				Column newcol = GroupColumn.verticalSplitByCategs(src, cats,
-						true);
+						true,reportMetadata);
 				rawColumns.replaceColumn(colName, newcol);
 			}
 		}

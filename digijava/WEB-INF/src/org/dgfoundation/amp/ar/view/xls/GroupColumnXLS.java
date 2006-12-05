@@ -10,6 +10,7 @@ import java.util.Iterator;
 
 import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.dgfoundation.amp.ar.Column;
 import org.dgfoundation.amp.ar.Exporter;
 import org.dgfoundation.amp.ar.GroupColumn;
@@ -40,9 +41,9 @@ public class GroupColumnXLS extends XLSExporter {
 	 * @param ownerId
 	 * @param item
 	 */
-	public GroupColumnXLS(HSSFSheet sheet, HSSFRow row, IntWrapper rowId,
+	public GroupColumnXLS(HSSFWorkbook wb ,HSSFSheet sheet, HSSFRow row, IntWrapper rowId,
 			IntWrapper colId, Long ownerId, Viewable item) {
-		super(sheet, row, rowId, colId, ownerId, item);
+		super(wb, sheet, row, rowId, colId, ownerId, item);
 		// TODO Auto-generated constructor stub
 	}
 

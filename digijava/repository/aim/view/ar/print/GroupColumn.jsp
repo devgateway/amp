@@ -6,8 +6,8 @@
 <bean:define id="ownerId" name="ownerId" type="java.lang.Long" scope="request" toScope="page"/>
 
 <% if(groupColumn.getVisibleCellCount(ownerId)!=0){ %>
-<table width="590" border="1" bordercolor="#808080" cellspacing=1
-	cellpadding=1 valign=top align=left style="border-collapse: collapse">
+<table width="100%" border="1" bordercolor="#B0B0B0" cellspacing=0
+	cellpadding=0 valign=top align=left style="border-collapse: collapse">
 <tr><td rowspan='<bean:write name="groupColumn" property="rowSpan"/>'> 
 <b><bean:write name="groupColumn" property="name"/></b>
 </td></tr>

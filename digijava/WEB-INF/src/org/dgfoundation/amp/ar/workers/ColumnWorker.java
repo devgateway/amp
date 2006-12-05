@@ -118,7 +118,7 @@ public abstract class ColumnWorker {
 			while (rs.next()) {
 				Cell c=getCellFromRow(rs);
 				//logger.info("Added cell for ownerId="+c.getOwnerId());
-				cc.addCell(c);				
+				if(c!=null) cc.addCell(c);				
 			}
 			
 			rs.close();

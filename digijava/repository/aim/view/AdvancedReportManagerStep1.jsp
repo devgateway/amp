@@ -286,6 +286,7 @@ function checkUncheckAll2() {
 
 																						<c:if test="${aimAdvancedReportForm.arReportType == 'regional' || aimAdvancedReportForm.arReportType == 'component'}">
 																						<logic:iterate name="aimAdvancedReportForm" id="ampColumns"	property="ampColumns" >
+																						<logic:notEqual name="ampColumns" property="columnId" value="5">
 
 																						<tr bgcolor="#ffffff">
 																							<td align="left" width="98%" valign=top>
@@ -298,6 +299,7 @@ function checkUncheckAll2() {
 																							</td>
 																						</tr>
 																						
+																						</logic:notEqual>
 																						</logic:iterate>
 																						</c:if>
 																					

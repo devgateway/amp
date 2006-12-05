@@ -66,7 +66,7 @@ public class CSVExportAction extends Action {
 
 		HSSFRow row = sheet.createRow(rowId.intValue());
 
-		GroupReportDataXLS grdx = new GroupReportDataXLS(sheet, row, rowId,
+		GroupReportDataXLS grdx = new GroupReportDataXLS(wb,sheet, row, rowId,
 				colId, null, rd);
 
 		grdx.setMetadata(r);
@@ -85,6 +85,9 @@ public class CSVExportAction extends Action {
 		row=sheet.createRow(rowId.shortValue());
 		cell=row.createCell(colId.shortValue());
 		cell.setCellValue("Report Name: "+r.getName());
+		
+		
+		
 		grdx.makeColSpan(rd.getTotalDepth());
 		rowId.inc();
 		colId.reset();
@@ -108,7 +111,8 @@ public class CSVExportAction extends Action {
 			for(short ii=crow.getFirstCellNum();ii<=crow.getLastCellNum();ii++){
 				HSSFCell ccell = crow.getCell(ii);
 				String s="";
-				if(ccell!=null) s=ccell.getStringCellValue();
+				if(ccell!=null) if(ccell.getCellType()==HSSFCell.CELL_TYPE_NUMERIC) s=Double.toString(ccell.getNumericCellValue());
+				else s=ccell.getStringCellValue();
 				sb.append("\"").append(s).append("\"");
 				if (ii<crow.getLastCellNum())
 					sb.append(",");

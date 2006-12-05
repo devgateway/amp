@@ -7,6 +7,7 @@
 package org.digijava.module.digifeed.core;
 
 import java.io.BufferedOutputStream;
+import java.io.InputStream;
 import java.io.OutputStream;
 
 import javax.xml.bind.JAXBContext;
@@ -32,5 +33,9 @@ public class FeedGenerator
 		Marshaller m=jx.createMarshaller();
 		m.setProperty(Marshaller.JAXB_ENCODING,feedInfo.getEncoding());
 		m.marshal(tree,new BufferedOutputStream(ret));
+	}
+	
+	public void generateDBObjects(InputStream s) throws JAXBException {
+		
 	}
 }

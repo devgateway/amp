@@ -7,13 +7,13 @@ import org.apache.log4j.Logger ;
 
 public class EthiopianCalendar 
 {
-	int ethMonth ; 
-	int ethDay ; 
+	public int ethMonth ; 
+	public int ethDay ; 
 	public int ethYear ; 
 	public int ethQtr;
 	public int ethFiscalYear = 0 ;
 	public int ethFiscalQrt = 0;
-	String ethMonthName="";
+	public String ethMonthName="";
 	
 	public static Logger logger = Logger.getLogger(EthiopianCalendar.class) ;
 	

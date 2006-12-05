@@ -20,6 +20,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Properties;
+import java.util.zip.GZIPOutputStream;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -179,6 +180,14 @@ public FeedControl() {
 	}
 
 	
+	public static boolean isGZipped(Map params) throws UninitializedDigifeedException {
+		String[] feedid=(String[])params.get("feed");
+		
+		FeedAccess fa = getFeedAccess(feedid[0]);
+		return fa.getInfo().isGzip();
+	}
+	
+
 	
 	/**
 	 * Generates XML output based on the request parameter map
@@ -190,14 +199,14 @@ public FeedControl() {
 		
 		
 		try {
-			OutputStream out=response.getOutputStream();
-				
+			OutputStream normalOut=response.getOutputStream();
+			
 			
 			//first get the feedaccess object for the requested feed:
 
 			
 			if (!params.containsKey("feed")) {
-				errorResponse(out,
+				errorResponse(normalOut,
 						"Please specify the feed id! (parameter 'feed')");
 				return;
 			}
@@ -206,11 +215,18 @@ public FeedControl() {
 			
 				FeedAccess fa = getFeedAccess(feedid[0]);
 			if (fa == null) {
-				errorResponse(out, "Unknown feed id! ");
+				errorResponse(normalOut, "Unknown feed id! ");
 				return;
 			}
 			
+			
 			//we now have a feed access, let's generate the request object
+			GZIPOutputStream gzout=new GZIPOutputStream(normalOut);
+			
+			OutputStream out=null;
+			
+			if(fa.getInfo().isGzip()) out=gzout;else out=normalOut; 
+			
 			GenericFeedRequest freq=(GenericFeedRequest)fa.getSampleRequest().clone();
 			freq.initialize(params);
 			logger.info("freq.maxblock="+freq.getMaxBlockSize());

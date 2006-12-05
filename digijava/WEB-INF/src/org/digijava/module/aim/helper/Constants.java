@@ -214,4 +214,6 @@ public class Constants
 	
 	public static final String DESKTOP_PG_CODE = "DTP";
 	public static final String FINANCIAL_PG_CODE = "FP";
+	
+	
 }	

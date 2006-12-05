@@ -30,11 +30,20 @@ public class DigifeedExportAction extends Action	 {
                                  javax.servlet.http.HttpServletResponse
                                  response) throws java.lang.Exception {
 		
-	
-		Map params=request.getParameterMap();		
-		response.setContentType("text/xml");
+		Map params=request.getParameterMap();
+		String contentType="text/xml";
+		String fileName="output.xml";
+		if(FeedControl.isGZipped(params)) {
+			fileName+=".gz";
+			contentType="application/x-gzip";
+		}
+			
+		
+		
+		response.setContentType(contentType);
 		response.setHeader("Content-Disposition",
-        "inline; filename=output.xml");
+        "inline; filename="+fileName);
+		
 		
 		
 		FeedControl.fetchXML(params, request, response);

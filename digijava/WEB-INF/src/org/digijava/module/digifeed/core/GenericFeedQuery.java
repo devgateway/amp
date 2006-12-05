@@ -6,7 +6,9 @@
  */
 package org.digijava.module.digifeed.core;
 
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.log4j.Logger;
 
@@ -46,6 +48,17 @@ public abstract class GenericFeedQuery implements Cloneable {
 		if (r.isCount()) return count(r); else return select(r);
 	}
 	
+	public void persist(List l,Map metadata) {
+		Iterator i=l.iterator();
+		while (i.hasNext()) {
+			Object element = (Object) i.next();
+			saveObject(element,metadata);
+		}
+	}
+	
+	
+	public abstract void saveObject(Object o,Map metadata);
+
 	
 	/**
 	 * @return Returns the last.

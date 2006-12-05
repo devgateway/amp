@@ -24,10 +24,10 @@ public class DeleteAllReports extends Action {
 							HttpServletResponse response) throws java.lang.Exception {
 
 		  	HttpSession session = request.getSession();
-		  	logger.info("In delete reports11111111");
+		  	//logger.info("In delete reports11111111");
 		  	boolean lead = false;
 				if (session.getAttribute("teamLeadFlag") == null) {
-					logger.info("NOOOOOO not  a team Lead!");
+					logger.info("not a team Lead!");
 					//return mapping.findForward("forward");
 				} else {
 					String str = (String)session.getAttribute("teamLeadFlag");

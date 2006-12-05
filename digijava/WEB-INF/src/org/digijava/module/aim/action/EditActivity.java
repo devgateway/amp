@@ -28,6 +28,8 @@ import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
+import org.dgfoundation.amp.ar.ARUtil;
+import org.dgfoundation.amp.ar.ArConstants;
 import org.digijava.kernel.dbentity.Country;
 import org.digijava.kernel.request.Site;
 import org.digijava.kernel.user.User;
@@ -104,7 +106,7 @@ public class EditActivity extends Action {
 			return mapping.findForward("index");
 		EditActivityForm eaForm = (EditActivityForm) form; // form bean instance
 		Long activityId = eaForm.getActivityId();
-		
+				
 		String errorMsgKey = "";
 		if (!mapping.getPath().trim().endsWith("viewActivityPreview")) { 
 			if (!("Team".equalsIgnoreCase(tm.getTeamAccessType()))) {
@@ -114,6 +116,21 @@ public class EditActivity extends Action {
 			}
 		}
 		
+		if (errorMsgKey.trim().length() > 0) {
+			errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
+					errorMsgKey));
+			saveErrors(request, errors);
+
+			String url = "/aim/viewChannelOverview.do?ampActivityId="
+				+ activityId + "&tabIndex=0";
+			RequestDispatcher rd = getServlet().getServletContext()
+				.getRequestDispatcher(url);
+			rd.forward(request, response);							
+		}
+						errorMsgKey = "error.aim.editActivity.userPartOfManagementTeam";
+			} else if (tm.getWrite() == false) {
+				errorMsgKey = "error.aim.editActivity.noWritePermissionForUser";
+
 		if (errorMsgKey.trim().length() > 0) {
 			errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
 					errorMsgKey));
@@ -695,9 +712,22 @@ public class EditActivity extends Action {
 					ArrayList regFunds = new ArrayList();
 					Iterator rItr = activity.getRegionalFundings().iterator();
 
+					eaForm.setRegionTotalDisb(0);
 					while (rItr.hasNext()) {
 						AmpRegionalFunding ampRegFund = (AmpRegionalFunding) rItr
 								.next();
+						
+						double disb=0;
+						if( ampRegFund.getAdjustmentType().intValue()==1 && ampRegFund.getTransactionType().intValue()==1) disb=ampRegFund.getTransactionAmount().doubleValue();
+						//if(!ampCompFund.getCurrency().getCurrencyCode().equals("USD")) {
+							//double toRate=1;
+							
+						//	disb/=ARUtil.getExchange(ampCompFund.getCurrency().getCurrencyCode(),new java.sql.Date(ampCompFund.getTransactionDate().getTime()));
+						//}
+						eaForm.setRegionTotalDisb(eaForm.getRegionTotalDisb()+disb);
+
+						
+						
 						FundingDetail fd = new FundingDetail();
 						fd.setAdjustmentType(ampRegFund.getAdjustmentType()
 								.intValue());
@@ -782,7 +812,7 @@ public class EditActivity extends Action {
 					eaForm.setRegionalFundings(regFunds);
 
 					eaForm.setSelectedComponents(null);
-
+					eaForm.setCompTotalDisb(0);
 					Collection componets = activity.getComponents();
 					if (componets != null && componets.size() > 0) {
 						ArrayList comp = new ArrayList();
@@ -803,6 +833,15 @@ public class EditActivity extends Action {
 							while (cItr.hasNext()) {
 								AmpComponentFunding ampCompFund = (AmpComponentFunding) cItr
 										.next();
+								
+								double disb=0;
+								if( ampCompFund.getAdjustmentType().intValue()==1 && ampCompFund.getTransactionType().intValue()==1) disb=ampCompFund.getTransactionAmount().doubleValue();
+								//if(!ampCompFund.getCurrency().getCurrencyCode().equals("USD")) {
+									//double toRate=1;
+									
+								//	disb/=ARUtil.getExchange(ampCompFund.getCurrency().getCurrencyCode(),new java.sql.Date(ampCompFund.getTransactionDate().getTime()));
+								//}
+								eaForm.setCompTotalDisb(eaForm.getCompTotalDisb()+disb);
 								FundingDetail fd = new FundingDetail();
 								fd.setAdjustmentType(ampCompFund
 										.getAdjustmentType().intValue());

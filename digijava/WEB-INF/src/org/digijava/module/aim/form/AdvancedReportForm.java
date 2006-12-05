@@ -23,7 +23,11 @@ public class AdvancedReportForm extends ActionForm
 	}
 
 	
-	
+	private String pdfPageSize=null;
+	private long donors[];
+	private long statuses[];
+	private long sectors[];
+	private String regions[];
 	private Boolean hideActivities = null;
 	private Collection ampMeasures = null; // Contains the avaliable measures from Database
 	private Collection ampColumns = null; // Contains the columns got from the DB
@@ -1338,6 +1342,66 @@ private int yrDiff;
 	}
 	public void setRisks(Collection risks) {
 		this.risks = risks;
+	}
+	/**
+	 * @return Returns the donors.
+	 */
+	public long[] getDonors() {
+		return donors;
+	}
+	/**
+	 * @param donors The donors to set.
+	 */
+	public void setDonors(long[] donors) {
+		this.donors = donors;
+	}
+	/**
+	 * @return Returns the sectors.
+	 */
+	public long[] getSectors() {
+		return sectors;
+	}
+	/**
+	 * @param sectors The sectors to set.
+	 */
+	public void setSectors(long[] sectors) {
+		this.sectors = sectors;
+	}
+	/**
+	 * @return Returns the statuses.
+	 */
+	public long[] getStatuses() {
+		return statuses;
+	}
+	/**
+	 * @param statuses The statuses to set.
+	 */
+	public void setStatuses(long[] statuses) {
+		this.statuses = statuses;
+	}
+	/**
+	 * @return Returns the regions.
+	 */
+	public String[] getRegions() {
+		return regions;
+	}
+	/**
+	 * @param regions The regions to set.
+	 */
+	public void setRegions(String[] regions) {
+		this.regions = regions;
+	}
+	/**
+	 * @return Returns the pdfPageSize.
+	 */
+	public String getPdfPageSize() {
+		return pdfPageSize;
+	}
+	/**
+	 * @param pdfPageSize The pdfPageSize to set.
+	 */
+	public void setPdfPageSize(String pdfPageSize) {
+		this.pdfPageSize = pdfPageSize;
 	}
 } //		End of Class
 

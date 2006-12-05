@@ -25,6 +25,8 @@ import org.dgfoundation.amp.ar.workers.ColumnWorker;
  */
 public abstract class Column extends Viewable implements ColumnIdentifiable {
 	
+	protected int maxNameDisplayLength=0;
+	
 	protected int spanCount = 0;
 
 	protected List items;
@@ -33,8 +35,7 @@ public abstract class Column extends Viewable implements ColumnIdentifiable {
 
 	protected int rowSpan;
 	
-	protected boolean visible;
-
+	
 	protected String contentCategory;
 	
 	protected int currentDepth = 0;
@@ -180,7 +181,10 @@ public abstract class Column extends Viewable implements ColumnIdentifiable {
 	 * @return Returns the name.
 	 */
 	public String getName() {
-		return name;
+		if(this.getMaxNameDisplayLength()==0) return name;
+		if(name.length()<this.maxNameDisplayLength)
+		return name; else 
+		return name.substring(0,maxNameDisplayLength);
 	}
 
 	/**
@@ -300,7 +304,7 @@ public abstract class Column extends Viewable implements ColumnIdentifiable {
 	 * @return the complete column name as seen in the header
 	 */
 	public String getAbsoluteColumnName(){
-		if (parent!=null && parent instanceof Column) return ((Column)parent).getAbsoluteColumnName()+" -- "+ this.name;
+		if (parent!=null && parent instanceof Column) return ((Column)parent).getAbsoluteColumnName()+"--"+ this.name;
 		else return this.name;
 	}
 
@@ -314,36 +318,29 @@ public abstract class Column extends Viewable implements ColumnIdentifiable {
 	}
 
 	
-	
-	/**
-	 * 
-	 * @param measures
-	 * @param category
-	 */
-	public void applyVisibility(Set measures,String category) {
-		if(!category.equals(this.contentCategory)) {visible=true;return;}
-		if(!ARUtil.containsMeasure(name,measures)) visible=false;else visible=true; 
-	}
-
-	/**
-	 * @return Returns the visible.
-	 */
-	public boolean isVisible() {
-		return visible;
-	}
-
-	/**
-	 * @param visible The visible to set.
-	 */
-	public void setVisible(boolean visible) {
-		this.visible = visible;
-	}
-
 	/**
 	 * @return Returns the contentCategory.
 	 */
 	public String getContentCategory() {
 		return contentCategory;
 	}
+
+	/**
+	 * @return Returns the maxNameDisplayLength.
+	 */
+	public int getMaxNameDisplayLength() {
+		return maxNameDisplayLength;
+	}
+
+	/**
+	 * @param maxNameDisplayLength The maxNameDisplayLength to set.
+	 */
+	public void setMaxNameDisplayLength(int maxNameDisplayLength) {
+		this.maxNameDisplayLength = maxNameDisplayLength;
+	}
 	
+
+	
+
 }
+

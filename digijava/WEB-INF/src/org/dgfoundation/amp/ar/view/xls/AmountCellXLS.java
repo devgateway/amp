@@ -7,8 +7,10 @@
 package org.dgfoundation.amp.ar.view.xls;
 
 import org.apache.poi.hssf.usermodel.HSSFCell;
+import org.apache.poi.hssf.usermodel.HSSFFont;
 import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.dgfoundation.amp.ar.Exporter;
 import org.dgfoundation.amp.ar.Viewable;
 import org.dgfoundation.amp.ar.cell.AmountCell;
@@ -21,7 +23,8 @@ import org.dgfoundation.amp.ar.cell.AmountCell;
  */
 public class AmountCellXLS extends XLSExporter {
 
-	/**
+	
+	/**	
 	 * @param parent
 	 * @param item
 	 */
@@ -38,9 +41,9 @@ public class AmountCellXLS extends XLSExporter {
 	 * @param ownerId
 	 * @param item
 	 */
-	public AmountCellXLS(HSSFSheet sheet, HSSFRow row, IntWrapper rowId,
+	public AmountCellXLS(HSSFWorkbook wb ,HSSFSheet sheet, HSSFRow row, IntWrapper rowId,
 			IntWrapper colId, Long ownerId, Viewable item) {
-		super(sheet, row, rowId, colId, ownerId, item);
+		super(wb, sheet, row, rowId, colId, ownerId, item);
 		// TODO Auto-generated constructor stub
 	}
 
@@ -49,8 +52,11 @@ public class AmountCellXLS extends XLSExporter {
 	 */
 	public void generate() {
 		AmountCell ac=(AmountCell) item;
-		HSSFCell cell=row.createCell(colId.shortValue());
-		cell.setCellValue(ac.toString());
+		HSSFCell cell=this.getCell(getAmountStyle());
+		
+		cell.setCellType(HSSFCell.CELL_TYPE_NUMERIC);
+	
+		cell.setCellValue(ac.getAmount());
 		colId.inc();
 	}
 

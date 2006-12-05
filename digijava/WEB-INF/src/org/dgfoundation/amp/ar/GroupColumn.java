@@ -13,6 +13,8 @@ import java.util.Set;
 import java.util.TreeSet;
 
 import org.dgfoundation.amp.ar.cell.Cell;
+import org.digijava.module.aim.dbentity.AmpMeasures;
+import org.digijava.module.aim.dbentity.AmpReports;
 
 /**
  * @author Mihai Postelnicu - mpostelnicu@dgfoundation.org Column that is built
@@ -34,18 +36,19 @@ public class GroupColumn extends Column {
 	}
 	
 	public static GroupColumn verticalSplitByCategs(CellColumn src,
-            List categories, boolean generateTotalCols) {
+            List categories, boolean generateTotalCols,AmpReports reportMetadata) {
 		
 		//create the set of unique IDS for all items that need to be categorized:
     	TreeSet ids=new TreeSet();
     	Iterator i=ids.iterator();
     	while (i.hasNext()) {
 			Cell element = (Cell) i.next();
+			if(element.isShow())
 			ids.add(element.getOwnerId());
 		}
     
 		
-		return verticalSplitByCategs(src,categories,ids,generateTotalCols);
+		return verticalSplitByCategs(src,categories,ids,generateTotalCols, reportMetadata);
 	}
 	
 	/**
@@ -60,13 +63,13 @@ public class GroupColumn extends Column {
 	 * @see MetaInfo, TotalAmountColumn, CategAmountCell
 	 */
     private static GroupColumn verticalSplitByCategs(Column src,
-            List categories, Set ids,boolean generateTotalCols) {
+            List categories, Set ids,boolean generateTotalCols,AmpReports reportMetadata) {
         String cat = (String) categories.remove(0);
         if (categories.size() > 0)
             return verticalSplitByCategs(verticalSplitByCateg(src, cat,ids,
-                    false), categories, ids, generateTotalCols);
+                    false,reportMetadata), categories, ids, generateTotalCols,reportMetadata);
         else
-            return verticalSplitByCateg(src, cat, ids, generateTotalCols);
+            return verticalSplitByCateg(src, cat, ids, generateTotalCols, reportMetadata);
     }
 
     /**
@@ -79,15 +82,15 @@ public class GroupColumn extends Column {
      * @see verticalSplitByCategs
      */
     private static GroupColumn verticalSplitByCateg(Column src, 
-            String category,Set ids, boolean generateTotalCols) {    
-    	if(src instanceof CellColumn || src instanceof AmountCellColumn) return verticalSplitByCateg((CellColumn)src,category,ids,generateTotalCols);
+            String category,Set ids, boolean generateTotalCols,AmpReports reportMetadata) {    
+    	if(src instanceof CellColumn || src instanceof AmountCellColumn) return verticalSplitByCateg((CellColumn)src,category,ids,generateTotalCols,reportMetadata);
     	else {
     		GroupColumn srcG=(GroupColumn) src;
     		GroupColumn dest=new GroupColumn(src);
     		Iterator i=srcG.iterator();
     		while (i.hasNext()) {
 				Column element = (Column) i.next();
-				GroupColumn splitted=verticalSplitByCateg(element,category,ids,generateTotalCols);
+				GroupColumn splitted=verticalSplitByCateg(element,category,ids,generateTotalCols,reportMetadata);
 				splitted.setContentCategory(category);
 				if(splitted!=null) dest.addColumn(splitted); else dest.addColumn(element);
 			}
@@ -104,7 +107,7 @@ public class GroupColumn extends Column {
      * @return a GroupColumn that holds the categorized Data
      */
     private static GroupColumn verticalSplitByCateg(CellColumn src,
-            String category, Set ids, boolean generateTotalCols) {
+            String category, Set ids, boolean generateTotalCols,AmpReports reportMetadata) {
         GroupColumn ret = new GroupColumn(src);
 
         // create a set of unique meta infos
@@ -112,10 +115,43 @@ public class GroupColumn extends Column {
         Iterator i = src.iterator();
         while (i.hasNext()) {
             Categorizable element = (Categorizable) i.next();
+            if(!element.isShow()) continue;
             MetaInfo minfo=element.getMetaInfo(category);
             if(minfo==null) return null;
             metaSet.add(minfo);
         }
+        
+        //TODO: ugly stuff... i have no choice
+        //manually add all quarters
+       if(category.equals(ArConstants.QUARTER)) {
+        	metaSet.add(new MetaInfo(ArConstants.QUARTER,"Q1"));
+        	metaSet.add(new MetaInfo(ArConstants.QUARTER,"Q2"));
+        	metaSet.add(new MetaInfo(ArConstants.QUARTER,"Q3"));
+        	metaSet.add(new MetaInfo(ArConstants.QUARTER,"Q4"));
+        }
+   
+       //manually add at least one term :(
+       
+       if(category.equals(ArConstants.TERMS_OF_ASSISTANCE) && ARUtil.containsMeasure(ArConstants.UNDISBURSED_BALANCE,reportMetadata.getMeasures())) {
+    	   metaSet.add(new MetaInfo(ArConstants.TERMS_OF_ASSISTANCE,"Grant"));
+    	//   metaSet.add(new MetaInfo(ArConstants.TERMS_OF_ASSISTANCE,"Loan"));
+    	//metaSet.add(new MetaInfo(ArConstants.TERMS_OF_ASSISTANCE,"In Kind"));
+       }
+       
+       
+       //manually add measures selected
+       if(category.equals(ArConstants.FUNDING_TYPE)) {
+    	   Set measures=reportMetadata.getMeasures();
+    	   Iterator ii=measures.iterator();
+    	   while (ii.hasNext()) {
+			AmpMeasures element = (AmpMeasures) ii.next();
+			if(element.getMeasureName().equals(ArConstants.UNDISBURSED_BALANCE)) continue;
+			metaSet.add(new MetaInfo(ArConstants.FUNDING_TYPE,new FundingTypeSortedString(element.getMeasureName())));
+		}
+    	   
+       }
+        
+        
 
         // iterate the set and create a subColumn for each of the metainfo
         i = metaSet.iterator();
@@ -388,24 +424,6 @@ public class GroupColumn extends Column {
 	}
 
 	
-	/**
-	 * @see
-	 * @param measures org.dgfoundation.amp.ar.Column#applyVisibility()
-	 * @param category
-	 */
-	public void applyVisibility(Set measures,String category) {
-		super.applyVisibility(measures,category);
-		Iterator i=items.iterator();
-		while (i.hasNext()) {
-			Column element = (Column) i.next();
-			element.applyVisibility(measures,category);
-			if(!element.isVisible()) i.remove();
-			if(element.getItems().size()==0 && element instanceof GroupColumn) i.remove();
-			
-		}
-			
-	}
-
 	public boolean hasTrailCells() {
 		Iterator i=items.iterator();
 		while (i.hasNext()) {

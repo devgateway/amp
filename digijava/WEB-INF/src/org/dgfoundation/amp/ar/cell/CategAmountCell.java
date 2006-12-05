@@ -11,18 +11,37 @@ import java.util.Set;
 
 import org.dgfoundation.amp.ar.Categorizable;
 import org.dgfoundation.amp.ar.MetaInfo;
+import org.dgfoundation.amp.ar.ArConstants;
 import org.dgfoundation.amp.ar.workers.CategAmountColWorker;
 
 /**
  * 
  * @author Mihai Postelnicu - mpostelnicu@dgfoundation.org
- * @since May 30, 2006
- * AmountCell that also holds metadata
+ * @since May 30, 2006 AmountCell that also holds metadata
  */
 public class CategAmountCell extends AmountCell implements Categorizable {
-	
+
 	protected Set metaData;
+
+	/**
+	 * this item is a customized show only for cummulative amounts
+	 */
+	protected boolean cummulativeShow;
 	
+	/**
+	 * @return Returns the cummulativeShow.
+	 */
+	public boolean isCummulativeShow() {
+		return cummulativeShow;
+	}
+
+	/**
+	 * @param cummulativeShow The cummulativeShow to set.
+	 */
+	public void setCummulativeShow(boolean cummulativeShow) {
+		this.cummulativeShow = cummulativeShow;
+	}
+
 	/**
 	 * @return Returns the metaData.
 	 */
@@ -31,36 +50,39 @@ public class CategAmountCell extends AmountCell implements Categorizable {
 	}
 
 	/**
-	 * @param metaData The metaData to set.
+	 * @param metaData
+	 *            The metaData to set.
 	 */
 	public void setMetaData(Set metaData) {
 		this.metaData = metaData;
 	}
 
 	public String getMetaValueString(String category) {
-		MetaInfo mi=getMetaInfo(category);
-		if(mi==null) return null;
-		return (String) mi.getValue();
+		MetaInfo mi = getMetaInfo(category);
+		if (mi == null)
+			return null;
+		return  mi.getValue().toString();
 	}
-	
+
 	public MetaInfo getMetaInfo(String category) {
-		Iterator i=metaData.iterator();
+		Iterator i = metaData.iterator();
 		while (i.hasNext()) {
 			MetaInfo element = (MetaInfo) i.next();
-			if(element.getCategory().equals(category)) return element;
+			if (element.getCategory().equals(category))
+				return element;
 		}
 		return null;
 	}
-	
+
 	public CategAmountCell() {
 		super();
-		metaData=new HashSet();
+		metaData = new HashSet();
 	}
-	
+
 	public Class getWorker() {
 		return CategAmountColWorker.class;
 	}
-	
+
 	/**
 	 * @param ownerId
 	 * @param name
@@ -68,46 +90,64 @@ public class CategAmountCell extends AmountCell implements Categorizable {
 	 */
 	public CategAmountCell(Long id) {
 		super(id);
-		metaData=new HashSet();
+		metaData = new HashSet();
 	}
-
 
 	public void setValue(Object o) {
-		this.amount=((Double) o).doubleValue();
+		this.amount = ((Double) o).doubleValue();
 	}
-	
+
 	public Object getValue() {
 		return new Double(amount);
 	}
 
-
-	/* (non-Javadoc)
+	/*
+	 * (non-Javadoc)
+	 * 
 	 * @see org.dgfoundation.amp.ar.Viewable#getViewArray()
 	 */
 	protected MetaInfo[] getViewArray() {
 		// TODO Auto-generated method stub
 		return null;
 	}
-	
-	
-	public Cell filter(Cell metaCell,Set ids) {
+
+public Cell filter(Cell metaCell,Set ids) {
 		CategAmountCell ret=(CategAmountCell) super.filter(metaCell,ids);
 		if(ret==null) return null;
-		if(metaCell.getColumn().getName().equals("Donor")) {
-				if(!metaCell.getValue().toString().equals(ret.getMetaValueString("Donor")))
+		if(metaCell.getColumn().getName().equals(ArConstants.DONOR)) {
+				if(!metaCell.getValue().toString().equals(ret.getMetaValueString(ArConstants.DONOR)))
 			return null;
 		}
+		if(metaCell.getColumn().getName().equals(ArConstants.REGION)) {
+				if(!metaCell.getValue().toString().equals(ret.getMetaValueString(ArConstants.REGION)))
+			return null;
+		}
+
+		if(metaCell.getColumn().getName().equals("Type Of Assistance")) {
+				if(!metaCell.getValue().toString().equals(ret.getMetaValueString(ArConstants.TERMS_OF_ASSISTANCE)))
+			return null;
+		}
+
+		if(metaCell.getColumn().getName().equals("Component Name")) {
+			if(!metaCell.getValue().toString().equals(ret.getMetaValueString("Component")))
+		return null;
+		}
+		
 		if(ret.getMergedCells().size()>0) 
 			logger.info(ret.getMergedCells());
 		return ret;
-	}
-
-	/* (non-Javadoc)
-	 * @see org.dgfoundation.amp.ar.Categorizable#hasMeta(org.dgfoundation.amp.ar.MetaInfo)
-	 */
+	}	/*
+		 * (non-Javadoc)
+		 * 
+		 * @see org.dgfoundation.amp.ar.Categorizable#hasMeta(org.dgfoundation.amp.ar.MetaInfo)
+		 */
 	public boolean hasMetaInfo(MetaInfo m) {
-		MetaInfo internal=getMetaInfo(m.getCategory());
-		if(internal==null) return false;
-		if(internal.compareTo(m)==0) return true;else return false;
+		MetaInfo internal = getMetaInfo(m.getCategory());
+		if (internal == null)
+			return false;
+		if (internal.compareTo(m) == 0)
+			return true;
+		else
+			return false;
 	}
 }

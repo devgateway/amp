@@ -270,6 +270,8 @@ public class EditActivityForm extends ActionForm implements Serializable{
 	private String componentTitle;
 	private String componentDesc;
 	private String componentAmount;
+	private double compTotalDisb;
+	
 
 	private String currencyCode;
 	private String componentRepDate;
@@ -285,6 +287,7 @@ public class EditActivityForm extends ActionForm implements Serializable{
 	private Long[] selRegFundings;
 	private Collection fundingRegions;
 	private Long fundingRegionId;
+	private double regionTotalDisb;
 
 	private ArrayList issues;
 	private Long[] selIssues;
@@ -3668,7 +3671,7 @@ public class EditActivityForm extends ActionForm implements Serializable{
 	public void setSelectedOrganizationsList(Collection selectedOrganizationsList) {
 		this.selectedOrganizationsList = selectedOrganizationsList;
 	}
-
+	
 	public Collection getOrderedFundingOrganizations() {
 		TreeSet orderedFundingOrganizations=new TreeSet();
 		try{
@@ -3688,6 +3691,36 @@ public class EditActivityForm extends ActionForm implements Serializable{
 
 	public void setOrderedFundingOrganizations(Collection orderedFundingOrganizations) {
 		this.orderedFundingOrganizations = orderedFundingOrganizations;
+	}
+
+	
+	
+	/**
+	 * @return Returns the compTotalDisb.
+	 */
+	public double getCompTotalDisb() {
+		return compTotalDisb;
+	}
+
+	/**
+	 * @param compTotalDisb The compTotalDisb to set.
+	 */
+	public void setCompTotalDisb(double compTotalDisb) {
+		this.compTotalDisb = compTotalDisb;
+	}
+
+	/**
+	 * @return Returns the regionTotalDisb.
+	 */
+	public double getRegionTotalDisb() {
+		return regionTotalDisb;
+	}
+
+	/**
+	 * @param regionTotalDisb The regionTotalDisb to set.
+	 */
+	public void setRegionTotalDisb(double regionTotalDisb) {
+		this.regionTotalDisb = regionTotalDisb;
 	}
 
 }

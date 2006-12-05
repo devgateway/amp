@@ -70,106 +70,91 @@
 			int fcnt = fcount.intValue();
 			System.out.println("FC = " +fcnt);
 		%>              
-      <table border="0" cellspacing="0" cellpadding="2">
-			<tr bgcolor="#c0c0c0" height=30>	
+      <table border="0" cellspacing="0" cellpadding="2" width="100%">
+			<tr bgcolor="#c0c0c0" height=30><td>
 				<logic:equal name="aimAdvancedReportForm" property="filterFlag" value="true">
-					<td>			
+
 						<html:select styleClass="dr-menu" property="perspectiveFilter">
 						<html:option value="DN">Donor View</html:option>
 						<html:option value="MA">MOFED</html:option>
 						</html:select>
-					</td>
 				</logic:equal>
 				<logic:notEmpty name="aimAdvancedReportForm" property="currencyColl">
-					<td>						
 						<html:select property="ampCurrencyCode" styleClass="dr-menu" >
 							<html:optionsCollection name="aimAdvancedReportForm" property="currencyColl" value="currencyCode" label="currencyName"/> 
 						</html:select>
-					</td>
 				</logic:notEmpty>
 
-				<logic:notEmpty name="aimAdvancedReportForm" property="fiscalYears">
-					<td>	 					
+				<logic:notEmpty name="aimAdvancedReportForm" property="fiscalYears">		
 						<html:select property="fiscalCalId" styleClass="dr-menu">
 							<html:optionsCollection name="aimAdvancedReportForm" property="fiscalYears" value="ampFiscalCalId" label="name"/> 
 						</html:select>
-					</td>
 				</logic:notEmpty>
 
-				<logic:notEmpty name="aimAdvancedReportForm" property="ampFromYears">
-					<td>	 					
+				<logic:notEmpty name="aimAdvancedReportForm" property="ampFromYears">		
 						<html:select property="ampFromYear" styleClass="dr-menu">
-							<html:option value="0">All</html:option>
+							<html:option value="0">From Year</html:option>
 							<html:options name="aimAdvancedReportForm" property="ampFromYears" /> 
 						</html:select> 
-					</td>
 	 			</logic:notEmpty>
 
-				<logic:notEmpty name="aimAdvancedReportForm" property="ampToYears">
-					<td>	 					
+				<logic:notEmpty name="aimAdvancedReportForm" property="ampToYears">		
 						<html:select property="ampToYear" styleClass="dr-menu">
-							<html:option value="0">All</html:option>
+							<html:option value="0">To Year</html:option>
 							<html:options name="aimAdvancedReportForm" property="ampToYears" /> 
 						</html:select> 
-					</td>
 	 			</logic:notEmpty>
-
-				<logic:notEmpty name="aimAdvancedReportForm" property="regionColl">
-					<td>						
-						<html:select property="ampLocationId" styleClass="dr-menu" >
-							<option value="All">All Regions</option>
-							<html:optionsCollection name="aimAdvancedReportForm" property="regionColl" value="name" label="name"/> 
-						</html:select>
-					</td>
-				</logic:notEmpty>
-
 				<logic:notEmpty name="aimAdvancedReportForm" property="modalityColl">
-					<td>						
 						<html:select property="ampModalityId" styleClass="dr-menu" >
 							<option value="0">All Financing Instruments</option>
 							<html:optionsCollection name="aimAdvancedReportForm" property="modalityColl" value="ampModalityId" label="name" /> 
 						</html:select>
-					</td>
 		 		</logic:notEmpty>
 
-				<logic:notEmpty name="aimAdvancedReportForm" property="donorColl">
-					<td>						
-						<html:select property="ampOrgId" styleClass="dr-menu" >
-							<option value="0">All Donors</option>
+
+
+				</td></tr>
+				<tr bgcolor="#c0c0c0"><td>
+				<logic:notEmpty name="aimAdvancedReportForm" property="regionColl">		
+						<html:select property="regions" styleClass="dr-menu" multiple="true" size="3">
+							<html:optionsCollection name="aimAdvancedReportForm" property="regionColl" value="name" label="name"/> 
+						</html:select>
+				</logic:notEmpty>
+				
+				<logic:notEmpty name="aimAdvancedReportForm" property="donorColl" >
+						<html:select property="donors" styleClass="dr-menu" multiple="true" size="3">
 							<html:optionsCollection name="aimAdvancedReportForm" property="donorColl" value="ampOrgId" label="acronym"/> 
 						</html:select>
-					</td>
 				</logic:notEmpty>
 
 				<logic:notEmpty name="aimAdvancedReportForm" property="statusColl">
-					<td>						
-						<html:select property="ampStatusId" styleClass="dr-menu" >
-							<option value="0">All Status</option>
+						<html:select property="statuses" styleClass="dr-menu" multiple="true" size="3">
 							<html:optionsCollection name="aimAdvancedReportForm" property="statusColl" value="ampStatusId" label="name"  /> 
 						</html:select>
-					</td>
 				</logic:notEmpty>
 
 				<logic:notEmpty name="aimAdvancedReportForm" property="sectorColl">
-					<td>						
-						<html:select property="ampSectorId" styleClass="dr-menu" >
-							<option value="0">All Sectors</option>
+						<html:select property="sectors" styleClass="dr-menu" multiple="true" size="3">
 							<html:optionsCollection name="aimAdvancedReportForm" property="sectorColl" value="ampSectorId" label="name" /> 
 						</html:select>
-					<td>
 				</logic:notEmpty>
-
-			
+				<logic:notEmpty name="aimAdvancedReportForm" property="pdfPageSize">
+						<html:select property="pdfPageSize" styleClass="dr-menu">
+						<html:option value="default">PDF Page Size</html:option>
+						<html:option value="A4">A4</html:option>
+						<html:option value="A3">A3</html:option>
+						<html:option value="A2">A2</html:option>
+						<html:option value="A1">A1</html:option>						
+						<html:option value="A0">A0</html:option>						
+						</html:select>
+				</logic:notEmpty>
 				<logic:equal name="aimAdvancedReportForm" property="goFlag" value="true">
-					<td>						
 						<input type="button" name="GoButton" value=" GO " class="dr-menu" onclick="submitFilter()">
-					</td>						
-					<td>						
 						<input type="button" name="reset" value="Reset" class="dr-menu" onclick="clearFilter()">
-					</td>						
 
 				</logic:equal>
-          </tr>
+          </td></tr>
+
       	<tr>
       		<td>
       	

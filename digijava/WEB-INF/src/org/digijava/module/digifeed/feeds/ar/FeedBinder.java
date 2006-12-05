@@ -14,12 +14,13 @@ import java.util.Iterator;
 import javax.xml.bind.JAXBException;
 
 import org.apache.log4j.Logger;
-import org.digijava.module.aim.dbentity.AmpColumns;
-import org.digijava.module.aim.dbentity.AmpMeasure;
+import org.digijava.module.aim.dbentity.AmpMeasures;
+import org.digijava.module.aim.dbentity.AmpReportColumn;
 import org.digijava.module.aim.dbentity.AmpReportHierarchy;
 import org.digijava.module.aim.dbentity.AmpReports;
 import org.digijava.module.digifeed.core.GenericFeedBinder;
 import org.digijava.module.digifeed.feeds.ar.schema.MeasureType;
+import org.digijava.module.digifeed.feeds.ar.schema.ColumnType;
 import org.digijava.module.digifeed.feeds.ar.schema.ObjectFactory;
 import org.digijava.module.digifeed.feeds.ar.schema.ReportType;
 import org.digijava.module.digifeed.feeds.ar.schema.Reports;
@@ -53,8 +54,9 @@ public class FeedBinder extends GenericFeedBinder {
 	protected Object createXMLBean(Object dbb) throws JAXBException,
 			ParseException {
 		AmpReports dbr=(AmpReports) dbb;
-		
+				
 		ReportType xmlr=fact.createReportType();
+		xmlr.setId(dbr.getAmpReportId().longValue());
 		xmlr.setName(dbr.getName());
 		xmlr.setDescription(dbr.getReportDescription());
 		xmlr.setHideActivities(dbr.getHideActivities()!=null?dbr.getHideActivities().booleanValue():false);
@@ -63,29 +65,31 @@ public class FeedBinder extends GenericFeedBinder {
 		
 		Iterator i=dbr.getMeasures().iterator();
 		while (i.hasNext()) {
-			AmpMeasure element = (AmpMeasure) i.next();
+			AmpMeasures element = (AmpMeasures) i.next();
 			MeasureType xmlm=fact.createMeasureType();
-			xmlm.setId(BigInteger.valueOf(element.getAmpMeasureId().longValue()));
-			xmlm.setValue(element.getName());
+			xmlm.setId(BigInteger.valueOf(element.getMeasureId().longValue()));
+			xmlm.setValue(element.getMeasureName());
 			xmlr.getMeasure().add(xmlm);
 		}
 		
 		i=dbr.getColumns().iterator();
 		while (i.hasNext()) {
-			AmpColumns element = (AmpColumns) i.next();
-			MeasureType xmlm=fact.createMeasureType();
-			xmlm.setId(BigInteger.valueOf(element.getColumnId().longValue()));
-			xmlm.setValue(element.getColumnName());
+			AmpReportColumn element = (AmpReportColumn) i.next();
+			ColumnType xmlm=fact.createColumnType();
+			xmlm.setOrder(BigInteger.valueOf(Long.parseLong(element.getOrderId())));
+			xmlm.setId(BigInteger.valueOf(element.getColumn().getColumnId().longValue()));
+			xmlm.setValue(element.getColumn().getColumnName());
 			xmlr.getColumn().add(xmlm);
 		}
 				
 		i=dbr.getHierarchies().iterator();
 		while (i.hasNext()) {
 			AmpReportHierarchy element = (AmpReportHierarchy) i.next();
-			MeasureType xmlm=fact.createMeasureType();
+			ColumnType xmlm=fact.createColumnType();
+			xmlm.setOrder(BigInteger.valueOf(Long.parseLong(element.getLevelId())));
 			xmlm.setId(BigInteger.valueOf(element.getColumn().getColumnId().longValue()));
 			xmlm.setValue(element.getColumn().getColumnName());
-			xmlr.getColumn().add(xmlm);
+			xmlr.getHierarchy().add(xmlm);
 		}
 
 		
@@ -102,7 +106,9 @@ public class FeedBinder extends GenericFeedBinder {
 	 */
 
 	protected Object createDBBean(Object xmlb) {
-		// TODO Auto-generated method stub
+		ReportType rt=(ReportType) xmlb;
+		
+		
 		return null;
 	}
 

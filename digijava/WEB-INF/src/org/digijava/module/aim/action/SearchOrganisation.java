@@ -104,7 +104,9 @@ public class SearchOrganisation extends Action {
         OrgProjectId hvOrgs[] = eaForm.getSelectedOrganizations();
 
         Collection newCol = new ArrayList();
-        if(hvOrgs != null) {
+        newCol=col;
+        //i have disabled duplicate org checking because it is buggy (u add orgs in several places and does not check that)
+/*        if(hvOrgs != null) {
             Iterator itr = col.iterator();
             boolean haveOrg=false;
             while(itr.hasNext()) {
@@ -125,6 +127,7 @@ public class SearchOrganisation extends Action {
         }else{
             newCol=col;
         }
+*/
 
 		int stIndex = 1;
 		int edIndex = eaForm.getNumResults();

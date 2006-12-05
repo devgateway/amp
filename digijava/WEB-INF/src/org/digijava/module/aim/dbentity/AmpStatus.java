@@ -2,7 +2,7 @@ package org.digijava.module.aim.dbentity ;
 
 import java.io.Serializable;
 
-public class AmpStatus implements Serializable
+public class AmpStatus implements Serializable, Comparable
 {
 	private Long ampStatusId ;
 	private String statusCode ;
@@ -114,4 +114,15 @@ public class AmpStatus implements Serializable
 		version = string;
 	}
 
+	public int compareTo(Object o) {
+		return this.ampStatusId.compareTo(((AmpStatus)o).getAmpStatusId());
+	}
+	
+	public String toString() {
+		return this.getAmpStatusId().toString();
+	}
+
+
 }	
+
+

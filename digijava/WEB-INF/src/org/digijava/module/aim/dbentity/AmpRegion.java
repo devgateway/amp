@@ -11,7 +11,7 @@ import java.io.Serializable;
 
 import org.digijava.kernel.dbentity.Country;
 
-public class AmpRegion implements Serializable{
+public class AmpRegion implements Serializable, Comparable{
 	private Long ampRegionId;
 	private String name;
 	private String description;
@@ -137,5 +137,9 @@ public class AmpRegion implements Serializable{
 		throw new ClassCastException();
 	}
 
+	public int compareTo(Object o) {
+		return this.ampRegionId.compareTo(((AmpRegion)o).getAmpRegionId());
+	}
+	
 }
  

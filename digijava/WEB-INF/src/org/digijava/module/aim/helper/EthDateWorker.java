@@ -13,6 +13,11 @@ public class EthDateWorker
 	public static String getEthDate(String strDate)
 	{
 		Date date = DateConversion.getDate(strDate) ;
+		return getEthDate(date);
+	}
+	
+	public static String getEthDate(Date date)
+	{
 		EthiopianCalendar ec = new EthiopianCalendar() ;
 		EthiopianCalendar ec1 = null ;
 		GregorianCalendar gc = new GregorianCalendar() ;

@@ -26,6 +26,8 @@ public abstract class ReportData extends Viewable {
 	
 	protected static Logger logger = Logger.getLogger(ReportData.class);
 	
+	protected Boolean globalHeadingsDisplayed;
+	
 	protected String name;
 	
 	protected List trailCells;
@@ -140,6 +142,23 @@ public abstract class ReportData extends Viewable {
 	 */
 	public void setReportMetadata(AmpReports reportMetadata) {
 		this.reportMetadata = reportMetadata;
+	}
+
+	/**
+	 * @return Returns the globalHeadingsDisplayed.
+	 */
+	public Boolean getGlobalHeadingsDisplayed() {
+		if(this.getParent()!=null) return this.getParent().getGlobalHeadingsDisplayed();
+		return this.globalHeadingsDisplayed;
+	}
+
+	/**
+	 * @param globalHeadingsDisplayed The globalHeadingsDisplayed to set.
+	 */
+	public void setGlobalHeadingsDisplayed(Boolean globalHeadingsDisplayed) {
+		if(this.getParent()!=null) this.getParent().setGlobalHeadingsDisplayed(globalHeadingsDisplayed);
+		else
+		this.globalHeadingsDisplayed=globalHeadingsDisplayed;
 	}
 	
 	

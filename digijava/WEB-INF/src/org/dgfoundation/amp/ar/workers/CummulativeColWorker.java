@@ -9,6 +9,8 @@ package org.dgfoundation.amp.ar.workers;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+import org.dgfoundation.amp.ar.AmpARFilter;
+import org.dgfoundation.amp.ar.ArConstants;
 import org.dgfoundation.amp.ar.CellColumn;
 import org.dgfoundation.amp.ar.GroupColumn;
 import org.dgfoundation.amp.ar.ReportGenerator;
@@ -50,6 +52,12 @@ public class CummulativeColWorker extends ColumnWorker {
 		return null;
 	}
 
+	/**
+	 * We show cummulative disbursement UP TO the ToYear selected in the filters (we do not care about FromYear)
+	 * @param src
+	 * @return 
+	 */
+	
 	/* (non-Javadoc)
 	 * @see org.dgfoundation.amp.ar.workers.ColumnWorker#getCellFromCell(org.dgfoundation.amp.ar.cell.Cell)
 	 */ 
@@ -57,10 +65,11 @@ public class CummulativeColWorker extends ColumnWorker {
 		CategAmountCell c=(CategAmountCell) src;
 		
 		String trStr="";
-		if(columnName.equalsIgnoreCase("Cumulative Commitment")) trStr="Commitment";
-		if(columnName.equalsIgnoreCase("Cumulative Disbursement")) trStr="Disbursement";
-	
-		if(c.getMetaInfo("Transaction Type").getValue().equals(trStr) && c.getMetaInfo("Adjustment Type").getValue().equals("Actual")) return src;
+		if(!c.isCummulativeShow() && columnName.equalsIgnoreCase("Cumulative Disbursement")) return null;
+		if(columnName.equalsIgnoreCase("Cumulative Commitment")) trStr=ArConstants.COMMITMENT;
+		if(columnName.equalsIgnoreCase("Cumulative Disbursement")) trStr=ArConstants.DISBURSEMENT;
+			
+		if(c.getMetaInfo(ArConstants.TRANSACTION_TYPE).getValue().equals(trStr) && c.getMetaInfo(ArConstants.ADJUSTMENT_TYPE).getValue().equals(ArConstants.ACTUAL)) return src;
 		else return null;	
 	}
 

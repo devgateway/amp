@@ -46,6 +46,7 @@ public class UndisbursedAmountCell extends AmountCell {
 		Iterator i = mergedCells.iterator();
 		while (i.hasNext()) {
 			CategAmountCell element = (CategAmountCell) i.next();
+			if(!element.isCummulativeShow() && element.getMetaValueString(ArConstants.TRANSACTION_TYPE).equals(ArConstants.DISBURSEMENT)) continue;
 			if(!element.getMetaValueString(ArConstants.ADJUSTMENT_TYPE).equals(ArConstants.ACTUAL)) continue;
 			if(element.getMetaValueString(ArConstants.TRANSACTION_TYPE).equals(ArConstants.COMMITMENT)) ret += element.getAmount();
 			if(element.getMetaValueString(ArConstants.TRANSACTION_TYPE).equals(ArConstants.DISBURSEMENT)) ret -= element.getAmount();

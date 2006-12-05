@@ -10,6 +10,7 @@
 <script language="JavaScript" type="text/javascript">
 	function addPropFunding() {
       var fna=aimEditActivityForm.funAmount.value;
+      var fnd=aimEditActivityForm.funDate.value;
       if(fna==""){
         alert("Please enter amount");
         return false;
@@ -17,7 +18,7 @@
         alert("Invalid amount value");
         return false;
       }
-      if(funDate.value==""){
+      if(fnd==""){
         alert("Please select date");
         return false;
       }

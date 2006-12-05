@@ -173,12 +173,24 @@ public class ProgramUtil {
 
 	public static AmpTheme getTheme(Long ampThemeId) {
 		Session session = null;
+		AmpTheme ampTheme = new AmpTheme();
 		try {
 			session = PersistenceManager.getRequestDBSession();
-            return (AmpTheme)session.load(AmpTheme.class, ampThemeId);
+			ampTheme = (AmpTheme)session.load(AmpTheme.class, ampThemeId); 
 		} catch (Exception e) {
             throw new RuntimeException(e);
 		}
+		finally	{
+			try {
+				if (session != null) {
+					PersistenceManager.releaseSession(session);
+				}
+			}
+			catch (Exception ex) {
+				logger.error("releaseSession() failed");
+			}
+		}
+		return ampTheme;
 	}
 
 	public static Collection getThemeIndicators(Long ampThemeId)

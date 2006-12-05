@@ -304,7 +304,7 @@
 		</action>
 		<action name="aimThemeForm" path="/aim/editTheme" scope="request" type="org.digijava.module.aim.action.EditTheme" validate="false">
 			<forward name="editProgram" path="/showLayout.do?layout=editTheme"/>
-			<forward name="forward" path="/aim/themeManager.do"/>
+			<forward name="forward" path="/aim/themeManager.do" redirect="true"/>
 			<forward name="index" path="/aim/index.do" redirect="true"/>
 		</action>
 		<action name="aimThemeForm" path="/aim/addThemeIndicator" scope="request" type="org.digijava.module.aim.action.AddThemeIndicator" validate="false">

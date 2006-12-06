@@ -126,9 +126,8 @@ public class EditActivity extends Action {
 			RequestDispatcher rd = getServlet().getServletContext()
 				.getRequestDispatcher(url);
 			rd.forward(request, response);							
-		}
 						errorMsgKey = "error.aim.editActivity.userPartOfManagementTeam";
-			} else if (tm.getWrite() == false) {
+			} else if (tm.getWrite() == false) 
 				errorMsgKey = "error.aim.editActivity.noWritePermissionForUser";
 
 		if (errorMsgKey.trim().length() > 0) {
@@ -1127,4 +1126,5 @@ public class EditActivity extends Action {
 
 		return mapping.findForward("forward");
 	}
+	
 }

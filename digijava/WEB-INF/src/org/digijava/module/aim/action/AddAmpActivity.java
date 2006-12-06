@@ -82,6 +82,7 @@ public class AddAmpActivity extends Action {
 
 		EditActivityForm eaForm = (EditActivityForm) form;
 
+    try {
         ProposedProjCost propProjCost=null;
         if(eaForm.getProProjCost()!=null){
             propProjCost=new ProposedProjCost();
@@ -92,8 +93,12 @@ public class AddAmpActivity extends Action {
                 eaForm.setProProjCost(null);
             }
         }
-
-    try {
+        if (eaForm.getProgramCollection() == null) {
+            Collection themes=new ArrayList();
+            themes = ProgramUtil.getAllThemes();
+            themes = CollectionUtils.getFlatHierarchy(themes, true, new HierarchicalDefinition(), new ProgramComparator());
+            eaForm.setProgramCollection(themes);
+        }
 
 		if (!eaForm.isEditAct() || eaForm.isReset()) {
 			eaForm.reset(mapping, request);
@@ -289,14 +294,6 @@ public class AddAmpActivity extends Action {
 				levelCol = eaForm.getLevelCollection();
 			}
 
-			// load all themes
-            Collection themes=new ArrayList();
-            themes = ProgramUtil.getAllThemes();
-            themes = CollectionUtils.getFlatHierarchy(themes, true, new HierarchicalDefinition(), new ProgramComparator());
-            eaForm.setProgramCollection(themes);
-
-			//eaForm.setProgramCollection(ProgramUtil.getAllThemes());
-
 			// load all the active currencies
 			eaForm.setCurrencies(CurrencyUtil.getAmpCurrency());
 
@@ -372,13 +369,6 @@ public class AddAmpActivity extends Action {
 
 			if (eaForm.getLevelCollection() == null) {
 				eaForm.setLevelCollection(DbUtil.getAmpLevels());
-			}
-
-			if (eaForm.getProgramCollection() == null) {
-                Collection themes=new ArrayList();
-                themes = ProgramUtil.getAllThemes();
-                themes = CollectionUtils.getFlatHierarchy(themes, true, new HierarchicalDefinition(), new ProgramComparator());
-                eaForm.setProgramCollection(themes);
 			}
 
 			return mapping.findForward("preview");

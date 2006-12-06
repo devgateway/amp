@@ -383,10 +383,10 @@ function disable() {
 											Objectives</digi:trn>
 										</td>
 										<td bgcolor="#ffffff">
-											<bean:define id="objKey">
-												<c:out value="${aimEditActivityForm.objectives}"/>
-											</bean:define>
-											<digi:edit key="<%=objKey%>"></digi:edit>
+                                          <c:if test="${aimEditActivityForm.objectives!=null}">
+											<c:set var="objKey" value="${aimEditActivityForm.objectives}" />
+											<digi:edit key="${objKey}"></digi:edit>
+                                         </c:if>
 										</td>
 									</tr>
 									<tr>
@@ -395,10 +395,10 @@ function disable() {
 											Description</digi:trn>
 										</td>
 										<td bgcolor="#ffffff">
-											<bean:define id="descKey">
-												<c:out value="${aimEditActivityForm.description}"/>
-											</bean:define>
-											<digi:edit key="<%=descKey%>"></digi:edit>
+                                        <c:if test="${aimEditActivityForm.description!=null}">
+											<c:set var="descKey" value="${aimEditActivityForm.description}" />
+											<digi:edit key="${descKey}"></digi:edit>
+                                            </c:if>
 										</td>
 									</tr>
 									<tr>
@@ -578,12 +578,16 @@ function disable() {
 											<digi:trn key="aim:program">Program</digi:trn>
 										</td>
 										<td bgcolor="#ffffff">
-                                          <c:if test="${!empty aimEditActivityForm.programCollection}">
+                                          <c:if test="${aimEditActivityForm.programCollection!=null}">
+                                            <c:if test="${!empty aimEditActivityForm.programCollection}">
                                               <c:forEach var="tempPgm" items="${aimEditActivityForm.programCollection}">
+                                                <c:if test="${tempPgm.member!=null}">
                                                   <c:if test="${tempPgm.member.ampThemeId == aimEditActivityForm.program}">
                                                     <c:out value="${tempPgm.member.name}"/>
                                                   </c:if>
+                                                </c:if>
                                               </c:forEach>
+                                            </c:if>
                                           </c:if>
 										</td>
 									</tr>

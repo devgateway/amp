@@ -162,20 +162,7 @@
 											</td>
 										</tr>
 										</logic:notEmpty>					
-                              <logic:notEmpty name="PI" scope="application">
-										<tr>
-											<td class=f-names noWrap>
-											<digi:img src="module/aim/images/arrow-th-BABAB9.gif" width="16"/>
-											<bean:define id="translation">
-												<digi:trn key="aim:clickToViewParisIndicatorsManager">Click here to view Indicator Manager</digi:trn>
-											</bean:define>
-											<digi:link href="/parisIndicatorManager.do" title="<%=translation%>" >
-											<digi:trn key="aim:parisIndicatorManager">Paris Indicator Manager</digi:trn>
-											</digi:link>
-											</td>
-										</tr>
-										</logic:notEmpty>
-										<tr>
+                            			<tr>
 											<td class=f-names noWrap>
 											<digi:img src="module/aim/images/arrow-th-BABAB9.gif" width="16"/>
 											<bean:define id="translation">

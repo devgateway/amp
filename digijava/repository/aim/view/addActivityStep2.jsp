@@ -114,10 +114,7 @@ function validateForm() {
 		document.aimEditActivityForm.addSec.focus();
 		return false;
 	}
-	if (!validateSectorPercentage())
-		return false;
-		
-	gotoStep(3);
+	document.aimEditActivityForm.step.value="3";
 	return true;
 }
 

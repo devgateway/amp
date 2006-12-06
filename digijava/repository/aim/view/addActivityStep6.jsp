@@ -14,6 +14,10 @@
 
 <!--
 
+	function validateForm() {
+		return true;
+	}
+
 function validate(field) {
 	if (field == 1) { // validate location
 		if (document.aimEditActivityForm.selDocs.checked != null) {

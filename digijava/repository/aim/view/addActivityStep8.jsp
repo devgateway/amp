@@ -11,6 +11,11 @@
 
 <script language="JavaScript">
 <!--
+
+	function validateForm() {
+		return true;
+	}
+
 function resetAll()
 {
 	<digi:context name="resetAll" property="context/module/moduleinstance/resetAll.do?edit=true" />

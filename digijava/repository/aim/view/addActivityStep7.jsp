@@ -15,6 +15,10 @@
 
 <!--
 
+	function validateForm() {
+		return true;
+	}
+
 function addOrgs(value) {
 		openNewWindow(600, 400);
 		<digi:context name="selectOrganization" property="context/module/moduleinstance/selectOrganization.do~orgSelReset=true" />

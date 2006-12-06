@@ -93,10 +93,9 @@ function validateForm() {
 		document.aimEditActivityForm.status.focus();
 		return false;
 	}
-	gotoStep(2);
+	document.aimEditActivityForm.step.value="2";
 	return true;
 }
-
 function reviseCloseDate() {
 	openNewWindow(600, 150);
 	<digi:context name="rev" property="context/module/moduleinstance/reviseCompDate.do?edit=true" />

@@ -105,6 +105,9 @@
 		return true;
 	}
 
+	function validateForm() {
+		return true;
+	}
 	-->
 
 </script>

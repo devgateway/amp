@@ -47,11 +47,14 @@ function saveClicked() {
 }
 
 function gotoStep(value) {
-	document.aimEditActivityForm.step.value = value;
-	<digi:context name="step" property="context/module/moduleinstance/addActivity.do?edit=true" />
-	document.aimEditActivityForm.action = "<%= step %>";
-	document.aimEditActivityForm.target = "_self";
-	document.aimEditActivityForm.submit();
+	var flag = validateForm();  
+	if (flag == true) {
+		document.aimEditActivityForm.step.value = value;
+		<digi:context name="step" property="context/module/moduleinstance/addActivity.do?edit=true" />
+		document.aimEditActivityForm.action = "<%= step %>";
+		document.aimEditActivityForm.target = "_self";
+		document.aimEditActivityForm.submit();			  
+	}
 }
 
 -->

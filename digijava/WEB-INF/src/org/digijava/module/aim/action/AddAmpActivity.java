@@ -93,12 +93,12 @@ public class AddAmpActivity extends Action {
                 eaForm.setProProjCost(null);
             }
         }
-        if (eaForm.getProgramCollection() == null) {
-            Collection themes=new ArrayList();
-            themes = ProgramUtil.getAllThemes();
-            themes = CollectionUtils.getFlatHierarchy(themes, true, new HierarchicalDefinition(), new ProgramComparator());
-            eaForm.setProgramCollection(themes);
-        }
+
+
+        Collection themes=new ArrayList();
+        themes = ProgramUtil.getAllThemes();
+        themes = CollectionUtils.getFlatHierarchy(themes, true, new HierarchicalDefinition(), new ProgramComparator());
+        eaForm.setProgramCollection(themes);
 
 		if (!eaForm.isEditAct() || eaForm.isReset()) {
 			eaForm.reset(mapping, request);

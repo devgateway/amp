@@ -77,6 +77,7 @@ import org.digijava.kernel.request.Site;
 import org.digijava.module.aim.util.DocumentUtil;
 import org.digijava.kernel.util.RequestUtils;
 import org.digijava.module.aim.form.ProposedProjCost;
+import org.digijava.kernel.util.collections.CollectionUtils;
 
 /**
  * Loads the activity details of the activity specified in the form bean
@@ -1072,8 +1073,8 @@ public class EditActivity extends Action {
 			// load all themes
             Collection themes=new ArrayList();
             themes = ProgramUtil.getAllThemes();
+            themes = CollectionUtils.getFlatHierarchy(themes, true, new HierarchicalDefinition(), new ProgramComparator());
             eaForm.setProgramCollection(themes);
-			//eaForm.setProgramCollection(ProgramUtil.getAllThemes());
 
 			// load all the active currencies
 			eaForm.setCurrencies(CurrencyUtil.getAmpCurrency());

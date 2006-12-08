@@ -13,6 +13,7 @@ import java.util.Iterator;
 import java.util.List;
 import org.digijava.module.calendar.dbentity.AmpEventType;
 import org.apache.struts.action.ActionErrors;
+import java.util.ArrayList;
 
 public class EventTypeAction
     extends DispatchAction {
@@ -53,7 +54,7 @@ public class EventTypeAction
                             HttpServletResponse response) throws
     Exception {
     EventTypeForm eventForm = (EventTypeForm) form;
-    ActionErrors errors = eventForm.validate(mapping, request);
+    ActionErrors errors =eventForm.validate(mapping, request);
 
     if (errors == null || errors.size() == 0) {
         AmpUtil.createEventType(eventForm.getAddName(), eventForm.getAddColor());

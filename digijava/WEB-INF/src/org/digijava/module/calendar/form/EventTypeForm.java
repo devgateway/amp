@@ -8,6 +8,9 @@ import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionMapping;
 import javax.servlet.http.HttpServletRequest;
 import org.apache.struts.action.ActionError;
+import org.digijava.module.calendar.util.AmpDbUtil;
+import java.util.Iterator;
+import java.util.ArrayList;
 
 public class EventTypeForm
     extends ActionForm {
@@ -66,9 +69,32 @@ public class EventTypeForm
                 errors.add(null, new ActionError("error.calendar.invalidEventTypeColor"));
 
             }*/
-
         }
+        try{
+            List eventTypes = new ArrayList(AmpDbUtil.getEventTypes());
+            if(eventTypes != null) {
+                Iterator etItr = eventTypes.iterator();
+                while(etItr.hasNext()) {
+                    AmpEventType et = (AmpEventType) etItr.next();
+                    if(et.getColor().equalsIgnoreCase(getAddColor())) {
+                        errors.add(null, new ActionError("error.calendar.colorAllredyExist"));
+                        break;
+                    }
+                }
+                etItr=null;
 
+                etItr = eventTypes.iterator();
+                while(etItr.hasNext()) {
+                    AmpEventType et = (AmpEventType) etItr.next();
+                    if(et.getName().equalsIgnoreCase(getAddName())) {
+                        errors.add(null, new ActionError("error.calendar.nameAllredyExist"));
+                        break;
+                    }
+                }
+            }
+        }catch(Exception ex){
+            ex.printStackTrace();
+        }
         return errors.isEmpty() ? null : errors;
     }
 }

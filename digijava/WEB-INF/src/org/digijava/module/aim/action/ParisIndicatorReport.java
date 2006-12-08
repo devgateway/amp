@@ -44,8 +44,8 @@ public class ParisIndicatorReport extends Action {
 		TeamMember tm = (TeamMember) request.getSession().getAttribute("currentMember");
 		
 		// if user is not a DONOR then forward him to his portfolio
-		if (!tm.getTeamType().equalsIgnoreCase(Constants.DEF_DNR_PERSPECTIVE)) 
-			return mapping.findForward("viewMyDesktop");
+		//if (!tm.getTeamType().equalsIgnoreCase(Constants.DEF_DNR_PERSPECTIVE)) 
+			//return mapping.findForward("viewMyDesktop");
 		
 		logger.debug("In paris-indicator survey report action");
 		

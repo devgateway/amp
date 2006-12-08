@@ -12,6 +12,11 @@
 
 <script language="JavaScript">
 <!--
+
+	function validateForm() {
+		return true;
+	}
+
 	function resetAll()
 	{
 		<digi:context name="resetAll" property="context/module/moduleinstance/resetAll.do?edit=true" />
@@ -215,7 +220,8 @@
 								<c:if test="${aimEditActivityForm.editAct == true}">
 									<digi:trn key="aim:editActivity">
 										Edit Activity
-									</digi:trn>
+									</digi:trn>:
+										<bean:write name="aimEditActivityForm" property="title"/>
 								</c:if>				
 							</td>
 						</tr>	

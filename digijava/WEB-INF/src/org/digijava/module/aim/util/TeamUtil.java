@@ -1451,6 +1451,7 @@ public class TeamUtil {
 		try {
 			session = PersistenceManager.getSession();
 			Collection childIds = DesktopUtil.getAllChildrenIds(teamId);
+			childIds.add(teamId);
 			if (childIds != null && childIds.size() > 0) {
 				Iterator itr = childIds.iterator();
 				String params = "";

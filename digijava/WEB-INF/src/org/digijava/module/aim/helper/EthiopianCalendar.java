@@ -7,13 +7,13 @@ import org.apache.log4j.Logger ;
 
 public class EthiopianCalendar 
 {
-	int ethMonth ; 
-	int ethDay ; 
+	public int ethMonth ; 
+	public int ethDay ; 
 	public int ethYear ; 
 	public int ethQtr;
 	public int ethFiscalYear = 0 ;
 	public int ethFiscalQrt = 0;
-	String ethMonthName="";
+	public String ethMonthName="";
 	
 	public static Logger logger = Logger.getLogger(EthiopianCalendar.class) ;
 	
@@ -266,4 +266,60 @@ public class EthiopianCalendar
 			return "Chek it";
 	}
 
+	public GregorianCalendar[] getGregorianDatesForEthYr (int ethYr)
+	{
+		GregorianCalendar gregDates[] = new GregorianCalendar[2];  
+		// gregDates[0] will hold gregStartDate for ethYr
+		// gregDates[1] will hold gregEndDate for ethYr
+		
+		EthiopianCalendar obj = new EthiopianCalendar();
+		GregorianCalendar gcYrStart;
+		GregorianCalendar gcYrEnd; 
+
+		String ethYrStart		= "11-Sep";
+		String ethLeapYrStart	= "12-Sep";
+		String ethYrEnd			= "10-Sep";
+		String ethLeapYrEnd		= "11-Sep";
+
+		gcYrStart = obj.Date(ethYrStart, ethYr + 7);
+		gcYrEnd	  = obj.Date(ethLeapYrEnd, ethYr + 8);
+
+		// adjust the gc start and gc end date by converting back to ethYr and
+		// comparing with input ethYr
+
+		EthiopianCalendar ecStart = obj.getEthiopianDate(gcYrStart);
+		EthiopianCalendar ecEnd   = obj.getEthiopianDate(gcYrEnd);
+
+		if ((ethYr - ecStart.ethYear) == 1)
+		{	gcYrStart = obj.Date(ethLeapYrStart, ethYr+7);		}
+		
+		if ((ecEnd.ethYear - ethYr) == 1)
+		{	gcYrEnd = obj.Date(ethYrEnd, ethYr+8);				}
+
+		gregDates[0] = gcYrStart;
+		gregDates[1] = gcYrEnd;
+
+		return gregDates;
+	}
+	
+	public GregorianCalendar[] getGregorianDatesForEthFiscalYr (int ethFiscalYr)
+	{
+		EthiopianCalendar ec = new EthiopianCalendar();
+		GregorianCalendar gcDates[] = new GregorianCalendar[2];
+		int gregStartYrForEthFiscalYr, gregEndYrForEthFiscalYr;
+		
+		gcDates = ec.getGregorianDatesForEthYr(ethFiscalYr);
+		
+		gregStartYrForEthFiscalYr = gcDates[1].get(Calendar.YEAR);
+		gregEndYrForEthFiscalYr   = gregStartYrForEthFiscalYr + 1;
+		
+		int ethFiscalMonth = 7;  // Eth Fiscal Year starts from 8-jul , ends on 7-jul
+		int ethFiscalStartDay = 8;
+		int ethFiscalEndDay = 7;
+				
+		gcDates[0].set( gregStartYrForEthFiscalYr, ethFiscalMonth -1, ethFiscalStartDay );
+		gcDates[1].set( gregEndYrForEthFiscalYr, ethFiscalMonth -1, ethFiscalEndDay );
+		
+		return gcDates;
+	}
 }

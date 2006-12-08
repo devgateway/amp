@@ -82,10 +82,7 @@ public class ColumnReportData extends ReportData {
 		Iterator i = keyCol.iterator();
 		while (i.hasNext()) {
 			Cell element = (Cell) i.next();
-			// TODO: i do not like this but i have no choice !
-			// if(element instanceof ListCell) cats.addAll((Collection)
-			// element.getValue());
-			// else
+			if(!element.isShow()) continue;
 			cats.add(element);
 		}
 
@@ -139,10 +136,10 @@ public class ColumnReportData extends ReportData {
 		while (i.hasNext()) {
 			Column element = (Column) i.next();
 			Column res = element.postProcess();
-			res.applyVisibility(this.getReportMetadata().getMeasures(),ArConstants.FUNDING_TYPE);
+			//res.applyVisibility(this.getReportMetadata().getMeasures(),ArConstants.FUNDING_TYPE);
 			
 			//just remove all non visible columns (we might need to change this in the future)
-			if(!res.isVisible()) continue;
+			//if(!res.isVisible()) continue;
 			
 			destCols.add(res);
 		}

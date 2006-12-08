@@ -347,7 +347,8 @@ function removeSelComponents() {
 								<c:if test="${aimEditActivityForm.editAct == true}">
 									<digi:trn key="aim:editActivity">
 										Edit Activity
-									</digi:trn>
+									</digi:trn>:
+										<bean:write name="aimEditActivityForm" property="title"/>
 								</c:if>				
 							</td>
 						</tr>	
@@ -394,6 +395,31 @@ function removeSelComponents() {
 										<table width="100%" cellSpacing=5 cellPadding=0 border=0 class="box-border-nopadding">
 
 										<logic:notEmpty name="aimEditActivityForm" property="selectedComponents">
+																												<tr><td><b>
+																			<digi:trn key="aim:commitments">Commitments</digi:trn> - (
+																			<digi:trn key="aim:totalActualAllocation">Grand Total actual 
+																			allocation</digi:trn> = 
+																			<c:out value="${aimEditActivityForm.totalCommitments}"/> 
+																			<c:out value="${aimEditActivityForm.currCode}"/>)															
+																		<br/>
+																																			
+																			<digi:trn key="aim:disbursements">Disbursements</digi:trn> - (
+																			<digi:trn key="aim:totalActualToDate">Total actual to date
+																			</digi:trn> = 
+																			<c:out value="${aimEditActivityForm.totalDisbursements}"/> 
+																			<c:out value="${aimEditActivityForm.currCode}"/>)
+																		<br/>																		
+																		<font
+																		<c:if test="${aimEditActivityForm.totalCommitments < aimEditActivityForm.compTotalDisb }">
+																		 color="RED"
+																		</c:if>
+																		>
+																		<digi:trn key="aim:totalComponentActualDisbursement">Component Grand Total Actual Disbursements</digi:trn>=
+																		<c:out value="${aimEditActivityForm.compTotalDisb}"/>
+																		<c:out value="${aimEditActivityForm.currCode}"/>																			
+																		</font>
+																		</b></td></tr>
+										
 											<logic:iterate name="aimEditActivityForm" property="selectedComponents"
 											id="selComponents" type="org.digijava.module.aim.helper.Components">
 										
@@ -421,13 +447,6 @@ function removeSelComponents() {
 																	<table width="100%" cellSpacing=1 cellPadding=3 border=0 
 																	bgcolor="#d7eafd">
 																		<logic:notEmpty name="selComponents" property="commitments">
-																		<tr><td><b>
-																			<digi:trn key="aim:commitments">Commitments</digi:trn> - (
-																			<digi:trn key="aim:totalActualAllocation">Total actual 
-																			allocation</digi:trn> = 
-																			<c:out value="${aimEditActivityForm.totalCommitments}"/> 
-																			<c:out value="${aimEditActivityForm.currCode}"/>)
-																		</b></td></tr>
 																		<tr><td bgcolor=#ffffff>
 																			<table width="100%" cellSpacing=1 cellPadding=3 border=0 
 																			bgcolor="#eeeeee">
@@ -463,14 +482,6 @@ function removeSelComponents() {
 																		</td></tr>
 																	</logic:notEmpty>
 																	<logic:notEmpty name="selComponents" property="disbursements">
-																		<tr><td><b>
-																			<digi:trn key="aim:disbursements">Disbursements</digi:trn> - (
-																			<digi:trn key="aim:totalActualToDate">Total actual to date
-																			</digi:trn> = 
-																			<c:out value="${aimEditActivityForm.totalDisbursements}"/> 
-																			<c:out value="${aimEditActivityForm.currCode}"/>)
-																	</b>		
-																		</td></tr>
 																		<tr><td bgcolor=#ffffff>
 																			<table width="100%" cellSpacing=1 cellPadding=3 border=0 
 																			bgcolor="#eeeeee">

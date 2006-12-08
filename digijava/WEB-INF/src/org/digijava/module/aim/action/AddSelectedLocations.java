@@ -1,7 +1,7 @@
 package org.digijava.module.aim.action;
 
-import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.TreeSet;
 
 import org.apache.log4j.Logger;
 import org.apache.struts.action.Action;
@@ -24,7 +24,7 @@ public class AddSelectedLocations extends Action {
 		eaForm = (EditActivityForm) form;
 		
 		if (eaForm.getSelectedLocs() == null) {
-			eaForm.setSelectedLocs(new ArrayList());
+			eaForm.setSelectedLocs(new TreeSet());
 		}
 		
 		Long selsearchedLoc[] = eaForm.getSearchedLocs();

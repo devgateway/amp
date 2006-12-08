@@ -287,6 +287,9 @@ public class ShowDesktopActivities extends TilesAction {
 				}			
 			}
 			
+			//add perspective name to seession
+			session.setAttribute("currentPerspective",tm.getAppSettings().getPerspective());
+			
 			double grandTotal = DesktopUtil.updateProjectTotals(
 					dForm.getActivities(),pers.getAmpPerspectiveId(),
 					currCode);
@@ -297,6 +300,7 @@ public class ShowDesktopActivities extends TilesAction {
 			dForm.setCurrentPage(new Integer(currPage));
 			
 			int actSize = dForm.getActivities().size();
+			dForm.setActivityCount(actSize);
 			int numRecs = tm.getAppSettings().getDefRecsPerPage();
 			
 			int stIndex = (dForm.getCurrentPage().intValue()-1) * numRecs;

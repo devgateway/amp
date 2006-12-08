@@ -11,6 +11,7 @@ import java.util.Iterator;
 import org.apache.poi.hssf.usermodel.HSSFCell;
 import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.dgfoundation.amp.ar.Column;
 import org.dgfoundation.amp.ar.ColumnReportData;
 import org.dgfoundation.amp.ar.Exporter;
@@ -41,9 +42,9 @@ public class ColumnReportDataXLS extends XLSExporter {
 	 * @param ownerId
 	 * @param item
 	 */
-	public ColumnReportDataXLS(HSSFSheet sheet, HSSFRow row, IntWrapper rowId,
+	public ColumnReportDataXLS(HSSFWorkbook wb ,HSSFSheet sheet, HSSFRow row, IntWrapper rowId,
 			IntWrapper colId, Long ownerId, Viewable item) {
-		super(sheet, row, rowId, colId, ownerId, item);
+		super(wb, sheet, row, rowId, colId, ownerId, item);
 		// TODO Auto-generated constructor stub
 	}
 
@@ -59,7 +60,7 @@ public class ColumnReportDataXLS extends XLSExporter {
 		// title:
 		if (columnReport.getParent() != null) {
 			HSSFRow row = sheet.createRow(rowId.shortValue());
-			HSSFCell cell = row.createCell(colId.shortValue());
+			HSSFCell cell = this.getCell(row,this.getHighlightedStyle(true));
 			cell.setCellValue(columnReport.getName());
 			makeColSpan(columnReport.getTotalDepth());
 			rowId.inc();
@@ -67,7 +68,8 @@ public class ColumnReportDataXLS extends XLSExporter {
 		}
 
 		// column headings:
-
+		if(columnReport.getGlobalHeadingsDisplayed().booleanValue()==false) {
+			columnReport.setGlobalHeadingsDisplayed(new Boolean(true));
 		for (int curDepth = 0; curDepth <= columnReport.getMaxColumnDepth(); curDepth++) {
 			row = sheet.createRow(rowId.shortValue());
 			Iterator i = columnReport.getItems().iterator();
@@ -79,7 +81,7 @@ public class ColumnReportDataXLS extends XLSExporter {
 				if (ii.hasNext())
 					while (ii.hasNext()) {
 						Column element2 = (Column) ii.next();
-						HSSFCell cell = row.createCell(colId.shortValue());
+						HSSFCell cell =  this.getCell(row,this.getHighlightedStyle(false));
 						cell.setCellValue(element2.getName(metadata.getHideActivities()));
 						// System.out.println("["+rowId.intValue()+"]["+colId.intValue()+"]
 						// depth="+curDepth+" "+element2.getName());
@@ -93,13 +95,14 @@ public class ColumnReportDataXLS extends XLSExporter {
 
 					}
 				else {
-					HSSFCell cell = row.createCell(colId.shortValue());
+					HSSFCell cell =  this.getCell(row,this.getHighlightedStyle(true));
 					cell.setCellValue(" ");
 					makeColSpan(col.getWidth());
 				}
 			}
 			rowId.inc();
 			colId.reset();
+		}
 		}
 
 		// add data

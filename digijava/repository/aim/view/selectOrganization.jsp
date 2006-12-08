@@ -10,9 +10,59 @@
 
 <script language="JavaScript">
 
-	<!-- 
+	function checkNumeric(objName,comma,period,hyphen)
+	{
+		var numberfield = objName;
+		if (chkNumeric(objName,comma,period,hyphen) == false)
+		{
+			numberfield.select();
+			numberfield.focus();
+			return false;
+		}
+		else
+		{
+			return true;
+		}
+	}
 
+	function chkNumeric(objName,comma,period,hyphen)
+	{
+// only allow 0-9 be entered, plus any values passed
+// (can be in any order, and don't have to be comma, period, or hyphen)
+// if all numbers allow commas, periods, hyphens or whatever,
+// just hard code it here and take out the passed parameters
+		var checkOK = "0123456789" + comma + period + hyphen;
+		var checkStr = objName;
+		var allValid = true;
+		var decPoints = 0;
+		var allNum = "";
+		
+		for (i = 0;  i < checkStr.value.length;  i++)
+		{
+			ch = checkStr.value.charAt(i);
+			for (j = 0;  j < checkOK.length;  j++)
+			if (ch == checkOK.charAt(j))
+			break;
+			if (j == checkOK.length)
+			{
+				allValid = false;
+				break;
+			}
+			if (ch != ",")
+			allNum += ch;
+		}
+		if (!allValid)
+		{	
+			alertsay = "Please enter only numbers in the \"Number of results per page\"."
+			alert(alertsay);
+			return (false);
+		}
+	}
+
+
+	
 	function validate() {
+
 		if (document.aimEditActivityForm.selOrganisations.checked != null) { // only one
 			if (document.aimEditActivityForm.selOrganisations.checked == false) {
 				alert("Please choose an organization to add");
@@ -51,16 +101,20 @@
 	}	
 
 	function searchOrganization() {
-		if (document.aimEditActivityForm.tempNumResults.value == 0) {
-			  alert ("Invalid value at 'Number of results per page'");
-			  document.aimEditActivityForm.tempNumResults.focus();
-			  return false;
-		} else {
-			 <digi:context name="searchOrg" property="context/module/moduleinstance/searchOrganisation.do?edit=true"/>
-		    document.aimEditActivityForm.action = "<%= searchOrg %>";
-		    document.aimEditActivityForm.submit();
-			  return true;
+		if(checkNumeric(document.aimEditActivityForm.tempNumResults	,'','','')==true) 
+		{	
+			if (document.aimEditActivityForm.tempNumResults.value == 0) {
+				  alert ("Invalid value at 'Number of results per page'");
+				  document.aimEditActivityForm.tempNumResults.focus();
+				  return false;
+			} else {
+				 <digi:context name="searchOrg" property="context/module/moduleinstance/searchOrganisation.do?edit=true"/>
+			    document.aimEditActivityForm.action = "<%= searchOrg %>";
+			    document.aimEditActivityForm.submit();
+				  return true;
+			}
 		}
+		else return false;
 	}
 	
 	function searchAlpha(val) {
@@ -76,8 +130,27 @@
 			  return true;
 		}
 	}	
+	
+	function searchAlphaAll(val) {
+		if (document.aimEditActivityForm.tempNumResults.value == 0) {
+			  alert ("Invalid value at 'Number of results per page'");
+			  document.aimEditActivityForm.tempNumResults.focus();
+			  return false;
+		} else {
+			 <digi:context name="searchOrg" property="context/module/moduleinstance/searchOrganisation.do"/>
+			// url = "<%= searchOrg %>?alpha=viewAll&orgSelReset=false&edit=true";
+		    // document.aimEditActivityForm.action = url;
+		    document.aimEditActivityForm.action = "<%= searchOrg %>";
+		      var aux= document.aimEditActivityForm.tempNumResults.value;
+		      document.aimEditActivityForm.tempNumResults.value=1000000;
+		     document.aimEditActivityForm.submit();
+		      document.aimEditActivityForm.tempNumResults.value=aux;
+			  return true;
+		}
+	}	
 
 	function load() {
+		document.aimEditActivityForm.tempNumResults.value=10;
 		document.aimEditActivityForm.keyword.focus();			  
 	}
 
@@ -87,7 +160,6 @@
 	function closeWindow() {
 		window.close();
 	}
-	-->
 
 </script>
 
@@ -242,7 +314,7 @@
 										<bean:define id="translation">
 											<digi:trn key="aim:clickToViewAllSearchPages">Click here to view all search pages</digi:trn>
 										</bean:define>
-										<a href="javascript:searchAlpha('viewAll')" title="<%=translation%>">
+										<a href="javascript:searchAlphaAll('viewAll')" title="<%=translation%>">
 											viewAll</a>&nbsp;|&nbsp;
 										<logic:iterate name="aimEditActivityForm" property="alphaPages" id="alphaPages" type="java.lang.String">
 											<c:if test="${alphaPages != null}">

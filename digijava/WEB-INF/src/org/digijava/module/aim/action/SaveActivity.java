@@ -368,6 +368,7 @@ public class SaveActivity extends Action {
 											new ActionError(
 													"error.aim.addActivity.fundingsNotEntered"));
 							saveErrors(request, errors);
+							logger.info(" the funds added is null... please check");
 							eaForm.setStep("3");
 							return mapping.findForward("addActivity");
 						}

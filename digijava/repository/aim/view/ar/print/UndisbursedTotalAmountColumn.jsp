@@ -1,3 +1,2 @@
 <%@ page pageEncoding="UTF-8" %>
-
-<jsp:include page="TotalAmountColumn.jsp"/>	
+<%@ include file="TotalAmountColumn.jsp" %>

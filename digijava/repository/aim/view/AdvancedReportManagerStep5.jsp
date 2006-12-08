@@ -348,7 +348,7 @@ function deleteColumn()
 																	<tr height=10>	<td>	</td>	</tr>												
 																	<TR bgcolor="#eeeeee">
 																		<td align="center" class=box-title>
-																			Column Hierarchie
+																			Column Hierarchy
 																		</td>
 																	</tr>
 																	<tr height=10>	<td>	</td>	</tr>

@@ -24,7 +24,8 @@ import org.dgfoundation.amp.ar.exception.UnidentifiedItemException;
 public class GroupReportData extends ReportData {
 
 	protected String currentView;
-
+	
+	
 	protected Integer sourceColsCount;
 
 	public GroupReportData(GroupReportData d) {
@@ -32,6 +33,7 @@ public class GroupReportData extends ReportData {
 		this.parent = d.getParent();
 		this.reportMetadata=d.getReportMetadata();
 		this.sourceColsCount = d.getSourceColsCount();
+		this.globalHeadingsDisplayed=new Boolean(false);
 	}
 
 	/**
@@ -67,6 +69,7 @@ public class GroupReportData extends ReportData {
 
 	public GroupReportData(String name) {
 		super(name);
+		this.globalHeadingsDisplayed=new Boolean(false);
 		// TODO Auto-generated constructor stub
 	}
 
@@ -141,8 +144,6 @@ public class GroupReportData extends ReportData {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		
-		
 
 	}
 
@@ -184,5 +185,7 @@ public class GroupReportData extends ReportData {
 		}
 		return ret;
 	}
+
+
 
 }

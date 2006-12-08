@@ -276,7 +276,11 @@
 						</logic:notEmpty>
 
 						<TR bgcolor="#FFFFFF">
-							<TD>&nbsp;</TD>
+							<TD><b>
+							<font class="home-bg-header">
+							<c:out value="${aimDesktopForm.activityCount}" />&nbsp;<digi:trn key="aim:activityCount">activities in your portofolio.</digi:trn>
+							</font>
+							</b></TD>
 							<TD>
 								<b><c:out value="${aimDesktopForm.defCurrency}" /></b>
 							</TD>
@@ -351,7 +355,16 @@
 				<TD>
 					<FONT color=blue>*
 					<digi:trn key="aim:allTheAmountsInThousands">
-					All the amounts are in thousands (000)</digi:trn></FONT>
+					All the amounts are in thousands (000)</digi:trn>
+					<digi:trn key="aim:perspectiveWarning1">	
+					Current workspace perspective is: 
+					</digi:trn>
+					<bean:write name="currentPerspective" scope="session"/>
+					.
+					<digi:trn key="aim:perspectiveWarning2">	
+					Totals column only show funding items  having the same perspective as the current workspace.
+					</digi:trn>
+					</FONT>
 				</TD>
 				<c:if test="${aimDesktopForm.showAddActivityLink == true}">
 				<TD width="300" align="right">

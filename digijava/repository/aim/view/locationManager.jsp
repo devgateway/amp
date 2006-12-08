@@ -20,14 +20,11 @@
 	}
 	
 	function newWin(val1, val2) {
-			<digi:context name="selectLoc" property="context/module/moduleinstance/addLocation.do" />
-			url = "<%= selectLoc %>?edLevel=" + val1 + "&edAction=" + val2;
-			
-			openLocWindow(600, 335);
-			document.aimAddLocationForm.action = url;
-			document.aimAddLocationForm.currUrl.value = "<%= selectLoc %>";
-			document.aimAddLocationForm.target = popupPointer.name;
-			document.aimAddLocationForm.submit();
+		<digi:context name="selectLoc" property="context/module/moduleinstance/addLocation.do" />
+		url = "<%= selectLoc %>?edLevel=" + val1 + "&edAction=" + val2;
+		document.aimAddLocationForm.action = url;
+		document.aimAddLocationForm.currUrl.value = "<%= selectLoc %>";
+		document.aimAddLocationForm.submit();
 	}
 	
 	function delet(val1, val2) {
@@ -41,10 +38,7 @@
 	}
 	
 	function countryChanged() {
-		  //document.aimAddLocationForm.regionId.disabled=false;
-		 // alert(document.aimAddLocationForm.countryId.value);
 		  document.aimAddLocationForm.level.value = "region";
-
 		  <digi:context name="selectLoc" property="context/module/moduleinstance/locationManager.do" />
 		  document.aimAddLocationForm.action = "<%= selectLoc %>";
 		  document.aimAddLocationForm.target = "_self";
@@ -156,11 +150,17 @@
 																	<html:optionsCollection name="aimAddLocationForm" property="country" 
 																		   value="iso" label="countryName" />
 																</html:select>
-																<!--<br>
+																<br>
 																<digi:img src="module/aim/images/arrow-014E86.gif" 	width="15" height="10" />
-																			<a href="javascript:newWin('country','edit')">
-																				<digi:trn key="aim:AmpEditCountry">Edit this Country</digi:trn></a>-->
-
+																	<a href="javascript:newWin('country','create')">
+																	<digi:trn key="aim:AmpAddCountry">Add a country</digi:trn></a>
+																<%--
+																<logic:notEqual name="aimAddLocationForm" property="countryId" value="">
+																	<digi:img src="module/aim/images/arrow-014E86.gif" 	width="15" height="10" />
+																		<a href="javascript:newWin('country','edit')">
+																		<digi:trn key="aim:AmpEditCountry">Edit this country</digi:trn></a>
+																</logic:notEqual>
+																--%>
 															</td>
 														</tr>
 													</logic:greaterEqual>	

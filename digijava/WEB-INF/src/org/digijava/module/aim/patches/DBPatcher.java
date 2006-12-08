@@ -214,8 +214,9 @@ public class DBPatcher {
 				 session.update(rr);
 				 session.flush();
 				 
-				 qryStr = "delete from dg_message where message_utf8 " +
-				 		"like '%&nbsp%'";
+				 qryStr = "ALTER TABLE DG_MESSAGE " +
+				 		"MODIFY MESSAGE_UTF8 TEXT";
+				 
 				 stmt.executeUpdate(qryStr);
 			 }
 				

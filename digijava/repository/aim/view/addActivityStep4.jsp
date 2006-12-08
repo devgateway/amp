@@ -151,7 +151,8 @@
 											<c:if test="${aimEditActivityForm.editAct == true}">
 												<digi:trn key="aim:editActivity">
 													Edit Activity
-												</digi:trn>
+												</digi:trn>:
+													<bean:write name="aimEditActivityForm" property="title"/>
 											</c:if>										
 										</td>
 									</tr>	
@@ -201,6 +202,37 @@
 																			<table width="100%" cellSpacing=5 cellPadding=0 border=0
 																			class="box-border-nopadding">
 																			<logic:notEmpty name="aimEditActivityForm" property="regionalFundings">
+																					<tr><td>
+																							<b>
+																							<digi:trn key="aim:donorcommitments">Donor Commitments</digi:trn> - (
+																							<digi:trn key="aim:totalActualAllocation">Total actual 
+																							allocation</digi:trn> = 
+																							<c:out value="${aimEditActivityForm.totalCommitments}"/> 
+																							<c:out value="${aimEditActivityForm.currCode}"/>)
+																							</b>
+																						</td></tr>
+																						<tr><td>
+																							<b>
+																							<digi:trn key="aim:donordisbursements">Donor Disbursements</digi:trn> - (
+																							<digi:trn key="aim:totalActualToDate">Total actual to date
+																							</digi:trn> = 
+																							<c:out value="${aimEditActivityForm.totalDisbursements}"/> 
+																							<c:out value="${aimEditActivityForm.currCode}"/>)
+																							</b>
+																						</td></tr>
+																		<tr><td><b>
+																		<font
+																		<c:if test="${aimEditActivityForm.totalCommitments < aimEditActivityForm.regionTotalDisb }">
+																		 color="RED"
+																		</c:if>
+																		>
+																		<digi:trn key="aim:totalRegionalActualDisbursement">Regional Grand Total Actual Disbursements</digi:trn>=
+																		<c:out value="${aimEditActivityForm.regionTotalDisb}"/>
+																		<c:out value="${aimEditActivityForm.currCode}"/>																			
+																		</font></b>
+																		</td></tr>
+																				
+																				
 																				<logic:iterate name="aimEditActivityForm" property="regionalFundings" 
 																				id="regionalFunding" 
 																				type="org.digijava.module.aim.helper.RegionalFunding"> <!-- L1 START-->
@@ -220,15 +252,6 @@
 																					<table width="100%" cellSpacing=1 cellPadding=3 border=0
 																					bgcolor="#d7eafd">
 																					<logic:notEmpty name="regionalFunding" property="commitments">
-																						<tr><td>
-																							<b>
-																							<digi:trn key="aim:commitments">Commitments</digi:trn> - (
-																							<digi:trn key="aim:totalActualAllocation">Total actual 
-																							allocation</digi:trn> = 
-																							<c:out value="${aimEditActivityForm.totalCommitments}"/> 
-																							<c:out value="${aimEditActivityForm.currCode}"/>)
-																							</b>
-																						</td></tr>
 																						<tr><td bgcolor=#ffffff>
 																							<table width="100%" cellSpacing=1 cellPadding=3 border=0
 																							bgcolor="#eeeeee">
@@ -257,15 +280,6 @@
 																						</td></tr>
 																					</logic:notEmpty>
 																					<logic:notEmpty name="regionalFunding" property="disbursements">
-																						<tr><td>
-																							<b>
-																							<digi:trn key="aim:disbursements">Disbursements</digi:trn> - (
-																							<digi:trn key="aim:totalActualToDate">Total actual to date
-																							</digi:trn> = 
-																							<c:out value="${aimEditActivityForm.totalDisbursements}"/> 
-																							<c:out value="${aimEditActivityForm.currCode}"/>)
-																							</b>
-																						</td></tr>
 																						<tr><td bgcolor=#ffffff>
 																							<table width="100%" cellSpacing=1 cellPadding=3 border=0
 																							bgcolor="#eeeeee">

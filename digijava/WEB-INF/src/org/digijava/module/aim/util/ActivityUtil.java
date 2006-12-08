@@ -364,15 +364,17 @@ public class ActivityUtil {
 			    }
 
 				activity.getMember().add(activity.getActivityCreator());
+                /*
 				member = (AmpTeamMember) session.load(AmpTeamMember.class,
 				        activity.getActivityCreator().getAmpTeamMemId());
 				if (member.getActivities() == null) {
 				    member.setActivities(new HashSet());
 				}
 				member.getActivities().add(activity);
+            */
 				session.save(activity);
 				activityId = activity.getAmpActivityId();
-				session.saveOrUpdate(member);
+				//session.saveOrUpdate(member);
 			}
 
 
@@ -1362,8 +1364,7 @@ public class ActivityUtil {
 		}
 		catch(Exception e1)
 		{
-			logger.error("Could not retrieve the activities list");
-			e1.printStackTrace(System.out);
+			throw new RuntimeException(e1);
 		}
 		finally
 		{
@@ -1582,12 +1583,19 @@ public class ActivityUtil {
 			}
 			session.delete(ampAct);
 			tx.commit();
-			session.flush();
 		}
 		catch(Exception e1)
 		{
-			logger.error("Could not delete the activity with id : "+ampActId);
-			e1.printStackTrace(System.out);
+            if (tx != null) {
+                try {
+                    tx.rollback();
+		}
+                catch(Exception e2)
+                {
+                    logger.error("Release session failed");
+				}
+            }
+            throw new RuntimeException(e1);
 		}
 		finally
 		{
@@ -1608,9 +1616,11 @@ public class ActivityUtil {
 	public static void deleteActivityAmpComments(Collection commentId)
 	{
 		Session session = null;
+        Transaction tx = null;
 		try
 		{
 			session = PersistenceManager.getSession();
+            tx = session.beginTransaction();
 			if(commentId != null)
 			{
 				Iterator commentItr = commentId.iterator();
@@ -1622,11 +1632,20 @@ public class ActivityUtil {
 					session.delete(ampComm);
 				}
 			}
+            tx.commit();
 		}
 		catch(Exception e1)
 		{
-			logger.error("Could not delete/find the comments revelant to the activity");
-			e1.printStackTrace(System.out);
+            if (tx != null) {
+                try {
+                    tx.rollback();
+		}
+                catch(Exception e2)
+                {
+                    logger.error("Release session failed");
+                }
+            }
+            throw new RuntimeException(e1);
 		}
 		finally
 		{
@@ -1644,9 +1663,12 @@ public class ActivityUtil {
 	public static void deleteActivityPhysicalComponentReport(Collection phyCompReport)
 	{
 		Session session = null;
+        Transaction tx = null;
+
 		try
 		{
 			session = PersistenceManager.getSession();
+            tx = session.beginTransaction();
 			if(phyCompReport != null)
 			{
 				Iterator phyReportItr = phyCompReport.iterator();
@@ -1658,11 +1680,20 @@ public class ActivityUtil {
 					session.delete(physicalReport);
 				}
 			}
+            tx.commit();
 		}
 		catch(Exception e1)
 		{
-			logger.error("could not delete/find the physical component report activities");
-			e1.printStackTrace(System.out);
+            if (tx != null) {
+                try {
+                    tx.rollback();
+		}
+                catch(Exception e2)
+                {
+                    logger.error("Release session failed");
+                }
+            }
+            throw new RuntimeException(e1);
 		}
 		finally
 		{
@@ -1680,9 +1711,11 @@ public class ActivityUtil {
 	public static void deleteActivityAmpReportCache(Collection repCache)
 	{
 		Session session = null;
+        Transaction tx = null;
 		try
 		{
 			session = PersistenceManager.getSession();
+            tx = session.beginTransaction();
 			if(repCache != null)
 			{
 				Iterator repCacheItr = repCache.iterator();
@@ -1694,11 +1727,20 @@ public class ActivityUtil {
 					session.delete(ampReportCache);
 				}
 			}
+            tx.commit();
 		}
 		catch(Exception e1)
 		{
-			logger.error("could not delete/find the physical component report activities");
-			e1.printStackTrace(System.out);
+            if (tx != null) {
+                try {
+                    tx.rollback();
+		}
+                catch(Exception e2)
+                {
+                    logger.error("Release session failed");
+                }
+            }
+            throw new RuntimeException(e1);
 		}
 		finally
 		{
@@ -1716,9 +1758,11 @@ public class ActivityUtil {
 	public static void deleteActivityReportLocation(Collection repLoc)
 	{
 		Session session = null;
+        Transaction tx = null;
 		try
 		{
 			session = PersistenceManager.getSession();
+            tx = session.beginTransaction();
 			if(repLoc != null)
 			{
 				Iterator repLocItr = repLoc.iterator();
@@ -1730,11 +1774,20 @@ public class ActivityUtil {
 					session.delete(amprepLoc);
 				}
 			}
+            tx.commit();
 		}
 		catch(Exception e1)
 		{
-			logger.error("could not delete/find the physical component report activities");
-			e1.printStackTrace(System.out);
+            if (tx != null) {
+                try {
+                    tx.rollback();
+		}
+                catch(Exception e2)
+                {
+                    logger.error("Release session failed");
+                }
+            }
+            throw new RuntimeException(e1);
 		}
 		finally
 		{
@@ -1752,9 +1805,11 @@ public class ActivityUtil {
 	public static void deleteActivityReportPhyPerformance(Collection phyPerform)
 	{
 		Session session = null;
+        Transaction tx = null;
 		try
 		{
 			session = PersistenceManager.getSession();
+            tx = session.beginTransaction();
 			if(phyPerform != null)
 			{
 				Iterator phyPerformItr = phyPerform.iterator();
@@ -1766,11 +1821,20 @@ public class ActivityUtil {
 					session.delete(repPhyPerform);
 				}
 			}
+            tx.commit();
 		}
 		catch(Exception e1)
 		{
-			logger.error("could not delete/find the physical component report activities");
-			e1.printStackTrace(System.out);
+            if (tx != null) {
+                try {
+                    tx.rollback();
+		}
+                catch(Exception e2)
+                {
+                    logger.error("Release session failed");
+                }
+            }
+            throw new RuntimeException(e1);
 		}
 		finally
 		{
@@ -1788,9 +1852,11 @@ public class ActivityUtil {
 	public static void deleteActivityReportSector(Collection repSector)
 	{
 		Session session = null;
+        Transaction tx = null;
 		try
 		{
 			session = PersistenceManager.getSession();
+            tx = session.beginTransaction();
 			if(repSector != null)
 			{
 				Iterator repSectorItr = repSector.iterator();
@@ -1802,11 +1868,20 @@ public class ActivityUtil {
 					session.delete(ampRepSector);
 				}
 			}
+            tx.commit();
 		}
 		catch(Exception e1)
 		{
-			logger.error("could not delete/find the physical component report activities");
-			e1.printStackTrace(System.out);
+            if (tx != null) {
+                try {
+                    tx.rollback();
+		}
+                catch(Exception e2)
+                {
+                    logger.error("Release session failed");
+                }
+            }
+            throw new RuntimeException(e1);
 		}
 		finally
 		{
@@ -1824,9 +1899,11 @@ public class ActivityUtil {
 	public static void deleteActivityIndicatorVal(Collection indVal)
 	{
 		Session session = null;
+        Transaction tx = null;
 		try
 		{
 			session = PersistenceManager.getSession();
+            tx = session.beginTransaction();
 			if(indVal != null)
 			{
 				Iterator indValItr = indVal.iterator();
@@ -1838,11 +1915,20 @@ public class ActivityUtil {
 					session.delete(indicatorVal);
 				}
 			}
+            tx.commit();
 		}
 		catch(Exception e1)
 		{
-			logger.error("could not delete/find the physical component report activities");
-			e1.printStackTrace(System.out);
+            if (tx != null) {
+                try {
+                    tx.rollback();
+		}
+                catch(Exception e2)
+                {
+                    logger.error("Release session failed");
+                }
+            }
+            throw new RuntimeException(e1);
 		}
 		finally
 		{

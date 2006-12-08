@@ -5,7 +5,7 @@
 <%@ taglib uri="/taglib/struts-html" prefix="html" %>
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
 
-<html:errors/>
+
 <digi:form name="aimStatusItemForm" type="org.digijava.module.aim.form.StatusItemForm" scope="request" action="/addStatus.do">
 
 <!--  AMP Admin Logo -->
@@ -20,7 +20,7 @@
 				<tr>
 					<!-- Start Navigation -->
 					<td height=33><span class=crumb>
-	
+
 						<bean:define id="translation">
 							<digi:trn key="aim:clickToViewAdmin">Click here to goto Admin Home</digi:trn>
 						</bean:define>
@@ -77,18 +77,18 @@
 															<!-- end header -->
 														</tr>
 														<!-- Page Logic -->
-														<tr>
+														<tr>	<html:errors/>
 															<td width="100%">	
 																<table width="100%" border=0	 bgColor=#f4f4f2>
 																	<tr>
-																		<td width="30%" align="right">
+																		<td width="30%" align="right"><font color=red>*</font>
 																		<digi:trn key="aim:statusCode">Status Code:</digi:trn></td>
 																	    <td width="30%" >
 																	          <html:text name="aimStatusItemForm" property="statusCode" size="20"/>
 																	    </td>
 																	</tr>
 																	<tr>
-																		<td width="30%" align="right">
+																		<td width="30%" align="right"><font color=red>*</font>
 																	        <digi:trn key="aim:StatusName">Name: </digi:trn>
 																		</td>
 																	    <td width="30%">
@@ -112,6 +112,11 @@
 																		</td>
 																	</tr>
 																	<tr>
+																		<td width=30% align = right>
+																			<font color=red>* Mandatory fields</font>
+																		</td>
+																	</tr>
+																	<tr>
 																		<td colspan="2" width="60%"  align="center">
 																			<table width="100%" cellspacing="5">
 																				<tr>
@@ -122,6 +127,7 @@
 																					<td width="50%" align="left">
 																						<html:reset value="Cancel" styleClass="dr-menu" 
 																							onclick="javascript:history.go(-1)"/>
+																							
 																					</td>
 																				</tr>
 																			</table>

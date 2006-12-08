@@ -42,7 +42,10 @@ public class SelectTeam extends Action {
 
 			if (lead != null) {
 				if (lead.getAmpTeamMemRoleId().equals(
-						member.getAmpMemberRole().getAmpTeamMemRoleId())) {
+						member.getAmpMemberRole().getAmpTeamMemRoleId())||
+						//very ugly but we have no choice - only one team head role possible :(
+						member.getAmpMemberRole().getRole().equals("Top Management") 				
+) {
 					session.setAttribute("teamLeadFlag", new String("true"));
 					tm.setTeamHead(true);
 				} else {

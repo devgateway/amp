@@ -150,9 +150,9 @@
 	<page name="addActivityStep9" title=" - Add Activity - Monitoring and Evaluation" />
 	<page name="activityExist" title=" - Add Activity - Activity Already Exist" />
 	<page name="locationManager" title=" - Region Manager" />
-    <page name="editActivityDenyed" title=" - Edit Activity Access Denyed" />
-<!--	<page name="locationManager" title=" - Location Manager" />-->
-	<page page="addLocation" name="aim_addlocPopupLayout" title=" - Location Manager" />
+<!--	<page name="locationManager" title=" - Location Manager" />
+	<page page="addLocation" name="aim_addlocPopupLayout" title=" - Region Manager" /> -->
+	<page name="addLocation" title=" - Region Manager" />
 	<page page="addOrgGroup" name="aim_addOrgGrpPopupLayout" title=" - Add Organization Group" />
 	<page page="viewOrgDetail" name="aim_viewOrgDetailPopupLayout" title=" - Organization Detail" />
 	<page page="viewComment" name="aim_viewCommentPopupLayout" title=" - Comment Detail" />
@@ -179,6 +179,9 @@
 
 	<page page="searchLocation" name="aim_searchlocPopupLayout" title="AMP - Search Location" />
 	<page page="searchSectors" name="aim_searchSectorPopupLayout" title="AMP - Search Sectors" />
+
+	<!-- global settings-->
+	<page name="viewGlobalSettings"  title ="AMP - Global Settings " />
 
 	<!-- sector manager with schemes -->
 	<page name="viewSectorSchemes" title=": View Sector Scheme" />

@@ -17,6 +17,8 @@ public class DesktopForm extends ActionForm {
 	private long fltrPrespective;
 	private Integer fltrActivityRisks;
 
+	private int activityCount;
+	
 	private Integer currentPage;
 
 	// desktop filter select box data collection
@@ -468,6 +470,18 @@ public class DesktopForm extends ActionForm {
 	 */
 	public void setResetFliters(String resetFliters) {
 		this.resetFliters = resetFliters;
+	}
+	/**
+	 * @return Returns the activityCount.
+	 */
+	public int getActivityCount() {
+		return activityCount;
+	}
+	/**
+	 * @param activityCount The activityCount to set.
+	 */
+	public void setActivityCount(int activityCount) {
+		this.activityCount = activityCount;
 	}
 
     public void setSelDonors(Collection selDonors) {

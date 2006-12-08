@@ -6,6 +6,8 @@
  */
 package org.dgfoundation.amp.ar.view.pdf;
 
+import java.util.ArrayList;
+
 import org.dgfoundation.amp.ar.Exporter;
 import org.dgfoundation.amp.ar.Viewable;
 
@@ -18,6 +20,14 @@ import com.lowagie.text.pdf.PdfPTable;
  *
  */
 public abstract class PDFExporter extends Exporter {
+	
+	/**
+	 * this static array will hold the heading cells that need to be displayed on the start of each page.
+	 * it will get initialized only once and then used by onStartPage
+	 */
+	public static ArrayList headingCells=null;
+	
+	public static float[] widths;
 	
 	protected PdfPTable table;
 	protected Long ownerId; 

@@ -10,34 +10,68 @@
 <script language="JavaScript">
 
 	function msg() {
-		if (confirm("Are you sure about deleting this fiscal calendar ?")) {
+		if (confirm("Are you sure about deleting this calendar ?")) {
 			document.aimAddFiscalCalForm.action.value = "delete";
 			document.aimAddFiscalCalForm.submit();
 		}
 		else
 			return false;
 	}
-	
+
 	function move() {
 		<digi:context name="selectLoc" property="context/module/moduleinstance/fiscalCalendarManager.do" />
 		url = "<%= selectLoc %>";
 		document.location.href = url;
 	}
-	
+
 	function check() {
-		var str = document.aimAddFiscalCalForm.fiscalCalName.value;
-		str = trim(str);
+
+        var sm=document.aimAddFiscalCalForm.startMonthNum.value;
+        var sd=document.aimAddFiscalCalForm.startDayNum.value;
+        var yr=document.aimAddFiscalCalForm.yearOffset.value;
+
+        var str = document.aimAddFiscalCalForm.fiscalCalName.value;
+        str = trim(str);
 		if (str.length == 0 || str == null) {
 			alert("Please enter name for this Fiscal Calenedar");
 			document.aimAddFiscalCalForm.fiscalCalName.focus();
-			return false;
-		}
-		else {
-			document.aimAddFiscalCalForm.fiscalCalName.value = str;
-			document.aimAddFiscalCalForm.submit();
-		}
+            return false;
+        }
+
+        if(sm.match("[^0-9]")){
+          alert("Invalid Start Month value");
+          document.aimAddFiscalCalForm.startMonthNum.focus();
+          return false;
+        }else if(sm>12 || sm<1){
+          alert("Invalid Start Month value");
+          document.aimAddFiscalCalForm.startMonthNum.focus();
+          return false;
+        }
+
+        if(sd.match("[^0-9]")){
+          alert("Invalid Start Day value");
+          document.aimAddFiscalCalForm.startDayNum.focus();
+          return false;
+        }else if(sd>31){
+          alert("Invalid Start Day value");
+          document.aimAddFiscalCalForm.startDayNum.focus();
+          return false;
+        }
+
+        if(yr.match("[^0-9]")){
+          alert("Invalid Year Offset value");
+          document.aimAddFiscalCalForm.yearOffset.focus();
+          return false;
+        }else if(yr>0){
+          alert("Invalid Year Offset value");
+          document.aimAddFiscalCalForm.yearOffset.focus();
+          return false;
+        }
+
+        document.aimAddFiscalCalForm.fiscalCalName.value = str;
+        document.aimAddFiscalCalForm.submit();
 	}
-	
+
 	function trim ( inputStringTrim ) {
 		fixedTrim = "";
 		lastCh = " ";
@@ -72,7 +106,7 @@
 				<tr>
 					<!-- Start Navigation -->
 					<td height=33><span class=crumb>
-	
+
 						<bean:define id="translation">
 							<digi:trn key="aim:clickToViewAdmin">Click here to goto Admin Home</digi:trn>
 						</bean:define>
@@ -90,12 +124,12 @@
 						</digi:trn>
 						</digi:link>&nbsp;&gt;&nbsp;
 						<logic:equal name="aimAddFiscalCalForm" property="action" value="create" >
-							<digi:trn key="aim:addFiscalCalendar">Add Fiscal Calendar</digi:trn>	
+							<digi:trn key="aim:addFiscalCalendar">Add Fiscal Calendar</digi:trn>
 						</logic:equal>
 						<logic:equal name="aimAddFiscalCalForm" property="action" value="edit" >
-							<digi:trn key="aim:editFiscalCalendar">Edit Fiscal Calendar</digi:trn>	
+							<digi:trn key="aim:editFiscalCalendar">Edit Fiscal Calendar</digi:trn>
 						</logic:equal>
-                      </span>	
+                      </span>
 					</td>
 					<!-- End navigation -->
 				</tr>
@@ -122,23 +156,23 @@
 								</tr>
 								<tr bgColor=#f4f4f2>
 									<td valign="top">
-										<table align=center bgColor=#f4f4f2 cellPadding=0 cellSpacing=0 width="90%" border=0>	
+										<table align=center bgColor=#f4f4f2 cellPadding=0 cellSpacing=0 width="90%" border=0>
 											<tr>
 												<td bgColor=#ffffff class=box-border>
 													<table border=0 cellPadding=1 cellSpacing=1 class=box-border width="100%">
 														<tr bgColor=#dddddb>
 															<td bgColor=#dddddb height="20" align="center" colspan="5">
 																<logic:equal name="aimAddFiscalCalForm" property="action" value="create" >
-																	<b><digi:trn key="aim:addFiscalCalendar">Add Fiscal Calendar</digi:trn></b>	
+																	<b><digi:trn key="aim:addFiscalCalendar">Add Fiscal Calendar</digi:trn></b>
 																</logic:equal>
 																<logic:equal name="aimAddFiscalCalForm" property="action" value="edit" >
-																	<b><digi:trn key="aim:editFiscalCalendar">Edit Fiscal Calendar</digi:trn></b>	
+																	<b><digi:trn key="aim:editFiscalCalendar">Edit Fiscal Calendar</digi:trn></b>
 																</logic:equal>
 															</td>
 														</tr>
 														<!-- Page Logic -->
 														<tr>
-															<td width="100%">	
+															<td width="100%">
 																<table width="100%" border=0	 bgColor=#f4f4f2>
 																	<tr>
 																		<td width="30%" align="right">
@@ -199,7 +233,7 @@
 																	<logic:equal name="aimAddFiscalCalForm" property="flag" value="delete" >
 																		<tr>
 																			<td colspan="2" width="60%"  align="center">
-																				<input type="button" value="Delete this Fiscal Calendar" class="dr-menu" onclick="msg()">
+																				<input type="button" value="Delete this Calendar" class="dr-menu" onclick="msg()">
 																			</td>
 																		</tr>
 																	</logic:equal>
@@ -207,20 +241,20 @@
 																		<tr>
 																			<td colspan="2" width="60%"  align="center">
 																				<b><digi:trn key="aim:cannotDeleteFisCalMsg1"><font color="#FF0000">
-																						Can not delete this fiscal calendar since some organisation references it !</font>
+																						Can not delete this calendar since some organization references it !</font>
 																					</digi:trn>
 																				</b>
 																			</td>
 																		</tr>
 																	</logic:equal>
-																</table>	
+																</table>
 															</td>
 														</tr>
 													<!-- end page logic -->
 													</table>
 												</td>
 											</tr>
-											
+
 										</table>
 									</td>
 								</tr>

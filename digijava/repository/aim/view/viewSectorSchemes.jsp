@@ -9,7 +9,7 @@
 
 <script langauage="JavaScript">
 	function onDelete() {
-		var flag = confirm("Delete this Scheme?");
+		var flag = confirm("Delete this Scheme ?");
 		return flag;
 	}
 </script>
@@ -52,7 +52,7 @@
 					<td height=16 vAlign=center width=571>
 						<html:errors />
 					</td>
-				</tr>				
+				</tr>
 				<tr>
 					<td noWrap width=100% vAlign="top">
 					<table width="100%" cellspacing=1 cellSpacing=1 border=0>
@@ -60,14 +60,14 @@
 						<table bgColor=#d7eafd cellPadding=1 cellSpacing=1 width="100%" valign="top">
 							<tr bgColor=#ffffff>
 								<td vAlign="top" width="100%">
-									
-									<table width="100%" cellspacing=1 cellpadding=1 valign=top align=left>	
+
+									<table width="100%" cellspacing=1 cellpadding=1 valign=top align=left>
 										<tr><td bgColor=#d7eafd class=box-title height="20" align="center">
 											<!-- Table title -->
 											<digi:trn key="aim:schemes">
 												Schemes
 											</digi:trn>
-											<!-- end table title -->										
+											<!-- end table title -->
 										</td></tr>
 										<tr><td>
 											<table width="100%" cellspacing=1 cellpadding=4 valign=top align=left bgcolor="#d7eafd">
@@ -97,14 +97,14 @@
 															<digi:link href="/updateSectorSchemes.do" name="urlParams2" title="<%=translation%>" >
 															<bean:write name="sectorScheme" property="secSchemeName"/></digi:link>
 														</td>
-														
+
 														<td bgcolor="#ffffff" width="40" align="center">
 															<bean:define id="translation">
 																<digi:trn key="aim:clickToEditScheme">Click here to Edit Scheme</digi:trn>
 															</bean:define>
 															[ <digi:link href="/updateSectorSchemes.do" name="urlParams2" title="<%=translation%>" >Edit</digi:link> ]
 														</td>
-											 
+
 														<%--<logic:equal name="aimAddSectorForm" property="deleteSchemeFlag" value="true">--%>
 														<td bgcolor="#ffffff" width="55" align="center">
 															<jsp:useBean id="urlParams4" type="java.util.Map" class="java.util.HashMap"/>
@@ -115,36 +115,36 @@
 															<bean:define id="translation">
 																<digi:trn key="aim:clickToDeleteScheme">Click here to Delete Scheme</digi:trn>
 															</bean:define>
-															[ <digi:link href="/updateSectorSchemes.do" name="urlParams4" 
+															[ <digi:link href="/updateSectorSchemes.do" name="urlParams4"
 																title="<%=translation%>" onclick="return onDelete()">Delete</digi:link> ]
 														</td>
-														
+
 														<%--<logic:equal name="aimAddSectorForm" property="deleteSchemeFlag" value="false">
 															<td colspan="2" align="center">
-																<b><digi:trn key="aim:cannotDeleteSectorMsg2">			
+																<b><digi:trn key="aim:cannotDeleteSectorMsg2">
 																	Cannot Delete the sector since activity exist
 																</digi:trn></b>
 															</td>
-														      
+
 														</logic:equal>--%>
 													</tr>
 													</logic:iterate>
 
-																									
-													
+
+
 													</logic:notEmpty>
-													<!-- end page logic -->													
+													<!-- end page logic -->
 											</table>
 										</td></tr>
 									</table>
-									
+
 								</td>
 							</tr>
 						</table>
 					</td>
-					
+
 					<td noWrap width=100% vAlign="top">
-						<table align=center cellPadding=0 cellSpacing=0 width="90%" border=0>	
+						<table align=center cellPadding=0 cellSpacing=0 width="90%" border=0>
 							<tr>
 								<td>
 									<!-- Other Links -->

@@ -9,16 +9,21 @@ package org.dgfoundation.amp.ar.workers;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.util.Set;
 
 import org.dgfoundation.amp.ar.ARUtil;
 import org.dgfoundation.amp.ar.AmountCellColumn;
+import org.dgfoundation.amp.ar.AmpARFilter;
 import org.dgfoundation.amp.ar.ArConstants;
 import org.dgfoundation.amp.ar.CellColumn;
+import org.dgfoundation.amp.ar.FundingTypeSortedString;
 import org.dgfoundation.amp.ar.MetaInfo;
 import org.dgfoundation.amp.ar.ReportGenerator;
 import org.dgfoundation.amp.ar.cell.CategAmountCell;
 import org.dgfoundation.amp.ar.cell.Cell;
+import org.digijava.module.aim.helper.Constants;
+import org.digijava.module.aim.helper.EthiopianCalendar;
 
 /**
  * 
@@ -39,16 +44,37 @@ public class CategAmountColWorker extends ColumnWorker {
 		// TODO Auto-generated constructor stub
 	}
 
-	/**
+	/**filter.getFromYear()!=null
 	 * Decides if the CategAmountCell is showable or not, based on the measures selected
 	 * in the report wizard.
 	 * @param cac the given CategAmountCell
 	 * @return true if showable
 	 */
 	public boolean isShowable(CategAmountCell cac) {
+		boolean showable=true;
 		Set measures=generator.getReportMetadata().getMeasures();
-		return ARUtil.containsMeasure(cac.getMetaValueString(ArConstants.FUNDING_TYPE),measures);
+		showable=ARUtil.containsMeasure(cac.getMetaValueString(ArConstants.FUNDING_TYPE),measures);
+		if(!showable) return false;
+		
+		//we now check if the year filtering is used - we do not want items from other years to be shown
+		AmpARFilter filter=(AmpARFilter) generator.getFilter();
+		if(filter.getFromYear()!=null || filter.getToYear()!=null) {
+			Integer itemYear=(Integer) cac.getMetaInfo(ArConstants.YEAR).getValue();
+			if(filter.getFromYear()!=null && filter.getFromYear().intValue()>itemYear.intValue()) showable=false;
+			if(filter.getToYear()!=null && filter.getToYear().intValue()<itemYear.intValue()) showable=false;
+		}
+		return showable;
 	}
+
+	
+	protected boolean isCummulativeShowable(CategAmountCell cac) {
+		AmpARFilter filter=(AmpARFilter) generator.getFilter();
+		if(filter.getToYear()==null) return true;
+		int cellYear=Integer.parseInt(cac.getMetaValueString(ArConstants.YEAR));
+		if(cellYear>filter.getToYear().intValue()) return false;
+		return true;
+	}
+
 	
 	/*
 	 * (non-Javadoc)
@@ -63,36 +89,45 @@ public class CategAmountColWorker extends ColumnWorker {
 
 		acc.setId(id);
 
+		AmpARFilter filter=(AmpARFilter) generator.getFilter();
+		
+		
 		int tr_type = rs.getInt("transaction_type");
 		int adj_type = rs.getInt("adjustment_type");
 		double tr_amount = rs.getDouble("transaction_amount");
 		java.sql.Date td = rs.getDate("transaction_date");
 		double exchangeRate=rs.getDouble("exchange_rate");
 		String currencyCode=rs.getString("currency_code");
-		String donorName=rs.getString("donor_name");
+		String perspectiveCode=rs.getString("perspective_code");
+		
+		//the most important meta name, the source name (donor name, region name, component name)
+		String headMetaName=rsmd.getColumnName(4);
 
 
 		try {
 			String termsAssist = rs.getString("terms_assist_name");
-			MetaInfo termsAssistMeta = new MetaInfo("Terms of Assistance",
+			MetaInfo termsAssistMeta = new MetaInfo(ArConstants.TERMS_OF_ASSISTANCE,
 					termsAssist);
 			acc.getMetaData().add(termsAssistMeta);
 		} catch (SQLException e) {
 
 		}
-		try {
-			String regionName = rs.getString("region_name");
-			MetaInfo regionMeta = new MetaInfo("Region", regionName);
-			acc.getMetaData().add(regionMeta);
-		} catch (SQLException e) {
-		}
 
-		try {
+		MetaInfo headMeta=null;
 		
-		String componentName = rs.getString("component_name");
-		MetaInfo compMeta = new MetaInfo("Component", componentName);
-		acc.getMetaData().add(compMeta);
-		} catch (SQLException e) {
+		if("region_name".equals(headMetaName)){
+			String regionName = rs.getString("region_name");
+			headMeta= new MetaInfo(ArConstants.REGION, regionName);			
+		} else
+		
+		if("component_name".equals(headMetaName)){
+			String componentName = rs.getString("component_name");
+			headMeta= new MetaInfo(ArConstants.COMPONENT, componentName);			
+		} else
+	
+		if("donor_name".equals(headMetaName)){
+			String donorName = rs.getString("donor_name");
+			headMeta= new MetaInfo(ArConstants.DONOR, donorName);			
 		}
 
 		acc.setAmount(tr_amount);
@@ -102,7 +137,6 @@ public class CategAmountColWorker extends ColumnWorker {
 		//put toExchangeRate
 		acc.setToExchangeRate(1);
 		
-		MetaInfo donorMs=new MetaInfo("Donor",donorName);
 		
 		MetaInfo adjMs = new MetaInfo(ArConstants.ADJUSTMENT_TYPE,
 				adj_type == 0 ? ArConstants.PLANNED : ArConstants.ACTUAL);
@@ -121,16 +155,49 @@ public class CategAmountColWorker extends ColumnWorker {
 		}
 
 		MetaInfo trMs = new MetaInfo(ArConstants.TRANSACTION_TYPE, trStr);
-		MetaInfo fundMs = new MetaInfo(ArConstants.FUNDING_TYPE, (String) adjMs
+		MetaInfo fundMs = new MetaInfo(ArConstants.FUNDING_TYPE, new FundingTypeSortedString((String) adjMs
 				.getValue()
-				+ " " + (String) trMs.getValue());
+				+ " " + (String) trMs.getValue()));
 
-		Calendar c = Calendar.getInstance();
-		c.setTime(td);
+		//Date handling..
+		
+		GregorianCalendar calendar = new GregorianCalendar();
+		calendar.setTime(td);
 
-		MetaInfo qMs = new MetaInfo("Quarter", "Q"
-				+ new Integer(c.get(Calendar.MONTH) / 4 + 1));
-		MetaInfo aMs = new MetaInfo("Year", new Integer(c.get(Calendar.YEAR)));
+		String quarter=null;
+		Integer year=null;
+		
+		if(filter.getCalendarType()==null || filter.getCalendarType().intValue()==Constants.GREGORIAN.intValue()) {
+			quarter= "Q"+ new Integer(calendar.get(Calendar.MONTH) / 4 + 1);
+			year=new Integer(calendar.get(Calendar.YEAR));
+		} else
+		if(filter.getCalendarType().intValue()==Constants.ETH_CAL.intValue() || filter.getCalendarType().intValue()==Constants.ETH_FY.intValue()) {
+			EthiopianCalendar ec=new EthiopianCalendar();
+			EthiopianCalendar tempDate=new EthiopianCalendar();
+			ec=tempDate.getEthiopianDate(calendar);
+			if(filter.getCalendarType().intValue()==Constants.ETH_FY.intValue())
+			{
+				year=new Integer(ec.ethFiscalYear);
+				quarter=new String("Q"+ec.ethFiscalQrt);
+			}
+			if(filter.getCalendarType().intValue()==Constants.ETH_CAL.intValue())
+			{
+				year=new Integer(ec.ethYear);
+				quarter=new String("Q"+ec.ethQtr);
+			}
+		}
+
+		
+		
+		
+		
+		MetaInfo perspMs=new MetaInfo(ArConstants.PERSPECTIVE,perspectiveCode);
+		
+		//we eliminate the perspective items that do not match the filter one
+		if(!filter.getPerspectiveCode().equals(perspMs.getValue())) return null;
+		
+		MetaInfo qMs = new MetaInfo(ArConstants.QUARTER,quarter);
+		MetaInfo aMs = new MetaInfo(ArConstants.YEAR, year);
 
 		
 		//add the newly created metainfo objects to the virtual funding object
@@ -139,10 +206,17 @@ public class CategAmountColWorker extends ColumnWorker {
 		acc.getMetaData().add(fundMs);
 		acc.getMetaData().add(aMs);
 		acc.getMetaData().add(qMs);
-		acc.getMetaData().add(donorMs);
+		acc.getMetaData().add(headMeta);
+		acc.getMetaData().add(perspMs);
 
-		//set the showable flag, based on selected measures
+		//set the showable flag, based on selected measures - THIS NEEDS TO BE MOVED OUT
+		//TODO: move this to postProcess!!
 		acc.setShow(isShowable(acc));
+		acc.setCummulativeShow(isCummulativeShowable(acc));
+		
+		//UGLY get exchage rate if cross-rates are needed (if we need to convert from X to USD and then to Y)
+		if(filter.getAmpCurrencyCode()!=null && !"USD".equals(filter.getAmpCurrencyCode())) 
+			acc.setToExchangeRate(ARUtil.getExchange(filter.getAmpCurrencyCode(),td));
 		
 		return acc;
 	}

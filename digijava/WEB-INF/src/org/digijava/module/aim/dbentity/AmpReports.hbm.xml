@@ -45,7 +45,7 @@
 			<many-to-many class="org.digijava.module.aim.dbentity.AmpMeasures" column="measureId"/>
 		</set>
 
-	<many-to-one name="defaultFilter" column="default_filter_id" class="org.dgfoundation.amp.ar.AmpARFilter" not-null="false"/>
+<!--  <many-to-one name="defaultFilter" column="default_filter_id" class="org.dgfoundation.amp.ar.AmpARFilter" not-null="false"/>-->
 					
 	</class>
 </hibernate-mapping>

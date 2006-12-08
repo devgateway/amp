@@ -26,16 +26,16 @@ public class SearchSectors extends Action {
 		//eaForm.setOrgPopupReset(false);
 
 		eaForm.setNumResults(eaForm.getTempNumResults());
-		
-		System.out.println("KeyWOrd= "+eaForm.getKeyword());
 
+		if(eaForm.getKeyword()!=null) request.getSession().setAttribute("keywordForSectors",eaForm.getKeyword());
+			else eaForm.setKeyword((String)request.getSession().getAttribute("keywordForSectors"));
+
+		
+		
 		Collection col = new ArrayList();
 		eaForm.setNumResults(eaForm.getTempNumResults());
-
-		logger.info(".............INSIDE Search SECTORS JAVA.....");
-		
 		int page = 0;
-		logger.info("page= "+request.getParameter("page"));
+
 		if (request.getParameter("page") == null) {
 			page = 1;
 		} else {
@@ -44,16 +44,16 @@ public class SearchSectors extends Action {
 		
 		eaForm.setCurrentPage(new Integer(page));
 
+		if(eaForm.getKeyword()!=null)
 		if (eaForm.getKeyword().trim().length() != 0) {
 			// search based on the given keyword only.
 			
 		col=(SectorUtil.searchForSector(eaForm.getKeyword().trim()));
-		System.out.println("SECTORS colllllllllll size: "+col.size());
-
+		
 		int stIndex = 1;
 		int edIndex = eaForm.getNumResults();
 
-		if (eaForm.getNumResults() == 0 || eaForm.isOrgSelReset() == true) {
+		if (eaForm.getNumResults() == 0 || eaForm.isSectorReset() == true) {
 			eaForm.setTempNumResults(10);
 		} else {
 			stIndex = ((page - 1) * eaForm.getNumResults()) + 1;
@@ -92,6 +92,7 @@ public class SearchSectors extends Action {
 		eaForm.setCols(col);
 		eaForm.setPagedCol(tempCol);
 		eaForm.setPages(pages);
+		eaForm.setCurrentPage(new Integer(page));
 			
 //		eaForm.setSearchLocs(col);
 //		eaForm.setPagedCol(tempCol);

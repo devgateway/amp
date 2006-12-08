@@ -100,6 +100,28 @@
 										</TR>										
 										<TR bgcolor="#ffffff">
 											<TD>
+												<b><digi:trn key="aim:meTargetValue">Target Value</digi:trn></b>
+											</TD>
+											<TD>
+												<bean:write name="indicator" property="revisedTargetVal" />
+											</TD>
+											<TD>
+												<b><digi:trn key="aim:meDate">Date</digi:trn></b>
+											</TD>
+											<TD>
+												<bean:write name="indicator" property="targetValDate" />	
+											</TD>											
+										</TR>
+										<TR bgcolor="#ffffff">
+											<TD width="125"> 
+												<b><digi:trn key="aim:meTargetValueComments">Comments</digi:trn></b>
+											</TD>
+											<TD colspan="3">  
+												<bean:write name="indicator" property="revisedTargetValComments" />
+											</TD>
+										</TR>										
+										<TR bgcolor="#ffffff">
+											<TD>
 												<b><digi:trn key="aim:meActualValue">Actual Value</digi:trn></b>
 											</TD>
 											<TD>
@@ -120,28 +142,7 @@
 												<bean:write name="indicator" property="actualValComments" />
 											</TD>
 										</TR>										
-										<TR bgcolor="#ffffff">
-											<TD>
-												<b><digi:trn key="aim:meTargetValue">Target Value</digi:trn></b>
-											</TD>
-											<TD>
-												<bean:write name="indicator" property="revisedTargetVal" />
-											</TD>
-											<TD>
-												<b><digi:trn key="aim:meDate">Date</digi:trn></b>
-											</TD>
-											<TD>
-												<bean:write name="indicator" property="targetValDate" />	
-											</TD>											
-										</TR>
-										<TR bgcolor="#ffffff">
-											<TD width="125">
-												<b><digi:trn key="aim:meTargetValueComments">Comments</digi:trn></b>
-											</TD>
-											<TD colspan="3">
-												<bean:write name="indicator" property="targetValComments" />
-											</TD>
-										</TR>										
+
 										<logic:notEmpty name="indicator" property="priorValues">
 										<TR bgcolor="#ffffff">
 											<TD colspan="4">

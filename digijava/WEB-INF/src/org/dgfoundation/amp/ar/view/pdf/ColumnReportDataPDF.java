@@ -6,6 +6,7 @@
  */
 package org.dgfoundation.amp.ar.view.pdf;
 
+import java.util.ArrayList;
 import java.util.Iterator;
 
 import org.dgfoundation.amp.ar.Column;
@@ -65,7 +66,10 @@ public class ColumnReportDataPDF extends PDFExporter {
 		// headings
 
 		Font font = new Font(Font.HELVETICA, Font.DEFAULTSIZE, Font.BOLD);
-		
+
+		if(columnReport.getGlobalHeadingsDisplayed().booleanValue()==false)  {
+			PDFExporter.headingCells=new ArrayList();
+			columnReport.setGlobalHeadingsDisplayed(new Boolean(true));
 		for (int curDepth = 0; curDepth <= columnReport.getMaxColumnDepth(); curDepth++) {
 			Iterator i = columnReport.getItems().iterator();
 			while (i.hasNext()) {
@@ -78,17 +82,21 @@ public class ColumnReportDataPDF extends PDFExporter {
 				if(ii.hasNext())
 				while (ii.hasNext()) {
 					Column element2 = (Column) ii.next();
+					element2.setMaxNameDisplayLength(16);
 					PdfPCell pdfc = new PdfPCell(new Paragraph(element2
 							.getName(metadata.getHideActivities()),font));
 					pdfc.setVerticalAlignment(Element.ALIGN_CENTER);
 					pdfc.setColspan(element2.getWidth());
 					table.addCell(pdfc);
+					headingCells.add(pdfc);
 				} else {
 					PdfPCell pdfc = new PdfPCell(new Paragraph(""));
 					pdfc.setColspan(col.getWidth());
 					table.addCell(pdfc);
+					headingCells.add(pdfc);
 				}
 			}
+		}
 		}
 
 		// add data

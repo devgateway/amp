@@ -21,7 +21,7 @@ import com.sun.xml.bind.ProxyGroup;
  * This class is a facade to a collection of GrammarInfo objects.  It
  * dispatches rootElement requests to the underlying GrammarInfo objects.
  *
- * @version $Revision: 1.2 $
+ * @version $Revision: 1.2.2.1 $
  */
 class GrammarInfoFacade implements GrammarInfo {
 

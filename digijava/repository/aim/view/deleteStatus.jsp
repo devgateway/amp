@@ -102,8 +102,12 @@
 																		<td colspan="2" width="60%"  align="center">
 																			<table width="100%" cellspacing="5">
 																				<tr>
-																					<td width="50%" align="center">
+																					<td width="50%" align="right">
 																						<html:submit styleClass="dr-menu" > Confirm Delete </html:submit>				
+																					</td>
+																					<td width="50%" align="left">
+																							<html:reset value="Cancel" styleClass="dr-menu" 
+																							onclick="javascript:history.go(-1)"/>			
 																					</td>
 																				</tr>
 																			</table>

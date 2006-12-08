@@ -4,7 +4,7 @@ import org.apache.struts.action.*;
 import javax.servlet.http.HttpServletRequest;
 
 public class AddFiscalCalendarForm extends ActionForm {
-	
+
 	private Long fiscalCalId = null;
 	private String fiscalCalName = null;
 	private String description = null;
@@ -22,7 +22,7 @@ public class AddFiscalCalendarForm extends ActionForm {
 	public void setFiscalCalId(Long fiscalCalId) {
 			  this.fiscalCalId = fiscalCalId;
 	}
-	
+
 	public String getFiscalCalName() {
 			  return (this.fiscalCalName);
 	}
@@ -42,7 +42,7 @@ public class AddFiscalCalendarForm extends ActionForm {
 	public int getStartMonthNum() {
 			  return (this.startMonthNum);
 	}
-	
+
 	public void setStartMonthNum(int num) {
 			  this.startMonthNum = num;
 	}
@@ -70,7 +70,7 @@ public class AddFiscalCalendarForm extends ActionForm {
 	public void setFlag(String flag) {
 			  this.flag = flag;
 	}
-	
+
 	public String getAction() {
 		  return (this.action);
 	}
@@ -81,7 +81,7 @@ public class AddFiscalCalendarForm extends ActionForm {
 
 	public ActionErrors validate(ActionMapping mapping,
                                  HttpServletRequest request) {
-	
+
 			ActionErrors errors = new ActionErrors();
 
 			if (startMonthNum < 1 || startMonthNum > 12) {
@@ -92,22 +92,22 @@ public class AddFiscalCalendarForm extends ActionForm {
 					  } else if (startMonthNum % 2 == 0 && startMonthNum < 8) {
 								 if (startDayNum > 30) {
 											errors.add("startDayNum",new ActionError("error.aim.addFiscalCal.invalidStartDay"));
-								 } 
+								 }
 								 if (startMonthNum == 2 && startDayNum > 28) {
 											errors.add("startDayNum",new ActionError("error.aim.addFiscalCal.invalidStartDay"));
 								 }
 					  } else if (startMonthNum % 2 != 0 && startMonthNum > 7) {
 								 if (startDayNum > 30) {
 											errors.add("startDayNum",new ActionError("error.aim.addFiscalCal.invalidStartDay"));
-								 } 
+								 }
 					  }
 			}
 
 			if (yearOffset > 0) {
 					  errors.add("yearOffset",new ActionError("error.aim.addFiscalCal.invalidYearOffset"));
 			}
-									
+
 			return (errors);
-    } 
+    }
 
 }

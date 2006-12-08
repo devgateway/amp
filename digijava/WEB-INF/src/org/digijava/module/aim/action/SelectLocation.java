@@ -1,13 +1,19 @@
 package org.digijava.module.aim.action;
 
+import java.util.Collection;
+import java.util.Iterator;
+
 import org.apache.log4j.Logger;
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
+import org.digijava.kernel.dbentity.Country;
+import org.digijava.module.aim.dbentity.AmpGlobalSettings;
 import org.digijava.module.aim.form.EditActivityForm;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.util.DbUtil;
+import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.LocationUtil;
 
 public class SelectLocation extends Action {
@@ -42,16 +48,44 @@ public class SelectLocation extends Action {
 		} else if (eaForm.getImplementationLevel().equals("woreda")) {
 			eaForm.setImpLevelValue(new Integer(4));
 		}		
+/*
+ * modified by Govind
+ */
+		
+		Collection a = FeaturesUtil.getDefaultCountryISO();
+		String iso=null;
+		String CountryName=null;
+		Iterator itr1 = a.iterator();
+		while (itr1.hasNext())
+		{
+			AmpGlobalSettings ampGS = (AmpGlobalSettings)itr1.next();
+			logger.info(" hope this is the correct one.. "+ampGS.getGlobalSettingsValue());
+			iso = ampGS.getGlobalSettingsValue();
+		}
+		logger.info(" this is the ISO .... in iso "+iso);
+		Collection b = FeaturesUtil.getDefaultCountry(iso);
+		Iterator itr2 = b.iterator();
+		while (itr2.hasNext())
+		{
+			Country ampGS = (Country)itr2.next();
+			logger.info(" hope this is the correct country name one.. "+ampGS.getCountryName());
+			CountryName = ampGS.getCountryName();
+		}
+		
 		
 		if (fill == null || fill.trim().length() == 0) {
-			eaForm.setCountry(Constants.COUNTRY);
+			eaForm.setCountry(CountryName);
+			eaForm.setImpCountry(iso);
+			eaForm.setRegions(LocationUtil.getAllRegionsUnderCountry(iso));
+			/*eaForm.setCountry(Constants.COUNTRY);
 			eaForm.setImpCountry(Constants.COUNTRY_ISO);
-			eaForm.setRegions(LocationUtil.getAllRegionsUnderCountry(Constants.COUNTRY_ISO));
+			eaForm.setRegions(LocationUtil.getAllRegionsUnderCountry(Constants.COUNTRY_ISO));*/
 		} else {
 			if (fill.equals("zone")) {
 				if (eaForm.getImpRegion() != null) {
 					eaForm.setZones(LocationUtil.getAllZonesUnderRegion(eaForm.getImpRegion()));
-					eaForm.setRegions(LocationUtil.getAllRegionsUnderCountry(Constants.COUNTRY_ISO));
+					//eaForm.setRegions(LocationUtil.getAllRegionsUnderCountry(Constants.COUNTRY_ISO));
+					eaForm.setRegions(LocationUtil.getAllRegionsUnderCountry(iso));
 					eaForm.setImpZone(null);
 					eaForm.setImpMultiWoreda(null);
 					eaForm.setImpWoreda(null);					
@@ -62,7 +96,8 @@ public class SelectLocation extends Action {
 				if (eaForm.getImpZone() != null) {
 					eaForm.setWoredas(LocationUtil.getAllWoredasUnderZone(eaForm.getImpZone()));
 					eaForm.setZones(LocationUtil.getAllZonesUnderRegion(eaForm.getImpRegion()));
-					eaForm.setRegions(LocationUtil.getAllRegionsUnderCountry(Constants.COUNTRY_ISO));
+					//eaForm.setRegions(LocationUtil.getAllRegionsUnderCountry(Constants.COUNTRY_ISO));
+					eaForm.setRegions(LocationUtil.getAllRegionsUnderCountry(iso));
 					eaForm.setImpWoreda(null);
 				}
 			}

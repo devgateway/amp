@@ -8,8 +8,8 @@ Style[...]=[TitleColor,TextColor,TitleBgColor,TextBgColor,TitleBgImag,TextBgImag
 
 var FiltersEnabled = 1 // if your not going to use transitions or filters in any of the tips set this to 0
 
-Style[0]=["white","black","#cc0000","#FFCC99","","","","","","","","","","",200,"",2,2,10,10,"","","","",""]
-Style[1]=["white","black","#cc0000","#FFCC99","","","","","","","center","","","",200,"",2,2,10,10,"","","","",""]
+Style[0]=["white","black","#cc0000","#FFCC99","","","","","","","","","","",500,"",2,2,10,10,"","","","",""]
+Style[1]=["white","black","#0033CC","#00FFFF","","","","","","","center","","","",500,"",2,2,10,10,"","","","",""]
 Style[2]=["white","black","#cc0000","#FFCC99","","","","","","","left","","","",200,"",2,2,10,10,"","","","",""]
 Style[3]=["white","black","#cc0000","#FFCC99","","","","","","","float","","","",200,"",2,2,10,10,"","","","",""]
 Style[4]=["white","black","#cc0000","#FFCC99","","","","","","","fixed","","","",200,"",2,2,150,400,"","","","",""]

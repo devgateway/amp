@@ -5,7 +5,7 @@ import java.util.Collection;
 /**
  * @author jose
  */
-public class FundingOrganization {
+public class FundingOrganization implements Comparable{
 	
 	private Long ampOrgId;
 	private String orgName ;
@@ -50,4 +50,11 @@ public class FundingOrganization {
     	}
     	throw new ClassCastException();
     }
+
+	public int compareTo(Object arg0) {
+		// TODO Auto-generated method stub
+		FundingOrganization comparedOrganization = (FundingOrganization)arg0;
+		return this.orgName.compareTo(comparedOrganization.orgName);
+		//return -1;
+	}
 }

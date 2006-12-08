@@ -9,7 +9,7 @@
 
 <script langauage="JavaScript">
 	function onDelete() {
-		var flag = confirm("Delete this Scheme?");
+		var flag = confirm("Delete this Sector?");
 		return flag;
 	}
 	function updateScheme(id) {
@@ -162,7 +162,7 @@
 															</c:set>
 															<c:set target="${urlParams4}" property="event" value="delete"/>
 															<bean:define id="translation">
-																<digi:trn key="aim:clickToDeleteScheme">Click here to Delete Scheme</digi:trn>
+																<digi:trn key="aim:clickToDeleteSector">Click here to Delete Sector</digi:trn>
 															</bean:define>
 															[ <digi:link href="/deleteSector.do" name="urlParams2" 
 																title="<%=translation%>" onclick="return onDelete()">Delete</digi:link> ]

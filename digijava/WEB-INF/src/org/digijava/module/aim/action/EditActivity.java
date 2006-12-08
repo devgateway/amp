@@ -13,6 +13,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
+import java.util.TreeSet;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletContext;
@@ -27,8 +28,12 @@ import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
+import org.dgfoundation.amp.ar.ARUtil;
+import org.dgfoundation.amp.ar.ArConstants;
 import org.digijava.kernel.dbentity.Country;
+import org.digijava.kernel.request.Site;
 import org.digijava.kernel.user.User;
+import org.digijava.kernel.util.RequestUtils;
 import org.digijava.module.aim.dbentity.AmpActivity;
 import org.digijava.module.aim.dbentity.AmpActivityClosingDates;
 import org.digijava.module.aim.dbentity.AmpActivityInternalId;
@@ -70,6 +75,7 @@ import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.ActivityUtil;
 import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.aim.util.DbUtil;
+import org.digijava.module.aim.util.DocumentUtil;
 import org.digijava.module.aim.util.ProgramUtil;
 import org.digijava.module.aim.util.TeamMemberUtil;
 import org.digijava.module.cms.dbentity.CMSContentItem;
@@ -97,25 +103,55 @@ public class EditActivity extends Action {
 
 		HttpSession session = request.getSession();
 		TeamMember tm = (TeamMember) session.getAttribute("currentMember");
+		ActionErrors errors = new ActionErrors();
 
 		ampContext = getServlet().getServletContext();
 
 		// if user is not logged in, forward him to the home page
 		if (session.getAttribute("currentMember") == null)
 			return mapping.findForward("index");
+		EditActivityForm eaForm = (EditActivityForm) form; // form bean instance
+		Long activityId = eaForm.getActivityId();
 
-        if(!tm.getWrite()){
-            return mapping.findForward("accessDenyed");
+		String errorMsgKey = "";
+		if (!mapping.getPath().trim().endsWith("viewActivityPreview")) { 
+			if (!("Team".equalsIgnoreCase(tm.getTeamAccessType()))) {
+				errorMsgKey = "error.aim.editActivity.userPartOfManagementTeam";
+			} else if (tm.getWrite() == false) {
+				errorMsgKey = "error.aim.editActivity.noWritePermissionForUser";
         }
-		EditActivityForm eaForm = (EditActivityForm) form; // form bean
-		// instance
+		}
 
+		if (errorMsgKey.trim().length() > 0) {
+			errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
+					errorMsgKey));
+			saveErrors(request, errors);
+
+			String url = "/aim/viewChannelOverview.do?ampActivityId="
+				+ activityId + "&tabIndex=0";
+			RequestDispatcher rd = getServlet().getServletContext()
+				.getRequestDispatcher(url);
+			rd.forward(request, response);							
+						errorMsgKey = "error.aim.editActivity.userPartOfManagementTeam";
+			} else if (tm.getWrite() == false) 
+				errorMsgKey = "error.aim.editActivity.noWritePermissionForUser";
+
+		if (errorMsgKey.trim().length() > 0) {
+			errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
+					errorMsgKey));
+			saveErrors(request, errors);
+
+			String url = "/aim/viewChannelOverview.do?ampActivityId="
+				+ activityId + "&tabIndex=0";
+			RequestDispatcher rd = getServlet().getServletContext()
+				.getRequestDispatcher(url);
+			rd.forward(request, response);							
+		}
+		
 		try {
 
 			// Checking whether the activity is already opened for editing
 			// by some other user
-
-			Long activityId = eaForm.getActivityId();
 
 			eaForm.setReset(true);
 			eaForm.setOrgSelReset(true);
@@ -131,6 +167,10 @@ public class EditActivity extends Action {
 					.getAttribute(Constants.EDIT_ACT_LIST);
 
 			boolean canEdit = true;
+			/*
+			 * modified by Govind
+			 */
+			String step= request.getParameter("step");
 
 			eaForm.setActivityId(activityId);
             eaForm.setReset(false);
@@ -211,7 +251,7 @@ public class EditActivity extends Action {
 
 			//logger.info("CanEdit = " + canEdit);
 			if (!canEdit) {
-				ActionErrors errors = new ActionErrors();
+				
 				errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
 						"error.aim.activityAlreadyOpenedForEdit"));
 				saveErrors(request, errors);
@@ -287,6 +327,11 @@ public class EditActivity extends Action {
 					eaForm.setSurveyFlag(Boolean.FALSE);
 				}
 			} else {
+				if(!step.equals(null))
+				{
+					eaForm.setStep(step);
+				}
+				else
 				eaForm.setStep("1");
 			}
 			eaForm.setReset(false);
@@ -421,7 +466,7 @@ public class EditActivity extends Action {
 					Collection ampLocs = activity.getLocations();
 
 					if (ampLocs != null && ampLocs.size() > 0) {
-						Collection locs = new ArrayList();
+						Collection locs = new TreeSet();
 
 						Iterator locIter = ampLocs.iterator();
 						boolean maxLevel = false;
@@ -692,9 +737,22 @@ public class EditActivity extends Action {
 					ArrayList regFunds = new ArrayList();
 					Iterator rItr = activity.getRegionalFundings().iterator();
 
+					eaForm.setRegionTotalDisb(0);
 					while (rItr.hasNext()) {
 						AmpRegionalFunding ampRegFund = (AmpRegionalFunding) rItr
 								.next();
+						
+						double disb=0;
+						if( ampRegFund.getAdjustmentType().intValue()==1 && ampRegFund.getTransactionType().intValue()==1) disb=ampRegFund.getTransactionAmount().doubleValue();
+						//if(!ampCompFund.getCurrency().getCurrencyCode().equals("USD")) {
+							//double toRate=1;
+							
+						//	disb/=ARUtil.getExchange(ampCompFund.getCurrency().getCurrencyCode(),new java.sql.Date(ampCompFund.getTransactionDate().getTime()));
+						//}
+						eaForm.setRegionTotalDisb(eaForm.getRegionTotalDisb()+disb);
+
+						
+						
 						FundingDetail fd = new FundingDetail();
 						fd.setAdjustmentType(ampRegFund.getAdjustmentType()
 								.intValue());
@@ -779,7 +837,7 @@ public class EditActivity extends Action {
 					eaForm.setRegionalFundings(regFunds);
 
 					eaForm.setSelectedComponents(null);
-
+					eaForm.setCompTotalDisb(0);
 					Collection componets = activity.getComponents();
 					if (componets != null && componets.size() > 0) {
 						ArrayList comp = new ArrayList();
@@ -800,6 +858,15 @@ public class EditActivity extends Action {
 							while (cItr.hasNext()) {
 								AmpComponentFunding ampCompFund = (AmpComponentFunding) cItr
 										.next();
+								
+								double disb=0;
+								if( ampCompFund.getAdjustmentType().intValue()==1 && ampCompFund.getTransactionType().intValue()==1) disb=ampCompFund.getTransactionAmount().doubleValue();
+								//if(!ampCompFund.getCurrency().getCurrencyCode().equals("USD")) {
+									//double toRate=1;
+									
+								//	disb/=ARUtil.getExchange(ampCompFund.getCurrency().getCurrencyCode(),new java.sql.Date(ampCompFund.getTransactionDate().getTime()));
+								//}
+								eaForm.setCompTotalDisb(eaForm.getCompTotalDisb()+disb);
 								FundingDetail fd = new FundingDetail();
 								fd.setAdjustmentType(ampCompFund
 										.getAdjustmentType().intValue());

@@ -23,7 +23,16 @@ function addOrganisation(orgId, orgName){
     option.text = orgName;
     list.options.add(option);
 }
-
+function check(){
+    var et=document.getElementById("eventTitle");
+    if(et.value==''){
+      alert("Please enter event title");
+      return false;
+    }else{
+      selectAllOrgs();
+      return true;
+    }
+}
 function addGuest(guest) {
     var list = document.getElementById('selectedAttendeeGuests');
     if (list == null || guest == null || guest.value == null || guest.value == "") {
@@ -157,7 +166,7 @@ function selectAllOrgs() {
                 <tr>
                     <td nowrap="nowrap">&nbsp;<span class="redbold">*</span>Event Title&nbsp;&nbsp;</td>
                     <td>
-                        <html:text name="calendarEventForm" property="eventTitle"/>
+                        <html:text name="calendarEventForm" styleId="eventTitle" property="eventTitle"/>
                     </td>
                 </tr>
                 <tr>
@@ -172,17 +181,17 @@ function selectAllOrgs() {
                     </td>
                 </tr>
                 <tr>
-                    <td nowrap="nowrap" valign="top"><br />&nbsp;Organisations&nbsp;&nbsp;</td>
+                    <td nowrap="nowrap" valign="top"><br />&nbsp;Organizations&nbsp;&nbsp;</td>
                     <td>
 
                       <a title="Facilitates tracking activities in donors' internal databases">
                        <br />
                        <digi:link href="/selectOrganization.do?orgSelReset=true&edit=true" onclick="window.open(this.href, 'users', 'HEIGHT=500,resizable=yes,scrollbars=yes,WIDTH=500');return false;">
-                        Add Organisation
+                        Add Organizations
                        </digi:link>
                        &nbsp
                       <a href="#" onclick="return removeSelOrganisations();">
-                        Delete Organisation
+                        Delete Organization
                       </a>
                         </a>
                         <br /><br />
@@ -213,7 +222,7 @@ function selectAllOrgs() {
                         <td nowrap="nowrap">
                             <table cellpadding="0" cellspacing="0">
                                 <td nowrap="nowrap">
-                                    <html:text styleId="selectedStartDate" name="calendarEventForm" property="selectedStartDate" style="width:80px"/>
+                                    <html:text styleId="selectedStartDate" readonly="true" name="calendarEventForm" property="selectedStartDate" style="width:80px"/>
                                 </td>
                                 <td>&nbsp;</td>
                                 <td>
@@ -324,7 +333,7 @@ function selectAllOrgs() {
                         <td nowrap="nowrap">
                             <table cellpadding="0" cellspacing="0">
                                 <td nowrap="nowrap">
-                                    <html:text styleId="selectedEndDate" name="calendarEventForm" property="selectedEndDate" style="width:80px"/>
+                                    <html:text styleId="selectedEndDate" readonly="true" name="calendarEventForm" property="selectedEndDate" style="width:80px"/>
                                 </td>
                                 <td>&nbsp;</td>
                                 <td>
@@ -494,7 +503,7 @@ function selectAllOrgs() {
                 <tr>
                     <td>&nbsp;</td>
                     <td>
-                        <input type="submit" value="Preview" onclick="selectAllOrgs()">
+                        <input type="submit" value="Preview" onclick="return check();">
                     </td>
                 </tr>
             </table>

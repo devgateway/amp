@@ -35,7 +35,7 @@
                                  READ_UNCOMMITTED
                                  NONE
         -->
-        <attribute name="IsolationLevel">REPEATABLE_READ</attribute>
+        <attribute name="IsolationLevel">READ_COMMITTED</attribute>
 
         <!--
              Valid modes are LOCAL
@@ -118,7 +118,7 @@
         <attribute name="SyncReplTimeout">10000</attribute>
 
         <!-- Max number of milliseconds to wait for a lock acquisition -->
-        <attribute name="LockAcquisitionTimeout">15000</attribute>
+        <attribute name="LockAcquisitionTimeout">50000</attribute>
 
         <!-- Max number of milliseconds we hold a lock (not currently
         implemented) -->

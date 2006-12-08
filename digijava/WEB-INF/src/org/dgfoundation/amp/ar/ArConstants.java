@@ -33,12 +33,21 @@ public final class ArConstants {
 	public final static String ADJUSTMENT_TYPE="Adjustment Type";
 	public final static String TRANSACTION_TYPE="Transaction Type";
 	public final static String FUNDING_TYPE="Funding Type";
+	public final static String TERMS_OF_ASSISTANCE="Terms of Assistance";
+	public final static String YEAR="Year";
+	public final static String QUARTER="Quarter";
+	public final static String PERSPECTIVE="Perspective";
+
+	//report types
 	public final static String DONOR="Donor";
+	public final static String REGION="Region";
+	public final static String COMPONENT="Component";
+
 	
 	//metainfo values:
-	public final static String COMMITMENT="Commitment";
-	public final static String DISBURSEMENT="Disbursement";
-	public final static String EXPENDITURE="Expenditure";
+	public final static String COMMITMENT="Commitments";
+	public final static String DISBURSEMENT="Disbursements";
+	public final static String EXPENDITURE="Expenditures";
 	
 	public final static String PLANNED="Planned";
 	public final static String ACTUAL="Actual";

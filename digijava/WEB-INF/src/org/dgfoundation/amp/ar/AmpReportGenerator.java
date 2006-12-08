@@ -75,7 +75,7 @@ public class AmpReportGenerator extends ReportGenerator {
 				AmpReportColumn element = (AmpReportColumn) i.next();
 				if (element.getColumn().getColumnName().equals(
 						"Type Of Assistance")) {
-					ret.add("Terms of Assistance");
+					ret.add(ArConstants.TERMS_OF_ASSISTANCE);
 					break;
 				}
 			}
@@ -238,7 +238,7 @@ public class AmpReportGenerator extends ReportGenerator {
 		AmountCellColumn funding = (AmountCellColumn) rawColumns
 				.getColumn("Funding");
 
-		Column newcol = GroupColumn.verticalSplitByCategs(funding, cats, true);
+		Column newcol = GroupColumn.verticalSplitByCategs(funding, cats, true,this.reportMetadata);
 
 		// we create the cummulative balance (undisbursed) = act commitment -
 		// act disbursement
@@ -283,12 +283,20 @@ public class AmpReportGenerator extends ReportGenerator {
 				.getName());
 		reportChild.addColumns(rawColumns.getItems());
 		report.addReport(reportChild);
+
+		//perform removal of funding column if no measure except undisbursed balance is selected. in such case,we just need totals
+		if(reportMetadata.getMeasures().size()==1 && ARUtil.containsMeasure(ArConstants.UNDISBURSED_BALANCE,reportMetadata.getMeasures())) 
+			reportChild.removeColumn("Funding");
+		
+
+		
 		// find out if this is a hierarchical report or not:
 		if (reportMetadata.getHierarchies().size() != 0)
 			createHierarchies();
 
 		// perform postprocessing - cell grouping and other tasks
 		report.postProcess();
+		
 
 	}
 
@@ -331,7 +339,7 @@ public class AmpReportGenerator extends ReportGenerator {
 			CellColumn src = (CellColumn) rawColumns.getColumn(colName);
 			if (cats.size() != 0) {
 				Column newcol = GroupColumn.verticalSplitByCategs(src, cats,
-						true);
+						true,reportMetadata);
 				rawColumns.replaceColumn(colName, newcol);
 			}
 		}

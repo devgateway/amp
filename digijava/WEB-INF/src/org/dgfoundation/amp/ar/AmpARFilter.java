@@ -14,17 +14,18 @@ import java.util.Set;
  * @since Aug 5, 2006
  *
  */
-public class AmpARFilter implements Filter {
-	
+public class AmpARFilter implements Filter {	
 	private Long id;
-	
-	private Long ampStatusId=null;
-	private Long ampOrgId=null;
+	private Set statuses=null;
+	private Set donors=null;
 	private Set sectors=null;
-	private String region=null;
+	private Set regions=null;
 	private Long ampModalityId=null;
 	private String ampCurrencyCode=null;
 	private Set ampTeams=null;
+	private Integer calendarType=null;
+	private String perspectiveCode;
+
 	
 	private Integer fromYear;
 	private Integer toYear;
@@ -45,10 +46,10 @@ public class AmpARFilter implements Filter {
 	
 	public void generateFilterQuery() {
 		String TEAM_FILTER="SELECT amp_activity_id FROM v_status WHERE amp_team_id IN ("+ARUtil.toSQLEnum(ampTeams)+")";
-		String STATUS_FILTER="SELECT amp_activity_id FROM v_status WHERE amp_status_id="+ampStatusId;
-		String ORG_FILTER = "SELECT amp_activity_id FROM v_donors WHERE amp_donor_org_id="+ampOrgId;
+		String STATUS_FILTER="SELECT amp_activity_id FROM v_status WHERE amp_status_id IN ("+ARUtil.toSQLEnum(statuses)+")";
+		String ORG_FILTER = "SELECT amp_activity_id FROM v_donors WHERE amp_donor_org_id IN ("+ARUtil.toSQLEnum(donors)+")";
 		String SECTOR_FILTER="SELECT amp_activity_id FROM v_sectors WHERE amp_sector_id IN ("+ARUtil.toSQLEnum(sectors)+")";
-		String REGION_FILTER="SELECT amp_activity_id FROM v_regions WHERE name='"+region+"'";
+		String REGION_FILTER="SELECT amp_activity_id FROM v_regions WHERE name IN ("+ARUtil.toSQLEnum(regions)+")";
 		String FINANCING_INSTR_FILTER="SELECT amp_activity_id FROM v_financing_instrument WHERE amp_modality_id='"+ampModalityId+"'";
 		//currency is not a filter but a currency transformation
 		//String START_YEAR_FILTER="SELECT amp_activity_id FROM v_actual_start_date WHERE date_format(actual_start_date,_latin1'%Y')>='"+startYear+"'";
@@ -64,14 +65,14 @@ public class AmpARFilter implements Filter {
 		String TO_YEAR_FILTER="SELECT f.amp_activity_id FROM amp_funding f, amp_funding_detail fd WHERE f.amp_funding_id=fd.AMP_FUNDING_ID and date_format(fd.transaction_date,_latin1'%Y')<='"+toYear+"'";
 		
 		if(ampTeams!=null) queryAppend(TEAM_FILTER);
-		if(ampStatusId!=null && ampStatusId.intValue()!=0) queryAppend(STATUS_FILTER);
-		if(ampOrgId!=null && ampOrgId.intValue()!=0) queryAppend(ORG_FILTER);
+		if(statuses!=null && statuses.size()>0) queryAppend(STATUS_FILTER);
+		if(donors!=null && donors.size()>0) queryAppend(ORG_FILTER);
 		if(sectors!=null && sectors.size()!=0) queryAppend(SECTOR_FILTER);
-		if(region!=null && !region.equals("All")) queryAppend(REGION_FILTER);
+		if(regions!=null && regions.size()>0) queryAppend(REGION_FILTER);
 		if(ampModalityId!=null && ampModalityId.intValue()!=0) queryAppend(FINANCING_INSTR_FILTER);
 		
-		if(fromYear!=null) queryAppend(FROM_YEAR_FILTER);
-		if(toYear!=null) queryAppend(TO_YEAR_FILTER);
+		//if(fromYear!=null) queryAppend(FROM_YEAR_FILTER);
+		//if(toYear!=null) queryAppend(TO_YEAR_FILTER);
 		
 		//if(startYear!=0) queryAppend(START_YEAR_FILTER);
 		//if(startMonth!=0) queryAppend(START_MONTH_FILTER);
@@ -114,22 +115,6 @@ public class AmpARFilter implements Filter {
 		this.ampModalityId = ampModalityId;
 	}
 
-
-	/**
-	 * @return Returns the ampOrgId.
-	 */
-	public Long getAmpOrgId() {
-		return ampOrgId;
-	}
-
-
-	/**
-	 * @param ampOrgId The ampOrgId to set.
-	 */
-	public void setAmpOrgId(Long ampOrgId) {
-		this.ampOrgId = ampOrgId;
-	}
-
  
 
 	/**
@@ -146,36 +131,6 @@ public class AmpARFilter implements Filter {
 		this.sectors = sectors;
 	}
 
-	/**
-	 * @return Returns the ampStatusId.
-	 */
-	public Long getAmpStatusId() {
-		return ampStatusId;
-	}
-
-
-	/**
-	 * @param ampStatusId The ampStatusId to set.
-	 */
-	public void setAmpStatusId(Long ampStatusId) {
-		this.ampStatusId = ampStatusId;
-	}
-
-
-	/**
-	 * @return Returns the region.
-	 */
-	public String getRegion() {
-		return region;
-	}
-
-
-	/**
-	 * @param region The region to set.
-	 */
-	public void setRegion(String region) {
-		this.region = region;
-	}
 
 	/**
 	 * @return Returns the generatedFilterQuery.
@@ -204,7 +159,6 @@ public class AmpARFilter implements Filter {
 	public void setAmpTeams(Set ampTeams) {
 		this.ampTeams = ampTeams;
 	}
-
 
 
 	/**
@@ -248,5 +202,80 @@ public class AmpARFilter implements Filter {
 	public void setId(Long id) {
 		this.id = id;
 	}
+
+	/**
+	 * @return Returns the calendarType.
+	 */
+	public Integer getCalendarType() {
+		return calendarType;
+	}
+
+	/**
+	 * @param calendarType The calendarType to set.
+	 */
+	public void setCalendarType(Integer calendarType) {
+		this.calendarType = calendarType;
+	}
+
+	/**
+	 * @return Returns the donors.
+	 */
+	public Set getDonors() {
+		return donors;
+	}
+
+	/**
+	 * @param donors The donors to set.
+	 */
+	public void setDonors(Set donors) {
+		this.donors = donors;
+	}
+
+	/**
+	 * @return Returns the regions.
+	 */
+	public Set getRegions() {
+		return regions;
+	}
+
+	/**
+	 * @param regions The regions to set.
+	 */
+	public void setRegions(Set regions) {
+		this.regions = regions;
+	}
+
+	/**
+	 * @return Returns the statuses.
+	 */
+	public Set getStatuses() {
+		return statuses;
+	}
+
+	/**
+	 * @param statuses The statuses to set.
+	 */
+	public void setStatuses(Set statuses) {
+		this.statuses = statuses;
+	}
+
+	/**
+	 * @return Returns the perspectiveCode.
+	 */
+	public String getPerspectiveCode() {
+		return perspectiveCode;
+	}
+
+	/**
+	 * @param perspectiveCode The perspectiveCode to set.
+	 */
+	public void setPerspectiveCode(String perspective) {
+		this.perspectiveCode = perspective;
+	}
+
+	/**
+	 * @return Returns the approvalStatus.
+	 */
+
 
 }

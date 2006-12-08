@@ -10,9 +10,11 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Date;
 
+import org.dgfoundation.amp.ar.AmpARFilter;
 import org.dgfoundation.amp.ar.ReportGenerator;
 import org.dgfoundation.amp.ar.cell.Cell;
 import org.dgfoundation.amp.ar.cell.DateCell;
+import org.digijava.module.aim.helper.Constants;
 
 /**
  * 
@@ -40,6 +42,13 @@ public class DateColWorker extends ColumnWorker {
 		Long id=new Long(rs.getLong(1));
 		Date value=rs.getDate(2);
 		DateCell ret=new DateCell(id);
+		
+		//checking the filter calendar
+		AmpARFilter filter=(AmpARFilter) generator.getFilter();
+		if(value!=null && filter.getCalendarType()!=null && (filter.getCalendarType().intValue()==Constants.ETH_CAL.intValue() || filter.getCalendarType().intValue()==Constants.ETH_FY.intValue()))
+			ret.setEthiopianDate(true);
+			
+		
 		ret.setValue(value);
 		return ret;
 	}

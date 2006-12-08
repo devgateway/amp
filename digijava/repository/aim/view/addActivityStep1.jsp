@@ -96,6 +96,7 @@ function validateForm() {
 	document.aimEditActivityForm.step.value="2";
 	return true;
 }
+
 function reviseCloseDate() {
 	openNewWindow(600, 150);
 	<digi:context name="rev" property="context/module/moduleinstance/reviseCompDate.do?edit=true" />
@@ -193,8 +194,9 @@ function popupwin()
 									<digi:trn key="aim:addNewActivity">Add New Activity</digi:trn>
 								</c:if>
 								<c:if test="${aimEditActivityForm.editAct == true}">
-									<digi:trn key="aim:editActivity">Edit Activity</digi:trn>
-								</c:if>
+									<digi:trn key="aim:editActivity">Edit Activity</digi:trn>:
+										<bean:write name="aimEditActivityForm" property="title"/>
+								</c:if>										
 							</td>
 						</tr>
 					</table>
@@ -317,7 +319,9 @@ function popupwin()
 											<logic:notEmpty name="aimEditActivityForm" property="selectedOrganizations">
 											<td>
 												<table cellSpacing=1 cellPadding=1 border=0 width="500">
-													<c:forEach var="selectedOrganizations" items="${aimEditActivityForm.selectedOrganizations}" >
+												<logic:iterate name="aimEditActivityForm"
+													property="selectedOrganizationsList" id="selectedOrganizations"
+													type="org.digijava.module.aim.helper.OrgProjectId">
 														<tr>
 															<td align="left" width=3>
 																<html:multibox property="selOrgs">

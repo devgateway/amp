@@ -11,7 +11,6 @@
 
 <script language="JavaScript">
 <!--
-
 	function validateForm() {
 		return true;
 	}
@@ -133,7 +132,8 @@ function resetAll()
 								<c:if test="${aimEditActivityForm.editAct == true}">
 									<digi:trn key="aim:editActivity">
 										Edit Activity
-									</digi:trn>
+									</digi:trn>:
+										<bean:write name="aimEditActivityForm" property="title"/>
 								</c:if>				
 							</td>
 						</tr>	

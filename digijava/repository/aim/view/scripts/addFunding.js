@@ -31,19 +31,70 @@ function validateFunding() {
 	return validateFundingDetails(numComm,numDisb,numExp);
 }
 
+	function chkNumeric(objName,comma,period,hyphen)
+	{
+// only allow 0-9 be entered, plus any values passed
+// (can be in any order, and don't have to be comma, period, or hyphen)
+// if all numbers allow commas, periods, hyphens or whatever,
+// just hard code it here and take out the passed parameterscheckNumeric
+		var checkOK = "0123456789" + comma + period + hyphen;
+		var checkStr = objName;
+		var allValid = true;
+		var decPoints = 0;
+		//var contor;
+		var allNum = "";
+		
+		contor=0;
+		for (i = 0;  i < checkStr.value.length;  i++)
+		{
+			ch = checkStr.value.charAt(i);
+			if (ch==".") 
+			{
+				if (i==0) {allValid=false; break;}
+				contor++;
+				if (contor>1) {allValid=false; break;}
+				
+			}
+
+			for (j = 0;  j < checkOK.length;  j++)
+			 {
+			 	if (ch == checkOK.charAt(j)) break;
+			 }
+			if (j == checkOK.length)
+			{
+				allValid = false;
+				break;
+			}
+			if (ch != ",") allNum += ch;
+		}
+		if (!allValid)
+		{	
+			alertsay = "Please enter only numbers in the \"Exchange rate\" field or a valid decimal number using \".\" "
+			alert(alertsay);
+			return (false);
+		}
+	}
+
+
 function validateFundingDetails(comm,disb,exp) {
 	var itr = comm + disb + exp;
 	var commAmt = 0, disbAmt = 0, expAmt = 0;
 	var disbIndex = -1, expIndex = -1; 
-	
 	for (var j = 0;j < itr;j ++) {
 		var amtField = "fundingDetail[" + j + "].transactionAmount";
 		var dateField = "fundingDetail[" + j + "].transactionDate";
 		var transType = "fundingDetail[" + j + "].transactionType";
+		var fixedExchangeRate="fundingDetail[" + j + "].fixedExchangeRate";
 		var temp = new Array();
 		temp = document.aimEditActivityForm.elements;		
-
+			
 		for (var i = 0;i < temp.length;i ++) {
+		
+			if(temp[i].name != null && temp[i].name == fixedExchangeRate) 
+			{
+				if(chkNumeric(temp[i],'','.','')==false) {return false;}
+			}
+		
 			if (temp[i].name != null && temp[i].name == amtField) {
 				if (trim(temp[i].value) == "") {
 					msg = "Please enter the amount for the transaction";

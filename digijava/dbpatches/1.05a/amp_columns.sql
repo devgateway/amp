@@ -44,4 +44,5 @@ INSERT INTO `amp_columns` (`columnId`,`columnName`,`aliasName`,`cellType`,`extra
  (20,'Measures Taken','measures_taken','org.dgfoundation.amp.ar.cell.TextCell','v_measures_taken'),
  (21,'Actors','actors','org.dgfoundation.amp.ar.cell.TextCell','v_actors'),
  (22,'Actual Approval Date','actual_approval_date','org.dgfoundation.amp.ar.cell.DateCell','v_actual_approval_date'),
- (23,'Donor Commitment Date','donor_commitment_date','org.dgfoundation.amp.ar.cell.DateCell','v_donor_commitment_date'); 
+ (23,'Donor Commitment Date','donor_commitment_date','org.dgfoundation.amp.ar.cell.DateCell','v_donor_commitment_date'),
+ (24,'Physical Progress','physical_progress','org.dgfoundation.amp.ar.cell.TextCell','v_physical_progress');  

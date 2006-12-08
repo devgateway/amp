@@ -19,5 +19,7 @@ public interface Categorizable {
 	public MetaInfo getMetaInfo(String category);
 	
 	public boolean hasMetaInfo(MetaInfo m);
+	
+	public boolean isShow();
 
 }

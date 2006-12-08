@@ -76,9 +76,6 @@
 		<hibernate-class>
 			org.digijava.module.aim.dbentity.AmpTeam
 		</hibernate-class>
-		<hibernate-class>
-			org.dgfoundation.amp.ar.AmpARFilter
-		</hibernate-class>
 
 		<hibernate-class>
 			org.digijava.module.aim.dbentity.AmpTeamMemberRoles
@@ -230,7 +227,9 @@
 		<hibernate-class>
 			org.digijava.module.aim.dbentity.AmpExternalMapping
 		</hibernate-class>
-
+	<hibernate-class>
+			  org.digijava.module.aim.dbentity.AmpGlobalSettings
+	</hibernate-class>
 
 	</hibernate-classes>
         <!-- highlights classes End-->

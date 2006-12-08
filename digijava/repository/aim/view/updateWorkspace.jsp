@@ -38,6 +38,7 @@ function removeChildWorkspace(id) {
 	document.aimUpdateWorkspaceForm.submit();		  
 }
 
+
 function update(action) {
 	var event	= document.aimUpdateWorkspaceForm.actionEvent.value;
 	var relFlag = document.aimUpdateWorkspaceForm.relatedTeamFlag.value;
@@ -73,7 +74,7 @@ function update(action) {
 				var val5	= document.aimUpdateWorkspaceForm.type.options[index4].value;
 				var bsize	= parseInt(document.aimUpdateWorkspaceForm.relatedTeamBilatCollSize.value, 10);
 				var val6	= document.aimUpdateWorkspaceForm.relatedTeamFlag.value;
-				
+			
 				if (val1 == "DONOR" && val2 == "Team") {
 					if (val5 == "-1") {
 							alert("Please select team type");

@@ -13,6 +13,8 @@
 	request.setAttribute("cell",c);
 %> 
 <bean:define id="viewable" name="cell" type="org.dgfoundation.amp.ar.cell.Cell" scope="request" toScope="request"/>
+<bean:define id="caller" name="cellColumn" type="org.dgfoundation.amp.ar.CellColumn" scope="page" toScope="request" />	
+
 <jsp:include page="<%=viewable.getViewerPath()%>"/>	
 <% } else { %> &nbsp; <% } %>
 </td>

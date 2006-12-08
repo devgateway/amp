@@ -57,6 +57,8 @@ public class UpdateWorkspace extends Action {
 
             String event = request.getParameter("event");
             String dest = request.getParameter("dest");
+            String tId1 = request.getParameter("tId");
+            System.out.println("Am primit parametrul " + tId1 +" *****************************8");
             logger.debug("event : " + event + " dest : " + dest);
 
             // Mapping regular DONOR team with a regular MOFEDd team of same
@@ -161,6 +163,20 @@ public class UpdateWorkspace extends Action {
             if(event != null && event.trim().equalsIgnoreCase("add")) {
                 uwForm.setActionEvent("add");
                 if(newTeam != null) {
+                	if(uwForm.getChildWorkspaces()==null && uwForm.getWorkspaceType().compareTo("Management")==0)
+                    {
+                 	   errors
+                        .add(
+                            ActionErrors.GLOBAL_ERROR,
+                            new ActionError(
+                                "error.aim.updateWorkspace.noManagementChildSelected"));
+                    saveErrors(request, errors);
+                    logger
+                        .debug(
+                        "error.aim.updateWorkspace.noManagementChildSelected !!!!!");
+                    return mapping.getInputForward();
+                    }
+                	
                     boolean teamExist = TeamUtil.createTeam(newTeam, uwForm
                         .getChildWorkspaces());
                     if(teamExist) {
@@ -179,7 +195,21 @@ public class UpdateWorkspace extends Action {
             } else if(event != null && event.trim().equalsIgnoreCase("edit")) {
                 uwForm.setActionEvent("edit");
                 if(newTeam != null) {
-                    newTeam.setAmpTeamId(uwForm.getTeamId());
+                	if(uwForm.getChildWorkspaces().size()==0 && uwForm.getWorkspaceType().compareTo("Management")==0)
+                    {
+                 		errors
+                        .add(
+                            ActionErrors.GLOBAL_ERROR,
+                            new ActionError(
+                                "error.aim.updateWorkspace.noManagementChildSelected"));
+                    saveErrors(request, errors);
+                    logger
+                        .debug(
+                        "error.aim.updateWorkspace.noManagementChildSelected !!!!!");
+                    return mapping.getInputForward();
+                    }
+                	if (tId1==null)	newTeam.setAmpTeamId(uwForm.getTeamId());
+                	else newTeam.setAmpTeamId(new Long(Long.parseLong(tId1)));
                     if(newTeam.getAccessType().equalsIgnoreCase("Team")
                        && (uwForm.getChildWorkspaces() != null && uwForm
                            .getChildWorkspaces().size() > 0)) {

@@ -10,10 +10,10 @@
    String viewParamXLS="/xlsExport.do"+viewParam;
    String viewParamPDF="/pdfExport.do"+viewParam;
    String viewParamCSV="/csvExport.do"+viewParam;
-   String viewParamPrint="/viewNewAdvancedReport.do"+viewParam+"&viewFormat=print";
+   String viewParamPrint="/viewNewAdvancedReport.do"+(viewParam.equals("") || viewParam.equals("?view=reset")?"?":"&")+"viewFormat=print";
 %>
 
-   <TABLE class=toolbar id=toolbartable cellSpacing=0 cellPadding=0 
+   <TABLE class=toolbar id=toolbartable cellSpacing=0 cellPadding=0
       width="100%" bgColor=#c0c0c0 border=0 name="toolbartable">
         <TBODY>
         <TR align=left>
@@ -62,7 +62,7 @@
 				</TD>
 				
 
-				
+
 
               </TR>
                   
@@ -71,4 +71,3 @@
 </TR>
 </TBODY>
 </TABLE>
-                  

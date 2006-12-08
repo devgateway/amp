@@ -28,24 +28,14 @@ public class AddLocation extends Action
   {
 	 AddLocationForm addForm = (AddLocationForm) form;
 	 
-	 if (request.getParameter("edLevel") != null && request.getParameter("edAction") != null) {
-	 	addForm.setEdLevel(request.getParameter("edLevel"));
-	 	addForm.setEdAction(request.getParameter("edAction"));
-	  	System.out.println("Inside AddLocation[edLevel] :" + addForm.getEdLevel());
-	 	System.out.println("Inside AddLocation[edAction]  :" + addForm.getEdAction());
-	 }
-	 System.out.println("Inside AddLocation[edFlag]  :" + addForm.getEdFlag());
-	 logger.debug("In addLocation");
-	 
 	 String level = addForm.getEdLevel();
 	 String action = addForm.getEdAction();
 	 boolean edFlag = false;
 	 if (addForm.getEdFlag()!= null && addForm.getEdFlag().equals("on"))
 	 	edFlag = true;
 
-	if ("create".equals(action)) { 
+	if ("create".equals(action)) {
 	 if (addForm.getName() == null || edFlag) {
-	 	logger.debug("Inside IF [CREATE]");
 	 	if (edFlag) {
 	 		addForm.setName("");
 			addForm.setCode("");
@@ -53,131 +43,109 @@ public class AddLocation extends Action
 			addForm.setGsLong("");
 			addForm.setGeoCode("");
 			addForm.setDescription("");
+			addForm.setIso("");
+			addForm.setIso3("");
 	 	}
 	 	return mapping.findForward("forward");
 	 }
 	 else {
-	 	Country ctry = new Country();
-	 	AmpRegion reg = new AmpRegion();
-	 	AmpZone zon = new AmpZone();
-	 	
+	 	Country ctry  = new Country();
+	 	AmpRegion reg = null;
+ 		AmpZone zon   = null;
 	 	if (addForm.getCountryId() != null) {
-	 		System.out.println("Inside ELSE Part[CountryId] :" + addForm.getCountryId());
- 			ctry = DbUtil.getDgCountry(addForm.getCountryId());
+	 		ctry = DbUtil.getDgCountry(addForm.getCountryId());
  		}
-	 	else
-	 		System.out.println("Inside ELSE Part[CREATE] :ctry is null !");
-	 	
-	 	if (addForm.getRegionId() != null) {
-	 		System.out.println("Inside ELSE Part[RegionId] :" + addForm.getRegionId());
- 			reg = LocationUtil.getAmpRegion(addForm.getRegionId());
- 		}
-	 	else
-	 		System.out.println("Inside ELSE Part[CREATE] :reg is null !");
-	
-		 	if (level.equals("region")){
-		 		AmpRegion c = new AmpRegion();
-		 		
-		 		if(ctry != null) {
-		 			c.setCountry(ctry);
-		 		}
-		 		else {
-		 			System.out.println("ctry is null!!");
-		 		}
-		 		
-				if (addForm.getDescription() == null || 
-						addForm.getDescription().trim().length() == 0) {
-					c.setDescription(" 	");}
-				else
-					c.setDescription(addForm.getDescription());
-				
-		 		c.setGeoCode(addForm.getGeoCode());
-		 		c.setGsLat(addForm.getGsLat());
-		 		c.setGsLong(addForm.getGsLong());
-		 		c.setName(addForm.getName());
-		 		c.setRegionCode(addForm.getCode());
-		 
-		 		DbUtil.add(c);
-		 	}
-		 	
-		 	if (level.equals("zone")){
-		 		
-		 		if(ctry != null) {
-		 			zon.setCountry(ctry);
-		 		}
-		 		else {
-		 			System.out.println("ctry is null!!");
-		 		}
-		 		
-		 		if(reg != null) {
-		 			zon.setRegion(reg);
-		 		}
-		 		else {
-		 			System.out.println("reg is null!!");
-		 		}
-		 		
-		 		//zon.getRegion().setAmpRegionId(addForm.getRegionId());
-		 		//zon.getCountry().setIso(addForm.getCountryId());
-		 		
-				if (addForm.getDescription() == null ||
-						addForm.getDescription().trim().length() == 0)
-					zon.setDescription(" ");
-				else
-					zon.setDescription(addForm.getDescription());
-				
-		 		zon.setGeoCode(addForm.getGeoCode());
-		 		zon.setGsLat(addForm.getGsLat());
-		 		zon.setGsLong(addForm.getGsLong());
-		 		zon.setName(addForm.getName());
-		 		zon.setZoneCode(addForm.getCode());
-		 		DbUtil.add(zon);
-		 	}
-		 
-		 	if (level.equals("woreda")){
-		 		AmpWoreda w = new AmpWoreda();
-		 		
-		 		if (addForm.getZoneId() != null) {
-		 			zon = LocationUtil.getAmpZone(addForm.getZoneId());
-		 		}
-		 	
-		 		if(ctry != null) {
-		 			w.setCountry(ctry);
-		 		}
-		 		else {
-		 			System.out.println("ctry is null!!");
-		 		}
-		 		
-		 		if(zon != null) {
-		 			w.setZone(zon);
-		 		}
-		 		else {
-		 			System.out.println("zon is null!!");
-		 		}
-		 		
-		 		//w.getZone().setAmpZoneId(addForm.getZoneId());
-		 		//w.getCountry().setIso(addForm.getCountryId());
-		 		
-				if (addForm.getDescription() == null ||
-						addForm.getDescription().trim().length() == 0)
-					w.setDescription(" ");
-				else
-					w.setDescription(addForm.getDescription());
-				
-		 		w.setGeoCode(addForm.getGeoCode());
-		 		w.setGsLat(addForm.getGsLat());
-		 		w.setGsLong(addForm.getGsLong());
-		 		w.setName(addForm.getName());
-		 		w.setWoredaCode(addForm.getCode());
-		 		DbUtil.add(w);
-		 	}
-		 	
-		 	addForm.setEdFlag("yes");
-		 	return mapping.findForward("added");
+	 	if ("country".equalsIgnoreCase(level)){
+	 		if (LocationUtil.chkDuplicateIso(addForm.getName(), addForm.getIso(), addForm.getIso3())) {
+	 			ctry.setCountryName(addForm.getName());
+		 		ctry.setIso(addForm.getIso());
+		 		ctry.setIso3(addForm.getIso3());
+		 		ctry.setAvailable(true);
+		 		ctry.setStat("t");
+		 		ctry.setShowCtry("t");
+		 		ctry.setDecCtryFlag("t");
+		 		ctry.setCountryId(new Long(LocationUtil.getDgCountryWithMaxCountryId().intValue() + 1));
+		 		ctry.setMessageLangKey("cn:" + ctry.getIso());
+		 		DbUtil.add(ctry);
+	 		}
+	 		else {
+	 			ActionErrors errors = new  ActionErrors();
+	 			errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("error.aim.addLocation.duplicateCountryInfo"));
+	 			saveErrors(request, errors);
+	 			return mapping.getInputForward();
+	 		}
 	 	}
+		if (level.equals("region")){
+	 		reg = new AmpRegion();
+	 		if(ctry != null) {
+	 			reg.setCountry(ctry);
+	 		}
+	 		if (addForm.getDescription() == null || 
+					addForm.getDescription().trim().length() == 0) {
+				reg.setDescription(" 	");}
+			else
+				reg.setDescription(addForm.getDescription());
+			reg.setGeoCode(addForm.getGeoCode());
+	 		reg.setGsLat(addForm.getGsLat());
+	 		reg.setGsLong(addForm.getGsLong());
+	 		reg.setName(addForm.getName());
+	 		reg.setRegionCode(addForm.getCode());
+	 		DbUtil.add(reg);
+	 	}
+	 	if (level.equals("zone")){
+	 		reg = new AmpRegion();
+	 		zon = new AmpZone();
+	 		if(ctry != null) {
+	 			zon.setCountry(ctry);
+	 		}
+	 		if (addForm.getRegionId() != null) {
+		 		reg = LocationUtil.getAmpRegion(addForm.getRegionId());
+	 		}
+	 		if(reg != null) {
+	 			zon.setRegion(reg);
+	 		}
+	 		if (addForm.getDescription() == null ||
+					addForm.getDescription().trim().length() == 0)
+				zon.setDescription(" ");
+			else
+				zon.setDescription(addForm.getDescription());
+			zon.setGeoCode(addForm.getGeoCode());
+	 		zon.setGsLat(addForm.getGsLat());
+	 		zon.setGsLong(addForm.getGsLong());
+	 		zon.setName(addForm.getName());
+	 		zon.setZoneCode(addForm.getCode());
+	 		DbUtil.add(zon);
+	 	}		 
+	 	if (level.equals("woreda")){
+	 		AmpWoreda w = new AmpWoreda();
+	 		zon = new AmpZone();
+	 		if (addForm.getZoneId() != null) {
+	 			zon = LocationUtil.getAmpZone(addForm.getZoneId());
+	 		}		 	
+	 		if(ctry != null) {
+	 			w.setCountry(ctry);
+	 		}
+	 		if(zon != null) {
+	 			w.setZone(zon);
+	 		}
+	 		if (addForm.getDescription() == null ||
+					addForm.getDescription().trim().length() == 0)
+				w.setDescription(" ");
+			else
+				w.setDescription(addForm.getDescription());
+			w.setGeoCode(addForm.getGeoCode());
+	 		w.setGsLat(addForm.getGsLat());
+	 		w.setGsLong(addForm.getGsLong());
+	 		w.setName(addForm.getName());
+	 		w.setWoredaCode(addForm.getCode());
+	 		DbUtil.add(w);
+	 	}
+		addForm.setEdFlag("yes");
+		return mapping.findForward("added");
+	 }
    }
    else if ("edit".equals(action)) {
    	if (addForm.getName() == null || edFlag) {
-	 	logger.debug("Inside IF [EDIT]");
 			if (level.equals("region")) {
 				AmpRegion obj = LocationUtil.getAmpRegion(addForm.getRegionId());
 				if (obj.getName() != null)
@@ -268,9 +236,7 @@ public class AddLocation extends Action
 		 		if (addForm.getRegionId() != null) {
 		 			obj = LocationUtil.getAmpRegion(addForm.getRegionId());
 		 		}
-			 	else
-			 		System.out.println("Inside ELSE [EDIT] :obj is null !");
-				
+			 	
 		 		obj.setGeoCode(addForm.getGeoCode());
 		 		obj.setGsLat(addForm.getGsLat());
 		 		obj.setGsLong(addForm.getGsLong());
@@ -289,9 +255,7 @@ public class AddLocation extends Action
 		 		if (addForm.getZoneId() != null) {
 		 			obj = LocationUtil.getAmpZone(addForm.getZoneId());
 		 		}
-			 	else
-			 		System.out.println("Inside ELSE [EDIT] :obj is null !");
-				
+			 	
 		 		obj.setGeoCode(addForm.getGeoCode());
 		 		obj.setGsLat(addForm.getGsLat());
 		 		obj.setGsLong(addForm.getGsLong());
@@ -310,9 +274,7 @@ public class AddLocation extends Action
 		 		if (addForm.getWoredaId() != null) {
 		 			obj = LocationUtil.getAmpWoreda(addForm.getWoredaId());
 		 		}
-			 	else
-			 		System.out.println("Inside ELSE [EDIT] :obj is null !");
-				
+			 	
 		 		obj.setGeoCode(addForm.getGeoCode());
 		 		obj.setGsLat(addForm.getGsLat());
 		 		obj.setGsLong(addForm.getGsLong());
@@ -337,8 +299,6 @@ public class AddLocation extends Action
    				obj = LocationUtil.getAmpRegion(addForm.getRegionId());
    				DbUtil.delete(obj);
    			}
-   			else
-   				System.out.println("Inside ELSE [DELETE] :obj is null !");
    		}
    		if (level.equals("zone")){
    			AmpZone obj = null;
@@ -346,8 +306,6 @@ public class AddLocation extends Action
    				obj = LocationUtil.getAmpZone(addForm.getZoneId());
    				DbUtil.delete(obj);
    			}
-   			else
-   				System.out.println("Inside ELSE [DELETE] :obj is null !");
    		}
    		if (level.equals("woreda")){
    			AmpWoreda obj = null;
@@ -355,8 +313,6 @@ public class AddLocation extends Action
    				obj = LocationUtil.getAmpWoreda(addForm.getWoredaId());
    				DbUtil.delete(obj);
    			}
-   			else
-   				System.out.println("Inside ELSE [DELETE] :obj is null !");
    		}
 
 	 	addForm.setEdFlag("yes");

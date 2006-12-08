@@ -2,7 +2,7 @@
  *   DbUtil.java
  *   @Author Maka Kharalashvili maka@digijava.org
  * 	 Created: Dec 17, 2003
- * 	 CVS-ID: $Id: DbUtil.java,v 1.1 2005-07-06 10:34:18 rahul Exp $
+ * 	 CVS-ID: $Id: DbUtil.java,v 1.1.16.1 2006-12-08 18:03:00 steve Exp $
  *
  *   This file is part of DiGi project (www.digijava.org).
  *   DiGi is a multi-site portal system written in Java/J2EE.
@@ -557,7 +557,8 @@ public class DbUtil {
             if (result != null && (result.size() != 0)) {
                 Iterator iter = result.iterator();
                 while (iter.hasNext()) {
-                    body =  new String((String)iter.next());
+                    String item = (String)iter.next();
+                    body =  item;
                     break;
                 }
             }

@@ -14,6 +14,7 @@ import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.util.CountryUtil;
 import org.digijava.module.aim.dbentity.AmpFeature;
 import org.digijava.module.aim.dbentity.AmpSiteFlag;
+import org.digijava.module.aim.dbentity.AmpGlobalSettings;
 import org.digijava.module.aim.helper.Flag;
 
 public class FeaturesUtil {
@@ -375,5 +376,161 @@ public class FeaturesUtil {
 			}
 		}
 	}
-	
+	/*
+	 * edited by Govind G Dalwani
+	 */
+	/*
+	 * to get all the Global settings
+	 */
+	public static Collection getGlobalSettings()
+	{
+		Collection coll = null;
+		Session session = null;
+		Transaction tx = null;
+		String qryStr = null;
+		Query qry = null;
+		try{
+				session = PersistenceManager.getSession();
+				qryStr = "select gs from " + AmpGlobalSettings.class.getName() + " gs " ;
+				qry = session.createQuery(qryStr);
+				coll=qry.list();
+				
+		}
+		catch (Exception ex) {
+			logger.error("Exception : " + ex.getMessage());
+			ex.printStackTrace(System.out);
+			if (tx != null) {
+				try {
+					tx.rollback();
+				} catch (Exception rbf) {
+					logger.error("Rollback failed !");
+				}
+			}
+		} finally {
+			if (session != null) {
+				try {
+					PersistenceManager.releaseSession(session);
+				} catch (Exception rsf) {
+					logger.error("Release session failed :" + rsf.getMessage());
+				}
+			}
+		}
+		return coll;
+	}
+	/*
+	 * to get the country names
+	 */
+	public static Collection getCountryNames()
+	{
+		Collection col = null;
+		Session session = null;
+		Query qry = null;
+		String qryStr = null;
+		Transaction tx = null;
+		try{
+			session = PersistenceManager.getSession();
+			qryStr = "select cn from " + Country.class.getName() + " cn order by cn.countryName" ;
+			qry = session.createQuery(qryStr);
+			col=qry.list();
+			
+			}
+			catch (Exception ex) {
+				logger.error("Exception : " + ex.getMessage());
+				ex.printStackTrace(System.out);
+				if (tx != null) {
+					try {
+						tx.rollback();
+					} catch (Exception rbf) {
+						logger.error("Rollback failed !");
+					}
+				}
+			} finally {
+				if (session != null) {
+					try {
+						PersistenceManager.releaseSession(session);
+					} catch (Exception rsf) {
+						logger.error("Release session failed :" + rsf.getMessage());
+					}
+				}
+			}
+		return col;
+	}
+	/* 
+	 * to get the country ISO that is set as a default value...
+	 */
+	public static Collection getDefaultCountryISO()
+	{
+		Collection col = null;
+		Session session = null;
+		Query qry = null;
+		String qryStr = null;
+		Transaction tx = null;
+		try{
+			session = PersistenceManager.getSession();
+			qryStr = "select gs from " + AmpGlobalSettings.class.getName() + " gs where gs.globalSettingsName = 'Default Country' " ;
+			qry = session.createQuery(qryStr);
+			col=qry.list();
+			
+			}
+			catch (Exception ex) {
+				logger.error("Exception : " + ex.getMessage());
+				ex.printStackTrace(System.out);
+				if (tx != null) {
+					try {
+						tx.rollback();
+					} catch (Exception rbf) {
+						logger.error("Rollback failed !");
+					}
+				}
+			} finally {
+				if (session != null) {
+					try {
+						PersistenceManager.releaseSession(session);
+					} catch (Exception rsf) {
+						logger.error("Release session failed :" + rsf.getMessage());
+					}
+				}
+			}
+		return col;
+	}
+	/*
+	 * to get the country name from the Iso got
+	 */
+	public static Collection getDefaultCountry(String ISO)
+	{
+		Collection col = null;
+		Session session = null;
+		Query qry = null;
+		String qryStr = null;
+		Transaction tx = null;
+		String a ="in the get country...";
+		logger.info(a);
+		try{
+			session = PersistenceManager.getSession();
+			qryStr = "select cn from " + Country.class.getName() + " cn where cn.iso = '"+ ISO +"'" ;
+			qry = session.createQuery(qryStr);
+			col=qry.list();
+			
+			}
+			catch (Exception ex) {
+				logger.error("Exception : " + ex.getMessage());
+				ex.printStackTrace(System.out);
+				if (tx != null) {
+					try {
+						tx.rollback();
+					} catch (Exception rbf) {
+						logger.error("Rollback failed !");
+					}
+				}
+			} finally {
+				if (session != null) {
+					try {
+						PersistenceManager.releaseSession(session);
+					} catch (Exception rsf) {
+						logger.error("Release session failed :" + rsf.getMessage());
+					}
+				}
+			}
+		return col;
+	}
 }

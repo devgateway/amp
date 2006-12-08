@@ -417,7 +417,7 @@
       <forward name="forward" path="/showLayout.do?layout=aim_addExchangeRate" />
     </action>
     <action name="aimCurrencyRateForm" path="/aim/saveCurrencyRate" scope="session" type="org.digijava.module.aim.action.UpdateCurrencyRate" validate="false">
-      <forward name="fileload" path="/aim/showCurrencyRates.do" redirect="true" />
+      <forward name="forward" path="/aim/showCurrencyRates.do" redirect="true" />
     </action>
     <action name="aimCurrencyRateForm" path="/aim/showCurrencyRates" scope="session" type="org.digijava.module.aim.action.ShowCurrencyRates" validate="false">
       <forward name="forward" path="/showLayout.do?layout=currencyRates" />
@@ -1040,14 +1040,14 @@
       <forward name="editforward" path="/showLayout.do?layout=updateStatus" />
     </action>
     <action name="aimStatusItemForm" path="/aim/updateStatus" scope="request" type="org.digijava.module.aim.action.UpdateStatus" validate="false">
-      <forward name="forward" path="/aim/statusManager.do" />
+      <forward name="forward" path="/aim/statusManager.do" redirect="true" />
     </action>
-    <action name="aimStatusItemForm" path="/aim/addStatus" scope="request" type="org.digijava.module.aim.action.AddStatus" validate="false">
-      <forward name="addforward" path="/aim/statusManager.do" />
-      <forward name="forward" path="/showLayout.do?layout=addStatus" />
+    <action name="aimStatusItemForm" path="/aim/addStatus" scope="request" type="org.digijava.module.aim.action.AddStatus" validate="false" >
+		<forward name="addforward" path="/aim/statusManager.do" redirect="true"/>
+      <forward name="forward" path="/showLayout.do?layout=addStatus"/>
     </action>
     <action name="aimStatusItemForm" path="/aim/deleteStatus" scope="request" type="org.digijava.module.aim.action.DeleteStatus" validate="false">
-      <forward name="forward" path="/aim/statusManager.do" />
+      <forward name="forward" path="/aim/statusManager.do" redirect="true"/>
     </action>
     <action name="aimCommitmentbyDonorForm" path="/aim/viewCommitmentbyModality" scope="session" type="org.digijava.module.aim.action.ViewCommitmentbyModality" validate="false">
       <forward name="forward" path="/showLayout.do?layout=viewCommitmentbyModality" />
@@ -1218,6 +1218,9 @@
     <action name="aimParisIndicatorReportForm" path="/aim/ParisIndicatorPrintReports" scope="session" type="org.digijava.module.aim.action.ParisIndicatorPrintReports" validate="false">
       <forward name="pi" path="/showLayout.do?layout=aim_pIPrintReports" />
       <forward name="pi2" path="/showLayout.do?layout=aim_pIPrintReports2" />
+    </action>
+	<action name="aimGlobalSettingsForm" path="/aim/GlobalSettings" scope="session" type="org.digijava.module.aim.action.GlobalSettings" validate="false">
+      <forward name="viewGS" path="/showLayout.do?layout=viewGlobalSettings" />
     </action>
 
     <action name="aimEditActivityForm" path="/aim/addProposedFunding" scope="session" type="org.digijava.module.aim.action.AddProposedFunding" validate="false">

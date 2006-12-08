@@ -132,7 +132,7 @@
 																	</tr>
 																	<tr>
 		<%--<td width="30%" align="right">
-			<digi:trn key="aim:sectorOrganisation">Organisation</digi:trn>		
+			<digi:trn key="aim:sectorOrganisation">Organization</digi:trn>		
 		</td>
 		<td width="30%" align="left">
 			<logic:empty name="aimAddSectorForm" property="ampOrganisation">

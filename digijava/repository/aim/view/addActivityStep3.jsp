@@ -108,6 +108,7 @@
 	function validateForm() {
 		return true;
 	}
+	
 	-->
 
 </script>
@@ -239,7 +240,8 @@
 								<c:if test="${aimEditActivityForm.editAct == true}">
 									<digi:trn key="aim:editActivity">
 										Edit Activity
-									</digi:trn>
+									</digi:trn>:
+										<bean:write name="aimEditActivityForm" property="title"/>
 								</c:if>
 							</td>
 						</tr>
@@ -351,7 +353,7 @@
 															<td>
 																<table cellSpacing=1 cellPadding=5 border=0 width="100%" class="box-border-nopadding">
 																	<logic:notEmpty name="aimEditActivityForm" property="fundingOrganizations">
-																	<logic:iterate name="aimEditActivityForm" property="fundingOrganizations"
+																	<logic:iterate name="aimEditActivityForm" property="orderedFundingOrganizations" 
 																	id="fundingOrganization" type="org.digijava.module.aim.helper.FundingOrganization">
 																	<tr>
 																		<td>
@@ -713,11 +715,11 @@
 																		<table cellSpacing=2 cellPadding=2>
 																			<tr>
 																				<td>
-																					<input type="button" value="Add Organisation" class="buton"
+																					<input type="button" value="Add Organizations" class="buton" 
 																				   onclick="selectOrganisation()">
 																				</td>
 																				<td>
-																					<input type="button" value="Remove Organisations" class="buton"
+																					<input type="button" value="Remove Organizations" class="buton" 
 																				   onclick="return removeSelOrganisations()">
 																				</td>
 																			</tr>
@@ -730,7 +732,7 @@
 																<c:if test="${aimEditActivityForm.donorFlag == false}">
 																<tr>
 																	<td>
-																		<input type="button" value="Add Organisation" class="buton"
+																		<input type="button" value="Add Organizations" class="buton" 
 																		onclick="selectOrganisation()">
 																	</td>
 																</tr>

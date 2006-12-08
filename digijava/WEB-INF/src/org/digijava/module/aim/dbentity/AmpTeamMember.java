@@ -11,7 +11,7 @@ import java.util.*;
 import java.io.Serializable;
 
 public class AmpTeamMember implements Serializable {
-	
+
 	private Long ampTeamMemId;
 	private User user;
 	private AmpTeam ampTeam;
@@ -22,10 +22,10 @@ public class AmpTeamMember implements Serializable {
 	private Set activities;
 	private Set reports;
 	private Set links;
-	
+
 	// added for donor access
 	private Set editableFundingOrgs;	// in case of donor - allowed organisations whose funding details this TM can edit
-	
+
 	public void setReports(Set reports) {
 		this.reports = reports;
 	}
@@ -33,7 +33,7 @@ public class AmpTeamMember implements Serializable {
 	public Set getReports() {
 			  return this.reports;
 	}
-	
+
 	/**
 	 * @return ampTeam
 	 */
@@ -105,14 +105,14 @@ public class AmpTeamMember implements Serializable {
 	public void setWritePermission(Boolean writePermission) {
 		this.writePermission = writePermission;
 	}
-	
+
 	public Boolean getDeletePermission() {
 		return deletePermission;
 	}
 
 	public void setDeletePermission(Boolean deletePermission) {
 		this.deletePermission = deletePermission;
-	}		
+	}
 
 	public Set getActivities() {
 		return activities;
@@ -121,17 +121,19 @@ public class AmpTeamMember implements Serializable {
 	public void setActivities(Set activities) {
 		this.activities = activities;
 	}
-	
+
+/*
 	public boolean equals(Object obj) {
 		if (obj == null) return false;
-		
+
 		if (!(obj instanceof AmpTeamMember)) {
 			throw new ClassCastException();
 		}
-		
+
 		AmpTeamMember temp = (AmpTeamMember) obj;
 		return temp.getAmpTeamMemId().equals(ampTeamMemId);
 	}
+    */
 
     /**
      * @return Returns the links.
@@ -161,7 +163,7 @@ public class AmpTeamMember implements Serializable {
 	/* (non-Javadoc)
 	 * @see java.lang.Comparable#compareTo(java.lang.Object)
 	 */
-	
-	
-	
+
+
+
 }

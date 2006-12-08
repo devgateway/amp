@@ -155,7 +155,7 @@ public class Login extends Action {
 						tm.setMemberName(usr.getName());
 						tm.setMemberId(usr.getId());
 						tm.setTeamName("AMP Administrator");
-						session.setAttribute("currentMember", tm);
+						session.setAttribute(Constants.CURRENT_MEMBER, tm);
 						// show the index page with the admin toolbar at the bottom
 
 						return mapping.findForward("admin");
@@ -232,7 +232,10 @@ public class Login extends Action {
 
 					if (lead != null) {
 						if (lead.getAmpTeamMemRoleId().equals(
-										member.getAmpMemberRole().getAmpTeamMemRoleId())) {
+										member.getAmpMemberRole().getAmpTeamMemRoleId()) ||
+						//very ugly but we have no choice - only one team head role possible :(
+										member.getAmpMemberRole().getRole().equals("Top Management") 				
+						) {
 							session.setAttribute("teamLeadFlag", new String(
 									"true"));
 							tm.setTeamHead(true);

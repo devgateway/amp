@@ -65,16 +65,68 @@
 
 		return flag;
 	}
+function checkNumeric(objName,comma,period,hyphen)
+	{
+		var numberfield = objName;
+		if (chkNumeric(objName,comma,period,hyphen) == false)
+		{
+			numberfield.select();
+			numberfield.focus();
+			return false;
+		}
+		else
+		{
+			return true;
+		}
+	}
+
+	function chkNumeric(objName,comma,period,hyphen)
+	{
+// only allow 0-9 be entered, plus any values passed
+// (can be in any order, and don't have to be comma, period, or hyphen)
+// if all numbers allow commas, periods, hyphens or whatever,
+// just hard code it here and take out the passed parameters
+		var checkOK = "0123456789" + comma + period + hyphen;
+		var checkStr = objName;
+		var allValid = true;
+		var decPoints = 0;
+		var allNum = "";
+		
+		for (i = 0;  i < checkStr.value.length;  i++)
+		{
+			ch = checkStr.value.charAt(i);
+			for (j = 0;  j < checkOK.length;  j++)
+			if (ch == checkOK.charAt(j))
+			break;
+			if (j == checkOK.length)
+			{
+				allValid = false;
+				break;
+			}
+			if (ch != ",")
+			allNum += ch;
+		}
+		if (!allValid)
+		{	
+			alertsay = "Please enter only numbers in the \"Number of results per page\"."
+			alert(alertsay);
+			return (false);
+		}
+	}
 
 	function searchSector() {
-		var flg=checkEmpty();
+	if(checkNumeric(document.aimEditActivityForm.tempNumResults	,'','','')==true) 
+		{	
+			var flg=checkEmpty();
 			if(flg)
-		{
-		 <digi:context name="searchSctr" property="context/module/moduleinstance/searchSectors.do?edit=true"/>
-		 document.aimEditActivityForm.action = "<%= searchSctr %>";
-		 document.aimEditActivityForm.submit();
-		 return true;
+			{
+			 <digi:context name="searchSctr" property="context/module/moduleinstance/searchSectors.do?edit=true"/>
+			 document.aimEditActivityForm.action = "<%= searchSctr %>";
+			 document.aimEditActivityForm.submit();
+			 return true;
+			}
 		}
+		else return false;
 	}
 
 	function load() {
@@ -218,10 +270,10 @@
 									<tr>
 										<td>
 											<digi:trn key="aim:enterKeyword">
-											Enter a keyword</digi:trn>
+											Enter a keyword </digi:trn>
 										</td>
 										<td>
-											<html:text property="keyword" styleClass="inp-text" />
+											<html:text property="keyword"  styleClass="inp-text" />
 										</td>
 									</tr>
 									<tr>

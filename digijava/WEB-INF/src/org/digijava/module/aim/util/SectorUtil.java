@@ -71,10 +71,7 @@ public class SectorUtil {
 					AmpSector as=(AmpSector) itr.next();
 					sectr = new ActivitySector();
 					sectr.setSectorId(as.getAmpSectorId());
-					logger.info("sector id set as " + as.getAmpSectorId());
 					sectr.setSectorName(as.getName());
-					logger.info("sector name set as " +	 sectr.getSectorName());
-					logger.info("adding sector now...");
 					col.add(sectr);
 				}
 

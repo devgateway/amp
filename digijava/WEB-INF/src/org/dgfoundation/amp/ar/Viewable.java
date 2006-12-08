@@ -8,18 +8,23 @@ package org.dgfoundation.amp.ar;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
-import java.util.Set;
+import java.util.HashMap;
 
 /**
  * Class describing a viewable behaviour. Viewable objects always have a viewer
- * name for each view modes (types).
+ * name for each view modes (types). A viewer is responsible for showing the contents of the cell to the end user. 
+ * One type of cell can have many viewers, depending on the number of export formats that we require (html,cvs,xls,pdf,etc...)
+ * 
  * 
  * @author Mihai Postelnicu - mpostelnicu@dgfoundation.org
  * @since Jun 23, 2006
  * 
  */
 public abstract class Viewable implements Cloneable {
-
+	
+	//cached viewerPath
+	protected static HashMap viewerPaths=new HashMap();
+	
 	/**
 	 * returns the viewer name for the specified view type.
 	 * 
@@ -40,12 +45,17 @@ public abstract class Viewable implements Cloneable {
 	 */
 	public String getViewerPath(String viewType) {
 		String className = this.getClass().getName();
+		String key=className+viewType;
+		String value=(String) viewerPaths.get(key);
+		if(value!=null) return value;
 		int idx = className.lastIndexOf('.');
 		for (int i = 0; i < ArConstants.prefixes.length; i++)
-			if (ArConstants.prefixes[i].getCategory().equals(viewType))
-				return (String) ArConstants.prefixes[i].getValue()
+			if (ArConstants.prefixes[i].getCategory().equals(viewType)) {
+				viewerPaths.put(key, (String) ArConstants.prefixes[i].getValue()
 						+ className.substring(idx + 1, className.length())
-						+ (String) ArConstants.suffixes[i].getValue();
+						+ (String) ArConstants.suffixes[i].getValue() );
+				return (String) viewerPaths.get(key);
+			}
 		return null;
 	}
 
@@ -53,8 +63,8 @@ public abstract class Viewable implements Cloneable {
 	 * This method is invoked by parent exporter items. It will instantiate the
 	 * appropriate Exporter class for the viewable item that is the child of the
 	 * exporter parent invoker. The class is dynamically instantiated as an
-	 * Exporter subclass.
-	 * 
+	 * Exporter subclass. Exporters are java based viewers.
+	 * @see Exporter
 	 * @param parent
 	 */
 	public void invokeExporter(Exporter parent) {

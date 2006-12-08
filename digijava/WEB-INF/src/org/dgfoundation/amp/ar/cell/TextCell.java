@@ -15,6 +15,8 @@ import org.dgfoundation.amp.ar.workers.TextColWorker;
  **/
 public class TextCell extends Cell {
 	
+	public static final int shortLength=160;
+	
 	protected String value;
 	
 	public TextCell() {
@@ -59,6 +61,21 @@ public class TextCell extends Cell {
 
 	public Cell newInstance() {
 		return new TextCell();
+	}
+	
+	public int getTextLength() {
+		if(value==null) return 0;
+		return value.length();
+	}
+	
+	public String getShortTextVersion() {
+		 if(!getHasLongVersion()) return value;
+		return value.substring(0,shortLength-1);
+	}
+	
+	public boolean getHasLongVersion() {
+		if(getTextLength()>shortLength) return true;
+		return false;
 	}
 	
 }

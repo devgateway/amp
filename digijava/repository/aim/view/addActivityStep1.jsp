@@ -194,9 +194,10 @@ function popupwin()
 									<digi:trn key="aim:addNewActivity">Add New Activity</digi:trn>
 								</c:if>
 								<c:if test="${aimEditActivityForm.editAct == true}">
-									<digi:trn key="aim:editActivity">Edit Activity</digi:trn>:
+									<digi:trn key="aim:editActivity">Edit Activity</digi:trn>
+:
 										<bean:write name="aimEditActivityForm" property="title"/>
-								</c:if>										
+								</c:if>
 							</td>
 						</tr>
 					</table>
@@ -319,9 +320,7 @@ function popupwin()
 											<logic:notEmpty name="aimEditActivityForm" property="selectedOrganizations">
 											<td>
 												<table cellSpacing=1 cellPadding=1 border=0 width="500">
-												<logic:iterate name="aimEditActivityForm"
-													property="selectedOrganizationsList" id="selectedOrganizations"
-													type="org.digijava.module.aim.helper.OrgProjectId">
+												<c:forEach items="${aimEditActivityForm.selectedOrganizationsList}" var="selectedOrganizations">
 														<tr>
 															<td align="left" width=3>
 																<html:multibox property="selOrgs">

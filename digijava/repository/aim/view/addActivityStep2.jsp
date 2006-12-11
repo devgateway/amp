@@ -492,22 +492,19 @@ function validateSectorPercentage() {
 												<td bgcolor="#ffffff" width="100%">
 																	<table cellPadding=1 cellSpacing=1 border=0
 																		bgcolor="#ffffff" width="100%">
-																		<logic:empty name="aimEditActivityForm"
-																			property="activitySectors">
+																		<c:if test="${empty aimEditActivityForm.activitySectors}">
 														<tr>
 																				<td bgcolor="#ffffff"><input type="button"
 																					value="Add Sector" class="buton" name="addSec"
 																					onclick="addSectors()"></td>
-														</tr>																			
-													</nested:empty>
+														</tr>
+													</c:if>
 													<nested:notEmpty name="aimEditActivityForm" property="activitySectors">
 														<tr>
 															<td>
 															<table cellSpacing=0 cellPadding=0 border=0
 																bgcolor="#ffffff" width="100%">
-																<logic:iterate name="aimEditActivityForm"
-																	property="activitySectors" id="actSect"
-																	type="org.digijava.module.aim.helper.ActivitySector">
+																<c:forEach items="${aimEditActivityForm.activitySectors}" var="actSect">
 																	<tr>
 																		<td>
 																		<table width="100%" cellSpacing=1 cellPadding=1 vAlign="top" align="left">
@@ -530,20 +527,20 @@ function validateSectorPercentage() {
 																						</c:if>
 																						</td>
 																						<td width="10%">
-																							<nested:text property="sectorPercentage" size="2" maxlength="3" 
+																							<html:text name="actSect" property="sectorPercentage" size="2" maxlength="3"
 																									   onkeyup="fnChk(this)"/>
 																						</td>
 																					</tr>
 																				</table>
 																			</td>
 																		</tr>
-																	</nested:iterate>
+																	</c:forEach>
 																<tr>
 																	<td>
 																		<table cellSpacing=2 cellPadding=2>
 																			<tr>
 																				<td>
-																					<input type="button" value="Add Sectors" class="buton" 
+																					<input type="button" value="Add Sectors" class="buton"
 																							onclick="addSectors()">
 																				</td>
 																				<td><input type="button" value="Remove Sector" class="buton"

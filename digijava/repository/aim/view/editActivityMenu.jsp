@@ -8,10 +8,9 @@
 
 
 <script language="JavaScript">
-<!--
 function previewClicked() {
-	var flag = validateForm();  
-	if (flag == true) {		  
+	var flag = validateForm();
+	if (flag == true) {
 	document.aimEditActivityForm.step.value = "9";
 	document.aimEditActivityForm.pageId.value = "1";
 	<digi:context name="preview" property="context/module/moduleinstance/previewActivity.do?edit=true" />
@@ -22,8 +21,8 @@ function previewClicked() {
 }
 
 function saveClicked() {
-	var flag = validateForm();  
-	if (flag == true) {		  
+	var flag = validateForm();
+	if (flag == true) {
 	document.aimEditActivityForm.saveButton.disabled = true;
 	<digi:context name="save" property="context/module/moduleinstance/saveActivity.do" />
 	document.aimEditActivityForm.action = "<%= save %>?edit=true";
@@ -53,19 +52,16 @@ function saveClicked() {
 }
 
 function gotoStep(value) {
-	var flag = validateForm();  
+	var flag = validateForm();
 	if (flag == true) {
 		document.aimEditActivityForm.step.value = value;
 		<digi:context name="step" property="context/module/moduleinstance/addActivity.do?edit=true" />
 		document.aimEditActivityForm.action = "<%= step %>";
 		document.aimEditActivityForm.target = "_self";
-		document.aimEditActivityForm.submit();			  
+		document.aimEditActivityForm.submit();
 	}
 }
 
-}
-
--->
 </script>
 
 <digi:instance property="aimEditActivityForm" />

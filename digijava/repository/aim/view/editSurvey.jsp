@@ -27,6 +27,7 @@
 	function fnChk(frmContrl) {
 		if (isNaN(frmContrl.value)) {
       		alert('Please enter numeric value only.');
+      		frmContrl.value = "";
       		//frmContrl.focus();
       		return false;
       	}

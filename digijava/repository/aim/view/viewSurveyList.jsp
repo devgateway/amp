@@ -24,7 +24,7 @@
 		else
 			return false;
 	}
--->
+
 function fnEditProject(id)
 {
 	<digi:context name="addUrl" property="context/module/moduleinstance/editActivity.do" />
@@ -42,6 +42,7 @@ function preview(id)
    document.aimSurveyForm.submit();
 }
 
+-->
 </script>
 
 <digi:instance property="aimSurveyForm" />

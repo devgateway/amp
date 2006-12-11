@@ -428,6 +428,22 @@ function disable() {
 										<td bgcolor="#ffffff">
 											<table width="100%" cellSpacing=2 cellPadding=1>
 												<tr>
+													<td width="32%"><digi:trn key="aim:lineMinRank">
+													Line Ministry Rank</digi:trn></td>
+													<td width="1">:</td>
+													<td align="left">
+														<c:out value="${aimEditActivityForm.lineMinRank}"/>
+													</td>
+												</tr>
+												<tr>
+													<td width="32%"><digi:trn key="aim:planMinRank">
+													Ministry of Planning Rank</digi:trn></td>
+													<td width="1">:</td>
+													<td align="left">
+														<c:out value="${aimEditActivityForm.planMinRank}"/>
+													</td>
+												</tr>
+												<tr>
 													<td width="32%"><digi:trn key="aim:originalApprovalDate">
 													Original Approval Date</digi:trn></td>
 													<td width="1">:</td>
@@ -567,7 +583,10 @@ function disable() {
 													<c:if test="${!empty sectors.subsectorLevel2Name}">
 														[<c:out value="${sectors.subsectorLevel2Name}"/>]
 													</c:if>
-													</td></tr>
+													</td>
+													<td width="1">:</td>
+													<td align="left"><c:out value="${sectors.sectorPercentage}" /></td>
+													</tr>
 												</c:forEach>
 												</table>
 											</c:if>

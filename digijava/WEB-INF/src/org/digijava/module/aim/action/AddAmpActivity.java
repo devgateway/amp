@@ -116,7 +116,7 @@ public class AddAmpActivity extends Action {
 			eaForm.setStep("9");
 
 		// clearing Line & Plan Ministry Ranking
-		if (!eaForm.isEditAct()) {
+		if (!eaForm.isEditAct() && eaForm.getPageId() > 1) {
 			eaForm.setLineMinRank(null);
 			eaForm.setPlanMinRank(null);
 		}
@@ -252,6 +252,13 @@ public class AddAmpActivity extends Action {
             }
 			eaForm.setReset(false);
 
+			// loading Activity Rank collection
+			if (null == eaForm.getActRankCollection()) {
+				eaForm.setActRankCollection(new ArrayList());
+				for (int i = 1; i < 6; i++)
+					eaForm.getActRankCollection().add(new Integer(i));
+			}
+			
 			Collection statusCol = null;
 			// load the status from the database
 			if(eaForm.getStatusCollection() == null) {

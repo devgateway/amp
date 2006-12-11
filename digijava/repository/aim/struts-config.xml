@@ -1164,12 +1164,6 @@
       <forward name="actPerformance" path="/showLayout.do?layout=aim_printActPerf" />
       <forward name="actRisk" path="/showLayout.do?layout=aim_printActRisk" />
     </action>
-    <action name="aimParisIndicatorForm" path="/aim/ParisIndicatorMenu" scope="session" type="org.digijava.module.aim.action.ParisIndicatorReport1" validate="false">
-      <forward name="pindicmenu" path="/showLayout.do?layout=ParisIndicatorReportMenu" />
-    </action>
-    <action name="aimParisIndicatorForm" path="/aim/ParisIndicatorReport1" scope="session" type="org.digijava.module.aim.action.ParisIndicatorReport1" validate="false">
-      <forward name="pindicr1" path="/showLayout.do?layout=ParisIndicatorReport1" />
-    </action>
     <action name="aimParisIndicatorManagerForm" path="/aim/parisIndicatorManager" scope="session" type="org.digijava.module.aim.action.ParisIndicatorManager" validate="false">
       <forward name="parisIndiManager" path="/showLayout.do?layout=parisIndicatorManager" />
       <forward name="parisIndiDelete" path="/showLayout.do?layout=parisIndicatorDelete" />

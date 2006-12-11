@@ -38,7 +38,14 @@ public class AddLocationForm extends ValidatorForm {
 		  
 		  private String edLevel = null;
 		  private String edAction = null;
+		  
+		  /** 'yes'- location created, edited-II, deleted
+		   *  'on'- edited-II
+		   *  'off'- save button clicked in addLocation screen
+		   *  'cancl'- cancel button clicked in addLocation screen
+		   */
 		  private String edFlag = null;
+		  
 		  private String regionFlag = null;
 		  private String zoneFlag = null;
 		  private String woredaFlag = null;

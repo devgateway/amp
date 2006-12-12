@@ -8,10 +8,7 @@ package org.digijava.module.aim.form;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Iterator;
 import java.util.List;
-import java.util.TreeSet;
-
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.struts.action.ActionForm;
@@ -20,7 +17,6 @@ import org.apache.struts.upload.FormFile;
 import org.digijava.module.aim.dbentity.AmpField;
 import org.digijava.module.aim.helper.ActivityIndicator;
 import org.digijava.module.aim.helper.FundingDetail;
-import org.digijava.module.aim.helper.FundingOrganization;
 import org.digijava.module.aim.helper.OrgProjectId;
 import org.digijava.module.aim.form.ProposedProjCost;
 
@@ -98,7 +94,6 @@ public class EditActivityForm extends ActionForm implements Serializable{
 	private long selLinks[];
     private String selManagedDocs[];
 	private OrgProjectId selectedOrganizations[];
-	private Collection selectedOrganizationsList;
 	private Collection executingAgencies;
 	private Long selExAgencies[];
 	private Collection impAgencies;
@@ -170,7 +165,6 @@ public class EditActivityForm extends ActionForm implements Serializable{
 
 	/* START FINANCIAL EDIT */
 	private Collection fundingOrganizations; // Collection of FundingOrganization objects
-	private Collection orderedFundingOrganizations;
 	private String orgFundingId;
 	private Long fundingId;
 	private Long orgId;
@@ -267,11 +261,12 @@ public class EditActivityForm extends ActionForm implements Serializable{
 	private boolean firstSubmit;
 
 	// FOR ADD COMPONENTS
+	
+	private Collection allComps;
 	private boolean componentReset;
 	private String componentTitle;
 	private String componentDesc;
 	private String componentAmount;
-	private double compTotalDisb;
 
 	private String currencyCode;
 	private String componentRepDate;
@@ -287,7 +282,6 @@ public class EditActivityForm extends ActionForm implements Serializable{
 	private Long[] selRegFundings;
 	private Collection fundingRegions;
 	private Long fundingRegionId;
-	private double regionTotalDisb;
 
 	private ArrayList issues;
 	private Long[] selIssues;
@@ -356,8 +350,6 @@ public class EditActivityForm extends ActionForm implements Serializable{
 		totalDisbursements = 0;
 		totalExpenditures = 0;
 		donorFlag = false;
-		keyword=null;
-		selectedOrganizationsList=null;
 	}
 
 	public void reset(ActionMapping mapping, HttpServletRequest request) {
@@ -409,7 +401,6 @@ public class EditActivityForm extends ActionForm implements Serializable{
 			pages = null;
 			alphaPages = null;
 			fundingOrganizations = null;
-			orderedFundingOrganizations = null;
 			fundingId = null;
 			orgFundingId = null;
 			orgId = null;
@@ -474,8 +465,6 @@ public class EditActivityForm extends ActionForm implements Serializable{
 			totalCommitments = 0;
 			totalDisbursements = 0;
 			totalExpenditures = 0;
-			keyword=null;
-			selectedOrganizationsList=null;
 		}
 
 		if (orgSelReset) {
@@ -484,7 +473,7 @@ public class EditActivityForm extends ActionForm implements Serializable{
 			keyword = null;
 			setOrgType("");
 			setAmpOrgTypeId(null);
-			//setTempNumResults(10);
+			setTempNumResults(10);
 		}
 
 		if (sectorReset) {
@@ -833,22 +822,6 @@ public class EditActivityForm extends ActionForm implements Serializable{
 	 * @return Returns the fundingOrganizations.
 	 */
 	public Collection getFundingOrganizations() {
-		
-		/*TreeSet orderedFundingOrganizations=new TreeSet();
-		try{
-			for (Iterator it=fundingOrganizations.iterator(); it.hasNext(); ) 
-			{
-				Object o=it.next();
-				orderedFundingOrganizations.addAll(fundingOrganizations);
-			}
-			}
-			catch (Exception e)
-			{
-				System.out.println("getFundingOrganizations -> "+e.fillInStackTrace());
-			}
-			
-		return orderedFundingOrganizations;
-		*/
 		return fundingOrganizations;
 	}
 
@@ -3667,71 +3640,6 @@ public class EditActivityForm extends ActionForm implements Serializable{
 	public void setCurrentValComments(String currentValComments) {
 		this.currentValComments = currentValComments;
 	}
-	
-	public Collection getSelectedOrganizationsList() {
-		
-		selectedOrganizationsList=new TreeSet();
-		for(int i=0; i<selectedOrganizations.length;i++)
-			selectedOrganizationsList.add(selectedOrganizations[i]);
-		
-		return selectedOrganizationsList;
-	}
-
-	public void setSelectedOrganizationsList(Collection selectedOrganizationsList) {
-		this.selectedOrganizationsList = selectedOrganizationsList;
-	}
-	
-	public Collection getOrderedFundingOrganizations() {
-		TreeSet orderedFundingOrganizations=new TreeSet();
-		try{
-			for (Iterator it=fundingOrganizations.iterator(); it.hasNext(); ) 
-			{
-				Object o=it.next();
-				orderedFundingOrganizations.addAll(fundingOrganizations);
-			}
-			}
-			catch (Exception e)
-			{
-				System.out.println("getFundingOrganizations -> "+e.fillInStackTrace());
-			}
-			
-		return orderedFundingOrganizations;
-	}
-
-	public void setOrderedFundingOrganizations(Collection orderedFundingOrganizations) {
-		this.orderedFundingOrganizations = orderedFundingOrganizations;
-	}
-
-	
-	
-	/**
-	 * @return Returns the compTotalDisb.
-	 */
-	public double getCompTotalDisb() {
-		return compTotalDisb;
-	}
-
-	/**
-	 * @param compTotalDisb The compTotalDisb to set.
-	 */
-	public void setCompTotalDisb(double compTotalDisb) {
-		this.compTotalDisb = compTotalDisb;
-	}
-
-	/**
-	 * @return Returns the regionTotalDisb.
-	 */
-	public double getRegionTotalDisb() {
-		return regionTotalDisb;
-	}
-
-	/**
-	 * @param regionTotalDisb The regionTotalDisb to set.
-	 */
-	public void setRegionTotalDisb(double regionTotalDisb) {
-		this.regionTotalDisb = regionTotalDisb;
-	}
-	
 
     public void setProProjCost(ProposedProjCost proProjCost) {
         this.proProjCost = proProjCost;
@@ -3759,5 +3667,13 @@ public class EditActivityForm extends ActionForm implements Serializable{
 
 	public void setPlanMinRank(String planMinRank) {
 		this.planMinRank = planMinRank;
+	}
+
+	public Collection getAllComps() {
+		return allComps;
+	}
+
+	public void setAllComps(Collection allComps) {
+		this.allComps = allComps;
 	}
 }

@@ -59,12 +59,17 @@
 											</a>
 										</td>
 										<td>
-											<a title="<digi:trn key="aim:TitleforComponent">Title of the project component specified</digi:trn>">
+											<html:select property="componentTitle" styleClass="inp-text">
+												<html:option value="-1">Select Component</html:option>
+												<html:optionsCollection name="aimEditActivityForm" property="allComps"
+													 value="title" label="title" />
+											</html:select>
+											<%--<a title="<digi:trn key="aim:TitleforComponent">Title of the project component specified</digi:trn>">
 											<html:text property="componentTitle" styleClass="inp-text" tabindex="1"/>
-											</a>
+											</a>--%>
 										</td>
 									</tr>
-									<tr>
+									<%--<tr>
 										<td>
 										<a title="<digi:trn key="aim:ComponentDescribe">Descriptive text as to the component objectives and tasks</digi:trn>">
 										<digi:trn key="aim:description">Description</digi:trn>
@@ -75,7 +80,7 @@
 											<html:textarea property="componentDesc" cols="50" rows="4" styleClass="inp-text" tabindex="2"/>
 											</a>
 										</td>
-									</tr>
+									</tr>--%>
 									<tr><td colspan=2>
 										<FONT color=blue><BIG>*</BIG>
 											<digi:trn key="aim:pleaseEnterTheAmountInThousands">

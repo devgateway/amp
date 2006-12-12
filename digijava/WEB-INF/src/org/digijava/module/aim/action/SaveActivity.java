@@ -852,6 +852,10 @@ public class SaveActivity extends Action {
 					Iterator itr = eaForm.getSelectedComponents().iterator();
 					while (itr.hasNext()) {
 						Components comp = (Components) itr.next();
+						AmpComponent ampComp = null;
+						// AmpComponent ampComp = Util.getAmpComponent(comp.getComponentId());
+						// activity.getComponents().add(ampComp);
+						/*
 						AmpComponent ampComponent = new AmpComponent();
 						ampComponent.setActivity(activity);
 						if (comp.getDescription() == null
@@ -862,6 +866,7 @@ public class SaveActivity extends Action {
 						}
 						ampComponent.setTitle(comp.getTitle());
 						ampComponent.setComponentFundings(new HashSet());
+						*/
 
 						if (comp.getCommitments() != null
 								&& comp.getCommitments().size() > 0) {
@@ -900,9 +905,7 @@ public class SaveActivity extends Action {
 										.getDate(fd.getTransactionDate()));
 								ampCompFund.setAdjustmentType(new Integer(fd
 										.getAdjustmentType()));
-								ampCompFund.setComponent(ampComponent);
-								ampComponent.getComponentFundings().add(
-										ampCompFund);
+								ampCompFund.setComponent(ampComp);
 							}
 						}
 
@@ -943,9 +946,7 @@ public class SaveActivity extends Action {
 										.getDate(fd.getTransactionDate()));
 								ampCompFund.setAdjustmentType(new Integer(fd
 										.getAdjustmentType()));
-								ampCompFund.setComponent(ampComponent);
-								ampComponent.getComponentFundings().add(
-										ampCompFund);
+								ampCompFund.setComponent(ampComp);
 							}
 						}
 
@@ -986,9 +987,7 @@ public class SaveActivity extends Action {
 										.getDate(fd.getTransactionDate()));
 								ampCompFund.setAdjustmentType(new Integer(fd
 										.getAdjustmentType()));
-								ampCompFund.setComponent(ampComponent);
-								ampComponent.getComponentFundings().add(
-										ampCompFund);
+								ampCompFund.setComponent(ampComp);
 							}
 						}
 
@@ -1013,13 +1012,11 @@ public class SaveActivity extends Action {
 										.getDate(phyProg.getReportingDate()));
 								ampPhyPerf.setTitle(phyProg.getTitle());
 								ampPhyPerf.setAmpActivityId(activity);
-								ampPhyPerf.setComponent(ampComponent);
+								ampPhyPerf.setComponent(ampComp);
 								ampPhyPerf.setComments(" ");
 								phyProgess.add(ampPhyPerf);
 							}
 						}
-						ampComponent.setPhysicalProgress(phyProgess);
-						activity.getComponents().add(ampComponent);
 					}
 				}
 

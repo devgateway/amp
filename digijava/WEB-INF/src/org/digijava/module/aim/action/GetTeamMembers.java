@@ -45,8 +45,9 @@ public class GetTeamMembers extends Action {
 						permitted = true;	
 					}
 				}
-			}
+			}logger.info(" this is the key to tell us "+key);
 		}
+		
 		if (!permitted) {
 			return mapping.findForward("index");
 		}

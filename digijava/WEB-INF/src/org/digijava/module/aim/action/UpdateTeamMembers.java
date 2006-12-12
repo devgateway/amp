@@ -60,14 +60,17 @@ public class UpdateTeamMembers extends Action {
 			TeamMemberForm upForm = (TeamMemberForm) form;
 			ActionErrors errors = new ActionErrors();
 			AmpTeam ampTeam = TeamUtil.getAmpTeam(upForm.getTeamId());
+			logger.info("ampTeam.getAmpTeamId() : "+ampTeam.getAmpTeamId());
 			if (upForm.getAction() != null
 					&& upForm.getAction().trim().equals("edit")) {
-				logger.debug("In edit team member");
+				logger.info("In edit team member");
 
 				AmpTeamMember ampMember = new AmpTeamMember();
 				ampMember.setAmpTeamMemId(upForm.getTeamMemberId());
+				logger.info("ampMember.getAmpTeamMemId() : "+ampMember.getAmpTeamMemId());
 				AmpTeamMemberRoles role = TeamMemberUtil.getAmpTeamMemberRole(upForm
 						.getRole());
+				logger.info("role.getRole() : "+role.getRole());
 				AmpTeamMemberRoles teamLead = TeamMemberUtil.getAmpTeamHeadRole();
 				if (role.getRole().equals(teamLead.getRole())) {
 					logger.debug("team name = " + ampTeam.getName());

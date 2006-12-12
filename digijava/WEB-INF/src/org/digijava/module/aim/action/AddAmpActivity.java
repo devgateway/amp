@@ -66,7 +66,7 @@ public class AddAmpActivity extends Action {
 	public ActionForward execute(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response)
 			throws java.lang.Exception {
-
+		
 		HttpSession session = request.getSession();
 
 		ampContext = getServlet().getServletContext();
@@ -81,8 +81,7 @@ public class AddAmpActivity extends Action {
 			return mapping.findForward("index");
 
 		EditActivityForm eaForm = (EditActivityForm) form;
-
-    try {
+		eaForm.setAllComps(ActivityUtil.getComponents());
         ProposedProjCost propProjCost=null;
         if(eaForm.getProProjCost()!=null){
             propProjCost=new ProposedProjCost();
@@ -94,11 +93,7 @@ public class AddAmpActivity extends Action {
             }
         }
 
-
-        Collection themes=new ArrayList();
-        themes = ProgramUtil.getAllThemes();
-        themes = CollectionUtils.getFlatHierarchy(themes, true, new HierarchicalDefinition(), new ProgramComparator());
-        eaForm.setProgramCollection(themes);
+    try {
 
 		if (!eaForm.isEditAct() || eaForm.isReset()) {
 			eaForm.reset(mapping, request);
@@ -116,11 +111,11 @@ public class AddAmpActivity extends Action {
 			eaForm.setStep("9");
 
 		// clearing Line & Plan Ministry Ranking
-		if (!eaForm.isEditAct() && eaForm.getPageId() > 1) {
+		if (!eaForm.isEditAct()) {
 			eaForm.setLineMinRank(null);
 			eaForm.setPlanMinRank(null);
 		}
-
+		
 		// added by Akash
 		// desc: clearing comment properties
 		// start
@@ -252,13 +247,6 @@ public class AddAmpActivity extends Action {
             }
 			eaForm.setReset(false);
 
-			// loading Activity Rank collection
-			if (null == eaForm.getActRankCollection()) {
-				eaForm.setActRankCollection(new ArrayList());
-				for (int i = 1; i < 6; i++)
-					eaForm.getActRankCollection().add(new Integer(i));
-			}
-			
 			Collection statusCol = null;
 			// load the status from the database
 			if(eaForm.getStatusCollection() == null) {
@@ -300,6 +288,15 @@ public class AddAmpActivity extends Action {
 			} else {
 				levelCol = eaForm.getLevelCollection();
 			}
+
+			// load all themes
+            Collection themes=new ArrayList();
+            themes = ProgramUtil.getAllThemes();
+            themes = CollectionUtils.getFlatHierarchy(themes, true, new HierarchicalDefinition(), new ProgramComparator());
+
+            eaForm.setProgramCollection(themes);
+
+			//eaForm.setProgramCollection(ProgramUtil.getAllThemes());
 
 			// load all the active currencies
 			eaForm.setCurrencies(CurrencyUtil.getAmpCurrency());
@@ -376,6 +373,12 @@ public class AddAmpActivity extends Action {
 
 			if (eaForm.getLevelCollection() == null) {
 				eaForm.setLevelCollection(DbUtil.getAmpLevels());
+			}
+
+			if (eaForm.getProgramCollection() == null) {
+                Collection themes=new ArrayList();
+                themes = ProgramUtil.getAllThemes();
+                eaForm.setProgramCollection(themes);
 			}
 
 			return mapping.findForward("preview");

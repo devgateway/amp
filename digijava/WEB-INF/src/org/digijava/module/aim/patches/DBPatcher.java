@@ -13,6 +13,8 @@ import net.sf.hibernate.Session;
 
 import org.apache.log4j.Logger;
 import org.digijava.kernel.persistence.PersistenceManager;
+import org.digijava.module.aim.dbentity.AmpActivity;
+import org.digijava.module.aim.dbentity.AmpComponent;
 import org.digijava.module.aim.dbentity.AmpFilters;
 import org.digijava.module.aim.dbentity.AmpIndicatorRiskRatings;
 import org.digijava.module.aim.dbentity.AmpPages;
@@ -214,12 +216,106 @@ public class DBPatcher {
 				 session.update(rr);
 				 session.flush();
 				 
-				 qryStr = "ALTER TABLE DG_MESSAGE " +
-				 		"MODIFY MESSAGE_UTF8 TEXT";
-				 
+				 qryStr = "delete from dg_message where message_utf8 " +
+				 		"like '%&nbsp%'";
 				 stmt.executeUpdate(qryStr);
+				 
+				 
 			 }
 				
+			 updateComponents();
+		} catch (Exception e) {
+			logger.error("Exception from patchAMPDB :" + e.getMessage());
+			e.printStackTrace(System.out);
+		} finally {
+			if (session != null) {
+				try {
+					PersistenceManager.releaseSession(session);
+				} catch (Exception rsf) {
+					logger.error("Release session failed!");
+				}
+			}
+		}
+	}
+	/*
+	 * modified by Govind
+	 */
+	
+	public void updateComponents() {
+		logger.info("In update Components");
+		Session session = null;
+		Session session1 = null;
+		String qryStr = null;
+		String qryStr1,qryStr2,qryStr3,qryStr4 = null;
+		Query qry = null;
+		Query qry1,qry2 = null;
+		Collection col = null;
+		int count =0;
+		ResultSet rs,rs1 = null;
+		String name,id =null;
+		int compId = 0,cnt =0,flag=0;
+		try {
+			  
+			 session = PersistenceManager.getSession();
+			 
+			 Statement stmt = session.connection().createStatement();			 
+			 qryStr4 = "SELECT COUNT(*) FROM AMP_ACTIVITY_COMPONENTS ";
+			 rs = stmt.executeQuery(qryStr4);
+			 if (rs.next()) {
+				 cnt = rs.getInt(1);
+				 if (cnt==0)
+				 {
+					 flag=1;
+				 }
+			 }
+			 if(flag==1)
+			 { 
+					 qryStr = "select DISTINCT p.title from " + AmpComponent.class.getName() + " p";
+					 qry = session.createQuery(qryStr);
+					 col = qry.list();
+					 Iterator itr = qry.list().iterator();
+					 logger.info(" govind your dead!!!!!");
+					 while (itr.hasNext()) {
+						 name = (String)itr.next(); 
+						 try{
+							 //logger.info(" name is PPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPP "+name);
+							 qryStr1 = "select amp_component_id from AMP_COMPONENTS where title = '" + name + "'";
+							  rs1 = stmt.executeQuery(qryStr1);			 
+							 if(rs1.next())
+							 {
+								 compId = rs1.getInt(1);
+							 }
+							// logger.info(" id id qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq "+compId);
+							 qryStr2 = "select amp_activity_id from AMP_COMPONENTS where title = '" + name + "'";
+							 
+								  rs = stmt.executeQuery(qryStr2);
+								 rs.first();					 
+								 while (!rs.isAfterLast()) {
+									 System.out.println(" in here");
+									  id = rs.getString(1);
+									  Statement stmt1 = session.connection().createStatement();			
+									 qryStr3 = "INSERT into AMP_ACTIVITY_COMPONENTS (amp_activity_id,amp_component_id) values ('"+id+"','"+compId+"')";
+									 stmt1.executeUpdate(qryStr3);
+									 //System.out.println("this is the query AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAaaaa "+ qryStr3);
+									  //logger.info(" id id ddddddddddddddddddddddddddddd "+id);
+									 rs.next();
+								 }
+								 Statement stmt2 = session.connection().createStatement();
+								 qryStr3 = "DELETE from AMP_COMPONENTS where title != '"+name+"' and amp_component_id !='"+compId+"'";
+								 System.out.println("this is the query AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAaaaa "+ qryStr3);
+								 stmt2.executeUpdate(qryStr3);
+						 	}
+						 
+						 catch (Exception e){
+							 logger.error("Exception from patchAMPDB getting the activity ids******************** :" + e.getMessage());
+								e.printStackTrace(System.out);
+						 }
+						 count++;
+					 }
+			 	}
+			 
+			 //logger.info("count................................................................."+count);
+		
 			 
 		} catch (Exception e) {
 			logger.error("Exception from patchAMPDB :" + e.getMessage());

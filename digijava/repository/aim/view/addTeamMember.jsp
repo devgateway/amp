@@ -34,9 +34,39 @@ function validate() {
 	}		  
 	return true;
 }
-	
-</script>
 
+function cancel()
+{
+	// alert("aaa");
+	//alert(document.aimTeamMemberForm.email.value);
+//	document.aimTeamMemberForm.email.value="";
+	//alert(document.aimTeamMemberForm.email.value)
+	document.aimTeamMemberForm.action = "/aim/teamMembers.do";
+	document.aimTeamMemberForm.target = "_self";
+	document.aimTeamMemberForm.submit();
+	return true;
+}
+
+function load()
+{
+	//aimTeamMemberForm.email.value="";
+	alert("aa");
+}
+
+function clearForms()
+{
+  var i;
+//	alert(aimTeamMemberForm.email.value);
+ // for (i = 0; (i < document.forms.length); i++) {
+ //   document.forms[i].reset();
+ // }
+ 	aimTeamMemberForm.email.value="";
+ 	aimTeamMemberForm.role.value="";
+ 	//onLoad="clearForms()"
+ //  alert(aimTeamMemberForm.email.value);
+}	
+</script>
+<body  onLoad="clearForms()">
 <digi:instance property="aimTeamMemberForm" />
 <digi:form action="/addTeamMember.do" method="post">
 
@@ -57,7 +87,7 @@ function validate() {
 </td></tr>
 <tr><td>
 </c:if>
-<table width="100%" cellSpacing=1 cellPadding=4 align="center" bgcolor="#aaaaaa">
+<table width="100%" cellSpacing=1 cellPadding=4 align="center" bgcolor="#aaaaaa" onload="load()">
 	<tr>
 		<td align="center" colspan="2" bgcolor="#eeeeee"><b>
 			<digi:trn key="aim:addTeamMembersFor">Add Members for</digi:trn>
@@ -139,7 +169,7 @@ function validate() {
 						<html:submit value="Save" styleClass="dr-menu" onclick="return validate()"/>
 					</td>
 					<td width="50%" align="left">
-						<html:reset value="Cancel" styleClass="dr-menu"  onclick="javascript:history.go(-1)"/>
+						<html:button property="" value="Cancel" styleClass="dr-menu" onclick="cancel()" />
 					</td>
 				</tr>
 			</table>
@@ -158,3 +188,4 @@ function validate() {
 
 
 </digi:form>
+</body>

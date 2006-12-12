@@ -29,6 +29,14 @@
 			 }
 	
 	}
+	function cancel()
+	{
+		document.aimAddSectorForm.action = "/aim/getSectorSchemes.do";
+		document.aimAddSectorForm.target = "_self";
+		document.aimAddSectorForm.submit();
+		return true;
+	}
+	
 </script>
 <digi:errors/>
 <digi:instance property="aimAddSectorForm" />
@@ -156,11 +164,15 @@
 					<td width="50%" align="right">
 					<%--
 						<html:submit value="Save" styleClass="dr-menu"/>--%>
-							<input  type="button" name="addBtn" value="Save" onclick="updateScheme('<bean:write name="aimAddSectorForm" property="parentId" />')"
+							<input  type="button" name="addBtn" value="Save" onclick="updateScheme('<bean:write name="aimAddSectorForm" property="parentId" />')">
 					</td>
 					<td width="50%" align="left">
-						<html:reset value="Cancel" styleClass="dr-menu"/>
+						<html:reset value="Reset" styleClass="dr-menu"/>
 					</td>
+					<td width="10%" align="left">
+						<html:button property="" value="Cancel" styleClass="dr-menu" onclick="cancel()"/>
+					</td>
+					
 				</tr>
 			</table>
 		</td>

@@ -161,15 +161,13 @@
 		<td colspan="2" width="60%">
 			<table width="100%" cellspacing="5">
 				<tr>
-					<td width="50%" align="right">
+					<td  align="right">
 					<%--
-						<html:submit value="Save" styleClass="dr-menu"/>--%>
-							<input  type="button" name="addBtn" value="Save" onclick="updateScheme('<bean:write name="aimAddSectorForm" property="parentId" />')">
+						<html:submit value="Save" styleClass="dr-menu" onclick="updateScheme('<bean:write name="aimAddSectorForm" property="parentId" />')"/>--%>
+						<input  type="button" class="dr-menu" name="addBtn" value="Save"  onclick="updateScheme('<bean:write name="aimAddSectorForm" property="parentId" />')">
 					</td>
-					<td width="50%" align="left">
+					<td align="center">
 						<html:reset value="Reset" styleClass="dr-menu"/>
-					</td>
-					<td width="10%" align="left">
 						<html:button property="" value="Cancel" styleClass="dr-menu" onclick="cancel()"/>
 					</td>
 					

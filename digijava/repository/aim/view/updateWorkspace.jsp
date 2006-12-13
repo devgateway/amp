@@ -152,11 +152,12 @@ function relTeam() {
 }
  function cancel()
  {
-	document.aimUpdateWorkspaceForm.action = "/aim/workspaceManager.do";
-	document.aimUpdateWorkspaceForm = "_self";
-	document.aimUpdateWorkspaceForm.submit();
+//	document.aimUpdateWorkspaceForm.action = "/aim/workspaceManager.do";
+//	document.aimUpdateWorkspaceForm = "_self";
+//	document.aimUpdateWorkspaceForm.submit();
+	window.location="/aim/workspaceManager.do";
 	return true;
-}
+ }
 
 -->
 </script>

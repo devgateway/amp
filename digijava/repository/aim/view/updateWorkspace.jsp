@@ -150,6 +150,13 @@ function relTeam() {
 		return false;	
 	}
 }
+ function cancel()
+ {
+	document.aimUpdateWorkspaceForm.action = "/aim/workspaceManager.do";
+	document.aimUpdateWorkspaceForm = "_self";
+	document.aimUpdateWorkspaceForm.submit();
+	return true;
+}
 
 -->
 </script>
@@ -536,6 +543,9 @@ onsubmit="return validateAimUpdateWorkspaceForm(this);">
 																	</td>
 																	<td>
 																		<html:reset value="Clear" styleClass="dr-menu"/>
+																	</td>
+																	<td>
+																		<html:button property="" value="Cancel" styleClass="dr-menu" onclick="cancel()"/>
 																	</td>
 																</tr>
 															</table>										

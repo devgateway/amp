@@ -213,8 +213,8 @@
 																	<logic:equal name="aimAddOrgGroupForm" property="flag" value="orgReferences" >
 																		<tr>
 																			<td colspan="2" width="60%"  align="center">
-																				<b><digi:trn key="aim:cannotDeleteOrgGrpMsg"><font color="#FF0000">
-																						Can not delete this group since some organization references it !</font>
+																				<b><digi:trn key="aim:cannotDeleteOrgGrpMsgRefOrgs"><font color="#FF0000">
+																						Cannot delete the organization group. It is used by one or more organizations.</font>
 																					</digi:trn>
 																				</b>
 																			</td>

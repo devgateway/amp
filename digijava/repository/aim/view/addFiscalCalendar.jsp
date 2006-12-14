@@ -176,6 +176,7 @@
 																<table width="100%" border=0	 bgColor=#f4f4f2>
 																	<tr>
 																		<td width="30%" align="right">
+                                                                        <font color="red"><b>*</b></font>
 																		<digi:trn key="aim:fiscalCalendarName">Name</digi:trn>	</td>
 																	    <td width="30%" >
 																	          <html:text property="fiscalCalName" size="40" />
@@ -183,7 +184,8 @@
 																	</tr>
 																	<tr>
 																		<td width="30%" align="right">
-																	        <digi:trn key="aim:fiscalCalendarStMnt">Start Month</digi:trn>
+                                                                          <font color="red"><b>*</b></font>
+                                                                          <digi:trn key="aim:fiscalCalendarStMnt">Start Month</digi:trn>
 																		</td>
 																		<td width="30%">
 																           <html:text property="startMonthNum" size="3" />

@@ -278,6 +278,7 @@ public class FreeBalanceHarvester {
 				
 				if (ac == null) {
 					ac = new AmpComponent();
+					
 					//ac.setComponentFundings(new HashSet());
 					ac.setDescription("");
 					ac.setTitle(componentName);

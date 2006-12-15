@@ -38,6 +38,8 @@ public class EditActivityForm extends ActionForm implements Serializable{
 	private Long assistanceType = null;
 	private String createdDate;
 	private Collection perspectives;
+	private double regionTotalDisb;
+	
 
 	private Long program;
 	private Collection programCollection;
@@ -3685,5 +3687,13 @@ public class EditActivityForm extends ActionForm implements Serializable{
 
 	public void setCompTotalDisb(double compTotalDisb) {
 		this.compTotalDisb = compTotalDisb;
+	}
+
+	public double getRegionTotalDisb() {
+		return regionTotalDisb;
+	}
+
+	public void setRegionTotalDisb(double regionTotalDisb) {
+		this.regionTotalDisb = regionTotalDisb;
 	}
 }

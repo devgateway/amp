@@ -45,8 +45,5 @@ public class AmpGlobalSettings implements Serializable {
 	public void setGlobalId(Long globalId) {
 		this.globalId = globalId;
 	}
-	
-	
-	
-	
+		
 }

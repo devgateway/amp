@@ -78,6 +78,7 @@ import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.DocumentUtil;
 import org.digijava.module.aim.util.ProgramUtil;
 import org.digijava.module.aim.util.TeamMemberUtil;
+import org.digijava.module.aim.util.ComponentsUtil;
 import org.digijava.module.cms.dbentity.CMSContentItem;
 import org.digijava.kernel.request.Site;
 import org.digijava.module.aim.util.DocumentUtil;
@@ -737,7 +738,7 @@ public class EditActivity extends Action {
 					ArrayList regFunds = new ArrayList();
 					Iterator rItr = activity.getRegionalFundings().iterator();
 
-					eaForm.setRegionTotalDisb(0);
+					//eaForm.setRegionTotalDisb(0);
 					while (rItr.hasNext()) {
 						AmpRegionalFunding ampRegFund = (AmpRegionalFunding) rItr
 								.next();
@@ -749,7 +750,7 @@ public class EditActivity extends Action {
 							
 						//	disb/=ARUtil.getExchange(ampCompFund.getCurrency().getCurrencyCode(),new java.sql.Date(ampCompFund.getTransactionDate().getTime()));
 						//}
-						eaForm.setRegionTotalDisb(eaForm.getRegionTotalDisb()+disb);
+						//eaForm.setRegionTotalDisb(eaForm.getRegionTotalDisb()+disb);
 
 						
 						
@@ -853,8 +854,8 @@ public class EditActivity extends Action {
 							tempComp.setDisbursements(new ArrayList());
 							tempComp.setExpenditures(new ArrayList());
 
-							Iterator cItr = temp.getComponentFundings()
-									.iterator();
+							//Iterator cItr = temp.getComponentFundings().iterator();
+							Iterator cItr = ComponentsUtil.getComponentFunding(tempComp.getComponentId()).iterator();
 							while (cItr.hasNext()) {
 								AmpComponentFunding ampCompFund = (AmpComponentFunding) cItr
 										.next();
@@ -902,7 +903,8 @@ public class EditActivity extends Action {
 								}
 							}
 
-							Collection phyProgess = temp.getPhysicalProgress();
+							//Collection phyProgess = temp.getPhysicalProgress();
+							Collection phyProgess = ComponentsUtil.getComponentPhysicalProgress(tempComp.getComponentId());
 							if (phyProgess != null && phyProgess.size() > 0) {
 								Collection physicalProgress = new ArrayList();
 								Iterator phyProgItr = phyProgess.iterator();
@@ -1140,7 +1142,7 @@ public class EditActivity extends Action {
 			// load all themes
             Collection themes=new ArrayList();
             themes = ProgramUtil.getAllThemes();
-            themes = CollectionUtils.getFlatHierarchy(themes, true, new HierarchicalDefinition(), new ProgramComparator());
+            //themes = CollectionUtils.getFlatHierarchy(themes, true, new HierarchicalDefinition(), new ProgramComparator());
             eaForm.setProgramCollection(themes);
 
 			// load all the active currencies

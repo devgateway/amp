@@ -47,11 +47,14 @@ public class ViewComponentDescription extends Action
 			AmpComponent progress=DbUtil.getAmpComponentDescription(cid);
 			formBean.setTitle(progress.getTitle());
 			formBean.setDescription(progress.getDescription());
+			/*
 			formBean.setAmount(mf.format(progress.getAmount()));
 			String date = DateConversion.ConvertDateToString(progress.getReportingDate());
 			formBean.setCompRepDate(date);
+			
 			if (progress.getCurrency() != null)
 				formBean.setCurrCode(progress.getCurrency().getCurrencyCode());
+			*/
 			/*
 			Iterator itr = progress.getPhysicalProgress().iterator();
 			while (itr.hasNext()) {

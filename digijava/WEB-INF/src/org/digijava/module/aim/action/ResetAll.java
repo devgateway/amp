@@ -401,11 +401,14 @@ public class ResetAll extends Action
 						AmpComponent temp = (AmpComponent) compItr.next();
 						Components tempComp = new Components();
 						tempComp.setTitle(temp.getTitle());
-						tempComp.setAmount(DecimalToText.ConvertDecimalToText(temp.getAmount().doubleValue()));
+						//tempComp.setAmount(DecimalToText.ConvertDecimalToText(temp.getAmount().doubleValue()));
 						tempComp.setComponentId(temp.getAmpComponentId());
+						/*
 						if (temp.getCurrency() != null)
 							tempComp.setCurrencyCode(temp.getCurrency().getCurrencyCode());
+						*/
 						tempComp.setDescription(temp.getDescription().trim());
+						/*
 						tempComp.setReportingDate(DateConversion.ConvertDateToString(temp.getReportingDate()));
 						Collection phyProgess = temp.getPhysicalProgress();
 						if (phyProgess != null && phyProgess.size() > 0)
@@ -423,7 +426,7 @@ public class ResetAll extends Action
 								physicalProgress.add(phyProg);
 							}
 							tempComp.setPhyProgress(physicalProgress);
-						}
+						}*/
 						comp.add(tempComp);
 					}
 					eaForm.setSelectedComponents(comp);

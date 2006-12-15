@@ -34,6 +34,7 @@ import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpPerspective;
 import org.digijava.module.aim.dbentity.AmpTermsAssist;
 import org.digijava.module.aim.helper.Constants;
+import org.digijava.module.aim.util.ComponentsUtil;
 
 /**
  * 
@@ -274,18 +275,20 @@ public class FreeBalanceHarvester {
 						break;
 					}
 				}
+				
 				if (ac == null) {
 					ac = new AmpComponent();
-					ac.setComponentFundings(new HashSet());
+					//ac.setComponentFundings(new HashSet());
 					ac.setDescription("");
 					ac.setTitle(componentName);
-					ac.setActivity(a);
+				//	ac.setActivity(a);
 					a.getComponents().add(ac);
 				}
 
 				// check if we have a funding	
 				AmpComponentFunding acf = null;
-				i = ac.getComponentFundings().iterator();
+				// i = ac.getComponentFundings().iterator();
+				i = ComponentsUtil.getComponentFunding(ac.getAmpComponentId()).iterator();
 				while (i.hasNext()) {
 					AmpComponentFunding element = (AmpComponentFunding) i
 							.next();
@@ -316,7 +319,7 @@ public class FreeBalanceHarvester {
 					acf.setPerspective(ap);
 					
 					acf.setTransactionAmount(new Double(n.doubleValue()));
-					ac.getComponentFundings().add(acf);
+					//ac.getComponentFundings().add(acf);
 				}
 				
 				session.saveOrUpdate(a);

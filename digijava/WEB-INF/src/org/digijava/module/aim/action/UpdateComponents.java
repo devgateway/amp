@@ -87,19 +87,21 @@ public class UpdateComponents extends Action{
 							}
 							if(event.equals("newComp"))
 							{
+								
 								AmpComponent ampComp = new AmpComponent();
 								ampComp.setAmpComponentId(null);
 								ampComp.setActivities(null);
-								ampComp.setActivity(null);
+								/*ampComp.setActivity(null);
 								ampComp.setComponentFundings(null);
 								ampComp.setCurrency(null);
 								ampComp.setReportingDate(null);
-								ampComp.setPhysicalProgress(null);
+								ampComp.setPhysicalProgress(null);*/
 								ampComp.setTitle(updCompForm.getCompTitle());
 								ampComp.setCode(updCompForm.getCompCode());
 								ampComp.setType(updCompForm.getCompType());
 								ampComp.setDescription(updCompForm.getCompDes());
 								DbUtil.add(ampComp);
+								
 								return mapping.findForward("comps");
 								
 								

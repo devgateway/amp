@@ -145,5 +145,83 @@ public class ComponentsUtil{
 			}
 		}
 	}
+	
+	/*
+	 * To get the Component Fundings from the ampComponentFundings Table
+	 * parameter passed is the component id
+	 */
+	public static Collection getComponentFunding(Long id)
+	{
+		logger.info(" getting the components funding details................");
+		Collection col = null;
+		String queryString=null;
+		Session session = null;
+		Query qry = null;
+		try
+		{
+			session = PersistenceManager.getSession();
+			queryString ="select co from "+AmpComponentFunding.class.getName()+" co where co.amp_component_id=:id";
+			qry = session.createQuery(queryString);
+			qry.setParameter("id",id,Hibernate.LONG);
+
+			col = qry.list();
+		}
+		catch(Exception ex)
+		{
+			logger.error("Unable to get Component for editing from database " + ex.getMessage());
+			ex.printStackTrace(System.out);
+		}
+		finally
+		{
+			try
+			{
+				PersistenceManager.releaseSession(session);
+			}
+			catch (Exception ex2)
+			{
+				logger.error("releaseSession() failed ");
+			}
+		}
+		return col;
+	}
+	
+	/*
+	 * To get the physical progress for a component from the physical progress table...
+	 * parameter passed is the amp component id
+	 */
+	public static Collection getComponentPhysicalProgress(Long id)
+	{
+		logger.info(" getting the components funding details................");
+		Collection col = null;
+		String queryString=null;
+		Session session = null;
+		Query qry = null;
+		try
+		{
+			session = PersistenceManager.getSession();
+			queryString ="select co from "+AmpPhysicalPerformance.class.getName()+" co where co.amp_component_id=:id";
+			qry = session.createQuery(queryString);
+			qry.setParameter("id",id,Hibernate.LONG);
+
+			col = qry.list();
+		}
+		catch(Exception ex)
+		{
+			logger.error("Unable to get Component for editing from database " + ex.getMessage());
+			ex.printStackTrace(System.out);
+		}
+		finally
+		{
+			try
+			{
+				PersistenceManager.releaseSession(session);
+			}
+			catch (Exception ex2)
+			{
+				logger.error("releaseSession() failed ");
+			}
+		}
+		return col;
+	}
 
 }

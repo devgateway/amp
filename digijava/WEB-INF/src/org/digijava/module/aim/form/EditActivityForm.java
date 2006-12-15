@@ -267,6 +267,8 @@ public class EditActivityForm extends ActionForm implements Serializable{
 	private String componentTitle;
 	private String componentDesc;
 	private String componentAmount;
+	////////////////////
+	private double compTotalDisb;
 
 	private String currencyCode;
 	private String componentRepDate;
@@ -3675,5 +3677,13 @@ public class EditActivityForm extends ActionForm implements Serializable{
 
 	public void setAllComps(Collection allComps) {
 		this.allComps = allComps;
+	}
+
+	public double getCompTotalDisb() {
+		return compTotalDisb;
+	}
+
+	public void setCompTotalDisb(double compTotalDisb) {
+		this.compTotalDisb = compTotalDisb;
 	}
 }

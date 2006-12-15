@@ -142,7 +142,24 @@ public class UpdateTeamMembers extends Action {
 				Long selMembers[] = new Long[1];
 				selMembers[0] = upForm.getTeamMemberId();
 				Site site = RequestUtils.getSite(request);
+				
+				//check if we can remove them: check if we have a team leader
+				
+				if(ampTeam.getTeamLead()==null) {
+					upForm.setAmpRoles(TeamMemberUtil.getAllTeamMemberRoles());
+					errors
+					.add(
+							ActionErrors.GLOBAL_ERROR,
+							new ActionError(
+									"error.aim.deleteTeamMember.teamLeaderRequired"));
+					saveErrors(request, errors);
+					return mapping.getInputForward();
+				}
+			
+				
 				TeamMemberUtil.removeTeamMembers(selMembers,site.getId());
+				
+				
 				
 				if (ampTeam != null) {
 					request.setAttribute("teamId", ampTeam.getAmpTeamId());

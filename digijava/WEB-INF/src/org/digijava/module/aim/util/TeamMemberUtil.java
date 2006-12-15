@@ -1282,6 +1282,10 @@ public class TeamMemberUtil {
 						team.setTeamLead(null);
 						session.update(team);
 					}
+					
+					//this cannot be null, if u get null here pls check to have a team leader before Delete!
+					AmpTeamMember teamLeader=ampMember.getAmpTeam().getTeamLead();
+					
 
 					qryStr = "select a from " + AmpApplicationSettings.class.getName() +
 							" a where (a.member=:memberId)";
@@ -1294,6 +1298,20 @@ public class TeamMemberUtil {
 						session.delete(ampAppSettings);
 						logger.info("deleted the app settings..");
 					}
+					
+					//assign member's activities to team leader
+					qryStr = "select a from " + AmpActivity.class.getName() +
+					" a where (a.activityCreator=:teamMemberId)";
+					qry = session.createQuery(qryStr);
+					qry.setParameter("teamMemberId", id[i], Hibernate.LONG);
+					itr = qry.list().iterator();
+					while (itr.hasNext()) {
+						AmpActivity act = (AmpActivity) itr.next();
+						logger.info("Assigning activity "+act.getName()+" to "+teamLeader.getUser().getEmail());
+						act.setActivityCreator(teamLeader);						
+						session.update(act);						
+					}
+			
 
 					User user = (User) session.load(User.class,ampMember.getUser().getId());
 					Group group = (Group) session.load(Group.class,groupId);

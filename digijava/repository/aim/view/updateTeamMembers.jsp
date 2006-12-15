@@ -6,7 +6,7 @@
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
 
-<digi:errors/>
+
 <digi:instance property="aimTeamMemberForm" />
 <digi:form action="/updateTeamMember.do" method="post">
 
@@ -100,6 +100,7 @@
 												<table border=0 cellPadding=5 cellSpacing=1 class=box-border width="100%">
 	<tr>
 		<td align="right" width="50%">
+			<digi:errors/>
 			<digi:trn key="aim:memberName">Name &nbsp;&nbsp; &nbsp;</digi:trn>
 		</td>
 		<td align="left" width="50%">

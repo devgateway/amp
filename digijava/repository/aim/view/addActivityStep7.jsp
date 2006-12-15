@@ -240,7 +240,7 @@ function removeSelOrgs(value) {
 													<table cellSpacing=1 cellPadding=1>
 														<tr>
 															<td>
-																<input type="button" value="Add Organisations" class="buton"
+																<input type="button" value="Add Organizations" class="buton"
 																onclick="addOrgs(1)" class="buton">
 															</td>
 															<td>
@@ -257,7 +257,7 @@ function removeSelOrgs(value) {
 											<table width="100%" bgcolor="#cccccc" cellSpacing=1 cellPadding=5>
 												<tr>
 													<td bgcolor="#ffffff">
-														<input type="button" value="Add Organisations" class="buton"
+														<input type="button" value="Add Organizations" class="buton"
 														onclick="addOrgs(1)">
 													</td>
 												</tr>
@@ -300,7 +300,7 @@ function removeSelOrgs(value) {
 													<table cellSpacing=1 cellPadding=1>
 														<tr>
 															<td>
-																<input type="button" value="Add Organisations" class="buton"
+																<input type="button" value="Add Organizations" class="buton"
 																onclick="addOrgs(2)" class="buton">
 															</td>
 															<td>
@@ -317,7 +317,7 @@ function removeSelOrgs(value) {
 											<table width="100%" bgcolor="#cccccc" cellSpacing=1 cellPadding=5>
 												<tr>
 													<td bgcolor="#ffffff">
-														<input type="button" value="Add Organisations" class="buton"
+														<input type="button" value="Add Organizations" class="buton"
 														onclick="addOrgs(2)">
 													</td>
 												</tr>

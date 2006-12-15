@@ -341,7 +341,7 @@ function popupwin()
 														<table cellSpacing=2 cellPadding=2>
 															<tr>
 																<td>
-																	<input type="button" value="Add Organisation" class="buton"
+																	<input type="button" value="Add Organization" class="buton"
 																		onclick="selectOrganisation()">
 																</td>
 																<td>

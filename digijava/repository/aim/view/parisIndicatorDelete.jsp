@@ -7,7 +7,9 @@
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
 
 <digi:errors/>
-
+<script language="JavaScript">
+window.location="/aim/parisIndicatorManager.do";
+</script>
 
 <!--  AMP Admin Logo -->
 <jsp:include page="teamPagesHeader.jsp" flush="true" />

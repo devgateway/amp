@@ -17,6 +17,10 @@
 			document.aimParisIndicatorManagerForm.target = popupPointer.name;
 			document.aimParisIndicatorManagerForm.submit();
 		}
+		function deleteIndicator()
+		{
+			return confirm("Do you want to delete the Indicator?");
+		}
 	-->
 </script>
 
@@ -112,6 +116,10 @@
 												<c:set target="${urlParams}" property="event" value="edit" />
 											[ <digi:link href="/parisIndicatorManager.do" name="urlParams" title="<%=translation%>" >
 												<digi:trn key="aim:reportManagerEdit">Edit</digi:trn>
+											</digi:link> ]
+												<c:set target="${urlParams}" property="event" value="delete" />
+											[ <digi:link href="/parisIndicatorManager.do" name="urlParams" title="<%=translation%>" onclick="return deleteIndicator()">
+												<digi:trn key="aim:reportManagerDelete">Delete</digi:trn>
 											</digi:link> ]
 
 				<%--							<bean:write name="parisIndicatorName" property="ampIndicatorId"/>--%>

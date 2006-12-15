@@ -121,12 +121,20 @@ public class ParisIndicatorManager extends Action
 			String quid2 = request.getParameter("qid2");
 			Long questId = new Long(quid2);
 			ParisUtil.deleteQuestion(questId);
+			
+			
 		}
 
 		String action = request.getParameter("event");
 		if (action != null && action.equals("delete")) 
 		{
-			return mapping.findForward(("parisIndiDelete"));
+			String a1 = (String)(request.getParameter("pid"));
+			Long t1 =	new Long(a1);
+			Indicid = new Long(a1);
+			parisForm.setIndicatorvalue(Indicid);
+			ParisUtil.deleteParisIndicator(t1);
+			//System.out.println("Am sters un indicator....t="+t1);
+			return mapping.findForward("parisIndiDelete");
 		}
 		if (action != null && action.equals("edit"))
 		{

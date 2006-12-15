@@ -197,6 +197,57 @@ public class ParisUtil {
 	}
 
 	/*
+	 * This is to delete a Paris Indicator
+	 */
+	public static void deleteParisIndicator(Long pid)
+	{
+		Session session = null;
+		Transaction tx = null;
+		try 
+		{
+			session = PersistenceManager.getSession();
+			AmpAhsurveyIndicator parisIndicator = 
+				(AmpAhsurveyIndicator) session.load(AmpAhsurveyIndicator.class,pid);
+			tx = session.beginTransaction();
+			session.delete(parisIndicator);
+			tx.commit();
+		} 
+		catch (Exception e) 
+		{
+			logger.error("Exception from deleteQIndicator() :" + e.getMessage());
+			e.printStackTrace(System.out);		
+			if (tx != null) 
+			{
+				try 
+				{
+					tx.rollback();
+				}
+				catch (Exception trbf) 
+				{
+					logger.error("Transaction roll back failed ");
+					e.printStackTrace(System.out);
+				}
+			}
+		} 
+		finally 
+		{
+			if (session != null) 
+			{
+				try 
+				{
+					PersistenceManager.releaseSession(session);
+				} 
+				catch (Exception rsf) 
+				{
+					logger.error("Failed to release session :" + rsf.getMessage());
+				}
+			}			
+		}
+	}
+
+	
+	
+	/*
 	 * this function is to get the question for editing
 	 */
 	

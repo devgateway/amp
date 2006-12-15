@@ -909,6 +909,7 @@
       <forward name="step3" path="/aim/addActivity.do?edit=true" redirect="true" />
       <forward name="step6" path="/aim/addActivity.do?edit=true" redirect="true" />
       <forward name="index" path="/aim/index.do" redirect="true" />
+      <forward name="selorg" path="/aim/selectOrganization.do?edit=true&amp;orgSelReset=false"/>
     </action>
     <action name="aimEditActivityForm" path="/aim/locationSelected" scope="session" type="org.digijava.module.aim.action.LocationSelected">
       <forward name="forward" path="/aim/addActivity.do?edit=true" />

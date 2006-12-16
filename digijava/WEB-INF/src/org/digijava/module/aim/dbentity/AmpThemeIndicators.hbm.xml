@@ -11,8 +11,6 @@
 		<property name="name" column="name" type="java.lang.String"/>
 		<property name="code" column="code" type="java.lang.String"/>
 		<property name="type" column="type" type="java.lang.String"/>
-		<property name="creationDate" column="creation_date" type="java.util.Date"/>
-		<property name="valueType" column="value_type" type="java.lang.Integer"/>
 		<property name="category" column="category" type="java.lang.Integer"/>
 		<property name="npIndicator" column="np_indicator" type="java.lang.Boolean"/>
 		<property name="description" column="description" type="org.digijava.kernel.db.SafeClobType"/>

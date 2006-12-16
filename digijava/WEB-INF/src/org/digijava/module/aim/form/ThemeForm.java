@@ -2,6 +2,7 @@ package org.digijava.module.aim.form;
 
 import org.apache.struts.action.*;
 import java.util.Collection;
+import java.util.List;
 
 public class ThemeForm extends ActionForm {
 
@@ -18,18 +19,16 @@ public class ThemeForm extends ActionForm {
 		  private String parentProgram;
 		  private String version; 
 		  private String event;
-		  private int valueType;
 		  private Long indicatorId;
 		  private String code;
 		  private String name;
 		  private String type;
 		  private String indicatorDescription;
-		  private String creationDate;
 		  private int category;
 		  private boolean npIndicator;
 		  private String saveType;
-		  
-
+		  private List prgIndValues;
+		
 		/**
 		 * @return Returns the themes.
 		 */
@@ -269,20 +268,6 @@ public class ThemeForm extends ActionForm {
 		}
 
 		/**
-		 * @return Returns the creationDate.
-		 */
-		public String getCreationDate() {
-			return creationDate;
-		}
-
-		/**
-		 * @param creationDate The creationDate to set.
-		 */
-		public void setCreationDate(String creationDate) {
-			this.creationDate = creationDate;
-		}
-
-		/**
 		 * @return Returns the name.
 		 */
 		public String getName() {
@@ -325,20 +310,6 @@ public class ThemeForm extends ActionForm {
 		}
 
 		/**
-		 * @return Returns the valueType.
-		 */
-		public int getValueType() {
-			return valueType;
-		}
-
-		/**
-		 * @param valueType The valueType to set.
-		 */
-		public void setValueType(int valueType) {
-			this.valueType = valueType;
-		}
-
-		/**
 		 * @return Returns the saveType.
 		 */
 		public String getSaveType() {
@@ -351,5 +322,12 @@ public class ThemeForm extends ActionForm {
 		public void setSaveType(String saveType) {
 			this.saveType = saveType;
 		}
-}
 
+		public List getPrgIndValues() {
+			return prgIndValues;
+		}
+
+		public void setPrgIndValues(List prgIndValues) {
+			this.prgIndValues = prgIndValues;
+		}
+}

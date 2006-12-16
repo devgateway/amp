@@ -1,16 +1,17 @@
 package org.digijava.module.aim.helper;
 
+import java.util.Collection;
+
 public class AmpPrgIndicator
 {
 	private Long indicatorId;
 	private String name;
 	private String code;
 	private String type;
-	private String creationDate;
-	private int valueType;
 	private int category;
 	private boolean npIndicator;
 	private String description;
+	private Collection prgIndicatorValues;
 	/**
 	 * @return Returns the category.
 	 */
@@ -34,18 +35,6 @@ public class AmpPrgIndicator
 	 */
 	public void setCode(String code) {
 		this.code = code;
-	}
-	/**
-	 * @return Returns the creationDate.
-	 */
-	public String getCreationDate() {
-		return creationDate;
-	}
-	/**
-	 * @param creationDate The creationDate to set.
-	 */
-	public void setCreationDate(String creationDate) {
-		this.creationDate = creationDate;
 	}
 	/**
 	 * @return Returns the description.
@@ -108,15 +97,15 @@ public class AmpPrgIndicator
 		this.type = type;
 	}
 	/**
-	 * @return Returns the valueType.
+	 * @return Returns the prgIndicatorValues.
 	 */
-	public int getValueType() {
-		return valueType;
+	public Collection getPrgIndicatorValues() {
+		return prgIndicatorValues;
 	}
 	/**
-	 * @param valueType The valueType to set.
+	 * @param prgIndicatorValues The prgIndicatorValues to set.
 	 */
-	public void setValueType(int valueType) {
-		this.valueType = valueType;
+	public void setPrgIndicatorValues(Collection prgIndicatorValues) {
+		this.prgIndicatorValues = prgIndicatorValues;
 	}
 }

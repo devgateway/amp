@@ -50,8 +50,6 @@ public class EditAllIndicators extends Action {
 			indThemeForm.setName(allPrgInd.getName());
 			indThemeForm.setCode(allPrgInd.getCode());
 			indThemeForm.setType(allPrgInd.getType());
-			indThemeForm.setCreationDate(allPrgInd.getCreationDate());
-			indThemeForm.setValueType(allPrgInd.getValueType());
 			indThemeForm.setCategory(allPrgInd.getCategory());
 			indThemeForm.setNpIndicator(allPrgInd.isNpIndicator());
 			indThemeForm.setSaveType("program");
@@ -70,8 +68,6 @@ public class EditAllIndicators extends Action {
 			allPrgInd.setName(indThemeForm.getName());
 			allPrgInd.setCode(indThemeForm.getCode());
 			allPrgInd.setType(indThemeForm.getType());
-			allPrgInd.setCreationDate(indThemeForm.getCreationDate());
-			allPrgInd.setValueType(indThemeForm.getValueType());
 			allPrgInd.setCategory(indThemeForm.getCategory());
 			allPrgInd.setNpIndicator(indThemeForm.isNpIndicator());
 			ProgramUtil.saveIndicator(allPrgInd);

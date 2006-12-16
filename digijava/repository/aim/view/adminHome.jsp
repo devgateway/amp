@@ -94,10 +94,10 @@
 											<td class=f-names noWrap>
 											<digi:img src="module/aim/images/arrow-th-BABAB9.gif" width="16"/>
 											<bean:define id="translation">
-												<digi:trn key="aim:clickToViewProgramManager">Click here to view Program Manager</digi:trn>
+												<digi:trn key="aim:clickToViewMultiLevelProgramManager">Click here to view Multi-level Program Manager</digi:trn>
 											</bean:define>
 											<digi:link href="/themeManager.do" title="<%=translation%>" >
-											<digi:trn key="aim:programManager">Program Manager</digi:trn>
+											<digi:trn key="aim:multilevelprogramManager">Multi-Level Program Manager</digi:trn>
 											</digi:link>
 											</td>
 										</tr>

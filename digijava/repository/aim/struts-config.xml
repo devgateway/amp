@@ -307,8 +307,11 @@
 			<forward name="forward" path="/aim/themeManager.do" redirect="true"/>
 			<forward name="index" path="/aim/index.do" redirect="true"/>
 		</action>
-		<action name="aimThemeForm" path="/aim/addThemeIndicator" scope="request" type="org.digijava.module.aim.action.AddThemeIndicator" validate="false">
+		<action name="aimThemeForm" path="/aim/addThemeIndicator" scope="session" type="org.digijava.module.aim.action.AddThemeIndicator" validate="false">
 			<forward name="forward" path="/showLayout.do?layout=aim_addPrgIndicator"/>
+ 		</action>
+		<action name="aimThemeForm" path="/aim/closeThemeIndicator" scope="session" type="org.digijava.module.aim.action.CloseThemeIndicator" validate="false">
+				  <forward name="forward" path="/aim/themeManager.do" redirect="true"/>
  		</action>
  		<action name="aimAllIndicatorForm" path="/aim/overallIndicatorManager" scope="request" type="org.digijava.module.aim.action.OverallIndicatorManager" validate="false">
      		<forward name="forward" path="/showLayout.do?layout=overallIndicatorManager" />

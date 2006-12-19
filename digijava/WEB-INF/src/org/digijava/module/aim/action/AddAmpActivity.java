@@ -111,7 +111,7 @@ public class AddAmpActivity extends Action {
 			eaForm.setStep("9");
 
 		// clearing Line & Plan Ministry Ranking
-		if (!eaForm.isEditAct()) {
+		if (!eaForm.isEditAct() && eaForm.getPageId() > 1) {
 			eaForm.setLineMinRank(null);
 			eaForm.setPlanMinRank(null);
 		}
@@ -132,7 +132,6 @@ public class AddAmpActivity extends Action {
 		// added by Akash
 		// desc: setting WorkingTeamLeadFlag & approval status in form bean
 		// start
-
 		Long ampTeamId = teamMember.getTeamId();
 		boolean teamLeadFlag = teamMember.getTeamHead();
 		boolean workingTeamFlag = TeamUtil.checkForParentTeam(ampTeamId);
@@ -168,7 +167,6 @@ public class AddAmpActivity extends Action {
 				ampContext.setAttribute(org.digijava.module.aim.helper.Constants.TS_ACT_LIST,tsList);
 			}
 		}
-
 		// end
 
 		if (eaForm.getStep().equals("1")) { // show the step 1 page.
@@ -231,7 +229,7 @@ public class AddAmpActivity extends Action {
                 org.digijava.module.editor.util.DbUtil.saveEditor(ed);
 		    }
 
-            // Exectly as description/objectives, AMP is using DigiJava's document
+            // Exactly as description/objectives, AMP is using DigiJava's document
             // management module to store documents (if enabled). Before storing
             // Documents, we need to create space there.
             // Later, we will give to space user-friendly name
@@ -246,6 +244,13 @@ public class AddAmpActivity extends Action {
                 }
             }
 			eaForm.setReset(false);
+			
+			// loading Activity Rank collection
+			if (null == eaForm.getActRankCollection()) {
+				eaForm.setActRankCollection(new ArrayList());
+				for (int i = 1; i < 6; i++)
+					eaForm.getActRankCollection().add(new Integer(i));
+			}
 
 			Collection statusCol = null;
 			// load the status from the database

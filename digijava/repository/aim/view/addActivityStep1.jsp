@@ -320,7 +320,7 @@ function popupwin()
 											<logic:notEmpty name="aimEditActivityForm" property="selectedOrganizations">
 											<td>
 												<table cellSpacing=1 cellPadding=1 border=0 width="500">
-												<c:forEach items="${aimEditActivityForm.selectedOrganizationsList}" var="selectedOrganizations">
+												<c:forEach items="${aimEditActivityForm.selectedOrganizations}" var="selectedOrganizations">
 														<tr>
 															<td align="left" width=3>
 																<html:multibox property="selOrgs">

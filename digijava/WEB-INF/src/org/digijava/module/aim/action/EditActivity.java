@@ -309,7 +309,7 @@ public class EditActivity extends Action {
 					eaForm.setSurveyFlag(Boolean.FALSE);
 				}
 			} else {
-				if(!step.equals(null))
+				if(step != null)
 				{
 					eaForm.setStep(step);
 				}

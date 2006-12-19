@@ -418,7 +418,7 @@
 																			<table width="100%" cellSpacing=1 cellPadding=1 bordercolor="#dddddd"
 																			border=1  style="border-collapse: collapse">
 																				<tr><td valign="top" width="100" bgcolor="#ffffff">
-																					<digi:trn key="expenditures">
+																					<digi:trn key="aim:expenditures">
 																					Expenditures</digi:trn>
 																				</td>
 																				<td bgcolor="#ffffff">

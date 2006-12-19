@@ -116,7 +116,7 @@ method="post">
 								
 								<bean:define id="riskName" name="aimActivityDashboardForm" property="overallRisk" toScope="page"
 								type="java.lang.String"/>
-								<b><digi:trn key="<%=riskName%>"><%=riskName%></digi:trn></b>
+								<b><digi:trn key='<%="aim:" + riskName%>'><%=riskName%></digi:trn></b>
 						
 								<img src="<%= actRiskChartUrl %>" width=370 height=350 border=0 usemap="#<%= actRiskChartFileName %>">
 								<br><br>

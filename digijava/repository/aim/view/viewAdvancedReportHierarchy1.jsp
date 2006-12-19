@@ -210,8 +210,8 @@
 						</logic:equal>
 						<logic:equal name="aimAdvancedReportForm" property="acBalFlag"
 							value="true">
-							<td height="21" width="23" align="center"><digi:trn
-								key="aim:undisbursed">Undisbursed</digi:trn></td>
+							<td height="21" width="23" align="center">
+							<digi:trn key="aim:undisbursed">Undisbursed</digi:trn></td>
 						</logic:equal>
 
 
@@ -503,8 +503,8 @@
 								</logic:equal>
 								<logic:equal name="aimAdvancedReportForm" property="acBalFlag"
 									value="true">
-									<td height="21" width="23" align="center"><digi:trn
-										key="aim:undisbursed">Undisbursed</digi:trn></td>
+									<td height="21" width="23" align="center">
+										<digi:trn key="aim:undisbursed">Undisbursed</digi:trn></td>
 								</logic:equal>
 								
 <!-- columnview no 2 -->
@@ -709,8 +709,8 @@
 						</logic:equal>
 						<logic:equal name="aimAdvancedReportForm" property="acBalFlag"
 							value="true">
-							<td height="21" width="23" align="center"><digi:trn
-								key="aim:undisbursed">Undisbursed</digi:trn></td>
+							<td height="21" width="23" align="center">
+								<digi:trn key="aim:undisbursed">Undisbursed</digi:trn></td>
 						</logic:equal>
 
 <!-- columnView nr 3 -->

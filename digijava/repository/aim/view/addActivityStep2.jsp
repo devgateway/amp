@@ -205,8 +205,8 @@ function popupwin()
 										Add Activity - Step 1
 									</digi:trn>
 										</c:if>
-									</digi:link>&nbsp;&gt;&nbsp; <digi:trn
-										key="aim:addActivityStep2">
+									</digi:link>&nbsp;&gt;&nbsp; 
+									<digi:trn key="aim:addActivityStep2">
 									Step 2
 								</digi:trn> </span></td>
 								</tr>
@@ -255,8 +255,8 @@ function popupwin()
 													<td width="13" height="20"
 														background="module/aim/images/left-side.gif"></td>
 													<td vAlign="center" align="center" class="textalb"
-														height="20" bgcolor="#006699"><digi:trn
-														key="aim:step2of9LocationAndSectors">
+														height="20" bgcolor="#006699">
+														<digi:trn key="aim:step2of9LocationAndSectors">
 													Step 2 of 9: Location | Sectors
 												</digi:trn></td>
 													<td width="13" height="20"
@@ -276,8 +276,8 @@ function popupwin()
 
 														<tr>
 															<td><IMG alt=Link height=10
-																src="../ampTemplate/images/arrow-014E86.gif" width=15> <b><digi:trn
-																key="aim:location">Location</digi:trn></b></td>
+																src="../ampTemplate/images/arrow-014E86.gif" width=15> <b>
+																<digi:trn key="aim:location">Location</digi:trn></b></td>
 														</tr>
 														<tr>
 															<td><digi:trn key="aim:chooseLocation">
@@ -419,9 +419,9 @@ function popupwin()
 																border=0></a></td>
 														</tr>
 														<tr>
-															<td><FONT color=red>*</FONT> <digi:trn
-																key="aim:chooseSector">
-										Choose the sector.</digi:trn></td>
+															<td><FONT color=red>*</FONT> 
+															<digi:trn key="aim:chooseSector">
+															Choose the sector</digi:trn></td>
 														</tr>
 														<tr>
 															<td>&nbsp;</td>

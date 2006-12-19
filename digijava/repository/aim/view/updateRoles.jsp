@@ -246,7 +246,7 @@
 																		<td><br></td>
 																		<td>
 																			<html:checkbox property="teamHead">
-																			<digi:trn key="checkIfTeamHead">
+																			<digi:trn key="aim:checkIfTeamHead">
 																			Check this box if you want to set this role as the team lead.
 																			</digi:trn>
 																			</html:checkbox>

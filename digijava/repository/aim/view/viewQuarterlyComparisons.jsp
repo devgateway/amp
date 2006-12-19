@@ -114,7 +114,7 @@ type="org.digijava.module.aim.form.QuarterlyComparisonsForm" method="post">
 								<digi:link href="/viewFinancingBreakdown.do" name="urlFinancingBreakdown" styleClass="comment" title="<%=translation%>" >
 									<digi:trn key="aim:financialProgress">Financial Progress</digi:trn>
 								</digi:link> &gt; 
-								<digi:trn key="quarterlyAll">Quarterly All</digi:trn> 							
+								<digi:trn key="aim:quarterlyAll">Quarterly All</digi:trn> 							
 								&gt;
 								<bean:write name="aimQuarterlyComparisonsForm" property="perpsectiveName" />							
 						</SPAN>

@@ -187,7 +187,7 @@
                   			          				<digi:trn key="aim:yearlyDisbursements">Yearly Disbursements</digi:trn>
 															</logic:equal>
 															<logic:equal name="aimYearlyInfoForm" property="transactionType" value="2">
-			                            				<digi:trn key="yearlyExpenditures">Yearly Expenditures</digi:trn>
+			                            				<digi:trn key="aim:yearlyExpenditures">Yearly Expenditures</digi:trn>
 															</logic:equal>
                   			          		</TD>
                           						<TD width="17" height="17" background="<%= digiContext %>/repository/aim/images/corner-r.gif">
@@ -200,7 +200,7 @@
 												<TABLE cellSpacing="2" cellPadding="0" vAlign="top" bgColor=#f4f4f2>
 													<TR>
 														<TD>
-						                         	<STRONG>Perspective:</STRONG>
+						                         	<STRONG><digi:trn key="aim:perspective">Perspective</digi:trn>:</STRONG>
 														</TD>
 														<TD>
 															<html:select property="perspective" styleClass="dr-menu">

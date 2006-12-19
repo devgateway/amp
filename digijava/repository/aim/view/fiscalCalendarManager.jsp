@@ -96,8 +96,8 @@
 																			<digi:trn key="aim:startDayFiscalCalendar">Start Day</digi:trn></b>
 																		</td>
 																		<td width="245"><b>
-																			<digi:trn 		key="aim:offsetFromCurrentYear">Offset
-                                                                            (From current year)
+																			<digi:trn key="aim:offsetFromCurrentYear">
+																			Offset (From current year)
 																			</digi:trn></b>
 																		</td>
 																	</tr>

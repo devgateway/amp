@@ -218,6 +218,9 @@ public class DBPatcher {
 				 		"MODIFY MESSAGE_UTF8 TEXT";
 				 
 				 stmt.executeUpdate(qryStr);
+				 
+				 qryStr = "DELETE FROM DG_MESSAGE ";
+				 stmt.executeUpdate(qryStr);				 
 			 }
 				
 			 

@@ -184,7 +184,7 @@
 												<bean:define id="riskName" name="indicator" property="riskName" 
 												type="java.lang.String" />
 												
-												<digi:trn key="<%=riskName%>"><%=riskName%></digi:trn>
+												<digi:trn key='<%="aim:" + riskName%>'><%=riskName%></digi:trn>
 												<%--
 												<bean:write name="indicator" property="riskName" />													
 												--%>

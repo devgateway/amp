@@ -159,10 +159,10 @@ type="org.digijava.module.aim.form.QuarterlyInfoForm" method="post">
 							</digi:link>
 							&gt; 
 							<logic:equal name="aimQuarterlyInfoForm" property="transactionType" value="1">
-            	        	<digi:trn key="quarterlyDisbursements">Quarterly Disbursements</digi:trn>
+            	        	<digi:trn key="aim:quarterlyDisbursements">Quarterly Disbursements</digi:trn>
 							</logic:equal>
 							<logic:equal name="aimQuarterlyInfoForm" property="transactionType" value="2">
-                     	<digi:trn key="quarterlyExpenditures">Quarterly Expenditures</digi:trn>
+                     	<digi:trn key="aim:quarterlyExpenditures">Quarterly Expenditures</digi:trn>
 							</logic:equal>
 							&gt;
 							<bean:write name="aimQuarterlyInfoForm" property="perpsectiveName" />							
@@ -190,10 +190,10 @@ type="org.digijava.module.aim.form.QuarterlyInfoForm" method="post">
          			               		<TR bgcolor="#F4F4F2"> 
                   			        			<TD nowrap bgcolor="#C9C9C7" class="box-title">&nbsp;
 					                      			<logic:equal name="aimQuarterlyInfoForm" property="transactionType" value="1">
-   	                  								<digi:trn key="quarterlyDisbursements">Quarterly Disbursements</digi:trn>
+   	                  								<digi:trn key="aim:quarterlyDisbursements">Quarterly Disbursements</digi:trn>
 															</logic:equal>
 															<logic:equal name="aimQuarterlyInfoForm" property="transactionType" value="2">
-            	         								<digi:trn key="quarterlyExpenditures">Quarterly Expenditures</digi:trn>
+            	         								<digi:trn key="aim:quarterlyExpenditures">Quarterly Expenditures</digi:trn>
 															</logic:equal>
                   			          		</TD>
                           						<TD width="17" height="17" background="<%= digiContext %>/repository/aim/images/corner-r.gif">

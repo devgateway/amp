@@ -66,8 +66,8 @@
 					<table width="100%" cellPadding=2 cellSpacing=1 vAlign="top"
 						align="left" bgcolor="#006699">
 						<tr>
-							<td width="20%" bgcolor="#ECF3FD"><digi:trn
-								key="aim:workspaceType">
+							<td width="20%" bgcolor="#ECF3FD">
+								<digi:trn key="aim:workspaceType">
 									Workspace Type
 								</digi:trn></td>
 							<td width="20%" bgcolor="#ECF3FD"><html:select
@@ -97,8 +97,8 @@
 					<table width="100%" cellPadding=2 cellSpacing=1 valign="top"
 						align="left" bgcolor="#006699">
 						<tr>
-							<td align="center" class="textalb" height="20"><digi:trn
-								key="aim:listOfAllTeams">
+							<td align="center" class="textalb" height="20">
+							<digi:trn key="aim:listOfAllTeams">
 									List of all child teams
 								</digi:trn></td>
 						</tr>

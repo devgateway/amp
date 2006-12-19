@@ -777,7 +777,7 @@ function disable() {
 																			<tr><td colspan="3">
 																			<table width="100%" cellSpacing=1 cellPadding=1 bgcolor="#dddddd">
 																				<tr><td valign="top" width="100" bgcolor="#ffffff">
-																					<digi:trn key="expenditures">
+																					<digi:trn key="aim:expenditures">
 																					Expenditures</digi:trn>
 																				</td>
 																				<td bgcolor="#ffffff">

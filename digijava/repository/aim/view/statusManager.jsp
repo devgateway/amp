@@ -30,14 +30,14 @@
 						Admin Home
 						</digi:trn>
 						</digi:link>&nbsp;&gt;&nbsp;
-						<digi:trn key="adminStatusManager">Status Manager
+						<digi:trn key="aim:adminStatusManager">Status Manager
 						</digi:trn>					
 					</td>
 					<!-- End navigation -->
 				</tr>
 				<tr>
 					<td height=16 vAlign=center width=571><span class=subtitle-blue>
-						<digi:trn key="adminStatusManager">Status Manager
+						<digi:trn key="aim:adminStatusManager">Status Manager
 						</digi:trn>					
 						</span>
 					</td>

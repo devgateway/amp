@@ -121,7 +121,7 @@
 																			<bean:define id="indName">
 																				<bean:write name="indicators" property="name"/>
 																			</bean:define>
-																			<digi:trn key="<%=indName%>">	
+																			<digi:trn key='<%="aim:" + indName%>'>
 																			<bean:write name="indicators" property="name"/></digi:trn>
 																		</a>
 																	</td>

@@ -134,7 +134,6 @@
 		</td>
 	</tr>	
 	<tr bgcolor=#ffffff><td height="5"></td></tr>	
-	<c:if test="${aimIndicatorForm.indId == null}">
 	<tr><td colspan="2" align="left">
 				&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 		<html:checkbox property="defaultFlag" />&nbsp;
@@ -142,7 +141,6 @@
 			Check this to make the indicator Global
 		</digi:trn>
 	</td></tr>
-	</c:if>
 	<tr bgColor=#ffffff><td height="30" colspan="2"></td></tr>
 	<tr bgColor=#dddddb>
 		<td bgColor=#dddddb height="25" align="center" colspan="2">

@@ -32,9 +32,6 @@
 		var temp = validate();
 		if (temp == true) 
 		{
-			document.aimIndicatorForm.addBtn.disabled = true;	  	
-			<digi:context name="addInd" property="context/module/moduleinstance/addIndicator.do" />
-			document.aimIndicatorForm.action = "<%=addInd%>";
 			document.aimIndicatorForm.target = "_self";
 			document.aimIndicatorForm.submit();			
 			
@@ -144,9 +141,9 @@
 	<tr bgColor=#ffffff><td height="30" colspan="2"></td></tr>
 	<tr bgColor=#dddddb>
 		<td bgColor=#dddddb height="25" align="center" colspan="2">
-			<input styleClass="dr-menu" type="button" name="addBtn" value="Save" onclick="return addIndicator()">&nbsp;&nbsp;
-			<input styleClass="dr-menu" type="reset" value="Cancel">&nbsp;&nbsp;
-			<input styleClass="dr-menu" type="button" name="close" value="Close" onclick="closeWindow()">			
+			<input class="dr-menu" type="button" value="Save" onclick="return addIndicator()">&nbsp;&nbsp;
+			<input type="reset" class="dr-menu" value="Cancel">&nbsp;&nbsp;
+			<input class="dr-menu" type="button" name="close" value="Close" onclick="closeWindow()">			
 		</td>
 	</tr>	
 </table>

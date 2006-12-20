@@ -3,7 +3,10 @@ package org.digijava.module.aim.form;
 import java.io.Serializable;
 import java.util.Collection;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.apache.struts.action.ActionForm;
+import org.apache.struts.action.ActionMapping;
 
 
 
@@ -15,7 +18,7 @@ public class IndicatorForm extends ActionForm implements Serializable
 	private String indicatorDesc = null;
 	private String indicatorCode = null;
 	private String searchKey = null;
-	private boolean defaultFlag = false;
+	private boolean defaultFlag;
 	private Long selectedIndicator = null;
 	private Collection searchReturn = null;
 	private Collection indicators = null;
@@ -57,13 +60,6 @@ public class IndicatorForm extends ActionForm implements Serializable
 		this.indicators = indicators;
 	}
 
-	public boolean getDefaultFlag() {
-		return defaultFlag;
-	}
-
-	public void setDefaultFlag(boolean defaultFlag) {
-		this.defaultFlag = defaultFlag;
-	}
 
 	public String getIndicatorCode() {
 		return indicatorCode;
@@ -255,5 +251,26 @@ public class IndicatorForm extends ActionForm implements Serializable
 	 */
 	public void setAscendingInd(char ascendingInd) {
 		this.ascendingInd = ascendingInd;
+	}
+
+	/**
+	 * @return Returns the defaultFlag.
+	 */
+	public boolean isDefaultFlag() {
+		return defaultFlag;
+	}
+
+	/**
+	 * @param defaultFlag The defaultFlag to set.
+	 */
+	public void setDefaultFlag(boolean defaultFlag) {
+		this.defaultFlag = defaultFlag;
+	}
+
+	/* (non-Javadoc)
+	 * @see org.apache.struts.action.ActionForm#reset(org.apache.struts.action.ActionMapping, javax.servlet.http.HttpServletRequest)
+	 */
+	public void reset(ActionMapping arg0, HttpServletRequest arg1) {
+		defaultFlag = false;
 	}
 }

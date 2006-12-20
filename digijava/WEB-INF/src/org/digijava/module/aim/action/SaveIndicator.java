@@ -30,7 +30,7 @@ public class SaveIndicator extends Action {
 				ampIndicators.setDescription(" ");
 				
 			ampIndicators.setCode(indForm.getIndicatorCode());
-			ampIndicators.setDefaultInd(indForm.getDefaultFlag());
+			ampIndicators.setDefaultInd(indForm.isDefaultFlag());
 			DbUtil.add(ampIndicators);
 		}
 		return mapping.findForward("forward");

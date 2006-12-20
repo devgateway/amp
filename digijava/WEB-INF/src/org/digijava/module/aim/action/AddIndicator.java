@@ -98,7 +98,7 @@ public class AddIndicator extends Action {
 						ampIndicators.setDescription(" ");
 					
 					ampIndicators.setCode(indForm.getIndicatorCode());
-					ampIndicators.setDefaultInd(indForm.getDefaultFlag());
+					ampIndicators.setDefaultInd(indForm.isDefaultFlag());
 					
 					if (indForm.getAscendingInd() == 'A')
 						ampIndicators.setAscendingInd(true);

@@ -738,7 +738,7 @@ public class EditActivity extends Action {
 					ArrayList regFunds = new ArrayList();
 					Iterator rItr = activity.getRegionalFundings().iterator();
 
-					//eaForm.setRegionTotalDisb(0);
+					eaForm.setRegionTotalDisb(0);
 					while (rItr.hasNext()) {
 						AmpRegionalFunding ampRegFund = (AmpRegionalFunding) rItr
 								.next();
@@ -750,7 +750,7 @@ public class EditActivity extends Action {
 							
 						//	disb/=ARUtil.getExchange(ampCompFund.getCurrency().getCurrencyCode(),new java.sql.Date(ampCompFund.getTransactionDate().getTime()));
 						//}
-						//eaForm.setRegionTotalDisb(eaForm.getRegionTotalDisb()+disb);
+						eaForm.setRegionTotalDisb(eaForm.getRegionTotalDisb()+disb);
 
 						
 						

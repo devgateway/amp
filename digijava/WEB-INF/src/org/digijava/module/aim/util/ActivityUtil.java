@@ -169,14 +169,14 @@ public class ActivityUtil {
 				}
 
 				// delete all previous components
-				Set comp = oldActivity.getComponents();
+				/*Set comp = oldActivity.getComponents();
 				if (comp != null) {
 					Iterator compItr = comp.iterator();
 					while (compItr.hasNext()) {
 						AmpComponent ampComp = (AmpComponent) compItr.next();
 						session.delete(ampComp);
 					}
-				}
+				}*/
 
 				// delete all previous org roles
 				Set orgrole = oldActivity.getOrgrole();
@@ -494,7 +494,7 @@ public class ActivityUtil {
 	public static Collection getComponents(Long actId) {
 		 Session session = null;
 		 Collection col = new ArrayList();
-
+		 logger.info(" this is the other components getting called....");
 		 try {
 			session = PersistenceManager.getSession();
 			String queryString = "select comp from " + AmpComponent.class.getName() +
@@ -1089,7 +1089,7 @@ public class ActivityUtil {
 	}
 	//function end physical progress
 //function to get all the components in the database
-	public static Collection getComponents() {
+	public static Collection getAllComponentNames() {
 	    Collection col = null;
 	    logger.info(" inside getting the components.....");
 	    Session session = null;

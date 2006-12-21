@@ -160,7 +160,7 @@ public class ComponentsUtil{
 		try
 		{
 			session = PersistenceManager.getSession();
-			queryString ="select co from "+AmpComponentFunding.class.getName()+" co where co.amp_component_id=:id";
+			queryString ="select co from "+AmpComponentFunding.class.getName()+" co where co.component=:id";
 			qry = session.createQuery(queryString);
 			qry.setParameter("id",id,Hibernate.LONG);
 
@@ -199,7 +199,7 @@ public class ComponentsUtil{
 		try
 		{
 			session = PersistenceManager.getSession();
-			queryString ="select co from "+AmpPhysicalPerformance.class.getName()+" co where co.amp_component_id=:id";
+			queryString ="select co from "+AmpPhysicalPerformance.class.getName()+" co where co.component=:id";
 			qry = session.createQuery(queryString);
 			qry.setParameter("id",id,Hibernate.LONG);
 
@@ -221,6 +221,41 @@ public class ComponentsUtil{
 				logger.error("releaseSession() failed ");
 			}
 		}
+		return col;
+	}
+	public static Collection getComponent(String title)
+	{
+		logger.info(" in here ");
+		Collection col = null;
+		String queryString=null;
+		Session session = null;
+		Query qry = null;
+		try
+		{
+			session = PersistenceManager.getSession();
+			queryString ="select co from "+AmpComponent.class.getName()+" co where co.title=:title";
+			qry = session.createQuery(queryString);
+			qry.setParameter("title",title,Hibernate.STRING);
+
+			col = qry.list();
+		}
+		catch(Exception ex)
+		{
+			logger.error("Unable to get Component for editing from database " + ex.getMessage());
+			ex.printStackTrace(System.out);
+		}
+		finally
+		{
+			try
+			{
+				PersistenceManager.releaseSession(session);
+			}
+			catch (Exception ex2)
+			{
+				logger.error("releaseSession() failed ");
+			}
+		}
+		logger.info(" returning the collection");
 		return col;
 	}
 

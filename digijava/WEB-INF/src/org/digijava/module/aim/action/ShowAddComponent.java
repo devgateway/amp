@@ -29,6 +29,8 @@ import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.FundingDetail;
 import org.digijava.module.aim.helper.FundingValidator;
 import org.digijava.module.aim.helper.TeamMember;
+import org.digijava.module.aim.util.ActivityUtil;
+import org.digijava.module.aim.util.ComponentsUtil;
 import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.aim.util.DbUtil;
 
@@ -53,6 +55,8 @@ public class ShowAddComponent extends Action {
 			
 			if( action != null && action.equalsIgnoreCase("show") )
 			{
+				logger.info(" in the show components..... ");
+				eaForm.setAllComps(ActivityUtil.getAllComponentNames());
 				logger.debug("Forwarding to forward");
 				eaForm.setComponentId(new Long(-1));
 				eaForm.setComponentTitle(null);

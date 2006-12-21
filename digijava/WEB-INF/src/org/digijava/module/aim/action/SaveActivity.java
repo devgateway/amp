@@ -84,6 +84,7 @@ import org.digijava.module.aim.util.SectorUtil;
 import org.digijava.module.aim.util.TeamMemberUtil;
 import org.digijava.module.aim.util.TeamUtil;
 import org.digijava.module.aim.util.DocumentUtil;
+import org.digijava.module.aim.util.ComponentsUtil;
 import javax.jcr.Node;
 
 /**
@@ -853,7 +854,16 @@ public class SaveActivity extends Action {
 					while (itr.hasNext()) {
 						Components comp = (Components) itr.next();
 						AmpComponent ampComp = null;
-						// AmpComponent ampComp = Util.getAmpComponent(comp.getComponentId());
+						logger.info(" in here finally..... "+ comp.getTitle()+"  get alase asfjskdfhl kasjfh "+comp.getComponentId());
+						Collection col = ComponentsUtil.getComponent(comp.getTitle());
+						Iterator it = col.iterator();
+						while(it.hasNext())
+						{
+							ampComp = (AmpComponent)it.next(); 
+						}
+						logger.info("finished.....");
+						activity.getComponents().add(ampComp);
+						//ampComp = DbUtil.getActivityAmpComments(comp.getComponentId());
 						// activity.getComponents().add(ampComp);
 						/*
 						AmpComponent ampComponent = new AmpComponent();

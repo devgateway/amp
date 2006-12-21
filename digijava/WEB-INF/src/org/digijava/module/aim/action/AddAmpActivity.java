@@ -81,7 +81,7 @@ public class AddAmpActivity extends Action {
 			return mapping.findForward("index");
 
 		EditActivityForm eaForm = (EditActivityForm) form;
-		eaForm.setAllComps(ActivityUtil.getComponents());
+		//eaForm.setAllComps(ActivityUtil.getAllComponentNames());
         ProposedProjCost propProjCost=null;
         if(eaForm.getProProjCost()!=null){
             propProjCost=new ProposedProjCost();

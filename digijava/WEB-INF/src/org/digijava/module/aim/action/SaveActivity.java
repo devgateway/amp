@@ -86,6 +86,7 @@ import org.digijava.module.aim.util.TeamUtil;
 import org.digijava.module.aim.util.DocumentUtil;
 import org.digijava.module.aim.util.ComponentsUtil;
 import javax.jcr.Node;
+import java.util.List;
 
 /**
  * SaveActivity class creates a 'AmpActivity' object and populate the fields
@@ -133,6 +134,27 @@ public class SaveActivity extends Action {
                 activity.setCurrencyCode(eaForm.getProProjCost().getCurrencyCode());
             }
 
+            if(eaForm.getSelectedPrograms()!=null){
+                Set programs=new HashSet();
+                ProgramUtil prg=new ProgramUtil();
+                ArrayList prgId=new ArrayList();
+                ArrayList ampThemes=new ArrayList();
+
+                Long programsId[]=eaForm.getSelectedPrograms();
+                for(int i=0; i<programsId.length;i++){
+                    prgId.add(programsId[i]);
+                }
+                ampThemes=prg.getThemesByIds(prgId);
+                if(ampThemes!=null){
+                    Iterator itr = ampThemes.iterator();
+                    AmpTheme theme = new AmpTheme();
+                    while(itr.hasNext()) {
+                        theme = (AmpTheme) itr.next();
+                        programs.add(theme);
+                    }
+                    activity.setActivityPrograms(programs);
+                }
+            }
 
 			if (eaForm.getPageId() < 0 || eaForm.getPageId() > 1) {
 				return mapping.findForward("index");

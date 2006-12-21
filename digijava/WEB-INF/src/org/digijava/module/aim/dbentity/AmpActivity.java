@@ -5,12 +5,12 @@ import java.util.*;
 
 import org.digijava.kernel.dbentity.*;
 import org.digijava.kernel.user.*;
-import org.digijava.module.aim.form.ProposedProjCost;
 
 public class AmpActivity
 		  implements Comparable, Serializable {
 
-	private Long ampActivityId ;
+
+    private Long ampActivityId ;
 	private String ampId ;
 	private String name ;
 	private String description ;
@@ -46,6 +46,8 @@ public class AmpActivity
     private Double funAmount;
     private String currencyCode;
     private String funDate;
+
+    private Set activityPrograms;
     // use contFirstName and contLastName instead.
 								 // The field is defunct
 
@@ -70,8 +72,9 @@ public class AmpActivity
 	private Date actualCompletionDate;
 	private Set closingDates;
 
-	private User author;                        // use activityCreator instead
-														  // This field is defunct
+
+    private User author;                        // use activityCreator instead
+    										  // This field is defunct
 
 	private AmpTeamMember activityCreator;
 	private Date createdDate;
@@ -843,7 +846,15 @@ public class AmpActivity
 		return actRankColl;
 	}
 
-	public void setActRankColl(Collection actRankColl) {
+    public Set getActivityPrograms() {
+        return activityPrograms;
+    }
+
+    public void setActRankColl(Collection actRankColl) {
 		this.actRankColl = actRankColl;
 	}
+
+    public void setActivityPrograms(Set activityPrograms) {
+        this.activityPrograms = activityPrograms;
+    }
 }

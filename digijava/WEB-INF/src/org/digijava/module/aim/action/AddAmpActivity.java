@@ -46,6 +46,8 @@ import org.digijava.module.aim.util.ProgramUtil;
 import org.digijava.module.aim.util.TeamUtil;
 import org.digijava.module.editor.dbentity.Editor;
 import org.digijava.module.editor.util.Constants;
+import java.util.Set;
+import java.util.HashSet;
 
 /**
  * Used to capture the activity details to the form bean of type org.digijava.module.aim.form.EditActivityForm
@@ -66,7 +68,7 @@ public class AddAmpActivity extends Action {
 	public ActionForward execute(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response)
 			throws java.lang.Exception {
-		
+
 		HttpSession session = request.getSession();
 
 		ampContext = getServlet().getServletContext();
@@ -115,7 +117,7 @@ public class AddAmpActivity extends Action {
 			eaForm.setLineMinRank(null);
 			eaForm.setPlanMinRank(null);
 		}
-		
+
 		// added by Akash
 		// desc: clearing comment properties
 		// start
@@ -129,7 +131,12 @@ public class AddAmpActivity extends Action {
 		}
 		// end
 
-		// added by Akash
+        Collection themes=new ArrayList();
+        themes = ProgramUtil.getAllThemes();
+        themes = CollectionUtils.getFlatHierarchy(themes, true, new HierarchicalDefinition(), new ProgramComparator());
+        eaForm.setProgramCollection(themes);
+
+        // added by Akash
 		// desc: setting WorkingTeamLeadFlag & approval status in form bean
 		// start
 		Long ampTeamId = teamMember.getTeamId();
@@ -244,7 +251,7 @@ public class AddAmpActivity extends Action {
                 }
             }
 			eaForm.setReset(false);
-			
+
 			// loading Activity Rank collection
 			if (null == eaForm.getActRankCollection()) {
 				eaForm.setActRankCollection(new ArrayList());
@@ -295,11 +302,6 @@ public class AddAmpActivity extends Action {
 			}
 
 			// load all themes
-            Collection themes=new ArrayList();
-            themes = ProgramUtil.getAllThemes();
-            themes = CollectionUtils.getFlatHierarchy(themes, true, new HierarchicalDefinition(), new ProgramComparator());
-
-            eaForm.setProgramCollection(themes);
 
 			//eaForm.setProgramCollection(ProgramUtil.getAllThemes());
 
@@ -378,12 +380,6 @@ public class AddAmpActivity extends Action {
 
 			if (eaForm.getLevelCollection() == null) {
 				eaForm.setLevelCollection(DbUtil.getAmpLevels());
-			}
-
-			if (eaForm.getProgramCollection() == null) {
-                Collection themes=new ArrayList();
-                themes = ProgramUtil.getAllThemes();
-                eaForm.setProgramCollection(themes);
 			}
 
 			return mapping.findForward("preview");

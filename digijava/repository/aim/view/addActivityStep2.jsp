@@ -204,10 +204,6 @@ function validateSectorPercentage() {
 </td></tr>
 <tr><td width="100%" vAlign="top" align="left">
 <table bgColor=#ffffff cellPadding=0 cellSpacing=0 width="100%" vAlign="top" align="center" border=0>
-	<tr>
-			<td width="100%" vAlign="top" align="left"><!--  AMP Admin Logo --> <jsp:include
-				page="teamPagesHeader.jsp" flush="true" /> <!-- End of Logo --></td>
-		</tr>
 		<tr>
 			<td width="100%" vAlign="top" align="left">
 			<table bgColor=#ffffff cellPadding=0 cellSpacing=0 width="100%"
@@ -576,19 +572,58 @@ function validateSectorPercentage() {
 										Select the program from the list.</digi:trn></td>
 														</tr>
 														<tr>
-															<td><html:select property="program" styleClass="inp-text">
-											<html:option value="-1">--- Select program ---</html:option>
-                                            <c:forEach var="theProgram" items="${aimEditActivityForm.programCollection}">
-                                              <html:option value="${theProgram.member.ampThemeId}">
-                                              <c:if test="${theProgram.level > 0}">
-                                                <c:forEach begin="1" end="${theProgram.level}">
-                                                &nbsp;
-                                                </c:forEach>
-                                              </c:if>
-                                                ${theProgram.member.name}
-                                              </html:option>
-                                            </c:forEach>
-										</html:select>
+															<td>
+
+                                            <table cellPadding=5 cellSpacing=1 border=0 width="100%" bgcolor="#d7eafd">
+											<tr>
+                                              <td align="left">
+                                                <b>
+                                                  <digi:trn key="aim:activitySelectedPrograms">
+                                                    Programs
+                                                  </digi:trn>
+                                                </b>
+                                              </td>
+                                            </tr>
+                                            <tr>
+                                              <td bgcolor="#ffffff" width="100%">
+                                                <table cellPadding=1 cellSpacing=1 border=0	bgcolor="#ffffff" width="100%">
+                                                  <tr>
+                                                    <td bgcolor="#ffffff">
+                                                    </td>
+                                                  </tr>
+                                                  <c:if test="${!empty aimEditActivityForm.programCollection}">
+                                                    <tr>
+                                                      <td>
+                                                        <table cellSpacing=0 cellPadding=0 border=0 bgcolor="#ffffff" width="100%">
+                                                          <c:forEach var="theProgram" items="${aimEditActivityForm.programCollection}">
+                                                            <tr>
+                                                              <td>
+                                                                <table width="100%" cellSpacing=1 cellPadding=1 vAlign="top" align="left">
+                                                                  <tr>
+                                                                    <td>
+                                                                      <c:if test="${theProgram.level > 0}">
+                                                                        <c:forEach begin="1" end="${theProgram.level}">
+                                                                        &nbsp;
+                                                                        </c:forEach>
+                                                                      </c:if>
+                                                                      <html:multibox property="selectedPrograms" value="${theProgram.member.ampThemeId}">
+                                                                        ${theProgram.member.ampThemeId}
+                                                                     </html:multibox>
+                                                                     ${theProgram.member.name}
+                                                                    </td>
+                                                                  </tr>
+                                                                </table>
+                                                              </td>
+                                                            </tr>
+                                                          </c:forEach>
+                                                        </table>
+                                                      </td>
+                                                    </tr>
+                                                  </c:if>
+                                                </table>
+                                              </td>
+                                            </tr>
+                                          </table>
 									</td></tr>
 									<tr><td>
 									<a title="<digi:trn key="aim:ProgramDesc">Description of program, objectives, or associated projects</digi:trn>">

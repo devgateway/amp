@@ -171,12 +171,30 @@ public class ProgramUtil {
 		return allTheme;
 	}
 
+    public static ArrayList getThemesByIds(ArrayList ampThemeIds) {
+        Session session = null;
+        Query qry = null;
+
+        try {
+            session = PersistenceManager.getRequestDBSession();
+            String qryStr = "select t from " + AmpTheme.class.getName()
+                + " t where t.ampThemeId in (:ids)";
+            qry = session.createQuery(qryStr);
+            qry.setParameterList("ids", ampThemeIds);
+            return (ArrayList) qry.list();
+        } catch(Exception e) {
+            logger.error("Unable to get all themes");
+            logger.debug("Exceptiion " + e);
+        }
+        return null;
+	}
+
 	public static AmpTheme getTheme(Long ampThemeId) {
 		Session session = null;
 		AmpTheme ampTheme = new AmpTheme();
 		try {
 			session = PersistenceManager.getRequestDBSession();
-			ampTheme = (AmpTheme)session.load(AmpTheme.class, ampThemeId); 
+			ampTheme = (AmpTheme)session.load(AmpTheme.class, ampThemeId);
 		} catch (Exception e) {
             throw new RuntimeException(e);
 		}
@@ -283,7 +301,7 @@ public class ProgramUtil {
 		}
 		return col;
 	}
-	
+
 	public static Collection getSubThemes(Long parentThemeId)
 	{
 		Session session = null;

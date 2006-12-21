@@ -5,20 +5,14 @@
 
 package org.digijava.module.aim.form;
 
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import javax.servlet.http.HttpServletRequest;
+import java.io.*;
+import java.util.*;
+import javax.servlet.http.*;
 
-import org.apache.struts.action.ActionForm;
-import org.apache.struts.action.ActionMapping;
-import org.apache.struts.upload.FormFile;
-import org.digijava.module.aim.dbentity.AmpField;
-import org.digijava.module.aim.helper.ActivityIndicator;
-import org.digijava.module.aim.helper.FundingDetail;
-import org.digijava.module.aim.helper.OrgProjectId;
-import org.digijava.module.aim.form.ProposedProjCost;
+import org.apache.struts.action.*;
+import org.apache.struts.upload.*;
+import org.digijava.module.aim.dbentity.*;
+import org.digijava.module.aim.helper.*;
 
 public class EditActivityForm extends ActionForm implements Serializable{
 
@@ -39,10 +33,11 @@ public class EditActivityForm extends ActionForm implements Serializable{
 	private String createdDate;
 	private Collection perspectives;
 	private double regionTotalDisb;
-	
+
 
 	private Long program;
 	private Collection programCollection;
+    private Long selectedPrograms[];
 
 	private String originalAppDate;
 	private String revisedAppDate;
@@ -263,7 +258,7 @@ public class EditActivityForm extends ActionForm implements Serializable{
 	private boolean firstSubmit;
 
 	// FOR ADD COMPONENTS
-	
+
 	private Collection allComps;
 	private boolean componentReset;
 	private String componentTitle;
@@ -333,7 +328,7 @@ public class EditActivityForm extends ActionForm implements Serializable{
 	private Collection updateIndValues;
 	private Collection indicatorPriorValues;
     private ProposedProjCost proProjCost;
-    
+
     private String lineMinRank;
 	private String planMinRank;
 	private Collection actRankCollection;
@@ -3693,7 +3688,15 @@ public class EditActivityForm extends ActionForm implements Serializable{
 		return regionTotalDisb;
 	}
 
-	public void setRegionTotalDisb(double regionTotalDisb) {
+    public Long[] getSelectedPrograms() {
+        return selectedPrograms;
+    }
+
+    public void setRegionTotalDisb(double regionTotalDisb) {
 		this.regionTotalDisb = regionTotalDisb;
 	}
+
+    public void setSelectedPrograms(Long[] selectedPrograms) {
+        this.selectedPrograms = selectedPrograms;
+    }
 }

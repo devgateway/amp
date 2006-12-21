@@ -92,6 +92,12 @@
 			<one-to-many class="org.digijava.module.aim.dbentity.AmpActivitySector" />
 		</set>
 
+		<set name="activityPrograms" cascade="none" inverse="true">
+			<cache usage="read-write"/>
+			<key column="amp_activity_id"/>
+			<one-to-many class="org.digijava.module.aim.dbentity.AmpTheme" />
+		</set>
+
 		<set name="locations" table="AMP_ACTIVITY_LOCATION" lazy="true" cascade="all">
 			<cache usage="read-write"/>
 			<key column="amp_activity_id"/>

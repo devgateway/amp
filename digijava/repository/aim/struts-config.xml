@@ -400,12 +400,13 @@
       <forward name="forward" path="/showLayout.do?layout=currencyManager" />
       <forward name="index" path="/aim/index.do" redirect="true" />
     </action>
-    <action name="aimCurrencyForm" path="/aim/updateCurrency" scope="session" type="org.digijava.module.aim.action.UpdateCurrency" validate="false">
+	 <action name="aimCurrencyForm" path="/aim/updateCurrency" scope="session" type="org.digijava.module.aim.action.UpdateCurrency" validate="false">
       <forward name="forward" path="/showLayout.do?layout=aim_updateCurrency" />
       <forward name="index" path="/aim/index.do" redirect="true" />
     </action>
-    <action name="aimCurrencyForm" path="/aim/saveCurrency" scope="session" type="org.digijava.module.aim.action.UpdateCurrency" validate="false">
-      <forward name="forward" path="/aim/currencyManager.do" />
+	 <action name="aimCurrencyForm" path="/aim/saveCurrency" scope="session" type="org.digijava.module.aim.action.UpdateCurrency" validate="false"
+				input="/showLayout.do?layout=aim_updateCurrency">
+      <forward name="forward" path="/showLayout.do?layout=aim_updateCurrency" />
     </action>
     <action name="aimAddCurrencyForm" path="/aim/editCurrency" scope="request" type="org.digijava.module.aim.action.EditCurrency" validate="false">
       <forward name="forward" path="/aim/currencyManager.do" />

@@ -43,9 +43,7 @@ public class CurrencyManager extends Action {
 			int page = crForm.getPage();
 			if (page < 1) page = 1;
 			
-			logger.debug("loading all currencies ....");
 			if (crForm.getAllCurrencies() == null) {
-				logger.debug("List empty... loading from the database ....");
 				crForm.setAllCurrencies(CurrencyUtil.getAllCurrencies(-1));
 			}
 			
@@ -100,14 +98,12 @@ public class CurrencyManager extends Action {
 			}							
 			crForm.setPages(pages);
 			
-			logger.debug("templist size = " + tempList.size());
-			logger.debug(stIndex + "," + edIndex);
 			for (int i = stIndex;i < edIndex;i ++) {
 				crForm.getCurrency().add(tempList.get(i));
 			}			
 				
 			crForm.setCurrentPage(new Integer(page));
-			crForm.setCountryName(null);
+			//crForm.setCountryName(null);
 			crForm.setCurrencyCode(null);
 			crForm.setCurrencyName(null);
 			crForm.setExchangeRate(null);

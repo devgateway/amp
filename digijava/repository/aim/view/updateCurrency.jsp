@@ -27,33 +27,14 @@ function validate() {
 		document.aimCurrencyForm.currencyName.focus();
 		return false;
 	}
-	if (isEmpty(document.aimCurrencyForm.countryName.value)) {
-		alert("Country name not entered");
-		document.aimCurrencyForm.countryName.focus();
-		return false;
-	}
-	if (document.aimCurrencyForm.id.value == -1) {
-		if (isEmpty(document.aimCurrencyForm.exchangeRateDate.value)) {
-			alert("Exchange rate date not entered");
-			document.aimCurrencyForm.exchangeRateDate.focus();
-			return false;
-		}
-		if (isEmpty(document.aimCurrencyForm.exchangeRate.value) ||
-            checkRate(document.aimCurrencyForm.exchangeRate.value) == false) {
-			alert("Invalid Exchange rate");
-			document.aimCurrencyForm.exchangeRate.focus();
-			return false;
-		}
-	}
 	return true;
 }
 
 function saveCurrency() {
 	var valid = validate();
 	if (valid != false) {
-		document.aimCurrencyForm.target = window.opener.name;
+		document.aimCurrencyForm.target = "_self";
 		document.aimCurrencyForm.submit();
-		window.close();
 	}
 	return valid;
 
@@ -92,6 +73,9 @@ function closePopup() {
 
 function load() {
 	document.aimCurrencyForm.currencyCode.focus();
+	if (document.aimCurrencyForm.closeFlag.value == "true") {
+		closePopup();
+	}	
 }
 
 function unload() {
@@ -105,6 +89,7 @@ function unload() {
 <input type="hidden" name="selectedDate">
 <html:hidden property="doAction" value="updateCurrency"/>
 <html:hidden property="id"/>
+<html:hidden property="closeFlag"/>
 
 <table bgcolor=#f4f4f2 cellPadding=5 cellSpacing=5 width="100%" class=box-border-nopadding>
 	<tr>
@@ -114,6 +99,10 @@ function unload() {
 					<td vAlign="center" width="100%" align ="center" class="textalb" height="20">
 						<digi:trn key="aim:currencyRateEditor">Currency Editor</digi:trn>
 					</td></tr>
+				<tr>
+					<td vAlign="center" width="100%" align ="center" height="20">
+						<html:errors />
+					</td></tr>					
 				<tr>
 					<td align="center">
 						<table border="0" cellpadding="2" cellspacing="1" width="100%">
@@ -137,17 +126,17 @@ function unload() {
 							</tr>
 							<tr bgcolor="#f4f4f2">
 								<td align="right" valign="middle" width="50%">
-									<FONT color=red>*</FONT>
-									<digi:trn key="aim:countryName">Country Name</digi:trn>&nbsp;
+									<digi:trn key="aim:country">Country</digi:trn>&nbsp;
 								</td>
 								<td align="left" valign="middle">
-									<html:select property="countryName" styleClass="inp-text">
+									<html:select property="countryIso" styleClass="inp-text">
 										<html:option value="">Select a country</html:option>
 										<html:optionsCollection name="aimCurrencyForm" property="countries"
-										value="name" label="name" />&nbsp;&nbsp;&nbsp;
+										value="iso" label="countryName" />&nbsp;&nbsp;&nbsp;
 									</html:select>
 								</td>
 							</tr>
+							<%--
 							<c:if test="${aimCurrencyForm.id == -1}">
 							<tr bgcolor="#f4f4f2">
 								<td align="right" valign="middle" width="50%">
@@ -181,6 +170,7 @@ function unload() {
 								</td>
 							</tr>
 							</c:if>
+							--%>
 							<tr bgcolor="#ffffff">
 								<td colspan="2">
 									<table width="100%" cellpadding="3" cellspacing="3" border="0">

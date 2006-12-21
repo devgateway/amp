@@ -16,18 +16,22 @@ import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
 import org.apache.struts.action.Action;
+import org.apache.struts.action.ActionError;
+import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.digijava.kernel.dbentity.Country;
 import org.digijava.kernel.translator.util.TrnCountry;
 import org.digijava.kernel.translator.util.TrnUtil;
+import org.digijava.kernel.util.CountryUtil;
 import org.digijava.kernel.util.RequestUtils;
 import org.digijava.module.aim.dbentity.AmpCurrency;
 import org.digijava.module.aim.dbentity.AmpCurrencyRate;
 import org.digijava.module.aim.form.CurrencyForm;
 import org.digijava.module.aim.helper.DateConversion;
 import org.digijava.module.aim.util.CurrencyUtil;
+import org.digijava.module.aim.util.DbUtil;
 
 public class UpdateCurrency extends Action {
 
@@ -60,14 +64,18 @@ public class UpdateCurrency extends Action {
 					curr = (AmpCurrency) itr.next();
 					if (curr.getCurrencyCode().equals(crForm.getCurrencyCode())) {
 						crForm.setCurrencyName(curr.getCurrencyName());
-						crForm.setCountryName(curr.getCountryName());
+						if (curr.getCountryId() != null)
+							crForm.setCountryIso(curr.getCountryId().getIso());
+						else 
+							crForm.setCountryIso(null);
+						
 						crForm.setId(curr.getAmpCurrencyId());
 						break;
 					}
 				}
 			} else {
 				crForm.setId(new Long(-1));
-				crForm.setCountryName(null);
+				crForm.setCountryIso(null);
 				crForm.setCurrencyCode(null);
 				crForm.setCurrencyName(null);
 				crForm.setExchangeRate(null);
@@ -76,51 +84,62 @@ public class UpdateCurrency extends Action {
 			if (crForm.getCountries() == null || 
 					crForm.getCountries().size() < 1) {
 				List countries = org.digijava.module.um.util.DbUtil.getCountries();
-				HashMap countriesMap = new HashMap();
-				Iterator iterator = TrnUtil.getCountries(
-						RequestUtils.getNavigationLanguage(request).getCode())
-						.iterator();
-				while (iterator.hasNext()) {
-					TrnCountry item = (TrnCountry) iterator.next();
-					countriesMap.put(item.getIso(), item);
-				}
-				//sort countries
 				List sortedCountries = new ArrayList();
-				iterator = countries.iterator();
+				Iterator iterator = countries.iterator();
 				while (iterator.hasNext()) {
 					Country item = (Country) iterator.next();
-					sortedCountries.add(countriesMap.get(item.getIso()));
+					if (item != null) {
+						if (item.getCountryName() != null &&
+								item.getCountryName().length() > 30) {
+							String name = item.getCountryName().substring(0,27);
+							item.setCountryName(name + "...");
+						}
+					}					
+					sortedCountries.add(item);
 				}
-				Collections.sort(sortedCountries, TrnUtil.countryNameComparator);
+				//Collections.sort(sortedCountries, TrnUtil.countryNameComparator);
 				crForm.setCountries(sortedCountries);				
 			}
-
+			crForm.setCloseFlag("false");
 		} else {
-			AmpCurrency curr = new AmpCurrency();
-			curr.setCountryName(crForm.getCountryName());
-			curr.setCurrencyCode(crForm.getCurrencyCode());
-			curr.setCurrencyName(crForm.getCurrencyName());
-			curr.setAmpCurrencyId(crForm.getId());
-			curr.setActiveFlag(new Integer(1));
-			AmpCurrencyRate cRate = new AmpCurrencyRate();
-			if (crForm.getExchangeRate() != null && 
-					crForm.getExchangeRateDate() != null && 
-					crForm.getExchangeRateDate().trim().length() > 0) {
-				cRate.setExchangeRate(crForm.getExchangeRate());
-				cRate.setExchangeRateDate(
-						DateConversion.getDate(crForm.getExchangeRateDate()));
-				cRate.setToCurrencyCode(crForm.getCurrencyCode());
-				
-			}
-			CurrencyUtil.saveCurrency(curr,cRate);
-			crForm.setCountryName(null);
-			crForm.setCurrencyCode(null);
-			crForm.setCurrencyName(null);
-			crForm.setExchangeRate(null);
-			crForm.setExchangeRateDate(null);
-			crForm.setAllCurrencies(null);
-			crForm.setDoAction(null);
-			crForm.setId(null);
+			boolean currCodeExist = CurrencyUtil.currencyCodeExist(crForm.getCurrencyCode(),crForm.getId());
+			if (!currCodeExist) {
+				AmpCurrency curr = null;
+				if (crForm.getId() != null && crForm.getId().longValue() > 0) {
+					// edit
+					curr = CurrencyUtil.getAmpcurrency(crForm.getId());
+					curr.setCurrencyCode(crForm.getCurrencyCode());
+					curr.setCurrencyName(crForm.getCurrencyName());
+					curr.setAmpCurrencyId(crForm.getId());
+					curr.setCountryId(DbUtil.getDgCountry(crForm.getCountryIso()));
+					CurrencyUtil.updateCurrency(curr);
+				} else {
+					// add
+					curr = new AmpCurrency();
+					curr.setCurrencyCode(crForm.getCurrencyCode());
+					curr.setCurrencyName(crForm.getCurrencyName());
+					curr.setAmpCurrencyId(crForm.getId());
+					curr.setActiveFlag(new Integer(1));
+					curr.setCountryId(DbUtil.getDgCountry(crForm.getCountryIso()));
+					CurrencyUtil.saveCurrency(curr);
+				}
+				crForm.setCurrencyCode(null);
+				crForm.setCurrencyName(null);
+				crForm.setExchangeRate(null);
+				crForm.setExchangeRateDate(null);
+				crForm.setAllCurrencies(null);
+				crForm.setDoAction(null);
+				crForm.setId(null);		
+				crForm.setCloseFlag("true");
+ 			} else {
+ 				logger.info("Error: Currency Code already exist");
+ 				ActionErrors errors = new ActionErrors();
+ 				errors.add("currencyCode", new ActionError("error.aim.updateCurrency.currencyCodeAlreadyExist"));
+ 				saveErrors(request, errors);
+ 				crForm.setCloseFlag("false");
+ 				return mapping.getInputForward(); 				
+ 			}
+
 		}
 		} catch (Exception e) {
 			e.printStackTrace(System.out);

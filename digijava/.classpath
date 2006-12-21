@@ -33,7 +33,7 @@
 	<classpathentry kind="lib" path="WEB-INF/lib/digijava-exception.jar"/>
 	<classpathentry kind="lib" path="WEB-INF/lib/digijava-forum.jar"/>
 	<classpathentry kind="lib" path="WEB-INF/lib/digijava-highlights.jar"/>
-	<classpathentry kind="lib" path="WEB-INF/lib/digijava-kernel.jar"/>
+	<classpathentry sourcepath="WEB-INF/lib/digijava-admin.jar" kind="lib" path="WEB-INF/lib/digijava-kernel.jar"/>
 	<classpathentry kind="lib" path="WEB-INF/lib/digijava-news.jar"/>
 	<classpathentry kind="lib" path="WEB-INF/lib/digijava-sdm.jar"/>
 	<classpathentry kind="lib" path="WEB-INF/lib/digijava-search.jar"/>

@@ -18,12 +18,13 @@ public class CurrencyForm extends ActionForm {
 	private Long id;
 	private String currencyCode;
 	private String currencyName;
-	private String countryName;
+	private String countryIso;
 	private Double exchangeRate;
 	private String exchangeRateDate;
 	private Collection countries;
 	
 	private String doAction;
+	private String closeFlag;
 
 	/**
 	 * @return Returns the allCurrencies.
@@ -122,18 +123,6 @@ public class CurrencyForm extends ActionForm {
 		this.countries = countries;
 	}
 	/**
-	 * @return Returns the countryName.
-	 */
-	public String getCountryName() {
-		return countryName;
-	}
-	/**
-	 * @param countryName The countryName to set.
-	 */
-	public void setCountryName(String countryName) {
-		this.countryName = countryName;
-	}
-	/**
 	 * @return Returns the currencyCode.
 	 */
 	public String getCurrencyCode() {
@@ -205,4 +194,29 @@ public class CurrencyForm extends ActionForm {
 	public void setId(Long id) {
 		this.id = id;
 	}
+	/**
+	 * @return Returns the closeFlag.
+	 */
+	public String getCloseFlag() {
+		return closeFlag;
+	}
+	/**
+	 * @param closeFlag The closeFlag to set.
+	 */
+	public void setCloseFlag(String closeFlag) {
+		this.closeFlag = closeFlag;
+	}
+	/**
+	 * @return Returns the countryIso.
+	 */
+	public String getCountryIso() {
+		return countryIso;
+	}
+	/**
+	 * @param countryIso The countryIso to set.
+	 */
+	public void setCountryIso(String countryIso) {
+		this.countryIso = countryIso;
+	}
+
 }

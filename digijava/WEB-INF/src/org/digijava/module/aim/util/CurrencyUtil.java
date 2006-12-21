@@ -13,6 +13,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import net.sf.hibernate.Hibernate;
+import net.sf.hibernate.HibernateException;
 import net.sf.hibernate.Query;
 import net.sf.hibernate.Session;
 import net.sf.hibernate.Transaction;
@@ -351,6 +352,110 @@ public class CurrencyUtil {
 			}			
 		}
 	}
+	
+	public static boolean currencyCodeExist(String currCode,Long id) {
+		Session session = null;
+		Query qry = null;
+		String qryStr = null;
+		boolean exist = false;
+		
+		try {
+			session = PersistenceManager.getSession();
+			qryStr = "select count(*) from " + AmpCurrency.class.getName() + " c where " +
+					"(c.currencyCode=:code)";
+			if (id != null) {
+				qryStr += " and (c.ampCurrencyId!=:id)";
+				 
+			}
+			qry = session.createQuery(qryStr);
+			qry.setParameter("code",currCode,Hibernate.STRING);
+			if (id != null) {
+				qry.setParameter("id",id,Hibernate.LONG);
+			}
+			Iterator itr = qry.list().iterator();
+			if (itr.hasNext()) {
+				Integer count = (Integer) itr.next();
+				if (count.intValue() > 0) {
+					exist = true;
+				}
+			}
+			
+		} catch (Exception e) {
+			logger.error("Exception from currencyCodeExist()");
+			e.printStackTrace(System.out);
+		} finally {
+			if (session != null) {
+				try {
+					PersistenceManager.releaseSession(session);
+				} catch (Exception rsf) {
+					logger.error("Release session failed");
+				}
+			}			
+		}
+		return exist;
+	}
+	
+	public static void saveCurrency(AmpCurrency curr) {
+		Session session = null;
+		Transaction tx = null;
+		
+		try {
+			session = PersistenceManager.getSession();
+			tx = session.beginTransaction();
+			session.save(curr);
+			tx.commit();
+			
+		} catch (Exception e) {
+			logger.error("Exception from saveCurrency");
+			e.printStackTrace(System.out);
+			if (tx != null) {
+				try {
+					tx.rollback();
+				} catch (Exception rbf) {
+					logger.error("Rollback failed");
+				}
+			}			
+		} finally {
+			if (session != null) {
+				try {
+					PersistenceManager.releaseSession(session);
+				} catch (Exception rsf) {
+					logger.error("Release session failed");
+				}
+			}			
+		}		
+	}
+	public static void updateCurrency(AmpCurrency curr) {
+		Session session = null;
+		Transaction tx = null;
+		
+		try {
+			session = PersistenceManager.getSession();
+			tx = session.beginTransaction();
+			session.update(curr);
+			tx.commit();
+			
+		} catch (Exception e) {
+			logger.error("Exception from saveCurrency");
+			e.printStackTrace(System.out);
+			if (tx != null) {
+				try {
+					tx.rollback();
+				} catch (Exception rbf) {
+					logger.error("Rollback failed");
+				}
+			}			
+		} finally {
+			if (session != null) {
+				try {
+					PersistenceManager.releaseSession(session);
+				} catch (Exception rsf) {
+					logger.error("Release session failed");
+				}
+			}			
+		}		
+	}	
+	
 	
 	/**
 	 * Save an AmpCurrency object

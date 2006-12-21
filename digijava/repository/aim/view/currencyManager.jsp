@@ -28,7 +28,7 @@ function makeActive(code) {
 function addNewCurrency() {
 	openNewWindow(450, 230);
 	<digi:context name="add" property="context/module/moduleinstance/updateCurrency.do" />
-	document.aimCurrencyForm.action = "<%= add %>~doAction=showCurrencies";
+	document.aimCurrencyForm.action = "<%= add %>~doAction=showCurrencies~closeFlag=false";
 	document.aimCurrencyForm.target = popupPointer.name;
 	document.aimCurrencyForm.submit();
 }
@@ -150,10 +150,12 @@ function submit() {
 										onMouseOut="this.className='colHeaderLink'">
 											<b><digi:trn key="aim:currencyName">Currency Name</digi:trn></b>
 										</td>
+										<%--
 										<td align="center" width="150" onMouseOver="this.className='colHeaderOver'"
 										onMouseOut="this.className='colHeaderLink'">
 											<b><digi:trn key="aim:countryName">Country</digi:trn></b>
 										</td>
+										--%>
 									</tr>
 									<c:if test="${empty aimCurrencyForm.currency}">
 									<tr bgcolor="#f4f4f2">
@@ -202,9 +204,11 @@ function submit() {
 											<a href="javascript:editCurrency('<c:out value="${curr.currencyCode}"/>')">
 											<c:out value="${curr.currencyName}"/></a>
 										</td>
+										<%--
 										<td align="left">
 											<c:out value="${curr.countryName}"/>
 										</td>
+										--%>
 									</tr>
 									</c:forEach>
 									</c:if>									

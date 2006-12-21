@@ -357,6 +357,7 @@ public class EditActivityForm extends ActionForm implements Serializable{
 
 	public void reset(ActionMapping mapping, HttpServletRequest request) {
 
+		
 		if (reset) {
 			donorFlag = false;
 			fundDonor = null;
@@ -1245,20 +1246,24 @@ public class EditActivityForm extends ActionForm implements Serializable{
 		this.regions = regions;
 	}
 
+	
 	/**
 	 * @return Returns the reset.
 	 */
+	
 	public boolean isReset() {
 		return reset;
 	}
-
+	
 	/**
 	 * @param reset
 	 *            The reset to set.
 	 */
+	
 	public void setReset(boolean reset) {
 		this.reset = reset;
 	}
+	
 
 	/**
 	 * @return Returns the sector.

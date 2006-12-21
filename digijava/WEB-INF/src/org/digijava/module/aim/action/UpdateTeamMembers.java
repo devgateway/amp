@@ -70,23 +70,31 @@ public class UpdateTeamMembers extends Action {
 						.getRole());
 				AmpTeamMemberRoles teamLead = TeamMemberUtil.getAmpTeamHeadRole();
 				if (role.getRole().equals(teamLead.getRole())) {
-					logger.debug("team name = " + ampTeam.getName());
+					ActionErrors error = new ActionErrors();
+					error.add(ActionErrors.GLOBAL_ERROR,
+											new ActionError(
+													"error.aim.addTeamMember.teamLeadRole"));
+				}
+				if (role.getRole().equals(teamLead.getRole())) {
+					logger.info("team name = " + ampTeam.getName());
+					logger.info(" team role = "+upForm.getRole());
+					logger.info(" this is the team Id = "+upForm.getTeamId() + " this is the member id = "+upForm.getTeamMemberId());
 					if (ampTeam.getTeamLead() != null) {
 						upForm.setAmpRoles(TeamMemberUtil.getAllTeamMemberRoles());
-						errors
-								.add(
+						errors.add(
 										ActionErrors.GLOBAL_ERROR,
 										new ActionError(
 												"error.aim.addTeamMember.teamLeadAlreadyExist"));
+						logger.info(" here");
 
 						saveErrors(request, errors);
-
-						return mapping.getInputForward();
+						return mapping.findForward("forward");
+						//return mapping.getInputForward();
 
 					}
 
 				}
-
+				logger.info(" this is the role.... "+role.getRole());
 				ampMember.setAmpMemberRole(role);
 				if (upForm.getReadPerms() != null
 						&& upForm.getReadPerms().equals("on")) {
@@ -116,10 +124,11 @@ public class UpdateTeamMembers extends Action {
 				Set temp = new HashSet();
 				temp.addAll(col);
 				ampMember.setActivities(temp);
-
+				logger.info(" updating the team member now....");
 				DbUtil.update(ampMember);
 				AmpTeamMember ampTeamHead = TeamMemberUtil.getTeamHead(ampTeam
 						.getAmpTeamId());
+				logger.info(" here finally");
 
 				if (ampTeam == null) {
 					logger.debug("ampTeam is null");
@@ -142,24 +151,7 @@ public class UpdateTeamMembers extends Action {
 				Long selMembers[] = new Long[1];
 				selMembers[0] = upForm.getTeamMemberId();
 				Site site = RequestUtils.getSite(request);
-				
-				//check if we can remove them: check if we have a team leader
-				
-				if(ampTeam.getTeamLead()==null) {
-					upForm.setAmpRoles(TeamMemberUtil.getAllTeamMemberRoles());
-					errors
-					.add(
-							ActionErrors.GLOBAL_ERROR,
-							new ActionError(
-									"error.aim.deleteTeamMember.teamLeaderRequired"));
-					saveErrors(request, errors);
-					return mapping.getInputForward();
-				}
-			
-				
 				TeamMemberUtil.removeTeamMembers(selMembers,site.getId());
-				
-				
 				
 				if (ampTeam != null) {
 					request.setAttribute("teamId", ampTeam.getAmpTeamId());

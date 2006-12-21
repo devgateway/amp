@@ -4,10 +4,30 @@
 <%@ taglib uri="/taglib/struts-tiles" prefix="tiles" %>
 <%@ taglib uri="/taglib/struts-html" prefix="html" %>
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
+<script language="JavaScript">
+function saveScheme()
+{
 
+		   if(isEmpty(document.aimStatusItemForm.statusCode.value)==true)
+			 {
+						alert("please enter a status code:");
+			 }	
+			 else if(isEmpty(document.aimStatusItemForm.name.value)==true)
+			 {
+						alert("please enter a Status Name:");
+			 }	
+			 else
+			 {
+				<digi:context name="addStatus" property="context/module/moduleinstance/addStatus.do"/>
+				document.aimStatusItemForm.action = "<%= addStatus %>";
+				document.aimStatusItemForm.target = "_self";
+				document.aimStatusItemForm.submit();
+			 }
+ }
+</script>
 
-<digi:form name="aimStatusItemForm" type="org.digijava.module.aim.form.StatusItemForm" scope="request" action="/addStatus.do">
-
+<%--<digi:form name="aimStatusItemForm" type="org.digijava.module.aim.form.StatusItemForm" scope="request" action="/addStatus.do" method="post">--%>
+<digi:form action="/addStatus.do">
 <!--  AMP Admin Logo -->
 <jsp:include page="teamPagesHeader.jsp" flush="true" />
 <!-- End of Logo -->
@@ -121,7 +141,8 @@
 																			<table width="100%" cellspacing="5">
 																				<tr>
 																					<td width="50%" align="right">
-																					<html:submit value="Save" styleClass="dr-menu" />
+																		 <%--<html:submit value="Save" styleClass="dr-menu" onclick="saveScheme()" />--%>
+																		 	<input  type="button" name="addBtn" value="Save" onclick="saveScheme()" />
 																					
 																					</td>
 																					<td width="50%" align="left">

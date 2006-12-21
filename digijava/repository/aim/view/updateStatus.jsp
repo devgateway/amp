@@ -4,10 +4,31 @@
 <%@ taglib uri="/taglib/struts-tiles" prefix="tiles" %>
 <%@ taglib uri="/taglib/struts-html" prefix="html" %>
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
+<script language="JavaScript">
+function saveScheme()
+{
 
+		   if(isEmpty(document.aimStatusItemForm.statusCode.value)==true)
+			 {
+						alert("please enter a status code:");
+			 }	
+			 else if(isEmpty(document.aimStatusItemForm.name.value)==true)
+			 {
+						alert("please enter a Status Name:");
+			 }	
+			 else
+			 {
+				<digi:context name="updateStatus" property="context/module/moduleinstance/updateStatus.do"/>
+				document.aimStatusItemForm.action = "<%= updateStatus %>";
+				document.aimStatusItemForm.target = "_self";
+				document.aimStatusItemForm.submit();
+			 }
+ }
+</script>
 <html:errors/>
 
-<digi:form name="aimStatusItemForm" type="org.digijava.module.aim.form.StatusItemForm" scope="request" action="/updateStatus.do">
+<%--<digi:form name="aimStatusItemForm" type="org.digijava.module.aim.form.StatusItemForm" scope="request" action="/updateStatus.do">--%>
+<digi:form action="/updateStatus.do">
 <html:hidden name="aimStatusItemForm" property="ampStatusId"/>
 
 
@@ -84,14 +105,14 @@
 															<td width="100%">	
 																<table width="100%" border=0	 bgColor=#f4f4f2>
 																	<tr>
-																		<td width="30%" align="right">
+																		<td width="30%" align="right"><font color=red>*</font>
 																		<digi:trn key="aim:statusCode">Status Code:</digi:trn></td>
 																	    <td width="30%" >
 																	          <html:text name="aimStatusItemForm" property="statusCode" size="20"/>
 																	    </td>
 																	</tr>
 																	<tr>
-																		<td width="30%" align="right">
+																		<td width="30%" align="right"><font color=red>*</font>
 																	        <digi:trn key="aim:StatusName">Name: </digi:trn>
 																		</td>
 																	    <td width="30%">
@@ -114,12 +135,18 @@
 																	          <html:textarea name="aimStatusItemForm" property="description" />
 																		</td>
 																	</tr>
+																		<tr>
+																		<td width=30% align = right>
+																			<font color=red>* Mandatory fields</font>
+																		</td>
+																	</tr>
 																	<tr>
 																		<td colspan="2" width="60%"  align="center">
 																			<table width="100%" cellspacing="5">
 																				<tr>
 																					<td width="50%" align="right">
-																					<html:submit styleClass="dr-menu"> Save </html:submit>
+																				<%--	<html:submit styleClass="dr-menu"> Save </html:submit>--%>
+																					<input  type="button" name="addBtn" value="Save" onclick="saveScheme()" />
 																				</td>
 																					<td width="50%" align="left">
 																						<html:reset styleClass="dr-menu" value="Cancel" 

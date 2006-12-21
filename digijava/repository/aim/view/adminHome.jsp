@@ -112,6 +112,17 @@
 												</digi:link>
 											</td>
 										</tr>
+										<tr>
+											<td class=f-names noWrap>
+											<digi:img src="module/aim/images/arrow-th-BABAB9.gif" width="16"/>
+											<bean:define id="translation">
+												<digi:trn key="aim:clickToViewSystemSettings">Click here to view System Settings</digi:trn>
+											</bean:define>
+											<digi:link href="/GlobalSettings.do" title="<%=translation%>" >
+											<digi:trn key="aim:GlobalSettings">Global Settings</digi:trn>	
+											</digi:link>
+											</td>
+										</tr>
 										<logic:notEmpty name="ME" scope="application">
 										<tr>
 											<td class=f-names noWrap>
@@ -127,17 +138,7 @@
 											</td>
 										</tr>
 										</logic:notEmpty>
-										<tr>
-											<td class=f-names noWrap>
-											<digi:img src="module/aim/images/arrow-th-BABAB9.gif" width="16"/>
-											<bean:define id="translation">
-												<digi:trn key="aim:clickToViewSystemSettings">Click here to view System Settings</digi:trn>
-											</bean:define>
-											<digi:link href="/GlobalSettings.do" title="<%=translation%>" >
-											<digi:trn key="aim:GlobalSettings">Global Settings</digi:trn>	
-											</digi:link>
-											</td>
-										</tr>
+									
 										<tr>
 											<td class=f-names noWrap>
 											<digi:img src="module/aim/images/arrow-th-BABAB9.gif" width="16"/>
@@ -162,7 +163,7 @@
 											</td>
 										</tr>
 										</logic:notEmpty>					
-                            			<tr>
+										<tr>
 											<td class=f-names noWrap>
 											<digi:img src="module/aim/images/arrow-th-BABAB9.gif" width="16"/>
 											<bean:define id="translation">

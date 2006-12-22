@@ -600,18 +600,19 @@ function disable() {
                                           <c:if test="${aimEditActivityForm.programCollection!=null}">
                                             <c:if test="${!empty aimEditActivityForm.programCollection}">
                                               <c:forEach var="tempPgm" items="${aimEditActivityForm.programCollection}">
-
+																<%--
                                                 <c:if test="${tempPgm!=null}">
                                                   <c:if test="${tempPgm.ampThemeId == aimEditActivityForm.program}">
                                                     <c:out value="${tempPgm.name}"/>
                                                   </c:if>
                                                 </c:if>
+																--%>
   																														
-                                                <%--<c:if test="${tempPgm.member!=null}">
+                                                <c:if test="${tempPgm.member!=null}">
                                                   <c:if test="${tempPgm.member.ampThemeId == aimEditActivityForm.program}">
                                                     <c:out value="${tempPgm.member.name}"/>
                                                   </c:if>
-                                                </c:if>--%>
+                                                </c:if>
 																
                                               </c:forEach>
                                             </c:if>

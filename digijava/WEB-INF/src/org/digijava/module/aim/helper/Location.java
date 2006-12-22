@@ -23,13 +23,13 @@ public class Location implements Serializable, Comparable
 	public Location() {
 		locId = new Long(-1);
 		countryId = new Long(-1);
-		country = null;
+		country = "";
 		regionId = new Long(-1);
-		region = null;
+		region = "";
 		zoneId = new Long(-1);
-		zone = null;
+		zone = "";
 		woredaId = new Long(-1);
-		woreda = null;
+		woreda = "";
 	}
 	
 	/**
@@ -167,23 +167,27 @@ public class Location implements Serializable, Comparable
 
 	public int compareTo(Object arg0) {
 		// TODO Auto-generated method stub
-		Location l=(Location)arg0;
-		if( this.getCountry() != null)
-			if(this.getCountry().compareTo(l.getCountry())!=0) return this.getCountry().compareTo(l.getCountry());
+		Location l = (Location)arg0;
+		String lcntry = (l.getCountry() == null) ? "" : l.getCountry();
+		String lregion = (l.getRegion() == null) ? "" : l.getRegion();
+		String lzone = (l.getZone() == null) ? "" : l.getZone();
+		String lworeda = (l.getWoreda() == null) ? "" : l.getWoreda();
+
+		if(country != null)
+			if(country.compareTo(lcntry)!=0) return country.compareTo(lcntry);
 			else
-				  if ( this.getRegion()!=null)
-					  if(this.getRegion().compareTo(l.getRegion())!=0) return this.getRegion().compareTo(l.getRegion());
+				  if (region != null)
+					  if(region.compareTo(lregion)!=0) return region.compareTo(lregion);
 					  else 
-						  if (this.getZone()!=null)
-							  if(this.getZone().compareTo(l.getZone())!=0) return this.getZone().compareTo(l.getZone());
+						  if (zone!=null)
+							  if(zone.compareTo(lzone)!=0) return zone.compareTo(lzone);
 							  else 
-								  if (this.getWoreda()!=null)
-									  if(this.getWoreda().compareTo(l.getWoreda())!=0) return this.getWoreda().compareTo(l.getWoreda());
+								  if (woreda != null)
+									  if(woreda.compareTo(lworeda)!=0) return woreda.compareTo(lworeda);
 									  else return 0;
 								  else return 0;
 						  else return 0;  
 				  else return 0; 
-		else return -1;
-					  
+		else return -1;			
 	}
 }

@@ -28,12 +28,11 @@ import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
-import org.dgfoundation.amp.ar.ARUtil;
-import org.dgfoundation.amp.ar.ArConstants;
 import org.digijava.kernel.dbentity.Country;
 import org.digijava.kernel.request.Site;
 import org.digijava.kernel.user.User;
 import org.digijava.kernel.util.RequestUtils;
+import org.digijava.kernel.util.collections.CollectionUtils;
 import org.digijava.module.aim.dbentity.AmpActivity;
 import org.digijava.module.aim.dbentity.AmpActivityClosingDates;
 import org.digijava.module.aim.dbentity.AmpActivityInternalId;
@@ -52,7 +51,9 @@ import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpPhysicalPerformance;
 import org.digijava.module.aim.dbentity.AmpRegionalFunding;
 import org.digijava.module.aim.dbentity.AmpSector;
+import org.digijava.module.aim.dbentity.AmpTheme;
 import org.digijava.module.aim.form.EditActivityForm;
+import org.digijava.module.aim.form.ProposedProjCost;
 import org.digijava.module.aim.helper.ActivitySector;
 import org.digijava.module.aim.helper.Components;
 import org.digijava.module.aim.helper.Constants;
@@ -73,20 +74,13 @@ import org.digijava.module.aim.helper.RegionalFunding;
 import org.digijava.module.aim.helper.RelatedLinks;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.ActivityUtil;
+import org.digijava.module.aim.util.ComponentsUtil;
 import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.DocumentUtil;
 import org.digijava.module.aim.util.ProgramUtil;
 import org.digijava.module.aim.util.TeamMemberUtil;
-import org.digijava.module.aim.util.ComponentsUtil;
 import org.digijava.module.cms.dbentity.CMSContentItem;
-import org.digijava.kernel.request.Site;
-import org.digijava.module.aim.util.DocumentUtil;
-import org.digijava.kernel.util.RequestUtils;
-import org.digijava.module.aim.form.ProposedProjCost;
-import org.digijava.kernel.util.collections.CollectionUtils;
-import java.util.HashSet;
-import org.digijava.module.aim.dbentity.AmpTheme;
 
 /**
  * Loads the activity details of the activity specified in the form bean
@@ -131,12 +125,15 @@ public class EditActivity
                 errorMsgKey));
             saveErrors(request, errors);
 
+            logger.info("From Here 1...");
+            errorMsgKey = "error.aim.editActivity.userPartOfManagementTeam";
             String url = "/aim/viewChannelOverview.do?ampActivityId="
                 + activityId + "&tabIndex=0";
             RequestDispatcher rd = getServlet().getServletContext()
                 .getRequestDispatcher(url);
             rd.forward(request, response);
-            errorMsgKey = "error.aim.editActivity.userPartOfManagementTeam";
+            return null;
+            
         } else if(tm.getWrite() == false)
             errorMsgKey = "error.aim.editActivity.noWritePermissionForUser";
 
@@ -144,12 +141,13 @@ public class EditActivity
             errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
                 errorMsgKey));
             saveErrors(request, errors);
-
+            logger.info("From Here 2...");
             String url = "/aim/viewChannelOverview.do?ampActivityId="
                 + activityId + "&tabIndex=0";
             RequestDispatcher rd = getServlet().getServletContext()
                 .getRequestDispatcher(url);
             rd.forward(request, response);
+            return null;
         }
 
         // load all themes
@@ -205,6 +203,7 @@ public class EditActivity
                 eaForm.setDonorFlag(false);
             }
 
+            // checking its the activity is already opened for editing...
             if(activityMap != null && activityMap.containsValue(activityId)) {
                 //logger.info("activity is in activityMap " + activityId);
                 // The activity is already opened for editing
@@ -267,7 +266,7 @@ public class EditActivity
 
             //logger.info("CanEdit = " + canEdit);
             if(!canEdit) {
-
+            	logger.info("From Here 3...");
                 errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
                     "error.aim.activityAlreadyOpenedForEdit"));
                 saveErrors(request, errors);
@@ -277,6 +276,7 @@ public class EditActivity
                 RequestDispatcher rd = getServlet().getServletContext()
                     .getRequestDispatcher(url);
                 rd.forward(request, response);
+                return null;
             } else {
                 // logger.info("Path = " + mapping.getPath());
                 if(!mapping.getPath().trim().endsWith("viewActivityPreview")) {
@@ -349,7 +349,7 @@ public class EditActivity
                     eaForm.setSurveyFlag(Boolean.FALSE);
                 }
             } else {
-                if(!step.equals(null)) {
+                if(step != null) {
                     eaForm.setStep(step);
                 } else
                     eaForm.setStep("1");
@@ -385,152 +385,7 @@ public class EditActivity
                     ex.printStackTrace();
                 }
 
-                if (activityMap != null && activityMap.containsValue(activityId)) {
-                    //logger.info("activity is in activityMap " + activityId);
-                    // The activity is already opened for editing
-                    synchronized (ampContext) {
-                        HashMap tsaMap = (HashMap) ampContext
-                                .getAttribute(Constants.TS_ACT_LIST);
-                        if (tsaMap != null) {
-                            Long timeStamp = (Long) tsaMap.get(activityId);
-                            if (timeStamp != null) {
-
-                                if ((System.currentTimeMillis() - timeStamp
-                                        .longValue()) > Constants.MAX_TIME_LIMIT) {
-                                    // time limit has execeeded. invalidate the activity references
-                                    tsaMap.remove(activityId);
-                                    HashMap userActList = (HashMap) ampContext
-                                        .getAttribute(Constants.USER_ACT_LIST);
-                                    Iterator itr = userActList.keySet().iterator();
-                                    while (itr.hasNext()) {
-                                        Long userId = (Long) itr.next();
-                                        Long actId = (Long) userActList.get(userId);
-                                        if (actId.longValue() == activityId
-                                                .longValue()) {
-                                            userActList.remove(userId);
-                                            break;
-                                        }
-                                    }
-                                    itr = activityMap.keySet().iterator();
-                                    String sessId = null;
-                                    while (itr.hasNext()) {
-                                        sessId = (String) itr.next();
-                                        Long actId = (Long) activityMap.get(sessId);
-                                        if (actId.longValue() == activityId.longValue()) {
-                                            activityMap.remove(sessId);
-                                            break;
-                                        }
-                                    }
-                                    ArrayList sessList = (ArrayList) ampContext
-                                            .getAttribute(Constants.SESSION_LIST);
-                                    sessList.remove(sessId);
-                                    Collections.sort(sessList);
-
-                                    ampContext.setAttribute(Constants.EDIT_ACT_LIST,activityMap);
-                                    ampContext.setAttribute(Constants.USER_ACT_LIST,userActList);
-                                    ampContext.setAttribute(Constants.SESSION_LIST,sessList);
-                                    ampContext.setAttribute(Constants.TS_ACT_LIST,tsaMap);
-
-                                } else
-                                    canEdit = false;
-                            } else
-                                canEdit = false;
-                        } else
-                            canEdit = false;
-                    }
-                }
-
-
-                //logger.info("CanEdit = " + canEdit);
-                if (!canEdit) {
-
-                    errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
-                            "error.aim.activityAlreadyOpenedForEdit"));
-                    saveErrors(request, errors);
-
-                    String url = "/aim/viewChannelOverview.do?ampActivityId="
-                            + activityId + "&tabIndex=0";
-                    RequestDispatcher rd = getServlet().getServletContext()
-                            .getRequestDispatcher(url);
-                    rd.forward(request, response);
-                } else {
-                   // logger.info("Path = " + mapping.getPath());
-                    if (!mapping.getPath().trim().endsWith("viewActivityPreview")) {
-                        // Edit the activity
-                        //logger.info("mapping does not end with viewActivityPreview.do");
-                        String sessId = session.getId();
-                        synchronized (ampContext) {
-                            ArrayList sessList = (ArrayList) ampContext.getAttribute(Constants.SESSION_LIST);
-                            HashMap userActList = (HashMap) ampContext.getAttribute(Constants.USER_ACT_LIST);
-
-                            HashMap tsaList = (HashMap) ampContext.getAttribute(Constants.TS_ACT_LIST);
-
-
-                            if (sessList == null) {
-                                sessList = new ArrayList();
-                            }
-                            if (userActList == null) {
-                                userActList = new HashMap();
-                            }
-                            if (activityMap == null) {
-                                activityMap = new HashMap();
-                            }
-                            if (tsaList == null) {
-                                tsaList = new HashMap();
-                            }
-
-                            sessList.add(sessId);
-                            Collections.sort(sessList);
-                            activityMap.put(sessId, activityId);
-                            userActList.put(tm.getMemberId(), activityId);
-                            tsaList.put(activityId,new Long(System.currentTimeMillis()));
-
-                            ampContext.setAttribute(Constants.SESSION_LIST, sessList);
-                            ampContext.setAttribute(Constants.EDIT_ACT_LIST,
-                                    activityMap);
-                            ampContext.setAttribute(Constants.USER_ACT_LIST,
-                                    userActList);
-                            ampContext.setAttribute(Constants.TS_ACT_LIST,tsaList);
-                        }
-                        eaForm.setEditAct(true);
-                    } else {
-                        //logger.info("mapping does end with viewActivityPreview.do");
-                    }
-                }
-
-                // Clearing comment properties
-                String laction = request.getParameter("action");
-                if (laction != null && laction.trim().length() != 0) {
-                    if ("edit".equals(laction)) {
-                        eaForm.getCommentsCol().clear();
-                        eaForm.setCommentFlag(false);
-                    }
-                }
-                logger.debug("step [before IF] : " + eaForm.getStep());
-                if (eaForm.isDonorFlag()) {
-                    eaForm.setStep("3");
-                    eaForm.setFundDonor(TeamMemberUtil.getFundOrgOfUser(tm.getMemberId()));
-                    logger.debug("step [inside IF] : " + eaForm.getStep());
-                    // Clearing aid-harmonisation-survey properties
-                    if (null != eaForm.getSurveyFlag() && eaForm.getSurveyFlag().booleanValue()) {
-                        eaForm.setSurvey(null);
-                        eaForm.setIndicators(null);
-                        eaForm.setAmpSurveyId(null);
-                        eaForm.setSurveyFlag(Boolean.FALSE);
-                    }
-                } else {
-                    if(step != null)
-                    {
-                        eaForm.setStep(step);
-                    }
-                    else
-                    eaForm.setStep("1");
-                }
-                eaForm.setReset(false);
-                eaForm.setPerspectives(DbUtil.getAmpPerspective());
-
                 // load the activity details
-
 
                 String actApprovalStatus = DbUtil.getActivityApprovalStatus(
                     activityId);

@@ -246,7 +246,7 @@ public class DBPatcher {
 		Session session = null;
 		Session session1 = null;
 		String qryStr = null;
-		String qryStr1,qryStr2,qryStr3,qryStr4 = null;
+		String qryStr1,qryStr2,qryStr3,qryStr4,qryStr5 = null;
 		Query qry = null;
 		Query qry1,qry2 = null;
 		Collection col = null;
@@ -261,6 +261,7 @@ public class DBPatcher {
 			 Statement stmt = session.connection().createStatement();			 
 			 qryStr4 = "SELECT COUNT(*) FROM AMP_ACTIVITY_COMPONENTS ";
 			 rs = stmt.executeQuery(qryStr4);
+			 
 			 if (rs.next()) {
 				 cnt = rs.getInt(1);
 				 if (cnt==0)
@@ -268,24 +269,23 @@ public class DBPatcher {
 					 flag=1;
 				 }
 			 }
+			
 			 if(flag==1)
 			 { 
 					 qryStr = "select DISTINCT p.title from " + AmpComponent.class.getName() + " p";
 					 qry = session.createQuery(qryStr);
 					 col = qry.list();
 					 Iterator itr = qry.list().iterator();
-					 logger.info(" govind your dead!!!!!");
+				
 					 while (itr.hasNext()) {
 						 name = (String)itr.next(); 
 						 try{
-							 //logger.info(" name is PPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPPP "+name);
 							 qryStr1 = "select amp_component_id from AMP_COMPONENTS where title = '" + name + "'";
 							  rs1 = stmt.executeQuery(qryStr1);			 
 							 if(rs1.next())
 							 {
 								 compId = rs1.getInt(1);
 							 }
-							// logger.info(" id id qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq "+compId);
 							 qryStr2 = "select amp_activity_id from AMP_COMPONENTS where title = '" + name + "'";
 							 
 								  rs = stmt.executeQuery(qryStr2);
@@ -296,14 +296,11 @@ public class DBPatcher {
 									  Statement stmt1 = session.connection().createStatement();			
 									 qryStr3 = "INSERT into AMP_ACTIVITY_COMPONENTS (amp_activity_id,amp_component_id) values ('"+id+"','"+compId+"')";
 									 stmt1.executeUpdate(qryStr3);
-									 //System.out.println("this is the query AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAaaaa "+ qryStr3);
-									  //logger.info(" id id ddddddddddddddddddddddddddddd "+id);
 									 rs.next();
 								 }
 								 Statement stmt2 = session.connection().createStatement();
-								 qryStr3 = "DELETE from AMP_COMPONENTS where title != '"+name+"' and amp_component_id !='"+compId+"'";
-								 System.out.println("this is the query AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAaaaa "+ qryStr3);
-								 stmt2.executeUpdate(qryStr3);
+								 qryStr5 = "DELETE from AMP_COMPONENTS where title = '"+name+"' and amp_component_id !='"+compId+"'";
+								 stmt2.executeUpdate(qryStr5);
 						 	}
 						 
 						 catch (Exception e){

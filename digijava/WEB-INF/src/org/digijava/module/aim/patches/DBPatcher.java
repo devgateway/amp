@@ -259,7 +259,7 @@ public class DBPatcher {
 			 session = PersistenceManager.getSession();
 			 
 			 Statement stmt = session.connection().createStatement();			 
-			 qryStr4 = "SELECT COUNT(*) FROM AMP_ACTIVITY_COMPONENTS ";
+			 qryStr4 = "SELECT COUNT(*) FROM AMP_ACTIVITY_COMPONENTS";
 			 rs = stmt.executeQuery(qryStr4);
 			 
 			 if (rs.next()) {
@@ -272,6 +272,7 @@ public class DBPatcher {
 			
 			 if(flag==1)
 			 { 
+				 logger.info(" Component patches already done check component manager.....");
 					 qryStr = "select DISTINCT p.title from " + AmpComponent.class.getName() + " p";
 					 qry = session.createQuery(qryStr);
 					 col = qry.list();

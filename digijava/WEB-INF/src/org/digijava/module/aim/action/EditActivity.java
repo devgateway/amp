@@ -108,10 +108,13 @@ public class EditActivity
         // if user is not logged in, forward him to the home page
         if(session.getAttribute("currentMember") == null)
             return mapping.findForward("index");
+        
         EditActivityForm eaForm = (EditActivityForm) form; // form bean instance
         Long activityId = eaForm.getActivityId();
 
         String errorMsgKey = "";
+        
+        // Checking whether the user have write access to the activity
         if(!mapping.getPath().trim().endsWith("viewActivityPreview")) {
             if(!("Team".equalsIgnoreCase(tm.getTeamAccessType()))) {
                 errorMsgKey = "error.aim.editActivity.userPartOfManagementTeam";
@@ -430,10 +433,10 @@ public class EditActivity
                                               toString());
                     else
                         eaForm.setPlanMinRank("-1");
-                    eaForm.setActRankCollection(new ArrayList());
-                    for(int i = 1; i < 6; i++) {
-                        eaForm.getActRankCollection().add(new Integer(i));
-                    }
+                    //eaForm.setActRankCollection(new ArrayList());
+                    //for(int i = 1; i < 6; i++) {
+                      //  eaForm.getActRankCollection().add(new Integer(i));
+                    //}
 
                     eaForm.setCreatedDate(DateConversion
                                           .ConvertDateToString(activity.

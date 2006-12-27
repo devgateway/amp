@@ -112,12 +112,6 @@ public class AddAmpActivity extends Action {
 		if (eaForm.getPageId() > 1)
 			eaForm.setStep("9");
 
-		// clearing Line & Plan Ministry Ranking
-		if (!eaForm.isEditAct() && eaForm.getPageId() > 1) {
-			eaForm.setLineMinRank(null);
-			eaForm.setPlanMinRank(null);
-		}
-
 		// added by Akash
 		// desc: clearing comment properties
 		// start

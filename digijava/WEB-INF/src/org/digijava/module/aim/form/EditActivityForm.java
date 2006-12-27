@@ -91,6 +91,7 @@ public class EditActivityForm extends ActionForm implements Serializable{
 	private long selLinks[];
     private String selManagedDocs[];
 	private OrgProjectId selectedOrganizations[];
+	//private Collection selectedOrganizationsList;
 	private Collection executingAgencies;
 	private Long selExAgencies[];
 	private Collection impAgencies;
@@ -464,6 +465,8 @@ public class EditActivityForm extends ActionForm implements Serializable{
 			totalCommitments = 0;
 			totalDisbursements = 0;
 			totalExpenditures = 0;
+			lineMinRank = null;
+			planMinRank = null;
 		}
 
 		if (orgSelReset) {
@@ -3692,11 +3695,19 @@ public class EditActivityForm extends ActionForm implements Serializable{
         return selectedPrograms;
     }
 
-    public void setRegionTotalDisb(double regionTotalDisb) {
-		this.regionTotalDisb = regionTotalDisb;
+    public void setSelectedPrograms(Long[] selectedPrograms) {
+		this.selectedPrograms = selectedPrograms;
 	}
 
-    public void setSelectedPrograms(Long[] selectedPrograms) {
-        this.selectedPrograms = selectedPrograms;
-    }
+	public void setRegionTotalDisb(double regionTotalDisb) {
+		this.regionTotalDisb = regionTotalDisb;
+	}
+/*
+	public Collection getSelectedOrganizationsList() {
+		return selectedOrganizationsList;
+	}
+
+	public void setSelectedOrganizationsList(Collection selectedOrganizationsList) {
+		this.selectedOrganizationsList = selectedOrganizationsList;
+	}*/
 }

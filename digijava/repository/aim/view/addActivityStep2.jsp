@@ -116,6 +116,9 @@ function validateForm() {
 		document.aimEditActivityForm.addSec.focus();
 		return false;
 	}
+	if (!validateSectorPercentage())
+		return false;
+	
 	document.aimEditActivityForm.step.value="3";
 	return true;
 }
@@ -204,20 +207,15 @@ function validateSectorPercentage() {
 </td></tr>
 <tr><td width="100%" vAlign="top" align="left">
 <table bgColor=#ffffff cellPadding=0 cellSpacing=0 width="100%" vAlign="top" align="center" border=0>
-		<tr>
-			<td width="100%" vAlign="top" align="left">
-			<table bgColor=#ffffff cellPadding=0 cellSpacing=0 width="100%"
-				vAlign="top" align="center" border=0>
-				<tr>
+	<tr>
 		<td class=r-dotted-lg width="10">&nbsp;</td>
 		<td align=left vAlign=top class=r-dotted-lg>
-					<table width="98%" cellSpacing="3" cellPadding="1" vAlign="top"
-						align="left">
-						<tr>
-							<td>
+			<table width="98%" cellSpacing="3" cellPadding="1" vAlign="top" align="left">
+				<tr>
+					<td>
 					<table width="100%" cellSpacing="1" cellPadding="1" vAlign="top">
 						<tr>
-									<td><span class=crumb> <c:if
+							<td><span class=crumb> <c:if
 										test="${aimEditActivityForm.pageId == 0}">
 									<bean:define id="translation">
 										<digi:trn key="aim:clickToViewAdmin">Click here to goto Admin Home</digi:trn>
@@ -500,37 +498,37 @@ function validateSectorPercentage() {
 															<td>
 															<table cellSpacing=0 cellPadding=0 border=0
 																bgcolor="#ffffff" width="100%">
-																<c:forEach items="${aimEditActivityForm.activitySectors}" var="actSect">
-																	<tr>
-																		<td>
-																		<table width="100%" cellSpacing=1 cellPadding=1 vAlign="top" align="left">
+																<nested:iterate name="aimEditActivityForm" property="activitySectors" id="actSect"
+																					type="org.digijava.module.aim.helper.ActivitySector">
+																		<tr>
+																			<td>
+																				<table width="100%" cellSpacing=1 cellPadding=1 vAlign="top" align="left">
 																					<tr>
-																						<td width="3" vAlign="center"><html:multibox
-																										property="selActivitySectors">
-																										<bean:write name="actSect" property="id" />
-																									</html:multibox></td>
-																									<td vAlign="center" align="left"><c:if
-																										test="${!empty actSect.sectorName}">
-																							[<bean:write name="actSect" property="sectorName" />]
-																						</c:if> <c:if
-																										test="${!empty actSect.subsectorLevel1Name}">
-																							[<bean:write name="actSect"
-																											property="subsectorLevel1Name" />]
-																						</c:if> <c:if
-																										test="${!empty actSect.subsectorLevel2Name}">
-																							[<bean:write name="actSect"
-																											property="subsectorLevel2Name" />]
-																						</c:if>
+																						<td width="3%" vAlign="center">
+																							<html:multibox property="selActivitySectors">
+																								<nested:write name="actSect" property="id" />
+																							</html:multibox>
+																						</td>
+																						<td  width="87%" vAlign="center" align="left">
+																							<c:if test="${!empty actSect.sectorName}">
+																								[<nested:write name="actSect" property="sectorName" />]
+																							</c:if>
+																							<c:if test="${!empty actSect.subsectorLevel1Name}">
+																								[<nested:write name="actSect" property="subsectorLevel1Name" />]
+																							</c:if>
+																							<c:if test="${!empty actSect.subsectorLevel2Name}">
+																								[<nested:write name="actSect" property="subsectorLevel2Name" />]
+																							</c:if>
 																						</td>
 																						<td width="10%">
-																							<html:text name="actSect" property="sectorPercentage" size="2" maxlength="3"
+																							<nested:text property="sectorPercentage" size="2" maxlength="3" 
 																									   onkeyup="fnChk(this)"/>
 																						</td>
 																					</tr>
 																				</table>
 																			</td>
 																		</tr>
-																	</c:forEach>
+																	</nested:iterate>
 																<tr>
 																	<td>
 																		<table cellSpacing=2 cellPadding=2>

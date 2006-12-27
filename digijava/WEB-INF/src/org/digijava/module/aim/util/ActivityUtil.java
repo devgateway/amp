@@ -363,17 +363,19 @@ public class ActivityUtil {
 			    if (activity.getMember() == null) {
 					activity.setMember(new HashSet());
 			    }
-
+			    
 				activity.getMember().add(activity.getActivityCreator());
+				/*
 				member = (AmpTeamMember) session.load(AmpTeamMember.class,
 				        activity.getActivityCreator().getAmpTeamMemId());
 				if (member.getActivities() == null) {
 				    member.setActivities(new HashSet());
 				}
 				member.getActivities().add(activity);
+				*/
 				session.save(activity);
 				activityId = activity.getAmpActivityId();
-				session.saveOrUpdate(member);
+				//session.saveOrUpdate(member);
 			}
 
 

@@ -15,28 +15,28 @@ public class AddSelectedSectors extends Action {
 
 	private static Logger logger = Logger.getLogger(AddSelectedLocations.class);
 
-	EditActivityForm eaForm; 
-	
+	EditActivityForm eaForm;
+
 	public ActionForward execute(ActionMapping mapping, ActionForm form,
 			javax.servlet.http.HttpServletRequest request,
 			javax.servlet.http.HttpServletResponse response) throws Exception {
-		
+
 		eaForm = (EditActivityForm) form;
-		
+
 		if (eaForm.getActivitySectors() == null) {
 			eaForm.setActivitySectors(new ArrayList());
 		}
-		
+
 		Long selsearchedSector[] = eaForm.getSelSectors();
 		logger.info("size off selected searched sectors: "+selsearchedSector.length);
 		Iterator itr = eaForm.getSearchedSectors().iterator();
 		int count = 0;
 		ActivitySector sctr = null;
-				
+
 		while (itr.hasNext()) {
 			sctr = (ActivitySector) itr.next();
 			for (int i = 0;i < selsearchedSector.length;i ++) {
-				logger.info("getsectorid: "+sctr.getSectorId()+"selsearchedSector: "+selsearchedSector[i]);
+				logger.info("getsectorid: "+sctr.getSectorId()+" selsearchedSector: "+selsearchedSector[i]);
 				if (sctr.getSectorId().equals(selsearchedSector[i])) {
 					if(!checkDuplicate(sctr)) {
 							logger.info("adding now...");
@@ -46,17 +46,17 @@ public class AddSelectedSectors extends Action {
 						}
 				}
 			}
-			if (count == selsearchedSector.length) 
+			if (count == selsearchedSector.length)
 				break;
 		}
 
 		//checking duplicates
 	//	Sector dup = null;
-		
-		
+
+
 		return mapping.findForward("forward");
-	}	
-	
+	}
+
 	public boolean checkDuplicate(ActivitySector dup)
 	{
 		Iterator itr=eaForm.getActivitySectors().iterator();

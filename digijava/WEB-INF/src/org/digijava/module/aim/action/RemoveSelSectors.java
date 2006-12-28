@@ -29,7 +29,7 @@ public class RemoveSelSectors extends Action {
 		while (itr.hasNext()) {
 			ActivitySector asec = (ActivitySector) itr.next();
 			for (int i = 0; i < selSectors.length; i++) {
-				if (!asec.getId().equals(selSectors[i])) {
+				if (!asec.getSectorId().equals(selSectors[i])) {
 					newSectors.add(asec);
 					break;
 				}

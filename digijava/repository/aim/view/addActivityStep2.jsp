@@ -586,7 +586,7 @@ function fnChk(frmContrl){
                                                                       </c:if>
                                                                     </td>
                                                                     <td width="10%">
-
+                                                                     <html:text name="actSect" property="sectorPercentage" size="2" maxlength="3" onkeyup="fnChk(this)"/>
                                                                     </td>
                                                                   </tr>
                                                                 </table>

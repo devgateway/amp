@@ -564,7 +564,7 @@ function fnChk(frmContrl){
                                                     <tr>
                                                       <td>
                                                         <table cellSpacing=0 cellPadding=0 border=0 bgcolor="#ffffff" width="100%">
-                                                          <c:forEach var="actSect" items="${aimEditActivityForm.activitySectors}" >
+                                                          <c:forEach var="actSect" items="${aimEditActivityForm.activitySectors}">
                                                             <tr>
                                                               <td>
                                                                 <table width="100%" cellSpacing=1 cellPadding=1 vAlign="top" align="left">
@@ -586,8 +586,8 @@ function fnChk(frmContrl){
                                                                       </c:if>
                                                                     </td>
                                                                     <td width="10%">
-                                                                     <html:text name="actSect" property="sectorPercentage" size="2" maxlength="3" onkeyup="fnChk(this)"/>
-                                                                    </td>
+                                                                      <html:text name="actSect" property="sectorPercentage" indexed="true" size="2" maxlength="3" onkeyup="fnChk(this)"/>
+                                                                   </td>
                                                                   </tr>
                                                                 </table>
                                                               </td>

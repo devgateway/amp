@@ -26,6 +26,8 @@ import org.digijava.module.aim.dbentity.AmpThemeIndicatorValue;
 import org.digijava.module.aim.dbentity.AmpThemeIndicators;
 import org.digijava.module.aim.dbentity.AmpTheme;
 import java.util.List;
+import java.util.Calendar;
+import org.apache.struts.util.LabelValueBean;
 
 public class ProgramUtil {
 
@@ -104,6 +106,44 @@ public class ProgramUtil {
 		return themes;
 	}
 
+        /**
+         * Returns All AmpThemes including sub Themes if parametre is true.
+         * @param includeSubThemes boolean false - only top level Themes, true - all themes
+         * @return List AmpTheme
+         */
+        public static List getAllThemes(boolean includeSubThemes) {
+            Session session = null;
+            Query qry = null;
+            List themes = new ArrayList();
+
+            try {
+                session = PersistenceManager.getRequestDBSession();
+                String queryString = "select t from " + AmpTheme.class.getName()
+                        + " t ";
+                if (!includeSubThemes) {
+                    queryString += "where t.parentThemeId is null ";
+                }
+                qry = session.createQuery(queryString);
+                themes = qry.list();
+            }
+            catch (Exception e) {
+                logger.error("Unable to get all themes");
+                logger.debug("Exceptiion " + e);
+            }
+            return themes;
+        }
+
+        public static Collection getYearsBeanList(){
+            Collection result=new ArrayList();
+            int start=2000;
+            Calendar now=Calendar.getInstance();
+            int end=now.get(Calendar.YEAR);
+            for (int i = start; i <= end; i++) {
+                result.add(new LabelValueBean(String.valueOf(i),String.valueOf(i)));
+            }
+            return result;
+        }
+
 	public static Collection getAllThemeIndicators()
 	{
 		Session session = null;
@@ -171,6 +211,24 @@ public class ProgramUtil {
 		return allTheme;
 	}
 
+    public static ArrayList getThemesByIds(ArrayList ampThemeIds) {
+        Session session = null;
+        Query qry = null;
+
+        try {
+            session = PersistenceManager.getRequestDBSession();
+            String qryStr = "select t from " + AmpTheme.class.getName()
+                + " t where t.ampThemeId in (:ids)";
+            qry = session.createQuery(qryStr);
+            qry.setParameterList("ids", ampThemeIds);
+            return (ArrayList) qry.list();
+        } catch(Exception e) {
+            logger.error("Unable to get all themes");
+            logger.debug("Exceptiion " + e);
+        }
+        return null;
+	}
+
 	public static AmpTheme getTheme(Long ampThemeId) {
 		Session session = null;
 		AmpTheme ampTheme = new AmpTheme();
@@ -179,16 +237,6 @@ public class ProgramUtil {
 			ampTheme = (AmpTheme)session.load(AmpTheme.class, ampThemeId); 
 		} catch (Exception e) {
             throw new RuntimeException(e);
-		}
-		finally	{
-			try {
-				if (session != null) {
-					PersistenceManager.releaseSession(session);
-				}
-			}
-			catch (Exception ex) {
-				logger.error("releaseSession() failed");
-			}
 		}
 		return ampTheme;
 	}
@@ -201,7 +249,7 @@ public class ProgramUtil {
 
 		try
 		{
-			session = PersistenceManager.getSession();
+			session = PersistenceManager.getRequestDBSession();
 			tempAmpTheme = (AmpTheme) session.load(AmpTheme.class,ampThemeId);
 			Set themeIndSet = tempAmpTheme.getIndicators();
 			Iterator itrIndSet = themeIndSet.iterator();
@@ -223,20 +271,6 @@ public class ProgramUtil {
 			logger.error("Exception from getThemeIndicators()  " + ex.getMessage());
 			ex.printStackTrace(System.out);
 		}
-		finally
-		{
-			if (session != null)
-			{
-				try
-				{
-					PersistenceManager.releaseSession(session);
-				}
-				catch (Exception e)
-				{
-					logger.error("Release session faliled :" + e);
-				}
-			}
-		}
 		return themeInd;
 	}
 
@@ -246,7 +280,7 @@ public class ProgramUtil {
 		Collection col = new ArrayList();
 		try
 		{
-			session = PersistenceManager.getSession();
+			session = PersistenceManager.getRequestDBSession();
 			String queryString = "select thIndValId from "
 								+ AmpThemeIndicatorValue.class.getName()
 								+ " thIndValId where (thIndValId.themeIndicatorId=:themeIndicatorId)";
@@ -268,21 +302,32 @@ public class ProgramUtil {
 			logger.error("Error in retrieving the values for indicator with ID : "+themeIndicatorId);
 			logger.debug("Exception : "+e1);
 		}
-		finally
-		{
-			try
-			{
-				if(session != null)
-					PersistenceManager.releaseSession(session);
-			}
-			catch(Exception e2)
-			{
-				logger.error("releaseSession() failed");
-				logger.debug("Exception : "+e2);
-			}
-		}
 		return col;
 	}
+
+        public static Collection getThemeIndicatorValuesDB(Long themeIndicatorId)
+        {
+                Session session = null;
+                Collection col = null;
+                try
+                {
+                        session = PersistenceManager.getRequestDBSession();
+                        String queryString = "select thIndValId from "
+                                                                + AmpThemeIndicatorValue.class.getName()
+                                                                + " thIndValId where (thIndValId.themeIndicatorId=:themeIndicatorId)";
+                        Query qry = session.createQuery(queryString);
+                        qry.setParameter("themeIndicatorId",themeIndicatorId,Hibernate.LONG);
+                        col = qry.list();
+                }
+                catch(Exception e1)
+                {
+                        logger.error("Error in retrieving the values for indicator with ID : "+themeIndicatorId);
+                        logger.debug("Exception : "+e1);
+                }
+                return col;
+        }
+
+
 
 	public static Collection getAllSubThemes(Long parentThemeId)
 	{

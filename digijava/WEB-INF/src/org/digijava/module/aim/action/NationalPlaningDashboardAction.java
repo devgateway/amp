@@ -90,7 +90,7 @@ public class NationalPlaningDashboardAction extends DispatchAction {
       }
 
       String statuseCode=(npdForm.getSelectedStatuses()==null)?null:npdForm.getSelectedStatuses()[0];
-      Long locationId=(npdForm.getSelectedLocations()==null)?null:npdForm.getSelectedLocations()[0];
+      Long locationId=(npdForm.getSelectedLocations()==null)?null:new Long(npdForm.getSelectedLocations()[0]);
 
       Collection activities=ActivityUtil.searchActivities(currentThemeId,statuseCode,null,null,locationId);
       npdForm.setActivities(getActivities(currentTheme));

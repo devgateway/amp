@@ -9,19 +9,44 @@
 
 <script language="JavaScript">
 	<!--
-		function addingPrograms()
+		function validate() 
 		{
-			openNewWindow(500, 300);
-			<digi:context name="addProgram" property="context/module/moduleinstance/addTheme.do?event=add"/>
-			document.aimThemeForm.action = "<%= addProgram %>";
-			document.aimThemeForm.target = popupPointer.name;
-			document.aimThemeForm.submit();
-			return true;			
+			if (trim(document.aimThemeForm.programName.value).length == 0) 
+			{
+				alert("Please enter Program name");
+				document.aimThemeForm.programName.focus();
+				return false;
+			}	
+			if (trim(document.aimThemeForm.programCode.value).length == 0) 
+			{
+				alert("Please enter Program code");
+				document.aimThemeForm.programCode.focus();
+				return false;
+			}			
+			if (trim(document.aimThemeForm.programType.value).length == 0) 
+			{
+				alert("Please enter Program type");
+				document.aimThemeForm.programType.focus();
+				return false;
+			}
+			return true;
 		}
-		function addSubProgram(id)
+		function saveProgram()
 		{
-			<digi:context name="subProgram" property="context/module/moduleinstance/addSubTheme.do?event=addSubProgram"/>
-			document.aimThemeForm.action = "<%= subProgram %>&themeId=" + id;
+			var temp = validate();
+			if (temp == true) 
+			{
+				<digi:context name="addThm" property="context/module/moduleinstance/addTheme.do"/>
+				document.aimThemeForm.action = "<%=addThm%>";
+				document.aimThemeForm.target = "_self";
+				document.aimThemeForm.submit();
+			}
+			return true;
+		}
+		function addSubProgram(rutId,id,level,name)
+		{
+			<digi:context name="subProgram" property="context/module/moduleinstance/addSubTheme.do?event=program"/>
+			document.aimThemeForm.action = "<%= subProgram %>&themeId=" + id + "&indlevel=" + level + "&indname=" + name + "&rootId=" + rutId;
 			document.aimThemeForm.target = "_self";
 			document.aimThemeForm.submit();
 			return true;
@@ -38,6 +63,13 @@
 		function deleteProgram()
 		{
 			return confirm("Do you want to delete the Program ?");
+		}
+		function load()
+		{
+			document.aimThemeForm.programName.value = "";
+			document.aimThemeForm.programCode.value = "";
+			document.aimThemeForm.programType.value = "";
+			document.aimThemeForm.programDescription.value = "";		
 		}
 	-->
 </script>
@@ -69,16 +101,16 @@
 						Admin Home
 						</digi:trn>
 						</digi:link>&nbsp;&gt;&nbsp;
-						<digi:trn key="aim:programManager">
-						Program Manager
+						<digi:trn key="aim:multilevelprogramManager">
+							Multi-Level Program Manager
 						</digi:trn>
 					</td>
 					<%-- End navigation --%>
 				</tr>
 				<tr>
 					<td height=16 vAlign=center width=571><span class=subtitle-blue>
-						<digi:trn key="aim:programManager">
-						Program Manager
+						<digi:trn key="aim:multilevelprogramManager">
+							Multi-Level Program Manager
 						</digi:trn>
 						</span>
 					</td>
@@ -91,12 +123,73 @@
 								<tr bgColor=#ffffff>
 									<td vAlign="top" width="100%">
 										<table align=left valign=top cellPadding=1 cellSpacing=1 width="100%">
+												<tr><td>
+														<table width="100%" cellPadding=4 cellSpacing=1 valign=top align=left bgcolor="#ffffff">
+																<tr bgColor=#ffffff>
+																<td bgColor=#d7eafd class=box-title height="20" align="center" colspan="2">
+																		<digi:trn key="aim:CreatingNewProgram">
+																				Create a New Program
+																		</digi:trn>
+																</td>
+																</tr>
+																<tr bgcolor=#ffffff><td height="5"></td></tr>
+																<tr bgColor=#ffffff>
+																<td height="10" align="left">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+																		<digi:trn key="aim:programName">
+																				Program Name
+																		</digi:trn>
+																		<font color="red">*</font>
+																</td>
+																<td height="10" align="left">
+																		<html:text property="programName" size="20"/>
+																</td>
+																</tr>
+																<tr bgcolor=#ffffff><td height="5"></td></tr>
+																<tr bgColor=#ffffff>
+																<td height="20" align="left">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+																		<digi:trn key="aim:programDescription">
+																				Description
+																		</digi:trn>
+																</td>
+																<td align="left">
+																		<html:textarea property="programDescription" cols="35" rows="2" styleClass="inp-text"/>
+																</td>
+																</tr>	
+																<tr bgColor=#ffffff>
+																<td height="20" align="left">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+																		<digi:trn key="aim:programCode">
+																				Program Code
+																		</digi:trn>
+																		<font color="red">*</font>
+																</td>
+																<td align="left">
+																		<html:text property="programCode" size="20" styleClass="inp-text"/>
+																</td>
+																</tr>
+																<tr bgColor=#ffffff>
+																<td height="20" align="left">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+																		<digi:trn key="aim:programType">
+																				Program Type
+																		</digi:trn>
+																		<font color="red">*</font>
+																</td>
+																<td align="left">
+																		<html:text property="programType" size="20" styleClass="inp-text"/>
+																</td>
+																</tr>	
+																<tr bgcolor=#ffffff><td height="5"></td></tr>	
+																<tr bgColor=#dddddb>
+																<td align="center" bgcolor="#f4f4f2" width="75" colspan="2">
+																		<input class="buton" type="button" name="addBtn" value="Save" onclick="return saveProgram()">&nbsp;&nbsp;
+																		<input class="buton" type="reset" value="Cancel">					
+																</td>
+																</tr>	
+														</table>
+												</td></tr>
 												<tr><td bgColor=#d7eafd class=box-title height="20" align="center">
-														<%-- Table title --%>
-														<digi:trn key="aim:programs">
-																Programs
+														<digi:trn key="aim:listofPrograms">
+																List of Programs
 														</digi:trn>
-														<%-- end table title --%>										
 												</td></tr>	
 											<tr><td>
 													<table width="100%" cellPadding=4 cellSpacing=1 valign=top align=left bgcolor="#ffffff">
@@ -117,7 +210,7 @@
 																					<c:set target="${urlParams}" property="themeId">
 																							<bean:write name="themes" property="ampThemeId" />
 																					</c:set><b>
-																					<a href="javascript:addSubProgram('<bean:write name="themes" property="ampThemeId" />')" title="Click here to add Sub-Programs">
+																					<a href="javascript:addSubProgram('<bean:write name="themes" property="ampThemeId" />','<bean:write name="themes" property="ampThemeId" />','<bean:write name="themes" property="indlevel"/>','<bean:write name="themes" property="name"/>')" title="Click here to add Sub-Programs">
 																							<bean:write name="themes" property="name"/>
 																					</a></b>
 																			</td>
@@ -153,11 +246,6 @@
 																		<digi:trn key="aim:noProgramsPresent">No Programs present</digi:trn></b></td>
 																</tr>
 														</logic:empty>
-														<tr><td bgColor=#d7eafd class=box-title height="20" align="center">
-															<input class="buton" type="button" name="addProgram" 
-															value="Add a New Program" onclick="addingPrograms()">
-														</td>
-														</tr>	
 													</table>
 												</td>
 											</tr>

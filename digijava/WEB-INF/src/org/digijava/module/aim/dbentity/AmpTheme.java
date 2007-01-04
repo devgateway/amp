@@ -1,7 +1,7 @@
 package org.digijava.module.aim.dbentity ;
 
-import java.io.*;
-import java.util.*;
+import java.io.Serializable;
+import java.util.Set;
 
 public class AmpTheme implements Serializable
 {
@@ -11,15 +11,16 @@ public class AmpTheme implements Serializable
 	private String themeCode ;
 	private String name ;
 	private String type ;
+	private int indlevel;
 	private String description ;
 	private String language ;
 	private String version ;
 	private Set indicators;
-
+			
 	public AmpTheme()
 	{
-	}
-
+	}	
+	
 	/**
 	 * @return
 	 */
@@ -144,6 +145,20 @@ public class AmpTheme implements Serializable
 		this.indicators = indicators;
 	}
 
+	/**
+	 * @return Returns the indlevel.
+	 */
+	public int getIndlevel() {
+		return indlevel;
+	}
+
+	/**
+	 * @param indlevel The indlevel to set.
+	 */
+	public void setIndlevel(int indlevel) {
+		this.indlevel = indlevel;
+	}
+	
     public void setActivityId(AmpActivity activityId) {
         this.activityId = activityId;
     }

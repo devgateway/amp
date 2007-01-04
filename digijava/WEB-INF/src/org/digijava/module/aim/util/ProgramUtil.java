@@ -72,7 +72,7 @@ public class ProgramUtil {
 			qry = session.createQuery(queryString);
 			themes = qry.list();
 		} catch (Exception e) {
-			logger.error("Unable to get all themes");
+			logger.error("Unable to get all themes : "+e);
 			logger.debug("Exceptiion " + e);
 		} finally {
 			try {
@@ -171,30 +171,12 @@ public class ProgramUtil {
 		return allTheme;
 	}
 
-    public static ArrayList getThemesByIds(ArrayList ampThemeIds) {
-        Session session = null;
-        Query qry = null;
-
-        try {
-            session = PersistenceManager.getRequestDBSession();
-            String qryStr = "select t from " + AmpTheme.class.getName()
-                + " t where t.ampThemeId in (:ids)";
-            qry = session.createQuery(qryStr);
-            qry.setParameterList("ids", ampThemeIds);
-            return (ArrayList) qry.list();
-        } catch(Exception e) {
-            logger.error("Unable to get all themes");
-            logger.debug("Exceptiion " + e);
-        }
-        return null;
-	}
-
 	public static AmpTheme getTheme(Long ampThemeId) {
 		Session session = null;
 		AmpTheme ampTheme = new AmpTheme();
 		try {
 			session = PersistenceManager.getRequestDBSession();
-			ampTheme = (AmpTheme)session.load(AmpTheme.class, ampThemeId);
+			ampTheme = (AmpTheme)session.load(AmpTheme.class, ampThemeId); 
 		} catch (Exception e) {
             throw new RuntimeException(e);
 		}
@@ -302,6 +284,170 @@ public class ProgramUtil {
 		return col;
 	}
 
+	public static Collection getAllSubThemes(Long parentThemeId)
+	{
+		Session session = null;
+		Query qry = null;
+		Collection tempCol1 = new ArrayList();
+		Collection tempCol2 = new ArrayList();
+		Collection tempCol3 = new ArrayList();
+		Collection tempCol4 = new ArrayList();
+		Collection tempCol5 = new ArrayList();
+		Collection tempCol6 = new ArrayList();
+		Collection tempCol7 = new ArrayList();
+		Collection tempCol8 = new ArrayList();
+		Collection allSubThemes = new ArrayList();
+		try
+		{
+			session = PersistenceManager.getSession();
+			// level 1 starts
+			String queryString1 = "select subT from " +AmpTheme.class.getName()
+								+ " subT where (subT.parentThemeId=:parentThemeId)";
+			qry = session.createQuery(queryString1);
+			qry.setParameter("parentThemeId",parentThemeId,Hibernate.LONG);
+			tempCol1 = qry.list();
+			if(!tempCol1.isEmpty())
+			{
+				Iterator tempItrCol1 = tempCol1.iterator();
+				while(tempItrCol1.hasNext())
+				{
+					AmpTheme ampTheme1 = (AmpTheme) tempItrCol1.next();
+					parentThemeId = ampTheme1.getAmpThemeId();
+					allSubThemes.add(ampTheme1);
+					//	level 2 starts
+					String queryString2 = "select subT from " +AmpTheme.class.getName()
+										+ " subT where (subT.parentThemeId=:parentThemeId)";
+					qry = session.createQuery(queryString2);
+					qry.setParameter("parentThemeId",parentThemeId,Hibernate.LONG);
+					tempCol2 = qry.list();
+					if(!tempCol2.isEmpty())
+					{
+						Iterator tempItrCol2 = tempCol2.iterator();
+						while(tempItrCol2.hasNext())
+						{
+							AmpTheme ampTheme2 = (AmpTheme) tempItrCol2.next();
+							parentThemeId = ampTheme2.getAmpThemeId();
+							allSubThemes.add(ampTheme2);
+							//	level 3 starts
+							String queryString3 = "select subT from " +AmpTheme.class.getName()
+												+ " subT where (subT.parentThemeId=:parentThemeId)";
+							qry = session.createQuery(queryString3);
+							qry.setParameter("parentThemeId",parentThemeId,Hibernate.LONG);
+							tempCol3 = qry.list();
+							if(!tempCol3.isEmpty())
+							{
+								Iterator tempItrCol3 = tempCol3.iterator();
+								while(tempItrCol3.hasNext())
+								{
+									AmpTheme ampTheme3 = (AmpTheme) tempItrCol3.next();
+									parentThemeId = ampTheme3.getAmpThemeId();
+									allSubThemes.add(ampTheme3);
+									//	level 4 starts
+									String queryString4 = "select subT from " +AmpTheme.class.getName()
+														+ " subT where (subT.parentThemeId=:parentThemeId)";
+									qry = session.createQuery(queryString4);
+									qry.setParameter("parentThemeId",parentThemeId,Hibernate.LONG);
+									tempCol4 = qry.list();
+									if(!tempCol4.isEmpty())
+									{
+										Iterator tempItrCol4 = tempCol4.iterator();
+										while(tempItrCol4.hasNext())
+										{
+											AmpTheme ampTheme4 = (AmpTheme) tempItrCol4.next();
+											parentThemeId = ampTheme4.getAmpThemeId();
+											allSubThemes.add(ampTheme4);
+											//	level 5 starts
+											String queryString5 = "select subT from " +AmpTheme.class.getName()
+																+ " subT where (subT.parentThemeId=:parentThemeId)";
+											qry = session.createQuery(queryString5);
+											qry.setParameter("parentThemeId",parentThemeId,Hibernate.LONG);
+											tempCol5 = qry.list();
+											if(!tempCol5.isEmpty())
+											{
+												Iterator tempItrCol5 = tempCol5.iterator();
+												while(tempItrCol5.hasNext())
+												{
+													AmpTheme ampTheme5 = (AmpTheme) tempItrCol5.next();
+													parentThemeId = ampTheme5.getAmpThemeId();
+													allSubThemes.add(ampTheme5);
+													//	level 6 starts
+													String queryString6 = "select subT from " +AmpTheme.class.getName()
+																		+ " subT where (subT.parentThemeId=:parentThemeId)";
+													qry = session.createQuery(queryString6);
+													qry.setParameter("parentThemeId",parentThemeId,Hibernate.LONG);
+													tempCol6 = qry.list();
+													if(!tempCol6.isEmpty())
+													{
+														Iterator tempItrCol6 = tempCol6.iterator();
+														while(tempItrCol6.hasNext())
+														{
+															AmpTheme ampTheme6 = (AmpTheme) tempItrCol6.next();
+															parentThemeId = ampTheme6.getAmpThemeId();
+															allSubThemes.add(ampTheme6);
+															//	level 7 starts
+															String queryString7 = "select subT from " +AmpTheme.class.getName()
+																				+ " subT where (subT.parentThemeId=:parentThemeId)";
+															qry = session.createQuery(queryString7);
+															qry.setParameter("parentThemeId",parentThemeId,Hibernate.LONG);
+															tempCol7 = qry.list();
+															if(!tempCol7.isEmpty())
+															{
+																Iterator tempItrCol7 = tempCol7.iterator();
+																while(tempItrCol7.hasNext())
+																{
+																	AmpTheme ampTheme7 = (AmpTheme) tempItrCol7.next();
+																	parentThemeId = ampTheme7.getAmpThemeId();
+																	allSubThemes.add(ampTheme7);
+																	//	level 8 starts
+																	String queryString8 = "select subT from " +AmpTheme.class.getName()
+																						+ " subT where (subT.parentThemeId=:parentThemeId)";
+																	qry = session.createQuery(queryString8);
+																	qry.setParameter("parentThemeId",parentThemeId,Hibernate.LONG);
+																	tempCol8 = qry.list();
+																	if(!tempCol8.isEmpty())
+																	{
+																		Iterator tempItrCol8 = tempCol8.iterator();
+																		while(tempItrCol8.hasNext())
+																		{
+																			AmpTheme ampTheme8 = (AmpTheme) tempItrCol8.next();
+																			allSubThemes.add(ampTheme8);
+																		}
+																	}
+																}
+															}
+														}
+													}
+												}
+											}
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+		catch(Exception e1)
+		{
+			logger.error("Unable to get all the Sub-Themes");
+			logger.debug("Exception : "+e1);
+		}
+		finally
+		{
+			try
+			{
+				if(session != null)
+					PersistenceManager.releaseSession(session);
+			}
+			catch(Exception e2)
+			{
+				logger.error("releaseSession() failed : "+e2);
+			}
+		}
+		return allSubThemes; 
+	}
+	
 	public static Collection getSubThemes(Long parentThemeId)
 	{
 		Session session = null;

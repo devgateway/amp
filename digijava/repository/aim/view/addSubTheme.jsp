@@ -31,13 +31,13 @@
 			}
 			return true;
 		}
-		function addSubProgram(id)
+		function addSubProgram(rutId,id,level,name)
 		{
+			openNewWindow(400, 300);
 			<digi:context name="subProgram" property="context/module/moduleinstance/addSubTheme.do?event=addSubProgram"/>
-			document.aimThemeForm.action = "<%= subProgram %>&themeId=" + id;
-			document.aimThemeForm.target = "_self";
+			document.aimThemeForm.action = "<%= subProgram %>&themeId=" + id + "&indlevel=" + level + "&indname=" + name + "&rootId=" + rutId;
+			document.aimThemeForm.target = popupPointer.name;
 			document.aimThemeForm.submit();
-			return true;
 		}
 		function saveProgram(id)
 		{
@@ -97,11 +97,11 @@
 						</digi:trn>
 						</digi:link>&nbsp;&gt;&nbsp;
 						<bean:define id="translation">
-							<digi:trn key="aim:clickToViewProgramManager">Click here to goto Program Manager</digi:trn>
+							<digi:trn key="aim:clickToViewMultiLevelProgramManager">Click here to goto Multi-level Program Manager</digi:trn>
 						</bean:define>
 						<digi:link href="/themeManager.do" styleClass="comment" title="<%=translation%>">
-						<digi:trn key="aim:programManager">
-							Program Manager
+						<digi:trn key="aim:multilevelprogramManager">
+							Multi-Level Program Manager
 						</digi:trn>
 						</digi:link>&nbsp;&gt;&nbsp;
 						<digi:trn key="aim:subProgram">
@@ -112,8 +112,8 @@
 				</tr>
 				<tr>
 					<td height=16 vAlign=center width=571><span class=subtitle-blue>
-						<digi:trn key="aim:programManager">
-						Program Manager
+						<digi:trn key="aim:multilevelprogramManager">
+							Multi-Level Program Manager
 						</digi:trn>
 						</span>
 					</td>
@@ -128,130 +128,442 @@
 									<td vAlign="top" width="100%">
 										<table align=left valign=top cellPadding=1 cellSpacing=1 width="100%">
 											<tr><td bgColor=#d7eafd class=box-title height="20" align="center">
-											<table bgColor=#ffffff cellPadding=0 cellSpacing=0 width="100%" align="center" border="0">
-													<tr bgColor=#ffffff>
-													<td bgColor=#d7eafd height="10" align="center" colspan="2"><h3>
-													<digi:trn key="aim:CreatingNewSubProgram">
-															Create a New Sub-Program
-													</digi:trn></h3>
-													</td>
-													</tr>
-													<tr bgColor=#ffffff><td height="10" colspan="2"></td></tr>
-													<tr bgColor=#ffffff>
-													<td height="10" align="left">
-															&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-															<digi:trn key="aim:programName">
-																	Program Name</digi:trn>
-															<font color="red">*</font>
-													</td>
-													<td height="10" align="left">
-															<html:text property="programName" size="20"/>
-													</td>
-													</tr>
-													<tr bgcolor=#ffffff><td height="5"></td></tr>
-													<tr bgColor=#ffffff>
-													<td height="20" align="left">
-															&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-															<digi:trn key="aim:programDescription">
-																	Description</digi:trn>
-													</td>
-													<td align="left">
-															<html:textarea property="programDescription" cols="35" rows="2" styleClass="inp-text"/>
-													</td>
-													</tr>	
-													<tr bgColor=#ffffff>
-													<td height="20" align="left">
-															&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-															<digi:trn key="aim:programCode">
-																	Program Code</digi:trn>
-															<font color="red">*</font>
-													</td>
-													<td align="left">
-															<html:text property="programCode" size="20" styleClass="inp-text"/>
-													</td>
-													</tr>
-													<tr bgColor=#ffffff>
-													<td height="20" align="left">
-															&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-															<digi:trn key="aim:programType">
-																	Program Type</digi:trn>
-															<font color="red">*</font>
-													</td>
-													<td align="left">
-															<html:text property="programType" size="20" styleClass="inp-text"/>
-													</td>
-													</tr>	
-													<tr bgcolor=#ffffff><td height="5"></td></tr>	
-													<tr bgColor=#ffffff><td height="30" colspan="2"></td></tr>
-													<tr bgColor=#d7eafd>
-													<td bgColor=#d7eafd height="25" align="center" colspan="2">
-															<input styleClass="dr-menu" type="button" name="addBtn" value="Save" onclick="return saveProgram('<bean:write name="aimThemeForm" property="prgParentThemeId"/>')">
-													</td>
-													</tr>	
-											</table>
-											</td></tr>
-											<tr bgColor=#ffffff><td height="7" colspan="2"></td></tr>
-											<tr><td bgColor=#d7eafd class=box-title height="20" align="center">
 											<table bgColor=#d7eafd cellPadding=0 cellSpacing=0 width="100%" valign="top">
 											<tr><td bgColor=#d7eafd height="7" align="center"><h3>
 													<digi:trn key="aim:subPrograms">
 															Sub-Programs
-													</digi:trn></h3>
+													</digi:trn> of <bean:write name="aimThemeForm" property="name"/></h3>
 											</td></tr>
 											<tr><td>
 														<logic:notEmpty name="aimThemeForm" property="subPrograms">
 															<tr bgColor=#ffffff><td>
 																<table width="100%" bgColor="#d7eafd" cellPadding=3 cellSpacing=1>
-																	<logic:iterate name="aimThemeForm" property="subPrograms" id="subPrograms" 
-																	type="org.digijava.module.aim.dbentity.AmpTheme">
-																		<tr bgcolor="#ffffff">
-																			<td width="9" height="15" bgcolor="#f4f4f2">
-																					<img src= "../ampTemplate/images/arrow_right.gif" border=0>
-																			</td>
-																			<td bgcolor="#f4f4f2" width="50">
-																					<bean:write name="subPrograms" property="themeCode"/>
-																			</td>
-																			<td align="left" bgcolor="#f4f4f2">
-																					<jsp:useBean id="urlParams" type="java.util.Map" class="java.util.HashMap"/>
-																					<c:set target="${urlParams}" property="themeId">
-																							<bean:write name="subPrograms" property="ampThemeId" />
-																					</c:set><b>
-																					<a href="javascript:addSubProgram('<bean:write name="subPrograms" property="ampThemeId"/>')" title="Click here to add Sub-Programs">
-																							<bean:write name="subPrograms" property="name"/>
-																					</a></b>
-																			</td>
-																			<td align="right" bgcolor="#f4f4f2" width="75">
-																					<input class="buton" type="button" name="addIndicator" 
-																					value="Indicator" onclick="assignIndicators('<bean:write name="subPrograms" property="ampThemeId" />')">
-																			</td>
-																			<td align="left" width="50" bgcolor="#f4f4f2">
-																					<bean:define id="translation">
-																							<digi:trn key="aim:clickToEditProgram">Click here to Edit Program</digi:trn>
-																					</bean:define>
-																					[ <digi:link href="/editTheme.do?event=edit" name="urlParams" title="<%=translation%>" >
-																							<digi:trn key="aim:programManagerEdit">Edit</digi:trn>
-																					</digi:link> ]						
-																			</td>
-																			<td align="left" width="12" bgcolor="#f4f4f2">
-																					<bean:define id="translation">
-																							<digi:trn key="aim:clickToDeleteProgram">
-																									Click here to Delete Program
-																							</digi:trn>
-																					</bean:define>
-																					<digi:link href="/editTheme.do?event=delete" name="urlParams" title="<%=translation%>" onclick="return deleteProgram()">
-																							<img src= "../ampTemplate/images/trash_12.gif" border=0>
-																					</digi:link>
-																			</td>
-																		</tr>
+																	<logic:iterate name="aimThemeForm" property="subPrograms" id="subPrograms" type="org.digijava.module.aim.dbentity.AmpTheme">
+																		<%------- level 1 starts ------------%>
+																		<logic:equal name="subPrograms" property="indlevel" value="1">
+																				<tr bgcolor="#ffffff">
+																					<td height="15" colspan="6">
+																						<table width="100%" bgColor="#d7eafd" cellPadding=3 cellSpacing=1>
+																								<tr bgcolor="#ffffff">
+																									<td width="9" height="15" bgcolor="#f4f4f2">
+																											<img src= "../ampTemplate/images/arrow_right.gif" border=0>
+																									</td>
+																									<td bgcolor="#ffcccc" width="50">
+																											<bean:write name="subPrograms" property="themeCode"/>
+																									</td>
+																									<td align="left" bgcolor="#ffcccc">
+																											<jsp:useBean id="urlParams1" type="java.util.Map" class="java.util.HashMap"/>
+																											<c:set target="${urlParams1}" property="themeId">
+																													<bean:write name="subPrograms" property="ampThemeId" />
+																											</c:set><b>
+																											<a href="javascript:addSubProgram('<bean:write name="aimThemeForm" property="rootId" />','<bean:write name="subPrograms" property="ampThemeId" />','<bean:write name="subPrograms" property="indlevel"/>','<bean:write name="subPrograms" property="name"/>')" title="Click here to add Sub-Programs">
+																													<bean:write name="subPrograms" property="name"/>
+																											</a></b>
+																									</td>
+																									<td align="right" bgcolor="#ffcccc" width="75">
+																											<input class="buton" type="button" name="addIndicator" value="Indicator" onclick="assignIndicators('<bean:write name="subPrograms" property="ampThemeId" />')">
+																									</td>
+																									<td align="left" width="50" bgcolor="#ffcccc">
+																											<bean:define id="translation">
+																													<digi:trn key="aim:clickToEditProgram">Click here to Edit Program</digi:trn>
+																											</bean:define>
+																											[ <digi:link href="/editTheme.do?event=edit" name="urlParams1" title="<%=translation%>" >
+																													<digi:trn key="aim:programManagerEdit">Edit</digi:trn>
+																											</digi:link> ]						
+																									</td>
+																									<td align="left" width="12" bgcolor="#f4f4f2">
+																											<bean:define id="translation">
+																													<digi:trn key="aim:clickToDeleteProgram">
+																															Click here to Delete Program
+																													</digi:trn>
+																											</bean:define>
+																											<digi:link href="/editTheme.do?event=delete" name="urlParams1" title="<%=translation%>" onclick="return deleteProgram()">
+																													<img src= "../ampTemplate/images/trash_12.gif" border=0>
+																											</digi:link>
+																									</td>
+																							</tr>
+																						</table>
+																					</td>
+																				</tr>
+																		</logic:equal>
+																		<%------- level 1 ends ------------%>
+																		<%------- level 2 starts ------------%>
+																		<logic:equal name="subPrograms" property="indlevel" value="2">
+																				<tr bgcolor="#ffffff">
+																					<td height="15" colspan="6">
+																						<table width="99%" align="right" bgColor="#d7eafd" cellPadding=3 cellSpacing=1>
+																								<tr bgcolor="#ffffff">
+																										<td width="9" height="15">
+																												<img src="../ampTemplate/images/link_out_bot.gif">
+																										</td>
+																										<td width="9" height="15" bgcolor="#f4f4f2">
+																												<img src= "../ampTemplate/images/square1.gif" border=0>
+																										</td>
+																										<td bgcolor="#f4f4f2" width="50">
+																												<bean:write name="subPrograms" property="themeCode"/>
+																										</td>
+																										<td align="left" bgcolor="#f4f4f2">
+																												<jsp:useBean id="urlParams2" type="java.util.Map" class="java.util.HashMap"/>
+																												<c:set target="${urlParams2}" property="themeId">
+																														<bean:write name="subPrograms" property="ampThemeId" />
+																												</c:set>
+																												<b>
+																												<a href="javascript:addSubProgram('<bean:write name="aimThemeForm" property="rootId" />','<bean:write name="subPrograms" property="ampThemeId" />','<bean:write name="subPrograms" property="indlevel"/>','<bean:write name="subPrograms" property="name"/>')" title="Click here to add Sub-Programs">
+																													<bean:write name="subPrograms" property="name"/>
+																												</a></b>
+																										</td>
+																										<td align="right" bgcolor="#f4f4f2" width="75">
+																												<input class="buton" type="button" name="addIndicator" value="Indicator" onclick="assignIndicators('<bean:write name="subPrograms" property="ampThemeId" />')">
+																										</td>
+																										<td align="left" width="50" bgcolor="#f4f4f2">
+																												<bean:define id="translation">
+																														<digi:trn key="aim:clickToEditProgram">Click here to Edit Program</digi:trn>
+																												</bean:define>
+																												[ <digi:link href="/editTheme.do?event=edit" name="urlParams2" title="<%=translation%>" >
+																														<digi:trn key="aim:programManagerEdit">Edit</digi:trn>
+																												</digi:link> ]						
+																										</td>
+																										<td align="left" width="12" bgcolor="#f4f4f2">
+																												<bean:define id="translation">
+																														<digi:trn key="aim:clickToDeleteProgram">
+																																Click here to Delete Program
+																														</digi:trn>
+																												</bean:define>
+																												<digi:link href="/editTheme.do?event=delete" name="urlParams2" title="<%=translation%>" onclick="return deleteProgram()">
+																														<img src= "../ampTemplate/images/trash_12.gif" border=0>
+																												</digi:link>
+																										</td>
+																								</tr>
+																						</table>
+																					</td>
+																				</tr>
+																		</logic:equal>
+																		<%------- level 2 ends ------------%>
+																		<%------- level 3 starts ------------%>
+																		<logic:equal name="subPrograms" property="indlevel" value="3">
+																				<tr bgcolor="#ffffff">
+																					<td height="15" colspan="6">
+																						<table width="98%" align="right" bgColor="#d7eafd" cellPadding=3 cellSpacing=1>
+																								<tr bgcolor="#ffffff">
+																										<td width="9" height="15">
+																												<img src="../ampTemplate/images/link_out_bot.gif">
+																										</td>
+																										<td width="9" height="15" bgcolor="#f4f4f2">
+																												<img src= "../ampTemplate/images/square2.gif" border=0>
+																										</td>
+																										<td bgcolor="#f4f4f2" width="50">
+																												<bean:write name="subPrograms" property="themeCode"/>
+																										</td>
+																										<td align="left" bgcolor="#f4f4f2">
+																												<jsp:useBean id="urlParams3" type="java.util.Map" class="java.util.HashMap"/>
+																												<c:set target="${urlParams3}" property="themeId">
+																														<bean:write name="subPrograms" property="ampThemeId" />
+																												</c:set>
+																												<b>
+																												<a href="javascript:addSubProgram('<bean:write name="aimThemeForm" property="rootId" />','<bean:write name="subPrograms" property="ampThemeId" />','<bean:write name="subPrograms" property="indlevel"/>','<bean:write name="subPrograms" property="name"/>')" title="Click here to add Sub-Programs">
+																													<bean:write name="subPrograms" property="name"/>
+																												</a></b>
+																										</td>
+																										<td align="right" bgcolor="#f4f4f2" width="75">
+																												<input class="buton" type="button" name="addIndicator" value="Indicator" onclick="assignIndicators('<bean:write name="subPrograms" property="ampThemeId" />')">
+																										</td>
+																										<td align="left" width="50" bgcolor="#f4f4f2">
+																												<bean:define id="translation">
+																														<digi:trn key="aim:clickToEditProgram">Click here to Edit Program</digi:trn>
+																												</bean:define>
+																												[ <digi:link href="/editTheme.do?event=edit" name="urlParams3" title="<%=translation%>" >
+																														<digi:trn key="aim:programManagerEdit">Edit</digi:trn>
+																												</digi:link> ]						
+																										</td>
+																										<td align="left" width="12" bgcolor="#f4f4f2">
+																												<bean:define id="translation">
+																														<digi:trn key="aim:clickToDeleteProgram">
+																																Click here to Delete Program
+																														</digi:trn>
+																												</bean:define>
+																												<digi:link href="/editTheme.do?event=delete" name="urlParams3" title="<%=translation%>" onclick="return deleteProgram()">
+																														<img src= "../ampTemplate/images/trash_12.gif" border=0>
+																												</digi:link>
+																										</td>
+																								</tr>
+																						</table>
+																					</td>
+																				</tr>
+																		</logic:equal>
+																		<%------- level 3 ends ------------%>
+																		<%------- level 4 starts ------------%>
+																		<logic:equal name="subPrograms" property="indlevel" value="4">
+																				<tr bgcolor="#ffffff">
+																					<td height="15" colspan="6">
+																						<table width="97%" align="right" bgColor="#d7eafd" cellPadding=3 cellSpacing=1>
+																								<tr bgcolor="#ffffff">
+																										<td width="9" height="15">
+																												<img src="../ampTemplate/images/link_out_bot.gif">
+																										</td>
+																										<td width="9" height="15" bgcolor="#f4f4f2">
+																												<img src= "../ampTemplate/images/square3.gif" border=0>
+																										</td>
+																										<td bgcolor="#f4f4f2" width="50">
+																												<bean:write name="subPrograms" property="themeCode"/>
+																										</td>
+																										<td align="left" bgcolor="#f4f4f2">
+																												<jsp:useBean id="urlParams4" type="java.util.Map" class="java.util.HashMap"/>
+																												<c:set target="${urlParams4}" property="themeId">
+																														<bean:write name="subPrograms" property="ampThemeId" />
+																												</c:set>
+																												<b>
+																												<a href="javascript:addSubProgram('<bean:write name="aimThemeForm" property="rootId" />','<bean:write name="subPrograms" property="ampThemeId" />','<bean:write name="subPrograms" property="indlevel"/>','<bean:write name="subPrograms" property="name"/>')" title="Click here to add Sub-Programs">
+																													<bean:write name="subPrograms" property="name"/>
+																												</a></b>
+																										</td>
+																										<td align="right" bgcolor="#f4f4f2" width="75">
+																												<input class="buton" type="button" name="addIndicator" value="Indicator" onclick="assignIndicators('<bean:write name="subPrograms" property="ampThemeId" />')">
+																										</td>
+																										<td align="left" width="50" bgcolor="#f4f4f2">
+																												<bean:define id="translation">
+																														<digi:trn key="aim:clickToEditProgram">Click here to Edit Program</digi:trn>
+																												</bean:define>
+																												[ <digi:link href="/editTheme.do?event=edit" name="urlParams4" title="<%=translation%>" >
+																														<digi:trn key="aim:programManagerEdit">Edit</digi:trn>
+																												</digi:link> ]						
+																										</td>
+																										<td align="left" width="12" bgcolor="#f4f4f2">
+																												<bean:define id="translation">
+																														<digi:trn key="aim:clickToDeleteProgram">
+																																Click here to Delete Program
+																														</digi:trn>
+																												</bean:define>
+																												<digi:link href="/editTheme.do?event=delete" name="urlParams4" title="<%=translation%>" onclick="return deleteProgram()">
+																														<img src= "../ampTemplate/images/trash_12.gif" border=0>
+																												</digi:link>
+																										</td>
+																								</tr>
+																						</table>
+																					</td>
+																				</tr>
+																		</logic:equal>
+																		<%------- level 4 ends ------------%>
+																		<%------- level 5 starts ------------%>
+																		<logic:equal name="subPrograms" property="indlevel" value="5">
+																				<tr bgcolor="#ffffff">
+																					<td height="15" colspan="6">
+																						<table width="96%" align="right" bgColor="#d7eafd" cellPadding=3 cellSpacing=1>
+																								<tr bgcolor="#ffffff">
+																										<td width="9" height="15">
+																												<img src="../ampTemplate/images/link_out_bot.gif">
+																										</td>
+																										<td width="9" height="15" bgcolor="#f4f4f2">
+																												<img src= "../ampTemplate/images/square4.gif" border=0>
+																										</td>
+																										<td bgcolor="#f4f4f2" width="50">
+																												<bean:write name="subPrograms" property="themeCode"/>
+																										</td>
+																										<td align="left" bgcolor="#f4f4f2">
+																												<jsp:useBean id="urlParams5" type="java.util.Map" class="java.util.HashMap"/>
+																												<c:set target="${urlParams5}" property="themeId">
+																														<bean:write name="subPrograms" property="ampThemeId" />
+																												</c:set>
+																												<b>
+																												<a href="javascript:addSubProgram('<bean:write name="aimThemeForm" property="rootId" />','<bean:write name="subPrograms" property="ampThemeId" />','<bean:write name="subPrograms" property="indlevel"/>','<bean:write name="subPrograms" property="name"/>')" title="Click here to add Sub-Programs">
+																													<bean:write name="subPrograms" property="name"/>
+																												</a></b>
+																										</td>
+																										<td align="right" bgcolor="#f4f4f2" width="75">
+																												<input class="buton" type="button" name="addIndicator" value="Indicator" onclick="assignIndicators('<bean:write name="subPrograms" property="ampThemeId" />')">
+																										</td>
+																										<td align="left" width="50" bgcolor="#f4f4f2">
+																												<bean:define id="translation">
+																														<digi:trn key="aim:clickToEditProgram">Click here to Edit Program</digi:trn>
+																												</bean:define>
+																												[ <digi:link href="/editTheme.do?event=edit" name="urlParams5" title="<%=translation%>" >
+																														<digi:trn key="aim:programManagerEdit">Edit</digi:trn>
+																												</digi:link> ]						
+																										</td>
+																										<td align="left" width="12" bgcolor="#f4f4f2">
+																												<bean:define id="translation">
+																														<digi:trn key="aim:clickToDeleteProgram">
+																																Click here to Delete Program
+																														</digi:trn>
+																												</bean:define>
+																												<digi:link href="/editTheme.do?event=delete" name="urlParams5" title="<%=translation%>" onclick="return deleteProgram()">
+																														<img src= "../ampTemplate/images/trash_12.gif" border=0>
+																												</digi:link>
+																										</td>
+																								</tr>
+																						</table>
+																					</td>
+																				</tr>
+																		</logic:equal>
+																		<%------- level 5 ends ------------%>
+																		<%------- level 6 starts ------------%>
+																		<logic:equal name="subPrograms" property="indlevel" value="6">
+																				<tr bgcolor="#ffffff">
+																					<td height="15" colspan="6">
+																						<table width="95%" align="right" bgColor="#d7eafd" cellPadding=3 cellSpacing=1>
+																								<tr bgcolor="#ffffff">
+																										<td width="9" height="15">
+																												<img src="../ampTemplate/images/link_out_bot.gif">
+																										</td>
+																										<td width="9" height="15" bgcolor="#f4f4f2">
+																												<img src= "../ampTemplate/images/square5.gif" border=0>
+																										</td>
+																										<td bgcolor="#f4f4f2" width="50">
+																												<bean:write name="subPrograms" property="themeCode"/>
+																										</td>
+																										<td align="left" bgcolor="#f4f4f2">
+																												<jsp:useBean id="urlParams6" type="java.util.Map" class="java.util.HashMap"/>
+																												<c:set target="${urlParams6}" property="themeId">
+																														<bean:write name="subPrograms" property="ampThemeId" />
+																												</c:set>
+																												<b>
+																												<a href="javascript:addSubProgram('<bean:write name="aimThemeForm" property="rootId" />','<bean:write name="subPrograms" property="ampThemeId" />','<bean:write name="subPrograms" property="indlevel"/>','<bean:write name="subPrograms" property="name"/>')" title="Click here to add Sub-Programs">
+																													<bean:write name="subPrograms" property="name"/>
+																												</a></b>
+																										</td>
+																										<td align="right" bgcolor="#f4f4f2" width="75">
+																												<input class="buton" type="button" name="addIndicator" value="Indicator" onclick="assignIndicators('<bean:write name="subPrograms" property="ampThemeId" />')">
+																										</td>
+																										<td align="left" width="50" bgcolor="#f4f4f2">
+																												<bean:define id="translation">
+																														<digi:trn key="aim:clickToEditProgram">Click here to Edit Program</digi:trn>
+																												</bean:define>
+																												[ <digi:link href="/editTheme.do?event=edit" name="urlParams6" title="<%=translation%>" >
+																														<digi:trn key="aim:programManagerEdit">Edit</digi:trn>
+																												</digi:link> ]						
+																										</td>
+																										<td align="left" width="12" bgcolor="#f4f4f2">
+																												<bean:define id="translation">
+																														<digi:trn key="aim:clickToDeleteProgram">
+																																Click here to Delete Program
+																														</digi:trn>
+																												</bean:define>
+																												<digi:link href="/editTheme.do?event=delete" name="urlParams6" title="<%=translation%>" onclick="return deleteProgram()">
+																														<img src= "../ampTemplate/images/trash_12.gif" border=0>
+																												</digi:link>
+																										</td>
+																								</tr>
+																						</table>
+																					</td>
+																				</tr>
+																		</logic:equal>
+																		<%------- level 6 ends ------------%>
+																		<%------- level 7 starts ------------%>
+																		<logic:equal name="subPrograms" property="indlevel" value="7">
+																				<tr bgcolor="#ffffff">
+																					<td height="15" colspan="6">
+																						<table width="94%" align="right" bgColor="#d7eafd" cellPadding=3 cellSpacing=1>
+																								<tr bgcolor="#ffffff">
+																										<td width="9" height="15">
+																												<img src="../ampTemplate/images/link_out_bot.gif">
+																										</td>
+																										<td width="9" height="15" bgcolor="#f4f4f2">
+																												<img src= "../ampTemplate/images/square6.gif" border=0>
+																										</td>
+																										<td bgcolor="#f4f4f2" width="50">
+																												<bean:write name="subPrograms" property="themeCode"/>
+																										</td>
+																										<td align="left" bgcolor="#f4f4f2">
+																												<jsp:useBean id="urlParams7" type="java.util.Map" class="java.util.HashMap"/>
+																												<c:set target="${urlParams7}" property="themeId">
+																														<bean:write name="subPrograms" property="ampThemeId" />
+																												</c:set>
+																												<b>
+																												<a href="javascript:addSubProgram('<bean:write name="aimThemeForm" property="rootId" />','<bean:write name="subPrograms" property="ampThemeId" />','<bean:write name="subPrograms" property="indlevel"/>','<bean:write name="subPrograms" property="name"/>')" title="Click here to add Sub-Programs">
+																													<bean:write name="subPrograms" property="name"/>
+																												</a></b>
+																										</td>
+																										<td align="right" bgcolor="#f4f4f2" width="75">
+																												<input class="buton" type="button" name="addIndicator" value="Indicator" onclick="assignIndicators('<bean:write name="subPrograms" property="ampThemeId" />')">
+																										</td>
+																										<td align="left" width="50" bgcolor="#f4f4f2">
+																												<bean:define id="translation">
+																														<digi:trn key="aim:clickToEditProgram">Click here to Edit Program</digi:trn>
+																												</bean:define>
+																												[ <digi:link href="/editTheme.do?event=edit" name="urlParams7" title="<%=translation%>" >
+																														<digi:trn key="aim:programManagerEdit">Edit</digi:trn>
+																												</digi:link> ]						
+																										</td>
+																										<td align="left" width="12" bgcolor="#f4f4f2">
+																												<bean:define id="translation">
+																														<digi:trn key="aim:clickToDeleteProgram">
+																																Click here to Delete Program
+																														</digi:trn>
+																												</bean:define>
+																												<digi:link href="/editTheme.do?event=delete" name="urlParams7" title="<%=translation%>" onclick="return deleteProgram()">
+																														<img src= "../ampTemplate/images/trash_12.gif" border=0>
+																												</digi:link>
+																										</td>
+																								</tr>
+																						</table>
+																					</td>
+																				</tr>
+																		</logic:equal>
+																		<%------- level 7 ends ------------%>
+																		<%------- level 8 starts ------------%>
+																		<logic:equal name="subPrograms" property="indlevel" value="8">
+																				<tr bgcolor="#ffffff">
+																					<td height="15" colspan="6">
+																						<table width="93%" align="right" bgColor="#d7eafd" cellPadding=3 cellSpacing=1>
+																								<tr bgcolor="#ffffff">
+																										<td width="9" height="15">
+																												<img src="../ampTemplate/images/link_out_bot.gif">
+																										</td>
+																										<td width="9" height="15" bgcolor="#f4f4f2">
+																												<img src= "../ampTemplate/images/square7.gif" border=0>
+																										</td>
+																										<td bgcolor="#f4f4f2" width="50">
+																												<bean:write name="subPrograms" property="themeCode"/>
+																										</td>
+																										<td align="left" bgcolor="#f4f4f2">
+																												<jsp:useBean id="urlParams8" type="java.util.Map" class="java.util.HashMap"/>
+																												<c:set target="${urlParams8}" property="themeId">
+																														<bean:write name="subPrograms" property="ampThemeId" />
+																												</c:set><b>
+																													<bean:write name="subPrograms" property="name"/></b>
+																										</td>
+																										<td align="right" bgcolor="#f4f4f2" width="75">
+																												<input class="buton" type="button" name="addIndicator" value="Indicator" onclick="assignIndicators('<bean:write name="subPrograms" property="ampThemeId" />')">
+																										</td>
+																										<td align="left" width="50" bgcolor="#f4f4f2">
+																												<bean:define id="translation">
+																														<digi:trn key="aim:clickToEditProgram">Click here to Edit Program</digi:trn>
+																												</bean:define>
+																												[ <digi:link href="/editTheme.do?event=edit" name="urlParams8" title="<%=translation%>" >
+																														<digi:trn key="aim:programManagerEdit">Edit</digi:trn>
+																												</digi:link> ]						
+																										</td>
+																										<td align="left" width="12" bgcolor="#f4f4f2">
+																												<bean:define id="translation">
+																														<digi:trn key="aim:clickToDeleteProgram">
+																																Click here to Delete Program
+																														</digi:trn>
+																												</bean:define>
+																												<digi:link href="/editTheme.do?event=delete" name="urlParams8" title="<%=translation%>" onclick="return deleteProgram()">
+																														<img src= "../ampTemplate/images/trash_12.gif" border=0>
+																												</digi:link>
+																										</td>
+																								</tr>
+																						</table>
+																					</td>
+																				</tr>
+																		</logic:equal>
+																		<%------- level 8 ends ------------%>
 																	</logic:iterate>
 																</table>
 															</td></tr>
 														</logic:notEmpty>
 														<logic:empty name="aimThemeForm" property="subPrograms">
-																<tr align="center" bgcolor="#ffffff"><td><b>
-																		<digi:trn key="aim:noProgramsPresent">No Programs present</digi:trn></b></td>
+																<tr align="center"  height="25" bgcolor="#ffffff">
+																<td><b>
+																		<digi:trn key="aim:noProgramsPresent">No Programs present</digi:trn></b>
+																</td>
 																</tr>
 														</logic:empty>
+														<tr>
+															<td bgColor=#d7eafd height="20" align="center">
+																	<input class="buton" type="button" name="addSubTheme" value="Add SubProgram Level 1" onclick=" return addSubProgram('<bean:write name="aimThemeForm" property="rootId"/>','<bean:write name="aimThemeForm" property="rootId"/>','0','<bean:write name="aimThemeForm" property="name"/>')">
+															</td>
+														</tr>
 													</table>
 												</td>
 											</tr>
@@ -262,6 +574,18 @@
 						</td>
 					</tr>
 				</table>
+			</td>
+		</tr>
+		<tr>
+			<td class=r-dotted-lg width=14>
+					<img src= "../ampTemplate/images/arrow_right.gif" border=0>  Level 1, 
+					<img src= "../ampTemplate/images/square1.gif" border=0>  Level 2, 
+					<img src= "../ampTemplate/images/square2.gif" border=0>  Level 3, 
+					<img src= "../ampTemplate/images/square3.gif" border=0>  Level 4, 
+					<img src= "../ampTemplate/images/square4.gif" border=0>  Level 5, 
+					<img src= "../ampTemplate/images/square5.gif" border=0>  Level 6, 
+					<img src= "../ampTemplate/images/square6.gif" border=0>  Level 7, 
+					<img src= "../ampTemplate/images/square7.gif" border=0>  Level 8.
 			</td>
 		</tr>
 	</table>

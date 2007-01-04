@@ -80,11 +80,11 @@
 						</digi:trn>
 						</digi:link>&nbsp;&gt;&nbsp;
 						<bean:define id="translation">
-							<digi:trn key="aim:clickToViewProgramManager">Click here to goto Program Manager</digi:trn>
+							<digi:trn key="aim:clickToViewMultiLevelProgramManager">Click here to goto Multi-level Program Manager</digi:trn>
 						</bean:define>
 						<digi:link href="/themeManager.do" styleClass="comment" title="<%=translation%>">
-						<digi:trn key="aim:programManager">
-							Program Manager
+						<digi:trn key="aim:multilevelprogramManager">
+							Multi-Level Program Manager
 						</digi:trn>
 						</digi:link>&nbsp;&gt;&nbsp;
 						<digi:trn key="aim:editProgram">

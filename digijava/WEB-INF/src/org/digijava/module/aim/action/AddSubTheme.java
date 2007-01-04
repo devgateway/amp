@@ -9,10 +9,10 @@ import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
-import org.digijava.module.aim.dbentity.AmpTheme;
 import org.digijava.module.aim.form.ThemeForm;
-import org.digijava.module.aim.util.DbUtil;
+import org.digijava.module.aim.dbentity.AmpTheme;
 import org.digijava.module.aim.util.ProgramUtil;
+import org.digijava.module.aim.util.DbUtil;
 
 public class AddSubTheme extends Action 
 {
@@ -39,8 +39,11 @@ public class AddSubTheme extends Action
 		ThemeForm themeForm = (ThemeForm) form;
 		String event = request.getParameter("event");
 		Long id = new Long(Long.parseLong(request.getParameter("themeId")));
+		Long roothemeId = new Long(Long.parseLong(request.getParameter("rootId")));
+		int indlevel = Integer.parseInt(request.getParameter("indlevel"));
+		String indname = request.getParameter("indname");
 		themeForm.setPrgParentThemeId(id);
-		
+		themeForm.setName(indname);
 		if(event != null && event.equals("addSubProgram"))
 		{
 			themeForm.setProgramName(null);
@@ -48,33 +51,29 @@ public class AddSubTheme extends Action
 			themeForm.setProgramDescription(null);
 			themeForm.setProgramType(null);
 			themeForm.setPrgParentThemeId(new Long(Long.parseLong(request.getParameter("themeId"))));
+			themeForm.setPrgLevel(indlevel);
+			themeForm.setRootId(roothemeId);
 			themeForm.setPrgLanguage(null);
 			themeForm.setVersion(null);
-			themeForm.setSubPrograms(ProgramUtil.getSubThemes(id));
-			return mapping.findForward("forward");
+			return mapping.findForward("addProgram");
 		}
-		else if (event != null && event.equals("save"))
+		else if(event != null && event.equals("save"))
 		{
+			int level = indlevel+1;
 			AmpTheme ampTheme = new AmpTheme();
 			ampTheme.setName(themeForm.getProgramName());
 			ampTheme.setThemeCode(themeForm.getProgramCode());
 			ampTheme.setDescription(themeForm.getProgramDescription());
 			ampTheme.setType(themeForm.getProgramType());
 			ampTheme.setParentThemeId(ProgramUtil.getTheme(id));
+			ampTheme.setIndlevel(level);
 			ampTheme.setLanguage(null);
 			ampTheme.setVersion(null);
 			DbUtil.add(ampTheme);
-			themeForm.setProgramName(null);
-			themeForm.setProgramCode(null);
-			themeForm.setProgramDescription(null);
-			themeForm.setProgramType(null);
-			themeForm.setPrgParentThemeId(new Long(Long.parseLong(request.getParameter("themeId"))));
-			themeForm.setPrgLanguage(null);
-			themeForm.setVersion(null);
-			themeForm.setSubPrograms(ProgramUtil.getSubThemes(id));
-			return mapping.findForward("forward");
+			themeForm.setRootId(roothemeId);
 		}
-		else
-			return mapping.findForward("forward");
+		themeForm.setRootId(roothemeId);
+		themeForm.setSubPrograms(ProgramUtil.getAllSubThemes(roothemeId));
+		return mapping.findForward("forward");
 	}
 }

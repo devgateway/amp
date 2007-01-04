@@ -14,7 +14,9 @@ public class ThemeForm extends ActionForm {
 		  private String programCode;
 		  private String programDescription;
 		  private String programType;
+		  private int prgLevel;
 		  private Long prgParentThemeId;
+		  private Long rootId;
 		  private String prgLanguage;
 		  private String parentProgram;
 		  private String version; 
@@ -142,6 +144,20 @@ public class ThemeForm extends ActionForm {
 		}
 
 		/**
+		 * @return Returns the prgLevel.
+		 */
+		public int getPrgLevel() {
+			return prgLevel;
+		}
+
+		/**
+		 * @param prgLevel The prgLevel to set.
+		 */
+		public void setPrgLevel(int prgLevel) {
+			this.prgLevel = prgLevel;
+		}
+
+		/**
 		 * @return Returns the indicatorDescription.
 		 */
 		public String getIndicatorDescription() {
@@ -195,6 +211,20 @@ public class ThemeForm extends ActionForm {
 		 */
 		public void setPrgParentThemeId(Long prgParentThemeId) {
 			this.prgParentThemeId = prgParentThemeId;
+		}
+
+		/**
+		 * @return Returns the rootId.
+		 */
+		public Long getRootId() {
+			return rootId;
+		}
+
+		/**
+		 * @param rootId The rootId to set.
+		 */
+		public void setRootId(Long rootId) {
+			this.rootId = rootId;
 		}
 
 		/**

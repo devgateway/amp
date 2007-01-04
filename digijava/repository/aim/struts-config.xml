@@ -295,11 +295,12 @@
       <forward name="index" path="/aim/index.do" redirect="true" />
     </action>
 		<action name="aimThemeForm" path="/aim/addTheme" scope="request" type="org.digijava.module.aim.action.AddTheme" validate="false">
-			<forward name="saveIt" path="/aim/themeManager.do" />
-			<forward name="forward" path="/showLayout.do?layout=aim_addProgram" />
+			<forward name="saveIt" path="/aim/themeManager.do" redirect="true"/>
+			<forward name="forward" path="/showLayout.do?layout=aim_addProgram"/>
 		</action>
 		<action name="aimThemeForm" path="/aim/addSubTheme" scope="request" type="org.digijava.module.aim.action.AddSubTheme" validate="false">
 			<forward name="forward" path="/showLayout.do?layout=addSubTheme"/>
+			<forward name="addProgram" path="/showLayout.do?layout=aim_addProgram"/> 
 			<forward name="index" path="/aim/index.do" redirect="true"/>			
 		</action>
 		<action name="aimThemeForm" path="/aim/editTheme" scope="request" type="org.digijava.module.aim.action.EditTheme" validate="false">

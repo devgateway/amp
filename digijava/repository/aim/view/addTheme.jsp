@@ -32,14 +32,14 @@
 		}
 		return true;
 	}
-	function saveProgram()
+	function saveProgram(rutId,id,level,name)
 	{
 			var temp = validate();
 			if (temp == true) 
 			{
 				document.aimThemeForm.addBtn.disabled = true;	  	
-				<digi:context name="addThm" property="context/module/moduleinstance/addTheme.do"/>
-				document.aimThemeForm.action = "<%=addThm%>";
+				<digi:context name="addThm" property="context/module/moduleinstance/addSubTheme.do?event=save"/>
+				document.aimThemeForm.action = "<%=addThm%>&themeId=" + id + "&indlevel=" + level + "&indname=" + name + "&rootId=" + rutId;;
 				document.aimThemeForm.target = window.opener.name;
 				document.aimThemeForm.submit();
 				window.close();
@@ -123,7 +123,7 @@
 				<tr bgColor=#ffffff><td height="30" colspan="2"></td></tr>
 				<tr bgColor=#dddddb>
 				<td bgColor=#dddddb height="25" align="center" colspan="2">
-						<input styleClass="dr-menu" type="button" name="addBtn" value="Save" onclick="return saveProgram()">&nbsp;&nbsp;
+						<input styleClass="dr-menu" type="button" name="addBtn" value="Save" onclick="return saveProgram('<bean:write name="aimThemeForm" property="rootId" />','<bean:write name="aimThemeForm" property="prgParentThemeId" />','<bean:write name="aimThemeForm" property="prgLevel"/>','<bean:write name="aimThemeForm" property="name"/>')">&nbsp;&nbsp;
 						<input styleClass="dr-menu" type="reset" value="Cancel">&nbsp;&nbsp;
 						<input styleClass="dr-menu" type="button" name="close" value="Close" onclick="closeWindow()">			
 				</td>

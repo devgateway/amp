@@ -60,9 +60,14 @@ public class AddTheme extends Action
 			ampTheme.setThemeCode(themeForm.getProgramCode());
 			ampTheme.setDescription(themeForm.getProgramDescription());
 			ampTheme.setType(themeForm.getProgramType());
+			ampTheme.setIndlevel(0);
 			ampTheme.setParentThemeId(null);
 			ampTheme.setLanguage(null);
 			ampTheme.setVersion(null);
+			themeForm.setProgramName(null);
+			themeForm.setProgramCode(null);
+			themeForm.setProgramDescription(null);
+			themeForm.setProgramType(null);
 			DbUtil.add(ampTheme);
 			return mapping.findForward("saveIt");
 		}

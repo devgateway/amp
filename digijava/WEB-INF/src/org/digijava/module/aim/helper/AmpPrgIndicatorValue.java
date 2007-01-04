@@ -4,11 +4,9 @@ import java.io.Serializable;
 
 public class AmpPrgIndicatorValue implements Serializable
 {
-//	private long indexId;
 	private String creationDate;
 	private int valueType;
 	private Double valAmount;
-//	private int index;
 
 	/**
 	 * @return Returns the creationDate.
@@ -46,14 +44,4 @@ public class AmpPrgIndicatorValue implements Serializable
 	public void setValAmount(Double valAmount) {
 		this.valAmount = valAmount;
 	}
-
-	/*
-	public boolean equals(Object obj) {
-		if (obj == null) throw new NullPointerException();
-		if (!(obj instanceof AmpPrgIndicatorValue)) throw new ClassCastException();
-		
-		AmpPrgIndicatorValue prgIndVal = (AmpPrgIndicatorValue) obj;
-		return (this.indexId == prgIndVal.indexId);
-	}
-	*/
 }

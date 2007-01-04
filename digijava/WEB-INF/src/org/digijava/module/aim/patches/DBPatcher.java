@@ -246,14 +246,14 @@ public class DBPatcher {
 		Session session = null;
 		Session session1 = null;
 		String qryStr = null;
-		String qryStr1,qryStr2,qryStr3,qryStr4,qryStr5 = null;
+		String qryStr1,qryStr2,qryStr3,qryStr4,qryStr5,qryStr6 = null;
 		Query qry = null;
 		Query qry1,qry2 = null;
 		Collection col = null;
 		int count =0;
-		ResultSet rs,rs1 = null;
+		ResultSet rs,rs1,rs2 = null;
 		String name,id =null;
-		int compId = 0,cnt =0,flag=0;
+		int compId = 0,cnt =0,flag=0,cnt1=0;
 		try {
 			  
 			 session = PersistenceManager.getSession();
@@ -266,13 +266,18 @@ public class DBPatcher {
 				 cnt = rs.getInt(1);
 				 if (cnt==0)
 				 {
+					 
 					 flag=1;
+				 }
+				 else
+				 {
+					 logger.info(" Component Patches already updated...");
 				 }
 			 }
 			
 			 if(flag==1)
 			 { 
-				 logger.info(" Component patches already done check component manager.....");
+				 logger.info(" Updating Component Patches......");
 					 qryStr = "select DISTINCT p.title from " + AmpComponent.class.getName() + " p";
 					 qry = session.createQuery(qryStr);
 					 col = qry.list();
@@ -292,13 +297,30 @@ public class DBPatcher {
 								  rs = stmt.executeQuery(qryStr2);
 								 rs.first();					 
 								 while (!rs.isAfterLast()) {
-									 System.out.println(" in here");
 									  id = rs.getString(1);
-									  Statement stmt1 = session.connection().createStatement();			
-									 qryStr3 = "INSERT into AMP_ACTIVITY_COMPONENTS (amp_activity_id,amp_component_id) values ('"+id+"','"+compId+"')";
-									 stmt1.executeUpdate(qryStr3);
+									  if(id!=null)
+									  {
+										  cnt1=0;
+										  Statement stmtcheckforactivityId = session.connection().createStatement();
+										  qryStr6 = "SELECT COUNT(*) FROM AMP_ACTIVITY WHERE AMP_ACTIVITY_ID = '" +id+ "'";
+										  rs2 = stmtcheckforactivityId.executeQuery(qryStr6);
+										  if (rs2.next()) {
+												 cnt = rs2.getInt(1);
+												 if (cnt==0)
+												 {
+													 cnt1=1;//to Check whether the Activity Id is valid 
+												 }	
+										  }
+										  if(cnt1==0)
+										  {
+										  Statement stmt1 = session.connection().createStatement();			
+										  qryStr3 = "INSERT into AMP_ACTIVITY_COMPONENTS (amp_activity_id,amp_component_id) values ('"+id+"','"+compId+"')";
+										  stmt1.executeUpdate(qryStr3);
+										  }
+									  }
 									 rs.next();
 								 }
+								 logger.info(" executing... the delete statements for AMP COMPONENTS");
 								 Statement stmt2 = session.connection().createStatement();
 								 qryStr5 = "DELETE from AMP_COMPONENTS where title = '"+name+"' and amp_component_id !='"+compId+"'";
 								 stmt2.executeUpdate(qryStr5);

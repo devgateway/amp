@@ -4404,7 +4404,7 @@ public class DbUtil {
 		Collection col = new ArrayList();
 
 		try {
-			session = PersistenceManager.getSession();
+			session = PersistenceManager.getRequestDBSession();
 			String queryString = "select distinct org.ampDonorOrgId from " + AmpFunding.class.getName()
 								 + " org order by org.ampDonorOrgId.acronym asc";
 			Query qry = session.createQuery(queryString);
@@ -4412,14 +4412,6 @@ public class DbUtil {
 		} catch (Exception ex) {
 			logger.debug("Exception from getAllDonorOrgs() : " + ex);
 			ex.printStackTrace(System.out);
-		} finally {
-			try {
-				if (session != null) {
-					PersistenceManager.releaseSession(session);
-				}
-			} catch (Exception ex) {
-				logger.debug("releaseSession() failed : " + ex);
-			}
 		}
 		return col;
 	}
@@ -5999,7 +5991,7 @@ public class DbUtil {
 						AmpCalendar acal = (AmpCalendar) itr.next();
 						if ("Mission".equalsIgnoreCase(acal.getEventType().getName())) {
 							Calendar cal = (Calendar) acal.getCalendarPK().getCalendar();
-							if (allDnRow[0] == Double.parseDouble(year.format(cal.getStartDate())) || 
+							if (allDnRow[0] == Double.parseDouble(year.format(cal.getStartDate())) ||
 									allDnRow[0] == Double.parseDouble(year.format(cal.getEndDate()))) {
 								if (null != acal.getDonors()) {
 									if (acal.getDonors().size() > 1)	// checking if the Mission is 'joint'
@@ -6448,8 +6440,8 @@ public class DbUtil {
 	 * while an activity is deleted by Admin
 	 * end here
 	*/
-	
-	/* To check for Status code 
+
+	/* To check for Status code
 	 * modified by Govind
 	 */
 	public static Collection getStatusCodes()

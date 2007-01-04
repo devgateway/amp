@@ -74,6 +74,8 @@ import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.cms.dbentity.CMSContentItem;
 import org.digijava.module.aim.form.ProposedProjCost;
 import org.digijava.module.aim.form.EditActivityForm;
+import org.digijava.kernel.exception.*;
+import java.util.Date;
 
 /**
  * ActivityUtil is the persister class for all activity related
@@ -363,7 +365,7 @@ public class ActivityUtil {
 			    if (activity.getMember() == null) {
 					activity.setMember(new HashSet());
 			    }
-			    
+
 				activity.getMember().add(activity.getActivityCreator());
 				/*
 				member = (AmpTeamMember) session.load(AmpTeamMember.class,
@@ -516,6 +518,63 @@ public class ActivityUtil {
 		 }
 		 return col;
 	}
+
+
+        public static Collection searchActivities(Long ampThemeId,
+                                                  String statusCode,
+                                                  Date fromDate,
+                                                  Date toDate,
+                                                  Long locationId) {
+            Collection result = null;
+            try {
+                Session session = PersistenceManager.getRequestDBSession();
+                String oql = "select * from " + AmpActivity.class.getName() +
+                        " act  where 1=1 ";
+                if (ampThemeId != null) {
+                    oql += " and act.themeId.ampThemeId=:ampThemeId ";
+                }
+                if (statusCode != null) {
+                    oql += " and act.status.statusCode=:statusCode ";
+                }
+                if (fromDate != null) {
+                    oql += " and act.activityStartDate >= :FromDate";
+                }
+                if (toDate != null) {
+                    oql += " and act.activityStartDate <= :ToDate";
+                }
+                if (locationId != null) {
+                    oql += " and act.locations in (from AmpLocation loc where loc.id=:LocationID)";
+//                    oql += " and act in (select a from AmpLocation.aidlocation as a, AmpLocation loc where loc.id=20)";
+                }
+                oql += " order by act.name";
+
+                //==query
+                Query query = session.createQuery(oql);
+                if (ampThemeId != null) {
+                    query.setLong("ampThemeId", ampThemeId.longValue());
+                }
+                if (statusCode != null) {
+                    query.setString("statusCode", statusCode);
+                }
+                if (fromDate != null) {
+                    query.setDate("FromDate", fromDate);
+                }
+                if (toDate != null) {
+                    query.setDate("ToDate", toDate);
+                }
+                if (locationId != null) {
+                    query.setLong("LocationID",locationId.longValue());
+                }
+
+                result = query.list();
+            }
+            catch (Exception ex) {
+                logger.error(ex);
+            }
+
+            return result;
+        }
+
 
 	public static Collection getActivityCloseDates(Long activityId) {
 		 Session session = null;
@@ -937,7 +996,7 @@ public class ActivityUtil {
 	                components.setDisbursements(new ArrayList());
 	                components.setExpenditures(new ArrayList());
 	                components.setPhyProgress(new ArrayList());
-	        
+
 	                Collection col1 = ActivityUtil.getFundingComponentActivity(ampComp.getAmpComponentId(),activity.getAmpActivityId());
 	              //  Iterator itr2 = ampComp.getComponentFundings().iterator();
 	                Iterator itr2 = col.iterator();
@@ -1020,10 +1079,10 @@ public class ActivityUtil {
 	    return col;
 	}
 	/*
-	 * edited by Govind Dalwani 
+	 * edited by Govind Dalwani
 	 */
 	// this function is to get the fundings for the components along with the activity Id
-	
+
 	public static Collection getFundingComponentActivity(Long id,Long actId) {
 	    Collection col = null;
 	    logger.info(" inside getting the funding.....");
@@ -1038,9 +1097,9 @@ public class ActivityUtil {
 	        //Iterator itr = qry.list().iterator();
 	      /*  if (itr.hasNext()) {
 	        	AmpComponentFunding ampf =
-	        	
+
 	        }*/
-	        
+
 
 	    } catch (Exception e) {
 			logger.debug("Exception in getAmpComponents() " + e.getMessage());
@@ -1057,11 +1116,11 @@ public class ActivityUtil {
 	    //getComponents();
 	    return col;
 	}
-	
+
 	// function for getting fundings for components and ids ends here
-	
+
 	//function for physical progress
-	
+
 	public static Collection getPhysicalProgressComponentActivity(Long id,Long actId) {
 	    Collection col = null;
 	    logger.info(" inside getting the Physical Progress.....");
@@ -1116,7 +1175,7 @@ public class ActivityUtil {
 	    }
 	   // EditActivityForm f = new EditActivityForm();
 	    //f.setAllComps(col);
-	    
+
 	    return col;
 	}
 //end functino to get components

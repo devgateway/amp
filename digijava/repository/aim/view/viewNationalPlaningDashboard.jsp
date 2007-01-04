@@ -85,7 +85,7 @@ function doFilter() {
                     <table width="100%">
                       <tr>
                         <td colspan="2" align="center">
-                          <input type="button" value="GO" onclick="return doFilter()" />
+                          <%--<input type="button" value="GO" onclick="return doFilter()" />--%>&nbsp;
                         </td>
                       </tr>
                       <tr>
@@ -129,10 +129,114 @@ function doFilter() {
                       <c:if test="${aimNationalPlaningDashboardForm.showChart}">
                       <tr>
                         <td colspan="2" align="center">
+							&nbsp;
                         </td>
                       </tr>
                       </c:if>
                       <!-- end of chart-->
+                      <%-- start of data --%>
+                      <c:if test="${!aimNationalPlaningDashboardForm.showChart}">
+                      <tr>
+                        <td colspan="2" align="center">
+							<%-- data grid outer table starts--%>
+							<table border="0" width="100%">
+								<tr>
+									<td>
+										<%-- data grid year dropdowns starts--%>
+										<table>
+											<tr>
+												<td> from: </td>
+												<td>
+													<html:select property="fromYear">
+														<option value="-1"><digi:trn key="aim:npSelectYear">Select</digi:trn></option>
+														<html:optionsCollection name="aimNationalPlaningDashboardForm" property="years" value="value" label="label" />
+													</html:select>
+												</td>
+												<td> to: </td>
+												<td>
+													<html:select property="toYear">
+														<option value="-1"><digi:trn key="aim:npSelectYear">Select</digi:trn></option>
+														<html:optionsCollection name="aimNationalPlaningDashboardForm" property="years" value="value" label="label" />
+													</html:select>
+												</td>
+												<td><input type="Button" value="Go" onclick="return doFilter()"></td>
+											</tr>
+										</table>
+										<%-- data grid year dropdowns ends--%>
+									</td>
+								</tr>
+								<tr>
+									<td>
+										&nbsp;
+									</td>
+								</tr>
+								<tr>
+									<td>
+										<%-- data grid table starts--%>
+										<table width="70%" border="1">
+											<tr>
+												<td>Indicator Name</td>
+												<td>Actual Value</td>
+												<td>Target Value</td>
+											</tr>
+											<tr>
+												<c:forEach var="themeMember" items="${aimNationalPlaningDashboardForm.programs}">
+													<c:if test="${aimNationalPlaningDashboardForm.currentProgramId == themeMember.member.ampThemeId}">
+							                            <c:forEach var="indicator" items="${themeMember.member.indicators}">
+															<tr>
+																<td>
+																	${indicator.name}
+																</td>
+																<td>
+																	<c:if test="${! empty aimNationalPlaningDashboardForm.valuesForSelectedIndicators}">
+																		<c:forEach var="indicValue" items="${aimNationalPlaningDashboardForm.valuesForSelectedIndicators}">
+																			<c:if test="${indicValue.indicatorId == indicator.ampThemeIndId}">
+																				<c:if test="${indicValue.valueTypeId == 0}">
+																					${indicValue.value}
+																				</c:if>
+																			</c:if>
+																		</c:forEach>
+																	</c:if>
+																	<c:if test="${empty aimNationalPlaningDashboardForm.valuesForSelectedIndicators}">
+																		N/A
+																	</c:if>
+																</td>
+																<td>
+																	<c:if test="${! empty aimNationalPlaningDashboardForm.valuesForSelectedIndicators}">
+																		<c:forEach var="indicValue" items="${aimNationalPlaningDashboardForm.valuesForSelectedIndicators}">
+																			<c:if test="${indicValue.indicatorId == indicator.ampThemeIndId}">
+																				<c:if test="${indicValue.valueTypeId == 1}">
+																					${indicValue.value}
+																				</c:if>
+																			</c:if>
+																		</c:forEach>
+																	</c:if>
+																	<c:if test="${empty aimNationalPlaningDashboardForm.valuesForSelectedIndicators}">
+																		N/A
+																	</c:if>
+																</td>
+															</tr>
+							                            </c:forEach>
+													</c:if>
+					                            </c:forEach>
+											</tr>
+										</table>
+										<%-- data grid table ends--%>
+									</td>
+								</tr>
+							</table>
+							<!-- data outer table ends-->
+                        </td>
+                      </tr>
+                      </c:if>
+                      <c:if test="${!aimNationalPlaningDashboardForm.showChart}">
+                      <tr>
+                        <td colspan="2" align="center">
+							&nbsp;
+                        </td>
+                      </tr>
+                      </c:if>
+                      <%-- end of data--%>
                     </table>
                   </td>
                   <td valign="top" class="highlight" align="left" width="100">
@@ -140,25 +244,25 @@ function doFilter() {
                       <c:forEach var="themeMember" items="${aimNationalPlaningDashboardForm.programs}">
                         <li style="left: 0px;">
                           <c:if test="${themeMember.level > 0}">
-                            <c:forEach begin="1" end="${themeMember.level}"> &nbsp; </c:forEach>
+                            <c:forEach begin="1" end="${themeMember.level}"> &nbsp;&nbsp; </c:forEach>
                           </c:if>
                           <a href="#" onclick="return browseProgram(${themeMember.member.ampThemeId})">${themeMember.member.name}</a>
                           <br/>
                           <c:if test="${themeMember.level > 0}">
-                            <c:forEach begin="1" end="${themeMember.level}"> &nbsp; </c:forEach>
+                            <c:forEach begin="1" end="${themeMember.level}"> &nbsp;&nbsp; </c:forEach>
                           </c:if>
-                          <c:if test="${aimNationalPlaningDashboardForm.currentProgramId != themeMember.member.ampThemeId}">
+                          <%--<c:if test="${aimNationalPlaningDashboardForm.currentProgramId != themeMember.member.ampThemeId}">
                           <ul style="margin-left : 10px;">
                             <c:forEach var="indicator" items="${themeMember.member.indicators}">
                               <li>${indicator.name}</li>
                             </c:forEach>
                           </ul>
-                          </c:if>
+                          </c:if>--%>
                           <c:if test="${aimNationalPlaningDashboardForm.currentProgramId == themeMember.member.ampThemeId}">
                           <ul style="list-style : none; margin-left : 10px; padding-left : 0px;">
                             <c:forEach var="indicator" items="${themeMember.member.indicators}">
                               <li>
-                              <html:multibox property="selectedIndicators" value="${indicator.ampThemeIndId}" />${indicator.name}
+                              <html:multibox property="selectedIndicators" onchange="return doFilter()" value="${indicator.ampThemeIndId}" />${indicator.name}
                               </li>
                             </c:forEach>
                           </ul>
@@ -179,19 +283,39 @@ function doFilter() {
 
                         <td class="colHeaderLink" onMouseOver="this.className='colHeaderOver'"
                         onMouseOut="this.className='colHeaderLink'" width="40%" nowrap="nowrap">
-                        <digi:trn key="aim:npDonor">Donor</digi:trn>
+						<html:select property="selectedDonors" onchange="return doFilter()">
+							<option value="-1"><digi:trn key="aim:npd:dropDownAnyDonor">Any Donor</digi:trn></option>
+							<html:optionsCollection name="aimNationalPlaningDashboardForm" property="donors" value="ampOrgId" label="name" />
+						</html:select>
+                        <%--<digi:trn key="aim:npDonor">Donor</digi:trn>--%>
+                        </td>
+
+                        <td class="colHeaderLink" onMouseOver="this.className='colHeaderOver'"
+                        onMouseOut="this.className='colHeaderLink'" nowrap="nowrap">
+						<html:select property="fromyearActivities" onchange="return doFilter()">
+							<option value="-1"><digi:trn key="aim:npd:dropDownFromYear">From Year</digi:trn></option>
+							<html:optionsCollection name="aimNationalPlaningDashboardForm" property="years" value="value" label="label" />
+						</html:select>
+                        <%--<digi:trn key="aim:npFromYear">From Year</digi:trn>--%>
+                        </td>
+
+                        <td class="colHeaderLink" onMouseOver="this.className='colHeaderOver'"
+                        onMouseOut="this.className='colHeaderLink'" nowrap="nowrap">
+						<html:select property="toYearActivities" onchange="return doFilter()">
+							<option value="-1"><digi:trn key="aim:npd:dropDownToYear">To Year</digi:trn></option>
+							<html:optionsCollection name="aimNationalPlaningDashboardForm" property="years" value="value" label="label" />
+						</html:select>
+                        <%--<digi:trn key="aim:npToYear">To Year</digi:trn>--%>
                         </td>
 
                         <td class="colHeaderLink" onMouseOver="this.className='colHeaderOver'"
                         onMouseOut="this.className='colHeaderLink'" width="40%" nowrap="nowrap">
-                        <digi:trn key="aim:npFromYear">From Year</digi:trn>
+						<html:select property="selectedStatuses" onchange="return doFilter()">
+							<html:option value="-1"><digi:trn key="aim:npd:dropDownAnyStatus">Any Status</digi:trn></html:option>
+							<html:optionsCollection name="aimNationalPlaningDashboardForm" property="activityStatuses" value="statusCode" label="name" />
+						</html:select>
                         </td>
-
-                        <td class="colHeaderLink" onMouseOver="this.className='colHeaderOver'"
-                        onMouseOut="this.className='colHeaderLink'" width="40%" nowrap="nowrap">
-                        <digi:trn key="aim:npToYear">To Year</digi:trn>
-                        </td>
-
+						
                         <td class="colHeaderLink" onMouseOver="this.className='colHeaderOver'"
                         onMouseOut="this.className='colHeaderLink'" width="40%" nowrap="nowrap">
                         <digi:trn key="aim:npAmountAndCurrency">Amount&amp;Currency</digi:trn>
@@ -217,6 +341,7 @@ function doFilter() {
                           </td>
                           <td valign="top">${activity.activityStartDate}</td>
                           <td valign="top">${activity.originalCompDate}</td>
+                          <td valign="top">&nbsp;</td>
                           <td valign="top">
                           <fmt:formatNumber var="funAmount" maxFractionDigits="2" minFractionDigits="2" groupingUsed="true" value="${activity.funAmount}" />
                           ${funAmount} ${activity.currencyCode}

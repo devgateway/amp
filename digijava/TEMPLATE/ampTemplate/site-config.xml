@@ -258,11 +258,12 @@
 			<put-item name="body" module="aim" instance="default" teaser="portfolioDashboard"/>
 		</layout>
 
-                <page-group masterLayout="desktopLayout" tile="body">
+                <!--page-group masterLayout="desktopLayout" tile="body"-->
+                <!--page-group masterLayout="single" tile="body">
                         <module name="aim">
                            <page>amp_viewNationalPlaningDashboard</page>
                         </module>
-                </page-group>
+                </page-group-->
 
 
 		<!-- START ADD/EDIT LAYOUT	-->

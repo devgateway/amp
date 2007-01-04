@@ -30,6 +30,8 @@ public class ThemeForm extends ActionForm {
 		  private boolean npIndicator;
 		  private String saveType;
 		  private List prgIndValues;
+    private int valueType;
+    private String creationDate;
 		
 		/**
 		 * @return Returns the themes.
@@ -357,7 +359,23 @@ public class ThemeForm extends ActionForm {
 			return prgIndValues;
 		}
 
+    public int getValueType() {
+        return valueType;
+    }
+
+    public String getCreationDate() {
+        return creationDate;
+    }
+
 		public void setPrgIndValues(List prgIndValues) {
 			this.prgIndValues = prgIndValues;
 		}
+
+    public void setValueType(int valueType) {
+        this.valueType = valueType;
+    }
+
+    public void setCreationDate(String creationDate) {
+        this.creationDate = creationDate;
+    }
 }

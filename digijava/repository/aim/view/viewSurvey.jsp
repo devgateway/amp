@@ -94,7 +94,12 @@
 																	<b><nested:write property="indicatorCode" /></b>
 																</td>
 																<td bgcolor=#ECF3FD width="95%"><b>
-																	<nested:write property="name" />
+																	<bean:define id = "piIndcCode" >
+																		<nested:write property="indicatorCode" />
+																	</bean:define>
+																	<digi:trn key='<%="aim:parisIndc" + piIndcCode %>'>
+																		<nested:write property="name" />
+																	</digi:trn>
 																</td>
 															</tr>
 															<nested:iterate property="question">
@@ -124,7 +129,13 @@
 																			</c:when>
 																			<c:otherwise>
 																				<TD width="80%">
-																					<nested:write property="questionText" /><br>
+																					<bean:define id = "piIndcQuesId" >
+																						<nested:write property="questionId" />
+																					</bean:define>
+																					<digi:trn key='<%= "aim:parisIndc" + piIndcCode + "Ques" + piIndcQuesId %>'>
+																						<nested:write property="questionText" />
+																					</digi:trn>
+																					<br>
 																			</c:otherwise>
 																		</c:choose>
 																		</TD>

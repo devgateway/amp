@@ -110,8 +110,8 @@ function validateForm(){
         document.aimEditActivityForm.addSec.focus();
         return false;
 	}
-	if (!validateSectorPercentage())
-		return false;
+//	if (!validateSectorPercentage())
+	//	return false;
 
 	document.aimEditActivityForm.step.value="3";
 	return true;
@@ -182,7 +182,7 @@ function fnChk(frmContrl){
 
 <input type="hidden" name="edit" value="true"/>
 
-<c:if test="${!empty aimEditActivityForm.activitySectors}">
+<c:if test="${empty aimEditActivityForm.activitySectors}">
 	<input type="hidden" name="sizeActSectors" value="0"/>
 </c:if>
 <c:if test="${!empty aimEditActivityForm.activitySectors}">
@@ -564,7 +564,8 @@ function fnChk(frmContrl){
                                                     <tr>
                                                       <td>
                                                         <table cellSpacing=0 cellPadding=0 border=0 bgcolor="#ffffff" width="100%">
-                                                          <c:forEach var="actSect" items="${aimEditActivityForm.activitySectors}">
+                                                          <nested:iterate name="aimEditActivityForm" property="activitySectors" id="actSect"
+																		  type="org.digijava.module.aim.helper.ActivitySector">
                                                             <tr>
                                                               <td>
                                                                 <table width="100%" cellSpacing=1 cellPadding=1 vAlign="top" align="left">
@@ -586,13 +587,13 @@ function fnChk(frmContrl){
                                                                       </c:if>
                                                                     </td>
                                                                     <td width="10%">
-                                                                      <html:text name="actSect" property="sectorPercentage" indexed="true" size="2" maxlength="3" onkeyup="fnChk(this)"/>
+                                                                      <nested:text property="sectorPercentage" size="2" maxlength="3" onkeyup="fnChk(this)"/>
                                                                    </td>
                                                                   </tr>
                                                                 </table>
                                                               </td>
                                                             </tr>
-                                                          </c:forEach>
+                                                          </nested:iterate>
                                                           <tr>
                                                             <td>
                                                               <table cellSpacing=2 cellPadding=2>

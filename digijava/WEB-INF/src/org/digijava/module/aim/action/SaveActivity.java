@@ -136,7 +136,7 @@ public class SaveActivity extends Action {
 
             if(eaForm.getSelectedPrograms()!=null){
                 Set programs=new HashSet();
-                ProgramUtil prg=new ProgramUtil();
+                //ProgramUtil prg=new ProgramUtil();
                 ArrayList prgId=new ArrayList();
                 ArrayList ampThemes=new ArrayList();
 
@@ -144,7 +144,7 @@ public class SaveActivity extends Action {
                 for(int i=0; i<programsId.length;i++){
                     prgId.add(programsId[i]);
                 }
-                ampThemes=prg.getThemesByIds(prgId);
+                ampThemes = ProgramUtil.getThemesByIds(prgId);
                 if(ampThemes!=null){
                     Iterator itr = ampThemes.iterator();
                     AmpTheme theme = new AmpTheme();
@@ -347,6 +347,7 @@ public class SaveActivity extends Action {
 							|| "".equals(actSect.getSectorPercentage())) {
 						errors.add("sectorPercentageEmpty",
 								new ActionError("error.aim.addActivity.sectorPercentageEmpty"));
+						logger.debug("sector percentage is empty");
 						secPer = true;
 					}
 					// sector percentage is not a number
@@ -364,7 +365,7 @@ public class SaveActivity extends Action {
 					if (secPer) {
 						saveErrors(request, errors);
 						eaForm.setStep("2");
-						return mapping.findForward("addActivity");
+						return mapping.findForward("addActivityStep2");
 					}
 				}
 				// Total sector percentage is not equal to 100%
@@ -372,8 +373,9 @@ public class SaveActivity extends Action {
 					errors.add("sectorPercentageSumWrong",
 							new ActionError("error.aim.addActivity.sectorPercentageSumWrong"));
 					saveErrors(request, errors);
+					logger.debug("sector percentage is not equal to 100%");
 					eaForm.setStep("2");
-					return mapping.findForward("addActivity");
+					return mapping.findForward("addActivityStep2");
 				}
 
 				if (eaForm.getFundingOrganizations() != null

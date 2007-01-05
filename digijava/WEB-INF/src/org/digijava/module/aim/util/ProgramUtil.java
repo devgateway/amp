@@ -240,15 +240,16 @@ public class ProgramUtil {
             qry.setParameterList("ids", ampThemeIds);
             return (ArrayList) qry.list();
         } catch(Exception e) {
-            logger.error("Unable to get all themes");
-            logger.debug("Exceptiion " + e);
-        } finally {
-			if (session != null) {
-				try {
+            logger.error("Unable to get all themes" + e);
+            e.printStackTrace(System.out);
+        }
+        finally	{
+			try {
+				if (session != null)
 					PersistenceManager.releaseSession(session);
-				} catch (Exception rsf) {
-					logger.error("Release session failed");
-				}
+			}
+			catch (Exception ex) {
+				logger.error("releaseSession() failed");
 			}
 		}
         return null;

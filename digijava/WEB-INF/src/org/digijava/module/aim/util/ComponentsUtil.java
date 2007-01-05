@@ -15,6 +15,7 @@ public class ComponentsUtil{
 
 	public static Collection getAmpComponents()
 	{
+		logger.info(" starting to get all the components....");
 		Collection col = null;
 		String queryString=null;
 		Session session = null;
@@ -24,7 +25,6 @@ public class ComponentsUtil{
 			session = PersistenceManager.getSession();
 			queryString ="select distinct co from "+AmpComponent.class.getName()+" co order by co.title";
 			qry = session.createQuery(queryString);
-
 			col = qry.list();
 		}
 		catch(Exception ex)
@@ -258,5 +258,89 @@ public class ComponentsUtil{
 		logger.info(" returning the collection");
 		return col;
 	}
+	/*
+	 * this is to check whether a component with the same name already exists in the AMP Components Table.returns true if present and false if not present
+	 */
+	public static boolean checkComponentNameExists(String title)
+	{
+		logger.info(" in the checking for components existence through title ");
+		boolean flag = false;
+		Collection col = null;
+		String queryString=null;
+		Session session = null;
+		Query qry = null;
+		try
+		{
+			session = PersistenceManager.getSession();
+			queryString ="select co from "+AmpComponent.class.getName()+" co where co.title=:title";
+			qry = session.createQuery(queryString);
+			qry.setParameter("title",title,Hibernate.STRING);
 
+			col = qry.list();
+		}
+		catch(Exception ex)
+		{
+			logger.error("Unable to get Component for editing from database " + ex.getMessage());
+			ex.printStackTrace(System.out);
+		}
+		finally
+		{
+			try
+			{
+				PersistenceManager.releaseSession(session);
+			}
+			catch (Exception ex2)
+			{
+				logger.error("releaseSession() failed ");
+			}
+		}
+		logger.info(" returning the collection");
+		if(col.isEmpty())
+		{
+		return false;
+		}
+		else return true;
+	}
+	/*
+	 * this is to check whether a component with the same code already exists in the AMP Components Table.returns true if present and false if not present
+	 */
+	public static boolean checkComponentCodeExists(String code)
+	{
+		logger.info(" in the checking for component existence through code ");
+		Collection col = null;
+		String queryString=null;
+		Session session = null;
+		Query qry = null;
+		try
+		{
+			session = PersistenceManager.getSession();
+			queryString ="select co from "+AmpComponent.class.getName()+" co where co.code=:code";
+			qry = session.createQuery(queryString);
+			qry.setParameter("code",code,Hibernate.STRING);
+
+			col = qry.list();
+		}
+		catch(Exception ex)
+		{
+			logger.error("Unable to get Component for editing from database " + ex.getMessage());
+			ex.printStackTrace(System.out);
+		}
+		finally
+		{
+			try
+			{
+				PersistenceManager.releaseSession(session);
+			}
+			catch (Exception ex2)
+			{
+				logger.error("releaseSession() failed ");
+			}
+		}
+		logger.info(" returning the collection");
+		if(col.isEmpty())
+		{
+		return false;
+		}
+		else return true;
+	}
 }

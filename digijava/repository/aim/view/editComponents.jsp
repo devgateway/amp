@@ -103,7 +103,7 @@
 															<td width="100%">	
 																<table width="100%" border=0	 bgColor=#f4f4f2>
 																	<tr>
-																		<td width="30%" align="right">
+																		<td width="30%" align="right"><font color=red>*</font>
 																		<digi:trn key="aim:compTitle">Component Title</digi:trn>	
 																		</td>
 																	    <td width="30%" >
@@ -111,7 +111,7 @@
 																	    </td>
 																	</tr>
 																	<tr>
-																		<td width="30%" align="right">
+																		<td width="30%" align="right"><font color=red>*</font>
 																	        <digi:trn key="aim:compCode">Component Code</digi:trn>
 																		</td>
 																	    <td width="30%">
@@ -136,6 +136,9 @@
 																	</tr>
 	
 															</tr>	
+															<td width=30% align = right>
+																			<font color=red>* Mandatory fields</font>
+															</td>
 														  <tr>
 															<td colspan="2" width="60%">
 			<table width="100%" cellspacing="5">
@@ -145,7 +148,7 @@
 							<input  type="button" name="addBtn" value="Save" onclick="updateScheme('<bean:write name="aimUpdateComponentsForm" property="id" />')"
 					</td>
 					<td width="50%" align="left">
-						<html:reset value="Cancel" styleClass="dr-menu"/>
+						<html:reset value="Cancel" styleClass="dr-menu" onclick="javasript:history.go(-1)"/>
 					</td>
 				</tr>
 			</table>

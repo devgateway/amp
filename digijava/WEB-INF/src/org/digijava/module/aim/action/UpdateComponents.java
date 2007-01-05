@@ -4,6 +4,7 @@ import java.util.Collection;
 
 import org.apache.log4j.Logger;
 import org.apache.struts.action.*;
+
 import java.util.*;
 
 import javax.servlet.http.*;
@@ -16,7 +17,7 @@ import org.digijava.module.aim.dbentity.AmpComponent;
 
 
 public class UpdateComponents extends Action{
-		private static Logger logger = Logger.getLogger(GetSectorSchemes.class);
+		private static Logger logger = Logger.getLogger(UpdateComponents.class);
 	
 		  	public ActionForward execute(ActionMapping mapping,
 								ActionForm form,
@@ -87,7 +88,30 @@ public class UpdateComponents extends Action{
 							}
 							if(event.equals("newComp"))
 							{
-								
+								logger.info(" in the adding of a new Component.....");
+								boolean flag = ComponentsUtil.checkComponentNameExists(updCompForm.getCompTitle());
+								boolean flagCode = ComponentsUtil.checkComponentCodeExists(updCompForm.getCompCode());
+								if(flag)
+								{
+									logger.info("in else the component exists....");
+									ActionErrors errors = new ActionErrors();
+									errors.add("title", new ActionError(
+											"error.aim.componentName.Present"));
+									saveErrors(request, errors);
+									return mapping.findForward("addComponent");
+								}
+								else if(flagCode)
+								{
+									logger.info("in else the component exists....");
+									ActionErrors errors = new ActionErrors();
+									errors.add("title", new ActionError(
+											"error.aim.componentCode.Present"));
+									saveErrors(request, errors);
+									return mapping.findForward("addComponent");
+								}
+								else 
+									//if(!flag)
+								{
 								AmpComponent ampComp = new AmpComponent();
 								ampComp.setAmpComponentId(null);
 								ampComp.setActivities(null);
@@ -101,7 +125,18 @@ public class UpdateComponents extends Action{
 								ampComp.setType(updCompForm.getCompType());
 								ampComp.setDescription(updCompForm.getCompDes());
 								DbUtil.add(ampComp);
-								
+								}
+								/*else
+								{
+									logger.info("in else the component exists....");
+									ActionErrors errors = new ActionErrors();
+									errors.add("title", new ActionError(
+											"error.aim.component.Present"));
+									saveErrors(request, errors);
+									return mapping.findForward("addComponent");
+									
+									
+								}*/
 								return mapping.findForward("comps");
 								
 								

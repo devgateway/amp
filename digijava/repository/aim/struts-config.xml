@@ -1242,7 +1242,7 @@
     <action name="aimComponentsForm" path="/aim/getComponents" scope="session" type="org.digijava.module.aim.action.GetComponents" validate="false">
       <forward name="default" path="/showLayout.do?layout=viewComponents" />
     </action>
-    <action name="aimUpdateComponentsForm" path="/aim/updateComponents" scope="session" type="org.digijava.module.aim.action.UpdateComponents" validate="false">
+    <action name="aimUpdateComponentsForm" path="/aim/updateComponents" scope="request" type="org.digijava.module.aim.action.UpdateComponents" validate="false">
       <forward name="default" path="/showLayout.do?layout=printMyDesktop" />
       <forward name="editComponent" path="/showLayout.do?layout=editComponents" />
       <forward name="addComponent" path="/showLayout.do?layout=addComponents" />

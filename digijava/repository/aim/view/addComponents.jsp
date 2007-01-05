@@ -14,11 +14,11 @@
 			  
 			 if(isEmpty(document.aimUpdateComponentsForm.compTitle.value)==true)
 			 {
-						alert("please enter a sector name:");
+						alert("please enter a Component Title:");
 			 }	
 			 else if(isEmpty(document.aimUpdateComponentsForm.compCode.value)==true)
 			 {
-						alert("please enter a sector code:");
+						alert("please enter a Component code:");
 			 }	
 			 else
 			 {
@@ -30,10 +30,9 @@
 	
 	}
 </script>
-<digi:errors/>
+
 <digi:instance property="aimUpdateComponentsForm" />
 <digi:form action="/updateComponents.do" method="post">
-
 
 <!--  AMP Admin Logo -->
 <jsp:include page="teamPagesHeader.jsp" flush="true" />
@@ -69,6 +68,7 @@
 					<!-- End navigation -->
 				</tr>
 				<tr>
+
 					<td height=16 vAlign=center width=571><span class=subtitle-blue>
 						<digi:trn key="aim:addNewComponent">
 						Add A New Component
@@ -78,7 +78,7 @@
 				</tr>
 				<tr>
 					<td noWrap width=100% vAlign="top">
-					<table width="100%" cellspacing=1 cellSpacing=1>
+<digi:errors/>					<table width="100%" cellspacing=1 cellSpacing=1>
 					<tr>
 						<td noWrap width=600 vAlign="top">
 							<table bgColor=#ffffff cellPadding=0 cellSpacing=0 class=box-border-nopadding width="100%">
@@ -104,7 +104,8 @@
 															<td width="100%">	
 																<table width="100%" border=0	 bgColor=#f4f4f2>
 																	<tr>
-																		<td width="30%" align="right">
+																		
+																		<td width="30%" align="right"><font color=red>*</font>
 																		<digi:trn key="aim:compTitle">Component Title</digi:trn>	
 																		</td>
 																	    <td width="30%" >
@@ -112,7 +113,7 @@
 																	    </td>
 																	</tr>
 																	<tr>
-																		<td width="30%" align="right">
+																		<td width="30%" align="right"><font color=red>*</font>
 																	        <digi:trn key="aim:compCode">Component Code</digi:trn>
 																		</td>
 																	    <td width="30%">
@@ -137,6 +138,9 @@
 																	</tr>
 	
 															</tr>	
+															<td width=30% align = right>
+																			<font color=red>* Mandatory fields</font>
+																		</td>
 														  <tr>
 															<td colspan="2" width="60%">
 			<table width="100%" cellspacing="5">
@@ -146,7 +150,7 @@
 							<input  type="button" name="addBtn" value="Save" onclick="updateComponents('<bean:write name="aimUpdateComponentsForm" property="id" />')"
 					</td>
 					<td width="50%" align="left">
-						<html:reset value="Cancel" styleClass="dr-menu"/>
+						<html:reset value="Cancel" styleClass="dr-menu" 	onclick="javascript:history.go(-1)"/>
 					</td>
 				</tr>
 			</table>

@@ -102,6 +102,14 @@ public class ProgramUtil {
 		} catch (Exception e) {
 			logger.error("Unable to get all themes");
 			logger.debug("Exceptiion " + e);
+		} finally {
+			if (session != null) {
+				try {
+					PersistenceManager.releaseSession(session);
+				} catch (Exception rsf) {
+					logger.error("Release session failed");
+				}
+			}
 		}
 		return themes;
 	}
@@ -129,7 +137,16 @@ public class ProgramUtil {
             catch (Exception e) {
                 logger.error("Unable to get all themes");
                 logger.debug("Exceptiion " + e);
-            }
+            } 
+            finally {
+    			if (session != null) {
+    				try {
+    					PersistenceManager.releaseSession(session);
+    				} catch (Exception rsf) {
+    					logger.error("Release session failed");
+    				}
+    			}
+    		}
             return themes;
         }
 
@@ -225,7 +242,15 @@ public class ProgramUtil {
         } catch(Exception e) {
             logger.error("Unable to get all themes");
             logger.debug("Exceptiion " + e);
-        }
+        } finally {
+			if (session != null) {
+				try {
+					PersistenceManager.releaseSession(session);
+				} catch (Exception rsf) {
+					logger.error("Release session failed");
+				}
+			}
+		}
         return null;
 	}
 
@@ -237,6 +262,14 @@ public class ProgramUtil {
 			ampTheme = (AmpTheme)session.load(AmpTheme.class, ampThemeId); 
 		} catch (Exception e) {
             throw new RuntimeException(e);
+		} finally {
+			if (session != null) {
+				try {
+					PersistenceManager.releaseSession(session);
+				} catch (Exception rsf) {
+					logger.error("Release session failed");
+				}
+			}
 		}
 		return ampTheme;
 	}
@@ -266,10 +299,18 @@ public class ProgramUtil {
 				themeInd.add(tempPrgInd);
 			}
 		}
-		catch(Exception ex)
-		{
+		catch(Exception ex) {
 			logger.error("Exception from getThemeIndicators()  " + ex.getMessage());
 			ex.printStackTrace(System.out);
+		}
+		finally {
+			if (session != null) {
+				try {
+					PersistenceManager.releaseSession(session);
+				} catch (Exception rsf) {
+					logger.error("Release session failed");
+				}
+			}
 		}
 		return themeInd;
 	}
@@ -297,10 +338,18 @@ public class ProgramUtil {
 				col.add(tempPrgIndVal);
 			}
 		}
-		catch(Exception e1)
-		{
+		catch(Exception e1) {
 			logger.error("Error in retrieving the values for indicator with ID : "+themeIndicatorId);
 			logger.debug("Exception : "+e1);
+		}
+		finally {
+			if (session != null) {
+				try {
+					PersistenceManager.releaseSession(session);
+				} catch (Exception rsf) {
+					logger.error("Release session failed");
+				}
+			}
 		}
 		return col;
 	}
@@ -319,11 +368,19 @@ public class ProgramUtil {
                         qry.setParameter("themeIndicatorId",themeIndicatorId,Hibernate.LONG);
                         col = qry.list();
                 }
-                catch(Exception e1)
-                {
+                catch(Exception e1) {
                         logger.error("Error in retrieving the values for indicator with ID : "+themeIndicatorId);
                         logger.debug("Exception : "+e1);
                 }
+                finally {
+        			if (session != null) {
+        				try {
+        					PersistenceManager.releaseSession(session);
+        				} catch (Exception rsf) {
+        					logger.error("Release session failed");
+        				}
+        			}
+        		}
                 return col;
         }
 
@@ -473,13 +530,11 @@ public class ProgramUtil {
 				}
 			}
 		}
-		catch(Exception e1)
-		{
+		catch(Exception e1) {
 			logger.error("Unable to get all the Sub-Themes");
 			logger.debug("Exception : "+e1);
 		}
-		finally
-		{
+		finally {
 			try
 			{
 				if(session != null)
@@ -508,13 +563,11 @@ public class ProgramUtil {
 			qry.setParameter("parentThemeId",parentThemeId,Hibernate.LONG);
 			subThemes = qry.list();
 		}
-		catch(Exception e)
-		{
+		catch(Exception e) {
 			logger.error("Unable to get all the Sub-Themes");
 			logger.debug("Exception : "+e);
 		}
-		finally
-		{
+		finally {
 			try
 			{
 				if(session != null)

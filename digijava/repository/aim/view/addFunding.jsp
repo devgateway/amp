@@ -132,7 +132,7 @@
 			<table width="100%" cellpadding=1 cellspacing=0 bgcolor="#ffffff">
 				<tr>
 					<td width="100%" bgcolor="#006699" class="textalb" height="20" align="center">
-						Funding Item Editor
+						<digi:trn key="aim:FundingItemEditor">Funding Item Editor</digi:trn>
 					</td>
 				</tr>
 				<tr>
@@ -247,22 +247,22 @@
 						<table width="100%" border="0" bgcolor="#f4f4f2" cellspacing="1" cellpadding="0" class=box-border-nopadding>
 							<tr bgcolor="#003366" class="textalb">
 								<td align="center" valign="middle" width="75">
-									<b><font color="white">Planned/<br>Actual</font></b>
+									<b><font color="white"><digi:trn key="aim:Planned">Planned</digi:trn>/<br><digi:trn key="aim:Actual">Actual</digi:trn></font></b>
 								</td>
 								<td align="center" valign="middle" width="120">
 									<a title="<digi:trn key="aim:AmountCommitted">Full amount of expected transfer, irrespective of the time required for the completion of disbursements, in thousands</digi:trn>">
-									<b><font color="white">Amount</font></b></a>
+									<b><font color="white"><digi:trn key="aim:AmountFIE">Amount</digi:trn></font></b></a>
 								</td>
 								<td align="center" valign="middle" width="170">
-								<a title="<digi:trn key="aim:TransactionCurrency">Currency used in the project</digi:trn>">											  <b><font color="white">Currency</font></b></a>
+								<a title="<digi:trn key="aim:TransactionCurrency">Currency used in the project</digi:trn>"><b><font color="white"><digi:trn key="aim:CurrencyFIE">Currency</digi:trn></font></b></a>
 								</td>
 								<td align="center" valign="middle" width="120">
 									<a title="<digi:trn key="aim:CommitmentDate">The date (day, month, year) when funding commitment was signed</digi:trn>">									
-									<b><font color="white">Planned/Actual<br>Commitment Date</font></b></a>
+									<b><font color="white"><digi:trn key="aim:Planned">Planned</digi:trn>/<digi:trn key="aim:Actual">Actual</digi:trn><br><digi:trn key="aim:CommitmentDateFIE">Commitment Date</digi:trn></font></b></a>
 								</td>
 								<td align="center" valign="middle" colspan="2" width="120">
 									<a title="<digi:trn key="aim:PerpectiveofUser">Select perspective (Donor/ MoFED / implementing agency) of user entering the information</digi:trn>">											  
-									<b><font color="white">Perspective</font></b></a>
+									<b><font color="white"><digi:trn key="aim:PerspectiveFIE">Perspective</digi:trn></font></b></a>
 								</td>
 							</tr>
 
@@ -276,8 +276,8 @@
 											<td valign="bottom">
 												<c:set var="index" value="${index+1}"/>
 												<html:select name="fundingDetail" indexed="true" property="adjustmentType" styleClass="inp-text">
-													<html:option value="1">Actual</html:option>	
-													<html:option value="0">Planned</html:option>
+													<html:option value="1"><digi:trn key="aim:Actual">Actual</digi:trn></html:option>	
+													<html:option value="0"><digi:trn key="aim:Planned">Planned</digi:trn></html:option>
 												</html:select>
 												<html:hidden name="fundingDetail" indexed="true" property="transactionType"/>
 											</td>
@@ -308,8 +308,8 @@
 											<td valign="bottom">
 												<html:select name="fundingDetail" indexed="true" property="perspectiveCode" styleClass="inp-text" 
 												disabled="false">
-													<html:option value="DN">Donor</html:option>	
-													<html:option value="MA">MOFED</html:option>
+													<html:option value="DN"><digi:trn key="aim:donor">Donor</digi:trn></html:option>	
+													<html:option value="MA"><digi:trn key="aim:Mofed">MOFED</digi:trn></html:option>
 												</html:select>
 											</td>
 											<td>
@@ -323,13 +323,13 @@
 												&nbsp;
 											</td>
 											<td>
-												Fixed Rate
+												<digi:trn key="aim:FixedRate">Fixed Rate</digi:trn>
 											</td>
 											<td>
-												Exchange Rate		
+												<digi:trn key="aim:ExchangeRate">Exchange Rate</digi:trn>		
 											</td>
 											<td colspan="3">
-												Currency
+												<digi:trn key="aim:CurrencyFIE">Currency</digi:trn>
 											</td>
 										</tr>										
 										<tr>
@@ -379,8 +379,8 @@
 											<td valign="bottom">
 												<c:set var="index" value="${index+1}"/>
 												<html:select name="fundingDetail" indexed="true" property="adjustmentType" styleClass="inp-text">
-													<html:option value="1">Actual</html:option>	
-													<html:option value="0">Planned</html:option>
+													<html:option value="1"><digi:trn key="aim:Actual">Actual</digi:trn></html:option>	
+													<html:option value="0"><digi:trn key="aim:Planned">Planned</digi:trn></html:option>
 												</html:select>
 												<html:hidden name="fundingDetail" indexed="true" property="transactionType"/>
 											</td>
@@ -411,8 +411,8 @@
 											<td valign="bottom">
 												<html:select name="fundingDetail" indexed="true" property="perspectiveCode" styleClass="inp-text" 
 												disabled="false">
-													<html:option value="DN">Donor</html:option>	
-													<html:option value="MA">MOFED</html:option>
+													<html:option value="DN"><digi:trn key="aim:donor">Donor (s)</digi:trn></html:option>	
+													<html:option value="MA"><digi:trn key="aim:Mofed">MOFED</digi:trn></html:option>
 												</html:select>
 											</td>
 											<td>
@@ -527,23 +527,23 @@
 						<table width="100%" border="0" bgcolor="#f4f4f2" cellspacing="1" cellpadding="0" class=box-border-nopadding>
 							<tr bgcolor="#003366" class="textalb">
 								<td align="center" valign="middle" width="75">
-									<b><font color="white">Planned/<br>Actual</font></b>
+									<b><font color="white"><digi:trn key="aim:Planned">Planned</digi:trn>/<br><digi:trn key="aim:Actual">Actual</digi:trn></font></b>
 								</td>
 								<td align="center" valign="middle" width="120">
 									<a title="<digi:trn key="aim:AmountCommitted">Full amount of expected transfer, irrespective of the time required for the completion of disbursements, in thousands</digi:trn>">
-									<b><font color="white">Amount</font></b></a>
+									<b><font color="white"><digi:trn key="aim:AmountFIE">Amount</digi:trn></font></b></a>
 								</td>
 								<td align="center" valign="middle" width="170">
 									<a title="<digi:trn key="aim:TransactionCurrency">Currency used in the project</digi:trn>">
-									<b><font color="white">Currency</font></b></a>
+									<b><font color="white"><digi:trn key="aim:CurrencyFIE">Currency</digi:trn></font></b></a>
 								</td>
 								<td align="center" valign="middle" width="120">
 								<a title="<digi:trn key="aim:DateofDisbursement">Date of actual international transfer of financial resources</digi:trn>">
-								<b><font color="white">Planned/Actual<br>Disbursement Date</font></b></a>
+								<b><font color="white"><digi:trn key="aim:Planned">Planned</digi:trn>/<digi:trn key="aim:Actual">Actual</digi:trn><br><digi:trn key="aim:DisbursementDate">Disbursement Date</digi:trn></font></b></a>
 								</td>
 								<td align="center" valign="middle" colspan="2" width="120">
 									<a title="<digi:trn key="aim:PerpectiveofUser">Select perspective (Donor/ MoFED / implementing agency) of user entering the information</digi:trn>">											  
-									<b><font color="white">Perspective</font></b></a>
+									<b><font color="white"><digi:trn key="aim:PerspectiveFIE">Perspective</digi:trn></font></b></a>
 								</td>
 							</tr>
 							<c:if test="${ !empty aimEditActivityForm.fundingDetails}">
@@ -556,8 +556,8 @@
 											<td valign="bottom">
 												<c:set var="index" value="${index+1}"/>
 												<html:select name="fundingDetail" indexed="true" property="adjustmentType" styleClass="inp-text" >
-													<html:option value="1">Actual</html:option>	
-													<html:option value="0">Planned</html:option>
+													<html:option value="1"><digi:trn key="aim:Actual">Actual</digi:trn></html:option>	
+													<html:option value="0"><digi:trn key="aim:Planned">Planned</digi:trn></html:option>
 												</html:select>
 												<html:hidden name="fundingDetail" indexed="true" property="transactionType"/>									
 											</td>
@@ -588,8 +588,8 @@
 											<td valign="bottom">
 												<html:select name="fundingDetail" indexed="true" property="perspectiveCode" styleClass="inp-text" 
 												disabled="false">
-													<html:option value="DN">Donor</html:option>	
-													<html:option value="MA">MOFED</html:option>
+													<html:option value="DN"><digi:trn key="aim:donor">Donor</digi:trn></html:option>	
+													<html:option value="MA"><digi:trn key="aim:Mofed">MOFED</digi:trn></html:option>
 												</html:select>
 											</td>
 											<td>
@@ -606,8 +606,8 @@
 											<td valign="bottom">
 												<c:set var="index" value="${index+1}"/>
 												<html:select name="fundingDetail" indexed="true" property="adjustmentType" styleClass="inp-text" >
-													<html:option value="1">Actual</html:option>	
-													<html:option value="0">Planned</html:option>
+													<html:option value="1"><digi:trn key="aim:Actual">Actual</digi:trn></html:option>	
+													<html:option value="0"><digi:trn key="aim:Planned">Planned</digi:trn></html:option>
 												</html:select>
 												<html:hidden name="fundingDetail" indexed="true" property="transactionType"/>									
 											</td>
@@ -638,8 +638,8 @@
 											<td valign="bottom">
 												<html:select name="fundingDetail" indexed="true" property="perspectiveCode" styleClass="inp-text" 
 												disabled="false">
-													<html:option value="DN">Donor</html:option>	
-													<html:option value="MA">MOFED</html:option>
+													<html:option value="DN"><digi:trn key="aim:donor">Donor</digi:trn></html:option>	
+													<html:option value="MA"><digi:trn key="aim:Mofed">MOFED</digi:trn></html:option>
 												</html:select>
 											</td>
 											<td>
@@ -696,22 +696,23 @@
 						<table width="100%" border="0" bgcolor="#f4f4f2" cellspacing="1" cellpadding="0" class=box-border-nopadding>
 							<tr bgcolor="#003366" class="textalb">
 								<td align="center" valign="middle" width="75">
-									<b><font color="white">Planned/<br>Actual</font></b>
+									<b><font color="white"><digi:trn key="aim:Planned">Planned</digi:trn>/<br><digi:trn key="aim:Actual">Actual</digi:trn></font></b>
 								</td>
 								<td align="center" valign="middle" width="120">
 									<a title="<digi:trn key="aim:AmountCommitted">Full amount of expected transfer, irrespective of the time required for the completion of disbursements, in thousands</digi:trn>">
-									<b><font color="white">Amount</font></b></a>
+									<b><font color="white"><digi:trn key="aim:AmountFIE">Amount</digi:trn></font></b></a>
 								</td>
 								<td align="center" valign="middle" width="170">
-									<a title="<digi:trn key="aim:TransactionCurrency">Currency used in the project</digi:trn>">								   		  <b><font color="white">Currency</font></b></a>
+									<a title="<digi:trn key="aim:TransactionCurrency">Currency used in the project</digi:trn>">			
+										<b><font color="white"><digi:trn key="aim:CurrencyFIE">Currency</digi:trn></font></b></a>
 								</td>
 								<td align="center" valign="middle" width="120">
 									<a title="<digi:trn key="aim:DateofExpenditure">Date of actual expenditure</digi:trn>">
-									<b><font color="white">Planned/Actual<br>Expenditure Date</font></b></a>
+									<b><font color="white"><digi:trn key="aim:Planned">Planned</digi:trn>/<digi:trn key="aim:Actual">Actual</digi:trn><br><digi:trn key="aim:ExpenditureDate">Expenditure Date</digi:trn></font></b></a>
 								</td>
 								<td align="center" valign="middle" colspan="2" width="120">
 									<a title="<digi:trn key="aim:PerpectiveofUser">Select perspective (Donor/ MoFED / implementing agency) of user entering the information</digi:trn>">											  
-									<b><font color="white">Perspective</font></b></a>
+									<b><font color="white"><digi:trn key="aim:PerspectiveFIE">Perspective</digi:trn></font></b></a>
 								</td>
 							</tr>
 							<c:if test="${ !empty aimEditActivityForm.fundingDetails}">
@@ -728,8 +729,8 @@
 														<td valign="bottom">
 															<c:set var="index" value="${index+1}"/>
 															<html:select name="fundingDetail" indexed="true" property="adjustmentType" styleClass="inp-text" >
-																<html:option value="1">Actual</html:option>	
-																<html:option value="0">Planned</html:option>
+																<html:option value="1"><digi:trn key="aim:Actual">Actual</digi:trn></html:option>	
+																<html:option value="0"><digi:trn key="aim:Planned">Planned</digi:trn></html:option>
 															</html:select>
 															<html:hidden name="fundingDetail" indexed="true" property="transactionType"/>									
 														</td>
@@ -761,8 +762,8 @@
 														<td valign="bottom">
 															<html:select name="fundingDetail" indexed="true" property="perspectiveCode" styleClass="inp-text"
 															disabled="false">
-																<html:option value="DN">Donor</html:option>	
-																<html:option value="MA">MOFED</html:option>
+																<html:option value="DN"><digi:trn key="aim:donor">Donor</digi:trn></html:option>	
+																<html:option value="MA"><digi:trn key="aim:Mofed">MOFED</digi:trn></html:option>
 															</html:select>
 														</td>
 														<td>
@@ -796,8 +797,8 @@
 														<td valign="bottom">
 															<c:set var="index" value="${index+1}"/>
 															<html:select name="fundingDetail" indexed="true" property="adjustmentType" styleClass="inp-text" >
-																<html:option value="1">Actual</html:option>	
-																<html:option value="0">Planned</html:option>
+																<html:option value="1"><digi:trn key="aim:Actual">Actual</digi:trn></html:option>	
+																<html:option value="0"><digi:trn key="aim:Planned">Planned</digi:trn></html:option>
 															</html:select>
 															<html:hidden name="fundingDetail" indexed="true" property="transactionType"/>									
 														</td>
@@ -829,8 +830,8 @@
 														<td valign="bottom">
 															<html:select name="fundingDetail" indexed="true" property="perspectiveCode" styleClass="inp-text" 
 															disabled="false">
-																<html:option value="DN">Donor</html:option>	
-																<html:option value="MA">MOFED</html:option>
+																<html:option value="DN"><digi:trn key="aim:donor">Donor</digi:trn></html:option>	
+																<html:option value="MA"><digi:trn key="aim:Mofed">MOFED</digi:trn></html:option>
 															</html:select>
 														</td>
 														<td>

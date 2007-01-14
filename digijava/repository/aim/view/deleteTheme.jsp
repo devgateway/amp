@@ -163,9 +163,8 @@ function cancel() {
 																	<c:if test="${aimAddThemeForm.flag == 'activityReferences'}">
 																	<tr>
 																		<td colspan="2" align="center">
-																			<b><digi:trn key="aim:cannotDeleteThemeMsg1">
-																			Cannot Delete the theme since some 
-																			activities references it.
+																			<b><digi:trn key="aim:cannotDeleteProgram">
+																			Cannot delete this program as one or more activities reference it.
 																			</digi:trn></b>
 																		</td>
 																	</tr>																	

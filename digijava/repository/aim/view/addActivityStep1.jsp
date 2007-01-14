@@ -585,12 +585,19 @@ function popupwin()
 												<td bgcolor="#ffffff">
 														<html:select property="status" styleClass="inp-text">
 														<html:option value="-1">Please select the status</html:option>
-														<html:optionsCollection name="aimEditActivityForm" property="statusCollection" 
-														value="ampStatusId" label="name" />
+														<logic:iterate name="aimEditActivityForm" property="statusCollection" 
+														id="ampStatusId" >
+														<option value="<%=ampStatusId%>"> 
+													 		 <bean:define id="ampStatusName" name="ampStatusId" property="name" />
+															<digi:trn key="<%= "aim:" + ampStatusName%>">
+																<bean:write name="ampStatusId" property="name"/>
+															</digi:trn>
+														</option>
+														</logic:iterate>
 													</html:select>													
 													<br><br>
 													If there have been some changes in the status, explain below the reasons :
-													<a title="<digi:trn key="aim:ReasonforStatusofProject">Use this space to provide explanations as to why that status was selected. Used primarily in the case of cancelled and suspended projects</digi:trn>">
+													<a title='<digi:trn key="aim:ReasonforStatusofProject">Use this space to provide explanations as to why that status was selected. Used primarily in the case of cancelled and suspended projects</digi:trn>'>
 													<br>														
 													<html:textarea property="statusReason" cols="50" rows="3" styleClass="inp-text" />
 													</a>														

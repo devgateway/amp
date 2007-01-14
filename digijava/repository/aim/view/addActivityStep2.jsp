@@ -295,11 +295,18 @@ function popupwin()
 																		title="<digi:trn key="aim:impleLevel">Federal and regional programs are the scope of a project. They are a classification of the sponsorship of the project or program. This works in conjunction with location</digi:trn>">
 																	<digi:trn key="aim:implementLevel">Implementation Level</digi:trn></a>&nbsp;
 																	</td>
-																	<td><html:select property="level" styleClass="inp-text">
-																		<html:option value="-1">Select Level</html:option>
-																		<html:optionsCollection name="aimEditActivityForm"
-																			property="levelCollection" value="ampLevelId"
-																			label="name" />
+																	<td>
+																		<html:select property="level" styleClass="inp-text">
+																			<html:option value="-1">Select Level</html:option>
+																			<logic:iterate name="aimEditActivityForm" property="levelCollection" id="ampLevelId" >
+																				<option value="<%=ampLevelId%>"> 
+																		 		 <bean:define id="ampLevelName" name="ampLevelId" property="name" />
+																				 <digi:trn key="<%= "aim:" + ampLevelName%>">
+																					<bean:write name="ampLevelId" property="name"/>
+																				 </digi:trn>
+																				</option>
+																			</logic:iterate>
+																			
 																	</html:select></td>
 																</tr>
 																<tr>
@@ -314,10 +321,10 @@ function popupwin()
 																	<td vAlign="center"><br>
 																	<html:select property="implementationLevel"
 																		styleClass="inp-text">
-																		<html:option value="country">Country</html:option>
-																		<html:option value="region">Region</html:option>
-																		<html:option value="zone">Zone</html:option>
-																		<html:option value="woreda"><digi:trn key="aim:district">District </digi:trn></html:option>
+																		<html:option value="country"><digi:trn key="aim:CountryStep2">Country</digi:trn></html:option>
+																		<html:option value="region"><digi:trn key="aim:RegionStep2">Region</digi:trn></html:option>
+																		<html:option value="zone"><digi:trn key="aim:ZoneStep2">Zone</digi:trn></html:option>
+																		<html:option value="woreda"><digi:trn key="aim:DistrictStep2">District </digi:trn></html:option>
 																	</html:select></td>
 																</tr>
 															</table>

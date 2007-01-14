@@ -188,7 +188,7 @@
 					<td width="3%">&nbsp;</td>				
 					<td align=right class=f-names noWrap>
 						<FONT color=red>*</FONT>
-						<digi:trn key="um:organizationType">Organization Type</digi:trn>
+						<digi:trn key="um:organizationType!??">Organization Type!!</digi:trn>
 					</td>
 					<td align="left">
 						<html:select property="selectedOrgType" styleClass="inp-text" onchange="optionChanged('otype')">

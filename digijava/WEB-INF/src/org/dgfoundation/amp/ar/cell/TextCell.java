@@ -77,5 +77,9 @@ public class TextCell extends Cell {
 		if(getTextLength()>shortLength) return true;
 		return false;
 	}
+
+	public Comparable comparableToken() {
+		return value;
+	}
 	
 }

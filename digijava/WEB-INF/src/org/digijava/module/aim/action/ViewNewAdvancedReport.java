@@ -28,7 +28,7 @@ import org.digijava.module.aim.dbentity.AmpReports;
  * 
  * @author Mihai Postelnicu - mpostelnicu@dgfoundation.org
  * @since Jul 15, 2006
- *
+ * 
  */
 public class ViewNewAdvancedReport extends Action {
 
@@ -46,19 +46,37 @@ public class ViewNewAdvancedReport extends Action {
 	public ActionForward execute(ActionMapping mapping, ActionForm form, 
 			HttpServletRequest request, HttpServletResponse response) throws java.lang.Exception
 			{
+		HttpSession hs = request.getSession();
 
+		// test if the request was for sorting purposes:
+		String sortBy=request.getParameter("sortBy");
+		if(sortBy!=null) {
+			hs.setAttribute("sortBy",sortBy);
+			GroupReportData oldRd=(GroupReportData) hs.getAttribute("report");
+			AmpReports ar=(AmpReports) hs.getAttribute("reportMeta");
+			oldRd.setSorterColumn(sortBy);
+			oldRd.setGlobalHeadingsDisplayed(new Boolean(false));
+			String viewFormat=request.getParameter("viewFormat");
+			if(viewFormat==null) viewFormat=GenericViews.HTML;
+			request.setAttribute("viewFormat",viewFormat);
+			hs.setAttribute("report",oldRd);
+			request.setAttribute("ampReportId",ar.getAmpReportId().toString());			
+			return mapping.findForward("forward");	
+		}
+		
 				GroupReportData rd=ARUtil.generateReport(mapping,form,request,response);
-				HttpSession hs = request.getSession();
+				
 				String ampReportId = request.getParameter("ampReportId");
 				
 				if (rd==null) return mapping.findForward("index");
-		
+			
 				Session session = PersistenceManager.getSession();
 				
 				String viewFormat=request.getParameter("viewFormat");
 				if(viewFormat==null) viewFormat=GenericViews.HTML;
-
 				request.setAttribute("viewFormat",viewFormat);
+
+				
 				
 				AmpReports reportMeta = (AmpReports) session.get(AmpReports.class, new Long(ampReportId));
 				request.setAttribute("extraTitle",reportMeta.getName());

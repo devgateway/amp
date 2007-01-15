@@ -248,5 +248,9 @@ public class AmountCell extends Cell {
 	public Cell newInstance() {
 		return new AmountCell();
 	}
+
+	public Comparable comparableToken() {
+		return new Double(getAmount());
+	}
 	
 }

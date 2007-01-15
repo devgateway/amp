@@ -155,5 +155,10 @@ public class ListCell extends Cell {
 	public Cell newInstance() {
 		return new ListCell();
 	}
+
+
+	public Comparable comparableToken() {
+		return getCell(0).comparableToken();
+	}
 	
 }

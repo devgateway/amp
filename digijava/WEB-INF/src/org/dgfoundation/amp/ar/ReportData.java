@@ -7,9 +7,9 @@
 package org.dgfoundation.amp.ar;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Set;
 
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.ar.exception.IncompatibleColumnException;
@@ -34,13 +34,20 @@ public abstract class ReportData extends Viewable {
 
 	protected List items;
 	
+	protected String sortByColumn;
+	protected boolean sortAscending;
+	
 	protected ReportData parent;
 	
 	protected AmpReports reportMetadata;
 	
-	public abstract Set getOwnerIds();
+	public abstract Collection getOwnerIds();
 
 	public abstract Integer getSourceColsCount();
+	
+	public abstract String getSorterColumn();
+	
+	public abstract boolean getSortAscending();
 	
 	public int getTotalUniqueRows() {
 		return getOwnerIds().size();
@@ -77,7 +84,7 @@ public abstract class ReportData extends Viewable {
 	
 	/**
 	 * Hierarchy generator. This method splits horizontally a report into subReports,
-	 * based on categories (hierarchies). Descendants will support this for any type
+	 * based on categories (hierarchies). Descendants will support thgetSortByColumnis for any type
 	 * of ReportData object (nested or plain). 
 	 * @param columnName
 	 * @return

@@ -27,7 +27,25 @@
 	<% int rowsp=column.getCurrentRowSpan(); %>
 	<logic:iterate name="column" property="subColumnList" id="subColumn" scope="page" type="org.dgfoundation.amp.ar.Column">
 	<td align="center" class=clsTableTitleCol rowspan="<%=rowsp%>" colspan='<bean:write name="subColumn" property="width"/>'>
-	<%=subColumn.getName(reportMeta.getHideActivities())%>
+	
+	<logic:equal name="column" property="columnDepth" value="1">
+	<html:link styleClass="reportHeading" page="/viewNewAdvancedReport.do" paramName="column" paramProperty="name" paramId="sortBy">
+		<%=subColumn.getName(reportMeta.getHideActivities())%>
+	</html:link>
+	<c:if test="${column.name == columnReport.sorterColumn}">
+	<logic:equal name="columnReport" property="sortAscending" value="false">
+	<img src= "../ampTemplate/images/down.gif" align="absmiddle" border="0"/>
+	</logic:equal>
+	<logic:equal name="columnReport" property="sortAscending" value="true">
+	<img src= "../ampTemplate/images/up.gif" align="absmiddle" border="0"/>
+	</logic:equal>
+
+	</c:if>
+	
+	</logic:equal>
+	<logic:notEqual name="column" property="columnDepth" value="1">
+		<%=subColumn.getName(reportMeta.getHideActivities())%>
+	</logic:notEqual>
 	</td>
 	
 	</logic:iterate>

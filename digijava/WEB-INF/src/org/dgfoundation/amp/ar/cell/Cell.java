@@ -5,6 +5,7 @@
  */
 package org.dgfoundation.amp.ar.cell;
 
+import java.util.Comparator;
 import java.util.Set;
 
 import org.apache.log4j.Logger;
@@ -12,6 +13,7 @@ import org.dgfoundation.amp.ar.Column;
 import org.dgfoundation.amp.ar.ColumnIdentifiable;
 import org.dgfoundation.amp.ar.RowIdentifiable;
 import org.dgfoundation.amp.ar.Viewable;
+import org.dgfoundation.amp.ar.workers.ColumnWorker;
 
 
 /**
@@ -31,6 +33,16 @@ import org.dgfoundation.amp.ar.Viewable;
  */
 public abstract class Cell extends Viewable implements RowIdentifiable, ColumnIdentifiable, Comparable {
 
+	public static class CellComparator implements Comparator { 
+		public final int compare (Object o1, Object o2) {
+			Cell c1=(Cell) o1;
+			Cell c2=(Cell) o2;
+			return c1.comparableToken().compareTo(c2.comparableToken());
+		}
+	}
+	
+	protected Comparator sorter; 
+	
 	protected Long ownerId;
 	protected Long id;
 	protected Column column;
@@ -48,12 +60,14 @@ public abstract class Cell extends Viewable implements RowIdentifiable, ColumnId
 	 */
 	public abstract Class getWorker();
 	
-	
+
 	public int compareTo(Object o) {
 		Cell c=(Cell) o;
 		return ((Comparable)this.getValue()).compareTo(c.getValue());
 	}
 	
+	public abstract Comparable comparableToken();
+		
 	
 	public Cell() {
 		show=true;

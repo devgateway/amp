@@ -71,6 +71,9 @@ public class CSVExportAction extends Action {
 
 		grdx.setMetadata(r);
 
+		String sortBy=(String) session.getAttribute("sortBy");
+		if(sortBy!=null) rd.setSorterColumn(sortBy); 
+	
 		
 		//show title+desc
 		rowId.inc();

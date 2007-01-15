@@ -7,6 +7,7 @@
 package org.dgfoundation.amp.ar;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Iterator;
 import java.util.Set;
 import java.util.TreeSet;
@@ -176,7 +177,7 @@ public class GroupReportData extends ReportData {
 	 * 
 	 * @see org.dgfoundation.amp.ar.ReportData#getOwnerIds()
 	 */
-	public Set getOwnerIds() {
+	public Collection getOwnerIds() {
 		Set ret = new TreeSet();
 		Iterator i = items.iterator();
 		while (i.hasNext()) {
@@ -186,6 +187,25 @@ public class GroupReportData extends ReportData {
 		return ret;
 	}
 
+	public String getSorterColumn() {
+		if (parent == null)
+			return sortByColumn;
+		else
+			return parent.getSorterColumn();
+	}
 
+	public boolean getSortAscending() {
+		if (parent == null)
+			return sortAscending;
+		else
+			return parent.getSortAscending();
+	}
 
+	
+	public void setSorterColumn(String sortByColumn) {
+		if(sortByColumn.equals(this.sortByColumn)) sortAscending= !sortAscending; else sortAscending=true; 
+		this.sortByColumn=sortByColumn;
+	}
+	
+	
 }

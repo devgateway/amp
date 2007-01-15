@@ -115,5 +115,10 @@ public class DateCell extends Cell {
 	public void setEthiopianDate(boolean ethiopianDate) {
 		this.ethiopianDate = ethiopianDate;
 	}
+
+
+	public Comparable comparableToken() {
+		return value;
+	}
 	
 }

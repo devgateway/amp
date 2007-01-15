@@ -56,6 +56,9 @@ public class XLSExportAction extends Action {
 	        HttpSession session=request.getSession();
 			AmpReports r=(AmpReports) session.getAttribute("reportMeta");
 		
+		String sortBy=(String) session.getAttribute("sortBy");
+		if(sortBy!=null) rd.setSorterColumn(sortBy); 
+			
 		XLSExporter.resetStyles();
 	        
 		

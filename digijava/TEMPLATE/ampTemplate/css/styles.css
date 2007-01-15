@@ -79,6 +79,35 @@ A.heading:hover
 	TEXT-DECORATION: none
 }
 
+A.reportHeading
+{
+	FONT-SIZE: 12px;
+	TEXT-TRANSFORM: uppercase; 
+	COLOR: #d6d6d6; 
+   FONT-FAMILY: Verdana, Arial, Helvetica, sans-serif;
+	LETTER-SPACING: 2px; 
+	TEXT-DECORATION: none
+}
+
+A.reportHeading:visited 
+{
+	FONT-SIZE: 12px;
+	TEXT-TRANSFORM: uppercase; 
+	COLOR: #d6d6d6; 
+	LETTER-SPACING: 2px; 
+	TEXT-DECORATION: none
+}
+
+A.reportHeading:hover 
+{
+	FONT-SIZE: 12px;
+	TEXT-TRANSFORM: uppercase; 
+	COLOR: #d6d6d6; 
+	LETTER-SPACING: 2px; 
+	TEXT-DECORATION: none
+}
+
+
 A.nav 
 {
 	PADDING-TOP: 5px; 	

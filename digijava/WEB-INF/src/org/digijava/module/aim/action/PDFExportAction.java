@@ -84,6 +84,10 @@ public class PDFExportAction extends Action implements PdfPageEvent{
 		HttpSession session=request.getSession();
 		noteFromSession=AmpReports.getNote(request.getSession());
 		AmpReports r=(AmpReports) session.getAttribute("reportMeta");
+
+		String sortBy=(String) session.getAttribute("sortBy");
+		if(sortBy!=null) rd.setSorterColumn(sortBy); 
+	
 		
 		document.open();
 

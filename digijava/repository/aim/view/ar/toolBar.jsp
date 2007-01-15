@@ -4,6 +4,7 @@
 <%@ taglib uri="/taglib/struts-html" prefix="html" %>
 
 <% String ampReportId=request.getParameter("ampReportId");
+	if(ampReportId==null) ampReportId=(String)request.getAttribute("ampReportId");
 	 request.setAttribute("ampReportId",ampReportId);
    String viewParam="";
    if("reset".equals(request.getParameter("view"))) viewParam="?view=reset";

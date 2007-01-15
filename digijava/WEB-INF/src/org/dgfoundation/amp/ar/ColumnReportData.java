@@ -8,6 +8,8 @@ package org.dgfoundation.amp.ar;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
@@ -164,14 +166,60 @@ public class ColumnReportData extends ReportData {
 	 * 
 	 * @see org.dgfoundation.amp.ar.ReportData#getOwnerIds()
 	 */
-	public Set getOwnerIds() {
-		Set ret = new TreeSet();
+	public Collection getOwnerIds() {
+		//get the entire set of ids:
+		try {
+		Set allIds = new TreeSet();
 		Iterator i = items.iterator();
 		while (i.hasNext()) {
 			Column element = (Column) i.next();
-			ret.addAll(element.getOwnerIds());
+			allIds.addAll(element.getOwnerIds());
 		}
-		return ret;
+		
+		//if there is no sorter column, just return all ids
+		if(this.getSorterColumn()==null) return allIds;
+		
+		
+		//if we have a sorter column, get all its items:
+		List sorterItems=this.getColumn(this.getSorterColumn()).getItems();
+		
+		
+		//remove null values
+		i=sorterItems.iterator();
+		while (i.hasNext()) {
+			Cell element = (Cell) i.next();
+			if(element.getValue()==null) i.remove();
+		}
+		
+		
+		Collections.sort(sorterItems,new Cell.CellComparator());
+		
+		//we read all the ownerIds from the sortedItems;
+		List sortedIds=new ArrayList();
+		HashMap referenceIds=new HashMap();
+		i=sorterItems.iterator();
+		while (i.hasNext()) {
+			Cell element = (Cell) i.next();
+			sortedIds.add(element.getOwnerId());
+			referenceIds.put(element.getOwnerId(),element.getOwnerId());
+		}
+		
+		//we iterate allIds and see if we have more ids that are not present in the sortedIds. If yes, we add them at bottom:
+		i=allIds.iterator();
+		while (i.hasNext()) {
+			Long element = (Long) i.next();
+			if(!referenceIds.containsKey(element)) sortedIds.add(element);
+		}
+		
+		if(!getSortAscending()) Collections.reverse(sortedIds);
+		
+		return sortedIds;
+		} catch (Exception e) {
+			e.printStackTrace();
+			logger.error(e);
+			return null;
+		}
+		
 	}
 
 	/*
@@ -249,4 +297,13 @@ public class ColumnReportData extends ReportData {
 		return parent.getSourceColsCount();
 	}
 
+	public String getSorterColumn() {
+		return parent.getSorterColumn();
+	}
+
+	public boolean getSortAscending() {
+		return parent.getSortAscending();
+	}
+
+	
 }

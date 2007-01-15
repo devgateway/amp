@@ -142,9 +142,15 @@
 													<jsp:useBean id="urlParams1" type="java.util.Map" class="java.util.HashMap"/>
 													<c:set target="${urlParams1}" property="page"><%=pages%>
 													</c:set>
-													<digi:link href="/orgGroupManager.do" name="urlParams1">
-														<%=pages%>
-													</digi:link> |&nbsp; </logic:iterate>
+													<c:if test="${aimOrgGroupManagerForm.currentPage == pages}">
+													<font color="#FF0000"><%=pages%></font> |&nbsp;
+													</c:if>
+													<c:if test="${aimOrgGroupManagerForm.currentPage != pages}">
+														<digi:link href="/orgGroupManager.do" name="urlParams1">
+															<%=pages%>
+														</digi:link> |&nbsp; 
+													</c:if>
+													</logic:iterate>
 												</td>
 											</tr>
 											</logic:notEmpty>

@@ -42,7 +42,7 @@ public class OrgGroupManager extends Action {
 								 */
 								page = Integer.parseInt(request.getParameter("page"));
 					 }
-
+					 orgForm.setCurrentPage(new Integer(page));
 					 Collection ampOrg = (Collection)session.getAttribute("ampOrgGrp");
 					 if (ampOrg == null) {
 					 	ampOrg = DbUtil.getAllOrganisationGroup();

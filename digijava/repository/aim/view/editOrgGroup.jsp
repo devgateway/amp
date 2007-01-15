@@ -103,7 +103,7 @@
 				<tr>
 					<td height=16 vAlign=center width=571><span class=subtitle-blue>
 						<digi:trn key="aim:orgGroupManager">
-						Oraganization Group Manager
+						Organization Group Manager
 						</digi:trn>
 						</span>
 						<br>

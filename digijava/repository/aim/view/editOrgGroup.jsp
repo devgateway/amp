@@ -143,7 +143,7 @@
 																<table width="100%" border=0	 bgColor=#f4f4f2>
 																	<tr>
 																		<td width="30%" align="right">
-																		<digi:trn key="aim:orgGroupName">Name</digi:trn>	</td>
+																		<digi:trn key="aim:orgGroupName">Name</digi:trn><font color="#ff0000">*</font>	</td>
 																	    <td width="30%" >
 																	          <html:text property="orgGrpName" size="35" />
 																	    </td>
@@ -159,7 +159,7 @@
 																	</tr>
 																	<tr>
 																		<td width="30%" align="right">
-																	        <digi:trn key="aim:orgGroupType">Type</digi:trn>
+																	        <digi:trn key="aim:orgGroupType">Type</digi:trn><font color="#ff0000">*</font>
 																		</td>
 																		<td width="30%">
 																	          <html:select property="orgTypeId">

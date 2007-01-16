@@ -216,8 +216,8 @@ function selectAllOrgs() {
                         <script type="text/javascript" src="/thirdparty/CalendarPopup/CalendarPopup.js"></script>
                         <script type="text/javascript" src="/thirdparty/CalendarPopup/date.js"></script>
                         <script type="text/javascript">
-                            var startDateCalendar = new CalendarPopup();
-                            startDateCalendar.setWeekStartDay(1);
+                            //var startDateCalendar = new CalendarPopup();
+                            //startDateCalendar.setWeekStartDay(1);
                         </script>
                         <td nowrap="nowrap">
                             <table cellpadding="0" cellspacing="0">
@@ -327,8 +327,8 @@ function selectAllOrgs() {
                     <td nowrap="nowrap">&nbsp;<span class="redbold">*</span>To&nbsp;&nbsp;</td>
                     <c:if test="${calendarEventForm.selectedCalendarTypeId == 0}">
                         <script type="text/javascript">
-                            var endDateCalendar = new CalendarPopup();
-                            endDateCalendar.setWeekStartDay(1);
+                            //var endDateCalendar = new CalendarPopup();
+                            //endDateCalendar.setWeekStartDay(1);
                         </script>
                         <td nowrap="nowrap">
                             <table cellpadding="0" cellspacing="0">

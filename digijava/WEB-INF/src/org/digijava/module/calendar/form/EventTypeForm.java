@@ -54,6 +54,7 @@ public class EventTypeForm
     public void setDeleteId(long deleteId) {
         this.deleteId = deleteId;
     }
+
     public ActionErrors validate(ActionMapping mapping,
                                  HttpServletRequest httpServletRequest) {
         ActionErrors errors = new ActionErrors();
@@ -70,6 +71,7 @@ public class EventTypeForm
 
             }*/
         }
+
         try{
             List eventTypes = new ArrayList(AmpDbUtil.getEventTypes());
             if(eventTypes != null) {
@@ -77,7 +79,7 @@ public class EventTypeForm
                 while(etItr.hasNext()) {
                     AmpEventType et = (AmpEventType) etItr.next();
                     if(et.getColor().equalsIgnoreCase(getAddColor())) {
-                        errors.add(null, new ActionError("error.calendar.colorAllredyExist"));
+                        errors.add(null, new ActionError("error.calendar.colorAlreadyExist"));
                         break;
                     }
                 }
@@ -87,7 +89,7 @@ public class EventTypeForm
                 while(etItr.hasNext()) {
                     AmpEventType et = (AmpEventType) etItr.next();
                     if(et.getName().equalsIgnoreCase(getAddName())) {
-                        errors.add(null, new ActionError("error.calendar.nameAllredyExist"));
+                        errors.add(null, new ActionError("error.calendar.nameAlreadyExist"));
                         break;
                     }
                 }

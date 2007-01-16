@@ -29,6 +29,11 @@
 			 }
 	
 	}
+	function cancel(id)
+ 	{
+		window.location="/aim/updateSectorSchemes.do~ampSecSchemeparentId="+id+"~event=edit~dest=admin";
+		return true;
+ 	}
 </script>
 <digi:errors/>
 <digi:instance property="aimAddSectorForm" />
@@ -153,13 +158,16 @@
 		<td colspan="2" width="60%">
 			<table width="100%" cellspacing="5">
 				<tr>
-					<td width="50%" align="right">
+					<td  align="right">
 					<%--
 						<html:submit value="Save" styleClass="dr-menu"/>--%>
-							<input  type="button" name="addBtn" value="Save" onclick="updateScheme('<bean:write name="aimAddSectorForm" property="parentId" />')"
+							<input  type="button" class="dr-menu" name="addBtn" value="Save" onclick="updateScheme('<bean:write name="aimAddSectorForm" property="parentId" />')" />
 					</td>
-					<td width="50%" align="left">
-						<html:reset value="Cancel" styleClass="dr-menu"/>
+					<td  align="right">
+						<html:reset value="Clear" styleClass="dr-menu"/>
+					</td>
+					<td  align="left">
+						<input type="button" value="Cancel" class="dr-menu" onclick="cancel('<bean:write name="aimAddSectorForm" property="parentId" />')"/>
 					</td>
 				</tr>
 			</table>

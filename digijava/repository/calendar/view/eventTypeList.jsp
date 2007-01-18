@@ -84,6 +84,9 @@ function chooseColor(){
                       <html:text name="eventType" property="color" indexed="true" readonly="true" style="font-family:verdana;font-size:9pt;"/>
                     </td>
                     <td>
+                      <input type="text" style="width:25px;font-family:verdana;font-size:9pt;background:${eventType.color}" id="colorDisp" name="colorDisp" disabled="disabled"/>
+                    </td>
+                    <td>
                       <input type="button" value="Delete" onclick="setDeleteId('${eventType.id}');" style="font-family:verdana;font-size:9pt;"/>
                     </td>
                   </tr>

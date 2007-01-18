@@ -66,10 +66,20 @@ public class EventTypeForm
         if(this.getAddName()==null || this.getAddName().trim().equals("")){
             errors.add(null, new ActionError("error.calendar.emptyEventTypeColor"));
         }else {
-            /*if (!this.getAddColor().matches("^[a-fA-F0-9]{6}$")) {
-                errors.add(null, new ActionError("error.calendar.invalidEventTypeColor"));
+            if(this.getAddName()==null || this.getAddName().trim().equals("")){
+                errors.add(null, new ActionError("error.calendar.emptyEventTypeColor"));
+            }else{
+                String color=this.getAddColor();
+                if(color.charAt(0)!='#'){
+                    errors.add(null, new ActionError("error.calendar.invalidEventTypeColor"));
+                }else{
+                    color=color.substring(1,color.length());
+                }
 
-            }*/
+                if (!color.matches("^[a-fA-F0-9]{6}$")) {
+                    errors.add(null, new ActionError("error.calendar.invalidEventTypeColor"));
+                }
+            }
         }
 
         try{

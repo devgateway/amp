@@ -133,7 +133,6 @@ public class ParisIndicatorManager extends Action
 			Indicid = new Long(a1);
 			parisForm.setIndicatorvalue(Indicid);
 			ParisUtil.deleteParisIndicator(t1);
-			//System.out.println("Am sters un indicator....t="+t1);
 			return mapping.findForward("parisIndiDelete");
 		}
 		if (action != null && action.equals("edit"))

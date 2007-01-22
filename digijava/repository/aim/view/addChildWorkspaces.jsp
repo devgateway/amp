@@ -45,7 +45,13 @@
 	    document.aimUpdateWorkspaceForm.submit();
 		window.close();
 	}	
-
+	
+		function clearFormCheckBoxes() {
+			var el_collection=eval("document.forms.aimUpdateWorkspaceForm.selChildWorkspaces");
+			for (c=0;c<el_collection.length;c++)
+				el_collection[c].checked=false;
+			return true;
+		}
 	-->
 
 </script>
@@ -104,18 +110,19 @@
 						</tr>
 						<tr>
 							<td bgcolor="#ECF3FD"><c:if
-								test="${!empty aimUpdateWorkspaceForm.availChildWorkspaces}">
+								test="${!empty aimUpdateWorkspaceForm.allChildren}">
 								<table width="100%" cellSpacing=2 cellPadding=2 vAlign="top"
 									align="left" border=0>
 									<c:forEach var="workspaces"
-										items="${aimUpdateWorkspaceForm.availChildWorkspaces}">
+										items="${aimUpdateWorkspaceForm.allChildren}">
 										<c:if
 											test="${workspaces.ampTeamId != aimUpdateWorkspaceForm.teamId}">
 											<tr>
-												<td width="3" align="left"><html:multibox
-													property="selChildWorkspaces">
+												<td width="3" align="left">
+												<html:multibox property="selChildWorkspaces">
 													<c:out value="${workspaces.ampTeamId}" />
-												</html:multibox></td>
+												</html:multibox>
+												</td>
 												<td width="98%"><c:out value="${workspaces.name}" /></td>
 											</tr>
 										</c:if>
@@ -126,7 +133,7 @@
 											<tr>
 												<td><input type="button" value="Add" class="dr-menu"
 													onclick="return childWorkspacesAdded()"></td>
-												<td><input type="reset" value="Clear" class="dr-menu"></td>
+												<td><input type="reset" value="Clear" class="dr-menu" onclick="return clearFormCheckBoxes();"></td>
 												<td><input type="button" value="Close" class="dr-menu"
 													onclick="return closeWindow();"></td>
 											</tr>

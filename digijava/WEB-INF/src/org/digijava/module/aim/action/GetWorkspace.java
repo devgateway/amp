@@ -29,7 +29,6 @@ public class GetWorkspace extends Action {
 			throws java.lang.Exception {
 
 		logger.debug("In GetWorkspace");
-		
 		boolean permitted = false;
 		HttpSession session = request.getSession();
 		if (session.getAttribute("ampAdmin") != null) {
@@ -51,7 +50,6 @@ public class GetWorkspace extends Action {
 		
 		UpdateWorkspaceForm uwForm = (UpdateWorkspaceForm) form;
 		uwForm.setUpdateFlag(false);
-		
 		String dest = request.getParameter("dest");
 		String id	= request.getParameter("tId");
 		logger.debug("dest = " + dest);
@@ -79,7 +77,6 @@ public class GetWorkspace extends Action {
 		} catch (NumberFormatException nfe) {
 			// incorrect id.
 		}
-
 		Workspace workspace = TeamUtil.getWorkspace(teamId);
 		if (workspace != null) {
 			uwForm.setTeamId(new Long(workspace.getId()));
@@ -127,7 +124,6 @@ public class GetWorkspace extends Action {
 			uwForm.setChildWorkspaces(workspace.getChildWorkspaces());
 			uwForm.setActionEvent("edit");
 		}			
-
 		logger.debug("Dest value = " + dest);
 		return mapping.findForward(dest);
 	}

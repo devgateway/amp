@@ -197,11 +197,7 @@ public class UpdateWorkspace extends Action {
                 if(newTeam != null) {
                 	if(uwForm.getChildWorkspaces().size()==0 && uwForm.getWorkspaceType().compareTo("Management")==0)
                     {
-                 		errors
-                        .add(
-                            ActionErrors.GLOBAL_ERROR,
-                            new ActionError(
-                                "error.aim.updateWorkspace.noManagementChildSelected"));
+                 		errors.add(ActionErrors.GLOBAL_ERROR, new ActionError("error.aim.updateWorkspace.noManagementChildSelected"));
                     saveErrors(request, errors);
                     logger
                         .debug(
@@ -245,7 +241,7 @@ public class UpdateWorkspace extends Action {
                             tm.setTeamName(newTeam.getName());
                             session.setAttribute("currentMember", tm);
                         }
-                    }
+                    }return mapping.getInputForward();
                 }
             } else if(event != null && event.trim().equalsIgnoreCase("delete")) {
                 String tId = request.getParameter("tId");

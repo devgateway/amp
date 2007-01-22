@@ -2,6 +2,7 @@ package org.digijava.module.aim.form;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.TreeSet;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -9,7 +10,6 @@ import org.apache.struts.action.ActionError;
 import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.validator.ValidatorForm;
-import org.digijava.module.aim.dbentity.AmpTeam;
 
 public class UpdateWorkspaceForm extends ValidatorForm {
 
@@ -47,6 +47,18 @@ public class UpdateWorkspaceForm extends ValidatorForm {
 	private Long[] selChildWorkspaces;
 	private boolean popupReset;
 	private String dest;
+	private Collection allChildren;
+
+	public Collection getAllChildren() {
+		Collection aux=new TreeSet();
+		aux.addAll(availChildWorkspaces);
+		aux.addAll(childWorkspaces);
+		return aux;
+	}
+
+	public void setAllChildren(Collection allChildren) {
+		this.allChildren = allChildren;
+	}
 
 	public boolean getUpdateFlag() {
 		return updateFlag;
@@ -373,7 +385,8 @@ public class UpdateWorkspaceForm extends ValidatorForm {
 			deleteFlag = null;
 			updateFlag = false;
 			workspaceType = null;
-			
+			//availChildWorkspaces = null;
+			selChildWorkspaces = null;
 			addFlag = false;
 			reset	= false;
 		}		

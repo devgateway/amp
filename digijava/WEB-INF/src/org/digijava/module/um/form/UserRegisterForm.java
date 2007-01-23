@@ -2,7 +2,7 @@
  *   UserRegisterForm.java
  *   @Author Lasha Dolidze lasha@digijava.org
  *   Created:
- *   CVS-ID: $Id: UserRegisterForm.java,v 1.2 2006-02-22 12:09:21 akashs Exp $
+ *   CVS-ID: $Id: UserRegisterForm.java,v 1.3 2007-01-23 17:33:50 steve Exp $
  *
  *   This file is part of DiGi project (www.digijava.org).
  *   DiGi is a multi-site portal system written in Java/J2EE.
@@ -19,10 +19,11 @@
 package org.digijava.module.um.form;
 
 import java.util.Collection;
+import java.util.TreeSet;
+
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.struts.action.ActionError;
-//
 import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.validator.ValidatorForm;
@@ -51,8 +52,10 @@ public class UserRegisterForm
     private String selectedOrganizationType;
     private Long selectedOrgType;		// added for Donor access
     private Long selectedOrgGroup;		// added for Donor access
-    private Collection orgGroupColl;	// added for Donor access
-    private Collection orgTypeColl;		// added for Donor access
+    //private Collection orgGroupColl;	// added for Donor access
+    private TreeSet orgGroupColl;	// added for Donor access
+    //private Collection orgTypeColl;		// added for Donor access
+    private TreeSet orgTypeColl;		// added for Donor access    
     private Collection orgColl;			// added for Donor access
     private String orgGrp;				// hidden form field - added for Donor access
     private String orgType;				// hidden form field - added for Donor access
@@ -287,7 +290,10 @@ public class UserRegisterForm
 	 * @param orgGroupColl The orgGroupColl to set.
 	 */
 	public void setOrgGroupColl(Collection orgGroupColl) {
-		this.orgGroupColl = orgGroupColl;
+		
+		TreeSet aux=new TreeSet();
+		aux.addAll(orgGroupColl);
+		this.orgGroupColl = aux;
 	}
 	
 	/**
@@ -300,7 +306,9 @@ public class UserRegisterForm
 	 * @param orgTypeColl The orgTypeColl to set.
 	 */
 	public void setOrgTypeColl(Collection orgTypeColl) {
-		this.orgTypeColl = orgTypeColl;
+		TreeSet aux=new TreeSet();
+		aux.addAll(orgTypeColl);
+		this.orgTypeColl = aux;
 	}
 	/**
 	 * @return Returns the orgColl.

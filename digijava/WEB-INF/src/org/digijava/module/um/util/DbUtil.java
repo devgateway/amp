@@ -2,7 +2,7 @@
  *   DbUtil.java
  *   @Author Lasha Dolidze lasha@digijava.org
  * 	 Created:
- * 	 CVS-ID: $Id: DbUtil.java,v 1.2 2006-02-22 12:09:54 akashs Exp $
+ * 	 CVS-ID: $Id: DbUtil.java,v 1.3 2007-01-23 17:33:50 steve Exp $
  *
  *   This file is part of DiGi project (www.digijava.org).
  *   DiGi is a multi-site portal system written in Java/J2EE.
@@ -1249,7 +1249,7 @@ public class DbUtil {
 		try {
 			sess = PersistenceManager.getSession();
 			String queryString = "select o from " + AmpOrganisation.class.getName()
-								 + " o where (o.orgGrpId=:orgGrpId)";
+								 + " o where (o.orgGrpId=:orgGrpId) order by o.name asc";
 			qry = sess.createQuery(queryString);
 			qry.setParameter("orgGrpId", Id, Hibernate.LONG);
 			col = qry.list();
@@ -1279,7 +1279,7 @@ public class DbUtil {
 		Collection col = new ArrayList();
 		try {
 			session = PersistenceManager.getSession();
-			String q = "select type from " + AmpOrgType.class.getName() + " type";
+			String q = "select type from " + AmpOrgType.class.getName() + " type order by type asc";
 			col = session.createQuery(q).list();
 		} catch (Exception ex) {
 			logger.error("Unable to get Org Types" + ex);
@@ -1308,7 +1308,7 @@ public class DbUtil {
 		try {
 			sess = PersistenceManager.getSession();
 			String queryString = "select o from " + AmpOrgGroup.class.getName()
-								 + " o where (o.orgType=:orgTypeId)";
+								 + " o where (o.orgType=:orgTypeId) order by o.orgGrpName asc";
 			qry = sess.createQuery(queryString);
 			qry.setParameter("orgTypeId", Id, Hibernate.LONG);
 			col = qry.list();

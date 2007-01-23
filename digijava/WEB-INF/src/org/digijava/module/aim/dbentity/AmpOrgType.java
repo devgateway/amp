@@ -3,7 +3,7 @@ package org.digijava.module.aim.dbentity;
 
 import java.io.Serializable;
 
-public class AmpOrgType implements Serializable{
+public class AmpOrgType implements Serializable,Comparable{
 	
 	private Long ampOrgTypeId;
 	private String orgType;
@@ -45,6 +45,12 @@ public class AmpOrgType implements Serializable{
 	 */
 	public void setOrgTypeCode(String orgTypeCode) {
 		this.orgTypeCode = orgTypeCode;
+	}
+	public int compareTo(Object arg0) {
+		// TODO Auto-generated method stub
+		
+		return this.orgType.compareTo(((AmpOrgType)arg0).getOrgType());  
+		//return 0;
 	}
 
 }

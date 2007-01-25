@@ -22,6 +22,17 @@ public class GetAllFlags extends Action {
 		fuForm.setCntryFlags(FeaturesUtil.getAllCountryFlags());
 		fuForm.setCountries(FeaturesUtil.getAllCountries());
 		
+		String event = request.getParameter("event");
+		if(event!=null)
+			if(event.equals("delete"))
+			{
+				Long ampCntryFlagId=new Long( Long.parseLong(request.getParameter("ampCntryFlagId")));
+				FeaturesUtil.deleteFlag(ampCntryFlagId);
+				System.out.println("e de sters cu cntrID="+request.getParameter("ampCntryFlagId"));
+				return mapping.findForward("deleted");
+				
+			}
+		
 		return mapping.findForward("forward");
 	}
 	

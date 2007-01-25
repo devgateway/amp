@@ -437,8 +437,10 @@
     </action>
     <action name="aimFlagUploaderForm" path="/aim/flagUploader" scope="request" type="org.digijava.module.aim.action.GetAllFlags" validate="false">
       <forward name="forward" path="/showLayout.do?layout=flagUploader" />
+      <forward name="deleted" path="/aim/flagUploader.do" redirect="true"/>
       <forward name="index" path="/aim/index.do" redirect="true" />
     </action>
+    
     <action name="aimFlagUploaderForm" path="/aim/uploadFlag" scope="request" type="org.digijava.module.aim.action.UploadFlag" validate="false">
       <forward name="forward" path="/aim/flagUploader.do" redirect="true" />
       <forward name="index" path="/aim/index.do" redirect="true" />

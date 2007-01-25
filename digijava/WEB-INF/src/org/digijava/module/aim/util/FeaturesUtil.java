@@ -11,10 +11,9 @@ import net.sf.hibernate.Transaction;
 import org.apache.log4j.Logger;
 import org.digijava.kernel.dbentity.Country;
 import org.digijava.kernel.persistence.PersistenceManager;
-import org.digijava.kernel.util.CountryUtil;
 import org.digijava.module.aim.dbentity.AmpFeature;
-import org.digijava.module.aim.dbentity.AmpSiteFlag;
 import org.digijava.module.aim.dbentity.AmpGlobalSettings;
+import org.digijava.module.aim.dbentity.AmpSiteFlag;
 import org.digijava.module.aim.helper.Flag;
 
 public class FeaturesUtil {
@@ -533,4 +532,51 @@ public class FeaturesUtil {
 			}
 		return col;
 	}
+	public static void deleteFlag(Long cntryId)
+	{
+		logger.info(" deleting the flag");
+		Session session = null;
+		Transaction tx = null;
+		try
+		{
+			session = PersistenceManager.getSession();
+			AmpSiteFlag flag = (AmpSiteFlag) session.load(
+					AmpSiteFlag.class,cntryId);
+			tx = session.beginTransaction();
+			session.delete(flag);
+			tx.commit();
+		}
+		catch (Exception e)
+		{
+			logger.error("Exception from deleteFlag() :" + e.getMessage());
+			e.printStackTrace(System.out);
+			if (tx != null)
+			{
+				try
+				{
+					tx.rollback();
+				}
+				catch (Exception trbf)
+				{
+					logger.error("Transaction roll back failed ");
+					e.printStackTrace(System.out);
+				}
+			}
+		}
+		finally
+		{
+			if (session != null)
+			{
+				try
+				{
+					PersistenceManager.releaseSession(session);
+				}
+				catch (Exception rsf)
+				{
+					logger.error("Failed to release session :" + rsf.getMessage());
+				}
+			}
+		}
+	}
+
 }

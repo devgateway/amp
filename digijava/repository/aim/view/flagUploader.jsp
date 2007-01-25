@@ -37,8 +37,10 @@
 		document.aimFlagUploaderForm.submit();			  
 	}
 
-
-</script>
+	function onDelete() {
+		var flag = confirm("Delete this flag ?");
+		return flag;
+	}
 
 </script>
 
@@ -102,6 +104,16 @@
 													<digi:img src="images/bullet_grey.gif" border="0" height="9" width="9" align="center" />
 												</a>
 											</c:if>											
+										</td>
+										<td>
+										<jsp:useBean id="urlParamsDelFlag" type="java.util.Map" class="java.util.HashMap"/>
+										<c:set target="${urlParamsDelFlag}" property="event" value="delete"/>
+										<c:set target="${urlParamsDelFlag}" property="ampCntryFlagId">
+											<bean:write name="flag" property="cntryId" />
+										</c:set>
+										[<digi:link href="/flagUploader.do" name="urlParamsDelFlag"
+											title="<%=translation%>" onclick="return onDelete()">Delete</digi:link>]
+											
 										</td>
 									</tr>
 									</logic:iterate>

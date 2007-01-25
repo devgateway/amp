@@ -28,7 +28,7 @@ public class GetAllFlags extends Action {
 			{
 				Long ampCntryFlagId=new Long( Long.parseLong(request.getParameter("ampCntryFlagId")));
 				FeaturesUtil.deleteFlag(ampCntryFlagId);
-				System.out.println("e de sters cu cntrID="+request.getParameter("ampCntryFlagId"));
+				
 				return mapping.findForward("deleted");
 				
 			}

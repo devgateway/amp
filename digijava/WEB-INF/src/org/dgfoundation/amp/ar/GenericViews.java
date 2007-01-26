@@ -18,6 +18,7 @@ public final class GenericViews {
 	public static final String CSV="csv";
 	public static final String PRINT="print";
 	public static final String XLS="xls";
+	public static final String TREE="tree";
 
 	public static final String currentViewable="currentViewable";
 

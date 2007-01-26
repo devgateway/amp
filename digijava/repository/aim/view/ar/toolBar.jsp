@@ -12,6 +12,7 @@
    String viewParamPDF="/pdfExport.do"+viewParam;
    String viewParamCSV="/csvExport.do"+viewParam;
    String viewParamPrint="/viewNewAdvancedReport.do"+(viewParam.equals("") || viewParam.equals("?view=reset")?"?":"&")+"viewFormat=print";
+   String viewParamTree="/viewNewAdvancedReport.do"+(viewParam.equals("") || viewParam.equals("?view=reset")?"?":"&")+"viewFormat=tree";
 %>
 
    <TABLE class=toolbar id=toolbartable cellSpacing=0 cellPadding=0
@@ -62,7 +63,13 @@
 				</digi:link>
 				</TD>
 				
-
+				<TD noWrap align=left valign="center">	
+				<digi:img src="images/folders.png" border="0" alt="Drilldown"/>
+				<digi:link href="<%=viewParamTree%>" paramName="ampReportId" paramId="ampReportId" target="_blank">
+				Drilldown
+				</digi:link>
+				</TD>
+				
 
 
               </TR>

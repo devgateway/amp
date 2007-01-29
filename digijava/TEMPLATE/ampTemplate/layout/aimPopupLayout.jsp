@@ -28,7 +28,6 @@
 	
 </head>
 <body bgcolor="#ffffff" body onLoad="init()" onunload="unload()">
-<div id="loading" style="position:absolute; width:100%; text-align:center; top:300px;"><img src="/TEMPLATE/ampTemplate/images/amploading.gif" border=0/>Loading...</div>
 <script>
  var ld=(document.all);
  var ns4=document.layers;

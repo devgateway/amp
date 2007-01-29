@@ -47,7 +47,7 @@ public abstract class ReportData extends Viewable {
 	
 	public abstract String getSorterColumn();
 	
-	public abstract boolean getSortAscending();
+	public abstract boolean getSortAscending();	
 	
 	public int getTotalUniqueRows() {
 		return getOwnerIds().size();

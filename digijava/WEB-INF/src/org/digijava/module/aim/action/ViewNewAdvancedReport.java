@@ -73,8 +73,10 @@ public class ViewNewAdvancedReport extends Action {
 				Session session = PersistenceManager.getSession();
 				
 				String viewFormat=request.getParameter("viewFormat");
+				String hideBars=request.getParameter("hideBars");
 				if(viewFormat==null) viewFormat=GenericViews.HTML;
 				request.setAttribute("viewFormat",viewFormat);
+				request.setAttribute("hideBars",hideBars);
 
 				
 				

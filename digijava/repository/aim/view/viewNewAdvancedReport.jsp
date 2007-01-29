@@ -26,6 +26,7 @@
 
 <table class=clsTable cellSpacing=0 cellPadding=0 width="100%" border=0>
 
+	<logic:notEqual name="hideBars" scope="request" value="true">
 	<logic:notEqual name="viewFormat" scope="request" value="print">
 		<!-- attach filters -->
 		<tr>
@@ -34,6 +35,7 @@
 		<tr>
 			<td><jsp:include page="/repository/aim/view/ar/NewFilters.jsp" /></td>
 		</tr>
+	</logic:notEqual>
 	</logic:notEqual>
 
 	<tr>

@@ -206,6 +206,17 @@ public class GroupReportData extends ReportData {
 		if(sortByColumn.equals(this.sortByColumn)) sortAscending= !sortAscending; else sortAscending=true; 
 		this.sortByColumn=sortByColumn;
 	}
+
 	
+	/**
+	 * UGLY :(
+	 * @return the first column report found in this tree
+	 */
+	public ColumnReportData getFirstColumnReport() {
+		if(items.size()==0) return null;
+		ReportData rd=(ReportData) items.get(0);
+		if (rd instanceof GroupReportData) return ((GroupReportData)rd).getFirstColumnReport();
+		return (ColumnReportData) rd;
+	}
 	
 }

@@ -3,13 +3,13 @@
 	/* Turn off list bullets */
 	ul.mktree  li { list-style: none; } 
 	/* Control how "spaced out" the tree is */
-	ul.mktree, ul.mktree ul , ul.mktree li { margin-left:10px; padding:0px; }
+	ul.mktree, ul.mktree ul , ul.mktree li { margin-left:15px; padding:1px; }
 	/* Provide space for our own "bullet" inside the LI */
-	ul.mktree  li           .bullet { padding-left: 15px; }
+	ul.mktree  li           .bullet { padding-left: 5px; }
 	/* Show "bullets" in the links, depending on the class of the LI that the link's in */
-	ul.mktree  li.liOpen    .bullet { cursor: pointer; background: url(../images/minus.gif)  center left no-repeat; }
-	ul.mktree  li.liClosed  .bullet { cursor: pointer; background: url(../images/plus.gif)   center left no-repeat; }
-	ul.mktree  li.liBullet  .bullet { cursor: default; background: url(../images/bullet.gif) center left no-repeat; }
+	ul.mktree  li.liOpen    .bullet { cursor: pointer; background: url(/repository/aim/view/images/minus.gif)  center left no-repeat; }
+	ul.mktree  li.liClosed  .bullet { cursor: pointer; background: url(/repository/aim/view/images/plus.gif)   center left no-repeat; }
+	ul.mktree  li.liBullet  .bullet { cursor: default; background: url(/repository/aim/view/images/bullet.gif) center left no-repeat; }
 	/* Sublists are visible or not based on class of parent LI */
 	ul.mktree  li.liOpen    ul { display: block; }
 	ul.mktree  li.liClosed  ul { display: none; }

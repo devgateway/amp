@@ -295,6 +295,9 @@
         <!-- National Planing Dashboard -->
 	<page page="viewNationalPlaningDashboard" name="amp_viewNationalPlaningDashboard" title=" : National Planing Dashboard" />
 
+	<!-- tab Views -->
+	<page page="myTabs" name="aim_myTabs" title="My Tabs" />
+
 </secondary-pages>
 
 <module>

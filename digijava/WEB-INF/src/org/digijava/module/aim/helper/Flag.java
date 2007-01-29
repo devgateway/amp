@@ -1,7 +1,7 @@
 package org.digijava.module.aim.helper;
 
 public class Flag {
-	
+	   
 	private Long cntryId;
 	private String cntryName;
 	private boolean defaultFlag;

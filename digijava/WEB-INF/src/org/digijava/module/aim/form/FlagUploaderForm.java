@@ -4,7 +4,7 @@ import java.util.Collection;
 
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.upload.FormFile;
-
+  
 public class FlagUploaderForm extends ActionForm {
 	
 	private Long countryId;

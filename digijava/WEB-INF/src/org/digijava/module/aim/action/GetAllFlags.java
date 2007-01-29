@@ -10,7 +10,7 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.digijava.module.aim.form.FlagUploaderForm;
 import org.digijava.module.aim.util.FeaturesUtil;
-
+  
 public class GetAllFlags extends Action {
 	
 	private static Logger logger = Logger.getLogger(GetAllFlags.class);

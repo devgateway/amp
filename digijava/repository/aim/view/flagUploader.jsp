@@ -113,7 +113,7 @@
 										</c:set>
 										[<digi:link href="/flagUploader.do" name="urlParamsDelFlag"
 											title="<%=translation%>" onclick="return onDelete()">Delete</digi:link>]
-											
+											 
 										</td>
 									</tr>
 									</logic:iterate>

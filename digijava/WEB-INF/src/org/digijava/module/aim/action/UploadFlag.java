@@ -14,7 +14,7 @@ import org.digijava.module.aim.dbentity.AmpSiteFlag;
 import org.digijava.module.aim.form.FlagUploaderForm;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.FeaturesUtil;
-
+  
 public class UploadFlag extends Action {
 	
 	public ActionForward execute(ActionMapping mapping,ActionForm form,

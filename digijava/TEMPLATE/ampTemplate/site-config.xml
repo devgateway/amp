@@ -253,7 +253,7 @@
 		</layout>
 
 		<layout name="portfolioDashboardLayout" extends="desktopLayout">
-			<put name="title">- Dashbaord</put>
+			<put name="title">- Dashboard</put>
 			<put-item name="body" module="aim" instance="default" teaser="portfolioDashboard"/>
 		</layout>
 

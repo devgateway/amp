@@ -283,10 +283,14 @@ public class AmpReportGenerator extends ReportGenerator {
 				.getName());
 		reportChild.addColumns(rawColumns.getItems());
 		report.addReport(reportChild);
-
+		
+		AmpARFilter arf=(AmpARFilter) filter;
+		
 		//perform removal of funding column if no measure except undisbursed balance is selected. in such case,we just need totals
-		if(reportMetadata.getMeasures().size()==1 && ARUtil.containsMeasure(ArConstants.UNDISBURSED_BALANCE,reportMetadata.getMeasures())) 
-			reportChild.removeColumn("Funding");
+		//or if widget mode is true...
+		if((reportMetadata.getMeasures().size()==1 && ARUtil.containsMeasure(ArConstants.UNDISBURSED_BALANCE,reportMetadata.getMeasures()))
+				|| arf.isWidget()) 
+			reportChild.removeColumnsByName("Funding");
 		
 
 		

@@ -25,6 +25,7 @@ public class AmpARFilter implements Filter {
 	private Set ampTeams=null;
 	private Integer calendarType=null;
 	private String perspectiveCode;
+	private boolean widget=false;
 
 	
 	private Integer fromYear;
@@ -271,6 +272,14 @@ public class AmpARFilter implements Filter {
 	 */
 	public void setPerspectiveCode(String perspective) {
 		this.perspectiveCode = perspective;
+	}
+
+	public boolean isWidget() {
+		return widget;
+	}
+
+	public void setWidget(boolean widget) {
+		this.widget = widget;
 	}
 
 	/**

@@ -11,3 +11,4 @@
 	<bean:define id="viewable" name="column" type="org.dgfoundation.amp.ar.Viewable" scope="page" toScope="request"/>
 	<jsp:include page="<%=viewable.getViewerPath()%>"/>	
 </logic:iterate>
+

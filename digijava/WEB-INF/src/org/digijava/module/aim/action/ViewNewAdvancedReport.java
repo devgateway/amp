@@ -48,6 +48,9 @@ public class ViewNewAdvancedReport extends Action {
 			{
 		HttpSession hs = request.getSession();
 
+		String widget=request.getParameter("widget");
+		request.setAttribute("widget",widget);
+
 		// test if the request was for sorting purposes:
 		String sortBy=request.getParameter("sortBy");
 		if(sortBy!=null) {
@@ -73,10 +76,8 @@ public class ViewNewAdvancedReport extends Action {
 				Session session = PersistenceManager.getSession();
 				
 				String viewFormat=request.getParameter("viewFormat");
-				String hideBars=request.getParameter("hideBars");
 				if(viewFormat==null) viewFormat=GenericViews.HTML;
 				request.setAttribute("viewFormat",viewFormat);
-				request.setAttribute("hideBars",hideBars);
 
 				
 				

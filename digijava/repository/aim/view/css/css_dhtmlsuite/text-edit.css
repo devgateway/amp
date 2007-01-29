@@ -1,0 +1,18 @@
+.DHTMLSuite_textEdit_label{	/* label */
+	background-color:#316ac5;
+	color:#FFF;
+}
+.DHTMLSuite_textEdit_select,.DHTMLSuite_textEdit_input{
+	width:200px;
+	font-size:11px;
+	line-height:12px;
+	margin:0px;
+	padding:0px;
+}
+
+.DHTMLSuite_textEdit_input{
+	height:12px;
+}
+.DHTMLSuite_textEdit_select{
+	height:18px;
+}

@@ -71,7 +71,7 @@ public class ColumnReportData extends ReportData {
 		// create set with unique values for the filtered col:
 		Column keyCol = getColumn(columnName);
 
-		removeColumn(columnName);
+		removeColumnsByName(columnName);
 
 		if (keyCol instanceof GroupColumn)
 			throw new IncompatibleColumnException(
@@ -277,7 +277,7 @@ public class ColumnReportData extends ReportData {
 		}
 	}
 
-	public void removeColumn(String name) {
+	public void removeColumnsByName(String name) {
 		Iterator i = items.iterator();
 		while (i.hasNext()) {
 			Column element = (Column) i.next();

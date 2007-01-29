@@ -210,6 +210,7 @@ public class GroupReportData extends ReportData {
 	
 	/**
 	 * UGLY :(
+	 * @deprecated
 	 * @return the first column report found in this tree
 	 */
 	public ColumnReportData getFirstColumnReport() {
@@ -217,6 +218,14 @@ public class GroupReportData extends ReportData {
 		ReportData rd=(ReportData) items.get(0);
 		if (rd instanceof GroupReportData) return ((GroupReportData)rd).getFirstColumnReport();
 		return (ColumnReportData) rd;
+	}
+
+	public void removeColumnsByName(String name) {
+		Iterator i=items.iterator();
+		while (i.hasNext()) {
+			ReportData element = (ReportData) i.next();
+			element.removeColumnsByName(name);
+		}
 	}
 	
 }

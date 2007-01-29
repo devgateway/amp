@@ -8,8 +8,6 @@
 
 <link rel="stylesheet"
 	href="<digi:file src="module/aim/css/newamp.css"/>" />
-<link rel="stylesheet"
-	href="<digi:file src="module/aim/css/mktree.css"/>" />
 
 <!-- this is for the nice tooltip widgets -->
 <DIV id="TipLayer"
@@ -17,16 +15,17 @@
 <script language="JavaScript1.2" type="text/javascript"
 	src="<digi:file src="module/aim/scripts/dscript120_ar_style.js"/>"></script>
 <!-- script for tree-like view (drilldown reports) -->
-<script language="JavaScript1.2" type="text/javascript"
-	src="<digi:file src="module/aim/scripts/mktree.js"/>"></script>
 
 <script language="JavaScript" type="text/javascript"
 	src="<digi:file src="module/aim/scripts/arFunctions.js"/>"></script>
 
+<script type="text/javascript" src="<digi:file src="module/aim/scripts/ajax.js"/>"></script>
+<script type="text/javascript" src="<digi:file src="module/aim/scripts/dhtml-suite-for-applications.js"/>"></script>
+
 
 <table class=clsTable cellSpacing=0 cellPadding=0 width="100%" border=0>
 
-	<logic:notEqual name="hideBars" scope="request" value="true">
+	<logic:notEqual name="widget" scope="request" value="true">
 	<logic:notEqual name="viewFormat" scope="request" value="print">
 		<!-- attach filters -->
 		<tr>
@@ -96,3 +95,5 @@
 		</tr>
 	</logic:equal>
 </table>
+
+

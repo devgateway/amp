@@ -587,6 +587,9 @@ public final class ARUtil {
 		
 		}
 
+		String widget=(String) request.getAttribute("widget");
+		if("true".equals(widget)) anf.setWidget(true);
+		
 		anf.generateFilterQuery();
 
 		return anf;

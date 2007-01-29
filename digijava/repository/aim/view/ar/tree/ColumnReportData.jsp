@@ -8,7 +8,7 @@
 
 <bean:define id="columnReport" name="viewable" type="org.dgfoundation.amp.ar.ColumnReportData" scope="request" toScope="page"/>
 <bean:define id="reportMeta" name="reportMeta" type="org.digijava.module.aim.dbentity.AmpReports" scope="session" toScope="page"/>
-<li><b><bean:write name="columnReport" property="name"/></b>
+<li><a><bean:write name="columnReport" property="name"/></a>
 <ul>
 <table class=clsInnerTable cellSpacing=0 cellPadding=0 width="100%" border=0>
 

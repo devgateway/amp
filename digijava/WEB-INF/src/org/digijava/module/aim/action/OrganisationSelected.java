@@ -8,7 +8,10 @@ package org.digijava.module.aim.action;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.TreeSet;
 import java.util.Vector;
+
+import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
 import org.apache.struts.action.Action;
@@ -33,14 +36,39 @@ public class OrganisationSelected extends Action {
 		logger.debug("In OrganisationSelected");
 
 		EditActivityForm eaForm = (EditActivityForm) form;
-
-		Long selOrgs[] = eaForm.getSelOrganisations();
+		HttpSession session= request.getSession();
+		Long selOrgs1[] = eaForm.getSelOrganisations();
 		Collection prevSelOrgs = null;
 
 		OrgProjectId prevOrgs[] = null;
 		OrgProjectId currOrgs[] = null;
 		int item = 0;
-
+		if(eaForm.getSelectedOrganisationFromPages().intValue()!=-1){
+			int pageAux=eaForm.getSelectedOrganisationFromPages().intValue();
+			eaForm.setSelectedOrganisationFromPages(new Integer(-1));
+			session.setAttribute("pageOrgs",new Integer(pageAux));
+			
+			
+			return mapping.findForward("selorg");
+		}
+		
+		TreeSet auxselorg=(TreeSet)session.getAttribute("selectedOrganizationFromPages");
+		int iii=0;
+		Long selOrgs[] = eaForm.getSelOrganisations();
+		if(selOrgs1.length+auxselorg.size()!=0)
+		{
+			selOrgs=new Long[selOrgs1.length+auxselorg.size()];
+			for(iii=0;iii<selOrgs1.length;iii++)
+				selOrgs[iii]=selOrgs1[iii];
+		
+			for(Iterator it=auxselorg.iterator();it.hasNext();)
+			{
+					selOrgs[iii]=(Long)it.next();
+					iii++;
+			}
+		}
+		
+		
 		if (eaForm.getStep().equals("1")) {
 			prevOrgs = eaForm.getSelectedOrganizations();
 		} else if (eaForm.getStep().equals("3")) {
@@ -57,7 +85,7 @@ public class OrganisationSelected extends Action {
 		}
 		
 		logger.info("Step = " + eaForm.getStep());
-
+		
 		if (eaForm.getStep().equals("1")) {
 			if (eaForm.getSelOrganisations() == null ||
 					eaForm.getSelOrganisations().length == 0) return mapping.findForward("forward");	

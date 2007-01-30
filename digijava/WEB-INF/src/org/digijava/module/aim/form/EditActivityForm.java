@@ -138,6 +138,8 @@ public class EditActivityForm extends ActionForm implements Serializable{
 	private String currentAlpha;
 	private boolean startAlphaFlag;
 	private Long selOrganisations[]; // list of org selected from
+	private TreeSet selectedOrganisationPaged;
+	private Integer selectedOrganisationFromPages;
 
 	// pop-up organisation selector window
 	private Collection pages;
@@ -352,7 +354,8 @@ public class EditActivityForm extends ActionForm implements Serializable{
 		totalExpenditures = 0;
 		donorFlag = false;
 		keyword=null;
-		selectedOrganizationsList=null;
+		//selectedOrganizationsList=null;
+		//selectedOrganisationFromPages= new Integer(-1);
 	}
 
 	public void reset(ActionMapping mapping, HttpServletRequest request) {
@@ -3726,6 +3729,23 @@ public class EditActivityForm extends ActionForm implements Serializable{
 	 */
 	public void setRegionTotalDisb(double regionTotalDisb) {
 		this.regionTotalDisb = regionTotalDisb;
+	}
+
+	public TreeSet getSelectedOrganisationPaged() {
+		return selectedOrganisationPaged;
+	}
+
+	public void setSelectedOrganisationPaged(TreeSet selectedOrganisationPaged) {
+		this.selectedOrganisationPaged = selectedOrganisationPaged;
+	}
+
+	public Integer getSelectedOrganisationFromPages() {
+		return selectedOrganisationFromPages;
+	}
+
+	public void setSelectedOrganisationFromPages(
+			Integer selectedOrganisationFromPages) {
+		this.selectedOrganisationFromPages = selectedOrganisationFromPages;
 	}
 
 }

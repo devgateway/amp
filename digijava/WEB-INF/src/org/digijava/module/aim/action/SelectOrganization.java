@@ -1,14 +1,18 @@
 package org.digijava.module.aim.action;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.TreeSet;
+import java.util.Vector;
+
+import javax.servlet.http.HttpSession;
+
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.digijava.module.aim.form.EditActivityForm;
 import org.digijava.module.aim.util.DbUtil;
-import java.util.Collection;
-import java.util.ArrayList;
-import java.util.Vector;
 
 public class SelectOrganization extends Action {
 
@@ -18,6 +22,7 @@ public class SelectOrganization extends Action {
 			throws java.lang.Exception {
 
 		EditActivityForm eaForm = (EditActivityForm) form;
+		HttpSession session=request.getSession();
 
 		if (request.getParameter("orgSelReset") != null
 				&& request.getParameter("orgSelReset").equals("false")) {
@@ -26,9 +31,14 @@ public class SelectOrganization extends Action {
 			eaForm.setOrgSelReset(true);
 			eaForm.setPagedCol(null);
 			eaForm.reset(mapping, request);
+			session.setAttribute("selectedOrganizationFromPages",null);
 		}
-
 		int page = 0;
+		if(session.getAttribute("pageOrgs")!=null){
+			page=Integer.parseInt(session.getAttribute("pageOrgs").toString());
+			session.setAttribute("pageOrgs",null);
+		}
+		else 		
 		if (request.getParameter("page") == null) {
 			page = 1;
 		} else {
@@ -71,7 +81,23 @@ public class SelectOrganization extends Action {
 			eaForm.setPagedCol(tempCol);
 			eaForm.setCurrentPage(new Integer(page));
 		}
-
+		TreeSet auxaaa=new TreeSet();
+		TreeSet auxbbb=new TreeSet();
+		if(session.getAttribute("selectedOrganizationFromPages")!=null)
+		auxbbb.addAll((TreeSet)session.getAttribute("selectedOrganizationFromPages"));
+		
+		if(eaForm.getSelOrganisations()==null) System.out.println("e null");
+		else {
+			System.out.println("nu e nul");
+			for(int i=0;i<eaForm.getSelOrganisations().length;i++)
+				auxaaa.add(eaForm.getSelOrganisations()[i]);
+			auxbbb.addAll(auxaaa);
+		}
+		
+		
+		
+		session.setAttribute("selectedOrganizationFromPages",auxbbb);
+		
 		return mapping.findForward("forward");
 	}
 }

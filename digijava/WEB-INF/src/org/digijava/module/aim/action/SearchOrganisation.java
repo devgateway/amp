@@ -170,7 +170,7 @@ public class SearchOrganisation extends Action {
 		eaForm.setPagedCol(tempCol);
 		eaForm.setPages(pages);
 		eaForm.setCurrentPage(new Integer(1));
-
+	
     	return mapping.findForward("forward");
 	}
 }

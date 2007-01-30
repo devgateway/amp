@@ -39,7 +39,7 @@ function checkSelOrgs() {
 }	
 
 function selectOrganisation() {
-	openNewWindow(600, 400);
+	openNewWindow(750, 550);
 	<digi:context name="selectOrganization" property="context/module/moduleinstance/selectOrganization.do?orgSelReset=true&edit=true" />
 	document.aimEditActivityForm.action = "<%=selectOrganization%>";
 	document.aimEditActivityForm.target = popupPointer.name;

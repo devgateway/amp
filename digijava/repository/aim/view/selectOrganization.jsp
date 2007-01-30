@@ -62,6 +62,8 @@
 
 	
 	function validate() {
+		alert(document.aimEditActivityForm.selectedOrganisationFromPages.value);
+		if(document.aimEditActivityForm.selectedOrganisationFromPages.value != "-1") return true;
 
 		if (document.aimEditActivityForm.selOrganisations.checked != null) { // only one
 			if (document.aimEditActivityForm.selOrganisations.checked == false) {
@@ -95,9 +97,17 @@
 		<digi:context name="selOrg" property="context/module/moduleinstance/organisationSelected.do?edit=true"/>
 	   document.aimEditActivityForm.action = "<%= selOrg %>";
 		document.aimEditActivityForm.target = window.opener.name;
+		document.aimEditActivityForm.selectedOrganisationFromPages.value=-1;
 	   document.aimEditActivityForm.submit();
 		window.close();
 		return true;
+	}	
+
+	function selectOrganizationPages(page) {
+		
+	   document.aimEditActivityForm.selectedOrganisationFromPages.value=page;
+	   document.aimEditActivityForm.submit();
+	   return true;
 	}	
 
 	function searchOrganization() {
@@ -167,6 +177,7 @@
 <digi:form action="/organisationSelected.do" method="post">
 
 <html:hidden property="item" />
+<html:hidden property="selectedOrganisationFromPages" />
 
 <table width="100%" cellSpacing=5 cellPadding=5 vAlign="top" border=0>
 	<tr><td vAlign="top">
@@ -296,7 +307,8 @@
 											</bean:define>
 											<digi:link href="/selectOrganization.do" name="urlParams1" title="<%=translation%>" >
 												<%=pages%>
-											</digi:link>					
+											</digi:link>
+											<a href="javascript:selectOrganizationPages(<%=pages%>);"><%=pages %></a>
 										</c:if>										
 										|&nbsp; 
 									</logic:iterate>

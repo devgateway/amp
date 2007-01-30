@@ -12,27 +12,30 @@
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/relatedLinks.js"/>"></script>
 <digi:context name="digiContext" property="context" />
 
-<link rel="stylesheet"
-	href="<digi:file src="module/aim/css/newamp.css"/>" />
-<script type="text/javascript" src="<digi:file src="module/aim/scripts/ajax.js"/>"></script>
-<script type="text/javascript" src="<digi:file src="module/aim/scripts/dhtml-suite-for-applications.js"/>"></script>
-
-
+<!-- this is for the nice tooltip widgets -->
+<DIV id="TipLayer"
+	style="visibility:hidden;position:absolute;z-index:1000;top:-100;"></DIV>
 <script language="JavaScript1.2" type="text/javascript"
 	src="<digi:file src="module/aim/scripts/dscript120_ar_style.js"/>"></script>
 <!-- script for tree-like view (drilldown reports) -->
 
-<script language="JavaScript" type="text/javascript"
-	src="<digi:file src="module/aim/scripts/arFunctions.js"/>"></script>
+<script language="JavaScript1.2" type="text/javascript" src="<digi:file src="module/aim/scripts/dscript120.js"/>"></script>
 
-
+<link rel="stylesheet"
+	href="<digi:file src="module/aim/css/newamp.css"/>" />
+<script type="text/javascript" src="<digi:file src="module/aim/scripts/ajax.js"/>"></script>
+<script type="text/javascript" src="<digi:file src="module/aim/scripts/dhtml-suite-for-applications.js"/>"></script>
+<script language="JavaScript1.2" type="text/javascript" src="<digi:file src="module/aim/scripts/dscript120_ar_style.js"/>"></script>
+<!-- script for tree-like view (drilldown reports) -->
+<script language="JavaScript" type="text/javascript"src="<digi:file src="module/aim/scripts/arFunctions.js"/>"></script>
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/ajaxtabs/ajaxtabs.js"/>"></script>
 
 <div id="myTabs">
- <div class="DHTMLSuite_aTab">
+<div class="DHTMLSuite_aTab">
  				Click on one of the buttons below, to open a drilldown tab:<br/>
                 <input type="button" value="Sector" onclick="tabViewObj.createNewTab('myTabs','Sector','','/aim/viewNewAdvancedReport.do~view=reset~viewFormat=tree~ampReportId=10~widget=true',true);return false"/><br/>
                 <input type="button" value="Funding Agency" onclick="tabViewObj.createNewTab('myTabs','Funding Agency','','/aim/viewNewAdvancedReport.do~view=reset~viewFormat=tree~ampReportId=11~widget=true',true);return false"/><br/>
+				<input type="button" value="Status" onclick="tabViewObj.createNewTab('myTabs','Status','','/aim/viewNewAdvancedReport.do~view=reset~viewFormat=tree~ampReportId=12~widget=true',true);return false"/><br/>                
 </div>
 </div>
 
@@ -44,6 +47,3 @@ tabViewObj.setIndexActiveTab(0);
 tabViewObj.setTabTitles(Array('My Tabs'));
 tabViewObj.init();
 </script>
-
-
-

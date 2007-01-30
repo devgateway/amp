@@ -50,6 +50,8 @@ public abstract class ReportData extends Viewable {
 	public abstract boolean getSortAscending();
 	
 	public abstract void removeColumnsByName(String name);
+
+	public abstract String getAbsoluteReportName();
 	
 	public int getTotalUniqueRows() {
 		return getOwnerIds().size();

@@ -227,5 +227,10 @@ public class GroupReportData extends ReportData {
 			element.removeColumnsByName(name);
 		}
 	}
+
+	public String getAbsoluteReportName() {
+		if (parent!=null) return parent.getAbsoluteReportName()+"--"+ this.name;
+		else return this.name;
+	}
 	
 }

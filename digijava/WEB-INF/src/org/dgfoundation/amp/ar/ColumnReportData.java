@@ -305,5 +305,9 @@ public class ColumnReportData extends ReportData {
 		return parent.getSortAscending();
 	}
 
+	public String getAbsoluteReportName() {
+		return parent.getAbsoluteReportName()+"--"+ this.name;		
+	}
+
 	
 }

@@ -8,7 +8,12 @@
 
 <bean:define id="columnReport" name="viewable" type="org.dgfoundation.amp.ar.ColumnReportData" scope="request" toScope="page"/>
 <bean:define id="reportMeta" name="reportMeta" type="org.digijava.module.aim.dbentity.AmpReports" scope="session" toScope="page"/>
-<li><a><bean:write name="columnReport" property="name"/></a>
+
+
+
+
+<li noDrag="true">
+<a onMouseOver="stm(['Totals for <bean:write name="columnReport" property="name"/>',document.getElementById('<bean:write name="columnReport" property="absoluteReportName"/>').innerHTML],Style[0])" onMouseOut="htm()"><bean:write name="columnReport" property="name"/></a>
 <ul>
 <table class=clsInnerTable cellSpacing=0 cellPadding=0 width="100%" border=0>
 
@@ -71,3 +76,8 @@
 </table>
 </ul>
 </li>
+
+<div style='position:relative;display:none;' id='<bean:write name="columnReport" property="absoluteReportName"/>'> 
+<bean:define id="viewable" name="columnReport" type="org.dgfoundation.amp.ar.ColumnReportData" scope="page" toScope="request"/>
+<jsp:include page="/repository/aim/view/ar/print/TrailCells.jsp"/>
+</div>

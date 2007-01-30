@@ -305,9 +305,7 @@
 											<bean:define id="translation">
 												<digi:trn key="aim:clickToViewNextPage">Click here to goto Next Page</digi:trn>
 											</bean:define>
-											<digi:link href="/selectOrganization.do" name="urlParams1" title="<%=translation%>" >
-												<%=pages%>
-											</digi:link>
+
 											<a href="javascript:selectOrganizationPages(<%=pages%>);"><%=pages %></a>
 										</c:if>										
 										|&nbsp; 

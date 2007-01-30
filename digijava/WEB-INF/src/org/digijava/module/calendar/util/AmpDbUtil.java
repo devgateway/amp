@@ -41,7 +41,7 @@ public class AmpDbUtil {
         try{
             Session session = PersistenceManager.getRequestDBSession();
             tx=session.beginTransaction();
-            session.saveOrUpdate(eventType);
+            session.update(eventType);
             tx.commit();
         }catch(Exception ex){
             if (tx!=null){
@@ -51,10 +51,28 @@ public class AmpDbUtil {
                     throw new CalendarException("Cannot rallback EventType update",ex2);
                 }
             }
-            throw new CalendarException("Cannot insert or update EventType",ex);
+            throw new CalendarException("Cannot update EventType",ex);
         }
     }
 
+    public static void saveEventType(AmpEventType eventType)throws CalendarException{
+        Transaction tx=null;
+        try{
+            Session session = PersistenceManager.getRequestDBSession();
+            tx=session.beginTransaction();
+            session.save(eventType);
+            tx.commit();
+        }catch(Exception ex){
+            if (tx!=null){
+                try {
+                    tx.rollback();
+                } catch(Exception ex2) {
+                    throw new CalendarException("Cannot rallback EventType update",ex2);
+                }
+            }
+            throw new CalendarException("Cannot insert EventType",ex);
+        }
+    }
 
     public static void deleteEventType(AmpEventType eventType) throws
         CalendarException {

@@ -202,7 +202,7 @@ public class AmpUtil {
         AmpEventType newEventType=new AmpEventType();
         newEventType.setName(name);
         newEventType.setColor(color);
-        AmpDbUtil.updateEventType(newEventType);
+        AmpDbUtil.saveEventType(newEventType);
     }
 
     private static AmpCalendarGraph getAmpCalendarGraph(AmpCalendar ampCalendar,

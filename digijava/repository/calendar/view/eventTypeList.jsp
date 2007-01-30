@@ -11,22 +11,38 @@
 
 <script language="javaScript" type="">
 function setActionMethod(methodName) {
-  document.getElementsByName('method')[0].value=methodName;
+  document.getElementById('method').value=methodName;
   return true;
 }
+
+function saveEventType(id) {
+  document.getElementById('eventTypeId').value=id;
+  setActionMethod('save');
+  document.calendarEventTypeForm.submit();
+  return true;
+}
+
 function setDeleteId(id) {
-  document.getElementsByName('deleteId')[0].value=id;
+  var txt="<digi:trn key="calendar:deletingEventType">Are you sure about deleting event type?</digi:trn>"
+  var quertion=window.confirm(txt);
+  if(!quertion){
+    return false;
+  }
+  document.getElementById('eventTypeId').value=id;
   setActionMethod('delete');
   document.calendarEventTypeForm.submit();
   return true;
 }
 
 var cp = new ColorPicker('window');
-
+var objId=null;
+var hexColor=null;
 function pickColor(color) {
-  hexColorNum.value = color;
-  var cl=document.getElementById("colorDisp");
-  cl.setAttribute("style","width:25px;font-family:verdana;font-size:9pt;background:"+color+";");
+  if(objId!=null){
+    document.getElementById(hexColor).value = color;
+    var cl=document.getElementById(objId);
+    cl.setAttribute("style","width:25px;font-family:verdana;font-size:9pt;background:"+color+";");
+  }
 }
 function chooseColor(){
 
@@ -39,7 +55,7 @@ function chooseColor(){
   <jsp:include page="teamPagesHeader.jsp" flush="true" />
   <!-- End of Logo -->
 
-  <input type="hidden" name="deleteId" value="-1" />
+  <input type="hidden" name="eventTypeId" id="eventTypeId" value="-1" />
 
   <table bgColor=#ffffff cellPadding=0 cellSpacing=0 width=772>
     <tr>
@@ -62,7 +78,7 @@ function chooseColor(){
           <tr>
             <td height=16 vAlign=center>
               <span class=subtitle-blue><br />
-                <input type="hidden" name="method" value="NONE" />
+                <input type="hidden" name="method" id="method" value="NONE" />
                 <digi:trn key="calendar:eventTypes:page_header">Event Types</digi:trn>
               </span>
             </td>
@@ -71,34 +87,57 @@ function chooseColor(){
             <td>
               <table>
                 <tr>
-                  <td style="font-size:14pt;"><digi:trn key="calendar:typeName"><b>Name</b></digi:trn></td>
-                  <td style="font-size:14pt;"><digi:trn key="calendar:typeColor"><b>Color</b></digi:trn></td>
-                  <td>&nbsp;</td>
+                  <td>
+                    <!--<fieldset>-->
+                      <table>
+                        <c:if test="${!empty calendarEventTypeForm.eventTypes}">
+                          <tr>
+                            <td style="font-size:14pt;"><digi:trn key="calendar:typeName"><b>Name</b></digi:trn></td>
+                            <td style="font-size:14pt;"><digi:trn key="calendar:typeColor"><b>Color</b></digi:trn></td>
+                            <td>&nbsp;</td>
+                          </tr>
+                          <c:forEach items="${calendarEventTypeForm.eventTypes}" var="eventType" varStatus="varSt">
+                            <tr>
+                              <td>
+                                <html:text name="eventType" styleId="eventTypeName${varSt.count}" property="name" indexed="true" style="font-family:verdana;font-size:9pt;"/>
+                              </td>
+                              <td>
+                                <html:text name="eventType" styleId="eventTypeNameColor${varSt.count}" property="color" indexed="true" style="font-family:verdana;font-size:9pt;"/>
+                              </td>
+                              <td>
+                                <input type="text" name="colorViwe${varSt.count}" id="colorViwe${varSt.count}" style="width:25px;font-family:verdana;font-size:9pt;background:${eventType.color}" disabled="disabled" />
+                              </td>
+                              <td>
+                                <a href="#" onclick="cp.show('pick');objId='colorViwe${varSt.count}';hexColor='eventTypeNameColor${varSt.count}';return false;">
+                                  <img alt="" src="<digi:file src="module/calendar/images/colorImg.gif"/>" border="0" NAME="pick" ID="pick" width="15" height="15"/>
+                                </a>
+                              </td>
+                              <td>
+                                <input type="button" value="Save" onclick="saveEventType('${eventType.id}');" style="font-family:verdana;font-size:9pt;"/>
+                              </td>
+                              <td>
+                                <input type="button" value="Delete" onclick="setDeleteId('${eventType.id}');" style="font-family:verdana;font-size:9pt;"/>
+                              </td>
+                            </tr>
+                          </c:forEach>
+                        </c:if>
+                        <c:if test="${empty calendarEventTypeForm.eventTypes}">
+                          <digi:trn key="calendar:eventTypesStatus"><div style="font-family:Verdana:font-size:25pt;">No event types in data base</div></digi:trn>
+                        </c:if>
+                      </table>
+                    <!--</fieldset>-->
+                  </td>
                 </tr>
-                <c:forEach items="${calendarEventTypeForm.eventTypes}" var="eventType">
-                  <tr>
-                    <td>
-                      <html:text name="eventType" property="name" indexed="true" readonly="true" style="font-family:verdana;font-size:9pt;"/>
-                    </td>
-                    <td>
-                      <html:text name="eventType" property="color" indexed="true" readonly="true" style="font-family:verdana;font-size:9pt;"/>
-                    </td>
-                    <td>
-                      <input type="text" style="width:25px;font-family:verdana;font-size:9pt;background:${eventType.color}" disabled="disabled"/>
-                    </td>
-                    <td>
-                      <input type="button" value="Delete" onclick="setDeleteId('${eventType.id}');" style="font-family:verdana;font-size:9pt;"/>
-                    </td>
-                  </tr>
-                </c:forEach>
               </table>
-          </td>
-        </tr>
-        <tr>
-          <td>
-            <fieldset>
-              <legend><digi:trn key="calendar:addNewType">Add a new type</digi:trn></legend>
-              <table width="100%">
+            </td>
+          </tr>
+
+          <tr>
+            <td>
+              <fieldset>
+                <legend>
+                  <digi:trn key="calendar:addNewType">Add a new type</digi:trn></legend>
+                <table width="100%">
                 <tr>
                   <td colspan="5" align="left">
                     <digi:errors />
@@ -111,7 +150,7 @@ function chooseColor(){
                     </digi:trn>
                   </td>
                   <td>
-                    <html:text property="addName" style="width:155px;font-family:verdana;font-size:9pt;"/>
+                    <html:text property="eventTypeName" style="width:155px;font-family:verdana;font-size:9pt;"/>
                   </td>
                 </tr>
                 <tr>
@@ -121,16 +160,16 @@ function chooseColor(){
                     </digi:trn>
                   </td>
                   <td>
-                    <html:text property="addColor" styleId="hexColorNum" style="width:155px;font-family:verdana;font-size:9pt;"/>
+                    <html:text property="eventTypeColor" styleId="hexColorNum" style="width:155px;font-family:verdana;font-size:9pt;"/>
                     <input type="text" style="width:25px;font-family:verdana;font-size:9pt;background:#FFF;" id="colorDisp" name="colorDisp" disabled="disabled"/>
-                    <a href="#" onclick="cp.show('pick');return false;">
+                    <a href="#" onclick="cp.show('pick');objId='colorDisp';hexColor='hexColorNum';return false;">
                       <img alt="" src="<digi:file src="module/calendar/images/colorImg.gif"/>" border="0" NAME="pick" ID="pick" width="15" height="15"/>
                     </a>
                   </td>
                 </tr>
                 <tr>
                   <td colspan="2" align="right">
-                    <html:submit value="Add" onclick="setActionMethod('addType')" />
+                    <html:submit value="Add" onclick="setActionMethod('addType')" style="font-family:verdana;font-size:9pt;" />
                   </td>
                 </tr>
                 <tr>

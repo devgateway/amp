@@ -15,6 +15,7 @@
 		<property name="reportDescription" column="report_description" type="java.lang.String"/>
 		<property name="type" column="type" type="java.lang.Long"/>
 		<property name="hideActivities" column="hide_activities" type="java.lang.Boolean"/>
+		<property name="drilldownTab" column="drilldown_tab" type="java.lang.Boolean"/>
 		
 		<!--<many-to-one name="ampReportsOptions" column="amp_option_id" class="org.digijava.module.aim.dbentity.AmpReportsOptions" not-null="true"/>
 		-->

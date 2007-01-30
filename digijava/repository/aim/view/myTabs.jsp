@@ -33,9 +33,11 @@
 <div id="myTabs">
 <div class="DHTMLSuite_aTab">
  				Click on one of the buttons below, to open a drilldown tab:<br/>
-                <input type="button" value="Sector" onclick="tabViewObj.createNewTab('myTabs','Sector','','/aim/viewNewAdvancedReport.do~view=reset~viewFormat=tree~ampReportId=10~widget=true',true);return false"/><br/>
-                <input type="button" value="Funding Agency" onclick="tabViewObj.createNewTab('myTabs','Funding Agency','','/aim/viewNewAdvancedReport.do~view=reset~viewFormat=tree~ampReportId=11~widget=true',true);return false"/><br/>
-				<input type="button" value="Status" onclick="tabViewObj.createNewTab('myTabs','Status','','/aim/viewNewAdvancedReport.do~view=reset~viewFormat=tree~ampReportId=12~widget=true',true);return false"/><br/>                
+			<logic:iterate name="myReports" id="report" scope="session" type="org.digijava.module.aim.dbentity.AmpReports"> 
+			<logic:equal name="report" property="drilldownTab" value="true">
+                <input type="button" value="<bean:write name="report" property="name"/>" onclick="tabViewObj.createNewTab('myTabs','<bean:write name="report" property="name"/>','','/aim/viewNewAdvancedReport.do~view=reset~viewFormat=tree~ampReportId=<bean:write name="report" property="ampReportId"/>~widget=true',true);return false"/>&nbsp;
+			</logic:equal>
+			</logic:iterate>
 </div>
 </div>
 

@@ -990,6 +990,8 @@ public class AdvancedReport extends Action {
 							}
 							ampReports.setMeasures(measures);
 							ampReports.setHideActivities(formBean.getHideActivities());
+							ampReports.setDrilldownTab(formBean.getDrilldownTab());
+							
 							ReportUtil.saveReport(ampReports,teamMember.getTeamId(),teamMember.getMemberId(),teamMember.getTeamHead());
 							
 							HttpSession hs = request.getSession();

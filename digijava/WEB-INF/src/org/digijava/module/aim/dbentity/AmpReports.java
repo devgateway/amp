@@ -28,6 +28,8 @@ public class AmpReports implements Comparable {
 
 	private Boolean hideActivities;
 	
+	private Boolean drilldownTab;
+	
 	private Long type;
 
 	//private AmpReportsOptions ampReportsOptions;
@@ -180,6 +182,14 @@ public class AmpReports implements Comparable {
 	 */
 	public Boolean getHideActivities() {
 		return hideActivities;
+	}
+
+	public Boolean getDrilldownTab() {
+		return drilldownTab;
+	}
+
+	public void setDrilldownTab(Boolean drilldownTab) {
+		this.drilldownTab = drilldownTab;
 	}
 
 

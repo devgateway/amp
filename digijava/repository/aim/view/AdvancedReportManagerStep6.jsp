@@ -468,6 +468,16 @@ function checkUncheckAll2() {
 																					</td>
 																				</tr>
 																	
+																			<tr align="center">
+																					<td width="300" align="left">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+																						<html:checkbox property="drilldownTab"> 
+																							<digi:trn key="aim:drilldownTab">
+																							Show as a drilldown in My Tabs
+																							</digi:trn>
+																						</html:checkbox>
+																					</td>
+																				</tr>
+																	
 																			</table>
 																		</TD></TR>
 																	</TABLE>

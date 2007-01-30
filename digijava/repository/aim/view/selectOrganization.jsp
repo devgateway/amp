@@ -62,7 +62,7 @@
 
 	
 	function validate() {
-		alert(document.aimEditActivityForm.selectedOrganisationFromPages.value);
+	
 		if(document.aimEditActivityForm.selectedOrganisationFromPages.value != "-1") return true;
 
 		if (document.aimEditActivityForm.selOrganisations.checked != null) { // only one

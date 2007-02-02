@@ -97,7 +97,7 @@ public class AddOrgForm extends ActionForm {
 		  orgGroup = null;
 		  orgGroupColl = null;
 		
-		  actionFlag = null;
+		 // actionFlag = null;
 		  flag = null;
 		  regionFlag = null;	//defunct
 		  orgTypeFlag = null;

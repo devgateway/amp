@@ -222,6 +222,9 @@ function loadPage(){
 						<logic:equal name="aimAddOrgForm" property="actionFlag" value="create" >
 							<digi:trn key="aim:addOrganization">Add Organizations</digi:trn>
 						</logic:equal>
+						<logic:equal name="aimAddOrgForm" property="actionFlag" value="editOrgGroup" >
+							<digi:trn key="aim:addOrganization">Add Organizations</digi:trn>
+						</logic:equal>
 						<logic:equal name="aimAddOrgForm" property="actionFlag" value="edit" >
 							<digi:trn key="aim:editOrganization">Edit Organization</digi:trn>
 						</logic:equal>

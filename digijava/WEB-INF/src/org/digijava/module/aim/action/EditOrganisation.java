@@ -58,12 +58,8 @@ public class EditOrganisation extends Action {
 					 {
 						 
 						// editForm.setMode("");
-						 System.out.println("-------------"+editForm.getMode());
 						 editForm.reset(mapping, request);
 						 request.setAttribute("mode",null);
-						 
-						 System.out.println("da ma da aaaaaaaaaaaaa*****");
-						 //form.reset(mapping, request);System.out.println("da ma da aaaaaaaaaaaaa");editForm=new AddOrgForm();
 					 }
 					 editForm.setActionFlag(action);
 					 
@@ -165,7 +161,7 @@ public class EditOrganisation extends Action {
 								 	}
 								 }*/
 					 			editForm.setRegionFlag("hide");	// Setting style property for hiding region drop-down
-					 			return mapping.findForward("forward");//!!!!!!!!!!!!!!
+					 			return mapping.findForward("forward");
 					 		}
 							
 							 	if (ampOrg.getName() != null) {

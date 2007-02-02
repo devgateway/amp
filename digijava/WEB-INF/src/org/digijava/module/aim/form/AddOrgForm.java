@@ -1,7 +1,11 @@
 package org.digijava.module.aim.form;
 
-import org.apache.struts.action.*;
-import java.util.*;
+import java.util.Collection;
+
+import javax.servlet.http.HttpServletRequest;
+
+import org.apache.struts.action.ActionForm;
+import org.apache.struts.action.ActionMapping;
 
 public class AddOrgForm extends ActionForm {
 
@@ -39,12 +43,70 @@ public class AddOrgForm extends ActionForm {
 	private Collection orgGroupColl = null;
 	
 	private String actionFlag = null;
+	private String mode=null;
 	private String flag = null;
 	private String regionFlag = null;	//defunct
 	private String orgTypeFlag = null;
 	private String levelFlag = null;	//defunct
 	private String saveFlag = "no";
 
+	
+	 public String getMode() {
+		return mode;
+	}
+
+
+	public void setMode(String mode) {
+		this.mode = mode;
+	}
+
+
+	public void reset(ActionMapping mapping, HttpServletRequest request){
+		if("resetMode".equals(mode))
+		{	
+	 	  name = null;
+		  acronym = null;
+		  dacOrgCode = null;
+		  description = null;
+		  orgCode = null;
+		  orgIsoCode = null;
+			
+		  contactPersonName = null;
+		  contactPersonTitle = null;
+		  address = null;
+		  email = null;
+		  phone = null;
+		  fax = null;
+		  orgUrl = null;
+		
+		  ampOrgId = null;
+		  ampOrgTypeId = null;
+		  fiscalCalId = null;
+		  ampSecSchemeId = null;
+		  levelId = null;		//defunct
+		  regionId = null;
+		  countryId = "et";	//defunct
+		  ampOrgGrpId = null;
+		
+		  fiscalCal = null;
+		  sectorScheme = null;
+		  country = null;	//defunct
+		  region = null;
+		  orgType = null;
+		  level = null;	//defunct
+		  orgGroup = null;
+		  orgGroupColl = null;
+		
+		  actionFlag = null;
+		  flag = null;
+		  regionFlag = null;	//defunct
+		  orgTypeFlag = null;
+		  levelFlag = null;	//defunct
+		  saveFlag = "no";
+		  mode=null;
+		  }
+	
+	}
 	public String getName() {
 		return name;
 	}

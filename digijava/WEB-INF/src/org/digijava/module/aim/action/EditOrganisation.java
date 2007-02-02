@@ -43,7 +43,7 @@ public class EditOrganisation extends Action {
 					 } 
 					 else {
 							String str = (String)session.getAttribute("ampAdmin");
-							if (str.equals("no")) {
+ 							if (str.equals("no")) {
 								return mapping.findForward("index");
 							}
 					 }
@@ -51,10 +51,23 @@ public class EditOrganisation extends Action {
 					 logger.debug("In edit organisation action");
 
 					 AddOrgForm editForm = (AddOrgForm) form;
-					 
+					// session.setAttribute("dandan",editForm);
 					 String action = request.getParameter("actionFlag");
 					 logger.debug("action : " + action);
+					 if("create".equals(action) && request.getParameter("mode")!=null && "resetMode".equals(request.getParameter("mode"))) 
+					 {
+						 
+						// editForm.setMode("");
+						 System.out.println("-------------"+editForm.getMode());
+						 editForm.reset(mapping, request);
+						 request.setAttribute("mode",null);
+						 
+						 System.out.println("da ma da aaaaaaaaaaaaa*****");
+						 //form.reset(mapping, request);System.out.println("da ma da aaaaaaaaaaaaa");editForm=new AddOrgForm();
+					 }
 					 editForm.setActionFlag(action);
+					 
+					 if("editOrgGroup".equals(action)) return mapping.findForward("forward"); 
 					 
 					 if (null == editForm.getFiscalCal() || editForm.getFiscalCal().size() < 1)
 					 	editForm.setFiscalCal(DbUtil.getAllFisCalenders());
@@ -152,7 +165,7 @@ public class EditOrganisation extends Action {
 								 	}
 								 }*/
 					 			editForm.setRegionFlag("hide");	// Setting style property for hiding region drop-down
-					 			return mapping.findForward("forward");
+					 			return mapping.findForward("forward");//!!!!!!!!!!!!!!
 					 		}
 							
 							 	if (ampOrg.getName() != null) {
@@ -326,7 +339,7 @@ public class EditOrganisation extends Action {
 								if (org.isEmpty())   // To check for duplicate org-code
 									ampOrg.setOrgCode(editForm.getOrgCode());
 								else {
-									editForm.setFlag("orgCodeExist");
+									if (!("create".equals(action))) editForm.setFlag("orgCodeExist");
 									return mapping.findForward("forward");
 								}
 							}

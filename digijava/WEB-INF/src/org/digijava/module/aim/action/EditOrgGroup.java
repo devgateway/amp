@@ -1,16 +1,22 @@
 package org.digijava.module.aim.action ;
 
+import java.util.Collection;
 import java.util.Iterator;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+
 import org.apache.log4j.Logger;
-import org.apache.struts.action.*;
+import org.apache.struts.action.Action;
+import org.apache.struts.action.ActionForm;
+import org.apache.struts.action.ActionForward;
+import org.apache.struts.action.ActionMapping;
 import org.digijava.module.aim.dbentity.AmpOrgGroup;
-import org.digijava.module.aim.dbentity.AmpLevel;
 import org.digijava.module.aim.dbentity.AmpOrgType;
-import org.digijava.module.aim.util.DbUtil;
+import org.digijava.module.aim.form.AddOrgForm;
 import org.digijava.module.aim.form.AddOrgGroupForm;
-import javax.servlet.http.*;
-import java.util.Collection;
+import org.digijava.module.aim.util.DbUtil;
 
 
 public class EditOrgGroup extends Action {
@@ -34,7 +40,7 @@ public class EditOrgGroup extends Action {
 					 }
 					 
 					 logger.debug("In edit organization group");
-
+					 
 					 AddOrgGroupForm editForm = (AddOrgGroupForm) form;
 					 String action = request.getParameter("action");
 					 logger.debug("action : " + action);
@@ -43,7 +49,6 @@ public class EditOrgGroup extends Action {
 					 editForm.setOrgTypeColl(col);
 					 //Collection col = DbUtil.getAllLevels();
 					 //editForm.setLevel(col);
-					 
 					 if ("create".equals(action) || ("createGroup".equals(action))) {
 					 	if (("createGroup".equals(action))) {
 					 		if (request.getParameter("ampOrgId") == null 
@@ -52,19 +57,22 @@ public class EditOrgGroup extends Action {
 					 			editForm.setAmpOrgId(null);
 					 		else
 					 			editForm.setAmpOrgId(new Long(Integer.parseInt(request.getParameter("ampOrgId"))));
+					 			
 					 	}
 					 	if (editForm.getOrgGrpName() == null) {
 						 	logger.debug("Inside IF [CREATE]");
+							 
 						 	if (("create".equals(action)))
 						 		return mapping.findForward("forward");
 						 	else 
 						 		return mapping.findForward("popup");
+							 
 						 }
 						 else {
 						 	if (session.getAttribute("ampOrgGrp") != null) {
 								session.removeAttribute("ampOrgGrp");
 							}
-							
+							 
 							AmpOrgGroup ampGrp = new AmpOrgGroup();
 							ampGrp.setOrgGrpName(editForm.getOrgGrpName());
 							ampGrp.setOrgGrpCode(editForm.getOrgGrpCode());

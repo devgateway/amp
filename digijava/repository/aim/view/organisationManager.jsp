@@ -284,7 +284,7 @@
 												<td>
 													<digi:img src="module/aim/images/arrow-014E86.gif" 	width="15" height="10"/></td>
 												<td>
-														<digi:link href="/editOrganisation.do?actionFlag=create" >
+														<digi:link href="/editOrganisation.do?actionFlag=create&mode=resetMode" >
 															<digi:trn key="aim:addNewOrganization">Add an Organization</digi:trn></digi:link>
 												</td>
 											</tr>

@@ -14,6 +14,8 @@
 
 <li noDrag="true">
 <a onMouseOver="stm(['Totals for <bean:write name="columnReport" property="name"/>',document.getElementById('<bean:write name="columnReport" property="absoluteReportName"/>').innerHTML],Style[0])" onMouseOut="htm()"><bean:write name="columnReport" property="name"/></a>
+<bean:define id="viewable" name="columnReport" type="org.dgfoundation.amp.ar.Viewable" scope="page" toScope="request"/>
+<jsp:include page="subtotalsNodeLine.jsp"/>
 <ul>
 <table class=clsInnerTable cellSpacing=0 cellPadding=0 width="100%" border=0>
 

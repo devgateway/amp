@@ -21,6 +21,8 @@
 <logic:notPresent name="groupReport" property="parent">
 <li noDrag="true">
 <a><bean:write name="groupReport" property="name"/></a>
+<bean:define id="viewable" name="groupReport" type="org.dgfoundation.amp.ar.GroupReportData" scope="page" toScope="request"/>
+<jsp:include page="subtotalsNodeLine.jsp"/>
 <ul>
 </logic:notPresent>
 <logic:present name="groupReport" property="parent">
@@ -31,6 +33,8 @@
 </div>
 <li noDrag="true">
 <a onMouseOver="stm(['Totals for <bean:write name="groupReport" property="name"/>',document.getElementById('<bean:write name="groupReport" property="absoluteReportName"/>').innerHTML],Style[0])" onMouseOut="htm()"><bean:write name="groupReport" property="name"/></a>
+<bean:define id="viewable" name="groupReport" type="org.dgfoundation.amp.ar.GroupReportData" scope="page" toScope="request"/>
+<jsp:include page="subtotalsNodeLine.jsp"/>
 <ul>
 </c:if>
 </logic:present>

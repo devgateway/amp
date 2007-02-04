@@ -113,17 +113,23 @@ type="org.digijava.module.aim.form.ChannelOverviewForm" method="post">
 								<TD align="right">
 									<input type="button" value="Preview" class="dr-menu"
 										onclick="preview(<c:out value="${activity.activityId}"/>)">
-									<c:if test="${aimChannelOverviewForm.buttonText == 'edit'}">
-										<input type="button" value="Edit" class="dr-menu"
-											onclick="fnEditProject(<c:out value="${activity.activityId}"/>)">
-									</c:if>
-									<c:if test="${aimChannelOverviewForm.buttonText == 'validate'}">
-										<input type="button" value="Validate" class="dr-menu"
-											onclick="fnEditProject(<c:out value="${activity.activityId}"/>)">
-									</c:if>
-									<c:if test="${aimChannelOverviewForm.buttonText == 'approvalAwaited'}">
-										<input type="button" value="Approval Awaited" class="dr-menu" disabled>
-									</c:if>	
+									<c:choose>
+										<c:when test="${aimChannelOverviewForm.buttonText == 'edit'}">
+											<input type="button" value="Edit" class="dr-menu"
+												onclick="fnEditProject(<c:out value="${activity.activityId}"/>)">
+										</c:when>
+										<c:when test="${aimChannelOverviewForm.buttonText == 'validate'}">
+											<input type="button" value="Validate" class="dr-menu"
+												onclick="fnEditProject(<c:out value="${activity.activityId}"/>)">
+										</c:when>
+										<c:when test="${aimChannelOverviewForm.buttonText == 'approvalAwaited'}">
+											<input type="button" value="Approval Awaited" class="dr-menu" disabled>
+										</c:when>
+										<c:otherwise>
+											<input type="button" value="Editing is not allowed" class="dr-menu" disabled>
+										</c:otherwise>
+									</c:choose>
+										
 								</TD>
 							</TR>
 						</TABLE>

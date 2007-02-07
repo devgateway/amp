@@ -23,6 +23,9 @@ public class AdvancedReportForm extends ActionForm
 	}
 
 	
+	private String levelPicked=null;
+	private String levelSorter=null;
+	
 	private String pdfPageSize=null;
 	private long donors[];
 	private long statuses[];
@@ -1409,6 +1412,18 @@ private int yrDiff;
 	}
 	public void setDrilldownTab(Boolean drilldownTab) {
 		this.drilldownTab = drilldownTab;
+	}
+	public String getLevelPicked() {
+		return levelPicked;
+	}
+	public void setLevelPicked(String levelPicked) {
+		this.levelPicked = levelPicked;
+	}
+	public String getLevelSorter() {
+		return levelSorter;
+	}
+	public void setLevelSorter(String levelSorter) {
+		this.levelSorter = levelSorter;
 	}
 } //		End of Class
 

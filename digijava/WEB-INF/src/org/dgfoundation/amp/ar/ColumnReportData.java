@@ -309,5 +309,18 @@ public class ColumnReportData extends ReportData {
 		return parent.getAbsoluteReportName()+"--"+ this.name;		
 	}
 
+	public int getLevelDepth() {
+		return 1+parent.getLevelDepth();
+	}
+
+	public void applyLevelSorter() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void removeEmptyChildren() {
+		// TODO Auto-generated method stub
+	}
+
 	
 }

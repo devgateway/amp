@@ -12,6 +12,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.apache.log4j.Logger;
+import org.dgfoundation.amp.ar.cell.Cell;
 import org.dgfoundation.amp.ar.exception.IncompatibleColumnException;
 import org.dgfoundation.amp.ar.exception.UnidentifiedItemException;
 import org.digijava.module.aim.dbentity.AmpReports;
@@ -23,6 +24,7 @@ import org.digijava.module.aim.dbentity.AmpReports;
  *
  */
 public abstract class ReportData extends Viewable {
+	
 	
 	protected static Logger logger = Logger.getLogger(ReportData.class);
 	
@@ -37,7 +39,7 @@ public abstract class ReportData extends Viewable {
 	protected String sortByColumn;
 	protected boolean sortAscending;
 	
-	protected ReportData parent;
+	protected GroupReportData parent;
 	
 	protected AmpReports reportMetadata;
 	
@@ -53,6 +55,10 @@ public abstract class ReportData extends Viewable {
 
 	public abstract String getAbsoluteReportName();
 	
+	public abstract void applyLevelSorter();
+	
+	public abstract void removeEmptyChildren();
+	
 	public int getTotalUniqueRows() {
 		return getOwnerIds().size();
 	}
@@ -60,14 +66,14 @@ public abstract class ReportData extends Viewable {
 	/**
 	 * @return Returns the parent.
 	 */
-	public ReportData getParent() {
+	public GroupReportData getParent() {
 		return parent;
 	}
 
 	/**
 	 * @param parent The parent to set.
 	 */
-	public void setParent(ReportData parent) {
+	public void setParent(GroupReportData parent) {
 		this.parent = parent;
 	}
 
@@ -139,6 +145,8 @@ public abstract class ReportData extends Viewable {
 	}
 	
 	public abstract int getTotalDepth();
+	
+	public abstract int getLevelDepth();
 
 	/**
 	 * @return Returns the reportMetadata.
@@ -170,6 +178,22 @@ public abstract class ReportData extends Viewable {
 		if(this.getParent()!=null) this.getParent().setGlobalHeadingsDisplayed(globalHeadingsDisplayed);
 		else
 		this.globalHeadingsDisplayed=globalHeadingsDisplayed;
+	}
+
+
+	/**
+	 * Searches the trailCells list for a Cell belonging to the column name specified as parameter
+	 * @param columnName the column name to which the cell belongs
+	 * @return the cell or null if not found
+	 */
+	public Cell findTrailCell(String columnName) {
+		Iterator i=this.getTrailCells().iterator();
+		while (i.hasNext()) {
+			Cell element = (Cell) i.next();
+			if(columnName.equals(element.getColumn().getAbsoluteColumnName())) return element; 
+		}
+		logger.error(this.getName()+":Could not find appropriate trail cell for column name "+columnName);
+		return null;
 	}
 	
 	

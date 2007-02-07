@@ -56,5 +56,7 @@ public final class ArConstants {
 	
 	public final static String UNDISBURSED_BALANCE="Undisbursed Balance";
 	
-	
+
+	//hierarchysorter
+	public final static String HIERARCHY_SORTER_TITLE="Title";
 }

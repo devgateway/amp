@@ -7,6 +7,9 @@
 package org.digijava.module.aim.action;
 
 
+import java.util.HashMap;
+import java.util.Map;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -23,6 +26,7 @@ import org.dgfoundation.amp.ar.GenericViews;
 import org.dgfoundation.amp.ar.GroupReportData;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.dbentity.AmpReports;
+import org.digijava.module.aim.form.AdvancedReportForm;
 
 /**
  * 
@@ -46,12 +50,32 @@ public class ViewNewAdvancedReport extends Action {
 	public ActionForward execute(ActionMapping mapping, ActionForm form, 
 			HttpServletRequest request, HttpServletResponse response) throws java.lang.Exception
 			{
+		AdvancedReportForm arf=(AdvancedReportForm) form;
 		HttpSession hs = request.getSession();
 
 		String widget=request.getParameter("widget");
 		request.setAttribute("widget",widget);
+		
+		if(hs.getAttribute("reportSorters")==null) hs.setAttribute("reportSorters",new HashMap());
+		Map sorters=(Map) hs.getAttribute("reportSorters");		
 
-		// test if the request was for sorting purposes:
+		//test if the request was for hierarchy sorting purposes:
+		if(request.getParameter("applySorter")!=null) {
+			GroupReportData oldRd=(GroupReportData) hs.getAttribute("report");
+			AmpReports ar=(AmpReports) hs.getAttribute("reportMeta");
+			sorters.put(arf.getLevelPicked(),arf.getLevelSorter());
+			String viewFormat=request.getParameter("viewFormat");
+			if(viewFormat==null) viewFormat=GenericViews.HTML;
+			request.setAttribute("viewFormat",viewFormat);
+			oldRd.setGlobalHeadingsDisplayed(new Boolean(false));
+			hs.setAttribute("report",oldRd);
+			oldRd.importLevelSorters(sorters,ar.getHierarchies().size());
+			oldRd.applyLevelSorter();
+			request.setAttribute("ampReportId",ar.getAmpReportId().toString());			
+			return mapping.findForward("forward");	
+		}
+		
+		// test if the request was for column sorting purposes:
 		String sortBy=request.getParameter("sortBy");
 		if(sortBy!=null) {
 			hs.setAttribute("sortBy",sortBy);

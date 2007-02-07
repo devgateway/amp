@@ -298,6 +298,8 @@ public class AmpReportGenerator extends ReportGenerator {
 		if (reportMetadata.getHierarchies().size() != 0)
 			createHierarchies();
 
+		
+		
 		// perform postprocessing - cell grouping and other tasks
 		report.postProcess();
 		
@@ -328,6 +330,8 @@ public class AmpReportGenerator extends ReportGenerator {
 				e.printStackTrace();
 			}
 		}
+		
+		report.removeEmptyChildren();
 	}
 
 	/**

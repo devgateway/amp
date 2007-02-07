@@ -6199,8 +6199,8 @@ DHTMLSuite.modalMessage.prototype = {
     	
 		
 		
-    	this.divs_content.style.left = Math.ceil((bodyWidth - tmpWidth) / 2) + 'px';;
-    	this.divs_content.style.top = (Math.ceil((bodyHeight - tmpHeight) / 2) +  topOffset) + 'px';
+    	this.divs_content.style.left = 300 + 'px';;
+    	this.divs_content.style.top =  300 + 'px';
     	this.divs_shadow.style.left = (this.divs_content.style.left.replace('px','')/1 + this.shadowOffset) + 'px';
     	this.divs_shadow.style.top = (this.divs_content.style.top.replace('px','')/1 + this.shadowOffset) + 'px';
     	this.divs_shadow.style.height = tmpHeight + 'px';

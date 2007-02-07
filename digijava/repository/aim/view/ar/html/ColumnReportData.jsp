@@ -15,22 +15,28 @@
 <i><bean:write name="columnReport" property="name"/></i>
 </td></tr>
 
-<% int rowIdx=2; %>
+<%int rowIdx = 2;
+			%>
 
 <!-- generate report headings -->
 <logic:equal name="columnReport" property="globalHeadingsDisplayed" value="false">
-<%int maxDepth=columnReport.getMaxColumnDepth(); columnReport.setGlobalHeadingsDisplayed(new Boolean(true)); %>
-<%for(int curDepth=0;curDepth<=columnReport.getMaxColumnDepth();curDepth++,rowIdx++) {%>
+<%int maxDepth = columnReport.getMaxColumnDepth();
+				columnReport.setGlobalHeadingsDisplayed(new Boolean(true));
+				%>
+<%for (int curDepth = 0; curDepth <= columnReport
+						.getMaxColumnDepth(); curDepth++, rowIdx++) {%>
 <tr>
 <logic:iterate name="columnReport" property="items" id="column" scope="page" type="org.dgfoundation.amp.ar.Column">
-	<% column.setCurrentDepth(curDepth);%>
-	<% int rowsp=column.getCurrentRowSpan(); %>
+	<%column.setCurrentDepth(curDepth);%>
+	<%int rowsp = column.getCurrentRowSpan();
+						%>
 	<logic:iterate name="column" property="subColumnList" id="subColumn" scope="page" type="org.dgfoundation.amp.ar.Column">
 	<td align="center" class=clsTableTitleCol rowspan="<%=rowsp%>" colspan='<bean:write name="subColumn" property="width"/>'>
 	
 	<logic:equal name="column" property="columnDepth" value="1">
 	<html:link styleClass="reportHeading" page="/viewNewAdvancedReport.do" paramName="column" paramProperty="name" paramId="sortBy">
-		<%=subColumn.getName(reportMeta.getHideActivities())%>
+		<%=subColumn.getName(reportMeta
+													.getHideActivities())%>
 	</html:link>
 	<c:if test="${column.name == columnReport.sorterColumn}">
 	<logic:equal name="columnReport" property="sortAscending" value="false">
@@ -44,21 +50,24 @@
 	
 	</logic:equal>
 	<logic:notEqual name="column" property="columnDepth" value="1">
-		<%=subColumn.getName(reportMeta.getHideActivities())%>
+		<%=subColumn.getName(reportMeta
+												.getHideActivities())%>
 	</logic:notEqual>
 	</td>
 	
 	</logic:iterate>
 </logic:iterate>
 </tr>
-<% } %>
+<%}
+			%>
 </logic:equal>
 
 <!-- generate report data -->
 
 <logic:notEqual name="reportMeta" property="hideActivities" value="true">
 <logic:iterate name="columnReport" property="ownerIds" id="ownerId" scope="page">
-<%rowIdx++; %>
+<%rowIdx++;
+					%>
 <tr onmousedown="setPointer(this, <%=rowIdx%>, 'click', '#FFFFFF', '#FFFFFF', '#FFFF00');">
 	<logic:iterate name="columnReport" property="items" id="column" scope="page">
 		<bean:define id="viewable" name="column" type="org.dgfoundation.amp.ar.Viewable" scope="page" toScope="request"/>

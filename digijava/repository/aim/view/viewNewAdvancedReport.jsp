@@ -23,10 +23,19 @@
 <script type="text/javascript" src="<digi:file src="module/aim/scripts/dhtml-suite-for-applications.js"/>"></script>
 
 <!-- dynamic tooltip -->
-<script type="text/javascript" src="<digi:file src="module/aim/scripts/separateFiles/dhtmlSuite-common.js"/>"></script>
 <script type="text/javascript" src="<digi:file src="module/aim/scripts/separateFiles/dhtmlSuite-dynamicContent.js"/>"></script>
 <script type="text/javascript" src="<digi:file src="module/aim/scripts/separateFiles/dhtmlSuite-dynamicTooltip.js"/>"></script>
 
+<link rel="stylesheet"
+	href="<digi:file src="module/aim/view/css/css_dhtmlsuite/modal-message.css"/>" />
+
+	<div style='position:relative;display:none;' id="sorterPicker">
+		<b>Please select hierarchy sorter criteria:</b><br/>
+		<jsp:include page="/repository/aim/view/ar/levelSorterPicker.jsp" />
+		<br/>
+		<a href='#' onclick='closeMessage();return false'>Close</a>
+		</div>
+		
 <table class=clsTable cellSpacing=0 cellPadding=0 width="100%" border=0>
 
 	<logic:notEqual name="widget" scope="request" value="true">
@@ -38,8 +47,31 @@
 		<tr>
 			<td><jsp:include page="/repository/aim/view/ar/NewFilters.jsp" /></td>
 		</tr>
+	
+
 	</logic:notEqual>
 	</logic:notEqual>
+	<tr>
+		
+	
+			<td>
+			<div id="menucontainer">
+			<input type="button" value="Hierarchy Sorting" 
+			onclick="displayStaticMessage(document.getElementById('sorterPicker').innerHTML,false);return false"
+			/>
+
+			</div>
+			
+		</tr>
+		
+		<tr>
+			<td>
+				<logic:iterate name="report" property="levelSorters" id="sorter" indexId="levelId">
+					Level <bean:write name="levelId"/> sorted by <bean:write name="sorter"/><br/>
+				</logic:iterate>
+			</td>		
+		</tr>
+	<tr> <td>&nbsp;</td></tr>
 
 	<tr>
 		<td><bean:define id="reportMeta" name="reportMeta"
@@ -101,3 +133,38 @@
 </table>
 
 
+<script type="text/javascript">
+messageObj = new DHTMLSuite.modalMessage();	// We only create one object of this class
+messageObj.setWaitMessage('Loading message - please wait....');
+messageObj.setShadowOffset(5);	// Large shadow
+
+DHTMLSuite.commonObj.setCssCacheStatus(false);
+
+function displayMessage(url)
+{	
+	messageObj.setSource(url);
+	messageObj.setCssClassMessageBox(false);
+	messageObj.setSize(400,200);
+	messageObj.setShadowDivVisible(true);	// Enable shadow for these boxes
+	messageObj.display();
+}
+
+function displayStaticMessage(messageContent,cssClass)
+{
+	messageObj.setHtmlContent(messageContent);
+	messageObj.setSize(400,150);
+	messageObj.setCssClassMessageBox(cssClass);
+	messageObj.setSource(false);	// no html source since we want to use a static message here.
+	messageObj.setShadowDivVisible(false);	// Disable shadow for these boxes	
+	messageObj.display();
+	
+	
+}
+
+function closeMessage()
+{
+	messageObj.close();	
+}
+</script>
+
+<div id="debug"></div>

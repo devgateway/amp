@@ -8,7 +8,11 @@ package org.dgfoundation.amp.ar;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
 
@@ -24,11 +28,46 @@ import org.dgfoundation.amp.ar.exception.UnidentifiedItemException;
  */
 public class GroupReportData extends ReportData {
 
+	/**
+	 * GroupReportData comparator class. This class implements reportData comparison. 
+	 * Comparison is based on the level of this ReportData and the chosen sorter for that particular level
+	 * @author mihai
+	 * @see GroupReportData.getThisLevelSorter()
+	 */
+	public class GroupReportDataComparator implements Comparator {
+		public final int compare (Object o1, Object o2) {
+			Comparator c=new Cell.CellComparator();
+			String sorter=getThisLevelSorter();
+			ReportData c1=(ReportData) o1;
+			ReportData c2=(ReportData) o2;
+			if(ArConstants.HIERARCHY_SORTER_TITLE.equals(sorter))
+					return c1.getName().compareTo(c2.getName());
+			else return c.compare(c1.findTrailCell(sorter),c2.findTrailCell(sorter));
+		}
+	}
+	
+	protected List levelSorters;
+		
 	protected String currentView;
 	
+	public void applyLevelSorter() {
+		if(getThisLevelSorter()!=null)
+		Collections.sort(items,new GroupReportDataComparator());
+		Iterator i=items.iterator();
+		while (i.hasNext()) {
+			ReportData element = (ReportData) i.next();
+			element.applyLevelSorter();
+		}
+	}
 	
 	protected Integer sourceColsCount;
 
+	public String getThisLevelSorter() {
+		int myDepth=getLevelDepth()-1;
+		if(myDepth<0 || getLevelSorters().size()<=myDepth) return null;
+		return (String) getLevelSorters().get(myDepth);
+	}
+	
 	public GroupReportData(GroupReportData d) {
 		super(d.getName());
 		this.parent = d.getParent();
@@ -115,7 +154,9 @@ public class GroupReportData extends ReportData {
 				ReportData firstRd = (ReportData) items.iterator().next();
 				for (int k = 0; k < firstRd.getTrailCells().size(); k++) {
 					Cell c=(Cell) firstRd.getTrailCells().get(k);
-					trailCells.add(c.newInstance());
+					Cell newc=c.newInstance();
+					newc.setColumn(c.getColumn());
+					trailCells.add(newc);
 				}
 					
 				logger.debug("GroupTrail.size=" + trailCells.size());
@@ -232,5 +273,31 @@ public class GroupReportData extends ReportData {
 		if (parent!=null) return parent.getAbsoluteReportName()+"--"+ this.name;
 		else return this.name;
 	}
-	
+
+	public int getLevelDepth() {
+		if(parent==null) return 0; else return 1+parent.getLevelDepth();
+	}
+
+	public List getLevelSorters() {
+		if(parent==null) return levelSorters; else return parent.getLevelSorters();
+	}
+
+	public void importLevelSorters(Map sorterMap, int levels) {
+		levelSorters=new ArrayList(levels);
+		for(int k=0;k<levels;k++) levelSorters.add(null);
+		Iterator i=sorterMap.keySet().iterator();
+		while (i.hasNext()) {
+			String element = (String) i.next();
+			levelSorters.set(Integer.parseInt(element)-1,sorterMap.get(element));
+			
+		}
+	}
+
+	public void removeEmptyChildren() {
+		Iterator i=items.iterator();
+		while (i.hasNext()) {
+			ReportData element = (ReportData) i.next();
+			if(element.getItems().size()==0) i.remove(); else element.removeEmptyChildren();
+		}
+	}
 }

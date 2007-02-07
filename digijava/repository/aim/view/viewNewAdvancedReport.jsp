@@ -51,9 +51,11 @@
 
 	</logic:notEqual>
 	</logic:notEqual>
+
+	<logic:notEmpty name="reportMeta" property="hierarchies">
 	<tr>
 		
-	
+
 			<td>
 			<div id="menucontainer">
 			<input type="button" value="Hierarchy Sorting" 
@@ -68,13 +70,16 @@
 			<td>
 				<logic:notEmpty name="report" property="levelSorters">
 				<logic:iterate name="report" property="levelSorters" id="sorter" indexId="levelId">
+				<logic:present name="sorter">
 					Level <bean:write name="levelId"/> sorted by <bean:write name="sorter"/><br/>
+				</logic:present>					
 				</logic:iterate>
 				</logic:notEmpty>
 			</td>		
 		</tr>
 	<tr> <td>&nbsp;</td></tr>
-
+	</logic:notEmpty>
+	
 	<tr>
 		<td><bean:define id="reportMeta" name="reportMeta"
 			type="org.digijava.module.aim.dbentity.AmpReports" scope="session"

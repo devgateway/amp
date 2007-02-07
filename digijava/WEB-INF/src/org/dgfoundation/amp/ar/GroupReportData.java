@@ -288,6 +288,7 @@ public class GroupReportData extends ReportData {
 		Iterator i=sorterMap.keySet().iterator();
 		while (i.hasNext()) {
 			String element = (String) i.next();
+			if(Integer.parseInt(element)-1>=levels) i.remove(); else
 			levelSorters.set(Integer.parseInt(element)-1,sorterMap.get(element));
 			
 		}

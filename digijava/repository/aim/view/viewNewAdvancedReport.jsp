@@ -66,9 +66,11 @@
 		
 		<tr>
 			<td>
+				<logic:notEmpty name="report" property="levelSorters">
 				<logic:iterate name="report" property="levelSorters" id="sorter" indexId="levelId">
 					Level <bean:write name="levelId"/> sorted by <bean:write name="sorter"/><br/>
 				</logic:iterate>
+				</logic:notEmpty>
 			</td>		
 		</tr>
 	<tr> <td>&nbsp;</td></tr>

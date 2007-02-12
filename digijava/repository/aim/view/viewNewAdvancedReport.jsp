@@ -29,12 +29,12 @@
 <link rel="stylesheet"
 	href="<digi:file src="module/aim/view/css/css_dhtmlsuite/modal-message.css"/>" />
 
-	<div style='position:relative;display:none;' id="sorterPicker">
+<div style='position:relative;display:none;' id="sorterPicker-<bean:write name="reportMeta" property="ampReportId"/>">
 		<b>Please select hierarchy sorter criteria:</b><br/>
 		<jsp:include page="/repository/aim/view/ar/levelSorterPicker.jsp" />
 		<br/>
 		<a href='#' onclick='closeMessage();return false'>Close</a>
-		</div>
+</div>
 		
 <table class=clsTable cellSpacing=0 cellPadding=0 width="100%" border=0>
 
@@ -59,7 +59,7 @@
 			<td>
 			<div id="menucontainer">
 			<input type="button" value="Hierarchy Sorting" 
-			onclick="displayStaticMessage(document.getElementById('sorterPicker').innerHTML,false);return false"
+			onclick="displayStaticMessage(document.getElementById('sorterPicker-<bean:write name="reportMeta" property="ampReportId"/>').innerHTML,false);return false"
 			/>
 
 			</div>

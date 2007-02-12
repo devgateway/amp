@@ -57,12 +57,20 @@ public class ViewNewAdvancedReport extends Action {
 		request.setAttribute("widget",widget);
 		
 		if(hs.getAttribute("reportSorters")==null) hs.setAttribute("reportSorters",new HashMap());
-		Map sorters=(Map) hs.getAttribute("reportSorters");		
-
+		Map sorters=(Map) hs.getAttribute("reportSorters");
+		String ampReportId = request.getParameter("ampReportId");
+		
+		GroupReportData oldRd=(GroupReportData) hs.getAttribute("report");
+		AmpReports ar=(AmpReports) hs.getAttribute("reportMeta");
+		
+		if(!ar.getAmpReportId().toString().equals(ampReportId))  oldRd=ARUtil.generateReport(mapping,form,request,response);
+		
 		//test if the request was for hierarchy sorting purposes:
 		if(request.getParameter("applySorter")!=null) {
-			GroupReportData oldRd=(GroupReportData) hs.getAttribute("report");
-			AmpReports ar=(AmpReports) hs.getAttribute("reportMeta");
+			
+			if(request.getParameter("levelPicked")!=null && request.getParameter("levelSorter")!=null)
+				sorters.put(request.getParameter("levelPicked"),request.getParameter("levelSorter"));
+			else
 			sorters.put(arf.getLevelPicked(),arf.getLevelSorter());
 			String viewFormat=request.getParameter("viewFormat");
 			if(viewFormat==null) viewFormat=GenericViews.HTML;
@@ -79,8 +87,7 @@ public class ViewNewAdvancedReport extends Action {
 		String sortBy=request.getParameter("sortBy");
 		if(sortBy!=null) {
 			hs.setAttribute("sortBy",sortBy);
-			GroupReportData oldRd=(GroupReportData) hs.getAttribute("report");
-			AmpReports ar=(AmpReports) hs.getAttribute("reportMeta");
+			
 			oldRd.setSorterColumn(sortBy);
 			oldRd.setGlobalHeadingsDisplayed(new Boolean(false));
 			String viewFormat=request.getParameter("viewFormat");
@@ -93,7 +100,7 @@ public class ViewNewAdvancedReport extends Action {
 		
 				GroupReportData rd=ARUtil.generateReport(mapping,form,request,response);
 				
-				String ampReportId = request.getParameter("ampReportId");
+				
 				
 				if (rd==null) return mapping.findForward("index");
 			
@@ -106,6 +113,11 @@ public class ViewNewAdvancedReport extends Action {
 				
 				
 				AmpReports reportMeta = (AmpReports) session.get(AmpReports.class, new Long(ampReportId));
+				
+				rd.importLevelSorters(sorters,reportMeta.getHierarchies().size());
+				rd.applyLevelSorter();
+				
+				
 				request.setAttribute("extraTitle",reportMeta.getName());
 				
 				rd.setCurrentView(viewFormat);

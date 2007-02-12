@@ -10,6 +10,8 @@
 	type="org.digijava.module.aim.dbentity.AmpReports" scope="session"
 	toScope="page" />
 
+
+
 <digi:form action="/viewNewAdvancedReport.do">
 	<table>
 		<tr>
@@ -29,7 +31,14 @@
 		</tr>
 		<tr>
 			<td>&nbsp;</td>
+			<logic:notEqual name="widget" scope="request" value="true">
 			<td><html:submit property="applySorter">Apply Sorting</html:submit></td>
+			</logic:notEqual>
+			<logic:equal name="widget" scope="request" value="true">			
+			<td><input type="button" name="applySorter" value="Apply Sorting" 
+			onclick="tabViewObj.addContentToTab('<bean:write name="reportMeta" property="name"/>','/aim/viewNewAdvancedReport.do~applySorter=true~view=reset~viewFormat=tree~ampReportId=<bean:write name="reportMeta" property="ampReportId"/>~widget=true~levelPicked='+levelPicked.options[levelPicked.selectedIndex].value+'~levelSorter='+levelSorter.options[levelSorter.selectedIndex].value);closeMessage();"/>
+			</td>
+			</logic:equal>
 		</tr>
 	</table>
 </digi:form>

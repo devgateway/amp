@@ -63,7 +63,7 @@ public class ViewNewAdvancedReport extends Action {
 		GroupReportData oldRd=(GroupReportData) hs.getAttribute("report");
 		AmpReports ar=(AmpReports) hs.getAttribute("reportMeta");
 		
-		if(!ar.getAmpReportId().toString().equals(ampReportId))  oldRd=ARUtil.generateReport(mapping,form,request,response);
+		if(ar!=null && !ar.getAmpReportId().toString().equals(ampReportId))  oldRd=ARUtil.generateReport(mapping,form,request,response);
 		
 		//test if the request was for hierarchy sorting purposes:
 		if(request.getParameter("applySorter")!=null) {

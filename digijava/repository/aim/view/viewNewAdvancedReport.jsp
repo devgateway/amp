@@ -52,6 +52,7 @@
 	</logic:notEqual>
 	</logic:notEqual>
 
+
 	<logic:notEmpty name="reportMeta" property="hierarchies">
 	<tr>
 		

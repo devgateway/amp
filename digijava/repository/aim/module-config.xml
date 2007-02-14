@@ -12,6 +12,7 @@
 		<action login-required="false" pattern="/logout" />
 		<action login-required="false" pattern="/logoutAction" />
         <action login-required="false" pattern="/displayFlag" />
+        <action login-required="false" pattern="/viewNewAdvancedReport" />        
         </security>
 
 	<!-- highlights classes Begin-->

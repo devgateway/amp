@@ -67,6 +67,7 @@ public final class ARUtil {
 		Iterator i = col.iterator();
 		while (i.hasNext()) {
 			Object element = (Object) i.next();
+			if(element==null) continue;
 			if (element instanceof String)
 				ret += "'" + (String) element + "'";
 			else
@@ -98,12 +99,15 @@ public final class ARUtil {
 		HttpSession httpSession = request.getSession();
 		Session session = PersistenceManager.getSession();
 
+		String publicView=request.getParameter("publicView");
+		
 		TeamMember teamMember = (TeamMember) httpSession
 				.getAttribute("currentMember");
 
 		AmpReports r = (AmpReports) session.get(AmpReports.class, new Long(
 				ampReportId));
 
+		if(publicView==null)
 		logger.info("Report '" + r.getName() + "' requested by user "
 				+ teamMember.getEmail() + " from team "
 				+ teamMember.getTeamName());
@@ -195,16 +199,14 @@ public final class ARUtil {
 		GregorianCalendar c = new GregorianCalendar();
 		year = c.get(Calendar.YEAR);
 
-		// do not allow access for guests:
-		if (teamMember == null)
-			return null;
-		Long ampTeamId = teamMember.getTeamId();
+	
+		Long ampTeamId = null;
+		if(teamMember!=null) ampTeamId=teamMember.getTeamId();
 		ArrayList dbReturnSet = null;
 
 		AdvancedReportForm formBean = (AdvancedReportForm) form;
 		String perspective = "DN";
 
-		AmpTeam ampTeam = TeamUtil.getAmpTeam(ampTeamId);
 
 		if (request.getParameter("ampReportId") != null) {
 			formBean.setCreatedReportId(request.getParameter("ampReportId"));
@@ -213,8 +215,15 @@ public final class ARUtil {
 		formBean.setReportName(ampReports.getName());
 		if (ampReports.getReportDescription() != null)
 			formBean.setReportDescription(ampReports.getReportDescription());
-		formBean.setWorkspaceType(ampTeam.getType());
-		formBean.setWorkspaceName(ampTeam.getName());
+		AmpTeam ampTeam = null;
+			
+		if(ampTeamId!=null) ampTeam=TeamUtil.getAmpTeam(ampTeamId);
+		
+		if(ampTeam!=null) {
+			formBean.setWorkspaceType(ampTeam.getType());
+			formBean.setWorkspaceName(ampTeam.getName());
+		}
+		
 		Long ampPageId = DbUtil.getAmpPageId(ampReports.getName());
 
 		// Set all the filters
@@ -234,8 +243,8 @@ public final class ARUtil {
 		formBean.setFiscalYears(new ArrayList());
 		formBean.setRisks(new ArrayList());
 		formBean.setColumnHierarchie(new ArrayList());
-
-		filters = DbUtil.getTeamPageFilters(ampTeamId, ampPageId);
+		
+		if(ampTeamId!=null) filters = DbUtil.getTeamPageFilters(ampTeamId, ampPageId);
 		// logger.debug("Filter Size: " + filters.size());
 
 		formBean.setGoFlag("true");
@@ -281,10 +290,10 @@ public final class ARUtil {
 
 		setFilters = setFilters + " DONORS -";
 		filterCnt++;
-		dbReturnSet = DbUtil.getAmpDonors(ampTeamId);
+		if(ampTeamId!=null) dbReturnSet = DbUtil.getAmpDonors(ampTeamId); else dbReturnSet=new ArrayList();
 		// logger.debug("Donor Size: " + dbReturnSet.size());
 		iter = dbReturnSet.iterator();
-		formBean.setDonorColl(getFilterDonors(ampTeam));
+		if(ampTeam!=null) formBean.setDonorColl(getFilterDonors(ampTeam));
 
 		while (iter.hasNext()) {
 			AmpOrganisation ampOrganisation = (AmpOrganisation) iter.next();
@@ -348,6 +357,7 @@ public final class ARUtil {
 		else
 			ampModalityId = formBean.getAmpModalityId();
 
+		if(ampTeam!=null) {
 		if (formBean.getAmpCurrencyCode() == null
 				|| formBean.getAmpCurrencyCode().equals("0")) {
 			ampCurrency = CurrencyUtil.getAmpcurrency(teamMember
@@ -356,7 +366,8 @@ public final class ARUtil {
 			formBean.setAmpCurrencyCode(ampCurrencyCode);
 		} else
 			ampCurrencyCode = formBean.getAmpCurrencyCode();
-
+		} else formBean.setAmpCurrencyCode(Constants.DEFAULT_CURRENCY);
+		 
 		// for storing the value of year filter
 		if (formBean.getAmpToYear() == null) {
 			toYr = 0;
@@ -408,19 +419,22 @@ public final class ARUtil {
 		else
 			closeDay = formBean.getCloseDay().intValue();
 
+		if(teamMember!=null) {
 		if (formBean.getFiscalCalId() == 0) {
 			fiscalCalId = teamMember.getAppSettings().getFisCalId().intValue();
 			formBean.setFiscalCalId(fiscalCalId);
 		} else
 			fiscalCalId = formBean.getFiscalCalId();
-
+		}
+		
 		if (request.getParameter("view") != null) {
 			if (request.getParameter("view").equals("reset")) {
-				perspective = teamMember.getAppSettings().getPerspective();
+				if(teamMember!=null) {perspective = teamMember.getAppSettings().getPerspective();
 				if (perspective.equals("Donor"))
 					perspective = "DN";
 				if (perspective.equals("MOFED"))
-					perspective = "MA";
+					perspective = "MA";}
+				else perspective="MA";
 				formBean.setPerspectiveFilter(perspective);
 				formBean.setAmpStatusId(All);
 				ampStatusId = All;
@@ -433,9 +447,11 @@ public final class ARUtil {
 				toYr = 0;
 				fromYr = 0;
 
+				if(teamMember!=null) {
 				ampCurrency = CurrencyUtil.getAmpcurrency(teamMember
 						.getAppSettings().getCurrencyId());
 				ampCurrencyCode = ampCurrency.getCurrencyCode();
+				} else ampCurrencyCode=Constants.DEFAULT_CURRENCY;
 	
 				
 				formBean.setAmpFromYear(new Long(fromYr));
@@ -459,9 +475,11 @@ public final class ARUtil {
 				closeYear = 0;
 				closeMonth = 0;
 				closeDay = 0;
+				if(teamMember!=null) {
 				fiscalCalId = teamMember.getAppSettings().getFisCalId()
 						.intValue();
 				formBean.setFiscalCalId(fiscalCalId);
+				}
 				formBean.setAmpCurrencyCode(ampCurrencyCode);
 				formBean.setAmpLocationId("All");
 			}
@@ -476,9 +494,6 @@ public final class ARUtil {
 				&& formBean.getCloseYear().intValue() > 0)
 			closeDate = closeYear + "-" + closeMonth + "-" + closeDay;
 
-		// get the team list
-		Set teams = TeamUtil.getAmpLevel0Teams(ampTeamId);
-		teams.add(ampTeam);
 
 		// if the report metadata has a defaultFilter attached, use that as the
 		// first filter
@@ -525,7 +540,7 @@ public final class ARUtil {
 
 		
 		
-		if (formBean.getDonors() != null) {
+		if (ampTeam!=null && formBean.getDonors() != null) {
 			Collection alldonors = getFilterDonors(ampTeam);
 			Set donors = new TreeSet();
 			
@@ -568,7 +583,13 @@ public final class ARUtil {
 			anf.setRegions(regions);
 		}
 		
-		anf.setAmpTeams(teams);
+		// get the team list
+		if(request.getParameter("publicView")==null) {
+			Set teams = TeamUtil.getAmpLevel0Teams(ampTeamId);
+			teams.add(ampTeam);
+			anf.setAmpTeams(teams);
+		}
+		
 		anf.setPerspectiveCode(formBean.getPerspectiveFilter());
 
 		if (!"reset".equals(request.getParameter("view"))) {
@@ -576,7 +597,8 @@ public final class ARUtil {
 			anf.setAmpModalityId(ampModalityId);
 			// anf.setAmpOrgId(ampOrgId);
 
-			anf.setCalendarType(new Integer(formBean.getFiscalCalId()));
+			if(formBean.getFiscalCalId()==0) anf.setCalendarType(new Integer(formBean.getFiscalCalId())); 
+			else anf.setCalendarType(new Integer(Constants.GREGORIAN.intValue()));
 
 			anf.setFromYear(fromYr == 0 ? null : new Integer(fromYr));
 			anf.setToYear(toYr == 0 ? null : new Integer(toYr));

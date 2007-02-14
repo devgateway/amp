@@ -26,6 +26,7 @@ public class AmpARFilter implements Filter {
 	private Integer calendarType=null;
 	private String perspectiveCode;
 	private boolean widget=false;
+	private boolean publicView=false;
 
 	
 	private Integer fromYear;
@@ -280,6 +281,14 @@ public class AmpARFilter implements Filter {
 
 	public void setWidget(boolean widget) {
 		this.widget = widget;
+	}
+
+	public boolean isPublicView() {
+		return publicView;
+	}
+
+	public void setPublicView(boolean publicView) {
+		this.publicView = publicView;
 	}
 
 	/**

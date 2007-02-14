@@ -101,6 +101,15 @@
 				</tr>
 
 				<tr>
+					<td>&nbsp;</td>				
+					<td>&nbsp;</td>
+					<td align="left">
+						<input type="button" value="Public View" onclick="javascript:window.open('/viewNewAdvancedReport.do?view=reset&ampReportId=10&widget=true&viewFormat=tree&sortBy=Cumulative+Commitment&applySorter=true&levelPicked=1&levelSorter=Cumulative+Commitment&publicView=true', 'Public View','channelmode=no,directories=no,menubar=no,resizable=yes,status=no,toolbar=no,scrollbars=yes,location=yes');"/>
+					</td>
+				</tr>
+
+
+				<tr>
 				</tr>
 		          <td>&nbsp;</td>
 					 <td colSpan=2>

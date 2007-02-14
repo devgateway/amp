@@ -47,6 +47,7 @@ public class ViewNewAdvancedReport extends Action {
 		// TODO Auto-generated constructor stub
 	}
 	
+	
 	public ActionForward execute(ActionMapping mapping, ActionForm form, 
 			HttpServletRequest request, HttpServletResponse response) throws java.lang.Exception
 			{
@@ -60,10 +61,18 @@ public class ViewNewAdvancedReport extends Action {
 		Map sorters=(Map) hs.getAttribute("reportSorters");
 		String ampReportId = request.getParameter("ampReportId");
 		
-		GroupReportData oldRd=(GroupReportData) hs.getAttribute("report");
+		GroupReportData rd=(GroupReportData) hs.getAttribute("report");
 		AmpReports ar=(AmpReports) hs.getAttribute("reportMeta");
+		Session session = PersistenceManager.getSession();
+
+		if(ampReportId==null) ampReportId=ar.getAmpReportId().toString();
 		
-		if(ar!=null && !ar.getAmpReportId().toString().equals(ampReportId))  oldRd=ARUtil.generateReport(mapping,form,request,response);
+		if(ar==null || (ampReportId!=null && !ampReportId.equals(ar.getAmpReportId().toString())))
+		{
+			rd=ARUtil.generateReport(mapping,form,request,response);
+	
+			ar = (AmpReports) session.get(AmpReports.class, new Long(ampReportId));	
+		}
 		
 		//test if the request was for hierarchy sorting purposes:
 		if(request.getParameter("applySorter")!=null) {
@@ -72,57 +81,35 @@ public class ViewNewAdvancedReport extends Action {
 				sorters.put(request.getParameter("levelPicked"),request.getParameter("levelSorter"));
 			else
 			sorters.put(arf.getLevelPicked(),arf.getLevelSorter());
-			String viewFormat=request.getParameter("viewFormat");
-			if(viewFormat==null) viewFormat=GenericViews.HTML;
-			request.setAttribute("viewFormat",viewFormat);
-			oldRd.setGlobalHeadingsDisplayed(new Boolean(false));
-			hs.setAttribute("report",oldRd);
-			oldRd.importLevelSorters(sorters,ar.getHierarchies().size());
-			oldRd.applyLevelSorter();
-			request.setAttribute("ampReportId",ar.getAmpReportId().toString());			
-			return mapping.findForward("forward");	
+		
+			
+			rd.importLevelSorters(sorters,ar.getHierarchies().size());
+			rd.applyLevelSorter();
+						
 		}
 		
 		// test if the request was for column sorting purposes:
 		String sortBy=request.getParameter("sortBy");
 		if(sortBy!=null) {
 			hs.setAttribute("sortBy",sortBy);
-			
-			oldRd.setSorterColumn(sortBy);
-			oldRd.setGlobalHeadingsDisplayed(new Boolean(false));
-			String viewFormat=request.getParameter("viewFormat");
-			if(viewFormat==null) viewFormat=GenericViews.HTML;
-			request.setAttribute("viewFormat",viewFormat);
-			hs.setAttribute("report",oldRd);
-			request.setAttribute("ampReportId",ar.getAmpReportId().toString());			
-			return mapping.findForward("forward");	
+			rd.setSorterColumn(sortBy);
+		
 		}
 		
-				GroupReportData rd=ARUtil.generateReport(mapping,form,request,response);
-				
-				
-				
 				if (rd==null) return mapping.findForward("index");
-			
-				Session session = PersistenceManager.getSession();
+				rd.setGlobalHeadingsDisplayed(new Boolean(false));
 				
 				String viewFormat=request.getParameter("viewFormat");
 				if(viewFormat==null) viewFormat=GenericViews.HTML;
 				request.setAttribute("viewFormat",viewFormat);
-
+			
 				
-				
-				AmpReports reportMeta = (AmpReports) session.get(AmpReports.class, new Long(ampReportId));
-				
-				rd.importLevelSorters(sorters,reportMeta.getHierarchies().size());
-				rd.applyLevelSorter();
-				
-				
-				request.setAttribute("extraTitle",reportMeta.getName());
-				
+			
+				request.setAttribute("extraTitle",ar.getName());
+				request.setAttribute("ampReportId",ampReportId);				
 				rd.setCurrentView(viewFormat);
 				hs.setAttribute("report",rd);
-				hs.setAttribute("reportMeta",reportMeta);
+				hs.setAttribute("reportMeta",ar);
 				
 				session.close();
 				

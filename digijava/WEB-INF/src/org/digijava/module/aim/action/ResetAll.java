@@ -25,6 +25,7 @@ import org.digijava.module.aim.dbentity.AmpActor;
 import org.digijava.module.aim.dbentity.AmpComponent;
 import org.digijava.module.aim.dbentity.AmpFunding;
 import org.digijava.module.aim.dbentity.AmpFundingDetail;
+import org.digijava.module.aim.dbentity.AmpGlobalSettings;
 import org.digijava.module.aim.dbentity.AmpIssues;
 import org.digijava.module.aim.dbentity.AmpLocation;
 import org.digijava.module.aim.dbentity.AmpMeasure;
@@ -50,6 +51,7 @@ import org.digijava.module.aim.helper.PhysicalProgress;
 import org.digijava.module.aim.util.ActivityUtil;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.DocumentUtil;
+import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.cms.dbentity.CMSContentItem;
 
 /*
@@ -218,7 +220,17 @@ public class ResetAll extends Action
 						{
 							Location location = new Location();
 							location.setLocId(loc.getAmpLocationId());
-							Country cntry = DbUtil.getDgCountry(Constants.COUNTRY_ISO);
+							//changed By Govind
+							Collection col1 =FeaturesUtil.getDefaultCountryISO();
+				            String ISO= null;
+				            Iterator itr1 = col1.iterator();
+				            while(itr1.hasNext())
+				            {
+				            	AmpGlobalSettings ampG = (AmpGlobalSettings)itr1.next();
+				            	ISO = ampG.getGlobalSettingsValue();
+				            }
+				            Country cntry = DbUtil.getDgCountry(ISO);
+							//Country cntry = DbUtil.getDgCountry(Constants.COUNTRY_ISO);
 							location.setCountryId(cntry.getCountryId());
 							location.setCountry(cntry.getCountryName());
 							if (loc.getAmpRegion() != null)

@@ -2,6 +2,7 @@ package org.digijava.module.aim.dbentity ;
 
 import java.io.Serializable;
 import java.util.Set;
+import java.util.HashSet;
 import java.util.Date;
 
 public class AmpThemeIndicators implements Serializable
@@ -10,6 +11,7 @@ public class AmpThemeIndicators implements Serializable
 	private String name;
 	private String code;
 	private String type;
+	private Date creationDate;
 	private int category;
 	private boolean npIndicator;
 	private String description;
@@ -127,5 +129,19 @@ public class AmpThemeIndicators implements Serializable
 	 */
 	public void setType(String type) {
 		this.type = type;
+	}
+
+	/**
+	 * @return Returns the creationDate.
+	 */
+	public Date getCreationDate() {
+		return creationDate;
+	}
+
+	/**
+	 * @param creationDate The creationDate to set.
+	 */
+	public void setCreationDate(Date creationDate) {
+		this.creationDate = creationDate;
 	}
 }

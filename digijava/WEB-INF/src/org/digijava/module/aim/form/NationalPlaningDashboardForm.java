@@ -1,5 +1,6 @@
 package org.digijava.module.aim.form;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -31,6 +32,10 @@ public class NationalPlaningDashboardForm extends ActionForm {
     private Collection activityStatuses;
     private long[] selectedLocations;
     private Collection locations;
+    private Collection programTree;
+    private String xmlTree;
+    private boolean showIndicators;
+    private String fundingSum;
 
     public void reset(ActionMapping mapping, HttpServletRequest request) {
         currentProgramId = null;
@@ -118,6 +123,14 @@ public class NationalPlaningDashboardForm extends ActionForm {
         return selectedLocations;
     }
 
+    public Collection getProgramTree() {
+        return programTree;
+    }
+
+    public String getXmlTree() {
+        return xmlTree;
+    }
+
     public void setPrograms(ArrayList programs) {
         this.programs = programs;
     }
@@ -193,4 +206,28 @@ public class NationalPlaningDashboardForm extends ActionForm {
     public void setSelectedLocations(long[] selectedLocations) {
         this.selectedLocations = selectedLocations;
     }
+
+    public void setProgramTree(Collection programTree) {
+        this.programTree = programTree;
+    }
+
+    public void setXmlTree(String xmlTree) {
+        this.xmlTree = xmlTree;
+    }
+
+	public boolean isShowIndicators() {
+		return showIndicators;
+	}
+
+	public void setShowIndicators(boolean showIndicators) {
+		this.showIndicators = showIndicators;
+	}
+
+	public String getFundingSum() {
+        return fundingSum;
+	}
+
+	public void setFundingSum(String fundingSum) {
+		this.fundingSum=fundingSum;
+	}
 }

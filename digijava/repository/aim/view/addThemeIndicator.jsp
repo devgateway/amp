@@ -35,14 +35,14 @@
 		return true;
 	}
 
-	function saveProgram(id)
+	function saveProgram(id,indId)
 	{
 			var temp = validate();
 			if (temp == true) 
 			{
 				<digi:context name="addThmInd" property="context/module/moduleinstance/addThemeIndicator.do?event=save"/>
-				document.aimThemeForm.action = "<%=addThmInd%>&themeId=" +id;
-				document.aimThemeForm.target = "_self";
+				document.aimThemeForm.action = "<%=addThmInd%>&themeId=" + id + "&indicatorId=" + indId;
+				document.aimThemeForm.target = "_self"; 
 				document.aimThemeForm.submit();
 			}
 			return true;	
@@ -56,7 +56,7 @@
 			document.aimThemeForm.submit();
 			return true;
 	}
-	
+
 	function load(){}
 
 	function unload(){}
@@ -111,7 +111,28 @@
 						<b>Indicator Type</b><font color="red">*</font>&nbsp;
 				</td>
 				<td align="left">
-						<html:text name="aimThemeForm" property="type" size="20" styleClass="inp-text"/>
+						<html:select property="type" styleClass="inp-text">
+								<html:option value="A">Ascending</html:option>
+								<html:option value="D">Descending</html:option>
+						</html:select>
+				</td>
+				</tr>
+				<tr bgcolor=#ffffff><td height="5" colspan="4"></td></tr>
+				<tr bgColor=#ffffff>
+				<td height="20" align="right">
+						<b>Creation Date</b><font color="red">*</font>&nbsp;
+				</td>
+				<td vAlign="bottom">
+						<table cellPadding=0 cellSpacing=0>
+								<tr>
+								<td>
+										<html:text name="aimThemeForm" property="creationDate" styleId="themeDate" readonly="true" size="10"/>
+								</td>
+								<td align="right" vAlign="center">&nbsp;<a href='javascript:calendar("themeDate")'>
+   			          			<img src="../ampTemplate/images/show-calendar.gif" border="0"></a>
+								</td>
+								</tr>
+						</table>
 				</td>
 				</tr>
 				<tr bgcolor=#ffffff><td height="5" colspan="4"></td></tr>
@@ -119,13 +140,21 @@
 				<td height="20" align="right">
 					<b>Category</b>&nbsp;
 				</td>
-				<td align="left" valign="botto">
+				<td align="left" valign="bottom">
 					<html:select name="aimThemeForm" property="category" styleClass="inp-text">
 						<html:option value="0">Input</html:option>	
 						<html:option value="1">Output</html:option>
 						<html:option value="2">Process</html:option>
 						<html:option value="3">Outcomes</html:option>
 					</html:select>&nbsp;&nbsp;
+				</td>
+				</tr>
+				<tr bgcolor=#ffffff><td height="5" colspan="4"></td></tr>
+				<tr bgcolor=#ffffff>
+				<td height="20" align="right"><b>
+					National Planning Indicator</b>&nbsp;
+				</td>
+				<td align="left" valign="botto">
 					<html:checkbox name="aimThemeForm" property="npIndicator" title="Tick to mark this indicator as an National Planning Indicator"/>
 				</td>
 				</tr>
@@ -185,13 +214,6 @@
 													</tr>
 												</table>
 											</td>																
-											<%--	
-											<td>
-												<a href="javascript:removeFundingDetail(<bean:write name="fundingDetail" property="indexId"/>,0)">
-												 	<digi:img src="module/cms/images/deleteIcon.gif" border="0" alt="Delete this transaction"/>
-												</a>
-											</td>
-											--%>
 										</tr>	
 								</c:forEach>
 						</table>
@@ -206,7 +228,7 @@
 				<tr bgcolor=#ffffff><td height="15" colspan="4"></td></tr>
 				<tr bgColor=#dddddb>
 				<td bgColor=#dddddb height="25" align="center" colspan="4">
-						<input styleClass="dr-menu" type="button" name="addBtn" value="Save" onclick="return saveProgram('<bean:write name="aimThemeForm" property="themeId"/>')">&nbsp;&nbsp;
+						<input styleClass="dr-menu" type="button" name="addBtn" value="Save" onclick="return saveProgram('<bean:write name="aimThemeForm" property="themeId"/>','<bean:write name="aimThemeForm" property="indicatorId"/>')">&nbsp;&nbsp;
 						<input styleClass="dr-menu" type="reset" value="Cancel">&nbsp;&nbsp;
 						<input styleClass="dr-menu" type="button" name="close" value="Close" onclick="closeWindow()">			
 				</td>
@@ -230,11 +252,14 @@
 												Name
 											</td>
 											<td align="left" width="60" bgcolor="#dddddb">
-												Type
+												Creation Date
 											</td>
 											<td align="center" bgcolor="#dddddb">
 												Values
-											</td>
+											</td><%--
+											<td width="25" height="15" bgcolor="#ffffff">
+												&nbsp;
+											</td>--%>
 										</tr>
 										<logic:iterate name="aimThemeForm" property="prgIndicators" id="prgIndicators" type="org.digijava.module.aim.helper.AmpPrgIndicator">
 												<tr bgcolor="#ffffff">
@@ -248,7 +273,7 @@
 																<bean:write name="prgIndicators" property="name"/></b>
 														</td>
 														<td align="left" width="60" bgcolor="#f4f4f2">
-																<bean:write name="prgIndicators" property="type"/>
+																<bean:write name="prgIndicators" property="creationDate"/>
 														</td>
 														<td align="center" bgcolor="#f4f4f2">
 																<logic:notEmpty name="prgIndicators" property="prgIndicatorValues">
@@ -260,13 +285,13 @@
 																						<td align="left" bgcolor="#66FFFF">
 																								Amount
 																						</td>
-																						<td align="left" width="60" bgcolor="#66FFFF">
+																						<td align="left" width="70" bgcolor="#66FFFF">
 																								Date
 																						</td>
 																				</tr>
 																				<logic:iterate name="prgIndicators" property="prgIndicatorValues" id="prgIndicatorValues" type="org.digijava.module.aim.helper.AmpPrgIndicatorValue">
 																						<tr bgcolor="#ffffff">
-																								<td bgcolor="#f4f4f2">
+																								<td width="50" bgcolor="#f4f4f2">
 																										<logic:equal name="prgIndicatorValues" property="valueType" value="1">
 																											Actual
 																												
@@ -279,13 +304,28 @@
 																								<td align="left" bgcolor="#f4f4f2"><b>
 																										<bean:write name="prgIndicatorValues" property="valAmount"/></b>
 																								</td>
-																								<td align="left" bgcolor="#f4f4f2">
+																								<td align="left" width="70" bgcolor="#f4f4f2">
 																										<bean:write name="prgIndicatorValues" property="creationDate"/>
 																								</td>
 																						</tr>
 																				</logic:iterate>
 																		</table>
 																</logic:notEmpty>	
+														</td>
+														<td width="25" height="15" bgcolor="#ffffff">
+																<jsp:useBean id="urlParams" type="java.util.Map" class="java.util.HashMap"/>
+																<c:set target="${urlParams}" property="prgIndicatorId">
+																		<bean:write name="prgIndicators" property="indicatorId"/>
+																</c:set>
+																<c:set target="${urlParams}" property="themeId">
+																		<bean:write name="aimThemeForm" property="themeId"/>
+																</c:set>
+																<bean:define id="translation">
+																		<digi:trn key="aim:clickToEditPrgIndicator">Click here to Edit Program Indicator</digi:trn>
+																</bean:define>
+																[<digi:link href="/addThemeIndicator.do?event=edit" name="urlParams" title="<%=translation%>">
+																		<digi:trn key="aim:subProgramManagerEdit">Edit</digi:trn>
+																</digi:link>]
 														</td>
 												</tr>
 										</logic:iterate>

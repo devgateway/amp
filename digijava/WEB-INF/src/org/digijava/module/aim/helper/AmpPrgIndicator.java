@@ -8,6 +8,7 @@ public class AmpPrgIndicator
 	private String name;
 	private String code;
 	private String type;
+	private String creationDate;
 	private int category;
 	private boolean npIndicator;
 	private String description;
@@ -107,5 +108,17 @@ public class AmpPrgIndicator
 	 */
 	public void setPrgIndicatorValues(Collection prgIndicatorValues) {
 		this.prgIndicatorValues = prgIndicatorValues;
+	}
+	/**
+	 * @return Returns the creationDate.
+	 */
+	public String getCreationDate() {
+		return creationDate;
+	}
+	/**
+	 * @param creationDate The creationDate to set.
+	 */
+	public void setCreationDate(String creationDate) {
+		this.creationDate = creationDate;
 	}
 }

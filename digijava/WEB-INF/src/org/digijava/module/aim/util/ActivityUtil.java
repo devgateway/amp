@@ -8,6 +8,7 @@ package org.digijava.module.aim.util;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
@@ -54,6 +55,7 @@ import org.digijava.module.aim.dbentity.AmpReportSector;
 import org.digijava.module.aim.dbentity.AmpSector;
 import org.digijava.module.aim.dbentity.AmpTeam;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
+import org.digijava.module.aim.dbentity.AmpTheme;
 import org.digijava.module.aim.helper.Activity;
 import org.digijava.module.aim.helper.ActivityIndicator;
 import org.digijava.module.aim.helper.ActivitySector;
@@ -72,10 +74,6 @@ import org.digijava.module.aim.helper.RelOrganization;
 import org.digijava.module.aim.helper.RelatedLinks;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.cms.dbentity.CMSContentItem;
-import org.digijava.module.aim.form.ProposedProjCost;
-import org.digijava.module.aim.form.EditActivityForm;
-import org.digijava.kernel.exception.*;
-import java.util.Date;
 
 /**
  * ActivityUtil is the persister class for all activity related
@@ -287,10 +285,12 @@ public class ActivityUtil {
 				oldActivity.setSectors(activity.getSectors());
 				oldActivity.setIssues(activity.getIssues());
 
-                //ProposedProjCost pg=new ProposedProjCost();
+
+                oldActivity.setActivityPrograms(activity.getActivityPrograms());
                 oldActivity.setFunAmount(activity.getFunAmount());
                 oldActivity.setCurrencyCode(activity.getCurrencyCode());
                 oldActivity.setFunDate(activity.getFunDate());
+
 
 				oldActivity.setApprovalStatus(activity.getApprovalStatus());
 			}
@@ -522,28 +522,38 @@ public class ActivityUtil {
 
         public static Collection searchActivities(Long ampThemeId,
                                                   String statusCode,
+                                                  Long donorOrgId,
                                                   Date fromDate,
                                                   Date toDate,
                                                   Long locationId) {
             Collection result = null;
             try {
                 Session session = PersistenceManager.getRequestDBSession();
-                String oql = "select * from " + AmpActivity.class.getName() +
+                String oql = "select act from " + AmpActivity.class.getName() +
                         " act  where 1=1 ";
+                //this is changed cos now we have many-to-many here.
                 if (ampThemeId != null) {
-                    oql += " and act.themeId.ampThemeId=:ampThemeId ";
+                	oql+=" and ( :ampThemeId in elements(act.activityPrograms )) ";
+//                	oql+=" and act.activityPrograms in ( from "+AmpTheme.class.getName()+" thm where thm.ampThemeId=:ampThemeId )";
+//                    oql += " and act.themeId.ampThemeId=:ampThemeId ";
+                }
+                if (donorOrgId != null) {
+                    String s = " and act in (select rol.activity from " +
+                            AmpOrgRole.class.getName() + " rol, "+
+                            "where rol.organisation.ampOrgId=:DonorId  )";
+                    oql += s;
                 }
                 if (statusCode != null) {
                     oql += " and act.status.statusCode=:statusCode ";
                 }
                 if (fromDate != null) {
-                    oql += " and act.activityStartDate >= :FromDate";
+                    oql += " and act.createdDate >= :FromDate";
                 }
                 if (toDate != null) {
-                    oql += " and act.activityStartDate <= :ToDate";
+                    oql += " and act.createdDate <= :ToDate";
                 }
                 if (locationId != null) {
-                    oql += " and act.locations in (from AmpLocation loc where loc.id=:LocationID)";
+                    oql += " and act.locations in (from "+AmpLocation.class.getName()+" loc where loc.id=:LocationID)";
 //                    oql += " and act in (select a from AmpLocation.aidlocation as a, AmpLocation loc where loc.id=20)";
                 }
                 oql += " order by act.name";
@@ -552,6 +562,9 @@ public class ActivityUtil {
                 Query query = session.createQuery(oql);
                 if (ampThemeId != null) {
                     query.setLong("ampThemeId", ampThemeId.longValue());
+                }
+                if (donorOrgId != null) {
+                    query.setLong("DonorId", donorOrgId.longValue());
                 }
                 if (statusCode != null) {
                     query.setString("statusCode", statusCode);
@@ -651,7 +664,7 @@ public class ActivityUtil {
 	    AmpActivity activity = null;
 
 	    try {
-			session = PersistenceManager.getSession();
+			session = PersistenceManager.getRequestDBSession();
 
 			AmpActivity ampActivity = (AmpActivity) session.load(AmpActivity.class,id);
 
@@ -678,8 +691,9 @@ public class ActivityUtil {
 			    activity.setCountry(ampActivity.getCountry());
 			    activity.setCreatedDate(ampActivity.getCreatedDate());
 			    activity.setDescription(ampActivity.getDescription());
-                            activity.setDocumentSpace(ampActivity.getDocumentSpace());
-			    activity.setEmail(ampActivity.getEmail());
+                activity.setDocumentSpace(ampActivity.getDocumentSpace());
+
+                activity.setEmail(ampActivity.getEmail());
 			    activity.setLanguage(ampActivity.getLanguage());
 			    activity.setLevel(ampActivity.getLevel());
 			    activity.setModality(ampActivity.getModality());
@@ -699,6 +713,7 @@ public class ActivityUtil {
 			    activity.setUpdatedDate(ampActivity.getUpdatedDate());
 			    activity.setVersion(ampActivity.getVersion());
 
+                activity.setActivityPrograms(ampActivity.getActivityPrograms());
                 activity.setFunAmount(ampActivity.getFunAmount());
                 activity.setFunDate(ampActivity.getFunDate());
                 activity.setCurrencyCode(ampActivity.getCurrencyCode());
@@ -718,12 +733,6 @@ public class ActivityUtil {
 		} catch (Exception e) {
 		 	logger.error("Unable to getAmpActivity");
 		 	e.printStackTrace(System.out);
-		} finally {
-			try {
-				PersistenceManager.releaseSession(session);
-			} catch (Exception  ex) {
-		 		logger.error("Release Session failed :" + ex);
-		 	}
 		}
 	    return activity;
 	}

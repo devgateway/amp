@@ -30,7 +30,7 @@
 	
 	function saveIndicator()
 	{
-		alert("saving indicator in create :)");
+		
 		<digi:context name="addPIInd" property="context/module/moduleinstance/parisIndicatorAdd.do?editquestion=true" />
 		document.aimParisIndicatorManagerForm.action = "<%= addPIInd%>";
 		document.aimParisIndicatorManagerForm.target = window.opener.name;

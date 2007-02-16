@@ -597,29 +597,54 @@ function disable() {
 											<digi:trn key="aim:program">Program</digi:trn>
 										</td>
 										<td bgcolor="#ffffff">
-                                          <c:if test="${aimEditActivityForm.programCollection!=null}">
-                                            <c:if test="${!empty aimEditActivityForm.programCollection}">
-                                              <c:forEach var="tempPgm" items="${aimEditActivityForm.programCollection}">
-																<%--
+                                          <c:if test="${aimEditActivityForm.actPrograms!=null}">
+                                            <c:if test="${!empty aimEditActivityForm.actPrograms}">
+                                              <c:forEach var="tempPgm" items="${aimEditActivityForm.actPrograms}">
                                                 <c:if test="${tempPgm!=null}">
-                                                  <c:if test="${tempPgm.ampThemeId == aimEditActivityForm.program}">
-                                                    <c:out value="${tempPgm.name}"/>
-                                                  </c:if>
+                                                  <c:out value="${tempPgm.name}"/>
                                                 </c:if>
-																--%>
-  																														
-                                                <c:if test="${tempPgm.member!=null}">
-                                                  <c:if test="${tempPgm.member.ampThemeId == aimEditActivityForm.program}">
-                                                    <c:out value="${tempPgm.member.name}"/>
-                                                  </c:if>
-                                                </c:if>
-																
                                               </c:forEach>
                                             </c:if>
                                           </c:if>
 										</td>
-									</tr>
+                                    </tr>
 
+									<tr>
+										<td class="t-name" width="30%" align="right" bgcolor="#f4f4f2">
+											<digi:trn key="aim:proposedPrjectCost">Proposed Project Cost</digi:trn>
+										</td>
+										<td bgcolor="#ffffff">
+											<c:if test="${aimEditActivityForm.proProjCost!=null}">
+                                                  <table cellSpacing=1 cellPadding="3" bgcolor="#aaaaaa" width="100%">
+                                                      <tr bgcolor="#ffffff">
+																		  <td>
+																		  			Cost
+																		  </td>
+                                                        <td bgcolor="#FFFFFF" align="left" >
+                                                          <c:if test="${aimEditActivityForm.proProjCost.funAmount!=null}">
+																			 	<FONT color=blue>*</FONT>
+                                                            ${aimEditActivityForm.proProjCost.funAmount}
+                                                          </c:if>&nbsp;
+																			 <c:if test="${aimEditActivityForm.proProjCost.currencyCode!=null}">
+                                                            ${aimEditActivityForm.proProjCost.currencyCode}
+                                                          </c:if>
+                                                        </td>
+																		  </tr>
+																		  <tr bgcolor="#ffffff">
+																		  <td>
+																		  	Proposed	Completion Date
+																		  </td>
+                                                        <td bgcolor="#FFFFFF" align="left" width="150">
+                                                          <c:if test="${aimEditActivityForm.proProjCost.funDate!=null}">
+                                                             ${aimEditActivityForm.proProjCost.funDate}
+                                                          </c:if>
+                                                        </td>
+                                                      </tr>
+                                                    </table>
+                                             </c:if>
+										</td>	
+										
+									</tr>
 									<tr>
 										<td class="t-name" width="30%" align="right" bgcolor="#f4f4f2">
 											<digi:trn key="aim:funding">

@@ -37,81 +37,11 @@
 											<td class=f-names noWrap>
 												<digi:img src="module/aim/images/arrow-th-BABAB9.gif" width="16"/>
 												<bean:define id="translation">
-													<digi:trn key="aim:clickToViewEventTypes">Click here to view Event Type Manager</digi:trn>
+													<digi:trn key="aim:clickToViewActivityManager">Click here to view Activity Manager</digi:trn>
 												</bean:define>
-												<digi:link module="calendar" href="/eventTypes.do" title="<%=translation%>" >
-												<digi:trn key="aim:eventTypeManager">Event Type Manager</digi:trn>
+												<digi:link href="/activityManager.do" title="<%=translation%>" >
+												<digi:trn key="aim:activityManager">Activity Manager</digi:trn>	
 												</digi:link>
-											</td>
-										</tr>
-                                        <tr>
-											<td class=f-names noWrap>
-												<digi:img src="module/aim/images/arrow-th-BABAB9.gif" width="16"/>
-												<bean:define id="translation">
-													<digi:trn key="aim:clickToViewRegionManager">Click here to view Region Manager</digi:trn>
-												</bean:define>
-												<digi:link href="/locationManager.do" title="<%=translation%>" >
-												<digi:trn key="aim:regionManager">Region Manager</digi:trn>
-												</digi:link>
-											</td>
-										</tr>
-										<tr>
-											<td class=f-names noWrap>
-											<digi:img src="module/aim/images/arrow-th-BABAB9.gif" width="16"/>
-											<bean:define id="translation">
-												<digi:trn key="aim:clickToViewStatusManager">Click here to view Status Manager</digi:trn>
-											</bean:define>
-											<digi:link href="/statusManager.do" title="<%=translation%>" >
-											<digi:trn key="aim:statusManager">Status Manager</digi:trn>
-											</digi:link>
-											</td>
-										</tr>
-										
-										<tr>
-											<td class=f-names noWrap>
-											<digi:img src="module/aim/images/arrow-th-BABAB9.gif" width="16"/>
-											<bean:define id="translation">
-												<digi:trn key="aim:clickToViewSectorManager">Click here to view Sector Manager</digi:trn>
-											</bean:define>
-											<digi:link href="/getSectorSchemes.do" title="<%=translation%>" >
-											<digi:trn key="aim:sectorManager">Sector Manager</digi:trn>	
-											</digi:link>
-											</td>
-										</tr>
-										
-										<tr>
-											<td class=f-names noWrap>
-											<digi:img src="module/aim/images/arrow-th-BABAB9.gif" width="16"/>
-											<bean:define id="translation">
-												<digi:trn key="aim:clickToViewOrganizationManager">Click here to view Organization Manager</digi:trn>
-											</bean:define>
-											<digi:link href="/organisationManager.do?orgSelReset=true" title="<%=translation%>" >
-											<digi:trn key="aim:organizationManager">Organization Manager</digi:trn>
-											</digi:link>
-											</td>
-										</tr>
-										<tr>
-											<td class=f-names noWrap>
-											<digi:img src="module/aim/images/arrow-th-BABAB9.gif" width="16"/>
-											<bean:define id="translation">
-												<digi:trn key="aim:clickToViewMultiLevelProgramManager">Click here to view Multi-level Program Manager</digi:trn>
-											</bean:define>
-											<digi:link href="/themeManager.do" title="<%=translation%>" >
-											<digi:trn key="aim:multilevelprogramManager">Multi-Level Program Manager</digi:trn>
-											</digi:link>
-											</td>
-										</tr>
-										<tr>
-											<td class=f-names noWrap>
-											<digi:img src="module/aim/images/arrow-th-BABAB9.gif" width="16"/>
-											<bean:define id="translation">
-												<digi:trn key="aim:clickToViewIndicatorManager">Click here to view Indicator Manager</digi:trn>
-											</bean:define>
-											<digi:link href="/overallIndicatorManager.do" title="<%=translation%>" >
-												<digi:trn key="aim:indicatorManager">
-													Indicator Manager
-												</digi:trn>
-											</digi:link>
 											</td>
 										</tr>
 										<tr>
@@ -122,6 +52,17 @@
 											</bean:define>
 											<digi:link href="/fiscalCalendarManager.do" title="<%=translation%>" >
 											<digi:trn key="aim:CalendarManager">Calendar Manager</digi:trn>
+											</digi:link>
+											</td>
+										</tr>	
+										<tr>
+											<td class=f-names noWrap>
+											<digi:img src="module/aim/images/arrow-th-BABAB9.gif" width="16"/>
+											<bean:define id="translation">
+												<digi:trn key="aim:clickToViewcomponentsManager">Click here to view Components Manager</digi:trn>
+											</bean:define>
+											<digi:link href="/getComponents.do" title="<%=translation%>" >
+											<digi:trn key="aim:componentsManager">Components Manager</digi:trn>
 											</digi:link>
 											</td>
 										</tr>
@@ -149,67 +90,15 @@
 										</tr>
 										<tr>
 											<td class=f-names noWrap>
-											<digi:img src="module/aim/images/arrow-th-BABAB9.gif" width="16"/>
-											<bean:define id="translation">
-												<digi:trn key="aim:clickToViewWorkspaceManager">Click here to view Workspace Manager</digi:trn>
-											</bean:define>
-											<digi:link href="/workspaceManager.do~page=1" title="<%=translation%>" >
-											<digi:trn key="aim:workspaceManager">Workspace Manager</digi:trn>
-											</digi:link>
+												<digi:img src="module/aim/images/arrow-th-BABAB9.gif" width="16"/>
+												<bean:define id="translation">
+													<digi:trn key="aim:clickToViewEventTypes">Click here to view Event Type Manager</digi:trn>
+												</bean:define>
+												<digi:link module="calendar" href="/eventTypes.do" title="<%=translation%>" >
+												<digi:trn key="aim:eventTypeManager">Event Type Manager</digi:trn>
+												</digi:link>
 											</td>
 										</tr>
-										<tr>
-											<td class=f-names noWrap>
-											<digi:img src="module/aim/images/arrow-th-BABAB9.gif" width="16"/>
-											<bean:define id="translation">
-												<digi:trn key="aim:clickToViewcomponentsManager">Click here to view Components Manager</digi:trn>
-											</bean:define>
-											<digi:link href="/getComponents.do" title="<%=translation%>" >
-											<digi:trn key="aim:componentsManager">Components Manager</digi:trn>
-											</digi:link>
-											</td>
-										</tr>
-									<%--	<tr>
-											<td class=f-names noWrap>
-											<digi:img src="module/aim/images/arrow-th-BABAB9.gif" width="16"/>
-											<bean:define id="translation">
-												<digi:trn key="aim:clickToViewReportsManager">Click here to view Reports Manager</digi:trn>
-											</bean:define>
-											<digi:link href="/reportsManager.do" title="<%=translation%>" >
-											<digi:trn key="aim:reportsManager">Reports Manager</digi:trn>
-											</digi:link>
-											</td>
-										</tr>--%>
-									<logic:notEmpty name="ME" scope="application">
-										<tr>
-											<td class=f-names noWrap>
-											<digi:img src="module/aim/images/arrow-th-BABAB9.gif" width="16"/>
-											<bean:define id="translation">
-												<digi:trn key="aim:clickToViewProjectMEIndicatorManager">Click here to view Project M&E Indicator Manager</digi:trn>
-											</bean:define>
-											<digi:link href="/indicatorManager.do" title="<%=translation%>" >
-												<digi:trn key="aim:projectmeIndicatorManager">
-													Project M & E Indicator Manager
-												</digi:trn>
-											</digi:link>
-											</td>
-										</tr>
-									</logic:notEmpty>
-										<%--paris indicators report manager--%>
-									<logic:notEmpty name="PI" scope="application">
-										<tr>
-											<td class=f-names noWrap>
-											<digi:img src="module/aim/images/arrow-th-BABAB9.gif" width="16"/>
-											<bean:define id="translation">
-												<digi:trn key="aim:clickToViewParisIndicatorsManager">Click here to view Indicator Manager</digi:trn>
-											</bean:define>
-											<digi:link href="/parisIndicatorManager.do" title="<%=translation%>" >
-											<digi:trn key="aim:parisIndicatorManager">Paris Indicator Manager</digi:trn>
-											</digi:link>
-											</td>
-										</tr>
-									</logic:notEmpty>
-
 										<tr>
 											<td class=f-names noWrap>
 											<digi:img src="module/aim/images/arrow-th-BABAB9.gif" width="16"/>
@@ -221,19 +110,6 @@
 											</digi:link>
 											</td>
 										</tr>
-
-										<tr>
-											<td class=f-names noWrap>
-												<digi:img src="module/aim/images/arrow-th-BABAB9.gif" width="16"/>
-												<bean:define id="translation">
-													<digi:trn key="aim:clickToViewActivityManager">Click here to view Activity Manager</digi:trn>
-												</bean:define>
-												<digi:link href="/activityManager.do" title="<%=translation%>" >
-												<digi:trn key="aim:activityManager">Activity Manager</digi:trn>	
-												</digi:link>
-											</td>
-										</tr>
-
 										<tr>
 											<td class=f-names noWrap>
 												<digi:img src="module/aim/images/arrow-th-BABAB9.gif" width="16"/>
@@ -246,7 +122,112 @@
 												</digi:trn>	
 												</digi:link>
 											</td>
-										</tr>										
+										</tr>
+										<tr>
+											<td class=f-names noWrap>
+											<digi:img src="module/aim/images/arrow-th-BABAB9.gif" width="16"/>
+											<bean:define id="translation">
+												<digi:trn key="aim:clickToViewSystemSettings">Click here to view System Settings</digi:trn>
+											</bean:define>
+											<digi:link href="/GlobalSettings.do" title="<%=translation%>" >
+											<digi:trn key="aim:GlobalSettings">Global Settings</digi:trn>	
+											</digi:link>
+											</td>
+										</tr>
+										<tr>
+											<td class=f-names noWrap>
+											<digi:img src="module/aim/images/arrow-th-BABAB9.gif" width="16"/>
+											<bean:define id="translation">
+												<digi:trn key="aim:clickToViewOrganizationManager">Click here to view Organization Manager</digi:trn>
+											</bean:define>
+											<digi:link href="/organisationManager.do?orgSelReset=true" title="<%=translation%>" >
+											<digi:trn key="aim:organizationManager">Organization Manager</digi:trn>
+											</digi:link>
+											</td>
+										</tr>
+										<logic:notEmpty name="PI" scope="application">
+										<tr>
+											<td class=f-names noWrap>
+											<digi:img src="module/aim/images/arrow-th-BABAB9.gif" width="16"/>
+											<bean:define id="translation">
+												<digi:trn key="aim:clickToViewParisIndicatorsManager">Click here to view Indicator Manager</digi:trn>
+											</bean:define>
+											<digi:link href="/parisIndicatorManager.do" title="<%=translation%>" >
+											<digi:trn key="aim:parisIndicatorManager">Paris Indicator Manager</digi:trn>
+											</digi:link>
+											</td>
+										</tr>
+										</logic:notEmpty>
+										<tr>
+											<td class=f-names noWrap>
+											<digi:img src="module/aim/images/arrow-th-BABAB9.gif" width="16"/>
+											<bean:define id="translation">
+												<digi:trn key="aim:clickToViewIndicatorManager">Click here to view Indicator Manager</digi:trn>
+											</bean:define>
+											<digi:link href="/overallIndicatorManager.do" title="<%=translation%>" >
+												<digi:trn key="aim:ProgramProjectManager">
+													Program/Project Indicator Manager
+												</digi:trn>
+											</digi:link>
+											</td>
+										</tr>
+										<tr>
+											<td class=f-names noWrap>
+											<digi:img src="module/aim/images/arrow-th-BABAB9.gif" width="16"/>
+											<bean:define id="translation">
+												<digi:trn key="aim:clickToViewProgramTypeManager">Click here to view Program Type Manager</digi:trn>
+											</bean:define>
+											<digi:link href="/programTypeManager.do" title="<%=translation%>" >
+												<digi:trn key="aim:ProgramTypeManager">
+													Program Type Manager
+												</digi:trn>
+											</digi:link>
+											</td>
+										</tr>
+                              <tr>
+											<td class=f-names noWrap>
+												<digi:img src="module/aim/images/arrow-th-BABAB9.gif" width="16"/>
+												<bean:define id="translation">
+													<digi:trn key="aim:clickToViewRegionManager">Click here to view Region Manager</digi:trn>
+												</bean:define>
+												<digi:link href="/locationManager.do" title="<%=translation%>" >
+												<digi:trn key="aim:regionManager">Region Manager</digi:trn>
+												</digi:link>
+											</td>
+										</tr>
+										<tr>
+											<td class=f-names noWrap>
+											<digi:img src="module/aim/images/arrow-th-BABAB9.gif" width="16"/>
+											<bean:define id="translation">
+												<digi:trn key="aim:clickToViewSectorManager">Click here to view Sector Manager</digi:trn>
+											</bean:define>
+											<digi:link href="/getSectorSchemes.do" title="<%=translation%>" >
+											<digi:trn key="aim:sectorManager">Sector Manager</digi:trn>	
+											</digi:link>
+											</td>
+										</tr>
+										<tr>
+											<td class=f-names noWrap>
+											<digi:img src="module/aim/images/arrow-th-BABAB9.gif" width="16"/>
+											<bean:define id="translation">
+												<digi:trn key="aim:clickToViewStatusManager">Click here to view Status Manager</digi:trn>
+											</bean:define>
+											<digi:link href="/statusManager.do" title="<%=translation%>" >
+											<digi:trn key="aim:statusManager">Status Manager</digi:trn>
+											</digi:link>
+											</td>
+										</tr>
+										<tr>
+											<td class=f-names noWrap>
+											<digi:img src="module/aim/images/arrow-th-BABAB9.gif" width="16"/>
+											<bean:define id="translation">
+												<digi:trn key="aim:clickToViewWorkspaceManager">Click here to view Workspace Manager</digi:trn>
+											</bean:define>
+											<digi:link href="/workspaceManager.do~page=1" title="<%=translation%>" >
+											<digi:trn key="aim:workspaceManager">Workspace Manager</digi:trn>
+											</digi:link>
+											</td>
+										</tr>
 									</table>
 								</td>
 							</tr>

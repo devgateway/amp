@@ -275,14 +275,6 @@ public class AmpARFilter implements Filter {
 		this.perspectiveCode = perspective;
 	}
 
-	public boolean isWidget() {
-		return widget;
-	}
-
-	public void setWidget(boolean widget) {
-		this.widget = widget;
-	}
-
 	public boolean isPublicView() {
 		return publicView;
 	}
@@ -291,9 +283,17 @@ public class AmpARFilter implements Filter {
 		this.publicView = publicView;
 	}
 
+	public boolean isWidget() {
+		return widget;
+	}
+
+	public void setWidget(boolean widget) {
+		this.widget = widget;
+	}
+
 	/**
 	 * @return Returns the approvalStatus.
 	 */
-
+	
 
 }

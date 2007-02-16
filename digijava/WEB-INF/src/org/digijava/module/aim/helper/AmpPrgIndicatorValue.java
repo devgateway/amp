@@ -4,10 +4,23 @@ import java.io.Serializable;
 
 public class AmpPrgIndicatorValue implements Serializable
 {
+	private Long indicatorValueId;
 	private String creationDate;
 	private int valueType;
 	private Double valAmount;
 
+	/**
+	 * @return Returns the indicatorValueId.
+	 */
+	public Long getIndicatorValueId() {
+		return indicatorValueId;
+	}
+	/**
+	 * @param indicatorValueId The indicatorValueId to set.
+	 */
+	public void setIndicatorValueId(Long indicatorValueId) {
+		this.indicatorValueId = indicatorValueId;
+	}
 	/**
 	 * @return Returns the creationDate.
 	 */

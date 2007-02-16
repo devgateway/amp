@@ -32,7 +32,21 @@ public class OverallIndicatorManager extends Action
 		}
 		
 		AllIndicatorForm allIndForm = (AllIndicatorForm) form;
-		
+		String viewPreference = request.getParameter("view");
+
+		if(viewPreference!=null)
+		{
+			if(viewPreference.equals("indicators"))
+			{
+				allIndForm.setPrgIndicators(ProgramUtil.getAllThemeIndicators());
+				allIndForm.setProjIndicators(MEIndicatorsUtil.getAllActivityIds());
+				return mapping.findForward("forward");
+			}
+			else if(viewPreference.equals("multiprogram"))
+				return mapping.findForward("gotoMultiProgram");
+			else if(viewPreference.equals("meindicators"))
+				return mapping.findForward("gotoMEIndicators");
+		}
 		allIndForm.setPrgIndicators(ProgramUtil.getAllThemeIndicators());
 		allIndForm.setProjIndicators(MEIndicatorsUtil.getAllActivityIds());
 		

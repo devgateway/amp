@@ -34,17 +34,27 @@
 		function addSubProgram(rutId,id,level,name)
 		{
 			openNewWindow(400, 300);
-			<digi:context name="subProgram" property="context/module/moduleinstance/addSubTheme.do?event=addSubProgram"/>
+			<digi:context name="subProgram" property="context/module/moduleinstance/addSubPrgInd.do?event=addSubProgram"/>
 			document.aimThemeForm.action = "<%= subProgram %>&themeId=" + id + "&indlevel=" + level + "&indname=" + name + "&rootId=" + rutId;
 			document.aimThemeForm.target = popupPointer.name;
 			document.aimThemeForm.submit();
 		}
+		function editProgram(id,rutId)
+		{
+			openNewWindow(400,300);
+			<digi:context name="editTh" property="context/module/moduleinstance/editTheme.do?event=editSub"/>
+			document.aimThemeForm.action = "<%= editTh %>&themeId=" + id + "&rootId=" +rutId;
+			document.aimThemeForm.target = popupPointer.name;
+			document.aimThemeForm.submit();
+			return true;
+		}
+
 		function saveProgram(id)
 		{
 			var temp = validate();
 			if (temp == true) 
 			{
-				<digi:context name="addSubThm" property="context/module/moduleinstance/addSubTheme.do?event=save" />
+				<digi:context name="addSubThm" property="context/module/moduleinstance/addSubPrgInd.do?event=save" />
 				document.aimThemeForm.action = "<%= addSubThm %>&themeId=" + id;
 				document.aimThemeForm.target = "_self";
 				document.aimThemeForm.submit();
@@ -71,7 +81,7 @@
 
 <digi:errors/>
 <digi:instance property="aimThemeForm" />
-<digi:form action="/addSubTheme.do" method="post">
+<digi:form action="/addSubPrgInd.do" method="post">
 
 <digi:context name="digiContext" property="context" />
 <input type="hidden" name="event">
@@ -155,6 +165,12 @@
 																											<jsp:useBean id="urlParams1" type="java.util.Map" class="java.util.HashMap"/>
 																											<c:set target="${urlParams1}" property="themeId">
 																													<bean:write name="subPrograms" property="ampThemeId" />
+																											</c:set>
+																											<c:set target="${urlParams1}" property="indname">
+																													<bean:write name="subPrograms" property="name" />
+																											</c:set>
+																											<c:set target="${urlParams1}" property="rutId">
+																													<bean:write name="aimThemeForm" property="rootId" />
 																											</c:set><b>
 																											<a href="javascript:addSubProgram('<bean:write name="aimThemeForm" property="rootId" />','<bean:write name="subPrograms" property="ampThemeId" />','<bean:write name="subPrograms" property="indlevel"/>','<bean:write name="subPrograms" property="name"/>')" title="Click here to add Sub-Programs">
 																													<bean:write name="subPrograms" property="name"/>
@@ -164,12 +180,7 @@
 																											<input class="buton" type="button" name="addIndicator" value="Indicator" onclick="assignIndicators('<bean:write name="subPrograms" property="ampThemeId" />')">
 																									</td>
 																									<td align="left" width="50" bgcolor="#ffcccc">
-																											<bean:define id="translation">
-																													<digi:trn key="aim:clickToEditProgram">Click here to Edit Program</digi:trn>
-																											</bean:define>
-																											[ <digi:link href="/editTheme.do?event=edit" name="urlParams1" title="<%=translation%>" >
-																													<digi:trn key="aim:programManagerEdit">Edit</digi:trn>
-																											</digi:link> ]						
+																											<input class="buton" type="button" name="editButton" value="Edit" onclick="editProgram('<bean:write name="subPrograms" property="ampThemeId"/>','<bean:write name="aimThemeForm" property="rootId"/>')">					
 																									</td>
 																									<td align="left" width="12" bgcolor="#f4f4f2">
 																											<bean:define id="translation">
@@ -177,7 +188,7 @@
 																															Click here to Delete Program
 																													</digi:trn>
 																											</bean:define>
-																											<digi:link href="/editTheme.do?event=delete" name="urlParams1" title="<%=translation%>" onclick="return deleteProgram()">
+																											<digi:link href="/addSubTheme.do?event=delete" name="urlParams1" title="<%=translation%>" onclick="return deleteProgram()">
 																													<img src= "../ampTemplate/images/trash_12.gif" border=0>
 																											</digi:link>
 																									</td>
@@ -207,7 +218,12 @@
 																												<c:set target="${urlParams2}" property="themeId">
 																														<bean:write name="subPrograms" property="ampThemeId" />
 																												</c:set>
-																												<b>
+																												<c:set target="${urlParams2}" property="indname">
+																														<bean:write name="subPrograms" property="name" />
+																												</c:set>
+																												<c:set target="${urlParams2}" property="rutId">
+																														<bean:write name="aimThemeForm" property="rootId" />
+																												</c:set><b>
 																												<a href="javascript:addSubProgram('<bean:write name="aimThemeForm" property="rootId" />','<bean:write name="subPrograms" property="ampThemeId" />','<bean:write name="subPrograms" property="indlevel"/>','<bean:write name="subPrograms" property="name"/>')" title="Click here to add Sub-Programs">
 																													<bean:write name="subPrograms" property="name"/>
 																												</a></b>
@@ -216,12 +232,7 @@
 																												<input class="buton" type="button" name="addIndicator" value="Indicator" onclick="assignIndicators('<bean:write name="subPrograms" property="ampThemeId" />')">
 																										</td>
 																										<td align="left" width="50" bgcolor="#f4f4f2">
-																												<bean:define id="translation">
-																														<digi:trn key="aim:clickToEditProgram">Click here to Edit Program</digi:trn>
-																												</bean:define>
-																												[ <digi:link href="/editTheme.do?event=edit" name="urlParams2" title="<%=translation%>" >
-																														<digi:trn key="aim:programManagerEdit">Edit</digi:trn>
-																												</digi:link> ]						
+																												<input class="buton" type="button" name="editButton" value="Edit" onclick="editProgram('<bean:write name="subPrograms" property="ampThemeId"/>','<bean:write name="aimThemeForm" property="rootId"/>')">
 																										</td>
 																										<td align="left" width="12" bgcolor="#f4f4f2">
 																												<bean:define id="translation">
@@ -229,7 +240,7 @@
 																																Click here to Delete Program
 																														</digi:trn>
 																												</bean:define>
-																												<digi:link href="/editTheme.do?event=delete" name="urlParams2" title="<%=translation%>" onclick="return deleteProgram()">
+																												<digi:link href="/addSubTheme.do?event=delete" name="urlParams2" title="<%=translation%>" onclick="return deleteProgram()">
 																														<img src= "../ampTemplate/images/trash_12.gif" border=0>
 																												</digi:link>
 																										</td>
@@ -259,7 +270,12 @@
 																												<c:set target="${urlParams3}" property="themeId">
 																														<bean:write name="subPrograms" property="ampThemeId" />
 																												</c:set>
-																												<b>
+																												<c:set target="${urlParams3}" property="indname">
+																														<bean:write name="subPrograms" property="name" />
+																												</c:set>
+																												<c:set target="${urlParams3}" property="rutId">
+																														<bean:write name="aimThemeForm" property="rootId" />
+																												</c:set><b>
 																												<a href="javascript:addSubProgram('<bean:write name="aimThemeForm" property="rootId" />','<bean:write name="subPrograms" property="ampThemeId" />','<bean:write name="subPrograms" property="indlevel"/>','<bean:write name="subPrograms" property="name"/>')" title="Click here to add Sub-Programs">
 																													<bean:write name="subPrograms" property="name"/>
 																												</a></b>
@@ -268,12 +284,7 @@
 																												<input class="buton" type="button" name="addIndicator" value="Indicator" onclick="assignIndicators('<bean:write name="subPrograms" property="ampThemeId" />')">
 																										</td>
 																										<td align="left" width="50" bgcolor="#f4f4f2">
-																												<bean:define id="translation">
-																														<digi:trn key="aim:clickToEditProgram">Click here to Edit Program</digi:trn>
-																												</bean:define>
-																												[ <digi:link href="/editTheme.do?event=edit" name="urlParams3" title="<%=translation%>" >
-																														<digi:trn key="aim:programManagerEdit">Edit</digi:trn>
-																												</digi:link> ]						
+																												<input class="buton" type="button" name="editButton" value="Edit" onclick="editProgram('<bean:write name="subPrograms" property="ampThemeId"/>','<bean:write name="aimThemeForm" property="rootId"/>')">
 																										</td>
 																										<td align="left" width="12" bgcolor="#f4f4f2">
 																												<bean:define id="translation">
@@ -281,7 +292,7 @@
 																																Click here to Delete Program
 																														</digi:trn>
 																												</bean:define>
-																												<digi:link href="/editTheme.do?event=delete" name="urlParams3" title="<%=translation%>" onclick="return deleteProgram()">
+																												<digi:link href="/addSubTheme.do?event=delete" name="urlParams3" title="<%=translation%>" onclick="return deleteProgram()">
 																														<img src= "../ampTemplate/images/trash_12.gif" border=0>
 																												</digi:link>
 																										</td>
@@ -311,7 +322,12 @@
 																												<c:set target="${urlParams4}" property="themeId">
 																														<bean:write name="subPrograms" property="ampThemeId" />
 																												</c:set>
-																												<b>
+																												<c:set target="${urlParams4}" property="indname">
+																														<bean:write name="subPrograms" property="name" />
+																												</c:set>
+																												<c:set target="${urlParams4}" property="rutId">
+																														<bean:write name="aimThemeForm" property="rootId" />
+																												</c:set><b>
 																												<a href="javascript:addSubProgram('<bean:write name="aimThemeForm" property="rootId" />','<bean:write name="subPrograms" property="ampThemeId" />','<bean:write name="subPrograms" property="indlevel"/>','<bean:write name="subPrograms" property="name"/>')" title="Click here to add Sub-Programs">
 																													<bean:write name="subPrograms" property="name"/>
 																												</a></b>
@@ -320,12 +336,7 @@
 																												<input class="buton" type="button" name="addIndicator" value="Indicator" onclick="assignIndicators('<bean:write name="subPrograms" property="ampThemeId" />')">
 																										</td>
 																										<td align="left" width="50" bgcolor="#f4f4f2">
-																												<bean:define id="translation">
-																														<digi:trn key="aim:clickToEditProgram">Click here to Edit Program</digi:trn>
-																												</bean:define>
-																												[ <digi:link href="/editTheme.do?event=edit" name="urlParams4" title="<%=translation%>" >
-																														<digi:trn key="aim:programManagerEdit">Edit</digi:trn>
-																												</digi:link> ]						
+																												<input class="buton" type="button" name="editButton" value="Edit" onclick="editProgram('<bean:write name="subPrograms" property="ampThemeId"/>','<bean:write name="aimThemeForm" property="rootId"/>')">
 																										</td>
 																										<td align="left" width="12" bgcolor="#f4f4f2">
 																												<bean:define id="translation">
@@ -333,7 +344,7 @@
 																																Click here to Delete Program
 																														</digi:trn>
 																												</bean:define>
-																												<digi:link href="/editTheme.do?event=delete" name="urlParams4" title="<%=translation%>" onclick="return deleteProgram()">
+																												<digi:link href="/addSubTheme.do?event=delete" name="urlParams4" title="<%=translation%>" onclick="return deleteProgram()">
 																														<img src= "../ampTemplate/images/trash_12.gif" border=0>
 																												</digi:link>
 																										</td>
@@ -363,7 +374,12 @@
 																												<c:set target="${urlParams5}" property="themeId">
 																														<bean:write name="subPrograms" property="ampThemeId" />
 																												</c:set>
-																												<b>
+																												<c:set target="${urlParams5}" property="indname">
+																														<bean:write name="subPrograms" property="name" />
+																												</c:set>
+																												<c:set target="${urlParams5}" property="rutId">
+																														<bean:write name="aimThemeForm" property="rootId" />
+																												</c:set><b>
 																												<a href="javascript:addSubProgram('<bean:write name="aimThemeForm" property="rootId" />','<bean:write name="subPrograms" property="ampThemeId" />','<bean:write name="subPrograms" property="indlevel"/>','<bean:write name="subPrograms" property="name"/>')" title="Click here to add Sub-Programs">
 																													<bean:write name="subPrograms" property="name"/>
 																												</a></b>
@@ -372,12 +388,7 @@
 																												<input class="buton" type="button" name="addIndicator" value="Indicator" onclick="assignIndicators('<bean:write name="subPrograms" property="ampThemeId" />')">
 																										</td>
 																										<td align="left" width="50" bgcolor="#f4f4f2">
-																												<bean:define id="translation">
-																														<digi:trn key="aim:clickToEditProgram">Click here to Edit Program</digi:trn>
-																												</bean:define>
-																												[ <digi:link href="/editTheme.do?event=edit" name="urlParams5" title="<%=translation%>" >
-																														<digi:trn key="aim:programManagerEdit">Edit</digi:trn>
-																												</digi:link> ]						
+																												<input class="buton" type="button" name="editButton" value="Edit" onclick="editProgram('<bean:write name="subPrograms" property="ampThemeId"/>','<bean:write name="aimThemeForm" property="rootId"/>')">
 																										</td>
 																										<td align="left" width="12" bgcolor="#f4f4f2">
 																												<bean:define id="translation">
@@ -385,7 +396,7 @@
 																																Click here to Delete Program
 																														</digi:trn>
 																												</bean:define>
-																												<digi:link href="/editTheme.do?event=delete" name="urlParams5" title="<%=translation%>" onclick="return deleteProgram()">
+																												<digi:link href="/addSubTheme.do?event=delete" name="urlParams5" title="<%=translation%>" onclick="return deleteProgram()">
 																														<img src= "../ampTemplate/images/trash_12.gif" border=0>
 																												</digi:link>
 																										</td>
@@ -415,7 +426,12 @@
 																												<c:set target="${urlParams6}" property="themeId">
 																														<bean:write name="subPrograms" property="ampThemeId" />
 																												</c:set>
-																												<b>
+																												<c:set target="${urlParams6}" property="indname">
+																														<bean:write name="subPrograms" property="name" />
+																												</c:set>
+																												<c:set target="${urlParams6}" property="rutId">
+																														<bean:write name="aimThemeForm" property="rootId" />
+																												</c:set><b>
 																												<a href="javascript:addSubProgram('<bean:write name="aimThemeForm" property="rootId" />','<bean:write name="subPrograms" property="ampThemeId" />','<bean:write name="subPrograms" property="indlevel"/>','<bean:write name="subPrograms" property="name"/>')" title="Click here to add Sub-Programs">
 																													<bean:write name="subPrograms" property="name"/>
 																												</a></b>
@@ -424,12 +440,7 @@
 																												<input class="buton" type="button" name="addIndicator" value="Indicator" onclick="assignIndicators('<bean:write name="subPrograms" property="ampThemeId" />')">
 																										</td>
 																										<td align="left" width="50" bgcolor="#f4f4f2">
-																												<bean:define id="translation">
-																														<digi:trn key="aim:clickToEditProgram">Click here to Edit Program</digi:trn>
-																												</bean:define>
-																												[ <digi:link href="/editTheme.do?event=edit" name="urlParams6" title="<%=translation%>" >
-																														<digi:trn key="aim:programManagerEdit">Edit</digi:trn>
-																												</digi:link> ]						
+																												<input class="buton" type="button" name="editButton" value="Edit" onclick="editProgram('<bean:write name="subPrograms" property="ampThemeId"/>','<bean:write name="aimThemeForm" property="rootId"/>')">
 																										</td>
 																										<td align="left" width="12" bgcolor="#f4f4f2">
 																												<bean:define id="translation">
@@ -437,7 +448,7 @@
 																																Click here to Delete Program
 																														</digi:trn>
 																												</bean:define>
-																												<digi:link href="/editTheme.do?event=delete" name="urlParams6" title="<%=translation%>" onclick="return deleteProgram()">
+																												<digi:link href="/addSubTheme.do?event=delete" name="urlParams6" title="<%=translation%>" onclick="return deleteProgram()">
 																														<img src= "../ampTemplate/images/trash_12.gif" border=0>
 																												</digi:link>
 																										</td>
@@ -467,7 +478,12 @@
 																												<c:set target="${urlParams7}" property="themeId">
 																														<bean:write name="subPrograms" property="ampThemeId" />
 																												</c:set>
-																												<b>
+																												<c:set target="${urlParams7}" property="indname">
+																														<bean:write name="subPrograms" property="name" />
+																												</c:set>
+																												<c:set target="${urlParams7}" property="rutId">
+																														<bean:write name="aimThemeForm" property="rootId" />
+																												</c:set><b>
 																												<a href="javascript:addSubProgram('<bean:write name="aimThemeForm" property="rootId" />','<bean:write name="subPrograms" property="ampThemeId" />','<bean:write name="subPrograms" property="indlevel"/>','<bean:write name="subPrograms" property="name"/>')" title="Click here to add Sub-Programs">
 																													<bean:write name="subPrograms" property="name"/>
 																												</a></b>
@@ -476,12 +492,7 @@
 																												<input class="buton" type="button" name="addIndicator" value="Indicator" onclick="assignIndicators('<bean:write name="subPrograms" property="ampThemeId" />')">
 																										</td>
 																										<td align="left" width="50" bgcolor="#f4f4f2">
-																												<bean:define id="translation">
-																														<digi:trn key="aim:clickToEditProgram">Click here to Edit Program</digi:trn>
-																												</bean:define>
-																												[ <digi:link href="/editTheme.do?event=edit" name="urlParams7" title="<%=translation%>" >
-																														<digi:trn key="aim:programManagerEdit">Edit</digi:trn>
-																												</digi:link> ]						
+																												<input class="buton" type="button" name="editButton" value="Edit" onclick="editProgram('<bean:write name="subPrograms" property="ampThemeId"/>','<bean:write name="aimThemeForm" property="rootId"/>')">
 																										</td>
 																										<td align="left" width="12" bgcolor="#f4f4f2">
 																												<bean:define id="translation">
@@ -489,7 +500,7 @@
 																																Click here to Delete Program
 																														</digi:trn>
 																												</bean:define>
-																												<digi:link href="/editTheme.do?event=delete" name="urlParams7" title="<%=translation%>" onclick="return deleteProgram()">
+																												<digi:link href="/addSubTheme.do?event=delete" name="urlParams7" title="<%=translation%>" onclick="return deleteProgram()">
 																														<img src= "../ampTemplate/images/trash_12.gif" border=0>
 																												</digi:link>
 																										</td>
@@ -518,6 +529,12 @@
 																												<jsp:useBean id="urlParams8" type="java.util.Map" class="java.util.HashMap"/>
 																												<c:set target="${urlParams8}" property="themeId">
 																														<bean:write name="subPrograms" property="ampThemeId" />
+																												</c:set>
+																												<c:set target="${urlParams8}" property="indname">
+																														<bean:write name="subPrograms" property="name" />
+																												</c:set>
+																												<c:set target="${urlParams8}" property="rutId">
+																														<bean:write name="aimThemeForm" property="rootId" />
 																												</c:set><b>
 																													<bean:write name="subPrograms" property="name"/></b>
 																										</td>
@@ -525,12 +542,7 @@
 																												<input class="buton" type="button" name="addIndicator" value="Indicator" onclick="assignIndicators('<bean:write name="subPrograms" property="ampThemeId" />')">
 																										</td>
 																										<td align="left" width="50" bgcolor="#f4f4f2">
-																												<bean:define id="translation">
-																														<digi:trn key="aim:clickToEditProgram">Click here to Edit Program</digi:trn>
-																												</bean:define>
-																												[ <digi:link href="/editTheme.do?event=edit" name="urlParams8" title="<%=translation%>" >
-																														<digi:trn key="aim:programManagerEdit">Edit</digi:trn>
-																												</digi:link> ]						
+																												<input class="buton" type="button" name="editButton" value="Edit" onclick="editProgram('<bean:write name="subPrograms" property="ampThemeId"/>','<bean:write name="aimThemeForm" property="rootId"/>')">
 																										</td>
 																										<td align="left" width="12" bgcolor="#f4f4f2">
 																												<bean:define id="translation">
@@ -538,7 +550,7 @@
 																																Click here to Delete Program
 																														</digi:trn>
 																												</bean:define>
-																												<digi:link href="/editTheme.do?event=delete" name="urlParams8" title="<%=translation%>" onclick="return deleteProgram()">
+																												<digi:link href="/addSubTheme.do?event=delete" name="urlParams8" title="<%=translation%>" onclick="return deleteProgram()">
 																														<img src= "../ampTemplate/images/trash_12.gif" border=0>
 																												</digi:link>
 																										</td>

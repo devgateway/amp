@@ -79,35 +79,6 @@ A.heading:hover
 	TEXT-DECORATION: none
 }
 
-A.reportHeading
-{
-	FONT-SIZE: 12px;
-	TEXT-TRANSFORM: uppercase; 
-	COLOR: #d6d6d6; 
-   FONT-FAMILY: Verdana, Arial, Helvetica, sans-serif;
-	LETTER-SPACING: 2px; 
-	TEXT-DECORATION: none
-}
-
-A.reportHeading:visited 
-{
-	FONT-SIZE: 12px;
-	TEXT-TRANSFORM: uppercase; 
-	COLOR: #d6d6d6; 
-	LETTER-SPACING: 2px; 
-	TEXT-DECORATION: none
-}
-
-A.reportHeading:hover 
-{
-	FONT-SIZE: 12px;
-	TEXT-TRANSFORM: uppercase; 
-	COLOR: #d6d6d6; 
-	LETTER-SPACING: 2px; 
-	TEXT-DECORATION: none
-}
-
-
 A.nav 
 {
 	PADDING-TOP: 5px; 	
@@ -233,6 +204,60 @@ A.sub-nav
 	BACKGROUND-COLOR: #3754a1; 
 	TEXT-DECORATION: none
 }
+
+A.sub-navGov 
+{
+	PADDING-RIGHT: 3px; 
+	PADDING-LEFT: 10px; 
+	FONT-WEIGHT: normal; 
+	FONT-SIZE: 11px; 
+	PADDING-BOTTOM: 3px; 
+	TEXT-TRANSFORM: uppercase; 
+	FONT-COLOR: #ffffff;
+	PADDING-TOP: 3px;
+	WHITE-SPACE: nowrap; 
+	LETTER-SPACING: 0px; 
+	BACKGROUND-IMAGE: url(../module/aim/images/tab-right.gif);
+	HEIGHT: 20px; 
+	WIDTH: 200px;
+	TEXT-DECORATION: none;
+}
+
+
+A.sub-navGovSelected
+{
+	PADDING-RIGHT: 3px; 
+	PADDING-LEFT: 10px; 
+	FONT-WEIGHT: normal; 
+	FONT-SIZE: 11px; 
+	PADDING-BOTTOM: 3px; 
+	TEXT-TRANSFORM: uppercase; 
+	FONT-COLOR: #ffffff;
+	PADDING-TOP: 3px; 
+	WHITE-SPACE: nowrap; 
+	LETTER-SPACING: 0px;
+ 	BACKGROUND-IMAGE: url(../module/aim/images/tab-rightselected.gif);
+	HEIGHT: 20px; 
+	TEXT-DECORATION: none;
+}
+
+A.sub-navGovSelected:hover
+{
+	PADDING-RIGHT: 3px; 
+	PADDING-LEFT: 10px; 
+	FONT-WEIGHT: normal; 
+	FONT-SIZE: 11px; 
+	PADDING-BOTTOM: 3px; 
+	TEXT-TRANSFORM: uppercase; 
+	FONT-COLOR: #ffffff;
+	PADDING-TOP: 3px; 
+	WHITE-SPACE: nowrap; 
+	LETTER-SPACING: 0px;
+ 	BACKGROUND-IMAGE: url(../module/aim/images/tab-righthover.gif);
+	HEIGHT: 20px; 
+	TEXT-DECORATION: none;
+}
+
 
 A.sub-nav3 
 {

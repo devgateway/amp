@@ -1,16 +1,15 @@
 package org.digijava.module.aim.form;
 
+import java.util.*;
+import javax.servlet.http.*;
+
 import org.apache.struts.action.*;
-
-import java.util.Collection;
-
-import javax.servlet.http.HttpServletRequest;
 
 public class OrgManagerForm extends ActionForm {
 
 	//private Collection organisation;
 	//private Collection pages;
-	
+
 	private Long ampOrgTypeId;
 	private String orgType;
 	private String keyword;
@@ -28,8 +27,10 @@ public class OrgManagerForm extends ActionForm {
 	private boolean orgSelReset;
 	private boolean reset;
 	private boolean orgPopupReset;
-	
-	
+        private boolean viewAll;
+        private String alpha;
+
+
 	public OrgManagerForm() {
 		reset = false;
 		orgPopupReset = true;
@@ -37,9 +38,9 @@ public class OrgManagerForm extends ActionForm {
 		tempNumResults = 0;
 		//ampOrgTypeId = new Long(-1);
 	}
-	
+
 	public void reset(ActionMapping mapping, HttpServletRequest request) {
-		
+
 		if (reset) {
 			numResults = 0;
 			cols = null;
@@ -49,9 +50,9 @@ public class OrgManagerForm extends ActionForm {
 			alphaPages = null;
 			reset = false;
 			currentPage = new Integer(0);
-			currentAlpha = null;				
+			currentAlpha = null;
 		}
-		
+
 		if (orgSelReset) {
 			pagedCol = null;
 			keyword = null;
@@ -60,7 +61,7 @@ public class OrgManagerForm extends ActionForm {
 			setTempNumResults(10);
 		}
 	}
-	
+
 	/**
 	 * @return Returns the alphaPages.
 	 */
@@ -259,10 +260,27 @@ public class OrgManagerForm extends ActionForm {
 	public boolean isReset() {
 		return reset;
 	}
-	/**
+
+  public boolean isViewAll() {
+    return viewAll;
+  }
+
+  public String getAlpha() {
+    return alpha;
+  }
+
+  /**
 	 * @param reset The reset to set.
 	 */
 	public void setReset(boolean reset) {
 		this.reset = reset;
 	}
+
+  public void setViewAll(boolean viewAll) {
+    this.viewAll = viewAll;
+  }
+
+  public void setAlpha(String alpha) {
+    this.alpha = alpha;
+  }
 }

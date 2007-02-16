@@ -32,13 +32,10 @@
 			<td><a href="javascript:switchTranslation(false)"><i>
 				<digi:trn key="trn:nontrans1">Non-translator View</digi:trn></i></a>
 			</td></logic:equal>
-			<td>
-				<html:link page="/translate/complete/trans.do?method=getAll">
-				<digi:trn key="trn:AdvancedMode">Advanced Mode</digi:trn></html:link>
-			</td>
+			
 			<td>
 				<html:link page="/translation/showAdvancedTranslation.do">
-				<digi:trn key="trn:AdvancedMode1">Advanced Mode!</digi:trn></html:link>
+		        <digi:trn key="trn:AdvancedMode">Advanced Mode</digi:trn></html:link>
 			</td>
 			<td>
 				<html:link page="/translation/showEditPermissions.do">

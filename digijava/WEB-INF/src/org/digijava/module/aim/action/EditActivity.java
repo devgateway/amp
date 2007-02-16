@@ -42,6 +42,7 @@ import org.digijava.module.aim.dbentity.AmpComponent;
 import org.digijava.module.aim.dbentity.AmpComponentFunding;
 import org.digijava.module.aim.dbentity.AmpFunding;
 import org.digijava.module.aim.dbentity.AmpFundingDetail;
+import org.digijava.module.aim.dbentity.AmpGlobalSettings;
 import org.digijava.module.aim.dbentity.AmpIssues;
 import org.digijava.module.aim.dbentity.AmpLocation;
 import org.digijava.module.aim.dbentity.AmpMeasure;
@@ -78,6 +79,7 @@ import org.digijava.module.aim.util.ComponentsUtil;
 import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.DocumentUtil;
+import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.ProgramUtil;
 import org.digijava.module.aim.util.TeamMemberUtil;
 import org.digijava.module.cms.dbentity.CMSContentItem;
@@ -108,12 +110,12 @@ public class EditActivity
         // if user is not logged in, forward him to the home page
         if(session.getAttribute("currentMember") == null)
             return mapping.findForward("index");
-        
+
         EditActivityForm eaForm = (EditActivityForm) form; // form bean instance
         Long activityId = eaForm.getActivityId();
 
         String errorMsgKey = "";
-        
+
         // Checking whether the user have write access to the activity
         if(!mapping.getPath().trim().endsWith("viewActivityPreview")) {
             if(!("Team".equalsIgnoreCase(tm.getTeamAccessType()))) {
@@ -128,7 +130,6 @@ public class EditActivity
                 errorMsgKey));
             saveErrors(request, errors);
 
-            logger.info("From Here 1...");
             errorMsgKey = "error.aim.editActivity.userPartOfManagementTeam";
             String url = "/aim/viewChannelOverview.do?ampActivityId="
                 + activityId + "&tabIndex=0";
@@ -136,7 +137,7 @@ public class EditActivity
                 .getRequestDispatcher(url);
             rd.forward(request, response);
             return null;
-            
+
         } else if(tm.getWrite() == false)
             errorMsgKey = "error.aim.editActivity.noWritePermissionForUser";
 
@@ -144,7 +145,6 @@ public class EditActivity
             errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
                 errorMsgKey));
             saveErrors(request, errors);
-            logger.info("From Here 2...");
             String url = "/aim/viewChannelOverview.do?ampActivityId="
                 + activityId + "&tabIndex=0";
             RequestDispatcher rd = getServlet().getServletContext()
@@ -154,11 +154,7 @@ public class EditActivity
         }
 
         // load all themes
-        Collection themes = new ArrayList();
-        themes = ProgramUtil.getAllThemes();
-        themes = CollectionUtils.getFlatHierarchy(themes, true,
-                                                  new HierarchicalDefinition(),
-                                                  new ProgramComparator());
+        Collection themes = new ArrayList(ProgramUtil.getAllThemes());
         eaForm.setProgramCollection(themes);
 
        try {
@@ -197,6 +193,15 @@ public class EditActivity
                    propProjCost.getFunDate() == null) {
                     eaForm.setProProjCost(null);
                 }
+            }
+
+            List prLst=new ArrayList();
+            if(eaForm.getActPrograms()==null){
+                eaForm.setActPrograms(prLst);
+            }else{
+                prLst=eaForm.getActPrograms();
+                prLst.clear();
+                eaForm.setActPrograms(prLst);
             }
 
             if(tm.getTeamType()
@@ -269,7 +274,6 @@ public class EditActivity
 
             //logger.info("CanEdit = " + canEdit);
             if(!canEdit) {
-            	logger.info("From Here 3...");
                 errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
                     "error.aim.activityAlreadyOpenedForEdit"));
                 saveErrors(request, errors);
@@ -370,24 +374,6 @@ public class EditActivity
                     eaForm.setDonorFlag(false);
                 }
 
-                try{
-                    if(activity.getActivityPrograms() != null) {
-                        Set prgs = activity.getActivityPrograms();
-                        Long selectedProgramIds[] = new Long[prgs.size()];
-                        AmpTheme ampTheme = new AmpTheme();
-                        Iterator itr = prgs.iterator();
-                        int i = 0;
-                        while(itr.hasNext()) {
-                            ampTheme = (AmpTheme) itr.next();
-                            selectedProgramIds[i] = ampTheme.getAmpThemeId();
-                            i++;
-                        }
-                        eaForm.setSelectedPrograms(selectedProgramIds);
-                    }
-                }catch(Exception ex){
-                    ex.printStackTrace();
-                }
-
                 // load the activity details
 
                 String actApprovalStatus = DbUtil.getActivityApprovalStatus(
@@ -403,6 +389,19 @@ public class EditActivity
                     pg.setFunDate(activity.getFunDate());
                     eaForm.setProProjCost(pg);
 
+                    try{
+                        List actPrgs = new ArrayList();
+                        Set prgSet = activity.getActivityPrograms();
+                        if(prgSet != null) {
+                            Iterator prgItr = prgSet.iterator();
+                            while(prgItr.hasNext()) {
+                                actPrgs.add((AmpTheme) prgItr.next());
+                            }
+                        }
+                        eaForm.setActPrograms(actPrgs);
+                    }catch(Exception ex){
+                        ex.printStackTrace();
+                    }
                     eaForm.setTitle(activity.getName().trim());
                     eaForm.setDescription(activity.getDescription().trim());
                     eaForm.setObjectives(activity.getObjective().trim());
@@ -545,8 +544,17 @@ public class EditActivity
                             if(loc != null) {
                                 Location location = new Location();
                                 location.setLocId(loc.getAmpLocationId());
-                                Country cntry = DbUtil
-                                    .getDgCountry(Constants.COUNTRY_ISO);
+                                Collection col1 =FeaturesUtil.getDefaultCountryISO();
+                                String ISO= null;
+                                Iterator itr1 = col1.iterator();
+                                while(itr1.hasNext())
+                                {
+                                	AmpGlobalSettings ampG = (AmpGlobalSettings)itr1.next();
+                                	ISO = ampG.getGlobalSettingsValue();
+                                }
+                                logger.info(" this is the settings Value"+ ISO);
+                                //Country cntry = DbUtil.getDgCountry(Constants.COUNTRY_ISO);
+                                    Country cntry = DbUtil.getDgCountry(ISO);
                                 location.setCountryId(cntry.getCountryId());
                                 location.setCountry(cntry.getCountryName());
                                 if(loc.getAmpRegion() != null) {
@@ -927,8 +935,15 @@ public class EditActivity
                             Components tempComp = new Components();
                             tempComp.setTitle(temp.getTitle());
                             tempComp.setComponentId(temp.getAmpComponentId());
+                            if(temp.getDescription()==null)
+                            {
+                            	tempComp.setDescription(" ");
+                            }
+                            else
+                            {
                             tempComp.setDescription(temp.getDescription()
                                 .trim());
+                        	}
                             tempComp.setCommitments(new ArrayList());
                             tempComp.setDisbursements(new ArrayList());
                             tempComp.setExpenditures(new ArrayList());
@@ -1052,8 +1067,7 @@ public class EditActivity
                         eaForm.setSelectedComponents(comp);
                     }
 
-                    Collection memLinks = TeamMemberUtil.getMemberLinks(tm
-                        .getMemberId());
+                    Collection memLinks = TeamMemberUtil.getMemberLinks(tm.getMemberId());
                     Collection actDocs = activity.getDocuments();
                     if(actDocs != null && actDocs.size() > 0) {
                         Collection docsList = new ArrayList();
@@ -1088,10 +1102,7 @@ public class EditActivity
                         eaForm.setLinksList(linksList);
                     }
                     Site currentSite = RequestUtils.getSite(request);
-                    eaForm.setManagedDocumentList(DocumentUtil.
-                                                  getDocumentsForActivity(
-                        currentSite, activity));
-
+                    eaForm.setManagedDocumentList(DocumentUtil.getDocumentsForActivity(currentSite, activity));
                     // loading the related organizations
                     eaForm.setExecutingAgencies(new ArrayList());
                     eaForm.setImpAgencies(new ArrayList());

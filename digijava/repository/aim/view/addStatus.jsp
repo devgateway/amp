@@ -7,6 +7,19 @@
 
 
 <digi:form name="aimStatusItemForm" type="org.digijava.module.aim.form.StatusItemForm" scope="request" action="/addStatus.do">
+<script language="JavaScript">
+function save() {
+ if (!document.aimStatusItemForm.name.value || document.aimStatusItemForm.statusCode.value == 0 ){
+  alert ("Please enter the Status Code/Name please ");
+ 	 document.aimStatusItemForm.focus();
+  	 return false;
+  }else{
+    document.aimStatusItemForm.submit();
+ 	return true;
+  }
+ }
+
+</script>
 
 <!--  AMP Admin Logo -->
 <jsp:include page="teamPagesHeader.jsp" flush="true" />
@@ -121,7 +134,7 @@
 																			<table width="100%" cellspacing="5">
 																				<tr>
 																					<td width="50%" align="right">
-																					<html:submit value="Save" styleClass="dr-menu" />
+																					<html:submit value="Save" styleClass="dr-menu" onclick="return save()" />
 																					
 																					</td>
 																					<td width="50%" align="left">

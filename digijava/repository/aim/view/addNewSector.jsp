@@ -13,10 +13,6 @@
 		return flag;
 	}
 	function updateScheme(id) {
-			  alert(" this is it");
-			  alert(id);
-			  
-		
 			<digi:context name="updateSector" property="context/module/moduleinstance/editSector.do?event=updateScheme" />
 			document.aimAddSectorForm.action = "<%= updateSector%>&id="+id;
 			document.aimAddSectorForm.target = "_self";
@@ -164,19 +160,37 @@
 															<bean:define id="translation">
 																<digi:trn key="aim:clickToEditSector">Click here to Edit Sector</digi:trn>
 															</bean:define>
-															[ <digi:link href="/viewSectorDetails.do" name="urlParams2" title="<%=translation%>" >Edit</digi:link> ]
+															[ <digi:link href="/viewSectorDetails.do" name="urlParams2" title="<%=translation%>" >Edit AAAAAAAAAAAAAAAAAAAAAAAAAAAAA add new sector.jsp</digi:link> ]
 														</td>
 														<td bgcolor="#ffffff" width="55" align="center">
+														<jsp:useBean id="urlParams4" type="java.util.Map" class="java.util.HashMap"/>
+															<c:set target="${urlParams4}" property="ampSectorId">
+																<bean:write name="sectorSchemeLevelOne" property="ampSectorId" />
+																
+															</c:set>
+															<c:set target="${urlParams4}" property="schemeId">
+					
+																<bean:write name="aimAddSectorForm" property="parentId" />
+															</c:set>
+
+															<c:set target="${urlParams4}" property="event" value="delete"/>
+															<bean:define id="translation">
+																<digi:trn key="aim:clickToDeleteSector">Click here to Delete Sector</digi:trn>
+															</bean:define>
+															[ <digi:link href="/deleteSector.do" name="urlParams4" 
+																title="<%=translation%>" onclick="return onDelete()">Delete</digi:link> ]
+															<%--	
 															<jsp:useBean id="urlParams4" type="java.util.Map" class="java.util.HashMap"/>
 															<c:set target="${urlParams4}" property="ampSecSchemeId">
 																<bean:write name="sectorSchemeLevelOne" property="ampSecSchemeId" />
 															</c:set>
-															<c:set target="${urlParams4}" property="event" value="delete"/>
+															<c:set target="${urlParams2}" property="event" value="delete"/>
 															<bean:define id="translation">
 																<digi:trn key="aim:clickToDeleteSector">Click here to Delete Sector</digi:trn>
 															</bean:define>
 															[ <digi:link href="/deleteSector.do" name="urlParams2" 
 																title="<%=translation%>" onclick="return onDelete()">Delete</digi:link> ]
+																--%>
 														</td>
 													</tr>
 													</logic:iterate>

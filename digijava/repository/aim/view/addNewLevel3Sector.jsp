@@ -43,7 +43,7 @@
 						</bean:define>
 						<digi:link href="/admin.do" styleClass="comment" title="<%=translation%>" >
 						<digi:trn key="aim:AmpAdminHome">
-						Admin Home
+						Admin Home 
 						</digi:trn>
 						</digi:link>&nbsp;&gt;&nbsp;
 						<digi:link href="/getSectorSchemes.do" styleClass="comment" title="<%=translation%>" >
@@ -78,7 +78,7 @@
 												<table width="100%">
 													<tr>
 														<td>
-															Sector two Name :
+															Sector two Name :AAAAAAAAAAAAAAAAAAAAAAAAAAAAA add new level 3 sector.jsp
 														</td>
 														<td>
 															<html:textarea  name ="aimAddSectorForm" property="sectorName" rows="1" cols= "35"/> 
@@ -158,11 +158,11 @@
 															<c:set target="${urlParams4}" property="ampSecSchemeId">
 																<bean:write name="sectorSchemeLevelOne" property="ampSecSchemeId" />
 															</c:set>
-															<c:set target="${urlParams4}" property="event" value="delete"/>
+															<c:set target="${urlParams2}" property="event" value="delete"/>
 															<bean:define id="translation">
 																<digi:trn key="aim:clickToDeleteSector">Click here to Delete Sector</digi:trn>
 															</bean:define>
-															[ <digi:link href="/deleteWorkspace.do" name="urlParams4" 
+															[ <digi:link href="/deleteSector.do" name="urlParams2" 
 																title="<%=translation%>" onclick="return onDelete()">Delete</digi:link> ]
 														</td>
 													</tr>
@@ -203,19 +203,27 @@
 							<tr>
 								<td bgColor=#ffffff class=box-border>
 									<table cellPadding=5 cellSpacing=1 width="100%">
+										<!-- 
 										<tr>
 											<td>
+												<jsp:useBean id="urlParams5" type="java.util.Map" class="java.util.HashMap"/>
+												<c:set target="${urlParams5}" property="ampSecSchemeId">
+													<bean:write name="aimAddSectorForm" property="sectorId" />
+												</c:set>
+												<c:set target="${urlParams5}" property="parent" value="sector"/>
 												<digi:img src="module/aim/images/arrow-014E86.gif" width="15" height="10"/>
 												<bean:define id="translation">
 													<digi:trn key="aim:clickToAddSector">Click here to Add a Sector</digi:trn>
 												</bean:define>
-												<digi:link href="/createSector.do?dest=admin" title="<%=translation%>" >
+												
+												<digi:link href="/addSector.do" name="urlParams5" title="<%=translation%>" >
 												<digi:trn key="aim:addSector">
 												Add Sector
 												</digi:trn>
 												</digi:link>
 											</td>
 										</tr>
+										-->
 										<tr>
 											<td>
 												<digi:img src="module/aim/images/arrow-014E86.gif" width="15" height="10"/>

@@ -15,7 +15,7 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.digijava.module.aim.dbentity.AmpTheme;
 import org.digijava.module.aim.form.ThemeForm;
-import org.digijava.module.aim.util.DbUtil;
+import org.digijava.module.aim.helper.EditProgram;
 import org.digijava.module.aim.util.ProgramUtil;
 
 
@@ -41,43 +41,60 @@ public class EditTheme extends Action {
 		String event = request.getParameter("event");
 		Long id = new Long(Long.parseLong(request.getParameter("themeId")));
 		
-		if (event != null && event.equals("edit"))
+		if (event != null)
 		{
-			AmpTheme ampTheme = ProgramUtil.getTheme(id);
-			themeForm.setThemeId(id);
-			themeForm.setProgramName(ampTheme.getName());
-			themeForm.setProgramCode(ampTheme.getThemeCode());
-			themeForm.setProgramDescription(ampTheme.getDescription());
-			themeForm.setProgramType(ampTheme.getType());
-			if(ampTheme.getParentThemeId() != null)
-				themeForm.setPrgParentThemeId(ampTheme.getParentThemeId().getAmpThemeId());
-			else
-				themeForm.setPrgParentThemeId(null);
-			return mapping.findForward("editProgram");
+			if (event.equals("edit"))
+			{
+				AmpTheme ampTheme = ProgramUtil.getThemeObject(id);
+				themeForm.setThemeId(id);
+				themeForm.setProgramName(ampTheme.getName());
+				themeForm.setProgramCode(ampTheme.getThemeCode());
+				themeForm.setProgramDescription(ampTheme.getDescription());
+				themeForm.setProgramType(ampTheme.getType());
+				themeForm.setProgramTypeNames(ProgramUtil.getProgramTypes());
+				return mapping.findForward("editProgram");				
+			}
+			if(event.equals("editSub"))
+			{
+				Long rootid = new Long(Long.parseLong(request.getParameter("rootId")));
+				AmpTheme ampTheme = ProgramUtil.getThemeObject(id);
+				themeForm.setThemeId(id);
+				themeForm.setProgramName(ampTheme.getName());
+				themeForm.setProgramCode(ampTheme.getThemeCode());
+				themeForm.setProgramDescription(ampTheme.getDescription());
+				themeForm.setProgramType(ampTheme.getType());
+				themeForm.setRootId(rootid);
+				return mapping.findForward("editProgram");
+			}
+			if (event.equals("update"))
+			{
+				String rootid = request.getParameter("rootId");
+				if(rootid.trim().length() != 0)
+				{
+					Long baseid = new Long(Long.parseLong(rootid));
+					EditProgram editPrg = new EditProgram();
+					editPrg.setAmpThemeId(id);
+					editPrg.setName(themeForm.getProgramName());
+					editPrg.setThemeCode(themeForm.getProgramCode());
+					editPrg.setDescription(themeForm.getProgramDescription());
+					editPrg.setType(themeForm.getProgramType());
+					ProgramUtil.updateTheme(editPrg);
+					themeForm.setSubPrograms(ProgramUtil.getAllSubThemes(baseid));
+					return mapping.findForward("subPrgEdit");
+				}
+				else
+				{
+					EditProgram editPrg = new EditProgram();
+					editPrg.setAmpThemeId(id);
+					editPrg.setName(themeForm.getProgramName());
+					editPrg.setThemeCode(themeForm.getProgramCode());
+					editPrg.setDescription(themeForm.getProgramDescription());
+					editPrg.setType(themeForm.getProgramType());
+					ProgramUtil.updateTheme(editPrg);
+					return mapping.findForward("forward");
+				}
+			}
 		}
-		else if (event != null && event.equals("update"))
-		{
-			AmpTheme ampTheme = new AmpTheme();
-			ampTheme = ProgramUtil.getTheme(id);
-			ampTheme.setName(themeForm.getProgramName());
-			ampTheme.setThemeCode(themeForm.getProgramCode());
-			ampTheme.setDescription(themeForm.getProgramDescription());
-			ampTheme.setType(themeForm.getProgramType());
-			if(ampTheme.getParentThemeId() != null)
-				ampTheme.setParentThemeId(ampTheme.getParentThemeId());
-			else
-				ampTheme.setParentThemeId(null);
-			ampTheme.setLanguage(null);
-			ampTheme.setVersion(null);
-			DbUtil.update(ampTheme);
-			return mapping.findForward("forward");
-		}
-		else if (event != null && event.equals("delete"))
-		{
-			ProgramUtil.deleteTheme(id);
-			return mapping.findForward("forward");
-		}
-		else
-			return mapping.findForward("forward");
+		return mapping.findForward("forward");
 	}
 }

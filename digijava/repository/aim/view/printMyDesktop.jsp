@@ -201,3 +201,6 @@
 </TABLE>
 
 </digi:form>
+<script language="JavaScript" type="text/javascript">
+window.print();
+</script>

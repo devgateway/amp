@@ -32,8 +32,8 @@ public class EventTypeAction
         Exception {
         EventTypeForm eventForm = (EventTypeForm) form;
         eventForm.setEventTypes(AmpDbUtil.getEventTypes());
-        eventForm.setAddColor(null);
-        eventForm.setAddName(null);
+        eventForm.setEventTypeColor(null);
+        eventForm.setEventTypeName(null);
         return mapping.findForward("eventTypesPage");
     }
 
@@ -43,7 +43,7 @@ public class EventTypeAction
                                 HttpServletResponse response) throws
         Exception {
         EventTypeForm eventForm = (EventTypeForm) form;
-        AmpUtil.deleteEventType(new Long(eventForm.getDeleteId()));
+        AmpUtil.deleteEventType(eventForm.getEventTypeId());
         return showList(mapping, form, request, response);
     }
 
@@ -55,10 +55,14 @@ public class EventTypeAction
     EventTypeForm eventForm = (EventTypeForm) form;
     ActionErrors errors = eventForm.validate(mapping, request);
 
-    if (errors == null || errors.size() == 0) {
-        AmpUtil.createEventType(eventForm.getAddName(), eventForm.getAddColor());
+    if (errors == null){
+        AmpUtil.createEventType(eventForm.getEventTypeName(), eventForm.getEventTypeColor());
     } else {
-        saveErrors(request, errors);
+        if(errors.size() == 0) {
+            AmpUtil.createEventType(eventForm.getEventTypeName(), eventForm.getEventTypeColor());
+        }else{
+            saveErrors(request, errors);
+        }
     }
 
     return showList(mapping, form, request, response);
@@ -72,14 +76,32 @@ public class EventTypeAction
         Exception {
         EventTypeForm eventForm = (EventTypeForm) form;
         List typesList = eventForm.getEventTypes();
+
         Iterator iterTypes = typesList.iterator();
         while(iterTypes.hasNext()) {
             AmpEventType typeBean = (AmpEventType) iterTypes.next();
-            AmpDbUtil.updateEventType(typeBean);
+            if(typeBean.getId().equals(eventForm.getEventTypeId())){
+                eventForm.setEventTypeName(typeBean.getName());
+                eventForm.setEventTypeColor(typeBean.getColor());
+                break;
+            }
         }
-        if(eventForm.getAddName() != null && eventForm.getAddColor() != null &&
-           !eventForm.getAddName().equals("") && !eventForm.getAddColor().equals("")) {
-            AmpUtil.createEventType(eventForm.getAddName(),eventForm.getAddColor());
+
+
+        ActionErrors errors = eventForm.validate(mapping, request);
+        if (errors != null){
+           if(errors.size() != 0) {
+               saveErrors(request, errors);
+           }
+        }else{
+            iterTypes=typesList.iterator();
+            while(iterTypes.hasNext()) {
+                AmpEventType typeBean = (AmpEventType) iterTypes.next();
+                AmpEventType et=AmpDbUtil.getEventType(typeBean.getId());
+                et.setName(typeBean.getName());
+                et.setColor(typeBean.getColor());
+                AmpDbUtil.updateEventType(et);
+            }
         }
         return showList(mapping, form, request, response);
     }

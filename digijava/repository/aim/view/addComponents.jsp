@@ -6,9 +6,18 @@
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
 <script langauage="JavaScript">
 	function onDelete() {
-		var flag = confirm("Delete this Scheme?");
+		var flag = confirm("Are You Sure?");
 		return flag;
 	}
+
+function onCancel() {
+			<digi:context name="cancelComponents" property="context/module/moduleinstance/updateComponents.do?event=cancel" />
+			document.aimUpdateComponentsForm.action = "<%= cancelComponents%>";
+			document.aimUpdateComponentsForm.target = "_self";
+			document.aimUpdateComponentsForm.submit();
+	}
+
+
 	function updateComponents(id) {
 			  
 			  
@@ -29,6 +38,7 @@
 			 }
 	
 	}
+	
 </script>
 
 <digi:instance property="aimUpdateComponentsForm" />
@@ -147,10 +157,12 @@
 				<tr>
 					<td width="50%" align="right">
 
-							<input  type="button" name="addBtn" value="Save" onclick="updateComponents('<bean:write name="aimUpdateComponentsForm" property="id" />')"
+							<input  type="button" name="addBtn" value="Save" onclick="updateComponents('<bean:write name="aimUpdateComponentsForm" property="id" />')"/>
 					</td>
 					<td width="50%" align="left">
-						<html:reset value="Cancel" styleClass="dr-menu" 	onclick="javascript:history.go(-1)"/>
+						<%--<html:reset value="Cancel" styleClass="dr-menu" 	onclick="javascript:history.go(-1)"/>--%>
+						<html:reset value="Cancel" styleClass="dr-menu" 	onclick="onCancel()"/>
+							<%--<input  type="button" name="addBtn" value="Cancel" onclick="onCancel()"/>--%>
 					</td>
 				</tr>
 			</table>

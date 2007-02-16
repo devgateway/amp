@@ -12,6 +12,14 @@
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
 
 <script language="JavaScript" type="text/javascript">
+function goNextStep(){
+  if(validateForm()){
+    <digi:context name="nextStepUrl" property="context/module/moduleinstance/addActivity.do?edit=true" />
+    document.aimEditActivityForm.action = "<%= nextStepUrl %>";
+    document.aimEditActivityForm.submit();
+  }
+}
+
 function validate(field) {
 	if (field == 1) { // validate location
 		if (document.aimEditActivityForm.selLocs.checked != null) {
@@ -76,6 +84,21 @@ function addSectors() {
 		document.aimEditActivityForm.submit();
 }
 
+function addProgram() {
+		openNewRsWindow(750, 550);
+		<digi:context name="taddProgram" property="context/module/moduleinstance/addProgram.do?edit=true" />
+	  	document.aimEditActivityForm.action = "<%= taddProgram %>";
+		document.aimEditActivityForm.target = popupPointer.name;
+		document.aimEditActivityForm.submit();
+}
+
+function remProgram() {
+		<digi:context name="tremProgram" property="context/module/moduleinstance/remProgram.do?edit=true" />
+	  	document.aimEditActivityForm.action = "<%= tremProgram %>";
+
+		document.aimEditActivityForm.submit();
+}
+
 function removeSelSectors() {
 		  var flag = validate(2);
 		  if (flag == false) return false;
@@ -110,8 +133,8 @@ function validateForm(){
         document.aimEditActivityForm.addSec.focus();
         return false;
 	}
-//	if (!validateSectorPercentage())
-	//	return false;
+	if (!validateSectorPercentage())
+		return false;
 
 	document.aimEditActivityForm.step.value="3";
 	return true;
@@ -135,31 +158,33 @@ function popupwin(){
 }
 
 function validateSectorPercentage(){
-	flag = false;
-	i = 0;
-	sum = 0;
-	cnt = document.aimEditActivityForm.sizeActSectors.value;
-	while (i < cnt) {
-		sid = "activitySectors[" + i + "].sectorPercentage";
-		val = (document.aimEditActivityForm.elements)[sid].value;
-		if (val == "" || val == null) {
-			alert("Please add sector-percentage");
-			flag = true;
-			break;
-		}
-		sum = sum + parseFloat(val);
-		i = i + 1;
+  var str = null;
+  var val = null;
+  var i = 0;
+  var flag = false;
+  var sum = 0;
+  var cnt = document.aimEditActivityForm.sizeActSectors.value;
+  while (i < cnt) {
+  	str   = "activitySectors[" + i + "].sectorPercentage";
+  	val   = (document.aimEditActivityForm.elements)[str].value;
+  	if (val == "" || val == null) {
+		alert("Please add sector-percentage");
+		flag = true;
+		break;
 	}
-	if (flag == true) {
-		(document.aimEditActivityForm.elements)[sid].focus();
-		return false;
-	}
-	else if (sum != 100) {
-		alert("Sum of sector percentages should be 100");
-		(document.aimEditActivityForm.elements)[sid].focus();
-		return false;
-	}
-	return true;
+	sum = sum + parseFloat(val);
+	i = i + 1;
+  }
+  if (flag == true) {
+  	(document.aimEditActivityForm.elements)[str].focus();
+	return false;
+  }
+  else if (sum != 100) {
+  	alert("Sum of sector percentages should be 100");
+	(document.aimEditActivityForm.elements)[str].focus();
+	return false;
+  }
+  return true;
 }
 
 function fnChk(frmContrl){
@@ -169,7 +194,14 @@ function fnChk(frmContrl){
     //frmContrl.focus();
     return false;
   }
+  if (frmContrl.value > 100) {
+    alert('Sector percentage can not exceed 100');
+    frmContrl.value = "";
+    return false;
+  }
+  return true;
 }
+
 </script>
 
 <digi:instance property="aimEditActivityForm" />
@@ -180,14 +212,14 @@ function fnChk(frmContrl){
 <html:hidden property="country" />
 <html:hidden property="editAct" />
 
-<input type="hidden" name="edit" value="true"/>
+<input type="hidden" name="edit" value="true">
 
 <c:if test="${empty aimEditActivityForm.activitySectors}">
-	<input type="hidden" name="sizeActSectors" value="0"/>
+	<input type="hidden" name="sizeActSectors" value="0">
 </c:if>
 <c:if test="${!empty aimEditActivityForm.activitySectors}">
 	<bean:size id ="actSectSize" name="aimEditActivityForm" property="activitySectors" />
-	<input type="hidden" name="sizeActSectors" value="${actSectSize}"/>
+	<input type="hidden" name="sizeActSectors" value="${actSectSize}">
 </c:if>
 
 <table width="100%" cellPadding="0" cellSpacing="0" vAlign="top" align="left">
@@ -228,10 +260,10 @@ function fnChk(frmContrl){
                           <c:if test="${aimEditActivityForm.pageId == 1}">
                             <c:set property="translation" var="ttt">
                               <digi:trn key="aim:clickToViewMyDesktop">
-                                Click here to view MyDesktop
+                              Click here to view MyDesktop
                               </digi:trn>
                             </c:set>
-                            <digi:link href="viewMyDesktop.do" styleClass="comment" onclick="return quitRnot()" title="${trans}">
+                            <digi:link href="/viewMyDesktop.do" styleClass="comment" onclick="return quitRnot()" title="${trans}">
                               <digi:trn key="aim:portfolio">
                               Portfolio
                               </digi:trn>
@@ -242,7 +274,7 @@ function fnChk(frmContrl){
                             Click here to goto Add Activity Step 1
                             </digi:trn>
                           </c:set>
-                          <digi:link href="addActivity.do?step=1&edit=true" styleClass="comment" title="${trans}">
+                          <digi:link href="/addActivity.do?step=1&edit=true" styleClass="comment" title="${trans}">
                             <c:if test="${aimEditActivityForm.editAct == true}">
                               <digi:trn key="aim:editActivityStep1">
                               Edit Activity - Step 1
@@ -440,7 +472,7 @@ function fnChk(frmContrl){
                                                   <logic:empty name="aimEditActivityForm" property="selectedLocs">
                                                     <tr>
                                                       <td bgcolor="#ffffff">
-                                                        <input type="button" value="Add Location" class="buton"	onclick="selectLocation()"/>
+                                                        <input type="button" value="Add Location" class="buton"	onclick="selectLocation()">
                                                       </td>
                                                     </tr>
                                                   </logic:empty>
@@ -482,10 +514,10 @@ function fnChk(frmContrl){
                                                               <table cellSpacing=2 cellPadding=2>
                                                                 <tr>
                                                                   <td>
-                                                                    <input type="button" value="Add Location" class="buton" onclick="selectLocation()"/>
+                                                                    <input type="button" value="Add Location" class="buton" onclick="selectLocation()">
                                                                   </td>
                                                                   <td>
-                                                                    <input type="button" value="Remove Location" class="buton" onclick="return removeSelLocations()"/>
+                                                                    <input type="button" value="Remove Location" class="buton" onclick="return removeSelLocations()">
                                                                   </td>
                                                                 </tr>
                                                               </table>
@@ -556,7 +588,7 @@ function fnChk(frmContrl){
                                                   <c:if test="${empty aimEditActivityForm.activitySectors}">
                                                     <tr>
                                                       <td bgcolor="#ffffff">
-                                                        <input type="button" value="Add Sector" class="buton" name="addSec"	onclick="addSectors();"/>
+                                                        <input type="button" value="Add Sector" class="buton" name="addSec"	onclick="addSectors();">
                                                       </td>
                                                     </tr>
                                                   </c:if>
@@ -564,45 +596,49 @@ function fnChk(frmContrl){
                                                     <tr>
                                                       <td>
                                                         <table cellSpacing=0 cellPadding=0 border=0 bgcolor="#ffffff" width="100%">
-                                                          <nested:iterate name="aimEditActivityForm" property="activitySectors" id="actSect"
-																		  type="org.digijava.module.aim.helper.ActivitySector">
+                                                          <c:forEach var="activitySectors" items="${aimEditActivityForm.activitySectors}">
                                                             <tr>
                                                               <td>
                                                                 <table width="100%" cellSpacing=1 cellPadding=1 vAlign="top" align="left">
                                                                   <tr>
                                                                     <td width="3%" vAlign="center">
                                                                       <html:multibox property="selActivitySectors">
-                                                                        ${actSect.sectorId}
+                                                                        ${activitySectors.sectorId}
                                                                       </html:multibox>
                                                                     </td>
                                                                     <td  width="87%" vAlign="center" align="left">
-                                                                      <c:if test="${!empty actSect.sectorName}">
-                                                                        [${actSect.sectorName}]
+                                                                      <c:if test="${!empty activitySectors.sectorName}">
+                                                                        [${activitySectors.sectorName}]
                                                                       </c:if>
-                                                                      <c:if test="${!empty actSect.subsectorLevel1Name}">
-                                                                        [${actSect.subsectorLevel1Name}]
+                                                                      <c:if test="${!empty activitySectors.subsectorLevel1Name}">
+                                                                        [${activitySectors.subsectorLevel1Name}]
                                                                       </c:if>
-                                                                      <c:if test="${!empty actSect.subsectorLevel2Name}">
-                                                                        [${actSect.subsectorLevel2Name}]
+                                                                      <c:if test="${!empty activitySectors.subsectorLevel2Name}">
+                                                                        [${activitySectors.subsectorLevel2Name}]
                                                                       </c:if>
                                                                     </td>
-                                                                    <td width="10%">
-                                                                      <nested:text property="sectorPercentage" size="2" maxlength="3" onkeyup="fnChk(this)"/>
+                                                                    <td width="5%" vAlign="center" align="right">
+                                                                    	<FONT color="red">*</FONT>Percentage:&nbsp;</td>
+                                                                    <td width="5%" vAlign="center" align="left">
+                                                                      <html:text name="activitySectors" indexed="true" property="sectorPercentage"
+                                                                      			 size="2" maxlength="3" onkeyup="fnChk(this)"/>
                                                                    </td>
                                                                   </tr>
                                                                 </table>
                                                               </td>
                                                             </tr>
-                                                          </nested:iterate>
+                                                          </c:forEach>
                                                           <tr>
                                                             <td>
                                                               <table cellSpacing=2 cellPadding=2>
                                                                 <tr>
+                                                                  <logic:notEmpty name="MS" scope="application">
+                                                                    <td>
+                                                                      <input type="button" value="Add Sectors" class="buton"  onclick="addSectors();">
+                                                                    </td>
+                                                                  </logic:notEmpty>
                                                                   <td>
-                                                                    <input type="button" value="Add Sectors" class="buton"  onclick="addSectors();"/>
-                                                                  </td>
-                                                                  <td>
-                                                                    <input type="button" value="Remove Sector" class="buton" onclick="return removeSelSectors()"/>
+                                                                    <input type="button" value="Remove Sector" class="buton" onclick="return removeSelSectors()">
                                                                   </td>
                                                                 </tr>
                                                               </table>
@@ -662,35 +698,39 @@ function fnChk(frmContrl){
                                                     <td bgcolor="#ffffff">
                                                     </td>
                                                   </tr>
-                                                  <c:if test="${!empty aimEditActivityForm.programCollection}">
-                                                    <tr>
-                                                      <td>
-                                                        <table cellSpacing=0 cellPadding=0 border=0 bgcolor="#ffffff" width="100%">
-                                                          <c:forEach var="theProgram" items="${aimEditActivityForm.programCollection}">
+
+                                                  <tr>
+                                                    <td>
+                                                      <table cellSpacing=0 cellPadding=0 border=0 bgcolor="#ffffff" width="100%">
+                                                        <c:if test="${!empty aimEditActivityForm.actPrograms}">
+                                                          <c:forEach var="theProgram" items="${aimEditActivityForm.actPrograms}">
                                                             <tr>
                                                               <td>
                                                                 <table width="100%" cellSpacing=1 cellPadding=1 vAlign="top" align="left">
                                                                   <tr>
                                                                     <td>
-                                                                      <c:if test="${theProgram.level > 0}">
-                                                                        <c:forEach begin="1" end="${theProgram.level}">
-                                                                        &nbsp;&nbsp;
-                                                                        </c:forEach>
-                                                                      </c:if>
-                                                                      <html:multibox property="selectedPrograms" value="${theProgram.member.ampThemeId}">
-                                                                      ${theProgram.member.ampThemeId}
+                                                                      <html:multibox property="selectedPrograms" value="${theProgram.ampThemeId}">
+                                                                      ${theProgram.ampThemeId}
                                                                       </html:multibox>
-                                                                      ${theProgram.member.name}
+                                                                      ${theProgram.name}
                                                                     </td>
                                                                   </tr>
                                                                 </table>
                                                               </td>
                                                             </tr>
                                                           </c:forEach>
-                                                        </table>
-                                                      </td>
-                                                    </tr>
-                                                  </c:if>
+                                                        </c:if>
+                                                        <tr>
+                                                          <td>
+                                                            <input type="button" value="Add Program" onclick="addProgram();" class="buton">
+                                                            <c:if test="${!empty aimEditActivityForm.actPrograms}">
+                                                              <input type="button" value="Remove Program" onclick="remProgram();" class="buton">
+                                                            </c:if>
+                                                          </td>
+                                                        </tr>
+                                                      </table>
+                                                    </td>
+                                                  </tr>
                                                 </table>
                                               </td>
                                             </tr>
@@ -701,8 +741,7 @@ function fnChk(frmContrl){
                                         <td>
                                           <a title="<digi:trn key="aim:ProgramDesc">Description of program, objectives, or associated projects</digi:trn>">
                                           Description
-</a>
-                                        </td>
+</a>                                    </td>
                                       </tr>
                                       <tr>
                                         <td>
@@ -721,13 +760,13 @@ function fnChk(frmContrl){
                                           <table cellPadding=3>
 											<tr>
                                               <td>
-                                                <input type="submit" value=" << Back "	class="dr-menu" onclick="return gotoStep(1)"/>
+                                                <input type="submit" value=" << Back "	class="dr-menu" onclick="return gotoStep(1)">
                                               </td>
                                               <td>
-                                                <input type="submit" value="Next >> " class="dr-menu" onclick="return validateForm()"/>
+                                                <input type="button" value="Next >> " class="dr-menu" onclick="goNextStep()">
                                               </td>
                                               <td>
-                                                <input type="reset" value="Reset" class="dr-menu" onclick="return resetAll()"/>
+                                                <input type="reset" value="Reset" class="dr-menu" onclick="return resetAll()">
                                               </td>
                                             </tr>
                                           </table>

@@ -33,6 +33,36 @@ public class ShowCalendarEvent
                                  HttpServletRequest request,
                                  HttpServletResponse response) throws Exception {
         CalendarEventForm calendarEventForm = (CalendarEventForm) form;
+
+        String ampCalebdarId=request.getParameter("ampCalendarId");
+        if(ampCalebdarId==null){
+            calendarEventForm.setAmpCalendarId(null);
+        }
+
+        calendarEventForm.setAttendeeGuests(null);
+        calendarEventForm.setAttendeeUsers(null);
+        calendarEventForm.setCalendarTypes(null);
+        calendarEventForm.setDonors(null);
+        calendarEventForm.setEndDate(null);
+        calendarEventForm.setEndDateBreakDown(null);
+        calendarEventForm.setEventTitle(null);
+        calendarEventForm.setEventTypesList(null);
+        calendarEventForm.setMethod(null);
+        calendarEventForm.setStartDate(null);
+        calendarEventForm.setStartDateBreakDown(null);
+
+        calendarEventForm.setSelectedAttendeeGuests(null);
+        calendarEventForm.setSelectedAttendeeUsers(null);
+        calendarEventForm.setSelectedCalendarTypeId(0);
+        calendarEventForm.setSelectedCalendarTypeName(null);
+        calendarEventForm.setSelectedDonors(null);
+        calendarEventForm.setSelectedEndDate(null);
+        calendarEventForm.setSelectedEndTime(null);
+        calendarEventForm.setSelectedEventTypeId(null);
+        calendarEventForm.setSelectedEventTypeName(null);
+        calendarEventForm.setSelectedStartDate(null);
+        calendarEventForm.setSelectedStartTime(null);
+
         try {
             // calendar type
             List calendarTypesList = DateNavigator.getCalendarTypes();

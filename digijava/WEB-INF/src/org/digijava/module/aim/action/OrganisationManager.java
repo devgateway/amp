@@ -20,12 +20,12 @@ import javax.servlet.http.HttpSession;
 public class OrganisationManager extends Action {
 
 	private static Logger logger = Logger.getLogger(OrganisationManager.class);
-	
+
 	public ActionForward execute(ActionMapping mapping, ActionForm form,
 			javax.servlet.http.HttpServletRequest request,
 			javax.servlet.http.HttpServletResponse response)
 			throws java.lang.Exception {
-		
+
 		 HttpSession session = request.getSession();
 		 if (session.getAttribute("ampAdmin") == null) {
 			return mapping.findForward("index");
@@ -35,11 +35,11 @@ public class OrganisationManager extends Action {
 						return mapping.findForward("index");
 					}
 		 }
-		 
+
 		logger.debug("In organisation manager action");
-		
+
 		OrgManagerForm eaForm = (OrgManagerForm) form;
-		
+
 		if (request.getParameter("orgSelReset") != null
 				&& request.getParameter("orgSelReset").equals("false")) {
 			eaForm.setOrgSelReset(false);
@@ -48,22 +48,24 @@ public class OrganisationManager extends Action {
 			eaForm.setPagedCol(null);
 			eaForm.reset(mapping, request);
 		}
-		
+
 		eaForm.setOrgSelReset(false); //
 		eaForm.setReset(false);
 		eaForm.setOrgPopupReset(false);
-		
-		String alpha = request.getParameter("alpha");
+
+		String alpha = eaForm.getAlpha(); //request.getParameter("alpha");
 		Collection col = null;
 		Collection colAlpha = null;
-		
+
+                eaForm.setNumResults(eaForm.getTempNumResults());
+
 		if (alpha == null || alpha.trim().length() == 0) {
 			col = new ArrayList();
-			eaForm.setNumResults(eaForm.getTempNumResults());
+//			eaForm.setNumResults(eaForm.getTempNumResults());
 			eaForm.setOrgTypes(DbUtil.getAllOrgTypes()); //
 			if (eaForm.getAlphaPages() != null) //
 				eaForm.setAlphaPages(null);		//
-			
+
 			if (eaForm.getAmpOrgTypeId() != null && !eaForm.getAmpOrgTypeId().equals(new Long(-1))) {
 				if (eaForm.getKeyword().trim().length() != 0) {
 					// serach for organisations based on the keyword and the
@@ -81,39 +83,39 @@ public class OrganisationManager extends Action {
 				// get all organisations since keyword field is blank and org type field has 'ALL'.
 				col = DbUtil.getAmpOrganisations();
 			}
-			
+
 			if (col != null && col.size() > 0) {
 				List temp = (List) col;
 				Collections.sort(temp);
 				col = (Collection) temp;
-				
+
 				if (eaForm.getCurrentAlpha() != null) {
-					eaForm.setCurrentAlpha(null);  
+					eaForm.setCurrentAlpha(null);
 				}
 				eaForm.setStartAlphaFlag(true);
-	
+
 				String[] alphaArray = new String[26];
 				int i = 0;
-				for(char c = 'A'; c <= 'Z'; c++) { 
+				for(char c = 'A'; c <= 'Z'; c++) {
 					Iterator itr = col.iterator();
 					while(itr.hasNext()) {
 						AmpOrganisation org = (AmpOrganisation) itr.next();
 						if (org.getName().toUpperCase().indexOf(c) == 0) {
 							alphaArray[i++] = String.valueOf(c);
 							break;
-						} 
+						}
 					}
 				}
 				eaForm.setAlphaPages(alphaArray);
 			} else {
 				eaForm.setAlphaPages(null);
 			}
-			
+
 		} else {
 			col = eaForm.getCols();
 			eaForm.setCurrentAlpha(alpha);
 			if (!alpha.equals("viewAll")) {
-				eaForm.setStartAlphaFlag(false); 
+				eaForm.setStartAlphaFlag(false);
 				colAlpha = new ArrayList();
 				Iterator itr = col.iterator();
 				while(itr.hasNext()) {
@@ -125,14 +127,20 @@ public class OrganisationManager extends Action {
 				eaForm.setColsAlpha(colAlpha);
 			}
 			else
-				eaForm.setStartAlphaFlag(true);  
+				eaForm.setStartAlphaFlag(true);
 		}
 
 		int stIndex = 1;
 		int edIndex = eaForm.getNumResults();
+
+                //If ALL was selected in pagination dropdown
+                if(edIndex<0){
+                  edIndex=col.size();
+                }
+
 		Vector vect = new Vector();
 		int numPages;
-		
+
 		if (alpha == null || alpha.trim().length() == 0 || alpha.equals("viewAll")) {
 			if (edIndex > col.size()) {
 				edIndex = col.size();
@@ -166,8 +174,8 @@ public class OrganisationManager extends Action {
 		eaForm.setCols(col);
 		eaForm.setPagedCol(tempCol);
 		eaForm.setPages(pages);
-		eaForm.setCurrentPage(new Integer(1));	
-		
+		eaForm.setCurrentPage(new Integer(1));
+
 		return mapping.findForward("forward");
 	}
 }

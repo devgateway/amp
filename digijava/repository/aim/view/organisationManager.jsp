@@ -98,13 +98,27 @@
 					</td>
 					<td width="150">
 						<digi:trn key="aim:resultsPerPage">Results per page</digi:trn>&nbsp;
-						<html:text property="tempNumResults" size="2" styleClass="inp-text" />
+						<!--<html:text property="tempNumResults" size="2" styleClass="inp-text" />-->
+						<html:select property="tempNumResults" styleClass="inp-text">
+							<html:option value="10">10</html:option>
+							<html:option value="20">20</html:option>
+							<html:option value="50">50</html:option>
+							<html:option value="-1">ALL</html:option>
+						</html:select>
 					</td>
 					<td width="249">
 						<input type="button" value="GO" class="buton" onclick="return searchOrganization()">
 					</td>
 				</tr>
 				<tr>
+					<td height=16 vAlign=center width=867 colspan="7">
+						<digi:trn key="aim:organMan:topFilterNote">
+						Select the value "ALL" in Results per page to view all results of your selection on one page. 
+						</digi:trn>
+                     </td>
+				</tr>
+				
+					<tr>
 					<td noWrap width=867 vAlign="top" colspan="7">
 					<table width="100%" cellspacing=1 cellSpacing=1>
 					<tr>
@@ -221,7 +235,8 @@
 											<tr>
 												<td align="center" colspan="4">
 													<table width="90%">
-														<tr><td>
+														<tr>
+														    <td>
 															<bean:define id="translation">
 																<digi:trn key="aim:clickToViewAllSearchPages">Click here to view all search pages</digi:trn>
 															</bean:define>
@@ -242,7 +257,9 @@
 															|&nbsp;
 															</c:if>
 															</logic:iterate>
-												</td></tr>
+												   </td>
+												 </tr>
+												 
 												</table>
 											</td>
 										</tr>
@@ -253,7 +270,9 @@
 								</tr>
 								<tr>
 									<td bgColor=#f4f4f2>
-										&nbsp;
+										<digi:trn key="aim:organMan:alphaFilterNote">
+											 Click on viewAll to see all existing organizations.
+										</digi:trn>
 									</td>
 								</tr>
 							</table>

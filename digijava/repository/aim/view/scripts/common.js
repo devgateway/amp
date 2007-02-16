@@ -43,10 +43,22 @@ function openNewWindow(wndWidth, wndHeight){
 		wndHeight = window.screen.availHeight/2;
 	}
 	var t = ((screen.width)-wndWidth)/2;
-	var l = ((screen.height)-wndHeight)/2;	
+	var l = ((screen.height)-wndHeight)/2;
+	
 	popupPointer = window.open("about:blank", "forumPopup", "height=" + wndHeight + ",width=" + wndWidth + ",top=" + l + ",left=" + t +",menubar=no,scrollbars=yes");
 }
 
+function openNewRsWindow(wndWidth, wndHeight){
+	window.name = "opener" + new Date().getTime();
+	if (wndWidth == null || wndWidth == 0 || wndHeight == null || wndHeight == 0) {
+		wndWidth = window.screen.availWidth/2;
+		wndHeight = window.screen.availHeight/2;
+	}
+	var t = ((screen.width)-wndWidth)/2;
+	var l = ((screen.height)-wndHeight)/2;
+
+	popupPointer = window.open("about:blank", "forumPopup", "height=" + wndHeight + ",width=" + wndWidth + ",top=" + l + ",left=" + t +",menubar=no,scrollbars=yes,resizable");
+}
 function checkNumeric(objName,period) {
 	var numberfield = objName;
 	if (chkNumeric(objName) == false) {

@@ -234,6 +234,9 @@
 	<hibernate-class>
 			  org.digijava.module.aim.dbentity.AmpGlobalSettings
 	</hibernate-class>
+		<hibernate-class>
+			  org.digijava.module.aim.dbentity.AmpProgramType
+	</hibernate-class>
 
 	</hibernate-classes>
         <!-- highlights classes End-->

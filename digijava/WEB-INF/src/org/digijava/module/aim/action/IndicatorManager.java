@@ -8,8 +8,10 @@ import java.lang.Long;
 import org.apache.log4j.Logger;
 import org.apache.struts.action.*;
 import org.digijava.module.aim.form.IndicatorForm;
+import org.digijava.module.aim.form.ThemeForm;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.MEIndicatorsUtil;
+import org.digijava.module.aim.util.ProgramUtil;
 import org.digijava.module.aim.dbentity.AmpMECurrValHistory;
 import org.digijava.module.aim.dbentity.AmpMEIndicatorValue;
 import org.digijava.module.aim.dbentity.AmpMEIndicators;
@@ -33,6 +35,67 @@ public class IndicatorManager extends Action
 			if (str.equals("no")) {
 				return mapping.findForward("index");
 			}
+		}
+		String viewPreference = request.getParameter("view");
+		if(viewPreference!=null)
+		{
+			if(viewPreference.equals("meindicators"))
+			{
+				String action = request.getParameter("action");
+				Collection indicators = new ArrayList();
+				Collection colMeIndValIds = null;
+				Collection ampMECurrValIds = null;
+				
+				IndicatorForm indForm = (IndicatorForm) form;
+
+				if (action != null && action.equals("delete")) 
+				{
+					Long indId = new Long(Long.parseLong(request.getParameter("id")));
+					if( indId != null )
+					{
+						AmpMEIndicators ampMEInd = new AmpMEIndicators();
+						ampMEInd.setAmpMEIndId(indId);
+						
+						colMeIndValIds = MEIndicatorsUtil.getMeIndValIds(indId);
+						AmpMEIndicatorValue ampMEIndVal = null;
+						
+						Iterator itr = colMeIndValIds.iterator();
+						while(itr.hasNext())
+						{
+							ampMEIndVal = (AmpMEIndicatorValue) itr.next();
+							ampMECurrValIds = MEIndicatorsUtil.getMeCurrValIds(ampMEIndVal.getAmpMeIndValId());
+							
+							if(ampMECurrValIds != null)
+							{
+								AmpMECurrValHistory ampMECurrVal = null;
+								Iterator itrCurrVal = ampMECurrValIds.iterator();
+								while(itrCurrVal.hasNext())
+								{
+									ampMECurrVal = (AmpMECurrValHistory) itrCurrVal.next();
+									DbUtil.delete(ampMECurrVal);
+								}
+							}
+							DbUtil.delete(ampMEIndVal);
+						}
+						DbUtil.delete(ampMEInd);
+					}
+				}
+				indicators = MEIndicatorsUtil.getAllIndicators();
+				indForm.setIndicators(indicators);
+				
+				return mapping.findForward("forward");
+			}
+			else if(viewPreference.equals("indicators"))
+			{
+				return mapping.findForward("gotoIndicators");
+			}
+			else if(viewPreference.equals("multiprogram"))
+			{
+				return mapping.findForward("gotoMultiProgram");
+			}
+			
+			
+			
 		}
 		
 		String action = request.getParameter("action");

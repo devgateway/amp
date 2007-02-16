@@ -30,105 +30,141 @@ public class UpdateSectorSchemes extends Action {
 				return mapping.findForward("index");
 			}
 		}
-		logger.info("came into the  UPDate sector schemes manager");
+		logger.debug("Comes into the  UpdateSectorSchemes action");
 		Collection scheme = null;
 		AddSectorForm sectorsForm = (AddSectorForm) form;
-		logger.info("in the update sector scheme's action");
 		String event = request.getParameter("event");
-
-		sectorsForm.setIdGot((String) request
-				.getParameter("ampSecSchemeparentId"));
-		String schemeId = sectorsForm.getIdGot();
+		
 		scheme = SectorUtil.getSectorSchemes();
-		logger.info(" this is the event got!!....." + event + "  id is "
-				+ schemeId);
-		if (event != null) {
-			if (event.equals("edit")) {
-				Integer a = new Integer(schemeId);
-				Collection schemeGot = SectorUtil.getEditScheme(a);
-
+		String Sevent = (String)session.getAttribute("Event");
+		boolean case1,case2,case3,case4;
+		case1=case2=case3=case4=false;
+		if (event!=null)
+			if(event.equalsIgnoreCase("Edit") && Sevent==null)
+				case1=true;
+		
+		 if(Sevent!=null)
+				if(Sevent.equalsIgnoreCase("Edit")&& event==null)
+					case2=true;
+		 
+		 if(Sevent!=null)
+			 if(Sevent.equalsIgnoreCase("Edit"))
+				 if(event!=null)
+					 if(event.equalsIgnoreCase("Edit"))
+						 case4 = true;
+		 if(event!=null)
+			 if(event.equalsIgnoreCase("Delete") && Sevent!=null)
+				 case3 = true;	
+		 String resetId = (String)session.getAttribute("resetId");
+		 Integer id = new Integer(0);
+		 
+		if (case1 || case2 || case4 || case3)
+			
+			{
+				
+				boolean flag = false;
+				if(resetId!=null)
+					if(resetId.equalsIgnoreCase("no"))
+						flag = true;
+						
+				 if((session.getAttribute("Id"))==null && request.getParameter("ampSecSchemeId")!=null ){
+				 id = new Integer(request.getParameter("ampSecSchemeId"));
+				 session.setAttribute("moreThanLevelOne",null);
+				}
+				 if (session.getAttribute("Id")!=null){
+				 id = new Integer((String)session.getAttribute("Id"));
+				 if(session.getAttribute("moreThanLevelOne")!=null)
+				 return mapping.findForward("toViewSectorDetails");
+				}
+				if(flag){
+					if(request.getParameter("ampSecSchemeId")!=null)
+					id = new Integer(request.getParameter("ampSecSchemeId"));
+					session.setAttribute("Id",null);
+				}
+				else
+				{
+					if(request.getParameter("ampSecSchemeId")!=null)
+						id = new Integer(request.getParameter("ampSecSchemeId"));
+						session.setAttribute("Id",null);
+				}
+				logger.debug("FinalID=============================="+id);
+				Collection schemeGot = SectorUtil.getEditScheme(id);
 				sectorsForm.setFormFirstLevelSectors(SectorUtil
-						.getSectorLevel1(a));
-				logger.info("in edit....");
+						.getSectorLevel1(id));
 				Iterator itr = schemeGot.iterator();
 				while (itr.hasNext()) {
 					AmpSectorScheme ampScheme = (AmpSectorScheme) itr.next();
 					sectorsForm.setSecSchemeId(ampScheme.getAmpSecSchemeId());
 					sectorsForm.setSecSchemeName(ampScheme.getSecSchemeName());
 					sectorsForm.setSecSchemeCode(ampScheme.getSecSchemeCode());
+					sectorsForm.setParentId(ampScheme.getAmpSecSchemeId());
 				}
 
-				/* scheme = SectorUtil.getSectorSchemes();
-				 sectorsForm.setFormSectorSchemes(scheme);*/
-
+				session.setAttribute("Id",null);
 				return mapping.findForward("viewSectorSchemeLevel1");
 			}
-			if (event.equals("addscheme")) {
-				logger.info("now add a new  scheme");
+			
+		else if (event.equals("addscheme")) {
+				logger.debug("now add a new  scheme");
 				return mapping.findForward("addSectorScheme");
 			}
-			if (event.equals("saveScheme")) {
-				logger.info("saving the scheme");
+		else if (event.equals("saveScheme")) {
+				logger.debug("saving the scheme");
 				AmpSectorScheme ampscheme = new AmpSectorScheme();
 				logger
-						.info(" the name is...."
+						.debug(" the name is...."
 								+ sectorsForm.getSecSchemeName());
-				logger.info(" the code is ...."
+				logger.debug(" the code is ...."
 						+ sectorsForm.getSecSchemeCode());
 				ampscheme.setSecSchemeCode(sectorsForm.getSecSchemeCode());
 				ampscheme.setSecSchemeName(sectorsForm.getSecSchemeName());
 				DbUtil.add(ampscheme);
 				request.setAttribute("event", "view");
 
-				logger.info("done kutte");
+				logger.debug("done kutte");
 				scheme = SectorUtil.getSectorSchemes();
 				sectorsForm.setFormSectorSchemes(scheme);
 				return mapping.findForward("viewSectorSchemes");
 			}
-			if (event.equals("updateScheme")) {
-				logger.info(" updating Scheme");
+		else if (event.equals("updateScheme")) {
+				logger.debug(" updating Scheme");
 				String editId = (String) request.getParameter("editSchemeId");
 				AmpSectorScheme ampscheme = new AmpSectorScheme();
 
 				Long Id = new Long(editId);
 				logger
-						.info(" the name is...."
+						.debug(" the name is...."
 								+ sectorsForm.getSecSchemeName());
-				logger.info(" the code is ...."
+				logger.debug(" the code is ...."
 						+ sectorsForm.getSecSchemeCode());
-				logger.info(" this is the id......" + Id);
+				logger.debug(" this is the id......" + Id);
 				ampscheme.setSecSchemeCode(sectorsForm.getSecSchemeCode());
 				ampscheme.setSecSchemeName(sectorsForm.getSecSchemeName());
 				ampscheme.setAmpSecSchemeId(Id);
 				DbUtil.update(ampscheme);
-				logger.info(" updated!!");
+				logger.debug(" updated!!");
 				return mapping.findForward("viewSectorSchemes");
 			}
-			if (event.equals("delete")) {
-				logger.info("in the delete Scheme");
-				Integer a = new Integer(schemeId);
-				sectorsForm.setFormFirstLevelSectors(SectorUtil
-						.getSectorLevel1(a));
-				Long Id = new Long(schemeId);
-				logger.info(" this is the id......" + Id);
-				logger.info(" the size is..........."
-						+ sectorsForm.getFormFirstLevelSectors().size());
-				if (sectorsForm.getFormFirstLevelSectors().size() >= 1) {
-					logger.info("no deletion");
-					sectorsForm.setDeleteSchemeFlag(false);
-					ActionErrors errors = new ActionErrors();
-					errors.add("title", new ActionError(
-							"error.aim.deleteScheme.schemeSelected"));
-					saveErrors(request, errors);
-					return mapping.findForward("viewSectorSchemes");
-
-				} else {
-					sectorsForm.setDeleteSchemeFlag(true);
-					logger.info(" yup!!! delete");
-					SectorUtil.deleteScheme(Id);
-				}
+		else if(event.equalsIgnoreCase("deleteScheme"))
+		{
+			logger.debug("in the delete Scheme");
+			Long id1 = new Long(request.getParameter("ampSecSchemeId"));
+			Integer a = new Integer(request.getParameter("ampSecSchemeId"));
+			sectorsForm.setFormFirstLevelSectors(SectorUtil.getSectorLevel1(a));
+			if (sectorsForm.getFormFirstLevelSectors().size() >= 1) {
+				logger.debug("no deletion");
+				ActionErrors errors = new ActionErrors();
+				errors.add("title", new ActionError(
+						"error.aim.deleteScheme.schemeSelected"));
+				saveErrors(request, errors);
+				return mapping.findForward("viewSectorSchemes");
 			}
+			else
+				SectorUtil.deleteScheme(id1);
+				return mapping.findForward("viewSectorSchemes");
+				
 		}
+		
 
 		scheme = SectorUtil.getSectorSchemes();
 		sectorsForm.setFormSectorSchemes(scheme);

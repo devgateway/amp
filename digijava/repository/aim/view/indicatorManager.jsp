@@ -44,55 +44,88 @@
 <!--  AMP Admin Logo -->
 <jsp:include page="teamPagesHeader.jsp" flush="true" />
 <!-- End of Logo -->
-
-<table bgColor=#ffffff cellPadding=0 cellSpacing=0 width=772>
-	<tr>
-		<td class=r-dotted-lg width=14>&nbsp;</td>
-		<td align=left class=r-dotted-lg vAlign=top width=750>
-			<table cellPadding=5 cellSpacing=0 width="100%" border=0>
+		<table bgColor=#ffffff cellPadding=0 cellSpacing=0 width=772>
 				<tr>
-					<!-- Start Navigation -->
-					<td height=33><span class=crumb>
-						<bean:define id="translation">
-							<digi:trn key="aim:clickToViewAdmin">Click here to goto Admin Home</digi:trn>
-						</bean:define>
-						<digi:link href="/admin.do" styleClass="comment" title="<%=translation%>" >
-						<digi:trn key="aim:AmpAdminHome">
-							Admin Home
-						</digi:trn>
-						</digi:link>&nbsp;&gt;&nbsp;
-						<digi:trn key="aim:projectmeIndicatorManager">
-							Project M & E Indicator Manager
-						</digi:trn>
-					</td>
-					<!-- End navigation -->
-				</tr>
-				<tr>
-					<td height=16 vAlign=center width=571>
-						<span class=subtitle-blue>
-						<digi:trn key="aim:projectmeIndicatorManager">
-							Project M & E Indicator Manager
-						</digi:trn>
-						</span>
-					</td>
-				</tr>
-				<tr>
-					<td height=16 vAlign=center width=571>
-						<html:errors />
-					</td>
-				</tr>				
-				<tr>
-					<td noWrap width=100% vAlign="top">
-					<table width="100%" cellspacing=1 cellSpacing=1 border=0>
-					<tr><td noWrap width=600 vAlign="top">
-						<table bgColor=#d7eafd cellPadding=1 cellSpacing=1 width="100%" valign="top">
-							<tr bgColor=#ffffff>
-								<td vAlign="top" width="100%">
-									
-									<table width="100%" cellspacing=1 cellpadding=1 valign=top align=left>	
-										<tr><td bgColor=#d7eafd class=box-title height="20" align="center">
+						<td class=r-dotted-lg width=14>&nbsp;</td>
+						<td align=left class=r-dotted-lg vAlign=top width=750>
+								<table cellPadding=5 cellSpacing=0 width="100%" border=0>
+										<tr><%-- Start Navigation --%>
+												<td height=33><span class=crumb>
+														<bean:define id="translation">
+																<digi:trn key="aim:clickToViewAdmin">Click here to goto Admin Home</digi:trn>
+														</bean:define>
+														<digi:link href="/admin.do" styleClass="comment" title="<%=translation%>" >
+																<digi:trn key="aim:AmpAdminHome">
+																		Admin Home
+																</digi:trn>
+														</digi:link>&nbsp;&gt;&nbsp;
+														<digi:trn key="aim:indicatorManager">
+																Indicator Manager
+														</digi:trn>
+												</td>
+										</tr><%-- End navigation --%>
+										<tr>
+												<td height=16 vAlign=center width=571><span class=subtitle-blue>
+														<digi:trn key="aim:indicatorManager">
+																Indicator Manager
+														</digi:trn></span>
+												</td>
+										</tr>
+										<tr><td height=16 vAlign=center width=571><html:errors /></td></tr>				
+										<tr>
+												<td noWrap width=100% vAlign="top">
+														<table width="100%" cellspacing=0 cellSpacing=0 border=0>
+																<tr><td noWrap width=600 vAlign="top">
+																		<table bgColor=#d7eafd cellPadding=0 cellSpacing=0 width="100%" valign="top">
+																				<tr bgColor=#ffffff><td vAlign="top" width="100%">
+																						<table width="100%" cellspacing=0 cellpadding=0 valign=top align=left>	
+																								<tr><td>
+																										<table cellspacing=0 cellpadding=0>
+																												<tr>
+																														<td noWrap height=17>
+																																<bean:define id="translation">
+																																		<digi:trn key="aim:viewIndicators">Click here to View Indicators</digi:trn>
+																																</bean:define>
+																																<digi:link href="/indicatorManager.do?view=indicators"  styleClass="sub-navGovSelected" title="<%=translation%>" ><font color="ffffff">
+																																		<digi:trn key="aim:programIndicatorList">
+																																				Program Indicator List
+																																		</digi:trn>&nbsp;&nbsp;&nbsp;&nbsp;</font>
+																																</digi:link>
+																											 			</td>
+																														<td noWrap height=17>
+																																<bean:define id="translation">
+																																		<digi:trn key="aim:viewMultiProgramIndicators" >Click here to view Multi Program Indicators</digi:trn>
+																																</bean:define>
+																																<digi:link href="/indicatorManager.do?view=multiprogram"  styleClass="sub-navGovSelected" title="<%=translation%>" ><font color="ffffff">
+																																		<digi:trn key="aim:multiProgramManager">
+																																				Multi Program Manager
+																																		</digi:trn>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</font>
+																																</digi:link>
+																														</td>
+																														<td noWrap height=17>
+																																<bean:define id="translation">
+																																		<digi:trn key="aim:viewM&EProjectIndicators" >Click here to view M & E Project Indicators</digi:trn>
+																																</bean:define>
+																																<digi:link href="/indicatorManager.do?view=meindicators"  styleClass="sub-navGov" title="<%=translation%>" ><font color="ffffff">
+																																		<digi:trn key="aim:projectIndicatorList">
+																																				Project Indicator List
+																																		</digi:trn>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</font>
+																																</digi:link>
+																														</td>		
+																												</tr>
+																										</table>
+																								</tr>
+																								<tr>
+																										<td noWrap width=100% vAlign="top">
+																												<table width="100%" cellspacing=1 cellSpacing=1 border=0>
+																														<tr><td noWrap width=600 vAlign="top">
+																																<table bgColor=#d7eafd cellPadding=1 cellSpacing=1 width="100%" valign="top">
+																																		<tr bgColor=#ffffff>
+																																				<td vAlign="top" width="100%">
+																																						<table width="100%" cellspacing=1 cellpadding=1 valign=top align=left>	
+																																								<tr><td bgColor=#d7eafd class=box-title height="20" align="center">
 											<!-- Table title -->
-											<digi:trn key="aim:projectIndicatorList">
+																																									<digi:trn key="aim:projectIndicatorList">
 												Project Indicator List
 											</digi:trn>
 											<!-- end table title -->										

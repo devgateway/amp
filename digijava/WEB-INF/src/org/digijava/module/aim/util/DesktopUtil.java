@@ -110,7 +110,13 @@ public class DesktopUtil {
 					qry = session.createQuery(qryStr);
 				}
 
-				Collection temp = qry.list();
+				Collection temp=null;
+				try {
+					temp = qry.list();
+				} catch (Exception e) {
+					// TODO this is warkaround for short time, problem is described in AMP-1059
+					e.printStackTrace();
+				}
 				if (temp != null && temp.size() > 0) {
 					itr = temp.iterator();
 					while (itr.hasNext()) {
@@ -126,7 +132,6 @@ public class DesktopUtil {
 						project.setLineMinRank(act.getLineMinRank());
 						project.setPlanMinRank(act.getPlanMinRank());
 
-						/*
 						project.setSector(new ArrayList());
 						Set sectSect = act.getSectors();
 						if (sectSect != null) {
@@ -139,7 +144,6 @@ public class DesktopUtil {
 								project.getSector().add(sector);
 							}
 						}
-						*/
 
 						project.setCommitmentList(new ArrayList());
 						project.setDonor(new ArrayList());
@@ -177,6 +181,7 @@ public class DesktopUtil {
 				}
 			}
 		} catch (Exception e) {
+			e.printStackTrace();
             throw new RuntimeException("Exception from getActivities()", e);
 		} finally {
 			if (session != null) {

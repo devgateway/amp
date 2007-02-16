@@ -1,6 +1,6 @@
 /**
  * SectorSelected.java
- * 
+ *
  * @author Priyajith
  */
 
@@ -44,12 +44,12 @@ public class SectorSelected extends Action {
 		AmpSector sec = SectorUtil.getAmpSector(actSect.getSectorId());
 		actSect.setSectorName(sec.getName());
 		actSect.setSubsectorLevel1Id(subsectorLevel1);
-		actSect.setSubsectorLevel2Id(subsectorLevel2);		
+		actSect.setSubsectorLevel2Id(subsectorLevel2);
 		/*
 		if (actSect.getSectorName().equalsIgnoreCase("MULTISECTOR/CROSS-CUTTING")) {
 			actSect.setSubsectorLevel1Id(null);
 			actSect.setSubsectorLevel2Id(null);
-		} else {		
+		} else {
 			actSect.setSubsectorLevel1Id(subsectorLevel1);
 			actSect.setSubsectorLevel2Id(subsectorLevel2);
 		}*/
@@ -87,9 +87,25 @@ public class SectorSelected extends Action {
 					&& (!(actSect.getSubsectorLevel2Id().equals(new Long(-1))))) {
 				sec = SectorUtil.getAmpSector(actSect.getSubsectorLevel2Id());
 				actSect.setSubsectorLevel2Name(sec.getName());
-			}				
+			}
+
+            if(prevSelSectors==null){
+                actSect.setSectorPercentage("100");
+            }else if(prevSelSectors.size()==0){
+                    actSect.setSectorPercentage("100");
+            }else if(prevSelSectors.size()==1){
+                Iterator prevItr = prevSelSectors.iterator();
+                while(prevItr.hasNext()) {
+                    ActivitySector oldSect = (ActivitySector) prevItr.next();
+//                        if(oldSect.getSectorPercentage().equals("100")){
+//                            oldSect.setSectorPercentage(null);
+//                        }
+                    break;
+                }
+            }
 			newSectors.add(actSect);
 		}
+
 
 		eaForm.setSelActivitySectors(null);
 		eaForm.setActivitySectors(newSectors);

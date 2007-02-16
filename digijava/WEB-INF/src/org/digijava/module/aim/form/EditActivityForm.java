@@ -5,14 +5,19 @@
 
 package org.digijava.module.aim.form;
 
-import java.io.*;
-import java.util.*;
-import javax.servlet.http.*;
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import javax.servlet.http.HttpServletRequest;
 
-import org.apache.struts.action.*;
-import org.apache.struts.upload.*;
-import org.digijava.module.aim.dbentity.*;
-import org.digijava.module.aim.helper.*;
+import org.apache.struts.action.ActionForm;
+import org.apache.struts.action.ActionMapping;
+import org.apache.struts.upload.FormFile;
+import org.digijava.module.aim.dbentity.AmpField;
+import org.digijava.module.aim.helper.ActivityIndicator;
+import org.digijava.module.aim.helper.FundingDetail;
+import org.digijava.module.aim.helper.OrgProjectId;
 
 public class EditActivityForm extends ActionForm implements Serializable{
 
@@ -34,8 +39,10 @@ public class EditActivityForm extends ActionForm implements Serializable{
 	private Collection perspectives;
 	private double regionTotalDisb;
 
-
-	private Long program;
+    private Long selPrograms[];
+    private Long selProgramId;
+    private Long program;
+    private List actPrograms;
 	private Collection programCollection;
     private Long selectedPrograms[];
 
@@ -184,7 +191,9 @@ public class EditActivityForm extends ActionForm implements Serializable{
 	private long transIndexId;
 	private Long selFundingOrgs[];
 
-	private int numComm;
+	private List programLevels;
+
+    private int numComm;
 	private int numDisb;
 	private int numExp;
 
@@ -259,7 +268,6 @@ public class EditActivityForm extends ActionForm implements Serializable{
 	private boolean firstSubmit;
 
 	// FOR ADD COMPONENTS
-
 	private Collection allComps;
 	private boolean componentReset;
 	private String componentTitle;
@@ -273,7 +281,6 @@ public class EditActivityForm extends ActionForm implements Serializable{
 	private Long componentId;
 	private Collection selectedComponents;
 	private Long[] selComp;
-
 
 	private String author;
 	private String context;
@@ -3695,6 +3702,23 @@ public class EditActivityForm extends ActionForm implements Serializable{
         return selectedPrograms;
     }
 
+
+    public Long[] getSelPrograms() {
+        return selPrograms;
+    }
+
+    public List getProgramLevels() {
+        return programLevels;
+    }
+
+    public List getActPrograms() {
+        return actPrograms;
+    }
+
+    public Long getSelProgramId() {
+        return selProgramId;
+    }
+
     public void setSelectedPrograms(Long[] selectedPrograms) {
 		this.selectedPrograms = selectedPrograms;
 	}
@@ -3702,7 +3726,24 @@ public class EditActivityForm extends ActionForm implements Serializable{
 	public void setRegionTotalDisb(double regionTotalDisb) {
 		this.regionTotalDisb = regionTotalDisb;
 	}
-/*
+
+    public void setSelPrograms(Long[] selPrograms) {
+        this.selPrograms = selPrograms;
+    }
+
+    public void setProgramLevels(List programLevels) {
+        this.programLevels = programLevels;
+    }
+
+    public void setActPrograms(List actPrograms) {
+        this.actPrograms = actPrograms;
+    }
+
+    public void setSelProgramId(Long selProgramId) {
+        this.selProgramId = selProgramId;
+    }
+
+    /*
 	public Collection getSelectedOrganizationsList() {
 		return selectedOrganizationsList;
 	}

@@ -82,8 +82,19 @@ public class UpdateComponents extends Action{
 								ampComp.setTitle(updCompForm.getCompTitle());
 								ampComp.setCode(updCompForm.getCompCode());
 								ampComp.setType(updCompForm.getCompType());
+								if(updCompForm.getCompDes()==null)
+								{
+									ampComp.setDescription(" ");
+								}
+								else
+								{
 								ampComp.setDescription(updCompForm.getCompDes());
+								}
 								ComponentsUtil.updateComponents(ampComp);
+								return mapping.findForward("comps");
+							}
+							if(event.equals("cancel"))
+							{
 								return mapping.findForward("comps");
 							}
 							if(event.equals("newComp"))

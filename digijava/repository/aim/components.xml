@@ -41,6 +41,7 @@
 	<page name="editAmpProjectOthers" title="AMP: Ethiopia: AIM Dashboard: Detail" />
 	<page name="sectorManager" title=" - Sector Manager" />
 	<page name="addSector" title=" - Add Sector" />
+	<page name="addASector" title=" - Add Sector" />
 	<page name="updateAmpActivity" title=" - Add Sector" />
 	<page name="addSectorList" title=" - Add Sector" />
 	<page name="addSubSectorList" title=" - Add Sector" />
@@ -66,15 +67,16 @@
 	<page name="themeManager" title=" - Multi-level Program Manager" />
 	<page page="addTheme" name="aim_addProgram" title="AMP - Add Program"/>
 	<page page="addThemeIndicator" name="aim_addPrgIndicator" title="AMP - Add Program Indicator"/>
+	<page page="editThemeIndicator" name="aim_editPrgIndicator" title="AMP - Edit Program Indicator"/>
 	<page name="addSubTheme" title=" - Add Sub Program"/>
-	<page name="editTheme" title=" - Edit Program" />
+	<page page="editTheme" name="aim_editTheme" title="AMP - Edit Program" />
 	<page name="deleteTheme" title=" - Delete Program" />
 	<page name="viewTheme" title=" - View Program" />
 	<page name="overallIndicatorManager" title=" - Indicator Manager" />
 	<page page="editAllIndicator" name="aim_editAllIndicator" title="AMP - Edit Indicator"/>
 	<page name="fiscalCalendarManager" title=" - Fiscal Calendar Manager" />
 	<page name="addFiscalCalendar" title=" - Fiscal Calendar Manager" />
-	<page name="organisationManager" title=" - Organisation Manager" />
+	<page name="organisationManager" title=" - Organization Manager" />
 	<page name="editOrganisation" title=" - Organisation Manager" />
 	<page name="orgGroupManager" title=" - Organisation Group Manager" />
 	<page name="editOrgGroup" title=" - Organisation Group Manager" />
@@ -181,8 +183,12 @@
 	<page page="searchSectors" name="aim_searchSectorPopupLayout" title="AMP - Search Sectors" />
 
 	<!-- global settings-->
-	<page name="viewGlobalSettings"  title ="AMP - Global Settings " />
+	<page name="viewGlobalSettings"  title ="- Global Settings " />
 
+	<!-- program Manager-->
+	<page name="viewProgramTypeManager" title=" : Program Type Manager" />
+	<page name="addProgramType" title=" : Add Program Type" />
+	<page name="editProgramType" title=" : Edit Program Type" />	
 	<!-- sector manager with schemes -->
 	<page name="viewSectorSchemes" title=": View Sector Scheme" />
 	<page name="viewSectorSchemeLevel1" title=": View Sector Level 1" />
@@ -260,6 +266,8 @@
 	<page name="viewAdvancedReportHierarchy1" title=" : Reports" />
 	<page name="viewAdvancedReportHierarchy0" title=" : Reports" />
 
+    <page name="addPropramPopup" title=" : Add Programs" />
+
 	<page name="AdvancedReportManagerStep2Hierarchy0" title=" : Reports" />
 	<page name="AdvancedReportManagerStep2Hierarchyn" title=" : Reports" />
 
@@ -291,7 +299,7 @@
 	-->
     <page name="addProposedProjFunding" title="Proposed Project Cost" />
     <page name="printMyDesktop" title="Print Desktop" />
-       
+    <page name="addProgramPopup" title="Add Program" />
         <!-- National Planing Dashboard -->
 	<page page="viewNationalPlaningDashboard" name="amp_viewNationalPlaningDashboard" title=" : National Planing Dashboard" />
 

@@ -37,6 +37,16 @@
 			}
 	}
 	
+function delet1(val1, val2) {
+		<digi:context name="selectLoc" property="context/module/moduleinstance/addLocation.do" />
+		url = "<%= selectLoc %>?edLevel=" + val1 + "&edAction=" + val2;
+			if (confirm("Are you sure about deleting this district ?")) {
+				document.aimAddLocationForm.action = url;
+				document.aimAddLocationForm.target = "_self";
+				document.aimAddLocationForm.submit();
+			}
+	}
+	
 	function countryChanged() {
 		  document.aimAddLocationForm.level.value = "region";
 		  <digi:context name="selectLoc" property="context/module/moduleinstance/locationManager.do" />
@@ -242,7 +252,7 @@
 															</td>
 															<td width="539" height="19">
 																<html:select property="woredaId" onchange="woredaChanged()">
-																	<html:option value="-1">-- Select Woreda --</html:option>
+																	<html:option value="-1">-- Select District --</html:option>
 																		<logic:notEmpty name="aimAddLocationForm" property="woreda">
 																			<html:optionsCollection name="aimAddLocationForm" property="woreda" 
 																				value="ampWoredaId" label="name" />
@@ -254,18 +264,18 @@
 
 																	<digi:img src="module/aim/images/arrow-014E86.gif" 	width="15" height="10"/>
 																	<a href="javascript:newWin('woreda','create')">
-																		<digi:trn key="aim:AmpAddWoreda">Add a woreda</digi:trn>
+																		<digi:trn key="aim:AmpAddWoreda">Add a district</digi:trn>
 																	</a>
                                                                  </logic:notEqual>
 																	<logic:notEqual name="aimAddLocationForm" property="woredaId"  value="-1">
 																		<digi:img src="module/aim/images/arrow-014E86.gif" 	width="15" height="10"/>
 																			<a href="javascript:newWin('woreda','edit')">
-																				<digi:trn key="aim:AmpEditWoreda">Edit this woreda</digi:trn>
+																				<digi:trn key="aim:AmpEditWoreda">Edit this district</digi:trn>
 																			</a>
 																		<logic:equal name="aimAddLocationForm" property="woredaFlag"  value="yes">
 																			<digi:img src="module/aim/images/arrow-014E86.gif" 	width="15" height="10"/>
-																				<a href="javascript:delet('woreda','delete')">
-																					<digi:trn key="aim:AmpDeleteWoreda">Delete this woreda</digi:trn>
+																				<a href="javascript:delet1('woreda','delete')">
+																					<digi:trn key="aim:AmpDeleteWoreda">Delete this district</digi:trn>
 																				</a>
 																		</logic:equal>
 																	</logic:notEqual>

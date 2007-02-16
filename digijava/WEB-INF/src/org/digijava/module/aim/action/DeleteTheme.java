@@ -46,7 +46,7 @@ public class DeleteTheme extends Action {
 			}
 
 			AmpTheme ampTheme = ProgramUtil
-					.getTheme(deleteThemeForm.getThemeId());
+					.getThemeObject(deleteThemeForm.getThemeId());
 			DbUtil.delete(ampTheme);
 			deleteThemeForm.setThemeId(null);
 			logger.debug("Theme deleted");

@@ -56,7 +56,8 @@ public class ShowAddComponent extends Action {
 			if( action != null && action.equalsIgnoreCase("show") )
 			{
 				logger.info(" in the show components..... ");
-				eaForm.setAllComps(ActivityUtil.getAllComponentNames());
+				//eaForm.setAllComps(ActivityUtil.getAllComponentNames());
+				eaForm.setAllComps(ComponentsUtil.getAmpComponents());
 				logger.debug("Forwarding to forward");
 				eaForm.setComponentId(new Long(-1));
 				eaForm.setComponentTitle(null);

@@ -51,6 +51,9 @@ public class AMPStartupListener extends HttpServlet
         		} else if (f.getCode().equalsIgnoreCase(Constants.CL_FEATURE)) {
         			ampContext.setAttribute(Constants.CL_FEATURE,new Boolean(true));
         			//logger.debug("CL Feature..");
+        		} else if (f.getCode().equalsIgnoreCase(Constants.MS_FEATURE)) {
+        			ampContext.setAttribute(Constants.MS_FEATURE,new Boolean(true));
+        			//logger.debug("MS Feature");
         		}
         	}
         	boolean defFlagExist = FeaturesUtil.defaultFlagExist();

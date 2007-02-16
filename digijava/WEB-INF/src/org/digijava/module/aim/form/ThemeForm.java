@@ -28,11 +28,20 @@ public class ThemeForm extends ActionForm {
 		  private String indicatorDescription;
 		  private int category;
 		  private boolean npIndicator;
-		  private String saveType;
 		  private List prgIndValues;
-    private int valueType;
-    private String creationDate;
+		  private int valueType;
+		  private String creationDate;
+		  private String flag; 
+		  private Collection programTypeNames;
 		
+		public String getFlag() {
+			return flag;
+		}
+
+		public void setFlag(String flag) {
+			this.flag = flag;
+		}
+
 		/**
 		 * @return Returns the themes.
 		 */
@@ -341,20 +350,6 @@ public class ThemeForm extends ActionForm {
 			this.type = type;
 		}
 
-		/**
-		 * @return Returns the saveType.
-		 */
-		public String getSaveType() {
-			return saveType;
-		}
-
-		/**
-		 * @param saveType The saveType to set.
-		 */
-		public void setSaveType(String saveType) {
-			this.saveType = saveType;
-		}
-
 		public List getPrgIndValues() {
 			return prgIndValues;
 		}
@@ -378,4 +373,13 @@ public class ThemeForm extends ActionForm {
     public void setCreationDate(String creationDate) {
         this.creationDate = creationDate;
     }
+
+	public Collection getProgramTypeNames() {
+		return programTypeNames;
+	}
+
+	public void setProgramTypeNames(Collection programTypeNames) {
+		this.programTypeNames = programTypeNames;
+	}
+
 }

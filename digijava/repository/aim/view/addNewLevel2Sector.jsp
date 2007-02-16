@@ -13,10 +13,6 @@
 		return flag;
 	}
 	function updateScheme(id) {
-			  alert(" this is it");
-			  alert(id);
-			  
-		
 			<digi:context name="updateSector" property="context/module/moduleinstance/editSector.do?event=updateScheme" />
 			document.aimAddSectorForm.action = "<%= updateSector%>&id="+id;
 			document.aimAddSectorForm.target = "_self";
@@ -47,7 +43,7 @@
 						</bean:define>
 						<digi:link href="/admin.do" styleClass="comment" title="<%=translation%>" >
 						<digi:trn key="aim:AmpAdminHome">
-						Admin Home
+						Admin Home 
 						</digi:trn>
 						</digi:link>&nbsp;&gt;&nbsp;
 						<digi:link href="/getSectorSchemes.do" styleClass="comment" title="<%=translation%>" >
@@ -122,8 +118,8 @@
 										
 										<tr><td bgColor=#d7eafd class=box-title height="20" align="center">
 											<!-- Table title -->
-											<digi:trn key="aim:LevelthreeSectors">
-												Level Three Sectors
+											<digi:trn key="aim:LeveltwoSectors">
+												Level Two Sectors
 											</digi:trn>
 											<!-- end table title -->										
 										</td></tr>
@@ -140,13 +136,13 @@
 													</logic:empty>
 													
 													<logic:notEmpty name="aimAddSectorForm" property="subSectors">
-													<logic:iterate name="aimAddSectorForm" property="subSectors" id="sectorSchemeLevelOne"
+													<logic:iterate name="aimAddSectorForm" property="subSectors" id="sectorLevelTwo"
 																	type="org.digijava.module.aim.dbentity.AmpSector	">
 													<tr>
 														<td bgcolor="#ffffff">
 															<jsp:useBean id="urlParams2" type="java.util.Map" class="java.util.HashMap"/>
 															<c:set target="${urlParams2}" property="ampSectorId">
-															<bean:write name="sectorSchemeLevelOne" property="ampSectorId" />
+															<bean:write name="sectorLevelTwo" property="ampSectorId" />
 															</c:set>
 															<c:set target="${urlParams2}" property="event" value="edit" />
 															<c:set target="${urlParams2}" property="level" value="three" />
@@ -154,25 +150,28 @@
 																<digi:trn key="aim:clickToViewSector">Click here to view Sector</digi:trn>
 															</bean:define>
 															<digi:link href="/viewSectorDetails.do" name="urlParams2" title="<%=translation%>" >
-															<bean:write name="sectorSchemeLevelOne" property="name"/></digi:link>
+															<bean:write name="sectorLevelTwo" property="name"/></digi:link>
 														</td>
 														
 														<td bgcolor="#ffffff" width="40" align="center">
 															<bean:define id="translation">
 																<digi:trn key="aim:clickToEditSector">Click here to Edit Sector</digi:trn>
 															</bean:define>
-															[ <digi:link href="/viewSectorDetails.do" name="urlParams2" title="<%=translation%>" >Edit</digi:link> ]
+															[ <digi:link href="/viewSectorDetails.do" name="urlParams2" title="<%=translation%>" >Edit </digi:link> ]
 														</td>
 														<td bgcolor="#ffffff" width="55" align="center">
 															<jsp:useBean id="urlParams4" type="java.util.Map" class="java.util.HashMap"/>
-															<c:set target="${urlParams4}" property="ampSecSchemeId">
-																<bean:write name="sectorSchemeLevelOne" property="ampSecSchemeId" />
+															<c:set target="${urlParams4}" property="ampSectorId">
+																<bean:write name="sectorLevelTwo" property="ampSectorId" />
+															</c:set>
+															<c:set target="${urlParams4}" property="schemeId">
+																<bean:write name="aimAddSectorForm" property="parentSectorId" />
 															</c:set>
 															<c:set target="${urlParams4}" property="event" value="delete"/>
 															<bean:define id="translation">
 																<digi:trn key="aim:clickToDeleteSector">Click here to Delete Sector</digi:trn>
 															</bean:define>
-															[ <digi:link href="/deleteSector.do" name="urlParams2" 
+															[ <digi:link href="/deleteSector.do" name="urlParams4" 
 																title="<%=translation%>" onclick="return onDelete()">Delete</digi:link> ]
 														</td>
 													</tr>
@@ -213,19 +212,27 @@
 							<tr>
 								<td bgColor=#ffffff class=box-border>
 									<table cellPadding=5 cellSpacing=1 width="100%">
-										<tr>
+										
+										 <tr>
 											<td>
+												<jsp:useBean id="urlParams5" type="java.util.Map" class="java.util.HashMap"/>
+												<c:set target="${urlParams5}" property="ampSecSchemeId">
+													<bean:write name="aimAddSectorForm" property="sectorId" />
+												</c:set>
+												<c:set target="${urlParams5}" property="parent" value="sector"/>
 												<digi:img src="module/aim/images/arrow-014E86.gif" width="15" height="10"/>
 												<bean:define id="translation">
 													<digi:trn key="aim:clickToAddSector">Click here to Add a Sector</digi:trn>
 												</bean:define>
-												<digi:link href="/createSector.do?dest=admin" title="<%=translation%>" >
+												
+												<digi:link href="/addSector.do" name="urlParams5" title="<%=translation%>" >
 												<digi:trn key="aim:addSector">
 												Add Sector
 												</digi:trn>
 												</digi:link>
 											</td>
 										</tr>
+										
 										<tr>
 											<td>
 												<digi:img src="module/aim/images/arrow-014E86.gif" width="15" height="10"/>

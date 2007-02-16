@@ -1,6 +1,7 @@
 package org.digijava.module.aim.dbentity ;
 
 import java.io.Serializable;
+import java.util.Collection;
 import java.util.Set;
 
 public class AmpTheme implements Serializable
@@ -16,7 +17,16 @@ public class AmpTheme implements Serializable
 	private String language ;
 	private String version ;
 	private Set indicators;
+	private Collection activityPrograms;
 			
+	public Collection getActivityPrograms() {
+		return activityPrograms;
+	}
+
+	public void setActivityPrograms(Collection activityPrograms) {
+		this.activityPrograms = activityPrograms;
+	}
+
 	public AmpTheme()
 	{
 	}	

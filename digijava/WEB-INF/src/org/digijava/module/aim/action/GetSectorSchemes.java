@@ -21,6 +21,7 @@ public class GetSectorSchemes extends Action {
 								HttpServletResponse response) throws java.lang.Exception {
 
 		HttpSession session = request.getSession();
+		session.setAttribute("moreThanLevelOne",null);
 		if (session.getAttribute("ampAdmin") == null) {
 			return mapping.findForward("index");
 		} else {

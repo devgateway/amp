@@ -106,14 +106,7 @@ function selectFile() {
 						Admin Home
 						</digi:trn>
 						</digi:link>&nbsp;&gt;&nbsp;
-						<digi:link href="/currencyManager.do" styleClass="comment" title="Click here to view currency manager">
-						<digi:trn key="aim:currencyManager">
-						Currency Manager
-						</digi:trn>
-						</digi:link>&nbsp;&gt;&nbsp;
-						<digi:trn key="aim:exchangeRates">
-						Exchange Rates
-						</digi:trn>	
+						<digi:trn key="aim:currencyRateManager">Currency Rate Manager</digi:trn>
 						</span>
 					</td>
 					<!-- End navigation -->

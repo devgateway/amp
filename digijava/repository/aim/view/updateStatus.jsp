@@ -5,18 +5,29 @@
 <%@ taglib uri="/taglib/struts-html" prefix="html" %>
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
 
-<html:errors/>
+
 
 <digi:form name="aimStatusItemForm" type="org.digijava.module.aim.form.StatusItemForm" scope="request" action="/updateStatus.do">
 <html:hidden name="aimStatusItemForm" property="ampStatusId"/>
+<script language="JavaScript">
+function save() {
+ if (!document.aimStatusItemForm.name.value || document.aimStatusItemForm.statusCode.value == 0 ){
+  alert ("Invalid value 'Please feel Required field'");
+ 	 document.aimStatusItemForm.focus();
+  	 return false;
+  }else{
+    document.aimStatusItemForm.submit();
+ 	return true;
+  }
+ }
 
+</script>
 
 <!--  AMP Admin Logo -->
 <jsp:include page="teamPagesHeader.jsp" flush="true" />
 <!-- End of Logo -->
 
 <table bgColor=#ffffff cellPadding=0 cellSpacing=0 width=772>
-	<tr>
 		<td class=r-dotted-lg width=14>&nbsp;</td>
 		<td align=left class=r-dotted-lg vAlign=top width=750>
 			<table cellPadding=5 cellSpacing=0 width="100%">
@@ -54,6 +65,7 @@
 						</span>
 					</td>
 				</tr>
+				<html:errors/>
 				<tr>
 					<td noWrap width=100% vAlign="top">
 					<table width="100%" cellspacing=1 cellSpacing=1>
@@ -119,7 +131,8 @@
 																			<table width="100%" cellspacing="5">
 																				<tr>
 																					<td width="50%" align="right">
-																					<html:submit styleClass="dr-menu"> Save </html:submit>
+																					
+																					<html:submit value="Save" styleClass="dr-menu" onclick="return save()" />
 																				</td>
 																					<td width="50%" align="left">
 																						<html:reset styleClass="dr-menu" value="Cancel" 

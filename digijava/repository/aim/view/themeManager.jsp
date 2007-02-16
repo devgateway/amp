@@ -22,6 +22,12 @@
 				alert("Please enter Program code");
 				document.aimThemeForm.programCode.focus();
 				return false;
+			}
+			if (document.aimThemeForm.programType.value == -1) 
+			{
+				alert("Please Select a  Program type");
+				document.aimThemeForm.programType.focus();
+				return false;
 			}			
 			if (trim(document.aimThemeForm.programType.value).length == 0) 
 			{
@@ -43,11 +49,20 @@
 			}
 			return true;
 		}
-		function addSubProgram(rutId,id,level,name)
+		function addSubProgram(id,name)
 		{
-			<digi:context name="subProgram" property="context/module/moduleinstance/addSubTheme.do?event=program"/>
-			document.aimThemeForm.action = "<%= subProgram %>&themeId=" + id + "&indlevel=" + level + "&indname=" + name + "&rootId=" + rutId;
+			<digi:context name="subProgram" property="context/module/moduleinstance/addSubTheme.do?event="/>
+			document.aimThemeForm.action = "<%= subProgram %>&themeId=" + id + "&indname=" + name;
 			document.aimThemeForm.target = "_self";
+			document.aimThemeForm.submit();
+			return true;
+		}
+		function editProgram(id)
+		{
+			openNewWindow(400,300);
+			<digi:context name="editTh" property="context/module/moduleinstance/editTheme.do?event=edit"/>
+			document.aimThemeForm.action = "<%= editTh %>&themeId=" + id;
+			document.aimThemeForm.target = popupPointer.name;
 			document.aimThemeForm.submit();
 			return true;
 		}
@@ -81,40 +96,88 @@
 <digi:context name="digiContext" property="context" />
 <input type="hidden" name="event">
 
-<%--  AMP Admin Logo --%>
+<%--  AMP Admin Logo--%> 
 <jsp:include page="teamPagesHeader.jsp" flush="true" />
-<%-- End of Logo --%>
+<%-- End of Logo--%>
 
-<table bgColor=#ffffff cellPadding=0 cellSpacing=0 width=772>
+	<table bgColor=#ffffff cellPadding=0 cellSpacing=0 width=772>
 	<tr>
 		<td class=r-dotted-lg width=14>&nbsp;</td>
 		<td align=left class=r-dotted-lg vAlign=top width=750>
-			<table cellPadding=5 cellSpacing=0 width="100%">
-				<tr>
-					<%-- Start Navigation --%>
+			<table cellPadding=5 cellSpacing=0 width="100%" border=0>
+				<tr><%-- Start Navigation --%>
 					<td height=33><span class=crumb>
 						<bean:define id="translation">
 							<digi:trn key="aim:clickToViewAdmin">Click here to goto Admin Home</digi:trn>
 						</bean:define>
 						<digi:link href="/admin.do" styleClass="comment" title="<%=translation%>" >
 						<digi:trn key="aim:AmpAdminHome">
-						Admin Home
+							Admin Home
 						</digi:trn>
 						</digi:link>&nbsp;&gt;&nbsp;
-						<digi:trn key="aim:multilevelprogramManager">
-							Multi-Level Program Manager
+						<digi:trn key="aim:indicatorManager">
+							Indicator Manager
 						</digi:trn>
 					</td>
-					<%-- End navigation --%>
-				</tr>
+				</tr><%-- End navigation --%>
 				<tr>
-					<td height=16 vAlign=center width=571><span class=subtitle-blue>
-						<digi:trn key="aim:multilevelprogramManager">
-							Multi-Level Program Manager
+					<td height=16 vAlign=center width=571>
+						<span class=subtitle-blue>
+						<digi:trn key="aim:indicatorManager">
+							Indicator Manager
 						</digi:trn>
 						</span>
 					</td>
 				</tr>
+				<tr>
+					<td height=16 vAlign=center width=571>
+						<html:errors />
+					</td>
+				</tr>				
+				<tr>
+					<td noWrap width=100% vAlign="top">
+					<table width="100%" cellspacing=0 cellSpacing=0 border=0>
+					<tr><td noWrap width=600 vAlign="top">
+						<table bgColor=#d7eafd cellPadding=0 cellSpacing=0 width="100%" valign="top">
+							<tr bgColor=#ffffff>
+								<td vAlign="top" width="100%">
+									<table width="100%" cellspacing=0 cellpadding=0 valign=top align=left>	
+										<tr><td>
+												<table cellspacing=0 cellpadding=0>
+														<tr>
+															<td noWrap height=17>
+																<bean:define id="translation">
+																	<digi:trn key="aim:viewIndicators">Click here to View Indicators</digi:trn>
+																</bean:define>
+																<digi:link href="/themeManager.do?view=indicators"  styleClass="sub-navGovSelected" title="<%=translation%>" ><font color="ffffff">
+																<digi:trn key="aim:programIndicatorList">
+																		Program Indicator List
+																</digi:trn>&nbsp;&nbsp;&nbsp;&nbsp;</font>
+																</digi:link>
+												 			</td>
+															<td noWrap height=17>
+																<bean:define id="translation">
+																	<digi:trn key="aim:viewMultiProgramIndicators" >Click here to view Multi Program Indicators</digi:trn>
+																</bean:define>
+																<digi:link href="/themeManager.do?view=multiprogram"  styleClass="sub-navGov" title="<%=translation%>" ><font color="ffffff">
+															<digi:trn key="aim:multiProgramManager">
+																Multi Program Manager
+															</digi:trn>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</font>
+																</digi:link>
+															</td>
+															<td noWrap height=17>
+																<bean:define id="translation">
+																	<digi:trn key="aim:viewM&EProjectIndicators" >Click here to view M & E Project Indicators</digi:trn>
+																</bean:define>
+																<digi:link href="/themeManager.do?view=meindicators"  styleClass="sub-navGovSelected" title="<%=translation%>" ><font color="ffffff">
+																<digi:trn key="aim:projectIndicatorList">
+																		Project Indicator List
+																</digi:trn>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</font>
+																</digi:link>
+															</td>		
+														</tr>
+													</table>
+												</tr>
 				<tr>
 					<td noWrap width=100% vAlign="top">
 					<table width="100%" cellspacing=1 cellSpacing=1 border=0>
@@ -174,7 +237,12 @@
 																		<font color="red">*</font>
 																</td>
 																<td align="left">
-																		<html:text property="programType" size="20" styleClass="inp-text"/>
+																	<html:select property="programType" styleClass="inp-text">
+																	<html:option value="-1">Select Progarm Type</html:option>
+																		<html:optionsCollection name="aimThemeForm" property="programTypeNames"
+													 						value="title" label="title" />
+																		</html:select>
+																		<%--<html:text property="programType" size="20" styleClass="inp-text"/>--%>
 																</td>
 																</tr>	
 																<tr bgcolor=#ffffff><td height="5"></td></tr>	
@@ -190,7 +258,18 @@
 														<digi:trn key="aim:listofPrograms">
 																List of Programs
 														</digi:trn>
-												</td></tr>	
+												</td></tr>
+												<c:if test="${aimThemeForm.flag == 'activityReferences'}">
+																	<tr>
+																		<td colspan="2" align="center">
+																			<b><digi:trn key="aim:cannotDeleteThemeMsg1">
+																			Cannot Delete the theme since some 
+																			activities references it.
+																			</digi:trn></b>
+																		</td>
+																	</tr>																	
+												</c:if>	
+
 											<tr><td>
 													<table width="100%" cellPadding=4 cellSpacing=1 valign=top align=left bgcolor="#ffffff">
 														<logic:notEmpty name="aimThemeForm" property="themes">
@@ -210,21 +289,15 @@
 																					<c:set target="${urlParams}" property="themeId">
 																							<bean:write name="themes" property="ampThemeId" />
 																					</c:set><b>
-																					<a href="javascript:addSubProgram('<bean:write name="themes" property="ampThemeId" />','<bean:write name="themes" property="ampThemeId" />','<bean:write name="themes" property="indlevel"/>','<bean:write name="themes" property="name"/>')" title="Click here to add Sub-Programs">
+																					<a href="javascript:addSubProgram('<bean:write name="themes" property="ampThemeId" />','<bean:write name="themes" property="name"/>')" title="Click here to add Sub-Programs">
 																							<bean:write name="themes" property="name"/>
 																					</a></b>
 																			</td>
 																			<td align="right" bgcolor="#f4f4f2" width="75">
-																					<input class="buton" type="button" name="addIndicator" 
-																					value="Indicator" onclick="assignIndicators('<bean:write name="themes" property="ampThemeId" />')">
+																					<input class="buton" type="button" name="addIndicator" value="Indicator" onclick="assignIndicators('<bean:write name="themes" property="ampThemeId" />')">
 																			</td>
 																			<td align="left" width="40" bgcolor="#f4f4f2">
-																					<bean:define id="translation">
-																							<digi:trn key="aim:clickToEditProgram">Click here to Edit Program</digi:trn>
-																					</bean:define>
-																					[ <digi:link href="/editTheme.do?event=edit" name="urlParams" title="<%=translation%>">
-																							<digi:trn key="aim:programManagerEdit">Edit</digi:trn>
-																					</digi:link> ]
+																					<input class="buton" type="button" name="editButton" value="Edit" onclick="editProgram('<bean:write name="themes" property="ampThemeId"/>')">
 																			</td>
 																			<td align="left" width="12" bgcolor="#f4f4f2">
 																					<bean:define id="translation">
@@ -232,7 +305,7 @@
 																									Click here to Delete Program
 																							</digi:trn>
 																					</bean:define>
-																					<digi:link href="/editTheme.do?event=delete" name="urlParams" title="<%=translation%>" onclick="return deleteProgram()">
+																					<digi:link href="/themeManager.do?event=delete" name="urlParams" title="<%=translation%>" onclick="return deleteProgram()">
 																							<img src= "../ampTemplate/images/trash_12.gif" border=0>
 																					</digi:link>
 																			</td>

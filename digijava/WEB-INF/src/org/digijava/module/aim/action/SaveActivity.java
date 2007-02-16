@@ -134,24 +134,23 @@ public class SaveActivity extends Action {
                 activity.setCurrencyCode(eaForm.getProProjCost().getCurrencyCode());
             }
 
-            if(eaForm.getSelectedPrograms()!=null){
+            if(eaForm.getActPrograms()!=null){
                 Set programs=new HashSet();
                 //ProgramUtil prg=new ProgramUtil();
-                ArrayList prgId=new ArrayList();
-                ArrayList ampThemes=new ArrayList();
+                ArrayList prgIds=new ArrayList();
+                ArrayList ampThemeLst=null;
+                AmpTheme theme=null;
 
-                Long programsId[]=eaForm.getSelectedPrograms();
-                for(int i=0; i<programsId.length;i++){
-                    prgId.add(programsId[i]);
+                List themeLst=eaForm.getActPrograms();
+                Iterator prgItr=themeLst.listIterator();
+                while(prgItr.hasNext()){
+                    theme=(AmpTheme)prgItr.next();
+                    prgIds.add(theme.getAmpThemeId());
                 }
-                ampThemes = ProgramUtil.getThemesByIds(prgId);
-                if(ampThemes!=null){
-                    Iterator itr = ampThemes.iterator();
-                    AmpTheme theme = new AmpTheme();
-                    while(itr.hasNext()) {
-                        theme = (AmpTheme) itr.next();
-                        programs.add(theme);
-                    }
+
+                ampThemeLst = ProgramUtil.getThemesByIds(prgIds);
+                if(ampThemeLst!=null){
+                    programs.addAll(ampThemeLst);
                     activity.setActivityPrograms(programs);
                 }
             }
@@ -716,7 +715,7 @@ public class SaveActivity extends Action {
 
 				if (eaForm.getProgram() != null
 						&& (!eaForm.getProgram().equals(new Long(-1)))) {
-					AmpTheme theme = ProgramUtil.getTheme(eaForm.getProgram());
+					AmpTheme theme = ProgramUtil.getThemeObject(eaForm.getProgram());
 					if (theme != null) {
 						activity.setThemeId(theme);
 					}
@@ -883,7 +882,7 @@ public class SaveActivity extends Action {
 						Iterator it = col.iterator();
 						while(it.hasNext())
 						{
-							ampComp = (AmpComponent)it.next(); 
+							ampComp = (AmpComponent)it.next();
 						}
 						logger.info("finished.....");
 						activity.getComponents().add(ampComp);

@@ -1,15 +1,21 @@
 package org.digijava.module.aim.helper ;
 
-public class AllPrgIndicators
+import java.io.Serializable;
+import java.util.Collection;
+
+public class AllPrgIndicators implements Serializable
 {
 	private Long indicatorId;
 	private String name;
 	private String code;
 	private String type;
 	private String creationDate;
+	private String description;
 	private int valueType;
 	private int category;
 	private boolean npIndicator;
+	private Collection themeIndValues;
+	
 	/**
 	 * @return Returns the category.
 	 */
@@ -45,6 +51,18 @@ public class AllPrgIndicators
 	 */
 	public void setCreationDate(String creationDate) {
 		this.creationDate = creationDate;
+	}
+	/**
+	 * @return Returns the description.
+	 */
+	public String getDescription() {
+		return description;
+	}
+	/**
+	 * @param description The description to set.
+	 */
+	public void setDescription(String description) {
+		this.description = description;
 	}
 	/**
 	 * @return Returns the indicatorId.
@@ -105,5 +123,17 @@ public class AllPrgIndicators
 	 */
 	public void setValueType(int valueType) {
 		this.valueType = valueType;
+	}
+	/**
+	 * @return Returns the themeIndValues.
+	 */
+	public Collection getThemeIndValues() {
+		return themeIndValues;
+	}
+	/**
+	 * @param themeIndValues The themeIndValues to set.
+	 */
+	public void setThemeIndValues(Collection themeIndValues) {
+		this.themeIndValues = themeIndValues;
 	}
 }

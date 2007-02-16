@@ -130,18 +130,18 @@
 														</b></td>
 													</tr>
 													</logic:empty>
-													
+
 													<logic:notEmpty name="aimAddSectorForm" property="formFirstLevelSectors">
 													<logic:iterate name="aimAddSectorForm" property="formFirstLevelSectors" id="sectorSchemeLevelOne"
 																	type="org.digijava.module.aim.dbentity.AmpSector	">
-													<tr>
+													<tr> 
 														<td bgcolor="#ffffff">
 															<jsp:useBean id="urlParams2" type="java.util.Map" class="java.util.HashMap"/>
 															<c:set target="${urlParams2}" property="ampSectorId">
 															<bean:write name="sectorSchemeLevelOne" property="ampSectorId" />
 															</c:set>
 															<c:set target="${urlParams2}" property="event" value="edit" />
-															<c:set target="${urlParams2}" property="level" value="one" />
+															<c:set target="${urlParams2}" property="level" value="two" />
 															<bean:define id="translation">
 																<digi:trn key="aim:clickToViewSector">Click here to view Sector</digi:trn>
 															</bean:define>
@@ -157,15 +157,22 @@
 														</td>
 														<td bgcolor="#ffffff" width="55" align="center">
 															<jsp:useBean id="urlParams4" type="java.util.Map" class="java.util.HashMap"/>
-															<c:set target="${urlParams4}" property="ampSecSchemeId">
-																<bean:write name="sectorSchemeLevelOne" property="ampSecSchemeId" />
+															<c:set target="${urlParams4}" property="ampSectorId">
+																<bean:write name="sectorSchemeLevelOne" property="ampSectorId" />
+																
 															</c:set>
+															<c:set target="${urlParams4}" property="schemeId">
+					
+																<bean:write name="aimAddSectorForm" property="parentId" />
+															</c:set>
+
 															<c:set target="${urlParams4}" property="event" value="delete"/>
 															<bean:define id="translation">
 																<digi:trn key="aim:clickToDeleteSector">Click here to Delete Sector</digi:trn>
 															</bean:define>
-															[ <digi:link href="/deleteSector.do" name="urlParams2" 
+															[ <digi:link href="/deleteSector.do" name="urlParams4" 
 																title="<%=translation%>" onclick="return onDelete()">Delete</digi:link> ]
+																
 														</td>
 													</tr>
 													</logic:iterate>

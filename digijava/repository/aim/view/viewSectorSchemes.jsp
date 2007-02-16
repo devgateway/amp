@@ -86,7 +86,7 @@
 													<tr>
 														<td bgcolor="#ffffff">
 															<jsp:useBean id="urlParams2" type="java.util.Map" class="java.util.HashMap"/>
-															<c:set target="${urlParams2}" property="ampSecSchemeparentId">
+															<c:set target="${urlParams2}" property="ampSecSchemeId">
 															<bean:write name="sectorScheme" property="ampSecSchemeId" />
 															</c:set>
 															<c:set target="${urlParams2}" property="event" value="edit" />
@@ -102,22 +102,28 @@
 															<bean:define id="translation">
 																<digi:trn key="aim:clickToEditScheme">Click here to Edit Scheme</digi:trn>
 															</bean:define>
-															[ <digi:link href="/updateSectorSchemes.do" name="urlParams2" title="<%=translation%>" >Edit</digi:link> ]
+															[ <digi:link href="/updateSectorSchemes.do" name="urlParams2" title="<%=translation%>" >
+															Edit	
+															</digi:link> 
+															]
 														</td>
 
 														<%--<logic:equal name="aimAddSectorForm" property="deleteSchemeFlag" value="true">--%>
 														<td bgcolor="#ffffff" width="55" align="center">
 															<jsp:useBean id="urlParams4" type="java.util.Map" class="java.util.HashMap"/>
-															<c:set target="${urlParams4}" property="ampSecSchemeparentId">
+															<c:set target="${urlParams4}" property="ampSecSchemeId">
 																<bean:write name="sectorScheme" property="ampSecSchemeId" />
 															</c:set>
-															<c:set target="${urlParams4}" property="event" value="delete"/>
+															<c:set target="${urlParams4}" property="event" value="deleteScheme"/>
 															<bean:define id="translation">
 																<digi:trn key="aim:clickToDeleteScheme">Click here to Delete Scheme</digi:trn>
 															</bean:define>
 															[ <digi:link href="/updateSectorSchemes.do" name="urlParams4"
-																title="<%=translation%>" onclick="return onDelete()">Delete</digi:link> ]
-														</td>
+																title="<%=translation%>" onclick="return onDelete()">
+																Delete
+															</digi:link>
+															] 
+														
 
 														<%--<logic:equal name="aimAddSectorForm" property="deleteSchemeFlag" value="false">
 															<td colspan="2" align="center">

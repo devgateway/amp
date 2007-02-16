@@ -8,14 +8,14 @@
 
 <script language="JavaScript">
 	<!--
-		function editPrgIndicator(prgId)
+		function editPrgIndicator(id)
 		{
-			openNewWindow(500, 300);
-			<digi:context name="editIndicator" property="context/module/moduleinstance/editAllIndicator.do?indicator=program"/>
-			document.aimAllIndicatorForm.action = "<%= editIndicator %>&indicatorId=" +prgId;
+			openNewWindow(650, 500);
+			<digi:context name="indAssign" property="context/module/moduleinstance/addThemeIndicator.do"/>
+			document.aimAllIndicatorForm.action = "<%= indAssign %>?themeId=" + id;
 			document.aimAllIndicatorForm.target = popupPointer.name;
 			document.aimAllIndicatorForm.submit();
-			return true;	
+			return true;
 		}
 		function editProjIndicator(projId)
 		{
@@ -24,7 +24,6 @@
 			document.aimAllIndicatorForm.action = "<%= editIndicator %>&indicatorId=" +projId;
 			document.aimAllIndicatorForm.target = popupPointer.name;
 			document.aimAllIndicatorForm.submit();
-			return true;	
 		}
 		function deletePrgIndicator()
 	  	{
@@ -83,17 +82,50 @@
 				</tr>				
 				<tr>
 					<td noWrap width=100% vAlign="top">
-					<table width="100%" cellspacing=1 cellSpacing=1 border=0>
+					<table width="100%" cellspacing=0 cellSpacing=0 border=0>
 					<tr><td noWrap width=600 vAlign="top">
-						<table bgColor=#d7eafd cellPadding=1 cellSpacing=1 width="100%" valign="top">
+						<table bgColor=#d7eafd cellPadding=0 cellSpacing=0 width="100%" valign="top">
 							<tr bgColor=#ffffff>
 								<td vAlign="top" width="100%">
-									<table width="100%" cellspacing=1 cellpadding=1 valign=top align=left>	
-										<tr><td bgColor=#d7eafd class=box-title height="20" align="center">
-											<%-- Table title --%>
-											<digi:trn key="aim:indicatorList">
-												Indicator List
-											</digi:trn>
+									<table width="100%" cellspacing=0 cellpadding=0 valign=top align=left>	
+										<tr><td>
+												<table cellspacing=0 cellpadding=0>
+														<tr>
+															<td noWrap height=17>
+																<bean:define id="translation">
+																	<digi:trn key="aim:viewIndicators">Click here to View Indicators</digi:trn>
+																</bean:define>
+																<digi:link href="/overallIndicatorManager.do?view=indicators"  styleClass="sub-navGov" title="<%=translation%>" ><font color="ffffff">
+																<digi:trn key="aim:programIndicatorList">
+																		Program Indicator List
+																</digi:trn>&nbsp;&nbsp;&nbsp;&nbsp;</font>
+																</digi:link>
+												 			</td>
+															<td noWrap height=17>
+																<bean:define id="translation">
+																	<digi:trn key="aim:viewMultiProgramIndicators" >Click here to view Multi Program Indicators</digi:trn>
+																</bean:define>
+																<digi:link href="/overallIndicatorManager.do?view=multiprogram"  styleClass="sub-navGovSelected" title="<%=translation%>" ><font color="ffffff">
+															<digi:trn key="aim:multiProgramManager">
+																Multi Program Manager
+															</digi:trn>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</font>
+																</digi:link>
+															</td>
+															<td noWrap height=17>
+																<bean:define id="translation">
+																	<digi:trn key="aim:viewM&EProjectIndicators" >Click here to view M & E Project Indicators</digi:trn>
+																</bean:define>
+																<digi:link href="/overallIndicatorManager.do?view=meindicators"  styleClass="sub-navGovSelected" title="<%=translation%>" ><font color="ffffff">
+																<digi:trn key="aim:projectIndicatorList">
+																		Project Indicator List
+																</digi:trn>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</font>
+																</digi:link>
+															</td>		
+														</tr>
+													</table>
+												</td>
+												</tr>
+										  </table>
 											<%-- end table title --%>										
 										</td></tr>
 										<tr><td>
@@ -106,15 +138,25 @@
 													<logic:notEmpty name="aimAllIndicatorForm" property="prgIndicators">
 													<logic:iterate name="aimAllIndicatorForm" property="prgIndicators" id="prgIndicators" type="org.digijava.module.aim.helper.AllThemes">
 														<tr><td align="left">
-															<img src= "../ampTemplate/images/arrow-014E86.gif" border=0>&nbsp;<b>
-															<bean:write name="prgIndicators" property="programName"/></b>																			  </td></tr>
+														<table width="100%" cellspacing=1 cellpadding=3 bgcolor="#ffffff">
+															<tr bgcolor="#ffffff">
+															<td align="left">
+																<img src= "../ampTemplate/images/arrow-014E86.gif" border=0>&nbsp;<b>
+																<bean:write name="prgIndicators" property="programName"/></b>
+															</td>
+															<td align="right">
+																<input class="buton" type="button" name="editIndicator" value="Edit Indicators" onclick="editPrgIndicator('<bean:write name="prgIndicators" property="programId"/>')"/>
+															</td>
+															</tr>
+														</table>
+														</td></tr>
 														<logic:notEmpty name="prgIndicators" property="allPrgIndicators">
 														<tr><td>
 															<table width="100%" cellspacing=1 cellpadding=3 bgcolor="#d7eafd">
 																<logic:iterate name="prgIndicators" property="allPrgIndicators" id="allPrgIndicators" type="org.digijava.module.aim.helper.AllPrgIndicators">	
 																	<tr bgcolor="#ffffff">
 																	<td width="9">
-																		<img src= "../ampTemplate/images/arrow_right.gif" border=0>
+																		<img src= "../ampTemplate/images/link_out_bot.gif" border=0>
 																	</td>																	
 																	<td>
 																		<jsp:useBean id="urlParams1" type="java.util.Map" class="java.util.HashMap"/>
@@ -127,7 +169,7 @@
 																		<bean:write name="allPrgIndicators" property="code"/>
 																	</td>
 																	<td width="40">
-																		<input class="buton" type="button" name="editIndicator" value="Edit" onclick="editPrgIndicator('<bean:write name="allPrgIndicators" property="indicatorId"/>')">
+																		<%--<input class="buton" type="button" name="editIndicator" value="Edit" onclick="editPrgIndicator('<bean:write name="prgIndicators" property="programId"/>')"/>--%>
 																	</td>																
 																	<td align="left" width="12">
 																		<bean:define id="translation">
@@ -179,7 +221,12 @@
 																<logic:iterate name="projIndicators" property="allMEIndicators" id="allMEIndicators" type="org.digijava.module.aim.helper.AllMEIndicators">	
 																	<tr bgcolor="#ffffff">
 																	<td width="9">
-																		<img src= "../ampTemplate/images/arrow_right.gif" border=0>
+																		<c:if test="${allMEIndicators.defaultInd == true}">
+																			<img src= "../ampTemplate/images/bullet_red.gif" border=0>
+																		</c:if>
+																		<c:if test="${allMEIndicators.defaultInd == false}">
+																			<img src= "../ampTemplate/images/bullet_grey.gif" border=0>
+																		</c:if>
 																	</td>																	
 																	<td>
 																		<jsp:useBean id="urlParams2" type="java.util.Map" class="java.util.HashMap"/>
@@ -236,6 +283,24 @@
 						</table>
 					</td>
 				</tr>
+				<tr><td>
+					<table width="100%" cellspacing=1 cellpadding=3 bgcolor="ffffff" border=0>
+							<tr bgcolor="#ffffff">
+									<td width="9">
+											<img src= "../ampTemplate/images/bullet_red.gif" border=0>
+									</td>
+									<td width="100">
+											<digi:trn key="aim:globalIndicator">Global Indicator</digi:trn>
+									</td>
+									<td width="9">
+											<img src= "../ampTemplate/images/bullet_grey.gif" border=0>
+									</td>
+									<td>
+											<digi:trn key="aim:activitySpecificIndicator">Activity Specific Indicator</digi:trn>
+									</td>
+							</tr>																
+					</table>
+				</td></tr>
 			</table>
 		</td>
 	</tr>

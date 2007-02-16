@@ -38,8 +38,8 @@
 			if (temp == true) 
 			{
 				document.aimThemeForm.addBtn.disabled = true;	  	
-				<digi:context name="addThm" property="context/module/moduleinstance/addSubTheme.do?event=save"/>
-				document.aimThemeForm.action = "<%=addThm%>&themeId=" + id + "&indlevel=" + level + "&indname=" + name + "&rootId=" + rutId;;
+				<digi:context name="addThm" property="context/module/moduleinstance/addSubPrgInd.do?event=save"/>
+				document.aimThemeForm.action = "<%=addThm%>&themeId=" + id + "&indlevel=" + level + "&indname=" + name + "&rootId=" + rutId;
 				document.aimThemeForm.target = window.opener.name;
 				document.aimThemeForm.submit();
 				window.close();

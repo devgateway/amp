@@ -47,7 +47,7 @@ public class GetTheme extends Action {
 		if (request.getParameter("id") != null) {
 
 			Long themeId = new Long(Long.parseLong(request.getParameter("id")));
-			AmpTheme ampTheme = ProgramUtil.getTheme(themeId);
+			AmpTheme ampTheme = ProgramUtil.getThemeObject(themeId);
 			themeForm.setThemeId(themeId);
 			themeForm.setThemeCode(ampTheme.getThemeCode());
 			themeForm.setThemeName(ampTheme.getName());

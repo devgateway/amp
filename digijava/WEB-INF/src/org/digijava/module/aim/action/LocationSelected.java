@@ -1,6 +1,7 @@
 package org.digijava.module.aim.action;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Iterator;
 import java.util.TreeSet;
 
@@ -13,10 +14,12 @@ import org.digijava.kernel.dbentity.Country;
 import org.digijava.module.aim.dbentity.AmpRegion;
 import org.digijava.module.aim.dbentity.AmpWoreda;
 import org.digijava.module.aim.dbentity.AmpZone;
+import org.digijava.module.aim.dbentity.AmpGlobalSettings;
 import org.digijava.module.aim.form.EditActivityForm;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.Location;
 import org.digijava.module.aim.util.DbUtil;
+import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.LocationUtil;
 
 public class LocationSelected extends Action {
@@ -42,7 +45,19 @@ public class LocationSelected extends Action {
 		
 		if (eaForm.getImpLevelValue().intValue() == 1) {
 			location = new Location[1];
-			Country cntry = DbUtil.getDgCountry(Constants.COUNTRY_ISO);
+			Collection col =FeaturesUtil.getGlobalSettings();
+            Iterator itr = col.iterator();
+            Country cntry =null;
+            String Iso=null;
+            while(itr.hasNext())
+            {
+            	AmpGlobalSettings ampgs = (AmpGlobalSettings) itr.next();
+            	logger.info(" this is the default country..."+ampgs.getGlobalSettingsValue());
+             	Iso = ampgs.getGlobalSettingsValue();
+            	cntry = DbUtil.getDgCountry(Iso);
+            	logger.info(" this is the ISO "+ Iso+" this is the country got ..... "+ cntry);
+            }
+			//Country cntry = DbUtil.getDgCountry(Constants.COUNTRY_ISO);
 			location[0] = new Location();
 			location[0].setLocId(new Long(System.currentTimeMillis()));
 			location[0].setCountryId(cntry.getCountryId());
@@ -51,9 +66,22 @@ public class LocationSelected extends Action {
 		
 		if (eaForm.getImpLevelValue().intValue() > 1) {
 			if (eaForm.getImpCountry() != null) {
-				Country cntry = DbUtil.getDgCountry(Constants.COUNTRY_ISO);
+				Country cntry =null;
+	            String Iso=null;
+	            Collection col =FeaturesUtil.getGlobalSettings();
+	            Iterator itr = col.iterator();
+	            while(itr.hasNext())
+	            {
+	            	AmpGlobalSettings ampgs = (AmpGlobalSettings) itr.next();
+	            	logger.info(" this is the default country..."+ampgs.getGlobalSettingsValue());
+	             	Iso = ampgs.getGlobalSettingsValue();
+	            	cntry = DbUtil.getDgCountry(Iso);
+	            	logger.info(" this is the ISO "+ Iso+" this is the country got ..... "+ cntry);
+	            }
+				//Country cntry = DbUtil.getDgCountry(Constants.COUNTRY_ISO);
 				cntryId = cntry.getCountryId();
 				cntryName = cntry.getCountryName();
+				logger.info(" this is the country ...." +cntry.getCountryName()+ " ID "+cntry.getCountryId() );
 				flag = false;
 			} else
 				flag = true;

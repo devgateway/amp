@@ -324,6 +324,10 @@ public class DBPatcher {
 								 Statement stmt2 = session.connection().createStatement();
 								 qryStr5 = "DELETE from AMP_COMPONENTS where title = '"+name+"' and amp_component_id !='"+compId+"'";
 								 stmt2.executeUpdate(qryStr5);
+								 logger.info("Setting all the amp Ids as null as null...");
+								 stmt2 = session.connection().createStatement();
+								 qryStr5 = "update amp_components set amp_activity_id = null";
+								 stmt2.executeUpdate(qryStr5);
 						 	}
 						 
 						 catch (Exception e){

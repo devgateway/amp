@@ -11,8 +11,8 @@
    String viewParamXLS="/xlsExport.do"+viewParam;
    String viewParamPDF="/pdfExport.do"+viewParam;
    String viewParamCSV="/csvExport.do"+viewParam;
-   String viewParamPrint="/viewNewAdvancedReport.do"+(viewParam.equals("") || viewParam.equals("?view=reset")?"?":"&")+"viewFormat=print";
    String viewParamTree="/viewNewAdvancedReport.do"+(viewParam.equals("") || viewParam.equals("?view=reset")?"?":"&")+"viewFormat=tree";
+   String viewParamPrint="/viewNewAdvancedReport.do"+(viewParam.equals("") || viewParam.equals("?view=reset")?"?":"&")+"viewFormat=print";
 %>
 
    <TABLE class=toolbar id=toolbartable cellSpacing=0 cellPadding=0

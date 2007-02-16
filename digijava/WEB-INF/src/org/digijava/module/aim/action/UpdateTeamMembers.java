@@ -46,7 +46,7 @@ public class UpdateTeamMembers extends Action {
 				if (session.getAttribute("teamLeadFlag") != null) {
 					key = (String) session.getAttribute("teamLeadFlag");
 					if (key.equalsIgnoreCase("true")) {
-						permitted = true;	
+						permitted = true;
 					}
 				}
 			}
@@ -54,7 +54,7 @@ public class UpdateTeamMembers extends Action {
 		if (!permitted) {
 			return mapping.findForward("index");
 		}
-		
+
 
 		try {
 			TeamMemberForm upForm = (TeamMemberForm) form;
@@ -65,8 +65,14 @@ public class UpdateTeamMembers extends Action {
 					&& upForm.getAction().trim().equals("edit")) {
 				logger.info("In edit team member");
 
-				AmpTeamMember ampMember = new AmpTeamMember();
-				ampMember.setAmpTeamMemId(upForm.getTeamMemberId());
+                                Long memberID=upForm.getTeamMemberId();
+                                AmpTeamMember ampMember = null;
+                                if (memberID!=null){
+                                  ampMember=TeamMemberUtil.getAmpTeamMember(memberID);
+                                }else{
+                                  ampMember=new AmpTeamMember();
+                                }
+
 				logger.info("ampMember.getAmpTeamMemId() : "+ampMember.getAmpTeamMemId());
 				AmpTeamMemberRoles role = TeamMemberUtil.getAmpTeamMemberRole(upForm
 						.getRole());
@@ -84,7 +90,7 @@ public class UpdateTeamMembers extends Action {
 
 						saveErrors(request, errors);
 
-						return mapping.getInputForward();
+						return mapping.findForward("forward");
 
 					}
 
@@ -146,7 +152,7 @@ public class UpdateTeamMembers extends Action {
 				selMembers[0] = upForm.getTeamMemberId();
 				Site site = RequestUtils.getSite(request);
 				TeamMemberUtil.removeTeamMembers(selMembers,site.getId());
-				
+
 				if (ampTeam != null) {
 					request.setAttribute("teamId", ampTeam.getAmpTeamId());
 					return mapping.findForward("forward");

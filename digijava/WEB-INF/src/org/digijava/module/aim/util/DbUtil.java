@@ -66,11 +66,11 @@ import org.digijava.module.aim.dbentity.AmpStatus;
 import org.digijava.module.aim.dbentity.AmpTeamPageFilters;
 import org.digijava.module.aim.dbentity.AmpTeamReports;
 import org.digijava.module.aim.dbentity.AmpTermsAssist;
+import org.digijava.module.aim.dbentity.AmpTheme;
 import org.digijava.module.aim.helper.AmpProjectBySector;
 import org.digijava.module.aim.helper.Assistance;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.CurrencyWorker;
-import org.digijava.module.aim.helper.DateConversion;
 import org.digijava.module.aim.helper.Documents;
 import org.digijava.module.aim.helper.EthiopianCalendar;
 import org.digijava.module.aim.helper.FilterProperties;
@@ -2346,6 +2346,40 @@ public class DbUtil {
 		return col;
 	}
 
+	public static Collection getActivityThemeFromAAT(Long themeId) {
+		Session sess = null;
+		Collection col = null;
+			try {
+			/*sess = PersistenceManager.getSession();
+			String queryString = "select a from " + AmpTheme.class.getName()
+					+ " a where (a.themeId=:themeId)";*/
+			
+			AmpTheme themeToBeDeleted = (AmpTheme) sess.get(AmpTheme.class, themeId);	
+			//qry = sess.createQuery(queryString);
+			//qry.setParameter("themeId", themeId, Hibernate.LONG);
+			Iterator itr = themeToBeDeleted.getActivityPrograms().iterator();//qry.list().iterator();
+			col = new ArrayList();
+			while (itr.hasNext()) {
+				col.add(itr.next());
+			}
+
+		} catch (Exception e) {
+			logger.debug("Exception from getActivityTheme()");
+			logger.debug(e.toString());
+		} finally {
+			try {
+				if (sess != null) {
+					PersistenceManager.releaseSession(sess);
+				}
+			} catch (Exception ex) {
+				logger.debug("releaseSession() failed");
+				logger.debug(ex.toString());
+			}
+		}
+		return col;
+	}
+
+	
 	public static void add(Object object) {
 		logger.debug("In add " + object.getClass().getName());
 		Session sess = null;

@@ -14,12 +14,12 @@
 			document.aimFlagUploaderForm.countryId.focus();
 			return false;
 		}
-		
+
 		/*
 		if (trim(document.aimFlagUploaderForm.flagFile.value).length == 0) {
 			alert("Please select a flag");
 			document.aimFlagUploaderForm.flagFile.focus();
-			return false;				  
+			return false;
 		}*/
 	}
 
@@ -34,9 +34,14 @@
 	function setAsDefault(id) {
 		<digi:context name="url" property="context/module/moduleinstance/setDefaultFlag.do" />
 		document.aimFlagUploaderForm.action = "<%=url%>?id="+id;
-		document.aimFlagUploaderForm.submit();			  
+		document.aimFlagUploaderForm.submit();
 	}
 
+    function deleteFlag(id) {
+        <digi:context name="url" property="context/module/moduleinstance/deleteFlag.do" />
+        document.aimFlagUploaderForm.action = "<%=url%>?CountryId="+id;
+        document.aimFlagUploaderForm.submit();
+	}
 
 </script>
 
@@ -98,14 +103,16 @@
 												<digi:img src="images/bullet_green.gif" border="0" height="9" width="9" align="center" />
 											</c:if>
 											<c:if test="${flag.defaultFlag == false}">
-												<a href="javascript:setAsDefault('<bean:write name="flag" property="cntryId" />')">
-													<digi:img src="images/bullet_grey.gif" border="0" height="9" width="9" align="center" />
-												</a>
-											</c:if>											
+												<a href="javascript:setAsDefault('<bean:write name="flag" property="cntryId" />')"><digi:img src="images/bullet_grey.gif" border="0" height="9" width="9" align="center" /></a>
+                                            </c:if>
+                                            &nbsp;
+                                            <a href="javascript:deleteFlag('<bean:write name="flag" property="cntryId" />')">
+                                               <digi:img src="images/trash_12.gif" border="0" height="11" width="11" align="center" />
+                                            </a>
 										</td>
 									</tr>
 									</logic:iterate>
-								</table>	
+								</table>
 							</td>
 							<td noWrap vAlign="top">
 									<table bgcolor=#f4f4f2 cellPadding=0 cellSpacing=0 width="100%" class=box-border-nopadding>
@@ -122,22 +129,22 @@
 														<td colspan="2" align="center">
 															<html:errors/>
 														</td>
-													</tr>								
+													</tr>
 													<tr>
 														<td>
-															<digi:trn key="aim:country">Country</digi:trn>	
+															<digi:trn key="aim:country">Country</digi:trn>
 														</td>
 														<td>
 															<html:select property="countryId" styleClass="inp-text">
 																<html:option value="-1">-- Select Country --</html:option>
-																<html:optionsCollection name="aimFlagUploaderForm" property="countries" 
+																<html:optionsCollection name="aimFlagUploaderForm" property="countries"
 																value="id" label="name" />
 															</html:select>
 														</td>
 													</tr>
 													<tr>
 														<td>
-															<digi:trn key="aim:flag">Flag</digi:trn>	
+															<digi:trn key="aim:flag">Flag</digi:trn>
 														</td>
 														<td>
 															<html:file name="aimFlagUploaderForm" property="flagFile" size="30"
@@ -158,7 +165,7 @@
 															</tr>
 															</table>
 														</td>
-													</tr>									
+													</tr>
 												</table>
 											</td>
 										</tr>
@@ -171,7 +178,7 @@
 				</tr>
 				<tr>
 					<td>
-						<digi:img src="images/bullet_green.gif" border="0" height="9" width="9" align="top" /> -  
+						<digi:img src="images/bullet_green.gif" border="0" height="9" width="9" align="top" /> -
 						<digi:trn key="aim:defaultFlag">Deafult Flag</digi:trn>
 					</td>
 				</tr>
@@ -181,7 +188,7 @@
 						<digi:img src="images/bullet_grey.gif" border="0" height="9" width="9" align="top" />
 						<digi:trn key="aim:flagUploadHelpPhrase2">next to the flag to make it as the default for the site</digi:trn>
 					</td>
-				</tr>				
+				</tr>
 			</table>
 		</td>
 	</tr>

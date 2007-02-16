@@ -40,6 +40,24 @@ public class AddSelectedSectors extends Action {
 				if (sctr.getSectorId().equals(selsearchedSector[i])) {
 					if(!checkDuplicate(sctr)) {
 							logger.info("adding now...");
+                            if(eaForm.getActivitySectors()==null){
+                                if(selsearchedSector.length==1){
+                                    sctr.setSectorPercentage("100");
+                                }
+                            }else if(eaForm.getActivitySectors().size()==0){
+                                if(selsearchedSector.length==1){
+                                    sctr.setSectorPercentage("100");
+                                }
+                            }else if(eaForm.getActivitySectors().size()==1){
+                                Iterator sectItr=eaForm.getActivitySectors().iterator();
+                                while(sectItr.hasNext()){
+                                    ActivitySector oldSect=(ActivitySector)sectItr.next();
+//                                    if(oldSect.getSectorPercentage().equals("100")){
+//                                        oldSect.setSectorPercentage(null);
+//                                    }
+                                    break;
+                                }
+                            }
 							eaForm.getActivitySectors().add(sctr);
 							count ++;
 							break;

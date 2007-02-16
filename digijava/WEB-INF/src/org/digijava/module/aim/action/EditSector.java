@@ -46,6 +46,7 @@ public class EditSector extends Action {
 								/*
 								 * check whether the id is a valid long value
 								 */
+						 		String id = (String)request.getParameter("id");
 								Long secId = new Long(Long.parseLong(request.getParameter("id")));
 								AmpSector ampSector = SectorUtil.getAmpSector(secId);
 
@@ -62,6 +63,8 @@ public class EditSector extends Action {
 								ampSector.setSectorCode(editSectorForm.getSectorCode());
 								logger.info(" here");
 								DbUtil.update(ampSector);
+								session.setAttribute("Id",id);
+								//session.setAttribute("Event","Edit");
 								logger.info(" update sector Complete");
 								/*if (ampSector.getParentSectorId() == null) {
 										  editSectorForm.setParentSectorId(null);

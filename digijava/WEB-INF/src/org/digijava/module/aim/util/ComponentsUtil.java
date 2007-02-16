@@ -152,7 +152,6 @@ public class ComponentsUtil{
 	 */
 	public static Collection getComponentFunding(Long id)
 	{
-		logger.info(" getting the components funding details................");
 		Collection col = null;
 		String queryString=null;
 		Session session = null;
@@ -191,7 +190,6 @@ public class ComponentsUtil{
 	 */
 	public static Collection getComponentPhysicalProgress(Long id)
 	{
-		logger.info(" getting the components funding details................");
 		Collection col = null;
 		String queryString=null;
 		Session session = null;
@@ -202,7 +200,6 @@ public class ComponentsUtil{
 			queryString ="select co from "+AmpPhysicalPerformance.class.getName()+" co where co.component=:id";
 			qry = session.createQuery(queryString);
 			qry.setParameter("id",id,Hibernate.LONG);
-
 			col = qry.list();
 		}
 		catch(Exception ex)

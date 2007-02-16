@@ -10,8 +10,10 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import java.util.*;
+
 import org.digijava.module.aim.dbentity.AmpSector;
 import org.digijava.module.aim.form.AddSectorForm;
+import org.digijava.module.aim.dbentity.AmpSectorScheme;
 import org.digijava.module.aim.util.SectorUtil;
 
 public class ViewSectorDetails extends Action {
@@ -34,30 +36,40 @@ public class ViewSectorDetails extends Action {
 					 }					 
 
 					 AddSectorForm viewSectorForm = (AddSectorForm) form;
+					 session.setAttribute("moreThanLevelOne","yes");
 
-					 logger.debug("In view sector action");
-					 logger.debug("In add sector action");
-						String sectId = request.getParameter("ampSectorId");
-						String event = request.getParameter("event");
-						String level = request.getParameter("level");
-						Long parentId = new Long(sectId);
-						logger.info(" this is the sector id....." +parentId);
-						
+					 logger.debug("In ViewSectorDetails action");
+					 String event = request.getParameter("event");
+					 String level = request.getParameter("level");
+					 String secId = "";
+					 if(session.getAttribute("Id")==null)
+					    	secId = request.getParameter("ampSectorId");
+					 else
+					 {
+						 	secId = (String)session.getAttribute("Id");
+						 	event = "edit";
+						 	level = "two";
+					 }
+						Long parentId = new Long(secId);
 						viewSectorForm.setSubSectors(SectorUtil.getAllChildSectors(parentId));
+						Collection _subSectors = viewSectorForm.getSubSectors();
+						Iterator itr = _subSectors.iterator();
+						while (itr.hasNext()) {
+							AmpSector ampScheme = (AmpSector) itr.next();
+							viewSectorForm.setAmpSectorId(ampScheme.getAmpSectorId());
+							viewSectorForm.setParentId(ampScheme.getAmpSectorId());
+							viewSectorForm.setParentSectorId(ampScheme.getParentSectorId().getAmpSectorId());
+						}
 						if(event!=null)
 						{
 							if(event.equals("edit"))
 							{
-								logger.info(" inside editing the sector...");
-								AmpSector editSector = new AmpSector();
+								logger.info(" inside editing the sector     poi   event === edit...");
+								AmpSector editSector= new AmpSector();
 								editSector = SectorUtil.getAmpSector(parentId);
-								logger.info(" this is the name ....."+editSector.getName());
-								logger.info(" this is the code ....."+ editSector.getSectorCode());
-								logger.info("this is the sector id...."+editSector.getAmpSectorId());
 								viewSectorForm.setSectorCode(editSector.getSectorCode());
 								viewSectorForm.setSectorName(editSector.getName());
 								viewSectorForm.setSectorId(editSector.getAmpSectorId());
-								
 								if(level.equals("one"))
 								{
 									return mapping.findForward("levelOne");
@@ -70,31 +82,9 @@ public class ViewSectorDetails extends Action {
 								{
 									return mapping.findForward("levelThree");
 								}
-									
-							}
-							
-							
+							}							
 						}
-					/* if (request.getParameter("id") != null) {
-								Long secId = new Long(Long.parseLong(request.getParameter("id")));
-								AmpSector ampSector = SectorUtil.getAmpSector(secId);
-
-								if (ampSector.getParentSectorId() != null) {
-										  viewSectorForm.setParentSectorId(ampSector.getParentSectorId().getAmpSectorId());
-								} else {
-										  viewSectorForm.setParentSectorId(new Long(0));
-								}
-								viewSectorForm.setSectorId(secId);
-								viewSectorForm.setSectorCode(ampSector.getSectorCode());
-								viewSectorForm.setSectorName(ampSector.getName());
-								viewSectorForm.setAmpOrganisation(ampSector.getAmpOrgId().getName());
-								viewSectorForm.setDescription(ampSector.getDescription());
-								if (ampSector.getParentSectorId() == null) {
-										  viewSectorForm.setParentSectorName("");
-								} else {
-										  viewSectorForm.setParentSectorName(ampSector.getParentSectorId().getName());
-								}
-					 }*/
+					
 					 return mapping.findForward("levelOne");
 		  }
 		  

@@ -100,6 +100,17 @@ public class FeatureManager extends Action {
 							}
 						}
 					}
+					else if (feature.getCode().equalsIgnoreCase(Constants.MS_FEATURE)) {
+						synchronized (ampContext) {
+							if (feature.isActive()) {
+								ampContext.setAttribute(Constants.MS_FEATURE,featureOn);
+							} else {
+								if (ampContext.getAttribute(Constants.MS_FEATURE) != null) {
+									ampContext.removeAttribute(Constants.MS_FEATURE);
+								}
+							}
+						}
+					}
 				}
 			} catch (NumberFormatException nfe) {
 				logger.error("Trying to parse " + tempFId + " to int"); 

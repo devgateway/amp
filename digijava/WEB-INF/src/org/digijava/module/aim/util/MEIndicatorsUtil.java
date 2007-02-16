@@ -170,7 +170,7 @@ public class MEIndicatorsUtil
 		try 
 		{
 			session = PersistenceManager.getSession();
-			String qryStr = "select indVal from " + AmpMEIndicatorValue.class.getName() + "" +
+			String qryStr = "select indVal from " + AmpMEIndicatorValue.class.getName() +
 					" indVal where (indVal.activityId=:actId)" ;
 			Query qry = session.createQuery(qryStr);
 			qry.setParameter("actId",actId,Hibernate.LONG);

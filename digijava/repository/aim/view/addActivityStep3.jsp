@@ -57,6 +57,10 @@
 
     function delPropFunding() {
             <digi:context name="delProposedFunding" property="context/module/moduleinstance/removeProposedFunding.do" />
+            var state=window.confirm("Are you sure about deleting the Proposed Project Cost ?");
+            if(state==false){
+              return false;
+            }
             document.aimEditActivityForm.action = "<%= delProposedFunding %>";
             document.aimEditActivityForm.submit();
 	}
@@ -108,7 +112,7 @@
 	function validateForm() {
 		return true;
 	}
-	
+
 	-->
 
 </script>
@@ -324,6 +328,7 @@
                                                   </c:if>
                                                   <c:if test="${aimEditActivityForm.proProjCost!=null}">
                                                     <input type="Button" value="Remove Funding" class="buton" onclick="delPropFunding()">
+													<input type="Button" value="Edit Funding" class="buton" onclick="addPropFunding()">
                                                   </c:if>
                                                 </td>
                                               </tr>
@@ -715,11 +720,11 @@
 																		<table cellSpacing=2 cellPadding=2>
 																			<tr>
 																				<td>
-																					<input type="button" value="Add Organizations" class="buton" 
+																					<input type="button" value="Add Organizations" class="buton"
 																				   onclick="selectOrganisation()">
 																				</td>
 																				<td>
-																					<input type="button" value="Remove Organizations" class="buton" 
+																					<input type="button" value="Remove Organizations" class="buton"
 																				   onclick="return removeSelOrganisations()">
 																				</td>
 																			</tr>
@@ -732,7 +737,7 @@
 																<c:if test="${aimEditActivityForm.donorFlag == false}">
 																<tr>
 																	<td>
-																		<input type="button" value="Add Organizations" class="buton" 
+																		<input type="button" value="Add Organizations" class="buton"
 																		onclick="selectOrganisation()">
 																	</td>
 																</tr>

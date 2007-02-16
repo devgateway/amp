@@ -14,7 +14,7 @@
       if(fna==""){
         alert("Please enter amount");
         return false;
-      }else if(fna.match("[^0-9]")){
+      }else if(fna.match("[^0-9][,]")){
         alert("Invalid amount value");
         return false;
       }

@@ -72,8 +72,9 @@ public class Constants
 	public static final Integer REVISED = new Integer(1);	
 	public static final Integer CURRENT = new Integer(2);
 	
-	public static final String COUNTRY_ISO = "et";
-	public static final String COUNTRY = "Ethiopia";
+	//Removed by Govind
+	//public static  String COUNTRY_ISO = "";
+	//public static  String COUNTRY = "";
 	
 	public static final String CURRENCY_RATE_DEAFULT_START_DATE = "25/04/2005";
 	public static final String CURRENCY_RATE_DEAFULT_END_DATE = "01/05/2005";
@@ -178,6 +179,8 @@ public class Constants
 	public static final String CL_FEATURE = "CL"; // Calendar feature code
 	public static final String DC_FEATURE = "DC"; // Documents feature code
 	public static final String SC_FEATURE = "SC"; // Scenarios feature code
+	public static final String MS_FEATURE = "MS"; // Multi Sector Manager code
+	
 	
 	public static final String DEF_FLAG_EXIST = "defFlagExist"; 
 	

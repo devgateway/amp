@@ -7,6 +7,7 @@ public class AllIndicatorForm extends ActionForm
 {
 	private Collection prgIndicators;
 	private Collection projIndicators;
+	private boolean flag;
 	/**
 	 * @return Returns the prgIndicators.
 	 */
@@ -31,4 +32,11 @@ public class AllIndicatorForm extends ActionForm
 	public void setProjIndicators(Collection projIndicators) {
 		this.projIndicators = projIndicators;
 	}
+	public boolean isFlag() {
+		return flag;
+	}
+	public void setFlag(boolean flag) {
+		this.flag = flag;
+	}
+	
 }

@@ -170,6 +170,7 @@
 		</layout>
                 
 
+
 		<layout name="layoutChannelOverview" extends="tabLayout">
         <put name="title">Activity - Channel Overview </put>
         <put-item name="tabBody" module="aim" instance="default"
@@ -255,7 +256,7 @@
 		</layout>
 
 		<layout name="portfolioDashboardLayout" extends="desktopLayout">
-			<put name="title">- Dashbaord</put>
+			<put name="title">- Dashboard</put>
 			<put-item name="body" module="aim" instance="default" teaser="portfolioDashboard"/>
 		</layout>
 
@@ -361,6 +362,7 @@
 				<page>aim_addRegionalFunding</page>
 				<page>aim_addMEIndicator</page>
 				<page>aim_addProgram</page>
+				<page>aim_editTheme</page>
 				<page>aim_addPrgIndicator</page>
 				<page>aim_editAllIndicator</page>
 				<page>aim_printActPerf</page>
@@ -388,6 +390,7 @@
 				<page>aim_pIPrintReports2</page>
                 <page>addProposedProjFunding</page>
                 <page>printMyDesktop</page>
+                <page>addProgramPopup</page>
 				<page>aim_actPerfWithoutBase</page>
 				<page>aim_portPerfWithoutBase</page>
 

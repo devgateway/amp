@@ -11,7 +11,6 @@ public class AmpSector implements Serializable, Comparable
 	private Long ampSectorId ;
 	private AmpSector parentSectorId ;
 	private String sectorCode ;
-	// private Long ampDacSectorId ;
 	private String name ;
 	private String type; 
 	private AmpOrganisation ampOrgId;

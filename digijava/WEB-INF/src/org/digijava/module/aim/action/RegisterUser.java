@@ -4,6 +4,9 @@
 
 package org.digijava.module.aim.action;
 
+import java.util.Collection;
+import java.util.Iterator;
+
 import org.apache.log4j.Logger;
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionError;
@@ -21,6 +24,8 @@ import org.digijava.kernel.user.Group;
 import org.digijava.kernel.user.User;
 import org.digijava.kernel.util.DgUtil;
 import org.digijava.kernel.util.RequestUtils;
+import org.digijava.module.aim.dbentity.AmpGlobalSettings;
+import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.um.form.UserRegisterForm;
 import org.digijava.module.um.util.DbUtil;
 
@@ -64,7 +69,25 @@ public class RegisterUser extends Action {
 			user.setOrganizationTypeOther(new String(" "));
 
 			// set country
-			user.setCountry(new Country(org.digijava.module.aim.helper.Constants.COUNTRY_ISO));
+			Collection col1 =FeaturesUtil.getDefaultCountryISO();
+            String ISO= null;
+            Iterator itr1 = col1.iterator();
+            while(itr1.hasNext())
+            {
+            	AmpGlobalSettings ampG = (AmpGlobalSettings)itr1.next();
+            	ISO = ampG.getGlobalSettingsValue();
+            }
+            Collection col =FeaturesUtil.getDefaultCountry(ISO);
+            String Country = null;
+            Iterator itr = col.iterator();
+            while(itr.hasNext())
+            {
+            	Country ampG = (Country)itr.next();
+            	Country = ampG.getCountryName();
+            }
+            System.out.println(" this is the default country.... "+Country);
+            user.setCountry(new Country(Country));
+			//user.setCountry(new Country(org.digijava.module.aim.helper.Constants.COUNTRY_ISO));
 
 			// set default language
 			user.setRegisterLanguage(RequestUtils

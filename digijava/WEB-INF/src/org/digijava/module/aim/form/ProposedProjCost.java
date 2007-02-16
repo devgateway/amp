@@ -49,9 +49,11 @@ public class ProposedProjCost extends ActionForm{
     public void setFunAmount(String funAmount) {
         try{
             DecimalFormat format = new DecimalFormat();
+            funAmount=funAmount.replaceAll("'","");
+            funAmount=funAmount.replaceAll(",","");
             this.funAmount = format.format(Double.valueOf(funAmount));
         }catch(Exception ex){
-            this.funAmount = null;
+            ex.printStackTrace();
         }
     }
 
@@ -60,7 +62,7 @@ public class ProposedProjCost extends ActionForm{
             DecimalFormat format = new DecimalFormat();
             this.funAmount = format.format(funAmount);
         }catch(Exception ex){
-            this.funAmount = null;
+            ex.printStackTrace();
         }
     }
 

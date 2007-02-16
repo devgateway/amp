@@ -55,7 +55,7 @@
 	<classpathentry kind="lib" path="WEB-INF/lib/jdt-compiler.jar"/>
 	<classpathentry kind="lib" path="WEB-INF/lib/je.jar"/>
 	<classpathentry kind="lib" path="WEB-INF/lib/jel.jar"/>
-	<classpathentry kind="lib" path="WEB-INF/lib/jfreechart-1.0.0-rc3.jar"/>
+	<classpathentry sourcepath="/home/ika/distros/java/jfreechart-1.0.0-rc1/src" kind="lib" path="WEB-INF/lib/jfreechart-1.0.0-rc3.jar"/>
 	<classpathentry kind="lib" path="WEB-INF/lib/jgroups.jar"/>
 	<classpathentry kind="lib" path="WEB-INF/lib/jstl.jar"/>
 	<classpathentry kind="lib" path="WEB-INF/lib/jta-spec1_0_1.jar"/>

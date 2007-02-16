@@ -10,7 +10,6 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.digijava.module.aim.form.ThemeForm;
-import org.digijava.module.aim.helper.AllPrgIndicators;
 import org.digijava.module.aim.helper.AllMEIndicators;
 import org.digijava.module.aim.util.MEIndicatorsUtil;
 import org.digijava.module.aim.util.ProgramUtil;
@@ -39,39 +38,16 @@ public class EditAllIndicators extends Action {
 		
 		ThemeForm indThemeForm = (ThemeForm) form;
 		String type = request.getParameter("indicator");
+		
 		Long id = new Long(Long.parseLong(request.getParameter("indicatorId")));
-		AllPrgIndicators allPrgInd = new AllPrgIndicators();
 		AllMEIndicators allMEInd = new AllMEIndicators();
 		
-		if(type.equalsIgnoreCase("program"))
-		{
-			allPrgInd = ProgramUtil.getThemeIndicator(id);
-			indThemeForm.setIndicatorId(allPrgInd.getIndicatorId());
-			indThemeForm.setName(allPrgInd.getName());
-			indThemeForm.setCode(allPrgInd.getCode());
-			indThemeForm.setType(allPrgInd.getType());
-			indThemeForm.setCategory(allPrgInd.getCategory());
-			indThemeForm.setNpIndicator(allPrgInd.isNpIndicator());
-			indThemeForm.setSaveType("program");
-		}
 		if(type.equalsIgnoreCase("project"))
 		{
 			allMEInd = MEIndicatorsUtil.getMEIndicator(id);
 			indThemeForm.setIndicatorId(allMEInd.getAmpMEIndId());
 			indThemeForm.setName(allMEInd.getName());
 			indThemeForm.setCode(allMEInd.getCode());
-			indThemeForm.setSaveType("project");
-		}
-		if(type.equalsIgnoreCase("savePrg"))
-		{
-			allPrgInd.setIndicatorId(id);
-			allPrgInd.setName(indThemeForm.getName());
-			allPrgInd.setCode(indThemeForm.getCode());
-			allPrgInd.setType(indThemeForm.getType());
-			allPrgInd.setCategory(indThemeForm.getCategory());
-			allPrgInd.setNpIndicator(indThemeForm.isNpIndicator());
-			ProgramUtil.saveIndicator(allPrgInd);
-			return mapping.findForward("saving");
 		}
 		if(type.equalsIgnoreCase("saveProj"))
 		{

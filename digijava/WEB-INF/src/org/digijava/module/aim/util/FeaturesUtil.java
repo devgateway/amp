@@ -18,52 +18,21 @@ import org.digijava.module.aim.dbentity.AmpGlobalSettings;
 import org.digijava.module.aim.helper.Flag;
 
 public class FeaturesUtil {
-	
+
 	private static Logger logger = Logger.getLogger(FeaturesUtil.class);
-	
+
 	public static Collection getAMPFeatures() {
 		Session session = null;
 		Collection col = new ArrayList();
 		String qryStr = null;
 		Query qry = null;
-		
+
 		try {
 			session = PersistenceManager.getSession();
 			qryStr = "select f from " + AmpFeature.class.getName() + " f";
 			qry = session.createQuery(qryStr);
 			col = qry.list();
-				
-		} catch (Exception ex) {
-			logger.error("Exception : " + ex.getMessage());
-		} finally {
-			if (session != null) {
-				try {
-					PersistenceManager.releaseSession(session);
-				} catch (Exception rsf) {
-					logger.error("Release session failed :" + rsf.getMessage());
-				}
-			}
-		}
-		return col;
-	}	
-	
-	/**
-	 * Used to get the features which are currently active for AMP 
-	 * @return The collection of org.digijava.module.aim.dbentity.AmpFeature objects
-	 */
-	public static Collection getActiveFeatures() {
-		Session session = null;
-		Collection col = new ArrayList();
-		String qryStr = null;
-		Query qry = null;
-		
-		try {
-			session = PersistenceManager.getSession();
-			qryStr = "select f from " + AmpFeature.class.getName() + " f" +
-					" where f.active = true";
-			qry = session.createQuery(qryStr);
-			col = qry.list();
-				
+
 		} catch (Exception ex) {
 			logger.error("Exception : " + ex.getMessage());
 		} finally {
@@ -77,12 +46,43 @@ public class FeaturesUtil {
 		}
 		return col;
 	}
-	
+
+	/**
+	 * Used to get the features which are currently active for AMP
+	 * @return The collection of org.digijava.module.aim.dbentity.AmpFeature objects
+	 */
+	public static Collection getActiveFeatures() {
+		Session session = null;
+		Collection col = new ArrayList();
+		String qryStr = null;
+		Query qry = null;
+
+		try {
+			session = PersistenceManager.getSession();
+			qryStr = "select f from " + AmpFeature.class.getName() + " f" +
+					" where f.active = true";
+			qry = session.createQuery(qryStr);
+			col = qry.list();
+
+		} catch (Exception ex) {
+			logger.error("Exception : " + ex.getMessage());
+		} finally {
+			if (session != null) {
+				try {
+					PersistenceManager.releaseSession(session);
+				} catch (Exception rsf) {
+					logger.error("Release session failed :" + rsf.getMessage());
+				}
+			}
+		}
+		return col;
+	}
+
 	public static AmpFeature toggleFeature(Integer featureId) {
 		Session session = null;
 		Transaction tx = null;
 		AmpFeature feature = null;
-		
+
 		try {
 			session = PersistenceManager.getSession();
 			tx = session.beginTransaction();
@@ -111,13 +111,13 @@ public class FeaturesUtil {
 		}
 		return feature;
 	}
-	
+
 	public static Collection getAllCountries() {
 		Session session = null;
 		Collection col = new ArrayList();
 		String qryStr = null;
 		Query qry = null;
-		
+
 		try {
 			session = PersistenceManager.getSession();
 			qryStr = "select c.countryId,c.countryName from " + Country.class.getName() + " c order by c.countryName";
@@ -127,13 +127,13 @@ public class FeaturesUtil {
 				Object obj[] = (Object[]) itr.next();
 				Long cId = (Long) obj[0];
 				String cName = (String) obj[1];
-				org.digijava.module.aim.helper.Country 
+				org.digijava.module.aim.helper.Country
 					ctry = new org.digijava.module.aim.helper.Country();
 				ctry.setId(cId);
 				ctry.setName(cName);
 				col.add(ctry);
 			}
-			
+
 		} catch (Exception ex) {
 			logger.error("Exception : " + ex.getMessage());
 		} finally {
@@ -145,17 +145,17 @@ public class FeaturesUtil {
 				}
 			}
 		}
-		
-		return col; 
+
+		return col;
 	}
-	
+
 	public static Collection getAllCountryFlags() {
 		Session session = null;
 		Collection col = new ArrayList();
 		String qryStr = null;
 		Query qry = null;
 		String params = "";
-		
+
 		try {
 			session = PersistenceManager.getSession();
 			qryStr = "select f.countryId,f.defaultFlag from " + AmpSiteFlag.class.getName() + " f";
@@ -170,17 +170,17 @@ public class FeaturesUtil {
 					params += ",";
 				}
 				params += cId.longValue();
-				
+
 				f.setCntryId(cId);
 				f.setDefaultFlag(defFlag.booleanValue());
 				col.add(f);
 			}
-			
-			
+
+
 			if (params != null && params.trim().length() > 0) {
 				qryStr = "select c.countryId,c.countryName from " + Country.class.getName() + " c" +
 					" where c.countryId in (" + params + ")";
-			
+
 				qry = session.createQuery(qryStr);
 				itr = qry.list().iterator();
 				while (itr.hasNext()) {
@@ -188,7 +188,7 @@ public class FeaturesUtil {
 					Long cId = (Long) obj[0];
 					String cName = (String) obj[1];
 					long temp = cId.longValue();
-					
+
 					Iterator itr1 = col.iterator();
 					while (itr1.hasNext()) {
 						Flag f = (Flag) itr1.next();
@@ -196,8 +196,8 @@ public class FeaturesUtil {
 							f.setCntryName(cName);
 						}
 					}
-					
-				}				
+
+				}
 			}
 		} catch (Exception ex) {
 			logger.error("Exception : " + ex.getMessage());
@@ -210,14 +210,14 @@ public class FeaturesUtil {
 				}
 			}
 		}
-		
-		return col; 		
+
+		return col;
 	}
-	
+
 	public static AmpSiteFlag getAmpSiteFlag(Long id) {
 		Session session = null;
 		AmpSiteFlag flag = null;
-		
+
 		try {
 			session = PersistenceManager.getSession();
 			flag = (AmpSiteFlag) session.get(AmpSiteFlag.class,id);
@@ -232,21 +232,21 @@ public class FeaturesUtil {
 				}
 			}
 		}
-		
-		return flag; 		
+
+		return flag;
 	}
-	
+
 	public static byte[] getFlag(Long id) {
 		Session session = null;
 		byte flag[] = null;
-		
+
 		try {
 			session = PersistenceManager.getSession();
 			AmpSiteFlag tmp = (AmpSiteFlag) session.get(AmpSiteFlag.class,id);
 			if (tmp != null) {
 				flag = tmp.getFlag();
 			}
-			
+
 		} catch (Exception ex) {
 			logger.error("Exception : " + ex.getMessage());
 		} finally {
@@ -258,16 +258,16 @@ public class FeaturesUtil {
 				}
 			}
 		}
-		
-		return flag; 				
+
+		return flag;
 	}
-	
+
 	public static byte[] getDefaultFlag() {
 		Session session = null;
 		byte flag[] = null;
 		String qryStr = null;
 		Query qry = null;
-		
+
 		try {
 			qryStr = "select f from " + AmpSiteFlag.class.getName() + " f " +
 					"where f.defaultFlag=true";
@@ -281,7 +281,7 @@ public class FeaturesUtil {
 			if (sf != null) {
 				flag = sf.getFlag();
 			}
-			
+
 		} catch (Exception ex) {
 			logger.error("Exception : " + ex.getMessage());
 		} finally {
@@ -293,16 +293,16 @@ public class FeaturesUtil {
 				}
 			}
 		}
-		
-		return flag; 				
-	}	
-	
+
+		return flag;
+	}
+
 	public static boolean defaultFlagExist() {
 		Session session = null;
 		boolean exist = false;
 		String qryStr = null;
 		Query qry = null;
-		
+
 		try {
 			qryStr = "select count(*) from " + AmpSiteFlag.class.getName() + " f " +
 					"where f.defaultFlag=true";
@@ -311,12 +311,12 @@ public class FeaturesUtil {
 			Iterator itr = qry.list().iterator();
 			Integer num = null;
 			if (itr.hasNext()) {
-				num = (Integer) itr.next(); 
+				num = (Integer) itr.next();
 			}
 			if (num.intValue() > 0) {
 				exist = true;
 			}
-			
+
 		} catch (Exception ex) {
 			logger.error("Exception : " + ex.getMessage());
 		} finally {
@@ -328,10 +328,10 @@ public class FeaturesUtil {
 				}
 			}
 		}
-		
-		return exist;		
+
+		return exist;
 	}
-	
+
 	public static void setDefaultFlag(Long id) {
 		Session session = null;
 		Transaction tx = null;
@@ -340,7 +340,7 @@ public class FeaturesUtil {
 		try {
 			session = PersistenceManager.getSession();
 			qryStr = "select s from " + AmpSiteFlag.class.getName() + " s " +
-					"where s.defaultFlag=true";			
+					"where s.defaultFlag=true";
 			qry = session.createQuery(qryStr);
 			Iterator itr = qry.list().iterator();
 			AmpSiteFlag defFlag = null;
@@ -353,7 +353,7 @@ public class FeaturesUtil {
 			session.update(newDefFlag);
 			if (defFlag != null) {
 				defFlag.setDefaultFlag(false);
-				session.update(defFlag);				
+				session.update(defFlag);
 			}
 			tx.commit();
 		} catch (Exception ex) {
@@ -394,7 +394,7 @@ public class FeaturesUtil {
 				qryStr = "select gs from " + AmpGlobalSettings.class.getName() + " gs " ;
 				qry = session.createQuery(qryStr);
 				coll=qry.list();
-				
+
 		}
 		catch (Exception ex) {
 			logger.error("Exception : " + ex.getMessage());
@@ -432,7 +432,7 @@ public class FeaturesUtil {
 			qryStr = "select cn from " + Country.class.getName() + " cn order by cn.countryName" ;
 			qry = session.createQuery(qryStr);
 			col=qry.list();
-			
+
 			}
 			catch (Exception ex) {
 				logger.error("Exception : " + ex.getMessage());
@@ -455,7 +455,7 @@ public class FeaturesUtil {
 			}
 		return col;
 	}
-	/* 
+	/*
 	 * to get the country ISO that is set as a default value...
 	 */
 	public static Collection getDefaultCountryISO()
@@ -470,7 +470,7 @@ public class FeaturesUtil {
 			qryStr = "select gs from " + AmpGlobalSettings.class.getName() + " gs where gs.globalSettingsName = 'Default Country' " ;
 			qry = session.createQuery(qryStr);
 			col=qry.list();
-			
+
 			}
 			catch (Exception ex) {
 				logger.error("Exception : " + ex.getMessage());
@@ -510,7 +510,7 @@ public class FeaturesUtil {
 			qryStr = "select cn from " + Country.class.getName() + " cn where cn.iso = '"+ ISO +"'" ;
 			qry = session.createQuery(qryStr);
 			col=qry.list();
-			
+
 			}
 			catch (Exception ex) {
 				logger.error("Exception : " + ex.getMessage());

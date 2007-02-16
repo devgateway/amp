@@ -51,6 +51,10 @@ public class ParisIndicatorManager extends Action
 			AmpAhsurveyIndicator surveyInd = new AmpAhsurveyIndicator();
 			surveyInd.setIndicatorNumber(null);
 			surveyInd.setName(null);
+			parisForm.setAddNewIndicatorText(null);
+			parisForm.setAddNewIndicatorCode(null);
+			parisForm.setPiQuestionGot(null);
+			parisForm.setPiQuestId(null);
 			AmpAhsurveyQuestion surveyQuestion = new AmpAhsurveyQuestion();
 			surveyQuestion.setQuestionText(null);
 			surveyQuestion.setQuestionNumber(null);
@@ -81,7 +85,7 @@ public class ParisIndicatorManager extends Action
 		 * create is got from the JSP
 		 */
 		String create = request.getParameter("create");
-		logger.info("this is create..............."+create);
+		logger.info("this is create( parisIndicatorManager action )..............."+create);
 		if(create!=null && create.equals("new"))
 		{
 			//logger.info("pid.. : "+parisForm.getIndicatorvalue());

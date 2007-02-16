@@ -41,16 +41,12 @@ public class CloseThemeIndicator extends Action
 		themeForm.setName(null);
 		themeForm.setCode(null);
 		themeForm.setType(null);
+		themeForm.setCreationDate(null);
 		themeForm.setCategory(0);
 		themeForm.setNpIndicator(false);
 		themeForm.setIndicatorDescription(null);
 		themeForm.setPrgIndValues(null);
 		themeForm.setThemeId(null);
-		/*
-		themeForm.setValueType(0);
-		themeForm.setProgramType(null);
-		themeForm.setCreationDate(null);
-		*/
 		return mapping.findForward("forward");
 	}
 }

@@ -42,6 +42,17 @@
 </div>
 
 
+
+
+					<bean:define id="translation">
+						<digi:trn key="aim:clickToAddNewActivity">Click here to Add New Activity</digi:trn>
+					</bean:define>
+					<div title='<%=translation%>'>
+					<digi:link href="/addActivity.do~pageId=1~reset=true~action=create">
+					<digi:trn key="aim:addActivity">
+					Add Activity</digi:trn></digi:link></div>
+
+
 <script type="text/javascript">
 var tabViewObj = new DHTMLSuite.tabView();
 tabViewObj.setParentId('myTabs');

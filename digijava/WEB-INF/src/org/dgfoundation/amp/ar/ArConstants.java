@@ -21,6 +21,7 @@ public final class ArConstants {
 		new MetaInfo(GenericViews.PDF,"org.dgfoundation.amp.ar.view.pdf."),
 		new MetaInfo(GenericViews.PRINT,"/repository/aim/view/ar/print/"),
 		new MetaInfo(GenericViews.TREE,"/repository/aim/view/ar/tree/"),
+		new MetaInfo(GenericViews.FOLDABLE,"/repository/aim/view/ar/foldable/"),		
 		};
 
 	public final static MetaInfo []suffixes=new MetaInfo[] {
@@ -29,6 +30,7 @@ public final class ArConstants {
 		new MetaInfo(GenericViews.PDF,"PDF"),
 		new MetaInfo(GenericViews.PRINT,".jsp"),
 		new MetaInfo(GenericViews.TREE,".jsp"),
+		new MetaInfo(GenericViews.FOLDABLE,".jsp"),		
 		};
 
 	//metainfo categs:

@@ -242,7 +242,7 @@
 			<put-item name="headerMiddle" file="headerMiddle.jsp"/>
 			<put-item name="dropdownLangSwitch" module="translation" instance="default" teaser="dropdownLangSwitch"/>
 			<put-item name="myDesktop" module="aim" instance="default" teaser="myDesktop"/>
-			<put-item name="myTabs" module="aim" instance="default" teaser="myTabs"/>/>
+
 			<put-item name="myReports" module="aim" instance="default" teaser="myReports"/>
 			<put-item name="myLinks" module="aim" instance="default" teaser="myLinks"/>
 			<put-item name="myTeamMembers" module="aim" instance="default" teaser="myTeamMembers"/>
@@ -252,7 +252,8 @@
 
 		<layout name="desktopLayout" extends="userHomeLayout">
 			<put name="title">- My Desktop</put>
-			<put-item name="body" module="aim" instance="default" teaser="myDesktop"/>
+			<put-item name="body" module="aim" instance="default" teaser="myTabs"/>/>			
+<!-- 			<put-item name="body" module="aim" instance="default" teaser="myDesktop"/> -->
 		</layout>
 
 		<layout name="portfolioDashboardLayout" extends="desktopLayout">

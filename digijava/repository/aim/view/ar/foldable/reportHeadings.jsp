@@ -9,11 +9,6 @@
 <bean:define id="columnReport" name="viewable" type="org.dgfoundation.amp.ar.ColumnReportData" scope="request" toScope="page"/>
 <bean:define id="reportMeta" name="reportMeta" type="org.digijava.module.aim.dbentity.AmpReports" scope="session" toScope="page"/>
 
-<script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/arFunctions.js"/>"></script>
-
-<tr><td colspan='<bean:write name="columnReport" property="totalDepth"/>'>
-<i><bean:write name="columnReport" property="name"/></i>
-</td></tr>
 
 <%int rowIdx = 2;%>
 
@@ -33,10 +28,17 @@
 	<td align="center" class=clsTableTitleCol rowspan="<%=rowsp%>" colspan='<bean:write name="subColumn" property="width"/>'>
 	
 	<logic:equal name="column" property="columnDepth" value="1">
+	
+	<logic:equal name="widget" scope="request" value="true">
+	<a styleClass="reportHeading" onclick="tabViewObj.addContentToTab('<bean:write name="reportMeta" property="name"/>','/aim/viewNewAdvancedReport.do~applySorter=true~view=reset~viewFormat=foldable~ampReportId=<bean:write name="reportMeta" property="ampReportId"/>~widget=true~sortBy=<bean:write name="column" property="name"/>');">
+		<%=subColumn.getName(reportMeta.getHideActivities())%>
+	</a>
+	</logic:equal>
+	<logic:notEqual name="widget" scope="request" value="true">			
 	<html:link styleClass="reportHeading" page="/viewNewAdvancedReport.do" paramName="column" paramProperty="name" paramId="sortBy">
-		<%=subColumn.getName(reportMeta
-													.getHideActivities())%>
+		<%=subColumn.getName(reportMeta.getHideActivities())%>
 	</html:link>
+	</logic:notEqual>
 	<c:if test="${column.name == columnReport.sorterColumn}">
 	<logic:equal name="columnReport" property="sortAscending" value="false">
 	<img src= "../ampTemplate/images/down.gif" align="absmiddle" border="0"/>
@@ -60,24 +62,3 @@
 <%}
 			%>
 </logic:equal>
-
-<!-- generate report data -->
-
-<logic:notEqual name="reportMeta" property="hideActivities" value="true">
-<logic:iterate name="columnReport" property="ownerIds" id="ownerId" scope="page">
-<%rowIdx++;
-					%>
-<tr onmousedown="setPointer(this, <%=rowIdx%>, 'click', '#FFFFFF', '#FFFFFF', '#FFFF00');">
-	<logic:iterate name="columnReport" property="items" id="column" scope="page">
-		<bean:define id="viewable" name="column" type="org.dgfoundation.amp.ar.Viewable" scope="page" toScope="request"/>
-		<bean:define id="ownerId" name="ownerId" type="java.lang.Long" scope="page" toScope="request"/>
-		<jsp:include page="<%=viewable.getViewerPath()%>"/>	
-	</logic:iterate>
-</tr>
-</logic:iterate>
-</logic:notEqual>
-
-
-<!-- generate total row -->
-<bean:define id="viewable" name="columnReport" type="org.dgfoundation.amp.ar.ColumnReportData" scope="page" toScope="request"/>
-<jsp:include page="TrailCells.jsp"/>

@@ -35,7 +35,7 @@
  				Click on one of the buttons below, to open a drilldown tab:<br/>
 			<logic:iterate name="myReports" id="report" scope="session" type="org.digijava.module.aim.dbentity.AmpReports"> 
 			<logic:equal name="report" property="drilldownTab" value="true">
-                <input type="button" value="<bean:write name="report" property="name"/>" onclick="tabViewObj.createNewTab('myTabs','<bean:write name="report" property="name"/>','','/aim/viewNewAdvancedReport.do~view=reset~viewFormat=tree~ampReportId=<bean:write name="report" property="ampReportId"/>~widget=true',true);return false"/>&nbsp;
+                <input type="button" value="<bean:write name="report" property="name"/>" onclick="tabViewObj.createNewTab('myTabs','<bean:write name="report" property="name"/>','','/aim/viewNewAdvancedReport.do~view=reset~viewFormat=foldable~ampReportId=<bean:write name="report" property="ampReportId"/>~widget=true',true);return false"/>&nbsp;
 			</logic:equal>
 			</logic:iterate>
 </div>

@@ -61,12 +61,6 @@
 							<TD align=center vAlign=top>
 								<TABLE width="100%" cellPadding=0 cellSpacing=0 vAlign="top" align="left" border="0">
 									<TR>
-										<TD colspan="2" vAlign="top" align="left" width="75%" class=r-dotted-lg>
-											<digi:insert attribute="myTabs" />
-										</TD>
-									</TR>
-									
-									<TR>
 										<TD vAlign="top" align="left" width="75%" class=r-dotted-lg>
 											<digi:insert attribute="body" />
 										</TD>

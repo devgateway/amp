@@ -250,8 +250,6 @@ public class GroupReportData extends ReportData {
 
 	
 	/**
-	 * UGLY :(
-	 * @deprecated
 	 * @return the first column report found in this tree
 	 */
 	public ColumnReportData getFirstColumnReport() {

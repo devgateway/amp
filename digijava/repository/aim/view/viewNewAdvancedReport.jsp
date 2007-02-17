@@ -104,6 +104,8 @@
 </script>
 	</logic:equal>
 
+<logic:notEqual name="widget" scope="request" value="true">
+
 	<tr>
 		<td align="left"><font size="+1">Report Name: <b><bean:write
 			scope="session" name="reportMeta" property="name" /></b></font></td>
@@ -115,14 +117,14 @@
 			property="reportDescription" /></i></td>
 	</tr>
 
-
+</logic:notEqual>
 
 
 	<logic:notEqual name="report" property="totalUniqueRows" value="0">
 		<tr>
 			<td><!-- begin big report table -->
 
-			<table class=clsInnerTable cellSpacing=0 cellPadding=0 width="100%"
+			<table id='reportTable' class=clsInnerTable cellSpacing=0 cellPadding=0 width="100%"
 				border=0>
 				<bean:define id="viewable" name="report"
 					type="org.dgfoundation.amp.ar.Viewable" toScope="request" />
@@ -173,6 +175,38 @@ function closeMessage()
 {
 	messageObj.close();	
 }
+
+
+function writeError(str, append)
+{
+  var dbgObj = document.getElementById("debug");
+  dbgObj.innerHTML = append? (dbgObj.innerHTML + str): str;
+}
+
+function toggleRows(caller,hideId){
+	if(caller.value=='Show') caller.value='Hide'; else caller.value='Show';
+	var display= (caller.value!='Hide')? 'none':'';
+	tb = document.getElementById('reportTable');
+	
+	var len = tb.rows.length;
+	var found=false;
+	var hideDepth=document.getElementById(hideId).title;
+	
+
+	//writeError(+"<br/>", true);
+	for(i=1 ; i< len; i++){
+		var rowDepth=tb.rows[i].title;
+ 		if(tb.rows[i].id!=null && tb.rows[i].id==hideId && !found) {
+		found=true;continue;
+		}
+		if(rowDepth<=hideDepth && tb.rows[i].id!='' && tb.rows[i].id!=hideId && found) {
+		break;
+		}
+		if (found) tb.rows[i].style.display = display;
+	}
+}
+
+
 </script>
 
 <div id="debug"></div>

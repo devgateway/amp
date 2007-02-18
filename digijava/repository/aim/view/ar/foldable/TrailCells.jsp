@@ -12,8 +12,11 @@
 <!-- generate total row -->
 <tr id='<bean:write name="reportData" property="absoluteReportName"/>' title='<bean:write name="reportData" property="levelDepth"/>'>
 	<td class=clsTableL1SubTotalEndSectionLabel colspan='<bean:write name="reportData" property="sourceColsCount"/>'>
-<c:if test="${!(reportData.name == reportMeta.name)}">	
-		<input type="button" name="switcherButton" alt="<bean:write name="reportData" property="levelDepth"/>" value="Hide" onclick='toggleRows(this,"<bean:write name="reportData" property="absoluteReportName"/>")'/>
+<c:if test="${!(reportData.name == reportMeta.name)}">
+<%for(int i=2;i<reportData.getLevelDepth();i++) {%>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<% } %>
+		<input type="button" name="switcherButton" alt="<bean:write name="reportData" property="levelDepth"/>" value="-" onclick='toggleRows(this,"<bean:write name="reportData" property="absoluteReportName"/>")'/>
 </c:if>		
 <b>
 <bean:write name="reportData" property="name"/>

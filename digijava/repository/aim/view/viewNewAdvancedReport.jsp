@@ -80,7 +80,8 @@
 		</tr>
 	<tr> <td>&nbsp;</td></tr>
 	</logic:notEmpty>
-	
+
+	<logic:notEqual name="widget" scope="request" value="true">	
 	<tr>
 		<td><bean:define id="reportMeta" name="reportMeta"
 			type="org.digijava.module.aim.dbentity.AmpReports" scope="session"
@@ -90,8 +91,8 @@
 							.getNote(session)%></li>
 		</ul>
 		</td>
-
 	</tr>
+	</logic:notEqual>
 
 	<logic:equal name="viewFormat" scope="request" value="print">
 		<script language="JavaScript">
@@ -184,8 +185,8 @@ function writeError(str, append)
 }
 
 function toggleRows(caller,hideId){
-	if(caller.value=='Show') caller.value='Hide'; else caller.value='Show';
-	var display= (caller.value!='Hide')? 'none':'';
+	if(caller.value=='+') caller.value='-'; else caller.value='+';
+	var display= (caller.value!='-')? 'none':'';
 	tb = document.getElementById('reportTable');
 	
 	var len = tb.rows.length;

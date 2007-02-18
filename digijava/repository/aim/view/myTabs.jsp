@@ -56,7 +56,8 @@
 <script type="text/javascript">
 var tabViewObj = new DHTMLSuite.tabView();
 tabViewObj.setParentId('myTabs');
-tabViewObj.setIndexActiveTab(0);
 tabViewObj.setTabTitles(Array('My Tabs'));
 tabViewObj.init();
+tabViewObj.createNewTab('myTabs','By Sector','','/aim/viewNewAdvancedReport.do~view=reset~viewFormat=foldable~ampReportId=10~widget=true',true);
+tabViewObj.setIndexActiveTab(1);
 </script>

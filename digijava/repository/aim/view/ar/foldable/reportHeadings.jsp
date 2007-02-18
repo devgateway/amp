@@ -30,12 +30,12 @@
 	<logic:equal name="column" property="columnDepth" value="1">
 	
 	<logic:equal name="widget" scope="request" value="true">
-	<a styleClass="reportHeading" onclick="tabViewObj.addContentToTab('<bean:write name="reportMeta" property="name"/>','/aim/viewNewAdvancedReport.do~applySorter=true~view=reset~viewFormat=foldable~ampReportId=<bean:write name="reportMeta" property="ampReportId"/>~widget=true~sortBy=<bean:write name="column" property="name"/>');">
+	<a onclick="tabViewObj.addContentToTab('<bean:write name="reportMeta" property="name"/>','/aim/viewNewAdvancedReport.do~applySorter=true~view=reset~viewFormat=foldable~ampReportId=<bean:write name="reportMeta" property="ampReportId"/>~widget=true~sortBy=<bean:write name="column" property="name"/>');">
 		<%=subColumn.getName(reportMeta.getHideActivities())%>
 	</a>
 	</logic:equal>
 	<logic:notEqual name="widget" scope="request" value="true">			
-	<html:link styleClass="reportHeading" page="/viewNewAdvancedReport.do" paramName="column" paramProperty="name" paramId="sortBy">
+	<html:link page="/viewNewAdvancedReport.do" paramName="column" paramProperty="name" paramId="sortBy">
 		<%=subColumn.getName(reportMeta.getHideActivities())%>
 	</html:link>
 	</logic:notEqual>

@@ -23,12 +23,12 @@
 <%int rowIdx = 0;%>
 <logic:notEqual name="reportMeta" property="hideActivities" value="true">
 <logic:iterate name="columnReport" property="ownerIds" id="ownerId" scope="page">
-<%rowIdx++;
-					%>
+<%rowIdx++;%>
 <tr onmousedown="setPointer(this, <%=rowIdx%>, 'click', '#FFFFFF', '#FFFFFF', '#FFFF00');">
-	<logic:iterate name="columnReport" property="items" id="column" scope="page">
+	<logic:iterate name="columnReport" property="items" id="column" scope="page" indexId="columnNo">
 		<bean:define id="viewable" name="column" type="org.dgfoundation.amp.ar.Viewable" scope="page" toScope="request"/>
 		<bean:define id="ownerId" name="ownerId" type="java.lang.Long" scope="page" toScope="request"/>
+		<bean:define id="columnNo" name="columnNo" type="java.lang.Integer" scope="page" toScope="request"/>		
 		<jsp:include page="<%=viewable.getViewerPath()%>"/>	
 	</logic:iterate>
 </tr>

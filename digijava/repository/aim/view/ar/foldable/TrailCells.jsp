@@ -16,7 +16,7 @@
 <%for(int i=2;i<reportData.getLevelDepth();i++) {%>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 <% } %>
-		<input type="button" name="switcherButton" alt="<bean:write name="reportData" property="levelDepth"/>" value="-" onclick='toggleRows(this,"<bean:write name="reportData" property="absoluteReportName"/>")'/>
+		<img style="cursor:pointer" src="/repository/aim/view/images/images_dhtmlsuite/dhtmlgoodies_minus.gif" alt='shown' onclick='toggleRows(this,"<bean:write name="reportData" property="absoluteReportName"/>")' title="<bean:write name="reportData" property="levelDepth"/>" border="0" width="20"/>
 </c:if>		
 <b>
 <bean:write name="reportData" property="name"/>

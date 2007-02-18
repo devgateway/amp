@@ -59,5 +59,7 @@ tabViewObj.setParentId('myTabs');
 tabViewObj.setTabTitles(Array('My Tabs'));
 tabViewObj.init();
 tabViewObj.createNewTab('myTabs','By Sector','','/aim/viewNewAdvancedReport.do~view=reset~viewFormat=foldable~ampReportId=10~widget=true',true);
+tabViewObj.createNewTab('myTabs','By Project','','/aim/viewNewAdvancedReport.do~view=reset~viewFormat=foldable~ampReportId=34~widget=true',true);
+tabViewObj.createNewTab('myTabs','By Status','','/aim/viewNewAdvancedReport.do~view=reset~viewFormat=foldable~ampReportId=35~widget=true',true);
 tabViewObj.setIndexActiveTab(1);
 </script>

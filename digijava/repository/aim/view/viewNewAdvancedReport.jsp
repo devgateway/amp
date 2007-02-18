@@ -53,33 +53,6 @@
 	</logic:notEqual>
 
 
-	<logic:notEmpty name="reportMeta" property="hierarchies">
-	<tr>
-		
-
-			<td>
-			<div id="menucontainer">
-			<input type="button" value="Hierarchy Sorting" 
-			onclick="displayStaticMessage(document.getElementById('sorterPicker-<bean:write name="reportMeta" property="ampReportId"/>').innerHTML,false);return false"
-			/>
-
-			</div>
-			
-		</tr>
-		
-		<tr>
-			<td>
-				<logic:notEmpty name="report" property="levelSorters">
-				<logic:iterate name="report" property="levelSorters" id="sorter" indexId="levelId">
-				<logic:present name="sorter">
-					Level <bean:write name="levelId"/> sorted by <bean:write name="sorter"/><br/>
-				</logic:present>					
-				</logic:iterate>
-				</logic:notEmpty>
-			</td>		
-		</tr>
-	<tr> <td>&nbsp;</td></tr>
-	</logic:notEmpty>
 
 	<logic:notEqual name="widget" scope="request" value="true">	
 	<tr>
@@ -119,6 +92,36 @@
 	</tr>
 
 </logic:notEqual>
+
+<logic:notEmpty name="reportMeta" property="hierarchies">
+	<tr>
+		
+
+			<td>
+			<div id="menucontainer">
+			<a style="cursor:pointer"
+			onclick="displayStaticMessage(document.getElementById('sorterPicker-<bean:write name="reportMeta" property="ampReportId"/>').innerHTML,false);return false">
+			<u>Hierarchy Sorting</u>
+			</a>
+
+			</div>
+			
+		</tr>
+		
+		<tr>
+			<td>
+				<logic:notEmpty name="report" property="levelSorters">
+				<logic:iterate name="report" property="levelSorters" id="sorter" indexId="levelId">
+				<logic:present name="sorter">
+					Level <bean:write name="levelId"/> sorted by <bean:write name="sorter"/><br/>
+				</logic:present>					
+				</logic:iterate>
+				</logic:notEmpty>
+			</td>		
+		</tr>
+	<tr> <td>&nbsp;</td></tr>
+	</logic:notEmpty>
+
 
 
 	<logic:notEqual name="report" property="totalUniqueRows" value="0">
@@ -185,10 +188,13 @@ function writeError(str, append)
 }
 
 function toggleRows(caller,hideId){
-	if(caller.value=='+') caller.value='-'; else caller.value='+';
-	var display= (caller.value!='-')? 'none':'';
+ 	var minus='/repository/aim/view/images/images_dhtmlsuite/dhtmlgoodies_minus.gif';
+ 	var plus='/repository/aim/view/images/images_dhtmlsuite/dhtmlgoodies_plus.gif';
+	if(caller.alt=='hidden') {caller.alt='shown';caller.src=minus;} else {caller.alt='hidden'; caller.src=plus;}
+	var display= (caller.alt!='shown')? 'none':'';
 	tb = document.getElementById('reportTable');
-	
+	//writeError(caller.src+' '+display+"<br/>", true);
+
 	var len = tb.rows.length;
 	var found=false;
 	var hideDepth=document.getElementById(hideId).title;
@@ -209,5 +215,8 @@ function toggleRows(caller,hideId){
 
 
 </script>
+
+
+	
 
 <div id="debug"></div>

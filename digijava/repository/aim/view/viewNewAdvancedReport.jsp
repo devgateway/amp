@@ -6,28 +6,7 @@
 <%@ taglib uri="/taglib/digijava" prefix="digi"%>
 <%@ taglib uri="/taglib/jstl-core" prefix="c"%>
 
-<link rel="stylesheet"
-	href="<digi:file src="module/aim/css/newamp.css"/>" />
-
-<!-- this is for the nice tooltip widgets -->
-<DIV id="TipLayer"
-	style="visibility:hidden;position:absolute;z-index:1000;top:-100;"></DIV>
-<script language="JavaScript1.2" type="text/javascript"
-	src="<digi:file src="module/aim/scripts/dscript120_ar_style.js"/>"></script>
-<!-- script for tree-like view (drilldown reports) -->
-
-<script language="JavaScript" type="text/javascript"
-	src="<digi:file src="module/aim/scripts/arFunctions.js"/>"></script>
-
-<script type="text/javascript" src="<digi:file src="module/aim/scripts/ajax.js"/>"></script>
-<script type="text/javascript" src="<digi:file src="module/aim/scripts/dhtml-suite-for-applications.js"/>"></script>
-
-<!-- dynamic tooltip -->
-<script type="text/javascript" src="<digi:file src="module/aim/scripts/separateFiles/dhtmlSuite-dynamicContent.js"/>"></script>
-<script type="text/javascript" src="<digi:file src="module/aim/scripts/separateFiles/dhtmlSuite-dynamicTooltip.js"/>"></script>
-
-<link rel="stylesheet"
-	href="<digi:file src="module/aim/view/css/css_dhtmlsuite/modal-message.css"/>" />
+<jsp:include page="/repository/aim/view/ar/reportsScripts.jsp"/>
 
 <div style='position:relative;display:none;' id="sorterPicker-<bean:write name="reportMeta" property="ampReportId"/>">
 		<b>Please select hierarchy sorter criteria:</b><br/>
@@ -147,74 +126,7 @@
 </table>
 
 
-<script type="text/javascript">
-messageObj = new DHTMLSuite.modalMessage();	// We only create one object of this class
-messageObj.setWaitMessage('Loading message - please wait....');
-messageObj.setShadowOffset(5);	// Large shadow
 
-DHTMLSuite.commonObj.setCssCacheStatus(false);
-
-function displayMessage(url)
-{	
-	messageObj.setSource(url);
-	messageObj.setCssClassMessageBox(false);
-	messageObj.setSize(400,200);
-	messageObj.setShadowDivVisible(true);	// Enable shadow for these boxes
-	messageObj.display();
-}
-
-function displayStaticMessage(messageContent,cssClass)
-{
-	messageObj.setHtmlContent(messageContent);
-	messageObj.setSize(400,150);
-	messageObj.setCssClassMessageBox(cssClass);
-	messageObj.setSource(false);	// no html source since we want to use a static message here.
-	messageObj.setShadowDivVisible(false);	// Disable shadow for these boxes	
-	messageObj.display();
-	
-	
-}
-
-function closeMessage()
-{
-	messageObj.close();	
-}
-
-
-function writeError(str, append)
-{
-  var dbgObj = document.getElementById("debug");
-  dbgObj.innerHTML = append? (dbgObj.innerHTML + str): str;
-}
-
-function toggleRows(caller,hideId){
- 	var minus='/repository/aim/view/images/images_dhtmlsuite/dhtmlgoodies_minus.gif';
- 	var plus='/repository/aim/view/images/images_dhtmlsuite/dhtmlgoodies_plus.gif';
-	if(caller.alt=='hidden') {caller.alt='shown';caller.src=minus;} else {caller.alt='hidden'; caller.src=plus;}
-	var display= (caller.alt!='shown')? 'none':'';
-	tb = document.getElementById('reportTable');
-	//writeError(caller.src+' '+display+"<br/>", true);
-
-	var len = tb.rows.length;
-	var found=false;
-	var hideDepth=document.getElementById(hideId).title;
-	
-
-	//writeError(+"<br/>", true);
-	for(i=1 ; i< len; i++){
-		var rowDepth=tb.rows[i].title;
- 		if(tb.rows[i].id!=null && tb.rows[i].id==hideId && !found) {
-		found=true;continue;
-		}
-		if(rowDepth<=hideDepth && tb.rows[i].id!='' && tb.rows[i].id!=hideId && found) {
-		break;
-		}
-		if (found) tb.rows[i].style.display = display;
-	}
-}
-
-
-</script>
 
 
 	

@@ -36,7 +36,7 @@
 			</logic:notEqual>
 			<logic:equal name="widget" scope="request" value="true">			
 			<td><input type="button" name="applySorter" value="Apply Sorting" 
-			onclick="tabViewObj.addContentToTab('<bean:write name="reportMeta" property="name"/>','/aim/viewNewAdvancedReport.do~applySorter=true~view=reset~viewFormat=foldable~ampReportId=<bean:write name="reportMeta" property="ampReportId"/>~widget=true~levelPicked='+levelPicked.options[levelPicked.selectedIndex].value+'~levelSorter='+levelSorter.options[levelSorter.selectedIndex].value);closeMessage();"/>
+			onclick="changeTabUrl('MyTabs','Tab-<bean:write name="reportMeta" property="name"/>','/aim/viewNewAdvancedReport.do~applySorter=true~viewFormat=foldable~ampReportId=<bean:write name="reportMeta" property="ampReportId"/>~widget=true~levelPicked='+levelPicked.options[levelPicked.selectedIndex].value+'~levelSorter='+levelSorter.options[levelSorter.selectedIndex].value);closeMessage();"/>
 			</td>
 			</logic:equal>
 		</tr>

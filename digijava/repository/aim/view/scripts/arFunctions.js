@@ -1,3 +1,31 @@
+function toggleRows(caller,hideId){
+ 	var minus='/repository/aim/view/images/images_dhtmlsuite/dhtmlgoodies_minus.gif';
+ 	var plus='/repository/aim/view/images/images_dhtmlsuite/dhtmlgoodies_plus.gif';
+	if(caller.alt=='hidden') {caller.alt='shown';caller.src=minus;} else {caller.alt='hidden'; caller.src=plus;}
+	var display= (caller.alt!='shown')? 'none':'';
+	tb = document.getElementById('reportTable');
+	//writeError(caller.src+' '+display+"<br/>", true);
+
+	var len = tb.rows.length;
+	var found=false;
+	var hideDepth=document.getElementById(hideId).title;
+	
+
+	//writeError(+"<br/>", true);
+	for(i=1 ; i< len; i++){
+		var rowDepth=tb.rows[i].title;
+ 		if(tb.rows[i].id!=null && tb.rows[i].id==hideId && !found) {
+		found=true;continue;
+		}
+		if(rowDepth<=hideDepth && tb.rows[i].id!='' && tb.rows[i].id!=hideId && found) {
+		break;
+		}
+		if (found) tb.rows[i].style.display = display;
+	}
+}
+
+
+
 var lastClickedRow=-1;
 
 /**

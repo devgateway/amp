@@ -11,11 +11,8 @@
 
 <!-- generate total row -->
 <tr id='<bean:write name="reportData" property="absoluteReportName"/>' title='<bean:write name="reportData" property="levelDepth"/>'>
-	<td class=clsTableL1SubTotalEndSectionLabel colspan='<bean:write name="reportData" property="sourceColsCount"/>'>
+	<td style="padding-left:<%=10*(reportData.getLevelDepth()-1)%>" class=clsTableL1SubTotalEndSectionLabel colspan='<bean:write name="reportData" property="sourceColsCount"/>'>
 <c:if test="${!(reportData.name == reportMeta.name)}">
-<%for(int i=2;i<reportData.getLevelDepth();i++) {%>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-<% } %>
 		<img style="cursor:pointer" src="/repository/aim/view/images/images_dhtmlsuite/dhtmlgoodies_minus.gif" alt='shown' onclick='toggleRows(this,"<bean:write name="reportData" property="absoluteReportName"/>")' title="<bean:write name="reportData" property="levelDepth"/>" border="0" width="20"/>
 </c:if>		
 <b>

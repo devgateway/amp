@@ -2357,7 +2357,7 @@ public class DbUtil {
 			AmpTheme themeToBeDeleted = (AmpTheme) sess.get(AmpTheme.class, themeId);	
 			//qry = sess.createQuery(queryString);
 			//qry.setParameter("themeId", themeId, Hibernate.LONG);
-			Iterator itr = themeToBeDeleted.getActivityPrograms().iterator();//qry.list().iterator();
+			Iterator itr = themeToBeDeleted.getActivities().iterator();
 			col = new ArrayList();
 			while (itr.hasNext()) {
 				col.add(itr.next());

@@ -16,7 +16,13 @@
 		<img style="cursor:pointer" src="/repository/aim/view/images/images_dhtmlsuite/dhtmlgoodies_minus.gif" alt='shown' onclick='toggleRows(this,"<bean:write name="reportData" property="absoluteReportName"/>")' title="<bean:write name="reportData" property="levelDepth"/>" border="0" width="20"/>
 </c:if>		
 <b>
+<% if(reportData.getName().indexOf(':')!=-1) { %>
+<%=reportData.getName().substring(reportData.getName().indexOf(':')+1,reportData.getName().length())%>
+
+<% } else { %>
 <bean:write name="reportData" property="name"/>
+<% } %>
+
 </b>
 	</td>
 	<logic:iterate name="reportData" property="trailCells" id="cell" scope="page">

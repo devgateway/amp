@@ -66,7 +66,7 @@ public class AddSubPrgIndicator extends Action
 			ampTheme.setDescription(themeForm.getProgramDescription());
 			ampTheme.setType(themeForm.getProgramType());
 			ampTheme.setParentThemeId(ProgramUtil.getThemeObject(id));
-			ampTheme.setIndlevel(level);
+			ampTheme.setIndlevel(new Integer(level));
 			ampTheme.setLanguage(null);
 			ampTheme.setVersion(null);
 			DbUtil.add(ampTheme);

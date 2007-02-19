@@ -60,7 +60,7 @@ public class AddTheme extends Action
 			ampTheme.setThemeCode(themeForm.getProgramCode());
 			ampTheme.setDescription(themeForm.getProgramDescription());
 			ampTheme.setType(themeForm.getProgramType());
-			ampTheme.setIndlevel(0);
+			ampTheme.setIndlevel(new Integer(0));
 			ampTheme.setParentThemeId(null);
 			ampTheme.setLanguage(null);
 			ampTheme.setVersion(null);

@@ -1,7 +1,7 @@
 package org.digijava.module.aim.dbentity ;
 
 import java.io.Serializable;
-import java.util.Collection;
+import java.util.HashSet;
 import java.util.Set;
 
 public class AmpTheme implements Serializable
@@ -12,19 +12,19 @@ public class AmpTheme implements Serializable
 	private String themeCode ;
 	private String name ;
 	private String type ;
-	private int indlevel;
+	private Integer indlevel;
 	private String description ;
 	private String language ;
 	private String version ;
 	private Set indicators;
-	private Collection activityPrograms;
+	private Set activities=new HashSet();
 			
-	public Collection getActivityPrograms() {
-		return activityPrograms;
+	public Set getActivities() {
+		return activities;
 	}
 
-	public void setActivityPrograms(Collection activityPrograms) {
-		this.activityPrograms = activityPrograms;
+	public void setActivities(Set activities) {
+		this.activities = activities;
 	}
 
 	public AmpTheme()
@@ -155,21 +155,25 @@ public class AmpTheme implements Serializable
 		this.indicators = indicators;
 	}
 
-	/**
+    /**
 	 * @return Returns the indlevel.
 	 */
-	public int getIndlevel() {
+	public Integer getIndlevel() {
+		if(indlevel == null)
+			indlevel = new Integer(0);
 		return indlevel;
 	}
 
 	/**
 	 * @param indlevel The indlevel to set.
 	 */
-	public void setIndlevel(int indlevel) {
+	public void setIndlevel(Integer indlevel) {
+		if(indlevel == null)
+			indlevel = new Integer(0);
 		this.indlevel = indlevel;
 	}
-	
-    public void setActivityId(AmpActivity activityId) {
+
+	public void setActivityId(AmpActivity activityId) {
         this.activityId = activityId;
     }
 

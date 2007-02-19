@@ -265,8 +265,10 @@ function popupwin()
 												</bean:define>
 
 												<digi:edit key="<%=objKey%>"/>
+												<%--
 												<a href="<c:out value="${aimEditActivityForm.context}"/>/editor/showEditText.do?id=<%=objKey%>&referrer=<c:out value="${aimEditActivityForm.context}"/>/aim/addActivity.do?edit=true">Edit</a>
-												<a href="javascript:edit('<%=objKey%>')">
+											--%>
+												<a href="javascript:edit('<%=objKey%>')">	
 												Edit</a>
 											</td></tr>
 											<tr bgcolor="#ffffff"><td valign="top" align="left">
@@ -277,15 +279,18 @@ function popupwin()
 												</a>
 											</td>
 											<td valign="top" align="left">
-												<a title="<digi:trn key="aim:DescriptionofProject">Summary information describing the project</digi:trn>">
+												<%--<a title="<digi:trn key="aim:DescriptionofProject">Summary information describing the project</digi:trn>">
 												<html:textarea property="description" cols="60" rows="4" styleClass="inp-text" />
-											   </a>
+											   </a>--%>
+
 												<bean:define id="descKey">
 													<c:out value="${aimEditActivityForm.description}"/>
 												</bean:define>
 
 												<digi:edit key="<%=descKey%>"/>
-												<a href="<c:out value="${aimEditActivityForm.context}"/>/editor/showEditText.do?id=<%=descKey%>&referrer=<c:out value="${aimEditActivityForm.context}"/>/aim/addActivity.do?edit=true">Edit</a>
+												<%--
+												<a href="<c:out value="${aimEditActivityForm.context}"/>/editor/showEditText.do?id=<%=descKey%>&referrer=<c:out value="${aimEditActivityForm.context}"/>/aim/addActivity.do?edit=true">Edit</a>--%>
+
 												<a href="javascript:edit('<%=descKey%>')">
 												Edit</a>
 											</td></tr>

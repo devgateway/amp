@@ -124,8 +124,8 @@
 													<logic:empty name="aimAddSectorForm" property="formFirstLevelSectors">
 													<tr bgcolor="#ffffff">
 														<td colspan="5" align="center"><b>
-															<digi:trn key="aim:noSchemes">
-															No Schemes present
+															<digi:trn key="aim:noSectorPresent">
+															No Sector present
 															</digi:trn>
 														</b></td>
 													</tr>
@@ -271,3 +271,5 @@
 	</tr>
 </table>
 </digi:form>
+
+

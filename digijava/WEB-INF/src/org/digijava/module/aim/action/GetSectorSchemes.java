@@ -1,3 +1,4 @@
+
 package org.digijava.module.aim.action ;
 
 import org.apache.log4j.Logger;
@@ -50,3 +51,5 @@ public class GetSectorSchemes extends Action {
 					 return mapping.findForward("viewSectorSchemes");
 		  }
 }
+
+

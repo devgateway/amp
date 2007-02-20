@@ -1,3 +1,4 @@
+
 package org.digijava.module.aim.action;
 
 import org.apache.log4j.Logger;
@@ -87,7 +88,7 @@ public class UpdateSectorSchemes extends Action {
 						id = new Integer(request.getParameter("ampSecSchemeId"));
 						session.setAttribute("Id",null);
 				}
-				logger.debug("FinalID=============================="+id);
+				logger.info("FinalID=============================="+id);
 				Collection schemeGot = SectorUtil.getEditScheme(id);
 				sectorsForm.setFormFirstLevelSectors(SectorUtil
 						.getSectorLevel1(id));
@@ -172,3 +173,5 @@ public class UpdateSectorSchemes extends Action {
 		return mapping.findForward("viewSectorSchemes");
 	}
 }
+
+

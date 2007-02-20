@@ -1,3 +1,4 @@
+
 package org.digijava.module.aim.action;
 
 import org.apache.log4j.Logger;

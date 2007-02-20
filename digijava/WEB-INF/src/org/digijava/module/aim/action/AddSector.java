@@ -1,3 +1,4 @@
+
 package org.digijava.module.aim.action;
 
 import java.util.*;
@@ -84,6 +85,8 @@ public class AddSector extends Action {
 					newSector.setVersion(null);
 					DbUtil.add(newSector);
 					session.setAttribute("Event","Edit");
+					session.setAttribute("LEVEL","1");
+					logger.info("level one sector added");
 					return mapping.findForward("levelFirstSectorAdded");
 				}
 				if(addSectorForm.getLevelType().equals("sector"))
@@ -109,7 +112,36 @@ public class AddSector extends Action {
 					newSector.setLanguage(null);
 					newSector.setVersion(null);
 					DbUtil.add(newSector);
+					session.setAttribute("LEVEL","2");
+					logger.info("level 2 sector added");
 					return mapping.findForward("levelSecondSectorAdded");
+				}
+				if(addSectorForm.getLevelType().equals("sector3"))
+				{
+					Long id = new Long((String)session.getAttribute("Id"));
+					addSectorForm.setParentId(new Long((String)session.getAttribute("Id")));
+					AmpSectorScheme user = SectorUtil.getParentSchemeId(id);
+					AmpSector newSector = new AmpSector();
+					newSector.setAmpSectorId(null);
+					newSector.setParentSectorId(SectorUtil.getAmpSector(id));
+					newSector.setAmpOrgId(null);
+					newSector.setAmpSecSchemeId(user);
+					newSector.setSectorCode(addSectorForm.getSectorCode());
+					newSector.setName(addSectorForm.getSectorName());
+					newSector.setType(null);
+					if (addSectorForm.getDescription() == null
+							|| addSectorForm.getDescription().trim().equals("")) {
+
+						newSector.setDescription(new String(" "));
+					} else {
+						newSector.setDescription(addSectorForm.getDescription());
+					}
+					newSector.setLanguage(null);
+					newSector.setVersion(null);
+					DbUtil.add(newSector);
+					session.setAttribute("LEVEL","3");
+					logger.info("level Third Sector added");
+					return mapping.findForward("levelThirdSectorAdded");
 				}
 			}
 		}
@@ -188,7 +220,7 @@ public class AddSector extends Action {
 		if(parent.equalsIgnoreCase("scheme"))		
 		return mapping.findForward("forwardScheme");
 		else
-			if(parent.equalsIgnoreCase("sector"))
+			if(parent.equalsIgnoreCase("sector")|| parent.equalsIgnoreCase("sector3"))
 				return mapping.findForward("forwardSector");
 		return null;
 	}

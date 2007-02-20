@@ -1,3 +1,4 @@
+
 package org.digijava.module.aim.action ;
 
 import javax.servlet.http.HttpServletRequest;
@@ -37,19 +38,47 @@ public class ViewSectorDetails extends Action {
 
 					 AddSectorForm viewSectorForm = (AddSectorForm) form;
 					 session.setAttribute("moreThanLevelOne","yes");
-
-					 logger.debug("In ViewSectorDetails action");
+					 String Level = new String();
+					 logger.info("In ViewSectorDetails action");
 					 String event = request.getParameter("event");
 					 String level = request.getParameter("level");
+					 logger.info("LEVEL======================"+level);
+					 logger.info("event================"+event);
+					 if(event==null && level==null){
+						 viewSectorForm.setJspFlag(true);
+						 Level = "three";
+					 }
+					 else if(event.equalsIgnoreCase("enough") && level.equalsIgnoreCase("three")){
+						 Level="three";
+						 event = "edit";
+						 viewSectorForm.setJspFlag(true);
+					 }
 					 String secId = "";
 					 if(session.getAttribute("Id")==null)
 					    	secId = request.getParameter("ampSectorId");
 					 else
 					 {
 						 	secId = (String)session.getAttribute("Id");
-						 	event = "edit";
 						 	level = "two";
+						 	if(event!=null)
+						 	if(event.equalsIgnoreCase("addSector"))
+								 level = "three";
+						 	event = "edit";
+						 	
 					 }
+					 
+					 logger.info(request.getParameter("ampSectorId"));
+					 logger.info(session.getAttribute("id"));
+					 logger.info(secId);
+					 if(session.getAttribute("LEVEL")!=null)
+					 if(((String)session.getAttribute("LEVEL")).equalsIgnoreCase("1"))
+						 level = "one";
+					 else if(((String)session.getAttribute("LEVEL")).equalsIgnoreCase("2"))
+						 level = "two";
+					 else if(((String)session.getAttribute("LEVEL")).equalsIgnoreCase("3"))
+						 level = "three";
+					 
+					 session.setAttribute("LEVEL",null);
 						Long parentId = new Long(secId);
 						viewSectorForm.setSubSectors(SectorUtil.getAllChildSectors(parentId));
 						Collection _subSectors = viewSectorForm.getSubSectors();
@@ -60,6 +89,7 @@ public class ViewSectorDetails extends Action {
 							viewSectorForm.setParentId(ampScheme.getAmpSectorId());
 							viewSectorForm.setParentSectorId(ampScheme.getParentSectorId().getAmpSectorId());
 						}
+						
 						if(event!=null)
 						{
 							if(event.equals("edit"))
@@ -78,8 +108,9 @@ public class ViewSectorDetails extends Action {
 								{
 									return mapping.findForward("levelTwo");
 								}
-								if(level.equals("three"))
+								if(level.equals("three")|| Level.equalsIgnoreCase("three"))
 								{
+									
 									return mapping.findForward("levelThree");
 								}
 							}							
@@ -91,5 +122,4 @@ public class ViewSectorDetails extends Action {
 		  
 		  
 }
-
 

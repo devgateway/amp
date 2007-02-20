@@ -25,7 +25,7 @@ function saveScheme()
 			 }
  }
 </script>
-<html:errors/>
+
 
 <%--<digi:form name="aimStatusItemForm" type="org.digijava.module.aim.form.StatusItemForm" scope="request" action="/updateStatus.do">--%>
 <digi:form action="/updateStatus.do">
@@ -101,6 +101,9 @@ function saveScheme()
 															<!-- end header -->
 														</tr>
 														<!-- Page Logic -->
+														<tr>
+														<html:errors/>
+														</tr>
 														<tr>
 															<td width="100%">	
 																<table width="100%" border=0	 bgColor=#f4f4f2>
@@ -185,6 +188,7 @@ function saveScheme()
 	</tr>
 </table>
 </digi:form>
+
 
 
 

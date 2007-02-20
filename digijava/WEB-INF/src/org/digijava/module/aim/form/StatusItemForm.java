@@ -11,8 +11,17 @@ public class StatusItemForm extends ActionForm
 	private String name ;
 	private String type;
 	private String description;
+	private Long originalAmpStatusId;
 	
 	
+	public Long getOriginalAmpStatusId() {
+		return originalAmpStatusId;
+	}
+
+	public void setOriginalAmpStatusId(Long originalAmpStatusId) {
+		this.originalAmpStatusId = originalAmpStatusId;
+	}
+
 	/**
 	 * @return
 	 */

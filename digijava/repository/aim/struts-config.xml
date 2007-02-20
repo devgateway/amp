@@ -1014,12 +1014,13 @@
     <action name="aimStatusListForm" path="/aim/statusManager" scope="request" type="org.digijava.module.aim.action.StatusManager" validate="false">
       <forward name="forward" path="/showLayout.do?layout=statusManager" />
     </action>
-    <action name="aimStatusItemForm" path="/aim/getStatusItem" scope="request" type="org.digijava.module.aim.action.GetStatusItem" validate="false">
+    <action name="aimStatusItemForm" path="/aim/getStatusItem" scope="session" type="org.digijava.module.aim.action.GetStatusItem" validate="false">
       <forward name="deleteforward" path="/showLayout.do?layout=deleteStatus" />
       <forward name="editforward" path="/showLayout.do?layout=updateStatus" />
     </action>
-    <action name="aimStatusItemForm" path="/aim/updateStatus" scope="request" type="org.digijava.module.aim.action.UpdateStatus" validate="false">
-      <forward name="forward" path="/aim/statusManager.do" redirect="true" />
+    <action name="aimStatusItemForm" path="/aim/updateStatus" scope="session" type="org.digijava.module.aim.action.UpdateStatus" validate="false">
+		<forward name="forward" path="/aim/statusManager.do" redirect="true" />
+		<forward name="returnforward" path="/aim/getStatusItem.do" redirect="true" />
     </action>
     <action name="aimStatusItemForm" path="/aim/addStatus" scope="request" type="org.digijava.module.aim.action.AddStatus" validate="false" >
 		<forward name="addforward" path="/aim/statusManager.do" redirect="true"/>

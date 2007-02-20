@@ -22,7 +22,8 @@ function showUserProfile(id)
 <table cellpadding="0" cellspacing="0" height="37" width="100%" background="module/aim/images/bg-header-1.gif" border=0>
 	<tr>
 		<td valign="top">
-			<table cellpadding="0" cellSpacing="0" height="33" width="757" 
+<%--<html:errors/>--%>
+		<table cellpadding="0" cellSpacing="0" height="33" width="757" 
 			background="module/aim/images/my-desktop.gif" vAlign="top" class=r-dotted>
 				<tr>
 					<td width="10">

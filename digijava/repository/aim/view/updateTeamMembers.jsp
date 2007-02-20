@@ -15,7 +15,7 @@
 <html:hidden property="action" />
 <html:hidden property="userId" />
 <html:hidden property="name" />
-
+<html:errors/>
 <jsp:include page="teamPagesHeader.jsp" flush="true" />
 <table bgColor=#ffffff cellPadding=0 cellSpacing=0 width=772>
 	<tr>
@@ -100,7 +100,6 @@
 												<table border=0 cellPadding=5 cellSpacing=1 class=box-border width="100%">
 	<tr>
 		<td align="right" width="50%">
-			<digi:errors/>
 			<digi:trn key="aim:memberName">Name &nbsp;&nbsp; &nbsp;</digi:trn>
 		</td>
 		<td align="left" width="50%">

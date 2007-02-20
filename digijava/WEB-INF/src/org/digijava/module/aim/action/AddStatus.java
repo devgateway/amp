@@ -37,6 +37,7 @@ public class AddStatus extends Action
 				return mapping.findForward("index");
 			}
 		}	
+			logger.info(" in here....");
 			boolean Flag = true;
 			StatusItemForm formBean = (StatusItemForm) form ; 	
 			AmpStatus statusItem = new AmpStatus() ;

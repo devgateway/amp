@@ -1,7 +1,12 @@
 package org.digijava.module.aim.action ;
 
+import java.util.Collection;
+import java.util.Iterator;
+
 import org.apache.log4j.Logger ;
 import org.apache.struts.action.Action ;
+import org.apache.struts.action.ActionError;
+import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionForm ;
 import org.apache.struts.action.ActionMapping ;
 import org.apache.struts.action.ActionForward ;
@@ -43,10 +48,43 @@ public class UpdateStatus extends Action
 			logger.debug("UpdateStatus action: unchanged status-id " + formBean.getAmpStatusId());
 			logger.debug("UpdateStatus action: updated status code: " + formBean.getStatusCode());
 			logger.debug("UpdateStatus action: updated status name:" + formBean.getName());
-		
+			// added for checking whether the status code is already present
+			boolean Flag = true;
+			String code = formBean.getStatusCode();
+			Long originalCode = formBean.getOriginalAmpStatusId();
+			String trial = originalCode.toString();
+			Collection col = DbUtil.getStatusCodes();
+			Iterator itr = col.iterator();
+			while(itr.hasNext())
+			{
+				AmpStatus amp=  (AmpStatus) itr.next();
+				String a = amp.getStatusCode();
+				if(a.equals(code) && !(a.equals(trial)))
+				{
+					Flag = false;
+				}
+				else
+				{
+					logger.info("COOL u can proceed!!!!");
+				}
+				
+			}
+			
+			
+			if(Flag){
 			DbUtil.update(statusItem) ;
-		
 			return mapping.findForward("forward") ;
+			}
+			else
+			{
+				ActionErrors errors = new ActionErrors();
+				errors.add("title", new ActionError(
+						"error.aim.addStatus.statusAdded"));
+				saveErrors(request, errors);
+				return mapping.findForward("returnforward");
+			}
+		
+			//return mapping.findForward("forward") ;
 		}
 
 }

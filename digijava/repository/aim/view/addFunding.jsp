@@ -34,12 +34,16 @@
   }
 
 	function addFunding() {
+		
 		var flag = validateFunding();
 		if (flag == false) return false;
+		
 		<digi:context name="fundAdded" property="context/module/moduleinstance/fundingAdded.do?edit=true" />;
 		document.aimEditActivityForm.action = "<%= fundAdded %>";
 		document.aimEditActivityForm.target = "_self";
 	  	document.aimEditActivityForm.submit();
+	  //	window.opener.reload();
+	  //	window.opener.refresh();
 		return true;
 	}
 
@@ -73,6 +77,7 @@
 	{
 		if(document.aimEditActivityForm.dupFunding.value == "false")
 		{
+				
 				<digi:context name="addAct" property="context/module/moduleinstance/addActivity.do?edit=true"/>
 				document.aimEditActivityForm.action = "<%=addAct%>";
 				document.aimEditActivityForm.target = window.opener.name;
@@ -109,6 +114,7 @@
 
 <%! long t = System.currentTimeMillis(); %>
 
+<body onload="load()">
 <digi:instance property="aimEditActivityForm" />
 <digi:form action="/addFundingDetail.do" method="post">
 
@@ -927,3 +933,4 @@
 
 </table>
 </digi:form>
+</body>

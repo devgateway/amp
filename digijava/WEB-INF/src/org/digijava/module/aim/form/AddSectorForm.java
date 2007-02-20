@@ -22,8 +22,9 @@ public class AddSectorForm extends ActionForm {
 	String secSchemeCode;
 	boolean deleteSchemeFlag = true;
 	private String idGot;
-        private String event;
-        private Long ampSectorId;
+    private String event;
+    private Long ampSectorId;
+    private boolean jspFlag;
 
 
 	private Long sectorId = null;
@@ -258,4 +259,12 @@ public Collection getSubSectors() {
   public void setAmpSectorId(Long ampSectorId) {
     this.ampSectorId = ampSectorId;
   }
+
+public boolean isJspFlag() {
+	return jspFlag;
+}
+
+public void setJspFlag(boolean jspFlag) {
+	this.jspFlag = jspFlag;
+}
 }

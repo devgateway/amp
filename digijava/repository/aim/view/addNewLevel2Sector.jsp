@@ -95,14 +95,14 @@
 														</td>
 													</tr>
 
-													<%--<tr>
+													<tr>
 														<td>
-															Scheme Code :
+															Description :
 														</td>
 														<td>
-															<html:text name ="aimSectorSchemeForm" property="secSchemeId" size="5"/> 
+															<html:text name ="aimAddSectorForm" property="description" size="35" /> 
 														</td>
-													</tr>--%>
+													</tr>
 
 													
 													<tr>

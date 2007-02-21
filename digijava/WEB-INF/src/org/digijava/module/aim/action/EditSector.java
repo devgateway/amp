@@ -61,6 +61,7 @@ public class EditSector extends Action {
 								logger.info(" thi sis the id...."+ secId);
 								ampSector.setName(editSectorForm.getSectorName());
 								ampSector.setSectorCode(editSectorForm.getSectorCode());
+								ampSector.setDescription(editSectorForm.getDescription());
 								logger.info(" here");
 								DbUtil.update(ampSector);
 								session.setAttribute("Id",id);

@@ -100,6 +100,7 @@ public class ViewSectorDetails extends Action {
 								viewSectorForm.setSectorCode(editSector.getSectorCode());
 								viewSectorForm.setSectorName(editSector.getName());
 								viewSectorForm.setSectorId(editSector.getAmpSectorId());
+								viewSectorForm.setDescription(editSector.getDescription());
 								if(level.equals("one"))
 								{
 									return mapping.findForward("levelOne");

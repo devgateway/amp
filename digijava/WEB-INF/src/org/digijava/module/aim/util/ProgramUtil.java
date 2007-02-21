@@ -733,6 +733,7 @@ public class ProgramUtil {
 				session.save(ampThemeInd);
 				tempAmpTheme.getIndicators().add(ampThemeInd);
 				session.saveOrUpdate(tempAmpTheme);
+				if(tempPrgInd.getPrgIndicatorValues()!=null) {
 				Iterator indItr = tempPrgInd.getPrgIndicatorValues().iterator();
 				while(indItr.hasNext())
 				{
@@ -743,6 +744,7 @@ public class ProgramUtil {
 					indValue.setCreationDate(DateConversion.getDate(prgIndValue.getCreationDate()));
 					indValue.setThemeIndicatorId(ampThemeInd);
 					session.save(indValue);
+				}
 				}
 				tx.commit();
 			}

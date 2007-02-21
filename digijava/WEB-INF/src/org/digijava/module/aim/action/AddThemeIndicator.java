@@ -48,6 +48,7 @@ public class AddThemeIndicator extends Action
 		Long id = new Long(Long.parseLong(request.getParameter("themeId")));
 		String event = request.getParameter("event");
 		themeForm.setThemeId(id);
+		if(request.getParameter("resetIndicatorId")!=null) themeForm.setIndicatorId(null);
 		
 		if(event!=null)
 		{

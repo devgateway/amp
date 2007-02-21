@@ -65,7 +65,7 @@
 		{
 			openNewWindow(650, 500);
 			<digi:context name="indAssign" property="context/module/moduleinstance/addThemeIndicator.do"/>
-			document.aimThemeForm.action = "<%= indAssign %>?themeId=" + id;
+			document.aimThemeForm.action = "<%= indAssign %>?resetIndicatorId=true&themeId=" + id;
 			document.aimThemeForm.target = popupPointer.name;
 			document.aimThemeForm.submit();
 			return true;

@@ -138,8 +138,7 @@
 														<tr bgColor=#dddddb>
 															<!-- header -->
 															<td bgColor=#dddddb height="20" 			align="center" colspan="5"><B>
-																<digi:trn key="aim:organizationList">List
-                                                                of Organizations</digi:trn>						
+																<digi:trn key="aim:organizationList">List of Organizations</digi:trn>						
                                                               </b>						
 															</td>
 															<!-- end header -->

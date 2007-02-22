@@ -312,8 +312,10 @@ function popupwin()
 										<table cellPadding=1 cellSpacing=1 border=0 bgcolor="#ffffff" width="100%">
 											<logic:empty name="aimEditActivityForm" property="selectedOrganizations">
 												<td>
-													<a title="<digi:trn key="aim:TrackActivitiesintheDonorsInternalDatabase">Facilitates tracking activities in donors' internal databases </digi:trn>">
-													<input type="button" value="Add Organizations" class="buton" name="addOrgs" onclick="selectOrganisation()"></a>
+													<a title="<digi:trn key="aim:TrackActivitiesintheDonorsInternalDatabase">Facilitates tracking activities in donors' internal databases </digi:trn>"></a>
+													<html:button  styleClass="buton" property="addOrgs" onclick="selectOrganisation()">
+														<digi:trn key="btn:addOrganizations">Add Organizations</digi:trn> 
+													</html:button>
 												</td>
 											</logic:empty>
 											<logic:notEmpty name="aimEditActivityForm" property="selectedOrganizations">
@@ -527,7 +529,10 @@ function popupwin()
 																</a>
 															</td>
 															<td>&nbsp;
-																<input type="button" class="buton" value="Comment" onclick="commentWin()">
+
+																<html:button  styleClass="dr-menu" property="submitButton" onclick="commentWin()">
+																	<digi:trn key="btn:Comment">Comment</digi:trn> 
+																</html:button>
 															</td>
 														</tr>
 													</table>
@@ -610,10 +615,14 @@ function popupwin()
 										<table cellPadding=3>
 											<tr>
 												<td>
-													<html:submit value="Next >>" styleClass="dr-menu" onclick="return validateForm()"/>
+													<html:submit  styleClass="dr-menu" property="submitButton" onclick="return validateForm()">
+															<digi:trn key="btn:next>>">Next >></digi:trn> 
+													</html:submit>
 												</td>
 												<td>
-													<html:reset value="Reset" styleClass="dr-menu" onclick="return resetAll()"/>
+													<html:reset  styleClass="dr-menu" property="submitButton" onclick="return resetAll()">
+														<digi:trn key="btn:reset">Reset</digi:trn> 
+													</html:reset>
 												</td>
 											</tr>
 										</table>

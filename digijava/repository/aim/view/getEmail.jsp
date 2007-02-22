@@ -43,7 +43,7 @@
 				<tr>
 					<td width="3">&nbsp;</td>
 					<td colspan="2" align="center">
-						<html:submit property="submit" value="Submit" styleClass="dr-menu" />
+						<html:submit property="submit" styleClass="dr-menu" ><digi:trn key="btn:submit">Submit</digi:trn> </html:submit>
 					</td>
 				</tr>
 			</table>

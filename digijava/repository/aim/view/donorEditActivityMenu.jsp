@@ -147,12 +147,16 @@ bgcolor="#006699">
 	</tr>	
 	<tr>
 		<td align="center">
-			<input type="button" value="Preview" class="buton" onclick="previewClicked()">
+			<html:button  styleClass="dr-menu" property="submitButton" onclick="previewClicked()">
+				<digi:trn key="btn:preview">Preview</digi:trn> 
+			</html:button>
 		</td>
 	</tr>	
 	<tr>
 		<td align="center">
-			<input type="button" value="Save" name="saveButton" class="buton" onclick="saveClicked()">
+			<html:button  styleClass="dr-menu" property="submitButton"  onclick="saveClicked()">
+				<digi:trn key="btn:save">Save</digi:trn> 
+			</html:button>
 		</td>
 	</tr>		
 </table>

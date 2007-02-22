@@ -643,10 +643,14 @@ function removeSelComponents() {
 											<tr><td align="center">
 												<table cellSpacing=2 cellPadding=2>
 													<tr><td>
-														<input type="button" value="Add Components" class="buton" name="addComponent" 
-														onclick="addComponents()" class="buton"> &nbsp;&nbsp;&nbsp;
-														<input type="button" value="Remove Components" class="buton" name="removeComponent" 
-														onclick="removeSelComponents()" class="buton">														
+														<html:button  styleClass="dr-menu" property="submitButton" onclick="addComponents()">
+															<digi:trn key="btn:addComponents">Add Components</digi:trn> 
+														</html:button>
+														 &nbsp;&nbsp;&nbsp;
+														<html:button  styleClass="buton" property="submitButton" onclick="removeSelComponents()">
+															<digi:trn key="btn:removeComponents">Remove Components</digi:trn> 
+														</html:button>
+														
 													</td></tr>
 												</table>
 											</td></tr>
@@ -657,6 +661,9 @@ function removeSelComponents() {
 											<tr><td>
 												<input type="button" value="Add Components" class="buton" name="addComponent" 
 												onclick="addComponents()" class="buton">
+												<html:button  styleClass="buton" property="submitButton" onclick="addComponents()">
+														<digi:trn key="btn:addComponents">Add Components</digi:trn> 
+												</html:button>
 											</td></tr>
 										</table>
 									</logic:empty>
@@ -772,9 +779,10 @@ function removeSelComponents() {
 																					<td vAlign="center" align="left" width="3">
 																					</td>														
 																					<td vAlign="center" align="left">
-																						<input type="button" value="Remove Actors" class="buton"
-																						onclick="removeActors('<c:out value="${issues.id}"/>','<c:out value="${measure.id}"/>')" 
-																						class="buton">
+																						<html:button  styleClass="buton" property="submitButton" onclick="removeActors('<c:out value="${issues.id}"/>','<c:out value="${measure.id}"/>')">
+																							<digi:trn key="btn:removeActors">Remove Actors</digi:trn> 
+																						</html:button>
+																						
 																					</td>
 																				</tr>
 																				</logic:notEmpty>
@@ -786,8 +794,10 @@ function removeSelComponents() {
 																		<td vAlign="center" align="left" width="3">
 																		</td>														
 																		<td vAlign="center" align="left">
-																			<input type="button" value="Remove Measures" class="buton"
-																			onclick="removeMeasure('<c:out value="${issues.id}"/>')" class="buton">
+																			<html:button  styleClass="buton" property="submitButton" onclick="removeMeasure('<c:out value="${issues.id}"/>')">
+																				<digi:trn key="btn:removeMeasures">Remove Measures</digi:trn> 
+																			</html:button>
+																			
 																		</td>
 																	</tr>
 																	</logic:notEmpty>
@@ -801,12 +811,14 @@ function removeSelComponents() {
 													<table cellSpacing=2 cellPadding=2>
 														<tr>
 															<td>
-																<input type="button" value="Add Issues" class="buton"
-																onclick="addIssues()" class="buton">
+																<html:button  styleClass="buton" property="submitButton" onclick="addIssues()">
+																		<digi:trn key="btn:addIssues">Add Issues</digi:trn> 
+																</html:button>
 															</td>
 															<td>
-																<input type="button" value="Remove Issues" class="buton"
-																onclick="removeIssues()" class="buton">
+																<html:button  styleClass="buton" property="submitButton" onclick="removeIssues()">
+																		<digi:trn key="btn:removeIssues">Remove Issues</digi:trn> 
+																</html:button>
 															</td>															
 														</tr>
 													</table>
@@ -816,8 +828,10 @@ function removeSelComponents() {
 										<logic:empty name="aimEditActivityForm" property="issues">
 											<table width="100%" cellSpacing=1 cellPadding=5 class="box-border-nopadding">
 												<tr><td>
-													<input type="button" value="Add Issues" class="buton"
-													onclick="addIssues()" class="buton">
+													<html:button  styleClass="buton" property="submitButton" onclick="addIssues()">
+															<digi:trn key="btn:addIssues">Add Issues</digi:trn> 
+													</html:button>
+													
 												</td></tr>
 											</table>
 										</logic:empty>
@@ -829,13 +843,19 @@ function removeSelComponents() {
 										<table cellPadding=3>
 											<tr>
 												<td>
-													<input type="submit" value=" << Back " class="dr-menu" onclick="gotoStep(4)">
+													<html:submit  styleClass="buton" property="submitButton" onclick="gotoStep(4)">
+														<< <digi:trn key="btn:back">Back</digi:trn> 
+													</html:submit>
 												</td>
 												<td>
-													<input type="submit" value="Next >> " class="dr-menu" onclick="gotoStep(6)">
+													<html:submit  styleClass="buton" property="submitButton"  onclick="gotoStep(6)">
+															<digi:trn key="btn:next">Next</digi:trn> >>
+													</html:submit>
 												</td>
 												<td>
-													<input type="reset" value="Reset" class="dr-menu" onclick="return resetAll()">
+													<html:reset  styleClass="dr-menu" property="submitButton" onclick="return resetAll()">
+														<digi:trn key="btn:reset">Reset</digi:trn> 
+													</html:reset>
 												</td>
 											</tr>
 										</table>

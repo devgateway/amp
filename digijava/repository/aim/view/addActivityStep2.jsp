@@ -349,9 +349,11 @@ function popupwin()
 																		<logic:empty name="aimEditActivityForm"
 																			property="selectedLocs">
 																			<tr>
-																				<td bgcolor="#ffffff"><input type="button"
-																					value="Add Location" class="buton"
-																					onclick="selectLocation()"></td>
+																				<td bgcolor="#ffffff">
+																					<html:button  styleClass="button" property="submitButton" onclick="selectLocation()">
+																						<digi:trn key="btn:addLocation">Add Location</digi:trn> 
+																					</html:button>		
+																				</td>
 																			</tr>
 																		</logic:empty>
 																		<logic:notEmpty name="aimEditActivityForm"
@@ -393,11 +395,16 @@ function popupwin()
 																						<td>
 																						<table cellSpacing=2 cellPadding=2>
 																							<tr>
-																								<td><input type="button" value="Add Location"
-																									class="buton" onclick="selectLocation()"></td>
-																								<td><input type="button" value="Remove Location"
-																									class="buton"
-																									onclick="return removeSelLocations()"></td>
+																								<td>
+																									<html:button  styleClass="button" property="submitButton" onclick="selectLocation()">
+																										<digi:trn key="btn:addLocation">Add Location</digi:trn> 
+																									</html:button>
+																								</td>
+																								<td>
+																									<html:button  styleClass="button" property="submitButton" onclick="return removeSelLocations()">
+																										<digi:trn key="btn:removeLocation">Remove Location</digi:trn> 
+																									</html:button>
+																								</td>
 																							</tr>
 																						</table>
 																						</td>
@@ -450,9 +457,11 @@ function popupwin()
 																		<logic:empty name="aimEditActivityForm"
 																			property="activitySectors">
 																			<tr>
-																				<td bgcolor="#ffffff"><input type="button"
-																					value="Add Sector" class="buton" name="addSec"
-																					onclick="addSectors()"></td>
+																				<td bgcolor="#ffffff">
+																					<html:button  styleClass="dr-menu" property="addSec" onclick="addSectors()">
+																						<digi:trn key="btn:addSector">Add Sector</digi:trn> 
+																					</html:button>
+																				</td>
 																			</tr>
 																		</logic:empty>
 																		<logic:notEmpty name="aimEditActivityForm"
@@ -500,9 +509,11 @@ function popupwin()
 																				onclick="addSectors()">
 																			</td>
 																			--%>
-																								<td><input type="button" value="Remove Sector"
-																									class="buton"
-																									onclick="return removeSelSectors()"></td>
+																								<td>
+																									<html:button  styleClass="buton" property="submitButton" onclick="return removeSelSectors()">
+																										<digi:trn key="btn:removeSector">Remove Sector</digi:trn> 
+																									</html:button>
+																								</td>
 																							</tr>
 																						</table>
 																						</td>
@@ -558,12 +569,21 @@ function popupwin()
 															<td bgColor=#f4f4f2 align="center">
 															<table cellPadding=3>
 																<tr>
-																	<td><input type="submit" value=" << Back "
-																		class="dr-menu" onclick="return gotoStep(1)"></td>
-																	<td><input type="submit" value="Next >> "
-																		class="dr-menu" onclick="return validateForm()"></td>
-																	<td><input type="reset" value="Reset" class="dr-menu"
-																		onclick="return resetAll()"></td>
+																	<td>
+																	<html:submit  styleClass="dr-menu" property="submitButton" onclick="return gotoStep(1)">
+																		<digi:trn key="btn:back">Back</digi:trn> >> 
+																	</html:submit>	
+																	</td>
+																	<td>
+																		<html:submit  styleClass="dr-menu" property="submitButton" onclick="return validateForm()">
+																			<digi:trn key="btn:next">Next</digi:trn> >>
+																		</html:submit>
+																	</td>
+																	<td>
+																		<html:reset  styleClass="dr-menu" property="submitButton" onclick="return resetAll()">
+																			<digi:trn key="btn:reset">Reset</digi:trn> 
+																		</html:reset>
+																	</td>
 																</tr>
 															</table>
 															</td>

@@ -27,8 +27,11 @@
 			document.aimAddOrgGroupForm.orgGrpName.value = str;
 			document.aimAddOrgGroupForm.target = window.opener.name;
 			//document.aimAddOrgForm.name.value="11111111111111112";
+
 			document.aimAddOrgGroupForm.submit();
+
 			window.close();
+			window.opener.reload();
 		}
 	}
 

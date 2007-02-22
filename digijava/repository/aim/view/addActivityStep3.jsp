@@ -631,8 +631,10 @@
 																<c:if test="${aimEditActivityForm.donorFlag == false}">	
 																<tr>
 																	<td>
-																		<input type="button" value="Add Funding" class="buton" 
-																		onclick="addFunding('<bean:write name="fundingOrganization" property="ampOrgId"/>')">
+																		<html:button  styleClass="dr-menu" property="submitButton" onclick="addFunding('<bean:write name="fundingOrganization" property="ampOrgId"/>')">
+																			<digi:trn key="btn:addFunding">Add Funding</digi:trn> 
+																		</html:button>
+																		
 																	</td>
 																</tr>
 																</c:if>
@@ -644,12 +646,15 @@
 																		<table cellSpacing=2 cellPadding=2>
 																			<tr>
 																				<td>
-																					<input type="button" value="Add Organizations" class="buton" 
-																				   onclick="selectOrganisation()">
+																					
+																				   <html:button  styleClass="dr-menu" property="submitButton" onclick="selectOrganisation()">
+																						<digi:trn key="btn:addOrganizations">Add Organizations</digi:trn> 
+																					</html:button>
 																				</td>
 																				<td>
-																					<input type="button" value="Remove Organizations" class="buton" 
-																				   onclick="return removeSelOrganisations()">
+																				   <html:button  styleClass="buton" property="submitButton" onclick="return removeSelOrganisations()">
+																						<digi:trn key="btn:removeOrganizations">Remove Organizations</digi:trn> 
+																				   </html:button>
 																				</td>
 																			</tr>
 																		</table>
@@ -661,8 +666,9 @@
 																<c:if test="${aimEditActivityForm.donorFlag == false}">	
 																<tr>
 																	<td>
-																		<input type="button" value="Add Organizations" class="buton" 
-																		onclick="selectOrganisation()">
+																		<html:button  styleClass="dr-menu" property="submitButton" onclick="selectOrganisation()">
+																				<digi:trn key="btn:addOrganizations">Add Organizations</digi:trn> 
+																		</html:button>
 																	</td>
 																</tr>
 																</c:if>
@@ -680,19 +686,31 @@
 											<tr>
 												<c:if test="${aimEditActivityForm.donorFlag == true}">
 												<td>
-													<input type="button" value="Preview" class="dr-menu" onclick="previewClicked()">
+
+													<html:button  styleClass="dr-menu" property="submitButton" onclick="previewClicked()">
+															<digi:trn key="btn:preview">Preview</digi:trn> 
+													</html:button>
 												</td>												
 												</c:if>
 												<c:if test="${aimEditActivityForm.donorFlag == false}">
 												<td>
-													<input type="submit" value=" << Back " class="dr-menu" onclick="gotoStep(2)">
+													<html:submit  styleClass="dr-menu" property="submitButton" onclick="gotoStep(2)">
+															<< <digi:trn key="btn:back">Back</digi:trn> 
+													</html:submit>
+
 												</td>
 												<td>
-													<input type="submit" value="Next >> " class="dr-menu" onclick="gotoStep(4)">
+													<html:submit  styleClass="dr-menu" property="submitButton" onclick="gotoStep(4)">
+															<digi:trn key="btn:next">Next</digi:trn> >>
+													</html:submit>
+													
 												</td>												
 												</c:if>													
 												<td>
-													<input type="reset" value="Reset" class="dr-menu" onclick="return resetAll()">
+													<html:reset  styleClass="dr-menu" property="submitButton" onclick="return resetAll()">
+														<digi:trn key="btn:reset">Reset</digi:trn> 
+													</html:reset>
+													
 												</td>
 											</tr>
 										</table>

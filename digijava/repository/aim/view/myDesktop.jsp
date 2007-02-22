@@ -117,8 +117,12 @@
 							</html:select>
 						</c:if>	
 						
-						<input type="submit" value="Go" class="dr-menu">
-						<input type="submit" value="Reset" class="dr-menu" onclick="resetFilters()">
+						<html:submit  styleClass="dr-menu" property="submitButton">
+							<digi:trn key="btn:Go">Go</digi:trn> 
+						</html:submit>
+						<html:submit  styleClass="dr-menu" property="submitButton" onclick="resetFilters()">
+							<digi:trn key="btn:reset">Reset</digi:trn> 
+						</html:submit>
 					</TD></TR>
 				</c:if>
 				<!-- Project List -->
@@ -347,7 +351,9 @@
 				<TD>
 					<B><digi:trn key="aim:activityKeywordSearch">Activity Keyword 	Search</digi:trn></B>
 					<html:text property="searchKey" styleClass="inp-text"/>
-					<input type="button" value="GO" class="dr-menu" onclick="searchActivity()">
+					<html:submit  styleClass="dr-menu" property="submitButton" onclick="searchActivity()">
+						<digi:trn key="btn:GO">GO</digi:trn> 
+					</html:submit>
 				</TD>
 				<TD align="right">
 					<logic:equal name="aimDesktopForm" property="teamHead" value="true">

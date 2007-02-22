@@ -96,7 +96,7 @@
 					<td>&nbsp;</td>				
 					<td>&nbsp;</td>
 					<td align="left">
-						<html:submit value="Sign In" styleClass="dr-menu" property="submitButton"/>
+						<html:submit  styleClass="dr-menu" property="submitButton"><digi:trn key="btn:signIn">Sign In</digi:trn></html:submit>
 					</td>
 				</tr>
 

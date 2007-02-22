@@ -228,14 +228,19 @@ function checkNumeric(objName,comma,period,hyphen)
 											<table cellPadding=5>
 												<tr>
 													<td>
-														<input type="button" value="Add" class="dr-menu" onclick="selectSector()">
+														<html:button  styleClass="dr-menu" property="submitButton" onclick="selectSector()">
+															<digi:trn key="btn:add">Add</digi:trn> 
+														</html:button>
 													</td>
 													<td>
-														<input type="reset" value="Clear" class="dr-menu">
+														<html:reset  styleClass="dr-menu" property="submitButton">
+															<digi:trn key="btn:clear">Clear</digi:trn> 
+														</html:reset>
 													</td>
 													<td>
-														<input type="button" value="Close" class="dr-menu" 
-																	 onclick="closeWindow()">
+														 <html:button  styleClass="dr-menu" property="submitButton"  onclick="closeWindow()">
+																<digi:trn key="btn:close">Close</digi:trn> 
+														 </html:button>
 													</td>
 												</tr>
 											</table>
@@ -287,7 +292,9 @@ function checkNumeric(objName,comma,period,hyphen)
 									</tr>
 									<tr>
 										<td align="center" colspan=2>
-											<input type="button" value="Search" class="dr-menu" onclick="return searchSector()">
+											<html:button  styleClass="dr-menu" property="submitButton" onclick="return searchSector()">
+												<digi:trn key="btn:search">Search</digi:trn> 
+											</html:button>
 										</td>
 									</tr>
 								</table>

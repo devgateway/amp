@@ -363,8 +363,10 @@
 																			<logic:empty name="aimEditActivityForm" property="regionalFundings">
 																				<!-- No fundings -->
 																				<tr><td>
-																					<input type="button" value="Add Fundings" class="buton" 
-																					onclick="addRegionalFunding()">
+																					<html:button  styleClass="buton" property="submitButton" onclick="addRegionalFunding()">
+																							<digi:trn key="btn:addFundings">Add Fundings</digi:trn> 
+																					</html:button>
+																					
 																				</td></tr>														
 																			</logic:empty>
 																			<logic:notEmpty name="aimEditActivityForm" property="regionalFundings">
@@ -372,12 +374,14 @@
 																					<table cellSpacing=2 cellPadding=2>
 																						<tr>
 																							<td>
-																								<input type="button" value="Add Fundings" 
-																								class="buton" onclick="addRegionalFunding()">
+																								<html:button  styleClass="buton" property="submitButton" onclick="addRegionalFunding()">
+																									<digi:trn key="btn:addFundings">Add Fundings</digi:trn> 
+																								</html:button>
 																							</td>
 																							<td>
-																								<input type="button" value="Remove Fundings"
-																								class="buton" onclick="removeRegFundings()">
+																								<html:button  styleClass="dr-menu" property="submitButton" onclick="removeRegFundings()">
+																									<digi:trn key="btn:removeFundings">Remove Fundings</digi:trn> 
+																								</html:button>
 																							</td>
 																						</tr>
 																					</table>
@@ -399,16 +403,20 @@
 																		<table cellPadding=3>
 																			<tr>
 																				<td>
-																					<input type="submit" value=" << Back " class="dr-menu" 
-																					onclick="gotoStep(3)">
+																					<html:submit  styleClass="dr-menu" property="submitButton" onclick="gotoStep(3)">
+																							<< <digi:trn key="btn:back">Back</digi:trn> 
+																					</html:submit>
+																					
 																				</td>
 																				<td>
-																					<input type="submit" value="Next >> " class="dr-menu" 
-																					onclick="gotoStep(5)">
+																					<html:submit  styleClass="dr-menu" property="submitButton" onclick="gotoStep(5)">
+																							<digi:trn key="btn:next">Next</digi:trn> >>
+																					</html:submit>
 																				</td>
 																				<td>
-																					<input type="reset" value="Reset" class="dr-menu" 
-																					onclick="return resetAll()">
+																					<html:reset  styleClass="dr-menu" property="submitButton" onclick="return resetAll()">
+																							<digi:trn key="btn:reset">Reset</digi:trn> 
+																					</html:reset>
 																				</td>
 																			</tr>
 																		</table>

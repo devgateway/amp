@@ -288,6 +288,7 @@ function selectFile() {
 							<tr><td>
 								<input type="button" value="Delete Selected Rates" class="buton" onclick="deleteRates()">
 							</td></tr>
+							<c:if test="${!empty aimCurrencyRateForm.currencyRates}">
 							<c:if test="${!empty aimCurrencyRateForm.pages}">
 							<tr><td>
 								<!-- Pagination -->
@@ -321,6 +322,28 @@ function selectFile() {
 								</table>
 							</td></tr>
 							</c:if>
+							</c:if>
+
+							<!--here-->
+
+							<c:if test="${empty aimCurrencyRateForm.pages}">
+							<tr><td>
+								<!-- Pagination -->
+								<table width="460" cellSpacing="1" cellPadding="2" vAlign="top" align="left">
+									<tr>
+										<td>
+											
+											Page 1 of 1 
+											
+										</td>
+									</tr>
+								</table>
+							</td></tr>
+							</c:if>
+									
+							<!--end end-->
+
+							
 							<tr><td>
 								<table width="450" cellSpacing="3" cellPadding="1" vAlign="top" align="left">
 									<tr>

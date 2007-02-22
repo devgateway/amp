@@ -240,12 +240,17 @@ function removeSelOrgs(value) {
 													<table cellSpacing=1 cellPadding=1>
 														<tr>
 															<td>
-																<input type="button" value="Add Organizations" class="buton" 
-																onclick="addOrgs(1)" class="buton">
+																<html:button  styleClass="dr-menu" property="submitButton" onclick="addOrgs(1)">
+																	<digi:trn key="btn:addOrganizations">Add Organizations</digi:trn> 
+																</html:button>
+																
 															</td>
 															<td>
-																<input type="button" value="Remove Selected Organizations" class="buton" 
-																onclick="return removeSelOrgs(1)" class="buton">
+																<html:button  styleClass="dr-menu" property="submitButton" onclick="removeSelOrgs(1)">
+																	<digi:trn key="btn:removeSelectedOrganizations">Remove Selected Organizations</digi:trn> 
+																</html:button>
+																
+																
 															</td>
 														</tr>
 													</table>
@@ -257,8 +262,10 @@ function removeSelOrgs(value) {
 											<table width="100%" bgcolor="#cccccc" cellSpacing=1 cellPadding=5>
 												<tr>
 													<td bgcolor="#ffffff">
-														<input type="button" value="Add Organizations" class="buton" 
-														onclick="addOrgs(1)">
+														<html:button  styleClass="dr-menu" property="submitButton" onclick="addOrgs(1)">
+																<digi:trn key="btn:addOrganizations">Add Organizations</digi:trn> 
+														</html:button>
+
 													</td>
 												</tr>
 											</table>
@@ -300,12 +307,16 @@ function removeSelOrgs(value) {
 													<table cellSpacing=1 cellPadding=1>
 														<tr>
 															<td>
-																<input type="button" value="Add Organizations" class="buton" 
-																onclick="addOrgs(2)" class="buton">
+																
+																<html:button  styleClass="dr-menu" property="submitButton" onclick="addOrgs(2)">
+																	<digi:trn key="btn:addOrganizations">Add Organizations</digi:trn> 
+																</html:button>
+																
 															</td>
 															<td>
-																<input type="button" value="Remove Selected Organizations" class="buton" 
-																onclick="return removeSelOrgs(2)" class="buton">
+																<html:button  styleClass="dr-menu" property="submitButton" onclick="return removeSelOrgs(2)">
+																	<digi:trn key="btn:removeSelectedOrganizations">Remove Selected Organizations</digi:trn> 
+																</html:button>
 															</td>
 														</tr>
 													</table>
@@ -317,8 +328,9 @@ function removeSelOrgs(value) {
 											<table width="100%" bgcolor="#cccccc" cellSpacing=1 cellPadding=5>
 												<tr>
 													<td bgcolor="#ffffff">
-														<input type="button" value="Add Organizations" class="buton" 
-														onclick="addOrgs(2)">
+														<html:button  styleClass="dr-menu" property="submitButton" onclick="addOrgs(2)">
+																<digi:trn key="btn:addOrganizations">Add Organizations</digi:trn> 
+														</html:button>
 													</td>
 												</tr>
 											</table>
@@ -343,13 +355,22 @@ function removeSelOrgs(value) {
 										<table cellPadding=3>
 											<tr>
 												<td>
-													<input type="button" value=" << Back " class="dr-menu" onclick="gotoStep(6)">
+													<html:button  styleClass="dr-menu" property="submitButton" onclick="gotoStep(6)">
+															<< <digi:trn key="btn:back">Back</digi:trn> 
+													</html:button>
+
+
 												</td>
 												<td>
-													<input type="submit" value="Next >> " class="dr-menu" onclick="gotoStep(8)">
+														<html:submit  styleClass="dr-menu" property="submitButton" onclick="gotoStep(8)">
+																<digi:trn key="btn:addOrganizations">Next</digi:trn> >>
+														</html:submit>
 												</td>
 												<td>
-													<input type="reset" value="Reset" class="dr-menu" onclick="return resetAll()">
+														<html:reset  styleClass="dr-menu" property="submitButton" onclick="return resetAll()">
+																<digi:trn key="btn:reset">Reset</digi:trn> 
+														</html:reset>
+
 												</td>
 											</tr>
 										</table>

@@ -214,13 +214,14 @@ public class DBPatcher {
 				 session.update(rr);
 				 session.flush();
 				 
-				 qryStr = "ALTER TABLE DG_MESSAGE " +
+/*				 qryStr = "ALTER TABLE DG_MESSAGE " +
 				 		"MODIFY MESSAGE_UTF8 TEXT";
 				 
 				 stmt.executeUpdate(qryStr);
 				 
 				 qryStr = "DELETE FROM DG_MESSAGE ";
-				 stmt.executeUpdate(qryStr);				 
+				 stmt.executeUpdate(qryStr);
+				 */				 
 			 }
 				
 			 

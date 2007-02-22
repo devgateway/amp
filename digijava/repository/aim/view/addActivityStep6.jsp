@@ -334,12 +334,15 @@ function removeSelLinks() {
 													<table cellSpacing=2 cellPadding=2>
 														<tr>
 															<td>
-																<input type="button" value="Add Documents" class="buton" 
-																onclick="addDocuments()" class="buton">
+																<html:button  styleClass="dr-menu" property="submitButton" onclick="addDocuments()">
+																	<digi:trn key="btn:addDocuments">Add Documents</digi:trn> 
+																</html:button>
+																
 															</td>
 															<td>
-																<input type="button" value="Remove Documents" class="buton" 
-																onclick="return removeSelDocuments()" class="buton">
+																<html:button  styleClass="dr-menu" property="submitButton" onclick="return removeSelDocuments()">
+																	<digi:trn key="btn:removeDocuments">Remove Documents</digi:trn> 
+																</html:button>
 															</td>
 														</tr>
 													</table>
@@ -351,8 +354,10 @@ function removeSelLinks() {
 											<table width="100%" bgcolor="#cccccc" cellSpacing=1 cellPadding=5>
 												<tr>
 													<td bgcolor="#ffffff">
-														<input type="button" value="Add Documents" class="buton" 
-														onclick="addDocuments()" class="buton">
+														<html:button  styleClass="dr-menu" property="submitButton" onclick="addDocuments()">
+																<digi:trn key="btn:addDocuments">Add Documents</digi:trn> 
+														</html:button>
+														
 													</td>
 												</tr>
 											</table>
@@ -390,12 +395,15 @@ function removeSelLinks() {
 													<table cellSpacing=2 cellPadding=2>
 														<tr>
 															<td>
-																<input type="button" value="Add Web Resources" class="buton" 
-																onclick="addLinks()" class="buton">
+																<html:button  styleClass="dr-menu" property="submitButton" onclick="addLinks()">
+																	<digi:trn key="btn:addWebResources">Add Web Resources</digi:trn> 
+																</html:button>
 															</td>
 															<td>
-																<input type="button" value="Remove Web Resources" class="buton" 
-																onclick="return removeSelLinks()" class="buton">
+																<html:button  styleClass="dr-menu" property="submitButton" onclick="return removeSelLinks()">
+																	<digi:trn key="btn:removeWebResources">Remove Web Resources</digi:trn> 
+																</html:button>
+																
 															</td>
 														</tr>
 													</table>
@@ -406,8 +414,11 @@ function removeSelLinks() {
 											<table width="100%" bgcolor="#cccccc" cellSpacing=1 cellPadding=5>
 												<tr>
 													<td bgcolor="#ffffff">
-														<input type="button" value="Add Web Resources" class="buton" 
-														onclick="addLinks()" class="buton">
+
+														<html:button  styleClass="buton" property="submitButton" onclick="addLinks()">
+															<digi:trn key="btn:addWebResources">Add Web Resources</digi:trn> 
+														</html:button>
+														
 													</td>
 												</tr>
 											</table>
@@ -464,12 +475,16 @@ function removeSelLinks() {
 													<table cellSpacing=2 cellPadding=2>
 														<tr>
 															<td>
-																<input type="button" value="Add Managed Documents" class="buton" 
-																onclick="addManagedDocuments()" class="buton">
+																<html:button  styleClass="buton" property="submitButton" onclick="addManagedDocuments()">
+																	<digi:trn key="btn:addManagedDocuments">Add Managed Documents</digi:trn> 
+																</html:button>
+																
 															</td>
 															<td>
-																<input type="button" value="Remove Documents" class="buton" 
-																onclick="return removeSelManagedDocuments()" class="buton">
+																<html:button  styleClass="buton" property="submitButton" onclick="return removeSelManagedDocuments()">
+																	<digi:trn key="btn:removeDocuments">Remove Documents</digi:trn> 
+																</html:button>
+																
 															</td>
 														</tr>
 													</table>
@@ -481,8 +496,11 @@ function removeSelLinks() {
 											<table width="100%" bgcolor="#cccccc" cellSpacing=1 cellPadding=5>
 												<tr>
 													<td bgcolor="#ffffff">
-														<input type="button" value="Add Managed Documents" class="buton" 
-														onclick="addManagedDocuments()" class="buton">
+														<html:button  styleClass="buton" property="submitButton" onclick="addManagedDocuments()">
+																<digi:trn key="btn:addManagedDocuments">Add Managed Documents</digi:trn> 
+														</html:button>
+														
+														
 													</td>
 												</tr>
 											</table>
@@ -497,13 +515,23 @@ function removeSelLinks() {
 										<table cellPadding=3>
 											<tr>
 												<td>
-													<input type="button" value=" << Back " class="dr-menu" onclick="gotoStep(5)">
+													<html:button  styleClass="buton" property="submitButton" onclick="gotoStep(5)">
+															<< <digi:trn key="btn:back">Back</digi:trn> 
+													</html:button>
+													
 												</td>
 												<td>
-													<input type="submit" value="Next >> " class="dr-menu" onclick="gotoStep(7)">
+													<html:submit  styleClass="buton" property="submitButton" onclick="gotoStep(7)">
+															<digi:trn key="btn:next">Next</digi:trn> >>
+													</html:submit>
+													
 												</td>
 												<td>
 													<input type="reset" value="Reset" class="dr-menu" onclick="return resetAll()">
+													<html:reset  styleClass="buton" property="submitButton" onclick="return resetAll()">
+															<digi:trn key="btn:reset">Reset</digi:trn>
+													</html:reset>
+													
 												</td>
 											</tr>
 										</table>

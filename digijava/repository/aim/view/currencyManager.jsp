@@ -114,7 +114,10 @@ function submit() {
 											</html:select>
 										</td>
 										<td bgcolor="#f4f4f2" align="right" width="50">
-											<input type="button" value=" Go " class="buton" onclick="submit()"/>
+											<html:button  styleClass="dr-menu" property="submitButton"  onclick="submit()">
+												<digi:trn key="btn:go">Go</digi:trn> 
+											</html:button>
+											
 										</td>	
 									</tr>
 								</table>
@@ -130,7 +133,9 @@ function submit() {
 											<html:text property="numRecords" size="3" styleClass="inp-text"/>
 										</td>											
 										<td bgcolor="#f4f4f2" vAlign="center" align="left">
-											<input type="button" value=" View " class="buton" onclick="submit()"/>
+											<html:button  styleClass="dr-menu" property="submitButton"  onclick="submit()">
+												<digi:trn key="btn:view">View</digi:trn> 
+											</html:button>
 										</td>	
 									</tr>
 								</table>								

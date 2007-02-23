@@ -178,8 +178,11 @@
 															<table width="100%" cellSpacing=2 cellPadding=3 vAlign="top" align="center"
 															bgcolor="#ffffff">
 																<tr><td bgcolor="#ffffff" align="center">
-																		<html:submit styleClass="dr-menu" value="Add Activity To Workspace" 
-																		onclick="return validate()" />
+																		<html:submit  styleClass="dr-menu" property="submitButton"  onclick="return validate()">
+																			<digi:trn key="btn:addActivityToWorkspace">Add Activity To Workspace</digi:trn> 
+																		</html:submit>
+																		
+																		
 																</td></tr>
 															</table>
 														</td>
@@ -228,8 +231,11 @@
 															<table cellspacing="5">
 																<tr>
 																	<td>
-																		<html:submit styleClass="dr-menu" value="Add Activity To Workspace" 
-																		onclick="return validate()" />
+																		<html:submit  styleClass="dr-menu" property="submitButton"  onclick="return validate()">
+																			<digi:trn key="btn:addActivityToWorkspace">Add Activity To Workspace</digi:trn> 
+																		</html:submit>
+																		
+																		
 																	</td>
 																</tr>
 															</table>

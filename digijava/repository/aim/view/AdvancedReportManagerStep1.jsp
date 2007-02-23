@@ -381,15 +381,26 @@ function checkUncheckAll2() {
 											</TR>
 											<tr align="center">
 												<td align="center">
-													<input type=button value="  Add >>   " class="dr-menu" onclick="addColumn()" >						
-													<input type=button value="<< Remove " class="dr-menu" onclick="deleteColumn()" >						
+													<html:button  styleClass="dr-menu" property="submitButton"  onclick="addColumn()">
+														<digi:trn key="btn:add">  Add </digi:trn> >>&nbsp;&nbsp;&nbsp;
+													</html:button>					
+													<html:button  styleClass="dr-menu" property="submitButton"  onclick="deleteColumn()">
+														<< <digi:trn key="btn:remove">Remove</digi:trn> 
+													</html:button>					
+
 												</td>
 											</tr>	<!-- Add and Remove Button-->
 											<tr>
 												<td align="right" colspan="2">
-												    <input type=button name=back value="<< Previous"   class="dr-menu" onclick="javascript:backStep()">	
-													<input type="button" name="Cancel" value=" Cancel " class="dr-menu" onclick="return quitAdvRptMngr()" >
-													<input type=button value="  Next >>  " class="dr-menu" onclick="javascript:gotoStep()" >															
+												   <html:button  styleClass="dr-menu" property="submitButton"  onclick="javascript:backStep()">
+														<< <digi:trn key="btn:previous">Previous</digi:trn> 
+													</html:button>					
+													<html:button  styleClass="dr-menu" property="submitButton"  onclick="return quitAdvRptMngr()">
+														<digi:trn key="btn:cancel">Cancel</digi:trn> 
+													</html:button>					
+													<html:button  styleClass="dr-menu" property="submitButton" onclick="javascript:gotoStep()">
+														<digi:trn key="btn:remove">Remove</digi:trn> >>
+													</html:button>					
 												</td>
 											</tr>
 										</TABLE>

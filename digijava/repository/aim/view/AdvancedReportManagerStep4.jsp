@@ -305,9 +305,15 @@ function backStep() {
 											</TR>
 											<tr bgcolor="#f4f4f2">
 												<td align="center" colspan="2" bgcolor="#f4f4f2">
-													<input type=button name=back value="<< Previous"   class="dr-menu" onclick="javascript:backStep()">
-													<input type="button" name="Cancel" value=" Cancel " class="dr-menu" onclick="return quitAdvRptMngr()" >	
-													<input type=button name=generateReport value="  Generate Report  " class="dr-menu"  onclick="javascript:saveReport()">															
+													<html:button  styleClass="dr-menu" property="submitButton"  onclick="javascript:backStep()">
+															<< <digi:trn key="btn:previous">Previous</digi:trn> 
+													</html:button>
+													<html:button  styleClass="dr-menu" property="submitButton"  onclick="return quitAdvRptMngr()">
+															<digi:trn key="btn:cancel">Cancel</digi:trn> 
+													</html:button>
+													<html:button  styleClass="dr-menu" property="submitButton"  onclick="javascript:saveReport()">
+															<digi:trn key="btn:generateReport">Generate Report</digi:trn> 
+													</html:button>
 												</td>
 											</tr>
 										</TABLE>

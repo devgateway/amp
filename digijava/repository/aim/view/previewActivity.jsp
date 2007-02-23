@@ -1345,19 +1345,25 @@ function disable() {
 											<tr>
 												<c:if test="${aimEditActivityForm.donorFlag == true}">
 												<td>
-													<input type="button" value=" << Back" class="dr-menu" onclick="javascript:history.go(-1)"
-													name="backButton">
+													<html:button  styleClass="dr-menu" property="submitButton" onclick="javascript:history.go(-1)">
+														<< <digi:trn key="btn:back">Back</digi:trn> 
+													</html:button>
+													
+													
 												</td>
 												</c:if>
 												<c:if test="${aimEditActivityForm.donorFlag == false}">
 												<td>
-													<input type="button" value=" << Back" class="dr-menu" onclick="javascript:history.go(-1)"
-													name="backButton">
+													<html:button  styleClass="dr-menu" property="submitButton" onclick="javascript:history.go(-1)">
+														<< <digi:trn key="btn:back">Back</digi:trn> 
+													</html:button>
 												</td>
 												</c:if>
 												<td>
-													<input type="button" value="Save Activity" class="dr-menu" onclick="disable()"
-													name="submitButton">
+													<html:button  styleClass="dr-menu" property="submitButton" onclick="disable()">
+														<digi:trn key="btn:saveActivity">Save Activity</digi:trn> 
+													</html:button>
+													
 												</td>
 											</tr>
 										</table>
@@ -1365,7 +1371,10 @@ function disable() {
 									</c:if>
 									<c:if test="${aimEditActivityForm.pageId > 2}">
 									<tr><td bgColor=#ffffff align="center" colspan=2>
-										<input type="button" value="Back" class="dr-menu" onclick="javascript:history.go(-1)">
+
+										<html:button  styleClass="dr-menu" property="submitButton" onclick="javascript:history.go(-1)">
+														<digi:trn key="btn:back">Back</digi:trn> 
+										</html:button>
 									</td></tr>
 									</c:if>
 								</table>

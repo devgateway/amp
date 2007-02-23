@@ -198,8 +198,10 @@
 															<table width="100%" cellSpacing=2 cellPadding=3 vAlign="top" align="center"
 															bgcolor="#ffffff">
 																<tr><td bgcolor="#ffffff" align="center">
-																		<html:button styleClass="dr-menu" value="Add Activity To Workspace" 
-																		property="addActivity" onclick="assignActivity()" />
+																		<html:button  styleClass="dr-menu" property="submitButton" onclick="assignActivity()">
+																			<digi:trn key="btn:addActivityToWorkspace">Add Activity To Workspace</digi:trn> 
+																		</html:button>
+																		
 																</td></tr>
 															</table>
 														</td>
@@ -248,12 +250,15 @@
 															<table cellspacing="5">
 																<tr>
 																	<td>
-																		<html:button styleClass="dr-menu" value="Add Activity To Workspace" 
-																		property="addActivity" onclick="assignActivity()"/>
+																		<html:button  styleClass="dr-menu" property="submitButton" onclick="assignActivity()">
+																			<digi:trn key="btn:addActivityToWorkspace">Add Activity To Workspace</digi:trn> 
+																		</html:button>
 																	</td>
 																	<td>	
-																		<html:submit styleClass="dr-menu" value="Remove selected activities" 
-																		property="removeActivity" onclick="return confirmDelete()"/>
+																		<html:submit  styleClass="dr-menu" property="submitButton"  onclick="return confirmDelete()">
+																			<digi:trn key="btn:removeSelectedActivities">Remove selected activities</digi:trn> 
+																		</html:submit>
+																		
 																	</td>
 																</tr>
 															</table>

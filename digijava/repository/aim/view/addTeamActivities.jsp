@@ -235,8 +235,10 @@ function checkSelActivities() {
 															<table cellspacing="5">
 																<tr>
 																	<td>
-																		<html:submit styleClass="dr-menu" value="Add Activity To Workspace" 
-																		property="assignActivity" onclick="return checkSelActivities()"/>
+																		<html:submit  styleClass="dr-menu" property="submitButton"  onclick="return checkSelActivities()">
+																			<digi:trn key="btn:addActivityToWorkspace">Add Activity To Workspace</digi:trn> 
+																		</html:submit>
+																		
 																	</td>
 																</tr>
 															</table>

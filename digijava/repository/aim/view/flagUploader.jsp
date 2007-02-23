@@ -161,11 +161,14 @@
 															<table cellPadding=3 cellSpacing=3>
 															<tr>
 																<td>
-																	<input type="submit" value="Upload" class="dr-menu"
-																	onclick="return upload()">
+																	<html:submit  styleClass="dr-menu" property="submitButton"  onclick="return upload()">
+																		<digi:trn key="btn:upload">Upload</digi:trn> 
+																	</html:submit>
 																</td>
 																<td>
-																	<input type="reset" value="Clear" class="dr-menu">
+																	<html:reset  styleClass="dr-menu" property="submitButton" >
+																		<digi:trn key="btn:clear">Clear</digi:trn> 
+																	</html:reset>
 																</td>
 															</tr>
 															</table>

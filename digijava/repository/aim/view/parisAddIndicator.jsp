@@ -114,7 +114,12 @@
 	<tr bgColor=#dddddb>														
 		<td bgColor=#dddddb height="20" align="center" colspan="5"><B>
 			<input styleClass="dr-menu" type="button" name="addBtn" value="Save" onclick="saveIndicator()">
-			<input styleClass="dr-menu" type="button" name="close" value="Close" onclick="closeWindow()">
+			<html:button  styleClass="dr-menu" property="addBtn"  onclick="saveIndicator()">
+				<digi:trn key="btn:save">Save</digi:trn> 
+			</html:button>
+			<html:button  styleClass="dr-menu" property="close"  onclick="closeWindow()">
+				<digi:trn key="btn:close">Close</digi:trn> 
+			</html:button>
 		</td>
 	</tr>
 	

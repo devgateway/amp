@@ -280,10 +280,15 @@ function gotoStep() {
 
 											<tr bgcolor="#f4f4f2">
 												<td align="center" colspan="2" bgcolor="#f4f4f2">
-													<input type=button name=back value="<< Previous"   class="dr-menu" onclick="javascript:history.back()">
-													<input type="button" name="Cancel" value=" Cancel " class="dr-menu" onclick="return quitAdvRptMngr()" >
-<!--													<input type=button name=next value="  Chart Creation  " class="dr-menu" onclick="javascript:gotoStep()" >-->
-													<input type=button name=back value=" Save Report "   class="dr-menu" onclick="saveReport()">						
+													<html:button  styleClass="dr-menu" property="submitButton"  onclick="javascript:history.back()">
+														<< <digi:trn key="btn:previous">Previous</digi:trn> 
+													</html:button>
+													<html:button  styleClass="dr-menu" property="submitButton"  onclick="javascript:gotoStep()">
+														<digi:trn key="btn:cancel">Cancel</digi:trn> 
+													</html:button>
+													<html:button  styleClass="dr-menu" property="submitButton"   onclick="saveReport()">
+														<digi:trn key="btn:saveReport">Save Report</digi:trn> 
+													</html:button>
 													
 												</td>
 											</tr>

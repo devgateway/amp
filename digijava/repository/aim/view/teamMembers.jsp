@@ -149,7 +149,10 @@ function addTeamMember(id) {
 													</tr>
 													<tr>
 														<td>
-															<html:submit styleClass="dr-menu" value="Add Member" property="addMember" />
+															<html:submit  styleClass="dr-menu" property="addMember">
+																<digi:trn key="btn:addMember">Add Member</digi:trn> 
+															</html:submit>
+															
 														</td>
 													</tr>
 													</logic:empty>
@@ -242,12 +245,17 @@ function addTeamMember(id) {
 															<table cellspacing="5">
 																<tr>
 																	<td>	
-																		<input type="button" class="dr-menu" value="Add Member"
-																		onclick="addTeamMember('<c:out value="${aimTeamMemberForm.teamId}"/>')">
+																		<html:button  styleClass="dr-menu" property="submitButton" onclick="addTeamMember('<c:out value="${aimTeamMemberForm.teamId}"/>')">
+																			<digi:trn key="btn:addMember">AddMember</digi:trn> 
+																		</html:button>
+																		
 																	</td>
 																	<td>
-																		<html:submit styleClass="dr-menu" value="Remove selected members" 
-																		property="removeMember" onclick="return checkSelMembers()"/>
+																		<html:button  styleClass="dr-menu" property="removeMember"  onclick="return checkSelMembers()">
+																			<digi:trn key="btn:removeSelectedMembers"> Remove Selected Members</digi:trn> 
+																		</html:button>
+
+
 																	</td>
 																</tr>
 															</table>

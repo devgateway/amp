@@ -527,13 +527,21 @@ function loadPage(){
 																			<table width="100%" cellspacing="5">
 																				<tr>
 																					<td width="42%" align="right">
-																						<input type="button" value="Save" class="dr-menu" onclick="return check()">
+																						<html:button  styleClass="dr-menu" property="submitButton"  onclick="return check()">
+																							<digi:trn key="btn:save">Save</digi:trn> 
+																						</html:button>
 																					</td>
 																					<td width="8%" align="left">
 																						<input type="reset" value="Reset" class="dr-menu">
+																						<html:reset  styleClass="dr-menu" property="submitButton">
+																							<digi:trn key="btn:reset">Reset</digi:trn> 
+																						</html:reset>
 																					</td>
 																					<td width="45%" align="left">
 																						<input type="button" value="Cancel" class="dr-menu" onclick="move()">
+																						<html:button  styleClass="dr-menu" property="submitButton"  onclick="return move()">
+																							<digi:trn key="btn:cancel">Cancel</digi:trn> 
+																						</html:button>
 																					</td>
 																				</tr>
 																			</table>
@@ -542,7 +550,10 @@ function loadPage(){
 																	<logic:equal name="aimAddOrgForm" property="flag" value="delete" >
 																		<tr>
 																			<td colspan="3" width="555"  align="center" height="27">
-																				<input type="button" value="Delete this Organization" class="dr-menu" onclick="return msg()">
+																				<html:button  styleClass="dr-menu" property="submitButton"  onclick="return msg()">
+																					<digi:trn key="btn:deleteThisOrganization">Delete this Organization</digi:trn> 
+																				</html:button>
+																				
 																			</td>
 																		</tr>
 																	</logic:equal>

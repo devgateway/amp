@@ -207,8 +207,10 @@
 																		</tr>
 																		<tr>
 																			<td bgcolor="#f4f4f2" align="center" colspan="2">
-																				<input class="buton" type="button" name="addFromList"
-																				value=" Add " onclick="addIndicatorTL(1)">
+																				<html:button  styleClass="dr-menu" property="addFromList"  onclick="addIndicatorTL(1)">
+																					<digi:trn key="btn:add">Add</digi:trn> 
+																				</html:button>
+																				
 																			</td>
 																		</tr>
 																	</logic:notEmpty>
@@ -247,8 +249,10 @@
 																		</td>
 																		<td bgcolor="#f4f4f2" align="left">
 																			<html:text property="searchkey" size="20" styleClass="inp-text"/>&nbsp;&nbsp;
-																			<input class="buton" type="button" name="searchIndicatorkeyword" value=" Go " 
-																			onclick="searchIndicatorkey()">
+																			<html:button  styleClass="dr-menu" property="searchIndicatorKeyword"  onclick="searchIndicatorkey()">
+																				<digi:trn key="btn:Go">Go</digi:trn> 
+																			</html:button>
+																			
 																		</td>														
 																	</tr>
 																	<logic:notEmpty name="aimIndicatorForm" property="searchReturn">
@@ -277,6 +281,9 @@
 																		<tr>
 																			<td bgcolor="#f4f4f2" align="center" colspan="3">
 																				<input class="buton" type="button" name="addFromSearchList" value=" Add " onclick="addIndicatorTL(2)">
+																				<html:button  styleClass="dr-menu" property="addFromSearchList"  onclick="addIndicatorTL(2)">
+																					<digi:trn key="btn:add">Add</digi:trn> 
+																				</html:button>
 																			</td>
 																		</tr>
 																	</logic:notEmpty>
@@ -358,8 +365,9 @@
 																	</tr>																	
 																	<tr>
 																		<td bgcolor="#f4f4f2" align="center" colspan="3">
-																			<input class="buton" type="button" name="addnewIndicator" value=" Add " 
-																			onclick="addNewIndicatorTL()">
+																			<html:button  styleClass="dr-menu" property="addnewIndicator"  onclick="addNewIndicatorTL()">
+																				<digi:trn key="btn:add">Add</digi:trn> 
+																			</html:button>
 																		</td>
 																	</tr>
 																</table>														

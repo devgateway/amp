@@ -279,8 +279,9 @@
 																	</td>																	
 																	</c:if>
 																	<td>	
-																		<html:submit styleClass="dr-menu" value="Remove selected activities" 
-																		property="removeActivity" onclick="return confirmDelete()"/>
+																		<html:submit  styleClass="dr-menu" property="submitButton"  onclick="return confirmDelete()">
+																			<digi:trn key="btn:removeSelectedActivities">Remove selected activities</digi:trn> 
+																		</html:submit>
 																	</td>
 																</tr>
 															</table>

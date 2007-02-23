@@ -147,7 +147,9 @@
 													</tr>	
 													<tr>
 														<td colspan="2" align="center">
-															<input type="Submit" value="Save Indicator" class="buton" onclick="saveIndicator()">
+															<html:submit  styleClass="dr-menu" property="submitButton"  onclick="saveIndicator()">
+																<digi:trn key="btn:saveIndicator">Save Indicator</digi:trn> 
+															</html:submit>
 														</td>
 													</tr>	
 													<tr>
@@ -155,7 +157,9 @@
 																Add A Question
 														</td>
 														<td align="left" bgcolor="#f4f4f2">
-																<input type="button" value="Add" class="buton" onclick="addQuestion()">
+																<html:button  styleClass="dr-menu" property="submitButton"  onclick="addQuestion()">
+																	<digi:trn key="btn:add">Add</digi:trn> 
+																</html:button>
 														</td>																
 													</tr>
 														

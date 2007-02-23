@@ -220,13 +220,19 @@
 																			<table width="100%" cellspacing="5">
 																				<tr>
 																					<td width="45%" align="right">
-																						<input type="button" value="Save" class="dr-menu" onclick="check()">
+																						<html:button  styleClass="dr-menu" property="submitButton"  onclick="check()">
+																							<digi:trn key="btn:save">Save</digi:trn> 
+																						</html:button>
 																					</td>
 																					<td width="8%" align="left">
-																						<input type="reset" value="Reset" class="dr-menu">
+																						<html:reset  styleClass="dr-menu" property="submitButton" >
+																							<digi:trn key="btn:reset">Reset</digi:trn> 
+																						</html:reset>
 																					</td>
 																					<td width="45%" align="left">
-																						<input type="button" value="Cancel" class="dr-menu" onclick="move()">
+																						<html:button  styleClass="dr-menu" property="submitButton"  onclick="move()">
+																							<digi:trn key="btn:cancel">Cancel</digi:trn> 
+																						</html:button>
 																					</td>
 																				</tr>
 																			</table>
@@ -235,7 +241,9 @@
 																	<logic:equal name="aimAddFiscalCalForm" property="flag" value="delete" >
 																		<tr>
 																			<td colspan="2" width="60%"  align="center">
-																				<input type="button" value="Delete this Calendar" class="dr-menu" onclick="msg()">
+																				<html:button  styleClass="dr-menu" property="submitButton"  onclick="msg()">
+																					<digi:trn key="btn:deleteThisCalendar">Delete this Calendar</digi:trn> 
+																				</html:button>
 																			</td>
 																		</tr>
 																	</logic:equal>

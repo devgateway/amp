@@ -612,13 +612,22 @@
 										<table cellPadding=3>
 											<tr>
 												<td>
-													<input type="button" value=" << Back " class="dr-menu" onclick="gotoStep(8)">
+													<html:button  styleClass="dr-menu" property="submitButton" onclick="gotoStep(8)">
+														<< <digi:trn key="btn:back">Back</digi:trn> 
+													</html:button>													
 												</td>
 												<td>
-													<input type="button" value="Preview" class="dr-menu" onclick="previewClicked()">
+													<html:button  styleClass="dr-menu" property="submitButton" onclick="previewClicked()">
+														<digi:trn key="btn:preview">Preview</digi:trn> 
+													</html:button>													
+
 												</td>
 												<td>
 													<input type="reset" value="Reset" class="dr-menu" onclick="return resetAll()">
+													<html:reset  styleClass="dr-menu" property="submitButton" onclick="return resetAll()">
+														<digi:trn key="btn:reset">Reset</digi:trn> 
+													</html:reset>													
+
 												</td>
 											</tr>
 										</table>

@@ -166,10 +166,15 @@ function clearForms()
 			<table width="100%" cellspacing="5">
 				<tr>
 					<td width="50%" align="right">
-						<html:submit value="Save" styleClass="dr-menu" onclick="return validate()"/>
+						<html:submit  styleClass="dr-menu" property="submitButton" onclick="return validate()">
+							<digi:trn key="btn:save">Save</digi:trn> 
+						</html:submit>
 					</td>
 					<td width="50%" align="left">
-						<html:button property="" value="Cancel" styleClass="dr-menu" onclick="cancel()" />
+						<html:button  styleClass="dr-menu" property="submitButton" onclick="cancel()">
+							<digi:trn key="btn:cancel">Cancel</digi:trn> 
+						</html:button>
+
 					</td>
 				</tr>
 			</table>

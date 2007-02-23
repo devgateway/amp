@@ -227,8 +227,10 @@
 													                    <a href="javascript:listReports()"> List of Unassigned Reports </a>
 																	</td>
 																	<td >	
-																		<html:submit styleClass="dr-menu" value="Remove selected reports" 
-																		property="removeReports" onclick="return validate()"/>
+																		<html:submit  styleClass="dr-menu" property="submitButton"  onclick="return validate()">
+																			<digi:trn key="btn:removeSelectedReports">Remove selected reports</digi:trn> 
+																		</html:submit>
+																		
 																	</td>
 																</tr>
 															</table>

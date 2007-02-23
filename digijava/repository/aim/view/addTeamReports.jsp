@@ -199,8 +199,10 @@
 															<table cellspacing="5">
 																<tr>
 																	<td>
-																		<html:submit styleClass="dr-menu" value="Add Reports to the Workspace" 
-																		property="assignReports" onclick="return validate()"/>
+																		<html:submit  styleClass="dr-menu" property="assignReports"  onclick="return validate()">
+																			<digi:trn key="btn:addReportsToTheWorkspace">Add Reports to the Workspace</digi:trn> 
+																		</html:submit>
+																		
 																	</td>
 																</tr>
 															</table>

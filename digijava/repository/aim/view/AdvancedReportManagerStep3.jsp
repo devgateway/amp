@@ -259,13 +259,18 @@
 																<a href="<%=bargraphURL%>" target="_blank"><img src=<%=bargraphURL%> border="1" width="600" height="600"></a>
 
 																<br><br>
-																<input type=button name=back value="<< Previous"   class="dr-menu" onclick="javascript:history.back()">						
-<!--<input type="button" onclick="popup_chart()" value="Create Pie-Chart PDF" class="dr-menu"> -->
-
-																<input type="button" name="Cancel" value=" Cancel " class="dr-menu" onclick="return quitAdvRptMngr()" >
-																<input type="button" onclick="popup_barChart()" value="Create Bar-Chart PDF" class="dr-menu"> 
-
-																<input type=button name=back value=" Save Report "   class="dr-menu" onclick="saveReport()">						
+																<html:button  styleClass="dr-menu" property="submitButton"  onclick="javascript:history.back()">
+																	<< <digi:trn key="btn:previous">Previous</digi:trn> 
+																</html:button>
+																<html:button  styleClass="dr-menu" property="submitButton"  onclick="return quitAdvRptMngr()">
+																	<digi:trn key="btn:cancel">Cancel</digi:trn> 
+																</html:button>
+																<html:button  styleClass="dr-menu" property="submitButton"  onclick="popup_barChart()">
+																	<digi:trn key="btn:createBarChartPDF">Create Bar-Chart PDF</digi:trn> 
+																</html:button>
+																<html:button  styleClass="dr-menu" property="submitButton"  onclick="saveReport()">
+																	<digi:trn key="btn:saveReport">Save Report</digi:trn> 
+																</html:button>
 
 
 																</TD>

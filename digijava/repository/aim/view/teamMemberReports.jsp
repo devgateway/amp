@@ -221,7 +221,10 @@
 													</tr>	
 													<tr>
 														<td align="center">
-															<html:submit styleClass="dr-menu" value="Add report" property="addReport" />
+															<html:submit  styleClass="dr-menu" property="addReport">
+																<digi:trn key="btn:addReport">Add report</digi:trn> 
+															</html:submit>
+															
 														</td>
 													</tr>	
 													</logic:empty>
@@ -250,12 +253,15 @@
 															<table cellspacing="5">
 																<tr>
 																	<td>
-																		<html:submit styleClass="dr-menu" value="Add report" 
-																		property="addReport" />
+																		<html:submit  styleClass="dr-menu" property="addReport">
+																			<digi:trn key="btn:addReport">Add report</digi:trn> 
+																		</html:submit>
 																	</td>
 																	<td>	
-																		<html:submit styleClass="dr-menu" value="Remove selected reports" 
-																		property="removeReports" onclick="return confirmDelete()"/>
+																		<html:submit  styleClass="dr-menu" property="submitButton"  onclick="return confirmDelete()">
+																			<digi:trn key="btn:removeSelectedReports">Remove selected reports</digi:trn> 
+																		</html:submit>
+																		
 																	</td>
 																</tr>
 															</table>

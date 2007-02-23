@@ -175,7 +175,9 @@ function selectFile() {
 											<digi:trn key="aim:andPrev7Days">and previous 7 days</digi:trn>
 										</td>
 										<td bgcolor="#f4f4f2" vAlign="center">
-											<html:submit value=" Go " styleClass="buton"/>
+											<html:submit  styleClass="dr-menu" property="submitButton" >
+												<digi:trn key="btn:go">Go</digi:trn> 
+											</html:submit>
 										</td>	
 									</tr>
 								</table>								
@@ -190,7 +192,9 @@ function selectFile() {
 											<html:text property="numResultsPerPage" size="3" styleClass="inp-text"/>
 										</td>											
 										<td bgcolor="#f4f4f2" vAlign="left" align="center">
-											<html:submit value=" View " styleClass="buton"/>
+											<html:submit  styleClass="dr-menu" property="submitButton" >
+												<digi:trn key="btn:view">View</digi:trn> 
+											</html:submit>
 										</td>
 									</tr>
 								</table>							
@@ -210,7 +214,10 @@ function selectFile() {
 								</a>
 								</td>
 								<td bgcolor="#f4f4f2" vAlign="left" align="right">
-								<input type="button" value="Update Values" class="buton" onclick="return updateRates()">	
+								<html:button  styleClass="dr-menu" property="submitButton"  onclick="return updateRates()">
+									<digi:trn key="btn:updateValues">Update Values</digi:trn> 
+								</html:button>
+								
 								</td>
 								</tr>
 								</table>
@@ -286,7 +293,10 @@ function selectFile() {
 								</table>
 							</td></tr>
 							<tr><td>
-								<input type="button" value="Delete Selected Rates" class="buton" onclick="deleteRates()">
+								<html:button  styleClass="dr-menu" property="submitButton"  onclick="deleteRates()">
+									<digi:trn key="btn:deleteSelectedRates">Delete Selected Rates</digi:trn> 
+								</html:button>
+								
 							</td></tr>
 							<c:if test="${!empty aimCurrencyRateForm.currencyRates}">
 							<c:if test="${!empty aimCurrencyRateForm.pages}">

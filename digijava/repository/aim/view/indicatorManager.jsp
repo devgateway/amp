@@ -157,8 +157,9 @@
 													
 													<tr bgcolor="#ffffff">
 														<td height="20" align="center"><B>
-															<input class="buton" type="button" name="addIndicator" 
-															value="Add a New Indicator" onclick="addingIndicators()">
+															<html:button  styleClass="dr-menu" property="submitButton"  onclick="addingIndicators()">
+																<digi:trn key="btn:addNewAIndicator">Add a New Indicator</digi:trn> 
+															</html:button>
 														</td>
 													</tr>
 											</table>

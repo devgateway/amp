@@ -224,8 +224,14 @@ function gotoStep() {
 											</TR>
 											<tr>
 												<td align="right">
-													<input type="button" name="Cancel" value=" Cancel " class="dr-menu" onclick="return quitAdvRptMngr()" >
-													<input type=button value="  Next  " class="dr-menu" onclick="javascript:gotoStep()" >															
+													<html:button  styleClass="dr-menu" property="submitButton"  onclick="return quitAdvRptMngr()">
+														<digi:trn key="btn:cancel">Cancel</digi:trn> 
+													</html:button>
+													
+													<html:button  styleClass="dr-menu" property="submitButton"  onclick="javascript:gotoStep()">
+														<digi:trn key="btn:next">Next</digi:trn> 
+													</html:button>
+
 												</td>
 											</tr>
 										</TABLE>

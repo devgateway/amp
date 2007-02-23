@@ -250,8 +250,9 @@
 													</tr>	
 													<tr>
 														<td align="center">
-															<html:submit styleClass="dr-menu" value="Add Activity To Member's Workspace" 
-															property="addActivity" />
+															<html:submit  styleClass="dr-menu" property="addActivity" >
+																<digi:trn key="btn:addActivityToMemberWorkspace">Add Activity To Member's Workspace</digi:trn> 
+															</html:submit>
 														</td>
 													</tr>	
 													</logic:empty>
@@ -298,12 +299,17 @@
 															<table cellspacing="5">
 																<tr>
 																	<td>
-																		<html:submit styleClass="dr-menu" value="Add Activity To Member's Workspace" 
-																		property="addActivity" />
+																		<html:submit  styleClass="dr-menu" property="submitButton" >
+																			<digi:trn key="btn:addActivityToMemberWorkspace">Add Activity To Member's Workspace</digi:trn> 
+																		</html:submit>
+																		
 																	</td>
 																	<td>	
-																		<html:submit styleClass="dr-menu" value="Remove selected activities" 
-																		property="removeActivity" onclick="return confirmDelete()"/>
+																		<html:submit  styleClass="dr-menu" property="submitButton"  onclick="return confirmDelete()">
+																			<digi:trn key="btn:removeSelectedActivities">Remove Selected Activities</digi:trn> 
+																		</html:submit>
+																		
+																		
 																	</td>
 																</tr>
 															</table>

@@ -350,7 +350,7 @@ function popupwin()
 																			property="selectedLocs">
 																			<tr>
 																				<td bgcolor="#ffffff">
-																					<html:button  styleClass="button" property="submitButton" onclick="selectLocation()">
+																					<html:button  styleClass="buton" property="submitButton" onclick="selectLocation()">
 																						<digi:trn key="btn:addLocation">Add Location</digi:trn> 
 																					</html:button>		
 																				</td>
@@ -396,12 +396,12 @@ function popupwin()
 																						<table cellSpacing=2 cellPadding=2>
 																							<tr>
 																								<td>
-																									<html:button  styleClass="button" property="submitButton" onclick="selectLocation()">
+																									<html:button  styleClass="buton" property="submitButton" onclick="selectLocation()">
 																										<digi:trn key="btn:addLocation">Add Location</digi:trn> 
 																									</html:button>
 																								</td>
 																								<td>
-																									<html:button  styleClass="button" property="submitButton" onclick="return removeSelLocations()">
+																									<html:button  styleClass="buton" property="submitButton" onclick="return removeSelLocations()">
 																										<digi:trn key="btn:removeLocation">Remove Location</digi:trn> 
 																									</html:button>
 																								</td>

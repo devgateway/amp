@@ -352,7 +352,7 @@
 					<B><digi:trn key="aim:activityKeywordSearch">Activity Keyword 	Search</digi:trn></B>
 					<html:text property="searchKey" styleClass="inp-text"/>
 					<html:submit  styleClass="dr-menu" property="submitButton" onclick="searchActivity()">
-						<digi:trn key="btn:GO">GO</digi:trn> 
+						<digi:trn key="btn:Go">GO</digi:trn> 
 					</html:submit>
 				</TD>
 				<TD align="right">

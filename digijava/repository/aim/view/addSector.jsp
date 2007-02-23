@@ -161,13 +161,13 @@
 					<td  align="right">
 					<%--
 						<html:submit value="Save" styleClass="dr-menu"/>--%>
-							<input  type="button" class="dr-menu" name="addBtn" value="Save" onclick="updateScheme('<bean:write name="aimAddSectorForm" property="parentId" />')" />
+							<input  type="button" class="dr-menu" name="addBtn" value='<digi:trn key="btn:save">Save</digi:trn>' onclick="updateScheme('<bean:write name="aimAddSectorForm" property="parentId" />')" />
 					</td>
 					<td  align="right">
 						<html:reset value="Clear" styleClass="dr-menu"/>
 					</td>
 					<td  align="left">
-						<input type="button" value="Cancel" class="dr-menu" onclick="cancel('<bean:write name="aimAddSectorForm" property="parentId" />')"/>
+						<input type="button" value='<digi:trn key="btn:save">Save</digi:trn>' class="dr-menu" onclick="cancel('<bean:write name="aimAddSectorForm" property="parentId" />')"/>
 					</td>
 				</tr>
 			</table>

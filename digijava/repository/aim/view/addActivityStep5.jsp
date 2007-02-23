@@ -438,7 +438,7 @@ function removeSelComponents() {
 																<a href="javascript:editFunding('<bean:write name="selComponents" 
 																property="componentId"/>')">Edit</a><br>
 																&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<c:out value="${selComponents.description}"/>
-																</a><br>
+																</a><br> 
 															</td>
 														</tr>		
 

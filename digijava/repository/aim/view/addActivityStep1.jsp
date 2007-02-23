@@ -592,7 +592,7 @@ function popupwin()
 														<html:option value="-1">Please select the status</html:option>
 														<logic:iterate name="aimEditActivityForm" property="statusCollection" 
 														id="ampStatusId" >
-														<option value="<%=ampStatusId%>"> 
+														<option value="<%=ampStatusId%>" <%=(ampStatusId.equals(aimEditActivityForm.getStatus()))?"selected":""%>> 
 													 		 <bean:define id="ampStatusName" name="ampStatusId" property="name" />
 															<digi:trn key="<%= "aim:" + ampStatusName%>">
 																<bean:write name="ampStatusId" property="name"/>

@@ -377,8 +377,7 @@ function popupwin()
 																									</html:multibox></td>
 																									<td vAlign="center" align="left"><c:if
 																										test="${!empty selectedLocs.country}">
-																						[<bean:write name="selectedLocs"
-																											property="country" />][<c:out value="${aimEditActivityForm.country}"/>]
+																						[<c:out value="${aimEditActivityForm.country}"/>]
 																					</c:if> <c:if test="${!empty selectedLocs.region}">
 																						[<bean:write name="selectedLocs" property="region" />]
 																					</c:if> <c:if test="${!empty selectedLocs.zone}">

@@ -205,8 +205,8 @@ function popupwin()
 										Add Activity - Step 1
 									</digi:trn>
 										</c:if>
-									</digi:link>&nbsp;&gt;&nbsp; 
-									<digi:trn key="aim:addActivityStep2">
+									</digi:link>&nbsp;&gt;&nbsp; <digi:trn
+										key="aim:addActivityStep2">
 									Step 2
 								</digi:trn> </span></td>
 								</tr>
@@ -227,7 +227,7 @@ function popupwin()
 										<digi:trn key="aim:editActivity">
 										Edit Activity 
 									</digi:trn>:
-									<bean:write name="aimEditActivityForm" property="title"/>
+									<bean:write name="aimEditActivityForm" property="title" />
 									</c:if></td>
 								</tr>
 							</table>
@@ -255,8 +255,8 @@ function popupwin()
 													<td width="13" height="20"
 														background="module/aim/images/left-side.gif"></td>
 													<td vAlign="center" align="center" class="textalb"
-														height="20" bgcolor="#006699">
-														<digi:trn key="aim:step2of9LocationAndSectors">
+														height="20" bgcolor="#006699"><digi:trn
+														key="aim:step2of9LocationAndSectors">
 													Step 2 of 9: Location | Sectors
 												</digi:trn></td>
 													<td width="13" height="20"
@@ -277,7 +277,7 @@ function popupwin()
 														<tr>
 															<td><IMG alt=Link height=10
 																src="../ampTemplate/images/arrow-014E86.gif" width=15> <b>
-																<digi:trn key="aim:location">Location</digi:trn></b></td>
+															<digi:trn key="aim:location">Location</digi:trn></b></td>
 														</tr>
 														<tr>
 															<td><digi:trn key="aim:chooseLocation">
@@ -295,18 +295,17 @@ function popupwin()
 																		title="<digi:trn key="aim:impleLevel">Federal and regional programs are the scope of a project. They are a classification of the sponsorship of the project or program. This works in conjunction with location</digi:trn>">
 																	<digi:trn key="aim:implementLevel">Implementation Level</digi:trn></a>&nbsp;
 																	</td>
-																	<td>
-																		<html:select property="level" styleClass="inp-text">
-																			<html:option value="-1">Select Level</html:option>
-																			<logic:iterate name="aimEditActivityForm" property="levelCollection" id="ampLevelId" >
-																				<option value="<%=ampLevelId%>"> 
-																		 		 <bean:define id="ampLevelName" name="ampLevelId" property="name" />
-																				 <digi:trn key="<%= "aim:" + ampLevelName%>">
-																					<bean:write name="ampLevelId" property="name"/>
-																				 </digi:trn>
-																				</option>
-																			</logic:iterate>
-																			
+																	<td><html:select property="level" styleClass="inp-text">
+																		<html:option value="-1">Select Level</html:option>
+																		<logic:iterate name="aimEditActivityForm"
+																			property="levelCollection" id="ampLevelId">
+																			<option value="<%=ampLevelId%>"><bean:define
+																				id="ampLevelName" name="ampLevelId" property="name" />
+																			<digi:trn key="<%= "aim:" + ampLevelName%>">
+																				<bean:write name="ampLevelId" property="name" />
+																			</digi:trn></option>
+																		</logic:iterate>
+
 																	</html:select></td>
 																</tr>
 																<tr>
@@ -321,10 +320,18 @@ function popupwin()
 																	<td vAlign="center"><br>
 																	<html:select property="implementationLevel"
 																		styleClass="inp-text">
-																		<html:option value="country"><digi:trn key="aim:CountryStep2">Country</digi:trn></html:option>
-																		<html:option value="region"><digi:trn key="aim:RegionStep2">Region</digi:trn></html:option>
-																		<html:option value="zone"><digi:trn key="aim:ZoneStep2">Zone</digi:trn></html:option>
-																		<html:option value="woreda"><digi:trn key="aim:DistrictStep2">District </digi:trn></html:option>
+																		<html:option value="country">
+																			<digi:trn key="aim:CountryStep2">Country</digi:trn>
+																		</html:option>
+																		<html:option value="region">
+																			<digi:trn key="aim:RegionStep2">Region</digi:trn>
+																		</html:option>
+																		<html:option value="zone">
+																			<digi:trn key="aim:ZoneStep2">Zone</digi:trn>
+																		</html:option>
+																		<html:option value="woreda">
+																			<digi:trn key="aim:DistrictStep2">District </digi:trn>
+																		</html:option>
 																	</html:select></td>
 																</tr>
 															</table>
@@ -349,11 +356,11 @@ function popupwin()
 																		<logic:empty name="aimEditActivityForm"
 																			property="selectedLocs">
 																			<tr>
-																				<td bgcolor="#ffffff">
-																					<html:button  styleClass="buton" property="submitButton" onclick="selectLocation()">
-																						<digi:trn key="btn:addLocation">Add Location</digi:trn> 
-																					</html:button>		
-																				</td>
+																				<td bgcolor="#ffffff"><html:button
+																					styleClass="dr-menu" property="submitButton"
+																					onclick="selectLocation()">
+																					<digi:trn key="btn:addLocation">Add Location</digi:trn>
+																				</html:button></td>
 																			</tr>
 																		</logic:empty>
 																		<logic:notEmpty name="aimEditActivityForm"
@@ -377,7 +384,7 @@ function popupwin()
 																									</html:multibox></td>
 																									<td vAlign="center" align="left"><c:if
 																										test="${!empty aimEditActivityForm.country}">
-																						[<c:out value="${aimEditActivityForm.country}"/>]
+																						[<c:out value="${aimEditActivityForm.country}" />]
 																					</c:if> <c:if test="${!empty selectedLocs.region}">
 																						[<bean:write name="selectedLocs" property="region" />]
 																					</c:if> <c:if test="${!empty selectedLocs.zone}">
@@ -389,21 +396,21 @@ function popupwin()
 																							</table>
 																							</td>
 																						</tr>
-																					</logic:iterate> 
+																					</logic:iterate>
 																					<tr>
 																						<td>
 																						<table cellSpacing=2 cellPadding=2>
 																							<tr>
-																								<td>
-																									<html:button  styleClass="buton" property="submitButton" onclick="selectLocation()">
-																										<digi:trn key="btn:addLocation">Add Location</digi:trn> 
-																									</html:button>
-																								</td>
-																								<td>
-																									<html:button  styleClass="buton" property="submitButton" onclick="return removeSelLocations()">
-																										<digi:trn key="btn:removeLocation">Remove Location</digi:trn> 
-																									</html:button>
-																								</td>
+																								<td><html:button styleClass="dr-menu"
+																									property="submitButton"
+																									onclick="selectLocation()">
+																									<digi:trn key="btn:addLocation">Add Location</digi:trn>
+																								</html:button></td>
+																								<td><html:button styleClass="dr-menu"
+																									property="submitButton"
+																									onclick="return removeSelLocations()">
+																									<digi:trn key="btn:removeLocation">Remove Location</digi:trn>
+																								</html:button></td>
 																							</tr>
 																						</table>
 																						</td>
@@ -432,8 +439,8 @@ function popupwin()
 																border=0></a></td>
 														</tr>
 														<tr>
-															<td><FONT color=red>*</FONT> 
-															<digi:trn key="aim:chooseSector">
+															<td><FONT color=red>*</FONT> <digi:trn
+																key="aim:chooseSector">
 															Choose the sector</digi:trn></td>
 														</tr>
 														<tr>
@@ -456,11 +463,11 @@ function popupwin()
 																		<logic:empty name="aimEditActivityForm"
 																			property="activitySectors">
 																			<tr>
-																				<td bgcolor="#ffffff">
-																					<html:button  styleClass="dr-menu" property="addSec" onclick="addSectors()">
-																						<digi:trn key="btn:addSector">Add Sector</digi:trn> 
-																					</html:button>
-																				</td>
+																				<td bgcolor="#ffffff"><html:button
+																					styleClass="dr-menu" property="addSec"
+																					onclick="addSectors()">
+																					<digi:trn key="btn:addSector">Add Sector</digi:trn>
+																				</html:button></td>
 																			</tr>
 																		</logic:empty>
 																		<logic:notEmpty name="aimEditActivityForm"
@@ -508,11 +515,11 @@ function popupwin()
 																				onclick="addSectors()">
 																			</td>
 																			--%>
-																								<td>
-																									<html:button  styleClass="buton" property="submitButton" onclick="return removeSelSectors()">
-																										<digi:trn key="btn:removeSector">Remove Sector</digi:trn> 
-																									</html:button>
-																								</td>
+																								<td><html:button styleClass="dr-menu"
+																									property="submitButton"
+																									onclick="return removeSelSectors()">
+																									<digi:trn key="btn:removeSector">Remove Sector</digi:trn>
+																								</html:button></td>
 																							</tr>
 																						</table>
 																						</td>
@@ -568,21 +575,19 @@ function popupwin()
 															<td bgColor=#f4f4f2 align="center">
 															<table cellPadding=3>
 																<tr>
-																	<td>
-																	<html:submit  styleClass="dr-menu" property="submitButton" onclick="return gotoStep(1)">
-																		<digi:trn key="btn:back">Back</digi:trn> >> 
-																	</html:submit>	
-																	</td>
-																	<td>
-																		<html:submit  styleClass="dr-menu" property="submitButton" onclick="return validateForm()">
-																			<digi:trn key="btn:next">Next</digi:trn> >>
-																		</html:submit>
-																	</td>
-																	<td>
-																		<html:reset  styleClass="dr-menu" property="submitButton" onclick="return resetAll()">
-																			<digi:trn key="btn:reset">Reset</digi:trn> 
-																		</html:reset>
-																	</td>
+																	<td><html:submit styleClass="dr-menu"
+																		property="submitButton" onclick="return gotoStep(1)">
+																		<< <digi:trn key="btn:back">Back</digi:trn>
+																	</html:submit></td>
+																	<td><html:submit styleClass="dr-menu"
+																		property="submitButton"
+																		onclick="return validateForm()">
+																		<digi:trn key="btn:next">Next</digi:trn> >>
+																		</html:submit></td>
+																	<td><html:reset styleClass="dr-menu"
+																		property="submitButton" onclick="return resetAll()">
+																		<digi:trn key="btn:reset">Reset</digi:trn>
+																	</html:reset></td>
 																</tr>
 															</table>
 															</td>

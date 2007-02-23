@@ -649,7 +649,7 @@
 																					</html:button>
 																				</td>
 																				<td>
-																				   <html:button  styleClass="buton" property="submitButton" onclick="return removeSelOrganisations()">
+																				   <html:button  styleClass="dr-menu" property="submitButton" onclick="return removeSelOrganisations()">
 																						<digi:trn key="btn:removeOrganizations">Remove Organizations</digi:trn> 
 																				   </html:button>
 																				</td>

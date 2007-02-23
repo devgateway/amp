@@ -141,7 +141,7 @@ function cancel() {
 																	<tr>
 																		<td align="center" colspan="2" bgcolor="#ffffff">
 																			<b><digi:trn key="aim:confirmDeleteTheme">
-																			Are you sure you want to delete this theme?
+																			Are you sure about deleting this program ?
 																			</digi:trn></b>
 																		</td>
 																	</tr>																	

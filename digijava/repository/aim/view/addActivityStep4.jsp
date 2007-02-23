@@ -363,7 +363,7 @@
 																			<logic:empty name="aimEditActivityForm" property="regionalFundings">
 																				<!-- No fundings -->
 																				<tr><td>
-																					<html:button  styleClass="buton" property="submitButton" onclick="addRegionalFunding()">
+																					<html:button  styleClass="dr-menu" property="submitButton" onclick="addRegionalFunding()">
 																							<digi:trn key="btn:addFundings">Add Fundings</digi:trn> 
 																					</html:button>
 																					
@@ -374,7 +374,7 @@
 																					<table cellSpacing=2 cellPadding=2>
 																						<tr>
 																							<td>
-																								<html:button  styleClass="buton" property="submitButton" onclick="addRegionalFunding()">
+																								<html:button  styleClass="dr-menu" property="submitButton" onclick="addRegionalFunding()">
 																									<digi:trn key="btn:addFundings">Add Fundings</digi:trn> 
 																								</html:button>
 																							</td>

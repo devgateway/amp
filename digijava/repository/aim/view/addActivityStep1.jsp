@@ -553,11 +553,11 @@ function popupwin()
 																	readonly="true"/>
 																</td>
 																<td align="left" vAlign="center">&nbsp;
-																	<input type="button" class="buton" value="Revise"
+																	<input type="button" class="dr-menu" value="Revise"
 																	onclick="reviseCloseDate()">
 																</td>
 																<td>&nbsp;
-																	<input type="button" class="buton" value="Comment" onclick="commentWin()">
+																	<input type="button" class="dr-menu" value="Comment" onclick="commentWin()">
 																</td>
 															</tr>
 														</table>

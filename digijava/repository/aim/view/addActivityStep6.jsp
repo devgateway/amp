@@ -527,8 +527,7 @@ function removeSelLinks() {
 													
 												</td>
 												<td>
-													<input type="reset" value="Reset" class="dr-menu" onclick="return resetAll()">
-													<html:reset  styleClass="buton" property="submitButton" onclick="return resetAll()">
+													<html:reset  styleClass="dr-menu" property="submitButton" onclick="return resetAll()">
 															<digi:trn key="btn:reset">Reset</digi:trn>
 													</html:reset>
 													

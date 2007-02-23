@@ -647,7 +647,7 @@ function removeSelComponents() {
 															<digi:trn key="btn:addComponents">Add Components</digi:trn> 
 														</html:button>
 														 &nbsp;&nbsp;&nbsp;
-														<html:button  styleClass="buton" property="submitButton" onclick="removeSelComponents()">
+														<html:button  styleClass="dr-menu" property="submitButton" onclick="removeSelComponents()">
 															<digi:trn key="btn:removeComponents">Remove Components</digi:trn> 
 														</html:button>
 														
@@ -659,9 +659,7 @@ function removeSelComponents() {
 									<logic:empty name="aimEditActivityForm" property="selectedComponents">
 										<table width="100%" cellSpacing=1 cellPadding=5 class="box-border-nopadding">
 											<tr><td>
-												<input type="button" value="Add Components" class="buton" name="addComponent" 
-												onclick="addComponents()" class="buton">
-												<html:button  styleClass="buton" property="submitButton" onclick="addComponents()">
+												<html:button  styleClass="dr-menu" property="submitButton" onclick="addComponents()">
 														<digi:trn key="btn:addComponents">Add Components</digi:trn> 
 												</html:button>
 											</td></tr>
@@ -779,7 +777,7 @@ function removeSelComponents() {
 																					<td vAlign="center" align="left" width="3">
 																					</td>														
 																					<td vAlign="center" align="left">
-																						<input type="button" class="dr-menu" onclick="removeActors('<c:out value="${issues.id}"/>','<c:out value="${measure.id}"/>')" value='<digi:trn key="btn:removeActors">Remove Actors</digi:trn>' />
+																						<input type="dr-menu" class="dr-menu" onclick="removeActors('<c:out value="${issues.id}"/>','<c:out value="${measure.id}"/>')" value='<digi:trn key="btn:removeActors">Remove Actors</digi:trn>' />
 																					</td>
 																				</tr>
 																				</logic:notEmpty>
@@ -806,12 +804,12 @@ function removeSelComponents() {
 													<table cellSpacing=2 cellPadding=2>
 														<tr>
 															<td>
-																<html:button  styleClass="buton" property="submitButton" onclick="addIssues()">
+																<html:button  styleClass="dr-menu" property="submitButton" onclick="addIssues()">
 																		<digi:trn key="btn:addIssues">Add Issues</digi:trn> 
 																</html:button>
 															</td>
 															<td>
-																<html:button  styleClass="buton" property="submitButton" onclick="removeIssues()">
+																<html:button  styleClass="dr-menu" property="submitButton" onclick="removeIssues()">
 																		<digi:trn key="btn:removeIssues">Remove Issues</digi:trn> 
 																</html:button>
 															</td>															
@@ -823,7 +821,7 @@ function removeSelComponents() {
 										<logic:empty name="aimEditActivityForm" property="issues">
 											<table width="100%" cellSpacing=1 cellPadding=5 class="box-border-nopadding">
 												<tr><td>
-													<html:button  styleClass="buton" property="submitButton" onclick="addIssues()">
+													<html:button  styleClass="dr-menu" property="submitButton" onclick="addIssues()">
 															<digi:trn key="btn:addIssues">Add Issues</digi:trn> 
 													</html:button>
 													
@@ -838,12 +836,12 @@ function removeSelComponents() {
 										<table cellPadding=3>
 											<tr>
 												<td>
-													<html:submit  styleClass="buton" property="submitButton" onclick="gotoStep(4)">
+													<html:submit  styleClass="dr-menu" property="submitButton" onclick="gotoStep(4)">
 														<< <digi:trn key="btn:back">Back</digi:trn> 
 													</html:submit>
 												</td>
 												<td>
-													<html:submit  styleClass="buton" property="submitButton"  onclick="gotoStep(6)">
+													<html:submit  styleClass="dr-menu" property="submitButton"  onclick="gotoStep(6)">
 															<digi:trn key="btn:next">Next</digi:trn> >>
 													</html:submit>
 												</td>

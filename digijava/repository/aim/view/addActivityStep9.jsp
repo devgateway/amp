@@ -586,10 +586,7 @@
 														<tr>
 															<td>&nbsp;</td>
 															<td colspan="3" align="center">
-																<html:button  styleClass="dr-menu" property="submitButton" onclick="setValues('<c:out value="${indicator.indicatorId}" />')">
-																	<digi:trn key="btn:setValues">Set Values</digi:trn>
-																</html:button>
-																
+																<input type="button" class="dr-menu" onclick="setValues('<c:out value="${indicator.indicatorId}" />')" value='<digi:trn key="btn:setValues">Set Values</digi:trn>' />
 															</td>
 															<td>&nbsp;</td>
 														</tr>

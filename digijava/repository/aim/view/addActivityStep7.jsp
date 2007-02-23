@@ -363,7 +363,7 @@ function removeSelOrgs(value) {
 												</td>
 												<td>
 														<html:submit  styleClass="dr-menu" property="submitButton" onclick="gotoStep(8)">
-																<digi:trn key="btn:addOrganizations">Next</digi:trn> >>
+																<digi:trn key="btn:next">Next</digi:trn> >>
 														</html:submit>
 												</td>
 												<td>

@@ -243,7 +243,7 @@ function resetAll()
 												<logic:notEmpty name="ME" scope="application">												 										
 													<td>
 														<html:submit  styleClass="dr-menu" property="submitButton" onclick="gotoStep(10)">
-																<digi:trn key="btn:addOrganizations">Next</digi:trn> >>
+																<digi:trn key="btn:next">Next</digi:trn> >>
 														</html:submit>
 														
 													</td>

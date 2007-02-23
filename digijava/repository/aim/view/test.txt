@@ -16,3 +16,6 @@
 </html:button>
 
 <input type="button" class="dr-menu" onclick="" value='' />
+
+test="${!empty selectedLocs.country}"
+[<bean:write name="selectedLocs" property="country" />]

@@ -779,10 +779,7 @@ function removeSelComponents() {
 																					<td vAlign="center" align="left" width="3">
 																					</td>														
 																					<td vAlign="center" align="left">
-																						<html:button  styleClass="buton" property="submitButton" onclick="removeActors('<c:out value="${issues.id}"/>','<c:out value="${measure.id}"/>')">
-																							<digi:trn key="btn:removeActors">Remove Actors</digi:trn> 
-																						</html:button>
-																						
+																						<input type="button" class="dr-menu" onclick="removeActors('<c:out value="${issues.id}"/>','<c:out value="${measure.id}"/>')" value='<digi:trn key="btn:removeActors">Remove Actors</digi:trn>' />
 																					</td>
 																				</tr>
 																				</logic:notEmpty>
@@ -794,9 +791,7 @@ function removeSelComponents() {
 																		<td vAlign="center" align="left" width="3">
 																		</td>														
 																		<td vAlign="center" align="left">
-																			<html:button  styleClass="buton" property="submitButton" onclick="removeMeasure('<c:out value="${issues.id}"/>')">
-																				<digi:trn key="btn:removeMeasures">Remove Measures</digi:trn> 
-																			</html:button>
+																			<input type="button" class="dr-menu" onclick="removeMeasure('<c:out value="${issues.id}"/>')" value='<digi:trn key="btn:removeMeasures">Remove Measures</digi:trn>' />
 																			
 																		</td>
 																	</tr>

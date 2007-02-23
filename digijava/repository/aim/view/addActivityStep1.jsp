@@ -588,11 +588,15 @@ function popupwin()
 												<img src="../ampTemplate/images/help.gif" alt="Click to get help on Status" width=10 height=10 border=0></a>
 												</td>
 												<td bgcolor="#ffffff">
+													
+													<bean:define id="eaf" name="aimEditActivityForm"  toScope="page" type="org.digijava.module.aim.form.EditActivityForm"/>
+													
 														<html:select property="status" styleClass="inp-text">
-														<html:option value="-1">Please select the status</html:option>
+														<option value="-1">Please select the status</option>
+													
 														<logic:iterate name="aimEditActivityForm" property="statusCollection" 
 														id="ampStatusId" >
-														<option value="<%=ampStatusId%>" <%=(ampStatusId.equals(aimEditActivityForm.getStatus()))?"selected":""%>> 
+														<option <%=(eaf.getStatus()!=null && ampStatusId.toString().equals(eaf.getStatus().toString()))?"SELECTED":""%> value="<%=ampStatusId%>"> 
 													 		 <bean:define id="ampStatusName" name="ampStatusId" property="name" />
 															<digi:trn key="<%= "aim:" + ampStatusName%>">
 																<bean:write name="ampStatusId" property="name"/>

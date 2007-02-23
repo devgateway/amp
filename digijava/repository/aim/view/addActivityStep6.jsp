@@ -415,7 +415,7 @@ function removeSelLinks() {
 												<tr>
 													<td bgcolor="#ffffff">
 
-														<html:button  styleClass="buton" property="submitButton" onclick="addLinks()">
+														<html:button  styleClass="dr-menu" property="submitButton" onclick="addLinks()">
 															<digi:trn key="btn:addWebResources">Add Web Resources</digi:trn> 
 														</html:button>
 														
@@ -475,13 +475,13 @@ function removeSelLinks() {
 													<table cellSpacing=2 cellPadding=2>
 														<tr>
 															<td>
-																<html:button  styleClass="buton" property="submitButton" onclick="addManagedDocuments()">
+																<html:button  styleClass="dr-menu" property="submitButton" onclick="addManagedDocuments()">
 																	<digi:trn key="btn:addManagedDocuments">Add Managed Documents</digi:trn> 
 																</html:button>
 																
 															</td>
 															<td>
-																<html:button  styleClass="buton" property="submitButton" onclick="return removeSelManagedDocuments()">
+																<html:button  styleClass="dr-menu" property="submitButton" onclick="return removeSelManagedDocuments()">
 																	<digi:trn key="btn:removeDocuments">Remove Documents</digi:trn> 
 																</html:button>
 																
@@ -496,7 +496,7 @@ function removeSelLinks() {
 											<table width="100%" bgcolor="#cccccc" cellSpacing=1 cellPadding=5>
 												<tr>
 													<td bgcolor="#ffffff">
-														<html:button  styleClass="buton" property="submitButton" onclick="addManagedDocuments()">
+														<html:button  styleClass="dr-menu" property="submitButton" onclick="addManagedDocuments()">
 																<digi:trn key="btn:addManagedDocuments">Add Managed Documents</digi:trn> 
 														</html:button>
 														
@@ -515,13 +515,13 @@ function removeSelLinks() {
 										<table cellPadding=3>
 											<tr>
 												<td>
-													<html:button  styleClass="buton" property="submitButton" onclick="gotoStep(5)">
+													<html:button  styleClass="dr-menu" property="submitButton" onclick="gotoStep(5)">
 															<< <digi:trn key="btn:back">Back</digi:trn> 
 													</html:button>
 													
 												</td>
 												<td>
-													<html:submit  styleClass="buton" property="submitButton" onclick="gotoStep(7)">
+													<html:submit  styleClass="dr-menu" property="submitButton" onclick="gotoStep(7)">
 															<digi:trn key="btn:next">Next</digi:trn> >>
 													</html:submit>
 													

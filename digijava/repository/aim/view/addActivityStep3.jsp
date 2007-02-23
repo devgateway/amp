@@ -631,10 +631,7 @@
 																<c:if test="${aimEditActivityForm.donorFlag == false}">	
 																<tr>
 																	<td>
-																		<html:button  styleClass="dr-menu" property="submitButton" onclick="addFunding('<bean:write name="fundingOrganization" property="ampOrgId"/>')">
-																			<digi:trn key="btn:addFunding">Add Funding</digi:trn> 
-																		</html:button>
-																		
+																	<input type="button" class="dr-menu" onclick="addFunding('<bean:write name="fundingOrganization" property="ampOrgId"/>')" value='<digi:trn key="btn:addFunding">Add Funding</digi:trn>' />
 																	</td>
 																</tr>
 																</c:if>

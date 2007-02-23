@@ -139,7 +139,7 @@
 					<td>
 							<html:select styleClass="dr-menu" property="perspectiveFilter">
 								<html:option value="DN">Donor View</html:option>
-								<html:option value="MA">MOFED View</html:option>
+								<html:option value="MA"><digi:trn key="aim:Mofed">Mofed</digi:trn> View</html:option>
 							</html:select>
 					</td>
 					</logic:equal>

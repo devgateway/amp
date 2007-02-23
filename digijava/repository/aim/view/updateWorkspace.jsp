@@ -308,7 +308,7 @@ onsubmit="return validateAimUpdateWorkspaceForm(this);">
 																	<c:otherwise>
 																		<html:select property="category" styleClass="inp-text" onchange="relTeam()">
 																			<html:option value="-1">-- Select Category --</html:option>
-																			<html:option value="MOFED">Mofed</html:option>
+																			<html:option value="MOFED"><digi:trn key="aim:Mofed">Mofed</digi:trn></html:option>
 																			<html:option value="DONOR">Donor</html:option>
 																		</html:select>
 																	</c:otherwise>
@@ -317,7 +317,7 @@ onsubmit="return validateAimUpdateWorkspaceForm(this);">
 															<logic:equal name="aimUpdateWorkspaceForm" property="actionEvent" value="add">
 																<html:select property="category" styleClass="inp-text" onchange="relTeam()">
 																	<html:option value="-1">-- Select Category --</html:option>
-																	<html:option value="MOFED">Mofed</html:option>
+																	<html:option value="MOFED"><digi:trn key="aim:Mofed">Mofed</digi:trn></html:option>
 																	<html:option value="DONOR">Donor</html:option>
 																</html:select>
 															</logic:equal>

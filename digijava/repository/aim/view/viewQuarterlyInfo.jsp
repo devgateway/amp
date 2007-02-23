@@ -406,7 +406,7 @@ type="org.digijava.module.aim.form.QuarterlyInfoForm" method="post">
 											            	<div align="center">Impl. Agency Planned</div>
 							              				</td>
 										              	<td bgcolor="#DDDDDB">
-										              		<div align="center">MOFED Planned </div>
+										              		<div align="center"><digi:trn key="aim:Mofed">Mofed</digi:trn> Planned </div>
 							              				</td>
 										              	<td bgcolor="#DDDDDB">
 										              		<div align="center">Donor Actuals</div>
@@ -415,7 +415,7 @@ type="org.digijava.module.aim.form.QuarterlyInfoForm" method="post">
 										              		<div align="center">Impl. Agency Actuals</div>
 										              	</td>
 							      			        	<td bgcolor="#DDDDDB">
-							              					<div align="center">MOFED Actuals</div>
+							              					<div align="center"><digi:trn key="aim:Mofed">Mofed</digi:trn> Actuals</div>
 							              				</td>
 							            			</tr>
 							            			<logic:empty name="aimQuarterlyInfoForm" property="discrepancies" >

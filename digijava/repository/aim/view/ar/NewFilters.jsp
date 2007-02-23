@@ -76,7 +76,7 @@
 
 						<html:select styleClass="dr-menu" property="perspectiveFilter">
 						<html:option value="DN">Donor View</html:option>
-						<html:option value="MA">MOFED</html:option>
+						<html:option value="MA"><digi:trn key="aim:Mofed">MOFED</digi:trn></html:option>
 						</html:select>
 				</logic:equal>
 				<logic:notEmpty name="aimAdvancedReportForm" property="currencyColl">

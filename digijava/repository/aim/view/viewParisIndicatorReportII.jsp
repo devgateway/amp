@@ -237,7 +237,7 @@
 											</td>
 											<td>
 												<html:select property="perspective" name="aimParisIndicatorReportForm" styleClass="dr-menu" >
-													<html:option value="MA">MOFED</html:option>
+													<html:option value="MA"><digi:trn key="aim:Mofed">Mofed</digi:trn></html:option>
 													<html:option value="DN">DONOR</html:option>
 												</html:select>
 											</td>

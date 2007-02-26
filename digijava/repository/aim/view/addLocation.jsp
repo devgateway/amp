@@ -147,7 +147,7 @@
 														<td>
 															<table width="100%" border="0" cellspacing="4">
 																<tr>
-																	<td width="30%" align="right">Name</td>
+																	<td width="30%" align="right"><FONT color=red>* </FONT>Name</td>
 																	<td width="70%" align="left">
 																		<html:text property="name" size="25"
 																			onkeydown="textCounter(this.form.name,this.form.cname,200);" 
@@ -159,7 +159,7 @@
                                 							<c:choose>
                                 								<c:when test="${aimAddLocationForm.edLevel == 'country'}">
                                 									<tr>
-																		<td width="30%" align="right">ISO</td>
+																		<td width="30%" align="right"><FONT color=red>* </FONT>ISO</td>
 																		<td width="70%" align="left">
 																			<html:text property="iso" size="5" maxlength="2" />
 																			<br>
@@ -168,7 +168,7 @@
 																		</td>
                                 									</tr>
                                 									<tr>
-																		<td width="30%" align="right">ISO3</td>
+																		<td width="30%" align="right"><FONT color=red>* </FONT>ISO3</td>
 																		<td width="70%" align="left">
 																			<html:text property="iso3" size="5" maxlength="3" />
 																			<br>
@@ -210,7 +210,15 @@
 										 							</tr>
                                 								</c:otherwise>
                                 							</c:choose>
-																
+                                								<tr>
+																	<td width="30%" align="right"></td>
+																	<td width="70%" align="left">
+																		<digi:trn key="aim:allMarkedRequiredField">
+																		All fields marked with an <FONT color=red><B><BIG>*</BIG>
+																		</B></FONT> are required.</digi:trn>	
+																	</td>
+										 						</tr>
+																																
 																<tr>
 																	<td colspan="2" width="60%">	
 																		<table width="100%" cellspacing="5">

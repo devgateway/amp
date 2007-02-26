@@ -399,7 +399,7 @@ function checkUncheckAll2() {
 														<digi:trn key="btn:cancel">Cancel</digi:trn> 
 													</html:button>					
 													<html:button  styleClass="dr-menu" property="submitButton" onclick="javascript:gotoStep()">
-														<digi:trn key="btn:remove">Remove</digi:trn> >>
+														<digi:trn key="btn:remove">Next</digi:trn> >>
 													</html:button>					
 												</td>
 											</tr>

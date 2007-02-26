@@ -119,6 +119,9 @@ return false;
 											[ <digi:link href="/deleteAllReports.do" name="urlParams" title="<%=translation%>" >
 												<digi:trn key="aim:reportDelete">Delete</digi:trn>
 											</digi:link> ]												
+											[ <digi:link href="/editReport.do" name="urlParams" title="<%=translation%>" >
+												<digi:trn key="aim:reportEdit">Edit</digi:trn>
+											</digi:link> ]
 											</td>
 											<% } %>
 										</TR>

@@ -1166,6 +1166,9 @@
       <forward name="SelectRows" path="/showLayout.do?layout=AdvancedReportManagerStep5" />
       <forward name="SelectMeasures" path="/showLayout.do?layout=AdvancedReportManagerStep6" />
     </action>
+    <action name="aimAdvancedReportForm" path="/aim/editReport" scope="session" type="org.digijava.module.aim.action.EditReport">
+    	<forward name="forward" path="/showLayout.do?layout=AdvancedReportManagerStep0" />
+    </action>
     <action path="/aim/printableActivityChart" scope="request" type="org.digijava.module.aim.action.ViewPrintableActivityChart">
       <forward name="actPerformance" path="/showLayout.do?layout=aim_printActPerf" />
       <forward name="actRisk" path="/showLayout.do?layout=aim_printActRisk" />

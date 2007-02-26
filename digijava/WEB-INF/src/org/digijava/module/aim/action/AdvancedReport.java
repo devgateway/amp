@@ -16,6 +16,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import net.sf.hibernate.Query;
+import net.sf.hibernate.Session;
 
 import org.apache.log4j.Logger;
 import org.apache.struts.action.Action;
@@ -24,6 +25,7 @@ import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
+import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.dbentity.AmpColumns;
 import org.digijava.module.aim.dbentity.AmpCurrency;
 import org.digijava.module.aim.dbentity.AmpMeasures;
@@ -112,6 +114,9 @@ public class AdvancedReport extends Action {
 				formBean.setSelAdjustType(null);
 				formBean.setSelectedAdjustmentType(null);
 				
+				formBean.setInEditingMode(false);
+				formBean.setDbReportId( 0 );
+				formBean.setDescriptionLink( null );
 			}
 
 			
@@ -143,8 +148,17 @@ public class AdvancedReport extends Action {
 				String arReportType="Donor";
 				arReportType=request.getParameter("reportType");
 				logger.info("arReportType::::"+arReportType);
-				formBean.setArReportType(arReportType);
-				
+				/* Only change the Advanced Report Type if it has been selected on the previous webpage */
+				if ( arReportType != null && arReportType.compareTo("") != 0 )
+					formBean.setArReportType(arReportType);
+				/*
+				if ( formBean.getArReportType().compareTo("") == 0 )
+						formBean.setArReportType(arReportType);
+				if ( formBean.getArReportType()	== null ) {
+					formBean.setArReportType(arReportType);
+					logger.info("The report type of form BeRan was null.");
+				}
+				*/
 				//logger.info("inside Step 1...");
 				return mapping.findForward("SelectCols");
 			}
@@ -882,7 +896,7 @@ public class AdvancedReport extends Action {
 			if(request.getParameter("check") != null && request.getParameter("check").equals("SaveReport"))
 			{
 				boolean flag = false;
-				//logger.info("---------Start--Report --- Save -------------");
+//				logger.info("---------Start--Report --- Save ------------- Save report state is: " + formBean.getInEditingMode());
 				ActionErrors errors = new ActionErrors();	
 				if(formBean.getReportTitle() != null)
 				{
@@ -895,32 +909,51 @@ public class AdvancedReport extends Action {
 					}
 				}
 				
-				if(flag == false)
+				if( flag == false )
 				{
+					boolean found = false; 
 					int i = 0;
-					boolean found = ReportUtil.checkDuplicateReportName(formBean.getReportTitle());
-					if(found==true)
-					{ 
-						errors.add("DuplicateReportName", new ActionError("error.aim.reportManager.DuplicateReportName"));
-						saveErrors(request, errors);
-						return mapping.findForward("MissingReportDetails");
-					}
 					
-	           	if(found == false)
-	            {
+					/* No need to check for duplicate if editing an exisiting report */
+					if ( !formBean.getInEditingMode() ) { 
+						found = ReportUtil.checkDuplicateReportName(formBean.getReportTitle());
+						if(found==true)
+						{ 
+							errors.add("DuplicateReportName", new ActionError("error.aim.reportManager.DuplicateReportName"));
+							saveErrors(request, errors);
+							return mapping.findForward("MissingReportDetails");
+						}
+					}
+		           	if( found == false )
+		            {
 						//logger.info("............no duplicate report title............");
-						AmpReports ampReports = new AmpReports();
+		           		Session pmsession		= PersistenceManager.getSession();
+		           		AmpReports ampReports;
+//		           		if ( formBean.getInEditingMode() ) {
+//		           			ampReports				= (AmpReports)pmsession.get(AmpReports.class, new Long(formBean.getDbReportId()) );
+//		           			pmsession.delete( ampReports );
+//		           		}
+//		           		else 
+		           			ampReports 				= new AmpReports();
 						
 						if ("donor".equals(formBean.getReportType())) ampReports.setType(new Long(1));
 						if ("regional".equals(formBean.getReportType())) ampReports.setType(new Long(3));
 						if ("component".equals(formBean.getReportType())) ampReports.setType(new Long(2));
 						
-						String descr = "/"+formBean.getReportTitle().replaceAll(" " , "");
-						descr = descr + ".do";
-						ampReports.setDescription(descr);
+						if ( formBean.getInEditingMode() ) {
+							ampReports.setDescription( formBean.getDescriptionLink() ) ;
+						}
+						else {
+							String descr = "/"+formBean.getReportTitle().replaceAll(" " , "");
+							descr = descr + ".do";
+							ampReports.setDescription(descr);
+						}
 						ampReports.setReportDescription(formBean.getReportDescription());
 						ampReports.setName(formBean.getReportTitle().trim());
-						ampReports.setAmpReportId(new Long("0"));
+						if ( formBean.getInEditingMode() )
+								ampReports.setAmpReportId( new Long(formBean.getDbReportId()) );
+						else 
+								ampReports.setAmpReportId(new Long("0"));
 						if(formBean.getReportOption()==null)
 								  ampReports.setOptions(Constants.ANNUAL);
 						else
@@ -936,14 +969,14 @@ public class AdvancedReport extends Action {
 							{
 								AmpColumns cols = (AmpColumns)iter.next();
 
-									AmpReportColumn	temp = new AmpReportColumn();
-									temp.setColumn(cols);
-									temp.setOrderId(""+i);
-									columns.add(temp);
-									i = i + 1;
-								}
-								ampReports.setColumns(columns);
+								AmpReportColumn	temp = new AmpReportColumn();
+								temp.setColumn(cols);
+								temp.setOrderId(""+i);
+								columns.add(temp);
+								i = i + 1;
 							}
+								ampReports.setColumns(columns);
+						}
 						
 							if(formBean.getColumnHierarchie() != null)
 							{
@@ -968,6 +1001,10 @@ public class AdvancedReport extends Action {
 							Set measures = new HashSet();
 							if(formBean.getAddedMeasures() != null)
 							{
+								/*Only for testing*/
+								logger.info("Added measures are: " + formBean.getAddedMeasures());
+								/*Only for testing*/
+								
 								iter = formBean.getAddedMeasures().iterator();
 								i = 1;
 								while(iter.hasNext())
@@ -980,6 +1017,11 @@ public class AdvancedReport extends Action {
 						
 							if(formBean.getSelAdjustType() != null)
 							{
+								/*Only for testing*/
+//								Logger logger		= Logger.getLogger(this.getClass());
+//								logger.info("Added Selected Adjust Type are: " + formBean.getSelAdjustType());
+								/*Only for testing*/
+								
 								iter = formBean.getSelAdjustType().iterator();
 								
 								while(iter.hasNext())
@@ -990,7 +1032,17 @@ public class AdvancedReport extends Action {
 							}
 							ampReports.setMeasures(measures);
 							ampReports.setHideActivities(formBean.getHideActivities());
-							ReportUtil.saveReport(ampReports,teamMember.getTeamId(),teamMember.getMemberId(),teamMember.getTeamHead());
+							
+							if ( formBean.getInEditingMode() ) { // Editing an exisiting report
+//								logger.info ("Updating report.." );
+								pmsession.update( ampReports );
+								pmsession.flush();
+								
+							}
+							else { // This is the case of a new Report being created
+//								logger.info ("Saving report.." );
+								ReportUtil.saveReport(ampReports,teamMember.getTeamId(),teamMember.getMemberId(),teamMember.getTeamHead());
+							}
 							
 							HttpSession hs = request.getSession();
 							hs.removeAttribute(Constants.MY_REPORTS);
@@ -1001,6 +1053,10 @@ public class AdvancedReport extends Action {
 							formBean.setAddedColumns(null);
 							formBean.setColumnHierarchie(null);
 							formBean.setAddedMeasures(null);
+							
+							formBean.setInEditingMode( false );
+							formBean.setDbReportId( 0 );
+							formBean.setDescriptionLink( null );
 						
 			            }
 					

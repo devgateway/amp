@@ -66,6 +66,11 @@ public class AdvancedReportForm extends ActionForm
 	private String currency ;
 	private String option;
 	private Collection options;
+	
+	private boolean inEditingMode	= false; // true if in editing mode
+	private long dbReportId			= 0; // If in editing mode, it represents the id of the AmpReports object in the database
+	private String descriptionLink	= null;
+	
 	/**
 	 * @return Returns the multiReport.
 	 */
@@ -1403,5 +1408,26 @@ private int yrDiff;
 	public void setPdfPageSize(String pdfPageSize) {
 		this.pdfPageSize = pdfPageSize;
 	}
+	
+	public void setInEditingMode (boolean inEditingMode) {
+		this.inEditingMode	= inEditingMode;
+	}
+	public boolean getInEditingMode () {
+		return this.inEditingMode;
+	}
+	
+	public void setDbReportId (long dbReportId) {
+		this.dbReportId		= dbReportId;
+	}
+	public long getDbReportId () {
+		return this.dbReportId;
+	}
+	public void setDescriptionLink(String descriptionLink) {
+		this.descriptionLink	= descriptionLink;
+	}
+	public String getDescriptionLink() {
+		return this.descriptionLink;
+	}
+	
 } //		End of Class
 

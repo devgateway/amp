@@ -14,9 +14,9 @@
 		var flag = confirm("Delete this Sector?");
 		return flag;
 	}
-	function updateScheme(id) {
-			<digi:context name="updateSector" property="context/module/moduleinstance/editSector.do?event=addSector" />
-			document.aimAddSectorForm.action = "<%= updateSector%>&id="+id;
+	function updateScheme(id,flag) {
+			<digi:context name="updateSector" property="context/module/moduleinstance/editSector.do?event=update3LevelSector" />
+			document.aimAddSectorForm.action = "<%= updateSector%>&id="+id+"&flag="+flag;
 			document.aimAddSectorForm.target = "_self";
 			document.aimAddSectorForm.submit();
 	
@@ -110,7 +110,7 @@
 															&nbsp;
 														</td>
 														<td >&nbsp;&nbsp;
-								<input  type="button" name="addBtn" value="Save" onclick="updateScheme('<bean:write name="aimAddSectorForm" property="sectorId" />')"/>
+								<input  type="button" name="addBtn" value="Save" onclick="updateScheme('<bean:write name="aimAddSectorForm" property="sectorId" />','<bean:write name="aimAddSectorForm" property="jspFlag" />')"/>
 														<td>
 													</tr>
 											</table>

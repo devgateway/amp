@@ -37,48 +37,21 @@ public class ViewSectorDetails extends Action {
 					 }					 
 
 					 AddSectorForm viewSectorForm = (AddSectorForm) form;
-					 session.setAttribute("moreThanLevelOne","yes");
-					 String Level = new String();
+					 //session.setAttribute("moreThanLevelOne","yes");
+					 //String Level = new String();
 					 logger.info("In ViewSectorDetails action");
 					 String event = request.getParameter("event");
 					 String level = request.getParameter("level");
+					 String secId = request.getParameter("ampSectorId");
+					 if(secId==null)
+						 secId = (String)session.getAttribute("Id");
 					 logger.info("LEVEL======================"+level);
 					 logger.info("event================"+event);
-					 if(event==null && level==null){
-						 viewSectorForm.setJspFlag(true);
-						 Level = "three";
-					 }
-					 else if(event.equalsIgnoreCase("enough") && level.equalsIgnoreCase("three")){
-						 Level="three";
-						 event = "edit";
-						 viewSectorForm.setJspFlag(true);
-					 }
-					 String secId = "";
-					 if(session.getAttribute("Id")==null)
-					    	secId = request.getParameter("ampSectorId");
-					 else
-					 {
-						 	secId = (String)session.getAttribute("Id");
-						 	level = "two";
-						 	if(event!=null)
-						 	if(event.equalsIgnoreCase("addSector"))
-								 level = "three";
-						 	event = "edit";
-						 	
-					 }
+					
+					 logger.debug(request.getParameter("ampSectorId"));
+					 logger.debug(session.getAttribute("Id"));
+					 logger.debug(secId);
 					 
-					 logger.info(request.getParameter("ampSectorId"));
-					 logger.info(session.getAttribute("id"));
-					 logger.info(secId);
-					 if(session.getAttribute("LEVEL")!=null)
-					 if(((String)session.getAttribute("LEVEL")).equalsIgnoreCase("1"))
-						 level = "one";
-					 else if(((String)session.getAttribute("LEVEL")).equalsIgnoreCase("2"))
-						 level = "two";
-					 else if(((String)session.getAttribute("LEVEL")).equalsIgnoreCase("3"))
-						 level = "three";
-					 
-					 session.setAttribute("LEVEL",null);
 						Long parentId = new Long(secId);
 						viewSectorForm.setSubSectors(SectorUtil.getAllChildSectors(parentId));
 						Collection _subSectors = viewSectorForm.getSubSectors();
@@ -94,13 +67,13 @@ public class ViewSectorDetails extends Action {
 						{
 							if(event.equals("edit"))
 							{
-								logger.info(" inside editing the sector     poi   event === edit...");
+								logger.debug("Inside view sector details--------------");
 								AmpSector editSector= new AmpSector();
 								editSector = SectorUtil.getAmpSector(parentId);
 								viewSectorForm.setSectorCode(editSector.getSectorCode());
 								viewSectorForm.setSectorName(editSector.getName());
 								viewSectorForm.setSectorId(editSector.getAmpSectorId());
-								viewSectorForm.setDescription(editSector.getDescription());
+								
 								if(level.equals("one"))
 								{
 									return mapping.findForward("levelOne");
@@ -109,12 +82,22 @@ public class ViewSectorDetails extends Action {
 								{
 									return mapping.findForward("levelTwo");
 								}
-								if(level.equals("three")|| Level.equalsIgnoreCase("three"))
+								if(level.equals("three"))
 								{
 									
 									return mapping.findForward("levelThree");
 								}
-							}							
+							}
+							else if (event.equalsIgnoreCase("enough")){
+								AmpSector editSector= new AmpSector();
+								editSector = SectorUtil.getAmpSector(parentId);
+								viewSectorForm.setSectorCode(editSector.getSectorCode());
+								viewSectorForm.setSectorName(editSector.getName());
+								viewSectorForm.setSectorId(editSector.getAmpSectorId());
+								logger.debug("Setting jsp Flag==================(true)================");
+								viewSectorForm.setJspFlag(true);
+								return mapping.findForward("levelThree");
+							}
 						}
 					
 					 return mapping.findForward("levelOne");

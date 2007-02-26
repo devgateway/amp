@@ -15,7 +15,7 @@
 		return flag;
 	}
 	function updateScheme(id) {
-			<digi:context name="updateSector" property="context/module/moduleinstance/editSector.do?event=updateScheme" />
+			<digi:context name="updateSector" property="context/module/moduleinstance/editSector.do?event=update2LevelSector" />
 			document.aimAddSectorForm.action = "<%= updateSector%>&id="+id;
 			document.aimAddSectorForm.target = "_self";
 			document.aimAddSectorForm.submit();
@@ -95,14 +95,14 @@
 														</td>
 													</tr>
 
-													<tr>
+													<%--<tr>
 														<td>
-															Description :
+															Scheme Code :
 														</td>
 														<td>
-															<html:text name ="aimAddSectorForm" property="description" size="35" /> 
+															<html:text name ="aimSectorSchemeForm" property="secSchemeId" size="5"/> 
 														</td>
-													</tr>
+													</tr>--%>
 
 													
 													<tr>

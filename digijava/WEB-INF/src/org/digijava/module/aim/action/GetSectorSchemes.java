@@ -22,7 +22,8 @@ public class GetSectorSchemes extends Action {
 								HttpServletResponse response) throws java.lang.Exception {
 
 		HttpSession session = request.getSession();
-		session.setAttribute("moreThanLevelOne",null);
+		//session.setAttribute("moreThanLevelOne",null);
+		session.setAttribute("Id",null);
 		if (session.getAttribute("ampAdmin") == null) {
 			return mapping.findForward("index");
 		} else {
@@ -39,10 +40,10 @@ public class GetSectorSchemes extends Action {
 					 scheme = SectorUtil.getSectorSchemes();
 					 sectorsForm.setFormSectorSchemes(scheme);
 					 */
-					 String event = request.getParameter("event");
-					 String schemeId = (String)request.getParameter("ampSecSchemeId");
+					 //String event = request.getParameter("event");
+					 //String schemeId = (String)request.getParameter("ampSecSchemeId");
 					 
-					 logger.info(" this is the event got!!....."+event+"  id is "+schemeId);
+					 //logger.info(" this is the event got!!....."+event+"  id is "+schemeId);
 					
 					 scheme = SectorUtil.getSectorSchemes();
 					 sectorsForm.setFormSectorSchemes(scheme);

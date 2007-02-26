@@ -46,17 +46,21 @@ public class AddSector extends Action {
 		String event = request.getParameter("event");
 		String parent = request.getParameter("parent");
 		String schemeId = request.getParameter("ampSecSchemeId");
-		if(schemeId==null){
-			schemeId = (String)session.getAttribute("Id");
-			parent = "sector";
+		logger.debug(request.getParameter("ampSecSchemeId"));
+		if(schemeId==null || schemeId.equals("") || schemeId.length()<=0){
+			schemeId = (String)session.getAttribute("Id");			
 		}
-		if(session.getAttribute("Id")==null){
+		else{
 			session.setAttribute("Id",schemeId);
+			logger.debug("setting the session::::::::::::::::::::");
 		}
 		if(parent!=null)
 		{
 			 addSectorForm.setLevelType(parent);
 		}
+		logger.debug(addSectorForm.getLevelType());
+		logger.debug("Add===================================================Sector:;:::::::"+session.getAttribute("Id"));
+		logger.debug("outside event if    value of schemeId============="+schemeId);
 		
 		if(event!=null)
 		{
@@ -64,7 +68,8 @@ public class AddSector extends Action {
 			{
 				   if(addSectorForm.getLevelType().equals("scheme"))
 				{
-					addSectorForm.setParentId(new Long((String)session.getAttribute("Id")));
+					   logger.debug("level 1inside event if    value of schemeId============="+schemeId);
+					addSectorForm.setParentId(new Long(schemeId));
 					AmpSector newSector = new AmpSector();
 					newSector.setAmpSectorId(null);
 					newSector.setParentSectorId(null);
@@ -84,14 +89,27 @@ public class AddSector extends Action {
 					newSector.setLanguage(null);
 					newSector.setVersion(null);
 					DbUtil.add(newSector);
-					session.setAttribute("Event","Edit");
-					session.setAttribute("LEVEL","1");
-					logger.info("level one sector added");
+					Collection schemeGot = SectorUtil.getEditScheme(
+							new Integer((String)session.getAttribute("Id")));
+					addSectorForm.setFormFirstLevelSectors(
+							SectorUtil.getSectorLevel1(new Integer((String)session.getAttribute("Id"))));
+						Iterator itr = schemeGot.iterator();
+						while (itr.hasNext()) {
+							AmpSectorScheme ampScheme = (AmpSectorScheme) itr.next();
+							addSectorForm.setSecSchemeId(ampScheme.getAmpSecSchemeId());
+							addSectorForm.setSecSchemeName(ampScheme.getSecSchemeName());
+							addSectorForm.setSecSchemeCode(ampScheme.getSecSchemeCode());
+							addSectorForm.setParentId(ampScheme.getAmpSecSchemeId());
+						}
+					
+					logger.debug("level one sector added");
+					session.setAttribute("Id",null);
 					return mapping.findForward("levelFirstSectorAdded");
 				}
 				if(addSectorForm.getLevelType().equals("sector"))
 				{
-					Long id = new Long((String)session.getAttribute("Id"));
+					logger.debug("level 2 inside event if    value of schemeId============="+schemeId);
+					Long id = new Long(schemeId);
 					addSectorForm.setParentId(new Long((String)session.getAttribute("Id")));
 					AmpSectorScheme user = SectorUtil.getParentSchemeId(id);
 					AmpSector newSector = new AmpSector();
@@ -112,13 +130,31 @@ public class AddSector extends Action {
 					newSector.setLanguage(null);
 					newSector.setVersion(null);
 					DbUtil.add(newSector);
-					session.setAttribute("LEVEL","2");
-					logger.info("level 2 sector added");
+					
+					Long parentId = id;//new Long(id);
+					addSectorForm.setSubSectors(SectorUtil.getAllChildSectors(parentId));
+					Collection _subSectors = addSectorForm.getSubSectors();
+					Iterator itr = _subSectors.iterator();
+					while (itr.hasNext()) {
+						AmpSector ampScheme = (AmpSector) itr.next();
+						addSectorForm.setAmpSectorId(ampScheme.getAmpSectorId());
+						addSectorForm.setParentId(ampScheme.getAmpSectorId());
+						addSectorForm.setParentSectorId(ampScheme.getParentSectorId().getAmpSectorId());
+					}
+					
+					AmpSector editSector= new AmpSector();
+					editSector = SectorUtil.getAmpSector(parentId);
+					addSectorForm.setSectorCode(editSector.getSectorCode());
+					addSectorForm.setSectorName(editSector.getName());
+					addSectorForm.setSectorId(editSector.getAmpSectorId());
+					logger.debug("level 2  sector added");
+					session.setAttribute("Id",null);
 					return mapping.findForward("levelSecondSectorAdded");
 				}
 				if(addSectorForm.getLevelType().equals("sector3"))
 				{
-					Long id = new Long((String)session.getAttribute("Id"));
+					logger.debug("level 3 inside event if    value of schemeId============="+schemeId);
+					Long id = new Long(schemeId);
 					addSectorForm.setParentId(new Long((String)session.getAttribute("Id")));
 					AmpSectorScheme user = SectorUtil.getParentSchemeId(id);
 					AmpSector newSector = new AmpSector();
@@ -139,90 +175,41 @@ public class AddSector extends Action {
 					newSector.setLanguage(null);
 					newSector.setVersion(null);
 					DbUtil.add(newSector);
-					session.setAttribute("LEVEL","3");
-					logger.info("level Third Sector added");
+					
+					Long parentId = id;//new Long(id);
+					addSectorForm.setSubSectors(SectorUtil.getAllChildSectors(parentId));
+					Collection _subSectors = addSectorForm.getSubSectors();
+					Iterator itr = _subSectors.iterator();
+					while (itr.hasNext()) {
+						AmpSector ampScheme = (AmpSector) itr.next();
+						addSectorForm.setAmpSectorId(ampScheme.getAmpSectorId());
+						addSectorForm.setParentId(ampScheme.getAmpSectorId());
+						addSectorForm.setParentSectorId(ampScheme.getParentSectorId().getAmpSectorId());
+					}
+					
+					AmpSector editSector= new AmpSector();
+					editSector = SectorUtil.getAmpSector(parentId);
+					addSectorForm.setSectorCode(editSector.getSectorCode());
+					addSectorForm.setSectorName(editSector.getName());
+					addSectorForm.setSectorId(editSector.getAmpSectorId());
+					
+					
+					
+					logger.debug("level Third Sector added");
+					session.setAttribute("Id",null);
 					return mapping.findForward("levelThirdSectorAdded");
 				}
 			}
 		}
 			
 		
-		/*if (request.getParameter("parSecId") != null
-				&& addSectorForm.getParentSectorId() == null) {
-
-			/*
-			 * check whether parSecId is Long else give error.
-			 
-			Long parSecId = new Long(Long.parseLong(request
-					.getParameter("parSecId")));
-
-			/*
-			 * check whether there exist a sector with the value parSecId else
-			 * give error.
-			 
-			addSectorForm.setParentSectorId(parSecId);
-
-			HashMap map = null;
-
-			if (parSecId.intValue() == 0) {
-				Iterator itr = DbUtil.getAllOrganisation().iterator();
-				map = new HashMap();
-
-				while (itr.hasNext()) {
-					AmpOrganisation ampOrg = (AmpOrganisation) itr.next();
-					Long orgId = ampOrg.getAmpOrgId();
-					String name = ampOrg.getName();
-					map.put(orgId, name);
-				}
-				addSectorForm.setAmpOrganisation(null);
-			} else {
-				AmpSector ampSector = SectorUtil.getAmpSector(parSecId);
-				AmpOrganisation ampOrg = DbUtil.getOrganisation(ampSector
-						.getAmpOrgId().getAmpOrgId());
-				addSectorForm.setAmpOrganisation(ampOrg.getName());
-				addSectorForm.setAmpOrganisationId(ampOrg.getAmpOrgId());
-			}
-			addSectorForm.setOrganisationList(map);
-		} else if (addSectorForm.getParentSectorId() != null) {
-			// add the sector details to the databse
-			logger.debug("Adding the sector");
-			AmpSector ampSector = new AmpSector();
-
-			if (addSectorForm.getParentSectorId().intValue() == 0) {
-				ampSector.setParentSectorId(null);
-			} else {
-				ampSector.setParentSectorId(SectorUtil.getAmpSector(addSectorForm
-						.getParentSectorId()));
-			}
-			ampSector.setAmpOrgId(DbUtil.getOrganisation(addSectorForm
-					.getAmpOrganisationId()));
-			ampSector.setSectorCode(addSectorForm.getSectorCode());
-			ampSector.setName(addSectorForm.getSectorName());
-			ampSector.setType(null);
-			if (addSectorForm.getDescription() == null
-					|| addSectorForm.getDescription().trim().equals("")) {
-
-				ampSector.setDescription(new String(" "));
-			} else {
-				ampSector.setDescription(addSectorForm.getDescription());
-			}
-			ampSector.setLanguage(null);
-			ampSector.setVersion(null);
-
-			DbUtil.add(ampSector);
-			logger.debug("Sector added");
-
-			return mapping.findForward("added");
-		} else {
-			logger.debug("No action selected");
-		}
-*/
+		
 		if(parent.equalsIgnoreCase("scheme"))		
 		return mapping.findForward("forwardScheme");
 		else
 			if(parent.equalsIgnoreCase("sector")|| parent.equalsIgnoreCase("sector3"))
 				return mapping.findForward("forwardSector");
-		return null;
+			else return null;
 	}
 
 }

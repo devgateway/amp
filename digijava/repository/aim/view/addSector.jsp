@@ -24,7 +24,7 @@
 			 else
 			 {
 			<digi:context name="addSector" property="context/module/moduleinstance/addSector.do?event=addSector" />
-			document.aimAddSectorForm.action = "<%= addSector%>&ampSecSchemeId="+id+"&parent=scheme";
+			document.aimAddSectorForm.action = "<%= addSector%>&ampSecSchemeIdpoi="+id+"&parent=scheme";
 			document.aimAddSectorForm.target = "_self";
 			document.aimAddSectorForm.submit();
 			 }

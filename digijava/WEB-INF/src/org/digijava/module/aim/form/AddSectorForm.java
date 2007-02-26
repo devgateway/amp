@@ -20,11 +20,11 @@ public class AddSectorForm extends ActionForm {
 	Long secSchemeId;
 	String secSchemeName;
 	String secSchemeCode;
+	boolean jspFlag = false;
 	boolean deleteSchemeFlag = true;
 	private String idGot;
-    private String event;
-    private Long ampSectorId;
-    private boolean jspFlag;
+        private String event;
+        private Long ampSectorId;
 
 
 	private Long sectorId = null;
@@ -42,7 +42,13 @@ public class AddSectorForm extends ActionForm {
 
 
 
+	public boolean getJspFlag() {
+		return jspFlag;
+	}
 
+	public void setJspFlag(boolean flag) {
+		this.jspFlag = flag;
+	}
 
 	public String getIdGot() {
 		return idGot;
@@ -259,12 +265,4 @@ public Collection getSubSectors() {
   public void setAmpSectorId(Long ampSectorId) {
     this.ampSectorId = ampSectorId;
   }
-
-public boolean isJspFlag() {
-	return jspFlag;
-}
-
-public void setJspFlag(boolean jspFlag) {
-	this.jspFlag = jspFlag;
-}
 }

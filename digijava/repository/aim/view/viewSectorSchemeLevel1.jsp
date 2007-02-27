@@ -104,7 +104,7 @@
 															&nbsp;
 														</td>
 														<td >&nbsp;&nbsp;
-								<input  type="button" name="addBtn" value='<digi:trn key="btn:save">Save</digi:trn>' onclick="updateScheme('<bean:write name="aimAddSectorForm" property="secSchemeId" />')"/>
+								<input  type="button" class="dr-menu" name="addBtn" value='<digi:trn key="btn:save">Save</digi:trn>' onclick="updateScheme('<bean:write name="aimAddSectorForm" property="secSchemeId" />')"/>
 														<td>
 													</tr>
 											</table>

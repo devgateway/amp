@@ -167,7 +167,7 @@
 						<html:reset value="Clear" styleClass="dr-menu"/>
 					</td>
 					<td  align="left">
-						<input type="button" value='<digi:trn key="btn:save">Save</digi:trn>' class="dr-menu" onclick="cancel('<bean:write name="aimAddSectorForm" property="parentId" />')"/>
+						<input type="button" value='<digi:trn key="btn:clear">Clear</digi:trn>' class="dr-menu" onclick="cancel('<bean:write name="aimAddSectorForm" property="parentId" />')"/>
 					</td>
 				</tr>
 			</table>

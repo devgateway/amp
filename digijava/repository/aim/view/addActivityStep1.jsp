@@ -344,11 +344,11 @@ function popupwin()
 														<table cellSpacing=2 cellPadding=2>
 															<tr>
 																<td>
-																	<input type="dr-menu" value="Add Organizations" class="buton" 
+																	<input type="button" value="Add Organizations" class="dr-menu" 
 																		onclick="selectOrganisation()">
 																</td>
 																<td>
-																	<input type="dr-menu" value="Remove Organizations" class="buton" 
+																	<input type="button" value="Remove Organizations" class="dr-menu" 
 																		onclick="return removeSelOrganisations()">
 																</td>
 															</tr>

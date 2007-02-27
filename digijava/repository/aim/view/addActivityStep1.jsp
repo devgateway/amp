@@ -313,7 +313,7 @@ function popupwin()
 											<logic:empty name="aimEditActivityForm" property="selectedOrganizations">
 												<td>
 													<a title="<digi:trn key="aim:TrackActivitiesintheDonorsInternalDatabase">Facilitates tracking activities in donors' internal databases </digi:trn>"></a>
-													<html:button  styleClass="buton" property="addOrgs" onclick="selectOrganisation()">
+													<html:button  styleClass="dr-menu" property="addOrgs" onclick="selectOrganisation()">
 														<digi:trn key="btn:addOrganizations">Add Organizations</digi:trn> 
 													</html:button>
 												</td>
@@ -344,11 +344,11 @@ function popupwin()
 														<table cellSpacing=2 cellPadding=2>
 															<tr>
 																<td>
-																	<input type="button" value="Add Organizations" class="buton" 
+																	<input type="dr-menu" value="Add Organizations" class="buton" 
 																		onclick="selectOrganisation()">
 																</td>
 																<td>
-																	<input type="button" value="Remove Organizations" class="buton" 
+																	<input type="dr-menu" value="Remove Organizations" class="buton" 
 																		onclick="return removeSelOrganisations()">
 																</td>
 															</tr>

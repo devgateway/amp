@@ -1020,6 +1020,80 @@ public class CurrencyUtil {
 						+ currency.size());
 		return currency;
 
-	}	
+	}
+	
+	/*
+	 * searching for a currency Rate using the code
+	 * added by Govind
+	 */
+	public static Collection getCurrencyRate(String code) {
+		Collection col = new ArrayList();
+		Session session = null;
+		Query qry = null;
+		String qryStr = null;
+		try {
+			session = PersistenceManager.getSession();
+			
+				qryStr = "select curr from " + AmpCurrencyRate.class.getName() + " curr where curr.toCurrencyCode=:code ";
+				qry = session.createQuery(qryStr);				
+				qry.setParameter("code",code,Hibernate.STRING);
+			col = qry.list();
+		} catch (Exception e) {
+			logger.error("Exception from getAllCurrencies()");
+			e.printStackTrace(System.out);
+		} finally {
+			if (session != null) {
+				try {
+					PersistenceManager.releaseSession(session);
+				} catch (Exception rsf) {
+					logger.error("Release session failed");
+				}
+			}			
+		}
+		
+		return col;
+	}
+	public static Collection getCurrencyRateValues(Long id) {
+		Collection col = new ArrayList();
+		Session session = null;
+		Query qry = null;
+		String qryStr = null;
+		try {
+			session = PersistenceManager.getSession();
+			
+				qryStr = "select curr from " + AmpCurrencyRate.class.getName() + " curr where curr.ampCurrencyRateId=:id ";
+				qry = session.createQuery(qryStr);				
+				qry.setParameter("id",id,Hibernate.LONG);
+			col = qry.list();
+		} catch (Exception e) {
+			logger.error("Exception from getAllCurrencies()");
+			e.printStackTrace(System.out);
+		} finally {
+			if (session != null) {
+				try {
+					PersistenceManager.releaseSession(session);
+				} catch (Exception rsf) {
+					logger.error("Release session failed");
+				}
+			}			
+		}
+		
+		return col;
+	}
+	/*
+	 * For Deleting a Currency...
+	 */
+	public static void deleteCurrency(String Code) {
+		try
+		{
+			AmpCurrency ampC = new AmpCurrency();
+			ampC = CurrencyUtil.getCurrencyByCode(Code);
+			DbUtil.delete(ampC);
+		}
+		catch (Exception e) {
+			logger.error("Exception from getAllCurrencies()");
+			e.printStackTrace(System.out);
+		} 	
+	}
 	
 }

@@ -13,6 +13,7 @@ import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
+import org.digijava.kernel.dbentity.Country;
 import org.digijava.module.aim.dbentity.AmpCurrency;
 import org.digijava.module.aim.form.CurrencyForm;
 import org.digijava.module.aim.util.CurrencyUtil;
@@ -28,6 +29,27 @@ public class ChangeCurrencyStatus extends Action {
 		logger.debug("In ChangeCurrencyStatus");
 		try {
 			String currCode = request.getParameter("currCode");
+			if((request.getParameter("action")!=null)&&(request.getParameter("action").equals("deleteCurrency"))) {
+				CurrencyUtil.deleteCurrency(currCode);
+				
+				Iterator itr = crForm.getAllCurrencies().iterator();
+				AmpCurrency curr = null;
+				while (itr.hasNext()) {
+					curr = (AmpCurrency) itr.next();
+					if (curr.getCurrencyCode().equals(currCode)) {
+						break;
+					}
+				}
+				
+				crForm.getAllCurrencies().remove(curr);
+				if (crForm.getAllCurrencies() == null) {
+					crForm.setAllCurrencies(new ArrayList());
+				}
+				List temp = new ArrayList(crForm.getAllCurrencies());
+				Collections.sort(temp);
+				crForm.setAllCurrencies(temp);
+				
+			}
 			int status = Integer.parseInt(request.getParameter("status"));
 			CurrencyUtil.updateCurrencyStatus(currCode,status);
 			Iterator itr = crForm.getAllCurrencies().iterator();

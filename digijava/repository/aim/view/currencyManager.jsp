@@ -41,6 +41,22 @@ function editCurrency(code) {
 	document.aimCurrencyForm.submit();
 }
 
+function deleteCurrency(code) {
+		  var flag = validate();
+		  if(flag)
+		  {
+	<digi:context name="deleteCurrency" property="context/module/moduleinstance/changeCurrencyStatus.do" />
+	document.aimCurrencyForm.action = "<%= deleteCurrency %>~action=deleteCurrency~currCode="+code;
+	document.aimCurrencyForm.target = "_self";
+	document.aimCurrencyForm.submit();
+		  }
+}
+function validate(){
+		 
+		
+			return(confirm(" Do you want to delete this Currency ?"));
+		
+}
 function submit() {
 	document.aimCurrencyForm.target = "_self";
 	document.aimCurrencyForm.submit();		  
@@ -205,10 +221,24 @@ function submit() {
 											<a href="javascript:editCurrency('<c:out value="${curr.currencyCode}"/>')">
 											<c:out value="${curr.currencyCode}"/></a>
 										</td>
-										<td align="left">
-											<a href="javascript:editCurrency('<c:out value="${curr.currencyCode}"/>')">
+										<td >
+											<table width="100%">
+												<tr>
+													<td align="left" width="75%">
+														<a href="javascript:editCurrency('<c:out value="${curr.currencyCode}"/>')">
 											<c:out value="${curr.currencyName}"/></a>
+													</td>
+													<td align="right">
+														<a href="javascript:deleteCurrency('<c:out value="${curr.currencyCode}"/>')">
+												 		<digi:img src="module/cms/images/deleteIcon.gif" border="0" alt="Delete this Currency"/>
+														</a>
+															
+													</td>
+												</tr>
+												</table>
+											
 										</td>
+										
 										<%--
 										<td align="left">
 											<c:out value="${curr.countryName}"/>

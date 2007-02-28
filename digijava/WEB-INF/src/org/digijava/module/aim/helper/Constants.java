@@ -125,6 +125,9 @@ public class Constants
 	
 	public static final String TEAM_ID = "TID";
 	
+	public static final String TEAM_Lead = "teamLead";
+	public static final String TEAM_Head = "teamHead";
+	
 	public static final String SESSION_LIST	= "sessionList";
 	public static final String EDIT_ACT_LIST = "editActivityList";
 	public static final String USER_ACT_LIST = "userActivityList";

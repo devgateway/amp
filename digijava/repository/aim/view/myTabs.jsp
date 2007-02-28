@@ -7,6 +7,19 @@
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
 
 
+<script language="JavaScript">
+	function addActivity() {
+		window.location.href="/aim/addActivity.do~pageId=1~reset=true~action=create";	
+	}
+	
+	function teamWorkspaceSetup(a) {
+		window.location.href="/aim/workspaceOverview.do~tId="+a+"~dest=teamLead";	
+	}
+	
+	
+</script>
+
+	
 <digi:context name="digiContext" property="context" />
 
 
@@ -38,8 +51,16 @@ reloadTab("MyTabs","Tab-By Project");
 					<bean:define id="translation">
 						<digi:trn key="aim:clickToAddNewActivity">Click here to Add New Activity</digi:trn>
 					</bean:define>
-					<div title='<%=translation%>'>
-					<digi:link href="/addActivity.do~pageId=1~reset=true~action=create">
-					<digi:trn key="aim:addActivity">
-					Add Activity</digi:trn></digi:link></div>
+					<div title='<%=translation%>' align="right">
+					<input type="button" class="dr-menu" onclick="return addActivity()" value='<digi:trn key="btn:addActivity">Add Activity</digi:trn>' name="addActivity"/>
+					</div>
+					<logic:equal name="teamHead" scope="session" value="yes">
+						<br/>
+						<bean:define id="translation">
+							<digi:trn key="aim:clickToConfigureTeamPages">Click here to Configure Team Workspace</digi:trn>
+						</bean:define>
+						<div title='<%=translation%>' align="right">
+                     	<input type="button" class="dr-menu" onclick='return teamWorkspaceSetup("<bean:write name="teamHead" scope="session"/>")' value='<digi:trn key="btn:teamWorkspaceSetup">Team Workspace Setup</digi:trn>' name="addActivity"/>
+                     	</div><br/>
+					</logic:equal>
 

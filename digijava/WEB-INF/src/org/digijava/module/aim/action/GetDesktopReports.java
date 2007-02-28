@@ -35,9 +35,7 @@ public class GetDesktopReports extends TilesAction {
 				session.setAttribute(Constants.MY_REPORTS,reports);
 				session.setAttribute(Constants.TEAM_ID,tm.getTeamId());
 				if(tm.getTeamHead()) session.setAttribute(Constants.TEAM_Head,"yes");
-				session.setAttribute(Constants.TEAM_Head,"no");
-				System.out.println(session.getAttribute("teamHead"));
-			
+					else session.setAttribute(Constants.TEAM_Head,"no");
 		}
 		return null;
 	}

@@ -5,6 +5,7 @@
 <%@ taglib uri="/taglib/struts-html" prefix="html" %>
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
+<%@ page import = "org.apache.struts.util.LabelValueBean" %>
 
 <digi:instance property="calendarEventForm"/>
 
@@ -23,6 +24,14 @@ function addOrganisation(orgId, orgName){
     option.text = orgName;
     list.options.add(option);
 }
+
+function preSubmit(){
+  if(!check()){
+    return false;
+  }
+  selectUsers();
+}
+
 function check(){
     var et=document.getElementById("eventTitle");
     if(et.value==''){
@@ -33,20 +42,78 @@ function check(){
       return true;
     }
 }
-function addGuest(guest) {
-    var list = document.getElementById('selectedAttendeeGuests');
-    if (list == null || guest == null || guest.value == null || guest.value == "") {
+
+function addUser(){
+    var uslist = document.getElementById('usersList');
+    var selUsList=document.getElementById('selectedUsersSel');
+
+    if (uslist == null) {
+        return false;
+    }
+
+    var index = uslist.selectedIndex;
+    if (index != -1) {
+        for(var i = 0; i < uslist.length; i++) {
+            if (uslist.options[i].selected){
+              if(selUsList.length!=0){
+                var flag=false;
+                for(var j=0; j<selUsList.length;j++){
+                  if(selUsList.options[j].value=='u:'+uslist.options[i].value &&
+                     selUsList.options[j].text==uslist.options[i].text){
+                    flag=true;
+                  }
+                }
+                if(!flag){
+                  addOnption(selUsList,uslist.options[i].text,'u:'+uslist.options[i].value);
+                }
+              }else{
+                addOnption(selUsList,uslist.options[i].text,'u:'+uslist.options[i].value);
+              }
+            }
+
+        }
+    }
+    return false;
+}
+
+function addOnption(list, text, value){
+    if (list == null) {
         return;
     }
     var option = document.createElement("OPTION");
-    option.value = guest.value;
+    option.value = value;
+    option.text = text;
+    list.options.add(option);
+    return false;
+}
+
+function addGuest(guest) {
+    var list = document.getElementById('selectedUsersSel');
+    if (list == null || guest == null || guest.value == null || guest.value == "") {
+        return;
+    }
+
+    var flag=false;
+    for(var i=0; i<list.length;i++){
+      if(list.options[i].value=='g:'+guest.value &&
+         list.options[i].text==guest.value){
+        flag=true;
+        break;
+      }
+    }
+    if(flag){
+      return false;
+    }
+
+    var option = document.createElement("OPTION");
+    option.value = 'g:'+guest.value;
     option.text = guest.value;
     list.options.add(option);
     guest.value = "";
 }
 
-function removeGuest() {
-    var list = document.getElementById('selectedAttendeeGuests');
+function removeUser() {
+    var list = document.getElementById('selectedUsersSel');
     if (list == null) {
         return;
     }
@@ -63,8 +130,8 @@ function removeGuest() {
     }
 }
 
-function selectGuests() {
-    var list = document.getElementById('selectedAttendeeGuests');
+function selectUsers() {
+    var list = document.getElementById('selectedUsersSel');
     if (list == null) {
         return;
     }
@@ -216,8 +283,8 @@ function selectAllOrgs() {
                         <script type="text/javascript" src="/thirdparty/CalendarPopup/CalendarPopup.js"></script>
                         <script type="text/javascript" src="/thirdparty/CalendarPopup/date.js"></script>
                         <script type="text/javascript">
-                            //var startDateCalendar = new CalendarPopup();
-                            //startDateCalendar.setWeekStartDay(1);
+                            var startDateCalendar = new CalendarPopup();
+                            startDateCalendar.setWeekStartDay(1);
                         </script>
                         <td nowrap="nowrap">
                             <table cellpadding="0" cellspacing="0">
@@ -327,8 +394,8 @@ function selectAllOrgs() {
                     <td nowrap="nowrap">&nbsp;<span class="redbold">*</span>To&nbsp;&nbsp;</td>
                     <c:if test="${calendarEventForm.selectedCalendarTypeId == 0}">
                         <script type="text/javascript">
-                            //var endDateCalendar = new CalendarPopup();
-                            //endDateCalendar.setWeekStartDay(1);
+                            var endDateCalendar = new CalendarPopup();
+                            endDateCalendar.setWeekStartDay(1);
                         </script>
                         <td nowrap="nowrap">
                             <table cellpadding="0" cellspacing="0">
@@ -446,15 +513,17 @@ function selectAllOrgs() {
                                         </tr>
                                         <tr>
                                             <td>
-                                                <html:select name="calendarEventForm" property="selectedAttendeeUsers" multiple="multiple" size="7">
-                                                    <logic:notEmpty name="calendarEventForm" property="attendeeUsers">
-                                                        <bean:define id="users" name="calendarEventForm" property="attendeeUsers" type="java.util.List"/>
-                                                        <html:options collection="users" property="value" labelProperty="label"/>
-                                                    </logic:notEmpty>
-                                                </html:select>
+                                              <select multiple="multiple" size="7" id="usersList">
+                                                <c:forEach var="usr" items="${calendarEventForm.attendeeUsers}">
+                                                  <option value="${usr.value}">${usr.label}</option>
+                                                </c:forEach>
+                                               </select>
                                             </td>
                                         </tr>
                                     </table>
+                                </td>
+                                <td>
+                                  <input type="button" onclick="addUser();" style="font-family:tahoma;font-size:11px;" value="Add User >>"/>
                                 </td>
                                 <td valign="top">
                                     <table border="0" width="100%" cellpadding="0">
@@ -469,20 +538,20 @@ function selectAllOrgs() {
                                                             <input id="guest" type="text" style="width:100%">
                                                         </td>
                                                         <td valign="top">
-                                                            <input type="button" value="Add" style="width:80px" onclick="addGuest(document.getElementById('guest'))">
+                                                            <input type="button" value="Add Guest" style="width:80px;font-family:tahoma;font-size:11px;" onclick="addGuest(document.getElementById('guest'))">
                                                         </td>
                                                     </tr>
                                                     <tr>
                                                         <td valign="top">
-                                                            <html:select styleId="selectedAttendeeGuests" name="calendarEventForm" property="selectedAttendeeGuests" multiple="multiple" size="5" style="width:200px">
-                                                                <logic:notEmpty name="calendarEventForm" property="attendeeGuests">
-                                                                    <bean:define id="guests" name="calendarEventForm" property="attendeeGuests" type="java.util.List"/>
-                                                                    <html:options collection="guests" property="value" labelProperty="label"/>
-                                                                </logic:notEmpty>
+
+                                                            <html:select styleId="selectedUsersSel" name="calendarEventForm" property="selectedUsers" multiple="multiple" size="5" style="width:200px">
+                                                              <c:if test="${!empty calendarEventForm.selectedUsersList}">
+                                                                <html:optionsCollection name="calendarEventForm" property="selectedUsersList" value="value" label="label" />
+                                                              </c:if>
                                                             </html:select>
                                                         </td>
                                                         <td valign="top">
-                                                            <input type="button" value="Remove" style="width:80px" onclick="removeGuest()">
+                                                            <input type="button" value="Remove" style="width:80px;font-family:tahoma;font-size:11px;" onclick="removeUser()">
                                                         </td>
                                                     </tr>
                                                 </table>
@@ -503,7 +572,7 @@ function selectAllOrgs() {
                 <tr>
                     <td>&nbsp;</td>
                     <td>
-                        <input type="submit" value="Preview" onclick="return check();">
+                        <input type="submit" value="Preview" onclick="return preSubmit();">
                     </td>
                 </tr>
             </table>

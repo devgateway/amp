@@ -1,14 +1,10 @@
 package org.digijava.module.calendar.form;
 
-import java.util.GregorianCalendar;
-import java.util.List;
-import javax.servlet.http.HttpServletRequest;
+import java.util.*;
+import javax.servlet.http.*;
 
-import org.apache.struts.action.ActionError;
-import org.apache.struts.action.ActionErrors;
-import org.apache.struts.action.ActionForm;
-import org.apache.struts.action.ActionMapping;
-import org.digijava.module.calendar.entity.DateBreakDown;
+import org.apache.struts.action.*;
+import org.digijava.module.calendar.entity.*;
 
 public class CalendarEventForm
     extends ActionForm {
@@ -33,8 +29,10 @@ public class CalendarEventForm
     private DateBreakDown endDateBreakDown;
     private List attendeeUsers;
     private List attendeeGuests;
+    private List selectedUsersList;
     private String[] selectedAttendeeUsers;
     private String[] selectedAttendeeGuests;
+    private String[] selectedUsers;
     private boolean privateEvent;
 
     public List getCalendarTypes() {
@@ -136,6 +134,14 @@ public class CalendarEventForm
         return selectedStartTime;
     }
 
+    public String[] getSelectedUsers() {
+        return selectedUsers;
+    }
+
+    public List getSelectedUsersList() {
+        return selectedUsersList;
+    }
+
     public void setCalendarTypes(List calendarTypes) {
         this.calendarTypes = calendarTypes;
     }
@@ -232,6 +238,14 @@ public class CalendarEventForm
 
     public void setSelectedEndTime(String selectedEndTime) {
         this.selectedEndTime = selectedEndTime;
+    }
+
+    public void setSelectedUsers(String[] selectedUsers) {
+        this.selectedUsers = selectedUsers;
+    }
+
+    public void setSelectedUsersList(List selectedUsersList) {
+        this.selectedUsersList = selectedUsersList;
     }
 
     public ActionErrors validate(ActionMapping mapping,

@@ -33,7 +33,16 @@ public class ShowCalendarEvent
                                  HttpServletRequest request,
                                  HttpServletResponse response) throws Exception {
         CalendarEventForm calendarEventForm = (CalendarEventForm) form;
+
         try {
+
+            if(calendarEventForm.getMethod()==null){
+                calendarEventForm=resetForm(calendarEventForm);
+            }else if(calendarEventForm.getMethod().equalsIgnoreCase("new")){
+                calendarEventForm=resetForm(calendarEventForm);
+                calendarEventForm.setAmpCalendarId(new Long(0));
+            }
+
             // calendar type
             List calendarTypesList = DateNavigator.getCalendarTypes();
             calendarEventForm.setCalendarTypes(calendarTypesList);
@@ -104,33 +113,38 @@ public class ShowCalendarEvent
                 calendarEventForm.setSelectedEndTime(endDateBreakDown.
                     formatTimeString());
                 // attendee users
-                Set attendees = ampCalendar.getAttendees();
-                Set selectedAttendeeUsers = new HashSet();
-                Set selectedAttendeeGuests = new HashSet();
-                if(attendees != null) {
-                    Iterator it = attendees.iterator();
-                    while(it.hasNext()) {
-                        AmpCalendarAttendee attendee = (AmpCalendarAttendee) it.
-                            next();
-                        if(attendee.getUser() != null) {
-                            selectedAttendeeUsers.add(attendee.getUser().getId().
-                                toString());
-                        } else if(attendee.getGuest() != null) {
-                            selectedAttendeeGuests.add(attendee.getGuest());
-                        } else {
-                            // ignore invalid attendee
-                            continue;
+                if(calendarEventForm.getMethod()==null) {
+                    Set attendees = ampCalendar.getAttendees();
+                    Set selectedAttendeeUsers = new HashSet();
+                    Set selectedAttendeeGuests = new HashSet();
+                    Set selectedUsers = new HashSet();
+                    if(attendees != null) {
+                        Iterator it = attendees.iterator();
+                        while(it.hasNext()) {
+                            AmpCalendarAttendee attendee = (AmpCalendarAttendee) it.
+                                    next();
+                            if(attendee.getUser() != null) {
+                                selectedAttendeeUsers.add(attendee.getUser().getId().toString());
+                                selectedUsers.add(new String("u:" + attendee.getUser().getId().toString()));
+
+                            } else if(attendee.getGuest() != null) {
+                                selectedAttendeeGuests.add(attendee.getGuest());
+                                selectedUsers.add(new String("g:" + attendee.getGuest()));
+                            } else {
+                                // ignore invalid attendee
+                                continue;
+                            }
                         }
                     }
+                    // selected attendee users
+                    calendarEventForm.setSelectedAttendeeUsers((String[]) selectedAttendeeUsers.toArray(new String[0]));
+                    // selected attendee guests
+                    calendarEventForm.setSelectedAttendeeGuests((String[]) selectedAttendeeGuests.toArray(new String[0]));
+
+                    calendarEventForm.setSelectedUsers((String[]) selectedUsers.toArray(new String[0]));
+                    // private event
+                    calendarEventForm.setPrivateEvent(ampCalendar.isPrivateEvent());
                 }
-                // selected attendee users
-                calendarEventForm.setSelectedAttendeeUsers((String[])
-                    selectedAttendeeUsers.toArray(new String[0]));
-                // selected attendee guests
-                calendarEventForm.setSelectedAttendeeGuests((String[])
-                    selectedAttendeeGuests.toArray(new String[0]));
-                // private event
-                calendarEventForm.setPrivateEvent(ampCalendar.isPrivateEvent());
             }
             // event types list
             List eventTypesList = AmpDbUtil.getEventTypes();
@@ -178,16 +192,33 @@ public class ShowCalendarEvent
             calendarEventForm.setSelectedEndTime(endDateBreakDown.
                                                  formatTimeString());
             // attendee users
-            Iterator userIt = AmpDbUtil.getUsers().iterator();
-            List attendeeUsers = new ArrayList();
-            while(userIt.hasNext()) {
-                User user = (User) userIt.next();
-                LabelValueBean lvb = new LabelValueBean(user.getFirstNames() +
-                    " " +
-                    user.getLastName(), user.getId().toString());
-                attendeeUsers.add(lvb);
+            List selectedUsersList=new ArrayList();
+            List ampUsers=AmpDbUtil.getUsers();
+            if(ampUsers!=null && ampUsers.size()!=0){
+                Iterator userIt = AmpDbUtil.getUsers().iterator();
+                List attendeeUsers = new ArrayList();
+                while(userIt.hasNext()) {
+                    User user = (User) userIt.next();
+                    LabelValueBean lvb = new LabelValueBean(user.getFirstNames() +
+                            " " +
+                            user.getLastName(), user.getId().toString());
+                    attendeeUsers.add(lvb);
+
+                    String[] selUsers = calendarEventForm.getSelectedUsers();
+                    if(selUsers != null) {
+                        for(int i = 0; i < selUsers.length; i++) {
+                            String uid = "u:" + user.getId().toString();
+                            if(uid.equals(selUsers[i])) {
+                                LabelValueBean lvbs = new LabelValueBean(user.getFirstNames() + " " + user.getLastName(), uid);
+                                selectedUsersList.add(lvbs);
+                                break;
+                            }
+                        }
+                    }
+                }
+                calendarEventForm.setAttendeeUsers(attendeeUsers);
             }
-            calendarEventForm.setAttendeeUsers(attendeeUsers);
+
             // attendee guests
             List attendeeGuests = new ArrayList();
             if(calendarEventForm.getSelectedAttendeeGuests() != null) {
@@ -195,13 +226,48 @@ public class ShowCalendarEvent
                 for(int i = 0; i < guests.length; i++) {
                     LabelValueBean lvb = new LabelValueBean(guests[i], guests[i]);
                     attendeeGuests.add(lvb);
+                    LabelValueBean lvbs = new LabelValueBean(guests[i],new String("g:"+guests[i]));
+                    selectedUsersList.add(lvbs);
                 }
                 calendarEventForm.setSelectedAttendeeGuests(null);
             }
+            calendarEventForm.setSelectedUsersList(selectedUsersList);
             calendarEventForm.setAttendeeGuests(attendeeGuests);
+
+            calendarEventForm.setMethod(null);
         } catch(Exception ex) {
-            return mapping.findForward("failure");
+            throw new RuntimeException(ex);
         }
         return mapping.findForward("success");
+    }
+
+    private CalendarEventForm resetForm(CalendarEventForm calendarEventForm) {
+        calendarEventForm.setAttendeeGuests(null);
+        calendarEventForm.setAttendeeUsers(null);
+        calendarEventForm.setCalendarTypes(null);
+        calendarEventForm.setDonors(null);
+        calendarEventForm.setEndDate(null);
+        calendarEventForm.setEndDateBreakDown(null);
+        calendarEventForm.setEventTitle(null);
+        calendarEventForm.setEventTypesList(null);
+//      calendarEventForm.setMethod(null);
+        calendarEventForm.setStartDate(null);
+        calendarEventForm.setStartDateBreakDown(null);
+
+        calendarEventForm.setSelectedUsers(null);
+        calendarEventForm.setSelectedUsersList(null);
+
+        calendarEventForm.setSelectedAttendeeGuests(null);
+        calendarEventForm.setSelectedAttendeeUsers(null);
+
+        calendarEventForm.setSelectedCalendarTypeName(null);
+        calendarEventForm.setSelectedDonors(null);
+        calendarEventForm.setSelectedEndDate(null);
+        calendarEventForm.setSelectedEndTime(null);
+        calendarEventForm.setSelectedEventTypeId(null);
+        calendarEventForm.setSelectedEventTypeName(null);
+        calendarEventForm.setSelectedStartDate(null);
+        calendarEventForm.setSelectedStartTime(null);
+        return calendarEventForm;
     }
 }

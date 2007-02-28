@@ -32,10 +32,12 @@ function backClicked() {
 }
 
 function disable() {
+
 	document.aimEditActivityForm.submitButton.disabled = true;
 	document.aimEditActivityForm.backButton.disabled = true;
 	var appstatus = document.aimEditActivityForm.approvalStatus.value;
 	var wTLFlag   = document.aimEditActivityForm.workingTeamLeadFlag.value;
+
 	if (appstatus == "started") {
 		if (wTLFlag == "yes") {
 			//if (confirm("Do you want to approve this activity ?"))
@@ -1345,24 +1347,18 @@ function disable() {
 											<tr>
 												<c:if test="${aimEditActivityForm.donorFlag == true}">
 												<td>
-													<html:button  styleClass="dr-menu" property="submitButton" onclick="javascript:history.go(-1)">
-														<< <digi:trn key="btn:back">Back</digi:trn> 
-													</html:button>
+													<input type="button" class="dr-menu" onclick="javascript:history.go(-1)" value='<< <digi:trn key="btn:back">Back</digi:trn>'name="backButton"/>
 													
 													
 												</td>
 												</c:if>
 												<c:if test="${aimEditActivityForm.donorFlag == false}">
 												<td>
-													<html:button  styleClass="dr-menu" property="submitButton" onclick="javascript:history.go(-1)">
-														<< <digi:trn key="btn:back">Back</digi:trn> 
-													</html:button>
+													<input type="button" class="dr-menu" onclick="javascript:history.go(-1)" value='<< <digi:trn key="btn:back">Back</digi:trn>'name="backButton"/>
 												</td>
 												</c:if>
 												<td>
-													<html:button  styleClass="dr-menu" property="submitButton" onclick="disable()">
-														<digi:trn key="btn:saveActivity">Save Activity</digi:trn> 
-													</html:button>
+													<input type="button" class="dr-menu" onclick="disable()" value='<digi:trn key="btn:saveActivity">Save Activity</digi:trn>' name="submitButton"/>
 													
 												</td>
 											</tr>
@@ -1371,10 +1367,7 @@ function disable() {
 									</c:if>
 									<c:if test="${aimEditActivityForm.pageId > 2}">
 									<tr><td bgColor=#ffffff align="center" colspan=2>
-
-										<html:button  styleClass="dr-menu" property="submitButton" onclick="javascript:history.go(-1)">
-														<digi:trn key="btn:back">Back</digi:trn> 
-										</html:button>
+										<input type="button" class="dr-menu" onclick="javascript:history.go(-1)" value='<digi:trn key="btn:back">Back</digi:trn>' />
 									</td></tr>
 									</c:if>
 								</table>

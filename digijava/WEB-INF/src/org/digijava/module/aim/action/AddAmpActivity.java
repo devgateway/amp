@@ -23,11 +23,13 @@ import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
+import org.digijava.kernel.dbentity.Country;
 import org.digijava.kernel.request.SiteDomain;
 import org.digijava.kernel.user.User;
 import org.digijava.kernel.util.RequestUtils;
 import org.digijava.kernel.util.SiteUtils;
 import org.digijava.module.aim.dbentity.AmpActivity;
+import org.digijava.module.aim.dbentity.AmpGlobalSettings;
 import org.digijava.module.aim.dbentity.AmpModality;
 import org.digijava.module.aim.form.EditActivityForm;
 import org.digijava.module.aim.helper.FundingOrganization;
@@ -35,6 +37,7 @@ import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.ActivityUtil;
 import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.aim.util.DbUtil;
+import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.MEIndicatorsUtil;
 import org.digijava.module.aim.util.ProgramUtil;
 import org.digijava.module.aim.util.TeamUtil;
@@ -278,6 +281,31 @@ public class AddAmpActivity extends Action {
 			eaForm.setPerspectives(DbUtil.getAmpPerspective());
 
 			eaForm.setFundingRegionId(new Long(-1));
+			
+			//*************************
+			
+			Collection a = FeaturesUtil.getDefaultCountryISO();
+			String iso=null;
+			String CountryName=null;
+			Iterator itr1 = a.iterator();
+			while (itr1.hasNext())
+			{
+				AmpGlobalSettings ampGS = (AmpGlobalSettings)itr1.next();
+				iso = ampGS.getGlobalSettingsValue();
+			}
+			Collection b = FeaturesUtil.getDefaultCountry(iso);
+			Iterator itr2 = b.iterator();
+			while (itr2.hasNext())
+			{
+				Country ampGS = (Country)itr2.next();
+				CountryName = ampGS.getCountryName();
+				eaForm.setCountry(CountryName); 
+			}
+			
+			//************************************************	
+			
+			
+			
 			return mapping.findForward("addActivityStep1");
 		} else if (eaForm.getStep().equals("1.1")) { // shows the edit page of the editor module
 			eaForm.setStep("1");

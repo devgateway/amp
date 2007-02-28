@@ -28,7 +28,6 @@ public class ShowConfigureTeam extends Action {
 
 		TeamPagesForm tpForm = (TeamPagesForm) form;
 
-		ServletContext ampContext = getServlet().getServletContext();
 		
 		if (request.getParameter("pageId") == null)
 			return mapping.findForward("index");

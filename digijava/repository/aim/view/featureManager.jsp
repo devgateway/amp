@@ -101,9 +101,8 @@
 																			<input type="button" class="dr-menu" onclick="javascript:toggleFeature('<bean:write name="feature" property="ampFeatureId"/>')" value='<digi:trn key="btn:disable">Disable</digi:trn>' />
 																		</c:if>
 																		<c:if test="${feature.active == false}">
-																			<html:button  styleClass="dr-menu" property="submitButton"  onclick="javascript:toggleFeature('<bean:write name="feature" property="ampFeatureId"/>')">
-																				<digi:trn key="btn:enable">Enable</digi:trn> 
-																			</html:button>
+
+																			<input type="button" class="dr-menu" onclick="javascript:toggleFeature('<bean:write name="feature" property="ampFeatureId"/>')" value='<digi:trn key="btn:enable">Enable</digi:trn>' />
 																		</c:if>
 																	</td>
 																	</tr>

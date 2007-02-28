@@ -176,7 +176,7 @@ function selectFile() {
 										</td>
 										<td bgcolor="#f4f4f2" vAlign="center">
 											<html:submit  styleClass="dr-menu" property="submitButton" >
-												<digi:trn key="btn:go">Go</digi:trn> 
+												<digi:trn key="btn:Go">Go</digi:trn> 
 											</html:submit>
 										</td>	
 									</tr>
@@ -210,7 +210,7 @@ function selectFile() {
 								</td>
 								<td bgcolor="#f4f4f2" vAlign="left" width="170" align="center">
 								<a title="<digi:trn key="aim:FileLocation">Location of the document to be attached</digi:trn>">
-								<html:file name="aimCurrencyRateForm" property="currRateFile" size="50"/>
+								<html:file name="aimCurrencyRateForm" property="currRateFile" size="50" styleClass="dr-menu"/>
 								</a>
 								</td>
 								<td bgcolor="#f4f4f2" vAlign="left" align="right">

@@ -115,7 +115,11 @@ function validateForm() {
 		document.aimEditActivityForm.addSec.focus();
 		return false;
 	}
-	document.aimEditActivityForm.step.value="3";
+		document.aimEditActivityForm.step.value = "3";
+		<digi:context name="step" property="context/module/moduleinstance/addActivity.do?edit=true" />
+		document.aimEditActivityForm.action = "<%= step %>";
+		document.aimEditActivityForm.target = "_self";
+		document.aimEditActivityForm.submit();			  
 	return true;
 }
 
@@ -579,11 +583,11 @@ function popupwin()
 																		property="submitButton" onclick="return gotoStep(1)">
 																		<< <digi:trn key="btn:back">Back</digi:trn>
 																	</html:submit></td>
-																	<td><html:submit styleClass="dr-menu"
+																	<td><html:button styleClass="dr-menu"
 																		property="submitButton"
 																		onclick="return validateForm()">
 																		<digi:trn key="btn:next">Next</digi:trn> >>
-																		</html:submit></td>
+																		</html:button></td>
 																	<td><html:reset styleClass="dr-menu"
 																		property="submitButton" onclick="return resetAll()">
 																		<digi:trn key="btn:reset">Reset</digi:trn>

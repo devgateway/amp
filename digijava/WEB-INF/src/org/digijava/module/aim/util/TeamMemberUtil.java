@@ -483,7 +483,8 @@ public class TeamMemberUtil {
 				ampTeamMember = (AmpTeamMember) itrTemp.next();
 			}
 			// end
-
+			logger.info( "TeamMember: " + ampTeamMember.getUser().getName());
+			logger.info( "ampTeamMember.getReports is:" + ampTeamMember.getReports() );
 			Iterator itr = ampTeamMember.getReports().iterator();
 			while (itr.hasNext()) {
 				AmpReports ampReports = (AmpReports) itr.next();

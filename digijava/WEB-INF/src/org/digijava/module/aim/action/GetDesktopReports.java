@@ -26,7 +26,7 @@ public class GetDesktopReports extends TilesAction {
 		HttpSession session = request.getSession();
 		TeamMember tm = (TeamMember) session.getAttribute(Constants.CURRENT_MEMBER);
 		if (tm != null) {
-			if (session.getAttribute(Constants.MY_REPORTS) == null) {
+			if (session.getAttribute(Constants.MY_REPORTS) == null || tm.getDelete() ) {
 				Collection reports;
 				if (tm.getTeamHead() == true) {
 					reports = TeamUtil.getAllTeamReports(tm.getTeamId());

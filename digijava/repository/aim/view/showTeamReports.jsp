@@ -6,6 +6,8 @@
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
 
+<%@ page language="java" import="org.digijava.module.aim.helper.TeamMember" %>
+
 <digi:instance property="aimTeamReportsForm" />
 
 <SCRIPT TYPE="text/javascript">
@@ -107,8 +109,10 @@ return false;
 
 
 											</TD>
-											 <% String s = (String)session.getAttribute("teamLeadFlag"); %>
-												<% if(s.equals("true")){ %>
+											 <% String s = (String)session.getAttribute("teamLeadFlag");
+											 TeamMember tm = (TeamMember) session.getAttribute("currentMember");
+											 
+												 if( tm.getDelete() ){ %>
 											
 											<td>
 												<jsp:useBean id="urlParams" type="java.util.Map" class="java.util.HashMap"/>

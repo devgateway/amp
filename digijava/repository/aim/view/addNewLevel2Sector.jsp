@@ -215,11 +215,18 @@
 									<table cellPadding=5 cellSpacing=1 width="100%">
 										<tr>
 											<td>
+
+												<jsp:useBean id="urlParams5" type="java.util.Map" class="java.util.HashMap"/>
+												<c:set target="${urlParams5}" property="ampSecSchemeId">
+													<bean:write name="aimAddSectorForm" property="sectorId" />
+												</c:set>
+												<c:set target="${urlParams5}" property="parent" value="sector"/>
 												<digi:img src="module/aim/images/arrow-014E86.gif" width="15" height="10"/>
 												<bean:define id="translation">
 													<digi:trn key="aim:clickToAddSector">Click here to Add a Sector</digi:trn>
 												</bean:define>
-												<digi:link href="/createSector.do?dest=admin" title="<%=translation%>" >
+												
+												<digi:link href="/addSector.do" name="urlParams5" title="<%=translation%>" >
 												<digi:trn key="aim:addSector">
 												Add Sector
 												</digi:trn>

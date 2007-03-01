@@ -31,8 +31,18 @@
 	}
 	function cancel(id)
  	{
-		window.location="/aim/updateSectorSchemes.do~ampSecSchemeparentId="+id+"~event=edit~dest=admin";
+		if (document.aimAddSectorForm.levelType.value =="scheme") 
+			window.location="/aim/updateSectorSchemes.do~ampSecSchemeparentId="+id+"~event=edit~dest=admin";
+		if (document.aimAddSectorForm.levelType.value =="sector")
+			 window.location="/aim/viewSectorDetails.do~level=one~event=edit~ampSectorId="+id;
 		return true;
+		/*
+		/aim/updateSectorSchemes.do~ampSecSchemeparentId=3~event=edit~dest=admin
+		/aim/viewSectorDetails.do~level=one~event=edit~ampSectorId=238
+		/aim/viewSectorDetails.do~level=two~event=edit~ampSectorId=241
+		
+		*/
+		
  	}
 </script>
 <digi:errors/>

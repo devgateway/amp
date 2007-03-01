@@ -41,7 +41,6 @@ public class ViewSectorDetails extends Action {
 						String event = request.getParameter("event");
 						String level = request.getParameter("level");
 						Long parentId = new Long(sectId);
-						logger.info(" this is the sector id....." +parentId);
 						
 						viewSectorForm.setSubSectors(SectorUtil.getAllChildSectors(parentId));
 						if(event!=null)
@@ -51,9 +50,6 @@ public class ViewSectorDetails extends Action {
 								logger.info(" inside editing the sector...");
 								AmpSector editSector = new AmpSector();
 								editSector = SectorUtil.getAmpSector(parentId);
-								logger.info(" this is the name ....."+editSector.getName());
-								logger.info(" this is the code ....."+ editSector.getSectorCode());
-								logger.info("this is the sector id...."+editSector.getAmpSectorId());
 								viewSectorForm.setSectorCode(editSector.getSectorCode());
 								viewSectorForm.setSectorName(editSector.getName());
 								viewSectorForm.setSectorId(editSector.getAmpSectorId());

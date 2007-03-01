@@ -28,7 +28,7 @@ function selectCalendarType(view, type) {
         <td nowrap="nowrap">
             <table border="0" cellpadding="0" cellspacing="0">
                 <tr>
-                    <td nowrap="nowrap">&nbsp;Calendar Type&nbsp;&nbsp;</td>
+                    <td nowrap="nowrap"><digi:trn key="calendar:CalendarType">&nbsp;Calendar Type&nbsp;&nbsp;</digi:trn></td>
                     <td>
                         <html:select name="calendarViewForm" property="selectedCalendarType" onchange="selectCalendarType('${calendarViewForm.view}', '${calendarViewForm.selectedCalendarType}')">
                             <bean:define id="types" name="calendarViewForm" property="calendarTypes" type="java.util.List"/>
@@ -46,7 +46,7 @@ function selectCalendarType(view, type) {
             <td nowrap="nowrap">
                 <table border="0" cellpadding="0" cellspacing="0">
                     <tr>
-                        <td nowrap="nowrap">&nbsp;From&nbsp;&nbsp;</td>
+                        <td nowrap="nowrap"><digi:trn key="calendar:From">&nbsp;From&nbsp;&nbsp;</digi:trn></td>
                         <c:if test="${calendarViewForm.selectedCalendarType == 0}">
                             <script type="text/javascript" src="/thirdparty/CalendarPopup/PopupWindow.js"></script>
                             <script type="text/javascript" src="/thirdparty/CalendarPopup/AnchorPosition.js"></script>
@@ -211,7 +211,7 @@ function selectCalendarType(view, type) {
 <table border="0" width="100%" style="border:1px solid; border-color: #484846;">
     <tr>
         <td>
-            &nbsp;Today&nbsp;is:&nbsp;
+           <digi:trn key="calendar:navToday"> &nbsp;Today&nbsp;is:&nbsp;</digi:trn>
             ${calendarViewForm.currentDateBreakDown.dayOfMonth}/${calendarViewForm.currentDateBreakDown.month}/${calendarViewForm.currentDateBreakDown.year}
         </td>
     <tr>

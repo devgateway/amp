@@ -176,6 +176,14 @@ function selectAllOrgs() {
     //document.getElementById('organizationList').option.selectAll;
     return true;
 }
+
+function delSubmit(){
+  if(confirm('Are You sure?')){
+    return true
+  }else{
+    return false
+  }
+}
 </script>
 
 <table border="0" width="100%" cellPadding=0 cellSpacing=0>
@@ -192,7 +200,7 @@ function selectAllOrgs() {
                     <td nowrap="nowrap">
                         <table border="0" cellpadding="0" cellspacing="0">
                             <tr>
-                                <td nowrap="nowrap">&nbsp;Calendar Type&nbsp;&nbsp;</td>
+                                <td nowrap="nowrap"><digi:trn key="calendar:CalendarType">&nbsp;Calendar Type&nbsp;&nbsp;</digi:trn></td>
                                 <digi:form action="/showCalendarEvent.do">
                                     <td>
                                         <html:hidden name="calendarEventForm" property="ampCalendarId" value="${calendarEventForm.ampCalendarId}"/>
@@ -214,7 +222,7 @@ function selectAllOrgs() {
         <td align="right">
              <c:if test="${calendarEventForm.ampCalendarId != null && calendarEventForm.ampCalendarId != 0}">
                 <digi:form action="/DeleteEvent.do~ampCalendarId=${calendarEventForm.ampCalendarId}">
-                    <html:submit value="Delete" style="width:80px" onclick="if(confirm('Are You sure?')){return true}else{return false};"/>
+                  <input type="submit" onclick="return delSubmit();" value="<digi:trn key="calendar:deleteBtn">Delete</digi:trn>">
                 </digi:form>
              </c:if>
         </td>
@@ -228,16 +236,16 @@ function selectAllOrgs() {
             <html:hidden name="calendarEventForm" property="ampCalendarId" value="${calendarEventForm.ampCalendarId}"/>
             <table border="0" style="border:1px solid; border-color: #484846;" width="756px">
                 <tr>
-                    <td colspan="3" nowrap="nowrap">&nbsp;Details&nbsp;&nbsp;</td>
+                    <td colspan="3" nowrap="nowrap"><digi:trn key="calendar:details">&nbsp;Details&nbsp;&nbsp;</digi:trn></td>
                 </tr>
                 <tr>
-                    <td nowrap="nowrap">&nbsp;<span class="redbold">*</span>Event Title&nbsp;&nbsp;</td>
+                    <td nowrap="nowrap">&nbsp;<span class="redbold">*</span><digi:trn key="calendar:eventTitle">Event Title&nbsp;&nbsp</digi:trn></td>
                     <td>
                         <html:text name="calendarEventForm" styleId="eventTitle" property="eventTitle"/>
                     </td>
                 </tr>
                 <tr>
-                    <td nowrap="nowrap">&nbsp;<span class="redbold">*</span>Event Type&nbsp;&nbsp;</td>
+                    <td nowrap="nowrap">&nbsp;<span class="redbold">*</span><digi:trn key="calendar:eventType">Event Type&nbsp;&nbsp;</digi:trn></td>
                     <td>
                         <html:select name="calendarEventForm" property="selectedEventTypeId">
                             <logic:notEmpty name="calendarEventForm" property="eventTypesList">
@@ -248,17 +256,18 @@ function selectAllOrgs() {
                     </td>
                 </tr>
                 <tr>
-                    <td nowrap="nowrap" valign="top"><br />&nbsp;Organizations&nbsp;&nbsp;</td>
+                    <td nowrap="nowrap" valign="top"><br /><digi:trn key="calendar:organizations">&nbsp;Organizations&nbsp;&nbsp;</digi:trn></td>
                     <td>
 
                       <a title="Facilitates tracking activities in donors' internal databases">
                        <br />
                        <digi:link href="/selectOrganization.do?orgSelReset=true&edit=true" onclick="window.open(this.href, 'users', 'HEIGHT=500,resizable=yes,scrollbars=yes,WIDTH=500');return false;">
-                        Add Organizations
+                        <digi:trn key="calendar:addOrganizations">Add Organizations</digi:trn>
                        </digi:link>
                        &nbsp
                       <a href="#" onclick="return removeSelOrganisations();">
-                        Delete Organization
+                      <digi:trn key="calendar:deleteOrganisation">Delete Organization</digi:trn>
+
                       </a>
                         </a>
                         <br /><br />
@@ -274,7 +283,7 @@ function selectAllOrgs() {
                     </td>
                 </tr>
                 <tr>
-                    <td nowrap="nowrap">&nbsp;<span class="redbold">*</span>From&nbsp;&nbsp;</td>
+                    <td nowrap="nowrap">&nbsp;<span class="redbold">*</span><digi:trn key="calendar:from">From&nbsp;&nbsp;</digi:trn></td>
                     <html:hidden styleId="selectedStartTime" name="calendarEventForm" property="selectedStartTime"/>
                     <html:hidden styleId="selectedEndTime" name="calendarEventForm" property="selectedEndTime"/>
                     <c:if test="${calendarEventForm.selectedCalendarTypeId == 0}">
@@ -391,7 +400,7 @@ function selectAllOrgs() {
                     </c:if>
                 </tr>
                 <tr>
-                    <td nowrap="nowrap">&nbsp;<span class="redbold">*</span>To&nbsp;&nbsp;</td>
+                    <td nowrap="nowrap">&nbsp;<span class="redbold">*</span><digi:trn key="calendar:to">To&nbsp;&nbsp;</digi:trn></td>
                     <c:if test="${calendarEventForm.selectedCalendarTypeId == 0}">
                         <script type="text/javascript">
                             var endDateCalendar = new CalendarPopup();
@@ -502,14 +511,14 @@ function selectAllOrgs() {
                     </c:if>
                 </tr>
                 <tr>
-                    <td nowrap="nowrap" valign="top">&nbsp;Attendees&nbsp;&nbsp;</td>
+                    <td nowrap="nowrap" valign="top"><digi:trn key="calendar:attendees">&nbsp;Attendees&nbsp;&nbsp;</digi:trn></td>
                     <td>
                         <table border="0" style="border:1px solid; border-color: #484846;">
                             <tr>
                                 <td valign="top">
                                     <table border="0" width="100%">
                                         <tr>
-                                            <td nowrap="nowrap">&nbsp;Users</td>
+                                            <td nowrap="nowrap"><digi:trn key="calendar:users">&nbsp;Users</digi:trn></td>
                                         </tr>
                                         <tr>
                                             <td>
@@ -523,12 +532,12 @@ function selectAllOrgs() {
                                     </table>
                                 </td>
                                 <td>
-                                  <input type="button" onclick="addUser();" style="font-family:tahoma;font-size:11px;" value="Add User >>"/>
+                                  <input type="button" onclick="addUser();" style="font-family:tahoma;font-size:11px;" value="<digi:trn key="calendar:addUser">Add Users >></digi:trn>">
                                 </td>
                                 <td valign="top">
                                     <table border="0" width="100%" cellpadding="0">
                                         <tr>
-                                            <td nowrap="nowrap">&nbsp;Guests</td>
+                                            <td nowrap="nowrap"><digi:trn key="calendar:guests">&nbsp;Guests</digi:trn></td>
                                         </tr>
                                         <tr>
                                             <td nowrap="nowrap" valign="top">
@@ -538,7 +547,7 @@ function selectAllOrgs() {
                                                             <input id="guest" type="text" style="width:100%">
                                                         </td>
                                                         <td valign="top">
-                                                            <input type="button" value="Add Guest" style="width:80px;font-family:tahoma;font-size:11px;" onclick="addGuest(document.getElementById('guest'))">
+                                                            <input type="button" style="width:80px;font-family:tahoma;font-size:11px;" onclick="addGuest(document.getElementById('guest'))" value="<digi:trn key="calendar:addGuestBtn">Add Guest</digi:trn>">
                                                         </td>
                                                     </tr>
                                                     <tr>
@@ -551,7 +560,7 @@ function selectAllOrgs() {
                                                             </html:select>
                                                         </td>
                                                         <td valign="top">
-                                                            <input type="button" value="Remove" style="width:80px;font-family:tahoma;font-size:11px;" onclick="removeUser()">
+                                                            <input type="button" style="width:80px;font-family:tahoma;font-size:11px;" onclick="removeUser()" value="<digi:trn key="calendar:removeBtn">Remove</digi:trn>" >
                                                         </td>
                                                     </tr>
                                                 </table>
@@ -566,13 +575,13 @@ function selectAllOrgs() {
                 <tr>
                     <td nowrap="nowrap" valign="top">&nbsp;</td>
                     <td>
-                        <html:checkbox name="calendarEventForm" property="privateEvent"/>&nbsp;Event is private
+                        <html:checkbox name="calendarEventForm" property="privateEvent"/><digi:trn key="calendar:eventIsPrivate">&nbsp;Event is private</digi:trn>
                     </td>
                 </tr>
                 <tr>
                     <td>&nbsp;</td>
                     <td>
-                        <input type="submit" value="Preview" onclick="return preSubmit();">
+                        <input type="submit" onclick="return preSubmit();" value="<digi:trn key="calendar:previewBtn">Preview</digi:trn>" />
                     </td>
                 </tr>
             </table>

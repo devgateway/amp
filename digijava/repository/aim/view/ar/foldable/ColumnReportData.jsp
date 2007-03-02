@@ -8,7 +8,7 @@
 
 <bean:define id="columnReport" name="viewable" type="org.dgfoundation.amp.ar.ColumnReportData" scope="request" toScope="page"/>
 <bean:define id="reportMeta" name="reportMeta" type="org.digijava.module.aim.dbentity.AmpReports" scope="session" toScope="page"/>
-
+<bean:define id="bckColor" value="true" toScope="page"/>
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/arFunctions.js"/>"></script>
 
 <bean:define id="viewable" name="columnReport" type="org.dgfoundation.amp.ar.Viewable" scope="page" toScope="request"/>
@@ -18,20 +18,29 @@
 <!-- generate total row -->
 <bean:define id="viewable" name="columnReport" type="org.dgfoundation.amp.ar.Viewable" scope="page" toScope="request"/>
 <jsp:include page="TrailCells.jsp"/>
-
 <!-- generate report data -->
 <%int rowIdx = 0;%>
+
 <logic:notEqual name="reportMeta" property="hideActivities" value="true">
 <logic:iterate name="columnReport" property="ownerIds" id="ownerId" scope="page">
 <%rowIdx++;%>
-<tr onmousedown="setPointer(this, <%=rowIdx%>, 'click', '#FFFFFF', '#FFFFFF', '#FFFF00');">
+<% if(bckColor.equals("true")) {%>
+<bean:define id="bckColor" value="false" toScope="page"/>
+<% } else { %>
+<bean:define id="bckColor" value="true" toScope="page"/>
+<% } %>
+
+<tr onmousedown="setPointer(this, <%=rowIdx%>, 'click', '#FFFFFF', '#FFFFFF', '#FFFF00');" style="background-color:#ffffff">
 	<logic:iterate name="columnReport" property="items" id="column" scope="page" indexId="columnNo">
+		
 		<bean:define id="viewable" name="column" type="org.dgfoundation.amp.ar.Viewable" scope="page" toScope="request"/>
 		<bean:define id="ownerId" name="ownerId" type="java.lang.Long" scope="page" toScope="request"/>
-		<bean:define id="columnNo" name="columnNo" type="java.lang.Integer" scope="page" toScope="request"/>		
+		<bean:define id="columnNo" name="columnNo" type="java.lang.Integer" scope="page" toScope="request"/>
+		<bean:define id="bckColor" name="bckColor" type="java.lang.String" toScope="request"/>		
 		<jsp:include page="<%=viewable.getViewerPath()%>"/>	
 	</logic:iterate>
 </tr>
+
 </logic:iterate>
 </logic:notEqual>
 

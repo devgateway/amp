@@ -196,6 +196,15 @@ public abstract class ReportData extends Viewable {
 		return null;
 	}
 	
+	public String getLevelBkgColor()
+	{
+		int v=this.getLevelDepth();
+		if (v==1) return "#BBEEFF";
+		if (v==2) return "#FFAAAA";
+		if (v==3) return "#BBFFBB";
+		return "ffffff";
+	}
+	
 	
 	
 }

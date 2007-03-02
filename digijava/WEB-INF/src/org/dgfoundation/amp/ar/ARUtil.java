@@ -99,7 +99,7 @@ public final class ARUtil {
 		return col;
 	}
 
-	
+
 	public static String toSQLEnum(Collection col) {
 		String ret = "";
 		if (col == null || col.size() == 0)

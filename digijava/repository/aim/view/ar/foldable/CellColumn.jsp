@@ -9,14 +9,15 @@
 
 <bean:define id="ownerId" name="ownerId" type="java.lang.Long" scope="request" toScope="page"/>
 <bean:define id="columnNo" name="columnNo" type="java.lang.Integer" scope="request" toScope="page"/>
-
+<bean:define id="bckColor" name="bckColor" type="java.lang.String" scope="request" toScope="page"/>		
 <% Cell c=cellColumn.getByOwner(ownerId);%>
 <logic:equal name="columnNo" value="0">
 <bean:define id="reportData" name="cellColumn" property="parent" type="org.dgfoundation.amp.ar.ReportData" scope="page" toScope="page"/>
-<td style="padding-left:<%=10+10*(reportData.getLevelDepth()-1)%>" valign="top" class="clsTableCellData" bgcolor="#FFFFFF">
+<td style="padding-left:<%=10+10*(reportData.getLevelDepth()-1)%>" valign="top"  bgcolor="<%= bckColor.equals("true")?"DDDDDD":"ffffff" %>">
 </logic:equal>
 <logic:notEqual name="columnNo" value="0">
-<td valign="top" class="clsTableCellData" bgcolor="#FFFFFF">
+
+<td valign="top" class="clsTableCellData" bgcolor="<%= bckColor.equals("true")?"DDDDDD":"ffffff" %>">
 </logic:notEqual>
 <% if(c!=null) {
 	request.setAttribute("cell",c);

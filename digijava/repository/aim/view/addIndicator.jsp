@@ -142,9 +142,6 @@
 	<tr bgColor=#dddddb>
 		<td bgColor=#dddddb height="25" align="center" colspan="2">
 			<input class="dr-menu" type="button" value="Save" onclick="return addIndicator()">&nbsp;&nbsp;
-			<html:button  styleClass="dr-menu" property="submitButton"  onclick="return addIndicator()">
-				<digi:trn key="btn:next">Next</digi:trn> 
-			</html:button>
 			<html:reset  styleClass="dr-menu" property="submitButton" >
 				<digi:trn key="btn:cancel">Cancel</digi:trn> &nbsp;&nbsp;
 			</html:reset>

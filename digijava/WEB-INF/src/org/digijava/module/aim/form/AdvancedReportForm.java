@@ -33,6 +33,7 @@ public class AdvancedReportForm extends ActionForm
 	private String regions[];
 	private Boolean hideActivities = null;
 	private Boolean drilldownTab = null;
+	private Boolean publicReport = null;
 	private Collection ampMeasures = null; // Contains the avaliable measures from Database
 	private Collection ampColumns = null; // Contains the columns got from the DB
 	private Long selectedColumns[] = null; // list of columns after selecting.
@@ -1424,6 +1425,12 @@ private int yrDiff;
 	}
 	public void setLevelSorter(String levelSorter) {
 		this.levelSorter = levelSorter;
+	}
+	public Boolean getPublicReport() {
+		return publicReport;
+	}
+	public void setPublicReport(Boolean publicReport) {
+		this.publicReport = publicReport;
 	}
 } //		End of Class
 

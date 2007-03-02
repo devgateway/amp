@@ -113,7 +113,7 @@ public class AdvancedReport extends Action {
 				formBean.setSelectedAdjustmentType(null);
 				
 			}
-
+			
 			
 			// Fills the column that can be selected from AMP_COLUMNS
 			if(formBean.getAmpColumns() == null)
@@ -991,6 +991,7 @@ public class AdvancedReport extends Action {
 							ampReports.setMeasures(measures);
 							ampReports.setHideActivities(formBean.getHideActivities());
 							ampReports.setDrilldownTab(formBean.getDrilldownTab());
+							ampReports.setPublicReport(formBean.getPublicReport());
 							
 							ReportUtil.saveReport(ampReports,teamMember.getTeamId(),teamMember.getMemberId(),teamMember.getTeamHead());
 							

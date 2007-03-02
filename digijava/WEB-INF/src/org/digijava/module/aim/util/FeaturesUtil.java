@@ -376,6 +376,18 @@ public class FeaturesUtil {
 			}
 		}
 	}
+	
+	
+	public static String getGlobalSettingValue(String globalSettingName) {
+		Collection settings=getGlobalSettings();
+		Iterator i=settings.iterator();
+		while (i.hasNext()) {
+			AmpGlobalSettings element = (AmpGlobalSettings) i.next();
+			if(element.getGlobalSettingsName().equals(globalSettingName)) return element.getGlobalSettingsValue();
+		}
+		return null;
+	}
+	
 	/*
 	 * edited by Govind G Dalwani
 	 */

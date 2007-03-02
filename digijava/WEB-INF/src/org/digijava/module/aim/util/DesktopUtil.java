@@ -116,6 +116,7 @@ public class DesktopUtil {
 				} catch (Exception e) {
 					// TODO this is warkaround for short time, problem is described in AMP-1059
 					e.printStackTrace();
+					logger.error(e);
 				}
 				if (temp != null && temp.size() > 0) {
 					itr = temp.iterator();

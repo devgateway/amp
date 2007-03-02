@@ -108,7 +108,7 @@ public class EditActivity
         ampContext = getServlet().getServletContext();
 
         // if user is not logged in, forward him to the home page
-        if(session.getAttribute("currentMember") == null)
+        if(session.getAttribute("currentMember") == null && request.getParameter("edit")!=null)
             return mapping.findForward("index");
 
         EditActivityForm eaForm = (EditActivityForm) form; // form bean instance
@@ -138,7 +138,7 @@ public class EditActivity
             rd.forward(request, response);
             return null;
 
-        } else if(tm.getWrite() == false)
+        } else if(tm!=null && tm.getWrite() == false)
             errorMsgKey = "error.aim.editActivity.noWritePermissionForUser";
 
         if(errorMsgKey.trim().length() > 0) {
@@ -204,7 +204,7 @@ public class EditActivity
                 eaForm.setActPrograms(prLst);
             }
 
-            if(tm.getTeamType()
+            if(tm!=null && tm.getTeamType()
                .equalsIgnoreCase(Constants.DEF_DNR_PERSPECTIVE)) {
                 eaForm.setDonorFlag(true);
             } else {
@@ -315,7 +315,7 @@ public class EditActivity
                         sessList.add(sessId);
                         Collections.sort(sessList);
                         activityMap.put(sessId, activityId);
-                        userActList.put(tm.getMemberId(), activityId);
+                        if(tm!=null) userActList.put(tm.getMemberId(), activityId);
                         tsaList.put(activityId,
                                     new Long(System.currentTimeMillis()));
 
@@ -344,7 +344,7 @@ public class EditActivity
             logger.debug("step [before IF] : " + eaForm.getStep());
             if(eaForm.isDonorFlag()) {
                 eaForm.setStep("3");
-                eaForm.setFundDonor(TeamMemberUtil.getFundOrgOfUser(tm.
+                if(tm!=null) eaForm.setFundDonor(TeamMemberUtil.getFundOrgOfUser(tm.
                     getMemberId()));
                 logger.debug("step [inside IF] : " + eaForm.getStep());
                 // Clearing aid-harmonisation-survey properties
@@ -367,7 +367,7 @@ public class EditActivity
             if(activityId != null) {
                 AmpActivity activity = ActivityUtil.getAmpActivity(activityId);
 
-                if (tm.getTeamType()
+                if (tm!=null && tm.getTeamType()
                         .equalsIgnoreCase(Constants.DEF_DNR_PERSPECTIVE)) {
                     eaForm.setDonorFlag(true);
                 } else {
@@ -407,7 +407,7 @@ public class EditActivity
                     eaForm.setObjectives(activity.getObjective().trim());
                     if(activity.getDocumentSpace() == null ||
                        activity.getDocumentSpace().trim().length() == 0) {
-                        if(DocumentUtil.isDMEnabled()) {
+                        if(tm!=null && DocumentUtil.isDMEnabled()) {
                             eaForm.setDocumentSpace("aim-document-space-" +
                                 tm.getMemberId() +
                                 "-" + System.currentTimeMillis());
@@ -721,7 +721,8 @@ public class EditActivity
                                         getExchangeRate(
                                             fundDet.getAmpCurrencyId()
                                             .getCurrencyCode(), 1, dt);
-                                    String toCurrCode = CurrencyUtil.
+                                    String toCurrCode = Constants.DEFAULT_CURRENCY;
+                                    	if(tm!=null) toCurrCode=CurrencyUtil.
                                         getAmpcurrency(
                                             tm.getAppSettings()
                                             .getCurrencyId()).getCurrencyCode();
@@ -1067,9 +1068,10 @@ public class EditActivity
                         eaForm.setSelectedComponents(comp);
                     }
 
-                    Collection memLinks = TeamMemberUtil.getMemberLinks(tm.getMemberId());
+                    Collection memLinks = null;
+                    if(tm!=null) memLinks=TeamMemberUtil.getMemberLinks(tm.getMemberId());
                     Collection actDocs = activity.getDocuments();
-                    if(actDocs != null && actDocs.size() > 0) {
+                    if(tm!=null && actDocs != null && actDocs.size() > 0) {
                         Collection docsList = new ArrayList();
                         Collection linksList = new ArrayList();
 
@@ -1080,7 +1082,7 @@ public class EditActivity
                             CMSContentItem cmsItem = (CMSContentItem) docItr
                                 .next();
                             rl.setRelLink(cmsItem);
-                            rl.setMember(TeamMemberUtil.getAmpTeamMember(tm
+                            if(tm!=null) rl.setMember(TeamMemberUtil.getAmpTeamMember(tm
                                 .getMemberId()));
                             Iterator tmpItr = memLinks.iterator();
                             while(tmpItr.hasNext()) {

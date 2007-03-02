@@ -68,11 +68,13 @@ function disable() {
 <html:hidden property="workingTeamLeadFlag" />
 
 <table width="100%" cellPadding="0" cellSpacing="0" vAlign="top" align="left">
+<logic:present name="currentMember" scope="session">
 <tr><td width="100%" vAlign="top" align="left">
 <!--  AMP Admin Logo -->
 <jsp:include page="teamPagesHeader.jsp" flush="true" />
 <!-- End of Logo -->
 </td></tr>
+</logic:present>
 <tr><td width="100%" vAlign="top" align="left">
 
 <table bgColor=#ffffff cellPadding=0 cellSpacing=0 width="780" vAlign="top" align="left" border=0>
@@ -81,6 +83,7 @@ function disable() {
 		<td class=r-dotted-lg align=left vAlign=top>
 			<table width="100%" cellSpacing="3" cellPadding="1" vAlign="top" align="left" border=0>
 					<tr><td>
+					<logic:present name="currentMember" scope="session">
 					<table width="100%" cellSpacing="1" cellPadding="1" vAlign="top">
 						<tr>
 							<td>
@@ -291,6 +294,7 @@ function disable() {
 							</td>
 						</tr>
 					</table>
+					</logic:present>
 				</td></tr>
 				<tr><td>
 					<table width="100%" cellSpacing="0" cellPadding="0" vAlign="bottom">
@@ -315,6 +319,7 @@ function disable() {
 								</table>
 								</c:if>
 							</td>
+							<logic:present name="currentMember" scope="session">
 							<td width="50%" align="right">
 								<table cellSpacing="1" cellPadding="1" vAlign="bottom" border=0>
 									<tr>
@@ -331,6 +336,7 @@ function disable() {
 									</tr>
 								</table>
 							</td>
+							</logic:present>
 						</tr>
 					</table>
 				</td></tr>

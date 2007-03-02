@@ -478,6 +478,17 @@ function checkUncheckAll2() {
 																					</td>
 																				</tr>
 																	
+																		<tr align="center">
+																					<td width="300" align="left">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+																						<html:checkbox property="publicReport"> 
+																							<b><digi:trn key="aim:publicReport">
+																							Public Report
+																							</digi:trn>
+																							</b>
+																						</html:checkbox>
+																					</td>
+																				</tr>
+																	
 																			</table>
 																		</TD></TR>
 																	</TABLE>

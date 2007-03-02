@@ -11,9 +11,9 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.tiles.ComponentContext;
 import org.apache.struts.tiles.actions.TilesAction;
+import org.dgfoundation.amp.ar.ARUtil;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.TeamMember;
-import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.TeamMemberUtil;
 import org.digijava.module.aim.util.TeamUtil;
 
@@ -36,6 +36,9 @@ public class GetDesktopReports extends TilesAction {
 				session.setAttribute(Constants.TEAM_ID,tm.getTeamId());
 				if(tm.getTeamHead()) session.setAttribute(Constants.TEAM_Head,"yes");
 					else session.setAttribute(Constants.TEAM_Head,"no");
+		} else {
+			Collection reports=ARUtil.getAllPublicReports();
+			session.setAttribute(Constants.MY_REPORTS,reports);
 		}
 		return null;
 	}

@@ -69,6 +69,7 @@ return false;
 					</TABLE>
 				</TD></TR>
 				</logic:notEmpty>
+				<logic:present name="currentMember" scope="session">
 				<logic:empty name="myReports" scope="session">
 					<TR><TD bgColor=#ffffff class=box-border align=left>
 						No reports for this workspace
@@ -94,7 +95,7 @@ return false;
 					</logic:notEmpty>
 				<%-- </c:if>  --%>
 				<!-- Paris Indicators Reports ends Here -->
-				
+				</logic:present>
 			</TABLE>	
 		</TD>
 	</TR>

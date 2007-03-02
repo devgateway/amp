@@ -6,20 +6,20 @@ public class GlobalSettingsForm extends ActionForm {
 	Collection gsfCol = null;
 	Collection countryNameCol = null;
 	String countryName = null;
-	Long gsfId;
-	String gsfName = null;
+	Long globalId;
+	String globalSettingsName = null;
 	String gsfValue = null;
-	public Long getGsfId() {
-		return gsfId;
+	public Long getGlobalId() {
+		return globalId;
 	}
-	public void setGsfId(Long gsfId) {
-		this.gsfId = gsfId;
+	public void setGlobalId(Long gsfId) {
+		this.globalId = gsfId;
 	}
-	public String getGsfName() {
-		return gsfName;
+	public String getGlobalSettingsName() {
+		return globalSettingsName;
 	}
-	public void setGsfName(String gsfName) {
-		this.gsfName = gsfName;
+	public void setGlobalSettingsName(String gsfName) {
+		this.globalSettingsName = gsfName;
 	}
 	public String getGsfValue() {
 		return gsfValue;

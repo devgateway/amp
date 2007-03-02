@@ -17,7 +17,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.apache.log4j.Logger;
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionError;
 import org.apache.struts.action.ActionErrors;
@@ -46,8 +45,6 @@ import org.digijava.module.aim.util.ProgramUtil;
 import org.digijava.module.aim.util.TeamUtil;
 import org.digijava.module.editor.dbentity.Editor;
 import org.digijava.module.editor.util.Constants;
-import java.util.Set;
-import java.util.HashSet;
 
 /**
  * Used to capture the activity details to the form bean of type org.digijava.module.aim.form.EditActivityForm
@@ -78,9 +75,6 @@ public class AddAmpActivity extends Action {
 		// Get the current member who has logged in from the session
 		teamMember=(TeamMember)session.getAttribute("currentMember");
 
-		// if user is not logged in, forward him to the home page
-		if (session.getAttribute("currentMember") == null)
-			return mapping.findForward("index");
 
 		EditActivityForm eaForm = (EditActivityForm) form;
 		//eaForm.setAllComps(ActivityUtil.getAllComponentNames());
@@ -133,14 +127,19 @@ public class AddAmpActivity extends Action {
         // added by Akash
 		// desc: setting WorkingTeamLeadFlag & approval status in form bean
 		// start
+        boolean teamLeadFlag=false;
+        boolean workingTeamFlag=true;
+        if(teamMember!=null) {
 		Long ampTeamId = teamMember.getTeamId();
-		boolean teamLeadFlag = teamMember.getTeamHead();
-		boolean workingTeamFlag = TeamUtil.checkForParentTeam(ampTeamId);
+			teamLeadFlag = teamMember.getTeamHead();
+			workingTeamFlag = TeamUtil.checkForParentTeam(ampTeamId);
+        }
+    
 		if (teamLeadFlag && workingTeamFlag)
 			eaForm.setWorkingTeamLeadFlag("yes");
 		else
 			eaForm.setWorkingTeamLeadFlag("no");
-
+    
 		if (!eaForm.isEditAct())
 			eaForm.setApprovalStatus("started");
 		else {
@@ -355,7 +354,7 @@ public class AddAmpActivity extends Action {
 			/*
 			 * If the mode is 'Add', set the Activity Creator as the current logged in user
 			 */
-			if ((!eaForm.isEditAct()) &&
+			if (teamMember!=null && (!eaForm.isEditAct()) &&
 					(eaForm.getActAthEmail() == null || eaForm.getActAthEmail().trim().length() == 0)) {
 				User usr = DbUtil.getUser(teamMember.getEmail());
 				if (usr != null) {
@@ -375,8 +374,9 @@ public class AddAmpActivity extends Action {
 			if (eaForm.getLevelCollection() == null) {
 				eaForm.setLevelCollection(DbUtil.getAmpLevels());
 			}
-
-			return mapping.findForward("preview");
+			
+			if(teamMember==null) return mapping.findForward("publicPreview"); 
+			else return mapping.findForward("preview");
 		} else if (eaForm.getStep().equals("10")) {		// show step 9 - M&E page
 
 			eaForm.setIndicatorsME(

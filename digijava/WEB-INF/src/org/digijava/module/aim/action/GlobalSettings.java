@@ -47,20 +47,17 @@ public class GlobalSettings extends Action {
 		
 		FeaturesUtil featUtil = new FeaturesUtil();
 		GlobalSettingsForm gsForm = (GlobalSettingsForm) form;
-		if(request.getParameter("action")!=null)
+		if(request.getParameter("save")!=null)
 		{
-			String save = request.getParameter("action");
+			String save = request.getParameter("save");
 			logger.info(" this is the action "+save);
 			AmpGlobalSettings ampGS = new AmpGlobalSettings();
-			logger.info(" id is "+gsForm.getGsfId()+"   name is "+gsForm.getGsfName()+ "  value is... "+gsForm.getGsfValue());
-			ampGS.setGlobalId(gsForm.getGsfId());
-			ampGS.setGlobalSettingsName(gsForm.getGsfName());
+			logger.info(" id is "+gsForm.getGlobalId()+"   name is "+gsForm.getGlobalSettingsName()+ "  value is... "+gsForm.getGsfValue());
+			ampGS.setGlobalId(gsForm.getGlobalId());
+			ampGS.setGlobalSettingsName(gsForm.getGlobalSettingsName());
 			ampGS.setGlobalSettingsValue(gsForm.getGsfValue());
 			DbUtil.update(ampGS);
 			ActionErrors errors = new ActionErrors(); 
-			errors.add("title", new ActionError(
-							"error.aim.updateCountry.updateCountry"));
-					saveErrors(request, errors);
 					
 		}
 		/*Collection a = FeaturesUtil.getDefaultCountryISO();
@@ -86,8 +83,8 @@ public class GlobalSettings extends Action {
 		while (itr.hasNext())
 		{
 			AmpGlobalSettings ampGS = (AmpGlobalSettings)itr.next();
-			gsForm.setGsfId(ampGS.getGlobalId());
-			gsForm.setGsfName(ampGS.getGlobalSettingsName());
+			gsForm.setGlobalId(ampGS.getGlobalId());
+			gsForm.setGlobalSettingsName(ampGS.getGlobalSettingsName());
 			gsForm.setGsfValue(ampGS.getGlobalSettingsValue());
 		}
 		Collection countries = featUtil.getCountryNames();

@@ -13,6 +13,10 @@
 		<action login-required="false" pattern="/logoutAction" />
         <action login-required="false" pattern="/displayFlag" />
         <action login-required="false" pattern="/viewNewAdvancedReport" />        
+        <action login-required="false" pattern="/reportsPublicView" />              
+        <action login-required="false" pattern="/getDesktopReports" /> 
+        <action login-required="false" pattern="/viewActivityPreview" />      
+        <action login-required="false" pattern="/previewActivity" />                                          
         </security>
 
 	<!-- highlights classes Begin-->

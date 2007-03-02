@@ -26,11 +26,14 @@
 
 <logic:equal name="columnNo" value="0">
 
-
-<a  href='/aim/viewChannelOverview.do~tabIndex=0~ampActivityId=<bean:write name="ownerId"/>'>
+<logic:present name="currentMember" scope="session">
+<a href='/aim/viewChannelOverview.do~tabIndex=0~ampActivityId=<bean:write name="ownerId"/>'>
+</logic:present>
+<logic:notPresent name="currentMember" scope="session">
+<a href='/aim/viewActivityPreview.do~pageId=2~activityId=<bean:write name="ownerId"/>' target=_blank>
+</logic:notPresent>
 </logic:equal>
 <jsp:include page="<%=viewable.getViewerPath()%>"/>	
-
 <logic:equal name="columnNo" value="0">
 </a>
 </logic:equal>

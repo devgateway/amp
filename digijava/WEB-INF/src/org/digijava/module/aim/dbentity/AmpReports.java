@@ -29,6 +29,7 @@ public class AmpReports implements Comparable {
 	private Boolean hideActivities;
 	
 	private Boolean drilldownTab;
+	private Boolean publicReport;
 	
 	private Long type;
 
@@ -40,6 +41,7 @@ public class AmpReports implements Comparable {
 	private List orderedColumns;
 	private Set hierarchies;
 	private Set measures;
+	
 	
 	//public static final String NOTE="NOTE: All shown funding items are in USD currency. All calendaristic date cells are shown using DD/MM/YYYY format. All amounts are in thousands.";
 	
@@ -190,6 +192,14 @@ public class AmpReports implements Comparable {
 
 	public void setDrilldownTab(Boolean drilldownTab) {
 		this.drilldownTab = drilldownTab;
+	}
+
+	public Boolean getPublicReport() {
+		return publicReport;
+	}
+
+	public void setPublicReport(Boolean publicReport) {
+		this.publicReport = publicReport;
 	}
 
 

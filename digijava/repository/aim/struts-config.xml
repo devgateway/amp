@@ -122,6 +122,10 @@
       <forward name="forward" path="/aim/viewMyDesktop.do" />
       <forward name="index" path="/aim/index.do" redirect="true" />
     </action>
+     <action path="/aim/reportsPublicView" scope="session" type="org.digijava.module.aim.action.ReportsPublicView" validate="false">
+      <forward name="forward" path="/showLayout.do?layout=publicReportsViewLayout" />
+    </action>
+
     <action name="aimDesktopForm" path="/aim/filterDesktopActivities" scope="session" type="org.digijava.module.aim.action.FilterDesktopActivities" validate="false">
       <forward name="forward" path="/aim/viewMyDesktop.do" />
       <forward name="index" path="/aim/index.do" redirect="true" />
@@ -887,6 +891,7 @@
     </action>
     <action name="aimEditActivityForm" path="/aim/previewActivity" scope="session" type="org.digijava.module.aim.action.AddAmpActivity">
       <forward name="preview" path="/showLayout.do?layout=previewActivity" />
+      <forward name="publicPreview" path="/showLayout.do?layout=aim_publicActivityPreview" />      
       <forward name="index" path="/aim/index.do" redirect="true" />
     </action>
     <action name="aimEditActivityForm" path="/aim/viewActivityPreview" scope="session" type="org.digijava.module.aim.action.EditActivity">

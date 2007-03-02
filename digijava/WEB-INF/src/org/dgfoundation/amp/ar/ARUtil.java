@@ -14,6 +14,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.GregorianCalendar;
 import java.util.Iterator;
 import java.util.List;
@@ -24,7 +25,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import net.sf.hibernate.Hibernate;
 import net.sf.hibernate.HibernateException;
+import net.sf.hibernate.Query;
 import net.sf.hibernate.Session;
 import net.sf.swarmcache.ObjectCache;
 
@@ -43,6 +46,7 @@ import org.digijava.module.aim.dbentity.AmpReports;
 import org.digijava.module.aim.dbentity.AmpSector;
 import org.digijava.module.aim.dbentity.AmpStatus;
 import org.digijava.module.aim.dbentity.AmpTeam;
+import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.form.AdvancedReportForm;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.TeamMember;
@@ -60,6 +64,42 @@ import org.digijava.module.aim.util.TeamUtil;
  */
 public final class ARUtil {
 
+	
+	public static ArrayList getAllPublicReports() {
+		Session session = null;
+		ArrayList col = new ArrayList();
+
+		try {
+
+			session = PersistenceManager.getSession();
+			String queryString = "select r from "
+					+ AmpReports.class.getName() + " r "
+					+ "where (r.publicReport=true)";
+			Query qry = session.createQuery(queryString);
+			
+			Iterator itrTemp = qry.list().iterator();
+			AmpReports ar = null;
+			while (itrTemp.hasNext()) {
+				ar = (AmpReports) itrTemp.next();
+				col.add(ar);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			logger.error(e);
+		} finally {
+			try {
+				if (session != null) {
+					PersistenceManager.releaseSession(session);
+				}
+			} catch (Exception ex) {
+				logger.debug("releaseSession() failed");
+				logger.debug(ex.toString());
+			}
+		}
+		return col;
+	}
+
+	
 	public static String toSQLEnum(Collection col) {
 		String ret = "";
 		if (col == null || col.size() == 0)
@@ -99,15 +139,14 @@ public final class ARUtil {
 		HttpSession httpSession = request.getSession();
 		Session session = PersistenceManager.getSession();
 
-		String publicView=request.getParameter("publicView");
-		
 		TeamMember teamMember = (TeamMember) httpSession
 				.getAttribute("currentMember");
+		
 
 		AmpReports r = (AmpReports) session.get(AmpReports.class, new Long(
 				ampReportId));
 
-		if(publicView==null)
+		if(teamMember!=null)
 		logger.info("Report '" + r.getName() + "' requested by user "
 				+ teamMember.getEmail() + " from team "
 				+ teamMember.getTeamName());
@@ -584,7 +623,7 @@ public final class ARUtil {
 		}
 		
 		// get the team list
-		if(request.getParameter("publicView")==null) {
+		if(teamMember!=null) {
 			Set teams = TeamUtil.getAmpLevel0Teams(ampTeamId);
 			teams.add(ampTeam);
 			anf.setAmpTeams(teams);

@@ -2,8 +2,8 @@
 <site-config>
 	<site-layout>
 		<layout name="footerLayout" file="footerLayout.jsp">
-		    <put name="version">1.05b RC14</put>
-		   <put-item name="transmode" module="translation" instance="default" teaser="modeSwitch"/>
+			<put name="version">1.05b RC14</put>
+		    <put-item name="transmode" module="translation" instance="default" teaser="modeSwitch"/>
 			<put-item name="ampAdminLink" file="ampAdminLink.jsp"/>
 			<put-item name="adminLink" module="admin" instance="default" teaser="adminLink"/>
 			<put-item name="flatLangSwitch" module="translation" instance="default" teaser="flatLangSwitch"/>
@@ -250,9 +250,18 @@
 	 		<put-item name="footer" layout="footerLayout"/>
  		</layout>
 
+		<layout name="publicReportsViewLayout" file="publicReportsViewLayout.jsp">
+			<put name="title">- Public View</put>
+			<put-item name="headerTop" file="headerTop.jsp"/>
+			<put-item name="body" module="aim" page="reportsPublicView"/>			
+			<put-item name="myReports" module="aim" instance="default" teaser="myReports"/>
+	 		<put-item name="footer" layout="footerLayout"/>
+ 		</layout>
+
+
 		<layout name="desktopLayout" extends="userHomeLayout">
 			<put name="title">- My Desktop</put>
-			<put-item name="body" module="aim" instance="default" teaser="myTabs"/>/>			
+			<put-item name="body" module="aim" instance="default" teaser="myTabs"/>
 <!-- 			<put-item name="body" module="aim" instance="default" teaser="myDesktop"/> -->
 		</layout>
 
@@ -308,6 +317,8 @@
 		<page-group masterLayout="single" tile="body">
 			<module name="aim">
 				<page>aim_myTabs</page>
+				<page>aim_reportsPublicView</page>		
+							
 			</module>
 			<module name="admin">
 				<page>admin_usersPopupLayout</page>
@@ -335,6 +346,7 @@
 				<page>aim_orgPopupLayout</page>
 				<page>aim_fundingPopupLayout</page>
 				<page>aim_locPopupLayout</page>
+				<page>aim_publicActivityPreview</page>							
 		    <page>aim_selectFilePopupLayout</page>
 				<page>aim_selectCMSCategoryPopupLayout</page>
 				<page>aim_selSectorPopupLayout</page>

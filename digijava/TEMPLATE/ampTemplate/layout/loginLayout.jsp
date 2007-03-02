@@ -1,4 +1,5 @@
 <%@ page pageEncoding="UTF-8" %>
+<%@ page import="org.digijava.module.aim.util.FeaturesUtil" %>
 <%@ taglib uri="/taglib/struts-bean" prefix="bean" %>
 <%@ taglib uri="/taglib/struts-logic" prefix="logic" %>
 <%@ taglib uri="/taglib/struts-tiles" prefix="tiles" %>
@@ -99,16 +100,17 @@
 						<html:submit value="Sign In" styleClass="dr-menu" property="submitButton"/>
 					</td>
 				</tr>
-<!-- 
+
+<% String publicView=FeaturesUtil.getGlobalSettingValue("Public View"); 
+if("On".equals(publicView)) { %>
 				<tr>
 					<td>&nbsp;</td>				
 					<td>&nbsp;</td>
 					<td align="left">
-						<input type="button" value="Public View" onclick="javascript:window.open('/viewNewAdvancedReport.do?view=reset&ampReportId=10&widget=true&viewFormat=tree&sortBy=Cumulative+Commitment&applySorter=true&levelPicked=1&levelSorter=Cumulative+Commitment&publicView=true', 'Public View','channelmode=no,directories=no,menubar=no,resizable=yes,status=no,toolbar=no,scrollbars=yes,location=yes');"/>
+						<input style="background-color:#993300;color:#FFFFFF;width:150px;height:40px" type="button" value="Public View" onclick="javascript:window.open('/aim/reportsPublicView.do', 'Public View','channelmode=no,directories=no,menubar=no,resizable=yes,status=no,toolbar=no,scrollbars=yes,location=yes');"/>
 					</td>
 				</tr>
- -->
-
+<% } %>
 				<tr>
 				</tr>
 		          <td>&nbsp;</td>

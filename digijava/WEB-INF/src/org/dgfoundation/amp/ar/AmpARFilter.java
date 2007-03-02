@@ -66,7 +66,7 @@ public class AmpARFilter implements Filter {
 		String FROM_YEAR_FILTER="SELECT f.amp_activity_id FROM amp_funding f, amp_funding_detail fd WHERE f.amp_funding_id=fd.AMP_FUNDING_ID and date_format(fd.transaction_date,_latin1'%Y')>='"+fromYear+"'";
 		String TO_YEAR_FILTER="SELECT f.amp_activity_id FROM amp_funding f, amp_funding_detail fd WHERE f.amp_funding_id=fd.AMP_FUNDING_ID and date_format(fd.transaction_date,_latin1'%Y')<='"+toYear+"'";
 		
-		if(ampTeams!=null) queryAppend(TEAM_FILTER);
+		if(ampTeams!=null && ampTeams.size()>0) queryAppend(TEAM_FILTER);
 		if(statuses!=null && statuses.size()>0) queryAppend(STATUS_FILTER);
 		if(donors!=null && donors.size()>0) queryAppend(ORG_FILTER);
 		if(sectors!=null && sectors.size()!=0) queryAppend(SECTOR_FILTER);

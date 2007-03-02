@@ -16,7 +16,7 @@
 	
 	}
 </script>
-<digi:form action="/GlobalSettings.do" method="post" >
+
 <digi:instance property="aimGlobalSettingsForm" />
 
 <!--  AMP Admin Logo -->
@@ -73,24 +73,50 @@
 										</td></tr>
 										<tr><td>
 											<table width="100%" cellspacing=1 cellpadding=1 valign=top align=left bgcolor="#d7eafd">
-												
+	<tr>
+	<td bgcolor="#fefefe">
+	Setting Name
+	</td>												
+	<td bgcolor="#fefefe">
+	Current Value
+	</td>												
+	<td bgcolor="#fefefe">
+	New Value
+	</td>												
+
+	
 												<logic:notEmpty name="aimGlobalSettingsForm" property="gsfCol">
 													<logic:iterate name="aimGlobalSettingsForm" property="gsfCol" id="globalSett"
 																	type="org.digijava.module.aim.dbentity.AmpGlobalSettings	">
 															<tr>
 																<td bgcolor="#ffffff">
-																			<bean:write name="aimGlobalSettingsForm" property="gsfName"/>
+																			<bean:write name="globalSett" property="globalSettingsName"/>
 																</td>
+																<td bgcolor="#ffffff">
+																			<bean:write name="globalSett" property="globalSettingsValue"/>
+																</td>
+																			
 																<td bgcolor="#f4f4f2" >
+<digi:form action="/GlobalSettings.do" method="post" >												
+<html:hidden property="globalId" name="globalSett"/>
+<html:hidden property="globalSettingsName" name="globalSett"/>
+																<logic:equal name="globalSett" property="globalSettingsName" value="Default Country">
 																	<html:select property="gsfValue" styleClass="inp-text">
 																		<html:optionsCollection name="aimGlobalSettingsForm"
 																			property="countryNameCol" value="iso"
 																			label="countryName" />
 																	</html:select>
-																</td>
-																<td align="center" bgcolor"#f4f4f2">
-																		<input type="button" value="Save" name="saveButton" class="buton" onclick="saveClicked()">
-																</td>
+																</logic:equal>		
+																<logic:equal name="globalSett" property="globalSettingsName" value="Public View">
+																	<html:select property="gsfValue" styleClass="inp-text">
+																		<html:option value="On">On</html:option>
+																		<html:option value="Off">Off</html:option>																		
+																	</html:select>
+																</logic:equal>		
+																<html:submit property="save">																														
+																Save
+																</html:submit>
+</digi:form>																
 															</tr>
 													</logic:iterate>
 												</logic:notEmpty>
@@ -111,4 +137,4 @@
 		</td>
 	</tr>
 </table>
-</digi:form>
+

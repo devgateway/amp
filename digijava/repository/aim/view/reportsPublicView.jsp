@@ -1,4 +1,6 @@
 <%@ page pageEncoding="UTF-8" %>
+<%@ page import="org.digijava.module.aim.util.FeaturesUtil,org.digijava.module.aim.helper.Constants" %>
+
 <%@ taglib uri="/taglib/struts-bean" prefix="bean" %>
 <%@ taglib uri="/taglib/struts-logic" prefix="logic" %>
 <%@ taglib uri="/taglib/struts-html" prefix="html" %>
@@ -8,6 +10,24 @@
 <digi:context name="digiContext" property="context" />
 
 <jsp:include page="/repository/aim/view/ar/reportsScripts.jsp"/>
+
+<logic:notPresent name="currentMember">
+<%String onOff=FeaturesUtil.getGlobalSettingValue(Constants.GLOBAL_BUDGET_FILTER);
+if("On Budget".equals(onOff)) {%>
+<digi:trn key="amp:showOnBudget">
+Showing all On Budget activities...
+</digi:trn>
+<% } else
+if("Off Budget".equals(onOff)) {%>
+<digi:trn key="amp:showOffBudget">
+Showing all Off Budget activities...
+</digi:trn>
+<% } else { %>	
+<digi:trn key="amp:showallBudget">
+Showing all activities...
+</digi:trn>
+<% } %>
+</logic:notPresent>
 
 <ul id="PublicTabs" class="shadeTabs">
 <logic:iterate name="publicReports" id="report" scope="session" type="org.digijava.module.aim.dbentity.AmpReports" indexId="position"> 

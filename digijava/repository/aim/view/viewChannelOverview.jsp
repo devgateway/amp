@@ -268,12 +268,36 @@ function commentWin(val) {
 															<TR>
 																<TD bgcolor="#ffffff"><c:out value="${activity.status}" />
 																</TD>
-															</TR>
+															</TR>															
 															<TR>
 																<TD bgcolor="#ffffff"><i><digi:trn key="aim:reason">Reason</digi:trn></i>:
 																<c:out value="${activity.statusReason}" /></TD>
 															</TR>
 														</TABLE>
+														</TD>
+													</TR>
+													<TR>
+														<TD>
+															<TABLE width="100%" cellPadding=2 cellSpacing=1 vAlign="top" align="top" bgcolor="#aaaaaa">
+																<TR><TD bgcolor="#eeeeee" height="18">&nbsp;
+																	<IMG  height=10 src="../ampTemplate/images/arrow-014E86.gif" width=15>
+																	<b><digi:trn key="aim:actBudget">Budget</digi:trn></b>
+																</TD></TR>
+																<TR><TD bgcolor="#ffffff">
+										<logic:equal name="activity" property="budget" value="true">
+										<digi:trn key="aim:actBudgeton">
+												Activity is On Budget
+										</digi:trn>
+										</logic:equal>
+										<logic:equal name="activity" property="budget" value="false">
+										<digi:trn key="aim:actBudgetoff">
+												Activity is Off Budget
+										</digi:trn>
+										</logic:equal>
+
+																</TD></TR>
+																														
+															</TABLE>
 														</TD>
 													</TR>
 

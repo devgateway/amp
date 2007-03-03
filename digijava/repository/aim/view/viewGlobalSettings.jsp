@@ -113,6 +113,14 @@
 																		<html:option value="Off">Off</html:option>																		
 																	</html:select>
 																</logic:equal>		
+																<logic:equal name="globalSett" property="globalSettingsName" value="Public View Budget Filter">
+																	<html:select property="gsfValue" styleClass="inp-text">
+																		<html:option value="On Budget">On Budget</html:option>
+																		<html:option value="Off Budget">Off Budget</html:option>																		
+																		<html:option value="All">All Activities</html:option>																																				
+																	</html:select>
+																</logic:equal>		
+																
 																<html:submit property="save">																														
 																Save
 																</html:submit>

@@ -58,6 +58,7 @@ public class ProposedProjCost extends ActionForm{
     }
 
     public void setFunAmountAsDouble(Double funAmount) {
+    	if(funAmount==null) return;
         try{
             DecimalFormat format = new DecimalFormat();
             this.funAmount = format.format(funAmount);

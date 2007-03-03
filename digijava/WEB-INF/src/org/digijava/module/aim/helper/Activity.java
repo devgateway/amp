@@ -9,6 +9,7 @@ public class Activity implements Comparable {
 	private String name;
 	private String donors;
 	private String ampId;
+	private Boolean budget;
 
 	private String description;
 	private String objective;
@@ -533,4 +534,11 @@ public class Activity implements Comparable {
 	public void setUniqueModalities(Set uniqueModalities) {
 		this.uniqueModalities = uniqueModalities;
 	}
+	public Boolean getBudget() {
+		return budget;
+	}
+	public void setBudget(Boolean budget) {
+		this.budget = budget;
+	}
+	
 }

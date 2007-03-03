@@ -294,6 +294,21 @@ function popupwin()
 												<a href="javascript:edit('<%=descKey%>')">
 												Edit</a>
 											</td></tr>
+											
+											<tr bgcolor="#ffffff"><td valign="top" align="left">
+												<a title="<digi:trn key="aim:DescriptionofProject">Summary information describing the project</digi:trn>">
+												<digi:trn key="aim:actBudget">
+												Activity Budget
+												</digi:trn>
+												</a>
+											</td>
+											<td valign="top" align="left">
+													<html:checkbox property="budget">
+													<digi:trn key="aim:actBudgeton">
+												Activity is On Budget
+												</digi:trn>
+													</html:checkbox>
+											</td></tr>
 										</table>
 									</td></tr>
 									<tr><td>

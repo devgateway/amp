@@ -2,7 +2,7 @@ package org.digijava.module.aim.dbentity;
 
 import java.io.Serializable;
  
-public class AmpModality implements Serializable
+public class AmpModality implements Serializable, Comparable
 {
 	private Long ampModalityId ;
 	private String modalityCode ;
@@ -93,6 +93,12 @@ public class AmpModality implements Serializable
 	 */
 	public void setType(String string) {
 		type = string;
+	}
+
+	public int compareTo(Object o) {
+		AmpModality b=(AmpModality) o;
+		return this.getAmpModalityId().compareTo(b.getAmpModalityId());
+		//return this.getName().compareTo(b.getName());
 	}
 
 }

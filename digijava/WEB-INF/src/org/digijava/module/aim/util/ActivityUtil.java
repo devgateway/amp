@@ -13,6 +13,7 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
+import java.util.TreeSet;
 
 import net.sf.hibernate.Hibernate;
 import net.sf.hibernate.HibernateException;
@@ -55,7 +56,6 @@ import org.digijava.module.aim.dbentity.AmpReportSector;
 import org.digijava.module.aim.dbentity.AmpSector;
 import org.digijava.module.aim.dbentity.AmpTeam;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
-import org.digijava.module.aim.dbentity.AmpTheme;
 import org.digijava.module.aim.helper.Activity;
 import org.digijava.module.aim.helper.ActivityIndicator;
 import org.digijava.module.aim.helper.ActivitySector;
@@ -914,6 +914,7 @@ public class ActivityUtil {
 					modalities.add(fund.getModalityId());
 				}
 				activity.setModalities(modalities);
+				activity.setUniqueModalities(new TreeSet(modalities));
 			}
 		} catch (Exception e) {
 		 	logger.error("Unable to get channnel overview");

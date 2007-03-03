@@ -28,6 +28,7 @@ public class Activity implements Comparable {
 	private Collection revCompDates;
 	private Collection assistanceType;
 	private Collection modalities;
+	private Set uniqueModalities;
 	private String modality;
 	private String modalityCode;
 	private String program;
@@ -526,4 +527,10 @@ public class Activity implements Comparable {
     public void setPropProjCost(ProposedProjCost propProjCost) {
         this.propProjCost = propProjCost;
     }
+	public Set getUniqueModalities() {
+		return uniqueModalities;
+	}
+	public void setUniqueModalities(Set uniqueModalities) {
+		this.uniqueModalities = uniqueModalities;
+	}
 }

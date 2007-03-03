@@ -55,6 +55,7 @@ public class AddSubPrgIndicator extends Action
 			themeForm.setRootId(roothemeId);
 			themeForm.setPrgLanguage(null);
 			themeForm.setVersion(null);
+			themeForm.setProgramTypeNames( ProgramUtil.getProgramTypes() );
 			return mapping.findForward("addProgram");
 		}
 		else if(event != null && event.equals("save"))
@@ -67,6 +68,15 @@ public class AddSubPrgIndicator extends Action
 			ampTheme.setType(themeForm.getProgramType());
 			ampTheme.setParentThemeId(ProgramUtil.getThemeObject(id));
 			ampTheme.setIndlevel(new Integer(level));
+			
+			ampTheme.setLeadAgency( themeForm.getProgramLeadAgency() );
+			ampTheme.setTargetGroups( themeForm.getProgramTargetGroups() );
+			ampTheme.setBackground( themeForm.getProgramBackground() );
+			ampTheme.setObjectives( themeForm.getProgramObjectives() );
+			ampTheme.setOutputs( themeForm.getProgramOutputs() );
+			ampTheme.setBeneficiaries( themeForm.getProgramBeneficiaries() );
+			ampTheme.setEnvironmentConsiderations( themeForm.getProgramEnvironmentConsiderations() );
+			
 			ampTheme.setLanguage(null);
 			ampTheme.setVersion(null);
 			DbUtil.add(ampTheme);

@@ -18,6 +18,14 @@ public class AmpTheme implements Serializable
 	private String version ;
 	private Set indicators;
 	private Set activities=new HashSet();
+	
+	private String leadAgency;
+	private String targetGroups;
+	private String background;
+	private String objectives;
+	private String outputs;
+	private String beneficiaries;
+	private String environmentConsiderations;
 			
 	public Set getActivities() {
 		return activities;
@@ -187,4 +195,57 @@ public class AmpTheme implements Serializable
         AmpTheme theme = (AmpTheme) obj;
         return (theme.getAmpThemeId().equals(ampThemeId));
 	}
+    
+    
+    public void setLeadAgency (String leadAgency) {
+		this.leadAgency	= leadAgency;
+	}
+	public String getLeadAgency () {
+		return this.leadAgency;
+	}
+	
+	public void setTargetGroups (String targetGroups) {
+		this.targetGroups	= targetGroups;
+	}
+	public String getTargetGroups () {
+		return this.targetGroups;
+	}
+
+	
+	public void setBackground (String background) {
+		this.background	= background;
+	}
+	public String getBackground () {
+		return this.background;
+	}
+	
+	public void setObjectives (String objectives) {
+		this.objectives	= objectives;
+	}
+	public String getObjectives() {
+		return this.objectives;
+	}
+	
+	public void setOutputs (String outputs) {
+		this.outputs	= outputs;
+	}
+	public String getOutputs () {
+		return this.outputs;
+	}
+	
+	public void setBeneficiaries (String beneficiaries) {
+		this.beneficiaries	= beneficiaries;
+	}
+	public String getBeneficiaries () {
+		return this.beneficiaries;
+	}
+	
+	public void setEnvironmentConsiderations (String environmentConsiderations) {
+		this.environmentConsiderations	= environmentConsiderations;
+	}
+	public String getEnvironmentConsiderations () {
+		return this.environmentConsiderations;
+	}
+    
+    
 }

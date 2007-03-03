@@ -33,6 +33,14 @@ public class ThemeForm extends ActionForm {
 		  private String creationDate;
 		  private String flag; 
 		  private Collection programTypeNames;
+		  
+		  private String programLeadAgency;
+		  private String programTargetGroups;
+		  private String programBackground;
+		  private String programObjectives;
+		  private String programOutputs;
+		  private String programBeneficiaries;
+		  private String programEnvironmentConsiderations;
 		
 		public String getFlag() {
 			return flag;
@@ -382,4 +390,54 @@ public class ThemeForm extends ActionForm {
 		this.programTypeNames = programTypeNames;
 	}
 
+	
+	public void setProgramLeadAgency (String programLeadAgency) {
+		this.programLeadAgency	= programLeadAgency;
+	}
+	public String getProgramLeadAgency () {
+		return this.programLeadAgency;
+	}
+	
+	public void setProgramTargetGroups (String programTargetGroups) {
+		this.programTargetGroups	= programTargetGroups;
+	}
+	public String getProgramTargetGroups () {
+		return this.programTargetGroups;
+	}
+
+	
+	public void setProgramBackground (String programBackground) {
+		this.programBackground	= programBackground;
+	}
+	public String getProgramBackground () {
+		return this.programBackground;
+	}
+	
+	public void setProgramObjectives (String programObjectives) {
+		this.programObjectives	= programObjectives;
+	}
+	public String getProgramObjectives() {
+		return this.programObjectives;
+	}
+	
+	public void setProgramOutputs (String programOutputs) {
+		this.programOutputs	= programOutputs;
+	}
+	public String getProgramOutputs () {
+		return this.programOutputs;
+	}
+	
+	public void setProgramBeneficiaries (String programBeneficiaries) {
+		this.programBeneficiaries	= programBeneficiaries;
+	}
+	public String getProgramBeneficiaries () {
+		return this.programBeneficiaries;
+	}
+	
+	public void setProgramEnvironmentConsiderations (String programEnvironmentConsiderations) {
+		this.programEnvironmentConsiderations	= programEnvironmentConsiderations;
+	}
+	public String getProgramEnvironmentConsiderations () {
+		return this.programEnvironmentConsiderations;
+	}
 }

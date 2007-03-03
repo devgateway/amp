@@ -61,9 +61,20 @@ public class AddTheme extends Action
 			ampTheme.setDescription(themeForm.getProgramDescription());
 			ampTheme.setType(themeForm.getProgramType());
 			ampTheme.setIndlevel(new Integer(0));
+			
+			ampTheme.setLeadAgency( themeForm.getProgramLeadAgency() );
+			ampTheme.setTargetGroups( themeForm.getProgramTargetGroups() );
+			ampTheme.setBackground( themeForm.getProgramBackground() );
+			ampTheme.setObjectives( themeForm.getProgramObjectives() );
+			ampTheme.setOutputs( themeForm.getProgramOutputs() );
+			ampTheme.setBeneficiaries( themeForm.getProgramBeneficiaries() );
+			ampTheme.setEnvironmentConsiderations( themeForm.getProgramEnvironmentConsiderations() );
+			
 			ampTheme.setParentThemeId(null);
 			ampTheme.setLanguage(null);
 			ampTheme.setVersion(null);
+			
+						
 			themeForm.setProgramName(null);
 			themeForm.setProgramCode(null);
 			themeForm.setProgramDescription(null);

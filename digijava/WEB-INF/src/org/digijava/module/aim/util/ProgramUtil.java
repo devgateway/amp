@@ -977,10 +977,20 @@ public class ProgramUtil {
 				session = PersistenceManager.getSession();
 				AmpTheme tempAmpTheme = null;
 				tempAmpTheme = (AmpTheme) session.load(AmpTheme.class,editPrg.getAmpThemeId());
+				
 				tempAmpTheme.setName(editPrg.getName());
 				tempAmpTheme.setThemeCode(editPrg.getThemeCode());
 				tempAmpTheme.setDescription(editPrg.getDescription());
 				tempAmpTheme.setType(editPrg.getType());
+				
+				tempAmpTheme.setLeadAgency( editPrg.getLeadAgency() );
+				tempAmpTheme.setTargetGroups( editPrg.getTargetGroups() );
+				tempAmpTheme.setBackground( editPrg.getBackground() );
+				tempAmpTheme.setObjectives( editPrg.getObjectives() );
+				tempAmpTheme.setOutputs( editPrg.getOutputs() );
+				tempAmpTheme.setBeneficiaries( editPrg.getBeneficiaries() );
+				tempAmpTheme.setEnvironmentConsiderations( editPrg.getEnvironmentConsiderations() );
+				
 				tx = session.beginTransaction();
 				session.update(tempAmpTheme);
 				tx.commit();

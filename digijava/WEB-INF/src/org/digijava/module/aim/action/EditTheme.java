@@ -52,6 +52,15 @@ public class EditTheme extends Action {
 				themeForm.setProgramDescription(ampTheme.getDescription());
 				themeForm.setProgramType(ampTheme.getType());
 				themeForm.setProgramTypeNames(ProgramUtil.getProgramTypes());
+				
+				themeForm.setProgramLeadAgency( ampTheme.getLeadAgency() );
+				themeForm.setProgramBackground( ampTheme.getBackground() );
+				themeForm.setProgramTargetGroups( ampTheme.getTargetGroups() );
+				themeForm.setProgramObjectives( ampTheme.getObjectives() );
+				themeForm.setProgramOutputs( ampTheme.getOutputs() );
+				themeForm.setProgramBeneficiaries( ampTheme.getBeneficiaries() );
+				themeForm.setProgramEnvironmentConsiderations( ampTheme.getEnvironmentConsiderations() );
+				
 				return mapping.findForward("editProgram");				
 			}
 			if(event.equals("editSub"))
@@ -64,6 +73,16 @@ public class EditTheme extends Action {
 				themeForm.setProgramDescription(ampTheme.getDescription());
 				themeForm.setProgramType(ampTheme.getType());
 				themeForm.setRootId(rootid);
+				
+				themeForm.setProgramTypeNames(ProgramUtil.getProgramTypes());
+				themeForm.setProgramLeadAgency( ampTheme.getLeadAgency() );
+				themeForm.setProgramBackground( ampTheme.getBackground() );
+				themeForm.setProgramTargetGroups( ampTheme.getTargetGroups() );
+				themeForm.setProgramObjectives( ampTheme.getObjectives() );
+				themeForm.setProgramOutputs( ampTheme.getOutputs() );
+				themeForm.setProgramBeneficiaries( ampTheme.getBeneficiaries() );
+				themeForm.setProgramEnvironmentConsiderations( ampTheme.getEnvironmentConsiderations() );
+				
 				return mapping.findForward("editProgram");
 			}
 			if (event.equals("update"))
@@ -78,6 +97,15 @@ public class EditTheme extends Action {
 					editPrg.setThemeCode(themeForm.getProgramCode());
 					editPrg.setDescription(themeForm.getProgramDescription());
 					editPrg.setType(themeForm.getProgramType());
+					
+					editPrg.setLeadAgency( themeForm.getProgramLeadAgency() );
+					editPrg.setTargetGroups( themeForm.getProgramTargetGroups() );
+					editPrg.setBackground( themeForm.getProgramBackground() );
+					editPrg.setObjectives( themeForm.getProgramObjectives() );
+					editPrg.setOutputs( themeForm.getProgramOutputs() );
+					editPrg.setBeneficiaries( themeForm.getProgramBeneficiaries() );
+					editPrg.setEnvironmentConsiderations( themeForm.getProgramEnvironmentConsiderations() );
+					
 					ProgramUtil.updateTheme(editPrg);
 					themeForm.setSubPrograms(ProgramUtil.getAllSubThemes(baseid));
 					return mapping.findForward("subPrgEdit");
@@ -90,6 +118,15 @@ public class EditTheme extends Action {
 					editPrg.setThemeCode(themeForm.getProgramCode());
 					editPrg.setDescription(themeForm.getProgramDescription());
 					editPrg.setType(themeForm.getProgramType());
+					
+					editPrg.setLeadAgency( themeForm.getProgramLeadAgency() );
+					editPrg.setTargetGroups( themeForm.getProgramTargetGroups() );
+					editPrg.setBackground( themeForm.getProgramBackground() );
+					editPrg.setObjectives( themeForm.getProgramObjectives() );
+					editPrg.setOutputs( themeForm.getProgramOutputs() );
+					editPrg.setBeneficiaries( themeForm.getProgramBeneficiaries() );
+					editPrg.setEnvironmentConsiderations( themeForm.getProgramEnvironmentConsiderations() );
+					
 					ProgramUtil.updateTheme(editPrg);
 					return mapping.findForward("forward");
 				}

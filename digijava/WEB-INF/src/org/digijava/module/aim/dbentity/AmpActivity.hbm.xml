@@ -14,6 +14,7 @@
 		<property name="objective" column="objectives" type="org.digijava.kernel.db.SafeClobType"/>
         <property name="documentSpace" column="document_space" type="java.lang.String"/>
 		<property name="language" column="language" type="java.lang.String"/>
+	    <property name="budget" column="budget" type="java.lang.Boolean"/>		
 		<property name="version" column="version" type="java.lang.String"/>
 		<property name="calType" column="cal_type" type="java.lang.String"/>
 		<property name="activityApprovalDate" column="activity_approval_date" type="java.util.Date" />		<!-- defunct -->
@@ -46,6 +47,8 @@
 
 		<property name="createdDate" column="date_created" type="java.util.Date" />
 		<property name="updatedDate" column="date_updated" type="java.util.Date" />
+		<many-to-one name="updatedBy" column="updated_by" class="org.digijava.module.aim.dbentity.AmpTeamMember" cascade="none"/> 
+
 
 		<property name="programDescription" column="program_description"  type="org.digijava.kernel.db.SafeClobType"/>
 		<property name="contractors" column="contractors" type="org.digijava.kernel.db.SafeClobType"/>

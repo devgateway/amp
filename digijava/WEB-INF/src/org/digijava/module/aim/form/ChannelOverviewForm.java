@@ -41,6 +41,7 @@ public class ChannelOverviewForm extends MainProjectDetailsForm
 	private Collection modal;
 	private boolean canView;
 	
+	
 	private Activity activity;
 	
 	private String buttonText;  // added by Akash for activity approval

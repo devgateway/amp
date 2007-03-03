@@ -403,6 +403,9 @@ public class EditActivity
                         ex.printStackTrace();
                     }
                     eaForm.setTitle(activity.getName().trim());
+                    eaForm.setTeam(activity.getTeam());
+                    eaForm.setUpdatedBy(activity.getUpdatedBy());
+                    eaForm.setBudget(activity.getBudget());
                     eaForm.setDescription(activity.getDescription().trim());
                     eaForm.setObjectives(activity.getObjective().trim());
                     if(activity.getDocumentSpace() == null ||
@@ -440,7 +443,9 @@ public class EditActivity
                     eaForm.setCreatedDate(DateConversion
                                           .ConvertDateToString(activity.
                         getCreatedDate()));
-
+                    eaForm.setUpdatedDate(DateConversion
+                            .ConvertDateToString(activity.
+                            			getUpdatedDate()));
                     eaForm.setOriginalAppDate(DateConversion
                                               .ConvertDateToString(activity
                         .getProposedApprovalDate()));

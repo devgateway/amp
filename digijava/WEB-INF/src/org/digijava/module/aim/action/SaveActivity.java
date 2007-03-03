@@ -148,7 +148,9 @@ public class SaveActivity extends Action {
                     prgIds.add(theme.getAmpThemeId());
                 }
 
-                ampThemeLst = ProgramUtil.getThemesByIds(prgIds);
+                ampThemeLst = null;
+                if(prgIds.size()>0)
+                	ampThemeLst=ProgramUtil.getThemesByIds(prgIds);
                 if(ampThemeLst!=null){
                     programs.addAll(ampThemeLst);
                     activity.setActivityPrograms(programs);
@@ -548,6 +550,7 @@ public class SaveActivity extends Action {
                 }
 				activity.setAmpId(eaForm.getAmpId());
 				activity.setName(eaForm.getTitle());
+				activity.setBudget(eaForm.getBudget());
 				if (eaForm.getDescription() == null
 						|| eaForm.getDescription().trim().length() == 0) {
 					activity.setDescription(new String(" "));

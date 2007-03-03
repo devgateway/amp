@@ -85,6 +85,7 @@ public class ResetAll extends Action
 	    	{
 				logger.info("In reset all method");
 			   eaForm.setTitle(null);
+			   eaForm.setTeam(null);
 				eaForm.setDescription(null);
 				eaForm.setObjectives(null);
                 eaForm.setDocumentSpace(null);
@@ -100,6 +101,7 @@ public class ResetAll extends Action
 //				eaForm.setActivityCloseDates(null);
 				eaForm.setStatus(null);
 				eaForm.setStatusReason(null);
+				eaForm.setBudget(null);
 	    	}
 	    	if(eaForm.getStep().equals("2"))
 	    	{

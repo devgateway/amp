@@ -27,6 +27,7 @@ public class AmpARFilter implements Filter {
 	private String perspectiveCode;
 	private boolean widget=false;
 	private boolean publicView=false;
+	private Boolean budget=null;
 
 	
 	private Integer fromYear;
@@ -47,6 +48,7 @@ public class AmpARFilter implements Filter {
 	}
 	
 	public void generateFilterQuery() {
+		String BUDGET_FILTER="SELECT amp_activity_id FROM amp_activity WHERE budget="+(budget!=null?budget.toString():"null");
 		String TEAM_FILTER="SELECT amp_activity_id FROM v_status WHERE amp_team_id IN ("+ARUtil.toSQLEnum(ampTeams)+")";
 		String STATUS_FILTER="SELECT amp_activity_id FROM v_status WHERE amp_status_id IN ("+ARUtil.toSQLEnum(statuses)+")";
 		String ORG_FILTER = "SELECT amp_activity_id FROM v_donors WHERE amp_donor_org_id IN ("+ARUtil.toSQLEnum(donors)+")";
@@ -66,6 +68,7 @@ public class AmpARFilter implements Filter {
 		String FROM_YEAR_FILTER="SELECT f.amp_activity_id FROM amp_funding f, amp_funding_detail fd WHERE f.amp_funding_id=fd.AMP_FUNDING_ID and date_format(fd.transaction_date,_latin1'%Y')>='"+fromYear+"'";
 		String TO_YEAR_FILTER="SELECT f.amp_activity_id FROM amp_funding f, amp_funding_detail fd WHERE f.amp_funding_id=fd.AMP_FUNDING_ID and date_format(fd.transaction_date,_latin1'%Y')<='"+toYear+"'";
 		
+		if(budget!=null) queryAppend(BUDGET_FILTER);
 		if(ampTeams!=null && ampTeams.size()>0) queryAppend(TEAM_FILTER);
 		if(statuses!=null && statuses.size()>0) queryAppend(STATUS_FILTER);
 		if(donors!=null && donors.size()>0) queryAppend(ORG_FILTER);
@@ -289,6 +292,14 @@ public class AmpARFilter implements Filter {
 
 	public void setWidget(boolean widget) {
 		this.widget = widget;
+	}
+
+	public Boolean getBudget() {
+		return budget;
+	}
+
+	public void setBudget(Boolean budget) {
+		this.budget = budget;
 	}
 
 	/**

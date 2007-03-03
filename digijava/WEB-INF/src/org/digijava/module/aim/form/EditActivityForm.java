@@ -9,12 +9,15 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.upload.FormFile;
 import org.digijava.module.aim.dbentity.AmpField;
+import org.digijava.module.aim.dbentity.AmpTeam;
+import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.helper.ActivityIndicator;
 import org.digijava.module.aim.helper.FundingDetail;
 import org.digijava.module.aim.helper.OrgProjectId;
@@ -36,8 +39,12 @@ public class EditActivityForm extends ActionForm implements Serializable{
 	private Long countryIso = null;
 	private Long assistanceType = null;
 	private String createdDate;
+	private String updatedDate;
+	private AmpTeamMember updatedBy;
 	private Collection perspectives;
+	private Boolean budget=null;
 	private double regionTotalDisb;
+	private AmpTeam team;
 
     private Long selPrograms[];
     private Long selProgramId;
@@ -3742,6 +3749,38 @@ public class EditActivityForm extends ActionForm implements Serializable{
     public void setSelProgramId(Long selProgramId) {
         this.selProgramId = selProgramId;
     }
+
+	public Boolean getBudget() {
+		return budget;
+	}
+
+	public void setBudget(Boolean budget) {
+		this.budget = budget;
+	}
+
+	public AmpTeam getTeam() {
+		return team;
+	}
+
+	public void setTeam(AmpTeam team) {
+		this.team = team;
+	}
+
+	public AmpTeamMember getUpdatedBy() {
+		return updatedBy;
+	}
+
+	public void setUpdatedBy(AmpTeamMember updatedBy) {
+		this.updatedBy = updatedBy;
+	}
+
+	public String getUpdatedDate() {
+		return updatedDate;
+	}
+
+	public void setUpdatedDate(String updatedDate) {
+		this.updatedDate = updatedDate;
+	}
 
     /*
 	public Collection getSelectedOrganizationsList() {

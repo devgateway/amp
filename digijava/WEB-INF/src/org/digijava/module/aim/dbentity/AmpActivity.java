@@ -10,6 +10,7 @@ public class AmpActivity
 		  implements Comparable, Serializable {
 
 
+	private Boolean budget;
     private Long ampActivityId ;
 	private String ampId ;
 	private String name ;
@@ -42,6 +43,7 @@ public class AmpActivity
 	private Set member;
 	private Country country;
 	private String contactName;
+	private AmpTeamMember updatedBy;
 
     private Double funAmount;
     private String currencyCode;
@@ -857,4 +859,20 @@ public class AmpActivity
     public void setActivityPrograms(Set activityPrograms) {
         this.activityPrograms = activityPrograms;
     }
+
+	public Boolean getBudget() {
+		return budget;
+	}
+
+	public void setBudget(Boolean budget) {
+		this.budget = budget;
+	}
+
+	public AmpTeamMember getUpdatedBy() {
+		return updatedBy;
+	}
+
+	public void setUpdatedBy(AmpTeamMember updatedBy) {
+		this.updatedBy = updatedBy;
+	}
 }

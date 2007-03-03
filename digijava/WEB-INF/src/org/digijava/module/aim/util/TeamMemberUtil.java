@@ -394,6 +394,7 @@ public class TeamMemberUtil {
 				act.setActivityId(activity.getAmpActivityId());
 				act.setAmpId(activity.getAmpId());
 				act.setName(activity.getName());
+				act.setBudget(activity.getBudget());
 				String donors = "";
 
 				while (orgItr.hasNext()) {
@@ -874,6 +875,7 @@ public class TeamMemberUtil {
 				Activity activity = new Activity();
 				activity.setActivityId(act.getAmpActivityId());
 				activity.setName(act.getName());
+				activity.setBudget(act.getBudget());
 				activity.setAmpId(act.getAmpId());
 				String donors = "";
 
@@ -930,6 +932,7 @@ public class TeamMemberUtil {
 				Activity act = new Activity();
 				act.setActivityId(activity.getAmpActivityId());
 				act.setName(activity.getName());
+				act.setBudget(activity.getBudget());
 				act.setAmpId(activity.getAmpId());
 				String donors = "";
 

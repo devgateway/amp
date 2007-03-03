@@ -120,13 +120,15 @@ public class ActivityUtil {
 		Session session = null;
 		Transaction tx = null;
 		AmpActivity oldActivity = null;
-
+		
 		Long activityId = null;
 
 		try {
 			session = PersistenceManager.getSession();
+			AmpTeamMember member = (AmpTeamMember) session.load(AmpTeamMember.class,memberId);
 			tx = session.beginTransaction();
-
+	
+			
 			if (edit) { /* edit an existing activity */
 			    oldActivity = (AmpActivity) session.load(AmpActivity.class,oldActivityId);
 
@@ -265,6 +267,7 @@ public class ActivityUtil {
 				oldActivity.setMofedCntFirstName(activity.getMofedCntFirstName());
 				oldActivity.setMofedCntLastName(activity.getMofedCntLastName());
 				oldActivity.setName(activity.getName());
+				oldActivity.setBudget(activity.getBudget());
 				oldActivity.setObjective(activity.getObjective());
 				oldActivity.setProgramDescription(activity.getProgramDescription());
 				oldActivity.setProposedApprovalDate(activity.getProposedApprovalDate());
@@ -296,7 +299,7 @@ public class ActivityUtil {
 			}
 
 			Iterator itr = relatedLinks.iterator();
-			AmpTeamMember member = (AmpTeamMember) session.load(AmpTeamMember.class,memberId);
+			
 			while (itr.hasNext()) {
 				RelatedLinks rl = (RelatedLinks) itr.next();
 				CMSContentItem temp = (CMSContentItem) session.get(CMSContentItem.class, new Long(rl.getRelLink().getId()));
@@ -331,7 +334,8 @@ public class ActivityUtil {
 			if (edit) {
 				// update the activity
 			    logger.debug("updating ....");
-
+			    oldActivity.setUpdatedDate(new Date(System.currentTimeMillis()));
+			    oldActivity.setUpdatedBy(member);
 			    session.saveOrUpdate(oldActivity);
 			    activity = oldActivity;
 			    /*
@@ -692,6 +696,8 @@ public class ActivityUtil {
 			    activity.setCreatedDate(ampActivity.getCreatedDate());
 			    activity.setDescription(ampActivity.getDescription());
                 activity.setDocumentSpace(ampActivity.getDocumentSpace());
+                activity.setBudget(ampActivity.getBudget());
+                activity.setUpdatedBy(ampActivity.getUpdatedBy());
 
                 activity.setEmail(ampActivity.getEmail());
 			    activity.setLanguage(ampActivity.getLanguage());
@@ -756,6 +762,7 @@ public class ActivityUtil {
 
 				activity.setStatus(ampAct.getStatus().getName());
 				activity.setStatusReason(ampAct.getStatusReason().trim());
+				activity.setBudget(ampAct.getBudget());
 
 				activity.setObjective(ampAct.getObjective());
 

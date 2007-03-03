@@ -408,6 +408,25 @@ function disable() {
 										</td>
 									</tr>
 									<tr>
+										<td class="t-name" width="30%" align="right" bgcolor="#fffff0">
+											<digi:trn key="aim:actBudget">Budget</digi:trn>
+										</td>
+										<td bgcolor="#ffffff">
+										<logic:equal name="aimEditActivityForm" property="budget" value="true">
+										<digi:trn key="aim:actBudgeton">
+												Activity is On Budget
+										</digi:trn>
+										</logic:equal>
+										<logic:equal name="aimEditActivityForm" property="budget" value="false">
+										<digi:trn key="aim:actBudgetoff">
+												Activity is Off Budget
+										</digi:trn>
+										</logic:equal>
+
+										</td>
+									</tr>
+
+									<tr>
 										<td class="t-name" width="30%" align="right" bgcolor="#f4f4f2">
 											<digi:trn key="aim:orgsAndProjectIds">
 											Organizations and Project IDs
@@ -1391,6 +1410,31 @@ function disable() {
 											<c:out value="${aimEditActivityForm.actAthEmail}"/>
 										</td>
 									</tr>
+									<logic:notEmpty name="aimEditActivityForm" property="updatedDate">
+									<tr>
+										<td class="t-name" width="30%" align="right" bgcolor="#f4f4f2">
+											<digi:trn key="aim:activityUpdatedOn">
+											Activity updated on</digi:trn>
+										</td>
+										<td bgcolor="#ffffff">
+											<c:out value="${aimEditActivityForm.updatedDate}"/>
+										</td>
+									</tr>	
+									</logic:notEmpty>
+									<logic:notEmpty name="aimEditActivityForm" property="updatedBy">									
+									<tr>
+										<td class="t-name" width="30%" align="right" bgcolor="#f4f4f2">
+											<digi:trn key="aim:activityUpdatedBy">
+											Activity updated by</digi:trn>
+										</td>
+										<td bgcolor="#ffffff">
+											<c:out value="${aimEditActivityForm.updatedBy.user.firstNames}"/>										
+											<c:out value="${aimEditActivityForm.updatedBy.user.lastName}"/>	-
+											<c:out value="${aimEditActivityForm.updatedBy.user.email}"/>
+										</td>
+									</tr>																	
+									</logic:notEmpty>
+									
 									<logic:notEmpty name="aimEditActivityForm" property="createdDate">
 									<tr>
 										<td class="t-name" width="30%" align="right" bgcolor="#f4f4f2">
@@ -1399,6 +1443,21 @@ function disable() {
 										</td>
 										<td bgcolor="#ffffff">
 											<c:out value="${aimEditActivityForm.createdDate}"/>
+										</td>
+									</tr>
+									
+									</logic:notEmpty>
+									<logic:notEmpty name="aimEditActivityForm" property="team">
+									<tr>
+										<td class="t-name" width="30%" align="right" bgcolor="#f4f4f2">
+											<digi:trn key="aim:activityTeamLeader">
+											Data Team Leader</digi:trn>
+										</td>
+										<td bgcolor="#ffffff">
+											<c:out value="${aimEditActivityForm.team.teamLead.user.firstNames}"/>										
+											<c:out value="${aimEditActivityForm.team.teamLead.user.lastName}"/>	-
+											<c:out value="${aimEditActivityForm.team.teamLead.user.email}"/>
+
 										</td>
 									</tr>
 									</logic:notEmpty>

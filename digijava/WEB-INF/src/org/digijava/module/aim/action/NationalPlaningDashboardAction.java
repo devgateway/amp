@@ -29,6 +29,7 @@ import org.digijava.module.aim.dbentity.AmpThemeIndicators;
 import org.digijava.module.aim.form.NationalPlaningDashboardForm;
 import org.digijava.module.aim.helper.AmpPrgIndicatorValue;
 import org.digijava.module.aim.helper.CurrencyWorker;
+import org.digijava.module.aim.helper.FilteredAmpTheme;
 import org.digijava.module.aim.helper.IndicatorValuesBean;
 import org.digijava.module.aim.util.ActivityUtil;
 import org.digijava.module.aim.util.ChartUtil;
@@ -61,6 +62,7 @@ public class NationalPlaningDashboardAction extends DispatchAction {
 		System.out.println(filter);
 		// load all themes
 		List themes = ProgramUtil.getAllThemes(true);
+		npdForm.setAllThemes( FilteredAmpTheme.transformAmpThemeList(themes) );
 		Collection sortedThemes = CollectionUtils.getFlatHierarchy(themes,
 				true, new ProgramUtil.ProgramHierarchyDefinition(),
 				new ProgramUtil.HierarchicalProgramComparator());

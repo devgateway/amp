@@ -14,6 +14,11 @@
 <script type="text/javascript" src="<digi:file src="module/aim/scripts/tree/event.js"/>"></script>
 <script type="text/javascript" src="<digi:file src="module/aim/scripts/tree/treeview.js"/>" ></script>
 <script type="text/javascript" src="<digi:file src="module/aim/scripts/tree/jktreeview.js"/>" ></script>
+
+<link rel="stylesheet" type="text/css" href="<digi:file src="module/aim/css/container.css"/>">
+<script type="text/javascript" src="<digi:file src="module/aim/scripts/panel/yahoo-dom-event.js"/>" ></script>
+<script type="text/javascript" src="<digi:file src="module/aim/scripts/panel/container-min.js"/>" ></script>
+
 <style type="text/css">
 	a { text-decoration: underline; color: #46546C; }
 	a:hover { text-decoration: underline; color: #4d77c3; }
@@ -89,7 +94,9 @@ function doFilter() {
 		var allProgs=progTree.getElementsByTagName("program");
 		for(var i=0;i<allProgs.length;i++){
 			var id=allProgs[i].getAttribute("id");
-			if(id==toFindID) return allProgs[i];
+			if(id==toFindID) {
+				return allProgs[i];
+			}
 		}
 	}
 
@@ -103,7 +110,7 @@ function doFilter() {
 		return false;
 	}
 
-	/* creates tree view object from XML. this is called form callback*/
+	/* creates tree view object from XML. this is called form callback */
 	function updateTree(myXML){
 		if (myXML==null) {
 			return;
@@ -140,7 +147,7 @@ function doFilter() {
 
 		//create TreeView Object for specified with ID HTML object.
 		var ptree=new jktreeview("tree");
-
+		
 		//build nodes
 		buildTree(programList,ptree,"");
 		
@@ -154,6 +161,12 @@ function doFilter() {
 		
 		//highlight current Node
 		highlightNode(curProgNodeIndex);
+		
+		setNumOfPrograms (myXML);
+		addRootListener();
+		addEventListeners();
+		
+		createPanel("TEST","<i>test</i>");
 	}
 
 	/* recursivly builds tree nodes */
@@ -210,7 +223,9 @@ function doFilter() {
 //				var color=getRealColor(nodTD);
 //				nodTD.style.color=nodTD.style.backgrundColor;
 //				nodTD.style.backgrundColor=color;
+								
 			}
+			
 		}
 		
 	}
@@ -273,7 +288,120 @@ function doFilter() {
 		
 	}
 	
+	var numOfPrograms;				// Number of programs (themes) displayed
+	var informationPanel;			// The panel on which the information is displayed
+	var themeArray	= new Array();  // Array containing the formatted information for the themes
+
+	/*Gets total number of programs from the xml tree */
+	function setNumOfPrograms (xml) {
+		var elements	=	xml.getElementsByTagName("program");
+		numOfPrograms	= elements.length;
+		//alert ("xml: " + numOfPrograms);
+	}
+	/* When clicking on a '+' to expand the tree the listeners for the other elements are refreshed */
+	function addRootListener () {
+		var tree		= document.getElementById('tree');
+		YAHOO.util.Event.addListener(tree, "click", addEventListeners);
+	}
+	/* Adds listeners for all elemets in the tree */
+	function addEventListeners () {
+		for(var j=1;j<=numOfPrograms;j++){
+							var n	= document.getElementById('ygtvlabelel'+j);
+							YAHOO.util.Event.addListener(n, "mouseover", eventFunction);
+							YAHOO.util.Event.addListener(n, "mouseout", hidePanel);
+		}
+	}
+	/* Function that is executed when mouse over an element */
+	function eventFunction(e) {
+		//alert('S-a apelat eventFunction	' + this.href + '||' + getIdFromHref(this.href) );
+		showPanel(this.innerHTML, getIdFromHref(this.href), e.clientX, e.clientY);
+		
+	}
+	/* Extracts the id (database id of AmpTheme) from the href property */
+	function getIdFromHref( href ) {
+		var start	= href.indexOf("('");
+		var end		= href.indexOf("')");
+		return href.substring(start+2, end);
+ 	}
+ 	/* Creates the panel used to show information */
+ 	function createPanel(headerText, bodyText) {
+ 		//YAHOO.namespace("amp.container");
+ 		//alert('Create Panels');
+ 		//YAHOO.amp.container.panel2 = new YAHOO.widget.Panel("panel2", { width:"300px", visible:true, draggable:false, close:true } );
+		//YAHOO.amp.container.panel2.setHeader("Panel #2 from Script");
+		//YAHOO.amp.container.panel2.setBody("This is a dynamically generated Panel.");
+		//YAHOO.amp.container.panel2.setFooter("End of Panel #2");
+		//YAHOO.amp.container.panel2.render(document.body);
+		
+		//YAHOO.amp.container.panel2.moveTo(50,50);
+		
+		
+		informationPanel	= new YAHOO.widget.Panel("infoPanel", { width:"300px", visible:false, draggable:false, close:true } );
+		informationPanel.setHeader(headerText);
+		informationPanel.setBody(bodyText);
+		informationPanel.render(document.body);
+		
+		infoPanelObj	= document.getElementById('infoPanel');
+		
+		YAHOO.util.Event.addListener(infoPanelObj, "mouseover", makePanelVisible);
+		YAHOO.util.Event.addListener(infoPanelObj, "mouseout", hidePanel);
+		
+ 	}
+ 	/* Updates the panels header, body and position and makes it visible */
+ 	function showPanel(headerText, id, posX, posY) {
+ 		informationPanel.setHeader(headerText);
+		informationPanel.setBody(themeArray[id]);
+		informationPanel.moveTo(posX-1, posY-1);
+		informationPanel.show();
+ 	}
+ 	/* Just makes the panel visible */
+ 	function makePanelVisible() {
+ 		informationPanel.show();
+ 	}
+ 	/* Just makes the panel invisible */
+ 	function hidePanel() {
+ 		informationPanel.hide();
+ 	}
+ 	/* Adds the information for a theme to the themeArray array in the corresponding position (=pid). */
+ 	function addProgramInformation(pid, programName, description, leadAgency, programCode, programType, targetGroups,
+ 				background, objectives, outputs, beneficiaries, environmentConsiderations) {
+ 			var panelBody =	"";
+ 			panelBody += '<table border="0">';
+ 			panelBody += '<tr><td align="left"><b>Program Name:</b>&nbsp;</td><td>'+ programName +'</td></tr>';
+ 			panelBody += '<tr><td align="left"><b>Description:</b>&nbsp;</td><td>'+ description +'</td></tr>';
+ 			panelBody += '<tr><td align="left"><b>Lead Agency:</b>&nbsp;</td><td>'+ leadAgency +'</td></tr>';
+ 			panelBody += '<tr><td align="left"><b>Program Code:</b>&nbsp;</td><td>'+ programCode +'</td></tr>';
+ 			panelBody += '<tr><td align="left"><b>Program Type:</b>&nbsp;</td><td>'+ programType +'</td></tr>';
+ 			panelBody += '<tr><td align="left"><b>Target Groups:</b>&nbsp;</td><td>'+ targetGroups +'</td></tr>';
+ 			panelBody += '<tr><td align="left"><b>Background:</b>&nbsp;</td><td>'+ background +'</td></tr>';
+ 			panelBody += '<tr><td align="left"><b>Objectives:</b>&nbsp;</td><td>'+ objectives +'</td></tr>';
+ 			panelBody += '<tr><td align="left"><b>Outputs:</b>&nbsp;</td><td>'+ outputs +'</td></tr>';
+ 			panelBody += '<tr><td align="left"><b>Beneficiaries:</b>&nbsp;</td><td>'+ beneficiaries +'</td></tr>';
+ 			panelBody += '<tr><td align="left"><b>Environment Considerations:</b>&nbsp;</td><td>'+ environmentConsiderations +'</td></tr>';
+ 			panelBody += '</table>'; 
+ 			
+ 			themeArray[pid]	= panelBody;
+ 	
+ 	}
 	window.onload=initTree;
+</script>
+<script language="javascript" type="text/javascript">
+	<digi:instance property="aimNationalPlaningDashboardForm" />
+	<logic:iterate id="theme" name="aimNationalPlaningDashboardForm" property="allThemes" type="org.digijava.module.aim.dbentity.AmpTheme" >
+		addProgramInformation(	'<bean:write name="theme" property="ampThemeId" />',
+								'<bean:write name="theme" property="name" />',
+								'<bean:write name="theme" property="description" />',
+								'<bean:write name="theme" property="leadAgency" />',
+								'<bean:write name="theme" property="themeCode" />',
+								'<bean:write name="theme" property="type" />',
+								'<bean:write name="theme" property="targetGroups" />',
+								'<bean:write name="theme" property="background" />',
+								'<bean:write name="theme" property="objectives" />',
+								'<bean:write name="theme" property="outputs" />',
+								'<bean:write name="theme" property="beneficiaries" />',
+			 					'<bean:write name="theme" property="environmentConsiderations" />'
+		);
+	</logic:iterate>
 </script>
 <digi:form action="/nationalPlaningDashboard.do">
   <html:hidden property="actionMethod"/>

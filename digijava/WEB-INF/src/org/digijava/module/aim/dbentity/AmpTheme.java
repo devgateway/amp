@@ -246,6 +246,4 @@ public class AmpTheme implements Serializable
 	public String getEnvironmentConsiderations () {
 		return this.environmentConsiderations;
 	}
-    
-    
 }

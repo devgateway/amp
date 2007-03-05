@@ -36,6 +36,8 @@ public class NationalPlaningDashboardForm extends ActionForm {
     private String xmlTree;
     private boolean showIndicators;
     private String fundingSum;
+    
+    private Collection allThemes;
 
     public void reset(ActionMapping mapping, HttpServletRequest request) {
         currentProgramId = null;
@@ -229,5 +231,12 @@ public class NationalPlaningDashboardForm extends ActionForm {
 
 	public void setFundingSum(String fundingSum) {
 		this.fundingSum=fundingSum;
+	}
+	
+	public void setAllThemes(Collection allThemes) {
+		this.allThemes	= allThemes;
+	}
+	public Collection getAllThemes () {
+		return this.allThemes;
 	}
 }

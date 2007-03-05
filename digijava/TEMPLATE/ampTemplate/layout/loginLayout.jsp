@@ -107,7 +107,7 @@ if("On".equals(publicView)) { %>
 					<td>&nbsp;</td>				
 					<td>&nbsp;</td>
 					<td align="left">
-						<input style="background-color:#993300;color:#FFFFFF;width:150px;height:40px" type="button" value="Public View" onclick="javascript:window.open('/aim/reportsPublicView.do', 'Public View','channelmode=no,directories=no,menubar=no,resizable=yes,status=no,toolbar=no,scrollbars=yes,location=yes');"/>
+						<input style="background-color:#993300;color:#FFFFFF;width:150px;height:40px" type="button" value="Public View" onclick="javascript:window.open('/aim/reportsPublicView.do', 'Public','channelmode=no,directories=no,menubar=no,resizable=yes,status=no,toolbar=no,scrollbars=yes,location=yes');"/>
 					</td>
 				</tr>
 <% } %>

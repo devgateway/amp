@@ -141,7 +141,7 @@
 															<bean:write name="sectorSchemeLevelOne" property="ampSectorId" />
 															</c:set>
 															<c:set target="${urlParams2}" property="event" value="edit" />
-															<c:set target="${urlParams2}" property="level" value="one" />
+															<c:set target="${urlParams2}" property="level" value="two" />
 															<bean:define id="translation">
 																<digi:trn key="aim:clickToViewSector">Click here to view Sector</digi:trn>
 															</bean:define>

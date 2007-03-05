@@ -41,6 +41,22 @@
 				</TD></TR>
 				</logic:notEmpty>
 			</TABLE>	
-		</TD>
+					<br/><br/>
+					<bean:define id="translation">
+						<digi:trn key="aim:clickToAddNewActivity">Click here to Add New Activity</digi:trn>
+					</bean:define>
+					<div title='<%=translation%>' align="left">
+					<input type="button" class="dr-menu" onclick="return addActivity()" value='<digi:trn key="btn:addActivity">Add Activity</digi:trn>' name="addActivity"/>
+					</div>
+					<logic:equal name="teamHead" scope="session" value="yes">
+						<br/>
+						<bean:define id="translation">
+							<digi:trn key="aim:clickToConfigureTeamPages">Click here to Configure Team Workspace</digi:trn>
+						</bean:define>
+						<div title='<%=translation%>' align="left">
+                     	<input type="button" class="dr-menu" onclick='return teamWorkspaceSetup("<bean:write name="teamHead" scope="session"/>")' value='<digi:trn key="btn:teamWorkspaceSetup">Team Workspace Setup</digi:trn>' name="addActivity"/>
+                     	</div><br/><br/>
+					</logic:equal>
+			</TD>
 	</TR>
 </TABLE>

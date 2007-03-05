@@ -1,3 +1,4 @@
+
 <%@ page pageEncoding="UTF-8" %>
 <%@ taglib uri="/taglib/struts-bean" prefix="bean" %>
 <%@ taglib uri="/taglib/struts-logic" prefix="logic" %>
@@ -23,27 +24,12 @@
 			 else
 			 {
 			<digi:context name="addSector" property="context/module/moduleinstance/addSector.do?event=addSector" />
-			document.aimAddSectorForm.action = "<%= addSector%>&id="+id;
+			document.aimAddSectorForm.action = "<%= addSector%>&ampSecSchemeIdpoi="+id+"&parent=scheme";
 			document.aimAddSectorForm.target = "_self";
 			document.aimAddSectorForm.submit();
 			 }
 	
 	}
-	function cancel(id)
- 	{
-		if (document.aimAddSectorForm.levelType.value =="scheme") 
-			window.location="/aim/updateSectorSchemes.do~ampSecSchemeparentId="+id+"~event=edit~dest=admin";
-		if (document.aimAddSectorForm.levelType.value =="sector")
-			 window.location="/aim/viewSectorDetails.do~level=one~event=edit~ampSectorId="+id;
-		return true;
-		/*
-		/aim/updateSectorSchemes.do~ampSecSchemeparentId=3~event=edit~dest=admin
-		/aim/viewSectorDetails.do~level=one~event=edit~ampSectorId=238
-		/aim/viewSectorDetails.do~level=two~event=edit~ampSectorId=241
-		
-		*/
-		
- 	}
 </script>
 <digi:errors/>
 <digi:instance property="aimAddSectorForm" />
@@ -168,16 +154,13 @@
 		<td colspan="2" width="60%">
 			<table width="100%" cellspacing="5">
 				<tr>
-					<td  align="right">
+					<td width="50%" align="right">
 					<%--
 						<html:submit value="Save" styleClass="dr-menu"/>--%>
-							<input  type="button" class="dr-menu" name="addBtn" value='<digi:trn key="btn:save">Save</digi:trn>' onclick="updateScheme('<bean:write name="aimAddSectorForm" property="parentId" />')" />
+							<input  type="button" name="addBtn" value="Save" onclick="updateScheme('<bean:write name="aimAddSectorForm" property="parentId" />')"
 					</td>
-					<td  align="right">
-						<html:reset value="Clear" styleClass="dr-menu"/>
-					</td>
-					<td  align="left">
-						<input type="button" value='<digi:trn key="btn:cancel">Cancel</digi:trn>' class="dr-menu" onclick="cancel('<bean:write name="aimAddSectorForm" property="parentId" />')"/>
+					<td width="50%" align="left">
+						<html:reset value="Cancel" styleClass="dr-menu"/>
 					</td>
 				</tr>
 			</table>
@@ -212,9 +195,6 @@
 	</tr>
 </table>
 </digi:form>
-
-
-
 
 
 

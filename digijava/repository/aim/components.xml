@@ -41,6 +41,7 @@
 	<page name="editAmpProjectOthers" title="AMP: Ethiopia: AIM Dashboard: Detail" />
 	<page name="sectorManager" title=" - Sector Manager" />
 	<page name="addSector" title=" - Add Sector" />
+	<page name="addASector" title=" - Add Sector" />
 	<page name="updateAmpActivity" title=" - Add Sector" />
 	<page name="addSectorList" title=" - Add Sector" />
 	<page name="addSubSectorList" title=" - Add Sector" />

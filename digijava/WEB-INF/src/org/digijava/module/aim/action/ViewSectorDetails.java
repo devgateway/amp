@@ -1,3 +1,4 @@
+
 package org.digijava.module.aim.action ;
 
 import javax.servlet.http.HttpServletRequest;
@@ -10,8 +11,10 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import java.util.*;
+
 import org.digijava.module.aim.dbentity.AmpSector;
 import org.digijava.module.aim.form.AddSectorForm;
+import org.digijava.module.aim.dbentity.AmpSectorScheme;
 import org.digijava.module.aim.util.SectorUtil;
 
 public class ViewSectorDetails extends Action {
@@ -34,21 +37,38 @@ public class ViewSectorDetails extends Action {
 					 }					 
 
 					 AddSectorForm viewSectorForm = (AddSectorForm) form;
-
-					 logger.debug("In view sector action");
-					 logger.debug("In add sector action");
-						String sectId = request.getParameter("ampSectorId");
-						String event = request.getParameter("event");
-						String level = request.getParameter("level");
-						Long parentId = new Long(sectId);
-						
+					 //session.setAttribute("moreThanLevelOne","yes");
+					 //String Level = new String();
+					 logger.info("In ViewSectorDetails action");
+					 String event = request.getParameter("event");
+					 String level = request.getParameter("level");
+					 String secId = request.getParameter("ampSectorId");
+					 if(secId==null)
+						 secId = (String)session.getAttribute("Id");
+					 logger.info("LEVEL======================"+level);
+					 logger.info("event================"+event);
+					
+					 logger.debug(request.getParameter("ampSectorId"));
+					 logger.debug(session.getAttribute("Id"));
+					 logger.debug(secId);
+					 
+						Long parentId = new Long(secId);
 						viewSectorForm.setSubSectors(SectorUtil.getAllChildSectors(parentId));
+						Collection _subSectors = viewSectorForm.getSubSectors();
+						Iterator itr = _subSectors.iterator();
+						while (itr.hasNext()) {
+							AmpSector ampScheme = (AmpSector) itr.next();
+							viewSectorForm.setAmpSectorId(ampScheme.getAmpSectorId());
+							viewSectorForm.setParentId(ampScheme.getAmpSectorId());
+							viewSectorForm.setParentSectorId(ampScheme.getParentSectorId().getAmpSectorId());
+						}
+						
 						if(event!=null)
 						{
 							if(event.equals("edit"))
 							{
-								logger.info(" inside editing the sector...");
-								AmpSector editSector = new AmpSector();
+								logger.debug("Inside view sector details--------------");
+								AmpSector editSector= new AmpSector();
 								editSector = SectorUtil.getAmpSector(parentId);
 								viewSectorForm.setSectorCode(editSector.getSectorCode());
 								viewSectorForm.setSectorName(editSector.getName());
@@ -64,38 +84,26 @@ public class ViewSectorDetails extends Action {
 								}
 								if(level.equals("three"))
 								{
+									
 									return mapping.findForward("levelThree");
 								}
-									
 							}
-							
-							
+							else if (event.equalsIgnoreCase("enough")){
+								AmpSector editSector= new AmpSector();
+								editSector = SectorUtil.getAmpSector(parentId);
+								viewSectorForm.setSectorCode(editSector.getSectorCode());
+								viewSectorForm.setSectorName(editSector.getName());
+								viewSectorForm.setSectorId(editSector.getAmpSectorId());
+								logger.debug("Setting jsp Flag==================(true)================");
+								viewSectorForm.setJspFlag(true);
+								return mapping.findForward("levelThree");
+							}
 						}
-					/* if (request.getParameter("id") != null) {
-								Long secId = new Long(Long.parseLong(request.getParameter("id")));
-								AmpSector ampSector = SectorUtil.getAmpSector(secId);
-
-								if (ampSector.getParentSectorId() != null) {
-										  viewSectorForm.setParentSectorId(ampSector.getParentSectorId().getAmpSectorId());
-								} else {
-										  viewSectorForm.setParentSectorId(new Long(0));
-								}
-								viewSectorForm.setSectorId(secId);
-								viewSectorForm.setSectorCode(ampSector.getSectorCode());
-								viewSectorForm.setSectorName(ampSector.getName());
-								viewSectorForm.setAmpOrganisation(ampSector.getAmpOrgId().getName());
-								viewSectorForm.setDescription(ampSector.getDescription());
-								if (ampSector.getParentSectorId() == null) {
-										  viewSectorForm.setParentSectorName("");
-								} else {
-										  viewSectorForm.setParentSectorName(ampSector.getParentSectorId().getName());
-								}
-					 }*/
+					
 					 return mapping.findForward("levelOne");
 		  }
 		  
 		  
 		  
 }
-
 

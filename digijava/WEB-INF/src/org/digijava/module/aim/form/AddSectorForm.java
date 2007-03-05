@@ -1,24 +1,33 @@
 package org.digijava.module.aim.form;
 
-import org.apache.struts.action.*;
 import java.util.*;
+
+import org.apache.struts.action.*;
 /*
- *@ Author Govind G Dalwani 
+ *@ Author Govind G Dalwani
  */
 public class AddSectorForm extends ActionForm {
-	
-	private Collection subSectors = null;	  
+
+	private Collection subSectors = null;
 	private Long parentId = null;
 	private String levelType = null;
+	
+	//required 
 	Collection formSectorSchemes;
+	//poi
+	
 	Collection formFirstLevelSectors;
 	Long secSchemeId;
 	String secSchemeName;
 	String secSchemeCode;
+	boolean jspFlag = false;
 	boolean deleteSchemeFlag = true;
 	private String idGot;
-	
-	private Long sectorId = null;  
+        private String event;
+        private Long ampSectorId;
+
+
+	private Long sectorId = null;
 	private Long parentSectorId = null;
 	private String parentSectorName = null;
 	private String sectorCode = null;
@@ -29,11 +38,17 @@ public class AddSectorForm extends ActionForm {
 	private String description = null;
 	private HashMap organisationList = null;
 	private String flag = null;
-	
 
-	
-	
-	
+
+
+
+	public boolean getJspFlag() {
+		return jspFlag;
+	}
+
+	public void setJspFlag(boolean flag) {
+		this.jspFlag = flag;
+	}
 
 	public String getIdGot() {
 		return idGot;
@@ -45,7 +60,7 @@ public class AddSectorForm extends ActionForm {
 
 		/*
 	 * get the Scheme COde
-	 */	
+	 */
 		public String getSecSchemeCode() {
 			return secSchemeCode;
 		}
@@ -119,8 +134,8 @@ public class AddSectorForm extends ActionForm {
 
 		public void setDeleteSchemeFlag(boolean deleteSchemeFlag) {
 			this.deleteSchemeFlag = deleteSchemeFlag;
-		}	
-	
+		}
+
 public String getLevelType() {
 		return levelType;
 	}
@@ -145,52 +160,52 @@ public Collection getSubSectors() {
 		this.subSectors = subSectors;
 	}
 
-	///previously done  	
+	///previously done
 	public Long getSectorId() {
 		return (this.sectorId);
 	}
-	
+
 	public void setSectorId(Long sectorId) {
 		this.sectorId = sectorId;
 	}
-	
+
 	public String getSectorCode() {
-		return (this.sectorCode); 
+		return (this.sectorCode);
 	}
-	
+
 	public void setSectorCode(String sectorCode) {
 		this.sectorCode = sectorCode;
-		
+
 	}
-	
+
 	public String getSectorName() {
 		return (this.sectorName);
 	}
-	
+
 	public void setSectorName(String sectorName) {
-		this.sectorName = sectorName; 
+		this.sectorName = sectorName;
 	}
-	
+
 	public String getType() {
 		return (this.type);
 	}
-	
+
 	public void setType(String type) {
 		this.type = type;
 	}
-	
+
 	public Long getAmpOrganisationId() {
 		return (this.ampOrganisationId);
 	}
-	
+
 	public void setAmpOrganisationId(Long ampOrganisationId) {
 		this.ampOrganisationId = ampOrganisationId;
 	}
-	
+
 	public String getDescription() {
 		return (this.description);
 	}
-	
+
 	public void setDescription(String description) {
 		this.description = description;
 	}
@@ -200,7 +215,7 @@ public Collection getSubSectors() {
 	}
 
 	public void setParentSectorId(Long parentSectorId) {
-		this.parentSectorId = parentSectorId;	  
+		this.parentSectorId = parentSectorId;
 	}
 
 	public HashMap getOrganisationList() {
@@ -231,7 +246,23 @@ public Collection getSubSectors() {
 			  return (this.parentSectorName);
 	}
 
-	public void setParentSectorName(String parentSectorName) {
+  public String getEvent() {
+    return event;
+  }
+
+  public Long getAmpSectorId() {
+    return ampSectorId;
+  }
+
+  public void setParentSectorName(String parentSectorName) {
 			  this.parentSectorName = parentSectorName;
 	}
+
+  public void setEvent(String event) {
+    this.event = event;
+  }
+
+  public void setAmpSectorId(Long ampSectorId) {
+    this.ampSectorId = ampSectorId;
+  }
 }

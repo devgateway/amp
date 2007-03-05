@@ -35,82 +35,92 @@ public class EditSector extends Action {
 			if (str.equals("no")) {
 				return mapping.findForward("index");
 			}
-		}					 
-
+		}
 					 AddSectorForm editSectorForm = (AddSectorForm) form;
-
 					 logger.debug("In edit sector action");
-					 logger.info("In edit sector action");
-
+					 logger.debug("In edit sector action");
 					 if (request.getParameter("id") != null) {
-								/*
-								 * check whether the id is a valid long value
-								 */
-								Long secId = new Long(Long.parseLong(request.getParameter("id")));
-								AmpSector ampSector = SectorUtil.getAmpSector(secId);
-
-								/*
-								 * check whether ampSector is null if yes return error
-								 */
-
-								editSectorForm.setSectorId(secId);
-								HashMap map = null;
-								logger.info(" this is the sector name....."+ editSectorForm.getSectorName());
-								logger.info(" this is the sectorCode....."+ editSectorForm.getSectorCode());
-								logger.info(" thi sis the id...."+ secId);
-								ampSector.setName(editSectorForm.getSectorName());
-								ampSector.setSectorCode(editSectorForm.getSectorCode());
-								logger.info(" here");
-								DbUtil.update(ampSector);
-								logger.info(" update sector Complete");
-								/*if (ampSector.getParentSectorId() == null) {
-										  editSectorForm.setParentSectorId(null);
-										  Iterator itr = DbUtil.getAllOrganisation().iterator();
-										  map = new HashMap();
-
-										  while (itr.hasNext()) {
-													 AmpOrganisation ampOrg = (AmpOrganisation) itr.next();
-													 Long orgId = ampOrg.getAmpOrgId();
-													 String name = ampOrg.getName();
-													 map.put(orgId,name);
-										  }
-								} else {
-										  editSectorForm.setParentSectorId(ampSector.getParentSectorId().getAmpSectorId());
+						 	String id = (String)request.getParameter("id");
+							Long secId = new Long(Long.parseLong(request.getParameter("id")));
+							String event = request.getParameter("event");
+							String flag = request.getParameter("flag");
+							if(request.getParameter("flag")==null)
+								flag = "false";
+							System.out.println(flag);
+							System.out.println("FLAG========================"+editSectorForm.getJspFlag());
+						 if(flag.equalsIgnoreCase("false"))
+						 	{
+						 		
+								if(event!=null || !event.equals("") || event.length()<=0)
+								{
+									if(event.equalsIgnoreCase("update2LevelSector"))
+								  {
+										AmpSector ampSector = SectorUtil.getAmpSector(secId);
+										editSectorForm.setSectorId(secId);
+										ampSector.setName(editSectorForm.getSectorName());
+										ampSector.setSectorCode(editSectorForm.getSectorCode());
+										logger.debug("Updating.............................................");
+										DbUtil.update(ampSector);
+										Long schemeId =ampSector.getAmpSecSchemeId().getAmpSecSchemeId();
+										Integer schemeID = new Integer(schemeId.intValue());
+										editSectorForm.setFormFirstLevelSectors(
+												SectorUtil.getSectorLevel1(schemeID));
+										editSectorForm.setSecSchemeCode(ampSector.getAmpSecSchemeId().getSecSchemeCode());
+										editSectorForm.setSecSchemeName(ampSector.getAmpSecSchemeId().getSecSchemeName());
+										editSectorForm.setSecSchemeId(ampSector.getAmpSecSchemeId().getAmpSecSchemeId());
+										//editSectorForm.setParentSectorId(ampSector.getParentSectorId().getAmpSectorId());
+										logger.debug(" update sector1 Complete");
+										return mapping.findForward("editedSecondLevelSector");
 								}
-								editSectorForm.setSectorCode(ampSector.getSectorCode());
-								editSectorForm.setSectorName(ampSector.getName());
-								editSectorForm.setAmpOrganisationId(ampSector.getAmpOrgId().getAmpOrgId());
-								editSectorForm.setDescription(ampSector.getDescription());
-								editSectorForm.setOrganisationList(map);*/
-					 }
-					 /*else if (request.getParameter("id") == null && editSectorForm.getSectorId() != null) {
-								// update the sector details to the database
-								
-								logger.debug("Updating the sector");
-								AmpSector ampSector = new AmpSector();
-								ampSector.setAmpSectorId(editSectorForm.getSectorId());
-								ampSector.setParentSectorId(SectorUtil.getAmpSector(editSectorForm.getParentSectorId()));
-								ampSector.setAmpOrgId(DbUtil.getOrganisation(editSectorForm.getAmpOrganisationId()));
-								ampSector.setSectorCode(editSectorForm.getSectorCode());
-								ampSector.setName(editSectorForm.getSectorName());
-								if (editSectorForm.getDescription() == null
-													 || editSectorForm.getDescription().trim().equals("")) {
-										  ampSector.setDescription(new String(" "));
-								} else {
-										  ampSector.setDescription(editSectorForm.getDescription());
+								else if(event.equalsIgnoreCase("update3LevelSector"))
+								 {
+									AmpSector ampSector = SectorUtil.getAmpSector(secId);
+									editSectorForm.setSectorId(secId);
+									ampSector.setName(editSectorForm.getSectorName());
+									ampSector.setSectorCode(editSectorForm.getSectorCode());
+									logger.debug("Updating.............................................");
+									DbUtil.update(ampSector);
+									ampSector = SectorUtil.getAmpSector(secId);
+									Long sectorId = ampSector.getParentSectorId().getAmpSectorId();
+									Integer schemeID = new Integer(sectorId.intValue());
+									editSectorForm.setSubSectors(SectorUtil.getAllChildSectors(sectorId));
+									editSectorForm.setSectorCode(ampSector.getParentSectorId().getSectorCode());
+									editSectorForm.setSectorName(ampSector.getParentSectorId().getName());
+									editSectorForm.setSecSchemeId(ampSector.getAmpSecSchemeId().getAmpSecSchemeId());
+									editSectorForm.setSectorId(ampSector.getParentSectorId().getAmpSectorId());
+									editSectorForm.setParentSectorId(ampSector.getParentSectorId().getAmpSectorId());
+									logger.debug(" update sector2 Complete");
+									return mapping.findForward("editedThirdLevelSector");
 								}
-
-								SectorUtil.updateSector(ampSector);
-								logger.debug("Sector updated");
-								return mapping.findForward("edited");
-					 } else {
-								logger.debug("No action selected");
-					 }*/
-
-					 return mapping.findForward("forward");
+					 
+							  }
+		  		  
+						 	}
+						 else if(flag.equalsIgnoreCase("true"))
+						 	{
+							 if(event.equalsIgnoreCase("update3LevelSector"))
+							 	{
+									AmpSector ampSector = SectorUtil.getAmpSector(secId);
+									editSectorForm.setSectorId(secId);
+									ampSector.setName(editSectorForm.getSectorName());
+									ampSector.setSectorCode(editSectorForm.getSectorCode());
+									logger.debug("Updating.............................................");
+									DbUtil.update(ampSector);
+									ampSector = SectorUtil.getAmpSector(secId);
+									Long sectorId = ampSector.getParentSectorId().getAmpSectorId();
+									Integer schemeID = new Integer(sectorId.intValue());
+									editSectorForm.setSubSectors(SectorUtil.getAllChildSectors(sectorId));
+									editSectorForm.setSectorCode(ampSector.getParentSectorId().getSectorCode());
+									editSectorForm.setSectorName(ampSector.getParentSectorId().getName());
+									editSectorForm.setSecSchemeId(ampSector.getAmpSecSchemeId().getAmpSecSchemeId());
+									editSectorForm.setSectorId(ampSector.getParentSectorId().getAmpSectorId());
+									logger.debug(" update sector3 Complete");
+									editSectorForm.setJspFlag(false);
+									return mapping.findForward("editedThirdLevelSectorPlusOne");
+						 }
+						 }
+					}
+					 return null;
 		  }
-		  
-		  
-		  
 }
 

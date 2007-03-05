@@ -256,24 +256,34 @@
       <forward name="index" path="/aim/index.do" redirect="true" />
     </action>
     <action name="aimAddSectorForm" path="/aim/addSector" scope="request" type="org.digijava.module.aim.action.AddSector" validate="false">
-      <forward name="forward" path="/showLayout.do?layout=addSector" />
-      <forward name="done" path="/aim/getSectorSchemes.do" redirect="true" />
+	  <forward name="forwardSector" path="/showLayout.do?layout=addASector" />
+      <forward name="forwardScheme" path="/showLayout.do?layout=addSector" />
+	  <forward name="levelFirstSectorAdded" path="/showLayout.do?layout=viewSectorSchemeLevel1" />
+      <forward name="levelSecondSectorAdded" path="/showLayout.do?layout=addNewLevel2Sector" />
+      <forward name="levelThirdSectorAdded" path="/showLayout.do?layout=addNewLevel3Sector" />
       <forward name="added" path="/aim/sectorManager.do?sectorId=0" />
-      <forward name="index" path="/aim/index.do" redirect="true" />
+	  <forward name="index" path="/aim/index.do" redirect="true" />
     </action>
-    <action name="aimAddSectorForm" path="/aim/editSector" scope="request" type="org.digijava.module.aim.action.EditSector" validate="false">
-      <forward name="forward" path="/aim/updateSectorSchemes.do" redirect="true" />
+  <action name="aimAddSectorForm" path="/aim/editSector" scope="request" type="org.digijava.module.aim.action.EditSector" validate="false">
+      <forward name = "editedSecondLevelSector" path="/showLayout.do?layout=viewSectorSchemeLevel1" />
+	  <forward name = "editedThirdLevelSector" path="/showLayout.do?layout=addNewLevel2Sector" />
+	  <forward name = "editedThirdLevelSectorPlusOne" path ="/showLayout.do?layout=addNewLevel3Sector" />
+	  <forward name="forward" path="/aim/viewSectorDetails.do" redirect="true" />
       <forward name="edited" path="/aim/sectorManager.do?sectorId=0" />
       <forward name="index" path="/aim/index.do" redirect="true" />
     </action>
-    <action name="aimAddSectorForm" path="/aim/deleteSector" scope="request" type="org.digijava.module.aim.action.DeleteSector" validate="false">
-      <forward name="cantDelete" path="/aim/getSectorSchemes.do" />
-      <forward name="forward" path="/aim/updateSectorSchemes.do" />
-      <forward name="deleted" path="/aim/sectorManager.do?sectorId=0" />
+	
+	 <action name="aimAddSectorForm" path="/aim/deleteSector" scope="request" type="org.digijava.module.aim.action.DeleteSector" validate="false">
+      <forward name="levelOneSectorDeleted" path="/showLayout.do?layout=viewSectorSchemeLevel1"/>
+	  <forward name="levelTwoSectorDeleted" path="/showLayout.do?layout=addNewLevel2Sector"/>
+       <forward name="levelThreeSectorDeleted" path="/showLayout.do?layout=addNewLevel3Sector"/>
+		<forward name="cantDelete" path="/aim/getSectorSchemes.do" />
+	  <forward name="deleted" path="/aim/getSectorSchemes.do" />
       <forward name="index" path="/aim/index.do" redirect="true" />
     </action>
-    <action name="aimAddSectorForm" path="/aim/viewSectorDetails" scope="request" type="org.digijava.module.aim.action.ViewSectorDetails" validate="false">
-      <forward name="levelOne" path="/showLayout.do?layout=addNewSector" />
+	
+	 <action name="aimAddSectorForm" path="/aim/viewSectorDetails" scope="request" type="org.digijava.module.aim.action.ViewSectorDetails" validate="false">
+      <forward name="levelOne" path="/showLayout.do?layout=addASector" />
       <forward name="levelTwo" path="/showLayout.do?layout=addNewLevel2Sector" />
       <forward name="levelThree" path="/showLayout.do?layout=addNewLevel3Sector" />
       <forward name="index" path="/aim/index.do" redirect="true" />
@@ -282,9 +292,10 @@
       <forward name="viewSectorSchemes" path="/showLayout.do?layout=viewSectorSchemes" />
     </action>
     <action name="aimAddSectorForm" path="/aim/updateSectorSchemes" scope="request" type="org.digijava.module.aim.action.UpdateSectorSchemes" validate="false">
-      <forward name="viewSectorSchemes" path="/aim/getSectorSchemes.do" />
+      <forward name="viewSectorSchemes" path="/aim/getSectorSchemes.do" redirect="true" />
       <forward name="addSectorScheme" path="/showLayout.do?layout=addSectorScheme" />
       <forward name="viewSectorSchemeLevel1" path="/showLayout.do?layout=viewSectorSchemeLevel1" />
+	  <forward name="toViewSectorDetails" path="/aim/viewSectorDetails.do" />
     </action>
     <action name="aimThemeForm" path="/aim/themeManager" scope="request" type="org.digijava.module.aim.action.ThemeManager" validate="false">
       <forward name="forward" path="/showLayout.do?layout=themeManager" />

@@ -254,7 +254,7 @@
 				<tr> <td>
 					<digi:errors/>
 				</td></tr>
-				<tr><td>
+				<tr valign="top"><td>
 					<table width="100%" cellSpacing="5" cellPadding="3" vAlign="top">
 						<tr><td width="75%" vAlign="top">
 
@@ -265,7 +265,7 @@
 										<tr>
 											<td width="13" height="20" background="module/aim/images/left-side.gif">
 											</td>
-											<td vAlign="center" align ="center" class="textalb" height="20" bgcolor="#006699">
+											<td vAlign="top" align ="center" class="textalb" height="20" bgcolor="#006699">
 												<digi:trn key="aim:step3of9Funding">
 													Step 3 of 9: Funding
 												</digi:trn>

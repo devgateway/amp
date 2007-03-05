@@ -1,7 +1,7 @@
 package org.digijava.module.aim.form ;
 
-import java.util.Collection ;
-import org.digijava.module.aim.dbentity.AmpSector ;
+import java.util.Collection;
+
 import org.digijava.module.aim.helper.Activity;
 
 public class ChannelOverviewForm extends MainProjectDetailsForm

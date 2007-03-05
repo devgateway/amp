@@ -1,7 +1,10 @@
 package org.digijava.module.aim.helper;
-import java.util.*;
+import java.util.Collection;
+import java.util.Date;
+import java.util.Set;
 
-import org.digijava.module.aim.form.*;
+import org.digijava.module.aim.dbentity.AmpTeamMember;
+import org.digijava.module.aim.form.ProposedProjCost;
 
 public class Activity implements Comparable {
 
@@ -46,8 +49,22 @@ public class Activity implements Comparable {
 	private String createdDate;
 	private ProposedProjCost propProjCost;
 	private String contractors;
+	private Date updatedDate;
+	private AmpTeamMember updatedBy;
 
 
+	public AmpTeamMember getUpdatedBy() {
+		return updatedBy;
+	}
+	public void setUpdatedBy(AmpTeamMember updatedBy) {
+		this.updatedBy = updatedBy;
+	}
+	public Date getUpdatedDate() {
+		return updatedDate;
+	}
+	public void setUpdatedDate(Date updatedDate) {
+		this.updatedDate = updatedDate;
+	}
 	/**
 	 * @return Returns the programDescription.
 	 */

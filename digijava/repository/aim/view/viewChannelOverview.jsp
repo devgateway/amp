@@ -82,7 +82,7 @@ function commentWin(val) {
 
 	<logic:equal name="aimChannelOverviewForm" property="validLogin"
 		value="true">
-................................
+
 <TABLE cellSpacing=0 cellPadding=0 align="left" vAlign="top" border=0
 			width=770>
 			<TR>
@@ -294,12 +294,11 @@ function commentWin(val) {
 												Activity is Off Budget
 										</digi:trn>
 										</logic:equal>		
-										<logic:equal name="activity" property="budget" value="null">
+										<logic:equal name="activity" property="budget" value="">
 										<digi:trn key="aim:actBudgetoff">
 												Activity is Off Budget
 										</digi:trn>
 										</logic:equal>
-
 																</TD></TR>
 																														
 															</TABLE>
@@ -727,6 +726,7 @@ function commentWin(val) {
 																<TD bgcolor="#ffffff"><i><digi:trn key="aim:createdDate">Created date</digi:trn></i>:
 																<c:out value="${activity.createdDate}" />&nbsp;</TD>
 															</TR>
+															<c:if test="${!empty activity.updatedBy}">
 															<TR>
 																<TD bgcolor="#ffffff">
 																<i>
@@ -737,12 +737,15 @@ function commentWin(val) {
 																	<c:out value="${activity.updatedBy.user.email}"/>
 																	
 															</TR>
+															</c:if>
+															<c:if test="${!empty activity.updatedDate}">
 															<TR>
 																<TD bgcolor="#ffffff"><i><digi:trn key="aim:activityUpdatedOn">
 																Activity updated on</digi:trn></i>:
 																<c:out value="${activity.updatedDate}"/>
 															&nbsp;</TD>
 															</TR>
+															</c:if>
 														</TABLE>
 														</TD>
 													</TR>

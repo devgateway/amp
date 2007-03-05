@@ -118,7 +118,7 @@
 						</c:if>	
 						
 						<html:submit  styleClass="dr-menu" property="submitButton">
-							<digi:trn key="btn:Go">Go </digi:trn> 
+							<digi:trn key="btn:go">Go </digi:trn> 
 						</html:submit>
 						<html:submit  styleClass="dr-menu" property="submitButton" onclick="resetFilters()">
 							<digi:trn key="btn:reset">Reset</digi:trn> 

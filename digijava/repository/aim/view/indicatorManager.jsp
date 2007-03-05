@@ -61,8 +61,8 @@
 							Admin Home
 						</digi:trn>
 						</digi:link>&nbsp;&gt;&nbsp;
-						<digi:trn key="aim:indicatorManager">
-							Indicator Manager
+						<digi:trn key="aim:meIndicatorManager">
+							M & E Indicator Manager
 						</digi:trn>
 					</td>
 					<!-- End navigation -->

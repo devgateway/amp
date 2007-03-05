@@ -412,12 +412,20 @@ function disable() {
 											<digi:trn key="aim:actBudget">Budget</digi:trn>
 										</td>
 										<td bgcolor="#ffffff">
+
 										<logic:equal name="aimEditActivityForm" property="budget" value="true">
 										<digi:trn key="aim:actBudgeton">
 												Activity is On Budget
 										</digi:trn>
 										</logic:equal>
+
 										<logic:equal name="aimEditActivityForm" property="budget" value="false">
+										<digi:trn key="aim:actBudgetoff">
+												Activity is Off Budget
+										</digi:trn>
+										</logic:equal>
+
+										<logic:equal name="aimEditActivityForm" property="budget" value="null">
 										<digi:trn key="aim:actBudgetoff">
 												Activity is Off Budget
 										</digi:trn>

@@ -6,7 +6,7 @@
 <%@ taglib uri="/taglib/digijava" prefix="digi"%>
 <%@ taglib uri="/taglib/jstl-core" prefix="c"%>
 <script type="text/javascript">
-	
+   	
 function fnEditProject(id)
 {
 	<digi:context name="addUrl" property="context/module/moduleinstance/editActivity.do" />
@@ -290,6 +290,11 @@ function commentWin(val) {
 										</digi:trn>
 										</logic:equal>
 										<logic:equal name="activity" property="budget" value="false">
+										<digi:trn key="aim:actBudgetoff">
+												Activity is Off Budget
+										</digi:trn>
+										</logic:equal>		
+										<logic:equal name="activity" property="budget" value="null">
 										<digi:trn key="aim:actBudgetoff">
 												Activity is Off Budget
 										</digi:trn>
@@ -721,6 +726,22 @@ function commentWin(val) {
 															<TR>
 																<TD bgcolor="#ffffff"><i><digi:trn key="aim:createdDate">Created date</digi:trn></i>:
 																<c:out value="${activity.createdDate}" />&nbsp;</TD>
+															</TR>
+															<TR>
+																<TD bgcolor="#ffffff">
+																<i>
+																<digi:trn key="aim:activityUpdatedBy">
+																	Activity updated by</digi:trn></i>: 
+																	<c:out value="${activity.updatedBy.user.firstNames}"/>										
+																	<c:out value="${activity.updatedBy.user.lastName}"/>	-
+																	<c:out value="${activity.updatedBy.user.email}"/>
+																	
+															</TR>
+															<TR>
+																<TD bgcolor="#ffffff"><i><digi:trn key="aim:activityUpdatedOn">
+																Activity updated on</digi:trn></i>:
+																<c:out value="${activity.updatedDate}"/>
+															&nbsp;</TD>
 															</TR>
 														</TABLE>
 														</TD>

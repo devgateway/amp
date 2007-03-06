@@ -180,7 +180,7 @@ function selectFile() {
 										</td>
 										<td bgcolor="#f4f4f2" vAlign="center">
 											<html:submit  styleClass="dr-menu" property="submitButton" >
-												<digi:trn key="btn:Go">Go</digi:trn> 
+												<digi:trn key="btn:go">Go</digi:trn> 
 											</html:submit>
 										</td>	
 									</tr>

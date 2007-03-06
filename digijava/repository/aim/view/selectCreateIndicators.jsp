@@ -250,7 +250,7 @@
 																		<td bgcolor="#f4f4f2" align="left">
 																			<html:text property="searchkey" size="20" styleClass="inp-text"/>&nbsp;&nbsp;
 																			<html:button  styleClass="dr-menu" property="searchIndicatorKeyword"  onclick="searchIndicatorkey()">
-																				<digi:trn key="btn:Go">Go</digi:trn> 
+																				<digi:trn key="btn:go">Go</digi:trn> 
 																			</html:button>
 																			
 																		</td>														

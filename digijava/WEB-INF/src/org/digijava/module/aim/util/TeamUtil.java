@@ -1111,6 +1111,8 @@ public class TeamUtil {
 				act.setName(activity.getName());
 				act.setAmpId(activity.getAmpId());
 				act.setBudget(activity.getBudget());
+				act.setUpdatedBy(activity.getUpdatedBy());
+				act.setUpdatedDate(activity.getUpdatedDate());
 				String donors = "";
 
 				while (orgItr.hasNext()) {
@@ -1181,6 +1183,8 @@ public class TeamUtil {
 					act.setName(activity.getName());
 					act.setBudget(activity.getBudget());
 					act.setAmpId(activity.getAmpId());
+					act.setUpdatedBy(activity.getUpdatedBy());
+					act.setUpdatedDate(activity.getUpdatedDate());
 
 					String donors = "";
 
@@ -1487,7 +1491,8 @@ public class TeamUtil {
 					act.setName(activity.getName());
 					act.setAmpId(activity.getAmpId());
 					act.setBudget(activity.getBudget());
-
+					act.setUpdatedBy(activity.getUpdatedBy());
+					act.setUpdatedDate(activity.getUpdatedDate());
 					String donors = "";
 
 					while (orgItr.hasNext()) {
@@ -1567,7 +1572,8 @@ public class TeamUtil {
 				act.setName(activity.getName());
 				act.setBudget(activity.getBudget());
 				act.setAmpId(activity.getAmpId());
-
+				act.setUpdatedBy(activity.getUpdatedBy());
+				act.setUpdatedDate(activity.getUpdatedDate());
 				String donors = "";
 
 				while (orgItr.hasNext()) {

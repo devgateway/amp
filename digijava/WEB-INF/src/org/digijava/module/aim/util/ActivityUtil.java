@@ -776,6 +776,8 @@ public class ActivityUtil {
 						ConvertDateToString(ampAct.getActualApprovalDate()));
 				activity.setRevStartDate(DateConversion.
 						ConvertDateToString(ampAct.getActualStartDate()));
+				activity.setUpdatedBy(ampAct.getUpdatedBy());
+				activity.setUpdatedDate(ampAct.getUpdatedDate());
 
 				Collection col = ampAct.getClosingDates();
 				List dates = new ArrayList();

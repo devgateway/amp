@@ -148,7 +148,10 @@ public class UpdateAppSettings extends Action {
 						TeamMember member = (TeamMember) itr.next();
 						AmpApplicationSettings memSettings = DbUtil
 								.getMemberAppSettings(member.getMemberId());
+						
+						if (memSettings!=null)
 						if (memSettings.getUseDefault().booleanValue() == true) {
+							
 							AmpTeamMember ampMember = TeamMemberUtil
 									.getAmpTeamMember(member.getMemberId());
 							restoreApplicationSettings(memSettings,

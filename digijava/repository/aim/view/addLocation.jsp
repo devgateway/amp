@@ -8,7 +8,24 @@
 <digi:ref href="css/styles.css" type="text/css" rel="stylesheet" />
 
 <script language="JavaScript">
+	function validate(string,length) {
+    if (string.length > length) {
+        return false;
+    }
+    if (string.length < length) {
+        return false;
+    }
 
+    var valid="abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
+
+    for (var i=0; i<length; i++) {
+        if (valid.indexOf(string.charAt(i)) < 0) {
+            return false;
+        }
+    }
+
+    return true;
+} 
 	function addLoc() {
 	  level = document.aimAddLocationForm.edLevel.value;
 	  if ((document.aimAddLocationForm.name.value.length==0) ||
@@ -24,12 +41,24 @@
       		document.aimAddLocationForm.iso.focus();
       		return false;
       	}
+      	if (validate(document.aimAddLocationForm.iso.value, 2) == false){
+      		alert('Select alphabets only for 2-character iso code');
+      		return false;
+      	}
+      	
       	if ((document.aimAddLocationForm.iso3.value.length==0) ||
    				(document.aimAddLocationForm.iso3.value==null)) {
    			alert('Please enter iso3 code for this country');
       		document.aimAddLocationForm.iso3.focus();
       		return false;
       	}
+      	
+      	if (validate(document.aimAddLocationForm.iso3.value, 3) == false){
+      		alert('Select alphabets only for 3-character iso3 code');
+      		return false;
+      	}
+      	
+      	   
       }
       else {
       	if (isNaN(document.aimAddLocationForm.gsLat.value)) {

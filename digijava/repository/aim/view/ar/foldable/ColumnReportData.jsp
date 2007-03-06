@@ -13,7 +13,7 @@
 
 <bean:define id="viewable" name="columnReport" type="org.dgfoundation.amp.ar.Viewable" scope="page" toScope="request"/>
 <jsp:include page="reportHeadings.jsp"/>
-
+<% String display=columnReport.getLevelDepth()>1?"display:none":"";%>
 
 <!-- generate total row -->
 <bean:define id="viewable" name="columnReport" type="org.dgfoundation.amp.ar.Viewable" scope="page" toScope="request"/>
@@ -30,7 +30,7 @@
 <bean:define id="bckColor" value="true" toScope="page"/>
 <% } %>
 
-<tr onmousedown="setPointer(this, <%=rowIdx%>, 'click', '#FFFFFF', '#FFFFFF', '#FFFF00');" style="background-color:#ffffff">
+<tr onmousedown="setPointer(this, <%=rowIdx%>, 'click', '#FFFFFF', '#FFFFFF', '#FFFF00');" style="<%=display%>">
 	<logic:iterate name="columnReport" property="items" id="column" scope="page" indexId="columnNo">
 		
 		<bean:define id="viewable" name="column" type="org.dgfoundation.amp.ar.Viewable" scope="page" toScope="request"/>

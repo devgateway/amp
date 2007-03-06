@@ -6,6 +6,7 @@ var loadedobjects=""
 var defaultcontentarray=new Object()
 var bustcacheparameter=""
 
+
 function ajaxpage(url, containerid, targetobj){
 var page_request = false
 if (window.XMLHttpRequest) // if Mozilla, Safari etc

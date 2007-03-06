@@ -9,12 +9,12 @@
 
 <bean:define id="reportData" name="viewable" type="org.dgfoundation.amp.ar.ReportData" scope="request" toScope="page"/>
 <bean:define id="reportMeta" name="reportMeta" type="org.digijava.module.aim.dbentity.AmpReports" scope="session" toScope="page"/>
-
+<% String display=reportData.getLevelDepth()>2?"display:none":"";%>
 <!-- generate total row -->
-<tr id='<bean:write name="reportData" property="absoluteReportName"/>' title='<bean:write name="reportData" property="levelDepth"/>'>
+<tr id='<bean:write name="reportData" property="absoluteReportName"/>' title='<bean:write name="reportData" property="levelDepth"/>' style="<%=display%>">
 	<td style="padding-left:<%=10*(reportData.getLevelDepth()-1)%>; background-color:<%= reportData.getLevelBkgColor() %>" colspan='<bean:write name="reportData" property="sourceColsCount"/>'>
 <c:if test="${!(reportData.name == reportMeta.name)}">
-		<img style="cursor:pointer" src="/repository/aim/view/images/images_dhtmlsuite/dhtmlgoodies_minus.gif" alt='shown' onclick='toggleRows(this,"<bean:write name="reportData" property="absoluteReportName"/>")' title="<bean:write name="reportData" property="levelDepth"/>" border="0" width="20"/>
+		<img id="toggleImage" style="cursor:pointer" src="/repository/aim/view/images/images_dhtmlsuite/dhtmlgoodies_plus.gif" alt='hidden' onclick='toggleRows(this,"<bean:write name="reportData" property="absoluteReportName"/>")' title="<bean:write name="reportData" property="levelDepth"/>" border="0" width="20"/>
 </c:if>		
 <b>
 <% if(reportData.getName().indexOf(':')!=-1) { %>
@@ -30,7 +30,7 @@
 </b>
 	</td>
 	<logic:iterate name="reportData" property="trailCells" id="cell" scope="page">
-		<td class=clsTableL1SubTotalEndSection style="background-color:<%= reportData.getLevelBkgColor() %>">
+		<td style="background-color:<%= reportData.getLevelBkgColor() %>">
 		<bean:define id="viewable" name="cell" type="org.dgfoundation.amp.ar.Viewable" scope="page" toScope="request"/>
 		<bean:define id="caller" name="reportData" type="org.dgfoundation.amp.ar.ReportData" scope="page" toScope="request" />			
 		<jsp:include page="<%=viewable.getViewerPath()%>"/>	

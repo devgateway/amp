@@ -1,10 +1,23 @@
+var minus_sign='/repository/aim/view/images/images_dhtmlsuite/dhtmlgoodies_minus.gif';
+var plus_sign='/repository/aim/view/images/images_dhtmlsuite/dhtmlgoodies_plus.gif';
+
+function writeError(str, append)
+{
+  var dbgObj = document.getElementById("debug");
+  dbgObj.innerHTML = append? (dbgObj.innerHTML + str): str;
+}
+
+
 function toggleRows(caller,hideId){
- 	var minus='/repository/aim/view/images/images_dhtmlsuite/dhtmlgoodies_minus.gif';
- 	var plus='/repository/aim/view/images/images_dhtmlsuite/dhtmlgoodies_plus.gif';
-	if(caller.alt=='hidden') {caller.alt='shown';caller.src=minus;} else {caller.alt='hidden'; caller.src=plus;}
+	var exitnow=false;
+	if(caller.alt=='shown') exitnow=true;	
+	
+ 	hideAllRows();
+ 	if(exitnow) return;
+	if(caller.alt=='hidden') {caller.alt='shown';caller.src=minus_sign;} else {caller.alt='hidden'; caller.src=plus_sign;}
 	var display= (caller.alt!='shown')? 'none':'';
 	tb = document.getElementById('reportTable');
-	//writeError(caller.src+' '+display+"<br/>", true);
+	
 
 	var len = tb.rows.length;
 	var found=false;
@@ -22,8 +35,35 @@ function toggleRows(caller,hideId){
 		}
 		if (found) tb.rows[i].style.display = display;
 	}
+	
+	//put sub-images to -
+	imgs = tb.getElementsByTagName('img');	
+	for(i=0 ; i< imgs.length; i++){
+		if(imgs[i].id=='toggleImage' && imgs[i].title>hideDepth)  {
+			imgs[i].alt='shown';
+			imgs[i].src=minus_sign;
+		 }
+	}
 }
 
+
+function hideAllRows() {
+	tb = document.getElementById('reportTable');	
+	for(i=1 ; i< tb.rows.length; i++){
+		if(tb.rows[i].title=='' || tb.rows[i].title>2) {
+		 tb.rows[i].style.display = 'none';		
+		 }
+	}
+	
+	//change  +/- images now...
+	imgs = tb.getElementsByTagName('img');	
+	for(i=0 ; i< imgs.length; i++){
+		if(imgs[i].id=='toggleImage')  {
+			imgs[i].alt='hidden';
+			imgs[i].src=plus_sign;
+		}
+	}
+}
 
 
 var lastClickedRow=-1;

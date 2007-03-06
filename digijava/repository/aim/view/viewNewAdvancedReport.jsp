@@ -126,9 +126,5 @@
 </table>
 
 
-
-
-
-	
-
 <div id="debug"></div>
+

@@ -19,7 +19,7 @@
 				%>
 <%for (int curDepth = 0; curDepth <= columnReport
 						.getMaxColumnDepth(); curDepth++, rowIdx++) {%>
-<tr>
+<tr title="Report Headings">
 <logic:iterate name="columnReport" property="items" id="column" scope="page" type="org.dgfoundation.amp.ar.Column">
 	<%column.setCurrentDepth(curDepth);%>
 	<%int rowsp = column.getCurrentRowSpan();

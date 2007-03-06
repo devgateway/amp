@@ -15,8 +15,6 @@
 	function teamWorkspaceSetup(a) {
 		window.location.href="/aim/workspaceOverview.do~tId="+a+"~dest=teamLead";	
 	}
-	
-	
 </script>
 
 	
@@ -42,3 +40,5 @@ Text
 startajaxtabs("MyTabs");
 reloadTab("MyTabs","Tab-By Project");
 </script>
+
+<div id="debug"></div>

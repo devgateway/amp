@@ -16,10 +16,12 @@
 <!-- this is for the nice tooltip widgets -->
 <DIV id="TipLayer"
 	style="visibility:hidden;position:absolute;z-index:1000;top:-100;"></DIV>
-<script language="JavaScript1.2" type="text/javascript"
-	src="<digi:file src="module/aim/scripts/dscript120_ar_style.js"/>"></script>
+	
 <script language="JavaScript1.2" type="text/javascript"
 	src="<digi:file src="module/aim/scripts/dscript120.js"/>"></script>	
+<script language="JavaScript1.2" type="text/javascript"
+	src="<digi:file src="module/aim/scripts/dscript120_ar_style.js"/>"></script>
+
 <!-- script for tree-like view (drilldown reports) -->
 
 <script language="JavaScript" type="text/javascript"
@@ -76,11 +78,6 @@ function closeMessage()
 }
 
 
-function writeError(str, append)
-{
-  var dbgObj = document.getElementById("debug");
-  dbgObj.innerHTML = append? (dbgObj.innerHTML + str): str;
-}
 </script>	
 
 

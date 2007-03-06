@@ -48,7 +48,7 @@ public class AmpARFilter implements Filter {
 	}
 	
 	public void generateFilterQuery() {
-		String BUDGET_FILTER="SELECT amp_activity_id FROM amp_activity WHERE budget="+(budget!=null?budget.toString():"null");
+		String BUDGET_FILTER="SELECT amp_activity_id FROM amp_activity WHERE budget="+(budget!=null?budget.toString():"null")+(budget!=null && budget.booleanValue()==false?" OR budget is null":"");
 		String TEAM_FILTER="SELECT amp_activity_id FROM v_status WHERE amp_team_id IN ("+ARUtil.toSQLEnum(ampTeams)+")";
 		String STATUS_FILTER="SELECT amp_activity_id FROM v_status WHERE amp_status_id IN ("+ARUtil.toSQLEnum(statuses)+")";
 		String ORG_FILTER = "SELECT amp_activity_id FROM v_donors WHERE amp_donor_org_id IN ("+ARUtil.toSQLEnum(donors)+")";

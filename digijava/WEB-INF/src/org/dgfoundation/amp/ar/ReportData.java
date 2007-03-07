@@ -202,7 +202,7 @@ public abstract class ReportData extends Viewable {
 		//if (v==1) return "#BBEEFF";
 		//if (v==2) return "#FFAAAA";
 		//if (v==3) return "#BBFFBB";
-		if (v==3) return "#BBEEFF";
+		if (v==3) return "#8FBCFF";
 		return "ffffff";
 	}
 	

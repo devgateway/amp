@@ -108,7 +108,7 @@ function fnOnSearchUser(search) {
   <tr>
    <td colspan=4 align="left">
    <digi:trn key="translation:goTo">Go to</digi:trn> 
-   <a href="<%= indexUrl%>">
+   <a href="/">
     <b><digi:trn key="translation:indexPage">Index Page</digi:trn></b>
    </a> 
    </td>

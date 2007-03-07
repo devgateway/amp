@@ -12,7 +12,7 @@
 <% String display=reportData.getLevelDepth()>2?"display:none":"";%>
 <!-- generate total row -->
 <tr id='<bean:write name="reportData" property="absoluteReportName"/>' title='<bean:write name="reportData" property="levelDepth"/>' style="<%=display%>">
-	<td style="padding-left:<%=10*(reportData.getLevelDepth()-1)%>; background-color:<%= reportData.getLevelBkgColor() %>" colspan='<bean:write name="reportData" property="sourceColsCount"/>'>
+	<td style="padding-left:<%=10*(reportData.getLevelDepth()-1)%>; background-color:<%= reportData.getLevelBkgColor() %>" colspan='<bean:write name="reportData" property="sourceColsCount"/>' nowrap>
 <c:if test="${!(reportData.name == reportMeta.name)}">
 		<img id="toggleImage" style="cursor:pointer" src="/repository/aim/view/images/images_dhtmlsuite/dhtmlgoodies_plus.gif" alt='hidden' onclick='toggleRows(this,"<bean:write name="reportData" property="absoluteReportName"/>")' title="<bean:write name="reportData" property="levelDepth"/>" border="0" width="20"/>
 </c:if>		

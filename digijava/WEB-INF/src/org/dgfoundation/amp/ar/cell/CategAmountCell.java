@@ -134,8 +134,7 @@ public Cell filter(Cell metaCell,Set ids) {
 				if(relatedSector!=null) { 
 				MetaInfo percentMeta=MetaInfo.getMetaInfo(relatedSector.getMetaData(),ArConstants.SECTOR_PERCENTAGE);
 				Integer percentage=(Integer) percentMeta.getValue();
-				ret.setPercentage(percentage.intValue());
-				//logger.info("applying percentage "+percentage+" to owner id "+this.getOwnerId());
+				ret.setPercentage(percentage.intValue());			
 				}
 			}
 		}

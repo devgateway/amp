@@ -116,7 +116,7 @@ public class GroupColumn extends Column {
         while (i.hasNext()) {
             Categorizable element = (Categorizable) i.next();
             if(!element.isShow()) continue;
-            MetaInfo minfo=element.getMetaInfo(category);
+            MetaInfo minfo=MetaInfo.getMetaInfo(element.getMetaData(),category);
             if(minfo==null) return null;
             metaSet.add(minfo);
         }

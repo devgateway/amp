@@ -58,6 +58,9 @@ public final class ArConstants {
 	
 	public final static String UNDISBURSED_BALANCE="Undisbursed Balance";
 	
+	//maldives only:
+	public final static String SECTOR_PERCENTAGE="Sector Percentage";
+	
 
 	//hierarchysorter
 	public final static String HIERARCHY_SORTER_TITLE="Title";

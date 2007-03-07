@@ -31,7 +31,7 @@ import org.dgfoundation.amp.ar.workers.ColumnWorker;
  * @since Nov 13, 2006
  *
  */
-public abstract class Cell extends Viewable implements RowIdentifiable, ColumnIdentifiable, Comparable {
+public abstract class Cell extends Viewable implements RowIdentifiable, ColumnIdentifiable, Comparable,Cloneable {
 
 	public static class CellComparator implements Comparator { 
 		public final int compare (Object o1, Object o2) {
@@ -144,7 +144,12 @@ public abstract class Cell extends Viewable implements RowIdentifiable, ColumnId
 	 * @return the resulting Cell
 	 */
 	public Cell filter(Cell metaCell,Set ids) {
-		if(ids.contains(ownerId)) return this; else return null;
+		try {
+		if(ids.contains(ownerId)) return (Cell) this.clone(); else return null;
+		} catch(CloneNotSupportedException e) {
+			e.printStackTrace();
+		}
+		return null;
 	}
 
 

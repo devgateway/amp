@@ -5,4 +5,3 @@
 <bean:define id="amountCell" name="viewable" type="org.dgfoundation.amp.ar.cell.AmountCell" scope="request" toScope="page"/>
 <div align="right">
 <bean:write name="amountCell"/>&nbsp;
-</div>

@@ -53,6 +53,15 @@ public class CellColumn extends Column {
 		return (Cell) itemsMap.get(ownerId);
 	}
 	
+	public Cell getByOwnerAndValue(Long ownerId,Object value) {
+		Iterator i=items.iterator();
+		while (i.hasNext()) {
+			Cell element = (Cell) i.next();
+			if(element.getOwnerId().equals(ownerId) && value.equals(element.getValue())) return element;
+		}
+		return null;
+	}
+	
 	public Cell getCell(int i) {
 		return (Cell) getItem(i);
 	}

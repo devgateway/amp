@@ -9,10 +9,10 @@ package org.dgfoundation.amp.ar.workers;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-import org.dgfoundation.amp.ar.AmpARFilter;
 import org.dgfoundation.amp.ar.ArConstants;
 import org.dgfoundation.amp.ar.CellColumn;
 import org.dgfoundation.amp.ar.GroupColumn;
+import org.dgfoundation.amp.ar.MetaInfo;
 import org.dgfoundation.amp.ar.ReportGenerator;
 import org.dgfoundation.amp.ar.TotalAmountColumn;
 import org.dgfoundation.amp.ar.cell.CategAmountCell;
@@ -69,7 +69,7 @@ public class CummulativeColWorker extends ColumnWorker {
 		if(columnName.equalsIgnoreCase("Cumulative Commitment")) trStr=ArConstants.COMMITMENT;
 		if(columnName.equalsIgnoreCase("Cumulative Disbursement")) trStr=ArConstants.DISBURSEMENT;
 			
-		if(c.getMetaInfo(ArConstants.TRANSACTION_TYPE).getValue().equals(trStr) && c.getMetaInfo(ArConstants.ADJUSTMENT_TYPE).getValue().equals(ArConstants.ACTUAL)) return src;
+		if(MetaInfo.getMetaInfo(c.getMetaData(),ArConstants.TRANSACTION_TYPE).getValue().equals(trStr) && MetaInfo.getMetaInfo(c.getMetaData(),ArConstants.ADJUSTMENT_TYPE).getValue().equals(ArConstants.ACTUAL)) return src;
 		else return null;	
 	}
 

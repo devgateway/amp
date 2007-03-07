@@ -48,7 +48,7 @@ public abstract class Column extends Viewable implements ColumnIdentifiable {
 		return name + " (" + items.size() + " items)";
 	}
 
-	protected static Logger logger = Logger.getLogger(CellColumn.class);
+	protected static Logger logger = Logger.getLogger(Column.class);
 
 	protected ColumnWorker worker;
 

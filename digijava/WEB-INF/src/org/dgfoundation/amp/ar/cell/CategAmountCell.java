@@ -6,12 +6,12 @@
 package org.dgfoundation.amp.ar.cell;
 
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.Set;
 
-import org.dgfoundation.amp.ar.Categorizable;
-import org.dgfoundation.amp.ar.MetaInfo;
 import org.dgfoundation.amp.ar.ArConstants;
+import org.dgfoundation.amp.ar.Categorizable;
+import org.dgfoundation.amp.ar.CellColumn;
+import org.dgfoundation.amp.ar.MetaInfo;
 import org.dgfoundation.amp.ar.workers.CategAmountColWorker;
 
 /**
@@ -58,21 +58,12 @@ public class CategAmountCell extends AmountCell implements Categorizable {
 	}
 
 	public String getMetaValueString(String category) {
-		MetaInfo mi = getMetaInfo(category);
+		MetaInfo mi = MetaInfo.getMetaInfo(metaData,category);
 		if (mi == null)
 			return null;
 		return  mi.getValue().toString();
 	}
 
-	public MetaInfo getMetaInfo(String category) {
-		Iterator i = metaData.iterator();
-		while (i.hasNext()) {
-			MetaInfo element = (MetaInfo) i.next();
-			if (element.getCategory().equals(category))
-				return element;
-		}
-		return null;
-	}
 
 	public CategAmountCell() {
 		super();
@@ -133,6 +124,22 @@ public Cell filter(Cell metaCell,Set ids) {
 		return null;
 		}
 		
+		//apply metatext filters
+		if(metaCell instanceof MetaTextCell) {
+			//apply metatext filters for column Sector
+			if(metaCell.getColumn().getName().equals("Sector")) {
+				//we need to get the sector percentage, it is stored in the MetaText of related to the owner of the current cell
+				CellColumn c=(CellColumn) metaCell.getColumn();
+				MetaTextCell relatedSector=(MetaTextCell) c.getByOwnerAndValue(this.getOwnerId(),metaCell.getValue());
+				if(relatedSector!=null) { 
+				MetaInfo percentMeta=MetaInfo.getMetaInfo(relatedSector.getMetaData(),ArConstants.SECTOR_PERCENTAGE);
+				Integer percentage=(Integer) percentMeta.getValue();
+				ret.setPercentage(percentage.intValue());
+				//logger.info("applying percentage "+percentage+" to owner id "+this.getOwnerId());
+				}
+			}
+		}
+		
 		if(ret.getMergedCells().size()>0) 
 			logger.info(ret.getMergedCells());
 		return ret;
@@ -142,7 +149,7 @@ public Cell filter(Cell metaCell,Set ids) {
 		 * @see org.dgfoundation.amp.ar.Categorizable#hasMeta(org.dgfoundation.amp.ar.MetaInfo)
 		 */
 	public boolean hasMetaInfo(MetaInfo m) {
-		MetaInfo internal = getMetaInfo(m.getCategory());
+		MetaInfo internal = MetaInfo.getMetaInfo(metaData,m.getCategory());
 		if (internal == null)
 			return false;
 		if (internal.compareTo(m) == 0)

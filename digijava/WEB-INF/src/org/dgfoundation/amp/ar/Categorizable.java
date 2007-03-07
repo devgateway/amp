@@ -16,7 +16,6 @@ import java.util.Set;
  */
 public interface Categorizable {
 	public Set getMetaData();
-	public MetaInfo getMetaInfo(String category);
 	
 	public boolean hasMetaInfo(MetaInfo m);
 	

@@ -59,7 +59,7 @@ public class CategAmountColWorker extends ColumnWorker {
 		//we now check if the year filtering is used - we do not want items from other years to be shown
 		AmpARFilter filter=(AmpARFilter) generator.getFilter();
 		if(filter.getFromYear()!=null || filter.getToYear()!=null) {
-			Integer itemYear=(Integer) cac.getMetaInfo(ArConstants.YEAR).getValue();
+			Integer itemYear=(Integer) MetaInfo.getMetaInfo(cac.getMetaData(),ArConstants.YEAR).getValue();
 			if(filter.getFromYear()!=null && filter.getFromYear().intValue()>itemYear.intValue()) showable=false;
 			if(filter.getToYear()!=null && filter.getToYear().intValue()<itemYear.intValue()) showable=false;
 		}

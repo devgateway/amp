@@ -6,6 +6,9 @@
  */
 package org.dgfoundation.amp.ar;
 
+import java.util.Collection;
+import java.util.Iterator;
+
 /**
  * Class describing objects with purpose of wrapping metainformation. a
  * MetaObject is a normal Comparable object with some category text attached.
@@ -60,4 +63,15 @@ public class MetaInfo implements Comparable {
 	public String toString() {
 		return category+": "+value;
 	}
+	
+	public static MetaInfo getMetaInfo(Collection metaData,String category) {
+		Iterator i = metaData.iterator();
+		while (i.hasNext()) {
+			MetaInfo element = (MetaInfo) i.next();
+			if (element.getCategory().equals(category))
+				return element;
+		}
+		return null;
+	}
+
 }

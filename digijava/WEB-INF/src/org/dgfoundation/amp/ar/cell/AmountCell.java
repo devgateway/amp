@@ -24,6 +24,8 @@ public class AmountCell extends Cell {
 	public static DecimalFormat mf = new DecimalFormat("###,###,###,###,###");
 
 	protected double amount;
+	
+	protected int percentage=100;
 
 	protected Set mergedCells;
 
@@ -146,12 +148,14 @@ public class AmountCell extends Cell {
 	public double getAmount() {
 		double ret = 0;
 		if (id != null)
-			return convert();
+			return convert()*percentage/100;
 		Iterator i = mergedCells.iterator();
 		while (i.hasNext()) {
 			AmountCell element = (AmountCell) i.next();
 			ret += element.getAmount();
+			//logger.info("amount++"+element.getAmount());
 		}
+		//logger.info("total amount for owner "+this.getOwnerId()+"="+ret);
 		return ret;
 	}
 
@@ -251,6 +255,14 @@ public class AmountCell extends Cell {
 
 	public Comparable comparableToken() {
 		return new Double(getAmount());
+	}
+
+	public int getPercentage() {
+		return percentage;
+	}
+
+	public void setPercentage(int percentage) {
+		this.percentage = percentage;
 	}
 	
 }

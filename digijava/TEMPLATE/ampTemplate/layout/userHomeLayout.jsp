@@ -69,6 +69,7 @@
 												<TR><TD vAlign="top" align="left">
 													<digi:insert attribute="myReports" />
 												</TD></TR>
+												<logic:present name="currentMember">
 												<bean:define id="lead" property="teamHead" name="currentMember" scope="session"/>
 												<c:if test="${lead == true}">
 												<TR><TD vAlign="top" align="left">
@@ -81,6 +82,7 @@
 												<TR><TD vAlign="top" align="left">
 													<digi:insert attribute="myTeamMembers" />
 												</TD></TR>
+												</logic:present>
 											</TABLE>
 										</TD>
 									</TR>

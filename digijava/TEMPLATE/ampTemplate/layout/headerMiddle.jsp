@@ -2,11 +2,30 @@
 <%@ taglib uri="/taglib/struts-bean" prefix="bean" %>
 <%@ taglib uri="/taglib/struts-logic" prefix="logic" %>
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
+
+<logic:notPresent name="currentMember">
+<DIV id="menu">
+<UL>
+		<LI class="noLink">
+			<digi:link styleClass="head-menu-link" href="/" module="aim" onclick="return quitRnot()">			
+					::: <digi:trn key="aim:aidInformationModule">AID INFORMATION MODULE</digi:trn>
+			</digi:link>
+		</LI>				
+		<LI class="noLink">
+		<digi:link styleClass="head-menu-link" href="/viewTeamReports.do" module="aim" onclick="return quitRnot()">
+				::: <digi:trn key="aim:reports">REPORTS</digi:trn></digi:link>	
+		</LI>				
+</UL>		
+</DIV>
+</logic:notPresent>
 	
 <logic:present name="ampAdmin" scope="session">
 <DIV id="menu">
 	<UL>
 		<LI class="noLink">&nbsp;</LI>
+		
+		
+		
 		<logic:equal name="ampAdmin" value="yes">
 		<LI>
 			<div id="gen" title='<digi:trn key="aim:clickToAccessAdminTools">Click here to access admin tools</digi:trn>'>

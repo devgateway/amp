@@ -28,8 +28,9 @@ function showUserProfile(id)
 					<td width="10">
 						&nbsp;&nbsp;&nbsp;
 					</td>
-					<td align="left">
-						<logic:notEmpty name="currentMember" scope="session">										
+					<logic:present name="currentMember" scope="session">															
+					<td align="left">javascript:showUserProfile(<c:out value="${teamMember.memberId}"/>)
+						
       	       			<bean:define id="teamMember" name="currentMember" scope="session" 
 					 	type="org.digijava.module.aim.helper.TeamMember" />					
 						<bean:define id="translation">
@@ -40,7 +41,6 @@ function showUserProfile(id)
 						 	<bean:write name="teamMember" property="teamName" /> :
 							<bean:write name="teamMember" property="memberName" />
 						</a></div>
-						</logic:notEmpty>
 					</td>
 					<td align="right">
 						<bean:define id="translation">
@@ -51,6 +51,17 @@ function showUserProfile(id)
 						<digi:trn key="aim:logout">Logout</digi:trn>
 						</a></div>&nbsp;&nbsp;&nbsp;&nbsp;
 					</td>
+					</logic:present>			
+					<logic:notPresent name="currentMember" scope="session">															
+					<td align="left">
+					<digi:link href="/reportsPublicView.do" styleClass="header">
+					<digi:trn key="aim:publicPortfolio">Public Portfolio</digi:trn>
+					</digi:link>
+					</td>
+					<td align="right">&nbsp;
+					</td>
+					
+					</logic:notPresent>
 				</tr>
 			</table>
 		</td>

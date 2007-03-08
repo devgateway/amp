@@ -34,6 +34,7 @@ return false;
 		<td align=left class=r-dotted-lg vAlign=top width=750>
 		
 			<table cellPadding=5 cellSpacing=0 width="100%">
+<logic:present name="currentMember">
 				<tr>
 				<td valign="bottom" class="crumb" >
 <bean:define id="translation">
@@ -52,6 +53,29 @@ return false;
 						</span>
 					</td>
 				</tr>
+</logic:present>
+<logic:notPresent name="currentMember">
+				<tr>
+				<td valign="bottom" class="crumb" >
+<bean:define id="translation">
+	<digi:trn key="aim:publicPortfolio">Public Portfolio</digi:trn>
+</bean:define>
+                <digi:link href="/viewMyDesktop.do" styleClass="comment" title="<%=translation%>" >
+                	Public Portfolio
+                </digi:link> &gt; All Reports</td></tr>
+				<tr>
+		<td>&nbsp;</td></tr>
+				<tr>
+					<td height=16 align="center" vAlign=center><span class=subtitle-blue>
+						<digi:trn key="aim:publicReports">
+							Public Reports
+						</digi:trn>
+						</span>
+					</td>
+				</tr>
+</logic:notPresent>
+				
+				
 				<tr>
 					<td noWrap width=650 vAlign="top">
 						<table bgColor=#ffffff cellPadding=0 cellSpacing=0 class=box-border-nopadding width="100%">
@@ -108,7 +132,7 @@ return false;
 
 											</TD>
 											 <% String s = (String)session.getAttribute("teamLeadFlag"); %>
-												<% if(s.equals("true")){ %>
+												<% if(s!=null && s.equals("true")){ %>
 											
 											<td>
 												<jsp:useBean id="urlParams" type="java.util.Map" class="java.util.HashMap"/>

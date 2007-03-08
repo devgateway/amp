@@ -150,6 +150,7 @@
 											</digi:link>
 											</td>
 										</tr>
+										<%--
 										<logic:notEmpty name="PI" scope="application">
 										<tr>
 											<td class=f-names noWrap>
@@ -163,6 +164,7 @@
 											</td>
 										</tr>
 										</logic:notEmpty>					
+										--%>
 										<tr>
 											<td class=f-names noWrap>
 											<digi:img src="module/aim/images/arrow-th-BABAB9.gif" width="16"/>

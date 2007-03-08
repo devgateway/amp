@@ -40,7 +40,7 @@ return false;
 <bean:define id="translation">
 	<digi:trn key="aim:clickToViewMyDesktop">Click here to view MyDesktop</digi:trn>
 </bean:define>
-                <digi:link href="/viewMyDesktop.do" styleClass="comment" title="<%=translation%>" >
+                <digi:link href="/reportsPublicView.do" styleClass="comment" title="<%=translation%>" >
                 	My Desktop
                 </digi:link> &gt; All Reports</td></tr>
 				<tr>

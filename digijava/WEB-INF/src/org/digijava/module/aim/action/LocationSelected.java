@@ -49,19 +49,20 @@ public class LocationSelected extends Action {
             Iterator itr = col.iterator();
             Country cntry =null;
             String Iso=null;
-            while(itr.hasNext())
-            {
+        //    while(itr.hasNext())
+          //  {
             	AmpGlobalSettings ampgs = (AmpGlobalSettings) itr.next();
             	logger.info(" this is the default country..."+ampgs.getGlobalSettingsValue());
              	Iso = ampgs.getGlobalSettingsValue();
-            	cntry = DbUtil.getDgCountry(Iso);
+             	cntry = DbUtil.getDgCountry(Iso);
             	logger.info(" this is the ISO "+ Iso+" this is the country got ..... "+ cntry);
-            }
+            //}
 			//Country cntry = DbUtil.getDgCountry(Constants.COUNTRY_ISO);
 			location[0] = new Location();
 			location[0].setLocId(new Long(System.currentTimeMillis()));
 			location[0].setCountryId(cntry.getCountryId());
 			location[0].setCountry(cntry.getCountryName());
+			
 		}
 		
 		if (eaForm.getImpLevelValue().intValue() > 1) {

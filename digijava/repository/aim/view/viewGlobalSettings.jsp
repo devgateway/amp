@@ -75,13 +75,15 @@
 											<table width="100%" cellspacing=1 cellpadding=1 valign=top align=left bgcolor="#d7eafd">
 	<tr>
 	<td bgcolor="#fefefe">
-	Setting Name
+	<b>Setting Name</b>
 	</td>												
-	<td bgcolor="#fefefe">
+<td bgcolor="#fefefe">
+	<b>
 	Current Value
+</b>	
 	</td>												
 	<td bgcolor="#fefefe">
-	New Value
+	<b>New Value</b>
 	</td>												
 
 	
@@ -93,7 +95,9 @@
 																			<bean:write name="globalSett" property="globalSettingsName"/>
 																</td>
 																<td bgcolor="#ffffff">
+																<b>
 																			<bean:write name="globalSett" property="globalSettingsValue"/>
+																</b>																			
 																</td>
 																			
 																<td bgcolor="#f4f4f2" >

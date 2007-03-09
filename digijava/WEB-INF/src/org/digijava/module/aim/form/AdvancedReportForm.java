@@ -25,6 +25,7 @@ public class AdvancedReportForm extends ActionForm
 	
 	private String levelPicked=null;
 	private String levelSorter=null;
+	private String levelSortOrder=null;
 	
 	private String pdfPageSize=null;
 	private long donors[];
@@ -1431,6 +1432,12 @@ private int yrDiff;
 	}
 	public void setPublicReport(Boolean publicReport) {
 		this.publicReport = publicReport;
+	}
+	public String getLevelSortOrder() {
+		return levelSortOrder;
+	}
+	public void setLevelSortOrder(String levelsortOrder) {
+		this.levelSortOrder = levelsortOrder;
 	}
 } //		End of Class
 

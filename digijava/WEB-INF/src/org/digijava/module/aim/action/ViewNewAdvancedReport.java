@@ -24,6 +24,7 @@ import org.apache.struts.action.ActionMapping;
 import org.dgfoundation.amp.ar.ARUtil;
 import org.dgfoundation.amp.ar.GenericViews;
 import org.dgfoundation.amp.ar.GroupReportData;
+import org.dgfoundation.amp.ar.MetaInfo;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.dbentity.AmpReports;
 import org.digijava.module.aim.form.AdvancedReportForm;
@@ -57,6 +58,8 @@ public class ViewNewAdvancedReport extends Action {
 		String widget=request.getParameter("widget");
 		request.setAttribute("widget",widget);
 		
+	
+		
 		if(hs.getAttribute("reportSorters")==null) hs.setAttribute("reportSorters",new HashMap());
 		Map sorters=(Map) hs.getAttribute("reportSorters");
 		String ampReportId = request.getParameter("ampReportId");
@@ -78,9 +81,10 @@ public class ViewNewAdvancedReport extends Action {
 		if(request.getParameter("applySorter")!=null) {
 			
 			if(request.getParameter("levelPicked")!=null && request.getParameter("levelSorter")!=null)
-				sorters.put(request.getParameter("levelPicked"),request.getParameter("levelSorter"));
-			else
-			sorters.put(arf.getLevelPicked(),arf.getLevelSorter());
+				sorters.put(request.getParameter("levelPicked"),new MetaInfo(request.getParameter("levelSorter"),request.getParameter("levelSortOrder")));
+			else 	
+			sorters.put(arf.getLevelPicked(),new MetaInfo(arf.getLevelSorter(),arf.getLevelSortOrder()));
+			
 		
 			
 			rd.importLevelSorters(sorters,ar.getHierarchies().size());

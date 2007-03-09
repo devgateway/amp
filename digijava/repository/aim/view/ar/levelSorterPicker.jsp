@@ -30,13 +30,20 @@
 			</html:select></td>
 		</tr>
 		<tr>
+			<td align="right">Sort Order:</td>
+			<td><html:select property="levelSortOrder">
+				<html:option value="ascending">Ascending</html:option>
+				<html:option value="descending">Descending</html:option>				
+			</html:select></td>
+		</tr>
+		<tr>
 			<td>&nbsp;</td>
 			<logic:notEqual name="widget" scope="request" value="true">
 			<td><html:submit property="applySorter">Apply Sorting</html:submit></td>
 			</logic:notEqual>
 			<logic:equal name="widget" scope="request" value="true">			
 			<td><input type="button" name="applySorter" value="Apply Sorting" 
-			onclick="changeTabUrl('MyTabs','Tab-<bean:write name="reportMeta" property="name"/>','/aim/viewNewAdvancedReport.do~applySorter=true~viewFormat=foldable~ampReportId=<bean:write name="reportMeta" property="ampReportId"/>~widget=true~levelPicked='+levelPicked.options[levelPicked.selectedIndex].value+'~levelSorter='+levelSorter.options[levelSorter.selectedIndex].value);closeMessage();"/>
+			onclick="changeTabUrl('MyTabs','Tab-<bean:write name="reportMeta" property="name"/>','/aim/viewNewAdvancedReport.do~applySorter=true~viewFormat=foldable~ampReportId=<bean:write name="reportMeta" property="ampReportId"/>~widget=true~levelPicked='+levelPicked.options[levelPicked.selectedIndex].value+'~levelSorter='+levelSorter.options[levelSorter.selectedIndex].value+'~levelSortOrder='+levelSortOrder.options[levelSortOrder.selectedIndex].value);closeMessage();"/>
 			</td>
 			</logic:equal>
 		</tr>

@@ -37,12 +37,14 @@ public class GroupReportData extends ReportData {
 	public class GroupReportDataComparator implements Comparator {
 		public final int compare (Object o1, Object o2) {
 			Comparator c=new Cell.CellComparator();
-			String sorter=getThisLevelSorter();
+			String sorterName=getThisLevelSorter().getCategory();
+			String sorterType=(String) getThisLevelSorter().getValue();
+			boolean ascending="ascending".equals(sorterType)?true:false;
 			ReportData c1=(ReportData) o1;
 			ReportData c2=(ReportData) o2;
-			if(ArConstants.HIERARCHY_SORTER_TITLE.equals(sorter))
-					return c1.getName().compareTo(c2.getName());
-			else return c.compare(c1.findTrailCell(sorter),c2.findTrailCell(sorter));
+			if(ArConstants.HIERARCHY_SORTER_TITLE.equals(sorterName))
+					return ascending?c1.getName().compareTo(c2.getName()):c2.getName().compareTo(c1.getName());
+			else return ascending?c.compare(c1.findTrailCell(sorterName),c2.findTrailCell(sorterName)):c.compare(c2.findTrailCell(sorterName),c1.findTrailCell(sorterName));
 		}
 	}
 	
@@ -62,10 +64,10 @@ public class GroupReportData extends ReportData {
 	
 	protected Integer sourceColsCount;
 
-	public String getThisLevelSorter() {
+	public MetaInfo getThisLevelSorter() {
 		int myDepth=getLevelDepth()-1;
 		if(myDepth<0 || getLevelSorters().size()<=myDepth) return null;
-		return (String) getLevelSorters().get(myDepth);
+		return (MetaInfo) getLevelSorters().get(myDepth);
 	}
 	
 	public GroupReportData(GroupReportData d) {

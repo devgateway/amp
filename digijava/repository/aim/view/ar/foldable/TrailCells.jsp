@@ -12,7 +12,7 @@
 <% String display=reportData.getLevelDepth()>2?"display:none":"";%>
 <!-- generate total row -->
 <tr id='<bean:write name="reportData" property="absoluteReportName"/>' title='<bean:write name="reportData" property="levelDepth"/>' style="<%=display%>">
-	<td style="border: 0.1px solid #999999; padding-left:<%=10*(reportData.getLevelDepth()-1)%>; background-color:<%= reportData.getLevelBkgColor() %>" colspan='<bean:write name="reportData" property="sourceColsCount"/>' nowrap>
+	<td style=" padding-left:<%=10*(reportData.getLevelDepth()-1)%>; background-color:<%= reportData.getLevelBkgColor() %>" colspan='<bean:write name="reportData" property="sourceColsCount"/>' class="reportsBorder" nowrap>
 <c:if test="${!(reportData.name == reportMeta.name)}">
 		<img id="toggleImage" style="cursor:pointer" src="/repository/aim/view/images/images_dhtmlsuite/dhtmlgoodies_plus.gif" alt='hidden' onclick='toggleRows(this,"<bean:write name="reportData" property="absoluteReportName"/>")' title="<bean:write name="reportData" property="levelDepth"/>" border="0" width="20"/>
 </c:if>		
@@ -31,7 +31,7 @@
 </b>
 	</td>
 	<logic:iterate name="reportData" property="trailCells" id="cell" scope="page">
-		<td style="border: 0.1px solid #999999; background-color:<%= reportData.getLevelBkgColor() %>">
+		<td style="background-color:<%= reportData.getLevelBkgColor() %>" class="reportsBorder" >
 		<bean:define id="viewable" name="cell" type="org.dgfoundation.amp.ar.Viewable" scope="page" toScope="request"/>
 		<bean:define id="caller" name="reportData" type="org.dgfoundation.amp.ar.ReportData" scope="page" toScope="request" />			
 		<jsp:include page="<%=viewable.getViewerPath()%>"/>	

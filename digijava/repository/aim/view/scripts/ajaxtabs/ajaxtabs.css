@@ -46,6 +46,7 @@ text-decoration: none;
 }
 
 .contentstyle{
-border: 1px solid gray;
-margin-bottom: 1em; padding: 10px;
+margin-bottom: 1em;
+padding: 0em;
+margin:0em
 }

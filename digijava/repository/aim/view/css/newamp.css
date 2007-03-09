@@ -2,8 +2,22 @@ A {
 	FONT-SIZE: xx-small; COLOR: black
 }
 TD {
-	COLOR: black
+	COLOR: black;
+	padding: 0;
+	margin: 0;
 }
+TH {
+	COLOR: black;
+	padding: 0;
+	margin: 0;
+}
+
+TABLE {
+	border-spacing: 0;
+	padding: 0;
+	margin: 0;
+}
+
 .clsReportTitle {
 	BORDER-RIGHT: medium none; BORDER-TOP: medium none; FONT: bold 10pt "Verdana"; BORDER-LEFT: medium none; CURSOR: default; COLOR: white; BORDER-BOTTOM: medium none; BACKGROUND-COLOR: #205386; TEXT-ALIGN: center
 }
@@ -14,8 +28,9 @@ TD {
 	BORDER-RIGHT: 0px; BORDER-TOP: 0px; BORDER-LEFT: 0px; BORDER-BOTTOM: 0px
 }
 .clsInnerTable {
-	BORDER-RIGHT: #336699 1px solid; BORDER-TOP: #336699 1px solid; BORDER-LEFT: #336699 1px solid; BORDER-BOTTOM: #336699 1px solid; BACKGROUND-COLOR: transparent
+	BORDER-RIGHT: #336699 1px solid; BORDER-TOP: #336699 1px solid; BORDER-LEFT: #336699 1px solid; BORDER-BOTTOM: #336699 1px solid; BACKGROUND-COLOR: transparent ; PADDING:0; LINE-HEIGHT: small ; SPACING: 0; BORDER-WIDTH:1px; MARGIN:0;
 }
+
 .clsHelp {
 	FONT: 8pt "Verdana"; COLOR: black; TEXT-ALIGN: right
 }

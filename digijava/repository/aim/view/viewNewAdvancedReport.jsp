@@ -15,7 +15,7 @@
 		<a href='#' onclick='closeMessage();return false'>Close</a>
 </div>
 		
-<table class=clsTable cellSpacing=0 cellPadding=0 width="100%" border=0>
+<table  cellSpacing="0" cellPadding="0" width="95%" border="0">
 
 	<logic:notEqual name="widget" scope="request" value="true">
 	<logic:notEqual name="viewFormat" scope="request" value="print">
@@ -107,8 +107,8 @@
 		<tr>
 			<td><!-- begin big report table -->
 
-			<table id='reportTable' class=clsInnerTable cellSpacing=0 cellPadding=0 width="100%"
-				border=0>
+			<table id='reportTable'  cellSpacing="0" cellPadding="0" width="100%"   border="1"
+				style="border: 1px solid #000000">
 				<bean:define id="viewable" name="report"
 					type="org.dgfoundation.amp.ar.Viewable" toScope="request" />
 				<jsp:include page="/repository/aim/view/ar/viewableItem.jsp" />

@@ -629,6 +629,13 @@ TD
 	FONT-WEIGHT: normal; 
 	FONT-SIZE: 10px
 }
+
+TABLE {
+	border-spacing: 0;
+	padding: 0;
+	margin: 0;
+}
+
 .home-scroll 
 {
 	BORDER-RIGHT: #c5c6cb 1px dotted; 
@@ -1079,4 +1086,9 @@ A.head-menu-link:hover {
 
 #head-middle		{
  height:22px;
+}
+.reportsBorder {
+	padding: 0;
+	margin: 0;
+	border: thin solid #999999;
 }

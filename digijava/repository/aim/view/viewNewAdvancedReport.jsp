@@ -105,9 +105,9 @@
 
 	<logic:notEqual name="report" property="totalUniqueRows" value="0">
 		<tr>
-			<td><!-- begin big report table -->
+			<td><!-- begin big report table --> 
 
-			<table id='reportTable'  cellSpacing="0" cellPadding="0" width="100%" class="reportsBorder"	>
+			<table id='reportTable'  cellSpacing="0" cellPadding="0" width="100%" class="reportsBorderTable">
 				<bean:define id="viewable" name="report"
 					type="org.dgfoundation.amp.ar.Viewable" toScope="request" />
 				<jsp:include page="/repository/aim/view/ar/viewableItem.jsp" />

@@ -26,7 +26,7 @@
 <bean:define id="caller" name="cellColumn" type="org.dgfoundation.amp.ar.CellColumn" scope="page" toScope="request" />	
 
 <logic:equal name="columnNo" value="0">
-
+<b>
 <logic:present name="currentMember" scope="session">
 <a href='/aim/viewChannelOverview.do~tabIndex=0~ampActivityId=<bean:write name="ownerId"/>'>
 </logic:present>
@@ -37,6 +37,7 @@
 <jsp:include page="<%=viewable.getViewerPath()%>"/>	
 <logic:equal name="columnNo" value="0">
 </a>
+</b>
 </logic:equal>
 
 <% } else { %> &nbsp; <% } %>

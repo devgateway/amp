@@ -107,7 +107,7 @@
 		<tr>
 			<td><!-- begin big report table --> 
 
-			<table id='reportTable'  cellSpacing="0" cellPadding="0" width="100%" class="reportsBorderTable">
+			<table id='reportTable'  cellSpacing="0" cellPadding="1" width="100%" class="reportsBorderTable">
 				<bean:define id="viewable" name="report"
 					type="org.dgfoundation.amp.ar.Viewable" toScope="request" />
 				<jsp:include page="/repository/aim/view/ar/viewableItem.jsp" />

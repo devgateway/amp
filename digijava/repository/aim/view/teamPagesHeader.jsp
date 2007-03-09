@@ -27,8 +27,7 @@ function showUserProfile(id){
 						&nbsp;&nbsp;&nbsp;
 					</td>
 					<logic:present name="currentMember" scope="session">															
-					<td align="left">javascript:showUserProfile(<c:out value="${teamMember.memberId}"/>)
-						
+					<td align="left">						
       	       			<bean:define id="teamMember" name="currentMember" scope="session" 
 					 	type="org.digijava.module.aim.helper.TeamMember" />					
 						<bean:define id="translation">

@@ -179,7 +179,7 @@
 				<tr>
 					<td>
 						<digi:img src="images/bullet_green.gif" border="0" height="9" width="9" align="top" /> -
-						<digi:trn key="aim:defaultFlag">Deafult Flag</digi:trn>
+						<digi:trn key="aim:defaultFlag">Default Flag</digi:trn>
 					</td>
 				</tr>
 				<tr>

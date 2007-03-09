@@ -1088,7 +1088,12 @@ A.head-menu-link:hover {
  height:22px;
 }
 .reportsBorder {
-	padding: 0;
-	margin: 0;
-	border: thin solid #999999;
+	cellpadding: 0px;
+	cellspacing: 0px;
+	padding: 0px;
+	margin: 0px;
+	border: 1px solid #999999;
+	border-spacing: 0pt;
+	border-width: 1px;
+	border-collapse: collapse;
 }

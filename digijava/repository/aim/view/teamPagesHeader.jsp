@@ -39,6 +39,7 @@ function showUserProfile(id){
 							<bean:write name="teamMember" property="memberName" />
 						</a></div>
 					</td>
+<!-- 
 					<td align="right">
 						<bean:define id="translation">
 							<digi:trn key="aim:clickToLogoutTheSystem">Click here to logout from the system</digi:trn>
@@ -48,7 +49,8 @@ function showUserProfile(id){
 						<digi:trn key="aim:logout">Logout</digi:trn>
 						</a></div>&nbsp;&nbsp;&nbsp;&nbsp;
 					</td>
-					</logic:present>			
+-->					
+					</logic:present>								
 					<logic:notPresent name="currentMember" scope="session">															
 					<td align="left">
 					<digi:link href="/reportsPublicView.do" styleClass="header">

@@ -32,7 +32,10 @@
 </logic:iterate>
 </ul>
 <div id="ajaxcontentarea" class="contentstyle">
-Text
+<digi:trn key="aim:clickOnATab">
+<p/>
+Click on one of the tabs to display activities. You can create more tabs by using the Advanced Reports Manager.
+</digi:trn>
 </div>
 
 <script type="text/javascript">

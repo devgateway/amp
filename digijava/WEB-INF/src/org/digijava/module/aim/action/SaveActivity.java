@@ -115,6 +115,10 @@ public class SaveActivity extends Action {
 			return mapping.findForward("index");
 		}
 
+		session.removeAttribute("report");
+		session.removeAttribute("reportMeta");
+
+		
 		try {
 
 			TeamMember tm = null;
@@ -1389,9 +1393,7 @@ public class SaveActivity extends Action {
 							true, eaForm.getCommentsCol(), eaForm
 									.isSerializeFlag(), field, relatedLinks, tm
 									.getMemberId(), eaForm.getIndicatorsME());
-					session.removeAttribute("report");
-					session.removeAttribute("reportMeta");
-					// remove the activity details from the edit activity list
+						// remove the activity details from the edit activity list
 					if (toDelete == null
 							|| (!toDelete.trim().equalsIgnoreCase("true"))) {
 						String sessId = session.getId();

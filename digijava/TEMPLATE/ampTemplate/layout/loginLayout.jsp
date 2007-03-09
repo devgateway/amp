@@ -112,7 +112,7 @@ if("On".equals(publicView)) { %>
 					<td>&nbsp;</td>				
 					<td>&nbsp;</td>
 					<td align="left">
-						<input type="button" class="dr-menu" value="View Public Portfolio" onclick="javascript:window.location='/aim/reportsPublicView.do'"/>
+						<input type="button" style="background-color:#8FBCFF" class="dr-menu" value="View Public Portfolio" onclick="javascript:window.location='/aim/reportsPublicView.do'"/>
 					</td>
 				</tr>
 <% } %>

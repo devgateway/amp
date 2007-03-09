@@ -86,6 +86,7 @@
     </property>
    <property name="exceptionMappings">
      <props>
+       <prop key="org.digijava.module.aim.auth.InvalidUserException">/showLayout.do?layout=login&amp;loginError=invalidUser</prop>
        <prop key="org.digijava.module.aim.auth.NotTeamMemberException">/showLayout.do?layout=login&amp;loginError=noTeamMember</prop>
      </props>
     </property>

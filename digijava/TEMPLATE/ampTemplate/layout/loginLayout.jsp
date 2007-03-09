@@ -52,7 +52,12 @@
 
                                                   <c:if test="${param['loginError'] == 'noTeamMember'}">
                                                      <c:set var="errorDisplayed">true</c:set>
-           					     <bean:message key="error.aim.userNotTeamMember" />
+           					     <bean:message key="error.aim.userInvalid" />
+                                                  </c:if>
+                                                  
+                                                  <c:if test="${param['loginError'] == 'invalidUser'}">
+                                                     <c:set var="errorDisplayed">true</c:set>
+           					     <bean:message key="error.aim.userInvalid" />
                                                   </c:if>
 
                                                   <c:if test="${errorDisplayed == null}">

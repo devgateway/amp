@@ -69,6 +69,18 @@ public class AmpAuthenticationProcessingFilter
                 throw new NotTeamMemberException(currentUser.getEmail());
             }
         }
+        
+        /*
+         * Checking user Activity settings
+         */
+        Iterator itr = members.iterator();
+        while (itr.hasNext()){
+        	AmpTeamMember member = (AmpTeamMember) itr.next();
+        	AmpApplicationSettings ampAppSettings = DbUtil.getMemberAppSettings(member.getAmpTeamMemId());
+            if (ampAppSettings == null)	//if the user hasn't got the personalized settings
+            	throw new InvalidUserException(currentUser.getEmail());
+        }
+        
 
         return authResult;
     }

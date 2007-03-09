@@ -40,7 +40,10 @@
 						   	<TD align="left" vAlign="center" height="15">
 									<digi:insert attribute="headerMiddle" />
 								</TD>	
-							  	<TD align="right" vAlign="top" height="15">
+							<td align="right" vAlign="top" height="15">
+									<digi:insert attribute="loginWidget" />	
+							</td>	
+							  	<TD width="20" align="right" vAlign="top" height="15">
 									<digi:insert attribute="dropdownLangSwitch" />
 								</TD>
 							</TR>

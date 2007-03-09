@@ -51,7 +51,10 @@
 						   	<TD align="left" vAlign="center">
 									<digi:insert attribute="headerMiddle" />
 								</TD>	
-							  	<TD align="right" vAlign="top">
+							 	<TD align="right" vAlign="top">
+										<digi:insert attribute="loginWidget" />
+								</TD>								
+							  	<TD width="20" align="right" vAlign="top">
 										<digi:insert attribute="dropdownLangSwitch" />
 								</TD>
 							</TR>

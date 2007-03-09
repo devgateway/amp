@@ -36,6 +36,7 @@ function showUserProfile(id){
               </div>
             </logic:notEmpty>
           </td>
+<!-- 
           <td align="right">
             <div title='<digi:trn key="aim:clickToLogoutTheSystem">Click here to logout from the system</digi:trn>'>
               <a href="${request.contextPath}/j_acegi_logout" class="up-menu" onclick="return quitRnot()">
@@ -43,6 +44,7 @@ function showUserProfile(id){
               </a>
             </div>&nbsp;&nbsp;&nbsp;&nbsp;
           </td>
+ -->                    
         </tr>
       </table>
     </td>

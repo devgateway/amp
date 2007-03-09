@@ -7,7 +7,7 @@
 <DIV id="menu">
 <UL>
 		<LI class="noLink">
-			<digi:link styleClass="head-menu-link" href="/" module="aim" onclick="return quitRnot()">			
+			<digi:link styleClass="head-menu-link" href="/reportsPublicView.do" module="aim" onclick="return quitRnot()">			
 					::: <digi:trn key="aim:aidInformationModule">AID INFORMATION MODULE</digi:trn>
 			</digi:link>
 		</LI>				
@@ -90,6 +90,8 @@
 			</div></LI>
 		</logic:notEmpty>
 		</logic:equal>
+		
+		
 	</UL>
-</DIV>
+</DIV>	
 </logic:present>

@@ -4,6 +4,8 @@ import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Set;
+
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.struts.action.ActionErrors;
@@ -19,6 +21,7 @@ public class NationalPlaningDashboardForm extends ActionForm {
     private List activities;
     private String actionMethod;
     private boolean showChart;
+    private Set indicators;
     private long[] selectedIndicators;
     private List valuesForSelectedIndicators;
     private int fromYear;
@@ -238,5 +241,12 @@ public class NationalPlaningDashboardForm extends ActionForm {
 	}
 	public Collection getAllThemes () {
 		return this.allThemes;
+	}
+	
+	public Set getIndicators() {
+		return indicators;
+	}
+	public void setIndicators(Set indicators) {
+		this.indicators = indicators;
 	}
 }

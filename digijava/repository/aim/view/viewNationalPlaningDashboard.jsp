@@ -6,24 +6,26 @@
 <%@taglib uri="/taglib/digijava" prefix="digi"%>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
+
+
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/asynchronous.js"/>"></script>
 
 
 <link rel="stylesheet" type="text/css" href="<digi:file src="module/aim/css/tree.css"/>">
-<script type="text/javascript" src="<digi:file src="module/aim/scripts/tree/yahoo.js"/>" ></script>
-<script type="text/javascript" src="<digi:file src="module/aim/scripts/tree/event.js"/>"></script>
-<script type="text/javascript" src="<digi:file src="module/aim/scripts/tree/treeview.js"/>" ></script>
-<script type="text/javascript" src="<digi:file src="module/aim/scripts/tree/jktreeview.js"/>" ></script>
-
-<link rel="stylesheet" type="text/css" href="<digi:file src="module/aim/css/container.css"/>">
-<script type="text/javascript" src="<digi:file src="module/aim/scripts/panel/yahoo-dom-event.js"/>" ></script>
-<script type="text/javascript" src="<digi:file src="module/aim/scripts/panel/container-min.js"/>" ></script>
-
+<script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/tree/yahoo.js"/>" ></script>
+<script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/tree/event.js"/>"></script>
+<script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/tree/treeview.js"/>" ></script>
+<script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/tree/jktreeview.js"/>" ></script>
+<script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
 <style type="text/css">
 	a { text-decoration: underline; color: #46546C; }
 	a:hover { text-decoration: underline; color: #4d77c3; }
 	#tree {width:250px;padding: 10px;float:left;}
 </style>
+
+<link rel="stylesheet" type="text/css" href="<digi:file src="module/aim/css/container.css"/>">
+<script type="text/javascript" src="<digi:file src="module/aim/scripts/panel/yahoo-dom-event.js"/>" ></script>
+<script type="text/javascript" src="<digi:file src="module/aim/scripts/panel/container-min.js"/>" ></script>
 
 <script type="text/javascript">
 	function newWin(val) {
@@ -36,6 +38,7 @@
 	}
 </script>
 
+<digi:form action="/nationalPlaningDashboard.do">
 
 <script language="javascript" type="text/javascript">
 function setActionMethod(methodName) {
@@ -63,6 +66,23 @@ function doFilter() {
   document.forms['aimNationalPlaningDashboardForm'].submit();
   return false;
 }
+
+	var indNameArr=[];	
+	var indIdArr=[];
+	<c:if test="${!empty aimNationalPlaningDashboardForm.indicators}">
+		<c:forEach varStatus="st" var="ind" items="${aimNationalPlaningDashboardForm.indicators}">
+			indIdArr[${st.index}]=${ind.ampThemeIndId};
+			indNameArr[${st.index}]='${ind.name}';
+		</c:forEach>
+	</c:if>
+
+	var selIndics=[];
+	<c:if test="${!empty aimNationalPlaningDashboardForm.selectedIndicators}">
+		<c:forEach varStatus="sl" var="ind" items="${aimNationalPlaningDashboardForm.selectedIndicators}">
+			selIndics[${sl.index}]=${ind};
+		</c:forEach>
+	</c:if>
+
 
 	var curProgId;
 	var curProgNodeIndex;
@@ -94,9 +114,7 @@ function doFilter() {
 		var allProgs=progTree.getElementsByTagName("program");
 		for(var i=0;i<allProgs.length;i++){
 			var id=allProgs[i].getAttribute("id");
-			if(id==toFindID) {
-				return allProgs[i];
-			}
+			if(id==toFindID) return allProgs[i];
 		}
 	}
 
@@ -110,7 +128,7 @@ function doFilter() {
 		return false;
 	}
 
-	/* creates tree view object from XML. this is called form callback */
+	/* creates tree view object from XML. this is called form callback*/
 	function updateTree(myXML){
 		if (myXML==null) {
 			return;
@@ -147,7 +165,7 @@ function doFilter() {
 
 		//create TreeView Object for specified with ID HTML object.
 		var ptree=new jktreeview("tree");
-		
+
 		//build nodes
 		buildTree(programList,ptree,"");
 		
@@ -166,7 +184,7 @@ function doFilter() {
 		addRootListener();
 		addEventListeners();
 		
-		createPanel("TEST","<i>test</i>");
+		createPanel("Info","<i>info</i>");
 	}
 
 	/* recursivly builds tree nodes */
@@ -192,6 +210,7 @@ function doFilter() {
 				//save index in tree for current program
 				if(prgID==curProgId){
 					curProgNodeIndex=thisNode.index;
+					thisNode.indicators=getIndicatorsHTML();
 				}
 				var subNodes=prg.childNodes;
 				//recurs on children programs
@@ -214,6 +233,23 @@ function doFilter() {
 		}
 	}
 	
+	function getIndicatorsHTML(){
+		var indics=document.getElementsByName('indicators');
+		var result='No Indicators';
+		if (indIdArr.length>0){
+			result='<table border="0" cellpadding="0" cellspacing="0">';
+			for(var i=0;i<indIdArr.length;i++){
+				result+='<tr><td><input type="checkbox" name="selectedIndicators" onchange="return doFilter()" value="'+indIdArr[i]+'" ';
+				if(isSelectedIndicator(indIdArr[i])){
+					result+='checked ';
+				}
+				result+=' >'+indNameArr[i]+'</td><td>&nbsp;&nbsp;</td></tr>';
+			}
+			result+='</table>';
+		}
+		return result;
+	}	
+	
 	/* highlights node for current program 	*/
 	function highlightNode(nodeIndex){
 		if(nodeIndex!=null){
@@ -223,9 +259,7 @@ function doFilter() {
 //				var color=getRealColor(nodTD);
 //				nodTD.style.color=nodTD.style.backgrundColor;
 //				nodTD.style.backgrundColor=color;
-								
 			}
-			
 		}
 		
 	}
@@ -244,9 +278,8 @@ function doFilter() {
 	}
 
 	function isSelectedIndicator(indicId){
-		var selIndics=document.getElementsByName("selectedIndicators");
 		for(var i=0;i<selIndics.length;i++){
-			if (selIndics[i].value==indicId) return true;
+			if (selIndics[i]==indicId) return true;
 		}
 		return false;
 	}
@@ -287,7 +320,6 @@ function doFilter() {
 	function previewActivity(actId){
 		
 	}
-	
 	var numOfPrograms;				// Number of programs (themes) displayed
 	var informationPanel;			// The panel on which the information is displayed
 	var themeArray	= new Array();  // Array containing the formatted information for the themes
@@ -351,7 +383,7 @@ function doFilter() {
  	function showPanel(headerText, id, posX, posY) {
  		informationPanel.setHeader(headerText);
 		informationPanel.setBody(themeArray[id]);
-		informationPanel.moveTo(posX-1, posY-1);
+		informationPanel.moveTo(posX+2, posY+2);
 		informationPanel.show();
  	}
  	/* Just makes the panel visible */
@@ -403,7 +435,6 @@ function doFilter() {
 		);
 	</logic:iterate>
 </script>
-<digi:form action="/nationalPlaningDashboard.do">
   <html:hidden property="actionMethod"/>
   <html:hidden property="currentProgramId"/>
   <html:hidden property="showChart"/>
@@ -415,22 +446,22 @@ function doFilter() {
             <TD>
               <TABLE border="0" cellPadding="0" cellSpacing="0">
                 <TR>
-                  <TD bgColor=#c9c9c7 class=box-title width=80>                    &nbsp;
+                  <TD bgColor="#c9c9c7" class="box-title" width="80">                    &nbsp;
                     <digi:link href="/viewPortfolioDashboard.do~actId=-1~indId=-1">
                       <digi:trn key="aim:portfolioDashboard">Dashboard</digi:trn>
                     </digi:link>
                   </TD>
-                  <TD background="module/aim/images/corner-r.gif" height=17 width=17>                  </TD>
-                  <TD bgColor=#c9c9c7 class=box-title width=220 >                    &nbsp;
+                  <TD background="module/aim/images/corner-r.gif" height="17" width="17">                  </TD>
+                  <TD bgColor="#c9c9c7" class="box-title" width="220" >                    &nbsp;
                     <digi:trn key="aim:npDashboard">National Planing Dashboard</digi:trn>
                   </TD>
-                  <TD background="module/aim/images/corner-r.gif" height=17 width=17>                  </TD>
+                  <TD background="module/aim/images/corner-r.gif" height="17" width="17">                  </TD>
                 </TR>
               </TABLE>
             </TD>
           </TR>
           <TR>
-            <TD bgColor=#ffffff class=box-border align=left>
+            <TD bgColor="#ffffff" class="box-border" align="left">
               <table width="100%" cellspacing="5" cellpadding="5">
                 <tr>
                   <td align="center" class="textalb" bgcolor="#336699" width="50%">
@@ -442,61 +473,45 @@ function doFilter() {
                 </tr>
                 <tr>
                   <td valign="top" width="50%">
+                  
+                  <!-- This is main left Table -->
                     <table cellspacing="0" border="0">
+                    
+					<!-- Sub Tabs start -->                    
                       <tr>
                       	<td bgColor="#c9c9c7" class="box-title" width="40">
-                          <c:if test="${!aimNationalPlaningDashboardForm.showChart}">
-                            <a href="JavaScript:showChart(true);">
+                          <c:if test="${aimNationalPlaningDashboardForm.showChart}">
+                            <a href="JavaScript:showChart(false);">
                               <digi:trn key="aim:npData">Data</digi:trn>
                             </a>
                           </c:if>
-                          <c:if test="${aimNationalPlaningDashboardForm.showChart}">
+                          <c:if test="${!aimNationalPlaningDashboardForm.showChart}">
                             <digi:trn key="aim:npData">Data</digi:trn>
                           </c:if>
                         </td>                        
                         <td background="module/aim/images/corner-r.gif" style="background-repeat: no-repeat" height="17" width="17"></td>
                         <td bgColor="#c9c9c7" class="box-title" width="40">
-                          <c:if test="${aimNationalPlaningDashboardForm.showChart}">
-                            <a href="JavaScript:showChart(false);">
+                          <c:if test="${!aimNationalPlaningDashboardForm.showChart}">
+                            <a href="JavaScript:showChart(true);">
                               <digi:trn key="aim:npChart">Chart</digi:trn>
                             </a>
                           </c:if>
-                          <c:if test="${!aimNationalPlaningDashboardForm.showChart}">
+                          <c:if test="${aimNationalPlaningDashboardForm.showChart}">
                             <digi:trn key="aim:npChart">Chart</digi:trn>
                           </c:if>
                         </td>
                         <td background="module/aim/images/corner-r.gif" style="background-repeat: no-repeat"  height="17">&nbsp;</td>
                       </tr>
+                    <!-- Sub tabs End -->
+
                       <!-- chart -->
-                      <c:if test="${!aimNationalPlaningDashboardForm.showChart}">
                       <tr>
                       	<td colspan="4">&nbsp;</td>
                       </tr>
+                    <c:if test="${aimNationalPlaningDashboardForm.showChart}">
                       <tr>
                         <td colspan="4" align="center">
-							<html:select property="fromYear">
-								<option value="-1"><digi:trn key="aim:npSelectYear">Select</digi:trn></option>
-								<html:optionsCollection name="aimNationalPlaningDashboardForm" property="years" value="value" label="label" />
-							</html:select>&nbsp;<input type="Button" value="Go" onclick="return doFilter()">
-							
-                        </td>
-                      </tr>
-                      <tr>
-                      	<td colspan="4" align="center">
-							<c:forEach var="themeMember" items="${aimNationalPlaningDashboardForm.programs}">
-									<c:if test="${aimNationalPlaningDashboardForm.currentProgramId == themeMember.member.ampThemeId}">
-											<c:forEach var="indicator" items="${themeMember.member.indicators}">
-													<html:multibox property="selectedIndicators" onchange="return doFilter()" value="${indicator.ampThemeIndId}" />${indicator.name}&nbsp;&nbsp;&nbsp;&nbsp;
-											</c:forEach>
-									</c:if>
-							</c:forEach>
-                      	</td>
-                      </tr>
-                      <tr>
-                      	<td colspan="4">&nbsp;</td>
-                      </tr>
-                      <tr>
-                        <td colspan="4" align="center">
+
                         <digi:context name="showChart" property="/module/moduleinstance/nationalPlaningDashboard.do"/>
                         <c:url var="fullShowChartUrl" scope="page" value="${showChart}">
                           <c:param name="actionMethod" value="displayChart" />
@@ -505,73 +520,88 @@ function doFilter() {
                             <c:param name="selectedIndicators" value="${selVal}" />
                           </c:forEach>
                         </c:url>
-                        <img alt="chart" src="${fullShowChartUrl}" width="500" />
+                        <img alt="chart" src="${fullShowChartUrl}" width="300" />
                         </td>
                       </tr>
-                      </c:if>
-                      <c:if test="${aimNationalPlaningDashboardForm.showChart}">
-                      <tr>
-                        <td colspan="4" align="center">
-							&nbsp;
-                        </td>
-                      </tr>
-                      </c:if>
+                    </c:if>
+
                       <!-- end of chart-->
                       <%-- start of data --%>
-                      <c:if test="${aimNationalPlaningDashboardForm.showChart}">
-					<tr>
-                        <td colspan="4" align="center">
+                    <c:if test="${! aimNationalPlaningDashboardForm.showChart}">
+
+						<tr>
+                        	<td colspan="4" align="center">
 							<%-- data grid outer table starts--%>
-							<table border="0" width="100%">
-								<tr>
-									<td>
-										<%-- data grid year dropdowns starts--%>
-										<table>
-											<tr>
-												<td> from: </td>
-												<td>
-													<html:select property="fromYear">
-														<option value="-1"><digi:trn key="aim:npSelectYear">Select</digi:trn></option>
-														<html:optionsCollection name="aimNationalPlaningDashboardForm" property="years" value="value" label="label" />
-													</html:select>
-												</td>
-												<td> to: </td>
-												<td>
-													<html:select property="toYear">
-														<option value="-1"><digi:trn key="aim:npSelectYear">Select</digi:trn></option>
-														<html:optionsCollection name="aimNationalPlaningDashboardForm" property="years" value="value" label="label" />
-													</html:select>
-												</td>
-												<td><input type="Button" value="Go" onclick="return doFilter()"></td>
-											</tr>
-										</table>
-										<%-- data grid year dropdowns ends--%>
-									</td>
-								</tr>
-								<tr>
-									<td>
-										&nbsp;
-									</td>
-								</tr>
-								<tr>
-									<td>
-										<%-- data grid table starts--%>
-										<table width="90%" border="1" cellpadding="0" cellspacing="0">
-											<tr>
-												<td	width="100"><strong>Indicator Name</strong></td>
-												<td width="100"><strong>Actual Value</strong></td>
-												<td width="100"><strong>Target Value</strong></td>
-											</tr>
-											<tr>
-												<c:forEach var="themeMember" items="${aimNationalPlaningDashboardForm.programs}">
-													<c:if test="${aimNationalPlaningDashboardForm.currentProgramId == themeMember.member.ampThemeId}">
-							                            <c:forEach var="indicator" items="${themeMember.member.indicators}">
-															<tr>
+								<table border="0" width="100%">
+									<tr>
+										<td>
+											<%-- data grid year dropdowns starts
+											<table>
+												<tr>
+													<td> from: </td>
+													<td>
+														<html:select property="fromYear">
+															<option value="-1"><digi:trn key="aim:npSelectYear">Select</digi:trn></option>
+															<html:optionsCollection name="aimNationalPlaningDashboardForm" property="years" value="value" label="label" />
+														</html:select>
+													</td>
+													<td> to: </td>
+													<td>
+														<html:select property="toYear">
+															<option value="-1"><digi:trn key="aim:npSelectYear">Select</digi:trn></option>
+															<html:optionsCollection name="aimNationalPlaningDashboardForm" property="years" value="value" label="label" />
+														</html:select>
+													</td>
+													<td><input type="Button" value="Go" onclick="return doFilter()"></td>
+												</tr>
+											</table>
+											 data grid year dropdowns ends--%>
+										</td>
+									</tr>
+									<tr>
+										<td>
+											&nbsp;
+										</td>
+									</tr>
+									<tr>
+										<td>
+											<%-- data grid table starts--%>
+											<table width="90%" border="1" cellpadding="0" cellspacing="0">
+												<tr>
+													<td>&nbsp;</td>
+													<td	width="100"><strong>Indicator Name</strong></td>
+													<td width="100"><strong>Actual Value</strong></td>
+													<td width="100"><strong>Target Value</strong></td>
+												</tr>
+												<tr>
+													<c:forEach var="themeMember" items="${aimNationalPlaningDashboardForm.programs}">
+														<c:if test="${aimNationalPlaningDashboardForm.currentProgramId == themeMember.member.ampThemeId}">
+								                            <c:forEach var="indicator" items="${themeMember.member.indicators}">
+																<tr>
+																<!-- td>
+																	<html:multibox property="selectedIndicators" onchange="return doFilter()" value="${indicator.ampThemeIndId}" />
+																</td-->
 																<td width="100">
-																
 																	${indicator.name}
 																	&nbsp;
 																</td>
+																<td width="100">
+																
+																	<c:if test="${! empty aimNationalPlaningDashboardForm.valuesForSelectedIndicators}">
+																		<c:forEach var="indicValue" items="${aimNationalPlaningDashboardForm.valuesForSelectedIndicators}">
+																			<c:if test="${indicValue.indicatorId == indicator.ampThemeIndId}">
+																				<c:if test="${indicValue.valueTypeId == 1}">
+																					${indicValue.value}
+																				</c:if>
+																			</c:if>
+																		</c:forEach>
+																	</c:if>
+																	<c:if test="${empty aimNationalPlaningDashboardForm.valuesForSelectedIndicators}">
+																		N/A
+																	</c:if>
+																	&nbsp;
+																</td>
+
 																<td width="100">
 																
 																	<c:if test="${! empty aimNationalPlaningDashboardForm.valuesForSelectedIndicators}">
@@ -588,22 +618,7 @@ function doFilter() {
 																	</c:if>
 																	&nbsp;
 																</td>
-																<td width="100">
-																
-																<c:if test="${! empty aimNationalPlaningDashboardForm.valuesForSelectedIndicators}">
-																		<c:forEach var="indicValue" items="${aimNationalPlaningDashboardForm.valuesForSelectedIndicators}">
-																			<c:if test="${indicValue.indicatorId == indicator.ampThemeIndId}">
-																				<c:if test="${indicValue.valueTypeId == 1}">
-																					${indicValue.value}
-																				</c:if>
-																			</c:if>
-																		</c:forEach>
-																	</c:if>
-																	<c:if test="${empty aimNationalPlaningDashboardForm.valuesForSelectedIndicators}">
-																		N/A
-																	</c:if>
-																	&nbsp;
-																</td>
+
 															</tr>
 							                            </c:forEach>
 													</c:if>
@@ -617,16 +632,10 @@ function doFilter() {
 							<!-- data outer table ends-->
                         </td>
 					</tr>
-					</c:if>
-					<c:if test="${aimNationalPlaningDashboardForm.showChart}">
-						<tr>
-							<td colspan="4" align="center">
-								&nbsp;
-							</td>
-						</tr>
-					</c:if>
+                    </c:if>
+
 					<%-- end of data--%>
-				</table>
+				</table><!-- this is main left Table -->
 			</td>
 			<td valign="top" class="highlight" align="left" width="100%">
 				<div id="tree" style="width: 100%;"></div>
@@ -714,13 +723,17 @@ function doFilter() {
                           </td>
                         </tr>
                       </c:forEach>
-                      <tr>
-                      	<td colspan="10">
-                      		<div align="right">
-    	                  				Sum ${aimNationalPlaningDashboardForm.fundingSum} USD
-                      		</div>
-                      	</td>
-                      </tr>
+                      <c:if test="${!empty aimNationalPlaningDashboardForm.fundingSum}">
+                        <c:if test="${aimNationalPlaningDashboardForm.fundingSum!='$0'}">
+                          <tr>
+                            <td colspan="10">
+                              <div align="right">
+                              Sum ${aimNationalPlaningDashboardForm.fundingSum} USD
+                              </div>
+                            </td>
+                          </tr>
+                        </c:if>
+                      </c:if>
                     </table>
                   </td>
                 </tr>

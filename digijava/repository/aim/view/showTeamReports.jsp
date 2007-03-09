@@ -91,17 +91,17 @@ return false;
 											<td bgColor=#ffffff class=box-border>
 												<table border=0 cellPadding=3 cellSpacing=3 class=box-border width="100%" >
 													<tr bgColor=#dddddb>
-														<td bgColor=#dddddb align="center" height="20">
-															<b>
+														<td bgColor=#dddddb align="center" height="20" colspan="2">
+															<b>									
 															<digi:trn key="aim:publicTeamReportsList">
 																List of public team reports
 															</digi:trn></b>
 														</td>
 													</tr>
-													<logic:iterate name="aimTeamReportsForm"  property="reports" id="reports"
+													<logic:iterate name="aimTeamReportsForm"  property="reports" id="reports" indexId="idx"
 											type="org.digijava.module.aim.dbentity.AmpReports"> 
 											
-											<TR><TD>
+											<TR><TD bgcolor="<%=(idx.intValue()%2==1?"#eeeeee":"#ffffff")%>">
 				                 	 			<IMG alt=Link height=10 src="../ampTemplate/images/arrow-gr.gif" 
 												width=10>
 												<bean:define name="reports" id="link"  property="description" type="java.lang.String"/>
@@ -134,7 +134,7 @@ return false;
 											 <% String s = (String)session.getAttribute("teamLeadFlag"); %>
 												<% if(s!=null && s.equals("true")){ %>
 											
-											<td>
+											<td bgcolor="<%=(idx.intValue()%2==1?"#eeeeee":"#ffffff")%>">
 												<jsp:useBean id="urlParams" type="java.util.Map" class="java.util.HashMap"/>
 												<c:set target="${urlParams}" property="rid">
 													<bean:write name="reports" property="ampReportId" />
@@ -149,12 +149,20 @@ return false;
 										
 										
 										</logic:iterate>
+<tr><td colspan="2" align="right"> 							
+	<digi:link href="/advancedReportManager.do?clear=true">
+							<b><digi:trn key="aim:advancedReportManager">Advanced Report Manager</digi:trn></b>
+						</digi:link>
+</td></tr>	
 												</table>
 											</td>
 										</tr>
+										
 									</table>
 								</td>
 							</tr>
+						
+							
 							<tr><td bgColor=#f4f4f2>
 								&nbsp;
 							</td></tr>
@@ -165,3 +173,5 @@ return false;
 		</td>
 	</tr>
 </table>
+
+

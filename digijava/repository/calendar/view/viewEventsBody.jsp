@@ -168,7 +168,7 @@
                                 <td width="${ampCalendarGraphItem.left}%"><digi:img src="module/calendar/images/spacer.gif"/></td>
                             </c:if>
                             <c:if test="${ampCalendarGraphItem.center > 0}">
-                                <td width="${ampCalendarGraphItem.center}%"><digi:img src="module/calendar/images/spacer.gif" style="width:100%;height:7px;background-color:#${ampCalendarGraphItem.color}"/></td>
+                                <td width="${ampCalendarGraphItem.center}%"><digi:img src="module/calendar/images/spacer.gif" style="width:100%;height:7px;background-color:${ampCalendarGraphItem.color}"/></td>
                             </c:if>
                             <c:if test="${ampCalendarGraphItem.right > 0}">
                                 <td width="${ampCalendarGraphItem.right}%"><digi:img src="module/calendar/images/spacer.gif"/></td>

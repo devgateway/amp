@@ -23,6 +23,8 @@
 
     function perviewPrint(val) {
         <digi:context name="printLoc" property="context/module/moduleinstance/previewPrintMyDesktop.do" />
+        openNewWindowWithMenubar(screen.width,screen.height);
+        document.aimDesktopForm.target=popupPointer.name;
         document.aimDesktopForm.action ="<%=printLoc%>";
 		document.aimDesktopForm.submit();
 	}
@@ -155,10 +157,10 @@
 							<html:option value="-2">PMR+</html:option>
 							<html:option value="-3">PMR-</html:option>	--%>
 						</html:select>
-						
-						<input type="submit" value="Go" class="dr-menu">
-						<input type="submit" value="Reset" class="dr-menu" onclick="resetFilters()">
-                        <input type="button" value="Print" class="dr-menu" onclick="perviewPrint()">
+
+						<input type="submit" class="dr-menu" value="<digi:trn key="aim:desktopGoBtn">Go</digi:trn>">
+						<input type="submit" class="dr-menu" onclick="resetFilters()" value="<digi:trn key="aim:desktopResetBtn">Reset</digi:trn>">
+                        <input type="button" class="dr-menu" onclick="perviewPrint()" value="<digi:trn key="aim:desktopPrintBtn">Print</digi:trn>">
 					</TD></TR>
 				</c:if>
 				<!-- Project List -->
@@ -356,12 +358,12 @@
 					<FONT color=blue>*
 					<digi:trn key="aim:allTheAmountsInThousands">
 					All the amounts are in thousands (000)</digi:trn>
-					<digi:trn key="aim:perspectiveWarning1">	
-					Current workspace perspective is: 
+					<digi:trn key="aim:perspectiveWarning1">
+					Current workspace perspective is:
 					</digi:trn>
 					<bean:write name="currentPerspective" scope="session"/>
 					.
-					<digi:trn key="aim:perspectiveWarning2">	
+					<digi:trn key="aim:perspectiveWarning2">
 					Totals column only show funding items  having the same perspective as the current workspace.
 					</digi:trn>
 					</FONT>

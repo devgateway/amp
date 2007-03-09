@@ -1,3 +1,4 @@
+
 <%@ page pageEncoding="UTF-8" %>
 <%@ taglib uri="/taglib/struts-bean" prefix="bean" %>
 <%@ taglib uri="/taglib/struts-logic" prefix="logic" %>
@@ -81,7 +82,7 @@
 												<table width="100%">
 													<tr>
 														<td>
-															Sector one Name :
+															Sector one Name :add new sector
 														</td>
 														<td>
 															<html:textarea  name ="aimAddSectorForm" property="sectorName" rows="1" cols= "35"/> 
@@ -298,3 +299,4 @@
 	</tr>
 </table>
 </digi:form>
+

@@ -86,6 +86,13 @@
 			document.aimThemeForm.programType.value = "";
 			document.aimThemeForm.programDescription.value = "";		
 		}
+
+        function setOverImg(index){
+          document.getElementById("img"+index).src="/TEMPLATE/ampTemplate/module/aim/images/tab-righthover1.gif"
+        }
+        function setOutImg(index){
+          document.getElementById("img"+index).src="/TEMPLATE/ampTemplate/module/aim/images/tab-rightselected1.gif"
+        }
 	-->
 </script>
 
@@ -115,16 +122,16 @@
 							Admin Home
 						</digi:trn>
 						</digi:link>&nbsp;&gt;&nbsp;
-						<digi:trn key="aim:indicatorManager">
-							Indicator Manager
+						<digi:trn key="aim:multiProgramManager">
+							Multi-Program Manager
 						</digi:trn>
 					</td>
 				</tr><%-- End navigation --%>
 				<tr>
 					<td height=16 vAlign=center width=571>
 						<span class=subtitle-blue>
-						<digi:trn key="aim:indicatorManager">
-							Indicator Manager
+						<digi:trn key="aim:multiProgramManager">
+							Multi-Program Manager
 						</digi:trn>
 						</span>
 					</td>
@@ -149,12 +156,15 @@
 																<bean:define id="translation">
 																	<digi:trn key="aim:viewIndicators">Click here to View Indicators</digi:trn>
 																</bean:define>
-																<digi:link href="/themeManager.do?view=indicators"  styleClass="sub-navGovSelected" title="<%=translation%>" ><font color="ffffff">
+																<digi:link href="/themeManager.do?view=indicators"  styleClass="sub-navGovSelected" title="<%=translation%>" onmouseover="setOverImg(1)" onmouseout="setOutImg(1)"><font color="ffffff">
 																<digi:trn key="aim:programIndicatorList">
 																		Program Indicator List
-																</digi:trn>&nbsp;&nbsp;&nbsp;&nbsp;</font>
+																</digi:trn></font>
 																</digi:link>
 												 			</td>
+                                                            <td>
+                                                              <img id="img1" alt="" src="/TEMPLATE/ampTemplate/module/aim/images/tab-rightselected1.gif" width="20" height="19" />
+                                                            </td>
 															<td noWrap height=17>
 																<bean:define id="translation">
 																	<digi:trn key="aim:viewMultiProgramIndicators" >Click here to view Multi Program Indicators</digi:trn>
@@ -162,19 +172,25 @@
 																<digi:link href="/themeManager.do?view=multiprogram"  styleClass="sub-navGov" title="<%=translation%>" ><font color="ffffff">
 															<digi:trn key="aim:multiProgramManager">
 																Multi Program Manager
-															</digi:trn>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</font>
+															</digi:trn></font>
 																</digi:link>
 															</td>
+                                                            <td>
+                                                              <img id="img2" alt="" src="/TEMPLATE/ampTemplate/module/aim/images/tab-right1.gif" width="20" height="19" />
+                                                            </td>
 															<td noWrap height=17>
 																<bean:define id="translation">
 																	<digi:trn key="aim:viewM&EProjectIndicators" >Click here to view M & E Project Indicators</digi:trn>
 																</bean:define>
-																<digi:link href="/themeManager.do?view=meindicators"  styleClass="sub-navGovSelected" title="<%=translation%>" ><font color="ffffff">
+																<digi:link href="/themeManager.do?view=meindicators"  styleClass="sub-navGovSelected" title="<%=translation%>" onmouseover="setOverImg(3)" onmouseout="setOutImg(3)"><font color="ffffff">
 																<digi:trn key="aim:projectIndicatorList">
 																		Project Indicator List
-																</digi:trn>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</font>
+																</digi:trn></font>
 																</digi:link>
 															</td>		
+                                                            <td>
+                                                              <img id="img3" alt="" src="/TEMPLATE/ampTemplate/module/aim/images/tab-rightselected1.gif" width="20" height="19" />
+                                                            </td>
 														</tr>
 													</table>
 												</tr>
@@ -248,7 +264,7 @@
 																</td>
 																<td align="left">
 																	<html:select property="programType" styleClass="inp-text">
-																	<html:option value="-1">Select Program Type</html:option>
+																	<html:option value="-1">Select Progarm Type</html:option>
 																		<html:optionsCollection name="aimThemeForm" property="programTypeNames"
 													 						value="title" label="title" />
 																		</html:select>
@@ -333,7 +349,7 @@
 																	<tr>
 																		<td colspan="2" align="center">
 																			<b><digi:trn key="aim:cannotDeleteThemeMsg1">
-																			Cannot Delete the theme since some 
+																			Cannot delete the theme since some 
 																			activities references it.
 																			</digi:trn></b>
 																		</td>

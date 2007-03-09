@@ -14,19 +14,24 @@
 <digi:form action="/filterDesktopActivities.do" method="POST">
 <html:hidden name="aimDesktopForm" property="resetFliters" value="false"/>
 <TABLE width="99%" cellspacing="1" cellpadding="4" valign="top" align="center">
-	<TR><TD>
+	<TR>
+      <TD>
 		<TABLE border=0 cellPadding=0 cellSpacing=0 width="580" align=center>
-      	<TR><TD>
-           	<TABLE border=0 cellPadding=0 cellSpacing=0 >
-           		<TR>
-              		<TD bgColor=#c9c9c7 class=box-title>
-							&nbsp;<digi:trn key="aim:portfolio">Portfolio</digi:trn>
-						</TD>
-                 	<TD background="module/aim/images/corner-r.gif"
-						height=17 width=17></TD>
-					</TR>
-				</TABLE>
-			</TD></TR>
+          <TR>
+            <TD>
+              <TABLE border=0 cellPadding=0 cellSpacing=0 >
+                <TR>
+                  <TD bgColor=#c9c9c7 class=box-title>
+                    &nbsp;<digi:trn key="aim:portfolio">Portfolio</digi:trn>
+                  </TD>
+                  <TD style="background-image:url(module/aim/images/corner-r.gif);" height=17 width=17></TD>
+                    <div align="right">
+                      <input type="button" value="Close" onclick="window.close()" />
+                    </div>
+
+                </TR>
+              </TABLE>
+</TD></TR>
 
 			<TR><TD bgColor=#ffffff class=box-border align=center>
 				<TABLE border=0 cellPadding=4 cellSpacing=1 width="580" >

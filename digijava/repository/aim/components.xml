@@ -74,6 +74,7 @@
 	<page name="viewTheme" title=" - View Program" />
 	<page name="overallIndicatorManager" title=" - Indicator Manager" />
 	<page page="editAllIndicator" name="aim_editAllIndicator" title="AMP - Edit Indicator"/>
+	<page page="assignThemeIndicator" name="aim_assignThemeIndicator" title="AMP - Assign Indicator"/>
 	<page name="fiscalCalendarManager" title=" - Fiscal Calendar Manager" />
 	<page name="addFiscalCalendar" title=" - Fiscal Calendar Manager" />
 	<page name="organisationManager" title=" - Organization Manager" />
@@ -454,8 +455,6 @@
 	<teaser name="meIndicatorValues" action="meIndicatorValues.do">
 			viewIndicatorValues.jsp
 	</teaser>
-
-
 
     <!-- Teasers Add/Edit Start	-->
     <teaser name="addEditNavigator" action="showAddEditNavigator.do">

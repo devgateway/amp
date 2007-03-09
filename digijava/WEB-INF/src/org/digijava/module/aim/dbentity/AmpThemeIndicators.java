@@ -1,11 +1,12 @@
 package org.digijava.module.aim.dbentity ;
 
 import java.io.Serializable;
+import java.util.Date;
 import java.util.Set;
 import java.util.HashSet;
 import java.util.Date;
 
-public class AmpThemeIndicators implements Serializable
+public class AmpThemeIndicators implements Serializable, Comparable
 {
 	private Long ampThemeIndId;
 	private String name;
@@ -144,4 +145,10 @@ public class AmpThemeIndicators implements Serializable
 	public void setCreationDate(Date creationDate) {
 		this.creationDate = creationDate;
 	}
+
+	public int compareTo(Object obj) {
+		AmpThemeIndicators other=(AmpThemeIndicators)obj;
+		return this.getName().compareTo(other.getName());
+	}
+	
 }

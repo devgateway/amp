@@ -323,12 +323,12 @@
 	 </action>
 	 <action name="aimThemeForm" path="/aim/addSubPrgInd" scope="request" type="org.digijava.module.aim.action.AddSubPrgIndicator" validate="false">
 		<forward name="forward" path="/showLayout.do?layout=addSubTheme"/>
-		<forward name="addProgram" path="/showLayout.do?layout=aim_addProgram"/>		
-		<forward name="index" path="/aim/index.do" redirect="true"/>		
+		<forward name="addProgram" path="/showLayout.do?layout=aim_addProgram"/>
+		<forward name="index" path="/aim/index.do" redirect="true"/>
 	 </action>
     <action name="aimThemeForm" path="/aim/editTheme" scope="request" type="org.digijava.module.aim.action.EditTheme" validate="false">
 		<forward name="editProgram" path="/showLayout.do?layout=aim_editTheme"/>
-		<forward name="subPrgEdit" path="/showLayout.do?layout=addSubTheme"/>		
+		<forward name="subPrgEdit" path="/showLayout.do?layout=addSubTheme"/>
       <forward name="forward" path="/aim/themeManager.do" redirect="true" />
       <forward name="index" path="/aim/index.do" redirect="true" />
     </action>
@@ -349,9 +349,13 @@
     </action>
     <action name="aimThemeForm" path="/aim/editAllIndicator" scope="request" type="org.digijava.module.aim.action.EditAllIndicators" validate="false">
       <forward name="forward" path="/showLayout.do?layout=aim_editAllIndicator" />
-      <forward name="saving" path="/aim/overallIndicatorManager.do" />
+		<forward name="saving" path="/aim/overallIndicatorManager.do" redirect="true"/>
+		<forward name="assign" path="/showLayout.do?layout=aim_assignThemeIndicator"/>
       <forward name="index" path="/aim/index.do" redirect="true" />
-    </action>
+	 </action>
+	 <action name="aimThemeForm" path="/aim/assignThemeIndicator" scope="request" type="org.digijava.module.aim.action.AssignThemeIndicator" validate="false">
+		<forward name="forward" path="/aim/overallIndicatorManager.do" redirect="true"/>
+	 </action>
     <action name="aimAddLocationForm" path="/aim/addLocation" scope="session" type="org.digijava.module.aim.action.AddLocation" validate="false">
       <forward name="forward" path="/showLayout.do?layout=addLocation" />
       <forward name="added" path="/aim/locationManager.do" redirect="true" />
@@ -478,6 +482,10 @@
       <forward name="index" path="/aim/index.do" redirect="true" />
     </action>
     <action name="aimFlagUploaderForm" path="/aim/uploadFlag" scope="request" type="org.digijava.module.aim.action.UploadFlag" validate="false">
+      <forward name="forward" path="/aim/flagUploader.do" redirect="true" />
+      <forward name="index" path="/aim/index.do" redirect="true" />
+    </action>
+    <action name="aimFlagUploaderForm" path="/aim/deleteFlag" scope="request" type="org.digijava.module.aim.action.DeleteFlag" validate="false">
       <forward name="forward" path="/aim/flagUploader.do" redirect="true" />
       <forward name="index" path="/aim/index.do" redirect="true" />
     </action>
@@ -1057,7 +1065,7 @@
     </action>
     <action name="aimStatusItemForm" path="/aim/updateStatus" scope="session" type="org.digijava.module.aim.action.UpdateStatus" validate="false">
       <forward name="forward" path="/aim/statusManager.do" redirect="true" />
-		<forward name="returnforward" path="/aim/getStatusItem.do" redirect="true" />	 
+		<forward name="returnforward" path="/aim/getStatusItem.do" redirect="true" />
 	 </action>
     <action name="aimStatusItemForm" path="/aim/addStatus" scope="request" type="org.digijava.module.aim.action.AddStatus" validate="false">
       <forward name="addforward" path="/aim/statusManager.do" redirect="true" />

@@ -53,7 +53,10 @@
 								                		<TABLE border="0" cellpadding="3" cellspacing="1">
 								                  		<TR align=center bgcolor="Gold">
                       										<TD>
-																		<A href='<digi:site property="url"/>/admin/'>Admin</A>
+																<A href='<digi:site property="url"/>/admin/'>Admin</A>
+								                      		</TD>
+                      										<TD>
+																<a href='<digi:site property="url"/>/admin/switchDevelopmentMode.do'><digi:trn key="admin:devMode">User/Dev Mode</digi:trn></a>
 								                      		</TD>
 																</TR>
 								                		</TABLE>

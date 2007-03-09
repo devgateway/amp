@@ -39,19 +39,20 @@ public class ViewSectorDetails extends Action {
 					 AddSectorForm viewSectorForm = (AddSectorForm) form;
 					 //session.setAttribute("moreThanLevelOne","yes");
 					 //String Level = new String();
-					 logger.info("In ViewSectorDetails action");
+					 logger.debug("In ViewSectorDetails action");
 					 String event = request.getParameter("event");
 					 String level = request.getParameter("level");
 					 String secId = request.getParameter("ampSectorId");
 					 if(secId==null)
 						 secId = (String)session.getAttribute("Id");
+					 /*
 					 logger.info("LEVEL======================"+level);
 					 logger.info("event================"+event);
 					
 					 logger.debug(request.getParameter("ampSectorId"));
 					 logger.debug(session.getAttribute("Id"));
 					 logger.debug(secId);
-					 
+					 */
 						Long parentId = new Long(secId);
 						viewSectorForm.setSubSectors(SectorUtil.getAllChildSectors(parentId));
 						Collection _subSectors = viewSectorForm.getSubSectors();

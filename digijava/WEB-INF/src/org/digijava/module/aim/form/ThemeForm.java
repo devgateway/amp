@@ -33,6 +33,7 @@ public class ThemeForm extends ActionForm {
 		  private String creationDate;
 		  private String flag; 
 		  private Collection programTypeNames;
+		  private Long selectTheme;
 		  
 		  private String programLeadAgency;
 		  private String programTargetGroups;
@@ -41,7 +42,7 @@ public class ThemeForm extends ActionForm {
 		  private String programOutputs;
 		  private String programBeneficiaries;
 		  private String programEnvironmentConsiderations;
-		
+				
 		public String getFlag() {
 			return flag;
 		}
@@ -439,5 +440,19 @@ public class ThemeForm extends ActionForm {
 	}
 	public String getProgramEnvironmentConsiderations () {
 		return this.programEnvironmentConsiderations;
+	}
+	
+	/**
+	 * @return Returns the selectTheme.
+	 */
+	public Long getSelectTheme() {
+		return selectTheme;
+	}
+
+	/**
+	 * @param selectTheme The selectTheme to set.
+	 */
+	public void setSelectTheme(Long selectTheme) {
+		this.selectTheme = selectTheme;
 	}
 }

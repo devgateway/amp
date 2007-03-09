@@ -33,8 +33,10 @@ public class CalendarEventForm
     private DateBreakDown endDateBreakDown;
     private List attendeeUsers;
     private List attendeeGuests;
+    private List selectedUsersList;
     private String[] selectedAttendeeUsers;
     private String[] selectedAttendeeGuests;
+    private String[] selectedUsers;
     private boolean privateEvent;
 
     public List getCalendarTypes() {
@@ -136,6 +138,14 @@ public class CalendarEventForm
         return selectedStartTime;
     }
 
+    public String[] getSelectedUsers() {
+        return selectedUsers;
+    }
+
+    public List getSelectedUsersList() {
+        return selectedUsersList;
+    }
+
     public void setCalendarTypes(List calendarTypes) {
         this.calendarTypes = calendarTypes;
     }
@@ -232,6 +242,14 @@ public class CalendarEventForm
 
     public void setSelectedEndTime(String selectedEndTime) {
         this.selectedEndTime = selectedEndTime;
+    }
+
+    public void setSelectedUsers(String[] selectedUsers) {
+        this.selectedUsers = selectedUsers;
+    }
+
+    public void setSelectedUsersList(List selectedUsersList) {
+        this.selectedUsersList = selectedUsersList;
     }
 
     public ActionErrors validate(ActionMapping mapping,

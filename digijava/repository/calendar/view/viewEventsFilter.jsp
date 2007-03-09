@@ -20,7 +20,7 @@ function submitFilterForm(view, timestamp) {
 </script>
 
 <table border="0" width="100%" cellpadding="0" cellspacing="0">
-    <tr><td>Filter</td></tr>
+    <tr><td><digi:trn key="calendar:filter">Filter</digi:trn></td></tr>
     <tr>
         <td>
             <html:hidden name="calendarViewForm" property="view" value="${calendarViewForm.view}"/>
@@ -28,7 +28,7 @@ function submitFilterForm(view, timestamp) {
             <html:hidden name="calendarViewForm" property="filterInUse" value="true"/>
             <table border="0" width="100%" style="border:1px solid; border-color: #484846;">
                 <tr>
-                    <td colspan="2">&nbsp;Event Type</td>
+                    <td colspan="2"><digi:trn key="calendar:fltEventTypes">&nbsp;Event Types</digi:trn></td>
                 </tr>
                 <tr>
                     <td colspan="2">
@@ -48,7 +48,7 @@ function submitFilterForm(view, timestamp) {
                     </td>
                 </tr>
                 <tr>
-                    <td colspan="2">&nbsp;Donors</td>
+                    <td colspan="2"><digi:trn key="calendar:FltDonors">&nbsp;Donors</digi:trn></td>
                 </tr>
                 <tr>
                     <td colspan="2">
@@ -69,13 +69,15 @@ function submitFilterForm(view, timestamp) {
                 <digi:secure authenticated="true">
                     <tr>
                         <td colspan="2">
-                            <html:checkbox name="calendarViewForm" property="filter.showPublicEvents"/>&nbsp;Show public events
+                            <html:checkbox name="calendarViewForm" property="filter.showPublicEvents"/><digi:trn key="calendar:showPublicEvents">&nbsp;Show public events</digi:trn>
                         </td>
                     </tr>
                 </digi:secure>
                 <tr>
                     <td colspan="2">
-                        <html:submit value="Show"/>&nbsp;<html:reset value="Reset"/>
+                        <html:submit><digi:trn key="calendar:showBtn">Show</digi:trn></html:submit>
+                        &nbsp;
+                        <html:reset><digi:trn key="calendar:resetBtn">Reset</digi:trn></html:reset>
                     </td>
                 </tr>
             </table>

@@ -45,6 +45,9 @@ import org.digijava.module.aim.util.ProgramUtil;
 import org.digijava.module.aim.util.TeamUtil;
 import org.digijava.module.editor.dbentity.Editor;
 import org.digijava.module.editor.util.Constants;
+import java.util.Set;
+import java.util.HashSet;
+import java.util.List;
 
 /**
  * Used to capture the activity details to the form bean of type org.digijava.module.aim.form.EditActivityForm
@@ -80,7 +83,6 @@ public class AddAmpActivity extends Action {
 		//eaForm.setAllComps(ActivityUtil.getAllComponentNames());
         ProposedProjCost propProjCost=null;
         if(eaForm.getProProjCost()!=null){
-            propProjCost=new ProposedProjCost();
             propProjCost=eaForm.getProProjCost();
             if(propProjCost.getCurrencyCode()==null &&
                propProjCost.getFunAmount()==null &&
@@ -121,8 +123,8 @@ public class AddAmpActivity extends Action {
 
         Collection themes=new ArrayList();
         themes = ProgramUtil.getAllThemes();
-        themes = CollectionUtils.getFlatHierarchy(themes, true, new HierarchicalDefinition(), new ProgramComparator());
         eaForm.setProgramCollection(themes);
+
 
         // added by Akash
 		// desc: setting WorkingTeamLeadFlag & approval status in form bean

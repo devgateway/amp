@@ -37,15 +37,16 @@ import org.digijava.module.aim.helper.DateConversion;
 import org.digijava.module.aim.helper.TreeItem;
 import org.digijava.module.aim.dbentity.AmpComponent;
 import org.digijava.module.aim.dbentity.AmpProgramType;
+import org.digijava.module.aim.exception.AimException;
 
 public class ProgramUtil {
 
 		private static Logger logger = Logger.getLogger(ProgramUtil.class);
-	
+
 		public static AmpTheme getTheme(String name) {
 			Session session = null;
 			AmpTheme theme = null;
-	
+
 			try {
 				session = PersistenceManager.getSession();
 				String qryStr = "select theme from " + AmpTheme.class.getName()
@@ -75,7 +76,7 @@ public class ProgramUtil {
 			Session session = null;
 			Query qry = null;
 			Collection themes = new ArrayList();
-	
+
 			try {
 				session = PersistenceManager.getSession();
 				String queryString = "select t from " + AmpTheme.class.getName()
@@ -101,7 +102,7 @@ public class ProgramUtil {
 			Session session = null;
 			Query qry = null;
 			List themes = new ArrayList();
-	
+
 			try {
 				session = PersistenceManager.getRequestDBSession();
 				String queryString = " from " + AmpTheme.class.getName()
@@ -111,7 +112,7 @@ public class ProgramUtil {
 			} catch (Exception e) {
 				logger.error("Unable to get all themes");
 				logger.debug("Exceptiion " + e);
-			} 
+			}
 			return themes;
 		}
 
@@ -141,7 +142,7 @@ public class ProgramUtil {
             }
             return themes;
         }
-        
+
         public static Collection getYearsBeanList(){
             Collection result=new ArrayList();
             int start=2000;
@@ -152,14 +153,12 @@ public class ProgramUtil {
             }
             return result;
         }
-    
-	    public static Collection getAllThemeIndicators()
+
+	    public static Collection getAllThemeIndicators() throws AimException
 	    {
 	    	Collection colThInd = new ArrayList();
 	    	Collection colTh = null;
-	    	Collection colInd = null;
 	    	colTh = getAllPrograms();
-	    	colInd = getAllProgramIndicators();
 	    	Iterator itrColTh = colTh.iterator();
 	    	while(itrColTh.hasNext())
 	    	{
@@ -167,35 +166,21 @@ public class ProgramUtil {
 	    		AllThemes tempAllThemes = new AllThemes();
 				tempAllThemes.setProgramId(ampTh1.getAmpThemeId());
 				tempAllThemes.setProgramName(ampTh1.getName());
-	    		Iterator itrColInd = colInd.iterator();
 	    		Collection allInds = new ArrayList();
-	    		while(itrColInd.hasNext())
+	    		Iterator itr = getThemeIndicators(ampTh1.getAmpThemeId()).iterator();
+	    		while(itr.hasNext())
 	    		{
-	    			AmpThemeIndicators ampThInd = (AmpThemeIndicators) itrColInd.next();
-	    			Set thIndset = ampThInd.getThemes();
-	    			if(thIndset.isEmpty()){
-	    				continue;
-	    			}
-	    			else
-	    			{
-	    				Iterator thIndItr = thIndset.iterator();
-	    				while(thIndItr.hasNext())
-	    				{
-	    					AmpTheme ampTh2 = (AmpTheme) thIndItr.next();
-	    					if(ampTh1.getAmpThemeId().equals(ampTh2.getAmpThemeId()))
-	    					{
-	    						AllPrgIndicators prgInd = new AllPrgIndicators();
-	    						prgInd.setIndicatorId(ampThInd.getAmpThemeIndId());
-	    						prgInd.setName(ampThInd.getName());
-	    						prgInd.setCode(ampThInd.getCode());
-	    						prgInd.setType(ampThInd.getType());
-	    						prgInd.setCreationDate(DateConversion.ConvertDateToString(ampThInd.getCreationDate()));
-	    						prgInd.setCategory(ampThInd.getCategory());
-	    						prgInd.setNpIndicator(ampThInd.isNpIndicator());
-	    						allInds.add(prgInd);
-	    					}
-	    				}
-	    			}
+	    			AmpPrgIndicator ampPrg = (AmpPrgIndicator) itr.next();
+	    			AllPrgIndicators prgInd = new AllPrgIndicators();
+					prgInd.setIndicatorId(ampPrg.getIndicatorId());
+					prgInd.setName(ampPrg.getName());
+					prgInd.setCode(ampPrg.getCode());
+					prgInd.setType(ampPrg.getType());
+					prgInd.setCreationDate(ampPrg.getCreationDate());
+					prgInd.setCategory(ampPrg.getCategory());
+					prgInd.setNpIndicator(ampPrg.isNpIndicator());
+					allInds.add(prgInd);
+	    			
 	    		}
 	    		tempAllThemes.setAllPrgIndicators(allInds);
 	    		colThInd.add(tempAllThemes);
@@ -203,7 +188,7 @@ public class ProgramUtil {
 	    	return colThInd;
 	    }
 
-        public static Collection getAllPrograms()
+        public static Collection getAllPrograms() throws AimException
         {
         	Session session = null;
         	Query qry = null;
@@ -220,10 +205,11 @@ public class ProgramUtil {
         	{
         		logger.error("Unable to get all the Themes");
     			logger.debug("Exception " + ex);
+    			throw new AimException(ex);
         	}
         	return colPrg;
         }
-        
+
         public static Collection getAllProgramIndicators()
         {
         	Session session = null;
@@ -248,7 +234,7 @@ public class ProgramUtil {
 	    public static ArrayList getThemesByIds(ArrayList ampThemeIds) {
 	        Session session = null;
 	        Query qry = null;
-	
+
 	        try {
 	            session = PersistenceManager.getRequestDBSession();
 	            String qryStr = "select t from " + AmpTheme.class.getName()
@@ -271,7 +257,7 @@ public class ProgramUtil {
 			}
 	        return null;
 		}
-	
+
 		public static AmpTheme getThemeObject(Long ampThemeId) {
 			Session session = null;
 	        AmpTheme ampTheme = new AmpTheme();
@@ -284,16 +270,48 @@ public class ProgramUtil {
 	        }
 	        return ampTheme;
 		}
-	
+
+		public static void assignThemeInd(Long indId, Long themeId)
+		{
+			Session session = null;
+			Transaction tx = null;
+			AmpThemeIndicators ampThInd = null;
+			AmpTheme ampTh = getThemeObject(themeId);
+			try
+			{
+				session = PersistenceManager.getSession();
+				ampThInd = (AmpThemeIndicators) session.load(AmpThemeIndicators.class, indId);
+				Set tempTh = new HashSet();
+				tempTh.add(ampTh);
+				ampThInd.setThemes(tempTh);
+				tx = session.beginTransaction();
+				session.saveOrUpdate(ampThInd);
+				tx.commit();
+			}
+			catch(Exception ex) {
+				logger.error("Exception from getThemeIndicators()  " + ex.getMessage());
+				ex.printStackTrace(System.out);
+			}
+			finally {
+				if (session != null) {
+					try {
+						PersistenceManager.releaseSession(session);
+					} catch (Exception rsf) {
+						logger.error("Release session failed");
+					}
+				}
+			}
+		}
+
 		public static Collection getThemeIndicators(Long ampThemeId)
 		{
 			Session session = null;
 			AmpTheme tempAmpTheme = null;
 			Collection themeInd = new ArrayList();
-	
+
 			try
 			{
-				session = PersistenceManager.getRequestDBSession();
+				session = PersistenceManager.getSession();
 				tempAmpTheme = (AmpTheme) session.load(AmpTheme.class,ampThemeId);
 				Set themeIndSet = tempAmpTheme.getIndicators();
 				Iterator itrIndSet = themeIndSet.iterator();
@@ -325,7 +343,7 @@ public class ProgramUtil {
 			}
 			return themeInd;
 		}
-	
+
 		public static Collection getThemeIndicatorValues(Long themeIndicatorId)
 		{
 			Session session = null;
@@ -561,7 +579,7 @@ public class ProgramUtil {
 			}
 			return subThemes;
 		}
-		
+
 		public static void saveEditThemeIndicators(AllPrgIndicators allPrgInd, Long ampThemeId)
 		{
 			Session session = null;
@@ -594,7 +612,7 @@ public class ProgramUtil {
 				}
 			}
 		}
-		
+
 		public static AmpThemeIndicators saveEditPrgInd(AllPrgIndicators allPrgInd, AmpTheme tempAmpTheme)
 		{
 			Session session = null;
@@ -632,7 +650,7 @@ public class ProgramUtil {
 						logger.error("Transaction roll back failed : "+trbf.getMessage());
 						trbf.printStackTrace(System.out);
 					}
-				}	
+				}
 			}
 			finally
 			{
@@ -650,7 +668,7 @@ public class ProgramUtil {
 			}
 			return ampThemeInd;
 		}
-		
+
 		public static void saveEditPrgIndValues(Collection prgIndValues, AmpThemeIndicators ampThemeInd)
 		{
 			Session session = null;
@@ -708,7 +726,7 @@ public class ProgramUtil {
 				}
 			}
 		}
-		
+
 		public static void saveThemeIndicators(AmpPrgIndicator tempPrgInd, Long ampThemeId)
 		{
 			Session session = null;
@@ -733,19 +751,19 @@ public class ProgramUtil {
 				session.save(ampThemeInd);
 				tempAmpTheme.getIndicators().add(ampThemeInd);
 				session.saveOrUpdate(tempAmpTheme);
-				if(tempPrgInd.getPrgIndicatorValues()!=null) {
-				Iterator indItr = tempPrgInd.getPrgIndicatorValues().iterator();
-				while(indItr.hasNext())
-				{
-					AmpPrgIndicatorValue prgIndValue = (AmpPrgIndicatorValue) indItr.next();
-					AmpThemeIndicatorValue indValue = new AmpThemeIndicatorValue();
-					indValue.setValueType(prgIndValue.getValueType());
-					indValue.setValueAmount(prgIndValue.getValAmount());
-					indValue.setCreationDate(DateConversion.getDate(prgIndValue.getCreationDate()));
-					indValue.setThemeIndicatorId(ampThemeInd);
-					session.save(indValue);
-				}
-				}
+
+                if(tempPrgInd.getPrgIndicatorValues()!=null && tempPrgInd.getPrgIndicatorValues().size()!=0){
+                    Iterator indItr = tempPrgInd.getPrgIndicatorValues().iterator();
+                    while(indItr.hasNext()) {
+                        AmpPrgIndicatorValue prgIndValue = (AmpPrgIndicatorValue) indItr.next();
+                        AmpThemeIndicatorValue indValue = new AmpThemeIndicatorValue();
+                        indValue.setValueType(prgIndValue.getValueType());
+                        indValue.setValueAmount(prgIndValue.getValAmount());
+                        indValue.setCreationDate(DateConversion.getDate(prgIndValue.getCreationDate()));
+                        indValue.setThemeIndicatorId(ampThemeInd);
+                        session.save(indValue);
+                    }
+                }
 				tx.commit();
 			}
 			catch(Exception ex)
@@ -780,7 +798,7 @@ public class ProgramUtil {
 				}
 			}
 		}
-	
+
 		public static void deleteTheme(Long themeId)
 		{
 			ArrayList colTheme = (ArrayList)getRelatedThemes(themeId);
@@ -798,7 +816,7 @@ public class ProgramUtil {
 				deleteonebyone(ampTh.getAmpThemeId());
 			}
 		}
-	
+
 		public static void deleteonebyone(Long thID)
 		{
 			Session sess = null;
@@ -817,12 +835,12 @@ public class ProgramUtil {
 				logger.debug("Exception : "+e1);
 			}
 		}
-		
+
 		public static AllPrgIndicators getThemeIndicator(Long indId)
 		{
 			Session session = null;
 			AllPrgIndicators tempPrgInd = new AllPrgIndicators();
-	
+
 			try
 			{
 				session = PersistenceManager.getSession();
@@ -858,14 +876,14 @@ public class ProgramUtil {
 			}
 			return tempPrgInd;
 		}
-	
+
 		public static AllPrgIndicators getThemeIndValues(Long indId)
 		{
 			AllPrgIndicators programInd = getThemeIndicator(indId);
 			programInd.setThemeIndValues(getThemeIndicatorValues(indId));
 			return programInd;
 		}
-		
+
 		public static void saveIndicator(AllPrgIndicators allPrgInd)
 		{
 			Session session = null;
@@ -916,7 +934,7 @@ public class ProgramUtil {
 				}
 			}
 		}
-	
+
 		public static void deletePrgIndicator(Long indId)
 		{
 			Session session = null;
@@ -929,6 +947,7 @@ public class ProgramUtil {
 				AmpThemeIndicators tempThemeInd = (AmpThemeIndicators) session.load(AmpThemeIndicators.class,indId);
 				session.delete(tempThemeInd);
 				tx.commit();
+				session.flush();
 			}
 			catch(Exception e1)
 			{
@@ -936,7 +955,7 @@ public class ProgramUtil {
 				logger.debug("Exception : "+e1);
 			}
 		}
-		
+
 		public static void deletePrgIndicatorValue(Long themeIndicatorId)
 		{
 			Session session = null;
@@ -967,8 +986,8 @@ public class ProgramUtil {
 				logger.debug("Exception : "+e1);
 			}
 		}
-		
-		public static void updateTheme(EditProgram editPrg) 
+
+		public static void updateTheme(EditProgram editPrg)
 		{
 			Session session = null;
 			Transaction tx = null;
@@ -977,20 +996,10 @@ public class ProgramUtil {
 				session = PersistenceManager.getSession();
 				AmpTheme tempAmpTheme = null;
 				tempAmpTheme = (AmpTheme) session.load(AmpTheme.class,editPrg.getAmpThemeId());
-				
 				tempAmpTheme.setName(editPrg.getName());
 				tempAmpTheme.setThemeCode(editPrg.getThemeCode());
 				tempAmpTheme.setDescription(editPrg.getDescription());
 				tempAmpTheme.setType(editPrg.getType());
-				
-				tempAmpTheme.setLeadAgency( editPrg.getLeadAgency() );
-				tempAmpTheme.setTargetGroups( editPrg.getTargetGroups() );
-				tempAmpTheme.setBackground( editPrg.getBackground() );
-				tempAmpTheme.setObjectives( editPrg.getObjectives() );
-				tempAmpTheme.setOutputs( editPrg.getOutputs() );
-				tempAmpTheme.setBeneficiaries( editPrg.getBeneficiaries() );
-				tempAmpTheme.setEnvironmentConsiderations( editPrg.getEnvironmentConsiderations() );
-				
 				tx = session.beginTransaction();
 				session.update(tempAmpTheme);
 				tx.commit();
@@ -998,14 +1007,14 @@ public class ProgramUtil {
 			catch(Exception ex)
 			{
 				logger.error("Exception from saveIndicator() : " + ex.getMessage());
-				ex.printStackTrace(System.out);		
-				if (tx != null) 
+				ex.printStackTrace(System.out);
+				if (tx != null)
 				{
-					try 
+					try
 					{
 						tx.rollback();
-					} 
-					catch (Exception trbf) 
+					}
+					catch (Exception trbf)
 					{
 						logger.error("Transaction roll back failed : "+trbf.getMessage());
 						trbf.printStackTrace(System.out);
@@ -1014,20 +1023,20 @@ public class ProgramUtil {
 			}
 			finally
 			{
-				if (session != null) 
+				if (session != null)
 				{
-					try 
+					try
 					{
 						PersistenceManager.releaseSession(session);
-					} 
-					catch (Exception rsf) 
+					}
+					catch (Exception rsf)
 					{
 						logger.error("Failed to release session :" + rsf.getMessage());
 					}
 				}
-			} 
+			}
 		}
-	
+
 		static Collection tempPrg = new ArrayList();
 		public static Collection getRelatedThemes(Long id)
 		{
@@ -1111,11 +1120,11 @@ public class ProgramUtil {
             }
 
         }
-        
+
         /*
          * Added by Govind
          */
-        
+
         public static Collection getProgramTypes() {
     		Session session = null;
     		Collection col = null;
@@ -1144,14 +1153,14 @@ public class ProgramUtil {
          */
         public static void saveNewProgramType(AmpProgramType prg) {
         	DbUtil.add(prg);
-    		
+
     	}
         /*
-         * update a Program  
+         * update a Program
          */
         public static void updateProgramType(AmpProgramType prg) {
         	DbUtil.update(prg);
-    		
+
     	}
         /*
          * to get the Program Type for Editing
@@ -1163,7 +1172,7 @@ public class ProgramUtil {
     			session = PersistenceManager.getSession();
     			String qryStr = "select name from " + AmpProgramType.class.getName()
     					+ " name where name.ampProgramId=:Id ";
-    			
+
     			Query qry = session.createQuery(qryStr);
 				qry.setParameter("Id",Id);
     			col=qry.list();
@@ -1182,10 +1191,10 @@ public class ProgramUtil {
     		return col;
     	}
         /*
-         * 
+         *
          */
         public static void deleteProgramType(AmpProgramType prg) {
         	DbUtil.delete(prg);
-    		
+
     	}
  }

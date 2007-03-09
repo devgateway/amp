@@ -4,7 +4,7 @@
 		 <host>gnyan.ncb.ernet.in</host>
 		 <from>system@digijava.org</from>
 	</smtp>
-    <logon-site id="dglogin" host="amp-login.code.ro">http://amp-demo-login.code.ro:8080</logon-site>
+    <logon-site id="dglogin" host="amp-login.code.ro">http://amp-maldives-login.code.ro:8080</logon-site>
 	<server-type prefix="">development</server-type>
 
 	<site-config>repository</site-config>

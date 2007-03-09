@@ -62,7 +62,6 @@ public class LocationSelected extends Action {
 			location[0].setLocId(new Long(System.currentTimeMillis()));
 			location[0].setCountryId(cntry.getCountryId());
 			location[0].setCountry(cntry.getCountryName());
-			
 		}
 		
 		if (eaForm.getImpLevelValue().intValue() > 1) {

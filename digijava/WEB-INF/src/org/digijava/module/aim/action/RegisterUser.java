@@ -77,16 +77,17 @@ public class RegisterUser extends Action {
             	AmpGlobalSettings ampG = (AmpGlobalSettings)itr1.next();
             	ISO = ampG.getGlobalSettingsValue();
             }
+            
             Collection col =FeaturesUtil.getDefaultCountry(ISO);
-            String Country = null;
+            String countryIso = null;
             Iterator itr = col.iterator();
             while(itr.hasNext())
             {
             	Country ampG = (Country)itr.next();
-            	Country = ampG.getCountryName();
+            	countryIso = ampG.getIso();
             }
-            System.out.println(" this is the default country.... "+Country);
-            user.setCountry(new Country(Country));
+            System.out.println(" this is the default country.... "+countryIso);
+            user.setCountry(new Country(countryIso));
 			//user.setCountry(new Country(org.digijava.module.aim.helper.Constants.COUNTRY_ISO));
 
 			// set default language

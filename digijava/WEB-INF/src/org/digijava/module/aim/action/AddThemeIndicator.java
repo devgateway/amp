@@ -56,7 +56,7 @@ public class AddThemeIndicator extends Action
 			{
 				String indId = request.getParameter("indicatorId");
 				AllPrgIndicators allPrgInd = new AllPrgIndicators();
-				if(indId.trim().length() == 0)
+				if(indId.trim().length() == 0 || indId.trim().equals("0"))
 				{
 					AmpPrgIndicator ampPrgInd = new AmpPrgIndicator();
 					ampPrgInd.setName(themeForm.getName());

@@ -34,16 +34,12 @@
   }
 
 	function addFunding() {
-		
 		var flag = validateFunding();
 		if (flag == false) return false;
-		
 		<digi:context name="fundAdded" property="context/module/moduleinstance/fundingAdded.do?edit=true" />;
 		document.aimEditActivityForm.action = "<%= fundAdded %>";
 		document.aimEditActivityForm.target = "_self";
 	  	document.aimEditActivityForm.submit();
-	  //	window.opener.reload();
-	  //	window.opener.refresh();
 		return true;
 	}
 
@@ -77,7 +73,6 @@
 	{
 		if(document.aimEditActivityForm.dupFunding.value == "false")
 		{
-				
 				<digi:context name="addAct" property="context/module/moduleinstance/addActivity.do?edit=true"/>
 				document.aimEditActivityForm.action = "<%=addAct%>";
 				document.aimEditActivityForm.target = window.opener.name;
@@ -106,7 +101,6 @@
 	function closeWindow() {
 		window.close();
 	}
-
 
 
 	-->
@@ -316,8 +310,8 @@
 											<td valign="bottom">
 												<html:select name="fundingDetail" indexed="true" property="perspectiveCode" styleClass="inp-text"
 												disabled="false">
-													<html:option value="DN">Donor</html:option>
-													<html:option value="MA">MOFED</html:option>
+													<html:option value="DN"><digi:trn key="aim:PerspectiveOp1">Donor</digi:trn></html:option>
+													<html:option value="MA"><digi:trn key="aim:PerspectiveOp2">Goverment</digi:trn></html:option>
 												</html:select>
 											</td>
 											<td>
@@ -419,8 +413,8 @@
 											<td valign="bottom">
 												<html:select name="fundingDetail" indexed="true" property="perspectiveCode" styleClass="inp-text"
 												disabled="false">
-													<html:option value="DN">Donor</html:option>
-													<html:option value="MA">MOFED</html:option>
+													<html:option value="DN"><digi:trn key="aim:PerspectiveOp1">Donor</digi:trn></html:option>
+													<html:option value="MA"><digi:trn key="aim:PerspectiveOp2">Goverment</digi:trn></html:option>
 												</html:select>
 											</td>
 											<td>
@@ -597,7 +591,7 @@
 											<td valign="bottom">
 												<html:select name="fundingDetail" indexed="true" property="perspectiveCode" styleClass="inp-text"
 												disabled="false">
-													<html:option value="DN">Donor</html:option>
+													<html:option value="DN"><digi:trn key="aim:PerspectiveOp1">Donor</digi:trn></html:option>
 													<html:option value="MA">MOFED</html:option>
 												</html:select>
 											</td>
@@ -647,8 +641,8 @@
 											<td valign="bottom">
 												<html:select name="fundingDetail" indexed="true" property="perspectiveCode" styleClass="inp-text"
 												disabled="false">
-													<html:option value="DN">Donor</html:option>
-													<html:option value="MA">MOFED</html:option>
+													<html:option value="DN"><digi:trn key="aim:PerspectiveOp1">Donor</digi:trn></html:option>
+													<html:option value="MA"><digi:trn key="aim:PerspectiveOp2">Goverment</digi:trn></html:option>
 												</html:select>
 											</td>
 											<td>
@@ -770,7 +764,7 @@
 														<td valign="bottom">
 															<html:select name="fundingDetail" indexed="true" property="perspectiveCode" styleClass="inp-text"
 															disabled="false">
-																<html:option value="DN">Donor</html:option>
+																<html:option value="DN"><digi:trn key="aim:PerspectiveOp1">Donor</digi:trn></html:option>
 																<html:option value="MA">MOFED</html:option>
 															</html:select>
 														</td>
@@ -838,8 +832,8 @@
 														<td valign="bottom">
 															<html:select name="fundingDetail" indexed="true" property="perspectiveCode" styleClass="inp-text"
 															disabled="false">
-																<html:option value="DN">Donor</html:option>
-																<html:option value="MA">MOFED</html:option>
+																<html:option value="DN"><digi:trn key="aim:PerspectiveOp1">Donor</digi:trn></html:option>
+																<html:option value="MA"><digi:trn key="aim:PerspectiveOp2">Goverment</digi:trn></html:option>
 															</html:select>
 														</td>
 														<td>

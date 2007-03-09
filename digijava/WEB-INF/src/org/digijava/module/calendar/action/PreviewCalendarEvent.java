@@ -47,27 +47,37 @@ public class PreviewCalendarEvent
             }
             calendarEventForm.setDonors(donors);
             // attendee users
+
+
+            List attendeeGuests = new ArrayList();
             List attendeeUsers = new ArrayList();
-            String[] userIds = calendarEventForm.getSelectedAttendeeUsers();
+            List selUsers =new ArrayList();
+
+            String[] userIds = calendarEventForm.getSelectedUsers();
             if(userIds != null && userIds.length > 0) {
+                LabelValueBean lvb=null;
+                LabelValueBean lvbs=null;
+                String userId=null;
                 for(int i = 0; i < userIds.length; i++) {
-                    User user = UserUtils.getUser(Long.valueOf(userIds[i]));
-                    LabelValueBean lvb = new LabelValueBean(user.getFirstNames() +
-                        " " + user.getLastName(), userIds[i]);
-                    attendeeUsers.add(lvb);
+                    if(userIds[i].substring(0,2).equals("u:")){
+                        userId=new String(userIds[i].substring(2,userIds[i].length()));
+                        User user = UserUtils.getUser(Long.valueOf(userId));
+                        lvb = new LabelValueBean(user.getFirstNames() + " " + user.getLastName(), userId);
+                        lvbs=new LabelValueBean(user.getFirstNames() + " " + user.getLastName(), userIds[i]);
+                        attendeeUsers.add(lvb);
+                    }else if(userIds[i].substring(0,2).equals("g:")){
+                        userId=new String(userIds[i].substring(2,userIds[i].length()));
+                        lvb = new LabelValueBean(userId, userId);
+                        lvbs=new LabelValueBean(userId, userIds[i]);
+                        attendeeGuests.add(lvb);
+                    }
+                    selUsers.add(lvbs);
                 }
             }
             calendarEventForm.setAttendeeUsers(attendeeUsers);
-            // attendee guests
-            List attendeeGuests = new ArrayList();
-            String[] guestNames = calendarEventForm.getSelectedAttendeeGuests();
-            if(guestNames != null && guestNames.length > 0) {
-                for(int i = 0; i < guestNames.length; i++) {
-                    LabelValueBean lvb = new LabelValueBean(guestNames[i], guestNames[i]);
-                    attendeeGuests.add(lvb);
-                }
-            }
             calendarEventForm.setAttendeeGuests(attendeeGuests);
+            calendarEventForm.setSelectedUsersList(selUsers);
+
         } catch(Exception ex) {
             return mapping.findForward("failure");
         }

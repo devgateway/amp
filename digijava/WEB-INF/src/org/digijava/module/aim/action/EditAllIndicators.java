@@ -57,6 +57,12 @@ public class EditAllIndicators extends Action {
 			MEIndicatorsUtil.saveIndicator(allMEInd);
 			return mapping.findForward("saving");
 		}
+		if(type.equalsIgnoreCase("assign"))
+		{
+			indThemeForm.setThemes(ProgramUtil.getAllPrograms());
+			indThemeForm.setIndicatorId(id);
+			return mapping.findForward("assign");
+		}
 		if(type.equalsIgnoreCase("deletePrg"))
 		{
 			ProgramUtil.deletePrgIndicator(id);

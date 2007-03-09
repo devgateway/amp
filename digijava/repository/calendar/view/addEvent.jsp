@@ -143,7 +143,7 @@
 									<tr>
 										<td class="tlt"><b>
 											<digi:trn key="calendar:source">Source:</digi:trn></b>&nbsp;<a href='<bean:write name="previewItem" property="sourceUrl" />'>
-											   <bean:write name="previewItem" property="sourceName" />	
+											   <bean:write name="previewItem" property="sourceName" />
 											</a>
 										</td>
 									</tr>

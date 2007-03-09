@@ -232,295 +232,316 @@
 						</tr>
 					</table>
 				</td></tr>
-				<tr><td>
-					<table width="100%" cellSpacing="1" cellPadding="1" vAlign="top">
-						<tr>
-							<td height=16 vAlign=center width="100%"><span class=subtitle-blue>
-								<c:if test="${aimEditActivityForm.editAct == false}">
-									<digi:trn key="aim:addNewActivity">
-										Add New Activity
-									</digi:trn>
-								</c:if>
-								<c:if test="${aimEditActivityForm.editAct == true}">
-									<digi:trn key="aim:editActivity">
-										Edit Activity
-									</digi:trn>:
-										<bean:write name="aimEditActivityForm" property="title"/>
-								</c:if>
-							</td>
-						</tr>
-					</table>
-				</td></tr>
-				<tr> <td>
-					<digi:errors/>
-				</td></tr>
-				<tr valign="top"><td>
-					<table width="100%" cellSpacing="5" cellPadding="3" vAlign="top">
-						<tr><td width="75%" vAlign="top">
-
-							<table cellPadding=0 cellSpacing=0 width="100%" vAlign="top">
-								<tr>
-								<td width="100%">
-									<table cellPadding=0 cellSpacing=0 width="100%" border=0>
-										<tr>
-											<td width="13" height="20" background="module/aim/images/left-side.gif">
-											</td>
-											<td vAlign="top" align ="center" class="textalb" height="20" bgcolor="#006699">
-												<digi:trn key="aim:step3of9Funding">
-													Step 3 of 9: Funding
-												</digi:trn>
-											</td>
-											<td width="13" height="20" background="module/aim/images/right-side.gif">
-											</td>
-										</tr>
-									</table>
-								</td>
-								</tr>
- 							<tr>
-                            <td bgColor=#f4f4f2 align="center" vAlign="top">
-                              <c:if test="${aimEditActivityForm.status==1}">
-                                <table width="95%" bgcolor="#f4f4f2">
+                <tr>
+                  <td>
+                    <table width="100%" cellSpacing="1" cellPadding="1" valign="top">
+                      <tr>
+                        <td height=16 vAlign="middle" width="100%"><span class=subtitle-blue>
+                          <c:if test="${aimEditActivityForm.editAct == false}">
+                            <digi:trn key="aim:addNewActivity">
+                            Add New Activity
+                            </digi:trn>
+                          </c:if>
+                          <c:if test="${aimEditActivityForm.editAct == true}">
+                            <digi:trn key="aim:editActivity">
+                            Edit Activity
+                            </digi:trn>:
+                            <bean:write name="aimEditActivityForm" property="title"/>
+                          </c:if>
+                        </td>
+                      </tr>
+                    </table>
+                  </td>
+                </tr>
+				<tr>
+                  <td>
+                    <digi:errors/>
+                  </td>
+                </tr>
+                <tr valign="top">
+                  <td>
+                    <table width="100%" cellSpacing="0" cellPadding="1" vAlign="top">
+                      <tr>
+                        <td width="75%" vAlign="top">
+                          <table cellPadding=0 cellSpacing=0 width="100%" vAlign="top">
+                            <tr>
+                              <td width="100%">
+                                <table cellPadding=0 cellSpacing=0 width="100%" border=0>
                                   <tr>
-                                    <td>
-                                      <IMG alt=Link height=10 src="../ampTemplate/images/arrow-014E86.gif" width=15>
-                                        <a title="<digi:trn key="aim:ProposedProjCost">Proposed Project Cost</digi:trn>">
-                                        <b><digi:trn key="aim:proposedPrjectCost">Proposed Project Cost</digi:trn></b></a>
+                                    <td width="13" height="20" background="module/aim/images/left-side.gif">
+                                    </td>
+                                    <td vAlign="middle" align ="center" class="textalb" height="20" bgcolor="#006699">
+                                      <digi:trn key="aim:step3of9Funding">
+                                      Step 3 of 9: Funding
+                                      </digi:trn>
+                                    </td>
+                                    <td width="13" height="20" background="module/aim/images/right-side.gif">
                                     </td>
                                   </tr>
+                                </table>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td bgColor=#f4f4f2 align="center" vAlign="top" width="100%">
+                                <table width="100%" cellSpacing="0" vAlign="top" align="left" bgcolor="#006699">
                                   <tr>
-                                    <td align="left">
-                                      <table width="100%" cellSpacing=1 cellPadding=0 border=0>
-                                        <tr>
-                                          <td>
-                                            <table cellSpacing=1 cellPadding=5 border=0 width="100%" class="box-border-nopadding">
-                                              <c:if test="${aimEditActivityForm.proProjCost!=null}">
+                                    <td>
+                                      <c:if test="${aimEditActivityForm.status==1}">
+                                        <table width="100%" bgcolor="#f4f4f2" border="0" cellSpacing=0 cellPadding=0>
+                                          <tr>
+                                            <td>
+                                            <br />
+                                            &nbsp;&nbsp;&nbsp;&nbsp;
+                                              <IMG alt=Link height=10 src="../ampTemplate/images/arrow-014E86.gif" width=15 />
+                                              <a title="<digi:trn key="aim:ProposedProjCost">Proposed Project Cost</digi:trn>">
+                                              <b>
+                                                <digi:trn key="aim:proposedPrjectCost">Proposed Project Cost</digi:trn>
+                                              </b>
+</a><br /><br />
+                                            </td>
+                                          </tr>
+                                          <tr>
+                                            <td align="left">
+                                              <table width="100%" cellSpacing=0 cellPadding=0 border=0>
                                                 <tr>
                                                   <td>
-                                                    <table cellSpacing=1 cellPadding="1" bgcolor="#dddddd" width="100%">
-                                                      <tr bgcolor="#ffffff">
-                                                        <td bgcolor="#FFFFFF" align="left" width="30">
-                                                        Planned
-                                                        </td>
-                                                        <td bgcolor="#FFFFFF" align="left" width="10">
-                                                          <c:if test="${aimEditActivityForm.proProjCost.funAmount!=null}">
-                                                            ${aimEditActivityForm.proProjCost.funAmount}
+                                                    <table cellSpacing=8 cellPadding=0 border=0 width="95%" class="box-border-nopadding" align="center">
+                                                      <c:if test="${aimEditActivityForm.proProjCost!=null}">
+                                                        <tr>
+                                                          <td>
+                                                            <table cellSpacing=1 cellPadding="1" bgcolor="#dddddd" width="100%">
+                                                              <tr bgcolor="#ffffff">
+                                                                <td bgcolor="#FFFFFF" align="left" width="30">
+                                                                Planned
+                                                                </td>
+                                                                <td bgcolor="#FFFFFF" align="left" width="10">
+                                                                  <c:if test="${aimEditActivityForm.proProjCost.funAmount!=null}">
+                                                                  ${aimEditActivityForm.proProjCost.funAmount}
+                                                                  </c:if>
+                                                                </td>
+                                                                <td bgcolor="#FFFFFF" align="left" width="10">
+                                                                  <c:if test="${aimEditActivityForm.proProjCost.currencyCode!=null}">
+                                                                  ${aimEditActivityForm.proProjCost.currencyCode}
+                                                                  </c:if>
+                                                                </td>
+                                                                <td bgcolor="#FFFFFF" align="left" width="150">
+                                                                  <c:if test="${aimEditActivityForm.proProjCost.funDate!=null}">
+                                                                  ${aimEditActivityForm.proProjCost.funDate}
+                                                                  </c:if>
+                                                                </td>
+                                                              </tr>
+                                                            </table>
+                                                          </td>
+                                                        </tr>
+                                                      </c:if>
+                                                      <tr>
+                                                        <td>
+                                                          <c:if test="${aimEditActivityForm.proProjCost==null}">
+                                                            <input type="button" value="Add Funding" class="buton" onclick="addPropFunding()">
                                                           </c:if>
-                                                        </td>
-                                                        <td bgcolor="#FFFFFF" align="left" width="10">
-                                                          <c:if test="${aimEditActivityForm.proProjCost.currencyCode!=null}">
-                                                            ${aimEditActivityForm.proProjCost.currencyCode}
-                                                          </c:if>
-                                                        </td>
-                                                        <td bgcolor="#FFFFFF" align="left" width="150">
-                                                          <c:if test="${aimEditActivityForm.proProjCost.funDate!=null}">
-                                                             ${aimEditActivityForm.proProjCost.funDate}
+                                                          <c:if test="${aimEditActivityForm.proProjCost!=null}">
+                                                            <input type="Button" value="Remove Funding" class="buton" onclick="delPropFunding()">
+                                                            <input type="Button" value="Edit Funding" class="buton" onclick="addPropFunding()">
                                                           </c:if>
                                                         </td>
                                                       </tr>
                                                     </table>
                                                   </td>
                                                 </tr>
-                                             </c:if>
-                                              <tr>
-                                                <td>
-                                                  <c:if test="${aimEditActivityForm.proProjCost==null}">
-                                                    <input type="button" value="Add Funding" class="buton" onclick="addPropFunding()">
-                                                  </c:if>
-                                                  <c:if test="${aimEditActivityForm.proProjCost!=null}">
-                                                    <input type="Button" value="Remove Funding" class="buton" onclick="delPropFunding()">
-													<input type="Button" value="Edit Funding" class="buton" onclick="addPropFunding()">
-                                                  </c:if>
-                                                </td>
-                                              </tr>
-                                            </table>
+                                              </table>
+                                            </td>
+                                          </tr>
+                                          <tr>
+                                            <td>
+                                              &nbsp;
+                                            </td>
+                                          </tr>
+                                        </table>
+                                      </c:if>
+                                      <table width="100%" bgcolor="#f4f4f2" border="0" cellSpacing=0 cellPadding=0 >
+                                        <tr>
+                                          <td>
+                                          <br />
+                                          &nbsp;&nbsp;&nbsp;&nbsp;
+                                            <IMG alt=Link height=10 src="../ampTemplate/images/arrow-014E86.gif" width=15>
+                                              <a title="<digi:trn key="aim:FundingOrgs">The country or agency that financed the project</digi:trn>">
+                                              <b>
+                                                <digi:trn key="aim:fundingOrganizations">Funding Organizations</digi:trn>
+                                              </b>
+</a><br /><br />
                                           </td>
                                         </tr>
-                                      </table>
+
+                                        <tr>
+                                          <td align="left">
+                                            <table width="95%" cellSpacing=1 cellPadding=0 border=0 align="center">
+                                              <tr>
+                                                <td>
+                                                  <table cellSpacing=8 cellPadding=0 border=0 width="100%" class="box-border-nopadding">
+                                                    <logic:notEmpty name="aimEditActivityForm" property="fundingOrganizations">
+                                                      <logic:iterate name="aimEditActivityForm" property="fundingOrganizations" id="fundingOrganization" type="org.digijava.module.aim.helper.FundingOrganization">
+                                                        <tr>
+                                                          <td>
+                                                            <html:multibox property="selFundingOrgs">
+                                                              <bean:write name="fundingOrganization" property="ampOrgId"/>
+                                                            </html:multibox>
+                                                            <bean:write name="fundingOrganization" property="orgName"/>
+                                                          </td>
+                                                        </tr>
+                                                        <logic:notEmpty name="fundingOrganization" property="fundings">
+                                                          <logic:iterate name="fundingOrganization" indexId="index" property="fundings" id="funding" type="org.digijava.module.aim.helper.Funding">
+                                                            <tr>
+                                                              <td>
+                                                                <table cellSpacing=1 cellPadding=0 border=0 width="100%" class="box-border-nopadding">
+                                                                  <tr>
+                                                                    <td>
+                                                                      <table cellSpacing=1 cellPadding=0 border=0 width="100%">
+                                                                        <tr>
+                                                                          <td>
+                                                                            <table width="100%" border="0" cellpadding="1" bgcolor="#ffffff" cellspacing="1">
+                                                                              <tr>
+                                                                                <td bgcolor="#FFFFFF" align="left" width="150">
+                                                                                  <a title="<digi:trn key="aim:FundOrgId">This ID is specific to the financial operation. This item may be useful when one project has two or more different financial instruments. If the project has a unique financial operation, the ID can be the same as the project ID</digi:trn>">																																<digi:trn key="aim:fundingOrgId">
+                                                                                    Funding Organization Id</digi:trn></a>
+                                                                                </td>
+                                                                                <td width="1">:</td>
+                                                                                <td bgcolor="#FFFFFF" align="left">
+                                                                                  <bean:write name="funding"	property="orgFundingId"/>
+                                                                                </td>
+                                                                              </tr>
+                                                                              <!-- type of assistance -->
+                                                                              <tr>
+                                                                                <td bgcolor="#FFFFFF" align="left" width="150">
+                                                                                  <a title="<digi:trn key="aim:AssitanceType">Specify whether the project was financed through a grant, a loan or in kind</digi:trn>">
+                                                                                  <digi:trn key="aim:typeOfAssist">
+                                                                                    Type of Assistance </digi:trn>
+</a>
+                                                                                </td>
+                                                                                <td width="1">:</td>
+                                                                                <td bgcolor="#FFFFFF" align="left">
+                                                                                  <logic:notEmpty name="funding" property="ampTermsAssist">
+                                                                                    <bean:write name="funding"	property="ampTermsAssist.termsAssistName"/>
+                                                                                  </logic:notEmpty>
+                                                                                </td>
+                                                                              </tr>
+
+                                                                              <tr>
+                                                                                <td bgcolor="#FFFFFF" align="left" width="150">
+                                                                                  <a title="<digi:trn key="aim:Financing">Method by which aid is delivered to an activity</digi:trn>">
+                                                                                  <digi:trn key="aim:financingInstrument">
+                                                                                    Financing Instrument</digi:trn>
+</a>
+                                                                                </td>
+                                                                                <td width="1">:</td>
+                                                                                <td bgcolor="#FFFFFF" align="left">
+                                                                                  <logic:notEmpty name="funding" property="modality">
+                                                                                    <bean:write name="funding"	property="modality.name"/>
+                                                                                  </logic:notEmpty>
+                                                                                </td>
+                                                                              </tr>
+
+                                                                              <tr>
+                                                                                <td bgcolor="#FFFFFF" align="left" width="150">
+                                                                                  <a title="<digi:trn key="aim:ConditionsforFundRelease">Enter the conditions attached to the release of the funds</digi:trn>">		 <digi:trn key="aim:conditions"> Conditions
+                                                                                  </digi:trn>
+</a>
+                                                                                </td>
+                                                                                <td width="1">:</td>
+                                                                                <td bgcolor="#FFFFFF" align="left">
+                                                                                  <bean:write name="funding"	property="conditions"/>
+                                                                                </td>
+                                                                              </tr>
+                                                                            </table>
+                                          </td>
+                                                                        </tr>
+                                                                      </table>
                                     </td>
-                                  </tr>
-                                  <tr><td>&nbsp;</td></tr>
-                                </table>
-                                </c:if>
-										<table width="95%" bgcolor="#f4f4f2">
-											<tr>
-												<td>
-													<IMG alt=Link height=10 src="../ampTemplate/images/arrow-014E86.gif" width=15>
-													<a title="<digi:trn key="aim:FundingOrgs">The country or agency that financed the project</digi:trn>">
-													<b><digi:trn key="aim:fundingOrganizations">Funding Organizations</digi:trn></b>
-													</a>
-												</td>
-											</tr>
+                                                                  </tr>
+                                                                  <tr>
+                                                                    <td>
+                                                                      <table width="98%" border="0" cellpadding="1"                                                                      bgcolor="#ffffff" cellspacing="1">
+                                                                        <tr>
+                                                                          <td bgcolor="#FFFFFF" align="right" colspan="2">
+                                                                            <table width="100%" border="0" cellSpacing="1" cellPadding="1" bgcolor="#dddddd">
+                                                                              <tr bgcolor="#ffffff">
+                                                                                <td colspan="5"><b>
+                                                                                  <a title="<digi:trn key="aim:Commitmentsmade">A firm obligation expressed in writing and backed by the necessary funds, undertaken by an official donor to provide specified assistance to a recipient country</digi:trn>">				<digi:trn key="aim:commitments">			Commitments </digi:trn></b>
+</a>
+                                                                                </td>
+                                                                              </tr>
+                                                                              <logic:iterate name="funding" property="fundingDetails" id="fundingDetail"                                                                              type="org.digijava.module.aim.helper.FundingDetail">
+                                                                                <logic:equal name="fundingDetail" property="transactionType" value="0">
 
-											<tr>
-												<td align="left">
-													<table width="100%" cellSpacing=1 cellPadding=0 border=0>
-														<tr>
-															<td>
-																	<table cellSpacing=1 cellPadding=5 border=0 width="100%" class="box-border-nopadding">
-																	<logic:notEmpty name="aimEditActivityForm" property="fundingOrganizations">
-																	<logic:iterate name="aimEditActivityForm" property="fundingOrganizations"
-																	id="fundingOrganization" type="org.digijava.module.aim.helper.FundingOrganization">
-																	<tr>
-																		<td>
-																			<html:multibox property="selFundingOrgs">
-																				<bean:write name="fundingOrganization" property="ampOrgId"/>
-																			</html:multibox>
-																			<bean:write name="fundingOrganization" property="orgName"/>
-																		</td>
-																	</tr>
-																	<logic:notEmpty name="fundingOrganization" property="fundings">
-																	<logic:iterate name="fundingOrganization" indexId="index" property="fundings"
-																	id="funding" type="org.digijava.module.aim.helper.Funding">
-																	<tr><td>
-																	<table cellSpacing=1 cellPadding=0 border=0 width="100%" class="box-border-nopadding">
-																	<tr><td>
+                                                                                  <c:if test="${aimEditActivityForm.donorFlag == true}">
+                                                                                    <c:if test="${fundingDetail.perspectiveCode == 'DN'}">
+                                                                                      <tr bgcolor="#FFFF00">
+                                                                                    </c:if>
+                                                                                    <c:if test="${fundingDetail.perspectiveCode != 'DN'}">
+                                                                                      <tr bgcolor="#ffffff">
+                                                                                    </c:if>
+                                                                                    <td width="50">
+                                                                                      <bean:write name="fundingDetail" property="adjustmentTypeName"/>
+                                                                                    </td>
+                                                                                    <td width="120" align="right">
+                                                                                      <FONT color=blue>*</FONT>
+                                                                                      <bean:write name="fundingDetail" property="transactionAmount"/>&nbsp;
+                                                                                    </td>
+                                                                                    <td width="150">
+                                                                                      <bean:write name="fundingDetail" property="currencyCode"/>
+                                                                                    </td>
+                                                                                    <td width="70">
+                                                                                      <bean:write name="fundingDetail" property="transactionDate"/>
+                                                                                    </td>
+                                                                                    <td>
+                                                                                      <bean:write name="fundingDetail" property="perspectiveName"/>
+                                                                                    </td>
+                                                                                      </tr>
+                                                                                  </c:if>
 
-																	<table cellSpacing=1 cellPadding=0 border=0 width="100%">
-																	<tr><td>
-																		<table width="100%" border="0" cellpadding="1"
-																			bgcolor="#ffffff" cellspacing="1">
-														     					<tr>
-																            	<td bgcolor="#FFFFFF" align="left" width="150">
-																					<a title="<digi:trn key="aim:FundOrgId">This ID is specific to the financial operation. This item may be useful when one project has two or more different financial instruments. If the project has a unique financial operation, the ID can be the same as the project ID</digi:trn>">																																<digi:trn key="aim:fundingOrgId">
-																					Funding Organization Id</digi:trn></a>
-																        			</td>
-																					<td width="1">:</td>
-																        			<td bgcolor="#FFFFFF" align="left">
-																			  			<bean:write name="funding"	property="orgFundingId"/>
-																			  		</td>
-																	  			</tr>
-																				<!-- type of assistance -->
-																				<tr>
-																	       		<td bgcolor="#FFFFFF" align="left" width="150">
-																						<a title="<digi:trn key="aim:AssitanceType">Specify whether the project was financed through a grant, a loan or in kind</digi:trn>">
-																						<digi:trn key="aim:typeOfAssist">
-																						Type of Assistance </digi:trn>
-																						</a>
-																					</td>
-																					<td width="1">:</td>
-																				<td bgcolor="#FFFFFF" align="left">
-																					<logic:notEmpty name="funding" property="ampTermsAssist">
-																						<bean:write name="funding"	property="ampTermsAssist.termsAssistName"/>
-																					</logic:notEmpty>
-																				</td>
-																			</tr>
+                                                                                  <c:if test="${aimEditActivityForm.donorFlag == false}">
+                                                                                    <c:if test="${fundingDetail.perspectiveCode != 'DN'}">
+                                                                                      <tr bgcolor="#ffffff">
+                                                                                        <td width="50">
+                                                                                          <bean:write name="fundingDetail" property="adjustmentTypeName"/>
+                                                                                        </td>
+                                                                                        <td width="120" align="right">
+                                                                                          <FONT color=blue>*</FONT>
+                                                                                          <bean:write name="fundingDetail" property="transactionAmount"/>&nbsp;
+                                                                                        </td>
+                                                                                        <td width="150">
+                                                                                          <bean:write name="fundingDetail" property="currencyCode"/>
+                                                                                        </td>
+                                                                                        <td width="70">
+                                                                                          <bean:write name="fundingDetail" property="transactionDate"/>
+                                                                                        </td>
+                                                                                        <td>
+                                                                                          <bean:write name="fundingDetail" property="perspectiveName"/>
+                                                                                        </td>
+                                                                                      </tr>
+                                                                                    </c:if>
+                                                                                  </c:if>
 
-																			<tr>
-																	      	<td bgcolor="#FFFFFF" align="left" width="150">
-																					<a title="<digi:trn key="aim:Financing">Method by which aid is delivered to an activity</digi:trn>">
-																		  <digi:trn key="aim:financingInstrument">
-																					Financing Instrument</digi:trn>
-																					</a>
-																				</td>
-																				<td width="1">:</td>
-																			<td bgcolor="#FFFFFF" align="left">
-																				<logic:notEmpty name="funding" property="modality">
-																					<bean:write name="funding"	property="modality.name"/>
-																				</logic:notEmpty>
-																			</td>
-																		</tr>
-
-																			<tr>
-																				<td bgcolor="#FFFFFF" align="left" width="150">
-																					<a title="<digi:trn key="aim:ConditionsforFundRelease">Enter the conditions attached to the release of the funds</digi:trn>">		 <digi:trn key="aim:conditions"> Conditions
-																					</digi:trn>
-																					</a>
-																				</td>
-																					<td width="1">:</td>
-																				<td bgcolor="#FFFFFF" align="left">
-																					<bean:write name="funding"	property="conditions"/>
-																				</td>
-																			</tr>
-																		</table>
-																	</td></tr>
-																	</table>
-																	</td></tr>
-																	<tr><td>
-																		<table width="98%" border="0" cellpadding="1"
-																			bgcolor="#ffffff" cellspacing="1">
-																			<tr>
-																				<td bgcolor="#FFFFFF" align="right" colspan="2">
-																					<table width="100%" border="0" cellSpacing="1" cellPadding="1" bgcolor="#dddddd">
-																						<tr bgcolor="#ffffff">
-																							<td colspan="5"><b>
-																								<a title="<digi:trn key="aim:Commitmentsmade">A firm obligation expressed in writing and backed by the necessary funds, undertaken by an official donor to provide specified assistance to a recipient country</digi:trn>">				<digi:trn key="aim:commitments">			Commitments </digi:trn></b>
-																								</a>
-																							</td>
-																						</tr>
-																						<logic:iterate name="funding" property="fundingDetails" id="fundingDetail"
-																						type="org.digijava.module.aim.helper.FundingDetail">
-																						<logic:equal name="fundingDetail" property="transactionType" value="0">
-
-																						<c:if test="${aimEditActivityForm.donorFlag == true}">
-																						<c:if test="${fundingDetail.perspectiveCode == 'DN'}">
-																						<tr bgcolor="#FFFF00">
-																						</c:if>
-																						<c:if test="${fundingDetail.perspectiveCode != 'DN'}">
-																						<tr bgcolor="#ffffff">
-																						</c:if>
-																							<td width="50">
-																								<bean:write name="fundingDetail" property="adjustmentTypeName"/>
-																							</td>
-																							<td width="120" align="right">
-																								<FONT color=blue>*</FONT>
-																								<bean:write name="fundingDetail" property="transactionAmount"/>&nbsp;
-																							</td>
-																							<td width="150">
-																								<bean:write name="fundingDetail" property="currencyCode"/>
-																							</td>
-																							<td width="70">
-																								<bean:write name="fundingDetail" property="transactionDate"/>
-																							</td>
-																							<td>
-																								<bean:write name="fundingDetail" property="perspectiveName"/>
-																							</td>
-																						</tr>
-																						</c:if>
-
-																						<c:if test="${aimEditActivityForm.donorFlag == false}">
-																						<c:if test="${fundingDetail.perspectiveCode != 'DN'}">
-																						<tr bgcolor="#ffffff">
-																							<td width="50">
-																								<bean:write name="fundingDetail" property="adjustmentTypeName"/>
-																							</td>
-																							<td width="120" align="right">
-																								<FONT color=blue>*</FONT>
-																								<bean:write name="fundingDetail" property="transactionAmount"/>&nbsp;
-																							</td>
-																							<td width="150">
-																								<bean:write name="fundingDetail" property="currencyCode"/>
-																							</td>
-																							<td width="70">
-																								<bean:write name="fundingDetail" property="transactionDate"/>
-																							</td>
-																							<td>
-																								<bean:write name="fundingDetail" property="perspectiveName"/>
-																							</td>
-																						</tr>
-																						</c:if>
-																						</c:if>
-
-																						</logic:equal>
-																						</logic:iterate>
-																						<tr bgcolor="#ffffff">
-																							<td colspan="5">&nbsp;</td>
-															            			</tr>
-				          															<tr bgcolor="#ffffff">
-																        					<td colspan="5">
-																								<a title="<digi:trn key="aim:FundRelease">Release of funds to, or the purchase of goods or services for a recipient; by extension, the amount thus spent. Disbursements record the actual international transfer of financial resources, or of goods or services valued at the cost to the donor </digi:trn>"><b> <digi:trn key="aim:disbursements">			Disbursements </digi:trn></b>
-																								</a>
-																          				</td>
-						        														</tr>
-																	        			<logic:iterate name="funding" property="fundingDetails"
-																						id="fundingDetail" type="org.digijava.module.aim.helper.FundingDetail">
-																						<logic:equal name="fundingDetail" property="transactionType" value="1">
+                                                                                </logic:equal>
+                                                                              </logic:iterate>
+                                                                              <tr bgcolor="#ffffff">
+                                                                                <td colspan="5">&nbsp;</td>
+                                                                              </tr>
+                                                                              <tr bgcolor="#ffffff">
+                                                                                <td colspan="5">
+                                                                                  <a title="<digi:trn key="aim:FundRelease">Release of funds to, or the purchase of goods or services for a recipient; by extension, the amount thus spent. Disbursements record the actual international transfer of financial resources, or of goods or services valued at the cost to the donor </digi:trn>"><b> <digi:trn key="aim:disbursements">			Disbursements </digi:trn></b>
+</a>
+                                                                                </td>
+                                                                              </tr>
+                                                                              <logic:iterate name="funding" property="fundingDetails"
+                                                                              id="fundingDetail" type="org.digijava.module.aim.helper.FundingDetail">
+                                                                              <logic:equal name="fundingDetail" property="transactionType" value="1">
 
 
-																						<c:if test="${aimEditActivityForm.donorFlag == true}">
-																						<c:if test="${fundingDetail.perspectiveCode == 'DN'}">
-																						<tr bgcolor="#FFFF00">
-																						</c:if>
-																						<c:if test="${fundingDetail.perspectiveCode != 'DN'}">
+                                                                                <c:if test="${aimEditActivityForm.donorFlag == true}">
+                                                                                  <c:if test="${fundingDetail.perspectiveCode == 'DN'}">
+                                                                                    <tr bgcolor="#FFFF00">
+                                                                                  </c:if>
+                                                                                  <c:if test="${fundingDetail.perspectiveCode != 'DN'}">
 																						<tr bgcolor="#ffffff">
 																						</c:if>
 																							<td width="50">
@@ -750,55 +771,59 @@
 												</td>
 											</tr>
 											<tr><td>&nbsp;</td></tr>
-								<tr>
-									<td bgColor=#f4f4f2 align="center">
-										<table cellPadding=3>
-											<tr>
-												<c:if test="${aimEditActivityForm.donorFlag == true}">
-												<td>
-													<input type="button" value="Preview" class="dr-menu" onclick="previewClicked()">
-												</td>
-												</c:if>
-												<c:if test="${aimEditActivityForm.donorFlag == false}">
-												<td>
-													<input type="submit" value=" << Back " class="dr-menu" onclick="gotoStep(2)">
-												</td>
-												<td>
-													<input type="submit" value="Next >> " class="dr-menu" onclick="gotoStep(4)">
-												</td>
-												</c:if>
-												<td>
-													<input type="reset" value="Reset" class="dr-menu" onclick="return resetAll()">
-												</td>
-											</tr>
-										</table>
-									</td>
-								</tr>
-										</table>
+                                            <tr>
+                                              <td bgColor=#f4f4f2 align="center">
+                                                <table cellPadding=3>
+                                                  <tr>
+                                                    <c:if test="${aimEditActivityForm.donorFlag == true}">
+                                                      <td>
+                                                        <input type="button" value="Preview" class="dr-menu" onclick="previewClicked()">
+                                                      </td>
+                                                    </c:if>
+                                                    <c:if test="${aimEditActivityForm.donorFlag == false}">
+                                                      <td>
+                                                        <input type="submit" value=" << Back " class="dr-menu" onclick="gotoStep(2)">
+                                                      </td>
+                                                      <td>
+                                                        <input type="submit" value="Next >> " class="dr-menu" onclick="gotoStep(4)">
+                                                      </td>
+                                                    </c:if>
+                                                    <td>
+                                                      <input type="reset" value="Reset" class="dr-menu" onclick="return resetAll()">
+                                                    </td>
+                                                  </tr>
+                                                </table>
+                                              </td>
+                                            </tr>
+                                      </table>
+                                      </td>
+                                      </tr>
+                                      </table>
 
 
 
 
-										<!-- end contents -->
-									</td>
-								</tr>
+                                      <!-- end contents -->
+</td>
+                                                                    </tr>
 
-							</table>
-							</td></tr>
-						</table>
+                                </table>
+</td>
+                                                                                    </tr>
+                          </table>
 
-						</td>
-						<td width="25%" vAlign="top" align="right">
-						<!-- edit activity form menu -->
-							<c:if test="${aimEditActivityForm.donorFlag == false}">
-								<jsp:include page="editActivityMenu.jsp" flush="true" />
-							</c:if>
-							<c:if test="${aimEditActivityForm.donorFlag == true}">
-								<jsp:include page="donorEditActivityMenu.jsp" flush="true" />
-							</c:if>
-						<!-- end of activity form menu -->
-						</td></tr>
-					</table>
+</td>
+<td width="25%" vAlign="top" align="right">
+  <!-- edit activity form menu -->
+  <c:if test="${aimEditActivityForm.donorFlag == false}">
+    <jsp:include page="editActivityMenu.jsp" flush="true" />
+  </c:if>
+  <c:if test="${aimEditActivityForm.donorFlag == true}">
+    <jsp:include page="donorEditActivityMenu.jsp" flush="true" />
+  </c:if>
+  <!-- end of activity form menu -->
+</td></tr>
+                    </table>
 				</td></tr>
 				<tr><td>
 					&nbsp;

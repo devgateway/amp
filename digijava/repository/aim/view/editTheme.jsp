@@ -36,13 +36,13 @@
 		}
 		return true;
 	}
-	function saveProgram(id,rutId)
+	function saveProgram(id,rutId,name)
 	{
 			var temp = validate();
 			if(temp == true)
 			{
 				<digi:context name="editThm" property="context/module/moduleinstance/editTheme.do?event=update"/>
-				document.aimThemeForm.action = "<%=editThm%>&themeId=" + id + "&rootId=" + rutId;
+				document.aimThemeForm.action = "<%=editThm%>&themeId=" + id + "&rootId=" + rutId + "&indname=" + name;
 				document.aimThemeForm.target = window.opener.name;
 				document.aimThemeForm.submit();
 				window.close();
@@ -131,7 +131,7 @@
 				</td>
 				<td align="left">
 						<html:select property="programType" styleClass="inp-text">
-																	<html:option value="-1">Select Program Type</html:option>
+																	<html:option value="-1">Select Progarm Type</html:option>
 																		<html:optionsCollection name="aimThemeForm" property="programTypeNames"
 													 						value="title" label="title" />
 																		</html:select>
@@ -197,7 +197,7 @@
 				<tr bgColor=#ffffff><td height="30" colspan="2"></td></tr>
 				<tr bgColor=#dddddb>
 				<td bgColor=#dddddb height="25" align="center" colspan="2">
-						<input styleClass="dr-menu" type="button" name="addBtn" value="Save" onclick="return saveProgram('<bean:write name="aimThemeForm" property="themeId"/>','<bean:write name="aimThemeForm" property="rootId"/>')">&nbsp;&nbsp;
+						<input styleClass="dr-menu" type="button" name="addBtn" value="Save" onclick="return saveProgram('<bean:write name="aimThemeForm" property="themeId"/>','<bean:write name="aimThemeForm" property="rootId"/>','<bean:write name="aimThemeForm" property="name"/>')">&nbsp;&nbsp;
 						<input styleClass="dr-menu" type="reset" value="Cancel">&nbsp;&nbsp;
 						<input styleClass="dr-menu" type="button" name="close" value="Close" onclick="closeWindow()">
 				</td>

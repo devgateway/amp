@@ -21,7 +21,7 @@ function openURLinWindow(url,wndWidth, wndHeight) {
 		wndHeight = window.screen.availHeight/2;
 	}
 	var t = ((screen.width)-wndWidth)/2;
-	var l = ((screen.height)-wndHeight)/2;	
+	var l = ((screen.height)-wndHeight)/2;
 	popupPointer = window.open(url, "forumPopup", "height=" + wndHeight + ",width=" + wndWidth + ",top=" + l + ",left=" + t +",menubar=no,scrollbars=yes");
 }
 
@@ -32,7 +32,7 @@ function openResisableWindow(wndWidth, wndHeight) {
 		wndHeight = window.screen.availHeight/2;
 	}
 	var t = ((screen.width)-wndWidth)/2;
-	var l = ((screen.height)-wndHeight)/2;	
+	var l = ((screen.height)-wndHeight)/2;
 	popupPointer = window.open("about:blank", "forumPopup", "height=" + wndHeight + ",width=" + wndWidth + ",top=" + l + ",left=" + t +",toolbar=yes,menubar=yes,scrollbars=yes,resizable=yes,location=no, directories=no, status=no");
 }
 
@@ -44,8 +44,20 @@ function openNewWindow(wndWidth, wndHeight){
 	}
 	var t = ((screen.width)-wndWidth)/2;
 	var l = ((screen.height)-wndHeight)/2;
-	
+
 	popupPointer = window.open("about:blank", "forumPopup", "height=" + wndHeight + ",width=" + wndWidth + ",top=" + l + ",left=" + t +",menubar=no,scrollbars=yes");
+}
+
+function openNewWindowWithMenubar(wndWidth, wndHeight){
+	window.name = "opener" + new Date().getTime();
+	if (wndWidth == null || wndWidth == 0 || wndHeight == null || wndHeight == 0) {
+		wndWidth = window.screen.availWidth/2;
+		wndHeight = window.screen.availHeight/2;
+	}
+	var t = ((screen.width)-wndWidth)/2;
+	var l = ((screen.height)-wndHeight)/2;
+
+	popupPointer = window.open("about:blank", "forumPopup", "height=" + wndHeight + ",width=" + wndWidth + ",top=" + l + ",left=" + t +",menubar=yes,scrollbars=yes,resizable");
 }
 
 function openNewRsWindow(wndWidth, wndHeight){
@@ -103,13 +115,13 @@ function chkNumeric(objName)
 		for (j = 0;  j < checkOK.length;  j++)
 			if (ch == checkOK.charAt(j))
 				break;
-				
+
 		if (j == checkOK.length) {
 			allValid = false;
 			break;
 		}
 	}
-	
+
 	return allValid;
 }
 
@@ -144,7 +156,7 @@ function isEmpty(value)
 	if(value.length > 0)
 		return false;
 	else
-		return true;	
+		return true;
 }
 
 
@@ -214,6 +226,6 @@ function checkAmountLen(amt)
 	if(len > 6)
 	{
 		valid = confirm('All funding information should be entered in thousands "000". Do you wish to proceed with your entry?');
-		return valid;			
+		return valid;
 	}
 }

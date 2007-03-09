@@ -268,7 +268,7 @@ function popupwin()
 												<%--
 												<a href="<c:out value="${aimEditActivityForm.context}"/>/editor/showEditText.do?id=<%=objKey%>&referrer=<c:out value="${aimEditActivityForm.context}"/>/aim/addActivity.do?edit=true">Edit</a>
 											--%>
-												<a href="javascript:edit('<%=objKey%>')">	
+												<a href="javascript:edit('<%=objKey%>')">
 												Edit</a>
 											</td></tr>
 											<tr bgcolor="#ffffff"><td valign="top" align="left">
@@ -531,7 +531,7 @@ function popupwin()
 											</tr>
 											<tr>
 												<td width=200 bgcolor="#ffffff">
-													<a title="<digi:trn key="aim:ActualDateofProjectStart">Date (dd/mm/yy) when the project commenced (effective start date) </digi:trn>">&nbsp;&nbsp;
+													<a title="<digi:trn key="aim:ActualDateofProjectStart">Date (dd/mm/yy) when the project commenced (effective start date) </digi:trn>">&nbsp;
 													<digi:trn key="aim:actualStartDate">Actual Start Date </digi:trn>
 													</a>
 												</td>
@@ -557,10 +557,13 @@ function popupwin()
 													</table>
 												</td>
 											</tr>
-											<c:if test="${aimEditActivityForm.editAct == false}">
+
+
+
+
 											<tr>
 												<td width=200 bgcolor="#ffffff">
-													<a title="<digi:trn key="aim:ExpectedCompletionDateofProject">Date (dd/mm/yy) when the project is expected to be completed </digi:trn>">&nbsp;&nbsp;
+													<a title="<digi:trn key="aim:ExpectedCompletionDateofProject">Date (dd/mm/yy) when the project is expected to be completed </digi:trn>">&nbsp;
 													<digi:trn key="aim:proposedCompletionDate">Proposed Completion Date</digi:trn>
 													</a>
 												</td>
@@ -583,7 +586,7 @@ function popupwin()
 												</td>
 											</tr>
 											<tr>
-												<td width=200 bgcolor="#ffffff">	&nbsp;
+												<td width=200 bgcolor="#ffffff">&nbsp;
 												<a title="<digi:trn key="aim:CompletionDateofProject">Date (dd/mm/yy) when the project is expected to end or ended. AMP users have the possibility to update this field; AMP will keep track of the history of proposed completion dates </digi:trn>">
 												<digi:trn key="aim:currentCompletionDate">Current Completion Date</digi:trn>
 												</a>
@@ -609,50 +612,11 @@ function popupwin()
 													</table>
 												</td>
 											</tr>
-											</c:if>
-											<c:if test="${aimEditActivityForm.editAct == true}">
-												<tr>
-													<td width=200 bgcolor="#ffffff">&nbsp;
-													<digi:trn key="aim:currentCompletionDate">Current Completion Date</digi:trn>
-													</td>
-													<td bgcolor="#ffffff">
-														<table cellPadding=0 cellSpacing=0>
-															<tr>
-																<td>
-																	<html:text name="aimEditActivityForm" property="currentCompDate"
-																	size="10" styleClass="inp-text"
-																	readonly="true"/>
-																</td>
-																<td align="left" vAlign="center">&nbsp;
-																	<input type="button" class="buton" value="Revise"
-																	onclick="reviseCloseDate()">
-																</td>
-																<td>&nbsp;
-																	<input type="button" class="buton" value="Comment" onclick="commentWin()">
-																</td>
-															</tr>
-														</table>
-													</td>
-												</tr>
-												<c:if test="${!empty aimEditActivityForm.activityCloseDates}">
-												<tr>
-													<td width=200 bgcolor="#ffffff">&nbsp;
-													<digi:trn key="aim:proposedCompletionDates">Proposed Completion Dates</digi:trn>
-													</td>
-													<td bgcolor="#ffffff">
-														<table cellPadding=0 cellSpacing=0>
-															<c:forEach var="closeDate" items="${aimEditActivityForm.activityCloseDates}">
-															<tr>
-																<td>
-																	<c:out value="${closeDate}"/>
-																</td>
-															</tr>
-															</c:forEach>
-														</table>
-													</td>
-												</tr>
-												</c:if>
-											</c:if>
+
+
+
+
+
 											<tr>
 												<td bgcolor="#ffffff">																			  <FONT color=red>*</FONT>&nbsp;
 												<digi:trn key="aim:status">Status</digi:trn>												  <a href="javascript:popupwin()">

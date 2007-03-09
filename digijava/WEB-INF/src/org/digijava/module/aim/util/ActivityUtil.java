@@ -56,6 +56,7 @@ import org.digijava.module.aim.dbentity.AmpReportSector;
 import org.digijava.module.aim.dbentity.AmpSector;
 import org.digijava.module.aim.dbentity.AmpTeam;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
+import org.digijava.module.aim.dbentity.AmpTheme;
 import org.digijava.module.aim.helper.Activity;
 import org.digijava.module.aim.helper.ActivityIndicator;
 import org.digijava.module.aim.helper.ActivitySector;
@@ -696,6 +697,7 @@ public class ActivityUtil {
 			    activity.setCreatedDate(ampActivity.getCreatedDate());
 			    activity.setDescription(ampActivity.getDescription());
                 activity.setDocumentSpace(ampActivity.getDocumentSpace());
+
                 activity.setBudget(ampActivity.getBudget());
                 activity.setUpdatedBy(ampActivity.getUpdatedBy());
 

@@ -5,6 +5,7 @@
 <%@ taglib uri="/taglib/struts-html" prefix="html" %>
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
+<%@ page import = "org.apache.struts.util.LabelValueBean" %>
 
 <digi:instance property="calendarEventForm"/>
 
@@ -23,6 +24,14 @@ function addOrganisation(orgId, orgName){
     option.text = orgName;
     list.options.add(option);
 }
+
+function preSubmit(){
+  if(!check()){
+    return false;
+  }
+  selectUsers();
+}
+
 function check(){
     var et=document.getElementById("eventTitle");
     if(et.value==''){
@@ -33,20 +42,78 @@ function check(){
       return true;
     }
 }
-function addGuest(guest) {
-    var list = document.getElementById('selectedAttendeeGuests');
-    if (list == null || guest == null || guest.value == null || guest.value == "") {
+
+function addUser(){
+    var uslist = document.getElementById('usersList');
+    var selUsList=document.getElementById('selectedUsersSel');
+
+    if (uslist == null) {
+        return false;
+    }
+
+    var index = uslist.selectedIndex;
+    if (index != -1) {
+        for(var i = 0; i < uslist.length; i++) {
+            if (uslist.options[i].selected){
+              if(selUsList.length!=0){
+                var flag=false;
+                for(var j=0; j<selUsList.length;j++){
+                  if(selUsList.options[j].value=='u:'+uslist.options[i].value &&
+                     selUsList.options[j].text==uslist.options[i].text){
+                    flag=true;
+                  }
+                }
+                if(!flag){
+                  addOnption(selUsList,uslist.options[i].text,'u:'+uslist.options[i].value);
+                }
+              }else{
+                addOnption(selUsList,uslist.options[i].text,'u:'+uslist.options[i].value);
+              }
+            }
+
+        }
+    }
+    return false;
+}
+
+function addOnption(list, text, value){
+    if (list == null) {
         return;
     }
     var option = document.createElement("OPTION");
-    option.value = guest.value;
+    option.value = value;
+    option.text = text;
+    list.options.add(option);
+    return false;
+}
+
+function addGuest(guest) {
+    var list = document.getElementById('selectedUsersSel');
+    if (list == null || guest == null || guest.value == null || guest.value == "") {
+        return;
+    }
+
+    var flag=false;
+    for(var i=0; i<list.length;i++){
+      if(list.options[i].value=='g:'+guest.value &&
+         list.options[i].text==guest.value){
+        flag=true;
+        break;
+      }
+    }
+    if(flag){
+      return false;
+    }
+
+    var option = document.createElement("OPTION");
+    option.value = 'g:'+guest.value;
     option.text = guest.value;
     list.options.add(option);
     guest.value = "";
 }
 
-function removeGuest() {
-    var list = document.getElementById('selectedAttendeeGuests');
+function removeUser() {
+    var list = document.getElementById('selectedUsersSel');
     if (list == null) {
         return;
     }
@@ -63,8 +130,8 @@ function removeGuest() {
     }
 }
 
-function selectGuests() {
-    var list = document.getElementById('selectedAttendeeGuests');
+function selectUsers() {
+    var list = document.getElementById('selectedUsersSel');
     if (list == null) {
         return;
     }
@@ -109,6 +176,14 @@ function selectAllOrgs() {
     //document.getElementById('organizationList').option.selectAll;
     return true;
 }
+
+function delSubmit(){
+  if(confirm('Are You sure?')){
+    return true
+  }else{
+    return false
+  }
+}
 </script>
 
 <table border="0" width="100%" cellPadding=0 cellSpacing=0>
@@ -125,7 +200,7 @@ function selectAllOrgs() {
                     <td nowrap="nowrap">
                         <table border="0" cellpadding="0" cellspacing="0">
                             <tr>
-                                <td nowrap="nowrap">&nbsp;Calendar Type&nbsp;&nbsp;</td>
+                                <td nowrap="nowrap"><digi:trn key="calendar:CalendarType">&nbsp;Calendar Type&nbsp;&nbsp;</digi:trn></td>
                                 <digi:form action="/showCalendarEvent.do">
                                     <td>
                                         <html:hidden name="calendarEventForm" property="ampCalendarId" value="${calendarEventForm.ampCalendarId}"/>
@@ -147,7 +222,7 @@ function selectAllOrgs() {
         <td align="right">
              <c:if test="${calendarEventForm.ampCalendarId != null && calendarEventForm.ampCalendarId != 0}">
                 <digi:form action="/DeleteEvent.do~ampCalendarId=${calendarEventForm.ampCalendarId}">
-                    <html:submit value="Delete" style="width:80px" onclick="if(confirm('Are You sure?')){return true}else{return false};"/>
+                  <input type="submit" onclick="return delSubmit();" value="<digi:trn key="calendar:deleteBtn">Delete</digi:trn>">
                 </digi:form>
              </c:if>
         </td>
@@ -161,16 +236,16 @@ function selectAllOrgs() {
             <html:hidden name="calendarEventForm" property="ampCalendarId" value="${calendarEventForm.ampCalendarId}"/>
             <table border="0" style="border:1px solid; border-color: #484846;" width="756px">
                 <tr>
-                    <td colspan="3" nowrap="nowrap">&nbsp;Details&nbsp;&nbsp;</td>
+                    <td colspan="3" nowrap="nowrap"><digi:trn key="calendar:details">&nbsp;Details&nbsp;&nbsp;</digi:trn></td>
                 </tr>
                 <tr>
-                    <td nowrap="nowrap">&nbsp;<span class="redbold">*</span>Event Title&nbsp;&nbsp;</td>
+                    <td nowrap="nowrap">&nbsp;<span class="redbold">*</span><digi:trn key="calendar:eventTitle">Event Title&nbsp;&nbsp</digi:trn></td>
                     <td>
                         <html:text name="calendarEventForm" styleId="eventTitle" property="eventTitle"/>
                     </td>
                 </tr>
                 <tr>
-                    <td nowrap="nowrap">&nbsp;<span class="redbold">*</span>Event Type&nbsp;&nbsp;</td>
+                    <td nowrap="nowrap">&nbsp;<span class="redbold">*</span><digi:trn key="calendar:eventType">Event Type&nbsp;&nbsp;</digi:trn></td>
                     <td>
                         <html:select name="calendarEventForm" property="selectedEventTypeId">
                             <logic:notEmpty name="calendarEventForm" property="eventTypesList">
@@ -181,17 +256,18 @@ function selectAllOrgs() {
                     </td>
                 </tr>
                 <tr>
-                    <td nowrap="nowrap" valign="top"><br />&nbsp;Organizations&nbsp;&nbsp;</td>
+                    <td nowrap="nowrap" valign="top"><br /><digi:trn key="calendar:organizations">&nbsp;Organizations&nbsp;&nbsp;</digi:trn></td>
                     <td>
 
                       <a title="Facilitates tracking activities in donors' internal databases">
                        <br />
                        <digi:link href="/selectOrganization.do?orgSelReset=true&edit=true" onclick="window.open(this.href, 'users', 'HEIGHT=500,resizable=yes,scrollbars=yes,WIDTH=500');return false;">
-                        Add Organizations
+                        <digi:trn key="calendar:addOrganizations">Add Organizations</digi:trn>
                        </digi:link>
                        &nbsp
                       <a href="#" onclick="return removeSelOrganisations();">
-                        Delete Organization
+                      <digi:trn key="calendar:deleteOrganisation">Delete Organization</digi:trn>
+
                       </a>
                         </a>
                         <br /><br />
@@ -207,7 +283,7 @@ function selectAllOrgs() {
                     </td>
                 </tr>
                 <tr>
-                    <td nowrap="nowrap">&nbsp;<span class="redbold">*</span>From&nbsp;&nbsp;</td>
+                    <td nowrap="nowrap">&nbsp;<span class="redbold">*</span><digi:trn key="calendar:from">From&nbsp;&nbsp;</digi:trn></td>
                     <html:hidden styleId="selectedStartTime" name="calendarEventForm" property="selectedStartTime"/>
                     <html:hidden styleId="selectedEndTime" name="calendarEventForm" property="selectedEndTime"/>
                     <c:if test="${calendarEventForm.selectedCalendarTypeId == 0}">
@@ -324,7 +400,7 @@ function selectAllOrgs() {
                     </c:if>
                 </tr>
                 <tr>
-                    <td nowrap="nowrap">&nbsp;<span class="redbold">*</span>To&nbsp;&nbsp;</td>
+                    <td nowrap="nowrap">&nbsp;<span class="redbold">*</span><digi:trn key="calendar:to">To&nbsp;&nbsp;</digi:trn></td>
                     <c:if test="${calendarEventForm.selectedCalendarTypeId == 0}">
                         <script type="text/javascript">
                             var endDateCalendar = new CalendarPopup();
@@ -435,31 +511,33 @@ function selectAllOrgs() {
                     </c:if>
                 </tr>
                 <tr>
-                    <td nowrap="nowrap" valign="top">&nbsp;Attendees&nbsp;&nbsp;</td>
+                    <td nowrap="nowrap" valign="top"><digi:trn key="calendar:attendees">&nbsp;Attendees&nbsp;&nbsp;</digi:trn></td>
                     <td>
                         <table border="0" style="border:1px solid; border-color: #484846;">
                             <tr>
                                 <td valign="top">
                                     <table border="0" width="100%">
                                         <tr>
-                                            <td nowrap="nowrap">&nbsp;Users</td>
+                                            <td nowrap="nowrap"><digi:trn key="calendar:users">&nbsp;Users</digi:trn></td>
                                         </tr>
                                         <tr>
                                             <td>
-                                                <html:select name="calendarEventForm" property="selectedAttendeeUsers" multiple="multiple" size="7">
-                                                    <logic:notEmpty name="calendarEventForm" property="attendeeUsers">
-                                                        <bean:define id="users" name="calendarEventForm" property="attendeeUsers" type="java.util.List"/>
-                                                        <html:options collection="users" property="value" labelProperty="label"/>
-                                                    </logic:notEmpty>
-                                                </html:select>
+                                              <select multiple="multiple" size="7" id="usersList">
+                                                <c:forEach var="usr" items="${calendarEventForm.attendeeUsers}">
+                                                  <option value="${usr.value}">${usr.label}</option>
+                                                </c:forEach>
+                                               </select>
                                             </td>
                                         </tr>
                                     </table>
                                 </td>
+                                <td>
+                                  <input type="button" onclick="addUser();" style="font-family:tahoma;font-size:11px;" value="<digi:trn key="calendar:addUser">Add Users >></digi:trn>">
+                                </td>
                                 <td valign="top">
                                     <table border="0" width="100%" cellpadding="0">
                                         <tr>
-                                            <td nowrap="nowrap">&nbsp;Guests</td>
+                                            <td nowrap="nowrap"><digi:trn key="calendar:guests">&nbsp;Guests</digi:trn></td>
                                         </tr>
                                         <tr>
                                             <td nowrap="nowrap" valign="top">
@@ -469,20 +547,20 @@ function selectAllOrgs() {
                                                             <input id="guest" type="text" style="width:100%">
                                                         </td>
                                                         <td valign="top">
-                                                            <input type="button" value="Add" style="width:80px" onclick="addGuest(document.getElementById('guest'))">
+                                                            <input type="button" style="width:80px;font-family:tahoma;font-size:11px;" onclick="addGuest(document.getElementById('guest'))" value="<digi:trn key="calendar:addGuestBtn">Add Guest</digi:trn>">
                                                         </td>
                                                     </tr>
                                                     <tr>
                                                         <td valign="top">
-                                                            <html:select styleId="selectedAttendeeGuests" name="calendarEventForm" property="selectedAttendeeGuests" multiple="multiple" size="5" style="width:200px">
-                                                                <logic:notEmpty name="calendarEventForm" property="attendeeGuests">
-                                                                    <bean:define id="guests" name="calendarEventForm" property="attendeeGuests" type="java.util.List"/>
-                                                                    <html:options collection="guests" property="value" labelProperty="label"/>
-                                                                </logic:notEmpty>
+
+                                                            <html:select styleId="selectedUsersSel" name="calendarEventForm" property="selectedUsers" multiple="multiple" size="5" style="width:200px">
+                                                              <c:if test="${!empty calendarEventForm.selectedUsersList}">
+                                                                <html:optionsCollection name="calendarEventForm" property="selectedUsersList" value="value" label="label" />
+                                                              </c:if>
                                                             </html:select>
                                                         </td>
                                                         <td valign="top">
-                                                            <input type="button" value="Remove" style="width:80px" onclick="removeGuest()">
+                                                            <input type="button" style="width:80px;font-family:tahoma;font-size:11px;" onclick="removeUser()" value="<digi:trn key="calendar:removeBtn">Remove</digi:trn>" >
                                                         </td>
                                                     </tr>
                                                 </table>
@@ -497,13 +575,13 @@ function selectAllOrgs() {
                 <tr>
                     <td nowrap="nowrap" valign="top">&nbsp;</td>
                     <td>
-                        <html:checkbox name="calendarEventForm" property="privateEvent"/>&nbsp;Event is private
+                        <html:checkbox name="calendarEventForm" property="privateEvent"/><digi:trn key="calendar:eventIsPrivate">&nbsp;Event is private</digi:trn>
                     </td>
                 </tr>
                 <tr>
                     <td>&nbsp;</td>
                     <td>
-                        <input type="submit" value="Preview" onclick="return check();">
+                        <input type="submit" onclick="return preSubmit();" value="<digi:trn key="calendar:previewBtn">Preview</digi:trn>" />
                     </td>
                 </tr>
             </table>

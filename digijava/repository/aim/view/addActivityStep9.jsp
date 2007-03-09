@@ -103,7 +103,7 @@
 
 -->
 </script>
-
+<digi:instance property="aimEditActivityForm" />
 <digi:form action="/saveIndicatorValues.do" method="post">
 <html:hidden property="step" />
 <html:hidden property="editAct" />
@@ -316,7 +316,7 @@
 																	<digi:trn key="aim:meBaseValue">Base Value</digi:trn></b>
 																</td>
 																<td>
-																	<bean:write name="indicator" property="baseVal" />
+																	<bean:write name="indicator" property="baseVal"/>
 																</td>
 																<td>&nbsp;&nbsp;&nbsp;</td>
 																<td align="right">
@@ -385,9 +385,11 @@
 																	<digi:trn key="aim:meBaseValue">Base Value</digi:trn></b>
 																	<font color="red">*</font></td>
 																<td>
-																	<input type="text" name="baseVal" 
-																	value="<bean:write name="indicator" property="baseVal" />"
+																<html:text property="baseVal" size="10" maxlength="10"/>
+																	<!-- <input type="text" name="baseVal" 
+																	value="<bean:write name="indicator" property="baseVal"/>"
 																	class="inp-text" size="10">
+																	-->
 																</td>
 																<td>&nbsp;&nbsp;&nbsp;</td>
 																<td align="right">
@@ -407,7 +409,8 @@
 																<td><digi:trn key="aim:meBaseValueComments">Comments</digi:trn>
 																</td>
 																<td colspan="4">
-																	<textarea name="baseValComments" class="inp-text" rows="2" cols="38"><bean:write name="indicator" property="baseValComments" /></textarea>
+																<html:textarea property="baseValComments" cols="38" rows="2" styleClass="inp-text"/>
+																	
 																</td>
 															</tr>															
 															<tr>
@@ -417,9 +420,11 @@
 																</td>
 																<c:if test="${indicator.targetValDate == null}">
 																<td>
-																	<input type="text" name="targetVal" 
+																<html:text property="targetVal" size="10" maxlength="10"/>
+																	<!-- <input type="text" name="targetVal" 
 																	value="<bean:write name="indicator" property="targetVal" />"
 																	class="inp-text" size="10">
+																	-->
 																</td>
 																<td>&nbsp;&nbsp;&nbsp;</td>
 																<td align="right">
@@ -456,7 +461,11 @@
 																<td><digi:trn key="aim:meTargetValComments">Comments</digi:trn>
 																</td>
 																<td colspan="4">
+																<html:textarea property="targetValComments" cols="38" rows="2" styleClass="inp-text"/>
+																
+																<!-- 
 																<textarea name="targetValComments" class="inp-text" rows="2" cols="38"><bean:write name="indicator" property="targetValComments" /></textarea>
+																-->
 																</td>
 															</tr>															
 															<c:if test="${indicator.targetValDate != null}">
@@ -466,9 +475,12 @@
 																	</b><font color="red">*</font>
 																</td>
 																<td>
-																	<input type="text" name="revTargetVal" 
+																<html:text property="currentVal" size="10" maxlength="10"/>
+																	<!-- <input type="text" name="revTargetVal" 
 																	value="<bean:write name="indicator" property="revisedTargetVal" />"
 																	class="inp-text" size="10">
+																	-->
+																	
 																</td>
 																<td>&nbsp;&nbsp;&nbsp;</td>
 																<td align="right">
@@ -488,7 +500,10 @@
 																<td><digi:trn key="aim:meRevisedTargetValComments">Comments</digi:trn>
 																</td>
 																<td colspan="4">
+																<html:textarea property="revTargetValComments" cols="38" rows="2" styleClass="inp-text"/>
+																<!-- 
 																	<textarea name="revTargetValComments" class="inp-text" rows="2" cols="38"><bean:write name="indicator" property="revisedTargetValComments" /></textarea>
+																-->
 																</td>
 															</tr>
 															</c:if>
@@ -538,9 +553,11 @@
 																	<font color="red">*</font>
 																</b></td>
 																<td>
-																	<input type="text" name="currentVal" 
+																	<html:text property="currentVal" size="10" maxlength="10"/>
+																	<!-- <input type="text" name="currentVal" 
 																	value="<bean:write name="indicator" property="currentVal" />"
 																	class="inp-text" size="10">
+																-->
 																</td>
 																<td>&nbsp;&nbsp;&nbsp;</td>
 																<td align="right">
@@ -560,7 +577,11 @@
 																<td><digi:trn key="aim:meCurrentValComments">Comments</digi:trn>
 																</td>
 																<td colspan="4">
+																<html:textarea property="currentValComments" cols="38" rows="2" styleClass="inp-text"/>
+																	
+																	<!-- 
 																	<textarea name="currentValComments" class="inp-text" rows="2" cols="38"><bean:write name="indicator" property="currentValComments" /></textarea>
+																 -->
 																</td>
 															</tr>															
 														<tr>

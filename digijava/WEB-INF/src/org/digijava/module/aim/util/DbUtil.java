@@ -2350,14 +2350,18 @@ public class DbUtil {
 		Session sess = null;
 		Collection col = null;
 			try {
-			/*sess = PersistenceManager.getSession();
-			String queryString = "select a from " + AmpTheme.class.getName()
+		//		PersistenceManager.gets
+			sess = PersistenceManager.getSession();
+			/*String queryString = "select a from " + AmpTheme.class.getName()
 					+ " a where (a.themeId=:themeId)";*/
 			
-			AmpTheme themeToBeDeleted = (AmpTheme) sess.get(AmpTheme.class, themeId);	
+			//AmpTheme themeToBeDeleted = (AmpTheme) sess.get(AmpTheme.class, themeId);	
+			AmpTheme themeToBeDeleted = (AmpTheme) sess.load(AmpTheme.class, themeId);
+			
 			//qry = sess.createQuery(queryString);
 			//qry.setParameter("themeId", themeId, Hibernate.LONG);
 			Iterator itr = themeToBeDeleted.getActivities().iterator();
+			
 			col = new ArrayList();
 			while (itr.hasNext()) {
 				col.add(itr.next());
@@ -4449,7 +4453,7 @@ public class DbUtil {
 		}
 		return col;
 	}
-
+	
 	public static Collection getAllOrgGroups() {
 		Session session = null;
 		Collection col = new ArrayList();

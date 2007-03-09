@@ -6,7 +6,7 @@
 <%@ taglib uri="/taglib/digijava" prefix="digi"%>
 <%@ taglib uri="/taglib/jstl-core" prefix="c"%>
 <script type="text/javascript">
-   	
+	
 function fnEditProject(id)
 {
 	<digi:context name="addUrl" property="context/module/moduleinstance/editActivity.do" />
@@ -80,13 +80,12 @@ function commentWin(val) {
 			onclick="login()" /></p>
 	</logic:equal>
 
-	<logic:equal name="aimChannelOverviewForm" property="validLogin"
-		value="true">
-
-<TABLE cellSpacing=0 cellPadding=0 align="left" vAlign="top" border=0
-			width=770>
-			<TR>
-				<TD vAlign="top" align="center"><!-- contents -->
+<logic:equal name="aimChannelOverviewForm" property="validLogin" value="true">
+................................
+<TABLE cellSpacing=0 cellPadding=0 align="left" vAlign="top" border=0 width=770>
+<TR>
+	<TD vAlign="top" align="center">
+		<!-- contents -->
 
 				<TABLE width="99%" cellSpacing=0 cellPadding=0 vAlign="top"
 					align="center" bgcolor="#f4f4f4" class="box-border-nopadding">

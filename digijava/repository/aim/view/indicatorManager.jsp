@@ -14,9 +14,9 @@
 			<digi:context name="addIndicator" property="context/module/moduleinstance/addIndicator.do?event=edit" />
 			document.aimIndicatorForm.action = "<%= addIndicator %>&indId=" + id;
 			document.aimIndicatorForm.target = popupPointer.name;
-			document.aimIndicatorForm.submit();				  
+			document.aimIndicatorForm.submit();
 		}
-	
+
 		function addingIndicators()
 		{
 			openNewWindow(500, 300);
@@ -24,12 +24,19 @@
 			document.aimIndicatorForm.action = "<%= addIndicator %>";
 			document.aimIndicatorForm.target = popupPointer.name;
 			document.aimIndicatorForm.submit();
-			return true;			
+			return true;
 		}
 		function deleteIndicator()
 		{
 			return(confirm(" Do you want to delete the Indicator ? Please check whether the indicator is being used by some Activity."));
 		}
+
+        function setOverImg(index){
+          document.getElementById("img"+index).src="/TEMPLATE/ampTemplate/module/aim/images/tab-righthover1.gif"
+        }
+        function setOutImg(index){
+          document.getElementById("img"+index).src="/TEMPLATE/ampTemplate/module/aim/images/tab-rightselected1.gif"
+        }
 	-->
 </script>
 
@@ -59,26 +66,26 @@
 																		Admin Home
 																</digi:trn>
 														</digi:link>&nbsp;&gt;&nbsp;
-														<digi:trn key="aim:indicatorManager">
-																Indicator Manager
+														<digi:trn key="aim:projectIndicatorManager">
+																Project Indicator Manager
 														</digi:trn>
 												</td>
 										</tr><%-- End navigation --%>
 										<tr>
 												<td height=16 vAlign=center width=571><span class=subtitle-blue>
-														<digi:trn key="aim:indicatorManager">
-																Indicator Manager
+														<digi:trn key="aim:projectIndicatorManager">
+																Project Indicator Manager
 														</digi:trn></span>
 												</td>
 										</tr>
-										<tr><td height=16 vAlign=center width=571><html:errors /></td></tr>				
+										<tr><td height=16 vAlign=center width=571><html:errors /></td></tr>
 										<tr>
 												<td noWrap width=100% vAlign="top">
 														<table width="100%" cellspacing=0 cellSpacing=0 border=0>
 																<tr><td noWrap width=600 vAlign="top">
 																		<table bgColor=#d7eafd cellPadding=0 cellSpacing=0 width="100%" valign="top">
 																				<tr bgColor=#ffffff><td vAlign="top" width="100%">
-																						<table width="100%" cellspacing=0 cellpadding=0 valign=top align=left>	
+																						<table width="100%" cellspacing=0 cellpadding=0 valign=top align=left>
 																								<tr><td>
 																										<table cellspacing=0 cellpadding=0>
 																												<tr>
@@ -86,32 +93,41 @@
 																																<bean:define id="translation">
 																																		<digi:trn key="aim:viewIndicators">Click here to View Indicators</digi:trn>
 																																</bean:define>
-																																<digi:link href="/indicatorManager.do?view=indicators"  styleClass="sub-navGovSelected" title="<%=translation%>" ><font color="ffffff">
+																																<digi:link href="/indicatorManager.do?view=indicators"  styleClass="sub-navGovSelected" title="<%=translation%>" onmouseover="setOverImg(1)" onmouseout="setOutImg(1)"><font color="ffffff">
 																																		<digi:trn key="aim:programIndicatorList">
 																																				Program Indicator List
-																																		</digi:trn>&nbsp;&nbsp;&nbsp;&nbsp;</font>
+																																		</digi:trn></font>
 																																</digi:link>
 																											 			</td>
+                                                                                                                        <td>
+                                                                                                                          <img id="img1" alt="" src="/TEMPLATE/ampTemplate/module/aim/images/tab-rightselected1.gif" width="20" height="19" />
+                                                                                                                        </td>
 																														<td noWrap height=17>
 																																<bean:define id="translation">
 																																		<digi:trn key="aim:viewMultiProgramIndicators" >Click here to view Multi Program Indicators</digi:trn>
 																																</bean:define>
-																																<digi:link href="/indicatorManager.do?view=multiprogram"  styleClass="sub-navGovSelected" title="<%=translation%>" ><font color="ffffff">
+																																<digi:link href="/indicatorManager.do?view=multiprogram"  styleClass="sub-navGovSelected" title="<%=translation%>" onmouseover="setOverImg(2)" onmouseout="setOutImg(2)"><font color="ffffff">
 																																		<digi:trn key="aim:multiProgramManager">
 																																				Multi Program Manager
-																																		</digi:trn>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</font>
+																																		</digi:trn></font>
 																																</digi:link>
 																														</td>
+                                                                                                                        <td>
+                                                                                                                          <img id="img2" alt="" src="/TEMPLATE/ampTemplate/module/aim/images/tab-rightselected1.gif" width="20" height="19" />
+                                                                                                                        </td>
 																														<td noWrap height=17>
 																																<bean:define id="translation">
 																																		<digi:trn key="aim:viewM&EProjectIndicators" >Click here to view M & E Project Indicators</digi:trn>
 																																</bean:define>
-																																<digi:link href="/indicatorManager.do?view=meindicators"  styleClass="sub-navGov" title="<%=translation%>" ><font color="ffffff">
+																																<digi:link href="/indicatorManager.do?view=meindicators"  styleClass="sub-navGov" title="<%=translation%>"><font color="ffffff">
 																																		<digi:trn key="aim:projectIndicatorList">
 																																				Project Indicator List
-																																		</digi:trn>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</font>
+																																		</digi:trn></font>
 																																</digi:link>
-																														</td>		
+																														</td>
+                                                                                                                        <td>
+                                                                                                                          <img id="img3" alt="" src="/TEMPLATE/ampTemplate/module/aim/images/tab-right1.gif" width="20" height="19" />
+                                                                                                                        </td>
 																												</tr>
 																										</table>
 																								</tr>
@@ -122,13 +138,13 @@
 																																<table bgColor=#d7eafd cellPadding=1 cellSpacing=1 width="100%" valign="top">
 																																		<tr bgColor=#ffffff>
 																																				<td vAlign="top" width="100%">
-																																						<table width="100%" cellspacing=1 cellpadding=1 valign=top align=left>	
+																																						<table width="100%" cellspacing=1 cellpadding=1 valign=top align=left>
 																																								<tr><td bgColor=#d7eafd class=box-title height="20" align="center">
 											<!-- Table title -->
 																																									<digi:trn key="aim:projectIndicatorList">
 												Project Indicator List
 											</digi:trn>
-											<!-- end table title -->										
+											<!-- end table title -->
 										</td></tr>
 										<tr><td>
 											<table width="100%" cellspacing=1 cellpadding=4 valign=top align=left bgcolor="#ffffff">
@@ -136,9 +152,9 @@
 													<logic:notEmpty name="aimIndicatorForm" property="indicators">
 														<tr><td>
 															<table width="100%" cellspacing=1 cellpadding=3 bgcolor="#d7eafd">
-															
+
 																<logic:iterate name="aimIndicatorForm" property="indicators" id="indicators"
-																type="org.digijava.module.aim.helper.AmpMEIndicatorList">	
+																type="org.digijava.module.aim.helper.AmpMEIndicatorList">
 
 																	<tr bgcolor="#ffffff">
 																	<td width="9">
@@ -148,7 +164,7 @@
 																		<c:if test="${indicators.defaultInd == false}">
 																			<img src= "../ampTemplate/images/bullet_grey.gif" border=0>
 																		</c:if>
-																	</td>																	
+																	</td>
 																	<td>
 																		<a href="javascript:editIndicator('<bean:write name="indicators" property="ampMEIndId" />')">
 																			<bean:write name="indicators" property="name"/>
@@ -156,7 +172,7 @@
 																	</td>
 																	<td width="100">
 																		<bean:write name="indicators" property="code"/>
-																	</td>																	
+																	</td>
 																	<td align="left" width="12">
 																		<jsp:useBean id="urlParams" type="java.util.Map" class="java.util.HashMap"/>
 																		<c:set target="${urlParams}" property="id">
@@ -166,7 +182,7 @@
 																		<bean:define id="translation">
 																			<digi:trn key="aim:clickToDeleteIndicator">Click here to Delete Indicator</digi:trn>
 																		</bean:define>
-																		<digi:link href="/indicatorManager.do" name="urlParams" 
+																		<digi:link href="/indicatorManager.do" name="urlParams"
 																		onclick=" return deleteIndicator()" title="<%=translation%>" >
 																		<img src= "../ampTemplate/images/trash_12.gif" border=0>
 																		</digi:link>
@@ -175,7 +191,7 @@
 																</logic:iterate>
 															</table>
 														</td></tr>
-														
+
 													</logic:notEmpty>
 													<logic:empty name="aimIndicatorForm" property="indicators">
 														<tr align="center" bgcolor="#ffffff"><td><b>
@@ -183,20 +199,20 @@
 															</b></td>
 														</tr>
 													</logic:empty>
-													
+
 													<tr bgcolor="#ffffff">
 														<td height="20" align="center"><B>
-															<input class="buton" type="button" name="addIndicator" 
+															<input class="buton" type="button" name="addIndicator"
 															value="Add a New Indicator" onclick="addingIndicators()">
 														</td>
 													</tr>
 											</table>
 										</td></tr>
 									</table>
-									
+
 								</td>
 							</tr>
-							
+
 						</table>
 					</td>
 				</tr>
@@ -218,8 +234,8 @@
 				<td>
 					<digi:trn key="aim:activitySpecificIndicator">Activity Specific Indicator</digi:trn>
 				</td>
-			</tr>																
+			</tr>
 		</table>
-	</td></tr>	
+	</td></tr>
 </table>
 </digi:form>

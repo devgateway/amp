@@ -17,24 +17,24 @@
             <html:hidden name="calendarEventForm" property="ampCalendarId" value="${calendarEventForm.ampCalendarId}"/>
             <table border="0" style="border:1px solid">
                 <tr>
-                    <td colspan="2" nowrap="nowrap">&nbsp;Details&nbsp;&nbsp;</td>
+                    <td colspan="2" nowrap="nowrap"><digi:trn key="calendar:details">&nbsp;Details&nbsp;&nbsp;</digi:trn></td>
                 </tr>
                 <tr>
-                    <td nowrap="nowrap">&nbsp;Event Title:&nbsp;&nbsp;</td>
+                    <td nowrap="nowrap"><digi:trn key="calendar:eventTitle">&nbsp;Event Title:&nbsp;&nbsp;</digi:trn></td>
                     <td>
                         <html:hidden name="calendarEventForm" property="eventTitle" value="${calendarEventForm.eventTitle}"/>
                         <b>${calendarEventForm.eventTitle}</b>
                     </td>
                 </tr>
                 <tr>
-                    <td nowrap="nowrap">&nbsp;Event Type:&nbsp;&nbsp;</td>
+                    <td nowrap="nowrap"><digi:trn key="calendar:eventType">&nbsp;Event Type:&nbsp;&nbsp;</digi:trn></td>
                     <td>
                         <html:hidden name="calendarEventForm" property="selectedEventTypeId" value="${calendarEventForm.selectedEventTypeId}"/>
                         <b>${calendarEventForm.selectedEventTypeName}</b>
                     </td>
                 </tr>
                 <tr>
-                    <td nowrap="nowrap" valign="top">&nbsp;Donors:&nbsp;&nbsp;</td>
+                    <td nowrap="nowrap" valign="top"><digi:trn key="calendar:dolors">&nbsp;Donors:&nbsp;&nbsp;</digi:trn></td>
                     <td>
                         <logic:empty name="calendarEventForm" property="donors">
                             &nbsp;
@@ -70,13 +70,13 @@
                     </td>
                 </tr>
                 <tr>
-                    <td nowrap="nowrap" valign="top">&nbsp;Attendees:&nbsp;&nbsp;</td>
+                    <td nowrap="nowrap" valign="top"><digi:trn key="calendar:attendees">&nbsp;Attendees:&nbsp;&nbsp;</digi:trn></td>
                     <td>
                         <table border="0" cellpadding="0" cellspacing="0">
                             <tr>
-                                <td valign="top">&nbsp;Users</td>
+                                <td valign="top"><digi:trn key="calendar:users">&nbsp;Users</digi:trn></td>
                                 <td rowspan="2">&nbsp;</td>
-                                <td valign="top">&nbsp;Guests</td>
+                                <td valign="top"><digi:trn key="calendar:guests">&nbsp;Guests</digi:trn></td>
                             </tr>
                             <tr>
                                 <td valign="top">

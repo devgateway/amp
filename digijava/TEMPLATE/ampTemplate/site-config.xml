@@ -168,7 +168,6 @@
 			<put name="title">Activity - Dashboard</put>
 			<put-item name="tabBody" module="aim" instance="default" teaser="activityDashboard"/>
 		</layout>
-                
 
 
 		<layout name="layoutChannelOverview" extends="tabLayout">
@@ -380,6 +379,7 @@
 				<page>aim_editTheme</page>
 				<page>aim_addPrgIndicator</page>
 				<page>aim_editAllIndicator</page>
+				<page>aim_assignThemeIndicator</page>
 				<page>aim_printActPerf</page>
 				<page>aim_printActRisk</page>
 				<page>aim_printPortPerf</page>

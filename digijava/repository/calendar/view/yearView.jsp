@@ -185,7 +185,7 @@
 										<span class="italic">
 										<bean:write name="events" property="startDate"/>-
 										<bean:write name="events" property="endDate"/></span></td></tr>
-									</table>	
+									</table>
 									</td>
 								</tr>
 								<tr>

@@ -41,7 +41,7 @@ public class DeleteSector extends Action {
     String event = request.getParameter("event");
     String ampSectorId = request.getParameter("ampSectorId");
     String schemeId = request.getParameter("schemeId");
-    logger.info(
+    logger.debug(
     		"Event================"+event+
     		"\nampSectorId=================="+ampSectorId+
     		"\nschemeId====================="+schemeId);
@@ -65,7 +65,7 @@ public class DeleteSector extends Action {
     if (event.equals("delete")) {
       id = deleteSectorForm.getAmpSectorId();
       if(SectorUtil.getAllChildSectors(aSector.getAmpSectorId()).isEmpty()){
-    	  logger.info("Sector dont have any child sector:");
+    	  logger.debug("Sector dont have any child sector:");
     	  SectorUtil.deleteSector(id);
     	  Collection schemeGot = SectorUtil.getEditScheme(_schemeId);
     	  if(aSector.getParentSectorId()==null){
@@ -90,13 +90,13 @@ public class DeleteSector extends Action {
     		    	//forward="cantDelete";
     		    }
     		    */
-			logger.info("level 1 deleted");
+			logger.debug("level 1 deleted");
 			forward = "levelOneSectorDeleted";
     	  }
     	  else if(aSector.getParentSectorId().getParentSectorId() == null){
     		//  if(SectorUtil.getAllChildSectors(aSector.getAmpSectorId()).isEmpty()){
     		//	  SectorUtil.deleteSector(id);
-    		  logger.info("second level");
+    		  logger.debug("second level");
     		  subSectors = SectorUtil.getAllChildSectors(__schemeId);
     		  deleteSectorForm.setSubSectors(subSectors);
     		  Iterator itr = subSectors.iterator();

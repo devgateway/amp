@@ -26,14 +26,21 @@ public class RemoveSelSectors extends Action {
 
 		Iterator itr = prevSelSectors.iterator();
 
+        boolean flag =false;
+
 		while (itr.hasNext()) {
 			ActivitySector asec = (ActivitySector) itr.next();
+            flag=false;
 			for (int i = 0; i < selSectors.length; i++) {
-				if (!asec.getSectorId().equals(selSectors[i])) {
-					newSectors.add(asec);
-					break;
+				if (asec.getSectorId().equals(selSectors[i])) {
+					flag=true;
+                    break;
 				}
 			}
+
+            if(!flag){
+                newSectors.add(asec);
+            }
 		}
 
 		eaForm.setActivitySectors(newSectors);

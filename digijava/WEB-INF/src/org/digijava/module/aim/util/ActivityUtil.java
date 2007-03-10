@@ -56,7 +56,6 @@ import org.digijava.module.aim.dbentity.AmpReportSector;
 import org.digijava.module.aim.dbentity.AmpSector;
 import org.digijava.module.aim.dbentity.AmpTeam;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
-import org.digijava.module.aim.dbentity.AmpTheme;
 import org.digijava.module.aim.helper.Activity;
 import org.digijava.module.aim.helper.ActivityIndicator;
 import org.digijava.module.aim.helper.ActivitySector;
@@ -856,9 +855,14 @@ public class ActivityUtil {
 					Iterator orgItr = ampAct.getOrgrole().iterator();
 					while (orgItr.hasNext()) {
 						AmpOrgRole orgRole = (AmpOrgRole) orgItr.next();
+						AmpOrganisation auxOrgRel=orgRole.getOrganisation();
 						RelOrganization relOrg = new RelOrganization();
-						relOrg.setOrgName(orgRole.getOrganisation().getName());
+						relOrg.setOrgName(auxOrgRel.getName());
 						relOrg.setRole(orgRole.getRole().getRoleCode());
+						relOrg.setAcronym(auxOrgRel.getAcronym());
+						relOrg.setOrgCode(auxOrgRel.getOrgCode());
+						relOrg.setOrgGrpId(auxOrgRel.getOrgGrpId());
+						relOrg.setOrgTypeId(auxOrgRel.getOrgTypeId());
 						if (!relOrgs.contains(relOrg)) {
 							relOrgs.add(relOrg);
 						}

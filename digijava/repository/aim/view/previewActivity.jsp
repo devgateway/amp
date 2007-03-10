@@ -6,6 +6,15 @@
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
 
+<script language="JavaScript1.2" type="text/javascript"
+	src="<digi:file src="module/aim/scripts/dscript120.js"/>"></script>	
+<script language="JavaScript1.2" type="text/javascript"
+	src="<digi:file src="module/aim/scripts/dscript120_ar_style.js"/>"></script>
+
+<DIV id="TipLayer"
+	style="visibility:hidden;position:absolute;z-index:1000;top:-100;"></DIV>
+
+
 <digi:instance property="aimEditActivityForm" />
 
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/addActivity.js"/>"></script>
@@ -447,8 +456,14 @@ function disable() {
 														<tr><td>
 														<c:out value="${selectedOrganizations.name}"/> :
 														<c:out value="${selectedOrganizations.projectId}"/>
+														<bean:define id="selectedOrgForPopup" name="selectedOrganizations"
+															type="org.digijava.module.aim.helper.OrgProjectId"
+															toScope="request" />
+														<jsp:include page="previewOrganizationPopup.jsp"/>
 														</td></tr>
+														
 													</c:forEach>
+													
 												</table>
 											</c:if>
 										</td>

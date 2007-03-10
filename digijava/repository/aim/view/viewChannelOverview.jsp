@@ -5,6 +5,15 @@
 <%@ taglib uri="/taglib/struts-html" prefix="html"%>
 <%@ taglib uri="/taglib/digijava" prefix="digi"%>
 <%@ taglib uri="/taglib/jstl-core" prefix="c"%>
+<script language="JavaScript1.2" type="text/javascript"
+	src="<digi:file src="module/aim/scripts/dscript120.js"/>"></script>	
+<script language="JavaScript1.2" type="text/javascript"
+	src="<digi:file src="module/aim/scripts/dscript120_ar_style.js"/>"></script>
+
+<DIV id="TipLayer"
+	style="visibility:hidden;position:absolute;z-index:1000;top:-100;"></DIV>
+
+
 <script type="text/javascript">
 	
 function fnEditProject(id)
@@ -527,10 +536,13 @@ function commentWin(val) {
 																			<TR>
 																				<TD bgcolor="#ffffff"><c:if
 																					test="${!empty activity.relOrgs}">
-																					<c:forEach var="relOrgs"
+																					<c:forEach var="relOrg"
 																						items="${activity.relOrgs}">
-																						<c:if test="${relOrgs.role == 'DN'}">
-																							<li><c:out value="${relOrgs.orgName}" /><br>
+																						<c:if test="${relOrg.role == 'DN'}">
+																							<bean:define id="currentOrg" name="relOrg"
+																									type="org.digijava.module.aim.helper.RelOrganization" 
+																									toScope="request" />
+																									<jsp:include page="organizationPopup.jsp"/>
 																						</c:if>
 																					</c:forEach>
 																				</c:if></TD>
@@ -550,10 +562,13 @@ function commentWin(val) {
 																			<TR>
 																				<TD bgcolor="#ffffff"><c:if
 																					test="${!empty activity.relOrgs}">
-																					<c:forEach var="relOrgs"
+																					<c:forEach var="relOrg"
 																						items="${activity.relOrgs}">
-																						<c:if test="${relOrgs.role == 'IA'}">
-																							<li><c:out value="${relOrgs.orgName}" /><br>
+																						<c:if test="${relOrg.role == 'IA'}">
+																							<li><bean:define id="currentOrg" name="relOrg"
+																									type="org.digijava.module.aim.helper.RelOrganization" 
+																									toScope="request" />
+																									<jsp:include page="organizationPopup.jsp"/>
 																						</c:if>
 																					</c:forEach>
 																				</c:if></TD>

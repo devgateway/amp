@@ -500,6 +500,7 @@ public class EditActivity
                             projId
                                 .setName(actIntId.getOrganisation()
                                          .getName());
+                            projId.setOrganisation(actIntId.getOrganisation());
                             projId.setProjectId(actIntId.getInternalId());
                             temp.add(projId);
                         }

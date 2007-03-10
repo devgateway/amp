@@ -3,10 +3,17 @@
  */
 
 package org.digijava.module.aim.helper;
+import org.digijava.module.aim.dbentity.AmpOrgGroup;
+import org.digijava.module.aim.dbentity.AmpOrgType;
 
 public class RelOrganization {
 	private String orgName;
 	private String role;
+	private AmpOrgType orgTypeId;
+	private AmpOrgGroup orgGrpId;
+	private String acronym;
+	private String orgCode;
+
 	
 	public RelOrganization() {}
 	
@@ -49,5 +56,37 @@ public class RelOrganization {
 		
 		RelOrganization relOrg = (RelOrganization) obj;
 		return (relOrg.getOrgName().equals(orgName) && relOrg.getRole().equals(role));
+	}
+
+	public String getAcronym() {
+		return acronym;
+	}
+
+	public void setAcronym(String acronym) {
+		this.acronym = acronym;
+	}
+
+	public String getOrgCode() {
+		return orgCode;
+	}
+
+	public void setOrgCode(String orgCode) {
+		this.orgCode = orgCode;
+	}
+
+	public AmpOrgGroup getOrgGrpId() {
+		return orgGrpId;
+	}
+
+	public void setOrgGrpId(AmpOrgGroup orgGrpId) {
+		this.orgGrpId = orgGrpId;
+	}
+
+	public AmpOrgType getOrgTypeId() {
+		return orgTypeId;
+	}
+
+	public void setOrgTypeId(AmpOrgType orgTypeId) {
+		this.orgTypeId = orgTypeId;
 	}
 }

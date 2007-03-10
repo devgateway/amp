@@ -1,6 +1,7 @@
 package org.digijava.module.aim.helper;
 
 import java.io.Serializable;
+import org.digijava.module.aim.dbentity.AmpOrganisation;
 
 public class OrgProjectId implements Serializable, Comparable
 {
@@ -8,6 +9,7 @@ public class OrgProjectId implements Serializable, Comparable
 	private Long ampOrgId;
 	private String name;
 	private String projectId;
+	private AmpOrganisation organisation;
 
 	public OrgProjectId() {
 		ampOrgId = null;
@@ -56,5 +58,13 @@ public class OrgProjectId implements Serializable, Comparable
 		// TODO Auto-generated method stub
 		OrgProjectId oPId=(OrgProjectId)arg0;
 		return this.name.compareTo(oPId.getName());
+	}
+
+	public AmpOrganisation getOrganisation() {
+		return organisation;
+	}
+
+	public void setOrganisation(AmpOrganisation organisation) {
+		this.organisation = organisation;
 	}
 }

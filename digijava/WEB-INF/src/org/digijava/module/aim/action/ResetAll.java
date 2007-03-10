@@ -174,6 +174,7 @@ public class ResetAll extends Action
 						projId.setAmpOrgId(actIntId.getOrganisation().getAmpOrgId());
 						projId.setName(actIntId.getOrganisation().getName());
 						projId.setProjectId(actIntId.getInternalId());
+						projId.setOrganisation(actIntId.getOrganisation());
 						temp.add(projId);
 					}
 					if (temp != null && temp.size() > 0)

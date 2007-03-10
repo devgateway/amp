@@ -264,7 +264,7 @@
 										<logic:iterate name="aimThemeForm" property="prgIndicators" id="prgIndicators" type="org.digijava.module.aim.helper.AmpPrgIndicator">
 												<tr bgcolor="#ffffff">
 														<td width="9" height="15" bgcolor="#ffffff">
-																<img src= "../ampTemplate/images/arrow_right.gif" border=0>
+																<img src= "../ampTemplate/images/bullet_grey.gif" border=0>
 														</td>
 														<td bgcolor="#f4f4f2" width="50">
 																<bean:write name="prgIndicators" property="code"/>

@@ -658,7 +658,7 @@ public class EditActivity
                                         }
                                     }
                                     actSect.setSectorPercentage(ampActSect.
-                                        getSectorPercentage().toString());
+                                        getSectorPercentage());
                                 }
                                 activitySectors.add(actSect);
                             }

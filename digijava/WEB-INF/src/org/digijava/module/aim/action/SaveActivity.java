@@ -344,7 +344,7 @@ public class SaveActivity extends Action {
 				}
 
 				boolean secPer = false;
-				double percent = 0.0;
+				int percent = 0;
 				Iterator secPerItr = eaForm.getActivitySectors().iterator();
 				while (secPerItr.hasNext()) {
 					ActivitySector actSect = (ActivitySector) secPerItr.next();
@@ -358,7 +358,7 @@ public class SaveActivity extends Action {
 					// sector percentage is not a number
 					else {
 						try {
-							percent += Double.parseDouble(actSect.getSectorPercentage());
+							percent += actSect.getSectorPercentage().intValue();
 						}
 						catch (NumberFormatException nex) {
 							logger.debug("sector percentage is not a number : " + nex);
@@ -713,7 +713,7 @@ public class SaveActivity extends Action {
 							amps.setActivityId(activity);
 							if (sectorId != null && (!sectorId.equals(new Long(-1))))
 								amps.setSectorId(SectorUtil.getAmpSector(sectorId));
-							amps.setSectorPercentage(Integer.valueOf(actSect.getSectorPercentage()));
+							amps.setSectorPercentage(actSect.getSectorPercentage());
 							sectors.add(amps);
 						}
 					}

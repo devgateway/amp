@@ -90,9 +90,9 @@ public class SectorSelected extends Action {
 			}
 
             if(prevSelSectors==null){
-                actSect.setSectorPercentage("100");
+                actSect.setSectorPercentage(new Integer(100));
             }else if(prevSelSectors.size()==0){
-                    actSect.setSectorPercentage("100");
+                    actSect.setSectorPercentage(new Integer(100));
             }else if(prevSelSectors.size()==1){
                 Iterator prevItr = prevSelSectors.iterator();
                 while(prevItr.hasNext()) {

@@ -875,8 +875,10 @@ public class ActivityUtil {
 					Iterator sectItr = ampAct.getSectors().iterator();
 					while (sectItr.hasNext()) {
 						//AmpSector sec = (AmpSector) sectItr.next();
-						AmpSector sec = ((AmpActivitySector) sectItr.next()).getSectorId();
+						AmpActivitySector ampActSect=(AmpActivitySector) sectItr.next();
+						AmpSector sec = ampActSect.getSectorId();
 						ActivitySector actSect = new ActivitySector();
+						actSect.setSectorPercentage(ampActSect.getSectorPercentage());
 						if (sec.getParentSectorId() == null) {
 							actSect.setSectorName(sec.getName());
 						} else if (sec.getParentSectorId().getParentSectorId() == null) {

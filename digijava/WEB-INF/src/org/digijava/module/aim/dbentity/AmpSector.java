@@ -19,6 +19,7 @@ public class AmpSector implements Serializable, Comparable
 	private String language ;
 	private String version ;
 	private Set aidlist ;
+
 	
 	private String segmentCode;
 	

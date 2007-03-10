@@ -23,7 +23,7 @@
 		<property name="language" column="language" type="java.lang.String"/>
 		<property name="version" column="version" type="java.lang.String"/>
 
-		<property name="segmentCode" column="segment_code" type="java.lang.String"/>
+		<property name="segmentCode" column="segment_code" type="java.lang.Integer"/>
 
 
 		<set name="aidlist" table="AMP_ACTIVITY_SECTOR" lazy="true" cascade="all">

@@ -326,7 +326,13 @@ function commentWin(val) {
 																<TD bgcolor="#ffffff">
 																<ul>
 																	<c:forEach var="actSect" items="${activity.sectors}">
-																		<li><c:out value="${actSect.sectorName}" /></li>
+																		<li><c:out value="${actSect.sectorName}" />&nbsp;&nbsp;
+																			<logic:present name="actSect" property="sectorPercentage">
+																			<c:if test="${actSect.sectorPercentage!=0}">
+																				(<c:out value="${actSect.sectorPercentage}" />%)
+																			</c:if>
+																		</logic:present>
+																		</li>
 																		<c:if test="${!empty actSect.subsectorLevel1Name}">
 																			<li><IMG src="../ampTemplate/images/link_out_bot.gif">
 																			<c:out value="${actSect.subsectorLevel1Name}" />&nbsp;
@@ -337,6 +343,7 @@ function commentWin(val) {
 																					value="${actSect.subsectorLevel2Name}" /> &nbsp;</li>
 																			</c:if>
 																		</c:if>
+
 																	</c:forEach>
 																</ul>
 																</TD>

@@ -123,7 +123,7 @@
 						</digi:trn>
 						</digi:link>&nbsp;&gt;&nbsp;
 						<digi:trn key="aim:multiProgramManager">
-							Multi-Program Manager
+							Strategy/Plan Manager
 						</digi:trn>
 					</td>
 				</tr><%-- End navigation --%>
@@ -131,7 +131,7 @@
 					<td height=16 vAlign=center width=571>
 						<span class=subtitle-blue>
 						<digi:trn key="aim:multiProgramManager">
-							Multi-Program Manager
+							Strategy/Plan Manager
 						</digi:trn>
 						</span>
 					</td>
@@ -171,7 +171,7 @@
 																</bean:define>
 																<digi:link href="/themeManager.do?view=multiprogram"  styleClass="sub-navGov" title="<%=translation%>" ><font color="ffffff">
 															<digi:trn key="aim:multiProgramManager">
-																Multi Program Manager
+																Strategy/Plan Manager
 															</digi:trn></font>
 																</digi:link>
 															</td>

@@ -33,7 +33,6 @@
 
 
 
-	<logic:notEqual name="widget" scope="request" value="true">	
 	<tr>
 		<td><bean:define id="reportMeta" name="reportMeta"
 			type="org.digijava.module.aim.dbentity.AmpReports" scope="session"
@@ -44,7 +43,6 @@
 		</ul>
 		</td>
 	</tr>
-	</logic:notEqual>
 
 	<logic:equal name="viewFormat" scope="request" value="print">
 		<script language="JavaScript">

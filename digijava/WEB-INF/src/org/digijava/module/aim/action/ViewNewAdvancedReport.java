@@ -22,12 +22,14 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.dgfoundation.amp.ar.ARUtil;
+import org.dgfoundation.amp.ar.ArConstants;
 import org.dgfoundation.amp.ar.GenericViews;
 import org.dgfoundation.amp.ar.GroupReportData;
 import org.dgfoundation.amp.ar.MetaInfo;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.dbentity.AmpReports;
 import org.digijava.module.aim.form.AdvancedReportForm;
+import org.digijava.module.aim.helper.Constants;
 
 /**
  * 
@@ -58,7 +60,8 @@ public class ViewNewAdvancedReport extends Action {
 		String widget=request.getParameter("widget");
 		request.setAttribute("widget",widget);
 		
-	
+		//check currency code:
+		if(hs.getAttribute("reportCurrencyCode")==null) hs.setAttribute("reportCurrencyCode",Constants.DEFAULT_CURRENCY);
 		
 		if(hs.getAttribute("reportSorters")==null) hs.setAttribute("reportSorters",new HashMap());
 		Map sorters=(Map) hs.getAttribute("reportSorters");
@@ -79,7 +82,6 @@ public class ViewNewAdvancedReport extends Action {
 		
 		//test if the request was for hierarchy sorting purposes:
 		if(request.getParameter("applySorter")!=null) {
-			
 			if(request.getParameter("levelPicked")!=null && request.getParameter("levelSorter")!=null)
 				sorters.put(request.getParameter("levelPicked"),new MetaInfo(request.getParameter("levelSorter"),request.getParameter("levelSortOrder")));
 			else 	

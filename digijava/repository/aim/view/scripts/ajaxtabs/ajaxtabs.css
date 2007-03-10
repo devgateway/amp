@@ -46,7 +46,8 @@ text-decoration: none;
 }
 
 .contentstyle{
-margin-bottom: 1em;
-padding: 0em;
-margin:0em
+padding: 1px;
+margin-top:5px;
+margin-left:2px;
+border:1;
 }

@@ -5,6 +5,17 @@
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
 
+
+<script language="JavaScript">
+	function addActivity() {
+		window.location.href="/aim/addActivity.do~pageId=1~reset=true~action=create";	
+	}
+	
+	function teamWorkspaceSetup(a) {
+		window.location.href="/aim/workspaceOverview.do~tId="+a+"~dest=teamLead";	
+	}
+</script>
+
 <TABLE align=center border=0 cellPadding=2 cellSpacing=3 width="100%" bgcolor="#f4f4f2">
 	<TR>
 		<TD class=r-dotted-lg-buttom vAlign=top>

@@ -14,6 +14,7 @@ import java.sql.SQLException;
 import java.util.Iterator;
 
 import net.sf.hibernate.HibernateException;
+import net.sf.hibernate.Session;
 
 import org.apache.log4j.Logger;
 import org.dgfoundation.amp.ar.CellColumn;
@@ -95,8 +96,11 @@ public abstract class ColumnWorker {
 	
 	protected Column extractCellColumn() {
 		CellColumn cc=newColumnInstance();
+		Session sess=null;
+		Connection conn=null;
 		try {
-			conn = PersistenceManager.getSession().connection();
+			sess= PersistenceManager.getSession();
+			conn=sess.connection();
 		} catch (HibernateException e) {
 			logger.error(e);
 			e.printStackTrace();
@@ -122,6 +126,12 @@ public abstract class ColumnWorker {
 			}
 			
 			rs.close();
+			try {
+				sess.close();
+			} catch (HibernateException e) {
+				logger.error(e);
+				e.printStackTrace();
+			}
 
 		} catch (SQLException e) {
 			logger.error("Unable to complete extraction for column "+columnName+". Master query was "+query);

@@ -35,7 +35,7 @@
 	</a>
 	</logic:equal>
 	<logic:notEqual name="widget" scope="request" value="true">			
-	<html:link page="/viewNewAdvancedReport.do" paramName="column" paramProperty="name" paramId="sortBy">
+	<html:link style="color:#FFFFFF;cursor:pointer" page="/viewNewAdvancedReport.do" paramName="column" paramProperty="name" paramId="sortBy">
 		<%=subColumn.getName(reportMeta.getHideActivities())%>
 	</html:link>
 	</logic:notEqual>

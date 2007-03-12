@@ -33,7 +33,7 @@
 	<td align="center" class=clsTableTitleCol rowspan="<%=rowsp%>" colspan='<bean:write name="subColumn" property="width"/>'>
 	
 	<logic:equal name="column" property="columnDepth" value="1">
-	<html:link styleClass="reportHeading" page="/viewNewAdvancedReport.do" paramName="column" paramProperty="name" paramId="sortBy">
+	<html:link style="color:#FFFFFF;cursor:pointer" page="/viewNewAdvancedReport.do" paramName="column" paramProperty="name" paramId="sortBy">
 		<%=subColumn.getName(reportMeta
 													.getHideActivities())%>
 	</html:link>

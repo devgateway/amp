@@ -1833,6 +1833,23 @@ YAHOO.extend(YAHOO.widget.TextNode, YAHOO.widget.Node, {
         sb[sb.length] = '</a>';
         sb[sb.length] = '</td>';
         sb[sb.length] = '</tr>';
+        if (this.indicators != null){
+	        sb[sb.length] = '<tr>';
+    	    for (var i=0;i<this.depth;i++) {
+            	sb[sb.length] = '<td class="' + this.getDepthStyle(i) + '">&#160;</td>';
+	        }
+
+			if (this.nextSibling!=null){
+        	    sb[sb.length] = '<td class="ygtvdepthcell">&#160;</td>';
+    	    }else{
+    	    	sb[sb.length] = '<td class="ygtvblankdepthcell">&#160;</td>';
+    	    }
+
+    	    sb[sb.length] = '<td>';
+    	    sb[sb.length] = this.indicators;
+	        sb[sb.length] = '</td>';
+    	    sb[sb.length] = '</tr>';
+        }
         sb[sb.length] = '</table>';
 
         return sb.join("");

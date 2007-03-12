@@ -5,14 +5,18 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
+import java.util.SortedSet;
+import java.util.TreeSet;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.log4j.NDC;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
@@ -90,8 +94,8 @@ public class NationalPlaningDashboardAction extends DispatchAction {
 
 		if (currentTheme != null) {
 
-			long[] ids = getIndicatorIds(currentTheme);
-			npdForm.setSelectedIndicators(ids);
+			//long[] ids = getIndicatorIds(currentTheme);
+			//npdForm.setSelectedIndicators(ids);
 
 			Long locationId = null;
 			if (npdForm.getSelectedLocations() != null
@@ -151,6 +155,13 @@ public class NationalPlaningDashboardAction extends DispatchAction {
 
 			List valueBeans = getIndicatorValues(currentTheme, fromDate, toDate);
 			npdForm.setValuesForSelectedIndicators(valueBeans);
+			Set indis=currentTheme.getIndicators();
+			if (indis!=null){
+				SortedSet sortedIndicators=new TreeSet(indis);
+				npdForm.setIndicators(sortedIndicators);
+			}else{
+				npdForm.setIndicators(indis);
+			}
 
 		}
 
@@ -200,7 +211,6 @@ public class NationalPlaningDashboardAction extends DispatchAction {
 				}
 			}
 		}
-
 		return result;
 	}
 
@@ -267,8 +277,8 @@ public class NationalPlaningDashboardAction extends DispatchAction {
 				ChartUtil.CHRAT_TYPE_STACKED_BARS_PERCENTAGE);
 
 		response.setContentType("image/png");
-		ChartUtilities.writeChartAsPNG(response.getOutputStream(), chart, 500,
-				500);
+		ChartUtilities.writeChartAsPNG(response.getOutputStream(), chart, 300,
+				300);
 
 		return null;
 	}
@@ -373,7 +383,8 @@ public class NationalPlaningDashboardAction extends DispatchAction {
 
 			dataset = new DefaultCategoryDataset();
 
-			Iterator iter = currentTheme.getIndicators().iterator();
+			Set sortedIndicators=new TreeSet(currentTheme.getIndicators());
+			Iterator iter = sortedIndicators.iterator();
 			while (iter.hasNext()) {
 				AmpThemeIndicators item = (AmpThemeIndicators) iter.next();
 

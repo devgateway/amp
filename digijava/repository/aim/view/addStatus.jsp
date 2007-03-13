@@ -13,6 +13,11 @@ function save() {
   alert ("Please enter the Status Code/Name please ");
  	 document.aimStatusItemForm.focus();
   	 return false;
+  }
+  if (isNaN(document.aimStatusItemForm.statusCode.value)){
+  	alert ("Status code must be a number!");
+  	document.aimStatusItemForm.focus();
+  	return false;
   }else{
     document.aimStatusItemForm.submit();
  	return true;
@@ -134,7 +139,7 @@ function save() {
 																			<table width="100%" cellspacing="5">
 																				<tr>
 																					<td width="50%" align="right">
-																					<html:submit value="Save" styleClass="dr-menu" onclick="return save()" />
+																					<html:submit property="saveStatus" value="Save" styleClass="dr-menu" onclick="return save()" />
 																					
 																					</td>
 																					<td width="50%" align="left">

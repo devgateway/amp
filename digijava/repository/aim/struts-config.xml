@@ -1068,7 +1068,7 @@
 		<forward name="returnforward" path="/aim/getStatusItem.do" redirect="true" />
 	 </action>
     <action name="aimStatusItemForm" path="/aim/addStatus" scope="request" type="org.digijava.module.aim.action.AddStatus" validate="false">
-      <forward name="addforward" path="/aim/statusManager.do" redirect="true" />
+      <forward name="addforward" path="/aim/statusManager.do" />
       <forward name="forward" path="/showLayout.do?layout=addStatus" />
     </action>
     <action name="aimStatusItemForm" path="/aim/deleteStatus" scope="request" type="org.digijava.module.aim.action.DeleteStatus" validate="false">

@@ -41,24 +41,18 @@ public class AddStatus extends Action
 			StatusItemForm formBean = (StatusItemForm) form ; 	
 			AmpStatus statusItem = new AmpStatus() ;
 			String code = formBean.getStatusCode();
-			logger.info(code);
+			if (code == null || request.getParameter("saveStatus") == null)
+				return mapping.findForward("forward");
 			Collection col = DbUtil.getStatusCodes();
 			Iterator itr = col.iterator();
 			while(itr.hasNext())
 			{
 				AmpStatus amp=  (AmpStatus) itr.next();
 				String a = amp.getStatusCode();
-				logger.info("this is a "+a);
-				if(a.equals(code))
+				if(a.compareTo(code) == 0)
 				{
-					logger.info(" therer is a match....");
 					Flag = false;
 				}
-				else
-				{
-					logger.info("COOL u can proceed!!!!");
-				}
-				
 			}
 			
 		if(Flag){
@@ -82,10 +76,7 @@ public class AddStatus extends Action
 				statusItem.setLanguage(null) ;
 				statusItem.setVersion(null) ;
 				
-
-				logger.debug("AddStatus action: adding status code: " + formBean.getStatusCode());
-		
-				DbUtil.add(statusItem) ;
+				DbUtil.add(statusItem);
 				return mapping.findForward("addforward") ;
 			}
 		else 			
@@ -99,5 +90,5 @@ public class AddStatus extends Action
 			return mapping.findForward("forward");
 		}
 	 }
-
+		
 }

@@ -311,7 +311,7 @@ function doFilter() {
 		myCallBack(o.status, o.statusText, o.responseText, o.responseXML);
 	}
 	function treeLoadFailure(o) {
-		alert("Error loading tree: " + o);
+		alert("Error loading tree: " + o.statusText + " . " + o.argument);
 	}
 
 	/* function to be called at page load to asynchronously call server for tree data.

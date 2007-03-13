@@ -26,6 +26,8 @@
 <link rel="stylesheet" type="text/css" href="<digi:file src="module/aim/css/container.css"/>">
 <script type="text/javascript" src="<digi:file src="module/aim/scripts/panel/yahoo-dom-event.js"/>" ></script>
 <script type="text/javascript" src="<digi:file src="module/aim/scripts/panel/container-min.js"/>" ></script>
+<script type="text/javascript" src="<digi:file src="module/aim/scripts/panel/connection-min.js"/>" ></script>
+
 
 <script type="text/javascript">
 	function newWin(val) {
@@ -303,6 +305,14 @@ function doFilter() {
 		var partialURL=fullURL.substring(0,lastSlash);
 		return partialURL+"/"+actionName;
 	}
+	function treeLoadSuccess(o) {
+		alert("I am in treeLoadSuccess");
+		//alert(o.responseXML);
+		myCallBack(o.status, o.statusText, o.responseText, o.responseXML);
+	}
+	function treeLoadFailure(o) {
+		alert("Error loading tree: " + o);
+	}
 
 	/* function to be called at page load to asynchronously call server for tree data.
 		Later we may convert all page to asynchronous style to not refresh page at all.
@@ -312,9 +322,16 @@ function doFilter() {
 		treeList.innerHTML="<i>Loading...</i>"
 		
 		var url=addActionToURL("getThemeTreeNode.do");
-		var async=new Asynchronous();
-		async.complete=myCallBack;
-		async.call(url);
+		//var async=new Asynchronous();
+		//async.complete=myCallBack;
+		//async.call(url);
+		
+		var callObject	= {
+			success: treeLoadSuccess,
+			failure: treeLoadFailure,
+			timeout: 1000
+		}
+		YAHOO.util.Connect.asyncRequest('POST', url, callObject);
 	}
 
 	function previewActivity(actId){

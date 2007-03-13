@@ -241,7 +241,7 @@ function doFilter() {
 		if (indIdArr.length>0){
 			result='<table border="0" cellpadding="0" cellspacing="0">';
 			for(var i=0;i<indIdArr.length;i++){
-				result+='<tr><td><input type="checkbox" name="selectedIndicators" onchange="return doFilter()" value="'+indIdArr[i]+'" ';
+				result+='<tr><td><input type="checkbox" name="selectedIndicators" onclick="doFilter()" value="'+indIdArr[i]+'" ';
 				if(isSelectedIndicator(indIdArr[i])){
 					result+='checked ';
 				}
@@ -596,7 +596,7 @@ function doFilter() {
 								                            <c:forEach var="indicator" items="${themeMember.member.indicators}">
 																<tr>
 																<!-- td>
-																	<html:multibox property="selectedIndicators" onchange="return doFilter()" value="${indicator.ampThemeIndId}" />
+																	<html:multibox property="selectedIndicators" onclick="doFilter()" value="${indicator.ampThemeIndId}" />
 																</td-->
 																<td width="100">
 																	${indicator.name}

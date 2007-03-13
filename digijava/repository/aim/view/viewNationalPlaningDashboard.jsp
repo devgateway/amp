@@ -306,7 +306,7 @@ function doFilter() {
 		return partialURL+"/"+actionName;
 	}
 	function treeLoadSuccess(o) {
-		alert("I am in treeLoadSuccess");
+		//alert("I am in treeLoadSuccess");
 		//alert(o.responseXML);
 		myCallBack(o.status, o.statusText, o.responseText, o.responseXML);
 	}
@@ -329,7 +329,7 @@ function doFilter() {
 		var callObject	= {
 			success: treeLoadSuccess,
 			failure: treeLoadFailure,
-			timeout: 1000
+			timeout: 5000
 		}
 		YAHOO.util.Connect.asyncRequest('POST', url, callObject);
 	}

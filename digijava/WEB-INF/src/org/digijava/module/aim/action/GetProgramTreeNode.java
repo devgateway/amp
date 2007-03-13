@@ -7,6 +7,7 @@ import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.log4j.Logger;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
@@ -24,9 +25,10 @@ public class GetProgramTreeNode extends DispatchAction {
 	private ActionForward doWork(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) {
 		response.setContentType("text/xml");
-
+		Logger logger =  Logger.getLogger(this.getClass());
 		ServletOutputStream outputStream = null;
 		try {
+			logger.info(  "Fetching the tree..." );
 			outputStream = response.getOutputStream();
 
 			// get All themes from DB
@@ -38,15 +40,21 @@ public class GetProgramTreeNode extends DispatchAction {
 			// return xml
 			outputStream.println(xml);
 			outputStream.close();
+			logger.info(  "Finished fetching the tree!" );
 		} catch (Exception e) {
+			logger.info(  "Exception occured in getting TREE" );
 			e.printStackTrace();
 			if (outputStream != null) {
 				try {
+					logger.info(  "outputstream is NOT NULL" );
 					outputStream.println("Error retriving tree: "
 							+ e.toString());
 				} catch (IOException e1) {
 					e1.printStackTrace();
 				}
+			}
+			else {
+				logger.info(  "outputstream is NULL" );
 			}
 		}
 		return null;

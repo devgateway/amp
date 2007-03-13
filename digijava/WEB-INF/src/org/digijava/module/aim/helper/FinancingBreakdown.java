@@ -1,4 +1,5 @@
 package org.digijava.module.aim.helper ;
+import org.digijava.module.aim.dbentity.AmpOrganisation;
 
 public class FinancingBreakdown
 {
@@ -14,6 +15,7 @@ public class FinancingBreakdown
 	private String actualCompletionDate ;
 	private String signatureDate; // added by Priyajith
 	private String goeId;
+	private AmpOrganisation organisation;
 
 	/**
 	 * @return
@@ -168,5 +170,13 @@ public class FinancingBreakdown
 	 */
 	public void setSignatureDate(String signatureDate) {
 		this.signatureDate = signatureDate;
+	}
+
+	public AmpOrganisation getOrganisation() {
+		return organisation;
+	}
+
+	public void setOrganisation(AmpOrganisation organisation) {
+		this.organisation = organisation;
 	}
 }

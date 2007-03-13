@@ -6,6 +6,15 @@
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
 
+<script language="JavaScript1.2" type="text/javascript"
+	src="<digi:file src="module/aim/scripts/dscript120.js"/>"></script>	
+<script language="JavaScript1.2" type="text/javascript"
+	src="<digi:file src="module/aim/scripts/dscript120_ar_style.js"/>"></script>
+
+<DIV id="TipLayer"
+	style="visibility:hidden;position:absolute;z-index:1000;top:-100;"></DIV>
+
+
 <script type="text/javascript">
 	
 function fnEditProject(id)
@@ -241,7 +250,11 @@ type="org.digijava.module.aim.form.FinancingBreakdownForm" method="post">
 																		<bean:write name="breakdown" property="financingId" /> 
 																	</digi:link>
 																</TD>
-					                  		<TD><bean:write name="breakdown" property="donor" /></TD>
+															<bean:define id="breakdown" name="breakdown"
+															type="org.digijava.module.aim.helper.FinancingBreakdown"
+															toScope="request" />
+																
+					                  		<TD><jsp:include page="previewFinancingOrganizationPopup.jsp"/></TD>
 							                  <TD align="right"><bean:write name="breakdown" property="totalCommitted"/></TD>
 							                  <TD align="right"><bean:write name="breakdown" property="totalDisbursed"/></TD>
 								                <TD align="right"><bean:write name="breakdown" property="unDisbursed"/></TD>

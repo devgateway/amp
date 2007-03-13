@@ -533,10 +533,10 @@ function commentWin(val) {
 																	</TR>
 																	<TR>
 																		<TD>
-																		<TABLE width="100%" cellSpacing="1" cellPadding="2"
+																		<TABLE  cellSpacing="1" cellPadding="2"
 																			vAlign="top" align="left" bgcolor="#dddddd">
 																			<TR>
-																				<TD bgcolor="#ffffff"><b><digi:trn
+																				<TD bgcolor="#ffffff" colspan="2"><b><digi:trn
 																					key="aim:fundingCountryAgency">
 																						Funding Country/Agency</digi:trn></b></TD>
 																			</TR>
@@ -553,6 +553,7 @@ function commentWin(val) {
 																						</c:if>
 																					</c:forEach>
 																				</c:if></TD>
+																				<td bgcolor="#ffffff">&nbsp;</td>
 																			</TR>
 																		</TABLE>
 																		</TD>

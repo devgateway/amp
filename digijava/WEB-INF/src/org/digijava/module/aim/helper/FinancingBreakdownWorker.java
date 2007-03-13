@@ -138,6 +138,7 @@ public class FinancingBreakdownWorker
 				String goeId = DbUtil.getGoeId(ampActivityId);
 //				logger.debug("GOE ID" + goeId);
 				financingBreakdown.setGoeId(goeId);
+				financingBreakdown.setOrganisation(ampOrg);
 				
 				financingBreakdown.setSignatureDate(DateConversion.
 						ConvertDateToString(ampFunding.getSignatureDate()));

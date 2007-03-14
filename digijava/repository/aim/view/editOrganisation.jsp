@@ -532,16 +532,10 @@ function loadPage(){
 																						</html:button>
 																					</td>
 																					<td width="8%" align="left">
-																						<input type="reset" value="Reset" class="dr-menu">
-																						<html:reset  styleClass="dr-menu" property="submitButton">
-																							<digi:trn key="btn:reset">Reset</digi:trn> 
-																						</html:reset>
+																						<input type="reset" value='<digi:trn key="btn:reset">Reset</digi:trn>' class="dr-menu">
 																					</td>
 																					<td width="45%" align="left">
-																						<input type="button" value="Cancel" class="dr-menu" onclick="move()">
-																						<html:button  styleClass="dr-menu" property="submitButton"  onclick="return move()">
-																							<digi:trn key="btn:cancel">Cancel</digi:trn> 
-																						</html:button>
+																						<input type="button" value="<digi:trn key="btn:cancel">Cancel</digi:trn>" class="dr-menu" onclick="move()">
 																					</td>
 																				</tr>
 																			</table>

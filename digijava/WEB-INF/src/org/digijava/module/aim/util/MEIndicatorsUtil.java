@@ -446,17 +446,22 @@ public class MEIndicatorsUtil
 			if (id != null && id.longValue() > 0) {
 				queryString = "select count(*) from "
 					+ AmpMEIndicators.class.getName() + " meind " 
-					+ "where (name like '" + name + "'"
-					+ " or code like '" + code + "') and " +
+					+ "where ( name=:name"
+					+ " or code=:code) and " +
 							"(meind.ampMEIndId !=:id)" ;
 				qry = session.createQuery(queryString);
-				qry.setParameter("id",id,Hibernate.LONG);
+				qry.setParameter("id", id, Hibernate.LONG);
+				qry.setParameter("code", code.trim(), Hibernate.STRING);
+				qry.setParameter("name", name.trim(), Hibernate.STRING);
 			} else {
-				queryString = "select count(*) from " 
+				queryString = "select count(*) from "
 					+ AmpMEIndicators.class.getName() + " meind " 
-					+ "where name like '" + name + "'"
-					+ " or code like '" + code + "'" ;
-				qry = session.createQuery(queryString);								
+					+ "where ( name=:name"
+					+ " or code=:code)" ;
+				qry = session.createQuery(queryString);
+				qry.setParameter("code", code.trim(), Hibernate.STRING);
+				qry.setParameter("name", name.trim(), Hibernate.STRING);
+												
 			}
 			Iterator itr = qry.list().iterator();
 			if (itr.hasNext()) {

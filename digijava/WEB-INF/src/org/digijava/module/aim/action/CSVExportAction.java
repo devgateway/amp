@@ -52,7 +52,7 @@ public class CSVExportAction extends Action {
 
 		response.setContentType("application/vnd.ms-excel");
 		response.setHeader("Content-Disposition",
-				"inline; filename=AMPExport.csv");
+				"inline; filename=data.csv");
 
 		HSSFWorkbook wb = new HSSFWorkbook();
 		

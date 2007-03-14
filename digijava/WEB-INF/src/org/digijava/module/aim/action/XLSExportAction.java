@@ -51,7 +51,7 @@ public class XLSExportAction extends Action {
 		
 	     response.setContentType("application/msexcel");
 	        response.setHeader("Content-Disposition",
-	                "inline; filename=AMPExport.xls");
+	                "inline; filename=data.xls");
 
 	        HttpSession session=request.getSession();
 			AmpReports r=(AmpReports) session.getAttribute("reportMeta");

@@ -75,7 +75,7 @@ public class PDFExportAction extends Action implements PdfPageEvent{
 
 	     response.setContentType("application/pdf");
 	        response.setHeader("Content-Disposition",
-	                "inline; filename=data.pdf");
+	                "attachment; filename=data.pdf");
 	   
 		PdfWriter writer=PdfWriter.getInstance(document,
 				response.getOutputStream());

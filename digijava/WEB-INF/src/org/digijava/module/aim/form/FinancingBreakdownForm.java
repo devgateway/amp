@@ -20,6 +20,7 @@ public class FinancingBreakdownForm extends MainProjectDetailsForm
 	private String totalUnExpended ;
 	private Collection fiscalYears;
 	private long fiscalCalId;
+	private String perpsectiveNameTrimmed;
 		
 	/**
 	 * @return
@@ -28,9 +29,12 @@ public class FinancingBreakdownForm extends MainProjectDetailsForm
 		return financingBreakdown;
 	}
 
+	
+	
 	/**
 	 * @return
 	 */
+	
 	public String getTotalCommitted() {
 		return totalCommitted;
 	}
@@ -118,6 +122,18 @@ public class FinancingBreakdownForm extends MainProjectDetailsForm
 					 			 HttpServletRequest httpServletRequest) {
 		ActionErrors errors = super.validate(actionMapping, httpServletRequest);
 	 	return errors;
+	}
+
+
+
+	public String getPerpsectiveNameTrimmed() {
+		return super.getPerpsectiveName().replaceAll(" ","");
+	}
+
+
+
+	public void setPerpsectiveNameTrimmed(String perpsectiveNameTrimmed) {
+		this.perpsectiveNameTrimmed = perpsectiveNameTrimmed;
 	}	
 }
 	

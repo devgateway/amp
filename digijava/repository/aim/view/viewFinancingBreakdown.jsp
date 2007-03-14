@@ -5,6 +5,7 @@
 <%@ taglib uri="/taglib/struts-html" prefix="html" %>
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
+<%@ page import="org.digijava.module.aim.form.FinancingBreakdownForm" %>
 
 <script language="JavaScript1.2" type="text/javascript"
 	src="<digi:file src="module/aim/scripts/dscript120.js"/>"></script>	
@@ -84,7 +85,9 @@ type="org.digijava.module.aim.form.FinancingBreakdownForm" method="post">
 													<digi:trn key="aim:financialProgress">Financial Progress</digi:trn>
 													</digi:link>&nbsp;&gt;&nbsp;
 													<digi:trn key="aim:actOverview">Overview</digi:trn>&nbsp;&gt;&nbsp;
-													<bean:write name="aimFinancingBreakdownForm" property="perpsectiveName"/>
+													<bean:define id="perspectiveNameTrimedLocal" name="aimFinancingBreakdownForm" property="perpsectiveNameTrimmed" type="java.lang.String"/>
+													<digi:trn key='<%="aim:"+ perspectiveNameTrimedLocal %>'>	
+														<bean:write name="aimFinancingBreakdownForm" property="perpsectiveName"/></digi:trn>
 												</SPAN>
 											</TD>
 											<TD align="right">

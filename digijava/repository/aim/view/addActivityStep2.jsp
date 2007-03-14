@@ -415,7 +415,7 @@ function fnChk(frmContrl){
                                             </tr>
                                             <tr>
                                               <td vAlign="center" colspan=5>
-                                              Select the appropriate Region, Zone or Woreda as needed.
+                                              <digi:trn key="aim:regionZoneWored">Select the appropriate Region, Zone or Woreda as needed.</digi:trn>
                                               </td>
                                             </tr>
                                             <tr>

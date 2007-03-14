@@ -123,8 +123,12 @@ function commentWin(val) {
 											name="urlChannelOverview" styleClass="comment"
 											title="<%=translation%>">
 											<digi:trn key="aim:channelOverview">Channel Overview</digi:trn>
-										</digi:link> &nbsp;&gt;&nbsp; Overview&nbsp;&gt;&nbsp;<bean:write
-											name="aimChannelOverviewForm" property="perspective" />&nbsp;
+										</digi:link> &nbsp;&gt;&nbsp; Overview&nbsp;&gt;&nbsp;
+										<bean:define id="perspectiveNameLocal" name="aimChannelOverviewForm" property="perspective" 
+										type="java.lang.String"/>
+												<digi:trn key='<%="aim:"+ perspectiveNameLocal %>'>	
+													<bean:write name="aimChannelOverviewForm" property="perspective"/></digi:trn>
+										&nbsp;
 										Perspective </SPAN></TD>
 										<TD align="right"><input type="button" value="Preview"
 											class="dr-menu"

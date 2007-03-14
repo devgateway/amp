@@ -70,7 +70,8 @@ public class LocationSelected extends Action {
 	            String Iso=null;
 	            Collection col =FeaturesUtil.getGlobalSettings();
 	            Iterator itr = col.iterator();
-	            while(itr.hasNext())
+	            //at merging pls keep this while comment :)
+	            //while(itr.hasNext())
 	            {
 	            	AmpGlobalSettings ampgs = (AmpGlobalSettings) itr.next();
 	            	logger.info(" this is the default country..."+ampgs.getGlobalSettingsValue());

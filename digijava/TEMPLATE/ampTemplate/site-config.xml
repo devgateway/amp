@@ -67,6 +67,7 @@
 			<put-item name="tabHeader" module="aim" instance="default" teaser="mainProjectDetails"/>
 			<put-item name="tabBody" module="aim" instance="default" teaser="blankTeaser"/>
 	 		<put-item name="footer" layout="footerLayout"/>
+	 		<put-item name="loginWidget" file="loginWidget.jsp"/>
 		</layout>
 		<layout name="layoutSurveyList" extends="tabLayout">
 			<put name="title">Activity - Aid Harmonization Survey Overview </put>

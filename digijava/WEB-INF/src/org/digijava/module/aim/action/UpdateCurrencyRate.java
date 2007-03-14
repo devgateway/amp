@@ -30,7 +30,7 @@ public class UpdateCurrencyRate extends Action {
 	private static final long SEVEN_DAYS = 604800000; // in miliseconds 
 	// 7 * 24 * 60 * 60 * 1000
 	
-	private static Logger logger = Logger.getLogger(UpdateCurrencyRate.class);
+	//private static Logger logger = Logger.getLogger(UpdateCurrencyRate.class);
 	
 	public ActionForward execute(ActionMapping mapping,ActionForm form,
 			HttpServletRequest request,HttpServletResponse response) throws Exception {
@@ -38,8 +38,6 @@ public class UpdateCurrencyRate extends Action {
 		CurrencyRateForm crForm = (CurrencyRateForm) form;
 		CurrencyRates currencyRates = null;
 		Collection col = new ArrayList();
-		
-		logger.debug("Reset :" + crForm.isReset());
 		
 		/*	
 		 * 	Starts here
@@ -91,7 +89,9 @@ public class UpdateCurrencyRate extends Action {
 		/*	
 		 * 	Ends here
 		 */
-		if (crForm.getDoAction() == null ||
+		if ("addRates".equalsIgnoreCase(crForm.getDoAction()))
+			crForm.reset(mapping, request);
+		else if (crForm.getDoAction() == null ||
 				crForm.getDoAction().equals("showRates")) {
 			if (crForm.getUpdateCRateCode() != null && 
 					crForm.getUpdateCRateDate() != null) {
@@ -126,6 +126,7 @@ public class UpdateCurrencyRate extends Action {
 			crForm.setUpdateCRateId(null);
 			crForm.setDoAction(null);
 		}
+		
 		return mapping.findForward("forward");
 	}
 }

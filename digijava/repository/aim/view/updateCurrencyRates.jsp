@@ -53,6 +53,7 @@ function load() {
 }
 
 function unload() {
+	window.opener.document.aimCurrencyRateForm.currUrl.value = "";
 }
 
 function closePopup() {

@@ -14,8 +14,8 @@
 function addExchangeRate() {
 	openNewWindow(420, 180);
 	<digi:context name="addExchangeRate" property="context/module/moduleinstance/showAddExchangeRates.do~reset=true" />
-  	document.aimCurrencyRateForm.action = "<%= addExchangeRate %>~doAction=showRates";
-	document.aimCurrencyRateForm.target = popupPointer.name;
+  	document.aimCurrencyRateForm.action = "<%= addExchangeRate %>~doAction=addRates";
+  	document.aimCurrencyRateForm.target = popupPointer.name;
 	document.aimCurrencyRateForm.submit();
 } 	
 
@@ -41,11 +41,16 @@ function updateRates()
 }
 
 function editExchangeRate(date,code) {
-	openNewWindow(420, 180);
-	<digi:context name="addExchangeRate" property="context/module/moduleinstance/showAddExchangeRates.do~reset=true" />
-  	document.aimCurrencyRateForm.action = "<%= addExchangeRate %>~doAction=showRates~updateCRateCode="+code+"~updateCRateDate="+date+"~reset=false";
-	document.aimCurrencyRateForm.target = popupPointer.name;
-	document.aimCurrencyRateForm.submit();
+	if (document.aimCurrencyRateForm.currUrl.value == "") {
+		openNewWindow(420, 180);
+		<digi:context name="addExchangeRate" property="context/module/moduleinstance/showAddExchangeRates.do" />
+  		document.aimCurrencyRateForm.action = "<%= addExchangeRate %>~doAction=showRates~updateCRateCode="+code+"~updateCRateDate="+date+"~reset=false";
+  		document.aimCurrencyRateForm.target = popupPointer.name;
+		document.aimCurrencyRateForm.currUrl.value = "<%= addExchangeRate %>";
+		document.aimCurrencyRateForm.submit();	
+	}
+	else
+		popupPointer.focus();
 }
 
 function checkall() {
@@ -63,6 +68,8 @@ function checkall() {
 
 function deleteRates() {
 	document.aimCurrencyRateForm.doAction.value = "delete";
+	<digi:context name="showCurrRates" property="context/module/moduleinstance/showCurrencyRates.do" />
+	document.aimCurrencyRateForm.action = "<%=showCurrRates %>";
 	document.aimCurrencyRateForm.target = "_self";
 	document.aimCurrencyRateForm.submit();
 }
@@ -70,6 +77,13 @@ function deleteRates() {
 function selectFile() {
 	document.aimCurrencyRateForm.ratesFile.value = document.aimCurrencyRateForm.file.value;
 	document.aimCurrencyRateForm.doAction.value = "loadRates";
+	document.aimCurrencyRateForm.target = "_self";
+	document.aimCurrencyRateForm.submit();
+}
+
+function fnSubmit() {
+	<digi:context name="showCurrRates" property="context/module/moduleinstance/showCurrencyRates.do" />
+	document.aimCurrencyRateForm.action = "<%=showCurrRates %>";
 	document.aimCurrencyRateForm.target = "_self";
 	document.aimCurrencyRateForm.submit();
 }
@@ -85,6 +99,7 @@ function selectFile() {
 <html:hidden property="updateCRateId"/>
 <html:hidden property="doAction"/>
 <html:hidden property="ratesFile"/>
+<input type="hidden" name="currUrl" value="">
 
 <table width="100%" cellspacing=0 cellpadding=0 valign="top" align="left">
 <tr><td>
@@ -179,9 +194,9 @@ function selectFile() {
 											<digi:trn key="aim:andPrev7Days">and previous 7 days</digi:trn>
 										</td>
 										<td bgcolor="#f4f4f2" vAlign="center">
-											<html:submit  styleClass="dr-menu" property="submitButton" >
+											<html:button  styleClass="dr-menu" property="submitButton" onclick="fnSubmit()" >
 												<digi:trn key="btn:go">Go</digi:trn> 
-											</html:submit>
+											</html:button>
 										</td>	
 									</tr>
 								</table>								
@@ -196,9 +211,9 @@ function selectFile() {
 											<html:text property="numResultsPerPage" size="3" styleClass="inp-text"/>
 										</td>											
 										<td bgcolor="#f4f4f2" vAlign="left" align="center">
-											<html:submit  styleClass="dr-menu" property="submitButton" >
-												<digi:trn key="btn:view">View</digi:trn> 
-											</html:submit>
+										<html:button  styleClass="dr-menu" property="submitButton" onclick="fnSubmit()" >
+											<digi:trn key="btn:view">View</digi:trn> 
+										</html:button>
 										</td>
 									</tr>
 								</table>							

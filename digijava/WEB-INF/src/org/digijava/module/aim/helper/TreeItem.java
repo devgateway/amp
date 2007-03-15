@@ -80,6 +80,8 @@ public class TreeItem extends HierarchyMember {
     	if(text!=null){
     		result=text.replaceAll(">","&gt;");
     		result=result.replaceAll("<","&lt;");
+    		result=result.replaceAll("&","&amp;");
+    		result=result.replaceAll("\"","&quot;");
     	}
     	return result;
     }

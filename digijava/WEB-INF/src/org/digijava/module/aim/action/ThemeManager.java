@@ -6,6 +6,7 @@ package org.digijava.module.aim.action;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.Iterator; 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -76,7 +77,8 @@ public class ThemeManager extends Action {
 			logger.info(" theme Id is ... "+themeForm.getThemeId());
 			//Iterator itr = DbUtil.getActivityThemeFromAAT(new Long(Long.parseLong(request.getParameter("themeId")))).iterator();
 			Collection col = DbUtil.getActivityThemeFromAAT(themeForm.getThemeId());
-			if(col!=null)
+			
+			if((col!=null)&&(!(col.isEmpty())))
 			{
 				//System.out.println("activity references i can not delete this theme!!!!and ThemeID="+themeForm.getThemeId()+"and request param="+request.getParameter("themeId"));
 				themeForm.setFlag("activityReferences");

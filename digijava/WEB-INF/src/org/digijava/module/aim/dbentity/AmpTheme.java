@@ -17,8 +17,7 @@ public class AmpTheme implements Serializable
 	private String language ;
 	private String version ;
 	private Set indicators;
-	private Set activities=new HashSet();
-	
+	private Set activities;
 	private String leadAgency;
 	private String targetGroups;
 	private String background;
@@ -37,6 +36,7 @@ public class AmpTheme implements Serializable
 
 	public AmpTheme()
 	{
+		activities=new HashSet();
 	}	
 	
 	/**

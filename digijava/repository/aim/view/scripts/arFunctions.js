@@ -67,6 +67,7 @@ function hideAllRows() {
 
 
 var lastClickedRow=-1;
+var lastClickedRowNum=-1;
 
 /**
  * Sets/unsets the pointer and marker in browse mode
@@ -85,6 +86,7 @@ function setPointer(theRow, theRowNum, theAction, theDefaultColor, thePointerCol
     var theCells = null;
 	var marked_row = new Array;
 	var lastClickedCells = null;
+	var firsColor=null
 
 
 
@@ -125,7 +127,7 @@ function setPointer(theRow, theRowNum, theAction, theDefaultColor, thePointerCol
         currentColor = theCells[0].style.backgroundColor;
         domDetect    = false;
     } // end 3
-
+	// alert(currentColor);
     // 3.3 ... Opera changes colors set via HTML to rgb(r,g,b) format so fix it
     if (currentColor.indexOf("rgb") >= 0) 
     {
@@ -151,6 +153,7 @@ function setPointer(theRow, theRowNum, theAction, theDefaultColor, thePointerCol
         else if (theAction == 'click' && theMarkColor != '') {
             newColor              = theMarkColor;
             marked_row[theRowNum] = true;
+            
             // Garvin: deactivated onclick marking of the checkbox because it's also executed
             // when an action (like edit/delete) on a single item is performed. Then the checkbox
             // would get deactived, even though we need it activated. Maybe there is a way
@@ -184,16 +187,23 @@ function setPointer(theRow, theRowNum, theAction, theDefaultColor, thePointerCol
     } // end 4
 
     // 5. Sets the new color...
+    
     if (newColor) {
         var c = null;
+        var aux=null;
         // 5.1 ... with DOM compatible browsers except Opera
         if (domDetect) {
+        	if(lastClickedRowNum == -1) firstColor=currentColor;
             for (c = 0; c < rowCellsCnt; c++) { 
                 theCells[c].setAttribute('bgcolor', newColor, 0);
-                 if (lastClickedRow != -1)  lastClickedCells[c].setAttribute('bgcolor', theDefaultColor, 0);
+                 if (lastClickedRow != -1)  
+                 	{
+                 		if(lastClickedRowNum==-1) lastClickedCells[c].setAttribute('bgcolor', firstColor, 0);
+                 		else lastClickedCells[c].setAttribute('bgcolor', lastClickedRowNum%2==0?"#FFFFFF":"DDDDDD", 0);
+                 	} // theDefaultColor
                  lastClickedRow=theRow;
-				
             } // end for
+            lastClickedRowNum=theRowNum;
         }
         // 5.2 ... with other browsers
         else {

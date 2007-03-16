@@ -23,14 +23,25 @@
 
 <logic:notEqual name="reportMeta" property="hideActivities" value="true">
 <logic:iterate name="columnReport" property="ownerIds" id="ownerId" scope="page">
-<%rowIdx++;%>
+
 <% if(bckColor.equals("true")) {%>
 <bean:define id="bckColor" value="false" toScope="page"/>
+
+<tr onmousedown="setPointer(this, <%=rowIdx%>, 'click', '#DDDDDD', '#FFFFFF', '#FFFF00');" style="<%=display%>">
+<%=rowIdx %>
+	<logic:iterate name="columnReport" property="items" id="column" scope="page" indexId="columnNo">
+		
+		<bean:define id="viewable" name="column" type="org.dgfoundation.amp.ar.Viewable" scope="page" toScope="request"/>
+		<bean:define id="ownerId" name="ownerId" type="java.lang.Long" scope="page" toScope="request"/>
+		<bean:define id="columnNo" name="columnNo" type="java.lang.Integer" scope="page" toScope="request"/>
+		<bean:define id="bckColor" name="bckColor" type="java.lang.String" toScope="request"/>		
+		<jsp:include page="<%=viewable.getViewerPath()%>"/>	
+	</logic:iterate>
+</tr>
 <% } else { %>
 <bean:define id="bckColor" value="true" toScope="page"/>
-<% } %>
-
-<tr onmousedown="setPointer(this, <%=rowIdx%>, 'click', '#FFFFFF', '#FFFFFF', '#FFFF00');" style="<%=display%>">
+<tr onmousedown="setPointer(this, <%=rowIdx%>, 'click', '#FFFFFF', '#DDDDDD', '#FFFF00');" style="<%=display%>">
+<%=rowIdx %>
 	<logic:iterate name="columnReport" property="items" id="column" scope="page" indexId="columnNo">
 		
 		<bean:define id="viewable" name="column" type="org.dgfoundation.amp.ar.Viewable" scope="page" toScope="request"/>
@@ -41,6 +52,7 @@
 	</logic:iterate>
 </tr>
 
+<% } %><%rowIdx++;%>
 </logic:iterate>
 </logic:notEqual>
 

@@ -9,6 +9,7 @@ public class AmpGlobalSettings implements Serializable {
 	private Long globalId;
 	private String globalSettingsName;
 	private String globalSettingsValue;
+	private String globalSettingsPossibleValues; //the name of the database table/view containing the values
 	/**
 	 * @return Returns the globalSettingsName.
 	 */
@@ -44,6 +45,12 @@ public class AmpGlobalSettings implements Serializable {
 	 */
 	public void setGlobalId(Long globalId) {
 		this.globalId = globalId;
+	}
+	public String getGlobalSettingsPossibleValues() {
+		return globalSettingsPossibleValues;
+	}
+	public void setGlobalSettingsPossibleValues(String globalSettingsPossibleValues) {
+		this.globalSettingsPossibleValues = globalSettingsPossibleValues;
 	}
 	
 	

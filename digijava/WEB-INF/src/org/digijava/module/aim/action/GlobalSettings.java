@@ -2,33 +2,35 @@ package org.digijava.module.aim.action;
 /*
 * @ author Govind G Dalwani
 */
-import org.apache.log4j.Logger;
-import org.apache.struts.action.Action ;
-import org.apache.struts.action.ActionError;
-import org.apache.struts.action.ActionErrors;
-import org.apache.struts.action.ActionForm ;
-import org.apache.struts.action.ActionMapping ;
-import org.apache.struts.action.ActionForward ;
-
-import java.util.ArrayList;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.Statement;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
-import java.util.List;
-
-import org.digijava.kernel.dbentity.Country;
-import org.digijava.kernel.translator.util.TrnCountry;
-import org.digijava.kernel.translator.util.TrnUtil;
-import org.digijava.kernel.util.RequestUtils;
-import org.digijava.module.aim.util.FeaturesUtil;
-import org.digijava.module.aim.form.GlobalSettingsForm;
-import org.digijava.module.aim.dbentity.AmpGlobalSettings;
-import org.digijava.module.aim.util.DbUtil;
+import java.util.Map;
+import java.util.Vector;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+
+import net.sf.hibernate.Query;
+import net.sf.hibernate.Session;
+import net.sf.hibernate.Transaction;
+
+import org.apache.log4j.Logger;
+import org.apache.struts.action.Action;
+import org.apache.struts.action.ActionErrors;
+import org.apache.struts.action.ActionForm;
+import org.apache.struts.action.ActionForward;
+import org.apache.struts.action.ActionMapping;
+import org.digijava.kernel.persistence.PersistenceManager;
+import org.digijava.module.aim.dbentity.AmpGlobalSettings;
+import org.digijava.module.aim.form.GlobalSettingsForm;
+import org.digijava.module.aim.helper.KeyValue;
+import org.digijava.module.aim.util.FeaturesUtil;
+
 public class GlobalSettings extends Action {
 	private static Logger logger = Logger.getLogger(GlobalSettings.class);
 	public ActionForward execute(ActionMapping mapping, ActionForm form, 
@@ -51,12 +53,9 @@ public class GlobalSettings extends Action {
 		{
 			String save = request.getParameter("save");
 			logger.info(" this is the action "+save);
-			AmpGlobalSettings ampGS = new AmpGlobalSettings();
+			
 			logger.info(" id is "+gsForm.getGlobalId()+"   name is "+gsForm.getGlobalSettingsName()+ "  value is... "+gsForm.getGsfValue());
-			ampGS.setGlobalId(gsForm.getGlobalId());
-			ampGS.setGlobalSettingsName(gsForm.getGlobalSettingsName());
-			ampGS.setGlobalSettingsValue(gsForm.getGsfValue());
-			DbUtil.update(ampGS);
+			this.updateGlobalSetting(gsForm.getGlobalId(), gsForm.getGsfValue());
 			ActionErrors errors = new ActionErrors(); 
 					
 		}
@@ -86,9 +85,110 @@ public class GlobalSettings extends Action {
 			gsForm.setGlobalId(ampGS.getGlobalId());
 			gsForm.setGlobalSettingsName(ampGS.getGlobalSettingsName());
 			gsForm.setGsfValue(ampGS.getGlobalSettingsValue());
+			
+			String possibleValuesTable		= ampGS.getGlobalSettingsPossibleValues();
+			Collection possibleValues		= null;
+			Map possibleValuesDictionary	= null;
+			if ( possibleValuesTable != null ) {
+				possibleValues				= this.getPossibleValues(possibleValuesTable);
+				possibleValuesDictionary	= new HashMap();
+				Iterator pvIterator			= possibleValues.iterator();
+				
+				while (pvIterator.hasNext()) {
+					KeyValue keyValue	= (KeyValue) pvIterator.next();
+					possibleValuesDictionary.put(keyValue.getKey(), keyValue.getValue());
+				}
+			}
+			gsForm.setPossibleValues( ampGS.getGlobalSettingsName(), possibleValues );
+			gsForm.setPossibleValuesDictionary( ampGS.getGlobalSettingsName(), possibleValuesDictionary );
 		}
-		Collection countries = featUtil.getCountryNames();
+		Collection countries = FeaturesUtil.getCountryNames();
 		gsForm.setCountryNameCol(countries);
 		return mapping.findForward("viewGS");
+	}
+	
+	
+	private Collection getPossibleValues(String tableName)
+	{
+		Collection ret 	= new Vector();
+		Session session = null;
+		String qryStr = null;
+		Query qry = null;
+		try{
+				session				= PersistenceManager.getSession();
+				Connection	conn	= session.connection();
+				Statement st		= conn.createStatement();
+				qryStr 				= "select id, value from "+tableName ;
+				//qry 				= session.createSQLQuery(qryStr,"kv",KeyValue.class);
+				ResultSet rs		= st.executeQuery(qryStr);
+				//qry.setString (0, tableName);
+				//Iterator iterator 	= session.iterate(qryStr);
+				
+				//Collection coll		= qry.list();
+				//Iterator iterator 	= coll.iterator(); 
+				while (rs.next()){
+					//KeyValue vObjects	= (KeyValue)iterator.next();
+					logger.info("Values:" + rs.getString(1) + "," + rs.getString(2) );
+					KeyValue keyValue	= new KeyValue( rs.getString(1), rs.getString(2) );
+					
+					ret.add( keyValue );
+				}
+				conn.close();
+
+		}
+		catch (Exception ex) {
+			logger.error("Exception : " + ex.getMessage());
+			ex.printStackTrace(System.out);
+		} 
+		finally {
+			if (session != null) {
+				try {
+					PersistenceManager.releaseSession(session);
+				} catch (Exception rsf) {
+					logger.error("Release session failed :" + rsf.getMessage());
+				}
+			}
+		}
+		return ret;
+	}
+	
+	private void  updateGlobalSetting(Long id, String value) {
+		
+		Session session 	= null;
+		String qryStr 		= null;
+		Query qry 			= null;
+		Transaction tx		= null;
+		try{
+				session					= PersistenceManager.getSession();
+				tx						= session.beginTransaction();
+				
+				qryStr 					= "select gs from "+ AmpGlobalSettings.class.getName() + " gs where gs.globalId = :id " ;
+				qry 					= session.createQuery(qryStr);
+				qry.setLong ("id", id.longValue());
+				AmpGlobalSettings ags	= (AmpGlobalSettings) qry.list().get(0);
+				ags.setGlobalSettingsValue(value);
+				tx.commit();
+
+		}
+		catch (Exception ex) {
+			logger.error("Exception : " + ex.getMessage());
+			ex.printStackTrace(System.out);
+			if (tx != null) {
+				try {
+					tx.rollback();
+				} catch (Exception rbf) {
+					logger.error("Rollback failed !");
+				}
+			}
+		} 
+		finally {
+			if (session != null) {
+				try {
+					PersistenceManager.releaseSession(session);
+				} catch (Exception rsf) {
+					logger.error("Release session failed :" + rsf.getMessage());
+				}
+			}
+		}
 	}
 }

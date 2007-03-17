@@ -5,6 +5,7 @@
 <%@ taglib uri="/taglib/struts-html" prefix="html" %>
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
+<%@ page import="java.util.Map"%>
 
 
 <script langauage="JavaScript">
@@ -84,6 +85,9 @@
 	</td>												
 	<td bgcolor="#fefefe">
 	<b>New Value</b>
+	</td>
+	<td bgcolor="#fefefe">
+	&nbsp;
 	</td>												
 
 	
@@ -96,38 +100,45 @@
 																</td>
 																<td bgcolor="#ffffff">
 																<b>
-																			<bean:write name="globalSett" property="globalSettingsValue"/>
+																		<bean:define id="thisForm" name="aimGlobalSettingsForm" type="org.digijava.module.aim.form.GlobalSettingsForm" />
+																		<% 
+																		Map dictionary	= thisForm.getPossibleValuesDictionary(globalSett.getGlobalSettingsName()); 
+																		if (dictionary != null)
+																			out.write( (String)dictionary.get(globalSett.getGlobalSettingsValue()) );
+																		else
+																			out.write(globalSett.getGlobalSettingsValue());
+																		
+																		%>
+																			
 																</b>																			
 																</td>
 																			
-																<td bgcolor="#f4f4f2" >
-<digi:form action="/GlobalSettings.do" method="post" >												
+																
+<digi:form action="/GlobalSettings.do" method="post" >			
+															<td bgcolor="#f4f4f2" >									
 <html:hidden property="globalId" name="globalSett"/>
 <html:hidden property="globalSettingsName" name="globalSett"/>
-																<logic:equal name="globalSett" property="globalSettingsName" value="Default Country">
-																	<html:select property="gsfValue" styleClass="inp-text">
+														
+														
+														<% String possibleValues = "possibleValues(" + globalSett.getGlobalSettingsName() + ")"; %>
+														<logic:notEmpty name="aimGlobalSettingsForm" property='<%= possibleValues %>'>
+															<html:select property="gsfValue" styleClass="inp-text" value='<%= globalSett.getGlobalSettingsValue() %>'>
 																		<html:optionsCollection name="aimGlobalSettingsForm"
-																			property="countryNameCol" value="iso"
-																			label="countryName" />
-																	</html:select>
-																</logic:equal>		
-																<logic:equal name="globalSett" property="globalSettingsName" value="Public View">
-																	<html:select property="gsfValue" styleClass="inp-text">
-																		<html:option value="On">On</html:option>
-																		<html:option value="Off">Off</html:option>																		
-																	</html:select>
-																</logic:equal>		
-																<logic:equal name="globalSett" property="globalSettingsName" value="Public View Budget Filter">
-																	<html:select property="gsfValue" styleClass="inp-text">
-																		<html:option value="On Budget">On Budget</html:option>
-																		<html:option value="Off Budget">Off Budget</html:option>																		
-																		<html:option value="All">All Activities</html:option>																																				
-																	</html:select>
-																</logic:equal>		
-																
+																			property='<%= possibleValues %>' value="key"
+																			label="value" />
+															</html:select>
+														</logic:notEmpty>
+														<logic:empty name="aimGlobalSettingsForm" property='<%= possibleValues %>'>
+															<html:text property="gsfValue" styleClass="inp-text" value='<%= globalSett.getGlobalSettingsValue() %>' />
+																		
+														</logic:empty>
+														</td>
+														<td bgcolor="#f4f4f2" > 
 																<html:submit property="save">																														
-																Save
+																	Save
 																</html:submit>
+														</td>
+
 </digi:form>																
 															</tr>
 													</logic:iterate>

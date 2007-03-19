@@ -28,7 +28,6 @@
 <bean:define id="bckColor" value="false" toScope="page"/>
 
 <tr onmousedown="setPointer(this, <%=rowIdx%>, 'click', '#DDDDDD', '#FFFFFF', '#FFFF00');" style="<%=display%>">
-<%=rowIdx %>
 	<logic:iterate name="columnReport" property="items" id="column" scope="page" indexId="columnNo">
 		
 		<bean:define id="viewable" name="column" type="org.dgfoundation.amp.ar.Viewable" scope="page" toScope="request"/>
@@ -41,7 +40,6 @@
 <% } else { %>
 <bean:define id="bckColor" value="true" toScope="page"/>
 <tr onmousedown="setPointer(this, <%=rowIdx%>, 'click', '#FFFFFF', '#DDDDDD', '#FFFF00');" style="<%=display%>">
-<%=rowIdx %>
 	<logic:iterate name="columnReport" property="items" id="column" scope="page" indexId="columnNo">
 		
 		<bean:define id="viewable" name="column" type="org.dgfoundation.amp.ar.Viewable" scope="page" toScope="request"/>

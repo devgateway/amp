@@ -9,6 +9,7 @@ package org.dgfoundation.amp.ar;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 
@@ -315,11 +316,42 @@ public class AmpReportGenerator extends ReportGenerator {
 	protected void createHierarchies() {
 		List orderedHierarchies = ARUtil
 				.createOrderedHierarchies(reportMetadata.getHierarchies());
+		// add Unallocated fake items for activities missing hierarchy enabled
+		// data
+		Collection allIds = report.getOwnerIds();
 		Iterator i = orderedHierarchies.iterator();
 		while (i.hasNext()) {
 			AmpReportHierarchy element = (AmpReportHierarchy) i.next();
+			AmpColumns c = element.getColumn();
+			// the report always has one ColumnReportData since we did no
+			// processing, this is raw data:
+			ColumnReportData rd = (ColumnReportData) report.getItem(0);
+			// column used by hierarchy
+			CellColumn hc = (CellColumn) rd.getColumn(c.getColumnName());
+			Collection hcIds = hc.getOwnerIds();
+			// we remove from the list of all ids in all columns, the ones
+			// present in the hierarchy column.
+			allIds.removeAll(hcIds);
+			// now we have the ids of the items that do not have the hierarchy
+			// cells present, and we need to add fakes so we can
+			// show the Unallocated hierarchy
+			Iterator ii = allIds.iterator();
+			while (ii.hasNext()) {
+				Long id = (Long) ii.next();
+				Cell fakeC = hc.getWorker().newCellInstance();
+				fakeC.setOwnerId(id);
+				hc.addCell(fakeC);
+			}
+
+		}
+		//now we can create the hiearchy tree
+		i = orderedHierarchies.iterator();
+		while (i.hasNext()) {			
+			AmpReportHierarchy element = (AmpReportHierarchy) i.next();
 			// TODO: the set is NOT a list, so the hierarchies are unordered.
 			AmpColumns c = element.getColumn();
+			
+			
 			try {
 				report = report.horizSplitByCateg(c.getColumnName());
 			} catch (UnidentifiedItemException e) {

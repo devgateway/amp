@@ -11,6 +11,7 @@ import java.sql.SQLException;
 
 import org.dgfoundation.amp.ar.GroupColumn;
 import org.dgfoundation.amp.ar.ReportGenerator;
+import org.dgfoundation.amp.ar.cell.AmountCell;
 import org.dgfoundation.amp.ar.cell.Cell;
 
 /**
@@ -55,6 +56,10 @@ public class TotalAmountColWorker extends ColumnWorker {
 	protected Cell getCellFromCell(Cell src) {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	public Cell newCellInstance() {
+		return new AmountCell();
 	}
 
 }

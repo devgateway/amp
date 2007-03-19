@@ -54,4 +54,10 @@ public class TextColWorker extends ColumnWorker {
 		return null;
 	}
 
+	public Cell newCellInstance() {
+		TextCell tx= new TextCell();
+		tx.setValue("Unallocated");
+		return tx;
+	}
+
 }

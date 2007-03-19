@@ -235,4 +235,8 @@ public class CategAmountColWorker extends ColumnWorker {
 		return new AmountCellColumn(columnName);
 	}
 
+	public Cell newCellInstance() {
+		return new CategAmountCell();
+	}
+
 }

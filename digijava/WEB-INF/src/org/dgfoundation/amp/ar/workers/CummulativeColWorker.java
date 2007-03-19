@@ -73,4 +73,9 @@ public class CummulativeColWorker extends ColumnWorker {
 		else return null;	
 	}
 
+	public Cell newCellInstance() {
+		return new CategAmountCell();
+		
+	}
+
 }

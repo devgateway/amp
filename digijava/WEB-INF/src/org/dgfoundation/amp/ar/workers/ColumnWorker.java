@@ -68,8 +68,11 @@ public abstract class ColumnWorker {
 	}
 	
 	public Column populateCellColumn() {
-		if(extractor) return extractCellColumn(); else
-			return generateCellColumn();
+		Column c=null;
+		if(extractor) c= extractCellColumn(); else
+			c=generateCellColumn();
+		c.setWorker(this);
+		return c;
 	}
 	
 	/**
@@ -200,7 +203,7 @@ public abstract class ColumnWorker {
 	 */
 	public void setConn(Connection conn) {
 		this.conn = conn;
-	}
+	}				
 
 	/**
 	 * @return Returns the rsmd.
@@ -272,5 +275,12 @@ public abstract class ColumnWorker {
 	public void setSourceGroup(GroupColumn sourceGroup) {
 		this.sourceGroup = sourceGroup;
 	}
+	
+	/**
+	 * Creates a new cell instance of the type. Backwards reference to Cell.getWorker
+	 * @return
+	 */
+	public abstract Cell newCellInstance();
+	
 
 }

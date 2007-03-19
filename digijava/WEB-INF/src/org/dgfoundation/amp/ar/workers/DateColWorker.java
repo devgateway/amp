@@ -61,4 +61,8 @@ public class DateColWorker extends ColumnWorker {
 		return null;
 	}
 
+	public Cell newCellInstance() {
+		return new DateCell();
+	}
+
 }

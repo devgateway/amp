@@ -65,7 +65,7 @@
 							<digi:trn key="aim:clickToConfigureTeamPages">Click here to Configure Team Workspace</digi:trn>
 						</bean:define>
 						<div title='<%=translation%>' align="left">
-                     	<input type="button" class="dr-menu" onclick='return teamWorkspaceSetup("<bean:write name="teamHead" scope="session"/>")' value='<digi:trn key="btn:teamWorkspaceSetup">Team Workspace Setup</digi:trn>' name="addActivity"/>
+                     	<input type="button" class="dr-menu" onclick='return teamWorkspaceSetup("-1")' value='<digi:trn key="btn:teamWorkspaceSetup">Team Workspace Setup</digi:trn>' name="addActivity"/>
                      	</div><br/><br/>
 					</logic:equal>
 			</TD>

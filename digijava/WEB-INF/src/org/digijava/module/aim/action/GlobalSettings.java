@@ -127,8 +127,8 @@ public class GlobalSettings extends Action {
 				//Collection coll		= qry.list();
 				//Iterator iterator 	= coll.iterator(); 
 				while (rs.next()){
-					//KeyValue vObjects	= (KeyValue)iterator.next();
-					logger.info("Values:" + rs.getString(1) + "," + rs.getString(2) );
+					
+					//logger.info("Values:" + rs.getString(1) + "," + rs.getString(2) );
 					KeyValue keyValue	= new KeyValue( rs.getString(1), rs.getString(2) );
 					
 					ret.add( keyValue );

@@ -113,3 +113,7 @@ CREATE ALGORITHM=UNDEFINED SQL SECURITY DEFINER VIEW  `v_global_settings_pv_budg
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
+
+UPDATE amp_global_settings SET possibleValues='v_global_settings_countries' WHERE settingsName='Default Country';
+UPDATE amp_global_settings SET possibleValues='v_global_settings_public_view' WHERE settingsName='Public View';
+UPDATE amp_global_settings SET possibleValues='v_global_settings_pv_budget_filter' WHERE settingsName='Public View Budget Filter';

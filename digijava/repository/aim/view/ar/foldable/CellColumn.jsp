@@ -4,6 +4,7 @@
 <%@ taglib uri="/taglib/struts-logic" prefix="logic" %>
 <%@ taglib uri="/taglib/struts-html" prefix="html" %>
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
+<%@ taglib uri="/taglib/jstl-core" prefix="c" %>
 
 <bean:define id="cellColumn" name="viewable" type="org.dgfoundation.amp.ar.CellColumn" scope="request" toScope="page"/>
 
@@ -40,5 +41,22 @@
 </b>
 </logic:equal>
 
-<% } else { %> &nbsp; <% } %>
+<% } else { %>
+
+<logic:equal name="columnNo" value="0">
+<b>
+<logic:present name="currentMember" scope="session">
+<a href='/aim/viewChannelOverview.do~tabIndex=0~ampActivityId=<bean:write name="ownerId"/>'>
+</logic:present>
+<logic:notPresent name="currentMember" scope="session">
+<a href='/aim/viewActivityPreview.do~pageId=2~activityId=<bean:write name="ownerId"/>' target=_blank>
+</logic:notPresent>
+<digi:trn key="amp:reports:unspecified">Unspecified</digi:trn>
+</a>
+</b>
+</logic:equal>
+<logic:notEqual name="columnNo" value="0">
+&nbsp;
+</logic:notEqual>
+ <% } %>
 </td>

@@ -76,11 +76,16 @@
 			onclick="displayStaticMessage(document.getElementById('sorterPicker-<bean:write name="reportMeta" property="ampReportId"/>').innerHTML,false);return false">
 			<u>Hierarchy Sorting</u>
 			</a>
-
 			</div>
-			
+			</td>
 		</tr>
-		
+		<tr>
+			<td align="right">
+				<font size="small" color="red">
+					<%=org.digijava.module.aim.dbentity.AmpReports.getNote(session)%>
+				</font>
+			</td>
+		</tr>
 		<tr>
 			<td>
 				<logic:notEmpty name="report" property="levelSorters">
@@ -116,16 +121,7 @@
 			pick a different filter criteria or use another report.</b></td>
 		</tr>
 	</logic:equal>
-		<tr>
-		<td align="left">
-							<font size="small">
-								<%=org.digijava.module.aim.dbentity.AmpReports
-							.getNote(session)%>
-							</font>
-
-							&nbsp;&nbsp;&nbsp;
-					 	</td>
-		</tr>
+		
 </table>
 
 

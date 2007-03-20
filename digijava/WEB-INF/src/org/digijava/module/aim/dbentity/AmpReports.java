@@ -46,7 +46,7 @@ public class AmpReports implements Comparable {
 	//public static final String NOTE="NOTE: All shown funding items are in USD currency. All calendaristic date cells are shown using DD/MM/YYYY format. All amounts are in thousands.";
 	
 	public static String getNote(HttpSession session)
-	{ return "* All the amounts are in thousands (000) Current workspace perspective is: MOFED . Totals column only show funding items having the same perspective as the current workspace.";}
+	{ return "Amounts are in thousands (000)";}
 	
 	public Set getMeasures() {
 		return measures;

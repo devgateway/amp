@@ -58,7 +58,7 @@
           return false;
         }
 
-        if(yr.match("[^0-9]")){
+        if(yr.match("[^0-9,-]")){
           alert("Invalid Year Offset value");
           document.aimAddFiscalCalForm.yearOffset.focus();
           return false;
@@ -221,17 +221,17 @@
 																				<tr>
 																					<td width="45%" align="right">
 																						<html:button  styleClass="dr-menu" property="submitButton"  onclick="check()">
-																							<digi:trn key="btn:save">Save</digi:trn> 
+																							<digi:trn key="btn:save">Save</digi:trn>
 																						</html:button>
 																					</td>
 																					<td width="8%" align="left">
 																						<html:reset  styleClass="dr-menu" property="submitButton" >
-																							<digi:trn key="btn:reset">Reset</digi:trn> 
+																							<digi:trn key="btn:reset">Reset</digi:trn>
 																						</html:reset>
 																					</td>
 																					<td width="45%" align="left">
 																						<html:button  styleClass="dr-menu" property="submitButton"  onclick="move()">
-																							<digi:trn key="btn:cancel">Cancel</digi:trn> 
+																							<digi:trn key="btn:cancel">Cancel</digi:trn>
 																						</html:button>
 																					</td>
 																				</tr>
@@ -242,7 +242,7 @@
 																		<tr>
 																			<td colspan="2" width="60%"  align="center">
 																				<html:button  styleClass="dr-menu" property="submitButton"  onclick="msg()">
-																					<digi:trn key="btn:deleteThisCalendar">Delete this Calendar</digi:trn> 
+																					<digi:trn key="btn:deleteThisCalendar">Delete this Calendar</digi:trn>
 																				</html:button>
 																			</td>
 																		</tr>

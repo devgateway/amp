@@ -78,6 +78,7 @@ import org.digijava.module.aim.util.ActivityUtil;
 import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.DesktopUtil;
+import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.LocationUtil;
 import org.digijava.module.aim.util.ProgramUtil;
 import org.digijava.module.aim.util.SectorUtil;
@@ -288,8 +289,16 @@ public class SaveActivity extends Action {
 				boolean statusFlag = false;
 
 				if (eaForm.getAmpId() == null) {
-					String ampId = "AMP";
-					if (eaForm.getFundingOrganizations() != null) {
+					/*
+					 * The logic for geerating the AMP-ID is as follows:
+					 * 1. get default global country code
+					 * 2. Get the maximum of the ampActivityId + 1, MAX_NUM
+					 * 3. merge them
+					 */
+					String ampId = 
+						FeaturesUtil.getGlobalSettingValue(org.digijava.module.aim.helper.Constants.GLOBAL_DEFAULT_COUNTRY).toUpperCase();
+			
+			/*		if (eaForm.getFundingOrganizations() != null) {
 						if (eaForm.getFundingOrganizations().size() == 1) {
 							Iterator itr = eaForm.getFundingOrganizations()
 									.iterator();
@@ -302,10 +311,10 @@ public class SaveActivity extends Action {
 												.getOrgCode();
 							}
 						}
-					}
+					}*/
 					long maxId = ActivityUtil.getActivityMaxId();
 					maxId++;
-					ampId += "-" + maxId;
+					ampId += "/" + maxId;
 					eaForm.setAmpId(ampId);
 				}
 

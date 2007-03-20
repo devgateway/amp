@@ -40,6 +40,7 @@ import org.digijava.module.aim.util.ActivityUtil;
 import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.DocumentUtil;
+import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.MEIndicatorsUtil;
 import org.digijava.module.aim.util.ProgramUtil;
 import org.digijava.module.aim.util.TeamUtil;
@@ -332,12 +333,13 @@ public class AddAmpActivity extends Action {
 			if (eaForm.getAmpId() == null) { // if AMP-ID is not generated, generate the AMP-ID
 				/*
 				 * The logic for geerating the AMP-ID is as follows:
-				 * 1. Get the donor codes, if there are any donors, DNR_CODE
+				 * 1. get default global country code
 				 * 2. Get the maximum of the ampActivityId + 1, MAX_NUM
-				 * 3. Append 'DNR_CODE + "-" + MAX_NUM'  to the string "AMP-"
+				 * 3. merge them
 				 */
-				String ampId = "AMP";
-				if (eaForm.getFundingOrganizations() != null) {
+				String ampId = 
+					FeaturesUtil.getGlobalSettingValue(org.digijava.module.aim.helper.Constants.GLOBAL_DEFAULT_COUNTRY).toUpperCase();
+				/*if (eaForm.getFundingOrganizations() != null) {
 					if (eaForm.getFundingOrganizations().size() == 1) {
 						Iterator itr = eaForm.getFundingOrganizations().iterator();
 						if (itr.hasNext()) {
@@ -346,10 +348,10 @@ public class AddAmpActivity extends Action {
 							ampId += "-" + DbUtil.getOrganisation(fOrg.getAmpOrgId()).getOrgCode();
 						}
 					}
-				}
+				}*/
 				long maxId = ActivityUtil.getActivityMaxId();
 				maxId++;
-				ampId += "-" + maxId;
+				ampId += "/" + maxId;
 				eaForm.setAmpId(ampId);
 			}
 

@@ -129,6 +129,7 @@ public class EditActivityForm extends ActionForm implements Serializable{
 	private String actAthFirstName;
 	private String actAthLastName;
 	private String actAthEmail;
+	private String actAthAgencySource;
 
 	private String conditions;
 	private int item;
@@ -470,6 +471,7 @@ public class EditActivityForm extends ActionForm implements Serializable{
 			mfdCntLastName = null;
 			actAthEmail = null;
 			actAthFirstName = null;
+			actAthAgencySource=null;
 			actAthLastName = null;
 			regionalFundings = null;
 			issues = null;
@@ -3780,6 +3782,14 @@ public class EditActivityForm extends ActionForm implements Serializable{
 
 	public void setUpdatedDate(String updatedDate) {
 		this.updatedDate = updatedDate;
+	}
+
+	public String getActAthAgencySource() {
+		return actAthAgencySource;
+	}
+
+	public void setActAthAgencySource(String actAthAgencySource) {
+		this.actAthAgencySource = actAthAgencySource;
 	}
 
     /*

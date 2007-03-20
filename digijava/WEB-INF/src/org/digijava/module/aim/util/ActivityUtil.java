@@ -828,6 +828,7 @@ public class ActivityUtil {
 						activity.setActAthFirstName(usr.getFirstNames());
 						activity.setActAthLastName(usr.getLastName());
 						activity.setActAthEmail(usr.getEmail());
+						activity.setActAthAgencySource(usr.getOrganizationName());
 					}
 				}
 

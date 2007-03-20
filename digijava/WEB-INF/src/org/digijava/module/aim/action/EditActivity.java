@@ -1203,6 +1203,7 @@ public class EditActivity
                             eaForm.setActAthFirstName(usr.getFirstNames());
                             eaForm.setActAthLastName(usr.getLastName());
                             eaForm.setActAthEmail(usr.getEmail());
+                            eaForm.setActAthAgencySource(usr.getOrganizationName());
                         }
                     }
                 }

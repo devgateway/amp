@@ -772,6 +772,16 @@ function commentWin(val) {
 															&nbsp;</TD>
 															</TR>
 															</c:if>
+															
+															<c:if test="${!empty activity.actAthAgencySource}">
+															<TR>
+																<TD bgcolor="#ffffff"><i><digi:trn key="aim:dataSource">
+																Data Source</digi:trn></i>:
+																<c:out value="${activity.actAthAgencySource}"/>
+															&nbsp;</TD>
+															</TR>
+															</c:if>
+															
 														</TABLE>
 														</TD>
 													</TR>

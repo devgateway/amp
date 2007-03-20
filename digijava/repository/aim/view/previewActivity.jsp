@@ -1436,6 +1436,15 @@ function disable() {
 											<c:out value="${aimEditActivityForm.actAthEmail}"/>
 										</td>
 									</tr>
+									<tr>
+										<td class="t-name" width="30%" align="right" bgcolor="#f4f4f2">
+											<digi:trn key="aim:dataSource">
+											Data Source</digi:trn>
+										</td>
+										<td bgcolor="#ffffff">
+											<c:out value="${aimEditActivityForm.actAthAgencySource}"/>
+										</td>
+									</tr>									
 									<logic:notEmpty name="aimEditActivityForm" property="updatedDate">
 									<tr>
 										<td class="t-name" width="30%" align="right" bgcolor="#f4f4f2">

@@ -46,6 +46,7 @@ public class Activity implements Comparable {
 	private String actAthFirstName;
 	private String actAthLastName;
 	private String actAthEmail;
+	private String actAthAgencySource;
 	private String createdDate;
 	private ProposedProjCost propProjCost;
 	private String contractors;
@@ -556,6 +557,12 @@ public class Activity implements Comparable {
 	}
 	public void setBudget(Boolean budget) {
 		this.budget = budget;
+	}
+	public String getActAthAgencySource() {
+		return actAthAgencySource;
+	}
+	public void setActAthAgencySource(String actAthAgencySource) {
+		this.actAthAgencySource = actAthAgencySource;
 	}
 	
 }

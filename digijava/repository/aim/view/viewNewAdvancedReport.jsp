@@ -37,10 +37,6 @@
 		<td><bean:define id="reportMeta" name="reportMeta"
 			type="org.digijava.module.aim.dbentity.AmpReports" scope="session"
 			toScope="page" />
-		<ul>
-			<li><%=org.digijava.module.aim.dbentity.AmpReports
-							.getNote(session)%></li>
-		</ul>
 		</td>
 	</tr>
 
@@ -120,6 +116,16 @@
 			pick a different filter criteria or use another report.</b></td>
 		</tr>
 	</logic:equal>
+		<tr>
+		<td align="left">
+							<font size="small">
+								<%=org.digijava.module.aim.dbentity.AmpReports
+							.getNote(session)%>
+							</font>
+
+							&nbsp;&nbsp;&nbsp;
+					 	</td>
+		</tr>
 </table>
 
 

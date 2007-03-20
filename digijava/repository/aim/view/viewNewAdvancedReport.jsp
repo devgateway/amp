@@ -81,8 +81,10 @@
 		</tr>
 		<tr>
 			<td align="right">
-				<font size="small" color="red">
+				<font size="-5" face="arial" color="red">
+					<span  STYLE="font-style:  italic">
 					<%=org.digijava.module.aim.dbentity.AmpReports.getNote(session)%>
+					</span>			
 				</font>
 			</td>
 		</tr>

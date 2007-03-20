@@ -7,8 +7,14 @@
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
 
 <digi:instance property="aimTeamReportsForm" />
-
+<digi:context name="url" property="context/module/moduleinstance/deleteAllReports.do~event=edit~rid=" />
 <SCRIPT TYPE="text/javascript">
+function confirmDelete(rid) {
+	if (confirm("Are you sure you want to delete this report?")) {
+		window.location='<%=url%>'+rid;
+	 }
+}
+
 <!--
 function popup(mylink, windowname)
 {
@@ -133,16 +139,11 @@ return false;
 											</TD>
 											 <% String s = (String)session.getAttribute("teamLeadFlag"); %>
 												<% if(s!=null && s.equals("true")){ %>
-											
 											<td bgcolor="<%=(idx.intValue()%2==1?"#eeeeee":"#ffffff")%>">
-												<jsp:useBean id="urlParams" type="java.util.Map" class="java.util.HashMap"/>
-												<c:set target="${urlParams}" property="rid">
-													<bean:write name="reports" property="ampReportId" />
-												</c:set>
-												<c:set target="${urlParams}" property="event" value="edit" />
-											[ <digi:link href="/deleteAllReports.do" name="urlParams" title="<%=translation%>" >
-												<digi:trn key="aim:reportDelete">Delete</digi:trn>
-											</digi:link> ]												
+											[ <a style="cursor:pointer" title="<%=translation%>" onclick='javascript:confirmDelete(<bean:write name="reports" property="ampReportId"/>)'>
+											<digi:trn key="aim:reportDelete">Delete</digi:trn>
+											</a>
+											]
 											</td>
 											<% } %>
 										</TR>

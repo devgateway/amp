@@ -1,3 +1,7 @@
+-- Aid Management Platform 
+-- (C) 2007 Development Gateway Foundation
+-- Maldives Implementation (1.07) RC2
+
 -- MySQL Administrator dump 1.4
 --
 -- ------------------------------------------------------

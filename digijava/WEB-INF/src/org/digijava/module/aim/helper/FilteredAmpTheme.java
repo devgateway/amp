@@ -13,6 +13,7 @@ import org.digijava.module.aim.dbentity.AmpTheme;
  */
 public class FilteredAmpTheme extends AmpTheme {
 	private String filterString (String str){
+		if(str==null) return "";
 		try{
 			String ret	= str.replaceAll("\n"," ");
 			ret			= ret.replaceAll("\r","");

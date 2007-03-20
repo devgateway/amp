@@ -19,6 +19,8 @@ import org.apache.struts.tiles.actions.TilesAction;
 import org.digijava.module.aim.dbentity.AmpMEIndicators;
 import org.digijava.module.aim.helper.AmpProject;
 import org.digijava.module.aim.helper.Constants;
+import org.digijava.module.aim.helper.TeamMember;
+import org.digijava.module.aim.util.DesktopUtil;
 import org.digijava.module.aim.util.MEIndicatorsUtil;
 
 public class ViewPortfolioDashboard extends TilesAction {
@@ -33,12 +35,20 @@ public class ViewPortfolioDashboard extends TilesAction {
 		DynaActionForm pdForm = (DynaActionForm) form;
 		
 		HttpSession session = request.getSession();
+		TeamMember tm = (TeamMember) session.getAttribute(Constants.CURRENT_MEMBER);
+		
 		int pageListSize = 0;
 		int page = 1;
 		
 		if (request.getParameter("pge") != null) {
 			page = Integer.parseInt(request.getParameter("pge"));
 		}
+		
+		
+		Collection session_projects = DesktopUtil.getDesktopActivities(tm.getTeamId(),tm.getMemberId(),
+					tm.getTeamHead());
+			session.setAttribute(Constants.AMP_PROJECTS,session_projects);
+		
 		
 		if (session.getAttribute(Constants.AMP_PROJECTS) != null) {
 			Collection col = new ArrayList();

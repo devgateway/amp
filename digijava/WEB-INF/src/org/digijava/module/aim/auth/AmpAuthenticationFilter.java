@@ -84,6 +84,8 @@ public class AmpAuthenticationFilter
         HttpServletResponse response = (HttpServletResponse) servletResponse;
 
         HttpSession session = request.getSession();
+        session.invalidate();
+        
 
         Boolean filterApplied = (Boolean)session.getAttribute(FILTER_APPLIED);
         if (filterApplied != null && filterApplied.equals(Boolean.TRUE)) {

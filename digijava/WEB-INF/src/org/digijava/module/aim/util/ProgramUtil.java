@@ -1046,12 +1046,12 @@ public class ProgramUtil {
 			}
 		}
 
-		static Collection tempPrg = new ArrayList();
 		public static Collection getRelatedThemes(Long id)
 		{
 			AmpTheme ampThemetemp = new AmpTheme();
 			ampThemetemp = getThemeObject(id);
 			Collection themeCol = getSubThemes(id);
+			Collection tempPrg = new ArrayList();
 			tempPrg.add(ampThemetemp);
 			if(!themeCol.isEmpty())
 			{
@@ -1060,7 +1060,7 @@ public class ProgramUtil {
 				while(itr.hasNext())
 				{
 					tempTheme = (AmpTheme) itr.next();
-					getRelatedThemes(tempTheme.getAmpThemeId());
+					tempPrg.addAll(getRelatedThemes(tempTheme.getAmpThemeId()));
 				}
 			}
 			return tempPrg;

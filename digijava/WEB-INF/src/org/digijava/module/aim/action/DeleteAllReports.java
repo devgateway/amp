@@ -55,6 +55,8 @@ public class DeleteAllReports extends Action {
 						
 						 ampReport.setReportId(id);
 						 logger.info(" this is setReportid "+ampReport.getReportId());
+						 		if(id.intValue() > 11)
+						 		{
 								 DbUtil.deleteReportsCompletely(ampReport.getReportId());
 								
 								 ActionErrors errors = new ActionErrors();
@@ -63,7 +65,15 @@ public class DeleteAllReports extends Action {
 									saveErrors(request,errors);
 						
 								logger.debug("Report deleted");
-
+						 		}
+						 		else
+						 		{
+						 			logger.info(" cannot delete Static Reports");
+						 			 ActionErrors errors = new ActionErrors();
+										errors.add("title", new ActionError(
+												"error.aim.cannotdeleteReports.cannotReportDeleted"));
+										saveErrors(request,errors);
+						 		}
 					 }
 				 }
 				 return mapping.findForward("forward");

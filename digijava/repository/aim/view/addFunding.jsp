@@ -376,7 +376,7 @@
 									</c:if>
 								</c:if>
 								<c:if test="${aimEditActivityForm.donorFlag == false}">
-								 	<c:if test="${fundingDetail.perspectiveCode=='MA'}">
+								 	<%-- <c:if test="${fundingDetail.perspectiveCode=='MA'}"> --%>
 									 	<tr>
 											<td valign="bottom">
 												<c:set var="index" value="${index+1}"/>
@@ -480,7 +480,7 @@
 												</logic:equal>
 											</td>
 										</tr>
-									</c:if>
+								<%--	</c:if> --%>
 								</c:if>
 							</c:if>
 						 	</c:forEach>
@@ -604,7 +604,7 @@
 									</c:if>
 								</c:if>
 								<c:if test="${aimEditActivityForm.donorFlag == false}">
-								 	<c:if test="${fundingDetail.perspectiveCode=='MA'}">
+								 	<%-- <c:if test="${fundingDetail.perspectiveCode=='MA'}"> --%>
 										<tr>
 											<td valign="bottom">
 												<c:set var="index" value="${index+1}"/>
@@ -651,7 +651,7 @@
 												</a>
 											</td>
 										</tr>
-									</c:if>
+									<%-- </c:if> --%>
 								</c:if>
 							</c:if>
 						 	</c:forEach>
@@ -790,7 +790,7 @@
 									</c:if>
 								</c:if>
 								<c:if test="${aimEditActivityForm.donorFlag == false}">
-								 	<c:if test="${fundingDetail.perspectiveCode=='MA'}">
+								 	<%--  <c:if test="${fundingDetail.perspectiveCode=='MA'}"> --%>
 
 									 	<tr>
 											<td colspan="6">
@@ -856,7 +856,7 @@
 											</td>
 										</tr>
 
-									</c:if>
+									<%--  </c:if> --%>
 								</c:if>
 
 							</c:if>

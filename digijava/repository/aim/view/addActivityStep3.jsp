@@ -519,6 +519,26 @@
                                                                                         </td>
                                                                                       </tr>
                                                                                     </c:if>
+                                                                                     <c:if test="${fundingDetail.perspectiveCode == 'DN'}">
+                                                                                      <tr bgcolor="#ffffff">
+                                                                                        <td width="50">
+                                                                                          <bean:write name="fundingDetail" property="adjustmentTypeName"/>
+                                                                                        </td>
+                                                                                        <td width="120" align="right">
+                                                                                          <FONT color=blue>*</FONT>
+                                                                                          <bean:write name="fundingDetail" property="transactionAmount"/>&nbsp;
+                                                                                        </td>
+                                                                                        <td width="150">
+                                                                                          <bean:write name="fundingDetail" property="currencyCode"/>
+                                                                                        </td>
+                                                                                        <td width="70">
+                                                                                          <bean:write name="fundingDetail" property="transactionDate"/>
+                                                                                        </td>
+                                                                                        <td>
+                                                                                          <bean:write name="fundingDetail" property="perspectiveName"/>
+                                                                                        </td>
+                                                                                      </tr>
+                                                                                    </c:if>
                                                                                   </c:if>
 
                                                                                 </logic:equal>
@@ -565,6 +585,26 @@
 
 																						<c:if test="${aimEditActivityForm.donorFlag == false}">
 																						<c:if test="${fundingDetail.perspectiveCode != 'DN'}">
+																						<tr bgcolor="#ffffff">
+																							<td width="50">
+																								<bean:write name="fundingDetail" property="adjustmentTypeName"/>
+																							</td>
+																							<td width="120" align="right">
+																								<FONT color=blue>*</FONT>
+																								<bean:write name="fundingDetail" property="transactionAmount"/>&nbsp;
+																							</td>
+																							<td width="150">
+																								<bean:write name="fundingDetail" property="currencyCode"/>
+																							</td>
+																							<td width="70">
+																								<bean:write name="fundingDetail" property="transactionDate"/>
+																							</td>
+																							<td>
+																								<bean:write name="fundingDetail" property="perspectiveName"/>
+																							</td>
+																						</tr>
+																						</c:if>
+																						<c:if test="${fundingDetail.perspectiveCode == 'DN'}">
 																						<tr bgcolor="#ffffff">
 																							<td width="50">
 																								<bean:write name="fundingDetail" property="adjustmentTypeName"/>
@@ -634,31 +674,56 @@
 																						</c:if>
 
 																						<c:if test="${aimEditActivityForm.donorFlag == false}">
-																						<c:if test="${fundingDetail.perspectiveCode != 'DN'}">
-																						<tr bgcolor="#ffffff">
-																							<td width="50">
-																								<bean:write name="fundingDetail" property="adjustmentTypeName"/>
-																							</td>
-																							<td width="120" align="right">
-																								<FONT color=blue>*</FONT>
-																								<bean:write name="fundingDetail" property="transactionAmount"/>&nbsp;
-																							</td>
-																							<td width="150">
-																								<bean:write name="fundingDetail" property="currencyCode"/>
-																							</td>
-																							<td width="70">
-																								<bean:write name="fundingDetail" property="transactionDate"/>
-																							</td>
-																							<td>
-																								<bean:write name="fundingDetail" property="perspectiveName"/>
-																							</td>
-																						</tr>
-																						<tr>
-																							<td colspan=5 bgcolor="#ffffff">&nbsp;&nbsp;
-																								<bean:write name="fundingDetail" property="classification"/>
-																							</td>
-																						</tr>
-																						</c:if>
+																							<c:if test="${fundingDetail.perspectiveCode != 'DN'}">
+																								<tr bgcolor="#ffffff">
+																									<td width="50">
+																										<bean:write name="fundingDetail" property="adjustmentTypeName"/>
+																									</td>
+																									<td width="120" align="right">
+																										<FONT color=blue>*</FONT>
+																										<bean:write name="fundingDetail" property="transactionAmount"/>&nbsp;
+																									</td>
+																									<td width="150">
+																										<bean:write name="fundingDetail" property="currencyCode"/>
+																									</td>
+																									<td width="70">
+																										<bean:write name="fundingDetail" property="transactionDate"/>
+																									</td>
+																									<td>
+																										<bean:write name="fundingDetail" property="perspectiveName"/>
+																									</td>
+																								</tr>
+																								<tr>
+																									<td colspan=5 bgcolor="#ffffff">&nbsp;&nbsp;
+																										<bean:write name="fundingDetail" property="classification"/>
+																									</td>
+																								</tr>
+																							</c:if>
+																							<c:if test="${fundingDetail.perspectiveCode == 'DN'}">
+																								<tr bgcolor="#ffffff">
+																									<td width="50">
+																										<bean:write name="fundingDetail" property="adjustmentTypeName"/>
+																									</td>
+																									<td width="120" align="right">
+																										<FONT color=blue>*</FONT>
+																										<bean:write name="fundingDetail" property="transactionAmount"/>&nbsp;
+																									</td>
+																									<td width="150">
+																										<bean:write name="fundingDetail" property="currencyCode"/>
+																									</td>
+																									<td width="70">
+																										<bean:write name="fundingDetail" property="transactionDate"/>
+																									</td>
+																									<td>
+																										<bean:write name="fundingDetail" property="perspectiveName"/>
+																									</td>
+																								</tr>
+																								<tr>
+																									<td colspan=5 bgcolor="#ffffff">&nbsp;&nbsp;
+																										<bean:write name="fundingDetail" property="classification"/>
+																									</td>
+																								</tr>
+																							</c:if>
 																						</c:if>
 
 

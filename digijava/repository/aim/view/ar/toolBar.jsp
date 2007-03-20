@@ -63,13 +63,14 @@
 				</digi:link>
 				</TD>
 				
+				<!-- 
 				<TD noWrap align=left valign="center">	
 				<digi:img src="images/folders.png" border="0" alt="Drilldown"/>
 				<digi:link href="<%=viewParamTree%>" paramName="ampReportId" paramId="ampReportId" target="_blank">
 				Drilldown
 				</digi:link>
 				</TD>
-				
+				 -->
 
 
               </TR>

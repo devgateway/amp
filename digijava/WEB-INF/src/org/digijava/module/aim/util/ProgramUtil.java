@@ -806,13 +806,13 @@ public class ProgramUtil {
 			for(int i=colSize-1; i>=0; i--)
 			{
 				AmpTheme ampTh = (AmpTheme) colTheme.get(i);
-				Set tempIndicators = ampTh.getIndicators();
+				/*Set tempIndicators = ampTh.getIndicators();
 				Iterator tempInd = tempIndicators.iterator();
 				while(tempInd.hasNext())
 				{
 					AmpThemeIndicators themeInd = (AmpThemeIndicators) tempInd.next();
-					deletePrgIndicator(themeInd.getAmpThemeIndId());
-				}
+					//deletePrgIndicator(themeInd.getAmpThemeIndId());
+				}*/
 				deleteonebyone(ampTh.getAmpThemeId());
 			}
 		}

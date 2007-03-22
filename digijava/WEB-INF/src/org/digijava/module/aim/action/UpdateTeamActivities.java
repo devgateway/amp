@@ -98,8 +98,9 @@ public class UpdateTeamActivities extends Action {
 				session.removeAttribute("teamActivityList");
 			}
 			taForm.setRemoveActivity(null);
-			taForm.setSelActivities(null);			
-
+			taForm.setSelActivities(null);
+			session.removeAttribute("report"); // so that the activity list gets refreshed
+			session.removeAttribute("reportMeta"); // so that the activity list gets refreshed
 			return mapping.findForward("forward");
 		} else if (taForm.getAssignActivity() != null) {
 			/* add the selected activities to the team list */

@@ -47,7 +47,7 @@ public class GlobalSettings extends Action {
 				}
 			}
 		
-		FeaturesUtil featUtil = new FeaturesUtil();
+		//FeaturesUtil featUtil = new FeaturesUtil();
 		GlobalSettingsForm gsForm = (GlobalSettingsForm) form;
 		if(request.getParameter("save")!=null)
 		{
@@ -56,7 +56,7 @@ public class GlobalSettings extends Action {
 			
 			logger.info(" id is "+gsForm.getGlobalId()+"   name is "+gsForm.getGlobalSettingsName()+ "  value is... "+gsForm.getGsfValue());
 			this.updateGlobalSetting(gsForm.getGlobalId(), gsForm.getGsfValue());
-			ActionErrors errors = new ActionErrors(); 
+			//ActionErrors errors = new ActionErrors(); 
 					
 		}
 		/*Collection a = FeaturesUtil.getDefaultCountryISO();

@@ -105,6 +105,8 @@
     <form-bean name="aimParisIndicatorForm" type="org.digijava.module.aim.form.ParisIndicatorForm" />
     <form-bean name="aimNationalPlaningDashboardForm" type="org.digijava.module.aim.form.NationalPlaningDashboardForm" />
   	<form-bean name="aimGlobalSettingsForm" type="org.digijava.module.aim.form.GlobalSettingsForm" />
+  	<form-bean name="aimTranslatorManagerForm" type="org.digijava.module.aim.form.TranslatorManagerForm" />
+  	
    </form-beans>
   <global-forwards>
     <forward name="viewMyDesktop" path="/aim/viewMyDesktop.do" />
@@ -1247,6 +1249,9 @@
     </action>
     <action name="aimGlobalSettingsForm" path="/aim/GlobalSettings" scope="session" type="org.digijava.module.aim.action.GlobalSettings" validate="false">
       <forward name="viewGS" path="/showLayout.do?layout=viewGlobalSettings" />
+    </action>
+    <action name="aimTranslatorManagerForm" path="/aim/translationManager" scope="session" type="org.digijava.module.aim.action.TranslatorManager" validate="false">
+      <forward name="forward" path="/showLayout.do?layout=viewTranslatorManager" />
     </action>
     <action name="aimEditActivityForm" path="/aim/addProposedFunding" scope="session" type="org.digijava.module.aim.action.AddProposedFunding" validate="false">
       <forward name="forward" path="/aim/addActivity.do?edit=true" redirect="true" />

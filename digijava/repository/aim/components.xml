@@ -185,6 +185,11 @@
 
 	<!-- global settings-->
 	<page name="viewGlobalSettings"  title ="- Global Settings " />
+	
+	<!-- global settings-->
+	<page name="viewTranslatorManager"  title ="- Translator Manager " />
+	
+	
 
 	<!-- program Manager-->
 	<page name="viewProgramTypeManager" title=" : Program Type Manager" />

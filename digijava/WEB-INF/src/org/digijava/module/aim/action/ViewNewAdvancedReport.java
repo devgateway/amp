@@ -73,7 +73,7 @@ public class ViewNewAdvancedReport extends Action {
 
 		if(ampReportId==null) ampReportId=ar.getAmpReportId().toString();
 		
-		if(ar==null || (ampReportId!=null && !ampReportId.equals(ar.getAmpReportId().toString())))
+		if(ar==null || (arf.getCreatedReportId() != null) || (ampReportId!=null && !ampReportId.equals(ar.getAmpReportId().toString())))
 		{
 			rd=ARUtil.generateReport(mapping,form,request,response);
 	

@@ -7,62 +7,11 @@
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
 
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
-<script language="JavaScript">
-<!--
-	function submitFilter()
-	{
-		<digi:context name="clearVal" property="context/module/moduleinstance/viewNewAdvancedReport.do" />
-		url = "<%=clearVal %>?ampReportId=" + document.aimAdvancedReportForm.createdReportId.value;
-		document.aimAdvancedReportForm.action = url;
-		document.aimAdvancedReportForm.target = "_self";
-		document.aimAdvancedReportForm.submit();
-	}
-
-	function clearFilter()
-	{
-		<digi:context name="clearVal" property="context/module/moduleinstance/viewNewAdvancedReport.do" />
-		url = "<%=clearVal %>?view=reset&ampReportId=" + document.aimAdvancedReportForm.createdReportId.value;
-		document.aimAdvancedReportForm.action = url;
-		document.aimAdvancedReportForm.target = "_self";
-		document.aimAdvancedReportForm.submit();
-	}
 
 
-	function popup_pdf() {
-		openResisableWindow(800, 600);
-		<digi:context name="pdf" property="context/module/moduleinstance/advancedReportPdf.do?docType=pdf" />
-		document.aimAdvancedReportForm.action = "<%= pdf %>";
-		document.aimAdvancedReportForm.target = popupPointer.name;
-		document.aimAdvancedReportForm.submit();
-	}
-
-	function popup_xls() {
-		openResisableWindow(800, 600);
-		<digi:context name="xls" property="context/module/moduleinstance/advancedReportPdf.do?docType=excel" />
-		document.aimAdvancedReportForm.action = "<%= xls %>";
-		document.aimAdvancedReportForm.target = popupPointer.name;
-		document.aimAdvancedReportForm.submit();
-	}
-
-	function popup_csv() {
-		openResisableWindow(800, 600);
-		<digi:context name="csv" property="context/module/moduleinstance/advancedReportPdf.do?docType=csv" />
-		document.aimAdvancedReportForm.action = "<%= csv %>";
-		document.aimAdvancedReportForm.target = popupPointer.name;
-		document.aimAdvancedReportForm.submit();
-	}
-
-	function popup_warn() {
-		alert("Year Range selected should NOT be Greater than 4 Years.");
-	}
--->
-</script>
-
-
-	<digi:form action="/viewNewAdvancedReport.do" >
-	<html:hidden property="createdReportId"/>
-
-	
+	<digi:form action="/viewNewAdvancedReport.do">
+	<html:hidden property="createdReportId" />
+		
       <bean:define id="fcount" name="aimAdvancedReportForm" property="filterCnt" type="java.lang.Integer" /> 
       <bean:define id="reportCurrencyCode" name="aimAdvancedReportForm" toScope="session" property="ampCurrencyCode" type="java.lang.String" /> 
 
@@ -163,6 +112,56 @@
       
         </table>
     </tr>
+	
+	<script language="JavaScript">
+	function submitFilter()
+	{
+		<digi:context name="clearVal" property="context/module/moduleinstance/viewNewAdvancedReport.do" />
+		
+		url = "<%=clearVal %>?ampReportId=" + document.getElementsByName("aimAdvancedReportForm")[1].createdReportId.value;
+		document.getElementsByName("aimAdvancedReportForm")[1].action = url;
+		document.getElementsByName("aimAdvancedReportForm")[1].target = "_self";
+		document.getElementsByName("aimAdvancedReportForm")[1].submit();
+	}
+
+	function clearFilter()
+	{
+		<digi:context name="clearVal" property="context/module/moduleinstance/viewNewAdvancedReport.do" />
+		url = "<%=clearVal %>?view=reset&ampReportId=" + document.getElementsByName("aimAdvancedReportForm")[1].createdReportId.value;
+		document.getElementsByName("aimAdvancedReportForm")[1].action = url;
+		document.getElementsByName("aimAdvancedReportForm")[1].target = "_self";
+		document.getElementsByName("aimAdvancedReportForm")[1].submit();
+	}
+
+
+	function popup_pdf() {
+		openResisableWindow(800, 600);
+		<digi:context name="pdf" property="context/module/moduleinstance/advancedReportPdf.do?docType=pdf" />
+		document.getElementsByName("aimAdvancedReportForm")[1].action = "<%= pdf %>";
+		document.getElementsByName("aimAdvancedReportForm")[1].target = popupPointer.name;
+		document.getElementsByName("aimAdvancedReportForm")[1].submit();
+	}
+
+	function popup_xls() {
+		openResisableWindow(800, 600);
+		<digi:context name="xls" property="context/module/moduleinstance/advancedReportPdf.do?docType=excel" />
+		document.getElementsByName("aimAdvancedReportForm")[1].action = "<%= xls %>";
+		document.getElementsByName("aimAdvancedReportForm")[1].target = popupPointer.name;
+		document.getElementsByName("aimAdvancedReportForm")[1].submit();
+	}
+
+	function popup_csv() {
+		openResisableWindow(800, 600);
+		<digi:context name="csv" property="context/module/moduleinstance/advancedReportPdf.do?docType=csv" />
+		document.getElementsByName("aimAdvancedReportForm")[1].action = "<%= csv %>";
+		document.getElementsByName("aimAdvancedReportForm")[1].target = popupPointer.name;
+		document.getElementsByName("aimAdvancedReportForm")[1].submit();
+	}
+
+	function popup_warn() {
+		alert("Year Range selected should NOT be Greater than 4 Years.");
+	}
+</script>
 			
 
 

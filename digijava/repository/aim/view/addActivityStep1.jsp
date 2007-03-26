@@ -93,11 +93,17 @@ function validateForm() {
 		document.aimEditActivityForm.status.focus();
 		return false;
 	}
-	<digi:context name="commentUrl" property="context/module/moduleinstance/addActivity.do" />
-	url = "<%=commentUrl %>?comment=" + "ccd" + "&edit=" + "true";
-	document.aimEditActivityForm.action = url;
 	document.aimEditActivityForm.step.value="2";
 	return true;
+}
+
+function goNextStep(){
+  if(validateForm()){
+    <digi:context name="nextStepUrl" property="context/module/moduleinstance/addActivity.do?edit=true" />
+    document.aimEditActivityForm.action = "<%= nextStepUrl %>";
+    document.aimEditActivityForm.target = "_self";
+    document.aimEditActivityForm.submit();
+  }
 }
 
 function reviseCloseDate() {
@@ -642,7 +648,8 @@ function popupwin()
 										<table cellPadding=3>
 											<tr>
 												<td>
-													<html:submit value="Next >>" styleClass="dr-menu" onclick="return validateForm()"/>
+													<%--<html:submit value="Next >>" styleClass="dr-menu" onclick="return validateForm()"/>--%>
+													<html:submit value="Next >>" styleClass="dr-menu" onclick="goNextStep()"/>
 												</td>
 												<td>
 													<html:reset value="Reset" styleClass="dr-menu" onclick="return resetAll()"/>

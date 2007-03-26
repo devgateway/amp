@@ -493,7 +493,10 @@
                                                                                       <bean:write name="fundingDetail" property="transactionDate"/>
                                                                                     </td>
                                                                                     <td>
-                                                                                      <bean:write name="fundingDetail" property="perspectiveName"/>
+                                                                                    	<digi:trn key='<%="aim:"+fundingDetail.getPerspectiveNameTrimmed() %>'>
+																								<bean:write name="fundingDetail" property="perspectiveName"/>
+																						</digi:trn>
+                                                                                    
                                                                                     </td>
                                                                                       </tr>
                                                                                   </c:if>
@@ -515,7 +518,10 @@
                                                                                           <bean:write name="fundingDetail" property="transactionDate"/>
                                                                                         </td>
                                                                                         <td>
-                                                                                          <bean:write name="fundingDetail" property="perspectiveName"/>
+   																								<digi:trn key='<%="aim:"+fundingDetail.getPerspectiveNameTrimmed() %>'>
+																									<bean:write name="fundingDetail" property="perspectiveName"/>
+																								</digi:trn>
+
                                                                                         </td>
                                                                                       </tr>
                                                                                     </c:if>
@@ -535,8 +541,10 @@
                                                                                           <bean:write name="fundingDetail" property="transactionDate"/>
                                                                                         </td>
                                                                                         <td>
-                                                                                          <bean:write name="fundingDetail" property="perspectiveName"/>
-                                                                                        </td>
+   																								<digi:trn key='<%="aim:"+fundingDetail.getPerspectiveNameTrimmed() %>'>
+																									<bean:write name="fundingDetail" property="perspectiveName"/>
+																								</digi:trn>
+</td>
                                                                                       </tr>
                                                                                     </c:if>
                                                                                   </c:if>
@@ -578,7 +586,9 @@
 																								<bean:write name="fundingDetail" property="transactionDate"/>
 																							</td>
 																							<td>
-																								<bean:write name="fundingDetail" property="perspectiveName"/>
+   																								<digi:trn key='<%="aim:"+fundingDetail.getPerspectiveNameTrimmed() %>'>
+																									<bean:write name="fundingDetail" property="perspectiveName"/>
+																								</digi:trn>
 																							</td>
 																						</tr>
 																						</c:if>
@@ -600,7 +610,9 @@
 																								<bean:write name="fundingDetail" property="transactionDate"/>
 																							</td>
 																							<td>
-																								<bean:write name="fundingDetail" property="perspectiveName"/>
+																								<digi:trn key='<%="aim:"+fundingDetail.getPerspectiveNameTrimmed() %>'>
+																									<bean:write name="fundingDetail" property="perspectiveName"/>
+																								</digi:trn>yyy
 																							</td>
 																						</tr>
 																						</c:if>
@@ -620,7 +632,9 @@
 																								<bean:write name="fundingDetail" property="transactionDate"/>
 																							</td>
 																							<td>
-																								<bean:write name="fundingDetail" property="perspectiveName"/>
+   																								<digi:trn key='<%="aim:"+fundingDetail.getPerspectiveNameTrimmed() %>'>
+																									<bean:write name="fundingDetail" property="perspectiveName"/>
+																								</digi:trn>
 																							</td>
 																						</tr>
 																						</c:if>
@@ -663,7 +677,9 @@
 																								<bean:write name="fundingDetail" property="transactionDate"/>
 																							</td>
 																							<td>
-																								<bean:write name="fundingDetail" property="perspectiveName"/>
+   																								<digi:trn key='<%="aim:"+fundingDetail.getPerspectiveNameTrimmed() %>'>
+																									<bean:write name="fundingDetail" property="perspectiveName"/>
+																								</digi:trn>
 																							</td>
 																						</tr>
 																						<tr>
@@ -690,7 +706,9 @@
 																										<bean:write name="fundingDetail" property="transactionDate"/>
 																									</td>
 																									<td>
-																										<bean:write name="fundingDetail" property="perspectiveName"/>
+   																								<digi:trn key='<%="aim:"+fundingDetail.getPerspectiveNameTrimmed() %>'>
+																									<bean:write name="fundingDetail" property="perspectiveName"/>
+																								</digi:trn>
 																									</td>
 																								</tr>
 																								<tr>
@@ -715,7 +733,9 @@
 																										<bean:write name="fundingDetail" property="transactionDate"/>
 																									</td>
 																									<td>
-																										<bean:write name="fundingDetail" property="perspectiveName"/>
+   																								<digi:trn key='<%="aim:"+fundingDetail.getPerspectiveNameTrimmed() %>'>
+																									<bean:write name="fundingDetail" property="perspectiveName"/>
+																								</digi:trn>
 																									</td>
 																								</tr>
 																								<tr>

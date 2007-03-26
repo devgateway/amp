@@ -474,7 +474,10 @@ function removeSelComponents() {
 																							<c:out value="${commitment.transactionDate}"/>
 																						</td>
 																						<td>
-																							<c:out value="${commitment.perspectiveName}"/>
+																							<digi:trn key='<%="aim:"+commitment.getPerspectiveNameTrimmed() %>'>
+																									<bean:write name="commitment" property="perspectiveName"/>
+																							</digi:trn>
+																							
 																						</td>
 																					</tr>																			
 																				</logic:iterate>	<!-- L2 END-->
@@ -511,7 +514,10 @@ function removeSelComponents() {
 																							<c:out value="${disbursement.transactionDate}"/>
 																						</td>
 																						<td>
-																							<c:out value="${disbursement.perspectiveName}"/>
+																							<digi:trn key='<%="aim:"+disbursement.getPerspectiveNameTrimmed() %>'>
+																								<bean:write name="disbursement" property="perspectiveName"/>
+																							</digi:trn>
+																							
 																						</td>
 																					</tr>																			
 																				</logic:iterate>	
@@ -558,7 +564,9 @@ function removeSelComponents() {
 																						<c:out value="${expenditure.transactionDate}"/>
 																					</td>
 																					<td>
-																						<c:out value="${expenditure.perspectiveName}"/>
+																							<digi:trn key='<%="aim:"+expenditure.getPerspectiveNameTrimmed() %>'>
+																								<bean:write name="expenditure" property="perspectiveName"/>
+																							</digi:trn>
 																					</td>
 																				</tr>
 																			</logic:iterate>	

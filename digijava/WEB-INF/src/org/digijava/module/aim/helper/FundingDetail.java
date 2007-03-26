@@ -16,6 +16,7 @@ public class FundingDetail implements Serializable
 	private String transactionAmount;
 	private String perspectiveCode;
 	private String perspectiveName;
+	private String perspectiveNameTrimmed;
 	private Long reportingOrganizationId;
 	private String reportingOrganizationName;
 	private String currencyCode;
@@ -230,5 +231,13 @@ public class FundingDetail implements Serializable
 	 */
 	public void setUseFixedRate(boolean useFixedRate) {
 		this.useFixedRate = useFixedRate;
+	}
+
+	public String getPerspectiveNameTrimmed() {
+		return perspectiveName.replaceAll(" ","");
+	}
+
+	public void setPerspectiveNameTrimmed(String perspectiveNameTrimmed) {
+		this.perspectiveNameTrimmed = perspectiveNameTrimmed;
 	}
 } 

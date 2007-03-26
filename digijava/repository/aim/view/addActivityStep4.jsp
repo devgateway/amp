@@ -273,7 +273,12 @@
 																									<c:out value="${commitment.transactionAmount}"/></td>
 																									<td><c:out value="${commitment.currencyCode}"/></td>
 																									<td><c:out value="${commitment.transactionDate}"/></td>
-																									<td><c:out value="${commitment.perspectiveName}"/></td>
+																									<td>
+																										<digi:trn key='<%="aim:"+commitment.getPerspectiveNameTrimmed() %>'>
+																											<bean:write name="commitment" property="perspectiveName"/>
+																										</digi:trn>
+																									
+																									</td>
 																								</tr>																			
 																								</logic:iterate>	<!-- L2 END-->
 																							</table>	
@@ -303,7 +308,11 @@
 																									</td>
 																									<td><c:out value="${disbursement.currencyCode}"/></td>
 																									<td><c:out value="${disbursement.transactionDate}"/></td>
-																									<td><c:out value="${disbursement.perspectiveName}"/></td>
+																									<td>
+																										<digi:trn key='<%="aim:"+disbursement.getPerspectiveNameTrimmed() %>'>
+																											<bean:write name="disbursement" property="perspectiveName"/>
+																										</digi:trn>
+																									</td>
 																								</tr>																			
 																								</logic:iterate>	<!-- L3 END-->
 																							</table>																		
@@ -342,7 +351,11 @@
 																									</td>
 																									<td><c:out value="${expenditure.currencyCode}"/></td>
 																									<td><c:out value="${expenditure.transactionDate}"/></td>
-																									<td><c:out value="${expenditure.perspectiveName}"/></td>
+																									<td>
+																										<digi:trn key='<%="aim:"+expenditure.getPerspectiveNameTrimmed() %>'>
+																											<bean:write name="expenditure" property="perspectiveName"/>
+																										</digi:trn>
+																									</td>
 																								</tr>
 																								</logic:iterate>	<!-- L4 END-->
 																							</table>

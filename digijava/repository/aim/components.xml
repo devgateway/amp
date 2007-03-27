@@ -178,7 +178,11 @@
 	<page page="searchSectors" name="aim_searchSectorPopupLayout" title="AMP - Search Sectors" />
 
 	<!-- global settings-->
-	<page name="viewGlobalSettings"  title ="AMP - Global Settings " />
+	<page name="viewGlobalSettings"  title =" - Global Settings " />
+
+	<!-- translation manager-->
+	<page name="viewTranslatorManager"  title ="- Translator Manager " />
+
 
 	<!-- sector manager with schemes -->
 	<page name="viewSectorSchemes" title=": View Sector Scheme" />

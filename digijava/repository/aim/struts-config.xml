@@ -83,6 +83,7 @@
     <form-bean name="aimAdvancedReportForm" type="org.digijava.module.aim.form.AdvancedReportForm" />
     <form-bean name="aimSectorSchemeForm" type="org.digijava.module.aim.form.SectorSchemeForm" />
     <form-bean name="aimFlagUploaderForm" type="org.digijava.module.aim.form.FlagUploaderForm" />
+    <form-bean name="aimTranslatorManagerForm" type="org.digijava.module.aim.form.TranslatorManagerForm" />
     <form-bean name="aimPortfolioDashboardForm" type="org.apache.struts.action.DynaActionForm">
       <form-property name="indicatorList" type="java.util.Collection" />
       <form-property name="activityList" type="java.util.Collection" />
@@ -1210,6 +1211,10 @@
     <action name="aimGlobalSettingsForm" path="/aim/GlobalSettings" scope="session" type="org.digijava.module.aim.action.GlobalSettings" validate="false">
       <forward name="viewGS" path="/showLayout.do?layout=viewGlobalSettings" />
     </action>
+    <action name="aimTranslatorManagerForm" path="/aim/translationManager" scope="session" type="org.digijava.module.aim.action.TranslatorManager" validate="false">
+      <forward name="forward" path="/showLayout.do?layout=viewTranslatorManager" />
+    </action>
+   
   </action-mappings>
 </struts-config>
 

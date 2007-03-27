@@ -213,6 +213,17 @@
 											<td class=f-names noWrap>
 											<digi:img src="module/aim/images/arrow-th-BABAB9.gif" width="16"/>
 											<bean:define id="translation">
+												<digi:trn key="aim:clickToViewTranslationManager">Click here to view Translation Manager</digi:trn>
+											</bean:define>
+				                             <digi:link href="/translationManager.do" title="<%=translation%>" >
+                				                <digi:trn key="aim:translationManager">Translation Manager</digi:trn>
+											</digi:link>
+											</td>
+										</tr>
+										<tr>
+											<td class=f-names noWrap>
+											<digi:img src="module/aim/images/arrow-th-BABAB9.gif" width="16"/>
+											<bean:define id="translation">
 												<digi:trn key="aim:clickToViewWorkspaceManager">Click here to view Workspace Manager</digi:trn>
 											</bean:define>
 											<digi:link href="/workspaceManager.do~page=1" title="<%=translation%>" >

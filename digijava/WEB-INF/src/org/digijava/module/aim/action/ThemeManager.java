@@ -8,6 +8,8 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Iterator; 
+import java.util.List;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -77,24 +79,27 @@ public class ThemeManager extends Action {
 			logger.info(" theme Id is ... "+themeForm.getThemeId());
 			//Iterator itr = DbUtil.getActivityThemeFromAAT(new Long(Long.parseLong(request.getParameter("themeId")))).iterator();
 			Collection col = DbUtil.getActivityThemeFromAAT(themeForm.getThemeId());
-			
+			Collection col2 = ProgramUtil.getThemeIndicators(themeForm.getThemeId());
 			if((col!=null)&&(!(col.isEmpty())))
 			{
 				//System.out.println("activity references i can not delete this theme!!!!and ThemeID="+themeForm.getThemeId()+"and request param="+request.getParameter("themeId"));
 				themeForm.setFlag("activityReferences");
 			}
 			else
-			{
-				
-				themeForm.setFlag("deleted");
-				//System.out.println("I deleted this theme....ups!!!!!!!!and ThemeID="+themeForm.getThemeId()+"and request param="+request.getParameter("themeId"));
-				Long id = new Long(Long.parseLong(request.getParameter("themeId")));
-				
-				ProgramUtil.deleteTheme(id);
-				return mapping.findForward("delete");
-			}
+				if ((col2 != null) && (!(col2.isEmpty()))){
+					themeForm.setFlag("indicatorsNotEmpty");
+				}
+				else
+				{
+					themeForm.setFlag("deleted");
+					//System.out.println("I deleted this theme....ups!!!!!!!!and ThemeID="+themeForm.getThemeId()+"and request param="+request.getParameter("themeId"));
+					Long id = new Long(Long.parseLong(request.getParameter("themeId")));
+					
+					ProgramUtil.deleteTheme(id);
+					return mapping.findForward("delete");
+				}
 			/*Iterator itr = DbUtil.getActivityThemeFromAAT(themeForm.getThemeId()).iterator();
-			if (itr.hasNext()) {
+			 if (itr.hasNext()) {
 				System.out.println("activity references i can not delete this theme!!!!and ThemeID="+themeForm.getThemeId()+"and request param="+request.getParameter("themeId"));
 				themeForm.setFlag("activityReferences");
 			}

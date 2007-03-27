@@ -348,12 +348,22 @@
 												<c:if test="${aimThemeForm.flag == 'activityReferences'}">
 																	<tr>
 																		<td colspan="2" align="center">
-																			<b><digi:trn key="aim:cannotDeleteThemeMsg1">
+																			<font color="red"><b><digi:trn key="aim:cannotDeleteThemeMsg1">
 																			Cannot delete the theme since some 
 																			activities references it.
-																			</digi:trn></b>
+																			</digi:trn></b></font>
 																		</td>
-																	</tr>																	
+																	</tr>				
+												</c:if>
+												<c:if test="${aimThemeForm.flag == 'indicatorsNotEmpty'}">
+																	<tr>
+																		<td colspan="2" align="center">
+																			<font color="red"><b><digi:trn key="aim:cannotDeleteThemeMsg2">
+																			Cannot delete this program, one or more indicators are attached to it. 
+																			Delete the indicator(s) before deleting the program.
+																			</digi:trn></b></font>
+																		</td>
+																	</tr>				
 												</c:if>	
 
 											<tr><td>

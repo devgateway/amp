@@ -154,7 +154,7 @@ bgcolor="#006699">
 	</tr>	
 	<tr>
 		<td align="center">
-			<html:button  styleClass="dr-menu" property="submitButton"  onclick="saveClicked()">
+			<html:button  styleClass="dr-menu" property="saveButton"  onclick="saveClicked()">
 				<digi:trn key="btn:save">Save</digi:trn> 
 			</html:button>
 		</td>

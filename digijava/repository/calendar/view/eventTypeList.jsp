@@ -52,7 +52,7 @@ function chooseColor(){
 <digi:form action="/eventTypes.do" method="post">
 
   <!--  AMP Admin Logo -->
-  <jsp:include page="teamPagesHeader.jsp" flush="true" />
+  <jsp:include page="../../aim/view/teamPagesHeader.jsp" flush="true" />
   <!-- End of Logo -->
 
   <input type="hidden" name="eventTypeId" id="eventTypeId" value="-1" />

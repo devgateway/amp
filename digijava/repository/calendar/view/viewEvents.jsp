@@ -8,7 +8,7 @@
 
 <table border="0"  width="100%" cellPadding=0 cellSpacing=0>
        <tr>
-          <td colspan="2" valign="top"><jsp:include page="teamPagesHeader.jsp" flush="true"/><td>
+          <td colspan="2" valign="top"><jsp:include page="../../aim/view/teamPagesHeader.jsp" flush="true"/><td>
        </tr>
         <tr>
         <td valign="top" width="230" >

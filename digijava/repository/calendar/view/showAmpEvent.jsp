@@ -188,7 +188,7 @@ function delSubmit(){
 
 <table border="0" width="100%" cellPadding=0 cellSpacing=0>
         <tr>
-          <td colspan="3"><jsp:include page="teamPagesHeader.jsp" flush="true"/><td>
+          <td colspan="3"><jsp:include page="../../aim/view/teamPagesHeader.jsp" flush="true"/><td>
        </tr>
 
        <table class="r-dotted-lg">

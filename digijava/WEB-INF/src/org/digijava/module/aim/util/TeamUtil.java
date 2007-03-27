@@ -938,7 +938,7 @@ public class TeamUtil {
 					+ " act where act.team in (" + inclause.toString() + ")";
 
 			qry = session.createQuery(qryStr);
-			Iterator itr = qry.list().iterator();
+			Iterator itr = qry.list().iterator();		
 			inclause = "";
 			while (itr.hasNext()) {
 				if (inclause.length() != 0)
@@ -946,24 +946,26 @@ public class TeamUtil {
 				inclause += (Long) itr.next();
 			}
 
-			qryStr = "select distinct aor.organisation from "
-					+ AmpOrgRole.class.getName() + " aor, "
-					+ AmpOrganisation.class.getName() + " " + "org, "
-					+ AmpRole.class.getName() + " role where "
-					+ "aor.activity in (" + inclause + ") and "
-					+ "aor.role = role.ampRoleId and "
-					+ "aor.organisation = org.ampOrgId and "
-					+ "role.roleCode = '" + Constants.FUNDING_AGENCY + "'"
-					+ " order by org.acronym asc";
-
-			qry = session.createQuery(qryStr);
-			itr = qry.list().iterator();
-			while (itr.hasNext()) {
-				AmpOrganisation ampOrg = (AmpOrganisation) itr.next();
-				if (ampOrg.getAcronym().length() > 20)
-					ampOrg.setAcronym(ampOrg.getAcronym().substring(0, 20)
-							+ "...");
-				donors.add(ampOrg);
+			if(!"".equals(inclause)) {
+				qryStr = "select distinct aor.organisation from "
+						+ AmpOrgRole.class.getName() + " aor, "
+						+ AmpOrganisation.class.getName() + " " + "org, "
+						+ AmpRole.class.getName() + " role where "
+						+ "aor.activity in (" + inclause + ") and "
+						+ "aor.role = role.ampRoleId and "
+						+ "aor.organisation = org.ampOrgId and "
+						+ "role.roleCode = '" + Constants.FUNDING_AGENCY + "'"
+						+ " order by org.acronym asc";
+	
+				qry = session.createQuery(qryStr);
+				itr = qry.list().iterator();
+				while (itr.hasNext()) {
+					AmpOrganisation ampOrg = (AmpOrganisation) itr.next();
+					if (ampOrg.getAcronym().length() > 20)
+						ampOrg.setAcronym(ampOrg.getAcronym().substring(0, 20)
+								+ "...");
+					donors.add(ampOrg);
+				}
 			}
 		} catch (Exception e) {
             throw new RuntimeException(e);

@@ -246,9 +246,9 @@ function backStep() {
 										<bean:define id="translation">
 											<digi:trn key="aim:clickToSaveReport">Click here to Save Reports</digi:trn>
 										</bean:define>
-										<digi:link  href="/advancedReportManager.do?check=4" styleClass="sub-nav" title="<%=translation%>" onclick="javascript:gotoStep()">
+										<a class="sub-nav" style="cursor:pointer" title="<%=translation%>" onclick="javascript:saveReport()">
 										6 : <digi:trn key="aim:SaveReport">Save Report</digi:trn>
-										</digi:link>
+										</a>
 										</td>
 										<!--<td noWrap valign=top align=left>
 										<bean:define id="translation">
@@ -312,7 +312,7 @@ function backStep() {
 															<digi:trn key="btn:cancel">Cancel</digi:trn> 
 													</html:button>
 													<html:button  styleClass="dr-menu" property="submitButton"  onclick="javascript:saveReport()">
-															<digi:trn key="btn:generateReport">Generate Report</digi:trn> 
+															<digi:trn key="btn:saveReport">Save Report</digi:trn>
 													</html:button>
 												</td>
 											</tr>

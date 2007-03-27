@@ -221,7 +221,7 @@ function checkUncheckAll2() {
 											<digi:trn key="aim:clickToGenerateReport">Click here to Generate Reports</digi:trn>
 										</bean:define>
 										<digi:link href="/advancedReportManager.do?check=SelectCols"  styleClass="sub-nav" title="<%=translation%>" onclick="javascript:gotoStep()">
-										6 : <digi:trn key="aim:GenerateReport">Generate Report</digi:trn>
+										6 : <digi:trn key="aim:SaveReport">Save Report</digi:trn>
 										</digi:link>
 										</td>
 									<!--	<td noWrap valign=top align=left>

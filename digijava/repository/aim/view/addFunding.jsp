@@ -44,6 +44,10 @@
 	}	
 
 	function addFundingDetail(type) {
+	
+		var flag = validateFundingExchangeRate();
+		if (flag == false) return false;
+	
 		if (type == 0) {
 			document.aimEditActivityForm.event.value = "addCommitments";
 		} else if (type == 1) {

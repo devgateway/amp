@@ -31,6 +31,20 @@ function validateFunding() {
 	return validateFundingDetails(numComm,numDisb,numExp);
 }
 
+function validateFundingExchangeRate() {
+	var fundId = trim(document.aimEditActivityForm.orgFundingId.value);
+	
+	var numComm = document.aimEditActivityForm.numComm.value;
+	var numDisb = document.aimEditActivityForm.numDisb.value;
+	var numExp = document.aimEditActivityForm.numExp.value;
+
+	
+	return validateFundingDetailsExchangeRate(numComm,numDisb,numExp);
+}
+
+
+
+
 	function chkNumeric(objName,comma,period,hyphen)
 	{
 // only allow 0-9 be entered, plus any values passed
@@ -74,6 +88,34 @@ function validateFunding() {
 			return (false);
 		}
 	}
+
+
+function validateFundingDetailsExchangeRate(comm,disb,exp)
+{
+	var itr = comm + disb + exp;
+	var commAmt = 0, disbAmt = 0, expAmt = 0;
+	var disbIndex = -1, expIndex = -1; 
+	for (var j = 0;j < itr;j ++) {
+		var amtField = "fundingDetail[" + j + "].transactionAmount";
+		var dateField = "fundingDetail[" + j + "].transactionDate";
+		var transType = "fundingDetail[" + j + "].transactionType";
+		var fixedExchangeRate="fundingDetail[" + j + "].fixedExchangeRate";
+		var temp = new Array();
+		temp = document.aimEditActivityForm.elements;		
+			
+		for (var i = 0;i < temp.length;i ++) {
+		
+			if(temp[i].name != null && temp[i].name == fixedExchangeRate) 
+			{
+				if(chkNumeric(temp[i],'','.','')==false) {return false;}
+			}
+		
+			
+		}
+	}
+	return true;
+	
+}
 
 
 function validateFundingDetails(comm,disb,exp) {

@@ -34,7 +34,9 @@
                   <table bgColor=#ffffff cellPadding=0 cellSpacing=0 class=box-border-nopadding width="300" >
                     <tr bgcolor="#B7B7B7" align="center">
                       <td class=f-names noWrap>
+                      <digi:trn key="aim:administrative">
                       Administrative
+                      </digi:trn>
                       </td>
                     </tr>
                     <tr align="center" bgcolor="#f4f4f2" height="120" valign="top">
@@ -119,7 +121,9 @@
                   <table bgColor=#ffffff cellPadding=0 cellSpacing=0 class=box-border-nopadding width="300">
                     <tr bgcolor="#B7B7B7" align="center">
                       <td class=f-names noWrap>
+                      <digi:trn key="aim:dataFields">
                       Data Fields
+                      </digi:trn>
                       </td>
                     </tr>
                     <tr align="center" bgcolor="#f4f4f2" height="120" valign="top">
@@ -203,7 +207,9 @@
                   <table bgColor=#ffffff cellPadding=0 cellSpacing=0 class=box-border-nopadding width="300">
                     <tr bgcolor="#B7B7B7" align="center">
                       <td class=f-names noWrap>
+                      <digi:trn key="aim:programMonitoring">
                       Program Monitoring
+                      </digi:trn>
                       </td>
                     </tr>
                     <tr bgcolor="#f4f4f2" align="center" height="80" valign="top">
@@ -220,21 +226,7 @@
                               </digi:link>
                             </td>
                           </tr>
-                          <%--
-                          <logic:notEmpty name="PI" scope="application">
-                            <tr>
-                              <td class=f-names noWrap>
-                                <digi:img src="module/aim/images/arrow-th-BABAB9.gif" width="16"/>
-                                <bean:define id="translation">
-                                  <digi:trn key="aim:clickToViewParisIndicatorsManager">Click here to view Indicator Manager</digi:trn>
-                                </bean:define>
-                                <digi:link href="/parisIndicatorManager.do" title="<%=translation%>" >
-                                  <digi:trn key="aim:parisIndicatorManager">Paris Indicator Manager</digi:trn>
-                                </digi:link>
-                              </td>
-                            </tr>
-                          </logic:notEmpty>
-                          --%>
+
                           <tr>
                             <td class=f-names noWrap>
                               <digi:img src="module/aim/images/arrow-th-BABAB9.gif" width="16"/>
@@ -270,7 +262,7 @@
                   <table bgColor=#ffffff cellPadding=0 cellSpacing=0 class=box-border-nopadding width="300" title="">
                     <tr bgcolor="#B7B7B7" align="center">
                       <td class=f-names noWrap align="center">
-                      Projects / Activites
+                      <digi:trn key="aim:projectsActivities"> Projects / Activites</digi:trn>
                       </td>
                     </tr>
                     <tr bgcolor="#f4f4f2" align="center" height="80" valign="top">

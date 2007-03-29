@@ -186,7 +186,7 @@
 	<!-- global settings-->
 	<page name="viewGlobalSettings"  title ="- Global Settings " />
 	
-	<!-- global settings-->
+	<!-- translation manager-->
 	<page name="viewTranslatorManager"  title ="- Translator Manager " />
 	
 	

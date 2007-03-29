@@ -14,6 +14,9 @@
 
 	<!--
 
+
+	
+
 	function useFixedRateClicked(field1,field2) {
 		var fld1 = document.getElementById(field1);
 		var fld2 = document.getElementById(field2);
@@ -44,6 +47,10 @@
 	}
 
 	function addFundingDetail(type) {
+
+		var flag = validateFundingExchangeRate();
+		if (flag == false) return false;
+		
 		if (type == 0) {
 			document.aimEditActivityForm.event.value = "addCommitments";
 		} else if (type == 1) {
@@ -55,7 +62,7 @@
 	}
 
 	function removeFundingDetail(index,type) {
-		var flag = confirm("Are you sure you want to remove the selected transaction");
+		var flag = confirm("Are you sure you want to remove the selected transaction ?");
 		if(flag != false) {
 			if (type == 0) {
 				document.aimEditActivityForm.event.value = "delCommitments";

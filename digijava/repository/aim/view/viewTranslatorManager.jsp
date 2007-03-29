@@ -121,9 +121,7 @@
 											<option value="update">Update local translations</option>											
 											<option value="overwrite">Overwrite local translations</option>											
 										</select>
-										<html:checkbox property="overwriteTrn" value="<%=lang %>" />
-										Overwrite actual translations with the new ones (please check)
-										<br/>
+										
 	 								</td>
 		 						</tr>
 							 </logic:iterate>

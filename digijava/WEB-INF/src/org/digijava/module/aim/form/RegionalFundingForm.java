@@ -22,6 +22,9 @@ public class RegionalFundingForm extends MainProjectDetailsForm {
 	private String currFilterValue;
 	private long calFilterValue;
 	private Collection fiscalCalendars;
+	
+	private String perpsectiveNameTrimmed;
+	private String perspectiveNameLocaly;
 
 	public RegionalFundingForm() {
 		totCommitments = 0;
@@ -35,6 +38,8 @@ public class RegionalFundingForm extends MainProjectDetailsForm {
 		currFilterValue = "";
 		calFilterValue = -1;
 		fiscalCalendars = null;
+		perpsectiveNameTrimmed=null;
+		perspectiveNameLocaly="";
 	}
 	
 	/**
@@ -218,5 +223,26 @@ public class RegionalFundingForm extends MainProjectDetailsForm {
 	public void setGoButton(boolean goButton) {
 		this.goButton = goButton;
 	}
+	
+	public String getPerpsectiveNameTrimmed() {
+		return super.getPerpsectiveName().replaceAll(" ","");
+	}
+
+
+
+	public void setPerpsectiveNameTrimmed(String perpsectiveNameTrimmed) {
+		this.perpsectiveNameTrimmed = perpsectiveNameTrimmed;
+	}
+
+	public String getPerspectiveNameLocaly() {
+		//System.out.println("aaaaaaaaaaaaaaaaaaaaaaaaa:"+super.getPerpsectiveName()+" bbbbbbbbbbbbb:"+super.getPerspective());
+		if (super.getPerpsectiveName()!=null) return super.getPerpsectiveName().replaceAll(" ","");
+		return super.getPerspective().replaceAll(" ","");
+	}
+
+	public void setPerspectiveNameLocaly(String perspectiveNameLocaly) {
+		this.perspectiveNameLocaly = perspectiveNameLocaly;
+	}
+	
 }
 

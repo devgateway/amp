@@ -63,6 +63,9 @@ function preview(id)
 													</digi:link>&nbsp;&gt;&nbsp;
 													<digi:trn key="aim:actOverview">Overview</digi:trn>&nbsp;&gt;&nbsp;
 													<bean:write name="aimRegionalFundingForm" property="perspective"/>
+													<bean:define id="perspectiveNameTrimedLocal" name="aimRegionalFundingForm" property="perspectiveNameLocaly" type="java.lang.String"/>
+													<digi:trn key='<%="aim:"+ perspectiveNameTrimedLocal %>'>	
+														<bean:write name="aimRegionalFundingForm" property="perspective"/></digi:trn>
 												</SPAN>											
 											</TD>
 											<TD align="right">

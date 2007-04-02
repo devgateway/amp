@@ -94,6 +94,8 @@ function validateForm() {
 		return false;
 	}
 	document.aimEditActivityForm.step.value="2";
+	document.aimEditActivityForm.action = "/aim/addActivity.do?edit=true";
+    document.aimEditActivityForm.target = "_self";
 	return true;
 }
 

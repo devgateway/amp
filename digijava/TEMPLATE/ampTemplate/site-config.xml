@@ -12,6 +12,7 @@
 			<put name="title">AMP Default Template</put>
 			<put-item name="headerTop" file="headerTop.jsp"/>
 			<put-item name="headerMiddle" file="headerMiddle.jsp"/>
+			<put-item name="loginWidget" file="loginWidget.jsp"/>			
 			<put-item name="dropdownLangSwitch" module="translation" instance="default" teaser="dropdownLangSwitch"/>
 			<put-item name="footer" layout="footerLayout"/>
 			<put-item name="body" module="aim" instance="default"/>
@@ -46,6 +47,7 @@
 			<put-item name="headerMiddle" file="headerMiddle.jsp"/>
 			<put-item name="dropdownLangSwitch" module="translation" instance="default" teaser="dropdownLangSwitch"/>
 			<put-item name="footer" layout="footerLayout"/>
+						<put-item name="loginWidget" file="loginWidget.jsp"/>		
 			<put-item name="body" file="loginLayout.jsp"/>
 		</layout>
 		<layout name="loginBody" file="loginLayout.jsp">
@@ -65,6 +67,7 @@
 			<put-item name="tabHeader" module="aim" instance="default" teaser="mainProjectDetails"/>
 			<put-item name="tabBody" module="aim" instance="default" teaser="blankTeaser"/>
 	 		<put-item name="footer" layout="footerLayout"/>
+						<put-item name="loginWidget" file="loginWidget.jsp"/>		
 		</layout>
 		<layout name="layoutSurveyList" extends="tabLayout">
 			<put name="title">Activity - Aid Harmonization Survey Overview </put>
@@ -240,6 +243,7 @@
 			<put-item name="headerMiddle" file="headerMiddle.jsp"/>
 			<put-item name="dropdownLangSwitch" module="translation" instance="default" teaser="dropdownLangSwitch"/>
 			<put-item name="myDesktop" module="aim" instance="default" teaser="myDesktop"/>
+	 		<put-item name="loginWidget" file="loginWidget.jsp"/>
 			<put-item name="myReports" module="aim" instance="default" teaser="myReports"/>
 			<put-item name="myLinks" module="aim" instance="default" teaser="myLinks"/>
 			<put-item name="myTeamMembers" module="aim" instance="default" teaser="myTeamMembers"/>

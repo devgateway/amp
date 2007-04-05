@@ -10,9 +10,7 @@
 
 <script language=javascript>
 <!--
-function showUserProfile(id)
-{
-
+function showUserProfile(id){ 
 	<digi:context name="information" property="context/module/moduleinstance/userProfile.do" />
 	openURLinWindow("<%= information %>~edit=true~id="+id,480, 350);
 } 	
@@ -43,6 +41,7 @@ function showUserProfile(id)
 						</a></div>
 						</logic:notEmpty>
 					</td>
+<!--
 					<td align="right">
 						<bean:define id="translation">
 							<digi:trn key="aim:clickToLogoutTheSystem">Click here to logout from the system</digi:trn>
@@ -52,6 +51,7 @@ function showUserProfile(id)
 						<digi:trn key="aim:logout">Logout</digi:trn>
 						</a></div>&nbsp;&nbsp;&nbsp;&nbsp;
 					</td>
+-->
 				</tr>
 			</table>
 		</td>

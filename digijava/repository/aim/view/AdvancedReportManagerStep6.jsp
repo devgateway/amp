@@ -487,6 +487,7 @@ function checkUncheckAll2() {
 																<td height=30>	&nbsp;</td>	</tr>
 															<tr>
 																<td align="right" colspan="2">
+																	<html:hidden name="stepName" property="stepName" value="SelectMeasures" />
 																	<html:button  styleClass="dr-menu" property="submitButton"  onclick="javascript:backStep()">
 																		<< <digi:trn key="btn:previous">Previous</digi:trn> 
 																	</html:button>

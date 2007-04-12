@@ -2,7 +2,10 @@ package org.digijava.module.aim.form ;
 
 import java.util.Collection;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.apache.struts.action.ActionForm;
+import org.apache.struts.action.ActionMapping;
 import org.digijava.module.aim.helper.AmpFund;
 
 public class AdvancedReportForm extends ActionForm 
@@ -1429,5 +1432,10 @@ private int yrDiff;
 		return this.descriptionLink;
 	}
 	
+	public void reset(ActionMapping mapping, HttpServletRequest request) {
+		if (request.getParameter("stepName") != null && request.getParameter("stepName").equals("SelectMeasures") ){
+			this.hideActivities	= new Boolean(false);
+		}
+	}
 } //		End of Class
 

@@ -393,7 +393,7 @@
       <forward name="viewMyDesktop" path="/aim/viewMyDesktop.do" redirect="true" />
     </action>
     <action name="aimCurrencyForm" path="/aim/changeCurrencyStatus" scope="session" type="org.digijava.module.aim.action.ChangeCurrencyStatus" validate="false">
-      <forward name="forward" path="/currencyManager.do" redirect="true" />
+      <forward name="forward" path="/currencyManager.do"  />
     </action>
     <action name="aimCurrencyRateForm" path="/aim/loadCurrencyRates" scope="session" type="org.digijava.module.aim.action.LoadCurrencyRates" validate="false">
       <forward name="showCurrencyRates" path="/aim/showCurrencyRates.do" redirect="true" />

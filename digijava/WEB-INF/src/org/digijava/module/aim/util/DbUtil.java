@@ -110,6 +110,36 @@ public class DbUtil {
 		}
 		return fundingDetails;
 	}
+	public static Collection getFundingDetailsForCurrency(Long ampCurrencyId) {
+		Session session		= null;
+		Collection results 	= null;
+		try{
+			session				= PersistenceManager.getSession();
+			String queryString	= "select fdc from "+ AmpFundingDetail.class.getName() + " fdc "+ 
+						"where fdc.ampCurrencyId=:currencyId";
+			Query query			= session.createQuery(queryString);
+			query.setLong("currencyId", ampCurrencyId.longValue() );
+			results				= query.list();
+		}
+		catch (Exception ex) {
+			logger.error("Unable to get fundingDetails :" + ex);
+		} 
+		finally {
+			try {
+				PersistenceManager.releaseSession(session);
+			} catch (Exception ex2) {
+				logger.error("releaseSession() failed :" + ex2);
+			}
+		}
+		return results;
+	}
+	public static Collection getFundingDetailsForCurrencyByCode(String code) {
+		AmpCurrency	currency	= CurrencyUtil.getCurrencyByCode(code);
+		if (currency == null)
+				return null;
+		
+		return DbUtil.getFundingDetailsForCurrency( currency.getAmpCurrencyId() );
+	}
 
 	public static Collection getFundingByActivity(Long actId) {
 		Session session = null;

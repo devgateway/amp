@@ -64,7 +64,7 @@ function submit() {
 
 </script>
 
-<digi:errors/>
+
 <digi:instance property="aimCurrencyForm" />
 
 <digi:form action="/currencyManager.do">
@@ -78,6 +78,7 @@ function submit() {
 <!-- End of Logo -->
 </td></tr>
 <tr><td>
+
 <table bgColor=#ffffff cellPadding=0 cellSpacing=0 width=772>
 	<tr>
 		<td class=r-dotted-lg width=14>&nbsp;</td>
@@ -103,6 +104,7 @@ function submit() {
 						<digi:trn key="aim:currencyManager">
 							Currency Manager
 						</digi:trn></span>
+						<digi:errors/>
 					</td>
 				</tr>
 				<tr>

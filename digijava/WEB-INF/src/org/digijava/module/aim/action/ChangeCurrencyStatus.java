@@ -1,6 +1,7 @@
 package org.digijava.module.aim.action;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
@@ -10,13 +11,16 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.log4j.Logger;
 import org.apache.struts.action.Action;
+import org.apache.struts.action.ActionError;
+import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
-import org.digijava.kernel.dbentity.Country;
+import org.apache.struts.action.ActionMessage;
 import org.digijava.module.aim.dbentity.AmpCurrency;
 import org.digijava.module.aim.form.CurrencyForm;
 import org.digijava.module.aim.util.CurrencyUtil;
+import org.digijava.module.aim.util.DbUtil;
 
 public class ChangeCurrencyStatus extends Action {
 	
@@ -25,11 +29,28 @@ public class ChangeCurrencyStatus extends Action {
 	public ActionForward execute(ActionMapping mapping,ActionForm form,
 			HttpServletRequest request,HttpServletResponse response) throws Exception {
 
+		ActionErrors actionErrors	= new ActionErrors();
 		CurrencyForm crForm = (CurrencyForm) form;
 		logger.debug("In ChangeCurrencyStatus");
-		try {
+		try { 
 			String currCode = request.getParameter("currCode");
 			if((request.getParameter("action")!=null)&&(request.getParameter("action").equals("deleteCurrency"))) {
+				Collection fundingDetailsForCurrencyCode	= DbUtil.getFundingDetailsForCurrencyByCode(currCode);
+				if ( fundingDetailsForCurrencyCode == null ) {
+					ActionError error	= new ActionError("error.aim.deleteCurrency.currencyCodeDoesNotExist");
+					actionErrors.add(ActionErrors.GLOBAL_ERROR, error);
+					super.saveErrors(request, actionErrors);
+					return mapping.findForward("forward");
+				}
+				else {
+					if ( !fundingDetailsForCurrencyCode.isEmpty() ) {
+						ActionError error	= new ActionError("error.aim.deleteCurrency.actvitiesAreUsingTheCurrency");
+						actionErrors.add(ActionErrors.GLOBAL_ERROR, error);
+						super.saveErrors(request, actionErrors);
+						return mapping.findForward("forward");
+					}
+				}
+				
 				CurrencyUtil.deleteCurrency(currCode);
 				
 				Iterator itr = crForm.getAllCurrencies().iterator();

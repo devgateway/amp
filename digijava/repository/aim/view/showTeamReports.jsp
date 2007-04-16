@@ -73,65 +73,146 @@ return false;
 															<b>
 															<digi:trn key="aim:publicTeamReportsList">
 																List of public team reports
-															</digi:trn></b>
+															</digi:trn>
+															</b>
 														</td>
+														<!-- 
+														<td bgColor=#dddddb align="center" height="20">
+															<b>
+															<digi:trn key="aim:reportDescription">
+																Description
+															</digi:trn>
+															</b>
+														</td>
+														 -->
+														<td bgColor=#dddddb align="center" height="20">
+															<b>
+															<digi:trn key="aim:reportOwnerName">
+																Owner
+															</digi:trn>
+															</b>
+														</td>
+														<td bgColor=#dddddb align="center" height="20">
+															<b>
+															<digi:trn key="aim:reportCreationDate">
+																Creation Date
+															</digi:trn>
+															</b>
+														</td>
+														<td bgColor=#dddddb align="center" height="20">
+															<b>
+															<digi:trn key="aim:reportType">
+																Type
+															</digi:trn>
+															</b>
+														</td>
+														<% String s = (String)session.getAttribute("teamLeadFlag");
+														   TeamMember tm = (TeamMember) session.getAttribute("currentMember");
+														 
+														   if( tm.getDelete() ){ 
+														%>
+															<td bgColor=#dddddb align="center" height="20">
+																<b>
+																<digi:trn key="aim:reportAction">
+																	Action
+																</digi:trn>
+																</b>
+															</td>
+														<% } %>
 													</tr>
-													<logic:iterate name="aimTeamReportsForm"  property="reports" id="reports"
-											type="org.digijava.module.aim.dbentity.AmpReports"> 
-											
-											<TR><TD>
-				                 	 			<IMG alt=Link height=10 src="../ampTemplate/images/arrow-gr.gif" 
-												width=10>
-												<bean:define name="reports" id="link"  property="description" type="java.lang.String"/>
-												<bean:define name="reports" id="link2"  property="description" type="java.lang.String"/>
-												<% link2=link2.replaceFirst("viewAdvancedReport","viewNewAdvancedReport"); %>
-												<bean:define id="translation">
-													<digi:trn key="aim:clickToViewReport">Click here view Report</digi:trn>
-												</bean:define>
-												
-												<% if(link.equals(link2)) { %>
-
-												<a href="<%=link%>" styleClass="h-box" onclick="return popup(this,'');">
-												<b>
-												<bean:write name="reports" property="name"/>												
-												</b>
-												</a>
-
-												<% } else {%>
-
-												<a href="<%=link2%>" styleClass="h-box" onclick="return popup(this,'');">
-												<b>
-												<bean:write name="reports" property="name"/>												
-												</b>
-												</a> 
-												
-												<% } %>
-
-
-											</TD>
-											 <% String s = (String)session.getAttribute("teamLeadFlag");
-											 TeamMember tm = (TeamMember) session.getAttribute("currentMember");
-											 
-												 if( tm.getDelete() ){ %>
-											
-											<td>
-												<jsp:useBean id="urlParams" type="java.util.Map" class="java.util.HashMap"/>
-												<c:set target="${urlParams}" property="rid">
-													<bean:write name="reports" property="ampReportId" />
-												</c:set>
-												<c:set target="${urlParams}" property="event" value="edit" />
-											[ <digi:link href="/deleteAllReports.do" name="urlParams" title="<%=translation%>" >
-												<digi:trn key="aim:reportDelete">Delete</digi:trn>
-											</digi:link> ]												
-											[ <digi:link href="/editReport.do" name="urlParams" title="<%=translation%>" >
-												<digi:trn key="aim:reportEdit">Edit</digi:trn>
-											</digi:link> ]
-											</td>
-											<% } %>
-										</TR>
-										
-										
-										</logic:iterate>
+																										
+													<logic:iterate name="aimTeamReportsForm"  property="reports" id="report" indexId="idx" 
+														type="org.digijava.module.aim.dbentity.AmpReports"> 
+														<TR bgcolor="<%=(idx.intValue()%2==1?"#eeeeee":"#ffffff")%>">
+															<TD>
+															<p style="white-space: nowrap">
+							                 	 			<IMG alt=Link height=10 src="../ampTemplate/images/arrow-gr.gif" width=10>
+															<bean:define id="translation">
+																<digi:trn key="aim:clickToViewReport">Click here view Report</digi:trn>
+															</bean:define>
+															
+															<digi:link href="/viewAdvancedReport.do?view=reset" paramName="report"  paramId="ampReportId" paramProperty="ampReportId" styleClass="h-box" onclick="return popup(this,'');">
+															<b>
+															<bean:write name="report" property="name"/>												
+															</b>
+															</digi:link> 
+																		
+															</p>
+															<logic:present name="report" property="reportDescription" >
+																<p style="max-width: 400px;white-space: normal">
+															 		<bean:write name="report" property="reportDescription" />
+															 	</p>
+														 	</logic:present>
+															</TD>
+														 	<!-- 
+														 	<td>
+																<p style="width: 500px;white-space: normal">
+														 		<bean:write name="report" property="reportDescription" />
+														 		</p>
+														 	</td>
+														 	 -->
+														 	<td>
+														 		<p style="white-space: nowrap">
+														 		<logic:present name="report" property="ownerId">
+														 			 <i><bean:write name="report" property="ownerId.user.name" /></i>
+														 			 <br>
+														 			 <bean:write name="report" property="ownerId.ampTeam.name" />
+														 		</logic:present>
+														 		</p>
+														 	<td>
+														 		<p style="white-space: nowrap">
+														 			<logic:present name="report" property="updatedDate">
+														 	    		<bean:write name="report" property="formatedUpdatedDate" />
+														 	    	</logic:present>
+														 	    </p>
+														 	</td>
+														 	<td>
+														 		<p style="white-space: nowrap">
+														 		<% 
+														 			if (report.getType() == 1) {
+														 		%>
+														 				donor
+														 		<%
+														 			}
+														 			else
+														 				if (report.getType() == 2){
+														 		%>
+														 					regional
+														 		<%
+														 				}
+														 				else
+														 					if (report.getType() == 3){
+														 		%>
+														 						component
+														 		<%
+														 					}
+														 		%>
+														 		</p>
+														 	</td>													
+														 	
+														 	<%
+														 	if( tm.getDelete() ){ %>
+														
+															<td>
+																<p style="white-space: nowrap">
+																<jsp:useBean id="urlParams" type="java.util.Map" class="java.util.HashMap"/>
+																<c:set target="${urlParams}" property="rid">
+																	<bean:write name="report" property="ampReportId" />
+																</c:set>
+																<c:set target="${urlParams}" property="event" value="edit" />
+															[ <digi:link href="/deleteAllReports.do" name="urlParams" title="<%=translation%>" >
+																<digi:trn key="aim:reportDelete">Delete</digi:trn>
+															</digi:link> ]												
+															[ <digi:link href="/editReport.do" name="urlParams" title="<%=translation%>" >
+																<digi:trn key="aim:reportEdit">Edit</digi:trn>
+															</digi:link> ]
+																</p>
+															</td>
+															<% } %>
+															
+														</TR>
+														
+													</logic:iterate>
 												</table>
 											</td>
 										</tr>

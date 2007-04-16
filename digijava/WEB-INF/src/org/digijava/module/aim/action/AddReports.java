@@ -1,10 +1,13 @@
 package org.digijava.module.aim.action;
 
+import java.util.Date;
+
 import org.apache.log4j.Logger;
 import org.apache.struts.action.*;
 import org.digijava.module.aim.dbentity.*;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.form.ReportsForm;
+import org.digijava.module.aim.helper.Constants;
 import javax.servlet.http.*;
 
 public class AddReports extends Action {
@@ -32,7 +35,9 @@ public class AddReports extends Action {
 		if (repForm.getName() != null) {
 			AmpReports ampReport = new AmpReports();
 			ampReport.setName(repForm.getName());
-			ampReport.setDescription(repForm.getDescription());
+			//ampReport.setDescription(repForm.getDescription());
+			ampReport.setUpdatedDate(new Date(System.currentTimeMillis()));
+			//ampReport.setOwner((AmpTeamMember)session.getAttribute(Constants.CURRENT_MEMBER));
 			DbUtil.add(ampReport);
 			logger.debug("reports added");
 

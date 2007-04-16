@@ -34,7 +34,7 @@ public class EditReports extends Action {
 								AmpReports ampReport = new AmpReports();
 								ampReport.setAmpReportId(repForm.getReportId());
 								ampReport.setName(repForm.getName());
-								ampReport.setDescription(repForm.getDescription());
+								//ampReport.setDescription(repForm.getDescription());
 								DbUtil.update(ampReport);
 								logger.debug("report updated");
 					 }

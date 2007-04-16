@@ -699,6 +699,36 @@ public class TeamUtil {
 		}
 		return team;
 	}
+	
+	/**
+	 * Return an AmpTeamMember object corresponding to the id
+	 *
+	 * @param id
+	 *            The id of the team member whose object is to be returned.
+	 * @return The AmpTeamMember object
+	 */
+	public static AmpTeamMember getAmpTeamMember(Long id) {
+		Session session = null;
+		AmpTeamMember member = null;
+
+		try {
+			session = PersistenceManager.getSession();
+			member = (AmpTeamMember) session.load(AmpTeamMember.class, id);
+		} catch (Exception e) {
+            throw new RuntimeException(e);
+
+		} finally {
+			try {
+				if (session != null) {
+					PersistenceManager.releaseSession(session);
+				}
+			} catch (Exception ex) {
+				logger.error("releaseSession() failed");
+			}
+		}
+		return member;
+	}
+
 
 	public static void addTeamMember(AmpTeamMember member,
 			AmpApplicationSettings appSettings, Site site) {

@@ -15045,7 +15045,7 @@ public class ReportUtil {
 			session = PersistenceManager.getSession();
 			tx = session.beginTransaction();
 			session.save(ampReports);
-			ampReports.setDescription("/viewAdvancedReport.do?view=reset&ampReportId="+ampReports.getAmpReportId());
+			//ampReports.setDescription("/viewAdvancedReport.do?view=reset&ampReportId="+ampReports.getAmpReportId());
 			session.update(ampReports);
 			AmpTeam ampTeam = (AmpTeam) session.get(AmpTeam.class, ampTeamId);
 			

@@ -5,6 +5,7 @@ import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
+import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -32,6 +33,7 @@ import org.digijava.module.aim.dbentity.AmpMeasures;
 import org.digijava.module.aim.dbentity.AmpReportColumn;
 import org.digijava.module.aim.dbentity.AmpReportHierarchy;
 import org.digijava.module.aim.dbentity.AmpReports;
+import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.form.AdvancedReportForm;
 import org.digijava.module.aim.helper.AmpFund;
 import org.digijava.module.aim.helper.Column;
@@ -42,6 +44,7 @@ import org.digijava.module.aim.helper.ReportSelectionCriteria;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.aim.util.ReportUtil;
+import org.digijava.module.aim.util.TeamUtil;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartRenderingInfo;
 import org.jfree.chart.JFreeChart;
@@ -939,7 +942,7 @@ public class AdvancedReport extends Action {
 						if ("donor".equals(formBean.getReportType())) ampReports.setType(new Long(1));
 						if ("regional".equals(formBean.getReportType())) ampReports.setType(new Long(3));
 						if ("component".equals(formBean.getReportType())) ampReports.setType(new Long(2));
-						
+						/*
 						if ( formBean.getInEditingMode() ) {
 							ampReports.setDescription( formBean.getDescriptionLink() ) ;
 						}
@@ -948,6 +951,7 @@ public class AdvancedReport extends Action {
 							descr = descr + ".do";
 							ampReports.setDescription(descr);
 						}
+						*/
 						ampReports.setReportDescription(formBean.getReportDescription());
 						ampReports.setName(formBean.getReportTitle().trim());
 						if ( formBean.getInEditingMode() )
@@ -1030,8 +1034,10 @@ public class AdvancedReport extends Action {
 									measures.add(ampMeasures);
 								}
 							}
+							
 							ampReports.setMeasures(measures);
 							ampReports.setHideActivities(formBean.getHideActivities());
+							ampReports.setUpdatedDate(new Date(System.currentTimeMillis()));
 							
 							if ( formBean.getInEditingMode() ) { // Editing an exisiting report
 //								logger.info ("Updating report.." );
@@ -1041,6 +1047,9 @@ public class AdvancedReport extends Action {
 							}
 							else { // This is the case of a new Report being created
 //								logger.info ("Saving report.." );
+								TeamMember owner = (TeamMember)httpSession.getAttribute(Constants.CURRENT_MEMBER);
+								AmpTeamMember ampOwner = TeamUtil.getAmpTeamMember(owner.getMemberId());
+								ampReports.setOwnerId(ampOwner);
 								ReportUtil.saveReport(ampReports,teamMember.getTeamId(),teamMember.getMemberId(),teamMember.getTeamHead());
 							}
 							

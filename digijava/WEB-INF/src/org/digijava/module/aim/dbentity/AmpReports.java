@@ -6,8 +6,11 @@
 package org.digijava.module.aim.dbentity;
 
 
+import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.Set;
+import org.digijava.module.aim.helper.TeamMember;
+import java.util.Date;
 
 import javax.servlet.http.HttpSession;
 
@@ -21,7 +24,7 @@ public class AmpReports implements Comparable {
 	
 	private String name;
 
-	private String description;
+	//private String description;
 	private String reportDescription;
 
 	private String options;
@@ -38,9 +41,28 @@ public class AmpReports implements Comparable {
 	private List orderedColumns;
 	private Set hierarchies;
 	private Set measures;
-	
+	private AmpTeamMember ownerId;	// the member that created the report
+	private Date updatedDate;		// last date when the report was modified
 	//public static final String NOTE="NOTE: All shown funding items are in USD currency. All calendaristic date cells are shown using DD/MM/YYYY format. All amounts are in thousands.";
+	private static SimpleDateFormat dateFormat = new SimpleDateFormat(
+			"dd-MMM-yyyy");
 	
+	public String getFormatedUpdatedDate() {
+		String result = null;
+		if (this.updatedDate != null) {
+			result = dateFormat.format(this.updatedDate);
+		}
+		return result;
+	}
+	
+	public AmpTeamMember getOwnerId() {
+		return ownerId;
+	}
+
+	public void setOwnerId(AmpTeamMember owner) {
+		this.ownerId = owner;
+	}
+
 	public static String getNote(HttpSession session)
 	{ return "NOTE: All shown funding items are in "+session.getAttribute("reportCurrencyCode")+" currency. All calendaristic date cells are shown using DD/MM/YYYY format. All amounts are in thousands.";}
 	
@@ -64,10 +86,12 @@ public class AmpReports implements Comparable {
 		return name;
 	}
 
+	/* 
 	public String getDescription() {
 		return description;
 	}
-
+	*/
+	
 	public String getReportDescription() {
 		return reportDescription;
 	}
@@ -92,10 +116,12 @@ public class AmpReports implements Comparable {
 		this.name = name;
 	}
 
+	/*
 	public void setDescription(String description) {
 		this.description = description;
 	}
-
+	*/
+	
 	public void setReportDescription(String reportDescription) {
 		this.reportDescription = reportDescription;
 	}
@@ -182,5 +208,13 @@ public class AmpReports implements Comparable {
 		return hideActivities;
 	}
 
+	public Date getUpdatedDate() {
+		return updatedDate;
+	}
 
+	public void setUpdatedDate(Date updatedDate) {
+		this.updatedDate = updatedDate;
+	}
+
+	
 }

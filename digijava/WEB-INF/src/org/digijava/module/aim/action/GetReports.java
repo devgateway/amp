@@ -38,7 +38,7 @@ public class GetReports extends Action {
 								AmpReports ampReports = DbUtil.getAmpReport(repId);
 								repForm.setReportId(ampReports.getAmpReportId());
 								repForm.setName(ampReports.getName());
-								repForm.setDescription(ampReports.getDescription());
+								//repForm.setDescription(ampReports.getDescription());
 								logger.debug("values set.");
 					 }
 

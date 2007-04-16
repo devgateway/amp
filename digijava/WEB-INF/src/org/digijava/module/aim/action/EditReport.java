@@ -57,7 +57,7 @@ public class EditReport extends Action {
 					formBean.setAmpColumns(ReportUtil.getColumnList());
 					formBean.setAmpMeasures(ReportUtil.getMeasureList());
 					formBean.setReportTitle( ampreport.getName() );
-					formBean.setReportDescription ( ampreport.getDescription() );
+					//formBean.setReportDescription ( ampreport.getDescription() );
 					
 					//formBean.setAddedColumns( ampreport.getColumns() );
 					Set addedColumns			= ampreport.getColumns();
@@ -91,7 +91,7 @@ public class EditReport extends Action {
 					}
 					
 					
-					formBean.setDescriptionLink( ampreport.getDescription() );
+					//formBean.setDescriptionLink( ampreport.getDescription() );
 					formBean.setReportTitle( ampreport.getName() );
 					formBean.setReportDescription ( ampreport.getReportDescription() );
 					

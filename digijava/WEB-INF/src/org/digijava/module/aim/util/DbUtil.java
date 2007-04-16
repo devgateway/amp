@@ -36,6 +36,7 @@ import org.digijava.module.aim.dbentity.AmpApplicationSettings;
 import org.digijava.module.aim.dbentity.AmpClosingDateHistory;
 import org.digijava.module.aim.dbentity.AmpComments;
 import org.digijava.module.aim.dbentity.AmpComponent;
+import org.digijava.module.aim.dbentity.AmpComponentFunding;
 import org.digijava.module.aim.dbentity.AmpCurrency;
 import org.digijava.module.aim.dbentity.AmpField;
 import org.digijava.module.aim.dbentity.AmpFilters;
@@ -54,6 +55,7 @@ import org.digijava.module.aim.dbentity.AmpPerspective;
 import org.digijava.module.aim.dbentity.AmpPhysicalComponentReport;
 import org.digijava.module.aim.dbentity.AmpPhysicalPerformance;
 import org.digijava.module.aim.dbentity.AmpRegion;
+import org.digijava.module.aim.dbentity.AmpRegionalFunding;
 import org.digijava.module.aim.dbentity.AmpReportCache;
 import org.digijava.module.aim.dbentity.AmpReportLocation;
 import org.digijava.module.aim.dbentity.AmpReportPhysicalPerformance;
@@ -166,7 +168,113 @@ public class DbUtil {
 		}
 		return funding;
 	}
-
+	
+	public static Collection getComponentFundingForCurrency(Long ampCurrencyId) {
+		Session session		= null;
+		Collection results 	= null;
+		try{
+			session				= PersistenceManager.getSession();
+			String queryString	= "select acf from "+ AmpComponentFunding.class.getName() + " acf "+ 
+						"where acf.currency=:currencyId";
+			Query query			= session.createQuery(queryString);
+			query.setLong("currencyId", ampCurrencyId.longValue() );
+			results				= query.list();
+		}
+		catch (Exception ex) {
+			logger.error("Unable to get fundingDetails :" + ex);
+		} 
+		finally {
+			try {
+				PersistenceManager.releaseSession(session);
+			} catch (Exception ex2) {
+				logger.error("releaseSession() failed :" + ex2);
+			}
+		}
+		return results;
+	}
+	public static Collection getComponentFundingForCurrencyByCode(String code) {
+		AmpCurrency	currency	= CurrencyUtil.getCurrencyByCode(code);
+		if (currency == null)
+				return null;
+		
+		return DbUtil.getComponentFundingForCurrency( currency.getAmpCurrencyId() );
+	}
+	
+	
+	public static Collection getActivitiesByComponentsUsingCurrency (Long currencyId) {
+		Session session		= null;
+		Collection results 	= null;
+		try{
+			session				= PersistenceManager.getSession();
+			String queryString	= "select act from "+ AmpComponentFunding.class.getName() + " as acf inner join acf.activity as act "+ 
+						"where acf.currency=:currencyId";
+			Query query			= session.createQuery(queryString);
+			query.setLong("currencyId", currencyId.longValue() );
+			results				= query.list();
+		}
+		catch (Exception ex) {
+			logger.error("Unable to get AmpActivity from AmpComponentFunding :" + ex);
+		} 
+		finally {
+			try {
+				PersistenceManager.releaseSession(session);
+			} catch (Exception ex2) {
+				logger.error("releaseSession() failed :" + ex2);
+			}
+		}
+		return results;
+	} 
+	public static Collection getActivitiesByComponentsUsingCurrencyByCode(String code) {
+		AmpCurrency	currency	= CurrencyUtil.getCurrencyByCode(code);
+		if (currency == null)
+				return null;
+		
+		return DbUtil.getActivitiesByComponentsUsingCurrency( currency.getAmpCurrencyId() );
+	}
+	/**
+	 * 
+	 * @param currencyId The Id of the currency
+	 * @return A collection containing the AmpActivity-s that have AmpRegionalFunding-s that use 
+	 * the currency represented by currencyId
+	 */
+	public static Collection getActivitiesByRegionalFundingUsingCurrency (Long currencyId) {
+		Session session		= null;
+		Collection results 	= null;
+		try{
+			session				= PersistenceManager.getSession();
+			String queryString	= "select act from "+ AmpRegionalFunding.class.getName() + " as arf inner join arf.activity as act "+ 
+						"where arf.currency=:currencyId";
+			Query query			= session.createQuery(queryString);
+			query.setLong("currencyId", currencyId.longValue() );
+			results				= query.list();
+		}
+		catch (Exception ex) {
+			logger.error("Unable to get AmpActivity from AmpRegionalFundings :" + ex);
+		} 
+		finally {
+			try {
+				PersistenceManager.releaseSession(session);
+			} catch (Exception ex2) {
+				logger.error("releaseSession() failed :" + ex2);
+			}
+		}
+		return results;
+	} 
+	/**
+	 * 
+	 * @param code currency code
+	 * @return A collection containing the AmpActivity-s that have AmpRegionalFunding-s that use 
+	 * the currency represented by code
+	 */
+	
+	public static Collection getActivitiesByRegionalFundingUsingCurrencyByCode(String code) {
+		AmpCurrency	currency	= CurrencyUtil.getCurrencyByCode(code);
+		if (currency == null)
+				return null;
+		
+		return DbUtil.getActivitiesByRegionalFundingUsingCurrency( currency.getAmpCurrencyId() );
+	}
+	
 	public static AmpActivityInternalId getActivityInternalId(Long actId,
 			Long orgId) {
 		Session session = null;

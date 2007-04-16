@@ -131,7 +131,21 @@ public class ColumnReportData extends ReportData {
 	 * @see org.dgfoundation.amp.ar.ReportData#postProcess()
 	 */
 	public void postProcess() {
-		Iterator i = items.iterator();
+		//add fake column if needed:
+		
+		Iterator i=items.iterator();
+		boolean useFakeCol=true;
+		while (i.hasNext()) {
+			Column element = (Column) i.next();
+			if(element instanceof CellColumn && !(element instanceof AmountCellColumn)) useFakeCol=false;  
+		}
+		if(useFakeCol) {
+			CellColumn cc=new CellColumn(" ");
+			cc.setParent(this);
+			items.add(0,cc);
+		}
+		
+		i = items.iterator();
 		List destCols = new ArrayList();
 		while (i.hasNext()) {
 			Column element = (Column) i.next();

@@ -56,7 +56,17 @@ public class UpdateTeamReports extends Action {
 			tm = (TeamMember) session.getAttribute("currentMember");
 			id = tm.getTeamId();
 		}
-
+		if (raForm.getRemoveReports() != null) {
+			/* remove all selected reports */
+			Long selReports[] = raForm.getSelReports();
+			ReportUtil.removeTeamReports(selReports,tm.getTeamId());
+			raForm.setRemoveReports(null);
+			
+			/** setting the addReport property so that the system 
+			 * shows you the unassigned report list
+			 */
+			raForm.setAddReport("");
+		}
 		if (raForm.getAddReport() != null) {
 			/* show all unassigned reports */
 			
@@ -65,13 +75,8 @@ public class UpdateTeamReports extends Action {
 			raForm.setTeamId(tm.getTeamId());
 			raForm.setAddReport(null);
 			return mapping.findForward("showAddReport");
-		} else if (raForm.getRemoveReports() != null) {
-			/* remove all selected reports */
-			Long selReports[] = raForm.getSelReports();
-			ReportUtil.removeTeamReports(selReports,tm.getTeamId());
-			raForm.setRemoveReports(null);
-			return mapping.findForward("forward");
-		} else if (raForm.getAssignReports() != null) {
+		}  
+		else if (raForm.getAssignReports() != null) {
 			/* add the selected reports to the team list */
 
 			logger.info("in assign reports");

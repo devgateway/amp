@@ -117,8 +117,13 @@ public class GroupColumn extends Column {
             Categorizable element = (Categorizable) i.next();
             if(!element.isShow()) continue;
             MetaInfo minfo=MetaInfo.getMetaInfo(element.getMetaData(),category);
-            if(minfo==null) return null;
+            if(minfo==null || minfo.getValue()==null) return null;
+            try {
             metaSet.add(minfo);
+            } catch(Exception e) {
+            	e.printStackTrace();
+            	logger.error(e);
+            }
         }
         
         //TODO: ugly stuff... i have no choice

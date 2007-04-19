@@ -29,10 +29,8 @@ public class AmpARFilter implements Filter {
 	private boolean publicView=false;
 	private Boolean budget=null;
 
-	
 	private Integer fromYear;
-	private Integer toYear;
-	
+	private Integer toYear;	
 	
 	private String generatedFilterQuery="SELECT amp_activity_id FROM amp_activity WHERE 1";
 	private int initialQueryLength=generatedFilterQuery.length();

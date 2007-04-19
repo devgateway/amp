@@ -673,9 +673,10 @@ public final class ARUtil {
 				+ currencyDate));
 		if (cacheRet != null)
 			return cacheRet.doubleValue();
-
+		Session sess=null;
 		try {
-			conn = PersistenceManager.getSession().connection();
+			sess=PersistenceManager.getSession();
+			conn = sess.connection();
 		} catch (HibernateException e) {
 			logger.error(e);
 			e.printStackTrace();
@@ -704,6 +705,16 @@ public final class ARUtil {
 			logger.error(e);
 			e.printStackTrace();
 		}
+				Session sess=null;
+		
+		try {
+			sess.close();
+		} catch (HibernateException e) {
+			logger.error(e);
+			e.printStackTrace();
+		}
+
+		
 		logger.info("rate for " + currency + " to USD on " + currencyDate
 				+ " is " + ret);
 		if (ret != 1)

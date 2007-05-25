@@ -1,0 +1,68 @@
+/* Copyright (c) 2006 Yahoo! Inc. All rights reserved. */
+
+/* Defaults */
+.ygtvtn { width:16px; height:22px; background: url(/repository/aim/images/default/tn.gif) 0 0 no-repeat; }
+.ygtvtm { width:16px; height:22px; cursor:pointer ; background: url(/repository/aim/images/default/tm.gif) 0 0 no-repeat; }
+.ygtvtmh { width:16px; height:22px; cursor:pointer ; background: url(/repository/aim/images/default/tmh.gif) 0 0 no-repeat; }
+.ygtvtp { width:16px; height:22px; cursor:pointer ; background: url(/repository/aim/images/default/tp.gif) 0 0 no-repeat; }
+.ygtvtph { width:16px; height:22px; cursor:pointer ; background: url(/repository/aim/images/default/tph.gif) 0 0 no-repeat; }
+.ygtvln { width:16px; height:22px; background: url(/repository/aim/images/default/ln.gif) 0 0 no-repeat; } 
+.ygtvlm { width:16px; height:22px; cursor:pointer ; background: url(/repository/aim/images/default/lm.gif) 0 0 no-repeat; }
+.ygtvlmh { width:16px; height:22px; cursor:pointer ; background: url(/repository/aim/images/default/lmh.gif) 0 0 no-repeat; }
+.ygtvlp { width:16px; height:22px; cursor:pointer ; background: url(/repository/aim/images/default/lp.gif) 0 0 no-repeat; }
+.ygtvlph { width:16px; height:22px; cursor:pointer ; background: url(/repository/aim/images/default/lph.gif) 0 0 no-repeat; }
+.ygtvloading { width:16px; height:22px; background: url(/repository/aim/images/default/loading.gif) 0 0 no-repeat; }
+.ygtvdepthcell { width:16px; height:22px; background: url(/repository/aim/images/default/vline.gif) 0 0 no-repeat; }
+.ygtvblankdepthcell { width:16px; height:22px; }
+.ygtvitem { }  
+.ygtvchildren {  }  
+* html .ygtvchildren { height:2%; }  
+.ygtvlabel, .ygtvlabel:link, .ygtvlabel:visited, .ygtvlabel:hover { 
+	margin-left:2px;
+	text-decoration: none;
+    background-color: white;
+}
+.ygtvspacer { height: 10px; width: 10px; margin: 2px; }
+
+/* via ID selector */
+#tree2 .ygtvtn { background: url(/repository/aim/images/folders/tn.gif) 0 0 no-repeat; width:17px; height:22px; }
+#tree2 .ygtvtm { background: url(/repository/aim/images/folders/tm.gif) 0 0 no-repeat; width:34px; height:22px; cursor:pointer }
+#tree2 .ygtvtmh { background: url(/repository/aim/images/folders/tmh.gif) 0 0 no-repeat; width:34px; height:22px; cursor:pointer }
+#tree2 .ygtvtp { background: url(/repository/aim/images/folders/tp.gif) 0 0 no-repeat; width:34px; height:22px; cursor:pointer }
+#tree2 .ygtvtph { background: url(/repository/aim/images/folders/tph.gif) 0 0 no-repeat; width:34px; height:22px; cursor:pointer }
+#tree2 .ygtvln { background: url(/repository/aim/images/folders/ln.gif) 0 0 no-repeat; width:17px; height:22px; }
+#tree2 .ygtvlm { background: url(/repository/aim/images/folders/lm.gif) 0 0 no-repeat; width:34px; height:22px; cursor:pointer }
+#tree2 .ygtvlmh { background: url(/repository/aim/images/folders/lmh.gif) 0 0 no-repeat; width:34px; height:22px; cursor:pointer }
+#tree2 .ygtvlp { background: url(/repository/aim/images/folders/lp.gif) 0 0 no-repeat; width:34px; height:22px; cursor:pointer }
+#tree2 .ygtvlph { background: url(/repository/aim/images/folders/lph.gif) 0 0 no-repeat; width:34px; height:22px; cursor:pointer }
+#tree2 .ygtvloading { background: url(/repository/aim/images/folders/loading.gif) 0 0 no-repeat; width:16px; height:22px; }
+#tree2 .ygtvdepthcell { background: url(/repository/aim/images/folders/vline.gif) 0 0 no-repeat; width:17px; height:22px; }
+#tree2 .ygtvblankdepthcell { width:17px; height:22px; }
+#tree2 .ygtvitem { }  
+#tree2 .ygtvchildren { }  
+* html .ygtvchildren { height:1%; }  
+#tree2 .ygtvlabel, .ygtvlabel:link, .ygtvlabel:visited, .ygtvlabel:hover { 
+	margin-left:2px;
+	text-decoration: none;
+}
+
+/* via css class selector */
+.treemenu .ygtvtn {background: transparent;  width:1em; height:20px; }
+.treemenu .ygtvtm { background: url(/repository/aim/images/menu/collapse.gif) 0 6px no-repeat; width:1em; height:22px; cursor:pointer }
+.treemenu .ygtvtmh { background: url(/repository/aim/images/menu/collapseh.gif) 0 6px no-repeat; width:1em; height:22px; cursor:pointer }
+.treemenu .ygtvtp { background: url(/repository/aim/images/menu/expand.gif) 0 6px no-repeat; width:1em; height:22px; cursor:pointer }
+.treemenu .ygtvtph { background: url(/repository/aim/images/menu/expandh.gif) 0 6px no-repeat; width:1em; height:22px; cursor:pointer }
+.treemenu .ygtvln { background: transparent; width:1em; height:20px; }
+.treemenu .ygtvlm { background: url(/repository/aim/images/menu/collapse.gif) 0 6px no-repeat; width:1em; height:22px; cursor:pointer }
+.treemenu .ygtvlmh { background: url(/repository/aim/images/menu/collapseh.gif) 0 6px no-repeat; width:1em; height:22px; cursor:pointer }
+.treemenu .ygtvlp { background: url(/repository/aim/images/menu/expand.gif) 0 6px no-repeat; width:1em; height:22px; cursor:pointer }
+.treemenu .ygtvlph { background: url(/repository/aim/images/menu/expandh.gif) 0 6px no-repeat; width:1em; height:22px; cursor:pointer }
+.treemenu .ygtvloading { background: url(/repository/aim/images/menu/loading.gif) 0 6px no-repeat; width:1em; height:22px; }
+.treemenu .ygtvdepthcell { background: transparent; width:1em; height:20px; }
+.treemenu .ygtvblankdepthcell {background: transparent;  width:1em; height:20px; }
+.treemenu .ygtvitem { border: 0px solid grey; }  
+.treemenu .ygtvchildren { }  
+.treemenu .ygtvlabel, .ygtvlabel:link, .ygtvlabel:visited, .ygtvlabel:hover { 
+	font-size: 12px;
+}
+

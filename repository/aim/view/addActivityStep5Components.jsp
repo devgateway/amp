@@ -1,0 +1,303 @@
+<%@ page pageEncoding="UTF-8" %>
+<%@ taglib uri="/taglib/struts-bean" prefix="bean" %>
+<%@ taglib uri="/taglib/struts-logic" prefix="logic" %>
+<%@ taglib uri="/taglib/struts-tiles" prefix="tiles" %>
+<%@ taglib uri="/taglib/struts-html" prefix="html" %>
+<%@ taglib uri="/taglib/digijava" prefix="digi" %>
+<%@ taglib uri="/taglib/jstl-core" prefix="c" %>
+
+<digi:instance property="aimEditActivityForm" />
+
+
+								<table width="95%" bgcolor="#f4f4f2">
+									<tr><td>
+										<IMG alt=Link height=10 src="../ampTemplate/images/arrow-014E86.gif" width=15>
+										<a title="<digi:trn key="aim:ComponentofProject">A smaller sub project of a donor approved project</digi:trn>">										
+										<b><digi:trn key="aim:components">Components</digi:trn></b></a>
+									</td></tr>
+									<tr><td>
+										&nbsp;
+									</td></tr>
+								
+									<tr><td align="left">
+										<table width="100%" cellSpacing=5 cellPadding=0 border=0 class="box-border-nopadding">
+
+										<logic:notEmpty name="aimEditActivityForm" property="selectedComponents">
+																												<tr><td><b>
+																			<digi:trn key="aim:commitments">Commitments</digi:trn> - (
+																			<digi:trn key="aim:totalActualAllocation">Grand Total actual 
+																			allocation</digi:trn> = 
+																			<c:out value="${aimEditActivityForm.totalCommitments}"/> 
+																			<c:out value="${aimEditActivityForm.currCode}"/>)															
+																		<br/>
+																																			
+																			<digi:trn key="aim:disbursements">Disbursements</digi:trn> - (
+																			<digi:trn key="aim:totalActualToDate">Total actual to date
+																			</digi:trn> = 
+																			<c:out value="${aimEditActivityForm.totalDisbursements}"/> 
+																			<c:out value="${aimEditActivityForm.currCode}"/>)
+																		<br/>																		
+																		<font
+																		<c:if test="${aimEditActivityForm.totalCommitments < aimEditActivityForm.compTotalDisb }">
+																		 color="RED"
+																		</c:if>
+																		>
+																		<digi:trn key="aim:totalComponentActualDisbursement">Component Grand Total Actual Disbursements</digi:trn>=
+																		<c:out value="${aimEditActivityForm.compTotalDisb}"/>
+																		<c:out value="${aimEditActivityForm.currCode}"/>																			
+																		</font>
+																		</b></td></tr>
+										
+											<logic:iterate name="aimEditActivityForm" property="selectedComponents"
+											id="selComponents" type="org.digijava.module.aim.helper.Components">
+										
+												<tr><td align="center">
+													<table width="98%" cellSpacing=1 cellPadding=4 vAlign="top" align="center" border=0
+													class="box-border-nopadding">
+														<tr bgcolor="#fffffc">
+															<td vAlign="center" align="left" width="95%">
+																<html:multibox property="selComp">
+																	<c:out value="${selComponents.componentId}"/>
+																</html:multibox>
+																<a title="<digi:trn key="aim:TitleofComponent">Title of the project component specified</digi:trn>">											<b>					
+																<digi:trn key="aim:TitleofComponent">Component Title</digi:trn></a> :
+																<c:out value="${selComponents.title}"/></b>
+																&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+																<a href="javascript:editFunding('<bean:write name="selComponents" 
+																property="componentId"/>')">Edit</a><br>
+																&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<c:out value="${selComponents.description}"/>
+																</a><br>
+															</td>
+														</tr>		
+
+																<tr><td>
+																<!-- Component funding details -->
+																	<table width="100%" cellSpacing=1 cellPadding=3 border=0 
+																	bgcolor="#d7eafd">
+																		<logic:notEmpty name="selComponents" property="commitments">
+																		<tr><td bgcolor=#ffffff>
+																			<table width="100%" cellSpacing=1 cellPadding=3 border=0 
+																			bgcolor="#eeeeee">
+																				<tr>
+																					<td>Actual/Planned</td>
+																					<td>Total Amount</td>
+																					<td>Currency</td>
+																					<td>Date</td>
+																					<td>Perspective</td>
+																				</tr>
+																				<logic:iterate name="selComponents" property="commitments" 
+																				id="commitment" 
+																				type="org.digijava.module.aim.helper.FundingDetail"> 																						           <!-- L2 START-->
+																					<tr bgcolor="#ffffff">
+																						<td>
+																							<c:out value="${commitment.adjustmentTypeName}"/></td>
+																						<td align="right">
+																							<FONT color=blue>*</FONT>
+																							<c:out value="${commitment.transactionAmount}"/>
+																						</td>
+																						<td>
+																							<c:out value="${commitment.currencyCode}"/>
+																						</td>
+																						<td>
+																							<c:out value="${commitment.transactionDate}"/>
+																						</td>
+																						<td>
+																							<digi:trn key='<%="aim:"+commitment.getPerspectiveNameTrimmed() %>'>
+																									<bean:write name="commitment" property="perspectiveName"/>
+																							</digi:trn>
+																							
+																						</td>
+																					</tr>																			
+																				</logic:iterate>	<!-- L2 END-->
+																			</table>	
+																		</td></tr>
+																	</logic:notEmpty>
+																	<logic:notEmpty name="selComponents" property="disbursements">
+																		<tr><td bgcolor=#ffffff>
+																			<table width="100%" cellSpacing=1 cellPadding=3 border=0 
+																			bgcolor="#eeeeee">
+																				<tr>
+																					<td>Actual/Planned</td>
+																					<td>Total Amount</td>
+																					<td>Currency</td>
+																					<td>Date</td>
+																					<td>Perspective</td>
+																				</tr>
+																				<logic:iterate name="selComponents" property="disbursements" 
+																				id="disbursement" 
+																				type="org.digijava.module.aim.helper.FundingDetail">
+																				<!-- L3 START-->
+																					<tr bgcolor="#ffffff">
+																						<td>
+																							<c:out value="${disbursement.adjustmentTypeName}"/>
+																						</td>
+																						<td align="right">
+																							<FONT color=blue>*</FONT>
+																							<c:out value="${disbursement.transactionAmount}"/>
+																						</td>
+																						<td>
+																							<c:out value="${disbursement.currencyCode}"/>
+																						</td>
+																						<td>
+																							<c:out value="${disbursement.transactionDate}"/>
+																						</td>
+																						<td>
+																							<digi:trn key='<%="aim:"+disbursement.getPerspectiveNameTrimmed() %>'>
+																								<bean:write name="disbursement" property="perspectiveName"/>
+																							</digi:trn>
+																							
+																						</td>
+																					</tr>																			
+																				</logic:iterate>	
+																				<!-- L3 END-->
+																			</table>																		
+																		</td></tr>				
+
+																	</logic:notEmpty>
+																	<logic:notEmpty name="selComponents" property="expenditures">
+																		<tr><td><b>
+																			<digi:trn key="aim:expenditures">Expenditures</digi:trn> - (
+																			<digi:trn key="aim:totalActualToDate">Total actual to date
+																			</digi:trn> = 
+																			<c:out value="${aimEditActivityForm.totalExpenditures}"/> 
+																			<c:out value="${aimEditActivityForm.currCode}"/>)
+																	</b>
+																		</td></tr>
+																		<tr><td bgcolor=#ffffff>
+																			<table width="100%" cellSpacing=1 cellPadding=3 border=0 
+																			bgcolor="#eeeeee">
+																				<tr>
+																					<td>Actual/Planned</td>
+																					<td>Total Amount</td>
+																					<td>Currency</td>
+																					<td>Date</td>
+																					<td>Perspective</td>
+																				</tr>
+																				<logic:iterate name="selComponents" property="expenditures" 
+																				id="expenditure" 
+																				type="org.digijava.module.aim.helper.FundingDetail">
+																				<!-- L4 START-->
+																				<tr bgcolor="#ffffff">
+																					<td>
+																						<c:out value="${expenditure.adjustmentTypeName}"/>
+																					</td>
+																					<td align="right">
+																						<FONT color=blue>*</FONT>
+																						<c:out value="${expenditure.transactionAmount}"/>
+																					</td>
+																					<td>
+																						<c:out value="${expenditure.currencyCode}"/>
+																					</td>
+																					<td>
+																						<c:out value="${expenditure.transactionDate}"/>
+																					</td>
+																					<td>
+																							<digi:trn key='<%="aim:"+expenditure.getPerspectiveNameTrimmed() %>'>
+																								<bean:write name="expenditure" property="perspectiveName"/>
+																							</digi:trn>
+																					</td>
+																				</tr>
+																			</logic:iterate>	
+																			<!-- L4 END-->
+																		</table>
+																	</td></tr>
+																	
+																</logic:notEmpty>
+																
+															</table>
+															<logic:notEmpty name="selComponents" property="commitments">
+															<TR><TD>
+																<FONT color=blue>*
+																	<digi:trn key="aim:allTheAmountsInThousands">	
+																		All the amounts are in thousands (000)
+				  													</digi:trn>
+																</FONT>								
+															</TD></TR>															
+															</logic:notEmpty>
+														</td></tr>
+													</tr>	
+													<tr>
+														<td colspan="2">
+															<table width="100%" cellPadding=1 cellSpacing=1 vAlign="top" border=0 
+															class="box-border-nopadding">
+															<tr><td width="100%" bgcolor="#dddddd" height="15">
+																<a title="<digi:trn key="aim:physicalProgressTitleDesc">Measurable task done on a 
+																project to achieve component objectives</digi:trn>">
+																	<digi:trn key="aim:physicalProgres">Physical Progress</digi:trn>
+																</a>
+															</td></tr>														
+															<c:if test="${empty selComponents.phyProgress}">
+																<tr><td colspan="2"><b>
+																	<a href="javascript:
+																	addPhyProgess(-1,<c:out value="${selComponents.componentId}"/>)">
+																	Add Physical Progress</a>
+																	</b>
+																</td></tr>															
+															</c:if>
+															<c:if test="${!empty selComponents.phyProgress}">
+															<c:forEach var="phyProg" items="${selComponents.phyProgress}">
+																<tr><td>
+																	<table width="100%" cellSpacing=1 cellPadding=1 vAlign="top" align="left">
+																		<tr>
+																		<td vAlign="center" align="left" width="95%">
+																			<a href="javascript:addPhyProgess(<bean:write name="phyProg" 
+																			property="pid" />,<c:out value="${selComponents.componentId}"/>)">
+																				<bean:write name="phyProg" property="title" /> - 
+																				<bean:write name="phyProg" property="reportingDate" />
+																			</a>
+																		</td>
+																		<td align="right">
+																			<bean:define id="id" property="pid" name="phyProg"/>
+																			<bean:define id="compId" property="componentId" name="selComponents"/>
+																			<% String url1 = 
+																			"/removeSelPhyProg.do~edit=true~pid="+id+"~cid="+compId;%>
+																			<digi:link href="<%=url1%>">
+																				<digi:img src="module/cms/images/deleteIcon.gif" border="0" 
+																				alt="Delete this physical progress"/>
+																			</digi:link>
+																		</td>																																								  </tr>	
+																	</table>	
+																</td></tr>
+															</c:forEach>
+																<tr><td>
+																	<table cellSpacing=2 cellPadding=2>
+																		<tr><td>
+																			<b>
+																				<a href="javascript:
+																				addPhyProgess(-1,<c:out value="${selComponents.componentId}"/>)">
+																				Add Physical Progress</a>
+																			</b>
+																		</td></tr>
+																	</table>																
+																</td></tr>
+															</c:if>
+															</table>													
+														</td></tr>
+													</table>	
+												</td></tr>	
+											</logic:iterate>	
+											<tr><td align="center">
+												<table cellSpacing=2 cellPadding=2>
+													<tr><td>
+														<html:button  styleClass="buton" property="submitButton" onclick="addComponents()">
+															<digi:trn key="btn:addComponents">Add Components</digi:trn>
+														</html:button>
+														 &nbsp;&nbsp;&nbsp;
+														<html:button  styleClass="buton" property="submitButton" onclick="removeSelComponents()">
+															<digi:trn key="btn:removeComponents">Remove Components</digi:trn>
+														</html:button>
+
+													</td></tr>
+												</table>
+											</td></tr>
+										</table>												
+									</logic:notEmpty>
+									<logic:empty name="aimEditActivityForm" property="selectedComponents">
+										<table width="100%" cellSpacing=1 cellPadding=5 class="box-border-nopadding">
+											<tr><td>
+												<html:button  styleClass="buton" property="submitButton" onclick="addComponents()">
+														<digi:trn key="btn:addComponents">Add Components</digi:trn>
+												</html:button>
+											</td></tr>
+										</table>
+									</logic:empty>

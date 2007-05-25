@@ -1,0 +1,17 @@
+ALTER TABLE amp_me_indicators DROP value_type;
+ALTER TABLE amp_me_indicators DROP creation_date;
+ALTER TABLE amp_me_indicators DROP type;
+ALTER TABLE amp_me_indicators DROP np_indicator;
+ALTER TABLE amp_me_indicators DROP category;
+ALTER TABLE amp_theme_indicators MODIFY np_indicator TINYINT(1);
+ALTER TABLE amp_theme_indicators DROP value_type;
+UPDATE amp_theme set level=0 where level is null;
+UPDATE amp_components set amp_activity_id = null;
+INSERT INTO `amp_program_type` VALUES("1", "Area", NULL);
+INSERT INTO `amp_program_type` VALUES("2", "Sector", NULL);
+INSERT INTO `amp_program_type` VALUES("3", "Policy", NULL);
+INSERT INTO `amp_program_type` VALUES("4", "Strategy", NULL);
+INSERT INTO `amp_program_type` VALUES("5", "Program", NULL);
+INSERT INTO `amp_program_type` VALUES("6", "Project", NULL);
+INSERT INTO `amp_program_type` VALUES("7", "Values", NULL);
+INSERT INTO `amp_global_settings` VALUES  (1,'Default Country','et');

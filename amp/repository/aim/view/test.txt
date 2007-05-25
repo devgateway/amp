@@ -1,0 +1,6 @@
+
+myreports.jsp
+
+				<%		//	<digi:link href="<%=desc " onclick="return popup(this,'');"> %>
+							<a href="<%=desc%>" styleClass="h-box" onclick="return popup(this,'');">
+							<bean:write name="report" property="name"/><%//</digi:link>%>

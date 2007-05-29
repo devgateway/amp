@@ -6,6 +6,7 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.Collection;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -21,10 +22,12 @@ import net.sf.hibernate.Transaction;
 
 import org.apache.log4j.Logger;
 import org.apache.struts.action.Action;
+import org.apache.struts.action.ActionError;
 import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
+import org.dgfoundation.amp.Util;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.dbentity.AmpGlobalSettings;
 import org.digijava.module.aim.form.GlobalSettingsForm;
@@ -32,11 +35,12 @@ import org.digijava.module.aim.helper.KeyValue;
 import org.digijava.module.aim.util.FeaturesUtil;
 
 public class GlobalSettings extends Action {
-	private static Logger logger = Logger.getLogger(GlobalSettings.class);
+	private static Logger logger 				= Logger.getLogger(GlobalSettings.class);
+	private ActionErrors errors					= new ActionErrors();
+	
 	public ActionForward execute(ActionMapping mapping, ActionForm form, 
 	HttpServletRequest request, HttpServletResponse response) throws java.lang.Exception
 	{
-		ActionErrors errors							= new ActionErrors();
 		boolean refreshGlobalSettingsCache			= false;
 		HttpSession session = request.getSession();
 		if (session.getAttribute("ampAdmin") == null) {
@@ -96,10 +100,15 @@ public class GlobalSettings extends Action {
 //			gsForm.setGlobalSettingsName(ampGS.getGlobalSettingsName());
 //			gsForm.setGsfValue(ampGS.getGlobalSettingsValue());
 //			
+			/**
+			 *  Getting the name of the criteria for possible values:
+			 *  if v_view_name => the values are taken from the specified view
+			 *  if t_type => the value is checked to be of the specified type 
+			 */
 			String possibleValuesTable		= ampGS.getGlobalSettingsPossibleValues();
 			Collection possibleValues		= null;
 			Map possibleValuesDictionary	= null;
-			if ( possibleValuesTable != null ) {
+			if ( possibleValuesTable != null && possibleValuesTable.length() != 0 && possibleValuesTable.startsWith("v_") ) {
 				possibleValues				= this.getPossibleValues(possibleValuesTable);
 				possibleValuesDictionary	= new HashMap();
 				Iterator pvIterator			= possibleValues.iterator();
@@ -114,6 +123,8 @@ public class GlobalSettings extends Action {
 		}
 		Collection countries = FeaturesUtil.getCountryNames();
 		gsForm.setCountryNameCol(countries);
+		
+		saveErrors(request, errors);
 		return mapping.findForward("viewGS");
 	}
 	
@@ -180,7 +191,11 @@ public class GlobalSettings extends Action {
 				qry 					= session.createQuery(qryStr);
 				qry.setLong ("id", id.longValue());
 				AmpGlobalSettings ags	= (AmpGlobalSettings) qry.list().get(0);
-				ags.setGlobalSettingsValue(value);
+				
+				boolean changeValue		= this.testCriterion(ags, value);
+				
+				if (changeValue)
+						ags.setGlobalSettingsValue(value);
 				tx.commit();
 
 		}
@@ -205,4 +220,52 @@ public class GlobalSettings extends Action {
 			}
 		}
 	}
+	/**
+	 * 
+	 * @param ags the AmpGlobalSettings whos value should be changed
+	 * @param value the new value that should be applied
+	 * @return true if value is of the specified type (as returned by AmpGlobalSettings.getGlobalSettingsPossibleValues() )
+	 */
+	private boolean testCriterion (AmpGlobalSettings ags, String value) {
+		String criterion		= ags.getGlobalSettingsPossibleValues();
+		if ( criterion!=null && criterion.startsWith("t_")  ) {
+			if (criterion.equals("t_Integer")){
+				try{
+					Integer.parseInt(value);
+					return true;
+				}
+				catch(Exception E) { // value is not an integer
+					ActionError ae	= new ActionError("error.aim.globalSettings.valueIsNotOfType", criterion.substring(2));
+					errors.add("title", ae);
+					return false;
+				}
+			}
+			if (criterion.equals("t_Year")){
+				try{
+					int intValue	= Integer.parseInt(value);
+					if (intValue < 1000 || intValue > 2999 )
+						return false;
+					return true;
+				}
+				catch(Exception E) { // value is not a year
+					ActionError ae	= new ActionError("error.aim.globalSettings.valueIsNotOfType", criterion.substring(2));
+					errors.add("title", ae);
+					return false;
+				}
+			}
+			if (criterion.equals("t_Date")){
+				try{
+					Date testDate	= Util.dateFormat.parse(value);
+					return true;
+				}
+				catch(Exception E) { // value is not an Date
+					ActionError ae	= new ActionError("error.aim.globalSettings.valueIsNotOfType", criterion.substring(2));
+					errors.add("title", ae);
+					return false;
+				}
+			}
+			
+		}
+		return true;
+	} 
 }

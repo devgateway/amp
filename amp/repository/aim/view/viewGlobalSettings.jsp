@@ -97,6 +97,9 @@
 															<tr>
 																<td bgcolor="#ffffff">
 																			<bean:write name="globalSett" property="globalSettingsName"/>
+																			<logic:notEmpty name="globalSett" property="globalSettingsDescription"> 
+																				<img src= "../ampTemplate/images/help.gif" border=0 title="<bean:write name="globalSett" property="globalSettingsDescription"/>">
+																			</logic:notEmpty>
 																</td>
 																<td bgcolor="#ffffff">
 																<b>

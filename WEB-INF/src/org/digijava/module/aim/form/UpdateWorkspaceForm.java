@@ -52,8 +52,10 @@ public class UpdateWorkspaceForm extends ValidatorForm {
 
 	public Collection getAllChildren() {
 		Collection aux=new TreeSet();
-		aux.addAll(availChildWorkspaces);
-		aux.addAll(childWorkspaces);
+		if (availChildWorkspaces != null)
+			aux.addAll(availChildWorkspaces);
+		if (childWorkspaces != null)
+			aux.addAll(childWorkspaces);
 		return aux;
 	}
 

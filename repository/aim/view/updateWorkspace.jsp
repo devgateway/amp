@@ -51,6 +51,7 @@ function removeChildWorkspace(id) {
 function update(action) {
 	var event	= document.aimUpdateWorkspaceForm.actionEvent.value;
 	var relFlag = document.aimUpdateWorkspaceForm.relatedTeamFlag.value;
+	
 	if (event == "edit" && relFlag == "noedit") {
 		var name = trim(document.aimUpdateWorkspaceForm.teamName.value);
 		if (name == "" || name.length == 0) {
@@ -67,9 +68,13 @@ function update(action) {
 			document.aimUpdateWorkspaceForm.submit();
 		}
 	}
-	else if (!validateAimUpdateWorkspaceForm(document.aimUpdateWorkspaceForm))
-		return false;
+	else 
+	if (action != "reset"){
+		if (!validateAimUpdateWorkspaceForm(document.aimUpdateWorkspaceForm))
+			return false;
+	}
 	else {
+	    if (action != "reset"){
 		if (event == "add" || event == "edit") {
 			if (relFlag == "set") {
 				var index1  = document.aimUpdateWorkspaceForm.category.selectedIndex;
@@ -117,6 +122,7 @@ function update(action) {
 						}
 				}
 			}
+		}
 		}
 		document.aimUpdateWorkspaceForm.relatedTeamFlag.value = "no";
 		document.aimUpdateWorkspaceForm.addFlag.value = false;
@@ -554,7 +560,8 @@ onsubmit="return validateAimUpdateWorkspaceForm(this);">
 																		</c:if>																		
 																	</td>
 																	<td>
-																		<html:reset value="Clear" styleClass="dr-menu"/>
+																		<!-- <html:reset value="Clear" styleClass="dr-menu"/> -->
+																		<input type="button" value="Reset" class="dr-menu" onclick="update('reset')"/>
 																	</td>
 																	<td>
 																		<input name="" value="Cancel" onclick="cancel()" class="dr-menu" type="button">

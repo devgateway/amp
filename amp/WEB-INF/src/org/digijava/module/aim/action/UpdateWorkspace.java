@@ -159,7 +159,20 @@ public class UpdateWorkspace extends Action {
                     newTeam.setDescription(" ");
                 }
             }
-
+            
+            if(event != null && event.trim().equalsIgnoreCase("reset")) {
+        		uwForm.setPopupReset(false);
+                uwForm.setTeamName("");
+                uwForm.setCategory("");
+                uwForm.setType("");
+                uwForm.setDescription("");
+                uwForm.setWorkspaceType("");
+                uwForm.setRelatedTeamFlag("no");
+                uwForm.setRelatedTeamName("");
+                uwForm.getChildWorkspaces().clear();
+                return mapping.findForward("admin");
+            }
+            else
             if(event != null && event.trim().equalsIgnoreCase("add")) {
                 uwForm.setActionEvent("add");
                 if(newTeam != null) {
@@ -261,7 +274,8 @@ public class UpdateWorkspace extends Action {
                 }
                 return mapping.findForward("forward");
             }
-
+            	
+            
             uwForm.setReset(true);
             uwForm.reset(mapping, request);
 

@@ -38,7 +38,8 @@ public class UpdateWorkspaceForm extends ValidatorForm {
 
 	private boolean addFlag = false;
 	private boolean reset;
-
+	private boolean resetButton = false;
+	
 	private String mainAction;
 	
 	// for select child workspaces popup
@@ -440,5 +441,17 @@ public class UpdateWorkspaceForm extends ValidatorForm {
 			}
 		}
 		return errors;
+	}
+
+	public boolean isResetButton() {
+		return resetButton;
+	}
+
+	public boolean getResetButton() {
+		return resetButton;
+	}
+	
+	public void setResetButton(boolean resetButton) {
+		this.resetButton = resetButton;
 	}
 }

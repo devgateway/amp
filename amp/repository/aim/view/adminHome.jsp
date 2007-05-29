@@ -68,6 +68,17 @@
                           <tr>
                             <td class=f-names noWrap>
                               <digi:img src="module/aim/images/arrow-th-BABAB9.gif" width="16"/>
+                              <c:set var="trnFeatureManager">
+                                <digi:trn key="aim:clickToAccessVisibilityManager">Click here to access Visibility Manager</digi:trn>
+                              </c:set>
+                              <digi:link href="/visibilityManager.do" title="${trnFeatureManager}" >
+                                <digi:trn key="aim:fieldManagerVisibility">Field/Features/Module/Templates Manager</digi:trn>
+                              </digi:link>
+                            </td>
+                          </tr>
+                          <tr>
+                            <td class=f-names noWrap>
+                              <digi:img src="module/aim/images/arrow-th-BABAB9.gif" width="16"/>
                               <c:set var="trnUploadFlags">
                                 <digi:trn key="aim:clickToUploadFlags">Click here to upload and select flags</digi:trn>
                               </c:set>
@@ -280,19 +291,6 @@
                     <tr bgcolor="#f4f4f2" align="center" height="80" valign="top">
                       <td>
                         <table cellPadding=0 cellSpacing=0>
-                          <tr>
-                            <td class=f-names noWrap>
-                              <digi:img src="module/aim/images/arrow-th-BABAB9.gif" width="16"/>
-                              <c:set var="trnProgramTypeManager">
-                                <digi:trn key="aim:clickToViewProgramTypeManager">Click here to view Program Type Manager</digi:trn>
-                              </c:set>
-                              <digi:link href="/programTypeManager.do" title="${trnProgramTypeManager}" >
-                                <digi:trn key="aim:ProgramTypeManager">
-                                Program Type Manager
-                                </digi:trn>
-                              </digi:link>
-                            </td>
-                          </tr>
                           <tr>
                             <td class=f-names noWrap>
                               <digi:img src="module/aim/images/arrow-th-BABAB9.gif" width="16"/>

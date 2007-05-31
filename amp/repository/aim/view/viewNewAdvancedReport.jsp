@@ -24,7 +24,9 @@
 			<td><jsp:include page="/repository/aim/view/ar/toolBar.jsp" /></td>
 		</tr>
 		<tr>
-			<td><jsp:include page="/repository/aim/view/ar/NewFilters.jsp" /></td>
+		<!-- filters -->
+	
+		
 		</tr>
 	
 

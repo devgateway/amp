@@ -138,7 +138,9 @@ public class DesktopUtil {
 						if (sectSect != null) {
 							Iterator sItr = sectSect.iterator();
 							while (sItr.hasNext()) {
-								AmpSector sect = ((AmpActivitySector) sItr.next()).getSectorId();
+								Object x=sItr.next();
+								if(x==null) continue;
+								AmpSector sect = ((AmpActivitySector)x).getSectorId();
 								Sector sector = new Sector();
 								sector.setSectorId(sect.getAmpSectorId());
 								sector.setSectorName(sect.getName());

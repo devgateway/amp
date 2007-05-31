@@ -1,6 +1,8 @@
 package org.digijava.module.aim.dbentity;
 
-public class AmpIndicatorRiskRatings {
+import org.digijava.module.aim.util.Identifiable;
+
+public class AmpIndicatorRiskRatings implements Identifiable {
 	private Long ampIndRiskRatingsId;
 	private String ratingName;
 	private int ratingValue;
@@ -22,5 +24,8 @@ public class AmpIndicatorRiskRatings {
 	}
 	public void setRatingValue(int ratingValue) {
 		this.ratingValue = ratingValue;
+	}
+	public Object getIdentifier() {
+		return ampIndRiskRatingsId;
 	}
 }

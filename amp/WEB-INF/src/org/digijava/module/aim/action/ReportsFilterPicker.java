@@ -4,11 +4,7 @@
 package org.digijava.module.aim.action;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -19,13 +15,14 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.dgfoundation.amp.Util;
 import org.dgfoundation.amp.ar.AmpARFilter;
+import org.dgfoundation.amp.ar.ArConstants;
 import org.dgfoundation.amp.utils.MultiAction;
-import org.digijava.module.aim.dbentity.AmpStatus;
 import org.digijava.module.aim.form.ReportsFilterPickerForm;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.aim.util.DbUtil;
+import org.digijava.module.aim.util.Identifiable;
 import org.digijava.module.aim.util.MEIndicatorsUtil;
 import org.digijava.module.aim.util.SectorUtil;
 import org.springframework.beans.BeanWrapperImpl;
@@ -96,9 +93,18 @@ public class ReportsFilterPicker extends MultiAction {
 		
 		arf.setStatuses(Util.getSelectedObjects(filterForm.getStatuses(),filterForm.getSelectedStatuses()));
 		arf.setSectors(Util.getSelectedObjects(filterForm.getSectors(),filterForm.getSelectedSectors()));
-		arf.setCalendarType(new Integer(Util.getSelectedObject(filterForm.getCalendars(),filterForm.getCalendar()).toString()));
+		Identifiable selcal=Util.getSelectedObject(filterForm.getCalendars(),filterForm.getCalendar());
+		arf.setCalendarType(selcal==null?null:new Integer(selcal.toString()));
+		arf.setFromYear(filterForm.getFromYear().longValue()==-1?null:new Integer(filterForm.getFromYear().intValue()));
+		arf.setToYear(filterForm.getToYear().longValue()==-1?null:new Integer(filterForm.getToYear().intValue()));
+		arf.setDonors(Util.getSelectedObjects(filterForm.getDonors(),filterForm.getSelectedDonors()));
+		arf.setAmpCurrencyCode(Util.getSelectedObject(filterForm.getCurrencies(),filterForm.getCurrency()).toString());
 		
+		arf.setRisks(Util.getSelectedObjects(filterForm.getRisks(),filterForm.getSelectedRisks()));
 		
+		HttpSession httpSession = request.getSession();
+		httpSession.setAttribute(ArConstants.REPORTS_FILTER,arf);
+		request.setAttribute("close", "close");
 		return mapping.findForward("forward");
 	}
 	

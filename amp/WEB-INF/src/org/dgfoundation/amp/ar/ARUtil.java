@@ -124,10 +124,9 @@ public final class ARUtil {
 				+ teamMember.getEmail() + " from team "
 				+ teamMember.getTeamName());
 
-		AmpARFilter af = ARUtil.createFilter(r, mapping, form, request,
-				response);
+		AmpARFilter af = (AmpARFilter) httpSession.getAttribute(ArConstants.REPORTS_FILTER);
 		if (af == null)
-			return null;
+			af=new AmpARFilter();
 
 		AmpReportGenerator arg = new AmpReportGenerator(r, af);
 

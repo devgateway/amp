@@ -53,6 +53,7 @@ public final class Util {
 	 */
 	public static Set getSelectedObjects(Collection source, Object[] selected) {
 		Set ret = new HashSet();
+		if(selected==null) return ret;
 		Iterator i = source.iterator();
 		while (i.hasNext()) {
 			Identifiable element = (Identifiable) i.next();

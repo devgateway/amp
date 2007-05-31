@@ -22,7 +22,6 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.dgfoundation.amp.ar.ARUtil;
-import org.dgfoundation.amp.ar.ArConstants;
 import org.dgfoundation.amp.ar.GenericViews;
 import org.dgfoundation.amp.ar.GroupReportData;
 import org.dgfoundation.amp.ar.MetaInfo;
@@ -38,13 +37,8 @@ import org.digijava.module.aim.helper.Constants;
  * 
  */
 public class ViewNewAdvancedReport extends Action {
-
-	
 	private static Logger logger = Logger.getLogger(ViewNewAdvancedReport.class) ;
 	
-	/**
-	 * 
-	 */
 	public ViewNewAdvancedReport() {
 		super();
 		// TODO Auto-generated constructor stub

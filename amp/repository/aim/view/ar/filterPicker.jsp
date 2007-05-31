@@ -10,6 +10,15 @@
 	type="org.digijava.module.aim.dbentity.AmpReports" scope="session"
 	toScope="page" />
 
+<!-- invoked to close myself and reload my parent (after save was performed) -->
+<logic:present name="close">
+<script type="text/javascript">
+	window.opener.location.href = window.opener.location.href;
+	window.close();
+</script>	
+</logic:present>
+
+
 <digi:form action="/reportsFilterPicker.do">
 	<table>
 		<tr>
@@ -18,6 +27,7 @@
 		<tr>
 			<td colspan="3">
 			<html:select property="currency" style="width: 400px">
+			<html:option value="-1">All</html:option>
 				<html:optionsCollection property="currencies"
 					value="ampCurrencyId" label="currencyName" />
 			</html:select>
@@ -33,6 +43,7 @@
 		<tr>
 			<td>
 			<html:select property="calendar" style="width: 200px">
+				<html:option value="-1">All</html:option>			
 				<html:optionsCollection property="calendars"
 					value="ampFiscalCalId" label="name" />
 			</html:select>
@@ -40,12 +51,14 @@
 	
 			<td>
 			<html:select property="fromYear">
+				<html:option value="-1">All</html:option>			
 				<html:optionsCollection property="fromYears" label="wrappedInstance" value="wrappedInstance" />
 			</html:select>
 			</td>
 
 			<td>
 			<html:select property="toYear">
+				<html:option value="-1">All</html:option>			
 				<html:optionsCollection property="toYears" label="wrappedInstance" value="wrappedInstance" />
 			</html:select>
 			</td>

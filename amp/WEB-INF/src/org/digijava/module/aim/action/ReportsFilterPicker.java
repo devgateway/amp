@@ -89,7 +89,11 @@ public class ReportsFilterPicker extends MultiAction {
 	 */
 	public ActionForward modeApply(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
 		ReportsFilterPickerForm filterForm=(ReportsFilterPickerForm) form;
-		AmpARFilter arf=new AmpARFilter();
+		HttpSession httpSession = request.getSession();
+		TeamMember teamMember = (TeamMember) httpSession
+		.getAttribute("currentMember");
+
+		AmpARFilter arf=new AmpARFilter(teamMember);
 		
 		arf.setStatuses(Util.getSelectedObjects(filterForm.getStatuses(),filterForm.getSelectedStatuses()));
 		arf.setSectors(Util.getSelectedObjects(filterForm.getSectors(),filterForm.getSelectedSectors()));
@@ -102,7 +106,6 @@ public class ReportsFilterPicker extends MultiAction {
 		
 		arf.setRisks(Util.getSelectedObjects(filterForm.getRisks(),filterForm.getSelectedRisks()));
 		
-		HttpSession httpSession = request.getSession();
 		httpSession.setAttribute(ArConstants.REPORTS_FILTER,arf);
 		request.setAttribute("close", "close");
 		return mapping.findForward("forward");

@@ -59,15 +59,10 @@
 	YAHOO.reportsheet.jsReports	= new Array();
 	var i;
 	<logic:iterate name="myReports" id="report" scope="session" type="org.digijava.module.aim.dbentity.AmpReports"> 
-		<%
-			String descr	= report.getReportDescription();
-			descr			= descr.replaceAll("\n"," ");
-			descr			= descr.replaceAll("\r","");
-		%>
 		i							= <bean:write name="report" property="ampReportId" />;
 		YAHOO.reportsheet.jsReports[i]				= new Object();
 		YAHOO.reportsheet.jsReports[i].name			= '<bean:write name="report" property="name" />';
-		YAHOO.reportsheet.jsReports[i].description	= '<%= descr %>';
+		YAHOO.reportsheet.jsReports[i].description	= '<bean:write name="report" property="reportDescription" filter="true"/>';
 		YAHOO.reportsheet.jsReports[i].id			= '<bean:write name="report" property="ampReportId" />';
 		YAHOO.reportsheet.jsReports[i].type			= '<bean:write name="report" property="type" />';
 		YAHOO.reportsheet.jsReports[i].drilldown	= '<bean:write name="report" property="drilldownTab" />';

@@ -9,6 +9,8 @@ package org.dgfoundation.amp.ar;
 import java.util.Set;
 
 import org.dgfoundation.amp.Util;
+import org.digijava.module.aim.helper.Constants;
+import org.digijava.module.aim.helper.TeamMember;
 
 /**
  * Filtering bean. Holds info about filtering parameters and creates the filtering query
@@ -43,9 +45,20 @@ public class AmpARFilter implements Filter {
 		generatedFilterQuery+= " AND amp_activity_id IN ("+filter+")";
 	}
 	
+	public AmpARFilter(TeamMember tm) {
+		String perspective=null;
+		if(tm!=null) {perspective = tm.getAppSettings().getPerspective();
+		if (perspective.equals("Donor"))
+			perspective = "DN";
+		if (perspective.equals("MOFED"))
+			perspective = "MA";}
+		else perspective="MA";
+	
+		this.setPerspectiveCode(perspective);
+	}
+	
 	public AmpARFilter() {
-		super();
-		
+		super();	
 	}
 	
 	public void generateFilterQuery() {

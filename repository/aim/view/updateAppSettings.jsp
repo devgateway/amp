@@ -18,7 +18,7 @@
 <html:hidden property="appSettingsId" />
 
 <!-- Start include of reportDescriptionSheet.jsp  -->
-<%@ include file="reportDescriptionSheet.jsp"%>
+<jsp:include page="reportDescriptionSheet.jsp"/>
 <!-- END include of reportDescriptionSheet.jsp  -->
 
 <table cellSpacing=0 cellPadding=0 vAlign="top" align="left" width="100%">

@@ -22,9 +22,6 @@
 -- Create schema amp_maldives 
 --
 
-CREATE DATABASE IF NOT EXISTS amp_maldives;
-USE amp_maldives;
-
 --
 -- Temporary table structure for view `v_global_settings_countries`
 --

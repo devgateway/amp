@@ -18,8 +18,8 @@
 -- Create schema amp_montenegro
 --
 
-DROP TABLE IF EXISTS `amp_montenegro`.`amp_columns`;
-CREATE TABLE  `amp_montenegro`.`amp_columns` (
+DROP TABLE IF EXISTS `amp_columns`;
+CREATE TABLE `amp_columns` (
   `columnId` bigint(20) NOT NULL auto_increment,
   `columnName` varchar(255) default NULL,
   `aliasName` varchar(255) default NULL,
@@ -27,7 +27,7 @@ CREATE TABLE  `amp_montenegro`.`amp_columns` (
   `extractorView` varchar(255) default NULL,
   PRIMARY KEY  (`columnId`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-INSERT INTO `amp_montenegro`.`amp_columns` (`columnId`,`columnName`,`aliasName`,`cellType`,`extractorView`) VALUES 
+INSERT INTO `amp_columns` (`columnId`,`columnName`,`aliasName`,`cellType`,`extractorView`) VALUES 
  (1,'Status','statusName','org.dgfoundation.amp.ar.cell.TextCell','v_status'),
  (2,'Donor','donorName','org.dgfoundation.amp.ar.cell.TextCell','v_donors'),
  (3,'Actual Start Date','actualStartDate','org.dgfoundation.amp.ar.cell.DateCell','v_actual_start_date'),
@@ -39,7 +39,7 @@ INSERT INTO `amp_montenegro`.`amp_columns` (`columnId`,`columnName`,`aliasName`,
  (9,'Region',NULL,'org.dgfoundation.amp.ar.cell.TextCell','v_regions'),
  (10,'Financing Instrument',NULL,'org.dgfoundation.amp.ar.cell.TextCell','v_financing_instrument'),
  (11,'Objective',NULL,'org.dgfoundation.amp.ar.cell.TextCell','v_objectives');
-INSERT INTO `amp_montenegro`.`amp_columns` (`columnId`,`columnName`,`aliasName`,`cellType`,`extractorView`) VALUES 
+INSERT INTO `amp_columns` (`columnId`,`columnName`,`aliasName`,`cellType`,`extractorView`) VALUES 
  (12,'Project Id','ampId','org.dgfoundation.amp.ar.cell.TextCell','v_amp_id'),
  (13,'Contact Name',NULL,'org.dgfoundation.amp.ar.cell.TextCell','v_contact_name'),
  (14,'Description',NULL,'org.dgfoundation.amp.ar.cell.TextCell','v_description'),
@@ -52,7 +52,7 @@ INSERT INTO `amp_montenegro`.`amp_columns` (`columnId`,`columnName`,`aliasName`,
  (21,'Actors','actors','org.dgfoundation.amp.ar.cell.TextCell','v_actors'),
  (22,'Actual Approval Date','actual_approval_date','org.dgfoundation.amp.ar.cell.DateCell','v_actual_approval_date'),
  (23,'Donor Commitment Date','donor_commitment_date','org.dgfoundation.amp.ar.cell.DateCell','v_donor_commitment_date');
-INSERT INTO `amp_montenegro`.`amp_columns` (`columnId`,`columnName`,`aliasName`,`cellType`,`extractorView`) VALUES 
+INSERT INTO `amp_columns` (`columnId`,`columnName`,`aliasName`,`cellType`,`extractorView`) VALUES 
  (24,'Physical Progress','physical_progress','org.dgfoundation.amp.ar.cell.TextCell','v_physical_progress'),
  (25,'Total Costs','costs','org.dgfoundation.amp.ar.cell.CummulativeAmountCell','v_costs'),
  (26,'A.C. Chapter','acchapter','org.dgfoundation.amp.ar.cell.TextCell','v_ac_chapters'),

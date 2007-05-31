@@ -103,7 +103,19 @@ public class UpdateAppSettings extends Action {
 				else
 					uForm.setDefaultReportForTeamId( new Long(0) );
 			}
-			uForm.setReports( TeamUtil.getAllTeamReports(tm.getTeamId()) );
+			/* Select only the reports that are shown as tabs */
+			Collection reports	= TeamUtil.getAllTeamReports(tm.getTeamId());
+			if ( reports != null ) {
+				Iterator iterator	= reports.iterator();
+				while ( iterator.hasNext() ) {
+						AmpReports ampreport	= (AmpReports) iterator.next();
+						if ( ampreport.getDrilldownTab() == null || !ampreport.getDrilldownTab().booleanValue() ) {
+							iterator.remove();
+						}
+				}
+			}
+			
+			uForm.setReports( reports );
 			uForm.setCurrencies(CurrencyUtil.getAllCurrencies(1));
 			uForm.setFisCalendars(DbUtil.getAllFisCalenders());
 			

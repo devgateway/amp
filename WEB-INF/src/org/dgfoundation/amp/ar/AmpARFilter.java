@@ -22,6 +22,7 @@ public class AmpARFilter implements Filter {
 	private Set donors=null;
 	private Set sectors=null;
 	private Set regions=null;
+	private Set risks=null;
 	private Long ampModalityId=null;
 	private String ampCurrencyCode=null;
 	private Set ampTeams=null;
@@ -34,7 +35,7 @@ public class AmpARFilter implements Filter {
 	private Integer fromYear;
 	private Integer toYear;	
 	
-	private String generatedFilterQuery="SELECT amp_activity_id FROM amp_activity WHERE 1";
+	private String generatedFilterQuery="SELECT distinct(amp_activity_id) FROM amp_activity WHERE 1";
 	private int initialQueryLength=generatedFilterQuery.length();
 	
 	private void queryAppend(String filter) {
@@ -64,6 +65,8 @@ public class AmpARFilter implements Filter {
 		//String CLOSE_MONTH_FILTER="SELECT amp_activity_id FROM v_actual_completion_date WHERE date_format(actual_completion_date,_latin1'%m')<='"+closeMonth+"'";
 		//String CLOSE_DAY_FILTER="SELECT amp_activity_id FROM v_actual_completion_date WHERE date_format(actual_completion_date,_latin1'%d')<='"+closeDay+"'";
 	
+	
+		String RISK_FILTER="SELECT v.activity_id from AMP_ME_INDICATOR_VALUE v, AMP_INDICATOR_RISK_RATINGS r where v.risk=r.amp_ind_risk_ratings_id and r.amp_ind_risk_ratings_id in ("+Util.toCSString(risks)+")";
 		
 		String FROM_YEAR_FILTER="SELECT f.amp_activity_id FROM amp_funding f, amp_funding_detail fd WHERE f.amp_funding_id=fd.AMP_FUNDING_ID and date_format(fd.transaction_date,_latin1'%Y')>='"+fromYear+"'";
 		String TO_YEAR_FILTER="SELECT f.amp_activity_id FROM amp_funding f, amp_funding_detail fd WHERE f.amp_funding_id=fd.AMP_FUNDING_ID and date_format(fd.transaction_date,_latin1'%Y')<='"+toYear+"'";
@@ -75,6 +78,7 @@ public class AmpARFilter implements Filter {
 		if(sectors!=null && sectors.size()!=0) queryAppend(SECTOR_FILTER);
 		if(regions!=null && regions.size()>0) queryAppend(REGION_FILTER);
 		if(ampModalityId!=null && ampModalityId.intValue()!=0) queryAppend(FINANCING_INSTR_FILTER);
+		if(risks!=null && risks.size()>0) queryAppend(RISK_FILTER);
 		
 		//if(fromYear!=null) queryAppend(FROM_YEAR_FILTER);
 		//if(toYear!=null) queryAppend(TO_YEAR_FILTER);
@@ -300,6 +304,14 @@ public class AmpARFilter implements Filter {
 
 	public void setBudget(Boolean budget) {
 		this.budget = budget;
+	}
+
+	public Set getRisks() {
+		return risks;
+	}
+
+	public void setRisks(Set risks) {
+		this.risks = risks;
 	}
 
 	/**

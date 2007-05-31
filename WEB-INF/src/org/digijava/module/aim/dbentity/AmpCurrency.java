@@ -1,9 +1,11 @@
 package org.digijava.module.aim.dbentity ;
 
 import java.io.Serializable;
-import org.digijava.kernel.dbentity.Country;
 
-public class AmpCurrency implements Serializable,Comparable
+import org.digijava.kernel.dbentity.Country;
+import org.digijava.module.aim.util.Identifiable;
+
+public class AmpCurrency implements Serializable,Comparable, Identifiable
 {
 	private Long ampCurrencyId;
 	private String currencyCode;
@@ -106,5 +108,12 @@ public class AmpCurrency implements Serializable,Comparable
 		} else {
 			throw new ClassCastException();
 		}
+	}
+	public Object getIdentifier() {
+		return this.getAmpCurrencyId();
+	}
+	
+	public String toString() {
+		return currencyCode;
 	}
 }	

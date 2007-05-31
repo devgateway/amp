@@ -69,4 +69,8 @@ public final class ArConstants {
 
 	//hierarchysorter
 	public final static String HIERARCHY_SORTER_TITLE="Title";
+	
+	//reportsFilter
+	
+	public final static String REPORTS_FILTER="ReportsFilter";
 }

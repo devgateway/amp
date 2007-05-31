@@ -2,6 +2,11 @@ package org.digijava.module.aim.helper ;
 
 import java.util.Collection;
 
+/**
+ * @deprecated
+ * @author mihai
+ *
+ */
 public class AmpProject implements Comparable
 {
 	private Long ampActivityId;

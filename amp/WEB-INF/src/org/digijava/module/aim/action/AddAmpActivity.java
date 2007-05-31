@@ -364,15 +364,15 @@ public class AddAmpActivity extends Action {
 				
 			}
 			
-			Collection statusCol = null;
-			// load the status from the database
-			if(eaForm.getStatusCollection() == null) {
-				statusCol= DbUtil.getAmpStatus();
-				eaForm.setStatusCollection(statusCol);
-			}
-			else {
-				statusCol = eaForm.getStatusCollection();
-			}
+//			Collection statusCol = null; TO BE DELETED
+//			// load the status from the database
+//			if(eaForm.getStatusCollection() == null) {
+//				statusCol= DbUtil.getAmpStatus();
+//				eaForm.setStatusCollection(statusCol);
+//			}
+//			else {
+//				statusCol = eaForm.getStatusCollection();
+//			}
 			// Initailly setting the implementation level as "country"
 			if (eaForm.getImplementationLevel() == null)
 				eaForm.setImplementationLevel("country");
@@ -510,9 +510,9 @@ public class AddAmpActivity extends Action {
 			request.setAttribute("nextId", next);
 			request.setAttribute("prevId", prev);
 			
-			if(eaForm.getStatusCollection() == null) {
-				eaForm.setStatusCollection(DbUtil.getAmpStatus());
-			}
+//			if(eaForm.getStatusCollection() == null) { //TO BE DELETED
+//				eaForm.setStatusCollection(DbUtil.getAmpStatus());
+//			}
 			if (eaForm.getModalityCollection() == null) {
 				eaForm.setModalityCollection(DbUtil.getAmpModality());
 			}

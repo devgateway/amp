@@ -22,6 +22,7 @@ import org.digijava.module.aim.dbentity.AmpActivity;
 import org.digijava.module.aim.dbentity.AmpActivityInternalId;
 import org.digijava.module.aim.dbentity.AmpActivitySector;
 import org.digijava.module.aim.dbentity.AmpActor;
+import org.digijava.module.aim.dbentity.AmpCategoryValue;
 import org.digijava.module.aim.dbentity.AmpComponent;
 import org.digijava.module.aim.dbentity.AmpFunding;
 import org.digijava.module.aim.dbentity.AmpFundingDetail;
@@ -35,6 +36,8 @@ import org.digijava.module.aim.dbentity.AmpPhysicalPerformance;
 import org.digijava.module.aim.dbentity.AmpSector;
 import org.digijava.module.aim.form.EditActivityForm;
 import org.digijava.module.aim.helper.ActivitySector;
+import org.digijava.module.aim.helper.CategoryConstants;
+import org.digijava.module.aim.helper.CategoryManagerUtil;
 import org.digijava.module.aim.helper.Components;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.CurrencyWorker;
@@ -99,7 +102,7 @@ public class ResetAll extends Action
 				eaForm.setRevisedCompDate(null);
 				eaForm.setCreatedDate(null);
 //				eaForm.setActivityCloseDates(null);
-				eaForm.setStatus(null);
+				eaForm.setStatusId(new Long(0));
 				eaForm.setStatusReason(null);
 				eaForm.setBudget(null);
 	    	}
@@ -166,8 +169,11 @@ public class ResetAll extends Action
 				eaForm.setCurrentCompDate(DateConversion.ConvertDateToString(activity.getActualCompletionDate()));
 				eaForm.setDisbursementsDate(DateConversion.ConvertDateToString(activity.getDisbursmentsDate()));
 				eaForm.setContractingDate(DateConversion.ConvertDateToString(activity.getContractingDate()));
-				eaForm.setStatus(activity.getStatus().getAmpStatusId());
 				eaForm.setStatusReason(activity.getStatusReason());
+				AmpCategoryValue ampCategoryValue	= CategoryManagerUtil.getAmpCategoryValueFromListByKey(CategoryConstants.ACTIVITY_STATUS_KEY, activity.getCategories());
+                if (ampCategoryValue != null)
+            		eaForm.setStatusId( ampCategoryValue.getId() );
+				
 				Set orgProjIdsSet = activity.getInternalIds();
 				if (orgProjIdsSet != null)
 				{

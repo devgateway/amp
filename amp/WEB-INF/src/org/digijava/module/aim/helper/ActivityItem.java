@@ -9,6 +9,7 @@ import java.util.Set;
 
 import org.apache.struts.util.LabelValueBean;
 import org.digijava.module.aim.dbentity.AmpActivity;
+import org.digijava.module.aim.dbentity.AmpCategoryValue;
 import org.digijava.module.aim.dbentity.AmpFunding;
 import org.digijava.module.aim.util.ActivityUtil;
 
@@ -83,10 +84,12 @@ public class ActivityItem {
 	 */
 	public ActivityItem(AmpActivity entity,DateFormat frmt) throws Exception {
 		if (entity != null) {
+			AmpCategoryValue statusValue	= CategoryManagerUtil.getAmpCategoryValueFromListByKey(CategoryConstants.ACTIVITY_STATUS_KEY, entity.getCategories());
+			if (statusValue != null)
+				status		= statusValue.getValue();
 			id = entity.getAmpActivityId();
 			name = entity.getName();
 			name = name.replaceAll("&","&amp;");
-			status = entity.getStatus().getName();
 			try {
 				ActivityUtil.ActivityAmounts amounts = ActivityUtil.getActivityAmmountIn(entity,"USD");
 				proposedAmount=amounts.proposedAmout();

@@ -8,6 +8,9 @@ public class CategoryConstants {
 	public static final String DOCUMENT_TYPE_NAME		= "Document type";
 	public static final String DOCUMENT_TYPE_KEY		= "docType"; 
 	public static final String LOGFRAME_NAME		= "Logframe";
-	public static final String LOGFRAME_KEY		= "logframe";
+	public static final String LOGFRAME_KEY			= "logframe";
 	
+	public static final String ACTIVITY_STATUS_NAME		= "Activity Status";
+	public static final String ACTIVITY_STATUS_KEY		= "activity_status";
 }
+

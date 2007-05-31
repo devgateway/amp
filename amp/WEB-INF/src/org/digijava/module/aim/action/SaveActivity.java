@@ -134,8 +134,12 @@ public class SaveActivity extends Action {
 			if (activity.getCategories() == null) {
 				activity.setCategories( new HashSet() );
 			}
+			
+			/* Saving categories to AmpActivity */
 			CategoryManagerUtil.addCategoryToSet(eaForm.getAccessionInstrument(), activity.getCategories() );
 			CategoryManagerUtil.addCategoryToSet(eaForm.getAcChapter(), activity.getCategories() );
+			CategoryManagerUtil.addCategoryToSet(eaForm.getStatusId(), activity.getCategories() );
+			/* END - Saving categories to AmpActivity */
 			
 			
 			
@@ -342,7 +346,7 @@ public class SaveActivity extends Action {
 					}
 				}
 
-				if (eaForm.getStatus().equals(new Long(-1))) {
+				if (eaForm.getStatusId().equals(new Long(0))) {
 					errors.add("status", new ActionError(
 							"error.aim.addActivity.statusMissing"));
 					saveErrors(request, errors);
@@ -715,13 +719,13 @@ public class SaveActivity extends Action {
 				}
 
 				// set status of an activity
-				if (eaForm.getStatus() != null
-						&& eaForm.getStatus().intValue() != -1) {
-					AmpStatus status = DbUtil.getAmpStatus(eaForm.getStatus());
-					if (status != null) {
-						activity.setStatus(status);
-					}
-				}
+//				if (eaForm.getStatusId() != null // TO BE DELETED
+//						&& eaForm.getStatus().intValue() != -1) {
+//					AmpStatus status = DbUtil.getAmpStatus(eaForm.getStatus());
+//					if (status != null) {
+//						activity.setStatus(status);
+//					}
+//				}
 				// set status reason
 				if (eaForm.getStatusReason() != null
 						&& eaForm.getStatusReason().trim().length() != 0) {
@@ -1578,6 +1582,7 @@ public class SaveActivity extends Action {
 			/* Clearing categories */
 			eaForm.setAccessionInstrument(new Long(0));
 			eaForm.setAcChapter(new Long(0));
+			eaForm.setStatusId(new Long(0));
 			/* END - Clearing categories */
 
 			int temp = eaForm.getPageId();
@@ -1627,6 +1632,7 @@ public class SaveActivity extends Action {
 				return null;
 			}
 		} catch (Exception e) {
+			e.printStackTrace();
             throw new RuntimeException("Save Activity Error",e);
             
 		}

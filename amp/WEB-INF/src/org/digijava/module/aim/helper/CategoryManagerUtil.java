@@ -136,6 +136,27 @@ public class CategoryManagerUtil {
 	}
 	/**
 	 * 
+	 * @param categoryKey
+	 * @param values
+	 * @return The AmpCategoryValue object witch belongs to the AmpCategoryClass with key=categoryKey 
+	 * or null if the object is not in the set.
+	 */
+	public static AmpCategoryValue getAmpCategoryValueFromListByKey(String categoryKey, Set values) {
+		if ( categoryKey == null || values == null) {
+			logger.info("Couldn't get AmpCategoryValue because one of the parameters is null");
+			return null;
+		}
+		Iterator iterator	= values.iterator();
+		while( iterator.hasNext() ) {
+			AmpCategoryValue ampCategoryValue	= (AmpCategoryValue)iterator.next();
+			if ( ampCategoryValue.getAmpCategoryClass().getKeyName().equals(categoryKey) ) {
+				return ampCategoryValue;
+			}
+		}
+		return null;
+	}
+	/**
+	 * 
 	 * @param valueId
 	 * @return Extracts the AmpCategoryValue with id=valueId from teh database. Return null if not found.
 	 */

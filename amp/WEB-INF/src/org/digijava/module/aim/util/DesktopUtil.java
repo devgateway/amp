@@ -14,6 +14,7 @@ import org.apache.log4j.Logger;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.dbentity.AmpActivity;
 import org.digijava.module.aim.dbentity.AmpActivitySector;
+import org.digijava.module.aim.dbentity.AmpCategoryValue;
 import org.digijava.module.aim.dbentity.AmpFunding;
 import org.digijava.module.aim.dbentity.AmpFundingDetail;
 import org.digijava.module.aim.dbentity.AmpSector;
@@ -22,6 +23,8 @@ import org.digijava.module.aim.dbentity.AmpTeam;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.helper.AmpProject;
 import org.digijava.module.aim.helper.AmpProjectDonor;
+import org.digijava.module.aim.helper.CategoryConstants;
+import org.digijava.module.aim.helper.CategoryManagerUtil;
 import org.digijava.module.aim.helper.Commitments;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.CurrencyWorker;
@@ -127,8 +130,10 @@ public class DesktopUtil {
 						project.setAmpId(act.getAmpId());
 						project.setName(act.getName());
 						project.setApprovalStatus(act.getApprovalStatus());
-						AmpStatus status = act.getStatus();
-						project.setStatusId(status.getAmpStatusId());
+//						AmpStatus status = act.getStatus(); // TO BE DELETE
+						AmpCategoryValue statusValue	= CategoryManagerUtil.getAmpCategoryValueFromListByKey(CategoryConstants.ACTIVITY_STATUS_KEY, act.getCategories());
+						if (statusValue != null)
+							project.setStatusId(statusValue.getId());
 						project.setActivityRisk(MEIndicatorsUtil.getOverallRisk(act.getAmpActivityId()));
 						project.setLineMinRank(act.getLineMinRank());
 						project.setPlanMinRank(act.getPlanMinRank());
@@ -231,8 +236,10 @@ public class DesktopUtil {
 						project.setAmpId(act.getAmpId());
 						project.setName(act.getName());
 						project.setApprovalStatus(act.getApprovalStatus());
-						AmpStatus status = act.getStatus();
-						project.setStatusId(status.getAmpStatusId());
+//						AmpStatus status = act.getStatus(); // TO BE DELETED
+						AmpCategoryValue statusValue	= CategoryManagerUtil.getAmpCategoryValueFromListByKey(CategoryConstants.ACTIVITY_STATUS_KEY, act.getCategories());
+						if (statusValue != null)
+							project.setStatusId(statusValue.getId());
 						project.setActivityRisk(MEIndicatorsUtil.getOverallRisk(act.getAmpActivityId()));
 
 						project.setSector(new ArrayList());

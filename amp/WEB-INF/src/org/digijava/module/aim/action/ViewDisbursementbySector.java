@@ -14,9 +14,12 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.digijava.module.aim.dbentity.AmpActivity;
+import org.digijava.module.aim.dbentity.AmpCategoryValue;
 import org.digijava.module.aim.dbentity.AmpFunding;
 import org.digijava.module.aim.dbentity.AmpSector;
 import org.digijava.module.aim.form.CommitmentbySectorForm;
+import org.digijava.module.aim.helper.CategoryConstants;
+import org.digijava.module.aim.helper.CategoryManagerUtil;
 import org.digijava.module.aim.helper.DateConversion;
 import org.digijava.module.aim.helper.Report;
 import org.digijava.module.aim.util.DbUtil;
@@ -44,6 +47,11 @@ public class ViewDisbursementbySector extends Action
 		while ( iter.hasNext() )
 		{	
 			AmpActivity activity=(AmpActivity) iter.next();
+			AmpCategoryValue statusValue	= CategoryManagerUtil.getAmpCategoryValueFromListByKey(CategoryConstants.ACTIVITY_STATUS_KEY, activity.getCategories());
+			String statusStr				= null;
+			if (statusValue != null)
+				statusStr		= statusValue.getValue();
+			
 			String sectorname = new String();
 			String subsectorname = new String();
 			List sector = SectorUtil.getAmpSectors(activity.getAmpActivityId());
@@ -87,7 +95,7 @@ public class ViewDisbursementbySector extends Action
 						AmpFunding ampFunding = (AmpFunding)iter1.next() ;
 						report1.setDonor(ampFunding.getAmpDonorOrgId().getName());
 						report1.setTitle(activity.getName());
-						report1.setStatus(activity.getStatus().getName());
+						report1.setStatus(statusStr);
 						report1.setSectorname(sectorname);
 						report1.setSubSector(subsectorname);
 						report1.setStartDate(DateConversion.ConvertDateToString(ampFunding.getActualStartDate()));
@@ -156,7 +164,7 @@ public class ViewDisbursementbySector extends Action
 						// report.setPlannedCommitment(0.0);
 						Report report = new Report();
 						report.setTitle(activity.getName());
-						report.setStatus(activity.getStatus().getName());
+						report.setStatus(statusStr);
 						report.setSectorname(sectorname);
 						report.setSubSector(subsectorname);
 						report.setDonor("No Donor");

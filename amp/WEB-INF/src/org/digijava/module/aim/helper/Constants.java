@@ -119,6 +119,8 @@ public class Constants
 	
 	public static final String APPROVED_STATUS = "approved";
 	
+	//proudly added by Alex Gartner
+	public static final String ACTIVITY_STATUS_PROPOSED	= "Proposed";
 	
 	//humbly added by Mihai
 	public static final Long DONOR_FUNDING = new Long(1);

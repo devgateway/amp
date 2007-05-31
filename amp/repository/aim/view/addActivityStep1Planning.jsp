@@ -341,10 +341,7 @@
 												<img src="../ampTemplate/images/help.gif" alt="Click to get help on Status" width=10 height=10 border=0></a>
 												</td>
 												<td bgcolor="#ffffff">
-                                                    <html:select property="status" styleClass="inp-text">
-														<html:option value="-1">Please select the status</html:option>
-														<html:optionsCollection name="aimEditActivityForm" property="statusCollection" value="ampStatusId" label="name" />
-													</html:select>
+	                                                <category:showoptions name="aimEditActivityForm" property="statusId"  keyName="<%= org.digijava.module.aim.helper.CategoryConstants.ACTIVITY_STATUS_KEY %>" styleClass="inp-text" />
                                                     <br/><br/>
 													If there have been some changes in the status, explain below the reasons :
 													<a title="<digi:trn key="aim:ReasonforStatusofProject">Use this space to provide explanations as to why that status was selected. Used primarily in the case of cancelled and suspended projects</digi:trn>">

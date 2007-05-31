@@ -21,12 +21,15 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.digijava.module.aim.dbentity.AmpActivity;
 import org.digijava.module.aim.dbentity.AmpActivityInternalId;
+import org.digijava.module.aim.dbentity.AmpCategoryValue;
 import org.digijava.module.aim.dbentity.AmpFunding;
 import org.digijava.module.aim.dbentity.AmpModality;
 import org.digijava.module.aim.dbentity.AmpSector;
 import org.digijava.module.aim.form.ChannelOverviewForm;
 import org.digijava.module.aim.helper.ApplicationSettings;
 import org.digijava.module.aim.helper.Assistance;
+import org.digijava.module.aim.helper.CategoryConstants;
+import org.digijava.module.aim.helper.CategoryManagerUtil;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.DateConversion;
 import org.digijava.module.aim.helper.FilterParams;
@@ -37,6 +40,7 @@ import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.LocationUtil;
 import org.digijava.module.aim.util.SectorUtil;
+import org.jfree.chart.urls.CategoryURLGenerator;
 
 public class GetActivityDetails extends Action {
 
@@ -271,8 +275,9 @@ public class GetActivityDetails extends Action {
 
 			if (activity.getModality() != null) 
 				coForm.setModality(activity.getModality().getName());
-			if (activity.getStatus() != null)
-				coForm.setStatus(activity.getStatus().getName());
+			AmpCategoryValue ampCategoryValue	= CategoryManagerUtil.getAmpCategoryValueFromListByKey(CategoryConstants.ACTIVITY_STATUS_KEY, activity.getCategories());
+			if (ampCategoryValue != null)
+				coForm.setStatus( ampCategoryValue.getValue() );
 			if (activity.getThemeId() != null)
 				coForm.setTheme(activity.getThemeId().getName());
 			//Modified by Swapnil as now the method returns country,region,zone and woreda.

@@ -37,9 +37,9 @@ public class EditActivityForm extends ActionForm implements Serializable{
 	private String objectives = null;
     private String documentSpace = null;
 	private String condition = null;
-	private Long status = null;
+	private Long statusId = null;
 	private String statusReason = null;
-	private Collection statusCollection = null;
+	//private Collection statusCollection = null;
 	private Long level = null;
 	private Long modality = null;
 	private Long countryIso = null;
@@ -427,9 +427,9 @@ public class EditActivityForm extends ActionForm implements Serializable{
 			objectives = null;
             documentSpace = null;
 			condition = null;
-			status = null;
+			statusId = new Long(0);
 			statusReason = null;
-			statusCollection = null;
+			//statusCollection = null;
 			level = null;
 			program = null;
 			modality = null;
@@ -1484,32 +1484,18 @@ public class EditActivityForm extends ActionForm implements Serializable{
 	/**
 	 * @return Returns the status.
 	 */
-	public Long getStatus() {
-		return status;
+	public Long getStatusId() {
+		return statusId;
 	}
 
 	/**
 	 * @param status
 	 *            The status to set.
 	 */
-	public void setStatus(Long status) {
-		this.status = status;
+	public void setStatusId(Long statusId) {
+		this.statusId = statusId;
 	}
 
-	/**
-	 * @return Returns the statusCollection.
-	 */
-	public Collection getStatusCollection() {
-		return statusCollection;
-	}
-
-	/**
-	 * @param statusCollection
-	 *            The statusCollection to set.
-	 */
-	public void setStatusCollection(Collection statusCollection) {
-		this.statusCollection = statusCollection;
-	}
 
 	/**
 	 * @return Returns the statusReason.

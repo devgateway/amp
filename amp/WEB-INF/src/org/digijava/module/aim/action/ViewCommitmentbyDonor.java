@@ -14,9 +14,12 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.digijava.module.aim.dbentity.AmpActivity;
+import org.digijava.module.aim.dbentity.AmpCategoryValue;
 import org.digijava.module.aim.dbentity.AmpFunding;
 import org.digijava.module.aim.dbentity.AmpSector;
 import org.digijava.module.aim.form.CommitmentbyDonorForm;
+import org.digijava.module.aim.helper.CategoryConstants;
+import org.digijava.module.aim.helper.CategoryManagerUtil;
 import org.digijava.module.aim.helper.DateConversion;
 import org.digijava.module.aim.helper.Report;
 import org.digijava.module.aim.util.DbUtil;
@@ -43,10 +46,15 @@ public class ViewCommitmentbyDonor extends Action
 		iter = projects.iterator() ;
 		while ( iter.hasNext() )
 		{	
-			AmpActivity activity=(AmpActivity) iter.next();
+			AmpActivity activity			=(AmpActivity) iter.next();
+			AmpCategoryValue statusValue	= CategoryManagerUtil.getAmpCategoryValueFromListByKey(CategoryConstants.ACTIVITY_STATUS_KEY, activity.getCategories());
+			String statusStr				= null;
+			if (statusValue != null)
+				statusStr		= statusValue.getValue();
+			
 			logger.debug("Title :" + activity.getName());
 			logger.debug("Id :" + activity.getAmpActivityId());
-			logger.debug("Status :" + activity.getStatus().getName());
+			logger.debug("Status :" + statusStr);
 			//logger.debug("Sectors :" + activity..getSectors().size() );
 			//get the sector for the activity.getAmpActivityId()
 			Collection Sectors = SectorUtil.getAmpSectors(activity.getAmpActivityId());
@@ -90,7 +98,7 @@ public class ViewCommitmentbyDonor extends Action
 					  logger.debug("CLOSE DATE : " + (Date)ampFunding.getActualCompletionDate());
 					  report1.setDonor(ampFunding.getAmpDonorOrgId().getName());
 					  report1.setTitle(activity.getName());
-					  report1.setStatus(activity.getStatus().getName());
+					  report1.setStatus(statusStr);
 					  report1.setStartDate(DateConversion.ConvertDateToString(ampFunding.getActualStartDate()));
 					  report1.setCloseDate(DateConversion.ConvertDateToString(ampFunding.getActualCompletionDate()));
 					  report1.setSector(SectorStr);
@@ -168,7 +176,7 @@ public class ViewCommitmentbyDonor extends Action
 				Report report = new Report();
 				report.setSector(SectorStr);
 				report.setTitle(activity.getName());
-				report.setStatus(activity.getStatus().getName());
+				report.setStatus(statusStr);
 				report.setDonor("No Donor");
 				report.setStartDate("DD/MM/YY");
 				report.setCloseDate("DD/MM/YY");

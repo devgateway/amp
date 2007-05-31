@@ -65,7 +65,6 @@
 		<property name="funDate" column="proj_cost_date" type="java.lang.String" />
 		<property name="currencyCode" column="proj_cost_currcode" type="java.lang.String" />
 
-		<many-to-one name="status" column="amp_status_id" class="org.digijava.module.aim.dbentity.AmpStatus" cascade="none"/>
 		<many-to-one name="level" column="amp_level_id" class="org.digijava.module.aim.dbentity.AmpLevel" cascade="none"/>
 		<many-to-one name="themeId" column="amp_theme_id" class="org.digijava.module.aim.dbentity.AmpTheme" cascade="none"/>
 		<many-to-one name="modality" column="amp_modality_id" class="org.digijava.module.aim.dbentity.AmpModality" cascade="none"/>

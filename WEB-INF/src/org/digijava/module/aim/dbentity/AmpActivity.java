@@ -19,7 +19,7 @@ public class AmpActivity
 	private String purpose;
 	private String results;
     private String documentSpace;
-	private AmpStatus status ;
+//	private AmpStatus status ; // TO BE DELETED
 	private String language ;
 	private String version ;
 	private String calType; 	// values GREGORIAN, ETH_CAL, ETH_FISCAL_CAL
@@ -207,9 +207,9 @@ public class AmpActivity
 	/**
 	 * @return
 	 */
-	public AmpStatus getStatus() {
-		return status;
-	}
+//	public AmpStatus getStatus() { // TO BE DELETED
+//		return status;
+//	}
 
 	/**
 	 * @return
@@ -316,9 +316,9 @@ public class AmpActivity
 	/**
 	 * @param status
 	 */
-	public void setStatus(AmpStatus status) {
-		this.status = status;
-	}
+//	public void setStatus(AmpStatus status) { // TO BE DELETED
+//		this.status = status;
+//	}
 
 	/**
 	 * @param string

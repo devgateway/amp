@@ -2,6 +2,7 @@ package org.dgfoundation.amp.category;
 
 
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspWriter;
 import javax.servlet.jsp.tagext.TagSupport;
@@ -24,12 +25,14 @@ public class CategoryValueTagClass extends TagSupport {
 		return SKIP_BODY;
 	}
 	public int doEndTag() throws JspException {
+		HttpServletRequest request	= (HttpServletRequest) pageContext.getRequest(); 
+			
 		if (categoryValueId != null && categoryValueId.longValue() > 0 ) {
 			AmpCategoryValue ampCategoryValue	= CategoryManagerUtil.getAmpCategoryValueFromDb( categoryValueId );
 			if (ampCategoryValue != null) {
 				try{
 					JspWriter out					= pageContext.getOut();
-					out.print( ampCategoryValue.getValue() );
+					out.print( CategoryManagerUtil.translateAmpCategoryValue(ampCategoryValue, request, null) );
 				}
 				catch(Exception E){
 					logger.info(E);

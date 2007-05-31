@@ -20,11 +20,14 @@ import java.util.ArrayList;
 import java.util.List;
 import org.digijava.module.aim.util.DocumentUtil;
 import org.digijava.module.aim.helper.RegionalFunding;
+import org.digijava.module.aim.dbentity.AmpCategoryValue;
 import org.digijava.module.aim.dbentity.AmpRegionalFunding;
 import org.digijava.module.aim.dbentity.AmpOrgRole;
 import org.digijava.module.aim.dbentity.AmpMeasure;
 import java.util.TreeSet;
 import org.digijava.module.aim.dbentity.AmpFundingDetail;
+import org.digijava.module.aim.helper.CategoryConstants;
+import org.digijava.module.aim.helper.CategoryManagerUtil;
 import org.digijava.module.aim.helper.Location;
 import org.digijava.module.aim.helper.DecimalToText;
 import org.digijava.module.aim.helper.FundingValidator;
@@ -219,8 +222,9 @@ public class ShowActivityPrintPreview
                 }
 
                 // setting status and modality
-                if(activity.getStatus() != null)
-                    eaForm.setStatus(activity.getStatus().getAmpStatusId());
+                AmpCategoryValue ampCategoryValue					= CategoryManagerUtil.getAmpCategoryValueFromListByKey(CategoryConstants.ACTIVITY_STATUS_KEY, activity.getCategories());
+                if (ampCategoryValue != null)
+            		eaForm.setStatusId( ampCategoryValue.getId() );
                 if(activity.getLevel() != null)
                     eaForm.setLevel(activity.getLevel().getAmpLevelId());
 

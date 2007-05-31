@@ -8,6 +8,7 @@
 <%@ taglib uri="/taglib/struts-html" prefix="html" %>
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
+<%@ taglib uri="/taglib/category" prefix="category" %>
 
 <script language="JavaScript1.2" type="text/javascript"
 	src="<digi:file src="module/aim/scripts/dscript120.js"/>"></script>	
@@ -723,16 +724,7 @@ function disable() {
 												</c:if>
 												<tr>
 													<td colspan="3"><digi:trn key="aim:status">Status</digi:trn> :
-														<c:if test="${!empty aimEditActivityForm.status}">
-															<bean:define name="aimEditActivityForm" id="statusId" property="status" />
-															<c:if test="${statusId != -1}">
-																<c:forEach var="statusCol" items="${aimEditActivityForm.statusCollection}" >
-																	<c:if test="${statusCol.ampStatusId == statusId}">
-																		<c:out value="${statusCol.name}"/>
-																	</c:if>
-																</c:forEach>
-															</c:if>
-														</c:if>
+														<category:getoptionvalue categoryValueId="${aimEditActivityForm.statusId}"/>
 													</td>
 												</tr>
 												<tr>

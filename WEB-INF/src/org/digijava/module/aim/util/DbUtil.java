@@ -37,6 +37,7 @@ import org.digijava.module.aim.dbentity.AmpAhsurveyQuestion;
 import org.digijava.module.aim.dbentity.AmpAhsurveyResponse;
 import org.digijava.module.aim.dbentity.AmpApplicationSettings;
 import org.digijava.module.aim.dbentity.AmpCategoryClass;
+import org.digijava.module.aim.dbentity.AmpCategoryValue;
 import org.digijava.module.aim.dbentity.AmpClosingDateHistory;
 import org.digijava.module.aim.dbentity.AmpComments;
 import org.digijava.module.aim.dbentity.AmpComponent;
@@ -73,6 +74,8 @@ import org.digijava.module.aim.dbentity.AmpTheme;
 import org.digijava.module.aim.exception.AimException;
 import org.digijava.module.aim.helper.AmpProjectBySector;
 import org.digijava.module.aim.helper.Assistance;
+import org.digijava.module.aim.helper.CategoryConstants;
+import org.digijava.module.aim.helper.CategoryManagerUtil;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.CurrencyWorker;
 import org.digijava.module.aim.helper.Documents;
@@ -4675,7 +4678,8 @@ public class DbUtil {
 						AmpAhsurvey svy = (AmpAhsurvey) itr2.next();
 						// Filtering by activity-status here
 						if (null != status && status.trim().length() > 1 && !"all".equalsIgnoreCase(status)) {
-							if (!status.equalsIgnoreCase(svy.getAmpActivityId().getStatus().getName()))
+							AmpCategoryValue statusValue	= CategoryManagerUtil.getAmpCategoryValueFromListByKey(CategoryConstants.ACTIVITY_STATUS_KEY, svy.getAmpActivityId().getCategories());
+							if ( statusValue!=null && !status.equalsIgnoreCase(statusValue.getValue()) );
 								continue;
 						}
 						// Filtering by activity-sector here

@@ -31,6 +31,7 @@ import org.digijava.module.aim.dbentity.AmpActivitySector;
 import org.digijava.module.aim.dbentity.AmpActor;
 import org.digijava.module.aim.dbentity.AmpAhsurvey;
 import org.digijava.module.aim.dbentity.AmpAhsurveyResponse;
+import org.digijava.module.aim.dbentity.AmpCategoryValue;
 import org.digijava.module.aim.dbentity.AmpClosingDateHistory;
 import org.digijava.module.aim.dbentity.AmpComments;
 import org.digijava.module.aim.dbentity.AmpComponent;
@@ -293,7 +294,7 @@ public class ActivityUtil {
 				oldActivity.setProposedCompletionDate(activity.getProposedCompletionDate());
 				oldActivity.setContractingDate(activity.getContractingDate());
 				oldActivity.setDisbursmentsDate(activity.getDisbursmentsDate());
-				oldActivity.setStatus(activity.getStatus());
+//				oldActivity.setStatus(activity.getStatus()); // TO BE DELETED
 				oldActivity.setStatusReason(activity.getStatusReason());
 				oldActivity.setThemeId(activity.getThemeId());
 				oldActivity.setUpdatedDate(activity.getUpdatedDate());
@@ -819,7 +820,7 @@ public class ActivityUtil {
 			    activity.setProgramDescription(ampActivity.getProgramDescription());
 			    activity.setProposedApprovalDate(ampActivity.getProposedApprovalDate());
 			    activity.setProposedStartDate(ampActivity.getProposedStartDate());
-			    activity.setStatus(ampActivity.getStatus());
+//			    activity.setStatus(ampActivity.getStatus()); // TO BE DELETED
 			    activity.setStatusReason(ampActivity.getStatusReason());
 			    activity.setTeam(ampActivity.getTeam());
 			    activity.setThemeId(ampActivity.getThemeId());
@@ -878,7 +879,7 @@ public class ActivityUtil {
 				AmpActivity ampAct = (AmpActivity) actItr.next();
 				activity.setActivityId(ampAct.getAmpActivityId());
 
-				activity.setStatus(ampAct.getStatus().getName());
+//				activity.setStatus(ampAct.getStatus().getName()); // TO BE DELETED
 				activity.setStatusReason(ampAct.getStatusReason().trim());
 				activity.setBudget(ampAct.getBudget());
 
@@ -913,6 +914,11 @@ public class ActivityUtil {
 				activity.setAcChapter( 
 						CategoryManagerUtil.getStringValueOfAmpCategoryValue(
 								CategoryManagerUtil.getAmpCategoryValueFromList(CategoryConstants.ACCHAPTER_NAME, ampAct.getCategories())
+						)
+				);
+				activity.setStatus( 
+						CategoryManagerUtil.getStringValueOfAmpCategoryValue(
+								CategoryManagerUtil.getAmpCategoryValueFromListByKey(CategoryConstants.ACTIVITY_STATUS_KEY, ampAct.getCategories())
 						)
 				);
 				/* END - Set Categories */
@@ -2263,9 +2269,11 @@ public class ActivityUtil {
 		double tempPlanned=0;
 		ActivityAmounts result=new ActivityAmounts();
 		
-		if (act != null && act.getStatus() != null){
-			AmpStatus status = act.getStatus();
-			if (status.getStatusCode().equals("1") && act.getFunAmount()!=null){
+		AmpCategoryValue statusValue	= CategoryManagerUtil.getAmpCategoryValueFromListByKey(CategoryConstants.ACTIVITY_STATUS_KEY, act.getCategories());
+		
+		if (act != null && statusValue != null){
+//			AmpStatus status = act.getStatus(); // TO BE DELETED
+			if (statusValue.getValue().equals(Constants.ACTIVITY_STATUS_PROPOSED) && act.getFunAmount()!=null){
 				String currencyCode=act.getCurrencyCode();
 				//AMP-1403 assume USD if no code is specified
 				if (currencyCode == null || currencyCode.trim().equals("")){

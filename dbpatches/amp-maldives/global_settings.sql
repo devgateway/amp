@@ -18,9 +18,6 @@
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 
 
---
--- Create schema amp_maldives 
---
 
 --
 -- Temporary table structure for view `v_global_settings_countries`
@@ -87,7 +84,7 @@ UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `v_global_settings_countries`;
 DROP VIEW IF EXISTS `v_global_settings_countries`;
-CREATE ALGORITHM=UNDEFINED SQL SECURITY DEFINER VIEW  `v_global_settings_countries` AS select `dg_countries`.`ISO` AS `id`,`dg_countries`.`COUNTRY_NAME` AS `value` from `dg_countries` order by `dg_countries`.`COUNTRY_NAME`;
+CREATE VIEW  `v_global_settings_countries` AS select `dg_countries`.`ISO` AS `id`,`dg_countries`.`COUNTRY_NAME` AS `value` from `dg_countries` order by `dg_countries`.`COUNTRY_NAME`;
 
 --
 -- Definition of view `v_global_settings_public_view`
@@ -95,7 +92,7 @@ CREATE ALGORITHM=UNDEFINED SQL SECURITY DEFINER VIEW  `v_global_settings_countri
 
 DROP TABLE IF EXISTS `v_global_settings_public_view`;
 DROP VIEW IF EXISTS `v_global_settings_public_view`;
-CREATE ALGORITHM=UNDEFINED SQL SECURITY DEFINER VIEW  `v_global_settings_public_view` AS select `util_global_settings_possible_values`.`value_id` AS `id`,`util_global_settings_possible_values`.`value_shown` AS `value` from `util_global_settings_possible_values` where (`util_global_settings_possible_values`.`setting_name` = _latin1'Public View');
+CREATE VIEW  `v_global_settings_public_view` AS select `util_global_settings_possible_values`.`value_id` AS `id`,`util_global_settings_possible_values`.`value_shown` AS `value` from `util_global_settings_possible_values` where (`util_global_settings_possible_values`.`setting_name` = _latin1'Public View');
 
 --
 -- Definition of view `v_global_settings_pv_budget_filter`
@@ -103,7 +100,7 @@ CREATE ALGORITHM=UNDEFINED SQL SECURITY DEFINER VIEW  `v_global_settings_public_
 
 DROP TABLE IF EXISTS `v_global_settings_pv_budget_filter`;
 DROP VIEW IF EXISTS `v_global_settings_pv_budget_filter`;
-CREATE ALGORITHM=UNDEFINED SQL SECURITY DEFINER VIEW  `v_global_settings_pv_budget_filter` AS select `util_global_settings_possible_values`.`value_id` AS `id`,`util_global_settings_possible_values`.`value_shown` AS `value` from `util_global_settings_possible_values` where (`util_global_settings_possible_values`.`setting_name` = _latin1'Public View Budget Filter');
+CREATE VIEW  `v_global_settings_pv_budget_filter` AS select `util_global_settings_possible_values`.`value_id` AS `id`,`util_global_settings_possible_values`.`value_shown` AS `value` from `util_global_settings_possible_values` where (`util_global_settings_possible_values`.`setting_name` = _latin1'Public View Budget Filter');
 
 
 

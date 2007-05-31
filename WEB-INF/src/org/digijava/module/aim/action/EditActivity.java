@@ -378,9 +378,14 @@ public class EditActivity
                 AmpCategoryValue ampCategoryValue	= CategoryManagerUtil.getAmpCategoryValueFromList(CategoryConstants.ACCHAPTER_NAME, activity.getCategories());
                 if (ampCategoryValue != null)
                 		eaForm.setAcChapter( ampCategoryValue.getId() );
+                
                 ampCategoryValue					= CategoryManagerUtil.getAmpCategoryValueFromList(CategoryConstants.ACCESSION_INSTRUMENT_NAME, activity.getCategories());
                 if (ampCategoryValue != null)
                 		eaForm.setAccessionInstrument( ampCategoryValue.getId() );
+                
+                ampCategoryValue					= CategoryManagerUtil.getAmpCategoryValueFromListByKey(CategoryConstants.ACTIVITY_STATUS_KEY, activity.getCategories());
+                if (ampCategoryValue != null)
+            		eaForm.setStatusId( ampCategoryValue.getId() );
                 /* End - Insert Categories */
 
                 if (tm!=null && tm.getTeamType()
@@ -544,8 +549,6 @@ public class EditActivity
                     }
 
                     // setting status and modality
-                    if(activity.getStatus() != null)
-                        eaForm.setStatus(activity.getStatus().getAmpStatusId());
                     if(activity.getLevel() != null)
                         eaForm.setLevel(activity.getLevel().getAmpLevelId());
 
@@ -1259,12 +1262,12 @@ public class EditActivity
             }
             Collection statusCol = null;
             // load the status from the database
-            if(eaForm.getStatusCollection() == null) {
-                statusCol = DbUtil.getAmpStatus();
-                eaForm.setStatusCollection(statusCol);
-            } else {
-                statusCol = eaForm.getStatusCollection();
-            }
+//            if(eaForm.getStatusCollection() == null) { // TO BE DELETED
+//                statusCol = DbUtil.getAmpStatus();
+//                eaForm.setStatusCollection(statusCol);
+//            } else {
+//                statusCol = eaForm.getStatusCollection();
+//            }
             // Initailly setting the implementation level as "country"
             if(eaForm.getImplementationLevel() == null)
                 eaForm.setImplementationLevel("country");

@@ -1,5 +1,6 @@
 package org.digijava.module.aim.util;
 
+import java.sql.BatchUpdateException;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
@@ -17,6 +18,7 @@ import java.util.Set;
 
 import net.sf.hibernate.Hibernate;
 import net.sf.hibernate.HibernateException;
+import net.sf.hibernate.JDBCException;
 import net.sf.hibernate.Query;
 import net.sf.hibernate.Session;
 import net.sf.hibernate.Transaction;
@@ -2020,7 +2022,7 @@ public class DbUtil {
 		}
 	}
 
-	public static void delete(Object object) {
+	public static void delete(Object object) throws JDBCException {
 		Session sess = null;
 		Transaction tx = null;
 
@@ -2032,6 +2034,8 @@ public class DbUtil {
 			//sess.flush();
 			tx.commit();
 		} catch (Exception e) {
+		    if (e instanceof JDBCException)
+		    	throw (JDBCException)e;
 			logger.error("Exception " + e.toString());
 			try {
 				tx.rollback();

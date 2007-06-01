@@ -504,7 +504,8 @@
       <forward name="index" path="/aim/index.do" redirect="true" />
     </action>
     <action name="aimAddCurrencyForm" path="/aim/deleteCurrency" scope="request" type="org.digijava.module.aim.action.DeleteCurrency" validate="false">
-      <forward name="forward" path="/aim/currencyManager.do" />
+      <forward name="forward" path="/aim/currencyManager.do?reload=true" />
+      <forward name="cantDelete" path="/aim/currencyManager.do?cantDelete=true" />
       <forward name="index" path="/aim/index.do" redirect="true" />
     </action>
     <action name="aimAddCurrencyForm" path="/aim/getCurrency" scope="request" type="org.digijava.module.aim.action.GetCurrency" validate="false">

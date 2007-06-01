@@ -11,6 +11,7 @@ import java.util.Iterator;
 import java.util.Map;
 
 import net.sf.hibernate.Hibernate;
+import net.sf.hibernate.JDBCException;
 import net.sf.hibernate.Query;
 import net.sf.hibernate.Session;
 import net.sf.hibernate.Transaction;
@@ -1604,6 +1605,7 @@ public class MEIndicatorsUtil
 		ampMEInd.setAmpMEIndId(indId);
 		colMeIndValIds = MEIndicatorsUtil.getMeIndValIds(indId);
 		Iterator itr = colMeIndValIds.iterator();
+	
 		while(itr.hasNext())
 		{
 			ampMEIndVal = (AmpMEIndicatorValue) itr.next();
@@ -1616,11 +1618,23 @@ public class MEIndicatorsUtil
 				while(itrCurrVal.hasNext())
 				{
 					ampMECurrVal = (AmpMECurrValHistory) itrCurrVal.next();
-					DbUtil.delete(ampMECurrVal);
+					try {
+						DbUtil.delete(ampMECurrVal);
+					} catch (JDBCException e) {
+						logger.error(e);
+					}
 				}
 			}
-			DbUtil.delete(ampMEIndVal);
+			try {
+				DbUtil.delete(ampMEIndVal);
+			} catch (JDBCException e) {
+				logger.error(e);
+			}
 		}
-		DbUtil.delete(ampMEInd);
+		try {
+			DbUtil.delete(ampMEInd);
+		} catch (JDBCException e) {
+			logger.error(e);
+		}
 	}
 }

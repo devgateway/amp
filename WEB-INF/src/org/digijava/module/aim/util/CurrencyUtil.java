@@ -15,6 +15,7 @@ import java.util.List;
 
 import net.sf.hibernate.Hibernate;
 import net.sf.hibernate.HibernateException;
+import net.sf.hibernate.JDBCException;
 import net.sf.hibernate.Query;
 import net.sf.hibernate.Session;
 import net.sf.hibernate.Transaction;
@@ -624,8 +625,13 @@ public class CurrencyUtil {
 
 	public static void deleteCurrency(AmpCurrency ampCurr,
 			AmpCurrencyRate ampCurrRate) {
-		DbUtil.delete(ampCurr);
-		DbUtil.delete(ampCurrRate);
+		try {
+			DbUtil.delete(ampCurr);
+			DbUtil.delete(ampCurrRate);
+		} catch (JDBCException e) {
+			// TODO Auto-generated catch block
+			logger.error(e);
+		}
 	}
 
 	public static void updateCurrency(AmpCurrency ampCurr,

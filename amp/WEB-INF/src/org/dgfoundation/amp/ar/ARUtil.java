@@ -126,7 +126,7 @@ public final class ARUtil {
 
 		AmpARFilter af = (AmpARFilter) httpSession.getAttribute(ArConstants.REPORTS_FILTER);
 		if (af == null)
-			af=new AmpARFilter(teamMember);
+			af=new AmpARFilter(request);
 
 		AmpReportGenerator arg = new AmpReportGenerator(r, af);
 

@@ -46,7 +46,7 @@ public class AmpReportGenerator extends ReportGenerator {
 	 */
 	public List getColumnSubCategories(String columnName) {
 		List ret = new ArrayList();
-		if ("Funding".equals(columnName)) {
+		if (ArConstants.COLUMN_FUNDING.equals(columnName)) {
 			boolean annual = true;
 			if ("Q".equals(reportMetadata.getOptions()))
 				annual = false;
@@ -193,7 +193,7 @@ public class AmpReportGenerator extends ReportGenerator {
 		arc.setColumn(ac);
 		arc.setOrderId(new String("0"));
 		ac.setCellType("org.dgfoundation.amp.ar.cell.CategAmountCell");
-		ac.setColumnName("Funding");
+		ac.setColumnName(ArConstants.COLUMN_FUNDING);
 		if (reportMetadata.getType().intValue() == 1)
 			ac.setExtractorView("v_donor_funding");
 		if (reportMetadata.getType().intValue() == 2)
@@ -230,7 +230,7 @@ public class AmpReportGenerator extends ReportGenerator {
 
 		// get the funding column
 		AmountCellColumn funding = (AmountCellColumn) rawColumns
-				.getColumn("Funding");
+				.getColumn(ArConstants.COLUMN_FUNDING);
 
 		Column newcol = null;
 		if(cats.size()>0) newcol=GroupColumn.verticalSplitByCategs(funding, cats, true,this.reportMetadata);
@@ -292,7 +292,7 @@ public class AmpReportGenerator extends ReportGenerator {
 		//or if widget mode is true...
 		if((reportMetadata.getMeasures().size()==1 && ARUtil.containsMeasure(ArConstants.UNDISBURSED_BALANCE,reportMetadata.getMeasures()))
 				|| arf.isWidget()) 
-			reportChild.removeColumnsByName("Funding");
+			reportChild.removeColumnsByName(ArConstants.COLUMN_FUNDING);
 		
 
 		

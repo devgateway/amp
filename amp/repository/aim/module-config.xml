@@ -249,11 +249,7 @@
 			  org.digijava.module.aim.dbentity.EUActivityContribution
 	</hibernate-class>
 
-		<hibernate-class>
-			  org.digijava.module.aim.dbentity.FeatureTemplates
-	</hibernate-class>
-
-		<hibernate-class>
+	<hibernate-class>
 			  org.digijava.module.aim.dbentity.FeatureTemplates
 	</hibernate-class>
 

@@ -40,7 +40,7 @@ public class CummulativeColWorker extends ColumnWorker {
 
 	public CummulativeColWorker(String columnName,GroupColumn rawColumns,ReportGenerator generator) {
 		super(columnName,rawColumns,generator);
-		sourceName="Funding";
+		sourceName=ArConstants.COLUMN_FUNDING;
 	}
 
 

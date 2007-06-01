@@ -61,6 +61,9 @@ public final class ArConstants {
 	public final static String COLUMN_TOTAL="Total Costs";
 	public final static String COLUMN_CONTRIBUTION_TOTAL="Total Contributions";
 	
+
+	public final static String COLUMN_FUNDING="Funding";
+	
 	public final static String UNDISBURSED_BALANCE="Undisbursed Balance";
 	
 	//maldives only:

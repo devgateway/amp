@@ -8,6 +8,8 @@ package org.dgfoundation.amp.ar;
 
 import java.util.Set;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.dgfoundation.amp.Util;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.TeamMember;
@@ -45,8 +47,11 @@ public class AmpARFilter implements Filter {
 		generatedFilterQuery+= " AND amp_activity_id IN ("+filter+")";
 	}
 	
-	public AmpARFilter(TeamMember tm) {
+	public AmpARFilter(HttpServletRequest request) {
 		String perspective=null;
+		TeamMember tm = (TeamMember) request.getSession()
+		.getAttribute(Constants.CURRENT_MEMBER);
+
 		if(tm!=null) {perspective = tm.getAppSettings().getPerspective();
 		if (perspective.equals("Donor"))
 			perspective = "DN";
@@ -55,6 +60,9 @@ public class AmpARFilter implements Filter {
 		else perspective="MA";
 	
 		this.setPerspectiveCode(perspective);
+		
+		String widget=(String) request.getAttribute("widget");
+		if("true".equals(widget))setWidget(true);
 	}
 	
 	public AmpARFilter() {

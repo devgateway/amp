@@ -90,10 +90,8 @@ public class ReportsFilterPicker extends MultiAction {
 	public ActionForward modeApply(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
 		ReportsFilterPickerForm filterForm=(ReportsFilterPickerForm) form;
 		HttpSession httpSession = request.getSession();
-		TeamMember teamMember = (TeamMember) httpSession
-		.getAttribute("currentMember");
-
-		AmpARFilter arf=new AmpARFilter(teamMember);
+		
+		AmpARFilter arf=new AmpARFilter(request);
 		
 		arf.setStatuses(Util.getSelectedObjects(filterForm.getStatuses(),filterForm.getSelectedStatuses()));
 		arf.setSectors(Util.getSelectedObjects(filterForm.getSectors(),filterForm.getSelectedSectors()));

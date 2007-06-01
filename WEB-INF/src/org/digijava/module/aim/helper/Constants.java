@@ -120,7 +120,12 @@ public class Constants
 	public static final String APPROVED_STATUS = "approved";
 	
 	//proudly added by Alex Gartner
-	public static final String ACTIVITY_STATUS_PROPOSED	= "Proposed";
+	public static final String ACTIVITY_STATUS_PLANNED			= "Planned";
+	public static final String ACTIVITY_STATUS_ONGOING			= "Ongoing";
+	public static final String ACTIVITY_STATUS_COMPLETED		= "Completed";
+	public static final String ACTIVITY_STATUS_CANCELLED		= "Cancelled / Suspended";
+	public static final String ACTIVITY_STATUS_PROPOSED			= "Proposed";
+	public static final String ACTIVITY_STATUS_CONSIDERED		= "Considered";
 	
 	//humbly added by Mihai
 	public static final Long DONOR_FUNDING = new Long(1);

@@ -5,7 +5,8 @@
 <%@ taglib uri="/taglib/struts-html" prefix="html" %>
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
-
+<%@page import="org.digijava.module.aim.helper.Constants" %>
+<%@page import="org.digijava.module.aim.helper.CategoryManagerUtil" %>
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/addActivity.js"/>"></script>
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
 
@@ -286,7 +287,13 @@
                                 <table width="100%" cellSpacing="0" vAlign="top" align="left" bgcolor="#006699">
                                   <tr>
                                     <td>
-                                      <c:if test="${aimEditActivityForm.proProjCost!=null || aimEditActivityForm.status==1}">
+                                    	<bean:define name="aimEditActivityForm" id="myForm" type="org.digijava.module.aim.form.EditActivityForm"/>
+                                    	<%
+                                    		boolean isStatusPlanned	= false;
+                                    		if (myForm.getStatusId() != null)
+                                    			isStatusPlanned	= Constants.ACTIVITY_STATUS_PLANNED.equals( CategoryManagerUtil.getAmpCategoryValueFromDb(myForm.getStatusId()).getValue() );
+                                    	%>
+                                      <c:if test="${aimEditActivityForm.proProjCost!=null ||  isStatusPlanned  }">
                                         <table width="100%" bgcolor="#f4f4f2" border="0" cellSpacing=0 cellPadding=0>
                                           <tr>
                                             <td>
@@ -353,7 +360,7 @@ left" width="10">
                                                       </c:if>
                                                       <tr>
                                                         <td>
-                                                          <c:if test="${aimEditActivityForm.status==1}">
+                                                          <c:if test="${isStatusPlanned}">
                                                           <c:if test="${aimEditActivityForm.proProjCost==null}">
                                                             <input type="button" value="Add Funding" class="buton" onclick="addPropFunding()">
                                                           </c:if>

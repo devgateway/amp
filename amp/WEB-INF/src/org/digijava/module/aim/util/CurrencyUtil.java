@@ -1122,17 +1122,18 @@ public class CurrencyUtil {
 	/*
 	 * For Deleting a Currency...
 	 */
-	public static void deleteCurrency(String Code) {
-		try
+	public static void deleteCurrency(String Code) throws Exception {
+		/*try
 		{
-			AmpCurrency ampC = new AmpCurrency();
+		*/	AmpCurrency ampC = new AmpCurrency();
 			ampC = CurrencyUtil.getCurrencyByCode(Code);
-			DbUtil.delete(ampC);
-		}
+			if (ampC != null)
+				DbUtil.delete(ampC);
+		/*}
 		catch (Exception e) {
 			logger.error("Exception from getAllCurrencies()");
 			e.printStackTrace(System.out);
-		}
+		}*/
 	}
 
 }

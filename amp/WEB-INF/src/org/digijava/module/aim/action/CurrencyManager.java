@@ -42,9 +42,14 @@ public class CurrencyManager extends Action {
 		
 			int page = crForm.getPage();
 			if (page < 1) page = 1;
-			
+			String reload = request.getParameter("reload");
+			crForm.setCantDelete(false);
+			String cantDelete = request.getParameter("cantDelete");
+			if (cantDelete != null){
+				crForm.setCantDelete(true);
+			}
 			logger.debug("loading all currencies ....");
-			if (crForm.getAllCurrencies() == null) {
+			if ((crForm.getAllCurrencies() == null) ||((reload !=null) && (reload.compareTo("true") == 0))) {
 				logger.debug("List empty... loading from the database ....");
 				crForm.setAllCurrencies(CurrencyUtil.getAllCurrencies(-1));
 			}

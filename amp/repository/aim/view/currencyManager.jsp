@@ -45,10 +45,11 @@ function deleteCurrency(code) {
 		  var flag = validate();
 		  if(flag)
 		  {
-	<digi:context name="deleteCurrency" property="context/module/moduleinstance/changeCurrencyStatus.do" />
-	document.aimCurrencyForm.action = "<%= deleteCurrency %>~action=deleteCurrency~currCode="+code;
-	document.aimCurrencyForm.target = "_self";
-	document.aimCurrencyForm.submit();
+			<digi:context name="deleteCurrency" property="context/module/moduleinstance/deleteCurrency.do" />
+			document.aimCurrencyForm.action = "<%= deleteCurrency %>~id="+code;
+				  
+			document.aimCurrencyForm.target = "_self";
+			document.aimCurrencyForm.submit();
 		  }
 }
 function validate(){
@@ -161,6 +162,15 @@ function submit() {
 
 								</table>
 							</td></tr>
+							<logic:equal name="aimCurrencyForm" property="cantDelete" value="true">
+								<tr>
+									<td bgcolor="#ffffff" valign="top" align="left">
+										<b><font color="red">
+											<digi:trn key="aim:cannotDeleteCurrencyMsg2">Cannot Delete the currency since it is already in use!</digi:trn>
+										</font></b>
+									</td>
+								</tr>
+							</logic:equal>
 							<tr><td bgcolor="#ffffff" valign="top" align="left">
 								<!-- Currency list table -->
 								<table cellSpacing="1" cellPadding="4" vAlign="top" align="left" bgcolor="#aaaaaa" width="450">

@@ -23,6 +23,7 @@ public class CurrencyForm extends ActionForm {
 	private String exchangeRateDate;
 	private Collection countries;
 	private String countryName;
+	private boolean cantDelete = false;
 	
 	private String doAction;
 	private String closeFlag;
@@ -227,5 +228,11 @@ public class CurrencyForm extends ActionForm {
     public void setCountryName(String countryName) {
         this.countryName = countryName;
     }
+	public boolean getCantDelete() {
+		return cantDelete;
+	}
+	public void setCantDelete(boolean cantDelete) {
+		this.cantDelete = cantDelete;
+	}
 
 }

@@ -386,14 +386,14 @@
 									 	<tr>
 											<td valign="bottom">
 												<c:set var="index" value="${index+1}"/>
-												<c:if test="${aimEditActivityForm.status==1}">
+												<c:if test="${aimEditActivityForm.statusId==1}">
 												<html:select name="fundingDetail" indexed="true" property="adjustmentType" styleClass="inp-text">
 													<html:option value="0"><digi:trn key="aim:Planned">Planned</digi:trn></html:option>
 												</html:select>
                                                 </c:if>
 											</c:if>
 
-											<c:if test="${aimEditActivityForm.status!=1}">
+											<c:if test="${aimEditActivityForm.statusId!=1}">
 												<html:select name="fundingDetail" indexed="true" property="adjustmentType" styleClass="inp-text">
 													<html:option value="1"><digi:trn key="aim:Actual">Actual</digi:trn></html:option>
 													<html:option value="0"><digi:trn key="aim:Planned">Planned</digi:trn></html:option>
@@ -574,13 +574,13 @@
 										<tr>
 											<td valign="bottom">
 												<c:set var="index" value="${index+1}"/>
-											<c:if test="${aimEditActivityForm.status==1}">
+											<c:if test="${aimEditActivityForm.statusId==1}">
 												<html:select name="fundingDetail" indexed="true" property="adjustmentType" disabled="true" styleClass="inp-text">
 													<html:option value="0">Planned</html:option>
 												</html:select>
 											</c:if>
 
-											<c:if test="${aimEditActivityForm.status!=1}">
+											<c:if test="${aimEditActivityForm.statusId!=1}">
 												<html:select name="fundingDetail" indexed="true" property="adjustmentType" styleClass="inp-text">
 													<html:option value="1"><digi:trn key="aim:Actual">Actual</digi:trn></html:option>
 													<html:option value="0"><digi:trn key="aim:Planned">Planned</digi:trn></html:option>
@@ -632,13 +632,13 @@
 										<tr>
 											<td valign="bottom">
 												<c:set var="index" value="${index+1}"/>
-											<c:if test="${aimEditActivityForm.status==1}">
+											<c:if test="${aimEditActivityForm.statusId==1}">
 												<html:select name="fundingDetail" indexed="true" property="adjustmentType" disabled="true" styleClass="inp-text">
 													<html:option value="0">Planned</html:option>
 												</html:select>
 											</c:if>
 
-											<c:if test="${aimEditActivityForm.status!=1}">
+											<c:if test="${aimEditActivityForm.statusId!=1}">
 												<html:select name="fundingDetail" indexed="true" property="adjustmentType" styleClass="inp-text">
 													<html:option value="1"><digi:trn key="aim:Actual">Actual</digi:trn></html:option>
 													<html:option value="0"><digi:trn key="aim:Planned">Planned</digi:trn></html:option>
@@ -762,13 +762,13 @@
 													<tr bgcolor="#ffffff">
 														<td valign="bottom">
 															<c:set var="index" value="${index+1}"/>
-															<c:if test="${aimEditActivityForm.status==1}">
+															<c:if test="${aimEditActivityForm.statusId==1}">
 												<html:select name="fundingDetail" indexed="true" property="adjustmentType" disabled="true" styleClass="inp-text">
 																<html:option value="0">Planned</html:option>
 															</html:select>
 											</c:if>
 
-											<c:if test="${aimEditActivityForm.status!=1}">
+											<c:if test="${aimEditActivityForm.statusId!=1}">
 												<html:select name="fundingDetail" indexed="true" property="adjustmentType" styleClass="inp-text">
 																<html:option value="1"><digi:trn key="aim:Actual">Actual</digi:trn></html:option>
 																<html:option value="0"><digi:trn key="aim:Planned">Planned</digi:trn></html:option>
@@ -838,13 +838,13 @@
 													<tr bgcolor="#ffffff">
 														<td valign="bottom">
 															<c:set var="index" value="${index+1}"/>
-													<c:if test="${aimEditActivityForm.status==1}">
+													<c:if test="${aimEditActivityForm.statusId==1}">
 												<html:select name="fundingDetail" indexed="true" property="adjustmentType" disabled="true" styleClass="inp-text">
 																<html:option value="0">Planned</html:option>
 															</html:select>
 											</c:if>
 
-											<c:if test="${aimEditActivityForm.status!=1}">
+											<c:if test="${aimEditActivityForm.statusId!=1}">
 												<html:select name="fundingDetail" indexed="true" property="adjustmentType" styleClass="inp-text">
 																<html:option value="1"><digi:trn key="aim:Actual">Actual</digi:trn></html:option>
 																<html:option value="0"><digi:trn key="aim:Planned">Planned</digi:trn></html:option>

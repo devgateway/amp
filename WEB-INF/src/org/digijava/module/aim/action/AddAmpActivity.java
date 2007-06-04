@@ -498,14 +498,16 @@ public class AddAmpActivity extends Action {
 			Iterator it = ids.iterator();
 			Long prev = new Long(-1);
 			Long next = new Long(-1);
-			while (it.hasNext()) {
-				Long el = (Long) it.next();
-				if (el.compareTo(eaForm.getActivityId()) == 0){
-					if (it.hasNext())
-						next = new Long(((Long)it.next()).longValue());
-					break;
+			if (eaForm.getActivityId() != null){
+				while (it.hasNext()) {
+					Long el = (Long) it.next();
+					if (el.compareTo(eaForm.getActivityId()) == 0){
+						if (it.hasNext())
+							next = new Long(((Long)it.next()).longValue());
+						break;
+					}
+					prev = new Long(el.longValue());				
 				}
-				prev = new Long(el.longValue());				
 			}
 			request.setAttribute("nextId", next);
 			request.setAttribute("prevId", prev);

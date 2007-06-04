@@ -290,6 +290,7 @@
                                     	<bean:define name="aimEditActivityForm" id="myForm" type="org.digijava.module.aim.form.EditActivityForm"/>
                                     	<%
                                     		boolean isStatusPlanned	= false;
+                                    	
                                     		if (myForm.getStatusId() != null)
                                     			isStatusPlanned	= Constants.ACTIVITY_STATUS_PLANNED.equals( CategoryManagerUtil.getAmpCategoryValueFromDb(myForm.getStatusId()).getValue() );
                                     	%>

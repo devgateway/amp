@@ -16,7 +16,7 @@
 		val2 = val2 - 1;
 		<digi:context name="url" property="context/module/moduleinstance/viewComment.do?edit=true" />
 		if (val1 == "delete") {
-			if(alert("Are you sure about deleting this comment."))
+			if(!confirm("Are you sure about deleting this comment?"))
 				flag = false;
 		}
 		if (flag == true) {

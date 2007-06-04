@@ -96,7 +96,7 @@ function selectCalendarType(view, type) {
                         </c:if>
                     </tr>
                     <tr>
-                        <td nowrap="nowrap">&nbsp;To&nbsp;&nbsp;</td>
+                        <td nowrap="nowrap">&nbsp;<digi:trn key="aim:calendar:to">To</digi:trn>&nbsp;&nbsp;</td>
                         <c:if test="${calendarViewForm.selectedCalendarType == 0}">
                             <script type="text/javascript">
                                 var endDateCalendar = new CalendarPopup();
@@ -162,19 +162,20 @@ function selectCalendarType(view, type) {
                 </c:if>
                 <c:if test="${calendarViewForm.view == 'monthly'}">
                     <b>
-                        ${calendarViewForm.baseDateBreakDown.monthNameLong}&nbsp;
+                     
+						<digi:trn key="aim:calendar:basemonthNameLong:${calendarViewForm.baseDateBreakDown.monthNameLong}">${calendarViewForm.baseDateBreakDown.monthNameLong}</digi:trn>
                         ${calendarViewForm.baseDateBreakDown.year}
                     </b>
                 </c:if>
                 <c:if test="${calendarViewForm.view == 'weekly'}">
                     <b>
-                        ${calendarViewForm.baseDateBreakDown.monthNameLong}&nbsp;
+                    <digi:trn key="aim:calendar:weeklyMonthNameLong:${calendarViewForm.baseDateBreakDown.monthNameLong}">${calendarViewForm.baseDateBreakDown.monthNameLong}</digi:trn>
                         ${calendarViewForm.baseDateBreakDown.year}
                     </b>
                 </c:if>
                 <c:if test="${calendarViewForm.view == 'daily'}">
                     <b>
-                        ${calendarViewForm.baseDateBreakDown.monthNameLong}&nbsp;
+                      <digi:trn key="aim:calendar:dayMonthNameLong:${calendarViewForm.baseDateBreakDown.monthNameLong}">${calendarViewForm.baseDateBreakDown.monthNameLong}</digi:trn> 
                         ${calendarViewForm.baseDateBreakDown.dayOfMonth},&nbsp;
                         ${calendarViewForm.baseDateBreakDown.year}
                     </b>
@@ -189,13 +190,13 @@ function selectCalendarType(view, type) {
         <logic:iterate id="row" name="calendarViewForm" property="dateNavigator.items">
             <tr>
                 <logic:iterate id="item" name="row">
-                    <td align="center" <c:if test="${item.nolink}">bgcolor="#ffbebe"</c:if> <c:if test="${item.selected}">style="border:1px solid"</c:if> >
+                    <td align="center" <c:if test="${item.nolink}">bgcolor="#ffbebe"</c:if> <c:if test="${item.selected}">style="border:1px solid"</c:if>>
                         <c:if test="${!item.nolink}">
                             <a href="#" style="text-decoration:none" onclick="submitFilterForm('${calendarViewForm.view}', '${item.timestamp}'); return(false);">
                         </c:if>
                         <c:if test="${!item.enabled}"><span style="color:#cbcbcb"></c:if>
                         <c:choose>
-                            <c:when test="${calendarViewForm.view == 'yearly'}">${item.month}</c:when>
+                            <c:when test="${calendarViewForm.view == 'yearly'}"><digi:trn key="aim:cal:${item.month}">${item.month}</digi:trn></c:when>
                             <c:otherwise>${item.dayOfMonth}</c:otherwise>
                         </c:choose>
                         <c:if test="${!item.enabled}"></span></c:if>

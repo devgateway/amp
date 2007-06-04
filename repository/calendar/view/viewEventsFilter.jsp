@@ -28,7 +28,7 @@ function submitFilterForm(view, timestamp) {
             <html:hidden name="calendarViewForm" property="filterInUse" value="true"/>
             <table border="0" width="100%" style="border:1px solid; border-color: #484846;">
                 <tr>
-                    <td colspan="2"><digi:trn key="calendar:fltEventTypes">&nbsp;Event Types</digi:trn>/td>
+                    <td colspan="2"><digi:trn key="calendar:fltEventTypes">&nbsp;Event Types</digi:trn></td>
                 </tr>
                 <tr>
                     <td colspan="2">

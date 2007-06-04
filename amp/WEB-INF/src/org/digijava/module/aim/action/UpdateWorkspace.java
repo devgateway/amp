@@ -169,7 +169,8 @@ public class UpdateWorkspace extends Action {
                 uwForm.setWorkspaceType("");
                 uwForm.setRelatedTeamFlag("no");
                 uwForm.setRelatedTeamName("");
-                uwForm.getChildWorkspaces().clear();
+                if (uwForm.getChildWorkspaces() != null)
+                	uwForm.getChildWorkspaces().clear();
                 return mapping.findForward("admin");
             }
             else

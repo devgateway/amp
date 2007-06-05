@@ -1474,8 +1474,9 @@ public class ActivityUtil {
 		try {
 			session = PersistenceManager.getSession();
 			String qryStr = "select a from " + AmpActivity.class.getName() + " a " +
-					"where lower(a.name) = '" + name.toLowerCase() + "'";
+					"where lower(a.name) = :lowerName";
 			Query qry = session.createQuery(qryStr);
+			qry.setString( "lowerName", name.toLowerCase() );
 			Iterator itr = qry.list().iterator();
 			if (itr.hasNext()) {
 				activity = (AmpActivity) itr.next();

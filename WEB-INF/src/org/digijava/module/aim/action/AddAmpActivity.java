@@ -493,12 +493,13 @@ public class AddAmpActivity extends Action {
 			request.setAttribute("overallRisk",riskName);
 			request.setAttribute("riskColor",rskColor);
 			
-			ReportData rep = (ReportData) session.getAttribute("report");
-			Collection ids = (Collection) rep.getOwnerIds();
-			Iterator it = ids.iterator();
 			Long prev = new Long(-1);
 			Long next = new Long(-1);
 			if (eaForm.getActivityId() != null){
+				ReportData rep = (ReportData) session.getAttribute("report");
+				Collection ids = (Collection) rep.getOwnerIds();
+				Iterator it = ids.iterator();
+				
 				while (it.hasNext()) {
 					Long el = (Long) it.next();
 					if (el.compareTo(eaForm.getActivityId()) == 0){

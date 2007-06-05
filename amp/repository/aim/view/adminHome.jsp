@@ -5,6 +5,7 @@
 <%@ taglib uri="/taglib/struts-html" prefix="html" %>
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
+
 <jsp:include page="teamPagesHeader.jsp" flush="true" />
 <table bgColor=#ffffff cellPadding=0 cellSpacing=0 width=757 align="left">
   <tr>
@@ -117,10 +118,10 @@
                           <tr>
                             <td class=f-names noWrap>
                               <digi:img src="module/aim/images/arrow-th-BABAB9.gif" width="16"/>
-                              <bean:define id="translation">
+                              <c:set var="translation">
                                 <digi:trn key="aim:clickToViewCategoryManager">Click here to view Category Manager</digi:trn>
-                              </bean:define>
-                              <digi:link href="/categoryManager.do" title="<%=translation%>" >
+                              </c:set>
+                              <digi:link href="/categoryManager.do" title="${translation}" >
                                 <digi:trn key="aim:categoryManager">Category Manager</digi:trn>
                               </digi:link>
                             </td>
@@ -145,10 +146,10 @@
                           <tr>
                             <td class=f-names noWrap>
                               <digi:img src="module/aim/images/arrow-th-BABAB9.gif" width="16"/>
-                              <bean:define id="translation">
+                              <c:set var="translation">
                                 <digi:trn key="aim:clickToViewFiscalCalendarManager">Click here to view Fiscal Calendar Manager</digi:trn>
-                              </bean:define>
-                              <digi:link href="/fiscalCalendarManager.do" title="<%=translation%>" >
+                              </c:set>
+                              <digi:link href="/fiscalCalendarManager.do" title="${translation}" >
                                 <digi:trn key="aim:CalendarManager">Calendar Manager</digi:trn>
                               </digi:link>
                             </td>
@@ -156,21 +157,21 @@
                           <tr>
                             <td class=f-names noWrap>
                               <digi:img src="module/aim/images/arrow-th-BABAB9.gif" width="16"/>
-                              <bean:define id="translation">
+                              <c:set var="translation">
                                 <digi:trn key="aim:clickToViewCurrencyManager">Click here to view Currency Manager</digi:trn>
-                              </bean:define>
-                              <digi:link href="/currencyManager.do" title="<%=translation%>" >
+                              </c:set>
+                              <digi:link href="/currencyManager.do" title="${translation}" >
                                 <digi:trn key="aim:currencyManager">Currency Manager</digi:trn>
                               </digi:link>
                             </td>
                           </tr>
                           <tr>
                             <td class=f-names noWrap>
-                              <bean:define id="translation">
+                              <c:set var="translation">
                                 <digi:trn key="aim:clickToViewCurrencyRatesManager">Click here to view Currency Rates Manager</digi:trn>
-                              </bean:define>
+                              </c:set>
                               <digi:img src="module/aim/images/arrow-th-BABAB9.gif" width="16"/>
-                              <digi:link href="/showCurrencyRates.do" title="<%=translation%>">
+                              <digi:link href="/showCurrencyRates.do" title="${translation}">
                                 <digi:trn key="aim:currencyRateManager">Currency Rate Manager</digi:trn>
                               </digi:link>
                             </td>
@@ -178,10 +179,10 @@
                           <tr>
                             <td class=f-names noWrap>
                               <digi:img src="module/aim/images/arrow-th-BABAB9.gif" width="16"/>
-                              <bean:define id="translation">
+                              <c:set var="translation">
                                 <digi:trn key="aim:clickToViewRegionManager">Click here to view Region Manager</digi:trn>
-                              </bean:define>
-                              <digi:link href="/locationManager.do" title="<%=translation%>" >
+                              </c:set>
+                              <digi:link href="/locationManager.do" title="${translation}" >
                                 <digi:trn key="aim:regionManager">Region Manager</digi:trn>
                               </digi:link>
                             </td>
@@ -189,10 +190,10 @@
                           <tr>
                             <td class=f-names noWrap>
                               <digi:img src="module/aim/images/arrow-th-BABAB9.gif" width="16"/>
-                              <bean:define id="translation">
+                              <c:set var="translation">
                                 <digi:trn key="aim:clickToViewSectorManager">Click here to view Sector Manager</digi:trn>
-                              </bean:define>
-                              <digi:link href="/getSectorSchemes.do" title="<%=translation%>" >
+                              </c:set>
+                              <digi:link href="/getSectorSchemes.do" title="${translation}">
                                 <digi:trn key="aim:sectorManager">Sector Manager</digi:trn>
                               </digi:link>
                             </td>
@@ -200,10 +201,10 @@
                           <tr>
                             <td class=f-names noWrap>
                               <digi:img src="module/aim/images/arrow-th-BABAB9.gif" width="16"/>
-                              <bean:define id="translation">
+                              <c:set var="translation">
                                 <digi:trn key="aim:clickToViewStatusManager">Click here to view Status Manager</digi:trn>
-                              </bean:define>
-                              <digi:link href="/statusManager.do" title="<%=translation%>" >
+                              </c:set>
+                              <digi:link href="/statusManager.do" title="${translation}" >
                                 <digi:trn key="aim:statusManager">Status Manager</digi:trn>
                               </digi:link>
                             </td>
@@ -231,10 +232,10 @@
                           <tr>
                             <td class=f-names noWrap>
                               <digi:img src="module/aim/images/arrow-th-BABAB9.gif" width="16"/>
-                              <bean:define id="translation">
+                              <c:set var="translation">
                                 <digi:trn key="aim:clickToViewcomponentsManager">Click here to view Components Manager</digi:trn>
-                              </bean:define>
-                              <digi:link href="/getComponents.do" title="<%=translation%>" >
+                              </c:set>
+                              <digi:link href="/getComponents.do" title="${translation}" >
                                 <digi:trn key="aim:componentsManager">Components Manager</digi:trn>
                               </digi:link>
                             </td>
@@ -243,10 +244,10 @@
                           <tr>
                             <td class=f-names noWrap>
                               <digi:img src="module/aim/images/arrow-th-BABAB9.gif" width="16"/>
-                              <bean:define id="translation">
+                              <c:set var="translation">
                                 <digi:trn key="aim:clickToViewIndicatorManager">Click here to view Indicator Manager</digi:trn>
-                              </bean:define>
-                              <digi:link href="/overallIndicatorManager.do" title="<%=translation%>" >
+                              </c:set>
+                              <digi:link href="/overallIndicatorManager.do" title="${translation}" >
                                 <digi:trn key="aim:ProgramProjectManager">
                                 Program/Project Indicator Manager
                                 </digi:trn>
@@ -256,10 +257,10 @@
                           <tr>
                             <td class=f-names noWrap>
                               <digi:img src="module/aim/images/arrow-th-BABAB9.gif" width="16"/>
-                              <bean:define id="translation">
+                              <c:set var="translation">
                                 <digi:trn key="aim:clickToViewProgramTypeManager">Click here to view Program Type Manager</digi:trn>
-                              </bean:define>
-                              <digi:link href="/programTypeManager.do" title="<%=translation%>" >
+                              </c:set>
+                              <digi:link href="/programTypeManager.do" title="${translation}" >
                                 <digi:trn key="aim:ProgramTypeManager">
                                 Program Type Manager
                                 </digi:trn>

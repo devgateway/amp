@@ -31,26 +31,15 @@ function showUserProfile(id){
 					<td align="left">						
       	       			<bean:define id="teamMember" name="currentMember" scope="session" 
 					 	type="org.digijava.module.aim.helper.TeamMember" />					
-						<bean:define id="translation">
+						<c:set var="translation">
 							<digi:trn key="aim:clickToViewMemberDetails">Click here to view Member Details</digi:trn>
-						</bean:define>
-						<div title='<%=translation%>'>
+						</c:set>
+						<div title="${translation}"'>
 						<a href="javascript:showUserProfile(<c:out value="${teamMember.memberId}"/>)" class="header">
 						 	<bean:write name="teamMember" property="teamName" /> :
 							<bean:write name="teamMember" property="memberName" />
 						</a></div>
 					</td>
-<!-- 
-					<td align="right">
-						<bean:define id="translation">
-							<digi:trn key="aim:clickToLogoutTheSystem">Click here to logout from the system</digi:trn>
-						</bean:define>
-						<div title='<%=translation%>'>
-						<a href="<%= request.getContextPath() %>/j_acegi_logout" class="up-menu" onclick="return quitRnot()">
-						<digi:trn key="aim:logout">Logout</digi:trn>
-						</a></div>&nbsp;&nbsp;&nbsp;&nbsp;
-					</td>
--->					
 					</logic:present>								
 					<logic:notPresent name="currentMember" scope="session">															
 					<td align="left">

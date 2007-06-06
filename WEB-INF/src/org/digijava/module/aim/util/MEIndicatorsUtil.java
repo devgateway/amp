@@ -1557,6 +1557,89 @@ public class MEIndicatorsUtil
 		return riskName;
 	}	
 	
+	public static Collection checkBeforeDeletingIndicator(Long meId)
+	{
+		Session session = null;
+		Collection meIndActivities = new ArrayList();
+		Collection indActList = null;
+		try
+		{
+			session = PersistenceManager.getSession();
+			String qryStr = "select meIndVal from " + AmpMEIndicatorValue.class.getName() + 
+							" meIndVal where (meIndVal.meIndicatorId=:meId)";
+			Query qry = session.createQuery(qryStr);
+			qry.setParameter("meId",meId,Hibernate.LONG);
+			Iterator itr = qry.list().iterator();
+			while(itr.hasNext())
+			{
+				AmpMEIndicatorValue ampmeIndVal = (AmpMEIndicatorValue) itr.next();
+				if(ampmeIndVal.getBaseVal() == 0 &&
+				ampmeIndVal.getBaseValDate() == null &&  
+				ampmeIndVal.getActualVal() == 0 && 
+				ampmeIndVal.getActualValDate() == null && 
+				ampmeIndVal.getRevisedTargetVal() == 0 && 
+				ampmeIndVal.getRevisedTargetValDate() == null)
+					continue;
+				else
+					meIndActivities.add(ampmeIndVal);
+			}
+			indActList = getIndicatorActivityList(meIndActivities);
+		}
+		catch(Exception ex1)
+		{
+			logger.error("Unable to get the activities related to the indicators...in function checkBeforeDeletingIndicator");
+			ex1.printStackTrace(System.out);
+		}
+		finally
+		{
+			try
+			{
+				if(session != null)
+					PersistenceManager.releaseSession(session);
+			}
+			catch(Exception ex2)
+			{
+				logger.error("Session not released..."+ex2);
+			}
+		}
+		return indActList;
+	}
+
+	public static Collection getIndicatorActivityList(Collection meIndActs)
+	{
+		Session session = null;
+		Collection meIndActivities = new ArrayList();
+		try
+		{
+			session = PersistenceManager.getSession();
+			Iterator meIndActItr = meIndActs.iterator();
+			while(meIndActItr.hasNext())
+			{
+				AmpMEIndicatorValue meIndVal = (AmpMEIndicatorValue) meIndActItr.next();
+				AmpActivity ampAct = (AmpActivity) meIndVal.getActivityId();
+				meIndActivities.add(ampAct);
+			}
+		}
+		catch(Exception ex1)
+		{
+			logger.error("Unable to get the activities related to the indicators...in function getIndicatorActivityList()");
+			ex1.printStackTrace(System.out);
+		}
+		finally
+		{
+			try
+			{
+				if(session != null)
+					PersistenceManager.releaseSession(session);
+			}
+			catch(Exception ex2)
+			{
+				logger.error("Session not released..."+ex2);
+			}
+		}
+		return meIndActivities;
+	}
+	
 	public static AllMEIndicators getMEIndicator(Long indId)
 	{
 		Session session = null;
@@ -1595,6 +1678,36 @@ public class MEIndicatorsUtil
 		return tempMEInd;
 	}
 	
+	public static String getMEIndicatorName(Long id)
+	{
+		Session session = null;
+		AmpMEIndicators meInd = null;
+		String indName = null;
+		try
+		{
+			session = PersistenceManager.getSession();
+			meInd = (AmpMEIndicators) session.load(AmpMEIndicators.class, id);
+			indName = meInd.getName();
+		}
+		catch(Exception ex1)
+		{
+			logger.error("Unable to get AmpMEIndicators object : "+ex1);
+		}
+		finally 
+		{
+			try  
+			{
+				if (session != null)
+					PersistenceManager.releaseSession(session);
+			} 
+			catch (Exception ex)  
+			{
+				logger.error("releaseSession() FAILED", ex);
+			}
+		}
+		return indName;
+	}
+	
 	public static void deleteProjIndicator(Long indId)
 	{
 		Collection colMeIndValIds = null;
@@ -1605,7 +1718,6 @@ public class MEIndicatorsUtil
 		ampMEInd.setAmpMEIndId(indId);
 		colMeIndValIds = MEIndicatorsUtil.getMeIndValIds(indId);
 		Iterator itr = colMeIndValIds.iterator();
-	
 		while(itr.hasNext())
 		{
 			ampMEIndVal = (AmpMEIndicatorValue) itr.next();
@@ -1619,22 +1731,22 @@ public class MEIndicatorsUtil
 				{
 					ampMECurrVal = (AmpMECurrValHistory) itrCurrVal.next();
 					try {
-						DbUtil.delete(ampMECurrVal);
+					DbUtil.delete(ampMECurrVal);
 					} catch (JDBCException e) {
 						logger.error(e);
-					}
 				}
 			}
+			}
 			try {
-				DbUtil.delete(ampMEIndVal);
+			DbUtil.delete(ampMEIndVal);
 			} catch (JDBCException e) {
 				logger.error(e);
-			}
+		}
 		}
 		try {
-			DbUtil.delete(ampMEInd);
+		DbUtil.delete(ampMEInd);
 		} catch (JDBCException e) {
 			logger.error(e);
-		}
 	}
+}
 }

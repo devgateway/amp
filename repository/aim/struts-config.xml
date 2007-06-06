@@ -852,7 +852,12 @@
 		<forward name="index" path="/aim/index.do" redirect="true" />
 		<forward name="gotoIndicators" path="/aim/overallIndicatorManager.do" redirect="true" />
 		<forward name="gotoMultiProgram" path="/aim/themeManager.do" redirect="true" />
-    </action>
+		</action>
+		<action name="aimIndicatorForm" path="/aim/deleteIndicator" scope="session" type="org.digijava.module.aim.action.DeleteMEIndicator" validate="false">
+			<forward name="deleteWindow" path="/showLayout.do?layout=aim_deleteIndicator"/>
+			<forward name="forward" path="/aim/indicatorManager.do" redirect="true"/>
+      <forward name="index" path="/aim/index.do" redirect="true" />
+		</action>
     <action input="/showLayout.do?layout=aim_addMEIndicator" name="aimIndicatorForm" path="/aim/addIndicator" scope="session" type="org.digijava.module.aim.action.AddIndicator" validate="false">
       <forward name="forward" path="/showLayout.do?layout=aim_addMEIndicator" />
     </action>

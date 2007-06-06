@@ -134,6 +134,7 @@
 	<page name="addMemberReports" title=" - Add Member Reports" />
 	<page name="indicatorManager" title=" - Project Indicator Manager" />
 	<page page="addIndicator" name="aim_addMEIndicator" title="AMP - Add Indicator"/>
+	<page page="deleteIndicator" name="aim_deleteIndicator" title="AMP - Delete Indicator"/>
 	<page page="indicatorValues" name="aim_indicatorValues" title="AMP - Project Indicator Manager"/>
 	<page name="addDocument" title=" - Add Document" />
 	<page page="selectFile" name="aim_selectFilePopupLayout" title="AMP - Select File" />

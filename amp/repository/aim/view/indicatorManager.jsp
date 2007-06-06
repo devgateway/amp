@@ -8,7 +8,6 @@
 
 <script language="JavaScript">
 	<!--
-
 		function editIndicator(id) {
 			openNewWindow(500, 300);
 			<digi:context name="addIndicator" property="context/module/moduleinstance/addIndicator.do?event=edit" />
@@ -26,17 +25,20 @@
 			document.aimIndicatorForm.submit();
 			return true;
 		}
-		function deleteIndicator()
+		function deleteIndicator(id)
 		{
-			return(confirm(" Do you want to delete the Indicator ? Please check whether the indicator is being used by some Activity."));
+			openNewWindow(600, 300);
+			<digi:context name="deleteInd" property="context/module/moduleinstance/deleteIndicator.do?action=delete"/>
+			document.aimIndicatorForm.action = "<%= deleteInd %>&id=" +id;
+			document.aimIndicatorForm.target = popupPointer.name;
+			document.aimIndicatorForm.submit();
 		}
-
-        function setOverImg(index){
-          document.getElementById("img"+index).src="/TEMPLATE/ampTemplate/module/aim/images/tab-righthover1.gif"
-        }
-        function setOutImg(index){
-          document.getElementById("img"+index).src="/TEMPLATE/ampTemplate/module/aim/images/tab-rightselected1.gif"
-        }
+    function setOverImg(index){
+       document.getElementById("img"+index).src="/TEMPLATE/ampTemplate/module/aim/images/tab-righthover1.gif"
+    }
+    function setOutImg(index){
+      document.getElementById("img"+index).src="/TEMPLATE/ampTemplate/module/aim/images/tab-rightselected1.gif"
+    }
 	-->
 </script>
 
@@ -187,10 +189,9 @@
 																		<bean:define id="translation">
 																			<digi:trn key="aim:clickToDeleteIndicator">Click here to Delete Indicator</digi:trn>
 																		</bean:define>
-																		<digi:link href="/indicatorManager.do" name="urlParams"
-																		onclick=" return deleteIndicator()" title="<%=translation%>" >
-																		<img src= "../ampTemplate/images/trash_12.gif" border=0>
-																		</digi:link>
+																		<a href="javascript:deleteIndicator('<bean:write name="indicators" property="ampMEIndId" />')">
+																			<img src= "../ampTemplate/images/trash_12.gif" border=0>
+																		</a>
 																	</td>
 																	</tr>
 																</logic:iterate>

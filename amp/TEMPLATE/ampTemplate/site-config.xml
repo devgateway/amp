@@ -399,6 +399,7 @@
 				<page>viewbyProjectbyDonor_NoLayout</page>
 				<page>aim_addRegionalFunding</page>
 				<page>aim_addMEIndicator</page>
+				<page>aim_deleteIndicator</page>
 				<page>aim_addProgram</page>
 				<page>aim_editTheme</page>
 				<page>aim_addPrgIndicator</page>

@@ -24,6 +24,7 @@ public class IndicatorForm extends ActionForm implements Serializable
 	private Collection indicators = null;
 	private Collection nondefaultindicators = null;	
 	private Collection indicatorValues = null;
+	private Collection meIndActList = null;
 	private String sameIndicatorName = null;
 	private String sameIndicatorCode = null;
 	private boolean errorFlag;
@@ -94,6 +95,14 @@ public class IndicatorForm extends ActionForm implements Serializable
 
 	public void setIndicatorValues(Collection indicatorValues) {
 		this.indicatorValues = indicatorValues;
+	}
+
+	public Collection getMeIndActList() {
+		return meIndActList;
+	}
+
+	public void setMeIndActList(Collection meIndActList) {
+		this.meIndActList = meIndActList;
 	}
 
 	public Long getSelectedIndicator() {

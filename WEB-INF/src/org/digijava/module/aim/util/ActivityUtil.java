@@ -1830,18 +1830,18 @@ public class ActivityUtil {
 				if (closeDates != null)
 				{
 					Iterator dtItr = closeDates.iterator();
-					while (dtItr.hasNext())
+ 					while (dtItr.hasNext())
 					{
 						AmpActivityClosingDates date = (AmpActivityClosingDates) dtItr.next();
 						session.delete(date);
-					}
+ 					}
 				}
 
 				/* delete issues,measures,actors */
 				Set issues = ampAct.getIssues();
 				if (issues != null)
 				{
-					Iterator iItr = issues.iterator();
+  					Iterator iItr = issues.iterator();
 					while (iItr.hasNext())
 					{
 						AmpIssues issue = (AmpIssues) iItr.next();
@@ -1869,6 +1869,18 @@ public class ActivityUtil {
 					}
 				}
 
+				// delete all previous sectors
+				Set sectors = ampAct.getSectors();				
+				if (sectors != null) {
+					Iterator iItr = sectors.iterator();
+					while (iItr.hasNext()) {
+						AmpActivitySector sec = (AmpActivitySector) iItr.next();
+						session.delete(sec);
+					}
+				}
+
+
+				
 				/* delete activity internal id
 				Set internalIds = ampAct.getInternalIds();
 				if(internalIds != null)
@@ -1916,6 +1928,8 @@ public class ActivityUtil {
 						session.delete(notesAmp);
 					}
 				}
+			
+				
 			}
 			session.delete(ampAct);
 			tx.commit();

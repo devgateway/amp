@@ -6,6 +6,27 @@
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
 
+<script language="JavaScript">
+<!--
+
+	function permissionCheck()
+	{
+			if(document.aimUpdateRoleForm.readPermission.checked == true)
+					return true;
+			else
+			{
+					alert("Read Permission is default all members. Please tick the box for 'Read'.");				
+					return false;
+			}
+	}
+
+	function load() {}
+
+	function unload() {}
+
+-->
+</script>
+
 <html:javascript formName="aimUpdateRoleForm"/>
 
 <digi:context name="digiContext" property="context" />
@@ -119,7 +140,12 @@
 
 													<tr>
 														<td width="30%" align="right">
-															<font color="red"><b>*</b></font>
+															<logic:equal name="aimUpdateRoleForm" property="action" value="edit">
+																	<FONT color=red>*</FONT>
+															</logic:equal>
+															<logic:equal name="aimUpdateRoleForm" property="action" value="add">
+																	<FONT color=red>*</FONT>
+															</logic:equal>
 															<digi:trn key="aim:roleName">Role</digi:trn>
 														</td>
 														<td width="30%" align="left">
@@ -139,7 +165,12 @@
 													</tr>
 													<tr>
 														<td width="30%" align="right">
-															<font color="red"><b>*</b></font>
+															<logic:equal name="aimUpdateRoleForm" property="action" value="edit">
+																	<FONT color=red>*</FONT>
+															</logic:equal>
+															<logic:equal name="aimUpdateRoleForm" property="action" value="add">
+																	<FONT color=red>*</FONT>
+															</logic:equal>
 															<digi:trn key="aim:description">Description</digi:trn>
 														</td>
 														<td width="30%" align="left">
@@ -176,7 +207,7 @@
 																			<digi:trn key="aim:readPerms">
 																			Read
 																			</digi:trn>
-																			</html:checkbox>
+																			</html:checkbox><FONT color=red>*</FONT>
 																		</td>
 																	</tr>
 																	<tr>
@@ -219,7 +250,7 @@
 																				<digi:trn key="aim:readPerms">
 																				Read
 																				</digi:trn>
-																			</html:checkbox>
+																			</html:checkbox><FONT color=red>*</FONT>
 																		</td>
 																	</tr>
 																	<tr>
@@ -264,36 +295,31 @@
 																<table>
 																	<tr>
 																		<td>
-																				<digi:trn key="aim:defaultRolePrivilege">
-																				Default privileges for the role.
+																			<digi:trn key="aim:defaultRolePrivileges">
+																				Default privileges for the role :
 																			</digi:trn>
 																		</td>
 																	</tr>
-																	<tr>
+																	<tr align="center">
+																		<br>
 																		<td>
-																			<html:checkbox property="readPermission">
-																			<digi:trn key="aim:readPerms">
-																			Read
-																			</digi:trn>
-																			</html:checkbox>
+																			<logic:equal name="aimUpdateRoleForm" property="readPermission" value="on">
+																					<b>Read</b>
+																			</logic:equal>
 																		</td>
 																	</tr>
-																	<tr>
+																	<tr align="center">
 																		<td>
-																			<html:checkbox property="writePermission">
-																			<digi:trn key="aim:writePerms">
-																			Add / Update
-																			</digi:trn>
-																			</html:checkbox>
+																			<logic:equal name="aimUpdateRoleForm" property="writePermission" value="on">
+																					<b>Write</b>
+																			</logic:equal>
 																		</td>
 																	</tr>
-																	<tr>
+																	<tr align="center">
 																		<td>
-																			<html:checkbox property="deletePermission">
-																			<digi:trn key="aim:deletePerms">
-																			Delete
-																			</digi:trn>
-																			</html:checkbox>
+																			<logic:equal name="aimUpdateRoleForm" property="deletePermission" value="on">
+																					<b>Delete</b>
+																			</logic:equal>
 																		</td>
 																	</tr>
 																</table>
@@ -328,7 +354,7 @@
 																<table width="100%" cellspacing="5">
 																	<tr>
 																		<td width="50%" align="right">
-																			<html:submit value="Save" styleClass="dr-menu" />
+																			<html:submit value="Save" styleClass="dr-menu" onclick="return permissionCheck()" />
 																		</td>
 																		<td width="50%" align="left">
 																			<html:reset value="Cancel" styleClass="dr-menu" />
@@ -356,6 +382,14 @@
 															</logic:equal>
 														</td>
 													</tr>
+													<tr><td>
+															<logic:equal name="aimUpdateRoleForm" property="action" value="edit">
+																	<FONT color=red>*&nbsp;Mandatory fields</FONT>
+															</logic:equal>
+															<logic:equal name="aimUpdateRoleForm" property="action" value="add">
+																	<FONT color=red>*&nbsp;Mandatory fields</FONT>
+															</logic:equal>
+													</td></tr>
 												</table>
 											</td>
 										</tr>

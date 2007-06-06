@@ -24,9 +24,7 @@
         <!--
             Configure the TransactionManager
         -->
-<!--
-        <attribute name="TransactionManagerLookupClass">org.jboss.cache.DummyTransactionManagerLookup</attribute>
--->
+        <attribute name="TransactionManagerLookupClass">org.jboss.cache.JBossTransactionManagerLookup</attribute>
 
         <!--
             Node isolation level : SERIALIZABLE
@@ -118,11 +116,11 @@
         <attribute name="SyncReplTimeout">10000</attribute>
 
         <!-- Max number of milliseconds to wait for a lock acquisition -->
-        <attribute name="LockAcquisitionTimeout">50000</attribute>
+        <attribute name="LockAcquisitionTimeout">5000</attribute>
 
         <!-- Max number of milliseconds we hold a lock (not currently
         implemented) -->
-        <attribute name="LockLeaseTimeout">60000</attribute>
+        <attribute name="LockLeaseTimeout">7000</attribute>
 
         <!-- Name of the eviction policy class. Not supported now. -->
        <attribute name="EvictionPolicyClass"></attribute>

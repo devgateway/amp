@@ -14,7 +14,7 @@ import org.digijava.module.aim.util.ProgramUtil;
 
 public class AssignThemeIndicator extends Action {
 
-	private static Logger logger = Logger.getLogger(AssignThemeIndicator.class);
+	//private static Logger logger = Logger.getLogger(AssignThemeIndicator.class);
 
 	public ActionForward execute(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response)
@@ -36,9 +36,10 @@ public class AssignThemeIndicator extends Action {
 		
 		ThemeForm themeForm = (ThemeForm) form;
 		Long id = new Long(Long.parseLong(request.getParameter("indicatorId")));
-
-		ProgramUtil.assignThemeInd(id,themeForm.getSelectTheme());
 		
+		// comment by pcsing due to some doubt about indicators default values
+		//ProgramUtil.assignThemeInd(id,themeForm.getSelectTheme());
+		   
 		return mapping.findForward("forward");
 	}
 }

@@ -239,6 +239,73 @@ public class ProgramUtil {
 	    	return colThInd;
 	    }
 
+        // New function added for the program Indicator Manager by pcsingh
+	    
+        public static Collection getAllThemesIndicators() throws AimException
+	    {
+	    	Collection colThInd = new ArrayList();
+	    	Collection colTh = null;
+	    	colTh = getAllMainPrograms();
+	    	Iterator itrColTh = colTh.iterator();
+	    	while(itrColTh.hasNext())
+	    	{
+	    		AmpTheme ampTh1 = (AmpTheme) itrColTh.next();
+	    		AllThemes tempAllThemes = new AllThemes();
+				tempAllThemes.setProgramId(ampTh1.getAmpThemeId());
+				tempAllThemes.setProgramName(ampTh1.getName());
+	    		Collection allInds = new ArrayList();
+	    		Iterator itr = getThemeIndicators(ampTh1.getAmpThemeId()).iterator();
+	    		while(itr.hasNext())
+	    		{
+	    			AmpPrgIndicator ampPrg = (AmpPrgIndicator) itr.next();
+	    			AllPrgIndicators prgInd = new AllPrgIndicators();
+					prgInd.setIndicatorId(ampPrg.getIndicatorId());
+					prgInd.setName(ampPrg.getName());
+					prgInd.setCode(ampPrg.getCode());
+					prgInd.setType(ampPrg.getType());
+					prgInd.setCreationDate(ampPrg.getCreationDate());
+					prgInd.setCategory(ampPrg.getCategory());
+					prgInd.setNpIndicator(ampPrg.isNpIndicator());
+					allInds.add(prgInd);
+	    		}
+	    		tempAllThemes.setAllPrgIndicators(allInds);
+	    		colThInd.add(tempAllThemes);
+	    	}
+	    	return colThInd;
+	    }
+	    
+        // New function added for the program Indicator Manager by pcsingh
+	    public static Collection getAllMainPrograms() throws AimException
+        {
+        	Session session = null;
+        	Query qry = null;
+        	Collection colPrg = null;
+        	try
+        	{
+        		session = PersistenceManager.getRequestDBSession();
+    			String queryString = " from "
+    								+ AmpTheme.class.getName() + " th";
+    			qry = session.createQuery(queryString);
+    			colPrg = qry.list();
+        	}
+        	catch(Exception ex)
+        	{
+        		logger.error("Unable to get all the Themes");
+    			logger.debug("Exception " + ex);
+    			throw new AimException(ex);
+        	}
+        	Collection mainProgram = new ArrayList();;
+        	Iterator itr = colPrg.iterator();
+        	while(itr.hasNext()) {
+        		AmpTheme tmpTheme = (AmpTheme)itr.next();
+        		if(tmpTheme.getParentThemeId()==null || tmpTheme.getParentThemeId().getAmpThemeId().intValue()==0) {
+        			mainProgram.add(tmpTheme);
+        		}
+        	}
+        	return mainProgram;
+        }
+
+	    
         public static Collection getAllPrograms() throws AimException
         {
         	Session session = null;
@@ -312,20 +379,88 @@ public class ProgramUtil {
 	        }
 	        return ampTheme;
 		}
-
-		public static void assignThemeInd(Long indId, Long themeId)
-		{
+		
+	/* Commemted by pcsingh
+	 * due to some doubt abt assignment of indicator from one theme to other
+	 * doubt are like what should be default values, same indicator can be 
+	 * assign to mant theme or not etc.
+	 * Note: same functions are written twice for future use
+	 
+		public static void assignThemeInd(Long indId, Long themeId){
+			
 			Session session = null;
 			Transaction tx = null;
 			AmpThemeIndicators ampThInd = null;
 			AmpTheme ampTh = getThemeObject(themeId);
+			try{
+				session = PersistenceManager.getRequestDBSession();
+				ampThInd = (AmpThemeIndicators)session.load(AmpThemeIndicators.class, indId);
+				logger.info("Inside assignIndacators:::\n"+
+						"ampThemeIndicators.getName"+ampThInd.getName()+"\n\n\n");
+				Iterator getTheme = ampThInd.getThemes().iterator();
+				while(getTheme.hasNext()){
+					AmpTheme tmpAmpTheme = (AmpTheme)getTheme.next();
+					logger.info("Getting thems related to given indicator::::"+
+							"tmpAmpTheme.getName="+tmpAmpTheme.getName());
+				}
+				logger.info("\n\n\n");
+				
+				logger.info("Current theme name:::="+ampTh.getName());
+				Iterator itr = ampTh.getIndicators().iterator();
+				while(itr.hasNext()){
+					AmpThemeIndicators tmpAmpThemeInd = (AmpThemeIndicators)itr.next();
+					logger.info("\nGetting all Indicators related to theme::::\n"
+							+"tmpAmpThemeIndicators.getName="+tmpAmpThemeInd.getName());
+				}
+				logger.info("\n\n\n");
+				
+			}catch(Exception ex){
+				logger.error("Exception from assignThemeIndicator  "+ex.getMessage());
+				ex.printStackTrace(System.out);
+			}
+		}
+
+		public static void assignThemeInd(Long indId, Long themeId)
+		{
+			
+			logger.info("\n\nInside program Util\n"+indId+"      "+themeId);
+			Session session = null;
+			Transaction tx = null;
+			AmpThemeIndicators ampThInd = null;
+			AmpTheme ampTh = getThemeObject(themeId);
+			logger.info(ampTh.getName());
+			Set tmp1 = ampTh.getIndicators();
+			Iterator itr1 = tmp1.iterator();
+			while(itr1.hasNext()){
+				AmpThemeIndicators ampTmp = (AmpThemeIndicators)itr1.next();
+				logger.info(ampTmp.getName());
+			}
+			Set tmpTest = ampTh.getIndicators();
 			try
 			{
 				session = PersistenceManager.getRequestDBSession();
 				ampThInd = (AmpThemeIndicators) session.load(AmpThemeIndicators.class, indId);
-				Set tempTh = new HashSet();
+				logger.info(ampThInd.getName());
+				Set tempTh = ampThInd.getThemes();
+				Iterator itr = tempTh.iterator();
+				while(itr.hasNext()){
+					AmpTheme tmp = (AmpTheme)itr.next();
+					logger.info("Themes related to indicator\n\n"+tmp.getName());
+				}
+				tempTh.clear();
+				logger.info(tempTh.isEmpty());
 				tempTh.add(ampTh);
+				itr = tempTh.iterator();
+				while(itr.hasNext()){
+					AmpTheme tmp = (AmpTheme)itr.next();
+					logger.info("Now Themes related to indicator\n\n"+tmp.getName());
+				}
+				logger.info(tempTh.isEmpty());
+				//ampThInd.setThemes(ampThInd);
 				ampThInd.setThemes(tempTh);
+				
+				tmpTest.add(ampThInd);
+				ampTh.setIndicators(tmpTest);
 				tx = session.beginTransaction();
 				session.saveOrUpdate(ampThInd);
 				tx.commit();
@@ -335,7 +470,8 @@ public class ProgramUtil {
 				ex.printStackTrace(System.out);
 			}
 		}
-
+*/ //Comment over pcsing
+		
 		public static Collection getThemeIndicators(Long ampThemeId)
 		{
 			Session session = null;

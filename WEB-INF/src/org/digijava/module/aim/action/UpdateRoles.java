@@ -100,6 +100,7 @@ public class UpdateRoles extends Action {
 				} else {
 					urForm.setTeamHeadFlag("yes");
 				}
+				urForm.setReadPermission("true");
 				return mapping.findForward("showAdd");
 			}
 		} else if (urForm.getAction().equals("edit")) {

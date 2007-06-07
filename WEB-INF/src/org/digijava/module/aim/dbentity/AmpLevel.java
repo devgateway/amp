@@ -3,7 +3,11 @@ package org.digijava.module.aim.dbentity ;
 import java.io.Serializable;
 
 
-
+/**
+ * @deprecated
+ * @author alex
+ *
+ */
 public class AmpLevel implements Serializable
 {
 	

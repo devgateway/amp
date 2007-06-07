@@ -33,7 +33,7 @@ public class AmpActivity
 	private Set sectors ;
 	private Set locations ;
 	private Set orgrole;
-	private AmpLevel level ;
+//	private AmpLevel level ; //TO BE DELETED
 	private Set internalIds ;
 	private Set funding ;
 	private Set progress;
@@ -161,9 +161,9 @@ public class AmpActivity
 	/**
 	 * @return
 	 */
-	public AmpLevel getLevel() {
-		return level;
-	}
+//	public AmpLevel getLevel() { //TO BE DELETED
+//		return level;
+//	}
 
 	/**
 	 * @return
@@ -273,9 +273,9 @@ public class AmpActivity
 	/**
 	 * @param level
 	 */
-	public void setLevel(AmpLevel level) {
-		this.level = level;
-	}
+//	public void setLevel(AmpLevel level) { // TO BE DELETED
+//		this.level = level;
+//	}
 
 	/**
 	 * @param set

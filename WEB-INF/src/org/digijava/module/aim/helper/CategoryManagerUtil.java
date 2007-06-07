@@ -70,7 +70,7 @@ public class CategoryManagerUtil {
 			
 			Message m		= (Message)qry.uniqueResult();
 			if ( m == null ) {
-				logger.info("No translation found for value '"+ ampCategoryValue.getValue() +"' for lang " + lang + ".");
+				logger.debug("No translation found for value '"+ ampCategoryValue.getValue() +"' for lang " + lang + ".");
 				return ampCategoryValue.getValue();
 			}
 			ret				= m.getMessage();
@@ -272,13 +272,42 @@ public class CategoryManagerUtil {
 	/**
 	 * 
 	 * @param categoryName
-	 * @param ordered must be true if the AmpCategoryValues should be ordered alphabetically. 
-	 * If false the ordered property of the AmpCategoryClass object is checked.
+	 * @param ordered overrides the property in AmpCategoryClass and decides whether the values should be ordered alphabetically. 
+	 * If null the ordered property of the AmpCategoryClass object is checked.
 	 * @return A collection of AmpCategoryValues witch belong to the AmpCategoryClass with name=categoryName
 	 */
 	public static Collection getAmpCategoryValueCollection(String categoryName, Boolean ordered) {
 		boolean shouldOrderAlphabetically;
 		AmpCategoryClass ampCategoryClass	= CategoryManagerUtil.loadAmpCategoryClass(categoryName);
+		if (ampCategoryClass == null)
+			return null;
+		if (ordered == null) {
+			shouldOrderAlphabetically	= ampCategoryClass.getIsOrdered();
+		}
+		else
+			shouldOrderAlphabetically	= ordered.booleanValue();
+		
+		List ampCategoryValues			= ampCategoryClass.getPossibleValues();
+		
+		if ( !shouldOrderAlphabetically )
+				return ampCategoryValues;
+		
+		TreeSet treeSet	= new TreeSet( new CategoryManagerUtil().new CategoryComparator() );
+		treeSet.addAll(ampCategoryValues);
+		
+		
+		return treeSet;
+	}
+	/**
+	 * 
+	 * @param categoryKey
+	 * @param ordered overrides the property in AmpCategoryClass and decides whether the values should be ordered alphabetically. 
+	 * If null the ordered property of the AmpCategoryClass object is checked.
+	 * @return A collection of AmpCategoryValues witch belong to the AmpCategoryClass with name=categoryName
+	 */
+	public static Collection getAmpCategoryValueCollectionByKey(String categoryKey, Boolean ordered) {
+		boolean shouldOrderAlphabetically;
+		AmpCategoryClass ampCategoryClass	= CategoryManagerUtil.loadAmpCategoryClassByKey(categoryKey);
 		if (ampCategoryClass == null)
 			return null;
 		if (ordered == null) {
@@ -343,7 +372,7 @@ public class CategoryManagerUtil {
 	 * @param key The key of the AmpCategoryClass object. (A key can be attributed when creating a new category)
 	 * @return The AmpCategoryClass object with the specified key. If not found returns null.
 	 */
-	public static AmpCategoryClass getCategoryByKey(String key)
+	public static AmpCategoryClass loadAmpCategoryClassByKey(String key)
 	{
 		Session dbSession			= null;
 		Collection col=new ArrayList();
@@ -383,7 +412,7 @@ public class CategoryManagerUtil {
 	 */
 	public static Collection getAmpCategoryByKey(String key, Boolean ordered) {
 		boolean shouldOrderAlphabetically;
-		AmpCategoryClass ampCategoryClass	= CategoryManagerUtil.getCategoryByKey(key);
+		AmpCategoryClass ampCategoryClass	= CategoryManagerUtil.loadAmpCategoryClassByKey(key);
 		if (ampCategoryClass == null)
 			return null;
 		if (ordered == null) {

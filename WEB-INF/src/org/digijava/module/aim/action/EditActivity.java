@@ -386,6 +386,10 @@ public class EditActivity
                 ampCategoryValue					= CategoryManagerUtil.getAmpCategoryValueFromListByKey(CategoryConstants.ACTIVITY_STATUS_KEY, activity.getCategories());
                 if (ampCategoryValue != null)
             		eaForm.setStatusId( ampCategoryValue.getId() );
+                
+                ampCategoryValue					= CategoryManagerUtil.getAmpCategoryValueFromListByKey(CategoryConstants.IMPLEMENTATION_LEVEL_KEY, activity.getCategories());
+                if (ampCategoryValue != null)
+            		eaForm.setLevelId( ampCategoryValue.getId() );
                 /* End - Insert Categories */
 
                 if (tm!=null && tm.getTeamType()
@@ -548,9 +552,6 @@ public class EditActivity
                         }
                     }
 
-                    // setting status and modality
-                    if(activity.getLevel() != null)
-                        eaForm.setLevel(activity.getLevel().getAmpLevelId());
 
                     // loading the locations
                     int impLevel = 0;

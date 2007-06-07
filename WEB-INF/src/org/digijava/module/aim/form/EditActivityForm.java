@@ -40,7 +40,7 @@ public class EditActivityForm extends ActionForm implements Serializable{
 	private Long statusId = null;
 	private String statusReason = null;
 	//private Collection statusCollection = null;
-	private Long level = null;
+	private Long levelId = null;
 	private Long modality = null;
 	private Long countryIso = null;
 	private Long assistanceType = null;
@@ -430,7 +430,7 @@ public class EditActivityForm extends ActionForm implements Serializable{
 			statusId = new Long(0);
 			statusReason = null;
 			//statusCollection = null;
-			level = null;
+			levelId = new Long(0);
 			program = null;
 			modality = null;
 			countryIso = null;
@@ -1019,16 +1019,16 @@ public class EditActivityForm extends ActionForm implements Serializable{
 	/**
 	 * @return Returns the level.
 	 */
-	public Long getLevel() {
-		return level;
+	public Long getLevelId() {
+		return levelId;
 	}
 
 	/**
 	 * @param level
 	 *            The level to set.
 	 */
-	public void setLevel(Long level) {
-		this.level = level;
+	public void setLevelId(Long levelId) {
+		this.levelId = levelId;
 	}
 
 	/**

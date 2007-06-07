@@ -278,7 +278,7 @@ public class ActivityUtil {
                                 oldActivity.setDocumentSpace(activity.getDocumentSpace());
 				oldActivity.setEmail(activity.getEmail());
 				oldActivity.setLanguage(activity.getLanguage());
-				oldActivity.setLevel(activity.getLevel());
+//				oldActivity.setLevel(activity.getLevel()); //TO BE DELETED
 				oldActivity.setModality(activity.getModality());
 				oldActivity.setMofedCntEmail(activity.getMofedCntEmail());
 				oldActivity.setMofedCntFirstName(activity.getMofedCntFirstName());
@@ -805,7 +805,7 @@ public class ActivityUtil {
 
                 activity.setEmail(ampActivity.getEmail());
 			    activity.setLanguage(ampActivity.getLanguage());
-			    activity.setLevel(ampActivity.getLevel());
+//			    activity.setLevel(ampActivity.getLevel()); // TO BE DELETED
 			    activity.setModality(ampActivity.getModality());
 			    activity.setMofedCntEmail(ampActivity.getMofedCntEmail());
 			    activity.setMofedCntFirstName(ampActivity.getMofedCntFirstName());
@@ -921,6 +921,11 @@ public class ActivityUtil {
 								CategoryManagerUtil.getAmpCategoryValueFromListByKey(CategoryConstants.ACTIVITY_STATUS_KEY, ampAct.getCategories())
 						)
 				);
+				activity.setImpLevel( 
+						CategoryManagerUtil.getStringValueOfAmpCategoryValue(
+								CategoryManagerUtil.getAmpCategoryValueFromListByKey(CategoryConstants.IMPLEMENTATION_LEVEL_KEY, ampAct.getCategories())
+						)
+				);
 				/* END - Set Categories */
 
 				Collection col = ampAct.getClosingDates();
@@ -938,11 +943,6 @@ public class ActivityUtil {
 				}
 				Collections.sort(dates,DateConversion.dtComp);
 				activity.setRevCompDates(dates);
-
-
-				if (ampAct.getLevel() != null) {
-					activity.setImpLevel(ampAct.getLevel().getName());
-				}
 
 				if (ampAct.getThemeId() != null) {
 					activity.setProgram(ampAct.getThemeId().getName());
@@ -1043,9 +1043,11 @@ public class ActivityUtil {
                     programs.addAll(ampAct.getActivityPrograms());
                     activity.setActPrograms(programs);
                 }
-
-				if (ampAct.getLevel() != null) {
-					activity.setImpLevel(ampAct.getLevel().getName());
+                
+                AmpCategoryValue ampCategoryValueForStatus	= 
+                			CategoryManagerUtil.getAmpCategoryValueFromListByKey(CategoryConstants.IMPLEMENTATION_LEVEL_KEY, ampAct.getCategories());
+				if (ampCategoryValueForStatus != null) {
+					activity.setImpLevel( ampCategoryValueForStatus.getValue() );
 				}
 
 				Collection locColl = new ArrayList();

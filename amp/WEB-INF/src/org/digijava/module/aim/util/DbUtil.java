@@ -3627,7 +3627,7 @@ public class DbUtil {
 			Query qry = session.createQuery(queryString);
 			col = qry.list();
 		} catch (Exception e) {
-			logger.debug("Exception from getAllOrgGroups()");
+			logger.debug("Exception from getAllActivityStatus()");
 			logger.debug(e.toString());
 				}
 		return col;
@@ -3643,7 +3643,7 @@ public class DbUtil {
 			Query qry = session.createQuery(queryString);
 			col = qry.list();
 		} catch (Exception e) {
-			logger.debug("Exception from getAllOrgGroups()");
+			logger.debug("Exception from getAllTermAssist()");
 			logger.debug(e.toString());
 		}
 		return col;
@@ -3659,7 +3659,7 @@ public class DbUtil {
 			Query qry = session.createQuery(queryString);
 			col = qry.list();
 		} catch (Exception e) {
-			logger.debug("Exception from getAllOrgGroups() : " + e);
+			logger.debug("Exception from getAllFinancingInstruments() : " + e);
 			e.printStackTrace(System.out);
 		}
 		return col;
@@ -3701,12 +3701,12 @@ public class DbUtil {
 
 	public static Collection getAllOrgTypes() {
 		Session session = null;
-		Collection col = null;
+		Collection col = new ArrayList();
 
 		try {
 			session = PersistenceManager.getRequestDBSession();
 			String queryString = "select c from " + AmpOrgType.class.getName()
-					+ " c";
+					+ " c order by org_type asc";
 			Query qry = session.createQuery(queryString);
 			col = qry.list();
 		} catch (Exception e) {
@@ -3795,10 +3795,39 @@ public class DbUtil {
 			qry.setParameter("orgGrpId", Id, Hibernate.LONG);
 			col = qry.list();
 		} catch (Exception e) {
-			logger.debug("Exception from getOrgByGroup()");
-			logger.debug(e.toString());
+			logger.debug("Exception from getOrgByGroup(): " + e);
+			e.printStackTrace(System.out);
 		}
 		return col;
+	}
+	
+	public static boolean chkOrgTypeReferneces(Long Id) {
+
+		Session sess = null;
+		Query qry = null;
+		String queryString = null;
+
+		try {
+			sess = PersistenceManager.getRequestDBSession();
+			queryString = "select o from " + AmpOrganisation.class.getName()
+								+ " o where (o.orgTypeId=:orgTypeId)";
+			qry = sess.createQuery(queryString);
+			qry.setParameter("orgTypeId", Id, Hibernate.LONG);
+			if (null != qry.list() && qry.list().size() > 0)
+				return true;
+			else {
+				queryString = "select o from " + AmpOrgGroup.class.getName()
+								+ " o where (o.orgType=:orgTypeId)";
+				qry = sess.createQuery(queryString);
+				qry.setParameter("orgTypeId", Id, Hibernate.LONG);
+				if (null != qry.list() && qry.list().size() > 0)
+					return true;
+			}
+		} catch (Exception e) {
+			logger.debug("Exception from chkOrgTypeReferneces(): " + e);
+			e.printStackTrace(System.out);
+		}
+		return false;
 	}
 
 	public static AmpOrgType getOrgType(Long typeId) {

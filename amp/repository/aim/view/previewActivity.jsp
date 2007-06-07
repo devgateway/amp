@@ -739,13 +739,7 @@ function disable() {
 											Level</digi:trn>
 										</td>
 										<td bgcolor="#ffffff">
-											<c:if test="${!empty aimEditActivityForm.levelCollection}">
-												<c:forEach var="tempLevel" items="${aimEditActivityForm.levelCollection}">
-													<c:if test="${tempLevel.ampLevelId == aimEditActivityForm.level}">
-														<c:out value="${tempLevel.name}"/>
-													</c:if>
-												</c:forEach>
-											</c:if>
+											<category:getoptionvalue categoryValueId="${aimEditActivityForm.levelId}"/>
 										</td>
 									</tr>
 									<tr>

@@ -322,7 +322,7 @@ function closeWindow() 
 				<tr bgColor=#dddddb>
 				<td bgColor=#dddddb height="25" align="center" colspan="4">
 						<input styleClass="dr-menu" type="button" name="addBtn" value="Save" onclick="return saveProgram('<bean:write name="aimThemeForm" property="themeId"/>','<bean:write name="aimThemeForm" property="indicatorId"/>')">&nbsp;&nbsp;
-						<input styleClass="dr-menu" type="reset" value="Cancel">&nbsp;&nbsp;
+						<input styleClass="dr-menu" type="reset" value="Cancel"              onclick="closeWindow('<bean:write name="aimThemeForm" property="indType"/>')">	&nbsp;&nbsp;
 						<input styleClass="dr-menu" type="button" name="close" value="Close" onclick="closeWindow('<bean:write name="aimThemeForm" property="indType"/>')">			
 				</td>
 				</tr>	

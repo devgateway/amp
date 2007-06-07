@@ -139,6 +139,7 @@ public class SaveActivity extends Action {
 			CategoryManagerUtil.addCategoryToSet(eaForm.getAccessionInstrument(), activity.getCategories() );
 			CategoryManagerUtil.addCategoryToSet(eaForm.getAcChapter(), activity.getCategories() );
 			CategoryManagerUtil.addCategoryToSet(eaForm.getStatusId(), activity.getCategories() );
+			CategoryManagerUtil.addCategoryToSet(eaForm.getLevelId(), activity.getCategories() );
 			/* END - Saving categories to AmpActivity */
 			
 			
@@ -913,13 +914,13 @@ public class SaveActivity extends Action {
 				}
 			
 
-				// set level
-				if (eaForm.getLevel() != null) {
-					if (eaForm.getLevel().intValue() != -1) {
-						AmpLevel level = DbUtil.getAmpLevel(eaForm.getLevel());
-						activity.setLevel(level);
-					}
-				}
+//				// set level // TO BE DELETED
+//				if (eaForm.getLevel() != null) {
+//					if (eaForm.getLevel().intValue() != -1) {
+//						AmpLevel level = DbUtil.getAmpLevel(eaForm.getLevel());
+//						activity.setLevel(level);
+//					}
+//				}
 
 				Collection relatedLinks = new ArrayList();
 				if (eaForm.getDocumentList() != null) {

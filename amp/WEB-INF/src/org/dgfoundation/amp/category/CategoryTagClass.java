@@ -156,7 +156,8 @@ public class CategoryTagClass extends TagSupport {
 			AmpCategoryValue ampCategoryValue	= (AmpCategoryValue)iterator.next();
 			String outputValue					= CategoryManagerUtil.translateAmpCategoryValue(ampCategoryValue, request, null);
 			
-			if ( valueId != null && valueId.longValue()	== ampCategoryValue.getId().longValue() ) {
+			if ( valueId != null && valueId.longValue()	== ampCategoryValue.getId().longValue() || 
+					( valueIdsColl != null && valueIdsColl.contains(ampCategoryValue.getId()) ) ) {
 				out.println("<option value='"+ampCategoryValue.getId()+"' selected='selected' >"+outputValue+"</option>");
 			}
 			else{

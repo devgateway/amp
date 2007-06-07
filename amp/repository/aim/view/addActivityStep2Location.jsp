@@ -6,6 +6,7 @@
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
 <%@ taglib uri="/taglib/struts-nested" prefix="nested" %>
+<%@ taglib uri="/taglib/category" prefix="category" %>
 
 
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/addActivity.js"/>"></script>
@@ -53,18 +54,9 @@
                                                  </digi:trn>
                                                 </a>&nbsp;
                                               </td>
-											<td><html:select property="level" styleClass="inp-text">
-													<html:option value="-1">Select Level</html:option>
-														<logic:iterate name="aimEditActivityForm"
-														property="levelCollection" id="ampLevelId">
-														<option value="<%=ampLevelId%>"><bean:define
-															id="ampLevelName" name="ampLevelId" property="name" />
-														<digi:trn key="<%= "aim:" + ampLevelName%>">
-														<bean:write name="ampLevelId" property="name" />
-														</digi:trn></option>
-													</logic:iterate>
-
-												</html:select></td>
+												<td>
+													<category:showoptions name="aimEditActivityForm" property="levelId" keyName="<%= org.digijava.module.aim.helper.CategoryConstants.IMPLEMENTATION_LEVEL_KEY %>" styleClass="inp-text" />
+												</td>
                                             </tr>
                                             <tr>
                                               <td vAlign="center" colspan=5>

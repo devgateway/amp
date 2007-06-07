@@ -222,11 +222,15 @@ public class ShowActivityPrintPreview
                 }
 
                 // setting status and modality
-                AmpCategoryValue ampCategoryValue					= CategoryManagerUtil.getAmpCategoryValueFromListByKey(CategoryConstants.ACTIVITY_STATUS_KEY, activity.getCategories());
-                if (ampCategoryValue != null)
-            		eaForm.setStatusId( ampCategoryValue.getId() );
-                if(activity.getLevel() != null)
-                    eaForm.setLevel(activity.getLevel().getAmpLevelId());
+                AmpCategoryValue ampCategoryValueForStatus	= 
+                	CategoryManagerUtil.getAmpCategoryValueFromListByKey(CategoryConstants.ACTIVITY_STATUS_KEY, activity.getCategories());
+                if (ampCategoryValueForStatus != null)
+            		eaForm.setStatusId( ampCategoryValueForStatus.getId() );
+                
+                AmpCategoryValue ampCategoryValueForLevel	= 
+                	CategoryManagerUtil.getAmpCategoryValueFromListByKey(CategoryConstants.IMPLEMENTATION_LEVEL_KEY, activity.getCategories());
+                if(ampCategoryValueForLevel != null)
+                    eaForm.setLevelId(ampCategoryValueForLevel.getId());
 
                 // loading the locations
                 int impLevel = 0;

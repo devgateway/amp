@@ -1706,6 +1706,10 @@ public class DbUtil {
 		return status;
 	}
 
+	/**
+	 * @deprecated
+	 * @return
+	 */
 	public static ArrayList getAmpLevels() {
 		Session session = null;
 		Query q = null;

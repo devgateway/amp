@@ -108,7 +108,7 @@ public class ResetAll extends Action
 	    	}
 	    	if(eaForm.getStep().equals("2"))
 	    	{
-	    		eaForm.setLevel(null);
+	    		eaForm.setLevelId(new Long(0));
 	    		eaForm.setImplementationLevel(null);
 	    		eaForm.setSelectedLocs(null);
 	    		eaForm.setActivitySectors(null);
@@ -203,8 +203,11 @@ public class ResetAll extends Action
 			 }
 		    if(eaForm.getStep().equals("2"))
 		    {
-				if (activity.getLevel() != null)
-					eaForm.setLevel(activity.getLevel().getAmpLevelId());
+		    	AmpCategoryValue ampCategoryValue	= 
+		    					CategoryManagerUtil.getAmpCategoryValueFromListByKey
+		    						(CategoryConstants.IMPLEMENTATION_LEVEL_KEY, activity.getCategories() );
+				if (ampCategoryValue != null)
+					eaForm.setLevelId(ampCategoryValue.getId());
 				int impLevel = 0;
 				Collection ampLocs = activity.getLocations();
 				if (ampLocs != null && ampLocs.size() > 0)

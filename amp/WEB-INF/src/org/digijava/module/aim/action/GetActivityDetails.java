@@ -156,8 +156,11 @@ public class GetActivityDetails extends Action {
 		if (modality != null) {
 			if (!(modality.getModalityCode().equals(Constants.DIRECT_BUDGET_SUPPORT))) {
 				modName = "";
-				if (activity.getLevel() != null) {
-					modName = activity.getLevel().getName();
+				AmpCategoryValue ampCategoryValue	= 
+					CategoryManagerUtil.getAmpCategoryValueFromListByKey
+							(CategoryConstants.IMPLEMENTATION_LEVEL_KEY, activity.getCategories());
+				if (ampCategoryValue != null) {
+					modName = ampCategoryValue.getValue();
 					//logger.info("Implementation Level : " + modName);
 				}
 				coForm.setLevel(modName);

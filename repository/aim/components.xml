@@ -4,8 +4,9 @@
 
 	<page name="viewPortfolioDashboard" title=" - Portfolio Dashboard " />
 	<page name="addQuickLink" title="Add link" />
-    <page name="editQuickLink" title="Edit link" />
+  <page name="editQuickLink" title="Edit link" />
 	<page name="showMyTask" title=" - My Task List " />
+	<page name="showMyMessages" title=" - My Message List " />
 	<page name="viewChannelOverviewDescription" title="AMP: Ethiopia: AIM Dashboard: Detail" />
 	<page name="editPhysicalProgress" title="AMP: Ethiopia: AIM Dashboard: Detail" />
 	<page name="addAmpProjectDetails" title="AMP: Ethiopia: AIM Dashboard: Detail" />

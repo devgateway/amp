@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.Set;
+import java.util.Date;
 
 import net.sf.hibernate.Hibernate;
 import net.sf.hibernate.Query;
@@ -506,4 +507,34 @@ public class DesktopUtil {
 		}
 		return col;
 	}
+	public static Collection getActivitiesTobeClosed(Long ampTeamId)
+	{
+		Collection actList = new ArrayList();
+		Session session = null;
+		Query q = null;
+        Date currentDate = new Date();
+		try {
+			session = PersistenceManager.getSession();
+			String queryString = "select act from " + AmpActivity.class.getName()
+									+ " act where (act.team=:ampTeamId)" 
+									+ " and (act.actualCompletionDate is not null)"  
+									+ " and (act.actualCompletionDate>=:currentDate)";
+			q = session.createQuery(queryString);
+			q.setParameter("ampTeamId", ampTeamId, Hibernate.LONG);
+			q.setParameter("currentDate", currentDate, Hibernate.DATE);
+			actList = q.list();
+		} catch (Exception ex) {
+			logger.error("Unable to get AmpActivity [getCreatedOrEditedActivities()]", ex);
+		} finally {
+			try {
+				if (session != null) {
+					PersistenceManager.releaseSession(session);
+				}
+			} catch (Exception ex) {
+				logger.debug("releaseSession() failed");
+			}
+		}
+		logger.debug("Getting CreatedOrEdited activities Executed successfully ");
+		return actList;
+	}	
 }

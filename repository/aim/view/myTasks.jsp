@@ -55,5 +55,50 @@
 		</TD>
 	</TR>
 	
-	
+	<TR>
+		<TD class=r-dotted-lg-buttom vAlign=top>
+			<TABLE border=0 cellPadding=0 cellSpacing=0 width="100%" >
+        		<TR><TD>
+              	<TABLE border=0 cellPadding=0 cellSpacing=0 >
+              		<TR bgColor=#f4f4f2>
+                 		<TD bgColor=#c9c9c7 class=box-title
+							title='<digi:trn key="aim:myMessageListOfTeamLeader">List of activities to be closed</digi:trn>'>
+								<digi:trn key="aim:myMessageList">My Messages</digi:trn>
+							</TD>
+                    	<TD background="module/aim/images/corner-r.gif" 
+							height=17 width=17></TD>
+						</TR>
+					</TABLE>
+				</TD></TR>
+				
+				<logic:notEmpty name="myMessages" scope="session">
+				<TR><TD bgColor=#ffffff class=box-border align=left>
+					<bean:size id="messageCount" name="myMessages" scope="session" />
+					<c:if test="${messageCount == 0}">
+						<digi:trn key="aim:emptyMyMessageList">No pending message</digi:trn>
+					</c:if>
+					<c:if test="${messageCount != 0}">
+						<digi:link href="/viewMyMessage.do~showMessage=showMessage">	
+						<c:out value="${messageCount}" />
+						<c:choose>
+							<c:when test="${messageCount == 1}">
+								<digi:trn key="aim:myPendingMessage">Message pending</digi:trn>
+							</c:when>
+							<c:otherwise>
+								<digi:trn key="aim:myPendingMessages">Messages pending</digi:trn>
+							</c:otherwise>
+						</c:choose>
+						</digi:link>
+					</c:if>
+				</TD></TR>
+				</logic:notEmpty>
+				<logic:empty name="myMessages" scope="session">
+				<TR><TD bgColor=#ffffff class=box-border align=left>
+					<digi:trn key="aim:emptyMyMessageLists">No pending messages</digi:trn>										
+				</TD></TR>
+				</logic:empty>
+				
+			</TABLE>
+		</TD>
+	</TR>	
 </TABLE>

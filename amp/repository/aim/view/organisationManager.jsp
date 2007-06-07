@@ -96,8 +96,9 @@
 						<digi:trn key="aim:keyword">Keyword</digi:trn>&nbsp;
 						<html:text property="keyword" styleClass="inp-text" />
 					</td>
-					<td width="150">
-						<digi:trn key="aim:resultsPerPage">Results per page</digi:trn>&nbsp;
+					<td width="120">
+						<digi:trn key="aim:results">Results</digi:trn>&nbsp;
+						<!--<digi:trn key="aim:resultsPerPage">Results per page</digi:trn>&nbsp;-->
 						<!--<html:text property="tempNumResults" size="2" styleClass="inp-text" />-->
 						<html:select property="tempNumResults" styleClass="inp-text">
 							<html:option value="10">10</html:option>
@@ -106,7 +107,13 @@
 							<html:option value="-1">ALL</html:option>
 						</html:select>
 					</td>
-					<td width="249">
+					<td width="50">
+                    <c:set var="trnResetBtn">
+                      <digi:trn key="aim:btnReset"> Reset </digi:trn>
+                    </c:set>
+                    <input type="reset" value="${trnResetBtn}" class="buton">
+					</td>
+					<td width="260">
                     <c:set var="trnGoBtn">
                       <digi:trn key="aim:btnGo"> GO </digi:trn>
                     </c:set>
@@ -307,6 +314,14 @@
 												<td>
 														<digi:link href="/editOrganisation.do?actionFlag=create&mode=resetMode" >
 															<digi:trn key="aim:addNewOrganization">Add an Organization</digi:trn></digi:link>
+												</td>
+											</tr>
+											<tr>
+												<td>
+													<digi:img src="module/aim/images/arrow-014E86.gif" 	width="15" height="10"/></td>
+												<td>
+														<digi:link href="/orgTypeManager.do" >
+															<digi:trn key="aim:orgTypeManager">Organization Type Manager</digi:trn></digi:link>
 												</td>
 											</tr>
 											<tr>

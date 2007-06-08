@@ -106,7 +106,7 @@ public class ParisIndicatorReport extends Action {
 					while(iter.hasNext()) {
 						AmpSector ampSector = (AmpSector) iter.next();
 						if(ampSector.getName().length() > 30) {
-							String temp=ampSector.getName().substring(0,35) + "...";
+							String temp=ampSector.getName().substring(0,30) + "...";
 							ampSector.setName(temp);
 						}
 						svForm.getSectorColl().add(ampSector);

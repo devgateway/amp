@@ -481,53 +481,59 @@ function commentWin(val) {
 																</logic:iterate>
 																</ul>
 																
-																<i><b><digi:trn
-																	key="aim:programPurpose">Purpose</digi:trn></b></i>:
-																<digi:edit key="${activity.purpose}" />
-																<ul>
-																<logic:iterate name="aimChannelOverviewForm" id="comments" property="allComments">
-
-																 	<logic:equal name="comments" property="key" value="Purpose Assumption">
-																		<logic:iterate name="comments" id="comment" property="value" 
-																			type="org.digijava.module.aim.dbentity.AmpComments">
-																			<li><i>
-																			<digi:trn key="aim:purposeAssumption">Purpose Assumption</digi:trn>:</i>
-																			<bean:write name="comment" property="comment"/></li>
-                            						            		</logic:iterate>
-						                                        	</logic:equal>
-						                                        	<logic:equal name="comments" property="key" value="Purpose Verification">
-																		<logic:iterate name="comments" id="comment" property="value" 
-																			type="org.digijava.module.aim.dbentity.AmpComments">
-																			<li><i><digi:trn key="aim:purposeVerification">Purpose Verification</digi:trn>:</i>
-																			<bean:write name="comment" property="comment"/></li>
-						                                        		</logic:iterate>
-						                                        	</logic:equal>
-																</logic:iterate>
-																</ul>
-																<i><b><digi:trn
-																	key="aim:programResults">Results</digi:trn></b></i>:
-																<digi:edit key="${activity.results}" />
-																<ul>
-																<logic:iterate name="aimChannelOverviewForm" id="comments" property="allComments">
-
-																 	<logic:equal name="comments" property="key" value="Results Assumption">
-																		<logic:iterate name="comments" id="comment" property="value" 
-																			type="org.digijava.module.aim.dbentity.AmpComments">
-																			<li><i>
-																			<digi:trn key="aim:resultsAssumption">Results Assumption</digi:trn>:</i>
-																			<bean:write name="comment" property="comment"/></li>
-                            						            		</logic:iterate>
-						                                        	</logic:equal>
-						                                        	<logic:equal name="comments" property="key" value="Results Verification">
-																		<logic:iterate name="comments" id="comment" property="value" 
-																			type="org.digijava.module.aim.dbentity.AmpComments">
-																			<li><i><digi:trn key="aim:resultsVerification">Results Verification</digi:trn>:</i>
-																			<bean:write name="comment" property="comment"/></li>
-						                                        		</logic:iterate>
-						                                        	</logic:equal>
-																</logic:iterate>
-																</ul>
 																
+																
+																<logic:notEmpty name="activity" property="purpose">
+																	<i><b><digi:trn
+																		key="aim:programPurpose">Purpose</digi:trn></b></i>:
+																	<digi:edit key="${activity.purpose}" />
+																	<ul>
+																	<logic:iterate name="aimChannelOverviewForm" id="comments" property="allComments">
+	
+																	 	<logic:equal name="comments" property="key" value="Purpose Assumption">
+																			<logic:iterate name="comments" id="comment" property="value" 
+																				type="org.digijava.module.aim.dbentity.AmpComments">
+																				<li><i>
+																				<digi:trn key="aim:purposeAssumption">Purpose Assumption</digi:trn>:</i>
+																				<bean:write name="comment" property="comment"/></li>
+	                            						            		</logic:iterate>
+							                                        	</logic:equal>
+							                                        	<logic:equal name="comments" property="key" value="Purpose Verification">
+																			<logic:iterate name="comments" id="comment" property="value" 
+																				type="org.digijava.module.aim.dbentity.AmpComments">
+																				<li><i><digi:trn key="aim:purposeVerification">Purpose Verification</digi:trn>:</i>
+																				<bean:write name="comment" property="comment"/></li>
+							                                        		</logic:iterate>
+							                                        	</logic:equal>
+																	</logic:iterate>
+																	</ul>
+																</logic:notEmpty>
+																<logic:notEmpty name="activity" property="results">
+																	<i><b><digi:trn
+																		key="aim:programResults">Results</digi:trn></b></i>:
+																	<digi:edit key="${activity.results}" />
+																	<ul>
+																	<logic:iterate name="aimChannelOverviewForm" id="comments" property="allComments">
+	
+																	 	<logic:equal name="comments" property="key" value="Results Assumption">
+																			<logic:iterate name="comments" id="comment" property="value" 
+																				type="org.digijava.module.aim.dbentity.AmpComments">
+																				<li><i>
+																				<digi:trn key="aim:resultsAssumption">Results Assumption</digi:trn>:</i>
+																				<bean:write name="comment" property="comment"/></li>
+	                            						            		</logic:iterate>
+							                                        	</logic:equal>
+							                                        	<logic:equal name="comments" property="key" value="Results Verification">
+																			<logic:iterate name="comments" id="comment" property="value" 
+																				type="org.digijava.module.aim.dbentity.AmpComments">
+																				<li><i><digi:trn key="aim:resultsVerification">Results Verification</digi:trn>:</i>
+																				<bean:write name="comment" property="comment"/></li>
+							                                        		</logic:iterate>
+							                                        	</logic:equal>
+																	</logic:iterate>
+																	</ul>
+																</logic:notEmpty>
+																																
 																</TD>
 															</TR>
 														</TABLE>

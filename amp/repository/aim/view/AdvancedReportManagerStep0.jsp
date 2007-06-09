@@ -213,6 +213,7 @@ function gotoStep() {
 						</html:radio>
 					</td>
 				</tr>
+				<logic:notEmpty name="SA" scope="application">
 					<tr>
 					<td>
 						<html:radio property="reportType" value="contribution" >
@@ -221,7 +222,8 @@ function gotoStep() {
 							</digi:trn>
 						</html:radio>
 					</td>
-				</tr>				
+					</tr>
+				</logic:notEmpty>				
 			</table>
 			</td>
 			</tr>

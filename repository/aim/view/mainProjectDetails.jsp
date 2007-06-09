@@ -252,13 +252,15 @@
 						</LI>
 						</logic:equal>
 						<logic:notEqual name="aimMainProjectDetailsForm" property="tabIndex" value="7">
-     					<c:set target="${urlTabs}" property="tabIndex" value="7"/>
-						<LI>
-						<div id="gen" title='<digi:trn key="aim:clickToViewCosting">Click here to view Costing</digi:trn>'>
-              		<digi:link href="/viewProjectCostsBreakdown.do" name="urlTabs">
-							:: <digi:trn key="aim:projectCosting">Costing</digi:trn>
-						</digi:link></div>
-						</LI>
+							<logic:notEmpty name="SA" scope="application">
+								<c:set target="${urlTabs}" property="tabIndex" value="7"/>
+								<LI>
+								<div id="gen" title='<digi:trn key="aim:clickToViewCosting">Click here to view Costing</digi:trn>'>
+		              		<digi:link href="/viewProjectCostsBreakdown.do" name="urlTabs">
+									:: <digi:trn key="aim:projectCosting">Costing</digi:trn>
+								</digi:link></div>
+								</LI>
+							</logic:notEmpty>
 						</logic:notEqual>
 						
 					</UL>		

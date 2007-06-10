@@ -252,7 +252,7 @@
 						</LI>
 						</logic:equal>
 						<logic:notEqual name="aimMainProjectDetailsForm" property="tabIndex" value="7">
-							<logic:notEmpty name="SA" scope="application">
+							<logic:empty name="SA" scope="application">
 								<c:set target="${urlTabs}" property="tabIndex" value="7"/>
 								<LI>
 								<div id="gen" title='<digi:trn key="aim:clickToViewCosting">Click here to view Costing</digi:trn>'>
@@ -260,7 +260,7 @@
 									:: <digi:trn key="aim:projectCosting">Costing</digi:trn>
 								</digi:link></div>
 								</LI>
-							</logic:notEmpty>
+							</logic:empty>
 						</logic:notEqual>
 						
 					</UL>		

@@ -14,16 +14,16 @@ import org.apache.struts.actions.DispatchAction;
 import org.digijava.module.aim.util.ProgramUtil;
 
 /**
- * Returns XML of the tree of programs.
- * Currently used in NPD page.
- * This action creates hierarchy from all programs found in DB.
- * Members of the hierarchy are objects of TreeItem class which extends HierarchyMember from kernel 
- * by adding XML functionality - every item can return its own XML. 
- * Complete XML is composed using this parts.
+ * Returns XML of the tree of programs. Currently used in NPD page. This action
+ * creates hierarchy from all programs found in DB. Members of the hierarchy are
+ * objects of TreeItem class which extends HierarchyMember from kernel by adding
+ * XML functionality - every item can return its own XML. Complete XML is
+ * composed using this parts.
+ * 
  * @author Irakli Kobiashvili - ikobiashvili@picktek.com
  * @see org.digijava.module.aim.helper.TreeItem
  * @see org.digijava.kernel.util.collections.HierarchyMember
- *
+ * 
  */
 public class GetProgramTreeNode extends DispatchAction {
 
@@ -33,7 +33,8 @@ public class GetProgramTreeNode extends DispatchAction {
 		return doWork(mapping, form, request, response);
 	}
 
-	private ActionForward doWork(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) {
+	private ActionForward doWork(ActionMapping mapping, ActionForm form,
+			HttpServletRequest request, HttpServletResponse response) {
 		response.setContentType("text/xml");
 
 		ServletOutputStream outputStream = null;

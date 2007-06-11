@@ -1,89 +1,148 @@
 package org.digijava.module.aim.helper;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Iterator;
+import java.util.List;
 
 import org.digijava.kernel.util.collections.HierarchyMember;
 import org.digijava.module.aim.dbentity.AmpTheme;
 import org.digijava.module.aim.dbentity.AmpThemeIndicators;
+import org.digijava.module.aim.util.ProgramUtil;
 
+/**
+ * TreeItem represents AMP program tree node. It extends HierarchyMember for
+ * tree operations and adds XML generation.
+ * 
+ * @author Irakli Kobiashvili - ikobiashvili@picktek.com
+ * @see org.digijava.kernel.util.collections.HierarchyMember
+ * 
+ */
 public class TreeItem extends HierarchyMember {
 
-    public static final String TAG_NAME = "program";
-    public static final String CHILDREN_TAG_NAME = "children";
-    public static final String INDICATORS_TAG_NAME = "indicators";
+	public static final String TAG_NAME = "program";
 
-    public boolean showIndicators;
+	public static final String CHILDREN_TAG_NAME = "children";
 
-    public TreeItem() {
-        super();
-    }
+	public static final String INDICATORS_TAG_NAME = "indicators";
 
-    public String getXml() {
-        String result = "";
-        if (this.getMember() == null) {
-            return result;
-        }
-        AmpTheme realMe = (AmpTheme)this.getMember();
+	/**
+	 * Level of the program. This is ThredLocal cos usually there may be many
+	 * requests in seperate threads that construct XML from the set of this
+	 * objects.
+	 */
+	private static ThreadLocal _level = null;
 
-        //compose self XML
-        result += "<" + TAG_NAME + " "
-                + "id=\"" + realMe.getAmpThemeId().toString() + "\" "
-                + "name=\"" + filter(realMe.getName()) + "\" "
-                + "desc=\"" + filter(realMe.getDescription()) + "\" "
-        		+ "parentID=\"";
-        		if (realMe.getParentThemeId()==null){
-        			result+="-1";
-        		}else{
-        			result+=realMe.getParentThemeId().getAmpThemeId().toString();
-        		}
-        		result+="\" ";
-                result+= "level=\"" + String.valueOf(this.getLevel()) + "\""
-                + ">\n";
+	public boolean showIndicators;
 
-        //compose sub themes XML if any.
-        if (this.getChildren() != null && this.getChildren().size() > 0) {
-            result += "  <" + CHILDREN_TAG_NAME + ">\n";
-            for (Iterator iter = this.getChildren().iterator(); iter.hasNext(); ) {
-                TreeItem item = (TreeItem) iter.next();
-                result += "    " + item.getXml();
-            }
-            result += "  </" + CHILDREN_TAG_NAME + ">\n";
-        }
+	public TreeItem() {
+		super();
+	}
 
-        //compose indicators XML if any
-        if (realMe.getIndicators() != null && realMe.getIndicators().size() > 0) {
-            result += "  <" + INDICATORS_TAG_NAME + ">\n";
-            for (Iterator indicIter = realMe.getIndicators().iterator();
-                 indicIter.hasNext(); ) {
-                AmpThemeIndicators item = (AmpThemeIndicators) indicIter.next();
-                String indicatString = "<indicator id=\"" +
-                        item.getAmpThemeIndId()
-                        + "\" name=\"" + filter(item.getName()) + "\"/>\n";
-                result += "    " + indicatString;
-            }
-            result += "  </" + INDICATORS_TAG_NAME + ">\n";
-        }
-        result += "</" + TAG_NAME + ">\n";
-        return result;
-    }
+	private void incrementLevel() {
+		if (_level == null) {
+			_level = new ThreadLocal();
+		}
+		synchronized (_level) {
+			Integer oldLevel = (Integer) _level.get();
+			if (oldLevel == null) {
+				oldLevel = new Integer(0);
+			}
+			Integer newLevel = new Integer(oldLevel.intValue() + 1);
+			_level.set(newLevel);
+		}
+	}
 
-    public boolean isShowIndicators() {
-        return showIndicators;
-    }
+	private void decrementLevel() {
+		synchronized (_level) {
+			Integer oldLevel = (Integer) _level.get();
+			_level.set(new Integer(oldLevel.intValue() - 1));
+		}
+	}
 
-    public void setShowIndicators(boolean showIndicators) {
-        this.showIndicators = showIndicators;
-    }
-    
-    private String filter(String text){
-    	String result=null;
-    	if(text!=null){
-    		result=text.replaceAll(">","&gt;");
-    		result=result.replaceAll("<","&lt;");
-    		result=result.replaceAll("&","&amp;");
-    		result=result.replaceAll("\"","&quot;");
-    	}
-    	return result;
-    }
+	private int getProgLevel() {
+		Integer level = (Integer) _level.get();
+		if (level == null) {
+			return 0;
+		}
+		return level.intValue();
+	}
+
+	/**
+	 * Generates XML for this program including children programs and indicators
+	 * if they exist
+	 * 
+	 * @return text representing XML of this node and all child nodes.
+	 */
+	public String getXml() {
+		String result = "";
+		if (this.getMember() == null) {
+			return result;
+		}
+		AmpTheme realMe = (AmpTheme) this.getMember();
+		incrementLevel();
+		// compose self XML
+		result += "<" + TAG_NAME + " " + "id=\""
+				+ realMe.getAmpThemeId().toString() + "\" " + "name=\""
+				+ filter(realMe.getName()) + "\" " + "desc=\""
+				+ filter(realMe.getDescription()) + "\" " + "parentID=\"";
+		if (realMe.getParentThemeId() == null) {
+			result += "-1";
+		} else {
+			result += realMe.getParentThemeId().getAmpThemeId().toString();
+		}
+		result += "\" ";
+		result += "level=\"" + getProgLevel() + "\"" + ">\n";
+
+		// compose sub themes XML if any.
+		if (this.getChildren() != null && this.getChildren().size() > 0) {
+			result += "  <" + CHILDREN_TAG_NAME + ">\n";
+			for (Iterator iter = this.getChildren().iterator(); iter.hasNext();) {
+				TreeItem item = (TreeItem) iter.next();
+				result += "    " + item.getXml();
+			}
+			result += "  </" + CHILDREN_TAG_NAME + ">\n";
+		}
+
+		// compose indicators XML if any
+		if (realMe.getIndicators() != null && realMe.getIndicators().size() > 0) {
+			result += "  <" + INDICATORS_TAG_NAME + ">\n";
+
+			// sort indicators by name
+			List sortedIndics = new ArrayList(realMe.getIndicators());
+			Collections.sort(sortedIndics,
+					new ProgramUtil.IndicatorNameComparator());
+
+			for (Iterator indicIter = sortedIndics.iterator(); indicIter
+					.hasNext();) {
+				AmpThemeIndicators item = (AmpThemeIndicators) indicIter.next();
+				String indicatString = "<indicator id=\""
+						+ item.getAmpThemeIndId() + "\" name=\""
+						+ filter(item.getName()) + "\"/>\n";
+				result += "    " + indicatString;
+			}
+			result += "  </" + INDICATORS_TAG_NAME + ">\n";
+		}
+		result += "</" + TAG_NAME + ">\n";
+		decrementLevel();
+		return result;
+	}
+
+	public boolean isShowIndicators() {
+		return showIndicators;
+	}
+
+	public void setShowIndicators(boolean showIndicators) {
+		this.showIndicators = showIndicators;
+	}
+
+	private String filter(String text) {
+		String result = null;
+		if (text != null) {
+			result = text.replaceAll(">", "&gt;");
+			result = result.replaceAll("<", "&lt;");
+		}
+		return result;
+	}
 
 }

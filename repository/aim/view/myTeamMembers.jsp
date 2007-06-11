@@ -32,15 +32,15 @@
 						</TR>
 					</TABLE>
 				</TD></TR>
-				<bean:define id="translation">
-					<digi:trn key="aim:clickToViewMemberDetails">Click here to View Member Details</digi:trn>
-				</bean:define>				
+				<c:set var="trnclickToViewMemberDetails">
+						<digi:trn key="aim:clickToAddNewActivit">Click here to Add New Activity</digi:trn>
+				</c:set>
 				<logic:notEmpty name="myTeamMembers" scope="session">
 				<TR><TD bgColor=#ffffff class=box-border align=left>
 					<TABLE border=0 cellPadding=1 cellSpacing=1 width="100%" >
 					<logic:iterate name="myTeamMembers" id="tm" scope="session" 
 					type="org.digijava.module.aim.helper.TeamMember"> 
-						<TR><TD title='<%=translation%>'>
+						<TR><TD title="${trnclickToViewMemberDetails}">
 							<IMG alt=Link height=10 src="../ampTemplate/images/arrow-gr.gif" width=10>
 							<A href="javascript:showUserProfile(<c:out value="${tm.memberId}"/>)">
 								<bean:write name="tm" property="memberName" />
@@ -53,16 +53,18 @@
 				</logic:notEmpty>
 			</TABLE>	
 					<br/><br/>
-					
-					<div title='<%=translation%>' align="left">
+					<c:set var="trnClickToAddNewActivit">
+						<digi:trn key="aim:clickToAddNewActivit">Click here to Add New Activity</digi:trn>
+					</c:set>
+					<div title="${trnClickToAddNewActivit}" align="left">
 					<input type="button" class="dr-menu" onclick="return addActivity()" value='<digi:trn key="btn:addActivity">Add Activity</digi:trn>' name="addActivity"/>
 					</div>
 					<logic:equal name="teamHead" scope="session" value="yes">
 						<br/>
-						<bean:define id="translation">
-							<digi:trn key="aim:clickToConfigureTeamPages">Click here to Configure Team Workspace</digi:trn>
-						</bean:define>
-						<div title='<%=translation%>' align="left">
+					<c:set var="trnclickToConfigureTeamPages">
+						<digi:trn key="aim:clickToConfigureTeamPages">Click here to Add New Activity</digi:trn>
+					</c:set>
+						<div title='${trnclickToConfigureTeamPages}' align="left">
                      	<input type="button" class="dr-menu" onclick='return teamWorkspaceSetup("-1")' value='<digi:trn key="btn:teamWorkspaceSetup">Team Workspace Setup</digi:trn>' name="addActivity"/>
                      	</div><br/><br/>
 					</logic:equal>

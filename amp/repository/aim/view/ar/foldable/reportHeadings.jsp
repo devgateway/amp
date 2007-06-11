@@ -31,7 +31,8 @@
 	
 	<logic:equal name="widget" scope="request" value="true">
 	<a style="color:#FFFFFF;cursor:pointer" onclick="changeTabUrl('MyTabs','Tab-<bean:write name="reportMeta" property="name"/>','/aim/viewNewAdvancedReport.do~viewFormat=foldable~ampReportId=<bean:write name="reportMeta" property="ampReportId"/>~widget=true~sortBy=<bean:write name="column" property="name"/>');">
-		<%=subColumn.getName(reportMeta.getHideActivities())%>
+		<digi:trn key="report:HeadView:<%=subColumn.getName(reportMeta.getHideActivities())%>"><%=subColumn.getName(reportMeta.getHideActivities())%></digi:trn>
+		
 	</a>
 	</logic:equal>
 	<logic:notEqual name="widget" scope="request" value="true">			
@@ -46,13 +47,10 @@
 	<logic:equal name="columnReport" property="sortAscending" value="true">
 	<img src= "../ampTemplate/images/up.gif" align="absmiddle" border="0"/>
 	</logic:equal>
-
 	</c:if>
-	
 	</logic:equal>
 	<logic:notEqual name="column" property="columnDepth" value="1">
-		<%=subColumn.getName(reportMeta
-												.getHideActivities())%>
+		<%=subColumn.getName(reportMeta.getHideActivities())%>
 	</logic:notEqual>
 	</td>
 	

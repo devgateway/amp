@@ -54,7 +54,7 @@
 			</TABLE>	
 					<br/><br/>
 					<bean:define id="translation">
-						<digi:trn key="aim:clickToAddNewActivity">Click here to Add New Activity</digi:trn>
+						<digi:trn key="aim:clickToAddNewActivit">Click here to Add New Activity</digi:trn>
 					</bean:define>
 					<div title='<%=translation%>' align="left">
 					<input type="button" class="dr-menu" onclick="return addActivity()" value='<digi:trn key="btn:addActivity">Add Activity</digi:trn>' name="addActivity"/>

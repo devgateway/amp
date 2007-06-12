@@ -10,7 +10,10 @@ import org.apache.struts.action.ActionError;
 import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.validator.ValidatorForm;
-import org.digijava.module.aim.dbentity.AmpTeam;
+import org.digijava.module.aim.helper.CategoryManagerUtil;
+import org.digijava.module.aim.helper.Constants;
+
+import org.digijava.module.aim.dbentity.AmpCategoryValue;
 
 public class UpdateWorkspaceForm extends ValidatorForm {
 
@@ -28,7 +31,8 @@ public class UpdateWorkspaceForm extends ValidatorForm {
 	// Available multilateral mofed-teams for mapping with donor-team
 	private Collection relatedTeamMutilatColl = new ArrayList();
 	private String relatedTeamFlag = "no";		// 'yes', means relatedTeamColl collection is loaded, 'no' otherwise
-	private String type = null;					// 'Multilateral' or 'Bilateral'
+	//private String type = null;					// 'Multilateral' or 'Bilateral'
+	Long typeId;								// replaces type
 	private Integer relatedTeamBilatCollSize = null;
 	private String deleteFlag = null;
 	private boolean updateFlag = false;
@@ -44,7 +48,8 @@ public class UpdateWorkspaceForm extends ValidatorForm {
 	
 	// for select child workspaces popup
 	private String childWorkspaceType;
-	private String childTeamCategory;
+//	private String childTeamCategoryId;
+	private Long childTeamTypeId;
 	private Collection availChildWorkspaces;
 	private Long[] selChildWorkspaces;
 	private boolean popupReset;
@@ -196,13 +201,7 @@ public class UpdateWorkspaceForm extends ValidatorForm {
 		this.relatedTeamFlag = relatedTeamFlag;
 	}
 	
-	public String getType() {
-		return type;
-	}
-
-	public void setType(String type) {
-		this.type = type;
-	}
+	
 
 	/**
 	 * @return Returns the relatedTeamBilatCollSize.
@@ -232,15 +231,16 @@ public class UpdateWorkspaceForm extends ValidatorForm {
 	/**
 	 * @return Returns the childTeamCategory.
 	 */
-	public String getChildTeamCategory() {
-		return childTeamCategory;
-	}
+//	public String getChildTeamCategory() {
+//		return childTeamCategory;
+//	}
+	
 	/**
 	 * @param childTeamCategory The childTeamCategory to set.
 	 */
-	public void setChildTeamCategory(String childTeamCategory) {
-		this.childTeamCategory = childTeamCategory;
-	}
+//	public void setChildTeamCategory(String childTeamCategory) {
+//		this.childTeamCategory = childTeamCategory;
+//	}
 	/**
 	 * @return Returns the childWorkspaces.
 	 */
@@ -369,7 +369,7 @@ public class UpdateWorkspaceForm extends ValidatorForm {
 			teamId = null;
 			teamLead = null;
 			actionEvent = null;
-			type = null;
+			typeId = new Long(0);
 			deleteFlag = null;
 			updateFlag = false;
 			workspaceType = null;
@@ -384,7 +384,6 @@ public class UpdateWorkspaceForm extends ValidatorForm {
 			relatedTeamBilatColl = new ArrayList();
 			relatedTeamMutilatColl = new ArrayList();
 			relatedTeamFlag = "no";
-			type = null;
 			relatedTeamBilatCollSize = null;
 			deleteFlag = null;
 			updateFlag = false;
@@ -401,14 +400,15 @@ public class UpdateWorkspaceForm extends ValidatorForm {
 	}
 	
 	public ActionErrors validate(ActionMapping mapping, HttpServletRequest request) {
-		ActionErrors errors = null;
+		ActionErrors errors 					= null;
+		AmpCategoryValue typeCategoryValue		= CategoryManagerUtil.getAmpCategoryValueFromDb(typeId);
 		
 		if ("no".equals(relatedTeamFlag)) {
 			errors = super.validate(mapping, request);
 			
 			if ("DONOR".equalsIgnoreCase(category) && "Team".equalsIgnoreCase(workspaceType)) {
 				if ("edit".equalsIgnoreCase(actionEvent)) {
-					if ("Bilateral".equalsIgnoreCase(type)) {
+					if (typeCategoryValue!=null && Constants.TEAM_TYPE_BILATERAL.equals( typeCategoryValue.getValue() )) {
 						if (relatedTeamBilatColl.size() > 0 )
 							if (null == relatedTeam || "-1".equals(relatedTeam) || relatedTeam.toString().trim().length() < 1) {
 								ActionError error = new ActionError("error.aim.updateWorkspace.noRelatedTeam");
@@ -416,7 +416,7 @@ public class UpdateWorkspaceForm extends ValidatorForm {
 								relatedTeamFlag = "set";
 							}
 					}
-					if ("Multilateral".equalsIgnoreCase(type)) {
+					if ( typeCategoryValue!=null && Constants.TEAM_TYPE_MULTILATERAL.equals(typeCategoryValue.getValue()) ) {
 						if (relatedTeamMutilatColl.size() > 0)
 							if (null == relatedTeam || "-1".equals(relatedTeam) || relatedTeam.toString().trim().length() < 1) {
 								ActionError error = new ActionError("error.aim.updateWorkspace.noRelatedTeam");
@@ -427,7 +427,7 @@ public class UpdateWorkspaceForm extends ValidatorForm {
 				}
 				else if ("add".equalsIgnoreCase(actionEvent)) {
 					if (relatedTeamBilatColl.size() > 0 && relatedTeamMutilatColl.size() > 0) {
-						if (null == type || "-1".equals(type) || type.trim().length() < 1) {
+						if (null == typeCategoryValue) {
 							ActionError error = new ActionError("error.aim.updateWorkspace.noTeamType");
 							errors.add("type", error);
 						}
@@ -453,5 +453,21 @@ public class UpdateWorkspaceForm extends ValidatorForm {
 	
 	public void setResetButton(boolean resetButton) {
 		this.resetButton = resetButton;
+	}
+
+	public Long getTypeId() {
+		return typeId;
+	}
+
+	public void setTypeId(Long typeId) {
+		this.typeId = typeId;
+	}
+
+	public Long getChildTeamTypeId() {
+		return childTeamTypeId;
+	}
+
+	public void setChildTeamTypeId(Long childTeamTypeId) {
+		this.childTeamTypeId = childTeamTypeId;
 	}
 }

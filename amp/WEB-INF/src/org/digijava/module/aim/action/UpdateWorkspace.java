@@ -20,8 +20,11 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.digijava.module.aim.dbentity.AmpTeam;
 import org.digijava.module.aim.form.UpdateWorkspaceForm;
+import org.digijava.module.aim.helper.CategoryManagerUtil;
+import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.TeamUtil;
+import org.digijava.module.aim.dbentity.AmpCategoryValue;
 
 public class UpdateWorkspace extends Action {
 
@@ -60,6 +63,13 @@ public class UpdateWorkspace extends Action {
             String tId1 = request.getParameter("tId");
             System.out.println("Am primit parametrul " + tId1 +" *****************************8");
             logger.debug("event : " + event + " dest : " + dest);
+            
+            AmpCategoryValue typeCategoryValue	= null;
+            String typeString					= null;
+            if (uwForm.getTypeId().longValue() > 0) {
+            	typeCategoryValue	= CategoryManagerUtil.getAmpCategoryValueFromDb(uwForm.getTypeId());
+            	typeString			= typeCategoryValue.getValue();
+            }
 
             // Mapping regular DONOR team with a regular MOFEDd team of same
             // type (bilat/multilat)
@@ -71,9 +81,9 @@ public class UpdateWorkspace extends Action {
                     Iterator itr = col.iterator();
                     while(itr.hasNext()) {
                         AmpTeam team = (AmpTeam) itr.next();
-                        if("Bilateral".equals(team.getType()))
+                        if(Constants.TEAM_TYPE_BILATERAL.equals(team.getType().getValue()))
                             uwForm.getRelatedTeamBilatColl().add(team);
-                        else if("Multilateral".equals(team.getType()))
+                        else if(Constants.TEAM_TYPE_MULTILATERAL.equals(team.getType().getValue()))
                             uwForm.getRelatedTeamMutilatColl().add(team);
                     }
                     uwForm.setRelatedTeamBilatCollSize(new Integer(uwForm
@@ -94,7 +104,7 @@ public class UpdateWorkspace extends Action {
             if("set".equalsIgnoreCase(uwForm.getRelatedTeamFlag())) {
                 if("DONOR".equalsIgnoreCase(uwForm.getCategory())
                    && "Team".equalsIgnoreCase(uwForm.getWorkspaceType())) {
-                    String type = uwForm.getType();
+                    String type = typeString;
                     Iterator itr1 = uwForm.getRelatedTeamBilatColl().iterator();
                     Iterator itr2 = uwForm.getRelatedTeamMutilatColl()
                         .iterator();
@@ -140,11 +150,7 @@ public class UpdateWorkspace extends Action {
                 newTeam.setName(uwForm.getTeamName());
                 newTeam.setTeamCategory(uwForm.getCategory());
                 newTeam.setAccessType(uwForm.getWorkspaceType());
-                if(null == uwForm.getType()
-                   || "-1".equals(uwForm.getType().toString().trim()))
-                    newTeam.setType(null);
-                else
-                    newTeam.setType(uwForm.getType());
+                newTeam.setType(typeCategoryValue);
                 if(null == uwForm.getRelatedTeam()
                    || "-1".equals(uwForm.getRelatedTeam().toString()
                                   .trim()))
@@ -164,7 +170,7 @@ public class UpdateWorkspace extends Action {
         		uwForm.setPopupReset(false);
                 uwForm.setTeamName("");
                 uwForm.setCategory("");
-                uwForm.setType("");
+                uwForm.setTypeId(new Long(0));
                 uwForm.setDescription("");
                 uwForm.setWorkspaceType("");
                 uwForm.setRelatedTeamFlag("no");

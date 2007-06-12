@@ -5,6 +5,7 @@
 <%@ taglib uri="/taglib/struts-html" prefix="html" %>
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
+<%@ taglib uri="/taglib/category" prefix="category" %>
 
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
 <script language="JavaScript">
@@ -164,11 +165,7 @@ function update(action) {
 															<digi:trn key="aim:teamCategory">Team Category</digi:trn>			
 														</td>
 														<td align="left">
-															<html:select property="type" styleClass="inp-text">
-																<html:option value="">-- Select Category --</html:option>
-																<html:option value="Bilateral">Bilateral</html:option>
-																<html:option value="Multilateral">Multilateral</html:option>
-															</html:select>
+															<category:showoptions name="aimUpdateWorkspaceForm" property="typeId" styleClass="inp-text" keyName="<%= org.digijava.module.aim.helper.CategoryConstants.TEAM_TYPE_KEY %>"/>
 														</td>
 													</tr>
 													<tr bgcolor="#f4f4f2">

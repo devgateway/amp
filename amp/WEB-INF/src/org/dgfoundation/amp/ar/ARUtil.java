@@ -231,7 +231,7 @@ public final class ARUtil {
 		if(ampTeamId!=null) ampTeam=TeamUtil.getAmpTeam(ampTeamId);
 		
 		if(ampTeam!=null) {
-			formBean.setWorkspaceType(ampTeam.getType());
+			formBean.setWorkspaceType(ampTeam.getType().getValue());
 			formBean.setWorkspaceName(ampTeam.getName());
 		}
 		

@@ -6,6 +6,7 @@ package org.digijava.module.aim.helper;
 
 import java.util.Collection;
 
+import org.digijava.module.aim.dbentity.AmpCategoryValue;
 import org.digijava.module.aim.dbentity.AmpTeam;
 
 public class Workspace {
@@ -13,7 +14,8 @@ public class Workspace {
 	private String name;
 	private String description;
 	private String teamCategory;
-	private String type;
+	//private String type;
+	private AmpCategoryValue type;
 	private String workspaceType;
 	private Long relatedTeam;
 	private boolean hasActivities;
@@ -96,18 +98,6 @@ public class Workspace {
 		this.teamCategory = teamCategory;
 	}
 	/**
-	 * @return Returns the type.
-	 */
-	public String getType() {
-		return type;
-	}
-	/**
-	 * @param type The type to set.
-	 */
-	public void setType(String type) {
-		this.type = type;
-	}
-	/**
 	 * @return Returns the relatedTeam.
 	 */
 	public Long getRelatedTeam() {
@@ -142,5 +132,13 @@ public class Workspace {
 	 */
 	public void setChildWorkspaces(Collection childWorkspaces) {
 		this.childWorkspaces = childWorkspaces;
+	}
+
+	public AmpCategoryValue getType() {
+		return type;
+	}
+
+	public void setType(AmpCategoryValue type) {
+		this.type = type;
 	}
 }

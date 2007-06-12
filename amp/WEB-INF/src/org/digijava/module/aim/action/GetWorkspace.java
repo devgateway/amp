@@ -16,6 +16,7 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.digijava.module.aim.dbentity.AmpTeam;
 import org.digijava.module.aim.form.UpdateWorkspaceForm;
+import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.helper.Workspace;
 import org.digijava.module.aim.util.TeamUtil;
@@ -85,7 +86,7 @@ public class GetWorkspace extends Action {
 			uwForm.setTeamId(new Long(workspace.getId()));
 			uwForm.setTeamName(workspace.getName());
 			uwForm.setCategory(workspace.getTeamCategory());
-			uwForm.setType(workspace.getType());
+			uwForm.setTypeId(workspace.getType().getId());
 			uwForm.setWorkspaceType(workspace.getWorkspaceType());
 			uwForm.setDescription(workspace.getDescription());
 			
@@ -108,9 +109,9 @@ public class GetWorkspace extends Action {
 								else if ("Multilateral".equalsIgnoreCase(uwtype))
 									uwForm.getRelatedTeamMutilatColl().add(team);
 							} */
-							if ("Bilateral".equals(team.getType()))
+							if ( Constants.TEAM_TYPE_BILATERAL.equals( team.getType().getValue() ) )
 								uwForm.getRelatedTeamBilatColl().add(team);
-							else if ("Multilateral".equals(team.getType()))
+							else if ( Constants.TEAM_TYPE_MULTILATERAL.equals( team.getType().getValue() ) )
 								uwForm.getRelatedTeamMutilatColl().add(team);
 						}
 						uwForm.setRelatedTeamBilatCollSize(new Integer(uwForm.getRelatedTeamBilatColl().size()));

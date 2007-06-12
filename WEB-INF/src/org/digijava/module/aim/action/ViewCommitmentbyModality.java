@@ -618,7 +618,7 @@ public class ViewCommitmentbyModality extends Action
 //		logger.debug("formBean size " + formBean.getPageCount());
 		AmpTeam ampTeam=TeamUtil.getAmpTeam(ampTeamId);
 		formBean.setReportName("Annual Project Detail Report");	//set report name as title.(**hardcoded. can be read from database)
-		formBean.setWorkspaceType(ampTeam.getType());	//set workspace type in subtitle
+		formBean.setWorkspaceType(ampTeam.getType().getValue());	//set workspace type in subtitle
 		formBean.setWorkspaceName(ampTeam.getName());	//set workspace name in subtitle
 
 		/* formBean.getPerspective() stores "Donor" or "MOFED" value which is used to display 

@@ -5,6 +5,7 @@
 <%@ taglib uri="/taglib/struts-html" prefix="html"%>
 <%@ taglib uri="/taglib/digijava" prefix="digi"%>
 <%@ taglib uri="/taglib/jstl-core" prefix="c"%>
+<%@ taglib uri="/taglib/category" prefix="category" %>
 
 <digi:ref href="css/styles.css" type="text/css" rel="stylesheet" />
 
@@ -30,7 +31,7 @@
 	function getChildWorkspaces() {
 		var dest   = document.aimUpdateWorkspaceForm.dest.value;
 		var wsType = document.aimUpdateWorkspaceForm.childWorkspaceType.value;
-		var tCat   = document.aimUpdateWorkspaceForm.childTeamCategory.value;
+		var tCat   = document.aimUpdateWorkspaceForm.childTeamTypeId.value;
 		<digi:context name="getChild" property="context/module/moduleinstance/addChildWorkspaces.do" />
 		document.aimUpdateWorkspaceForm.action = "<%= getChild %>?wType="+wsType+"&tCategory="+tCat+"&popupReset=true&dest="+dest;
 		document.aimUpdateWorkspaceForm.target = "_self"
@@ -85,12 +86,12 @@
 							<td width="20%" bgcolor="#ECF3FD"><digi:trn key="aim:teamType">
 									Team Type
 								</digi:trn></td>
-							<td width="20%" bgcolor="#ECF3FD"><html:select
-								property="childTeamCategory" styleClass="inp-text">
-								<html:option value="">ALL</html:option>
-								<html:option value="bilateral">Bilateral</html:option>
-								<html:option value="multilateral">Multilateral</html:option>
-							</html:select></td>
+							<bean:define id="translation">
+								<digi:trn key="aim:allTeamTypes">ALL</digi:trn>
+							</bean:define>
+							<td width="20%" bgcolor="#ECF3FD">
+								<category:showoptions name="aimUpdateWorkspaceForm" property="childTeamTypeId" firstLine="<%= translation %>"  keyName="<%= org.digijava.module.aim.helper.CategoryConstants.TEAM_TYPE_KEY %>" styleClass="inp-text" />
+							</td>
 							<td width="20%" align="right" bgcolor="#ECF3FD"><input
 								type="button" value="GO" onclick="getChildWorkspaces()"
 								class="dr-menu"></td>

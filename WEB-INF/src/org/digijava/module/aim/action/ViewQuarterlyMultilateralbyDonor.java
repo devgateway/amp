@@ -422,7 +422,7 @@ public class ViewQuarterlyMultilateralbyDonor extends Action
 		logger.debug("FS = " + formBean.getFiscalYrRange());
 		AmpTeam ampTeam=TeamUtil.getAmpTeam(ampTeamId);
 		formBean.setReportName("Quarterly Report By Type of Assistance");
-		formBean.setWorkspaceType(ampTeam.getType());
+		formBean.setWorkspaceType(ampTeam.getType().getValue());
 		formBean.setWorkspaceName(ampTeam.getName());
 		if(perspective.equals("DN"))
 			formBean.setPerspective("Donor");

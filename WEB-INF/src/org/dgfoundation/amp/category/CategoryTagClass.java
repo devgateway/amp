@@ -12,6 +12,7 @@ import java.util.Vector;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspWriter;
+import javax.servlet.jsp.tagext.DynamicAttributes;
 import javax.servlet.jsp.tagext.TagSupport;
 
 import org.apache.log4j.Logger;
@@ -23,7 +24,7 @@ import org.digijava.module.aim.helper.CategoryManagerUtil;
  * @author Alex Gartner
  *
  */
-public class CategoryTagClass extends TagSupport {
+public class CategoryTagClass extends TagSupport implements DynamicAttributes {
 	private Logger logger	= Logger.getLogger(CategoryTagClass.class);
 	Boolean multiselect	= null;
 	Boolean ordered		= null;
@@ -37,6 +38,11 @@ public class CategoryTagClass extends TagSupport {
 	
 	Long categoryId		= null;
 	String categoryName	= null;
+	
+	String firstLine	= null;
+	
+	StringBuffer outerDynamicAttributes	= new StringBuffer(" ");
+	StringBuffer innerDynamicAttributes	= new StringBuffer(" ");
 	
 	int size			= 3;
 	
@@ -63,6 +69,18 @@ public class CategoryTagClass extends TagSupport {
 	}
 	public void setOrdered(Boolean ordered) {
 		this.ordered = ordered;
+	}
+	
+	public void setDynamicAttribute(String uri, String localName, Object value) {
+		String name;
+		if ( localName.toLowerCase().startsWith("outer") ) {
+			name = localName.substring(5);
+			outerDynamicAttributes.append(name+"=\""+value+"\" ");
+		}
+		if ( localName.toLowerCase().startsWith("inner") ) {
+			name = localName.substring(5);
+			innerDynamicAttributes.append(name+"=\""+value+"\" ");
+		}
 	}
 	public int doStartTag() {
 		return SKIP_BODY;
@@ -136,10 +154,12 @@ public class CategoryTagClass extends TagSupport {
 	private void printListView (Collection ampCategoryValues, boolean isMultiselect, Long valueId, Collection valueIdsColl) throws Exception {
 		HttpServletRequest request		= (HttpServletRequest)pageContext.getRequest();
 		String classProperty			= "";
-		
+		String fLine					= firstLine;
 		
 		JspWriter out					= pageContext.getOut();
 		String multiselectProperty		= "";
+		
+		String firstLineSelectedProperty	= "";
 		
 		if (styleClass != null)
 			classProperty	= " class='"+ styleClass + "'";
@@ -148,9 +168,21 @@ public class CategoryTagClass extends TagSupport {
 		
 		
 		Iterator iterator			= ampCategoryValues.iterator();			
-		out.println("<select name='"+property+"' "+classProperty+multiselectProperty+">");
-		if ( !isMultiselect )
-			out.println("<option value='0' >Please select from below</option>");
+		out.println("<select name='"+property+"' "+classProperty+multiselectProperty+outerDynamicAttributes+">");
+		
+		if ( (valueId != null && valueId.longValue() == 0) || 
+				( valueIdsColl != null && valueIdsColl.contains(new Long(0)) ) )
+				firstLineSelectedProperty	= "selected='selected'";
+		
+		if ( !isMultiselect ) {
+			if ( fLine == null )
+				fLine	= "Please select from below";
+			out.println("<option value='0' "+firstLineSelectedProperty+" >"+fLine+"</option>");
+		}
+		else {
+			if ( fLine != null )
+				out.println("<option value='0' "+firstLineSelectedProperty+" >"+fLine+"</option>");
+		}
 		
 		while (iterator.hasNext()) {
 			AmpCategoryValue ampCategoryValue	= (AmpCategoryValue)iterator.next();
@@ -158,10 +190,10 @@ public class CategoryTagClass extends TagSupport {
 			
 			if ( valueId != null && valueId.longValue()	== ampCategoryValue.getId().longValue() || 
 					( valueIdsColl != null && valueIdsColl.contains(ampCategoryValue.getId()) ) ) {
-				out.println("<option value='"+ampCategoryValue.getId()+"' selected='selected' >"+outputValue+"</option>");
+				out.println("<option value='"+ampCategoryValue.getId()+"' selected='selected'"+innerDynamicAttributes+" >"+outputValue+"</option>");
 			}
 			else{
-				out.println("<option value='"+ampCategoryValue.getId()+"' >"+outputValue+"</option>");
+				out.println("<option value='"+ampCategoryValue.getId()+"' "+innerDynamicAttributes+" >"+outputValue+"</option>");
 			}
 			
 		}
@@ -173,9 +205,8 @@ public class CategoryTagClass extends TagSupport {
 		String classProperty			= "";
 		String typeProperty				= " type='radio'";
 		String nameProperty				= " name='"+property+"'";
-		
+
 		JspWriter out					= pageContext.getOut();
-		
 
 		
 		
@@ -185,18 +216,30 @@ public class CategoryTagClass extends TagSupport {
 			typeProperty			= " type='checkbox'";
 		}
 		
-		out.println("<table>");
-		Iterator iterator			= ampCategoryValues.iterator();			
+		out.println("<table " + outerDynamicAttributes + ">");
+		
+		if ( firstLine != null) {
+			String checkedProperty	= "";
+			if (valueId != null && valueId.longValue() == 0)
+				checkedProperty		= " checked='checked'";
+			if (valueIdsColl != null && valueIdsColl.contains(new Long(0)) )
+				checkedProperty		= " checked='checked'";
+					
+			out.println("<tr><td><input value='0' "+typeProperty+checkedProperty+" >"+firstLine+"</input></td></tr>");
+		}
+		
+		Iterator iterator			= ampCategoryValues.iterator();
+		
 		while (iterator.hasNext()) {
 			AmpCategoryValue ampCategoryValue	= (AmpCategoryValue)iterator.next();
 			String outputValue					= CategoryManagerUtil.translateAmpCategoryValue(ampCategoryValue, request, null);
 			out.println("<tr><td>");
 			if ( ( valueId != null && valueId.longValue()	== ampCategoryValue.getId().longValue() ) || 
 					( valueIdsColl != null && valueIdsColl.contains(ampCategoryValue.getId()) ) ) {
-				out.println("<input "+typeProperty+" value='"+ampCategoryValue.getId()+"' checked='checked' >"+outputValue+"</input>");
+				out.println("<input "+typeProperty+" value='"+ampCategoryValue.getId()+"' checked='checked'"+innerDynamicAttributes+" >"+outputValue+"</input>");
 			}
 			else{
-				out.println("<input "+typeProperty+nameProperty+" value='"+ampCategoryValue.getId()+"' >"+outputValue+"</input>");
+				out.println("<input "+typeProperty+nameProperty+" value='"+ampCategoryValue.getId()+innerDynamicAttributes+"' >"+outputValue+"</input>");
 			}
 			out.println("</td></tr>");
 			
@@ -247,5 +290,12 @@ public class CategoryTagClass extends TagSupport {
 	public void setListView(boolean listView) {
 		this.listView = listView;
 	}
+	public String getFirstLine() {
+		return firstLine;
+	}
+	public void setFirstLine(String firstLine) {
+		this.firstLine = firstLine;
+	}
+	
 	
 }

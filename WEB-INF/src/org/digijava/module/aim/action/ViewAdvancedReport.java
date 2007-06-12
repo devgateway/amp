@@ -113,7 +113,7 @@ public class ViewAdvancedReport extends Action
 		formBean.setReportName(ampReports.getName());
 		if(ampReports.getReportDescription()!=null)
 			formBean.setReportDescription(ampReports.getReportDescription());
-		formBean.setWorkspaceType(ampTeam.getType());
+		formBean.setWorkspaceType(ampTeam.getType().getValue());
 		formBean.setWorkspaceName(ampTeam.getName());
 		if(perspective.equals("DN"))
 			formBean.setPerspective("Donor");

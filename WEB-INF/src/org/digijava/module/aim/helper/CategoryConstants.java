@@ -15,5 +15,8 @@ public class CategoryConstants {
 	
 	public static final String IMPLEMENTATION_LEVEL_NAME		= "Implementation Level";
 	public static final String IMPLEMENTATION_LEVEL_KEY			= "implementation_level";
+	
+	public static final String TEAM_TYPE_NAME		= "Team Type";
+	public static final String TEAM_TYPE_KEY		= "team_type";
 }
 

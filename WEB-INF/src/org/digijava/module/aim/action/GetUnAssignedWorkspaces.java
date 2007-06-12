@@ -39,13 +39,18 @@ public class GetUnAssignedWorkspaces extends Action {
 			String teamCategory  = request.getParameter("tCategory");
 			String team = uwForm.getCategory();
 			
-			if ((workspaceType == null || workspaceType.trim().length() == 0) 
-					&& (teamCategory == null || teamCategory.trim().length() == 0)) {
-				uwForm.setChildWorkspaceType(null);
-				uwForm.setChildTeamCategory(null);
+			Long typeId	= null;
+			if (teamCategory != null) {
+				typeId	= new Long(teamCategory);
 			}
 			
-			Collection col = TeamUtil.getUnassignedWorkspaces(workspaceType, teamCategory, team);
+			if ((workspaceType == null || workspaceType.trim().length() == 0) 
+					&& (teamCategory == null || typeId == null || typeId.longValue() == 0) ) {
+				uwForm.setChildWorkspaceType(null);
+				uwForm.setChildTeamTypeId(null);
+			}
+			
+			Collection col = TeamUtil.getUnassignedWorkspaces(workspaceType, typeId, team);
 			logger.debug("Unassigned workspaces retreived, size = " + col.size());
 			
 			uwForm.setAvailChildWorkspaces(col);

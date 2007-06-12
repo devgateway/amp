@@ -51,5 +51,8 @@ public class AmpCategoryValue implements Serializable {
 	    // not used, calculated value, see getIndex() method
 	}
 	
+	public String toString() {
+		return value;
+	}
 		
 }

@@ -83,7 +83,7 @@ public class CopyOfGetWorkspace extends Action {
 			uwForm.setTeamId(new Long(workspace.getId()));
 			uwForm.setTeamName(workspace.getName());
 			uwForm.setCategory(workspace.getTeamCategory());
-			uwForm.setType(workspace.getType());
+			uwForm.setTypeId(workspace.getType().getId());
 			uwForm.setWorkspaceType(workspace.getWorkspaceType());
 			uwForm.setDescription(workspace.getDescription());
 			

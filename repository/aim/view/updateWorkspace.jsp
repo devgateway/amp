@@ -5,6 +5,7 @@
 <%@ taglib uri="/taglib/struts-html" prefix="html" %>
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
+<%@ taglib uri="/taglib/category" prefix="category" %>
 
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
 <script language="JavaScript">
@@ -70,28 +71,29 @@ function update(action) {
 	}
 	else 
 	if (action != "reset"){
-		if (!validateAimUpdateWorkspaceForm(document.aimUpdateWorkspaceForm))
+		if (!validateAimUpdateWorkspaceForm(document.aimUpdateWorkspaceForm)) 
 			return false;
-	
+		 
 	    if (action != "reset"){
 		if (event == "add" || event == "edit") {
 			if (relFlag == "set") {
 				var index1  = document.aimUpdateWorkspaceForm.category.selectedIndex;
 				var index2  = document.aimUpdateWorkspaceForm.workspaceType.selectedIndex;
 				var index3  = document.aimUpdateWorkspaceForm.relatedTeam.selectedIndex;
-				var index4  = document.aimUpdateWorkspaceForm.type.selectedIndex;
+				var index4  = document.aimUpdateWorkspaceForm.typeId.selectedIndex;
 				var val1    = document.aimUpdateWorkspaceForm.category.options[index1].value;
 				var val2    = document.aimUpdateWorkspaceForm.workspaceType.options[index2].value;
 				var val3    = document.aimUpdateWorkspaceForm.relatedTeam.options[index3].value;
 				var val4	= document.aimUpdateWorkspaceForm.relatedTeamFlag.value;
-				var val5	= document.aimUpdateWorkspaceForm.type.options[index4].value;
+				var val5	= document.aimUpdateWorkspaceForm.typeId.options[index4].value;
+				var lab5	= document.aimUpdateWorkspaceForm.typeId.options[index4].text;
 				var bsize	= parseInt(document.aimUpdateWorkspaceForm.relatedTeamBilatCollSize.value, 10);
 				var val6	= document.aimUpdateWorkspaceForm.relatedTeamFlag.value;
 			
 				if (val1 == "DONOR" && val2 == "Team") {
-					if (val5 == "-1") {
+					if (val5 == "0") {
 							alert("Please select team type");
-							document.aimUpdateWorkspaceForm.type.focus();
+							document.aimUpdateWorkspaceForm.typeId.focus();
 							return false;
 						}
 						else if (val3 == "-1") {
@@ -100,7 +102,7 @@ function update(action) {
 							return false;
 						}
 						else {
-							if (val5 == "Bilateral") {
+							if (lab5 == "<%= org.digijava.module.aim.helper.Constants.TEAM_TYPE_BILATERAL %>") {
 								if (bsize != 0) {
 									if (index3 > bsize) {
 										alert("Please select a Bilateral team");
@@ -109,7 +111,7 @@ function update(action) {
 									}
 								}
 							}
-							if (val5 == "Multilateral") {
+							if (lab5 == "<%= org.digijava.module.aim.helper.Constants.TEAM_TYPE_MULTILATERAL %>") {
 								if (bsize != 0) {
 									if (index3 <= bsize) {
 										alert("Please select a Multilateral team");
@@ -135,15 +137,15 @@ function update(action) {
 function relTeam() {
 	var index1  = document.aimUpdateWorkspaceForm.category.selectedIndex;
 	var index2  = document.aimUpdateWorkspaceForm.workspaceType.selectedIndex;
-	var index3  = document.aimUpdateWorkspaceForm.type.selectedIndex;
+	var index3  = document.aimUpdateWorkspaceForm.typeId.selectedIndex;
 	var val1    = document.aimUpdateWorkspaceForm.category.options[index1].value;
 	var val2    = document.aimUpdateWorkspaceForm.workspaceType.options[index2].value;
-	var val3    = document.aimUpdateWorkspaceForm.type.options[index3].value;
+	var val3    = document.aimUpdateWorkspaceForm.typeId.options[index3].value;
 	var val4	= document.aimUpdateWorkspaceForm.relatedTeamFlag.value;
 	
 	if (val1 == "DONOR" && val2 == "Team") {
 		if (val4 == "no") {
-			if (val3 != "-1") {
+			if (val3 != "0") {
 				document.aimUpdateWorkspaceForm.relatedTeamFlag.value = "yes";
 				document.aimUpdateWorkspaceForm.addFlag.value = false;
 				<digi:context name="update" property="context/module/moduleinstance/updateWorkspace.do" />
@@ -346,28 +348,20 @@ onsubmit="return validateAimUpdateWorkspaceForm(this);">
 															<c:if test="${aimUpdateWorkspaceForm.actionEvent != 'add'}">
 																<c:choose>
 																	<c:when test="${aimUpdateWorkspaceForm.actionEvent == 'edit' && aimUpdateWorkspaceForm.relatedTeamFlag != 'noedit'}">
-																		<html:select property="type" styleClass="inp-text" onchange="relTeam()">
-																			<html:option value="-1"><digi:trn key="aim:selectType">-- Select Type --</digi:trn></html:option>
-																			<html:option value="Bilateral"><digi:trn key="aim:bilateral">Bilateral</digi:trn></html:option>
-																			<html:option value="Multilateral"><digi:trn key="aim:multilateral">Multilateral</digi:trn></html:option>
-																		</html:select>	
+																		<category:showoptions outeronchange="relTeam()" name="aimUpdateWorkspaceForm" property="typeId" styleClass="inp-text" keyName="<%= org.digijava.module.aim.helper.CategoryConstants.TEAM_TYPE_KEY %>"/>
 																	</c:when>
 																	<c:otherwise>
-																		<logic:notEmpty name="aimUpdateWorkspaceForm" property="type">
-																			<b><bean:write name="aimUpdateWorkspaceForm" property="type" /></b>
-																		</logic:notEmpty>
-																		<logic:empty name="aimUpdateWorkspaceForm" property="type">
+																		<c:if test="${aimUpdateWorkspaceForm.typeId > 0}">
+																			<b><category:getoptionvalue categoryValueId="${ aimUpdateWorkspaceForm.typeId }" /></b>
+																		</c:if>
+																		<c:if test="${aimUpdateWorkspaceForm.typeId == 0}">
 																			<b><digi:trn key="aim:noTeamTypeFound">No team type found</digi:trn></b>
-																		</logic:empty>
+																		</c:if>
 																	</c:otherwise>
 																</c:choose>
 															</c:if>
 															<c:if test="${aimUpdateWorkspaceForm.actionEvent == 'add'}">
-																<html:select property="type" styleClass="inp-text" onchange="relTeam()">
-																	<html:option value="-1"><digi:trn key="aim:selectType">-- Select Type --</digi:trn></html:option>
-																	<html:option value="Bilateral"><digi:trn key="aim:bilateral">Bilateral</digi:trn></html:option>
-																	<html:option value="Multilateral"><digi:trn key="aim:multilateral">Multilateral</digi:trn></html:option>
-																</html:select>
+																<category:showoptions outeronchange="relTeam()" name="aimUpdateWorkspaceForm" property="typeId" styleClass="inp-text" keyName="<%= org.digijava.module.aim.helper.CategoryConstants.TEAM_TYPE_KEY %>"/>
 															</c:if>
 														</td>
 													</tr>	
@@ -554,12 +548,12 @@ onsubmit="return validateAimUpdateWorkspaceForm(this);">
 																			onclick="update('add')"/>
 																		</c:if>
 																		<c:if test="${aimUpdateWorkspaceForm.actionEvent == 'edit'}">
-																			<input type="button" value="Save" class="dr-menu" onclick="update('edit')">
+																			<input type="button" value="Save" class="dr-menu" onclick="update('edit')"/>
 																		</c:if>																		
 																	</td>
 																	<td>
 																		<!-- <html:reset value="Clear" styleClass="dr-menu"/> -->
-																		<input type="button" value="Reset" class="dr-menu" onclick="update('reset')">
+																		<input type="button" value="Reset" class="dr-menu" onclick="update('reset')"/>
 																	</td>
 																	<td>
 																		<input name="" value="Cancel" onclick="cancel()" class="dr-menu" type="button">

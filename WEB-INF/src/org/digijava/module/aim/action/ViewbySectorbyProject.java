@@ -422,7 +422,7 @@ public class ViewbySectorbyProject extends Action{
 		formBean.setTotalColumns(4*formBean.getFiscalYrRange()+7);
 		AmpTeam ampTeam=TeamUtil.getAmpTeam(ampTeamId);
 		formBean.setReportName("Annual Report By Sector");
-		formBean.setWorkspaceType(ampTeam.getType());
+		formBean.setWorkspaceType(ampTeam.getType().getValue());
 		formBean.setWorkspaceName(ampTeam.getName());
 		if(perspective.equals("DN"))
 			formBean.setPerspective("Donor");

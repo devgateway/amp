@@ -9,6 +9,9 @@ public class AmpOrganisation implements Comparable, Serializable
 {
 	private Long ampOrgId;
 	private String name ;
+	/**
+	 * @deprecated
+	 */
 	private String orgType;  // defunct
 	private String dacOrgCode ;
 	private String orgIsoCode;
@@ -17,6 +20,9 @@ public class AmpOrganisation implements Comparable, Serializable
 	private String orgGroup;  // defunct
 	private AmpFiscalCalendar ampFiscalCalId;
 	private AmpSectorScheme ampSecSchemeId;
+	/**
+	 * @deprecated
+	 */
 	private String orgTypeCode; // defunct
 	
 	private AmpOrgType orgTypeId;
@@ -93,6 +99,7 @@ public class AmpOrganisation implements Comparable, Serializable
 	}
 
 	/**
+	 * @deprecated
 	 * @return
 	 */
 	public String getOrgType() {
@@ -100,6 +107,7 @@ public class AmpOrganisation implements Comparable, Serializable
 	}
 
 	/**
+	 * @deprecated
 	 * @param long1
 	 */
 	public void setAmpOrgId(Long long1) {
@@ -189,6 +197,7 @@ public class AmpOrganisation implements Comparable, Serializable
 	}
 
 	/**
+	 * @deprecated
 	 * @return
 	 */
 	public String getOrgTypeCode() {
@@ -196,6 +205,7 @@ public class AmpOrganisation implements Comparable, Serializable
 	} 
 
 	/**
+	 * @deprecated
 	 * @return
 	 */
 	public void setOrgTypeCode(String string) {

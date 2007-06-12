@@ -80,10 +80,16 @@ public class UpdateWorkspace extends Action {
                 else {
                     Iterator itr = col.iterator();
                     while(itr.hasNext()) {
-                        AmpTeam team = (AmpTeam) itr.next();
-                        if(Constants.TEAM_TYPE_BILATERAL.equals(team.getType().getValue()))
+                        AmpTeam team 			= (AmpTeam) itr.next();
+                        String teamTypeString	= null;
+                        
+                        if (team.getType() != null) {
+                        	teamTypeString	= team.getType().getValue();		
+                        }
+                        
+                        if( Constants.TEAM_TYPE_BILATERAL.equals(teamTypeString) )
                             uwForm.getRelatedTeamBilatColl().add(team);
-                        else if(Constants.TEAM_TYPE_MULTILATERAL.equals(team.getType().getValue()))
+                        else if( Constants.TEAM_TYPE_MULTILATERAL.equals(teamTypeString) )
                             uwForm.getRelatedTeamMutilatColl().add(team);
                     }
                     uwForm.setRelatedTeamBilatCollSize(new Integer(uwForm

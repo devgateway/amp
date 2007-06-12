@@ -53,12 +53,16 @@
 				</logic:notEmpty>
 			</TABLE>	
 					<br/><br/>
-					<c:set var="trnClickToAddNewActivit">
-						<digi:trn key="aim:clickToAddNewActivit">Click here to Add New Activity</digi:trn>
-					</c:set>
-					<div title="${trnClickToAddNewActivit}" align="left">
-					<input type="button" class="dr-menu" onclick="return addActivity()" value='<digi:trn key="btn:addActivity">Add Activity</digi:trn>' name="addActivity"/>
-					</div>
+					<c:if test="${not empty sessionScope.currentMember}">
+						<c:if test="${sessionScope.currentMember.teamType != 'DONOR'}">
+							<c:set var="trnClickToAddNewActivit">
+								<digi:trn key="aim:clickToAddNewActivit">Click here to Add New Activity</digi:trn>
+							</c:set>
+							<div title="${trnClickToAddNewActivit}" align="left">
+								<input type="button" class="dr-menu" onclick="return addActivity()" value='<digi:trn key="btn:addActivity">Add Activity</digi:trn>' name="addActivity"/>
+							</div>
+						</c:if>
+					</c:if>
 					<logic:equal name="teamHead" scope="session" value="yes">
 						<br/>
 					<c:set var="trnclickToConfigureTeamPages">

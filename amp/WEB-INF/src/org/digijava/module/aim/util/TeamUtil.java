@@ -64,7 +64,7 @@ public class TeamUtil {
 	 */
 
 	public static Collection getUnassignedWorkspaces(String workspaceType,
-			String teamCategory, String team) {
+			Long teamCategoryId, String team) {
 
 		Session session = null;
 		Collection col = new ArrayList();
@@ -87,8 +87,8 @@ public class TeamUtil {
 				wTypeFlag = true;
 			}
 			// if user has specified team category filter
-			if (teamCategory != null && teamCategory.trim().length() != 0) {
-				qryStr += " and (t.type=:tCat)";
+			if (teamCategoryId != null && teamCategoryId.longValue() != 0) {
+				qryStr += " and (t.type=:typeId)";
 				tCatFlag = true;
 			}
 
@@ -98,7 +98,7 @@ public class TeamUtil {
 				qry.setParameter("wType", workspaceType, Hibernate.STRING);
 			}
 			if (tCatFlag) {
-				qry.setParameter("tCat", teamCategory, Hibernate.STRING);
+				qry.setParameter("typeId", teamCategoryId, Hibernate.LONG);
 			}
 
 			col = qry.list();

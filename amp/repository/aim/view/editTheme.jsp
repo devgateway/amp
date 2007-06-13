@@ -198,8 +198,7 @@
 				<tr bgColor=#dddddb>
 				<td bgColor=#dddddb height="25" align="center" colspan="2">
 						<input styleClass="dr-menu" type="button" name="addBtn" value="Save" onclick="return saveProgram('<bean:write name="aimThemeForm" property="themeId"/>','<bean:write name="aimThemeForm" property="rootId"/>','<bean:write name="aimThemeForm" property="name"/>')">&nbsp;&nbsp;
-						<input styleClass="dr-menu" type="reset" value="Cancel">&nbsp;&nbsp;
-						<input styleClass="dr-menu" type="button" name="close" value="Close" onclick="closeWindow()">
+						<input styleClass="dr-menu" type="reset" value="Cancel" onclick="closeWindow()">
 				</td>
 				</tr>	
 		</table>

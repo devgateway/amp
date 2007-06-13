@@ -366,16 +366,10 @@
 																<table width="100%" cellspacing="5">
 																	<tr>
 																		<td width="50%" align="right">
-                                                                          <c:set var="trnSaveBtn">
-                                                                            <digi:trn key="aim:editRoleSaveBtn">Save</digi:trn>
-                                                                          </c:set>
-                                                                          <html:submit value="${trnSaveBtn}" styleClass="dr-menu" />
+																			<html:submit value="Save" styleClass="dr-menu" onclick="return permissionCheck()" />
 																		</td>
 																		<td width="50%" align="left">
-                                                                          <c:set var="trnCancelBtn">
-                                                                            <digi:trn key="aim:editRoleCancelBtn">Cancel</digi:trn>
-                                                                          </c:set>
-                                                                          <html:reset value="${trnCancelBtn}" styleClass="dr-menu" />
+																			<html:reset value="Cancel" styleClass="dr-menu" />
 																		</td>
 																	</tr>
 																</table>

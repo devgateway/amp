@@ -10,8 +10,9 @@ package org.digijava.module.aim.dbentity;
 import java.io.Serializable;
 
 import org.digijava.kernel.dbentity.Country;
+import org.digijava.module.aim.util.Identifiable;
 
-public class AmpRegion implements Serializable, Comparable{
+public class AmpRegion implements Serializable, Comparable, Identifiable{
 	private Long ampRegionId;
 	private String name;
 	private String description;
@@ -139,6 +140,11 @@ public class AmpRegion implements Serializable, Comparable{
 
 	public int compareTo(Object o) {
 		return this.ampRegionId.compareTo(((AmpRegion)o).getAmpRegionId());
+	}
+
+
+	public Object getIdentifier() {
+		return this.getAmpRegionId();
 	}
 	
 }

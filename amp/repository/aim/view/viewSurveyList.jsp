@@ -88,6 +88,15 @@ function preview(id)
 												onclick="preview(<c:out value="${aimSurveyForm.ampActivityId}"/>)">
 												<input type="button" value="Edit" class="dr-menu"
 												onclick="fnEditProject(<c:out value="${aimSurveyForm.ampActivityId}"/>)">
+											<logic:empty name="SA" scope="application">
+												<input type="button" value="Preview Logframe" class="dr-menu"	onclick="previewLogframe(<c:out value="${aimFinancingBreakdownForm.ampActivityId}"/>)">
+											</logic:empty>
+											<logic:empty name="SA" scope="application">
+											<input type='button' value='<digi:trn key="aim:projectFiche">Project Fiche</digi:trn>' class='dr-menu'
+												onclick='projectFiche(<c:out value="${aimFinancingBreakdownForm.ampActivityId}"/>)'>
+											</logic:empty>
+												
+												
 											</TD>
 										</TR>
 									</TABLE>										

@@ -29,7 +29,7 @@ CREATE TABLE `amp_columns` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 INSERT INTO `amp_columns` (`columnId`,`columnName`,`aliasName`,`cellType`,`extractorView`) VALUES 
  (1,'Status','statusName','org.dgfoundation.amp.ar.cell.TextCell','v_status'),
- (2,'Donor','donorName','org.dgfoundation.amp.ar.cell.TextCell','v_donors'),
+ (2,'Donor Agency','donorAgency','org.dgfoundation.amp.ar.cell.TextCell','v_donors'),
  (3,'Actual Start Date','actualStartDate','org.dgfoundation.amp.ar.cell.DateCell','v_actual_start_date'),
  (4,'Project Title','activityName','org.dgfoundation.amp.ar.cell.TextCell','v_titles'),
  (5,'Type Of Assistance','termAssistName','org.dgfoundation.amp.ar.cell.TextCell','v_terms_assist'),
@@ -57,7 +57,8 @@ INSERT INTO `amp_columns` (`columnId`,`columnName`,`aliasName`,`cellType`,`extra
  (25,'Total Costs','costs','org.dgfoundation.amp.ar.cell.CummulativeAmountCell','v_costs'),
  (26,'A.C. Chapter','acchapter','org.dgfoundation.amp.ar.cell.TextCell','v_ac_chapters'),
  (27,'Accession Instrument','accessioninstr','org.dgfoundation.amp.ar.cell.TextCell','v_accession_instruments'),
- (28,'Costing Donor','costingDonor','org.dgfoundation.amp.ar.cell.TextCell','v_costing_donors'); 
+ (28,'Costing Donor','costingDonor','org.dgfoundation.amp.ar.cell.TextCell','v_costing_donors'),
+ (29,'Donor Group','donorGroup','org.dgfoundation.amp.ar.cell.TextCell','v_donor_groups');  
 
 
 

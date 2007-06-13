@@ -13,7 +13,12 @@
 
 
 <digi:form action="/viewNewAdvancedReport.do">
-	<table>
+	<table width="400px">
+		<tr>
+		<td class=clsTableTitleCol colspan="2" align="center">
+		Please select hierarchy sorter criteria
+		</td>
+		</tr>
 		<tr>
 			<td align="right">Hierarchy Level:</td>
 			<td><html:select property="levelPicked">

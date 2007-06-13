@@ -4,8 +4,9 @@ import java.io.Serializable;
 import java.util.Set;
 
 import org.digijava.kernel.dbentity.Country;
+import org.digijava.module.aim.util.Identifiable;
 
-public class AmpOrganisation implements Comparable, Serializable
+public class AmpOrganisation implements Comparable, Serializable, Identifiable
 {
 	private Long ampOrgId;
 	private String name ;
@@ -412,5 +413,9 @@ public class AmpOrganisation implements Comparable, Serializable
 	
 	public String toString() {
 		return this.getName();
+	}
+
+	public Object getIdentifier() {
+		return this.getAmpOrgId();
 	}
 }	

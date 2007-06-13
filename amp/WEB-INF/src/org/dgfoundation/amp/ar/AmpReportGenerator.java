@@ -396,7 +396,9 @@ public class AmpReportGenerator extends ReportGenerator {
 		rawColumns = new GroupColumn();
 		this.filter = filter;
 		extractableCount=0;
-
+		
+		filter.generateFilterQuery();
+		
 		logger.info("Master report query:" + filter.getGeneratedFilterQuery());
 
 		reportMetadata.setOrderedColumns(ARUtil

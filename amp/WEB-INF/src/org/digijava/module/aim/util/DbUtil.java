@@ -1,6 +1,5 @@
 package org.digijava.module.aim.util;
 
-import java.sql.BatchUpdateException;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
@@ -38,7 +37,6 @@ import org.digijava.module.aim.dbentity.AmpAhsurveyIndicator;
 import org.digijava.module.aim.dbentity.AmpAhsurveyQuestion;
 import org.digijava.module.aim.dbentity.AmpAhsurveyResponse;
 import org.digijava.module.aim.dbentity.AmpApplicationSettings;
-import org.digijava.module.aim.dbentity.AmpCategoryClass;
 import org.digijava.module.aim.dbentity.AmpCategoryValue;
 import org.digijava.module.aim.dbentity.AmpClosingDateHistory;
 import org.digijava.module.aim.dbentity.AmpComments;
@@ -95,6 +93,29 @@ import org.digijava.module.cms.dbentity.CMSContentItem;
 public class DbUtil {
 	private static Logger logger = Logger.getLogger(DbUtil.class);
 
+	
+	public static AmpPerspective getPerspectiveByCode(String code) {
+		Session session = null;
+		List perspectives = new ArrayList();
+
+		try {
+			session = PersistenceManager.getRequestDBSession();
+			String queryString = "select f from "
+					+ AmpPerspective.class.getName()
+					+ " f where (f.code=:perspCode)";
+			Query qry = session.createQuery(queryString);
+			qry.setParameter("perspCode", code, Hibernate.STRING);
+			perspectives = qry.list();
+			if(perspectives!=null && perspectives.size()>0) return (AmpPerspective) perspectives.get(0);
+
+		} catch (Exception ex) {
+			logger.error("Unable to get perspectives by code :" + ex);
+			ex.printStackTrace();
+			}
+		return null;
+	}
+
+	
 	public static Collection getFundingDetails(Long fundId) {
 		Session session = null;
 		Collection fundingDetails = new ArrayList();

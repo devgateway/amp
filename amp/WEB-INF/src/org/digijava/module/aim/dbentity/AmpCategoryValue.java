@@ -2,12 +2,14 @@ package org.digijava.module.aim.dbentity;
 
 import java.io.Serializable;
 import java.util.Set;
+
+import org.digijava.module.aim.util.Identifiable;
 /**
  * Represents one of the possible values for a certain category
  * @author Alex Gartner
  *
  */
-public class AmpCategoryValue implements Serializable {
+public class AmpCategoryValue implements Serializable, Identifiable {
 	private Long id;
 	private AmpCategoryClass ampCategoryClass;
 	private String value;
@@ -50,9 +52,12 @@ public class AmpCategoryValue implements Serializable {
 		this.index	= index;
 	    // not used, calculated value, see getIndex() method
 	}
-	
+
 	public String toString() {
 		return value;
+	}
+	public Object getIdentifier() {
+		return this.getId();
 	}
 		
 }

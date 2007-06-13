@@ -25,18 +25,16 @@
 	<%int rowsp = column.getCurrentRowSpan();
 						%>
 	<logic:iterate name="column" property="subColumnList" id="subColumn" scope="page" type="org.dgfoundation.amp.ar.Column">
-	<td align="center" class=clsTableTitleCol rowspan="<%=rowsp%>" colspan='<bean:write name="subColumn" property="width"/>' %">
+	<td align="center" class=clsTableTitleCol rowspan="<%=rowsp%>" colspan='<bean:write name="subColumn" property="width"/>'>
 	
 	<logic:equal name="column" property="columnDepth" value="1">
+
+	
 	
 	<logic:equal name="widget" scope="request" value="true">
+
 	<a style="color:#FFFFFF;cursor:pointer" onclick="changeTabUrl('MyTabs','Tab-<bean:write name="reportMeta" property="name"/>','/aim/viewNewAdvancedReport.do~viewFormat=foldable~ampReportId=<bean:write name="reportMeta" property="ampReportId"/>~widget=true~sortBy=<bean:write name="column" property="name"/>');">
-	<c:set var="head">
-	<%=subColumn.getName(reportMeta.getHideActivities())%>
-	</c:set>	
-		
-		<digi:trn key="report:HeadView:${head}"><%=subColumn.getName(reportMeta.getHideActivities())%></digi:trn>
-		
+		<%=subColumn.getName(reportMeta.getHideActivities())%>		
 	</a>
 	</logic:equal>
 	<logic:notEqual name="widget" scope="request" value="true">			

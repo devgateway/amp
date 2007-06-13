@@ -97,6 +97,10 @@ public class AmpFiscalCalendar implements Serializable, Identifiable
 	public Object getIdentifier() {
 		return this.getAmpFiscalCalId();
 	}
+	
+	public String toString() {
+		return name;
+	}
 
 }
 	

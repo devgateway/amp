@@ -199,20 +199,20 @@ public class CategAmountColWorker extends ColumnWorker {
 		String quarter=null;
 		Integer year=null;
 		
-		if(filter.getCalendarType()==null || filter.getCalendarType().intValue()==Constants.GREGORIAN.intValue()) {
+		if(filter.getCalendarType()==null || filter.getCalendarType().equals(Constants.GREGORIAN)) {
 			quarter= "Q"+ new Integer(calendar.get(Calendar.MONTH) / 4 + 1);
 			year=new Integer(calendar.get(Calendar.YEAR));
 		} else
-		if(filter.getCalendarType().intValue()==Constants.ETH_CAL.intValue() || filter.getCalendarType().intValue()==Constants.ETH_FY.intValue()) {
+		if(filter.getCalendarType().equals(Constants.ETH_CAL) || filter.getCalendarType().equals(Constants.ETH_FY)) {
 			EthiopianCalendar ec=new EthiopianCalendar();
 			EthiopianCalendar tempDate=new EthiopianCalendar();
 			ec=tempDate.getEthiopianDate(calendar);
-			if(filter.getCalendarType().intValue()==Constants.ETH_FY.intValue())
+			if(filter.getCalendarType().equals(Constants.ETH_FY))
 			{
 				year=new Integer(ec.ethFiscalYear);
 				quarter=new String("Q"+ec.ethFiscalQrt);
 			}
-			if(filter.getCalendarType().intValue()==Constants.ETH_CAL.intValue())
+			if(filter.getCalendarType().equals(Constants.ETH_CAL))
 			{
 				year=new Integer(ec.ethYear);
 				quarter=new String("Q"+ec.ethQtr);
@@ -225,7 +225,7 @@ public class CategAmountColWorker extends ColumnWorker {
 		if(perspectiveCode!=null) {
 //			we eliminate the perspective items that do not match the filter one
 			MetaInfo perspMs=new MetaInfo(ArConstants.PERSPECTIVE,perspectiveCode);
-			if(!filter.getPerspectiveCode().equals(perspMs.getValue())) return null;
+			if(!filter.getPerspective().getCode().equals(perspMs.getValue())) return null;
 			
 		acc.getMetaData().add(perspMs);
 		}
@@ -247,8 +247,8 @@ public class CategAmountColWorker extends ColumnWorker {
 		acc.setCummulativeShow(isCummulativeShowable(acc));
 		
 		//UGLY get exchage rate if cross-rates are needed (if we need to convert from X to USD and then to Y)
-		if(filter.getAmpCurrencyCode()!=null && !"USD".equals(filter.getAmpCurrencyCode())) 
-			acc.setToExchangeRate(Util.getExchange(filter.getAmpCurrencyCode(),td));
+		if(filter.getCurrency()!=null && !"USD".equals(filter.getCurrency().getCurrencyCode())) 
+			acc.setToExchangeRate(Util.getExchange(filter.getCurrency().getCurrencyCode(),td));
 		
 		return acc;
 	}

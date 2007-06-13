@@ -6,13 +6,29 @@
  */
 package org.dgfoundation.amp.ar;
 
+import java.beans.BeanInfo;
+import java.beans.IntrospectionException;
+import java.beans.Introspector;
+import java.beans.PropertyDescriptor;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.util.Collection;
 import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 
+import net.sf.hibernate.Session;
+
+import org.apache.log4j.Logger;
 import org.dgfoundation.amp.Util;
+import org.digijava.kernel.exception.DgException;
+import org.digijava.kernel.persistence.PersistenceManager;
+import org.digijava.module.aim.dbentity.AmpCurrency;
+import org.digijava.module.aim.dbentity.AmpFiscalCalendar;
+import org.digijava.module.aim.dbentity.AmpPerspective;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.TeamMember;
+import org.digijava.module.aim.util.DbUtil;
 
 /**
  * Filtering bean. Holds info about filtering parameters and creates the filtering query
@@ -20,7 +36,9 @@ import org.digijava.module.aim.helper.TeamMember;
  * @since Aug 5, 2006
  *
  */
-public class AmpARFilter implements Filter {	
+public class AmpARFilter implements Filter {
+	
+	protected static Logger logger = Logger.getLogger(AmpARFilter.class);
 	private Long id;
 	private Set statuses=null;
 	private Set donors=null;
@@ -28,55 +46,65 @@ public class AmpARFilter implements Filter {
 	private Set regions=null;
 	private Set risks=null;
 	private Long ampModalityId=null;
-	private String ampCurrencyCode=null;
+	private AmpCurrency currency=null;
 	private Set ampTeams=null;
-	private Integer calendarType=null;
-	private String perspectiveCode;
+	private AmpFiscalCalendar calendarType=null;
+	private AmpPerspective perspective;
 	private boolean widget=false;
 	private boolean publicView=false;
 	private Boolean budget=null;
-
+	private Integer lineMinRank;
+	private Integer planMinRank;
+	
 	private Integer fromYear;
 	private Integer toYear;	
 	
-	private String generatedFilterQuery="SELECT distinct(amp_activity_id) FROM amp_activity WHERE 1";
-	private int initialQueryLength=generatedFilterQuery.length();
+	private static final String initialFilterQuery="SELECT distinct(amp_activity_id) FROM amp_activity WHERE 1";
+	private String generatedFilterQuery;
+	private int initialQueryLength=initialFilterQuery.length();
 	
 	private void queryAppend(String filter) {
 		//generatedFilterQuery+= (initialQueryLength==generatedFilterQuery.length()?"":" AND ") + " amp_activity_id IN ("+filter+")";
 		generatedFilterQuery+= " AND amp_activity_id IN ("+filter+")";
 	}
 	
-	public AmpARFilter(HttpServletRequest request) {
+	public void readRequestData(HttpServletRequest request) {
+		this.generatedFilterQuery=initialFilterQuery;
 		String perspective=null;
 		TeamMember tm = (TeamMember) request.getSession()
 		.getAttribute(Constants.CURRENT_MEMBER);
-
+		
 		if(tm!=null) {perspective = tm.getAppSettings().getPerspective();
 		if (perspective.equals("Donor"))
 			perspective = "DN";
 		if (perspective.equals("MOFED"))
 			perspective = "MA";}
 		else perspective="MA";
-	
-		this.setPerspectiveCode(perspective);
-		
+
+		this.setPerspective(DbUtil.getPerspective(perspective));
+
 		String widget=(String) request.getAttribute("widget");
-		if("true".equals(widget))setWidget(true);
+		if(widget!=null) this.setWidget(new Boolean(widget).booleanValue());
+		
 	}
 	
+
 	public AmpARFilter() {
 		super();	
+		this.generatedFilterQuery=initialFilterQuery;
 	}
 	
 	public void generateFilterQuery() {
 		String BUDGET_FILTER="SELECT amp_activity_id FROM amp_activity WHERE budget="+(budget!=null?budget.toString():"null")+(budget!=null && budget.booleanValue()==false?" OR budget is null":"");
-		String TEAM_FILTER="SELECT amp_activity_id FROM amp_activity WHERE amp_team_id IN ("+Util.toCSString(ampTeams)+") OR amp_activity_id IN (SELECT ata.amp_activity_id FROM amp_team_activities ata WHERE ata.amp_team_id IN ("+Util.toCSString(ampTeams)+") )";
-		String STATUS_FILTER="SELECT amp_activity_id FROM v_status WHERE amp_status_id IN ("+Util.toCSString(statuses)+")";
-		String ORG_FILTER = "SELECT amp_activity_id FROM v_donors WHERE amp_donor_org_id IN ("+Util.toCSString(donors)+")";
-		String SECTOR_FILTER="SELECT amp_activity_id FROM v_sectors WHERE amp_sector_id IN ("+Util.toCSString(sectors)+")";
-		String REGION_FILTER="SELECT amp_activity_id FROM v_regions WHERE name IN ("+Util.toCSString(regions)+")";
+		String TEAM_FILTER="SELECT amp_activity_id FROM amp_activity WHERE amp_team_id IN ("+Util.toCSString(ampTeams,true)+") OR amp_activity_id IN (SELECT ata.amp_activity_id FROM amp_team_activities ata WHERE ata.amp_team_id IN ("+Util.toCSString(ampTeams,true)+") )";
+		String STATUS_FILTER="SELECT amp_activity_id FROM v_status WHERE amp_status_id IN ("+Util.toCSString(statuses,true)+")";
+		String ORG_FILTER = "SELECT amp_activity_id FROM v_donors WHERE amp_donor_org_id IN ("+Util.toCSString(donors,true)+")";
+		String SECTOR_FILTER="SELECT amp_activity_id FROM v_sectors WHERE amp_sector_id IN ("+Util.toCSString(sectors,true)+")";
+		String REGION_FILTER="SELECT amp_activity_id FROM v_regions WHERE name IN ("+Util.toCSString(regions,true)+")";
 		String FINANCING_INSTR_FILTER="SELECT amp_activity_id FROM v_financing_instrument WHERE amp_modality_id='"+ampModalityId+"'";
+		String LINE_MIN_RANK_FILTER="SELECT amp_activity_id FROM amp_activity WHERE line_min_rank="+lineMinRank;
+		String PLAN_MIN_RANK_FILTER="SELECT amp_activity_id FROM amp_activity WHERE plan_min_rank="+planMinRank;
+		
 		//currency is not a filter but a currency transformation
 		//String START_YEAR_FILTER="SELECT amp_activity_id FROM v_actual_start_date WHERE date_format(actual_start_date,_latin1'%Y')>='"+startYear+"'";
 		//String START_MONTH_FILTER="SELECT amp_activity_id FROM v_actual_start_date WHERE date_format(actual_start_date,_latin1'%m')>='"+startMonth+"'";
@@ -87,7 +115,7 @@ public class AmpARFilter implements Filter {
 		//String CLOSE_DAY_FILTER="SELECT amp_activity_id FROM v_actual_completion_date WHERE date_format(actual_completion_date,_latin1'%d')<='"+closeDay+"'";
 	
 	
-		String RISK_FILTER="SELECT v.activity_id from AMP_ME_INDICATOR_VALUE v, AMP_INDICATOR_RISK_RATINGS r where v.risk=r.amp_ind_risk_ratings_id and r.amp_ind_risk_ratings_id in ("+Util.toCSString(risks)+")";
+		String RISK_FILTER="SELECT v.activity_id from AMP_ME_INDICATOR_VALUE v, AMP_INDICATOR_RISK_RATINGS r where v.risk=r.amp_ind_risk_ratings_id and r.amp_ind_risk_ratings_id in ("+Util.toCSString(risks,true)+")";
 		
 		String FROM_YEAR_FILTER="SELECT f.amp_activity_id FROM amp_funding f, amp_funding_detail fd WHERE f.amp_funding_id=fd.AMP_FUNDING_ID and date_format(fd.transaction_date,_latin1'%Y')>='"+fromYear+"'";
 		String TO_YEAR_FILTER="SELECT f.amp_activity_id FROM amp_funding f, amp_funding_detail fd WHERE f.amp_funding_id=fd.AMP_FUNDING_ID and date_format(fd.transaction_date,_latin1'%Y')<='"+toYear+"'";
@@ -100,6 +128,8 @@ public class AmpARFilter implements Filter {
 		if(regions!=null && regions.size()>0) queryAppend(REGION_FILTER);
 		if(ampModalityId!=null && ampModalityId.intValue()!=0) queryAppend(FINANCING_INSTR_FILTER);
 		if(risks!=null && risks.size()>0) queryAppend(RISK_FILTER);
+		if(lineMinRank!=null) queryAppend(LINE_MIN_RANK_FILTER);
+		if(planMinRank!=null) queryAppend(PLAN_MIN_RANK_FILTER);
 		
 		//if(fromYear!=null) queryAppend(FROM_YEAR_FILTER);
 		//if(toYear!=null) queryAppend(TO_YEAR_FILTER);
@@ -117,16 +147,16 @@ public class AmpARFilter implements Filter {
 	/**
 	 * @return Returns the ampCurrencyCode.
 	 */
-	public String getAmpCurrencyCode() {
-		return ampCurrencyCode;
+	public AmpCurrency getCurrency() {
+		return currency;
 	}
 
 
 	/**
 	 * @param ampCurrencyCode The ampCurrencyCode to set.
 	 */
-	public void setAmpCurrencyCode(String ampCurrencyCode) {
-		this.ampCurrencyCode = ampCurrencyCode;
+	public void setCurrency(AmpCurrency ampCurrencyCode) {
+		this.currency = ampCurrencyCode;
 	}
 
 
@@ -236,14 +266,14 @@ public class AmpARFilter implements Filter {
 	/**
 	 * @return Returns the calendarType.
 	 */
-	public Integer getCalendarType() {
+	public AmpFiscalCalendar getCalendarType() {
 		return calendarType;
 	}
 
 	/**
 	 * @param calendarType The calendarType to set.
 	 */
-	public void setCalendarType(Integer calendarType) {
+	public void setCalendarType(AmpFiscalCalendar calendarType) {
 		this.calendarType = calendarType;
 	}
 
@@ -292,15 +322,15 @@ public class AmpARFilter implements Filter {
 	/**
 	 * @return Returns the perspectiveCode.
 	 */
-	public String getPerspectiveCode() {
-		return perspectiveCode;
+	public AmpPerspective getPerspective() {
+		return perspective;
 	}
 
 	/**
 	 * @param perspectiveCode The perspectiveCode to set.
 	 */
-	public void setPerspectiveCode(String perspective) {
-		this.perspectiveCode = perspective;
+	public void setPerspective(AmpPerspective perspective) {
+		this.perspective = perspective;
 	}
 
 	public boolean isPublicView() {
@@ -339,5 +369,60 @@ public class AmpARFilter implements Filter {
 	 * @return Returns the approvalStatus.
 	 */
 	
+	/**
+	 * provides a way to display this bean in HTML. Properties are automatically shown along with their values. CollectionS are unfolded and
+	 * excluded properties (internally used) are not shown.
+	 * @see AmpARFilter.IGNORED_PROPERTIES
+	 */
+	public String toString() {
+		StringBuffer ret=new StringBuffer();
+		BeanInfo beanInfo = null;
+		try {
+			beanInfo = Introspector.getBeanInfo(AmpARFilter.class);
+		PropertyDescriptor[] propertyDescriptors = beanInfo.getPropertyDescriptors();
+		for (int i = 0; i < propertyDescriptors.length; i++) {
+			Method m=propertyDescriptors[i].getReadMethod();
+			Object object = m.invoke(this,new Object[]{});
+			if(object==null || IGNORED_PROPERTIES.contains(propertyDescriptors[i].getName())) continue;			
+			ret.append("<b>").append(propertyDescriptors[i].getName()).append(": ").append("</b>");
+			if(object instanceof Collection) 
+				ret.append(Util.toCSString((Collection) object,false));
+			
+			else ret.append(object);
+			if(i<propertyDescriptors.length) ret.append("; ");
+		}
+		} catch (IntrospectionException e) {
+			logger.error(e);
+			e.printStackTrace();
+		} catch (IllegalArgumentException e) {
+			logger.error(e);
+			e.printStackTrace();
+		} catch (IllegalAccessException e) {
+			logger.error(e);
+			e.printStackTrace();
+		} catch (InvocationTargetException e) {
+			logger.error(e);
+			e.printStackTrace();
+		}
+		return ret.toString();
+		
+	}
 
+	private static final String IGNORED_PROPERTIES="class#generatedFilterQuery#initialQueryLength#widget#publicView";
+
+	public Integer getLineMinRank() {
+		return lineMinRank;
+	}
+
+	public void setLineMinRank(Integer lineMinRank) {
+		this.lineMinRank = lineMinRank;
+	}
+
+	public Integer getPlanMinRank() {
+		return planMinRank;
+	}
+
+	public void setPlanMinRank(Integer planMinRank) {
+		this.planMinRank = planMinRank;
+	} 
 }

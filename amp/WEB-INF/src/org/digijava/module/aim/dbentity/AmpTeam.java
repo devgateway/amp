@@ -7,7 +7,9 @@ package org.digijava.module.aim.dbentity;
 import java.io.Serializable;
 import java.util.Set;
 
-public class AmpTeam  implements Serializable, Comparable {
+import org.digijava.module.aim.util.Identifiable;
+
+public class AmpTeam  implements Serializable, Comparable, Identifiable {
 	
 	private Long ampTeamId;
 
@@ -177,7 +179,11 @@ public class AmpTeam  implements Serializable, Comparable {
 	}
 	
 	public String toString() {
-		return ampTeamId.toString();
+		return name;
+	}
+
+	public Object getIdentifier() {
+		return this.getAmpTeamId();
 	}
 
 	public AmpCategoryValue getType() {

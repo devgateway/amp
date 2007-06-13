@@ -176,55 +176,200 @@ function resetAll()
 										<table width="100%" cellSpacing=2 cellPadding=2 vAlign=top align=left class="box-border-nopadding" border=0>
 											<tr>
 												<td width="32%">
-													&nbsp;
+
 												</td>
-												<td width="18%">
-													<b>
-													<digi:trn key="aim:firstName">
-														First Name
-													</digi:trn></b>
+												<td width="15%" align="right">
 												</td>
-												<td width="18%">
-													<b>
-													<digi:trn key="aim:lastName">
-														Last Name
-													</digi:trn></b>
+												<td width="53%">
 												</td>
-												<td width="18%">
-													<b>
-													<digi:trn key="aim:email">
-														Email
-													</digi:trn></b>
-												</td>												
 											</tr>
 											<tr>
 												<td align="right">
 													<digi:trn key="aim:donorFundingContactInformation">
 													Donor funding contact information</digi:trn>	
 												</td>
+												<td align="right">
+													<b>
+													<digi:trn key="aim:firstName">
+														First Name
+													</digi:trn></b>
+												</td>
 												<td>
 													<html:text property="dnrCntFirstName" styleClass="inp-text"/>
 												</td>
+											</tr>
+											<tr>
+												<td>
+												</td>
+												<td align="right">
+													<b>
+													<digi:trn key="aim:lastName">
+														Last Name
+													</digi:trn></b>
+												</td>
 												<td>
 													<html:text property="dnrCntLastName" styleClass="inp-text"/>												
+												</td>
+											</tr>
+											<tr>
+												<td>
+												</td>
+												<td align="right">
+													<b>
+													<digi:trn key="aim:email">
+														Email
+													</digi:trn></b>
 												</td>
 												<td>
 													<html:text property="dnrCntEmail" styleClass="inp-text"/>												
 												</td>												
 											</tr>
 											<tr>
+												<td>
+												</td>
+												<td align="right">
+													<b>
+													<digi:trn key="aim:title">
+														Title
+													</digi:trn></b>
+												</td>
+												<td>
+													<html:text property="dnrCntTitle" styleClass="inp-text"/>												
+												</td>												
+											</tr>
+											<tr>
+												<td>
+												</td>
+												<td align="right">
+													<b>
+													<digi:trn key="aim:organization">
+														Organization
+													</digi:trn></b>
+												</td>
+												<td>
+													<html:text property="dnrCntOrganization" styleClass="inp-text"/>												
+												</td>												
+											</tr>
+											<tr>
+												<td>
+												</td>
+												<td align="right">
+													<b>
+													<digi:trn key="aim:phoneNumber">
+														Phone Number
+													</digi:trn></b>
+												</td>
+												<td>
+													<html:text property="dnrCntPhoneNumber" styleClass="inp-text"/>												
+												</td>												
+											</tr>
+											<tr>
+												<td>
+												</td>
+												<td align="right">
+													<b>
+													<digi:trn key="aim:faxNumber">
+														Fax Number
+													</digi:trn></b>
+												</td>
+												<td>
+													<html:text property="dnrCntFaxNumber" styleClass="inp-text"/>												
+												</td>												
+											</tr>
+											<tr>
+												<td>&nbsp;</td><td></td><td></td>
+											</tr>
+											<tr>
 												<td align="right">
 													<digi:trn key="aim:mofedContactInformation">
 													MOFED contact information</digi:trn>	
 												</td>
+												<td align="right">
+													<b>
+													<digi:trn key="aim:firstName">
+														First Name
+													</digi:trn></b>
+												</td>
 												<td>
 													<html:text property="mfdCntFirstName" styleClass="inp-text"/>
+												</td>
+											</tr>
+											<tr>
+												<td>
+												</td>
+												<td align="right">
+													<b>
+													<digi:trn key="aim:lastName">
+														Last Name
+													</digi:trn></b>
 												</td>
 												<td>
 													<html:text property="mfdCntLastName" styleClass="inp-text"/>												
 												</td>
+											</tr>
+											<tr>
+												<td>
+												</td>
+												<td align="right">
+													<b>
+													<digi:trn key="aim:email">
+														Email
+													</digi:trn></b>
+												</td>
 												<td>
 													<html:text property="mfdCntEmail" styleClass="inp-text"/>												
+												</td>												
+											</tr>
+											<tr>
+												<td>
+												</td>
+												<td align="right">
+													<b>
+													<digi:trn key="aim:title">
+														Title
+													</digi:trn></b>
+												</td>
+												<td>
+													<html:text property="mfdCntTitle" styleClass="inp-text"/>												
+												</td>												
+											</tr>
+											<tr>
+												<td>
+												</td>
+												<td align="right">
+													<b>
+													<digi:trn key="aim:organization">
+														Organization
+													</digi:trn></b>
+												</td>
+												<td>
+													<html:text property="mfdCntOrganization" styleClass="inp-text"/>												
+												</td>												
+											</tr>
+											<tr>
+												<td>
+												</td>
+												<td align="right">
+													<b>
+													<digi:trn key="aim:phoneNumber">
+														Phone Number
+													</digi:trn></b>
+												</td>
+												<td>
+													<html:text property="mfdCntPhoneNumber" styleClass="inp-text"/>												
+												</td>												
+											</tr>
+											<tr>
+												<td>
+												</td>
+												<td align="right">
+													<b>
+													<digi:trn key="aim:faxNumber">
+														Fax Number
+													</digi:trn></b>
+												</td>
+												<td>
+													<html:text property="mfdCntFaxNumber" styleClass="inp-text"/>												
 												</td>												
 											</tr>											
 										</table>

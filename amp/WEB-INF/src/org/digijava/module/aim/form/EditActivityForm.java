@@ -146,9 +146,18 @@ public class EditActivityForm extends ActionForm implements Serializable{
 	private String dnrCntFirstName;
 	private String dnrCntLastName;
 	private String dnrCntEmail;
+	private String dnrCntTitle;
+	private String dnrCntOrganization;
+	private String dnrCntPhoneNumber;
+	private String dnrCntFaxNumber;
 	private String mfdCntFirstName;
 	private String mfdCntLastName;
 	private String mfdCntEmail;
+	private String mfdCntTitle;
+	private String mfdCntOrganization;
+	private String mfdCntPhoneNumber;
+	private String mfdCntFaxNumber;
+	
 	private String actAthFirstName;
 	private String actAthLastName;
 	private String actAthEmail;
@@ -4009,6 +4018,70 @@ public String getPurpose() {
 
 	public void setSelectedOrganisationPaged(TreeSet selectedOrganisationPaged) {
 		this.selectedOrganisationPaged = selectedOrganisationPaged;
+	}
+
+	public String getDnrCntFaxNumber() {
+		return dnrCntFaxNumber;
+	}
+
+	public void setDnrCntFaxNumber(String dnrCntFaxNumber) {
+		this.dnrCntFaxNumber = dnrCntFaxNumber;
+	}
+
+	public String getDnrCntOrganization() {
+		return dnrCntOrganization;
+	}
+
+	public void setDnrCntOrganization(String dnrCntOrganization) {
+		this.dnrCntOrganization = dnrCntOrganization;
+	}
+
+	public String getDnrCntPhoneNumber() {
+		return dnrCntPhoneNumber;
+	}
+
+	public void setDnrCntPhoneNumber(String dnrCntPhoneNumber) {
+		this.dnrCntPhoneNumber = dnrCntPhoneNumber;
+	}
+
+	public String getDnrCntTitle() {
+		return dnrCntTitle;
+	}
+
+	public void setDnrCntTitle(String dnrCntTitle) {
+		this.dnrCntTitle = dnrCntTitle;
+	}
+
+	public String getMfdCntFaxNumber() {
+		return mfdCntFaxNumber;
+	}
+
+	public void setMfdCntFaxNumber(String mfdCntFaxNumber) {
+		this.mfdCntFaxNumber = mfdCntFaxNumber;
+	}
+
+	public String getMfdCntOrganization() {
+		return mfdCntOrganization;
+	}
+
+	public void setMfdCntOrganization(String mfdCntOrganization) {
+		this.mfdCntOrganization = mfdCntOrganization;
+	}
+
+	public String getMfdCntPhoneNumber() {
+		return mfdCntPhoneNumber;
+	}
+
+	public void setMfdCntPhoneNumber(String mfdCntPhoneNumber) {
+		this.mfdCntPhoneNumber = mfdCntPhoneNumber;
+	}
+
+	public String getMfdCntTitle() {
+		return mfdCntTitle;
+	}
+
+	public void setMfdCntTitle(String mfdCntTitle) {
+		this.mfdCntTitle = mfdCntTitle;
 	}
 
     /*

@@ -7,16 +7,15 @@
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
 
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
-
 <script language="JavaScript">
-	<!--
+<!--
 	function validate() 
 	{
 		if (trim(document.aimThemeForm.programName.value).length == 0) 
 		{
 			alert("Please enter Program name");
 			document.aimThemeForm.programName.focus();
-			return false;
+		return false;
 		}	
 		if (trim(document.aimThemeForm.programCode.value).length == 0) 
 		{
@@ -54,7 +53,7 @@
 	{
 		window.close();
 	}
-	-->
+-->
 </script>
 
 <digi:form action="/themeManager.do" method="post">
@@ -79,7 +78,8 @@
 						<td height="10" align="left">
 								&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 								<digi:trn key="aim:programName">
-										Program Name</digi:trn>
+										Program Name
+								</digi:trn>
 								<font color="red">*</font>
 						</td>
 						<td height="10" align="left">
@@ -88,110 +88,105 @@
 				</tr>
 				<tr bgcolor=#ffffff><td height="5"></td></tr>
 				<tr bgColor=#ffffff>
-				<td height="20" align="left">
-						&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-						<digi:trn key="aim:programDescription">
-						Description</digi:trn>
-				</td>
-				<td align="left">
-						<html:textarea property="programDescription" cols="35" rows="2" styleClass="inp-text"/>
-				</td>
-				</tr>	
-				<tr bgColor=#ffffff>
 					<td height="20" align="left">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-							<digi:trn key="aim:programLeadAgency">
-									Lead Agency
+							<digi:trn key="aim:programDescription">
+								Description
 							</digi:trn>
 					</td>
+					<td align="left">
+							<html:textarea property="programDescription" cols="35" rows="2" styleClass="inp-text"/>
+					</td>
+				</tr>
+				<tr bgColor=#ffffff>
+					<td height="20" align="left">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+						<digi:trn key="aim:programLeadAgency">
+							Lead Agency
+						</digi:trn>
+			    </td>
 					<td align="left">
 							<html:textarea property="programLeadAgency" cols="35" rows="2" styleClass="inp-text"/>
 					</td>
-				</tr>	
+				</tr>
 				<tr bgColor=#ffffff>
-				<td height="20" align="left">
-						&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+					<td height="20" align="left">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 						<digi:trn key="aim:programCode">
-						Program Code</digi:trn>
+							Program Code
+						</digi:trn>
 						<font color="red">*</font>
-				</td>
-				<td align="left">
-						<html:text property="programCode" size="20" styleClass="inp-text"/>
-				</td>
+					</td>
+					<td align="left">
+							<html:text property="programCode" size="20" styleClass="inp-text"/>
+					</td>
 				</tr>
 				<tr bgColor=#ffffff>
-				<td height="20" align="left">
-						&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+					<td height="20" align="left">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 						<digi:trn key="aim:programType">
-						Program Type</digi:trn>
+							Program Type
+						</digi:trn>
 						<font color="red">*</font>
-				</td>
-				<td align="left">
-				
-							<html:select property="programType" styleClass="inp-text">
-																	<html:option value="-1">Select Progarm Type</html:option>
-																		<html:optionsCollection name="aimThemeForm" property="programTypeNames"
-													 						value="title" label="title" />
-						    </html:select>
-												
-							<!--<html:text property="programType" size="20" styleClass="inp-text"/>-->
-						
-				</td>
-				</tr>	
-				<tr bgColor=#ffffff>
-					<td height="20" align="left">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-							<digi:trn key="aim:programTargetGroups">
-									Target Groups
-							</digi:trn>
 					</td>
 					<td align="left">
-							<html:textarea property="programTargetGroups" cols="35" rows="2" styleClass="inp-text"/>
+						<html:select property="programType" styleClass="inp-text">
+							<html:option value="-1">Select Progarm Type</html:option>
+							<html:optionsCollection name="aimThemeForm" property="programTypeNames" value="title" label="title" />
+			  	  </html:select>
 					</td>
 				</tr>
 				<tr bgColor=#ffffff>
 					<td height="20" align="left">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-							<digi:trn key="aim:programBackground">
-									Background
-							</digi:trn>
+						<digi:trn key="aim:programTargetGroups">
+							Target Groups
+						</digi:trn>		
 					</td>
 					<td align="left">
-							<html:textarea property="programBackground" cols="35" rows="2" styleClass="inp-text"/>
-					</td>
-				</tr>	
-				<tr bgColor=#ffffff>
-					<td height="20" align="left">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-							<digi:trn key="aim:programObjectives">
-									Objectives
-							</digi:trn>
-					</td>
-					<td align="left">
-							<html:textarea property="programObjectives" cols="35" rows="2" styleClass="inp-text"/>
+						<html:textarea property="programTargetGroups" cols="35" rows="2" styleClass="inp-text"/>
 					</td>
 				</tr>
 				<tr bgColor=#ffffff>
 					<td height="20" align="left">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-							<digi:trn key="aim:programOutputs">
-									Outputs
-							</digi:trn>
+						<digi:trn key="aim:programBackground">
+							Background
+						</digi:trn>
 					</td>
 					<td align="left">
-							<html:textarea property="programOutputs" cols="35" rows="2" styleClass="inp-text"/>
+						<html:textarea property="programBackground" cols="35" rows="2" styleClass="inp-text"/>
+					</td>
+				</tr>																	
+				<tr bgColor=#ffffff>
+					<td height="20" align="left">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+						<digi:trn key="aim:programObjectives">
+							Objectives
+						</digi:trn>
+					</td>
+					<td align="left">
+						<html:textarea property="programObjectives" cols="35" rows="2" styleClass="inp-text"/>
 					</td>
 				</tr>
 				<tr bgColor=#ffffff>
 					<td height="20" align="left">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-							<digi:trn key="aim:programBeneficiaries">
-									Beneficiaries
-							</digi:trn>
+						<digi:trn key="aim:programOutputs">
+							Outputs
+						</digi:trn>
 					</td>
 					<td align="left">
-							<html:textarea property="programBeneficiaries" cols="35" rows="2" styleClass="inp-text"/>
+						<html:textarea property="programOutputs" cols="35" rows="2" styleClass="inp-text"/>
 					</td>
 				</tr>
 				<tr bgColor=#ffffff>
 					<td height="20" align="left">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-							<digi:trn key="aim:programEnvironmentConsiderations">
-									Environment Considerations
-							</digi:trn>
+						<digi:trn key="aim:programBeneficiaries">
+							Beneficiaries
+						</digi:trn>
+					</td>
+					<td align="left">
+						<html:textarea property="programBeneficiaries" cols="35" rows="2" styleClass="inp-text"/>
+					</td>
+				</tr>
+				<tr bgColor=#ffffff>
+					<td height="20" align="left">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+						<digi:trn key="aim:programEnvironmentConsiderations">
+							Environment Considerations
+						</digi:trn>
 					</td>
 					<td align="left">
 							<html:textarea property="programEnvironmentConsiderations" cols="35" rows="2" styleClass="inp-text"/>
@@ -202,9 +197,8 @@
 				<tr bgColor=#dddddb>
 				<td bgColor=#dddddb height="25" align="center" colspan="2">
 						<input styleClass="dr-menu" type="button" name="addBtn" value="Save" onclick="return saveProgram('<bean:write name="aimThemeForm" property="rootId" />','<bean:write name="aimThemeForm" property="prgParentThemeId" />','<bean:write name="aimThemeForm" property="prgLevel"/>','<bean:write name="aimThemeForm" property="name"/>')">&nbsp;&nbsp;
-						<input styleClass="dr-menu" type="reset" value="Cancel">&nbsp;&nbsp;
-						<input styleClass="dr-menu" type="button" name="close" value="Close" onclick="closeWindow()">			
+						<input styleClass="dr-menu" type="reset" value="Cancel" onclick="closeWindow()">
 				</td>
-				</tr>	
-		</table>
+			</tr>
+	</table>
 </digi:form>

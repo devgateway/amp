@@ -45,7 +45,8 @@ public class DateColWorker extends ColumnWorker {
 		
 		//checking the filter calendar
 		AmpARFilter filter=(AmpARFilter) generator.getFilter();
-		if(value!=null && filter.getCalendarType()!=null && (filter.getCalendarType().intValue()==Constants.ETH_CAL.intValue() || filter.getCalendarType().intValue()==Constants.ETH_FY.intValue()))
+		if(value!=null && filter.getCalendarType()!=null && 
+				(filter.getCalendarType().equals(Constants.ETH_CAL) || filter.getCalendarType().equals(Constants.ETH_FY)))
 			ret.setEthiopianDate(true);
 			
 		

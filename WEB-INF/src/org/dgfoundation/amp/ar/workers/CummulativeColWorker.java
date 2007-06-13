@@ -71,8 +71,8 @@ public class CummulativeColWorker extends ColumnWorker {
 		ret.setToExchangeRate(1);
 		
 		//UGLY get exchage rate if cross-rates are needed (if we need to convert from X to USD and then to Y)
-		if(filter.getAmpCurrencyCode()!=null && !"USD".equals(filter.getAmpCurrencyCode())) 
-			ret.setToExchangeRate(Util.getExchange(filter.getAmpCurrencyCode(),currencyDate));
+		if(filter.getCurrency()!=null && !"USD".equals(filter.getCurrency().getCurrencyCode())) 
+			ret.setToExchangeRate(Util.getExchange(filter.getCurrency().getCurrencyCode(),currencyDate));
 	
 		return ret;
 	}

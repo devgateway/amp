@@ -2,25 +2,26 @@
 <%@ taglib uri="/taglib/struts-bean" prefix="bean"%>
 <%@ taglib uri="/taglib/struts-logic" prefix="logic"%>
 <%@ taglib uri="/taglib/struts-tiles" prefix="tiles"%>
-<%@ taglib uri="/taglib/struts-html" prefix="html"%>
+<%@ taglib uri="/taglib/struts-html" prefix="html"%> 
 <%@ taglib uri="/taglib/digijava" prefix="digi"%>
 <%@ taglib uri="/taglib/jstl-core" prefix="c"%>
+<%@ taglib uri="/taglib/category" prefix="category" %>
 
 <bean:define id="reportMeta" name="reportMeta"
 	type="org.digijava.module.aim.dbentity.AmpReports" scope="session"
 	toScope="page" />
 
-<!-- invoked to close myself and reload my parent (after save was performed) -->
-<logic:present name="close">
-<script type="text/javascript">
-	window.opener.location.href = window.opener.location.href;
-	window.close();
-</script>	
-</logic:present>
 
+<digi:instance property="aimReportsFilterPickerForm"/>
 
 <digi:form action="/reportsFilterPicker.do">
+
+<html:hidden property="ampReportId"/>
 	<table>
+	<tr>
+		<td class=clsTableTitleCol colspan="3" align="center">Select filters</td>
+	</tr>
+		
 		<tr>
 			<td colspan="3"><b>Currency</b></td>
 		</tr>
@@ -82,10 +83,9 @@
 		</tr>
 		<tr>
 			<td colspan="3">
-			<html:select multiple="true" property="selectedStatuses" size="3" style="width: 400px"> 
-				<html:optionsCollection property="statuses"
-					value="ampStatusId" label="name" />
-			</html:select>
+			
+		<category:showoptions property="selectedStatuses" size="3" name="aimReportsFilterPickerForm" multiselect="true" keyName="<%=org.digijava.module.aim.helper.CategoryConstants.ACTIVITY_STATUS_KEY%>"/>
+			
 			</td>
 		</tr>
 		
@@ -102,21 +102,46 @@
 		</tr>
 
 		<tr>
-			<td colspan="3"><b>Risks</b></td>
+			<td><b>Risks</b></td>
+			<td>
+			<b>Line Ministry Rank</b>
+			</td>
+			<td>
+			<b>Planning Ministry Rank</b>
+			</td>
+			
 		</tr>
 		<tr>
-			<td colspan="3">
+			<td>
 			<html:select multiple="true" property="selectedRisks" size="3">
 				<html:optionsCollection property="risks"
 					value="ampIndRiskRatingsId" label="ratingName" />
 			</html:select>
 			</td>
+			<td>
+			<html:select property="lineMinRank" style="width: 50px">
+				<html:option value="-1">All</html:option>						
+				<html:optionsCollection property="actRankCollection" label="wrappedInstance" value="wrappedInstance" />
+			</html:select>
+			</td>
+			<td>
+			<html:select property="planMinRank" style="width: 50px">
+				<html:option value="-1">All</html:option>						
+				<html:optionsCollection property="actRankCollection" label="wrappedInstance" value="wrappedInstance" />
+			</html:select>
+			</td>
+			
 		</tr>
+
+
+
 		
 	<tr>
 	<td align="center" colspan="3">
-	<html:submit property="apply">OK</html:submit>
+	<html:submit property="apply">Apply</html:submit>&nbsp;
+	<html:submit property="reset">Reset</html:submit>
 	</td>
+		
 	</tr>
 	
 

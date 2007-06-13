@@ -2,8 +2,11 @@
 package org.digijava.module.aim.dbentity;
 
 import org.digijava.module.aim.util.DbUtil;
+import org.digijava.module.aim.util.Identifiable;
 
-public class AmpPerspective {
+
+
+public class AmpPerspective implements Identifiable {
 	private Long ampPerspectiveId;
 	private String name;
 	private String code;
@@ -44,4 +47,17 @@ public class AmpPerspective {
 		if(s!=null) return s;
 		return this.getName();
 	}
+	
+	public String toString() {
+		return name;
+	}
+	public int getId() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+	public Object getIdentifier() {		
+		return ampPerspectiveId;
+	}
+	
+ 
 }

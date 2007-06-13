@@ -45,6 +45,39 @@ public final class Util {
 	}
 	
 	/**
+	 * loads using Hibernate the object of the specified type, identified by the serializable object
+	 * @param type the class type of the specified object
+	 * @param selected the  serializable id of the object to be loaded
+	 * @return the fetched object
+	 * @throws HibernateException
+	 * @throws SQLException
+	 */
+	public static Object getSelectedObject(Class type, Object selected) throws HibernateException, SQLException {
+		if(selected==null || "-1".equals(selected.toString())) return null;
+		Set ret=getSelectedObjects(type, new Object[] {selected});
+		if(ret.size()==0) return null;
+		return ret.iterator().next();
+	}
+	
+	/**
+	 * loads using Hibernate the objects of the specified type, identified by the serializable objects in the array
+	 * @param type the class type of the specified objects
+	 * @param selected the array with serializable ids of objects to be loaded
+	 * @return the set of fetched objects
+	 * @throws HibernateException
+	 * @throws SQLException
+	 */
+	public static Set getSelectedObjects(Class type, Object[] selected) throws HibernateException, SQLException {
+		if(selected==null) return null;
+		HashSet set=new HashSet();		
+		Session session = PersistenceManager.getSession();
+		for (int i = 0; i < selected.length; i++) {
+			set.add(session.load(type,new Long(selected[i].toString())));
+		}
+		return set;
+	}
+	
+	/**
 	 * Returns a set with objects from the "source" collection, which were identified by Ids present in the "selected" array
 	 * @param source a Collection of Identifiable objects
 	 * @param selected an array of objects whose toString property returns the Id of the selected object
@@ -141,7 +174,7 @@ public final class Util {
 	 * @return the comma separated string
 	 * @author mihai 06.05.2007
 	 */
-	public static String toCSString(Collection col) {
+	public static String toCSString(Collection col, boolean identifiable) {
 		String ret = "";
 		if (col == null || col.size() == 0)
 			return ret;
@@ -149,16 +182,21 @@ public final class Util {
 		while (i.hasNext()) {
 			Object element = (Object) i.next();
 			if (element == null)
-				continue;
-			if (element instanceof String)
-				ret += "'" + (String) element + "'";
+				continue;			
+			Object item=element;
+			if(identifiable) item=((Identifiable)element).getIdentifier();
+			
+			if (item instanceof String)
+				ret += "'" + (String) item + "'";
 			else
-				ret += element.toString();
+				ret += item.toString();
 			if (i.hasNext())
 				ret += ",";
 		}
 		return ret;
 	}
+	
+
 
 	/**
 	 * QUICK access to exchange rates. Gets the exchange rate for the given

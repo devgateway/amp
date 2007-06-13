@@ -28,4 +28,8 @@ public class AmpIndicatorRiskRatings implements Identifiable {
 	public Object getIdentifier() {
 		return ampIndRiskRatingsId;
 	}
+
+	public String toString() {
+		return ratingName;
+	}
 }

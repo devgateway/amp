@@ -50,7 +50,7 @@ return false;
 						<% if (rCount < 5) { rCount ++; %>
 						<TR><TD title='<%=translation%>'>
 							<IMG alt=Link height=10 src="../ampTemplate/images/arrow-gr.gif" width=10>
-							<digi:link href="/viewNewAdvancedReport.do?view=reset" paramName="report"  paramId="ampReportId" paramProperty="ampReportId" onclick="return popup(this,'');">
+							<digi:link href="/viewNewAdvancedReport.do?view=reset&widget=false" paramName="report"  paramId="ampReportId" paramProperty="ampReportId" onclick="return popup(this,'');">
 								<bean:write name="report" property="name"/>												
 							</digi:link> 
 						</TD></TR>

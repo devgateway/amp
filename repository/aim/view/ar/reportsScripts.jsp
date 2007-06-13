@@ -60,10 +60,10 @@ function displayMessage(url)
 	messageObj.display();
 }
 
-function displayStaticMessage(messageContent,cssClass)
+function displayStaticMessage(messageContent,cssClass,width,height)
 {
 	messageObj.setHtmlContent(messageContent);
-	messageObj.setSize(400,150);
+	messageObj.setSize(width,height);
 	messageObj.setCssClassMessageBox(cssClass);
 	messageObj.setSource(false);	// no html source since we want to use a static message here.
 	messageObj.setShadowDivVisible(false);	// Disable shadow for these boxes	

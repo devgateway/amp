@@ -198,7 +198,7 @@ public void setAmpOrgId(AmpOrganisation org) {
 	}
 	
 	public String toString() {
-		return ampSectorId.toString();
+		return name;
 	}
 
 	public Object getIdentifier() {

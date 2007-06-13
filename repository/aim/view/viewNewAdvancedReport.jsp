@@ -8,12 +8,22 @@
 
 <jsp:include page="/repository/aim/view/ar/reportsScripts.jsp"/>
 
+
 <div style='position:relative;display:none;' id="sorterPicker-<bean:write name="reportMeta" property="ampReportId"/>">
-		<b>Please select hierarchy sorter criteria:</b><br/>
+	
 		<jsp:include page="/repository/aim/view/ar/levelSorterPicker.jsp" />
 		<br/>
-		<a href='#' onclick='closeMessage();return false'>Close</a>
+		<a href='#' onclick='closeMessage();return false'><b>Close</b></a>
 </div>
+
+<div style='position:relative;display:none;' id="filterPicker-<bean:write name="reportMeta" property="ampReportId"/>">
+		<jsp:include page="/aim/reportsFilterPicker.do" />
+		
+		<br/>
+		<a href='#' onclick='closeMessage();return false'><b>Close</b></a>
+
+</div>
+
 		
 <table  cellSpacing="0" cellPadding="0" width="95%" border="0">
 
@@ -68,20 +78,22 @@
 
 </logic:notEqual>
 
-<logic:notEmpty name="reportMeta" property="hierarchies">
-	<tr>
-		
 
-			<td>
-			<div id="menucontainer">
-			<a style="cursor:pointer"
-			onclick="displayStaticMessage(document.getElementById('sorterPicker-<bean:write name="reportMeta" property="ampReportId"/>').innerHTML,false);return false">
-			<u>Hierarchy Sorting</u>
-			</a>
-			</div>
-			</td>
-		</tr>
-		<tr>
+	<tr>
+		<td><logic:notEmpty name="reportMeta" property="hierarchies">
+			<div id="menucontainer"><a style="cursor:pointer"
+				onclick="displayStaticMessage(document.getElementById('sorterPicker-<bean:write name="reportMeta" property="ampReportId"/>').innerHTML,false,400,150);return false">
+			<u>Change Sorting</u> </a>
+		</logic:notEmpty>
+<a style="cursor:pointer"
+			onclick="displayStaticMessage(document.getElementById('filterPicker-<bean:write name="reportMeta" property="ampReportId"/>').innerHTML,false,400,460);return false">
+		<u>Change Filters</u> </a></div>
+		</td>
+	</tr>
+
+
+
+	<tr>
 			<td align="right">
 				<font size="-5" face="arial" color="red">
 					<span  STYLE="font-style:  italic">
@@ -90,6 +102,7 @@
 				</font>
 			</td>
 		</tr>
+<logic:notEmpty name="reportMeta" property="hierarchies">		
 		<tr>
 			<td>
 				<logic:notEmpty name="report" property="levelSorters">
@@ -104,6 +117,17 @@
 	<tr> <td>&nbsp;</td></tr>
 	</logic:notEmpty>
 
+	<tr>
+	<td width="500">
+	Currently Selected Filters:
+	<logic:present name="<%=org.dgfoundation.amp.ar.ArConstants.REPORTS_FILTER%>" scope="session">
+		<bean:write name="<%=org.dgfoundation.amp.ar.ArConstants.REPORTS_FILTER%>" filter="false"/>
+	</logic:present>
+	</td>
+	</tr>
+
+	<tr>
+	
 
 
 	<logic:notEqual name="report" property="totalUniqueRows" value="0">

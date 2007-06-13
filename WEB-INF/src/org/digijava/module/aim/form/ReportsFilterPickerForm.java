@@ -5,7 +5,10 @@ package org.digijava.module.aim.form;
 
 import java.util.Collection;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.apache.struts.action.ActionForm;
+import org.apache.struts.action.ActionMapping;
 
 /**
  * @author mihai
@@ -14,21 +17,52 @@ public class ReportsFilterPickerForm extends ActionForm {
 	private Collection currencies;
 	private Collection calendars;
 	private Collection sectors;
-	private Collection statuses;
 	private Collection donors;
 	private Collection risks;
 	private Collection fromYears;
 	private Collection toYears;
+	private Collection actRankCollection;
 	
 	private Object[] selectedSectors;
 	private Object[] selectedStatuses;
 	private Object[] selectedDonors;
 	private Object[] selectedRisks;
+	
 	private Long fromYear;
 	private Long toYear;
 	private Long currency;
 	private Long calendar;
+	private Long ampReportId;
+	private Integer lineMinRank;
+	private Integer planMinRank;
 
+	public Integer getLineMinRank() {
+		return lineMinRank;
+	}
+
+	public void setLineMinRank(Integer lineMinRank) {
+		this.lineMinRank = lineMinRank;
+	}
+
+	public Integer getPlanMinRank() {
+		return planMinRank;
+	}
+
+	public void setPlanMinRank(Integer planMinRank) {
+		this.planMinRank = planMinRank;
+	}
+
+	public Long getAmpReportId() {
+		return ampReportId;
+	}
+
+	public void setAmpReportId(Long ampReportId) {
+		this.ampReportId = ampReportId;
+	}
+
+	public void reset(ActionMapping mapping, HttpServletRequest request) {
+	}
+	
 	public Long getFromYear() {
 		return fromYear;
 	}
@@ -83,13 +117,7 @@ public class ReportsFilterPickerForm extends ActionForm {
 	public void setSectors(Collection sectors) {
 		this.sectors = sectors;
 	}
-	public Collection getStatuses() {
-		return statuses;
-	}
-	public void setStatuses(Collection statuses) {
-		this.statuses = statuses;
-	}
-
+	
 	public Object[] getSelectedDonors() {
 		return selectedDonors;
 	}
@@ -125,6 +153,14 @@ public class ReportsFilterPickerForm extends ActionForm {
 	}
 	public void setCalendar(Long calendar) {
 		this.calendar = calendar;
+	}
+
+	public Collection getActRankCollection() {
+		return actRankCollection;
+	}
+
+	public void setActRankCollection(Collection actRankCollection) {
+		this.actRankCollection = actRankCollection;
 	}
 	
 	

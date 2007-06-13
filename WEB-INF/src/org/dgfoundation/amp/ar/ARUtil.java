@@ -28,6 +28,7 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionMapping;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.dbentity.AmpCurrency;
+import org.digijava.module.aim.dbentity.AmpFiscalCalendar;
 import org.digijava.module.aim.dbentity.AmpMeasures;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpRegion;
@@ -109,6 +110,7 @@ public final class ARUtil {
 			HttpServletResponse response) throws java.lang.Exception {
 
 		String ampReportId = request.getParameter("ampReportId");
+		if(ampReportId==null) ampReportId=(String) request.getAttribute("ampReportId");
 		HttpSession httpSession = request.getSession();
 		Session session = PersistenceManager.getSession();
 
@@ -126,7 +128,9 @@ public final class ARUtil {
 
 		AmpARFilter af = (AmpARFilter) httpSession.getAttribute(ArConstants.REPORTS_FILTER);
 		if (af == null)
-			af=new AmpARFilter(request);
+			af=new AmpARFilter();
+		af.readRequestData(request);
+		httpSession.setAttribute(ArConstants.REPORTS_FILTER,af);
 
 		AmpReportGenerator arg = new AmpReportGenerator(r, af);
 
@@ -512,8 +516,8 @@ public final class ARUtil {
 		if ("reset".equals(request.getParameter("view"))
 				&& ampReports.getDefaultFilter() != null) {
 			AmpARFilter defFilt = ampReports.getDefaultFilter();
-			if (defFilt.getAmpCurrencyCode() != null)
-				formBean.setCurrency(defFilt.getAmpCurrencyCode());
+			if (defFilt.getCurrency() != null)
+				formBean.setCurrency(defFilt.getCurrency().getCurrencyCode());
 			if (defFilt.getFromYear() != null)
 				formBean.setAmpFromYear(new Long(defFilt.getFromYear()
 						.longValue()));
@@ -601,14 +605,14 @@ public final class ARUtil {
 			anf.setAmpTeams(teams);
 		}
 		
-		anf.setPerspectiveCode(formBean.getPerspectiveFilter());
+	//	anf.setPerspectiveCode(formBean.getPerspectiveFilter());
 
-			anf.setAmpCurrencyCode(ampCurrencyCode);
+			anf.setCurrency(CurrencyUtil.getCurrencyByCode(ampCurrencyCode));
 			anf.setAmpModalityId(ampModalityId);
 			// anf.setAmpOrgId(ampOrgId);
 
-			if(formBean.getFiscalCalId()==0) anf.setCalendarType(new Integer(formBean.getFiscalCalId())); 
-			else anf.setCalendarType(new Integer(Constants.GREGORIAN.intValue()));
+			if(formBean.getFiscalCalId()!=0) anf.setCalendarType((AmpFiscalCalendar) session.load(AmpFiscalCalendar.class,new Long(formBean.getFiscalCalId()))); 
+			else anf.setCalendarType((AmpFiscalCalendar) session.load(AmpFiscalCalendar.class,new Long(Constants.GREGORIAN.intValue())));
 
 			anf.setFromYear(fromYr == 0 ? null : new Integer(fromYr));
 			anf.setToYear(toYr == 0 ? null : new Integer(toYr));

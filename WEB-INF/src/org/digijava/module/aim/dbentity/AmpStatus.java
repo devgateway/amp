@@ -4,6 +4,11 @@ import java.io.Serializable;
 
 import org.digijava.module.aim.util.Identifiable;
 
+/**
+ * 
+ * @deprecated
+ *
+ */
 public class AmpStatus implements Serializable, Comparable, Identifiable
 {
 	private Long ampStatusId ;
@@ -121,7 +126,7 @@ public class AmpStatus implements Serializable, Comparable, Identifiable
 	}
 	
 	public String toString() {
-		return this.getAmpStatusId().toString();
+		return name;
 	}
 
 	public Object getIdentifier() {

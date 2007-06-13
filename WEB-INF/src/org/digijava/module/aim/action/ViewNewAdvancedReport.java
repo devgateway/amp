@@ -67,6 +67,7 @@ public class ViewNewAdvancedReport extends Action {
 		String sortBy=request.getParameter("sortBy");
 		String applySorter = request.getParameter("applySorter");
 		if(ampReportId==null) ampReportId=ar.getAmpReportId().toString();
+		request.setAttribute("ampReportId",ampReportId);				
 		
 		if( (applySorter==null && sortBy==null ) || ar==null || (arf.getCreatedReportId() == null) || (ampReportId!=null && !ampReportId.equals(arf.getCreatedReportId().toString())))
 		{
@@ -107,7 +108,6 @@ public class ViewNewAdvancedReport extends Action {
 				
 			
 				request.setAttribute("extraTitle",ar.getName());
-				request.setAttribute("ampReportId",ampReportId);				
 				rd.setCurrentView(viewFormat);
 				hs.setAttribute("report",rd);
 				hs.setAttribute("reportMeta",ar);

@@ -496,9 +496,14 @@ public class ViewProjects extends Action
 			formBean.getForecastYear().add(new Integer(i));
 		
 		formBean.setFilterCnt(filterCnt);
-		AmpTeam ampTeam=TeamUtil.getAmpTeam(ampTeamId);
+		AmpTeam ampTeam		= TeamUtil.getAmpTeam(ampTeamId);
+		String typeString	= null;
+		if (ampTeam.getType() != null) {
+			typeString	= ampTeam.getType().getValue();
+		}
+		
 		formBean.setReportName("Annual Forecasting Report");
-		formBean.setWorkspaceType(ampTeam.getType().getValue());
+		formBean.setWorkspaceType(typeString);
 		formBean.setWorkspaceName(ampTeam.getName());
 		if(perspective.equals("DN"))
 			formBean.setPerspective("Donor");

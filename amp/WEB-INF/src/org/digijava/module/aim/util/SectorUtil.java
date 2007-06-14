@@ -769,22 +769,14 @@ public class SectorUtil {
 		ArrayList dbReturnSet = SectorUtil.getAmpSectors();
 		Iterator iter = dbReturnSet.iterator();
 		while (iter.hasNext()) {
-			AmpSector ampSector = (AmpSector) iter.next();
-			if (ampSector.getName().length() > 20) {
-				String temp = ampSector.getName().substring(0, 20) + "...";
-				ampSector.setName(temp);
-			}
+			AmpSector ampSector = (AmpSector) iter.next();			
 			ret.add(ampSector);
 			dbReturnSet = SectorUtil.getAmpSubSectors(ampSector
 					.getAmpSectorId());
 			Iterator iterSub = dbReturnSet.iterator();
 			while (iterSub.hasNext()) {
 				AmpSector ampSubSector = (AmpSector) iterSub.next();
-				String temp = " -- " + ampSubSector.getName();
-				if (temp.length() > 20) {
-					temp = temp.substring(0, 20) + "...";
-					ampSubSector.setName(temp);
-				}
+				String temp = " -- " + ampSubSector.getName();				
 				ampSubSector.setName(temp);
 				ret.add(ampSubSector);
 			}

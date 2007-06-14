@@ -83,10 +83,15 @@ public class GetWorkspace extends Action {
 
 		Workspace workspace = TeamUtil.getWorkspace(teamId);
 		if (workspace != null) {
+			Long typeId		= new Long(0);
+			if ( workspace.getType() != null ) {
+				typeId	= workspace.getType().getId();
+			}
+			
 			uwForm.setTeamId(new Long(workspace.getId()));
 			uwForm.setTeamName(workspace.getName());
 			uwForm.setCategory(workspace.getTeamCategory());
-			uwForm.setTypeId(workspace.getType().getId());
+			uwForm.setTypeId(typeId);
 			uwForm.setWorkspaceType(workspace.getWorkspaceType());
 			uwForm.setDescription(workspace.getDescription());
 			
@@ -101,7 +106,11 @@ public class GetWorkspace extends Action {
 						//String uwtype = uwForm.getType();
 						Iterator itr = col.iterator();
 						while (itr.hasNext()) {
-							AmpTeam team = (AmpTeam) itr.next();
+							AmpTeam team 		= (AmpTeam) itr.next();
+							String typeValue	= null;
+							if ( team.getType() != null ) {
+								typeValue		= team.getType().getValue();
+							}
 							
 						/*if (uwtype.equalsIgnoreCase(team.getType())) {
 								if ("Bilateral".equalsIgnoreCase(uwtype))
@@ -109,9 +118,9 @@ public class GetWorkspace extends Action {
 								else if ("Multilateral".equalsIgnoreCase(uwtype))
 									uwForm.getRelatedTeamMutilatColl().add(team);
 							} */
-							if ( Constants.TEAM_TYPE_BILATERAL.equals( team.getType().getValue() ) )
+							if ( Constants.TEAM_TYPE_BILATERAL.equals( typeValue ) )
 								uwForm.getRelatedTeamBilatColl().add(team);
-							else if ( Constants.TEAM_TYPE_MULTILATERAL.equals( team.getType().getValue() ) )
+							else if ( Constants.TEAM_TYPE_MULTILATERAL.equals( typeValue ) )
 								uwForm.getRelatedTeamMutilatColl().add(team);
 						}
 						uwForm.setRelatedTeamBilatCollSize(new Integer(uwForm.getRelatedTeamBilatColl().size()));

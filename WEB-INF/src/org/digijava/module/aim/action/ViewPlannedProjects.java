@@ -509,9 +509,13 @@ public class ViewPlannedProjects extends Action
 		formBean.getTotFund().add(ampFund);
 		
 		formBean.setFilterCnt(filterCnt);
-		AmpTeam ampTeam=TeamUtil.getAmpTeam(ampTeamId);
+		AmpTeam ampTeam		= TeamUtil.getAmpTeam(ampTeamId);
+		String typeValue	= null;
+		if ( ampTeam.getType() != null ) {
+			typeValue	= ampTeam.getType().getValue();
+		}
 		formBean.setReportName("Quarterly Team Project Detail Report");
-		formBean.setWorkspaceType(ampTeam.getType().getValue());
+		formBean.setWorkspaceType(typeValue);
 		formBean.setWorkspaceName(ampTeam.getName());
 		if(perspective.equals("DN"))
 			formBean.setPerspective("Donor");

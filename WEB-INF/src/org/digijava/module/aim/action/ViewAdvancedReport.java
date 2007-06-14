@@ -108,12 +108,16 @@ public class ViewAdvancedReport extends Action
 			ampReportId=new Long(Long.parseLong(request.getParameter("ampReportId")));
 			//logger.debug("Report Id: " + ampReportId);
 		}	
-		AmpTeam ampTeam=TeamUtil.getAmpTeam(ampTeamId);
+		AmpTeam ampTeam		= TeamUtil.getAmpTeam(ampTeamId);
+		String typeValue	= null;
+		if (ampTeam.getType() != null) {
+			typeValue	= ampTeam.getType().getValue();
+		}
 		AmpReports ampReports=DbUtil.getAmpReport(ampReportId);
 		formBean.setReportName(ampReports.getName());
 		if(ampReports.getReportDescription()!=null)
 			formBean.setReportDescription(ampReports.getReportDescription());
-		formBean.setWorkspaceType(ampTeam.getType().getValue());
+		formBean.setWorkspaceType( typeValue );
 		formBean.setWorkspaceName(ampTeam.getName());
 		if(perspective.equals("DN"))
 			formBean.setPerspective("Donor");

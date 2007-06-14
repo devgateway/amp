@@ -19,14 +19,14 @@
 <html:hidden property="ampReportId"/>
 	<table>
 	<tr>
-		<td class=clsTableTitleCol colspan="3" align="center">Select filters</td>
+		<td class=clsTableTitleCol colspan="4" align="center">Select filters</td>
 	</tr>
 		
 		<tr>
-			<td colspan="3"><b>Currency</b></td>
+			<td colspan="4"><b>Currency</b></td>
 		</tr>
 		<tr>
-			<td colspan="3">
+			<td colspan="4">
 			<html:select property="currency" style="width: 400px" styleClass="inp-text">
 			<html:option value="-1">All</html:option>
 				<html:optionsCollection property="currencies"
@@ -67,10 +67,10 @@
 
 
 		<tr>
-			<td colspan="3"><b>Sector</b></td>
+			<td colspan="4"><b>Sector</b></td>
 		</tr>
 		<tr>
-			<td colspan="3" styleClass="inp-text">
+			<td colspan="4" styleClass="inp-text">
 			<html:select multiple="true" property="selectedSectors" size="3" style="width: 400px" styleClass="inp-text">
 				<html:optionsCollection property="sectors"
 					value="ampSectorId" label="name" />
@@ -78,22 +78,14 @@
 			</td>
 		</tr>
 		
-		<tr>
-			<td colspan="3"><b>Status</b></td>
-		</tr>
-		<tr>
-			<td colspan="3">
 			
-		<category:showoptions styleClass="inp-text" property="selectedStatuses" size="3" name="aimReportsFilterPickerForm" multiselect="true" keyName="<%=org.digijava.module.aim.helper.CategoryConstants.ACTIVITY_STATUS_KEY%>"/>
 			
-			</td>
-		</tr>
 		
 		<tr>
-			<td colspan="3"><b>Donor</b></td>
+			<td colspan="4"><b>Donor</b></td>
 		</tr>
 		<tr>
-			<td colspan="3">
+			<td colspan="4">
 			<html:select multiple="true" property="selectedDonors" size="3" style="width: 400px" styleClass="inp-text">
 				<html:optionsCollection property="donors"
 					value="ampOrgId" label="name" />
@@ -102,29 +94,33 @@
 		</tr>
 
 		<tr>
-			<td><b>Risks</b></td>
-			<td>
-			<b>Line Ministry Rank</b>
+			<td ><b>Status</b></td>
+			<td ><b>Risks</b></td>
+			<td >
+			<b>Line Min. Rank</b>
 			</td>
-			<td>
-			<b>Planning Ministry Rank</b>
+			<td >
+			<b>Planning Min. Rank</b>
 			</td>
 			
 		</tr>
 		<tr>
-			<td>
+			<td valign="top" >			
+					<category:showoptions outerstyle="width: 190px" styleClass="inp-text" property="selectedStatuses" size="3" name="aimReportsFilterPickerForm" multiselect="true" keyName="<%=org.digijava.module.aim.helper.CategoryConstants.ACTIVITY_STATUS_KEY%>"/>
+			</td>			
+			<td valign="top" >
 			<html:select multiple="true" property="selectedRisks" size="3" styleClass="inp-text">
 				<html:optionsCollection property="risks"
 					value="ampIndRiskRatingsId" label="ratingName" />
 			</html:select>
 			</td>
-			<td>
+			<td valign="top" >
 			<html:select property="lineMinRank" style="width: 50px" styleClass="inp-text">
 				<html:option value="-1">All</html:option>						
 				<html:optionsCollection property="actRankCollection" label="wrappedInstance" value="wrappedInstance" />
 			</html:select>
 			</td>
-			<td>
+			<td valign="top" >
 			<html:select property="planMinRank" style="width: 50px" styleClass="inp-text">
 				<html:option value="-1">All</html:option>						
 				<html:optionsCollection property="actRankCollection" label="wrappedInstance" value="wrappedInstance" />
@@ -140,9 +136,9 @@
 	</tr>
 		
 	<tr>
-	<td align="center" colspan="3">
-	<html:submit property="apply">Apply</html:submit>&nbsp;
-	<html:submit property="reset">Reset</html:submit>
+	<td align="center"  colspan="4">
+	<html:submit styleClass="buton" property="apply">Apply</html:submit>&nbsp;
+	<html:submit styleClass="buton" property="reset">Reset</html:submit>
 	</td>
 		
 	</tr>

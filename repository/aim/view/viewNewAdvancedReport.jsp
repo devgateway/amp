@@ -86,7 +86,7 @@
 			<u>Change Sorting</u> </a>
 		</logic:notEmpty>
 <a style="cursor:pointer"
-			onclick="displayStaticMessage(document.getElementById('filterPicker-<bean:write name="reportMeta" property="ampReportId"/>').innerHTML,false,400,410);return false">
+			onclick="displayStaticMessage(document.getElementById('filterPicker-<bean:write name="reportMeta" property="ampReportId"/>').innerHTML,false,400,360);return false">
 		<u>Change Filters</u> </a></div>
 		</td>
 	</tr>

@@ -66,7 +66,7 @@ function displayStaticMessage(messageContent,cssClass,width,height)
 	messageObj.setSize(width,height);
 	messageObj.setCssClassMessageBox(cssClass);
 	messageObj.setSource(false);	// no html source since we want to use a static message here.
-	messageObj.setShadowDivVisible(false);	// Disable shadow for these boxes	
+	messageObj.setShadowDivVisible(true);	// Disable shadow for these boxes	
 	messageObj.display();
 	
 	

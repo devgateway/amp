@@ -27,7 +27,7 @@
 		</tr>
 		<tr>
 			<td colspan="3">
-			<html:select property="currency" style="width: 400px">
+			<html:select property="currency" style="width: 400px" styleClass="inp-text">
 			<html:option value="-1">All</html:option>
 				<html:optionsCollection property="currencies"
 					value="ampCurrencyId" label="currencyName" />
@@ -38,27 +38,27 @@
 
 		<tr>
 			<td><b>Fiscal Calendar</b></td>
-			<td><b>From Year</b></td>
-			<td><b>To Year</b></td>
+			<td align="center"><b>From Year</b></td>
+			<td align="center"><b>To Year</b></td>
 		</tr>
 		<tr>
 			<td>
-			<html:select property="calendar" style="width: 200px">
+			<html:select property="calendar" style="width: 200px" styleClass="inp-text">
 				<html:option value="-1">All</html:option>			
 				<html:optionsCollection property="calendars"
 					value="ampFiscalCalId" label="name" />
 			</html:select>
 			</td>
 	
-			<td>
-			<html:select property="fromYear">
+			<td align="center">
+			<html:select property="fromYear" styleClass="inp-text">
 				<html:option value="-1">All</html:option>			
 				<html:optionsCollection property="fromYears" label="wrappedInstance" value="wrappedInstance" />
 			</html:select>
 			</td>
 
-			<td>
-			<html:select property="toYear">
+			<td align="center">
+			<html:select property="toYear" styleClass="inp-text">
 				<html:option value="-1">All</html:option>			
 				<html:optionsCollection property="toYears" label="wrappedInstance" value="wrappedInstance" />
 			</html:select>
@@ -70,8 +70,8 @@
 			<td colspan="3"><b>Sector</b></td>
 		</tr>
 		<tr>
-			<td colspan="3">
-			<html:select multiple="true" property="selectedSectors" size="3" style="width: 400px">
+			<td colspan="3" styleClass="inp-text">
+			<html:select multiple="true" property="selectedSectors" size="3" style="width: 400px" styleClass="inp-text">
 				<html:optionsCollection property="sectors"
 					value="ampSectorId" label="name" />
 			</html:select>
@@ -84,7 +84,7 @@
 		<tr>
 			<td colspan="3">
 			
-		<category:showoptions property="selectedStatuses" size="3" name="aimReportsFilterPickerForm" multiselect="true" keyName="<%=org.digijava.module.aim.helper.CategoryConstants.ACTIVITY_STATUS_KEY%>"/>
+		<category:showoptions styleClass="inp-text" property="selectedStatuses" size="3" name="aimReportsFilterPickerForm" multiselect="true" keyName="<%=org.digijava.module.aim.helper.CategoryConstants.ACTIVITY_STATUS_KEY%>"/>
 			
 			</td>
 		</tr>
@@ -94,7 +94,7 @@
 		</tr>
 		<tr>
 			<td colspan="3">
-			<html:select multiple="true" property="selectedDonors" size="3" style="width: 400px">
+			<html:select multiple="true" property="selectedDonors" size="3" style="width: 400px" styleClass="inp-text">
 				<html:optionsCollection property="donors"
 					value="ampOrgId" label="name" />
 			</html:select>
@@ -113,19 +113,19 @@
 		</tr>
 		<tr>
 			<td>
-			<html:select multiple="true" property="selectedRisks" size="3">
+			<html:select multiple="true" property="selectedRisks" size="3" styleClass="inp-text">
 				<html:optionsCollection property="risks"
 					value="ampIndRiskRatingsId" label="ratingName" />
 			</html:select>
 			</td>
 			<td>
-			<html:select property="lineMinRank" style="width: 50px">
+			<html:select property="lineMinRank" style="width: 50px" styleClass="inp-text">
 				<html:option value="-1">All</html:option>						
 				<html:optionsCollection property="actRankCollection" label="wrappedInstance" value="wrappedInstance" />
 			</html:select>
 			</td>
 			<td>
-			<html:select property="planMinRank" style="width: 50px">
+			<html:select property="planMinRank" style="width: 50px" styleClass="inp-text">
 				<html:option value="-1">All</html:option>						
 				<html:optionsCollection property="actRankCollection" label="wrappedInstance" value="wrappedInstance" />
 			</html:select>
@@ -135,6 +135,9 @@
 
 
 
+	<tr>
+	<td>&nbsp;</td>
+	</tr>
 		
 	<tr>
 	<td align="center" colspan="3">

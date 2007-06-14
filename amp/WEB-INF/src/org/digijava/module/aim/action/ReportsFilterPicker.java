@@ -6,6 +6,7 @@ package org.digijava.module.aim.action;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -62,7 +63,7 @@ public class ReportsFilterPicker extends MultiAction {
 		//create filter dropdowns		
 		Collection currency = CurrencyUtil.getAmpCurrency();
 		Collection allFisCalenders = DbUtil.getAllFisCalenders();
-		ArrayList ampSectors = SectorUtil.getAmpSectors();
+		List ampSectors = SectorUtil.getAmpSectorsAndSubSectors();
 
 		ArrayList donors;
 		if(ampTeamId!=null) donors=DbUtil.getAmpDonors(ampTeamId); else donors=new ArrayList();

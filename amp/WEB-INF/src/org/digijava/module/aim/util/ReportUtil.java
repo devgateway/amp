@@ -79,6 +79,7 @@ import org.digijava.module.editor.dbentity.Editor;
 /**
  * Utility class for persisting all reports related entities
  * @author priyajith
+ * @deprecated
  */
 public class ReportUtil {
 	

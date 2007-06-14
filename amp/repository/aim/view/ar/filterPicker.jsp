@@ -37,13 +37,13 @@
 
 
 		<tr>
-			<td><b>Fiscal Calendar</b></td>
+			<td colspan="2"><b>Fiscal Calendar</b></td>
 			<td align="center"><b>From Year</b></td>
 			<td align="center"><b>To Year</b></td>
 		</tr>
 		<tr>
-			<td>
-			<html:select property="calendar" style="width: 200px" styleClass="inp-text">
+			<td colspan="2">
+			<html:select property="calendar" style="width: 270px" styleClass="inp-text">
 				<html:option value="-1">All</html:option>			
 				<html:optionsCollection property="calendars"
 					value="ampFiscalCalId" label="name" />

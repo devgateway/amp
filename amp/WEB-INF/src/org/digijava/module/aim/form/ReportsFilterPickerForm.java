@@ -35,6 +35,15 @@ public class ReportsFilterPickerForm extends ActionForm {
 	private Long ampReportId;
 	private Integer lineMinRank;
 	private Integer planMinRank;
+	private String text;
+
+	public String getText() {
+		return text;
+	}
+
+	public void setText(String text) {
+		this.text = text;
+	}
 
 	public Integer getLineMinRank() {
 		return lineMinRank;

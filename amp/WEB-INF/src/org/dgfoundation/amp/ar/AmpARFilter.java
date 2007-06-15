@@ -22,6 +22,7 @@ import org.dgfoundation.amp.Util;
 import org.digijava.module.aim.dbentity.AmpCurrency;
 import org.digijava.module.aim.dbentity.AmpFiscalCalendar;
 import org.digijava.module.aim.dbentity.AmpPerspective;
+import org.digijava.module.aim.dbentity.AmpReports;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.DbUtil;
@@ -36,6 +37,7 @@ public class AmpARFilter implements Filter {
 	
 	protected static Logger logger = Logger.getLogger(AmpARFilter.class);
 	private Long id;
+	private Long ampReportId;
 	private Set statuses=null;
 	private Set donors=null;
 	private Set sectors=null;
@@ -52,8 +54,7 @@ public class AmpARFilter implements Filter {
 	private Integer lineMinRank;
 	private Integer planMinRank;
 	
-	private Integer fromYear;
-	private Integer toYear;	
+	private String text;
 	
 	private static final String initialFilterQuery="SELECT distinct(amp_activity_id) FROM amp_activity WHERE 1";
 	private String generatedFilterQuery;
@@ -82,6 +83,14 @@ public class AmpARFilter implements Filter {
 		String widget=(String) request.getAttribute("widget");
 		if(widget!=null) this.setWidget(new Boolean(widget).booleanValue());
 		
+		String ampReportId = request.getParameter("ampReportId");
+		if(ampReportId==null) {
+			AmpReports ar=(AmpReports) request.getSession().getAttribute("reportMeta");
+			ampReportId=ar.getAmpReportId().toString();
+		}			
+			
+		this.setAmpReportId(new Long(ampReportId));
+		
 	}
 	
 
@@ -101,20 +110,9 @@ public class AmpARFilter implements Filter {
 		String LINE_MIN_RANK_FILTER="SELECT amp_activity_id FROM amp_activity WHERE line_min_rank="+lineMinRank;
 		String PLAN_MIN_RANK_FILTER="SELECT amp_activity_id FROM amp_activity WHERE plan_min_rank="+planMinRank;
 		
-		//currency is not a filter but a currency transformation
-		//String START_YEAR_FILTER="SELECT amp_activity_id FROM v_actual_start_date WHERE date_format(actual_start_date,_latin1'%Y')>='"+startYear+"'";
-		//String START_MONTH_FILTER="SELECT amp_activity_id FROM v_actual_start_date WHERE date_format(actual_start_date,_latin1'%m')>='"+startMonth+"'";
-		//String START_DAY_FILTER="SELECT amp_activity_id FROM v_actual_start_date WHERE date_format(actual_start_date,_latin1'%d')>='"+startDay+"'";
-	
-		//String CLOSE_YEAR_FILTER="SELECT amp_activity_id FROM v_actual_completion_date WHERE date_format(actual_completion_date,_latin1'%Y')<='"+closeYear+"'";
-		//String CLOSE_MONTH_FILTER="SELECT amp_activity_id FROM v_actual_completion_date WHERE date_format(actual_completion_date,_latin1'%m')<='"+closeMonth+"'";
-		//String CLOSE_DAY_FILTER="SELECT amp_activity_id FROM v_actual_completion_date WHERE date_format(actual_completion_date,_latin1'%d')<='"+closeDay+"'";
-	
 	
 		String RISK_FILTER="SELECT v.activity_id from AMP_ME_INDICATOR_VALUE v, AMP_INDICATOR_RISK_RATINGS r where v.risk=r.amp_ind_risk_ratings_id and r.amp_ind_risk_ratings_id in ("+Util.toCSString(risks,true)+")";
 		
-		String FROM_YEAR_FILTER="SELECT f.amp_activity_id FROM amp_funding f, amp_funding_detail fd WHERE f.amp_funding_id=fd.AMP_FUNDING_ID and date_format(fd.transaction_date,_latin1'%Y')>='"+fromYear+"'";
-		String TO_YEAR_FILTER="SELECT f.amp_activity_id FROM amp_funding f, amp_funding_detail fd WHERE f.amp_funding_id=fd.AMP_FUNDING_ID and date_format(fd.transaction_date,_latin1'%Y')<='"+toYear+"'";
 		
 		if(budget!=null) queryAppend(BUDGET_FILTER);
 		if(ampTeams!=null && ampTeams.size()>0) queryAppend(TEAM_FILTER);
@@ -127,16 +125,6 @@ public class AmpARFilter implements Filter {
 		if(lineMinRank!=null) queryAppend(LINE_MIN_RANK_FILTER);
 		if(planMinRank!=null) queryAppend(PLAN_MIN_RANK_FILTER);
 		
-		//if(fromYear!=null) queryAppend(FROM_YEAR_FILTER);
-		//if(toYear!=null) queryAppend(TO_YEAR_FILTER);
-		
-		//if(startYear!=0) queryAppend(START_YEAR_FILTER);
-		//if(startMonth!=0) queryAppend(START_MONTH_FILTER);
-		//if(startDay!=0) queryAppend(START_DAY_FILTER);
-		
-		//if(closeYear!=0) queryAppend(CLOSE_YEAR_FILTER);
-		//if(closeMonth!=0) queryAppend(CLOSE_MONTH_FILTER);
-		//if(closeDay!=0) queryAppend(CLOSE_DAY_FILTER);	
 	}
 	
 	
@@ -217,33 +205,6 @@ public class AmpARFilter implements Filter {
 	}
 
 
-	/**
-	 * @return Returns the fromYear.
-	 */
-	public Integer getFromYear() {
-		return fromYear;
-	}
-
-	/**
-	 * @param fromYear The fromYear to set.
-	 */
-	public void setFromYear(Integer fromYear) {
-		this.fromYear = fromYear;
-	}
-
-	/**
-	 * @return Returns the toYear.
-	 */
-	public Integer getToYear() {
-		return toYear;
-	}
-
-	/**
-	 * @param toYear The toYear to set.
-	 */
-	public void setToYear(Integer toYear) {
-		this.toYear = toYear;
-	}
 
 	/**
 	 * @return Returns the id.
@@ -404,7 +365,7 @@ public class AmpARFilter implements Filter {
 		
 	}
 
-	private static final String IGNORED_PROPERTIES="class#generatedFilterQuery#initialQueryLength#widget#publicView";
+	private static final String IGNORED_PROPERTIES="class#generatedFilterQuery#initialQueryLength#widget#publicView#ampReportId";
 
 	public Integer getLineMinRank() {
 		return lineMinRank;
@@ -420,5 +381,21 @@ public class AmpARFilter implements Filter {
 
 	public void setPlanMinRank(Integer planMinRank) {
 		this.planMinRank = planMinRank;
+	}
+
+	public Long getAmpReportId() {
+		return ampReportId;
+	}
+
+	public void setAmpReportId(Long ampReportId) {
+		this.ampReportId = ampReportId;
+	}
+
+	public Integer getText() {
+		return text;
+	}
+
+	public void setText(Integer text) {
+		this.text = text;
 	} 
 }

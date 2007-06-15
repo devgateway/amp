@@ -22,6 +22,8 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.dgfoundation.amp.ar.ARUtil;
+import org.dgfoundation.amp.ar.AmpARFilter;
+import org.dgfoundation.amp.ar.ArConstants;
 import org.dgfoundation.amp.ar.GenericViews;
 import org.dgfoundation.amp.ar.GroupReportData;
 import org.dgfoundation.amp.ar.MetaInfo;
@@ -67,7 +69,16 @@ public class ViewNewAdvancedReport extends Action {
 		String sortBy=request.getParameter("sortBy");
 		String applySorter = request.getParameter("applySorter");
 		if(ampReportId==null) ampReportId=ar.getAmpReportId().toString();
+		Long reportId=new Long(ampReportId);
 		request.setAttribute("ampReportId",ampReportId);				
+		
+		AmpARFilter filter = (AmpARFilter) hs.getAttribute(ArConstants.REPORTS_FILTER);
+		if(filter==null || !reportId.equals(filter.getAmpReportId())) {
+			filter=new AmpARFilter();
+			hs.setAttribute(ArConstants.REPORTS_FILTER,filter);
+			filter.readRequestData(request);
+		}
+		
 		
 		if( (applySorter==null && sortBy==null ) || ar==null || (arf.getCreatedReportId() == null) || (ampReportId!=null && !ampReportId.equals(arf.getCreatedReportId().toString())))
 		{

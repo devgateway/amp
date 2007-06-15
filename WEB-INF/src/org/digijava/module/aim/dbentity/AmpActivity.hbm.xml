@@ -34,11 +34,19 @@
 		<property name="contFirstName" column="cont_first_name" type="java.lang.String"/>
 		<property name="contLastName" column="cont_last_name" type="java.lang.String"/>
 		<property name="email" column="email" type="java.lang.String"/>
+		<property name="dnrCntTitle" column="dnr_cont_title" type="java.lang.String"/>
+		<property name="dnrCntOrganization" column="dnr_cont_organization" type="java.lang.String"/>
+		<property name="dnrCntPhoneNumber" column="dnr_cont_phone_number" type="java.lang.String"/>
+		<property name="dnrCntFaxNumber" column="dnr_cont_fax_number" type="java.lang.String"/>
 
 		<!-- MOFED contact information -->
 		<property name="mofedCntFirstName" column="mofed_cnt_first_name" type="java.lang.String"/>
 		<property name="mofedCntLastName" column="mofed_cnt_last_name" type="java.lang.String"/>
 		<property name="mofedCntEmail" column="mofed_cnt_email" type="java.lang.String"/>
+		<property name="mfdCntTitle" column="mfd_cont_title" type="java.lang.String"/>
+		<property name="mfdCntOrganization" column="mfd_cont_organization" type="java.lang.String"/>
+		<property name="mfdCntPhoneNumber" column="mfd_cont_phone_number" type="java.lang.String"/>
+		<property name="mfdCntFaxNumber" column="mfd_cont_fax_number" type="java.lang.String"/>
 
 		
 

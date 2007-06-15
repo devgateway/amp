@@ -896,10 +896,18 @@ public class ShowActivityPrintPreview
                 eaForm.setDnrCntFirstName(activity.getContFirstName());
                 eaForm.setDnrCntLastName(activity.getContLastName());
                 eaForm.setDnrCntEmail(activity.getEmail());
-
+                eaForm.setDnrCntTitle(activity.getDnrCntTitle());
+                eaForm.setDnrCntOrganization(activity.getDnrCntOrganization());
+                eaForm.setDnrCntPhoneNumber(activity.getDnrCntPhoneNumber());
+                eaForm.setDnrCntFaxNumber(activity.getDnrCntFaxNumber());
+    
                 eaForm.setMfdCntFirstName(activity.getMofedCntFirstName());
                 eaForm.setMfdCntLastName(activity.getMofedCntLastName());
                 eaForm.setMfdCntEmail(activity.getMofedCntEmail());
+                eaForm.setMfdCntTitle(activity.getMfdCntTitle());
+                eaForm.setMfdCntOrganization(activity.getMfdCntOrganization());
+                eaForm.setMfdCntPhoneNumber(activity.getMfdCntPhoneNumber());
+                eaForm.setMfdCntFaxNumber(activity.getMfdCntFaxNumber());
 
                 eaForm.setConditions(activity.getCondition().trim());
 
@@ -947,9 +955,19 @@ public class ShowActivityPrintPreview
                 eaForm.setDnrCntFirstName(null);
                 eaForm.setDnrCntLastName(null);
                 eaForm.setDnrCntEmail(null);
+                eaForm.setDnrCntTitle(null);
+				eaForm.setDnrCntOrganization(null);
+				eaForm.setDnrCntPhoneNumber(null);
+				eaForm.setDnrCntFaxNumber(null);
+				
                 eaForm.setMfdCntFirstName(null);
                 eaForm.setMfdCntLastName(null);
                 eaForm.setMfdCntEmail(null);
+                eaForm.setMfdCntTitle(null);
+				eaForm.setMfdCntOrganization(null);
+				eaForm.setMfdCntPhoneNumber(null);
+				eaForm.setMfdCntFaxNumber(null);
+				
                 eaForm.setConditions(null);
                 eaForm.setActAthFirstName(null);
                 eaForm.setActAthLastName(null);

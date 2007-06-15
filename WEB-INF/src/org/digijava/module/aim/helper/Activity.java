@@ -46,9 +46,19 @@ public class Activity implements Comparable {
 	private String contFirstName;
 	private String contLastName;
 	private String email;
+	private String dnrCntTitle;
+	private String dnrCntOrganization;
+	private String dnrCntPhoneNumber;
+	private String dnrCntFaxNumber;
+
 	private String mfdContFirstName;
 	private String mfdContLastName;
 	private String mfdContEmail;
+	private String mfdCntTitle;
+	private String mfdCntOrganization;
+	private String mfdCntPhoneNumber;
+	private String mfdCntFaxNumber;
+
 	private String actAthFirstName;
 	private String actAthLastName;
 	private String actAthEmail;
@@ -619,4 +629,52 @@ public class Activity implements Comparable {
     public void setActPrograms(Collection actPrograms) {
         this.actPrograms = actPrograms;
     }
+	public String getDnrCntFaxNumber() {
+		return dnrCntFaxNumber;
+	}
+	public void setDnrCntFaxNumber(String dnrCntFaxNumber) {
+		this.dnrCntFaxNumber = dnrCntFaxNumber;
+	}
+	public String getDnrCntOrganization() {
+		return dnrCntOrganization;
+	}
+	public void setDnrCntOrganization(String dnrCntOrganization) {
+		this.dnrCntOrganization = dnrCntOrganization;
+	}
+	public String getDnrCntPhoneNumber() {
+		return dnrCntPhoneNumber;
+	}
+	public void setDnrCntPhoneNumber(String dnrCntPhoneNumber) {
+		this.dnrCntPhoneNumber = dnrCntPhoneNumber;
+	}
+	public String getDnrCntTitle() {
+		return dnrCntTitle;
+	}
+	public void setDnrCntTitle(String dnrCntTitle) {
+		this.dnrCntTitle = dnrCntTitle;
+	}
+	public String getMfdCntFaxNumber() {
+		return mfdCntFaxNumber;
+	}
+	public void setMfdCntFaxNumber(String mfdCntFaxNumber) {
+		this.mfdCntFaxNumber = mfdCntFaxNumber;
+	}
+	public String getMfdCntOrganization() {
+		return mfdCntOrganization;
+	}
+	public void setMfdCntOrganization(String mfdCntOrganization) {
+		this.mfdCntOrganization = mfdCntOrganization;
+	}
+	public String getMfdCntPhoneNumber() {
+		return mfdCntPhoneNumber;
+	}
+	public void setMfdCntPhoneNumber(String mfdCntPhoneNumber) {
+		this.mfdCntPhoneNumber = mfdCntPhoneNumber;
+	}
+	public String getMfdCntTitle() {
+		return mfdCntTitle;
+	}
+	public void setMfdCntTitle(String mfdCntTitle) {
+		this.mfdCntTitle = mfdCntTitle;
+	}
 }

@@ -705,11 +705,20 @@ public class SaveActivity extends Action {
 				activity.setContFirstName(eaForm.getDnrCntFirstName());
 				activity.setContLastName(eaForm.getDnrCntLastName());
 				activity.setEmail(eaForm.getDnrCntEmail());
+				activity.setDnrCntTitle(eaForm.getDnrCntTitle());
+				activity.setDnrCntOrganization(eaForm.getDnrCntOrganization());
+				activity.setDnrCntFaxNumber(eaForm.getDnrCntFaxNumber());
+				activity.setDnrCntPhoneNumber(eaForm.getDnrCntPhoneNumber());
+				
 
 				activity.setMofedCntFirstName(eaForm.getMfdCntFirstName());
 				activity.setMofedCntLastName(eaForm.getMfdCntLastName());
 				activity.setMofedCntEmail(eaForm.getMfdCntEmail());
-
+				activity.setMfdCntTitle(eaForm.getMfdCntTitle());
+				activity.setMfdCntOrganization(eaForm.getMfdCntOrganization());
+				activity.setMfdCntFaxNumber(eaForm.getMfdCntFaxNumber());
+				activity.setMfdCntPhoneNumber(eaForm.getMfdCntPhoneNumber());
+					
 				activity.setComments(" ");
 
 				if (eaForm.getContractors() == null

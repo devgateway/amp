@@ -526,9 +526,17 @@ public class EditActivityForm extends ActionForm implements Serializable{
 			dnrCntEmail = null;
 			dnrCntFirstName = null;
 			dnrCntLastName = null;
+			dnrCntTitle = null;
+			dnrCntOrganization = null;
+			dnrCntPhoneNumber = null;
+			dnrCntFaxNumber = null;
 			mfdCntEmail = null;
 			mfdCntFirstName = null;
 			mfdCntLastName = null;
+			mfdCntTitle = null;
+			mfdCntOrganization = null;
+			mfdCntPhoneNumber = null;
+			mfdCntFaxNumber = null;
 			actAthEmail = null;
 			actAthFirstName = null;
 			actAthAgencySource=null;

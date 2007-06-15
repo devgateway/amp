@@ -275,9 +275,20 @@ public class ActivityUtil {
 				oldActivity.setContractors(activity.getContractors());
 				oldActivity.setCountry(activity.getCountry());
 				oldActivity.setDescription(activity.getDescription());
-                                oldActivity.setDocumentSpace(activity.getDocumentSpace());
+                oldActivity.setDocumentSpace(activity.getDocumentSpace());
 				oldActivity.setEmail(activity.getEmail());
 				oldActivity.setLanguage(activity.getLanguage());
+				
+				oldActivity.setDnrCntTitle(activity.getDnrCntTitle());
+				oldActivity.setDnrCntOrganization(activity.getDnrCntOrganization());
+				oldActivity.setDnrCntPhoneNumber(activity.getDnrCntPhoneNumber());
+				oldActivity.setDnrCntFaxNumber(activity.getDnrCntFaxNumber());
+                
+				oldActivity.setMfdCntTitle(activity.getMfdCntTitle());
+				oldActivity.setMfdCntOrganization(activity.getMfdCntOrganization());
+				oldActivity.setMfdCntPhoneNumber(activity.getMfdCntPhoneNumber());
+				oldActivity.setMfdCntFaxNumber(activity.getMfdCntFaxNumber());
+				
 //				oldActivity.setLevel(activity.getLevel()); //TO BE DELETED
 				oldActivity.setModality(activity.getModality());
 				oldActivity.setMofedCntEmail(activity.getMofedCntEmail());
@@ -803,6 +814,16 @@ public class ActivityUtil {
                 activity.setBudget(ampActivity.getBudget());
                 activity.setUpdatedBy(ampActivity.getUpdatedBy());
 
+                activity.setDnrCntTitle(ampActivity.getDnrCntTitle());
+                activity.setDnrCntOrganization(ampActivity.getDnrCntOrganization());
+                activity.setDnrCntPhoneNumber(ampActivity.getDnrCntPhoneNumber());
+                activity.setDnrCntFaxNumber(ampActivity.getDnrCntFaxNumber());
+                
+                activity.setMfdCntTitle(ampActivity.getMfdCntTitle());
+                activity.setMfdCntOrganization(ampActivity.getMfdCntOrganization());
+                activity.setMfdCntPhoneNumber(ampActivity.getMfdCntPhoneNumber());
+                activity.setMfdCntFaxNumber(ampActivity.getMfdCntFaxNumber());
+                
                 activity.setEmail(ampActivity.getEmail());
 			    activity.setLanguage(ampActivity.getLanguage());
 //			    activity.setLevel(ampActivity.getLevel()); // TO BE DELETED
@@ -954,11 +975,19 @@ public class ActivityUtil {
 				activity.setContFirstName(ampAct.getContFirstName());
 				activity.setContLastName(ampAct.getContLastName());
 				activity.setEmail(ampAct.getEmail());
-
+				activity.setDnrCntTitle(ampAct.getDnrCntTitle());
+				activity.setDnrCntOrganization(ampAct.getDnrCntOrganization());
+				activity.setDnrCntPhoneNumber(ampAct.getDnrCntPhoneNumber());
+				activity.setDnrCntFaxNumber(ampAct.getDnrCntFaxNumber());
+				
 				activity.setMfdContFirstName(ampAct.getMofedCntFirstName());
 				activity.setMfdContLastName(ampAct.getMofedCntLastName());
 				activity.setMfdContEmail(ampAct.getMofedCntEmail());
-
+				activity.setMfdCntTitle(ampAct.getMfdCntTitle());
+				activity.setMfdCntOrganization(ampAct.getMfdCntOrganization());
+				activity.setMfdCntPhoneNumber(ampAct.getMfdCntPhoneNumber());
+				activity.setMfdCntFaxNumber(ampAct.getMfdCntFaxNumber());
+				
 				if (ampAct.getCreatedDate() != null) {
 					activity.setCreatedDate(
 							DateConversion.ConvertDateToString(ampAct.getCreatedDate()));

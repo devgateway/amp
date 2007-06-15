@@ -1243,10 +1243,18 @@ public class EditActivity
                     eaForm.setDnrCntFirstName(activity.getContFirstName());
                     eaForm.setDnrCntLastName(activity.getContLastName());
                     eaForm.setDnrCntEmail(activity.getEmail());
+                    eaForm.setDnrCntTitle(activity.getDnrCntTitle());
+                    eaForm.setDnrCntOrganization(activity.getDnrCntOrganization());
+                    eaForm.setDnrCntPhoneNumber(activity.getDnrCntPhoneNumber());
+                    eaForm.setDnrCntFaxNumber(activity.getDnrCntFaxNumber());
 
                     eaForm.setMfdCntFirstName(activity.getMofedCntFirstName());
                     eaForm.setMfdCntLastName(activity.getMofedCntLastName());
                     eaForm.setMfdCntEmail(activity.getMofedCntEmail());
+                    eaForm.setMfdCntTitle(activity.getMfdCntTitle());
+                    eaForm.setMfdCntOrganization(activity.getMfdCntOrganization());
+                    eaForm.setMfdCntPhoneNumber(activity.getMfdCntPhoneNumber());
+                    eaForm.setMfdCntFaxNumber(activity.getMfdCntFaxNumber());
 
                     eaForm.setConditions(activity.getCondition().trim());
 

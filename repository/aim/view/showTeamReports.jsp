@@ -139,7 +139,7 @@ function confirmFunc() {
 																<digi:trn key="aim:clickToViewReport">Click here view Report</digi:trn>
 															</bean:define>
 															
-															<digi:link href="/viewNewAdvancedReport.do?view=reset" paramName="report"  paramId="ampReportId" paramProperty="ampReportId" styleClass="h-box" onclick="return popup(this,'');">
+															<digi:link href="/viewNewAdvancedReport.do?view=reset&widget=false" paramName="report"  paramId="ampReportId" paramProperty="ampReportId" styleClass="h-box" onclick="return popup(this,'');">
 															<b>
 															<bean:write name="report" property="name"/>												
 															</b>

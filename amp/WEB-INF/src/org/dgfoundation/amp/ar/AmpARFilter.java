@@ -391,11 +391,11 @@ public class AmpARFilter implements Filter {
 		this.ampReportId = ampReportId;
 	}
 
-	public Integer getText() {
+	public String getText() {
 		return text;
 	}
 
-	public void setText(Integer text) {
+	public void setText(String text) {
 		this.text = text;
 	} 
 }

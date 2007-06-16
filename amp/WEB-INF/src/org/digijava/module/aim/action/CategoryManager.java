@@ -14,15 +14,19 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import net.sf.hibernate.Hibernate;
+import net.sf.hibernate.HibernateException;
 import net.sf.hibernate.Query;
 import net.sf.hibernate.Session;
+import net.sf.hibernate.Transaction;
 
 import org.apache.log4j.Logger;
 import org.apache.struts.action.Action;
+import org.apache.struts.action.ActionError;
 import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
+import org.apache.struts.action.ActionMessage;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.dbentity.AmpCategoryClass;
 import org.digijava.module.aim.dbentity.AmpCategoryValue;
@@ -36,14 +40,15 @@ import org.digijava.module.aim.helper.CategoryManagerUtil;
 public class CategoryManager extends Action {
 	
 	private static Logger logger	= Logger.getLogger(CategoryManager.class);
+	ActionErrors	errors;
 
 	public ActionForward execute(ActionMapping mapping, ActionForm form, 
 			HttpServletRequest request, HttpServletResponse response) throws java.lang.Exception
 	{
-		
+		errors						= new ActionErrors();
 		CategoryManagerForm myForm	= 	(CategoryManagerForm) form;
-		ActionErrors	errors		= new ActionErrors();
 		HttpSession session 		= request.getSession();
+		
 		/**
 		 * Test if user is administrator
 		 */
@@ -97,6 +102,7 @@ public class CategoryManager extends Action {
 			}
 		}
 		/* END- Ordering the values alphabetically if necessary */
+		this.saveErrors(request, errors);
 		return mapping.findForward("forward");
 	}
 	/**
@@ -171,19 +177,30 @@ public class CategoryManager extends Action {
 	}
 	private void deleteCategory (Long categoryId) {
 		Session dbSession			= null;
+		Transaction transaction		= null;
 		try{
-			dbSession	= PersistenceManager.getSession();
+			dbSession		= PersistenceManager.getSession();
+			transaction		= dbSession.beginTransaction();
+			
 			String queryString 	= "select c from "
 				+ AmpCategoryClass.class.getName()
 				+ " c where c.id=:id";
 			Query qry			= dbSession.createQuery(queryString);
 			qry.setParameter("id", categoryId, Hibernate.LONG);
 			dbSession.delete( qry.uniqueResult() );
-			dbSession.flush();
+			transaction.commit();
 		} 
 		catch (Exception ex) {
+			ActionError error	= (ActionError) new ActionError("error.aim.categoryManager.cannotDeleteCategory");
+			errors.add("title", error);
 			logger.error("Unable to delete Category: " + ex.getMessage());
-			ex.printStackTrace();
+			
+			try {
+				transaction.rollback();
+			} catch (HibernateException e) {
+				logger.error("Failed to rollback transaction when deleting category with id " + categoryId + ":"+ ex.getMessage());
+				e.printStackTrace();
+			}
 		} 
 		finally {
 			try {

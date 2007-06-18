@@ -119,12 +119,12 @@
 																<table cellspacing=0 cellpadding=0>
 																	<tr>
 																		<td noWrap height=17>
-																			<bean:define id="translation">
-																				<digi:trn key="aim:viewIndicators">Click here to View Indicators</digi:trn>
-																			</bean:define>
-																			<digi:link
+																		<c:set var="viewIndicators">
+																		<digi:trn key="aim:viewIndicators">Click here to View Indicators</digi:trn>
+																		</c:set>
+																		<digi:link
 																				href="/overallIndicatorManager.do?view=indicators"
-																				styleClass="sub-navGov" title="<%=translation%>">
+																				styleClass="sub-navGov" title="${viewIndicators}">
 																				<font color="ffffff"> <digi:trn
 																						key="aim:programIndicatorList">
 																		Program Indicator List
@@ -137,13 +137,14 @@
 																				width="20" height="19" />
 																		</td>
 																		<td noWrap height=17>
-																			<bean:define id="translation">
+																		<c:set var="ProgramIndicators">
 																				<digi:trn key="aim:viewMultiProgramIndicators">Click here to view Multi Program Indicators</digi:trn>
-																			</bean:define>
+																	
+																	     </c:set>
 																			<digi:link
 																				href="/overallIndicatorManager.do?view=multiprogram"
 																				styleClass="sub-navGovSelected"
-																				title="<%=translation%>" onmouseover="setOverImg(2)"
+																				title="${ProgramIndicators}" onmouseover="setOverImg(2)"
 																				onmouseout="setOutImg(2)">
 																				<font color="ffffff"> <digi:trn
 																						key="aim:multiProgramManager">
@@ -157,13 +158,14 @@
 																				width="20" height="19" />
 																		</td>
 																		<td noWrap height=17>
-																			<bean:define id="translation">
-																				<digi:trn key="aim:viewM&EProjectIndicators">Click here to view M & E Project Indicators</digi:trn>
-																			</bean:define>
+																		
+																		<c:set var="ProjectIndicators">
+																		<digi:trn key="aim:viewM&EProjectIndicators">Click here to view M & E Project Indicators</digi:trn>
+																		</c:set>
 																			<digi:link
 																				href="/overallIndicatorManager.do?view=meindicators"
 																				styleClass="sub-navGovSelected"
-																				title="<%=translation%>" onmouseover="setOverImg(3)"
+																				title="${ProjectIndicators}" onmouseover="setOverImg(3)"
 																				onmouseout="setOutImg(3)">
 																				<font color="ffffff"> <digi:trn
 																						key="aim:projectIndicatorList">

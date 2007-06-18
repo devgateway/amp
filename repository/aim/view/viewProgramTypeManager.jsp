@@ -31,10 +31,10 @@
 				<tr>
 					<!-- Start Navigation -->
 					<td height=33><span class=crumb>
-						<bean:define id="translation">
+					<c:set var="ToViewAdmin">
 							<digi:trn key="aim:clickToViewAdmin">Click here to goto Admin Home</digi:trn>
-						</bean:define>
-						<digi:link href="/admin.do" styleClass="comment" title="<%=translation%>" >
+					</c:set>
+						<digi:link href="/admin.do" styleClass="comment" title="${ToViewAdmin}">
 						<digi:trn key="aim:AmpAdminHome">
 						Admin Home
 						</digi:trn>
@@ -92,19 +92,19 @@
 															<bean:write name="programNames" property="ampProgramId"/>	
 															</c:set>
 															<c:set target="${urlParams2}" property="event" value="editPrgType"/>
-															<bean:define id="translation">
-
+															<c:set var="ToEditProgramType">
 																<digi:trn key="aim:clickToEditProgramType">Click here to Edit Program Type</digi:trn>
-															</bean:define>		
-															<digi:link href="/programTypeManager.do"  name ="urlParams2" title="<%=translation%>" >
+															</c:set>		
+															<digi:link href="/programTypeManager.do"  name ="urlParams2" title="${ToEditProgramType}" >
 																<bean:write name="programNames" property="title"/>
 															</digi:link>
+					
 														</td>
 														<td bgcolor="#ffffff" width="40" align="center">
-															<bean:define id="translation">
-																<digi:trn key="aim:aim:clickToEditProgramType">Click here to Edit Program Type</digi:trn>
-															</bean:define>
-															[ <digi:link href="/programTypeManager.do"  name ="urlParams2" title="<%=translation%>" >Edit</digi:link> ]
+															<c:set var="ToEditProgramType1">
+																<digi:trn key="aim:clickToEditProgramType">Click here to Edit Program Type</digi:trn>
+															</c:set>
+															[ <digi:link href="/programTypeManager.do"  name ="urlParams2" title="${ToEditProgramType1}" >Edit</digi:link> ]
 														</td>
 														<td bgcolor="#ffffff" width="55" align="center">
 															<jsp:useBean id="urlParams4" type="java.util.Map" class="java.util.HashMap"/>
@@ -112,12 +112,11 @@
 															<bean:write name="programNames" property="ampProgramId"/>	
 															</c:set>
 															<c:set target="${urlParams4}" property="event" value="delete"/>
-															
-															<bean:define id="translation">
-																<digi:trn key="aim:clickToDeleteComponent">Click here to Delete Component</digi:trn>
-															</bean:define>
+															<c:set var="ToDeleteComponent">
+																	<digi:trn key="aim:clickToDeleteComponent">Click here to Delete Component</digi:trn>
+															</c:set>
 															[ <digi:link href="/programTypeManager.do" name="urlParams4" 
-																title="<%=translation%>" onclick="return onDelete()">Delete</digi:link> ]
+																title="${ToDeleteComponent}" onclick="return onDelete()">Delete</digi:link> ]
 														</td>
 													</tr>
 													</logic:iterate>
@@ -157,10 +156,11 @@
 										<tr>
 											<td nowrap>
 												<digi:img src="module/aim/images/arrow-014E86.gif" width="15" height="10"/>
-												<bean:define id="translation">
+												<c:set var="ToAddProgramType">
 													<digi:trn key="aim:clickToAddProgramType">Click here to Add a Program Type</digi:trn>
-												</bean:define>
-												<digi:link href="/programTypeManager.do?event=add"  title="<%=translation%>" >
+												</c:set>
+												
+												<digi:link href="/programTypeManager.do?event=add"  title="${translation}" >
 												<digi:trn key="aim:addProgramType">
 												Add Program type
 												</digi:trn>
@@ -170,10 +170,10 @@
 										<tr>
 											<td>
 												<digi:img src="module/aim/images/arrow-014E86.gif" width="15" height="10"/>
-												<bean:define id="translation">
-													<digi:trn key="aim:clickToViewAdmin">Click here to goto Admin Home</digi:trn>
-												</bean:define>
-												<digi:link href="/admin.do" title="<%=translation%>" >
+												<c:set var="ToViewAdmin">
+														<digi:trn key="aim:clickToViewAdmin">Click here to goto Admin Home</digi:trn>
+												</c:set>
+												<digi:link href="/admin.do" title="${ToViewAdmin}" >
 												<digi:trn key="aim:AmpAdminHome">
 												Admin Home
 												</digi:trn>

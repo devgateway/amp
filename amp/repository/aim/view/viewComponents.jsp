@@ -30,10 +30,10 @@
 				<tr>
 					<!-- Start Navigation -->
 					<td height=33><span class=crumb>
-						<bean:define id="translation">
-							<digi:trn key="aim:clickToViewAdmin">Click here to goto Admin Home</digi:trn>
-						</bean:define>
-						<digi:link href="/admin.do" styleClass="comment" title="<%=translation%>" >
+					<c:set var="ToViewAdmin">
+						<digi:trn key="aim:clickToViewAdmin">Click here to goto Admin Home</digi:trn>
+					</c:set>
+						<digi:link href="/admin.do" styleClass="comment" title="${ToViewAdmin}" >
 						<digi:trn key="aim:AmpAdminHome">
 						Admin Home
 						</digi:trn>
@@ -90,19 +90,18 @@
 															<bean:write name="componentlist" property="ampComponentId" />
 															</c:set>
 															<c:set target="${urlParams2}" property="event" value="edit"/>
-															<bean:define id="translation">
-
+															<c:set var="ToEditComponents">
 																<digi:trn key="aim:clickToEditComponents">Click here to Edit</digi:trn>
-															</bean:define>		
-															<digi:link href="/updateComponents.do" name="urlParams2" title="<%=translation%>" >
+															</c:set>
+															<digi:link href="/updateComponents.do" name="urlParams2" title="${ToEditComponents}" >
 																<bean:write name="componentlist" property="title"/>
 															</digi:link>
 														</td>
 														<td bgcolor="#ffffff" width="40" align="center">
-															<bean:define id="translation">
-																<digi:trn key="aim:clickToEditComponent">Click here to Edit Component</digi:trn>
-															</bean:define>
-															[ <digi:link href="/updateComponents.do" name="urlParams2" title="<%=translation%>" >Edit</digi:link> ]
+														<c:set var="ToEditComponent1">
+														<digi:trn key="aim:clickToEditComponent">Click here to Edit Component</digi:trn>
+														</c:set>
+															[ <digi:link href="/updateComponents.do" name="urlParams2" title="${ToEditComponent1}" >Edit</digi:link> ]
 														</td>
 											 
 														<%--<logic:equal name="aimAddSectorForm" property="deleteSchemeFlag" value="true">--%>
@@ -112,11 +111,11 @@
 																<bean:write name="componentlist" property="ampComponentId" />
 															</c:set>
 															<c:set target="${urlParams4}" property="event" value="delete"/>
-															<bean:define id="translation">
-																<digi:trn key="aim:clickToDeleteComponent">Click here to Delete Component</digi:trn>
-															</bean:define>
-															[ <digi:link href="/updateComponents.do" name="urlParams4" 
-																title="<%=translation%>" onclick="return onDelete()">Delete</digi:link> ]
+															<c:set var="ToEditComponent2">
+														<digi:trn key="aim:clickToDeleteComponent">Click here to Delete Component</digi:trn>
+														</c:set>
+																[ <digi:link href="/updateComponents.do" name="urlParams4" 
+																title="${ToEditComponent2}" onclick="return onDelete()">Delete</digi:link> ]
 														</td>
 													</tr>
 													</logic:iterate>
@@ -156,10 +155,10 @@
 										<tr>
 											<td nowrap>
 												<digi:img src="module/aim/images/arrow-014E86.gif" width="15" height="10"/>
-												<bean:define id="translation">
-													<digi:trn key="aim:clickToAddComponent">Click here to Add a Component</digi:trn>
-												</bean:define>
-												<digi:link href="/updateComponents.do?event=add"  title="<%=translation%>" >
+													<c:set var="ToAddComponent">
+														<digi:trn key="aim:clickToAddComponent">Click here to Add a Component</digi:trn>
+													</c:set>
+												<digi:link href="/updateComponents.do?event=add"  title="${ToAddComponent}" >
 												<digi:trn key="aim:addComponent">
 												Add Component
 												</digi:trn>
@@ -169,10 +168,11 @@
 										<tr>
 											<td>
 												<digi:img src="module/aim/images/arrow-014E86.gif" width="15" height="10"/>
-												<bean:define id="translation">
-													<digi:trn key="aim:clickToViewAdmin">Click here to goto Admin Home</digi:trn>
-												</bean:define>
-												<digi:link href="/admin.do" title="<%=translation%>" >
+												<c:set var="ToViewAdmin">
+															<digi:trn key="aim:clickToViewAdmin">Click here to goto Admin Home</digi:trn>
+													</c:set>
+												
+												<digi:link href="/admin.do" title="${ToViewAdmin}" >
 												<digi:trn key="aim:AmpAdminHome">
 												Admin Home
 												</digi:trn>

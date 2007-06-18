@@ -66,7 +66,7 @@ public class UpdateWorkspace extends Action {
             
             AmpCategoryValue typeCategoryValue	= null;
             String typeString					= null;
-            if (uwForm.getTypeId().longValue() > 0) {
+            if (uwForm.getTypeId() != null && uwForm.getTypeId().longValue() > 0) {
             	typeCategoryValue	= CategoryManagerUtil.getAmpCategoryValueFromDb(uwForm.getTypeId());
             	typeString			= typeCategoryValue.getValue();
             }

@@ -270,6 +270,7 @@ public class AmpReportGenerator extends ReportGenerator {
 	}
 
 	protected void prepareData() {
+		
 
 		applyExchangeRate();
 
@@ -280,9 +281,19 @@ public class AmpReportGenerator extends ReportGenerator {
 		report = new GroupReportData(reportMetadata.getName());
 		report.setReportMetadata(this.reportMetadata);
 		report.setSourceColsCount(new Integer(extractableCount - 1));
+		
+
 
 		ColumnReportData reportChild = new ColumnReportData(reportMetadata
 				.getName());
+		
+		//add a fake first column ONLY IF the Columns metadata is empty (if we only have hierarchies but no columns). This is needed
+		//in order to preserve the table structure of the output
+		if(reportMetadata.getColumns().size()==0) {
+			reportChild.addColumn(new CellColumn(""));
+		}
+		
+		
 		reportChild.addColumns(rawColumns.getItems());
 		report.addReport(reportChild);
 		

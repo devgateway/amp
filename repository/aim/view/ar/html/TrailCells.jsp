@@ -11,8 +11,9 @@
 <!-- generate total row -->
 <tr>
 	<td class=clsTableL1SubTotalEndSectionLabel colspan='<bean:write name="reportData" property="sourceColsCount"/>'>
-	TOTALS FOR <bean:write name="reportData" property="name"/>
-	</td>
+	<digi:trn key="rep:pop:totalsFor">TOTALS FOR</digi:trn>
+	<digi:trn key="rep:pop:${reportData.name}">${reportData.name}</digi:trn>
+	 </td>
 	<logic:iterate name="reportData" property="trailCells" id="cell" scope="page">
 		<td class=clsTableL1SubTotalEndSection>
 		<bean:define id="viewable" name="cell" type="org.dgfoundation.amp.ar.Viewable" scope="page" toScope="request"/>

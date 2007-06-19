@@ -26,24 +26,24 @@
               <TR> 
 				<TD noWrap align=left valign="center">	
 				<digi:img src="module/aim/images/close.gif" border="0" alt="Close Report"/>
-				<a href="javascript:window.close();">Close Report</a></TD>				
+				<a href="javascript:window.close();"><digi:trn key="rep:tool:CloseReport">Close Report</digi:trn></a></TD>				
 
 				<TD noWrap align=left valign="center">	
 				<digi:img src="module/aim/images/reload.gif" border="0" alt="Reload Report"/>
-				<a href="javascript:window.location.reload();">Reload Report</a></TD>				
+				<a href="javascript:window.location.reload();"><digi:trn key="rep:tool:ReloadReport">Reload Report</digi:trn></a></TD>				
 
 
 				<TD noWrap align=left valign="center">	
 				<digi:img src="images/pdf_icon.gif" border="0" alt="Export to PDF"/>
 				<digi:link href="<%=viewParamPDF%>" paramName="ampReportId" paramId="ampReportId" target="_blank">
-				Export to PDF
+				<digi:trn key="rep:tool:ExporttoPDF">Export to PDF</digi:trn>
 				</digi:link>
 				</TD>
 			
 				<TD noWrap align=left valign="center">	
 				<digi:img src="images/xls_icon.jpg" border="0" alt="Export to Excel"/>
 				<digi:link href="<%=viewParamXLS%>" paramName="ampReportId" paramId="ampReportId" target="_blank">
-				Export to Excel
+				 <digi:trn key="rep:tool:ExporttoExcel">Export to Excel</digi:trn>
 				</digi:link>
 				</TD>
 				
@@ -51,7 +51,7 @@
 				<TD noWrap align=left valign="center">	
 				<digi:img src="images/icon_csv.gif" border="0" alt="Export to CSV"/>
 				<digi:link href="<%=viewParamCSV%>" paramName="ampReportId" paramId="ampReportId" target="_blank"> 
-				Export to CSV
+				<digi:trn key="rep:tool:ExporttoCSV">Export to CSV</digi:trn>
 				</digi:link>
 				</TD>
 				
@@ -59,7 +59,7 @@
 				<TD noWrap align=left valign="center">	
 				<digi:img src="images/print_icon.gif" border="0" alt="Printer Friendly"/>
 				<digi:link href="<%=viewParamPrint%>" paramName="ampReportId" paramId="ampReportId" target="_blank">
-				Printer Friendly
+				<digi:trn key="rep:tool:PrinterFriendly">Printer Friendly</digi:trn>
 				</digi:link>
 				</TD>
 				
@@ -75,8 +75,8 @@
 
               </TR>
                   
-                  </TBODY></TABLE>
-</TD>
-</TR>
-</TBODY>
+       			</TBODY></TABLE>
+			</TD>
+		</TR>
+	</TBODY>
 </TABLE>

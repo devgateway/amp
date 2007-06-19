@@ -66,13 +66,11 @@
 <logic:notEqual name="widget" scope="request" value="true">
 
 	<tr>
-		<td align="left"><font size="+1">Report Name: <b><bean:write
+		<td align="left"><font size="+1"><digi:trn key="rep:pop:ReportName">Report Name:</digi:trn><b><bean:write
 			scope="session" name="reportMeta" property="name" /></b></font></td>
 	</tr>
-
-
 	<tr>
-		<td>Description: <i><bean:write scope="session" name="reportMeta"
+		<td><digi:trn key="rep:pop:Description">Description:</digi:trn><i><bean:write scope="session" name="reportMeta"
 			property="reportDescription" /></i></td>
 	</tr>
 
@@ -83,21 +81,22 @@
 		<td><logic:notEmpty name="reportMeta" property="hierarchies">
 			<div id="menucontainer"><a style="cursor:pointer"
 				onclick="displayStaticMessage(document.getElementById('sorterPicker-<bean:write name="reportMeta" property="ampReportId"/>').innerHTML,false,400,150);return false">
-			<u>Change Sorting</u> </a>
+			<u><digi:trn key="rep:pop:ChangeSorting">Change Sorting</digi:trn></u> </a>
 		</logic:notEmpty>
 <a style="cursor:pointer"
-			onclick="displayStaticMessage(document.getElementById('filterPicker-<bean:write name="reportMeta" property="ampReportId"/>').innerHTML,false,400,400);return false">
-		<u>Change Filters</u> </a></div>
+			onclick="displayStaticMessage(document.getElementById('filterPicker-<bean:write name="reportMeta" property="ampReportId"/>').innerHTML,false,400,360);return false">
+		<u><digi:trn key="rep:pop:ChangeFilters">Change Filters</digi:trn></u> </a></div>
 		</td>
 	</tr>
-
-
-
 	<tr>
 			<td align="right">
 				<font size="-5" face="arial" color="red">
 					<span  STYLE="font-style:  italic">
+					
+					<c:set var="AllAmount">
 					<%=org.digijava.module.aim.dbentity.AmpReports.getNote(session)%>
+					</c:set>
+					<digi:trn key="rep:pop:AllAmount"><%=org.digijava.module.aim.dbentity.AmpReports.getNote(session)%></digi:trn>
 					</span>			
 				</font>
 			</td>
@@ -119,13 +118,12 @@
 
 	<tr>
 	<td width="500">
-	Currently Selected Filters:
-	<logic:present name="<%=org.dgfoundation.amp.ar.ArConstants.REPORTS_FILTER%>" scope="session">
+	<digi:trn key="rep:pop:SelectedFilters">Currently Selected Filters:</digi:trn>
+		<logic:present name="<%=org.dgfoundation.amp.ar.ArConstants.REPORTS_FILTER%>" scope="session">
 		<bean:write name="<%=org.dgfoundation.amp.ar.ArConstants.REPORTS_FILTER%>" filter="false"/>
 	</logic:present>
 	</td>
 	</tr>
-
 	<tr>
 	
 
@@ -145,8 +143,10 @@
 	</logic:notEqual>
 	<logic:equal name="report" property="totalUniqueRows" value="0">
 		<tr>
-			<td><b>The specified filtered report does not hold any data. Either
-			pick a different filter criteria or use another report.</b></td>
+			<td><b>
+			<digi:trn key="rep:pop:filteredreport">The specified filtered report does not hold any data. Either
+			pick a different filter criteria or use another report.	</digi:trn>
+			</b></td>
 		</tr>
 	</logic:equal>
 		

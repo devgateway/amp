@@ -77,6 +77,7 @@ public class ReportsFilterPicker extends MultiAction {
 		filterForm.setFromYears(new ArrayList());
 		filterForm.setToYears(new ArrayList());
 		
+		
 		// loading Activity Rank collection
 		if (null == filterForm.getActRankCollection()) {
 			filterForm.setActRankCollection(new ArrayList());
@@ -106,6 +107,7 @@ public class ReportsFilterPicker extends MultiAction {
 		filterForm.setToYear(null);
 		filterForm.setLineMinRank(null);
 		filterForm.setPlanMinRank(null);
+		filterForm.setText(null);
 	
 		return modeApply(mapping,form,request,response);
 	}
@@ -139,6 +141,7 @@ public class ReportsFilterPicker extends MultiAction {
 		arf.setSectors(Util.getSelectedObjects(AmpSector.class,filterForm.getSelectedSectors()));
 		AmpFiscalCalendar selcal=(AmpFiscalCalendar) Util.getSelectedObject(AmpFiscalCalendar.class,filterForm.getCalendar());
 		arf.setCalendarType(selcal);
+		arf.setText(filterForm.getText());
 		arf.setFromYear(filterForm.getFromYear()==null || filterForm.getFromYear().longValue()==-1?null:new Integer(filterForm.getFromYear().intValue()));
 		arf.setToYear(filterForm.getToYear()==null || filterForm.getToYear().longValue()==-1?null:new Integer(filterForm.getToYear().intValue()));
 		arf.setDonors(Util.getSelectedObjects(AmpOrganisation.class,filterForm.getSelectedDonors()));

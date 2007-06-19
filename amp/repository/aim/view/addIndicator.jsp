@@ -12,16 +12,16 @@
 	<!--
 	function validate()
 	{
-		if (trim(document.getElementById("indicatorName").value).length == 0)
+		if (trim(document.aimIndicatorForm.indicatorName.value).length == 0)
 		{
 			alert("Please enter Indicator name");
-			document.getElementById("indicatorName").focus();
+			document.aimIndicatorForm.indicatorName.focus();
 			return false;
 		}
-		if (trim(document.getElementById("indicatorCode").value).length == 0)
+		if (trim(document.aimIndicatorForm.indicatorCode.value).length == 0)
 		{
 			alert("Please enter Indicator code");
-			document.getElementById("indicatorCode").focus();
+			document.aimIndicatorForm.indicatorCode.focus();
 			return false;
 		}
 		return true;
@@ -32,7 +32,7 @@
 		var temp = validate();
 		if (temp == true)
 		{
-          document.getElementById("addBtn").disabled = true;   
+          document.aimIndicatorForm.addBtn.disabled = true;   
           <digi:context name="addInd" property="context/module/moduleinstance/addIndicator.do" />
           document.forms[0].action = "<%=addInd%>";
           document.forms[0].target = "_self";
@@ -43,7 +43,7 @@
 	}
 
 	function load(){
-		if (document.getElementById("errorFlag").value == "false") {
+		if (document.aimIndicatorForm.errorFlag.value == "false") {
 			<digi:context name="indMan" property="context/module/moduleinstance/indicatorManager.do"/>
             document.forms[0].action = "<%= indMan %>";
             document.forms[0].target = window.opener.name;

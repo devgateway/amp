@@ -12,7 +12,7 @@
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/arFunctions.js"/>"></script>
 
 <tr><td colspan='<bean:write name="columnReport" property="totalDepth"/>'>
-<i><bean:write name="columnReport" property="name"/></i>
+<i><digi:trn key="rep:pop:${columnReport.name}">${columnReport.name}</digi:trn></i>
 </td></tr>
 
 <%int rowIdx = 2;%>
@@ -22,8 +22,7 @@
 <%int maxDepth = columnReport.getMaxColumnDepth();
 				columnReport.setGlobalHeadingsDisplayed(new Boolean(true));
 				%>
-<%for (int curDepth = 0; curDepth <= columnReport
-						.getMaxColumnDepth(); curDepth++, rowIdx++) {%>
+<%for (int curDepth = 0; curDepth <= columnReport.getMaxColumnDepth(); curDepth++, rowIdx++) {%>
 <tr>
 <logic:iterate name="columnReport" property="items" id="column" scope="page" type="org.dgfoundation.amp.ar.Column">
 	<%column.setCurrentDepth(curDepth);%>
@@ -34,8 +33,13 @@
 	
 	<logic:equal name="column" property="columnDepth" value="1">
 	<html:link style="color:#FFFFFF;cursor:pointer" page="/viewNewAdvancedReport.do" paramName="column" paramProperty="name" paramId="sortBy">
-		<%=subColumn.getName(reportMeta
-													.getHideActivities())%>
+		
+	<c:set var="heatTitle1">
+		<%=subColumn.getName(reportMeta.getHideActivities())%>
+	</c:set>	
+	<digi:trn key="aim:pop:${heatTitle1}"><%=subColumn.getName(reportMeta.getHideActivities())%></digi:trn>
+
+
 	</html:link>
 	<c:if test="${column.name == columnReport.sorterColumn}">
 	<logic:equal name="columnReport" property="sortAscending" value="false">
@@ -49,8 +53,16 @@
 	
 	</logic:equal>
 	<logic:notEqual name="column" property="columnDepth" value="1">
-		<%=subColumn.getName(reportMeta
-												.getHideActivities())%>
+	
+	<c:set var="heatTitle">
+			<%=subColumn.getName(reportMeta.getHideActivities())%>
+	</c:set>	
+	<digi:trn key="aim:pop:${heatTitle}">	<%=subColumn.getName(reportMeta.getHideActivities())%></digi:trn>
+
+
+
+		
+	
 	</logic:notEqual>
 	</td>
 	
@@ -65,8 +77,7 @@
 
 <logic:notEqual name="reportMeta" property="hideActivities" value="true">
 <logic:iterate name="columnReport" property="ownerIds" id="ownerId" scope="page">
-<%rowIdx++;
-					%>
+<%rowIdx++;	%>
 <tr onmousedown="setPointer(this, <%=rowIdx%>, 'click', '#FFFFFF', '#FFFFFF', '#FFFF00');">
 	<logic:iterate name="columnReport" property="items" id="column" scope="page">
 		<bean:define id="viewable" name="column" type="org.dgfoundation.amp.ar.Viewable" scope="page" toScope="request"/>

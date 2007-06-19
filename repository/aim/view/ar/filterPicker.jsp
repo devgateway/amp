@@ -21,6 +21,14 @@
 	<tr>
 		<td class=clsTableTitleCol colspan="4" align="center">Select filters</td>
 	</tr>
+		<tr>
+			<td colspan="4"><b>Keywords</b></td>
+		</tr>
+		<tr>
+			<td colspan="4">
+			<html:text property="text" style="width: 400px" styleClass="inp-text"/>
+			</td>
+		</tr>
 		
 		<tr>
 			<td colspan="4"><b>Currency</b></td>
@@ -34,6 +42,7 @@
 			</html:select>
 			</td>
 		</tr>
+
 
 
 		<tr>
@@ -92,6 +101,8 @@
 			</html:select>
 			</td>
 		</tr>
+
+
 
 		<tr>
 			<td ><b>Status</b></td>

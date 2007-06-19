@@ -114,10 +114,10 @@
 			<table cellPadding=5 cellSpacing=0 width="100%" border=0>
 				<tr><%-- Start Navigation --%>
 					<td height=33><span class=crumb>
-						<bean:define id="translation">
-							<digi:trn key="aim:clickToViewAdmin">Click here to goto Admin Home</digi:trn>
-						</bean:define>
-						<digi:link href="/admin.do" styleClass="comment" title="<%=translation%>" >
+					<c:set var="ToViewAdmin">
+					<digi:trn key="aim:clickToViewAdmin">Click here to goto Admin Home</digi:trn>
+					</c:set> 
+						<digi:link href="/admin.do" styleClass="comment" title="${ToViewAdmin}" >
 						<digi:trn key="aim:AmpAdminHome">
 							Admin Home
 						</digi:trn>
@@ -153,10 +153,10 @@
 												<table cellspacing=0 cellpadding=0>
 														<tr>
 															<td noWrap height=17>
-																<bean:define id="translation">
-																	<digi:trn key="aim:viewIndicators">Click here to View Indicators</digi:trn>
-																</bean:define>
-																<digi:link href="/themeManager.do?view=indicators"  styleClass="sub-navGovSelected" title="<%=translation%>" onmouseover="setOverImg(1)" onmouseout="setOutImg(1)"><font color="ffffff">
+																<c:set var="viewIndicators">
+																<digi:trn key="aim:viewIndicators">Click here to View Indicators</digi:trn>
+																</c:set>
+																<digi:link href="/themeManager.do?view=indicators"  styleClass="sub-navGovSelected" title="${viewIndicators}" onmouseover="setOverImg(1)" onmouseout="setOutImg(1)"><font color="ffffff">
 																<digi:trn key="aim:programIndicatorList">
 																		Program Indicator List
 																</digi:trn></font>
@@ -166,10 +166,10 @@
                                                               <img id="img1" alt="" src="/TEMPLATE/ampTemplate/module/aim/images/tab-rightselected1.gif" width="20" height="19" />
                                                             </td>
 															<td noWrap height=17>
-																<bean:define id="translation">
+															<c:set var="MultiProgramIndicators">
 																	<digi:trn key="aim:viewMultiProgramIndicators" >Click here to view Multi Program Indicators</digi:trn>
-																</bean:define>
-																<digi:link href="/themeManager.do?view=multiprogram"  styleClass="sub-navGov" title="<%=translation%>" ><font color="ffffff">
+															</c:set>
+																<digi:link href="/themeManager.do?view=multiprogram"  styleClass="sub-navGov" title="${MultiProgramIndicators}" ><font color="ffffff">
 															<digi:trn key="aim:multiProgramManager">
 																Strategy/Plan Manager
 															</digi:trn></font>
@@ -179,10 +179,10 @@
                                                               <img id="img2" alt="" src="/TEMPLATE/ampTemplate/module/aim/images/tab-right1.gif" width="20" height="19" />
                                                             </td>
 															<td noWrap height=17>
-																<bean:define id="translation">
+															<c:set var="MEProjectIndicators">
 																	<digi:trn key="aim:viewM&EProjectIndicators" >Click here to view M & E Project Indicators</digi:trn>
-																</bean:define>
-																<digi:link href="/themeManager.do?view=meindicators"  styleClass="sub-navGovSelected" title="<%=translation%>" onmouseover="setOverImg(3)" onmouseout="setOutImg(3)"><font color="ffffff">
+															</c:set>
+															<digi:link href="/themeManager.do?view=meindicators"  styleClass="sub-navGovSelected" title="${MEProjectIndicators}" onmouseover="setOverImg(3)" onmouseout="setOutImg(3)"><font color="ffffff">
 																<digi:trn key="aim:projectIndicatorList">
 																		Project Indicator List
 																</digi:trn></font>
@@ -396,12 +396,14 @@
 																					<input class="buton" type="button" name="editButton" value="Edit" onclick="editProgram('<bean:write name="themes" property="ampThemeId"/>')">
 																			</td>
 																			<td align="left" width="12" bgcolor="#f4f4f2">
-																					<bean:define id="translation">
-																							<digi:trn key="aim:clickToDeleteProgram">
+																					
+																					<c:set var="ToDeleteProgram">
+																					<digi:trn key="aim:clickToDeleteProgram">
 																									Click here to Delete Program
 																							</digi:trn>
-																					</bean:define>
-																					<digi:link href="/themeManager.do?event=delete" name="urlParams" title="<%=translation%>" onclick="return deleteProgram()">
+																					
+																					</c:set>
+																					<digi:link href="/themeManager.do?event=delete" name="urlParams" title="${ToDeleteProgram}" onclick="return deleteProgram()">
 																							<img src= "../ampTemplate/images/trash_12.gif" border=0>
 																					</digi:link>
 																			</td>

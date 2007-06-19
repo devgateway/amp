@@ -60,13 +60,13 @@
 								<table cellPadding=5 cellSpacing=0 width="100%" border=0>
 										<tr><%-- Start Navigation --%>
 												<td height=33><span class=crumb>
-														<bean:define id="translation">
-																<digi:trn key="aim:clickToViewAdmin">Click here to goto Admin Home</digi:trn>
-														</bean:define>
-														<digi:link href="/admin.do" styleClass="comment" title="<%=translation%>" >
-																<digi:trn key="aim:AmpAdminHome">
+							<c:set var="ToViewAdmin">
+								<digi:trn key="aim:clickToViewAdmin">Click here to goto Admin Home</digi:trn>
+							</c:set> 
+									<digi:link href="/admin.do" styleClass="comment" title="${ToViewAdmin}" >
+													<digi:trn key="aim:AmpAdminHome">
 																		Admin Home
-																</digi:trn>
+														</digi:trn>
 														</digi:link>&nbsp;&gt;&nbsp;
 														<digi:trn key="aim:projectIndicatorManager">
 																Project Indicator Manager
@@ -92,10 +92,10 @@
 																										<table cellspacing=0 cellpadding=0>
 																												<tr>
 																														<td noWrap height=17>
-																																<bean:define id="translation">
-																																		<digi:trn key="aim:viewIndicators">Click here to View Indicators</digi:trn>
-																																</bean:define>
-																																<digi:link href="/indicatorManager.do?view=indicators"  styleClass="sub-navGovSelected" title="<%=translation%>" onmouseover="setOverImg(1)" onmouseout="setOutImg(1)"><font color="ffffff">
+																														<c:set var="iewIndicators">
+																														<digi:trn key="aim:viewIndicators">Click here to View Indicators</digi:trn>
+																														</c:set>
+																																<digi:link href="/indicatorManager.do?view=indicators"  styleClass="sub-navGovSelected" title="${iewIndicators}" onmouseover="setOverImg(1)" onmouseout="setOutImg(1)"><font color="ffffff">
 																																		<digi:trn key="aim:programIndicatorList">
 																																				Program Indicator List
 																																		</digi:trn></font>
@@ -105,10 +105,10 @@
                                                                                                                           <img id="img1" alt="" src="/TEMPLATE/ampTemplate/module/aim/images/tab-rightselected1.gif" width="20" height="19" />
                                                                                                                         </td>
 																														<td noWrap height=17>
-																																<bean:define id="translation">
-																																		<digi:trn key="aim:viewMultiProgramIndicators" >Click here to view Multi Program Indicators</digi:trn>
-																																</bean:define>
-																																<digi:link href="/indicatorManager.do?view=multiprogram"  styleClass="sub-navGovSelected" title="<%=translation%>" onmouseover="setOverImg(2)" onmouseout="setOutImg(2)"><font color="ffffff">
+																														<c:set var="MultiProgramIndicators">
+																																<digi:trn key="aim:viewMultiProgramIndicators" >Click here to view Multi Program Indicators</digi:trn>
+																														</c:set>
+																																<digi:link href="/indicatorManager.do?view=multiprogram"  styleClass="sub-navGovSelected" title="${MultiProgramIndicators}" onmouseover="setOverImg(2)" onmouseout="setOutImg(2)"><font color="ffffff">
 																																		<digi:trn key="aim:multiProgramManager">
 																																				Multi Program Manager
 																																		</digi:trn></font>
@@ -118,10 +118,11 @@
                                                                                                                           <img id="img2" alt="" src="/TEMPLATE/ampTemplate/module/aim/images/tab-rightselected1.gif" width="20" height="19" />
                                                                                                                         </td>
 																														<td noWrap height=17>
-																																<bean:define id="translation">
-																																		<digi:trn key="aim:viewM&EProjectIndicators" >Click here to view M & E Project Indicators</digi:trn>
-																																</bean:define>
-																																<digi:link href="/indicatorManager.do?view=meindicators"  styleClass="sub-navGov" title="<%=translation%>"><font color="ffffff">
+																														<c:set var="EProjectIndicators">
+																															<digi:trn key="aim:viewM&EProjectIndicators" >Click here to view M & E Project Indicators</digi:trn>
+																														</c:set>
+																														
+																																<digi:link href="/indicatorManager.do?view=meindicators"  styleClass="sub-navGov" title="${EProjectIndicators}"><font color="ffffff">
 																																		<digi:trn key="aim:projectIndicatorList">
 																																				Project Indicator List
 																																		</digi:trn></font>
@@ -169,6 +170,7 @@
 																	</td>
 																	<td>
 																		<a href="javascript:editIndicator('<bean:write name="indicators" property="ampMEIndId" />')">
+																		
 																			<bean:define id="indName">
 																				<bean:write name="indicators" property="name"/>
 																			</bean:define>

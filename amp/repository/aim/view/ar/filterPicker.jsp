@@ -19,19 +19,13 @@
 <html:hidden property="ampReportId"/>
 	<table>
 	<tr>
-		<td class=clsTableTitleCol colspan="4" align="center">Select filters</td>
+		<td class=clsTableTitleCol colspan="4" align="center">
+		<digi:trn key="rep:filer:Selectfilters">Select filters</digi:trn>
+		</td>
 	</tr>
-		<tr>
-			<td colspan="4"><b>Keywords</b></td>
-		</tr>
-		<tr>
-			<td colspan="4">
-			<html:text property="text" style="width: 400px" styleClass="inp-text"/>
-			</td>
-		</tr>
 		
 		<tr>
-			<td colspan="4"><b>Currency</b></td>
+			<td colspan="4"><b><digi:trn key="rep:filer:Currency">Currency</digi:trn></b></td>
 		</tr>
 		<tr>
 			<td colspan="4">
@@ -44,11 +38,10 @@
 		</tr>
 
 
-
 		<tr>
-			<td colspan="2"><b>Fiscal Calendar</b></td>
-			<td align="center"><b>From Year</b></td>
-			<td align="center"><b>To Year</b></td>
+			<td colspan="2"><b><digi:trn key="rep:filer:fiscalCalendar">Fiscal Calendar</digi:trn></b></td>
+			<td align="center"><b><digi:trn key="rep:filer:FromYear">From Year</digi:trn></b></td>
+			<td align="center"><b><digi:trn key="rep:filer:ToYear">To Year</digi:trn></b></td>
 		</tr>
 		<tr>
 			<td colspan="2">
@@ -76,7 +69,7 @@
 
 
 		<tr>
-			<td colspan="4"><b>Sector</b></td>
+			<td colspan="4"><b><digi:trn key="rep:filer:Sector">Sector</digi:trn></b></td>
 		</tr>
 		<tr>
 			<td colspan="4" styleClass="inp-text">
@@ -91,7 +84,7 @@
 			
 		
 		<tr>
-			<td colspan="4"><b>Donor</b></td>
+			<td colspan="4"><b><digi:trn key="rep:filer:donor">Donor</digi:trn></b></td>
 		</tr>
 		<tr>
 			<td colspan="4">
@@ -102,16 +95,14 @@
 			</td>
 		</tr>
 
-
-
 		<tr>
-			<td ><b>Status</b></td>
-			<td ><b>Risks</b></td>
+			<td ><b><digi:trn key="rep:filer:Status">Status</digi:trn>Status</b></td>
+			<td ><b><digi:trn key="rep:filer:Risks">Risks</digi:trn></b></td>
 			<td >
-			<b>Line Min. Rank</b>
+			<b><digi:trn key="rep:filer:LineMinRank">Line Min. Rank</digi:trn></b>
 			</td>
 			<td >
-			<b>Planning Min. Rank</b>
+			<b><digi:trn key="rep:filer:PlanningMinRank">Planning Min. Rank</digi:trn></b>
 			</td>
 			
 		</tr>
@@ -148,8 +139,8 @@
 		
 	<tr>
 	<td align="center"  colspan="4">
-	<html:submit styleClass="buton" property="apply">Apply</html:submit>&nbsp;
-	<html:submit styleClass="buton" property="reset">Reset</html:submit>
+	<html:submit styleClass="buton" property="apply"><digi:trn key="rep:filer:Apply">Apply</digi:trn></html:submit>&nbsp;
+	<html:submit styleClass="buton" property="reset"><digi:trn key="rep:filer:Reset">Reset</digi:trn></html:submit>
 	</td>
 		
 	</tr>

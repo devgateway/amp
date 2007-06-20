@@ -37,23 +37,24 @@ import org.digijava.module.aim.util.TeamMemberUtil;
 
 /**
  * Shows the index page
- *
+ * <p/>
  * A user cannot login to AMP if he has already logged in, using the same session.
  * If the user is logged in and then if he tries to access the index page or login page
  * he will be automatically redirected to the MyDesktop page
- *
  */
 public class ViewAmp
-    extends Action {
+        extends Action {
 
     public ActionForward execute(ActionMapping mapping, ActionForm form,
                                  HttpServletRequest request,
                                  HttpServletResponse response) throws java.lang.
-        Exception {
+            Exception {
 
         User user = RequestUtils.getUser(request);
+        Site site = RequestUtils.getSite(request);
+
         initializeTeamMembership(request, response, user,
-                                 RequestUtils.getSite(request));
+                site);
         /*
          * If the user information is present in the current session, then forward to the
          * MyDesktop page, when he tries to login again in that same session.
@@ -61,16 +62,19 @@ public class ViewAmp
         HttpSession session = request.getSession();
         String siteAdmin = (String) session.getAttribute("ampAdmin");
         TeamMember tm = (TeamMember) session.getAttribute("currentMember");
-        if(tm != null && tm.getTeamId() != null &&
-           tm.getTeamId().longValue() > 0) {
+        if (tm != null && tm.getTeamId() != null &&
+                tm.getTeamId().longValue() > 0) {
             String fwdUrl = "showDesktop.do";
             response.sendRedirect(fwdUrl);
             return null;
-        } else if(siteAdmin != null && "yes".equals(siteAdmin)) {
+        } else if (siteAdmin != null && "yes".equals(siteAdmin)) {
             String fwdUrl = "admin.do";
             response.sendRedirect(fwdUrl);
             return null;
         }
+
+
+
 
         // No menber info means that we could not set it automatically
         LoginForm lForm = (LoginForm) form; // login form instance
@@ -87,21 +91,21 @@ public class ViewAmp
     public static void initializeTeamMembership(HttpServletRequest request,
                                                 HttpServletResponse response,
                                                 User usr, Site site) throws
-        NotTeamMemberException, DgException {
+            NotTeamMemberException, DgException {
 
         HttpSession session = request.getSession();
         if (session.getAttribute(Constants.TEAM_ID) != null) {
-        	session.removeAttribute(Constants.TEAM_ID);
+            session.removeAttribute(Constants.TEAM_ID);
         }
 
         ServletContext ampContext = session.getServletContext();
 
         Subject subject = RequestUtils.getSubject(request);
-        if(subject == null) {
+        if (subject == null) {
             subject = UserUtils.getUserSubject(usr);
         }
         boolean siteAdmin = DgSecurityManager.permitted(subject, site,
-            ResourcePermission.INT_ADMIN);
+                ResourcePermission.INT_ADMIN);
 
         /*
          * if the member is part of multiple teams the below collection contains more than one element.
@@ -111,8 +115,8 @@ public class ViewAmp
          * registered user but has not yet been assigned a team
          */
         Collection members = TeamMemberUtil.getTeamMembers(usr.getEmail());
-        if(members == null || members.size() == 0) {
-            if(siteAdmin == true) { // user is a site admin
+        if (members == null || members.size() == 0) {
+            if (siteAdmin == true) { // user is a site admin
                 // set the session variable 'ampAdmin' to the value 'yes'
                 session.setAttribute("ampAdmin", new String("yes"));
                 // create a TeamMember object and set it to a session variabe 'currentMember'
@@ -131,65 +135,67 @@ public class ViewAmp
                 throw new NotTeamMemberException(usr.getEmail());
             }
         } else {
-            if(siteAdmin == true) {
-                session.setAttribute("ampAdmin", new String("yes"));
-            } else {
-                session.setAttribute("ampAdmin", new String("no"));
+            if (members.size() == 1) {
+                if (siteAdmin == true) {
+                    session.setAttribute("ampAdmin", new String("yes"));
+                } else {
+                    session.setAttribute("ampAdmin", new String("no"));
+                }
             }
         }
-        if(members.size() == 1) {
+        if (members.size() == 1) {
             // if the user is part of just on team, load his personalized settings
 
             Iterator itr = members.iterator();
             AmpTeamMember member = (AmpTeamMember) itr.next();
 
-            synchronized(ampContext) {
+            synchronized (ampContext) {
                 HashMap userActList = (HashMap) ampContext.getAttribute(
-                    Constants.USER_ACT_LIST);
-                if(userActList != null &&
-                   userActList.containsKey(member.getAmpTeamMemId())) {
+                        Constants.USER_ACT_LIST);
+                if (userActList != null &&
+                        userActList.containsKey(member.getAmpTeamMemId())) {
                     // expire all other entries
 
                     //logger.info("getting the value for " + member.getAmpTeamMemId());
 
                     Long actId = (Long) userActList.get(member.getAmpTeamMemId());
                     HashMap editActMap = (HashMap) ampContext.getAttribute(
-                        Constants.EDIT_ACT_LIST);
+                            Constants.EDIT_ACT_LIST);
                     String sessId = null;
-                    if(editActMap != null) {
+                    if (editActMap != null) {
                         Iterator itr1 = editActMap.keySet().iterator();
-                        while(itr1.hasNext()) {
+                        while (itr1.hasNext()) {
                             sessId = (String) itr1.next();
                             Long tempActId = (Long) editActMap.get(sessId);
 
                             //logger.info("tempActId = " + tempActId + " actId = " + actId);
-                            if(tempActId.longValue() == actId.longValue()) {
+                            if (tempActId.longValue() == actId.longValue()) {
                                 editActMap.remove(sessId);
                                 //logger.info("Removed the entry for " + actId);
                                 ampContext.setAttribute(Constants.EDIT_ACT_LIST,
-                                    editActMap);
+                                        editActMap);
                                 break;
                             }
                         }
                     }
                     userActList.remove(member.getAmpTeamMemId());
                     ampContext.setAttribute(Constants.USER_ACT_LIST,
-                                            userActList);
+                            userActList);
 
                     HashMap tsActList = (HashMap) ampContext.getAttribute(
-                        Constants.TS_ACT_LIST);
-                    if(tsActList != null) {
+                            Constants.TS_ACT_LIST);
+                    if (tsActList != null) {
                         tsActList.remove(actId);
                         ampContext.setAttribute(Constants.TS_ACT_LIST,
-                                                tsActList);
+                                tsActList);
                     }
                     ArrayList sessList = (ArrayList) ampContext.getAttribute(
-                        Constants.SESSION_LIST);
-                    if(sessList != null) {
+                            Constants.SESSION_LIST);
+                    if (sessList != null) {
                         sessList.remove(sessId);
                         Collections.sort(sessList);
                         ampContext.setAttribute(Constants.SESSION_LIST,
-                                                sessList);
+                                sessList);
                     }
                 }
             }
@@ -197,65 +203,65 @@ public class ViewAmp
             // checking whether the member is a Team lead. if yes, then
             // we set the session variable 'teamLeadFlag' as 'true' else 'false'
             AmpTeamMemberRoles lead = TeamMemberUtil
-                .getAmpTeamHeadRole();
+                    .getAmpTeamHeadRole();
             TeamMember tm = new TeamMember();
 
-            if(lead != null) {
-                if(lead.getAmpTeamMemRoleId().equals(
-                    member.getAmpMemberRole().getAmpTeamMemRoleId()) ||
-					//very ugly but we have no choice - only one team head role possible :(
-					member.getAmpMemberRole().getRole().equals("Top Management") 				    
-                ) {
+            if (lead != null) {
+                if (lead.getAmpTeamMemRoleId().equals(
+                        member.getAmpMemberRole().getAmpTeamMemRoleId()) ||
+                        //very ugly but we have no choice - only one team head role possible :(
+                        member.getAmpMemberRole().getRole().equals("Top Management")
+                        ) {
                     session.setAttribute("teamLeadFlag", new String(
-                        "true"));
+                            "true"));
                     tm.setTeamHead(true);
                 } else {
                     session.setAttribute("teamLeadFlag", new String(
-                        "false"));
+                            "false"));
                     tm.setTeamHead(false);
                 }
             } else {
                 session.setAttribute("teamLeadFlag",
-                                     new String("false"));
+                        new String("false"));
                 tm.setTeamHead(false);
             }
 
             // Get the team members application settings
             AmpApplicationSettings ampAppSettings = DbUtil
-                .getMemberAppSettings(member.getAmpTeamMemId());
+                    .getMemberAppSettings(member.getAmpTeamMemId());
             ApplicationSettings appSettings = new ApplicationSettings();
             appSettings.setAppSettingsId(ampAppSettings
-                                         .getAmpAppSettingsId());
+                    .getAmpAppSettingsId());
             try {
 
-            appSettings.setDefRecsPerPage(ampAppSettings
-                                          .getDefaultRecordsPerPage().intValue());
-            appSettings.setCurrencyId(ampAppSettings.getCurrency()
-                                      .getAmpCurrencyId());
-            appSettings.setFisCalId(ampAppSettings.getFiscalCalendar()
-                                    .getAmpFiscalCalId());
-            appSettings.setDefaultAmpReport( ampAppSettings.getDefaultTeamReport() );
+                appSettings.setDefRecsPerPage(ampAppSettings
+                        .getDefaultRecordsPerPage().intValue());
+                appSettings.setCurrencyId(ampAppSettings.getCurrency()
+                        .getAmpCurrencyId());
+                appSettings.setFisCalId(ampAppSettings.getFiscalCalendar()
+                        .getAmpFiscalCalId());
+                appSettings.setDefaultAmpReport(ampAppSettings.getDefaultTeamReport());
 
-            } catch(Exception ex) {
+            } catch (Exception ex) {
                 ex.printStackTrace();
             }
             //appSettings.setLanguage(ampAppSettings.getLanguage());
 
             String langCode = UserUtils.getUserLangPreferences(
-                usr, site).getAlertsLanguage().getCode();
+                    usr, site).getAlertsLanguage().getCode();
 
             appSettings.setLanguage(langCode);
 
             appSettings.setPerspective(ampAppSettings
-                                       .getDefaultPerspective());
+                    .getDefaultPerspective());
 
             tm.setMemberId(member.getAmpTeamMemId());
             tm.setMemberName(member.getUser().getName());
             tm.setRoleId(member.getAmpMemberRole()
-                         .getAmpTeamMemRoleId());
+                    .getAmpTeamMemRoleId());
             tm.setRoleName(member.getAmpMemberRole().getRole());
             tm.setTeamId(member.getAmpTeam().getAmpTeamId());
-            session.setAttribute(Constants.TEAM_ID,tm.getTeamId());
+            session.setAttribute(Constants.TEAM_ID, tm.getTeamId());
             tm.setTeamName(member.getAmpTeam().getName());
             tm.setTeamType(member.getAmpTeam().getTeamCategory());
             tm.setTeamAccessType(member.getAmpTeam().getAccessType());
@@ -263,13 +269,13 @@ public class ViewAmp
             tm.setWrite(member.getWritePermission().booleanValue());
             tm.setDelete(member.getDeletePermission().booleanValue());
             tm.setAppSettings(appSettings);
-            if(usr != null) {
+            if (usr != null) {
                 tm.setEmail(usr.getEmail());
             }
 
             // Check whether the user is a transalator for the amp site.
             // if yes, the system has to show the translator toolbar at the bottom of the pages
-            if(DbUtil.isUserTranslator(member.getUser().getId()) == true) {
+            if (DbUtil.isUserTranslator(member.getUser().getId()) == true) {
                 tm.setTranslator(true);
             } else {
                 tm.setTranslator(false);
@@ -277,7 +283,7 @@ public class ViewAmp
             session.setAttribute("currentMember", tm);
 
             // Set the session infinite. i.e. session never timeouts
-            session.setMaxInactiveInterval( -1);
+            session.setMaxInactiveInterval(-1);
 
             // forward to members desktop page
 
@@ -292,7 +298,8 @@ public class ViewAmp
             navLocale.setCode(tm.getAppSettings().getLanguage());
             DgUtil.switchLanguage(navLocale, request, response);
 
-        } else if(members.size() > 1) {
+        } else if (members.size() > 1) {
+
             // member is part of more than one team. Show the select team page
             // Moved to ViewAmp action
             return;

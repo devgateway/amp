@@ -1217,7 +1217,36 @@ public class DbUtil {
 		return user;
 	}
 
+	/**
+	 * @author Arty
+	 * @param reportId
+	 * Sets the the defaultTeamReport to null for all the 
+	 * AppSettings that were referencing the 
+	 */
+	public static void updateAppSettingsReportDeleted(Long reportId){
+		Session session = null;
+		Query qry = null;
+		AmpApplicationSettings ampAppSettings = null;
 
+		try {
+			session = PersistenceManager.getRequestDBSession();
+			String queryString = "select a from "
+					+ AmpApplicationSettings.class.getName()
+					+ " a where (a.defaultTeamReport=:repId)";
+			qry = session.createQuery(queryString);
+			qry.setParameter("repId", reportId, Hibernate.LONG);
+			Iterator itr = qry.list().iterator();
+			while (itr.hasNext()) {
+				ampAppSettings = (AmpApplicationSettings) itr.next();
+				ampAppSettings.setDefaultTeamReport(null);
+				update(ampAppSettings);
+				//System.out.println("Am updatat: " + ampAppSettings.getAmpAppSettingsId());
+			}
+		} catch (Exception e) {
+			logger.error("Unable to get TeamAppSettings");
+			logger.debug("Exceptiion " + e);
+		}
+	}
 
 	public static AmpApplicationSettings getTeamAppSettings(Long teamId) {
 		Session session = null;

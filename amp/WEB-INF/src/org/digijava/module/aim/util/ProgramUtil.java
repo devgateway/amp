@@ -1111,6 +1111,8 @@ public class ProgramUtil {
                         AmpThemeIndicators tmInd=(AmpThemeIndicators)indItr.next();
                         if(tmInd.getAmpThemeIndId().equals(indId)){
                             indItr.remove();
+                            //please read http://www.hibernate.org/hib_docs/reference/en/html/example-parentchild.html
+                            session.delete(tmInd);
                         }
                     }
                     session.update(tm);

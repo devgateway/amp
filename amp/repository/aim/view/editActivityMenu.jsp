@@ -572,19 +572,19 @@ bgcolor="#006699">
 	<logic:empty name="SA" scope="application">
 	<tr>
 		<td align="center">
-			<input type="button" value="Preview Logframe" class="buton" onclick="previewLogFrameClicked()" name="logframe">
+			<input type="button" value='<digi:trn key="aim:previewLogframe">Preview Logframe</digi:trn>' class="buton" onclick="previewLogFrameClicked()" name="logframe">
 		</td>
 	</tr>
 	</logic:empty>
 	<tr>
 		<td align="center">
-			<input type="button" value="Preview" class="buton" onclick="previewClicked()">
+			<input type="button" value='<digi:trn key="aim:preview">Preview</digi:trn>' class="buton" onclick="previewClicked()">
 		</td>
 	</tr>
 
 	<tr>
 		<td align="center">
-			<input type="button" value="Save" name="saveButton" class="buton" onclick="saveClicked()">
+			<input type="button" value='<digi:trn key="aim:save">Save</digi:trn>' name="saveButton" class="buton" onclick="saveClicked()">
 		</td>
 	</tr>
 </table>

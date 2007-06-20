@@ -72,15 +72,27 @@
 		}
 		document.forms[1].submit();
 	}
-	function deleteField(id) {
+	function deleteField(id, deleteId, undoId) {
 		field						= document.getElementById(id) ;
 		field.style.textDecoration	= "line-through";
 		field.disabled				= true;
+		
+		del							= document.getElementById(deleteId) ;
+		del.style.display			= "none";
+		
+		undo						= document.getElementById(undoId) ;
+		undo.style.display			= "inline";
 	}
-	function undeleteField(id) {
+	function undeleteField(id, deleteId, undoId) {
 		field						= document.getElementById(id) ;
 		field.style.textDecoration	= "none";
 		field.disabled				= false;
+		
+		del							= document.getElementById(deleteId) ;
+		del.style.display			= "inline";
+		
+		undo						= document.getElementById(undoId) ;
+		undo.style.display			= "none";
 	} 
 	
 </script>
@@ -183,23 +195,28 @@
 							max	= 3;
 						for (int i=0; i<max; i++) { 
 							String value	= "";
+							String deleteId	= "delete" + i;
+							String undoId	= "undo" + i;
 							String fieldId	= "field" + i;
 							if (myForm.getNumOfPossibleValues().intValue() > 0) 
 								value	= myForm.getPossibleValues()[i];
 					%>
 						<input type="text" name="possibleValues" value="<%=value %>" style="text-decoration:none" id="<%= fieldId %>" />
 						&nbsp; 
-						[<a style="cursor:pointer; text-decoration:underline; color: blue"  onclick="return deleteField('<%= fieldId %>')">
+						<span id="<%= deleteId %>" style="display:inline">
+						[<a style="cursor:pointer; text-decoration:underline; color: blue"  onclick="return deleteField('<%= fieldId %>', '<%= deleteId %>','<%= undoId %>')">
 							<digi:trn key="aim:categoryManagerValueDelete">
 								Delete
 							</digi:trn>
 						</a>]
-						&nbsp;
-						[<a style="cursor:pointer; text-decoration:underline; color: blue"  onclick="return undeleteField('<%= fieldId %>')">
+						</span>
+						<span id="<%= undoId %>" style="display:none">
+						[<a style="cursor:pointer; text-decoration:underline; color:blue"  onclick="return undeleteField('<%= fieldId %>', '<%= deleteId %>', '<%= undoId %>')">
 							<digi:trn key="aim:categoryManagerValueUndelete">
 								Undelete
 							</digi:trn>
 						</a>]
+						</span>
 						 <br /><br />
 					<%	} %>
  

@@ -46,7 +46,7 @@ public class CategoryManager extends Action {
 			HttpServletRequest request, HttpServletResponse response) throws java.lang.Exception
 	{
 		errors						= new ActionErrors();
-		CategoryManagerForm myForm	= 	(CategoryManagerForm) form;
+		CategoryManagerForm myForm	= (CategoryManagerForm) form;
 		HttpSession session 		= request.getSession();
 		
 		/**
@@ -83,7 +83,13 @@ public class CategoryManager extends Action {
 		 * Adding a new category to the database
 		 */
 		if (myForm.getAddNewCategory() != null && myForm.getAddNewCategory().booleanValue()) {
-			this.saveCategoryToDatabase(myForm, errors);	
+			boolean saved	= this.saveCategoryToDatabase(myForm, errors);
+			if (!saved) {
+				AmpCategoryClass ampCategoryClass	= CategoryManagerUtil.loadAmpCategoryClass( myForm.getEditedCategoryId() );
+				this.populateForm(ampCategoryClass, myForm);
+				this.saveErrors(request, errors);
+				return mapping.findForward("createOrEditCategory");
+			}
 		}
 		/**
 		 * loading existing categories
@@ -222,10 +228,13 @@ public class CategoryManager extends Action {
 
 		
 	
-	private void saveCategoryToDatabase(CategoryManagerForm myForm, ActionErrors errors) throws Exception {
+	private boolean saveCategoryToDatabase(CategoryManagerForm myForm, ActionErrors errors) throws Exception {
 		
-		Session dbSession			= null;		
+		Session dbSession					= null;	
+		Transaction tx						= null;
+		String undeletableCategoryValues	= null; 
 		
+		boolean retValue					= true;
 		
 		
 //		Transaction transaction		= dbSession.beginTransaction();
@@ -233,6 +242,7 @@ public class CategoryManager extends Action {
 		
 		try {
 			dbSession						= PersistenceManager.getSession();
+			tx								= dbSession.beginTransaction();
 			AmpCategoryClass dbCategory		= new AmpCategoryClass();
 			dbCategory.setPossibleValues( new Vector() );
 			if (myForm.getEditedCategoryId() != null) {
@@ -259,8 +269,19 @@ public class CategoryManager extends Action {
 			for (int i=0; i<possibleValues.length; i++) {
 				if ( k < dbCategory.getPossibleValues().size() && !addToPossibleValues ) {
 					AmpCategoryValue ampCategoryValue	= (AmpCategoryValue)dbCategory.getPossibleValues().get(k);
-					if (possibleValues[i].equals(""))
-						dbCategory.getPossibleValues().remove( k );
+					
+					if (possibleValues[i].equals("")) {// In this block we are surely editing an existing category (not creating a new one)
+						AmpCategoryValue removedValue			= (AmpCategoryValue)dbCategory.getPossibleValues().remove( k );
+						try{
+							dbSession.flush();
+						}
+						catch(Exception E) {
+							if (undeletableCategoryValues ==  null) 
+								undeletableCategoryValues = new String() + removedValue;
+							else
+								undeletableCategoryValues += ", " + removedValue; 
+						}
+					}
 					else {
 						ampCategoryValue.setValue( possibleValues[i] );
 						ampCategoryValue.setIndex( k++ );
@@ -278,14 +299,33 @@ public class CategoryManager extends Action {
 				}			
 			} 
 			
-			if (myForm.getEditedCategoryId() == null) {
-				dbSession.saveOrUpdate( dbCategory );
+			if (undeletableCategoryValues != null) {
+				if (tx != null)
+					tx.rollback();
+				ActionError error2	= new ActionError("error.aim.categoryManager.cannotDeleteValues", undeletableCategoryValues);
+				errors.add("title",error2);
+				retValue			= false;
 			}
-			else{
-				dbSession.flush();
+			
+			else {
+				if (myForm.getEditedCategoryId() == null) {
+					dbSession.saveOrUpdate( dbCategory );
+				}
+				else{
+					dbSession.flush();
+				}
+				
+				tx.commit();
 			}
+			
 		} catch (Exception ex) {
 			logger.error("Unable to save or update the AmpCategoryClass: " + ex);
+			ActionError error1	= new ActionError("error.aim.categoryManager.cannotSaveOrUpdate");
+			errors.add("title",error1);
+			if (tx != null)
+					tx.rollback();
+			retValue			= false;
+			
 		} finally {
 			try {
 				PersistenceManager.releaseSession(dbSession);
@@ -293,6 +333,7 @@ public class CategoryManager extends Action {
 				logger.error("releaseSession() failed :" + ex2);
 			}
 		}
+		return retValue;
 	}
 	
 }

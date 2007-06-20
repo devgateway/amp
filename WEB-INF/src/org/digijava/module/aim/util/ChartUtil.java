@@ -9,6 +9,7 @@ import org.apache.log4j.Logger;
 import org.digijava.module.aim.helper.Constants;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.JFreeChart;
+import org.jfree.chart.labels.CustomCategoryToolTipGenerator;
 import org.jfree.chart.axis.CategoryAxis;
 import org.jfree.chart.axis.CategoryLabelPositions;
 import org.jfree.chart.axis.NumberAxis;
@@ -81,6 +82,7 @@ public class ChartUtil {
     // disable bar outlines...
     BarRenderer renderer = (BarRenderer) plot.getRenderer();
     renderer.setDrawBarOutline(false);
+      renderer.setBaseToolTipGenerator(new CustomCategoryToolTipGenerator());
     //renderer.setItemLabelsVisible(false);
 
     // set up gradient paints for series...

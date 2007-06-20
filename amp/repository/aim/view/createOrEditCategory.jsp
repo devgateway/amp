@@ -51,14 +51,19 @@
 		numOfItemsCopied	= 0;
 		var numOfNotEmptyFields	= 0;
 		for (i=0; i<numOfPossibleValues; i++) {
-			document.forms[1].possibleValues[i].value	= document.forms[0].possibleValues[i].value;
+			var value	= "";
+			var field	= document.forms[0].possibleValues[i];
+			if (!field.disabled) {
+				value	= field.value;
+			}
+			document.forms[1].possibleValues[i].value	= value;
 			if (document.forms[1].possibleValues[i].value.length > 0)
 				 numOfNotEmptyFields++;
 			numOfItemsCopied ++;
 		}
 		for (i=0; i<numOfAdditionalFields; i++){
 			document.forms[1].possibleValues[i+numOfItemsCopied].value	= document.getElementById('additionalField'+i).value;
-			if (document.forms[1].possibleValues[i].value.length > 0)
+			if (document.forms[1].possibleValues[i+numOfItemsCopied].value.length > 0)
 				 numOfNotEmptyFields++;
 		}
 		if (numOfNotEmptyFields < 2) {
@@ -67,6 +72,16 @@
 		}
 		document.forms[1].submit();
 	}
+	function deleteField(id) {
+		field						= document.getElementById(id) ;
+		field.style.textDecoration	= "line-through";
+		field.disabled				= true;
+	}
+	function undeleteField(id) {
+		field						= document.getElementById(id) ;
+		field.style.textDecoration	= "none";
+		field.disabled				= false;
+	} 
 	
 </script>
 
@@ -168,10 +183,24 @@
 							max	= 3;
 						for (int i=0; i<max; i++) { 
 							String value	= "";
-							if (myForm.getNumOfPossibleValues().intValue() > 0)
+							String fieldId	= "field" + i;
+							if (myForm.getNumOfPossibleValues().intValue() > 0) 
 								value	= myForm.getPossibleValues()[i];
 					%>
-						<input type="text" name="possibleValues" value="<%=value %>" /> <br /><br />
+						<input type="text" name="possibleValues" value="<%=value %>" style="text-decoration:none" id="<%= fieldId %>" />
+						&nbsp; 
+						[<a style="cursor:pointer; text-decoration:underline; color: blue"  onclick="return deleteField('<%= fieldId %>')">
+							<digi:trn key="aim:categoryManagerValueDelete">
+								Delete
+							</digi:trn>
+						</a>]
+						&nbsp;
+						[<a style="cursor:pointer; text-decoration:underline; color: blue"  onclick="return undeleteField('<%= fieldId %>')">
+							<digi:trn key="aim:categoryManagerValueUndelete">
+								Undelete
+							</digi:trn>
+						</a>]
+						 <br /><br />
 					<%	} %>
  
 					</div>

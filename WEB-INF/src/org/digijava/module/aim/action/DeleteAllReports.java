@@ -11,6 +11,7 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.digijava.module.aim.util.DbUtil;
+import org.digijava.module.aim.util.ReportUtil;
 import org.digijava.module.aim.form.ReportsForm;
 
 
@@ -52,9 +53,11 @@ public class DeleteAllReports extends Action {
 					 Long id = new Long(a);
 					 if ( id != null) {
 						 ReportsForm ampReport = new ReportsForm();
-						
+						 
+						 
 						 ampReport.setReportId(id);
 						 logger.info(" this is setReportid "+ampReport.getReportId());
+						 DbUtil.updateAppSettingsReportDeleted(ampReport.getReportId());
 						 boolean deleted	= DbUtil.deleteReportsCompletely(ampReport.getReportId());
 								
 								 ActionErrors errors = new ActionErrors();

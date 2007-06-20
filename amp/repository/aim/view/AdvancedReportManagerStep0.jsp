@@ -74,13 +74,15 @@ function gotoStep() {
 
 				<td height=16 vAlign=right align=center>
 					<span class=subtitle-blue>
-					Report Builder : Select Report Type
+					<digi:trn key="aim:reportBuilder:selectReportType">
+						Report Builder : Select Report Type
+					</digi:trn>	
 					</span>
 				</td>
 			</tr>
 			<tr colspan="2">
 				<td class=box-title align="right" valign="top">
-					<img src="module/aim/images/arrow-014E86.gif">Report Type : Please Select
+					<img src="module/aim/images/arrow-014E86.gif"><digi:trn key="aim:reportBuilder:reportTypePleaseSelect">Report Type : Please Select</digi:trn>
 				<td>
 			</tr>
 			<TR>
@@ -99,7 +101,7 @@ function gotoStep() {
 														<digi:trn key="aim:clickToSelectReportType">Click here to Select Report Type</digi:trn>
 													</bean:define>
 													<digi:link href="/advancedReportManager.do~check=forward" styleClass="sub-nav3" title="<%=translation%>"  >
-														1 :   Select Report Type
+														1 :   <digi:trn key="aim:SelectReportType">Select Report Type</digi:trn>
 													</digi:link>
 												</td>
 											<!--ends here-->
@@ -108,7 +110,7 @@ function gotoStep() {
 														<digi:trn key="aim:clickToSelectColumns">Click here to Select Columns</digi:trn>
 													</bean:define>
 													<digi:link href="/advancedReportManager.do?check=SelectCols" styleClass="sub-nav" title="<%=translation%>"  >
-														2 :   Select Columns
+														2 :   <digi:trn key="aim:SelectColumns">Select Columns</digi:trn>
 													</digi:link>
 												</td>											
 												<td noWrap align=left>

@@ -30,7 +30,7 @@
 		<tr>
 			<td colspan="4">
 			<html:select property="currency" style="width: 400px" styleClass="inp-text">
-			<html:option value="-1">All</html:option>
+			<html:option value="-1"><digi:trn key="rep:filer:All">All</digi:trn></html:option>
 				<html:optionsCollection property="currencies"
 					value="ampCurrencyId" label="currencyName" />
 			</html:select>
@@ -46,7 +46,7 @@
 		<tr>
 			<td colspan="2">
 			<html:select property="calendar" style="width: 270px" styleClass="inp-text">
-				<html:option value="-1">All</html:option>			
+				<html:option value="-1"><digi:trn key="rep:filer:All">All</digi:trn></html:option>			
 				<html:optionsCollection property="calendars"
 					value="ampFiscalCalId" label="name" />
 			</html:select>
@@ -54,14 +54,14 @@
 	
 			<td align="center">
 			<html:select property="fromYear" styleClass="inp-text">
-				<html:option value="-1">All</html:option>			
+				<html:option value="-1"><digi:trn key="rep:filer:All">All</digi:trn></html:option>			
 				<html:optionsCollection property="fromYears" label="wrappedInstance" value="wrappedInstance" />
 			</html:select>
 			</td>
 
 			<td align="center">
 			<html:select property="toYear" styleClass="inp-text">
-				<html:option value="-1">All</html:option>			
+				<html:option value="-1"><digi:trn key="rep:filer:All">All</digi:trn></html:option>			
 				<html:optionsCollection property="toYears" label="wrappedInstance" value="wrappedInstance" />
 			</html:select>
 			</td>
@@ -96,12 +96,12 @@
 		</tr>
 
 		<tr>
-			<td ><b><digi:trn key="rep:filer:Status">Status</digi:trn>Status</b></td>
-			<td ><b><digi:trn key="rep:filer:Risks">Risks</digi:trn></b></td>
-			<td >
+			<td><b><digi:trn key="rep:filer:Status">Status</digi:trn>Status</b></td>
+			<td><b><digi:trn key="rep:filer:Risks">Risks</digi:trn></b></td>
+			<td>
 			<b><digi:trn key="rep:filer:LineMinRank">Line Min. Rank</digi:trn></b>
 			</td>
-			<td >
+			<td>
 			<b><digi:trn key="rep:filer:PlanningMinRank">Planning Min. Rank</digi:trn></b>
 			</td>
 			
@@ -118,13 +118,13 @@
 			</td>
 			<td valign="top" >
 			<html:select property="lineMinRank" style="width: 50px" styleClass="inp-text">
-				<html:option value="-1">All</html:option>						
+				<html:option value="-1"><digi:trn key="rep:filer:All">All</digi:trn></html:option>						
 				<html:optionsCollection property="actRankCollection" label="wrappedInstance" value="wrappedInstance" />
 			</html:select>
 			</td>
 			<td valign="top" >
 			<html:select property="planMinRank" style="width: 50px" styleClass="inp-text">
-				<html:option value="-1">All</html:option>						
+				<html:option value="-1"><digi:trn key="rep:filer:All">All</digi:trn></html:option>						
 				<html:optionsCollection property="actRankCollection" label="wrappedInstance" value="wrappedInstance" />
 			</html:select>
 			</td>
@@ -144,7 +144,5 @@
 	</td>
 		
 	</tr>
-	
-
 	</table>
 </digi:form>

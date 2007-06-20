@@ -13,14 +13,14 @@
 	
 		<jsp:include page="/repository/aim/view/ar/levelSorterPicker.jsp" />
 		<br/>
-		<a href='#' onclick='closeMessage();return false'><b>Close</b></a>
+		<a href='#' onclick='closeMessage();return false'><b><digi:trn key="rep:pop:Close">Close</digi:trn></b></a>
 </div>
 
 <div style='position:relative;display:none;' id="filterPicker-<bean:write name="reportMeta" property="ampReportId"/>">
 		<jsp:include page="/aim/reportsFilterPicker.do" />
 		
 		<br/>
-		<a href='#' onclick='closeMessage();return false'><b>Close</b></a>
+		<a href='#' onclick='closeMessage();return false'><b><digi:trn key="rep:pop:Close">Close</digi:trn></b></a>
 
 </div>
 
@@ -107,7 +107,7 @@
 				<logic:notEmpty name="report" property="levelSorters">
 				<logic:iterate name="report" property="levelSorters" id="sorter" indexId="levelId">
 				<logic:present name="sorter">
-					Level <bean:write name="levelId"/> sorted by <bean:write name="sorter"/><br/>
+					<digi:trn key="rep:pop:Level">Level</digi:trn> <bean:write name="levelId"/> <digi:trn key="rep:pop:sortedBy">sorted by</digi:trn> <bean:write name="sorter"/><br/>
 				</logic:present>					
 				</logic:iterate>
 				</logic:notEmpty>

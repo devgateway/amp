@@ -474,6 +474,7 @@ function disable() {
 									</tr>
 									
 									</logic:notEmpty>
+									<logic:empty name="SA" scope="application">
 									<tr>
 										<td class="t-name" width="30%" align="right" bgcolor="#fffff0">
 											<digi:trn key="aim:purpose">
@@ -549,7 +550,7 @@ function disable() {
 										
 										</td>
 									</tr>
-									
+									</logic:empty>
 
 									<tr>
 										<td class="t-name" width="30%" align="right" bgcolor="#fffff0">
@@ -1681,6 +1682,7 @@ function disable() {
 											<c:out value="${aimEditActivityForm.mfdCntEmail}"/>
 										</td>
 									</tr>
+									<logic:empty name="SA" scope="application">
 									<tr>
 										<td class="t-name" width="30%" align="right" bgcolor="#f4f4f2">
 											<digi:trn key="aim:AccessionInstrument">Accession Instrument</digi:trn>
@@ -1697,6 +1699,7 @@ function disable() {
 											<c:out value="${aimEditActivityForm.acChapter}"/>
 										</td>
 									</tr>
+									</logic:empty>
 									
 									
 									

@@ -146,11 +146,11 @@ function commentWin(val) {
 													<bean:write name="aimChannelOverviewForm" property="perspective"/></digi:trn>
 										&nbsp;
 										Perspective </SPAN></TD>
-										<TD align="right" nowrap="nowrap"><input type="button" value="Preview"
+										<TD align="right" nowrap="nowrap"><input type="button" value="<digi:trn key="aim:Activ:Preview">Preview</digi:trn>"
 											class="dr-menu"
 											onclick="preview(<c:out value="${activity.activityId}"/>)"> <c:if
 											test="${aimChannelOverviewForm.buttonText == 'edit'}">
-											<input type="button" value="Edit" class="dr-menu"
+											<input type="button" value="<digi:trn key="aim:Activ:Edit">Edit</digi:trn>" class="dr-menu"
 												onclick="fnEditProject(<c:out value="${activity.activityId}"/>)">
 												&nbsp;
 												<logic:empty name="SA" scope="application">

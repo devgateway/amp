@@ -343,8 +343,7 @@
                                           </tr>
                                           <tr>
                                             <td align="left">
-                                              <table width="100%" cellSpacing=0 cellPadding=0 border=0>
-left" width="10">
+                                              <table width="100%" cellSpacing="0" cellPadding="0" border="0">
                                                                   <c:if test="${aimEditActivityForm.proProjCost.currencyCode!=null}">
                                                                   ${aimEditActivityForm.proProjCost.currencyCode}
                                                                   </c:if>

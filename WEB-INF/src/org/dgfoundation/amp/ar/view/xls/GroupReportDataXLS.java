@@ -56,8 +56,14 @@ public class GroupReportDataXLS extends XLSExporter {
 	public void generate() {
 		GroupReportData grd = (GroupReportData) item;
 		
+//		trail cells:
+		rowId.inc();
+		colId.reset();
+		TrailCellsXLS trails=new TrailCellsXLS(this,grd);
+		trails.generate();
+
 		
-		//show title
+/*		//show title
 		if (grd.getParent() != null) {
 			rowId.inc();
 			colId.reset();
@@ -66,19 +72,19 @@ public class GroupReportDataXLS extends XLSExporter {
 			cell.setCellValue(grd.getName());
 			makeColSpan(grd.getTotalDepth());
 		}
+	*/	
+		//show Headings:		
+		ReportHeadingsXLS headings=new ReportHeadingsXLS(this,grd.getFirstColumnReport());
+		headings.generate();
 		
+		//iterate the data
 		Iterator i = grd.getItems().iterator();
 		while (i.hasNext()) {
 			Viewable element = (Viewable) i.next();
 			element.invokeExporter(this);
 		}
 		
-		//trail cells:
-		rowId.inc();
-		colId.reset();
-		TrailCellsXLS trails=new TrailCellsXLS(this,grd);
-		trails.generate();
-
+		
 
 		// add an empty row
 		rowId.inc();

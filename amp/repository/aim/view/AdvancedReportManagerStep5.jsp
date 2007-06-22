@@ -150,13 +150,15 @@ function deleteColumn()
 
 				<td height=16 vAlign=right align=center>
 					<span class=subtitle-blue>
-					Report Builder : Select Rows
+					<digi:trn key="aim:reportBuilder:selectrows">
+									Report Builder : Select Rows
+								</digi:trn>		
 					</span>
 				</td>
 			</tr>
 			<tr colspan="2">
 				<td class=box-title align="right" valign="top">
-					<img src="module/aim/images/arrow-014E86.gif">Report Type :
+					<img src="module/aim/images/arrow-014E86.gif"><digi:trn key="aim:report:Type">Report Type :</digi:trn>
 					<bean:write name="aimAdvancedReportForm" property="arReportType"/>
 				<td>
 			</tr>
@@ -259,7 +261,7 @@ function deleteColumn()
 																	<tr height=10>	<td>	</td>	</tr>												
 																	<TR bgcolor="#eeeeee">
 																		<td align="center" class=box-title>
-																			Selected Columns
+																			<digi:trn key="aim:report:SelectedColumn">Selected Columns</digi:trn>
 																		</td>	
 																	</tr>
 																	<tr height=10>	<td>	</td>	</tr>
@@ -275,12 +277,13 @@ function deleteColumn()
 																							<c:if test="${addedColumns.columnName == 'Donor' || addedColumns.columnName == 'Sector' || addedColumns.columnName == 'Status' || addedColumns.columnName == 'Type Of Assistance' || addedColumns.columnName == 'Financing Instrument' || addedColumns.columnName == 'Project Title' || addedColumns.columnName == 'Team'}">
 																								<TR bgcolor="#ffffff">
 																									<td align="left" width="98%" valign=top>
-																										<c:out value="${addedColumns.columnName}"/>
+																									<digi:trn key="aim:report:${addedColumns.columnName}"><c:out value="${addedColumns.columnName}"/></digi:trn>
+																									
 																									</td>												
 																									<td align="right">
 																									<html:multibox property="selectedColumns">
-																									  <c:out value="${addedColumns.columnId}"/>
-																									</html:multibox>
+																									<digi:trn key="aim:report:${addedColumns.columnId}"><c:out value="${addedColumns.columnId}"/></digi:trn>
+																									  </html:multibox>
 																									</td>
 																								</tr>
 																							</c:if>
@@ -293,12 +296,13 @@ function deleteColumn()
 																							<c:if test="${addedColumns.columnName == 'Status' || addedColumns.columnName == 'Sector' || addedColumns.columnName == 'Region' || addedColumns.columnName == 'Project Title'}">
 																								<tr bgcolor="#ffffff">
 																									<td align="left" width="98%" valign=top>
-																										<c:out value="${addedColumns.columnName}"/>
+																									<digi:trn key="aim:report:${addedColumns.columnName}"><c:out value="${addedColumns.columnName}"/></digi:trn>
+																										
 																									</td>												
 																									<td align="right">
 																									<html:multibox property="selectedColumns">
-																									  <c:out value="${addedColumns.columnId}"/>
-																									</html:multibox>
+																									<digi:trn key="aim:report:${addedColumns.columnId}"><c:out value="${addedColumns.columnId}"/></digi:trn>
+																										</html:multibox>
 																									</td>
 																								</tr>
 																							</c:if>
@@ -311,12 +315,12 @@ function deleteColumn()
 																							<c:if test="${addedColumns.columnName == 'Status' || addedColumns.columnName == 'Sector' || addedColumns.columnName == 'Project Title' || addedColumns.columnName == 'Component Name'}">
 																								<tr bgcolor="#ffffff">
 																									<td align="left" width="98%" valign=top>
-																										<c:out value="${addedColumns.columnName}"/>
-																									</td>												
+																									  	<digi:trn key="aim:report:${addedColumns.columnName}"><c:out value="${addedColumns.columnName}"/></digi:trn>
+																								  	</td>												
 																									<td align="right">
 																									<html:multibox property="selectedColumns">
-																									  <c:out value="${addedColumns.columnId}"/>
-																									</html:multibox>
+																									  	<digi:trn key="aim:report:${addedColumns.columnId}"> <c:out value="${addedColumns.columnId}"/></digi:trn>
+																									 </html:multibox>
 																									</td>
 																								</tr>
 																							</c:if>
@@ -330,12 +334,12 @@ function deleteColumn()
 																							<c:if test="${addedColumns.columnName == 'Status' || addedColumns.columnName == 'Sector' || addedColumns.columnName == 'A.C. Chapter' || addedColumns.columnName == 'Accession Instrument' || addedColumns.columnName == 'Donor'}">
 																								<tr bgcolor="#ffffff">
 																									<td align="left" width="98%" valign=top>
-																										<c:out value="${addedColumns.columnName}"/>
+																										<digi:trn key="aim:report:${addedColumns.columnName}"> <c:out value="${addedColumns.columnId}"/></digi:trn>
 																									</td>												
 																									<td align="right">
 																									<html:multibox property="selectedColumns">
-																									  <c:out value="${addedColumns.columnId}"/>
-																									</html:multibox>
+																									<digi:trn key="aim:report:${addedColumns.columnId}"><c:out value="${addedColumns.columnId}"/></digi:trn>
+																									  	</html:multibox>
 																									</td>
 																								</tr>
 																							</c:if>
@@ -352,9 +356,10 @@ function deleteColumn()
 																				<TABLE width="100%" height="200" cellPadding=2 cellSpacing=0 vAlign="top" align="center" bgcolor="#f4f4f2">
 																					<tr bgcolor="#eeeeee">	
 																						<td class=box-title align=center>
-																							Columns to be selected before creating hierarchie
+																						<digi:trn key="aim:report:Columnstobeselected">Columns to be selected before creating hierarchie</digi:trn>
 																							<br><br><br><br><br><br>
-																								Please return to Step 1 : Select Column																						</td>
+																							<digi:trn key="aim:report:Pleasereturn">Please return to Step 1 : Select Column</digi:trn>
+																						</td>
 																					</tr>
 																				</table>
 																			</td>
@@ -367,7 +372,8 @@ function deleteColumn()
 																	<tr height=10>	<td>	</td>	</tr>												
 																	<TR bgcolor="#eeeeee">
 																		<td align="center" class=box-title>
-																			Column Hierarchy
+																			<digi:trn key="aim:report:ColumnHierarchy">Column Hierarchy</digi:trn>
+																			
 																		</td>
 																	</tr>
 																	<tr height=10>	<td>	</td>	</tr>
@@ -387,12 +393,13 @@ function deleteColumn()
 																							   	<% }	%>
 																									<IMG src="../ampTemplate/images/link_out_bot.gif">
 																							<%	}	%>
-																							<c:out value="${columnHierarchie.columnName}"/>
+																							<digi:trn key="aim:report:${columnHierarchie.columnName}"><c:out value="${columnHierarchie.columnName}"/></digi:trn>	
+																							
 																						</td>
 																						<td align="right">
 																							<html:multibox property="removeColumns" >
-																							  <c:out value="${columnHierarchie.columnId}"/>
-					  																	    </html:multibox>
+																						<digi:trn key="aim:report:${columnHierarchie.columnId}"><c:out value="${columnHierarchie.columnId}"/></digi:trn>	
+																						    </html:multibox>
 																						</td>
 																							<td align="right">
 																								<IMG alt="Move Up"  height=10 src="../ampTemplate/images/up-arrow.jpg" width=10 onclick="moveUp(<c:out value='${columnHierarchie.columnId}' />)">
@@ -409,7 +416,7 @@ function deleteColumn()
 																			<td >
 																				<TABLE width="100%" height="200" cellPadding=2 cellSpacing=0 vAlign="top" align="center" bgcolor="#f4f4f2">
 																					<tr bgcolor="#eeeeee">	<td class=box-title align=center>
-																					No Columns Hierarchie Selected 
+																					<digi:trn key="aim:report:NoColumnsHierarchie">No Columns Hierarchie Selected</digi:trn> 
 																					</td></tr>
 																				</table>
 																			</td>

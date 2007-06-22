@@ -147,12 +147,15 @@ function checkUncheckAll2() {
 
 				<td height=16 vAlign=right align=center>
 					<span class=subtitle-blue>
-					Report Builder : Select Column</span>
+						<digi:trn key="aim:report:selectColumn">
+							Report Builder : Select Column
+						</digi:trn>
+					</span>
 				</td>
 			</tr>
 			<tr colspan="2">
 				<td class=box-title align="right" valign="top">
-					<img src="module/aim/images/arrow-014E86.gif">Report Type :
+					<img src="module/aim/images/arrow-014E86.gif"><digi:trn key="aim:report:Type">Report Type :</digi:trn>
 					<bean:write name="aimAdvancedReportForm" property="arReportType"/>
 				<td>
 			</tr>
@@ -254,11 +257,13 @@ function checkUncheckAll2() {
 																	<tr height=10>	<td>	</td>	</tr>												
 																	<TR bgcolor="#eeeeee">
 																		<td align="center" class=box-title>
-																			Available Columns 
+																			<digi:trn key="aim:report:AvailableColumns">Available Columns </digi:trn>
+																			
 																		</td>	
 																	</tr>
 
-																	<tr height=10>	<td align="right">Select All
+																	<tr height=10>	<td align="right">
+																	<digi:trn key="aim:report:SelectAll">Select All</digi:trn>
 																	<input type="checkbox" name="checkall" onclick="checkUncheckAll();">
 																	</input>
 																	</td>
@@ -273,12 +278,13 @@ function checkUncheckAll2() {
 																						<logic:iterate name="aimAdvancedReportForm" id="ampColumns"	property="ampColumns" >
 																						<tr bgcolor="#ffffff">
 																							<td align="left" width="98%" valign=top>
-																								<c:out value="${ampColumns.columnName}"/>
+																							<digi:trn key="aim:report:${ampColumns.columnName}"><c:out value="${ampColumns.columnName}"/></digi:trn>
+																								
 																							</td>
 																							<td align="right">
 																							<html:multibox property="selectedColumns">
-																							  <c:out value="${ampColumns.columnId}"/>
-					  																	    </html:multibox>
+																							<digi:trn key="aim:report:${ampColumns.columnId}"><c:out value="${ampColumns.columnId}"/></digi:trn>
+																							</html:multibox>
 																							</td>
 																						</tr>
 																						</logic:iterate>
@@ -290,11 +296,12 @@ function checkUncheckAll2() {
 
 																						<tr bgcolor="#ffffff">
 																							<td align="left" width="98%" valign=top>
+																							<digi:trn key="aim:report:${ampColumns.columnName}"><c:out value="${ampColumns.columnName}"/></digi:trn>
 																								<c:out value="${ampColumns.columnName}"/>
 																							</td>
 																							<td align="right">
 																							<html:multibox property="selectedColumns">
-																							  <c:out value="${ampColumns.columnId}"/>
+																							 <digi:trn key="aim:report:${ampColumns.columnId}"><c:out value="${ampColumns.columnId}"/></digi:trn>
 					  																	    </html:multibox>
 																							</td>
 																						</tr>
@@ -314,7 +321,7 @@ function checkUncheckAll2() {
 																			<td >
 																				<TABLE width="100%" height="200" cellPadding=2 cellSpacing=0 vAlign="top" align="center" bgcolor="#f4f4f2">
 																					<tr bgcolor="#eeeeee">	<td class=box-title align=center>
-																					No columns available to add 
+																	<digi:trn key="aim:report:Nocolumns">No columns available to add</digi:trn>
 																					</td></tr>
 																				</table>
 																			</td>
@@ -328,7 +335,8 @@ function checkUncheckAll2() {
 																	<tr height=10>	<td>	</td>	</tr>												
 																	<TR bgcolor="#eeeeee">
 																		<td align="center" class=box-title>
-																			Selected Columns
+																		<digi:trn key="aim:report:Selectedcolumns">Selected Columns</digi:trn>
+																			
 																		</td>
 																	</tr>
 																	<tr height=10>	<td align="right">Select All
@@ -345,11 +353,13 @@ function checkUncheckAll2() {
 																					<logic:iterate name="aimAdvancedReportForm" id="addedColumns"	property="addedColumns" >
 																						<tr bgcolor=#ffffff>
 																						<td align="left" width="98%">
-																							<c:out value="${addedColumns.columnName}"/>
+																					 <digi:trn key="aim:report:${addedColumns.columnName}"><c:out value="${addedColumns.columnName}"/></digi:trn>		
+																						
 																						</td>
 																						<td align="right">
 																							<html:multibox property="removeColumns" >
-																							  <c:out value="${addedColumns.columnId}"/>
+																							<digi:trn key="aim:report:${addedColumns.columnId}"><c:out value="${addedColumns.columnId}"/></digi:trn>		
+																							  
 					  																	    </html:multibox>
 																						</td>
 																							<td align="right">
@@ -367,7 +377,7 @@ function checkUncheckAll2() {
 																			<td >
 																				<TABLE width="100%" height="200" cellPadding=2 cellSpacing=0 vAlign="top" align="center" bgcolor="#f4f4f2">
 																					<tr bgcolor="#eeeeee">	<td class=box-title align=center>
-																					No Columns Selected 
+																					<digi:trn key="aim:report:NoColumns Selected">No Columns Selected</digi:trn>
 																					</td></tr>
 																				</table>
 																			</td>

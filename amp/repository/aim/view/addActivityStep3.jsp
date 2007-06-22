@@ -290,7 +290,6 @@
                                     	<bean:define name="aimEditActivityForm" id="myForm" type="org.digijava.module.aim.form.EditActivityForm"/>
                                     	<%
                                     		boolean isStatusPlanned	= false;
-                                    	
                                     		if (myForm.getStatusId() != null)
                                     			isStatusPlanned	= Constants.ACTIVITY_STATUS_PLANNED.equals( CategoryManagerUtil.getAmpCategoryValueFromDb(myForm.getStatusId()).getValue() );
                                     	%>
@@ -310,13 +309,13 @@
                                           </tr>
                                           <tr>
                                             <td align="left">
-                                              <table width="100%" cellSpacing=0 cellPadding=0 border=0>
+                                            <table width="100%" cellSpacing=0 cellPadding=0 border=0>
                                                 <tr>
                                                   <td>
                                                     <table cellSpacing=8 cellPadding=0 border=0 width="95%" class="box-border-nopadding" align="center">
-                                                      <c:if test="${aimEditActivityForm.proProjCost!=null}">
-                                                        <tr>
-                                                          <td>
+                                                      <tr>
+                                                        <td>
+                                                          <c:if test="${aimEditActivityForm.proProjCost!=null}">
                                                             <table cellSpacing=1 cellPadding="1" bgcolor="#dddddd" width="100%">
                                                               <tr bgcolor="#ffffff">
                                                                 <td bgcolor="#FFFFFF" align="left" width="30">
@@ -327,23 +326,7 @@
                                                                   ${aimEditActivityForm.proProjCost.funAmount}
                                                                   </c:if>
                                                                 </td>
-                                                                <td>
-                                        <table width="100%" bgcolor="#f4f4f2" border="0" cellSpacing=0 cellPadding=0>
-                                          <tr>
-                                            <td>
-                                            <br />
-                                            &nbsp;&nbsp;&nbsp;&nbsp;
-                                              <IMG alt=Link height=10 src="../ampTemplate/images/arrow-014E86.gif" width=15 />
-                                              <a title="<digi:trn key="aim:ProposedProjCost">Proposed Project Cost</digi:trn>">
-                                              <b>
-                                                <digi:trn key="aim:proposedPrjectCost">Proposed Project Cost</digi:trn>
-                                              </b>
-</a><br /><br />
-                                            </td>
-                                          </tr>
-                                          <tr>
-                                            <td align="left">
-                                              <table width="100%" cellSpacing="0" cellPadding="0" border="0">
+                                                                <td bgcolor="#FFFFFF" align="left" width="10">
                                                                   <c:if test="${aimEditActivityForm.proProjCost.currencyCode!=null}">
                                                                   ${aimEditActivityForm.proProjCost.currencyCode}
                                                                   </c:if>
@@ -355,19 +338,19 @@
                                                                 </td>
                                                               </tr>
                                                             </table>
-                                                          </td>
-                                                        </tr>
-                                                      </c:if>
+                                                          </c:if>
+                                                        </td>
+                                                      </tr>
                                                       <tr>
                                                         <td>
-                                                          <c:if test="${isStatusPlanned}">
-                                                          <c:if test="${aimEditActivityForm.proProjCost==null}">
-                                                            <input type="button" value="Add Funding" class="buton" onclick="addPropFunding()">
-                                                          </c:if>
-                                                          <c:if test="${aimEditActivityForm.proProjCost!=null}">
-                                                            <input type="Button" value="Remove Funding" class="buton" onclick="delPropFunding()">
-                                                            <input type="Button" value="Edit Funding" class="buton" onclick="addPropFunding()">
-                                                          </c:if>
+                                                           <c:if test="${isStatusPlanned}">
+                                                            <c:if test="${aimEditActivityForm.proProjCost==null}">
+                                                              <input type="button" value="Add Funding" class="buton" onclick="addPropFunding()">
+                                                            </c:if>
+                                                            <c:if test="${aimEditActivityForm.proProjCost!=null}">
+                                                              <input type="Button" value="Edit Funding" class="buton" onclick="addPropFunding()">
+                                                              <input type="Button" value="Remove Funding" class="buton" onclick="delPropFunding()">
+                                                            </c:if>
                                                           </c:if>
                                                         </td>
                                                       </tr>

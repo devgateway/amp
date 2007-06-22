@@ -57,6 +57,8 @@ public class ColumnReportDataXLS extends XLSExporter {
 		ColumnReportData columnReport = (ColumnReportData) item;
 		rowId.inc();
 		colId.reset();
+		
+		/*
 		// title:
 		if (columnReport.getParent() != null) {
 			HSSFRow row = sheet.createRow(rowId.shortValue());
@@ -66,44 +68,13 @@ public class ColumnReportDataXLS extends XLSExporter {
 			rowId.inc();
 			colId.reset();
 		}
-
-		// column headings:
-		if(columnReport.getGlobalHeadingsDisplayed().booleanValue()==false) {
-			columnReport.setGlobalHeadingsDisplayed(new Boolean(true));
-		for (int curDepth = 0; curDepth <= columnReport.getMaxColumnDepth(); curDepth++) {
-			row = sheet.createRow(rowId.shortValue());
-			Iterator i = columnReport.getItems().iterator();
-			while (i.hasNext()) {
-				Column col = (Column) i.next();
-				col.setCurrentDepth(curDepth);
-				int rowsp = col.getCurrentRowSpan();
-				Iterator ii = col.getSubColumnList().iterator();
-				if (ii.hasNext())
-					while (ii.hasNext()) {
-						Column element2 = (Column) ii.next();
-						HSSFCell cell =  this.getCell(row,this.getHighlightedStyle(false));
-						cell.setCellValue(element2.getName(metadata.getHideActivities()));
-						// System.out.println("["+rowId.intValue()+"]["+colId.intValue()+"]
-						// depth="+curDepth+" "+element2.getName());
-						// create spanning
-						// if(rowsp>1) makeRowSpan(rowsp);
-
-						if (element2.getWidth() > 1)
-							makeColSpan(element2.getWidth());
-						else
-							colId.inc();
-
-					}
-				else {
-					HSSFCell cell =  this.getCell(row,this.getHighlightedStyle(true));
-					cell.setCellValue(" ");
-					makeColSpan(col.getWidth());
-				}
-			}
-			rowId.inc();
-			colId.reset();
-		}
-		}
+*/
+		// add trail cells
+		TrailCellsXLS trails = new TrailCellsXLS(this, columnReport);
+		trails.generate();
+	
+		rowId.inc();
+		colId.reset();
 
 		// add data
 		if (metadata.getHideActivities() == null
@@ -123,9 +94,6 @@ public class ColumnReportDataXLS extends XLSExporter {
 			}
 		}
 
-		// add trail cells
-		TrailCellsXLS trails = new TrailCellsXLS(this, columnReport);
-		trails.generate();
 
 	}
 

@@ -105,6 +105,8 @@ public final class ARUtil {
 
 		AmpReports r = (AmpReports) session.get(AmpReports.class, new Long(
 				ampReportId));
+		
+		httpSession.setAttribute("reportMeta", r);
 
 		if(teamMember!=null)
 		logger.info("Report '" + r.getName() + "' requested by user "

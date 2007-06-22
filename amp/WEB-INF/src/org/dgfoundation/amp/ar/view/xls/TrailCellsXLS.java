@@ -61,7 +61,7 @@ public class TrailCellsXLS extends XLSExporter {
 		
 		if (grd.getParent() != null) {
 			HSSFCell cell = this.getCell(this.getHighlightedStyle(false));
-			cell.setCellValue("TOTALS FOR " + grd.getName());
+			cell.setCellValue(grd.getName());
 			
 			makeColSpan(grd.getSourceColsCount().intValue());
 			//colId.inc();

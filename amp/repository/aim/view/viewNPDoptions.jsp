@@ -27,7 +27,7 @@
 		}
 		return res;
 	}
-
+	
 	function getSelectedYears(){
 		var localYears = document.getElementsByName('selYears');
 		var res = [];
@@ -45,7 +45,7 @@
 	function doChanges(){
 		var ins=getSelectedIndicators();
 		var yrs=getSelectedYears();
-        yrs.sort();
+		yrs.sort();
 		window.opener.changeOptions(ins,yrs,null);
 		window.close();
 	}

@@ -25,6 +25,15 @@
 	</tr>
 		
 		<tr>
+			<td colspan="4"><b>Keywords</b></td>
+		</tr>
+		<tr>
+			<td colspan="4">
+			<html:text property="text" style="width: 400px" styleClass="inp-text"/>
+			</td>
+		</tr>
+		
+		<tr>
 			<td colspan="4"><b><digi:trn key="rep:filer:Currency">Currency</digi:trn></b></td>
 		</tr>
 		<tr>

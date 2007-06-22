@@ -210,13 +210,21 @@ function checkUncheckAll2() {
 
 							<td height=16 vAlign=right align=center>
 								<span class=subtitle-blue>
-									Report Builder : Select Measures
+								
+								<digi:trn key="aim:reportBuilder:selectmeasure">
+												Report Builder : Select Measures
+								</digi:trn>
 								</span>
 							</td>
 						</tr>
 						<tr colspan="2">
 							<td class=box-title align="right" valign="top">
-								<img src="module/aim/images/arrow-014E86.gif">Report Type :
+								<img src="module/aim/images/arrow-014E86.gif">
+								<digi:trn key="aim:reportBuilder:ReportType">
+								 Report Type :
+								</digi:trn>
+						
+						
 								<bean:write name="aimAdvancedReportForm" property="arReportType"/>
 							<td>
 						</tr>
@@ -326,11 +334,16 @@ function checkUncheckAll2() {
 																					<tr height=10>	<td>	</td>	</tr>												
 																					<TR bgcolor="#eeeeee">
 																						<td align="center" class=box-title>
+																						  <digi:trn key="aim:reportBuilder:AvailableMeasures">
 																							Available Measures
+																						  </digi:trn>
 																						</td>	
 																					</tr>
 																					<tr height="10">
-																						<td align="right">Select All
+																						<td align="right">
+																						  <digi:trn key="aim:reportBuilder:SelectAll">
+																							Select All
+																						  </digi:trn>
 																							<input type="checkbox" name="checkall" onclick="checkUncheckAll();">
 																							</input>
 																						</td>
@@ -344,12 +357,16 @@ function checkUncheckAll2() {
 																								property="ampMeasures" >
 																								<TR bgcolor="#ffffff">
 																									<td align="left" width="98%" valign=top>
+																									<digi:trn key="aim:reportBuilder:${ampMeasures.aliasName}">
 																										<c:out value="${ampMeasures.aliasName}"/>
+																									 </digi:trn>
 																									</td>
 																									<td align="right">
 																										<html:multibox property="selectedColumns">
-																										  <c:out value="${ampMeasures.measureId}"/>
-						  																			    </html:multibox>
+																										<digi:trn key="aim:reportBuilder:${ampMeasures.measureId}">
+																										<c:out value="${ampMeasures.measureId}"/>
+																									 </digi:trn>
+																									    </html:multibox>
 																									</td>
 																								</tr>
 																								</logic:iterate>
@@ -364,7 +381,9 @@ function checkUncheckAll2() {
 																							vAlign="top" align="center" bgcolor="#f4f4f2">
 																								<tr bgcolor="#eeeeee">
 																									<td class=box-title align=center>
-																										No measures available to add
+																						  <digi:trn key="aim:reportBuilder:Nomeasures">
+																											No measures available to add
+																						  </digi:trn>
 																									</td>
 																								</tr>
 																							</table>
@@ -379,11 +398,20 @@ function checkUncheckAll2() {
 																					<tr height=10><td></td></tr>												
 																					<TR bgcolor="#eeeeee">
 																						<td align="center" class=box-title>
+																						  <digi:trn key="aim:reportBuilder:NomeasuresAdd">
+																											No measures available to add
+																						  </digi:trn>
+																					<digi:trn key="aim:reportBuilder:SelectedMeasur">
 																							Selected Measures
+																						  </digi:trn>
+																							
 																						</td>
 																					</tr>
 																					<tr height=10>
-																						<td align="right">Select All
+																						<td align="right">
+																					<digi:trn key="aim:reportBuilder:SelectAll">
+																								Select All
+																						  </digi:trn>
 																							<input type="checkbox" name="checkall2" onclick="checkUncheckAll2(this);">
 																							</input>
 																						</td>
@@ -398,11 +426,15 @@ function checkUncheckAll2() {
 																							property="addedMeasures" >
 																							<tr bgcolor=#ffffff>
 																								<td align="left" width="98%">
-																									<c:out value="${addedMeasures.aliasName}"/>
+																								<digi:trn key="aim:reportBuilder:${addedMeasures.aliasName}">
+																										<c:out value="${addedMeasures.aliasName}"/>
+																							 </digi:trn>
 																								</td>
 																								<td align="right">
 																									<html:multibox property="removeColumns" >
+																								<digi:trn key="aim:reportBuilder:${addedMeasures.measureId}">
 																										<c:out value="${addedMeasures.measureId}"/>
+																							 </digi:trn>
 																									</html:multibox>
 																								</td>
 																								<td align="right">
@@ -426,7 +458,10 @@ function checkUncheckAll2() {
 																							vAlign="top" align="center" bgcolor="#f4f4f2">
 																								<tr bgcolor="#eeeeee">	
 																									<td class=box-title align=center>
-																										No measures selected 
+																									<digi:trn key="aim:reportBuilder:NOmeasuresselected ">
+																									No measures selected 
+																						  </digi:trn>
+																									
 																									</td>
 																								</tr>
 																							</table>
@@ -440,7 +475,10 @@ function checkUncheckAll2() {
 																			<table width="638" bgColor=#f4f4f2 class="box-border-nopadding" border=0>
 																				<tr align="center">
 																					<td align="center" class="box-title" rowspan="2" width="300">		
-																						&nbsp;&nbsp;&nbsp;&nbsp;Kind of report													
+																						&nbsp;&nbsp;&nbsp;&nbsp;
+																						<digi:trn key="aim:AnnualReport:Kindreport">
+																								Kind of report													
+																							</digi:trn>
 																					</td>
 																					<td width="300" align="left">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 																						<html:radio property="reportOption" value="A">

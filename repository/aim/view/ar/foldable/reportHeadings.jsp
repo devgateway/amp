@@ -34,7 +34,10 @@
 	<logic:equal name="widget" scope="request" value="true">
 
 	<a style="color:#FFFFFF;cursor:pointer" onclick="changeTabUrl('MyTabs','Tab-<bean:write name="reportMeta" property="name"/>','/aim/viewNewAdvancedReport.do~viewFormat=foldable~ampReportId=<bean:write name="reportMeta" property="ampReportId"/>~widget=true~sortBy=<bean:write name="column" property="name"/>');">
+		<c:set var="portfTitle">
 		<%=subColumn.getName(reportMeta.getHideActivities())%>		
+	</c:set>	
+		<digi:trn key="aim:protfilio:${portfTitle}"><%=subColumn.getName(reportMeta.getHideActivities())%></digi:trn>
 	</a>
 	</logic:equal>
 	<logic:notEqual name="widget" scope="request" value="true">			

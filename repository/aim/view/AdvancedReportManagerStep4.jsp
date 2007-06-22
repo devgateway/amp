@@ -278,7 +278,8 @@ function backStep() {
 															style="border-collapse: collapse" >
 															<tr>
 																<td align="left" height=20  bgColor=#f4f4f2 width=150 class=box-title>
-																	<FONT color=red><BIG>*</BIG> </font>	Report Title
+																	<FONT color=red><BIG>*</BIG> </font><digi:trn key="aim:reportBuilder:ReportTitle">Report Title</digi:trn>
+																	
 																</td>
 															</tr>
 															<tr>
@@ -289,7 +290,8 @@ function backStep() {
 															<tr>
 					
 																<td align="left"  bgColor=#f4f4f2 height=20 width=150 class=box-title >
-																	Report Description
+																<digi:trn key="aim:reportBuilder:ReporDescription">Report Description</digi:trn>
+																	
 																</td>
 															</tr>
 															<tr>

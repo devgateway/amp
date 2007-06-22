@@ -11,7 +11,7 @@
 
 <digi:instance property="aimNPDForm"/>
 <script language="javascript" type="text/javascript">
-	
+
 	var localIndicators=[];
 
 	function getSelectedIndicators(){
@@ -27,7 +27,7 @@
 		}
 		return res;
 	}
-	
+
 	function getSelectedYears(){
 		var localYears = document.getElementsByName('selYears');
 		var res = [];
@@ -41,14 +41,15 @@
 		}
 		return res;
 	}
-	
+
 	function doChanges(){
 		var ins=getSelectedIndicators();
 		var yrs=getSelectedYears();
+        yrs.sort();
 		window.opener.changeOptions(ins,yrs,null);
 		window.close();
 	}
-	
+
 	function checkYearsRules(){
 		var locYears = document.getElementsByName('selYears');
 		var cou=0;

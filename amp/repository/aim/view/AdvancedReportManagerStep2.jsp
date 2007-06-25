@@ -64,7 +64,7 @@ function gotoStep() {
 	
 	<tr colspan="2">
 				<td class=box-title align="right" valign="top">
-					<img src="module/aim/images/arrow-014E86.gif">Report Type :
+					<img src="module/aim/images/arrow-014E86.gif"><digi:trn key="aim:report:Type">Report Type :</digi:trn>
 					<bean:write name="aimAdvancedReportForm" property="arReportType"/>
 				<td>
 	</tr>

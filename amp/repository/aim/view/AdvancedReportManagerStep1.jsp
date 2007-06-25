@@ -339,7 +339,7 @@ function checkUncheckAll2() {
 																			
 																		</td>
 																	</tr>
-																	<tr height=10>	<td align="right">Select All
+																	<tr height=10>	<td align="right"><digi:trn key="aim:report:SelectAll">Select All</digi:trn>
 																	<input type="checkbox" name="checkall2" onclick="checkUncheckAll2(this);">
 																	</input>
 																	</td>

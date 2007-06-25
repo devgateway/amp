@@ -178,7 +178,7 @@ function deleteColumn()
 														<digi:trn key="aim:clickToSelectReportType">Click here to Select Report Type</digi:trn>
 													</bean:define>
 													<digi:link href="/advancedReportManager.do~check=forward" styleClass="sub-nav" title="<%=translation%>"  >
-														1 :   Select Report Type
+														1 :   <digi:trn key="aim:SelectReportType2">Select Report Type</digi:trn>
 													</digi:link>
 												</td>
 											<!--ends here-->
@@ -186,8 +186,8 @@ function deleteColumn()
 													<bean:define id="translation">
 														<digi:trn key="aim:clickToSelectColumns">Click here to Select Columns</digi:trn>
 													</bean:define>
-													<digi:link href="/advancedReportManager.do?check=SelectCols" styleClass="sub-nav" title="<%=translation%>"  >
-														2 :   Select Columns
+													<digi:link href="/advancedReportManager.do?check=SelectCols" styleClass="sub-nav" title="<%=translation%>" >
+														2 :   <digi:trn key="aim:SelectColumns2">Select Columns</digi:trn>
 													</digi:link>
 												</td>											
 												<td noWrap align=left>

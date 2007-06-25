@@ -943,17 +943,17 @@
  				background, objectives, outputs, beneficiaries, environmentConsiderations) {
  			var panelBody =	"";
  			panelBody += '<table border="0">';
- 			panelBody += '<tr><td align="left"><b>Program Name:</b>&nbsp;</td><td>'+ programName +'</td></tr>';
- 			panelBody += '<tr><td align="left"><b>Description:</b>&nbsp;</td><td>'+ description +'</td></tr>';
- 			panelBody += '<tr><td align="left"><b>Lead Agency:</b>&nbsp;</td><td>'+ leadAgency +'</td></tr>';
- 			panelBody += '<tr><td align="left"><b>Program Code:</b>&nbsp;</td><td>'+ programCode +'</td></tr>';
- 			panelBody += '<tr><td align="left"><b>Program Type:</b>&nbsp;</td><td>'+ programType +'</td></tr>';
- 			panelBody += '<tr><td align="left"><b>Target Groups:</b>&nbsp;</td><td>'+ targetGroups +'</td></tr>';
- 			panelBody += '<tr><td align="left"><b>Background:</b>&nbsp;</td><td>'+ background +'</td></tr>';
- 			panelBody += '<tr><td align="left"><b>Objectives:</b>&nbsp;</td><td>'+ objectives +'</td></tr>';
- 			panelBody += '<tr><td align="left"><b>Outputs:</b>&nbsp;</td><td>'+ outputs +'</td></tr>';
- 			panelBody += '<tr><td align="left"><b>Beneficiaries:</b>&nbsp;</td><td>'+ beneficiaries +'</td></tr>';
- 			panelBody += '<tr><td align="left"><b>Environment Considerations:</b>&nbsp;</td><td>'+ environmentConsiderations +'</td></tr>';
+ 			panelBody += '<tr><td align="left"><b><digi:trn key="aim:NPD:ProgramName">Program Name</digi:trn>:</b>&nbsp;</td><td>'+ programName +'</td></tr>';
+ 			panelBody += '<tr><td align="left"><b><digi:trn key="aim:NPD:Description">Description</digi:trn>:</b>&nbsp;</td><td>'+ description +'</td></tr>';
+ 			panelBody += '<tr><td align="left"><b><digi:trn key="aim:NPD:LeadAgency">Lead Agency</digi:trn>:</b>&nbsp;</td><td>'+ leadAgency +'</td></tr>';
+ 			panelBody += '<tr><td align="left"><b><digi:trn key="aim:NPD:ProgramCode">Program Code</digi:trn>:</b>&nbsp;</td><td>'+ programCode +'</td></tr>';
+ 			panelBody += '<tr><td align="left"><b><digi:trn key="aim:NPD:ProgramType">Program Type</digi:trn>:</b>&nbsp;</td><td>'+ programType +'</td></tr>';
+ 			panelBody += '<tr><td align="left"><b><digi:trn key="aim:NPD:TargetGroups">Target Groups</digi:trn>:</b>&nbsp;</td><td>'+ targetGroups +'</td></tr>';
+ 			panelBody += '<tr><td align="left"><b><digi:trn key="aim:NPD:Background">Background</digi:trn>:</b>&nbsp;</td><td>'+ background +'</td></tr>';
+ 			panelBody += '<tr><td align="left"><b><digi:trn key="aim:NPD:Objectives">Objectives</digi:trn>:</b>&nbsp;</td><td>'+ objectives +'</td></tr>';
+ 			panelBody += '<tr><td align="left"><b><digi:trn key="aim:NPD:Outputs">Outputs</digi:trn>:</b>&nbsp;</td><td>'+ outputs +'</td></tr>';
+ 			panelBody += '<tr><td align="left"><b><digi:trn key="aim:NPD:Beneficiaries">Beneficiaries</digi:trn>:</b>&nbsp;</td><td>'+ beneficiaries +'</td></tr>';
+ 			panelBody += '<tr><td align="left"><b><digi:trn key="aim:NPD:Environment">Environment Considerations</digi:trn>:</b>&nbsp;</td><td>'+ environmentConsiderations +'</td></tr>';
  			panelBody += '</table>'; 
  			
  			themeArray[pid]	= panelBody;

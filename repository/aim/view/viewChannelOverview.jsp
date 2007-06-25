@@ -145,24 +145,24 @@ function commentWin(val) {
 												<digi:trn key='<%="aim:"+ perspectiveNameLocal %>'>	
 													<bean:write name="aimChannelOverviewForm" property="perspective"/></digi:trn>
 										&nbsp;
-										Perspective </SPAN></TD>
-										<TD align="right" nowrap="nowrap"><input type="button" value="<digi:trn key="aim:Activ:Preview">Preview</digi:trn>"
+										<digi:trn key="aim:perspective">Perspective</digi:trn> </SPAN></TD>
+										<TD align="right" nowrap="nowrap"><input type="button" value='<digi:trn key="aim:preview">Preview</digi:trn>'
 											class="dr-menu"
 											onclick="preview(<c:out value="${activity.activityId}"/>)"> <c:if
 											test="${aimChannelOverviewForm.buttonText == 'edit'}">
-											<input type="button" value="<digi:trn key="aim:Activ:Edit">Edit</digi:trn>" class="dr-menu"
+											<input type="button" value='<digi:trn key="aim:edit">Edit</digi:trn>' class="dr-menu"
 												onclick="fnEditProject(<c:out value="${activity.activityId}"/>)">
 												&nbsp;
 												<logic:empty name="SA" scope="application">
-													<input type="button" value="Preview Logframe" class="dr-menu" onclick="previewLogframe(<c:out value="${activity.activityId}"/>)">
+													<input type="button" value='<digi:trn key="aim:previewLogframe">Preview Logframe</digi:trn>' class="dr-menu" onclick="previewLogframe(<c:out value="${activity.activityId}"/>)">
 												</logic:empty>
 										</c:if> <c:if
 											test="${aimChannelOverviewForm.buttonText == 'validate'}">
-											<input type="button" value="Validate" class="dr-menu"
+											<input type="button" value='<digi:trn key="aim:validate">Validate</digi:trn>' class="dr-menu"
 												onclick="fnEditProject(<c:out value="${activity.activityId}"/>)">
 										</c:if> <c:if
 											test="${aimChannelOverviewForm.buttonText == 'approvalAwaited'}">
-											<input type="button" value="Approval Awaited" class="dr-menu"
+											<input type="button" value='<digi:trn key="aim:approvalAwaited">Approval Awaited</digi:trn>' class="dr-menu"
 												disabled>
 										</c:if>
 										<logic:empty name="SA" scope="application">

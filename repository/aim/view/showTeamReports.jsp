@@ -51,7 +51,7 @@ function confirmFunc() {
 </bean:define>
                 <digi:link href="/viewMyDesktop.do" styleClass="comment" title="<%=translation%>" >
                 	My Desktop
-                </digi:link> &gt; All Reports</td></tr>
+                </digi:link> &gt; <digi:trn key="aim:allReports">All Reports</digi:trn></td></tr>
 				<tr>
 		<td>&nbsp;</td></tr>
 				<tr>

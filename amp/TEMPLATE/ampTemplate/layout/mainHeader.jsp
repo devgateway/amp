@@ -74,41 +74,16 @@
 					<jsp:include page="../../../repository/aim/view/teamPagesHeader.jsp" flush="true" />				
 				</TD>
 		  </TR>--%>
-			<TR>
+		  <TR>
 				<TD width="100%" vAlign="top" align="left">
 					<TABLE bgColor=#ffffff cellPadding=0 cellSpacing=0 width="99%" vAlign="top" align="left" border=0>
 						<TR>
-							<TD  width="10">&nbsp;</td>
+							<TD class=r-dotted-lg width="10">&nbsp;</td>
 							<TD align=center vAlign=top>
 								<TABLE width="100%" cellPadding=0 cellSpacing=0 vAlign="top" align="left" border="0">
 									<TR>
-										<TD vAlign="top" align="left" width="75%">
+										<TD vAlign="top" align="left" width="75%" class=r-dotted-lg>
 											<digi:insert attribute="body" />
-										</TD>
-										<TD vAlign="top" align="left" width="25%"  bgcolor="#fffff">
-											<TABLE width="100%" cellPadding=0 cellSpacing=0 vAlign="top" align="left" border="0">
-												<TR><TD vAlign="top" align="left">
-													<digi:insert attribute="myReports" />
-												</TD></TR>
-												<tr><td>&nbsp;</td></tr>
-												<logic:present name="currentMember">
-												<bean:define id="lead" property="teamHead" name="currentMember" scope="session"/>
-												<c:if test="${lead == true}">
-												<tr><td>&nbsp;</td></tr>
-												<TR><TD vAlign="top" align="left">
-													<digi:insert attribute="myTasks" />
-												</TD></TR>
-												<tr><td>&nbsp;</td></tr>
-												</c:if>
-												<TR><TD vAlign="top" align="left">
-													<digi:insert attribute="myLinks" />
-												</TD></TR>
-												<tr><td>&nbsp;</td></tr>
-												<TR><TD vAlign="top" align="left">
-													<digi:insert attribute="myTeamMembers" />
-												</TD></TR>
-												</logic:present>
-											</TABLE>
 										</TD>
 									</TR>
 								</TABLE>
@@ -117,7 +92,7 @@
 					</TABLE>
 				</TD>
 			</TR>
-			<TR>
+		  <tr>
 				<TD width="100%"  bgcolor="#323232">
 				   <digi:insert attribute="footer" />
 				</TD>

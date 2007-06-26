@@ -58,7 +58,7 @@
 
 <jsp:include page="teamPagesHeader.jsp" flush="true" />
 
-<table width="100%" border="0" cellpadding="10" cellspacing="0" bgcolor="#FFFFFF">
+<table width="100%" border="0" cellpadding="10" cellspacing="0" bgcolor="#FFFFFF" >
 		<tr>
           <td width="14" class="r-dotted-lg">&nbsp;</td>
           <td width="750" align="left" valign="top" >

@@ -7,26 +7,27 @@
 
 <TABLE align=center border=0 cellPadding=2 cellSpacing=3 width="100%" bgcolor="#f4f4f2">
 	<TR>
-		<TD  vAlign=top>
+		<TD class=r-dotted-lg-buttom vAlign=top>
 			<TABLE border=0 cellPadding=0 cellSpacing=0 width="100%" >
         		<TR><TD>
               	<TABLE border=0 cellPadding=0 cellSpacing=0 >
-              		<TR >
-                 		<TD bgColor=#ffffff 
+              		<TR bgColor=#f4f4f2>
+                 		<TD bgColor=#c9c9c7 class=box-title
 							title='<digi:trn key="aim:myTaskListOfTeamLeader">List of activities pending for approval</digi:trn>'>
-								<span id="desktopFont"><digi:trn key="aim:myTaskList">My Tasks</digi:trn></span>
+								<digi:trn key="aim:myTaskList">My Tasks</digi:trn>
 							</TD>
-		  				</TR>
+                    	<TD background="module/aim/images/corner-r.gif" 
+							height=17 width=17></TD>
+						</TR>
 					</TABLE>
 				</TD></TR>
-				<tr height=2px><td height=2px bgcolor="#000000"></td></tr>
 				<logic:notEmpty name="myTasks" scope="session">
-				<TR><TD bgColor=#ffffff  align=left>
+				<TR><TD bgColor=#ffffff class=box-border align=left>
 					<bean:size id="taskCount" name="myTasks" scope="session" />
 					<c:if test="${taskCount == 0}">
 						<digi:trn key="aim:emptyMyTaskList">No pending task</digi:trn>						
 					</c:if>
-					<c:if test="${taskCount != 0} ">
+					<c:if test="${taskCount != 0}">
 						<digi:link href="/viewMyTask.do~showTask=showTask">	
 						<c:out value="${taskCount}" />
 						<c:choose>
@@ -44,13 +45,12 @@
 				</TD></TR>
 				</logic:notEmpty>
 				<logic:empty name="myTasks" scope="session">				
-				<TR><TD bgColor=#ffffff align=left>
+				<TR><TD bgColor=#ffffff class=box-border align=left>
 					<digi:trn key="aim:emptyMyTaskList">No pending task</digi:trn>								
 					<br/>
 		<digi:link href="/viewEditableTasks.do"><digi:trn key="aim:moreTasks">..more</digi:trn></digi:link>					
 				</TD></TR>
 				</logic:empty>
-				<tr height=2px><td height=2px bgcolor="#000000"></td></tr>
 			</TABLE>	
 		</TD>
 	</TR>

@@ -60,10 +60,7 @@ function preview(id)
 			
 			<TABLE width="99%" cellSpacing=0 cellPadding=0 vAlign="top" align="center" bgcolor="#f4f4f4" class="box-border-nopadding">
 				<TR>
-														<td align="top" vAlign="top">
-<jsp:include page="channelOverviewMenu.jsp" flush="true" />
-	</td>
-					<TD bgcolor="#f4f4f4" align="top" vAlign="top">
+					<TD bgcolor="#f4f4f4">
 						<TABLE width="100%" cellSpacing=3 cellPadding=3 vAlign="top" align="center" bgcolor="#f4f4f4">
 							<TR bgColor=#f4f4f2>
       	      			<TD align=left>

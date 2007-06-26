@@ -25,7 +25,7 @@
 
 <%--
 <digi:errors/>
---
+--%>
 
 <digi:instance property="aimMainProjectDetailsForm" />
 
@@ -270,4 +270,4 @@
 		</TD>
 	</TR>
 </TABLE>
-</logic:equal>								--%>
+</logic:equal>								

@@ -7,8 +7,8 @@
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
 
 <table border="0"  width="100%" cellPadding=0 cellSpacing=0>
-      <tr>
-          <td colspan="2" valign="top">&nbsp;<td>
+       <tr>
+          <td colspan="2" valign="top"><jsp:include page="../../aim/view/teamPagesHeader.jsp" flush="true"/><td>
        </tr>
         <tr>
         <td valign="top" width="230" >
@@ -36,8 +36,5 @@
                 </tr>
             </table>
         </td>
-		  <td width="20%">
-		   &nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;
-		  </td>
     </tr>
 </table>

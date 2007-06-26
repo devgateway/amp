@@ -63,6 +63,13 @@ function submit() {
 	document.aimCurrencyForm.submit();
 }
 
+function sortSubmit(value){
+	<digi:context name="sorting" property="context/module/moduleinstance/currencyManager.do" />
+	document.aimCurrencyForm.action = "<%= sorting %>~sortingValue="+value;
+	document.aimCurrencyForm.target = "_self";
+	document.aimCurrencyForm.submit();
+}
+
 </script>
 
 
@@ -175,11 +182,11 @@ function submit() {
 								<!-- Currency list table -->
 								<table cellSpacing="1" cellPadding="4" vAlign="top" align="left" bgcolor="#aaaaaa" width="450">
 									<tr bgcolor="eeeeee">
-										<td colspan="2" align="center" width="40" onMouseOver="this.className='colHeaderOver'"
+										<td colspan="2" align="center" width="40" style="cursor:pointer;" onclick="sortSubmit(1)" onMouseOver="this.className='colHeaderOver'"
 										onMouseOut="this.className='colHeaderLink'">
 											<b><digi:trn key="aim:currCode">Code</digi:trn></b>
 										</td>
-										<td align="center" width="200" onMouseOver="this.className='colHeaderOver'"
+										<td align="center" width="200"  style="cursor:pointer;" onclick="sortSubmit(2)" onMouseOver="this.className='colHeaderOver'"
 										onMouseOut="this.className='colHeaderLink'">
 											<b><digi:trn key="aim:currencyName">Currency Name</digi:trn></b>
 										</td>

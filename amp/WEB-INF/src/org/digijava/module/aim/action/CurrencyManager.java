@@ -37,6 +37,7 @@ public class CurrencyManager extends Action {
 		}
 
 		CurrencyForm crForm = (CurrencyForm) form;
+		
 		try {
 			
 		
@@ -48,10 +49,16 @@ public class CurrencyManager extends Action {
 			if (cantDelete != null){
 				crForm.setCantDelete(true);
 			}
-			logger.debug("loading all currencies ....");
-			if ((crForm.getAllCurrencies() == null) ||((reload !=null) && (reload.compareTo("true") == 0))) {
-				logger.debug("List empty... loading from the database ....");
+			String value = request.getParameter("sortingValue");
+			if(value==null){
+				if((crForm.getAllCurrencies() == null) ||((reload !=null) && (reload.compareTo("true") == 0))){
+					crForm.setAllCurrencies(CurrencyUtil.getAllCurrencies(-1));
+				}
+			}else if(value.equalsIgnoreCase("-1")){
 				crForm.setAllCurrencies(CurrencyUtil.getAllCurrencies(-1));
+			}
+			else if(value.equalsIgnoreCase("2")){
+				crForm.setAllCurrencies(CurrencyUtil.getAllCurrencies(2));
 			}
 			
 			boolean filtered = false;

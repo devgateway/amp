@@ -37,26 +37,44 @@
 		<TABLE cellSpacing=0 cellPadding=0 width="100%" border=0 valign="top" align="left">
 			<TBODY>
 			<TR>
-				<TD width="100%" bgColor=#323232 vAlign="center" align="left">
-					<digi:insert attribute="headerTop" />
+				<TD width="100%"  bgColor=#F7F9E4 vAlign="center" align="left">
+					<%--<digi:insert attribute="headerTop" />--%>
+					<DIV id="head-top">
+					<TABLE cellSpacing=0 cellPadding=0 width="100%" border="0" align="center"
+					vAlign="center">
+						<TBODY>
+						  	<TR bgColor=#F7F9E4>
+						   	<TD align="left" vAlign="center">
+									<digi:insert attribute="headerTop" />
+								</TD>
+								<TD align="left" vAlign="left">
+							
+								<%--<digi:insert attribute="headerTopMiddle" />--%>
+								</TD>
+								<TD width="20" align="right" vAlign="center" bgColor=#195C79>
+										<digi:insert attribute="dropdownLangSwitch" />
+								</TD>
+								
+							</TR>
+						</TBODY>
+					</TABLE>
+					</DIV>
 				</TD>
+				
 			</TR>
 			<TR>
-				<TD align="left" vAlign="top" bgcolor="#5a5a58" width="100%">
+				<TD align="left" vAlign="top" bgcolor="#F7F9E4" width="100%">
 					<DIV id="head-middle">
 					<TABLE cellSpacing=0 cellPadding=0 width="98%"
 					vAlign="center">
 						<TBODY>
-						  	<TR bgColor=#5a5a58>
+						  	<TR bgColor=#F7F9E4>
 						   	<TD align="left" vAlign="center">
 									<digi:insert attribute="headerMiddle" />
 								</TD>	
 							 	<TD align="right" vAlign="top">
 										<digi:insert attribute="loginWidget" />
 								</TD>								
-							  	<TD width="20" align="right" vAlign="top">
-										<digi:insert attribute="dropdownLangSwitch" />
-								</TD>
 							</TR>
 						</TBODY>
 					</TABLE>

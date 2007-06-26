@@ -49,9 +49,6 @@ function projectFiche(id)
 <TABLE cellSpacing="0" cellPadding="0" align="center" vAlign="top"
 	border="0" width="100%">
 	<TR>
-											<td align="top" vAlign="top">
-<jsp:include page="channelOverviewMenu.jsp" flush="true" />
-	</td>
 		<TD vAlign="top" align="center"><!-- contents -->
 		<TABLE width="99%" cellSpacing="0" cellPadding="0" vAlign="top"
 			align="center" bgcolor="#f4f4f4" class="box-border-nopadding">

@@ -18,16 +18,17 @@
 
 <TABLE align=center border=0 cellPadding=2 cellSpacing=3 width="100%" bgcolor="#f4f4f2">
 	<TR>
-		<TD  vAlign=top>
+		<TD class=r-dotted-lg-buttom vAlign=top>
 			<TABLE border=0 cellPadding=0 cellSpacing=0 width="100%" >
         		<TR><TD>
               	<TABLE border=0 cellPadding=0 cellSpacing=0 >
-              		<TR>
-                 		<TD bgColor=#ffffff 
+              		<TR bgColor=#f4f4f2>
+                 		<TD bgColor=#c9c9c7 class=box-title
 							title='<digi:trn key="aim:TeamMemberListAssocWithTeam">List of Team Members associated with Team</digi:trn>'>
-							<span id="desktopFont">	<digi:trn key="aim:teamMembers">Team Members</digi:trn></span>
+								<digi:trn key="aim:teamMembers">Team Members</digi:trn>
 							</TD>
-                    
+                    	<TD background="module/aim/images/corner-r.gif" 
+							height=17 width=17></TD>
 						</TR>
 					</TABLE>
 				</TD></TR>
@@ -35,7 +36,7 @@
 						<digi:trn key="aim:clickToAddNewActivit">Click here to Add New Activity</digi:trn>
 				</c:set>
 				<logic:notEmpty name="myTeamMembers" scope="session">
-				<TR><TD bgColor=#ffffff  align=left>
+				<TR><TD bgColor=#ffffff class=box-border align=left>
 					<TABLE border=0 cellPadding=1 cellSpacing=1 width="100%" >
 					<logic:iterate name="myTeamMembers" id="tm" scope="session" 
 					type="org.digijava.module.aim.helper.TeamMember"> 
@@ -50,7 +51,6 @@
 					</TABLE>
 				</TD></TR>
 				</logic:notEmpty>
-				<tr height=2px><td height=2px bgcolor="#000000"></td></tr>
 			</TABLE>	
 					<br/><br/>
 					<c:if test="${not empty sessionScope.currentMember}">

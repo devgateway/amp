@@ -85,9 +85,8 @@ function preview(id)
 <digi:form action="/viewActivityDashboard.do" name="aimActivityForm" type="org.digijava.module.aim.form.aimActivityForm" 
 method="post">
 
-<TABLE cellSpacing=0 cellPadding=0 align="center" vAlign="top" border=1 width="100%">
+<TABLE cellSpacing=0 cellPadding=0 align="center" vAlign="top" border=0 width="100%">
 	<TR>
-
 		<TD align=right>
 			<input type="button" value="Preview" class="dr-menu" onclick="preview('<%=actId%>')">
 			<input type="button" value="Edit" class="dr-menu" onclick="fnEditProject('<%=actId%>')">
@@ -103,13 +102,9 @@ method="post">
 		</TD>
 	</TR>
 	<TR>
-		<TD vAlign="top" align="center" >
+		<TD vAlign="top" align="center">
 			<TABLE width="99%" cellSpacing=0 cellPadding=0 vAlign="top" align="center" class="box-border-nopadding">
-				<TR>
-															<td align="top" vAlign="top" width="15%">
-<jsp:include page="channelOverviewMenu.jsp" flush="true" />
-	</td>
-				<TD align="top" vAlign="top">
+				<TR><TD>
 					<TABLE width="100%" cellspacing="2" cellpadding="2" valign="top" align="left" border=0>
 						<TR><TD class="highlight" colspan="2">
 						</TD></TR>						

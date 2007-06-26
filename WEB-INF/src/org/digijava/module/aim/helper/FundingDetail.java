@@ -130,6 +130,10 @@ public class FundingDetail implements Serializable
 	public String getAdjustmentTypeName() {
 		return adjustmentTypeName;
 	}
+	
+	public String getAdjustmentTypeNameTrimmed(){
+		return adjustmentTypeName.replaceAll(" ","");
+	}
 
 	public void setAdjustmentTypeName(String adjustmentTypeName) {
 		this.adjustmentTypeName = adjustmentTypeName;

@@ -489,7 +489,9 @@
                                                                                       <tr bgcolor="#ffffff">
                                                                                     </c:if>
                                                                                     <td width="50">
-                                                                                      <bean:write name="fundingDetail" property="adjustmentTypeName"/>
+                                                                                    	<digi:trn key='<%="aim:"+fundingDetail.getAdjustmentTypeNameTrimmed() %>'>
+																								<bean:write name="fundingDetail" property="adjustmentTypeName"/>
+																						</digi:trn>
                                                                                     </td>
                                                                                     <td width="120" align="right">
                                                                                       <FONT color=blue>*</FONT>
@@ -514,7 +516,9 @@
                                                                                     <c:if test="${fundingDetail.perspectiveCode != 'DN'}">
                                                                                       <tr bgcolor="#ffffff">
                                                                                         <td width="50">
-                                                                                          <bean:write name="fundingDetail" property="adjustmentTypeName"/>
+                                                                                          <digi:trn key='<%="aim:"+fundingDetail.getAdjustmentTypeNameTrimmed() %>'>
+																								<bean:write name="fundingDetail" property="adjustmentTypeName"/>
+																							</digi:trn>
                                                                                         </td>
                                                                                         <td width="120" align="right">
                                                                                           <FONT color=blue>*</FONT>
@@ -536,7 +540,9 @@
                                                                                      <c:if test="${fundingDetail.perspectiveCode == 'DN'}">
                                                                                       <tr bgcolor="#ffffff">
                                                                                         <td width="50">
-                                                                                          <bean:write name="fundingDetail" property="adjustmentTypeName"/>
+                                                                                          <digi:trn key='<%="aim:"+fundingDetail.getAdjustmentTypeNameTrimmed() %>'>
+																								<bean:write name="fundingDetail" property="adjustmentTypeName"/>
+																							</digi:trn>
                                                                                         </td>
                                                                                         <td width="120" align="right">
                                                                                           <FONT color=blue>*</FONT>
@@ -581,8 +587,9 @@
 																						<tr bgcolor="#ffffff">
 																						</c:if>
 																							<td width="50">
-																								<bean:write name="fundingDetail" property="adjustmentTypeName"/>
-																							</td>
+																								<digi:trn key='<%="aim:"+fundingDetail.getAdjustmentTypeNameTrimmed() %>'>
+																										<bean:write name="fundingDetail" property="adjustmentTypeName"/>
+																								</digi:trn>																							</td>
 																							<td width="120" align="right">
 																								<FONT color=blue>*</FONT>
 																								<bean:write name="fundingDetail" property="transactionAmount"/>&nbsp;
@@ -605,8 +612,9 @@
 																						<c:if test="${fundingDetail.perspectiveCode != 'DN'}">
 																						<tr bgcolor="#ffffff">
 																							<td width="50">
-																								<bean:write name="fundingDetail" property="adjustmentTypeName"/>
-																							</td>
+																								<digi:trn key='<%="aim:"+fundingDetail.getAdjustmentTypeNameTrimmed() %>'>
+																										<bean:write name="fundingDetail" property="adjustmentTypeName"/>
+																								</digi:trn>																							</td>
 																							<td width="120" align="right">
 																								<FONT color=blue>*</FONT>
 																								<bean:write name="fundingDetail" property="transactionAmount"/>&nbsp;
@@ -627,8 +635,9 @@
 																						<c:if test="${fundingDetail.perspectiveCode == 'DN'}">
 																						<tr bgcolor="#ffffff">
 																							<td width="50">
-																								<bean:write name="fundingDetail" property="adjustmentTypeName"/>
-																							</td>
+																								<digi:trn key='<%="aim:"+fundingDetail.getAdjustmentTypeNameTrimmed() %>'>
+																										<bean:write name="fundingDetail" property="adjustmentTypeName"/>
+																								</digi:trn>																							</td>
 																							<td width="120" align="right">
 																								<FONT color=blue>*</FONT>
 																								<bean:write name="fundingDetail" property="transactionAmount"/>&nbsp;
@@ -672,8 +681,9 @@
 																						<tr bgcolor="#ffffff">
 																						</c:if>
 																							<td width="50">
-																								<bean:write name="fundingDetail" property="adjustmentTypeName"/>
-																							</td>
+																								<digi:trn key='<%="aim:"+fundingDetail.getAdjustmentTypeNameTrimmed() %>'>
+																										<bean:write name="fundingDetail" property="adjustmentTypeName"/>
+																								</digi:trn>																							</td>
 																							<td width="120" align="right">
 																								<FONT color=blue>*</FONT>
 																								<bean:write name="fundingDetail" property="transactionAmount"/>&nbsp;

@@ -57,14 +57,14 @@ function openCalendar(month,year) {
 	
 	str += '</HEAD><BODY BGCOLOR="#FFFFFF"><CENTER>'; 
 	str += '<FORM NAME="Cal"><TABLE BGCOLOR="#FFFFFF" BORDER=0><TR><TD ALIGN=LEFT WIDTH=100%>';
-	str += '<FONT COLOR="#0000BB" FACE="Arial" SIZE=+1>' + names[Month] + ' ' + Year + '<\/FONT><\/TD><TD WIDTH=50% ALIGN=RIGHT>';
+	str += '<FONT COLOR="#0000BB" FACE="Arial" SIZE=+1><digi:trn key=calendar:' + names[Month]+ '>+'names[Month]+'</digi:trn>' + ' ' + Year + '<\/FONT><\/TD><TD WIDTH=50% ALIGN=RIGHT>';
 	str += '<SELECT NAME="Month" onChange="changeMonth();">';
 
 	for (t_month=0;t_month<12; t_month++) {
 		if (t_month == Month) 
-			str += '<OPTION VALUE="' + t_month + '" SELECTED>' + names[t_month] + '<\/OPTION>';
+			str += '<OPTION VALUE="' + t_month + '" SELECTED> <digi:trn key=calendar:' + names[t_month]+ '>+'names[t_month]+'<\/digi:trn><\/OPTION>';
 		else 
-			str += '<OPTION VALUE="' + t_month + '">'          + names[t_month] + '<\/OPTION>';
+			str += '<OPTION VALUE="' + t_month + '"><digi:trn key=calendar:' + names[t_month]+ '>+'names[t_month]+'<\/digi:trn><\/OPTION>';
 	}
 
 	str += '<\/SELECT><SELECT NAME="Year" onChange="changeYear();">';
@@ -89,7 +89,7 @@ function openCalendar(month,year) {
 	str += '<TABLE CALLSPACING=0 CELLPADDING=0 BORDER=1 BORDERCOLORDARK="#FFFFFF" BORDERCOLORLIGHT="#C0C0C0"><TR>';
 
 	for (i=0; i<7; i++)
-		str += '<TD WIDTH=50 ALIGN=CENTER VALIGN=MIDDLE><FONT SIZE=-1 COLOR="#000000" FACE="ARIAL"><B>' + dow[i] +'<\/B><\/FONT><\/TD>';
+		str += '<TD WIDTH=50 ALIGN=CENTER VALIGN=MIDDLE><FONT SIZE=-1 COLOR="#000000" FACE="ARIAL"><B> <digi:trn key=calendar:' + dow[i]+ '>+'dow[i]+'<\/digi:trn> <\/B><\/FONT><\/TD>';
 
 	str += '<\/TR><TR ALIGN=CENTER VALIGN=MIDDLE>';
 

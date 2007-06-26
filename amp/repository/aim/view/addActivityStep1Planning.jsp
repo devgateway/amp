@@ -329,7 +329,7 @@
 																</a>
 															</td>
 															<td>&nbsp;
-																<input type="button" class="buton" value="Comment" onclick="commentWin('ccd')">
+																<input type="button" class="buton" value="<digi:trn key="btn:Comment">Comment</digi:trn>" onclick="commentWin('ccd')">
 															</td>
 														</tr>
 													</table>

@@ -245,15 +245,22 @@ public class DesktopUtil {
 
 						project.setSector(new ArrayList());
 						Set sectSect = act.getSectors();
-						if (sectSect != null) {
+						if (sectSect != null || !sectSect.isEmpty() || sectSect.iterator()!=null) {
+							
 							Iterator sItr = sectSect.iterator();
+							//System.out.println(sItr.toString()+" -----------------------");
 							while (sItr.hasNext()) {
-								//AmpSector sect = (AmpSector) sItr.next();
-								AmpSector sect = ((AmpActivitySector) sItr.next()).getSectorId();
-								Sector sector = new Sector();
-								sector.setSectorId(sect.getAmpSectorId());
-								sector.setSectorName(sect.getName());
-								project.getSector().add(sector);
+								AmpActivitySector asect = (AmpActivitySector) sItr.next();
+								
+								if(asect!=null)
+									if (asect.getSectorId()!=null) {
+  								//AmpSector sect = ((AmpActivitySector) sItr.next()).getSectorId();
+										AmpSector sect = asect.getSectorId();
+										Sector sector = new Sector();
+										sector.setSectorId(sect.getAmpSectorId());
+										sector.setSectorName(sect.getName());
+										project.getSector().add(sector);
+									}
 							}
 						}
 

@@ -379,6 +379,7 @@ public class DesktopUtil {
 			}
 
 		} catch (Exception e) {
+			e.printStackTrace();
             throw new RuntimeException("Exception from getDesktopActivties", e);
 		} finally {
 			if (session != null) {

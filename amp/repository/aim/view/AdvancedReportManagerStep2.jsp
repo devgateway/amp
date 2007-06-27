@@ -69,7 +69,7 @@ function gotoStep() {
 				<td>
 	</tr>
 
-	<TR>
+	<%--<TR>
 	<TD vAlign="top" align="center">
 	<TABLE width="100%" cellSpacing=0 cellPadding=0 vAlign="top" align="left" bgcolor="#f4f4f4" class="box-border-nopadding">
 	<TR><TD bgcolor="#f4f4f4">
@@ -150,7 +150,7 @@ function gotoStep() {
 										6 : <digi:trn key="aim:GenerateChart">Generate Chart</digi:trn>
 										</digi:link>
 										</td>-->
-
+--%>
 	<TR bgColor=#f4f4f2>
 	<TD vAlign="top" align="left" width="100%"></TD>
 	</TR>				

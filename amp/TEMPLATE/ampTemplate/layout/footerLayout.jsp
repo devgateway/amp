@@ -10,17 +10,22 @@
 	<TR><TD>
 	--%>
 		<TABLE class="padding" cellSpacing=0 cellPadding=0 width="100%" border=0>
-		  	<TR bgColor=#484846><TD bgColor=#484846 align="center">
+		  	<TR bgColor=#484846><TD bgColor=#ffffff align="center">
 	      	<TABLE cellSpacing=0 cellPadding=0 width="100%" border=0>
 					<TR>
-						<TD width=1 align="right"><digi:img src="images/feedback.gif"/></TD>
-						<TD align=left vAlign="center" class="feedbk">
+						<TD align="centre">
+						<digi:img src="images/dg_footer_logo.jpg"/>
+						</TD>
+						<TD width=1 align="right"><digi:img src="images/contact_footer_img.jpg"/></TD>
+						<TD align="left" vAlign="center" class="feedbk">
+						<FONT color="#1B5887">
 							<digi:trn key="aim:feedBackOrContact">
 								FEEDBACK / CONTACT
 							</digi:trn>
+							<FONT color="#1B5887">
 						</TD>
-          			<TD align=right>
-							<FONT color="#FFFFFF">
+          			<TD align=left>
+							<FONT color="#1B5887">
 							AMP version <b><tiles:getAsString name="version"/></b> -
 							<digi:trn key="aim:ampDevelepmentCredits">
 								Developed in partnership with OECD, UNDP, WB and DGF

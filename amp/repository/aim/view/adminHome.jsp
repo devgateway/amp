@@ -6,7 +6,7 @@
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
 
-<jsp:include page="teamPagesHeader.jsp" flush="true" />
+<%--<jsp:include page="teamPagesHeader.jsp" flush="true" />--%>
 <table bgColor=#ffffff cellPadding=0 cellSpacing=0 width=757 align="left">
   <tr>
     <td class=r-dotted-lg width=5>&nbsp;</td>

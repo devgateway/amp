@@ -28,60 +28,82 @@
 		<TABLE cellSpacing=0 cellPadding=0 width="100%" border=0 valign="top" align="left">
 			<TBODY>
 			<TR>
-				<TD width="100%" bgColor=#323232 vAlign="center" align="left" height="15">
-					<digi:insert attribute="headerTop" />
+				<TD width="100%" bgColor=#F7F9E4 vAlign="center" align="left" height="15">
+					<%--<digi:insert attribute="headerTop" />--%>
+					<DIV id="head-top">
+					<TABLE cellSpacing=0 cellPadding=0 width="100%" border=0
+					vAlign="center">
+						<TBODY>
+						  	<TR bgColor=#F7F9E4>
+						   	<TD align="left" vAlign="center" width="50%" nowrap>
+									<digi:insert attribute="headerTop" />
+								</TD>
+								<TD align="left" vAlign="center" >
+								<%--<digi:insert attribute="headerTopMiddle" />--%>
+									<jsp:include page="../../../repository/aim/view/teamPagesHeader.jsp" flush="true" />				
+								</TD>
+								<TD width="20" align="right" vAlign="center" bgColor=#195C79>
+										<digi:insert attribute="dropdownLangSwitch" />
+								</TD>
+								
+							</TR>
+						</TBODY>
+					</TABLE>
+					</DIV>
 				</TD>
 			</TR>
 			<TR>
-				<TD width="100%" align="center" vAlign="top" bgcolor="#5a5a58">
+				<TD width="100%" align="center" vAlign="top" bgcolor="#F7F9E4">
 					<TABLE cellSpacing=0 cellPadding=0 width="98%" border=0 vAlign="center" bgcolor="#5a5a58">
 						<TBODY>
-						  	<TR bgColor=#5a5a58 height="15">
+						  	<TR bgColor=#F7F9E4 height="15">
 						   	<TD align="left" vAlign="center" height="15">
 									<digi:insert attribute="headerMiddle" />
 								</TD>	
 							<td align="right" vAlign="top" height="15">
 									<digi:insert attribute="loginWidget" />	
 							</td>	
-							  	<TD width="20" align="right" vAlign="top" height="15">
-									<digi:insert attribute="dropdownLangSwitch" />
-								</TD>
+							  	
 							</TR>
 						</TBODY>
 					</TABLE>
 				</TD>
 			</TR>
-			<TR>
+			<%--<TR>
 				<TD width="100%" vAlign="top" align="left">
 					<jsp:include page="../../../repository/aim/view/teamPagesHeader.jsp" flush="true" />				
 				</TD>
-			</TR>
+		  </TR>--%>
 			<TR>
 				<TD width="100%" vAlign="top" align="left">
 					<TABLE bgColor=#ffffff cellPadding=0 cellSpacing=0 width="99%" vAlign="top" align="left" border=0>
 						<TR>
-							<TD class=r-dotted-lg width="10">&nbsp;</td>
+							<TD  width="10">&nbsp;</td>
 							<TD align=center vAlign=top>
 								<TABLE width="100%" cellPadding=0 cellSpacing=0 vAlign="top" align="left" border="0">
 									<TR>
-										<TD vAlign="top" align="left" width="75%" class=r-dotted-lg>
+										<TD vAlign="top" align="left" width="75%">
 											<digi:insert attribute="body" />
 										</TD>
-										<TD vAlign="top" align="left" width="25%" class=r-dotted-lg bgcolor="#f4f4f2">
+										<TD vAlign="top" align="left" width="25%"  bgcolor="#fffff">
 											<TABLE width="100%" cellPadding=0 cellSpacing=0 vAlign="top" align="left" border="0">
 												<TR><TD vAlign="top" align="left">
 													<digi:insert attribute="myReports" />
 												</TD></TR>
+												<tr><td>&nbsp;</td></tr>
 												<logic:present name="currentMember">
 												<bean:define id="lead" property="teamHead" name="currentMember" scope="session"/>
 												<c:if test="${lead == true}">
+												<tr><td>&nbsp;</td></tr>
 												<TR><TD vAlign="top" align="left">
 													<digi:insert attribute="myTasks" />
 												</TD></TR>
+												<tr><td>&nbsp;</td></tr>
 												</c:if>
 												<TR><TD vAlign="top" align="left">
 													<digi:insert attribute="myLinks" />
 												</TD></TR>
+												<tr><td>&nbsp;</td></tr>
 												<TR><TD vAlign="top" align="left">
 													<digi:insert attribute="myTeamMembers" />
 												</TD></TR>

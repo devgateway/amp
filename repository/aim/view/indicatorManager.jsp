@@ -18,12 +18,8 @@
 
 		function addingIndicators()
 		{
-			openNewWindow(500, 300);
 			<digi:context name="addIndicator" property="context/module/moduleinstance/addIndicator.do?event=add" />
-			document.aimIndicatorForm.action = "<%= addIndicator %>";
-			document.aimIndicatorForm.target = popupPointer.name;
-			document.aimIndicatorForm.submit();
-			return true;
+			openURLinWindow("<%= addIndicator %>",500, 300);
 		}
 		function deleteIndicator(id)
 		{

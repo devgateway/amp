@@ -268,7 +268,6 @@
  		</layout>
 
 
-
 		<layout name="desktopLayout" extends="userHomeLayout">
 			<put name="title">- My Desktop</put>
 			<put-item name="body" module="aim" instance="default" teaser="myTabs"/>
@@ -281,12 +280,11 @@
 		</layout>
 
                 <!--page-group masterLayout="desktopLayout" tile="body"-->
-					 <page-group masterLayout="default" tile="body">
+                <!--page-group masterLayout="single" tile="body">
                         <module name="aim">
-										  <page>amp_viewNationalPlaningDashboard</page>
-										  	 <page>showTeamReports</page>
+                           <page>amp_viewNationalPlaningDashboard</page>
                         </module>
-					 </page-group>
+                </page-group-->
 
 
 		<!-- START ADD/EDIT LAYOUT	-->

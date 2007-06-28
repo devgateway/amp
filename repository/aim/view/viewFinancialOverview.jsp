@@ -45,14 +45,13 @@
 <TABLE cellSpacing=0 cellPadding=0 align="center" vAlign="top" border=0 width="100%">
 <TR>
 	<TD vAlign="top" align="center">
-
 		<!-- contents -->
 
 			<TABLE width="99%" cellSpacing=0 cellPadding=0 vAlign="top" align="center" bgcolor="#f4f4f4" class="box-border-nopadding">
 			<TR><TD bgcolor="#f4f4f4">
 			
 			<TABLE width="100%" cellSpacing=3 cellPadding=3 vAlign="top" align="center" bgcolor="#f4f4f4">
-			<%--	<TR bgColor=#222e5d height="20"><TD style="COLOR: #c9c9c7" height="20"> 	
+				<TR bgColor=#222e5d height="20"><TD style="COLOR: #c9c9c7" height="20"> 	
 				&nbsp;&nbsp;&nbsp;
 				<SPAN class="sub-nav2-selected">OVERVIEW</SPAN> | 
 					<bean:define id="translation">
@@ -84,7 +83,7 @@
 					<digi:link href="/viewYearlyComparisons.do" name="urlAll" styleClass="sub-nav2" title="<%=translation%>" >
 					<digi:trn key="aim:all">ALL</digi:trn>
 					</digi:link>	
-				</TD></TR>	--%>		
+				</TD></TR>			
 				<TR bgColor=#f4f4f2>
             	<TD align=left>
 						<TABLE width="100%" cellPadding="3" cellSpacing="2" align="left" vAlign="top">
@@ -116,11 +115,8 @@
 					<TD vAlign="top" align="center" width="750">
 						<TABLE width="100%" cellSpacing=1 cellPadding=1 vAlign="top" align="center" bgcolor="#f4f4f4">
 							<TR>
-		<td align="top" vAlign="top">
-<jsp:include page="channelOverviewSubMenu.jsp" flush="true" />
-	</td>
-								<TD width="100%" align="top" vAlign="top">
-        							<TABLE cellSpacing=0 cellPadding=0 width="99%" align=top bgColor=#f4f4f2 border=0>
+								<TD width="100%">
+        							<TABLE cellSpacing=0 cellPadding=0 width="99%" align=center bgColor=#f4f4f2 border=0>
                 					<TR bgColor=#f4f4f2>
 					            		<TD width=370 bgColor=#f4f4f2>
 					                    	<TABLE cellSpacing=0 cellPadding=0 bgColor=#f4f4f2 border=0>

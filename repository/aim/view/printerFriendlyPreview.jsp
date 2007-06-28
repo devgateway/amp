@@ -188,8 +188,8 @@
 												</tr>
 												<tr>
 													<td colspan="3"><digi:trn key="aim:status">Status</digi:trn> :
-														<c:if test="${!empty aimEditActivityForm.statusId}">
-															<bean:define name="aimEditActivityForm" id="statusId" property="statusId" />
+														<c:if test="${!empty aimEditActivityForm.status}">
+															<bean:define name="aimEditActivityForm" id="statusId" property="status" />
 															<c:if test="${statusId != -1}">
 																<c:forEach var="statusCol" items="${aimEditActivityForm.statusCollection}" >
 																	<c:if test="${statusCol.ampStatusId == statusId}">

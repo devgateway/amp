@@ -35,7 +35,6 @@
           document.aimIndicatorForm.addBtn.disabled = true;   
           <digi:context name="addInd" property="context/module/moduleinstance/addIndicator.do" />
           document.forms[0].action = "<%=addInd%>";
-          
           document.forms[0].submit();
           <digi:context name="indMan" property="context/module/moduleinstance/indicatorManager.do"/>
           window.opener.document.forms[0].action="<%=indMan%>~view=meindicators";

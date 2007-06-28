@@ -13,7 +13,7 @@
 <table border="0" width="100%" height="40px" bgcolor="f5f8e5">
     <tr >
         <c:if test="${calendarViewForm.view != 'custom'}">
-		  
+
             <td align="right" width="40%" vAlign="center">
 				<digi:img src="module/calendar/images/calenderLeftArrow1.jpg"/>
                 <a href="#"  onclick="submitFilterForm('${calendarViewForm.view}', '${calendarViewForm.dateNavigator.leftTimestamp}');return(false);">Last</a>
@@ -25,13 +25,13 @@
             ${calendarViewForm.baseDateBreakDown.year}
         </logic:equal>
         <logic:equal name="calendarViewForm" property="view" value="monthly">
-            
+
              <digi:trn key="aim:calendar:basemonthNameLong:${calendarViewForm.baseDateBreakDown.monthNameLong}">${calendarViewForm.baseDateBreakDown.monthNameLong}</digi:trn>,&nbsp;
 	              ${calendarViewForm.baseDateBreakDown.year}
-            
+
         </logic:equal>
         <logic:equal name="calendarViewForm" property="view" value="weekly">
-            
+
             <digi:trn key="aim:calendar:startmonthNameShort:${calendarViewForm.startDateBreakDown.monthNameShort}">${calendarViewForm.startDateBreakDown.monthNameShort}</digi:trn>
                ${calendarViewForm.startDateBreakDown.dayOfMonth},&nbsp;
                ${calendarViewForm.startDateBreakDown.year}&nbsp;-&nbsp;
@@ -40,7 +40,7 @@
                ${calendarViewForm.endDateBreakDown.year}
         </logic:equal>
         <logic:equal name="calendarViewForm" property="view" value="daily">
-         <digi:trn key="aim:calendar:dailymonthNameLong:${calendarViewForm.baseDateBreakDown.monthNameLong}">${calendarViewForm.baseDateBreakDown.monthNameLong}</digi:trn>  
+         <digi:trn key="aim:calendar:dailymonthNameLong:${calendarViewForm.baseDateBreakDown.monthNameLong}">${calendarViewForm.baseDateBreakDown.monthNameLong}</digi:trn>
                 ${calendarViewForm.baseDateBreakDown.dayOfMonth},&nbsp;
                 ${calendarViewForm.baseDateBreakDown.year}
         </logic:equal>
@@ -73,7 +73,7 @@
 
 
 <table border="0"   width="100%" cellpadding="1" cellspacing="1" bgcolor=#f5f8e5 ailgn="center">
-    
+
 <%--   f5f8e5     <td align="center" width="140" <c:if test="${calendarViewForm.view == 'monthly'}">rowspan="2"</c:if>><digi:trn key="calendar:EventName">Event Name</digi:trn></td>
         <c:if test="${calendarViewForm.view != 'custom'}">
             <c:if test="${calendarViewForm.view == 'monthly'}">
@@ -92,13 +92,13 @@
 
 
 
-	  
+
 <c:if test="${calendarViewForm.view != 'custom'}">
             <c:if test="${calendarViewForm.view == 'monthly'}">
 				<tr width="99%" align="center" vAlign="center" bgcolor="#f5f8e5">
 				<td>
 	  <table width="99%" border="0" bordercolor="blue" align="center" >
-				<tr width="100%"> 
+				<tr width="100%">
 		  			 <td valign="left">M</td>
 					 <td valign="left">T</td>
 					 <td valign="left">W</td>
@@ -115,9 +115,9 @@
 					 ${item.dayOfMonth}
 					  <c:if test="${!item.enabled}"></span></c:if>
 					 </td>
-					 </logic:iterate>		
+					 </logic:iterate>
 			 </tr>
-		  <tr height="1px" bgcolor="f5f8e5"><td colspan="7" ></td></tr> 
+		  <tr height="1px" bgcolor="f5f8e5"><td colspan="7" ></td></tr>
 					 </logic:iterate>
 			</table>
 			</td>
@@ -138,7 +138,7 @@
 							<tr>
 							<td align="center" vAlign="center">
 								Regular Tasks or events
-							
+
 							</td>
 							</tr>
 							<c:forEach var="hour" begin="6" end="18">
@@ -147,7 +147,7 @@
 						  			<c:if test="${hour < 12}">
 										<c:if test="${hour < 10}">
 										<c:set var="hour" value="0${hour}"/>
-										${hour}  AM 
+										${hour}  AM
 										</c:if>
 										<c:if test="${hour > 9}">
 										${hour} AM
@@ -164,41 +164,41 @@
                         	</c:if>
                     			</td>
 						  			</tr>
-									<tr height="1px" bgcolor="f5f8e5"><td></td></tr> 
+									<tr height="1px" bgcolor="f5f8e5"><td></td></tr>
                 			</c:forEach>
-							</table>	
+							</table>
 						  	</td>
 							<td width="1px" bgcolor="f5f8e5">
-							
-							</td>	
+
+							</td>
 							<td>
 							&nbsp;
 							</td>
 						</tr>
- 								
+
 					</table>
 				</td>
               </tr>
             </c:if>
 </tr>
-        </c:if>				
+        </c:if>
 <tr width="100%" >
 
 
 
 
 
-				
+				<td align="center" width="140" <c:if test="${calendarViewForm.view == 'monthly'}">rowspan="2"</c:if>><digi:trn key="calendar:EventName">Event Name</digi:trn></td>
             <logic:iterate id="row" name="calendarViewForm" property="dateNavigator.items">
-			
+
                 <logic:iterate id="item" name="row">
-					
-					 	
-				
+
+
+
                     <c:choose>
                         <c:when test="${calendarViewForm.view == 'yearly'}">
-                            <td align="center" style="border-left:1px solid" <c:if test="${item.nolink}">bgcolor="#ffbebe"</c:if>>
-                                <a href="#" style="text-decoration:none" onclick="submitFilterForm('${calendarViewForm.view}', '${item.timestamp}');return(false);"><digi:trn key="aim:calendar:${item.month}">${item.month}</digi:trn></a>
+                            <td align="center" style="width:7%;border-left:1px solid" <c:if test="${item.nolink}">bgcolor="#ffbebe"</c:if>>
+                                <a href="#" style="text-decoration:none" onclick="submitFilterForm('${calendarViewForm.view}', '${item.timestamp}');return(false);"><digi:trn key="aim:calendar${item.month}">${item.month}</digi:trn></a>
                             </td>
                         </c:when>
                        <%-- <c:when test="${calendarViewForm.view == 'monthly'}">
@@ -206,7 +206,7 @@
                                 <a href="#" style="text-decoration:none" onclick="submitFilterForm('${calendarViewForm.view}', '${item.timestamp}');return(false);"><digi:trn key="aim:calendar:day:${item.dayOfWeek}">${item.dayOfWeek}</digi:trn></a>
                             </td>
                         </c:when>--%>
-								
+
                         <c:when test="${calendarViewForm.view == 'weekly' && item.selected}">
 								<td>
 									<table  width="98%" cellspacing="1" cellpadding="2" border="0" bgcolor="#ffffff">
@@ -216,7 +216,7 @@
 										${item.dayOfWeek}
 										</span>
 										</td>
-                            <td align="center" <c:if test="${item.nolink}">bgcolor="#ffbebe"</c:if>> 
+                            <td align="center" <c:if test="${item.nolink}">bgcolor="#ffbebe"</c:if>>
                                 <a href="#" style="text-decoration:none" onclick="submitFilterForm('${calendarViewForm.view}', '${item.timestamp}');return(false);">${item.dayOfMonth}/${item.month}/${calendarViewForm.baseDateBreakDown.year}</a>
                             </td>
 									 </tr>
@@ -226,7 +226,7 @@
                     </c:choose>
                 </logic:iterate>
             </logic:iterate>
-         
+
         <c:if test="${calendarViewForm.view == 'custom'}">
             <td align="center" width="80"><digi:trn key="calendar:BodyEventTypes">Event Types</digi:trn></td>
             <td align="center" width="80"><digi:trn key="calendar:BodyDonors">Donors</digi:trn></td>

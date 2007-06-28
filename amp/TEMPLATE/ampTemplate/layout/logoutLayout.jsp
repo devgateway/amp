@@ -26,42 +26,22 @@
 	<BODY leftmargin="0" topmargin="0" rightmargin="0" bottommargin="0">
 		<TABLE cellSpacing=0 cellPadding=0 width="100%">
 			<TBODY>
-			<TR height="15" valign="center" >
-			<td >
-					<DIV id="head-top">
-					<TABLE cellSpacing=0 cellPadding=0 width="100%" border=0
-					vAlign="center" >
-						<TBODY>
-						  	<TR bgColor=#F7F9E4>
-						   	<TD align="left" vAlign="center" width="50%" nowrap>
-									<digi:insert attribute="headerTop" />
-								</TD>
-								
-								<TD width="20" align="right" vAlign="center" bgColor=#195C79>
-										<digi:insert attribute="dropdownLangSwitch" />
-								</TD>
-								
-							</TR>
-						</TBODY>
-					</TABLE>
-					</DIV>
-				<%--<TD width="100%" bgColor=#323232 vAlign="center" align="left" height="15">
+			<TR height="15" valign="center">
+				<TD width="100%" bgColor=#323232 vAlign="center" align="left" height="15">
 					<digi:insert attribute="headerTop" />
 				</TD>
-				<TD align="right" vAlign="top" height="15">
-										<digi:insert attribute="dropdownLangSwitch" />
-				</TD>--%>
-			</td>
 			</TR>
 			<TR height="15">
-				<TD width="100%" align="center" vAlign="top" bgcolor="#F7F9E4">
+				<TD width="100%" align="center" vAlign="top" bgcolor="#5a5a58">
 					<TABLE cellSpacing=0 cellPadding=0 width="98%" border=0 vAlign="top" align="top">
 						<TBODY>
-						  	<TR bgColor=#F7F9E4 height="15">
+						  	<TR bgColor=#5a5a58 height="15">
 						   	<TD align="left" vAlign="center" height="15">
 									<digi:insert attribute="headerMiddle" />
 								</TD>	
-							  	
+							  	<TD align="right" vAlign="top" height="15">
+										<digi:insert attribute="dropdownLangSwitch" />
+								</TD>
 							</TR>
 						</TBODY>
 					</TABLE>

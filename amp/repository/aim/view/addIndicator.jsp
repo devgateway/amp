@@ -35,22 +35,19 @@
           document.aimIndicatorForm.addBtn.disabled = true;   
           <digi:context name="addInd" property="context/module/moduleinstance/addIndicator.do" />
           document.forms[0].action = "<%=addInd%>";
+          document.forms[0].target = "_self";
           document.forms[0].submit();
-          <digi:context name="indMan" property="context/module/moduleinstance/indicatorManager.do"/>
-          window.opener.document.forms[0].action="<%=indMan%>~view=meindicators";
-          window.opener.document.forms[0].submit();
-		  window.close();
 
 		}
-	return temp;
+		return temp;
 	}
 
 	function load(){
 		if (document.aimIndicatorForm.errorFlag.value == "false") {
 			<digi:context name="indMan" property="context/module/moduleinstance/indicatorManager.do"/>
-            document.aimThemeForm.action = "<%= indMan %>";
-            document.aimThemeForm.targe = window.opener.name;
-           	document.aimThemeForm.submit();
+            document.forms[0].action = "<%= indMan %>";
+            document.forms[0].target = window.opener.name;
+            document.forms[0].submit();
 			window.close();
 		}
 	}
@@ -63,7 +60,7 @@
 	}
 	-->
 </script>
-<digi:instance property="aimIndicatorForm" />
+
 <digi:form action="/addIndicator.do" method="post">
 <input type="hidden" name="create" value="false">
 <html:hidden styleId="errorFlag" property="errorFlag"/>

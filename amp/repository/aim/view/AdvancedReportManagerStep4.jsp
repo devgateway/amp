@@ -104,11 +104,11 @@ function backStep() {
 <input type="hidden" name="isAdd" >
 
 <TABLE cellSpacing=0 cellPadding=0 align="center" vAlign="top" border=0 width="100%">
-<%--<tr>
+<tr>
 	<td>
 		<jsp:include page="teamPagesHeader.jsp" flush="true" />
 	</td>
-</tr>--%>
+</tr>
 
 <tr>
 
@@ -117,92 +117,6 @@ function backStep() {
 	<tr>
 
 	<td class=r-dotted-lg align=left vAlign=top >	&nbsp;</td>
-	<td align="top" valign="top" width="100" noWrap="noWrap">
-		<%-- insertion of report builder Menu --%>
-
-				<TABLE width="100%" cellSpacing=0 cellPadding=0 vAlign="top" align="left" height="15" >
-					<TR>
-						<TD>
-							<span id="leftNavSelected">
-									Create Report
-							</span>
-						</TD>
-					</TR>
-					<TR>
-						<TD noWrap="noWrap">
-								<bean:define id="translation">
-									<digi:trn key="aim:clickToSelectReportType">Click here to Select Report Type</digi:trn>
-								</bean:define>
-								<digi:link href="/advancedReportManager.do~check=forward" styleClass="reportMenu" title="<%=translation%>"  >
-											
-										1 :   Select Report Type
-									
-								</digi:link>
-						</TD>
-					</TR>
-					<TR>
-						<TD noWrap="noWrap"> 
-								<bean:define id="translation">
-									<digi:trn key="aim:clickToSelectColumns">Click here to Select Columns</digi:trn>
-								</bean:define>
-								<digi:link href="/advancedReportManager.do?check=SelectCols" styleClass="reportMenu"  title="<%=translation%>" >
-									
-										2 :   Select Columns
-									
-								</digi:link>
-						</TD>
-					</TR>
-					<TR>
-						<TD noWrap="noWrap"> 
-								<bean:define id="translation">
-									<digi:trn key="aim:clickToselectrows/hierarchies" >Click here to select rows/hierarchies</digi:trn>
-								</bean:define>
-								<digi:link href="/advancedReportManager.do?check=SelectRows"  styleClass="reportMenu" title="<%=translation%>" >
-											3 : <digi:trn key="aim:SelectRows/hierarchies">Select rows/hierarchies</digi:trn>
-
-								</digi:link>
-						</TD>
-					</TR>
-					<TR>
-						<td noWrap="noWrap">
-									<bean:define id="translation">
-										<digi:trn key="aim:clickToSelectMeasures">Click here to Select Measures</digi:trn>
-									</bean:define>
-													<digi:link href="/advancedReportManager.do?check=SelectMeasures"  styleClass="reportMenu" title="<%=translation%>" > 
-													4 : <digi:trn key="aim:SelectMeasures">Select Measures</digi:trn>
-													</digi:link>
-												</td>		
-					</TR>
-					<TR>
-						<TD>
-								<bean:define id="translation">
-									<digi:trn key="aim:clickToViewReportDetails">Click here to view Report Details</digi:trn>
-								</bean:define>
-								<digi:link href="/advancedReportManager.do?check=4"  styleClass="reportMenuSelected" title="<%=translation%>" >
-								<span id="leftNavSelected">
-									5 : <digi:trn key="aim:ReportDetails">Report Details</digi:trn>
-								</span>
-								</digi:link>
-						</TD>
-					</TR>
-					<TR>
-						<TD>
-						<bean:define id="translation">
-							<digi:trn key="aim:clickToGenerateReport">Click here to Generate Reports</digi:trn>
-						</bean:define>
-						<digi:link href="/advancedReportManager.do?check=SelectCols" styleClass="reportMenu" title="<%=translation%>" onclick="javascript:gotoStep()">
-							6 : <digi:trn key="aim:SaveReport">Save Report</digi:trn>
-						</digi:link>
-						</TD>
-					</TR>
-				</table>
-		<%-- end builder --%>
-		
-	</td>
-	<td>
-	 &nbsp;&nbsp;
-	&nbsp;</td>
-	<td>
 	<td>
 		<table>
 			<tr>
@@ -268,7 +182,7 @@ function backStep() {
 					<bean:write name="aimAdvancedReportForm" property="arReportType"/>
 				<td>
 			</tr>
-		<%--	<TR>
+			<TR>
 			<TD vAlign="top" align="center">
 	
 				<TABLE width="100%" cellSpacing=0 cellPadding=0 vAlign="top" align="left" bgcolor="#f4f4f4" class="box-border-nopadding">
@@ -348,7 +262,7 @@ function backStep() {
 										</td>-->	
 										</tr>	</table>
 									</td>	
-								</tr>--%>
+								</tr>
 								<TR bgColor=#f4f4f2>
 									<TD vAlign="top" align="center" width="100%" bgColor=#f4f4f2>
 										<TABLE width="100%" cellPadding=0 cellSpacing=0 vAlign="top" align="center" bgColor=#f4f4f2 >

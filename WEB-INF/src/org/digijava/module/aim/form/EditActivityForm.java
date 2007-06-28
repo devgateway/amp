@@ -38,6 +38,7 @@ public class EditActivityForm extends ActionForm implements Serializable{
     private String documentSpace = null;
 	private String condition = null;
 	private Long statusId = null;
+	private String status=null;
 	private String statusReason = null;
 	//private Collection statusCollection = null;
 	private Long levelId = null;
@@ -437,6 +438,7 @@ public class EditActivityForm extends ActionForm implements Serializable{
             documentSpace = null;
 			condition = null;
 			statusId = new Long(0);
+			status=null;
 			statusReason = null;
 			//statusCollection = null;
 			levelId = new Long(0);
@@ -4090,6 +4092,14 @@ public String getPurpose() {
 
 	public void setMfdCntTitle(String mfdCntTitle) {
 		this.mfdCntTitle = mfdCntTitle;
+	}
+
+	public String getStatus() {
+		return status;
+	}
+
+	public void setStatus(String status) {
+		this.status = status;
 	}
 
     /*

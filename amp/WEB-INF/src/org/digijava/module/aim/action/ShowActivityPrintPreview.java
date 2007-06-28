@@ -130,6 +130,9 @@ public class ShowActivityPrintPreview
                                             trim());
                 }
                 eaForm.setAmpId(activity.getAmpId());
+                //String actApprovalStatus = DbUtil.getActivityApprovalStatus(id);
+                eaForm.setStatus(DbUtil.getActivityApprovalStatus(new Long(Long.parseLong(actId))));
+                
                 eaForm.setStatusReason(activity.getStatusReason());
 
                 if(null != activity.getLineMinRank())

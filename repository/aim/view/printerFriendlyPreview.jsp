@@ -209,7 +209,7 @@
 										<td bgcolor="#ffffff" >
 											<c:if test="${!empty aimEditActivityForm.levelCollection}">
 												<c:forEach var="tempLevel" items="${aimEditActivityForm.levelCollection}">
-													<c:if test="${tempLevel.ampLevelId == aimEditActivityForm.level}">												
+													<c:if test="${tempLevel.ampLevelId == aimEditActivityForm.levelId}">												
                                           ${tempLevel.name}
 													</c:if>
 												</c:forEach>

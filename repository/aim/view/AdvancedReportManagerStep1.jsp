@@ -283,7 +283,7 @@ function checkUncheckAll2() {
 																							</td>
 																							<td align="right">
 																							<html:multibox property="selectedColumns">
-																							<digi:trn key="aim:report:${ampColumns.columnId}"><c:out value="${ampColumns.columnId}"/></digi:trn>
+																							<c:out value="${ampColumns.columnId}"/>
 																							</html:multibox>
 																							</td>
 																						</tr>
@@ -301,7 +301,7 @@ function checkUncheckAll2() {
 																							</td>
 																							<td align="right">
 																							<html:multibox property="selectedColumns">
-																							 <digi:trn key="aim:report:${ampColumns.columnId}"><c:out value="${ampColumns.columnId}"/></digi:trn>
+																							<c:out value="${ampColumns.columnId}"/>	
 					  																	    </html:multibox>
 																							</td>
 																						</tr>
@@ -358,8 +358,7 @@ function checkUncheckAll2() {
 																						</td>
 																						<td align="right">
 																							<html:multibox property="removeColumns" >
-																							<digi:trn key="aim:report:${addedColumns.columnId}"><c:out value="${addedColumns.columnId}"/></digi:trn>		
-																							  
+																							<c:out value="${ampColumns.columnId}"/>																							  
 					  																	    </html:multibox>
 																						</td>
 																							<td align="right">

@@ -158,7 +158,7 @@ public class CategoryManagerUtil {
 	/**
 	 * 
 	 * @param valueId
-	 * @return Extracts the AmpCategoryValue with id=valueId from teh database. Return null if not found.
+	 * @return Extracts the AmpCategoryValue with id=valueId from teh database.
 	 */
 	public static AmpCategoryValue getAmpCategoryValueFromDb(Long valueId) {
 		if(valueId!=null)
@@ -174,10 +174,7 @@ public class CategoryManagerUtil {
 					+ AmpCategoryValue.class.getName()
 					+ " v where v.id=:id";
 				qry			= dbSession.createQuery(queryString);
-				qry.setParameter("id", valueId, Hibernate.LONG);
-			
-				
-				
+				qry.setParameter("id", valueId, Hibernate.LONG);				
 				returnCollection	= qry.list();
 				
 			} catch (Exception ex) {
@@ -197,7 +194,9 @@ public class CategoryManagerUtil {
 				return x;
 			}
 		}
-		return null;
+		else
+			logger.debug("[getAmpCategoryValueFromDb] valueId is null");
+		return new AmpCategoryValue();
 	}
 	/**
 	 * 

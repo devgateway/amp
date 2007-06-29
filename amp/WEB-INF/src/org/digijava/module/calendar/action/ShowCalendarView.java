@@ -24,6 +24,11 @@ import org.digijava.module.calendar.entity.EventsFilter;
 import org.digijava.module.calendar.form.CalendarViewForm;
 import org.digijava.module.calendar.util.AmpDbUtil;
 import org.digijava.module.calendar.util.AmpUtil;
+import javax.servlet.http.HttpSession;
+import org.digijava.module.aim.helper.TeamMember;
+import org.digijava.module.aim.util.FeaturesUtil;
+import org.digijava.module.aim.dbentity.AmpGlobalSettings;
+import java.util.*;
 
 public class ShowCalendarView
     extends Action {
@@ -34,9 +39,26 @@ public class ShowCalendarView
                                  HttpServletResponse response) throws Exception {
 
         CalendarViewForm calendarViewForm = (CalendarViewForm) form;
+        HttpSession ses=request.getSession();
+        TeamMember mem=(TeamMember)ses.getAttribute("currentMember");
+
 
         // calendar type
         List calendarTypesList = DateNavigator.getCalendarTypes();
+
+        Collection defCnISO=FeaturesUtil.getDefaultCountryISO();
+        if(defCnISO!=null){
+            AmpGlobalSettings sett=(AmpGlobalSettings)defCnISO.iterator().next();
+            if(!sett.getGlobalSettingsValue().equalsIgnoreCase("et")){
+                for(Iterator iter = calendarTypesList.iterator(); iter.hasNext(); ) {
+                    LabelValueBean item = (LabelValueBean) iter.next();
+                    if(item.getLabel().equalsIgnoreCase("ethiopian") ||
+                        item.getLabel().equalsIgnoreCase("ethiopian fy")){
+                        iter.remove();
+                    }
+                }
+            }
+        }
 
         calendarViewForm.setCalendarTypes(calendarTypesList);
         // selected calendar type

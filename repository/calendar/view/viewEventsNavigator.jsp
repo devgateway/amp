@@ -46,7 +46,7 @@ function selectCalendarType(view, type) {
             <td nowrap="nowrap">
                 <table border="0" cellpadding="0" cellspacing="0">
                     <tr>
-                        <td nowrap="nowrap"><digi:trn key="calendar:From">&nbsp;From&nbsp;&nbsp;</digi:trn></td>
+                        <td nowrap="nowrap"><digi:trn key="calendar:fromDate">&nbsp;From&nbsp;&nbsp;</digi:trn></td>
                         <c:if test="${calendarViewForm.selectedCalendarType == 0}">
                             <script type="text/javascript" src="/thirdparty/CalendarPopup/PopupWindow.js"></script>
                             <script type="text/javascript" src="/thirdparty/CalendarPopup/AnchorPosition.js"></script>
@@ -162,7 +162,7 @@ function selectCalendarType(view, type) {
                 </c:if>
                 <c:if test="${calendarViewForm.view == 'monthly'}">
                     <b>
-                     
+
 						<digi:trn key="aim:calendar:basemonthNameLong:${calendarViewForm.baseDateBreakDown.monthNameLong}">${calendarViewForm.baseDateBreakDown.monthNameLong}</digi:trn>
                         ${calendarViewForm.baseDateBreakDown.year}
                     </b>
@@ -175,7 +175,7 @@ function selectCalendarType(view, type) {
                 </c:if>
                 <c:if test="${calendarViewForm.view == 'daily'}">
                     <b>
-                      <digi:trn key="aim:calendar:dayMonthNameLong:${calendarViewForm.baseDateBreakDown.monthNameLong}">${calendarViewForm.baseDateBreakDown.monthNameLong}</digi:trn> 
+                      <digi:trn key="aim:calendar:dayMonthNameLong:${calendarViewForm.baseDateBreakDown.monthNameLong}">${calendarViewForm.baseDateBreakDown.monthNameLong}</digi:trn>
                         ${calendarViewForm.baseDateBreakDown.dayOfMonth},&nbsp;
                         ${calendarViewForm.baseDateBreakDown.year}
                     </b>
@@ -196,7 +196,7 @@ function selectCalendarType(view, type) {
                         </c:if>
                         <c:if test="${!item.enabled}"><span style="color:#cbcbcb"></c:if>
                         <c:choose>
-                            <c:when test="${calendarViewForm.view == 'yearly'}"><digi:trn key="aim:cal:${item.month}">${item.month}</digi:trn></c:when>
+                            <c:when test="${calendarViewForm.view == 'yearly'}"><digi:trn key="aim:cal${item.month}">${item.month}</digi:trn></c:when>
                             <c:otherwise>${item.dayOfMonth}</c:otherwise>
                         </c:choose>
                         <c:if test="${!item.enabled}"></span></c:if>

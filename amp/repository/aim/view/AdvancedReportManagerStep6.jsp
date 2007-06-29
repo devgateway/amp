@@ -361,9 +361,7 @@ function checkUncheckAll2() {
 																									</td>
 																									<td align="right">
 																										<html:multibox property="selectedColumns">
-																										<digi:trn key="aim:reportBuilder:${ampMeasures.measureId}">
 																										<c:out value="${ampMeasures.measureId}"/>
-																									 </digi:trn>
 																									    </html:multibox>
 																									</td>
 																								</tr>
@@ -430,9 +428,7 @@ function checkUncheckAll2() {
 																								</td>
 																								<td align="right">
 																									<html:multibox property="removeColumns" >
-																								<digi:trn key="aim:reportBuilder:${addedMeasures.measureId}">
 																										<c:out value="${addedMeasures.measureId}"/>
-																							 </digi:trn>
 																									</html:multibox>
 																								</td>
 																								<td align="right">

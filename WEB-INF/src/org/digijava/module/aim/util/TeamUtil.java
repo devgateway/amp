@@ -248,18 +248,21 @@ public class TeamUtil {
 
 				qryStr = "select fiscal from "
 						+ AmpFiscalCalendar.class.getName() + " fiscal "
-						+ "where (fiscal.name=:cal)";
+						+ "where (fiscal.name=:cal) or (fiscal.yearOffset=:yearOffset)";
 				qry = session.createQuery(qryStr);
-				qry.setParameter("cal", "Ethiopian Fiscal Calendar",
-						Hibernate.STRING);
+				qry.setParameter("cal", "Gregorian Calendar", Hibernate.STRING);
+				qry.setParameter("yearOffset", new Integer(0), Hibernate.INTEGER);
 				col = qry.list();
 				AmpFiscalCalendar fiscal = null;
 				if (col.size() > 0) {
-					Iterator itr = col.iterator();
-					if (itr.hasNext()) {
+					for(Iterator itr = col.iterator(); itr.hasNext();) {
 						fiscal = (AmpFiscalCalendar) itr.next();
+						logger.debug("[createTeam(-)] fiscal calendar - " + fiscal.getName());
+						if (fiscal != null) break;
 					}
 				}
+				else
+					logger.error("[createTeam(-)] fiscal calendar collection is empty");
 				qryStr = "select curr from " + AmpCurrency.class.getName()
 						+ " curr " + "where (curr.currencyCode=:code)";
 				qry = session.createQuery(qryStr);

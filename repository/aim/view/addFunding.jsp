@@ -317,7 +317,9 @@
 												<html:select name="fundingDetail" indexed="true" property="perspectiveCode" styleClass="inp-text"
 												disabled="false">
 													<html:option value="DN"><digi:trn key="aim:PerspectiveOp1">Donor</digi:trn></html:option>
-													<html:option value="MA"><digi:trn key="aim:PerspectiveOp2">Goverment</digi:trn></html:option>
+													<c:if test="${sessionScope.currentMember.teamType != 'DONOR'}">
+														<html:option value="MA"><digi:trn key="aim:PerspectiveOp2">Goverment</digi:trn></html:option>
+													</c:if>
 												</html:select>
 											</td>
 											<td>

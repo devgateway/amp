@@ -26,10 +26,12 @@
 		</tr>
 		<tr bgcolor="#ffffff" valign="top">
 			<td>
+			<logic:notEmpty name="aimMainProjectDetailsForm" property="description">
 				<bean:define id="descKey">
 					<c:out value="${aimMainProjectDetailsForm.description}"/>
 				</bean:define>
 				<digi:edit key="<%=descKey%>"></digi:edit>
+			</logic:notEmpty>
 			</td>
 		</tr>	
 	</c:if>
@@ -41,10 +43,12 @@
 		</tr>
 		<tr bgcolor="#ffffff" valign="top">
 			<td>
+			<logic:notEmpty name="aimMainProjectDetailsForm" property="objectives">
 				<bean:define id="objKey">
 					<c:out value="${aimMainProjectDetailsForm.objectives}"/>
 				</bean:define>
 				<digi:edit key="<%=objKey%>"></digi:edit>
+				</logic:notEmpty>
 			</td>
 		</tr>		
 	</c:if>
@@ -56,10 +60,13 @@
 		</tr>
 		<tr bgcolor="#ffffff" valign="top">
 			<td>
+			<logic:notEmpty name="aimMainProjectDetailsForm" property="results">
 				<bean:define id="resKey">
-					<c:out value="${aimMainProjectDetailsForm.description}"/>
+					<c:out value="${aimMainProjectDetailsForm.results}"/>
 				</bean:define>
+				
 				<digi:edit key="<%=resKey%>"></digi:edit>
+				</logic:notEmpty>
 			</td>
 		</tr>		
 	</c:if>
@@ -71,10 +78,12 @@
 		</tr>
 		<tr bgcolor="#ffffff" valign="top">
 			<td>
+			<logic:notEmpty name="aimMainProjectDetailsForm" property="purpose">
 				<bean:define id="purpKey">
-					<c:out value="${aimMainProjectDetailsForm.description}"/>
+					<c:out value="${aimMainProjectDetailsForm.purpose}"/>
 				</bean:define>
 				<digi:edit key="<%=purpKey%>"></digi:edit>
+				</logic:notEmpty>
 			</td>
 		</tr>		
 	</c:if>

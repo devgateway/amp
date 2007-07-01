@@ -93,7 +93,7 @@
             <table bgcolor=#f4f4f2 cellPadding=0 cellSpacing=0 width="100%" class=box-border-nopadding id="tblSlo">
               <tr bgcolor="#006699">
                 <td vAlign="center" width="100%" align ="center" class="textalb" height="20">
-                  Select Program
+                  <digi:trn key="aim:selectActivityProgram">Select Program</digi:trn>
                 </td>
               </tr>
               <tr>
@@ -124,13 +124,13 @@
                         <table cellPadding=5>
                           <tr>
                             <td>
-                              <input type="button" value="Add" class="dr-menu" onclick="addProgram()">
+                              <input type="button" value="<digi:trn key='btn:add'>Add</digi:trn>" class="dr-menu" onclick="addProgram()">
                             </td>
                             <td>
-                              <input type="button" value="Reset" class="dr-menu" onclick="resetResults()">
+                              <input type="button" value="<digi:trn key='btn:reset'>Reset</digi:trn>" class="dr-menu" onclick="resetResults()">
                             </td>
                             <td>
-                              <input type="button" value="Close" class="dr-menu" onclick="closeWindow()">
+                              <input type="button" value="<digi:trn key='btn:close'>Close</digi:trn>" class="dr-menu" onclick="closeWindow()">
                             </td>
                           </tr>
                         </table>

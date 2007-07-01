@@ -319,7 +319,9 @@
                                                             <table cellSpacing=1 cellPadding="1" bgcolor="#dddddd" width="100%">
                                                               <tr bgcolor="#ffffff">
                                                                 <td bgcolor="#FFFFFF" align="left" width="30">
-                                                                Planned
+                                                                <digi:trn key="aim:planned">
+                                                  					Planned
+                                                  				</digi:trn>
                                                                 </td>
                                                                 <td bgcolor="#FFFFFF" align="left" width="10">
                                                                   <c:if test="${aimEditActivityForm.proProjCost.funAmount!=null}">

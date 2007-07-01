@@ -90,11 +90,11 @@
 									</td></tr>
 								<tr bgcolor="#f4f4f2">
 								<td colspan="2" class="box-border-alt1">
-										<span class="f-names">Commitments - (Total Actual Allocation <%=eaForm.getTotalCommitments()%>
+										<span class="f-names"><digi:trn key="aim:commitmentsTotalActAllocation">Commitments - (Total Actual Allocation</digi:trn> <%=eaForm.getTotalCommitments()%>
 															 <%=eaForm.getCurrCode()%> )
 										</span>
 
-										<a href="javascript:addCommitments()">Add</a><br><br>
+										<a href="javascript:addCommitments()"><digi:trn key="btn:add">Add</digi:trn></a><br><br>
 												<digi:trn key="aim:PlannedFIE">Planned</digi:trn>/<digi:trn key="aim:ActualFIE">Actual</digi:trn>&nbsp;&nbsp;&nbsp;
 												<digi:trn key="aim:AmountFIE">Amount</digi:trn>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 												<digi:trn key="aim:CurrencyFIE">Currency</digi:trn>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
@@ -165,10 +165,10 @@
 							</tr>
 							<tr bgcolor="#ffffff">
 								<td colspan="2" class="box-border">
-										<span class="f-names">Disbursement - (Total actual to date <%=eaForm.getTotalDisbursements()%>
+										<span class="f-names"><digi:trn key="aim:disbursementTotalActToDate"> Disbursement - (Total actual to date</digi:trn> <%=eaForm.getTotalDisbursements()%>
 															 <%=eaForm.getCurrCode()%>)
 										</span>
-										<a href="javascript:addDisbursement()">Add</a><br><br>
+										<a href="javascript:addDisbursement()"><digi:trn key="btn:add">Add</digi:trn></a><br><br>
 												<digi:trn key="aim:PlannedFIE">Planned</digi:trn>/<digi:trn key="aim:ActualFIE">Actual</digi:trn>&nbsp;&nbsp;&nbsp;
 												<digi:trn key="aim:AmountFIE">Amount</digi:trn>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 												<digi:trn key="aim:CurrencyFIE">Currency</digi:trn>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
@@ -234,9 +234,9 @@
 							</tr>
 							<tr>
 								<td colspan="2" class="box-border-alt1">
-											<span class="f-names">Expenditure - (Total actual to date <%=eaForm.getTotalExpenditures()%>
+											<span class="f-names"><digi:trn key="aim:expenditureTotalActToDate"> Expenditure - (Total actual to date</digi:trn> <%=eaForm.getTotalExpenditures()%>
 																 <%=eaForm.getCurrCode()%>)</span>
-											<a href="javascript:addExpenditure()">Add</a>&nbsp;&nbsp;
+											<a href="javascript:addExpenditure()"><digi:trn key="btn:add">Add</digi:trn></a>&nbsp;&nbsp;
 											<br><br>
 												<digi:trn key="aim:PlannedFIE">Planned</digi:trn>/<digi:trn key="aim:ActualFIE">Actual</digi:trn>&nbsp;&nbsp;&nbsp;
 												<digi:trn key="aim:AmountFIE">Amount</digi:trn>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
@@ -309,13 +309,13 @@
 									<table cellPadding=3>
 										<tr>
 											<td>
-												<input type="button" value="Save" class="inp-text" onclick="return addComponents()">
+												<input type="button" value="<digi:trn key='btn:save'>Save</digi:trn>" class="inp-text" onclick="return addComponents()">
 											</td>
 											<td>
-												<input type="reset" value="Reset" class="inp-text">
+												<input type="reset" value="<digi:trn key='btn:reset'>Reset</digi:trn>" class="inp-text">
 											</td>
 											<td>
-												<input type="button" value="Close" class="inp-text" onclick="closeWindow()">
+												<input type="button" value="<digi:trn key='btn:close'>Close</digi:trn>" class="inp-text" onclick="closeWindow()">
 											</td>
 										</tr>
 									</table>

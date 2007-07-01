@@ -80,13 +80,13 @@
 											<table cellPadding=5>
 												<tr>
 													<td>
-														<input type="button" value="Add" class="dr-menu" onclick="return addIssue()">
+														<input type="button" value="<digi:trn key='btn:add'>Add</digi:trn>" class="dr-menu" onclick="return addIssue()">
 													</td>
 													<td>
-														<input type="reset" value="Clear" class="dr-menu">
+														<input type="reset" value="<digi:trn key='btn:clear'>Clear</digi:trn>" class="dr-menu">
 													</td>
 													<td>
-														<input type="button" value="Close" class="dr-menu" onclick="window.close()">
+														<input type="button" value="<digi:trn key='btn:close'>Close</digi:trn>" class="dr-menu" onclick="window.close()">
 													</td>
 												</tr>
 											</table>

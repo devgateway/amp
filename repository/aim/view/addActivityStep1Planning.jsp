@@ -35,7 +35,7 @@
 															<td>
 																<a title="<digi:trn key="aim:lineMinistryRank">Line Ministry Rank</digi:trn>">
 																	<html:select name="aimEditActivityForm" property="lineMinRank" styleClass="inp-text">
-																		<html:option value="-1">-Select Rank-</html:option>
+																		<html:option value="-1"><digi:trn key="aim:selectRank">-Select Rank-</digi:trn></html:option>
 																		<c:forEach var="lmr" items="${aimEditActivityForm.actRankCollection}" >
 																			<c:choose>
 																				<c:when test="${lmr == aimEditActivityForm.lineMinRank}">
@@ -67,7 +67,7 @@
 															<td>
 																<a title="<digi:trn key="aim:planMinistryRank">Ministry of Planning Rank</digi:trn>">
 																	<html:select property="planMinRank" styleClass="inp-text">
-																		<html:option value="-1">-Select Rank-</html:option>
+																		<html:option value="-1"><digi:trn key="aim:selectRank">-Select Rank-</digi:trn></html:option>
 																		<c:forEach var="mpr" items="${aimEditActivityForm.actRankCollection}" >
 																			<c:choose>
 																				<c:when test="${mpr == aimEditActivityForm.planMinRank}">

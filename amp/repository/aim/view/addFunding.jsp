@@ -148,7 +148,7 @@
 						<table cellpadding=4 cellspacing=1 bgcolor="#ffffff" width="100%">
 							<tr>
 								<td align="right" bgcolor=#ECF3FD width="50%">
-			                	<b>Organization</b>
+			                	<b><digi:trn key="aim:organization">Organization</digi:trn></b>
 								</td>
 								<td align="left" bgcolor=#ECF3FD width="50%">
 			                	<bean:write name="aimEditActivityForm" property="orgName"/>
@@ -247,7 +247,7 @@
 			<table width="100%" cellpadding=0 cellspacing=0>
 				<tr>
 					<td width="100%" bgcolor="#006699" class="textalb" height="20" align="center">
-					<a title="<digi:trn key="aim:Commitmentsmade">A firm obligation expressed in writing and backed by the necessary funds, undertaken by an official donor to provide specified assistance to a recipient country</digi:trn>">Commitments</a>
+					<a title="<digi:trn key="aim:Commitmentsmade">A firm obligation expressed in writing and backed by the necessary funds, undertaken by an official donor to provide specified assistance to a recipient country</digi:trn>"><digi:trn key="aim:commitments">Commitments</digi:trn></a>
 					</td>
 				</tr>
 				<tr>
@@ -516,7 +516,7 @@
 									onclick="this.form.event.value='delCommitments';addFundingDetail();">
 								</td> --%>
 								<td>
-									<input class="buton" type="button" name="xx1" value="Add Commitment"
+									<input class="buton" type="button" name="xx1" value="<digi:trn key='aim:addCommitment'>Add Commitment</digi:trn>"
 								   onclick="addFundingDetail(0)">
 								</td>
 							</tr>
@@ -539,7 +539,7 @@
 			<table width="100%" cellpadding=0 cellspacing=0>
 				<tr>
 					<td width="100%" bgcolor="#006699" class="textalb" height="20" align="center">
-					<a title="<digi:trn key="aim:FundRelease">Release of funds to, or the purchase of goods or services for a recipient; by extension, the amount thus spent. Disbursements record the actual international transfer of financial resources, or of goods or services valued at the cost to the donor</digi:trn>">Disbursements</a>
+					<a title="<digi:trn key="aim:FundRelease">Release of funds to, or the purchase of goods or services for a recipient; by extension, the amount thus spent. Disbursements record the actual international transfer of financial resources, or of goods or services valued at the cost to the donor</digi:trn>"><digi:trn key="Disbursements">Disbursements</digi:trn></a>
 					</td>
 				</tr>
 				<tr>
@@ -703,7 +703,7 @@
 								   onclick="this.form.event.value='delDisbursements';addFundingDetail();">
 								</td>--%>
 								<td>
-									<input class="buton" type="button" name="xx1" value="Add Disbursement"
+									<input class="buton" type="button" name="xx1" value="<digi:trn key='aim:addDisbursement'>Add Disbursement</digi:trn>"
 								   onclick="addFundingDetail(1)">
 								</td>
 							</tr>
@@ -725,7 +725,7 @@
 			<table width="100%" cellpadding=0 cellspacing=0>
 				<tr>
 					<td width="100%" bgcolor="#006699" class="textalb" height="20" align="center">
- 						<a title="<digi:trn key="aim:ExpenditureofFund">Amount effectively spent by the implementing agency</digi:trn>">Expenditures</a>
+ 						<a title="<digi:trn key='aim:ExpenditureofFund'>Amount effectively spent by the implementing agency</digi:trn>"><digi:trn key="aim:expenditures">Expenditures</digi:trn></a>
 					</td>
 				</tr>
 				<tr>
@@ -920,7 +920,7 @@
 						<table cellPadding=3>
 							<tr>
 								<td>
-									<input class="buton" type="button" name="xx1" value="Add Expenditure"
+									<input class="buton" type="button" name="xx1" value="<digi:trn key='aim:addExpediture'>Add Expenditure</digi:trn>"
 				   				onclick="addFundingDetail(2)">
 								</td>
 							</tr>
@@ -959,13 +959,13 @@
 						<table cellPadding=3>
 							<tr>
 								<td>
-									<input type="button" value="Save" class="inp-text" onclick="return addFunding()">
+									<input type="button" value="<digi:trn key='btn:save'>Save</digi:trn>" class="inp-text" onclick="return addFunding()">
 								</td>
 								<td>
-									<input type="reset" value="Reset" class="inp-text">
+									<input type="reset" value="<digi:trn key='btn:reset'>Reset</digi:trn>" class="inp-text">
 								</td>
 								<td>
-									<input type="button" value="Close" class="inp-text" onclick="closeWindow()">
+									<input type="button" value="<digi:trn key='btn:close'>Close</digi:trn>" class="inp-text" onclick="closeWindow()">
 								</td>
 							</tr>
 						</table>

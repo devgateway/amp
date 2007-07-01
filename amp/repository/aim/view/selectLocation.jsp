@@ -310,14 +310,14 @@ function checkNumeric(objName,comma,period,hyphen)
 								<table cellPadding=3 cellSpacing=3>
 									<tr>
 										<td>
-											<input type="button" value="Add" class="dr-menu"
+											<input type="button" value="<digi:trn key='btn:add'>Add</digi:trn>" class="dr-menu"
 											onclick="selectLocation()">
 										</td>
 										<td>
-											<input type="reset" value="Clear" class="dr-menu">
+											<input type="reset" value="<digi:trn key='btn:clear'>Clear</digi:trn>" class="dr-menu">
 										</td>
 										<td>
-											<input type="button" value="Close" class="dr-menu" onclick="closeWindow()">
+											<input type="button" value="<digi:trn key='btn:close'>Close</digi:trn>" class="dr-menu" onclick="closeWindow()">
 										</td>
 									</tr>
 								</table>
@@ -377,7 +377,7 @@ function checkNumeric(objName,comma,period,hyphen)
 									</tr>
 									<tr>
 										<td align="center" colspan=2>
-											<input type="button" value="Search" class="dr-menu" onclick="return searchLoc()">
+											<input type="button" value="<digi:trn key='btn:search'>Search</digi:trn>" class="dr-menu" onclick="return searchLoc()">
 										</td>
 									</tr>
 								</table>

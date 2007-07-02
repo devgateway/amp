@@ -431,8 +431,8 @@
                                                                                 </td>
                                                                                 <td width="1">:</td>
                                                                                 <td bgcolor="#FFFFFF" align="left">
-                                                                                  <logic:notEmpty name="funding" property="ampTermsAssist">
-                                                                                    <bean:write name="funding"	property="ampTermsAssist.termsAssistName"/>
+                                                                                  <logic:notEmpty name="funding" property="typeOfAssistance">
+                                                                                    <bean:write name="funding"	property="typeOfAssistance.value"/>
                                                                                   </logic:notEmpty>
                                                                                 </td>
                                                                               </tr>

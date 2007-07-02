@@ -3,6 +3,7 @@ package org.digijava.module.aim.helper;
 import java.io.Serializable;
 import java.util.Collection;
 
+import org.digijava.module.aim.dbentity.AmpCategoryValue;
 import org.digijava.module.aim.dbentity.AmpModality;
 import org.digijava.module.aim.dbentity.AmpTermsAssist;
 
@@ -13,7 +14,8 @@ import org.digijava.module.aim.dbentity.AmpTermsAssist;
 public class Funding implements Serializable 
 {
     private long fundingId;
-	private AmpTermsAssist ampTermsAssist;
+	//private AmpTermsAssist ampTermsAssist;
+    private AmpCategoryValue typeOfAssistance;
 	private String orgFundingId;
 	private String signatureDate;
 	private AmpModality modality;
@@ -26,14 +28,15 @@ public class Funding implements Serializable
    	private String reportingDate;
    	private String conditions;
 	
-	public AmpTermsAssist getAmpTermsAssist() {
-		return ampTermsAssist;
+   		
+	public AmpCategoryValue getTypeOfAssistance() {
+		return typeOfAssistance;
 	}
-	
-	public void setAmpTermsAssist(AmpTermsAssist ampTermsAssist) {
-		this.ampTermsAssist = ampTermsAssist;
+
+	public void setTypeOfAssistance(AmpCategoryValue typeOfAssistance) {
+		this.typeOfAssistance = typeOfAssistance;
 	}
-	
+
 	public String getOrgFundingId() {
 		return orgFundingId;
 	}

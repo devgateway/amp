@@ -744,7 +744,8 @@ public class EditActivity
                         }
 
                         Funding fund = new Funding();
-                        fund.setAmpTermsAssist(ampFunding.getAmpTermsAssistId());
+                        //fund.setAmpTermsAssist(ampFunding.getAmpTermsAssistId());
+                        fund.setTypeOfAssistance( ampFunding.getTypeOfAssistance() );
                         fund.setFundingId(ampFunding.getAmpFundingId().
                                           longValue());
                         fund.setOrgFundingId(ampFunding.getFinancingId());

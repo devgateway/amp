@@ -15,10 +15,10 @@ import org.apache.struts.action.ActionMapping;
 import org.apache.struts.tiles.ComponentContext;
 import org.apache.struts.tiles.actions.TilesAction;
 import org.digijava.module.aim.dbentity.AmpActivity;
+import org.digijava.module.aim.dbentity.AmpCategoryValue;
 import org.digijava.module.aim.dbentity.AmpFunding;
 import org.digijava.module.aim.dbentity.AmpModality;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
-import org.digijava.module.aim.dbentity.AmpTermsAssist;
 import org.digijava.module.aim.form.FinancialOverviewForm;
 import org.digijava.module.aim.helper.CommonWorker;
 import org.digijava.module.aim.helper.Constants;
@@ -114,11 +114,13 @@ public class ViewFinancialOverview extends TilesAction {
 					}
 
 					formBean.setConditions(ampFunding.getConditions());
-					AmpTermsAssist ampTermsAssist = ampFunding
-							.getAmpTermsAssistId();
-					if (ampTermsAssist != null) {
-						formBean.setTermsOfAssistance(ampTermsAssist
-								.getTermsAssistName());
+					//AmpTermsAssist ampTermsAssist = ampFunding
+					//		.getAmpTermsAssistId();
+					AmpCategoryValue typeOfAssistance	= ampFunding.getTypeOfAssistance();
+					if (typeOfAssistance != null) {
+//						formBean.setTermsOfAssistance(ampTermsAssist
+//								.getTermsAssistName());
+						formBean.setTermsOfAssistance( typeOfAssistance.getValue() );
 					}
 					if (logger.isDebugEnabled())
 						logger.debug("signature date : "

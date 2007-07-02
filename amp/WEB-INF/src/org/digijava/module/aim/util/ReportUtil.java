@@ -1759,7 +1759,7 @@ public class ReportUtil {
 						while(fundIdsItr.hasNext())
 						{
 							AmpFunding tempAmpFund = (AmpFunding) fundIdsItr.next();
-							if(tempAmpFund.getAmpTermsAssistId().getTermsAssistName().equalsIgnoreCase("Loan"))
+							if(tempAmpFund.getTypeOfAssistance().getValue().equalsIgnoreCase("Loan"))
 							{
 								Collection fundDetailIds = DbUtil.getFundingDetails(tempAmpFund.getAmpFundingId());
 								Iterator fundDetailItr = fundDetailIds.iterator();
@@ -1792,7 +1792,7 @@ public class ReportUtil {
 															fromExchangeRate,toExchangeRate);
 								}
 							}
-							if(tempAmpFund.getAmpTermsAssistId().getTermsAssistName().equalsIgnoreCase("Grant"))
+							if(tempAmpFund.getTypeOfAssistance().getValue().equalsIgnoreCase("Grant"))
 							{
 								Collection fundDetailIds = DbUtil.getFundingDetails(tempAmpFund.getAmpFundingId());
 								Iterator fundDetailItr = fundDetailIds.iterator();
@@ -1825,7 +1825,7 @@ public class ReportUtil {
 															fromExchangeRate,toExchangeRate);
 								}
 							}
-							if(tempAmpFund.getAmpTermsAssistId().getTermsAssistName().equalsIgnoreCase("In Kind"))
+							if(tempAmpFund.getTypeOfAssistance().getValue().equalsIgnoreCase("In Kind"))
 							{
 								Collection fundDetailIds = DbUtil.getFundingDetails(tempAmpFund.getAmpFundingId());
 								Iterator fundDetailItr = fundDetailIds.iterator();
@@ -5938,7 +5938,7 @@ public class ReportUtil {
 							while(fundIdsItr.hasNext())
 							{
 								AmpFunding tempAmpFund = (AmpFunding) fundIdsItr.next();
-								if(tempAmpFund.getAmpTermsAssistId().getTermsAssistName().equalsIgnoreCase("Loan"))
+								if(tempAmpFund.getTypeOfAssistance().getValue().equalsIgnoreCase("Loan"))
 								{
 									Collection fundDetailIds = DbUtil.getFundingDetails(tempAmpFund.getAmpFundingId());
 									Iterator fundDetailItr = fundDetailIds.iterator();
@@ -5971,7 +5971,7 @@ public class ReportUtil {
 																fromExchangeRate,toExchangeRate);
 									}
 								}
-								if(tempAmpFund.getAmpTermsAssistId().getTermsAssistName().equalsIgnoreCase("Grant"))
+								if(tempAmpFund.getTypeOfAssistance().getValue().equalsIgnoreCase("Grant"))
 								{
 									Collection fundDetailIds = DbUtil.getFundingDetails(tempAmpFund.getAmpFundingId());
 									Iterator fundDetailItr = fundDetailIds.iterator();
@@ -6004,7 +6004,7 @@ public class ReportUtil {
 																fromExchangeRate,toExchangeRate);
 									}
 								}
-								if(tempAmpFund.getAmpTermsAssistId().getTermsAssistName().equalsIgnoreCase("In Kind"))
+								if(tempAmpFund.getTypeOfAssistance().getValue().equalsIgnoreCase("In Kind"))
 								{
 									Collection fundDetailIds = DbUtil.getFundingDetails(tempAmpFund.getAmpFundingId());
 									Iterator fundDetailItr = fundDetailIds.iterator();
@@ -8763,7 +8763,7 @@ public class ReportUtil {
 							while(fundIdsItr.hasNext())
 							{
 								AmpFunding tempAmpFund = (AmpFunding) fundIdsItr.next();
-								if(tempAmpFund.getAmpTermsAssistId().getTermsAssistName().equalsIgnoreCase("Loan"))
+								if(tempAmpFund.getTypeOfAssistance().getValue().equalsIgnoreCase("Loan"))
 								{
 									Collection fundDetailIds = DbUtil.getFundingDetails(tempAmpFund.getAmpFundingId());
 									Iterator fundDetailItr = fundDetailIds.iterator();
@@ -8796,7 +8796,7 @@ public class ReportUtil {
 																fromExchangeRate,toExchangeRate);
 									}
 								}
-								if(tempAmpFund.getAmpTermsAssistId().getTermsAssistName().equalsIgnoreCase("Grant"))
+								if(tempAmpFund.getTypeOfAssistance().getValue().equalsIgnoreCase("Grant"))
 								{
 									Collection fundDetailIds = DbUtil.getFundingDetails(tempAmpFund.getAmpFundingId());
 									Iterator fundDetailItr = fundDetailIds.iterator();
@@ -8829,7 +8829,7 @@ public class ReportUtil {
 																fromExchangeRate,toExchangeRate);
 									}
 								}
-								if(tempAmpFund.getAmpTermsAssistId().getTermsAssistName().equalsIgnoreCase("In Kind"))
+								if(tempAmpFund.getTypeOfAssistance().getValue().equalsIgnoreCase("In Kind"))
 								{
 									Collection fundDetailIds = DbUtil.getFundingDetails(tempAmpFund.getAmpFundingId());
 									Iterator fundDetailItr = fundDetailIds.iterator();

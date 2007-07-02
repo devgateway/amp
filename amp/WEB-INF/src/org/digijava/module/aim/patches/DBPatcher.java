@@ -120,8 +120,8 @@ public class DBPatcher {
 			 } catch (SQLException sqle) {
 				 logger.info("Exception :" + sqle.getMessage());
 			 }			 			 
-			 
-			 qryStr = "select count(*) from " + AmpTermsAssist.class.getName() + " ta " +
+			Iterator itr; 
+			/* qryStr = "select count(*) from " + AmpTermsAssist.class.getName() + " ta " +
 			 		"where (ta.termsAssistName=:name)";
 			 qry = session.createQuery(qryStr);
 			 qry.setParameter("name",newTypeOfAssistance);
@@ -135,7 +135,7 @@ public class DBPatcher {
 					 session.save(newTa);
 					 session.flush();
 				 }
-			 }
+			 }*/
 			 
 			 qryStr = "select count(*) from " + AmpFilters.class.getName() + " f " +
 			 		"where (f.filterName=:name)";

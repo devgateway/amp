@@ -5,6 +5,7 @@
 <%@ taglib uri="/taglib/struts-html" prefix="html" %>
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
+<%@ taglib uri="/taglib/category" prefix="category" %>
 
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/calendar.js"/>"></script>
@@ -163,16 +164,10 @@
 								</td>
 								<td align="left" bgcolor=#ECF3FD>
 									<c:if test="${aimEditActivityForm.donorFlag == true}">
-				                	<html:select property="assistanceType" styleClass="inp-text" disabled="true">
-											<html:optionsCollection name="aimEditActivityForm" property="assistanceTypes"
-											value="ampTermsAssistId" label="termsAssistName"/>
-										</html:select>
+				                		<category:showoptions outerdisabled="true" name="aimEditActivityForm" property="assistanceType" keyName="<%= org.digijava.module.aim.helper.CategoryConstants.TYPE_OF_ASSISTENCE_KEY %>" styleClass="inp-text" />
 									</c:if>
 									<c:if test="${aimEditActivityForm.donorFlag == false}">
-				                	<html:select property="assistanceType" styleClass="inp-text">
-											<html:optionsCollection name="aimEditActivityForm" property="assistanceTypes"
-											value="ampTermsAssistId" label="termsAssistName"/>
-										</html:select>
+										<category:showoptions name="aimEditActivityForm" property="assistanceType"  keyName="<%= org.digijava.module.aim.helper.CategoryConstants.TYPE_OF_ASSISTENCE_KEY %>" styleClass="inp-text" />
 									</c:if>
 								</td>
 							</tr>

@@ -20,6 +20,7 @@ import org.digijava.module.aim.dbentity.AmpCurrency;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpPerspective;
 import org.digijava.module.aim.form.EditActivityForm;
+import org.digijava.module.aim.helper.CategoryManagerUtil;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.CurrencyWorker;
 import org.digijava.module.aim.helper.DateConversion;
@@ -80,8 +81,8 @@ public class FundingAdded extends Action {
 		} else {
 			newFund.setFundingId(System.currentTimeMillis());	
 		}
-		newFund.setAmpTermsAssist(DbUtil.getAssistanceType(eaForm
-				.getAssistanceType()));
+		//newFund.setAmpTermsAssist(DbUtil.getAssistanceType(eaForm.getAssistanceType()));
+		newFund.setTypeOfAssistance( CategoryManagerUtil.getAmpCategoryValueFromDb(eaForm.getAssistanceType()) );
 		newFund.setOrgFundingId(eaForm.getOrgFundingId());
 		newFund.setModality(DbUtil.getModality(eaForm.getModality()));
 		newFund.setConditions(eaForm.getFundingConditions());

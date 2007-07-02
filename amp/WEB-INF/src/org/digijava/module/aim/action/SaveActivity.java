@@ -1206,8 +1206,9 @@ public class SaveActivity extends Action {
 									ampFunding.setConditions(new String(" "));
 								}
 								ampFunding.setComments(new String(" "));
-								ampFunding.setAmpTermsAssistId(fund
-										.getAmpTermsAssist());
+/*								ampFunding.setAmpTermsAssistId(fund
+										.getAmpTermsAssist());*/
+								ampFunding.setTypeOfAssistance( fund.getTypeOfAssistance() );
 								ampFunding.setAmpActivityId(activity);
 
 								// add funding details for each funding

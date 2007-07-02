@@ -50,7 +50,8 @@ public class EditFunding extends Action {
 						if (index == offset) {
 							Funding funding = (Funding) fundings.get(j);
 							if (funding != null) {
-								formBean.setAssistanceType(funding.getAmpTermsAssist().getAmpTermsAssistId());
+								//formBean.setAssistanceType(funding.getAmpTermsAssist().getAmpTermsAssistId());
+								formBean.setAssistanceType( funding.getTypeOfAssistance().getId() );
 								formBean.setOrgFundingId(funding.getOrgFundingId());
 								formBean.setModality(funding.getModality().getAmpModalityId());
 								formBean.setFundingConditions(funding.getConditions());
@@ -82,7 +83,7 @@ public class EditFunding extends Action {
 		formBean.setNumComm(numComm);
 		formBean.setNumDisb(numDisb);
 		formBean.setNumExp(numExp);
-		formBean.setAssistanceTypes(c);
+		//formBean.setAssistanceTypes(c);
 		formBean.setCurrencies(CurrencyUtil.getAmpCurrency());
 		formBean.setOrganizations(DbUtil.getAllOrganisation());
 		formBean.setEditFunding(true);

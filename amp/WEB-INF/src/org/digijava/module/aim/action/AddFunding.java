@@ -8,8 +8,11 @@ import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
+import org.digijava.module.aim.dbentity.AmpCategoryValue;
 import org.digijava.module.aim.dbentity.AmpTermsAssist;
 import org.digijava.module.aim.form.EditActivityForm;
+import org.digijava.module.aim.helper.CategoryConstants;
+import org.digijava.module.aim.helper.CategoryManagerUtil;
 import org.digijava.module.aim.helper.FundingOrganization;
 import org.digijava.module.aim.util.DbUtil;
 
@@ -54,14 +57,14 @@ public class AddFunding extends Action {
 				break;
 			}
 		}
-		Collection c = DbUtil.getAllAssistanceTypes();
-		formBean.setAssistanceTypes(c);
+		Collection c 	= CategoryManagerUtil.getAmpCategoryValueCollectionByKey(
+								CategoryConstants.TYPE_OF_ASSISTENCE_KEY, null);
 		if (c != null) {
 			Iterator tempItr = c.iterator();
 			while (tempItr.hasNext()) {
-				AmpTermsAssist assist = (AmpTermsAssist) tempItr.next();
-				if (assist.getTermsAssistName().equalsIgnoreCase("Grant")) {
-					formBean.setAssistanceType(assist.getAmpTermsAssistId());
+				AmpCategoryValue assistCategoryValue = (AmpCategoryValue) tempItr.next();
+				if (assistCategoryValue.getValue().equalsIgnoreCase("Grant")) {
+					formBean.setAssistanceType(assistCategoryValue.getId());
 					break;
 				}
 			}

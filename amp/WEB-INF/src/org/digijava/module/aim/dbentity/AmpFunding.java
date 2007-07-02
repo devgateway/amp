@@ -29,7 +29,8 @@ public class AmpFunding implements Serializable
 	private String comments;
 	private Date signatureDate ;
 	private Set fundingDetails ;
-	private AmpTermsAssist ampTermsAssistId ;
+//	private AmpTermsAssist ampTermsAssistId ;
+	private AmpCategoryValue typeOfAssistance;
 	private Set closingDateHistory;
 	
 	private AmpModality modalityId;
@@ -302,19 +303,6 @@ public class AmpFunding implements Serializable
 		calType = string;
 	}
 
-	/**
-	 * @return
-	 */
-	public AmpTermsAssist getAmpTermsAssistId() {
-		return ampTermsAssistId;
-	}
-
-	/**
-	 * @param assist
-	 */
-	public void setAmpTermsAssistId(AmpTermsAssist assist) {
-		ampTermsAssistId = assist;
-	}
 
 	/**
 	 * @return
@@ -342,6 +330,16 @@ public class AmpFunding implements Serializable
 	public void setModalityId(AmpModality modalityId) {
 		this.modalityId = modalityId;
 	}
+
+	public AmpCategoryValue getTypeOfAssistance() {
+		return typeOfAssistance;
+	}
+
+	public void setTypeOfAssistance(AmpCategoryValue typeOfAssistence) {
+		this.typeOfAssistance = typeOfAssistence;
+	}
+	
+	
 }
 	
 	

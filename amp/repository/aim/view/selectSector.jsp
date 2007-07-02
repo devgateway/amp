@@ -10,6 +10,14 @@
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/addActivity.js"/>"></script>
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
 
+<logic:present name="addButton" scope="request">
+	<b>YAP!</b>
+	<script language="JavaScript">
+	    window.opener.addSector();
+		window.close();
+	</script>
+</logic:present>
+		
 <script language="JavaScript">
 
 	<!--
@@ -18,46 +26,48 @@
 		var check = checkSectorEmpty();
 		if(check)
 		{
-		<digi:context name="selSector" property="context/module/moduleinstance/sectorSelected.do?edit=true"/>
-	    document.aimEditActivityForm.action = "<%= selSector %>";
-		 document.aimEditActivityForm.target = window.opener.name;
-	    document.aimEditActivityForm.submit();
-		window.close();
+		
+		// <digi:context name="selSector" property="context/module/moduleinstance/sectorSelected.do?edit=true"/>
+	    // document.aimSelectSectorForm.action = "<%= selSector %>";
+		// document.aimSelectSectorForm.target = window.opener.name;
+	    document.aimSelectSectorForm.submit();
+		// window.close();
 		}
 	}	
 
 	function reloadSector(value) {
-		document.aimEditActivityForm.subsectorLevel1.disabled=false;
-		document.aimEditActivityForm.subsectorLevel2.disabled=false;
+		document.aimSelectSectorForm.subsectorLevel1.disabled=false;
+		document.aimSelectSectorForm.subsectorLevel2.disabled=false;
 		if (value == 1) {
-			document.aimEditActivityForm.sector.value = -1;
+			document.aimSelectSectorForm.sector.value = -1;
 		} else if (value == 2) {
-			document.aimEditActivityForm.subsectorLevel1.value = -1;
+			document.aimSelectSectorForm.subsectorLevel1.value = -1;
 		} else if (value == 3) {
-			document.aimEditActivityForm.subsectorLevel2.value = -1;
+			document.aimSelectSectorForm.subsectorLevel2.value = -1;
 		}
 		<digi:context name="selSector" property="context/module/moduleinstance/selectSectors.do?edit=true"/>
-	    document.aimEditActivityForm.action = "<%= selSector %>";
-  		document.aimEditActivityForm.submit();									
+	    document.aimSelectSectorForm.action = "<%= selSector %>";
+  		document.aimSelectSectorForm.submit();									
 	}	
 	function checkSectorEmpty()
 	{
 		var sectorFlag = true;
-		if(document.aimEditActivityForm.sector.value == -1)
+		if(document.aimSelectSectorForm.sector.value == -1)
 		{
 			alert("Please Select a sector First")
 			sectorFlag = false;
 		}
+		
 		return sectorFlag;
 	}
 	function checkEmpty() {
 		var flag=true;
-		if(trim(document.aimEditActivityForm.keyword.value) == "")
+		if(trim(document.aimSelectSectorForm.keyword.value) == "")
 		{
 			alert("Please Enter a Keyword....");
 			flag=false;
 		}
-		if(trim(document.aimEditActivityForm.tempNumResults.value) == 0)
+		if(trim(document.aimSelectSectorForm.tempNumResults.value) == 0)
 		{
 			alert("Invalid value at 'Number of results per page'");
 			flag=false;
@@ -115,14 +125,14 @@ function checkNumeric(objName,comma,period,hyphen)
 	}
 
 	function searchSector() {
-	if(checkNumeric(document.aimEditActivityForm.tempNumResults	,'','','')==true) 
+	if(checkNumeric(document.aimSelectSectorForm.tempNumResults	,'','','')==true) 
 		{	
 			var flg=checkEmpty();
 			if(flg)
 			{
 			 <digi:context name="searchSctr" property="context/module/moduleinstance/searchSectors.do?edit=true"/>
-			 document.aimEditActivityForm.action = "<%= searchSctr %>";
-			 document.aimEditActivityForm.submit();
+			 document.aimSelectSectorForm.action = "<%= searchSctr %>";
+			 document.aimSelectSectorForm.submit();
 			 return true;
 			}
 		}
@@ -130,7 +140,7 @@ function checkNumeric(objName,comma,period,hyphen)
 	}
 
 	function load() {
-		document.aimEditActivityForm.sectorScheme.focus();			  
+		document.aimSelectSectorForm.sectorScheme.focus();			  
 	}
 
 	function unload() {
@@ -144,13 +154,23 @@ function checkNumeric(objName,comma,period,hyphen)
 
 </script>
 
-<digi:instance property="aimEditActivityForm" />
-<digi:form action="/sectorSelected.do" method="post">
+<digi:instance property="aimSelectSectorForm" />
+<digi:form action="/selectSectors.do" method="post">
 
 <html:hidden property="sectorReset" value="false"/>
 
 <table width="100%" cellSpacing=5 cellPadding=5 vAlign="top" border=0>
 	<tr><td vAlign="top">
+		<logic:present name="addButton" scope="request">
+			<b>YAP!</b>
+		</logic:present>
+		<logic:present name="errSector" scope="request">
+			<font color="red">
+				<div align="center">
+				<b>Please select a Sector first!</b>
+				</div>
+			</font>
+		</logic:present>
 		<table bgcolor=#f4f4f2 cellPadding=5 cellSpacing=5 width="100%" class=box-border-nopadding>
 			<tr>
 				<td align=left vAlign=top>
@@ -170,8 +190,8 @@ function checkNumeric(objName,comma,period,hyphen)
 										</td>
 										<td>
 											<html:select property="sectorScheme" onchange="reloadSector(1)" styleClass="inp-text">
-												<logic:notEmpty name="aimEditActivityForm" property="sectorSchemes">
-													<html:optionsCollection name="aimEditActivityForm" property="sectorSchemes" 
+												<logic:notEmpty name="aimSelectSectorForm" property="sectorSchemes">
+													<html:optionsCollection name="aimSelectSectorForm" property="sectorSchemes" 
 													value="ampSecSchemeId" label="secSchemeName" />												
 												</logic:notEmpty>
 											</html:select>
@@ -185,8 +205,8 @@ function checkNumeric(objName,comma,period,hyphen)
 										<td>
 											<html:select property="sector" onchange="reloadSector(2)" styleClass="inp-text">
 												<html:option value="-1">Select sector</html:option>
-												<logic:notEmpty name="aimEditActivityForm" property="parentSectors">
-													<html:optionsCollection name="aimEditActivityForm" property="parentSectors" 
+												<logic:notEmpty name="aimSelectSectorForm" property="parentSectors">
+													<html:optionsCollection name="aimSelectSectorForm" property="parentSectors" 
 													value="ampSectorId" label="name" />												
 												</logic:notEmpty>												
 											</html:select>
@@ -200,8 +220,8 @@ function checkNumeric(objName,comma,period,hyphen)
 										<td>
 											<html:select property="subsectorLevel1" onchange="reloadSector(3)" styleClass="inp-text">
 												<html:option value="-1">Select sub-sector</html:option>
-												<logic:notEmpty name="aimEditActivityForm" property="childSectorsLevel1">
-													<html:optionsCollection name="aimEditActivityForm" property="childSectorsLevel1" 
+												<logic:notEmpty name="aimSelectSectorForm" property="childSectorsLevel1">
+													<html:optionsCollection name="aimSelectSectorForm" property="childSectorsLevel1" 
 													value="ampSectorId" label="name" />												
 												</logic:notEmpty>													
 											</html:select>
@@ -215,8 +235,8 @@ function checkNumeric(objName,comma,period,hyphen)
 										<td>
 											<html:select property="subsectorLevel2" styleClass="inp-text">
 												<html:option value="-1">Select sub-sector</html:option>
-												<logic:notEmpty name="aimEditActivityForm" property="childSectorsLevel2">
-													<html:optionsCollection name="aimEditActivityForm" property="childSectorsLevel2" 
+												<logic:notEmpty name="aimSelectSectorForm" property="childSectorsLevel2">
+													<html:optionsCollection name="aimSelectSectorForm" property="childSectorsLevel2" 
 													value="ampSectorId" label="name" />												
 												</logic:notEmpty>													
 											</html:select>
@@ -227,17 +247,18 @@ function checkNumeric(objName,comma,period,hyphen)
 											<table cellPadding=5>
 												<tr>
 													<td>
-														<html:button  styleClass="dr-menu" property="submitButton" onclick="selectSector()">
+														<html:submit styleClass="dr-menu" property="addButton" >
 															<digi:trn key="btn:add">Add</digi:trn> 
-														</html:button>
+														</html:submit>
+														
 													</td>
 													<td>
-														<html:reset  styleClass="dr-menu" property="submitButton">
+														<html:reset styleClass="dr-menu" property="resetButton" onclick="reloadSector(1)">
 															<digi:trn key="btn:clear">Clear</digi:trn> 
 														</html:reset>
 													</td>
 													<td>
-														 <html:button  styleClass="dr-menu" property="submitButton"  onclick="closeWindow()">
+														 <html:button  styleClass="dr-menu" property="closeButton"  onclick="closeWindow()">
 																<digi:trn key="btn:close">Close</digi:trn> 
 														 </html:button>
 													</td>

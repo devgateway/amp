@@ -171,7 +171,7 @@ public class EditActivity
 
             eaForm.setReset(true);
             eaForm.setOrgSelReset(true);
-            eaForm.setSectorReset(true);
+//            eaForm.setSectorReset(true);
             eaForm.setLocationReset(true);
             eaForm.setPhyProgReset(true);
             eaForm.setDocReset(true);

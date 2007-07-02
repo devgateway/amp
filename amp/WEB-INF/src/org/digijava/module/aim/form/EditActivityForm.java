@@ -87,9 +87,6 @@ public class EditActivityForm extends ActionForm implements Serializable{
 	private Collection searchLocs = null; // list of searched locations.
 	private Long searchedLocs[] = null; // locations selected by user to be added in activity after searching
 
-	private Collection searchedSectors = null; // list of searched Sectors.
-	private Long selSectors[] = null; // sectors selected by user to be added in activity after searching
-
 	private Long selOrgs[] = null;
 	private List selectedOrgs = null; // list of organisations to be added to the activity
 
@@ -100,8 +97,8 @@ public class EditActivityForm extends ActionForm implements Serializable{
 	private String step = null;
 
 	private Collection activitySectors; // sectors related to the activity
-	private int numResults;
-
+	private Long selActivitySectors[];
+	
 	private Collection cols = null;
 	private Collection colsAlpha = null;
 	private Collection orgTypes = null;
@@ -186,6 +183,7 @@ public class EditActivityForm extends ActionForm implements Serializable{
 	// pop-up organisation selector window
 	private Collection pages;
 	private String[] alphaPages;
+	private int numResults;
 
 	//	For view comment popup
 	private String actionFlag = null;
@@ -277,17 +275,7 @@ public class EditActivityForm extends ActionForm implements Serializable{
 	private String country;
 
 	// FOR SELECT SECTOR POPUP
-	private Long sector;
-	private Long subsectorLevel1;
-	private Long subsectorLevel2;
-	private Long sectorScheme;
-	private Collection sectorSchemes;
-	private Collection parentSectors;
-	private Collection childSectorsLevel1;
-	private Collection childSectorsLevel2;
-	private Long selActivitySectors[];
-	private boolean sectorReset;
-    private Collection orderedFundingOrganizations;
+	
 
 	// FOR ADD PHYSICAL PROGRESS POPUP
 	private boolean phyProgReset;
@@ -406,7 +394,7 @@ public class EditActivityForm extends ActionForm implements Serializable{
 		reset = false;
 		editAct = false;
 		orgPopupReset = true;
-		numResults = 0;
+//		numResults = 0;
 		tempNumResults = 0;
 		pageId = 0;
 		modality = null;
@@ -456,7 +444,7 @@ public class EditActivityForm extends ActionForm implements Serializable{
 			assistanceTypes = null;
 			step = "1";
 			activitySectors = null;
-			numResults = 0;
+//			numResults = 0;
 			cols = null;
 			colsAlpha = null;
 			orgTypes = null;
@@ -573,7 +561,7 @@ public class EditActivityForm extends ActionForm implements Serializable{
 			//setTempNumResults(10);
 		}
 
-		if (sectorReset) {
+		/*if (sectorReset) {
 			sector = new Long(-1);
 			subsectorLevel1 = new Long(-1);
 			subsectorLevel2 = new Long(-1);
@@ -581,7 +569,7 @@ public class EditActivityForm extends ActionForm implements Serializable{
 			parentSectors = null;
 			childSectorsLevel1 = null;
 			childSectorsLevel2 = null;
-		}
+		}*/
 
 		if (locationReset) {
 			fill = "country";
@@ -710,33 +698,21 @@ public class EditActivityForm extends ActionForm implements Serializable{
 	/**
 	 * @return Returns the childSectorsLevel1.
 	 */
-	public Collection getChildSectorsLevel1() {
-		return childSectorsLevel1;
-	}
-
 	/**
 	 * @param childSectorsLevel1
 	 *            The childSectorsLevel1 to set.
 	 */
-	public void setChildSectorsLevel1(Collection childSectorsLevel1) {
-		this.childSectorsLevel1 = childSectorsLevel1;
-	}
 
 	/**
 	 * @return Returns the childSectorsLevel2.
 	 */
-	public Collection getChildSectorsLevel2() {
-		return childSectorsLevel2;
-	}
+	
 
 	/**
 	 * @param childSectorsLevel2
 	 *            The childSectorsLevel2 to set.
 	 */
-	public void setChildSectorsLevel2(Collection childSectorsLevel2) {
-		this.childSectorsLevel2 = childSectorsLevel2;
-	}
-
+	
 	/**
 	 * @return Returns the cols.
 	 */
@@ -1111,21 +1087,6 @@ public class EditActivityForm extends ActionForm implements Serializable{
 	}
 
 	/**
-	 * @return Returns the numResults.
-	 */
-	public int getNumResults() {
-		return numResults;
-	}
-
-	/**
-	 * @param numResults
-	 *            The numResults to set.
-	 */
-	public void setNumResults(int numResults) {
-		this.numResults = numResults;
-	}
-
-	/**
 	 * @return Returns the objectives.
 	 */
 	public String getObjectives() {
@@ -1293,18 +1254,10 @@ public class EditActivityForm extends ActionForm implements Serializable{
 	/**
 	 * @return Returns the parentSectors.
 	 */
-	public Collection getParentSectors() {
-		return parentSectors;
-	}
-
 	/**
 	 * @param parentSectors
 	 *            The parentSectors to set.
 	 */
-	public void setParentSectors(Collection parentSectors) {
-		this.parentSectors = parentSectors;
-	}
-
 	/**
 	 * @return Returns the regions.
 	 */
@@ -1333,81 +1286,6 @@ public class EditActivityForm extends ActionForm implements Serializable{
 	 */
 	public void setReset(boolean reset) {
 		this.reset = reset;
-	}
-
-	/**
-	 * @return Returns the sector.
-	 */
-	public Long getSector() {
-		return sector;
-	}
-
-	/**
-	 * @param sector
-	 *            The sector to set.
-	 */
-	public void setSector(Long sector) {
-		this.sector = sector;
-	}
-
-	/**
-	 * @return Returns the sectorReset.
-	 */
-	public boolean isSectorReset() {
-		return sectorReset;
-	}
-
-	/**
-	 * @param sectorReset
-	 *            The sectorReset to set.
-	 */
-	public void setSectorReset(boolean sectorReset) {
-		this.sectorReset = sectorReset;
-	}
-
-	/**
-	 * @return Returns the sectorScheme.
-	 */
-	public Long getSectorScheme() {
-		return sectorScheme;
-	}
-
-	/**
-	 * @param sectorScheme
-	 *            The sectorScheme to set.
-	 */
-	public void setSectorScheme(Long sectorScheme) {
-		this.sectorScheme = sectorScheme;
-	}
-
-	/**
-	 * @return Returns the sectorSchemes.
-	 */
-	public Collection getSectorSchemes() {
-		return sectorSchemes;
-	}
-
-	/**
-	 * @param sectorSchemes
-	 *            The sectorSchemes to set.
-	 */
-	public void setSectorSchemes(Collection sectorSchemes) {
-		this.sectorSchemes = sectorSchemes;
-	}
-
-	/**
-	 * @return Returns the selActivitySectors.
-	 */
-	public Long[] getSelActivitySectors() {
-		return selActivitySectors;
-	}
-
-	/**
-	 * @param selActivitySectors
-	 *            The selActivitySectors to set.
-	 */
-	public void setSelActivitySectors(Long[] selActivitySectors) {
-		this.selActivitySectors = selActivitySectors;
 	}
 
 	/**
@@ -1546,35 +1424,6 @@ public class EditActivityForm extends ActionForm implements Serializable{
 		this.step = step;
 	}
 
-	/**
-	 * @return Returns the subsectorLevel1.
-	 */
-	public Long getSubsectorLevel1() {
-		return subsectorLevel1;
-	}
-
-	/**
-	 * @param subsectorLevel1
-	 *            The subsectorLevel1 to set.
-	 */
-	public void setSubsectorLevel1(Long subsectorLevel1) {
-		this.subsectorLevel1 = subsectorLevel1;
-	}
-
-	/**
-	 * @return Returns the subsectorLevel2.
-	 */
-	public Long getSubsectorLevel2() {
-		return subsectorLevel2;
-	}
-
-	/**
-	 * @param subsectorLevel2
-	 *            The subsectorLevel2 to set.
-	 */
-	public void setSubsectorLevel2(Long subsectorLevel2) {
-		this.subsectorLevel2 = subsectorLevel2;
-	}
 
 	/**
 	 * @return Returns the tempNumResults.
@@ -2606,30 +2455,6 @@ public class EditActivityForm extends ActionForm implements Serializable{
 	 */
 	public void setSearchedLocs(Long[] searchedLocs) {
 		this.searchedLocs = searchedLocs;
-	}
-	/**
-	 * @return Returns the selSectors.
-	 */
-	public Long[] getSelSectors() {
-		return selSectors;
-	}
-	/**
-	 * @param selSectors The selSectors to set.
-	 */
-	public void setSelSectors(Long[] selSectors) {
-		this.selSectors = selSectors;
-	}
-	/**
-	 * @return Returns the searchedSectors.
-	 */
-	public Collection getSearchedSectors() {
-		return searchedSectors;
-	}
-	/**
-	 * @param searchedSectors The searchedSectors to set.
-	 */
-	public void setSearchedSectors(Collection searchedSectors) {
-		this.searchedSectors = searchedSectors;
 	}
 
 	/**
@@ -3996,15 +3821,6 @@ public String getPurpose() {
 		this.allComments = allComments;
 	}
 
-	public Collection getOrderedFundingOrganizations() {
-		return orderedFundingOrganizations;
-	}
-
-	public void setOrderedFundingOrganizations(
-			Collection orderedFundingOrganizations) {
-		this.orderedFundingOrganizations = orderedFundingOrganizations;
-	}
-
 	public float getRevisedTargetVal() {
 		return revisedTargetVal;
 	}
@@ -4094,7 +3910,24 @@ public String getPurpose() {
 		this.mfdCntTitle = mfdCntTitle;
 	}
 
-	public String getStatus() {
+	public int getNumResults() {
+		return numResults;
+	}
+
+	public void setNumResults(int numResults) {
+		this.numResults = numResults;
+	}
+
+	public Long[] getSelActivitySectors() {
+		return selActivitySectors;
+	}
+
+	public void setSelActivitySectors(Long[] selActivitySectors) {
+		this.selActivitySectors = selActivitySectors;
+	}
+
+    
+    public String getStatus() {
 		return status;
 	}
 

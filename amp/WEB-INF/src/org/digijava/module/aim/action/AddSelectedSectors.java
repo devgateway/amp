@@ -26,7 +26,7 @@ public class AddSelectedSectors extends Action {
 		if (eaForm.getActivitySectors() == null) {
 			eaForm.setActivitySectors(new ArrayList());
 		}
-
+		/*
 		Long selsearchedSector[] = eaForm.getSelSectors();
 		logger.info("size off selected searched sectors: "+selsearchedSector.length);
 		Iterator itr = eaForm.getSearchedSectors().iterator();
@@ -71,7 +71,7 @@ public class AddSelectedSectors extends Action {
 		//checking duplicates
 	//	Sector dup = null;
 
-
+*/
 		return mapping.findForward("forward");
 	}
 

@@ -2,7 +2,7 @@
  * SectorSelected.java
  *
  * @author Priyajith
- */
+ *//*
 
 package org.digijava.module.aim.action;
 
@@ -26,7 +26,7 @@ public class SectorSelected extends Action {
 			javax.servlet.http.HttpServletResponse response)
 			throws java.lang.Exception {
 
-		EditActivityForm eaForm = (EditActivityForm) form;
+		SelectSectorForm eaForm = (SelectSectorForm) form;
 
 		Long sector = eaForm.getSector();
 		Long subsectorLevel1 = eaForm.getSubsectorLevel1();
@@ -45,14 +45,14 @@ public class SectorSelected extends Action {
 		actSect.setSectorName(sec.getName());
 		actSect.setSubsectorLevel1Id(subsectorLevel1);
 		actSect.setSubsectorLevel2Id(subsectorLevel2);
-		/*
+		
 		if (actSect.getSectorName().equalsIgnoreCase("MULTISECTOR/CROSS-CUTTING")) {
 			actSect.setSubsectorLevel1Id(null);
 			actSect.setSubsectorLevel2Id(null);
 		} else {
 			actSect.setSubsectorLevel1Id(subsectorLevel1);
 			actSect.setSubsectorLevel2Id(subsectorLevel2);
-		}*/
+		}
 
 		if (subsectorLevel2 != null && (!subsectorLevel2.equals(new Long(-1)))) {
 			actSect.setId(subsectorLevel2);
@@ -114,3 +114,4 @@ public class SectorSelected extends Action {
 
 	}
 }
+*/

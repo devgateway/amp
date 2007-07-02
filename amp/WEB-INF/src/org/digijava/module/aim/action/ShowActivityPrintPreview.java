@@ -928,7 +928,7 @@ public class ShowActivityPrintPreview
                 eaForm.setObjectives(null);
                 eaForm.setDescription(null);
                 eaForm.setActivitySectors(null);
-                eaForm.setSectorSchemes(null);
+//                eaForm.setSectorSchemes(null);
                 eaForm.setActPrograms(null);
                 eaForm.setProgramCollection(null);
                 eaForm.setOriginalAppDate(null);

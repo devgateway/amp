@@ -12,7 +12,23 @@
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
 
 <script language="JavaScript" type="text/javascript">
-
+	function addSector()
+	{
+		<digi:context name="addSec" property="context/addActivity.do?addSector=true" />
+	    document.aimEditActivityForm.action = "<%= addSec %>";
+		document.aimEditActivityForm.target = "_self";
+		document.aimEditActivityForm.submit();
+	}
+	function removeSelSectors() {
+		var flag = validate(2);
+		if (flag == false) return false;
+	    
+	    <digi:context name="remSec" property="context/addActivity.do?remSectors=true" />
+	    document.aimEditActivityForm.action = "<%= remSec %>";
+	    document.aimEditActivityForm.target = "_self";
+	    document.aimEditActivityForm.submit();
+	    return true;
+	}
 </script>
 
 <digi:instance property="aimEditActivityForm" />
@@ -95,7 +111,7 @@
                                                                       </c:if>
                                                                     </td>
                                                                     <td width="5%" vAlign="center" align="right">
-                                                                    	<FONT color="red">*</FONT>Percentage:&nbsp;</td>
+                                                                    	<FONT color="red">*</FONT><digi:trn key="aim:percentage">Percentage</digi:trn>:&nbsp;</td>
                                                                     <td width="5%" vAlign="center" align="left">
                                                                       <html:text name="activitySectors" indexed="true" property="sectorPercentage"
                                                                       			 size="2" maxlength="3" onkeyup="fnChk(this)"/>

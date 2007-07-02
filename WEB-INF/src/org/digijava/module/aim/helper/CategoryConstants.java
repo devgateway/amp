@@ -18,5 +18,9 @@ public class CategoryConstants {
 	
 	public static final String TEAM_TYPE_NAME		= "Team Type";
 	public static final String TEAM_TYPE_KEY		= "team_type";
+	
+	public static final String TYPE_OF_ASSISTENCE_NAME		= "Type of Assistence";
+	public static final String TYPE_OF_ASSISTENCE_KEY		= "type_of_assistence";
+
 }
 

@@ -537,22 +537,6 @@ public class ActivityUtil {
 					}
 				}
 			}
-			
-			//reload category values into this session
-			Set newCategories=new HashSet();
-			Iterator i=activity.getCategories().iterator();
-			while (i.hasNext()) {
-				AmpCategoryValue element = (AmpCategoryValue) i.next();
-				i.remove();
-				AmpCategoryValue categVal =null;
-				if(element.getId()!=null) {
-					 categVal=(AmpCategoryValue) session.load(AmpCategoryValue.class,element.getId());
-					 newCategories.add(categVal);
-				}
-				
-			}
-			activity.setCategories(newCategories);
-
 			tx.commit(); // commit the transcation
 			logger.debug("Activity saved");
 		} catch (Exception ex) {
@@ -1024,7 +1008,7 @@ public class ActivityUtil {
 					activity.setModalityCode(ampAct.getModality().getModalityCode());
 				}
 
-				queryString = "select distinct f.ampTermsAssistId.termsAssistName from " +
+				queryString = "select distinct f.typeOfAssistance.value from " +
 				AmpFunding.class.getName() + " f where f.ampActivityId=:actId";
 
 				qry = session.createQuery(queryString);

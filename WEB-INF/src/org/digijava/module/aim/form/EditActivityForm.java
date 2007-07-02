@@ -92,13 +92,13 @@ public class EditActivityForm extends ActionForm implements Serializable{
 
 	private Collection levelCollection = null;
 	private Collection modalityCollection = null;
-	private Collection assistanceTypes = null;
+	//private Collection assistanceTypes = null;
 
 	private String step = null;
 
 	private Collection activitySectors; // sectors related to the activity
 	private Long selActivitySectors[];
-	
+
 	private Collection cols = null;
 	private Collection colsAlpha = null;
 	private Collection orgTypes = null;
@@ -275,7 +275,6 @@ public class EditActivityForm extends ActionForm implements Serializable{
 	private String country;
 
 	// FOR SELECT SECTOR POPUP
-	
 
 	// FOR ADD PHYSICAL PROGRESS POPUP
 	private boolean phyProgReset;
@@ -441,7 +440,7 @@ public class EditActivityForm extends ActionForm implements Serializable{
 			levelCollection = null;
 			programCollection = null;
 			modalityCollection = null;
-			assistanceTypes = null;
+			//assistanceTypes = null;
 			step = "1";
 			activitySectors = null;
 //			numResults = 0;
@@ -681,21 +680,6 @@ public class EditActivityForm extends ActionForm implements Serializable{
 	}
 
 	/**
-	 * @return Returns the assistanceTypes.
-	 */
-	public Collection getAssistanceTypes() {
-		return assistanceTypes;
-	}
-
-	/**
-	 * @param assistanceTypes
-	 *            The assistanceTypes to set.
-	 */
-	public void setAssistanceTypes(Collection assistanceTypes) {
-		this.assistanceTypes = assistanceTypes;
-	}
-
-	/**
 	 * @return Returns the childSectorsLevel1.
 	 */
 	/**
@@ -706,13 +690,12 @@ public class EditActivityForm extends ActionForm implements Serializable{
 	/**
 	 * @return Returns the childSectorsLevel2.
 	 */
-	
 
 	/**
 	 * @param childSectorsLevel2
 	 *            The childSectorsLevel2 to set.
 	 */
-	
+
 	/**
 	 * @return Returns the cols.
 	 */
@@ -3927,7 +3910,7 @@ public String getPurpose() {
 	}
 
     
-    public String getStatus() {
+	public String getStatus() {
 		return status;
 	}
 

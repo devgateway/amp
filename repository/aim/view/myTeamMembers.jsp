@@ -59,7 +59,8 @@
 								<digi:trn key="aim:clickToAddNewActivit">Click here to Add New Activity</digi:trn>
 							</c:set>
 							<div title="${trnClickToAddNewActivit}" align="left">
-								<input type="button" class="dr-menu" onclick="return addActivity()" value='<digi:trn key="btn:addActivity">Add Activity</digi:trn>' name="addActivity"/>
+								<input type="button" class="dr-menu" onclick="return addActivity()" 
+								value="<digi:trn key="btn:addActivity">Add Activity</digi:trn>" name="addActivity"/>
 							</div>
 						</c:if>
 					</c:if>
@@ -69,7 +70,7 @@
 						<digi:trn key="aim:clickToConfigureTeamPages">Click here to Add New Activity</digi:trn>
 					</c:set>
 						<div title='${trnclickToConfigureTeamPages}' align="left">
-                     	<input type="button" class="dr-menu" onclick='return teamWorkspaceSetup("-1")' value='<digi:trn key="btn:teamWorkspaceSetup">Team Workspace Setup</digi:trn>' name="addActivity"/>
+                     	<input type="button" class="dr-menu" onclick='return teamWorkspaceSetup("-1")' value="<digi:trn key="btn:teamWorkspaceSetup">Team Workspace Setup</digi:trn>" name="addActivity"/>
                      	</div><br/><br/>
 					</logic:equal>
 			</TD>

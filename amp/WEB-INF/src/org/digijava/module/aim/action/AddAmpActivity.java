@@ -87,8 +87,11 @@ public class AddAmpActivity extends Action {
 			ActivitySector sect = (ActivitySector) session.getAttribute("sectorSelected");
 			session.removeAttribute("sectorSelected");
 			Collection prevSelSectors = eaForm.getActivitySectors();
-			if (prevSelSectors != null)
+			if (prevSelSectors != null){
+				if (prevSelSectors.isEmpty())
+					sect.setSectorPercentage(new Integer(100));
 				prevSelSectors.add(sect);
+			}
 			else{
 				sect.setSectorPercentage(new Integer(100));
 				prevSelSectors = new ArrayList();

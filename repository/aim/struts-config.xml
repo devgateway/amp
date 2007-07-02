@@ -88,6 +88,7 @@
     <form-bean name="cmsForm" type="org.digijava.module.cms.form.CMSForm" />
     <form-bean name="aimTeamPagesForm" type="org.digijava.module.aim.form.TeamPagesForm" />
     <form-bean name="aimEditActivityForm" type="org.digijava.module.aim.form.EditActivityForm" />
+    <form-bean name="aimSelectSectorForm" type="org.digijava.module.aim.action.SelectSectorForm" />
     <form-bean name="aimCurrencyRateForm" type="org.digijava.module.aim.form.CurrencyRateForm" />
     <form-bean name="aimDonorDataImportForm" type="org.digijava.module.aim.form.DonorDataImportForm" />
     <form-bean name="aimUserDetailForm" type="org.digijava.module.aim.form.UserDetailForm" />
@@ -1026,7 +1027,7 @@
       <forward name="forward" path="/aim/addActivity.do?edit=true" />
       <forward name="index" path="/aim/index.do" redirect="true" />
     </action>
-    <action name="aimEditActivityForm" path="/aim/searchSectors" scope="session" type="org.digijava.module.aim.action.SearchSectors" validate="false">
+    <action name="aimSelectSectorForm" path="/aim/searchSectors" scope="session" type="org.digijava.module.aim.action.SearchSectors" validate="false">
       <forward name="forward" path="/showLayout.do?layout=aim_searchSectorPopupLayout" />
       <forward name="index" path="/aim/index.do" redirect="true" />
     </action>
@@ -1049,8 +1050,8 @@
       <forward name="forward" path="/aim/addActivity.do?edit=true" />
       <forward name="index" path="/aim/index.do" redirect="true" />
     </action>
-    <action name="aimEditActivityForm" path="/aim/selectSectors" scope="session" type="org.digijava.module.aim.action.SelectSector">
-      <forward name="forward" path="/showLayout.do?layout=aim_selSectorPopupLayout" />
+    <action name="aimSelectSectorForm" path="/aim/selectSectors" scope="session" type="org.digijava.module.aim.action.SelectSector">
+      <forward name="forward" path="/showLayout.do?layout=aim_selSectorPopupLayout"/>
       <forward name="index" path="/aim/index.do" redirect="true" />
     </action>
     <action name="aimEditActivityForm" path="/aim/sectorSelected" scope="session" type="org.digijava.module.aim.action.SectorSelected">

@@ -35,6 +35,7 @@ import org.digijava.module.aim.dbentity.AmpTheme;
 import org.digijava.module.aim.dbentity.EUActivity;
 import org.digijava.module.aim.form.EditActivityForm;
 import org.digijava.module.aim.form.ProposedProjCost;
+import org.digijava.module.aim.helper.ActivitySector;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.ActivityUtil;
 import org.digijava.module.aim.util.CurrencyUtil;
@@ -81,6 +82,51 @@ public class AddAmpActivity extends Action {
 			return mapping.findForward("index");
 
 		EditActivityForm eaForm = (EditActivityForm) form;
+		// Add sectors
+		if (request.getParameter("addSector") != null){
+			ActivitySector sect = (ActivitySector) session.getAttribute("sectorSelected");
+			session.removeAttribute("sectorSelected");
+			Collection prevSelSectors = eaForm.getActivitySectors();
+			if (prevSelSectors != null)
+				prevSelSectors.add(sect);
+			else{
+				sect.setSectorPercentage(new Integer(100));
+				prevSelSectors = new ArrayList();
+				prevSelSectors.add(sect);
+			}
+			eaForm.setActivitySectors(prevSelSectors);
+			return mapping.findForward("addActivityStep2");
+		}
+		// Remove sectors
+		else
+			if (request.getParameter("remSectors") != null){
+				Long selSectors[] = eaForm.getSelActivitySectors();
+				Collection prevSelSectors = eaForm.getActivitySectors();
+				Collection newSectors = new ArrayList();
+
+				Iterator itr = prevSelSectors.iterator();
+
+		        boolean flag =false;
+
+				while (itr.hasNext()) {
+					ActivitySector asec = (ActivitySector) itr.next();
+		            flag=false;
+					for (int i = 0; i < selSectors.length; i++) {
+						if (asec.getSectorId().equals(selSectors[i])) {
+							flag=true;
+		                    break;
+						}
+					}
+
+		            if(!flag){
+		                newSectors.add(asec);
+		            }
+				}
+
+				eaForm.setActivitySectors(newSectors);
+				return mapping.findForward("addActivityStep2");
+			}
+		//
 		
 		//we use this pointer to simplify adding items in the selectors: 
 		session.setAttribute("eaf",eaForm);

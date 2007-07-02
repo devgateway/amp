@@ -1577,7 +1577,7 @@ public class SaveActivity extends Action {
 			eaForm.setOrgPopupReset(true);
 			eaForm.setOrgSelReset(true);
 			eaForm.setComponentReset(true);
-			eaForm.setSectorReset(true);
+//			eaForm.setSectorReset(true);
 			eaForm.setPhyProgReset(true);
 			// Clearing comment properties
 			eaForm.getCommentsCol().clear();

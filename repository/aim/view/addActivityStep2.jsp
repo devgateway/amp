@@ -99,16 +99,6 @@ function remProgram() {
 		document.aimEditActivityForm.submit();
 }
 
-function removeSelSectors() {
-		  var flag = validate(2);
-		  if (flag == false) return false;
-          <digi:context name="remSec" property="context/module/moduleinstance/removeSelSectors.do?edit=true" />
-          document.aimEditActivityForm.action = "<%= remSec %>";
-          document.aimEditActivityForm.target = "_self"
-          document.aimEditActivityForm.submit();
-          return true;
-}
-
 function resetAll(){
 	<digi:context name="resetAll" property="context/module/moduleinstance/resetAll.do?edit=true" />
 	document.aimEditActivityForm.action = "<%= resetAll %>";

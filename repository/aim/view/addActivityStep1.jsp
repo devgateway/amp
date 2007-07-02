@@ -9,7 +9,7 @@
 
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/addActivity.js"/>"></script>
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
-<script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/calendar.js"/>"></script>
+<script language="JavaScript" type="text/javascript" src="/scripts/calendara.js"></script>
 
 <script language="JavaScript">
 <!--
@@ -146,6 +146,8 @@ function popupwin()
 	winpopup.document.write('</font>\n</body>\n</html>\n');
 	winpopup.document.close();
 }
+
+
 
 -->
 </script>

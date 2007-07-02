@@ -1,4 +1,8 @@
 var field;
+function dan()
+{
+	alert("daadad");
+}
 
 function y2k(number) { 
 	return (number < 1000) ? number + 1900 : number; 
@@ -57,7 +61,8 @@ function openCalendar(month,year) {
 	
 	str += '</HEAD><BODY BGCOLOR="#FFFFFF"><CENTER>'; 
 	str += '<FORM NAME="Cal"><TABLE BGCOLOR="#FFFFFF" BORDER=0><TR><TD ALIGN=LEFT WIDTH=100%>';
-	str += '<FONT COLOR="#0000BB" FACE="Arial" SIZE=+1><digi:trn key=calendar:' + names[Month]+ '>+'names[Month]+'</digi:trn>' + ' ' + Year + '<\/FONT><\/TD><TD WIDTH=50% ALIGN=RIGHT>';
+	
+	str += '<FONT COLOR="#0000BB" FACE="Arial" SIZE="+1">' ' + Year + '<\/FONT><\/TD><TD WIDTH=50% ALIGN=RIGHT>';
 	str += '<SELECT NAME="Month" onChange="changeMonth();">';
 
 	for (t_month=0;t_month<12; t_month++) {

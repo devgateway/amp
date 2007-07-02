@@ -93,7 +93,9 @@
 
 									<bean:define id="riskName" name="aimPortfolioDashboardForm" property="overallRisk" toScope="page"
 									type="java.lang.String"/>
-									<digi:trn key='<%="aim:" + riskName%>'><%=riskName%></digi:trn>
+									<logic:notEmpty name="riskName">
+										<digi:trn key='<%="aim:" + riskName%>'><%=riskName%></digi:trn>
+									</logic:notEmpty>
 								</TD></TR>								
 								<TR><TD>
 									<TABLE cellspacing="2" cellpadding="2" valign="top" align="left" border=0>

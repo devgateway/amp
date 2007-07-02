@@ -1,6 +1,10 @@
 function unload() {
 }
 
+function dandan(){
+alert("asdasd");
+}
+
 /*
 <SCRIPT LANGUAGE="javascript">
 <!--
@@ -12,6 +16,16 @@ location=no, directories=no, status=no')
 */
 
 function load() {
+}
+
+function toggleChildren(callerId) {
+		caller = document.getElementById(callerId);
+		inputs = caller.getElementsByTagName('input');
+		for(i=1 ; i< inputs.length; i++){ 
+			if(inputs[i].type!="checkbox") continue;
+			inputs[i].checked=inputs[0].checked;			
+		}
+		
 }
 
 function openURLinWindow(url,wndWidth, wndHeight) {

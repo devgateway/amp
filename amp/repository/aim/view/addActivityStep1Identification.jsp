@@ -173,7 +173,7 @@
 												</a>
 											</td>
 											<td valign="top" align="left">
-													<category:showoptions outerestyle="width:400px" name="aimEditActivityForm" property="accessionInstrument" categoryName="<%= org.digijava.module.aim.helper.CategoryConstants.ACCESSION_INSTRUMENT_NAME %>" styleClass="inp-text" />
+													<category:showoptions name="aimEditActivityForm" property="accessionInstrument" categoryName="<%= org.digijava.module.aim.helper.CategoryConstants.ACCESSION_INSTRUMENT_NAME %>" styleClass="inp-text" />
 											</td></tr>	
 											</logic:empty>
 											<logic:empty name="SA" scope="application">

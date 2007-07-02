@@ -204,8 +204,12 @@ public class AddAmpActivity extends Action {
 		else
 			eaForm.setWorkingTeamLeadFlag("no");
     
-		if (!eaForm.isEditAct() || logframepr.compareTo("true")==0)
-			eaForm.setApprovalStatus("started");
+		if (!eaForm.isEditAct() || logframepr.compareTo("true")==0){
+			if (teamMember.getTeamHead())
+				eaForm.setApprovalStatus("approved");
+			else
+				eaForm.setApprovalStatus("started");
+		}
 		else {
 			String sessId = session.getId();
 			ArrayList sessList = (ArrayList) ampContext.getAttribute(

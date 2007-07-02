@@ -291,7 +291,8 @@
                                     	<%
                                     		boolean isStatusPlanned	= false;
                                     		if (myForm.getStatusId() != null)
-                                    			isStatusPlanned	= Constants.ACTIVITY_STATUS_PLANNED.equals( CategoryManagerUtil.getAmpCategoryValueFromDb(myForm.getStatusId()).getValue() );
+                                    			if(CategoryManagerUtil.getAmpCategoryValueFromDb(myForm.getStatusId())!=null)
+	                                    			isStatusPlanned	= Constants.ACTIVITY_STATUS_PLANNED.equals( CategoryManagerUtil.getAmpCategoryValueFromDb(myForm.getStatusId()).getValue() );
                                     	%>
                                       <c:if test="${aimEditActivityForm.proProjCost!=null ||  isStatusPlanned  }">
                                         <table width="100%" bgcolor="#f4f4f2" border="0" cellSpacing=0 cellPadding=0>

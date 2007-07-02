@@ -1,12 +1,8 @@
 var field;
-function dan()
-{
-	alert("daadad");
-}
 
-function y2k(number) {
-	return (number < 1000) ? number + 1900 : number;
-}
+function y2k(number) { 
+	return (number < 1000) ? number + 1900 : number; 
+}	
 
 var today = new Date();
 var curr_day   = today.getDate();
@@ -34,8 +30,8 @@ function openCalendar(month,year) {
 
 	var t = ((screen.width)-350)/2;
 	var l = ((screen.height)-270)/2;
-
-	calWindow = window.open('','Calendar','resizable=no,width=350,height=270,top='+l+',left='+t);
+	
+	calWindow = window.open('','Calendar','resizable=no,width=350,height=270,top='+l+',left='+t);	
 
 	str  = '<HTML><HEAD><TITLE>Calendar</TITLE>';
 	str += '<SCRIPT LANGUAGE="JavaScript"> ';
@@ -44,12 +40,12 @@ function openCalendar(month,year) {
 	str += '		opener.restart(); } ';
 
 	str += ' function changeMonth() {';
-   str += '		opener.curr_month = document.Cal.Month.options[document.Cal.Month.selectedIndex].value + \'\';';
+   str += '		opener.curr_month = document.Cal.Month.options[document.Cal.Month.selectedIndex].value + \'\';'; 
 	str += '		opener.reload(); }';
 
 	str += ' function changeYear() {';
    str += ' 	opener.curr_year = document.Cal.Year.options[document.Cal.Year.selectedIndex].value + \'\';';
-	str += '		opener.reload(); }';
+	str += '		opener.reload(); }';	
 
 	str += ' function makeArray0() {';
 	str += ' for (i = 0; i<makeArray0.arguments.length; i++) this[i] = makeArray0.arguments[i]; }';
@@ -58,43 +54,43 @@ function openCalendar(month,year) {
 	str += ' var days = new makeArray0(31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31); ';
 	str += ' var dow = new makeArray0(\'Sun\',\'Mon\',\'Tue\',\'Wed\',\'Thu\',\'Fri\',\'Sat\'); ';
 	str += '</SCRIPT>	';
-
-	str += '</HEAD><BODY BGCOLOR="#FFFFFF"><CENTER>';
+	
+	str += '</HEAD><BODY BGCOLOR="#FFFFFF"><CENTER>'; 
 	str += '<FORM NAME="Cal"><TABLE BGCOLOR="#FFFFFF" BORDER=0><TR><TD ALIGN=LEFT WIDTH=100%>';
 
-	str += '<FONT COLOR="#0000BB" FACE="Arial" SIZE="+1">'  + Year + '<\/FONT><\/TD><TD WIDTH=50% ALIGN=RIGHT>';
+	str += '<FONT COLOR="#0000BB" FACE="Arial" SIZE=+1><digi:trn key=calendar:' + names[Month]+ '>' + names[Month]+'</digi:trn>' + ' ' + Year + '<\/FONT><\/TD><TD WIDTH=50% ALIGN=RIGHT>';
 	str += '<SELECT NAME="Month" onChange="changeMonth();">';
 
 	for (t_month=0;t_month<12; t_month++) {
-		if (t_month == Month)
-			str += '<OPTION VALUE="' + t_month + '" SELECTED> <digi:trn key=calendar:' + names[t_month]+ '>'+names[t_month]+'<\/digi:trn><\/OPTION>';
-		else
-			str += '<OPTION VALUE="' + t_month + '"><digi:trn key=calendar:' + names[t_month]+ '>'+names[t_month]+'<\/digi:trn><\/OPTION>';
+		if (t_month == Month) 
+			str += '<OPTION VALUE="' + t_month + '" SELECTED> <digi:trn key=calendar:' + names[t_month]+ '>' + names[t_month]+'<\/digi:trn><\/OPTION>';
+		else 
+			str += '<OPTION VALUE="' + t_month + '"><digi:trn key=calendar:' + names[t_month]+ '>' + names[t_month]+'<\/digi:trn><\/OPTION>';
 	}
 
 	str += '<\/SELECT><SELECT NAME="Year" onChange="changeYear();">';
 
 	for (t_year=1950; t_year<2049; t_year++) {
-		if (t_year == Year)
+		if (t_year == Year) 
 			str += '<OPTION VALUE="' + t_year + '" SELECTED>' + t_year + '<\/OPTION>';
 		else
 			str += '<OPTION VALUE="' + t_year + '">'          + t_year + '<\/OPTION>';
 	}
 
 	str += '<\/SELECT><\/TD><\/TR><TR><TD ALIGN=CENTER COLSPAN=2>';
-
+	
 	firstDay = new Date(Year,Month,1);
 	startDay = firstDay.getDay();
 
 	if (((Year % 4 == 0) && (Year % 100 != 0)) || (Year % 400 == 0))
-		days[1] = 29;
+		days[1] = 29; 
 	else
 		days[1] = 28;
 
 	str += '<TABLE CALLSPACING=0 CELLPADDING=0 BORDER=1 BORDERCOLORDARK="#FFFFFF" BORDERCOLORLIGHT="#C0C0C0"><TR>';
 
 	for (i=0; i<7; i++)
-		str += '<TD WIDTH=50 ALIGN=CENTER VALIGN=MIDDLE><FONT SIZE=-1 COLOR="#000000" FACE="ARIAL"><B> <digi:trn key=calendar:' + dow[i]+ '>'+dow[i]+'<\/digi:trn> <\/B><\/FONT><\/TD>';
+		str += '<TD WIDTH=50 ALIGN=CENTER VALIGN=MIDDLE><FONT SIZE=-1 COLOR="#000000" FACE="ARIAL"><B> <digi:trn key=calendar:' + dow[i]+ '>' + dow[i]+'<\/digi:trn> <\/B><\/FONT><\/TD>';
 
 	str += '<\/TR><TR ALIGN=CENTER VALIGN=MIDDLE>';
 
@@ -107,7 +103,7 @@ function openCalendar(month,year) {
 
 	for (i=1; i<=days[Month]; i++, column++) {
 		str += '<TD WIDTH=50 HEIGHT=30>' + '<A HREF="javascript:changeDay(' + i + ')"><FONT SIZE=-1 FACE="ARIAL" COLOR="#0000FF">' + i + '<\/FONT><\/A>' +'<\/TD>';
-
+						 
 		if (column == 6) {
 			str += '<\/TR><TR ALIGN=CENTER VALIGN=MIDDLE>';
 			column = -1;
@@ -133,18 +129,18 @@ function sameAsDateClicked(value) {
 			document.aimEditActivityForm.actAppDate.value = document.aimEditActivityForm.propAppDate.value;
 		} else {
 		}
-	}
+	} 
 	else if (value == 2) {
 		if (document.aimEditActivityForm.actStartDateCheckBox.checked == true) {
 			document.aimEditActivityForm.actStartDate.value = document.aimEditActivityForm.propStartDate.value;
 		} else {
-		}
+		}			  
 	}
 	else if (value == 3) {
 		if (document.aimEditActivityForm.actCloseDateCheckBox.checked == true) {
 			document.aimEditActivityForm.actCloseDate.value = document.aimEditActivityForm.propCloseDate.value;
 		} else {
-		}
+		}			  
 	}
 }
 

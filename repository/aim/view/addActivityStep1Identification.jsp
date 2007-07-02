@@ -48,11 +48,11 @@
 															<a href="<c:out value="${aimEditActivityForm.context}"/>/editor/showEditText.do?id=<%=objKey%>&referrer=<c:out value="${aimEditActivityForm.context}"/>/aim/addActivity.do?edit=true">Edit</a>
 															--%>
 															<a href="javascript:edit('<%=objKey%>')">
-															Edit</a>	
+															<digi:trn key="aim:edit">Edit</digi:trn></a>	
 															&nbsp;
-															<a href="javascript:commentWin('objAssumption')" id="CommentObjAssumption">Add/Edit Assumption</a>
+															<a href="javascript:commentWin('objAssumption')" id="CommentObjAssumption"><digi:trn key="aim:addEditAssumption">Add/Edit Assumption</digi:trn></a>
 															&nbsp;
-															<a href="javascript:commentWin('objVerification')" id="CommentObjVerification">Add/Edit Verification</a>		
+															<a href="javascript:commentWin('objVerification')" id="CommentObjVerification"><digi:trn key="aim:addEditVerification">Add/Edit Verification</digi:trn></a>		
 														</td>
 													</tr>
 												</table>												
@@ -83,7 +83,7 @@
 															<a href="<c:out value="${aimEditActivityForm.context}"/>/editor/showEditText.do?id=<%=descKey%>&referrer=<c:out value="${aimEditActivityForm.context}"/>/aim/addActivity.do?edit=true">Edit</a>
 															--%>
 															<a href="javascript:edit('<%=descKey%>')">
-															Edit</a>
+															<digi:trn key="aim:edit">Edit</digi:trn></a>
 														</td>
 													</tr>
 												</table>
@@ -117,11 +117,11 @@
 															<a href="<c:out value="${aimEditActivityForm.context}"/>/editor/showEditText.do?id=<%=descKey%>&referrer=<c:out value="${aimEditActivityForm.context}"/>/aim/addActivity.do?edit=true">Edit</a>--%>
 			
 															<a href="javascript:edit('<%=purpKey%>')">
-															Edit</a>
+															<digi:trn key="aim:edit">Edit</digi:trn></a>
 															&nbsp;
-															<a href="javascript:commentWin('purpAssumption')" id="CommentPurpAssumption">Add/Edit Assumption</a>
+															<a href="javascript:commentWin('purpAssumption')" id="CommentPurpAssumption"><digi:trn key="aim:addEditAssumption">Add/Edit Assumption</digi:trn></a>
 															&nbsp;
-															<a href="javascript:commentWin('purpVerification')" id="CommentPurpVerification">Add/Edit Verification</a>
+															<a href="javascript:commentWin('purpVerification')" id="CommentPurpVerification"><digi:trn key="aim:addEditVerification">Add/Edit Verification</digi:trn></a>
 														</td>
 													</tr>
 												</table>
@@ -154,11 +154,11 @@
 															<a href="<c:out value="${aimEditActivityForm.context}"/>/editor/showEditText.do?id=<%=descKey%>&referrer=<c:out value="${aimEditActivityForm.context}"/>/aim/addActivity.do?edit=true">Edit</a>--%>
 			
 															<a href="javascript:edit('<%=resKey%>')">
-															Edit</a>
+															<digi:trn key="aim:edit">Edit</digi:trn></a>
 															&nbsp;
-															<a href="javascript:commentWin('resAssumption')" id="CommentResAssumption">Add/Edit Assumption</a>
+															<a href="javascript:commentWin('resAssumption')" id="CommentResAssumption"><digi:trn key="aim:addEditAssumption">Add/Edit Assumption</digi:trn></a>
 															&nbsp;
-															<a href="javascript:commentWin('resVerification')" id="CommentResVerification">Add/Edit Verification</a>
+															<a href="javascript:commentWin('resVerification')" id="CommentResVerification"><digi:trn key="aim:addEditVerification">Add/Edit Verification</digi:trn></a>
 														</td>
 													</tr>
 												</table>

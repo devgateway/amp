@@ -28,6 +28,8 @@ import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
+import org.dgfoundation.amp.ar.ColumnReportData;
+import org.dgfoundation.amp.ar.GroupReportData;
 import org.digijava.kernel.dbentity.Country;
 import org.digijava.kernel.request.Site;
 import org.digijava.kernel.user.User;
@@ -75,6 +77,7 @@ import org.digijava.module.aim.helper.OrgProjectId;
 import org.digijava.module.aim.helper.PhysicalProgress;
 import org.digijava.module.aim.helper.RegionalFunding;
 import org.digijava.module.aim.helper.RelatedLinks;
+import org.digijava.module.aim.helper.Report;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.ActivityUtil;
 import org.digijava.module.aim.util.ComponentsUtil;
@@ -336,6 +339,21 @@ public class EditActivity
                     }
                     eaForm.setEditAct(true);
                 } else {
+                	GroupReportData r = (GroupReportData) session.getAttribute("report");
+                	TreeSet l = (TreeSet)r.getOwnerIds();
+                	Iterator i = l.iterator();
+                	Long prev = null, next = null;
+                	while (i.hasNext()) {
+						Long e = (Long) i.next();
+						if (e.compareTo(activityId) == 0)
+							break;
+						else
+							prev = e;
+					}
+                	if (i.hasNext())
+                		next = (Long) i.next();
+                	session.setAttribute("previousActivity",prev);
+                	session.setAttribute("nextActivity", next);
                 	logger.info("mapping does end with viewActivityPreview.do");
                 }
             }

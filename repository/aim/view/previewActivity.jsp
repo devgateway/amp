@@ -1807,6 +1807,24 @@ function disable() {
 							</td></tr>
 							</table>
 							</td></tr>
+							<tr>
+								<td>
+									<div align="center">
+										<logic:notEmpty name="previousActivity" scope="session">
+											<digi:link href="/viewActivityPreview.do~pageId=2" paramId="activityId" paramName="previousActivity" paramScope="session"><font size="2"><digi:trn key="aim:previous">Previous</digi:trn></font></digi:link>
+												<logic:notEmpty name="nextActivity" scope="session">
+													<font size="2">
+														&nbsp;-&nbsp; 
+													</font>		
+												</logic:notEmpty>
+										</logic:notEmpty>
+										<logic:notEmpty name="nextActivity" scope="session">		
+											<digi:link href="/viewActivityPreview.do~pageId=2" paramId="activityId" paramName="nextActivity" paramScope="session"><font size="2"><digi:trn key="aim:next">Next</digi:trn></font></digi:link>
+										</logic:notEmpty>
+										
+									</div>			
+								</td>
+							</tr>
 						</table>
 						</td></tr>
 					</table>
@@ -1822,3 +1840,4 @@ function disable() {
 </td></tr>
 </table>
 </digi:form>
+ 

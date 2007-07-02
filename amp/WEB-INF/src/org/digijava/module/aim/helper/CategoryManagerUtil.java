@@ -158,7 +158,7 @@ public class CategoryManagerUtil {
 	/**
 	 * 
 	 * @param valueId
-	 * @return Extracts the AmpCategoryValue with id=valueId from teh database.
+	 * @return Extracts the AmpCategoryValue with id=valueId from the database. Return null if not found.
 	 */
 	public static AmpCategoryValue getAmpCategoryValueFromDb(Long valueId) {
 		if(valueId!=null)
@@ -196,7 +196,7 @@ public class CategoryManagerUtil {
 		}
 		else
 			logger.debug("[getAmpCategoryValueFromDb] valueId is null");
-		return new AmpCategoryValue();
+		return null;
 	}
 	/**
 	 * 
@@ -302,7 +302,7 @@ public class CategoryManagerUtil {
 	 * @param categoryKey
 	 * @param ordered overrides the property in AmpCategoryClass and decides whether the values should be ordered alphabetically. 
 	 * If null the ordered property of the AmpCategoryClass object is checked.
-	 * @return A collection of AmpCategoryValues witch belong to the AmpCategoryClass with name=categoryName
+	 * @return A collection of AmpCategoryValues witch belong to the AmpCategoryClass with key=categoryKey
 	 */
 	public static Collection getAmpCategoryValueCollectionByKey(String categoryKey, Boolean ordered) {
 		boolean shouldOrderAlphabetically;

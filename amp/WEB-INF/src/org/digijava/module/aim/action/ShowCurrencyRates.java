@@ -33,10 +33,14 @@ public class ShowCurrencyRates extends Action {
 	private static Logger logger = Logger.getLogger(ShowCurrencyRates.class);
 
 
+
 	public ActionForward execute(ActionMapping mapping,ActionForm form,
 			HttpServletRequest request,HttpServletResponse response) throws Exception {
 
 		CurrencyRateForm crForm = (CurrencyRateForm) form;
+                Boolean isFromAdminHome=crForm.isClean();
+
+
 
 		try {
 
@@ -66,11 +70,14 @@ public class ShowCurrencyRates extends Action {
 			page = Integer.parseInt(temp.trim());
 		}
 
+
+
 		if (crForm.getFilterByDateFrom() == null
-				|| crForm.getFilterByDateFrom().trim().length() == 0) {
+				|| crForm.getFilterByDateFrom().trim().length() == 0||(isFromAdminHome!=null&&isFromAdminHome)) {
 //			crForm.setFilterByDateFrom(Constants.CURRENCY_RATE_DEAFULT_END_DATE);//AMP-1421
 			SimpleDateFormat sdf= new SimpleDateFormat("dd/MM/yyyy");
 			crForm.setFilterByDateFrom(sdf.format(new Date()));
+                        crForm.setClean(false);
 		}
 
         if((!(crForm.getFilterByDateFrom().equals(crForm.getPrevFromDate()))) || crForm.getAllRates() == null) {

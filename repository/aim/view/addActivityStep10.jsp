@@ -618,8 +618,12 @@
 															<td>
 																<html:select property="indicatorRisk" styleClass="inp-text">
 																	<option value="-1">Select Risk</option>
-																	<html:optionsCollection name="aimEditActivityForm" property="riskCollection" 
-																	value="ampIndRiskRatingsId" label="ratingName" />
+																	<% int idx=0; %>
+																	<logic:iterate id="riskName" name="aimEditActivityForm" property="riskCollection">
+																		<% idx++; %>
+																		<option value="<%=idx%>"><digi:trn key="<%="aim:risk"+idx%>"><%=riskName%></digi:trn></option>
+																	</logic:iterate>
+																	
 																</html:select>
 															</td>
 														</tr>
@@ -627,7 +631,7 @@
 														<tr>
 															<td>&nbsp;</td>
 															<td colspan="3" align="center">
-																<input type="button" class="buton" value="Set Values" 
+																<input type="button" class="buton" value="<digi:trn key='btn:setValues'>Set Values</digi:trn>" 
 																onclick="setValues('<c:out value="${indicator.indicatorId}" />')">
 															</td>
 															<td>&nbsp;</td>

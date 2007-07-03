@@ -350,16 +350,21 @@ function checkUncheckAll2() {
 																		<TD>
 																			<TABLE width="100%" cellPadding=2 cellSpacing=1 vAlign="top" align="top" bgcolor="#aaaaaa" border=0>
 																				<c:if test="${!empty aimAdvancedReportForm.addedColumns}">
+																				
 																					<logic:iterate name="aimAdvancedReportForm" id="addedColumns"	property="addedColumns" >
 																						<tr bgcolor=#ffffff>
 																						<td align="left" width="98%">
+																					
 																					 <digi:trn key="aim:report:${addedColumns.columnName}"><c:out value="${addedColumns.columnName}"/></digi:trn>		
 																						
 																						</td>
+																					
 																						<td align="right">
+																							
 																							<html:multibox property="removeColumns" >
-																							<c:out value="${ampColumns.columnId}"/>																							  
+																							<c:out value="${addedColumns.columnId}"/>																							  
 					  																	    </html:multibox>
+					  																	    
 																						</td>
 																							<td align="right">
 																								<IMG alt="Move Up"  height=10 src="../ampTemplate/images/up-arrow.jpg" width=10 onclick="moveUp(<c:out value='${addedColumns.columnId}' />)">
@@ -367,6 +372,7 @@ function checkUncheckAll2() {
 																							</td>
 																						</tr>
 																					</logic:iterate>
+
 																				</c:if>
 																			</TABLE>
 																		</TD>

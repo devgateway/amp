@@ -6,6 +6,7 @@
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
 
+
 <jsp:include page="teamPagesHeader.jsp" flush="true" />
 <table bgColor=#ffffff cellPadding=0 cellSpacing=0 width=757 align="left">
   <tr>
@@ -102,7 +103,7 @@
                               </digi:link>
                             </td>
                           </tr>
-                          
+
                           <tr>
                             <td class=f-names noWrap>
                               <digi:img src="module/aim/images/arrow-th-BABAB9.gif" width="16"/>
@@ -114,7 +115,7 @@
                               </digi:link>
                             </td>
                           </tr>
-                          
+
                           <tr>
                             <td class=f-names noWrap>
                               <digi:img src="module/aim/images/arrow-th-BABAB9.gif" width="16"/>
@@ -171,7 +172,7 @@
                                 <digi:trn key="aim:clickToViewCurrencyRatesManager">Click here to view Currency Rates Manager</digi:trn>
                               </c:set>
                               <digi:img src="module/aim/images/arrow-th-BABAB9.gif" width="16"/>
-                              <digi:link href="/showCurrencyRates.do" title="${translation}">
+                              <digi:link href="/showCurrencyRates.do~clean=true" title="${translation}">
                                 <digi:trn key="aim:currencyRateManager">Currency Rate Manager</digi:trn>
                               </digi:link>
                             </td>

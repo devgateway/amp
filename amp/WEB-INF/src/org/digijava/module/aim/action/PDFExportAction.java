@@ -62,15 +62,18 @@ public class PDFExportAction extends Action implements PdfPageEvent{
 		AdvancedReportForm formBean = (AdvancedReportForm) form;
 		String pageSize=formBean.getPdfPageSize();
 
+		//the pagesize is not initialized in the form bean 		
+		Rectangle page=null;
 		
-		
-		Rectangle page=PageSize.A4;
-		if(pageSize.equals("A0")) page=PageSize.A0;
-		if(pageSize.equals("A1")) page=PageSize.A1;
-		if(pageSize.equals("A2")) page=PageSize.A2;
-		if(pageSize.equals("A3")) page=PageSize.A3;
-		if(pageSize.equals("A4")) page=PageSize.A4;
-		
+		if(pageSize==null)
+			page=PageSize.A4;
+		else{
+			if(pageSize.equals("A0")) page=PageSize.A0;
+			if(pageSize.equals("A1")) page=PageSize.A1;
+			if(pageSize.equals("A2")) page=PageSize.A2;
+			if(pageSize.equals("A3")) page=PageSize.A3;
+			if(pageSize.equals("A4")) page=PageSize.A4;
+		}
 		Document document = new Document(page.rotate(),5, 5, 5, 5);		
 
 	     response.setContentType("application/pdf");

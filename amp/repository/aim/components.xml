@@ -296,6 +296,8 @@
 
 	<page name="featureManager" title=" - Feature Manager" />
 	
+	<page name="visibilityManager" title=" - Visibility Manager" />
+	
 	<page page="ar/filterPicker" name="aim_filterPicker" title="AMP - Reports Filter Picker" />
 
 	<page page="printableActivityPerformance" name="aim_printActPerf" title="AMP - Activity-Performance" />

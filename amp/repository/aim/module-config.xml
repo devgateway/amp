@@ -74,6 +74,18 @@
 			org.digijava.module.aim.dbentity.AmpFunding
 		</hibernate-class>
 		<hibernate-class>
+			org.digijava.module.aim.dbentity.AmpModulesVisibility
+		</hibernate-class>
+		<hibernate-class>
+			org.digijava.module.aim.dbentity.AmpTemplatesVisibility
+		</hibernate-class>
+		<hibernate-class>
+			org.digijava.module.aim.dbentity.AmpFeaturesVisibility
+		</hibernate-class>
+		<hibernate-class>
+			org.digijava.module.aim.dbentity.AmpFieldsVisibility
+		</hibernate-class>
+		<hibernate-class>
 			org.digijava.module.aim.dbentity.AmpFundingDetail
 		</hibernate-class>
 		<hibernate-class>

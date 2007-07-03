@@ -226,8 +226,16 @@
 		<taglib-location>/WEB-INF/category.tld</taglib-location>
 	</taglib>
 	<taglib>
-		<taglib-uri>/taglib/feature</taglib-uri>
-		<taglib-location>/WEB-INF/feature.tld</taglib-location>
+		<taglib-uri>/taglib/moduleVisibility</taglib-uri>
+		<taglib-location>/WEB-INF/moduleVisibility.tld</taglib-location>
+	</taglib>
+	<taglib>
+		<taglib-uri>/taglib/featureVisibility</taglib-uri>
+		<taglib-location>/WEB-INF/featureVisibility.tld</taglib-location>
+	</taglib>
+	<taglib>
+		<taglib-uri>/taglib/fieldVisibility</taglib-uri>
+		<taglib-location>/WEB-INF/fieldVisibility.tld</taglib-location>
 	</taglib>
 	<taglib>
 		<taglib-uri>/taglib/editlivejava</taglib-uri>

@@ -3,17 +3,21 @@
 <taglib>
 	<tlibversion>1.0</tlibversion>
 	<jspversion>1.1</jspversion>
-	<shortname>feature</shortname>
+	<shortname>module</shortname>
 	<uri>http://digijava.org</uri>
 	<tag>
 		<name>display</name>
-		<tagclass>org.dgfoundation.amp.features.FeatureTrn</tagclass>
+		<tagclass>org.dgfoundation.amp.visibility.ModuleVisibilityTag</tagclass>
 		<bodycontent>JSP</bodycontent>
 		<attribute>
 			<name>name</name>
 			<required>true</required>
 			<rtexprvalue>true</rtexprvalue>
 		</attribute>
+		<attribute>
+			<name>enabled</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
 	</tag>
-	
 </taglib>

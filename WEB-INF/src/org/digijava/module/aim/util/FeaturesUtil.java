@@ -1,12 +1,17 @@
 package org.digijava.module.aim.util;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.List;
+import java.util.TreeSet;
 
 import javax.servlet.ServletContext;
 
+import net.sf.hibernate.Hibernate;
+import net.sf.hibernate.HibernateException;
 import net.sf.hibernate.Query;
 import net.sf.hibernate.Session;
 import net.sf.hibernate.Transaction;
@@ -14,10 +19,13 @@ import net.sf.hibernate.Transaction;
 import org.apache.log4j.Logger;
 import org.digijava.kernel.dbentity.Country;
 import org.digijava.kernel.persistence.PersistenceManager;
-import org.digijava.module.aim.action.FeatureManager;
 import org.digijava.module.aim.dbentity.AmpFeature;
+import org.digijava.module.aim.dbentity.AmpFeaturesVisibility;
+import org.digijava.module.aim.dbentity.AmpFieldsVisibility;
 import org.digijava.module.aim.dbentity.AmpGlobalSettings;
+import org.digijava.module.aim.dbentity.AmpModulesVisibility;
 import org.digijava.module.aim.dbentity.AmpSiteFlag;
+import org.digijava.module.aim.dbentity.AmpTemplatesVisibility;
 import org.digijava.module.aim.dbentity.FeatureTemplates;
 import org.digijava.module.aim.helper.Flag;
 
@@ -854,6 +862,692 @@ public class FeaturesUtil {
 		return col;
 	}
 	
+	/**
+	 * 
+	 * @author dan
+	 *
+	 * @return
+	 */
+		public static Collection getAMPTemplatesVisibility() {
+			Session session = null;
+			Collection col = new ArrayList();
+			String qryStr = null;
+			Query qry = null;
+
+			try {
+				session = PersistenceManager.getSession();
+				qryStr = "select f from " + AmpTemplatesVisibility.class.getName() + " f order by f.name asc";
+				qry = session.createQuery(qryStr);
+				col = qry.list();
+
+			} catch (Exception ex) {
+				logger.error("Exception : " + ex.getMessage());
+			} finally {
+				if (session != null) {
+					try {
+						PersistenceManager.releaseSession(session);
+					} catch (Exception rsf) {
+						logger.error("Release session failed :" + rsf.getMessage());
+					}
+				}
+			}
+			return col;
+		}
 		
-	
+
+		
+		/**
+		 * 
+		 * @author dan
+		 *
+		 * @return
+		 */
+			public static Collection getAMPModulesVisibility() {
+				Session session = null;
+				Collection col = new ArrayList();
+				String qryStr = null;
+				Query qry = null;
+
+				try {
+					session = PersistenceManager.getSession();
+					qryStr = "select f from " + AmpModulesVisibility.class.getName() + " f order by f.name asc";
+					qry = session.createQuery(qryStr);
+					col = qry.list();
+
+				} catch (Exception ex) {
+					logger.error("Exception : " + ex.getMessage());
+				} finally {
+					if (session != null) {
+						try {
+							PersistenceManager.releaseSession(session);
+						} catch (Exception rsf) {
+							logger.error("Release session failed :" + rsf.getMessage());
+						}
+					}
+				}
+				return col;
+			}
+
+			/**
+			 * @author dan
+			 */
+			public static boolean existTemplateVisibility(String templateName) {
+				Session session = null;
+				Collection col = new ArrayList();
+				String qryStr = null;
+				Query qry = null;
+
+				try {
+					session = PersistenceManager.getSession();
+					qryStr = "select f from " + AmpTemplatesVisibility.class.getName() + " f" +
+							" where f.name = '"+templateName+"'";
+					qry = session.createQuery(qryStr);
+					col = qry.list();
+					if(col==null) return false;
+					if(col.size()==0) return false;
+					if(col.size()>0) return true;
+				} catch (Exception ex) {
+					logger.error("Exception : " + ex.getMessage());
+				} finally {
+					if (session != null) {
+						try {
+							PersistenceManager.releaseSession(session);
+						} catch (Exception rsf) {
+							logger.error("Release session failed :" + rsf.getMessage());
+						}
+					}
+				}
+				return true;
+			}
+			/**
+			 * 
+			 * @author dan
+			 *
+			 * @return
+			 */
+			public static Collection getAMPModules() {
+				Session session = null;
+				Collection col = new ArrayList();
+				String qryStr = null;
+				Query qry = null;
+
+				try {
+					session = PersistenceManager.getSession();
+					qryStr = "select f from " + AmpModulesVisibility.class.getName() + " f order by f.name asc";
+					qry = session.createQuery(qryStr);
+					col = qry.list();
+
+				} catch (Exception ex) {
+					logger.error("Exception : " + ex.getMessage());
+				} finally {
+					if (session != null) {
+						try {
+							PersistenceManager.releaseSession(session);
+						} catch (Exception rsf) {
+							logger.error("Release session failed :" + rsf.getMessage());
+						}
+					}
+				}
+				return col;
+			}
+			
+			/**
+			 * 
+			 * @author dan
+			 *
+			 * @return
+			 */
+			public static void insertTemplate(String templateName, Session session) {
+				Transaction tx = null;
+
+				try {
+					session = PersistenceManager.getSession();
+					tx = session.beginTransaction();
+					AmpTemplatesVisibility ampTemplate=new AmpTemplatesVisibility();
+					ampTemplate.setName(templateName);
+					session.save(ampTemplate);
+					tx.commit();
+				} catch (Exception ex) {
+					logger.error("Exception : " + ex.getMessage());
+				} finally {
+					if (session != null) {
+						try {
+							PersistenceManager.releaseSession(session);
+						} catch (Exception rsf) {
+							logger.error("Release session failed :" + rsf.getMessage());
+						}
+					}
+				}
+
+				return ;
+			}
+
+			/**
+			 * @author dan
+			 */
+			public static Collection getTemplateModules(Long id) {
+				Session session = null;
+				AmpTemplatesVisibility ft=new AmpTemplatesVisibility();
+				try {
+					session = PersistenceManager.getSession();
+					ft=(AmpTemplatesVisibility)session.load(AmpTemplatesVisibility.class,id);
+				} catch (Exception ex) {
+					logger.error("Exception : " + ex.getMessage());
+				} finally {
+					if (session != null) {
+						try {
+							PersistenceManager.releaseSession(session);
+						} catch (Exception rsf) {
+							logger.error("Release session failed :" + rsf.getMessage());
+						}
+					}
+				}
+				return ft.getItems();
+			}
+			
+			/**
+			 * @author dan
+			 */
+			public static String getTemplateNameVisibility(Long id) {
+				Session session = null;
+				AmpTemplatesVisibility ft=new AmpTemplatesVisibility();
+				try {
+					session = PersistenceManager.getSession();
+					ft=(AmpTemplatesVisibility)session.load(AmpTemplatesVisibility.class,id);
+				} catch (Exception ex) {
+					logger.error("Exception : " + ex.getMessage());
+				} finally {
+					if (session != null) {
+						try {
+							PersistenceManager.releaseSession(session);
+						} catch (Exception rsf) {
+							logger.error("Release session failed :" + rsf.getMessage());
+						}
+					}
+				}
+				return ft.getName();
+			}
+
+			/**
+			 * @author dan
+			 * @param session 
+			 * @throws HibernateException 
+			 */
+			public static AmpTemplatesVisibility getTemplateVisibility(Long id, Session session) throws HibernateException {
+				AmpTemplatesVisibility ft=new AmpTemplatesVisibility();
+					ft=(AmpTemplatesVisibility)session.load(AmpTemplatesVisibility.class,id);
+					
+					List list = session.createQuery("from "+AmpModulesVisibility.class.getName()).list();
+					ft.setAllItems(new TreeSet(list));
+					
+				return ft;
+			}
+			
+			
+			/**
+			 * 
+			 * @author dan
+			 *
+			 * @return
+			 */
+			public static void updateModulesTemplate(Collection modules, Long templateId, String templateName) {
+				Session session = null;
+				Transaction tx = null;
+
+				try {
+					session = PersistenceManager.getRequestDBSession();
+					AmpTemplatesVisibility ampTemplate;
+					tx = session.beginTransaction();
+					ampTemplate=(AmpTemplatesVisibility)session.load(AmpTemplatesVisibility.class,templateId);
+					ampTemplate.setItems(null);
+					session.saveOrUpdate(ampTemplate);
+					tx.commit(); 
+				} catch (Exception ex) {
+					logger.error("Exception :::: " + ex.getMessage());
+				} finally {
+					if (session != null) {
+						try {
+							PersistenceManager.releaseSession(session);
+						} catch (Exception rsf) {
+							logger.error("Release session failed :" + rsf.getMessage());
+						}
+					}
+				}
+
+				try {
+					session = PersistenceManager.getRequestDBSession();
+					AmpTemplatesVisibility ampTemplate;
+					tx = session.beginTransaction();
+					ampTemplate=(AmpTemplatesVisibility)session.load(AmpTemplatesVisibility.class,templateId);
+					ampTemplate.setName(templateName);
+					//ampTemplate.setVisible("true");
+					for(Iterator it=modules.iterator();it.hasNext();)
+						{	
+							AmpModulesVisibility ampModule=(AmpModulesVisibility)it.next();
+							ampTemplate.getItems().add(ampModule);
+						}
+					session.saveOrUpdate(ampTemplate);
+					tx.commit(); 
+				} catch (Exception ex) {
+					logger.error("Exception ;;;; " + ex.getMessage());
+				} finally {
+					if (session != null) {
+						try {
+							PersistenceManager.releaseSession(session);
+						} catch (Exception rsf) {
+							logger.error("Release session failed :" + rsf.getMessage());
+						}
+					}
+				}
+			
+				return ;
+			}
+
+			/**
+			 * @author dan
+			 */
+			public static boolean deleteTemplateVisibility(Long id, Session session) {
+				Transaction tx = null;
+
+				try {
+					//tx=session.beginTransaction();
+					AmpTemplatesVisibility ft=new AmpTemplatesVisibility();
+					ft=(AmpTemplatesVisibility)session.load(AmpTemplatesVisibility.class,id);
+					session.delete(ft);
+					session.flush();
+					//tx.commit();
+				} catch (Exception ex) {
+					logger.error("Exception : " + ex.getMessage());
+				} finally {
+					if (session != null) {
+						try {
+							PersistenceManager.releaseSession(session);
+						} catch (Exception rsf) {
+							logger.error("Release session failed :" + rsf.getMessage());
+						}
+					}
+				}
+				return true;
+			}
+			
+			/**
+			 * @author dan
+			 */
+			public static AmpModulesVisibility getModuleVisibility(String moduleName) {
+
+				Session session = null;
+				Query q = null;
+				Collection c = null;
+				AmpModulesVisibility id = null;
+				Iterator iter = null;
+
+				try {
+					session = PersistenceManager.getRequestDBSession();
+					String queryString = new String();
+					queryString = "select a from " + AmpModulesVisibility.class.getName()
+							+ " a where (a.moduleName=:moduleName) ";
+					q = session.createQuery(queryString);
+					q.setParameter("moduleName", moduleName, Hibernate.STRING);
+					c = q.list();
+					if (c.size() != 0) {
+						iter = c.iterator();
+						if (iter.hasNext()) {
+							id = (AmpModulesVisibility) iter.next();
+						}
+					} else {
+						if (logger.isDebugEnabled())
+							logger.debug("No page with corresponding name");
+					}
+				} catch (Exception ex) {
+					if (logger.isDebugEnabled())
+						logger.error("Unable to get page id  from database", ex);
+				}finally {
+					if (session != null) {
+						try {
+							PersistenceManager.releaseSession(session);
+						} catch (Exception rsf) {
+							logger.error("Release session failed :" + rsf.getMessage());
+						}
+					}
+					}
+				if (logger.isDebugEnabled())
+					logger.debug("getPageId() returning page id:" + id);
+				return id;
+			}
+
+			
+			/**
+			 * @author dan
+			 */
+			public static Collection getModuleFeatures(Long id) {
+				Session session = null;
+				AmpModulesVisibility ft=new AmpModulesVisibility();
+				try {
+					session = PersistenceManager.getSession();
+					ft=(AmpModulesVisibility)session.load(AmpModulesVisibility.class,id);
+				} catch (Exception ex) {
+					logger.error("Exception : " + ex.getMessage());
+				} finally {
+					if (session != null) {
+						try {
+							PersistenceManager.releaseSession(session);
+						} catch (Exception rsf) {
+							logger.error("Release session failed :" + rsf.getMessage());
+						}
+					}
+				}
+				return ft.getItems();
+			}
+
+			/**
+			 * @author dan
+			 */
+			public static String getModuleNameVisibility(Long id) {
+				Session session = null;
+				AmpModulesVisibility ft=new AmpModulesVisibility();
+				try {
+					session = PersistenceManager.getSession();
+					ft=(AmpModulesVisibility)session.load(AmpModulesVisibility.class,id);
+				} catch (Exception ex) {
+					logger.error("Exception : " + ex.getMessage());
+				} finally {
+					if (session != null) {
+						try {
+							PersistenceManager.releaseSession(session);
+						} catch (Exception rsf) {
+							logger.error("Release session failed :" + rsf.getMessage());
+						}
+					}
+				}
+				return ft.getName();
+			}
+			/**
+			 * @author dan
+			 */
+			public static Collection getFeaturesOfModules(Long id) {
+				Session session = null;
+				AmpModulesVisibility ft=new AmpModulesVisibility();
+				try {
+					session = PersistenceManager.getSession();
+					ft=(AmpModulesVisibility)session.load(AmpModulesVisibility.class,id);
+				} catch (Exception ex) {
+					logger.error("Exception : " + ex.getMessage());
+				} finally {
+					if (session != null) {
+						try {
+							PersistenceManager.releaseSession(session);
+						} catch (Exception rsf) {
+							logger.error("Release session failed :" + rsf.getMessage());
+						}
+					}
+				}
+				return ft.getItems();
+			}
+
+			/**
+			 * 
+			 * @author dan
+			 *
+			 * @return
+			 */
+			public static void updateFeaturesModule(Collection modules, Long templateId, String templateName) {
+				Session session = null;
+				Transaction tx = null;
+
+				try {
+					session = PersistenceManager.getRequestDBSession();
+					AmpModulesVisibility ampModule;
+					tx = session.beginTransaction();
+					ampModule=(AmpModulesVisibility)session.load(AmpModulesVisibility.class,templateId);
+					//ampModule.setItems(null);
+					boolean found=false;
+					for(Iterator it=ampModule.getItems().iterator();it.hasNext();)
+					{
+						AmpFeaturesVisibility fDb=(AmpFeaturesVisibility) it.next();
+						found=false;
+						for(Iterator jt=modules.iterator();jt.hasNext();)
+						{
+							AmpFeaturesVisibility fRqst=(AmpFeaturesVisibility) jt.next();
+							if(fRqst.getId().compareTo(fDb.getId())==0) {found=true;break;}
+						}
+						//if(found) fDb.setVisible("true");
+						//else fDb.setVisible("false");
+					}
+					session.saveOrUpdate(ampModule);
+					tx.commit(); 
+				} catch (Exception ex) {
+					logger.error("Exception :::: " + ex.getMessage());
+				} finally {
+					if (session != null) {
+						try {
+							PersistenceManager.releaseSession(session);
+						} catch (Exception rsf) {
+							logger.error("Release session failed :" + rsf.getMessage());
+						}
+					}
+				}
+
+			
+				return ;
+			}
+
+			/**
+			 * 
+			 * @author dan
+			 *
+			 * @return
+			 */
+			public static void updateAmpTreeVisibility(Collection modules, Collection features, Collection fields, Long templateId) {
+				Session session = null;
+				Transaction tx = null;
+				AmpTemplatesVisibility ampTemplate=new AmpTemplatesVisibility();
+				try {
+					session = PersistenceManager.getSession();
+					tx=session.beginTransaction();
+					ampTemplate=(AmpTemplatesVisibility)session.load(AmpTemplatesVisibility.class,templateId);
+					ampTemplate.getItems().retainAll(modules);
+					ampTemplate.getItems().addAll(modules);
+					ampTemplate.getFeatures().retainAll(features);
+					ampTemplate.getFeatures().addAll(features);
+					//ampTemplate.getFields().retainAll(fields);
+					//ampTemplate.getFields().addAll(fields);
+					tx.commit(); 
+				} catch (Exception ex) {
+					logger.error("Exception : " + ex.getMessage());
+					ex.printStackTrace();
+				} finally {
+					if (session != null) {
+						try {
+							PersistenceManager.releaseSession(session);
+						} catch (Exception rsf) {
+							logger.error("Release session failed :" + rsf.getMessage());
+						}
+					}
+				}
+				return ;
+			}
+
+			/**
+			 * 
+			 * @author dan
+			 * @param session 
+			 *
+			 * @return
+			 * @throws HibernateException 
+			 */
+			public static void updateAmpModulesTreeVisibility(Collection modules, Long templateId, Session session) throws HibernateException {
+				Transaction tx = null;
+				AmpTemplatesVisibility ampTemplate=new AmpTemplatesVisibility();
+					tx=session.beginTransaction();
+					ampTemplate=(AmpTemplatesVisibility)session.load(AmpTemplatesVisibility.class,templateId);
+					ampTemplate.getItems().retainAll(modules);
+					ampTemplate.getItems().addAll(modules);
+					tx.commit(); 
+				return ;
+			}
+			
+			/**
+			 * 
+			 * @author dan
+			 * @param session 
+			 *
+			 * @return
+			 * @throws HibernateException 
+			 */
+			public static void updateAmpTemplateNameTreeVisibility(String templateName, Long templateId, Session session) throws HibernateException {
+				Transaction tx = null;
+				AmpTemplatesVisibility ampTemplate=new AmpTemplatesVisibility();
+					tx=session.beginTransaction();
+					ampTemplate=(AmpTemplatesVisibility)session.load(AmpTemplatesVisibility.class,templateId);
+					ampTemplate.setName(templateName);
+					tx.commit(); 
+				return ;
+			}
+			
+			/**
+			 * 
+			 * @author dan
+			 *
+			 * @return
+			 * @throws SQLException 
+			 * @throws HibernateException 
+			 */
+			public static void updateAmpFeaturesTreeVisibility(Collection features, Long templateId,Session session) throws HibernateException, SQLException {
+				Transaction tx = null;
+				AmpTemplatesVisibility ampTemplate=new AmpTemplatesVisibility();
+					tx=session.beginTransaction();
+					ampTemplate=(AmpTemplatesVisibility)session.load(AmpTemplatesVisibility.class,templateId);
+
+					ampTemplate.getFeatures().retainAll(features);
+					ampTemplate.getFeatures().addAll(features);
+					tx.commit(); 
+				return ;
+			}
+			/**
+			 * 
+			 * @author dan
+			 * @param session 
+			 *
+			 * @return
+			 * @throws HibernateException 
+			 */
+			public static void updateAmpFieldsTreeVisibility(Collection fields, Long templateId, Session session) throws HibernateException {
+				Transaction tx = null;
+				AmpTemplatesVisibility ampTemplate=new AmpTemplatesVisibility();
+					tx=session.beginTransaction();
+					ampTemplate=(AmpTemplatesVisibility)session.load(AmpTemplatesVisibility.class,templateId);
+					ampTemplate.getFields().retainAll(fields);
+					ampTemplate.getFields().addAll(fields);
+					tx.commit(); 
+				return ;
+			}
+
+			
+			/**
+			 * @author dan
+			 */
+			public static void insertFieldWithFeatureVisibility(Long templateId, Long featureId, String fieldName) {
+				Session session = null;
+				AmpFeaturesVisibility feature=new AmpFeaturesVisibility();
+				AmpFieldsVisibility field=new AmpFieldsVisibility();
+				AmpTemplatesVisibility template=null;
+				Transaction tx;
+				try {
+					session = PersistenceManager.getSession();
+					tx=session.beginTransaction();
+					feature=(AmpFeaturesVisibility)session.load(AmpFeaturesVisibility.class,featureId);
+					field.setParent(feature);
+					field.setName(fieldName);					
+					session.save(field);
+					tx.commit();
+					tx=session.beginTransaction();
+					template=(AmpTemplatesVisibility)session.load(AmpTemplatesVisibility.class,templateId);
+					template.getFields().add(field);
+					tx.commit();
+					//session.saveOrUpdate(template);
+					//tx.commit();
+					
+				} catch (Exception ex) {
+					logger.error("Exception : " + ex.getMessage());
+					ex.printStackTrace();
+				} finally {
+					if (session != null) {
+						try {
+							PersistenceManager.releaseSession(session);
+						} catch (Exception rsf) {
+							logger.error("Release session failed :" + rsf.getMessage());
+						}
+					}
+				}
+				return ;
+			}
+
+			/**
+			 * @author dan
+			 */
+			public static void updateFieldWithFeatureVisibility(Long featureId, String fieldName) {
+				Session session = null;
+				AmpFeaturesVisibility feature=new AmpFeaturesVisibility();
+				AmpFieldsVisibility field=new AmpFieldsVisibility();
+				Query qry;
+				Collection col=new ArrayList();
+				String qryStr;
+				try {
+					//session = PersistenceManager.getSession();
+					//feature=(AmpFeaturesVisibility)session.load(AmpFeaturesVisibility.class,featureId);
+					//field.setParent(feature);
+					//field.setName(fieldName);
+					//session.save(field);
+					
+					session = PersistenceManager.getSession();
+					feature=(AmpFeaturesVisibility)session.load(AmpFeaturesVisibility.class,featureId);
+					qryStr = "select f from " + AmpFieldsVisibility.class.getName() + " f"
+					+" where f.name = '"+fieldName+"'";;
+					qry = session.createQuery(qryStr);
+					col = qry.list();
+					field=(AmpFieldsVisibility) col.iterator().next();
+					feature.getItems().add(field);
+					field.setParent(feature);
+					session.saveOrUpdate(field);
+					
+				} catch (Exception ex) {
+					logger.error("Exception : " + ex.getMessage());
+				} finally {
+					if (session != null) {
+						try {
+							PersistenceManager.releaseSession(session);
+						} catch (Exception rsf) {
+							logger.error("Release session failed :" + rsf.getMessage());
+						}
+					}
+				}
+				return ;
+			}
+
+			
+			/**
+			 * @author dan
+			 */
+			public static AmpTemplatesVisibility getTemplateById(Long id) {
+				Session session = null;
+				AmpTemplatesVisibility ft=new AmpTemplatesVisibility();
+				try {
+					session = PersistenceManager.getSession();
+					ft=(AmpTemplatesVisibility)session.load(AmpTemplatesVisibility.class,id);
+					System.out.println("*********************"+ft.getId());
+				} catch (Exception ex) {
+					logger.error("Exception : " + ex.getMessage());
+				} finally {
+					if (session != null) {
+						try {
+							PersistenceManager.releaseSession(session);
+						} catch (Exception rsf) {
+							logger.error("Release session failed :" + rsf.getMessage());
+						}
+					}
+				}
+				return ft;
+			}
+
+			
 }

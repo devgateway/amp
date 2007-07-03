@@ -6,15 +6,21 @@
  */
 package org.dgfoundation.amp.utils;
 
+import java.sql.SQLException;
+
 import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import net.sf.hibernate.HibernateException;
+import net.sf.hibernate.Session;
 
 import org.apache.log4j.Logger;
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
+import org.digijava.kernel.persistence.PersistenceManager;
 
 
 /**
@@ -36,7 +42,15 @@ public abstract class MultiAction extends Action {
 	private static Logger logger = Logger.getLogger(MultiAction.class);
 
     protected ServletContext sc;
+    protected Session session;
 
+    public Session createSession() throws HibernateException, SQLException {
+    	if(session!=null) return session;
+    	session = PersistenceManager.getSession();
+    	return session;
+    }
+    
+    
 
 	/**
 		 * @param mapping object list to be passed to other modes
@@ -57,6 +71,15 @@ public abstract class MultiAction extends Action {
         	logger.error(e);
         	e.printStackTrace();
             return null;
+        } finally {
+        	if (session != null) {
+				try {
+					PersistenceManager.releaseSession(session);
+					session=null;
+				} catch (Exception rsf) {
+					logger.error("Release session failed :" + rsf.getMessage());
+				}
+			}
         }
     }
 

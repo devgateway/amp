@@ -929,7 +929,7 @@ function disable() {
 																				</td>
 																				<td width="1">:</td>
 																				<td align="left">
-																					<c:out value="${fund.ampTermsAssist.termsAssistName}"/>
+																					<c:out value="${fund.typeOfAssistance}"/>
 																				</td>
 																			</tr>
 																			<tr>

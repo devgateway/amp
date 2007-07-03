@@ -23,15 +23,24 @@
 			 }	
 			 else
 			 {
-			<digi:context name="addSector" property="context/module/moduleinstance/addSector.do?event=addSector" 
-
-/>
+			<digi:context name="addSector" property="context/module/moduleinstance/addSector.do?event=addSector" />
 			document.aimAddSectorForm.action = "<%= addSector%>&ampSecSchemeIdpoi="+id+"&parent="+levelType;
 			document.aimAddSectorForm.target = "_self";
 			document.aimAddSectorForm.submit();
 			 }
 	
 	}
+	
+	function cancel(id,levelType){
+			<digi:context name="cancel" property="context/module/moduleinstance/viewSectorDetails.do~level=two~event=edit" />
+			document.aimAddSectorForm.action = "<%= cancel%>~ampSectorId="+id;
+			
+
+	window.location="<%= cancel%>~ampSecSchemeId="+id;
+	return true;
+	}
+	
+	
 </script>
 <digi:errors/>
 <digi:instance property="aimAddSectorForm" />
@@ -238,15 +247,17 @@ value="key" label="value" />
 		<td colspan="2" width="60%">
 			<table width="100%" cellspacing="5">
 				<tr>
-					<td width="50%" align="right">
-					<%--
-						<html:submit value="Save" styleClass="dr-menu"/>--%>
-							<input  type="button" name="addBtn" value="Save" 
-
-onclick="updateScheme('<bean:write name="aimAddSectorForm" property="parentId" />','<bean:write name="aimAddSectorForm" property="levelType" />')"
+					<td width="45%" align="right">
+							<input  type="button" name="addBtn" value='<digi:trn key="btn:save">Save</digi:trn>' 
+								onclick="updateScheme('<bean:write name="aimAddSectorForm" property="parentId" />','<bean:write name="aimAddSectorForm" property="levelType" />')" class="dr-menu"/>
 					</td>
-					<td width="50%" align="left">
-						<html:reset value="Cancel" styleClass="dr-menu"/>
+					
+					<td width="10%" align="center">
+						<html:reset  styleClass="dr-menu"><digi:trn key="btn:reset">Reset</digi:trn></html:reset>
+					</td>
+					
+					<td width="45%" align="left">
+						<input type="button" value='<digi:trn key="btn:cancel">Cancel</digi:trn>' class="dr-menu" onclick="cancel('<%= session.getAttribute("Id") %>','<bean:write name="aimAddSectorForm" property="levelType" />')"/>
 					</td>
 				</tr>
 			</table>

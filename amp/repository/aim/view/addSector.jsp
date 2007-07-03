@@ -30,6 +30,13 @@
 			 }
 	
 	}
+	//href="/getSectorSchemes.do"
+	function cancel(){
+	<digi:context name="cancel" property="context/module/moduleinstance/getSectorSchemes.do" />
+
+	window.location="<%= cancel%>";
+	return true;
+	}
 </script>
 <digi:errors/>
 <digi:instance property="aimAddSectorForm" />
@@ -154,14 +161,21 @@
 		<td colspan="2" width="60%">
 			<table width="100%" cellspacing="5">
 				<tr>
-					<td width="50%" align="right">
+					<td width="45%" align="right">
 					<%--
 						<html:submit value="Save" styleClass="dr-menu"/>--%>
-							<input  type="button" name="addBtn" value="Save" onclick="updateScheme('<bean:write name="aimAddSectorForm" property="parentId" />')"
+							<input  type="button" name="addBtn" class="dr-menu" value='<digi:trn key="btn:save">Save</digi:trn>' onclick="updateScheme('<bean:write name="aimAddSectorForm" property="parentId" />')"/>
 					</td>
-					<td width="50%" align="left">
-						<html:reset value="Cancel" styleClass="dr-menu"/>
+					
+					<td width="10%" align="center">
+						<html:reset  styleClass="dr-menu"><digi:trn key="btn:reset">Reset</digi:trn></html:reset>
 					</td>
+					
+					
+					<td width="45%" align="left">
+						<input type="button" value='<digi:trn key="btn:cancel">Cancel</digi:trn>' class="dr-menu" onclick="return cancel()"/>
+					</td>
+					
 				</tr>
 			</table>
 		</td>

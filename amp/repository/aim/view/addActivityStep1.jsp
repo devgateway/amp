@@ -6,6 +6,7 @@
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
 <%@ taglib uri="/taglib/category" prefix="category" %>
+<%@ taglib uri="/taglib/fieldVisibility" prefix="field" %>
 
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/addActivity.js"/>"></script>
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
@@ -261,6 +262,7 @@ function popupwin()
 									<tr><td>
 										<IMG alt=Link height=10 src="../ampTemplate/images/arrow-014E86.gif" width=15>
 										<b><digi:trn key="aim:identification">Identification</digi:trn></b>
+										:::<field:display name="field8" feature="feature1">testingggggggg</field:display>:::
 									</td></tr>
 									<tr><td>&nbsp;</td></tr>
 									<tr><td><jsp:include page="addActivityStep1Identification.jsp"/>

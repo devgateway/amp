@@ -10,9 +10,7 @@
 	function load() {
 		window.print();
 	}
-
 	function unload() {}
-
 </script>
 
 
@@ -340,7 +338,7 @@
 																				</td>
 																				<td width="1">:</td>
 																				<td align="left">
-                                                              ${fund.ampTermsAssist.termsAssistName}
+                                                              ${fund.typeOfAssistance}
 																				</td>
 																			</tr>
 																			<tr>

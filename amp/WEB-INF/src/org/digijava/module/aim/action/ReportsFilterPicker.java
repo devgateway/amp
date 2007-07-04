@@ -6,7 +6,9 @@ package org.digijava.module.aim.action;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -151,7 +153,39 @@ public class ReportsFilterPicker extends MultiAction {
 		if(arf==null) arf=new AmpARFilter();
 		arf.readRequestData(request);
 		
-		arf.setSectors(Util.getSelectedObjects(AmpSector.class,filterForm.getSelectedSectors()));
+		//for each sector we have also to add the subsectors
+		
+		Set selectedSectors=Util.getSelectedObjects(AmpSector.class,filterForm.getSelectedSectors());
+		
+		if(selectedSectors!=null)
+		{
+			Iterator sectorIterator=selectedSectors.iterator();
+		
+			while(sectorIterator.hasNext())
+			{//process each sector and get all its children
+				AmpSector currentSector=(AmpSector)sectorIterator.next();
+				if(currentSector!=null)
+				{
+					Collection childSectors=SectorUtil.getAllChildSectors(currentSector.getAmpSectorId());
+					selectedSectors.addAll(childSectors); //add the children sectors to the filter
+					
+					//add the grand children
+					Iterator childSectorsIterator=childSectors.iterator();
+					while(childSectorsIterator.hasNext())
+					{
+						AmpSector currentChild=(AmpSector)sectorIterator.next();
+						Collection grandChildrenSectors=SectorUtil.getAllChildSectors(currentChild.getAmpSectorId());
+						selectedSectors.addAll(grandChildrenSectors);
+					}
+					
+				}
+			
+			}
+		}
+		arf.setSectors(selectedSectors);
+		
+				
+		
 		AmpFiscalCalendar selcal=(AmpFiscalCalendar) Util.getSelectedObject(AmpFiscalCalendar.class,filterForm.getCalendar());
 		arf.setCalendarType(selcal);
 		arf.setText(filterForm.getText());

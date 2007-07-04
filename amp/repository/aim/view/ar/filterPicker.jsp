@@ -139,9 +139,19 @@
 			</td>
 			
 		</tr>
-
-
-
+	<logic:notEqual name="widget" value="true" scope="request">
+		<tr>
+			<td colspan="4"><b>Page Size</b></td>
+		</tr>
+		<tr>
+			<td colspan="4">
+			<html:select property="pageSize" style="width: 100px" styleClass="inp-text">
+				<html:optionsCollection property="pageSizes"
+					 label="wrappedInstance" value="wrappedInstance" />
+			</html:select>
+			</td>
+		</tr>
+</logic:notEqual>
 	<tr>
 	<td>&nbsp;</td>
 	</tr>

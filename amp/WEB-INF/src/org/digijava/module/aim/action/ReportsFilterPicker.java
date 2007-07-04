@@ -59,12 +59,14 @@ public class ReportsFilterPicker extends MultiAction {
 		
 		if(teamMember!=null) ampTeamId=teamMember.getTeamId();
 		
-				
 		//create filter dropdowns		
 		Collection currency = CurrencyUtil.getAmpCurrency();
 		Collection allFisCalenders = DbUtil.getAllFisCalenders();
 		List ampSectors = SectorUtil.getAmpSectorsAndSubSectors();
-
+		
+		//create the pageSizes Collection for the dropdown
+		Collection pageSizes=new ArrayList();
+		
 		ArrayList donors;
 		if(ampTeamId!=null) donors=DbUtil.getAmpDonors(ampTeamId); else donors=new ArrayList();
 		Collection allIndicatorRisks = MEIndicatorsUtil.getAllIndicatorRisks();
@@ -76,6 +78,7 @@ public class ReportsFilterPicker extends MultiAction {
 		filterForm.setSectors(ampSectors);
 		filterForm.setFromYears(new ArrayList());
 		filterForm.setToYears(new ArrayList());
+		filterForm.setPageSizes(pageSizes);
 		
 		
 		// loading Activity Rank collection
@@ -90,6 +93,15 @@ public class ReportsFilterPicker extends MultiAction {
 			filterForm.getFromYears().add(new BeanWrapperImpl(new Long(i)));
 			filterForm.getToYears().add(new BeanWrapperImpl(new Long(i)));		
 		}
+		
+	
+		filterForm.getPageSizes().add(new BeanWrapperImpl(new String("A0")));
+		filterForm.getPageSizes().add(new BeanWrapperImpl(new String("A1")));
+		filterForm.getPageSizes().add(new BeanWrapperImpl(new String("A2")));
+		filterForm.getPageSizes().add(new BeanWrapperImpl(new String("A3")));
+		filterForm.getPageSizes().add(new BeanWrapperImpl(new String("A4")));
+		
+		
 		
 		return modeSelect(mapping,form,request,response);
 	}
@@ -108,6 +120,7 @@ public class ReportsFilterPicker extends MultiAction {
 		filterForm.setLineMinRank(null);
 		filterForm.setPlanMinRank(null);
 		filterForm.setText(null);
+		filterForm.setPageSize(null);
 	
 		return modeApply(mapping,form,request,response);
 	}
@@ -158,6 +171,12 @@ public class ReportsFilterPicker extends MultiAction {
 			AmpCategoryValue value = (AmpCategoryValue) session.load(AmpCategoryValue.class,new Long((String) filterForm.getSelectedStatuses()[i]));
 			arf.getStatuses().add(value);
 		}
+		
+		
+	    if(filterForm.getPageSize()!=null)
+	    {
+	    	arf.setPageSize(filterForm.getPageSize()); //set page size in the ARF filter
+	    }
 		
 		arf.setRisks(Util.getSelectedObjects(AmpIndicatorRiskRatings.class,filterForm.getSelectedRisks()));
 		

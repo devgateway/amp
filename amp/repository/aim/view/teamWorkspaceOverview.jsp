@@ -159,7 +159,22 @@ function update(action) {
 														<td align="left">
 															<html:textarea property="description" rows="3" cols="50" styleClass="inp-text"/>
 														</td>
-													</tr>							
+													</tr>
+									<logic:notEmpty name="aimUpdateWorkspaceForm" property="relatedTeamName" scope="session" >
+									
+									
+													<tr bgcolor="#f4f4f2">
+														<td align="right" width="30%">
+															<digi:trn key="aim:relatedTeam">
+															Related Team
+															</digi:trn>
+														</td>
+														<td align="left">
+															<bean:write name="aimUpdateWorkspaceForm" property="relatedTeamName" scope="session" />
+														</td>
+													</tr>
+													</logic:notEmpty>
+																					
 													<tr bgcolor="#f4f4f2">
 														<td align="right" width="30%">
 															<digi:trn key="aim:teamCategory">Team Category</digi:trn>			

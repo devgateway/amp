@@ -40,26 +40,24 @@ function load() {
 <TABLE bgcolor="#dddddd" width="400" border=1>
   <TR>
     <TD width="90" class="label">
-    Link Name
+    <digi:trn key="aim:linkName">Link Name</digi:trn>
     </TD>
     <TD>
       <html:text styleId="linkName" property="linkName" size="45" styleClass="inp-text"/>
-
     </TD>
   </TR>
   <TR>
     <TD width="90" class="label">
-    Link
+    <digi:trn key="aim:link">Link</digi:trn>
     </TD>
     <TD>
       <html:text styleId="link" property="link" size="45" styleClass="inp-text"/>
-
     </TD>
   </TR>
   <TR>
     <TD colspan="2" align="center">
-      <input type="button" value="Add" onclick="addNewLink()" class="inp-text">&nbsp;&nbsp;
-      <input type="button" value="Close" onclick="window.close()" class="inp-text">
+      <input type="button" value="<digi:trn key='btn:add'>Add</digi:trn>" onclick="addNewLink()" class="inp-text">&nbsp;&nbsp;
+      <input type="button" value="<digi:trn key='btn:close'>Close</digi:trn>" onclick="window.close()" class="inp-text">
     </TD>
   </TR>
 </TABLE>

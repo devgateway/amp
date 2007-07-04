@@ -56,6 +56,8 @@ public class AmpARFilter implements Filter {
 	private Integer fromYear;
 	private Integer toYear;	
 	
+	private String pageSize; // to be used for exporting reports
+	
 	private String text;
 	
 	private static final String initialFilterQuery="SELECT distinct(amp_activity_id) FROM amp_activity WHERE 1";
@@ -422,5 +424,13 @@ public class AmpARFilter implements Filter {
 
 	public void setToYear(Integer toYear) {
 		this.toYear = toYear;
+	}
+
+	public String getPageSize() {
+		return pageSize;
+	}
+
+	public void setPageSize(String pageSize) {
+		this.pageSize = pageSize;
 	} 
 }

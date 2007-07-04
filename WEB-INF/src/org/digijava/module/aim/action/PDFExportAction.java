@@ -18,6 +18,8 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.dgfoundation.amp.ar.ARUtil;
+import org.dgfoundation.amp.ar.AmpARFilter;
+import org.dgfoundation.amp.ar.ArConstants;
 import org.dgfoundation.amp.ar.GenericViews;
 import org.dgfoundation.amp.ar.GroupReportData;
 import org.dgfoundation.amp.ar.view.pdf.GroupReportDataPDF;
@@ -59,10 +61,22 @@ public class PDFExportAction extends Action implements PdfPageEvent{
 		GroupReportData rd=ARUtil.generateReport(mapping,form,request,response);
 		rd.setCurrentView(GenericViews.PDF);
 		
-		AdvancedReportForm formBean = (AdvancedReportForm) form;
-		String pageSize=formBean.getPdfPageSize();
+		//AdvancedReportForm formBean = (AdvancedReportForm) form;
+		
+		 
+		/*
+		 * this should not be used anymore as the page size has been included in the ARFilters.
+		 * String pageSize=formBean.getPdfPageSize();
+		 */
+		//use the session to get the existing filters
+		String pageSize=null;
+		
+		HttpSession httpSession = request.getSession();
+		AmpARFilter arf=(AmpARFilter) httpSession.getAttribute(ArConstants.REPORTS_FILTER);
+		if(arf!=null)
+			pageSize=arf.getPageSize();//use the page size set in the filters 
 
-		//the pagesize is not initialized in the form bean 		
+		//the pagesize is not initialized in the filters	
 		Rectangle page=null;
 		
 		if(pageSize==null)

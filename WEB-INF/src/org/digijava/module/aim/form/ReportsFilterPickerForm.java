@@ -22,6 +22,7 @@ public class ReportsFilterPickerForm extends ActionForm {
 	private Collection fromYears;
 	private Collection toYears;
 	private Collection actRankCollection;
+	private Collection pageSizes; //A0,A1,A2,A3,A4 
 	
 	private Object[] selectedSectors;
 	private Object[] selectedStatuses;
@@ -36,6 +37,7 @@ public class ReportsFilterPickerForm extends ActionForm {
 	private Integer lineMinRank;
 	private Integer planMinRank;
 	private String text;
+	private String pageSize; //the specific page sizes
 
 	public String getText() {
 		return text;
@@ -170,6 +172,22 @@ public class ReportsFilterPickerForm extends ActionForm {
 
 	public void setActRankCollection(Collection actRankCollection) {
 		this.actRankCollection = actRankCollection;
+	}
+
+	public Collection getPageSizes() {
+		return pageSizes;
+	}
+
+	public void setPageSizes(Collection pageSizes) {
+		this.pageSizes = pageSizes;
+	}
+
+	public String getPageSize() {
+		return pageSize;
+	}
+
+	public void setPageSize(String pageSize) {
+		this.pageSize = pageSize;
 	}
 	
 	

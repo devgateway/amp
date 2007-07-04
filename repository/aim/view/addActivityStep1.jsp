@@ -262,7 +262,7 @@ function popupwin()
 									<tr><td>
 										<IMG alt=Link height=10 src="../ampTemplate/images/arrow-014E86.gif" width=15>
 										<b><digi:trn key="aim:identification">Identification</digi:trn></b>
-										:::<field:display name="field8" feature="feature1">testingggggggg</field:display>:::
+										
 									</td></tr>
 									<tr><td>&nbsp;</td></tr>
 									<tr><td><jsp:include page="addActivityStep1Identification.jsp"/>

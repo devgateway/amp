@@ -24,8 +24,8 @@
 
 </div>
 
-		
-<table  cellSpacing="0" cellPadding="0" width="95%" border="0">
+<div align="center">		
+<table  cellSpacing="0" cellPadding="0" width="99%" border="0" align="center">
 
 	<logic:notEqual name="widget" scope="request" value="true">
 	<logic:notEqual name="viewFormat" scope="request" value="print">
@@ -35,16 +35,9 @@
 		</tr>
 		<tr>
 		<!-- filters -->
-	
-		
 		</tr>
-	
-
 	</logic:notEqual>
 	</logic:notEqual>
-
-
-
 	<tr>
 		<td><bean:define id="reportMeta" name="reportMeta"
 			type="org.digijava.module.aim.dbentity.AmpReports" scope="session"
@@ -158,7 +151,5 @@
 	</logic:equal>
 		
 </table>
-
-
-<div id="debug"></div>
+</div>
 

@@ -1028,7 +1028,12 @@ public class AdvancedReport extends Action {
 							
 							formBean.setInEditingMode( false );
 							formBean.setDbReportId( 0 );
-												
+								
+							formBean.setHideActivities(null);
+							formBean.setDrilldownTab(null);
+							formBean.setPublicReport(null);
+							formBean.setReportType(null);		
+							formBean.setReportOption(null);
 			            }
 					
 				}

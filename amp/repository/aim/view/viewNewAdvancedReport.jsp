@@ -120,8 +120,15 @@
 	<td width="500">
 	<digi:trn key="rep:pop:SelectedFilters">Currently Selected Filters:</digi:trn>
 		<logic:present name="<%=org.dgfoundation.amp.ar.ArConstants.REPORTS_FILTER%>" scope="session">
-		<bean:write name="<%=org.dgfoundation.amp.ar.ArConstants.REPORTS_FILTER%>" filter="false"/>
-	</logic:present>
+			<bean:define id="filterName" name="<%=org.dgfoundation.amp.ar.ArConstants.REPORTS_FILTER%>"/>
+			<% java.lang.String trn = filterName.toString().replaceAll(" ","");
+			   trn = trn.replaceAll("<b>","");
+			   trn = trn.replaceAll("</b>","");
+			   trn = trn.replaceAll(";","");
+			%>
+			<digi:trn key="<%="aim:"+trn %>"><%=filterName %></digi:trn>
+			
+		</logic:present>
 	</td>
 	</tr>
 	<tr>

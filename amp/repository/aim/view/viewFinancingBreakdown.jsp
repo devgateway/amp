@@ -112,9 +112,9 @@ type="org.digijava.module.aim.form.FinancingBreakdownForm" method="post">
 
 
 											<TD align="right">
-												<input type="button" value="Preview" class="dr-menu"
+												<input type="button" value="<digi:trn key='btn:preview'>Preview</digi:trn>" class="dr-menu"
 												onclick="preview(<c:out value="${aimFinancingBreakdownForm.ampActivityId}"/>)">
-												<input type="button" value="Edit" class="dr-menu"
+												<input type="button" value="<digi:trn key='btn:edit'>Edit</digi:trn>" class="dr-menu"
 														onclick="fnEditProject(<c:out value="${aimFinancingBreakdownForm.ampActivityId}"/>)">
 													&nbsp;
 											<logic:empty name="SA" scope="application">

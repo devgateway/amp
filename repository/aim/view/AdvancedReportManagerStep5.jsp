@@ -275,7 +275,7 @@ function deleteColumn()
 																						<c:if test="${aimAdvancedReportForm.arReportType == 'donor' }">
 																						<logic:iterate name="aimAdvancedReportForm" id="addedColumns"	property="addedColumns" >
 																						
-																																													<c:if test="${addedColumns.columnName == 'Donor' || addedColumns.columnName == 'Sector' || addedColumns.columnName == 'Status' || addedColumns.columnName == 'Type Of Assistance' || addedColumns.columnName == 'Financing Instrument' || addedColumns.columnName == 'Project Title' || addedColumns.columnName == 'Team'}">
+																							<c:if test="${addedColumns.columnName == 'Donor' || addedColumns.columnName == 'Sector' || addedColumns.columnName == 'Status' || addedColumns.columnName == 'Type Of Assistance' || addedColumns.columnName == 'Financing Instrument' || addedColumns.columnName == 'Project Title' || addedColumns.columnName == 'Team'}">
 																								<TR bgcolor="#ffffff">
 																									<td align="left" width="98%" valign=top>
 																									<digi:trn key="aim:report:${addedColumns.columnName}"><c:out value="${addedColumns.columnName}"/></digi:trn>
@@ -305,7 +305,7 @@ function deleteColumn()
 																									</td>												
 																									<td align="right">
 																									<html:multibox property="selectedColumns">
-																									<digi:trn key="aim:report:${addedColumns.columnId}"><c:out value="${addedColumns.columnId}"/></digi:trn>
+																									<c:out value="${addedColumns.columnId}"/>
 																										</html:multibox>
 																									</td>
 																								</tr>
@@ -323,7 +323,7 @@ function deleteColumn()
 																								  	</td>												
 																									<td align="right">
 																									<html:multibox property="selectedColumns">
-																									  	<digi:trn key="aim:report:${addedColumns.columnId}"> <c:out value="${addedColumns.columnId}"/></digi:trn>
+																									  	<c:out value="${addedColumns.columnId}"/>
 																									 </html:multibox>
 																									</td>
 																								</tr>
@@ -342,7 +342,7 @@ function deleteColumn()
 																									</td>												
 																									<td align="right">
 																									<html:multibox property="selectedColumns">
-																									<digi:trn key="aim:report:${addedColumns.columnId}"><c:out value="${addedColumns.columnId}"/></digi:trn>
+																									<c:out value="${addedColumns.columnId}"/>
 																									  	</html:multibox>
 																									</td>
 																								</tr>

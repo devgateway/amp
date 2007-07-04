@@ -297,7 +297,7 @@ function checkUncheckAll2() {
 																						<tr bgcolor="#ffffff">
 																							<td align="left" width="98%" valign=top>
 																							<digi:trn key="aim:report:${ampColumns.columnName}"><c:out value="${ampColumns.columnName}"/></digi:trn>
-																								<c:out value="${ampColumns.columnName}"/>
+																								
 																							</td>
 																							<td align="right">
 																							<html:multibox property="selectedColumns">

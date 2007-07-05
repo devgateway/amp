@@ -46,9 +46,14 @@ public class GetSectorSchemes extends Action {
 					 //logger.info(" this is the event got!!....."+event+"  id is "+schemeId);
 					
 					 scheme = SectorUtil.getSectorSchemes();
-					 sectorsForm.setFormSectorSchemes(scheme);
-					 
-					 
+					 if("true".equals(session.getAttribute("schemeDeletedError")))
+					 {
+						 	sectorsForm.setFormSectorSchemes(scheme);
+						 	ActionErrors errors = new ActionErrors();
+						 	errors.add("title", new ActionError("error.aim.deleteScheme.schemeSelected"));
+						 	saveErrors(request, errors);
+						 	session.setAttribute("schemeDeletedError",null);
+					 }
 					 return mapping.findForward("viewSectorSchemes");
 		  }
 }

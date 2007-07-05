@@ -19,6 +19,7 @@
 		document.aimEditActivityForm.target = "_self";
 		document.aimEditActivityForm.submit();
 	}
+	
 	function removeSelSectors() {
 		var flag = validate(2);
 		if (flag == false) return false;

@@ -51,6 +51,10 @@ public class AddOrgForm extends ActionForm {
 	private String levelFlag = null;	//defunct
 	private String saveFlag = "no";
 
+	//Sector Preferences
+	private Collection sectors;
+	private Long selSectors[];
+	//
 	
 	 public String getMode() {
 		return mode;
@@ -63,7 +67,7 @@ public class AddOrgForm extends ActionForm {
 
 
 	public void reset(ActionMapping mapping, HttpServletRequest request){
-		if("resetMode".equals(mode))
+		if(("resetMode".equals(mode))&&(request.getParameter("addSector")==null)&&(request.getParameter("remSector")==null)&&(request.getParameter("saveFlag")==null))
 		{	
 	 	  name = null;
 		  acronym = null;
@@ -105,6 +109,10 @@ public class AddOrgForm extends ActionForm {
 		  levelFlag = null;	//defunct
 		  saveFlag = "no";
 		  mode=null;
+		  sectors = null;
+		  if ("resetMode".equals(request.getParameter("mode"))){
+			  request.removeAttribute("mode");
+		  }
 		  }
 	
 	}
@@ -396,5 +404,25 @@ public class AddOrgForm extends ActionForm {
 	 */
 	public void setAcronym(String acronym) {
 		this.acronym = acronym;
+	}
+
+
+	public Collection getSectors() {
+		return sectors;
+	}
+
+
+	public void setSectors(Collection sectors) {
+		this.sectors = sectors;
+	}
+
+
+	public Long[] getSelSectors() {
+		return selSectors;
+	}
+
+
+	public void setSelSectors(Long[] selSectors) {
+		this.selSectors = selSectors;
 	}
 }

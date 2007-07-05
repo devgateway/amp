@@ -47,7 +47,8 @@
 		actPerfChartUrl = request.getContextPath() + "/aim/DisplayChart.img?filename=" + actPerfChartFileName;
 	}
 	
-	String url = "/filterDesktopActivities.do";
+	//String url = "/filterDesktopActivities.do";
+	String url = "/aim/showDesktop.do";
 	String actRiskChartFileName = ChartGenerator.getPortfolioRiskChartFileName(
 						 session,new PrintWriter(out),370,400,url);
 
@@ -125,6 +126,7 @@
 													<digi:trn key="aim:portfolioPerformanceChart">Portfolio-Performance chart</digi:trn>
 												 	</span><br><br>
 												<% } %>
+												
 												<logic:notEmpty name="aimPortfolioDashboardForm" property="pageList">
 													<jsp:useBean id="urlParam" type="java.util.Map" class="java.util.HashMap"/>
 													Page : 

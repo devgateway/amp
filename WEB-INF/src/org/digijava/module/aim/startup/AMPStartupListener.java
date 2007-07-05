@@ -56,7 +56,7 @@ public class AMPStartupListener extends HttpServlet
     	try {
         	ampContext = sce.getServletContext();
 
-        	Iterator itr = FeaturesUtil.
+       /* 	Iterator itr = FeaturesUtil.
         		getActiveFeatures().iterator();
         	while (itr.hasNext()) {
         		AmpFeature f = (AmpFeature) itr.next();
@@ -102,7 +102,20 @@ public class AMPStartupListener extends HttpServlet
         		}
         		
 
-        	}
+        	}*/
+        	
+        		ampContext.setAttribute(Constants.ME_FEATURE,new Boolean(true));
+    			ampContext.setAttribute(Constants.AA_FEATURE,new Boolean(true));
+    			ampContext.setAttribute(Constants.PI_FEATURE,new Boolean(true));
+    			ampContext.setAttribute(Constants.CL_FEATURE,new Boolean(true));
+    			ampContext.setAttribute(Constants.DC_FEATURE,new Boolean(true));
+    			ampContext.setAttribute(Constants.SC_FEATURE,new Boolean(true));
+    			ampContext.setAttribute(Constants.MS_FEATURE,new Boolean(true));
+    			ampContext.setAttribute(Constants.AC_FEATURE,new Boolean(true));
+    			ampContext.setAttribute(Constants.LB_FEATURE,new Boolean(true));
+    			ampContext.setAttribute(Constants.SA_FEATURE,new Boolean(true));
+        	
+        	
         	boolean defFlagExist = FeaturesUtil.defaultFlagExist();
         	ampContext.setAttribute(Constants.DEF_FLAG_EXIST,new Boolean(defFlagExist));
 

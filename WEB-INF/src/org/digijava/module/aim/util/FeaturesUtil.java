@@ -23,6 +23,7 @@ import org.digijava.module.aim.dbentity.AmpFeature;
 import org.digijava.module.aim.dbentity.AmpFeaturesVisibility;
 import org.digijava.module.aim.dbentity.AmpFieldsVisibility;
 import org.digijava.module.aim.dbentity.AmpGlobalSettings;
+import org.digijava.module.aim.dbentity.AmpIndicatorRiskRatings;
 import org.digijava.module.aim.dbentity.AmpModulesVisibility;
 import org.digijava.module.aim.dbentity.AmpSiteFlag;
 import org.digijava.module.aim.dbentity.AmpTemplatesVisibility;
@@ -1671,6 +1672,35 @@ public class FeaturesUtil {
 				}
 				return ft;
 			}
+			/**
+			 * @author dan
+			 */
+			public static AmpIndicatorRiskRatings getFilter(String ratingName) {
+				Session session = null;
+				Collection col = new ArrayList();
+				String qryStr = null;
+				Query qry = null;
+				AmpIndicatorRiskRatings airr=null;
 
+				try {
+					session = PersistenceManager.getSession();
+					qryStr = "select f from " + AmpIndicatorRiskRatings.class.getName() + " f" +
+							" where f.ratingName = '"+ratingName+"'";
+					qry = session.createQuery(qryStr);
+					col = qry.list();
+					airr=(AmpIndicatorRiskRatings) col.iterator().next();
+				} catch (Exception ex) {
+					logger.error("Exception : " + ex.getMessage());
+				} finally {
+					if (session != null) {
+						try {
+							PersistenceManager.releaseSession(session);
+						} catch (Exception rsf) {
+							logger.error("Release session failed :" + rsf.getMessage());
+						}
+					}
+				}
+				return airr;
+			}
 			
 }

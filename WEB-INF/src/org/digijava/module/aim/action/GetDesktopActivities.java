@@ -15,10 +15,14 @@ import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
+import org.dgfoundation.amp.ar.AmpARFilter;
+import org.dgfoundation.amp.ar.ArConstants;
+import org.digijava.module.aim.dbentity.AmpIndicatorRiskRatings;
 import org.digijava.module.aim.form.DesktopForm;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.DesktopUtil;
+import org.digijava.module.aim.util.FeaturesUtil;
 
 /**
  * Loads all desktop activities for the user
@@ -35,6 +39,19 @@ public class GetDesktopActivities extends Action {
 		DesktopForm dForm = (DesktopForm) form;
 		
 		session.setAttribute(Constants.TEAM_ID,tm.getTeamId());
+		String risk=(String) request.getParameter("risk");
+		AmpARFilter arf = (AmpARFilter) session.getAttribute(ArConstants.REPORTS_FILTER);
+		if(risk!=null)
+		{
+			if(arf!=null)
+				if(arf.getRisks()!=null)
+				{
+					arf.getRisks().clear();
+					AmpIndicatorRiskRatings airr=FeaturesUtil.getFilter(risk);
+					arf.getRisks().add(airr);
+					session.setAttribute(ArConstants.REPORTS_FILTER, arf);
+				}
+		}
 		
 		if (Constants.ACCESS_TYPE_MNGMT.equalsIgnoreCase(tm.getTeamAccessType()) ||
 				"Donor".equalsIgnoreCase(tm.getTeamType())) {

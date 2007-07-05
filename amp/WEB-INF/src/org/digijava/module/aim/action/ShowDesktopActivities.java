@@ -47,10 +47,9 @@ public class ShowDesktopActivities extends TilesAction {
 		DecimalFormat mf = new DecimalFormat("###,###,###,###,###") ;
 
 		ServletContext ampContext = getServlet().getServletContext();
-
+		
 		TeamMember tm = (TeamMember) session.getAttribute(Constants.CURRENT_MEMBER);
 		DesktopForm dForm = (DesktopForm) form;
-
 
 		if (session.getAttribute(Constants.DIRTY_ACTIVITY_LIST) != null) {
 			Collection col = (Collection) session.getAttribute(Constants.DIRTY_ACTIVITY_LIST);
@@ -90,6 +89,7 @@ public class ShowDesktopActivities extends TilesAction {
 				loadFilters = false;
 			}
 		}
+		
 		session.setAttribute(Constants.DSKTP_FLTR_CHANGED,new Boolean(false));
 
 		if (loadFilters) {

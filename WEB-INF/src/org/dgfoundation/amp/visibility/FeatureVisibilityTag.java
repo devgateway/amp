@@ -5,15 +5,16 @@
  */
 package org.dgfoundation.amp.visibility;
 
-import java.util.Collection;
 import java.util.Iterator;
 
+import javax.servlet.ServletContext;
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspTagException;
 import javax.servlet.jsp.tagext.BodyTagSupport;
 
-import org.digijava.module.aim.dbentity.AmpFeature;
+import org.digijava.module.aim.dbentity.AmpFeaturesVisibility;
 import org.digijava.module.aim.dbentity.AmpModulesVisibility;
+import org.digijava.module.aim.dbentity.AmpTemplatesVisibility;
 import org.digijava.module.aim.util.FeaturesUtil;
 
 
@@ -48,72 +49,100 @@ public class FeatureVisibilityTag extends BodyTagSupport {
 	public int doEndTag() throws JspException 
     {
        String bodyText = bodyContent.getString();
-       boolean moduleActive=false;
-       boolean featureActive=false;
+       
        try {
-       	
-       	if(this.getModule()==null) ;//error!!!
-       	else
-       	{
-       		moduleActive=isModuleActive();
-       		featureActive=isFeatureActive();
-       		if(moduleActive && featureActive) pageContext.getOut().print(bodyText);
-       			
-       	}
+    	   ServletContext ampContext=pageContext.getServletContext();
+    	   AmpTreeVisibility ampTreeVisibility=(AmpTreeVisibility) ampContext.getAttribute("ampTreeVisibility");
+    	   
+    	   /* name, feature, enable
+    	    * 
+    	    * if feature is not in the db, error! it has to be already added this feature
+    	    * 
+    	    *if field is not in db insert it with feature as parent
+    	    *
+    	    * is this feature the correct parent? if not -> error!
+    	    * 
+    	    * if field is active then display the content
+    	    */
+    	   if(! existModule(ampTreeVisibility)) {
+    		   //error
+    		  System.out.println("error!!!! module "+this.getModule()+" doesn't exist");
+    		  return SKIP_BODY;
+    	   }
+   		   if(!existFeatureinDB(ampTreeVisibility)){
+    		//insert in db;	   
+   			   //insert(templateid,moduleId, featurename);
+   			   
+   			   FeaturesUtil.insertFeatureWithModuleVisibility(ampTreeVisibility.getRoot().getId(),ampTreeVisibility.getModuleByNameFromRoot(this.getModule()).getId(),this.getName());
+   			   
+   			   AmpTemplatesVisibility currentTemplate=(AmpTemplatesVisibility)FeaturesUtil.getTemplateById(ampTreeVisibility.getRoot().getId());
+   			   System.out.println("-------------------------------inserting new feature in database");
+   			   ampTreeVisibility.buildAmpTreeVisibility(currentTemplate);
+   			   ampContext.setAttribute("ampTreeVisibility", ampTreeVisibility);
+   		   }
+
+   		   if(!isModuleTheParent(ampTreeVisibility)){
+   			   //update(featureId, fieldname);
+			   System.out.println("error!!!! module "+this.getModule()+" is not the parent");
+			   FeaturesUtil.updateFeatureWithModuleVisibility(ampTreeVisibility.getModuleByNameFromRoot(this.getModule()).getId(),this.getName());
+			   AmpTemplatesVisibility currentTemplate=(AmpTemplatesVisibility)FeaturesUtil.getTemplateById(ampTreeVisibility.getRoot().getId());
+   			   System.out.println("-------------------------------update the parent of the feature");
+   			   ampTreeVisibility.buildAmpTreeVisibility(currentTemplate);
+   			   ampContext.setAttribute("ampTreeVisibility", ampTreeVisibility);
+		   }
+    	
+   		   if(isFeatureActive(ampTreeVisibility)){
+   			pageContext.getOut().print(bodyText);
+   		   }
+   		   else{
+   			System.out.println("Field MANAGER!!!! ffeature "+this.getName()+" is not ACTIVE");
+   			   //the field is not active!!!
+   		   }
+    	   
        }
        catch (Exception e) {
+    	   e.printStackTrace();
        	throw new JspTagException(e.getMessage());
        }
-       return EVAL_PAGE; 
+       return EVAL_PAGE;//SKIP_BODY 
     }
 	
-	public boolean isFeatureActive()
+	public boolean isFeatureActive(AmpTreeVisibility atv)
 	{
-		AmpModulesVisibility aModule=this.getModuleObject();
-		Collection features=FeaturesUtil.getModuleFeatures(aModule.getId());
-		boolean found=false;
-		for(Iterator it=features.iterator();it.hasNext();)
-			{
-				AmpFeature afeature=(AmpFeature)it.next();
-				if(afeature.getName().compareTo(this.getName())==0) {found=true;break;}
-			}
-		return found;
-	}
-	
-	public boolean isModuleActive()
-	{
-		//to do: getDefaultTemplate -> templateId
-		//to be commented:
-		Long templateId=new Long(1);
-		Collection modules=FeaturesUtil.getTemplateModules(templateId);
-		boolean found=false;
-		AmpModulesVisibility aModule;
-		for(Iterator it=modules.iterator();it.hasNext();)
-			{
-				aModule=(AmpModulesVisibility)it.next();
-				if(aModule.getName().compareTo(this.getModule())==0) {found=true;break;}
-			}
-		return found;
-	}
-	
-	public AmpModulesVisibility getModuleObject()
-	{
-		AmpModulesVisibility aModule=null;
-		if(this.getModule()==null) ;//error!!!
-		else
+		AmpTemplatesVisibility currentTemplate=(AmpTemplatesVisibility) atv.getRoot();
+		for(Iterator it=currentTemplate.getFeatures().iterator();it.hasNext();)
 		{
-//			to do: getDefaultTemplate -> templateId
-			//to be commented:
-			Long templateId=new Long(1);
-			Collection modules=FeaturesUtil.getTemplateModules(templateId);
-			boolean found=false;
-			for(Iterator it=modules.iterator();it.hasNext();)
-				{
-					aModule=(AmpModulesVisibility)it.next();
-					if(aModule.getName().compareTo(this.getModule())==0) {found=true;break;}
-				}
+			AmpFeaturesVisibility feature=(AmpFeaturesVisibility) it.next();
+			if(feature.getName().compareTo(this.getName())==0) 
+			{
+				return true;
+			}
+			
 		}
-		return aModule;
+		return false;
+	}
+	
+	public boolean existModule(AmpTreeVisibility atv)
+	{
+
+		AmpModulesVisibility moduleByNameFromRoot = atv.getModuleByNameFromRoot(this.getModule());
+		if(moduleByNameFromRoot==null) return false;
+		return true;
+	}
+	
+	public boolean existFeatureinDB(AmpTreeVisibility atv)
+	{
+		AmpFeaturesVisibility featureByNameFromRoot = atv.getFeatureByNameFromRoot(this.getName());
+		if(featureByNameFromRoot==null) return false;
+		return true;
+	}
+	
+	public boolean isModuleTheParent(AmpTreeVisibility atv)
+	{
+		AmpTreeVisibility moduleByNameFromRoot = atv.getModuleTreeByNameFromRoot(this.getModule());
+		//AmpFeaturesVisibility f=(AmpFeaturesVisibility) featureByNameFromRoot.getRoot();
+		if(moduleByNameFromRoot.getItems().containsKey(this.getName())) return true;
+		return false;
 	}
 	
 	

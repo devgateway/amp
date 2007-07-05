@@ -703,6 +703,14 @@ public class FeaturesUtil {
 		}
 		return null;
 	}
+	/**
+	 * 
+	 * @author dan
+	 * made for visibility module
+	 */
+	public static Long getGlobalSettingValueLong(String globalSettingName) {
+		return new Long(Long.parseLong(getGlobalSettingValue(globalSettingName)));
+	}
 	
 	/*
 	 * edited by Govind G Dalwani
@@ -1485,33 +1493,67 @@ public class FeaturesUtil {
 			/**
 			 * @author dan
 			 */
-			public static void updateFieldWithFeatureVisibility(Long featureId, String fieldName) {
+			public static void insertFeatureWithModuleVisibility(Long templateId, Long moduleId, String featureName) {
 				Session session = null;
+				AmpModulesVisibility module=new AmpModulesVisibility();
 				AmpFeaturesVisibility feature=new AmpFeaturesVisibility();
-				AmpFieldsVisibility field=new AmpFieldsVisibility();
-				Query qry;
-				Collection col=new ArrayList();
-				String qryStr;
+				AmpTemplatesVisibility template=null;
+				Transaction tx;
 				try {
-					//session = PersistenceManager.getSession();
-					//feature=(AmpFeaturesVisibility)session.load(AmpFeaturesVisibility.class,featureId);
-					//field.setParent(feature);
-					//field.setName(fieldName);
-					//session.save(field);
-					
 					session = PersistenceManager.getSession();
-					feature=(AmpFeaturesVisibility)session.load(AmpFeaturesVisibility.class,featureId);
-					qryStr = "select f from " + AmpFieldsVisibility.class.getName() + " f"
-					+" where f.name = '"+fieldName+"'";;
-					qry = session.createQuery(qryStr);
-					col = qry.list();
-					field=(AmpFieldsVisibility) col.iterator().next();
-					feature.getItems().add(field);
-					field.setParent(feature);
-					session.saveOrUpdate(field);
+					tx=session.beginTransaction();
+					module=(AmpModulesVisibility)session.load(AmpModulesVisibility.class,moduleId);
+					feature.setParent(module);
+					feature.setName(featureName);					
+					session.save(feature);
+					tx.commit();
+					tx=session.beginTransaction();
+					template=(AmpTemplatesVisibility)session.load(AmpTemplatesVisibility.class,templateId);
+					template.getFeatures().add(feature);
+					tx.commit();
+					//session.saveOrUpdate(template);
+					//tx.commit();
 					
 				} catch (Exception ex) {
 					logger.error("Exception : " + ex.getMessage());
+					ex.printStackTrace();
+				} finally {
+					if (session != null) {
+						try {
+							PersistenceManager.releaseSession(session);
+						} catch (Exception rsf) {
+							logger.error("Release session failed :" + rsf.getMessage());
+						}
+					}
+				}
+				return ;
+			}
+
+
+			/**
+			 * @author dan
+			 */
+			public static void insertModuleVisibility(Long templateId, String moduleName) {
+				Session session = null;
+				AmpModulesVisibility module=new AmpModulesVisibility();
+				AmpTemplatesVisibility template=null;
+				Transaction tx;
+				try {
+					session = PersistenceManager.getSession();
+					tx=session.beginTransaction();
+					module.setName(moduleName);
+					session.save(module);
+					tx.commit();
+					tx=session.beginTransaction();
+					template=(AmpTemplatesVisibility)session.load(AmpTemplatesVisibility.class,templateId);
+					template.getItems().add(module);
+					tx.commit();
+					//session.saveOrUpdate(template);
+					//tx.commit();
+					
+				} catch (Exception ex) {
+					logger.error("Exception : " + ex.getMessage());
+					ex.printStackTrace();
 				} finally {
 					if (session != null) {
 						try {
@@ -1528,13 +1570,94 @@ public class FeaturesUtil {
 			/**
 			 * @author dan
 			 */
+			public static void updateFieldWithFeatureVisibility(Long featureId, String fieldName) {
+				Session session = null;
+				AmpFeaturesVisibility feature=new AmpFeaturesVisibility();
+				AmpFieldsVisibility field=new AmpFieldsVisibility();
+				Query qry;
+				Collection col=new ArrayList();
+				String qryStr;
+				Transaction tx;
+				try {
+					session = PersistenceManager.getSession();
+					tx=session.beginTransaction();
+					feature=(AmpFeaturesVisibility)session.load(AmpFeaturesVisibility.class,featureId);
+					qryStr = "select f from " + AmpFieldsVisibility.class.getName() + " f"
+					+" where f.name = '"+fieldName+"'";;
+					qry = session.createQuery(qryStr);
+					col = qry.list();
+					field=(AmpFieldsVisibility) col.iterator().next();
+					feature.getItems().add(field);
+					field.setParent(feature);
+					session.saveOrUpdate(field);
+					tx.commit();
+					
+				} catch (Exception ex) {
+					logger.error("Exception : " + ex.getMessage());
+				} finally {
+					if (session != null) {
+						try {
+							PersistenceManager.releaseSession(session);
+						} catch (Exception rsf) {
+							logger.error("Release session failed :" + rsf.getMessage());
+						}
+					}
+				}
+				return ;
+			}
+
+			/**
+			 * @author dan
+			 */
+			public static void updateFeatureWithModuleVisibility(Long moduleId, String featureName) {
+				Session session = null;
+				AmpModulesVisibility module=new AmpModulesVisibility();
+				AmpFeaturesVisibility feature=new AmpFeaturesVisibility();
+				Query qry;
+				Collection col=new ArrayList();
+				String qryStr;
+				Transaction tx;
+				try {
+					
+					session = PersistenceManager.getSession();
+					tx=session.beginTransaction();
+					module=(AmpModulesVisibility)session.load(AmpModulesVisibility.class,moduleId);
+					qryStr = "select f from " + AmpFeaturesVisibility.class.getName() + " f"
+					+" where f.name = '"+featureName+"'";
+					qry = session.createQuery(qryStr);
+					col = qry.list();
+					feature=(AmpFeaturesVisibility) col.iterator().next();
+					module.getItems().add(feature);
+					feature.setParent(module);
+					session.saveOrUpdate(feature);
+					tx.commit();
+				} catch (Exception ex) {
+					logger.error("Exception : " + ex.getMessage());
+				} finally {
+					if (session != null) {
+						try {
+							PersistenceManager.releaseSession(session);
+						} catch (Exception rsf) {
+							logger.error("Release session failed :" + rsf.getMessage());
+						}
+					}
+				}
+				return ;
+			}
+
+			
+			
+			/**
+			 * @author dan
+			 */
 			public static AmpTemplatesVisibility getTemplateById(Long id) {
 				Session session = null;
 				AmpTemplatesVisibility ft=new AmpTemplatesVisibility();
 				try {
 					session = PersistenceManager.getSession();
 					ft=(AmpTemplatesVisibility)session.load(AmpTemplatesVisibility.class,id);
-					System.out.println("*********************"+ft.getId());
+					List list = session.createQuery("from "+AmpModulesVisibility.class.getName()).list();
+					ft.setAllItems(new TreeSet(list));
 				} catch (Exception ex) {
 					logger.error("Exception : " + ex.getMessage());
 				} finally {

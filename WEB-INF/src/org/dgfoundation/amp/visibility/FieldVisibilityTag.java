@@ -86,6 +86,11 @@ public class FieldVisibilityTag extends BodyTagSupport {
    			   //update(featureId, fieldname);
 			   System.out.println("error!!!! feature "+this.getFeature()+" is not the parent");
 			   FeaturesUtil.updateFieldWithFeatureVisibility(ampTreeVisibility.getFeatureByNameFromRoot(this.getFeature()).getId(),this.getName());
+   			   AmpTemplatesVisibility currentTemplate=(AmpTemplatesVisibility)FeaturesUtil.getTemplateById(ampTreeVisibility.getRoot().getId());
+   			   System.out.println("-------------------------------"+currentTemplate.getId());
+   			   ampTreeVisibility.buildAmpTreeVisibility(currentTemplate);
+   			   ampContext.setAttribute("ampTreeVisibility", ampTreeVisibility);
+
 		   }
     	
    		   if(isFieldActive (ampTreeVisibility)){

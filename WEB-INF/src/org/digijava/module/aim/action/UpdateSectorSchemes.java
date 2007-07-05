@@ -33,6 +33,7 @@ public class UpdateSectorSchemes extends Action {
 		}
 		logger.debug("Comes into the  UpdateSectorSchemes action");
 		AddSectorForm sectorsForm = (AddSectorForm) form;
+		//sectorsForm.setDeleteScheme("");
 		String event = request.getParameter("event");
 		String sId = request.getParameter("ampSecSchemeId");
 		Integer id = new Integer(0);
@@ -159,10 +160,10 @@ public class UpdateSectorSchemes extends Action {
 			sectorsForm.setFormFirstLevelSectors(SectorUtil.getSectorLevel1(a));
 			if (sectorsForm.getFormFirstLevelSectors().size() >= 1) {
 				logger.debug("no deletion");
-				ActionErrors errors = new ActionErrors();
-				errors.add("title", new ActionError(
-						"error.aim.deleteScheme.schemeSelected"));
-				saveErrors(request, errors);
+				//ActionErrors errors = new ActionErrors();
+				//errors.add("title", new ActionError("error.aim.deleteScheme.schemeSelected"));
+				//saveErrors(request, errors);
+				session.setAttribute("schemeDeletedError", "true");
 				return mapping.findForward("viewSectorSchemes");
 			}
 			else

@@ -59,13 +59,7 @@
 						<html:errors />
 					</td>
 				</tr>
-				<logic:equal name="aimVisibilityManagerForm" property="mode" value="addNew">
-					<tr>
-						<td noWrap width=100% vAlign="top">
-							<jsp:include page="newTemplateVisibility.jsp" />
-						</td>
-					</tr>			
-				</logic:equal>
+
 				<logic:equal name="aimVisibilityManagerForm" property="mode" value="editTemplate">
 					<tr>
 						<td noWrap width=100% vAlign="top">
@@ -79,7 +73,14 @@
 						<jsp:include page="manageTemplatesVisibility.jsp" />
 					</td>
 				</tr>
-
+				
+				<logic:equal name="aimVisibilityManagerForm" property="mode" value="addNew">
+					<tr>
+						<td noWrap width=100% vAlign="top">
+							<jsp:include page="newTemplateVisibility.jsp" />
+						</td>
+					</tr>			
+				</logic:equal>
 				<logic:equal name="aimVisibilityManagerForm" property="mode" value="editTemplateTree">			
 				<tr>
 					<td noWrap width=100% vAlign="top">

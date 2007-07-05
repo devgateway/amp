@@ -160,12 +160,17 @@ public class VisibilityManager extends MultiAction {
 						newTemplateModulesList.add(ampModule);
 					}
 		}
-		System.out.println(":::!!!"+templateId+":::!!!"+vForm.getTemplateName());
 		FeaturesUtil.updateModulesTemplate(newTemplateModulesList, templateId, vForm.getTemplateName());
 		{//for refreshing the page
 			Collection templates=FeaturesUtil.getAMPTemplatesVisibility();
 			vForm.setTemplates(templates);
 		}
+		
+		ActionErrors errors = new ActionErrors();
+	 	errors.add("title", new ActionError("error.aim.visibility.updatedTemplate"));
+	 	saveErrors(request, errors);
+
+		
 		return mapping.findForward("forward");
 	}
 	
@@ -180,6 +185,9 @@ public class VisibilityManager extends MultiAction {
 			Collection templates=FeaturesUtil.getAMPTemplatesVisibility();
 			vForm.setTemplates(templates);
 		}
+		ActionErrors errors = new ActionErrors();
+	 	errors.add("title", new ActionError("error.aim.visibility.deletedTemplate"));
+	 	saveErrors(request, errors);
 		return mapping.findForward("forward");
 	}
 	
@@ -231,7 +239,10 @@ public class VisibilityManager extends MultiAction {
 		FeaturesUtil.updateAmpFeaturesTreeVisibility(features, templateId, hbsession);
 		FeaturesUtil.updateAmpFieldsTreeVisibility(fields, templateId, hbsession);
 		request.setAttribute("templateId", templateId);
-		
+		ActionErrors errors = new ActionErrors();
+	 	errors.add("title", new ActionError("error.aim.visibility.visibilityTreeUpdated"));
+	 	saveErrors(request, errors);
+
 		
 		return modeEditTemplate(mapping,form,request,response);
 	}

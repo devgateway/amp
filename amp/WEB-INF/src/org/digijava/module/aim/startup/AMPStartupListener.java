@@ -140,7 +140,7 @@ public class AMPStartupListener extends HttpServlet
         	AmpTreeVisibility ampTreeVisibility=new AmpTreeVisibility();
         	//get the default amp template!!!
         	Session session=this.createSession();
-        	AmpTemplatesVisibility currentTemplate=FeaturesUtil.getTemplateVisibility(new Long(1),session);
+        	AmpTemplatesVisibility currentTemplate=FeaturesUtil.getTemplateVisibility(FeaturesUtil.getGlobalSettingValueLong("Visibility Template"),session);
         	ampTreeVisibility.buildAmpTreeVisibility(currentTemplate);
         	ampContext.setAttribute("ampTreeVisibility",ampTreeVisibility);
         	

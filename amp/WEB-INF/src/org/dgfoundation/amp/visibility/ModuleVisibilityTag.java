@@ -8,12 +8,15 @@ package org.dgfoundation.amp.visibility;
 import java.util.Collection;
 import java.util.Iterator;
 
+import javax.servlet.ServletContext;
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspTagException;
 import javax.servlet.jsp.tagext.BodyTagSupport;
 
 import org.digijava.module.aim.dbentity.AmpFeature;
+import org.digijava.module.aim.dbentity.AmpFeaturesVisibility;
 import org.digijava.module.aim.dbentity.AmpModulesVisibility;
+import org.digijava.module.aim.dbentity.AmpTemplatesVisibility;
 import org.digijava.module.aim.util.FeaturesUtil;
 
 
@@ -49,32 +52,71 @@ public class ModuleVisibilityTag extends BodyTagSupport {
 	public int doEndTag() throws JspException 
     {
        String bodyText = bodyContent.getString();
-
-
+       
        try {
-       	
-    	   if(isModuleActive()) System.out.println("ACTIVE MODULE!!! name:::"+this.getName()+":::enable:::"+this.getEnabled());
-    	   else System.out.println("name:::"+this.getName()+":::enable:::"+this.getEnabled());
-           pageContext.getOut().print(bodyText);
+    	   ServletContext ampContext=pageContext.getServletContext();
+    	   AmpTreeVisibility ampTreeVisibility=(AmpTreeVisibility) ampContext.getAttribute("ampTreeVisibility");
+    	   
+    	   /* name, feature, enable
+    	    * 
+    	    * if feature is not in the db, error! it has to be already added this feature
+    	    * 
+    	    *if field is not in db insert it with feature as parent
+    	    *
+    	    * is this feature the correct parent? if not -> error!
+    	    * 
+    	    * if field is active then display the content
+    	    */
+   		   if(!existModuleinDB(ampTreeVisibility)){
+    		//insert in db;	   
+   			   //insert(templateid, modulename);
+   			   
+   			   FeaturesUtil.insertModuleVisibility(ampTreeVisibility.getRoot().getId(),this.getName());
+   			   
+   			   AmpTemplatesVisibility currentTemplate=(AmpTemplatesVisibility)FeaturesUtil.getTemplateById(ampTreeVisibility.getRoot().getId());
+   			   System.out.println("-------------------------------inserting new feature in database");
+   			   ampTreeVisibility.buildAmpTreeVisibility(currentTemplate);
+   			   ampContext.setAttribute("ampTreeVisibility", ampTreeVisibility);
+   		   }
+
+   		   if(isModuleActive(ampTreeVisibility)){
+   			pageContext.getOut().print(bodyText);
+   		   }
+   		   else{
+   			System.out.println("Field MANAGER!!!! module "+this.getName()+" is not ACTIVE");
+   			   //the field is not active!!!
+   		   }
+    	   
        }
        catch (Exception e) {
+    	   e.printStackTrace();
        	throw new JspTagException(e.getMessage());
        }
-       return EVAL_PAGE; 
+       return EVAL_PAGE;//SKIP_BODY 
     }
 	
-	public boolean isModuleActive()
+	public boolean isModuleActive(AmpTreeVisibility atv)
 	{
-		//to do: getDefaultTemplate -> templateId
-		//to be commented:
-		Long templateId=new Long(1);
-		Collection modules=FeaturesUtil.getTemplateModules(templateId);
-		boolean found=false;
-		for(Iterator it=modules.iterator();it.hasNext();)
+		AmpTemplatesVisibility currentTemplate=(AmpTemplatesVisibility) atv.getRoot();
+		for(Iterator it=currentTemplate.getItems().iterator();it.hasNext();)
+		{
+			AmpModulesVisibility module=(AmpModulesVisibility) it.next();
+			if(module.getName().compareTo(this.getName())==0) 
 			{
-				AmpModulesVisibility aModule=(AmpModulesVisibility)it.next();
-				if(aModule.getName().compareTo(this.getName())==0) {found=true;break;}
+				return true;
 			}
-		return found;
+			
+		}
+		return false;
 	}
+	
+	
+	public boolean existModuleinDB(AmpTreeVisibility atv)
+	{
+		AmpModulesVisibility moduleByNameFromRoot = atv.getModuleByNameFromRoot(this.getName());
+		if(moduleByNameFromRoot==null) return false;
+		return true;
+	}
+	
+	
 }

@@ -44,6 +44,15 @@ public class AmpOrganisation implements Comparable, Serializable, Identifiable
 	private Set calendar;
 	
 	private String segmentCode;
+	private Set sectors;
+
+	public Set getSectors() {
+		return sectors;
+	}
+
+	public void setSectors(Set sectors) {
+		this.sectors = sectors;
+	}
 
 	public String getSegmentCode() {
 		return segmentCode;

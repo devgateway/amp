@@ -7,7 +7,57 @@
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
 
 <digi:ref href="css/styles.css" type="text/css" rel="stylesheet" />
+<script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
+<script language="JavaScript" type="text/javascript">
+	function addSector()
+	{
+		<digi:context name="addSec" property="context/module/moduleinstance/editOrganisation.do" />
+		document.aimAddOrgForm.action = "<%= addSec %>"+"~ampOrgId="+document.aimAddOrgForm.ampOrgId.value+"~actionFlag="+document.aimAddOrgForm.actionFlag.value+"~addSector=true";
+		document.aimAddOrgForm.target = "_self";
+		document.aimAddOrgForm.submit();
+	}
+	function addSectors() {
+		openNewWindow(600, 450);
+		<digi:context name="addSector" property="context/module/moduleinstance/selectSectors.do?edit=true" />
+	  	document.aimAddOrgForm.action = "<%= addSector %>";
+		document.aimAddOrgForm.target = popupPointer.name;
+		document.aimAddOrgForm.submit();
+	}
+	function removeSelSectors() {
+		var flag = validate();
+		if (flag == false) return false;
+	    
+	    <digi:context name="addSec" property="context/module/moduleinstance/editOrganisation.do" />
+		document.aimAddOrgForm.action = "<%= addSec %>"+"~ampOrgId="+document.aimAddOrgForm.ampOrgId.value+"~actionFlag=edit~remSectors=true";
+		document.aimAddOrgForm.target = "_self";
+	    document.aimAddOrgForm.submit();
+	    return true;
+	}
+	function validate(){
+		if (document.aimAddOrgForm.selSectors.checked != null) {
+			if (document.aimAddOrgForm.selSectors.checked == false) {
+				alert("Please choose a sector to remove");
+				return false;
+			}
+		} else {
+			var length = document.aimAddOrgForm.selSectors.length;
+			var flag = 0;
+			for (i = 0;i < length;i ++) {
+				if (document.aimAddOrgForm.selSectors[i].checked == true) {
+					flag = 1;
+					break;
+				}
+			}
 
+			if (flag == 0) {
+				alert("Please choose a sector to remove");
+				return false;
+			}
+		}
+		return true;
+	}
+	
+</script>
 <script language="JavaScript">
 
 
@@ -198,6 +248,10 @@ function loadPage()
 		//}
 		document.aimAddOrgForm.saveFlag.value = "yes";
 		document.aimAddOrgForm.name.value = str1;
+		<digi:context name="addSec" property="context/module/moduleinstance/editOrganisation.do" />
+		document.aimAddOrgForm.action = "<%= addSec %>";<!-- +"~ampOrgId="+document.aimAddOrgForm.ampOrgId.value+"~actionFlag=edit~remSectors=true"; -->
+		document.aimAddOrgForm.target = "_self";
+	    
 		document.aimAddOrgForm.submit();
 	}
 
@@ -492,6 +546,84 @@ function loadPage()
 																	</tr>
 																	<tr>
 																		<td width="169" align="right" height="30">
+                                                                     		<digi:trn key="aim:sectorPreferences">Sector Preferences</digi:trn>
+																		</td>
+																	    <td width="380" height="30" colspan="2">
+                                                                    		<table cellPadding=5 cellSpacing=1 border=0 width="100%"	bgcolor="#d7eafd">
+																				<tr>
+									                                              <td bgcolor="#ffffff" width="100%">
+									                                                <table cellPadding=1 cellSpacing=1 border=0	bgcolor="#ffffff" width="100%">
+									                                                  <c:if test="${empty aimAddOrgForm.sectors}">
+									                                                    <tr>
+									                                                      <td bgcolor="#ffffff">
+									                                                        <input type="button" class="buton" onclick="addSectors();" value='<digi:trn key="btn:addSectors">Add Sectors</digi:trn>' />
+									                                                      </td>
+									                                                    </tr>
+									                                                  </c:if>
+									                                                  <c:if test="${!empty aimAddOrgForm.sectors}">
+									                                                    <tr>
+									                                                      <td>
+									                                                        <table cellSpacing=0 cellPadding=0 border=0 bgcolor="#ffffff" width="100%">
+									                                                        <% int i = 0; %>
+									                                                        <c:if test="${aimAddOrgForm.sectors != null}">
+									                                                          <c:forEach var="sectorash" items="${aimAddOrgForm.sectors}">
+									                                                          	<% i++; %>
+									                                                          	<tr>
+									                                                              <td>
+									                                                              	<table width="100%" cellSpacing=1 cellPadding=1 vAlign="top" align="left">
+									                                                                  <tr>
+									                                                                    <td width="3%" vAlign="center">
+									                                                                      <html:multibox property="selSectors">
+									                                                                      	  <c:out value="${sectorash.sectorId}" />
+									                                                                      </html:multibox>
+									                                                                    </td>
+									                                                                    <td  width="87%" vAlign="center" align="left">
+									                                                                      <c:if test="${!empty sectorash.sectorName}">
+									                                                                        [${sectorash.sectorName}]
+									                                                                      </c:if>
+									                                                                      <c:if test="${!empty sectorash.subsectorLevel1Name}">
+									                                                                        [${sectorash.subsectorLevel1Name}]
+									                                                                      </c:if>
+									                                                                      <c:if test="${!empty sectorash.subsectorLevel2Name}">
+									                                                                        [${sectorash.subsectorLevel2Name}]
+									                                                                      </c:if>
+									                                                                    </td>
+									                                                                  </tr>
+									                                                                </table>
+									                                                              </td>
+									                                                            </tr>
+									                                                          </c:forEach>
+									                                                          </c:if>
+									                                                          <tr>
+									                                                            <td>
+									                                                              <table cellSpacing=2 cellPadding=2>
+									                                                                <tr>
+									                                                                  <c:if test="<%=i<5 %>">
+									                                                                  <logic:notEmpty name="MS" scope="application">
+									                                                                    <td>
+									                                                                      <input type="button" value="Add Sectors" class="buton"  onclick="addSectors();">
+									                                                                    </td>
+									                                                                  </logic:notEmpty>
+									                                                                  </c:if>
+									                                                                  <td>
+																										<input type="button" class="buton" onclick="return removeSelSectors()" value='<digi:trn key="btn:removeSector">Remove Sector</digi:trn>' />
+									                                                                  </td>
+									                                                                </tr>
+									                                                              </table>
+									                                                            </td>
+									                                                          </tr>
+									                                                        </table>
+									                                                      </td>
+									                                                    </tr>
+									                                                  </c:if>
+									                                                </table>
+									                                              </td>
+									                                            </tr>
+									                                          </table>
+																		</td>
+																	</tr>
+																	<tr>
+																		<td width="169" align="right" height="30">
 																			<digi:trn key="aim:orgContactName">Contact Person Name</digi:trn>
 																		</td>
 																	    <td width="380" height="30" colspan="2">
@@ -559,7 +691,7 @@ function loadPage()
 																			<table width="100%" cellspacing="5">
 																				<tr>
 																					<td width="42%" align="right">
-																						<html:button  styleClass="dr-menu" property="submitButton"  onclick="return check()">
+																						<html:button  styleClass="dr-menu" property="submitButton" onclick="return check()">
 																							<digi:trn key="btn:save">Save</digi:trn> 
 																						</html:button>
 																					</td>

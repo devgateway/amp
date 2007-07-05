@@ -184,6 +184,7 @@
                                                            			<tr>
 																		<td height="30" width="377">
 																		  <jsp:useBean id="urlParams" type="java.util.Map" class="java.util.HashMap"/>
+																		  <c:set target="${urlParams}" property="mode" value="resetMode" />
 																		  <c:set target="${urlParams}" property="actionFlag" value="edit" />
 																		  <c:set target="${urlParams}" property="ampOrgId">
 																		  	<bean:write name="organisation" property="ampOrgId" />

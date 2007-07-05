@@ -2077,6 +2077,39 @@ public class DbUtil {
 			}
 		}
 	}
+	
+	public static void updateOrg(Object object) {
+		Session sess = null;
+		Transaction tx = null;
+
+		try {
+			sess = PersistenceManager.getRequestDBSession();
+			tx = sess.beginTransaction();
+			AmpOrganisation org = (AmpOrganisation) object;
+			HashSet sect = new HashSet();
+			Iterator i = org.getSectors().iterator();
+			while (i.hasNext()) {
+				AmpSector e = (AmpSector) i.next();
+				sect.add(sess.load(AmpSector.class, e.getAmpSectorId()));
+				
+			}
+			org.setSectors(sect);
+			sess.update(org);
+			tx.commit();
+		} catch (Exception e) {
+			logger.error("Unable to update");
+			logger.debug(e.toString());
+			if (tx != null) {
+				try {
+					tx.rollback();
+				} catch (HibernateException ex) {
+					logger.debug("rollback() failed");
+					logger.debug(ex.toString());
+				}
+			}
+		}
+	}
+
 
 	public static void delete(Object object) throws JDBCException {
 		Session sess = null;

@@ -59,6 +59,7 @@ public class AdvancedReport extends Action {
 		
 		AdvancedReportForm formBean = (AdvancedReportForm) form;
 		
+		
 		HttpSession httpSession = request.getSession();
 		Query query;
 		Collection reports = new ArrayList();
@@ -77,6 +78,31 @@ public class AdvancedReport extends Action {
 		logger.debug("Team Id: " + ampTeamId);
 		String perspective = "DN";
 		Long All=new Long(0);
+		
+		//set maxStep
+		String check = request.getParameter("check");
+		if (check != null){
+			if ("SelectCols".equals(check)){
+				if (formBean.getMaxStep().intValue() < 1)
+					formBean.setMaxStep(new Integer(1));
+			}
+			else
+				if ("SelectRows".equals(check)){
+					if (formBean.getMaxStep().intValue() < 2)
+						formBean.setMaxStep(new Integer(2));
+				}
+				else
+					if ("SelectMeasures".equals(check)){
+						if (formBean.getMaxStep().intValue() < 3)
+							formBean.setMaxStep(new Integer(3));
+					}
+					else
+						if ("4".equals(check)){
+							if (formBean.getMaxStep().intValue() < 4)
+								formBean.setMaxStep(new Integer(4));
+						}
+		}
+		//
 		
 		if(formBean.getPerspective() == null)
 		{
@@ -109,6 +135,7 @@ public class AdvancedReport extends Action {
 				
 				formBean.setInEditingMode(false);
 				formBean.setDbReportId( 0 );
+				formBean.setMaxStep(new Integer(0));
 			} 
 			
 			
@@ -145,6 +172,8 @@ public class AdvancedReport extends Action {
 					formBean.setArReportType(arReportType);
 				
 				//logger.info("inside Step 1...");
+				if (formBean.getMaxStep().intValue() < 1)
+					formBean.setMaxStep(new Integer(1));
 				return mapping.findForward("SelectCols");
 			}
 			// add columns that are available
@@ -154,6 +183,8 @@ public class AdvancedReport extends Action {
 				//logger.info( "Operation is : " + str);
 				updateData(formBean.getAmpColumns(), formBean.getAddedColumns(), formBean.getSelectedColumns(), formBean);
 				formBean.setSelectedColumns(null);
+				if (formBean.getMaxStep().intValue() < 1)
+					formBean.setMaxStep(new Integer(1));
 				return mapping.findForward("SelectCols");
 			}
 			// Remove the columns selected
@@ -163,6 +194,8 @@ public class AdvancedReport extends Action {
 				//logger.info( "Operation is : " + str);
 				updateData(formBean.getAddedColumns(), formBean.getAmpColumns() , formBean.getRemoveColumns(), formBean);
 				formBean.setRemoveColumns(null);
+				if (formBean.getMaxStep().intValue() < 1)
+					formBean.setMaxStep(new Integer(1));
 				return mapping.findForward("SelectCols");
 			}
 			
@@ -172,6 +205,8 @@ public class AdvancedReport extends Action {
 				str = request.getParameter("check");
 				updateData(formBean.getAddedColumns(), formBean.getColumnHierarchie(), formBean.getSelectedColumns(), formBean);
 				formBean.setSelectedColumns(null);
+				if (formBean.getMaxStep().intValue() < 2)
+					formBean.setMaxStep(new Integer(2));
 				return mapping.findForward("SelectRows");
 			}
 			// Remove the columns selected : Step 2
@@ -181,6 +216,8 @@ public class AdvancedReport extends Action {
 				//logger.info( "Operation is : " + str);
 				updateData(formBean.getColumnHierarchie(), formBean.getAddedColumns(), formBean.getRemoveColumns(), formBean);
 				formBean.setRemoveColumns(null);
+				if (formBean.getMaxStep().intValue() < 2)
+					formBean.setMaxStep(new Integer(2));
 				return mapping.findForward("SelectRows");
 			}
 			// Step 3 : Select Measures
@@ -190,6 +227,8 @@ public class AdvancedReport extends Action {
 				//logger.info( "Operation is : " + str);
 				updateData(formBean.getAmpMeasures(), formBean.getAddedMeasures(), formBean.getSelectedColumns(), formBean);
 				formBean.setSelectedColumns(null);
+				if (formBean.getMaxStep().intValue() < 3)
+					formBean.setMaxStep(new Integer(3));
 				return mapping.findForward("SelectMeasures");
 			}
 			
@@ -200,6 +239,8 @@ public class AdvancedReport extends Action {
 				//logger.info( "Operation is : " + str);
 				updateData(formBean.getAddedMeasures(), formBean.getAmpMeasures() , formBean.getRemoveColumns(), formBean);
 				formBean.setRemoveColumns(null);
+				if (formBean.getMaxStep().intValue() < 3)
+					formBean.setMaxStep(new Integer(3));
 				return mapping.findForward("SelectMeasures");
 			}
 
@@ -726,6 +767,9 @@ public class AdvancedReport extends Action {
 			if(request.getParameter("check") != null && request.getParameter("check").equals("4"))
 			{
 				//logger.info("In here  Getting Report Details..........");
+				if (formBean.getMaxStep().intValue() < 4)
+					formBean.setMaxStep(new Integer(4));
+
 				return mapping.findForward("ReportDetails");
 			}
 			if(request.getParameter("check") != null && request.getParameter("check").equals("SelectColumn"))

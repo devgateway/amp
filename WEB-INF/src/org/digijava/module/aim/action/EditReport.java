@@ -39,7 +39,7 @@ public class EditReport extends Action {
 	{
 		
 			AdvancedReportForm formBean = (AdvancedReportForm) form;
-			
+			formBean.setMaxStep(new Integer(6));
 			String strReportId	= request.getParameter("rid");
 			if (strReportId.compareTo("") != 0) {
 				//AmpReports ampreport	= (AmpReports) session.get(AmpReports.class, new Long(strReportId));

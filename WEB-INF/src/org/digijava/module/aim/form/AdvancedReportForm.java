@@ -78,8 +78,15 @@ public class AdvancedReportForm extends ActionForm
 	
 	private boolean inEditingMode	= false; // true if in editing mode
 	private long dbReportId			= 0; // If in editing mode, it represents the id of the AmpReports object in the database
-
 	
+	private Integer maxStep = new Integer(0);
+	
+	public Integer getMaxStep() {
+		return maxStep;
+	}
+	public void setMaxStep(Integer maxStep) {
+		this.maxStep = maxStep;
+	}
 	/**
 	 * @return Returns the multiReport.
 	 */

@@ -10,17 +10,28 @@
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/advanceReportManager.js"/>"></script>
 
 <script language="JavaScript">
-
+function check(){
+	option = -1;
+	for (i = document.aimAdvancedReportForm.reportType.length-1; i > -1; i--){
+		if (document.aimAdvancedReportForm.reportType[i].checked){
+			option = i;
+			i = -1;
+		}
+	}
+	if (option == -1){ 
+		alert("You must choose a report type!");
+		return false;
+	}	
+	return true;
+}
 function gotoStep() {
-
-/*	if(document.aimAdvancedReportForm.removeColumns == null)
-		alert(" Please select columns to generate report ");
-	else
-	{*/
+		if (!check())
+			return false; 
 		<digi:context name="step" property="context/module/moduleinstance/advancedReportManager.do?check=SelectCols" />
 		document.aimAdvancedReportForm.action = "<%= step %>";
 		document.aimAdvancedReportForm.target = "_self";
 		document.aimAdvancedReportForm.submit();
+		return true;
 //	}
 }
 
@@ -91,81 +102,7 @@ function gotoStep() {
 					<TR>
 						<TD bgcolor="#f4f4f4">
 							<TABLE width="100%" cellSpacing=1 cellPadding=0 valign="top" align="left" bgcolor="#f4f4f4">
-								<tr width="100%" valign="top">
-									<td height="20">
-										<table bgcolor="#f4f4f4" align="left" valign="bottom" cellPadding=0 cellspacing=1 height="20">
-											<tr>
-											<!--this one-->
-											<td noWrap align=left> 
-													<bean:define id="translation">
-														<digi:trn key="aim:clickToSelectReportType">Click here to Select Report Type</digi:trn>
-													</bean:define>
-													<digi:link href="/advancedReportManager.do~check=forward" styleClass="sub-nav" title="<%=translation%>"  >
-														1 :   <digi:trn key="aim:SelectReportType2">Select Report Type</digi:trn>
-													</digi:link>
-												</td>
-											<!--ends here-->
-												<td noWrap align=left> 
-													<bean:define id="translation">
-														<digi:trn key="aim:clickToSelectColumns">Click here to Select Columns</digi:trn>
-													</bean:define>
-													<digi:link href="/advancedReportManager.do?check=SelectCols" styleClass="sub-nav" title="<%=translation%>" >
-														2 :   <digi:trn key="aim:SelectColumns2">Select Columns</digi:trn>
-													</digi:link>
-												</td>							
-												<td noWrap align=left>
-													<bean:define id="translation">
-														<digi:trn key="aim:clickToselectrows/hierarchies" >Click here to select rows/hierarchies</digi:trn>
-													</bean:define>
-													<digi:link href="/advancedReportManager.do?check=SelectRows"  styleClass="sub-nav" title="<%=translation%>" >
-														3 : <digi:trn key="aim:SelectRows/hierarchies">Select rows/hierarchies</digi:trn>
-													</digi:link>
-												</td>										
-												<td noWrap align=left>
-													<bean:define id="translation">
-														<digi:trn key="aim:clickToSelectMeasures">Click here to Select Measures</digi:trn>
-													</bean:define>
-													<digi:link href="/advancedReportManager.do?check=SelectMeasures"  styleClass="sub-nav" title="<%=translation%>" > 
-													4 : <digi:trn key="aim:SelectMeasures">Select Measures</digi:trn>
-													</digi:link>
-												</td>											
-												
-											</tr>
-										</table>	
-									</td>
-								</tr>
-								<TR>
-
-									<td noWrap valign=top align=left>
-									 <table cellpadding=0 cellspacing=1 valign=top align=left>	<tr>	
-									 <td noWrap align=left> 
-													<bean:define id="translation">
-														<digi:trn key="aim:clickToViewReportDetails">Click here to view Report Details</digi:trn>
-													</bean:define>
-													<digi:link href="/advancedReportManager.do?check=4"  styleClass="sub-nav" title="<%=translation%>" >
-														5 : <digi:trn key="aim:ReportDetails">Report Details</digi:trn>
-													</digi:link>
-												</td>
-									 <td valign=top>
-										<bean:define id="translation">
-											<digi:trn key="aim:clickToGenerateReport">Click here to Generate Reports</digi:trn>
-										</bean:define>
-										<digi:link href="/advancedReportManager.do?check=forward"  styleClass="sub-nav" title="<%=translation%>" onclick="javascript:gotoStep()">
-										6 : <digi:trn key="aim:SaveReport">Save Report</digi:trn>
-										</digi:link>
-										</td>	
-										<!--<td noWrap valign=top align=left>
-										<bean:define id="translation">
-											<digi:trn key="aim:clickToGenerateReport">Click here to Generate Chart</digi:trn>
-										</bean:define>
-										<digi:link href="/advancedReportManager.do?check=forward"  styleClass="sub-nav" title="<%=translation%>" onclick="javascript:alert('Charts Coming Soon...');">
-										6 : <digi:trn key="aim:GenerateChart">Generate Chart</digi:trn>
-										</digi:link>
-										</td>-->	
-										</tr>	</table>
-									</td>	
-								</tr>
-
+								<jsp:include page="AdvancedReportManagerMenu.jsp" flush="true"/>
 								<TR bgColor=#f4f4f2>
 									<TD vAlign="top" align="left" width="100%">
 									</TD>

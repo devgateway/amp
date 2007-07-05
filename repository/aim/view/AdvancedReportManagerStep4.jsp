@@ -19,11 +19,7 @@ function saveReport()
 		document.aimAdvancedReportForm.submit();
 }
 
-
-
-function gotoStep() 
-{
-	
+function check(){
 	var temp = document.aimAdvancedReportForm.reportTitle.value;
     var iChars = "\"*|,?_:.<>[]{}';()@&$#%!~`^-+=\\/";
 	var j = "0123456789";
@@ -31,7 +27,6 @@ function gotoStep()
 	var desc = document.aimAdvancedReportForm.reportDescription.value;
 	var stat=0;
     var a = temp.charAt(0);
-	 
 	
 	/*if (isNaN(a)) {
 		alert("Not Numeric");
@@ -40,61 +35,61 @@ function gotoStep()
 		flag=1;
 	}*/
 	
-
 	if(trim(temp) == "")
 	{
 		alert(" Please enter report title");
 		document.aimAdvancedReportForm.reportTitle.value = "";
-		
-
+		flag = 1;
 	}
 	else if(!(isNaN(a)))
 	{
 		alert("Report Title cannot start with a numeric value");
 		flag=1;
-		
 	}
 	else
 	{
-		
 		for (var i = 0; i < temp.length; i++) 
 		{
 			if (iChars.indexOf(temp.charAt(i)) != -1)
 			{
 				alert(" Please do not enter special characters in the Report Title");
-				
 				flag=1;
 				break;
 			}
 		}
-		
 	}
 	if(temp.length > 30)
 	{
 		alert("Report title should not be greater than 30 characters including spaces.");
 		flag=1;
 	}
-   
-		if(flag==0)
-		{
-			<digi:context name="step" property="context/module/moduleinstance/advancedReportManager.do?check=5" />
+	if (flag == 0)
+		return true;
+	else
+		return false;
+}
+
+function gotoStep() 
+{
+	if(check())
+	{
+		<digi:context name="step" property="context/module/moduleinstance/advancedReportManager.do?check=5" />
 		document.aimAdvancedReportForm.action = "<%= step %>";
 		document.aimAdvancedReportForm.target = "_self";
 		document.aimAdvancedReportForm.reportTitle.value = temp;
 		document.aimAdvancedReportForm.reportDescription.value = desc;
 		document.aimAdvancedReportForm.submit();
-		}
-	
+	}
 
-//	}
 }
 /*added here*/
 function backStep() {
-
+	if (check()){
 		<digi:context name="step" property="context/module/moduleinstance/advancedReportManager.do?check=SelectMeasures" />
 		document.aimAdvancedReportForm.action = "<%= step %>";
 		document.aimAdvancedReportForm.target = "_self";
 		document.aimAdvancedReportForm.submit();
+	}
 }
 /*ended here*/
 </script>
@@ -189,80 +184,7 @@ function backStep() {
 					<TR>
 						<TD bgcolor="#f4f4f4">
 							<TABLE width="100%" cellSpacing=1 cellPadding=0 vAlign="top" align="left" bgcolor="#f4f4f4">
-								<tr width="100%" valign="top">
-									<td height="20">
-										<table bgcolor="#f4f4f4" align="left" valign="bottom" cellPadding=0 cellspacing=1 height="20">
-											<tr>
-												<!--this one-->
-											<td noWrap align=left> 
-													<bean:define id="translation">
-														<digi:trn key="aim:clickToSelectReportType">Click here to Select Report Type</digi:trn>
-													</bean:define>
-													<digi:link href="/advancedReportManager.do~check=forward" styleClass="sub-nav" title="<%=translation%>"  >
-														1 :   <digi:trn key="aim:SelectReportType2">Select Report Type</digi:trn>
-													</digi:link>
-												</td>
-											<!--ends here-->
-												<td noWrap align=left> 
-													<bean:define id="translation">
-														<digi:trn key="aim:clickToSelectColumns">Click here to Select Columns</digi:trn>
-													</bean:define>
-													<digi:link href="/advancedReportManager.do?check=SelectCols" styleClass="sub-nav" title="<%=translation%>" >
-														2 :   <digi:trn key="aim:SelectColumns2">Select Columns</digi:trn>
-													</digi:link>
-												</td>											
-												<td noWrap align=left>
-													<bean:define id="translation">
-														<digi:trn key="aim:clickToselectrows/hierarchies" >Click here to select rows/hierarchies</digi:trn>
-													</bean:define>
-													<digi:link href="/advancedReportManager.do?check=SelectRows"  styleClass="sub-nav" title="<%=translation%>" >
-														3 : <digi:trn key="aim:SelectRows/hierarchies">Select rows/hierarchies</digi:trn>
-													</digi:link>
-												</td>										
-												<td noWrap align=left>
-													<bean:define id="translation">
-														<digi:trn key="aim:clickToSelectMeasures">Click here to Select Measures</digi:trn>
-													</bean:define>
-													<digi:link href="/advancedReportManager.do?check=SelectMeasures"  styleClass="sub-nav" title="<%=translation%>" > 
-													4 : <digi:trn key="aim:SelectMeasures">Select Measures</digi:trn>
-													</digi:link>
-												</td>											
-												
-											</tr>
-										</table>	
-									</td>
-								</tr>
-								<TR>
-
-									<td noWrap valign=top align=left>	
-									 <table cellpadding=0 cellspacing=1 valign=top align=left>	<tr>	
-									 <td noWrap align=left> 
-													<bean:define id="translation">
-														<digi:trn key="aim:clickToViewReportDetails">Click here to view Report Details</digi:trn>
-													</bean:define>
-													<digi:link href="/advancedReportManager.do?check=4"  styleClass="sub-nav3" title="<%=translation%>" >
-														5 : <digi:trn key="aim:ReportDetails">Report Details</digi:trn>
-													</digi:link>
-												</td>
-									 <td valign=top>
-										<bean:define id="translation">
-											<digi:trn key="aim:clickToSaveReport">Click here to Save Reports</digi:trn>
-										</bean:define>
-										<digi:link  href="/advancedReportManager.do?check=4" styleClass="sub-nav" title="<%=translation%>" onclick="javascript:gotoStep()">
-										6 : <digi:trn key="aim:SaveReport">Save Report</digi:trn>
-										</digi:link>
-										</td>
-										<!--<td noWrap valign=top align=left>
-										<bean:define id="translation">
-											<digi:trn key="aim:clickToGenerateReport">Click here to Generate Chart</digi:trn>
-										</bean:define>
-										<digi:link href="/advancedReportManager.do?check=4"  styleClass="sub-nav" title="<%=translation%>" onclick="javascript:alert('Charts Coming Soon...');">
-										6 : <digi:trn key="aim:GenerateChart">Generate Chart</digi:trn>
-										</digi:link>
-										</td>-->	
-										</tr>	</table>
-									</td>	
-								</tr>
+								<jsp:include page="AdvancedReportManagerMenu.jsp" flush="true"/>
 								<TR bgColor=#f4f4f2>
 									<TD vAlign="top" align="center" width="100%" bgColor=#f4f4f2>
 										<TABLE width="100%" cellPadding=0 cellSpacing=0 vAlign="top" align="center" bgColor=#f4f4f2 >

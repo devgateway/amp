@@ -6,6 +6,7 @@ package org.digijava.module.aim.action;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashSet;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -51,6 +52,19 @@ public class GetDesktopActivities extends Action {
 					arf.getRisks().add(airr);
 					session.setAttribute(ArConstants.REPORTS_FILTER, arf);
 				}
+				else{
+					arf.setRisks(new HashSet());
+					AmpIndicatorRiskRatings airr=FeaturesUtil.getFilter(risk);
+					arf.getRisks().add(airr);
+					session.setAttribute(ArConstants.REPORTS_FILTER, arf);
+				}
+			else{
+				arf=new AmpARFilter();
+				arf.setRisks(new HashSet());
+				AmpIndicatorRiskRatings airr=FeaturesUtil.getFilter(risk);
+				arf.getRisks().add(airr);
+				session.setAttribute(ArConstants.REPORTS_FILTER, arf);
+			}
 		}
 		
 		if (Constants.ACCESS_TYPE_MNGMT.equalsIgnoreCase(tm.getTeamAccessType()) ||

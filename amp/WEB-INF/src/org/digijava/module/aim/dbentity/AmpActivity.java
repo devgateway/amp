@@ -5,9 +5,10 @@ import java.util.*;
 
 import org.digijava.kernel.dbentity.*;
 import org.digijava.kernel.user.*;
+import org.digijava.module.aim.util.LoggerIdentifiable;
 
 public class AmpActivity
-		  implements Comparable, Serializable {
+		  implements Comparable, Serializable, LoggerIdentifiable {
 
 
 	private Boolean budget;
@@ -1009,5 +1010,15 @@ public class AmpActivity
 
 	public void setMfdCntTitle(String mfdCntTitle) {
 		this.mfdCntTitle = mfdCntTitle;
+	}
+
+	public Object getObjectType() {
+		// TODO Auto-generated method stub
+		return this.getClass().getName();
+	}
+
+	public Object getIdentifier() {
+		// TODO Auto-generated method stub
+		return this.getAmpActivityId().toString();
 	}
 }

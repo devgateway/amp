@@ -83,6 +83,9 @@
 			org.digijava.module.aim.dbentity.AmpFeaturesVisibility
 		</hibernate-class>
 		<hibernate-class>
+			org.digijava.module.aim.dbentity.AmpAuditLogger
+		</hibernate-class>
+		<hibernate-class>
 			org.digijava.module.aim.dbentity.AmpFieldsVisibility
 		</hibernate-class>
 		<hibernate-class>

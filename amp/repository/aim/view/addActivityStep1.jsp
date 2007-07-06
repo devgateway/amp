@@ -51,7 +51,7 @@ function selectOrganisation() {
 
 function edit(key) {
 	document.aimEditActivityForm.step.value = "1.1";
-	
+
 	document.aimEditActivityForm.action = "/editor/showEditText.do?id=" + key + "&referrer=/aim/addActivity.do?edit=true";
 	document.aimEditActivityForm.editKey.value = key;
 	document.aimEditActivityForm.target = "_self";
@@ -103,6 +103,11 @@ function validateForm() {
 		return false;
 	}
 
+    var stId=document.getElementsByName("statusId");
+    if(stId==null || stId[0].value==0){
+      alert("Please select status");
+      return false;
+    }
 /*	if (document.aimEditActivityForm.status.value == "-1") {
 		alert("Please select status");
 		document.aimEditActivityForm.status.focus();
@@ -264,7 +269,7 @@ function popupwin()
 									<tr><td>
 										<IMG alt=Link height=10 src="../ampTemplate/images/arrow-014E86.gif" width=15>
 										<b><digi:trn key="aim:identification">Identification</digi:trn></b>
-										
+
 									</td></tr>
 									<tr><td>&nbsp;</td></tr>
 									<tr><td><jsp:include page="addActivityStep1Identification.jsp"/>
@@ -273,14 +278,14 @@ function popupwin()
 										&nbsp;
 									</td></tr>
 									<tr><td>
-										<jsp:include page="addActivityStep1OrgAndProjects.jsp"/>									
+										<jsp:include page="addActivityStep1OrgAndProjects.jsp"/>
 									</td></tr>
 									<tr><td>
 										&nbsp;
 									</td></tr>
 									<tr><td bgColor=#f4f4f2>&nbsp;</td></tr>
-										<jsp:include page="addActivityStep1Planning.jsp"/>									
-<!-- 
+										<jsp:include page="addActivityStep1Planning.jsp"/>
+<!--
 									<tr><td bgColor=#f4f4f2 align="center">
 										<table cellPadding=3>
 											<tr>
@@ -294,7 +299,7 @@ function popupwin()
 											</tr>
 										</table>
 									</td></tr>
- -->																		
+ -->
 								</table>
 
 								<!-- end contents -->

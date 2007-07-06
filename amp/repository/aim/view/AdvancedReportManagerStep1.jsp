@@ -228,7 +228,7 @@ function checkUncheckAll2() {
 																						
 																						<!-- the contribution report doesn't have access to columns 30-35 from amp_columns -->
 																						<c:if test="${aimAdvancedReportForm.arReportType == 'contribution'}">
-																						<c:if test="${ampColumns.columnId<30 || ampColumns.columnId>35}">
+																						<c:if test="${ampColumns.columnId<'30' || ampColumns.columnId>'35'}">
 																						<logic:iterate name="aimAdvancedReportForm" id="ampColumns"	property="ampColumns" >
 																						<tr bgcolor="#ffffff">
 																							<td align="left" width="98%" valign=top>
@@ -247,10 +247,10 @@ function checkUncheckAll2() {
 																						
 																						
 																						<!-- the regional report doesn't have access to columns 30-35 from amp_columns -->
-																						<c:if test="${aimAdvancedReportForm.arReportType == 'regional' || aimAdvancedReportForm.arReportType == 'component'}">
+																						<c:if test="${aimAdvancedReportForm.arReportType == 'regional'}">
 																						<logic:iterate name="aimAdvancedReportForm" id="ampColumns"	property="ampColumns" >
 																						<logic:notEqual name="ampColumns" property="columnId" value="5">
-																						<c:if test="${ampColumns.columnId<30 || ampColumns.columnId>35}">
+																						<c:if test="${ampColumns.columnId<'30' || ampColumns.columnId>'35'}">
 																						<tr bgcolor="#ffffff">
 																							<td align="left" width="98%" valign=top>
 																							<digi:trn key="aim:report:${ampColumns.columnName}"><c:out value="${ampColumns.columnName}"/></digi:trn>
@@ -268,7 +268,7 @@ function checkUncheckAll2() {
 																						</c:if>
 																					
 																						<!-- the new component report containing also indicator columns 30-35 -->
-																						<c:if test="${aimAdvancedReportForm.arReportType == 'regional' || aimAdvancedReportForm.arReportType == 'component'}">
+																						<c:if test="${aimAdvancedReportForm.arReportType == 'component'}">
 																						<logic:iterate name="aimAdvancedReportForm" id="ampColumns"	property="ampColumns" >
 																						<logic:notEqual name="ampColumns" property="columnId" value="5">
 

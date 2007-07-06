@@ -2,7 +2,7 @@ DROP VIEW IF EXISTS `amp_local`.`v_indicator_name`;
 CREATE OR REPLACE  VIEW `v_indicator_name` AS select `a`.`activity_id` AS `amp_activity_id`,`b`.`name` AS `name`,`b`.`amp_me_indicator_id` AS `amp_me_indicator_id` from ((`amp_me_indicator_value` `a` join `amp_me_indicators` `b`) join `amp_activity` `c`) where ((`c`.`amp_activity_id` = `a`.`activity_id`) and (`a`.`me_indicator_id` = `b`.`amp_me_indicator_id`));
 
 DROP VIEW IF EXISTS `amp_local`.`v_indicator_description`;
-CREATE OR REPLACE  VIEW `v_indicator_description` AS select `a`.`activity_id` AS `amp_activity_id`,`b`.`description` AS `name`,`b`.`amp_me_indicator_id` AS `amp_me_indicator_id` from ((`amp_me_indicator_value` `a` join `amp_me_indicators` `b`) join `amp_activity` `c`) where ((`c`.`amp_activity_id` = `a`.`activity_id`) and (`a`.`me_indicator_id` = `b`.`amp_me_indicator_id`));
+CREATE OR REPLACE VIEW `v_indicator_description` AS select `a`.`activity_id` AS `amp_activity_id`,`b`.`description` AS `name`,`b`.`amp_me_indicator_id` AS `amp_me_indicator_id` from ((`amp_me_indicator_value` `a` join `amp_me_indicators` `b`) join `amp_activity` `c`) where ((`c`.`amp_activity_id` = `a`.`activity_id`) and (`a`.`me_indicator_id` = `b`.`amp_me_indicator_id`) and (`b`.`description` <> _latin1''));
 
 DROP VIEW IF EXISTS `amp_local`.`v_indicator_id`;
 CREATE OR REPLACE  VIEW `v_indicator_id` AS select `a`.`activity_id` AS `amp_activity_id`,`b`.`code` AS `name`,`b`.`amp_me_indicator_id` AS `amp_me_indicator_id` from ((`amp_me_indicator_value` `a` join `amp_me_indicators` `b`) join `amp_activity` `c`) where ((`c`.`amp_activity_id` = `a`.`activity_id`) and (`a`.`me_indicator_id` = `b`.`amp_me_indicator_id`));

@@ -204,7 +204,12 @@ function checkUncheckAll2() {
 																			<TABLE width="100%" cellPadding=2 cellSpacing=1 vAlign="top" align="top" bgcolor="#aaaaaa" border=0>
 																				<c:if test="${!empty aimAdvancedReportForm.ampColumns}">
 																					
-																						<c:if test="${aimAdvancedReportForm.arReportType == 'donor' || aimAdvancedReportForm.arReportType == 'contribution'}">
+																					<!-- 
+																						Because the donor report and the contribution report are now different (the donor has also the indicator columnns)
+																						we have to create different c:if for each report								
+																						 -->
+																					
+																						<c:if test="${aimAdvancedReportForm.arReportType == 'donor'}">
 																						<logic:iterate name="aimAdvancedReportForm" id="ampColumns"	property="ampColumns" >
 																						<tr bgcolor="#ffffff">
 																							<td align="left" width="98%" valign=top>
@@ -219,7 +224,50 @@ function checkUncheckAll2() {
 																						</tr>
 																						</logic:iterate>
 																						</c:if>
-
+																						
+																						
+																						<!-- the contribution report doesn't have access to columns 30-35 from amp_columns -->
+																						<c:if test="${aimAdvancedReportForm.arReportType == 'contribution'}">
+																						<c:if test="${ampColumns.columnId<30 || ampColumns.columnId>35}">
+																						<logic:iterate name="aimAdvancedReportForm" id="ampColumns"	property="ampColumns" >
+																						<tr bgcolor="#ffffff">
+																							<td align="left" width="98%" valign=top>
+																							<digi:trn key="aim:report:${ampColumns.columnName}"><c:out value="${ampColumns.columnName}"/></digi:trn>
+																								
+																							</td>
+																							<td align="right">
+																							<html:multibox property="selectedColumns">
+																							<c:out value="${ampColumns.columnId}"/>
+																							</html:multibox>
+																							</td>
+																						</tr>
+																						</logic:iterate>
+																						</c:if>
+																						</c:if>
+																						
+																						
+																						<!-- the regional report doesn't have access to columns 30-35 from amp_columns -->
+																						<c:if test="${aimAdvancedReportForm.arReportType == 'regional' || aimAdvancedReportForm.arReportType == 'component'}">
+																						<logic:iterate name="aimAdvancedReportForm" id="ampColumns"	property="ampColumns" >
+																						<logic:notEqual name="ampColumns" property="columnId" value="5">
+																						<c:if test="${ampColumns.columnId<30 || ampColumns.columnId>35}">
+																						<tr bgcolor="#ffffff">
+																							<td align="left" width="98%" valign=top>
+																							<digi:trn key="aim:report:${ampColumns.columnName}"><c:out value="${ampColumns.columnName}"/></digi:trn>
+																								
+																							</td>
+																							<td align="right">
+																							<html:multibox property="selectedColumns">
+																							<c:out value="${ampColumns.columnId}"/>	
+					  																	    </html:multibox>
+																							</td>
+																						</tr>
+																						</c:if>
+																						</logic:notEqual>
+																						</logic:iterate>
+																						</c:if>
+																					
+																						<!-- the new component report containing also indicator columns 30-35 -->
 																						<c:if test="${aimAdvancedReportForm.arReportType == 'regional' || aimAdvancedReportForm.arReportType == 'component'}">
 																						<logic:iterate name="aimAdvancedReportForm" id="ampColumns"	property="ampColumns" >
 																						<logic:notEqual name="ampColumns" property="columnId" value="5">
@@ -239,7 +287,7 @@ function checkUncheckAll2() {
 																						</logic:notEqual>
 																						</logic:iterate>
 																						</c:if>
-																					
+																						
 																					
 																				</c:if>
 																			</TABLE>

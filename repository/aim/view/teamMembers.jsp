@@ -245,7 +245,7 @@ function addTeamMember(id) {
 															<table cellspacing="5">
 																<tr>
 																	<td>	
-							<input type="button" value="Add Member" class="dr-menu"  onclick="addTeamMember('<c:out value="${aimTeamMemberForm.teamId}"/>')"/>											
+							<input type="button" value="<digi:trn key='btn:addMember'>Add Member</digi:trn>" class="dr-menu"  onclick="addTeamMember('<c:out value="${aimTeamMemberForm.teamId}"/>')"/>											
 																	</td>
 																	<td>
 																		<html:button  styleClass="dr-menu" property="removeMember"  onclick="return checkSelMembers()">

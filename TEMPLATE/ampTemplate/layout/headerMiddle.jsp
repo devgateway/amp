@@ -2,10 +2,15 @@
 <%@ taglib uri="/taglib/struts-bean" prefix="bean" %>
 <%@ taglib uri="/taglib/struts-logic" prefix="logic" %>
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
+<%@ page import="org.digijava.module.aim.util.FeaturesUtil" %>
+
 
 <logic:notPresent name="currentMember">
+<% String publicView=FeaturesUtil.getGlobalSettingValue("Public View"); 
+if("On".equals(publicView)) { %>
 <DIV id="menu">
 <UL>
+
 		<LI class="noLink">
 			<digi:link styleClass="head-menu-link" href="/reportsPublicView.do" module="aim" onclick="return quitRnot()">			
 					::: <digi:trn key="aim:aidInformationModule">AID INFORMATION MODULE</digi:trn>
@@ -17,6 +22,7 @@
 		</LI>				
 </UL>		
 </DIV>
+<% } %>
 </logic:notPresent>
 	
 <logic:present name="ampAdmin" scope="session">

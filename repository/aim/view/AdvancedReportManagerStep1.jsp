@@ -228,9 +228,9 @@ function checkUncheckAll2() {
 																						
 																						<!-- the contribution report doesn't have access to columns 30-35 from amp_columns -->
 																						<c:if test="${aimAdvancedReportForm.arReportType == 'contribution'}">
-																						<c:if test="${ampColumns.columnId<'30' || ampColumns.columnId>'35'}">
+
 																						<logic:iterate name="aimAdvancedReportForm" id="ampColumns"	property="ampColumns" >
-																						<tr bgcolor="#ffffff">
+																						<c:if test="${ampColumns.columnId<'30' || ampColumns.columnId>'35'}">																						<tr bgcolor="#ffffff">
 																							<td align="left" width="98%" valign=top>
 																							<digi:trn key="aim:report:${ampColumns.columnName}"><c:out value="${ampColumns.columnName}"/></digi:trn>
 																								
@@ -241,8 +241,8 @@ function checkUncheckAll2() {
 																							</html:multibox>
 																							</td>
 																						</tr>
-																						</logic:iterate>
 																						</c:if>
+																						</logic:iterate>
 																						</c:if>
 																						
 																						

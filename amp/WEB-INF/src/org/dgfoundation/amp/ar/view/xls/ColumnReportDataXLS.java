@@ -55,8 +55,8 @@ public class ColumnReportDataXLS extends XLSExporter {
 	 */
 	public void generate() {
 		ColumnReportData columnReport = (ColumnReportData) item;
-		rowId.inc();
-		colId.reset();
+	//	rowId.inc();
+	//	colId.reset();
 		
 		/*
 		// title:

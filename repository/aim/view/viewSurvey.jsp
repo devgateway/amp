@@ -11,7 +11,7 @@
 <script language="Javascript">
 <!--
 	function getSurvey() {
-		if (document.aimEditSurveyForm.surveyId.value != "-1") {
+		if (document.aimEditSurveyForm.surveyId.value != "-1")Status {
 			document.aimEditSurveyForm.submit();
 		}
 		else
@@ -55,7 +55,7 @@
 											<td>
 						<img src="../ampTemplate/images/print_icon.gif">
 				<digi:link href="/ParisIndicatorPrintSurvey.do" target="_blank">
-					Print
+					<digi:trn key="btn:print">Print</digi:trn>
 				</digi:link>
 				</td>
 											<TD align="right">

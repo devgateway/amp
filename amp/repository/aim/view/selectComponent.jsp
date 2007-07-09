@@ -190,12 +190,12 @@
 												 <div id="<%=divName%>">
 												<select name="<%=field1%>" class="inp-text">
 													<c:if test="${comm.adjustmentType == 1}">
-														<option value="1" selected="true">Actual</option>
-														<option value="0">Planned</option>
+														<option value="1" selected="true"><digi:trn key="opt:actual">Actual</digi:trn></option>
+														<option value="0"><digi:trn key="opt:planned">Planned</digi:trn></option>
 													</c:if>
 													<c:if test="${comm.adjustmentType == 0}">
-														<option value="1">Actual</option>
-														<option value="0" selected="true">Planned</option>
+														<option value="1"><digi:trn key="opt:actual">Actual</digi:trn></option>
+														<option value="0" selected="true"><digi:trn key="opt:planned">Planned</digi:trn></option>
 													</c:if>
 												</select>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="text" name="<%=field2%>"
 												value="<c:out value="${comm.transactionAmount}"/>" size="15"  class='amt'>&nbsp;<select name="<%=field3%>" class="inp-text">
@@ -222,7 +222,7 @@
 														<c:out value="${pers.name}"/>
 														</option>
 													</c:forEach>
-												</select>&nbsp;<input type='button' value='Delete' class='inp-text'
+												</select>&nbsp;<input type='button' value='<digi:trn key="btn:delete">Delete</digi:trn>' class='inp-text'
 												onclick="removeDisbursement('<%=divName%>')"></div>
 											</c:forEach>
 											</c:if>
@@ -263,12 +263,12 @@
 												 <div id="<%=divName%>">
 												<select name="<%=field1%>" class="inp-text">
 													<c:if test="${comm.adjustmentType == 1}">
-														<option value="1" selected="true">Actual</option>
-														<option value="0">Planned</option>
+														<option value="1" selected="true"><digi:trn key="opt:actual">Actual</digi:trn></option>
+														<option value="0"><digi:trn key="opt:planned">Planned</digi:trn></option>
 													</c:if>
 													<c:if test="${comm.adjustmentType == 0}">
-														<option value="1">Actual</option>
-														<option value="0" selected="true">Planned</option>
+														<option value="1"><digi:trn key="opt:actual">Actual</digi:trn></option>
+														<option value="0" selected="true"><digi:trn key="opt:planned">Planned</digi:trn></option>
 													</c:if>
 												</select>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="text" name="<%=field2%>"
 												value="<c:out value="${comm.transactionAmount}"/>" size="15"  class='amt'>&nbsp;<select name="<%=field3%>" class="inp-text">
@@ -294,7 +294,7 @@
 														<c:out value="${pers.name}"/>
 														</option>
 													</c:forEach>
-												</select>&nbsp;<input type='button' value='Delete' class='inp-text'
+												</select>&nbsp;<input type='button' value='<digi:trn key="btn:delete">Delete</digi:trn>' class='inp-text'
 												onclick="removeExpenditure('<%=divName%>')"></div>
 											</c:forEach>
 											</c:if>

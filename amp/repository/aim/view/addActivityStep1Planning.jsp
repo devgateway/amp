@@ -336,14 +336,16 @@
 												</td>
 											</tr>
 											<tr>
-												<td bgcolor="#ffffff">																			  <FONT color=red>*</FONT>&nbsp;
-												<digi:trn key="aim:status">Status</digi:trn>												  <a href="javascript:popupwin()">
+												<td bgcolor="#ffffff">
+												<FONT color=red>*</FONT>&nbsp;
+												<digi:trn key="aim:status">Status</digi:trn>												  
+												<a href="javascript:popupwin()">
 												<img src="../ampTemplate/images/help.gif" alt="Click to get help on Status" width=10 height=10 border=0></a>
 												</td>
 												<td bgcolor="#ffffff">
 	                                                <category:showoptions name="aimEditActivityForm" property="statusId"  keyName="<%= org.digijava.module.aim.helper.CategoryConstants.ACTIVITY_STATUS_KEY %>" styleClass="inp-text" />
                                                     <br/><br/>
-													If there have been some changes in the status, explain below the reasons :
+													<digi:trn key="aim:reasonsToChangeStatus">If there have been some changes in the status, explain below the reasons</digi:trn> :
 													<a title="<digi:trn key="aim:ReasonforStatusofProject">Use this space to provide explanations as to why that status was selected. Used primarily in the case of cancelled and suspended projects</digi:trn>">
                                                     <br/>
 													<html:textarea property="statusReason" cols="50" rows="3" styleClass="inp-text" />

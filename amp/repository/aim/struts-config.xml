@@ -1147,9 +1147,9 @@
       <forward name="forward" path="/aim/addActivity.do?edit=true" redirect="true" />
     </action>
     <action forward="/showLayout.do?layout=adminHome" path="/aim/admin" type="org.digijava.module.aim.action.ShowAdminHome" />
-    <action name="aimStatusListForm" path="/aim/statusManager" scope="request" type="org.digijava.module.aim.action.StatusManager" validate="false">
+    <!-- <action name="aimStatusListForm" path="/aim/statusManager" scope="request" type="org.digijava.module.aim.action.StatusManager" validate="false">
       <forward name="forward" path="/showLayout.do?layout=statusManager" />
-    </action>
+    </action>  -->
     <action name="aimStatusItemForm" path="/aim/getStatusItem" scope="session" type="org.digijava.module.aim.action.GetStatusItem" validate="false">
       <forward name="deleteforward" path="/showLayout.do?layout=deleteStatus" />
       <forward name="editforward" path="/showLayout.do?layout=updateStatus" />

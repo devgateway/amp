@@ -16,6 +16,12 @@ import javax.servlet.http.HttpServletResponse ;
 import javax.servlet.http.HttpSession;
 import java.util.* ;
 
+/**
+ * 
+ * @deprecated
+ *
+ * CategoryManager should be used instead
+ */
 public class StatusManager extends Action
 {
 	public ActionForward execute(ActionMapping mapping, ActionForm form, 

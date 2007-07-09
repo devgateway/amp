@@ -39,8 +39,17 @@ public class CategoryValueTagClass extends TagSupport {
 					E.printStackTrace();
 				}
 			}
-			else
-				logger.info("No AmpCategoryValue found with id " + categoryValueId);
+			else {
+				try {
+					JspWriter out					= pageContext.getOut();
+					out.println("<font color='red'>No category value found with id " + categoryValueId + "</font>");
+					logger.info("No AmpCategoryValue found with id " + categoryValueId);
+				}
+				catch (Exception E) {
+					logger.error(E);
+					E.printStackTrace();
+				}
+			}
 		}
 		return EVAL_PAGE;
 	}

@@ -143,6 +143,11 @@ public class CategoryTagClass extends TagSupport implements DynamicAttributes {
 						this.printBoxView( ampCategoryValues, isMultiselect, valueId, valueIdsColl);
 				
 			}
+			else {
+				JspWriter out					= pageContext.getOut();
+				out.println("<font color='red'>Category not found in database</font>");
+				
+			}
 		}
 		catch(Exception E){
 			logger.info(E);

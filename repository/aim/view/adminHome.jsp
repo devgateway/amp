@@ -209,7 +209,7 @@
                               </digi:link>
                             </td>
                           </tr>
-                          <tr>
+                          <!-- Satus Manager is deprecated. Use Category Manager instead. <tr>
                             <td class=f-names noWrap>
                               <digi:img src="module/aim/images/arrow-th-BABAB9.gif" width="16"/>
                               <c:set var="translation">
@@ -219,7 +219,7 @@
                                 <digi:trn key="aim:statusManager">Status Manager</digi:trn>
                               </digi:link>
                             </td>
-                          </tr>
+                          </tr>  -->
                         </table>
                       </td>
                     </tr>

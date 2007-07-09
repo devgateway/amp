@@ -236,7 +236,6 @@
 												<digi:trn key="btn:clear">Clear</digi:trn> 
 											</html:reset>
 											&nbsp;
-											<input type="button" value="Close" class="dr-menu" onclick="closeWindow()">
 											<html:button  styleClass="dr-menu" property="submitButton" onclick="closeWindow()">
 												<digi:trn key="btn:close">Close</digi:trn> 
 											</html:button>

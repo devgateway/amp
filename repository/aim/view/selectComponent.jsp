@@ -60,9 +60,8 @@
 										</td>
 										<td>
 											<html:select property="componentTitle" styleClass="inp-text">
-												<html:option value="-1">Select Component</html:option>
-												<html:optionsCollection name="aimEditActivityForm" property="allComps"
-													 value="title" label="title" />
+												<html:option value="-1"><digi:trn key="aim:selectComponent">Select Component</digi:trn></html:option>
+												<html:optionsCollection name="aimEditActivityForm" property="allComps" value="title" label="title" />
 											</html:select>
 											<%--<a title="<digi:trn key="aim:TitleforComponent">Title of the project component specified</digi:trn>">
 											<html:text property="componentTitle" styleClass="inp-text" tabindex="1"/>
@@ -94,9 +93,9 @@
 															 <%=eaForm.getCurrCode()%> )
 										</span>
 
-										<a href="javascript:addCommitments()"><digi:trn key="btn:add">Add</digi:trn></a><br><br>
 												<digi:trn key="aim:PlannedFIE">Planned</digi:trn>/<digi:trn key="aim:ActualFIE">Actual</digi:trn>&nbsp;&nbsp;&nbsp;
-												<digi:trn key="aim:AmountFIE">Amount</digi:trn>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+										<a href="javascript:addCommitments()"><digi:trn key="btn:add">Add</digi:trn></a><br><br>
+													<digi:trn key="aim:AmountFIE">Amount</digi:trn>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 												<digi:trn key="aim:CurrencyFIE">Currency</digi:trn>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 												<digi:trn key="aim:DateFIE">Date</digi:trn>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 												<digi:trn key="aim:PerspectiveFIE">Perspective</digi:trn><br>
@@ -122,12 +121,12 @@
 												 <div id="<%=divName%>">
 												<select name="<%=field1%>" class="inp-text">
 													<c:if test="${comm.adjustmentType == 1}">
-														<option value="1" selected="true">Actual</option>
-														<option value="0">Planned</option>
+														<option value="1" selected="true"><digi:trn key="opt:actual">Actual</digi:trn></option>
+														<option value="0"><digi:trn key="opt:planned">Planned</digi:trn></option>
 													</c:if>
 													<c:if test="${comm.adjustmentType == 0}">
-														<option value="1">Actual</option>
-														<option value="0" selected="true">Planned</option>
+														<option value="1"><digi:trn key="opt:actual">Actual</digi:trn></option>
+														<option value="0" selected="true"><digi:trn key="opt:planned">Planned</digi:trn></option>
 													</c:if>
 												</select>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="text" name="<%=field2%>"
 												value="<c:out value="${comm.transactionAmount}"/>" size="15"  class='amt'>&nbsp;<select name="<%=field3%>" class="inp-text">

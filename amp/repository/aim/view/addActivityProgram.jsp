@@ -104,15 +104,15 @@
                         <tr>
                           <td width="120" align="right">
                             <c:if test="${varSt.count==1}">
-                            Program scheme
+                            <digi:trn key="aim:programScheme">Program scheme</digi:trn>
                             </c:if>
                             <c:if test="${varSt.count!=1}">
-                            Sub program level ${varSt.count-1}
+                            <digi:trn key="aim:subProgramLevel">Sub program level</digi:trn> ${varSt.count-1}
                             </c:if>
                           </td>
                           <td id="slo${varSt.count}">
                             <html:select property="selPrograms" onchange="reloadProgram(this)" styleClass="inp-text">
-                              <option value="-1">-Select Program-</option>
+                              <option value="-1">-<digi:trn key="aim:selectProgram">Select Program</digi:trn>-</option>
                               <html:optionsCollection name="prgLevels" value="ampThemeId" label="name" />
                            </html:select>
                           </td>

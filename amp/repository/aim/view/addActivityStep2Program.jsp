@@ -97,7 +97,7 @@
                                       <tr>
                                         <td>
                                           <a title="<digi:trn key="aim:ProgramDesc">Description of program, objectives, or associated projects</digi:trn>">
-                                          Description
+                                          <digi:trn key="aim:description">Description</digi:trn>
 </a>                                    </td>
                                       </tr>
                                       <tr>

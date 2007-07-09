@@ -45,7 +45,7 @@ version: 2.2.0
     left:0;
     -moz-opacity: 0.5;
     opacity:.50;
-    filter: alpha(opacity=50);
+
     background-color:#CCC;
 }
 
@@ -99,8 +99,8 @@ version: 2.2.0
 	height:100%;
     -moz-opacity: 0.7;
     opacity:.70;
-    filter:alpha(opacity=70);
-	zoom:1;
+
+
 }
 
 .yui-panel {
@@ -202,7 +202,7 @@ version: 2.2.0
 	text-decoration:none;
 	background-color: #E4E4E4;
 	color: #333;
-	cursor: hand;
+
 	vertical-align: middle;
 	border: 2px solid #797979;
 	border-top-color:#FFF;

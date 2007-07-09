@@ -3,58 +3,70 @@
 <script language="JavaScript" type="text/javascript" src="<digi:file src='module/aim/scripts/panel/yahoo-dom-event.js'/>" >.</script>
 <script language="JavaScript" type="text/javascript" src="<digi:file src='module/aim/scripts/panel/container-min.js'/>" >.</script>
 <script language="JavaScript" type="text/javascript" src="<digi:file src='module/aim/scripts/panel/dragdrop-min.js'/>" >.</script>
-<div align="center" id="tableForReportSheet">
-	<table>
-			<tr>
-				<td><strong>ID:</strong></td>
-				<td id='reportId'>&nbsp;</td>
-			</tr>
-			<tr>
-				<td><strong>Name:</strong></td>
-				<td id='reportName'>&nbsp;</td>
-			</tr>
-			<tr>
-				<td><strong>Type:</strong></td>
-				<td id='reportType'>&nbsp;</td>
-			</tr>
-			<tr>
-				<td><strong>Is drilldown:</strong></td>
-				<td id='reportDrilldown'>&nbsp;</td>
-			</tr>
-			<tr>
-				<td><strong>Is public:</strong></td>
-				<td id='reportPublic'>&nbsp;</td>
-			</tr>
-			<tr>
-				<td><strong>Description:</strong></td>
-				<td id='reportDescription'>&nbsp;</td>
-			</tr>
-			<tr>
-				<td>&nbsp;</td>
-				<td>&nbsp;</td>
-			</tr>
-			<tr>
-				<td>&nbsp;</td>
-				<td><a style='cursor:pointer;color:#006699' onClick='openReportWindow()'><digi:trn key='aim:defaultTeamReportViewReportMessage'>View report</digi:trn></a></td>
-			</tr>
-			<tr>
-				<td colspan="2"><button onClick='YAHOO.reportsheet.myPanel.hide()'>Close</button></td>
-			</tr>
-		</table>
+<script language="JavaScript" type="text/javascript" src="<digi:file src='module/aim/scripts/panel/event-min.js'/>" >.</script>
+<div id="reportSheet" style="display:none">
+	<div class="hd">Report Sheet</div>
+	<div align="center" class="bd" id="tableForReportSheet">
+		<table>
+				<tr>
+					<td><strong>ID:</strong></td>
+					<td id='reportId'>&nbsp;</td>
+				</tr>
+				<tr>
+					<td><strong>Name:</strong></td>
+					<td id='reportName'>&nbsp;</td>
+				</tr>
+				<tr>
+					<td><strong>Type:</strong></td>
+					<td id='reportType'>&nbsp;</td>
+				</tr>
+				<tr>
+					<td><strong>Is drilldown:</strong></td>
+					<td id='reportDrilldown'>&nbsp;</td>
+				</tr>
+				<tr>
+					<td><strong>Is public:</strong></td>
+					<td id='reportPublic'>&nbsp;</td>
+				</tr>
+				<tr>
+					<td><strong>Description:</strong></td>
+					<td id='reportDescription'>&nbsp;</td>
+				</tr>
+				<tr>
+					<td>&nbsp;</td>
+					<td>&nbsp;</td>
+				</tr>
+				<tr>
+					<td>&nbsp;</td>
+					<td><a style='cursor:pointer;color:#006699' onClick='openReportWindow()'><digi:trn key='aim:defaultTeamReportViewReportMessage'>View report</digi:trn></a></td>
+				</tr>
+				<tr>
+					<td colspan="2"><button type="button" id="closePanelButton" onClick="YAHOO.reportsheet.myPanel.hide()">Close</button></td>
+				</tr>
+			</table>
+	</div>
 </div>
-<script language="JavaScript">
+<script type="text/javascript">
 	YAHOO.namespace("YAHOO.reportsheet");
-	YAHOO.reportsheet.myPanel		= new YAHOO.widget.Panel("reportSheet", {
-			width:"200px", 
-			fixedcenter: true, 
-			constraintoviewport: true, 
-			underlay:"shadow", 
-			close:true, 
-			visible:false, 
-			draggable:true} );
-	var div							= document.getElementById('tableForReportSheet');
-	YAHOO.reportsheet.myPanel.setBody( div );
-	YAHOO.reportsheet.myPanel.render(document.body);
+	function initReportSheet() {
+		var reportSheetElement				= document.getElementById("reportSheet");
+		reportSheetElement.style.display	= "block";
+		YAHOO.reportsheet.myPanel		= new YAHOO.widget.Panel("reportSheet", {
+				width:"200px", 
+				fixedcenter: true, 
+				constraintoviewport: true, 
+				underlay:"shadow", 
+				close:true, 
+				visible:false, 
+				draggable:true} );
+		//var div							= document.getElementById('tableForReportSheet');
+		//YAHOO.reportsheet.myPanel.setBody( div );
+		//YAHOO.reportsheet.myPanel.render(document.body);
+		YAHOO.reportsheet.myPanel.render();
+	}
+
+	YAHOO.util.Event.addListener(window, "load", initReportSheet) ;
+
 
 	YAHOO.reportsheet.jsReports	= new Array();
 	var i;
@@ -77,7 +89,7 @@
 		i++;
 	</logic:iterate>
 </script>
-<script language="JavaScript">
+<script type="text/javascript">
 	YAHOO.namespace("YAHOO.reportsheet");
 	function openReportWindow () {
 		var selectedReport	= document.getElementById('defaultReport').value;

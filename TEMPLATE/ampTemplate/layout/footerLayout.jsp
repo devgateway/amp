@@ -10,7 +10,7 @@
 	<TR><TD>
 	--%>
 		<TABLE class="padding" cellSpacing=0 cellPadding=0 width="100%" border=0>
-		  	<TR bgColor=#484846><TD bgColor=#484846 align="center">
+			<TR bgColor=#484846><TD bgColor=#484846 align="center">
 	      	<TABLE cellSpacing=0 cellPadding=0 width="100%" border=0>
 					<TR>
 						<TD width=1 align="right"><digi:img src="images/feedback.gif"/></TD>

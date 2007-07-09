@@ -14,11 +14,11 @@
 <% Cell c=cellColumn.getByOwner(ownerId);%>
 <logic:equal name="columnNo" value="0">
 <bean:define id="reportData" name="cellColumn" property="parent" type="org.dgfoundation.amp.ar.ReportData" scope="page" toScope="page"/>
-<td style=" padding-left:<%=10+10*(reportData.getLevelDepth()-1)%>" valign="top"  bgcolor="<%= bckColor.equals("true")?"DDDDDD":"ffffff" %>" class="reportsBorderTD" >
+<td style=" padding-top: 1px; padding-bottom: 1px; padding-left:<%=10+10*(reportData.getLevelDepth()-1)%>;" valign="middle"  bgcolor="<%= bckColor.equals("true")?"DDDDDD":"eeeeee" %>" class="reportsBorderTD" >
 </logic:equal>
 <logic:notEqual name="columnNo" value="0">
 
-<td valign="top"  class="reportsBorderTD" bgcolor="<%= bckColor.equals("true")?"#DDDDDD":"#ffffff" %>" >
+<td valign="top"  class="reportsBorderTD" bgcolor="<%= bckColor.equals("true")?"#DDDDDD":"#eeeeee" %>" >
 </logic:notEqual> 
 <% if(c!=null) {
 	request.setAttribute("cell",c);
@@ -27,24 +27,21 @@
 <bean:define id="caller" name="cellColumn" type="org.dgfoundation.amp.ar.CellColumn" scope="page" toScope="request" />	
 
 <logic:equal name="columnNo" value="0">
-<b>
 <logic:present name="currentMember" scope="session">
-<a href='/aim/viewChannelOverview.do~tabIndex=0~ampActivityId=<bean:write name="ownerId"/>'>
+<a href='/aim/viewChannelOverview.do~tabIndex=0~ampActivityId=<bean:write name="ownerId"/>' style="text-decoration: none">
 </logic:present>
 <logic:notPresent name="currentMember" scope="session">
-<a href='/aim/viewActivityPreview.do~pageId=2~activityId=<bean:write name="ownerId"/>' target=_blank>
+<a href='/aim/viewActivityPreview.do~pageId=2~activityId=<bean:write name="ownerId"/>' target=_blank style="text-decoration: none">
 </logic:notPresent>
 </logic:equal>
 <jsp:include page="<%=viewable.getViewerPath()%>"/>	
 <logic:equal name="columnNo" value="0">
 </a>
-</b>
 </logic:equal>
 
 <% } else { %>
 
 <logic:equal name="columnNo" value="0">
-<b>
 <logic:present name="currentMember" scope="session">
 <a href='/aim/viewChannelOverview.do~tabIndex=0~ampActivityId=<bean:write name="ownerId"/>'>
 </logic:present>
@@ -53,7 +50,6 @@
 </logic:notPresent>
 <digi:trn key="amp:reports:unspecified">Unspecified</digi:trn>
 </a>
-</b>
 </logic:equal>
 <logic:notEqual name="columnNo" value="0">
 &nbsp;

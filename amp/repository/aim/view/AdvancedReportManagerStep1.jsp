@@ -226,11 +226,12 @@ function checkUncheckAll2() {
 																						</c:if>
 																						
 																						
-																						<!-- the contribution report doesn't have access to columns 30;34-39 from amp_columns -->
+																						<!-- the contribution report doesn't have access to columns 33-38 from amp_columns -->
 																						<c:if test="${aimAdvancedReportForm.arReportType == 'contribution'}">
 
 																						<logic:iterate name="aimAdvancedReportForm" id="ampColumns"	property="ampColumns" >
-																						<c:if test="${ampColumns.columnId!='30' && (ampColumns.columnId<'34' || ampColumns.columnId>'39')}">																						<tr bgcolor="#ffffff">
+																						<c:if test="${ampColumns.columnId<'33' || ampColumns.columnId>'38'}">
+																						<tr bgcolor="#ffffff">
 																						
 																							<td align="left" width="98%" valign=top>
 																							<digi:trn key="aim:report:${ampColumns.columnName}"><c:out value="${ampColumns.columnName}"/></digi:trn>
@@ -247,11 +248,11 @@ function checkUncheckAll2() {
 																						</c:if>
 																						
 																						
-																						<!-- the regional report doesn't have access to columns 30-35 from amp_columns -->
+																						<!-- the regional report doesn't have access to columns 33-38 from amp_columns -->
 																						<c:if test="${aimAdvancedReportForm.arReportType == 'regional'}">
 																						<logic:iterate name="aimAdvancedReportForm" id="ampColumns"	property="ampColumns" >
 																						<logic:notEqual name="ampColumns" property="columnId" value="5">
-																						<c:if test="${ampColumns.columnId!='30' && (ampColumns.columnId<'34' || ampColumns.columnId>'39')}">
+																						<c:if test="${ampColumns.columnId<'33' || ampColumns.columnId>'38'}">
 																						<tr bgcolor="#ffffff">
 																							<td align="left" width="98%" valign=top>
 																							<digi:trn key="aim:report:${ampColumns.columnName}"><c:out value="${ampColumns.columnName}"/></digi:trn>

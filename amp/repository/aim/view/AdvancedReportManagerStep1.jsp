@@ -251,7 +251,7 @@ function checkUncheckAll2() {
 																						<c:if test="${aimAdvancedReportForm.arReportType == 'regional'}">
 																						<logic:iterate name="aimAdvancedReportForm" id="ampColumns"	property="ampColumns" >
 																						<logic:notEqual name="ampColumns" property="columnId" value="5">
-																						<c:if test="${ampColumns.columnId!='30' && ampColumns.columnId!='39' &&ampColumns.columnId!='35' && ampColumns.columnId!='34'&&ampColumns.columnId!='37' && ampColumns.columnId!='38' }">
+																						<c:if test="${ampColumns.columnId!='30' && (ampColumns.columnId<'34' || ampColumns.columnId>'39')}">
 																						<tr bgcolor="#ffffff">
 																							<td align="left" width="98%" valign=top>
 																							<digi:trn key="aim:report:${ampColumns.columnName}"><c:out value="${ampColumns.columnName}"/></digi:trn>

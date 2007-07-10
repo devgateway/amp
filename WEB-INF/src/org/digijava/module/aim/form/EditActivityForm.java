@@ -389,7 +389,17 @@ public class EditActivityForm extends ActionForm implements Serializable{
 	private Long acChapter				= new Long(0);
 	private Long accessionInstrument	= new Long(0);
 
-    public Long getAcChapter() {
+	 private Collection searchedSectors = null; // list of searched Sectors.
+	
+	public Collection getSearchedSectors() {
+		return searchedSectors;
+	}
+
+	public void setSearchedSectors(Collection searchedSectors) {
+		this.searchedSectors = searchedSectors;
+	}
+
+	public Long getAcChapter() {
 		return acChapter;
 	}
 

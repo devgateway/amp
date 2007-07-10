@@ -173,7 +173,7 @@ public class ReportsFilterPicker extends MultiAction {
 					Iterator childSectorsIterator=childSectors.iterator();
 					while(childSectorsIterator.hasNext())
 					{
-						AmpSector currentChild=(AmpSector)sectorIterator.next();
+						AmpSector currentChild=(AmpSector)childSectorsIterator.next();
 						Collection grandChildrenSectors=SectorUtil.getAllChildSectors(currentChild.getAmpSectorId());
 						selectedSectors.addAll(grandChildrenSectors);
 					}

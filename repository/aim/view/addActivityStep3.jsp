@@ -320,7 +320,7 @@
                                                             <table cellSpacing=1 cellPadding="1" bgcolor="#dddddd" width="100%">
                                                               <tr bgcolor="#ffffff">
                                                                 <td bgcolor="#FFFFFF" align="left" width="30">
-                                                                <digi:trn key="aim:fundingPlanned">
+                                                                <digi:trn key="aim:AvtivityFundingPlanned">
                                                   					Planned
                                                   				</digi:trn>
                                                                 </td>

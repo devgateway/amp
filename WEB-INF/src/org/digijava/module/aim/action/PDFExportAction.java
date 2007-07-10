@@ -24,6 +24,12 @@ import org.dgfoundation.amp.ar.GenericViews;
 import org.dgfoundation.amp.ar.GroupReportData;
 import org.dgfoundation.amp.ar.view.pdf.GroupReportDataPDF;
 import org.dgfoundation.amp.ar.view.pdf.PDFExporter;
+import org.digijava.kernel.entity.Locale;
+import org.digijava.kernel.entity.Message;
+import org.digijava.kernel.persistence.WorkerException;
+import org.digijava.kernel.request.Site;
+import org.digijava.kernel.translator.TranslatorWorker;
+import org.digijava.kernel.util.RequestUtils;
 import org.digijava.module.aim.dbentity.AmpReports;
 import org.digijava.module.aim.form.AdvancedReportForm;
 
@@ -57,6 +63,14 @@ public class PDFExportAction extends Action implements PdfPageEvent{
 	public ActionForward execute(ActionMapping mapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response)
 			throws java.lang.Exception {
+		
+		//for translation purposes
+		TranslatorWorker translator=TranslatorWorker.getInstance();
+		Site site = RequestUtils.getSite(request);
+		Locale navigationLanguage = RequestUtils.getNavigationLanguage(request);
+		String siteId=site.getSiteId();
+		String locale=navigationLanguage.getName();
+		
 		
 		GroupReportData rd=ARUtil.generateReport(mapping,form,request,response);
 		rd.setCurrentView(GenericViews.PDF);
@@ -124,11 +138,19 @@ public class PDFExportAction extends Action implements PdfPageEvent{
 		
 		Font titleFont = new Font(Font.COURIER, 16, Font.BOLD);
 		
-		PdfPCell pdfc = new PdfPCell(new Paragraph("Report Name: "+r.getName(),titleFont));
+		
+		String translatedReportName="Report Name:";
+		String translatedReportDescription="Description:";
+		try{	
+			translatedReportName=TranslatorWorker.translate("rep:pop:ReportName",locale,siteId);
+			translatedReportDescription=TranslatorWorker.translate("rep:pop:Description",locale,siteId);
+		}catch (WorkerException e){;}
+		
+		PdfPCell pdfc = new PdfPCell(new Paragraph(translatedReportName+" "+r.getName(),titleFont));
 		pdfc.setColspan(rd.getTotalDepth());
 		table.addCell(pdfc);
 		
-		pdfc = new PdfPCell(new Paragraph("Report Description: "+r.getReportDescription()));
+		pdfc = new PdfPCell(new Paragraph(translatedReportDescription+" "+r.getReportDescription()));
 		pdfc.setColspan(rd.getTotalDepth());
 		table.addCell(pdfc);
 		

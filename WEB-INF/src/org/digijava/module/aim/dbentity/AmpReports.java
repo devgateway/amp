@@ -46,6 +46,11 @@ public class AmpReports implements Comparable {
 	private Set measures;
 	private AmpTeamMember ownerId;	// the member that created the report
 	private Date updatedDate;		// last date when the report was modified
+	
+	//to be set in order to get information for translation purposes in pdf and excel reports 
+	private String siteId;
+	private String locale;
+	
 	//public static final String NOTE="NOTE: All shown funding items are in USD currency. All calendaristic date cells are shown using DD/MM/YYYY format. All amounts are in thousands.";
 	private static SimpleDateFormat dateFormat = new SimpleDateFormat(
 			"dd-MMM-yyyy");
@@ -242,5 +247,21 @@ public class AmpReports implements Comparable {
 
 	public void setDescription(String description) {
 		this.description = description;
+	}
+
+	public String getLocale() {
+		return locale;
+	}
+
+	public void setLocale(String locale) {
+		this.locale = locale;
+	}
+
+	public String getSiteId() {
+		return siteId;
+	}
+
+	public void setSiteId(String siteId) {
+		this.siteId = siteId;
 	}
 }

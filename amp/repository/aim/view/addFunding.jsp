@@ -15,9 +15,6 @@
 
 	<!--
 
-
-	
-
 	function useFixedRateClicked(field1,field2) {
 		var fld1 = document.getElementById(field1);
 		var fld2 = document.getElementById(field2);

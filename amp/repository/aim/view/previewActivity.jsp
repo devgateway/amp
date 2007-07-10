@@ -893,271 +893,65 @@ function disable() {
 											<% } %>
 										</td>
 									</tr>
-									
 									<tr>
 										<td class="t-name" width="30%" align="right" bgcolor="#f4f4f2">
 											<digi:trn key="aim:funding">
 											Funding</digi:trn>
 										</td>
 										<td bgcolor="#ffffff">
-											<c:if test="${!empty aimEditActivityForm.fundingOrganizations}">
-												<table width="100%" cellSpacing="1" cellPadding="3" bgcolor="#aaaaaa">
-												<c:forEach var="fundOrgs" items="${aimEditActivityForm.fundingOrganizations}">
-													<tr><td bgcolor="#ffffff">
-														<table width="100%" cellSpacing="1" cellPadding="1">
-															<tr><td bgcolor="#ffffff"><b>
-																<c:out value="${fundOrgs.orgName}"/></b>
-															</td></tr>
-															<c:if test="${!empty fundOrgs.fundings}">
-																<c:forEach var="fund" items="${fundOrgs.fundings}">
-																	<tr><td bgcolor="#ffffff">
-																		<table width="100%" cellSpacing="1" cellPadding="1" class="box-border">
-																			<tr>
-																				<td width="31%">
-																					<digi:trn key="aim:fundingOrgId">
-																					Funding Organization Id</digi:trn>
-																				</td>
-																				<td width="1">:</td>
-																				<td align="left">
-																					<c:out value="${fund.orgFundingId}"/>
-																				</td>
-																			</tr>
-																			<tr>
-																				<td width="31%">
-																					<digi:trn key="aim:typeOfAssistance">
-																					Type of Assistance</digi:trn>
-																				</td>
-																				<td width="1">:</td>
-																				<td align="left">
-																					<c:out value="${fund.typeOfAssistance}"/>
-																				</td>
-																			</tr>
-																			<tr>
-																				<td width="31%">
-																					<digi:trn key="aim:financingInstrument">
-																					Financing Instrument</digi:trn>
-																				</td>
-																				<td width="1">:</td>
-																				<td align="left">
-																					<c:if test="${!empty aimEditActivityForm.modalityCollection}">
-																						<c:forEach var="tempModality"
-																						items="${aimEditActivityForm.modalityCollection}">
-																						<c:if test="${tempModality.ampModalityId == fund.modality.ampModalityId}">
-																							<c:out value="${tempModality.name}"/>
-																						</c:if>
-																						</c:forEach>
-																					</c:if>
-																				</td>
-																			</tr>
-																			<c:if test="${!empty fund.fundingDetails}">
-																			<tr><td colspan="3">
-																			<table width="100%" cellSpacing=1 cellPadding=1 bgcolor="#dddddd">
-																				<tr><td valign="top" width="100" bgcolor="#ffffff">
-																					<digi:trn key="aim:commitments">
-																					Commitments</digi:trn>
-																				</td>
-																				<td bgcolor="#ffffff">
-																					<c:forEach var="fundDet" items="${fund.fundingDetails}">
-																					<table width="100%" cellSpacing="1" cellPadding="1" bgcolor="#eeeeee">
-																						<c:if test="${fundDet.transactionType == 0}">
+											<table  border="0" cellpadding="4" cellspacing="1">
+				                 					<TR bgcolor="#DDDDDB" > 
+							                        	<TD><digi:trn key="aim:orgFundingId">Org Funding ID</digi:trn></TD>
+									                    <TD width="20"><digi:trn key="aim:organization">Organization</digi:trn></TD>
+														<TD><digi:trn key="aim:totalCommitted">Total Committed</digi:trn></TD>
+	                        						 	<TD><digi:trn key="aim:totalDisbursed">Total Disbursed</digi:trn></TD>
+														<TD><digi:trn key="aim:unDisbursedFunds">Undisbursed Funds</digi:trn></TD>
+							                         	<TD><digi:trn key="aim:totalExpended">Total Expended</digi:trn></TD>
+														<TD><digi:trn key="aim:unExpendedFunds">Unexpended Funds</digi:trn></TD>
+													</TR>
+													
+													<logic:iterate name="aimEditActivityForm" property="financingBreakdown" id="breakdown" 
+									  	                   type="org.digijava.module.aim.helper.FinancingBreakdown">
+															<TR valign="top" bgcolor="#f4f4f2"> 
+					    					           			<TD>
+						               								<jsp:useBean id="urlFinancialOverview" type="java.util.Map" class="java.util.HashMap"/>
+																	<c:set target="${urlFinancialOverview}" property="ampActivityId">
+																		<bean:write name="aimEditActivityForm" property="activityId"/>
+																	</c:set>
+																	<c:set target="${urlFinancialOverview}" property="ampFundingId">
+																		<bean:write name="breakdown" property="ampFundingId"/>
+																	</c:set>
 
-
-																						<c:if test="${aimEditActivityForm.donorFlag == true}">
-																						<c:if test="${fundDet.perspectiveCode != 'DN'}">
-																						<tr bgcolor="#ffffff">
-																						</c:if>
-																						<c:if test="${fundDet.perspectiveCode == 'DN'}">
-																						<tr bgcolor="#ffff00">
-																						</c:if>
-																							<td width="50">
-																								<c:out value="${fundDet.adjustmentTypeName}"/>
-																							</td>
-																							<td align="right" width="100">
-																							<FONT color=blue>*</FONT>
-																								<c:out value="${fundDet.transactionAmount}"/>
-																							</td>
-																							<td>
-																								<c:out value="${fundDet.currencyCode}"/>
-																							</td>
-																							<td width="70">
-																								<c:out value="${fundDet.transactionDate}"/>
-																							</td>
-																							<td>
-																								<c:out value="${fundDet.perspectiveName}"/>
-																							</td>
-																						</tr>
-																						</c:if>
-																						<c:if test="${aimEditActivityForm.donorFlag == false}">
-																						<c:if test="${fundDet.perspectiveCode != 'DN'}">
-																						<tr bgcolor="#ffffff">
-																							<td width="50">
-																								<c:out value="${fundDet.adjustmentTypeName}"/>
-																							</td>
-																							<td align="right" width="100">
-																							<FONT color=blue>*</FONT>
-																								<c:out value="${fundDet.transactionAmount}"/>
-																							</td>
-																							<td>
-																								<c:out value="${fundDet.currencyCode}"/>
-																							</td>
-																							<td width="70">
-																								<c:out value="${fundDet.transactionDate}"/>
-																							</td>
-																							<td>
-																								<c:out value="${fundDet.perspectiveName}"/>
-																							</td>
-																						</tr>
-																						</c:if>
-																						</c:if>
-
-
-																						</c:if>
-																					</table>
-																				   </c:forEach>
-																				</td></tr>
-																			</table>
-																			</td></tr>
-																			<tr><td colspan="3">
-																			<table width="100%" cellSpacing=1 cellPadding=1 bgcolor="#dddddd">
-																				<tr><td valign="top" width="100" bgcolor="#ffffff">
-																					<digi:trn key="aim:disbursements">
-																					Disbursements</digi:trn>
-																				</td>
-																				<td bgcolor="#ffffff">
-																					<c:forEach var="fundDet" items="${fund.fundingDetails}">
-																					<table width="100%" cellSpacing="1" cellPadding="1" bgcolor="#eeeeee">
-																						<c:if test="${fundDet.transactionType == 1}">
-																						<c:if test="${aimEditActivityForm.donorFlag == true}">
-																						<c:if test="${fundDet.perspectiveCode != 'DN'}">
-																						<tr bgcolor="#ffffff">
-																						</c:if>
-																						<c:if test="${fundDet.perspectiveCode == 'DN'}">
-																						<tr bgcolor="#ffff00">
-																						</c:if>
-																							<td width="50">
-																								<c:out value="${fundDet.adjustmentTypeName}"/>
-																							</td>
-																							<td align="right" width="100">
-																							<FONT color=blue>*</FONT>
-																								<c:out value="${fundDet.transactionAmount}"/>
-																							</td>
-																							<td>
-																								<c:out value="${fundDet.currencyCode}"/>
-																							</td>
-																							<td width="70">
-																								<c:out value="${fundDet.transactionDate}"/>
-																							</td>
-																							<td>
-																								<c:out value="${fundDet.perspectiveName}"/>
-																							</td>
-																						</tr>
-																						</c:if>
-																						<c:if test="${aimEditActivityForm.donorFlag == false}">
-																						<c:if test="${fundDet.perspectiveCode != 'DN'}">
-																						<tr bgcolor="#ffffff">
-																							<td width="50">
-																								<c:out value="${fundDet.adjustmentTypeName}"/>
-																							</td>
-																							<td align="right" width="100">
-																							<FONT color=blue>*</FONT>
-																								<c:out value="${fundDet.transactionAmount}"/>
-																							</td>
-																							<td>
-																								<c:out value="${fundDet.currencyCode}"/>
-																							</td>
-																							<td width="70">
-																								<c:out value="${fundDet.transactionDate}"/>
-																							</td>
-																							<td>
-																								<c:out value="${fundDet.perspectiveName}"/>
-																							</td>
-																						</tr>
-																						</c:if>
-																						</c:if>
-																						</c:if>
-																					</table>
-																				   </c:forEach>
-																				</td></tr>
-																			</table>
-																			</td></tr>
-																			<tr><td colspan="3">
-																			<table width="100%" cellSpacing=1 cellPadding=1 bgcolor="#dddddd">
-																				<tr><td valign="top" width="100" bgcolor="#ffffff">
-																					<digi:trn key="aim:expenditures">
-																					Expenditures</digi:trn>
-																				</td>
-																				<td bgcolor="#ffffff">
-																					<c:forEach var="fundDet" items="${fund.fundingDetails}">
-																					<table width="100%" cellSpacing="1" cellPadding="1" bgcolor="#eeeeee">
-																						<c:if test="${fundDet.transactionType == 2}">
-																						<c:if test="${aimEditActivityForm.donorFlag == true}">
-																						<c:if test="${fundDet.perspectiveCode != 'DN'}">
-																						<tr bgcolor="#ffffff">
-																						</c:if>
-																						<c:if test="${fundDet.perspectiveCode == 'DN'}">
-																						<tr bgcolor="#ffff00">
-																						</c:if>
-																							<td width="50">
-																								<c:out value="${fundDet.adjustmentTypeName}"/>
-																							</td>
-																							<td align="right" width="100">
-																							<FONT color=blue>*</FONT>
-																								<c:out value="${fundDet.transactionAmount}"/>
-																							</td>
-																							<td>
-																								<c:out value="${fundDet.currencyCode}"/>
-																							</td>
-																							<td width="70">
-																								<c:out value="${fundDet.transactionDate}"/>
-																							</td>
-																							<td>
-																								<c:out value="${fundDet.perspectiveName}"/>
-																							</td>
-																						</tr>
-																						</c:if>
-																						<c:if test="${aimEditActivityForm.donorFlag == false}">
-																						<c:if test="${fundDet.perspectiveCode != 'DN'}">
-																						<tr bgcolor="#ffffff">
-																							<td width="50">
-																								<c:out value="${fundDet.adjustmentTypeName}"/>
-																							</td>
-																							<td align="right" width="100">
-																							<FONT color=blue>*</FONT>
-																								<c:out value="${fundDet.transactionAmount}"/>
-																							</td>
-																							<td>
-																								<c:out value="${fundDet.currencyCode}"/>
-																							</td>
-																							<td width="70">
-																								<c:out value="${fundDet.transactionDate}"/>
-																							</td>
-																							<td>
-																								<c:out value="${fundDet.perspectiveName}"/>
-																							</td>
-																						</tr>
-																						</c:if>
-																						</c:if>
-																						</c:if>
-																					</table>
-																				   </c:forEach>
-																				</td></tr>
-																			</table>
-																			</td></tr>
-																			</c:if>
-																		</table>
-																	</td></tr>
-																</c:forEach>
-															</c:if>
-														</table>
-													</td></tr>
-												</c:forEach>
-												<tr><td bgcolor="#ffffff">
-													<FONT color=blue>*
-													<digi:trn key="aim:theAmountEnteredAreInThousands">
-													The amount entered are in thousands (000)</digi:trn></FONT>
-												</td></tr>
-												</table>
-											</c:if>
+																	<bean:define id="translation">
+																		<digi:trn key="aim:clickToViewFinancialOverview">
+																		Click here to view Financial Overview</digi:trn>
+																	</bean:define>
+											                  		<digi:link href="/viewFinancialOverview.do" name="urlFinancialOverview" title="<%=translation%>" >
+																		<bean:write name="breakdown" property="financingId" /> 
+																	</digi:link>
+																</TD>
+																<bean:define id="breakdown" name="breakdown" type="org.digijava.module.aim.helper.FinancingBreakdown" toScope="request" />
+																
+											                  		<TD><jsp:include page="previewFinancingOrganizationPopup.jsp"/></TD>
+													                <TD align="right"><bean:write name="breakdown" property="totalCommitted"/></TD>
+							                						<TD align="right"><bean:write name="breakdown" property="totalDisbursed"/></TD>
+													                <TD align="right"><bean:write name="breakdown" property="unDisbursed"/></TD>
+					    									        <TD align="right"><bean:write name="breakdown" property="totalExpended"/></TD>
+					        				            		    <TD align="right"><bean:write name="breakdown" property="unExpended"/></TD>
+															</TR>
+															
+													</logic:iterate>
+													<TR valign="top" class="note"> 
+																<TD><digi:trn key="aim:total">Total</digi:trn></TD>
+											                    <TD>&nbsp;</TD>
+																<TD align="right"><bean:write name="aimEditActivityForm" property="totalCommitted"/></TD>
+																<TD align="right"><bean:write name="aimEditActivityForm" property="totalDisbursed"/></TD>
+																<TD align="right"><bean:write name="aimEditActivityForm" property="totalUnDisbursed"/></TD>
+																<TD align="right"><bean:write name="aimEditActivityForm" property="totalExpended"/></TD>
+																<TD align="right"><bean:write name="aimEditActivityForm" property="totalUnExpended"/></TD>
+													</TR>
+															
+											</table>
 										</td>
 									</tr>
 									<!-- Costing -->

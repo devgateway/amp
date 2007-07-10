@@ -320,7 +320,7 @@
                                                             <table cellSpacing=1 cellPadding="1" bgcolor="#dddddd" width="100%">
                                                               <tr bgcolor="#ffffff">
                                                                 <td bgcolor="#FFFFFF" align="left" width="30">
-                                                                <digi:trn key="aim:planned">
+                                                                <digi:trn key="aim:fundingPlanned">
                                                   					Planned
                                                   				</digi:trn>
                                                                 </td>
@@ -510,7 +510,7 @@
                                                                                     	<digi:trn key='<%="aim:"+fundingDetail.getPerspectiveNameTrimmed() %>'>
 																								<bean:write name="fundingDetail" property="perspectiveName"/>
 																						</digi:trn>
-                                                                                    
+
                                                                                     </td>
                                                                                       </tr>
                                                                                   </c:if>
@@ -880,7 +880,7 @@
 												</td>
 											</tr>
 											<tr><td>&nbsp;</td></tr>
-<!-- 
+<!--
                                             <tr>
                                               <td bgColor=#f4f4f2 align="center">
                                                 <table cellPadding=3>
@@ -917,7 +917,7 @@
                                                 </table>
                                               </td>
                                             </tr>
- -->											                                            
+ -->
                                       </table>
                                       </td>
                                       </tr>
@@ -955,7 +955,7 @@
 		</td>
 		<td width="10">&nbsp;</td>
 	</tr>
-	
+
 </table>
 </digi:form>
 

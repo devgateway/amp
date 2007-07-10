@@ -12,6 +12,12 @@ import org.dgfoundation.amp.ar.Exporter;
 import org.dgfoundation.amp.ar.ReportData;
 import org.dgfoundation.amp.ar.Viewable;
 import org.dgfoundation.amp.ar.cell.Cell;
+import org.digijava.kernel.entity.Locale;
+import org.digijava.kernel.entity.Message;
+import org.digijava.kernel.persistence.WorkerException;
+import org.digijava.kernel.request.Site;
+import org.digijava.kernel.translator.TranslatorWorker;
+import org.digijava.kernel.util.RequestUtils;
 
 import com.lowagie.text.Font;
 import com.lowagie.text.Paragraph;
@@ -54,7 +60,18 @@ public class TrailCellsPDF extends PDFExporter {
 		Font totalFont = new Font(Font.TIMES_ROMAN, Font.DEFAULTSIZE, Font.ITALIC);
 		
 		if(grd.getParent()!=null) {
-			PdfPCell pdfc = new PdfPCell(new Paragraph("TOTALS FOR "+grd.getName(),totalFont));
+			
+		//	for translation purposes
+			String siteId=this.getMetadata().getSiteId();
+			String locale=this.getMetadata().getLocale();
+			String totalsFor="TOTALS for:";
+			try{
+				totalsFor=TranslatorWorker.translate("rep:pop:totalsFor",locale,siteId);	
+			}
+			catch (WorkerException e){;}
+			
+			
+			PdfPCell pdfc = new PdfPCell(new Paragraph(totalsFor+" "+grd.getName(),totalFont));
 			pdfc.setColspan(grd.getSourceColsCount().intValue());
 			table.addCell(pdfc);
 			

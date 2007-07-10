@@ -23,7 +23,10 @@ import net.sf.hibernate.Session;
 import org.apache.log4j.Logger;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionMapping;
+import org.digijava.kernel.entity.Locale;
 import org.digijava.kernel.persistence.PersistenceManager;
+import org.digijava.kernel.request.Site;
+import org.digijava.kernel.util.RequestUtils;
 import org.digijava.module.aim.dbentity.AmpMeasures;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.aim.dbentity.AmpReportColumn;
@@ -105,6 +108,16 @@ public final class ARUtil {
 
 		AmpReports r = (AmpReports) session.get(AmpReports.class, new Long(
 				ampReportId));
+		
+		//the siteid and locale are set for translation purposes
+		Site site = RequestUtils.getSite(request);
+		Locale navigationLanguage = RequestUtils.getNavigationLanguage(request);
+		String siteId=site.getSiteId();
+		String locale=navigationLanguage.getName();
+		
+		r.setSiteId(siteId);
+		r.setLocale(locale);
+
 		
 		httpSession.setAttribute("reportMeta", r);
 

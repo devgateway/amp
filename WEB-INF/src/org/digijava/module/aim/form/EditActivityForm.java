@@ -40,6 +40,7 @@ public class EditActivityForm extends ActionForm implements Serializable{
 	private Long statusId = null;
 	private String status=null;
 	private String statusReason = null;
+	private Collection financingBreakdown=null;
 	//private Collection statusCollection = null;
 	private Long levelId = null;
 	private Long modality = null;
@@ -210,6 +211,14 @@ public class EditActivityForm extends ActionForm implements Serializable{
 	private Long ampSurveyId = null;
 	private Boolean surveyFlag = null;	// if true then survey properties are cleared
 
+	private String totalCommitted = "";
+	private String totalDisbursed = "";
+	private String totalUnDisbursed = "";
+	private String totalExpenditure = "";
+	private String totalUnExpended = "";
+	private String totalExpended="";
+	
+	
 	/* START FINANCIAL EDIT */
 	private Collection fundingOrganizations; // Collection of FundingOrganization objects
 	private String orgFundingId;
@@ -549,6 +558,7 @@ public class EditActivityForm extends ActionForm implements Serializable{
 			overallCost = null;
 			overallContribution=null;
 			allComments=null;
+			financingBreakdown=null;
 		}
 
 		if (orgSelReset) {
@@ -3918,12 +3928,60 @@ public String getPurpose() {
 		this.status = status;
 	}
 
-    /*
-	public Collection getSelectedOrganizationsList() {
-		return selectedOrganizationsList;
+	public Collection getFinancingBreakdown() {
+		return financingBreakdown;
 	}
 
-	public void setSelectedOrganizationsList(Collection selectedOrganizationsList) {
-		this.selectedOrganizationsList = selectedOrganizationsList;
-	}*/
+	public void setFinancingBreakdown(Collection financingBreakdown) {
+		this.financingBreakdown = financingBreakdown;
+	}
+
+
+	public String getTotalCommitted() {
+		return totalCommitted;
+	}
+
+	public void setTotalCommitted(String totalCommitted) {
+		this.totalCommitted = totalCommitted;
+	}
+
+	public String getTotalDisbursed() {
+		return totalDisbursed;
+	}
+
+	public void setTotalDisbursed(String totalDisbursed) {
+		this.totalDisbursed = totalDisbursed;
+	}
+
+	public String getTotalExpenditure() {
+		return totalExpenditure;
+	}
+
+	public void setTotalExpenditure(String totalExpenditure) {
+		this.totalExpenditure = totalExpenditure;
+	}
+
+	public String getTotalUnDisbursed() {
+		return totalUnDisbursed;
+	}
+
+	public void setTotalUnDisbursed(String totalUnDisbursed) {
+		this.totalUnDisbursed = totalUnDisbursed;
+	}
+
+	public String getTotalUnExpended() {
+		return totalUnExpended;
+	}
+
+	public void setTotalUnExpended(String totalUnExpended) {
+		this.totalUnExpended = totalUnExpended;
+	}
+
+	public String getTotalExpended() {
+		return totalExpended;
+	}
+
+	public void setTotalExpended(String totalExpended) {
+		this.totalExpended = totalExpended;
+	}
 }

@@ -131,12 +131,9 @@ public class FinancingBreakdownWorker
 				financingBreakdown.setAmpFundingId(ampFunding.getAmpFundingId().longValue());
 				financingBreakdown.setFinancingId(ampFunding.getFinancingId());
 				String donor = FinancingBreakdownWorker.getDonor(ampFunding);
-//				if ( logger.isDebugEnabled() )	
-//					logger.debug("donor " + donor);
 				financingBreakdown.setDonor(donor);
 				AmpOrganisation ampOrg = ampFunding.getAmpDonorOrgId();
 				String goeId = DbUtil.getGoeId(ampActivityId);
-//				logger.debug("GOE ID" + goeId);
 				financingBreakdown.setGoeId(goeId);
 				financingBreakdown.setOrganisation(ampOrg);
 				
@@ -146,14 +143,10 @@ public class FinancingBreakdownWorker
 				fp.setAmpFundingId(ampFunding.getAmpFundingId());
 				fp.setTransactionType(Constants.COMMITMENT);
 				String totalDonorCommitment = getTotalDonorFund(fp) ;
-//				if ( logger.isDebugEnabled() )	
-//					logger.debug("totalDonorCommitment " + totalDonorCommitment) ;
 				financingBreakdown.setTotalCommitted(totalDonorCommitment) ;
 				
 				fp.setTransactionType(Constants.DISBURSEMENT);
 				String totalDonorDisbursement = getTotalDonorFund(fp) ;
-//				if ( logger.isDebugEnabled() )
-//					logger.debug("totalDonorDisbursement " + totalDonorDisbursement) ;
 				financingBreakdown.setTotalDisbursed(totalDonorDisbursement) ;
 				
 				String unDisbursed = DecimalToText.getDifference(totalDonorCommitment,totalDonorDisbursement) ;
@@ -161,8 +154,6 @@ public class FinancingBreakdownWorker
 				
 				fp.setTransactionType(Constants.EXPENDITURE);
 				String totalDonorExpenditure = getTotalDonorFund(fp);
-//				if ( logger.isDebugEnabled() )
-//					logger.debug("totalDonorExpenditure " + totalDonorExpenditure);
 				financingBreakdown.setTotalExpended(totalDonorExpenditure) ;
 				
 				String unExpended = DecimalToText.getDifference(totalDonorDisbursement,totalDonorExpenditure) ;
@@ -182,8 +173,6 @@ public class FinancingBreakdownWorker
 		}
 		else
 		{
-//			if ( logger.isDebugEnabled() )
-//				logger.debug("ampFundings is null") ;
 		}
 		if ( logger.isDebugEnabled() )
 					logger.debug("GETFINANCINGBREAKDOWNLIST() RETURNING A COLLECTION OF SIZE : " + temp.size());

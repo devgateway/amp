@@ -6,9 +6,11 @@
 package org.digijava.module.aim.action;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -58,14 +60,19 @@ import org.digijava.module.aim.dbentity.AmpTheme;
 import org.digijava.module.aim.form.EditActivityForm;
 import org.digijava.module.aim.form.ProposedProjCost;
 import org.digijava.module.aim.helper.ActivitySector;
+import org.digijava.module.aim.helper.ApplicationSettings;
 import org.digijava.module.aim.helper.CategoryConstants;
 import org.digijava.module.aim.helper.CategoryManagerUtil;
+import org.digijava.module.aim.helper.CommonWorker;
 import org.digijava.module.aim.helper.Components;
 import org.digijava.module.aim.helper.Constants;
+import org.digijava.module.aim.helper.Currency;
 import org.digijava.module.aim.helper.CurrencyWorker;
 import org.digijava.module.aim.helper.DateConversion;
 import org.digijava.module.aim.helper.DecimalToText;
 import org.digijava.module.aim.helper.Documents;
+import org.digijava.module.aim.helper.FilterParams;
+import org.digijava.module.aim.helper.FinancingBreakdownWorker;
 import org.digijava.module.aim.helper.Funding;
 import org.digijava.module.aim.helper.FundingDetail;
 import org.digijava.module.aim.helper.FundingOrganization;
@@ -1344,6 +1351,83 @@ public class EditActivity
         		session.setAttribute("logframepr","true");
         		return mapping.findForward("forwardToPreview");
         	}
+        
+        //activityId
+        Collection ampFundingsAux = DbUtil.getAmpFunding(activityId);
+        FilterParams fp = (FilterParams) session.getAttribute("filterParams");
+		TeamMember teamMember=(TeamMember)session.getAttribute("currentMember");
+		if(fp==null) 
+        {
+        	fp=new FilterParams();
+        }
+		
+			ApplicationSettings apps = null;
+    		if ( teamMember != null )	{
+    			apps = teamMember.getAppSettings();
+    		}
+
+    		/*	Currency curr = CurrencyUtil.getCurrency(apps.getCurrencyId());
+    			fp.setCurrencyCode(curr.getCurrencyCode());
+    			fp.setFiscalCalId(apps.getFisCalId());
+    			String perspective = CommonWorker.getPerspective(apps.getPerspective());
+    			fp.setPerspective(perspective);
+    			int year = new GregorianCalendar().get(Calendar.YEAR);
+    			fp.setFromYear(year-Constants.FROM_YEAR_RANGE);
+    			fp.setToYear(year+Constants.TO_YEAR_RANGE);
+    			*/
+    			if (fp.getCurrencyCode() == null) 
+    			{
+    				Currency curr = CurrencyUtil.getCurrency(apps.getCurrencyId());
+    				if (curr != null) {
+    					fp.setCurrencyCode(curr.getCurrencyCode());
+    				}
+    			}
+    			
+
+
+    			if (fp.getFiscalCalId() == null) {
+    				fp.setFiscalCalId(apps.getFisCalId());
+    			}
+    			
+
+    			if (fp.getPerspective() == null) {
+    				String perspective = CommonWorker.getPerspective(apps
+    						.getPerspective());
+    				fp.setPerspective(perspective);
+    			}
+
+    			if (fp.getFromYear() == 0 || fp.getToYear() == 0) {
+    				int year = new GregorianCalendar().get(Calendar.YEAR);
+    				fp.setFromYear(year-Constants.FROM_YEAR_RANGE);
+    				fp.setToYear(year+Constants.TO_YEAR_RANGE);
+    			}
+
+        //System.out.println("filterrrrrrrr paramssssssss fund id:::"+fp.getAmpFundingId());
+        Collection fb = FinancingBreakdownWorker.getFinancingBreakdownList(
+				activityId, ampFundingsAux, fp);
+        eaForm.setFinancingBreakdown(fb);
+        String overallTotalCommitted = "";
+		String overallTotalDisbursed = "";
+		String overallTotalUnDisbursed = "";
+		String overallTotalExpenditure = "";
+		String overallTotalUnExpended = "";
+		overallTotalCommitted = FinancingBreakdownWorker.getOverallTotal(
+				fb, Constants.COMMITMENT);
+		
+		eaForm.setTotalCommitted(overallTotalCommitted);
+		overallTotalDisbursed = FinancingBreakdownWorker.getOverallTotal(
+				fb, Constants.DISBURSEMENT);
+		eaForm.setTotalDisbursed(overallTotalDisbursed);
+		overallTotalUnDisbursed = DecimalToText.getDifference(
+				overallTotalCommitted, overallTotalDisbursed);
+		eaForm.setTotalUnDisbursed(overallTotalUnDisbursed);
+		overallTotalExpenditure = FinancingBreakdownWorker.getOverallTotal(
+				fb, Constants.EXPENDITURE);
+		eaForm.setTotalExpended(overallTotalExpenditure);
+		overallTotalUnExpended = DecimalToText.getDifference(
+				overallTotalDisbursed, overallTotalExpenditure);
+		eaForm.setTotalUnExpended(overallTotalUnExpended);
+		
         return mapping.findForward("forward");
     }
 }

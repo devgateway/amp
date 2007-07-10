@@ -11644,7 +11644,7 @@ public class ReportUtil {
 		AmpColumns ampColumns = new AmpColumns();
 		try
 		{
-			sqlQuery = "select c from "+ AmpColumns.class.getName() + " c";
+			sqlQuery = "select c from "+ AmpColumns.class.getName() + " c order by columnName asc";
 			query = session.createQuery(sqlQuery);
 			if (query != null) 
 			{

@@ -36,6 +36,8 @@ public class AuditLoggerUtil {
 			Session session = null;
 			Transaction tx = null;
 			TeamMember tm = (TeamMember) hsession.getAttribute("currentMember");
+			
+
 			String browser=request.getHeader("user-agent");
 			try {
 				session = PersistenceManager.getSession();

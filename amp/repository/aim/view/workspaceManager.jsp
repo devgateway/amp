@@ -30,10 +30,10 @@
 				<tr>
 					<!-- Start Navigation -->
 					<td height=33><span class=crumb>
-						<bean:define id="translation">
+						<c:set var="translation">
 							<digi:trn key="aim:clickToViewAdmin">Click here to goto Admin Home</digi:trn>
-						</bean:define>
-						<digi:link href="/admin.do" styleClass="comment" title="<%=translation%>" >
+						</c:set>
+						<digi:link href="/admin.do" styleClass="comment" title="${translation}" >
 						<digi:trn key="aim:AmpAdminHome">
 						Admin Home
 						</digi:trn>
@@ -91,10 +91,10 @@
 															</c:set>
 															<c:set target="${urlParams2}" property="event" value="edit" />
 															<c:set target="${urlParams2}" property="dest" value="admin" />
-															<bean:define id="translation">
+															<c:set var="translation">
 																<digi:trn key="aim:clickToViewWorkspace">Click here to view Workspace</digi:trn>
-															</bean:define>
-															<digi:link href="/getWorkspace.do" name="urlParams2" title="<%=translation%>" >
+															</c:set>
+															<digi:link href="/getWorkspace.do" name="urlParams2" title="${translation}" >
 															<bean:write name="workspaces" property="name"/></digi:link>
 														</td>
 														<td bgcolor="#ffffff" width="70" align="center">
@@ -102,29 +102,29 @@
 															<c:set target="${urlParams}" property="teamId">
 															<bean:write name="workspaces" property="ampTeamId" />
 															</c:set>
-															<bean:define id="translation">
+															<c:set var="translation">
 																<digi:trn key="aim:clickToViewMembers">Click here to view Members</digi:trn>
-															</bean:define>
-															[ <digi:link href="/teamMembers.do" name="urlParams" title="<%=translation%>" >Members</digi:link> ]
+															</c:set>
+															[ <digi:link href="/teamMembers.do" name="urlParams" title="${translation}" >Members</digi:link> ]
 														</td>
 														<td bgcolor="#ffffff" width="70" align="center">
 															<jsp:useBean id="urlParams1" type="java.util.Map" class="java.util.HashMap"/>
 															<c:set target="${urlParams1}" property="id">
 															<bean:write name="workspaces" property="ampTeamId" />
 															</c:set>
-															<bean:define id="translation">
+															<c:set var="translation">
 																<digi:trn key="aim:clickToViewActivities">Click here to view Activities</digi:trn>
-															</bean:define>
-															[ <digi:link href="/teamActivities.do" name="urlParams1" title="<%=translation%>" >
+															</c:set>
+															[ <digi:link href="/teamActivities.do" name="urlParams1" title="${translation}" >
 															Activities</digi:link> ]
 														</td>
 														<td bgcolor="#ffffff" width="40" align="center">
 															<%--
 															<c:set target="${urlParams2}" property="actionEvent" value="edit" />--%>
-															<bean:define id="translation">
+															<c:set var="translation">
 																<digi:trn key="aim:clickToEditWorkspace">Click here to Edit Workspace</digi:trn>
-															</bean:define>
-															[ <digi:link href="/getWorkspace.do" name="urlParams2" title="<%=translation%>" >Edit</digi:link> ]
+															</c:set>
+															[ <digi:link href="/getWorkspace.do" name="urlParams2" title="${translation}" >Edit</digi:link> ]
 														</td>
 														<td bgcolor="#ffffff" width="55" align="center">
 															<jsp:useBean id="urlParams4" type="java.util.Map" class="java.util.HashMap"/>
@@ -132,11 +132,11 @@
 																<bean:write name="workspaces" property="ampTeamId" />
 															</c:set>
 															<c:set target="${urlParams4}" property="event" value="delete"/>
-															<bean:define id="translation">
+															<c:set var="translation">
 																<digi:trn key="aim:clickToDeleteWorkspace">Click here to Delete Workspace</digi:trn>
-															</bean:define>
+															</c:set>
 															[ <digi:link href="/deleteWorkspace.do" name="urlParams4"
-																title="<%=translation%>" onclick="return onDelete()">Delete</digi:link> ]
+																title="${translation}" onclick="return onDelete()">Delete</digi:link> ]
 														</td>
 													</tr>
 													</logic:iterate>
@@ -152,11 +152,11 @@
 															<logic:iterate name="aimWorkspaceForm" property="pages" id="pages"
 															type="java.lang.Integer">
 															<c:set target="${urlParams3}" property="page"><%=pages%></c:set>
-															<bean:define id="translation">
+															<c:set var="translation">
 																<digi:trn key="aim:clickToViewAllPages">Click here to view All pages</digi:trn>
-															</bean:define>
+															</c:set>
 															<digi:link href="/workspaceManager.do" name="urlParams3"
-															title="<%=translation%>" ><%=pages%></digi:link> |&nbsp;
+															title="${translation}" ><%=pages%></digi:link> |&nbsp;
 															</logic:iterate>
 														</td>
 													</tr>
@@ -199,10 +199,10 @@
 										<tr>
 											<td>
 												<digi:img src="module/aim/images/arrow-014E86.gif" width="15" height="10"/>
-												<bean:define id="translation">
+												<c:set var="translation">
 													<digi:trn key="aim:clickToAddTeams">Click here to Add Teams</digi:trn>
-												</bean:define>
-												<digi:link href="/createWorkspace.do?dest=admin" title="<%=translation%>" >
+												</c:set>
+												<digi:link href="/createWorkspace.do?dest=admin" title="${translation}" >
 												<digi:trn key="aim:addTeam">
 												Add Teams
 												</digi:trn>
@@ -212,10 +212,10 @@
 										<tr>
 											<td>
 												<digi:img src="module/aim/images/arrow-014E86.gif" width="15" height="10"/>
-												<bean:define id="translation">
+												<c:set var="translation">
 													<digi:trn key="aim:clickToViewRoles">Click here to view Roles</digi:trn>
-												</bean:define>
-												<digi:link href="/roles.do" title="<%=translation%>" >
+												</c:set>
+												<digi:link href="/roles.do" title="${translation}" >
 												<digi:trn key="aim:roles">
 												Roles
 												</digi:trn>
@@ -225,10 +225,10 @@
 										<tr>
 											<td>
 												<digi:img src="module/aim/images/arrow-014E86.gif" width="15" height="10"/>
-												<bean:define id="translation">
+												<c:set var="translation">
 													<digi:trn key="aim:clickToAddRoles">Click here to Add Roles</digi:trn>
-												</bean:define>
-												<digi:link href="/updateRole.do" title="<%=translation%>" >
+												</c:set>
+												<digi:link href="/updateRole.do" title="${translation}" >
 												<digi:trn key="aim:addRole">
 												Add Roles
 												</digi:trn>
@@ -238,10 +238,10 @@
 										<tr>
 											<td>
 												<digi:img src="module/aim/images/arrow-014E86.gif" width="15" height="10"/>
-												<bean:define id="translation">
+												<c:set var="translation">
 													<digi:trn key="aim:clickToViewAdmin">Click here to goto Admin Home</digi:trn>
-												</bean:define>
-												<digi:link href="/admin.do" title="<%=translation%>" >
+												</c:set>
+												<digi:link href="/admin.do" title="${translation}" >
 												<digi:trn key="aim:AmpAdminHome">
 												Admin Home
 												</digi:trn>

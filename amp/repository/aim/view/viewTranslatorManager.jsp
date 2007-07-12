@@ -10,9 +10,9 @@
 
 <script langauage="JavaScript">
 	function enableChkBox(chkBox) {
-		
+
 		alert(chkBox);
-			 
+
 	}
 </script>
 
@@ -46,7 +46,12 @@
 					<!-- End navigation -->
 				</tr>
 				<tr>
-					<td height=16 vAlign=center width=571><span class=subtitle-blue>Translation Manager</span>
+					<td height=16 vAlign=center width=571>
+                      <span class=subtitle-blue>
+                        <digi:trn key="aim:TranslationManagerHeader">
+                        Translation Manager
+                        </digi:trn>
+                      </span>
 					</td>
 				</tr>
 				<tr>
@@ -65,29 +70,38 @@
 									The following languages where found on this site:
 								</td>
 							</tr>
-						<logic:iterate name="aimTranslatorManagerForm" property="languages" id="lang"
-																	type="java.lang.String">
+						<c:forEach items="${aimTranslatorManagerForm.languages}" var="lang">
 							<tr>
 								<td>
-									<html:checkbox property="selectedLanguages" value="<%=lang %>"/>
-									<bean:write name="lang" /> <br/>
+									<html:checkbox property="selectedLanguages" value="${lang}"/>
+                                    <digi:trn key="aim:TranslationManagerLangiage${lang}">
+                                    ${lang}
+                                    </digi:trn>
+									<br/>
  								</td>
 	 						</tr>
-						 </logic:iterate>
+						 </c:forEach>
 							 <tr>
-							 	<td><html:submit style="dr-menu" value="Export" property="export"/></td>
+							 	<td>
+                                  <c:set var="translation">
+                                    <digi:trn key="aim:TranslationManagerExportButton">
+                                    Export
+                                    </digi:trn>
+                                  </c:set>
+                                  <html:submit style="dr-menu" value="${translation}" property="export"/>
+                                </td>
 							 </tr>
 							 <td>
 									<br/>Please select the languages you want to export
 							</td>
 					 </digi:form>
 					</logic:notEmpty>
-					
+
 					<tr>
 						<td><br/><br/><br/>
 							</td>
 					</tr>
-						 
+
 					<digi:form action="/translationManager.do" method="post" enctype="multipart/form-data">
 						<tr>
 							<td>
@@ -95,10 +109,16 @@
 							</td>
 						</tr>
 							 <tr>
-							 	<td><html:submit style="dr-menu" value="Import" property="import"/></td>
+							 	<td>
+                                  <c:set var="translation">
+                                    <digi:trn key="aim:TranslationManagerImportButton">
+                                    Import
+                                    </digi:trn>
+                                  </c:set>
+                                  <html:submit style="dr-menu" value="${translation}" property="import"/></td>
 							 </tr>
 					</digi:form>
-					
+
 					</logic:empty>
 					<logic:notEmpty name="aimTranslatorManagerForm" property="importedLanguages">
 						<digi:form action="/translationManager.do" method="post" >
@@ -111,15 +131,15 @@
 																	type="java.lang.String">
 								<tr>
 									<td width="30%">
-										
+
 										<html:hidden property="selectedImportedLanguages" value="<%=lang %>" />
-										<bean:write name="lang" /> 
+										<bean:write name="lang" />
 										</td>
 										<td>
 										<select name='<%="LANG:"+lang%>' >
 											<option value="-1" selected>-- Please select --</option>
-											<option value="update">Update local translations</option>											
-											<option value="overwrite">Overwrite local translations</option>											
+											<option value="update">Update local translations</option>
+											<option value="overwrite">Overwrite local translations</option>
 										</select>
 	 								</td>
 		 						</tr>

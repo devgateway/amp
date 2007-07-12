@@ -22,10 +22,10 @@
 				<tr>
 					<!-- Start Navigation -->
 					<td height=33><span class=crumb>
-						<bean:define id="translation">
+						<c:set var="translation">
 							<digi:trn key="aim:clickToViewAdmin">Click here to goto Admin Home</digi:trn>
-						</bean:define>
-						<digi:link href="/admin.do" styleClass="comment" title="<%=translation%>" >
+						</c:set>
+						<digi:link href="/admin.do" styleClass="comment" title="${translation}" >
 						<digi:trn key="aim:AmpAdminHome">
 						Admin Home
 						</digi:trn>
@@ -57,15 +57,15 @@
 								</tr>
 								<tr bgColor=#f4f4f2>
 									<td valign="top">
-										<table align=center bgColor=#f4f4f2 cellPadding=0 cellSpacing=0 width="90%" border=0>	
+										<table align=center bgColor=#f4f4f2 cellPadding=0 cellSpacing=0 width="90%" border=0>
 											<tr>
 												<td bgColor=#ffffff class=box-border>
 													<table border=0 cellPadding=1 cellSpacing=1 class=box-border width="100%">
 														<tr bgColor=#dddddb>
 															<!-- header -->
 															<td bgColor=#dddddb height="20" 			align="center" colspan="5"><B>
-																<digi:trn key="aim:fiscalCalendars">Fiscal Calendars</digi:trn>						
-                                                              </b>						
+																<digi:trn key="aim:fiscalCalendars">Fiscal Calendars</digi:trn>
+                                                              </b>
 															</td>
 															<!-- end header -->
 														</tr>
@@ -75,19 +75,19 @@
 														<tr>
 															<td colspan="5">
                                                    		<b><digi:trn key="aim:nofiscalCalendar">No fiscal calendar present</digi:trn>
-                                                       </b>	
+                                                       </b>
 															</td>
 														</tr>
 														</logic:empty>
 														<logic:notEmpty name="aimFiscalCalendarForm" 	property="fiscalCal">
 														<tr>
-															<td width="100%">	
+															<td width="100%">
 																<table width="533" border=0	 bgColor=#f4f4f2>
 																	<tr>
 																		<td width="144"><b>
-																			<digi:trn key="aim:nameFiscalCalendar">Name	
+																			<digi:trn key="aim:nameFiscalCalendar">Name
 																			</digi:trn></b>
-																		</td>	
+																		</td>
 																		<td width="117"><b>
 																			<digi:trn key="aim:startMonthFiscalCalendar">Start Month
 																			</digi:trn></b>
@@ -101,8 +101,8 @@
 																			</digi:trn></b>
 																		</td>
 																	</tr>
-																	
-                                                                <c:set value="0" var="monthIndex"/>																	
+
+                                                                <c:set value="0" var="monthIndex"/>
 																<logic:iterate name="aimFiscalCalendarForm" property="fiscalCal" id="fiscalCal">
 																	<tr>
 																		<td height=5 width="593" colspan="4">
@@ -115,10 +115,10 @@
 																			<bean:write name="fiscalCal" property="ampFiscalCalId" />
 																		  </c:set>
 																		  <c:set target="${urlParams}" property="action" value="edit" />
-																		<bean:define id="translation">
+																		<c:set var="translation">
 																			<digi:trn key="aim:clickToEditFiscalCalendar">Click here to Edit Fiscal Calendar</digi:trn>
-																		</bean:define>
-																		  <digi:link href="/editFiscalCalendar.do" name="urlParams" title="<%=translation%>" >
+																		</c:set>
+																		  <digi:link href="/editFiscalCalendar.do" name="urlParams" title="${translation}" >
 																			<bean:write name="fiscalCal" property="name"/>
 																		  </digi:link>
 																		</td>
@@ -135,7 +135,7 @@
 																		</td>
 																	</tr>
 																	</logic:iterate>
-																</table>	
+																</table>
 															</td>
 														</tr>
 														</logic:notEmpty>
@@ -153,10 +153,10 @@
 													<jsp:useBean id="urlParams1" type="java.util.Map" class="java.util.HashMap"/>
 													<c:set target="${urlParams1}" property="page"><%=pages%>
 													</c:set>
-													<bean:define id="translation">
+													<c:set var="translation">
 														<digi:trn key="aim:clickToViewNextPage">Click here to goto Next Page</digi:trn>
-													</bean:define>
-													<digi:link href="/fiscalCalendarManager.do" name="urlParams1" title="<%=translation%>" >
+													</c:set>
+													<digi:link href="/fiscalCalendarManager.do" name="urlParams1" title="${translation}" >
 														<%=pages%>
 													</digi:link> |&nbsp; </logic:iterate>
 												</td>
@@ -174,7 +174,7 @@
 							</table>
 						</td>
 						<td noWrap width=100% vAlign="top">
-							<table align=center cellPadding=0 cellSpacing=0 width="90%" border=0>	
+							<table align=center cellPadding=0 cellSpacing=0 width="90%" border=0>
 								<tr>
 									<td>
 										<!-- Other Links -->
@@ -198,10 +198,10 @@
 											<tr>
 												<td>
 													<digi:img src="module/aim/images/arrow-014E86.gif" 	width="15" height="10"/>
-														<bean:define id="translation">
+														<c:set var="translation">
 															<digi:trn key="aim:clickToAddFiscalCalendar">Click here to Add Fiscal Calendar</digi:trn>
-														</bean:define>
-														<digi:link href="/editFiscalCalendar.do?action=create"  title="<%=translation%>" >
+														</c:set>
+														<digi:link href="/editFiscalCalendar.do?action=create"  title="${translation}" >
 															<digi:trn key="aim:addNewFiscalCalendar">
 																Add a Fiscal Calendar </digi:trn>
 														</digi:link>
@@ -210,10 +210,10 @@
 											<tr>
 												<td>
 													<digi:img src="module/aim/images/arrow-014E86.gif" 	width="15" height="10"/>
-													<bean:define id="translation">
+													<c:set var="translation">
 														<digi:trn key="aim:clickToViewAdmin">Click here to goto Admin Home</digi:trn>
-													</bean:define>
-													<digi:link href="/admin.do" title="<%=translation%>" >
+													</c:set>
+													<digi:link href="/admin.do" title="${translation}" >
 													<digi:trn key="aim:AmpAdminHome">
 													Admin Home
 													</digi:trn>

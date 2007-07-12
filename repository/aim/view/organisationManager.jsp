@@ -10,7 +10,7 @@
 
 <script language="JavaScript">
 
-	<!-- 
+	<!--
 
 	function searchOrganization() {
 		if (document.aimOrgManagerForm.tempNumResults.value == 0) {
@@ -25,7 +25,7 @@
 			 return true;
 		}
 	}
-	
+
 	function searchAlpha(val) {
 		if (document.aimOrgManagerForm.tempNumResults.value == 0) {
 			  alert ("Invalid value at 'Number of results per page'");
@@ -39,7 +39,7 @@
 			 return true;
 		}
 	}
-	
+
 	-->
 
 </script>
@@ -87,7 +87,7 @@
 						<html:select property="ampOrgTypeId" styleClass="inp-text">
 							<html:option value="-1">All</html:option>
 							<logic:notEmpty name="aimOrgManagerForm" property="orgTypes">
-								<html:optionsCollection name="aimOrgManagerForm" property="orgTypes" 
+								<html:optionsCollection name="aimOrgManagerForm" property="orgTypes"
 									value="ampOrgTypeId" label="orgType" />
 							</logic:notEmpty>
 						</html:select>
@@ -123,11 +123,11 @@
 				<tr>
 					<td height=16 vAlign=center width=867 colspan="7">
 						<digi:trn key="aim:organMan:topFilterNote">
-						Select the value "ALL" in Results per page to view all results of your selection on one page. 
+						Select the value "ALL" in Results per page to view all results of your selection on one page.
 						</digi:trn>
                      </td>
 				</tr>
-				
+
 					<tr>
 					<td noWrap width=867 vAlign="top" colspan="7">
 					<table width="100%" cellspacing=1 cellSpacing=1>
@@ -141,15 +141,15 @@
 								</tr>
 								<tr bgColor=#f4f4f2>
 									<td valign="top">
-										<table align=center bgColor=#f4f4f2 cellPadding=0 cellSpacing=0 width="90%" border=0>	
+										<table align=center bgColor=#f4f4f2 cellPadding=0 cellSpacing=0 width="90%" border=0>
 											<tr>
 												<td bgColor=#ffffff class=box-border>
 													<table border=0 cellPadding=1 cellSpacing=1 class=box-border width="100%">
 														<tr bgColor=#dddddb>
 															<!-- header -->
 															<td bgColor=#dddddb height="20" 			align="center" colspan="5"><B>
-																<digi:trn key="aim:organizationList">List of Organizations</digi:trn>						
-                                                              </b>						
+																<digi:trn key="aim:organizationList">List of Organizations</digi:trn>
+                                                              </b>
 															</td>
 															<!-- end header -->
 														</tr>
@@ -160,19 +160,19 @@
 															<td colspan="5">
                                                    		<b><digi:trn key="aim:noOrganization">No
                                                         organization present</digi:trn>
-                                                       </b>	
+                                                       </b>
 															</td>
 														</tr>
 														</logic:empty>
 														<logic:notEmpty name="aimOrgManagerForm" 	property="pagedCol">
 														<tr>
-															<td width="100%">	
+															<td width="100%">
 																<table width="634" border=0	 bgColor=#f4f4f2>
 																	<tr>
 																		<td height="30" width="377"><b>
 																			<digi:trn key="aim:organizationAcronym">Organization
                                                                             Name (Acronym)</digi:trn></b>
-																		</td>	
+																		</td>
 																	<%--<td height="30" width="171"><b>
 																			<digi:trn key="aim:organizationCountry">Country</digi:trn></b>
 																		</td>--%>
@@ -206,7 +206,7 @@
 																		</td>
                                                             		</tr>
 																</logic:iterate>
-																</table>	
+																</table>
 															</td>
 														</tr>
 														</logic:notEmpty>
@@ -224,18 +224,18 @@
 													<jsp:useBean id="urlParams1" type="java.util.Map" class="java.util.HashMap"/>
 													<c:set target="${urlParams1}" property="page"><%=pages%>
 													</c:set>
-													
+
 													<c:set target="${urlParams1}" property="orgSelReset" value="false"/>
 													<c:if test="${aimOrgManagerForm.currentPage == pages}">
 														<font color="#FF0000"><%=pages%></font>
 													</c:if>
 													<c:if test="${aimOrgManagerForm.currentPage != pages}">
-														<bean:define id="translation">
+														<c:set var="translation">
 															<digi:trn key="aim:clickToViewNextPage">Click here to go to Next Page</digi:trn>
-														</bean:define>
-														<digi:link href="/organisationSearch.do" name="urlParams1" title="<%=translation%>" >
+														</c:set>
+														<digi:link href="/organisationSearch.do" name="urlParams1" title="${translation}" >
 															<%=pages%>
-														</digi:link>					
+														</digi:link>
 													</c:if>
 													|&nbsp; </logic:iterate>
 												</td>
@@ -258,10 +258,10 @@
 																	<font color="#FF0000"><%=alphaPages %></font>
 																</c:if>
 																<c:if test="${aimOrgManagerForm.currentAlpha != alphaPages}">
-																	<bean:define id="translation">
+																	<c:set var="translation">
 																		<digi:trn key="aim:clickToGoToNext">Click here to go to next page</digi:trn>
-																	</bean:define>
-																	<a href="javascript:searchAlpha('<%=alphaPages%>')" title="<%=translation%>" >
+																	</c:set>
+																	<a href="javascript:searchAlpha('<%=alphaPages%>')" title="${translation}" >
 																		<%=alphaPages %></a>
 																</c:if>
 															|&nbsp;
@@ -269,7 +269,7 @@
 															</logic:iterate>
 												   </td>
 												 </tr>
-												 
+
 												</table>
 											</td>
 										</tr>
@@ -288,7 +288,7 @@
 							</table>
 						</td>
 						<td noWrap width=100% vAlign="top">
-							<table align=center cellPadding=0 cellSpacing=0 width="90%" border=0>	
+							<table align=center cellPadding=0 cellSpacing=0 width="90%" border=0>
 								<tr>
 									<td>
 										<!-- Other Links -->

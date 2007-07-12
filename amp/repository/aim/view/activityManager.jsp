@@ -35,10 +35,10 @@
 				<tr>
 					<!-- Start Navigation -->
 					<td height=33><span class=crumb>
-						<bean:define id="translation">
-							<digi:trn key="aim:clickToViewAdmin">Click here to goto Admin Home</digi:trn>
-						</bean:define>
-						<digi:link href="/admin.do" styleClass="comment" title="<%=translation%>" >
+					<c:set var="clickToViewAdmin">
+					<digi:trn key="aim:clickToViewAdmin">Click here to goto Admin Home</digi:trn>
+					</c:set>	
+						<digi:link href="/admin.do" styleClass="comment" title="${clickToViewAdmin}" >
 						<digi:trn key="aim:AmpAdminHome">
 							Admin Home
 						</digi:trn>
@@ -124,11 +124,11 @@
 																			<bean:write name="activities" property="ampActivityId"/>
 																		</c:set>
 																		<c:set target="${urlParams}" property="action" value="delete"/>
-																		<bean:define id="translation">
-																			<digi:trn key="aim:clickToDeletetheActivity">Click here to Delete Activity</digi:trn>
-																		</bean:define>
+																		<c:set var="clickToDeletetheActivity">
+																		<digi:trn key="aim:clickToDeletetheActivity">Click here to Delete Activity</digi:trn>
+																		</c:set>
 																		<digi:link href="/activityManager.do" name="urlParams"
-																		onclick="return deleteIndicator()" title="<%=translation%>" >
+																		onclick="return deleteIndicator()" title="${clickToDeletetheActivity}" >
 																		<img src= "../ampTemplate/images/trash_12.gif" border=0>
 																		</digi:link>
 																	</td>

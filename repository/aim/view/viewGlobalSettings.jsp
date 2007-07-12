@@ -33,10 +33,10 @@
 				<tr>
 					<!-- Start Navigation -->
 					<td height=33><span class=crumb>
-						<bean:define id="translation">
-							<digi:trn key="aim:clickToViewAdmin">Click here to goto Admin Home</digi:trn>
-						</bean:define>
-						<digi:link href="/admin.do" styleClass="comment" title="<%=translation%>" >
+						<c:set var="clickToViewAdmin">
+							<digi:trn key="aim:clickToViewAdmin">Click here to goto Admin Home</digi:trn> 
+						</c:set>
+						<digi:link href="/admin.do" styleClass="comment" title="${clickToViewAdmin}" >
 						<digi:trn key="aim:AmpAdminHome">
 						Admin Home
 						</digi:trn>
@@ -76,15 +76,25 @@
 											<table width="100%" cellspacing=1 cellpadding=1 valign=top align=left bgcolor="#d7eafd">
 	<tr>
 	<td bgcolor="#fefefe">
-	<b>Setting Name</b>
-	</td>												
-<td bgcolor="#fefefe">
-	<b>
-	Current Value
-</b>	
+		<b>
+		<digi:trn key="aim:systemName">
+			Setting Name
+		</digi:trn>
+		</b>
 	</td>												
 	<td bgcolor="#fefefe">
-	<b>New Value</b>
+		<b>
+		   <digi:trn key="aim:currentValue">
+				Current Value
+		    </digi:trn>
+		</b>	
+	</td>												
+	<td bgcolor="#fefefe">
+		<b>
+		   <digi:trn key="aim:newValue">
+				New Value
+		    </digi:trn>
+		</b>
 	</td>
 	<td bgcolor="#fefefe">
 	&nbsp;
@@ -96,26 +106,43 @@
 																	type="org.digijava.module.aim.dbentity.AmpGlobalSettings	">
 															<tr>
 																<td bgcolor="#ffffff">
+																			
+																			<c:set var="globaLset">
 																			<bean:write name="globalSett" property="globalSettingsName"/>
-																			<logic:notEmpty name="globalSett" property="globalSettingsDescription"> 
-																				<img src= "../ampTemplate/images/help.gif" border=0 title="<bean:write name="globalSett" property="globalSettingsDescription"/>">
-																			</logic:notEmpty>
+																			</c:set>
+																			<digi:trn key="aim:Global:${globaLset}">
+																					<bean:write name="globalSett" property="globalSettingsName"/>
+		    																</digi:trn>
+																			
+																				<logic:notEmpty name="globalSett" property="globalSettingsDescription"> 
+																					<img src= "../ampTemplate/images/help.gif" border="0" title="<bean:write name="globalSett" property="globalSettingsDescription"/>">
+																				</logic:notEmpty>
 																</td>
 																<td bgcolor="#ffffff">
 																<b>
 																		<bean:define id="thisForm" name="aimGlobalSettingsForm" type="org.digijava.module.aim.form.GlobalSettingsForm" />
 																		<% 
 																		Map dictionary	= thisForm.getPossibleValuesDictionary(globalSett.getGlobalSettingsName()); 
-																		if (dictionary != null) {
-																			String dictionaryValue	=  (String)dictionary.get(globalSett.getGlobalSettingsValue());
+																			if (dictionary != null) {
+																				String dictionaryValue	=  (String)dictionary.get(globalSett.getGlobalSettingsValue());
 																			if ( dictionaryValue == null )
-																				dictionaryValue	= "n/a";
-																			out.write(dictionaryValue);
-																		}
-																		else
-																			out.write(globalSett.getGlobalSettingsValue());
-																		
-																		%>
+																					dictionaryValue	= "n/a";
+																			%>
+																				<c:set var="dic">
+																					<%out.write(dictionaryValue);%>
+																				</c:set>
+																				<digi:trn key="aim:${dic}">
+																					<%out.write(dictionaryValue);%>
+																				</digi:trn>
+														
+																		  <%}else{%>
+																			    <digi:trn key="aim:<%=globalSett.getGlobalSettingsValue()%>">
+																				     <%=globalSett.getGlobalSettingsValue()%>
+																			    </digi:trn>
+																		   <%}%>
+						
+						
+						
 																			
 																</b>																			
 																</td>
@@ -130,19 +157,20 @@
 														<% String possibleValues = "possibleValues(" + globalSett.getGlobalSettingsName() + ")"; %>
 														<logic:notEmpty name="aimGlobalSettingsForm" property='<%= possibleValues %>'>
 															<html:select property="gsfValue" styleClass="inp-text" value='<%= globalSett.getGlobalSettingsValue() %>'>
-																		<html:optionsCollection name="aimGlobalSettingsForm"
-																			property='<%= possibleValues %>' value="key"
-																			label="value" />
+
+																		<html:optionsCollection name="aimGlobalSettingsForm" property='<%=possibleValues%>' value="key" label="value" />
+															
 															</html:select>
 														</logic:notEmpty>
 														<logic:empty name="aimGlobalSettingsForm" property='<%= possibleValues %>'>
 															<html:text property="gsfValue" styleClass="inp-text" value='<%= globalSett.getGlobalSettingsValue() %>' />
-																		
 														</logic:empty>
 														</td>
 														<td bgcolor="#f4f4f2" > 
 																<html:submit property="save">																														
-																	Save
+																	<digi:trn key="aim:save">
+																			save
+		    														</digi:trn>
 																</html:submit>
 														</td>
 

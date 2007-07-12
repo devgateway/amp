@@ -10,19 +10,19 @@ function writeError(str, append)
 
 function toggleRows(caller,hideId){
 	var exitnow=false;
-	if(caller.alt=='shown') exitnow=true;	
-	
+	if(caller.alt=='shown') exitnow=true;
+
  	hideAllRows();
  	if(exitnow) return;
 	if(caller.alt=='hidden') {caller.alt='shown';caller.src=minus_sign;} else {caller.alt='hidden'; caller.src=plus_sign;}
 	var display= (caller.alt!='shown')? 'none':'';
 	tb = document.getElementById('reportTable');
-	
+
 
 	var len = tb.rows.length;
 	var found=false;
 	var hideDepth=document.getElementById(hideId).title;
-	
+
 
 	//writeError(+"<br/>", true);
 	for(i=1 ; i< len; i++){
@@ -35,9 +35,9 @@ function toggleRows(caller,hideId){
 		}
 		if (found) tb.rows[i].style.display = display;
 	}
-	
+
 	//put sub-images to -
-	imgs = tb.getElementsByTagName('img');	
+	imgs = tb.getElementsByTagName('img');
 	for(i=0 ; i< imgs.length; i++){
 		if(imgs[i].id=='toggleImage' && imgs[i].title>hideDepth)  {
 			imgs[i].alt='shown';
@@ -48,15 +48,15 @@ function toggleRows(caller,hideId){
 
 
 function hideAllRows() {
-	tb = document.getElementById('reportTable');	
+	tb = document.getElementById('reportTable');
 	for(i=1 ; i< tb.rows.length; i++){
 		if(tb.rows[i].title=='' || tb.rows[i].title>2) {
-		 tb.rows[i].style.display = 'none';		
+		 tb.rows[i].style.display = 'none';
 		 }
 	}
-	
+
 	//change  +/- images now...
-	imgs = tb.getElementsByTagName('img');	
+	imgs = tb.getElementsByTagName('img');
 	for(i=0 ; i< imgs.length; i++){
 		if(imgs[i].id=='toggleImage')  {
 			imgs[i].alt='hidden';
@@ -129,7 +129,7 @@ function setPointer(theRow, theRowNum, theAction, theDefaultColor, thePointerCol
     } // end 3
 	// alert(currentColor);
     // 3.3 ... Opera changes colors set via HTML to rgb(r,g,b) format so fix it
-    if (currentColor.indexOf("rgb") >= 0) 
+    if (currentColor.indexOf("rgb") >= 0)
     {
         var rgbStr = currentColor.slice(currentColor.indexOf('(') + 1,
                                      currentColor.indexOf(')'));
@@ -153,7 +153,7 @@ function setPointer(theRow, theRowNum, theAction, theDefaultColor, thePointerCol
         else if (theAction == 'click' && theMarkColor != '') {
             newColor              = theMarkColor;
             marked_row[theRowNum] = true;
-            
+
             // Garvin: deactivated onclick marking of the checkbox because it's also executed
             // when an action (like edit/delete) on a single item is performed. Then the checkbox
             // would get deactived, even though we need it activated. Maybe there is a way
@@ -187,19 +187,23 @@ function setPointer(theRow, theRowNum, theAction, theDefaultColor, thePointerCol
     } // end 4
 
     // 5. Sets the new color...
-    
+
     if (newColor) {
         var c = null;
         var aux=null;
         // 5.1 ... with DOM compatible browsers except Opera
         if (domDetect) {
         	if(lastClickedRowNum == -1) firstColor=currentColor;
-            for (c = 0; c < rowCellsCnt; c++) { 
+            for (c = 0; c < rowCellsCnt; c++) {
                 theCells[c].setAttribute('bgcolor', newColor, 0);
-                 if (lastClickedRow != -1)  
+                 if (lastClickedRow != -1&&lastClickedCells!=null)
                  	{
-                 		if(lastClickedRowNum==-1) lastClickedCells[c].setAttribute('bgcolor', firstColor, 0);
-                 		else lastClickedCells[c].setAttribute('bgcolor', lastClickedRowNum%2==0?"#FFFFFF":"DDDDDD", 0);
+                 		if(lastClickedRowNum==-1){
+                                lastClickedCells[c].setAttribute('bgcolor', firstColor, 0);
+                                }
+                 		else {
+                                lastClickedCells[c].setAttribute('bgcolor', lastClickedRowNum%2==0?"#FFFFFF":"DDDDDD", 0);
+                                }
                  	} // theDefaultColor
                  lastClickedRow=theRow;
             } // end for
@@ -211,7 +215,7 @@ function setPointer(theRow, theRowNum, theAction, theDefaultColor, thePointerCol
                 theCells[c].style.backgroundColor = newColor;
              	if (lastClickedRow != -1)  lastClickedCells[c].setAttribute('bgcolor', theDefaultColor, 0);
                 lastClickedRow=theRow;
-				
+
             }
         }
     } // end 5

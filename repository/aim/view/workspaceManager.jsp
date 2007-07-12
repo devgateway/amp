@@ -248,19 +248,6 @@
 												</digi:link>
 											</td>
 										</tr>
-                                        <tr>
-                                          <td>
-                                            <digi:img src="module/aim/images/arrow-014E86.gif" width="15" height="10"/>
-                                            <c:set var="translation">
-                                              <digi:trn key="aim:clickToViewUsers">Click here to goto Admin Home</digi:trn>
-                                            </c:set>
-                                            <digi:link href="/viewAllUsers.do" title="${translation}" >
-                                              <digi:trn key="aim:listOfUsers">
-                                              List of users
-                                              </digi:trn>
-                                            </digi:link>
-                                          </td>
-                                        </tr>
 										<!-- end of other links -->
 									</table>
 								</td>

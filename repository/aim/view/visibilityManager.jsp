@@ -60,14 +60,6 @@
 					</td>
 				</tr>
 
-				<logic:equal name="aimVisibilityManagerForm" property="mode" value="editTemplate">
-					<tr>
-						<td noWrap width=100% vAlign="top">
-							<jsp:include page="editTemplateVisibility.jsp" />
-						</td>
-					</tr>			
-				</logic:equal>
-				
 				<tr>
 					<td noWrap width=100% vAlign="top">
 						<jsp:include page="manageTemplatesVisibility.jsp" />

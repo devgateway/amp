@@ -89,7 +89,7 @@ public class GlobalSettings extends Action {
 		if (refreshGlobalSettingsCache) {
 			FeaturesUtil.setGlobalSettingsCache(col);
 			FeaturesUtil.logGlobalSettingsCache();
-			FeatureManager.refreshTemplateGlobalSettings(getServlet());
+			//FeatureManager.refreshTemplateGlobalSettings(getServlet());
 		}
 		gsForm.setGsfCol(col);
 		Iterator itr = col.iterator();

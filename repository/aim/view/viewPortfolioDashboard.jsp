@@ -64,7 +64,7 @@
 
 <TABLE width="810" cellspacing="1" cellpadding="4" valign="top" align="left">
 
-	<TR><TD>R
+	<TR><TD>
 		<TABLE border=0 cellPadding=0 cellSpacing=0 width="100%" >
       	<TR><TD>
            	<TABLE border=0 cellPadding=0 cellSpacing=0 >

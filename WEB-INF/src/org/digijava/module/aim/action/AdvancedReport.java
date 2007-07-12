@@ -42,6 +42,7 @@ import org.digijava.module.aim.helper.DecimalToText;
 import org.digijava.module.aim.helper.Report;
 import org.digijava.module.aim.helper.ReportSelectionCriteria;
 import org.digijava.module.aim.helper.TeamMember;
+import org.digijava.module.aim.util.AuditLoggerUtil;
 import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.aim.util.ReportUtil;
 import org.digijava.module.aim.util.TeamUtil;
@@ -1053,11 +1054,15 @@ public class AdvancedReport extends Action {
 //								logger.info ("Updating report.." );
 								pmsession.update( ampReports );
 								pmsession.flush();
+//								log the update action for a report
+								AuditLoggerUtil.logObject(httpSession,request,ampReports,"update");
 								
 							}
 							else { // This is the case of a new Report being created
 //								logger.info ("Saving report.." );
 								ReportUtil.saveReport(ampReports,teamMember.getTeamId(),teamMember.getMemberId(),teamMember.getTeamHead());
+//								log the add action for a report
+								AuditLoggerUtil.logObject(httpSession,request,ampReports,"add");
 							}
 							
 							HttpSession hs = request.getSession();

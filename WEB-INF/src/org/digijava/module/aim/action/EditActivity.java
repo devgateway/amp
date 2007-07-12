@@ -116,13 +116,18 @@ public class EditActivity
 
         HttpSession session = request.getSession();
         TeamMember tm = (TeamMember) session.getAttribute("currentMember");
+
+        //if("true".compareTo(request.getParameter("public"))!=0) 
+        	//return mapping.findForward("forward");
+		
         ActionErrors errors = new ActionErrors();
 
         ampContext = getServlet().getServletContext();
 
         // if user is not logged in, forward him to the home page
         if(session.getAttribute("currentMember") == null && request.getParameter("edit")!=null)
-            return mapping.findForward("index");
+        	if("true".compareTo(request.getParameter("public"))!=0)
+        		return mapping.findForward("index");
 
         EditActivityForm eaForm = (EditActivityForm) form; // form bean instance
         Long activityId = eaForm.getActivityId();
@@ -1296,7 +1301,7 @@ public class EditActivity
                     }
                 }
             }
-            Collection statusCol = null;
+            //Collection statusCol = null;
             // load the status from the database
 //            if(eaForm.getStatusCollection() == null) { // TO BE DELETED
 //                statusCol = DbUtil.getAmpStatus();
@@ -1353,6 +1358,7 @@ public class EditActivity
         	}
         
         //activityId
+       /*
         Collection ampFundingsAux = DbUtil.getAmpFunding(activityId);
         FilterParams fp = (FilterParams) session.getAttribute("filterParams");
 		TeamMember teamMember=(TeamMember)session.getAttribute("currentMember");
@@ -1365,22 +1371,16 @@ public class EditActivity
     		if ( teamMember != null )	{
     			apps = teamMember.getAppSettings();
     		}
-
-    		/*	Currency curr = CurrencyUtil.getCurrency(apps.getCurrencyId());
-    			fp.setCurrencyCode(curr.getCurrencyCode());
-    			fp.setFiscalCalId(apps.getFisCalId());
-    			String perspective = CommonWorker.getPerspective(apps.getPerspective());
-    			fp.setPerspective(perspective);
-    			int year = new GregorianCalendar().get(Calendar.YEAR);
-    			fp.setFromYear(year-Constants.FROM_YEAR_RANGE);
-    			fp.setToYear(year+Constants.TO_YEAR_RANGE);
-    			*/
+    		if(apps!=null){
+    		
     			if (fp.getCurrencyCode() == null) 
     			{
-    				Currency curr = CurrencyUtil.getCurrency(apps.getCurrencyId());
-    				if (curr != null) {
-    					fp.setCurrencyCode(curr.getCurrencyCode());
-    				}
+    				
+    					Currency curr = CurrencyUtil.getCurrency(apps.getCurrencyId());
+    					if (curr != null) {
+    						fp.setCurrencyCode(curr.getCurrencyCode());
+    					}
+    				
     			}
     			
 
@@ -1401,8 +1401,9 @@ public class EditActivity
     				fp.setFromYear(year-Constants.FROM_YEAR_RANGE);
     				fp.setToYear(year+Constants.TO_YEAR_RANGE);
     			}
+    		
 
-        //System.out.println("filterrrrrrrr paramssssssss fund id:::"+fp.getAmpFundingId());
+        
         Collection fb = FinancingBreakdownWorker.getFinancingBreakdownList(
 				activityId, ampFundingsAux, fp);
         eaForm.setFinancingBreakdown(fb);
@@ -1427,7 +1428,8 @@ public class EditActivity
 		overallTotalUnExpended = DecimalToText.getDifference(
 				overallTotalDisbursed, overallTotalExpenditure);
 		eaForm.setTotalUnExpended(overallTotalUnExpended);
-		
+    		}
+    */
         return mapping.findForward("forward");
     }
 }

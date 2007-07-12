@@ -5,17 +5,17 @@
 
 package org.digijava.module.aim.dbentity;
 
-import java.text.*;
-import java.util.*;
-import javax.servlet.http.*;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
 import javax.servlet.http.HttpSession;
 
-import org.dgfoundation.amp.ar.*;
+import org.dgfoundation.amp.ar.AmpARFilter;
+import org.digijava.module.aim.util.LoggerIdentifiable;
 
-public class AmpReports implements Comparable {
+public class AmpReports implements Comparable, LoggerIdentifiable {
 
 	private Long ampReportId;
 
@@ -263,5 +263,15 @@ public class AmpReports implements Comparable {
 
 	public void setSiteId(String siteId) {
 		this.siteId = siteId;
+	}
+
+	public Object getObjectType() {
+		// TODO Auto-generated method stub
+		return this.getClass().getName();
+	}
+
+	public Object getIdentifier() {
+		// TODO Auto-generated method stub
+		return this.getAmpReportId().toString();
 	}
 }

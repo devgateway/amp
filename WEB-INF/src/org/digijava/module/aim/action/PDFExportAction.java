@@ -69,7 +69,7 @@ public class PDFExportAction extends Action implements PdfPageEvent{
 		Site site = RequestUtils.getSite(request);
 		Locale navigationLanguage = RequestUtils.getNavigationLanguage(request);
 		String siteId=site.getSiteId();
-		String locale=navigationLanguage.getName();
+		String locale=navigationLanguage.getCode();
 		
 		
 		GroupReportData rd=ARUtil.generateReport(mapping,form,request,response);

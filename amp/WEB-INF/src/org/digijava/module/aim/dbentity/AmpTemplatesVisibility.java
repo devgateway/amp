@@ -10,6 +10,7 @@ import java.io.Serializable;
 import java.util.Set;
 
 import org.dgfoundation.amp.visibility.AmpObjectVisibility;
+import org.digijava.module.aim.util.FeaturesUtil;
 
 public class AmpTemplatesVisibility extends AmpObjectVisibility implements Serializable {
 	/**
@@ -65,5 +66,8 @@ public class AmpTemplatesVisibility extends AmpObjectVisibility implements Seria
 		this.visible = visible;
 	}
 	
+	public boolean isDefault(){
+		return this.getId().equals(FeaturesUtil.getGlobalSettingValueLong("Visibility Template"));
+	}
 	
 }

@@ -31,7 +31,7 @@
 <a href='/aim/viewChannelOverview.do~tabIndex=0~ampActivityId=<bean:write name="ownerId"/>' style="text-decoration: none">
 </logic:present>
 <logic:notPresent name="currentMember" scope="session">
-<a href='/aim/viewActivityPreview.do~pageId=2~activityId=<bean:write name="ownerId"/>' target=_blank style="text-decoration: none">
+<a href='/aim/viewActivityPreview.do~public=true~pageId=2~activityId=<bean:write name="ownerId"/>' target=_blank style="text-decoration: none">
 </logic:notPresent>
 </logic:equal>
 <jsp:include page="<%=viewable.getViewerPath()%>"/>	

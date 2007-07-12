@@ -74,13 +74,14 @@ public class AddAmpActivity extends Action {
 		ampContext = getServlet().getServletContext();
 
 		TeamMember teamMember= new TeamMember();
-
 		// Get the current member who has logged in from the session
 		teamMember=(TeamMember)session.getAttribute("currentMember");
 				// if user is not logged in, forward him to the home page
-		if (session.getAttribute("currentMember") == null)
-			return mapping.findForward("index");
+		//if (session.getAttribute("currentMember") == null)
+			//return mapping.findForward("index");
 
+		//return mapping.findForward("publicPreview");
+		
 		EditActivityForm eaForm = (EditActivityForm) form;
 		// Add sectors
 		if (request.getParameter("addSector") != null){
@@ -205,6 +206,7 @@ public class AddAmpActivity extends Action {
 			eaForm.setWorkingTeamLeadFlag("no");
     
 		if (!eaForm.isEditAct() || logframepr.compareTo("true")==0){
+			if(teamMember!=null)
 			if (teamMember.getTeamHead())
 				eaForm.setApprovalStatus("approved");
 			else
@@ -576,6 +578,7 @@ public class AddAmpActivity extends Action {
 			if (eaForm.getLevelCollection() == null) {
 				eaForm.setLevelCollection(DbUtil.getAmpLevels());
 			}
+			
 			if(teamMember==null) return mapping.findForward("publicPreview"); 
 			else 
 				{

@@ -333,7 +333,7 @@ public class FeatureManager extends MultiAction {
 		return mapping.findForward("forward");
 	}
 	
-	public static void refreshTemplateGlobalSettings(ActionServlet x)
+	public static void refreshTemplateGlobalSettings1(ActionServlet x)
 	{
 		
 		FeatureTemplates defaultTemplate=FeaturesUtil.getTemplate(FeaturesUtil.getGlobalSettingValue("Feature Template"));

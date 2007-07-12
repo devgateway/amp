@@ -434,6 +434,7 @@ function disable() {
                                          </c:if>
 										</td>
 									</tr>
+									<logic:present name="currentMember" scope="session">
 									<tr>
 										<td class="t-name" width="30%" align="right" bgcolor="#fffff0">
 											<digi:trn key="aim:objectiveComments">
@@ -459,6 +460,7 @@ function disable() {
 										
 										</td>
 									</tr>
+									</logic:present>
 									<logic:notEmpty name="SA" scope="application">
 									<tr>
 										<td class="t-name" width="30%" align="right" bgcolor="#fffff0">
@@ -893,6 +895,7 @@ function disable() {
 											<% } %>
 										</td>
 									</tr>
+									<logic:present name="currentMember" scope="session">
 									<tr>
 										<td class="t-name" width="30%" align="right" bgcolor="#f4f4f2">
 											<digi:trn key="aim:funding">
@@ -954,6 +957,8 @@ function disable() {
 											</table>
 										</td>
 									</tr>
+									</logic:present>
+									<logic:present name="currentMember" scope="session">
 									<!-- Costing -->
 									<tr>
 										<td class="t-name" width="30%" align="right" bgcolor="#f4f4f2">
@@ -974,7 +979,7 @@ function disable() {
 										</td>
 									</tr>
 									<!-- End Costing -->
-									
+									</logic:present>
 									<logic:notEmpty name="SA" scope="application">
 									<tr>
 										<td class="t-name" width="30%" align="right" bgcolor="#f4f4f2">

@@ -3,6 +3,7 @@ package org.digijava.module.aim.action;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+
 import org.apache.log4j.Logger;
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionError;
@@ -10,9 +11,10 @@ import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
-import org.digijava.module.aim.util.DbUtil;
-import org.digijava.module.aim.util.ReportUtil;
+import org.digijava.module.aim.dbentity.AmpReports;
 import org.digijava.module.aim.form.ReportsForm;
+import org.digijava.module.aim.util.AuditLoggerUtil;
+import org.digijava.module.aim.util.DbUtil;
 
 
 public class DeleteAllReports extends Action {
@@ -56,9 +58,13 @@ public class DeleteAllReports extends Action {
 						 
 						 
 						 ampReport.setReportId(id);
-						 logger.info(" this is setReportid "+ampReport.getReportId());
+						 //log the delete action for a report
+						 AmpReports aReportForLog=DbUtil.getAmpReport(ampReport.getReportId());
+						 AuditLoggerUtil.logObject(session,request,aReportForLog,"delete");
 						 DbUtil.updateAppSettingsReportDeleted(ampReport.getReportId());
 						 boolean deleted	= DbUtil.deleteReportsCompletely(ampReport.getReportId());
+
+						 
 								
 								 ActionErrors errors = new ActionErrors();
 								 if (deleted) {

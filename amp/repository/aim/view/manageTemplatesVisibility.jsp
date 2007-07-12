@@ -59,6 +59,7 @@
 			</bean:define>	
 			<td width="70%"> <digi:link href="/visibilityManager.do" name="urlParams10" 
 				title="<%=translation%>" ><bean:write name="template" property="name"/></digi:link> &nbsp;&nbsp;&nbsp; 
+				<%= template.isDefault()?"in use":"" %>
 			</td>
 
 			<td width="30%" align="center">

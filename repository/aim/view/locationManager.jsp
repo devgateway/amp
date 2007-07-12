@@ -103,10 +103,10 @@ function delet1(val1, val2) {
 				<tr>
 					<!-- Start Navigation -->
 					<td height=33 width="900"><span class=crumb>
-						<bean:define id="translation">
+						<c:set var="clickToViewAdmin">
 							<digi:trn key="aim:clickToViewAdmin">Click here to goto Admin Home</digi:trn>
-						</bean:define>
-						<digi:link href="/admin.do" styleClass="comment" title="<%=translation%>" >
+						</c:set>
+						<digi:link href="/admin.do" styleClass="comment" title="${clickToViewAdmin}">
 						<digi:trn key="aim:AmpAdminHome">
 						Admin Home
 						</digi:trn>

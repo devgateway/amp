@@ -319,6 +319,36 @@ public class TeamMemberUtil {
 		return members;
 	}
 
+    public static Collection<User> getAllTeamMemberUsers() {
+        Session session = null;
+        Query qry = null;
+        Collection<User> users = null;
+
+        try {
+            session = PersistenceManager.getRequestDBSession();
+            String queryString = "select tm from "
+                    + AmpTeamMember.class.getName()
+                    + " tm";
+
+            qry = session.createQuery(queryString);
+
+            Collection teamMembers=qry.list();
+            if(teamMembers!=null){
+                users=new ArrayList();
+                Iterator itr = teamMembers.iterator();
+                while(itr.hasNext()) {
+                    AmpTeamMember ampMem = (AmpTeamMember) itr.next();
+                    users.add(ampMem.getUser());
+                }
+            }
+        } catch (Exception e) {
+            logger.error("Unable to get all team members");
+            logger.debug("Exceptiion " + e);
+        }
+        logger.debug("returning members");
+        return users;
+	}
+
 	public static Collection getAllMembersUsingActivity(Long activityId) {
 		Session session = null;
 		Collection col = null;

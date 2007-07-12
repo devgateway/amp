@@ -14,10 +14,10 @@
 		<property name="objective" column="objectives" type="org.digijava.kernel.db.SafeClobType"/>
 		<property name="results" column="results"  type="org.digijava.kernel.db.SafeClobType"/>
 		<property name="purpose" column="purpose" type="org.digijava.kernel.db.SafeClobType"/>
-		
+
         <property name="documentSpace" column="document_space" type="java.lang.String"/>
 		<property name="language" column="language" type="java.lang.String"/>
-	    <property name="budget" column="budget" type="java.lang.Boolean"/>		
+	    <property name="budget" column="budget" type="java.lang.Boolean"/>
 		<property name="version" column="version" type="java.lang.String"/>
 		<property name="calType" column="cal_type" type="java.lang.String"/>
 		<property name="activityApprovalDate" column="activity_approval_date" type="java.util.Date" />		<!-- defunct -->
@@ -48,7 +48,7 @@
 		<property name="mfdCntPhoneNumber" column="mfd_cont_phone_number" type="java.lang.String"/>
 		<property name="mfdCntFaxNumber" column="mfd_cont_fax_number" type="java.lang.String"/>
 
-		
+
 
 		<property name="comments" column="comments" type="org.digijava.kernel.db.SafeClobType"/>
 		<property name="statusReason" column="status_reason" type="org.digijava.kernel.db.SafeClobType"/>
@@ -57,13 +57,13 @@
 		<property name="actualStartDate" column="actual_start_date" type="java.util.Date" />
 		<property name="proposedApprovalDate" column="proposed_approval_date" type="java.util.Date" />
 		<property name="actualApprovalDate" column="actual_approval_date" type="java.util.Date" />
-		
+
 		<property name="actualCompletionDate" column="actual_completion_date" type="java.util.Date" />
         <property name="proposedCompletionDate" column="proposed_completion_date" type="java.util.Date" />
 
 		<property name="createdDate" column="date_created" type="java.util.Date" />
 		<property name="updatedDate" column="date_updated" type="java.util.Date" />
-		<many-to-one name="updatedBy" column="updated_by" class="org.digijava.module.aim.dbentity.AmpTeamMember" cascade="none"/> 
+		<many-to-one name="updatedBy" column="updated_by" class="org.digijava.module.aim.dbentity.AmpTeamMember" cascade="none"/>
 
 
 		<property name="programDescription" column="program_description"  type="org.digijava.kernel.db.SafeClobType"/>
@@ -80,15 +80,14 @@
 		<many-to-one name="country" column="country_iso" class="org.digijava.kernel.dbentity.Country" cascade="none"/>
 
 		<many-to-one name="author" column="author" class="org.digijava.kernel.user.User" cascade="none"/>   <!-- defunct -->
-		<many-to-one name="activityCreator" column="activity_creator"
-			class="org.digijava.module.aim.dbentity.AmpTeamMember" cascade="none"/>
+		<many-to-one name="activityCreator" column="activity_creator" class="org.digijava.module.aim.dbentity.AmpTeamMember" cascade="none"/>
 
 		<property name="approvalStatus" column="approval_status" type="java.lang.String"/>
 
 		<property name="lineMinRank" column="line_min_rank" type="java.lang.Integer"/>
 		<property name="planMinRank" column="plan_min_rank" type="java.lang.Integer"/>
-		
-		
+
+
 		<set name="categories" table="AMP_ACTIVITIES_CATEGORYVALUES" lazy="false" cascade="none">
 			<cache usage="read-write"/>
 			<key column="amp_activity_id" />

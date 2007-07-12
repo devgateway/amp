@@ -971,7 +971,7 @@ public class TeamUtil {
 					+ " act where act.team in (" + inclause.toString() + ")";
 
 			qry = session.createQuery(qryStr);
-			Iterator itr = qry.list().iterator();		
+			Iterator itr = qry.list().iterator();
 			inclause = "";
 			while (itr.hasNext()) {
 				if (inclause.length() != 0)
@@ -989,7 +989,7 @@ public class TeamUtil {
 						+ "aor.organisation = org.ampOrgId and "
 						+ "role.roleCode = '" + Constants.FUNDING_AGENCY + "'"
 						+ " order by org.acronym asc";
-	
+
 				qry = session.createQuery(qryStr);
 				itr = qry.list().iterator();
 				while (itr.hasNext()) {

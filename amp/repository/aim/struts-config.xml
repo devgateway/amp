@@ -101,6 +101,7 @@
     <form-bean name="aimComponentsForm" type="org.digijava.module.aim.form.ComponentsForm" />
     <form-bean name="aimUpdateComponentsForm" type="org.digijava.module.aim.form.UpdateComponentsForm" />
     <form-bean name="aimProgramTypeForm" type="org.digijava.module.aim.form.ProgramTypeForm" />
+    <form-bean name="aimViewAllUsersForm" type="org.digijava.module.aim.form.ViewAllUsersForm" />
     <form-bean name="aimPortfolioDashboardForm" type="org.apache.struts.action.DynaActionForm">
       <form-property name="indicatorList" type="java.util.Collection" />
       <form-property name="activityList" type="java.util.Collection" />
@@ -132,7 +133,7 @@
     <action name="aimUserDetailForm" path="/aim/userProfile" scope="request" type="org.digijava.module.aim.action.ViewUserProfile" validate="false">
       <forward name="forward" path="/showLayout.do?layout=aim_viewUserProfile" />
     </action>
-    
+
     <action name="aimLoginForm" path="/aim/index" scope="request" type="org.digijava.module.aim.action.ViewAmp" validate="false">
       <forward name="forward" path="/showLayout.do?layout=index" />
       <forward name="selectTeam" path="/showLayout.do?layout=selectTeam" />
@@ -177,8 +178,8 @@
     </action>
     <action name="aimReportsFilterPickerForm" path="/aim/reportsFilterPicker" scope="session" type="org.digijava.module.aim.action.ReportsFilterPicker" validate="false">
       <forward name="forward" path="/showLayout.do?layout=aim_filterPicker" />
-      <forward name="mydesktop" path="/aim/showDesktop.do" redirect="true" />      
-      <forward name="reportView" path="/aim/viewNewAdvancedReport.do?reload=true" />      
+      <forward name="mydesktop" path="/aim/showDesktop.do" redirect="true" />
+      <forward name="reportView" path="/aim/viewNewAdvancedReport.do?reload=true" />
     </action>
 
 
@@ -208,12 +209,12 @@
     <action path="/aim/viewEUActivityDetails" scope="request" type="org.digijava.module.aim.action.ViewEUActivity" validate="false">
       <forward name="forward" path="/showLayout.do?layout=aim_euActivityDetails" />
     </action>
-    
+
     <action name="aimYearlyComparisonsForm" path="/aim/yearlyComparisonsFilter" scope="request" type="org.digijava.module.aim.action.YearlyComparisonsFilter" validate="false">
       <forward name="forward" path="/showLayout.do?layout=viewYearlyComparisons" />
     </action>
     <action parameter="/showLayout.do?layout=aim_editableTasks" path="/aim/viewEditableTasks" type="org.apache.struts.actions.ForwardAction" />
-    
+
     <action forward="/showLayout.do?layout=desktopLayout" path="/aim/viewMyDesktop" />
     <action forward="/showLayout.do?layout=portfolioDashboardLayout" name="aimPortfolioDashboardForm" path="/aim/viewPortfolioDashboard" />
     <action forward="/showLayout.do?layout=layoutSurveyList" name="aimSurveyForm" path="/aim/viewSurveyList" />
@@ -293,8 +294,8 @@
     <action name="aimMyDesktopForm" path="/aim/deleteMemberLink" scope="session" type="org.digijava.module.aim.action.DeleteMemberLink" validate="false">
       <forward name="forward" path="/aim/viewMyDesktop.do" redirect="true" />
     </action>
-    
-    
+
+
     <action name="aimRelatedLinksForm" path="/aim/viewAllDocuments" scope="session" type="org.digijava.module.aim.action.ViewRelatedLinks" validate="false">
       <forward name="forward" path="/showLayout.do?layout=moreDocuments" />
       <forward name="index" path="/aim/index.do" redirect="true" />
@@ -448,7 +449,7 @@
       <forward name="forward" path="/showLayout.do?layout=orgTypeManager" />
       <forward name="index" path="/aim/index.do" redirect="true" />
     </action>
-    <action name="aimAddOrgTypeForm" path="/aim/editOrgType" scope="request" type="org.digijava.module.aim.action.EditOrgType" validate="true" 
+    <action name="aimAddOrgTypeForm" path="/aim/editOrgType" scope="request" type="org.digijava.module.aim.action.EditOrgType" validate="true"
     		parameter="action" input="/showLayout.do?layout=editOrgType">
       <forward name="forward" path="/showLayout.do?layout=editOrgType" />
       <forward name="index" path="/aim/index.do" redirect="true" />
@@ -965,11 +966,11 @@
       <forward name="forwardToPreview" path="/aim/previewActivity.do" redirect="true" />
       <forward name="accessDenyed" path="/showLayout.do?layout=editActivityDenyed" />
     </action>
-    
+
     <action name="aimEUActivityForm" path="/aim/editEUActivity" scope="session" type="org.digijava.module.aim.action.EditEUActivity">
       <forward name="forward" path="/showLayout.do?layout=aim_editEUActivity" />
     </action>
-    
+
     <action name="aimEditActivityForm" path="/aim/addActivity" scope="session" type="org.digijava.module.aim.action.AddAmpActivity">
       <forward name="addActivityStep1" path="/showLayout.do?layout=addActivityStep1" />
       <forward name="addActivityStep2" path="/showLayout.do?layout=addActivityStep2" />
@@ -1199,7 +1200,7 @@
       <forward name="forward" path="/showLayout.do?layout=viewNewAdvancedReport" />
     </action>
     <action path="/aim/projectFicheExport" type="org.digijava.module.aim.action.ProjectFicheExport" validate="false" />
-    
+
     <action name="aimAdvancedReportForm" path="/aim/pdfExport" scope="session" type="org.digijava.module.aim.action.PDFExportAction" validate="false" />
     <action name="aimAdvancedReportForm" path="/aim/xlsExport" scope="session" type="org.digijava.module.aim.action.XLSExportAction" validate="false" />
     <action name="aimAdvancedReportForm" path="/aim/csvExport" scope="session" type="org.digijava.module.aim.action.CSVExportAction" validate="false" />
@@ -1405,8 +1406,8 @@
     <action name="aimTranslatorManagerForm" path="/aim/translationManager" scope="session" type="org.digijava.module.aim.action.TranslatorManager" validate="false">
       <forward name="forward" path="/showLayout.do?layout=viewTranslatorManager" />
     </action>
-    <action name="aimViewIndicatorsForm" path="/aim/viewIndicators" scope="session" type="org.digijava.module.aim.action.ViewIndicators" validate="false">
-      <forward name="forward" path="/showLayout.do?layout=viewIndicators" />
+    <action name="aimViewAllUsersForm" path="/aim/viewAllUsers" scope="session" type="org.digijava.module.aim.action.ViewAllUsers" validate="false">
+      <forward name="forward" path="/showLayout.do?layout=viewAllUsers" />
     </action>
   </action-mappings>
 </struts-config>

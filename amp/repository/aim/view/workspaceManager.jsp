@@ -52,7 +52,7 @@
 					<td height=16 vAlign=center width=571>
 						<html:errors />
 					</td>
-				</tr>				
+				</tr>
 				<tr>
 					<td noWrap width=100% vAlign="top">
 					<table width="100%" cellspacing=1 cellSpacing=1 border=0>
@@ -60,14 +60,14 @@
 						<table bgColor=#d7eafd cellPadding=1 cellSpacing=1 width="100%" valign="top">
 							<tr bgColor=#ffffff>
 								<td vAlign="top" width="100%">
-									
-									<table width="100%" cellspacing=1 cellpadding=1 valign=top align=left>	
+
+									<table width="100%" cellspacing=1 cellpadding=1 valign=top align=left>
 										<tr><td bgColor=#d7eafd class=box-title height="20" align="center">
 											<!-- Table title -->
 											<digi:trn key="aim:teams">
 												Teams
 											</digi:trn>
-											<!-- end table title -->										
+											<!-- end table title -->
 										</td></tr>
 										<tr><td>
 											<table width="100%" cellspacing=1 cellpadding=4 valign=top align=left bgcolor="#d7eafd">
@@ -135,7 +135,7 @@
 															<bean:define id="translation">
 																<digi:trn key="aim:clickToDeleteWorkspace">Click here to Delete Workspace</digi:trn>
 															</bean:define>
-															[ <digi:link href="/deleteWorkspace.do" name="urlParams4" 
+															[ <digi:link href="/deleteWorkspace.do" name="urlParams4"
 																title="<%=translation%>" onclick="return onDelete()">Delete</digi:link> ]
 														</td>
 													</tr>
@@ -149,33 +149,33 @@
 																Pages :
 															</digi:trn>
 															<jsp:useBean id="urlParams3" type="java.util.Map" class="java.util.HashMap"/>
-															<logic:iterate name="aimWorkspaceForm" property="pages" id="pages" 
+															<logic:iterate name="aimWorkspaceForm" property="pages" id="pages"
 															type="java.lang.Integer">
 															<c:set target="${urlParams3}" property="page"><%=pages%></c:set>
 															<bean:define id="translation">
 																<digi:trn key="aim:clickToViewAllPages">Click here to view All pages</digi:trn>
 															</bean:define>
-															<digi:link href="/workspaceManager.do" name="urlParams3" 
-															title="<%=translation%>" ><%=pages%></digi:link> |&nbsp; 
+															<digi:link href="/workspaceManager.do" name="urlParams3"
+															title="<%=translation%>" ><%=pages%></digi:link> |&nbsp;
 															</logic:iterate>
 														</td>
 													</tr>
-													</logic:notEmpty>												
-													<!-- end page logic for pagination -->													
-													
 													</logic:notEmpty>
-													<!-- end page logic -->													
+													<!-- end page logic for pagination -->
+
+													</logic:notEmpty>
+													<!-- end page logic -->
 											</table>
 										</td></tr>
 									</table>
-									
+
 								</td>
 							</tr>
 						</table>
 					</td>
-					
+
 					<td noWrap width=100% vAlign="top">
-						<table align=center cellPadding=0 cellSpacing=0 width="90%" border=0>	
+						<table align=center cellPadding=0 cellSpacing=0 width="90%" border=0>
 							<tr>
 								<td>
 									<!-- Other Links -->
@@ -248,6 +248,19 @@
 												</digi:link>
 											</td>
 										</tr>
+                                        <tr>
+                                          <td>
+                                            <digi:img src="module/aim/images/arrow-014E86.gif" width="15" height="10"/>
+                                            <c:set var="translation">
+                                              <digi:trn key="aim:clickToViewUsers">Click here to goto Admin Home</digi:trn>
+                                            </c:set>
+                                            <digi:link href="/viewAllUsers.do" title="${translation}" >
+                                              <digi:trn key="aim:listOfUsers">
+                                              List of users
+                                              </digi:trn>
+                                            </digi:link>
+                                          </td>
+                                        </tr>
 										<!-- end of other links -->
 									</table>
 								</td>

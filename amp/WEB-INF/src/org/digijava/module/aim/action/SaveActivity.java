@@ -79,7 +79,6 @@ import org.digijava.module.aim.helper.RegionalFunding;
 import org.digijava.module.aim.helper.RelatedLinks;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.ActivityUtil;
-import org.digijava.module.aim.util.AuditLoggerUtil;
 import org.digijava.module.aim.util.ComponentsUtil;
 import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.aim.util.DbUtil;
@@ -123,7 +122,7 @@ public class SaveActivity extends Action {
 		session.removeAttribute("report");
 		session.removeAttribute("reportMeta");
 
-		
+
 		try {
 
 			TeamMember tm = null;
@@ -135,16 +134,16 @@ public class SaveActivity extends Action {
 			if (activity.getCategories() == null) {
 				activity.setCategories( new HashSet() );
 			}
-			
+
 			/* Saving categories to AmpActivity */
 			CategoryManagerUtil.addCategoryToSet(eaForm.getAccessionInstrument(), activity.getCategories() );
 			CategoryManagerUtil.addCategoryToSet(eaForm.getAcChapter(), activity.getCategories() );
 			CategoryManagerUtil.addCategoryToSet(eaForm.getStatusId(), activity.getCategories() );
 			CategoryManagerUtil.addCategoryToSet(eaForm.getLevelId(), activity.getCategories() );
 			/* END - Saving categories to AmpActivity */
-			
-			
-			
+
+
+
             if(eaForm.getProProjCost()==null){
                 activity.setFunAmount(null);
                 activity.setFunDate(null);
@@ -311,9 +310,9 @@ public class SaveActivity extends Action {
 					 * 2. Get the maximum of the ampActivityId + 1, MAX_NUM
 					 * 3. merge them
 					 */
-					String ampId = 
+					String ampId =
 						FeaturesUtil.getGlobalSettingValue(org.digijava.module.aim.helper.Constants.GLOBAL_DEFAULT_COUNTRY).toUpperCase();
-			
+
 			/*		if (eaForm.getFundingOrganizations() != null) {
 						if (eaForm.getFundingOrganizations().size() == 1) {
 							Iterator itr = eaForm.getFundingOrganizations()
@@ -348,7 +347,10 @@ public class SaveActivity extends Action {
 					}
 				}
 
-				if (eaForm.getStatusId().equals(new Long(0))) {
+                Long statId=eaForm.getStatusId();
+
+
+				if (statId != null && statId.equals(new Long(0))) {
 					errors.add("status", new ActionError(
 							"error.aim.addActivity.statusMissing"));
 					saveErrors(request, errors);
@@ -573,7 +575,7 @@ public class SaveActivity extends Action {
 				activity.setDnrCntOrganization(eaForm.getDnrCntOrganization());
 				activity.setDnrCntFaxNumber(eaForm.getDnrCntFaxNumber());
 				activity.setDnrCntPhoneNumber(eaForm.getDnrCntPhoneNumber());
-				
+
 
 				activity.setMofedCntFirstName(eaForm.getMfdCntFirstName());
 				activity.setMofedCntLastName(eaForm.getMfdCntLastName());
@@ -582,7 +584,7 @@ public class SaveActivity extends Action {
 				activity.setMfdCntOrganization(eaForm.getMfdCntOrganization());
 				activity.setMfdCntFaxNumber(eaForm.getMfdCntFaxNumber());
 				activity.setMfdCntPhoneNumber(eaForm.getMfdCntPhoneNumber());
-					
+
 				activity.setComments(" ");
 
 				if (eaForm.getContractors() == null
@@ -768,7 +770,7 @@ public class SaveActivity extends Action {
 					}
 					activity.setLocations(locations);
 				}
-				
+
 				if(eaForm.getCosts()!=null) {
 					Set costs=new HashSet();
 					Iterator i=eaForm.getCosts().iterator();
@@ -785,7 +787,7 @@ public class SaveActivity extends Action {
 					}
 					activity.setCosts(costs);
 				}
-			
+
 
 //				// set level // TO BE DELETED
 //				if (eaForm.getLevel() != null) {
@@ -851,7 +853,7 @@ public class SaveActivity extends Action {
 							ampComp = (AmpComponent)it.next();
 							activity.getComponents().add(ampComp);
 						}
-						
+
 						//ampComp = DbUtil.getActivityAmpComments(comp.getComponentId());
 						// activity.getComponents().add(ampComp);
 						/*
@@ -903,7 +905,7 @@ public class SaveActivity extends Action {
 								{
 									AmpComponentFunding ampf = (AmpComponentFunding) itr23.next();
 									ampCompFund.setAmpComponentFundingId(ampf.getAmpComponentFundingId());
-									
+
 								}
 								ampCompFund.setReportingOrganization(null);
 								ampCompFund.setTransactionAmount(new Double(
@@ -1005,7 +1007,7 @@ public class SaveActivity extends Action {
 								HashSet temp = new HashSet();
 								temp.add(ampCompFund);
 								tempComp.setExpenditures(temp);
-								
+
 							}
 						}
 
@@ -1373,7 +1375,7 @@ public class SaveActivity extends Action {
 									.isSerializeFlag(), field, relatedLinks, tm
 									.getMemberId(), eaForm.getIndicatorsME(),tempComp);
 					//for logging the activity
-						AuditLoggerUtil.logObject(session, request,activity,"update");
+						// AuditLoggerUtil.logObject(session, request,activity,"update");
 						// remove the activity details from the edit activity list
 					if (toDelete == null
 							|| (!toDelete.trim().equalsIgnoreCase("true"))) {
@@ -1417,12 +1419,12 @@ public class SaveActivity extends Action {
 					// Setting approval status of activity
 					activity.setApprovalStatus(eaForm.getApprovalStatus());
 					// create a new activity
-					
+
 					actId = ActivityUtil.saveActivity(activity,
 							eaForm.getCommentsCol(), eaForm.isSerializeFlag(),
 							field, relatedLinks, tm.getMemberId(), tempComp);
 					//for logging the activity
-					AuditLoggerUtil.logObject(session, request,activity,"add");
+					// AuditLoggerUtil.logObject(session, request,activity,"add");
 
 				}
 			}
@@ -1458,7 +1460,7 @@ public class SaveActivity extends Action {
 			eaForm.setRegionalFundings(null);
 			eaForm.setLineMinRank(null);
 			eaForm.setPlanMinRank(null);
-			
+
 			/* Clearing categories */
 			eaForm.setAccessionInstrument(new Long(0));
 			eaForm.setAcChapter(new Long(0));
@@ -1514,7 +1516,7 @@ public class SaveActivity extends Action {
 		} catch (Exception e) {
 			e.printStackTrace();
             throw new RuntimeException("Save Activity Error",e);
-            
+
 		}
 	}
 

@@ -95,7 +95,7 @@ import org.digijava.module.cms.dbentity.CMSContentItem;
 public class DbUtil {
 	private static Logger logger = Logger.getLogger(DbUtil.class);
 
-	
+
 	public static AmpPerspective getPerspectiveByCode(String code) {
 		Session session = null;
 		List perspectives = new ArrayList();
@@ -117,7 +117,7 @@ public class DbUtil {
 		return null;
 	}
 
-	
+
 	public static Collection getFundingDetails(Long fundId) {
 		Session session = null;
 		Collection fundingDetails = new ArrayList();
@@ -441,8 +441,8 @@ public class DbUtil {
 		return role;
 	}
 
-	
-	
+
+
 	public static Object get(Class c,Long id) {
 		Session session = null;
 		Object o=null;
@@ -450,7 +450,7 @@ public class DbUtil {
 		try {
 			session = PersistenceManager.getSession();
 			o=session.load(c,id);
-			
+
 		} catch (Exception e) {
 			logger.error("Uanble to get object of class "+c.getName() + " width id="+id+". Error was:"+e);
 		} finally {
@@ -464,9 +464,9 @@ public class DbUtil {
 		return o;
 	}
 
-	
-	
-	
+
+
+
 	public static AmpModality getModality(Long id) {
 		Session session = null;
 		AmpModality modality = null;
@@ -1197,6 +1197,24 @@ public class DbUtil {
 		return ampFisCal;
 	}
 
+    public static Collection<User> getAllUsers() {
+        Session session = null;
+        Query qry = null;
+        Collection<User> users = new ArrayList<User>();
+
+        try {
+            session = PersistenceManager.getRequestDBSession();
+            String queryString = "select u from " + User.class.getName()
+                + " u";
+            qry = session.createQuery(queryString);
+            users = qry.list();
+        } catch(Exception e) {
+            logger.error("Unable to get user");
+            logger.debug("Exceptiion " + e);
+        }
+        return users;
+    }
+
 	public static User getUser(String email) {
 		Session session = null;
 		Query qry = null;
@@ -1222,8 +1240,8 @@ public class DbUtil {
 	/**
 	 * @author Arty
 	 * @param reportId
-	 * Sets the the defaultTeamReport to null for all the 
-	 * AppSettings that were referencing the 
+	 * Sets the the defaultTeamReport to null for all the
+	 * AppSettings that were referencing the
 	 */
 	public static void updateAppSettingsReportDeleted(Long reportId){
 		Session session = null;
@@ -2010,14 +2028,14 @@ public class DbUtil {
 			sess = PersistenceManager.getRequestDBSession();
 			/*String queryString = "select a from " + AmpTheme.class.getName()
 					+ " a where (a.themeId=:themeId)";*/
-			
-			//AmpTheme themeToBeDeleted = (AmpTheme) sess.get(AmpTheme.class, themeId);	
+
+			//AmpTheme themeToBeDeleted = (AmpTheme) sess.get(AmpTheme.class, themeId);
 			AmpTheme themeToBeDeleted = (AmpTheme) sess.load(AmpTheme.class, themeId);
-			
+
 			//qry = sess.createQuery(queryString);
 			//qry.setParameter("themeId", themeId, Hibernate.LONG);
 			Iterator itr = themeToBeDeleted.getActivities().iterator();
-			
+
 			col = new ArrayList();
 			while (itr.hasNext()) {
 				col.add(itr.next());
@@ -2030,7 +2048,7 @@ public class DbUtil {
 		return col;
 	}
 
-	
+
 	public static void add(Object object) {
 		logger.debug("In add " + object.getClass().getName());
 		Session sess = null;
@@ -2077,7 +2095,7 @@ public class DbUtil {
 			}
 		}
 	}
-	
+
 	public static void updateOrg(Object object) {
 		Session sess = null;
 		Transaction tx = null;
@@ -2091,7 +2109,7 @@ public class DbUtil {
 			while (i.hasNext()) {
 				AmpSector e = (AmpSector) i.next();
 				sect.add(sess.load(AmpSector.class, e.getAmpSectorId()));
-				
+
 			}
 			org.setSectors(sect);
 			sess.update(org);
@@ -3770,7 +3788,7 @@ public class DbUtil {
 		}
 		return col;
 	}
-	
+
 	public static Collection getAllOrgGroups() {
 		Session session = null;
 		Collection col = new ArrayList();
@@ -3889,7 +3907,7 @@ public class DbUtil {
 		}
 		return col;
 	}
-	
+
 	public static boolean chkOrgTypeReferneces(Long Id) {
 
 		Session sess = null;
@@ -4047,7 +4065,7 @@ public class DbUtil {
 		return colAux;
 	}
 
-	
+
 	public static ArrayList getAllCommentsByField(Long fid, Long aid) {
 		Session session = null;
 		Query qry = null;
@@ -5613,5 +5631,14 @@ public class DbUtil {
 			logger.error("could not retrieve Statuses "+e1.getMessage());
 			throw new AimException(e1);
 		}
-	}	
+	}
+
+    public static class HelperUserNameComparator
+        implements Comparator {
+        public int compare(Object obj1, Object obj2) {
+            User user1 = (User) obj1;
+            User user2 = (User) obj2;
+            return user1.getName().compareTo(user2.getName());
+        }
+    }
 }

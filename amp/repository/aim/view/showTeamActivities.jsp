@@ -86,18 +86,18 @@
 					<!-- Start Navigation -->
 					<td height=33>
 						<span class="crumb">
-						<bean:define id="translation">
-							<digi:trn key="aim:clickToViewAdmin">Click here to go to Admin Home</digi:trn>
-						</bean:define>
-						<digi:link href="/admin.do" styleClass="comment" title="<%=translation%>" >
+						<c:set var="clickToViewAdmin">
+						<digi:trn key="aim:clickToViewAdmin">Click here to go to Admin Home</digi:trn>
+						</c:set>
+						<digi:link href="/admin.do" styleClass="comment" title="${clickToViewAdmin}" >
 						<digi:trn key="aim:AmpAdminHome">
 						Admin Home
 						</digi:trn>
 						</digi:link>&nbsp;&gt;&nbsp;
-						<bean:define id="translation">
-							<digi:trn key="aim:clickToViewWorkspaceManager">Click here to view Workspace Manager</digi:trn>
-						</bean:define>
-						<digi:link href="/workspaceManager.do" styleClass="comment" title="<%=translation%>" >
+					     <c:set var="clickToViewWorkspaceManager">
+					     <digi:trn key="aim:clickToViewWorkspaceManager">Click here to view Workspace Manager</digi:trn>
+					     </c:set> 
+					    <digi:link href="/workspaceManager.do" styleClass="comment" title="${clickToViewWorkspaceManager}" >
 						<digi:trn key="aim:workspaceManager">
 						Workspace Manager
 						</digi:trn>
@@ -174,14 +174,15 @@
 															</c:set>
 
 															<bean:define id="currPage" name="aimTeamActivitiesForm" property="currentPage" />
-														
+													
 															<% if (currPage.equals(pages)) { %>
 																<%=pages%>
 															<%	} else { %>
-																<bean:define id="translation">
-																	<digi:trn key="aim:clickToViewNextPage">Click here to goto Next Page</digi:trn>
-																</bean:define>
-																<digi:link href="/teamActivities.do" name="urlParams1" title="<%=translation%>" >
+																
+															<c:set var="clickToViewNextPage">
+																<digi:trn key="aim:clickToViewNextPage">Click here to goto Next Page</digi:trn>
+															</c:set>	
+																<digi:link href="/teamActivities.do" name="urlParams1" title="${clickToViewNextPage}" >
 																	<%=pages%>
 																</digi:link>
 															<% } %>
@@ -233,10 +234,11 @@
 												<bean:write name="aimTeamActivitiesForm" property="teamId" />
 												</c:set>
 												<digi:img src="module/aim/images/arrow-014E86.gif" width="15" height="10"/>
-												<bean:define id="translation">
-													<digi:trn key="aim:clickToAssignActivity">Click here to Assign Activity</digi:trn>
-												</bean:define>
-												<digi:link href="/assignActivity.do" name="urlParams" title="<%=translation%>" >
+												<c:set var="clickToAssignActivity">
+												<digi:trn key="aim:clickToAssignActivity">Click here to Assign Activity</digi:trn>
+												</c:set>
+												
+												<digi:link href="/assignActivity.do" name="urlParams" title="${clickToAssignActivity}" >
 													<digi:trn key="aim:assignAnActivity">Assign an activity</digi:trn>
 												</digi:link>					
 											</td>
@@ -244,10 +246,10 @@
 										<tr>
 											<td>
 												<digi:img src="module/aim/images/arrow-014E86.gif" width="15" height="10"/>
-												<bean:define id="translation">
-													<digi:trn key="aim:clickToViewAdmin">Click here to goto Admin Home</digi:trn>
-												</bean:define>
-												<digi:link href="/admin.do" title="<%=translation%>" >
+												<c:set var="clickToViewAdmin">
+												<digi:trn key="aim:clickToViewAdmin">Click here to goto Admin Home</digi:trn>
+												</c:set>
+												<digi:link href="/admin.do" title="${clickToViewAdmin}" >
 												<digi:trn key="aim:AmpAdminHome">Admin Home</digi:trn>
 												</digi:link>
 											</td>

@@ -43,6 +43,7 @@ import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.DonorTeam;
 import org.digijava.module.aim.helper.ReportsCollection;
 import org.digijava.module.aim.helper.Workspace;
+import net.sf.hibernate.ObjectNotFoundException;
 
 /**
  * Persister class for all Team/Workspaces related Objects
@@ -586,7 +587,7 @@ public class TeamUtil {
 		Query qry = null;
 
 		try {
-			session = PersistenceManager.getSession();
+			session = PersistenceManager.getRequestDBSession();
 			tx = session.beginTransaction();
 
 			AmpTeam team = (AmpTeam) session.load(AmpTeam.class, teamId);
@@ -595,7 +596,7 @@ public class TeamUtil {
 			qryStr = "select act from " + AmpActivity.class.getName() + " act"
 					+ " where (act.team=:teamId)";
 			qry = session.createQuery(qryStr);
-			qry.setParameter("teamId", teamId, Hibernate.LONG);
+			qry.setLong("teamId", teamId);
 			Iterator itr = qry.list().iterator();
 			while (itr.hasNext()) {
 				AmpActivity act = (AmpActivity) itr.next();
@@ -607,7 +608,7 @@ public class TeamUtil {
 			qryStr = "select tpf from " + AmpTeamPageFilters.class.getName()
 					+ " tpf" + " where (tpf.team=:teamId)";
 			qry = session.createQuery(qryStr);
-			qry.setParameter("teamId", teamId, Hibernate.LONG);
+			qry.setLong("teamId", teamId);
 			itr = qry.list().iterator();
 			while (itr.hasNext()) {
 				AmpTeamPageFilters tpf = (AmpTeamPageFilters) itr.next();
@@ -618,7 +619,7 @@ public class TeamUtil {
 			qryStr = "select tr from " + AmpTeamReports.class.getName() + " tr"
 					+ " where (tr.team=:teamId)";
 			qry = session.createQuery(qryStr);
-			qry.setParameter("teamId", teamId, Hibernate.LONG);
+			qry.setLong("teamId", teamId);
 			itr = qry.list().iterator();
 			while (itr.hasNext()) {
 				AmpTeamReports tr = (AmpTeamReports) itr.next();
@@ -629,7 +630,7 @@ public class TeamUtil {
 			qryStr = "select t from " + AmpTeam.class.getName() + " t"
 					+ " where (t.parentTeamId=:teamId)";
 			qry = session.createQuery(qryStr);
-			qry.setParameter("teamId", teamId, Hibernate.LONG);
+			qry.setLong("teamId", teamId);
 			itr = qry.list().iterator();
 			while (itr.hasNext()) {
 				AmpTeam t = (AmpTeam) itr.next();
@@ -641,7 +642,7 @@ public class TeamUtil {
 			qryStr = "select a from " + AmpApplicationSettings.class.getName()
 					+ " a " + "where (a.team=:teamId)";
 			qry = session.createQuery(qryStr);
-			qry.setParameter("teamId", teamId, Hibernate.LONG);
+			qry.setLong("teamId", teamId);
 			itr = qry.list().iterator();
 			if (itr.hasNext()) {
 				AmpApplicationSettings as = (AmpApplicationSettings) itr.next();
@@ -650,26 +651,21 @@ public class TeamUtil {
 			session.delete(team);
 
 			tx.commit();
-		} catch (Exception e) {
-			logger.error("Execption from removeTeam() :" + e.getMessage());
+        }catch (ObjectNotFoundException objectNotFoundEx) {
+            logger.error("Execption from removeTeam() :" + objectNotFoundEx.getMessage());
+            return;
+        }catch (Exception ex) {
+			logger.error("Execption from removeTeam() :" + ex.getMessage());
 			if (tx != null) {
 				try {
 					tx.rollback();
 				} catch (Exception rbf) {
 					logger.error("Rollback failed");
 				}
-                throw new RuntimeException(e);
+                throw new RuntimeException(ex);
 			}
-            throw new RuntimeException(e);
-		} finally {
-			if (session != null) {
-				try {
-					PersistenceManager.releaseSession(session);
-				} catch (Exception rsf) {
-					logger.error("Release session failed");
-				}
-			}
-		}
+            throw new RuntimeException(ex);
+        }
 	}
 
 	/**

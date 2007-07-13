@@ -43,19 +43,19 @@
 		}
 		function load(){}
 		function unload(){}
-		
+
 		function showIndicators(prgId){
 			<digi:context name="showIndicator" property="context/module/moduleinstance/overallIndicatorManager.do?indicatorFlag=true"/>
 			document.aimAllIndicatorForm.action = "<%= showIndicator%>&flagShow=true"+"&prgId="+prgId;
 			document.aimAllIndicatorForm.submit();
 		}
-		
+
 		function hideIndicators(){
 			<digi:context name="hideIndicator" property="context/module/moduleinstance/overallIndicatorManager.do?indicatorFlag=false"/>
 			document.aimAllIndicatorForm.action = "<%= hideIndicator%>";
 			document.aimAllIndicatorForm.submit();
 		}
-		
+
         function setOverImg(index){
           document.getElementById("img"+index).src="/TEMPLATE/ampTemplate/module/aim/images/tab-righthover1.gif"
         }
@@ -80,14 +80,14 @@
 				<table cellPadding=5 cellSpacing=0 width="100%" border=0>
 					<tr><%-- Start Navigation --%>
 						<td height=33><span class=crumb>
-							<bean:define id="translation">
+							<c:set var="translation">
 									<digi:trn key="aim:clickToViewAdmin">Click here to goto Admin Home</digi:trn>
-								</bean:define>
-								 <digi:link href="/admin.do" styleClass="comment"	title="<%=translation%>">
+								</c:set>
+								 <digi:link href="/admin.do" styleClass="comment"	title="${translation}">
 									<digi:trn key="aim:AmpAdminHome">
 										Admin Home
 									</digi:trn>
-										</digi:link>&nbsp;&gt;&nbsp; 
+										</digi:link>&nbsp;&gt;&nbsp;
 										<digi:trn key="aim:ProgramIndicatorManager">
                   							Program Indicator Manager
                  					 </digi:trn>
@@ -95,10 +95,10 @@
 				</tr><%-- End navigation --%>
 					<tr>
 						<td height=16 vAlign=center width=571>
-							<span class=subtitle-blue> 
+							<span class=subtitle-blue>
 						<digi:trn key="aim:ProgramIndicatorManager">
                   					Program Indicator Manager
-                  				</digi:trn> 
+                  				</digi:trn>
                   			</span>
 						</td>
 					</tr>
@@ -139,7 +139,7 @@
 																		<td noWrap height=17>
 																		<c:set var="ProgramIndicators">
 																				<digi:trn key="aim:viewMultiProgramIndicators">Click here to view Multi Program Indicators</digi:trn>
-																	
+
 																	     </c:set>
 																			<digi:link
 																				href="/overallIndicatorManager.do?view=multiprogram"
@@ -158,7 +158,7 @@
 																				width="20" height="19" />
 																		</td>
 																		<td noWrap height=17>
-																		
+
 																		<c:set var="ProjectIndicators">
 																		<digi:trn key="aim:viewM&EProjectIndicators">Click here to view M & E Project Indicators</digi:trn>
 																		</c:set>
@@ -199,13 +199,13 @@
 														</tr>
 														<tr>
 															<td class=r-dotted-lg width=14>
-																<img src= "../ampTemplate/images/arrow_right.gif" border=0>  Level 1, 
-																<img src= "../ampTemplate/images/square1.gif" border=0>  Level 2, 
-																<img src= "../ampTemplate/images/square2.gif" border=0>  Level 3, 
-																<img src= "../ampTemplate/images/square3.gif" border=0>  Level 4, 
-																<img src= "../ampTemplate/images/square4.gif" border=0>  Level 5, 
-																<img src= "../ampTemplate/images/square5.gif" border=0>  Level 6, 
-																<img src= "../ampTemplate/images/square6.gif" border=0>  Level 7, 
+																<img src= "../ampTemplate/images/arrow_right.gif" border=0>  Level 1,
+																<img src= "../ampTemplate/images/square1.gif" border=0>  Level 2,
+																<img src= "../ampTemplate/images/square2.gif" border=0>  Level 3,
+																<img src= "../ampTemplate/images/square3.gif" border=0>  Level 4,
+																<img src= "../ampTemplate/images/square4.gif" border=0>  Level 5,
+																<img src= "../ampTemplate/images/square5.gif" border=0>  Level 6,
+																<img src= "../ampTemplate/images/square6.gif" border=0>  Level 7,
 																<img src= "../ampTemplate/images/square7.gif" border=0>  Level 8.
 															</td>
 														</tr>
@@ -214,21 +214,21 @@
 														<tr>
 															<td align="left">
 																		<table width="100%" align="right" cellspacing=1 cellpadding=0 bgcolor="#d7eafd" border=0 >
-																											
+
 																			<tr bgcolor="#FFFFFF">
 																				<td align="left" width=85%>
 																					<img src= "../ampTemplate/images/arrow-014E86.gif" border=0>&nbsp;<b>
 																						<bean:write name="prgIndicators" property="programName"/></b>
 																				</td>
 																						<c:if test="${aimAllIndicatorForm.programId!=prgIndicators.programId or aimAllIndicatorForm.indicatorFlag==false}">
-																						
+
 																				<td align="right">
-																					<input class="buton" type="button"	name="showIndicator" value="Show Indicators" 
+																					<input class="buton" type="button"	name="showIndicator" value="Show Indicators"
 																							onclick="showIndicators('<bean:write name="prgIndicators" property="programId"/>')" />
 																				</td>
 																						</c:if>
 																						<c:if test="${aimAllIndicatorForm.programId==prgIndicators.programId and aimAllIndicatorForm.indicatorFlag==true}">
-																						
+
 																				<td align="right">
 																					<input class="buton" type="button"	name="hideIndicator" value="Hide Indicators" onclick="hideIndicators()"/>
 																				</td>
@@ -262,21 +262,21 @@
 																													onclick="assignIndicatorTo('<bean:write name="ampPrgIndicator" property="indicatorId"/>')" />
 																								</td>
 																								<td align="left" width="12">
-																									<bean:define id="translation">
+																									<c:set var="translation">
 																									<digi:trn key="aim:clickToDeleteIndicator">
 																											Click here to Delete Indicator
 																									</digi:trn>
-																									</bean:define>
+																									</c:set>
 																									<c:set target="${urlParams11}"
 																										property="indicator" value="deletePrg" />
 																											<digi:link href="/editAllIndicator.do"
-																													name="urlParams11" title="<%=translation%>"
+																													name="urlParams11" title="${translation}"
 																																onclick="return deletePrgIndicator()">
 																													<img src="../ampTemplate/images/trash_12.gif" border=0>
 																											</digi:link>
 																								</td>
 																							</tr>
-																								
+
 																							</logic:iterate>
 																						</table>
 																				</td>
@@ -321,12 +321,12 @@
 																														property="name" />
 																												</td>
 																											</tr>
-																											<logic:notEmpty name="aimAllIndicatorForm" property = "themeIndi">	
+																											<logic:notEmpty name="aimAllIndicatorForm" property = "themeIndi">
 																												<logic:iterate name="aimAllIndicatorForm" property="themeIndi" id="themeIndiId">
 																													<c:if test="${themeIndiId.key==subPrograms.ampThemeId}">
 																														<logic:notEmpty name="themeIndiId" property="value">
 																																		<logic:iterate name="themeIndiId" property="value" id="indi">
-																								<tr>	
+																								<tr>
 																									<td colspan=2>
 																										<table width="97%" align="right" cellspacing=1 cellpadding=0	bgcolor="#00FFF" border="0">
 																											<tr bgcolor="#ffffff" >
@@ -349,15 +349,15 @@
 																																onclick="assignIndicatorTo('<bean:write name="indi" property="indicatorId"/>')" />
 																												</td>
 																												<td align="left" width="12">
-																														<bean:define id="translation">
+																														<c:set var="translation">
 																														<digi:trn key="aim:clickToDeleteIndicator">
 																															Click here to Delete Indicator
 																														</digi:trn>
-																														</bean:define>
+																														</c:set>
 																														<c:set target="${urlParams1}"
 																															property="indicator" value="deletePrg" />
 																															<digi:link href="/editAllIndicator.do"
-																																name="urlParams1" title="<%=translation%>"
+																																name="urlParams1" title="${translation}"
 																																	onclick="return deletePrgIndicator()">
 																															<img src="../ampTemplate/images/trash_12.gif" border=0>
 																															</digi:link>
@@ -372,7 +372,7 @@
 																								<tr>
 																									<td colspan=2>
 																										<table width="97%" align="right" cellspacing=1 cellpadding=0	bgcolor="#FF0000" border="0">
-																								
+
 																											<tr bgcolor="ffffff">
 																												<td>
 																													<font color=red>No indicator present in the Program</font>
@@ -398,18 +398,18 @@
 																											<tr>
 																												<td width="3%" align="right" height="15" bgcolor="#f4f4f2">
 																													<img src= "../ampTemplate/images/square1.gif" border=0>
-																												</td>	
+																												</td>
 																												<td  width=90% bgcolor="#ffcccc">
 																													<bean:write name="subPrograms"
 																														property="name" />
 																												</td>
 																											</tr>
-																											<logic:notEmpty name="aimAllIndicatorForm" property = "themeIndi">	
+																											<logic:notEmpty name="aimAllIndicatorForm" property = "themeIndi">
 																												<logic:iterate name="aimAllIndicatorForm" property="themeIndi" id="themeIndiId">
 																													<c:if test="${themeIndiId.key==subPrograms.ampThemeId}">
 																														<logic:notEmpty name="themeIndiId" property="value">
 																																		<logic:iterate name="themeIndiId" property="value" id="indi">
-																								<tr>	
+																								<tr>
 																									<td colspan=2>
 																										<table width="95%" align="right" cellspacing=1 cellpadding=0	bgcolor="#00FFF" border="0">
 																											<tr bgcolor="#ffffff" >
@@ -432,15 +432,15 @@
 																																onclick="assignIndicatorTo('<bean:write name="indi" property="indicatorId"/>')" />
 																												</td>
 																												<td align="left" width="12">
-																														<bean:define id="translation">
+																														<c:set var="translation">
 																														<digi:trn key="aim:clickToDeleteIndicator">
 																															Click here to Delete Indicator
 																														</digi:trn>
-																														</bean:define>
+																														</c:set>
 																														<c:set target="${urlParams2}"
 																															property="indicator" value="deletePrg" />
 																															<digi:link href="/editAllIndicator.do"
-																																name="urlParams2" title="<%=translation%>"
+																																name="urlParams2" title="${translation}"
 																																	onclick="return deletePrgIndicator()">
 																															<img src="../ampTemplate/images/trash_12.gif" border=0>
 																															</digi:link>
@@ -455,7 +455,7 @@
 																								<tr>
 																									<td colspan=2>
 																										<table width="95%" align="right" cellspacing=1 cellpadding=0	bgcolor="#FF0000" border="0">
-																								
+
 																											<tr bgcolor="ffffff">
 																												<td>
 																													<font color=red>No indicator present in the Program</font>
@@ -481,18 +481,18 @@
 																											<tr>
 																												<td width="4%" align="right" height="15" bgcolor="#f4f4f2">
 																													<img src= "../ampTemplate/images/square2.gif" border=0>
-																												</td>	
+																												</td>
 																												<td  width=90% bgcolor="#ffcccc">
 																													<bean:write name="subPrograms"
 																														property="name" />
 																												</td>
 																											</tr>
-																											<logic:notEmpty name="aimAllIndicatorForm" property = "themeIndi">	
+																											<logic:notEmpty name="aimAllIndicatorForm" property = "themeIndi">
 																												<logic:iterate name="aimAllIndicatorForm" property="themeIndi" id="themeIndiId">
 																													<c:if test="${themeIndiId.key==subPrograms.ampThemeId}">
 																														<logic:notEmpty name="themeIndiId" property="value">
 																																		<logic:iterate name="themeIndiId" property="value" id="indi">
-																								<tr>	
+																								<tr>
 																									<td colspan=2>
 																										<table width="93%" align="right" cellspacing=1 cellpadding=0	bgcolor="#00FFF" border="0">
 																											<tr bgcolor="#ffffff" >
@@ -515,15 +515,15 @@
 																																onclick="assignIndicatorTo('<bean:write name="indi" property="indicatorId"/>')" />
 																												</td>
 																												<td align="left" width="12">
-																														<bean:define id="translation">
+																														<c:set var="translation">
 																														<digi:trn key="aim:clickToDeleteIndicator">
 																															Click here to Delete Indicator
 																														</digi:trn>
-																														</bean:define>
+																														</c:set>
 																														<c:set target="${urlParams3}"
 																															property="indicator" value="deletePrg" />
 																															<digi:link href="/editAllIndicator.do"
-																																name="urlParams3" title="<%=translation%>"
+																																name="urlParams3" title="${translation}"
 																																	onclick="return deletePrgIndicator()">
 																															<img src="../ampTemplate/images/trash_12.gif" border=0>
 																															</digi:link>
@@ -538,7 +538,7 @@
 																								<tr>
 																									<td colspan=2>
 																										<table width="93%" align="right" cellspacing=1 cellpadding=0	bgcolor="#FF0000" border="0">
-																								
+
 																											<tr bgcolor="ffffff">
 																												<td>
 																													<font color=red>No indicator present in the Program</font>
@@ -564,18 +564,18 @@
 																											<tr>
 																												<td width="5%" align="right" height="15" bgcolor="#f4f4f2">
 																													<img src= "../ampTemplate/images/square3.gif" border=0>
-																												</td>	
+																												</td>
 																												<td  width=90% bgcolor="#ffcccc">
 																													<bean:write name="subPrograms"
 																														property="name" />
 																												</td>
 																											</tr>
-																											<logic:notEmpty name="aimAllIndicatorForm" property = "themeIndi">	
+																											<logic:notEmpty name="aimAllIndicatorForm" property = "themeIndi">
 																												<logic:iterate name="aimAllIndicatorForm" property="themeIndi" id="themeIndiId">
 																													<c:if test="${themeIndiId.key==subPrograms.ampThemeId}">
 																														<logic:notEmpty name="themeIndiId" property="value">
 																																		<logic:iterate name="themeIndiId" property="value" id="indi">
-																								<tr>	
+																								<tr>
 																									<td colspan=2>
 																										<table width="91%" align="right" cellspacing=1 cellpadding=0	bgcolor="#00FFF" border="0">
 																											<tr bgcolor="#ffffff" >
@@ -598,15 +598,15 @@
 																																onclick="assignIndicatorTo('<bean:write name="indi" property="indicatorId"/>')" />
 																												</td>
 																												<td align="left" width="12">
-																														<bean:define id="translation">
+																														<c:set var="translation">
 																														<digi:trn key="aim:clickToDeleteIndicator">
 																															Click here to Delete Indicator
 																														</digi:trn>
-																														</bean:define>
+																														</c:set>
 																														<c:set target="${urlParams4}"
 																															property="indicator" value="deletePrg" />
 																															<digi:link href="/editAllIndicator.do"
-																																name="urlParams4" title="<%=translation%>"
+																																name="urlParams4" title="${translation}"
 																																	onclick="return deletePrgIndicator()">
 																															<img src="../ampTemplate/images/trash_12.gif" border=0>
 																															</digi:link>
@@ -621,7 +621,7 @@
 																								<tr>
 																									<td colspan=2>
 																										<table width="91%" align="right" cellspacing=1 cellpadding=0	bgcolor="#FF0000" border="0">
-																								
+
 																											<tr bgcolor="ffffff">
 																												<td>
 																													<font color=red>No indicator present in the Program</font>
@@ -647,18 +647,18 @@
 																											<tr>
 																												<td width="6%" align="right" height="15" bgcolor="#f4f4f2">
 																													<img src= "../ampTemplate/images/square4.gif" border=0>
-																												</td>	
+																												</td>
 																												<td  width=90% bgcolor="#ffcccc">
 																													<bean:write name="subPrograms"
 																														property="name" />
 																												</td>
 																											</tr>
-																											<logic:notEmpty name="aimAllIndicatorForm" property = "themeIndi">	
+																											<logic:notEmpty name="aimAllIndicatorForm" property = "themeIndi">
 																												<logic:iterate name="aimAllIndicatorForm" property="themeIndi" id="themeIndiId">
 																													<c:if test="${themeIndiId.key==subPrograms.ampThemeId}">
 																														<logic:notEmpty name="themeIndiId" property="value">
 																																		<logic:iterate name="themeIndiId" property="value" id="indi">
-																								<tr>	
+																								<tr>
 																									<td colspan=2>
 																										<table width="89%" align="right" cellspacing=1 cellpadding=0	bgcolor="#00FFF" border="0">
 																											<tr bgcolor="#ffffff" >
@@ -681,15 +681,15 @@
 																																onclick="assignIndicatorTo('<bean:write name="indi" property="indicatorId"/>')" />
 																												</td>
 																												<td align="left" width="12">
-																														<bean:define id="translation">
+																														<c:set var="translation">
 																														<digi:trn key="aim:clickToDeleteIndicator">
 																															Click here to Delete Indicator
 																														</digi:trn>
-																														</bean:define>
+																														</c:set>
 																														<c:set target="${urlParams5}"
 																															property="indicator" value="deletePrg" />
 																															<digi:link href="/editAllIndicator.do"
-																																name="urlParams5" title="<%=translation%>"
+																																name="urlParams5" title="${translation}"
 																																	onclick="return deletePrgIndicator()">
 																															<img src="../ampTemplate/images/trash_12.gif" border=0>
 																															</digi:link>
@@ -704,7 +704,7 @@
 																								<tr>
 																									<td colspan=2>
 																										<table width="89%" align="right" cellspacing=1 cellpadding=0	bgcolor="#FF0000" border="0">
-																								
+
 																											<tr bgcolor="ffffff">
 																												<td>
 																													<font color=red>No indicator present in the Program</font>
@@ -730,18 +730,18 @@
 																											<tr>
 																												<td width="7%" align="right" height="15" bgcolor="#f4f4f2">
 																													<img src= "../ampTemplate/images/square5.gif" border=0>
-																												</td>	
+																												</td>
 																												<td  width=90% bgcolor="#ffcccc">
 																													<bean:write name="subPrograms"
 																														property="name" />
 																												</td>
 																											</tr>
-																											<logic:notEmpty name="aimAllIndicatorForm" property = "themeIndi">	
+																											<logic:notEmpty name="aimAllIndicatorForm" property = "themeIndi">
 																												<logic:iterate name="aimAllIndicatorForm" property="themeIndi" id="themeIndiId">
 																													<c:if test="${themeIndiId.key==subPrograms.ampThemeId}">
 																														<logic:notEmpty name="themeIndiId" property="value">
 																																		<logic:iterate name="themeIndiId" property="value" id="indi">
-																								<tr>	
+																								<tr>
 																									<td colspan=2>
 																										<table width="87%" align="right" cellspacing=1 cellpadding=0	bgcolor="#00FFF" border="0">
 																											<tr bgcolor="#ffffff" >
@@ -764,15 +764,15 @@
 																																onclick="assignIndicatorTo('<bean:write name="indi" property="indicatorId"/>')" />
 																												</td>
 																												<td align="left" width="12">
-																														<bean:define id="translation">
+																														<c:set var="translation">
 																														<digi:trn key="aim:clickToDeleteIndicator">
 																															Click here to Delete Indicator
 																														</digi:trn>
-																														</bean:define>
+																														</c:set>
 																														<c:set target="${urlParams6}"
 																															property="indicator" value="deletePrg" />
 																															<digi:link href="/editAllIndicator.do"
-																																name="urlParams6" title="<%=translation%>"
+																																name="urlParams6" title="${translation}"
 																																	onclick="return deletePrgIndicator()">
 																															<img src="../ampTemplate/images/trash_12.gif" border=0>
 																															</digi:link>
@@ -787,7 +787,7 @@
 																								<tr>
 																									<td colspan=2>
 																										<table width="87%" align="right" cellspacing=1 cellpadding=0	bgcolor="#FF0000" border="0">
-																								
+
 																											<tr bgcolor="ffffff">
 																												<td>
 																													<font color=red>No indicator present in the Program</font>
@@ -813,18 +813,18 @@
 																											<tr>
 																												<td width="8%" align="right" height="15" bgcolor="#f4f4f2">
 																													<img src= "../ampTemplate/images/square6.gif" border=0>
-																												</td>	
+																												</td>
 																												<td  width=90% bgcolor="#ffcccc">
 																													<bean:write name="subPrograms"
 																														property="name" />
 																												</td>
 																											</tr>
-																											<logic:notEmpty name="aimAllIndicatorForm" property = "themeIndi">	
+																											<logic:notEmpty name="aimAllIndicatorForm" property = "themeIndi">
 																												<logic:iterate name="aimAllIndicatorForm" property="themeIndi" id="themeIndiId">
 																													<c:if test="${themeIndiId.key==subPrograms.ampThemeId}">
 																														<logic:notEmpty name="themeIndiId" property="value">
 																																		<logic:iterate name="themeIndiId" property="value" id="indi">
-																								<tr>	
+																								<tr>
 																									<td colspan=2>
 																										<table width="85%" align="right" cellspacing=1 cellpadding=0	bgcolor="#00FFF" border="0">
 																											<tr bgcolor="#ffffff" >
@@ -847,15 +847,15 @@
 																																onclick="assignIndicatorTo('<bean:write name="indi" property="indicatorId"/>')" />
 																												</td>
 																												<td align="left" width="12">
-																														<bean:define id="translation">
+																														<c:set var="translation">
 																														<digi:trn key="aim:clickToDeleteIndicator">
 																															Click here to Delete Indicator
 																														</digi:trn>
-																														</bean:define>
+																														</c:set>
 																														<c:set target="${urlParams7}"
 																															property="indicator" value="deletePrg" />
 																															<digi:link href="/editAllIndicator.do"
-																																name="urlParams7" title="<%=translation%>"
+																																name="urlParams7" title="${translation}"
 																																	onclick="return deletePrgIndicator()">
 																															<img src="../ampTemplate/images/trash_12.gif" border=0>
 																															</digi:link>
@@ -870,7 +870,7 @@
 																								<tr>
 																									<td colspan=2>
 																										<table width="85%" align="right" cellspacing=1 cellpadding=0	bgcolor="#FF0000" border="0">
-																								
+
 																											<tr bgcolor="ffffff">
 																												<td>
 																													<font color=red>No indicator present in the Program</font>
@@ -896,18 +896,18 @@
 																											<tr>
 																												<td width="9%" align="right" height="15" bgcolor="#f4f4f2">
 																													<img src= "../ampTemplate/images/square7.gif" border=0>
-																												</td>	
+																												</td>
 																												<td  width=90% bgcolor="#ffcccc">
 																													<bean:write name="subPrograms"
 																														property="name" />
 																												</td>
 																											</tr>
-																											<logic:notEmpty name="aimAllIndicatorForm" property = "themeIndi">	
+																											<logic:notEmpty name="aimAllIndicatorForm" property = "themeIndi">
 																												<logic:iterate name="aimAllIndicatorForm" property="themeIndi" id="themeIndiId">
 																													<c:if test="${themeIndiId.key==subPrograms.ampThemeId}">
 																														<logic:notEmpty name="themeIndiId" property="value">
 																																		<logic:iterate name="themeIndiId" property="value" id="indi">
-																								<tr>	
+																								<tr>
 																									<td colspan=2>
 																										<table width="83%" align="right" cellspacing=1 cellpadding=0	bgcolor="#00FFF" border="0">
 																											<tr bgcolor="#ffffff" >
@@ -930,15 +930,15 @@
 																																onclick="assignIndicatorTo('<bean:write name="indi" property="indicatorId"/>')" />
 																												</td>
 																												<td align="left" width="12">
-																														<bean:define id="translation">
+																														<c:set var="translation">
 																														<digi:trn key="aim:clickToDeleteIndicator">
 																															Click here to Delete Indicator
 																														</digi:trn>
-																														</bean:define>
+																														</c:set>
 																														<c:set target="${urlParams8}"
 																															property="indicator" value="deletePrg" />
 																															<digi:link href="/editAllIndicator.do"
-																																name="urlParams8" title="<%=translation%>"
+																																name="urlParams8" title="${translation}"
 																																	onclick="return deletePrgIndicator()">
 																															<img src="../ampTemplate/images/trash_12.gif" border=0>
 																															</digi:link>
@@ -953,7 +953,7 @@
 																								<tr>
 																									<td colspan=2>
 																										<table width="83%" align="right" cellspacing=1 cellpadding=0	bgcolor="#FF0000" border="0">
-																								
+
 																											<tr bgcolor="ffffff">
 																												<td>
 																													<font color=red>No indicator present in the Program</font>
@@ -1059,15 +1059,15 @@
 																								onclick="editProjIndicator('<bean:write name="allMEIndicators" property="ampMEIndId"/>')">
 																						</td>
 																						<td align="left" width="12">
-																							<bean:define id="translation">
+																							<c:set var="translation">
 																								<digi:trn key="aim:clickToDeleteIndicator">
 																				Click here to Delete Indicator
 																			</digi:trn>
-																							</bean:define>
+																							</c:set>
 																							<c:set target="${urlParams22}"
 																								property="indicator" value="deleteProj" />
 																							<digi:link href="/editAllIndicator.do"
-																								name="urlParams22" title="<%=translation%>"
+																								name="urlParams22" title="${translation}"
 																								onclick="return deleteProjIndicator()">
 																								<img src="../ampTemplate/images/trash_12.gif"
 																									border=0>

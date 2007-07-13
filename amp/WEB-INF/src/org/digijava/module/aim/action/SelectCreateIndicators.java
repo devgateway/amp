@@ -2,6 +2,7 @@ package org.digijava.module.aim.action;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import java.util.Collection;
 import java.util.Iterator;
@@ -30,7 +31,9 @@ public class SelectCreateIndicators extends Action {
 		Collection activityInd = null;
 		Collection nonDefActInd = new ArrayList();
 		boolean sameIndicator = false;
-
+		
+		HttpSession session = request.getSession();
+		
 		IndicatorForm indForm = (IndicatorForm) form;
 
 		nonDefaultInd = MEIndicatorsUtil.getAllNonDefaultIndicators();
@@ -58,7 +61,10 @@ public class SelectCreateIndicators extends Action {
 
 		indForm.setNondefaultindicators(nonDefActInd);
 		indForm.setActivityId(indForm.getActivityId());
-
+		if("true".equalsIgnoreCase(request.getParameter("addIndicatorForStep9"))){
+			session.setAttribute("forStep9","true");
+			return mapping.findForward("toAdditionOfIndiForStep9");
+		}
 		return mapping.findForward("forward");
 	}
 }

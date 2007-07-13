@@ -38,14 +38,12 @@
 			alert("Base value date not entered");
 			document.aimEditActivityForm.baseValDate.focus();
 			return false;
-		}
-				
+		}		
 		if (containsValidNumericValue(document.aimEditActivityForm.targetVal) == false) {
 			alert("Invalid Target value or Target value not entered");
 			document.aimEditActivityForm.targetVal.focus();
 			return false;
 		}
-		
 		if (isEmpty(document.aimEditActivityForm.targetValDate.value) == true) {
 			alert("Target value date not entered");
 			document.aimEditActivityForm.targetValDate.focus();
@@ -107,6 +105,15 @@
 			document.aimEditActivityForm.indicatorId.value = val;
 			document.aimEditActivityForm.submit();				  
 		}
+	}
+	
+	function addIndicator()
+	{
+		openNewRsWindow(750, 550);
+		<digi:context name="selCreateInd" property="context/module/moduleinstance/selectCreateIndicators.do" />
+		document.aimEditActivityForm.action = "<%=selCreateInd%>?addIndicatorForStep9=true";
+		document.aimEditActivityForm.target = popupPointer.name;
+		document.aimEditActivityForm.submit();				  
 	}
 
 
@@ -309,11 +316,12 @@
 															<img src= "../ampTemplate/images/arrow_right.gif" border=0>
 														</digi:link>
 													</c:if>&nbsp;&nbsp;&nbsp;<b>
-													<bean:define id="indName">
-														<bean:write name="indicator" property="indicatorName"/>
-													</bean:define>
+													<bean:define id="indName"> 
+														 <bean:write name="indicator" property="indicatorName"/>
+													</bean:define> 						
 													<digi:trn key="<%=indName%>"><%=indName%></digi:trn></b> - 
 													<bean:write name="indicator" property="indicatorCode" />
+													 
 												</td>
 											</tr>
 											
@@ -442,11 +450,11 @@
 																</td>
 																<c:if test="${indicator.targetValDate == null}">
 																<td>
-															<!-- 	<html:text property="targetVal" size="10" maxlength="10"/>
-																-->	<input type="text" name="targetVal" 
+																<html:text property="targetVal" size="10" maxlength="10"/>
+																	<!-- <input type="text" name="targetVal" 
 																	value="<bean:write name="indicator" property="targetVal" />"
 																	class="inp-text" size="10">
-																	
+																	-->
 																</td>
 																<td>&nbsp;&nbsp;&nbsp;</td>
 																<td align="right">
@@ -464,11 +472,9 @@
 																</c:if>
 																<c:if test="${indicator.targetValDate != null}">
 																<td>
-																
 																	<input type="text" name="targetVal" 
 																	value="<bean:write name="indicator" property="targetVal" />"
 																	class="inp-text" size="10" disabled="true">
-																
 																</td>
 																<td>&nbsp;&nbsp;&nbsp;</td>
 																<td align="right">
@@ -499,12 +505,12 @@
 																	</b><font color="red">*</font>
 																</td>
 																<td>
-																<!--<html:text property="currentVal" size="10" maxlength="10"/>
-																	-->
-																	<input type="text" name="revTargetVal" 
+																<html:text property="revTargetVal" size="10" maxlength="10"/>
+																	<!-- <input type="text" name="revTargetVal" 
 																	value="<bean:write name="indicator" property="revisedTargetVal" />"
 																	class="inp-text" size="10">
-																																		
+																	-->
+																	
 																</td>
 																<td>&nbsp;&nbsp;&nbsp;</td>
 																<td align="right">
@@ -621,8 +627,8 @@
 															<td><b>Risk</b></td>
 															<td>
 																<html:select property="indicatorRisk" styleClass="inp-text">
-																	<option value="-1">Select Risk</option>
-																	<html:optionsCollection name="aimEditActivityForm" property="riskCollection" 
+																<option value="-1">Select Risk</option>
+																	<html:optionsCollection name="aimEditActivityForm" property="riskCollection"
 																	value="ampIndRiskRatingsId" label="ratingName" />
 																</html:select>
 															</td>
@@ -631,7 +637,7 @@
 														<tr>
 															<td>&nbsp;</td>
 															<td colspan="3" align="center">
-																<input type="button" class="buton" value="Set Values" 
+																<input type="button" class="buton" value="<digi:trn key='btn:setValues'>Set Values</digi:trn>" 
 																onclick="setValues('<c:out value="${indicator.indicatorId}" />')">
 															</td>
 															<td>&nbsp;</td>
@@ -669,6 +675,9 @@
 									</td></tr>									
  -->									
 								</table>
+							</td></tr>
+							<tr><td>
+							<input type="button" value="Add Indicator" class="dr-menu" onclick="addIndicator()">
 							</td></tr>
 							</table>
 							</td></tr>							

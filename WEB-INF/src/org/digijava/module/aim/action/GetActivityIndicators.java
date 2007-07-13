@@ -6,6 +6,7 @@ package org.digijava.module.aim.action;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
 import org.apache.struts.action.Action;
@@ -24,6 +25,8 @@ public class GetActivityIndicators extends Action {
 		
 		UpdateIndicatorValuesForm uIndValForm = (UpdateIndicatorValuesForm) form;
 		
+		HttpSession session = request.getSession();
+		
 		uIndValForm.setActivityId(uIndValForm.getActivityId());
 		uIndValForm.setIndicators(MEIndicatorsUtil.getActivityIndicators(
 				uIndValForm.getActivityId()));
@@ -31,7 +34,10 @@ public class GetActivityIndicators extends Action {
 		uIndValForm.setIndicatorId(null);
 		uIndValForm.setIndicatorValId(null);
 		uIndValForm.setExpIndicatorId(new Long(-1));
-		
+		if("true".equalsIgnoreCase((String)session.getAttribute("forStep9"))){
+			session.removeAttribute("forStep9");
+			return mapping.findForward("AddIndicatorForStepNine");
+		}
 		return mapping.findForward("forward");
 	}
 }

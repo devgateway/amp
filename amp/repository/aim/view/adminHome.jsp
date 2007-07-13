@@ -25,7 +25,9 @@
         <tr>
           <td height=10 vAlign="middle" align=center>
             <span class=subtitle-blue>
-            Admin Tools
+              <digi:trn key="aim:AmpAdminTools">
+              Admin Tools
+              </digi:trn>
             </span>
           </td>
         </tr>

@@ -6,7 +6,9 @@
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
 <%@ taglib uri="/taglib/struts-nested" prefix="nested" %>
-
+<%@ taglib uri="/taglib/fieldVisibility" prefix="field" %>
+<%@ taglib uri="/taglib/featureVisibility" prefix="feature" %>
+<%@ taglib uri="/taglib/moduleVisibility" prefix="module" %>
 
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/addActivity.js"/>"></script>
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
@@ -82,7 +84,9 @@
                                                   <c:if test="${empty aimEditActivityForm.activitySectors}">
                                                     <tr>
                                                       <td bgcolor="#ffffff">
-                                                        <input type="button" class="buton" onclick="addSectors();" value='<digi:trn key="btn:addSectors">Add Sectors</digi:trn>' />
+                                                      	<field:display name="Add Sectors Button" feature="Sectors">
+                                                        	<input type="button" class="buton" onclick="addSectors();" value='<digi:trn key="btn:addSectors">Add Sectors</digi:trn>' />
+                                                        </field:display>
                                                       </td>
                                                     </tr>
                                                   </c:if>
@@ -126,14 +130,16 @@
                                                             <td>
                                                               <table cellSpacing=2 cellPadding=2>
                                                                 <tr>
-                                                                  <logic:notEmpty name="MS" scope="application">
+                                                                	<field:display name="Add Sectors Button" feature="Sectors">
                                                                     <td>
                                                                       <input type="button" value="Add Sectors" class="buton"  onclick="addSectors();">
                                                                     </td>
-                                                                  </logic:notEmpty>
+                                                                    </field:display>
+                                                                    <field:display name="Remove Sectors Button" feature="Sectors">
                                                                   <td>
 																	<input type="button" class="buton" onclick="return removeSelSectors()" value='<digi:trn key="btn:removeSector">Remove Sector</digi:trn>' />
                                                                   </td>
+                                                                  </field:display>
                                                                 </tr>
                                                               </table>
                                                             </td>

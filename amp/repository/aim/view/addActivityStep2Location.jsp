@@ -7,6 +7,9 @@
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
 <%@ taglib uri="/taglib/struts-nested" prefix="nested" %>
 <%@ taglib uri="/taglib/category" prefix="category" %>
+<%@ taglib uri="/taglib/fieldVisibility" prefix="field" %>
+<%@ taglib uri="/taglib/featureVisibility" prefix="feature" %>
+<%@ taglib uri="/taglib/moduleVisibility" prefix="module" %>
 
 
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/addActivity.js"/>"></script>
@@ -46,6 +49,7 @@
                                       <tr>
                                         <td vAlign="center">
                                           <table border=0>
+                                          <field:display name="Implementation Level" feature="Location">
                                             <tr>
                                               <td>
                                                 <a title="<digi:trn key="aim:impleLevel">Federal and regional programs are the scope of a project. They are a classification of the sponsorship of the project or program. This works in conjunction with location</digi:trn>">
@@ -58,6 +62,9 @@
 													<category:showoptions name="aimEditActivityForm" property="levelId" keyName="<%= org.digijava.module.aim.helper.CategoryConstants.IMPLEMENTATION_LEVEL_KEY %>" styleClass="inp-text" />
 												</td>
                                             </tr>
+                                            </field:display>
+                                            
+                                            <field:display name="Implementation Location" feature="Location">
                                             <tr>
                                               <td vAlign="center" colspan=5>
                                               <digi:trn key="aim:regionZoneWored">Select the appropriate Region, Zone or Woreda as needed.</digi:trn>
@@ -89,6 +96,7 @@
 												</html:select>
 											</td>
                                             </tr>
+                                            </field:display>
                                           </table>
                                         </td>
                                       </tr>
@@ -97,6 +105,7 @@
                                         &nbsp;
                                         </td>
                                       </tr>
+                                      <field:display name="Add Location" feature="Location">
                                       <tr>
                                         <td>
                                           <table cellPadding=5 cellSpacing=1 border=0 width="100%"	bgcolor="#d7eafd">
@@ -181,6 +190,8 @@
                                                     </tr>
                                                   </logic:notEmpty>
                                                 </table>
+                                               
                                               </td>
                                             </tr>
+											</field:display>
                                           </table>

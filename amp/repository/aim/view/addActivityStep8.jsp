@@ -5,7 +5,9 @@
 <%@ taglib uri="/taglib/struts-html" prefix="html" %>
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
-
+<%@ taglib uri="/taglib/fieldVisibility" prefix="field" %>
+<%@ taglib uri="/taglib/featureVisibility" prefix="feature" %>
+<%@ taglib uri="/taglib/moduleVisibility" prefix="module" %>
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/addActivity.js"/>"></script>
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
 
@@ -183,11 +185,13 @@ function resetAll()
 												<td width="53%">
 												</td>
 											</tr>
+											<feature:display name="Donor Contact Information" module="Contact Information">
 											<tr>
 												<td align="right">
 													<digi:trn key="aim:donorFundingContactInformation">
 													Donor funding contact information</digi:trn>	
 												</td>
+												<field:display name="Donor First Name" feature="Donor Contact Information">
 												<td align="right">
 													<b>
 													<digi:trn key="aim:firstName">
@@ -197,7 +201,9 @@ function resetAll()
 												<td>
 													<html:text property="dnrCntFirstName" styleClass="inp-text"/>
 												</td>
+												</field:display>
 											</tr>
+											<field:display name="Donor Last Name" feature="Donor Contact Information">
 											<tr>
 												<td>
 												</td>
@@ -211,6 +217,8 @@ function resetAll()
 													<html:text property="dnrCntLastName" styleClass="inp-text"/>												
 												</td>
 											</tr>
+											</field:display>
+											<field:display name="Donor Email" feature="Donor Contact Information">
 											<tr>
 												<td>
 												</td>
@@ -224,6 +232,8 @@ function resetAll()
 													<html:text property="dnrCntEmail" styleClass="inp-text"/>												
 												</td>												
 											</tr>
+											</field:display>
+											<field:display name="Donor Title" feature="Donor Contact Information">
 											<tr>
 												<td>
 												</td>
@@ -237,6 +247,8 @@ function resetAll()
 													<html:text property="dnrCntTitle" styleClass="inp-text"/>												
 												</td>												
 											</tr>
+											</field:display>
+											<field:display name="Donor Organization" feature="Donor Contact Information">
 											<tr>
 												<td>
 												</td>
@@ -250,6 +262,8 @@ function resetAll()
 													<html:text property="dnrCntOrganization" styleClass="inp-text"/>												
 												</td>												
 											</tr>
+											</field:display>
+											<field:display name="Donor Phone Number" feature="Donor Contact Information">
 											<tr>
 												<td>
 												</td>
@@ -263,6 +277,8 @@ function resetAll()
 													<html:text property="dnrCntPhoneNumber" styleClass="inp-text"/>												
 												</td>												
 											</tr>
+											</field:display>
+											<field:display name="Donor Fax Number" feature="Donor Contact Information">
 											<tr>
 												<td>
 												</td>
@@ -276,14 +292,18 @@ function resetAll()
 													<html:text property="dnrCntFaxNumber" styleClass="inp-text"/>												
 												</td>												
 											</tr>
+											</field:display>
+											</feature:display>
 											<tr>
 												<td>&nbsp;</td><td></td><td></td>
 											</tr>
+											<feature:display name="Mofed Contact Information" module="Contact Information">
 											<tr>
 												<td align="right">
 													<digi:trn key="aim:mofedContactInformation">
 													MOFED contact information</digi:trn>	
 												</td>
+												<field:display name="Mofed First Name" feature="Mofed Contact Information">
 												<td align="right">
 													<b>
 													<digi:trn key="aim:firstName">
@@ -293,7 +313,9 @@ function resetAll()
 												<td>
 													<html:text property="mfdCntFirstName" styleClass="inp-text"/>
 												</td>
+												</field:display>
 											</tr>
+											<field:display name="Mofed Last Name" feature="Mofed Contact Information">
 											<tr>
 												<td>
 												</td>
@@ -307,6 +329,8 @@ function resetAll()
 													<html:text property="mfdCntLastName" styleClass="inp-text"/>												
 												</td>
 											</tr>
+											</field:display>
+											<field:display name="Mofed Email" feature="Mofed Contact Information">
 											<tr>
 												<td>
 												</td>
@@ -320,6 +344,8 @@ function resetAll()
 													<html:text property="mfdCntEmail" styleClass="inp-text"/>												
 												</td>												
 											</tr>
+											</field:display>
+											<field:display name="Mofed Title" feature="Mofed Contact Information">
 											<tr>
 												<td>
 												</td>
@@ -333,6 +359,8 @@ function resetAll()
 													<html:text property="mfdCntTitle" styleClass="inp-text"/>												
 												</td>												
 											</tr>
+											</field:display>
+											<field:display name="Mofed Organization" feature="Mofed Contact Information">
 											<tr>
 												<td>
 												</td>
@@ -346,6 +374,8 @@ function resetAll()
 													<html:text property="mfdCntOrganization" styleClass="inp-text"/>												
 												</td>												
 											</tr>
+											</field:display>
+											<field:display name="Mofed Phone Number" feature="Mofed Contact Information">
 											<tr>
 												<td>
 												</td>
@@ -359,6 +389,8 @@ function resetAll()
 													<html:text property="mfdCntPhoneNumber" styleClass="inp-text"/>												
 												</td>												
 											</tr>
+											</field:display>
+											<field:display name="Mofed Fax Number" feature="Mofed Contact Information">
 											<tr>
 												<td>
 												</td>
@@ -371,7 +403,9 @@ function resetAll()
 												<td>
 													<html:text property="mfdCntFaxNumber" styleClass="inp-text"/>												
 												</td>												
-											</tr>											
+											</tr>
+											</field:display>
+											</feature:display>											
 										</table>
 									</td></tr>
 									<tr><td bgColor=#f4f4f2>

@@ -5,7 +5,9 @@
 <%@ taglib uri="/taglib/struts-html" prefix="html" %>
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
-
+<%@ taglib uri="/taglib/fieldVisibility" prefix="field" %>
+<%@ taglib uri="/taglib/featureVisibility" prefix="feature" %>
+<%@ taglib uri="/taglib/moduleVisibility" prefix="module" %>
 <digi:instance property="aimEditActivityForm" />
 
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/addActivity.js"/>"></script>
@@ -378,16 +380,19 @@ function removeSelComponents() {
 							</tr>
 							<tr><td width="100%" bgcolor="#f4f4f2">
 							<table width="100%" cellSpacing="1" cellPadding="3" vAlign="top" align="left" bgcolor="#006699">
+							<feature:display name="Components" module="Components and Issues">
 							<tr><td bgColor=#f4f4f2 align="center" vAlign="top">
 									<jsp:include page="addActivityStep5Components.jsp"/>
 							</td></tr>
-
+							</feature:display>
 								
 								<!-- Issues , Measures and Actions -->
 									<tr><td>
 										&nbsp;
 									</td></tr>
-									<jsp:include page="addActivityStep5Issues.jsp"/>
+									<feature:display name="Issues" module="Components and Issues">
+										<jsp:include page="addActivityStep5Issues.jsp"/>
+									</feature:display>
 									<tr><td>
 										&nbsp;
 									</td></tr>

@@ -5,7 +5,9 @@
 <%@ taglib uri="/taglib/struts-html" prefix="html" %>
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
-
+<%@ taglib uri="/taglib/fieldVisibility" prefix="field" %>
+<%@ taglib uri="/taglib/featureVisibility" prefix="feature" %>
+<%@ taglib uri="/taglib/moduleVisibility" prefix="module" %>
 
 <script langauage="JavaScript">
 	function onDelete() {
@@ -27,10 +29,10 @@
 				<tr>
 					<!-- Start Navigation -->
 					<td height=33><span class=crumb>
-					<c:set var="clickToViewAdmin">
-					<digi:trn key="aim:clickToViewAdmin">Click here to goto Admin Home</digi:trn>
-					</c:set>
-						<digi:link href="/admin.do" styleClass="comment" title="${clickToViewAdmin}" >
+						<bean:define id="translation">
+							<digi:trn key="aim:clickToViewAdmin">Click here to goto Admin Home</digi:trn>
+						</bean:define>
+						<digi:link href="/admin.do" styleClass="comment" title="<%=translation%>" >
 						<digi:trn key="aim:AmpAdminHome">
 						Admin Home
 						</digi:trn>
@@ -86,10 +88,10 @@
 															</c:set>
 															<c:set target="${urlParams2}" property="event" value="edit" />
 															<c:set target="${urlParams2}" property="dest" value="admin" />
-															<c:set var="clickToViewSchemes">
-															<digi:trn key="aim:clickToViewSchemes">Click here to view Schemes</digi:trn>
-															</c:set>
-															<digi:link href="/updateSectorSchemes.do" name="urlParams2" title="${clickToViewSchemes}" >
+															<bean:define id="translation">
+																<digi:trn key="aim:clickToViewSchemes">Click here to view Schemes</digi:trn>
+															</bean:define>
+															<digi:link href="/updateSectorSchemes.do" name="urlParams2" title="<%=translation%>" >
 															<bean:write name="sectorScheme" property="secSchemeName"/></digi:link>
 														</td>
 
@@ -166,6 +168,7 @@
 							<tr>
 								<td bgColor=#ffffff class=box-border>
 									<table cellPadding=5 cellSpacing=1 width="100%">
+										<field:display name="Add Scheme Link" feature="Sectors">
 										<tr>
 											<td>
 												<digi:img src="module/aim/images/arrow-014E86.gif" width="15" height="10"/>
@@ -179,6 +182,7 @@
 												</digi:link>
 											</td>
 										</tr>
+										</field:display>
 										<tr>
 											<td>
 												<digi:img src="module/aim/images/arrow-014E86.gif" width="15" height="10"/>

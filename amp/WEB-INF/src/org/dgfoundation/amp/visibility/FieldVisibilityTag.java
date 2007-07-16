@@ -81,7 +81,7 @@ public class FieldVisibilityTag extends BodyTagSupport {
    			   ampTreeVisibility.buildAmpTreeVisibility(currentTemplate);
    			   ampContext.setAttribute("ampTreeVisibility", ampTreeVisibility);
    		   }
-
+   		   ampTreeVisibility=(AmpTreeVisibility) ampContext.getAttribute("ampTreeVisibility");
    		   if(!isFeatureTheParent(ampTreeVisibility)){
    			   //update(featureId, fieldname);
 			   System.out.println("error!!!! feature "+this.getFeature()+" is not the parent");
@@ -92,7 +92,7 @@ public class FieldVisibilityTag extends BodyTagSupport {
    			   ampContext.setAttribute("ampTreeVisibility", ampTreeVisibility);
 
 		   }
-    	
+   		   ampTreeVisibility=(AmpTreeVisibility) ampContext.getAttribute("ampTreeVisibility");
    		   if(isFieldActive (ampTreeVisibility)){
    			pageContext.getOut().print(bodyText);
    		   }

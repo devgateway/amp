@@ -47,9 +47,7 @@ public class TextCellPDF extends PDFExporter {
 		if(c.getColumn().getName().compareTo("Status")==0)
 		{
 			String actualStatus=c.toString();
-			//multiple statuses can be (separated by " /")
-			String[] statuses=actualStatus.split(" /");
-
+			
 			ReportData parent=(ReportData)c.getColumn().getParent();
 			while (parent.getReportMetadata()==null)
 			{
@@ -64,19 +62,16 @@ public class TextCellPDF extends PDFExporter {
 			
 			String finalStatus=new String();//the actual text to be added to the column
 			
-			for(int i=0;i<statuses.length;i++)
-			{
-				if(i>0)finalStatus+=" /";
-				String translatedStatus=null;
-				String prefix="aim:";
-				try{
-					translatedStatus=TranslatorWorker.translate(prefix+statuses[i],locale,siteId);
-				}catch (WorkerException e)
-					{System.out.println(e);}
-				if (translatedStatus.compareTo("")==0)
-					translatedStatus=statuses[i];
-				finalStatus+=translatedStatus;
-			}
+			String translatedStatus=null;
+			String prefix="aim:";
+			try{
+				translatedStatus=TranslatorWorker.translate(prefix+actualStatus,locale,siteId);
+			}catch (WorkerException e)
+				{System.out.println(e);}
+			if (translatedStatus.compareTo("")==0)
+				translatedStatus=actualStatus;
+			finalStatus+=translatedStatus;
+
 			pdfc = new PdfPCell(new Paragraph(finalStatus));
 		}
 		else 

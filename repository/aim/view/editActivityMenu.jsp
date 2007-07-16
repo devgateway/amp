@@ -5,7 +5,9 @@
 <%@ taglib uri="/taglib/struts-html" prefix="html" %>
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
-
+<%@ taglib uri="/taglib/fieldVisibility" prefix="field" %>
+<%@ taglib uri="/taglib/featureVisibility" prefix="feature" %>
+<%@ taglib uri="/taglib/moduleVisibility" prefix="module" %>
 
 <script language="JavaScript">
 <!--
@@ -256,6 +258,8 @@ bgcolor="#006699">
 		</td>
 		</c:if>
 	</tr>
+	<module:display name="Funding">
+	<feature:display name="Funding Organizations"  module="Funding">
 	<tr>
 		<c:if test="${aimEditActivityForm.step != 3}">
 		<td nowrap="nowrap">
@@ -289,8 +293,9 @@ bgcolor="#006699">
 		</td>
 		</c:if>
 	</tr>
-	<logic:notEmpty name="SA" scope="application">
-	
+	</feature:display>
+
+	<feature:display name="Regional Funding" module="Funding">
 	<tr>
 		<c:if test="${aimEditActivityForm.step != 4}">
 		<td nowrap="nowrap">
@@ -324,7 +329,10 @@ bgcolor="#006699">
 		</td>
 		</c:if>
 	</tr>
-
+	</feature:display>
+	</module:display>
+	<module:display name="Components and Issues">
+	<feature:display name="Components" module="Components and Issues">
 	<tr>
 		<c:if test="${aimEditActivityForm.step != 5}">
 		<td nowrap="nowrap">
@@ -358,6 +366,8 @@ bgcolor="#006699">
 		</td>
 		</c:if>
 	</tr>
+	</feature:display>
+	<feature:display name="Issues" module="Components and Issues">
 	<tr>
 		<c:if test="${aimEditActivityForm.step != 5}">
 		<td nowrap="nowrap">
@@ -391,7 +401,9 @@ bgcolor="#006699">
 		</td>
 		</c:if>
 	</tr>
-	</logic:notEmpty>
+	</feature:display>
+	</module:display>
+	<module:display name="Document Management">
 	<tr>
 		<c:if test="${aimEditActivityForm.step != 6}">
 		<td nowrap="nowrap">
@@ -425,6 +437,8 @@ bgcolor="#006699">
 		</td>
 		</c:if>
 	</tr>
+	</module:display>
+	<module:display name="Organizations">
 	<tr>
 		<c:if test="${aimEditActivityForm.step != 7}">
 		<td nowrap="nowrap">
@@ -458,6 +472,8 @@ bgcolor="#006699">
 		</td>
 		</c:if>
 	</tr>
+	</module:display>
+	<module:display name="Contact Information">
 	<tr>
 		<c:if test="${aimEditActivityForm.step != 8}">
 		<td nowrap="nowrap">
@@ -491,8 +507,9 @@ bgcolor="#006699">
 		</td>
 		</c:if>
 	</tr>
+	</module:display>
 	
-	<logic:notEmpty name="ME" scope="application">
+	<module:display name="Trend Analysis and Forecasting">
 	<tr>
 		<c:if test="${aimEditActivityForm.step != 10}">
 		<td nowrap="nowrap">
@@ -527,10 +544,10 @@ bgcolor="#006699">
 		</td>
 		</c:if>
 	</tr>
-	</logic:notEmpty>
+	</module:display>
 	
-	<logic:empty name="SA" scope="application">
 	<!-- EU Costs -->
+	<module:display name="Activity Costing">
 	<tr>
 		<c:if test="${aimEditActivityForm.step != 11}">
 		<td nowrap="nowrap">
@@ -562,7 +579,7 @@ bgcolor="#006699">
 		</td>
 		</c:if>
 	</tr>
-	</logic:empty>
+	</module:display>
 	
 	
 	<tr>

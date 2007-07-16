@@ -5,7 +5,9 @@
 <%@ taglib uri="/taglib/struts-html" prefix="html" %>
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
-
+<%@ taglib uri="/taglib/fieldVisibility" prefix="field" %>
+<%@ taglib uri="/taglib/featureVisibility" prefix="feature" %>
+<%@ taglib uri="/taglib/moduleVisibility" prefix="module" %>
 
 <jsp:include page="teamPagesHeader.jsp" flush="true" />
 <table bgColor=#ffffff cellPadding=0 cellSpacing=0 width=757 align="left">
@@ -253,7 +255,8 @@
                               </digi:link>
                             </td>
                           </tr>
-
+						
+						<module:display name="National Planning Dashboard">
                           <tr>
                             <td class=f-names noWrap>
                               <digi:img src="module/aim/images/arrow-th-BABAB9.gif" width="16"/>
@@ -267,6 +270,7 @@
                               </digi:link>
                             </td>
                           </tr>
+                          </module:display>
                           <tr>
                             <td class=f-names noWrap>
                               <digi:img src="module/aim/images/arrow-th-BABAB9.gif" width="16"/>

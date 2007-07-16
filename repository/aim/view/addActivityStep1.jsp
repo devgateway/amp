@@ -266,6 +266,8 @@ function popupwin()
 								<!-- contents -->
 
 								<table width="95%" bgcolor="#f4f4f2" border=0>
+								<module:display name="Project ID and Planning">
+									<feature:display name="Identification" module="Project ID and Planning">	
 									<tr><td>
 										<IMG alt=Link height=10 src="../ampTemplate/images/arrow-014E86.gif" width=15>
 										<b><digi:trn key="aim:identification">Identification</digi:trn></b>
@@ -274,17 +276,25 @@ function popupwin()
 									<tr><td>&nbsp;</td></tr>
 									<tr><td><jsp:include page="addActivityStep1Identification.jsp"/>
 									</td></tr>
+									</feature:display>
 									<tr><td>
 										&nbsp;
 									</td></tr>
-									<tr><td>
-										<jsp:include page="addActivityStep1OrgAndProjects.jsp"/>
-									</td></tr>
+									<feature:display name="Identification" module="Project ID and Planning">	
+										<field:display name="Organizations and Project ID" feature="Identification">
+											<tr><td>
+												<jsp:include page="addActivityStep1OrgAndProjects.jsp"/>
+											</td></tr>
+										</field:display>
+									</feature:display>
 									<tr><td>
 										&nbsp;
 									</td></tr>
 									<tr><td bgColor=#f4f4f2>&nbsp;</td></tr>
-										<jsp:include page="addActivityStep1Planning.jsp"/>
+									<feature:display name="Planning" module="Project ID and Planning">
+											<jsp:include page="addActivityStep1Planning.jsp"/>
+									</feature:display>
+									
 <!--
 									<tr><td bgColor=#f4f4f2 align="center">
 										<table cellPadding=3>
@@ -300,6 +310,8 @@ function popupwin()
 										</table>
 									</td></tr>
  -->
+ 									
+								</module:display>
 								</table>
 
 								<!-- end contents -->

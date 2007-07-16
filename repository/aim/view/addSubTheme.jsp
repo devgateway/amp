@@ -4,7 +4,9 @@
 <%@ taglib uri="/taglib/struts-html" prefix="html" %>
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
-
+<%@ taglib uri="/taglib/fieldVisibility" prefix="field" %>
+<%@ taglib uri="/taglib/featureVisibility" prefix="feature" %>
+<%@ taglib uri="/taglib/moduleVisibility" prefix="module" %>
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
 
 <script language="JavaScript">
@@ -146,10 +148,33 @@
 											</td></tr>
 											<tr><td>
 														<logic:notEmpty name="aimThemeForm" property="subPrograms">
+														<field:display name="Sub Program Level 1" feature="NPD Programs"> </field:display>
+														<field:display name="Sub Program Level 2" feature="NPD Programs"> </field:display>
+														<field:display name="Sub Program Level 3" feature="NPD Programs"> </field:display>
+														<field:display name="Sub Program Level 4" feature="NPD Programs"> </field:display>
+														<field:display name="Sub Program Level 5" feature="NPD Programs"> </field:display>
+														<field:display name="Sub Program Level 6" feature="NPD Programs"> </field:display>
+														<field:display name="Sub Program Level 7" feature="NPD Programs"> </field:display>
+														<field:display name="Sub Program Level 8" feature="NPD Programs"> </field:display>
+														<%
+								                          ServletContext x=session.getServletContext();
+								                          	org.dgfoundation.amp.visibility.AmpTreeVisibility atv=(org.dgfoundation.amp.visibility.AmpTreeVisibility)x.getAttribute("ampTreeVisibility");
+								                          	int i;
+								                          	for(i=1;i<=8;i++)
+								                          	{
+								                          		org.digijava.module.aim.dbentity.AmpFieldsVisibility field=(org.digijava.module.aim.dbentity.AmpFieldsVisibility)atv.getFieldByNameFromRoot("Sub Program Level "+i);
+								                          		if(field==null) break;
+								                          		else
+										                        	if(!field.isFieldActive(atv)) break;
+								                          	}
+								                          	java.lang.String visible=new String(Integer.toString(i));
+								                       	%>
+															<bean:define id="visibilityLevel"><%=visible%></bean:define>
 															<tr bgColor=#ffffff><td>
 																<table width="100%" bgColor="#d7eafd" cellPadding=3 cellSpacing=1>
 																	<logic:iterate name="aimThemeForm" property="subPrograms" id="subPrograms" type="org.digijava.module.aim.dbentity.AmpTheme">
 																		<%------- level 1 starts ------------%>
+																		<logic:lessThan name="subPrograms" property="indlevel" value="${visibilityLevel}">
 																		<logic:equal name="subPrograms" property="indlevel" value="1">
 																				<tr bgcolor="#ffffff">
 																					<td height="15" colspan="6">
@@ -171,10 +196,19 @@
 																											</c:set>
 																											<c:set target="${urlParams1}" property="rutId">
 																													<bean:write name="aimThemeForm" property="rootId" />
-																											</c:set><b>
+																											</c:set>
+																											<logic:equal name="subPrograms" property="indlevel" value="${visibilityLevel-1}">
+																											<b>
+																													<bean:write name="subPrograms" property="name"/>
+																											</b>
+																											</logic:equal>
+																											<logic:notEqual name="subPrograms" property="indlevel" value="${visibilityLevel-1}">
+																											<b>
 																											<a href="javascript:addSubProgram('<bean:write name="aimThemeForm" property="rootId" />','<bean:write name="subPrograms" property="ampThemeId" />','<bean:write name="subPrograms" property="indlevel"/>','<bean:write name="subPrograms" property="name"/>')" title="Click here to add Sub-Programs">
 																													<bean:write name="subPrograms" property="name"/>
 																											</a></b>
+																											</logic:notEqual>
+																										
 																									</td>
 																									<td align="right" bgcolor="#ffcccc" width="75">
 																											<input class="buton" type="button" name="addIndicator" value="Indicator" onclick="assignIndicators('<bean:write name="subPrograms" property="ampThemeId" />')">
@@ -197,8 +231,10 @@
 																					</td>
 																				</tr>
 																		</logic:equal>
+																		</logic:lessThan>
 																		<%------- level 1 ends ------------%>
 																		<%------- level 2 starts ------------%>
+																		<logic:lessThan name="subPrograms" property="indlevel" value="${visibilityLevel}">
 																		<logic:equal name="subPrograms" property="indlevel" value="2">
 																				<tr bgcolor="#ffffff">
 																					<td height="15" colspan="6">
@@ -223,10 +259,18 @@
 																												</c:set>
 																												<c:set target="${urlParams2}" property="rutId">
 																														<bean:write name="aimThemeForm" property="rootId" />
-																												</c:set><b>
-																												<a href="javascript:addSubProgram('<bean:write name="aimThemeForm" property="rootId" />','<bean:write name="subPrograms" property="ampThemeId" />','<bean:write name="subPrograms" property="indlevel"/>','<bean:write name="subPrograms" property="name"/>')" title="Click here to add Sub-Programs">
+																												</c:set>
+																												<logic:equal name="subPrograms" property="indlevel" value="${visibilityLevel-1}">
+																											<b>
 																													<bean:write name="subPrograms" property="name"/>
-																												</a></b>
+																											</b>
+																											</logic:equal>
+																											<logic:notEqual name="subPrograms" property="indlevel" value="${visibilityLevel-1}">
+																											<b>
+																											<a href="javascript:addSubProgram('<bean:write name="aimThemeForm" property="rootId" />','<bean:write name="subPrograms" property="ampThemeId" />','<bean:write name="subPrograms" property="indlevel"/>','<bean:write name="subPrograms" property="name"/>')" title="Click here to add Sub-Programs">
+																													<bean:write name="subPrograms" property="name"/>
+																											</a></b>
+																											</logic:notEqual>
 																										</td>
 																										<td align="right" bgcolor="#f4f4f2" width="75">
 																												<input class="buton" type="button" name="addIndicator" value="Indicator" onclick="assignIndicators('<bean:write name="subPrograms" property="ampThemeId" />')">
@@ -249,8 +293,10 @@
 																					</td>
 																				</tr>
 																		</logic:equal>
+																		</logic:lessThan>
 																		<%------- level 2 ends ------------%>
 																		<%------- level 3 starts ------------%>
+																		<logic:lessThan name="subPrograms" property="indlevel" value="${visibilityLevel}">
 																		<logic:equal name="subPrograms" property="indlevel" value="3">
 																				<tr bgcolor="#ffffff">
 																					<td height="15" colspan="6">
@@ -275,10 +321,17 @@
 																												</c:set>
 																												<c:set target="${urlParams3}" property="rutId">
 																														<bean:write name="aimThemeForm" property="rootId" />
-																												</c:set><b>
-																												<a href="javascript:addSubProgram('<bean:write name="aimThemeForm" property="rootId" />','<bean:write name="subPrograms" property="ampThemeId" />','<bean:write name="subPrograms" property="indlevel"/>','<bean:write name="subPrograms" property="name"/>')" title="Click here to add Sub-Programs">
+																												</c:set><logic:equal name="subPrograms" property="indlevel" value="${visibilityLevel-1}">
+																											<b>
 																													<bean:write name="subPrograms" property="name"/>
-																												</a></b>
+																											</b>
+																											</logic:equal>
+																											<logic:notEqual name="subPrograms" property="indlevel" value="${visibilityLevel-1}">
+																											<b>
+																											<a href="javascript:addSubProgram('<bean:write name="aimThemeForm" property="rootId" />','<bean:write name="subPrograms" property="ampThemeId" />','<bean:write name="subPrograms" property="indlevel"/>','<bean:write name="subPrograms" property="name"/>')" title="Click here to add Sub-Programs">
+																													<bean:write name="subPrograms" property="name"/>
+																											</a></b>
+																											</logic:notEqual>
 																										</td>
 																										<td align="right" bgcolor="#f4f4f2" width="75">
 																												<input class="buton" type="button" name="addIndicator" value="Indicator" onclick="assignIndicators('<bean:write name="subPrograms" property="ampThemeId" />')">
@@ -301,8 +354,10 @@
 																					</td>
 																				</tr>
 																		</logic:equal>
+																		</logic:lessThan>
 																		<%------- level 3 ends ------------%>
 																		<%------- level 4 starts ------------%>
+																		<logic:lessThan name="subPrograms" property="indlevel" value="${visibilityLevel}">
 																		<logic:equal name="subPrograms" property="indlevel" value="4">
 																				<tr bgcolor="#ffffff">
 																					<td height="15" colspan="6">
@@ -327,10 +382,17 @@
 																												</c:set>
 																												<c:set target="${urlParams4}" property="rutId">
 																														<bean:write name="aimThemeForm" property="rootId" />
-																												</c:set><b>
-																												<a href="javascript:addSubProgram('<bean:write name="aimThemeForm" property="rootId" />','<bean:write name="subPrograms" property="ampThemeId" />','<bean:write name="subPrograms" property="indlevel"/>','<bean:write name="subPrograms" property="name"/>')" title="Click here to add Sub-Programs">
+																												</c:set><logic:equal name="subPrograms" property="indlevel" value="${visibilityLevel-1}">
+																											<b>
 																													<bean:write name="subPrograms" property="name"/>
-																												</a></b>
+																											</b>
+																											</logic:equal>
+																											<logic:notEqual name="subPrograms" property="indlevel" value="${visibilityLevel-1}">
+																											<b>
+																											<a href="javascript:addSubProgram('<bean:write name="aimThemeForm" property="rootId" />','<bean:write name="subPrograms" property="ampThemeId" />','<bean:write name="subPrograms" property="indlevel"/>','<bean:write name="subPrograms" property="name"/>')" title="Click here to add Sub-Programs">
+																													<bean:write name="subPrograms" property="name"/>
+																											</a></b>
+																											</logic:notEqual>
 																										</td>
 																										<td align="right" bgcolor="#f4f4f2" width="75">
 																												<input class="buton" type="button" name="addIndicator" value="Indicator" onclick="assignIndicators('<bean:write name="subPrograms" property="ampThemeId" />')">
@@ -353,8 +415,10 @@
 																					</td>
 																				</tr>
 																		</logic:equal>
+																		</logic:lessThan>
 																		<%------- level 4 ends ------------%>
 																		<%------- level 5 starts ------------%>
+																		<logic:lessThan name="subPrograms" property="indlevel" value="${visibilityLevel}">
 																		<logic:equal name="subPrograms" property="indlevel" value="5">
 																				<tr bgcolor="#ffffff">
 																					<td height="15" colspan="6">
@@ -379,10 +443,17 @@
 																												</c:set>
 																												<c:set target="${urlParams5}" property="rutId">
 																														<bean:write name="aimThemeForm" property="rootId" />
-																												</c:set><b>
-																												<a href="javascript:addSubProgram('<bean:write name="aimThemeForm" property="rootId" />','<bean:write name="subPrograms" property="ampThemeId" />','<bean:write name="subPrograms" property="indlevel"/>','<bean:write name="subPrograms" property="name"/>')" title="Click here to add Sub-Programs">
+																												</c:set><logic:equal name="subPrograms" property="indlevel" value="${visibilityLevel-1}">
+																											<b>
 																													<bean:write name="subPrograms" property="name"/>
-																												</a></b>
+																											</b>
+																											</logic:equal>
+																											<logic:notEqual name="subPrograms" property="indlevel" value="${visibilityLevel-1}">
+																											<b>
+																											<a href="javascript:addSubProgram('<bean:write name="aimThemeForm" property="rootId" />','<bean:write name="subPrograms" property="ampThemeId" />','<bean:write name="subPrograms" property="indlevel"/>','<bean:write name="subPrograms" property="name"/>')" title="Click here to add Sub-Programs">
+																													<bean:write name="subPrograms" property="name"/>
+																											</a></b>
+																											</logic:notEqual>
 																										</td>
 																										<td align="right" bgcolor="#f4f4f2" width="75">
 																												<input class="buton" type="button" name="addIndicator" value="Indicator" onclick="assignIndicators('<bean:write name="subPrograms" property="ampThemeId" />')">
@@ -405,8 +476,10 @@
 																					</td>
 																				</tr>
 																		</logic:equal>
+																		</logic:lessThan>
 																		<%------- level 5 ends ------------%>
 																		<%------- level 6 starts ------------%>
+																		<logic:lessThan name="subPrograms" property="indlevel" value="${visibilityLevel}">
 																		<logic:equal name="subPrograms" property="indlevel" value="6">
 																				<tr bgcolor="#ffffff">
 																					<td height="15" colspan="6">
@@ -431,10 +504,17 @@
 																												</c:set>
 																												<c:set target="${urlParams6}" property="rutId">
 																														<bean:write name="aimThemeForm" property="rootId" />
-																												</c:set><b>
-																												<a href="javascript:addSubProgram('<bean:write name="aimThemeForm" property="rootId" />','<bean:write name="subPrograms" property="ampThemeId" />','<bean:write name="subPrograms" property="indlevel"/>','<bean:write name="subPrograms" property="name"/>')" title="Click here to add Sub-Programs">
+																												</c:set><logic:equal name="subPrograms" property="indlevel" value="${visibilityLevel-1}">
+																											<b>
 																													<bean:write name="subPrograms" property="name"/>
-																												</a></b>
+																											</b>
+																											</logic:equal>
+																											<logic:notEqual name="subPrograms" property="indlevel" value="${visibilityLevel-1}">
+																											<b>
+																											<a href="javascript:addSubProgram('<bean:write name="aimThemeForm" property="rootId" />','<bean:write name="subPrograms" property="ampThemeId" />','<bean:write name="subPrograms" property="indlevel"/>','<bean:write name="subPrograms" property="name"/>')" title="Click here to add Sub-Programs">
+																													<bean:write name="subPrograms" property="name"/>
+																											</a></b>
+																											</logic:notEqual>
 																										</td>
 																										<td align="right" bgcolor="#f4f4f2" width="75">
 																												<input class="buton" type="button" name="addIndicator" value="Indicator" onclick="assignIndicators('<bean:write name="subPrograms" property="ampThemeId" />')">
@@ -457,8 +537,10 @@
 																					</td>
 																				</tr>
 																		</logic:equal>
+																		</logic:lessThan>
 																		<%------- level 6 ends ------------%>
 																		<%------- level 7 starts ------------%>
+																		<logic:lessThan name="subPrograms" property="indlevel" value="${visibilityLevel}">
 																		<logic:equal name="subPrograms" property="indlevel" value="7">
 																				<tr bgcolor="#ffffff">
 																					<td height="15" colspan="6">
@@ -483,10 +565,17 @@
 																												</c:set>
 																												<c:set target="${urlParams7}" property="rutId">
 																														<bean:write name="aimThemeForm" property="rootId" />
-																												</c:set><b>
-																												<a href="javascript:addSubProgram('<bean:write name="aimThemeForm" property="rootId" />','<bean:write name="subPrograms" property="ampThemeId" />','<bean:write name="subPrograms" property="indlevel"/>','<bean:write name="subPrograms" property="name"/>')" title="Click here to add Sub-Programs">
+																												</c:set><logic:equal name="subPrograms" property="indlevel" value="${visibilityLevel-1}">
+																											<b>
 																													<bean:write name="subPrograms" property="name"/>
-																												</a></b>
+																											</b>
+																											</logic:equal>
+																											<logic:notEqual name="subPrograms" property="indlevel" value="${visibilityLevel-1}">
+																											<b>
+																											<a href="javascript:addSubProgram('<bean:write name="aimThemeForm" property="rootId" />','<bean:write name="subPrograms" property="ampThemeId" />','<bean:write name="subPrograms" property="indlevel"/>','<bean:write name="subPrograms" property="name"/>')" title="Click here to add Sub-Programs">
+																													<bean:write name="subPrograms" property="name"/>
+																											</a></b>
+																											</logic:notEqual>
 																										</td>
 																										<td align="right" bgcolor="#f4f4f2" width="75">
 																												<input class="buton" type="button" name="addIndicator" value="Indicator" onclick="assignIndicators('<bean:write name="subPrograms" property="ampThemeId" />')">
@@ -509,8 +598,10 @@
 																					</td>
 																				</tr>
 																		</logic:equal>
+																		</logic:lessThan>
 																		<%------- level 7 ends ------------%>
 																		<%------- level 8 starts ------------%>
+																		<logic:lessThan name="subPrograms" property="indlevel" value="${visibilityLevel}">
 																		<logic:equal name="subPrograms" property="indlevel" value="8">
 																				<tr bgcolor="#ffffff">
 																					<td height="15" colspan="6">
@@ -559,6 +650,7 @@
 																					</td>
 																				</tr>
 																		</logic:equal>
+																		</logic:lessThan>
 																		<%------- level 8 ends ------------%>
 																	</logic:iterate>
 																</table>

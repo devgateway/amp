@@ -80,17 +80,18 @@ public class FeatureVisibilityTag extends BodyTagSupport {
    			   ampTreeVisibility.buildAmpTreeVisibility(currentTemplate);
    			   ampContext.setAttribute("ampTreeVisibility", ampTreeVisibility);
    		   }
-
+   		   ampTreeVisibility=(AmpTreeVisibility) ampContext.getAttribute("ampTreeVisibility");
    		   if(!isModuleTheParent(ampTreeVisibility)){
    			   //update(featureId, fieldname);
 			   System.out.println("error!!!! module "+this.getModule()+" is not the parent");
+			   
 			   FeaturesUtil.updateFeatureWithModuleVisibility(ampTreeVisibility.getModuleByNameFromRoot(this.getModule()).getId(),this.getName());
 			   AmpTemplatesVisibility currentTemplate=(AmpTemplatesVisibility)FeaturesUtil.getTemplateById(ampTreeVisibility.getRoot().getId());
    			   System.out.println("-------------------------------update the parent of the feature");
    			   ampTreeVisibility.buildAmpTreeVisibility(currentTemplate);
    			   ampContext.setAttribute("ampTreeVisibility", ampTreeVisibility);
 		   }
-    	
+   		   ampTreeVisibility=(AmpTreeVisibility) ampContext.getAttribute("ampTreeVisibility");
    		   if(isFeatureActive(ampTreeVisibility)){
    			pageContext.getOut().print(bodyText);
    		   }

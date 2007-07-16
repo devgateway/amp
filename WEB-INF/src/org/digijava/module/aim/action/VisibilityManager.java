@@ -124,7 +124,7 @@ public class VisibilityManager extends MultiAction {
 				for(Iterator k=n.getItems().values().iterator();k.hasNext();)
 				{
 					AmpTreeVisibility p=(AmpTreeVisibility) k.next();
-					System.out.println("			"+p.getRoot().getName());
+					System.out.println("xxx			"+p.getRoot().getName());
 				}
 
 			}
@@ -243,7 +243,14 @@ public class VisibilityManager extends MultiAction {
 	 	errors.add("title", new ActionError("error.aim.visibility.visibilityTreeUpdated"));
 	 	saveErrors(request, errors);
 
-		
+    	//AmpTreeVisibility ampTreeVisibility=new AmpTreeVisibility();
+    	//get the default amp template!!!
+    	//Session session=this.createSession();
+    	AmpTemplatesVisibility currentTemplate=FeaturesUtil.getTemplateVisibility(FeaturesUtil.getGlobalSettingValueLong("Visibility Template"),hbsession);
+    	ampTreeVisibility.buildAmpTreeVisibility(currentTemplate);
+    	ampContext=session.getServletContext();
+    	ampContext.setAttribute("ampTreeVisibility",ampTreeVisibility);
+
 		return modeEditTemplate(mapping,form,request,response);
 	}
 	

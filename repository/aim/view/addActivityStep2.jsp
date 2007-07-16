@@ -6,6 +6,9 @@
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
 <%@ taglib uri="/taglib/struts-nested" prefix="nested" %>
+<%@ taglib uri="/taglib/fieldVisibility" prefix="field" %>
+<%@ taglib uri="/taglib/featureVisibility" prefix="feature" %>
+<%@ taglib uri="/taglib/moduleVisibility" prefix="module" %>
 
 
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/addActivity.js"/>"></script>
@@ -355,24 +358,30 @@ function fnChk(frmContrl){
                               </table>
                             </td>
                           </tr>
+                          <feature:display name="Location" module="Project ID and Planning">
                           <tr>
                             <td width="100%" bgcolor="#f4f4f2">
 		                            <jsp:include page="addActivityStep2Location.jsp"/>
                                           <!-- Add Location -->
                                </td>
                              </tr>
+                          </feature:display>
                                       <tr>
                                         <td>
                                           &nbsp;
                                         </td>
                                       </tr>
-		                            <jsp:include page="addActivityStep2Sector.jsp"/>
+                                      <feature:display name="Sectors" module="Project ID and Planning">
+		                            	<jsp:include page="addActivityStep2Sector.jsp"/>
+		                             </feature:display>
                                       <tr>
                                         <td>
                                         &nbsp;
                                         </td>
                                       </tr>
-		                            <jsp:include page="addActivityStep2Program.jsp"/>
+                                      <feature:display name="NPD Programs" module="National Planning Dashboard">
+			                            <jsp:include page="addActivityStep2Program.jsp"/>
+	 	                              </feature:display>
                                       <tr>
                                         <td>
                                           &nbsp;

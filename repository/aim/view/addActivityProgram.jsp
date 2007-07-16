@@ -5,7 +5,9 @@
 <%@ taglib uri="/taglib/struts-html" prefix="html" %>
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
-
+<%@ taglib uri="/taglib/fieldVisibility" prefix="field" %>
+<%@ taglib uri="/taglib/featureVisibility" prefix="feature" %>
+<%@ taglib uri="/taglib/moduleVisibility" prefix="module" %>
 <digi:ref href="css/styles.css" type="text/css" rel="stylesheet" />
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/addActivity.js"/>"></script>
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
@@ -43,8 +45,11 @@
       return true;
     }
 
-    function reloadProgram(selectedProgram) {
-       	<digi:context name="selProgram" property="context/module/moduleinstance/addProgram.do?edit=true"/>
+    function reloadProgram(selectedProgram,reload) {
+
+    	if(reload==1)
+    	 {
+		<digi:context name="selProgram" property="context/module/moduleinstance/addProgram.do?edit=true"/>
 
         var prgSels=document.getElementsByName("selPrograms");
         var flag=false;
@@ -54,7 +59,7 @@
           for(i=0;i<prgSels.length;i++){
             if(prgSels[i].value==-1){
               urlParams="<%=selProgram%>&themeid="+prgSels[i].value+"&selPrgLevel="+(i+1);
-              flag=true
+              flag=true;
               break;
             }
           }
@@ -66,6 +71,7 @@
 
         document.aimEditActivityForm.action = urlParams;
         document.aimEditActivityForm.submit();
+        }
 
       }
 
@@ -100,7 +106,9 @@
                 <td align="center" bgcolor=#ECF3FD>
                   <table cellSpacing=2 cellPadding=2>
                     <c:if test="${!empty aimEditActivityForm.programLevels}">
+                    <% int i=0; %>
                       <c:forEach var="prgLevels" varStatus="varSt" items="${aimEditActivityForm.programLevels}">
+                      <%i++; %>
                         <tr>
                           <td width="120" align="right">
                             <c:if test="${varSt.count==1}">
@@ -109,13 +117,37 @@
                             <c:if test="${varSt.count!=1}">
                             <digi:trn key="aim:subProgramLevel">Sub program level</digi:trn> ${varSt.count-1}
                             </c:if>
+                            
+                            <html:hidden name="aimEditActivityForm" property="visibleProgram" value="aaa"/>
+                            
                           </td>
-                          <td id="slo${varSt.count}">
-                            <html:select property="selPrograms" onchange="reloadProgram(this)" styleClass="inp-text">
+                          
+                          <bean:define id="crtVisibleProgram" value="0"/>
+                          <bean:define id="nxtVisibleProgram" value="0"/>
+                          
+                          <field:display name="Sub Program Level ${varSt.count}" feature="NPD Programs">
+                          	<bean:define id="crtVisibleProgram" value="1"/>
+                          </field:display>
+                          <logic:lessEqual name="varSt" property="count" value="7">
+                              <field:display name="Sub Program Level ${varSt.count+1}" feature="NPD Programs">
+                          	  </field:display>
+                          </logic:lessEqual>
+                          <%
+                          ServletContext x=session.getServletContext();
+                          	org.dgfoundation.amp.visibility.AmpTreeVisibility atv=(org.dgfoundation.amp.visibility.AmpTreeVisibility)x.getAttribute("ampTreeVisibility");
+                          	org.digijava.module.aim.dbentity.AmpFieldsVisibility field=(org.digijava.module.aim.dbentity.AmpFieldsVisibility)atv.getFieldByNameFromRoot("Sub Program Level "+i);
+                          if(field!=null)	
+                          if(field.isFieldActive(atv))
+                        	  {%><bean:define id="nxtVisibleProgram" value="1"/>
+                        	  <%}
+                          else {%><bean:define id="nxtVisibleProgram" value="0"/>
+                          <%} %>
+							<td id="slo${varSt.count}">
+                            <html:select property="selPrograms" onchange="reloadProgram(this,${nxtVisibleProgram})" styleClass="inp-text">
                               <option value="-1">-<digi:trn key="aim:selectProgram">Select Program</digi:trn>-</option>
                               <html:optionsCollection name="prgLevels" value="ampThemeId" label="name" />
-                           </html:select>
-                          </td>
+                           	</html:select>
+                          	</td>
                         </tr>
                       </c:forEach>
                     </c:if>

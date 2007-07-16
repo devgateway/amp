@@ -6,6 +6,9 @@
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
 <%@ taglib uri="/taglib/category" prefix="category" %>
+<%@ taglib uri="/taglib/fieldVisibility" prefix="field" %>
+<%@ taglib uri="/taglib/featureVisibility" prefix="feature" %>
+<%@ taglib uri="/taglib/moduleVisibility" prefix="module" %>
 
 <script language="JavaScript">
 
@@ -14,6 +17,7 @@
 
 <digi:instance property="aimEditActivityForm" />
 										<table width="100%" bgcolor="#cccccc" cellPadding=5 cellSpacing=1>
+											<field:display name="Title" feature="Identification">
 											<tr bgcolor="#ffffff"><td valign="top" align="left">
 												<FONT color=red>*</FONT>
 												<a title="<digi:trn key="aim:TitleInDonorsOrMoFEDInternalSystems">Title used in donors or MoFED internal systems</digi:trn>">
@@ -27,6 +31,8 @@
 												<html:textarea property="title" cols="60" rows="2" styleClass="inp-text"/>
 												</a>
 											</td></tr>
+											</field:display>
+											<field:display name="Objective" feature="Identification">
 											<tr bgcolor="#ffffff"><td valign="top" align="left">
 												<a title="<digi:trn key="aim:ObjectivesAndComponentsofProject">The key objectives and main components of the project</digi:trn>">
 												<digi:trn key="aim:objective">Objective</digi:trn>
@@ -57,8 +63,9 @@
 													</tr>
 												</table>												
 											</td></tr>
+											</field:display>
 											
-											<logic:notEmpty name="SA" scope="application">
+											<field:display name="Description" feature="Identification">
 											<tr bgcolor="#ffffff"><td valign="top" align="left">
 												<a title="<digi:trn key="aim:DescriptionofProject">Summary information describing the project</digi:trn>">
 												<digi:trn key="aim:description">
@@ -88,10 +95,11 @@
 													</tr>
 												</table>
 											</td></tr>
-											</logic:notEmpty>
+											</field:display>
+
 		
 											<!-- Purpose -->
-											<logic:empty name="SA" scope="application">
+											<field:display name="Purpose" feature="Identification">
 											<tr bgcolor="#ffffff"><td valign="top" align="left">
 												<a title="<digi:trn key="aim:PurposeofProject">Purpose of the project</digi:trn>">
 												<digi:trn key="aim:purpose">
@@ -126,8 +134,9 @@
 													</tr>
 												</table>
 											</td></tr>
-										</logic:empty>
-										<logic:empty name="SA" scope="application">
+											</field:display>
+
+											<field:display name="Results" feature="Identification">
 											<!-- Results -->
 											<tr bgcolor="#ffffff"><td valign="top" align="left">
 												<a title="<digi:trn key="aim:ResultsofProject">Results of the project</digi:trn>">
@@ -136,7 +145,7 @@
 												</digi:trn>
 												</a>
 											</td>
-											
+
 											<td valign="top" align="left">
 												<table cellPadding=0 cellSpacing=0>
 													<tr>
@@ -163,8 +172,8 @@
 													</tr>
 												</table>
 											</td></tr>
-											</logic:empty>
-											<logic:empty name="SA" scope="application">
+											</field:display>
+											<field:display name="Accession Instrument" feature="Identification">
 											<tr bgcolor="#ffffff"><td valign="top" align="left">
 												<a title="<digi:trn key="aim:DescriptionOfAccessionInstrument">Accession Instrument of the project</digi:trn>">
 												<digi:trn key="aim:AccessionInstrument">
@@ -175,8 +184,9 @@
 											<td valign="top" align="left">
 													<category:showoptions name="aimEditActivityForm" property="accessionInstrument" categoryName="<%= org.digijava.module.aim.helper.CategoryConstants.ACCESSION_INSTRUMENT_NAME %>" styleClass="inp-text" />
 											</td></tr>	
-											</logic:empty>
-											<logic:empty name="SA" scope="application">
+											</field:display>
+											
+											<field:display name="AC Chapter" feature="Identification">
 											<tr bgcolor="#ffffff"><td valign="top" align="left">
 												<a title="<digi:trn key="aim:DescriptionofACChapter">A.C. Chapter of the project</digi:trn>">
 												<digi:trn key="aim:acChapter">
@@ -187,8 +197,9 @@
 											<td valign="top" align="left">
 													<category:showoptions name="aimEditActivityForm" property="acChapter" categoryName="<%= org.digijava.module.aim.helper.CategoryConstants.ACCHAPTER_NAME %>" styleClass="inp-text" />
 											</td></tr>											
-											</logic:empty>								
-											<logic:notEmpty name="SA" scope="application">																																						
+											</field:display>
+											
+											<field:display name="Activity Budget" feature="Identification">
 											<tr bgcolor="#ffffff"><td valign="top" align="left">
 												<a title="<digi:trn key="aim:DescriptionofProject">Summary information describing the project</digi:trn>">
 												<digi:trn key="aim:actBudget">
@@ -203,6 +214,6 @@
 												</digi:trn>
 													</html:checkbox>
 											</td></tr>
-											</logic:notEmpty>
+											</field:display>
 										</table>
 

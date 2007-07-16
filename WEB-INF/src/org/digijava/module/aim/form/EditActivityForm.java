@@ -96,6 +96,8 @@ public class EditActivityForm extends ActionForm implements Serializable{
 	//private Collection assistanceTypes = null;
 
 	private String step = null;
+	
+	private String visibleProgram=null;
 
 	private Collection activitySectors; // sectors related to the activity
 	private Long selActivitySectors[];
@@ -569,6 +571,7 @@ public class EditActivityForm extends ActionForm implements Serializable{
 			overallContribution=null;
 			allComments=null;
 			financingBreakdown=null;
+			visibleProgram=null;
 		}
 
 		if (orgSelReset) {
@@ -3993,5 +3996,13 @@ public String getPurpose() {
 
 	public void setTotalExpended(String totalExpended) {
 		this.totalExpended = totalExpended;
+	}
+
+	public String getVisibleProgram() {
+		return visibleProgram;
+	}
+
+	public void setVisibleProgram(String visibleProgram) {
+		this.visibleProgram = visibleProgram;
 	}
 }

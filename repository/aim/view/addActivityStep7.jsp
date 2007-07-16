@@ -5,6 +5,9 @@
 <%@ taglib uri="/taglib/struts-html" prefix="html" %>
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
+<%@ taglib uri="/taglib/fieldVisibility" prefix="field" %>
+<%@ taglib uri="/taglib/featureVisibility" prefix="feature" %>
+<%@ taglib uri="/taglib/moduleVisibility" prefix="module" %>
 
 <digi:instance property="aimEditActivityForm" />
 
@@ -203,27 +206,31 @@ function removeSelOrgs(value) {
 							</tr>
 							<tr><td width="100%" bgcolor="#f4f4f2">
 							<table width="100%" cellSpacing="1" cellPadding="3" vAlign="top" align="left" bgcolor="#006699">
+							<feature:display name="Executing Agency" module="Organizations">
 							<tr><td bgColor=#f4f4f2 align="center" vAlign="top">
-								<logic:notEmpty name="SA" scope="application">
 								<jsp:include page="addActivityStep7ExecutingAgency.jsp"/>
-								</logic:notEmpty>
 							</td></tr>
+							</feature:display>
 									<tr><td>
 										&nbsp;
 									</td></tr>
+									<feature:display name="Implementing Agency" module="Organizations">
 										<jsp:include page="addActivityStep7ImplementingAgency.jsp"/>
+									</feature:display>
 									<tr><td>
 										&nbsp;
 									</td></tr>
-									<logic:empty name="SA" scope="application">
+									
 									<!-- Beneficiary Agency  -->
+									<feature:display name="Beneficiary Agency" module="Organizations">
 										<jsp:include page="addActivityStep7BeneficiaryAgency.jsp"/>
+									</feature:display>
 									<!-- /Benegiciary Agency -->
-									</logic:empty>
-									<logic:empty name="SA" scope="application">
+								
 									<!-- Contracting Agency  -->
+									<feature:display name="Contracting Agency" module="Organizations">
 										<jsp:include page="addActivityStep7ContractingAgency.jsp"/>
-									</logic:empty>
+									</feature:display>
 									<!-- /Contracting Agency -->
 <!-- 									
 									<tr><td>

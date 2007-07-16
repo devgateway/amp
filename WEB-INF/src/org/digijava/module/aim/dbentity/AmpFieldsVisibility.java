@@ -10,6 +10,7 @@ import java.io.Serializable;
 import java.util.Iterator;
 
 import org.dgfoundation.amp.visibility.AmpObjectVisibility;
+import org.dgfoundation.amp.visibility.AmpTreeVisibility;
 
 public class AmpFieldsVisibility extends AmpObjectVisibility implements Serializable {
 	/**
@@ -39,6 +40,21 @@ public class AmpFieldsVisibility extends AmpObjectVisibility implements Serializ
 		{
 			AmpFieldsVisibility x=(AmpFieldsVisibility) it.next();
 			if(x.getId().compareTo(id)==0) return true;
+			
+		}
+		return false;
+	}
+	
+	public boolean isFieldActive(AmpTreeVisibility atv)
+	{
+		AmpTemplatesVisibility currentTemplate=(AmpTemplatesVisibility) atv.getRoot();
+		for(Iterator it=currentTemplate.getFields().iterator();it.hasNext();)
+		{
+			AmpFieldsVisibility field=(AmpFieldsVisibility) it.next();
+			if(field.getName().compareTo(this.getName())==0) 
+			{
+				return true;
+			}
 			
 		}
 		return false;

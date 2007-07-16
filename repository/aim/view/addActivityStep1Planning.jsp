@@ -6,7 +6,9 @@
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
 <%@ taglib uri="/taglib/category" prefix="category" %>
-
+<%@ taglib uri="/taglib/fieldVisibility" prefix="field" %>
+<%@ taglib uri="/taglib/featureVisibility" prefix="feature" %>
+<%@ taglib uri="/taglib/moduleVisibility" prefix="module" %>
 <script language="JavaScript">
 
 </script>
@@ -22,7 +24,7 @@
 									</td></tr>
 									<tr><td>
 										<table width="100%" bgcolor="#cccccc" cellSpacing=1 cellPadding=5>
-										<logic:notEmpty name="SA" scope="application">
+										<field:display name="Line Ministry Rank" feature="Planning">
 											<tr>
 												<td width=200 bgcolor="#ffffff">
 													<a title="<digi:trn key="aim:lineMinistryRank">Line Ministry Rank</digi:trn>">&nbsp;
@@ -53,8 +55,8 @@
 													</table>
 												</td>
 											</tr>
-											</logic:notEmpty>
-											<logic:notEmpty name="SA" scope="application">
+										</field:display>
+										<field:display name="Ministry of Planning Rank" feature="Planning">
 											<tr>
 												<td width=200 bgcolor="#ffffff">
 													<a title="<digi:trn key="aim:planMinistryRank">Ministry of Planning Rank</digi:trn>">&nbsp;
@@ -85,8 +87,8 @@
 													</table>
 												</td>
 											</tr>
-											</logic:notEmpty>
-									
+											</field:display>
+											<field:display name="Overall Cost" feature="Planning">
 											<logic:present name="aimEditActivityForm" property="overallCost">
 											<tr>
 												<td width=200 bgcolor="#ffffff">
@@ -101,8 +103,9 @@
 												</td>
 											</tr>
 											</logic:present>
+											</field:display>
 											
-
+											<field:display name="Overall Contribution" feature="Planning">
 											<logic:present name="aimEditActivityForm" property="overallContribution">											
 											<tr>
 												<td width=200 bgcolor="#ffffff">
@@ -117,9 +120,9 @@
 												</td>
 											</tr>
 											</logic:present>
+											</field:display>
 											
-											
-											<logic:notEmpty name="SA" scope="application">											
+											<field:display name="Proposed Approval Date" feature="Planning">
 											<tr>
 												<td width=200 bgcolor="#ffffff">
 													<a title="<digi:trn key="aim:ExpectedApprovalDatebyDonorAgency">Date (dd/mm/yy) when the project is expected to be approved by the donor agency</digi:trn>">&nbsp;
@@ -144,8 +147,9 @@
 													</table>
 												</td>
 											</tr>
-											</logic:notEmpty>
-											<logic:notEmpty name="SA" scope="application">
+											</field:display>
+											
+											<field:display name="Actual Approval Date" feature="Planning">
 											<tr>
 												<td width=200 bgcolor="#ffffff">
 													<a title="<digi:trn key="aim:ActualApprovalDatebyDonorAgency">Date (dd/mm/yy) when the project was approved by the donor agency</digi:trn>">&nbsp;
@@ -173,8 +177,9 @@
 													</table>
 												</td>
 											</tr>
-											</logic:notEmpty>
-											<logic:notEmpty name="SA" scope="application">
+											</field:display>
+
+											<field:display name="Proposed Start Date" feature="Planning">
 											<tr>
 												<td width=200 bgcolor="#ffffff">
 													<a title="<digi:trn key="aim:ProposedDateProjectStart">Date (dd/mm/yy) when the project is expected to commence</digi:trn>">&nbsp;
@@ -199,7 +204,9 @@
 													</table>
 												</td>
 											</tr>
-											</logic:notEmpty>
+											</field:display>
+											
+											<field:display name="Actual Start Date" feature="Planning">
 											<tr>
 												<td width=200 bgcolor="#ffffff">
 													<a title="<digi:trn key="aim:ActualDateofProjectStart">Date (dd/mm/yy) when the project commenced (effective start date) </digi:trn>">&nbsp;
@@ -228,8 +235,9 @@
 													</table>
 												</td>
 											</tr>
-
-											<logic:empty name="SA" scope="application">
+											</field:display>
+											
+											<field:display name="Final Date for Contracting" feature="Planning">
 											<tr>
 												<td width=200 bgcolor="#ffffff">
 													<a title="<digi:trn key="aim:ContractingDateofProject">Final Date (dd/mm/yy) for Contracting</digi:trn>">&nbsp;
@@ -254,8 +262,9 @@
 													</table>
 												</td>
 											</tr>
-											</logic:empty>
-											<logic:empty name="SA" scope="application">
+											</field:display>
+											
+											<field:display name="Final Date for Disbursements" feature="Planning">
 											<tr>
 												<td width=200 bgcolor="#ffffff">
 													<a title="<digi:trn key="aim:DisbursementsDateofProject">Final Date (dd/mm/yy) for Disbursements</digi:trn>">&nbsp;
@@ -283,7 +292,9 @@
 													</table>
 												</td>
 											</tr>	
-											</logic:empty>
+											</field:display>
+											
+											<field:display name="Proposed Completion Date" feature="Planning">
 											<tr>
 												<td width=200 bgcolor="#ffffff">
 													<a title="<digi:trn key="aim:ExpectedCompletionDateofProject">Date (dd/mm/yy) when the project is expected to be completed </digi:trn>">&nbsp;
@@ -308,6 +319,9 @@
 													</table>
 												</td>
 											</tr>
+											</field:display>
+											
+											<field:display name="Current Completion Date" feature="Planning">
 											<tr>
 												<td width=200 bgcolor="#ffffff">&nbsp;
 												<a title="<digi:trn key="aim:CompletionDateofProject">Date (dd/mm/yy) when the project is expected to end or ended. AMP users have the possibility to update this field; AMP will keep track of the history of proposed completion dates </digi:trn>">
@@ -335,6 +349,9 @@
 													</table>
 												</td>
 											</tr>
+											</field:display>
+											
+											<field:display name="Status" feature="Planning">
 											<tr>
 												<td bgcolor="#ffffff">
 												<FONT color=red>*</FONT>&nbsp;
@@ -352,5 +369,6 @@
 													</a>
 												</td>
 											</tr>
+											</field:display>
 										</table>
 									</td></tr>

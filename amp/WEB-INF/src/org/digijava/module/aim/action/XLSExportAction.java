@@ -30,6 +30,11 @@ import org.dgfoundation.amp.ar.GroupReportData;
 import org.dgfoundation.amp.ar.view.xls.GroupReportDataXLS;
 import org.dgfoundation.amp.ar.view.xls.IntWrapper;
 import org.dgfoundation.amp.ar.view.xls.XLSExporter;
+import org.digijava.kernel.entity.Locale;
+import org.digijava.kernel.persistence.WorkerException;
+import org.digijava.kernel.request.Site;
+import org.digijava.kernel.translator.TranslatorWorker;
+import org.digijava.kernel.util.RequestUtils;
 import org.digijava.module.aim.dbentity.AmpReports;
 
 /**
@@ -56,6 +61,15 @@ public class XLSExportAction extends Action {
 	        HttpSession session=request.getSession();
 			AmpReports r=(AmpReports) session.getAttribute("reportMeta");
 		
+//			for translation purposes
+			TranslatorWorker translator=TranslatorWorker.getInstance();
+			Site site = RequestUtils.getSite(request);
+			Locale navigationLanguage = RequestUtils.getNavigationLanguage(request);
+					
+			String siteId=site.getSiteId();
+			String locale=navigationLanguage.getCode();	
+			
+			
 		String sortBy=(String) session.getAttribute("sortBy");
 		if(sortBy!=null) rd.setSorterColumn(sortBy); 
 			
@@ -95,9 +109,16 @@ public class XLSExportAction extends Action {
 			rowId.inc();
 			colId.reset();
 			
+			String translatedReportName="Report Name:";
+			String translatedReportDescription="Description:";
+			try{	
+				translatedReportName=TranslatorWorker.translate("rep:pop:ReportName",locale,siteId);
+				translatedReportDescription=TranslatorWorker.translate("rep:pop:Description",locale,siteId);
+			}catch (WorkerException e){;}
+			
 			row=sheet.createRow(rowId.shortValue());
 			cell=row.createCell(colId.shortValue());
-			cell.setCellValue("Report Name: "+r.getName());
+			cell.setCellValue(translatedReportName+": "+r.getName());
 			HSSFCellStyle cs = wb.createCellStyle();
 			cs.setFillBackgroundColor(HSSFColor.BROWN.index);
 			HSSFFont font = wb.createFont();
@@ -116,7 +137,7 @@ public class XLSExportAction extends Action {
 			
 			row=sheet.createRow(rowId.shortValue()); 		 
 			cell=row.createCell(colId.shortValue());
-			cell.setCellValue("Report Description: "+r.getReportDescription());
+			cell.setCellValue(translatedReportDescription+": "+r.getReportDescription());
 			grdx.makeColSpan(rd.getTotalDepth());
 			rowId.inc();
 			colId.reset();

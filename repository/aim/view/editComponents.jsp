@@ -4,6 +4,7 @@
 <%@ taglib uri="/taglib/struts-tiles" prefix="tiles" %>
 <%@ taglib uri="/taglib/struts-html" prefix="html" %>
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
+<%@ taglib uri="/taglib/jstl-core" prefix="c" %>
 <script langauage="JavaScript">
 	function onDelete() {
 		var flag = confirm("Delete this Scheme?");
@@ -46,18 +47,17 @@
 				<tr>
 					<!-- Start Navigation -->
 					<td height=33><span class=crumb>
-	
-						<bean:define id="translation">
+						<c:set var="translation">
 							<digi:trn key="aim:clickToViewAdmin">Click here to goto Admin Home</digi:trn>
-						</bean:define>
+						</c:set>
 						<digi:link href="/admin.do" styleClass="comment" title="<%=translation%>" >
 						<digi:trn key="aim:AmpAdminHome">
 						Admin Home
 						</digi:trn>
 						</digi:link>&nbsp;&gt;&nbsp;
-						<bean:define id="translation">
+						<c:set var="translation">
 							<digi:trn key="aim:clickToViewComponentManager">Click here to view Component Manager</digi:trn>
-						</bean:define>
+						</c:set>
 						<digi:link href="/getComponents.do" styleClass="comment" title="<%=translation%>" >
 						<digi:trn key="aim:componentManager">
 						Component Manager

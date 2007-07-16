@@ -6,6 +6,7 @@
  */
 package org.digijava.module.aim.action;
 
+import java.util.Enumeration;
 import java.util.Iterator;
 
 import javax.servlet.http.HttpServletRequest;
@@ -68,6 +69,7 @@ public class PDFExportAction extends Action implements PdfPageEvent{
 		TranslatorWorker translator=TranslatorWorker.getInstance();
 		Site site = RequestUtils.getSite(request);
 		Locale navigationLanguage = RequestUtils.getNavigationLanguage(request);
+				
 		String siteId=site.getSiteId();
 		String locale=navigationLanguage.getCode();
 		
@@ -85,8 +87,8 @@ public class PDFExportAction extends Action implements PdfPageEvent{
 		//use the session to get the existing filters
 		String pageSize=null;
 		
-		HttpSession httpSession = request.getSession();
-		AmpARFilter arf=(AmpARFilter) httpSession.getAttribute(ArConstants.REPORTS_FILTER);
+		HttpSession session = request.getSession();
+		AmpARFilter arf=(AmpARFilter) session.getAttribute(ArConstants.REPORTS_FILTER);
 		if(arf!=null)
 			pageSize=arf.getPageSize();//use the page size set in the filters 
 
@@ -112,9 +114,11 @@ public class PDFExportAction extends Action implements PdfPageEvent{
 				response.getOutputStream());
 		writer.setPageEvent(new PDFExportAction());
 
-		HttpSession session=request.getSession();
+	
 		noteFromSession=AmpReports.getNote(request.getSession());
 		AmpReports r=(AmpReports) session.getAttribute("reportMeta");
+		r.setSiteId(siteId);
+		r.setLocale(locale);
 
 		String sortBy=(String) session.getAttribute("sortBy");
 		if(sortBy!=null) rd.setSorterColumn(sortBy); 

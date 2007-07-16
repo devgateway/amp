@@ -113,7 +113,7 @@ public final class ARUtil {
 		Site site = RequestUtils.getSite(request);
 		Locale navigationLanguage = RequestUtils.getNavigationLanguage(request);
 		String siteId=site.getSiteId();
-		String locale=navigationLanguage.getName();
+		String locale=navigationLanguage.getCode();
 		
 		r.setSiteId(siteId);
 		r.setLocale(locale);

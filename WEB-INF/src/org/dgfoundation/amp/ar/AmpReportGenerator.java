@@ -18,6 +18,11 @@ import org.dgfoundation.amp.ar.cell.Cell;
 import org.dgfoundation.amp.ar.exception.IncompatibleColumnException;
 import org.dgfoundation.amp.ar.exception.UnidentifiedItemException;
 import org.dgfoundation.amp.ar.workers.ColumnWorker;
+import org.digijava.kernel.entity.Locale;
+import org.digijava.kernel.persistence.WorkerException;
+import org.digijava.kernel.request.Site;
+import org.digijava.kernel.translator.TranslatorWorker;
+import org.digijava.kernel.util.RequestUtils;
 import org.digijava.module.aim.dbentity.AmpColumns;
 import org.digijava.module.aim.dbentity.AmpReportColumn;
 import org.digijava.module.aim.dbentity.AmpReportHierarchy;
@@ -312,6 +317,29 @@ public class AmpReportGenerator extends ReportGenerator {
 			createHierarchies();
 
 		
+		//if all the job is done i presume i can translate the column names
+		/*hopefully*/
+		
+		//requirements for translation purposes
+		TranslatorWorker translator=TranslatorWorker.getInstance();
+		String siteId=this.reportMetadata.getSiteId();
+		String locale=this.reportMetadata.getLocale();
+
+		Iterator columnIterator=this.reportMetadata.getOrderedColumns().iterator();
+		while (columnIterator.hasNext())
+		{
+			Column col=(Column)columnIterator.next();
+			String columnName=col.getName();
+			String prefix="aim:report:";
+			String translatedColumnName=columnName;
+			try{
+				translatedColumnName=TranslatorWorker.translate(prefix+columnName,locale,siteId);
+			}catch (WorkerException e)
+				{System.out.println(e);
+							}
+			col.setName(translatedColumnName);
+			
+		}
 		
 		// perform postprocessing - cell grouping and other tasks
 		report.postProcess();

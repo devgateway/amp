@@ -12,7 +12,10 @@ import java.util.Iterator;
 import org.dgfoundation.amp.ar.Column;
 import org.dgfoundation.amp.ar.ColumnReportData;
 import org.dgfoundation.amp.ar.Exporter;
+import org.dgfoundation.amp.ar.ReportData;
 import org.dgfoundation.amp.ar.Viewable;
+import org.digijava.kernel.persistence.WorkerException;
+import org.digijava.kernel.translator.TranslatorWorker;
 
 import com.lowagie.text.Element;
 import com.lowagie.text.Font;
@@ -57,7 +60,32 @@ public class ColumnReportDataPDF extends PDFExporter {
 		Font titleFont = new Font(Font.COURIER, Font.DEFAULTSIZE, Font.BOLD);
 		//title
 		if (columnReport.getParent() != null) {
-			PdfPCell pdfc = new PdfPCell(new Paragraph(columnReport.getName(),titleFont));
+			
+			//introducing the translaton issues
+			ReportData parent=(ReportData)columnReport.getParent();
+			
+			while (parent.getReportMetadata()==null)
+			{
+				parent=parent.getParent();
+			}
+			//when we get to the top of the hierarchy we have access to AmpReports
+			
+			//requirements for translation purposes
+			TranslatorWorker translator=TranslatorWorker.getInstance();
+			String siteId=parent.getReportMetadata().getSiteId();
+			String locale=parent.getReportMetadata().getLocale();
+			String prefix="rep:pop:";
+			String translatedName=null;
+			try{
+				translatedName=TranslatorWorker.translate(prefix+columnReport.getName(),locale,siteId);
+			}catch (WorkerException e)
+				{System.out.println(e);}
+			
+			PdfPCell pdfc; 
+			if(translatedName.compareTo("")==0)
+				pdfc= new PdfPCell(new Paragraph(columnReport.getName(),titleFont));
+			else 
+				pdfc=new PdfPCell(new Paragraph(translatedName,titleFont));
 			pdfc.setColspan(columnReport.getTotalDepth());
 			table.addCell(pdfc);
 		}

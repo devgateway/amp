@@ -61,17 +61,38 @@ public class TrailCellsPDF extends PDFExporter {
 		
 		if(grd.getParent()!=null) {
 			
-		//	for translation purposes
-			String siteId=this.getMetadata().getSiteId();
-			String locale=this.getMetadata().getLocale();
-			String totalsFor="TOTALS for:";
+			ReportData parent=(ReportData)grd.getParent();
+			while (parent.getReportMetadata()==null)
+			{
+				parent=parent.getParent();
+			}
+			//when we get to the top of the hierarchy we have access to AmpReports
+			
+			//requirements for translation purposes
+			//this is the translation part for the rep:pop:totalsfor and the rep:pop:($donorName} part
+			TranslatorWorker translator=TranslatorWorker.getInstance();
+			String siteId=parent.getReportMetadata().getSiteId();
+			String locale=parent.getReportMetadata().getLocale();
+			String totalsFor="TOTALS for";
+			String translatedName=grd.getName();
 			try{
-				totalsFor=TranslatorWorker.translate("rep:pop:totalsFor",locale,siteId);	
+				totalsFor=TranslatorWorker.translate("rep:pop:totalsFor",locale,siteId);
+				String namePrefix="rep:pop:";
+				translatedName=TranslatorWorker.translate(namePrefix+grd.getName(),locale,siteId );
 			}
 			catch (WorkerException e){;}
+			String result;
 			
+			//create the actual output string for the totals line
+			if(totalsFor.compareTo("")==0)
+				result="TOTALS for: ";
+			else result=totalsFor+": ";
 			
-			PdfPCell pdfc = new PdfPCell(new Paragraph(totalsFor+" "+grd.getName(),totalFont));
+			if(translatedName.compareTo("")==0 )
+				result+=grd.getName();
+			else result+=translatedName;
+				
+			PdfPCell pdfc = new PdfPCell(new Paragraph(result,totalFont));
 			pdfc.setColspan(grd.getSourceColsCount().intValue());
 			table.addCell(pdfc);
 			

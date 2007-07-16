@@ -27,6 +27,10 @@ public class VisibilityManagerForm extends ActionForm implements Serializable{
 	private String templateName;
 	private AmpTreeVisibility ampTreeVisibility;
 	
+	private Collection allFields;
+	private Collection allFeatures;
+	private Collection allModules;
+	
 	public String getTemplateName() {
 		return templateName;
 	}
@@ -110,6 +114,24 @@ public class VisibilityManagerForm extends ActionForm implements Serializable{
 	}
 	public void setAmpTreeVisibility(AmpTreeVisibility ampTreeVisibility) {
 		this.ampTreeVisibility = ampTreeVisibility;
+	}
+	public Collection getAllFeatures() {
+		return allFeatures;
+	}
+	public void setAllFeatures(Collection allFeatures) {
+		this.allFeatures = allFeatures;
+	}
+	public Collection getAllFields() {
+		return allFields;
+	}
+	public void setAllFields(Collection allFields) {
+		this.allFields = allFields;
+	}
+	public Collection getAllModules() {
+		return allModules;
+	}
+	public void setAllModules(Collection allModules) {
+		this.allModules = allModules;
 	}
 	
 

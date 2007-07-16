@@ -80,4 +80,11 @@
 					</td>
 				</tr>
 				</logic:equal>	
+				<logic:equal name="aimVisibilityManagerForm" property="mode" value="viewFields">
+					<tr>
+						<td noWrap width=100% vAlign="top">
+							<jsp:include page="viewFieldsVisibility.jsp" />
+						</td>
+					</tr>			
+				</logic:equal>
 </table>

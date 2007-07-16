@@ -50,8 +50,10 @@ public class VisibilityManager extends MultiAction {
 		if(request.getParameter("action")!=null)
 			{
 				if(request.getParameter("action").compareTo("add")==0) return modeAddTemplate(mapping, form, request, response);
+				if(request.getParameter("action").compareTo("viewFields")==0) return modeViewFields(mapping, form, request, response);
 				if(request.getParameter("action").compareTo("edit")==0) return modeEditTemplate(mapping, form, request, response);
 				if(request.getParameter("action").compareTo("delete")==0) return modeDeleteTemplate(mapping, form, request, response);				
+				if(request.getParameter("action").compareTo("deleteFFM")==0) return modeDeleteFFM(mapping, form, request, response);
 			}
 		if(request.getParameter("newTemplate")!=null) return modeSaveTemplate(mapping, form, request, response);
 		if(request.getParameter("saveEditTemplate")!=null) return modeSaveEditTemplate(mapping, form, request, response);
@@ -66,6 +68,19 @@ public class VisibilityManager extends MultiAction {
 		Collection modules=FeaturesUtil.getAMPModulesVisibility();
 		vForm.setMode("addNew");
 		vForm.setModules(modules);
+		return mapping.findForward("forward");
+	}
+	
+	public ActionForward modeViewFields(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
+		// TODO Auto-generated method stub
+		VisibilityManagerForm vForm=(VisibilityManagerForm) form;
+		Collection modules=FeaturesUtil.getAMPModulesVisibility();
+		Collection features=FeaturesUtil.getAMPFeaturesVisibility();
+		Collection fields=FeaturesUtil.getAMPFieldsVisibility();
+		vForm.setMode("viewFields");
+		vForm.setAllModules(modules);
+		vForm.setAllFeatures(features);
+		vForm.setAllFields(fields);
 		return mapping.findForward("forward");
 	}
 	
@@ -188,6 +203,26 @@ public class VisibilityManager extends MultiAction {
 		ActionErrors errors = new ActionErrors();
 	 	errors.add("title", new ActionError("error.aim.visibility.deletedTemplate"));
 	 	saveErrors(request, errors);
+		return mapping.findForward("forward");
+	}
+	
+	public ActionForward modeDeleteFFM(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
+		// TODO Auto-generated method stub
+		System.out.println(Long.parseLong(request.getParameter("fieldId")));
+		Session hbsession = null;
+		hbsession = this.createSession();
+		if(request.getParameter("fieldId")!=null) ;//FeaturesUtil.deleteFieldVisibility(new Long(Long.parseLong(request.getParameter("fieldId"))),hbsession);//delete field
+		if(request.getParameter("featureId")!=null) ;//delete feature
+		if(request.getParameter("moduleId")!=null) ;//delete module
+		/*{//for refreshing the page
+			VisibilityManagerForm vForm = (VisibilityManagerForm) form;
+			Collection templates=FeaturesUtil.getAMPTemplatesVisibility();
+			vForm.setTemplates(templates);
+		}
+		ActionErrors errors = new ActionErrors();
+	 	errors.add("title", new ActionError("error.aim.visibility.deletedTemplate"));
+	 	saveErrors(request, errors);
+	 	*/
 		return mapping.findForward("forward");
 	}
 	

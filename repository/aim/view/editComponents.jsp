@@ -47,18 +47,18 @@
 				<tr>
 					<!-- Start Navigation -->
 					<td height=33><span class=crumb>
-						<c:set var="translation">
-							<digi:trn key="aim:clickToViewAdmin">Click here to goto Admin Home</digi:trn>
+						<c:set var="clickToViewAdmin">
+						<digi:trn key="aim:clickToViewAdmin">Click here to goto Admin Home</digi:trn>
 						</c:set>
-						<digi:link href="/admin.do" styleClass="comment" title="<%=translation%>" >
+						<digi:link href="/admin.do" styleClass="comment" title="${clickToViewAdmin}" >
 						<digi:trn key="aim:AmpAdminHome">
 						Admin Home
 						</digi:trn>
 						</digi:link>&nbsp;&gt;&nbsp;
-						<c:set var="translation">
+						<c:set var="clickToViewComponentManager">
 							<digi:trn key="aim:clickToViewComponentManager">Click here to view Component Manager</digi:trn>
 						</c:set>
-						<digi:link href="/getComponents.do" styleClass="comment" title="<%=translation%>" >
+						<digi:link href="/getComponents.do" styleClass="comment" title="${clickToViewComponentManager}" >
 						<digi:trn key="aim:componentManager">
 						Component Manager
 						</digi:trn>

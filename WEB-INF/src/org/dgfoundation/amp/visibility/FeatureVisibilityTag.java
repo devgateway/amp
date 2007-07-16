@@ -8,6 +8,7 @@ package org.dgfoundation.amp.visibility;
 import java.util.Iterator;
 
 import javax.servlet.ServletContext;
+import javax.servlet.http.HttpSession;
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspTagException;
 import javax.servlet.jsp.tagext.BodyTagSupport;
@@ -46,13 +47,22 @@ public class FeatureVisibilityTag extends BodyTagSupport {
 		// TODO Auto-generated constructor stub
 	}
 	
+	public int doStartTag() throws JspException {
+		// TODO Auto-generated method stub
+		System.out.println("sunt in feature in starttttttttt!!!");
+		HttpSession session = pageContext.getSession();
+		session.setAttribute("currentFeatureTag",this.getName());
+		return EVAL_BODY_BUFFERED;//super.doStartTag();
+	}
 	public int doEndTag() throws JspException 
     {
        String bodyText = bodyContent.getString();
-       
+       System.out.println("sunt in feature in endddddddddddddddd");
        try {
     	   ServletContext ampContext=pageContext.getServletContext();
     	   AmpTreeVisibility ampTreeVisibility=(AmpTreeVisibility) ampContext.getAttribute("ampTreeVisibility");
+    	   HttpSession session=pageContext.getSession();
+    	   if(session.getAttribute("currentModuleTag")!=null) this.setModule((String)session.getAttribute("currentModuleTag"));
     	   
     	   /* name, feature, enable
     	    * 
@@ -67,6 +77,7 @@ public class FeatureVisibilityTag extends BodyTagSupport {
     	   if(! existModule(ampTreeVisibility)) {
     		   //error
     		  System.out.println("error!!!! module "+this.getModule()+" doesn't exist");
+    		  session.setAttribute("currentFeatureTag",null);
     		  return SKIP_BODY;
     	   }
    		   if(!existFeatureinDB(ampTreeVisibility)){
@@ -99,6 +110,7 @@ public class FeatureVisibilityTag extends BodyTagSupport {
    			System.out.println("Field MANAGER!!!! ffeature "+this.getName()+" is not ACTIVE");
    			   //the field is not active!!!
    		   }
+   		session.setAttribute("currentFeatureTag",null);
     	   
        }
        catch (Exception e) {

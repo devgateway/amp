@@ -563,6 +563,7 @@ bgcolor="#006699">
 	
 	<!-- EU Costs -->
 	<module:display name="Activity Costing">
+	<feature:display name="Costing" module="Activity Costing">
 	<tr>
 		<c:if test="${aimEditActivityForm.step != 11}">
 		<td nowrap="nowrap">
@@ -594,6 +595,7 @@ bgcolor="#006699">
 		</td>
 		</c:if>
 	</tr>
+	</feature:display>
 	</module:display>
 	
 	
@@ -601,13 +603,11 @@ bgcolor="#006699">
 		<td align="center">
 		</td>
 	</tr>
-	<logic:empty name="SA" scope="application">
 	<tr>
 		<td align="center">
 			<input type="button" value='<digi:trn key="aim:previewLogframe">Preview Logframe</digi:trn>' class="buton" onclick="previewLogFrameClicked()" name="logframe">
 		</td>
 	</tr>
-	</logic:empty>
 	<tr>
 		<td align="center">
 			<input type="button" value='<digi:trn key="aim:preview">Preview</digi:trn>' class="buton" onclick="previewClicked()">

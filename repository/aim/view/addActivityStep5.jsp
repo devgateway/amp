@@ -380,7 +380,7 @@ function removeSelComponents() {
 							</tr>
 							<tr><td width="100%" bgcolor="#f4f4f2">
 							<table width="100%" cellSpacing="1" cellPadding="3" vAlign="top" align="left" bgcolor="#006699">
-							<feature:display name="Components" module="Components and Issues">
+							<feature:display name="Components" module="Components">
 							<tr><td bgColor=#f4f4f2 align="center" vAlign="top">
 									<jsp:include page="addActivityStep5Components.jsp"/>
 							</td></tr>
@@ -390,7 +390,7 @@ function removeSelComponents() {
 									<tr><td>
 										&nbsp;
 									</td></tr>
-									<feature:display name="Issues" module="Components and Issues">
+									<feature:display name="Issues" module="Issues">
 										<jsp:include page="addActivityStep5Issues.jsp"/>
 									</feature:display>
 									<tr><td>

@@ -6,7 +6,9 @@
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
 <%@ taglib uri="/taglib/struts-nested" prefix="nested" %>
-
+<%@ taglib uri="/taglib/fieldVisibility" prefix="field" %>
+<%@ taglib uri="/taglib/featureVisibility" prefix="feature" %>
+<%@ taglib uri="/taglib/moduleVisibility" prefix="module" %>
 
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/addActivity.js"/>"></script>
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
@@ -94,16 +96,19 @@
                                           </table>
                                         </td>
                                       </tr>
+                                      <field:display name="Description of Program" feature="NPD Programs">
                                       <tr>
                                         <td>
                                           <a title="<digi:trn key="aim:ProgramDesc">Description of program, objectives, or associated projects</digi:trn>">
                                           <digi:trn key="aim:description">Description</digi:trn>
-</a>                                    </td>
+											</a>                                    
+										</td>
                                       </tr>
                                       <tr>
                                         <td>
                                           <a title="<digi:trn key="aim:ProgramDesc">Description of program, objectives, or associated projects</digi:trn>">
                                           <html:textarea property="programDescription" rows="3" cols="75" styleClass="inp-text"/>
-</a>
+											</a>
                                         </td>
                                       </tr>
+									</field:display>

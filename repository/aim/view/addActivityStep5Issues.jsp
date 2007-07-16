@@ -5,7 +5,9 @@
 <%@ taglib uri="/taglib/struts-html" prefix="html" %>
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
-
+<%@ taglib uri="/taglib/fieldVisibility" prefix="field" %>
+<%@ taglib uri="/taglib/featureVisibility" prefix="feature" %>
+<%@ taglib uri="/taglib/moduleVisibility" prefix="module" %>
 <digi:instance property="aimEditActivityForm" />
 
 									<tr><td>
@@ -64,8 +66,10 @@
 																	<tr class="<%=rowClass%>">
 																		<td align="left" colspan="2">
 																			<b><digi:trn key="aim:measures">Measures</digi:trn></b>&nbsp;&nbsp;
+																			<field:display name="Add Measures Link" feature="Issues">
 																			<a href="javascript:addMeasures('<c:out value="${issues.id}"/>')">
 																			Add Measures</a>
+																			</field:display>
 																		</td>																	
 																	</tr>																
 																	<logic:notEmpty name="issues" property="measures">
@@ -91,7 +95,9 @@
 																				<tr class="<%=rowClass%>">
 																					<td align="left" colspan="2">
 																						<b><digi:trn key="aim:actors">Actors</digi:trn></b>&nbsp;&nbsp;
+																						<field:display name="Add Actors Link" feature="Issues">
 																						<a href="javascript:addActors('<c:out value="${issues.id}"/>','<c:out value="${measure.id}"/>')">Add Actors</a>
+																						</field:display>
 																					</td>																	
 																				</tr>																
 																				<logic:notEmpty name="measure" property="actors">
@@ -108,7 +114,8 @@
 																							<c:out value="${actor.name}"/>
 																					</td>																		
 																				</tr>
-																				</logic:iterate>		
+																				</logic:iterate>
+																				<field:display name="Remove Actors Button" feature="Issues">		
 																				<tr class="<%=rowClass%>">
 																					<td vAlign="center" align="left" width="3">
 																					</td>														
@@ -116,11 +123,13 @@
 																						<input type="button" class="dr-menu" onclick="removeActors('<c:out value="${issues.id}"/>','<c:out value="${measure.id}"/>')" value='<digi:trn key="btn:removeActors">Remove Actors</digi:trn>' />
 																					</td>
 																				</tr>
+																				</field:display>
 																				</logic:notEmpty>
 																			</table>
 																		</td>														
 																	</tr>
-																	</logic:iterate>		
+																	</logic:iterate>
+																	<field:display name="Remove Measures Button" feature="Issues">
 																	<tr class="<%=rowClass%>">
 																		<td vAlign="center" align="left" width="3">
 																		</td>														
@@ -129,6 +138,7 @@
 
 																		</td>
 																	</tr>
+																	</field:display>		
 																	</logic:notEmpty>
 																</table>
 															</td>
@@ -139,22 +149,27 @@
 												<tr><td align="center">
 													<table cellSpacing=2 cellPadding=2>
 														<tr>
+															<field:display name="Add Issues Button" feature="Issues">
 															<td>
 																<html:button  styleClass="buton" property="submitButton" onclick="addIssues()">
 																		<digi:trn key="btn:addIssues">Add Issues</digi:trn>
 																</html:button>
 															</td>
+															</field:display>
+															<field:display name="Remove Issues Button" feature="Issues">
 															<td>
 																<html:button  styleClass="buton" property="submitButton" onclick="removeIssues()">
 																		<digi:trn key="btn:removeIssues">Remove Issues</digi:trn>
 																</html:button>
-															</td>															
+															</td>						
+															</field:display>									
 														</tr>
 													</table>
 												</td></tr>
 											</table>												
 										</logic:notEmpty>
 										<logic:empty name="aimEditActivityForm" property="issues">
+											<field:display name="Add Issues Button" feature="Issues">
 											<table width="100%" cellSpacing=1 cellPadding=5 class="box-border-nopadding">
 												<tr><td>
 													<html:button  styleClass="buton" property="submitButton" onclick="addIssues()">
@@ -163,5 +178,6 @@
 
 												</td></tr>
 											</table>
+											</field:display>
 										</logic:empty>
 									</td></tr>

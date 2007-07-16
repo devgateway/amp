@@ -16,6 +16,8 @@ import org.dgfoundation.amp.ar.Exporter;
 import org.dgfoundation.amp.ar.ReportData;
 import org.dgfoundation.amp.ar.Viewable;
 import org.dgfoundation.amp.ar.cell.Cell;
+import org.digijava.kernel.persistence.WorkerException;
+import org.digijava.kernel.translator.TranslatorWorker;
 
 /**
  * 
@@ -61,7 +63,25 @@ public class TrailCellsXLS extends XLSExporter {
 		
 		if (grd.getParent() != null) {
 			HSSFCell cell = this.getCell(this.getHighlightedStyle(false));
-			cell.setCellValue(grd.getName());
+			
+//			introducing the translaton issues
+			
+			//requirements for translation purposes
+			TranslatorWorker translator=TranslatorWorker.getInstance();
+			String siteId=this.getMetadata().getSiteId();
+			String locale=this.getMetadata().getLocale();
+			String prefix="rep:pop:";
+			String translatedName=null;
+			try{
+				translatedName=TranslatorWorker.translate(prefix+grd.getName(),locale,siteId);
+			}catch (WorkerException e)
+				{System.out.println(e);}
+			
+		 
+			if(translatedName.compareTo("")==0)
+				cell.setCellValue(grd.getName());
+			else 
+				cell.setCellValue(translatedName);
 			
 			makeColSpan(grd.getSourceColsCount().intValue());
 			//colId.inc();

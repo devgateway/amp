@@ -15,7 +15,13 @@ import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.dgfoundation.amp.ar.Column;
 import org.dgfoundation.amp.ar.ColumnReportData;
 import org.dgfoundation.amp.ar.Exporter;
+import org.dgfoundation.amp.ar.ReportData;
 import org.dgfoundation.amp.ar.Viewable;
+import org.digijava.kernel.persistence.WorkerException;
+import org.digijava.kernel.translator.TranslatorWorker;
+
+import com.lowagie.text.Paragraph;
+import com.lowagie.text.pdf.PdfPCell;
 
 /**
  * 
@@ -69,6 +75,47 @@ public class ColumnReportDataXLS extends XLSExporter {
 			colId.reset();
 		}
 */
+		
+//		title
+	/*	if (columnReport.getParent() != null) {
+			HSSFRow row = sheet.createRow(rowId.shortValue());
+			HSSFCell cell = this.getCell(row,this.getHighlightedStyle(true));
+			
+			//introducing the translaton issues
+			ReportData parent=(ReportData)columnReport.getParent();
+			
+			while (parent.getReportMetadata()==null)
+			{
+				parent=parent.getParent();
+			}
+			//when we get to the top of the hierarchy we have access to AmpReports
+			
+			//requirements for translation purposes
+			TranslatorWorker translator=TranslatorWorker.getInstance();
+			String siteId=parent.getReportMetadata().getSiteId();
+			String locale=parent.getReportMetadata().getLocale();
+			String prefix="rep:pop:";
+			String translatedName=null;
+			try{
+				translatedName=TranslatorWorker.translate(prefix+columnReport.getName(),locale,siteId);
+			}catch (WorkerException e)
+				{System.out.println(e);}
+			
+		 
+			if(translatedName.compareTo("")==0)
+				cell.setCellValue(columnReport.getName());
+			else 
+				cell.setCellValue(translatedName);
+			makeColSpan(columnReport.getTotalDepth());
+			rowId.inc();
+			colId.reset();
+	}
+		*/
+		
+		
+		
+		
+		
 		// add trail cells
 		TrailCellsXLS trails = new TrailCellsXLS(this, columnReport);
 		trails.generate();

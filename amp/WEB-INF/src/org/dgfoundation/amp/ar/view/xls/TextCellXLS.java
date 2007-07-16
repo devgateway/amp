@@ -12,8 +12,14 @@ import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.hssf.usermodel.HSSFSheet;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.dgfoundation.amp.ar.Exporter;
+import org.dgfoundation.amp.ar.ReportData;
 import org.dgfoundation.amp.ar.Viewable;
 import org.dgfoundation.amp.ar.cell.TextCell;
+import org.digijava.kernel.persistence.WorkerException;
+import org.digijava.kernel.translator.TranslatorWorker;
+
+import com.lowagie.text.Paragraph;
+import com.lowagie.text.pdf.PdfPCell;
 
 /**
  * 
@@ -52,7 +58,39 @@ public class TextCellXLS extends XLSExporter {
 	public void generate() {
 		TextCell c=(TextCell) item;
 		HSSFCell cell=this.getRegularCell();
-		cell.setCellValue(c.toString());		
+		if(c.getColumn().getName().compareTo("Status")==0)
+		{
+			String actualStatus=c.toString();
+			
+			ReportData parent=(ReportData)c.getColumn().getParent();
+			while (parent.getReportMetadata()==null)
+			{
+				parent=parent.getParent();
+			}
+			//when we get to the top of the hierarchy we have access to AmpReports
+			
+			//requirements for translation purposes
+			TranslatorWorker translator=TranslatorWorker.getInstance();
+			String siteId=parent.getReportMetadata().getSiteId();
+			String locale=parent.getReportMetadata().getLocale();
+			
+			String finalStatus=new String();//the actual text to be added to the column
+			
+			String translatedStatus=null;
+			String prefix="aim:";
+			try{
+				translatedStatus=TranslatorWorker.translate(prefix+actualStatus,locale,siteId);
+			}catch (WorkerException e)
+				{System.out.println(e);}
+			if (translatedStatus.compareTo("")==0)
+				translatedStatus=actualStatus;
+			finalStatus+=translatedStatus;
+
+			cell.setCellValue( finalStatus);
+		}
+		else 
+			cell.setCellValue(c.toString());
+		
 		colId.inc();
 	}
 

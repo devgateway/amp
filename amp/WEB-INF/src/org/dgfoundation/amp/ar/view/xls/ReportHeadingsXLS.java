@@ -15,6 +15,8 @@ import org.dgfoundation.amp.ar.Column;
 import org.dgfoundation.amp.ar.ColumnReportData;
 import org.dgfoundation.amp.ar.Exporter;
 import org.dgfoundation.amp.ar.Viewable;
+import org.digijava.kernel.persistence.WorkerException;
+import org.digijava.kernel.translator.TranslatorWorker;
 
 /**
  * @author mihai
@@ -52,6 +54,13 @@ public class ReportHeadingsXLS extends XLSExporter {
 	 */
 	public void generate() {
 		ColumnReportData columnReport = (ColumnReportData) item;
+		
+//		requirements for translation purposes
+		TranslatorWorker translator=TranslatorWorker.getInstance();
+		String siteId=this.getMetadata().getSiteId();
+		String locale=this.getMetadata().getLocale();
+	
+		
 		// column headings:
 		if(columnReport.getGlobalHeadingsDisplayed().booleanValue()==false) {
 			columnReport.setGlobalHeadingsDisplayed(new Boolean(true));
@@ -67,7 +76,22 @@ public class ReportHeadingsXLS extends XLSExporter {
 					while (ii.hasNext()) {
 						Column element2 = (Column) ii.next();
 						HSSFCell cell =  this.getCell(row,this.getHighlightedStyle(false));
-						cell.setCellValue(element2.getName(metadata.getHideActivities()));
+						String cellValue=element2.getName(metadata.getHideActivities());
+						//this value should be translated
+						String translatedCellValue=new String();
+						String prefix="aim:pop:";
+						
+						try{
+							translatedCellValue=TranslatorWorker.translate(prefix+cellValue,locale,siteId);
+						}catch (WorkerException e)
+							{System.out.println(e);}
+						
+					 
+						if(translatedCellValue.compareTo("")==0)
+							cell.setCellValue(cellValue);
+						else 
+							cell.setCellValue(translatedCellValue);
+						
 						// System.out.println("["+rowId.intValue()+"]["+colId.intValue()+"]
 						// depth="+curDepth+" "+element2.getName());
 						// create spanning

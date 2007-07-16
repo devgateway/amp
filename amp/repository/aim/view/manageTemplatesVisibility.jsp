@@ -87,7 +87,7 @@
 		<tr>
 		<td>
 			<bean:define id="translation">
-					<digi:trn key="aim:setTemplateInUse">Click here to Add a New Template </digi:trn>
+					<digi:trn key="aim:addNewTemplate">Click here to Add a New Template </digi:trn>
 			</bean:define>
 			<jsp:useBean id="urlParams12" type="java.util.Map" class="java.util.HashMap"/>
 			<c:set target="${urlParams12}" property="action" value="add"/>
@@ -96,6 +96,17 @@
 		</td>
 	</tr>
 	
+		<tr>
+		<td>
+			<bean:define id="translation">
+					<digi:trn key="aim:clickToManageFieldsFeaturesModule">Click here to Field, Features and Modules </digi:trn>
+			</bean:define>
+			<jsp:useBean id="urlParams13" type="java.util.Map" class="java.util.HashMap"/>
+			<c:set target="${urlParams13}" property="action" value="viewFields"/>
+			 <digi:link href="/visibilityManager.do" name="urlParams13" 
+				title="<%=translation%>" ><digi:trn key="aim:manageFieldsFeaturesModules">List of Fields, Features, Modules</digi:trn></digi:link>
+		</td>
+	</tr>
 	
 	<tr>
 		<td>

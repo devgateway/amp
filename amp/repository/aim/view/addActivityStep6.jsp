@@ -5,7 +5,9 @@
 <%@ taglib uri="/taglib/struts-html" prefix="html" %>
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
-
+<%@ taglib uri="/taglib/fieldVisibility" prefix="field" %>
+<%@ taglib uri="/taglib/featureVisibility" prefix="feature" %>
+<%@ taglib uri="/taglib/moduleVisibility" prefix="module" %>
 
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/addActivity.js"/>"></script>
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
@@ -283,14 +285,18 @@ function removeSelLinks() {
 							</tr>
 							<tr><td width="100%" bgcolor="#f4f4f2">
 							<table width="100%" cellSpacing="1" cellPadding="3" vAlign="top" align="left" bgcolor="#006699">
+							<feature:display name="Related Documents" module="Document Management">
 							<tr><td bgColor=#f4f4f2 align="center" vAlign="top">
 								<!-- contents -->
 							<jsp:include page="addActivityStep6RelatedDocuments.jsp"/>
 									</td></tr>
+							</feature:display>
 									<tr><td>
 										&nbsp;
 									</td></tr>
+							<feature:display name="Web Resources" module="Document Management">
 							<jsp:include page="addActivityStep6WebResources.jsp"/>
+							</feature:display>
 									<tr><td bgColor=#f4f4f2>
 										&nbsp;
 									</td></tr>

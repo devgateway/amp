@@ -5,7 +5,9 @@
 <%@ taglib uri="/taglib/struts-html" prefix="html" %>
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
-
+<%@ taglib uri="/taglib/fieldVisibility" prefix="field" %>
+<%@ taglib uri="/taglib/featureVisibility" prefix="feature" %>
+<%@ taglib uri="/taglib/moduleVisibility" prefix="module" %>
 
 
 <digi:instance property="aimEditActivityForm" />
@@ -50,36 +52,44 @@
 														</c:if>
 															<i>
 														<bean:write name="selDocuments" property="fileName" /></i>	<br>
-														
-														<logic:notEqual name="selDocuments" property="description" value=" ">
+														<field:display name="Document Description" feature="Related Documents">
+														<logic:notEmpty name="selDocuments" property="description">
 															<b>Desc:</b><bean:write name="selDocuments" property="description" />
-														</logic:notEqual>
-														<logic:notEqual name="selDocuments" property="date" value=" ">
+														</logic:notEmpty>
+														</field:display>
+														<field:display name="Document Date" feature="Related Documents">
+														<logic:notEmpty name="selDocuments" property="date">
 															<br />
 															<b>Date:</b><bean:write name="selDocuments" property="date" />
-														</logic:notEqual>
+														</logic:notEmpty>
+														</field:display>
+														<field:display name="Document Type" feature="Related Documents">
 														<logic:notEmpty name="selDocuments" property="docType">
 															<bean:define name="selDocuments" property="docType" id="docTypeBean" />
 															<br />
 															<b>Doc type:</b><bean:write name="docTypeBean" property="value" />
 														</logic:notEmpty>
+														</field:display>
 													</td>
 												</tr>
 												</logic:iterate>
 												<tr><td>
 													<table cellSpacing=2 cellPadding=2>
 														<tr>
+															<field:display name="Add Documents Button" feature="Related Documents">
 															<td>
 																<html:button  styleClass="buton" property="submitButton" onclick="addDocuments()">
 																	<digi:trn key="btn:addDocuments">Add Documents</digi:trn>
-																</html:button>
-
+																</html:button>															
 															</td>
+															</field:display>
+															<field:display name="Remove Documents Button" feature="Related Documents">
 															<td>
 																<html:button  styleClass="buton" property="submitButton" onclick="return removeSelDocuments()">
 																	<digi:trn key="btn:removeDocuments">Remove Documents</digi:trn>
 																</html:button>
 															</td>
+															</field:display>
 														</tr>
 													</table>
 												</td></tr>
@@ -87,6 +97,7 @@
 										</logic:notEmpty>
 										
 										<logic:empty name="aimEditActivityForm" property="documentList">
+										<field:display name="Add Documents Button" feature="Related Documents">
 											<table width="100%" bgcolor="#cccccc" cellSpacing=1 cellPadding=5>
 												<tr>
 													<td bgcolor="#ffffff">
@@ -97,4 +108,5 @@
 													</td>
 												</tr>
 											</table>
+										</field:display>
 										</logic:empty>										

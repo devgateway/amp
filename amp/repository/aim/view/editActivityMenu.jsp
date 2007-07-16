@@ -93,6 +93,8 @@ function gotoStep(value) {
 <tr><td>
 <table width="209" cellSpacing=4 cellPadding=2 vAlign="top" align="left" 
 bgcolor="#006699">
+<module:display name="Project ID and Planning">
+	<feature:display name="Identification" module="Project ID and Planning">
 	<tr>
 		<c:if test="${aimEditActivityForm.step != 1}">
 		<td nowrap="nowrap">
@@ -126,6 +128,8 @@ bgcolor="#006699">
 		</td>
 		</c:if>
 	</tr>
+	</feature:display>
+	<feature:display name="Planning" module="Project ID and Planning">
 	<tr>
 		<c:if test="${aimEditActivityForm.step != 1}">
 		<td nowrap="nowrap">
@@ -159,6 +163,8 @@ bgcolor="#006699">
 		</td>
 		</c:if>
 	</tr>
+	</feature:display>
+	<feature:display name="Location" module="Project ID and Planning">
 	<tr>
 		<c:if test="${aimEditActivityForm.step != 2}">
 		<td nowrap="nowrap">
@@ -192,6 +198,8 @@ bgcolor="#006699">
 		</td>
 		</c:if>
 	</tr>
+	</feature:display>
+	<feature:display name="Sectors" module="Project ID and Planning">
 	<tr>
 		<c:if test="${aimEditActivityForm.step != 2}">
 		<td nowrap="nowrap">
@@ -225,6 +233,10 @@ bgcolor="#006699">
 		</td>
 		</c:if>
 	</tr>
+	</feature:display>
+	</module:display>
+	<module:display name="National Planning Dashboard">
+	<feature:display name="NPD Programs" module="National Planning Dashboard">
 	<tr>
 		<c:if test="${aimEditActivityForm.step != 2}">
 		<td nowrap="nowrap">
@@ -258,6 +270,8 @@ bgcolor="#006699">
 		</td>
 		</c:if>
 	</tr>
+	</feature:display>
+	</module:display>
 	<module:display name="Funding">
 	<feature:display name="Funding Organizations"  module="Funding">
 	<tr>
@@ -294,7 +308,6 @@ bgcolor="#006699">
 		</c:if>
 	</tr>
 	</feature:display>
-
 	<feature:display name="Regional Funding" module="Funding">
 	<tr>
 		<c:if test="${aimEditActivityForm.step != 4}">
@@ -331,8 +344,8 @@ bgcolor="#006699">
 	</tr>
 	</feature:display>
 	</module:display>
-	<module:display name="Components and Issues">
-	<feature:display name="Components" module="Components and Issues">
+	<module:display name="Components">
+	<feature:display name="Components" module="Components">
 	<tr>
 		<c:if test="${aimEditActivityForm.step != 5}">
 		<td nowrap="nowrap">
@@ -367,7 +380,9 @@ bgcolor="#006699">
 		</c:if>
 	</tr>
 	</feature:display>
-	<feature:display name="Issues" module="Components and Issues">
+	</module:display>
+	<module:display name="Issues">
+	<feature:display name="Issues" module="Issues">
 	<tr>
 		<c:if test="${aimEditActivityForm.step != 5}">
 		<td nowrap="nowrap">

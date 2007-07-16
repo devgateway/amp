@@ -5,6 +5,9 @@
 <%@ taglib uri="/taglib/struts-html" prefix="html" %>
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
+<%@ taglib uri="/taglib/fieldVisibility" prefix="field" %>
+<%@ taglib uri="/taglib/featureVisibility" prefix="feature" %>
+<%@ taglib uri="/taglib/moduleVisibility" prefix="module" %>
 
 <digi:instance property="aimEditActivityForm" />
 
@@ -23,20 +26,35 @@
 										<table width="100%" cellSpacing=5 cellPadding=0 border=0 class="box-border-nopadding">
 
 										<logic:notEmpty name="aimEditActivityForm" property="selectedComponents">
-																												<tr><td><b>
+																	<tr><td>
+																		<b><field:display name="Grand Total Commitments" feature="Components">
+																		&nbsp;&nbsp;
 																			<digi:trn key="aim:commitments">Commitments</digi:trn> - (
 																			<digi:trn key="aim:totalActualAllocation">Grand Total actual 
 																			allocation</digi:trn> = 
 																			<c:out value="${aimEditActivityForm.totalCommitments}"/> 
 																			<c:out value="${aimEditActivityForm.currCode}"/>)															
-																		<br/>
-																																			
+																		<br/></field:display>
+																		<field:display name="Grand Total Disbursements" feature="Components">
+																				&nbsp;&nbsp;															
 																			<digi:trn key="aim:disbursements">Disbursements</digi:trn> - (
 																			<digi:trn key="aim:totalActualToDate">Total actual to date
 																			</digi:trn> = 
 																			<c:out value="${aimEditActivityForm.totalDisbursements}"/> 
 																			<c:out value="${aimEditActivityForm.currCode}"/>)
-																		<br/>																		
+																		<br/>
+																		</field:display>
+																		<field:display name="Grand Total Expenditures" feature="Components">
+																		&nbsp;&nbsp;
+																			<digi:trn key="aim:expenditures">Expenditures</digi:trn> - (
+																			<digi:trn key="aim:totalActualToDate">Total actual to date
+																			</digi:trn> = 
+																			<c:out value="${aimEditActivityForm.totalExpenditures}"/> 
+																			<c:out value="${aimEditActivityForm.currCode}"/>)
+																		<br/>
+																		</field:display>
+																		&nbsp;&nbsp;
+																		
 																		<font
 																		<c:if test="${aimEditActivityForm.totalCommitments < aimEditActivityForm.compTotalDisb }">
 																		 color="RED"
@@ -79,34 +97,36 @@
 																			<table width="100%" cellSpacing=1 cellPadding=3 border=0 
 																			bgcolor="#eeeeee">
 																				<tr>
-																					<td>Actual/Planned</td>
-																					<td>Total Amount</td>
-																					<td>Currency</td>
-																					<td>Date</td>
-																					<td>Perspective</td>
+																					<field:display name="Actual/Planned Commitments" feature="Components"><td>Actual/Planned</td></field:display>
+																					<field:display name="Total Amount Commitments" feature="Components"><td>Total Amount</td></field:display>
+																					<field:display name="Currency Commitments" feature="Components"><td>Currency</td></field:display>
+																					<field:display name="Date Commitments" feature="Components"><td>Date</td></field:display>
+																					<field:display name="Perspective Commitments" feature="Components"><td>Perspective</td></field:display>
 																				</tr>
 																				<logic:iterate name="selComponents" property="commitments" 
 																				id="commitment" 
 																				type="org.digijava.module.aim.helper.FundingDetail"> 																						           <!-- L2 START-->
 																					<tr bgcolor="#ffffff">
-																						<td>
-																							<c:out value="${commitment.adjustmentTypeName}"/></td>
-																						<td align="right">
+																						<field:display name="Actual/Planned Commitments" feature="Components"><td>
+																							<c:out value="${commitment.adjustmentTypeName}"/></td></field:display>
+																						<field:display name="Total Amount Commitments" feature="Components"><td align="right">
 																							<FONT color=blue>*</FONT>
 																							<c:out value="${commitment.transactionAmount}"/>
-																						</td>
-																						<td>
+																						</td></field:display>
+																						<field:display name="Currency Commitments" feature="Components"><td>
 																							<c:out value="${commitment.currencyCode}"/>
-																						</td>
+																						</td></field:display>
+																						<field:display name="Date Commitments" feature="Components">
 																						<td>
 																							<c:out value="${commitment.transactionDate}"/>
-																						</td>
+																						</td></field:display>
+																						<field:display name="Perspective Commitments" feature="Components">
 																						<td>
 																							<digi:trn key='<%="aim:"+commitment.getPerspectiveNameTrimmed() %>'>
 																									<bean:write name="commitment" property="perspectiveName"/>
 																							</digi:trn>
 																							
-																						</td>
+																						</td></field:display>
 																					</tr>																			
 																				</logic:iterate>	<!-- L2 END-->
 																			</table>	
@@ -117,36 +137,38 @@
 																			<table width="100%" cellSpacing=1 cellPadding=3 border=0 
 																			bgcolor="#eeeeee">
 																				<tr>
-																					<td>Actual/Planned</td>
-																					<td>Total Amount</td>
-																					<td>Currency</td>
-																					<td>Date</td>
-																					<td>Perspective</td>
+																					<field:display name="Actual/Planned Disbursements" feature="Components"><td>Actual/Planned</td></field:display>
+																					<field:display name="Total Amount Disbursements" feature="Components"><td>Total Amount</td></field:display>
+																					<field:display name="Currency Disbursements" feature="Components"><td>Currency</td></field:display>
+																					<field:display name="Date Disbursements" feature="Components"><td>Date</td></field:display>
+																					<field:display name="Perspective Disbursements" feature="Components"><td>Perspective</td></field:display>
 																				</tr>
 																				<logic:iterate name="selComponents" property="disbursements" 
 																				id="disbursement" 
 																				type="org.digijava.module.aim.helper.FundingDetail">
 																				<!-- L3 START-->
 																					<tr bgcolor="#ffffff">
-																						<td>
+																						<field:display name="Actual/Planned Disbursements" feature="Components"><td>
 																							<c:out value="${disbursement.adjustmentTypeName}"/>
-																						</td>
-																						<td align="right">
+																						</td></field:display>
+																						<field:display name="Total Amount Disbursements" feature="Components"><td align="right">
 																							<FONT color=blue>*</FONT>
 																							<c:out value="${disbursement.transactionAmount}"/>
-																						</td>
-																						<td>
+																						</td></field:display>
+																						<field:display name="Currency Disbursements" feature="Components"><td>
 																							<c:out value="${disbursement.currencyCode}"/>
-																						</td>
+																						</td></field:display>
+																						<field:display name="Date Disbursements" feature="Components">
 																						<td>
 																							<c:out value="${disbursement.transactionDate}"/>
-																						</td>
+																						</td></field:display>
+																						<field:display name="Perspective Disbursements" feature="Components">
 																						<td>
 																							<digi:trn key='<%="aim:"+disbursement.getPerspectiveNameTrimmed() %>'>
 																								<bean:write name="disbursement" property="perspectiveName"/>
 																							</digi:trn>
 																							
-																						</td>
+																						</td></field:display>
 																					</tr>																			
 																				</logic:iterate>	
 																				<!-- L3 END-->
@@ -167,35 +189,39 @@
 																			<table width="100%" cellSpacing=1 cellPadding=3 border=0 
 																			bgcolor="#eeeeee">
 																				<tr>
-																					<td>Actual/Planned</td>
-																					<td>Total Amount</td>
-																					<td>Currency</td>
-																					<td>Date</td>
-																					<td>Perspective</td>
+																					<field:display name="Actual/Planned Expenditures" feature="Components"><td>Actual/Planned</td></field:display>
+																					<field:display name="Total Amount Expenditures" feature="Components"><td>Total Amount</td></field:display>
+																					<field:display name="Currency Expenditures" feature="Components"><td>Currency</td></field:display>
+																					<field:display name="Date Expenditures" feature="Components"><td>Date</td></field:display>
+																					<field:display name="Perspective Expenditures" feature="Components"><td>Perspective</td></field:display>
 																				</tr>
 																				<logic:iterate name="selComponents" property="expenditures" 
 																				id="expenditure" 
 																				type="org.digijava.module.aim.helper.FundingDetail">
 																				<!-- L4 START-->
 																				<tr bgcolor="#ffffff">
-																					<td>
+																					<field:display name="Actual/Planned Expenditures" feature="Components"><td>
 																						<c:out value="${expenditure.adjustmentTypeName}"/>
-																					</td>
+																					</td></field:display>
+																					<field:display name="Total Amount Expenditures" feature="Components">
 																					<td align="right">
 																						<FONT color=blue>*</FONT>
 																						<c:out value="${expenditure.transactionAmount}"/>
-																					</td>
+																					</td></field:display>
+																					<field:display name="Currency Expenditures" feature="Components">
 																					<td>
 																						<c:out value="${expenditure.currencyCode}"/>
-																					</td>
+																					</td></field:display>
+																					<field:display name="Date Expenditures" feature="Components">
 																					<td>
 																						<c:out value="${expenditure.transactionDate}"/>
-																					</td>
+																					</td></field:display>
+																					<field:display name="Perspective Expenditures" feature="Components">
 																					<td>
 																							<digi:trn key='<%="aim:"+expenditure.getPerspectiveNameTrimmed() %>'>
 																								<bean:write name="expenditure" property="perspectiveName"/>
 																							</digi:trn>
-																					</td>
+																					</td></field:display>
 																				</tr>
 																			</logic:iterate>	
 																			<!-- L4 END-->

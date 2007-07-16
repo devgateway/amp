@@ -317,30 +317,6 @@ public class AmpReportGenerator extends ReportGenerator {
 			createHierarchies();
 
 		
-		//if all the job is done i presume i can translate the column names
-		/*hopefully*/
-		
-		//requirements for translation purposes
-		TranslatorWorker translator=TranslatorWorker.getInstance();
-		String siteId=this.reportMetadata.getSiteId();
-		String locale=this.reportMetadata.getLocale();
-
-		Iterator columnIterator=this.reportMetadata.getOrderedColumns().iterator();
-		while (columnIterator.hasNext())
-		{
-			Column col=(Column)columnIterator.next();
-			String columnName=col.getName();
-			String prefix="aim:report:";
-			String translatedColumnName=columnName;
-			try{
-				translatedColumnName=TranslatorWorker.translate(prefix+columnName,locale,siteId);
-			}catch (WorkerException e)
-				{System.out.println(e);
-							}
-			col.setName(translatedColumnName);
-			
-		}
-		
 		// perform postprocessing - cell grouping and other tasks
 		report.postProcess();
 		

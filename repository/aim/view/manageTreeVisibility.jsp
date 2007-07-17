@@ -65,7 +65,7 @@
 					</logic:equal>
 					
 							<a href="#" id="module:<bean:write name="moduleAux" property="root.id"/>">
-								<bean:write name="moduleAux" property="root.name"/>
+								<digi:trn key="<%="viz:"+moduleAux.getRoot().getNameTrimmed() %>"><bean:write name="moduleAux" property="root.name"/></digi:trn>
 							</a>
 						<ul>
 						<logic:iterate name="moduleAux" property="items" id="feature" type="java.util.Map.Entry" >
@@ -84,7 +84,7 @@
 								</logic:equal>
 								
 									<a href="#" id="feature:<bean:write name="featureAux" property="root.id"/>">
-										<bean:write name="featureAux" property="root.name"/>
+										<digi:trn key="<%="viz:"+featureAux.getRoot().getNameTrimmed() %>"><bean:write name="featureAux" property="root.name"/></digi:trn>
 									</a>
 								<ul>
 									<logic:iterate name="featureAux" property="items" id="field" type="java.util.Map.Entry" >
@@ -101,7 +101,7 @@
 											/>
 											</logic:equal>
 											<a id="field:<bean:write name="fieldAux" property="root.id"/>">
-												<bean:write name="fieldAux" property="root.name"/>
+												<digi:trn key="<%="viz:"+fieldAux.getRoot().getNameTrimmed() %>"><bean:write name="fieldAux" property="root.name"/></digi:trn>
 											</a>
 										</li>	
 									</logic:iterate>

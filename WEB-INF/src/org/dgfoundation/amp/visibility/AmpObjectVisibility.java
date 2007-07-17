@@ -23,6 +23,11 @@ public abstract class AmpObjectVisibility implements Serializable, Comparable {
 	protected String name;
 	protected Set items;
 	protected Set allItems;
+	protected String nameTrimmed;
+
+	public void setNameTrimmed(String nameTrimmed) {
+		this.nameTrimmed = nameTrimmed;
+	}
 
 	public abstract AmpTemplatesVisibility getTemplate();
 	

@@ -710,7 +710,10 @@ public class FeaturesUtil {
 	 * made for visibility module
 	 */
 	public static Long getGlobalSettingValueLong(String globalSettingName) {
-		return new Long(Long.parseLong(getGlobalSettingValue(globalSettingName)));
+		String globalValue=getGlobalSettingValue(globalSettingName);
+		if(globalValue!=null)
+			return new Long(Long.parseLong(globalValue));
+		return new Long(-1);
 	}
 	
 	/*

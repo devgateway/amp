@@ -125,7 +125,9 @@ public class ModuleVisibilityTag extends BodyTagSupport {
 	
 	public boolean existModuleinDB(AmpTreeVisibility atv)
 	{
-		AmpModulesVisibility moduleByNameFromRoot = atv.getModuleByNameFromRoot(this.getName());
+		AmpModulesVisibility moduleByNameFromRoot=null;
+		if(atv!=null)
+			moduleByNameFromRoot = atv.getModuleByNameFromRoot(this.getName());
 		if(moduleByNameFromRoot==null) return false;
 		return true;
 	}

@@ -60,17 +60,7 @@
                               </digi:link>
                             </td>
                           </tr>
-                          <tr>
-                            <td class=f-names noWrap>
-                              <digi:img src="module/aim/images/arrow-th-BABAB9.gif" width="16"/>
-                              <c:set var="trnFeatureManager">
-                                <digi:trn key="aim:clickToViewFeatureManager">Click here to view Feature Manager</digi:trn>
-                              </c:set>
-                              <digi:link href="/featureManager.do" title="${trnFeatureManager}" >
-                                <digi:trn key="aim:featureManager">Feature Manager</digi:trn>
-                              </digi:link>
-                            </td>
-                          </tr>
+
                           <tr>
                             <td class=f-names noWrap>
                               <digi:img src="module/aim/images/arrow-th-BABAB9.gif" width="16"/>

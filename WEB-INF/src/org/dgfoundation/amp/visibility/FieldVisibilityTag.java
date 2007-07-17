@@ -50,7 +50,7 @@ public class FieldVisibilityTag extends BodyTagSupport {
 
  	   ServletContext ampContext=pageContext.getServletContext();
 	   AmpTreeVisibility ampTreeVisibility=(AmpTreeVisibility) ampContext.getAttribute("ampTreeVisibility");
-
+	   if(ampTreeVisibility!=null)
 		   if(!existFieldinDB(ampTreeVisibility)){
 	    		//insert in db;	   
 	   			   //insert(featureId, fieldname);
@@ -63,6 +63,7 @@ public class FieldVisibilityTag extends BodyTagSupport {
 	   			   ampContext.setAttribute("ampTreeVisibility", ampTreeVisibility);
 	   		   }
 	   		   ampTreeVisibility=(AmpTreeVisibility) ampContext.getAttribute("ampTreeVisibility");
+	   		if(ampTreeVisibility!=null)
 	   		   if(!isFeatureTheParent(ampTreeVisibility)){
 	   			   //update(featureId, fieldname);
 				   System.out.println("error!!!! feature "+this.getFeature()+" is not the parent");
@@ -94,12 +95,14 @@ public class FieldVisibilityTag extends BodyTagSupport {
     	    * 
     	    * if field is active then display the content
     	    */
+    	   if(ampTreeVisibility!=null)
     	   if(! existFeature(ampTreeVisibility)) {
     		   //error
     		  System.out.println("error!!!! feature "+this.getFeature()+" doesn't exist");
     		  return SKIP_BODY;
     	   }
    		   ampTreeVisibility=(AmpTreeVisibility) ampContext.getAttribute("ampTreeVisibility");
+   		   if(ampTreeVisibility!=null)
    		   if(isFieldActive (ampTreeVisibility)){
    			pageContext.getOut().print(bodyText);
    		   }

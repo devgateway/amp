@@ -54,6 +54,7 @@ public class ModuleVisibilityTag extends BodyTagSupport {
 		// TODO Auto-generated method stub
 		ServletContext ampContext=pageContext.getServletContext();
 		AmpTreeVisibility ampTreeVisibility=(AmpTreeVisibility) ampContext.getAttribute("ampTreeVisibility");
+		if(ampTreeVisibility!=null)
 		//String bodyText = bodyContent.getString();
 		if(!existModuleinDB(ampTreeVisibility)){
     		//insert in db;	   
@@ -88,7 +89,7 @@ public class ModuleVisibilityTag extends BodyTagSupport {
     	    * if field is active then display the content
     	    */
    		   
-
+    	   if(ampTreeVisibility!=null)
    		   if(isModuleActive(ampTreeVisibility)){
    			   
    			pageContext.getOut().print(bodyText);

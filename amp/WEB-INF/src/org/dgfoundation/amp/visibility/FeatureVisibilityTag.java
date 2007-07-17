@@ -51,6 +51,7 @@ public class FeatureVisibilityTag extends BodyTagSupport {
 		// TODO Auto-generated method stub
 		ServletContext ampContext=pageContext.getServletContext();
  	   AmpTreeVisibility ampTreeVisibility=(AmpTreeVisibility) ampContext.getAttribute("ampTreeVisibility");
+ 	   if(ampTreeVisibility!=null)
  	   if(!existFeatureinDB(ampTreeVisibility)){
     		//insert in db;	   
    			   //insert(templateid,moduleId, featurename);
@@ -61,6 +62,7 @@ public class FeatureVisibilityTag extends BodyTagSupport {
    			   ampContext.setAttribute("ampTreeVisibility", ampTreeVisibility);
    		   }
 	   ampTreeVisibility=(AmpTreeVisibility) ampContext.getAttribute("ampTreeVisibility");
+	   if(ampTreeVisibility!=null)
    		   if(!isModuleTheParent(ampTreeVisibility)){
    			   //update(featureId, fieldname);
 			   System.out.println("error!!!! module "+this.getModule()+" is not the parent");
@@ -97,6 +99,7 @@ public class FeatureVisibilityTag extends BodyTagSupport {
     	   }
    		   
    		   ampTreeVisibility=(AmpTreeVisibility) ampContext.getAttribute("ampTreeVisibility");
+   		   if(ampTreeVisibility!=null)
    		   if(isFeatureActive(ampTreeVisibility)){
    			pageContext.getOut().print(bodyText);
    		   }

@@ -58,22 +58,26 @@ public class ColumnReportDataPDF extends PDFExporter {
 		ColumnReportData columnReport = (ColumnReportData) item;
 
 		Font titleFont = new Font(Font.COURIER, Font.DEFAULTSIZE, Font.BOLD);
-		//title
+		
+		
+		ReportData parent=(ReportData)columnReport.getParent();
+		
+		while (parent.getReportMetadata()==null)
+		{
+			parent=parent.getParent();
+		}
+		//when we get to the top of the hierarchy we have access to AmpReports
+		
+		//requirements for translation purposes
+		TranslatorWorker translator=TranslatorWorker.getInstance();
+		String siteId=parent.getReportMetadata().getSiteId();
+		String locale=parent.getReportMetadata().getLocale();
+		
+//		title
 		if (columnReport.getParent() != null) {
 			
 			//introducing the translaton issues
-			ReportData parent=(ReportData)columnReport.getParent();
 			
-			while (parent.getReportMetadata()==null)
-			{
-				parent=parent.getParent();
-			}
-			//when we get to the top of the hierarchy we have access to AmpReports
-			
-			//requirements for translation purposes
-			TranslatorWorker translator=TranslatorWorker.getInstance();
-			String siteId=parent.getReportMetadata().getSiteId();
-			String locale=parent.getReportMetadata().getLocale();
 			String prefix="rep:pop:";
 			String translatedName=null;
 			try{
@@ -92,7 +96,6 @@ public class ColumnReportDataPDF extends PDFExporter {
 		
 		
 		// headings
-
 		Font font = new Font(Font.HELVETICA, Font.DEFAULTSIZE, Font.BOLD);
 
 		if(columnReport.getGlobalHeadingsDisplayed().booleanValue()==false)  {
@@ -111,8 +114,23 @@ public class ColumnReportDataPDF extends PDFExporter {
 				while (ii.hasNext()) {
 					Column element2 = (Column) ii.next();
 					element2.setMaxNameDisplayLength(16);
-					PdfPCell pdfc = new PdfPCell(new Paragraph(element2
-							.getName(metadata.getHideActivities()),font));
+					
+					String cellValue=element2.getName(metadata.getHideActivities());
+					//this value should be translated
+					String translatedCellValue=new String();
+					String prefix="aim:pop:";
+					
+					try{
+						translatedCellValue=TranslatorWorker.translate(prefix+cellValue,locale,siteId);
+					}catch (WorkerException e)
+						{System.out.println(e);}
+					PdfPCell pdfc=null;
+				 
+					if(translatedCellValue.compareTo("")==0)
+						pdfc = new PdfPCell(new Paragraph(cellValue,font));
+					else 
+						pdfc = new PdfPCell(new Paragraph(translatedCellValue,font));
+					
 					pdfc.setVerticalAlignment(Element.ALIGN_CENTER);
 					pdfc.setColspan(element2.getWidth());
 					table.addCell(pdfc);

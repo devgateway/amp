@@ -18,6 +18,7 @@ import org.digijava.module.aim.util.LoggerIdentifiable;
 public class AmpReports implements Comparable, LoggerIdentifiable {
 
 	private Long ampReportId;
+	private Long id; //for logging
 
 	private AmpARFilter defaultFilter;
 	
@@ -273,5 +274,18 @@ public class AmpReports implements Comparable, LoggerIdentifiable {
 	public Object getIdentifier() {
 		// TODO Auto-generated method stub
 		return this.getAmpReportId().toString();
+	}
+
+	public Long getId() {
+		return this.getAmpReportId();
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+	public String getObjectName() {
+		// TODO Auto-generated method stub
+		return this.getName();
 	}
 }

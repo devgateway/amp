@@ -6,11 +6,8 @@
 package org.digijava.module.aim.util;
 
 import java.sql.Timestamp;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Date;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -22,7 +19,8 @@ import net.sf.hibernate.Transaction;
 import org.apache.log4j.Logger;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.dbentity.AmpAuditLogger;
-import org.digijava.module.aim.dbentity.AmpIndicatorRiskRatings;
+import org.digijava.module.aim.dbentity.AmpReports;
+import org.digijava.module.aim.dbentity.*;
 import org.digijava.module.aim.helper.TeamMember;
 
 /**
@@ -40,7 +38,7 @@ public class AuditLoggerUtil {
 			Session session = null;
 			Transaction tx = null;
 			TeamMember tm = (TeamMember) hsession.getAttribute("currentMember");
-			
+			//String objectName="";
 
 			String browser=request.getHeader("user-agent");
 			try {
@@ -58,6 +56,7 @@ public class AuditLoggerUtil {
 				aal.setObjectId((String) o.getIdentifier());
 				aal.setObjectType((String) o.getObjectType());
 				aal.setTeamName(tm.getTeamName());
+				aal.setObjectName(o.getObjectName());
 				session.save(aal);
 				tx.commit();
 			} catch (Exception ex) {
@@ -104,4 +103,40 @@ public class AuditLoggerUtil {
 	}
 
 
+	/**
+	 * @author dan
+	 */
+	public static Object loadObject(String idObj, String className) {
+		Session session = null;
+		Collection col = new ArrayList();
+		String qryStr = null;
+		Query qry = null;
+		Long id=new Long(Long.parseLong(idObj));
+		Object o=null;
+		try {
+			session = PersistenceManager.getSession();
+			qryStr = "select f from " + className + " f where f.id="+id;
+			if(className.contains("AmpReports")) {
+				qryStr = "select f from " + className + " f where f.ampReportId="+id;
+				System.out.println("aaaaaaaaaaa"+qryStr);
+				
+			}
+			qry = session.createQuery(qryStr);
+			col = qry.list();
+			o=col.iterator().next();
+		} catch (Exception ex) {
+			logger.error("Exception : " + ex.getMessage());
+		} finally {
+			if (session != null) {
+				try {
+					PersistenceManager.releaseSession(session);
+				} catch (Exception rsf) {
+					logger.error("Release session failed :" + rsf.getMessage());
+				}
+			}
+		}
+		return o;
+	}
+
+	
 } 

@@ -9,6 +9,8 @@ package org.digijava.module.aim.dbentity;
 import java.io.Serializable;
 import java.sql.Timestamp;
 
+import org.digijava.module.aim.util.AuditLoggerUtil;
+
 public class AmpAuditLogger implements Serializable {
 	/**
 	 * 
@@ -29,8 +31,27 @@ public class AmpAuditLogger implements Serializable {
 	private String action;
 	private String objectId;
 	private String objectType;
+	private String objectName;
 	
 	
+	public String getObjectName() {
+		/*Object o=AuditLoggerUtil.loadObject(this.objectId,this.objectType);
+		if(o instanceof AmpActivity) {
+			AmpActivity a=(AmpActivity)o;
+			return a.getAmpId()+" "+a.getName();
+		}
+		if(o instanceof AmpReports) {
+			AmpReports a=(AmpReports)o;
+			return a.getName();
+		}
+
+		return "";*/
+		return this.objectName;
+
+	}
+	public void setObjectName(String objectName) {
+		this.objectName = objectName;
+	}
 	public String getAction() {
 		return action;
 	}

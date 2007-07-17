@@ -9,4 +9,5 @@ package org.digijava.module.aim.util;
  */
 public interface LoggerIdentifiable extends Identifiable{
 	public Object getObjectType();
+	public String getObjectName();
 }

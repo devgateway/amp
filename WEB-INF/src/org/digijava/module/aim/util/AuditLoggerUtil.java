@@ -8,17 +8,21 @@ package org.digijava.module.aim.util;
 import java.sql.Timestamp;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Date;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import net.sf.hibernate.Query;
 import net.sf.hibernate.Session;
 import net.sf.hibernate.Transaction;
 
 import org.apache.log4j.Logger;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.dbentity.AmpAuditLogger;
+import org.digijava.module.aim.dbentity.AmpIndicatorRiskRatings;
 import org.digijava.module.aim.helper.TeamMember;
 
 /**
@@ -71,6 +75,33 @@ public class AuditLoggerUtil {
 			return ;
 		}
 
+	/**
+	 * @author dan
+	 */
+	public static Collection getLogObjects() {
+		Session session = null;
+		Collection col = new ArrayList();
+		String qryStr = null;
+		Query qry = null;
 		
+		try {
+			session = PersistenceManager.getSession();
+			qryStr = "select f from " + AmpAuditLogger.class.getName() + " f";
+			qry = session.createQuery(qryStr);
+			col = qry.list();
+		} catch (Exception ex) {
+			logger.error("Exception : " + ex.getMessage());
+		} finally {
+			if (session != null) {
+				try {
+					PersistenceManager.releaseSession(session);
+				} catch (Exception rsf) {
+					logger.error("Release session failed :" + rsf.getMessage());
+				}
+			}
+		}
+		return col;
+	}
+
 
 } 

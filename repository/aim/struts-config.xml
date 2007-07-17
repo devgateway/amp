@@ -12,6 +12,7 @@
     </form-bean>
     <form-bean name="aimEUActivityForm" type="org.digijava.module.aim.form.EUActivityForm" />
     <form-bean name="aimVisibilityManagerForm" type="org.digijava.module.aim.form.VisibilityManagerForm" />
+    <form-bean name="aimAuditLoggerManagerForm" type="org.digijava.module.aim.form.AuditLoggerManagerForm" />
     <form-bean name="aimDesktopForm" type="org.digijava.module.aim.form.DesktopForm" />
     <form-bean name="aimViewQuickLinksForm" type="org.digijava.module.aim.form.ViewQuickLinksForm" />
     <form-bean name="aimQuickLinkForm" type="org.digijava.module.aim.form.QuickLinkForm" />
@@ -878,6 +879,11 @@
       <forward name="forward" path="/showLayout.do?layout=visibilityManager" />
       <forward name="index" path="/aim/index.do" redirect="true" />
     </action>
+    <action name="aimAuditLoggerManagerForm" path="/aim/auditLoggerManager" scope="request" type="org.digijava.module.aim.action.AuditLoggerManager" validate="false">
+      <forward name="forward" path="/showLayout.do?layout=auditLoggerManager" />
+      <forward name="index" path="/aim/index.do" redirect="true" />
+    </action>
+    
     <action name="aimIndicatorForm" path="/aim/indicatorManager" scope="session" type="org.digijava.module.aim.action.IndicatorManager" validate="false">
       <forward name="forward" path="/showLayout.do?layout=indicatorManager" />
       <forward name="index" path="/aim/index.do" redirect="true" />

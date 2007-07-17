@@ -67,6 +67,7 @@
 								<th><digi:trn key="aim:browser">Browser</digi:trn></th>
 								<th><digi:trn key="aim:IP">IP</digi:trn></th>
 								<th><digi:trn key="aim:action">Action</digi:trn></th>								
+								<th><digi:trn key="aim:name">Name</digi:trn></th>								
 								<th><digi:trn key="aim:objectID">Object Id</digi:trn></th>
 								<th><digi:trn key="aim:objectType">Object Type</digi:trn></th>
 							</tr>
@@ -79,6 +80,7 @@
 									<td align="center"><bean:write name="log" property="browser"/></td>
 									<td align="center"><bean:write name="log" property="ip"/></td>
 									<td align="center"><bean:write name="log" property="action"/></td>
+									<td align="center"><bean:write name="log" property="objectName"/></td>
 									<td align="center"><bean:write name="log" property="objectId"/></td>
 									<td align="center"><bean:write name="log" property="objectType"/></td>
 								</tr>

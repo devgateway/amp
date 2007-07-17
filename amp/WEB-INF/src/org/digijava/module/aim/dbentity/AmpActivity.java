@@ -1021,4 +1021,9 @@ public class AmpActivity
 		// TODO Auto-generated method stub
 		return this.getAmpActivityId().toString();
 	}
+
+	public String getObjectName() {
+		// TODO Auto-generated method stub
+		return this.getAmpId()+" "+this.getName();
+	}
 }

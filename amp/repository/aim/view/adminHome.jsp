@@ -284,6 +284,20 @@
                               </digi:link>
                             </td>
                           </tr>
+                          
+                          <tr>
+                            <td class=f-names noWrap>
+                              <digi:img src="module/aim/images/arrow-th-BABAB9.gif" width="16"/>
+                              <c:set var="translation">
+                                <digi:trn key="aim:clickToViewAuditLoggerManager">Click here to view Audit Logger Manager</digi:trn>
+                              </c:set>
+                              <digi:link href="/auditLoggerManager.do" title="${translation}" >
+                                <digi:trn key="aim:AuditLoggerManager">
+                                	Audit Logger Manager
+                                </digi:trn>
+                              </digi:link>
+                            </td>
+                          </tr>
                         </table>
                       </td>
                     </tr>

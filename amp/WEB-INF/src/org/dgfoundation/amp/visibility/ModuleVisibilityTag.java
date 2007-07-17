@@ -59,7 +59,6 @@ public class ModuleVisibilityTag extends BodyTagSupport {
 	public int doEndTag() throws JspException 
     {
        String bodyText = bodyContent.getString();
-       System.out.println("sunt in modul in endddddddddddddddd");
        try {
     	   ServletContext ampContext=pageContext.getServletContext();
     	   HttpSession session=pageContext.getSession();
@@ -82,7 +81,6 @@ public class ModuleVisibilityTag extends BodyTagSupport {
    			   FeaturesUtil.insertModuleVisibility(ampTreeVisibility.getRoot().getId(),this.getName());
    			   
    			   AmpTemplatesVisibility currentTemplate=(AmpTemplatesVisibility)FeaturesUtil.getTemplateById(ampTreeVisibility.getRoot().getId());
-   			   System.out.println("-------------------------------inserting new module in database");
    			   ampTreeVisibility.buildAmpTreeVisibility(currentTemplate);
    			   ampContext.setAttribute("ampTreeVisibility", ampTreeVisibility);
    			   pageContext.getOut().print(bodyText);

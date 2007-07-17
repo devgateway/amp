@@ -172,7 +172,6 @@ function popupwin()
 <input type="hidden" name="edit" value="true">
 
 <input type="hidden" name="selectedDate" value="">
-
 <html:hidden property="reset" />
 <table width="100%" cellPadding="0" cellSpacing="0" vAlign="top" align="left" border=0>
 <tr><td width="100%" vAlign="top" align="left">

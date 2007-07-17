@@ -5,6 +5,7 @@
  */
 package org.dgfoundation.amp.visibility;
 
+import java.io.IOException;
 import java.util.Collection;
 import java.util.Iterator;
 
@@ -52,8 +53,20 @@ public class ModuleVisibilityTag extends BodyTagSupport {
 	public int doStartTag() throws JspException {
 		// TODO Auto-generated method stub
 		ServletContext ampContext=pageContext.getServletContext();
-		HttpSession session = pageContext.getSession();
-		session.setAttribute("currentModuleTag",this.getName());
+		AmpTreeVisibility ampTreeVisibility=(AmpTreeVisibility) ampContext.getAttribute("ampTreeVisibility");
+		//String bodyText = bodyContent.getString();
+		if(!existModuleinDB(ampTreeVisibility)){
+    		//insert in db;	   
+   			   //insert(templateid, modulename);
+   			   
+   			   FeaturesUtil.insertModuleVisibility(ampTreeVisibility.getRoot().getId(),this.getName());
+   			   
+   			   AmpTemplatesVisibility currentTemplate=(AmpTemplatesVisibility)FeaturesUtil.getTemplateById(ampTreeVisibility.getRoot().getId());
+   			   ampTreeVisibility.buildAmpTreeVisibility(currentTemplate);
+   			   ampContext.setAttribute("ampTreeVisibility", ampTreeVisibility);
+   			   
+   		   }
+		
 		return EVAL_BODY_BUFFERED;//super.doStartTag();
 	}
 	public int doEndTag() throws JspException 
@@ -74,19 +87,7 @@ public class ModuleVisibilityTag extends BodyTagSupport {
     	    * 
     	    * if field is active then display the content
     	    */
-   		   if(!existModuleinDB(ampTreeVisibility)){
-    		//insert in db;	   
-   			   //insert(templateid, modulename);
-   			   
-   			   FeaturesUtil.insertModuleVisibility(ampTreeVisibility.getRoot().getId(),this.getName());
-   			   
-   			   AmpTemplatesVisibility currentTemplate=(AmpTemplatesVisibility)FeaturesUtil.getTemplateById(ampTreeVisibility.getRoot().getId());
-   			   ampTreeVisibility.buildAmpTreeVisibility(currentTemplate);
-   			   ampContext.setAttribute("ampTreeVisibility", ampTreeVisibility);
-   			   pageContext.getOut().print(bodyText);
-   			   session.setAttribute("currentModuleTag",null);
-   			   return EVAL_PAGE;
-   		   }
+   		   
 
    		   if(isModuleActive(ampTreeVisibility)){
    			   

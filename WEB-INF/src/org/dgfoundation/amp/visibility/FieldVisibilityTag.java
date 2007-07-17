@@ -46,6 +46,35 @@ public class FieldVisibilityTag extends BodyTagSupport {
 		super();
 		// TODO Auto-generated constructor stub
 	}
+		public int doStartTag() throws JspException {
+
+ 	   ServletContext ampContext=pageContext.getServletContext();
+	   AmpTreeVisibility ampTreeVisibility=(AmpTreeVisibility) ampContext.getAttribute("ampTreeVisibility");
+
+		   if(!existFieldinDB(ampTreeVisibility)){
+	    		//insert in db;	   
+	   			   //insert(featureId, fieldname);
+	   			   //TODO default has to be visibile!!!!
+	   			   FeaturesUtil.insertFieldWithFeatureVisibility(ampTreeVisibility.getRoot().getId(),ampTreeVisibility.getFeatureByNameFromRoot(this.getFeature()).getId(),this.getName());;
+	   			   
+	   			   AmpTemplatesVisibility currentTemplate=(AmpTemplatesVisibility)FeaturesUtil.getTemplateById(ampTreeVisibility.getRoot().getId());
+	   			   System.out.println("-------------------------------"+currentTemplate.getId());
+	   			   ampTreeVisibility.buildAmpTreeVisibility(currentTemplate);
+	   			   ampContext.setAttribute("ampTreeVisibility", ampTreeVisibility);
+	   		   }
+	   		   ampTreeVisibility=(AmpTreeVisibility) ampContext.getAttribute("ampTreeVisibility");
+	   		   if(!isFeatureTheParent(ampTreeVisibility)){
+	   			   //update(featureId, fieldname);
+				   System.out.println("error!!!! feature "+this.getFeature()+" is not the parent");
+				   FeaturesUtil.updateFieldWithFeatureVisibility(ampTreeVisibility.getFeatureByNameFromRoot(this.getFeature()).getId(),this.getName());
+	   			   AmpTemplatesVisibility currentTemplate=(AmpTemplatesVisibility)FeaturesUtil.getTemplateById(ampTreeVisibility.getRoot().getId());
+	   			   System.out.println("-------------------------------"+currentTemplate.getId());
+	   			   ampTreeVisibility.buildAmpTreeVisibility(currentTemplate);
+	   			   ampContext.setAttribute("ampTreeVisibility", ampTreeVisibility);
+
+			   }
+	   		return EVAL_BODY_BUFFERED;//super.doStartTag();
+	}
 	
 	public int doEndTag() throws JspException 
     {
@@ -70,28 +99,6 @@ public class FieldVisibilityTag extends BodyTagSupport {
     		  System.out.println("error!!!! feature "+this.getFeature()+" doesn't exist");
     		  return SKIP_BODY;
     	   }
-   		   if(!existFieldinDB(ampTreeVisibility)){
-    		//insert in db;	   
-   			   //insert(featureId, fieldname);
-   			   //TODO default has to be visibile!!!!
-   			   FeaturesUtil.insertFieldWithFeatureVisibility(ampTreeVisibility.getRoot().getId(),ampTreeVisibility.getFeatureByNameFromRoot(this.getFeature()).getId(),this.getName());;
-   			   
-   			   AmpTemplatesVisibility currentTemplate=(AmpTemplatesVisibility)FeaturesUtil.getTemplateById(ampTreeVisibility.getRoot().getId());
-   			   System.out.println("-------------------------------"+currentTemplate.getId());
-   			   ampTreeVisibility.buildAmpTreeVisibility(currentTemplate);
-   			   ampContext.setAttribute("ampTreeVisibility", ampTreeVisibility);
-   		   }
-   		   ampTreeVisibility=(AmpTreeVisibility) ampContext.getAttribute("ampTreeVisibility");
-   		   if(!isFeatureTheParent(ampTreeVisibility)){
-   			   //update(featureId, fieldname);
-			   System.out.println("error!!!! feature "+this.getFeature()+" is not the parent");
-			   FeaturesUtil.updateFieldWithFeatureVisibility(ampTreeVisibility.getFeatureByNameFromRoot(this.getFeature()).getId(),this.getName());
-   			   AmpTemplatesVisibility currentTemplate=(AmpTemplatesVisibility)FeaturesUtil.getTemplateById(ampTreeVisibility.getRoot().getId());
-   			   System.out.println("-------------------------------"+currentTemplate.getId());
-   			   ampTreeVisibility.buildAmpTreeVisibility(currentTemplate);
-   			   ampContext.setAttribute("ampTreeVisibility", ampTreeVisibility);
-
-		   }
    		   ampTreeVisibility=(AmpTreeVisibility) ampContext.getAttribute("ampTreeVisibility");
    		   if(isFieldActive (ampTreeVisibility)){
    			pageContext.getOut().print(bodyText);

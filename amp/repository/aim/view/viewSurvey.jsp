@@ -68,10 +68,10 @@
 							</TR>
 							<TR bgColor=#f4f4f2>
 								<TD vAlign="top" align="center" width="750">
-									<TABLE width="98%" cellPadding=0 cellSpacing=0 vAlign="top" align="center" bgColor=#f4f4f2 border="1">
+									<TABLE width="98%" cellPadding=0 cellSpacing=0 vAlign="top" align="center" bgColor=#f4f4f2 border="0">
 										<TR>
 											<TD width="750" bgcolor="#F4F4F2" height="17">
-												<TABLE border="1" cellpadding="0" cellspacing="0" bgcolor="#F4F4F2" height="17">
+												<TABLE border="0" cellpadding="0" cellspacing="0" bgcolor="#F4F4F2" height="17">
                         							<TR bgcolor="#F4F4F2" height="17"> 
                           	  							<TD bgcolor="#C9C9C7" class="box-title">&nbsp;&nbsp;
 															<digi:trn key="aim:aidEffectIndicators">Aid Effectiveness Indicators</digi:trn>
@@ -86,7 +86,7 @@
 										<TR>
 											<TD width="750" bgcolor="#F4F4F2" align="center" class="box-border-nopadding">
 												<logic:notEmpty name="aimEditSurveyForm" property="indicators">
-													<table width="100%" cellPadding=3 border="1">
+													<table width="100%" cellPadding=3 border="0">
 													<bean:define id="start" name="aimEditSurveyForm" property="offset" />
 														<nested:iterate name="aimEditSurveyForm" property="indicators" offset="start" length="5">
 															<tr>

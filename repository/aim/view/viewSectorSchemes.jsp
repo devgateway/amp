@@ -29,10 +29,10 @@
 				<tr>
 					<!-- Start Navigation -->
 					<td height=33><span class=crumb>
-						<bean:define id="translation">
-							<digi:trn key="aim:clickToViewAdmin">Click here to goto Admin Home</digi:trn>
-						</bean:define>
-						<digi:link href="/admin.do" styleClass="comment" title="<%=translation%>" >
+					<c:set var="clickToViewAdmin">
+					<digi:trn key="aim:clickToViewAdmin">Click here to goto Admin Home</digi:trn>
+					</c:set>
+						<digi:link href="/admin.do" styleClass="comment" title="${clickToViewAdmin}" >
 						<digi:trn key="aim:AmpAdminHome">
 						Admin Home
 						</digi:trn>
@@ -88,10 +88,10 @@
 															</c:set>
 															<c:set target="${urlParams2}" property="event" value="edit" />
 															<c:set target="${urlParams2}" property="dest" value="admin" />
-															<bean:define id="translation">
-																<digi:trn key="aim:clickToViewSchemes">Click here to view Schemes</digi:trn>
-															</bean:define>
-															<digi:link href="/updateSectorSchemes.do" name="urlParams2" title="<%=translation%>" >
+															<c:set var="clickToViewSchemes">
+															<digi:trn key="aim:clickToViewSchemes">Click here to view Schemes</digi:trn>
+															</c:set>
+															<digi:link href="/updateSectorSchemes.do" name="urlParams2" title="${clickToViewSchemes}" >
 															<bean:write name="sectorScheme" property="secSchemeName"/></digi:link>
 														</td>
 

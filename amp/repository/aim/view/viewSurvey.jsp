@@ -11,7 +11,8 @@
 <script language="Javascript">
 <!--
 	function getSurvey() {
-		if (document.aimEditSurveyForm.surveyId.value != "-1")Status {
+		if (document.aimEditSurveyForm.surveyId.value != "-1")
+		{
 			document.aimEditSurveyForm.submit();
 		}
 		else
@@ -40,13 +41,13 @@
 										<TR>
 											<TD align="left">
 												<SPAN class=crumb>
-													<bean:define id="translation">
+													<c:set var="clickToViewAESurveys">
 														<digi:trn key="aim:clickToViewAESurveys">Click here to view Aid Effectiveness Surveys</digi:trn>
-													</bean:define>
+													</c:set>
 													<jsp:useBean id="urlParams" type="java.util.Map" class="java.util.HashMap" />
 													<c:set target="${urlParams}" property="ampActivityId" value="${aimEditSurveyForm.ampActivityId}" />
 													<c:set target="${urlParams}" property="tabIndex" value="${aimEditSurveyForm.tabIndex}" />
-													<digi:link href="/viewSurveyList.do" name="urlParams" styleClass="comment" title="<%=translation%>" >
+													<digi:link href="/viewSurveyList.do" name="urlParams" styleClass="comment" title="${clickToViewAESurveys}" >
 													<digi:trn key="aim:viewAESurveys">Aid Effectiveness Surveys</digi:trn>
 													</digi:link>&nbsp;&gt;&nbsp;
 													<c:out value="${aimEditSurveyForm.fundingOrg}" />
@@ -67,10 +68,10 @@
 							</TR>
 							<TR bgColor=#f4f4f2>
 								<TD vAlign="top" align="center" width="750">
-									<TABLE width="98%" cellPadding=0 cellSpacing=0 vAlign="top" align="center" bgColor=#f4f4f2>
+									<TABLE width="98%" cellPadding=0 cellSpacing=0 vAlign="top" align="center" bgColor=#f4f4f2 border="1">
 										<TR>
 											<TD width="750" bgcolor="#F4F4F2" height="17">
-												<TABLE border="0" cellpadding="0" cellspacing="0" bgcolor="#F4F4F2" height="17">
+												<TABLE border="1" cellpadding="0" cellspacing="0" bgcolor="#F4F4F2" height="17">
                         							<TR bgcolor="#F4F4F2" height="17"> 
                           	  							<TD bgcolor="#C9C9C7" class="box-title">&nbsp;&nbsp;
 															<digi:trn key="aim:aidEffectIndicators">Aid Effectiveness Indicators</digi:trn>
@@ -85,17 +86,17 @@
 										<TR>
 											<TD width="750" bgcolor="#F4F4F2" align="center" class="box-border-nopadding">
 												<logic:notEmpty name="aimEditSurveyForm" property="indicators">
-													<table width="100%" cellPadding=3>
+													<table width="100%" cellPadding=3 border="1">
 													<bean:define id="start" name="aimEditSurveyForm" property="offset" />
-														<nested:iterate name="aimEditSurveyForm" property="indicators" 
-																	    offset="start" length="5">
+														<nested:iterate name="aimEditSurveyForm" property="indicators" offset="start" length="5">
 															<tr>
 																<td bgcolor=#ECF3FD width="5%">
 																	<b><nested:write property="indicatorCode" /></b>
 																</td>
 																<td bgcolor=#ECF3FD width="95%"><b>
-																	<bean:define id = "piIndcCode" toScope="page" >aim:parisIndc<nested:write property="indicatorCode" /></bean:define>
-																	<digi:trn key="<%=piIndcCode%>"><nested:write property="name" /></digi:trn>
+																
+																	<bean:define id ="piIndcCode" scope="page" >aim:parisIndc<nested:write property="indicatorCode" /></bean:define>
+																	<digi:trn key="${piIndcCode}"><nested:write property="name"/></digi:trn>
 																</td>
 															</tr>
 															<nested:iterate property="question">
@@ -125,10 +126,12 @@
 																			</c:when>
 																			<c:otherwise>
 																				<TD width="80%">
-																					<bean:define id = "piKey" scope="page">
-																						aim:parisIndc<%=piIndcCode%>Ques<nested:write property="questionId" />
-																					</bean:define>
-																					<digi:trn key="<%=piKey%>">
+																				
+																				
+																					<c:set var="piKey" scope="page">
+																						aim:parisIndc${piIndcCode}Ques<nested:write property="questionId" />
+																					</c:set>
+																					<digi:trn key="${piKey}">
 																						<nested:write property="questionText" />
 																					</digi:trn>
 																					<br>
@@ -180,12 +183,12 @@
 																	<font color="#FF0000"><%=pages%></font>
 																</c:if>
 																<c:if test="${aimEditSurveyForm.currentPage != pages}">
-																	<bean:define id="translation">
-																		<digi:trn key="aim:clickToViewNextPage">Click here to go to Next Page</digi:trn>
-																	</bean:define>
-																	<digi:link href="/viewSurvey.do" name="urlParams" title="<%=translation%>" >
-																		<%=pages%>
-																	</digi:link>					
+																	<c:set var="clickToViewNextPage">
+																	<digi:trn key="aim:clickToViewNextPage">Click here to go to Next Page</digi:trn>
+																	</c:set>
+																	<digi:link href="/viewSurvey.do" name="urlParams" title="${clickToViewNextPage}" >
+																	<%=pages%>
+																</digi:link>					
 																</c:if>
 																|&nbsp; 
 															</logic:iterate>

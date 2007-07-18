@@ -93,6 +93,12 @@
 																	<table width="100%" cellSpacing=1 cellPadding=3 border=0 
 																	bgcolor="#d7eafd">
 																		<logic:notEmpty name="selComponents" property="commitments">
+																		<tr><td>
+																		<b><field:display name="Grand Total Commitments" feature="Components">
+																		&nbsp;&nbsp;
+																			<digi:trn key="aim:commitments">Commitments</digi:trn>
+																		</field:display>
+																		</b></td></tr>
 																		<tr><td bgcolor=#ffffff>
 																			<table width="100%" cellSpacing=1 cellPadding=3 border=0 
 																			bgcolor="#eeeeee">
@@ -133,6 +139,14 @@
 																		</td></tr>
 																	</logic:notEmpty>
 																	<logic:notEmpty name="selComponents" property="disbursements">
+																	<tr>
+																	<td>
+																	<field:display name="Grand Total Disbursements" feature="Components">
+																				&nbsp;&nbsp;															
+																		<b>	<digi:trn key="aim:disbursements">Disbursements</digi:trn> </b>
+																		
+																	</field:display>
+																	</td></tr>
 																		<tr><td bgcolor=#ffffff>
 																			<table width="100%" cellSpacing=1 cellPadding=3 border=0 
 																			bgcolor="#eeeeee">
@@ -178,11 +192,7 @@
 																	</logic:notEmpty>
 																	<logic:notEmpty name="selComponents" property="expenditures">
 																		<tr><td><b>
-																			<digi:trn key="aim:expenditures">Expenditures</digi:trn> - (
-																			<digi:trn key="aim:totalActualToDate">Total actual to date
-																			</digi:trn> = 
-																			<c:out value="${aimEditActivityForm.totalExpenditures}"/> 
-																			<c:out value="${aimEditActivityForm.currCode}"/>)
+																			<digi:trn key="aim:expenditures">Expenditures</digi:trn>
 																	</b>
 																		</td></tr>
 																		<tr><td bgcolor=#ffffff>

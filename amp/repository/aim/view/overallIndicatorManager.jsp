@@ -83,10 +83,10 @@
 				<table cellPadding=5 cellSpacing=0 width="100%" border=0>
 					<tr><%-- Start Navigation --%>
 						<td height=33><span class=crumb>
-							<bean:define id="translation">
-									<digi:trn key="aim:clickToViewAdmin">Click here to goto Admin Home</digi:trn>
-								</bean:define>
-								 <digi:link href="/admin.do" styleClass="comment"	title="<%=translation%>">
+						<c:set var="clickToViewAdmin">
+						<digi:trn key="aim:clickToViewAdmin">Click here to goto Admin Home</digi:trn>
+						</c:set>
+								 <digi:link href="/admin.do" styleClass="comment"	title="${clickToViewAdmin}">
 									<digi:trn key="aim:AmpAdminHome">
 										Admin Home
 									</digi:trn>
@@ -266,15 +266,15 @@
 																													onclick="assignIndicatorTo('<bean:write name="ampPrgIndicator" property="indicatorId"/>')" />
 																								</td>
 																								<td align="left" width="12">
-																									<bean:define id="translation">
-																									<digi:trn key="aim:clickToDeleteIndicator">
+																								<c:set var="clickToDeleteIndicator">
+																								<digi:trn key="aim:clickToDeleteIndicator">
 																											Click here to Delete Indicator
 																									</digi:trn>
-																									</bean:define>
+																								</c:set>
 																									<c:set target="${urlParams11}"
 																										property="indicator" value="deletePrg" />
 																											<digi:link href="/editAllIndicator.do"
-																													name="urlParams11" title="<%=translation%>"
+																													name="urlParams11" title="${clickToDeleteIndicator}"
 																																onclick="return deletePrgIndicator()">
 																													<img src="../ampTemplate/images/trash_12.gif" border=0>
 																											</digi:link>
@@ -353,15 +353,15 @@
 																																onclick="assignIndicatorTo('<bean:write name="indi" property="indicatorId"/>')" />
 																												</td>
 																												<td align="left" width="12">
-																														<bean:define id="translation">
-																														<digi:trn key="aim:clickToDeleteIndicator">
+																												<c:set var="clickToDeleteIndicator">
+																												<digi:trn key="aim:clickToDeleteIndicator">
 																															Click here to Delete Indicator
 																														</digi:trn>
-																														</bean:define>
+																												</c:set>
 																														<c:set target="${urlParams1}"
 																															property="indicator" value="deletePrg" />
 																															<digi:link href="/editAllIndicator.do"
-																																name="urlParams1" title="<%=translation%>"
+																																name="urlParams1" title="${clickToDeleteIndicator}"
 																																	onclick="return deletePrgIndicator()">
 																															<img src="../ampTemplate/images/trash_12.gif" border=0>
 																															</digi:link>
@@ -436,15 +436,15 @@
 																																onclick="assignIndicatorTo('<bean:write name="indi" property="indicatorId"/>')" />
 																												</td>
 																												<td align="left" width="12">
-																														<bean:define id="translation">
-																														<digi:trn key="aim:clickToDeleteIndicator">
+																												<c:set var="clickToDeleteIndicator">
+																															<digi:trn key="aim:clickToDeleteIndicator">
 																															Click here to Delete Indicator
-																														</digi:trn>
-																														</bean:define>
-																														<c:set target="${urlParams2}"
+																															</digi:trn>
+																												</c:set>
+																												<c:set target="${urlParams2}"
 																															property="indicator" value="deletePrg" />
 																															<digi:link href="/editAllIndicator.do"
-																																name="urlParams2" title="<%=translation%>"
+																																name="urlParams2" title="${clickToDeleteIndicator}"
 																																	onclick="return deletePrgIndicator()">
 																															<img src="../ampTemplate/images/trash_12.gif" border=0>
 																															</digi:link>
@@ -519,15 +519,15 @@
 																																onclick="assignIndicatorTo('<bean:write name="indi" property="indicatorId"/>')" />
 																												</td>
 																												<td align="left" width="12">
-																														<bean:define id="translation">
-																														<digi:trn key="aim:clickToDeleteIndicator">
+																												<c:set var="clickToDeleteIndicator">
+																												<digi:trn key="aim:clickToDeleteIndicator">
 																															Click here to Delete Indicator
 																														</digi:trn>
-																														</bean:define>
+																												</c:set>
 																														<c:set target="${urlParams3}"
 																															property="indicator" value="deletePrg" />
 																															<digi:link href="/editAllIndicator.do"
-																																name="urlParams3" title="<%=translation%>"
+																																name="urlParams3" title="${clickToDeleteIndicator}"
 																																	onclick="return deletePrgIndicator()">
 																															<img src="../ampTemplate/images/trash_12.gif" border=0>
 																															</digi:link>
@@ -602,15 +602,15 @@
 																																onclick="assignIndicatorTo('<bean:write name="indi" property="indicatorId"/>')" />
 																												</td>
 																												<td align="left" width="12">
-																														<bean:define id="translation">
+																												<c:set var="clickToDeleteIndicator">
 																														<digi:trn key="aim:clickToDeleteIndicator">
 																															Click here to Delete Indicator
 																														</digi:trn>
-																														</bean:define>
+																												</c:set>
 																														<c:set target="${urlParams4}"
 																															property="indicator" value="deletePrg" />
 																															<digi:link href="/editAllIndicator.do"
-																																name="urlParams4" title="<%=translation%>"
+																																name="urlParams4" title="${clickToDeleteIndicator}"
 																																	onclick="return deletePrgIndicator()">
 																															<img src="../ampTemplate/images/trash_12.gif" border=0>
 																															</digi:link>
@@ -685,15 +685,15 @@
 																																onclick="assignIndicatorTo('<bean:write name="indi" property="indicatorId"/>')" />
 																												</td>
 																												<td align="left" width="12">
-																														<bean:define id="translation">
+																												<c:set var="clickToDeleteIndicator">
 																														<digi:trn key="aim:clickToDeleteIndicator">
 																															Click here to Delete Indicator
 																														</digi:trn>
-																														</bean:define>
+																												</c:set>
 																														<c:set target="${urlParams5}"
 																															property="indicator" value="deletePrg" />
 																															<digi:link href="/editAllIndicator.do"
-																																name="urlParams5" title="<%=translation%>"
+																																name="urlParams5" title="${clickToDeleteIndicator}"
 																																	onclick="return deletePrgIndicator()">
 																															<img src="../ampTemplate/images/trash_12.gif" border=0>
 																															</digi:link>
@@ -768,15 +768,15 @@
 																																onclick="assignIndicatorTo('<bean:write name="indi" property="indicatorId"/>')" />
 																												</td>
 																												<td align="left" width="12">
-																														<bean:define id="translation">
+																												<c:set var="clickToDeleteIndicator">
 																														<digi:trn key="aim:clickToDeleteIndicator">
 																															Click here to Delete Indicator
 																														</digi:trn>
-																														</bean:define>
+																												</c:set>
 																														<c:set target="${urlParams6}"
 																															property="indicator" value="deletePrg" />
 																															<digi:link href="/editAllIndicator.do"
-																																name="urlParams6" title="<%=translation%>"
+																																name="urlParams6" title="${clickToDeleteIndicator}"
 																																	onclick="return deletePrgIndicator()">
 																															<img src="../ampTemplate/images/trash_12.gif" border=0>
 																															</digi:link>
@@ -851,15 +851,15 @@
 																																onclick="assignIndicatorTo('<bean:write name="indi" property="indicatorId"/>')" />
 																												</td>
 																												<td align="left" width="12">
-																														<bean:define id="translation">
-																														<digi:trn key="aim:clickToDeleteIndicator">
+																												<c:set var="clickToDeleteIndicator">
+																												<digi:trn key="aim:clickToDeleteIndicator">
 																															Click here to Delete Indicator
 																														</digi:trn>
-																														</bean:define>
+																												</c:set>
 																														<c:set target="${urlParams7}"
 																															property="indicator" value="deletePrg" />
 																															<digi:link href="/editAllIndicator.do"
-																																name="urlParams7" title="<%=translation%>"
+																																name="urlParams7" title="${clickToDeleteIndicator}"
 																																	onclick="return deletePrgIndicator()">
 																															<img src="../ampTemplate/images/trash_12.gif" border=0>
 																															</digi:link>
@@ -934,15 +934,15 @@
 																																onclick="assignIndicatorTo('<bean:write name="indi" property="indicatorId"/>')" />
 																												</td>
 																												<td align="left" width="12">
-																														<bean:define id="translation">
-																														<digi:trn key="aim:clickToDeleteIndicator">
+																												<c:set var="clickToDeleteIndicator">
+																												<digi:trn key="aim:clickToDeleteIndicator">
 																															Click here to Delete Indicator
 																														</digi:trn>
-																														</bean:define>
+																												</c:set>
 																														<c:set target="${urlParams8}"
 																															property="indicator" value="deletePrg" />
 																															<digi:link href="/editAllIndicator.do"
-																																name="urlParams8" title="<%=translation%>"
+																																name="urlParams8" title="${clickToDeleteIndicator}"
 																																	onclick="return deletePrgIndicator()">
 																															<img src="../ampTemplate/images/trash_12.gif" border=0>
 																															</digi:link>
@@ -1063,15 +1063,16 @@
 																								onclick="editProjIndicator('<bean:write name="allMEIndicators" property="ampMEIndId"/>')">
 																						</td>
 																						<td align="left" width="12">
-																							<bean:define id="translation">
-																								<digi:trn key="aim:clickToDeleteIndicator">
-																				Click here to Delete Indicator
-																			</digi:trn>
-																							</bean:define>
+																						<c:set var="clickToDeleteIndicator">
+																						<digi:trn key="aim:clickToDeleteIndicator">
+																							Click here to Delete Indicator
+																						</digi:trn>
+																						</c:set>
+																						
 																							<c:set target="${urlParams22}"
 																								property="indicator" value="deleteProj" />
 																							<digi:link href="/editAllIndicator.do"
-																								name="urlParams22" title="<%=translation%>"
+																								name="urlParams22" title="${clickToDeleteIndicator}"
 																								onclick="return deleteProjIndicator()">
 																								<img src="../ampTemplate/images/trash_12.gif"
 																									border=0>

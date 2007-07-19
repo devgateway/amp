@@ -1395,9 +1395,12 @@ public class TeamMemberUtil {
 			session = PersistenceManager.getSession();
 			AmpTeam ampTeam = (AmpTeam) session.load(AmpTeam.class,
 					member.getAmpTeam().getAmpTeamId());
-			if (ampTeam.getTeamLead().getAmpTeamMemId().
-					equals(member.getAmpTeamMemId())) {
-				return true;
+			if(ampTeam!=null)
+				if(ampTeam.getTeamLead()!=null)
+					if(ampTeam.getTeamLead().getAmpTeamMemId()!=null)
+						if (ampTeam.getTeamLead().getAmpTeamMemId().
+									equals(member.getAmpTeamMemId())) {
+								return true;
 			}
 		} catch (Exception e) {
 			logger.error("Unable to update team page filters" + e.getMessage());

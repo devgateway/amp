@@ -75,7 +75,7 @@ public class ShowCurrencyRates extends Action {
 		if (crForm.getFilterByDateFrom() == null
 				|| crForm.getFilterByDateFrom().trim().length() == 0||(isFromAdminHome!=null&&isFromAdminHome)) {
 //			crForm.setFilterByDateFrom(Constants.CURRENCY_RATE_DEAFULT_END_DATE);//AMP-1421
-			SimpleDateFormat sdf= new SimpleDateFormat("dd/MM/yyyy");
+			SimpleDateFormat sdf= new SimpleDateFormat(Constants.SIMPLE_DATE_FORMAT);
 			crForm.setFilterByDateFrom(sdf.format(new Date()));
                         crForm.setClean(false);
 		}

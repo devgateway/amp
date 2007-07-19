@@ -18,6 +18,7 @@ import org.digijava.module.aim.dbentity.AmpMeasures;
 import org.digijava.module.aim.dbentity.AmpReportColumn;
 import org.digijava.module.aim.dbentity.AmpReportHierarchy;
 import org.digijava.module.aim.dbentity.AmpReports;
+import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.digifeed.core.GenericFeedBinder;
 import org.digijava.module.digifeed.feeds.ar.schema.MeasureType;
 import org.digijava.module.digifeed.feeds.ar.schema.ColumnType;
@@ -32,7 +33,7 @@ import org.digijava.module.digifeed.feeds.ar.schema.Reports;
  * 
  */
 public class FeedBinder extends GenericFeedBinder {
-	public static SimpleDateFormat sdt = new SimpleDateFormat("dd-MM-yyyy");
+	public static SimpleDateFormat sdt = new SimpleDateFormat(Constants.SIMPLE_DATE_FORMAT);
 
 	private static Logger logger = Logger.getLogger(FeedBinder.class);
 

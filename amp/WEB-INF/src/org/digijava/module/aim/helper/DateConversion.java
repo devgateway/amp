@@ -36,7 +36,7 @@ public class DateConversion
 		String textDate ="";
 		if ( mysqlDate != null ) {
 			//SimpleDateFormat formatter = new SimpleDateFormat("MM/dd/yyyy") ;
-			SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy") ;
+			SimpleDateFormat formatter = new SimpleDateFormat(Constants.SIMPLE_DATE_FORMAT) ;
 			textDate = formatter.format(mysqlDate) ;
 		}
 		return textDate ;

@@ -42,6 +42,7 @@ import org.apache.struts.action.ActionErrors;
 import java.io.IOException;
 import org.apache.struts.action.ActionError;
 import org.digijava.module.forum.dbentity.ForumAsset;
+import org.digijava.module.aim.helper.Constants;
 
 public class ForumManager {
     private static Map forumPageTrailCallbackMap;
@@ -50,10 +51,10 @@ public class ForumManager {
     public static String[] imgsTypes = {"jpg", "bmp", "gif", "png"};
 
     private static SimpleDateFormat dateTimeFormater =
-        new SimpleDateFormat("MMMMM dd, yyyy hh:mm aaa");
+        new SimpleDateFormat(Constants.SIMPLE_DATE_TIME_FORMAT);
 
     private static SimpleDateFormat dateFormater =
-        new SimpleDateFormat("MMMMM dd, yyyy");
+        new SimpleDateFormat("dd MMMMM, yyyy");
 
     static {
         forumPageTrailCallbackMap = getForumPageTrailMap();

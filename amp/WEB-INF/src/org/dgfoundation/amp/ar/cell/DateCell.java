@@ -11,6 +11,7 @@ import java.util.Date;
 
 import org.dgfoundation.amp.ar.MetaInfo;
 import org.dgfoundation.amp.ar.workers.DateColWorker;
+import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.EthDateWorker;
 
 
@@ -23,7 +24,7 @@ import org.digijava.module.aim.helper.EthDateWorker;
  */
 public class DateCell extends Cell {
 
-	private static SimpleDateFormat sdt=new SimpleDateFormat("dd/MM/yyyy");
+	private static SimpleDateFormat sdt=new SimpleDateFormat(Constants.SIMPLE_DATE_FORMAT);
 	
 	protected boolean ethiopianDate;
 	

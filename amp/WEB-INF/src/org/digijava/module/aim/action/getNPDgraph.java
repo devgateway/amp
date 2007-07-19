@@ -17,6 +17,7 @@ import org.jfree.chart.ChartUtilities;
 import org.jfree.chart.JFreeChart;
 import org.jfree.data.category.CategoryDataset;
 import org.jfree.data.category.CustomCategoryDataset;
+import org.digijava.module.aim.helper.Constants;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -194,7 +195,7 @@ public class getNPDgraph extends Action {
 
     public String formatActualDate(AmpThemeIndicatorValue val) {
         if (val != null) {
-            SimpleDateFormat form = new SimpleDateFormat("MM/dd/yyyy");
+            SimpleDateFormat form = new SimpleDateFormat(Constants.SIMPLE_DATE_FORMAT);
             return form.format(val.getCreationDate());
         }
         return "";

@@ -15,6 +15,7 @@ import java.util.Iterator;
 import java.util.Map;
 
 import org.apache.log4j.Logger;
+import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.digifeed.exception.UnsupportedParamTypeException;
 
 /**
@@ -24,7 +25,7 @@ import org.digijava.module.digifeed.exception.UnsupportedParamTypeException;
  * 
  */
 public abstract class GenericFeedRequest implements Cloneable {
-	public static SimpleDateFormat sdt = new SimpleDateFormat("dd-MM-yyyy");
+	public static SimpleDateFormat sdt = new SimpleDateFormat(Constants.SIMPLE_DATE_FORMAT);
 	
 	
 

@@ -5096,7 +5096,7 @@ public class DbUtil {
 
 	public static boolean chkEqualDates(Date d1, Date d2) {
 		boolean result = false;
-		SimpleDateFormat formatter = new SimpleDateFormat("M/d/y");
+		SimpleDateFormat formatter = new SimpleDateFormat(Constants.SIMPLE_DATE_FORMAT);
 		result = (formatter.format(d1).equalsIgnoreCase(formatter.format(d2))) ? true : false;
 		//logger.debug("[chkEqualDates] date1: " + d1 + " date2:" + d2 + " result: " + result);
 		return result;

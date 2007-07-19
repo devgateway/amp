@@ -131,15 +131,15 @@ public class VisibilityManager extends MultiAction {
 		{
 			AmpTreeVisibility m=(AmpTreeVisibility) i.next();
 			AmpModulesVisibility aop=(AmpModulesVisibility) m.getRoot();
-			System.out.println("	"+m.getRoot().getName()+m.getRoot()+aop.isVisibleId((Long)session.getAttribute("templateId")));
+			//System.out.println("	"+m.getRoot().getName()+m.getRoot()+aop.isVisibleId((Long)session.getAttribute("templateId")));
 			for(Iterator j=m.getItems().values().iterator();j.hasNext();)
 			{
 				AmpTreeVisibility n=(AmpTreeVisibility) j.next();
-				System.out.println("		"+n.getRoot().getName());
+				//System.out.println("		"+n.getRoot().getName());
 				for(Iterator k=n.getItems().values().iterator();k.hasNext();)
 				{
 					AmpTreeVisibility p=(AmpTreeVisibility) k.next();
-					System.out.println("xxx			"+p.getRoot().getName());
+					//System.out.println("xxx			"+p.getRoot().getName());
 				}
 
 			}
@@ -169,8 +169,8 @@ public class VisibilityManager extends MultiAction {
 			
 			AmpModulesVisibility ampModule=(AmpModulesVisibility)it.next();
 			String existentModule=ampModule.getName().replaceAll(" ","");
-			if(request.getParameter("module:"+existentModule)!=null)
-				if(request.getParameter("module:"+existentModule).compareTo("enable")==0)
+			if(request.getParameter("moduleVis:"+existentModule)!=null)
+				if(request.getParameter("moduleVis:"+existentModule).compareTo("enable")==0)
 					{
 						newTemplateModulesList.add(ampModule);
 					}
@@ -211,7 +211,7 @@ public class VisibilityManager extends MultiAction {
 		System.out.println(Long.parseLong(request.getParameter("fieldId")));
 		Session hbsession = null;
 		hbsession = this.createSession();
-		if(request.getParameter("fieldId")!=null) ;//FeaturesUtil.deleteFieldVisibility(new Long(Long.parseLong(request.getParameter("fieldId"))),hbsession);//delete field
+		if(request.getParameter("fieldId")!=null) FeaturesUtil.deleteFieldVisibility(new Long(Long.parseLong(request.getParameter("fieldId"))),hbsession);//delete field
 		if(request.getParameter("featureId")!=null) ;//delete feature
 		if(request.getParameter("moduleId")!=null) ;//delete module
 		/*{//for refreshing the page
@@ -245,19 +245,19 @@ public class VisibilityManager extends MultiAction {
 		for(Iterator i=x.getItems().values().iterator();i.hasNext();)
 		{
 			AmpTreeVisibility m=(AmpTreeVisibility) i.next();
-			if(request.getParameter("module:"+m.getRoot().getId())!=null)
+			if(request.getParameter("moduleVis:"+m.getRoot().getId())!=null)
 			{
 				modules.add(m.getRoot());
 				for(Iterator j=m.getItems().values().iterator();j.hasNext();)
 				{
 					AmpTreeVisibility n=(AmpTreeVisibility) j.next();
-					if(request.getParameter("feature:"+n.getRoot().getId())!=null)
+					if(request.getParameter("featureVis:"+n.getRoot().getId())!=null)
 					{
 						features.add(n.getRoot());
 						for(Iterator k=n.getItems().values().iterator();k.hasNext();)
 						{
 							AmpTreeVisibility p=(AmpTreeVisibility) k.next();
-							if(request.getParameter("field:"+p.getRoot().getId())!=null)
+							if(request.getParameter("fieldVis:"+p.getRoot().getId())!=null)
 							{
 								fields.add(p.getRoot()); 
 							}

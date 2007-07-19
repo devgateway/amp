@@ -51,11 +51,11 @@
 				<c:set target="${urlParamsDelModule}" property="action" value="deleteModule"/>
 				<c:set target="${urlParamsDelModule}" property="moduleId" value="<%=module.getId()%>"/>
 				<td>
-					<bean:define id="translation">
+					<c:set var="translation">
 						<digi:trn key="aim:clickToDeleteModule">Click here to Delete Module</digi:trn>
-					</bean:define>
+					</c:set>
 					[ <digi:link href="/visibilityManager.do" name="urlParamsDelModule" 
-						title="<%=translation%>" onclick="return onDeleteModule()">Delete</digi:link> ]
+						title="${translation}" onclick="return onDeleteModule()">Delete</digi:link> ]
 				</td>
 				
 			</tr>
@@ -91,11 +91,11 @@
 				<c:set target="${urlParamsDelFeature}" property="action" value="deleteFFM"/>
 				<c:set target="${urlParamsDelFeature}" property="featureId" value="<%=feature.getId()%>"/>
 				<td>
-					<bean:define id="translation">
+					<c:set var="translation">
 						<digi:trn key="aim:clickToDeleteFeature">Click here to Delete Feature</digi:trn>
-					</bean:define>
+					</c:set>
 					[ <digi:link href="/visibilityManager.do" name="urlParamsDelFeature" 
-						title="<%=translation%>" onclick="return onDeleteFeature()">Delete</digi:link> ]
+						title="${translation}" onclick="return onDeleteFeature()">Delete</digi:link> ]
 				</td>
 				
 			</tr>
@@ -133,11 +133,11 @@
 				<c:set target="${urlParamsDelField}" property="action" value="deleteFFM"/>
 				<c:set target="${urlParamsDelField}" property="fieldId" value="<%=field.getId()%>"/>
 				<td>
-					<bean:define id="translation">
+					<c:set var="translation">
 						<digi:trn key="aim:clickToDeleteField">Click here to Delete Field</digi:trn>
-					</bean:define>
+					</c:set>
 					[ <digi:link href="/visibilityManager.do" name="urlParamsDelField" 
-						title="<%=translation%>" onclick="return onDeleteField()">Delete</digi:link> ]
+						title="${translation}" onclick="return onDeleteField()">Delete</digi:link> ]
 				</td>
 				
 			</tr>

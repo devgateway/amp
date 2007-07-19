@@ -21,6 +21,8 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.text.ParseException;
 
+import org.digijava.module.aim.helper.Constants;
+
 /**
  * <p>Title: DiGiJava</p>
  * <p>Description: </p>
@@ -44,7 +46,7 @@ public class DateTimeUtil {
         ParseException {
 
         java.util.Calendar date = new java.util.GregorianCalendar();
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat( "yyyyMMdd" );
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(Constants.SIMPLE_DATE_FORMAT);
         date.setTime(simpleDateFormat.parse(isoDate));
 
         return date;

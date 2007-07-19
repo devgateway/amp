@@ -80,6 +80,8 @@ public class Constants
 	
 	public static final String CURRENCY_RATE_DEAFULT_START_DATE = "25/04/2005";
 	public static final String CURRENCY_RATE_DEAFULT_END_DATE = "01/05/2005";
+	public static final String SIMPLE_DATE_FORMAT = "dd/MMM/yyyy";
+	public static final String SIMPLE_DATE_TIME_FORMAT = "dd MMMMM, yyyy hh:mm aaa";
 	
 	public static final int FROM_YEAR_RANGE = 22;
 	public static final int TO_YEAR_RANGE = 5;

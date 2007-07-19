@@ -44,7 +44,7 @@ import org.digijava.module.aim.util.ComponentsUtil;
  */
 public class FreeBalanceHarvester {
 
-	public static SimpleDateFormat dateFormatter = new SimpleDateFormat("MM/dd/yyyy") ;
+	public static SimpleDateFormat dateFormatter = new SimpleDateFormat(Constants.SIMPLE_DATE_FORMAT) ;
 	
 	public static DecimalFormat mf = new DecimalFormat("###,###,###,###,###.##");
 	

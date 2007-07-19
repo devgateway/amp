@@ -3,13 +3,13 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import org.digijava.module.aim.helper.Constants;
+
 
 
 public class PublisherDateFormatter {
-	private static SimpleDateFormat dateFormat = new SimpleDateFormat(
-			"yyyy-MM-dd");
-	private static SimpleDateFormat valueDateFormat = new SimpleDateFormat(
-	"EEE MMM d yyyy");
+	private static SimpleDateFormat dateFormat = new SimpleDateFormat(Constants.SIMPLE_DATE_FORMAT);
+	private static SimpleDateFormat valueDateFormat = new SimpleDateFormat("EEE MMM d yyyy");
 	public static Date parse(String date) throws ParseException {
 		return dateFormat.parse(date);
 	}

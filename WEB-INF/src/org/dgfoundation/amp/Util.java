@@ -24,6 +24,7 @@ import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.request.Site;
 import org.digijava.kernel.util.DigiCacheManager;
 import org.digijava.module.aim.dbentity.AmpOrgRole;
+import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.util.Identifiable;
 import org.digijava.module.editor.exception.EditorException;
 
@@ -275,6 +276,5 @@ public final class Util {
 
 	}
 
-	public static SimpleDateFormat dateFormat = new SimpleDateFormat(
-	"yyyy-MM-dd");
+	public static SimpleDateFormat dateFormat = new SimpleDateFormat(Constants.SIMPLE_DATE_FORMAT);
 }

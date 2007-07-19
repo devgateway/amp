@@ -13,6 +13,7 @@ import java.util.Set;
 import javax.servlet.http.HttpSession;
 
 import org.dgfoundation.amp.ar.AmpARFilter;
+import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.util.LoggerIdentifiable;
 
 public class AmpReports implements Comparable, LoggerIdentifiable {
@@ -53,8 +54,7 @@ public class AmpReports implements Comparable, LoggerIdentifiable {
 	private String locale;
 	
 	//public static final String NOTE="NOTE: All shown funding items are in USD currency. All calendaristic date cells are shown using DD/MM/YYYY format. All amounts are in thousands.";
-	private static SimpleDateFormat dateFormat = new SimpleDateFormat(
-			"dd-MMM-yyyy");
+	private static SimpleDateFormat dateFormat = new SimpleDateFormat(Constants.SIMPLE_DATE_FORMAT);
 	
 	public String getFormatedUpdatedDate() {
 		String result = null;

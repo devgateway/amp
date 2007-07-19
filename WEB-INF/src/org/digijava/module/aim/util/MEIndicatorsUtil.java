@@ -10,6 +10,8 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
+
 import net.sf.hibernate.Hibernate;
 import net.sf.hibernate.JDBCException;
 import net.sf.hibernate.Query;
@@ -27,6 +29,7 @@ import org.digijava.module.aim.dbentity.AmpActivity;
 import org.digijava.module.aim.helper.AllMEIndicators;
 import org.digijava.module.aim.helper.AmpMEIndicatorList;
 import org.digijava.module.aim.helper.ActivityIndicator;
+import org.digijava.module.aim.helper.CategoryManagerUtil;
 import org.digijava.module.aim.helper.PriorCurrentValues;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.DateConversion;
@@ -918,7 +921,7 @@ public class MEIndicatorsUtil
 	}	
 	
 	public static Collection getPortfolioMEIndicatorValues(Collection actIds,
-			Long indId,boolean includeBaseLine) {
+			Long indId,boolean includeBaseLine, HttpServletRequest request) {
 		
 		Session session = null;
 		Collection col = new ArrayList();
@@ -982,7 +985,10 @@ public class MEIndicatorsUtil
 						MEIndicatorValue actIndVal = new MEIndicatorValue();
 						actIndVal.setIndId(new Long(id));
 						actIndVal.setIndicatorName(key);
-						actIndVal.setType(Constants.ME_IND_VAL_ACTUAL_ID);
+						String trnKey = "aim:performance:"+(Constants.ME_IND_VAL_ACTUAL_ID).toLowerCase();
+						trnKey = trnKey.replaceAll(" ", "");
+						String msg = CategoryManagerUtil.translate(trnKey, request, Constants.ME_IND_VAL_ACTUAL_ID);
+						actIndVal.setType(msg);
 						if (tarVal > 0) {
 							actIndVal.setValue((actVal - baseVal)/(tarVal - baseVal));
 							col.add(actIndVal);
@@ -991,7 +997,10 @@ public class MEIndicatorsUtil
 						MEIndicatorValue actIndVal = new MEIndicatorValue();
 						actIndVal.setIndId(new Long(id));
 						actIndVal.setIndicatorName(key);
-						actIndVal.setType(Constants.ME_IND_VAL_ACTUAL_ID);
+						String trnKey = "aim:performance:"+(Constants.ME_IND_VAL_ACTUAL_ID).toLowerCase();
+						trnKey = trnKey.replaceAll(" ", "");
+						String msg = CategoryManagerUtil.translate(trnKey, request, Constants.ME_IND_VAL_ACTUAL_ID);
+						actIndVal.setType(msg);
 						if (tarVal > 0) {
 							actIndVal.setValue(actVal/tarVal);
 							col.add(actIndVal);
@@ -1001,7 +1010,11 @@ public class MEIndicatorsUtil
 					MEIndicatorValue targetIndVal = new MEIndicatorValue();
 					targetIndVal.setIndId(new Long(id));
 					targetIndVal.setIndicatorName(key);
-					targetIndVal.setType(Constants.ME_IND_VAL_TARGET_ID);
+					String trnKey = "aim:performance:"+(Constants.ME_IND_VAL_TARGET_ID).toLowerCase();
+					trnKey = trnKey.replaceAll(" ", "");
+					String msg = CategoryManagerUtil.translate(trnKey, request, Constants.ME_IND_VAL_TARGET_ID);
+
+					targetIndVal.setType(msg);
 					if (tarVal > 0) { 
 						targetIndVal.setValue(1);
 						col.add(targetIndVal);						

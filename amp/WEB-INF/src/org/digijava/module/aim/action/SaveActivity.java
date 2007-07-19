@@ -35,14 +35,12 @@ import org.digijava.module.aim.dbentity.AmpActivityClosingDates;
 import org.digijava.module.aim.dbentity.AmpActivityInternalId;
 import org.digijava.module.aim.dbentity.AmpActivitySector;
 import org.digijava.module.aim.dbentity.AmpActor;
-import org.digijava.module.aim.dbentity.AmpCategoryValue;
 import org.digijava.module.aim.dbentity.AmpComponent;
 import org.digijava.module.aim.dbentity.AmpComponentFunding;
 import org.digijava.module.aim.dbentity.AmpCurrency;
 import org.digijava.module.aim.dbentity.AmpFunding;
 import org.digijava.module.aim.dbentity.AmpFundingDetail;
 import org.digijava.module.aim.dbentity.AmpIssues;
-import org.digijava.module.aim.dbentity.AmpLevel;
 import org.digijava.module.aim.dbentity.AmpLocation;
 import org.digijava.module.aim.dbentity.AmpMeasure;
 import org.digijava.module.aim.dbentity.AmpOrgRole;
@@ -52,7 +50,6 @@ import org.digijava.module.aim.dbentity.AmpPhysicalPerformance;
 import org.digijava.module.aim.dbentity.AmpRegion;
 import org.digijava.module.aim.dbentity.AmpRegionalFunding;
 import org.digijava.module.aim.dbentity.AmpRole;
-import org.digijava.module.aim.dbentity.AmpStatus;
 import org.digijava.module.aim.dbentity.AmpTeam;
 import org.digijava.module.aim.dbentity.AmpTeamMember;
 import org.digijava.module.aim.dbentity.AmpTheme;
@@ -79,6 +76,7 @@ import org.digijava.module.aim.helper.RegionalFunding;
 import org.digijava.module.aim.helper.RelatedLinks;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.ActivityUtil;
+import org.digijava.module.aim.util.AuditLoggerUtil;
 import org.digijava.module.aim.util.ComponentsUtil;
 import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.aim.util.DbUtil;
@@ -1373,7 +1371,7 @@ public class SaveActivity extends Action {
 									.isSerializeFlag(), field, relatedLinks, tm
 									.getMemberId(), eaForm.getIndicatorsME(),tempComp);
 					//for logging the activity
-						// AuditLoggerUtil.logObject(session, request,activity,"update");
+					AuditLoggerUtil.logObject(session, request,activity,"update");
 						// remove the activity details from the edit activity list
 					if (toDelete == null
 							|| (!toDelete.trim().equalsIgnoreCase("true"))) {
@@ -1422,7 +1420,7 @@ public class SaveActivity extends Action {
 							eaForm.getCommentsCol(), eaForm.isSerializeFlag(),
 							field, relatedLinks, tm.getMemberId(), tempComp);
 					//for logging the activity
-					// AuditLoggerUtil.logObject(session, request,activity,"add");
+					 AuditLoggerUtil.logObject(session, request,activity,"add");
 
 				}
 			}

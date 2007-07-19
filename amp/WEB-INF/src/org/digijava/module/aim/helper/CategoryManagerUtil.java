@@ -50,13 +50,13 @@ public class CategoryManagerUtil {
 	 * @return The translated category value
 	 */
 	public static String translateAmpCategoryValue(AmpCategoryValue ampCategoryValue, HttpServletRequest request ,String lang) {
+		return translate(CategoryManagerUtil.getTranslationKeyForCategoryValue(ampCategoryValue), request, ampCategoryValue.getValue() );
+	}
+	public static String translate(String key, HttpServletRequest request, String defaultValue) {
 		Session session	= null;
 		String ret		= "";
-		Long siteId		= null;
-		if (lang == null || lang.length() == 0) {
-			lang	= RequestUtils.getNavigationLanguage(request).getCode();
-			siteId	= RequestUtils.getSite(request).getId();
-		}
+		String	lang	= RequestUtils.getNavigationLanguage(request).getCode();
+		Long	siteId	= RequestUtils.getSite(request).getId();
 		try{
 			session			= PersistenceManager.getSession();
 			String qryStr	= "select m from "
@@ -65,13 +65,13 @@ public class CategoryManagerUtil {
 
 			Query qry		= session.createQuery(qryStr);
 			qry.setParameter("langIso", lang, Hibernate.STRING);
-			qry.setParameter("translationKey", CategoryManagerUtil.getTranslationKeyForCategoryValue(ampCategoryValue) ,Hibernate.STRING);
+			qry.setParameter("translationKey", key ,Hibernate.STRING);
 			qry.setParameter("thisSiteId", siteId+"", Hibernate.STRING);
 
 			Message m		= (Message)qry.uniqueResult();
 			if ( m == null ) {
-				logger.debug("No translation found for value '"+ ampCategoryValue.getValue() +"' for lang " + lang + ".");
-				return ampCategoryValue.getValue();
+				logger.debug("No translation found for key '"+ key +"' for lang " + lang + ".");
+				return defaultValue;
 			}
 			ret				= m.getMessage();
 		}
@@ -89,7 +89,7 @@ public class CategoryManagerUtil {
 			}
 		}
 		if ( ret == null || ret.equals("") )
-				ret	= ampCategoryValue.getValue();
+				ret	= defaultValue;
 		return ret;
 	}
 	/**

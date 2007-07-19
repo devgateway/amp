@@ -11,7 +11,7 @@
 <%@ taglib uri="/taglib/category" prefix="category" %>
 
 <script language="JavaScript1.2" type="text/javascript"
-	src="<digi:file src="module/aim/scripts/dscript120.js"/>"></script>	
+	src="<digi:file src="module/aim/scripts/dscript120.js"/>"></script>
 <script language="JavaScript1.2" type="text/javascript"
 	src="<digi:file src="module/aim/scripts/dscript120_ar_style.js"/>"></script>
 
@@ -74,9 +74,9 @@ function disable() {
 
 <%
 	Long actId = (Long) request.getAttribute("actId");
-	
+
 	String url = "/aim/viewIndicatorValues.do?ampActivityId="+actId+"&tabIndex=6";
-	
+
 	String actPerfChartFileName = ChartGenerator.getActivityPerformanceChartFileName(
 						 actId,session,new PrintWriter(out),370,450,url,true);
 
@@ -85,7 +85,7 @@ function disable() {
 		actPerfChartUrl = request.getContextPath() + "/aim/DisplayChart.img?filename=" + actPerfChartFileName;
 	}
 
-	
+
 	String actRiskChartFileName = ChartGenerator.getActivityRiskChartFileName(
 						 actId,session,new PrintWriter(out),370,350,url);
 
@@ -443,21 +443,21 @@ function disable() {
 										<td bgcolor="#ffffff">
 										 <logic:iterate name="aimEditActivityForm" id="comments" property="allComments">
 										 	<logic:equal name="comments" property="key" value="Objective Assumption">
-												<logic:iterate name="comments" id="comment" property="value" 
+												<logic:iterate name="comments" id="comment" property="value"
 													type="org.digijava.module.aim.dbentity.AmpComments"><b>
 													<digi:trn key="aim:objectiveAssumption">Objective Assumption</digi:trn>:</b>
 													<bean:write name="comment" property="comment"/><br/>
                                         		</logic:iterate>
                                         	</logic:equal>
                                         	<logic:equal name="comments" property="key" value="Objective Verification">
-												<logic:iterate name="comments" id="comment" property="value" 
+												<logic:iterate name="comments" id="comment" property="value"
 													type="org.digijava.module.aim.dbentity.AmpComments"><b>
 													<digi:trn key="aim:objectiveVerification">Objective Verification</digi:trn>:</b>
 													<bean:write name="comment" property="comment"/><br/>
                                         		</logic:iterate>
                                         	</logic:equal>
 										</logic:iterate>
-										
+
 										</td>
 									</tr>
 									</logic:present>
@@ -474,7 +474,7 @@ function disable() {
                                             </c:if>
 										</td>
 									</tr>
-									
+
 									</logic:notEmpty>
 									<logic:empty name="SA" scope="application">
 									<tr>
@@ -497,24 +497,24 @@ function disable() {
 										<td bgcolor="#ffffff">
 										 <logic:iterate name="aimEditActivityForm" id="comments" property="allComments">
 										 	<logic:equal name="comments" property="key" value="Purpose Assumption">
-												<logic:iterate name="comments" id="comment" property="value" 
+												<logic:iterate name="comments" id="comment" property="value"
 													type="org.digijava.module.aim.dbentity.AmpComments"><b>
 													<digi:trn key="aim:purposeAssumption">Purpose Assumption</digi:trn>:</b>
 													<bean:write name="comment" property="comment"/><br/>
                                         		</logic:iterate>
                                         	</logic:equal>
                                         	<logic:equal name="comments" property="key" value="Purpose Verification">
-												<logic:iterate name="comments" id="comment" property="value" 
+												<logic:iterate name="comments" id="comment" property="value"
 													type="org.digijava.module.aim.dbentity.AmpComments"><b>
 													<digi:trn key="aim:purposeVerification">Purpose Verification</digi:trn>:</b>
 													<bean:write name="comment" property="comment"/><br/>
                                         		</logic:iterate>
                                         	</logic:equal>
 										</logic:iterate>
-										
+
 										</td>
 									</tr>
-									
+
 									<tr>
 										<td class="t-name" width="30%" align="right" bgcolor="#fffff0">
 											<digi:trn key="aim:results">
@@ -535,21 +535,21 @@ function disable() {
 										<td bgcolor="#ffffff">
 										 <logic:iterate name="aimEditActivityForm" id="comments" property="allComments">
 										 	<logic:equal name="comments" property="key" value="Results Assumption">
-												<logic:iterate name="comments" id="comment" property="value" 
+												<logic:iterate name="comments" id="comment" property="value"
 													type="org.digijava.module.aim.dbentity.AmpComments"><b>
 													<digi:trn key="aim:resultsAssumption">Results Assumption</digi:trn>:</b>
 													<bean:write name="comment" property="comment"/><br/>
                                         		</logic:iterate>
                                         	</logic:equal>
                                         	<logic:equal name="comments" property="key" value="Results Verification">
-												<logic:iterate name="comments" id="comment" property="value" 
+												<logic:iterate name="comments" id="comment" property="value"
 													type="org.digijava.module.aim.dbentity.AmpComments"><b>
 													<digi:trn key="aim:resultsVerification">Results Verification</digi:trn>:</b>
 													<bean:write name="comment" property="comment"/><br/>
                                         		</logic:iterate>
                                         	</logic:equal>
 										</logic:iterate>
-										
+
 										</td>
 									</tr>
 									</logic:empty>
@@ -599,9 +599,9 @@ function disable() {
 															toScope="request" />
 														<jsp:include page="previewOrganizationPopup.jsp"/>
 														</td></tr>
-														
+
 													</c:forEach>
-													
+
 												</table>
 											</c:if>
 										</td>
@@ -619,7 +619,7 @@ function disable() {
 													<td width="1">:</td>
 													<td align="left">
 													<c:if test="${aimEditActivityForm.lineMinRank == -1}">
-													
+
 													</c:if>
 													<c:if test="${aimEditActivityForm.lineMinRank != -1}">
 													${aimEditActivityForm.lineMinRank}
@@ -632,7 +632,7 @@ function disable() {
 													<td width="1">:</td>
 													<td align="left">
 													<c:if test="${aimEditActivityForm.planMinRank == -1}">
-													
+
 													</c:if>
 													<c:if test="${aimEditActivityForm.planMinRank != -1}">
 													${aimEditActivityForm.planMinRank}
@@ -797,7 +797,7 @@ function disable() {
 														[<c:out value="${sectors.subsectorLevel2Name}"/>]
 													</c:if>
 													</td>
-														
+
 													</tr>
 												</c:forEach>
 												</table>
@@ -854,8 +854,8 @@ function disable() {
                                                       </tr>
                                                     </table>
                                              </c:if>
-										</td>	
-										
+										</td>
+
 									</tr>
 									<tr>
 										<td class="t-name" width="30%" align="right" bgcolor="#f4f4f2">
@@ -881,11 +881,11 @@ function disable() {
 											<% if (actRiskChartUrl != null) { %>
 												<bean:define id="riskColor" name="riskColor" scope="request" toScope="page" type="java.lang.String"/>
 												<bean:define id="riskName" name="overallRisk" scope="request" toScope="page" type="java.lang.String"/>
-												<digi:trn key="aim:overallActivityRisk">Overall Risk</digi:trn>: 
+												<digi:trn key="aim:overallActivityRisk">Overall Risk</digi:trn>:
 												<font color="<bean:write name="riskColor" />">
-												
+
 												<b><digi:trn key="<%=riskName%>"><%=riskName%></digi:trn></b>
-										
+
 												<img src="<%= actRiskChartUrl %>" width=370 height=350 border=0 usemap="#<%= actRiskChartFileName %>">
 												<br><br>
 											<% } else { %>
@@ -903,7 +903,7 @@ function disable() {
 										</td>
 										<td bgcolor="#ffffff">
 											<table  border="0" cellpadding="4" cellspacing="1">
-				                 					<TR bgcolor="#DDDDDB" > 
+				                 					<TR bgcolor="#DDDDDB" >
 							                        	<TD><digi:trn key="aim:orgFundingId">Org Funding ID</digi:trn></TD>
 									                    <TD width="20"><digi:trn key="aim:organization">Organization</digi:trn></TD>
 														<TD><digi:trn key="aim:totalCommitted">Total Committed</digi:trn></TD>
@@ -912,10 +912,10 @@ function disable() {
 							                         	<TD><digi:trn key="aim:totalExpended">Total Expended</digi:trn></TD>
 														<TD><digi:trn key="aim:unExpendedFunds">Unexpended Funds</digi:trn></TD>
 													</TR>
-													
-													<logic:iterate name="aimEditActivityForm" property="financingBreakdown" id="breakdown" 
-									  	                   type="org.digijava.module.aim.helper.FinancingBreakdown">
-															<TR valign="top" bgcolor="#f4f4f2"> 
+
+                                                    <c:if test="${!empty aimEditActivityForm.financingBreakdown}">
+													<logic:iterate name="aimEditActivityForm" property="financingBreakdown" id="breakdown" type="org.digijava.module.aim.helper.FinancingBreakdown">
+															<TR valign="top" bgcolor="#f4f4f2">
 					    					           			<TD>
 						               								<jsp:useBean id="urlFinancialOverview" type="java.util.Map" class="java.util.HashMap"/>
 																	<c:set target="${urlFinancialOverview}" property="ampActivityId">
@@ -930,11 +930,11 @@ function disable() {
 																		Click here to view Financial Overview</digi:trn>
 																	</bean:define>
 											                  		<digi:link href="/viewFinancialOverview.do" name="urlFinancialOverview" title="<%=translation%>" >
-																		<bean:write name="breakdown" property="financingId" /> 
+																		<bean:write name="breakdown" property="financingId" />
 																	</digi:link>
 																</TD>
 																<bean:define id="breakdown" name="breakdown" type="org.digijava.module.aim.helper.FinancingBreakdown" toScope="request" />
-																
+
 											                  		<TD><jsp:include page="previewFinancingOrganizationPopup.jsp"/></TD>
 													                <TD align="right"><bean:write name="breakdown" property="totalCommitted"/></TD>
 							                						<TD align="right"><bean:write name="breakdown" property="totalDisbursed"/></TD>
@@ -942,9 +942,10 @@ function disable() {
 					    									        <TD align="right"><bean:write name="breakdown" property="totalExpended"/></TD>
 					        				            		    <TD align="right"><bean:write name="breakdown" property="unExpended"/></TD>
 															</TR>
-															
+
 													</logic:iterate>
-													<TR valign="top" class="note"> 
+                                                    </c:if>
+													<TR valign="top" class="note">
 																<TD><digi:trn key="aim:total">Total</digi:trn></TD>
 											                    <TD>&nbsp;</TD>
 																<TD align="right"><bean:write name="aimEditActivityForm" property="totalCommitted"/></TD>
@@ -953,7 +954,7 @@ function disable() {
 																<TD align="right"><bean:write name="aimEditActivityForm" property="totalExpended"/></TD>
 																<TD align="right"><bean:write name="aimEditActivityForm" property="totalUnExpended"/></TD>
 													</TR>
-															
+
 											</table>
 										</td>
 									</tr>
@@ -975,7 +976,7 @@ function disable() {
 													</td>
 												</tr>
 											</table>
-											
+
 										</td>
 									</tr>
 									<!-- End Costing -->
@@ -1116,7 +1117,7 @@ function disable() {
 										</td>
 									</tr>
 									</logic:notEmpty>
-									
+
 									<tr>
 										<td class="t-name" width="30%" align="right" bgcolor="#f4f4f2">
 											<digi:trn key="aim:relatedOrganizations">
@@ -1134,7 +1135,7 @@ function disable() {
 													</td></tr>
 												</table>
 											</logic:notEmpty><br/>
-										
+
 											<b><digi:trn key="aim:beneficiary2Agency">Beneficiary Agency</digi:trn></b><br/>
 											<logic:notEmpty name="aimEditActivityForm" property="benAgencies">
 												<table width="100%" cellSpacing=1 cellPadding=5 class="box-border-nopadding">
@@ -1158,7 +1159,7 @@ function disable() {
 												</table>
 											</logic:notEmpty><br/>
 										</td>
-									</tr>									
+									</tr>
 									<tr>
 										<td class="t-name" width="30%" align="right" bgcolor="#f4f4f2">
 											<digi:trn key="aim:components">
@@ -1361,7 +1362,7 @@ function disable() {
 										<td bgcolor="#ffffff">
 											<c:if test="${!empty aimEditActivityForm.documentList}">
 												<table width="100%" cellSpacing="0" cellPadding="0">
-												 <logic:iterate name="aimEditActivityForm"  property="documents" 
+												 <logic:iterate name="aimEditActivityForm"  property="documents"
 													id="docs" type="org.digijava.module.aim.helper.Documents">
 													<c:if test="${docs.isFile == true}">
 													<tr><td>
@@ -1499,9 +1500,9 @@ function disable() {
 										</td>
 									</tr>
 									</logic:empty>
-									
-									
-									
+
+
+
 									<tr>
 										<td class="t-name" width="30%" align="right" bgcolor="#f4f4f2">
 											<digi:trn key="aim:activityCreatedBy">
@@ -1521,7 +1522,7 @@ function disable() {
 										<td bgcolor="#ffffff">
 											<c:out value="${aimEditActivityForm.actAthAgencySource}"/>
 										</td>
-									</tr>									
+									</tr>
 									<logic:notEmpty name="aimEditActivityForm" property="updatedDate">
 									<tr>
 										<td class="t-name" width="30%" align="right" bgcolor="#f4f4f2">
@@ -1531,22 +1532,22 @@ function disable() {
 										<td bgcolor="#ffffff">
 											<c:out value="${aimEditActivityForm.updatedDate}"/>
 										</td>
-									</tr>	
+									</tr>
 									</logic:notEmpty>
-									<logic:notEmpty name="aimEditActivityForm" property="updatedBy">									
+									<logic:notEmpty name="aimEditActivityForm" property="updatedBy">
 									<tr>
 										<td class="t-name" width="30%" align="right" bgcolor="#f4f4f2">
 											<digi:trn key="aim:activityUpdatedBy">
 											Activity updated by</digi:trn>
 										</td>
 										<td bgcolor="#ffffff">
-											<c:out value="${aimEditActivityForm.updatedBy.user.firstNames}"/>										
+											<c:out value="${aimEditActivityForm.updatedBy.user.firstNames}"/>
 											<c:out value="${aimEditActivityForm.updatedBy.user.lastName}"/>	-
 											<c:out value="${aimEditActivityForm.updatedBy.user.email}"/>
 										</td>
-									</tr>																	
+									</tr>
 									</logic:notEmpty>
-									
+
 									<logic:notEmpty name="aimEditActivityForm" property="createdDate">
 									<tr>
 										<td class="t-name" width="30%" align="right" bgcolor="#f4f4f2">
@@ -1557,7 +1558,7 @@ function disable() {
 											<c:out value="${aimEditActivityForm.createdDate}"/>
 										</td>
 									</tr>
-									
+
 									</logic:notEmpty>
 									<logic:notEmpty name="aimEditActivityForm" property="team">
 									<tr>
@@ -1566,7 +1567,7 @@ function disable() {
 											Data Team Leader</digi:trn>
 										</td>
 										<td bgcolor="#ffffff">
-											<c:out value="${aimEditActivityForm.team.teamLead.user.firstNames}"/>										
+											<c:out value="${aimEditActivityForm.team.teamLead.user.firstNames}"/>
 											<c:out value="${aimEditActivityForm.team.teamLead.user.lastName}"/>	-
 											<c:out value="${aimEditActivityForm.team.teamLead.user.email}"/>
 
@@ -1613,15 +1614,15 @@ function disable() {
 											<digi:link href="/viewActivityPreview.do~pageId=2" paramId="activityId" paramName="previousActivity" paramScope="session"><font size="2"><digi:trn key="aim:previous">Previous</digi:trn></font></digi:link>
 												<logic:notEmpty name="nextActivity" scope="session">
 													<font size="2">
-														&nbsp;-&nbsp; 
-													</font>		
+														&nbsp;-&nbsp;
+													</font>
 												</logic:notEmpty>
 										</logic:notEmpty>
-										<logic:notEmpty name="nextActivity" scope="session">		
+										<logic:notEmpty name="nextActivity" scope="session">
 											<digi:link href="/viewActivityPreview.do~pageId=2" paramId="activityId" paramName="nextActivity" paramScope="session"><font size="2"><digi:trn key="aim:next">Next</digi:trn></font></digi:link>
 										</logic:notEmpty>
-										
-									</div>			
+
+									</div>
 								</td>
 							</tr>
 						</table>
@@ -1639,4 +1640,4 @@ function disable() {
 </td></tr>
 </table>
 </digi:form>
- 
+

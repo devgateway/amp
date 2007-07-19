@@ -54,23 +54,23 @@
 		<c:set target="${urlParams10}" property="templateId" value="<%=template.getId() %>"/>
 		<c:set target="${urlParams11}" property="action" value="delete"/>
 		<c:set target="${urlParams11}" property="templateId" value="<%=template.getId() %>"/>
-			<bean:define id="translation">
+			<c:set var="translation">
 				<digi:trn key="aim:clickToEditTemplate">Click here to Edit Template</digi:trn>
-			</bean:define>	
+			</c:set>	
 			<td width="70%"> <digi:link href="/visibilityManager.do" name="urlParams10" 
-				title="<%=translation%>" ><bean:write name="template" property="name"/></digi:link> &nbsp;&nbsp;&nbsp; 
+				title="${translation}" ><bean:write name="template" property="name"/></digi:link> &nbsp;&nbsp;&nbsp; 
 				<%= template.isDefault()?"in use":"" %>
 			</td>
 
 			<td width="30%" align="center">
 
 			[ <digi:link href="/visibilityManager.do" name="urlParams10" 
-				title="<%=translation%>" >Edit</digi:link> ]&nbsp;&nbsp;&nbsp;
-			<bean:define id="translation">
+				title="${translation}" >Edit</digi:link> ]&nbsp;&nbsp;&nbsp;
+			<c:set var="translation">
 				<digi:trn key="aim:clickToDeleteTemplate">Click here to Delete Template</digi:trn>
-			</bean:define>
+			</c:set>
 			[ <digi:link href="/visibilityManager.do" name="urlParams11" 
-				title="<%=translation%>" onclick="return onDelete()">Delete</digi:link> ]
+				title="${translation}" onclick="return onDelete()">Delete</digi:link> ]
 			</td>
 		</tr>
 	</logic:iterate>
@@ -86,34 +86,34 @@
 	
 		<tr>
 		<td>
-			<bean:define id="translation">
+			<c:set var="translation">
 					<digi:trn key="aim:addNewTemplate">Click here to Add a New Template </digi:trn>
-			</bean:define>
+			</c:set>
 			<jsp:useBean id="urlParams12" type="java.util.Map" class="java.util.HashMap"/>
 			<c:set target="${urlParams12}" property="action" value="add"/>
 			 <digi:link href="/visibilityManager.do" name="urlParams12" 
-				title="<%=translation%>" ><digi:trn key="aim:addVisibilityTemplate">Add a New Template</digi:trn></digi:link>
+				title="${translation}" ><digi:trn key="aim:addVisibilityTemplate">Add a New Template</digi:trn></digi:link>
 		</td>
 	</tr>
 	
 		<tr>
 		<td>
-			<bean:define id="translation">
+			<c:set var="translation">
 					<digi:trn key="aim:clickToManageFieldsFeaturesModule">Click here to Field, Features and Modules </digi:trn>
-			</bean:define>
+			</c:set>
 			<jsp:useBean id="urlParams13" type="java.util.Map" class="java.util.HashMap"/>
 			<c:set target="${urlParams13}" property="action" value="viewFields"/>
 			 <digi:link href="/visibilityManager.do" name="urlParams13" 
-				title="<%=translation%>" ><digi:trn key="aim:manageFieldsFeaturesModules">List of Fields, Features, Modules</digi:trn></digi:link>
+				title="${translation}" ><digi:trn key="aim:manageFieldsFeaturesModules">List of Fields, Features, Modules</digi:trn></digi:link>
 		</td>
 	</tr>
 	
 	<tr>
 		<td>
-				<bean:define id="translation">
+				<c:set var="translation">
 					<digi:trn key="aim:setTemplateInUse">Click here to Set the Template in use</digi:trn>
-			</bean:define>
-			<digi:link href="/GlobalSettings.do" title="<%=translation%>" ><digi:trn key="aim:GlobalSettings">Global Settings</digi:trn></digi:link>
+			</c:set>
+			<digi:link href="/GlobalSettings.do" title="${translation}" ><digi:trn key="aim:GlobalSettings">Global Settings</digi:trn></digi:link>
 		</td>
 	</tr>
 	

@@ -17,6 +17,7 @@
 
 <digi:instance property="aimEditActivityForm" />
 										<table width="100%" bgcolor="#cccccc" cellPadding=5 cellSpacing=1>
+											
 											<field:display name="Title" feature="Identification">
 											<tr bgcolor="#ffffff"><td valign="top" align="left">
 												<FONT color=red>*</FONT>

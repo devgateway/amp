@@ -13,9 +13,14 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Iterator;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.apache.log4j.Logger;
+import org.digijava.kernel.entity.Message;
+import org.digijava.kernel.persistence.WorkerException;
+import org.digijava.kernel.translator.TranslatorWorker;
+import org.digijava.kernel.util.RequestUtils;
 import org.digijava.module.aim.util.MEIndicatorsUtil;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartRenderingInfo;
@@ -41,7 +46,7 @@ public class ChartGenerator {
 	private static Logger logger = Logger.getLogger(ChartGenerator.class);
 	
 	public static String getPortfolioRiskChartFileName(HttpSession session,PrintWriter pw,
-			int chartWidth,int chartHeight,String url) {
+			int chartWidth,int chartHeight,String url, HttpServletRequest request) throws WorkerException {
 		
 		Collection activityIds = new ArrayList();
 		if (session.getAttribute(Constants.AMP_PROJECTS) != null) {
@@ -54,6 +59,19 @@ public class ChartGenerator {
 		
 		ArrayList col = (ArrayList) MEIndicatorsUtil.getPortfolioMEIndicatorRisks(
 				activityIds);
+		Iterator i=col.iterator();
+		String lang = RequestUtils.getNavigationLanguage(request).getCode();
+		Long siteId = RequestUtils.getSite(request).getId();
+		String siteName = RequestUtils.getSite(request).getName();
+		while (i.hasNext()) {
+			MEIndicatorRisk el = (MEIndicatorRisk) i.next();
+			String risk = el.getRisk();
+			String key = "aim:risk:"+risk.toLowerCase();
+			key = key.replaceAll(" ", "");
+			String msg = CategoryManagerUtil.translate(key, request, risk);
+			el.setRisk(msg);
+		}
+		
 		Collections.sort(col);
 		ChartParams cp = new ChartParams();
 		cp.setChartHeight(chartHeight);
@@ -86,7 +104,7 @@ public class ChartGenerator {
 	
 	public static String getPortfolioPerformanceChartFileName(Long actId,Long indId,
 			Integer page,HttpSession session,PrintWriter pw,
-			int chartWidth,int chartHeight,String url,boolean includeBaseline) {
+			int chartWidth,int chartHeight,String url,boolean includeBaseline, HttpServletRequest request) {
 	
 		Collection activityIds = new ArrayList();
 		if (actId.longValue() < 0) {
@@ -103,7 +121,7 @@ public class ChartGenerator {
 		
 		Collection col = new ArrayList();
 		ArrayList temp = (ArrayList) MEIndicatorsUtil.getPortfolioMEIndicatorValues(
-				activityIds,indId,includeBaseline);
+				activityIds,indId,includeBaseline, request);
 		
 		if ((actId.longValue() > 0 && indId.longValue() <= 0) ||
 				(actId.longValue() <= 0 && indId.longValue() > 0)) {
@@ -243,7 +261,6 @@ public class ChartGenerator {
 				CategoryPlot plot = (CategoryPlot) chart.getPlot();
 				
 				StackedBarRenderer r1 = new StackedBarRenderer();
-				
 				r1.setSeriesPaint(0,Constants.ACTUAL_VAL_CLR);
 				r1.setSeriesPaint(1,Constants.TARGET_VAL_CLR);									
 				

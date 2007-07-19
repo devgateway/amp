@@ -12,6 +12,20 @@
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/relatedLinks.js"/>"></script>
 <digi:context name="digiContext" property="context" />
 
+<div style='position:relative;display:none;'> 
+<digi:trn key="aim:risk:medium">Medium</digi:trn>
+<digi:trn key="aim:risk:high">High</digi:trn>
+<digi:trn key="aim:risk:low">Low</digi:trn>
+<digi:trn key="aim:risk:veryhigh">Very High</digi:trn>
+<digi:trn key="aim:risk:verylow">Very Low</digi:trn>
+<digi:trn key="aim:performance:actual">Actual</digi:trn>
+<digi:trn key="aim:performance:target">Target</digi:trn>
+
+
+</div>
+
+
+
 <script language="Javascript">
 	function showPrinterFriendlyPortPerf() {
 		<digi:context name="ptUrl" property="context/module/moduleinstance/viewPrintablePortPerf.do" />
@@ -39,7 +53,7 @@
 	Integer pg = (Integer) session.getAttribute("page");
 	
 	String actPerfChartFileName = ChartGenerator.getPortfolioPerformanceChartFileName(
-						 actId,indId,pg,session,new PrintWriter(out),400,500,"",true);
+						 actId,indId,pg,session,new PrintWriter(out),400,500,"",true, request);
 
 	String actPerfChartUrl = null;
 	
@@ -50,7 +64,7 @@
 	//String url = "/filterDesktopActivities.do";
 	String url = "/aim/showDesktop.do";
 	String actRiskChartFileName = ChartGenerator.getPortfolioRiskChartFileName(
-						 session,new PrintWriter(out),370,400,url);
+						 session,new PrintWriter(out),370,400,url, request);
 
 	String actRiskChartUrl = null;
 	if (actRiskChartFileName != null) {

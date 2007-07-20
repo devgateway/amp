@@ -7,14 +7,20 @@ import org.apache.struts.action.ActionMapping;
 import org.digijava.module.aim.dbentity.AmpTheme;
 import org.digijava.module.aim.dbentity.AmpThemeIndicatorValue;
 import org.digijava.module.aim.dbentity.AmpThemeIndicators;
+import org.digijava.module.aim.dbentity.NpdSettings;
 import org.digijava.module.aim.exception.AimException;
 import org.digijava.module.aim.form.NpdGraphForm;
 import org.digijava.module.aim.helper.NpdGraphTooltipGenerator;
+import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.ChartUtil;
+import org.digijava.module.aim.util.NpdSettingsUtil;
 import org.digijava.module.aim.util.ProgramUtil;
 import org.jfree.chart.ChartRenderingInfo;
 import org.jfree.chart.ChartUtilities;
 import org.jfree.chart.JFreeChart;
+import org.jfree.chart.axis.CategoryAxis;
+import org.jfree.chart.axis.CategoryLabelPositions;
+import org.jfree.chart.plot.CategoryPlot;
 import org.jfree.data.category.CategoryDataset;
 import org.jfree.data.category.CustomCategoryDataset;
 import org.digijava.module.aim.helper.Constants;
@@ -65,8 +71,17 @@ public class getNPDgraph extends Action {
 
 
             response.setContentType("image/png");
-            ChartUtilities.writeChartAsPNG(response.getOutputStream(), chart, ChartUtil.CHART_WIDTH, ChartUtil.CHART_HEIGHT, info);
-
+            
+            TeamMember teamMember = (TeamMember) request.getSession().getAttribute("currentMember");
+    		Long teamId=teamMember.getTeamId();
+    		NpdSettings npdSettings=NpdSettingsUtil.getCurrentSettings(teamId);
+    		CategoryPlot categoryplot = (CategoryPlot)chart.getPlot();
+            CategoryAxis categoryaxis = categoryplot.getDomainAxis();
+            Double angle=npdSettings.getAngle().intValue()*3.1415926535897931D/180D;
+            categoryaxis.setCategoryLabelPositions(CategoryLabelPositions.createUpRotationLabelPositions(angle));
+    		ChartUtilities.writeChartAsPNG(response.getOutputStream(), chart, npdSettings.getWidth().intValue(),
+            		npdSettings.getHeight().intValue(), info);
+         
             //generate map for this graph
             NpdGraphTooltipGenerator ttGen = new NpdGraphTooltipGenerator();
 

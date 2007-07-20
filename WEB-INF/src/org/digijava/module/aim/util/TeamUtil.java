@@ -14,6 +14,8 @@ import java.util.Set;
 import java.util.TreeSet;
 import java.util.Vector;
 
+import javax.servlet.http.HttpServletRequest;
+
 import net.sf.hibernate.Hibernate;
 import net.sf.hibernate.Query;
 import net.sf.hibernate.Session;
@@ -42,6 +44,7 @@ import org.digijava.module.aim.helper.Activity;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.DonorTeam;
 import org.digijava.module.aim.helper.ReportsCollection;
+import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.helper.Workspace;
 import net.sf.hibernate.ObjectNotFoundException;
 
@@ -1947,4 +1950,14 @@ public class TeamUtil {
 		}
 		return ret;
 	}
+	/**
+	 * Retrieves current Team from request
+	 * @param request
+	 * @return currentAmpTeam
+	 */
+	public static AmpTeam getCurrentTeam(HttpServletRequest request){
+		AmpTeam currentAmpTeam=TeamMemberUtil.getCurrentAmpTeamMember(request).getAmpTeam();
+		return currentAmpTeam;
+	}
+	
 }

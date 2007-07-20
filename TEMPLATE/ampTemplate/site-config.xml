@@ -363,6 +363,7 @@
 				<page>calendarOrgPopupLayout</page>
             </module>
 			<module name="aim">
+				<page>viewNpdSettings</page>			
 				<page>aim_filterPicker</page>						
 				<page>aim_euActivityDetails</page>			
 				<page>aim_orgPopupLayout</page>

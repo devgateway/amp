@@ -15,11 +15,14 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.util.LabelValueBean;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
+import org.digijava.module.aim.dbentity.NpdSettings;
 import org.digijava.module.aim.exception.AimException;
 import org.digijava.module.aim.form.NpdForm;
 import org.digijava.module.aim.helper.FilteredAmpTheme;
+import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.ChartUtil;
 import org.digijava.module.aim.util.DbUtil;
+import org.digijava.module.aim.util.NpdSettingsUtil;
 import org.digijava.module.aim.util.ProgramUtil;
 
 /**
@@ -34,8 +37,11 @@ public class ViewNPD extends Action {
 	public ActionForward execute(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
 		NpdForm npdForm=(NpdForm)form;
 		//dimensions should come from NPD settings not from constants
-		npdForm.setGraphWidth(ChartUtil.CHART_WIDTH);
-		npdForm.setGraphHeight(ChartUtil.CHART_HEIGHT);
+		TeamMember teamMember = (TeamMember) request.getSession().getAttribute("currentMember");
+		Long teamId=teamMember.getTeamId();
+		NpdSettings npdSettings=NpdSettingsUtil.getCurrentSettings(teamId);
+		npdForm.setGraphWidth(npdSettings.getWidth().intValue());
+		npdForm.setGraphHeight(npdSettings.getHeight().intValue());
 		npdForm.setYears(new ArrayList(ProgramUtil.getYearsBeanList()));
 //		if (npdForm.getSelYears() == null)
 		npdForm.setSelYears(selectNYears(ProgramUtil.getYearsBeanList(),3));

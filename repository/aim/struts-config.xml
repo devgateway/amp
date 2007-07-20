@@ -124,6 +124,7 @@
     <form-bean name="aimNPDForm" type="org.digijava.module.aim.form.NpdForm" />
     <form-bean name="aimActiityListForm" type="org.digijava.module.aim.form.ActivitiesForm" />
     <form-bean name="aimNPDgraphForm" type="org.digijava.module.aim.form.NpdGraphForm" />
+	<form-bean name="npdSettingsForm" type="org.digijava.module.aim.form.NpdSettingsForm"/>  
   </form-beans>
 
   <global-forwards>
@@ -1421,6 +1422,9 @@
     <action name="aimViewAllUsersForm" path="/aim/viewAllUsers" scope="session" type="org.digijava.module.aim.action.ViewAllUsers" validate="false">
       <forward name="forward" path="/showLayout.do?layout=viewAllUsers" />
     </action>
+    <action input="/showLayout.do?layout=viewNpdSettings" name="npdSettingsForm" scope="request" path="/aim/npdSettingsAction" parameter="actionType" type="org.digijava.module.aim.action.NpdSettingsAction" validate="false">
+		<forward name="forward" path="/showLayout.do?layout=viewNpdSettings"/>
+	</action>  
   </action-mappings>
 </struts-config>
 

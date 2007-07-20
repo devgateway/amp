@@ -17,18 +17,18 @@
 			<table cellPadding=5 cellSpacing=0 width="100%">
 				<tr>
 					<td height=33><span class=crumb>
-						<bean:define id="translation">
-							<digi:trn key="aim:clickToViewAdmin">Click here to go to Admin Home</digi:trn>
-						</bean:define>
-						<digi:link href="/admin.do" styleClass="comment" title="<%=translation%>" >
+					<c:set var="clickToViewAdmin">
+					<digi:trn key="aim:clickToViewAdmin">Click here to go to Admin Home</digi:trn>
+					</c:set>
+						<digi:link href="/admin.do" styleClass="comment" title="${clickToViewAdmin}" >
 						<digi:trn key="aim:AmpAdminHome">
 						Admin Home
 						</digi:trn>
 						</digi:link>&nbsp;&gt;&nbsp;
-						<bean:define id="translation">
-							<digi:trn key="aim:clickToViewWorkspaceManager">Click here to view Workspace Manager</digi:trn>
-						</bean:define>
-						<digi:link href="/workspaceManager.do" styleClass="comment" title="<%=translation%>" >
+						<c:set var="clickToViewWorkspaceManager">
+						<digi:trn key="aim:clickToViewWorkspaceManager">Click here to view Workspace Manager</digi:trn>
+						</c:set>
+						<digi:link href="/workspaceManager.do" styleClass="comment" title="${clickToViewWorkspaceManager}" >
 						<digi:trn key="aim:workspaceManager">
 						Workspace Manager
 						</digi:trn>
@@ -99,28 +99,29 @@
 																<bean:write name="roles" property="ampTeamMemRoleId" />
 															</c:set>
 															<c:set target="${urlParams}" property="action" value="view" />
-															<bean:define id="translation">
+															<c:set var="translation">
 																<digi:trn key="aim:clickToViewRole">Click here to view Role</digi:trn>
-															</bean:define>
-															<digi:link href="/getRole.do" name="urlParams" title="<%=translation%>" >
+															</c:set>
+															<digi:link href="/getRole.do" name="urlParams" title="${translation}" >
 																<bean:write name="roles" property="role"/>
 															</digi:link>															
 														</td>
 														<td bgcolor="#eeeeee">
 															<c:set target="${urlParams}" property="action" value="edit" />
-															<bean:define id="translation">
-																<digi:trn key="aim:clickToEditRole">Click here to Edit Role</digi:trn>
-															</bean:define>
-															[ <digi:link href="/getRole.do" name="urlParams" title="<%=translation%>" >
+															
+															<c:set var="clickToEditRole">
+															<digi:trn key="aim:clickToEditRole">Click here to Edit Role</digi:trn>
+															</c:set>
+															[ <digi:link href="/getRole.do" name="urlParams" title="${clickToEditRole}" >
 																<digi:trn key="aim:rolesManagerEdit">Edit</digi:trn>
 															</digi:link> ]
 														</td>
 														<td bgcolor="#eeeeee">
 															<c:set target="${urlParams}" property="action" value="delete" />
-															<bean:define id="translation">
-																<digi:trn key="aim:clickToDeleteRole">Click here to Delete Role</digi:trn>
-															</bean:define>
-															[ <digi:link href="/getRole.do" name="urlParams" title="<%=translation%>" >
+															<c:set var="translation">
+															<digi:trn key="aim:clickToDeleteRole">Click here to Delete Role</digi:trn>
+															</c:set>
+															[ <digi:link href="/getRole.do" name="urlParams" title="${translation}" >
 																<digi:trn key="aim:rolesManagerDelete">Delete</digi:trn>
 															</digi:link> ]														
 														</td>
@@ -142,10 +143,10 @@
 													<c:set target="${urlParams1}" property="page">
 														<%=pages%>
 													</c:set>
-													<bean:define id="translation">
+													<c:set var="translation">
 														<digi:trn key="aim:clickToViewNextPage">Click here to goto Next Page</digi:trn>
-													</bean:define>
-													<digi:link href="/roles.do" name="urlParams1" title="<%=translation%>" >
+													</c:set>
+													<digi:link href="/roles.do" name="urlParams1" title="${translation}" >
 														<%=pages%>
 													</digi:link> |&nbsp; 												
 												</logic:iterate>
@@ -185,10 +186,10 @@
 										<tr>
 											<td>
 												<digi:img src="module/aim/images/arrow-014E86.gif" width="15" height="10"/>
-												<bean:define id="translation">
+												<c:set var="translation">
 													<digi:trn key="aim:clickToViewTeams">Click here to view Teams</digi:trn>
-												</bean:define>
-												<digi:link href="/workspaceManager.do" title="<%=translation%>" >
+												</c:set>
+												<digi:link href="/workspaceManager.do" title="${translation}" >
 												<digi:trn key="aim:teams">
 												Teams
 												</digi:trn>
@@ -198,10 +199,10 @@
 										<tr>
 											<td>
 												<digi:img src="module/aim/images/arrow-014E86.gif" width="15" height="10"/>
-												<bean:define id="translation">
+												<c:set var="translation">
 													<digi:trn key="aim:clickToAddTeams">Click here to Add Teams</digi:trn>
-												</bean:define>
-												<digi:link href="/updateWorkspace.do" title="<%=translation%>" >
+												</c:set>
+												<digi:link href="/updateWorkspace.do" title="${translation}" >
 												<digi:trn key="aim:addTeam">
 												Add Teams
 												</digi:trn>
@@ -211,10 +212,10 @@
 										<tr>
 											<td>
 												<digi:img src="module/aim/images/arrow-014E86.gif" width="15" height="10"/>
-												<bean:define id="translation">
+												<c:set var="translation">
 													<digi:trn key="aim:clickToAddRoles">Click here to Add Roles</digi:trn>
-												</bean:define>
-												<digi:link href="/updateRole.do" title="<%=translation%>" >
+												</c:set>
+												<digi:link href="/updateRole.do" title="${translation}" >
 												<digi:trn key="aim:addRole">
 												Add Roles
 												</digi:trn>
@@ -224,10 +225,10 @@
 										<tr>
 											<td>
 												<digi:img src="module/aim/images/arrow-014E86.gif" width="15" height="10"/>
-												<bean:define id="translation">
+												<c:set var="translation">
 													<digi:trn key="aim:clickToViewAdmin">Click here to goto Admin Home</digi:trn>
-												</bean:define>
-												<digi:link href="/admin.do" title="<%=translation%>" >
+												</c:set>
+												<digi:link href="/admin.do" title="${translation}" >
 												<digi:trn key="aim:AmpAdminHome">
 												Admin Home
 												</digi:trn>

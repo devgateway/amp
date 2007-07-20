@@ -33,8 +33,13 @@ public class NpdSettingsAction extends DispatchAction {
 			teamId = form.getAmpTeamId();
 		}
 
-		NpdSettings npdSettings = NpdSettingsUtil.getCurrentSettings(teamId);
-		form.setAngle(npdSettings.getAngle());
+		NpdSettings npdSettings = NpdSettingsUtil.getCurrentSettings(teamId);	
+		if(npdSettings.getAngle()==null){
+			form.setAngle("");
+		}else {
+			form.setAngle(String.valueOf(npdSettings.getAngle()));	
+		}		
+		
 		form.setHeight(npdSettings.getHeight());
 		form.setWidth(npdSettings.getWidth());
 		form.setAmpTeamId(npdSettings.getTeam().getAmpTeamId());
@@ -58,8 +63,15 @@ public class NpdSettingsAction extends DispatchAction {
 		} else {
 			teamId = form.getAmpTeamId();
 		}
-		NpdSettings npdSettings = NpdSettingsUtil.getCurrentSettings(teamId);
-		npdSettings.setAngle(form.getAngle());
+		NpdSettings npdSettings = NpdSettingsUtil.getCurrentSettings(teamId);	
+		
+		if(form.getAngle().equals("")){
+			npdSettings.setAngle(null);
+		}else {
+			npdSettings.setAngle(new Integer(form.getAngle()));
+				
+		}		
+		
 		npdSettings.setHeight(form.getHeight());
 		npdSettings.setWidth(form.getWidth());
 		NpdSettingsUtil.updateSettings(npdSettings);
@@ -76,8 +88,8 @@ public class NpdSettingsAction extends DispatchAction {
 			errors.add(null, new ActionMessage(
 					"errors.aim.npdsettings.incorectWidth"));
 		}
-		if (form.getAngle() == null || form.getAngle().intValue() < 0
-				|| form.getAngle().intValue() > 90) {
+		if (!form.getAngle().equals("") && ( form.getAngle() == null || Integer.parseInt(form.getAngle()) < 0
+				|| Integer.parseInt(form.getAngle()) > 90)) {
 			errors.add(null, new ActionMessage(
 					"errors.aim.npdsettings.incorrectAngle"));
 		}

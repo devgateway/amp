@@ -15,6 +15,7 @@ import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.ChartUtil;
 import org.digijava.module.aim.util.NpdSettingsUtil;
 import org.digijava.module.aim.util.ProgramUtil;
+import org.digijava.module.aim.util.TeamUtil;
 import org.jfree.chart.ChartRenderingInfo;
 import org.jfree.chart.ChartUtilities;
 import org.jfree.chart.JFreeChart;
@@ -70,15 +71,19 @@ public class getNPDgraph extends Action {
             ChartRenderingInfo info = new ChartRenderingInfo();
 
 
-            response.setContentType("image/png");
+            response.setContentType("image/png");            
+           
+    		Long teamId=TeamUtil.getCurrentTeam(request).getAmpTeamId();
+    		NpdSettings npdSettings=NpdSettingsUtil.getCurrentSettings(teamId);            
+            Double angle=null;
             
-            TeamMember teamMember = (TeamMember) request.getSession().getAttribute("currentMember");
-    		Long teamId=teamMember.getTeamId();
-    		NpdSettings npdSettings=NpdSettingsUtil.getCurrentSettings(teamId);
-    		CategoryPlot categoryplot = (CategoryPlot)chart.getPlot();
-            CategoryAxis categoryaxis = categoryplot.getDomainAxis();
-            Double angle=npdSettings.getAngle().intValue()*3.1415926535897931D/180D;
-            categoryaxis.setCategoryLabelPositions(CategoryLabelPositions.createUpRotationLabelPositions(angle));
+            if(npdSettings.getAngle()!=null){
+        		CategoryPlot categoryplot = (CategoryPlot)chart.getPlot();
+                CategoryAxis categoryaxis = categoryplot.getDomainAxis();
+            	angle=npdSettings.getAngle().intValue()*3.1415926535897931D/180D;
+                categoryaxis.setCategoryLabelPositions(CategoryLabelPositions.createUpRotationLabelPositions(angle));
+            }
+            
     		ChartUtilities.writeChartAsPNG(response.getOutputStream(), chart, npdSettings.getWidth().intValue(),
             		npdSettings.getHeight().intValue(), info);
          

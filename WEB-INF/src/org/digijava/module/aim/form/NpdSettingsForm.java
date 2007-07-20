@@ -11,10 +11,10 @@ import org.apache.struts.action.ActionMessages;
 public class NpdSettingsForm extends ActionForm  {
 	private Integer width;
 	private Integer height;
-	private Integer angle;
+	private String angle;
 	private Long ampTeamId;
 	
-	public void setAngle(Integer angle) {
+	public void setAngle(String angle) {
 		this.angle = angle;
 	}
 	public void setHeight(Integer height) {
@@ -23,7 +23,7 @@ public class NpdSettingsForm extends ActionForm  {
 	public void setWidth(Integer width) {
 		this.width = width;
 	}
-	public Integer getAngle() {
+	public String getAngle() {
 		return angle;
 	}
 	public Integer getHeight() {

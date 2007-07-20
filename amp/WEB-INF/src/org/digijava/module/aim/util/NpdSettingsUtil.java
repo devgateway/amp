@@ -42,11 +42,9 @@ public class NpdSettingsUtil {
 			AmpTeam ampTeam = (AmpTeam) session.load(AmpTeam.class, teamId);
 			if (ampTeam.getNpdSettings() == null) {
 				npdSettings = new NpdSettings();
-				npdSettings.setAngle(new Integer(0));
 				npdSettings.setWidth(new Integer(ChartUtil.CHART_WIDTH));
 				npdSettings.setHeight(new Integer(ChartUtil.CHART_HEIGHT));
 				npdSettings.setTeam(ampTeam);
-				updateSettings(npdSettings);
 			} else {
 				npdSettings = ampTeam.getNpdSettings();
 			}

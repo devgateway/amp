@@ -31,13 +31,17 @@
 		 	errmsg+='\n<digi:trn key="aim:npdSettings:warningHeightRange">Please enter correct height</digi:trn>';
 		 }		 
 		 //***Validate angle	
-		 if(parseInt(angle)==(angle-0)) {
-		 	if(parseInt(angle)<0 || parseInt(angle)>90){
+
+			if(angle!=''){
+		  		if(parseInt(angle)==(angle-0)) {
+		 		if(parseInt(angle)<0 || parseInt(angle)>90){
 			 	errmsg+='\n<digi:trn key="aim:npdSettings:warningAngle">Angle of inclination must be in range from 0 to 90</digi:trn>';
 			}
 		 }else{
 		 	errmsg+='\n<digi:trn key="aim:npdSettings:warningAngleRange">Please enter correct angle</digi:trn>';
 		 }
+				} 
+		 
 		 //***Validate error messages
 		 if (errmsg==''){
 			 window.close();
@@ -79,7 +83,11 @@
 						<td align="right" valign="middle" width="50%">
 							<digi:trn key="aim:npdSettings:angle">Angle</digi:trn>
 						</td>
-						<td align="left" valign="middle"><html:text property="angle" styleClass="inp-text" size="7"/></td>
+						<td align="left" valign="middle"><html:text property="angle" styleClass="inp-text" size="7"/>&nbsp;
+							<small>
+								<digi:trn key="aim:npdSettings:blankAngle">Blank value will be generated automatically</digi:trn>
+							</small>
+						</td>
 					</tr>
 				
 					<tr bgcolor="#ffffff">

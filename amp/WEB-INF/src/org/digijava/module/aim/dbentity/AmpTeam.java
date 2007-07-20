@@ -31,7 +31,15 @@ public class AmpTeam  implements Serializable, Comparable, Identifiable {
 	private String teamCategory;	// Donor or Mofed team
 	private AmpTeam relatedTeamId;	// a donor team referring a mofed team
 	private Set activityList;		// activities assigned to donor team
-	
+	private NpdSettings npdSettings;
+
+	public NpdSettings getNpdSettings() {
+		return npdSettings;
+	}
+
+	public void setNpdSettings(NpdSettings npdSettings) {
+		this.npdSettings = npdSettings;
+	}
 
 	/**
 	 * @return ampTeamId

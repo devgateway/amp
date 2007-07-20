@@ -17,8 +17,9 @@
         <action login-required="false" pattern="/getDesktopReports" /> 
         <action login-required="false" pattern="/viewActivityPreview" />      
         <action login-required="false" pattern="/previewActivity" />                                          
-        <action login-required="false" pattern="/viewTeamReports" />         
-        </security>
+        <action login-required="false" pattern="/viewTeamReports" /> 
+        <action login-required="true" pattern="/npdSettingsAction" />        
+     </security>
 
 	<!-- highlights classes Begin-->
 	<hibernate-classes required="false">
@@ -274,7 +275,9 @@
 	<hibernate-class>
 			  org.digijava.module.aim.dbentity.AmpCategoryValue
 	</hibernate-class>
-
+	<hibernate-class>
+			  org.digijava.module.aim.dbentity.NpdSettings
+	</hibernate-class>
 	</hibernate-classes>
         <!-- highlights classes End-->
 

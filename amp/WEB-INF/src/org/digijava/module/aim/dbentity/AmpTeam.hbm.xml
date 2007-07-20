@@ -28,7 +28,7 @@
 				<key column="amp_team_id"/>
 				<many-to-many class="org.digijava.module.aim.dbentity.AmpActivity" column="amp_activity_id"/>
 		</set>			
-		
+		<one-to-one name="npdSettings" class="org.digijava.module.aim.dbentity.NpdSettings" property-ref="team" cascade="delete"/>
 	 
 	</class>
 </hibernate-mapping>

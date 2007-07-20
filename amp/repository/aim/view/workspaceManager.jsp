@@ -12,6 +12,17 @@
 		var flag = confirm("Delete this workspace?");
 		return flag;
 	}
+	function openNpdSettingsWindow(ampTeamId){
+		var url=addActionToURL('npdSettingsAction.do');
+        url+='?actionType=viewCurrentSettings&ampTeamId='+ampTeamId;
+        openURLinResizableWindow(url,600,400);
+	}
+	function addActionToURL(actionName){
+		var fullURL=document.URL;
+		var lastSlash=fullURL.lastIndexOf("/");
+		var partialURL=fullURL.substring(0,lastSlash);
+		return partialURL+"/"+actionName;
+	}
 </script>
 
 <digi:instance property="aimWorkspaceForm" />
@@ -98,7 +109,7 @@
 															<bean:write name="workspaces" property="name"/></digi:link>
 														</td>
 														<td bgcolor="#ffffff" width="70" align="center">
-															<jsp:useBean id="urlParams" type="java.util.Map" class="java.util.HashMap"/>
+										 					<jsp:useBean id="urlParams" type="java.util.Map" class="java.util.HashMap"/>
 															<c:set target="${urlParams}" property="teamId">
 															<bean:write name="workspaces" property="ampTeamId" />
 															</c:set>
@@ -137,6 +148,11 @@
 															</c:set>
 															[ <digi:link href="/deleteWorkspace.do" name="urlParams4"
 																title="${translation}" onclick="return onDelete()">Delete</digi:link> ]
+														</td>
+														<td bgcolor="#ffffff" align="center" nowrap>
+															[<a href="JavaScript:openNpdSettingsWindow(${workspaces.ampTeamId});">
+																<digi:trn key="aim:npdSettings:EditNpdSettings">Npd Settings</digi:trn>
+															</a>]
 														</td>
 													</tr>
 													</logic:iterate>
@@ -247,7 +263,7 @@
 												</digi:trn>
 												</digi:link>
 											</td>
-										</tr>
+										</tr>							
 										<!-- end of other links -->
 									</table>
 								</td>

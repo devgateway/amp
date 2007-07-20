@@ -12,6 +12,8 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Vector;
 
+import javax.servlet.http.HttpServletRequest;
+
 import net.sf.hibernate.Hibernate;
 import net.sf.hibernate.Query;
 import net.sf.hibernate.Session;
@@ -1415,5 +1417,15 @@ public class TeamMemberUtil {
 			}
 		}
 		return false;
+	}
+	/**
+	 * Retrieves current TeamMember from request
+	 * @param HttpServletRequest request
+	 * @return AmpTeamMember currentAmpTeamMember
+	 */
+	public static AmpTeamMember getCurrentAmpTeamMember(HttpServletRequest request){
+		TeamMember currentTeamMember = (TeamMember) request.getSession().getAttribute("currentMember");
+		AmpTeamMember currentAmpTeamMember=getAmpTeamMember(currentTeamMember.getMemberId());
+		return currentAmpTeamMember;
 	}
 }

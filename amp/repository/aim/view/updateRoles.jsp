@@ -47,18 +47,18 @@
 			<table cellPadding=5 cellSpacing=0 width="100%">
 				<tr>
 					<td height=33><span class=crumb>
-						<bean:define id="translation">
+						<c:set var="translation">
 							<digi:trn key="aim:clickToViewAdmin">Click here to goto Admin Home</digi:trn>
-						</bean:define>
-						<digi:link href="/admin.do" styleClass="comment" title="<%=translation%>" >
+						</c:set>
+						<digi:link href="/admin.do" styleClass="comment" title="${translation}" >
 						<digi:trn key="aim:AmpAdminHome">
 						Admin Home
 						</digi:trn>
 						</digi:link>&nbsp;&gt;&nbsp;
-						<bean:define id="translation">
+						<c:set var="translation">
 							<digi:trn key="aim:clickToViewWorkspaceManager">Click here to view Workspace Manager</digi:trn>
-						</bean:define>
-						<digi:link href="/workspaceManager.do" styleClass="comment" title="<%=translation%>" >
+						</c:set>
+						<digi:link href="/workspaceManager.do" styleClass="comment" title="${translation}" >
 						<digi:trn key="aim:workspaceManager">
 						Workspace Manager
 						</digi:trn>
@@ -420,10 +420,10 @@
 										<tr>
 											<td>
 												<digi:img src="module/aim/images/arrow-014E86.gif" width="15" height="10"/>
-												<bean:define id="translation">
+												<c:set var="translation">
 													<digi:trn key="aim:clickToViewTeams">Click here to view Teams</digi:trn>
-												</bean:define>
-												<digi:link href="/workspaceManager.do" title="<%=translation%>" >
+												</c:set>
+												<digi:link href="/workspaceManager.do" title="${translation}" >
 												<digi:trn key="aim:teams">
 												Teams
 												</digi:trn>
@@ -433,10 +433,10 @@
 										<tr>
 											<td>
 												<digi:img src="module/aim/images/arrow-014E86.gif" width="15" height="10"/>
-												<bean:define id="translation">
+												<c:set var="translation">
 													<digi:trn key="aim:clickToAddTeams">Click here to Add Teams</digi:trn>
-												</bean:define>
-												<digi:link href="/updateWorkspace.do" title="<%=translation%>" >
+												</c:set>
+												<digi:link href="/updateWorkspace.do" title="${translation}" >
 												<digi:trn key="aim:addTeam">
 												Add Teams
 												</digi:trn>
@@ -446,10 +446,10 @@
 										<tr>
 											<td>
 												<digi:img src="module/aim/images/arrow-014E86.gif" width="15" height="10"/>
-												<bean:define id="translation">
+												<c:set var="translation">
 													<digi:trn key="aim:clickToViewRoles">Click here to view Roles</digi:trn>
-												</bean:define>
-												<digi:link href="/roles.do" title="<%=translation%>" >
+												</c:set>
+												<digi:link href="/roles.do" title="${translation}" >
 												<digi:trn key="aim:roles">
 												Roles
 												</digi:trn>

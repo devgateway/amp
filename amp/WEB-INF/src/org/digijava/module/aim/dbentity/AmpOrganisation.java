@@ -46,6 +46,9 @@ public class AmpOrganisation implements Comparable, Serializable, Identifiable
 	private String segmentCode;
 	private Set sectors;
 
+	//Pledges
+	private Set fundingDetails;
+	//
 	public Set getSectors() {
 		return sectors;
 	}
@@ -426,5 +429,13 @@ public class AmpOrganisation implements Comparable, Serializable, Identifiable
 
 	public Object getIdentifier() {
 		return this.getAmpOrgId();
+	}
+
+	public Set getFundingDetails() {
+		return fundingDetails;
+	}
+
+	public void setFundingDetails(Set fundingDetails) {
+		this.fundingDetails = fundingDetails;
 	}
 }	

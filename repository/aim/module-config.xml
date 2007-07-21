@@ -30,6 +30,9 @@
 			org.digijava.module.aim.dbentity.AmpStatus
 		</hibernate-class>
 		<hibernate-class>
+			org.digijava.module.aim.dbentity.AmpPledge
+		</hibernate-class>
+		<hibernate-class>
 			org.digijava.module.aim.dbentity.AmpSector
 		</hibernate-class>
 		<hibernate-class>

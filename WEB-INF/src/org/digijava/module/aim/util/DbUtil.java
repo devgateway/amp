@@ -1,5 +1,6 @@
 package org.digijava.module.aim.util;
 
+import java.io.Serializable;
 import java.sql.BatchUpdateException;
 import java.text.DecimalFormat;
 import java.text.NumberFormat;
@@ -60,6 +61,7 @@ import org.digijava.module.aim.dbentity.AmpPages;
 import org.digijava.module.aim.dbentity.AmpPerspective;
 import org.digijava.module.aim.dbentity.AmpPhysicalComponentReport;
 import org.digijava.module.aim.dbentity.AmpPhysicalPerformance;
+import org.digijava.module.aim.dbentity.AmpPledge;
 import org.digijava.module.aim.dbentity.AmpRegion;
 import org.digijava.module.aim.dbentity.AmpReportCache;
 import org.digijava.module.aim.dbentity.AmpReportLocation;
@@ -2112,6 +2114,7 @@ public class DbUtil {
 
 			}
 			org.setSectors(sect);
+			
 			sess.update(org);
 			tx.commit();
 		} catch (Exception e) {

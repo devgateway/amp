@@ -1,14 +1,19 @@
 package org.digijava.module.aim.action ;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
+import java.util.StringTokenizer;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import javax.swing.text.DateFormatter;
 
 import org.apache.log4j.Logger;
 import org.apache.struts.action.Action;
@@ -17,17 +22,24 @@ import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.digijava.module.aim.dbentity.AmpActivity;
 import org.digijava.module.aim.dbentity.AmpActivitySector;
+import org.digijava.module.aim.dbentity.AmpCurrency;
 import org.digijava.module.aim.dbentity.AmpFiscalCalendar;
+import org.digijava.module.aim.dbentity.AmpFunding;
+import org.digijava.module.aim.dbentity.AmpFundingDetail;
 import org.digijava.module.aim.dbentity.AmpOrgGroup;
 import org.digijava.module.aim.dbentity.AmpOrgRole;
 import org.digijava.module.aim.dbentity.AmpOrgType;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
+import org.digijava.module.aim.dbentity.AmpPledge;
 import org.digijava.module.aim.dbentity.AmpRegion;
 import org.digijava.module.aim.dbentity.AmpSector;
 import org.digijava.module.aim.dbentity.AmpSectorScheme;
 import org.digijava.module.aim.form.AddOrgForm;
 import org.digijava.module.aim.helper.ActivitySector;
+import org.digijava.module.aim.helper.FundingDetail;
+import org.digijava.module.aim.helper.Pledge;
 import org.digijava.module.aim.util.ActivityUtil;
+import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.LocationUtil;
 import org.digijava.module.aim.util.SectorUtil;
@@ -57,6 +69,40 @@ public class EditOrganisation extends Action {
 
 					 AddOrgForm editForm = (AddOrgForm) form;
 					//editForm.setSectors(null);
+					// Add Pledge
+					if (request.getParameter("addPledge") != null){
+						Pledge det = new Pledge();
+						det.setIndexId(System.currentTimeMillis());
+						if (editForm.getFundingDetails() != null){
+							ArrayList list = (ArrayList) editForm.getFundingDetails();
+							list.add(det);
+							editForm.setFundingDetails(list);
+						}
+						else{
+							ArrayList newList = new ArrayList();
+							newList.add(det);
+							editForm.setFundingDetails(newList);
+						}
+						return mapping.findForward("forward");
+					}
+					else
+						if (request.getParameter("delPledge") != null){
+							long index = editForm.getTransIndexId();
+							ArrayList list = (ArrayList) editForm.getFundingDetails();
+							Iterator i = list.iterator();
+							while (i.hasNext()) {
+								Pledge e = (Pledge) i.next();
+								if (e.getIndexId() == index){
+									i.remove();
+									break;
+								}
+							}
+							return mapping.findForward("forward");
+						}
+					if (editForm.getCurrencies() == null){
+						editForm.setCurrencies(CurrencyUtil.getAmpCurrency());
+					}
+					//
 					// Add sectors
 					if (request.getParameter("addSector") != null){
 						ActivitySector sect = (ActivitySector) session.getAttribute("sectorSelected");
@@ -400,6 +446,27 @@ public class EditOrganisation extends Action {
 								
 								editForm.setSectors(convSect);
 							 	//
+								//Pledges
+								Collection funding = ampOrg.getFundingDetails();
+								ArrayList fundingDet = new ArrayList();
+								Iterator it = funding.iterator();
+								while (it.hasNext()) {
+									AmpPledge e = (AmpPledge) it.next();
+									Pledge fund = new Pledge();
+									fund.setAdjustmentType(e.getAdjustmentType().intValue());
+									fund.setAmount(String.valueOf(e.getAmount()));
+									fund.setCurrencyCode(e.getCurrency().getCurrencyCode());
+									fund.setProgram(e.getProgram());
+									Date d = new Date();
+									SimpleDateFormat dz = new SimpleDateFormat("dd/mm/yyyy");
+									String date = "";
+									if (e.getDate() != null)
+										date = dz.format(e.getDate());
+									fund.setDate(date);
+									fundingDet.add(fund);
+								}
+								editForm.setFundingDetails(fundingDet);
+								//
 								return mapping.findForward("forward");
 						 }
 						 else {
@@ -566,6 +633,38 @@ public class EditOrganisation extends Action {
 								}
 							}
 							ampOrg.setSectors(sectors);
+							//
+							//Pledges
+							Set ampPledges = new HashSet();
+							if (editForm.getFundingDetails() != null){
+								Iterator itr = editForm.getFundingDetails().iterator();
+								while (itr.hasNext()) {
+									Pledge el = (Pledge) itr.next();
+									AmpPledge pledge = new AmpPledge();
+									pledge.setAdjustmentType(new Integer(el.getAdjustmentType()));
+									pledge.setAmount(Double.valueOf(el.getAmount()));
+									AmpCurrency c = CurrencyUtil.getCurrencyByCode(el.getCurrencyCode());
+									pledge.setCurrency(c);
+									pledge.setProgram(el.getProgram());
+									String date = el.getDate();
+									System.out.println(date);
+									if (!("".equals(date))){
+										Date d = new Date();
+										SimpleDateFormat dz = new SimpleDateFormat("dd/mm/yyyy");
+										d = dz.parse(date);
+										System.out.println(d.toString());
+										pledge.setDate(d);
+									}
+									ampPledges.add(pledge);
+									
+								}
+								if (ampOrg.getFundingDetails() != null)
+									ampOrg.getFundingDetails().clear();
+								else
+									ampOrg.setFundingDetails(new HashSet());
+								
+								ampOrg.getFundingDetails().addAll(ampPledges);
+							}
 							//
 
 							if ("create".equals(action))

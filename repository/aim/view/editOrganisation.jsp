@@ -8,7 +8,26 @@
 
 <digi:ref href="css/styles.css" type="text/css" rel="stylesheet" />
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
+<script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/calendar.js"/>"></script>
+
 <script language="JavaScript" type="text/javascript">
+	function addPledge() {
+		<digi:context name="addSec" property="context/module/moduleinstance/editOrganisation.do" />
+		document.aimAddOrgForm.action = "<%= addSec %>"+"~ampOrgId="+document.aimAddOrgForm.ampOrgId.value+"~actionFlag="+document.aimAddOrgForm.actionFlag.value+"~addPledge=true";
+		document.aimAddOrgForm.target = "_self";
+		document.aimAddOrgForm.submit();
+	}
+	function removeFundingDetail(index) {
+		var flag = confirm("Are you sure you want to remove the selected transaction ?");
+		if(flag != false) {
+			<digi:context name="addSec" property="context/module/moduleinstance/editOrganisation.do" />
+			document.aimAddOrgForm.action = "<%= addSec %>"+"~ampOrgId="+document.aimAddOrgForm.ampOrgId.value+"~actionFlag="+document.aimAddOrgForm.actionFlag.value+"~delPledge=true";
+			document.aimAddOrgForm.target = "_self";
+			document.aimAddOrgForm.transIndexId.value=index;
+			document.aimAddOrgForm.submit();
+		}
+	}
+	
 	function addSector()
 	{
 		<digi:context name="addSec" property="context/module/moduleinstance/editOrganisation.do" />
@@ -280,6 +299,7 @@ function loadPage()
 <html:hidden property="orgTypeFlag" />
 <html:hidden property="levelFlag" />
 <html:hidden property="saveFlag" />
+<html:hidden property="transIndexId"/>
 <input type="hidden" name="currUrl" value="">
 
 <!--  AMP Admin Logo -->
@@ -549,7 +569,7 @@ function loadPage()
                                                                      		<digi:trn key="aim:sectorPreferences">Sector Preferences</digi:trn>
 																		</td>
 																	    <td width="380" height="30" colspan="2">
-                                                                    		<table cellPadding=5 cellSpacing=1 border=0 width="100%"	bgcolor="#d7eafd">
+                                                                    		<table cellPadding=5 cellSpacing=1 border=0 width="100%" bgcolor="#d7eafd" class=box-border-nopadding>
 																				<tr>
 									                                              <td bgcolor="#ffffff" width="100%">
 									                                                <table cellPadding=1 cellSpacing=1 border=0	bgcolor="#ffffff" width="100%">
@@ -620,6 +640,94 @@ function loadPage()
 									                                              </td>
 									                                            </tr>
 									                                          </table>
+																		</td>
+																	</tr>
+																	<tr>
+																		<td width="169" align="right" height="30">
+																			<digi:trn key="aim:pledges">Pledges</digi:trn>
+																		</td>
+																	    <td width="380" height="30" colspan="2">
+                                                              				&nbsp;
+                                                        					<% String tempIndexStr = ""; %>
+																			<% int tempIndex = 0; %>
+																			<!-- ############################## -->
+                                                        					<table width="100%" border="0" bgcolor="#f4f4f2" cellspacing="1" cellpadding="0" class=box-border-nopadding>
+                                                        					<c:if test="${ aimAddOrgForm.fundingDetails != null}">
+                                                        					<c:set var="index" value="-1"/>
+                                                        								<tr>
+                                                        									<td align="center" valign="bottom">
+	                                                        									Program
+                                                        									</td>
+                                                        									<td align="center" valign="bottom">
+                                                        										Planned/Actual
+                                                        									</td>
+                                                        									<td align="center" valign="bottom">
+                                                        										Ammount
+                                                        									</td>
+                                                        									<td align="center" valign="bottom">
+                                                        										Currency
+                                                        									</td>
+                                                        									<td align="center" valign="bottom">
+                                                        										Date
+                                                        									</td>
+                                                        								</tr>
+																		 	<c:forEach var="fundingDetail" items="${aimAddOrgForm.fundingDetails}">
+																		 			 	<tr>
+																							<td valign="bottom">
+																								<html:text name="fundingDetail" indexed="true" property="program" styleClass="inp-text" size="10"/>
+																							</td>
+																							<td valign="bottom">
+																								<c:set var="index" value="${index+1}"/>
+																								<html:select name="fundingDetail" indexed="true" property="adjustmentType" styleClass="inp-text">
+																									<html:option value="1"><digi:trn key="aim:Actual">Actual</digi:trn></html:option>
+																									<html:option value="0"><digi:trn key="aim:Planned">Planned</digi:trn></html:option>
+																								</html:select>
+																							</td>
+																							<td valign="bottom">
+																								<html:text name="fundingDetail" indexed="true" property="amount" size="17" styleClass="amt"/>
+																							</td>
+																							<td valign="bottom">
+																								<html:select name="fundingDetail" indexed="true" property="currencyCode" styleClass="inp-text">
+																									<html:optionsCollection name="aimAddOrgForm" property="currencies" value="currencyCode"
+																									label="currencyName"/>
+																								</html:select>
+																							</td>
+																							<td vAlign="bottom">
+																								<table cellPadding=0 cellSpacing=0>
+																									<tr>
+																										<td valign="bottom">
+																											<% tempIndexStr = "" + tempIndex; tempIndex++;%>
+																											<html:text name="fundingDetail" indexed="true" property="date"
+																											styleId="<%=tempIndexStr%>" styleClass="inp-text" readonly="true" size="10"/>
+																										</td>
+																										<td align="left" vAlign="center">&nbsp;
+																			             					<a href='javascript:calendar("<%=tempIndexStr%>")'>
+															   						        	  			<img src="../ampTemplate/images/show-calendar.gif" border="0"></a>
+																										</td>
+																									</tr>
+																								</table>
+																							</td>
+																							<td valign="bottom">
+																								<a href="javascript:removeFundingDetail(<bean:write name="fundingDetail" property="indexId"/>)">
+																								 	<digi:img src="module/cms/images/deleteIcon.gif" border="0" alt="Delete this transaction"/>
+																								</a>
+																							</td>
+																						</tr>
+																			</c:forEach>
+																	 		</c:if>
+																	 			<tr>
+																	 				<td>
+																	 					&nbsp;
+																	 				</td>
+																	 			</tr>
+																	 			<tr valign="baseline">
+																	 				<td>
+																	 					<digi:img src="module/aim/images/arrow-014E86.gif" 	width="15" height="10"/>
+																	 					<a onclick="addPledge()" style="cursor:pointer;"><digi:trn key="aim:addPledge">Add Pledge</digi:trn></a>
+																	 				</td>
+																	 			</tr>
+																	 		</table>
+																	 		<!-- ############################## -->
 																		</td>
 																	</tr>
 																	<tr>
@@ -711,7 +819,6 @@ function loadPage()
 																				<html:button  styleClass="dr-menu" property="submitButton"  onclick="return msg()">
 																					<digi:trn key="btn:deleteThisOrganization">Delete this Organization</digi:trn> 
 																				</html:button>
-																				
 																			</td>
 																		</tr>
 																	</logic:equal>

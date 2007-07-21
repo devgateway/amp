@@ -1,6 +1,7 @@
 package org.digijava.module.aim.action ;
 
 import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -43,6 +44,7 @@ import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.LocationUtil;
 import org.digijava.module.aim.util.SectorUtil;
+import org.digijava.module.aim.helper.Constants;
 
 
 public class EditOrganisation extends Action {
@@ -638,6 +640,36 @@ public class EditOrganisation extends Action {
 							Set ampPledges = new HashSet();
 							if (editForm.getFundingDetails() != null){
 								Iterator itr = editForm.getFundingDetails().iterator();
+								//verify if all fields were completed
+								boolean forw = false;
+								while (itr.hasNext()) {
+									Pledge e = (Pledge) itr.next();
+									try {
+										double val = Double.parseDouble(e.getAmount());
+										if (val == 0)
+											forw = true;
+										if ((e.getProgram() == null)||("".equals(e.getProgram())))
+											forw = true;
+										Date d = new Date();
+										SimpleDateFormat dz = new SimpleDateFormat(Constants.CALENDAR_DATE_FORMAT);
+										d = dz.parse(e.getDate());
+									} catch (Exception ex) {
+										if ((ex instanceof ParseException)||(ex instanceof NumberFormatException))
+											forw = true;
+										else{
+											logger.debug(ex);
+											ex.printStackTrace();
+										}
+									}
+									if (forw)
+										break;
+								}
+								if (forw){
+									editForm.setFlag("completePledges");
+									return mapping.findForward("forward");
+								}
+								//
+								itr = editForm.getFundingDetails().iterator();
 								while (itr.hasNext()) {
 									Pledge el = (Pledge) itr.next();
 									AmpPledge pledge = new AmpPledge();
@@ -650,7 +682,7 @@ public class EditOrganisation extends Action {
 									System.out.println(date);
 									if (!("".equals(date))){
 										Date d = new Date();
-										SimpleDateFormat dz = new SimpleDateFormat("dd/mm/yyyy");
+										SimpleDateFormat dz = new SimpleDateFormat(Constants.CALENDAR_DATE_FORMAT);
 										d = dz.parse(date);
 										System.out.println(d.toString());
 										pledge.setDate(d);

@@ -270,7 +270,6 @@ function loadPage()
 		<digi:context name="addSec" property="context/module/moduleinstance/editOrganisation.do" />
 		document.aimAddOrgForm.action = "<%= addSec %>";<!-- +"~ampOrgId="+document.aimAddOrgForm.ampOrgId.value+"~actionFlag=edit~remSectors=true"; -->
 		document.aimAddOrgForm.target = "_self";
-	    
 		document.aimAddOrgForm.submit();
 	}
 
@@ -300,12 +299,12 @@ function loadPage()
 <html:hidden property="levelFlag" />
 <html:hidden property="saveFlag" />
 <html:hidden property="transIndexId"/>
+
 <input type="hidden" name="currUrl" value="">
 
 <!--  AMP Admin Logo -->
 <jsp:include page="teamPagesHeader.jsp" flush="true" />
 <!-- End of Logo -->
-
 <table bgColor=#ffffff cellPadding=5 cellSpacing=1 width=705>
 	<tr>
 		<td class=r-dotted-lg width=14>&nbsp;</td>
@@ -353,6 +352,12 @@ function loadPage()
 						<logic:equal name="aimAddOrgForm" property="flag" value="orgCodeExist" >
 							<b><digi:trn key="aim:orgCodeExistMsg"><font color="#FF0000">
                                		Please choose other organization code as it is currently in use by some other organization !</font>
+							   </digi:trn>
+							</b>
+						</logic:equal>
+						<logic:equal name="aimAddOrgForm" property="flag" value="completePledges">
+							<b><digi:trn key="aim:completePledges"><font color="#FF0000">
+                               		Please complete the fields program, ammount and date for each Pledge!</font>
 							   </digi:trn>
 							</b>
 						</logic:equal>
@@ -799,7 +804,7 @@ function loadPage()
 																			<table width="100%" cellspacing="5">
 																				<tr>
 																					<td width="42%" align="right">
-																						<html:button  styleClass="dr-menu" property="submitButton" onclick="return check()">
+																						<html:button  styleClass="dr-menu" property="submitButton" onclick="return check()" >
 																							<digi:trn key="btn:save">Save</digi:trn> 
 																						</html:button>
 																					</td>

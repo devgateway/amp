@@ -12,7 +12,7 @@
 <tr>
 	<td class=clsTableL1SubTotalEndSectionLabel colspan='<bean:write name="reportData" property="sourceColsCount"/>'>
 	<digi:trn key="rep:pop:totalsFor">TOTALS FOR</digi:trn>
-	<digi:trn key="rep:pop:${reportData.name}">${reportData.name}</digi:trn>
+	<digi:trn key="rep:pop:${reportData.nameTrn}">${reportData.name}</digi:trn>
 	 </td>
 	<logic:iterate name="reportData" property="trailCells" id="cell" scope="page">
 		<td class=clsTableL1SubTotalEndSection>

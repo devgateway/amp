@@ -266,7 +266,7 @@ public class CategoryManagerUtil {
 				logger.error("releaseSession() failed :" + ex2);
 			}
 		}
-        if(returnCollection!=null){
+        if((returnCollection!=null)&&(!returnCollection.isEmpty())){
             return (AmpCategoryClass)returnCollection.toArray()[0];
         }else{
             return null;

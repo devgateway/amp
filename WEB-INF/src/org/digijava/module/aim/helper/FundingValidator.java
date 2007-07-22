@@ -26,7 +26,7 @@ public class FundingValidator {
 				FundingDetail fd2 = (FundingDetail) e2;
 				Date dt1 = DateConversion.getDate(fd1.getTransactionDate());
 				Date dt2 = DateConversion.getDate(fd2.getTransactionDate());
-				if (dt1.equals(dt2)) {
+				if (((dt1 == null)&&(dt2 == null))||(dt1.equals(dt2))) {
 					return fd2.getAdjustmentType() - fd1.getAdjustmentType();
 				} else {
 					return (dt1.compareTo(dt2));

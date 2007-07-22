@@ -29,6 +29,11 @@ public class ColumnReportData extends ReportData {
 	/**
 	 * @param name
 	 */
+	
+	public String getNameTrn(){
+		return this.name.toLowerCase().replaceAll(" ", "");
+	}
+	
 	public ColumnReportData(String name) {
 		super(name);
 		// TODO Auto-generated constructor stub

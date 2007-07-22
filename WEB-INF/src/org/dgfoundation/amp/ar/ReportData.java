@@ -59,6 +59,10 @@ public abstract class ReportData extends Viewable {
 	
 	public abstract void removeEmptyChildren();
 	
+	public String getNameTrn(){
+		return this.name.toLowerCase().replaceAll(" ", "");
+	}
+	
 	public int getTotalUniqueRows() {
 		return getOwnerIds().size();
 	}

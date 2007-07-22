@@ -12,7 +12,7 @@
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/arFunctions.js"/>"></script>
 
 <tr><td colspan='<bean:write name="columnReport" property="totalDepth"/>'>
-<i><digi:trn key="rep:pop:${columnReport.name}">${columnReport.name}</digi:trn></i>
+<i><digi:trn key="rep:pop:${columnReport.nameTrn}">${columnReport.name}</digi:trn></i>
 </td></tr>
 
 <%int rowIdx = 2;%>
@@ -35,7 +35,7 @@
 	<html:link style="color:#FFFFFF;cursor:pointer" page="/viewNewAdvancedReport.do" paramName="column" paramProperty="name" paramId="sortBy">
 		
 	<c:set var="heatTitle1">
-		<%=subColumn.getName(reportMeta.getHideActivities())%>
+		<%=subColumn.getName(reportMeta.getHideActivities()).toLowerCase().replaceAll(" ", "")%>
 	</c:set>	
 	<digi:trn key="aim:pop:${heatTitle1}"><%=subColumn.getName(reportMeta.getHideActivities())%></digi:trn>
 
@@ -55,7 +55,7 @@
 	<logic:notEqual name="column" property="columnDepth" value="1">
 	
 	<c:set var="heatTitle">
-			<%=subColumn.getName(reportMeta.getHideActivities())%>
+			<%=subColumn.getName(reportMeta.getHideActivities()).toLowerCase().replaceAll(" ", "")%>
 	</c:set>	
 	<digi:trn key="aim:pop:${heatTitle}">	<%=subColumn.getName(reportMeta.getHideActivities())%></digi:trn>
 

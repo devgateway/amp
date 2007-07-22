@@ -63,6 +63,36 @@ public abstract class ReportData extends Viewable {
 		return this.name.toLowerCase().replaceAll(" ", "");
 	}
 	
+	public String getColumnId(){
+		if (this.name.indexOf(':') < 0)
+			return this.name;
+		
+		String id = this.name.substring(0, this.name.indexOf(':'));
+		return id;
+	}
+	
+	public String getRepName(){
+		if (this.name.indexOf(':') < 0)
+			return "";
+		
+		String id = this.name.substring(this.name.indexOf(':') + 1, name.length());
+		return id;
+	}
+	
+	public String getColumnIdTrn(){
+		if (this.name.indexOf(':') < 0)
+			return this.name;
+		String id = this.name.substring(0, this.name.indexOf(':'));
+		return id.toLowerCase().replaceAll(" ",	"");
+	}
+	
+	public String getRepNameTrn(){
+		if (this.name.indexOf(':') < 0)
+			return "";
+		String id = this.name.substring(this.name.indexOf(':') + 1, name.length());
+		return id.toLowerCase().replaceAll(" ",	"");
+	}
+	
 	public int getTotalUniqueRows() {
 		return getOwnerIds().size();
 	}

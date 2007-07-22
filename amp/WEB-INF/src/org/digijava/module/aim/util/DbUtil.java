@@ -115,7 +115,7 @@ public class DbUtil {
 		} catch (Exception ex) {
 			logger.error("Unable to get perspectives by code :" + ex);
 			ex.printStackTrace();
-			}
+		}
 		return null;
 	}
 

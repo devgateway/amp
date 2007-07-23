@@ -32,7 +32,7 @@ if (url.indexOf("#default")!=-1){ //if simply show default content within contai
 document.getElementById(containerid).innerHTML=defaultcontentarray[containerid]
 return
 }
-document.getElementById(containerid).innerHTML=loadstatustext+url
+document.getElementById(containerid).innerHTML=loadstatustext
 page_request.onreadystatechange=function(){
 loadpage(page_request, containerid)
 }
@@ -87,7 +87,7 @@ loadobjs(thetab.getAttribute("rev"))
 
 function reloadTab(tabcontentid,tabid) {
 var thetab=document.getElementById(tabid);
-if (thetab!=null)
+//if (thetab!=null)
 	if (thetab.getAttribute("rel")){
 		ajaxpage(thetab.getAttribute("href"), thetab.getAttribute("rel"), thetab)
 		loadobjs(thetab.getAttribute("rev"))

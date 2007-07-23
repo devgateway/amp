@@ -32,7 +32,7 @@ if (url.indexOf("#default")!=-1){ //if simply show default content within contai
 document.getElementById(containerid).innerHTML=defaultcontentarray[containerid]
 return
 }
-document.getElementById(containerid).innerHTML=loadstatustext
+document.getElementById(containerid).innerHTML=loadstatustext+url
 page_request.onreadystatechange=function(){
 loadpage(page_request, containerid)
 }
@@ -87,10 +87,11 @@ loadobjs(thetab.getAttribute("rev"))
 
 function reloadTab(tabcontentid,tabid) {
 var thetab=document.getElementById(tabid);
-if (thetab.getAttribute("rel")){
-ajaxpage(thetab.getAttribute("href"), thetab.getAttribute("rel"), thetab)
-loadobjs(thetab.getAttribute("rev"))
-}
+if (thetab!=null)
+	if (thetab.getAttribute("rel")){
+		ajaxpage(thetab.getAttribute("href"), thetab.getAttribute("rel"), thetab)
+		loadobjs(thetab.getAttribute("rev"))
+	}
 }
 
 function expandtab(tabcontentid, tabnumber){ //interface for selecting a tab (plus expand corresponding content)
@@ -113,7 +114,10 @@ var ulist=ulobj.getElementsByTagName("li") //array containing the LI elements wi
 for (var x=0; x<ulist.length; x++){ //loop through each LI element
 var ulistlink=ulist[x].getElementsByTagName("a")[0]
 if (ulistlink.getAttribute("rel")){
-var modifiedurl=ulistlink.getAttribute("href").replace(/^http:\/\/[^\/]+\//i, "http://"+window.location.hostname+"/")
+if(window.location.port==80)
+	var modifiedurl=ulistlink.getAttribute("href").replace(/^http:\/\/[^\/]+\//i, "http://"+window.location.hostname+"/")
+else
+	var modifiedurl=ulistlink.getAttribute("href").replace(/^http:\/\/[^\/]+\//i, "http://"+window.location.hostname+":"+window.location.port+"/")
 ulistlink.setAttribute("href", modifiedurl) //replace URL's root domain with dynamic root domain, for ajax security sake
 savedefaultcontent(ulistlink.getAttribute("rel")) //save default ajax tab content
 ulistlink.onclick=function(){

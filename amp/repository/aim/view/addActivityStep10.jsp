@@ -109,7 +109,7 @@
 	
 	function addIndicator()
 	{
-		openNewRsWindow(750, 550);
+		openNewRsWindow(750, 400);
 		<digi:context name="selCreateInd" property="context/module/moduleinstance/selectCreateIndicators.do" />
 		document.aimEditActivityForm.action = "<%=selCreateInd%>?addIndicatorForStep9=true";
 		document.aimEditActivityForm.target = popupPointer.name;
@@ -652,12 +652,27 @@
 											</c:if>
 											</logic:iterate>
 											</logic:notEmpty>
+											<tr>
+												<td width="32%" align="center" colspan="2">
+													&nbsp;
+												</td>
+											</tr>
+											<tr>
+												<td width="32%" align="center" colspan="2">
+													<input type="button" value="Add Indicator" class="dr-menu" onclick="addIndicator()">	
+												</td>
+											</tr>
+											<tr>
+												<td width="32%" align="center" colspan="2">
+													&nbsp;
+												</td>
+											</tr>
 										</table>
 									</td></tr>
 									<tr><td bgColor=#f4f4f2>
 										&nbsp;
 									</td></tr>
-<!-- 									
+<%-- 									
 									<tr><td bgColor=#f4f4f2 align="center">
 										<table cellPadding=3>
 											<tr>
@@ -673,12 +688,12 @@
 											</tr>
 										</table>
 									</td></tr>									
- -->									
+ --%>									
 								</table>
-							</td></tr>
+							</td></tr><%--
 							<tr><td>
 							<input type="button" value="Add Indicator" class="dr-menu" onclick="addIndicator()">
-							</td></tr>
+							</td></tr>--%>
 							</table>
 							</td></tr>							
 						</table>

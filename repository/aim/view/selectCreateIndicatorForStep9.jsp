@@ -107,16 +107,13 @@
 <c:set target="${bcparams}" property="tId" value="-1"/>
 <c:set target="${bcparams}" property="dest" value="teamLead"/>
 
-<table width="100%" cellSpacing=0 cellPadding=0 valign="top" align="left">
+<table width="80%" cellSpacing=0 cellPadding=0 valign="top" align="left">
 	<tr><td width="100%" valign="top" align="left">
 		<table bgColor=#ffffff cellPadding=0 cellSpacing=0 width=772>
 			<tr>
-				<td class=r-dotted-lg width=14>&nbsp;</td>
-				<td align=left class=r-dotted-lg vAlign=top width=750>
-
 				<table cellPadding=5 cellSpacing=0 width="100%">
 					<tr>
-						<td noWrap width=571 vAlign="top">
+						<td noWrap width=500 vAlign="top">
 							<table bgColor=#ffffff cellPadding=0 cellSpacing=0 class=box-border-nopadding width="100%">
 								<%--
 								<tr bgColor=#3754a1>
@@ -130,7 +127,7 @@
 								</tr>
 								<tr bgColor=#f4f4f2>
 									<td valign="top">
-										<table align=center bgColor=#f4f4f2 cellPadding=0 cellSpacing=0 width="98%">	
+										<table align=left bgColor=#f4f4f2 cellPadding=0 cellSpacing=0 width="98%">	
 											<tr><td>
 												<digi:errors />
 											</td></tr>

@@ -114,7 +114,7 @@ var ulist=ulobj.getElementsByTagName("li") //array containing the LI elements wi
 for (var x=0; x<ulist.length; x++){ //loop through each LI element
 var ulistlink=ulist[x].getElementsByTagName("a")[0]
 if (ulistlink.getAttribute("rel")){
-if(window.location.port==80)
+if(window.location.port=="80")
 	var modifiedurl=ulistlink.getAttribute("href").replace(/^http:\/\/[^\/]+\//i, "http://"+window.location.hostname+"/")
 else
 	var modifiedurl=ulistlink.getAttribute("href").replace(/^http:\/\/[^\/]+\//i, "http://"+window.location.hostname+":"+window.location.port+"/")

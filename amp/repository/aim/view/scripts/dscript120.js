@@ -20,10 +20,7 @@ var dom = (document.getElementById)? 1:0
 
 var ie4 = (document.all&&!dom)? 1:0
 
-var ie7 = (document.all && !window.opera && window.XMLHttpRequest)? 1:0
-
 var ie5 = (document.all&&dom)? 1:0
-
 
 var nn4 =(navigator.appName.toLowerCase() == "netscape" && parseInt(navigator.appVersion) == 4)
 
@@ -31,19 +28,25 @@ var nn6 = (dom&&!ie5)? 1:0
 
 var sNav = (nn4||nn6||ie4||ie5)? 1:0
 
-var cssFilters = ((ua.indexOf("MSIE 5.5")>=0||ua.indexOf("MSIE 6")>=0)&&ua.indexOf("Opera")<0)? 1:0
+var cssFilters = (ua.indexOf("MSIE 6")>=0&&ua.indexOf("Opera")<0)? 1:0
 
 var Style=[],Text=[],Count=0,sbw=0,move=0,hs="",mx,my,scl,sct,ww,wh,obj,sl,st,ih,iw,vl,hl,sv,evlh,evlw,tbody
 
 var HideTip = "eval(obj+sv+hl+';'+obj+sl+'=0;'+obj+st+'=-800')"
+/*var doc_root=(ua.indexOf("MSIE 6")>=0)? "document.documentElement":
+((ie5&&ua.indexOf("Opera")<0||ie4)&&document.compatMode=="CSS1Compat")? "document.documentElement":"document.body"
+*/
+
 
 var doc_root = ((ie5&&ua.indexOf("Opera")<0||ie4)&&document.compatMode=="CSS1Compat")? "document.documentElement":"document.body"
+
 
 var PX = (nn6)? "px" :""
 
 
 
 if(sNav) {
+
 
 	window.onresize = ReloadTip
 
@@ -87,32 +90,29 @@ if(nn4||nn6) {
 
 }
 
-if(ie4||ie5||ie7) {
+if(ie4||ie5) {
 
-        if(ie7){
+       mx = "event.x"
 
-        obj = "document.getElementById('TipLayer')."
+       my = "event.y"
 
-        }
-        else{
-        obj = "TipLayer."
-        }
+       scl = "eval(doc_root).scrollLeft"
 
-	mx = "event.x"
+       sct = "eval(doc_root).scrollTop"
 
-	my = "event.y"
+      if(ie4){
 
-	scl = "eval(doc_root).scrollLeft"
+      obj = "TipLayer."
+     }
+      else {
 
-	sct = "eval(doc_root).scrollTop"
+      obj = "document.getElementById('TipLayer')."
+      mx = mx+"+"+scl
 
-	if(ie5) {
+      my = my+"+"+sct
+      }
 
-		mx = mx+"+"+scl
 
-		my = my+"+"+sct
-
-	}
 
 }
 
@@ -158,15 +158,23 @@ else {
 
 
 
+
 function applyCssFilter(){
 
 	if(cssFilters&&FiltersEnabled) {
 
+
 		var dx = " progid:DXImageTransform.Microsoft."
 
-		TipLayer.style.filter = "revealTrans()"+dx+"Fade(Overlap=1.00 enabled=0)"+dx+"Inset(enabled=0)"+dx+"Iris(irisstyle=PLUS,motion=in enabled=0)"+dx+"Iris(irisstyle=PLUS,motion=out enabled=0)"+dx+"Iris(irisstyle=DIAMOND,motion=in enabled=0)"+dx+"Iris(irisstyle=DIAMOND,motion=out enabled=0)"+dx+"Iris(irisstyle=CROSS,motion=in enabled=0)"+dx+"Iris(irisstyle=CROSS,motion=out enabled=0)"+dx+"Iris(irisstyle=STAR,motion=in enabled=0)"+dx+"Iris(irisstyle=STAR,motion=out enabled=0)"+dx+"RadialWipe(wipestyle=CLOCK enabled=0)"+dx+"RadialWipe(wipestyle=WEDGE enabled=0)"+dx+"RadialWipe(wipestyle=RADIAL enabled=0)"+dx+"Pixelate(MaxSquare=35,enabled=0)"+dx+"Slide(slidestyle=HIDE,Bands=25 enabled=0)"+dx+"Slide(slidestyle=PUSH,Bands=25 enabled=0)"+dx+"Slide(slidestyle=SWAP,Bands=25 enabled=0)"+dx+"Spiral(GridSizeX=16,GridSizeY=16 enabled=0)"+dx+"Stretch(stretchstyle=HIDE enabled=0)"+dx+"Stretch(stretchstyle=PUSH enabled=0)"+dx+"Stretch(stretchstyle=SPIN enabled=0)"+dx+"Wheel(spokes=16 enabled=0)"+dx+"GradientWipe(GradientSize=1.00,wipestyle=0,motion=forward enabled=0)"+dx+"GradientWipe(GradientSize=1.00,wipestyle=0,motion=reverse enabled=0)"+dx+"GradientWipe(GradientSize=1.00,wipestyle=1,motion=forward enabled=0)"+dx+"GradientWipe(GradientSize=1.00,wipestyle=1,motion=reverse enabled=0)"+dx+"Zigzag(GridSizeX=8,GridSizeY=8 enabled=0)"+dx+"Alpha(enabled=0)"+dx+"Dropshadow(OffX=3,OffY=3,Positive=true,enabled=0)"+dx+"Shadow(strength=3,direction=135,enabled=0)"
+		TipLayer.style.filter = "revealTrans()"+dx+"Fade(Overlap=1.00 enabled=0)"+dx+"Inset(enabled=0)"+
+                dx+"Iris(irisstyle=PLUS,motion=in enabled=0)"+dx+"Iris(irisstyle=PLUS,motion=out enabled=0)"+dx+"Iris(irisstyle=DIAMOND,motion=in enabled=0)"+dx+"Iris(irisstyle=DIAMOND,motion=out enabled=0)"+dx+"Iris(irisstyle=CROSS,motion=in enabled=0)"+dx+"Iris(irisstyle=CROSS,motion=out enabled=0)"+dx+"Iris(irisstyle=STAR,motion=in enabled=0)"+dx+"Iris(irisstyle=STAR,motion=out enabled=0)"+dx+"RadialWipe(wipestyle=CLOCK enabled=0)"+dx+"RadialWipe(wipestyle=WEDGE enabled=0)"
+                +dx+"RadialWipe(wipestyle=RADIAL enabled=0)"+dx+"Pixelate(MaxSquare=35,enabled=0)"+dx+"Slide(slidestyle=HIDE,Bands=25 enabled=0)"+dx+"Slide(slidestyle=PUSH,Bands=25 enabled=0)"+dx+"Slide(slidestyle=SWAP,Bands=25 enabled=0)"+dx+"Spiral(GridSizeX=16,GridSizeY=16 enabled=0)"+dx+"Stretch(stretchstyle=HIDE enabled=0)"+dx+"Stretch(stretchstyle=PUSH enabled=0)"+dx+"Stretch(stretchstyle=SPIN enabled=0)"+dx+"Wheel(spokes=16 enabled=0)"+dx+"GradientWipe(GradientSize=1.00,wipestyle=0,motion=forward enabled=0)"+dx+
+                "GradientWipe(GradientSize=1.00,wipestyle=0,motion=reverse enabled=0)"+dx+"GradientWipe(GradientSize=1.00,wipestyle=1,motion=forward enabled=0)"+dx+"GradientWipe(GradientSize=1.00,wipestyle=1,motion=reverse enabled=0)"+dx+"Zigzag(GridSizeX=8,GridSizeY=8 enabled=0)"+dx+"Alpha(enabled=0)"+dx+
+               "Dropshadow(OffX=3,OffY=3,Positive=true,enabled=0)"+dx+"Shadow(strength=3,direction=135,enabled=0)"
 
 	}
+
+
 
 }
 
@@ -174,7 +182,9 @@ function applyCssFilter(){
 
 function stm(t,s) {
 
+
   if(sNav) {
+
 
   	if(t.length<2||s.length<25) {
 
@@ -292,6 +302,7 @@ function stm(t,s) {
 
 		move=1
 
+
  	 }
 
   }
@@ -302,7 +313,10 @@ function stm(t,s) {
 
 function MoveTip(e) {
 
+
 	if(move) {
+
+
 
 		var X,Y,MouseX = eval(mx),MouseY = eval(my); tbody.Height = parseInt(eval(obj+ih)+3)
 
@@ -348,11 +362,14 @@ function MoveTip(e) {
 
 function ViewTip() {
 
+
   	Count++
 
 	if(Count == 1) {
 
-		if(cssFilters&&FiltersEnabled) {
+
+
+		if(cssFilters&&FiltersEnabled&&TipLayer.filters!=null) {
 
 			for(Index=28; Index<31; Index++) { TipLayer.filters[Index].enabled = 0 }
 
@@ -403,10 +420,9 @@ function ViewTip() {
 			}
 
 		}
-
  		eval(obj+sv+vl)
 
-		if(cssFilters&&FiltersEnabled&&(applyTrans||advFilters)) TipLayer.filters[which].play()
+		if(cssFilters&&FiltersEnabled&&(applyTrans||advFilters)&&TipLayer.filters!=null) TipLayer.filters[which].play()
 
 		if(hs == "sticky") move=0
 

@@ -7,43 +7,86 @@ function writeError(str, append)
   dbgObj.innerHTML = append? (dbgObj.innerHTML + str+"<br/>"): str;
 }
 
+function getRowLevel(id){
+	return id.substring(0, id.indexOf("@"));
+}
+function getRowRelativeNo(id){
+	return id.substring(id.indexOf("@")+1);
+}
 
 function toggleRows(caller,hideId){
-	var exitnow=false;
-	if(caller.alt=='shown') exitnow=true;
+	var closing=false;
+	if(caller.alt=='shown') 
+		closing=true;
 
- 	hideAllRows();
- 	if(exitnow) return;
-	if(caller.alt=='hidden') {caller.alt='shown';caller.src=minus_sign;} else {caller.alt='hidden'; caller.src=plus_sign;}
+ 	//hideAllRows();
+	if(caller.alt=='hidden') {
+		caller.alt='shown';
+		caller.src=minus_sign;
+	} else {
+		caller.alt='hidden'; 
+		caller.src=plus_sign;
+	}
 	var display= (caller.alt!='shown')? 'none':'';
 	tb = document.getElementById('reportTable');
 
 
 	var len = tb.rows.length;
 	var found=false;
-	var hideDepth=document.getElementById(hideId).title;
-
-
+	var hideDepth=getRowLevel(document.getElementById(hideId).title);
+	var hideRelat=getRowRelativeNo(document.getElementById(hideId).title);
+	
 	//writeError(+"<br/>", true);
+	var notLevelTooGreat = false;
+	var areGreaterLevels = false;
 	for(i=1 ; i< len; i++){
-		var rowDepth=tb.rows[i].title;
+		var rowDepth=getRowLevel(tb.rows[i].title);
+		var rowRelat=getRowRelativeNo(tb.rows[i].title);
  		if(tb.rows[i].id!=null && tb.rows[i].id==hideId && !found) {
-		found=true;continue;
+			found=true;
+			continue;
 		}
-		if(rowDepth<=hideDepth && tb.rows[i].id!='' && tb.rows[i].id!=hideId && found) {
-		break;
+		if((rowDepth<=hideDepth) && (tb.rows[i].id!='') &&( tb.rows[i].id!=hideId) && (found)) {
+			break;
 		}
-		if (found) tb.rows[i].style.display = display;
+		if ((found)){
+			if (hideDepth < rowDepth)
+				areGreaterLevels = true;
+			if (!notLevelTooGreat){
+				if (rowDepth - 1 > hideDepth)
+					notLevelTooGreat = true;
+			}
+			else{
+				if ((rowDepth - 1 <= hideDepth)&&(rowDepth != ""))
+					notLevelTooGreat = false;
+			}
+		}
+		//alert("Found=" + found + " RowDepth=" + rowDepth + " HideDepth=" + hideDepth + " Arty=" + notLevelTooGreat);
+		if (((found)&&(((!notLevelTooGreat)&&(rowDepth != ""))||((rowDepth == "")&&(!areGreaterLevels))))||((found)&&(closing)) )
+			tb.rows[i].style.display = display;
 	}
 
 	//put sub-images to -
 	imgs = tb.getElementsByTagName('img');
-	for(i=0 ; i< imgs.length; i++){
-		if(imgs[i].id=='toggleImage' && imgs[i].title>hideDepth)  {
-			imgs[i].alt='shown';
-			imgs[i].src=minus_sign;
-		 }
+	found = false;
+	if (closing){
+		for(i=0 ; i< imgs.length; i++){
+			var imgDepth=getRowLevel(imgs[i].title);
+			var imgRelat=getRowRelativeNo(imgs[i].title);
+			if ((imgDepth == hideDepth) && (imgRelat == hideRelat) && (imgs[i].name==hideId)){
+				found = true;
+				continue;
+			}
+			if((imgs[i].id=='toggleImage') && (found))  {
+				imgs[i].alt='hidden';
+				imgs[i].src=plus_sign;
+			}
+			//alert(imgDepth + "@" + imgRelat + "  " + found);
+			if ((found) && (imgDepth == hideDepth))
+				break;
+		}
 	}
+	
 }
 
 

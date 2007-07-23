@@ -181,6 +181,12 @@ public abstract class ReportData extends Viewable {
 	public abstract int getTotalDepth();
 	
 	public abstract int getLevelDepth();
+	
+	public int getRelativeRowNo(){
+		if (parent == null)
+			return 0;
+        return 1 + parent.getItems().indexOf(this);
+	}
 
 	/**
 	 * @return Returns the reportMetadata.

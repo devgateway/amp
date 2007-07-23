@@ -11,10 +11,10 @@
 <bean:define id="reportMeta" name="reportMeta" type="org.digijava.module.aim.dbentity.AmpReports" scope="session" toScope="page"/>
 <% String display=reportData.getLevelDepth()>2?"display:none":"";%>
 <!-- generate total row -->
-<tr id='<bean:write name="reportData" property="absoluteReportName"/>' title='<bean:write name="reportData" property="levelDepth"/>' style="<%=display%>">
+<tr id='<bean:write name="reportData" property="absoluteReportName"/>' title='<bean:write name="reportData" property="levelDepth"/>@<bean:write name="reportData" property="relativeRowNo"/>' style="<%=display%>">
 	<td style=" padding-left:<%=10*(reportData.getLevelDepth()-1)%>; background-color:#dddddd" colspan='<bean:write name="reportData" property="sourceColsCount"/>' class="reportsBorderTD" nowrap>
 <c:if test="${!(reportData.name == reportMeta.name)}">
-		<img id="toggleImage" style="cursor:pointer" src="/repository/aim/view/images/images_dhtmlsuite/dhtmlgoodies_plus.gif" alt='hidden' onclick='toggleRows(this,"<bean:write name="reportData" property="absoluteReportName"/>")' title="<bean:write name="reportData" property="levelDepth"/>" border="0"/>
+		<img id="toggleImage" name="<bean:write name="reportData" property="absoluteReportName"/>" style="cursor:pointer" src="/repository/aim/view/images/images_dhtmlsuite/dhtmlgoodies_plus.gif" alt='hidden' onclick='toggleRows(this,"<bean:write name="reportData" property="absoluteReportName"/>")' title="<bean:write name="reportData" property="levelDepth"/>@<bean:write name="reportData" property="relativeRowNo"/>" border="0"/>
 </c:if>		
   
 <b>

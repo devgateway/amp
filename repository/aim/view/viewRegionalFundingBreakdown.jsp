@@ -72,7 +72,7 @@ function preview(id)
 												&nbsp;
 											</TD>
 											<TD align=right>
-												<input type="button" value="<digi:trn key="aim:physical:Preview">Preview</digi:trn>" class="dr-menu"
+												<input type="button" value="<digi:trn key="aim:physical:preview">Preview</digi:trn>" class="dr-menu"
 												onclick="preview(<c:out value="${aimRegionalFundingForm.ampActivityId}"/>)">
 												<input type="button" value="<digi:trn key="aim:physical:edit">Edit</digi:trn>" class="dr-menu"
 												onclick="fnEditProject(<c:out value="${aimRegionalFundingForm.ampActivityId}"/>)">

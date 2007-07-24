@@ -661,19 +661,19 @@ function loadPage()
                                                         					<c:set var="index" value="-1"/>
                                                         								<tr>
                                                         									<td align="center" valign="bottom">
-	                                                        									Program
+	                                                        									<digi:trn key="aim:org:program">Program</digi:trn>
                                                         									</td>
                                                         									<td align="center" valign="bottom">
-                                                        										Planned/Actual
+                                                        										<digi:trn key="aim:org:planned">Planned</digi:trn>
                                                         									</td>
                                                         									<td align="center" valign="bottom">
-                                                        										Ammount
+                                                        										<digi:trn key="aim:org:amount">Amount</digi:trn>
                                                         									</td>
                                                         									<td align="center" valign="bottom">
-                                                        										Currency
+                                                        										<digi:trn key="aim:org:currency">Currency</digi:trn>
                                                         									</td>
                                                         									<td align="center" valign="bottom">
-                                                        										Date
+                                                        										<digi:trn key="aim:org:date">Date</digi:trn>
                                                         									</td>
                                                         								</tr>
 																		 	<c:forEach var="fundingDetail" items="${aimAddOrgForm.fundingDetails}">
@@ -684,7 +684,6 @@ function loadPage()
 																							<td valign="bottom">
 																								<c:set var="index" value="${index+1}"/>
 																								<html:select name="fundingDetail" indexed="true" property="adjustmentType" styleClass="inp-text">
-																									<html:option value="1"><digi:trn key="aim:Actual">Actual</digi:trn></html:option>
 																									<html:option value="0"><digi:trn key="aim:Planned">Planned</digi:trn></html:option>
 																								</html:select>
 																							</td>

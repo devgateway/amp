@@ -33,6 +33,7 @@ import org.digijava.module.aim.dbentity.AmpGlobalSettings;
 import org.digijava.module.aim.form.GlobalSettingsForm;
 import org.digijava.module.aim.helper.KeyValue;
 import org.digijava.module.aim.util.FeaturesUtil;
+import org.digijava.module.common.util.DateTimeUtil;
 
 public class GlobalSettings extends Action {
 	private static Logger logger 				= Logger.getLogger(GlobalSettings.class);
@@ -255,7 +256,7 @@ public class GlobalSettings extends Action {
 			}
 			if (criterion.equals("t_Date")){
 				try{
-					Date testDate	= Util.dateFormat.parse(value);
+					Date testDate	= DateTimeUtil.parseDate(value);
 					return true;
 				}
 				catch(Exception E) { // value is not an Date

@@ -35,6 +35,7 @@ import org.digijava.module.aim.form.EditActivityForm;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.aim.util.DbUtil;
+import org.digijava.module.common.util.DateTimeUtil;
 
 /**
  * @author mihai
@@ -142,7 +143,7 @@ public class EditEUActivity extends MultiAction {
 				euaf.setTextId(element.getTextId());
 				euaf.setTotalCost(element.getTotalCost().toString());
 				euaf.setTotalCostCurrencyId(element.getTotalCostCurrency().getAmpCurrencyId());
-				euaf.setDueDate(Util.dateFormat.format(element.getDueDate()));
+				euaf.setDueDate(DateTimeUtil.formatDate(element.getDueDate()));
 				
 				euaf.getContrAmountList().clear();
 				euaf.getContrCurrIdList().clear();
@@ -217,7 +218,7 @@ public class EditEUActivity extends MultiAction {
 		}
 		
 		try {
-			Util.dateFormat.parse(eaf.getDueDate());
+			DateTimeUtil.parseDate(eaf.getDueDate());
 		} catch (ParseException e) {			
 			errors.add("title", new ActionError(
 					"error.aim.euactivity.dueDate"));						
@@ -316,7 +317,7 @@ public class EditEUActivity extends MultiAction {
 		
 		
 		eua.setAssumptions(euaf.getAssumptions());
-		eua.setDueDate(Util.dateFormat.parse(euaf.getDueDate()));
+		eua.setDueDate(DateTimeUtil.parseDate(euaf.getDueDate()));
 		eua.setInputs(euaf.getInputs());
 		eua.setName(euaf.getName());
 		eua.setProgress(euaf.getProgress());

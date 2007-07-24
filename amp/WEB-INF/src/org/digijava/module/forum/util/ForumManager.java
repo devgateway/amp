@@ -18,31 +18,29 @@
 
 package org.digijava.module.forum.util;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
-
-import org.digijava.module.forum.dbentity.Forum;
-import org.digijava.module.forum.dbentity.ForumUserSettings;
-import org.digijava.kernel.user.User;
-import org.digijava.module.forum.dbentity.ForumThread;
-import org.digijava.module.forum.dbentity.ForumSubsection;
-import java.util.Iterator;
-import java.util.Map;
-import org.digijava.kernel.entity.ModuleInstance;
-import java.util.List;
-import java.util.HashMap;
-import org.digijava.module.forum.dbentity.ForumSection;
-import org.digijava.module.forum.dbentity.ForumPost;
-import org.digijava.module.forum.exception.*;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.Collections;
-import org.apache.struts.upload.FormFile;
-import org.apache.struts.action.ActionErrors;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+
 import org.apache.struts.action.ActionError;
+import org.apache.struts.action.ActionErrors;
+import org.apache.struts.upload.FormFile;
+import org.digijava.kernel.entity.ModuleInstance;
+import org.digijava.kernel.user.User;
+import org.digijava.module.forum.dbentity.Forum;
 import org.digijava.module.forum.dbentity.ForumAsset;
-import org.digijava.module.aim.helper.Constants;
+import org.digijava.module.forum.dbentity.ForumSection;
+import org.digijava.module.forum.dbentity.ForumSubsection;
+import org.digijava.module.forum.dbentity.ForumThread;
+import org.digijava.module.forum.dbentity.ForumUserSettings;
+import org.digijava.module.forum.exception.ForumException;
 
 public class ForumManager {
     private static Map forumPageTrailCallbackMap;
@@ -51,7 +49,8 @@ public class ForumManager {
     public static String[] imgsTypes = {"jpg", "bmp", "gif", "png"};
 
     private static SimpleDateFormat dateTimeFormater =
-        new SimpleDateFormat(Constants.SIMPLE_DATE_TIME_FORMAT);
+        new SimpleDateFormat("MMMMM dd, yyyy hh:mm aaa");
+    
 
     private static SimpleDateFormat dateFormater =
         new SimpleDateFormat("dd MMMMM, yyyy");

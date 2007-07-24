@@ -10,10 +10,8 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.LineNumberReader;
 import java.text.DecimalFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -35,6 +33,7 @@ import org.digijava.module.aim.dbentity.AmpPerspective;
 import org.digijava.module.aim.dbentity.AmpTermsAssist;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.util.ComponentsUtil;
+import org.digijava.module.common.util.DateTimeUtil;
 
 /**
  * 
@@ -44,7 +43,8 @@ import org.digijava.module.aim.util.ComponentsUtil;
  */
 public class FreeBalanceHarvester {
 
-	public static SimpleDateFormat dateFormatter = new SimpleDateFormat(Constants.SIMPLE_DATE_FORMAT) ;
+	//public static SimpleDateFormat dateFormatter = new SimpleDateFormat("") ;
+	
 	
 	public static DecimalFormat mf = new DecimalFormat("###,###,###,###,###.##");
 	
@@ -316,7 +316,7 @@ public class FreeBalanceHarvester {
 					acf.setTransactionType(new Integer(trType));
 					acf.setReportingOrganization(o);
 					if(!date.trim().equals(""))
-						acf.setTransactionDate(dateFormatter.parse(date));
+						acf.setTransactionDate(DateTimeUtil.parseDate(date));
 					acf.setPerspective(ap);
 					
 					acf.setTransactionAmount(new Double(n.doubleValue()));

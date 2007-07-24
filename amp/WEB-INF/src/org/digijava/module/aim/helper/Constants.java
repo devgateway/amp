@@ -1,6 +1,10 @@
 package org.digijava.module.aim.helper ;
 
 import java.awt.Color;
+import org.digijava.module.aim.util.FeaturesUtil;
+
+
+	 
 
 public class Constants
 {
@@ -78,9 +82,11 @@ public class Constants
 	//public static  String COUNTRY_ISO = "";
 	//public static  String COUNTRY = "";
 	
+	public static final String GLOBALSETTINGS_DATEFORMAT="Default Date Format";
+	
 	public static final String CURRENCY_RATE_DEAFULT_START_DATE = "25/04/2005";
 	public static final String CURRENCY_RATE_DEAFULT_END_DATE = "01/05/2005";
-	public static final String SIMPLE_DATE_FORMAT = "dd/MMM/yyyy";
+	
 	public static final String CALENDAR_DATE_FORMAT = "dd/mm/yyyy";
 	public static final String SIMPLE_DATE_TIME_FORMAT = "dd MMMMM, yyyy hh:mm aaa";
 	

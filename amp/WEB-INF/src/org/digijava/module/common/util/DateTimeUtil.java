@@ -22,6 +22,7 @@ import java.util.Date;
 import java.text.ParseException;
 
 import org.digijava.module.aim.helper.Constants;
+import org.digijava.module.aim.util.FeaturesUtil;
 
 /**
  * <p>Title: DiGiJava</p>
@@ -46,9 +47,41 @@ public class DateTimeUtil {
         ParseException {
 
         java.util.Calendar date = new java.util.GregorianCalendar();
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(Constants.SIMPLE_DATE_FORMAT);
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyyMMdd");
         date.setTime(simpleDateFormat.parse(isoDate));
 
         return date;
     }
+    
+    
+	/**
+	 * Formats date using pattern from global settings
+	 * @param date
+	 * @return
+	 */
+	public static String formatDate(Date date){
+		// TODO This should be in some other Utility class, FormatUtil may be, or just Util
+		String pattern=FeaturesUtil.getGlobalSettingValue(Constants.GLOBALSETTINGS_DATEFORMAT);
+		if (pattern==null){
+			pattern=Constants.CALENDAR_DATE_FORMAT;
+		}
+		SimpleDateFormat formater=new SimpleDateFormat(pattern);
+		String result = formater.format(date);
+		return result;
+	}
+
+	public static Date parseDate(String date) throws Exception{
+		// TODO This should be in some other Utility class, FormatUtil may be, or just Util
+		String pattern=FeaturesUtil.getGlobalSettingValue(Constants.GLOBALSETTINGS_DATEFORMAT);
+		if (pattern==null){
+			pattern=Constants.CALENDAR_DATE_FORMAT;
+		}
+		SimpleDateFormat formater=new SimpleDateFormat(pattern);
+		Date result = formater.parse(date);
+		return result;
+	}
+	
+    
+    
+    
 }

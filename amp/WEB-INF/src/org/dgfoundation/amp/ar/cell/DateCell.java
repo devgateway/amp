@@ -6,14 +6,12 @@
  */
 package org.dgfoundation.amp.ar.cell;
 
-import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import org.dgfoundation.amp.ar.MetaInfo;
 import org.dgfoundation.amp.ar.workers.DateColWorker;
-import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.EthDateWorker;
-
+import org.digijava.module.common.util.DateTimeUtil;
 
 /**
  * 
@@ -24,7 +22,8 @@ import org.digijava.module.aim.helper.EthDateWorker;
  */
 public class DateCell extends Cell {
 
-	private static SimpleDateFormat sdt=new SimpleDateFormat(Constants.SIMPLE_DATE_FORMAT);
+	//this is not thread safe
+//	private static SimpleDateFormat sdt=new SimpleDateFormat("dd/mm/yy");
 	
 	protected boolean ethiopianDate;
 	
@@ -96,7 +95,7 @@ public class DateCell extends Cell {
 
 	public String toString() {
 		if(ethiopianDate) return getEthDate();
-		return value!=null?sdt.format(value):"";
+		return value!=null?DateTimeUtil.formatDate(value):"";
 	}
 
 	public Cell newInstance() {

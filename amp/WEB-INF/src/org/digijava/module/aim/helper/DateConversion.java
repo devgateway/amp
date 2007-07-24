@@ -1,12 +1,11 @@
 package org.digijava.module.aim.helper ;
 
-import java.util.Date ;
-import java.text.SimpleDateFormat ;
-import org.apache.log4j.Logger ;
-
 import java.util.Comparator;
-import java.util.GregorianCalendar ;
-import java.util.Calendar ;
+import java.util.Date;
+import java.util.GregorianCalendar;
+
+import org.apache.log4j.Logger;
+import org.digijava.module.common.util.DateTimeUtil;
 
  
 public class DateConversion
@@ -34,12 +33,12 @@ public class DateConversion
 	public static String ConvertDateToString(Date mysqlDate )
 	{
 		String textDate ="";
-		if ( mysqlDate != null ) {
-			//SimpleDateFormat formatter = new SimpleDateFormat("MM/dd/yyyy") ;
-			SimpleDateFormat formatter = new SimpleDateFormat(Constants.SIMPLE_DATE_FORMAT) ;
-			textDate = formatter.format(mysqlDate) ;
+		if (mysqlDate != null) {
+			//SimpleDateFormat formatter = new SimpleDateFormat("MM/dd/yyyy");
+			//SimpleDateFormat formatter = new SimpleDateFormat(Constants.SIMPLE_DATE_FORMAT);
+			  textDate = DateTimeUtil.formatDate(mysqlDate);
 		}
-		return textDate ;
+		return textDate;
 	}	
 	
 	/**@author jose

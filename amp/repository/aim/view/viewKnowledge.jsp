@@ -92,9 +92,9 @@ function preview(id)
 								</SPAN>
 							</TD>
 							<TD align=right>
-												<input type="button" value="Preview" class="dr-menu"
+												<input type="button" value="<digi:trn key="aim:physical:Preview">Preview</digi:trn>" class="dr-menu"
 												onclick="preview(<c:out value="${aimKnowledgeForm.id}"/>)">
-												<input type="button" value="Edit" class="dr-menu"
+												<input type="button" value="<digi:trn key="aim:physical:edit">Edit</digi:trn>" class="dr-menu"
 												onclick="fnEditProject(<c:out value="${aimKnowledgeForm.id}"/>)">
 														&nbsp;
 											<logic:empty name="SA" scope="application">

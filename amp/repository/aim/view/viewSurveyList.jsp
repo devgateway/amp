@@ -84,9 +84,9 @@ function preview(id)
 												&nbsp;
 											</TD>
 											<TD align=right>
-												<input type="button" value="Preview" class="dr-menu"
+												<input type="button" value="<digi:trn key="aim:physical:Preview">Preview</digi:trn>" class="dr-menu"
 												onclick="preview(<c:out value="${aimSurveyForm.ampActivityId}"/>)">
-												<input type="button" value="Edit" class="dr-menu"
+												<input type="button" value="<digi:trn key="aim:physical:edit">Edit</digi:trn>"class="dr-menu"
 												onclick="fnEditProject(<c:out value="${aimSurveyForm.ampActivityId}"/>)">
 											<logic:empty name="SA" scope="application">
 												<input type="button" value="Preview Logframe" class="dr-menu"	onclick="previewLogframe(<c:out value="${aimFinancingBreakdownForm.ampActivityId}"/>)">

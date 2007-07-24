@@ -201,21 +201,21 @@ type="org.digijava.module.aim.form.FinancingBreakdownForm" method="post">
 											</logic:equal>
 			              	 			<logic:equal name="aimFinancingBreakdownForm" property="yearRangePresent" value="true">
 												<TD>
-   	                 						<STRONG>From</STRONG>&nbsp;
+   	                 						<STRONG><digi:trn key="aim:financeprg:from">From</digi:trn></STRONG>&nbsp;
 								      				<html:select property="fromYear" styleClass="dr-menu">
 								      					<html:optionsCollection name="aimFinancingBreakdownForm" 
 															property="years" value="year" label="year"/>
 														</html:select>&nbsp;&nbsp;
-								      			<STRONG>To</STRONG>&nbsp;
+								      			<STRONG><digi:trn key="aim:financeprg:to">To</digi:trn></STRONG>&nbsp;
 														<html:select property="toYear" styleClass="dr-menu">
 															<html:optionsCollection name="aimFinancingBreakdownForm" 
 															property="years" value="year" label="year"/>
 														</html:select>
 												</TD>
 											</logic:equal>
-											<TD width="5">
-												<html:submit value="GO" styleClass="dr-menu"/>
-											</TD>
+												<TD width="5">
+													<input type="submit" value="<digi:trn key="aim:go">GO</digi:trn>" styleClass="dr-menu"/>
+												</TD>
 											</TR>							
 										</TABLE>
 									</TD>

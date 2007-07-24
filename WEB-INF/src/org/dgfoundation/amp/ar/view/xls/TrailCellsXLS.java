@@ -77,11 +77,16 @@ public class TrailCellsXLS extends XLSExporter {
 			}catch (WorkerException e)
 				{System.out.println(e);}
 			
-		 
+			
+			String modified;
 			if(translatedName.compareTo("")==0)
-				cell.setCellValue(grd.getName());
-			else 
-				cell.setCellValue(translatedName);
+				modified = grd.getName();
+			else
+				modified = translatedName;
+			int pos = modified.indexOf(':'); 
+			if (pos >= 0)
+				modified = modified.substring(pos + 1);
+			cell.setCellValue(modified);
 			
 			makeColSpan(grd.getSourceColsCount().intValue());
 			//colId.inc();

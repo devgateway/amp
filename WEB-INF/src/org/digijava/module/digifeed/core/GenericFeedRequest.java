@@ -25,7 +25,7 @@ import org.digijava.module.digifeed.exception.UnsupportedParamTypeException;
  * 
  */
 public abstract class GenericFeedRequest implements Cloneable {
-	public static SimpleDateFormat sdt = new SimpleDateFormat(Constants.SIMPLE_DATE_FORMAT);
+	public static SimpleDateFormat sdt = new SimpleDateFormat(Constants.CALENDAR_DATE_FORMAT);
 	
 	
 

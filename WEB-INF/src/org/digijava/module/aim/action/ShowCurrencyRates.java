@@ -4,7 +4,6 @@
  */
 package org.digijava.module.aim.action;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
@@ -24,6 +23,7 @@ import org.digijava.module.aim.helper.CurrencyRateLoader;
 import org.digijava.module.aim.helper.CurrencyRates;
 import org.digijava.module.aim.helper.DateConversion;
 import org.digijava.module.aim.util.CurrencyUtil;
+import org.digijava.module.common.util.DateTimeUtil;
 
 public class ShowCurrencyRates extends Action {
 
@@ -75,8 +75,7 @@ public class ShowCurrencyRates extends Action {
 		if (crForm.getFilterByDateFrom() == null
 				|| crForm.getFilterByDateFrom().trim().length() == 0||(isFromAdminHome!=null&&isFromAdminHome)) {
 //			crForm.setFilterByDateFrom(Constants.CURRENCY_RATE_DEAFULT_END_DATE);//AMP-1421
-			SimpleDateFormat sdf= new SimpleDateFormat(Constants.SIMPLE_DATE_FORMAT);
-			crForm.setFilterByDateFrom(sdf.format(new Date()));
+			crForm.setFilterByDateFrom(DateTimeUtil.formatDate(new Date()));
                         crForm.setClean(false);
 		}
 

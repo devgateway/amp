@@ -33,7 +33,7 @@ import org.digijava.module.digifeed.feeds.ar.schema.Reports;
  * 
  */
 public class FeedBinder extends GenericFeedBinder {
-	public static SimpleDateFormat sdt = new SimpleDateFormat(Constants.SIMPLE_DATE_FORMAT);
+	//public static SimpleDateFormat sdt = new SimpleDateFormat(Constants.SIMPLE_DATE_FORMAT);
 
 	private static Logger logger = Logger.getLogger(FeedBinder.class);
 

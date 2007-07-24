@@ -4,20 +4,21 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import org.digijava.module.aim.helper.Constants;
+import org.digijava.module.common.util.DateTimeUtil;
 
 
 
 public class PublisherDateFormatter {
-	private static SimpleDateFormat dateFormat = new SimpleDateFormat(Constants.SIMPLE_DATE_FORMAT);
+	//private static SimpleDateFormat dateFormat = new SimpleDateFormat(Constants.SIMPLE_DATE_FORMAT);
 	private static SimpleDateFormat valueDateFormat = new SimpleDateFormat("EEE MMM d yyyy");
 	public static Date parse(String date) throws ParseException {
-		return dateFormat.parse(date);
+		return valueDateFormat.parse(date);
 	}
 
 	public static String print(Date date) {
 		String result = null;
 		if (date != null) {
-			result = dateFormat.format(date);
+			result = DateTimeUtil.formatDate(date);
 		}
 		return result;
 	}

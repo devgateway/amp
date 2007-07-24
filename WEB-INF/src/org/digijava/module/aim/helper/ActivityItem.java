@@ -73,7 +73,7 @@ public class ActivityItem {
 	 * @see ActivityItem#ActivityItem(AmpActivity, DateFormat)
 	 */
 	public ActivityItem(AmpActivity entity) throws Exception{
-		this(entity,new SimpleDateFormat(Constants.SIMPLE_DATE_FORMAT));
+		this(entity,new SimpleDateFormat(Constants.CALENDAR_DATE_FORMAT));
 	}
 
 	/**

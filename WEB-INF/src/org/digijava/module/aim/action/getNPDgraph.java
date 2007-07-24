@@ -1,5 +1,20 @@
 package org.digijava.module.aim.action;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Calendar;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
@@ -11,11 +26,11 @@ import org.digijava.module.aim.dbentity.NpdSettings;
 import org.digijava.module.aim.exception.AimException;
 import org.digijava.module.aim.form.NpdGraphForm;
 import org.digijava.module.aim.helper.NpdGraphTooltipGenerator;
-import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.ChartUtil;
 import org.digijava.module.aim.util.NpdSettingsUtil;
 import org.digijava.module.aim.util.ProgramUtil;
 import org.digijava.module.aim.util.TeamUtil;
+import org.digijava.module.common.util.DateTimeUtil;
 import org.jfree.chart.ChartRenderingInfo;
 import org.jfree.chart.ChartUtilities;
 import org.jfree.chart.JFreeChart;
@@ -24,13 +39,6 @@ import org.jfree.chart.axis.CategoryLabelPositions;
 import org.jfree.chart.plot.CategoryPlot;
 import org.jfree.data.category.CategoryDataset;
 import org.jfree.data.category.CustomCategoryDataset;
-import org.digijava.module.aim.helper.Constants;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
-import java.util.*;
-import java.text.SimpleDateFormat;
 
 /**
  * NPD Indicators graph generator action.
@@ -215,8 +223,7 @@ public class getNPDgraph extends Action {
 
     public String formatActualDate(AmpThemeIndicatorValue val) {
         if (val != null) {
-            SimpleDateFormat form = new SimpleDateFormat(Constants.SIMPLE_DATE_FORMAT);
-            return form.format(val.getCreationDate());
+        	return DateTimeUtil.formatDate(val.getCreationDate());
         }
         return "";
     }

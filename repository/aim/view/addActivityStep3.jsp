@@ -495,6 +495,7 @@
 </a>
                                                                                 </td>
                                                                               </tr>
+                                                                              <c:if test="${!empty funding.fundingDetails}">
                                                                               <logic:iterate name="funding" property="fundingDetails" id="fundingDetail"                                                                              type="org.digijava.module.aim.helper.FundingDetail">
                                                                                 <logic:equal name="fundingDetail" property="transactionType" value="0">
 
@@ -505,7 +506,7 @@
                                                                                     <c:if test="${fundingDetail.perspectiveCode != 'DN'}">
                                                                                       <tr bgcolor="#ffffff">
                                                                                     </c:if>
-                                                                                    
+
                                                                                     <td width="50">
 	                                                                                    <field:display name="Adjustment Type Commitment" feature="Funding Organizations">
     	                                                                                	<digi:trn key='<%="aim:"+fundingDetail.getAdjustmentTypeNameTrimmed() %>'>
@@ -513,15 +514,15 @@
 																							</digi:trn>
 																						</field:display>
                                                                                     </td>
-                                                                                    
-                                                                                    
+
+
                                                                                     <td width="120" align="right">
                                                                                       <field:display name="Amount Commitment" feature="Funding Organizations">
                                                                                       	<FONT color=blue>*</FONT>
                                                                                       	<bean:write name="fundingDetail" property="transactionAmount"/>&nbsp;
                                                                                       </field:display>
                                                                                     </td>
-                                                                                    
+
                                                                                     <td width="150">
 	                                                                                    <field:display name="Currency Commitment" feature="Funding Organizations">
     	                                                                                  <bean:write name="fundingDetail" property="currencyCode"/>
@@ -616,6 +617,7 @@
 
                                                                                 </logic:equal>
                                                                               </logic:iterate>
+                                                                              </c:if>
                                                                               <tr bgcolor="#ffffff">
                                                                                 <td colspan="5">&nbsp;</td>
                                                                               </tr>
@@ -625,6 +627,7 @@
 																				</a>
                                                                                 </td>
                                                                               </tr>
+                                                                              <c:if test="${!empty funding.fundingDetails}">
                                                                               <logic:iterate name="funding" property="fundingDetails"
                                                                               id="fundingDetail" type="org.digijava.module.aim.helper.FundingDetail">
                                                                               <logic:equal name="fundingDetail" property="transactionType" value="1">
@@ -677,7 +680,7 @@
 																								<field:display name="Adjustment Type Disbursement" feature="Funding Organizations">
 																									<digi:trn key='<%="aim:"+fundingDetail.getAdjustmentTypeNameTrimmed() %>'>
 																										<bean:write name="fundingDetail" property="adjustmentTypeName"/>
-																									</digi:trn>																		
+																									</digi:trn>
 																								</field:display>
 																							</td>
 																							<td width="120" align="right">
@@ -711,7 +714,7 @@
 																								<field:display name="Adjustment Type Disbursement" feature="Funding Organizations">
 																									<digi:trn key='<%="aim:"+fundingDetail.getAdjustmentTypeNameTrimmed() %>'>
 																										<bean:write name="fundingDetail" property="adjustmentTypeName"/>
-																									</digi:trn>		
+																									</digi:trn>
 																								</field:display>
 																							</td>
 																							<td width="120" align="right">
@@ -743,6 +746,7 @@
 
 																						</logic:equal>
 																						</logic:iterate>
+                                                                                        </c:if>
 																						<tr bgcolor="#ffffff">
 																							<td colspan="5">&nbsp;</td>
 																						</tr>
@@ -752,6 +756,7 @@
 																							</a>
 																							</td>
 																						</tr>
+                                                                                        <c:if test="${!empty funding.fundingDetails}">
 																						<logic:iterate name="funding" property="fundingDetails"
 																						id="fundingDetail" type="org.digijava.module.aim.helper.FundingDetail">
 																						<logic:equal name="fundingDetail" property="transactionType" value="2">
@@ -768,7 +773,7 @@
 																								<field:display name="Adjustment Type Expenditure" feature="Funding Organizations">
 																									<digi:trn key='<%="aim:"+fundingDetail.getAdjustmentTypeNameTrimmed() %>'>
 																										<bean:write name="fundingDetail" property="adjustmentTypeName"/>
-																									</digi:trn>																							
+																									</digi:trn>
 																								</field:display>
 																							</td>
 																							<td width="120" align="right">
@@ -811,7 +816,7 @@
 																								<field:display name="Adjustment Type Expenditure" feature="Funding Organizations">
 																									<digi:trn key='<%="aim:"+fundingDetail.getAdjustmentTypeNameTrimmed() %>'>
 																										<bean:write name="fundingDetail" property="adjustmentTypeName"/>
-																									</digi:trn>																							
+																									</digi:trn>
 																								</field:display>
 																							</td>
 																							<td width="120" align="right">
@@ -852,7 +857,7 @@
 																								<field:display name="Adjustment Type Expenditure" feature="Funding Organizations">
 																									<digi:trn key='<%="aim:"+fundingDetail.getAdjustmentTypeNameTrimmed() %>'>
 																										<bean:write name="fundingDetail" property="adjustmentTypeName"/>
-																									</digi:trn>																							
+																									</digi:trn>
 																								</field:display>
 																							</td>
 																							<td width="120" align="right">
@@ -893,6 +898,7 @@
 
 																						</logic:equal>
 																						</logic:iterate>
+                                                                                        </c:if>
 																					</table>
 																				</td>
 																			</tr>

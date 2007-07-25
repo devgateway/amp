@@ -1084,10 +1084,10 @@
     <action name="aimEditActivityForm" path="/aim/showAddComponent" scope="session" type="org.digijava.module.aim.action.ShowAddComponent">
       <forward name="forward" path="/showLayout.do?layout=aim_addCompPopupLayout" />
       <forward name="updated" path="/aim/addActivity.do?edit=true" redirect="true" />
-    </action>
+		</action>
     <action name="aimEditActivityForm" path="/aim/removeComponent" scope="session" type="org.digijava.module.aim.action.RemoveComponent">
       <forward name="forward" path="/addActivity.do" redirect="true" />
-    </action>
+		</action>
     <action name="aimEditActivityForm" path="/aim/componentSelected" scope="session" type="org.digijava.module.aim.action.ComponentSelected">
       <forward name="forward" path="/addActivity.do" redirect="true" />
       <forward name="selectComponent" path="/showLayout.do?layout=aim_addCompPopupLayout" />
@@ -1375,12 +1375,12 @@
     </action>
     <action name="aimComponentsForm" path="/aim/getComponents" scope="session" type="org.digijava.module.aim.action.GetComponents" validate="false">
       <forward name="default" path="/showLayout.do?layout=viewComponents" />
-    </action>
+		</action>
     <action name="aimUpdateComponentsForm" path="/aim/updateComponents" scope="request" type="org.digijava.module.aim.action.UpdateComponents" validate="false">
       <forward name="default" path="/showLayout.do?layout=printMyDesktop" />
       <forward name="editComponent" path="/showLayout.do?layout=editComponents" />
       <forward name="addComponent" path="/showLayout.do?layout=addComponents" />
-      <forward name="comps" path="/aim/getComponents.do" />
+      <forward name="comps" path="/aim/getComponents.do" redirect="true"/>
     </action>
     <action name="aimNationalPlaningDashboardForm" parameter="actionMethod" path="/aim/npd" scope="request" type="org.digijava.module.aim.action.NationalPlaningDashboardAction" unknown="true" validate="false">
       <forward name="viewNPDDashboard" path="/showLayout.do?layout=amp_viewNationalPlaningDashboard" />

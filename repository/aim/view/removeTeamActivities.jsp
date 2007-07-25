@@ -7,10 +7,10 @@
 
 <digi:errors/>
 <digi:instance property="aimTeamActivitiesForm" />
-<bean:define id="translation">
+<c:set var="translation">
 	<digi:trn key="aim:clickToViewAdmin">Click here to goto Admin Home</digi:trn>
-</bean:define>
-<digi:link href="/admin.do" title="<%=translation%>" >
+</c:set>
+<digi:link href="/admin.do" title="${translation}" >
 	Admin Home Page
 </digi:link><br><br>
 <jsp:include page="workspaceManagerMenu.jsp" flush="true" />
@@ -87,3 +87,6 @@
 	</tr>
 </table>
 </digi:form>
+
+
+

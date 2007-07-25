@@ -63,16 +63,16 @@
             
 			<tr>
             <td valign="bottom" class="crumb" >
-			  		<bean:define id="translation">
+			  		<c:set var="translation">
 						<digi:trn key="aim:clickToViewMyDesktop">Click here to view MyDesktop</digi:trn>
-					</bean:define>
-            	<digi:link href="/viewMyDesktop.do" styleClass="comment" title="<%=translation%>">
+					</c:set>
+            	<digi:link href="/viewMyDesktop.do" styleClass="comment" title="${translation}">
 						<digi:trn key="aim:MyDesktop">My Desktop</digi:trn>
             	</digi:link> &gt; 
-					<bean:define id="translation">
+					<c:set var="translation">
 						<digi:trn key="aim:clickToViewAllReports">Click here to view list of all Reports </digi:trn>
-					</bean:define>
-					<digi:link href="/viewTeamReports.do" styleClass="comment" title="<%=translation%>">
+					</c:set>
+					<digi:link href="/viewTeamReports.do" styleClass="comment" title="${translation}">
 						<digi:trn key="aim:AllReport">All Reports</digi:trn>
 					</digi:link>&nbsp;&gt;&nbsp;
 					<bean:write name="aimAdvancedReportForm" property="perspective"/> &nbsp;
@@ -106,11 +106,11 @@
 			<tr>	
 				<td valign="bottom" class="crumb">
 					&nbsp;&nbsp;<img src="../ampTemplate/images/pdf_icon.gif" border=0>
-					<bean:define id="translation">
+					<c:set var="translation">
 						<digi:trn key="aim:clickToCreateReportInPDF">Click here to Create Report in Pdf </digi:trn>
-					</bean:define>
+					</c:set>
 					
-					<digi:link href="" onclick="popup_pdf(''); return false;" title="<%=translation%>">
+					<digi:link href="" onclick="popup_pdf(''); return false;" title="${translation}">
 						<digi:trn key="aim:createReportInPdf">Create Report in Pdf.</digi:trn>
 					</digi:link>
 	           </td>
@@ -118,10 +118,10 @@
 			<tr>
 				<td valign="bottom" class="crumb" >
 					&nbsp;&nbsp;<img src="../ampTemplate/images/xls_icon.jpg" border=0>
-					<bean:define id="translation">
+					<c:set var="translation">
 						<digi:trn key="aim:clickToCreateReportInExcel">Click here to Create Report in Excel </digi:trn>
-					</bean:define>
-					<digi:link href="" onclick="popup_xls(''); return false;" title="<%=translation%>">
+					</c:set>
+					<digi:link href="" onclick="popup_xls(''); return false;" title="${translation}">
 					 	<digi:trn key="aim:createReportInXls">Create Report in Xls.</digi:trn>
 					</digi:link>
             </td>
@@ -130,10 +130,10 @@
 			<tr>
 				<td valign="bottom" class="crumb" >
 					&nbsp;&nbsp;<img src="../ampTemplate/images/icon_csv.gif" border=0>
-					<bean:define id="translation">
+					<c:set var="translation">
 						<digi:trn key="aim:clickToCreateReportInExcel">Click here to Create Report in Excel </digi:trn>
-					</bean:define>
-					<digi:link href="" onclick="popup_csv(''); return false;" title="<%=translation%>">
+					</c:set>
+					<digi:link href="" onclick="popup_csv(''); return false;" title="${translation}">
 					 	<digi:trn key="aim:createReportInCsv">Create Report in CSV.</digi:trn>
 					</digi:link>
 			
@@ -396,10 +396,10 @@
 					</c:set>
 					
 					<logic:notEqual name="aimAdvancedReportForm" property="page" value="1">
-						<bean:define id="translation">
+						<c:set var="translation">
 							<digi:trn key="aim:clickToViewPreviousPage">Click here to view Previous page</digi:trn>
-						</bean:define>
-						<digi:link href="/viewAdvancedReport.do" name="urlParams2" title="<%=translation%>" >
+						</c:set>
+						<digi:link href="/viewAdvancedReport.do" name="urlParams2" title="${translation}" >
 							Previous
 						</digi:link>&nbsp;
 					</logic:notEqual>
@@ -425,10 +425,10 @@
 								
 						<% if( curr != cnt ) { %>
 						
-						<bean:define id="translation">
+						<c:set var="translation">
 							<digi:trn key="aim:clickToViewAllPages">Click here to view All pages</digi:trn>
-						</bean:define>
-						<digi:link href="/viewAdvancedReport.do" name="urlParams1" title="<%=translation%>" >
+						</c:set>
+						<digi:link href="/viewAdvancedReport.do" name="urlParams1" title="${translation}" >
 							<%=pages%>
 						</digi:link>
 						<% } else { %>
@@ -454,10 +454,10 @@
 							Next
 						</digi:trn>  
 						<% } else { %>
-						<bean:define id="translation">
+						<c:set var="translation">
 							<digi:trn key="aim:clickToViewNextPage">Click here to go to Next page</digi:trn>
-						</bean:define>
-						<digi:link href="/viewAdvancedReport.do" name="urlParams3" title="<%=translation%>" >
+						</c:set>
+						<digi:link href="/viewAdvancedReport.do" name="urlParams3" title="${translation}" >
 							Next
 						</digi:link>&nbsp;	
 						<% } %>
@@ -487,4 +487,7 @@
 		</table>
 	-->
 </digi:form>
+
+
+
 

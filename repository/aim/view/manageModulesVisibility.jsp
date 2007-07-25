@@ -1,12 +1,21 @@
 <%@ page pageEncoding="UTF-8" %>
+
 <%@ taglib uri="/taglib/struts-bean" prefix="bean" %>
+
 <%@ taglib uri="/taglib/struts-logic" prefix="logic" %>
+
 <%@ taglib uri="/taglib/struts-tiles" prefix="tiles" %>
+
 <%@ taglib uri="/taglib/struts-html" prefix="html" %>
+
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
+
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
 
+
+
 <script language="JavaScript">
+
 	
 	function editTemplate(id) {
     	// if(!onDelete) return false;
@@ -15,10 +24,16 @@
         document.aimFlagUploaderForm.submit();
 	}
 
+
+
 </script>
 
 
+
+
+
 <digi:instance property="aimVisibilityManagerForm" />
+
 <table width="100%" cellspacing=1 cellpadding=1 valign=top align=left>	
 	<tr><td bgColor=#d7eafd class=box-title height="20" align="center" colspan="3">
 	<!-- Table title -->
@@ -41,19 +56,19 @@
 		<tr bgcolor="#ffffff">
 		<c:set target="${urlParams10}" property="action" value="editModule"/>
 		<c:set target="${urlParams10}" property="moduleId" value="<%=module.getId() %>"/>
-			<bean:define id="translation">
+			<c:set var="translation">
 				<digi:trn key="aim:clickToEditModule">Click here to Edit Module</digi:trn>
-			</bean:define>	
+			</c:set>	
 			<td width="70%"> <digi:link href="/visibilityManager.do" name="urlParams10" 
-				title="<%=translation%>" ><bean:write name="module" property="name"/></digi:link> &nbsp;&nbsp;&nbsp; 
+				title="${translation}" ><bean:write name="module" property="name"/></digi:link> &nbsp;&nbsp;&nbsp; 
 			</td>
 
 			<td width="30%" align="center">
-			<bean:define id="translation">
+			<c:set var="translation">
 				<digi:trn key="aim:clickToEditModule">Click here to Edit Module</digi:trn>
-			</bean:define>
+			</c:set>
 			[ <digi:link href="/visibilityManager.do" name="urlParams10" 
-				title="<%=translation%>" >Edit</digi:link> ]&nbsp;&nbsp;&nbsp;
+				title="${translation}" >Edit</digi:link> ]&nbsp;&nbsp;&nbsp;
 			</td>
 		</tr>
 	</logic:iterate>
@@ -64,3 +79,7 @@
 	</tr>
 	
 </table>
+
+
+
+

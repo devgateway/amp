@@ -61,11 +61,11 @@ method="post">
 											<bean:write name="aimPhysicalProgressForm" property="ampActivityId"/>
 										</c:set>
 										<c:set target="${urlPhysicalProgress}" property="tabIndex" value="2"/>
-										<bean:define id="translation">
+										<c:set var="translation">
 											<digi:trn key="aim:clickToViewPhysicalProgress">Click here to view Physical Progress</digi:trn>
-										</bean:define>
+										</c:set>
 										<digi:link href="/viewPhysicalProgress.do" name="urlPhysicalProgress" styleClass="comment" 
-										title="<%=translation%>" >
+										title="${translation}" >
 											<digi:trn key="aim:physicalProgress">Physical Progress</digi:trn>
 										</digi:link>
 										&gt; Overview &gt; 
@@ -226,3 +226,6 @@ method="post">
 
 </logic:equal>	
 </digi:form>
+
+
+

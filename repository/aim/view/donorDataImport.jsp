@@ -43,10 +43,10 @@
         <tr>
           <td width="50%" align="right"><html:reset value="Cancel" /></td>
           <td width="50%" align="left">
-		<bean:define id="translation">
+		<c:set var="translation">
 			<digi:trn key="aim:clickToGoToNext">next</digi:trn>
-		</bean:define>
-		  <html:button property="aimDonorDataImportForm" title="<%=translation%>" value="Next &gt;&gt;" /></td>
+		</c:set>
+		  <html:button property="aimDonorDataImportForm" title="${translation}" value="Next &gt;&gt;" /></td>
         </tr>
       </table>
     </td>
@@ -58,3 +58,6 @@
 </TABLE>
 
 </digi:form>
+
+
+

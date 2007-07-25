@@ -23,10 +23,10 @@
 				<tr>
 					<!-- Start Navigation -->
 					<td height=33><span class=crumb>
-						<bean:define id="translation">
+						<c:set var="translation">
 							<digi:trn key="aim:clickToViewAdmin">Click here to goto Admin Home</digi:trn>
-						</bean:define>
-						<digi:link href="/admin.do" styleClass="comment" title="<%=translation%>" >
+						</c:set>
+						<digi:link href="/admin.do" styleClass="comment" title="${translation}" >
 						<digi:trn key="aim:AmpAdminHome">
 						Admin Home
 						</digi:trn>
@@ -110,19 +110,19 @@
 								<bean:write name="reports" property="ampReportId" />
 							</c:set>
 							<c:set target="${urlParams}" property="action" value="edit" />
-							<bean:define id="translation">
+							<c:set var="translation">
 								<digi:trn key="aim:clickToEditReport">Click here to Edit Report</digi:trn>
-							</bean:define>
-							[ <digi:link href="/getReports.do" name="urlParams" title="<%=translation%>" >
+							</c:set>
+							[ <digi:link href="/getReports.do" name="urlParams" title="${translation}" >
 								<digi:trn key="aim:reportManagerEdit">Edit</digi:trn>
 							</digi:link> ]
 						</td>
 						<td align="center">
 							<c:set target="${urlParams}" property="action" value="delete" />
-							<bean:define id="translation">
+							<c:set var="translation">
 								<digi:trn key="aim:clickToDeleteReport">Click here to Delete Report</digi:trn>
-							</bean:define>
-							[ <digi:link href="/getReports.do" name="urlParams" title="<%=translation%>" >
+							</c:set>
+							[ <digi:link href="/getReports.do" name="urlParams" title="${translation}" >
 								<digi:trn key="aim:reportManagerDelete">Delete</digi:trn>
 							</digi:link> ]
 						</td>
@@ -171,10 +171,10 @@
 										<tr>
 											<td>
 												<digi:img src="module/aim/images/arrow-014E86.gif" width="15" height="10"/>
-						<bean:define id="translation">
+						<c:set var="translation">
 							<digi:trn key="aim:clickToAddNewReport">Click here to Add New Report</digi:trn>
-						</bean:define>
-						<digi:link href="/addReports.do"  title="<%=translation%>" >
+						</c:set>
+						<digi:link href="/addReports.do"  title="${translation}" >
 						<digi:trn key="aim:addReport">
 						Add a new report
 						</digi:trn>
@@ -184,10 +184,10 @@
 										<tr>
 											<td>
 												<digi:img src="module/aim/images/arrow-014E86.gif" width="15" height="10"/>
-												<bean:define id="translation">
+												<c:set var="translation">
 													<digi:trn key="aim:clickToViewAdmin">Click here to goto Admin Home</digi:trn>
-												</bean:define>
-												<digi:link href="/admin.do" title="<%=translation%>" >
+												</c:set>
+												<digi:link href="/admin.do" title="${translation}" >
 												<digi:trn key="aim:AmpAdminHome">
 												Admin Home
 												</digi:trn>
@@ -207,3 +207,6 @@
 		</td>
 	</tr>
 </table>
+
+
+

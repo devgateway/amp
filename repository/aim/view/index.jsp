@@ -79,28 +79,28 @@
 				</tr>
 		          <td>&nbsp;</td>
 					 <td colSpan=2>
-						<bean:define id="translation">
+						<c:set var="translation">
 							<digi:trn key="aim:clickifyouForgotYourPassword">Click here if you have forgot your password</digi:trn>
-						</bean:define>
-						<digi:link href="/showEmailForm.do" title="<%=translation%>">
+						</c:set>
+						<digi:link href="/showEmailForm.do" title="${translation}">
 						<digi:trn key="aim:forgotPassword">
 						Forgot Password
 						</digi:trn>
 						</digi:link>
 						 | 
-						<bean:define id="translation">
+						<c:set var="translation">
 							<digi:trn key="aim:clickToChangeYourPassword">Click here if you want to change your password</digi:trn>
-						</bean:define>
-						<digi:link href="/showChangePassword.do" title="<%=translation%>">
+						</c:set>
+						<digi:link href="/showChangePassword.do" title="${translation}">
 						<digi:trn key="aim:changePassword">
 						Change Password
 						</digi:trn>
 						</digi:link>
 						<br><br>
-						<bean:define id="translation">
+						<c:set var="translation">
 							<digi:trn key="aim:clickToRegister">Click here to register</digi:trn>
-						</bean:define>
-						<digi:link href="/showRegisterUser.do" title="<%=translation%>">
+						</c:set>
+						<digi:link href="/showRegisterUser.do" title="${translation}">
 						<digi:trn key="aim:newUserRegister">
 						New user register
 						</digi:trn>
@@ -146,3 +146,6 @@
 </table>
 </td></tr>
 </table>
+
+
+

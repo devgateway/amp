@@ -25,10 +25,10 @@
 						<tr>
 							<td>
 								<span class=crumb>
-								<bean:define id="translation">
+								<c:set var="translation">
 									<digi:trn key="aim:clickToViewMyDesktop">Click here to view MyDesktop </digi:trn>
-								</bean:define>
-								<digi:link href="/viewMyDesktop.do" styleClass="comment"  title="<%=translation%>">
+								</c:set>
+								<digi:link href="/viewMyDesktop.do" styleClass="comment"  title="${translation}">
 									<digi:trn key="aim:portfolio">Portfolio</digi:trn>
 								</digi:link>&nbsp;&gt;&nbsp;								
 								<digi:trn key="aim:relatedLinks">Related Links</digi:trn>
@@ -54,10 +54,13 @@
 									<b>No Links</b>								
 								</c:if>
 								<c:if test="${linksCount > 0}">
+
 									<table width="100%" cellPadding=5 cellSpacing=1 bgcolor="#aaaaaa">
+
 									<c:forEach var="document" items="${myLinks}" varStatus="status">
 										<tr bgcolor="#f4f4f2">
 											<td>
+
 												Title: <b><c:out value="${document.title}"/></b> <br>
 												<c:if test="${!empty document.docDescription}">
 													Description: <c:out value="${document.docDescription}"/><br>
@@ -72,13 +75,18 @@
 													<a href="<%=digiContext%>/cms/downloadFile.do?itemId=<c:out value="${document.docId}"/>">
 													<c:out value="${document.fileName}"/></i></a>
 												</c:if>		
+
 												<br>
+
 												
+
 												<a href="/deleteMemberLink.do?id=<c:out value="${document.docId}"/>">Delete</a>
 											</td>	
 										</tr>
 									</c:forEach>
+
 									</table>
+
 								</c:if>
 							</td>
 						</tr>
@@ -92,4 +100,7 @@
 </table>
 </td></tr>
 </table>
+
+
+
 

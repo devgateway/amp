@@ -69,16 +69,16 @@
               <td width="9" height="33"></td>
               
           <td valign="bottom" class="crumb" >
-				<bean:define id="translation">
+				<c:set var="translation">
 					<digi:trn key="aim:clickToViewMyDesktop">Click here to view MyDesktop</digi:trn>
-				</bean:define>
-				<digi:link href="/viewMyDesktop.do" styleClass="comment" title="<%=translation%>">
+				</c:set>
+				<digi:link href="/viewMyDesktop.do" styleClass="comment" title="${translation}">
 				<digi:trn key="aim:MyDesktop">My Desktop</digi:trn>
                 </digi:link> &gt; 
-				<bean:define id="translation">
+				<c:set var="translation">
 					<digi:trn key="aim:clickToViewAllReports">Click here to view list of all Reports </digi:trn>
-				</bean:define>
-				<digi:link href="/viewTeamReports.do" styleClass="comment" title="<%=translation%>">
+				</c:set>
+				<digi:link href="/viewTeamReports.do" styleClass="comment" title="${translation}">
 				<digi:trn key="aim:AllReports">All Reports</digi:trn>
 				</digi:link> &nbsp;&gt;&nbsp;
 				<bean:write name="aimMulitlateralbyDonorForm" property="perspective"/>&nbsp;
@@ -118,10 +118,10 @@
 					<logic:notEmpty name="aimMulitlateralbyDonorForm" property="multiReport">
 						&nbsp;&nbsp;
 						<img src="../ampTemplate/images/pdf_icon.gif" border=0>	
-						<bean:define id="translation">
+						<c:set var="translation">
 						<digi:trn key="aim:clickToCreateReportInPDF">Click here to Create Report in Pdf </digi:trn>
-						</bean:define>
-						<digi:link href="" onclick="popup_warn(''); return false;" title="<%=translation%>"> 
+						</c:set>
+						<digi:link href="" onclick="popup_warn(''); return false;" title="${translation}"> 
 						<digi:trn key="aim:createReportInPdf">Create Report in Pdf.</digi:trn>
 						</digi:link>
 		        	</logic:notEmpty>
@@ -132,10 +132,10 @@
 					<logic:notEmpty name="aimMulitlateralbyDonorForm" property="multiReport">
 					&nbsp;&nbsp;
 					<img src="../ampTemplate/images/pdf_icon.gif" border=0>	
-					<bean:define id="translation">
+					<c:set var="translation">
 						<digi:trn key="aim:clickToCreateReportInPDF">Click here to Create Report in Pdf </digi:trn>
-					</bean:define>
-						<digi:link href="" onclick="popup_pdf(''); return false;" title="<%=translation%>"> 
+					</c:set>
+						<digi:link href="" onclick="popup_pdf(''); return false;" title="${translation}"> 
 								<digi:trn key="aim:createReportInPdf">Create Report in Pdf.</digi:trn>
 						</digi:link>
                 	</logic:notEmpty>
@@ -149,10 +149,10 @@
 							<logic:notEmpty name="aimMulitlateralbyDonorForm" property="multiReport">
 							&nbsp;&nbsp;
 								<img src="../ampTemplate/images/xls_icon.jpg" border=0>	
-								<bean:define id="translation">
+								<c:set var="translation">
 								<digi:trn key="aim:clickToCreateReportInExcel">Click here to Create Report in Excel </digi:trn>
-								</bean:define>
-								<digi:link href="" onclick="popup_xls(''); return false;" title="<%=translation%>">
+								</c:set>
+								<digi:link href="" onclick="popup_xls(''); return false;" title="${translation}">
 								<digi:trn key="aim:createReportInXls">Create Report in Xls</digi:trn>
 								</digi:link>
 		                	</logic:notEmpty>
@@ -165,10 +165,10 @@
 					<logic:notEmpty name="aimMulitlateralbyDonorForm" property="multiReport">
 							&nbsp;&nbsp;
 					<img src="../ampTemplate/images/icon_csv.gif" border=0>
-					<bean:define id="translation">
+					<c:set var="translation">
 						<digi:trn key="aim:clickToCreateReportInCSV">Click here to Create Report in CSV </digi:trn>
-					</bean:define>
-					<digi:link href="" onclick="popup_csv(''); return false;" title="<%=translation%>">
+					</c:set>
+					<digi:link href="" onclick="popup_csv(''); return false;" title="${translation}">
 					 	<digi:trn key="aim:createReportInCsv">Create Report in CSV.</digi:trn>
 					</digi:link>
 					</logic:notEmpty>
@@ -701,3 +701,6 @@
 	
 </table>
 </digi:form>
+
+
+

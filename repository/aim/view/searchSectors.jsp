@@ -289,10 +289,10 @@
 											<font color="#FF0000"><%=pages%></font>
 										</c:if>
 										<c:if test="${aimEditActivityForm.currentPage != pages}">
-											<bean:define id="translation">
+											<c:set var="translation">
 												<digi:trn key="aim:clickToViewNextPage">Click here to goto Next Page</digi:trn>
-											</bean:define>
-											<digi:link href="/searchSectors.do" name="urlParams1" title="<%=translation%>" >
+											</c:set>
+											<digi:link href="/searchSectors.do" name="urlParams1" title="${translation}" >
 												<%=pages%>
 											</digi:link>
 										</c:if>
@@ -312,3 +312,6 @@
 
 <bean:write name="aimEditActivityForm" property="orgType" />
 </digi:form>
+
+
+

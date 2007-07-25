@@ -925,11 +925,11 @@ function disable() {
 																		<bean:write name="breakdown" property="ampFundingId"/>
 																	</c:set>
 
-																	<bean:define id="translation">
+																	<c:set var="translation">
 																		<digi:trn key="aim:clickToViewFinancialOverview">
 																		Click here to view Financial Overview</digi:trn>
-																	</bean:define>
-											                  		<digi:link href="/viewFinancialOverview.do" name="urlFinancialOverview" title="<%=translation%>" >
+																	</c:set>
+											                  		<digi:link href="/viewFinancialOverview.do" name="urlFinancialOverview" title="${translation}" >
 																		<bean:write name="breakdown" property="financingId" />
 																	</digi:link>
 																</TD>
@@ -1640,4 +1640,7 @@ function disable() {
 </td></tr>
 </table>
 </digi:form>
+
+
+
 

@@ -233,10 +233,10 @@
 											<font color="#FF0000"><%=pages%></font>
 										</c:if>
 										<c:if test="${calendarEditActivityForm.currentPage != pages}">
-											<bean:define id="translation">
+											<c:set var="translation">
 												<digi:trn key="aim:clickToViewNextPage">Click here to goto Next Page</digi:trn>
-											</bean:define>
-											<digi:link href="/selectOrganization.do" name="urlParams1" title="<%=translation%>" >
+											</c:set>
+											<digi:link href="/selectOrganization.do" name="urlParams1" title="${translation}" >
 												<%=pages%>
 											</digi:link>
 										</c:if>
@@ -253,10 +253,10 @@
 								<td align="center">
 									<table width="90%">
 									<tr><td>
-										<bean:define id="translation">
+										<c:set var="translation">
 											<digi:trn key="aim:clickToViewAllSearchPages">Click here to view all search pages</digi:trn>
-										</bean:define>
-										<a href="javascript:searchAlpha('viewAll')" title="<%=translation%>">
+										</c:set>
+										<a href="javascript:searchAlpha('viewAll')" title="${translation}">
 											viewAll</a>&nbsp;|&nbsp;
 										<logic:iterate name="calendarEditActivityForm" property="alphaPages" id="alphaPages" type="java.lang.String">
 											<c:if test="${alphaPages != null}">
@@ -264,10 +264,10 @@
 													<font color="#FF0000"><%=alphaPages %></font>
 												</c:if>
 												<c:if test="${calendarEditActivityForm.currentAlpha != alphaPages}">
-												<bean:define id="translation">
+												<c:set var="translation">
 													<digi:trn key="aim:clickToViewNextPage">Click here to go to next page</digi:trn>
-												</bean:define>
-													<a href="javascript:searchAlpha('<%=alphaPages%>')" title="<%=translation%>" >
+												</c:set>
+													<a href="javascript:searchAlpha('<%=alphaPages%>')" title="${translation}" >
 														<%=alphaPages %></a>
 												</c:if>
 											|&nbsp;
@@ -285,3 +285,6 @@
 	</td></tr>
 </table>
 </digi:form>
+
+
+

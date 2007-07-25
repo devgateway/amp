@@ -35,10 +35,10 @@ method="post">
 							<bean:write name="aimRelatedLinksForm" property="id"/>
 						</c:set>
 						<c:set target="${urlKnowledge}" property="tabIndex" value="3"/>
-						<bean:define id="translation">
+						<c:set var="translation">
 							<digi:trn key="aim:clickToViewKnowledge">Click here to view Knowledge</digi:trn>
-						</bean:define>
-						<digi:link href="/viewKnowledge.do" name="urlKnowledge" styleClass="comment" title="<%=translation%>" >
+						</c:set>
+						<digi:link href="/viewKnowledge.do" name="urlKnowledge" styleClass="comment" title="${translation}" >
 							<digi:trn key="aim:knowledge">Knowledge</digi:trn>
 						</digi:link>
 						&gt; Document &gt; <bean:write name="aimKnowledgeForm" property="aimRelatedLinksForm"/> Perspective
@@ -60,6 +60,9 @@ method="post">
 </table>
 </td></tr></table>
 </logic:equal>
+
+
+
 
 
 

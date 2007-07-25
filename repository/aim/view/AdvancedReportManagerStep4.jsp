@@ -119,26 +119,26 @@ function backStep() {
 					<table cellPadding=5 cellSpacing=0 width="100%">
 						<tr>
 							<td height=33><span class=crumb>
-								<bean:define id="translation">
+								<c:set var="translation">
 									<digi:trn key="aim:clickToViewMyDesktop">Click here to view MyDesktop</digi:trn>
-								</bean:define>
-								<digi:link href="/viewMyDesktop.do" styleClass="comment" title="<%=translation%>" >
+								</c:set>
+								<digi:link href="/viewMyDesktop.do" styleClass="comment" title="${translation}" >
 								<digi:trn key="aim:portfolio">
 									Portfolio
 								</digi:trn>
 								</digi:link>&nbsp;&gt;&nbsp;
 
-								<bean:define id="translation">
+								<c:set var="translation">
 									<digi:trn key="aim:clickToGotoStep1">Click here to goto Step 1</digi:trn>
-								</bean:define>
-								<digi:link href="/advancedReportManager.do?check=forward" styleClass="comment" title="<%=translation%>" >
+								</c:set>
+								<digi:link href="/advancedReportManager.do?check=forward" styleClass="comment" title="${translation}" >
 								<digi:trn key="aim:reportBuilder:selectcolumn">
 									Report Builder : Select Column
 								</digi:trn>					
 								&gt;&gt;		
 								</digi:link>&nbsp;&nbsp;
 								
-								<digi:link href="/advancedReportManager.do?check=4" styleClass="comment" title="<%=translation%>" >
+								<digi:link href="/advancedReportManager.do?check=4" styleClass="comment" title="${translation}" >
 								<digi:trn key="aim:reportBuilder:selectrows">
 									Report Builder : Select Rows
 								</digi:trn>					
@@ -146,7 +146,7 @@ function backStep() {
 								</digi:link>&nbsp;&nbsp;
 								
 								
-								<digi:link href="/advancedReportManager.do?check=SelectMeasures" styleClass="comment" title="<%=translation%>" >
+								<digi:link href="/advancedReportManager.do?check=SelectMeasures" styleClass="comment" title="${translation}" >
 								<digi:trn key="aim:reportBuilder:selectmeasures">
 									Report Builder : Select Measure
 								</digi:trn>					
@@ -262,3 +262,6 @@ function backStep() {
 
 
 </digi:form>
+
+
+

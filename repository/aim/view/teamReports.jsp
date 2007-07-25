@@ -78,16 +78,16 @@
 			<table cellPadding=5 cellSpacing=0 width="100%">
 				<tr>
 					<td height=33><span class=crumb>
-						<bean:define id="translation">
+						<c:set var="translation">
 							<digi:trn key="aim:clickToViewMyDesktop">Click here to view MyDesktop</digi:trn>
-						</bean:define>
-						<digi:link href="/viewMyDesktop.do" styleClass="comment" title="<%=translation%>" >
+						</c:set>
+						<digi:link href="/viewMyDesktop.do" styleClass="comment" title="${translation}" >
 						<digi:trn key="aim:portfolio">Portfolio</digi:trn>
 						</digi:link>&nbsp;&gt;&nbsp;
-						<bean:define id="translation">
+						<c:set var="translation">
 							<digi:trn key="aim:clickToViewTeamWorkspaceSetup">Click here to view Team Workspace Setup</digi:trn>
-						</bean:define>
-						<digi:link href="/workspaceOverview.do" name="bcparams" styleClass="comment" title="<%=translation%>" >
+						</c:set>
+						<digi:link href="/workspaceOverview.do" name="bcparams" styleClass="comment" title="${translation}" >
 						<digi:trn key="aim:teamWorkspaceSetup">Team Workspace Setup</digi:trn>
 						</digi:link>&nbsp;&gt;&nbsp;
 						<digi:trn key="aim:reportList">Report List</digi:trn>
@@ -189,10 +189,10 @@
 																		<c:set target="${urlParams}" property="status" value="team" />
 																		<td width="24%" align="center">
 																			[
-																			<bean:define id="translation">
+																			<c:set var="translation">
 																				<digi:trn key="aim:clickToMakeThisPublic">Click here to make this public</digi:trn>
-																			</bean:define>
-																			<digi:link href="/changeTeamReportStatus.do" name="urlParams" title="<%=translation%>" >Make this public</digi:link>
+																			</c:set>
+																			<digi:link href="/changeTeamReportStatus.do" name="urlParams" title="${translation}" >Make this public</digi:link>
 																			]
 																		</td>
 																	</logic:equal>
@@ -205,10 +205,10 @@
 																		<c:set target="${urlParams}" property="status" value="member" />
 																		<td width="24%" align="center">
 																			[
-																			<bean:define id="translation">
+																			<c:set var="translation">
 																				<digi:trn key="aim:clickToMakeThisPrivate">Click here to make this private</digi:trn>
-																			</bean:define>
-																			<digi:link href="/changeTeamReportStatus.do" name="urlParams" title="<%=translation%>" >
+																			</c:set>
+																			<digi:link href="/changeTeamReportStatus.do" name="urlParams" title="${translation}" >
 																			Make this private</digi:link>
 																			]
 																		</td>
@@ -284,4 +284,7 @@
 </table>
 
 </digi:form>
+
+
+
 

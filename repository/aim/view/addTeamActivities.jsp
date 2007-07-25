@@ -93,25 +93,25 @@ function checkSelActivities() {
 			<table cellPadding=5 cellSpacing=0 width="100%">
 				<tr>
 					<td height=33><span class=crumb>
-						<bean:define id="translation">
+						<c:set var="translation">
 							<digi:trn key="aim:clickToViewAdmin">Click here to goto Admin Home</digi:trn>
-						</bean:define>
-						<digi:link href="/viewMyDesktop.do" styleClass="comment" title="<%=translation%>" >
+						</c:set>
+						<digi:link href="/viewMyDesktop.do" styleClass="comment" title="${translation}" >
 						<digi:trn key="aim:portfolio">
 						Portfolio
 						</digi:trn>
 						</digi:link>&nbsp;&gt;&nbsp;
-						<bean:define id="translation">
+						<c:set var="translation">
 							<digi:trn key="aim:clickToConfigureTeam">Click here to Configure Team</digi:trn>
-						</bean:define>
-						<digi:link href="/configureTeam.do" styleClass="comment" title="<%=translation%>" >
+						</c:set>
+						<digi:link href="/configureTeam.do" styleClass="comment" title="${translation}" >
 							<digi:trn key="aim:configureTeam">Configure Team</digi:trn>
 						</digi:link>
 						&nbsp;&gt;&nbsp;						
-						<bean:define id="translation">
+						<c:set var="translation">
 							<digi:trn key="aim:clickToViewActivityList">Click here to view Activity List</digi:trn>
-						</bean:define>
-						<digi:link href="/teamActivityList.do" styleClass="comment" title="<%=translation%>" >
+						</c:set>
+						<digi:link href="/teamActivityList.do" styleClass="comment" title="${translation}" >
 							<digi:trn key="aim:activityList">Activity List</digi:trn>
 						</digi:link>&nbsp;&gt;&nbsp;
 						<digi:trn key="aim:addActivity">
@@ -214,12 +214,12 @@ function checkSelActivities() {
 																		<bean:write name="activities" property="activityId" />
 																	</c:set>
 																	<c:set target="${urlParams}" property="pageId" value="4"/>
-																	<bean:define id="translation">
+																	<c:set var="translation">
 																		<digi:trn key="aim:clickToViewActivityDetails">
 																		Click here to view Activity Details</digi:trn>
-																	</bean:define>
+																	</c:set>
 																	<digi:link href="/viewActivityPreview.do" name="urlParams" 
-																	title="<%=translation%>">
+																	title="${translation}">
 																		<bean:write name="activities" property="name" />
 																	</digi:link>
 																</td>
@@ -266,10 +266,10 @@ function checkSelActivities() {
 														<% if (currPage.equals(pages)) { %>
 																<%=pages%>
 														<%	} else { %>
-															<bean:define id="translation">
+															<c:set var="translation">
 																<digi:trn key="aim:clickToViewNextPage">Click here to goto Next Page</digi:trn>
-															</bean:define>
-															<digi:link href="/updateTeamActivity.do" name="urlParams1" title="<%=translation%>" >
+															</c:set>
+															<digi:link href="/updateTeamActivity.do" name="urlParams1" title="${translation}" >
 																<%=pages%>
 															</digi:link>
 														<% } %>
@@ -295,3 +295,6 @@ function checkSelActivities() {
 </table>
 
 </digi:form>
+
+
+

@@ -71,18 +71,18 @@ function addTeamMember(id) {
 			<table cellPadding=5 cellSpacing=0 width="100%">
 				<tr>
 					<td height=33><span class=crumb>
-						<bean:define id="translation">
+						<c:set var="translation">
 							<digi:trn key="aim:clickToViewMyDesktop">Click here to view MyDesktop</digi:trn>
-						</bean:define>
-						<digi:link href="/viewMyDesktop.do" styleClass="comment" title="<%=translation%>">
+						</c:set>
+						<digi:link href="/viewMyDesktop.do" styleClass="comment" title="${translation}">
 						<digi:trn key="aim:portfolio">
 						Portfolio
 						</digi:trn>
 						</digi:link>&nbsp;&gt;&nbsp;
-						<bean:define id="translation">
+						<c:set var="translation">
 							<digi:trn key="aim:clickToViewWorkspaceOverview">Click here to view Workspace Overview</digi:trn>
-						</bean:define>
-						<digi:link href="/workspaceOverview.do" name="bcparams" styleClass="comment" title="<%=translation%>">
+						</c:set>
+						<digi:link href="/workspaceOverview.do" name="bcparams" styleClass="comment" title="${translation}">
 						<digi:trn key="aim:teamWorkspaceSetup">
 						Team Workspace Setup
 						</digi:trn>
@@ -177,10 +177,10 @@ function addTeamMember(id) {
 																				<c:out value="${mem.memberId}"/>
 																			</c:set>	
 																			<c:set target="${urlParams1}" property="action" value="edit" />
-																				<bean:define id="translation">
+																				<c:set var="translation">
 																					<digi:trn key="aim:clickToViewMemberDetails">Click here to view Member Details</digi:trn>
-																				</bean:define>
-																				<digi:link href="/viewMemberDetails.do" name="urlParams1" title="<%=translation%>" >
+																				</c:set>
+																				<digi:link href="/viewMemberDetails.do" name="urlParams1" title="${translation}" >
 																			<c:out value="${mem.memberName}"/>
 																			</digi:link>																		
 																		</td>
@@ -224,10 +224,10 @@ function addTeamMember(id) {
 																			<c:out value="${mem.memberId}"/>
 																		</c:set>	
 																		<c:set target="${urlParams}" property="action" value="edit" />
-																		<bean:define id="translation">
+																		<c:set var="translation">
 																			<digi:trn key="aim:clickToViewMemberDetails">Click here to view Member Details</digi:trn>
-																		</bean:define>
-																		<digi:link href="/viewMemberDetails.do" name="urlParams" title="<%=translation%>" >
+																		</c:set>
+																		<digi:link href="/viewMemberDetails.do" name="urlParams" title="${translation}" >
 																			<c:out value="${mem.memberName}"/>
 																		</digi:link>
 																	</td>
@@ -278,3 +278,6 @@ function addTeamMember(id) {
 </td></tr>
 </table>
 </digi:form>
+
+
+

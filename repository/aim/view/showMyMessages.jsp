@@ -61,10 +61,10 @@
 									<bean:write name="activity" property="ampActivityId"/>
 								</c:set>
 								<c:set target="${urlChannelOverview}" property="tabIndex" value="0"/>
-								<bean:define id="translation">
+								<c:set var="translation">
 									<digi:trn key="aim:clickToViewProjectDetails">Click here to view Project Details</digi:trn>
-								</bean:define>
-								<digi:link href="/viewChannelOverview.do" name="urlChannelOverview" title="<%=translation%>" >
+								</c:set>
+								<digi:link href="/viewChannelOverview.do" name="urlChannelOverview" title="${translation}" >
 									<bean:write name="activity" property="name"/>
 								</digi:link>
 					</td></tr>
@@ -76,3 +76,6 @@
 </table>
 </td></tr>
 </table>
+
+
+

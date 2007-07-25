@@ -41,15 +41,15 @@
 				<tr>
 					<!-- Start Navigation -->
 					<td height=33><span class=crumb>
-						<bean:define id="translation">
+						<c:set var="translation">
 							<digi:trn key="aim:clickToViewAdmin">Click here to goto Admin Home</digi:trn>
-						</bean:define>
-						<digi:link href="/admin.do" styleClass="comment" title="<%=translation%>" >
+						</c:set>
+						<digi:link href="/admin.do" styleClass="comment" title="${translation}" >
 						<digi:trn key="aim:AmpAdminHome">
 						Admin Home 
 						</digi:trn>
 						</digi:link>&nbsp;&gt;&nbsp;
-						<digi:link href="/getSectorSchemes.do" styleClass="comment" title="<%=translation%>" >
+						<digi:link href="/getSectorSchemes.do" styleClass="comment" title="${translation}" >
 						<digi:trn key="aim:schemes">
 						Schemes
 						</digi:trn>
@@ -149,18 +149,18 @@
 															</c:set>
 															<c:set target="${urlParams2}" property="event" value="edit" />
 															<c:set target="${urlParams2}" property="level" value="three" />
-															<bean:define id="translation">
+															<c:set var="translation">
 																<digi:trn key="aim:clickToViewSector">Click here to view Sector</digi:trn>
-															</bean:define>
-															<digi:link href="/viewSectorDetails.do" name="urlParams2" title="<%=translation%>" >
+															</c:set>
+															<digi:link href="/viewSectorDetails.do" name="urlParams2" title="${translation}" >
 															<bean:write name="sectorLevelTwo" property="name"/></digi:link>
 														</td>
 														
 														<td bgcolor="#ffffff" width="40" align="center">
-															<bean:define id="translation">
+															<c:set var="translation">
 																<digi:trn key="aim:clickToEditSector">Click here to Edit Sector</digi:trn>
-															</bean:define>
-															[ <digi:link href="/viewSectorDetails.do" name="urlParams2" title="<%=translation%>" >Edit </digi:link> ]
+															</c:set>
+															[ <digi:link href="/viewSectorDetails.do" name="urlParams2" title="${translation}" >Edit </digi:link> ]
 														</td>
 														<td bgcolor="#ffffff" width="55" align="center">
 															<jsp:useBean id="urlParams4" type="java.util.Map" class="java.util.HashMap"/>
@@ -171,11 +171,11 @@
 																<bean:write name="aimAddSectorForm" property="parentSectorId" />
 															</c:set>
 															<c:set target="${urlParams4}" property="event" value="delete"/>
-															<bean:define id="translation">
+															<c:set var="translation">
 																<digi:trn key="aim:clickToDeleteSector">Click here to Delete Sector</digi:trn>
-															</bean:define>
+															</c:set>
 															[ <digi:link href="/deleteSector.do" name="urlParams4" 
-																title="<%=translation%>" onclick="return onDelete()">Delete</digi:link> ]
+																title="${translation}" onclick="return onDelete()">Delete</digi:link> ]
 														</td>
 													</tr>
 													</logic:iterate>
@@ -225,11 +225,11 @@
 												</c:set>
 												<c:set target="${urlParams5}" property="parent" value="sector"/>
 												<digi:img src="module/aim/images/arrow-014E86.gif" width="15" height="10"/>
-												<bean:define id="translation">
+												<c:set var="translation">
 													<digi:trn key="aim:clickToAddSector">Click here to Add a Sector</digi:trn>
-												</bean:define>
+												</c:set>
 												
-												<digi:link href="/addSector.do" name="urlParams5" title="<%=translation%>" >
+												<digi:link href="/addSector.do" name="urlParams5" title="${translation}" >
 												<digi:trn key="aim:addSector">
 												Add Sector
 												</digi:trn>
@@ -242,10 +242,10 @@
 										<tr>
 											<td>
 												<digi:img src="module/aim/images/arrow-014E86.gif" width="15" height="10"/>
-												<bean:define id="translation">
+												<c:set var="translation">
 													<digi:trn key="aim:clickToViewSchemes">Click here to the Schemes</digi:trn>
-												</bean:define>
-												<digi:link href="/getSectorSchemes.do" title="<%=translation%>" >
+												</c:set>
+												<digi:link href="/getSectorSchemes.do" title="${translation}" >
 												<digi:trn key="aim:viewSchemes">
 												View Schemes
 												</digi:trn>
@@ -256,10 +256,10 @@
 										<tr>
 											<td>
 												<digi:img src="module/aim/images/arrow-014E86.gif" width="15" height="10"/>
-												<bean:define id="translation">
+												<c:set var="translation">
 													<digi:trn key="aim:clickToViewAdmin">Click here to goto Admin Home</digi:trn>
-												</bean:define>
-												<digi:link href="/admin.do" title="<%=translation%>" >
+												</c:set>
+												<digi:link href="/admin.do" title="${translation}" >
 												<digi:trn key="aim:AmpAdminHome">
 												Admin Home
 												</digi:trn>
@@ -280,4 +280,7 @@
 	</tr>
 </table>
 </digi:form>
+
+
+
 

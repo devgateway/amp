@@ -67,11 +67,11 @@ function projectFiche(id)
 									target="${urlCostsBreakdown}" property="ampActivityId">
 									<bean:write name="ampActivityId" />
 								</c:set> <c:set target="${urlCostsBreakdown}"
-									property="tabIndex" value="7" /> <bean:define id="translation">
+									property="tabIndex" value="7" /> <c:set var="translation">
 									<digi:trn key="aim:clickToViewCosts">Click here to view Costing</digi:trn>
-								</bean:define> <digi:link href="/viewProjectCostsBreakdown.do"
+								</c:set> <digi:link href="/viewProjectCostsBreakdown.do"
 									name="urlCostsBreakdown" styleClass="comment"
-									title="<%=translation%>">
+									title="${translation}">
 									<digi:trn key="aim:projectCosting">Project Costing</digi:trn>
 								</digi:link>&nbsp;&gt;&nbsp; <digi:trn key="aim:actOverview">Overview</digi:trn>&nbsp;&gt;&nbsp;
 								<digi:trn key="aim:viewCostsBreakdown">Costing</digi:trn> </SPAN>
@@ -139,3 +139,6 @@ function projectFiche(id)
 		</TD>
 	</TR>
 </TABLE>
+
+
+

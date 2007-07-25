@@ -104,10 +104,10 @@
 		<tr align="left">	
 				<td valign="bottom" class="crumb">
 					&nbsp;&nbsp;<img src="../ampTemplate/images/pdf_icon.gif" border=0>				
-					<bean:define id="translation">
+					<c:set var="translation">
 						<digi:trn key="aim:clickToCreateReportInPDF">Click here to Create Report in Pdf</digi:trn>
-					</bean:define>
-					<digi:link href="" onclick="popup_pdf(''); return false;" title="<%=translation%>">  
+					</c:set>
+					<digi:link href="" onclick="popup_pdf(''); return false;" title="${translation}">  
 						<digi:trn key="aim:createReportInPdf">Create Report in Pdf.</digi:trn>
 					</digi:link>
                 </td>
@@ -116,10 +116,10 @@
 			<tr>
 				<td valign="bottom" class="crumb" >
 				&nbsp;&nbsp;<img src="../ampTemplate/images/xls_icon.jpg" border=0>
-					<bean:define id="translation">
+					<c:set var="translation">
 						<digi:trn key="aim:clickToCreateReportInExcel">Click here to Create Report in Excel</digi:trn>
-					</bean:define>
-					<digi:link href="" onclick="popup_xls(''); return false;" title="<%=translation%>">
+					</c:set>
+					<digi:link href="" onclick="popup_xls(''); return false;" title="${translation}">
 								 <digi:trn key="aim:createReportInXls">Create Report in Xls.</digi:trn>
 					</digi:link>
                 </td>
@@ -131,10 +131,10 @@
 			        <td valign="bottom" class="crumb" >
 					&nbsp;	
 					<img src="../ampTemplate/images/icon_csv.gif" border=0>
-					<bean:define id="translation">
+					<c:set var="translation">
 						<digi:trn key="aim:clickToCreateReportInCVS">Click here to Create Report in CSV </digi:trn>
-					</bean:define>
-					<digi:link href="" onclick="popup_csv(''); return false;" title="<%=translation%>">
+					</c:set>
+					<digi:link href="" onclick="popup_csv(''); return false;" title="${translation}">
 					 	<digi:trn key="aim:createReportInCsv">Create Report in CSV.</digi:trn>
 					</digi:link>
 					
@@ -781,4 +781,7 @@
 </table>
 
 </digi:form>
+
+
+
 

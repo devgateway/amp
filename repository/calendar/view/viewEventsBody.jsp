@@ -16,7 +16,7 @@
 
             <td align="right" width="40%" vAlign="center">
 				<digi:img src="module/calendar/images/calenderLeftArrow1.jpg"/>
-                <a href="#"  onclick="submitFilterForm('${calendarViewForm.view}', '${calendarViewForm.dateNavigator.leftTimestamp}');return(false);">Last</a>
+                <a href="#"  onclick="submitFilterForm('${calendarViewForm.view}', '${calendarViewForm.dateNavigator.leftTimestamp}');return(false);"><digi:trn key="aim:last">Last</digi:trn></a>
             </td>
         </c:if>
         <td align="center" >
@@ -56,7 +56,7 @@
         </td>
         <c:if test="${calendarViewForm.view != 'custom'}">
             <td align="left" width="40%">
-                <a href="#" style="text-decoration:none" onclick="submitFilterForm('${calendarViewForm.view}', '${calendarViewForm.dateNavigator.rightTimestamp}');return(false);">Next</a>	<digi:img src="module/calendar/images/calenderRightArrow1.jpg"/>
+                <a href="#" style="text-decoration:none" onclick="submitFilterForm('${calendarViewForm.view}', '${calendarViewForm.dateNavigator.rightTimestamp}');return(false);"><digi:trn key="aim:next">Next</digi:trn></a>	<digi:img src="module/calendar/images/calenderRightArrow1.jpg"/>
             </td>
         </c:if>
     </tr>
@@ -99,13 +99,13 @@
 				<td>
 	  <table width="99%" border="0" bordercolor="blue" align="center" >
 				<tr width="100%">
-		  			 <td valign="left">M</td>
-					 <td valign="left">T</td>
-					 <td valign="left">W</td>
-					 <td valign="left">T</td>
-					 <td valign="left">F</td>
-					 <td valign="left">S</td>
-					 <td valign="left">S</td>
+		  			 <td valign="left"><digi:trn key="aim:m">M</digi:trn></td>
+					 <td valign="left"><digi:trn key="aim:t">T</digi:trn></td>
+					 <td valign="left"><digi:trn key="aim:w">W</digi:trn></td>
+					 <td valign="left"><digi:trn key="aim:t">T</digi:trn></td>
+					 <td valign="left"><digi:trn key="aim:f">F</digi:trn></td>
+					 <td valign="left"><digi:trn key="aim:s">S</digi:trn></td>
+					 <td valign="left"><digi:trn key="aim:s">S</digi:trn></td>
 				</tr>
 			<logic:iterate id="row" name="calendarViewForm" property="dateNavigator.items">
 			<tr height="75px" vAlign="center" bgcolor="#ffffff" width="50%">
@@ -137,8 +137,7 @@
 							<table width="100%">
 							<tr>
 							<td align="center" vAlign="center">
-								Regular Tasks or events
-
+								<digi:trn key="aim:regular">Regular Tasks or events</digi:trn>
 							</td>
 							</tr>
 							<c:forEach var="hour" begin="6" end="18">
@@ -147,19 +146,19 @@
 						  			<c:if test="${hour < 12}">
 										<c:if test="${hour < 10}">
 										<c:set var="hour" value="0${hour}"/>
-										${hour}  AM
+										${hour}  <digi:trn key="aim:am">AM</digi:trn>
 										</c:if>
 										<c:if test="${hour > 9}">
-										${hour} AM
+										${hour} <digi:trn key="aim:am">AM</digi:trn>
 										</c:if>
 									</c:if>
 									<c:if test="${hour > 11}">
 									<c:if test="${hour < 13}">
-									  			${hour} PM
+									  			${hour} <digi:trn key="aim:mp">PM</digi:trn>
 									  </c:if>
 										<c:if test="${hour > 12}">
                             		<c:set var="hour" value="0${hour - 12}"/>
-									  			${hour} PM
+									  			${hour} <digi:trn key="aim:mp">PM</digi:trn>
 									  </c:if>
                         	</c:if>
                     			</td>
@@ -213,11 +212,13 @@
 										<tr>
 										<td align="left" vAlign="top">
 										<span id="calenderSubFont">
-										${item.dayOfWeek}
+										
+											<digi:trn key="aim:dayOfWeek${item.dayOfWeek}">${item.dayOfWeek}</digi:trn>
+										
 										</span>
 										</td>
                             <td align="center" <c:if test="${item.nolink}">bgcolor="#ffbebe"</c:if>>
-                                <a href="#" style="text-decoration:none" onclick="submitFilterForm('${calendarViewForm.view}', '${item.timestamp}');return(false);">${item.dayOfMonth}/${item.month}/${calendarViewForm.baseDateBreakDown.year}</a>
+                                <a href="#" style="text-decoration:none" onclick="submitFilterForm('${calendarViewForm.view}', '${item.timestamp}');return(false);">${item.dayOfMonth}/<digi:trn key="calendar:${item.month}">${item.month}</digi:trn>/${calendarViewForm.baseDateBreakDown.year}</a>
                             </td>
 									 </tr>
 									 </table>

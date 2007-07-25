@@ -21,10 +21,10 @@
 				<tr>
 					<td>&nbsp;</td>				
 					<td align=center>
-					<bean:define id="translation">
+					<c:set var="translation">
 						<digi:trn key="aim:clickToGoBackToHomePageAndRe-Login">Click here to go back to the Home Page and re-login</digi:trn>
-					</bean:define>
-					<digi:link href="/" title="<%=translation%>" >
+					</c:set>
+					<digi:link href="/" title="${translation}" >
 					<digi:trn key="aim:backToHomePage">
 					Click here to go back to the home page and re-login.
 					</digi:trn>
@@ -64,3 +64,6 @@
 		</td>
 	</tr>
 </table>
+
+
+

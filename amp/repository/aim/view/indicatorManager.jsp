@@ -62,7 +62,7 @@
 												<td height=33><span class=crumb>
 							<c:set var="ToViewAdmin">
 								<digi:trn key="aim:clickToViewAdmin">Click here to goto Admin Home</digi:trn>
-							</c:set> 
+							</c:set>
 									<digi:link href="/admin.do" styleClass="comment" title="${ToViewAdmin}" >
 													<digi:trn key="aim:AmpAdminHome">
 																		Admin Home
@@ -121,7 +121,7 @@
 																														<c:set var="EProjectIndicators">
 																															<digi:trn key="aim:viewM&EProjectIndicators" >Click here to view M & E Project Indicators</digi:trn>
 																														</c:set>
-																														
+
 																																<digi:link href="/indicatorManager.do?view=meindicators"  styleClass="sub-navGov" title="${EProjectIndicators}"><font color="ffffff">
 																																		<digi:trn key="aim:projectIndicatorList">
 																																				Project Indicator List
@@ -170,7 +170,7 @@
 																	</td>
 																	<td>
 																		<a href="javascript:editIndicator('<bean:write name="indicators" property="ampMEIndId" />')">
-																		
+
 																			<bean:define id="indName">
 																				<bean:write name="indicators" property="name"/>
 																			</bean:define>
@@ -188,9 +188,9 @@
 																			<bean:write name="indicators" property="ampMEIndId" />
 																		</c:set>
 																		<c:set target="${urlParams}" property="action" value="delete"/>
-																		<bean:define id="translation">
+																		<c:set var="translation">
 																			<digi:trn key="aim:clickToDeleteIndicator">Click here to Delete Indicator</digi:trn>
-																		</bean:define>
+																		</c:set>
 																		<a href="javascript:deleteIndicator('<bean:write name="indicators" property="ampMEIndId" />')">
 																			<img src= "../ampTemplate/images/trash_12.gif" border=0>
 																		</a>
@@ -211,7 +211,7 @@
 													<tr bgcolor="#ffffff">
 														<td height="20" align="center"><B>
 															<html:button  styleClass="dr-menu" property="submitButton"  onclick="addingIndicators()">
-																<digi:trn key="btn:addNewAIndicator">Add a New Indicator</digi:trn> 
+																<digi:trn key="btn:addNewAIndicator">Add a New Indicator</digi:trn>
 															</html:button>
 														</td>
 													</tr>

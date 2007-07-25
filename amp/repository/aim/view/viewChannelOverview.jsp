@@ -6,7 +6,7 @@
 <%@ taglib uri="/taglib/digijava" prefix="digi"%>
 <%@ taglib uri="/taglib/jstl-core" prefix="c"%>
 <script language="JavaScript1.2" type="text/javascript"
-	src="<digi:file src="module/aim/scripts/dscript120.js"/>"></script>	
+	src="<digi:file src="module/aim/scripts/dscript120.js"/>"></script>
 <script language="JavaScript1.2" type="text/javascript"
 	src="<digi:file src="module/aim/scripts/dscript120_ar_style.js"/>"></script>
 
@@ -15,22 +15,22 @@
 
 
 <script type="text/javascript">
-	
+
 function fnEditProject(id)
 {
 	<digi:context name="addUrl" property="context/module/moduleinstance/editActivity.do" />
    document.aimChannelOverviewForm.action = "<%=addUrl%>~pageId=1~step=1~action=edit~surveyFlag=true~activityId=" + id + "~actId=" + id;
-	document.aimChannelOverviewForm.target = "_self";    
+	document.aimChannelOverviewForm.target = "_self";
     document.aimChannelOverviewForm.submit();
 }
 
-	
+
 function previewLogframe(id)
 {
 	openResisableWindow(700, 650);
 	<digi:context name="addUrl" property="context/module/moduleinstance/editActivity.do" />
    	document.aimChannelOverviewForm.action = "<%=addUrl%>~pageId=1~step=1~action=edit~surveyFlag=true~logframepr=true~activityId=" + id + "~actId=" + id;
-	document.aimChannelOverviewForm.target = popupPointer.name;    
+	document.aimChannelOverviewForm.target = popupPointer.name;
     document.aimChannelOverviewForm.submit();
 }
 
@@ -75,7 +75,7 @@ function fnDeleteProject()
 }
 
 function commentWin(val) {
-	if (document.aimChannelOverviewForm.currUrl1.value == "") { 		  
+	if (document.aimChannelOverviewForm.currUrl1.value == "") {
 		openNewWindow(600, 400);
 		<digi:context name="commurl" property="context/module/moduleinstance/viewComment.do" />
 		url = "<%=commurl %>?comment=" + "viewccd" + "&actId=" + val;
@@ -115,8 +115,8 @@ function commentWin(val) {
 				<TABLE width="99%" cellSpacing=0 cellPadding=0 vAlign="top"
 					align="center" bgcolor="#f4f4f4" class="box-border-nopadding">
 					<TR>
-						<TD bgcolor="#f4f4f4"><bean:define id="activity"
-							property="activity" name="aimChannelOverviewForm" />
+						<TD bgcolor="#f4f4f4">
+                          <bean:define id="activity"	property="activity" name="aimChannelOverviewForm" />
 
 						<TABLE width="100%" cellSpacing=1 cellPadding=3 vAlign="top"
 							align="center" bgcolor="#f4f4f4">
@@ -129,24 +129,23 @@ function commentWin(val) {
 											id="urlChannelOverview" type="java.util.Map"
 											class="java.util.HashMap" /> <c:set
 											target="${urlChannelOverview}" property="ampActivityId">
-											<bean:write name="aimChannelOverviewForm"
-												property="ampActivityId" />
-										</c:set> <c:set target="${urlChannelOverview}"
-											property="tabIndex" value="0" /> <bean:define
-											id="translation">
+											<bean:write name="aimChannelOverviewForm" property="ampActivityId" />
+										</c:set>
+                                        <c:set target="${urlChannelOverview}" property="tabIndex" value="0" /> <c:set var="translation">
 											<digi:trn key="aim:clickToViewChannelOverview">Click here to view Channel Overview</digi:trn>
-										</bean:define> <digi:link href="/viewChannelOverview.do"
+										</c:set> <digi:link href="/viewChannelOverview.do"
 											name="urlChannelOverview" styleClass="comment"
-											title="<%=translation%>">
+											title="${translation}">
 											<digi:trn key="aim:channelOverview">Channel Overview</digi:trn>
 										</digi:link> &nbsp;&gt;&nbsp; Overview&nbsp;&gt;&nbsp;
-										<bean:define id="perspectiveNameLocal" name="aimChannelOverviewForm" property="perspective" 
+										<bean:define id="perspectiveNameLocal" name="aimChannelOverviewForm" property="perspective"
 										type="java.lang.String"/>
-												<digi:trn key='<%="aim:"+ perspectiveNameLocal %>'>	
+												<digi:trn key='<%="aim:"+ perspectiveNameLocal %>'>
 													<bean:write name="aimChannelOverviewForm" property="perspective"/></digi:trn>
 										&nbsp;
 										<digi:trn key="aim:perspective">Perspective</digi:trn> </SPAN></TD>
-										<TD align="right" nowrap="nowrap"><input type="button" value='<digi:trn key="aim:preview">Preview</digi:trn>'
+										<TD align="right" nowrap="nowrap">
+                                          <input type="button" value='<digi:trn key="aim:preview">Preview</digi:trn>'
 											class="dr-menu"
 											onclick="preview(<c:out value="${activity.activityId}"/>)"> <c:if
 											test="${aimChannelOverviewForm.buttonText == 'edit'}">
@@ -156,12 +155,12 @@ function commentWin(val) {
 												<logic:empty name="SA" scope="application">
 													<input type="button" value='<digi:trn key="aim:previewLogframe">Preview Logframe</digi:trn>' class="dr-menu" onclick="previewLogframe(<c:out value="${activity.activityId}"/>)">
 												</logic:empty>
-										</c:if> <c:if
-											test="${aimChannelOverviewForm.buttonText == 'validate'}">
+										</c:if>
+                                        <c:if test="${aimChannelOverviewForm.buttonText == 'validate'}">
 											<input type="button" value='<digi:trn key="aim:validate">Validate</digi:trn>' class="dr-menu"
 												onclick="fnEditProject(<c:out value="${activity.activityId}"/>)">
-										</c:if> <c:if
-											test="${aimChannelOverviewForm.buttonText == 'approvalAwaited'}">
+										</c:if>
+                                        <c:if test="${aimChannelOverviewForm.buttonText == 'approvalAwaited'}">
 											<input type="button" value='<digi:trn key="aim:approvalAwaited">Approval Awaited</digi:trn>' class="dr-menu"
 												disabled>
 										</c:if>
@@ -187,26 +186,26 @@ function commentWin(val) {
 							<TR>
 								<TD width="100%">
 									<c:out value="${activity.objective}" />
-									<c:if test="${activity.objMore == true}"> 
-										<bean:define id="translation">
+									<c:if test="${activity.objMore == true}">
+										<c:set var="translation">
 											<digi:trn key="aim:clickToViewMore">Click here to view more</digi:trn>
-										</bean:define>
-										<digi:link href="/viewChannelOverviewObjective.do" paramName="aimChannelOverviewForm" 
-										paramId="ampActivityId" paramProperty="ampActivityId" title="<%=translation%>" >
+										</c:set>
+										<digi:link href="/viewChannelOverviewObjective.do" paramName="aimChannelOverviewForm"
+										paramId="ampActivityId" paramProperty="ampActivityId" title="${translation}" >
 											<digi:trn key="aim:more">more...</digi:trn>
-										</digi:link>									
+										</digi:link>
 									</c:if>
 								</TD>
-							</TR>							
+							</TR>
 						</TABLE>
 					</TD>
-				</TR>				
+				</TR>
 				<TR bgColor=#f4f4f2>
 					<TD vAlign="top" align="left" width="100%">
 						<TABLE width="100%" cellPadding=2 cellSpacing=2 vAlign="top" align="left" bgColor=#f4f4f2>
 							<TR>
 								<TD width="100%">
-									<IMG  height=10 src="../ampTemplate/images/arrow-014E86.gif" width=15>								
+									<IMG  height=10 src="../ampTemplate/images/arrow-014E86.gif" width=15>
 									<b>
 									<digi:trn key="aim:financingInstrument">Financing Instrument</digi:trn>:</b>&nbsp;
 									<c:out value="${activity.modality}"/>
@@ -305,7 +304,7 @@ function commentWin(val) {
 															<TR>
 																<TD bgcolor="#ffffff"><c:out value="${activity.status}" />
 																</TD>
-															</TR>															
+															</TR>
 															<TR>
 																<TD bgcolor="#ffffff"><i><digi:trn key="aim:reason">Reason</digi:trn></i>:
 																<c:out value="${activity.statusReason}" /></TD>
@@ -331,14 +330,14 @@ function commentWin(val) {
 										<digi:trn key="aim:actBudgetoff">
 												Activity is Off Budget
 										</digi:trn>
-										</logic:equal>		
+										</logic:equal>
 										<logic:equal name="activity" property="budget" value="">
 										<digi:trn key="aim:actBudgetoff">
 												Activity is Off Budget
 										</digi:trn>
 										</logic:equal>
 																</TD></TR>
-																														
+
 															</TABLE>
 														</TD>
 													</TR>
@@ -464,7 +463,7 @@ function commentWin(val) {
 																<logic:iterate name="aimChannelOverviewForm" id="comments" property="allComments">
 
 																 	<logic:equal name="comments" property="key" value="Objective Assumption">
-																		<logic:iterate name="comments" id="comment" property="value" 
+																		<logic:iterate name="comments" id="comment" property="value"
 																			type="org.digijava.module.aim.dbentity.AmpComments">
 																			<li><i>
 																			<digi:trn key="aim:objectiveAssumption">Objective Assumption</digi:trn>:</i>
@@ -472,7 +471,7 @@ function commentWin(val) {
                             						            		</logic:iterate>
 						                                        	</logic:equal>
 						                                        	<logic:equal name="comments" property="key" value="Objective Verification">
-																		<logic:iterate name="comments" id="comment" property="value" 
+																		<logic:iterate name="comments" id="comment" property="value"
 																			type="org.digijava.module.aim.dbentity.AmpComments">
 																			<li><i><digi:trn key="aim:objectiveVerification">Objective Verification</digi:trn>:</i>
 																			<bean:write name="comment" property="comment"/></li>
@@ -480,18 +479,18 @@ function commentWin(val) {
 						                                        	</logic:equal>
 																</logic:iterate>
 																</ul>
-																
-																
-																
+
+
+
 																<logic:notEmpty name="activity" property="purpose">
 																	<i><b><digi:trn
 																		key="aim:programPurpose">Purpose</digi:trn></b></i>:
 																	<digi:edit key="${activity.purpose}" />
 																	<ul>
 																	<logic:iterate name="aimChannelOverviewForm" id="comments" property="allComments">
-	
+
 																	 	<logic:equal name="comments" property="key" value="Purpose Assumption">
-																			<logic:iterate name="comments" id="comment" property="value" 
+																			<logic:iterate name="comments" id="comment" property="value"
 																				type="org.digijava.module.aim.dbentity.AmpComments">
 																				<li><i>
 																				<digi:trn key="aim:purposeAssumption">Purpose Assumption</digi:trn>:</i>
@@ -499,7 +498,7 @@ function commentWin(val) {
 	                            						            		</logic:iterate>
 							                                        	</logic:equal>
 							                                        	<logic:equal name="comments" property="key" value="Purpose Verification">
-																			<logic:iterate name="comments" id="comment" property="value" 
+																			<logic:iterate name="comments" id="comment" property="value"
 																				type="org.digijava.module.aim.dbentity.AmpComments">
 																				<li><i><digi:trn key="aim:purposeVerification">Purpose Verification</digi:trn>:</i>
 																				<bean:write name="comment" property="comment"/></li>
@@ -514,9 +513,9 @@ function commentWin(val) {
 																	<digi:edit key="${activity.results}" />
 																	<ul>
 																	<logic:iterate name="aimChannelOverviewForm" id="comments" property="allComments">
-	
+
 																	 	<logic:equal name="comments" property="key" value="Results Assumption">
-																			<logic:iterate name="comments" id="comment" property="value" 
+																			<logic:iterate name="comments" id="comment" property="value"
 																				type="org.digijava.module.aim.dbentity.AmpComments">
 																				<li><i>
 																				<digi:trn key="aim:resultsAssumption">Results Assumption</digi:trn>:</i>
@@ -524,7 +523,7 @@ function commentWin(val) {
 	                            						            		</logic:iterate>
 							                                        	</logic:equal>
 							                                        	<logic:equal name="comments" property="key" value="Results Verification">
-																			<logic:iterate name="comments" id="comment" property="value" 
+																			<logic:iterate name="comments" id="comment" property="value"
 																				type="org.digijava.module.aim.dbentity.AmpComments">
 																				<li><i><digi:trn key="aim:resultsVerification">Results Verification</digi:trn>:</i>
 																				<bean:write name="comment" property="comment"/></li>
@@ -533,7 +532,7 @@ function commentWin(val) {
 																	</logic:iterate>
 																	</ul>
 																</logic:notEmpty>
-																																
+
 																</TD>
 															</TR>
 														</TABLE>
@@ -694,7 +693,7 @@ function commentWin(val) {
 																						items="${activity.relOrgs}">
 																						<c:if test="${relOrg.role == 'DN'}">
 																							<bean:define id="currentOrg" name="relOrg"
-																									type="org.digijava.module.aim.helper.RelOrganization" 
+																									type="org.digijava.module.aim.helper.RelOrganization"
 																									toScope="request" />
 																									<jsp:include page="organizationPopup.jsp"/>
 																						</c:if>
@@ -720,8 +719,8 @@ function commentWin(val) {
 																					<c:forEach var="relOrg"
 																						items="${activity.relOrgs}">
 																						<c:if test="${relOrg.role == 'IA'}">
-																							<bean:define id="currentOrg" name="relOrg" 
-																									type="org.digijava.module.aim.helper.RelOrganization" 
+																							<bean:define id="currentOrg" name="relOrg"
+																									type="org.digijava.module.aim.helper.RelOrganization"
 																									toScope="request" />
 																									<jsp:include page="organizationPopup.jsp"/>
 																						</c:if>
@@ -731,7 +730,7 @@ function commentWin(val) {
 																		</TABLE>
 																		</TD>
 																	</TR>
-																	
+
 																	<!--  Beneficiary + Contracting  -->
 																	<TR>
 																		<TD>
@@ -749,7 +748,7 @@ function commentWin(val) {
 																						items="${activity.relOrgs}">
 																						<c:if test="${relOrg.role == 'BA'}">
 																							<bean:define id="currentOrg" name="relOrg"
-																									type="org.digijava.module.aim.helper.RelOrganization" 
+																									type="org.digijava.module.aim.helper.RelOrganization"
 																									toScope="request" />
 																									<jsp:include page="organizationPopup.jsp"/>
 																						</c:if>
@@ -775,7 +774,7 @@ function commentWin(val) {
 																						items="${activity.relOrgs}">
 																						<c:if test="${relOrg.role == 'CA'}">
 																							<bean:define id="currentOrg" name="relOrg"
-																									type="org.digijava.module.aim.helper.RelOrganization" 
+																									type="org.digijava.module.aim.helper.RelOrganization"
 																									toScope="request" />
 																									<jsp:include page="organizationPopup.jsp"/>
 																						</c:if>
@@ -951,11 +950,11 @@ function commentWin(val) {
 																<TD bgcolor="#ffffff">
 																<i>
 																<digi:trn key="aim:activityUpdatedBy">
-																	Activity updated by</digi:trn></i>: 
-																	<c:out value="${activity.updatedBy.user.firstNames}"/>										
+																	Activity updated by</digi:trn></i>:
+																	<c:out value="${activity.updatedBy.user.firstNames}"/>
 																	<c:out value="${activity.updatedBy.user.lastName}"/>	-
 																	<c:out value="${activity.updatedBy.user.email}"/>
-																	
+
 															</TR>
 															</c:if>
 															<c:if test="${!empty activity.updatedDate}">
@@ -966,7 +965,7 @@ function commentWin(val) {
 															&nbsp;</TD>
 															</TR>
 															</c:if>
-															
+
 															<c:if test="${!empty activity.actAthAgencySource}">
 															<TR>
 																<TD bgcolor="#ffffff"><i><digi:trn key="aim:dataSource">
@@ -975,7 +974,7 @@ function commentWin(val) {
 															&nbsp;</TD>
 															</TR>
 															</c:if>
-															
+
 														</TABLE>
 														</TD>
 													</TR>

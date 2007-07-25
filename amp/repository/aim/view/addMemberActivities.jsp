@@ -93,26 +93,26 @@
 			<table cellPadding=5 cellSpacing=0 width="100%">
 				<tr>
 					<td height=33><span class=crumb>
-						<bean:define id="translation">
+						<c:set var="translation">
 							<digi:trn key="aim:clickToViewMyDesktop">Click here to view MyDesktop</digi:trn>
-						</bean:define>
-						<digi:link href="/viewMyDesktop.do" styleClass="comment" title="<%=translation%>" >
+						</c:set>
+						<digi:link href="/viewMyDesktop.do" styleClass="comment" title="${translation}" >
 						<digi:trn key="aim:portfolio">
 						Portfolio
 						</digi:trn>
 						</digi:link>&nbsp;&gt;&nbsp;
-						<bean:define id="translation">
+						<c:set var="translation">
 							<digi:trn key="aim:clickToViewTeamWorkspaceSetup">Click here to view Team Workspace Setup</digi:trn>
-						</bean:define>
-						<digi:link href="/workspaceOverview.do" name="bcparams" styleClass="comment" title="<%=translation%>" >
+						</c:set>
+						<digi:link href="/workspaceOverview.do" name="bcparams" styleClass="comment" title="${translation}" >
 						<digi:trn key="aim:teamWorkspaceSetup">
 						Team Workspace Setup
 						</digi:trn>
 						</digi:link>&nbsp;&gt;&nbsp;
-						<bean:define id="translation">
+						<c:set var="translation">
 							<digi:trn key="aim:clickToViewMembers">Click here to view Members</digi:trn>
-						</bean:define>
-						<digi:link href="/teamMemberList.do" styleClass="comment" title="<%=translation%>" >
+						</c:set>
+						<digi:link href="/teamMemberList.do" styleClass="comment" title="${translation}" >
 						<digi:trn key="aim:members">
 						Members
 						</digi:trn>
@@ -121,10 +121,10 @@
 						<c:set target="${urlParams}" property="id">
 							<bean:write name="aimMemberActivitiesForm" property="memberId" />
 						</c:set>						
-						<bean:define id="translation">
+						<c:set var="translation">
 							<digi:trn key="aim:clickToViewMemberActivities">Click here to view Member Activities</digi:trn>
-						</bean:define>
-						<digi:link href="/teamMemberActivities.do" name="urlParams" title="<%=translation%>" styleClass="comment">
+						</c:set>
+						<digi:link href="/teamMemberActivities.do" name="urlParams" title="${translation}" styleClass="comment">
 							<digi:trn key="aim:memActivities">
 								Member Activities
 							</digi:trn>
@@ -156,11 +156,11 @@
 										<tr>
 											<td bgColor=#222e5d noWrap>
 												&nbsp;
-												<bean:define id="translation">
+												<c:set var="translation">
 													<digi:trn key="aim:clickToViewMemberActivities">Click here to view Member Activities</digi:trn>
-												</bean:define>
+												</c:set>
 												<digi:link href="/teamMemberActivities.do" name="urlParams1" 
-												styleClass="sub-nav2" title="<%=translation%>" >
+												styleClass="sub-nav2" title="${translation}" >
 													<digi:trn key="aim:memberActivities">
 														Member Activities
 													</digi:trn>
@@ -168,12 +168,12 @@
 												&nbsp;
 											</td>											
 											<td bgColor=#222e5d noWrap>
-												<bean:define id="translation">
+												<c:set var="translation">
 													<digi:trn key="aim:clickToViewMemberReports">Click here to view Member Reports</digi:trn>
-												</bean:define>
+												</c:set>
 												&nbsp;
 												<digi:link href="/teamMemberReports.do" name="urlParams1" styleClass="sub-nav2" 
-												title="<%=translation%>" >
+												title="${translation}" >
 													<digi:trn key="aim:memberRepor">Member Reports</digi:trn>
 												</digi:link>
 												&nbsp;
@@ -265,12 +265,12 @@
 																		<bean:write name="activities" property="activityId" />
 																	</c:set>
 																	<c:set target="${url}" property="pageId" value="3"/>
-																	<bean:define id="translation">
+																	<c:set var="translation">
 																		<digi:trn key="aim:clickToViewActivityDetails">
 																		Click here to view Activity Details</digi:trn>
-																	</bean:define>
+																	</c:set>
 																	<digi:link href="/viewActivityPreview.do" name="url" 
-																	title="<%=translation%>">
+																	title="${translation}">
 																		<bean:write name="activities" property="name" />
 																	</digi:link>
 																</td>
@@ -312,3 +312,6 @@
 </table>
 
 </digi:form>
+
+
+

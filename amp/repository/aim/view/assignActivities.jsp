@@ -23,18 +23,18 @@
 				<tr>
 					<!-- Start Navigation -->
 					<td height=33>
-						<bean:define id="translation">
+						<c:set var="translation">
 							<digi:trn key="aim:clickToViewAdmin">Click here to goto Admin Home</digi:trn>
-						</bean:define>
-						<digi:link href="/admin.do" styleClass="comment" title="<%=translation%>" >
+						</c:set>
+						<digi:link href="/admin.do" styleClass="comment" title="${translation}" >
 						<digi:trn key="aim:AmpAdminHome">
 						Admin Home
 						</digi:trn>
 						</digi:link>&nbsp;&gt;&nbsp;
-						<bean:define id="translation">
+						<c:set var="translation">
 							<digi:trn key="aim:clickToViewWorkspaceManager">Click here to view Workspace Manager</digi:trn>
-						</bean:define>
-						<digi:link href="/workspaceManager.do" styleClass="comment" title="<%=translation%>" >
+						</c:set>
+						<digi:link href="/workspaceManager.do" styleClass="comment" title="${translation}" >
 						<digi:trn key="aim:workspaceManager">
 						Workspace Manager
 						</digi:trn>
@@ -44,10 +44,10 @@
 						<c:set target="${urlParams1}" property="id">
 						<bean:write name="aimAssignActivityForm" property="teamId" />
 						</c:set>
-						<bean:define id="translation">
+						<c:set var="translation">
 							<digi:trn key="aim:clickToViewTeamActivities">Click here to view Team Activities</digi:trn>
-						</bean:define>
-						<digi:link href="/teamActivities.do" name="urlParams1" styleClass="comment" title="<%=translation%>" >
+						</c:set>
+						<digi:link href="/teamActivities.do" name="urlParams1" styleClass="comment" title="${translation}" >
 						<digi:trn key="aim:activities">
 						Activities
 						</digi:trn>
@@ -152,10 +152,10 @@
 										<tr>
 											<td>
 												<digi:img src="module/aim/images/arrow-014E86.gif" width="15" height="10"/>
-												<bean:define id="translation">
+												<c:set var="translation">
 													<digi:trn key="aim:clickToViewAdmin">Click here to goto Admin Home</digi:trn>
-												</bean:define>
-												<digi:link href="/admin.do" title="<%=translation%>" >
+												</c:set>
+												<digi:link href="/admin.do" title="${translation}" >
 												<digi:trn key="aim:AmpAdminHome">Admin Home</digi:trn>
 												</digi:link>
 											</td>
@@ -174,4 +174,7 @@
 	</tr>
 </table>
 </digi:form>
+
+
+
 

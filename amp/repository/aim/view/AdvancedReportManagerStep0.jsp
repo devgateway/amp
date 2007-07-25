@@ -64,10 +64,10 @@ function gotoStep() {
 					<table cellPadding=5 cellSpacing=0 width="100%">
 						<tr>
 							<td height=33><span class=crumb>
-								<bean:define id="translation">
+								<c:set var="translation">
 									<digi:trn key="aim:clickToViewMyDesktop">Click here to view MyDesktop</digi:trn>
-								</bean:define>
-								<digi:link href="/viewMyDesktop.do" styleClass="comment" title="<%=translation%>" >
+								</c:set>
+								<digi:link href="/viewMyDesktop.do" styleClass="comment" title="${translation}" >
 								<digi:trn key="aim:portfolio">
 									Portfolio
 								</digi:trn>
@@ -204,3 +204,6 @@ function gotoStep() {
 
 
 </digi:form>
+
+
+

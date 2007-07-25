@@ -191,20 +191,20 @@ function popupwin()
 							<td><jsp:include page="t.jsp"/>
 								<span class=crumb>
 								<c:if test="${aimEditActivityForm.pageId == 0}">
-									<bean:define id="translation">
+									<c:set var="translation">
 										<digi:trn key="aim:clickToViewAdmin">Click here to go to Admin Home</digi:trn>
-									</bean:define>
-									<digi:link href="/admin.do" styleClass="comment" title="<%=translation%>">
+									</c:set>
+									<digi:link href="/admin.do" styleClass="comment" title="${translation}">
 										<digi:trn key="aim:AmpAdminHome">
 											Admin Home
 										</digi:trn>
 									</digi:link>&nbsp;&gt;&nbsp;
 								</c:if>
 								<c:if test="${aimEditActivityForm.pageId == 1}">
-									<bean:define id="translation">
+									<c:set var="translation">
 										<digi:trn key="aim:clickToViewMyDesktop">Click here to view MyDesktop </digi:trn>
-									</bean:define>
-									<digi:link href="/viewMyDesktop.do" styleClass="comment"  onclick="return quitRnot()" title="<%=translation%>">
+									</c:set>
+									<digi:link href="/viewMyDesktop.do" styleClass="comment"  onclick="return quitRnot()" title="${translation}">
 										<digi:trn key="aim:portfolio">Portfolio</digi:trn>
 									</digi:link>&nbsp;&gt;&nbsp;
 								</c:if>
@@ -334,3 +334,6 @@ function popupwin()
 </td></tr>
 </table>
 </digi:form>
+
+
+

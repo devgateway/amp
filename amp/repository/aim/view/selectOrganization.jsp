@@ -315,9 +315,9 @@
 											<font color="#FF0000"><%=pages%></font>
 										</c:if>
 										<c:if test="${aimEditActivityForm.currentPage != pages}">
-											<bean:define id="translation">
+											<c:set var="translation">
 												<digi:trn key="aim:clickToViewNextPage">Click here to goto Next Page</digi:trn>
-											</bean:define>
+											</c:set>
 
 											<a href="javascript:selectOrganizationPages(<%=pages%>);"><%=pages %></a>
 										</c:if>
@@ -334,10 +334,10 @@
 								<td align="center">
 									<table width="90%">
 									<tr><td>
-										<bean:define id="translation">
+										<c:set var="translation">
 											<digi:trn key="aim:clickToViewAllSearchPages">Click here to view all search pages</digi:trn>
-										</bean:define>
-										<a href="javascript:searchAlphaAll('viewAll')" title="<%=translation%>">
+										</c:set>
+										<a href="javascript:searchAlphaAll('viewAll')" title="${translation}">
 											viewAll</a>&nbsp;|&nbsp;
 										<logic:iterate name="aimEditActivityForm" property="alphaPages" id="alphaPages" type="java.lang.String">
 											<c:if test="${alphaPages != null}">
@@ -345,10 +345,10 @@
 													<font color="#FF0000"><%=alphaPages %></font>
 												</c:if>
 												<c:if test="${aimEditActivityForm.currentAlpha != alphaPages}">
-												<bean:define id="translation">
+												<c:set var="translation">
 													<digi:trn key="aim:clickToViewNextPage">Click here to go to next page</digi:trn>
-												</bean:define>
-													<a href="javascript:searchAlpha('<%=alphaPages%>')" title="<%=translation%>" >
+												</c:set>
+													<a href="javascript:searchAlpha('<%=alphaPages%>')" title="${translation}" >
 														<%=alphaPages %></a>
 												</c:if>
 											|&nbsp;
@@ -366,3 +366,6 @@
 	</td></tr>
 </table>
 </digi:form>
+
+
+

@@ -23,10 +23,10 @@
 				<tr>
 					<!-- Start Navigation -->
 					<td height=33><span class=crumb>
-						<bean:define id="translation">
+						<c:set var="translation">
 							<digi:trn key="aim:clickToViewAdmin">Click here to goto Admin Home</digi:trn>
-						</bean:define>
-						<digi:link href="/admin.do" styleClass="comment" title="<%=translation%>">
+						</c:set>
+						<digi:link href="/admin.do" styleClass="comment" title="${translation}">
 						<digi:trn key="aim:AmpAdminHome">
 						Admin Home
 						</digi:trn>
@@ -102,20 +102,20 @@
 					<bean:write name="ampStatusItem" property="ampStatusId" />
 				</c:set>
 				<c:set target="${urlParams}" property="action" value="update" />
-				<bean:define id="translation">
+				<c:set var="translation">
 					<digi:trn key="aim:clickToEditStatus">Click here Edit Status</digi:trn>
-				</bean:define>
-				[ <digi:link href="/getStatusItem.do" name="urlParams" title="<%=translation%>" >
+				</c:set>
+				[ <digi:link href="/getStatusItem.do" name="urlParams" title="${translation}" >
 					Edit
 				</digi:link> ]&nbsp;
 			</td>	
 			
 		<td width="15%">
 				<c:set target="${urlParams}" property="action" value="delete" />
-				<bean:define id="translation">
+				<c:set var="translation">
 					<digi:trn key="aim:clickToDeleteStatus">Click here to Delete Status</digi:trn>
-				</bean:define>
-				&nbsp;[ <digi:link href="/getStatusItem.do" name="urlParams" title="<%=translation%>" >
+				</c:set>
+				&nbsp;[ <digi:link href="/getStatusItem.do" name="urlParams" title="${translation}" >
 					Delete
 				</digi:link> ]
         </td>
@@ -165,10 +165,10 @@
 											<tr>
 												<td>
 													<digi:img src="module/aim/images/arrow-014E86.gif" 	width="15" height="10"/>
-														<bean:define id="translation">
+														<c:set var="translation">
 															<digi:trn key="aim:clickToAddNewStatus">Click here to Add New Status</digi:trn>
-														</bean:define>
-														<digi:link href="/addStatus.do" title="<%=translation%>" >
+														</c:set>
+														<digi:link href="/addStatus.do" title="${translation}" >
 															<digi:trn key="aim:addNewStatus">
 																Add new Status
 															</digi:trn>
@@ -178,10 +178,10 @@
 											<tr>
 												<td>
 													<digi:img src="module/aim/images/arrow-014E86.gif" 	width="15" height="10"/>
-													<bean:define id="translation">
+													<c:set var="translation">
 														<digi:trn key="aim:clickToViewAdmin">Click here to goto Admin Home</digi:trn>
-													</bean:define>
-													<digi:link href="/admin.do" title="<%=translation%>" >
+													</c:set>
+													<digi:link href="/admin.do" title="${translation}" >
 													<digi:trn key="aim:AmpAdminHome">
 													Admin Home
 													</digi:trn>
@@ -202,6 +202,9 @@
 	</td>
 	</tr>
 </table>
+
+
+
 
 
 

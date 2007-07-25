@@ -136,9 +136,9 @@
 								</c:if>
 							</TD>
 						</TR>
-						<bean:define id="translation">
+						<c:set var="translation">
 							<digi:trn key="aim:clickToViewProjectDetails">Click here to view Project Details</digi:trn>
-						</bean:define>
+						</c:set>
 						<logic:notEmpty name="aimDesktopForm" property="activities">
 							<c:forEach var="project" items="${aimDesktopForm.activities}"
 							begin="${aimDesktopForm.stIndex}" end="${aimDesktopForm.edIndex - 1}">
@@ -149,7 +149,7 @@
 											<bean:write name="project" property="ampActivityId"/>
 										</c:set>
 										<c:set target="${urlChannelOverview}" property="tabIndex" value="0"/>
-										<div title='<%=translation%>'>
+										<div title='${translation}'>
 											<c:out value="${project.name}" />
                                         </div>
 										<c:if test='${project.approvalStatus == "started"}'>
@@ -212,3 +212,6 @@ function load(){
   window.print();
 }
 </script>
+
+
+

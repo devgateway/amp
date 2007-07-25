@@ -216,23 +216,23 @@ function sortSubmit(value){
 									index++;%>
 										<td align="left" bgcolor="#ffffff" width="3">
 											<c:if test="${curr.activeFlag == 1}">
-												<bean:define id="translation">
+												<c:set var="translation">
 													<digi:trn key="aim:clickHereToMakeTheCurrencyInactive">
 														Click here to make the currency inactive
 													</digi:trn>
-												</bean:define>
+												</c:set>
 												<a href="javascript:makeInactive('<c:out value="${curr.currencyCode}"/>')"
-												title="<%=translation%>">
+												title="${translation}">
 												<digi:img src="module/aim/images/bullet_green.gif" border="0"/></a>
 											</c:if>
 											<c:if test="${curr.activeFlag != 1}">
-												<bean:define id="translation">
+												<c:set var="translation">
 													<digi:trn key="aim:clickHereToMakeTheCurrencyActive">
 														Click here to make the currency Active
 													</digi:trn>
-												</bean:define>
+												</c:set>
 												<a href="javascript:makeActive('<c:out value="${curr.currencyCode}"/>')"
-												title="<%=translation%>">
+												title="${translation}">
 												<digi:img src="module/aim/images/bullet_grey.gif" border="0"/></a>
 											</c:if>
 										</td>
@@ -354,3 +354,6 @@ function sortSubmit(value){
 </td></tr>
 </table>
 </digi:form>
+
+
+

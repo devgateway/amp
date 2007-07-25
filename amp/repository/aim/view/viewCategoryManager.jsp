@@ -12,12 +12,12 @@
 
 <!--  AMP Admin Logo -->
 <jsp:include page="teamPagesHeader.jsp" flush="true" />
-<bean:define id="translation">
+<c:set var="translation">
 				<digi:trn key="aim:categoryDeleteConfirm">Are you sure you want to delete the category?</digi:trn>
-</bean:define>
+</c:set>
 <script type="text/javascript">
 function confirmDelete() {
-	var ret		= confirm('<%=translation%>');
+	var ret		= confirm('${translation}');
 	return ret;
 }
 </script>
@@ -30,16 +30,16 @@ function confirmDelete() {
 				<tr>
 					<!-- Start Navigation -->
 					<td height=33><span class=crumb>
-						<bean:define id="translation">
+						<c:set var="translation">
 							<digi:trn key="aim:clickToViewAdmin">Click here to goto Admin Home</digi:trn>
-						</bean:define>
-						<digi:link href="/admin.do" styleClass="comment" title="<%=translation%>" >
+						</c:set>
+						<digi:link href="/admin.do" styleClass="comment" title="${translation}" >
 						<digi:trn key="aim:AmpAdminHome">
 						Admin Home
 						</digi:trn>
 						</digi:link>&nbsp;&gt;&nbsp;
-						
-						
+
+
 						<digi:trn key="aim:categoryManager">
 							Category Manager
 						</digi:trn>
@@ -62,7 +62,7 @@ function confirmDelete() {
 				</tr>
 				<tr>
 				<td>
-				
+
 				<logic:notEmpty name="myForm" property="categories">
 					<table border="1px" >
 						<tr align="center">
@@ -75,7 +75,7 @@ function confirmDelete() {
 								<digi:trn key="aim:categoryDescription">
 									Category Description
 								</digi:trn>
-							
+
 							</td>
 							<td bgcolor="#006699" class="textalb" align="center">
 								<digi:trn key="aim:categoryPossibleValues">
@@ -103,7 +103,7 @@ function confirmDelete() {
 								<br />
 								(
 								<digi:trn key="aim:categoryIdIs">
-									category id is 
+									category id is
 								</digi:trn>
 								<bean:write name="category" property="id" />
 								)
@@ -169,12 +169,12 @@ function confirmDelete() {
 						</tr>
 						</logic:iterate>
 					</table>
-				
+
 				</logic:notEmpty>
-<bean:define id="translation">
+<c:set var="translation">
 	<digi:trn key="aim:categoryManagerAddNewCategoryTitle">Click here to add a new category with specified values</digi:trn>
-</bean:define>
-<digi:link href="/categoryManager.do?new=true" title="<%= translation %>">
+</c:set>
+<digi:link href="/categoryManager.do?new=true" title="${translation}">
 	<digi:trn key="aim:categoryManagerAddNewCategory">Add New Category</digi:trn>
 </digi:link>
 
@@ -182,3 +182,6 @@ function confirmDelete() {
 				</td>
 				</tr>
 </table>
+
+
+

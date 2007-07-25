@@ -93,11 +93,11 @@ type="org.digijava.module.aim.form.FinancingBreakdownForm" method="post">
 														<bean:write name="aimFinancingBreakdownForm" property="ampActivityId"/>
 													</c:set>
 													<c:set target="${urlFinancingBreakdown}" property="tabIndex" value="1"/>
-													<bean:define id="translation">
+													<c:set var="translation">
 														<digi:trn key="aim:clickToViewFinancialProgress">Click here to view Financial Progress</digi:trn>
-													</bean:define>
+													</c:set>
 													<digi:link href="/viewFinancingBreakdown.do" name="urlFinancingBreakdown" 
-													styleClass="comment" title="<%=translation%>" >
+													styleClass="comment" title="${translation}" >
 													<digi:trn key="aim:financialProgress">Financial Progress</digi:trn>
 													</digi:link>&nbsp;&gt;&nbsp;
 													<digi:trn key="aim:actOverview">Overview</digi:trn>&nbsp;&gt;&nbsp;
@@ -272,12 +272,12 @@ type="org.digijava.module.aim.form.FinancingBreakdownForm" method="post">
 																	<c:set target="${urlFinancialOverview}" property="tabIndex">
 																		<bean:write name="aimFinancingBreakdownForm" property="tabIndex"/>
 																	</c:set>
-																	<bean:define id="translation">
+																	<c:set var="translation">
 																		<digi:trn key="aim:clickToViewFinancialOverview">
 																		Click here to view Financial Overview</digi:trn>
-																	</bean:define>
+																	</c:set>
 						                  		<digi:link href="/viewFinancialOverview.do" name="urlFinancialOverview" 
-																	title="<%=translation%>" >
+																	title="${translation}" >
 																		<bean:write name="breakdown" property="financingId" /> 
 																	</digi:link>
 																</TD>
@@ -327,3 +327,6 @@ type="org.digijava.module.aim.form.FinancingBreakdownForm" method="post">
 </TABLE>
 </digi:form>
 </logic:equal>
+
+
+

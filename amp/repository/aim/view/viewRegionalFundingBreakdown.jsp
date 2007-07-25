@@ -54,11 +54,11 @@ function preview(id)
 														<bean:write name="aimRegionalFundingForm" property="ampActivityId"/>
 													</c:set>
 													<c:set target="${url}" property="tabIndex" value="4"/>
-													<bean:define id="translation">
+													<c:set var="translation">
 															<digi:trn key="aim:clickToViewRegionalFunding">Click here to view regional funding</digi:trn>
-													</bean:define>
+													</c:set>
 													<digi:link href="/viewRegionalFundingBreakdown.do" name="url" 
-													styleClass="comment" title="<%=translation%>" >
+													styleClass="comment" title="${translation}" >
 													<digi:trn key="aim:regionalFunding">Regional Funding</digi:trn>
 													</digi:link>&nbsp;&gt;&nbsp;
 													<digi:trn key="aim:actOverview">Overview</digi:trn>&nbsp;&gt;&nbsp;
@@ -187,3 +187,6 @@ function preview(id)
 	<TR><TD>&nbsp;</TD></TR>	
 </TABLE>
 </digi:form>
+
+
+

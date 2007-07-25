@@ -414,10 +414,10 @@ function closeWindow() 
 																<c:set target="${urlParams}" property="themeId">
 																		<bean:write name="aimThemeForm" property="themeId"/>
 																</c:set>
-																<bean:define id="translation">
+																<c:set var="translation">
 																		<digi:trn key="aim:clickToEditPrgIndicator">Click here to Edit Program Indicator</digi:trn>
-																</bean:define>
-																[<digi:link href="/addThemeIndicator.do?event=edit" name="urlParams" title="<%=translation%>">
+																</c:set>
+																[<digi:link href="/addThemeIndicator.do?event=edit" name="urlParams" title="${translation}">
 																		<digi:trn key="aim:subProgramManagerEdit">Edit</digi:trn>
 																</digi:link>]
 														</td>
@@ -436,3 +436,6 @@ function closeWindow() 
 				</logic:empty>
 		</table>
 </digi:form>
+
+
+

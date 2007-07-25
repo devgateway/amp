@@ -61,12 +61,12 @@ function backStep() {
 
 	<table cellPadding=5 cellSpacing=0 width="100%">
 	<tr><td height=33><span class=crumb>
-	<bean:define id="translation">
+	<c:set var="translation">
 	<digi:trn key="aim:clickToViewMyDesktop">Click here to view MyDesktop</digi:trn>
-	</bean:define>
-	<digi:link href="/viewMyDesktop.do" styleClass="comment" title="<%=translation%>" >
-	<digi:trn key="aim:portfolio">Portfolio</digi:trn></digi:link>&nbsp;&gt;&nbsp;						<bean:define id="translation"><digi:trn key="aim:clickToGotoStep1">Click here to goto Step 1</digi:trn></bean:define>
-	<digi:link href="/advancedReportManager.do?check=forward" styleClass="comment" title="<%=translation%>" ><digi:trn key="aim:reportBuilder:selectcolumn">Report Builder : Select Column</digi:trn>&gt;&gt;</digi:link>&nbsp;&nbsp;<digi:link href="/advancedReportManager.do?check=5" styleClass="comment" title="<%=translation%>" ><digi:trn key="aim:reportBuilder:selectrows">		Report Builder : Select Rows</digi:trn>&gt;&gt;</digi:link>&nbsp;&nbsp;							<digi:link href="/advancedReportManager.do?check=SelectMeasuress" styleClass="comment" title="<%=translation%>" ><digi:trn key="aim:reportBuilder:selectmeasures">Report Builder : Select Measures</digi:trn>&gt;&gt;</digi:link>&nbsp;&nbsp;<digi:link href="/advancedReportManager.do?check=4" styleClass="comment" title="<%=translation%>" ><digi:trn key="aim:reportBuilder:reportDetails">Report Builder : Report Details</digi:trn>&gt;&gt;</digi:link>&nbsp;&nbsp;<digi:trn key="aim:reportBuilder:htmlReport">Report Builder : HTML Report</digi:trn>					
+	</c:set>
+	<digi:link href="/viewMyDesktop.do" styleClass="comment" title="${translation}" >
+	<digi:trn key="aim:portfolio">Portfolio</digi:trn></digi:link>&nbsp;&gt;&nbsp;						<c:set var="translation"><digi:trn key="aim:clickToGotoStep1">Click here to goto Step 1</digi:trn></c:set>
+	<digi:link href="/advancedReportManager.do?check=forward" styleClass="comment" title="${translation}" ><digi:trn key="aim:reportBuilder:selectcolumn">Report Builder : Select Column</digi:trn>&gt;&gt;</digi:link>&nbsp;&nbsp;<digi:link href="/advancedReportManager.do?check=5" styleClass="comment" title="${translation}" ><digi:trn key="aim:reportBuilder:selectrows">		Report Builder : Select Rows</digi:trn>&gt;&gt;</digi:link>&nbsp;&nbsp;							<digi:link href="/advancedReportManager.do?check=SelectMeasuress" styleClass="comment" title="${translation}" ><digi:trn key="aim:reportBuilder:selectmeasures">Report Builder : Select Measures</digi:trn>&gt;&gt;</digi:link>&nbsp;&nbsp;<digi:link href="/advancedReportManager.do?check=4" styleClass="comment" title="${translation}" ><digi:trn key="aim:reportBuilder:reportDetails">Report Builder : Report Details</digi:trn>&gt;&gt;</digi:link>&nbsp;&nbsp;<digi:trn key="aim:reportBuilder:htmlReport">Report Builder : HTML Report</digi:trn>					
 	</td></tr>
 	</table>	
 	</td></tr>
@@ -139,10 +139,10 @@ function backStep() {
 													</c:set>
 													<logic:notEqual name="aimAdvancedReportForm" property="page"
 													value="1">
-													  <bean:define id="translation">
+													  <c:set var="translation">
 															<digi:trn key="aim:clickToViewPreviousPage">Click here to view Previous page</digi:trn>
-														</bean:define>
-														<digi:link href="/advancedReportManager.do?check=5" name="urlParams2" title="<%=translation%>" >
+														</c:set>
+														<digi:link href="/advancedReportManager.do?check=5" name="urlParams2" title="${translation}" >
 															Previous
 														</digi:link>
 														&nbsp
@@ -154,10 +154,10 @@ function backStep() {
 													</logic:equal>	
 
 													<logic:notEmpty name="aimAdvancedReportForm" property="finalData">
-													  <bean:define id="translation">
+													  <c:set var="translation">
 															<digi:trn key="aim:clickToViewAllRecords">Click here to view All Records</digi:trn>
-														</bean:define>
-														<digi:link href="/advancedReportManager.do?check=5&page=all" title="<%=translation%>" >
+														</c:set>
+														<digi:link href="/advancedReportManager.do?check=5&page=all" title="${translation}" >
 															All
 														</digi:link>
 														&nbsp
@@ -177,10 +177,10 @@ function backStep() {
 															//logger.info(curr + " Comparison : " + cnt);
 														%>
 														<% if( curr != cnt ) { %>
-														<bean:define id="translation">
+														<c:set var="translation">
 															<digi:trn key="aim:clickToViewSpecificPages">Click here to view Specified Page</digi:trn>
-														</bean:define>
-														<digi:link href="/advancedReportManager.do?check=5" name="urlParams1" title="<%=translation%>" >
+														</c:set>
+														<digi:link href="/advancedReportManager.do?check=5" name="urlParams1" title="${translation}" >
 															<%=pages%>
 														</digi:link>
 														<% } else { %>
@@ -202,10 +202,10 @@ function backStep() {
 													<% if(allPages.size() == currPage.intValue()) { %>	
 														&nbsp; <digi:trn key="aim:next">Next</digi:trn>  
 													<% } else { %>
-													  <bean:define id="translation">
+													  <c:set var="translation">
 															<digi:trn key="aim:clickToViewNextPage">Click here to go to Next page</digi:trn>
-														</bean:define>
-														<digi:link href="/advancedReportManager.do?check=5" name="urlParams3" title="<%=translation%>" >
+														</c:set>
+														<digi:link href="/advancedReportManager.do?check=5" name="urlParams3" title="${translation}" >
 															Next
 														</digi:link>
 														&nbsp;	
@@ -254,3 +254,6 @@ function backStep() {
 </TR>
 </TABLE>
 </digi:form>
+
+
+

@@ -54,33 +54,33 @@
 				<TR bgColor=#222e5d height="20"><TD style="COLOR: #c9c9c7" height="20"> 	
 				&nbsp;&nbsp;&nbsp;
 				<SPAN class="sub-nav2-selected">OVERVIEW</SPAN> | 
-					<bean:define id="translation">
+					<c:set var="translation">
 						<digi:trn key="aim:clickToViewCommitments">Click here to view Commitments</digi:trn>
-					</bean:define>
-					<digi:link href="/viewYearlyInfo.do" name="urlSubTabs" styleClass="sub-nav2" title="<%=translation%>" >
+					</c:set>
+					<digi:link href="/viewYearlyInfo.do" name="urlSubTabs" styleClass="sub-nav2" title="${translation}" >
 					<digi:trn key="aim:commitments">COMMITMENTS</digi:trn>
 					</digi:link>|
 					<c:set target="${urlSubTabs}" property="transactionType" value="1"/>
-					<bean:define id="translation">
+					<c:set var="translation">
 						<digi:trn key="aim:clickToViewDisbursements">Click here to view Disbursements</digi:trn>
-					</bean:define>
-					<digi:link href="/viewYearlyInfo.do" name="urlSubTabs" styleClass="sub-nav2" title="<%=translation%>" >
+					</c:set>
+					<digi:link href="/viewYearlyInfo.do" name="urlSubTabs" styleClass="sub-nav2" title="${translation}" >
 					<digi:trn key="aim:disbursements">DISBURSEMENTS</digi:trn>
 					</digi:link>| 
 					<c:set target="${urlSubTabs}" property="transactionType" value="2"/>
-					<bean:define id="translation">
+					<c:set var="translation">
 						<digi:trn key="aim:clickToViewExpenditures">Click here to view Expenditures</digi:trn>
-					</bean:define>
-					<digi:link href="/viewYearlyInfo.do" name="urlSubTabs" styleClass="sub-nav2" title="<%=translation%>" >
+					</c:set>
+					<digi:link href="/viewYearlyInfo.do" name="urlSubTabs" styleClass="sub-nav2" title="${translation}" >
 					<digi:trn key="aim:expenditures">EXPENDITURES</digi:trn>
 					</digi:link>| 
-					<digi:link href="/viewYearlyDiscrepancy.do" name="urlDiscrepancy" styleClass="sub-nav2" title="<%=translation%>" >
+					<digi:link href="/viewYearlyDiscrepancy.do" name="urlDiscrepancy" styleClass="sub-nav2" title="${translation}" >
 					<digi:trn key="aim:discrepancy">DISCREPANCY</digi:trn>
 					</digi:link> |
-					<bean:define id="translation">
+					<c:set var="translation">
 						<digi:trn key="aim:clickToViewAll">Click here to view All</digi:trn>
-					</bean:define>
-					<digi:link href="/viewYearlyComparisons.do" name="urlAll" styleClass="sub-nav2" title="<%=translation%>" >
+					</c:set>
+					<digi:link href="/viewYearlyComparisons.do" name="urlAll" styleClass="sub-nav2" title="${translation}" >
 					<digi:trn key="aim:all">ALL</digi:trn>
 					</digi:link>	
 				</TD></TR>			
@@ -95,11 +95,11 @@
 											<bean:write name="aimFinancialOverviewForm" property="ampActivityId"/>
 										</c:set>
 										<c:set target="${urlFinancingBreakdown}" property="tabIndex" value="1"/>
-										<bean:define id="translation">
+										<c:set var="translation">
 											<digi:trn key="aim:clickToViewFinancialProgress">Click here to view Financial Progress</digi:trn>
-										</bean:define>
+										</c:set>
 										<digi:link href="/viewFinancingBreakdown.do" name="urlFinancingBreakdown" styleClass="comment" 
-										title="<%=translation%>" >
+										title="${translation}" >
 										<digi:trn key="aim:financialProgress">Financial Progress</digi:trn>
 										</digi:link> &gt; Overview
 									</SPAN>								
@@ -201,3 +201,6 @@
 <TR><TD>&nbsp;</TD></TR>
 </TABLE>
 </logic:equal>
+
+
+

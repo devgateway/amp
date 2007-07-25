@@ -24,10 +24,10 @@
 					<table cellPadding=5 cellSpacing=0 width="100%">
 						<tr>
 							<td height=33><span class=crumb>
-								<bean:define id="translation">
+								<c:set var="translation">
 									<digi:trn key="aim:clickToViewMyDesktop">Click here to view MyDesktop</digi:trn>
-								</bean:define>
-								<digi:link href="/viewMyDesktop.do" styleClass="comment" title="<%=translation%>" >
+								</c:set>
+								<digi:link href="/viewMyDesktop.do" styleClass="comment" title="${translation}" >
 								<digi:trn key="aim:portfolio">
 								Portfolio
 								</digi:trn>
@@ -67,19 +67,30 @@
 													<tr bgColor=#f4f4f2>
 														<td valign="left" align="left" width="50%">
 															<TABLE border="0" cellpadding="0" cellspacing="0" bgcolor="#F4F4F2" height="17">
+
 									                           	<TR bgcolor="#F4F4F2" height="17"> 
+
 									                              	<TD bgcolor="#C9C9C7" class="box-title">
+
 									                              			&nbsp;
+
 																			<digi:trn key="aim:documents">Documents</digi:trn>
+
 																	</TD>
+
 										                            <TD>
+
 										                            	<IMG src="../ampTemplate/images/corner-r.gif" width="17" height="17">
+
 										                            </TD>
+
 									   	                        </TR>
+
 					      	                    			</TABLE>
 														</td>
 													</tr>
 													<logic:empty name="aimRelatedLinksForm" property="relatedLinks">
+
 													<tr bgColor=#f4f4f2>
 														<td colspan=2>
 															<digi:trn key="aim:noDocsOrLinksPresent">
@@ -90,31 +101,52 @@
 													</logic:empty>
 							
 													<logic:notEmpty name="aimRelatedLinksForm" property="relatedLinks">
+
 													<tr><td>
 													<TABLE width="100%" cellPadding="2" cellSpacing="2" vAlign="top" align="center" bgColor=#f4f4f2
+
 														class="box-border-nopadding">	
+
 															<tr bgColor=#dddddb>
+
 																<td valign="center" align="center">
+
 																	<b>
+
 																	<digi:trn key="aim:document">
+
 																	Document
+
 																	</digi:trn>
+
 																	</b>
+
 																</td>
+
 																<td bgColor=#dddddb align="center">
+
 																	<b>
+
 																	<digi:trn key="aim:file">
+
 																		File
+
 																	</digi:trn>
+
 																	</b>
+
 																</td>
+
 															</tr>
+
 												
+
 															<logic:iterate name="aimRelatedLinksForm" property="relatedLinks" id="relatedLink" 
 															type="org.digijava.module.aim.helper.Documents">
 															<c:if test="${relatedLink.isFile == true}">
 															<tr>
 																<td bgColor=#f4f4f2>	
+
 																	<jsp:useBean id="docParams" type="java.util.Map" class="java.util.HashMap"/>			
 																	<c:set target="${docParams}" property="docId">	
 																		<c:out value="${relatedLink.docId}"/>
@@ -123,14 +155,16 @@
 																		<c:out value="${relatedLink.activityId}"/>
 																	</c:set>																							
 																	<c:set target="${docParams}" property="pageId" value="0"/>
-																	<bean:define id="translation">
+																	<c:set var="translation">
 																		<digi:trn key="aim:clickToViewDocumentDetails">Click here view Document Details</digi:trn>
-																	</bean:define>
-																	<digi:link href="/getDocumentDetails.do" name="docParams" title="<%=translation%>" >
+																	</c:set>
+																	<digi:link href="/getDocumentDetails.do" name="docParams" title="${translation}" >
 																	<bean:write name="relatedLink" property="title" /></digi:link>
 																	&nbsp;
 																</td>
+
 																<td bgColor=#f4f4f2>	
+
 																	<bean:define name="relatedLink" property="fileName" id="fileName"/>
 															    	<%
 																		int index2;
@@ -151,78 +185,151 @@
 															</tr>
 															</c:if>
 															</logic:iterate>
+
 														</table>
+
 														</td></tr>
+
 														<tr>
+
 															<td>
+
 																&nbsp;
+
 															</td>
+
 														</tr>
+
 														<tr bgColor=#f4f4f2>
+
 															<td valign="left" align="left">
+
 																<TABLE border="0" cellpadding="0" cellspacing="0" bgcolor="#F4F4F2" height="17">
+
 										                           	<TR bgcolor="#F4F4F2" height="17"> 
+
 										                              	<TD bgcolor="#C9C9C7" class="box-title">
+
 										                              			&nbsp;
+
 																				<digi:trn key="aim:links">Links</digi:trn>
+
 																		</TD>
+
 											                            <TD>
+
 											                            	<IMG src="../ampTemplate/images/corner-r.gif" width="17" height="17">
+
 											                            </TD>
+
 										   	                        </TR>
+
 						      	                    			</TABLE>
+
 															</td>
+
 														</tr>
+
 														
+
 														<tr><td>
+
 													<TABLE width="100%" cellPadding="2" cellSpacing="2" vAlign="top" align="center" bgColor=#f4f4f2
+
 														class="box-border-nopadding">	
+
 															<tr bgColor=#dddddb>
+
 																<td valign="center" align="center" >
+
 																	<b>
+
 																	<digi:trn key="aim:document">
+
 																	Document
+
 																	</digi:trn>
+
 																	</b>
+
 																</td>
+
 																<td bgColor=#dddddb align="center">
+
 																	<b>
+
 																	<digi:trn key="aim:link">
+
 																		Link
+
 																	</digi:trn>
+
 																	</b>
+
 																</td>
+
 															</tr>
+
 												
+
 															<logic:iterate name="aimRelatedLinksForm" property="relatedLinks" id="relatedLink" 
+
 															type="org.digijava.module.aim.helper.Documents">
+
 															<c:if test="${relatedLink.isFile == false}">
+
 															<tr>
+
 																<td bgColor=#f4f4f2>	
+
 																	<jsp:useBean id="docParams2" type="java.util.Map" class="java.util.HashMap"/>			
+
 																	<c:set target="${docParams2}" property="docId">	
+
 																		<c:out value="${relatedLink.docId}"/>
+
 																	</c:set>											
+
 																	<c:set target="${docParams2}" property="actId">
+
 																		<c:out value="${relatedLink.activityId}"/>
+
 																	</c:set>																							
+
 																	<c:set target="${docParams2}" property="pageId" value="0"/>
-																	<bean:define id="translation">
+
+																	<c:set var="translation">
+
 																		<digi:trn key="aim:clickToViewDocumentDetails">Click here view Document Details</digi:trn>
-																	</bean:define>
-																	<digi:link href="/getDocumentDetails.do" name="docParams2" title="<%=translation%>" >
+
+																	</c:set>
+
+																	<digi:link href="/getDocumentDetails.do" name="docParams2" title="${translation}" >
+
 																	<bean:write name="relatedLink" property="title" /></digi:link>
+
 																	&nbsp;
+
 																</td>
+
 																<td bgColor=#f4f4f2>	
+
 																	<digi:img src="module/aim/images/web-page.gif"/>
+
 																	<a target="_blank" href="<bean:write name="relatedLink" property="url" />">
+
 																	<i><bean:write name="relatedLink" property="url" /></i></a>
+
 																</td>
+
 															</tr>
+
 															</c:if>
+
 															</logic:iterate>
+
 														</table>
+
 														</td></tr>
 													</logic:notEmpty>
 												</table>
@@ -246,10 +353,10 @@
 															<%=pages%>
 														</c:if>
 														<c:if test="${aimRelatedLinksForm.currentPage != pages}">
-															<bean:define id="translation">
+															<c:set var="translation">
 																<digi:trn key="aim:clickToViewNextPage">Click here to goto Next Page</digi:trn>
-															</bean:define>
-															<digi:link href="/viewAllDocuments.do" name="urlParams1" title="<%=translation%>" >
+															</c:set>
+															<digi:link href="/viewAllDocuments.do" name="urlParams1" title="${translation}" >
 																<%=pages%>
 															</digi:link>
 														</c:if>
@@ -269,3 +376,6 @@
 	</td>
 </tr>
 </table>
+
+
+

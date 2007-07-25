@@ -75,26 +75,26 @@
 			<table cellPadding=5 cellSpacing=0 width="100%">
 				<tr>
 					<td height=33><span class=crumb>
-						<bean:define id="translation">
+						<c:set var="translation">
 							<digi:trn key="aim:clickToViewMyDesktop">Click here to view MyDesktop</digi:trn>
-						</bean:define>
-						<digi:link href="/viewMyDesktop.do" styleClass="comment" title="<%=translation%>" >
+						</c:set>
+						<digi:link href="/viewMyDesktop.do" styleClass="comment" title="${translation}" >
 						<digi:trn key="aim:portfolio">
 						Portfolio
 						</digi:trn>
 						</digi:link>&nbsp;&gt;&nbsp;
-						<bean:define id="translation">
+						<c:set var="translation">
 							<digi:trn key="aim:clickToViewTeamWorkspaceSetup">Click here view Team Workspace Setup</digi:trn>
-						</bean:define>
-						<digi:link href="/workspaceOverview.do" name="bcparams" styleClass="comment" title="<%=translation%>" >
+						</c:set>
+						<digi:link href="/workspaceOverview.do" name="bcparams" styleClass="comment" title="${translation}" >
 						<digi:trn key="aim:teamWorkspaceSetup">
 						Team Workspace Setup
 						</digi:trn>
 						</digi:link>&nbsp;&gt;&nbsp;
-						<bean:define id="translation">
+						<c:set var="translation">
 							<digi:trn key="aim:clickToViewReportList">Click here to view Report List</digi:trn>
-						</bean:define>
-						<digi:link href="/teamReportList.do" styleClass="comment" title="<%=translation%>" >
+						</c:set>
+						<digi:link href="/teamReportList.do" styleClass="comment" title="${translation}" >
 						<digi:trn key="aim:reportList">
 						Report List
 						</digi:trn>
@@ -229,3 +229,6 @@
 </td></tr>
 </table>
 </digi:form>
+
+
+

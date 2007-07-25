@@ -35,10 +35,10 @@
       		 <tr>
 		          <td class=r-dotted-lg-buttom vAlign=top><br>
 						<digi:img src="module/aim/images/arrow-014E86.gif" width="15" height="10"/>
-						<bean:define id="translation">
+						<c:set var="translation">
 							<digi:trn key="aim:clickToUseAmpEthiopia">Click here to Use AMP Ethiopia now</digi:trn>
-						</bean:define>
-						<digi:link href="/index.do" title="<%=translation%>" >	
+						</c:set>
+						<digi:link href="/index.do" title="${translation}" >	
 						<digi:trn key="aim:useAMPEthiopiaNow">
 						Use AMP Ethiopia now
 						</digi:trn>
@@ -73,4 +73,7 @@
 </td></tr>
 </table>
 </digi:form>
+
+
+
 

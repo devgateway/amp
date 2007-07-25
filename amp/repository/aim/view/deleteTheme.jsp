@@ -40,18 +40,18 @@ function cancel() {
 					<!-- Start Navigation -->
 					<td height=33><span class=crumb>
 	
-						<bean:define id="translation">
+						<c:set var="translation">
 							<digi:trn key="aim:clickToViewAdmin">Click here to goto Admin Home</digi:trn>
-						</bean:define>
-						<digi:link href="/admin.do" styleClass="comment" title="<%=translation%>" >
+						</c:set>
+						<digi:link href="/admin.do" styleClass="comment" title="${translation}" >
 						<digi:trn key="aim:AmpAdminHome">
 						Admin Home
 						</digi:trn>
 						</digi:link>&nbsp;&gt;&nbsp;
-						<bean:define id="translation">
+						<c:set var="translation">
 							<digi:trn key="aim:clickToViewThemeManager">Click here to view Theme Manager</digi:trn>
-						</bean:define>
-						<digi:link href="/themeManager.do" styleClass="comment" title="<%=translation%>" >
+						</c:set>
+						<digi:link href="/themeManager.do" styleClass="comment" title="${translation}" >
 						<digi:trn key="aim:programManager">	
 						Program Manager
 						</digi:trn>
@@ -200,3 +200,6 @@ function cancel() {
 </td></tr>
 </table>
 </digi:form>
+
+
+

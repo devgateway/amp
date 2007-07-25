@@ -568,10 +568,10 @@ bgcolor="#006699">
 		<c:if test="${aimEditActivityForm.step != 11}">
 		<td nowrap="nowrap">
 			<IMG alt=Link height=10 src="../ampTemplate/images/arrow-th-BABAB9.gif" width=15>
-			<bean:define id="translation">
+			<c:set var="translation">
 				<digi:trn key="aim:euProjectCosting">EU Project Costing</digi:trn>
-			</bean:define>
-			<a href="javascript:gotoStep(11)" class="menu" title="<%=translation%>">
+			</c:set>
+			<a href="javascript:gotoStep(11)" class="menu" title="${translation}">
 				<digi:trn key="aim:costing">Costing</digi:trn>
 			</a>
 		</td>
@@ -624,3 +624,6 @@ bgcolor="#006699">
 <tr><td width="220" height="10" background="module/aim/images/bottom.gif">
 </td></tr>
 </table>
+
+
+

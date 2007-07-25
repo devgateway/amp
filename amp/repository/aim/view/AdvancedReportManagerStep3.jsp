@@ -64,56 +64,56 @@
 					<table cellPadding=5 cellSpacing=0 width="100%">
 						<tr>
 							<td height=33><span class=crumb>
-								<bean:define id="translation">
+								<c:set var="translation">
 									<digi:trn key="aim:clickToViewMyDesktop">Click here to view MyDesktop</digi:trn>
-								</bean:define>
-								<digi:link href="/viewMyDesktop.do" styleClass="comment" title="<%=translation%>" >
+								</c:set>
+								<digi:link href="/viewMyDesktop.do" styleClass="comment" title="${translation}" >
 								<digi:trn key="aim:portfolio">
 									Portfolio
 								</digi:trn>
 								</digi:link>&nbsp;&gt;&nbsp;
 
-								<digi:link href="/advancedReportManager.do?check=forward" styleClass="comment" title="<%=translation%>" >
+								<digi:link href="/advancedReportManager.do?check=forward" styleClass="comment" title="${translation}" >
 								<digi:trn key="aim:reportBuilder:selectcolumn">
 									Report Builder : Select Column
-								</digi:trn>					
-								&gt;&gt;		
+								</digi:trn>
+								&gt;&gt;
 								</digi:link>&nbsp;&nbsp;
 
-								<digi:link href="/advancedReportManager.do?check=charts" styleClass="comment" title="<%=translation%>" >
+								<digi:link href="/advancedReportManager.do?check=charts" styleClass="comment" title="${translation}" >
 								<digi:trn key="aim:reportBuilder:selectrows">
 									Report Builder : Select Rows
-								</digi:trn>					
-								&gt;&gt;		
+								</digi:trn>
+								&gt;&gt;
 								</digi:link>&nbsp;&nbsp;
-								
-								<digi:link href="/advancedReportManager.do?check=SelectMeasures" styleClass="comment" title="<%=translation%>" >
+
+								<digi:link href="/advancedReportManager.do?check=SelectMeasures" styleClass="comment" title="${translation}" >
 								<digi:trn key="aim:reportBuilder:selectmeasures">
 									Report Builder : Select Measure
-								</digi:trn>					
-								&gt;&gt;		
+								</digi:trn>
+								&gt;&gt;
 								</digi:link>&nbsp;&nbsp;
 
-								<digi:link href="/advancedReportManager.do?check=4" styleClass="comment" title="<%=translation%>" >
+								<digi:link href="/advancedReportManager.do?check=4" styleClass="comment" title="${translation}" >
 								<digi:trn key="aim:reportBuilder:reportDetails">
 									Report Builder : Report Details
-								</digi:trn>					
-								&gt;&gt;		
+								</digi:trn>
+								&gt;&gt;
 								</digi:link>&nbsp;&nbsp;
 
-								<digi:link href="/advancedReportManager.do?check=5" styleClass="comment" title="<%=translation%>" >
+								<digi:link href="/advancedReportManager.do?check=5" styleClass="comment" title="${translation}" >
 								<digi:trn key="aim:reportBuilder:htmlReport">
 									Report Builder : HTML Report
-								</digi:trn>					
-								&gt;&gt;		
+								</digi:trn>
+								&gt;&gt;
 								</digi:link>&nbsp;&nbsp;
 
 								<digi:trn key="aim:reportBuilder:chartReport">
 									Report Builder : Chart Report
-								</digi:trn>					
+								</digi:trn>
 							</td>
 						</tr>
-					</table>	
+					</table>
 				</td>
 			</tr>
 		 	<tr>
@@ -134,7 +134,7 @@
 								<TR bgColor=#f4f4f2>
 									<TD vAlign="top" align="left" width="100%">
 									</TD>
-								</TR>				
+								</TR>
 								<TR bgColor=#f4f4f2>
 									<TD vAlign="top" align="center" width="100%" bgColor=#f4f4f2>
 										<TABLE width="100%" cellPadding=0 cellSpacing=0 vAlign="top" align="center" bgColor=#f4f4f2 >
@@ -146,12 +146,12 @@
 															<TABLE width="100%" cellPadding=2 cellSpacing=0 vAlign="top" align="top" bgColor=#f4f4f2 border=1
 															style="border-collapse: collapse">
 																<tr>
-																	<td class=box-title> 
-																		Note : 
+																	<td class=box-title>
+																		Note :
 																	</td>
 																</tr>
 																<tr>
-																	<td class=box-title> 
+																	<td class=box-title>
 																	<FONT color=red size="4">* </font>	Please select<u> "Title"  to generate a Chart.</u><br>
 																	</td>
 																</tr>
@@ -164,7 +164,7 @@
 																<bean:define id="fName">
 																	<c:out value="${aimAdvancedReportForm.pieImageUrl}"/>
 																</bean:define>
-																<%	
+																<%
 																String piegraphURL = request.getContextPath() + "/aim/DisplayChart.img?filename="+fName;
 																%>
 
@@ -177,7 +177,7 @@
 																<bean:define id="brName">
 																	<c:out value="${aimAdvancedReportForm.barImageUrl}"/>
 																</bean:define>
-																<%	
+																<%
 																String bargraphURL = request.getContextPath() + "/aim/DisplayChart.img?filename="+brName;
 																%>
 
@@ -186,21 +186,21 @@
 
 																<br><br>
 																<html:button  styleClass="dr-menu" property="submitButton"  onclick="javascript:history.back()">
-																	<< <digi:trn key="btn:previous">Previous</digi:trn> 
+																	<< <digi:trn key="btn:previous">Previous</digi:trn>
 																</html:button>
 																<html:button  styleClass="dr-menu" property="submitButton"  onclick="return quitAdvRptMngr()">
-																	<digi:trn key="btn:cancel">Cancel</digi:trn> 
+																	<digi:trn key="btn:cancel">Cancel</digi:trn>
 																</html:button>
 																<html:button  styleClass="dr-menu" property="submitButton"  onclick="popup_barChart()">
-																	<digi:trn key="btn:createBarChartPDF">Create Bar-Chart PDF</digi:trn> 
+																	<digi:trn key="btn:createBarChartPDF">Create Bar-Chart PDF</digi:trn>
 																</html:button>
 																<html:button  styleClass="dr-menu" property="submitButton"  onclick="saveReport()">
-																	<digi:trn key="btn:saveReport">Save Report</digi:trn> 
+																	<digi:trn key="btn:saveReport">Save Report</digi:trn>
 																</html:button>
 
 
 																</TD>
-															    
+
 															    </tr>
 															</TABLE>
 														</td>
@@ -210,7 +210,7 @@
 											</TR>
 										</TABLE>
 									</TD>
-								</TR>	
+								</TR>
 							</TABLE>
 						</TD>
 					</TR>
@@ -218,11 +218,11 @@
 			</TD>
 			</TR>
 		</table>
-	</td>	
+	</td>
 	<td class=r-dotted-lg align=left vAlign=top >	&nbsp;</td>
 </tr>
 </table>
-</td>	
+</td>
 </TR>
 </TABLE>
 </digi:form>

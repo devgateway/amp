@@ -59,10 +59,10 @@
 			<tr>
 	          <td width="14" class="r-dotted-lg" align=center>&nbsp;</td>
               <td valign="bottom" class="crumb" >
-						<bean:define id="translation">
+						<c:set var="translation">
 							<digi:trn key="aim:clickToViewMyDesktop">Click here to view MyDesktop</digi:trn>
-						</bean:define>
-                <digi:link href="/viewMyDesktop.do" styleClass="comment" title="<%=translation%>">
+						</c:set>
+                <digi:link href="/viewMyDesktop.do" styleClass="comment" title="${translation}">
                	<digi:trn key="aim:MyDesktop">My Desktop</digi:trn>
                 </digi:link> &gt; 
 				<digi:link href="/viewTeamReports.do" styleClass="comment">
@@ -136,7 +136,7 @@
 					
 						<!--<digi:trn key="aim:clickToCreateReportInCSV">Click here to Create Report in CSV </digi:trn>-->
 
-					<digi:link href="" onclick="popup_csv(''); return false;" title="<%=translation%>">
+					<digi:link href="" onclick="popup_csv(''); return false;" title="${translation}">
 					 	<digi:trn key="aim:createReportInCsv">Create Report in CSV.</digi:trn>
 					</digi:link>
 					</logic:notEmpty>
@@ -577,10 +577,10 @@
 								</c:set>
 								<logic:notEqual name="aimCommitmentbyDonorForm" property="page"
 								value="1">
-									<bean:define id="translation">
+									<c:set var="translation">
 										<digi:trn key="aim:clickToViewPreviousPage">Click here to goto Previous page</digi:trn>
-									</bean:define>
-									<digi:link href="/viewPlannedProjects.do" name="urlParams2" title="<%=translation%>" >
+									</c:set>
+									<digi:link href="/viewPlannedProjects.do" name="urlParams2" title="${translation}" >
 										Previous
 									</digi:link>
 									&nbsp;
@@ -604,10 +604,10 @@
 										System.out.println(curr + " Comparison : " + cnt);
 									%>
 									<% if( curr != cnt ) { %>
-									<bean:define id="translation">
+									<c:set var="translation">
 										<digi:trn key="aim:clickToViewAllPages">Click here to view All pages</digi:trn>
-									</bean:define>
-									<digi:link href="/viewPlannedProjects.do" name="urlParams1" title="<%=translation%>" >
+									</c:set>
+									<digi:link href="/viewPlannedProjects.do" name="urlParams1" title="${translation}" >
 										<%=pages%>
 									</digi:link>
 									<% } else { %>
@@ -629,10 +629,10 @@
 								<% if(allPages.size() == currPage.intValue()) { %>	
 									&nbsp; <digi:trn key="aim:next">Next</digi:trn>  
 								<% } else { %>
-									<bean:define id="translation">
+									<c:set var="translation">
 										<digi:trn key="aim:clickToViewNextPage">Click here to go to Next page</digi:trn>
-									</bean:define>
-									<digi:link href="/viewPlannedProjects.do" name="urlParams3" title="<%=translation%>" >
+									</c:set>
+									<digi:link href="/viewPlannedProjects.do" name="urlParams3" title="${translation}" >
 										Next
 									</digi:link>
 									&nbsp;	
@@ -672,3 +672,6 @@
 -->
 </digi:form>
 		
+
+
+

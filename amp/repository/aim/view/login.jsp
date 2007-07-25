@@ -77,10 +77,10 @@
 				</tr>
 				<tr>
 					<td>&nbsp;&nbsp;&nbsp;
-						<bean:define id="translation">
+						<c:set var="translation">
 							<digi:trn key="aim:clickToGoHome">Click here to go Home</digi:trn>
-						</bean:define>
-						<digi:link href="/" title="<%=translation%>" >
+						</c:set>
+						<digi:link href="/" title="${translation}" >
 							<digi:trn key="aim:home">
 							Home
 							</digi:trn>
@@ -100,3 +100,6 @@
 </td></tr>
 </table>
 </digi:form>
+
+
+

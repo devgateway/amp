@@ -54,20 +54,20 @@ function cancel() {
 							<td>
 								<span class=crumb>
 								<c:if test="${aimEditActivityForm.pageId == 0}">
-									<bean:define id="translation">
+									<c:set var="translation">
 										<digi:trn key="aim:clickToViewAdmin">Click here to go to Admin Home</digi:trn>
-									</bean:define>
-									<digi:link href="/admin.do" styleClass="comment" title="<%=translation%>">
+									</c:set>
+									<digi:link href="/admin.do" styleClass="comment" title="${translation}">
 										<digi:trn key="aim:AmpAdminHome">
 											Admin Home
 										</digi:trn>
 									</digi:link>&nbsp;&gt;&nbsp;
 								</c:if>
 								<c:if test="${aimEditActivityForm.pageId == 1}">								
-									<bean:define id="translation">
+									<c:set var="translation">
 										<digi:trn key="aim:clickToViewMyDesktop">Click here to view MyDesktop</digi:trn>
-									</bean:define>
-									<digi:link href="/viewMyDesktop.do" styleClass="comment" title="<%=translation%>" >
+									</c:set>
+									<digi:link href="/viewMyDesktop.do" styleClass="comment" title="${translation}" >
 										<digi:trn key="aim:portfolio">
 											Portfolio
 										</digi:trn>
@@ -75,10 +75,10 @@ function cancel() {
 								</c:if>	
 
 								<c:if test="${aimEditActivityForm.pageId == 2}">
-									<bean:define id="translation">
+									<c:set var="translation">
 										<digi:trn key="aim:clickToViewMyDesktop">Click here to view MyDesktop</digi:trn>
-									</bean:define>
-									<digi:link href="/viewMyDesktop.do" styleClass="comment" title="<%=translation%>" >
+									</c:set>
+									<digi:link href="/viewMyDesktop.do" styleClass="comment" title="${translation}" >
 										<digi:trn key="aim:portfolio">
 											Portfolio
 										</digi:trn>
@@ -89,20 +89,20 @@ function cancel() {
 										<c:out value="${aimEditActivityForm.activityId}"/>
 									</c:set>
 									<c:set target="${urlParam}" property="tabIndex" value="0"/>
-									<bean:define id="translation">
+									<c:set var="translation">
 										<digi:trn key="aim:clickToViewProjectDetails">Click here to view Project Details</digi:trn>
-									</bean:define>
-									<digi:link href="/viewChannelOverview.do" styleClass="comment" name="urlParam" title="<%=translation%>" >
+									</c:set>
+									<digi:link href="/viewChannelOverview.do" styleClass="comment" name="urlParam" title="${translation}" >
 										<digi:trn key="aim:channelOverview">Channel Overview</digi:trn>
 									</digi:link>&nbsp;&gt;&nbsp;	
 								</c:if>									
 								
 								<c:if test="${aimEditActivityForm.pageId != 2}">
 								
-								<bean:define id="translation">
+								<c:set var="translation">
 									<digi:trn key="aim:clickToViewAddActivityStep1">Click here to goto Add Activity Step 1</digi:trn>
-								</bean:define>
-								<digi:link href="/addActivity.do?step=1&edit=true" styleClass="comment" title="<%=translation%>" >
+								</c:set>
+								<digi:link href="/addActivity.do?step=1&edit=true" styleClass="comment" title="${translation}" >
 								
 								<c:if test="${aimEditActivityForm.editAct == true}">
 									<digi:trn key="aim:editActivityStep1">
@@ -115,58 +115,58 @@ function cancel() {
 									</digi:trn>
 								</c:if>																
 								</digi:link>&nbsp;&gt;&nbsp;						
-									<bean:define id="translation">
+									<c:set var="translation">
 										<digi:trn key="aim:clickToViewAddActivityStep2">Click here to goto Add Activity Step 2</digi:trn>
-									</bean:define>
-									<digi:link href="/addActivity.do?step=2&edit=true" styleClass="comment" title="<%=translation%>" >						
+									</c:set>
+									<digi:link href="/addActivity.do?step=2&edit=true" styleClass="comment" title="${translation}" >						
 									<digi:trn key="aim:addActivityStep2">
 									Step 2
 									</digi:trn>
 									</digi:link>&nbsp;&gt;&nbsp;			
-									<bean:define id="translation">
+									<c:set var="translation">
 										<digi:trn key="aim:clickToViewAddActivityStep3">Click here to goto Add Activity Step 3</digi:trn>
-									</bean:define>
-									<digi:link href="/addActivity.do?step=3&edit=true" styleClass="comment" title="<%=translation%>" >						
+									</c:set>
+									<digi:link href="/addActivity.do?step=3&edit=true" styleClass="comment" title="${translation}" >						
 									<digi:trn key="aim:addActivityStep3">
 									Step 3
 									</digi:trn>
 									</digi:link>&nbsp;&gt;&nbsp;							
-									<bean:define id="translation">
+									<c:set var="translation">
 										<digi:trn key="aim:clickToViewAddActivityStep4">Click here to goto Add Activity Step 4</digi:trn>
-									</bean:define>
-									<digi:link href="/addActivity.do?step=4&edit=true" styleClass="comment" title="<%=translation%>" >						
+									</c:set>
+									<digi:link href="/addActivity.do?step=4&edit=true" styleClass="comment" title="${translation}" >						
 									<digi:trn key="aim:addActivityStep4">
 									Step 4
 									</digi:trn>
 									</digi:link>&nbsp;&gt;&nbsp;			
-									<bean:define id="translation">
+									<c:set var="translation">
 										<digi:trn key="aim:clickToViewAddActivityStep5">Click here to goto Add Activity Step 5</digi:trn>
-									</bean:define>
-									<digi:link href="/addActivity.do?step=5&edit=true" styleClass="comment" title="<%=translation%>" >												
+									</c:set>
+									<digi:link href="/addActivity.do?step=5&edit=true" styleClass="comment" title="${translation}" >												
 									<digi:trn key="aim:addActivityStep5">
 									Step 5
 									</digi:trn>						
 									</digi:link>&nbsp;&gt;&nbsp;	
-									<bean:define id="translation">
+									<c:set var="translation">
 										<digi:trn key="aim:clickToViewAddActivityStep6">Click here to goto Add Activity Step 6</digi:trn>
-									</bean:define>
-									<digi:link href="/addActivity.do?step=6&edit=true" styleClass="comment" title="<%=translation%>" >						
+									</c:set>
+									<digi:link href="/addActivity.do?step=6&edit=true" styleClass="comment" title="${translation}" >						
 									<digi:trn key="aim:addActivityStep6">
 									Step 6
 									</digi:trn>
 									</digi:link>&nbsp;&gt;&nbsp;			
-									<bean:define id="translation">
+									<c:set var="translation">
 										<digi:trn key="aim:clickToViewAddActivityStep7">Click here to goto Add Activity Step 7</digi:trn>
-									</bean:define>
-									<digi:link href="/addActivity.do?step=7&edit=true" styleClass="comment" title="<%=translation%>" >
+									</c:set>
+									<digi:link href="/addActivity.do?step=7&edit=true" styleClass="comment" title="${translation}" >
 									<digi:trn key="aim:addActivityStep7">
 									Step 7
 									</digi:trn>
 									</digi:link>&nbsp;&gt;&nbsp;
-									<bean:define id="translation">
+									<c:set var="translation">
 										<digi:trn key="aim:clickToViewAddActivityStep8">Click here to goto Add Activity Step 8</digi:trn>
-									</bean:define>
-									<digi:link href="/addActivity.do?step=8&edit=true" styleClass="comment" title="<%=translation%>" >
+									</c:set>
+									<digi:link href="/addActivity.do?step=8&edit=true" styleClass="comment" title="${translation}" >
 									<digi:trn key="aim:addActivityStep8">
 									Step 8
 									</digi:trn>
@@ -226,3 +226,6 @@ function cancel() {
 </td></tr>
 </table>
 </digi:form>
+
+
+

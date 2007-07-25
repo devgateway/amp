@@ -9,10 +9,10 @@
 <digi:instance property="aimAddThemeForm" />
 <digi:context name="digiContext" property="context" />
 
-<bean:define id="translation">
+<c:set var="translation">
 	<digi:trn key="aim:clickToViewAdmin">Click here to goto Admin Home</digi:trn>
-</bean:define>
-<digi:link href="/admin.do" title="<%=translation%>" >
+</c:set>
+<digi:link href="/admin.do" title="${translation}" >
 	Admin Home Page
 </digi:link><br>
 <table width="100%" border="0" cellspacing="8">
@@ -65,30 +65,33 @@
 							<bean:write name="aimAddThemeForm" property="themeId" />
 						</c:set>
 						<c:set target="${urlParams}" property="action" value="edit" />
-						<bean:define id="translation">
+						<c:set var="translation">
 							<digi:trn key="aim:clickToEditCurrentTheme">Click here to Edit Current Theme</digi:trn>
-						</bean:define>
-						<digi:link href="/getTheme.do" name="urlParams" title="<%=translation%>" >
+						</c:set>
+						<digi:link href="/getTheme.do" name="urlParams" title="${translation}" >
 							Edit this theme
 						</digi:link>
 					</td>
 					<td width="30%" align="center">
 						<c:set target="${urlParams}" property="action" value="delete" />
-						<bean:define id="translation">
+						<c:set var="translation">
 							<digi:trn key="aim:clickToDeleteCurrentTheme">Click here to Delete Current Theme</digi:trn>
-						</bean:define>
-						<digi:link href="/getTheme.do" name="urlParams" title="<%=translation%>" >
+						</c:set>
+						<digi:link href="/getTheme.do" name="urlParams" title="${translation}" >
 							Delete this theme
 						</digi:link>					
 					</td>
 					<td width="30%" align="center">
-						<bean:define id="translation">
+						<c:set var="translation">
 							<digi:trn key="aim:clickToGoBackToThemeManager">Click here to go back to Theme Manager</digi:trn>
-						</bean:define>
-						<digi:link href="/themeManager.do" title="<%=translation%>" >Back to Theme Manager</digi:link>
+						</c:set>
+						<digi:link href="/themeManager.do" title="${translation}" >Back to Theme Manager</digi:link>
 					</td>
 			</table>
 		</td>
 	</tr>
 </table>
+
+
+
 

@@ -49,18 +49,18 @@
 					<!-- Start Navigation -->
 					<td height=33><span class=crumb>
 	
-						<bean:define id="translation">
+						<c:set var="translation">
 							<digi:trn key="aim:clickToViewAdmin">Click here to goto Admin Home</digi:trn>
-						</bean:define>
-						<digi:link href="/admin.do" styleClass="comment" title="<%=translation%>" >
+						</c:set>
+						<digi:link href="/admin.do" styleClass="comment" title="${translation}" >
 						<digi:trn key="aim:AmpAdminHome">
 						Admin Home
 						</digi:trn>
 						</digi:link>&nbsp;&gt;&nbsp;
-						<bean:define id="translation">
+						<c:set var="translation">
 							<digi:trn key="aim:clickToViewComponentManager">Click here to view Component Manager</digi:trn>
-						</bean:define>
-						<digi:link href="/programTypeManager.do" styleClass="comment" title="<%=translation%>" >
+						</c:set>
+						<digi:link href="/programTypeManager.do" styleClass="comment" title="${translation}" >
 						<digi:trn key="aim:ProgramTypeManager">
 							 Program Type Manager
 						</digi:trn>
@@ -175,3 +175,6 @@
 	</tr>
 </table>
 </digi:form>
+
+
+

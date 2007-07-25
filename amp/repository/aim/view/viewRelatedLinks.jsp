@@ -27,17 +27,17 @@
 			<table cellPadding=5 cellSpacing=0 width="100%">
 				<tr>
 					<td height=33><span class=crumb>
-						<bean:define id="translation">
+						<c:set var="translation">
 							<digi:trn key="aim:clickToViewMyDesktop">Click here to view MyDesktop</digi:trn>
-						</bean:define>
-						<digi:link href="/viewMyDesktop.do" styleClass="comment" title="<%=translation%>" >
+						</c:set>
+						<digi:link href="/viewMyDesktop.do" styleClass="comment" title="${translation}" >
 							<digi:trn key="aim:portfolio">Portfolio</digi:trn>
 						</digi:link>
 						&nbsp;&gt;&nbsp;
-						<bean:define id="translation">
+						<c:set var="translation">
 							<digi:trn key="aim:clickToViewTeamWorkspaceSetup">Click here to view Team Workspace Setup</digi:trn>
-						</bean:define>
-						<digi:link href="/workspaceOverview.do" name="bcparams" styleClass="comment" title="<%=translation%>" >
+						</c:set>
+						<digi:link href="/workspaceOverview.do" name="bcparams" styleClass="comment" title="${translation}" >
 							<digi:trn key="aim:teamWorkspaceSetup">Team Workspace Setup</digi:trn>
 						</digi:link>
 						&nbsp;&gt;&nbsp;						
@@ -127,6 +127,7 @@
 													<c:if test="${relatedLink.isFile == true}">
 													<tr>
 														<td bgColor=#f4f4f2 width="50%">	
+
 															<input type="checkbox" name="deleteLinks" value='<bean:write name="idx"/>'>
 															<jsp:useBean id="docParams" type="java.util.Map" class="java.util.HashMap"/>			
 															<c:set target="${docParams}" property="docId">	
@@ -136,10 +137,10 @@
 																<c:out value="${relatedLink.activityId}"/>
 															</c:set>																							
 															<c:set target="${docParams}" property="pageId" value="1"/>				
-															<bean:define id="translation">
+															<c:set var="translation">
 																<digi:trn key="aim:clickToViewDocumentDetails">Click here to view Document Details</digi:trn>
-															</bean:define>
-															<digi:link href="/getDocumentDetails.do" name="docParams" title="<%=translation%>" >
+															</c:set>
+															<digi:link href="/getDocumentDetails.do" name="docParams" title="${translation}" >
 															<bean:write name="relatedLink" property="title" /></digi:link>
 															&nbsp; :
 															<c:if test="${relatedLink.isFile == true}">
@@ -217,7 +218,9 @@
 													<c:if test="${relatedLink.isFile == false}">
 													<tr>
 														<td bgColor=#f4f4f2 width="50%">	
+
 															<input type="checkbox" name="deleteLinks" value='<bean:write name="idx"/>'>
+
 															<c:set target="${docParams}" property="docId">	
 																<c:out value="${relatedLink.docId}"/>
 															</c:set>											
@@ -225,10 +228,10 @@
 																<c:out value="${relatedLink.activityId}"/>
 															</c:set>																							
 															<c:set target="${docParams}" property="pageId" value="1"/>				
-															<bean:define id="translation">
+															<c:set var="translation">
 																<digi:trn key="aim:clickToViewDocumentDetails">Click here to view Document Details</digi:trn>
-															</bean:define>
-															<digi:link href="/getDocumentDetails.do" name="docParams" title="<%=translation%>" >
+															</c:set>
+															<digi:link href="/getDocumentDetails.do" name="docParams" title="${translation}" >
 															<bean:write name="relatedLink" property="title" /></digi:link>
 															&nbsp; :
 															<c:if test="${relatedLink.isFile == true}">
@@ -264,15 +267,24 @@
 												</table>											
 											
 											</td></tr>			
+
 												<tr>
+
 													<td>
+
 														&nbsp;
+
 													</td>
+
 												</tr>								
 												<tr>
+
 													<td align="right">
+
 														<html:submit styleClass="buton" property="removeFields"><digi:trn key="aim:addEditActivityDeleteSelected">Delete Selected</digi:trn></html:submit>				
+
 													</td>
+
 												</tr>
 											</table>
 
@@ -298,10 +310,10 @@
 															<%=pages%>
 														</c:if>
 														<c:if test="${aimRelatedLinksForm.currentPage != pages}">
-															<bean:define id="translation">
+															<c:set var="translation">
 																<digi:trn key="aim:clickToViewPages">Click here to view Pages</digi:trn>
-															</bean:define>
-															<digi:link href="/relatedLinksList.do" name="urlParams1" title="<%=translation%>" >
+															</c:set>
+															<digi:link href="/relatedLinksList.do" name="urlParams1" title="${translation}" >
 																<%=pages%>
 															</digi:link>
 														</c:if>
@@ -321,6 +333,7 @@
 							</td></tr>
 						</table>			
 					</td>
+
 				</tr>
 			</table>
 		</td>
@@ -329,3 +342,6 @@
 </td></tr>
 </table>
 </digi:form>
+
+
+

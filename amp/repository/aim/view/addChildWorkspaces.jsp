@@ -11,49 +11,91 @@
 
 <script language="JavaScript">
 
-	<!-- 
+
+
+	<!--
+
+
 
 	function load() {
+
 		if (window.opener.document.aimUpdateWorkspaceForm.currUrl.value == "") {
+
 			window.opener.document.aimUpdateWorkspaceForm.currUrl.value = "/addChildWoekspace";
+
 		}
+
 	}
+
+
 
 	function unload() {
+
 		window.opener.document.aimUpdateWorkspaceForm.currUrl.value="";
+
 	}
+
+
 
 	function closeWindow() {
+
 		//window.opener.document.aimUpdateWorkspaceForm.currUrl.value="";
+
 		window.close();
+
 	}
+
+
 
 	function getChildWorkspaces() {
+
 		var dest   = document.aimUpdateWorkspaceForm.dest.value;
+
 		var wsType = document.aimUpdateWorkspaceForm.childWorkspaceType.value;
+
 		var tCat   = document.aimUpdateWorkspaceForm.childTeamTypeId.value;
+
 		<digi:context name="getChild" property="context/module/moduleinstance/addChildWorkspaces.do" />
+
 		document.aimUpdateWorkspaceForm.action = "<%= getChild %>?wType="+wsType+"&tCategory="+tCat+"&popupReset=true&dest="+dest;
+
 		document.aimUpdateWorkspaceForm.target = "_self"
+
 	   document.aimUpdateWorkspaceForm.submit();
+
 	}
 
+
+
 	function childWorkspacesAdded() {
+
 		var dest = document.aimUpdateWorkspaceForm.dest.value;
+
 		<digi:context name="addChild" property="context/module/moduleinstance/childWorkspacesAdded.do" />
+
 		document.aimUpdateWorkspaceForm.action = "<%=addChild%>?dest="+dest;
+
 		document.aimUpdateWorkspaceForm.target = window.opener.name;
+
 	    document.aimUpdateWorkspaceForm.submit();
+
 		window.close();
-	}	
+
+	}
+
+
 
 		function clearFormCheckBoxes() {
+
 			var el_collection=eval("document.forms.aimUpdateWorkspaceForm.selChildWorkspaces");
 			for (c=0;c<el_collection.length;c++)
 				el_collection[c].checked=false;
 			return true;
 		}
+
 	-->
+
+
 
 </script>
 
@@ -75,7 +117,9 @@
 						<tr>
 							<td width="20%" bgcolor="#ECF3FD"><digi:trn
 								key="aim:workspaceType">
+
 									Workspace Type
+
 								</digi:trn></td>
 							<td width="20%" bgcolor="#ECF3FD"><html:select
 								property="childWorkspaceType" styleClass="inp-text">
@@ -84,13 +128,15 @@
 								<html:option value="team">Team</html:option>
 							</html:select></td>
 							<td width="20%" bgcolor="#ECF3FD"><digi:trn key="aim:teamType">
+
 									Team Type
+
 								</digi:trn></td>
-							<bean:define id="translation">
+							<c:set var="translation">
 								<digi:trn key="aim:allTeamTypes">ALL</digi:trn>
-							</bean:define>
+							</c:set>
 							<td width="20%" bgcolor="#ECF3FD">
-								<category:showoptions name="aimUpdateWorkspaceForm" property="childTeamTypeId" firstLine="<%= translation %>"  keyName="<%= org.digijava.module.aim.helper.CategoryConstants.TEAM_TYPE_KEY %>" styleClass="inp-text" />
+								<category:showoptions name="aimUpdateWorkspaceForm" property="childTeamTypeId" firstLine="${translation}"  keyName="<%= org.digijava.module.aim.helper.CategoryConstants.TEAM_TYPE_KEY %>" styleClass="inp-text" />
 							</td>
 							<td width="20%" align="right" bgcolor="#ECF3FD"><input
 								type="button" value="GO" onclick="getChildWorkspaces()"
@@ -106,7 +152,9 @@
 						<tr>
 							<td align="center" class="textalb" height="20"><digi:trn
 								key="aim:listOfAllTeams">
+
 									List of all child teams
+
 								</digi:trn></td>
 						</tr>
 						<tr>
@@ -151,3 +199,5 @@
 		</tr>
 	</table>
 </digi:form>
+
+

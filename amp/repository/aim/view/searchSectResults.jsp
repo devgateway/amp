@@ -10,10 +10,10 @@
 <digi:instance property="aimSearchSectorForm" />
 <digi:context name="digiContext" property="context" />
 
-<bean:define id="translation">
+<c:set var="translation">
 	<digi:trn key="aim:clickToViewAdmin">Click here to goto Admin Home</digi:trn>
-</bean:define>
-<digi:link href="/admin.do" title="<%=translation%>" >
+</c:set>
+<digi:link href="/admin.do" title="${translation}" >
 	Admin Home Page
 </digi:link><br>
 <table width="100%" border="0" cellspacing="4">
@@ -55,10 +55,10 @@
 								<c:set target="${urlParams}" property="id">
 									<bean:write name="results" property="ampSectorId" />
 								</c:set>
-								<bean:define id="translation">
+								<c:set var="translation">
 									<digi:trn key="aim:clickToViewSectorDetails">Click here to view Sector Details</digi:trn>
-								</bean:define>
-								<digi:link href="/viewSectorDetails.do" name="urlParams" title="<%=translation%>" >
+								</c:set>
+								<digi:link href="/viewSectorDetails.do" name="urlParams" title="${translation}" >
 									<bean:write name="results" property="name" />
 								</digi:link>
 							</td>
@@ -76,10 +76,10 @@
 						<c:set target="${urlParams1}" property="page">
 							<%=pages%>
 						</c:set>
-						<bean:define id="translation">
+						<c:set var="translation">
 							<digi:trn key="aim:clickToViewNextPage">Click here to goto Next Page</digi:trn>
-						</bean:define>
-						<digi:link href="/sectorSearchResults.do" name="urlParams1" title="<%=translation%>" >
+						</c:set>
+						<digi:link href="/sectorSearchResults.do" name="urlParams1" title="${translation}" >
 							<%=pages%>
 						</digi:link> |&nbsp;
 					</logic:iterate>
@@ -94,12 +94,15 @@
 	</logic:empty>
 	<tr>
 		<td align="center">
-			<bean:define id="translation">
+			<c:set var="translation">
 				<digi:trn key="aim:clickToGoBackToSectorManager">Click here to go back to Sector Manager</digi:trn>
-			</bean:define>
-			<digi:link href="/sectorManager.do" title="<%=translation%>" >
+			</c:set>
+			<digi:link href="/sectorManager.do" title="${translation}" >
 				Back to Sector Manager
 			</digi:link>
 		</td>
 	</tr>	
 </table>
+
+
+

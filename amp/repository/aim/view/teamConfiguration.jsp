@@ -25,10 +25,10 @@
 			<table cellPadding=5 cellSpacing=0 width="100%">
 				<tr>
 					<td height=33><span class=crumb>
-						<bean:define id="translation">
+						<c:set var="translation">
 							<digi:trn key="aim:clickToViewMyDesktop">Click here to view MyDesktop</digi:trn>
-						</bean:define>
-						<digi:link href="/viewMyDesktop.do" styleClass="comment" title="<%=translation%>" >
+						</c:set>
+						<digi:link href="/viewMyDesktop.do" styleClass="comment" title="${translation}" >
 						<digi:trn key="aim:portfolio">
 						Portfolio
 						</digi:trn>
@@ -60,42 +60,42 @@
 											<td bgColor=#ffffff class=box-border>
 												<table border=0 cellPadding=7 cellSpacing=7 width="100%" >
 													<tr><td>
-													<bean:define id="translation">
+													<c:set var="translation">
 														<digi:trn key="aim:clickToViewTeamWorkspaceSetup">Click here view Team Workspace Setup</digi:trn>
-													</bean:define>
-													<digi:link href="/workspaceOverview.do" name="bcparams" title="<%=translation%>" >
+													</c:set>
+													<digi:link href="/workspaceOverview.do" name="bcparams" title="${translation}" >
 														<digi:trn key="aim:teamWorkspaceSetup">Team Workspace Setup</digi:trn>
 													</digi:link>												
 													</td></tr>												
 													<tr><td>													
-													<bean:define id="translation">
+													<c:set var="translation">
 														<digi:trn key="aim:clickToManageActivityList">Click here to Manage Activity List</digi:trn>
-													</bean:define>
-													<digi:link href="/teamActivityList.do" title="<%=translation%>" >
+													</c:set>
+													<digi:link href="/teamActivityList.do" title="${translation}" >
 														<digi:trn key="aim:manageActivityList">Manage activity list</digi:trn>
 													</digi:link>													
 													</td></tr>
 													<tr><td>
-			<bean:define id="translation">
+			<c:set var="translation">
 				<digi:trn key="aim:clickToManageReports">Click here to Manage Reports</digi:trn>
-			</bean:define>
-			                  				<digi:link href="/teamReportList.do" title="<%=translation%>" >
+			</c:set>
+			                  				<digi:link href="/teamReportList.do" title="${translation}" >
 									  					<digi:trn key="aim:manageReports">Manage reports</digi:trn>
 		            	      				</digi:link>
 													</td></tr>
 													<tr><td>
-		<bean:define id="translation">
+		<c:set var="translation">
 			<digi:trn key="aim:clickToManageDocuments">Click here to Manage Documents</digi:trn>
-		</bean:define>
-		                  					<digi:link href="/workspaceOverview.do" title="<%=translation%>" >
+		</c:set>
+		                  					<digi:link href="/workspaceOverview.do" title="${translation}" >
 			                						Manage documents
 						              			</digi:link>
 													</td></tr>
 													<tr><td>													
-													<bean:define id="translation">
+													<c:set var="translation">
 														<digi:trn key="aim:clickToManageMembers">Click here to Manage Members</digi:trn>
-													</bean:define>
-													<digi:link href="/teamMemberList.do" title="<%=translation%>" >
+													</c:set>
+													<digi:link href="/teamMemberList.do" title="${translation}" >
 														Manage members
 													</digi:link>							
 													</td></tr>
@@ -118,3 +118,6 @@
 	</td>
 </tr>
 </table>
+
+
+

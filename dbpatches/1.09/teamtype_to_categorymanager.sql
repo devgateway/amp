@@ -8,4 +8,4 @@ INSERT INTO amp_category_value(category_value, amp_category_class_id, index_colu
 
 	
 UPDATE amp_team at, amp_category_value acv SET at.type_categoryvalue_id=acv.id 
-	WHERE acv.category_value=at.type
+	WHERE acv.category_value=at.type;

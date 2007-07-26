@@ -175,14 +175,14 @@ function closeWindow() 
 		<table bgColor=#ffffff cellPadding=0 cellSpacing=0 width="100%" align="center" border="0">
 				<tr bgColor=#dddddb>
 				<td bgColor=#dddddb height="15" align="center" colspan="4"><h4>
-						Program M&E Indicators </h4>
+						<digi:trn key="aim:programind">Program M&E Indicators </digi:trn></h4>
 				</td>
 				</tr>
 				<tr bgColor=#ffffff><td height="10" colspan="4"></td></tr>
 				<tr bgcolor=#ffffff><td height="5" colspan="4"></td></tr>
 				<tr bgColor=#ffffff>
 				<td height="20" align="right">
-						<b>Indicator Name</b><font color="red">*</font>&nbsp;
+						<b><digi:trn key="aim:indname">Indicator Name</digi:trn></b><font color="red">*</font>&nbsp;
 				</td>
 				<td align="left" colspan="3">
 						<html:text name="aimThemeForm" property="name" size="30"/>
@@ -191,7 +191,7 @@ function closeWindow() 
 				<tr bgcolor=#ffffff><td height="5" colspan="4"></td></tr>
 				<tr bgColor=#ffffff>
 				<td height="20" align="right">
-						<b>Indicator Code</b><font color="red">*</font>&nbsp;
+						<b><digi:trn key="aim:indcode">Indicator Code</digi:trn></b><font color="red">*</font>&nbsp;
 				</td>
 				<td align="left">
 						<html:text name="aimThemeForm" property="code" size="20" styleClass="inp-text"/>
@@ -200,19 +200,19 @@ function closeWindow() 
 				<tr bgcolor=#ffffff><td height="5" colspan="4"></td></tr>
 				<tr bgColor=#ffffff>
 				<td height="20" align="right">
-						<b>Indicator Type</b><font color="red">*</font>&nbsp;
+						<b><digi:trn key="aim:indtype">Indicator Type</digi:trn></b><font color="red">*</font>&nbsp;
 				</td>
 				<td align="left">
 						<html:select property="type" styleClass="inp-text">
-								<html:option value="A">Ascending</html:option>
-								<html:option value="D">Descending</html:option>
+								<html:option value="A"><digi:trn key="aim:ascending">Ascending</digi:trn></html:option>
+								<html:option value="D"><digi:trn key="aim:dscending">descending</digi:trn></html:option>
 						</html:select>
 				</td>
 				</tr>
 				<tr bgcolor=#ffffff><td height="5" colspan="4"></td></tr>
 				<tr bgColor=#ffffff>
 				<td height="20" align="right">
-						<b>Creation Date</b><font color="red">*</font>&nbsp;
+						<b><digi:trn key="aim:cratedate">Creation Date</digi:trn></b><font color="red">*</font>&nbsp;
 				</td>
 				<td vAlign="bottom">
 						<table cellPadding=0 cellSpacing=0>
@@ -230,21 +230,21 @@ function closeWindow() 
 				<tr bgcolor=#ffffff><td height="5" colspan="4"></td></tr>
 				<tr bgcolor=#ffffff>
 				<td height="20" align="right">
-					<b>Category</b>&nbsp;
+					<b><digi:trn key="aim:crategory">Category</digi:trn></b>&nbsp;
 				</td>
 				<td align="left" valign="bottom">
 					<html:select name="aimThemeForm" property="category" styleClass="inp-text">
-						<html:option value="0">Input</html:option>	
-						<html:option value="1">Output</html:option>
-						<html:option value="2">Process</html:option>
-						<html:option value="3">Outcomes</html:option>
+						<html:option value="0"><digi:trn key="aim:input">Input</digi:trn></html:option>	
+						<html:option value="1"><digi:trn key="aim:output">Output</digi:trn></html:option>
+						<html:option value="2"><digi:trn key="aim:process">Process</digi:trn></html:option>
+						<html:option value="3"><digi:trn key="aim:outcomes">Outcomes</digi:trn></html:option>
 					</html:select>&nbsp;&nbsp;
 				</td>
 				</tr>
 				<tr bgcolor=#ffffff><td height="5" colspan="4"></td></tr>
 				<tr bgcolor=#ffffff>
 				<td height="20" align="right"><b>
-					National Planning Indicator</b>&nbsp;
+					<digi:trn key="aim:nationalplan">National Planning Indicator</digi:trn></b>&nbsp;
 				</td>
 				<td align="left" valign="botto">
 					<html:checkbox name="aimThemeForm" property="npIndicator" title="Tick to mark this indicator as an National Planning Indicator"/>
@@ -269,13 +269,13 @@ function closeWindow() 
 						<table width="100%" border="0" bgcolor="#f4f4f2" cellspacing="1" cellpadding="0" class=box-border-nopadding>
 								<tr bgcolor="#003366" class="textalb">
 									<td align="center" valign="middle" width="75">
-										<b><font color="white">Actual/<br>Planned</font></b>
+										<b><font color="white"><digi:trn key="aim:actl">Actual</digi:trn>/<br><digi:trn key="aim:Plan">Planned</digi:trn></font></b>
 									</td>
 									<td align="center" valign="middle" width="120">
-										<b><font color="white">Value</font></b>
+										<b><font color="white"><digi:trn key="aim:value">Value</digi:trn></font></b>
 									</td>
 									<td align="center" valign="middle" width="120">
-										<b><font color="white">Creation Date</font></b>
+										<b><font color="white"><digi:trn key="aim:creationdate">Creation Date</digi:trn></font></b>
 									</td>
 								</tr>
 								<c:set var="index" value="-1"/>
@@ -284,9 +284,9 @@ function closeWindow() 
 											<td valign="bottom">
 												<c:set var="index" value="${index+1}"/>
 												<html:select name="prgIndValues" indexed="true" property="valueType" styleClass="inp-text">
-													<html:option value="1">Actual</html:option>	
-													<html:option value="2">Base</html:option>	
-													<html:option value="0">Target</html:option>
+													<html:option value="1"><digi:trn key="aim:mulprgmana:actual">Actual</digi:trn></html:option>	
+													<html:option value="2"><digi:trn key="aim:mulprgmana:base">Base</digi:trn></html:option>	
+													<html:option value="0"><digi:trn key="aim:mulprgmana:target">Target</digi:trn></html:option>
 												</html:select>
 											</td>
 											<td valign="bottom">
@@ -315,21 +315,21 @@ function closeWindow() 
 				</c:if>
 				<tr bgColor=#dddddb>
 				<td bgColor=#dddddb height="25" align="center" colspan="4">
-						<input styleClass="dr-menu" type="button" name="addValBtn" value="Add Indicator Values" onclick="return addIndVal('<bean:write name="aimThemeForm" property="themeId"/>')">&nbsp;&nbsp;
+						<input styleClass="dr-menu" type="button" name="addValBtn" value="<digi:trn key="aim:eddidicatoes">Add Indicator Values</digi:trn>" onclick="return addIndVal('<bean:write name="aimThemeForm" property="themeId"/>')">&nbsp;&nbsp;
 				</td>
 				</tr>
 				<tr bgcolor=#ffffff><td height="15" colspan="4"></td></tr>
 				<tr bgColor=#dddddb>
 				<td bgColor=#dddddb height="25" align="center" colspan="4">
-						<input styleClass="dr-menu" type="button" name="addBtn" value="Save" onclick="return saveProgram('<bean:write name="aimThemeForm" property="themeId"/>','<bean:write name="aimThemeForm" property="indicatorId"/>')">&nbsp;&nbsp;
-						<input styleClass="dr-menu" type="reset" value="Cancel"              onclick="closeWindow('<bean:write name="aimThemeForm" property="indType"/>')">	&nbsp;&nbsp;
-						<input styleClass="dr-menu" type="button" name="close" value="Close" onclick="closeWindow('<bean:write name="aimThemeForm" property="indType"/>')">			
+						<input styleClass="dr-menu" type="button" name="addBtn" value="<digi:trn key="aim:save">Save</digi:trn>" onclick="return saveProgram('<bean:write name="aimThemeForm" property="themeId"/>','<bean:write name="aimThemeForm" property="indicatorId"/>')">&nbsp;&nbsp;
+						<input styleClass="dr-menu" type="reset" value="<digi:trn key="aim:cancel">Cancel</digi:trn>" onclick="closeWindow('<bean:write name="aimThemeForm" property="indType"/>')">	&nbsp;&nbsp;
+						<input styleClass="dr-menu" type="button" name="close" value="<digi:trn key="aim:close">Close</digi:trn>" onclick="closeWindow('<bean:write name="aimThemeForm" property="indType"/>')">			
 				</td>
 				</tr>	
 		</table>
 		<table width="100%" cellPadding=4 cellSpacing=1 valign=top align=left bgcolor="#ffffff">
 				<tr><td bgColor=#d7eafd class=box-title height="20" align="center">
-						List of Program Indicators
+						<digi:trn key="aim:listofprogram">List of Program Indicators</digi:trn>
 				</td></tr>
 				<logic:notEmpty name="aimThemeForm" property="prgIndicators">
 						<tr><td>
@@ -339,16 +339,16 @@ function closeWindow() 
 												&nbsp;
 											</td>
 											<td width="50" bgcolor="#dddddb">
-												Code
+												<digi:trn key="aim:code">Code</digi:trn>
 											</td>
 											<td align="left" bgcolor="#dddddb">
-												Name
+												<digi:trn key="aim:name">Name</digi:trn>
 											</td>
 											<td align="left" width="60" bgcolor="#dddddb">
-												Creation
+												<digi:trn key="aim:creation">Creation</digi:trn>
 											</td>
 											<td align="center" bgcolor="#dddddb">
-												Values
+												<digi:trn key="aim:values">Values</digi:trn>
 											</td><%--
 											<td width="25" height="15" bgcolor="#ffffff">
 												&nbsp;
@@ -373,26 +373,26 @@ function closeWindow() 
 																		<table width="100%" bgColor="#d7eafd" cellPadding=3 cellSpacing=1 align="center">
 																				<tr bgcolor="#66FFFF">
 																						<td width="50" bgcolor="#66FFFF">
-																								Actual/Target
+																								<digi:trn key="aim:act">Actual</digi:trn>/<digi:trn key="aim:target">Target</digi:trn>
 																						</td>
 																						<td align="left" bgcolor="#66FFFF">
-																								Value
+																								<digi:trn key="aim:value">Value</digi:trn>
 																						</td>
 																						<td align="left" width="70" bgcolor="#66FFFF">
-																								Date
+																								<digi:trn key="aim:date">Date</digi:trn>
 																						</td>
 																				</tr>
 																				<logic:iterate name="prgIndicators" property="prgIndicatorValues" id="prgIndicatorValues" type="org.digijava.module.aim.helper.AmpPrgIndicatorValue">
 																						<tr bgcolor="#ffffff">
 																								<td width="50" bgcolor="#f4f4f2">
 																									<c:if test="${prgIndicatorValues.valueType=='0'}">
-																									Target
+																											<digi:trn key="aim:target">Target</digi:trn>
 																									</c:if>
 																									<c:if test="${prgIndicatorValues.valueType=='1'}">
-																											Actual
+																											<digi:trn key="aim:atual">Actual</digi:trn>
 																									</c:if>
 																									<c:if test="${prgIndicatorValues.valueType=='2'}">
-																									Base
+																										    <digi:trn key="aim:base">Base</digi:trn>
 																									</c:if>
 																								</td>
 																								<td align="left" bgcolor="#f4f4f2"><b>

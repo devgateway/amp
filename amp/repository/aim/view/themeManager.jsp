@@ -390,10 +390,10 @@
 																					</a></b>
 																			</td>
 																			<td align="right" bgcolor="#f4f4f2" width="75">
-																					<input class="buton" type="button" name="addIndicator" value="Indicator" onclick="assignIndicators('<bean:write name="themes" property="ampThemeId" />')">
+																					<input class="buton" type="button" name="addIndicator" value="<digi:trn key="aim:indicator">Indicator</digi:trn>" onclick="assignIndicators('<bean:write name="themes" property="ampThemeId" />')">
 																			</td>
 																			<td align="left" width="40" bgcolor="#f4f4f2">
-																					<input class="buton" type="button" name="editButton" value="Edit" onclick="editProgram('<bean:write name="themes" property="ampThemeId"/>')">
+																					<input class="buton" type="button" name="editButton" value="<digi:trn key="aim:edit">Edit</digi:trn>" onclick="editProgram('<bean:write name="themes" property="ampThemeId"/>')">
 																			</td>
 																			<td align="left" width="12" bgcolor="#f4f4f2">
 																					

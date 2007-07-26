@@ -171,10 +171,11 @@
 																				styleClass="sub-navGovSelected"
 																				title="${ProjectIndicators}" onmouseover="setOverImg(3)"
 																				onmouseout="setOutImg(3)">
-																				<font color="ffffff"> <digi:trn
-																						key="aim:projectIndicatorList">
-																		Project Indicator List
-																</digi:trn> </font>
+																				<font color="ffffff">
+																				<digi:trn	key="aim:projectIndicatorList">
+																							Project Indicator List
+																						</digi:trn>
+																 				</font>
 																			</digi:link>
 																		</td>
 																		<td>
@@ -203,14 +204,14 @@
 														</tr>
 														<tr>
 															<td class=r-dotted-lg width=14>
-																<img src= "../ampTemplate/images/arrow_right.gif" border=0>  Level 1, 
-																<img src= "../ampTemplate/images/square1.gif" border=0>  Level 2, 
-																<img src= "../ampTemplate/images/square2.gif" border=0>  Level 3, 
-																<img src= "../ampTemplate/images/square3.gif" border=0>  Level 4, 
-																<img src= "../ampTemplate/images/square4.gif" border=0>  Level 5, 
-																<img src= "../ampTemplate/images/square5.gif" border=0>  Level 6, 
-																<img src= "../ampTemplate/images/square6.gif" border=0>  Level 7, 
-																<img src= "../ampTemplate/images/square7.gif" border=0>  Level 8.
+																<img src= "../ampTemplate/images/arrow_right.gif" border=0> <digi:trn key="aim:leve1"> Level 1</digi:trn>, 
+																<img src= "../ampTemplate/images/square1.gif" border=0>  <digi:trn key="aim:leve2"> Level 2</digi:trn>, 
+																<img src= "../ampTemplate/images/square2.gif" border=0>  <digi:trn key="aim:leve2"> Level 3</digi:trn>, 
+																<img src= "../ampTemplate/images/square3.gif" border=0>  <digi:trn key="aim:leve4"> Level 4</digi:trn>,
+																<img src= "../ampTemplate/images/square4.gif" border=0>  <digi:trn key="aim:leve5"> Level 5</digi:trn>,
+																<img src= "../ampTemplate/images/square5.gif" border=0>  <digi:trn key="aim:leve6"> Level 6</digi:trn>,
+																<img src= "../ampTemplate/images/square6.gif" border=0> <digi:trn key="aim:leve7"> Level 7</digi:trn>,
+																<img src= "../ampTemplate/images/square7.gif" border=0>  <digi:trn key="aim:leve8"> Level 8</digi:trn>.
 															</td>
 														</tr>
 														<logic:notEmpty name="aimAllIndicatorForm" property="prgIndicators">
@@ -227,14 +228,14 @@
 																						<c:if test="${aimAllIndicatorForm.programId!=prgIndicators.programId or aimAllIndicatorForm.indicatorFlag==false}">
 																						
 																				<td align="right">
-																					<input class="buton" type="button"	name="showIndicator" value="Show Indicators" 
+																					<input class="buton" type="button"	name="showIndicator" value="<digi:trn key="aim:shoindicator">Show Indicators</digi:trn>" 
 																							onclick="showIndicators('<bean:write name="prgIndicators" property="programId"/>')" />
 																				</td>
 																						</c:if>
 																						<c:if test="${aimAllIndicatorForm.programId==prgIndicators.programId and aimAllIndicatorForm.indicatorFlag==true}">
 																						
 																				<td align="right">
-																					<input class="buton" type="button"	name="hideIndicator" value="Hide Indicators" onclick="hideIndicators()"/>
+																					<input class="buton" type="button"	name="hideIndicator" value="<digi:trn key="aim:hideind">Hide Indicators</digi:trn>" onclick="hideIndicators()"/>
 																				</td>
 																						</c:if>
 																			</tr>
@@ -262,7 +263,7 @@
 																								</td>
 																								<td align="center" width="60">
 																									<input class="buton" type="button"
-																											name="assignIndicator" value="Assign to"
+																											name="assignIndicator" value="<digi:trn key="aim:Assign">Assign to</digi:trn>"
 																													onclick="assignIndicatorTo('<bean:write name="ampPrgIndicator" property="indicatorId"/>')" />
 																								</td>
 																								<td align="left" width="12">
@@ -292,7 +293,7 @@
 																					<table align="right" width="97%" cellspacing=1 cellpadding=3	bgcolor="#d7eafd" border="0" bordercolor="FF0000">
 																						<tr bgcolor="#FFFFFF" align="left" bordercolor="FF0000">
 																							<td>
-																								<font color=red>No Indicator present in the Program</font>
+																								<font color=red><digi:trn  key="aim:Noind">No Indicator present in the Program</digi:trn></font>
 																							</td>
 																						</tr>
 																					</table>
@@ -313,7 +314,7 @@
 																		<logic:equal name="subPrograms" property="indlevel" value="1">
 																				<tr bgcolor="#ffffff">
 																					<td height="15" colspan=2>
-																						<table width="100%" align="right" bgColor="#d7eafd" cellPadding=1 cellSpacing=1>
+																						<table width="100%" align="right" bgColor="#d7eafd" cellPadding=1 cellSpacing=1 border="0">
 																											<tr>
 																												<td width=2%>
 																													<img
@@ -349,7 +350,7 @@
 																														</c:set>
 																												<td align="center" width="105">
 																													<input class="buton" type="button"
-																														name="assignIndicator" value="Assign to"
+																														name="assignIndicator" value="<digi:trn key="aim:Assign">Assign to</digi:trn>"
 																																onclick="assignIndicatorTo('<bean:write name="indi" property="indicatorId"/>')" />
 																												</td>
 																												<td align="left" width="12">
@@ -379,7 +380,7 @@
 																								
 																											<tr bgcolor="ffffff">
 																												<td>
-																													<font color=red>No indicator present in the Program</font>
+																													<font color=red><digi:trn  key="aim:Noindpr">No indicator present in the Program</digi:trn></font>
 																												</td>
 																											</tr>
 																										</table>
@@ -432,7 +433,7 @@
 																														</c:set>
 																												<td align="center" width="105">
 																													<input class="buton" type="button"
-																														name="assignIndicator" value="Assign to"
+																														name="assignIndicator" value="<digi:trn key="aim:Assign">Assign to</digi:trn>"
 																																onclick="assignIndicatorTo('<bean:write name="indi" property="indicatorId"/>')" />
 																												</td>
 																												<td align="left" width="12">
@@ -462,7 +463,7 @@
 																								
 																											<tr bgcolor="ffffff">
 																												<td>
-																													<font color=red>No indicator present in the Program</font>
+																													<font color=red><digi:trn  key="aim:Noindpr">No indicator present in the Program</digi:trn></font>
 																												</td>
 																											</tr>
 																										</table>
@@ -515,7 +516,7 @@
 																														</c:set>
 																												<td align="center" width="105">
 																													<input class="buton" type="button"
-																														name="assignIndicator" value="Assign to"
+																														name="assignIndicator" value="<digi:trn key="aim:Assign">Assign to</digi:trn>"
 																																onclick="assignIndicatorTo('<bean:write name="indi" property="indicatorId"/>')" />
 																												</td>
 																												<td align="left" width="12">
@@ -545,7 +546,7 @@
 																								
 																											<tr bgcolor="ffffff">
 																												<td>
-																													<font color=red>No indicator present in the Program</font>
+																													<font color=red><digi:trn  key="aim:Noindpr">No indicator present in the Program</digi:trn></font>
 																												</td>
 																											</tr>
 																										</table>
@@ -598,7 +599,7 @@
 																														</c:set>
 																												<td align="center" width="105">
 																													<input class="buton" type="button"
-																														name="assignIndicator" value="Assign to"
+																														name="assignIndicator" value="<digi:trn key="aim:Assign">Assign to</digi:trn>"
 																																onclick="assignIndicatorTo('<bean:write name="indi" property="indicatorId"/>')" />
 																												</td>
 																												<td align="left" width="12">
@@ -628,7 +629,7 @@
 																								
 																											<tr bgcolor="ffffff">
 																												<td>
-																													<font color=red>No indicator present in the Program</font>
+																													<font color=red><digi:trn  key="aim:Noindpr">No indicator present in the Program</digi:trn></font>
 																												</td>
 																											</tr>
 																										</table>
@@ -681,7 +682,7 @@
 																														</c:set>
 																												<td align="center" width="105">
 																													<input class="buton" type="button"
-																														name="assignIndicator" value="Assign to"
+																														name="assignIndicator" value="<digi:trn key="aim:Assign">Assign to</digi:trn>"
 																																onclick="assignIndicatorTo('<bean:write name="indi" property="indicatorId"/>')" />
 																												</td>
 																												<td align="left" width="12">
@@ -711,7 +712,7 @@
 																								
 																											<tr bgcolor="ffffff">
 																												<td>
-																													<font color=red>No indicator present in the Program</font>
+																													<font color=red><digi:trn  key="aim:Noindpr">No indicator present in the Program</digi:trn></font>
 																												</td>
 																											</tr>
 																										</table>
@@ -764,7 +765,7 @@
 																														</c:set>
 																												<td align="center" width="105">
 																													<input class="buton" type="button"
-																														name="assignIndicator" value="Assign to"
+																														name="assignIndicator" value="<digi:trn key="aim:Assign">Assign to</digi:trn>"
 																																onclick="assignIndicatorTo('<bean:write name="indi" property="indicatorId"/>')" />
 																												</td>
 																												<td align="left" width="12">
@@ -794,7 +795,7 @@
 																								
 																											<tr bgcolor="ffffff">
 																												<td>
-																													<font color=red>No indicator present in the Program</font>
+																													<font color=red><digi:trn  key="aim:Noindpr">No indicator present in the Program</digi:trn></font>
 																												</td>
 																											</tr>
 																										</table>
@@ -847,7 +848,7 @@
 																														</c:set>
 																												<td align="center" width="105">
 																													<input class="buton" type="button"
-																														name="assignIndicator" value="Assign to"
+																														name="assignIndicator" value="<digi:trn key="aim:Assign">Assign to</digi:trn>"
 																																onclick="assignIndicatorTo('<bean:write name="indi" property="indicatorId"/>')" />
 																												</td>
 																												<td align="left" width="12">
@@ -877,7 +878,7 @@
 																								
 																											<tr bgcolor="ffffff">
 																												<td>
-																													<font color=red>No indicator present in the Program</font>
+																													<font color=red><digi:trn  key="aim:Noindpr">No indicator present in the Program</digi:trn></font>
 																												</td>
 																											</tr>
 																										</table>
@@ -930,7 +931,7 @@
 																														</c:set>
 																												<td align="center" width="105">
 																													<input class="buton" type="button"
-																														name="assignIndicator" value="Assign to"
+																														name="assignIndicator" value="<digi:trn key="aim:Assign">Assign to</digi:trn>"
 																																onclick="assignIndicatorTo('<bean:write name="indi" property="indicatorId"/>')" />
 																												</td>
 																												<td align="left" width="12">
@@ -960,7 +961,7 @@
 																								
 																											<tr bgcolor="ffffff">
 																												<td>
-																													<font color=red>No indicator present in the Program</font>
+																													<font color=red><digi:trn  key="aim:Noindpr">No indicator present in the Program</digi:trn></font>
 																												</td>
 																											</tr>
 																										</table>
@@ -1059,7 +1060,7 @@
 																						</td>
 																						<td width="40">
 																							<input class="buton" type="button"
-																								name="editIndicator" value="Edit"
+																								name="editIndicator" value="<digi:trn key="aim:edit">Edit</digi:trn>"
 																								onclick="editProjIndicator('<bean:write name="allMEIndicators" property="ampMEIndId"/>')">
 																						</td>
 																						<td align="left" width="12">

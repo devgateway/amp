@@ -1984,6 +1984,7 @@ public class ActivityUtil {
 				}
 			}
 		}
+
 	}
 
 	public static void deleteActivityAmpComments(Collection commentId)
@@ -2208,6 +2209,7 @@ public class ActivityUtil {
 		try
 		{
 			session = PersistenceManager.getSession();
+			Transaction tx = session.beginTransaction();
 			if(indVal != null)
 			{
 				Iterator indValItr = indVal.iterator();
@@ -2219,6 +2221,8 @@ public class ActivityUtil {
 					session.delete(indicatorVal);
 				}
 			}
+			tx.commit();
+			session.flush();
 		}
 		catch(Exception e1)
 		{

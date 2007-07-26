@@ -8,7 +8,7 @@ import java.io.Serializable;
 import java.util.Set;
 
 import org.digijava.module.aim.util.Identifiable;
-
+TESTBAMBOO!
 public class AmpTeam  implements Serializable, Comparable, Identifiable {
 	
 	private Long ampTeamId;

@@ -290,6 +290,42 @@ public class DbUtil {
 	}
 
 
+	public static boolean deleteReportsForOwner(Long qid)
+	{
+		Session session = null;
+		Transaction tx = null;
+		String queryString = null;
+		Query qry = null;
+		Collection col = null;
+		try
+		{
+			session = PersistenceManager.getRequestDBSession();
+			try
+			{
+				queryString = "select rep from " + AmpReports.class.getName() + " rep " +
+						"where rep.ownerId=:oId ";
+				qry = session.createQuery(queryString);
+				qry.setParameter("oId", qid, Hibernate.LONG);
+				Iterator itr = qry.list().iterator();
+				col = new ArrayList();
+				while (itr.hasNext()) {
+					AmpReports rep = (AmpReports) itr.next();
+					session.delete(rep);
+				}
+				return true;
+			}
+			catch(net.sf.hibernate.ObjectNotFoundException onfe)
+			{
+				logger.error("Exception from deleteQuestion() :" + onfe.getMessage());
+			}
+		}
+		catch (Exception e)
+		{
+			logger.error("Exception from deleteQuestion() :" + e.getMessage());
+			e.printStackTrace(System.out);
+		}
+		return false;
+	}
 
 
 	public static Collection getOrganizations(Long actId, String orgCode) {

@@ -10,6 +10,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.Set;
 import java.util.Vector;
 
 import javax.servlet.http.HttpServletRequest;
@@ -1365,6 +1366,27 @@ public class TeamMemberUtil {
 					Group group = (Group) session.load(Group.class,groupId);
 					user.getGroups().remove(group);
 					session.update(user);
+					// Verify for reports that are owned by this user and delete them
+					//DbUtil.deleteReportsForOwner(ampMember.getAmpTeamMemId());
+					String queryString = "select rep from " + AmpReports.class.getName() + " rep " + "where rep.ownerId=:oId ";
+					qry = session.createQuery(queryString);
+					qry.setParameter("oId", ampMember.getAmpTeamMemId(), Hibernate.LONG);
+					Iterator it = qry.list().iterator();
+					while (it.hasNext()) {
+						AmpReports rep = (AmpReports) it.next();
+						//verify Default Report in App Settings
+						queryString = "select app from " + AmpApplicationSettings.class.getName() + " app " + "where app.defaultTeamReport=:rId ";
+						qry = session.createQuery(queryString);
+						qry.setParameter("rId", rep.getAmpReportId(), Hibernate.LONG);
+						Iterator iter = qry.list().iterator();
+						while (iter.hasNext()) {
+							AmpApplicationSettings set = (AmpApplicationSettings) iter.next();
+							set.setDefaultTeamReport(null);
+							session.update(set);
+						}
+						//
+						session.delete(rep);
+					}
 					session.delete(ampMember);
 				}
 			}

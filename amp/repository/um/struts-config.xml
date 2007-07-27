@@ -14,6 +14,8 @@
     <form-bean name="userProfileForm" type="org.digijava.module.um.form.UserProfileForm" />
     <form-bean name="userContactForm" type="org.digijava.module.um.form.UserContactForm" />
     <form-bean name="userUnSubscribeForm" type="org.digijava.module.um.form.UserUnSubscribeForm" />
+    <form-bean name="umViewAllUsersForm" type="org.digijava.module.um.form.ViewAllUsersForm" />
+    <form-bean name="umViewEditUserForm" type="org.digijava.module.um.form.ViewEditUserForm" />
   </form-beans>
   <action-mappings>
     <!--- UM (USER MANAGMENT) -->
@@ -130,5 +132,13 @@
     <!--  added by shrikant -->
     <action forward="/showLayout.do?layout=saveLogin" path="/um/saveLogin" />
     <!--  end -->
+
+    <action name="umViewAllUsersForm" path="/um/viewAllUsers" scope="session" type="org.digijava.module.um.action.ViewAllUsers" validate="false">
+      <forward name="forward" path="/showLayout.do?layout=umViewAllUsers" />
+    </action>
+    <action name="umViewEditUserForm" path="/um/viewEditUser" scope="session" type="org.digijava.module.um.action.ViewEditUser" validate="false">
+      <forward name="forward" path="/showLayout.do?layout=umViewEditUser" />
+      <forward name="saved" path="/um/viewAllUsers.do" />
+    </action>
   </action-mappings>
 </struts-config>

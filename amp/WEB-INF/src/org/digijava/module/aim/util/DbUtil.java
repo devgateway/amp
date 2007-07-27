@@ -1232,24 +1232,6 @@ public class DbUtil {
 		return ampFisCal;
 	}
 
-    public static Collection<User> getAllUsers() {
-        Session session = null;
-        Query qry = null;
-        Collection<User> users = new ArrayList<User>();
-
-        try {
-            session = PersistenceManager.getRequestDBSession();
-            String queryString = "select u from " + User.class.getName()
-                + " u";
-            qry = session.createQuery(queryString);
-            users = qry.list();
-        } catch(Exception e) {
-            logger.error("Unable to get user");
-            logger.debug("Exceptiion " + e);
-        }
-        return users;
-    }
-
 	public static User getUser(String email) {
 		Session session = null;
 		Query qry = null;
@@ -2147,7 +2129,7 @@ public class DbUtil {
 
 			}
 			org.setSectors(sect);
-			
+
 			sess.update(org);
 			tx.commit();
 		} catch (Exception e) {
@@ -5137,7 +5119,7 @@ public class DbUtil {
 		return result;
 	}
 
-	
+
 	public static Collection getAidSurveyReportByIndicator10a(String orgGroup, String donor, int startYear, int closeYear) {
 		Session session = null;
 		String qry = null;

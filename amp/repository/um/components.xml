@@ -25,6 +25,8 @@
 
 	<page page="emailExists" name="um_emailExists" title="It was not possible to create a new user" />
 
+    <page page="viewEditUser" name="umViewEditUser" title=" - View/Edit User" />
+    <page page="viewAllUsers" name="umViewAllUsers" title=" - All Users" />
 </secondary-pages>
 
 <module>

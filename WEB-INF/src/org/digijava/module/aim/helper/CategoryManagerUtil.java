@@ -1,9 +1,14 @@
 package org.digijava.module.aim.helper;
 
+import java.io.ByteArrayOutputStream;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.io.UnsupportedEncodingException;
+import java.nio.ByteBuffer;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Comparator;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
@@ -19,7 +24,6 @@ import org.apache.log4j.Logger;
 import org.digijava.kernel.entity.Message;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.util.RequestUtils;
-import org.digijava.module.aim.dbentity.AmpActivity;
 import org.digijava.module.aim.dbentity.AmpCategoryClass;
 import org.digijava.module.aim.dbentity.AmpCategoryValue;
 
@@ -231,7 +235,11 @@ public class CategoryManagerUtil {
 				logger.error("releaseSession() failed :" + ex2);
 			}
 		}
-		return (AmpCategoryClass)returnCollection.toArray()[0];
+		if((returnCollection!=null)&&(!returnCollection.isEmpty())){
+            return (AmpCategoryClass)returnCollection.toArray()[0];
+        }else{
+            return null;
+        }
 	}
 	/**
 	 *

@@ -117,25 +117,38 @@ public class CategoryManager extends Action {
 	 * @param myForm
 	 */
 	private void populateForm(AmpCategoryClass ampCategoryClass, CategoryManagerForm myForm) {
-		
-		myForm.setCategoryName( ampCategoryClass.getName() );
-		myForm.setDescription( ampCategoryClass.getDescription() );
-		myForm.setNumOfPossibleValues( new Integer(ampCategoryClass.getPossibleValues().size()) );
-		myForm.setEditedCategoryId( ampCategoryClass.getId() );
-		myForm.setIsMultiselect( ampCategoryClass.isMultiselect() );
-		myForm.setIsOrdered( ampCategoryClass.isOrdered() );
-		myForm.setKeyName( ampCategoryClass.getKeyName() );
-		
-		
-		Iterator iterator			= ampCategoryClass.getPossibleValues().iterator();
-		String[] possibleValues		= new String [ampCategoryClass.getPossibleValues().size()];
-		int k 						= 0;
-		while (iterator.hasNext()) {
-			AmpCategoryValue ampCategoryValue	= (AmpCategoryValue) iterator.next();
-			possibleValues[k++]					= ampCategoryValue.getValue();
+		if (ampCategoryClass != null) {
+			myForm.setCategoryName( ampCategoryClass.getName() );
+			myForm.setDescription( ampCategoryClass.getDescription() );
+			myForm.setNumOfPossibleValues( new Integer(ampCategoryClass.getPossibleValues().size()) );
+			myForm.setEditedCategoryId( ampCategoryClass.getId() );
+			myForm.setIsMultiselect( ampCategoryClass.isMultiselect() );
+			myForm.setIsOrdered( ampCategoryClass.isOrdered() );
+			myForm.setKeyName( ampCategoryClass.getKeyName() );
+			
+			
+			Iterator iterator			= ampCategoryClass.getPossibleValues().iterator();
+			String[] possibleValues		= new String [ampCategoryClass.getPossibleValues().size()];
+			int k 						= 0;
+			while (iterator.hasNext()) {
+				AmpCategoryValue ampCategoryValue	= (AmpCategoryValue) iterator.next();
+				possibleValues[k++]					= ampCategoryValue.getValue();
+			}
+			
+			myForm.setPossibleValues( possibleValues );
 		}
-		
-		myForm.setPossibleValues( possibleValues );
+		else{
+			if ( myForm.getPossibleValues() != null && myForm.getPossibleValues().length > 0 ) {
+					int count	= 0;
+					for (int i=0; i< myForm.getPossibleValues().length; i++) {
+						if ( myForm.getPossibleValues()[i].length() > 0  )
+									count++;
+					}
+					myForm.setNumOfPossibleValues( new Integer(count) );
+			}
+			else
+				myForm.setNumOfPossibleValues( new Integer(0) );
+		}
 		
 	}
 	
@@ -241,6 +254,15 @@ public class CategoryManager extends Action {
 		
 		
 		try {
+			/* Testing if entered category key is not already used */
+			if ( myForm.getEditedCategoryId() == null && 
+					CategoryManagerUtil.loadAmpCategoryClassByKey( myForm.getKeyName() ) != null ) 
+			{
+				ActionError duplicateKeyError	= new ActionError("error.aim.categoryManager.duplicateKey");
+				errors.add("title",duplicateKeyError);
+				return false;
+			}
+			
 			dbSession						= PersistenceManager.getSession();
 			tx								= dbSession.beginTransaction();
 			AmpCategoryClass dbCategory		= new AmpCategoryClass();

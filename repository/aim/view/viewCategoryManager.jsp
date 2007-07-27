@@ -1,4 +1,4 @@
-<%@ page pageEncoding="UTF-8" %>
+<%@ page pageEncoding="UTF-8" %> 
 <%@ taglib uri="/taglib/struts-bean" prefix="bean" %>
 <%@ taglib uri="/taglib/struts-logic" prefix="logic" %>
 <%@ taglib uri="/taglib/struts-tiles" prefix="tiles" %>
@@ -6,7 +6,7 @@
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
 <%@ page import="java.util.List"%>
-
+ 
 <digi:instance property="aimCategoryManagerForm" />
 <bean:define id="myForm" name="aimCategoryManagerForm" toScope="page" type="org.digijava.module.aim.form.CategoryManagerForm" />
 
@@ -38,8 +38,8 @@ function confirmDelete() {
 						Admin Home
 						</digi:trn>
 						</digi:link>&nbsp;&gt;&nbsp;
-
-
+						
+						
 						<digi:trn key="aim:categoryManager">
 							Category Manager
 						</digi:trn>
@@ -62,7 +62,7 @@ function confirmDelete() {
 				</tr>
 				<tr>
 				<td>
-
+				
 				<logic:notEmpty name="myForm" property="categories">
 					<table border="1px" >
 						<tr align="center">
@@ -75,7 +75,7 @@ function confirmDelete() {
 								<digi:trn key="aim:categoryDescription">
 									Category Description
 								</digi:trn>
-
+							
 							</td>
 							<td bgcolor="#006699" class="textalb" align="center">
 								<digi:trn key="aim:categoryPossibleValues">
@@ -102,10 +102,10 @@ function confirmDelete() {
 								</digi:trn>
 								<br />
 								(
-								<digi:trn key="aim:categoryIdIs">
-									category id is
+								<digi:trn key="aim:categoryKeyIs">
+									category key is 
 								</digi:trn>
-								<bean:write name="category" property="id" />
+								<i><bean:write name="category" property="keyName" /></i>
 								)
 							</td>
 							<td align="left">
@@ -116,7 +116,7 @@ function confirmDelete() {
 							<td align="left">
 								<ul>
 								<logic:iterate name="category" property="possibleValues" id="categoryValue" type="org.digijava.module.aim.dbentity.AmpCategoryValue">
-								<% String keyForValue	= key + categoryValue.getValue(); %>
+								<% String keyForValue	= org.digijava.module.aim.helper.CategoryManagerUtil.getTranslationKeyForCategoryValue(categoryValue); %>
 									<li>
 										<digi:trn key='<%=keyForValue%>'>
 											<bean:write name="categoryValue" property="value" />
@@ -169,7 +169,7 @@ function confirmDelete() {
 						</tr>
 						</logic:iterate>
 					</table>
-
+				
 				</logic:notEmpty>
 <c:set var="translation">
 	<digi:trn key="aim:categoryManagerAddNewCategoryTitle">Click here to add a new category with specified values</digi:trn>
@@ -182,6 +182,3 @@ function confirmDelete() {
 				</td>
 				</tr>
 </table>
-
-
-

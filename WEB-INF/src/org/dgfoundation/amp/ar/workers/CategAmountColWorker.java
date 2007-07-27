@@ -194,7 +194,8 @@ public class CategAmountColWorker extends ColumnWorker {
 		//Date handling..
 		
 		GregorianCalendar calendar = new GregorianCalendar();
-		calendar.setTime(td);
+		if (td!=null) calendar.setTime(td); else 
+			logger.error("MISSING DATE FOR FUNDING id ="+id+ " of activity id ="+ ownerId);
 
 		String quarter=null;
 		Integer year=null;

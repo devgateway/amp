@@ -4,12 +4,13 @@ import java.util.*;
 
 import org.apache.struts.action.*;
 import org.digijava.kernel.user.User;
+import org.digijava.module.aim.helper.UserBean;
 
 public class ViewAllUsersForm
     extends ActionForm {
     private String keyword;
     private int type=-1;
-    private Collection<User> users;
+    private Collection<UserBean> users;
 
     public ViewAllUsersForm() {
     }
@@ -18,7 +19,7 @@ public class ViewAllUsersForm
         return keyword;
     }
 
-    public Collection<User> getUsers() {
+    public Collection<UserBean> getUsers() {
         return users;
     }
 
@@ -26,7 +27,7 @@ public class ViewAllUsersForm
         return type;
     }
 
-    public void setUsers(Collection<User> users) {
+    public void setUsers(Collection<UserBean> users) {
         this.users = users;
     }
 

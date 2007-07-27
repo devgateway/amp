@@ -95,7 +95,8 @@
 
 												<digi:trn key="aim:PlannedFIE">Planned</digi:trn>/<digi:trn key="aim:ActualFIE">Actual</digi:trn>&nbsp;&nbsp;&nbsp;
 										<a href="javascript:addCommitments()"><digi:trn key="btn:add">Add</digi:trn></a><br><br>
-													<digi:trn key="aim:AmountFIE">Amount</digi:trn>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                                                                <digi:trn key="aim:PlannedFIE">Planned</digi:trn>/<digi:trn key="aim:ActualFIE">Actual</digi:trn>&nbsp;&nbsp;&nbsp;
+                                                                                <digi:trn key="aim:AmountFIE">Amount</digi:trn>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 												<digi:trn key="aim:CurrencyFIE">Currency</digi:trn>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 												<digi:trn key="aim:DateFIE">Date</digi:trn>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 												<digi:trn key="aim:PerspectiveFIE">Perspective</digi:trn><br>
@@ -151,7 +152,7 @@
 														</c:if>
 														<c:out value="${pers.name}"/>
 														</option>
-														
+
 													</c:forEach>
 												</select>&nbsp;aaaaa<input type='button' value='Delete' class='inp-text'
 												onclick="removeCommitment('<%=divName%>')">bbbbbbb</div>ccccccccccc
@@ -542,7 +543,7 @@ function validate()
 		alert(" please select a Component before Saving");
 			return false;
 	}
-	
+
 	/*
 	if (tempComm == 0) {
 		alert ("Commitment not entered.");

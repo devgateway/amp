@@ -102,7 +102,6 @@
     <form-bean name="aimComponentsForm" type="org.digijava.module.aim.form.ComponentsForm" />
     <form-bean name="aimUpdateComponentsForm" type="org.digijava.module.aim.form.UpdateComponentsForm" />
     <form-bean name="aimProgramTypeForm" type="org.digijava.module.aim.form.ProgramTypeForm" />
-    <form-bean name="aimViewAllUsersForm" type="org.digijava.module.aim.form.ViewAllUsersForm" />
     <form-bean name="aimPortfolioDashboardForm" type="org.apache.struts.action.DynaActionForm">
       <form-property name="indicatorList" type="java.util.Collection" />
       <form-property name="activityList" type="java.util.Collection" />
@@ -1418,9 +1417,6 @@
 </action>
 <action name="aimTranslatorManagerForm" path="/aim/translationManager" scope="session" type="org.digijava.module.aim.action.TranslatorManager" validate="false">
   <forward name="forward" path="/showLayout.do?layout=viewTranslatorManager" />
-</action>
-<action name="aimViewAllUsersForm" path="/aim/viewAllUsers" scope="session" type="org.digijava.module.aim.action.ViewAllUsers" validate="false">
-  <forward name="forward" path="/showLayout.do?layout=viewAllUsers" />
 </action>
 <action input="/showLayout.do?layout=viewNpdSettings" name="npdSettingsForm" scope="request" path="/aim/npdSettingsAction" parameter="actionType" type="org.digijava.module.aim.action.NpdSettingsAction" validate="false">
   <forward name="forward" path="/showLayout.do?layout=viewNpdSettings"/>

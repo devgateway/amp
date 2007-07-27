@@ -267,7 +267,7 @@ public class ImportManager {
     }
 
     // set executing Agency
-    AmpRole ampRoleEA = DbUtil.getAmpRole("EA", session);
+    AmpRole ampRoleEA = DbUtil.getAmpRole(Constants.EXECUTING_AGENCY, session);
     for (Object elem : xmlActivity.getExecutingAgency()) {
       CodeValueType cvt = (CodeValueType)elem;
       AmpOrgRole ampOrgRole = new AmpOrgRole();
@@ -281,7 +281,7 @@ public class ImportManager {
     }
 
     // set implementing Agency
-    AmpRole ampRoleIA = DbUtil.getAmpRole("IA", session);
+    AmpRole ampRoleIA = DbUtil.getAmpRole(Constants.IMPLEMENTING_AGENCY, session);
     for (Object elem : xmlActivity.getImplementingAgency()) {
       CodeValueType cvt = (CodeValueType)elem;
       AmpOrgRole ampOrgRole = new AmpOrgRole();
@@ -498,7 +498,7 @@ public class ImportManager {
     }
 
     // set executing Agency
-    AmpRole ampRoleEA = DbUtil.getAmpRole("EA", session);
+    AmpRole ampRoleEA = DbUtil.getAmpRole(Constants.EXECUTING_AGENCY, session);
     for (Object elem : xmlActivity.getExecutingAgency()) {
       CodeValueType cvt = (CodeValueType)elem;
       boolean notContain = true;
@@ -506,7 +506,7 @@ public class ImportManager {
       for (Object elemSect : ampActivity.getOrgrole()) {
         AmpOrgRole aor = (AmpOrgRole)elemSect;
         if (aor.getOrganisation().getOrgCode().trim().equalsIgnoreCase(cvt.getCode().trim()) &&
-            aor.getRole().getRoleCode().equalsIgnoreCase("EA")) {
+            aor.getRole().getRoleCode().equalsIgnoreCase(Constants.EXECUTING_AGENCY)) {
           notContain = false;
           break;
         }
@@ -525,7 +525,7 @@ public class ImportManager {
     }
 
     // set implementing Agency
-    AmpRole ampRoleIA = DbUtil.getAmpRole("IA", session);
+    AmpRole ampRoleIA = DbUtil.getAmpRole(Constants.IMPLEMENTING_AGENCY, session);
     for (Object elem : xmlActivity.getImplementingAgency()) {
       CodeValueType cvt = (CodeValueType)elem;
 
@@ -534,7 +534,7 @@ public class ImportManager {
       for (Object elemSect : ampActivity.getOrgrole()) {
         AmpOrgRole aor = (AmpOrgRole)elemSect;
         if (aor.getOrganisation().getOrgCode().trim().equalsIgnoreCase(cvt.getCode().trim()) &&
-            aor.getRole().getRoleCode().equalsIgnoreCase("IA")) {
+            aor.getRole().getRoleCode().equalsIgnoreCase(Constants.IMPLEMENTING_AGENCY)) {
           notContain = false;
           break;
         }

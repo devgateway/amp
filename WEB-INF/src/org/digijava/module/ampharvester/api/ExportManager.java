@@ -256,8 +256,11 @@ public class ExportManager {
       ActivityType.SectorType sector = new ActivityTypeImpl.SectorTypeImpl();
       sector.setCode(ampSector.getSectorId().getSectorCode());
       sector.setValue(ampSector.getSectorId().getName());
-      sector.setPercent(ampSector.getSectorPercentage().intValue());
-
+      if (ampSector.getSectorPercentage() != null){
+        sector.setPercent(ampSector.getSectorPercentage().intValue());
+      } else {
+         sector.setPercent(0);
+      }
       retValue.getSector().add(sector);
     }
 
@@ -411,10 +414,9 @@ public class ExportManager {
       cvt.setCode(ampOrgRole.getOrganisation().getOrgCode());
       cvt.setValue(ampOrgRole.getOrganisation().getName());
 
-      /** @todo need static values */
-      if (ampOrgRole.getRole().getRoleCode().equalsIgnoreCase("EA")) { // Executing Agency
+      if (ampOrgRole.getRole().getRoleCode().equalsIgnoreCase(Constants.EXECUTING_AGENCY)) { // Executing Agency
         retValue.getExecutingAgency().add(cvt);
-      } else if (ampOrgRole.getRole().getRoleCode().equalsIgnoreCase("IA")) { // Implementing Agency
+      } else if (ampOrgRole.getRole().getRoleCode().equalsIgnoreCase(Constants.IMPLEMENTING_AGENCY)) { // Implementing Agency
         retValue.getImplementingAgency().add(cvt);
       }
     }

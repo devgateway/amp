@@ -70,7 +70,7 @@ public class ImportExportManagerAction extends DispatchAction {
       outputStream = response.getOutputStream();
 
 //      activityList = new LinkedList(ActivityUtil.getAllActivitiesList());
-      String oql = " from " + AmpActivity.class.getName() + " as obj "; // where obj.ampActivityId=555";
+      String oql = " from " + AmpActivity.class.getName() + " as obj "; //where obj.ampActivityId=1";
       activityList = DbUtil.loadList(oql, null);
       List<ActivityType> activities = new LinkedList<ActivityType>();
 
@@ -81,8 +81,9 @@ public class ImportExportManagerAction extends DispatchAction {
       outputStream.println(XmlTransformerHelper.marshal(activities));
     } catch (Exception ex) {
       try {
-        outputStream.println("error ocure while exporting Activityes");
-        StringBuffer sp = new StringBuffer(ex.getMessage());
+        StringBuffer sp = new StringBuffer("error ocure while exporting Activityes");
+        sp.append("\n");
+        sp.append(ex.getMessage());
         sp.append("\n");
 
         for (int i = 0; i < ex.getStackTrace().length; i++) {

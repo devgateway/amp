@@ -126,13 +126,33 @@
                                                 <b><digi:trn key="um:viewAllUsers:UsersNames">Name</digi:trn></b>
                                               </span>
                                             </td>
+
+                                            <td>
+                                            &nbsp;
+                                            </td>
+
                                             <td>
                                               <span style="font-size:13px;">
                                                 <b><digi:trn key="um:viewAllUsers:UsersEmails">Email</digi:trn></b>
                                               </span>
                                             </td>
-                                            <td>
 
+                                            <td>
+                                            &nbsp;
+                                            </td>
+
+                                            <td>
+                                              <span style="font-size:13px;">
+                                                <b><digi:trn key="um:viewAllUsers:UserWorkspace">Workspace</digi:trn></b>
+                                              </span>
+                                            </td>
+
+                                            <td>
+                                            &nbsp;
+                                            </td>
+
+                                            <td>
+                                            &nbsp;
                                             </td>
                                           </tr>
                                           <tr>
@@ -145,9 +165,36 @@
                                               <td>
                                               ${us.firstNames}&nbsp;${us.lastName}
                                               </td>
+
+                                              <td>
+                                              &nbsp;
+                                              </td>
+
                                               <td>
                                               ${us.email}
                                               </td>
+
+                                              <td>
+                                              &nbsp;
+                                              </td>
+
+                                              <td>
+                                                <div>
+                                                  <c:if test="${!empty us.teams}">
+                                                    <c:forEach var="team" items="${us.teams}">
+                                                      ${team.name}<br />
+                                                    </c:forEach>
+                                                  </c:if>
+                                                  <c:if test="${empty us.teams}">
+                                                    <digi:trn key="um:viewAllUsers:UnassignedUser">Unassigned</digi:trn>
+                                                  </c:if>
+                                                </div>
+                                              </td>
+
+                                              <td>
+                                              &nbsp;
+                                              </td>
+
                                               <td>
                                                 <c:set var="translation">
                                                   <digi:trn key="um:viewAllUsers:EditUserLink">Edit user</digi:trn>

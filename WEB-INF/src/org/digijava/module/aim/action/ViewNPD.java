@@ -47,7 +47,7 @@ public class ViewNPD extends Action {
 		npdForm.setSelYears(selectNYears(ProgramUtil.getYearsBeanList(),3));
 		npdForm.setDummyYear("-1");
 		npdForm.setDonors(getDonorsList(30));
-		npdForm.setStatuses(getStatuses());
+		//npdForm.setStatuses(getStatuses());
 		
 		List themes = ProgramUtil.getAllThemes(true);
 		npdForm.setAllThemes( FilteredAmpTheme.transformAmpThemeList(themes) );

@@ -183,7 +183,10 @@
 												</a>
 											</td>
 											<td valign="top" align="left">
-													<category:showoptions name="aimEditActivityForm" property="accessionInstrument" categoryName="<%= org.digijava.module.aim.helper.CategoryConstants.ACCESSION_INSTRUMENT_NAME %>" styleClass="inp-text" />
+													<c:set var="translation">
+														<digi:trn key="aim:addActivityAccInstrFirstLine">Please select from below</digi:trn>
+													</c:set>
+													<category:showoptions firstLine="${translation}" name="aimEditActivityForm" property="accessionInstrument" categoryName="<%= org.digijava.module.aim.helper.CategoryConstants.ACCESSION_INSTRUMENT_NAME %>" styleClass="inp-text" />
 											</td></tr>	
 											</field:display>
 											
@@ -196,7 +199,10 @@
 												</a>
 											</td>
 											<td valign="top" align="left">
-													<category:showoptions name="aimEditActivityForm" property="acChapter" categoryName="<%= org.digijava.module.aim.helper.CategoryConstants.ACCHAPTER_NAME %>" styleClass="inp-text" />
+													<c:set var="translation">
+														<digi:trn key="aim:addActivityAcChapterFirstLine">Please select from below</digi:trn>
+													</c:set>
+													<category:showoptions firstLine="${translation}" name="aimEditActivityForm" property="acChapter" categoryName="<%= org.digijava.module.aim.helper.CategoryConstants.ACCHAPTER_NAME %>" styleClass="inp-text" />
 											</td></tr>											
 											</field:display>
 											

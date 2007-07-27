@@ -131,7 +131,6 @@
                               </digi:link>
                             </td>
                           </tr>
-
                           <tr>
                             <td class=f-names noWrap>
                               <digi:img src="module/aim/images/arrow-th-BABAB9.gif" width="16"/>
@@ -143,8 +142,17 @@
                               </digi:link>
                             </td>
                           </tr>
-
-
+                          <tr>
+                            <td class=f-names noWrap>
+                              <digi:img src="module/aim/images/arrow-th-BABAB9.gif" width="16"/>
+                              <c:set var="translation">
+                                <digi:trn key="aim:tipUserManager">Click here to view User Manager</digi:trn>
+                              </c:set>
+                              <digi:link module="um" href="/viewAllUsers.do">
+                                <digi:trn key="aim:UsertManager">User Manager</digi:trn>
+                              </digi:link>
+                            </td>
+                          </tr>
                         </table>
                       </td>
                     </tr>
@@ -259,7 +267,7 @@
                               </digi:link>
                             </td>
                           </tr>
-						
+
 						<module:display name="National Planning Dashboard">
                           <tr>
                             <td class=f-names noWrap>
@@ -288,7 +296,7 @@
                               </digi:link>
                             </td>
                           </tr>
-                          
+
                           <tr>
                             <td class=f-names noWrap>
                               <digi:img src="module/aim/images/arrow-th-BABAB9.gif" width="16"/>

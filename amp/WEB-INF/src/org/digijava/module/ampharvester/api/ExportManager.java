@@ -100,6 +100,10 @@ public class ExportManager {
       ProjectIdType projectId = new ProjectIdTypeImpl();
       AmpActivityInternalId aaii = (AmpActivityInternalId)iter.next();
       CodeValueType cvtOrganization = new CodeValueTypeImpl();
+
+      if (aaii.getOrganisation() == null ){
+        throw new DgException("Activity["+ampActivity.getAmpId()+"] unknow Organisation ");
+      }
       cvtOrganization.setCode(aaii.getOrganisation().getOrgCode());
       cvtOrganization.setValue(aaii.getOrganisation().getName());
 
@@ -225,13 +229,28 @@ public class ExportManager {
           if (lt.getCountryName().equalsIgnoreCase(ampRegion.getCountry().getCountryName()) &&
               lt.getRegion().equalsIgnoreCase(ampRegion.getName())) {
             FundingDetailType fdt = new FundingDetailTypeImpl();
+            if (ampRegionalFunding.getAdjustmentType() == null ){
+              throw new DgException("Activity["+ampActivity.getAmpId()+"] unknow RegionalFunding.AdjustmentType ");
+            }
             fdt.setAdjustmentType(ampRegionalFunding.getAdjustmentType());
 
+            if (ampRegionalFunding.getTransactionDate() == null ){
+              throw new DgException("Activity["+ampActivity.getAmpId()+"] unknow RegionalFunding.TransactionDatee ");
+            }
             Calendar calFDT = Calendar.getInstance();
             calFDT.setTime(ampRegionalFunding.getTransactionDate());
             fdt.setDate(calFDT);
+            if (ampRegionalFunding.getTransactionAmount() == null ){
+              throw new DgException("Activity["+ampActivity.getAmpId()+"] unknow RegionalFunding.TransactionAmount ");
+            }
             fdt.setAmount(ampRegionalFunding.getTransactionAmount().longValue());
+            if (ampRegionalFunding.getCurrency() == null ){
+              throw new DgException("Activity["+ampActivity.getAmpId()+"] unknow RegionalFunding.Currency ");
+            }
             fdt.setCurrencyCode(ampRegionalFunding.getCurrency().getCurrencyCode());
+            if (ampRegionalFunding.getPerspective() == null ){
+              throw new DgException("Activity["+ampActivity.getAmpId()+"] unknow RegionalFunding.Perspective ");
+            }
             fdt.setPerspectiveType(ampRegionalFunding.getPerspective().getAmpPerspectiveId().intValue());
 
             // copy from org.digijava.module.aim.action.EditActivity[915]
@@ -243,6 +262,8 @@ public class ExportManager {
               } else if (ampRegionalFunding.getTransactionType() == Constants.EXPENDITURE) { // expenditures
                 lt.getExpenditure().add(fdt);
               }
+            } else {
+              throw new DgException("Activity["+ampActivity.getAmpId()+"] unknow RegionalFunding.TransactionType ");
             }
           }
         }
@@ -262,6 +283,9 @@ public class ExportManager {
          sector.setPercent(0);
       }
       retValue.getSector().add(sector);
+    }
+    if (retValue.getSector().size() <=0){
+      throw new DgException("Activity["+ampActivity.getAmpId()+"] unknow Sector ");
     }
 
     // set program
@@ -291,7 +315,9 @@ public class ExportManager {
         organization.setTitle(ftt);
 
       }
-
+      if (ampFunding.getFinancingId() == null){
+        throw new DgException("Activity["+ampActivity.getAmpId()+"] unknow Organization["+organization.getCode()+"] FinancingId");
+      }
       ft.setFinancingId(ampFunding.getFinancingId());
 
       if (ampFunding.getTypeOfAssistance() != null) {
@@ -299,6 +325,8 @@ public class ExportManager {
         cvtAssist.setCode(Integer.toString(ampFunding.getTypeOfAssistance().getIndex()));
         cvtAssist.setValue(ampFunding.getTypeOfAssistance().getValue());
         ft.setAssistance(cvtAssist);
+      } else {
+        throw new DgException("Activity["+ampActivity.getAmpId()+"] unknow Organization["+organization.getCode()+"] Assistance");
       }
 
       if (ampFunding.getModalityId() != null) {
@@ -317,13 +345,28 @@ public class ExportManager {
         AmpFundingDetail ampFundingDetail = (AmpFundingDetail)iterFD.next();
 
         FundingDetailType fdt = new FundingDetailTypeImpl();
+        if (ampFundingDetail.getAdjustmentType() == null){
+          throw new DgException("Activity["+ampActivity.getAmpId()+"] unknow Organization["+organization.getCode()+"] FundingDetail.AdjustmentType");
+        }
         fdt.setAdjustmentType(ampFundingDetail.getAdjustmentType());
 
+        if (ampFundingDetail.getTransactionDate() == null){
+          throw new DgException("Activity["+ampActivity.getAmpId()+"] unknow Organization["+organization.getCode()+"] FundingDetail.TransactionDate");
+        }
         Calendar calFDT = Calendar.getInstance();
         calFDT.setTime(ampFundingDetail.getTransactionDate());
         fdt.setDate(calFDT);
+        if (ampFundingDetail.getTransactionAmount() == null){
+          throw new DgException("Activity["+ampActivity.getAmpId()+"] unknow Organization["+organization.getCode()+"] FundingDetail.TransactionAmounte");
+        }
         fdt.setAmount(ampFundingDetail.getTransactionAmount().longValue());
+        if (ampFundingDetail.getAmpCurrencyId() == null){
+          throw new DgException("Activity["+ampActivity.getAmpId()+"] unknow Organization["+organization.getCode()+"] FundingDetail.Currency");
+        }
         fdt.setCurrencyCode(ampFundingDetail.getAmpCurrencyId().getCurrencyCode());
+        if (ampFundingDetail.getPerspectiveId() == null){
+          throw new DgException("Activity["+ampActivity.getAmpId()+"] unknow Organization["+organization.getCode()+"] FundingDetail.PerspectiveId");
+        }
         fdt.setPerspectiveType(ampFundingDetail.getPerspectiveId().getAmpPerspectiveId().intValue());
 
         // copy from org.digijava.module.aim.action.EditActivity[915]
@@ -335,6 +378,8 @@ public class ExportManager {
           } else if (ampFundingDetail.getTransactionType() == Constants.EXPENDITURE) { // expenditures
             ft.getExpenditure().add(fdt);
           }
+        } else {
+          throw new DgException("Activity["+ampActivity.getAmpId()+"] unknow Organization["+organization.getCode()+"] FundingDetail.TransactionType");
         }
       }
       organization.getFounding().add(ft);
@@ -347,6 +392,9 @@ public class ExportManager {
     for (Iterator iter = ampActivity.getComponents().iterator(); iter.hasNext(); ) {
       AmpComponent ampComponent = (AmpComponent)iter.next();
       ComponentType componentType = new ComponentTypeImpl();
+      if (ampComponent.getCode() == null){
+        throw new DgException("Activity["+ampActivity.getAmpId()+"] unknow Component["+ampComponent.getTitle()+"] code ");
+      }
       componentType.setCode(ampComponent.getCode());
 
       FreeTextType ftt = new FreeTextTypeImpl();
@@ -359,13 +407,28 @@ public class ExportManager {
           AmpComponentFunding ampComponentFunding = (AmpComponentFunding)iterCF.next();
 
           FundingDetailType fdt = new FundingDetailTypeImpl();
+          if (ampComponentFunding.getAdjustmentType() == null){
+            throw new DgException("Activity["+ampActivity.getAmpId()+"] unknow Component["+componentType.getCode()+"] ComponentFunding.AdjustmentType");
+          }
           fdt.setAdjustmentType(ampComponentFunding.getAdjustmentType());
 
           Calendar calFDT = Calendar.getInstance();
+          if (ampComponentFunding.getTransactionDate() == null){
+            throw new DgException("Activity["+ampActivity.getAmpId()+"] unknow  Component["+componentType.getCode()+"] ComponentFunding.TransactionDate");
+          }
           calFDT.setTime(ampComponentFunding.getTransactionDate());
           fdt.setDate(calFDT);
+          if (ampComponentFunding.getTransactionAmount() == null){
+            throw new DgException("Activity["+ampActivity.getAmpId()+"] unknow  Component["+componentType.getCode()+"] ComponentFunding.TransactionAmount");
+          }
           fdt.setAmount(ampComponentFunding.getTransactionAmount().longValue());
+          if (ampComponentFunding.getCurrency() == null){
+            throw new DgException("Activity["+ampActivity.getAmpId()+"] unknow  Component["+componentType.getCode()+"] ComponentFunding.Currency");
+          }
           fdt.setCurrencyCode(ampComponentFunding.getCurrency().getCurrencyCode());
+          if (ampComponentFunding.getPerspective() == null){
+            throw new DgException("Activity["+ampActivity.getAmpId()+"] unknow  Component["+componentType.getCode()+"] ComponentFunding.Perspective");
+          }
           fdt.setPerspectiveType(ampComponentFunding.getPerspective().getAmpPerspectiveId().intValue());
 
           // copy from org.digijava.module.aim.action.EditActivity[915]
@@ -377,6 +440,8 @@ public class ExportManager {
             } else if (ampComponentFunding.getTransactionType() == Constants.EXPENDITURE) { // expenditures
               componentType.getExpenditure().add(fdt);
             }
+          } else {
+            throw new DgException("Activity["+ampActivity.getAmpId()+"] unknow  Component["+componentType.getCode()+"] ComponentFunding.TransactionType");
           }
         }
       }
@@ -387,11 +452,17 @@ public class ExportManager {
     for (Iterator iter = ampActivity.getIssues().iterator(); iter.hasNext(); ) {
       AmpIssues ampIssues = (AmpIssues)iter.next();
       IssueType issue = new IssueTypeImpl();
+      if (ampIssues.getName() == null){
+        throw new DgException("Activity["+ampActivity.getAmpId()+"] unknow  Issues.Name");
+      }
       issue.setTitle(ampIssues.getName());
 
       for (Iterator iterMeasures = ampIssues.getMeasures().iterator(); iterMeasures.hasNext(); ) {
         AmpMeasure ampMeasure = (AmpMeasure)iterMeasures.next();
         IssueType.MeasureType measure = new IssueTypeImpl.MeasureTypeImpl();
+        if (ampMeasure.getName() == null){
+          throw new DgException("Activity["+ampActivity.getAmpId()+"] unknow  Measure.Name");
+        }
         measure.setTitle(ampMeasure.getName());
 
         for (Iterator iterActor = ampMeasure.getActors().iterator(); iterActor.hasNext(); ) {

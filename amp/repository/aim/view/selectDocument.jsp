@@ -244,8 +244,11 @@
 											</a>
 										</td>
 										<td>
+											<c:set var="translation">
+													<digi:trn key="aim:addActivityDocTypeFirstLine">Please select from below</digi:trn>
+											</c:set>
 											<a title="<digi:trn key="aim:typeOfTheDocumentDescription">Select type of document</digi:trn>">
-											<category:showoptions name="aimEditActivityForm" property="docType" categoryName="<%=org.digijava.module.aim.helper.CategoryConstants.DOCUMENT_TYPE_NAME %>" styleClass="inp-text"/>
+											<category:showoptions firstLine="${translation}" name="aimEditActivityForm" property="docType" categoryName="<%=org.digijava.module.aim.helper.CategoryConstants.DOCUMENT_TYPE_NAME %>" styleClass="inp-text"/>
 											</a>
 										</td>
 									</tr>

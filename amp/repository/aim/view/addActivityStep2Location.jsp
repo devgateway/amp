@@ -59,7 +59,10 @@
                                                 </a>&nbsp;
                                               </td>
 												<td>
-													<category:showoptions name="aimEditActivityForm" property="levelId" keyName="<%= org.digijava.module.aim.helper.CategoryConstants.IMPLEMENTATION_LEVEL_KEY %>" styleClass="inp-text" />
+													<c:set var="translation">
+														<digi:trn key="aim:addActivityImplLevelFirstLine">Please select from below</digi:trn>
+													</c:set>
+													<category:showoptions firstLine="${translation}" name="aimEditActivityForm" property="levelId" keyName="<%= org.digijava.module.aim.helper.CategoryConstants.IMPLEMENTATION_LEVEL_KEY %>" styleClass="inp-text" />
 												</td>
                                             </tr>
                                             </field:display>

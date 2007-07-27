@@ -635,7 +635,7 @@ public class ActivityUtil {
             try {
                 Session session = PersistenceManager.getRequestDBSession();
                 String oql = "select act from " + AmpActivity.class.getName() +
-                        " act  where 1=1 ";
+                        " act join act.categories as categories where 1=1 ";
                 //this is changed cos now we have many-to-many here.
                 if (ampThemeId != null) {
                 	oql+=" and ( :ampThemeId in elements(act.activityPrograms )) ";
@@ -649,7 +649,8 @@ public class ActivityUtil {
                     oql += s;
                 }
                 if (statusCode != null) {
-                    oql += " and act.status.statusCode=:statusCode ";
+//                    oql += " and act.status.statusCode=:statusCode ";
+                	oql += " and categories.id=:statusCode ";
                 }
                 if (fromDate != null) {
                     oql += " and act.createdDate >= :FromDate";
@@ -1984,7 +1985,6 @@ public class ActivityUtil {
 				}
 			}
 		}
-
 	}
 
 	public static void deleteActivityAmpComments(Collection commentId)

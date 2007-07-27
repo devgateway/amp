@@ -19,8 +19,10 @@ public class NpdForm extends ActionForm {
 	private String dummyYear;
 	private List donors;
 	private long[] selectedDonors;
-	private List statuses;
-	private String[] selectedStatuses;
+	//private List statuses;
+	//private String[] selectedStatuses;
+	private Long selectedStatuses;
+	
 	private String[] yearTo;
 	private String[] yearFrom;
 	private Collection allThemes;
@@ -48,22 +50,6 @@ public class NpdForm extends ActionForm {
 
 	public void setYearTo(String[] yearTo) {
 		this.yearTo = yearTo;
-	}
-
-	public String[] getSelectedStatuses() {
-		return selectedStatuses;
-	}
-
-	public void setSelectedStatuses(String[] selectedStatuses) {
-		this.selectedStatuses = selectedStatuses;
-	}
-
-	public List getStatuses() {
-		return statuses;
-	}
-
-	public void setStatuses(List statuses) {
-		this.statuses = statuses;
 	}
 
 	public List getDonors() {
@@ -160,6 +146,14 @@ public class NpdForm extends ActionForm {
 
 	public void setRecursive(boolean recursive) {
 		this.recursive = recursive;
+	}
+
+	public Long getSelectedStatuses() {
+		return selectedStatuses;
+	}
+
+	public void setSelectedStatuses(Long selectedStatuses) {
+		this.selectedStatuses = selectedStatuses;
 	}
 
 	

@@ -6,6 +6,7 @@
 <%@taglib uri="/taglib/digijava" prefix="digi"%>
 <%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
+<%@ taglib uri="/taglib/category" prefix="category" %>
 
 
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/asynchronous.js"/>"></script>
@@ -41,6 +42,12 @@
 </style>
 
 <digi:form action="/nationalPlaningDashboard.do">
+
+<bean:define id="noProgSelected">
+	<digi:trn key="aim:npd:noProgSelected">
+			Please select a program before selecting a filter !
+	</digi:trn>
+</bean:define>
 
 <script language="javascript" type="text/javascript">
 
@@ -580,10 +587,14 @@
 	/* ========  Activities list methods START ======== */
 
 	function getActivities(){
+		if (curProgId == null) {
+			alert('<%=noProgSelected %>');
+			return;
+		}
 		var actList=document.getElementById('activityListPlace');
 		//actList.innerHTML="<i>Loading...</i>"
 		setActivityLoading(actList);
-		var url=getActivitiesURL();
+		var url=getActivitiesURL();	
 		var async=new Asynchronous();
 		async.complete=activitiesCallBack;
 		async.call(url);
@@ -594,7 +605,7 @@
 		if (curProgId != null ){
 			result+=p1d+'programId='+curProgId;
 		}
-		if (selActStatus != null && selActStatus != '-1'){
+		if (selActStatus != null && selActStatus != '0'){
 			result += pd + 'statusId='+ selActStatus;
 		}
 		if(selActDonors !=null && selActDonors != -1){
@@ -1086,10 +1097,11 @@
 						&nbsp;<span id="actListProgname">&nbsp</span>
 					</td>
 					<td>
-						<html:select property="selectedStatuses" onchange="filterStatus()">
-							<option value="-1"><digi:trn key="aim:npd:dropDownAnyStatus">Any Status</digi:trn></option>
-							<html:optionsCollection name="aimNPDForm" property="statuses" value="value" label="label" />
-						</html:select>
+						<bean:define id="translation">
+							<digi:trn key="aim:npd:dropDownAnyStatus">Any Status</digi:trn>
+						</bean:define>
+						<category:showoptions outeronchange="filterStatus()" firstLine="<%=translation %>" name="aimNPDForm" property="selectedStatuses"  keyName="<%= org.digijava.module.aim.helper.CategoryConstants.ACTIVITY_STATUS_KEY %>"  />
+					
 					</td>
 					<td>
 						<html:select property="selectedDonors" onchange="filterDonor()">

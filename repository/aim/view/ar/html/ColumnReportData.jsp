@@ -12,7 +12,7 @@
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/arFunctions.js"/>"></script>
 
 <tr><td colspan='<bean:write name="columnReport" property="totalDepth"/>'>
-<i><digi:trn key="rep:pop:${columnReport.nameTrn}">${columnReport.name}</digi:trn></i>
+<i><digi:trn key="rep:popup:${columnReport.nameTrn}">${columnReport.name}</digi:trn></i>
 </td></tr>
 
 <%int rowIdx = 2;%>
@@ -56,7 +56,7 @@
 	<c:set var="heatTitle">
 			<%=subColumn.getName(reportMeta.getHideActivities()).toLowerCase().replaceAll(" ", "")%>
 	</c:set>	
-			<digi:trn key="aim:popup:${heatTitle}"><%=subColumn.getName(reportMeta.getHideActivities())%></digi:trn>
+			<digi:trn key="aim:popupwin:${heatTitle}"><%=subColumn.getName(reportMeta.getHideActivities())%></digi:trn>
 
 
 

@@ -32,7 +32,7 @@ public static SessionFactory initialize() {
 	ResourceStreamHandlerFactory.installIfNeeded();
 	try {
 		DigiConfigManager
-				.initialize("/home/mihai/workspace/amp/repository");
+				.initialize("/home/dan/workspace/amp/repository");
 		PersistenceManager.initialize(false);
 	} catch (DgException e) {
 		// TODO Auto-generated catch block

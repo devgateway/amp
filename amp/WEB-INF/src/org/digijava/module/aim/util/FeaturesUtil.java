@@ -17,6 +17,7 @@ import net.sf.hibernate.Session;
 import net.sf.hibernate.Transaction;
 
 import org.apache.log4j.Logger;
+import org.dgfoundation.amp.visibility.AmpObjectVisibility;
 import org.digijava.kernel.dbentity.Country;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.dbentity.AmpFeature;
@@ -1250,29 +1251,138 @@ public class FeaturesUtil {
 			 * @author dan
 			 */
 			public static boolean deleteFieldVisibility(Long id, Session session) {
-				Transaction tx = null;
-
+				
 				try {
-					//tx=session.beginTransaction();
-					AmpFieldsVisibility ft=new AmpFieldsVisibility();
-					ft=(AmpFieldsVisibility)session.load(AmpFieldsVisibility.class,id);
-					ft.setParent(null);
-					session.delete(ft);
-					session.flush();
-					//tx.commit();
-				} catch (Exception ex) {
-					logger.error("Exception : " + ex.getMessage());
-				} finally {
-					if (session != null) {
-						try {
-							PersistenceManager.releaseSession(session);
-						} catch (Exception rsf) {
-							logger.error("Release session failed :" + rsf.getMessage());
+					//Session s=PersistenceManager.getSession();
+					Transaction tx=session.beginTransaction();
+					AmpFieldsVisibility field = (AmpFieldsVisibility) session.load(AmpFieldsVisibility.class, id);
+					AmpFeaturesVisibility parent = (AmpFeaturesVisibility) field.getParent();
+					parent.getItems().remove(field);
+					Iterator i=field.getTemplates().iterator();
+					while (i.hasNext()) {
+						AmpTemplatesVisibility element = (AmpTemplatesVisibility) i.next();
+						element.getFields().remove(field);
+					}
+					
+					tx.commit();
+					
+					session.close();
+				
+				} catch (HibernateException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} 
+			return true;
+		}
+			
+			/**
+			 * @author dan
+			 */
+			public static boolean deleteFeatureVisibility(Long id, Session session) {
+				
+				try {
+					//Session s=PersistenceManager.getSession();
+					Transaction tx=session.beginTransaction();
+					AmpFeaturesVisibility feature = (AmpFeaturesVisibility) session.load(AmpFeaturesVisibility.class, id);
+					AmpObjectVisibility parent = (AmpObjectVisibility) feature.getParent();
+					parent.getItems().remove(feature);
+					Iterator i=feature.getTemplates().iterator();
+					//feature.getItems().clear();
+					
+					Iterator j=feature.getItems().iterator();
+					while (j.hasNext()) {
+						AmpFieldsVisibility field = (AmpFieldsVisibility) j.next();
+						i=feature.getTemplates().iterator();
+						while (i.hasNext()) {
+							AmpTemplatesVisibility element = (AmpTemplatesVisibility) i.next();
+							element.getFields().remove(field);
+						}
+						i=field.getTemplates().iterator();
+						while (i.hasNext()) {
+							AmpTemplatesVisibility element = (AmpTemplatesVisibility) i.next();
+							element.getFields().remove(field);
 						}
 					}
-				}
-				return true;
-			}
+					i=feature.getTemplates().iterator();
+					while (i.hasNext()) {
+						AmpTemplatesVisibility element = (AmpTemplatesVisibility) i.next();
+						element.getFeatures().remove(feature);
+					}
+					
+					tx.commit();
+					
+					//s.close();
+				
+				} catch (HibernateException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} 
+			return true;
+		}
+
+			/**
+			 * @author dan
+			 */
+			public static boolean deleteModuleVisibility(Long id, Session session) {
+				
+				try {
+					//Session s=PersistenceManager.getSession();
+					Transaction tx=session.beginTransaction();
+					System.out.println("ssssssssssssssss");
+					AmpModulesVisibility module = (AmpModulesVisibility) session.load(AmpModulesVisibility.class, id);
+					//AmpObjectVisibility parent = (AmpObjectVisibility) module.getParent();
+					//parent.getItems().remove(module);
+					Iterator k=null;
+					k=module.getItems().iterator();
+					while (k.hasNext()) {
+						AmpFeaturesVisibility feature = (AmpFeaturesVisibility) k.next();
+						{
+							Iterator i=null;//feature.getTemplates().iterator();
+							//feature.getItems().clear();
+							
+							Iterator j=feature.getItems().iterator();
+							while (j.hasNext()) {
+								AmpFieldsVisibility field = (AmpFieldsVisibility) j.next();
+								i=feature.getTemplates().iterator();
+								while (i.hasNext()) {
+									AmpTemplatesVisibility element = (AmpTemplatesVisibility) i.next();
+									element.getFields().remove(field);
+								}
+								i=field.getTemplates().iterator();
+								while (i.hasNext()) {
+									AmpTemplatesVisibility element = (AmpTemplatesVisibility) i.next();
+									element.getFields().remove(field);
+								}
+							}
+							i=feature.getTemplates().iterator();
+							while (i.hasNext()) {
+								AmpTemplatesVisibility element = (AmpTemplatesVisibility) i.next();
+								element.getFeatures().remove(feature);
+							}
+						}
+						
+					}
+					k=module.getItems().iterator();
+					module.getItems().clear();
+					System.out.println("ddddddddddd:::"+module.getItems().size());
+					k=module.getTemplates().iterator();
+					while (k.hasNext()) {
+						AmpTemplatesVisibility element = (AmpTemplatesVisibility) k.next();
+						element.getItems().remove(module);
+					}
+					
+					tx.commit();
+					session.delete(module);
+					
+					//session.close();
+				
+				} catch (HibernateException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} 
+			return true;
+		}
+
 			
 			/**
 			 * @author dan

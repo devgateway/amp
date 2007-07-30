@@ -26,7 +26,8 @@ public class AmpFeaturesVisibility extends AmpObjectVisibility implements Serial
 	}
 	public int compareTo(Object arg0) {
 		// TODO Auto-generated method stub
-		AmpFeaturesVisibility x=(AmpFeaturesVisibility) arg0;
+		
+		AmpObjectVisibility x=(AmpObjectVisibility) arg0;
 		return this.getId().compareTo(x.getId());
 		
 	}

@@ -10,19 +10,19 @@
 			</id>
 		<property name="name" column="name" type="java.lang.String" />
 		
-    <set name="items" table="AMP_FIELDS_VISIBILITY" cascade="all">
+    <set name="items" table="AMP_FIELDS_VISIBILITY" inverse="true" cascade="all-delete-orphan">
       	   <cache usage="read-write" />
            <key column="parent"/>
            <one-to-many class="org.digijava.module.aim.dbentity.AmpFieldsVisibility"/>
      </set>
 		
-	<many-to-one name="parent" column="parent" class="org.digijava.module.aim.dbentity.AmpModulesVisibility" not-null="true"/>
+	<many-to-one name="parent" column="parent" class="org.digijava.module.aim.dbentity.AmpModulesVisibility"/>
 	
-	<set name="templates" table="amp_features_templates" inverse="true" cascade="all">
+	<set name="templates" table="amp_features_templates" inverse="true">
 		   <cache usage="read-write" />
            <key column="feature"/>
            <many-to-many column="template" class="org.digijava.module.aim.dbentity.AmpTemplatesVisibility"/>
      </set>
-		
+
 	</class>
 </hibernate-mapping>

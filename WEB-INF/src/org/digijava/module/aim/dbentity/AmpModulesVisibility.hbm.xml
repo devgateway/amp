@@ -17,7 +17,7 @@
            <one-to-many class="org.digijava.module.aim.dbentity.AmpFeaturesVisibility"/>
      </set>
      
-    <set name="templates" table="amp_modules_templates" inverse="true" cascade="all">
+    <set name="templates" table="amp_modules_templates" inverse="true">
 		   <cache usage="read-write" />
            <key column="module"/>
            <many-to-many column="template" class="org.digijava.module.aim.dbentity.AmpTemplatesVisibility"/>

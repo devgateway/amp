@@ -104,7 +104,11 @@ public class VisibilityManager extends MultiAction {
 		VisibilityManagerForm vForm=(VisibilityManagerForm) form;
 		Collection templates=FeaturesUtil.getAMPTemplatesVisibility();
 		vForm.setTemplates(templates);
-
+		try {
+			PersistenceManager.releaseSession(hbsession);
+		} catch (Exception rsf) {
+			logger.error("Release session failed :1" + rsf.getMessage());
+		}
 		return mapping.findForward("forward");
 	}
 	
@@ -150,6 +154,11 @@ public class VisibilityManager extends MultiAction {
 		{//for refreshing the page
 			Collection templates=FeaturesUtil.getAMPTemplatesVisibility();
 			vForm.setTemplates(templates);
+		}
+		try {
+			PersistenceManager.releaseSession(hbsession);
+		} catch (Exception rsf) {
+			logger.error("Release session failed :2" + rsf.getMessage());
 		}
 		return mapping.findForward("forward");
 	}
@@ -208,12 +217,13 @@ public class VisibilityManager extends MultiAction {
 	
 	public ActionForward modeDeleteFFM(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
 		// TODO Auto-generated method stub
-		System.out.println(Long.parseLong(request.getParameter("fieldId")));
+		//System.out.println(Long.parseLong(request.getParameter("fieldId")));
+		//System.out.println(Long.parseLong(request.getParameter("featureId")));
 		Session hbsession = null;
 		hbsession = this.createSession();
 		if(request.getParameter("fieldId")!=null) FeaturesUtil.deleteFieldVisibility(new Long(Long.parseLong(request.getParameter("fieldId"))),hbsession);//delete field
-		if(request.getParameter("featureId")!=null) ;//delete feature
-		if(request.getParameter("moduleId")!=null) ;//delete module
+		if(request.getParameter("featureId")!=null) FeaturesUtil.deleteFeatureVisibility(new Long(Long.parseLong(request.getParameter("featureId"))),hbsession);//delete feature
+		if(request.getParameter("moduleId")!=null) FeaturesUtil.deleteModuleVisibility(new Long(Long.parseLong(request.getParameter("moduleId"))),hbsession);//delete module
 		/*{//for refreshing the page
 			VisibilityManagerForm vForm = (VisibilityManagerForm) form;
 			Collection templates=FeaturesUtil.getAMPTemplatesVisibility();
@@ -223,7 +233,8 @@ public class VisibilityManager extends MultiAction {
 	 	errors.add("title", new ActionError("error.aim.visibility.deletedTemplate"));
 	 	saveErrors(request, errors);
 	 	*/
-		return mapping.findForward("forward");
+		hbsession.close();
+		return modeViewFields(mapping, form, request, response);
 	}
 	
 	public ActionForward modeSaveTreeVisibility(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
@@ -285,7 +296,11 @@ public class VisibilityManager extends MultiAction {
     	ampTreeVisibility.buildAmpTreeVisibility(currentTemplate);
     	ampContext=session.getServletContext();
     	ampContext.setAttribute("ampTreeVisibility",ampTreeVisibility);
-
+    	try {
+			PersistenceManager.releaseSession(hbsession);
+		} catch (Exception rsf) {
+			logger.error("Release session failed :4" + rsf.getMessage());
+		}
 		return modeEditTemplate(mapping,form,request,response);
 	}
 	

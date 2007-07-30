@@ -19,13 +19,13 @@
 
      </set>
      
-     <set name="features" table="amp_features_templates" cascade="all" sort="natural">
+     <set name="features" table="amp_features_templates" sort="natural" cascade="all-delete-orphan">
 	       <cache usage="read-write" />
            <key column="template"/>
            <many-to-many column="feature" class="org.digijava.module.aim.dbentity.AmpFeaturesVisibility"/>
      </set>
      
-     <set name="fields" table="amp_fields_templates" cascade="all" sort="natural">
+     <set name="fields" table="amp_fields_templates" sort="natural" cascade="all-delete-orphan">
 	       <cache usage="read-write" />
            <key column="template"/>
            <many-to-many column="field" class="org.digijava.module.aim.dbentity.AmpFieldsVisibility"/>

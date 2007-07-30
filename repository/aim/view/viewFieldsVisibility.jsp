@@ -48,7 +48,7 @@
 			type="org.digijava.module.aim.dbentity.AmpModulesVisibility">
 			<tr>
 				<td align="left"><bean:write name="module" property="name"/></td>
-				<c:set target="${urlParamsDelModule}" property="action" value="deleteModule"/>
+				<c:set target="${urlParamsDelModule}" property="action" value="deleteFFM"/>
 				<c:set target="${urlParamsDelModule}" property="moduleId" value="<%=module.getId()%>"/>
 				<td>
 					<c:set var="translation">

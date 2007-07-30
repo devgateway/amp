@@ -74,6 +74,13 @@ public class FeatureVisibilityTag extends BodyTagSupport {
    			   ampContext.setAttribute("ampTreeVisibility", ampTreeVisibility);
 		   }
 
+	   if(!existModule(ampTreeVisibility)) {
+		   //error
+		  System.out.println("error!!!! module "+this.getModule()+" doesn't exist");
+		  return SKIP_BODY;
+	   }
+
+	   
 		return EVAL_BODY_BUFFERED;//super.doStartTag();
 	}
 	public int doEndTag() throws JspException 
@@ -92,11 +99,6 @@ public class FeatureVisibilityTag extends BodyTagSupport {
     	    * 
     	    * if field is active then display the content
     	    */
-    	   if(! existModule(ampTreeVisibility)) {
-    		   //error
-    		  System.out.println("error!!!! module "+this.getModule()+" doesn't exist");
-    		  return SKIP_BODY;
-    	   }
    		   
    		   ampTreeVisibility=(AmpTreeVisibility) ampContext.getAttribute("ampTreeVisibility");
    		   if(ampTreeVisibility!=null)

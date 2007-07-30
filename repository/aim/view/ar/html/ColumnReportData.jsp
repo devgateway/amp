@@ -37,7 +37,7 @@
 	<c:set var="heatTitle1">
 		<%=subColumn.getName(reportMeta.getHideActivities()).toLowerCase().replaceAll(" ", "")%>
 	</c:set>	
-	<digi:trn key="aim:pop:${heatTitle1}"><%=subColumn.getName(reportMeta.getHideActivities())%></digi:trn>
+	<digi:trn key="aim:popwin:${heatTitle1}"><%=subColumn.getName(reportMeta.getHideActivities())%></digi:trn>
 
 
 	</html:link>

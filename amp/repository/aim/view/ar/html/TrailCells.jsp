@@ -11,8 +11,8 @@
 <!-- generate total row -->
 <tr>
 	<td class=clsTableL1SubTotalEndSectionLabel colspan='<bean:write name="reportData" property="sourceColsCount"/>'>
-	<digi:trn key="rep:pop:totalsFor">TOTALS FOR</digi:trn>
-	<digi:trn key="rep:pop:${reportData.columnIdTrn}">${reportData.columnId}</digi:trn>
+	<digi:trn key="rep:popup:totalsFor">TOTALS FOR</digi:trn>
+	<digi:trn key="rep:popu:${reportData.columnIdTrn}">${reportData.columnId}</digi:trn>
 	<% if (!("".equals(reportData.getRepName()))){ %>
 		: <digi:trn key="rep:pop:${reportData.repNameTrn}">${reportData.repName}</digi:trn>
 	<% } %>

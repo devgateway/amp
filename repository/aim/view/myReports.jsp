@@ -124,11 +124,11 @@ return false;
 
 				</logic:empty>
 
-	        		<TR><TD title='<digi:trn key="aim:createAdvancedReport">Create Advanced Report </digi:trn>'>
+	        		<TR><TD title='<digi:trn key="aim:createReport">Create Report</digi:trn>'>
 
 						<digi:link href="/advancedReportManager.do?clear=true">
 
-							<b><digi:trn key="aim:advancedReportManager">Advanced Report Manager</digi:trn></b>
+							<b><digi:trn key="aim:reportGenerator">Report Generator</digi:trn></b>
 
 						</digi:link>
 

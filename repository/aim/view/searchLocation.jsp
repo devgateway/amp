@@ -5,6 +5,7 @@
 <%@ taglib uri="/taglib/struts-html" prefix="html" %>
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
+<%@ taglib uri="/taglib/category" prefix="category" %>
 
 <digi:ref href="css/styles.css" type="text/css" rel="stylesheet" />
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/addActivity.js"/>"></script>
@@ -229,7 +230,7 @@ function checkNumeric(objName,comma,period,hyphen)
 							<td vAlign="center" width="100%" align ="center" class="textalb" height="20">
 								<digi:trn key="aim:locationList">
 								List of Locations</digi:trn> 
-					(<bean:write name="aimEditActivityForm" property="implementationLevel" />)
+					(<category:getoptionvalue categoryValueId="${aimEditActivityForm.implemLocationLevel}"/>)
 					
 							</td>
 						</tr>

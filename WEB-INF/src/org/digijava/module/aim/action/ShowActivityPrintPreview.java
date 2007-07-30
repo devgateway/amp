@@ -308,7 +308,7 @@ public class ShowActivityPrintPreview
                     eaForm.setSelectedLocs(locs);
                 }
 
-                switch(impLevel) {
+                /*switch(impLevel) {
                     case 0:
                         eaForm.setImplementationLevel("country");
                         break;
@@ -323,7 +323,19 @@ public class ShowActivityPrintPreview
                         break;
                     default:
                         eaForm.setImplementationLevel("country");
+                }*/
+                
+                if (impLevel >= 0) {
+                	eaForm.setImplemLocationLevel( 
+                			CategoryManagerUtil.getAmpCategoryValueFromDb( CategoryConstants.IMPLEMENTATION_LEVEL_KEY, 
+                													new Long(impLevel) ).getId()
+                	);
                 }
+                else
+                	eaForm.setImplemLocationLevel( 
+                			CategoryManagerUtil.getAmpCategoryValueFromDb( CategoryConstants.IMPLEMENTATION_LEVEL_KEY, 
+									new Long(0) ).getId()
+                	);
 
                 Collection sectors = activity.getSectors();
 

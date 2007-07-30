@@ -109,7 +109,10 @@ public class ResetAll extends Action
 	    	if(eaForm.getStep().equals("2"))
 	    	{
 	    		eaForm.setLevelId(new Long(0));
-	    		eaForm.setImplementationLevel(null);
+//	    		eaForm.setImplementationLevel(null);
+	    		eaForm.setImplemLocationLevel( 
+	    				CategoryManagerUtil.getAmpCategoryValueFromDb(CategoryConstants.IMPLEMENTATION_LOCATION_KEY, new Long(0)).getId() 
+	    		);
 	    		eaForm.setSelectedLocs(null);
 	    		eaForm.setActivitySectors(null);
 	    		eaForm.setProgram(null);
@@ -280,7 +283,7 @@ public class ResetAll extends Action
 					}
 					eaForm.setSelectedLocs(locs);
 				}
-				switch (impLevel)
+				/*switch (impLevel)
 				{
 					case 0:
 						eaForm.setImplementationLevel("country");
@@ -296,7 +299,18 @@ public class ResetAll extends Action
 						break;
 					default:
 						eaForm.setImplementationLevel("country");
-				}
+				}*/
+				if (impLevel >= 0) {
+                	eaForm.setImplemLocationLevel( 
+                			CategoryManagerUtil.getAmpCategoryValueFromDb( CategoryConstants.IMPLEMENTATION_LEVEL_KEY, 
+                													new Long(impLevel) ).getId()
+                	);
+                }
+                else
+                	eaForm.setImplemLocationLevel( 
+                			CategoryManagerUtil.getAmpCategoryValueFromDb( CategoryConstants.IMPLEMENTATION_LEVEL_KEY, 
+									new Long(0) ).getId()
+                	);
 
 				Collection sectors = activity.getSectors();
 

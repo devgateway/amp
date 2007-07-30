@@ -6,11 +6,9 @@
 package org.digijava.module.aim.action;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
-import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -30,7 +28,6 @@ import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
-import org.dgfoundation.amp.ar.ColumnReportData;
 import org.dgfoundation.amp.ar.GroupReportData;
 import org.digijava.kernel.dbentity.Country;
 import org.digijava.kernel.request.Site;
@@ -41,6 +38,7 @@ import org.digijava.module.aim.dbentity.AmpActivityClosingDates;
 import org.digijava.module.aim.dbentity.AmpActivityInternalId;
 import org.digijava.module.aim.dbentity.AmpActivitySector;
 import org.digijava.module.aim.dbentity.AmpActor;
+import org.digijava.module.aim.dbentity.AmpCategoryClass;
 import org.digijava.module.aim.dbentity.AmpCategoryValue;
 import org.digijava.module.aim.dbentity.AmpComponent;
 import org.digijava.module.aim.dbentity.AmpComponentFunding;
@@ -60,19 +58,14 @@ import org.digijava.module.aim.dbentity.AmpTheme;
 import org.digijava.module.aim.form.EditActivityForm;
 import org.digijava.module.aim.form.ProposedProjCost;
 import org.digijava.module.aim.helper.ActivitySector;
-import org.digijava.module.aim.helper.ApplicationSettings;
 import org.digijava.module.aim.helper.CategoryConstants;
 import org.digijava.module.aim.helper.CategoryManagerUtil;
-import org.digijava.module.aim.helper.CommonWorker;
 import org.digijava.module.aim.helper.Components;
 import org.digijava.module.aim.helper.Constants;
-import org.digijava.module.aim.helper.Currency;
 import org.digijava.module.aim.helper.CurrencyWorker;
 import org.digijava.module.aim.helper.DateConversion;
 import org.digijava.module.aim.helper.DecimalToText;
 import org.digijava.module.aim.helper.Documents;
-import org.digijava.module.aim.helper.FilterParams;
-import org.digijava.module.aim.helper.FinancingBreakdownWorker;
 import org.digijava.module.aim.helper.Funding;
 import org.digijava.module.aim.helper.FundingDetail;
 import org.digijava.module.aim.helper.FundingOrganization;
@@ -84,7 +77,6 @@ import org.digijava.module.aim.helper.OrgProjectId;
 import org.digijava.module.aim.helper.PhysicalProgress;
 import org.digijava.module.aim.helper.RegionalFunding;
 import org.digijava.module.aim.helper.RelatedLinks;
-import org.digijava.module.aim.helper.Report;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.ActivityUtil;
 import org.digijava.module.aim.util.ComponentsUtil;
@@ -656,10 +648,22 @@ public class EditActivity
                         }
                         eaForm.setSelectedLocs(locs);
                     }
-
-                    switch(impLevel) {
+                    
+                    if (impLevel >= 0) {
+                    	eaForm.setImplemLocationLevel( 
+                    			CategoryManagerUtil.getAmpCategoryValueFromDb( CategoryConstants.IMPLEMENTATION_LEVEL_KEY, 
+                    													new Long(impLevel) ).getId()
+                    			);
+                    }
+                    else
+                    	eaForm.setImplemLocationLevel( 
+                    			CategoryManagerUtil.getAmpCategoryValueFromDb( CategoryConstants.IMPLEMENTATION_LEVEL_KEY, 
+										new Long(0) ).getId()
+                    	);
+                    
+                    /*switch(impLevel) {
                         case 0:
-                            eaForm.setImplementationLevel("country");
+                            eaForm.setImplemLocationLevel("country");
                             break;
                         case 1:
                             eaForm.setImplementationLevel("region");
@@ -672,7 +676,7 @@ public class EditActivity
                             break;
                         default:
                             eaForm.setImplementationLevel("country");
-                    }
+                    }*/
 
                     Collection sectors = activity.getSectors();
 
@@ -1310,8 +1314,10 @@ public class EditActivity
 //                statusCol = eaForm.getStatusCollection();
 //            }
             // Initailly setting the implementation level as "country"
-            if(eaForm.getImplementationLevel() == null)
-                eaForm.setImplementationLevel("country");
+            if (eaForm.getImplemLocationLevel() == null)
+				eaForm.setImplemLocationLevel(
+						CategoryManagerUtil.getAmpCategoryValueFromDb(CategoryConstants.IMPLEMENTATION_LOCATION_KEY, new Long(0)).getId()
+				);
 
             Collection modalColl = null;
             // load the modalities from the database

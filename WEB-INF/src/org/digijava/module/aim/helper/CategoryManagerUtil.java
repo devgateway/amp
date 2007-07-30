@@ -160,6 +160,49 @@ public class CategoryManagerUtil {
 		return null;
 	}
 	/**
+	 * 
+	 * @param categoryKey The key of the category
+	 * @param categoryIndex The index of the value within the category
+	 * @return
+	 */
+	public static AmpCategoryValue getAmpCategoryValueFromDb(String categoryKey, Long categoryIndex) {
+		Session dbSession			= null;
+		Collection returnCollection	= null;
+		try {
+			dbSession			= PersistenceManager.getSession();
+			String queryString;
+			Query qry;
+
+			queryString = "select v from "
+				+ AmpCategoryValue.class.getName()
+				+ " v join v.ampCategoryClass as c where c.keyName=:key AND v.index=:index";
+			qry			= dbSession.createQuery(queryString);
+			qry.setParameter("key", categoryKey, Hibernate.STRING);
+			qry.setParameter("index", categoryIndex, Hibernate.LONG);
+			returnCollection	= qry.list();
+
+		} catch (Exception ex) {
+			logger.error("Unable to get AmpCategoryValue: " + ex.getMessage());
+			ex.printStackTrace();
+		} finally {
+			try {
+				PersistenceManager.releaseSession(dbSession);
+			} catch (Exception ex2) {
+				logger.error("releaseSession() failed :" + ex2);
+			}
+		}
+		if (returnCollection != null) {
+			Iterator it=returnCollection.iterator();
+			if(it.hasNext())
+			{
+				AmpCategoryValue x=(AmpCategoryValue)it.next();
+				return x;
+			}
+		}
+		return null;
+	}
+	
+	/**
 	 *
 	 * @param valueId
 	 * @return Extracts the AmpCategoryValue with id=valueId from the database. Return null if not found.

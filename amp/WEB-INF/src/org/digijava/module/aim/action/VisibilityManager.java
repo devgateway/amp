@@ -224,15 +224,6 @@ public class VisibilityManager extends MultiAction {
 		if(request.getParameter("fieldId")!=null) FeaturesUtil.deleteFieldVisibility(new Long(Long.parseLong(request.getParameter("fieldId"))),hbsession);//delete field
 		if(request.getParameter("featureId")!=null) FeaturesUtil.deleteFeatureVisibility(new Long(Long.parseLong(request.getParameter("featureId"))),hbsession);//delete feature
 		if(request.getParameter("moduleId")!=null) FeaturesUtil.deleteModuleVisibility(new Long(Long.parseLong(request.getParameter("moduleId"))),hbsession);//delete module
-		/*{//for refreshing the page
-			VisibilityManagerForm vForm = (VisibilityManagerForm) form;
-			Collection templates=FeaturesUtil.getAMPTemplatesVisibility();
-			vForm.setTemplates(templates);
-		}
-		ActionErrors errors = new ActionErrors();
-	 	errors.add("title", new ActionError("error.aim.visibility.deletedTemplate"));
-	 	saveErrors(request, errors);
-	 	*/
 		hbsession.close();
 		return modeViewFields(mapping, form, request, response);
 	}

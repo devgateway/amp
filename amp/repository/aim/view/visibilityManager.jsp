@@ -65,7 +65,14 @@
 						<jsp:include page="manageTemplatesVisibility.jsp" />
 					</td>
 				</tr>
-				
+				<logic:equal name="aimVisibilityManagerForm" property="mode" value="editTemplateTree">			
+				<tr>
+					<td noWrap width=100% vAlign="top">
+						<jsp:include page="manageTreeVisibility.jsp" />
+					</td>
+				</tr>
+				</logic:equal>
+				<logic:notEqual name="aimVisibilityManagerForm" property="mode" value="editTemplateTree">
 				<logic:equal name="aimVisibilityManagerForm" property="mode" value="addNew">
 					<tr>
 						<td noWrap width=100% vAlign="top">
@@ -73,13 +80,7 @@
 						</td>
 					</tr>			
 				</logic:equal>
-				<logic:equal name="aimVisibilityManagerForm" property="mode" value="editTemplateTree">			
-				<tr>
-					<td noWrap width=100% vAlign="top">
-						<jsp:include page="manageTreeVisibility.jsp" />
-					</td>
-				</tr>
-				</logic:equal>	
+					
 				<logic:equal name="aimVisibilityManagerForm" property="mode" value="viewFields">
 					<tr>
 						<td noWrap width=100% vAlign="top">
@@ -87,4 +88,5 @@
 						</td>
 					</tr>			
 				</logic:equal>
+				</logic:notEqual>
 </table>

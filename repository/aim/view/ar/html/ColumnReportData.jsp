@@ -50,14 +50,13 @@
 	</logic:equal>
 
 	</c:if>
-	
 	</logic:equal>
 	<logic:notEqual name="column" property="columnDepth" value="1">
 	
 	<c:set var="heatTitle">
 			<%=subColumn.getName(reportMeta.getHideActivities()).toLowerCase().replaceAll(" ", "")%>
 	</c:set>	
-	<digi:trn key="aim:pop:${heatTitle}">	<%=subColumn.getName(reportMeta.getHideActivities())%></digi:trn>
+			<digi:trn key="aim:popup:${heatTitle}"><%=subColumn.getName(reportMeta.getHideActivities())%></digi:trn>
 
 
 

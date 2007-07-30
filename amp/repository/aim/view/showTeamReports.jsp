@@ -62,6 +62,13 @@ function confirmFunc() {
 						</span>
 					</td>
 				</tr>
+        		<tr>
+        			<td title='<digi:trn key="aim:createReport">Create Report</digi:trn>' align="left">
+						<digi:link href="/advancedReportManager.do?clear=true">
+							<b><digi:trn key="aim:reportGenerator">Report Generator</digi:trn></b>
+						</digi:link>
+					</td>
+				</tr>				
 				<tr>
 					<td noWrap width=650 vAlign="top">
 						<table bgColor=#ffffff cellPadding=0 cellSpacing=0 class=box-border-nopadding width="100%">

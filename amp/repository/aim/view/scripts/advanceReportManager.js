@@ -3,7 +3,7 @@
 // Use: Advance Report Manager
 //
 function quitAdvRptMngr() {
-		var temp = confirm("Do you really want to quit Advanced Report Manager? \nWarning: All your Current Data Will be Lost... press OK to QUIT Advanced Report Manager.");
+		var temp = confirm("Do you really want to quit Report Generator? \nWarning: All your Current Data Will be Lost... press OK to QUIT Report Generator.");
 		if(temp.toString()=="true"){
 //		alert("----"+temp);
 //		<digi:context name="step" property="context/module/moduleinstance/viewMyDesktop.do" />

@@ -47,7 +47,7 @@
 		<logic:iterate name="aimVisibilityManagerForm" property="allModules" id="module"
 			type="org.digijava.module.aim.dbentity.AmpModulesVisibility">
 			<tr>
-				<td align="left"><bean:write name="module" property="name"/></td>
+				<td align="left"><digi:trn key="<%="viz:"+module.getNameTrimmed() %>"><bean:write name="module" property="name"/></digi:trn></td>
 				<c:set target="${urlParamsDelModule}" property="action" value="deleteFFM"/>
 				<c:set target="${urlParamsDelModule}" property="moduleId" value="<%=module.getId()%>"/>
 				<td>
@@ -86,7 +86,7 @@
 			type="org.digijava.module.aim.dbentity.AmpFeaturesVisibility">
 			<tr>
 				<bean:define id="module" name="feature" property="parent" type="org.digijava.module.aim.dbentity.AmpModulesVisibility"/>
-				<td align="left"><bean:write name="feature" property="name"/></td>
+				<td align="left"><digi:trn key="<%="viz:"+feature.getNameTrimmed() %>"><bean:write name="feature" property="name"/></digi:trn></td>
 				<td><i><bean:write name="module" property="name"/></i></td>
 				<c:set target="${urlParamsDelFeature}" property="action" value="deleteFFM"/>
 				<c:set target="${urlParamsDelFeature}" property="featureId" value="<%=feature.getId()%>"/>
@@ -127,7 +127,7 @@
 			<tr>
 				<bean:define id="feature" name="field" property="parent" type="org.digijava.module.aim.dbentity.AmpFeaturesVisibility"/>
 				<bean:define id="module" name="feature" property="parent" type="org.digijava.module.aim.dbentity.AmpModulesVisibility"/>
-				<td align="left"><bean:write name="field" property="name"/></td>
+				<td align="left"><digi:trn key="<%="viz:"+field.getNameTrimmed() %>"><bean:write name="field" property="name"/></digi:trn></td>
 				<td><i><bean:write name="feature" property="name"/></i></td>
 				<td><i><bean:write name="module" property="name"/></i></td>
 				<c:set target="${urlParamsDelField}" property="action" value="deleteFFM"/>

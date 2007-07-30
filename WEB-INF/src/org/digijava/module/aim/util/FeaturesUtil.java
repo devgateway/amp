@@ -1326,12 +1326,8 @@ public class FeaturesUtil {
 			public static boolean deleteModuleVisibility(Long id, Session session) {
 				
 				try {
-					//Session s=PersistenceManager.getSession();
 					Transaction tx=session.beginTransaction();
-					System.out.println("ssssssssssssssss");
 					AmpModulesVisibility module = (AmpModulesVisibility) session.load(AmpModulesVisibility.class, id);
-					//AmpObjectVisibility parent = (AmpObjectVisibility) module.getParent();
-					//parent.getItems().remove(module);
 					Iterator k=null;
 					k=module.getItems().iterator();
 					while (k.hasNext()) {
@@ -1364,17 +1360,15 @@ public class FeaturesUtil {
 					}
 					k=module.getItems().iterator();
 					module.getItems().clear();
-					System.out.println("ddddddddddd:::"+module.getItems().size());
 					k=module.getTemplates().iterator();
 					while (k.hasNext()) {
 						AmpTemplatesVisibility element = (AmpTemplatesVisibility) k.next();
 						element.getItems().remove(module);
 					}
-					
-					tx.commit();
 					session.delete(module);
+					tx.commit();
 					
-					//session.close();
+					
 				
 				} catch (HibernateException e) {
 					// TODO Auto-generated catch block

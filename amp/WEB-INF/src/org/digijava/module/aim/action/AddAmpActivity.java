@@ -30,12 +30,16 @@ import org.digijava.kernel.user.User;
 import org.digijava.kernel.util.RequestUtils;
 import org.digijava.kernel.util.SiteUtils;
 import org.digijava.kernel.util.collections.HierarchyDefinition;
+import org.digijava.module.aim.dbentity.AmpCategoryClass;
+import org.digijava.module.aim.dbentity.AmpCategoryValue;
 import org.digijava.module.aim.dbentity.AmpModality;
 import org.digijava.module.aim.dbentity.AmpTheme;
 import org.digijava.module.aim.dbentity.EUActivity;
 import org.digijava.module.aim.form.EditActivityForm;
 import org.digijava.module.aim.form.ProposedProjCost;
 import org.digijava.module.aim.helper.ActivitySector;
+import org.digijava.module.aim.helper.CategoryConstants;
+import org.digijava.module.aim.helper.CategoryManagerUtil;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.ActivityUtil;
 import org.digijava.module.aim.util.CurrencyUtil;
@@ -429,8 +433,10 @@ public class AddAmpActivity extends Action {
 //				statusCol = eaForm.getStatusCollection();
 //			}
 			// Initailly setting the implementation level as "country"
-			if (eaForm.getImplementationLevel() == null)
-				eaForm.setImplementationLevel("country");
+			if (eaForm.getImplemLocationLevel() == null)
+				eaForm.setImplemLocationLevel(
+						CategoryManagerUtil.getAmpCategoryValueFromDb(CategoryConstants.IMPLEMENTATION_LOCATION_KEY, new Long(0)).getId()
+				);
 
 			Collection modalColl = null;
 			// load the modalities from the database

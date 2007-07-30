@@ -107,7 +107,8 @@ public class EditActivityForm extends ActionForm implements Serializable{
 	private Collection orgTypes = null;
 	private boolean reset;
 	private boolean orgPopupReset;
-	private String implementationLevel = null;
+	//private String implementationLevel = null;
+	private Long implemLocationLevel;
 
 	private Collection selectedPhysicalProgress;
 	private Long selPhyProg[];
@@ -468,7 +469,9 @@ public class EditActivityForm extends ActionForm implements Serializable{
 			cols = null;
 			colsAlpha = null;
 			orgTypes = null;
-			implementationLevel = null;
+//			implementationLevel = null;
+			implemLocationLevel		= null;
+			
 			selectedPhysicalProgress = null;
 			componentDesc = null;
 			selPhyProg = null;
@@ -927,20 +930,6 @@ public class EditActivityForm extends ActionForm implements Serializable{
 		this.impCountry = impCountry;
 	}
 
-	/**
-	 * @return Returns the implementationLevel.
-	 */
-	public String getImplementationLevel() {
-		return implementationLevel;
-	}
-
-	/**
-	 * @param implementationLevel
-	 *            The implementationLevel to set.
-	 */
-	public void setImplementationLevel(String implementationLevel) {
-		this.implementationLevel = implementationLevel;
-	}
 
 	/**
 	 * @return Returns the impLevelValue.
@@ -4004,5 +3993,13 @@ public String getPurpose() {
 
 	public void setVisibleProgram(String visibleProgram) {
 		this.visibleProgram = visibleProgram;
+	}
+
+	public Long getImplemLocationLevel() {
+		return implemLocationLevel;
+	}
+
+	public void setImplemLocationLevel(Long implemLocationLevel) {
+		this.implemLocationLevel = implemLocationLevel;
 	}
 }

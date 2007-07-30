@@ -5,6 +5,7 @@
 <%@ taglib uri="/taglib/struts-html" prefix="html" %>
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
+<%@ taglib uri="/taglib/category" prefix="category" %>
 
 <digi:ref href="css/styles.css" type="text/css" rel="stylesheet" />
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/addActivity.js"/>"></script>
@@ -215,8 +216,7 @@ function checkNumeric(objName,comma,period,hyphen)
 									<logic:greaterEqual name="aimEditActivityForm" property="impLevelValue" value="1">
 										<tr>
 											<td>
-												<digi:trn key="aim:location">
-												Country</digi:trn>
+												<category:getoptionvalue categoryKey="<%= org.digijava.module.aim.helper.CategoryConstants.IMPLEMENTATION_LOCATION_KEY%>" categoryIndex="0"/>
 											</td>
 											<td><b>
 												<c:out value="${aimEditActivityForm.country}"/></b>
@@ -232,8 +232,7 @@ function checkNumeric(objName,comma,period,hyphen)
 									<logic:greaterEqual name="aimEditActivityForm" property="impLevelValue" value="2">
 										<tr>
 											<td>
-												<digi:trn key="aim:region">
-												Region</digi:trn>
+												<category:getoptionvalue categoryKey="<%= org.digijava.module.aim.helper.CategoryConstants.IMPLEMENTATION_LOCATION_KEY%>" categoryIndex="1"/>
 											</td>
 											<td>
 												<c:if test="${aimEditActivityForm.impLevelValue != 2}">
@@ -260,8 +259,7 @@ function checkNumeric(objName,comma,period,hyphen)
 									<logic:greaterEqual name="aimEditActivityForm" property="impLevelValue" value="3">
 										<tr>
 											<td>
-												<digi:trn key="aim:zone">
-												Zone</digi:trn>
+												<category:getoptionvalue categoryKey="<%= org.digijava.module.aim.helper.CategoryConstants.IMPLEMENTATION_LOCATION_KEY%>" categoryIndex="2"/>
 											</td>
 											<td>
 												<c:if test="${aimEditActivityForm.impLevelValue != 3}">
@@ -288,7 +286,7 @@ function checkNumeric(objName,comma,period,hyphen)
 									<logic:greaterEqual name="aimEditActivityForm" property="impLevelValue" value="4">
 										<tr>
 											<td>
-												<digi:trn key="aim:district">District </digi:trn>
+												<category:getoptionvalue categoryKey="<%= org.digijava.module.aim.helper.CategoryConstants.IMPLEMENTATION_LOCATION_KEY%>" categoryIndex="3"/>
 											</td>
 											<td>
 												<html:select property="impMultiWoreda"  styleClass="inp-text" size="5" multiple="true">
@@ -345,12 +343,7 @@ function checkNumeric(objName,comma,period,hyphen)
 								Search Locations</digi:trn>
 							(<script language="JavaScript">
 								{
-										switch(document.aimEditActivityForm.impLevelValue.value)
-										{
-											case '1':case '2':case '3':	document.write('<bean:write name="aimEditActivityForm" property="implementationLevel" />');break;
-											case '4': document.write('<digi:trn key="aim:district">District </digi:trn>');break;																					
-										}
-										
+										document.write('<category:getoptionvalue categoryValueId="${aimEditActivityForm.implemLocationLevel}"/>');										
 								}
 							</script>)
 							</td></tr>

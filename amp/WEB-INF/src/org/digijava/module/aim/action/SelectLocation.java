@@ -9,8 +9,10 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.digijava.kernel.dbentity.Country;
+import org.digijava.module.aim.dbentity.AmpCategoryValue;
 import org.digijava.module.aim.dbentity.AmpGlobalSettings;
 import org.digijava.module.aim.form.EditActivityForm;
+import org.digijava.module.aim.helper.CategoryManagerUtil;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.FeaturesUtil;
@@ -39,7 +41,7 @@ public class SelectLocation extends Action {
 		String fill = request.getParameter("fill");
 		
 				
-		if (eaForm.getImplementationLevel().equals("country")) {
+		/*if (eaForm.getImplementationLevel().equals("country")) {
 			eaForm.setImpLevelValue(new Integer(1));
 		} else if (eaForm.getImplementationLevel().equals("region")) {
 			eaForm.setImpLevelValue(new Integer(2));
@@ -47,7 +49,17 @@ public class SelectLocation extends Action {
 			eaForm.setImpLevelValue(new Integer(3));
 		} else if (eaForm.getImplementationLevel().equals("woreda")) {
 			eaForm.setImpLevelValue(new Integer(4));
-		}		
+		}		*/
+		
+		Integer impLevelValue;
+		AmpCategoryValue implLocValue	= CategoryManagerUtil.getAmpCategoryValueFromDb( eaForm.getImplemLocationLevel() );
+		if (implLocValue != null) {
+			impLevelValue	= new Integer ( implLocValue.getIndex() + 1 );
+		}
+		else
+			impLevelValue 	= new Integer( 1 );
+		
+		eaForm.setImpLevelValue( impLevelValue );
 /*
  * modified by Govind
  */
@@ -105,7 +117,7 @@ public class SelectLocation extends Action {
 		
 		logger.info("Region = " + eaForm.getImpRegion());
 		logger.info("Imp. level value = " + eaForm.getImpLevelValue());
-		logger.info("Imp. level = " + eaForm.getImplementationLevel());
+		logger.info("Imp. level = " + eaForm.getImplemLocationLevel());
 		
 		return mapping.findForward("forward");
 	}

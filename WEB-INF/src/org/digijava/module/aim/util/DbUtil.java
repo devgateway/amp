@@ -1254,6 +1254,29 @@ public class DbUtil {
 		return user;
 	}
 
+        public static User getUser(Long userId) {
+                Session session = null;
+                Query qry = null;
+                User user = null;
+
+                try {
+                        session = PersistenceManager.getRequestDBSession();
+                        String queryString = "select u from " + User.class.getName()
+                                        + " u where (u.id=:userId)";
+                        qry = session.createQuery(queryString);
+                        qry.setParameter("userId", userId, Hibernate.LONG);
+                        Iterator itr = qry.list().iterator();
+                        if (itr.hasNext()) {
+                                user = (User) itr.next();
+                        }
+                } catch (Exception e) {
+                        logger.error("Unable to get user");
+                        logger.debug("Exceptiion " + e);
+                                }
+                return user;
+        }
+
+
 	/**
 	 * @author Arty
 	 * @param reportId

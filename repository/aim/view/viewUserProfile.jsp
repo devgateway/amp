@@ -8,7 +8,7 @@
 
 
 <script language="JavaScript">
-<!-- 
+<!--
 
 function load() {
 }
@@ -22,7 +22,7 @@ function unload() {
 <digi:ref href="css/styles.css" type="text/css" rel="stylesheet" />
 <digi:instance property="aimUserDetailForm" />
 
-
+<digi:errors/>
 
 <table width="100%" cellSpacing=5 cellPadding=5 vAlign="top" border=0>
 	<tr><td vAlign="top">
@@ -57,7 +57,7 @@ function unload() {
 								<digi:trn key="aim:mailingAddress" >	Mailing Address		</digi:trn>
 							</td>
 							<td bgcolor="#f4f4f2">
-								<bean:write name="aimUserDetailForm" 
+								<bean:write name="aimUserDetailForm"
 								property="mailingAddress" />
 							</td>
 						</tr>
@@ -93,8 +93,8 @@ function unload() {
 												<digi:trn key="aim:teamName" >Team Name		</digi:trn>
 											<% } else { %>
 												<digi:trn key="aim:role" >	Role		</digi:trn>
-											<% } 
-											   i++;	
+											<% }
+											   i++;
 											%>
 										</td>
 										<td bgcolor="#f4f4f2">
@@ -111,7 +111,7 @@ function unload() {
 					<td>
 						<input type="button" value="Close" class="dr-menu" onclick="javascript:window.close()">
 					</td>
-				
+
 				</tr>
 			</tr>
 		</table>

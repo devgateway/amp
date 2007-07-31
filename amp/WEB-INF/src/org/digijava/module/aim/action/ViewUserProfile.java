@@ -14,36 +14,63 @@ import org.digijava.module.aim.form.UserDetailForm;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.TeamMemberUtil;
+import org.digijava.kernel.user.User;
+import org.apache.struts.action.ActionErrors;
+import org.apache.struts.action.ActionError;
 
+public class ViewUserProfile
+    extends Action {
+  private static Logger logger = Logger.getLogger(ViewUserProfile.class);
+  public ActionForward execute(ActionMapping mapping, ActionForm form,
+                               HttpServletRequest request,
+                               HttpServletResponse response) throws java.lang.
+      Exception {
+     ActionErrors errors = new ActionErrors();
 
-public class ViewUserProfile extends Action
-{
-	private static Logger logger = Logger.getLogger(ViewUserProfile.class) ;
-	public ActionForward execute(ActionMapping mapping, ActionForm form,
-								HttpServletRequest request, HttpServletResponse response) 
-	throws java.lang.Exception {
+    UserDetailForm formBean = (UserDetailForm) form;
+    HttpSession httpSession = request.getSession();
+    TeamMember teamMember = (TeamMember) httpSession.getAttribute(
+        "currentMember");
+    User user = null;
 
-		UserDetailForm formBean = (UserDetailForm)form;
-		HttpSession httpSession = request.getSession();
-		TeamMember teamMember=(TeamMember)httpSession.getAttribute("currentMember");
-		
-		Long memId = null;
-		if (request.getParameter("id") != null) {
-			long id = Long.parseLong(request.getParameter("id"));
-			memId = new Long(id);
-		} else {
-			memId = teamMember.getMemberId(); 
-		}
-		
-		AmpTeamMember member = TeamMemberUtil.getAmpTeamMember(memId);
-		
-		formBean.setAddress(member.getUser().getAddress());
-		formBean.setFirstNames(member.getUser().getFirstNames());
-		formBean.setLastName(member.getUser().getLastName());
-		formBean.setMailingAddress(member.getUser().getEmail());
-		formBean.setOrganizationName(member.getUser().getOrganizationName());
-		formBean.setInfo(TeamMemberUtil.getMemberInformation(member.getUser().getId()));
+    Long memId = null;
 
-		return mapping.findForward("forward");
-	}
+    if (request.getParameter("id") != null) {
+      long id = Long.parseLong(request.getParameter("id"));
+      memId = new Long(id);
+    }
+    /*   else {
+          memId = teamMember.getMemberId();
+        }
+     */
+
+    String[] memberInformationn ;
+    AmpTeamMember member = TeamMemberUtil.getAmpTeamMember(memId);
+    if (member == null) {
+      if (memId.equals(teamMember.getMemberId())) {
+        user = DbUtil.getUser(teamMember.getMemberId());
+         memberInformationn=new String[]{teamMember.getTeamName(),teamMember.getRoleName()};
+      }
+      else {
+        errors.add(ActionErrors.GLOBAL_ERROR,new ActionError("error.aim.invalidUserId"));
+        saveErrors(request,errors);
+        return mapping.getInputForward();
+      }
+
+    }
+    else {
+      user = member.getUser();
+      memberInformationn = TeamMemberUtil.getMemberInformation(user.getId());
+    }
+
+    formBean.setAddress(user.getAddress());
+    formBean.setFirstNames(user.getFirstNames());
+    formBean.setLastName(user.getLastName());
+    formBean.setMailingAddress(user.getEmail());
+    formBean.setOrganizationName(user.
+                                 getOrganizationName());
+    formBean.setInfo(memberInformationn);
+
+    return mapping.findForward("forward");
+  }
 }

@@ -60,11 +60,6 @@
 					</td>
 				</tr>
 
-				<tr>
-					<td noWrap width=100% vAlign="top">
-						<jsp:include page="manageTemplatesVisibility.jsp" />
-					</td>
-				</tr>
 				<logic:equal name="aimVisibilityManagerForm" property="mode" value="editTemplateTree">			
 				<tr>
 					<td noWrap width=100% vAlign="top">
@@ -73,6 +68,12 @@
 				</tr>
 				</logic:equal>
 				<logic:notEqual name="aimVisibilityManagerForm" property="mode" value="editTemplateTree">
+				<tr>
+					<td noWrap width=100% vAlign="top">
+						<jsp:include page="manageTemplatesVisibility.jsp" />
+					</td>
+				</tr>
+				
 				<logic:equal name="aimVisibilityManagerForm" property="mode" value="addNew">
 					<tr>
 						<td noWrap width=100% vAlign="top">

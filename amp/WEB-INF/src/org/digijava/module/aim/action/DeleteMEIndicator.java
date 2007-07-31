@@ -5,8 +5,11 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.lang.Long;
 
+import net.sf.hibernate.Session;
+
 import org.apache.log4j.Logger;
 import org.apache.struts.action.*;
+import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.form.IndicatorForm;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.MEIndicatorsUtil;
@@ -51,36 +54,40 @@ public class DeleteMEIndicator extends Action
 				indForm.setMeIndActList(indActList);
 				indForm.setIndicatorName(MEIndicatorsUtil.getMEIndicatorName(indId));
 				indForm.setIndId(indId);
+				indForm.setEvent("before");
 				return mapping.findForward("deleteWindow");
 			}
 		}
-
-		AmpMEIndicators ampMEInd = new AmpMEIndicators();
-		ampMEInd.setAmpMEIndId(indId);
-		
-		colMeIndValIds = MEIndicatorsUtil.getMeIndValIds(indId);
-		AmpMEIndicatorValue ampMEIndVal = null;
-		
-		Iterator itr = colMeIndValIds.iterator();
-		while(itr.hasNext())
-		{
-			ampMEIndVal = (AmpMEIndicatorValue) itr.next();
-			ampMECurrValIds = MEIndicatorsUtil.getMeCurrValIds(ampMEIndVal.getAmpMeIndValId());
+		if ("before".equals(indForm.getEvent())){
+			AmpMEIndicators ampMEInd;/* = new AmpMEIndicators();
+			ampMEInd.setAmpMEIndId(indId);*/
+			Session pSession = PersistenceManager.getSession();
+			ampMEInd =  (AmpMEIndicators) pSession.load(AmpMEIndicators.class, indId);
+			colMeIndValIds = MEIndicatorsUtil.getMeIndValIds(indId);
+			AmpMEIndicatorValue ampMEIndVal = null;
 			
-			if(ampMECurrValIds != null)
+			Iterator itr = colMeIndValIds.iterator();
+			while(itr.hasNext())
 			{
-				AmpMECurrValHistory ampMECurrVal = null;
-				Iterator itrCurrVal = ampMECurrValIds.iterator();
-				while(itrCurrVal.hasNext())
+				ampMEIndVal = (AmpMEIndicatorValue) itr.next();
+				ampMECurrValIds = MEIndicatorsUtil.getMeCurrValIds(ampMEIndVal.getAmpMeIndValId());
+				
+				if(ampMECurrValIds != null)
 				{
-					ampMECurrVal = (AmpMECurrValHistory) itrCurrVal.next();
-					DbUtil.delete(ampMECurrVal);
+					AmpMECurrValHistory ampMECurrVal = null;
+					Iterator itrCurrVal = ampMECurrValIds.iterator();
+					while(itrCurrVal.hasNext())
+					{
+						ampMECurrVal = (AmpMECurrValHistory) itrCurrVal.next();
+						DbUtil.delete(ampMECurrVal);
+					}
 				}
+				DbUtil.delete(ampMEIndVal);
 			}
-			DbUtil.delete(ampMEIndVal);
+			DbUtil.delete(ampMEInd);
+			indForm.setEvent("after");
 		}
-		DbUtil.delete(ampMEInd);
-
+		
 		indicators = MEIndicatorsUtil.getAllIndicators();
 		indForm.setIndicators(indicators);
 		return mapping.findForward("forward");

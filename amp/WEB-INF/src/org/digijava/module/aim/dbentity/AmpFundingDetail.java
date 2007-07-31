@@ -24,6 +24,9 @@ public class AmpFundingDetail implements Serializable
 	private AmpCurrency ampCurrencyId ;
 	private AmpOrganisation reportingOrgId;
 	private AmpFunding  ampFundingId;
+	private Double fixedExchangeRate;
+	private AmpCurrency rateCurrencyId;
+	
 	
 	private AmpPerspective perspectiveId;
 	private String expCategory;
@@ -268,6 +271,24 @@ public class AmpFundingDetail implements Serializable
 	public void setPerspectiveId(AmpPerspective perspectiveId) {
 		this.perspectiveId = perspectiveId;
 	}
+
+	public Double getFixedExchangeRate() {
+		return fixedExchangeRate;
+	}
+
+	public void setFixedExchangeRate(Double fixedExchangeRate) {
+		this.fixedExchangeRate = fixedExchangeRate;
+	}
+
+	public AmpCurrency getRateCurrencyId() {
+		return rateCurrencyId;
+	}
+
+	public void setRateCurrencyId(AmpCurrency rateCurrencyId) {
+		this.rateCurrencyId = rateCurrencyId;
+	}
+
+	
 }
 	
 	

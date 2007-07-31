@@ -19,6 +19,9 @@
 <bean:define id="translation2">
 	<digi:trn key="aim:categoryManagerPlsEnterKey">You need to enter a key for the category</digi:trn>
 </bean:define>
+<bean:define id="translation3">
+	<digi:trn key="aim:categoryManagerMoreThan2Values">Category must have at least two possible values</digi:trn>
+</bean:define>
 
 <script type="text/javascript">
 	var numOfAdditionalFields 	= 0;
@@ -78,7 +81,7 @@
 				 numOfNotEmptyFields++;
 		}
 		if (numOfNotEmptyFields < 2) {
-			alert("Category must have at least two possible values");
+			alert("<%= translation3 %>");
 			return;
 		}
 		document.forms[1].submit();

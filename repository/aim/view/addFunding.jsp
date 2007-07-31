@@ -126,7 +126,7 @@
 <html:hidden property="numExp"/>
 <html:hidden property="editAct"/>
 <html:hidden property="firstSubmit"/>
-
+	
 <table width="100%" border="0" cellspacing="2" cellpadding="2" align="center" class=box-border-nopadding>
 	<!-- funding -->
 	<tr>
@@ -236,7 +236,7 @@
 
 			<table width="100%" cellpadding=0 cellspacing=1 vAlign="top" align="left" bgcolor="#006699">
 			<tr><td>
-			<table width="100%" cellpadding=0 cellspacing=0>
+			<table width="100%" cellpadding=0 cellspacing=0 border="1">
 				<tr>
 					<td width="100%" bgcolor="#006699" class="textalb" height="20" align="center">
 					<a title="<digi:trn key="aim:Commitmentsmade">A firm obligation expressed in writing and backed by the necessary funds, undertaken by an official donor to provide specified assistance to a recipient country</digi:trn>"><digi:trn key="aim:commitments">Commitments</digi:trn></a>
@@ -328,7 +328,8 @@
 												<digi:trn key="aim:FixedRate">Fixed Rate</digi:trn>
 											</td>
 											<td>
-												<digi:trn key="aim:ExchangeRate">Exchange Rate</digi:trn>
+												<digi:trn key="aim:ExchangeRate">
+ Rate</digi:trn>
 											</td>
 											<td colspan="3">
 												<digi:trn key="aim:CurrencyFIE">Currency</digi:trn>
@@ -347,6 +348,7 @@
 												onclick="<%=jsUrl%>"/>
 											</td>
 											<td>
+
 												<logic:equal name="fundingDetail" property="useFixedRate" value="true">
 													<html:text name="fundingDetail" indexed="true" property="fixedExchangeRate" styleClass="amt"
 													disabled="false" styleId="<%=exchRatefldId%>"/>
@@ -394,7 +396,6 @@
 												</html:select>
 											</c:if>
 												<html:hidden name="fundingDetail" indexed="true" property="transactionType"/>
-											</td>
 											<td valign="bottom">
 												<html:text name="fundingDetail" indexed="true" property="transactionAmount" size="17" styleClass="amt"/>
 											</td>
@@ -431,13 +432,11 @@
 												 	<digi:img src="module/cms/images/deleteIcon.gif" border="0" alt="Delete this transaction"/>
 												</a>
 											</td>
-										</tr>
 										<tr>
-								<!--
 											<td bgcolor="#ffff00">
 												&nbsp;
 											</td>
-											<td align="right" bgcolor="#ffff00">
+											<td align="left"  bgcolor="#ffff00">
 												<b>
 													<digi:trn key="aim:fixedRate">Fixed Rate</digi:trn>
 												</b>
@@ -489,10 +488,9 @@
 												</html:select>
 												</logic:equal>
 											</td>
-											-->
+											
 										</tr>
-								<%--	</c:if> --%>
-							</c:if>
+									</c:if>
 						 	</c:forEach>
 						 	</c:if>
 						</table>

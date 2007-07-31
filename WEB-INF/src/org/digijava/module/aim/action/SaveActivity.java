@@ -252,8 +252,10 @@ public class SaveActivity extends Action {
 												double amt = CurrencyWorker.convert1(transAmt, frmExRt,1);
 												amt *= fundDet.getFixedExchangeRate();
 												ampFundDet.setTransactionAmount(new Double(amt));
+												ampFundDet.setFixedExchangeRate(fundDet.getFixedExchangeRate());
 												ampFundDet.setAmpCurrencyId(
 														CurrencyUtil.getCurrencyByCode(fundDet.getFixedExchangeCurrCode()));
+												ampFundDet.setRateCurrencyId(CurrencyUtil.getCurrencyByCode(fundDet.getFixedExchangeCurrCode()));
 											}
 											ampFundDet.setAmpFundingId(ampFunding);
 											if (fundDet.getTransactionType() == Constants.EXPENDITURE) {
@@ -1126,8 +1128,10 @@ public class SaveActivity extends Action {
 											double amt = CurrencyWorker.convert1(transAmt, frmExRt,1);
 											amt *= fundDet.getFixedExchangeRate();
 											ampFundDet.setTransactionAmount(new Double(amt));
+											ampFundDet.setFixedExchangeRate(fundDet.getFixedExchangeRate());
 											ampFundDet.setAmpCurrencyId(
-													CurrencyUtil.getCurrencyByCode(fundDet.getFixedExchangeCurrCode()));
+													CurrencyUtil.getCurrencyByCode(fundDet.getCurrencyCode()));
+											ampFundDet.setRateCurrencyId(CurrencyUtil.getCurrencyByCode(fundDet.getFixedExchangeCurrCode()));
 										}
 										ampFundDet.setAmpFundingId(ampFunding);
 										if (fundDet.getTransactionType() == Constants.EXPENDITURE) {

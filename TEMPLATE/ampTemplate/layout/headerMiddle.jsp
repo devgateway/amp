@@ -18,12 +18,12 @@ if("On".equals(publicView)) { %>
 					::: <digi:trn key="aim:aidInformationModule">AID INFORMATION MODULE</digi:trn>
 			</digi:link>
 		</LI>
-		<module:display name="Reports">
+
 		<LI class="noLink">
 		<digi:link styleClass="head-menu-link" href="/viewTeamReports.do" module="aim" onclick="return quitRnot()">
 				::: <digi:trn key="aim:reports">REPORTS</digi:trn></digi:link>	
 		</LI>
-		</module:display>				
+
 </UL>		
 </DIV>
 <% } %>
@@ -56,7 +56,7 @@ if("On".equals(publicView)) { %>
 				</digi:link>				
 			</logic:empty>			
 			</div></LI>
-		<module:display name="Reports">
+
 		<LI>
 			<div id="gen"  title='<digi:trn key="aim:viewPublicReports">View public team reports</digi:trn>'>
 			<logic:notEmpty name="TID" scope="session">
@@ -69,7 +69,6 @@ if("On".equals(publicView)) { %>
 			</logic:empty>			
 			</div>
 		</LI>
-		</module:display> 
 			<module:display name="Document Management">
 		    	<LI><a class="head-menu-link" href="/viewAllDocuments.do" module="aim" onclick="return quitRnot()">::: <digi:trn key="aim:documentsHeader">DOCUMENTS</digi:trn></a></LI>
 		    </module:display>

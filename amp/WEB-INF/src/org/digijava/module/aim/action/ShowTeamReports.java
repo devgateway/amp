@@ -5,23 +5,22 @@ import java.util.Collection;
 
 import javax.servlet.http.HttpSession;
 
+import org.apache.log4j.Logger;
 import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.dgfoundation.amp.ar.ARUtil;
-import org.digijava.kernel.request.SiteDomain;
-import org.digijava.kernel.util.RequestUtils;
-import org.digijava.kernel.util.SiteUtils;
 import org.digijava.module.aim.form.ReportsForm;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.TeamMember;
-import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.TeamMemberUtil;
 import org.digijava.module.aim.util.TeamUtil;
+import org.digijava.module.aim.dbentity.AmpReports;
 
 public class ShowTeamReports extends Action {
 
+	private static Logger logger	= Logger.getLogger( ShowTeamReports.class );
 	public ActionForward execute(ActionMapping mapping, ActionForm form,
 			javax.servlet.http.HttpServletRequest request,
 			javax.servlet.http.HttpServletResponse response)
@@ -45,7 +44,12 @@ public class ShowTeamReports extends Action {
 						.getMemberId());
 				if (dbReturnSet == null) 
 					dbReturnSet = new ArrayList();
-				dbReturnSet.add( session.getAttribute(Constants.DEFAULT_TEAM_REPORT) );
+				AmpReports defaultReport	= (AmpReports)session.getAttribute(Constants.DEFAULT_TEAM_REPORT);
+				if (defaultReport != null) {
+					dbReturnSet.add( session.getAttribute(Constants.DEFAULT_TEAM_REPORT) );
+				}
+				else
+					logger.info("There is no default team report set!");
 			}
 			rf.setReports(dbReturnSet);
 		}

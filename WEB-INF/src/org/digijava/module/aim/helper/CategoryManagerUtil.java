@@ -411,7 +411,11 @@ public class CategoryManagerUtil {
 
 		return treeSet;
 	}
-	
+	/**
+	 * returns a string containing only ascii characters
+	 * @param input The string that needs to be filtered
+	 * @return
+	 */
 	public static String asciiStringFilter (String input) {
 		byte [] bytearray		= input.getBytes(); 
 		

@@ -3,7 +3,9 @@
 <%@ taglib uri="/taglib/struts-logic" prefix="logic" %>
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
 <%@ page import="org.digijava.module.aim.util.FeaturesUtil" %>
-
+<%@ taglib uri="/taglib/fieldVisibility" prefix="field" %>
+<%@ taglib uri="/taglib/featureVisibility" prefix="feature" %>
+<%@ taglib uri="/taglib/moduleVisibility" prefix="module" %>
 
 <logic:notPresent name="currentMember">
 <% String publicView=FeaturesUtil.getGlobalSettingValue("Public View"); 
@@ -15,11 +17,13 @@ if("On".equals(publicView)) { %>
 			<digi:link styleClass="head-menu-link" href="/reportsPublicView.do" module="aim" onclick="return quitRnot()">			
 					::: <digi:trn key="aim:aidInformationModule">AID INFORMATION MODULE</digi:trn>
 			</digi:link>
-		</LI>				
+		</LI>
+		<module:display name="Reports">
 		<LI class="noLink">
 		<digi:link styleClass="head-menu-link" href="/viewTeamReports.do" module="aim" onclick="return quitRnot()">
 				::: <digi:trn key="aim:reports">REPORTS</digi:trn></digi:link>	
-		</LI>				
+		</LI>
+		</module:display>				
 </UL>		
 </DIV>
 <% } %>
@@ -29,8 +33,6 @@ if("On".equals(publicView)) { %>
 <DIV id="menu">
 	<UL>
 		<LI class="noLink">&nbsp;</LI>
-		
-		
 		
 		<logic:equal name="ampAdmin" value="yes">
 		<LI>
@@ -53,7 +55,8 @@ if("On".equals(publicView)) { %>
 					::: <digi:trn key="aim:aidInformationModule">AID INFORMATION MODULE</digi:trn>
 				</digi:link>				
 			</logic:empty>			
-			</div></LI> 
+			</div></LI>
+		<module:display name="Reports">
 		<LI>
 			<div id="gen"  title='<digi:trn key="aim:viewPublicReports">View public team reports</digi:trn>'>
 			<logic:notEmpty name="TID" scope="session">
@@ -64,14 +67,16 @@ if("On".equals(publicView)) { %>
 				<digi:link styleClass="head-menu-link" href="/" module="aim" onclick="return quitRnot()">
 				::: <digi:trn key="aim:reports">REPORTS</digi:trn></digi:link>
 			</logic:empty>			
-			</div></LI> 
-		<logic:notEmpty name="DC" scope="application">
-	    	<LI><a class="head-menu-link" href="/viewAllDocuments.do" module="aim" onclick="return quitRnot()">::: <digi:trn key="aim:documentsHeader">DOCUMENTS</digi:trn></a></LI>
-		</logic:notEmpty>	
-		<logic:notEmpty name="SC" scope="application">
-	    	<LI><a class="head-menu-link">::: <digi:trn key="aim:scenarios">SCENARIOS</digi:trn></a></LI>
-		</logic:notEmpty>	
-		<logic:notEmpty name="CL" scope="application">	
+			</div>
+		</LI>
+		</module:display> 
+			<module:display name="Document Management">
+		    	<LI><a class="head-menu-link" href="/viewAllDocuments.do" module="aim" onclick="return quitRnot()">::: <digi:trn key="aim:documentsHeader">DOCUMENTS</digi:trn></a></LI>
+		    </module:display>
+		    <module:display name="Scenarios">
+		    	<LI><a class="head-menu-link">::: <digi:trn key="aim:scenarios">SCENARIOS</digi:trn></a></LI>
+	    	</module:display>
+	    <module:display name="Calendar">
 		<LI>
 			<div id="gen" title='<digi:trn key="aim:viewPlanningCalendar">View Planning Calendar</digi:trn>'>
 			<logic:notEmpty name="TID" scope="session">
@@ -82,9 +87,10 @@ if("On".equals(publicView)) { %>
 				<digi:link styleClass="head-menu-link" href="/" module="aim" onclick="return quitRnot()">
 				::: <digi:trn key="aim:calendar">CALENDAR</digi:trn></digi:link>
 			</logic:empty>			
-			</div></LI> 
-		</logic:notEmpty>
-		<logic:notEmpty name="ME" scope="application">
+			</div>
+		</LI> 
+		</module:display>
+		<module:display name="National Planning Dashboard">
     	<LI>
 			<div id="gen"  title='<digi:trn key="aim:viewMEDashboard">View M&E Dashboard</digi:trn>'>
 			<logic:notEmpty name="TID" scope="session">
@@ -95,8 +101,9 @@ if("On".equals(publicView)) { %>
 				<digi:link styleClass="head-menu-link" href="/" module="aim" onclick="return quitRnot()">			
 				::: <digi:trn key="aim:medashboard">M & E DASHBOARD</digi:trn></digi:link>
 			</logic:empty>
-			</div></LI>
-		</logic:notEmpty>
+			</div>
+		</LI>
+		</module:display>
 		</logic:equal>
 		
 		

@@ -1,11 +1,11 @@
 package org.digijava.module.aim.helper;
 
-import java.io.ByteArrayOutputStream;
-import java.io.OutputStream;
-import java.io.OutputStreamWriter;
-import java.io.UnsupportedEncodingException;
 import java.nio.ByteBuffer;
+import java.nio.CharBuffer;
+import java.nio.charset.CharacterCodingException;
 import java.nio.charset.Charset;
+import java.nio.charset.CharsetDecoder;
+import java.nio.charset.CodingErrorAction;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Comparator;
@@ -411,15 +411,33 @@ public class CategoryManagerUtil {
 
 		return treeSet;
 	}
+	
+	public static String asciiStringFilter (String input) {
+		byte [] bytearray		= input.getBytes(); 
+		
+		CharsetDecoder decoder	= Charset.forName("US-ASCII").newDecoder();
+		decoder.replaceWith("_");
+		decoder.onMalformedInput(CodingErrorAction.REPLACE);
+		decoder.onUnmappableCharacter(CodingErrorAction.REPLACE);
+		
+		try {
+			CharBuffer buffer 		= decoder.decode( ByteBuffer.wrap(bytearray) );
+			return buffer.toString();
+		} catch (CharacterCodingException e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
 	/**
 	 *
 	 * @param ampCategoryValue
 	 * @return the translation key for the ampCategoryValue
 	 */
 	public static String getTranslationKeyForCategoryValue(AmpCategoryValue ampCategoryValue) {
+		String filteredValue			= asciiStringFilter( ampCategoryValue.getValue() );
 		String translationKey			= "aim:category" + ampCategoryValue.getAmpCategoryClass().getId() +
 										"_" + ampCategoryValue.getAmpCategoryClass().getName() + "_" +
-										ampCategoryValue.getValue();
+										filteredValue;
 		return translationKey;
 	}
 	/**

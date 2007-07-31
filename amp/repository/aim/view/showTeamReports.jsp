@@ -159,13 +159,7 @@ function confirmFunc() {
 															 	</p>
 														 	</logic:present>
 															</TD>
-														 	<!--
-														 	<td>
-																<p style="width: 500px;white-space: normal">
-														 		<bean:write name="report" property="reportDescription" />
-														 		</p>
-														 	</td>
-														 	 -->
+														 	
 														 	<td>
 														 		<p style="white-space: nowrap">
 														 		<logic:present name="report" property="ownerId">
@@ -174,6 +168,7 @@ function confirmFunc() {
 														 			 <bean:write name="report" property="ownerId.ampTeam.name" />
 														 		</logic:present>
 														 		</p>
+														 	</td>	
 														 	<td>
 														 		<p style="white-space: nowrap">
 														 			<logic:present name="report" property="updatedDate">

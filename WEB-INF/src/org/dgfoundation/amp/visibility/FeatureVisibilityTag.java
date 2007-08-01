@@ -73,7 +73,7 @@ public class FeatureVisibilityTag extends BodyTagSupport {
    			   ampTreeVisibility.buildAmpTreeVisibility(currentTemplate);
    			   ampContext.setAttribute("ampTreeVisibility", ampTreeVisibility);
 		   }
-
+	   ampTreeVisibility=(AmpTreeVisibility) ampContext.getAttribute("ampTreeVisibility");
 	   if(!existModule(ampTreeVisibility)) {
 		   //error
 		  System.out.println("error!!!! module "+this.getModule()+" doesn't exist");

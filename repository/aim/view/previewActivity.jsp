@@ -10,6 +10,11 @@
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
 <%@ taglib uri="/taglib/category" prefix="category" %>
 
+<%@ taglib uri="/taglib/fieldVisibility" prefix="field" %>
+<%@ taglib uri="/taglib/featureVisibility" prefix="feature" %>
+<%@ taglib uri="/taglib/moduleVisibility" prefix="module" %>
+
+
 <script language="JavaScript1.2" type="text/javascript"
 	src="<digi:file src="module/aim/scripts/dscript120.js"/>"></script>
 <script language="JavaScript1.2" type="text/javascript"
@@ -404,6 +409,9 @@ function disable() {
 							<table width="100%" cellSpacing="1" cellPadding="3" vAlign="top" align="left" bgcolor="#006699">
 							<tr><td align="center" vAlign="top" bgcolor="#ffffff">
 								<table width="100%" cellSpacing=1 cellpadding=3 bgcolor="#dddddd">
+								
+									<feature:display name="Identification" module="Project ID and Planning">
+									<field:display name="Organizations and Project ID" feature="Identification">
 									<tr>
 										<td class="t-name" width="30%" align="right" bgcolor="#fffff0">
 											<digi:trn key="aim:ampId">
@@ -413,6 +421,7 @@ function disable() {
 											<c:out value="${aimEditActivityForm.ampId}"/>
 										</td>
 									</tr>
+									</field:display>
 									<tr>
 										<td class="t-name" width="30%" align="right" bgcolor="#fffff0">
 											<digi:trn key="aim:projectTitle">
@@ -422,6 +431,7 @@ function disable() {
 											<c:out value="${aimEditActivityForm.title}"/>
 										</td>
 									</tr>
+								
 									<tr>
 										<td class="t-name" width="30%" align="right" bgcolor="#fffff0">
 											<digi:trn key="aim:objectives">
@@ -434,6 +444,8 @@ function disable() {
                                          </c:if>
 										</td>
 									</tr>
+									</feature:display>
+		
 									<logic:present name="currentMember" scope="session">
 									<tr>
 										<td class="t-name" width="30%" align="right" bgcolor="#fffff0">

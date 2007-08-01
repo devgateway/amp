@@ -36,7 +36,7 @@
           <include name="**/*.jar"/>
           <include name="**/*.zip"/>
         </fileset>
-        <fileset dir="${jboss-lib}/*.jar">
+        <fileset dir="${jboss-lib}">
           <include name="**/*.jar"/>
         </fileset>
         <fileset dir="${system.lib}">

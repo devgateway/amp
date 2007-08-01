@@ -125,7 +125,7 @@ function chooseColor(){
                                   Save
                                   </digi:trn>
                                 </c:set>
-                                <input type="button" value="Save" onclick="saveEventType('${eventType.id}');" style="font-family:verdana;font-size:11px;"/>
+                                <input type="button" value="${translation}" onclick="saveEventType('${eventType.id}');" style="font-family:verdana;font-size:11px;"/>
                               </td>
                               <td>
                                 <c:set var="translation">
@@ -133,7 +133,7 @@ function chooseColor(){
                                   Delete
                                   </digi:trn>
                                 </c:set>
-                                <input type="button" value="Delete" onclick="setDeleteId('${eventType.id}');" style="font-family:verdana;font-size:11px;"/>
+                                <input type="button" value="${translation}" onclick="setDeleteId('${eventType.id}');" style="font-family:verdana;font-size:11px;"/>
                               </td>
                             </tr>
                           </c:forEach>

@@ -205,7 +205,7 @@ function deleteColumn()
 																						<c:if test="${aimAdvancedReportForm.arReportType == 'donor' }">
 																						<logic:iterate name="aimAdvancedReportForm" id="addedColumns"	property="addedColumns" >
 																						
-																							<c:if test="${addedColumns.columnName == 'Donor' || addedColumns.columnName == 'Sector' || addedColumns.columnName == 'Status' || addedColumns.columnName == 'Type Of Assistance' || addedColumns.columnName == 'Financing Instrument' || addedColumns.columnName == 'Project Title' || addedColumns.columnName == 'Team'}">
+																							<c:if test="${addedColumns.columnName == 'Donor' || addedColumns.columnName == 'Donor Group' || addedColumns.columnName == 'Sector' || addedColumns.columnName == 'Status' || addedColumns.columnName == 'Type Of Assistance' || addedColumns.columnName == 'Financing Instrument' || addedColumns.columnName == 'Project Title' || addedColumns.columnName == 'Team'}">
 																								<TR bgcolor="#ffffff">
 																									<td align="left" width="98%" valign=top>
 																									<digi:trn key="aim:report:${addedColumns.columnName}"><c:out value="${addedColumns.columnName}"/></digi:trn>
@@ -227,7 +227,7 @@ function deleteColumn()
 																						<!-- Regional Funding -->
 																						<c:if test="${aimAdvancedReportForm.arReportType == 'regional' }">
 																						<logic:iterate name="aimAdvancedReportForm" id="addedColumns"	property="addedColumns" >
-																							<c:if test="${addedColumns.columnName == 'Status' || addedColumns.columnName == 'Sector' || addedColumns.columnName == 'Region' || addedColumns.columnName == 'Project Title'}">
+																							<c:if test="${addedColumns.columnName == 'Status' || addedColumns.columnName == 'Donor Group' || addedColumns.columnName == 'Sector' || addedColumns.columnName == 'Region' || addedColumns.columnName == 'Project Title'}">
 																								<tr bgcolor="#ffffff">
 																									<td align="left" width="98%" valign=top>
 																									<digi:trn key="aim:report:${addedColumns.columnName}"><c:out value="${addedColumns.columnName}"/></digi:trn>
@@ -246,7 +246,7 @@ function deleteColumn()
 																						<!-- Component Funding -->
 																						<c:if test="${aimAdvancedReportForm.arReportType == 'component' }">
 																						<logic:iterate name="aimAdvancedReportForm" id="addedColumns"	property="addedColumns" >
-																							<c:if test="${addedColumns.columnName == 'Status' || addedColumns.columnName == 'Sector' || addedColumns.columnName == 'Project Title' || addedColumns.columnName == 'Component Name'}">
+																							<c:if test="${addedColumns.columnName == 'Status' || addedColumns.columnName == 'Donor Group'  || addedColumns.columnName == 'Sector' || addedColumns.columnName == 'Project Title' || addedColumns.columnName == 'Component Name'}">
 																								<tr bgcolor="#ffffff">
 																									<td align="left" width="98%" valign=top>
 																									  	<digi:trn key="aim:report:${addedColumns.columnName}"><c:out value="${addedColumns.columnName}"/></digi:trn>
@@ -265,7 +265,7 @@ function deleteColumn()
 																							<!-- Component Funding -->
 																						<c:if test="${aimAdvancedReportForm.arReportType == 'contribution' }">
 																						<logic:iterate name="aimAdvancedReportForm" id="addedColumns"	property="addedColumns" >
-																							<c:if test="${addedColumns.columnName == 'Status' || addedColumns.columnName == 'Sector' || addedColumns.columnName == 'A.C. Chapter' || addedColumns.columnName == 'Accession Instrument' || addedColumns.columnName == 'Donor'}">
+																							<c:if test="${addedColumns.columnName == 'Donor Group' || addedColumns.columnName == 'Status' || addedColumns.columnName == 'Sector' || addedColumns.columnName == 'A.C. Chapter' || addedColumns.columnName == 'Accession Instrument' || addedColumns.columnName == 'Donor'}">
 																								<tr bgcolor="#ffffff">
 																									<td align="left" width="98%" valign=top>
 																										<digi:trn key="aim:report:${addedColumns.columnName}"> <c:out value="${addedColumns.columnId}"/></digi:trn>

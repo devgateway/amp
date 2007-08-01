@@ -7,6 +7,7 @@
              "dist" directory will be utilized or created -->
     <property name="distpath.project" value="./dist"/>
 	<property name="debug" value="true" />
+	<property name="jboss-lib" value="/home/jboss/jboss/server/default/lib" />
 
 
 
@@ -34,6 +35,9 @@
         <fileset dir="${lib}">
           <include name="**/*.jar"/>
           <include name="**/*.zip"/>
+        </fileset>
+        <fileset dir="${jboss-lib}/*.jar">
+          <include name="**/*.jar"/>
         </fileset>
         <fileset dir="${system.lib}">
           <include name="**/*.jar"/>

@@ -409,7 +409,7 @@ function disable() {
 							<table width="100%" cellSpacing="1" cellPadding="3" vAlign="top" align="left" bgcolor="#006699">
 							<tr><td align="center" vAlign="top" bgcolor="#ffffff">
 								<table width="100%" cellSpacing=1 cellpadding=3 bgcolor="#dddddd">
-								
+								<module:display name="Project ID and Planning">
 									<feature:display name="Identification" module="Project ID and Planning">
 									<field:display name="Organizations and Project ID" feature="Identification">
 									<tr>
@@ -422,6 +422,7 @@ function disable() {
 										</td>
 									</tr>
 									</field:display>
+									<field:display feature="Identification" name="title">
 									<tr>
 										<td class="t-name" width="30%" align="right" bgcolor="#fffff0">
 											<digi:trn key="aim:projectTitle">
@@ -431,7 +432,8 @@ function disable() {
 											<c:out value="${aimEditActivityForm.title}"/>
 										</td>
 									</tr>
-								
+								</field:display>
+								<field:display feature="Identification" name="Objective">
 									<tr>
 										<td class="t-name" width="30%" align="right" bgcolor="#fffff0">
 											<digi:trn key="aim:objectives">
@@ -444,7 +446,7 @@ function disable() {
                                          </c:if>
 										</td>
 									</tr>
-									</feature:display>
+									
 		
 									<logic:present name="currentMember" scope="session">
 									<tr>
@@ -473,6 +475,8 @@ function disable() {
 										</td>
 									</tr>
 									</logic:present>
+									</field:display>
+									<field:display feature="Identification" name="Description">
 									<logic:notEmpty name="SA" scope="application">
 									<tr>
 										<td class="t-name" width="30%" align="right" bgcolor="#fffff0">
@@ -488,7 +492,11 @@ function disable() {
 									</tr>
 
 									</logic:notEmpty>
+									</field:display>
+									
+									
 									<logic:empty name="SA" scope="application">
+									<field:display feature="Identification" name="Process">
 									<tr>
 										<td class="t-name" width="30%" align="right" bgcolor="#fffff0">
 											<digi:trn key="aim:purpose">
@@ -526,7 +534,9 @@ function disable() {
 
 										</td>
 									</tr>
-
+									</field:display>
+									
+									<field:display feature="Identification" name="Results">
 									<tr>
 										<td class="t-name" width="30%" align="right" bgcolor="#fffff0">
 											<digi:trn key="aim:results">
@@ -539,6 +549,7 @@ function disable() {
                                          </c:if>
 										</td>
 									</tr>
+									
 									<tr>
 										<td class="t-name" width="30%" align="right" bgcolor="#fffff0">
 											<digi:trn key="aim:resultsComments">
@@ -564,7 +575,9 @@ function disable() {
 
 										</td>
 									</tr>
+										</field:display>
 									</logic:empty>
+								
 
 									<tr>
 										<td class="t-name" width="30%" align="right" bgcolor="#fffff0">
@@ -592,7 +605,7 @@ function disable() {
 
 										</td>
 									</tr>
-
+									<field:display feature="Identification" name="Organizations and Project ID">
 									<tr>
 										<td class="t-name" width="30%" align="right" bgcolor="#f4f4f2">
 											<digi:trn key="aim:orgsAndProjectIds">
@@ -618,6 +631,10 @@ function disable() {
 											</c:if>
 										</td>
 									</tr>
+									</field:display>					
+									</feature:display>
+									
+									<feature:display module="Project ID and Planning" name="Planning">
 									<tr>
 										<td class="t-name" width="30%" align="right" bgcolor="#f4f4f2">
 											<digi:trn key="aim:planning">
@@ -625,6 +642,7 @@ function disable() {
 										</td>
 										<td bgcolor="#ffffff">
 											<table width="100%" cellSpacing=2 cellPadding=1>
+												<field:display feature="planning" name="Line Ministry Rank">
 												<tr>
 													<td width="32%"><digi:trn key="aim:lineMinRank">
 													Line Ministry Rank</digi:trn></td>
@@ -638,6 +656,8 @@ function disable() {
 													</c:if>
 													</td>
 												</tr>
+												</field:display>
+												<field:display name="Ministry of Planning Rank" feature="Planning">
 												<tr>
 													<td width="32%"><digi:trn key="aim:planMinRank">
 													Ministry of Planning Rank</digi:trn></td>
@@ -651,7 +671,10 @@ function disable() {
 													</c:if>
 													</td>
 												</tr>
+												</field:display>
+											
 												<logic:notEmpty name="SA" scope="application">
+												<field:display name="Proposed Approval Date" feature="Planning">
 												<tr>
 													<td width="32%"><digi:trn key="aim:originalApprovalDate">
 													Original Approval Date</digi:trn></td>
@@ -660,6 +683,8 @@ function disable() {
 														${aimEditActivityForm.originalAppDate}
 													</td>
 												</tr>
+												</field:display>
+												<field:display name="Actual Approval Date" feature="Planning">
 												<tr>
 													<td width="32%"><digi:trn key="aim:revisedApprovalDate">Revised Approval Date</digi:trn></td>
 													<td width="1">:</td>
@@ -667,6 +692,8 @@ function disable() {
 														${aimEditActivityForm.revisedAppDate}
 													</td>
 												</tr>
+												</field:display>
+												<field:display name="Proposed Start Date" feature="Planning">
 												<tr>
 													<td width="32%"><digi:trn key="aim:originalStartDate">Original Start Date</digi:trn></td>
 													<td width="1">:</td>
@@ -674,7 +701,9 @@ function disable() {
 														${aimEditActivityForm.originalStartDate}
 													</td>
 												</tr>
+												</field:display>
 												</logic:notEmpty>
+												<field:display name="Final Date for Contracting" feature="Planning">
 												<tr>
 													<td width="32%"><digi:trn key="aim:ContractingDateofProject1">Final Date for Contracting</digi:trn></td>
 													<td width="1">:</td>
@@ -682,6 +711,8 @@ function disable() {
 														<c:out value="${aimEditActivityForm.contractingDate}"/>
 													</td>
 												</tr>
+												</field:display>
+												<field:display name="Final Date for Disbursements" feature="Planning">
 												<tr>
 													<td width="32%"><digi:trn key="aim:DisbursementsDateofProject1">Final Date for Disbursements</digi:trn></td>
 													<td width="1">:</td>
@@ -689,6 +720,8 @@ function disable() {
 														<c:out value="${aimEditActivityForm.disbursementsDate}"/>
 													</td>
 												</tr>
+												</field:display>
+												<field:display name="Actual Start Date" feature="Planning">
 												<tr>
 													<td width="32%"><digi:trn key="aim:revisedStartDate">Revised Start Date</digi:trn></td>
 													<td width="1">:</td>
@@ -696,6 +729,8 @@ function disable() {
 														${aimEditActivityForm.revisedStartDate}
 													</td>
 												</tr>
+												</field:display>
+												<field:display name="Proposed Completion Date" feature="Planning">
 												<c:if test="${!aimEditActivityForm.editAct}">
 												<tr>
 													<td width="32%"><digi:trn key="aim:proposedCompletionDate">
@@ -706,6 +741,8 @@ function disable() {
 													</td>
 												</tr>
 												</c:if>
+												</field:display>
+												<field:display name="Current Completion Date" feature="Planning">
 												<tr>
 													<td width="32%"><digi:trn key="aim:currentCompletionDate">
 													Current Completion Date</digi:trn></td>
@@ -714,6 +751,7 @@ function disable() {
 														<c:out value="${aimEditActivityForm.currentCompDate}"/>
 													</td>
 												</tr>
+												</field:display>
 												<c:if test="${aimEditActivityForm.editAct}">
 												<c:if test="${!empty aimEditActivityForm.activityCloseDates}">
 												<tr>
@@ -737,6 +775,9 @@ function disable() {
 													<td colspan="3">&nbsp;</td>
 												</tr>
 												</c:if>
+												
+												
+												<field:display name="Status" feature="Planning">
 												<tr>
 													<td colspan="3"><digi:trn key="aim:status">Status</digi:trn> :
 														<category:getoptionvalue categoryValueId="${aimEditActivityForm.statusId}"/>
@@ -745,9 +786,11 @@ function disable() {
 												<tr>
 													<td colspan="3"><c:out value="${aimEditActivityForm.statusReason}"/></td>
 												</tr>
+												</field:display>
 											</table>
 										</td>
 									</tr>
+							
 									<tr>
 										<td class="t-name" width="30%" align="right" bgcolor="#f4f4f2">
 											<digi:trn key="aim:level">
@@ -757,6 +800,7 @@ function disable() {
 											<category:getoptionvalue categoryValueId="${aimEditActivityForm.levelId}"/>
 										</td>
 									</tr>
+									</feature:display>
 									<tr>
 										<td class="t-name" width="30%" align="right" bgcolor="#f4f4f2">
 											<digi:trn key="aim:location">
@@ -816,6 +860,9 @@ function disable() {
 											</c:if>
 										</td>
 									</tr>
+									
+									</module:display>
+
 									<tr>
 										<td class="t-name" width="30%" align="right" bgcolor="#f4f4f2">
 											<digi:trn key="aim:program">Program</digi:trn>
@@ -869,6 +916,7 @@ function disable() {
 										</td>
 
 									</tr>
+
 									<tr>
 										<td class="t-name" width="30%" align="right" bgcolor="#f4f4f2">
 											<digi:trn key="aim:meActivityPerformance">

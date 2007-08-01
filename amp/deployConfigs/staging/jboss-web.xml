@@ -1,0 +1,4 @@
+<jboss-web>
+<context-root>/</context-root>
+<virtual-host>amp-staging.code.ro</virtual-host>
+</jboss-web>

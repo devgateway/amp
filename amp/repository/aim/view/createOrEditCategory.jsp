@@ -13,15 +13,17 @@
 <!--  AMP Admin Logo -->
 <jsp:include page="teamPagesHeader.jsp" flush="true" /> 
 
-<bean:define id="translation1">
-	<digi:trn key="aim:categoryManagerPlsEnterName">You need to enter a name for the category</digi:trn>
-</bean:define>
-<bean:define id="translation2">
+<c:set var="translation1">
+		<digi:trn key="aim:categoryManagerPlsEnterName">You need to enter a name for the category</digi:trn>
+</c:set>
+
+<c:set var="translation2">
 	<digi:trn key="aim:categoryManagerPlsEnterKey">You need to enter a key for the category</digi:trn>
-</bean:define>
-<bean:define id="translation3">
+</c:set>
+
+<c:set var="translation3">
 	<digi:trn key="aim:categoryManagerMoreThan2Values">Category must have at least two possible values</digi:trn>
-</bean:define>
+</c:set>
 
 <script type="text/javascript">
 	var numOfAdditionalFields 	= 0;
@@ -44,11 +46,11 @@
 	}
 	function doSubmit() {
 		if (document.forms[0].categoryName.value.length == 0) {
-			alert ("<%= translation1%>");
+			alert ("${translation1}");
 			return;
 		}
 		if (document.forms[0].keyName.value.length == 0) {
-			alert ("<%= translation2 %>");
+			alert ("${translation2}");
 			return;
 		} 
 		document.forms[1].categoryName.value	= document.forms[0].categoryName.value;
@@ -81,7 +83,7 @@
 				 numOfNotEmptyFields++;
 		}
 		if (numOfNotEmptyFields < 2) {
-			alert("<%= translation3 %>");
+			alert("${translation3}");
 			return;
 		}
 		document.forms[1].submit();

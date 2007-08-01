@@ -56,7 +56,7 @@ public class ViewNewAdvancedReport extends Action {
 		String widget=request.getParameter("widget");
 		request.setAttribute("widget",widget);
 		
-		StringOnPurposeErrorToTestBamboo ... :)
+
 		
 		//check currency code:
 		if(hs.getAttribute("reportCurrencyCode")==null) hs.setAttribute("reportCurrencyCode",Constants.DEFAULT_CURRENCY);

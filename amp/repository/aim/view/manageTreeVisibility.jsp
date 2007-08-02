@@ -47,7 +47,7 @@
 	<bean:define name="template" property="root" id="currentTemplate" type="org.digijava.module.aim.dbentity.AmpTemplatesVisibility" scope="page"/>
 		<li><a href="#" id="<bean:write name="template" property="root.id"/>"><bean:write name="template" property="root.name"/></a>
 			<ul>
-			
+				<font size="2">
 				<logic:iterate name="modules" id="module" type="java.util.Map.Entry" >
 				
 				<bean:define id="moduleAux" name="module" property="value" type="org.dgfoundation.amp.visibility.AmpTreeVisibility" scope="page"/>
@@ -125,6 +125,7 @@
 						</ul>
 					</li>
 				</logic:iterate>
+				</font>
 			</ul>
 		</li>
 		

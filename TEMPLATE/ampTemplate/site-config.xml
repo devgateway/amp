@@ -381,6 +381,8 @@
 	  		<page>aim_selectDocument</page>
 				<page>aim_addlocPopupLayout</page>
 				<page>aim_addCompPopupLayout</page>
+				<page>aim_addComponents</page>
+				<page>aim_addComponentIndicator</page>
 				<page>aim_reviseCloseDate</page>
 				<page>aim_addIssue</page>
 				<page>aim_addMeasure</page>

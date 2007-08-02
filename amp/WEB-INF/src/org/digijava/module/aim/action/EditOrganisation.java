@@ -715,7 +715,7 @@ public class EditOrganisation extends Action {
 					    	boolean flag = false;
 
 					    	while (itr1.hasNext()) {
-					    		AmpActivity testActivity = new AmpActivity();
+					    		AmpActivity testActivity;
 					    		testActivity = (AmpActivity)itr1.next();
 
 					    		//Collection testOrgrole = testActivity.getOrgrole();

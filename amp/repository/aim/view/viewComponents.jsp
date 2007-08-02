@@ -12,9 +12,35 @@
 		var flag = confirm("Delete this Component?");
 		return flag;
 	}
+	
+	function addComponent()
+	{
+		openNewWindow(600, 400);
+		<digi:context name="addCompIndicator" property="context/module/moduleinstance/updateComponents.do?event=add" />
+		document.aimUpdateComponentsForm.action = "<%= addCompIndicator %>";
+		document.aimUpdateComponentsForm.target = popupPointer.name;
+		document.aimUpdateComponentsForm.submit();
+		return true;
+	}
+	
+	function editComponent(id){
+		openNewWindow(600, 400);
+		<digi:context name="editComponent" property="context/module/moduleinstance/updateComponents.do?event=edit" />
+		document.aimUpdateComponentsForm.action = "<%= editComponent %>&componentId="+id;
+		document.aimUpdateComponentsForm.target = popupPointer.name;
+		document.aimUpdateComponentsForm.submit();
+	}
+	
+	function deleteIndicator(id){
+		<digi:context name="delComponent" property="context/module/moduleinstance/updateComponents.do?event=delete" />
+		document.aimUpdateComponentsForm.action = "<%= delComponent %>&componentId="+id;
+		document.aimUpdateComponentsForm.target = "_self";
+		document.aimUpdateComponentsForm.submit();
+	}
 </script>
 
 <digi:instance property="aimComponentsForm" />
+<digi:form action="/updateComponents.do" method="post">
 <digi:context name="digiContext" property="context" />
 
 <!--  AMP Admin Logo -->
@@ -86,22 +112,20 @@
 													<tr>
 														<td bgcolor="#ffffff">
 														<jsp:useBean id="urlParams2" type="java.util.Map" class="java.util.HashMap"/>
-															<c:set target="${urlParams2}" property="componentId">
-															<bean:write name="componentlist" property="ampComponentId" />
-															</c:set>
-															<c:set target="${urlParams2}" property="event" value="edit"/>
 															<c:set var="ToEditComponents">
 																<digi:trn key="aim:clickToEditComponents">Click here to Edit</digi:trn>
 															</c:set>
-															<digi:link href="/updateComponents.do" name="urlParams2" title="${ToEditComponents}" >
+															<a href="javascript:editComponent(<bean:write name="componentlist" property="ampComponentId"/>)">
 																<bean:write name="componentlist" property="title"/>
-															</digi:link>
+															</a>
 														</td>
 														<td bgcolor="#ffffff" width="40" align="center">
 														<c:set var="ToEditComponent1">
 														<digi:trn key="aim:clickToEditComponent">Click here to Edit Component</digi:trn>
 														</c:set>
-															[ <digi:link href="/updateComponents.do" name="urlParams2" title="${ToEditComponent1}" >Edit</digi:link> ]
+															[ <a href="javascript:editComponent(<bean:write name="componentlist" property="ampComponentId"/>)">
+																Edit
+															</a> ]
 														</td>
 											 
 														<%--<logic:equal name="aimAddSectorForm" property="deleteSchemeFlag" value="true">--%>
@@ -122,7 +146,15 @@
 													</logic:notEmpty>
 													<!-- end page logic -->													
 											</table>
-										</td></tr>
+										</td>
+										</tr>
+										<tr>
+										<td height="20" bgColor=#d7eafd class=box-title align="center"><B>
+													<html:button styleClass="dr-menu" value="Add Component" property="submitButton"  onclick="addComponent()">
+														<digi:trn key="aim:clickToAddComponent">Click here to Add a Component</digi:trn>
+													</html:button>
+										</td>
+										</tr>
 									</table>
 									
 								</td>
@@ -155,12 +187,12 @@
 										<tr>
 											<td nowrap>
 												<digi:img src="module/aim/images/arrow-014E86.gif" width="15" height="10"/>
-													<c:set var="ToAddComponent">
-														<digi:trn key="aim:clickToAddComponent">Click here to Add a Component</digi:trn>
-													</c:set>
-												<digi:link href="/updateComponents.do?event=add"  title="${ToAddComponent}" >
-												<digi:trn key="aim:addComponent">
-												Add Component
+												<c:set var="toCompIndicatorManager">
+													<digi:trn key="aim:clickforCompIndManager">Click here to goto Component Indicator Manager</digi:trn>
+												</c:set>
+												<digi:link href="/componentIndicatorManager.do"  title="${toCompIndicatorManager}" >
+												<digi:trn key="aim:componentsIndicatorManager">
+													Component Indicator Manager
 												</digi:trn>
 												</digi:link>
 											</td>
@@ -192,5 +224,5 @@
 		</td>
 	</tr>
 </table>
-
+</digi:form>
 

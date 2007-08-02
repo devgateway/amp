@@ -104,11 +104,12 @@ public class VisibilityManager extends MultiAction {
 		VisibilityManagerForm vForm=(VisibilityManagerForm) form;
 		Collection templates=FeaturesUtil.getAMPTemplatesVisibility();
 		vForm.setTemplates(templates);
+		/*
 		try {
 			PersistenceManager.releaseSession(hbsession);
 		} catch (Exception rsf) {
 			logger.error("Release session failed :1" + rsf.getMessage());
-		}
+		}*/
 		return mapping.findForward("forward");
 	}
 	
@@ -155,11 +156,12 @@ public class VisibilityManager extends MultiAction {
 			Collection templates=FeaturesUtil.getAMPTemplatesVisibility();
 			vForm.setTemplates(templates);
 		}
+		/*
 		try {
 			PersistenceManager.releaseSession(hbsession);
 		} catch (Exception rsf) {
 			logger.error("Release session failed :2" + rsf.getMessage());
-		}
+		}*/
 		return mapping.findForward("forward");
 	}
 	
@@ -287,11 +289,11 @@ public class VisibilityManager extends MultiAction {
     	ampTreeVisibility.buildAmpTreeVisibility(currentTemplate);
     	ampContext=session.getServletContext();
     	ampContext.setAttribute("ampTreeVisibility",ampTreeVisibility);
-    	try {
+    	/*try {
 			PersistenceManager.releaseSession(hbsession);
 		} catch (Exception rsf) {
 			logger.error("Release session failed :4" + rsf.getMessage());
-		}
+		}*/
 		return modeEditTemplate(mapping,form,request,response);
 	}
 	

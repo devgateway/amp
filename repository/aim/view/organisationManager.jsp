@@ -179,6 +179,9 @@
 																		<td height="30"width="147"><b>
 																			<digi:trn key="aim:organizationType">Type</digi:trn></b>
 																		</td>
+																		<td height="30"width="147"><b>
+																			<digi:trn key="aim:organizationGroup">Organization Group</digi:trn></b>
+																		</td>
 																	</tr>
 																<logic:iterate name="aimOrgManagerForm" property="pagedCol" id="organisation">
                                                            			<tr>
@@ -202,6 +205,11 @@
 																			<logic:notEmpty name="organisation" property="orgTypeId">
                                                               					<c:out value="${organisation.orgTypeId.orgType}" />
                                                               					<%--<bean:write name="organisation" property="${organisation.orgTypeId.orgType}" />--%>
+                                                              				</logic:notEmpty>
+																		</td>
+																		<td height="30" width="147">
+																			<logic:notEmpty name="organisation" property="orgGrpId">
+                                                              					<c:out value="${organisation.orgGrpId.orgGrpName}" />
                                                               				</logic:notEmpty>
 																		</td>
                                                             		</tr>

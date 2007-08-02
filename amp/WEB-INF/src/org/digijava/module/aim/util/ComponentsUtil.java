@@ -7,6 +7,8 @@ import java.util.*;
 import org.apache.log4j.*;
 import org.digijava.kernel.persistence.*;
 import org.digijava.module.aim.dbentity.*;
+import org.digijava.module.aim.helper.AmpMEIndicatorList;
+
 import net.sf.hibernate.*;
 
 public class ComponentsUtil{
@@ -15,7 +17,7 @@ public class ComponentsUtil{
 
 	public static Collection getAmpComponents()
 	{
-		logger.info(" starting to get all the components....");
+		logger.debug(" starting to get all the components....");
 		Collection col = null;
 		String queryString=null;
 		Session session = null;
@@ -340,4 +342,189 @@ public class ComponentsUtil{
 		}
 		else return true;
 	}
+	
+	public static Collection getAllComponentIndicators() 
+	{
+		Session session = null;
+		Query qry = null;
+		Collection col = new ArrayList();
+
+		try
+		{
+			session = PersistenceManager.getSession();
+			String queryString = "select i from " + AmpComponentsIndicators.class.getName() + " i";
+			qry = session.createQuery(queryString);
+			col = qry.list();
+		} 
+		catch (Exception e) 
+		{
+			logger.error("Unable to get component indicators");
+			logger.debug("Exception : " + e);
+		} 
+		finally 
+		{
+			try 
+			{
+				if (session != null) 
+				{
+					PersistenceManager.releaseSession(session);
+				}
+			} 
+			catch (Exception ex) 
+			{
+				logger.debug("releaseSession() FAILED", ex);
+			}
+		}
+		return col;
+	}
+	
+	public static void saveComponentIndicator(AmpComponentsIndicators newIndicator) 
+	{
+		Session session = null;
+		Transaction tx = null;
+		
+		try 
+		{
+			session = PersistenceManager.getSession();
+			tx = session.beginTransaction();
+			session.saveOrUpdate(newIndicator);
+			tx.commit();							
+		} 
+		catch (Exception e) 
+		{
+			logger.error("Exception from saveComponentIndicator() :" + e.getMessage());
+			e.printStackTrace(System.out);
+			if (tx != null) {
+				try {
+					tx.rollback();
+				} catch (Exception rbf) {
+					logger.error("Roll back failed");
+				}
+			}
+		} finally {
+			if (session != null) {
+				try {
+					PersistenceManager.releaseSession(session);
+				} catch (Exception rsf) {
+					logger.error("Failed to release session :" + rsf.getMessage());
+				}
+			}
+		}
+	}
+	
+	public static Collection getComponentIndicator(Long id){
+		Session session = null;
+		Query query = null;
+		Collection ampCoInd = null;
+		try{
+			session = PersistenceManager.getSession();
+			String queryString = "select ami from "+ AmpComponentsIndicators.class.getName()+ " ami where (ami.ampCompIndId=:id)";
+			query = session.createQuery(queryString);
+			query.setParameter("id",id,Hibernate.LONG);
+			ampCoInd =query.list();
+		}catch(Exception ex){
+			logger.error("Unable to retrieve Indicator/s for a give Component");
+			logger.debug("Exception:="+ex);
+		}
+		finally{
+			try{
+				if(session!=null){
+					PersistenceManager.releaseSession(session);
+				}
+			}catch(Exception ex){
+				logger.debug("releaseSession() Failed:",ex);
+			}
+		}
+		return ampCoInd;
+	}
+	
+	public static void delComponentIndicator(Long indId)
+	{
+
+		Session session = null;
+		Transaction tx = null;
+		try
+		{
+			session = PersistenceManager.getSession();
+			AmpComponentsIndicators ampCompInd = (AmpComponentsIndicators) session.load(
+					AmpComponentsIndicators.class,indId);
+			tx = session.beginTransaction();
+			session.delete(ampCompInd);
+			tx.commit();
+		}
+		catch (Exception ex){
+			logger.error("Exception from delComponentIndicators() :" + ex.getMessage());
+			ex.printStackTrace(System.out);
+			if (tx != null){
+				try{
+					tx.rollback();
+				}catch (Exception trbf){
+					logger.error("Transaction roll back failed ");
+					trbf.printStackTrace(System.out);
+				}
+			}
+		}
+		finally{
+			if (session != null){
+				try{
+					PersistenceManager.releaseSession(session);
+				}catch (Exception rsf){
+					logger.error("Failed to release session :" + rsf.getMessage());
+				}
+			}
+		}
+	}
+	
+	public static boolean checkDuplicateNameCode(String name,String code,Long id) {
+		Session session = null;
+		Query qry = null;
+		boolean duplicatesExist = false;
+		String queryString = null;
+		
+		try
+		{
+			session = PersistenceManager.getSession();
+			if (id != null && id.longValue() > 0) {
+				queryString = "select count(*) from "
+					+ AmpComponentsIndicators.class.getName() + " ami " 
+					+ "where ( name=:name"
+					+ " or code=:code) and " +
+							"(ami.ampCompIndId !=:id)" ;
+				qry = session.createQuery(queryString);
+				qry.setParameter("id", id, Hibernate.LONG);
+				qry.setParameter("code", code.trim(), Hibernate.STRING);
+				qry.setParameter("name", name.trim(), Hibernate.STRING);
+			} else {
+				queryString = "select count(*) from "
+					+ AmpComponentsIndicators.class.getName() + " ami " 
+					+ "where ( name=:name"
+					+ " or code=:code)" ;
+				qry = session.createQuery(queryString);
+				qry.setParameter("code", code.trim(), Hibernate.STRING);
+				qry.setParameter("name", name.trim(), Hibernate.STRING);
+												
+			}
+			Iterator itr = qry.list().iterator();
+			if (itr.hasNext()) {
+				Integer cnt = (Integer) itr.next();
+				if (cnt.intValue() > 0)
+					duplicatesExist = true;
+			}
+		}
+		catch (Exception ex) {
+			logger.error("UNABLE to find Indicators with duplicate name.", ex);
+			ex.printStackTrace(System.out);
+		} 
+		finally {
+			try {
+				PersistenceManager.releaseSession(session);
+			} 
+			catch (Exception ex) {
+				logger.debug("releaseSession() FAILED", ex);
+			}
+		}
+		return duplicatesExist;
+	}
+
+	
 }

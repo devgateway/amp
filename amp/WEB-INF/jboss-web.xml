@@ -1,3 +1,4 @@
 <jboss-web>
 <context-root>/</context-root>
+<virtual-host>localhost</virtual-host>
 </jboss-web>

@@ -1379,6 +1379,7 @@
       <forward name="saved" path="/aim/getComponents.do" redirect="true" />
       <forward name="forward" path="/showLayout.do?layout=aim_addComponents" />
       <forward name="delete" path="/aim/getComponents.do" redirect="true" />
+	  <forward name="editComponent" path="/showLayout.do?layout=aim_editComponents" />      
   	</action>
   	<action name="aimComponentsForm" path="/aim/componentIndicatorManager" scope="session" type="org.digijava.module.aim.action.ComponentIndicatorManager">
 		<forward name="forward" path="/showLayout.do?layout=componentIndicatorManager"/>

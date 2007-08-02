@@ -11,7 +11,20 @@ public class UpdateComponentsForm extends ActionForm implements Serializable{
 	String compDes = null;
 	String compType = null;
 	String compCode = null;
+	String check;
 	
+	/**
+	 * @return the check
+	 */
+	public String getCheck() {
+		return check;
+	}
+	/**
+	 * @param check the check to set
+	 */
+	public void setCheck(String check) {
+		this.check = check;
+	}
 	/**
 	 * @return Returns the compCode.
 	 */

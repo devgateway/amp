@@ -222,6 +222,9 @@
 	<page name="viewComponents" title=": - AMP Components"/>
 	<page name="editComponents" title=": - Editing AMP Components"/>
 	<page name="addComponents" title=": - Adding AMP Components"/>
+	<page page="addComponents" name="aim_addComponents" title="AMP - Add Component"/>
+	<page name="componentIndicatorManager" title=" - Component Indicator Manager" />
+	<page page="addComponentIndicator" name="aim_addComponentIndicator" title="AMP - Add Component Indicator"/>
 
 	<page name="donorDataImport" title="AMP: Ethiopia: AIM Dashboard: Donor Data Import" />
 	<page page="selectPhysicalProgress" name="aim_addPhyProgPopupLayout" title="AMP - Add Physical Progress" />
@@ -276,7 +279,7 @@
 	<page name="htmlAdvancedReportHierarchy0"			title=" : Advanced Report " />
 	<page name="htmlAdvancedReportHierarchy1"			title=" : Advanced Report " />
 	<page name="htmlAdvancedReportHierarchy2"			title=" : Advanced Report " />
-	
+
 	<!-- Report Generator -->
 	<page name="AdvancedReportManagerStep0" title=" - Report Generator Step 0 : Select Report Type" />
 	<page name="AdvancedReportManagerStep1" title=" - Report Generator Step 1 : Select Columns" />

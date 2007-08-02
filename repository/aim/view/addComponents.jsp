@@ -18,65 +18,66 @@ function onCancel() {
 	}
 
 
-	function updateComponents(id) {
-			  
-			  
-			 if(isEmpty(document.aimUpdateComponentsForm.compTitle.value)==true)
-			 {
-						alert("please enter a Component Title:");
-			 }	
-			 else if(isEmpty(document.aimUpdateComponentsForm.compCode.value)==true)
-			 {
-						alert("please enter a Component code:");
-			 }	
-			 else
-			 {
-			<digi:context name="updateComponents" property="context/module/moduleinstance/updateComponents.do?event=newComp" />
+	function validate() 
+	{
+		if ((document.aimUpdateComponentsForm.compTitle.value).length == 0) 
+		{
+			alert("Please enter component title name");
+			document.aimUpdateComponentsForm.compTitle.focus();
+			return false;
+		}	
+		if ((document.aimUpdateComponentsForm.compCode.value).length == 0) 
+		{
+			alert("Please enter component code");
+			document.aimUpdateComponentsForm.compCode.focus();
+			return false;
+		}			
+		return true;
+	}
+		
+	function updateComponents(id) 
+	{
+		var temp = validate();
+		if (temp == true) 
+		{
+			document.aimUpdateComponentsForm.addBtn.disabled = true;
+			<digi:context name="updateComponents" property="context/module/moduleinstance/updateComponents.do?event=save" />
 			document.aimUpdateComponentsForm.action = "<%= updateComponents%>&componentId="+id;
 			document.aimUpdateComponentsForm.target = "_self";
-			document.aimUpdateComponentsForm.submit();
-			 }
+			document.aimUpdateComponentsForm.submit();	
+		}
+		return temp;
+	}
 	
+	function onload(){
+	//alert("onload="+document.aimUpdateComponentsForm.check.value);
+	if(document.aimUpdateComponentsForm.check.value=="save"){
+	<digi:context name="refreshComp" property="context/module/moduleinstance/getComponents.do" />
+		document.aimUpdateComponentsForm.action = "<%= refreshComp %>";
+		document.aimUpdateComponentsForm.target = window.opener.name;
+		document.aimUpdateComponentsForm.submit();
+	closeWindow();
+		}
+	}
+	
+	function unload(){}
+
+	function closeWindow() 
+	{
+		window.close();
 	}
 	
 </script>
 
 <digi:instance property="aimUpdateComponentsForm" />
 <digi:form action="/updateComponents.do" method="post">
+<html:hidden styleId="check" property="check"/>
 
-<!--  AMP Admin Logo -->
-<jsp:include page="teamPagesHeader.jsp" flush="true" />
-<!-- End of Logo -->
-
-<table bgColor=#ffffff cellPadding=0 cellSpacing=0 width=772>
+<table bgColor=#ffffff cellPadding=0 cellSpacing=0>
 	<tr>
 		<td class=r-dotted-lg width=14>&nbsp;</td>
 		<td align=left class=r-dotted-lg vAlign=top width=750>
 			<table cellPadding=5 cellSpacing=0 width="100%">
-				<tr>
-					<!-- Start Navigation -->
-					<td height=33><span class=crumb>
-	
-						<c:set var="translation">
-							<digi:trn key="aim:clickToViewAdmin">Click here to goto Admin Home</digi:trn>
-						</c:set>
-						<digi:link href="/admin.do" styleClass="comment" title="${translation}" >
-						<digi:trn key="aim:AmpAdminHome">
-						Admin Home
-						</digi:trn>
-						</digi:link>&nbsp;&gt;&nbsp;
-						<c:set var="translation">
-							<digi:trn key="aim:clickToViewComponentManager">Click here to view Component Manager</digi:trn>
-						</c:set>
-						<digi:link href="/getComponents.do" styleClass="comment" title="${translation}" >
-						<digi:trn key="aim:componentManager">
-						Component Manager
-						</digi:trn>
-						</digi:link>&nbsp;&gt;&nbsp;
-						<digi:trn key="aim:addComponent">Add Component</digi:trn>	
-					</td>
-					<!-- End navigation -->
-				</tr>
 				<tr>
 
 					<td height=16 vAlign=center width=571><span class=subtitle-blue>
@@ -153,30 +154,29 @@ function onCancel() {
 																		</td>
 														  <tr>
 															<td colspan="2" width="60%">
-			<table width="100%" cellspacing="5">
-				<tr>
-					<td width="50%" align="right">
-
-							<input  type="button" name="addBtn" value="Save" onclick="updateComponents('<bean:write name="aimUpdateComponentsForm" property="id" />')"/>
-					</td>
-					<td width="50%" align="left">
-						<%--<html:reset value="Cancel" styleClass="dr-menu" 	onclick="javascript:history.go(-1)"/>--%>
-						<html:reset value="Cancel" styleClass="dr-menu" 	onclick="onCancel()"/>
-							<%--<input  type="button" name="addBtn" value="Cancel" onclick="onCancel()"/>--%>
-					</td>
-				</tr>
+												<table width="100%" cellspacing="5">
+													<tr>
+														<td bgColor=#dddddb height="25" align="center" colspan="2">
+															<input class="dr-menu" id="addBtn" type="button" value="Save" onclick="return updateComponents('<bean:write name="aimUpdateComponentsForm" property="id"/>')">&nbsp;&nbsp;
+															<html:reset  styleClass="dr-menu" property="submitButton" >
+																<digi:trn key="btn:cancel">Cancel</digi:trn> &nbsp;&nbsp;
+															</html:reset>
+															<html:button  styleClass="dr-menu" property="submitButton"  onclick="closeWindow()">
+																<digi:trn key="btn:close">Close</digi:trn>
+															</html:button>
+														</td>
+													</tr>
+												</table>
+									</td>
+								</tr>
+							</table>	
+						</td>
+					</tr>
+				<!-- end page logic -->
 			</table>
 		</td>
 	</tr>
-																</table>	
-															</td>
-														</tr>
-													<!-- end page logic -->
-													</table>
-												</td>
-											</tr>
-											
-										</table>
+</table>
 									</td>
 								</tr>
 								<tr>
@@ -197,20 +197,3 @@ function onCancel() {
 	</tr>
 </table>
 </digi:form>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

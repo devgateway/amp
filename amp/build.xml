@@ -234,6 +234,9 @@
     </target>
 
 	<target name="deployForServer" description="deploys the project for use with a given database">
+		<delete file="${src}/hibernate.properties"/>
+		<delete file="${repository}/digi.xml"/>
+		<delete file="${webinf}/jboss-web.xml"/>
 		<copy file="${deployConfigs}/${serverName}/hibernate.properties" todir="${src}"/> 
 		<copy file="${deployConfigs}/${serverName}/digi.xml" todir="${repository}"/> 				
 		<copy file="${deployConfigs}/${serverName}/jboss-web.xml" todir="${webinf}"/> 		

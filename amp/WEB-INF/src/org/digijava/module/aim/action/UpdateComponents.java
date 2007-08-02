@@ -52,6 +52,25 @@ public class UpdateComponents extends Action{
 						updCompForm.setCompType(ampComp.getType());
 						updCompForm.setCompCode(ampComp.getCode());
 					}
+					updCompForm.setCheck("false");
+					return mapping.findForward("editComponent");
+				}
+				else if (event.equals("saveEditComp")) {
+					logger.debug("Updating Component" + compId);
+					Long id = new Long(compId);
+					AmpComponent ampComp = new AmpComponent();
+					ampComp.setAmpComponentId(id);
+					ampComp.setTitle(updCompForm.getCompTitle());
+					ampComp.setCode(updCompForm.getCompCode());
+					ampComp.setType(updCompForm.getCompType());
+					if (updCompForm.getCompDes() == null) {
+						ampComp.setDescription(" ");
+					} else {
+						ampComp.setDescription(updCompForm.getCompDes());
+					}
+					ComponentsUtil.updateComponents(ampComp);
+					updCompForm.setCheck("save");
+					return mapping.findForward("editComponent");
 				}
 				else if(event.equalsIgnoreCase("save"))
 				{  

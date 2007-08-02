@@ -225,6 +225,7 @@
 	<page page="addComponents" name="aim_addComponents" title="AMP - Add Component"/>
 	<page name="componentIndicatorManager" title=" - Component Indicator Manager" />
 	<page page="addComponentIndicator" name="aim_addComponentIndicator" title="AMP - Add Component Indicator"/>
+	<page page="editComponents" name="aim_editComponents" title="AMP - Edit Component"/>
 
 	<page name="donorDataImport" title="AMP: Ethiopia: AIM Dashboard: Donor Data Import" />
 	<page page="selectPhysicalProgress" name="aim_addPhyProgPopupLayout" title="AMP - Add Physical Progress" />

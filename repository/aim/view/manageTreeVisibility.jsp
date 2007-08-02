@@ -69,22 +69,6 @@
 						<%= moduleAux2.isVisibleTemplateObj(currentTemplate)?"checked":"" %>
 						 />
 					</logic:equal>
-					<span class="inputClassGreen">
-					<input  onclick="toggleChildrenEdit('limodule:<bean:write name="moduleAux" property="root.id"/>')"
-						type="checkbox" id="moduleEdit:<bean:write name="moduleAux" property="root.id"/>" 
-						name="moduleEdit:<bean:write name="moduleAux" property="root.id"/>" 
-						value="moduleEdit:<bean:write name="moduleAux" property="root.id"/>"
-						class="inputClassGreen"
-						/>
-						</span>
-					<span class="inputClassBlue">
-					<input  onclick="toggleChildrenMandatory('limodule:<bean:write name="moduleAux" property="root.id"/>')"
-						type=checkbox id="moduleMandatory:<bean:write name="moduleAux" property="root.id"/>" 
-						name="moduleMandatory:<bean:write name="moduleAux" property="root.id"/>" 
-						value="moduleMandatory:<bean:write name="moduleAux" property="root.id"/>"
-						 class="inputClassBlue"
-					/>
-					</span>
 							<a href="#" id="module:<bean:write name="moduleAux" property="root.id"/>">
 								<digi:trn key="<%="viz:"+moduleAux.getRoot().getNameTrimmed() %>"><bean:write name="moduleAux" property="root.name"/></digi:trn>
 							</a>
@@ -109,16 +93,6 @@
 									<%= featureAux2.isVisibleTemplateObj(currentTemplate)?"checked":"" %>
 								/>
 								</logic:equal>
-								<input onclick="toggleChildrenEdit('lifeature:<bean:write name="featureAux" property="root.id"/>')"
-								 type=checkbox id="featureEdit:<bean:write name="featureAux" property="root.id"/>"
-								 name="featureEdit:<bean:write name="featureAux" property="root.id"/>" 
-								 value="featureEdit:<bean:write name="featureAux" property="root.id"/>"
-								/>
-								<input onclick="toggleChildrenMandatory('lifeature:<bean:write name="featureAux" property="root.id"/>')"
-								 type=checkbox id="featureMandatory:<bean:write name="featureAux" property="root.id"/>"
-								 name="featureMandatory:<bean:write name="featureAux" property="root.id"/>" 
-								 value="featureMandatory:<bean:write name="featureAux" property="root.id"/>"
-								/>
 									<a href="#" id="feature:<bean:write name="featureAux" property="root.id"/>">
 										<digi:trn key="<%="viz:"+featureAux.getRoot().getNameTrimmed() %>"><bean:write name="featureAux" property="root.name"/></digi:trn>
 									</a>
@@ -140,14 +114,6 @@
 												<%= fieldAux2.isVisibleTemplateObj(currentTemplate)?"checked":"" %>
 											/>
 											</logic:equal>
-											<input type=checkbox id="fieldEdit:<bean:write name="fieldAux" property="root.id"/>" 
-											name="fieldEdit:<bean:write name="fieldAux" property="root.id"/>" 
-											value="fieldEdit:<bean:write name="fieldAux" property="root.id"/>" 
-											/>
-											<input type=checkbox id="fieldMandatory:<bean:write name="fieldAux" property="root.id"/>" 
-											name="fieldMandatory:<bean:write name="fieldAux" property="root.id"/>" 
-											value="fieldMandatory:<bean:write name="fieldAux" property="root.id"/>" 
-											/>
 											<a id="field:<bean:write name="fieldAux" property="root.id"/>">
 												<digi:trn key="<%="viz:"+fieldAux.getRoot().getNameTrimmed() %>"><bean:write name="fieldAux" property="root.name"/></digi:trn>
 											</a>

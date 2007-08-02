@@ -1625,7 +1625,6 @@ public class FeaturesUtil {
 				AmpTemplatesVisibility ampTemplate=new AmpTemplatesVisibility();
 					tx=session.beginTransaction();
 					ampTemplate=(AmpTemplatesVisibility)session.load(AmpTemplatesVisibility.class,templateId);
-
 					ampTemplate.getFeatures().retainAll(features);
 					ampTemplate.getFeatures().addAll(features);
 					tx.commit(); 

@@ -7,8 +7,6 @@
              "dist" directory will be utilized or created -->
     <property name="distpath.project" value="./dist"/>
 	<property name="debug" value="true" />
-	<property name="jboss-lib" value="/home/jboss/jboss/server/default/lib" />
-
 
 
     <!-- Project settings -->

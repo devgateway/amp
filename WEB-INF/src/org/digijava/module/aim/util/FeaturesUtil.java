@@ -1263,10 +1263,8 @@ public class FeaturesUtil {
 						AmpTemplatesVisibility element = (AmpTemplatesVisibility) i.next();
 						element.getFields().remove(field);
 					}
-					
+					session.delete(field);
 					tx.commit();
-					
-					session.close();
 				
 				} catch (HibernateException e) {
 					// TODO Auto-generated catch block
@@ -1308,7 +1306,7 @@ public class FeaturesUtil {
 						AmpTemplatesVisibility element = (AmpTemplatesVisibility) i.next();
 						element.getFeatures().remove(feature);
 					}
-					
+					session.delete(feature);
 					tx.commit();
 					
 					//s.close();

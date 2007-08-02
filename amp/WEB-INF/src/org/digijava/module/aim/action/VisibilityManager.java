@@ -41,6 +41,7 @@ public class VisibilityManager extends MultiAction {
 		Collection templates=FeaturesUtil.getAMPTemplatesVisibility();
 		VisibilityManagerForm vForm=(VisibilityManagerForm) form;
 		vForm.setTemplates(templates);
+		vForm.setMode("manageTemplates");
 		return  modeSelect(mapping, form, request, response);
 	}
 
@@ -54,6 +55,7 @@ public class VisibilityManager extends MultiAction {
 				if(request.getParameter("action").compareTo("edit")==0) return modeEditTemplate(mapping, form, request, response);
 				if(request.getParameter("action").compareTo("delete")==0) return modeDeleteTemplate(mapping, form, request, response);				
 				if(request.getParameter("action").compareTo("deleteFFM")==0) return modeDeleteFFM(mapping, form, request, response);
+				if(request.getParameter("action").compareTo("manageTemplates")==0) return modeManageTemplates(mapping, form, request, response);
 			}
 		if(request.getParameter("newTemplate")!=null) return modeSaveTemplate(mapping, form, request, response);
 		if(request.getParameter("saveEditTemplate")!=null) return modeSaveEditTemplate(mapping, form, request, response);
@@ -62,6 +64,15 @@ public class VisibilityManager extends MultiAction {
 	}
 	
 	
+	public ActionForward modeManageTemplates(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
+		// TODO Auto-generated method stub
+		Collection templates=FeaturesUtil.getAMPTemplatesVisibility();
+		VisibilityManagerForm vForm=(VisibilityManagerForm) form;
+		vForm.setTemplates(templates);
+		vForm.setMode("manageTemplates");
+		return mapping.findForward("forward");
+	}
+
 	public ActionForward modeAddTemplate(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
 		// TODO Auto-generated method stub
 		VisibilityManagerForm vForm=(VisibilityManagerForm) form;
@@ -70,6 +81,7 @@ public class VisibilityManager extends MultiAction {
 		vForm.setModules(modules);
 		return mapping.findForward("forward");
 	}
+
 	
 	public ActionForward modeViewFields(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
 		// TODO Auto-generated method stub

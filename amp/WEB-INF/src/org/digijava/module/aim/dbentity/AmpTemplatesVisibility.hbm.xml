@@ -15,17 +15,15 @@
 	    	<cache usage="read-write" />
            <key column="template"/>
            <many-to-many column="module" class="org.digijava.module.aim.dbentity.AmpModulesVisibility"/>
-           
-
      </set>
      
-     <set name="features" table="amp_features_templates" sort="natural" cascade="all-delete-orphan">
+     <set name="features" table="amp_features_templates" sort="natural" cascade="all">
 	       <cache usage="read-write" />
            <key column="template"/>
            <many-to-many column="feature" class="org.digijava.module.aim.dbentity.AmpFeaturesVisibility"/>
      </set>
      
-     <set name="fields" table="amp_fields_templates" sort="natural" cascade="all-delete-orphan">
+     <set name="fields" table="amp_fields_templates" sort="natural" cascade="all">
 	       <cache usage="read-write" />
            <key column="template"/>
            <many-to-many column="field" class="org.digijava.module.aim.dbentity.AmpFieldsVisibility"/>

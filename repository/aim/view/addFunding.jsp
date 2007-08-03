@@ -160,11 +160,14 @@
 									</b>
 								</td>
 								<td align="left" bgcolor=#ECF3FD>
+									<c:set var="translation">
+										<digi:trn key="aim:addActivityTypeOfAssistenceFirstLine">Please select from below</digi:trn>
+									</c:set> 
 									<c:if test="${aimEditActivityForm.donorFlag == true}">
-				                		<category:showoptions outerdisabled="true" name="aimEditActivityForm" property="assistanceType" keyName="<%= org.digijava.module.aim.helper.CategoryConstants.TYPE_OF_ASSISTENCE_KEY %>" styleClass="inp-text" />
+				                		<category:showoptions firstLine="${translation}" outerdisabled="true" name="aimEditActivityForm" property="assistanceType" keyName="<%= org.digijava.module.aim.helper.CategoryConstants.TYPE_OF_ASSISTENCE_KEY %>" styleClass="inp-text" />
 									</c:if>
 									<c:if test="${aimEditActivityForm.donorFlag == false}">
-										<category:showoptions name="aimEditActivityForm" property="assistanceType"  keyName="<%= org.digijava.module.aim.helper.CategoryConstants.TYPE_OF_ASSISTENCE_KEY %>" styleClass="inp-text" />
+										<category:showoptions firstLine="${translation}" name="aimEditActivityForm" property="assistanceType"  keyName="<%= org.digijava.module.aim.helper.CategoryConstants.TYPE_OF_ASSISTENCE_KEY %>" styleClass="inp-text" />
 									</c:if>
 								</td>
 							</tr>

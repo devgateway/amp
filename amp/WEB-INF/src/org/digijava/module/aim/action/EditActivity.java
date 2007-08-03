@@ -787,7 +787,8 @@ public class EditActivity
                                     fundDetItr
                                     .next();
                                 FundingDetail fundingDetail = new FundingDetail();
-                                fundingDetail.setFixedExchangeRate(fundDet.getFixedExchangeRate());
+                                if(fundDet.getFixedExchangeRate()!=null)
+                                	fundingDetail.setFixedExchangeRate(fundDet.getFixedExchangeRate());
                                 AmpCurrency rateCurrencyId=fundDet.getRateCurrencyId();
                                 if(rateCurrencyId!=null){
                                 fundingDetail.setFixedExchangeCurrCode(rateCurrencyId.getCurrencyCode());

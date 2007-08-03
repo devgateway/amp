@@ -865,7 +865,8 @@ function disable() {
 									</tr>
 									</feature:display>
 									</module:display>
-
+									<module:display name="National Planning Dashboard">
+									<feature:display name="NPD Programs " module="National Planning Dashboard">
 									<tr>
 										<td class="t-name" width="30%" align="right" bgcolor="#f4f4f2">
 											<digi:trn key="aim:program">Program</digi:trn>
@@ -882,7 +883,8 @@ function disable() {
                                           </c:if>
 										</td>
                                     </tr>
-
+									</feature:display>
+									<feature:display name="Proposed Project Cost" module="National Planning Dashboard">
 									<tr>
 										<td class="t-name" width="30%" align="right" bgcolor="#f4f4f2">
 											<digi:trn key="aim:proposedPrjectCost">Proposed Project Cost</digi:trn>
@@ -919,7 +921,8 @@ function disable() {
 										</td>
 
 									</tr>
-
+									</feature:display>
+									</module:display>
 									<tr>
 										<td class="t-name" width="30%" align="right" bgcolor="#f4f4f2">
 											<digi:trn key="aim:meActivityPerformance">
@@ -959,6 +962,7 @@ function disable() {
 										</td>
 									</tr>
 									<logic:present name="currentMember" scope="session">
+									<module:display name="Funding">
 									<tr>
 										<td class="t-name" width="30%" align="right" bgcolor="#f4f4f2">
 											<digi:trn key="aim:funding">
@@ -1021,9 +1025,11 @@ function disable() {
 											</table>
 										</td>
 									</tr>
+									</module:display>
 									</logic:present>
 									<logic:present name="currentMember" scope="session">
 									<!-- Costing -->
+									<feature:display name="Costing" module="Activity Costing">
 									<tr>
 										<td class="t-name" width="30%" align="right" bgcolor="#f4f4f2">
 											<digi:trn key="aim:costing">
@@ -1042,9 +1048,11 @@ function disable() {
 
 										</td>
 									</tr>
+									</feature:display>
 									<!-- End Costing -->
 									</logic:present>
 									<logic:notEmpty name="SA" scope="application">
+									<feature:display name="Regional Funding" module="Funding">
 									<tr>
 										<td class="t-name" width="30%" align="right" bgcolor="#f4f4f2">
 											<digi:trn key="aim:regionalFunding">
@@ -1179,14 +1187,17 @@ function disable() {
 											</c:if>
 										</td>
 									</tr>
+									</feature:display>
 									</logic:notEmpty>
-
+									<module:display name="Organizations">
 									<tr>
 										<td class="t-name" width="30%" align="right" bgcolor="#f4f4f2">
 											<digi:trn key="aim:relatedOrganizations">
 											Related Organizations</digi:trn>
 										</td>
+										
 										<td bgcolor="#ffffff">
+											<feature:display name="Implementing Agency" module="Organizations">
 											<b><digi:trn key="aim:implementingAgency">Implementing Agency</digi:trn></b><br/>
 											<logic:notEmpty name="aimEditActivityForm" property="impAgencies">
 												<table width="100%" cellSpacing=1 cellPadding=5 class="box-border-nopadding">
@@ -1197,8 +1208,9 @@ function disable() {
 													</logic:iterate>
 													</td></tr>
 												</table>
-											</logic:notEmpty><br/>
-
+											</logic:notEmpty><br/></feature:display>
+											
+											<feature:display name="Beneficiary Agency" module="Organizations">
 											<b><digi:trn key="aim:beneficiary2Agency">Beneficiary Agency</digi:trn></b><br/>
 											<logic:notEmpty name="aimEditActivityForm" property="benAgencies">
 												<table width="100%" cellSpacing=1 cellPadding=5 class="box-border-nopadding">
@@ -1210,6 +1222,9 @@ function disable() {
 													</td></tr>
 												</table>
 											</logic:notEmpty><br/>
+											</feature:display>
+											
+											<feature:display name="Contracting Agency" module="Organizations">
 											<b><digi:trn key="aim:contracting2Agency">Contracting Agency</digi:trn></b><br/>
 											<logic:notEmpty name="aimEditActivityForm" property="conAgencies">
 												<table width="100%" cellSpacing=1 cellPadding=5 class="box-border-nopadding">
@@ -1221,8 +1236,11 @@ function disable() {
 													</td></tr>
 												</table>
 											</logic:notEmpty><br/>
+											</feature:display>
 										</td>
 									</tr>
+									</module:display>
+									<module:display name="Components">
 									<tr>
 										<td class="t-name" width="30%" align="right" bgcolor="#f4f4f2">
 											<digi:trn key="aim:components">
@@ -1386,6 +1404,8 @@ function disable() {
 											</c:if>
 										</td>
 									</tr>
+									</module:display>
+									<module:display name="Issues">
 									<tr>
 										<td class="t-name" width="30%" align="right" bgcolor="#f4f4f2">
 											<digi:trn key="aim:issues">
@@ -1417,6 +1437,9 @@ function disable() {
 											</c:if>
 										</td>
 									</tr>
+									</module:display>
+									<module:display name="Document Management">
+									<feature:display name="Related Documents" module="Document Management">
 									<tr>
 										<td class="t-name" width="30%" align="right" bgcolor="#f4f4f2">
 											<digi:trn key="aim:relatedDocuments">
@@ -1480,6 +1503,9 @@ function disable() {
 											</c:if>
 										</td>
 									</tr>
+									</feature:display>
+									</module:display>
+
 									<tr>
 										<td class="t-name" width="30%" align="right" bgcolor="#f4f4f2">
 											<digi:trn key="aim:executingAgencies">
@@ -1497,6 +1523,7 @@ function disable() {
 											</c:if>
 										</td>
 									</tr>
+
 									<tr>
 										<td class="t-name" width="30%" align="right" bgcolor="#f4f4f2">
 											<digi:trn key="aim:implementingAgencies">
@@ -1523,6 +1550,8 @@ function disable() {
 											<c:out value="${aimEditActivityForm.contractors}"/>
 										</td>
 									</tr>
+									<module:display name="Contact Information">
+									<feature:display name="Donor Contact Information" module="Contact Information">
 									<tr>
 										<td class="t-name" width="30%" align="right" bgcolor="#f4f4f2">
 											<digi:trn key="aim:donorFundingContactInformation">
@@ -1534,6 +1563,8 @@ function disable() {
 											<c:out value="${aimEditActivityForm.dnrCntEmail}"/>
 										</td>
 									</tr>
+									</feature:display>
+									<feature:display name="Mofed Contact Information" module="Contact Information">
 									<tr>
 										<td class="t-name" width="30%" align="right" bgcolor="#f4f4f2">
 											<digi:trn key="aim:mofedContactInformation">
@@ -1545,7 +1576,12 @@ function disable() {
 											<c:out value="${aimEditActivityForm.mfdCntEmail}"/>
 										</td>
 									</tr>
+									</feature:display>
+									</module:display>
+									
 									<logic:empty name="SA" scope="application">
+									
+									<field:display name="Accession Instrument" feature="Identification">
 									<tr>
 										<td class="t-name" width="30%" align="right" bgcolor="#f4f4f2">
 											<digi:trn key="aim:AccessionInstrument">Accession Instrument</digi:trn>
@@ -1554,6 +1590,8 @@ function disable() {
 											<c:out value="${aimEditActivityForm.accessionInstrument}"/>
 										</td>
 									</tr>
+									</field:display>
+									<field:display name="A.C. Chapter" feature="Identification"></field:display>
 									<tr>
 										<td class="t-name" width="30%" align="right" bgcolor="#f4f4f2">
 											<digi:trn key="aim:acChapter"> A.C. Chapter</digi:trn>

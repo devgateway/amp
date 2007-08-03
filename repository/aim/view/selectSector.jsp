@@ -203,8 +203,11 @@ function checkNumeric(objName,comma,period,hyphen)
 											Sector</digi:trn>
 										</td>
 										<td>
+											<c:set var="translation">
+												<digi:trn key="aim:addActivitySelectSector">Select Sector</digi:trn>
+											</c:set>
 											<html:select property="sector" onchange="reloadSector(2)" styleClass="inp-text">
-												<html:option value="-1">Select sector</html:option>
+												<html:option value="-1">${translation}</html:option>
 												<logic:notEmpty name="aimSelectSectorForm" property="parentSectors">
 													<html:optionsCollection name="aimSelectSectorForm" property="parentSectors" 
 													value="ampSectorId" label="name" />												

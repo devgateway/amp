@@ -199,8 +199,11 @@
 											Select Organization type</digi:trn>
 										</td>
 										<td>
+											<c:set var="translation">
+												<digi:trn key="aim:addActivityAllOrganizationTypes">All</digi:trn>
+											</c:set>
 											<html:select property="ampOrgTypeId" styleClass="inp-text">
-												<html:option value="-1">All</html:option>
+												<html:option value="-1">${translation}</html:option>
 												<logic:notEmpty name="aimEditActivityForm" property="orgTypes">
 													<html:optionsCollection name="aimEditActivityForm" property="orgTypes"
 														value="ampOrgTypeId" label="orgType" />

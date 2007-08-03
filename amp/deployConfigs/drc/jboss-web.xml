@@ -1,0 +1,4 @@
+<jboss-web>
+<context-root>/</context-root>
+<virtual-host>amp-drc.code.ro</virtual-host>
+</jboss-web>

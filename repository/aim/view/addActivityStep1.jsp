@@ -51,7 +51,7 @@ function selectOrganisation() {
 
 function edit(key) {
 	document.aimEditActivityForm.step.value = "1.1";
-
+        document.aimEditActivityForm.submit();
 	document.aimEditActivityForm.action = "/editor/showEditText.do?id=" + key + "&referrer=/aim/addActivity.do?edit=true";
 	document.aimEditActivityForm.editKey.value = key;
 	document.aimEditActivityForm.target = "_self";
@@ -265,7 +265,7 @@ function popupwin()
 
 								<table width="95%" bgcolor="#f4f4f2" border=0>
 								<module:display name="Project ID and Planning">
-									<feature:display name="Identification" module="Project ID and Planning">	
+									<feature:display name="Identification" module="Project ID and Planning">
 									<tr><td>
 										<IMG alt=Link height=10 src="../ampTemplate/images/arrow-014E86.gif" width=15>
 										<b><digi:trn key="aim:identification">Identification</digi:trn></b>
@@ -278,7 +278,7 @@ function popupwin()
 									<tr><td>
 										&nbsp;
 									</td></tr>
-									<feature:display name="Identification" module="Project ID and Planning">	
+									<feature:display name="Identification" module="Project ID and Planning">
 										<field:display name="Organizations and Project ID" feature="Identification">
 											<tr><td>
 												<jsp:include page="addActivityStep1OrgAndProjects.jsp"/>
@@ -292,7 +292,7 @@ function popupwin()
 									<feature:display name="Planning" module="Project ID and Planning">
 											<jsp:include page="addActivityStep1Planning.jsp"/>
 									</feature:display>
-									
+
 <!--
 									<tr><td bgColor=#f4f4f2 align="center">
 										<table cellPadding=3>
@@ -308,7 +308,7 @@ function popupwin()
 										</table>
 									</td></tr>
  -->
- 									
+
 								</module:display>
 								</table>
 

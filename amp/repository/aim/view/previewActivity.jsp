@@ -642,7 +642,7 @@ function disable() {
 										</td>
 										<td bgcolor="#ffffff">
 											<table width="100%" cellSpacing=2 cellPadding=1>
-												<field:display feature="planning" name="Line Ministry Rank">
+												<field:display feature="Planning" name="Line Ministry Rank">
 												<tr>
 													<td width="32%"><digi:trn key="aim:lineMinRank">
 													Line Ministry Rank</digi:trn></td>
@@ -801,6 +801,7 @@ function disable() {
 										</td>
 									</tr>
 									</feature:display>
+									<feature:display name="Location" module="Project ID and Planning">
 									<tr>
 										<td class="t-name" width="30%" align="right" bgcolor="#f4f4f2">
 											<digi:trn key="aim:location">
@@ -829,6 +830,8 @@ function disable() {
 											</c:if>
 										</td>
 									</tr>
+									</feature:display>
+									<feature:display name="Sectors" module="Project ID and Planning">
 									<tr>
 										<td class="t-name" width="30%" align="right" bgcolor="#f4f4f2">
 											<digi:trn key="aim:sector">
@@ -860,7 +863,7 @@ function disable() {
 											</c:if>
 										</td>
 									</tr>
-									
+									</feature:display>
 									</module:display>
 
 									<tr>

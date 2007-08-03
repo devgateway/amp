@@ -67,7 +67,9 @@
 		  							</digi:trn>
 								</FONT>
 							</td></tr>
-
+							<c:set var="translationAdd">
+									<digi:trn key="aim:addActivityRegionalFundingAddFundingItem">Add</digi:trn>
+							</c:set>
 							<logic:notEmpty name="aimEditActivityForm" property="selectedLocs">
 							<tr bgcolor="#f4f4f2">
 								<td colspan="2" class="box-border-alt1">
@@ -75,7 +77,7 @@
 															 <%=eaForm.getCurrCode()%>)
 										</span>
 										
-										<a href="javascript:addCommitments()">Add</a><br><br>
+										<a href="javascript:addCommitments()">${translationAdd }</a><br><br>
 											<digi:trn key="aim:PlannedFIE">Planned</digi:trn>/<digi:trn key="aim:ActualFIE">Actual</digi:trn>&nbsp;&nbsp;&nbsp;
 												<digi:trn key="aim:AmountFIE">Amount</digi:trn>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 												<digi:trn key="aim:CurrencyFIE">Currency</digi:trn>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
@@ -148,7 +150,7 @@
 										<span class="f-names">Disbursement - (Total actual to date <%=eaForm.getTotalDisbursements()%>
 															 <%=eaForm.getCurrCode()%>)
 										</span>
-										<a href="javascript:addDisbursement()">Add</a><br><br>
+										<a href="javascript:addDisbursement()">${translationAdd }</a><br><br>
 												<digi:trn key="aim:PlannedFIE">Planned</digi:trn>/<digi:trn key="aim:ActualFIE">Actual</digi:trn>&nbsp;&nbsp;&nbsp;
 												<digi:trn key="aim:AmountFIE">Amount</digi:trn>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 												<digi:trn key="aim:CurrencyFIE">Currency</digi:trn>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
@@ -220,7 +222,7 @@
 								<td colspan="2" class="box-border-alt1">
 											<span class="f-names">Expenditure - (Total actual to date <%=eaForm.getTotalExpenditures()%>
 																 <%=eaForm.getCurrCode()%>)</span>
-											<a href="javascript:addExpenditure()">Add</a>&nbsp;&nbsp;
+											<a href="javascript:addExpenditure()">${translationAdd }</a>&nbsp;&nbsp;
 											<br><br>
 												<digi:trn key="aim:PlannedFIE">Planned</digi:trn>/<digi:trn key="aim:ActualFIE">Actual</digi:trn>&nbsp;&nbsp;&nbsp;
 												<digi:trn key="aim:AmountFIE">Amount</digi:trn>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;

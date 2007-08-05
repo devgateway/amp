@@ -203,11 +203,10 @@ function checkNumeric(objName,comma,period,hyphen)
 											Sector</digi:trn>
 										</td>
 										<td>
-											<c:set var="translation">
-												<digi:trn key="aim:addActivitySelectSector">Select Sector</digi:trn>
-											</c:set>
 											<html:select property="sector" onchange="reloadSector(2)" styleClass="inp-text">
-												<html:option value="-1">${translation}</html:option>
+												<html:option value="-1">
+													<digi:trn key="aim:addActivitySelectSector">Select Sector</digi:trn>
+												</html:option>
 												<logic:notEmpty name="aimSelectSectorForm" property="parentSectors">
 													<html:optionsCollection name="aimSelectSectorForm" property="parentSectors" 
 													value="ampSectorId" label="name" />												
@@ -222,7 +221,9 @@ function checkNumeric(objName,comma,period,hyphen)
 										</td>
 										<td>
 											<html:select property="subsectorLevel1" onchange="reloadSector(3)" styleClass="inp-text">
-												<html:option value="-1">Select sub-sector</html:option>
+												<html:option value="-1">
+													<digi:trn key="aim:addActivitySelectSubSector1">Select sub-sector</digi:trn>
+												</html:option>
 												<logic:notEmpty name="aimSelectSectorForm" property="childSectorsLevel1">
 													<html:optionsCollection name="aimSelectSectorForm" property="childSectorsLevel1" 
 													value="ampSectorId" label="name" />												
@@ -237,7 +238,9 @@ function checkNumeric(objName,comma,period,hyphen)
 										</td>
 										<td>
 											<html:select property="subsectorLevel2" styleClass="inp-text">
-												<html:option value="-1">Select sub-sector</html:option>
+												<html:option value="-1">
+														<digi:trn key="aim:addActivitySelectSubSector2">Select sub-sector</digi:trn>
+												</html:option>
 												<logic:notEmpty name="aimSelectSectorForm" property="childSectorsLevel2">
 													<html:optionsCollection name="aimSelectSectorForm" property="childSectorsLevel2" 
 													value="ampSectorId" label="name" />												

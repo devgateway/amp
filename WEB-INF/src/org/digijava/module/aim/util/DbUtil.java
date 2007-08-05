@@ -2504,6 +2504,32 @@ public class DbUtil {
 
 	}
 
+	public static ArrayList getAmpDonorsByFunding(Long ampTeamId) {
+		Session session = null;
+		Query q = null;
+		ArrayList donors = new ArrayList();
+		try {
+			session = PersistenceManager.getRequestDBSession();
+			String queryString = new String();
+			queryString = "select f from "
+					+ AmpFunding.class.getName() + " f";
+			q = session.createQuery(queryString);
+			//logger.debug("No of Donors : " + q.list().size());
+			Iterator it = q.list().iterator();
+			while (it.hasNext()) {
+				AmpFunding el = (AmpFunding) it.next();
+				if (el.getAmpActivityId().getTeam().getAmpTeamId().equals(ampTeamId)){
+					AmpOrganisation org = el.getAmpDonorOrgId();	
+					if (donors.indexOf(org) == -1)
+						donors.add(org);
+				}
+			}
+		} catch (Exception ex) {
+			logger.debug("Unable to get Donors from database", ex);
+		}
+		return donors;
+	}
+
 	public static ArrayList getAmpDonors(Long ampTeamId) {
 		ArrayList donor = new ArrayList();
 		StringBuffer DNOrg = new StringBuffer();
@@ -2571,7 +2597,8 @@ public class DbUtil {
 				}
 		return donor;
 	}
-
+	
+	
 	public static Collection getDonorFund1(Long ampFundingId,
 			Integer transactionType, Integer adjustmentType, String perspective) {
 		logger.debug("getTotalDonorFund() with ampFundingId " + ampFundingId

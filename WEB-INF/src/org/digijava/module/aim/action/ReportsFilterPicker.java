@@ -70,7 +70,7 @@ public class ReportsFilterPicker extends MultiAction {
 		Collection pageSizes=new ArrayList();
 		
 		ArrayList donors;
-		if(ampTeamId!=null) donors=DbUtil.getAmpDonors(ampTeamId); else donors=new ArrayList();
+		if(ampTeamId!=null) donors=DbUtil.getAmpDonorsByFunding(ampTeamId); else donors=new ArrayList();
 		Collection allIndicatorRisks = MEIndicatorsUtil.getAllIndicatorRisks();
 		
 		filterForm.setCurrencies(currency);

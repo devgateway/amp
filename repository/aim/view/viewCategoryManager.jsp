@@ -110,8 +110,9 @@ function confirmDelete() {
 							</td>
 							<td align="left">
 								<digi:trn key='<%=key+"description" %>'>
-									<bean:write name="category" property="description" /> &nbsp;
+									<bean:write name="category" property="description" /> 
 								</digi:trn>
+								&nbsp;
 							</td>
 							<td align="left">
 								<ul>

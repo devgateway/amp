@@ -252,7 +252,7 @@
 
 						</c:set>
 
-						 <a href="javascript:popup_pdf('<bean:write name="aimParisIndicatorReportForm" property="indicatorCode" />')"> Create Report in Pdf. </a> &nbsp;&nbsp;
+						 <a href="javascript:popup_pdf('<bean:write name="aimParisIndicatorReportForm" property="indicatorCode" />')"> <digi:trn key="aim:createReportInPdf">Create Report in Pdf.</digi:trn> </a> &nbsp;&nbsp;
 
 		        	<%--</logic:notEmpty>--%>
 
@@ -282,7 +282,7 @@
 
 								</c:set>
 
-							 <a href="javascript:popup_xls('<bean:write name="aimParisIndicatorReportForm" property="indicatorCode" />')"> Create Report in Xls. </a> &nbsp;&nbsp;
+							 <a href="javascript:popup_xls('<bean:write name="aimParisIndicatorReportForm" property="indicatorCode" />')"> <digi:trn key="aim:createReportInXls">Create Report in Xls.</digi:trn> </a> &nbsp;&nbsp;
 
 		                	<%--</logic:notEmpty>--%>
 
@@ -304,7 +304,7 @@
 
 							<digi:link href="/ParisIndicatorPrintReports.do" target="_blank">
 
-								Print
+								<digi:trn key="aim:print">Print</digi:trn>
 
 							</digi:link>
 
@@ -466,7 +466,7 @@
 
 													<html:option value="MA"><digi:trn key="aim:MOFED">Mofed</digi:trn></html:option>
 
-													<html:option value="DN">DONOR</html:option>
+													<html:option value="DN"><digi:trn key="aim:DONOR">DONOR</digi:trn></html:option>
 
 												</html:select>
 
@@ -494,7 +494,7 @@
 
 												<html:select property="donor" name="aimParisIndicatorReportForm" styleClass="dr-menu" >
 
-													<html:option value="all">All Donors</html:option>
+													<html:option value="all"><digi:trn key="aim:allDonors">All Donors</digi:trn></html:option>
 
 													<logic:notEmpty name="aimParisIndicatorReportForm" property="donorColl">
 
@@ -514,7 +514,7 @@
 
 												<html:select property="status" name="aimParisIndicatorReportForm" styleClass="dr-menu" >
 
-													<html:option value="all">All Status</html:option>
+													<html:option value="all"><digi:trn key="aim:allStatus">All Status</digi:trn></html:option>
 
 													<logic:notEmpty name="aimParisIndicatorReportForm" property="statusColl">
 
@@ -536,7 +536,7 @@
 
 												<html:select property="orgGroup" name="aimParisIndicatorReportForm" styleClass="dr-menu" >
 
-													<html:option value="all">All Groups</html:option>
+													<html:option value="all"><digi:trn key="aim:allGroups">All Groups</digi:trn></html:option>
 
 													<logic:notEmpty name="aimParisIndicatorReportForm" property="orgGroupColl">
 
@@ -602,7 +602,7 @@
 
 												<html:select property="orgGroup" name="aimParisIndicatorReportForm" styleClass="dr-menu" >
 
-													<html:option value="all">All Groups</html:option>
+													<html:option value="all"><digi:trn key="aim:allGroups">All Groups</digi:trn></html:option>
 
 													<logic:notEmpty name="aimParisIndicatorReportForm" property="orgGroupColl">
 
@@ -620,7 +620,7 @@
 
 												<html:select property="financingInstrument" name="aimParisIndicatorReportForm" styleClass="dr-menu" >
 
-													<html:option value="all">All Financing Instruments</html:option>
+													<html:option value="all"><digi:trn key="aim:allFinancingInstruments">All Financing Instruments</digi:trn></html:option>
 
 													<logic:notEmpty name="aimParisIndicatorReportForm" property="financingInstrumentColl">
 
@@ -638,7 +638,7 @@
 
 												<html:select property="sector" name="aimParisIndicatorReportForm" styleClass="dr-menu" >
 
-													<html:option value="all">All Sectors</html:option>
+													<html:option value="all"><digi:trn key="aim:allSectors">All Sectors</digi:trn></html:option>
 
 													<logic:notEmpty name="aimParisIndicatorReportForm" property="sectorColl">
 
@@ -744,7 +744,7 @@
 
 										<strong>
 
-											Donor(s)
+											<digi:trn key="aim:donors">Donor(s)</digi:trn>
 
 										</strong>
 
@@ -758,7 +758,7 @@
 
 											<strong>
 
-												Disbursement Year
+												<digi:trn key="aim:disbursmentYear">Disbursement Year</digi:trn>
 
 											</strong>
 
@@ -779,9 +779,9 @@
 											<div align="center">
 
 											<strong>
-
+											<digi:trn key="aim:aidFlowsGovernmentSectorReported">
 											Aid flows to the government sector reported on the government's budget
-
+											</digi:trn>
 											</strong>
 
 											</div>
@@ -793,9 +793,9 @@
 											<div align="center">
 
 											<strong>
-
+											<digi:trn key="aim:totalAidFlowsDisbursed">
 											Total Aid flows disbursed to the government sector
-
+											</digi:trn>
 											</strong>
 
 											</div>
@@ -815,9 +815,9 @@
 											<div align="center">
 
 											<strong>
-
+											<digi:trn key="aim:VolumeOfTehnicalCoOperation">
 											Volume of technical co-operation for capacity development provided through co-ordinated programmes 
-
+											</digi:trn>
 											</strong>
 
 											</div>
@@ -829,9 +829,9 @@
 											<div align="center">
 
 											<strong>
-
+											<digi:trn key="aim:totalVolumeOfTehnicalCoOperation">
 											Total volume of technical co-operation provided 
-
+											</digi:trn>
 											</strong>
 
 											</div>
@@ -843,9 +843,9 @@
 											<div align="center">
 
 											<strong>
-
+											<digi:trn key="aim:noOfTC">
 											% of TC for capacity development provided through coordinated programmes consistent with national development strategies 
-
+											</digi:trn>
 											</strong>
 
 											</div>
@@ -863,9 +863,9 @@
 											<div align="center">
 
 											<strong>
-
+											<digi:trn key="aim:aidFlowsToGovernmentSector">
 											Aid flows to the goverment sector that use national budget execution procedures
-
+											</digi:trn>
 											</strong>
 
 											</div>
@@ -877,9 +877,9 @@
 											<div align="center">
 
 											<strong>
-
+											<digi:trn key="aim:aidFlowsToGovernmentSector">
 											Aid flows to the goverment sector that use national financial reporting procedures
-
+											</digi:trn>
 											</strong>
 
 											</div>
@@ -891,9 +891,9 @@
 											<div align="center">
 
 											<strong>
-
+											<digi:trn key="aim:aidFlowsToGovernmentSector">
 											Aid flows to the goverment sector that use national financial auditing procedures
-
+											</digi:trn>
 											</strong>
 
 											</div>
@@ -905,9 +905,9 @@
 											<div align="center">
 
 											<strong>
-
+											<digi:trn key="aim:odaThatUses">
 											ODA that uses all 3 national PFM
-
+											</digi:trn>
 											</strong>
 
 											</div>
@@ -919,9 +919,9 @@
 											<div align="center">
 
 											<strong>
-
+											<digi:trn key="aim:totalAidFlowsDisbursed">
 											Total aid flows disbursed to the government sector
-
+											</digi:trn>
 											</strong>
 
 											</div>
@@ -933,9 +933,9 @@
 											<div align="center">
 
 											<strong>
-
+											<digi:trn key="aim:proportionAidFlows">
 											Proportion aid flows to the government sector using one of the 3 country PFM systems
-
+											</digi:trn>
 											</strong>
 
 											</div>
@@ -947,9 +947,9 @@
 											<div align="center">
 
 											<strong>
-
+											<digi:trn key="aim:proportionOfAidFlowsToTheGovernmentSector">
 											Proportion of aid flows to the government sector using all the 3 country PFM systems
-
+											</digi:trn>
 											</strong>
 
 											</div>
@@ -967,9 +967,9 @@
 											<div align="center">
 
 											<strong>
-
+											<digi:trn key="aim:aidFlowsToTheGovernmentSector">
 											Aid flows to the government sector that use national procurement procedures  
-
+											</digi:trn>
 											</strong>
 
 											</div>
@@ -981,9 +981,9 @@
 											<div align="center">
 
 											<strong>
-
+											<digi:trn key="aim:totalAidFlowsDisbured">
 											Total aid flows disbursed to the government sector
-
+											</digi:trn>
 											</strong>
 
 											</div>
@@ -995,9 +995,9 @@
 											<div align="center">
 
 											<strong>
-
+											<digi:trn key="aim:proportionOfAidFlowsToTheGovernmentSector">
 											Proportion of aid flows to the government sector using national procurement procedures
-
+											</digi:trn>
 											</strong>
 
 											</div>
@@ -1015,9 +1015,9 @@
 											<div align="center">
 
 											<strong>
-
+											<digi:trn key="aim:budgetSupportAidFlows">
 											Budget support aid flows provided in the context of programme based approach 
-
+											</digi:trn>
 											</strong>
 
 											</div>
@@ -1029,9 +1029,9 @@
 											<div align="center">
 
 											<strong>
-
+											<digi:trn key="aim:otherAidFlowsProvided">
 											Other aid flows provided in the context of programme based approach	
-
+											</digi:trn>
 											</strong>
 
 											</div>
@@ -1043,9 +1043,9 @@
 											<div align="center">
 
 											<strong>
-
+											<digi:trn key="aim:totalAidFlowsProvided">
 											Total aid flows provided
-
+											</digi:trn>
 											</strong>
 
 											</div>
@@ -1057,9 +1057,9 @@
 											<div align="center">
 
 											<strong>
-
-											Propotion of aid flows provided in the context of programme based approach
-
+											<digi:trn key="aim:proportionOfAidFlows">
+											Proportion of aid flows provided in the context of programme based approach
+											</digi:trn>
 											</strong>
 
 											</div>
@@ -1077,8 +1077,9 @@
 											<div align="center">
 
 											<strong>
-
+											<digi:trn key="aim:numberOfMission">
 											Number of missions to the field that are joint  
+											</digi:trn>
 
 											</strong>
 
@@ -1091,9 +1092,9 @@
 											<div align="center">
 
 											<strong>
-
+											<digi:trn key="aim:totalNumberOfMission">
 											Total number of missions to the field
-
+											</digi:trn>
 											</strong>
 
 											</div>
@@ -1111,9 +1112,9 @@
 											<div align="center">
 
 											<strong>
-
+											<digi:trn key="aim:numberOfCountryAnalytic">
 											Number of country analytic reports that are joint  
-
+											</digi:trn>
 											</strong>
 
 											</div>
@@ -1125,9 +1126,9 @@
 											<div align="center">
 
 											<strong>
-
+											<digi:trn key="aim:totalNumberOfCountryAnalytic">
 											Total number of country analytic reports
-
+											</digi:trn>
 											</strong>
 
 											</div>
@@ -1153,9 +1154,9 @@
 											<div align="center">
 
 											<strong>
-
-											<c:out value="${aimParisIndicatorReportForm.indicatorName}"/>
-
+											<digi:trn key="aim:${aimParisIndicatorReportForm.indicatorNameTrn}">
+												<c:out value="${aimParisIndicatorReportForm.indicatorName}"/>
+											</digi:trn>
 											</strong>
 
 											</div>
@@ -1324,7 +1325,7 @@
 
 									aimParisIndicatorReportForm.indicatorCode != '10b'}">
 
-					<tr><td><font color="blue">* All the amounts are in thousands (000)</font></td></tr>
+					<tr><td><font color="blue">* <digi:trn key="aim:allTheAmounts">All the amounts are in thousands (000)</digi:trn></font></td></tr>
 
 				</c:if>
 
@@ -1390,13 +1391,13 @@
 
 														<c:if test="${aimParisIndicatorReportForm.indicatorCode == '5a'}">
 
-															<strong>Percent of donors that use national procurement systems</strong>
+															<strong><digi:trn key="aim:percentOfDonorsThatUseNational">Percent of donors that use national procurement systems</digi:trn></strong>
 
 														</c:if>
 
 														<c:if test="${aimParisIndicatorReportForm.indicatorCode == '5b'}">
 
-															<strong>Percent of donors that use national procurement systems</strong>
+															<strong><digi:trn key="aim:percentOfDonorsThatUseNational">Percent of donors that use national procurement systems</digi:trn></strong>
 
 														</c:if>
 

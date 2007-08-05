@@ -46,7 +46,7 @@
 
                 <digi:link href="/viewMyDesktop.do" styleClass="comment" title="${translation}" >
 
-                	Portfolio
+                	<digi:trn key="aim:portofolio">Portfolio</digi:trn>
 
                 </digi:link> &gt; <digi:trn key="aim:allParisReportsList">Paris Indicator Reports List</digi:trn>
 

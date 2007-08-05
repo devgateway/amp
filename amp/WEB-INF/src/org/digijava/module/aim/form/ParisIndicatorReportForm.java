@@ -261,6 +261,10 @@ public class ParisIndicatorReportForm extends ActionForm {
 	public String getIndicatorName() {
 		return indicatorName;
 	}
+	
+	public String getIndicatorNameTrn() {
+		return indicatorName.toLowerCase().replaceAll(" ", "");	
+	}
 	/**
 	 * @param indicatorName The indicatorName to set.
 	 */

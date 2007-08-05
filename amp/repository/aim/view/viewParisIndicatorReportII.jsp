@@ -266,7 +266,7 @@
 
 						</c:set>
 
-						 <a href="javascript:popup_pdf('<bean:write name="aimParisIndicatorReportForm" property="indicatorCode" />')"> Create Report in Pdf. </a> &nbsp;&nbsp;
+						 <a href="javascript:popup_pdf('<bean:write name="aimParisIndicatorReportForm" property="indicatorCode" />')"> <digi:trn key="aim:createReportInPdf">Create Report in Pdf.</digi:trn> </a> &nbsp;&nbsp;
 
 		        	<%--</logic:notEmpty>--%>
 
@@ -296,7 +296,7 @@
 
 								</c:set>
 
-							 <a href="javascript:popup_xls('<bean:write name="aimParisIndicatorReportForm" property="indicatorCode" />')"> Create Report in Xls. </a> &nbsp;&nbsp;
+							 <a href="javascript:popup_xls('<bean:write name="aimParisIndicatorReportForm" property="indicatorCode" />')"> <digi:trn key="aim:createReportInXls">Create Report in Xls.</digi:trn> </a> &nbsp;&nbsp;
 
 		                	<%--</logic:notEmpty>--%>
 
@@ -316,7 +316,7 @@
 
 							<digi:link href="/ParisIndicatorPrintReports.do" target="_blank">
 
-								Print
+								<digi:trn key="aim:print">Print</digi:trn>
 
 							</digi:link>
 
@@ -478,7 +478,7 @@
 
 													<html:option value="MA"><digi:trn key="aim:MOFED">Mofed</digi:trn></html:option>
 
-													<html:option value="DN">DONOR</html:option>
+													<html:option value="DN"><digi:trn key="aim:DONOR">DONOR</digi:trn></html:option>
 
 												</html:select>
 
@@ -508,7 +508,7 @@
 
 												<html:select property="donor" name="aimParisIndicatorReportForm" styleClass="dr-menu" >
 
-													<html:option value="all">All Donors</html:option>
+													<html:option value="all"><digi:trn key="aim:allDonors">All Donors</digi:trn></html:option>
 
 													<logic:notEmpty name="aimParisIndicatorReportForm" property="donorColl">
 
@@ -526,7 +526,7 @@
 
 												<html:select property="status" name="aimParisIndicatorReportForm" styleClass="dr-menu" >
 
-													<html:option value="all">All Status</html:option>
+													<html:option value="all"><digi:trn key="aim:allStatus">All Status</digi:trn></html:option>
 
 													<logic:notEmpty name="aimParisIndicatorReportForm" property="statusColl">
 
@@ -560,7 +560,7 @@
 
 												<html:select property="orgGroup" name="aimParisIndicatorReportForm" styleClass="dr-menu" >
 
-													<html:option value="all">All Groups</html:option>
+													<html:option value="all"><digi:trn key="aim:allGroups">All Groups</digi:trn></html:option>
 
 													<logic:notEmpty name="aimParisIndicatorReportForm" property="orgGroupColl">
 
@@ -580,7 +580,7 @@
 
 												<html:select property="financingInstrument" name="aimParisIndicatorReportForm" styleClass="dr-menu" >
 
-													<html:option value="all">All Financing Instruments</html:option>
+													<html:option value="all"><digi:trn key="aim:allFinancingInstruments">All Financing Instruments</digi:trn></html:option>
 
 													<logic:notEmpty name="aimParisIndicatorReportForm" property="financingInstrumentColl">
 
@@ -600,7 +600,7 @@
 
 												<html:select property="sector" name="aimParisIndicatorReportForm" styleClass="dr-menu" >
 
-													<html:option value="all">All Sectors</html:option>
+													<html:option value="all"><digi:trn key="aim:allSectors">All Sectors</digi:trn></html:option>
 
 													<logic:notEmpty name="aimParisIndicatorReportForm" property="sectorColl">
 
@@ -704,7 +704,7 @@
 
 									<td width="15%" height="25">
 
-										<div align="center"><strong>Donor(s)</strong></div>
+										<div align="center"><strong><digi:trn key="aim:donors">Donor(s)</digi:trn></strong></div>
 
 								    </td>
 
@@ -714,7 +714,7 @@
 
 									<td width="15%" height="25" rowspan="2">
 
-										<div align="center"><strong>Donor(s)</strong></div>
+										<div align="center"><strong><digi:trn key="aim:donors">Donor(s)</digi:trn></strong></div>
 
 								  	</td>
 
@@ -803,9 +803,9 @@
 											<div align="center">
 
 												<strong>
-
+													<digi:trn key="aim:aidFlowsToTheGovernmentSector">
 													Aid flows to the government sector scheduled for fiscal year
-
+													</digi:trn>
 												</strong>
 
 											</div>
@@ -817,9 +817,9 @@
 											<div align="center">
 
 												<strong>
-
+													<digi:trn key="aim:totalAidFlowsDisbursedToTheGovernmentSector">
 													Total Aid flows disbursed to the government sector
-
+													</digi:trn>
 												</strong>
 
 											</div>
@@ -831,9 +831,9 @@
 											<div align="center">
 
 												<strong>
-
+													<digi:trn key="aim:proportionOfAidToTheGovernmentSectorDisbursed">
 													Proportion of aid to the government sector disbursed within the fiscal year it was scheduled
-
+													</digi:trn>
 												</strong>
 
 											</div>
@@ -986,7 +986,7 @@
 
 				<c:if test="${aimParisIndicatorReportForm.indicatorCode != '6'}">
 
-					<tr><td><font color="blue">* All the amounts are in thousands (000)</font></td></tr>
+					<tr><td><font color="blue">* <digi:trn key="aim:allTheAmounts">All the amounts are in thousands (000)</digi:trn></font></td></tr>
 
 				</c:if>
 

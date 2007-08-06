@@ -575,6 +575,7 @@ public class EditActivityForm extends ActionForm implements Serializable{
 			allComments=null;
 			financingBreakdown=null;
 			visibleProgram=null;
+			fundingRegions = null;
 		}
 
 		if (orgSelReset) {

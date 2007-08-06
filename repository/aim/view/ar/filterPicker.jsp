@@ -39,9 +39,9 @@
 		<tr>
 			<td colspan="4">
 			<html:select property="currency" style="width: 400px" styleClass="inp-text">
-			<html:option value="-1"><digi:trn key="rep:filer:Default">Default</digi:trn></html:option>
 				<html:optionsCollection property="currencies"
 					value="ampCurrencyId" label="currencyName" />
+			
 			</html:select>
 			</td>
 		</tr>

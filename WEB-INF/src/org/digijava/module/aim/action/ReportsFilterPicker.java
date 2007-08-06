@@ -69,6 +69,10 @@ public class ReportsFilterPicker extends MultiAction {
 		Collection allFisCalenders = DbUtil.getAllFisCalenders();
 		List ampSectors = SectorUtil.getAmpSectorsAndSubSectors();
 		
+		if (filterForm.getCurrency() == null){
+			AmpApplicationSettings tempSettings = DbUtil.getMemberAppSettings(teamMember.getMemberId());
+			filterForm.setCurrency(tempSettings.getCurrency().getAmpCurrencyId());  
+		}
 		//create the pageSizes Collection for the dropdown
 		Collection pageSizes=new ArrayList();
 		
@@ -84,10 +88,6 @@ public class ReportsFilterPicker extends MultiAction {
 		filterForm.setFromYears(new ArrayList());
 		filterForm.setToYears(new ArrayList());
 		filterForm.setPageSizes(pageSizes);
-		
-		AmpApplicationSettings tempSettings = DbUtil.getMemberAppSettings(teamMember.getMemberId());
-		filterForm.setCurrency(tempSettings.getCurrency().getAmpCurrencyId());  
-		
 		
 		// loading Activity Rank collection
 		if (null == filterForm.getActRankCollection()) {

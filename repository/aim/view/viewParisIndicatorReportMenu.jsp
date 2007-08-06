@@ -151,8 +151,9 @@
 													</c:set>
 
 													<digi:link href="/parisIndicatorReport.do" name="urlParams" styleClass="h-box" title="${translation}" >
-
+														<digi:trn key="aim:${report.nameTrn}">
 														<c:out value="${report.name}"/>
+														</digi:trn>
 
 													</digi:link>
 

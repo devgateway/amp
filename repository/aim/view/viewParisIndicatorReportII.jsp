@@ -803,7 +803,7 @@
 											<div align="center">
 
 												<strong>
-													<digi:trn key="aim:aidFlowsToTheGovernmentSector">
+													<digi:trn key="aim:aidFlowsToTheGovernmentSectorScheduled">
 													Aid flows to the government sector scheduled for fiscal year
 													</digi:trn>
 												</strong>

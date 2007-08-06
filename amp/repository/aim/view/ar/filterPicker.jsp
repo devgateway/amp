@@ -55,7 +55,6 @@
 		<tr>
 			<td colspan="2">
 			<html:select property="calendar" style="width: 270px" styleClass="inp-text">
-				<html:option value="-1"><digi:trn key="rep:filer:All">All</digi:trn></html:option>			
 				<html:optionsCollection property="calendars"
 					value="ampFiscalCalId" label="name" />
 			</html:select>

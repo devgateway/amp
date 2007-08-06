@@ -863,7 +863,7 @@
 											<div align="center">
 
 											<strong>
-											<digi:trn key="aim:aidFlowsToGovernmentSector">
+											<digi:trn key="aim:aidFlowsToGovernmentSectorBudget">
 											Aid flows to the goverment sector that use national budget execution procedures
 											</digi:trn>
 											</strong>
@@ -877,7 +877,7 @@
 											<div align="center">
 
 											<strong>
-											<digi:trn key="aim:aidFlowsToGovernmentSector">
+											<digi:trn key="aim:aidFlowsToGovernmentSectorFinancialReporting">
 											Aid flows to the goverment sector that use national financial reporting procedures
 											</digi:trn>
 											</strong>
@@ -891,7 +891,7 @@
 											<div align="center">
 
 											<strong>
-											<digi:trn key="aim:aidFlowsToGovernmentSector">
+											<digi:trn key="aim:aidFlowsToGovernmentSectorFinancialAuditing">
 											Aid flows to the goverment sector that use national financial auditing procedures
 											</digi:trn>
 											</strong>
@@ -933,7 +933,7 @@
 											<div align="center">
 
 											<strong>
-											<digi:trn key="aim:proportionAidFlows">
+											<digi:trn key="aim:proportionAidFlowsUsingOne">
 											Proportion aid flows to the government sector using one of the 3 country PFM systems
 											</digi:trn>
 											</strong>
@@ -947,7 +947,7 @@
 											<div align="center">
 
 											<strong>
-											<digi:trn key="aim:proportionOfAidFlowsToTheGovernmentSector">
+											<digi:trn key="aim:proportionOfAidFlowsUsingAll">
 											Proportion of aid flows to the government sector using all the 3 country PFM systems
 											</digi:trn>
 											</strong>
@@ -1015,7 +1015,7 @@
 											<div align="center">
 
 											<strong>
-											<digi:trn key="aim:budgetSupportAidFlows">
+											<digi:trn key="aim:budgetSupportAidFlowsInTheContextOfProgammeBasedApproach">
 											Budget support aid flows provided in the context of programme based approach 
 											</digi:trn>
 											</strong>
@@ -1029,7 +1029,7 @@
 											<div align="center">
 
 											<strong>
-											<digi:trn key="aim:otherAidFlowsProvided">
+											<digi:trn key="aim:otherAidFlowsProvidedInTheContextOfProgrammeBasedApproach">
 											Other aid flows provided in the context of programme based approach	
 											</digi:trn>
 											</strong>
@@ -1057,7 +1057,7 @@
 											<div align="center">
 
 											<strong>
-											<digi:trn key="aim:proportionOfAidFlows">
+											<digi:trn key="aim:proportionOfAidFlowsInTheContextOfProgrammeBasedApproach">
 											Proportion of aid flows provided in the context of programme based approach
 											</digi:trn>
 											</strong>
@@ -1077,7 +1077,7 @@
 											<div align="center">
 
 											<strong>
-											<digi:trn key="aim:numberOfMission">
+											<digi:trn key="aim:numberOfMissions">
 											Number of missions to the field that are joint  
 											</digi:trn>
 
@@ -1092,7 +1092,7 @@
 											<div align="center">
 
 											<strong>
-											<digi:trn key="aim:totalNumberOfMission">
+											<digi:trn key="aim:totalNumberOfMissions">
 											Total number of missions to the field
 											</digi:trn>
 											</strong>
@@ -1382,9 +1382,13 @@
 												<c:if test="${cntr == 0}">
 
 													<td align="center" rowspan="2">
-
-														<strong><c:out value="${rowVal}"/></strong>
-
+														
+														<c:if test="${aimParisIndicatorReportForm.indicatorCode == '5a'}">
+														<strong><digi:trn key="aim:percentOfODAUsingAll">Percent of ODA using all three partner's PFM procedures</digi:trn></strong>
+														</c:if>
+														<c:if test="${aimParisIndicatorReportForm.indicatorCode == '5b'}">
+														<strong><digi:trn key="aim:percentOdODAUsingNational">Percent of ODA using national procurement systems</digi:trn></strong>
+														</c:if>
 													</td>
 
 													<td align="center" colspan='<c:out value="${range}" />' >
@@ -1434,13 +1438,14 @@
 											<nested:iterate id="rowVal">
 
 												<c:if test="${flag == false}">
-
 													<td align="center">
-
-														<strong><c:out value="${rowVal}"/></strong>
-
+														<% String rowValTrn = ((String)rowVal).toLowerCase().replaceAll(" ", "").replaceAll("%",""); %>
+														<strong>
+														<digi:trn key="aim:${rowValTrn}">
+															${rowVal}
+														</digi:trn>
+														</strong>
 													</td>
-
 												</c:if>
 
 												<c:if test="${flag == true}">

@@ -48,6 +48,11 @@ public class AmpAhsurveyIndicator {
 	public String getName() {
 		return name;
 	}
+	
+	public String getNameTrn() {
+		return name.toLowerCase().replaceAll(" ", "");
+	}
+	
 	/**
 	 * @param name The name to set.
 	 */

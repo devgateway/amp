@@ -1206,10 +1206,14 @@
 									<td width="15%" align="center" height="65" rowspan='<c:out value="${yearRange}" />' >
 
 										<div align="center">
-
+											<bean:define id="key">
+												<nested:write property="donor"/>
+											</bean:define>
+											<% String trnTag = ((String)key).toLowerCase().replaceAll(" ","").replaceAll("%",""); %>
 											<strong>
-
-											<nested:write property="donor" />
+											<digi:trn key="<%="aim:pi:"+trnTag %>">
+												<nested:write property="donor" />
+											</digi:trn>
 
 											</strong>
 

@@ -69,9 +69,12 @@ public class ReportsFilterPicker extends MultiAction {
 		Collection allFisCalenders = DbUtil.getAllFisCalenders();
 		List ampSectors = SectorUtil.getAmpSectorsAndSubSectors();
 		
+		AmpApplicationSettings tempSettings = DbUtil.getMemberAppSettings(teamMember.getMemberId());
 		if (filterForm.getCurrency() == null){
-			AmpApplicationSettings tempSettings = DbUtil.getMemberAppSettings(teamMember.getMemberId());
 			filterForm.setCurrency(tempSettings.getCurrency().getAmpCurrencyId());  
+		}
+		if (filterForm.getCalendar() == null){
+			filterForm.setCalendar(tempSettings.getFiscalCalendar().getAmpFiscalCalId());
 		}
 		//create the pageSizes Collection for the dropdown
 		Collection pageSizes=new ArrayList();
@@ -121,11 +124,11 @@ public class ReportsFilterPicker extends MultiAction {
 		filterForm.setSelectedRisks(null);
 		filterForm.setSelectedSectors(null);
 		filterForm.setSelectedStatuses(null);
-		filterForm.setCalendar(null);
 		HttpSession httpSession = request.getSession();
 		TeamMember teamMember = (TeamMember) httpSession .getAttribute(Constants.CURRENT_MEMBER);;
 		AmpApplicationSettings tempSettings = DbUtil.getMemberAppSettings(teamMember.getMemberId());
 		filterForm.setCurrency(tempSettings.getCurrency().getAmpCurrencyId());  
+		filterForm.setCalendar(tempSettings.getFiscalCalendar().getAmpFiscalCalId());
 		filterForm.setFromYear(null);
 		filterForm.setToYear(null);
 		filterForm.setLineMinRank(null);

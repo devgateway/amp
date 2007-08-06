@@ -200,11 +200,11 @@ public class CategAmountColWorker extends ColumnWorker {
 		String quarter=null;
 		Integer year=null;
 		
-		if(filter.getCalendarType()==null || filter.getCalendarType().equals(Constants.GREGORIAN)) {
+		if(filter.getCalendarType()==null || filter.getCalendarType().getAmpFiscalCalId().equals(Constants.GREGORIAN)) {
 			quarter= "Q"+ new Integer(calendar.get(Calendar.MONTH) / 4 + 1);
 			year=new Integer(calendar.get(Calendar.YEAR));
 		} else
-		if(filter.getCalendarType().equals(Constants.ETH_CAL) || filter.getCalendarType().equals(Constants.ETH_FY)) {
+		if(filter.getCalendarType().getAmpFiscalCalId().equals(Constants.ETH_CAL) || filter.getCalendarType().getAmpFiscalCalId().equals(Constants.ETH_FY)) {
 			EthiopianCalendar ec=new EthiopianCalendar();
 			EthiopianCalendar tempDate=new EthiopianCalendar();
 			ec=tempDate.getEthiopianDate(calendar);

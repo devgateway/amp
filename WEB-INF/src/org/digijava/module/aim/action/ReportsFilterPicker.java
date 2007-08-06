@@ -10,6 +10,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
+import javax.servlet.ServletRequest;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -24,6 +25,7 @@ import org.dgfoundation.amp.ar.AmpARFilter;
 import org.dgfoundation.amp.ar.ArConstants;
 import org.dgfoundation.amp.utils.MultiAction;
 import org.digijava.kernel.persistence.PersistenceManager;
+import org.digijava.module.aim.dbentity.AmpApplicationSettings;
 import org.digijava.module.aim.dbentity.AmpCategoryValue;
 import org.digijava.module.aim.dbentity.AmpCurrency;
 import org.digijava.module.aim.dbentity.AmpFiscalCalendar;
@@ -37,6 +39,7 @@ import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.MEIndicatorsUtil;
 import org.digijava.module.aim.util.SectorUtil;
+import org.digijava.module.aim.util.TeamUtil;
 import org.springframework.beans.BeanWrapperImpl;
 
 /**
@@ -82,6 +85,9 @@ public class ReportsFilterPicker extends MultiAction {
 		filterForm.setToYears(new ArrayList());
 		filterForm.setPageSizes(pageSizes);
 		
+		AmpApplicationSettings tempSettings = DbUtil.getMemberAppSettings(teamMember.getMemberId());
+		filterForm.setCurrency(tempSettings.getCurrency().getAmpCurrencyId());  
+		
 		
 		// loading Activity Rank collection
 		if (null == filterForm.getActRankCollection()) {
@@ -116,7 +122,10 @@ public class ReportsFilterPicker extends MultiAction {
 		filterForm.setSelectedSectors(null);
 		filterForm.setSelectedStatuses(null);
 		filterForm.setCalendar(null);
-		filterForm.setCurrency(null);
+		HttpSession httpSession = request.getSession();
+		TeamMember teamMember = (TeamMember) httpSession .getAttribute(Constants.CURRENT_MEMBER);;
+		AmpApplicationSettings tempSettings = DbUtil.getMemberAppSettings(teamMember.getMemberId());
+		filterForm.setCurrency(tempSettings.getCurrency().getAmpCurrencyId());  
 		filterForm.setFromYear(null);
 		filterForm.setToYear(null);
 		filterForm.setLineMinRank(null);

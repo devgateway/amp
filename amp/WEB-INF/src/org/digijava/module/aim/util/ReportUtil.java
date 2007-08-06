@@ -8,6 +8,7 @@ import java.sql.SQLException;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.GregorianCalendar;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -15307,7 +15308,40 @@ public class ReportUtil {
 		}
 		return pid;
 	}// get projectId
-// end of Advanced Function	
+// end of Advanced Function
+	
+    public static Collection getReportsByOwner(Long ownerId) {
+        Session session = null;
+        Collection col = new ArrayList();
+        try {
+            session = PersistenceManager.getSession();
+
+            String queryString = null;
+            Query qry = null;
+
+            queryString = "select r from " + AmpReports.class.getName()
+                + " r " + "where r.ownerId=:ownId order by r.name";
+            qry = session.createQuery(queryString);
+            qry.setParameter("ownId", ownerId, Hibernate.LONG);
+            col = qry.list();
+
+        } catch(Exception e) {
+            logger.debug("Exception from getAllTeamReports()");
+            logger.error(e.toString());
+            throw new RuntimeException(e);
+        } finally {
+            try {
+                if(session != null) {
+                    PersistenceManager.releaseSession(session);
+                }
+            } catch(Exception ex) {
+                logger.debug("releaseSession() failed");
+                logger.debug(ex.toString());
+            }
+        }
+        return col;
+    }
+
 	
 	public static AmpReports getAmpReports (Long id) {
 		Session session		= null;

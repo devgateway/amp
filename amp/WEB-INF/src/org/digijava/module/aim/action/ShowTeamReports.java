@@ -14,6 +14,7 @@ import org.dgfoundation.amp.ar.ARUtil;
 import org.digijava.module.aim.form.ReportsForm;
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.TeamMember;
+import org.digijava.module.aim.util.ReportUtil;
 import org.digijava.module.aim.util.TeamMemberUtil;
 import org.digijava.module.aim.util.TeamUtil;
 import org.digijava.module.aim.dbentity.AmpReports;
@@ -36,9 +37,10 @@ public class ShowTeamReports extends Action {
 			rf.setReports(reports);
 		} else {
 
-			if (tm.getTeamHead() == true)
+			if (tm.getTeamHead() == true){
 				dbReturnSet = new ArrayList(TeamUtil.getAllTeamReports(tm
 						.getTeamId()));
+			}
 			else {
 				dbReturnSet = TeamMemberUtil.getAllMemberReports(tm
 						.getMemberId());

@@ -1719,13 +1719,13 @@ public class TeamUtil {
             if(team.getAccessType().equalsIgnoreCase(
                 Constants.ACCESS_TYPE_MNGMT)) {
                 queryString = "select r from " + AmpReports.class.getName()
-                    + " r " + "where r.ampReportId <> 7 order by r.name";
+                    + " r " + " order by r.name";
                 qry = session.createQuery(queryString);
                 col = qry.list();
             } else {
                 queryString = "select tr from "
                     + AmpTeamReports.class.getName()
-                    + " tr where (tr.team=:teamId) and tr.report.ampReportId<>'7'";
+                    + " tr where (tr.team=:teamId)";
                 qry = session.createQuery(queryString);
                 qry.setParameter("teamId", teamId, Hibernate.LONG);
                 Iterator itr = qry.list().iterator();

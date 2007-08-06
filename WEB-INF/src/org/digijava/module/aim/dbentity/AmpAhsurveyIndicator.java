@@ -50,7 +50,7 @@ public class AmpAhsurveyIndicator {
 	}
 	
 	public String getNameTrn() {
-		return name.toLowerCase().replaceAll(" ", "");
+		return name.toLowerCase().replaceAll(" ", "").replaceAll("%", "");
 	}
 	
 	/**

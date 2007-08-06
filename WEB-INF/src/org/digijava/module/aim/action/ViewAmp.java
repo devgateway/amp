@@ -248,7 +248,7 @@ public class ViewAmp
             //appSettings.setLanguage(ampAppSettings.getLanguage());
 
             String langCode = UserUtils.getUserLangPreferences(
-                    usr, site).getAlertsLanguage().getCode();
+                    usr, site).getNavigationLanguage().getCode();
 
             appSettings.setLanguage(langCode);
 

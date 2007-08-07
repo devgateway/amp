@@ -976,7 +976,7 @@ public class DbUtil {
 		Query q = null;
 		String ans = null;
 		try {
-			session = PersistenceManager.getRequestDBSession();
+			session = PersistenceManager.getSession();
 			String qry = "select act from " + AmpActivity.class.getName() + " act where act.ampActivityId=:actId";
 			q = session.createQuery(qry);
 			q.setParameter("actId", actId, Hibernate.LONG);
@@ -987,7 +987,15 @@ public class DbUtil {
 			}
 		} catch (Exception ex) {
 			logger.error("Unable to get AmpActivity [getActivityApprovalStatus()]", ex);
-				}
+		} finally {
+			try {
+				session.close();
+			} catch (HibernateException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		
 		logger.debug("getActivityApprovalStatus Executed successfully ");
 		return ans;
 	}
@@ -1817,8 +1825,10 @@ public class DbUtil {
 	}
 
 	/**
-	 * @deprecated
+	 * @deprecated Use category manager instead
+	 * 
 	 * @return
+	 * 
 	 */
 	public static ArrayList getAmpLevels() {
 		Session session = null;
@@ -4189,13 +4199,12 @@ public class DbUtil {
 		String queryString = null;
 		Iterator iter = null;
 		try {
-			session = PersistenceManager.getRequestDBSession();
+			session = PersistenceManager.getSession();
 			queryString = " select p from " + AmpPerspective.class.getName()
 					+ " p order by p.name";
 			q = session.createQuery(queryString);
 			iter = q.list().iterator();
 			while (iter.hasNext()) {
-
 				ampPerspective = (AmpPerspective) iter.next();
 				perspective.add(ampPerspective);
 			}
@@ -4203,6 +4212,13 @@ public class DbUtil {
 		} catch (Exception ex) {
 			logger.error("Unable to get Amp status   from database "
 					+ ex.getMessage());
+		} finally {
+			try {
+				session.close();
+			} catch (HibernateException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 		return perspective;
 	}

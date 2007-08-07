@@ -1357,12 +1357,13 @@ public class EditActivity
             }
             Collection levelCol = null;
             // Loading the levels from the database
-            if(eaForm.getLevelCollection() == null) {
+            /*if(eaForm.getLevelCollection() == null) {
                 levelCol = DbUtil.getAmpLevels();
                 eaForm.setLevelCollection(levelCol);
             } else {
                 levelCol = eaForm.getLevelCollection();
             }
+            */
 
             // load all the active currencies
             eaForm.setCurrencies(CurrencyUtil.getAmpCurrency());

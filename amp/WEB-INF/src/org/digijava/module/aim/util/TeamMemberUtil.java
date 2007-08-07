@@ -16,6 +16,7 @@ import java.util.Vector;
 import javax.servlet.http.HttpServletRequest;
 
 import net.sf.hibernate.Hibernate;
+import net.sf.hibernate.HibernateException;
 import net.sf.hibernate.Query;
 import net.sf.hibernate.Session;
 import net.sf.hibernate.Transaction;
@@ -1027,7 +1028,7 @@ public class TeamMemberUtil {
 		Session session = null;
 
 		try {
-			session = PersistenceManager.getRequestDBSession();
+			session = PersistenceManager.getSession();
 			AmpTeamMember tm = (AmpTeamMember) session.load(AmpTeamMember.class,
 					memberId);
 			Iterator itr = tm.getLinks().iterator();
@@ -1046,6 +1047,13 @@ public class TeamMemberUtil {
 		} catch (Exception e) {
 			logger.error("Unable to get Member links" + e.getMessage());
 			e.printStackTrace(System.out);
+		} finally {
+			try {
+				session.close();
+			} catch (HibernateException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 		return col;
 	}

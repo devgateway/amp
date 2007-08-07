@@ -45,6 +45,8 @@ import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.LocationUtil;
 import org.digijava.module.aim.util.SectorUtil;
 import org.digijava.module.aim.helper.Constants;
+import java.util.List;
+import java.util.Collections;
 
 
 public class EditOrganisation extends Action {
@@ -66,7 +68,7 @@ public class EditOrganisation extends Action {
 								return mapping.findForward("index");
 							}
 					 }
-					 
+
 					 logger.debug("In edit organisation action");
 
 					 AddOrgForm editForm = (AddOrgForm) form;
@@ -109,8 +111,8 @@ public class EditOrganisation extends Action {
 					if (request.getParameter("addSector") != null){
 						ActivitySector sect = (ActivitySector) session.getAttribute("sectorSelected");
 						session.removeAttribute("sectorSelected");
-						
-						Collection prevSelSectors = editForm.getSectors(); 
+
+						Collection prevSelSectors = editForm.getSectors();
 						if (prevSelSectors != null){
 							if (prevSelSectors.isEmpty())
 								sect.setSectorPercentage(new Integer(100));
@@ -137,8 +139,8 @@ public class EditOrganisation extends Action {
 					// Remove sectors
 					else
 						if (request.getParameter("remSectors") != null){
-							
-							Long selSectors[] = editForm.getSelSectors(); 
+
+							Long selSectors[] = editForm.getSelSectors();
 							Collection prevSelSectors = editForm.getSectors();
 							Collection newSectors = new ArrayList();
 
@@ -164,7 +166,7 @@ public class EditOrganisation extends Action {
 							return mapping.findForward("forward");
 						}
 					//
-					 
+
 					 String action = request.getParameter("actionFlag");
 					 logger.debug("action : " + action);
 					 editForm.setActionFlag(action);
@@ -179,8 +181,14 @@ public class EditOrganisation extends Action {
 					 	editForm.setOrgType(DbUtil.getAllOrgTypes());
 					 if (null == editForm.getSectorScheme() || editForm.getSectorScheme().size() < 1)
 					 	editForm.setSectorScheme(SectorUtil.getAllSectorSchemes());
-					 if (null == editForm.getOrgGroupColl() || editForm.getOrgGroupColl().size() < 1)
-					 	editForm.setOrgGroupColl(DbUtil.getAllOrgGroups());
+					 if (null == editForm.getOrgGroupColl() || editForm.getOrgGroupColl().size() < 1){
+                         Collection orgGroups = DbUtil.getAllOrgGroups();
+                         if(orgGroups!=null){
+                             List sortedOrgGroups=new ArrayList(orgGroups);
+                             Collections.sort(sortedOrgGroups,new DbUtil.HelperAmpOrgGroupNameComparator());
+                             editForm.setOrgGroupColl(sortedOrgGroups);
+                         }
+                     }
 					 Collection orgGroup = new ArrayList();
 					 editForm.setOrgGroup(orgGroup);
 
@@ -420,7 +428,7 @@ public class EditOrganisation extends Action {
 								Iterator i = sectors.iterator();
 								boolean first = true;
 								while (i.hasNext()) {
-									
+
 									//AmpActivitySector ampActSect=(AmpActivitySector) i.next();
 									AmpSector sec = (AmpSector) i.next();
 									ActivitySector actSect = new ActivitySector();
@@ -431,7 +439,7 @@ public class EditOrganisation extends Action {
 									}
 									else
 										actSect.setSectorPercentage(new Integer(0));
-									
+
 									if (sec.getParentSectorId() == null) {
 										actSect.setSectorName(sec.getName());
 									} else if (sec.getParentSectorId().getParentSectorId() == null) {
@@ -445,7 +453,7 @@ public class EditOrganisation extends Action {
 									actSect.setSectorId(sec.getAmpSectorId());
 									convSect.add(actSect);
 								}
-								
+
 								editForm.setSectors(convSect);
 							 	//
 								//Pledges
@@ -608,7 +616,7 @@ public class EditOrganisation extends Action {
 								if (lvl != null)
 									ampOrg.setLevelId(lvl);
 							} */
-							
+
 							//Sectors
 							Set sectors = new HashSet();
 							if (editForm.getSectors() != null) {
@@ -630,7 +638,7 @@ public class EditOrganisation extends Action {
 									AmpSector amps = null;
 									if (sectorId != null && (!sectorId.equals(new Long(-1))))
 										amps = SectorUtil.getAmpSector(sectorId);
-								
+
 									sectors.add(amps);
 								}
 							}
@@ -688,13 +696,13 @@ public class EditOrganisation extends Action {
 										pledge.setDate(d);
 									}
 									ampPledges.add(pledge);
-									
+
 								}
 								if (ampOrg.getFundingDetails() != null)
 									ampOrg.getFundingDetails().clear();
 								else
 									ampOrg.setFundingDetails(new HashSet());
-								
+
 								ampOrg.getFundingDetails().addAll(ampPledges);
 							}
 							//
@@ -704,7 +712,7 @@ public class EditOrganisation extends Action {
 							else{
 								DbUtil.updateOrg(ampOrg);
 							}
-								
+
 							logger.debug("Organisation added");
 							return mapping.findForward("added");
 						 }

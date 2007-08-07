@@ -2529,7 +2529,7 @@ public class DbUtil {
 			while (it.hasNext()) {
 				AmpFunding el = (AmpFunding) it.next();
 				if (el.getAmpActivityId().getTeam().getAmpTeamId().equals(ampTeamId)){
-					AmpOrganisation org = el.getAmpDonorOrgId();	
+					AmpOrganisation org = el.getAmpDonorOrgId();
 					if (donors.indexOf(org) == -1)
 						donors.add(org);
 				}
@@ -2607,8 +2607,8 @@ public class DbUtil {
 				}
 		return donor;
 	}
-	
-	
+
+
 	public static Collection getDonorFund1(Long ampFundingId,
 			Integer transactionType, Integer adjustmentType, String perspective) {
 		logger.debug("getTotalDonorFund() with ampFundingId " + ampFundingId
@@ -5723,6 +5723,15 @@ public class DbUtil {
             User user1 = (User) obj1;
             User user2 = (User) obj2;
             return user1.getName().compareTo(user2.getName());
+        }
+    }
+
+    public static class HelperAmpOrgGroupNameComparator
+        implements Comparator {
+        public int compare(Object obj1, Object obj2) {
+            AmpOrgGroup og1 = (AmpOrgGroup) obj1;
+            AmpOrgGroup og2 = (AmpOrgGroup) obj2;
+            return og1.getOrgGrpName().compareTo(og2.getOrgGrpName());
         }
     }
 }

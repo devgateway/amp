@@ -63,7 +63,7 @@ function projectFiche(id)
 					<TD bgcolor="#f4f4f4">
 						<TABLE width="100%" cellSpacing=3 cellPadding=3 vAlign="top" align="center" bgcolor="#f4f4f4">
 							<TR bgColor=#f4f4f2>
-      	      	<TD align=left>
+      	      					<TD align=left>
 									<TABLE width="100%" cellPadding="3" cellSpacing="2" align="left" vAlign="top">
 										<TR>
 											<TD align="left">
@@ -133,21 +133,21 @@ function projectFiche(id)
 
 							<c:if test="${aimRegionalFundingForm.goButton == true}">
 							<TR bgColor=#f4f4f2>
-      	      	<TD align=left>
+      	      					<TD align=left>
 									<TABLE width="100%" cellPadding="3" cellSpacing="2" align="left" vAlign="top">
 										<TR>
 											<TD align="left">
 												<c:if test="${aimRegionalFundingForm.currFilter == true}">
 												Currency :
 												<html:select property="currFilterValue" styleClass="dr-menu">
-  		       		        	<html:optionsCollection name="aimRegionalFundingForm" 
+  		       		        					<html:optionsCollection name="aimRegionalFundingForm" 
 													property="currencies" value="currencyCode" label="currencyName"/>
 												</html:select>&nbsp;&nbsp;&nbsp;
 												</c:if>
 												<c:if test="${aimRegionalFundingForm.calFilter == true}">
 												Calendar :
 												<html:select property="calFilterValue" styleClass="dr-menu">
-  		       		        	<html:optionsCollection name="aimRegionalFundingForm" 
+				  		       		        	<html:optionsCollection name="aimRegionalFundingForm" 
 													property="fiscalCalendars" value="ampFiscalCalId" label="name"/>
 												</html:select>												
 												</c:if>
@@ -165,12 +165,12 @@ function projectFiche(id)
 										<TR>
 											<TD width="750" bgcolor="#F4F4F2">
 												<TABLE border="0" cellpadding="0" cellspacing="0" bgcolor="#F4F4F2">
-                        	<TR bgcolor="#F4F4F2"> 
-                          	<TD bgcolor="#C9C9C7" class="box-title" height="17">&nbsp;&nbsp;
+                						        	<TR bgcolor="#F4F4F2"> 
+              							            	<TD bgcolor="#C9C9C7" class="box-title" height="17">&nbsp;&nbsp;
 															<digi:trn key="aim:regionalFunding">Regional Funding</digi:trn>
 														</TD>
-	                          <TD background="module/aim/images/corner-r.gif" 
-														height=17 width=17></TD>
+	         						                    <TD background="module/aim/images/corner-r.gif" height=17 width=17>
+														</TD>
 													</TR>
 												</TABLE>									
 											</TD>
@@ -178,40 +178,104 @@ function projectFiche(id)
 										<TR>
 											<TD width="750" bgcolor="#F4F4F2" align="center" class="box-border-nopadding">
 												<TABLE width="750"  border="0" cellpadding="4" cellspacing="1">
-                 					<TR bgcolor="#DDDDDB" > 
-	                        	<TD><digi:trn key="aim:region">Region</digi:trn></TD>
-														<TD><digi:trn key="aim:totalCommitted">Total Committed</digi:trn></TD>
-	                         	<TD><digi:trn key="aim:totalDisbursed">Total Disbursed</digi:trn></TD>
-														<TD><digi:trn key="aim:unDisbursedFunds">Undisbursed Funds</digi:trn></TD>
-	                         	<TD><digi:trn key="aim:totalExpended">Total Expended</digi:trn></TD>
-														<TD><digi:trn key="aim:unExpendedFunds">Unexpended Funds</digi:trn></TD>
+				                 					<TR bgcolor="#DDDDDB" > 
+	            						            	<TD>
+	            						            		<digi:trn key="aim:region">Region</digi:trn>
+	            						            	</TD>
+	            						            	<field:display name="Total Committed" feature="Related Documents">
+															<TD>
+																<digi:trn key="aim:totalCommitted">Total Committed</digi:trn>
+															</TD>
+														</field:display>
+														<field:display name="Total Disbursed" feature="Related Documents">
+								                         	<TD>
+								                         		<digi:trn key="aim:totalDisbursed">Total Disbursed</digi:trn>
+								                         	</TD>
+														</field:display>
+														<field:display name="Undisbursed Funds" feature="Related Documents">
+															<TD>
+																<digi:trn key="aim:unDisbursedFunds">Undisbursed Funds</digi:trn>
+															</TD>
+														</field:display>
+														<field:display name="Total Expended" feature="Related Documents">
+								                         	<TD>
+								                         		<digi:trn key="aim:totalExpended">Total Expended</digi:trn>
+								                         	</TD>
+														</field:display>
+														<field:display name="Unexpended Funds" feature="Related Documents">
+															<TD>
+																<digi:trn key="aim:unExpendedFunds">Unexpended Funds</digi:trn>
+															</TD>
+														</field:display>
 													</TR>
-			                    <logic:notEmpty name="aimRegionalFundingForm" property="regionalFundings">
+			                    					<logic:notEmpty name="aimRegionalFundingForm" property="regionalFundings">
 														<logic:iterate name="aimRegionalFundingForm" property="regionalFundings" id="fd" 
-			  	                   type="org.digijava.module.aim.helper.RegionalFunding">
+			  	                   							type="org.digijava.module.aim.helper.RegionalFunding">
 															<TR valign="top" bgcolor="#f4f4f2"> 
-					    	           			<TD>
+					    	           							<TD>
 																	<c:set target="${url}" property="regionId">
 																		<bean:write name="fd" property="regionId"/>
 																	</c:set>
 																	<digi:link href="/viewRegFundDetails.do" name="url">
 																	<bean:write name="fd" property="regionName"/></digi:link>
 																</TD>
-							                  <TD align="right"><bean:write name="fd" property="totCommitments"/></TD>
-							                  <TD align="right"><bean:write name="fd" property="totDisbursements"/></TD>
-					      			          <TD align="right"><bean:write name="fd" property="totUnDisbursed"/></TD>
-								                <TD align="right"><bean:write name="fd" property="totExpenditures"/></TD>
-					            		      <TD align="right"><bean:write name="fd" property="totUnExpended"/></TD>
+																<field:display name="Total Committed" feature="Related Documents">
+													                <TD align="right">
+													                	<bean:write name="fd" property="totCommitments"/>
+													                </TD>
+													            </field:display>
+																<field:display name="Total Disbursed" feature="Related Documents">
+													                <TD align="right">
+													                	<bean:write name="fd" property="totDisbursements"/>
+													                </TD>
+													            </field:display>
+																<field:display name="Undisbursed Funds" feature="Related Documents">
+											      			        <TD align="right">
+											      			        	<bean:write name="fd" property="totUnDisbursed"/>
+											      			        </TD>
+											      			    </field:display>
+																<field:display name="Total Expended" feature="Related Documents">
+														            <TD align="right">
+														            	<bean:write name="fd" property="totExpenditures"/>
+														            </TD>
+														        </field:display>
+																<field:display name="Unexpended Funds" feature="Related Documents">
+											            		    <TD align="right">
+											            		    	<bean:write name="fd" property="totUnExpended"/>
+											            		    </TD>
+											            		</field:display>
 															</TR>
 														</logic:iterate>
 													</logic:notEmpty>
-				                  <TR valign="top" class="note"> 
-														<TD><digi:trn key="aim:total">Total</digi:trn></TD>
-														<TD align="right"><bean:write name="aimRegionalFundingForm" property="totCommitments"/></TD>
-														<TD align="right"><bean:write name="aimRegionalFundingForm" property="totDisbursements"/></TD>
-														<TD align="right"><bean:write name="aimRegionalFundingForm" property="totUnDisbursed"/></TD>
-														<TD align="right"><bean:write name="aimRegionalFundingForm" property="totExpenditures"/></TD>
-														<TD align="right"><bean:write name="aimRegionalFundingForm" property="totUnExpended"/></TD>
+		                  							<TR valign="top" class="note"> 
+														<TD>
+															<digi:trn key="aim:total">Total</digi:trn>
+														</TD>
+														<field:display name="Total Committed" feature="Related Documents">
+															<TD align="right">
+																<bean:write name="aimRegionalFundingForm" property="totCommitments"/>
+															</TD>
+														</field:display>
+														<field:display name="Total Disbursed" feature="Related Documents">
+															<TD align="right">
+																<bean:write name="aimRegionalFundingForm" property="totDisbursements"/>
+															</TD>
+														</field:display>
+														<field:display name="Undisbursed Funds" feature="Related Documents">
+															<TD align="right">
+																<bean:write name="aimRegionalFundingForm" property="totUnDisbursed"/>
+															</TD>
+														</field:display>
+														<field:display name="Total Expended" feature="Related Documents">
+															<TD align="right">
+																<bean:write name="aimRegionalFundingForm" property="totExpenditures"/>
+															</TD>
+														</field:display>
+														<field:display name="Unexpended Funds" feature="Related Documents">
+															<TD align="right">
+																<bean:write name="aimRegionalFundingForm" property="totUnExpended"/>
+															</TD>
+														</field:display>
 													</TR>
 												</TABLE>
 											</TD>
@@ -220,7 +284,8 @@ function projectFiche(id)
 											<TD>
 												<FONT color=blue>*
 													<digi:trn key="aim:allTheAmountsInThousands">	
-													All the amounts are in thousands (000)</digi:trn>
+														All the amounts are in thousands (000)
+													</digi:trn>
 												</FONT>								
 											</TD>
 										</TR>

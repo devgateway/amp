@@ -222,341 +222,186 @@ function preview(id)
 				</TD>
 
 				</TR>
-
-				<TR bgColor=#f4f4f2>
-
-					<TD vAlign="top" align="center" width="100%">
-
-						<TABLE width="98%" cellPadding=0 cellSpacing=0 vAlign="top" align="center" bgColor=#f4f4f2>
-
-							<TR>
-
-								<TD width="100%" bgcolor="#F4F4F2" height="17">
-
-									<TABLE border="0" cellpadding="0" cellspacing="0" bgcolor="#F4F4F2" height="17">
-
-                           	<TR bgcolor="#F4F4F2" height="17"> 
-
-                              	<TD bgcolor="#C9C9C7" class="box-title">&nbsp;&nbsp;
-
-											<digi:trn key="aim:documents">Documents</digi:trn></TD>
-
-	                              <TD><IMG src="../ampTemplate/images/corner-r.gif" width="17" height="17"></TD>
-
-   	                        </TR>
-
-      	                  </TABLE>									
-
-								</TD>
-
-							</TR>
-
-							<TR>
-
-								<TD width="100%" bgcolor="#F4F4F2" align="center">
-
-									<TABLE width="100%" cellPadding="2" cellSpacing="2" vAlign="top" align="center" bgColor=#f4f4f2
-
-									class="box-border-nopadding">
-
-										<TR>
-
-											<TD width="100%" vAlign="top" align="left">
-
-												<TABLE width="100%" cellPadding="4" cellSpacing="1" vAlign="top" align="left" bgcolor="#ffffff">
-
-													<TR bgcolor="#dddddd">
-
-														<TD width="100%" colspan="2" align="center"><b>
-
-															<digi:trn key="aim:item">Item</digi:trn></b>
-
-														</TD>
-
-													</TR>
-
-													<jsp:useBean id="docParams" type="java.util.Map" class="java.util.HashMap"/>	
-
-													<logic:iterate name="aimKnowledgeForm"  property="documents" 
-
-													id="document" type="org.digijava.module.aim.helper.Documents">
-
-													
-
-													<c:if test="${document.isFile == true}">
-
-													<TR bgcolor="#f4f4f2">
-
-														<TD align="right">
-
-															<IMG alt=Link height=10 src="../ampTemplate/images/arrow-gr.gif"></TD>
-
-														<TD width="98%" align="left">
-
-															<%--
-
-															<c:set target="${docParams}" property="docId">
-
-																<c:out value="${document.docId}"/>
-
-															</c:set>
-
-															<c:set target="${docParams}" property="actId">
-
-																<c:out value="${document.activityId}"/>
-
-															</c:set>		
-
-															<c:set target="${docParams}" property="pageId" value="0"/>
-
-															<c:set target="${docParams}" property="reset" value="true"/>
-
-															<c:set var="translation">
-
-																<digi:trn key="aim:clickToViewDocumentDetails">Click here to view Document Details</digi:trn>
-
-															</c:set>
-
-															<digi:link href="/getDocumentDetails.do" name="docParams" 
-
-															title="${translation}" >
-
-																<bean:write name="document" property="title"/>
-
-															</digi:link> - 															
-
-															--%>
-
-															<b>
-
-															<bean:write name="document" property="title"/></b> - 
-
-															<i>File :
-
-
-
-															<a href="<%=digiContext%>/cms/downloadFile.do?itemId=
-
-															<c:out value="${document.docId}"/>">
-
-															<c:out value="${document.fileName}"/></i></a>
-
-														</TD>
-
-													</TR>
-
-													<c:if test="${!empty document.docDescription}">
-
-													<TR bgcolor="#f4f4f2">
-
-														<TD width="98%" align="left" colspan="2">
-
-															&nbsp;&nbsp;&nbsp;&nbsp;<c:out value="${document.docDescription}"/>
-
-														</TD>
-
-													</TR>	
-
-													</c:if>
-
-													
-
-													<logic:notEmpty name="document" property="date">
-
-														<TR bgcolor="#f4f4f2">
-
-														<TD width="98%" align="left" colspan="2">
-
-															&nbsp;&nbsp;&nbsp;Document date:&nbsp;<c:out value="${document.date}"/>
-
-														</TD>
-
-													</TR>
-
-													</logic:notEmpty>
-													<logic:notEmpty name="document" property="docType">
-															<TR bgcolor="#f4f4f2">
-																<TD width="98%" align="left" colspan="2">
-															&nbsp;&nbsp;&nbsp;&nbsp;Document type:&nbsp;<bean:write name="document" property="docType" />
+				<module:display name="Document Management">
+					<feature:display name="Related Documents" module="Document Management">
+						<TR bgColor=#f4f4f2>
+							<TD vAlign="top" align="center" width="100%">
+								<TABLE width="98%" cellPadding=0 cellSpacing=0 vAlign="top" align="center" bgColor=#f4f4f2>
+									<TR>
+										<TD width="100%" bgcolor="#F4F4F2" height="17">
+											<TABLE border="0" cellpadding="0" cellspacing="0" bgcolor="#F4F4F2" height="17">
+					                           	<TR bgcolor="#F4F4F2" height="17"> 
+					                              	<TD bgcolor="#C9C9C7" class="box-title">&nbsp;&nbsp;
+														<digi:trn key="aim:documents">Documents</digi:trn>
+													</TD>
+			                              			<TD>
+			                              				<IMG src="../ampTemplate/images/corner-r.gif" width="17" height="17">
+			                              			</TD>
+		   	                        			</TR>
+		      	                  			</TABLE>									
+										</TD>
+									</TR>
+									<TR>
+										<TD width="100%" bgcolor="#F4F4F2" align="center">
+											<TABLE width="100%" cellPadding="2" cellSpacing="2" vAlign="top" align="center" bgColor=#f4f4f2
+											class="box-border-nopadding">
+												<TR>
+													<TD width="100%" vAlign="top" align="left">
+														<TABLE width="100%" cellPadding="4" cellSpacing="1" vAlign="top" align="left" bgcolor="#ffffff">
+															<TR bgcolor="#dddddd">
+																<TD width="100%" colspan="2" align="center"><b>
+																	<digi:trn key="aim:item">Item</digi:trn></b>
 																</TD>
 															</TR>
-													</logic:notEmpty>
-
-													</c:if>
-
-													</logic:iterate>              
-
-												</TABLE>
-
-											</TD>
-
-										</TR>
-
-									</TABLE>
-
-								</TD>
-
-							</TR>
-
-						</TABLE>
-
-					</TD>
-
-				</TR>	
-
-
-
-				<TR bgColor=#f4f4f2>
-
-					<TD vAlign="top" align="center" width="100%">
-
-						<TABLE width="98%" cellPadding=0 cellSpacing=0 vAlign="top" align="center" bgColor=#f4f4f2>
-
-							<TR>
-
-								<TD width="100%" bgcolor="#F4F4F2" height="17">
-
-									<TABLE border="0" cellpadding="0" cellspacing="0" bgcolor="#F4F4F2" height="17">
-
-                           	<TR bgcolor="#F4F4F2" height="17"> 
-
-                              	<TD bgcolor="#C9C9C7" class="box-title">&nbsp;&nbsp;
-
-											<digi:trn key="aim:webResources">Web Resources</digi:trn></TD>
-
-	                              <TD><IMG src="../ampTemplate/images/corner-r.gif" width="17" height="17"></TD>
-
-   	                        </TR>
-
-      	                  </TABLE>									
-
-								</TD>
-
-							</TR>
-
-							<TR>
-
-								<TD width="100%" bgcolor="#F4F4F2" align="center">
-
-									<TABLE width="100%" cellPadding="2" cellSpacing="2" vAlign="top" align="center" bgColor=#f4f4f2
-
-									class="box-border-nopadding">
-
-										<TR>
-
-											<TD width="100%" vAlign="top" align="left">
-
-												<TABLE width="100%" cellPadding="4" cellSpacing="1" vAlign="top" align="left" bgcolor="#ffffff">
-
-													<TR bgcolor="#dddddd">
-
-														<TD width="100%" colspan="2" align="center"><b>
-
-															<digi:trn key="aim:item">Item</digi:trn></b>
-
-														</TD>
-
-													</TR>
-
-													<logic:iterate name="aimKnowledgeForm"  property="documents" 
-
-													id="document" type="org.digijava.module.aim.helper.Documents">
-
-													
-
-													<c:if test="${document.isFile == false}">
-
-													<TR bgcolor="#f4f4f2">
-
-														<TD align="right">
-
-															<IMG alt=Link height=10 src="../ampTemplate/images/arrow-gr.gif"></TD>
-
-														<TD width="98%" align="left">
-
-															<%--
-
-															<c:set target="${docParams}" property="docId">
-
-																<c:out value="${document.docId}"/>
-
-															</c:set>
-
-															<c:set target="${docParams}" property="actId">
-
-																<c:out value="${document.activityId}"/>
-
-															</c:set>		
-
-															<c:set target="${docParams}" property="pageId" value="0"/>
-
-															<c:set target="${docParams}" property="reset" value="true"/>
-
-															<c:set var="translation">
-
-																<digi:trn key="aim:clickToViewDocumentDetails">Click here to view Document Details</digi:trn>
-
-															</c:set>
-
-															<digi:link href="/getDocumentDetails.do" name="docParams" 
-
-															title="Click here to view Document Details" >
-
-																<bean:write name="document" property="title"/>
-
-															</digi:link> - 															
-
-															--%>
-
-															<b>
-
-															<bean:write name="document" property="title"/></b> - 
-
-															<i>URL :
-
-															<a href="<c:out value="${document.url}"/>" target="_blank">
-
-															<c:out value="${document.url}"/></a></i>
-
-														</TD>
-
-													</TR>
-
-													<c:if test="${!empty document.docDescription}">
-
-													<TR bgcolor="#f4f4f2">
-
-														<TD width="98%" align="left" colspan="2">
-
-															&nbsp;&nbsp;&nbsp;&nbsp;<c:out value="${document.docDescription}"/>
-
-														</TD>
-
-													</TR>	
-
-													</c:if>
-
-													</c:if>
-
-													</logic:iterate>              
-
-												</TABLE>
-
-											</TD>
-
-										</TR>
-
-									</TABLE>
-
-								</TD>
-
-							</TR>
-
-						</TABLE>
-
-					</TD>
-
-				</TR>					
+															<jsp:useBean id="docParams" type="java.util.Map" class="java.util.HashMap"/>	
+															<logic:iterate name="aimKnowledgeForm"  property="documents" 
+															id="document" type="org.digijava.module.aim.helper.Documents">
+															<c:if test="${document.isFile == true}">
+															<TR bgcolor="#f4f4f2">
+																<TD align="right">
+																	<IMG alt=Link height=10 src="../ampTemplate/images/arrow-gr.gif">
+																</TD>
+																<TD width="98%" align="left">
+																	<%--
+																	<c:set target="${docParams}" property="docId">
+																		<c:out value="${document.docId}"/>
+																	</c:set>
+																	<c:set target="${docParams}" property="actId">
+																		<c:out value="${document.activityId}"/>
+																	</c:set>		
+																	<c:set target="${docParams}" property="pageId" value="0"/>
+																	<c:set target="${docParams}" property="reset" value="true"/>
+																	<c:set var="translation">
+																		<digi:trn key="aim:clickToViewDocumentDetails">Click here to view Document Details</digi:trn>
+																	</c:set>
+																	<digi:link href="/getDocumentDetails.do" name="docParams" 
+																	title="${translation}" >
+																		<bean:write name="document" property="title"/>
+																	</digi:link> - 															
+																	--%>
+																	<b>
+																	<bean:write name="document" property="title"/></b> - 
+																	<i>File :
+																	<a href="<%=digiContext%>/cms/downloadFile.do?itemId=
+																	<c:out value="${document.docId}"/>">
+																	<c:out value="${document.fileName}"/></i></a>
+																</TD>
+															</TR>
+															<c:if test="${!empty document.docDescription}">
+															<TR bgcolor="#f4f4f2">
+																<TD width="98%" align="left" colspan="2">
+																	&nbsp;&nbsp;&nbsp;&nbsp;<c:out value="${document.docDescription}"/>
+																</TD>
+															</TR>	
+															</c:if>
+															<logic:notEmpty name="document" property="date">
+																<TR bgcolor="#f4f4f2">
+																	<TD width="98%" align="left" colspan="2">
+																		&nbsp;&nbsp;&nbsp;Document date:&nbsp;<c:out value="${document.date}"/>
+																	</TD>
+																</TR>
+															</logic:notEmpty>
+															<logic:notEmpty name="document" property="docType">
+																<TR bgcolor="#f4f4f2">
+																	<TD width="98%" align="left" colspan="2">
+																		&nbsp;&nbsp;&nbsp;&nbsp;Document type:&nbsp;<bean:write name="document" property="docType" />
+																	</TD>
+																</TR>
+															</logic:notEmpty>
+															</c:if>
+															</logic:iterate>              
+														</TABLE>
+													</TD>
+												</TR>
+											</TABLE>
+										</TD>
+									</TR>
+								</TABLE>
+							</TD>
+						</TR>	
+					</feature:display>
+					<feature:display name="Web Resources" module="Document Management">
+						<TR bgColor=#f4f4f2>
+							<TD vAlign="top" align="center" width="100%">
+								<TABLE width="98%" cellPadding=0 cellSpacing=0 vAlign="top" align="center" bgColor=#f4f4f2>
+									<TR>
+										<TD width="100%" bgcolor="#F4F4F2" height="17">
+											<TABLE border="0" cellpadding="0" cellspacing="0" bgcolor="#F4F4F2" height="17">
+					                           	<TR bgcolor="#F4F4F2" height="17"> 
+					                              	<TD bgcolor="#C9C9C7" class="box-title">&nbsp;&nbsp;
+														<digi:trn key="aim:webResources">Web Resources</digi:trn>
+													</TD>
+						                            <TD>
+						                            	<IMG src="../ampTemplate/images/corner-r.gif" width="17" height="17">
+						                            </TD>
+					   	                        </TR>
+				      	                  	</TABLE>									
+										</TD>
+									</TR>
+									<TR>
+										<TD width="100%" bgcolor="#F4F4F2" align="center">
+											<TABLE width="100%" cellPadding="2" cellSpacing="2" vAlign="top" align="center" bgColor=#f4f4f2
+											class="box-border-nopadding">
+												<TR>
+													<TD width="100%" vAlign="top" align="left">
+														<TABLE width="100%" cellPadding="4" cellSpacing="1" vAlign="top" align="left" bgcolor="#ffffff">
+															<TR bgcolor="#dddddd">
+																<TD width="100%" colspan="2" align="center"><b>
+																	<digi:trn key="aim:item">Item</digi:trn></b>
+																</TD>
+															</TR>
+															<logic:iterate name="aimKnowledgeForm"  property="documents" 
+															id="document" type="org.digijava.module.aim.helper.Documents">
+		
+															<c:if test="${document.isFile == false}">
+															<TR bgcolor="#f4f4f2">
+																<TD align="right">
+																	<IMG alt=Link height=10 src="../ampTemplate/images/arrow-gr.gif"></TD>
+																<TD width="98%" align="left">
+																	<%--
+																	<c:set target="${docParams}" property="docId">
+																		<c:out value="${document.docId}"/>
+																	</c:set>
+																	<c:set target="${docParams}" property="actId">
+																		<c:out value="${document.activityId}"/>
+																	</c:set>		
+																	<c:set target="${docParams}" property="pageId" value="0"/>
+																	<c:set target="${docParams}" property="reset" value="true"/>
+																	<c:set var="translation">
+																		<digi:trn key="aim:clickToViewDocumentDetails">Click here to view Document Details</digi:trn>
+																	</c:set>
+																	<digi:link href="/getDocumentDetails.do" name="docParams" 
+																	title="Click here to view Document Details" >
+																		<bean:write name="document" property="title"/>
+																	</digi:link> - 															
+																	--%>
+																	<b>
+																	<bean:write name="document" property="title"/></b> - 
+																	<i>URL :
+																	<a href="<c:out value="${document.url}"/>" target="_blank">
+																	<c:out value="${document.url}"/></a></i>
+																</TD>
+															</TR>
+															<c:if test="${!empty document.docDescription}">
+															<TR bgcolor="#f4f4f2">
+																<TD width="98%" align="left" colspan="2">
+																	&nbsp;&nbsp;&nbsp;&nbsp;<c:out value="${document.docDescription}"/>
+																</TD>
+															</TR>	
+															</c:if>
+															</c:if>
+															</logic:iterate>              
+														</TABLE>
+													</TD>
+												</TR>
+											</TABLE>
+										</TD>
+									</TR>
+								</TABLE>
+							</TD>
+						</TR>					
+					</feature:display>
+				</module:display>
 
 				<c:if test="${aimKnowledgeForm.managedDocuments != null && !empty aimKnowledgeForm.managedDocuments}">
 

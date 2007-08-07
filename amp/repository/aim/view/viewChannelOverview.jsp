@@ -144,7 +144,7 @@ function commentWin(val) {
 										</digi:link> &nbsp;&gt;&nbsp; Overview&nbsp;&gt;&nbsp;
 										<bean:define id="perspectiveNameLocal" name="aimChannelOverviewForm" property="perspective"
 										type="java.lang.String"/>
-												<digi:trn key='<%="aim:"+ perspectiveNameLocal %>'>
+												<digi:trn key='<%="aim:"+ perspectiveNameLocal.toLowerCase() %>'>
 													<bean:write name="aimChannelOverviewForm" property="perspective"/></digi:trn>
 										&nbsp;
 										<digi:trn key="aim:perspective">Perspective</digi:trn> </SPAN></TD>
@@ -317,309 +317,352 @@ function commentWin(val) {
 														</TABLE>
 														</TD>
 													</TR>
-													<TR>
-														<TD>
-														<TABLE width="100%" cellPadding=2 cellSpacing=1
-															vAlign="top" align="top" bgcolor="#aaaaaa">
-															<TR>
-																<TD bgcolor="#eeeeee" height="18">&nbsp; <IMG height=10
-																	src="../ampTemplate/images/arrow-014E86.gif" width=15>
-																<b><digi:trn key="aim:status">Status</digi:trn></b></TD>
-															</TR>
-															<TR>
-																<TD bgcolor="#ffffff"><c:out value="${activity.status}" />
-																</TD>
-															</TR>
-															<TR>
-																<TD bgcolor="#ffffff"><i><digi:trn key="aim:reason">Reason</digi:trn></i>:
-																<c:out value="${activity.statusReason}" /></TD>
-															</TR>
-														</TABLE>
-														</TD>
-													</TR>
-													<logic:notEmpty name="SA" scope="application">
-													<TR>
-														<TD>
-															<TABLE width="100%" cellPadding=2 cellSpacing=1 vAlign="top" align="top" bgcolor="#aaaaaa">
-																<TR><TD bgcolor="#eeeeee" height="18">&nbsp;
-																	<IMG  height=10 src="../ampTemplate/images/arrow-014E86.gif" width=15>
-																	<b><digi:trn key="aim:actBudget">Budget</digi:trn></b>
-																</TD></TR>
-																<TR><TD bgcolor="#ffffff">
-										<logic:equal name="activity" property="budget" value="true">
-										<digi:trn key="aim:actBudgeton">
-												Activity is On Budget
-										</digi:trn>
-										</logic:equal>
-										<logic:equal name="activity" property="budget" value="false">
-										<digi:trn key="aim:actBudgetoff">
-												Activity is Off Budget
-										</digi:trn>
-										</logic:equal>
-										<logic:equal name="activity" property="budget" value="">
-										<digi:trn key="aim:actBudgetoff">
-												Activity is Off Budget
-										</digi:trn>
-										</logic:equal>
-																</TD></TR>
-
-															</TABLE>
-														</TD>
-													</TR>
-													</logic:notEmpty>
-													<TR>
-														<TD>
-														<TABLE width="100%" cellPadding=2 cellSpacing=1
-															vAlign="top" align="top" bgcolor="#aaaaaa">
-															<TR>
-																<TD bgcolor="#eeeeee" height="18">&nbsp; <IMG height=10
-																	src="../ampTemplate/images/arrow-014E86.gif" width=15>
-																<b><digi:trn key="aim:sector">Sector</digi:trn></b></TD>
-															</TR>
-															<TR>
-																<TD bgcolor="#ffffff">
-																<ul>
-																	<c:forEach var="actSect" items="${activity.sectors}">
-																		<li><c:out value="${actSect.sectorName}" />&nbsp;&nbsp;
-																			<logic:present name="actSect" property="sectorPercentage">
-																			<c:if test="${actSect.sectorPercentage!=0}">
-																				(<c:out value="${actSect.sectorPercentage}" />%)
-																			</c:if>
-																		</logic:present>
-																		</li>
-																		<c:if test="${!empty actSect.subsectorLevel1Name}">
-																			<li><IMG src="../ampTemplate/images/link_out_bot.gif">
-																			<c:out value="${actSect.subsectorLevel1Name}" />&nbsp;
-																			</li>
-																			<c:if test="${!empty actSect.subsectorLevel2Name}">
-																				<li>&nbsp;&nbsp;&nbsp;&nbsp; <IMG
-																					src="../ampTemplate/images/link_out_bot.gif"> <c:out
-																					value="${actSect.subsectorLevel2Name}" /> &nbsp;</li>
-																			</c:if>
-																		</c:if>
-
-																	</c:forEach>
-																</ul>
-																</TD>
-															</TR>
-														</TABLE>
-														</TD>
-													</TR>
-
-													<TR>
-														<TD>
-														<TABLE width="100%" cellPadding=2 cellSpacing=1
-															vAlign="top" align="left" bgcolor="#aaaaaa">
-															<TR>
-																<TD bgcolor="#eeeeee" height="18">&nbsp; <IMG height=10
-																	src="../ampTemplate/images/arrow-014E86.gif" width=15>
-																<b><digi:trn key="aim:location">Location</digi:trn></b>
-																</TD>
-															</TR>
-															<TR>
-																<TD bgcolor="#ffffff">
-																<TABLE width="100%" cellSpacing="0" cellPadding="0"
-																	vAlign="top" align="left" bgcolor="#ffffff">
-																	<TR>
-																		<TD>
-																		<TABLE width="100%" cellSpacing="1" cellPadding="2"
-																			vAlign="top" align="left" bgcolor="#dddddd">
-																			<TR>
-																				<TD width="100%" colspan="3" align="left"
-																					bgcolor="#ffffff"><i><digi:trn key="aim:impLevel">
-																						Implementation Level</digi:trn></i>: &nbsp; <c:out
-																					value="${activity.impLevel}" /></TD>
-																			</TR>
-																			<c:if test="${!empty activity.locations}">
-																				<TR>
-																					<TD width="33%" align="center" bgcolor="#ffffff"><digi:trn
-																						key="aim:region">
-																						Region</digi:trn></TD>
-																					<TD width="33%" align="center" bgcolor="#ffffff"><digi:trn
-																						key="aim:zone">
-																							Zone
-																						</digi:trn></TD>
-																					<TD width="33%" align="center" bgcolor="#ffffff"><digi:trn
-																						key="aim:woreda">
-																							Woreda
-																						</digi:trn></TD>
-																				</TR>
-																				<c:forEach var="loc" items="${activity.locations}">
-																					<TR>
-																						<TD width="33%" align="left" bgcolor="#ffffff"><c:out
-																							value="${loc.region}" /></TD>
-																						<TD width="33%" align="left" bgcolor="#ffffff"><c:out
-																							value="${loc.zone}" /></TD>
-																						<TD width="33%" align="left" bgcolor="#ffffff"><c:out
-																							value="${loc.woreda}" /></TD>
-																					</TR>
-																				</c:forEach>
-																			</c:if>
+													<module:display name="Project ID and Planning">
+														<feature:display name="Planning" module="Project ID and Planning">
+															<field:display name="Status" feature="Planning">
+																<TR>
+																	<TD>
+																	<TABLE width="100%" cellPadding=2 cellSpacing=1
+																		vAlign="top" align="top" bgcolor="#aaaaaa">
+																		<TR>
+																			<TD bgcolor="#eeeeee" height="18">&nbsp; <IMG height=10
+																				src="../ampTemplate/images/arrow-014E86.gif" width=15>
+																			<b><digi:trn key="aim:status">Status</digi:trn></b></TD>
+																		</TR>
+																		<TR>
+																			<TD bgcolor="#ffffff"><c:out value="${activity.status}" />
+																			</TD>
+																		</TR>
+																		<TR>
+																			<TD bgcolor="#ffffff"><i><digi:trn key="aim:reason">Reason</digi:trn></i>:
+																			<c:out value="${activity.statusReason}" /></TD>
+																		</TR>
+																	</TABLE>
+																	</TD>
+																</TR>
+															</field:display>
+														</feature:display>
+														<feature:display name="Identification" module="Project ID and Planning">
+															<field:display feature="Identification" name="Activity Budget">
+																<TR>
+																	<TD>
+																		<TABLE width="100%" cellPadding=2 cellSpacing=1 vAlign="top" align="top" bgcolor="#aaaaaa">
+																			<TR><TD bgcolor="#eeeeee" height="18">&nbsp;
+																				<IMG  height=10 src="../ampTemplate/images/arrow-014E86.gif" width=15>
+																				<b><digi:trn key="aim:actBudget">Budget</digi:trn></b>
+																			</TD></TR>
+																			<TR><TD bgcolor="#ffffff">
+																				<logic:equal name="activity" property="budget" value="true">
+																				<digi:trn key="aim:actBudgeton">
+																						Activity is On Budget
+																				</digi:trn>
+																				</logic:equal>
+																				<logic:equal name="activity" property="budget" value="false">
+																				<digi:trn key="aim:actBudgetoff">
+																						Activity is Off Budget
+																				</digi:trn>
+																				</logic:equal>
+																				<logic:equal name="activity" property="budget" value="">
+																				<digi:trn key="aim:actBudgetoff">
+																						Activity is Off Budget
+																				</digi:trn>
+																				</logic:equal>
+																			</TD></TR>
+			
 																		</TABLE>
+																	</TD>
+																</TR>
+															</field:display>
+														</feature:display>
+														<feature:display module="Project ID and Planning" name="Sectors">
+															<field:display feature="Sectors" name="Level 1 Sectors List">
+																<TR>
+																	<TD>
+																	<TABLE width="100%" cellPadding=2 cellSpacing=1
+																		vAlign="top" align="top" bgcolor="#aaaaaa">
+																		<TR>
+																			<TD bgcolor="#eeeeee" height="18">&nbsp; <IMG height=10
+																				src="../ampTemplate/images/arrow-014E86.gif" width=15>
+																			<b><digi:trn key="aim:sector">Sector</digi:trn></b></TD>
+																		</TR>
+																		<TR>
+																			<TD bgcolor="#ffffff">
+																			<ul>
+																				<c:forEach var="actSect" items="${activity.sectors}">
+																					<li><c:out value="${actSect.sectorName}" />&nbsp;&nbsp;
+																						<logic:present name="actSect" property="sectorPercentage">
+																						<c:if test="${actSect.sectorPercentage!=0}">
+																							(<c:out value="${actSect.sectorPercentage}" />%)
+																						</c:if>
+																					</logic:present>
+																					</li>
+																					<c:if test="${!empty actSect.subsectorLevel1Name}">
+																						<li><IMG src="../ampTemplate/images/link_out_bot.gif">
+																						<c:out value="${actSect.subsectorLevel1Name}" />&nbsp;
+																						</li>
+																						<c:if test="${!empty actSect.subsectorLevel2Name}">
+																							<li>&nbsp;&nbsp;&nbsp;&nbsp; <IMG
+																								src="../ampTemplate/images/link_out_bot.gif"> <c:out
+																								value="${actSect.subsectorLevel2Name}" /> &nbsp;</li>
+																						</c:if>
+																					</c:if>
+			
+																				</c:forEach>
+																			</ul>
+																			</TD>
+																		</TR>
+																	</TABLE>
+																	</TD>
+																</TR>
+
+															</field:display>
+														</feature:display>
+														<feature:display module="Project ID and Planning" name="Location">
+																<TR>
+																	<TD>
+																	<TABLE width="100%" cellPadding=2 cellSpacing=1
+																		vAlign="top" align="left" bgcolor="#aaaaaa">
+																		<TR>
+																			<TD bgcolor="#eeeeee" height="18">&nbsp; <IMG height=10
+																				src="../ampTemplate/images/arrow-014E86.gif" width=15>
+																			<b><digi:trn key="aim:location">Location</digi:trn></b>
+																			</TD>
+																		</TR>
+																		<TR>
+																			<TD bgcolor="#ffffff">
+																			<TABLE width="100%" cellSpacing="0" cellPadding="0"
+																				vAlign="top" align="left" bgcolor="#ffffff">
+																				<TR>
+																					<TD>
+																					<TABLE width="100%" cellSpacing="1" cellPadding="2"
+																						vAlign="top" align="left" bgcolor="#dddddd">
+																						<field:display name="Implementation Level" feature="Location">
+																						<TR>
+																							<TD width="100%" colspan="3" align="left"
+																								bgcolor="#ffffff"><i><digi:trn key="aim:impLevel">
+																									Implementation Level</digi:trn></i>: &nbsp; <c:out
+																								value="${activity.impLevel}" /></TD>
+																						</TR>
+																						</field:display>
+																						<c:if test="${!empty activity.locations}">
+																							<TR>
+																								<TD width="33%" align="center" bgcolor="#ffffff"><digi:trn
+																									key="aim:region">
+																									Region</digi:trn></TD>
+																								<TD width="33%" align="center" bgcolor="#ffffff"><digi:trn
+																									key="aim:zone">
+																										Zone
+																									</digi:trn>
+																								</TD>
+																								<TD width="33%" align="center" bgcolor="#ffffff"><digi:trn
+																									key="aim:woreda">
+																										Woreda
+																									</digi:trn>
+																								</TD>
+																							</TR>
+																								<c:forEach var="loc" items="${activity.locations}">
+																									<TR>
+																										<TD width="33%" align="left" bgcolor="#ffffff"><c:out
+																											value="${loc.region}" /></TD>
+																										<TD width="33%" align="left" bgcolor="#ffffff"><c:out
+																											value="${loc.zone}" /></TD>
+																										<TD width="33%" align="left" bgcolor="#ffffff"><c:out
+																											value="${loc.woreda}" /></TD>
+																									</TR>
+																								</c:forEach>
+																							</c:if>
+																						</TABLE>
+																						</TD>
+																					</TR>
+																				</TABLE>
+																				</TD>
+																			</TR>
+																		</TABLE>
+																		</TD>
+																	</TR>
+														</feature:display>
+														
+														<feature:display name="Identification" module="Project ID and Planning">
+															<TR>
+																<TD>
+																<TABLE width="100%" cellPadding=3 cellSpacing=1
+																	vAlign="top" align="left" bgcolor="#aaaaaa">
+																	<TR>
+																		<TD bgcolor="#eeeeee" height="18">&nbsp; <IMG height=10
+																			src="../ampTemplate/images/arrow-014E86.gif" width=15>
+																		<b><digi:trn key="aim:program">Program</digi:trn></b></TD>
+																	</TR>
+																	<TR>
+																		<TD bgcolor="#ffffff"><c:out value="${activity.program}" />
+																		</TD>
+																	</TR>
+																	<TR>
+																		<TD bgcolor="#ffffff">
+																		<field:display name="Description" feature="Identification">
+																		<i><b><digi:trn
+																			key="aim:programDescription">Description</digi:trn></b></i>:
+																		<digi:edit key="${activity.description}" /><br/>
+																		</field:display>
+																		<field:display feature="Identification" name="Objective">
+																		<i><b><digi:trn
+																			key="aim:programObjective">Objective</digi:trn></b></i>:
+																		<digi:edit key="${activity.objective}"/>
+																		<ul>
+																		<logic:iterate name="aimChannelOverviewForm" id="comments" property="allComments">
+		
+																		 	<logic:equal name="comments" property="key" value="Objective Assumption">
+																				<logic:iterate name="comments" id="comment" property="value"
+																					type="org.digijava.module.aim.dbentity.AmpComments">
+																					<li><i>
+																					<digi:trn key="aim:objectiveAssumption">Objective Assumption</digi:trn>:</i>
+																					<bean:write name="comment" property="comment"/></li>
+		                            						            		</logic:iterate>
+								                                        	</logic:equal>
+								                                        	<logic:equal name="comments" property="key" value="Objective Verification">
+																				<logic:iterate name="comments" id="comment" property="value"
+																					type="org.digijava.module.aim.dbentity.AmpComments">
+																					<li><i><digi:trn key="aim:objectiveVerification">Objective Verification</digi:trn>:</i>
+																					<bean:write name="comment" property="comment"/></li>
+								                                        		</logic:iterate>
+								                                        	</logic:equal>
+																		</logic:iterate>
+																		</ul>
+																		</field:display>
+		
+																		<field:display feature="Identification" name="Purpose">
+																		<logic:notEmpty name="activity" property="purpose">
+																			<i><b><digi:trn
+																				key="aim:programPurpose">Purpose</digi:trn></b></i>:
+																			<digi:edit key="${activity.purpose}" />
+																			<ul>
+																			<logic:iterate name="aimChannelOverviewForm" id="comments" property="allComments">
+		
+																			 	<logic:equal name="comments" property="key" value="Purpose Assumption">
+																					<logic:iterate name="comments" id="comment" property="value"
+																						type="org.digijava.module.aim.dbentity.AmpComments">
+																						<li><i>
+																						<digi:trn key="aim:purposeAssumption">Purpose Assumption</digi:trn>:</i>
+																						<bean:write name="comment" property="comment"/></li>
+			                            						            		</logic:iterate>
+									                                        	</logic:equal>
+									                                        	<logic:equal name="comments" property="key" value="Purpose Verification">
+																					<logic:iterate name="comments" id="comment" property="value"
+																						type="org.digijava.module.aim.dbentity.AmpComments">
+																						<li><i><digi:trn key="aim:purposeVerification">Purpose Verification</digi:trn>:</i>
+																						<bean:write name="comment" property="comment"/></li>
+									                                        		</logic:iterate>
+									                                        	</logic:equal>
+																			</logic:iterate>
+																			</ul>
+																		</logic:notEmpty>
+																		</field:display>
+																		
+																		<field:display feature="Identification" name="Results">
+																		<logic:notEmpty name="activity" property="results">
+																			<i><b><digi:trn
+																				key="aim:programResults">Results</digi:trn></b></i>:
+																			<digi:edit key="${activity.results}" />
+																			<ul>
+																			<logic:iterate name="aimChannelOverviewForm" id="comments" property="allComments">
+		
+																			 	<logic:equal name="comments" property="key" value="Results Assumption">
+																					<logic:iterate name="comments" id="comment" property="value"
+																						type="org.digijava.module.aim.dbentity.AmpComments">
+																						<li><i>
+																						<digi:trn key="aim:resultsAssumption">Results Assumption</digi:trn>:</i>
+																						<bean:write name="comment" property="comment"/></li>
+			                            						            		</logic:iterate>
+									                                        	</logic:equal>
+									                                        	<logic:equal name="comments" property="key" value="Results Verification">
+																					<logic:iterate name="comments" id="comment" property="value"
+																						type="org.digijava.module.aim.dbentity.AmpComments">
+																						<li><i><digi:trn key="aim:resultsVerification">Results Verification</digi:trn>:</i>
+																						<bean:write name="comment" property="comment"/></li>
+									                                        		</logic:iterate>
+									                                        	</logic:equal>
+																			</logic:iterate>
+																			</ul>
+																		</logic:notEmpty>
+																		</field:display>
 																		</TD>
 																	</TR>
 																</TABLE>
 																</TD>
 															</TR>
-														</TABLE>
-														</TD>
-													</TR>
-													<TR>
-														<TD>
-														<TABLE width="100%" cellPadding=3 cellSpacing=1
-															vAlign="top" align="left" bgcolor="#aaaaaa">
+															
+														</feature:display>
+													</module:display>
+
+													<module:display name="Contact Information">
+														<feature:display name="Donor Contact Information" module="Contact Information">
 															<TR>
-																<TD bgcolor="#eeeeee" height="18">&nbsp; <IMG height=10
-																	src="../ampTemplate/images/arrow-014E86.gif" width=15>
-																<b><digi:trn key="aim:program">Program</digi:trn></b></TD>
-															</TR>
-															<TR>
-																<TD bgcolor="#ffffff"><c:out value="${activity.program}" />
+																<TD>
+																<TABLE width="100%" cellPadding=3 cellSpacing=1
+																	vAlign="top" align="top" bgcolor="#aaaaaa">
+																	<TR>
+																		<TD bgcolor="#eeeeee" height="18">&nbsp; <IMG height=10
+																			src="../ampTemplate/images/arrow-014E86.gif" width=15>
+																		<b><digi:trn key="aim:donorFundingContactInformation">
+																				Donor funding Contact Information
+																			</digi:trn></b></TD>
+																	</TR>
+																	<field:display feature="Donor Contact Information" name="Donor First Name">
+																	<TR>
+																		<TD bgcolor="#ffffff"><i><digi:trn
+																			key="aim:contactPersonName">Name</digi:trn></i>: <c:out
+																			value="${activity.contFirstName}" />&nbsp; <c:out
+																			value="${activity.contLastName}" /></TD>
+																	</TR>
+																	</field:display>
+																	<field:display feature="Donor Contact Information" name="Donor Email">
+																	<TR>
+																		<TD bgcolor="#ffffff"><i><digi:trn
+																			key="aim:contactPersonEmail">Email</digi:trn></i>: <bean:define
+																			id="mailTo">
+																				mailto:<c:out value="${activity.email}" />
+																		</bean:define> <a href="<%=mailTo%>"> <c:out
+																			value="${activity.email}" /></a></TD>
+																	</TR>
+																	</field:display>
+																</TABLE>
 																</TD>
 															</TR>
+														</feature:display>
+														<feature:display module="Contact Information" name="Mofed Contact Information">
 															<TR>
-																<TD bgcolor="#ffffff"><i><b><digi:trn
-																	key="aim:programDescription">Description</digi:trn></b></i>:
-																<digi:edit key="${activity.description}" /><br/>
-																<i><b><digi:trn
-																	key="aim:programObjective">Objective</digi:trn></b></i>:
-																<digi:edit key="${activity.objective}"/>
-																<ul>
-																<logic:iterate name="aimChannelOverviewForm" id="comments" property="allComments">
-
-																 	<logic:equal name="comments" property="key" value="Objective Assumption">
-																		<logic:iterate name="comments" id="comment" property="value"
-																			type="org.digijava.module.aim.dbentity.AmpComments">
-																			<li><i>
-																			<digi:trn key="aim:objectiveAssumption">Objective Assumption</digi:trn>:</i>
-																			<bean:write name="comment" property="comment"/></li>
-                            						            		</logic:iterate>
-						                                        	</logic:equal>
-						                                        	<logic:equal name="comments" property="key" value="Objective Verification">
-																		<logic:iterate name="comments" id="comment" property="value"
-																			type="org.digijava.module.aim.dbentity.AmpComments">
-																			<li><i><digi:trn key="aim:objectiveVerification">Objective Verification</digi:trn>:</i>
-																			<bean:write name="comment" property="comment"/></li>
-						                                        		</logic:iterate>
-						                                        	</logic:equal>
-																</logic:iterate>
-																</ul>
-
-
-
-																<logic:notEmpty name="activity" property="purpose">
-																	<i><b><digi:trn
-																		key="aim:programPurpose">Purpose</digi:trn></b></i>:
-																	<digi:edit key="${activity.purpose}" />
-																	<ul>
-																	<logic:iterate name="aimChannelOverviewForm" id="comments" property="allComments">
-
-																	 	<logic:equal name="comments" property="key" value="Purpose Assumption">
-																			<logic:iterate name="comments" id="comment" property="value"
-																				type="org.digijava.module.aim.dbentity.AmpComments">
-																				<li><i>
-																				<digi:trn key="aim:purposeAssumption">Purpose Assumption</digi:trn>:</i>
-																				<bean:write name="comment" property="comment"/></li>
-	                            						            		</logic:iterate>
-							                                        	</logic:equal>
-							                                        	<logic:equal name="comments" property="key" value="Purpose Verification">
-																			<logic:iterate name="comments" id="comment" property="value"
-																				type="org.digijava.module.aim.dbentity.AmpComments">
-																				<li><i><digi:trn key="aim:purposeVerification">Purpose Verification</digi:trn>:</i>
-																				<bean:write name="comment" property="comment"/></li>
-							                                        		</logic:iterate>
-							                                        	</logic:equal>
-																	</logic:iterate>
-																	</ul>
-																</logic:notEmpty>
-																<logic:notEmpty name="activity" property="results">
-																	<i><b><digi:trn
-																		key="aim:programResults">Results</digi:trn></b></i>:
-																	<digi:edit key="${activity.results}" />
-																	<ul>
-																	<logic:iterate name="aimChannelOverviewForm" id="comments" property="allComments">
-
-																	 	<logic:equal name="comments" property="key" value="Results Assumption">
-																			<logic:iterate name="comments" id="comment" property="value"
-																				type="org.digijava.module.aim.dbentity.AmpComments">
-																				<li><i>
-																				<digi:trn key="aim:resultsAssumption">Results Assumption</digi:trn>:</i>
-																				<bean:write name="comment" property="comment"/></li>
-	                            						            		</logic:iterate>
-							                                        	</logic:equal>
-							                                        	<logic:equal name="comments" property="key" value="Results Verification">
-																			<logic:iterate name="comments" id="comment" property="value"
-																				type="org.digijava.module.aim.dbentity.AmpComments">
-																				<li><i><digi:trn key="aim:resultsVerification">Results Verification</digi:trn>:</i>
-																				<bean:write name="comment" property="comment"/></li>
-							                                        		</logic:iterate>
-							                                        	</logic:equal>
-																	</logic:iterate>
-																	</ul>
-																</logic:notEmpty>
-
+																<TD>
+																<TABLE width="100%" cellPadding=3 cellSpacing=1
+																	vAlign="top" align="top" bgcolor="#aaaaaa">
+																	<TR>
+																		<TD bgcolor="#eeeeee" height="18">&nbsp; <IMG height=10
+																			src="../ampTemplate/images/arrow-014E86.gif" width=15>
+																		<b><digi:trn key="aim:mofedContactInformation">
+																			MOFED Contact Information</digi:trn></b></TD>
+																	</TR>
+																	<field:display feature="Mofed Contact Information" name="Mofed First Name">
+																	<TR>
+																		<TD bgcolor="#ffffff"><i><digi:trn
+																			key="aim:contactPersonName">Name</digi:trn></i>: <c:out
+																			value="${activity.mfdContFirstName}" />&nbsp; <c:out
+																			value="${activity.mfdContLastName}" /></TD>
+																	</TR>
+																	</field:display>
+																	<field:display feature="Mofed Contact Information" name="Mofed Email">
+																	<TR>
+																		<TD bgcolor="#ffffff"><i><digi:trn
+																			key="aim:contactPersonEmail">Email</digi:trn></i>: <bean:define
+																			id="mailTo">
+																				mailto:<c:out value="${activity.mfdContEmail}" />
+																		</bean:define> <a href="<%=mailTo%>"> <c:out
+																			value="${activity.mfdContEmail}" /></a></TD>
+																	</TR>
+																	</field:display>
+																</TABLE>
 																</TD>
 															</TR>
-														</TABLE>
-														</TD>
-													</TR>
-
-													<TR>
-														<TD>
-														<TABLE width="100%" cellPadding=3 cellSpacing=1
-															vAlign="top" align="top" bgcolor="#aaaaaa">
-															<TR>
-																<TD bgcolor="#eeeeee" height="18">&nbsp; <IMG height=10
-																	src="../ampTemplate/images/arrow-014E86.gif" width=15>
-																<b><digi:trn key="aim:donorFundingContactInformation">
-																		Donor funding Contact Information
-																	</digi:trn></b></TD>
-															</TR>
-															<TR>
-																<TD bgcolor="#ffffff"><i><digi:trn
-																	key="aim:contactPersonName">Name</digi:trn></i>: <c:out
-																	value="${activity.contFirstName}" />&nbsp; <c:out
-																	value="${activity.contLastName}" /></TD>
-															</TR>
-															<TR>
-																<TD bgcolor="#ffffff"><i><digi:trn
-																	key="aim:contactPersonEmail">Email</digi:trn></i>: <bean:define
-																	id="mailTo">
-																		mailto:<c:out value="${activity.email}" />
-																</bean:define> <a href="<%=mailTo%>"> <c:out
-																	value="${activity.email}" /></a></TD>
-															</TR>
-														</TABLE>
-														</TD>
-													</TR>
-
-													<TR>
-														<TD>
-														<TABLE width="100%" cellPadding=3 cellSpacing=1
-															vAlign="top" align="top" bgcolor="#aaaaaa">
-															<TR>
-																<TD bgcolor="#eeeeee" height="18">&nbsp; <IMG height=10
-																	src="../ampTemplate/images/arrow-014E86.gif" width=15>
-																<b><digi:trn key="aim:mofedContactInformation">
-																	MOFED Contact Information</digi:trn></b></TD>
-															</TR>
-															<TR>
-																<TD bgcolor="#ffffff"><i><digi:trn
-																	key="aim:contactPersonName">Name</digi:trn></i>: <c:out
-																	value="${activity.mfdContFirstName}" />&nbsp; <c:out
-																	value="${activity.mfdContLastName}" /></TD>
-															</TR>
-															<TR>
-																<TD bgcolor="#ffffff"><i><digi:trn
-																	key="aim:contactPersonEmail">Email</digi:trn></i>: <bean:define
-																	id="mailTo">
-																		mailto:<c:out value="${activity.mfdContEmail}" />
-																</bean:define> <a href="<%=mailTo%>"> <c:out
-																	value="${activity.mfdContEmail}" /></a></TD>
-															</TR>
-														</TABLE>
-														</TD>
-													</TR>
+														</feature:display>
+													</module:display>
+													
 													<logic:notEmpty name="activity" property="accessionInstrument">
 													<TR>
 														<TD>
@@ -675,274 +718,318 @@ function commentWin(val) {
 																<b><digi:trn key="aim:relatedOrganizations">Related Organizations</digi:trn></b>
 																</TD>
 															</TR>
+															
+															
+															
+															
 															<TR>
 																<TD bgcolor="#fffff">
 																<TABLE width="100%" cellSpacing="2" cellPadding="2"
 																	vAlign="top" align="center" bgcolor="#ffffff">
-																	<TR>
-																		<TD>
-																		<TABLE width="100%" cellSpacing="1" cellPadding="2"
-																			vAlign="top" align="left" bgcolor="#dddddd">
+																	<module:display name="Funding">
+																		<feature:display module="Funding" name="Funding Organizations">
 																			<TR>
-																				<TD bgcolor="#ffffff"><b><digi:trn
-																					key="aim:executingAgencies">
-																					Executing Agencies</digi:trn></b></TD>
+																				<TD>
+																				<TABLE  cellSpacing="1" cellPadding="2"
+																					vAlign="top" align="left" bgcolor="#dddddd">
+																					<TR>
+																						<TD bgcolor="#ffffff" colspan="2"><b><digi:trn
+																							key="aim:fundingCountryAgency">
+																								Funding Country/Agency</digi:trn></b></TD>
+																					</TR>
+																					<TR>
+																						<TD bgcolor="#ffffff"><c:if
+																							test="${!empty activity.relOrgs}">
+																							<c:forEach var="relOrg"
+																								items="${activity.relOrgs}">
+																								<c:if test="${relOrg.role == 'DN'}">
+																									<bean:define id="currentOrg" name="relOrg"
+																											type="org.digijava.module.aim.helper.RelOrganization"
+																											toScope="request" />
+																											<jsp:include page="organizationPopup.jsp"/>
+																								</c:if>
+																							</c:forEach>
+																						</c:if></TD>
+																						<td bgcolor="#ffffff">&nbsp;</td>
+																					</TR>
+																				</TABLE>
+																				</TD>
 																			</TR>
+																		</feature:display>
+																	</module:display>
+																	<module:display name="Organizations">
+																		<feature:display module="Organizations" name="Executing Agency">
 																			<TR>
-																				<TD bgcolor="#ffffff"><c:if
-																					test="${!empty activity.relOrgs}">
-																					<c:forEach var="relOrgs"
-																						items="${activity.relOrgs}">
-																						<c:if test="${relOrgs.role == 'EA'}">
-																							<li><c:out value="${relOrgs.orgName}" /><br>
-																						</c:if>
+																				<TD>
+																				<TABLE width="100%" cellSpacing="1" cellPadding="2"
+																					vAlign="top" align="left" bgcolor="#dddddd">
+																					<TR>
+																						<TD bgcolor="#ffffff"><b><digi:trn
+																							key="aim:executingAgencies">
+																							Executing Agencies</digi:trn></b></TD>
+																					</TR>
+																					<TR>
+																						<TD bgcolor="#ffffff"><c:if
+																							test="${!empty activity.relOrgs}">
+																							<c:forEach var="relOrgs"
+																								items="${activity.relOrgs}">
+																								<c:if test="${relOrgs.role == 'EA'}">
+																									<li><c:out value="${relOrgs.orgName}" /><br>
+																								</c:if>
+																							</c:forEach>
+																						</c:if></TD>
+																					</TR>
+																				</TABLE>
+																				</TD>
+																			</TR>	
+																		</feature:display>
+																		<feature:display module="Organizations" name="Implementing Agency">
+																			<TR>
+																				<TD>
+																				<TABLE width="100%" cellSpacing="1" cellPadding="2"
+																					vAlign="top" align="left" bgcolor="#dddddd">
+																					<TR>
+																						<TD bgcolor="#ffffff"><b><digi:trn
+																							key="aim:implementingAgency">
+																								Implementing Agency</digi:trn></b></TD>
+																					</TR>
+																					<TR>
+																						<TD bgcolor="#ffffff"><c:if
+																							test="${!empty activity.relOrgs}">
+																							<c:forEach var="relOrg"
+																								items="${activity.relOrgs}">
+																								<c:if test="${relOrg.role == 'IA'}">
+																									<bean:define id="currentOrg" name="relOrg"
+																											type="org.digijava.module.aim.helper.RelOrganization"
+																											toScope="request" />
+																											<jsp:include page="organizationPopup.jsp"/>
+																								</c:if>
+																							</c:forEach>
+																						</c:if></TD>
+																					</TR>
+																				</TABLE>
+																				</TD>
+																			</TR>
+																		</feature:display>
+																		<feature:display module="Organizations" name="Beneficiary Agency">
+																			<TR>
+																				<TD>
+																				<TABLE width="100%" cellSpacing="1" cellPadding="2"
+																					vAlign="top" align="left" bgcolor="#dddddd">
+																					<TR>
+																						<TD bgcolor="#ffffff"><b><digi:trn
+																							key="aim:beneficiary2Agency">
+																								Beneficiary Agency</digi:trn></b></TD>
+																					</TR>
+																					<TR>
+																						<TD bgcolor="#ffffff"><c:if
+																							test="${!empty activity.relOrgs}">
+																							<c:forEach var="relOrg"
+																								items="${activity.relOrgs}">
+																								<c:if test="${relOrg.role == 'BA'}">
+																									<bean:define id="currentOrg" name="relOrg"
+																											type="org.digijava.module.aim.helper.RelOrganization"
+																											toScope="request" />
+																											<jsp:include page="organizationPopup.jsp"/>
+																								</c:if>
+																							</c:forEach>
+																						</c:if></TD>
+																					</TR>
+																				</TABLE>
+																				</TD>
+																			</TR>
+																		</feature:display>
+																		<feature:display module="Organizations" name="Contracting Agency">
+																			<TR>
+																				<TD>
+																				<TABLE width="100%" cellSpacing="1" cellPadding="2"
+																					vAlign="top" align="left" bgcolor="#dddddd">
+																					<TR>
+																						<TD bgcolor="#ffffff"><b><digi:trn
+																							key="aim:contracting2Agency">
+																								Contracting Agency</digi:trn></b></TD>
+																					</TR>
+																					<TR>
+																						<TD bgcolor="#ffffff"><c:if
+																							test="${!empty activity.relOrgs}">
+																							<c:forEach var="relOrg"
+																								items="${activity.relOrgs}">
+																								<c:if test="${relOrg.role == 'CA'}">
+																									<bean:define id="currentOrg" name="relOrg"
+																											type="org.digijava.module.aim.helper.RelOrganization"
+																											toScope="request" />
+																											<jsp:include page="organizationPopup.jsp"/>
+																								</c:if>
+																							</c:forEach>
+																						</c:if></TD>
+																					</TR>
+																				</TABLE>
+																				</TD>
+																			</TR>
+																		</feature:display>
+																	</module:display>
+														</TABLE>
+														</TD>
+													</TR>
+														</TABLE>
+														</TD>
+													</TR>
+													<module:display name="Project ID and Planning">
+														<feature:display module="Project ID and Planning" name="Planning">
+															<TR>
+																<TD>
+																<TABLE width="100%" cellPadding=2 cellSpacing=1
+																	vAlign="top" align="top" bgcolor="#aaaaaa">
+																	<TR>
+																		<TD bgcolor="#eeeeee" height="18">&nbsp; <IMG height=10
+																			src="../ampTemplate/images/arrow-014E86.gif" width=15>
+																		<b><digi:trn key="aim:keyActivityDates">Key Activity Dates</digi:trn></b>
+																		</TD>
+																	</TR>
+																	<field:display name="Proposed Approval Date" feature="Planning">
+																	<TR>
+																		<TD bgcolor="#ffffff"><digi:trn
+																			key="aim:originalApprovalDate">
+																			Original Approval Date</digi:trn> : <c:out
+																			value="${activity.origAppDate}" /></TD>
+																	</TR>
+																	</field:display>
+																	<field:display name="Actual Approval Date" feature="Planning">
+																	<TR>
+																		<TD bgcolor="#ffffff"><digi:trn
+																			key="aim:revisedApprovalDate">
+																			Revised Approval Date</digi:trn> : <c:out
+																			value="${activity.revAppDate}" /></TD>
+																	</TR>
+																	</field:display>
+																	<field:display name="Proposed Start Date" feature="Planning">
+																	<TR>
+																		<TD bgcolor="#ffffff"><digi:trn
+																			key="aim:originalStartDate">
+																			Original Start Date</digi:trn> : <c:out
+																			value="${activity.origStartDate}" /></TD>
+																	</TR>
+																	</field:display>
+																	<field:display name="Actual Start Date" feature="Planning">
+																	<TR>
+																		<TD bgcolor="#ffffff"><digi:trn
+																			key="aim:revisedStartDate">
+																			Revised Start Date</digi:trn> : <c:out
+																			value="${activity.revStartDate}" /></TD>
+																	</TR>
+																	</field:display>
+																	<field:display name="Final Date for Contracting" feature="Planning">
+																	<TR>
+																		<TD bgcolor="#ffffff"><digi:trn
+																			key="aim:FinalDateForContracting">
+																			Final Date for Contracting</digi:trn> : <c:out
+																			value="${activity.contractingDate}" /></TD>
+																	</TR>
+																	</field:display>
+																	<field:display name="Final Date for Disbursements" feature="Planning">
+																	<TR>
+																		<TD bgcolor="#ffffff"><digi:trn
+																			key="aim:FinalDateForDisbursments">
+																			Final Date for Disbursments</digi:trn> : <c:out
+																			value="${activity.disbursmentsDate}" /></TD>
+																	</TR>
+																	</field:display>
+																	<field:display name="Current Completion Date" feature="Planning">
+																	<TR>
+																		<TD bgcolor="#ffffff"><digi:trn
+																			key="aim:currentCompletionDate">
+																			Current Completion Date</digi:trn> : <c:out
+																			value="${activity.currCompDate}" /> &nbsp; <a
+																			href="javascript:commentWin('<c:out value="${activity.activityId}" />')">
+																		<digi:trn key="aim:comment">Comment</digi:trn></a></TD>
+																	</TR>
+																	</field:display>
+																	<field:display name="Proposed Completion Date" feature="Planning">
+																	<TR>
+																		<TD bgcolor="#ffffff">
+																		<TABLE width="100%" cellspacing=0 cellpadding=0
+																			valign=top align=left>
+																			<TR>
+																				<TD width="170" valign=top><digi:trn
+																					key="aim:proposedCompletionDates">Proposed Completion Dates
+																					</digi:trn> :</TD>
+																				<TD>
+																				<TABLE cellPadding=0 cellSpacing=0>
+																					<c:forEach var="closeDate"
+																						items="${activity.revCompDates}">
+																						<TR>
+																							<TD><c:out value="${closeDate}" /></TD>
+																						</TR>
 																					</c:forEach>
-																				</c:if></TD>
+																				</TABLE>
+																				</TD>
 																			</TR>
 																		</TABLE>
 																		</TD>
 																	</TR>
-																	<TR>
-																		<TD>
-																		<TABLE  cellSpacing="1" cellPadding="2"
-																			vAlign="top" align="left" bgcolor="#dddddd">
-																			<TR>
-																				<TD bgcolor="#ffffff" colspan="2"><b><digi:trn
-																					key="aim:fundingCountryAgency">
-																						Funding Country/Agency</digi:trn></b></TD>
-																			</TR>
-																			<TR>
-																				<TD bgcolor="#ffffff"><c:if
-																					test="${!empty activity.relOrgs}">
-																					<c:forEach var="relOrg"
-																						items="${activity.relOrgs}">
-																						<c:if test="${relOrg.role == 'DN'}">
-																							<bean:define id="currentOrg" name="relOrg"
-																									type="org.digijava.module.aim.helper.RelOrganization"
-																									toScope="request" />
-																									<jsp:include page="organizationPopup.jsp"/>
-																						</c:if>
-																					</c:forEach>
-																				</c:if></TD>
-																				<td bgcolor="#ffffff">&nbsp;</td>
-																			</TR>
-																		</TABLE>
-																		</TD>
-																	</TR>
-																	<TR>
-																		<TD>
-																		<TABLE width="100%" cellSpacing="1" cellPadding="2"
-																			vAlign="top" align="left" bgcolor="#dddddd">
-																			<TR>
-																				<TD bgcolor="#ffffff"><b><digi:trn
-																					key="aim:implementingAgency">
-																						Implementing Agency</digi:trn></b></TD>
-																			</TR>
-																			<TR>
-																				<TD bgcolor="#ffffff"><c:if
-																					test="${!empty activity.relOrgs}">
-																					<c:forEach var="relOrg"
-																						items="${activity.relOrgs}">
-																						<c:if test="${relOrg.role == 'IA'}">
-																							<bean:define id="currentOrg" name="relOrg"
-																									type="org.digijava.module.aim.helper.RelOrganization"
-																									toScope="request" />
-																									<jsp:include page="organizationPopup.jsp"/>
-																						</c:if>
-																					</c:forEach>
-																				</c:if></TD>
-																			</TR>
-																		</TABLE>
-																		</TD>
-																	</TR>
-
-																	<!--  Beneficiary + Contracting  -->
-																	<TR>
-																		<TD>
-																		<TABLE width="100%" cellSpacing="1" cellPadding="2"
-																			vAlign="top" align="left" bgcolor="#dddddd">
-																			<TR>
-																				<TD bgcolor="#ffffff"><b><digi:trn
-																					key="aim:beneficiary2Agency">
-																						Beneficiary Agency</digi:trn></b></TD>
-																			</TR>
-																			<TR>
-																				<TD bgcolor="#ffffff"><c:if
-																					test="${!empty activity.relOrgs}">
-																					<c:forEach var="relOrg"
-																						items="${activity.relOrgs}">
-																						<c:if test="${relOrg.role == 'BA'}">
-																							<bean:define id="currentOrg" name="relOrg"
-																									type="org.digijava.module.aim.helper.RelOrganization"
-																									toScope="request" />
-																									<jsp:include page="organizationPopup.jsp"/>
-																						</c:if>
-																					</c:forEach>
-																				</c:if></TD>
-																			</TR>
-																		</TABLE>
-																		</TD>
-																	</TR>
-																	<TR>
-																		<TD>
-																		<TABLE width="100%" cellSpacing="1" cellPadding="2"
-																			vAlign="top" align="left" bgcolor="#dddddd">
-																			<TR>
-																				<TD bgcolor="#ffffff"><b><digi:trn
-																					key="aim:contracting2Agency">
-																						Contracting Agency</digi:trn></b></TD>
-																			</TR>
-																			<TR>
-																				<TD bgcolor="#ffffff"><c:if
-																					test="${!empty activity.relOrgs}">
-																					<c:forEach var="relOrg"
-																						items="${activity.relOrgs}">
-																						<c:if test="${relOrg.role == 'CA'}">
-																							<bean:define id="currentOrg" name="relOrg"
-																									type="org.digijava.module.aim.helper.RelOrganization"
-																									toScope="request" />
-																									<jsp:include page="organizationPopup.jsp"/>
-																						</c:if>
-																					</c:forEach>
-																				</c:if></TD>
-																			</TR>
+																	</field:display>
 																</TABLE>
 																</TD>
 															</TR>
-																	<!--  END Beneficiary + Contracting  -->
-														</TABLE>
-														</TD>
-													</TR>
-														</TABLE>
-														</TD>
-													</TR>
+														</feature:display>
+													</module:display>
 
-													<TR>
-														<TD>
-														<TABLE width="100%" cellPadding=2 cellSpacing=1
-															vAlign="top" align="top" bgcolor="#aaaaaa">
-															<TR>
-																<TD bgcolor="#eeeeee" height="18">&nbsp; <IMG height=10
-																	src="../ampTemplate/images/arrow-014E86.gif" width=15>
-																<b><digi:trn key="aim:keyActivityDates">Key Activity Dates</digi:trn></b>
-																</TD>
-															</TR>
-															<logic:notEmpty name="SA" scope="application">
-															<TR>
-																<TD bgcolor="#ffffff"><digi:trn
-																	key="aim:originalApprovalDate">
-																	Original Approval Date</digi:trn> : <c:out
-																	value="${activity.origAppDate}" /></TD>
-															</TR>
-															<TR>
-																<TD bgcolor="#ffffff"><digi:trn
-																	key="aim:revisedApprovalDate">
-																	Revised Approval Date</digi:trn> : <c:out
-																	value="${activity.revAppDate}" /></TD>
-															</TR>
-															<TR>
-																<TD bgcolor="#ffffff"><digi:trn
-																	key="aim:originalStartDate">
-																	Original Start Date</digi:trn> : <c:out
-																	value="${activity.origStartDate}" /></TD>
-															</TR>
-															</logic:notEmpty>
-															<TR>
-																<TD bgcolor="#ffffff"><digi:trn
-																	key="aim:revisedStartDate">
-																	Revised Start Date</digi:trn> : <c:out
-																	value="${activity.revStartDate}" /></TD>
-															</TR>
-															<TR>
-																<TD bgcolor="#ffffff"><digi:trn
-																	key="aim:FinalDateForContracting">
-																	Final Date for Contracting</digi:trn> : <c:out
-																	value="${activity.contractingDate}" /></TD>
-															</TR>
-															<TR>
-																<TD bgcolor="#ffffff"><digi:trn
-																	key="aim:FinalDateForDisbursments">
-																	Final Date for Disbursments</digi:trn> : <c:out
-																	value="${activity.disbursmentsDate}" /></TD>
-															</TR>
-															<TR>
-																<TD bgcolor="#ffffff"><digi:trn
-																	key="aim:currentCompletionDate">
-																	Current Completion Date</digi:trn> : <c:out
-																	value="${activity.currCompDate}" /> &nbsp; <a
-																	href="javascript:commentWin('<c:out value="${activity.activityId}" />')">
-																<digi:trn key="aim:comment">Comment</digi:trn></a></TD>
-															</TR>
-															<TR>
-																<TD bgcolor="#ffffff">
-																<TABLE width="100%" cellspacing=0 cellpadding=0
-																	valign=top align=left>
-																	<TR>
-																		<TD width="170" valign=top><digi:trn
-																			key="aim:proposedCompletionDates">Proposed Completion Dates
-																			</digi:trn> :</TD>
-																		<TD>
-																		<TABLE cellPadding=0 cellSpacing=0>
-																			<c:forEach var="closeDate"
-																				items="${activity.revCompDates}">
+													<module:display name="Funding">
+														<feature:display name="Funding Organizations" module="Funding">
+															<field:display feature="Funding Organizations" name="Type of Assistance">
+																<TR>
+																	<TD>
+																	<TABLE width="100%" cellPadding=2 cellSpacing=1
+																		vAlign="top" align="left" bgcolor="#aaaaaa">
+																		<TR>
+																			<TD bgcolor="#eeeeee" height="18">&nbsp; <IMG height=10
+																				src="../ampTemplate/images/arrow-014E86.gif" width=15>
+																			<b><digi:trn key="aim:typeOfAssistance">
+																				Type Of Assistance</digi:trn></b></TD>
+																		</TR>
+																		<c:if test="${!empty activity.assistanceType}">
+																			<c:forEach var="asstType"
+																				items="${activity.assistanceType}">
 																				<TR>
-																					<TD><c:out value="${closeDate}" /></TD>
+																					<TD bgcolor="#ffffff"><c:out value="${asstType}" /></TD>
 																				</TR>
 																			</c:forEach>
-																		</TABLE>
-																		</TD>
-																	</TR>
-																</TABLE>
-																</TD>
-															</TR>
-														</TABLE>
-														</TD>
-													</TR>
+																		</c:if>
+																	</TABLE>
+																	</TD>
+																</TR>
+															</field:display>
+														</feature:display>
+													</module:display>													
+													<module:display name="Funding">
+														<feature:display name="Funding Organizations" module="Funding">
+															<field:display name="Financing Instrument" feature="Funding Organizations">
+																<TR>
+																	<TD>
+																	<TABLE width="100%" cellPadding=2 cellSpacing=1
+																		vAlign="top" align="left" bgcolor="#aaaaaa">
+																		<TR>
+																			<TD bgcolor="#eeeeee" height="18">&nbsp; <IMG height=10
+																				src="../ampTemplate/images/arrow-014E86.gif" width=15>
+																			<b><digi:trn key="aim:financingInstruments">
+																				Financing Instruments</digi:trn></b></TD>
+																		</TR>
+																		<c:if test="${!empty activity.uniqueModalities}">
+			
+																			<c:forEach var="modal" items="${activity.uniqueModalities}">
+																				<TR>
+																					<TD bgcolor="#ffffff"><c:out value="${modal.name}" />
+																					</TD>
+																				</TR>
+																			</c:forEach>
+																		</c:if>
+																	</TABLE>
+																	</TD>
+																</TR>
+															</field:display>
+														</feature:display>
+													</module:display>
 
-													<TR>
-														<TD>
-														<TABLE width="100%" cellPadding=2 cellSpacing=1
-															vAlign="top" align="left" bgcolor="#aaaaaa">
-															<TR>
-																<TD bgcolor="#eeeeee" height="18">&nbsp; <IMG height=10
-																	src="../ampTemplate/images/arrow-014E86.gif" width=15>
-																<b><digi:trn key="aim:typeOfAssistance">
-																	Type Of Assistance</digi:trn></b></TD>
-															</TR>
-															<c:if test="${!empty activity.assistanceType}">
-																<c:forEach var="asstType"
-																	items="${activity.assistanceType}">
-																	<TR>
-																		<TD bgcolor="#ffffff"><c:out value="${asstType}" /></TD>
-																	</TR>
-																</c:forEach>
-															</c:if>
-														</TABLE>
-														</TD>
-													</TR>
-
-													<TR>
-														<TD>
-														<TABLE width="100%" cellPadding=2 cellSpacing=1
-															vAlign="top" align="left" bgcolor="#aaaaaa">
-															<TR>
-																<TD bgcolor="#eeeeee" height="18">&nbsp; <IMG height=10
-																	src="../ampTemplate/images/arrow-014E86.gif" width=15>
-																<b><digi:trn key="aim:financingInstruments">
-																	Financing Instruments</digi:trn></b></TD>
-															</TR>
-															<c:if test="${!empty activity.uniqueModalities}">
-
-																<c:forEach var="modal" items="${activity.uniqueModalities}">
-																	<TR>
-																		<TD bgcolor="#ffffff"><c:out value="${modal.name}" />
-																		</TD>
-																	</TR>
-																</c:forEach>
-															</c:if>
-														</TABLE>
-														</TD>
-													</TR>
 
 													<TR>
 														<TD>

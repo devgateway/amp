@@ -719,8 +719,13 @@ public class EditOrganisation extends Action {
 					    } else if ("delete".equals(action)){
 
 					    	Collection activities = DbUtil.getAllActivities();
+					    	Collection testFunding = ActivityUtil.getFundingByOrg(editForm.getAmpOrgId());
 					    	Iterator itr1 = activities.iterator();
 					    	boolean flag = false;
+					    	boolean flag2 = false;
+					    	if (!testFunding.isEmpty()){
+					    		flag2 = true;
+					    	}
 
 					    	while (itr1.hasNext()) {
 					    		AmpActivity testActivity;
@@ -742,23 +747,29 @@ public class EditOrganisation extends Action {
 					    		editForm.setFlag("orgReferences");
 								editForm.setActionFlag("edit");
 					    		return mapping.findForward("forward");
-							} else {
-								if (session.getAttribute("ampOrg") != null) {
-									session.removeAttribute("ampOrg");
-								}
-						    	Collection activitiesCol=DbUtil.getAllOrgActivities(editForm.getAmpOrgId());
-						    	AmpOrganisation org = DbUtil.getOrganisation(editForm.getAmpOrgId());
-                                Iterator actItr=activitiesCol.iterator();
-                                while(actItr.hasNext()) {
-                                    AmpActivity act = (AmpActivity) actItr.next();
-                                    DbUtil.update(act);
-                                }
-								DbUtil.delete(org);
-								logger.debug("Organisation deleted");
-
-						    	return mapping.findForward("added");
 							}
-					    }
+					    	else
+					    		if (flag2){
+					    			editForm.setFlag("fundReferences");
+					    			editForm.setActionFlag("edit");
+					    			return mapping.findForward("forward");
+					    		}else {
+									if (session.getAttribute("ampOrg") != null) {
+										session.removeAttribute("ampOrg");
+									}
+							    	Collection activitiesCol=DbUtil.getAllOrgActivities(editForm.getAmpOrgId());
+							    	AmpOrganisation org = DbUtil.getOrganisation(editForm.getAmpOrgId());
+	                                Iterator actItr=activitiesCol.iterator();
+	                                while(actItr.hasNext()) {
+	                                    AmpActivity act = (AmpActivity) actItr.next();
+	                                    DbUtil.update(act);
+	                                }
+									DbUtil.delete(org);
+									logger.debug("Organisation deleted");
+	
+							    	return mapping.findForward("added");
+					    		}
+					    	}
 					 return mapping.findForward("index");
 				}
 }

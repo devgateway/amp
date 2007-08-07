@@ -1188,7 +1188,7 @@ public class DbUtil {
 		Query qry = null;
 		Collection activities = new ArrayList();
 		try {
-			session = PersistenceManager.getRequestDBSession();
+			session = PersistenceManager.getSession();
 			String queryString = "select f from " + AmpActivity.class.getName()
 					+ " f";
 			qry = session.createQuery(queryString);
@@ -1196,7 +1196,14 @@ public class DbUtil {
 		} catch (Exception e) {
 			logger.error("Unable to get all activities");
 			logger.debug("Exceptiion " + e);
-				}
+		} finally {
+			try {
+				session.close();
+			} catch (HibernateException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
 		return activities;
 			}
 

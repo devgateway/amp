@@ -1171,7 +1171,7 @@ public class ActivityUtil {
 			Query qry = session.createQuery(queryString);
 			qry.setParameter("actId",id,Hibernate.LONG);
 			orgroles = qry.list();
-		} catch(Exception ex) {
+		} catch(Exception ex){ 
 			logger.error("Unable to get activity sectors :" + ex);
 		} finally {
 			try {
@@ -1182,6 +1182,28 @@ public class ActivityUtil {
 		}
 		return orgroles;
 	}
+	
+public static Collection getFundingByOrg(Long id) {
+    Session session = null;
+    Collection orgroles = new ArrayList();
+	try {
+		session = PersistenceManager.getSession() ;
+		String queryString = "select f from " + AmpFunding.class.getName() +
+			 " f " +  "where (f.ampDonorOrgId=:orgId)";
+		Query qry = session.createQuery(queryString);
+		qry.setParameter("orgId",id,Hibernate.LONG);
+		orgroles = qry.list();
+	} catch(Exception ex){
+		logger.error("Unable to get fundings for organization :" + ex);
+	} finally {
+		try {
+			PersistenceManager.releaseSession(session);
+		} catch (Exception ex2) {
+			logger.error("releaseSession() failed ");
+		}
+	}
+	return orgroles;
+}
 
 	public static Collection getAllComponents(Long id) {
 	    Collection col = new ArrayList();

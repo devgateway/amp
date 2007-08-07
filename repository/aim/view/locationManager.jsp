@@ -307,6 +307,7 @@ function delet1(val1, val2) {
 																<c:set var="districtNormal"> 
 																	<category:getoptionvalue categoryKey="<%= org.digijava.module.aim.helper.CategoryConstants.IMPLEMENTATION_LOCATION_KEY%>" categoryIndex="3"/>
 																</c:set>
+																${districtNormal}
 															</td>
 															<td width="539" height="19">
 																<html:select property="woredaId" onchange="woredaChanged()">

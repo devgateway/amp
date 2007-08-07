@@ -130,9 +130,10 @@ method="post">
 							</TR>
 						</TABLE>
 					</TD>
-									
-					
 					</TR>
+					
+					<module:display name="Components">
+					<feature:display name="Components" module="Components">
 					<TR bgColor=#f4f4f2><TD vAlign="top" align="center" width="100%">
 						<TABLE width="98%" cellPadding=0 cellSpacing=0 vAlign="top" align="center" bgColor=#f4f4f2>
 							<TR><TD width="100%" bgcolor="#F4F4F2" height="17">
@@ -179,9 +180,13 @@ method="post">
 							</TD></TR>
 						</TABLE>
 					</TD>
-					</TR>				
-				</TABLE>
-				<TR><TD bgcolor="#F4F4F2">
+					</TR>
+					</feature:display>
+					</module:display>				
+				</TABLE></TD></TR>
+				<module:display name="Issues">
+				<feature:display name="Issues" module="Issues">
+				<TR><TD bgcolor="#F4F4F2" vAlign="bottom" align="center" width="100%">
 					<!-- issues --> 
 					<TABLE width="96.5%" cellPadding=0 cellSpacing=0 vAlign="top" align="center" bgColor=#f4f4f2>
 						<TR><TD width="100%" bgcolor="#F4F4F2" height="17">
@@ -244,7 +249,7 @@ method="post">
 																					<logic:iterate name="measure" property="actors" id="actor"
 																					type="org.digijava.module.aim.dbentity.AmpActor">
 																						<TR bgcolor="#ffffff"><TD>
-																							<font color="#0000ff">Actor: </font>
+														</TD></TR>									<font color="#0000ff">Actor: </font>
 																							<bean:write name="actor" property="name"/>
 																						</TD></TR>
 																					</logic:iterate>
@@ -264,8 +269,8 @@ method="post">
 							</TABLE>
 						</TD></TR>
 					</TABLE>
-					<TR><TD bgcolor="#F4F4F2">&nbsp</TD></TR>
-				</TD></TR>
+					<TR><TD bgcolor="#F4F4F2">&nbsp;</TD></TR>
+				</TD></TR></feature:display></module:display>
 			</TABLE>
 		<!-- end -->
 	</TD></TR>

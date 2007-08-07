@@ -156,7 +156,7 @@ type="org.digijava.module.aim.form.FinancingBreakdownForm" method="post">
 									</TABLE>										
 								</TD>
 							</TR>
-							
+							<module:display name="Calendar">
 							<logic:equal name="aimFinancingBreakdownForm" property="goButtonPresent" value="true">
 								<TR bgColor=#f4f4f2>
 									<TD vAlign="top" align="left" width="750">
@@ -245,7 +245,7 @@ type="org.digijava.module.aim.form.FinancingBreakdownForm" method="post">
 									</TD>
 								</TR>
 							</logic:equal>
-
+							</module:display>
 							<TR bgColor=#f4f4f2>
 								<TD vAlign="top" align="center" width="750">
 									<TABLE width="98%" cellPadding=0 cellSpacing=0 vAlign="top" align="center" bgColor=#f4f4f2>
@@ -266,16 +266,30 @@ type="org.digijava.module.aim.form.FinancingBreakdownForm" method="post">
 										<TR>
 											<TD width="750" bgcolor="#F4F4F2" align="center" class="box-border-nopadding">
 												<TABLE width="750"  border="0" cellpadding="4" cellspacing="1">
-                 					<TR bgcolor="#DDDDDB" > 
-	                        	<TD><digi:trn key="aim:orgFundingId">Org Funding ID</digi:trn>
-														</TD>
-				                    <TD width="20"><digi:trn key="aim:organization">Organization</digi:trn></TD>
-														<TD><digi:trn key="aim:totalCommitted">Total Committed</digi:trn></TD>
-	                         	<TD><digi:trn key="aim:totalDisbursed">Total Disbursed</digi:trn></TD>
-														<TD><digi:trn key="aim:unDisbursedFunds">Undisbursed Funds</digi:trn></TD>
-	                         	<TD><digi:trn key="aim:totalExpended">Total Expended</digi:trn></TD>
-														<TD><digi:trn key="aim:unExpendedFunds">Unexpended Funds</digi:trn></TD>
-													</TR>
+                 					<TR bgcolor="#DDDDDB" >
+                 					 
+		    	                    	<field:display name="Funding Organization Id" feature="Funding Organizations">
+		    	                    		<TD><digi:trn key="aim:orgFundingId">Org Funding ID</digi:trn></TD>
+		    	                    	</field:display>
+		    	                    	<field:display name="Funding Organization" feature="Funding Organizations">
+						                    <TD width="20"><digi:trn key="aim:organization">Organization</digi:trn></TD>
+						                </field:display>
+						                <field:display name="Total Committed" feature="Funding Organizations">
+											<TD><digi:trn key="aim:totalCommitted">Total Committed</digi:trn></TD>
+										</field:display>
+										<field:display name="Total Disbursed" feature="Funding Organizations">
+			                	         	<TD><digi:trn key="aim:totalDisbursed">Total Disbursed</digi:trn></TD>
+			                	        </field:display>
+			                	        <field:display name="Undisbursed Funds" feature="Funding Organizations">
+											<TD><digi:trn key="aim:unDisbursedFunds">Undisbursed Funds</digi:trn></TD>
+										</field:display>
+										<field:display name="Total Expended" feature="Funding Organizations">
+		    	                    	 	<TD><digi:trn key="aim:totalExpended">Total Expended</digi:trn></TD>
+	    	                    	 	</field:display>
+	    	                    	 	<field:display name="Unexpended Funds" feature="Funding Organizations">
+											<TD><digi:trn key="aim:unExpendedFunds">Unexpended Funds</digi:trn></TD>
+										</field:display>
+									</TR>
 													<logic:empty name="aimFinancingBreakdownForm" property="financingBreakdown"> 
 			                    	<TR valign="top"> 
 															<TD align="center" colspan="7"><span class="note"> No records !! </span></TD>
@@ -285,9 +299,11 @@ type="org.digijava.module.aim.form.FinancingBreakdownForm" method="post">
 														<logic:iterate name="aimFinancingBreakdownForm" property="financingBreakdown" id="breakdown" 
 			  	                   type="org.digijava.module.aim.helper.FinancingBreakdown">
 															<TR valign="top" bgcolor="#f4f4f2"> 
+												<field:display name="Funding Organization Id" feature="Funding Organizations">
 					    	           			<TD>
 						               				<jsp:useBean id="urlFinancialOverview" type="java.util.Map" class="java.util.HashMap"/>
 																	<c:set target="${urlFinancialOverview}" property="ampActivityId">
+																	
 																		<bean:write name="aimFinancingBreakdownForm" property="ampActivityId"/>
 																	</c:set>
 																	<c:set target="${urlFinancialOverview}" property="ampFundingId">
@@ -305,27 +321,39 @@ type="org.digijava.module.aim.form.FinancingBreakdownForm" method="post">
 																		<bean:write name="breakdown" property="financingId" /> 
 																	</digi:link>
 																</TD>
+												</field:display>
 															<bean:define id="breakdown" name="breakdown"
 															type="org.digijava.module.aim.helper.FinancingBreakdown"
 															toScope="request" />
-																
-					                  		<TD><jsp:include page="previewFinancingOrganizationPopup.jsp"/></TD>
+											<field:display name="Funding Organization" feature="Funding Organizations">
+						                  		<TD><jsp:include page="previewFinancingOrganizationPopup.jsp"/></TD>
+						                  	</field:display>
+						                  	<field:display name="Total Committed" feature="Funding Organizations">
 							                  <TD align="right"><bean:write name="breakdown" property="totalCommitted"/></TD>
+							                </field:display>
+							                <field:display name="Total Disbursed" feature="Funding Organizations">
 							                  <TD align="right"><bean:write name="breakdown" property="totalDisbursed"/></TD>
+							                </field:display>
+							                <field:display name="Undisbursed Funds" feature="Funding Organizations">
 								                <TD align="right"><bean:write name="breakdown" property="unDisbursed"/></TD>
+								            </field:display>
+								            <field:display name="Total Expended" feature="Funding Organizations">
 					      			          <TD align="right"><bean:write name="breakdown" property="totalExpended"/></TD>
+					      			        </field:display>
+					      			        <field:display name="Unexpended Funds" feature="Funding Organizations">
 					            		      <TD align="right"><bean:write name="breakdown" property="unExpended"/></TD>
+					            		    </field:display>
 															</TR>
 														</logic:iterate>
 													</logic:notEmpty>
 				                  <TR valign="top" class="note"> 
 														<TD><digi:trn key="aim:total">Total</digi:trn></TD>
 				                    <TD>&nbsp;</TD>
-														<TD align="right"><bean:write name="aimFinancingBreakdownForm" property="totalCommitted"/></TD>
-														<TD align="right"><bean:write name="aimFinancingBreakdownForm" property="totalDisbursed"/></TD>
-														<TD align="right"><bean:write name="aimFinancingBreakdownForm" property="totalUnDisbursed"/></TD>
-														<TD align="right"><bean:write name="aimFinancingBreakdownForm" property="totalExpended"/></TD>
-														<TD align="right"><bean:write name="aimFinancingBreakdownForm" property="totalUnExpended"/></TD>
+														<field:display name="Total Committed" feature="Funding Organizations"><TD align="right"><bean:write name="aimFinancingBreakdownForm" property="totalCommitted"/></TD></field:display>
+														<field:display name="Total Disbursed" feature="Funding Organizations"><TD align="right"><bean:write name="aimFinancingBreakdownForm" property="totalDisbursed"/></TD></field:display>
+														<field:display name="Undisbursed Funds" feature="Funding Organizations"><TD align="right"><bean:write name="aimFinancingBreakdownForm" property="totalUnDisbursed"/></TD></field:display>
+														<field:display name="Total Expended" feature="Funding Organizations"><TD align="right"><bean:write name="aimFinancingBreakdownForm" property="totalExpended"/></TD></field:display>
+														<field:display name="Unexpended Funds" feature="Funding Organizations"><TD align="right"><bean:write name="aimFinancingBreakdownForm" property="totalUnExpended"/></TD></field:display>
 													</TR>
 												</TABLE>
 											</TD>

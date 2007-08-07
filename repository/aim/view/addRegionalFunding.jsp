@@ -46,7 +46,13 @@
 								<td align="left">
 									<c:if test="${aimEditActivityForm.fundingRegionId == -1}">
 										<html:select property="fundingRegionId" styleClass="inp-text">
-											<html:option value="-1">--- Select a region ---</html:option>
+											<html:option value="-1">
+												--- 
+												<digi:trn key="aim:addActivityRegionalFundingSelectRegion">
+												Select a region
+												</digi:trn>
+												 ---
+											</html:option>
 											<html:optionsCollection name="aimEditActivityForm" property="fundingRegions" 
 											value="ampRegionId" label="name" />										
 										</html:select>										

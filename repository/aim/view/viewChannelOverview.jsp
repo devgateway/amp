@@ -154,7 +154,7 @@ function commentWin(val) {
 												<digi:trn key='<%="aim:"+ perspectiveNameLocal %>'>
 													<bean:write name="aimChannelOverviewForm" property="perspective"/></digi:trn>
 											</logic:notEmpty>
-										&nbsp;
+										&nbsp;:::<%="aim:"+ perspectiveNameLocal %>:::
 										<digi:trn key="aim:perspective">Perspective</digi:trn> </SPAN></TD>
 										<TD align="right" nowrap="nowrap">
 										<module:display name="Previews">

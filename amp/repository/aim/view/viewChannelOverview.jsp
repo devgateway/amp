@@ -144,10 +144,7 @@ function commentWin(val) {
 										</digi:link> &nbsp;&gt;&nbsp; Overview&nbsp;&gt;&nbsp;
 										<bean:define id="perspectiveNameLocal" name="aimChannelOverviewForm" property="perspective"
 										type="java.lang.String"/>
-											<logic:notEmpty name="aimChannelOverviewForm" property="perspective">
-												<digi:trn key='<%="aim:"+ perspectiveNameLocal.toLowerCase() %>'>
-													<bean:write name="aimChannelOverviewForm" property="perspective"/></digi:trn>
-											</logic:notEmpty>
+
 										&nbsp;
 										<digi:trn key="aim:perspective">Perspective</digi:trn> </SPAN></TD>
 										<TD align="right" nowrap="nowrap">

@@ -814,7 +814,7 @@ type="org.digijava.module.aim.form.QuarterlyInfoForm" method="post">
 
 										              	<td bgcolor="#DDDDDB">
 
-										              		<div align="center"><digi:trn key="aim:Mofed">Mofed</digi:trn> Planned </div>
+										              		<div align="center"><digi:trn key="aim:MOFED">Mofed</digi:trn> Planned </div>
 
 							              				</td>
 
@@ -832,7 +832,7 @@ type="org.digijava.module.aim.form.QuarterlyInfoForm" method="post">
 
 							      			        	<td bgcolor="#DDDDDB">
 
-							              					<div align="center"><digi:trn key="aim:Mofed">Mofed</digi:trn> Actuals</div>
+							              					<div align="center"><digi:trn key="aim:MOFED">Mofed</digi:trn> Actuals</div>
 
 							              				</td>
 

@@ -133,16 +133,21 @@ method="post">
 						<TR><TD class="highlight" colspan="2">
 						</TD></TR>						
 						<TR>
+							<feature:display name="Project Performance" module="National Planning Dashboard">
 							<TD width="50%" align="center" class="textalb" height="20" bgcolor="#336699">
 								<digi:trn key="aim:meActivityPerformance">
 								Activity - Performance</digi:trn>
 							</TD>
+							</feature:display>
+							<feature:display name="Project Performance" module="National Planning Dashboard">
 							<TD width="50%" align="center" class="textalb" height="20" bgcolor="#336699">
 								<digi:trn key="aim:meActivityRisk">
 								Activity - Risk</digi:trn>
 							</TD>
+							</feature:display>
 						</TR>
 						<TR>
+							<feature:display name="Project Performance" module="National Planning Dashboard">
 							<TD width="50%">
 								<% if (actPerfChartUrl != null) { %>
 								<img src="<%= actPerfChartUrl %>" width=370 height=450 border=0 usemap="#<%= actPerfChartFileName %>"><br><br>
@@ -161,6 +166,8 @@ method="post">
 							  </span><br><br>
 								<% } %>
 							</TD>
+							</feature:display>
+							<feature:display name="Project Performance" module="National Planning Dashboard">
 							<TD width="50%" valign="top">
 								<% if (actRiskChartUrl != null) { %>
 								<digi:trn key="aim:overallActivityRisk">Overall Risk</digi:trn>: 
@@ -183,6 +190,7 @@ method="post">
 							  </span><br><br>
 								<% } %>		
 							</TD>
+							</feature:display>
 						</TR>
 					</TABLE>
 				</TD></TR>

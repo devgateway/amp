@@ -235,8 +235,13 @@ public class RegionalFundingForm extends MainProjectDetailsForm {
 	}
 
 	public String getPerspectiveNameLocaly() {
-		if (super.getPerpsectiveName()!=null) return super.getPerpsectiveName().replaceAll(" ","");
-		return super.getPerspective().replaceAll(" ","");
+		if (super.getPerpsectiveName()!=null) 
+			return super.getPerpsectiveName().replaceAll(" ","");
+		else
+			if (super.getPerspective() != null)
+				return super.getPerspective().replaceAll(" ","");
+			else
+				return "";
 	}
 
 	public void setPerspectiveNameLocaly(String perspectiveNameLocaly) {

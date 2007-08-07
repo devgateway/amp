@@ -1,29 +1,35 @@
 package org.digijava.module.um.action;
 
-import org.apache.struts.action.Action;
-import org.apache.struts.action.ActionForward;
-import org.apache.struts.action.ActionMapping;
-import org.apache.struts.action.ActionForm;
-import org.digijava.kernel.util.UserUtils;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import org.digijava.module.um.form.ViewEditUserForm;
-import org.digijava.kernel.user.User;
-import org.digijava.module.um.util.DbUtil;
-import org.digijava.kernel.translator.util.TrnUtil;
-import org.digijava.kernel.util.RequestUtils;
-import org.digijava.kernel.entity.Locale;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
-import java.util.ArrayList;
-import java.util.*;
-import org.digijava.module.aim.dbentity.AmpOrganisation;
-import org.digijava.module.aim.dbentity.AmpOrgGroup;
-import org.digijava.kernel.dbentity.Country;
+import java.util.Set;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+
+import org.apache.struts.action.Action;
 import org.apache.struts.action.ActionError;
 import org.apache.struts.action.ActionErrors;
+import org.apache.struts.action.ActionForm;
+import org.apache.struts.action.ActionForward;
+import org.apache.struts.action.ActionMapping;
+import org.digijava.kernel.entity.Locale;
+import org.digijava.kernel.entity.UserLangPreferences;
+import org.digijava.kernel.entity.UserPreferences;
+import org.digijava.kernel.request.Site;
+import org.digijava.kernel.translator.util.TrnUtil;
+import org.digijava.kernel.user.User;
+import org.digijava.kernel.util.RequestUtils;
+import org.digijava.kernel.util.UserUtils;
+import org.digijava.module.aim.dbentity.AmpOrgGroup;
+import org.digijava.module.aim.dbentity.AmpOrganisation;
+import org.digijava.module.um.form.ViewEditUserForm;
+import org.digijava.module.um.util.DbUtil;
 
 public class ViewEditUser
     extends Action {
@@ -36,6 +42,7 @@ public class ViewEditUser
     HttpSession session = request.getSession();
     String isAmpAdmin = (String) session.getAttribute("ampAdmin");
     ActionErrors errors = new ActionErrors();
+    Site curSite=RequestUtils.getSite(request);
 
     if (uForm.getId() != null) {
       user = UserUtils.getUser(uForm.getId());
@@ -69,12 +76,8 @@ public class ViewEditUser
           uForm.setCountries(sortedCountrieList);
         }
 
-        Collection langCol = TrnUtil.getLanguages(navLang.getCode());
-        if (langCol != null) {
-          List sortedLangList = new ArrayList(langCol);
-          Collections.sort(sortedLangList, TrnUtil.localeNameComparator);
-          uForm.setLanguages(sortedLangList);
-        }
+    	Collection userLangs=TrnUtil.getSortedUserLanguages(request);
+    	uForm.setLanguages(userLangs);
       }
 
       Collection orgTypeCol = DbUtil.getAllOrgTypes();
@@ -173,9 +176,26 @@ public class ViewEditUser
           user.setOrganizationName(uForm.getSelectedOrgName());
           user.setUrl(uForm.getUrl());
 
-          Locale language = DbUtil.getLanguageByCode(uForm.
-              getSelectedLanguageCode());
-          user.setRegisterLanguage(language);
+          Locale language = DbUtil.getLanguageByCode(uForm.getSelectedLanguageCode());
+          UserLangPreferences langPref = UserUtils.getUserLangPreferences(user, curSite);
+          if (langPref == null) {
+        	  UserPreferences pref = UserUtils.getUserPreferences(user, curSite);
+        	  if (pref == null) {
+        		  pref = new UserPreferences(user, curSite);
+        		  pref.setPublicProfile(true);
+        		  pref.setReceiveAlerts(true);
+        		  pref.setBiography("");
+        		  UserUtils.saveUserPreferences(pref);
+        	  }
+        	  langPref = new UserLangPreferences();
+        	  langPref.setId(pref.getId());
+        	  langPref.setAlertsLanguage(language);
+        	  Set<Locale> contentLangs = new HashSet<Locale>();
+        	  langPref.setContentLanguages(contentLangs);
+          }
+          langPref.setNavigationLanguage(language);
+          UserUtils.saveUserLangPreferences(langPref);
+          
           DbUtil.updateUser(user);
           resetViewEditUserForm(uForm);
           return mapping.findForward("saved");

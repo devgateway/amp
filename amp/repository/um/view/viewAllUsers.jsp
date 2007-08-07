@@ -5,6 +5,15 @@
 <%@ taglib uri="/taglib/struts-html" prefix="html" %>
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
+<script language="JavaScript">
+
+
+function banUser(txt) {
+  var ban=confirm("Do you really want to"+txt);
+  return ban;
+  }
+
+</script>
 
 <digi:instance property="umViewAllUsersForm" />
 <digi:context name="digiContext" property="context" />
@@ -41,6 +50,7 @@
           </tr>
           <tr>
             <td>
+              <digi:errors/>
               <span class=subtitle-blue>
                 <digi:trn key="um:viewAllUsers:ListOfUsers">
                 List of users
@@ -50,10 +60,10 @@
           </tr>
           <tr style="width:50%;">
             <td height=16 vAlign="center">
-            <digi:trn key="um:viewAllUsers:filter">
-            Filter by:
-            </digi:trn>
-            <html:select property="type" style="font-family:verdana;font-size:11px;">
+              <digi:trn key="um:viewAllUsers:filter">
+              Filter by:
+              </digi:trn>
+              <html:select property="type" style="font-family:verdana;font-size:11px;">
                 <c:set var="translation">
                   <digi:trn key="um:viewAllUsers:all">
                   -All-
@@ -74,19 +84,19 @@
                   </digi:trn>
                 </c:set>
                 <html:option value="1">${translation}</html:option>
-            </html:select>
+              </html:select>
 
-            <digi:trn key="um:viewAllUsers:keyword">
-            keyword:
-            </digi:trn>
-            <html:text property="keyword" style="font-family:verdana;font-size:11px;"/>
-
-            <c:set var="translation">
-              <digi:trn key="um:viewAllUsers:showButton">
-              Show
+              <digi:trn key="um:viewAllUsers:keyword">
+              keyword:
               </digi:trn>
-            </c:set>
-            <input type="submit" value="${translation}" style="font-family:verdana;font-size:11px;" />
+              <html:text property="keyword" style="font-family:verdana;font-size:11px;"/>
+
+              <c:set var="translation">
+                <digi:trn key="um:viewAllUsers:showButton">
+                Show
+                </digi:trn>
+              </c:set>
+              <input type="submit" value="${translation}" style="font-family:verdana;font-size:11px;" />
             </td>
           </tr>
           <tr>
@@ -108,10 +118,10 @@
                             </tr>
                             <tr>
                               <td>
-                                <table width="100%" cellspacing=1 cellpadding=4 valign=top align=left bgcolor="#d7eafd">
+                                <table width="100%" cellspacing=1 cellpadding=4 valign=top align=left  >
                                   <tr bgcolor="#ffffff">
                                     <td>
-                                      <table bgcolor="#ffffff">
+                                      <table bgcolor="#ffffff" border="1" cellspacing="1" cellpadding="4" valign="top">
                                         <c:if test="${empty umViewAllUsersForm.users}">
                                           <tr bgcolor="#ffffff">
                                             <td colspan="3" align="center">
@@ -127,9 +137,7 @@
                                               </span>
                                             </td>
 
-                                            <td>
-                                            &nbsp;
-                                            </td>
+
 
                                             <td>
                                               <span style="font-size:13px;">
@@ -137,9 +145,7 @@
                                               </span>
                                             </td>
 
-                                            <td>
-                                            &nbsp;
-                                            </td>
+
 
                                             <td>
                                               <span style="font-size:13px;">
@@ -147,35 +153,22 @@
                                               </span>
                                             </td>
 
-                                            <td>
+                                            <td colspan="2">
                                             &nbsp;
                                             </td>
 
-                                            <td>
-                                            &nbsp;
-                                            </td>
+
                                           </tr>
-                                          <tr>
-                                            <td>
-                                            &nbsp;
-                                            </td>
-                                          </tr>
+
                                           <c:forEach var="us" items="${umViewAllUsersForm.users}">
                                             <tr>
                                               <td>
                                               ${us.firstNames}&nbsp;${us.lastName}
                                               </td>
 
-                                              <td>
-                                              &nbsp;
-                                              </td>
 
                                               <td>
                                               ${us.email}
-                                              </td>
-
-                                              <td>
-                                              &nbsp;
                                               </td>
 
                                               <td>
@@ -191,15 +184,37 @@
                                                 </div>
                                               </td>
 
-                                              <td>
-                                              &nbsp;
-                                              </td>
 
-                                              <td>
+
+                                              <td nowrap="nowrap">
                                                 <c:set var="translation">
                                                   <digi:trn key="um:viewAllUsers:EditUserLink">Edit user</digi:trn>
                                                 </c:set>
                                                 <digi:link href="/viewEditUser.do?id=${us.id}">${translation}</digi:link>
+                                              </td>
+
+                                              <td nowrap="nowrap">
+                                                <c:choose>
+
+                                                  <c:when test="${us.ban}">
+                                                    <c:set var="translation">
+                                                      <digi:trn key="um:viewAllUsers:unBanUserLink">Remove ban</digi:trn>
+                                                    </c:set>
+
+                                                    <digi:link href="/viewEditUser.do?id=${us.id}&ban=false" onclick="return banUser(' remove ban?')"  >${translation}</digi:link>
+
+
+                                                  </c:when>
+                                                  <c:otherwise>
+                                                    <c:set var="translation">
+                                                      <digi:trn key="um:viewAllUsers:banUsersLink">Ban user</digi:trn>
+                                                    </c:set>
+
+                                                    <digi:link href="/viewEditUser.do?id=${us.id}&ban=true" onclick="return banUser(' ban user?')">${translation}</digi:link>
+
+
+                                                  </c:otherwise>
+                                                </c:choose>
                                               </td>
                                             </tr>
                                           </c:forEach>

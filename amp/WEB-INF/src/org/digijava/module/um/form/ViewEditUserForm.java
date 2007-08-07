@@ -1,192 +1,201 @@
 package org.digijava.module.um.form;
 
-import java.util.Collection;
+import java.util.*;
 
-import org.apache.struts.action.ActionForm;
+import org.apache.struts.action.*;
 
 public class ViewEditUserForm
     extends ActionForm {
 
-    private Long id;
-    private String email;
-    private String contacts;
-    private String firstNames;
-    private String lastName;
-    private String name;
-    private String url;
-    private String mailingAddress;
+  private Long id;
+  private String email;
+  private String contacts;
+  private String firstNames;
+  private String lastName;
+  private String name;
+  private String url;
+  private String mailingAddress;
 
-    private Long selectedOrgGroupId;
-    private Collection orgGroups;
+  private Long selectedOrgGroupId;
+  private Collection orgGroups;
 
-    private String selectedOrgTypeId;
-    private Collection orgTypes;
+  private String selectedOrgTypeId;
+  private Collection orgTypes;
 
-    private String selectedOrgName;
-    private Collection orgs;
+  private String selectedOrgName;
+  private Collection orgs;
 
-    private String selectedCountryIso;
-    private Collection countries;
+  private String selectedCountryIso;
+  private Collection countries;
 
-    private String selectedLanguageCode;
-    private Collection languages;
+  private String selectedLanguageCode;
+  private Collection languages;
 
-    private String event;
+  private String event;
+  private Boolean ban;
 
-    public ViewEditUserForm() {
+  public ViewEditUserForm() {
 
-    }
+  }
 
-    public String getContacts() {
-        return contacts;
-    }
+  public String getContacts() {
+    return contacts;
+  }
 
-    public Collection getCountries() {
-        return countries;
-    }
+  public Collection getCountries() {
+    return countries;
+  }
 
-    public String getEmail() {
-        return email;
-    }
+  public String getEmail() {
+    return email;
+  }
 
-    public String getEvent() {
-        return event;
-    }
+  public String getEvent() {
+    return event;
+  }
 
-    public String getFirstNames() {
-        return firstNames;
-    }
+  public String getFirstNames() {
+    return firstNames;
+  }
 
-    public Long getId() {
-        return id;
-    }
+  public Long getId() {
+    return id;
+  }
 
-    public Collection getLanguages() {
-        return languages;
-    }
+  public Collection getLanguages() {
+    return languages;
+  }
 
-    public String getLastName() {
-        return lastName;
-    }
+  public String getLastName() {
+    return lastName;
+  }
 
-    public String getMailingAddress() {
-        return mailingAddress;
-    }
+  public String getMailingAddress() {
+    return mailingAddress;
+  }
 
-    public String getName() {
-        return name;
-    }
+  public String getName() {
+    return name;
+  }
 
-    public Collection getOrgGroups() {
-        return orgGroups;
-    }
+  public Collection getOrgGroups() {
+    return orgGroups;
+  }
 
-    public Collection getOrgs() {
-        return orgs;
-    }
+  public Collection getOrgs() {
+    return orgs;
+  }
 
-    public Collection getOrgTypes() {
-        return orgTypes;
-    }
+  public Collection getOrgTypes() {
+    return orgTypes;
+  }
 
-    public String getSelectedCountryIso() {
-        return selectedCountryIso;
-    }
+  public String getSelectedCountryIso() {
+    return selectedCountryIso;
+  }
 
-    public String getSelectedLanguageCode() {
-        return selectedLanguageCode;
-    }
+  public String getSelectedLanguageCode() {
+    return selectedLanguageCode;
+  }
 
-    public Long getSelectedOrgGroupId() {
-        return selectedOrgGroupId;
-    }
+  public Long getSelectedOrgGroupId() {
+    return selectedOrgGroupId;
+  }
 
-    public String getSelectedOrgName() {
-        return selectedOrgName;
-    }
+  public String getSelectedOrgName() {
+    return selectedOrgName;
+  }
 
-    public String getSelectedOrgTypeId() {
-        return selectedOrgTypeId;
-    }
+  public String getSelectedOrgTypeId() {
+    return selectedOrgTypeId;
+  }
 
-    public String getUrl() {
-        return url;
-    }
+  public String getUrl() {
+    return url;
+  }
 
-    public void setUrl(String url) {
-        this.url = url;
-    }
+  public Boolean getBan() {
+    return ban;
+  }
 
-    public void setSelectedOrgTypeId(String selectedOrgTypeId) {
-        this.selectedOrgTypeId = selectedOrgTypeId;
-    }
+  public void setUrl(String url) {
+    this.url = url;
+  }
 
-    public void setSelectedOrgName(String selectedOrgName) {
-        this.selectedOrgName = selectedOrgName;
-    }
+  public void setSelectedOrgTypeId(String selectedOrgTypeId) {
+    this.selectedOrgTypeId = selectedOrgTypeId;
+  }
 
-    public void setSelectedOrgGroupId(Long selectedOrgGroupId) {
-        this.selectedOrgGroupId = selectedOrgGroupId;
-    }
+  public void setSelectedOrgName(String selectedOrgName) {
+    this.selectedOrgName = selectedOrgName;
+  }
 
-    public void setSelectedLanguageCode(String selectedLanguageCode) {
-        this.selectedLanguageCode = selectedLanguageCode;
-    }
+  public void setSelectedOrgGroupId(Long selectedOrgGroupId) {
+    this.selectedOrgGroupId = selectedOrgGroupId;
+  }
 
-    public void setSelectedCountryIso(String selectedCountryIso) {
-        this.selectedCountryIso = selectedCountryIso;
-    }
+  public void setSelectedLanguageCode(String selectedLanguageCode) {
+    this.selectedLanguageCode = selectedLanguageCode;
+  }
 
-    public void setOrgTypes(Collection orgTypes) {
-        this.orgTypes = orgTypes;
-    }
+  public void setSelectedCountryIso(String selectedCountryIso) {
+    this.selectedCountryIso = selectedCountryIso;
+  }
 
-    public void setOrgs(Collection orgs) {
-        this.orgs = orgs;
-    }
+  public void setOrgTypes(Collection orgTypes) {
+    this.orgTypes = orgTypes;
+  }
 
-    public void setOrgGroups(Collection orgGroups) {
-        this.orgGroups = orgGroups;
-    }
+  public void setOrgs(Collection orgs) {
+    this.orgs = orgs;
+  }
 
-    public void setName(String name) {
-        this.name = name;
-    }
+  public void setOrgGroups(Collection orgGroups) {
+    this.orgGroups = orgGroups;
+  }
 
-    public void setMailingAddress(String mailingAddress) {
-        this.mailingAddress = mailingAddress;
-    }
+  public void setName(String name) {
+    this.name = name;
+  }
 
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
-    }
+  public void setMailingAddress(String mailingAddress) {
+    this.mailingAddress = mailingAddress;
+  }
 
-    public void setLanguages(Collection languages) {
-        this.languages = languages;
-    }
+  public void setLastName(String lastName) {
+    this.lastName = lastName;
+  }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
+  public void setLanguages(Collection languages) {
+    this.languages = languages;
+  }
 
-    public void setFirstNames(String firstNames) {
-        this.firstNames = firstNames;
-    }
+  public void setId(Long id) {
+    this.id = id;
+  }
 
-    public void setEvent(String event) {
-        this.event = event;
-    }
+  public void setFirstNames(String firstNames) {
+    this.firstNames = firstNames;
+  }
 
-    public void setEmail(String email) {
-        this.email = email;
-    }
+  public void setEvent(String event) {
+    this.event = event;
+  }
 
-    public void setCountries(Collection countries) {
-        this.countries = countries;
-    }
+  public void setEmail(String email) {
+    this.email = email;
+  }
 
-    public void setContacts(String contacts) {
-        this.contacts = contacts;
-    }
+  public void setCountries(Collection countries) {
+    this.countries = countries;
+  }
+
+  public void setContacts(String contacts) {
+    this.contacts = contacts;
+  }
+
+  public void setBan(Boolean ban) {
+    this.ban = ban;
+  }
 
 }

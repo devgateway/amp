@@ -9,6 +9,9 @@
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
 
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
+<%@ taglib uri="/taglib/fieldVisibility" prefix="field" %>
+<%@ taglib uri="/taglib/featureVisibility" prefix="feature" %>
+<%@ taglib uri="/taglib/moduleVisibility" prefix="module" %>
 
 <SCRIPT TYPE="text/javascript">
 <!--
@@ -146,19 +149,13 @@ return false;
 
 				<%-- <c:if var="teamType" test="${currentMember.teamType == 'DONOR'}" scope="session"> --%>
 
-					<logic:notEmpty name="PI" scope="application">
-
+					<module:display name="Paris Indicators">
 		      			<TR><TD title='<digi:trn key="aim:clickToViewParisIndcReports">Click here to view Paris Indicator Reports</digi:trn>'>
-
 							<digi:link href="/parisIndicatorReport.do">
-
 								<b><digi:trn key="aim:parisIndicatorReports">Paris Indicator Reports</digi:trn></b>
-
 							</digi:link>
-
 						</TD></TR>
-
-					</logic:notEmpty>
+					</module:display>
 
 				<%-- </c:if>  --%>
 

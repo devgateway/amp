@@ -11,6 +11,9 @@
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
 
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
+<%@ taglib uri="/taglib/fieldVisibility" prefix="field" %>
+<%@ taglib uri="/taglib/featureVisibility" prefix="feature" %>
+<%@ taglib uri="/taglib/moduleVisibility" prefix="module" %>
 
 
 
@@ -152,22 +155,14 @@
 
 						</div></LI>
 
-						<logic:notEmpty name="ME" scope="application">
-
+						<module:display name="Trend Analysis and Forecasting">
 						<LI>
-
 						<div id="gen" title='<digi:trn key="aim:clickToViewM&E">Click here to view M & E</digi:trn>'>
-
 						<digi:link href="/getTeamActivities.do">
-
 							:: <digi:trn key="aim:m&e">M&E</digi:trn>
-
 						</digi:link>
-
 						</div></LI>
-
-						</logic:notEmpty>
-
+						</module:display>
 					</UL>		
 
 				</DIV>	
@@ -330,8 +325,8 @@
 
 				</td>			
 
-				<logic:notEmpty name="ME" scope="application">				
 
+				<logic:notEmpty name="ME" scope="application">				
 				<td noWrap>
 
 					<digi:link href="/getTeamActivities.do" styleClass="sub-nav">

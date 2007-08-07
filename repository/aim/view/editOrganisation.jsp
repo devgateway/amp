@@ -5,6 +5,9 @@
 <%@ taglib uri="/taglib/struts-html" prefix="html" %>
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
+<%@ taglib uri="/taglib/fieldVisibility" prefix="field" %>
+<%@ taglib uri="/taglib/featureVisibility" prefix="feature" %>
+<%@ taglib uri="/taglib/moduleVisibility" prefix="module" %>
 
 <digi:ref href="css/styles.css" type="text/css" rel="stylesheet" />
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
@@ -624,11 +627,11 @@ function loadPage()
 									                                                              <table cellSpacing=2 cellPadding=2>
 									                                                                <tr>
 									                                                                  <c:if test="<%=i<5 %>">
-									                                                                  <logic:notEmpty name="MS" scope="application">
+									                                                                  <field:display name="Add Sectors Button" feature="Sectors">
 									                                                                    <td>
 									                                                                      <input type="button" value="Add Sectors" class="buton"  onclick="addSectors();">
 									                                                                    </td>
-									                                                                  </logic:notEmpty>
+									                                                                  </field:display>
 									                                                                  </c:if>
 									                                                                  <td>
 																										<input type="button" class="buton" onclick="return removeSelSectors()" value='<digi:trn key="btn:removeSector">Remove Sector</digi:trn>' />

@@ -5,6 +5,10 @@
 <%@ taglib uri="/taglib/struts-html" prefix="html" %>
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
+<%@ taglib uri="/taglib/fieldVisibility" prefix="field" %>
+<%@ taglib uri="/taglib/featureVisibility" prefix="feature" %>
+<%@ taglib uri="/taglib/moduleVisibility" prefix="module" %>
+
 
 <script language="JavaScript">
 <!--
@@ -133,12 +137,13 @@
 					
 						</logic:notEqual>
 					</td></tr>		
+
+					<feature:display name="Regional Funding" module="Funding">
 					<TR><TD bgcolor="#f7f9e3">
 					<DIV id="leftNav">
-						<logic:notEmpty name="SA" scope="application">												
 						<logic:equal name="aimMainProjectDetailsForm" property="tabIndex" value="4">
-					   					  	<span id="leftNavSelected">
-							 <digi:trn key="aim:regionalFunding">Regional Funding</digi:trn>
+   					  	<span id="leftNavSelected">
+   					    	<digi:trn key="aim:regionalFunding">Regional Funding</digi:trn>
 						</span>
 						</logic:equal>
 						<logic:notEqual name="aimMainProjectDetailsForm" property="tabIndex" value="4">
@@ -151,16 +156,12 @@
 						</digi:link></div>
 					
 						</logic:notEqual>
-						</logic:notEmpty>
-	<logic:notEmpty name="SA" scope="application">												
-				</DIV>
-				</TD></TR>
-			  	<TR><TD bgcolor="#f7f9e3">
-				<DIV id="leftNav">
-				
-	</logic:notEmpty>					
-					
-						<logic:notEmpty name="PI" scope="application">
+					</DIV>
+					</TD></TR>
+					</feature:display>
+					<module:display name="Paris Indicators">
+				  	<TR><TD bgcolor="#f7f9e3">
+					<DIV id="leftNav">
 						<logic:equal name="aimMainProjectDetailsForm" property="tabIndex" value="5">
 									  	<span id="leftNavSelected">
 							 <digi:trn key="aim:parisIndicator">Paris Indicator</digi:trn>
@@ -180,13 +181,13 @@
 						</digi:link></div>
 				
 						</logic:notEqual>
-						</logic:notEmpty>
 						</DIV>
 					</TD></TR>
+					</module:display>
+					
+					<module:display name="National Planning Dashboard">
 			  		<TR><TD bgcolor="#f7f9e3">
 					<DIV id="leftNav">
-				
-						<logic:notEmpty name="ME" scope="application">
 						<logic:equal name="aimMainProjectDetailsForm" property="tabIndex" value="6">
 										  	<span id="leftNavSelected">
 							 <digi:trn key="aim:activityDashboard">Dashboard</digi:trn>
@@ -201,9 +202,9 @@
 						</digi:link></div>
 					
 						</logic:notEqual>
-						</logic:notEmpty>
 					</DIV>
-				</TD></TR>
+					</TD></TR>
+					</module:display>
 			  	<TR><TD bgcolor="#f7f9e3">
 				<DIV id="leftNav">
 					

@@ -231,7 +231,7 @@ function checkNumeric(objName,comma,period,hyphen)
 											</html:select>
 										</td>
 									</tr>
-									<tr <logic:empty name="SA" scope="application">style="position:relative;display:none;"</logic:empty>>
+									<tr style="position:relative;display:none;">
 										<td>
 											<digi:trn key="aim:subSectorLevel2">
 											Sub-Sector Level 2</digi:trn>

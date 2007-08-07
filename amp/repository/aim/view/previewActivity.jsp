@@ -665,7 +665,6 @@ function disable() {
 												</tr>
 												</field:display>
 											
-												<logic:notEmpty name="SA" scope="application">
 												<field:display name="Proposed Approval Date" feature="Planning">
 												<tr>
 													<td width="32%"><digi:trn key="aim:originalApprovalDate">
@@ -694,7 +693,6 @@ function disable() {
 													</td>
 												</tr>
 												</field:display>
-												</logic:notEmpty>
 												<field:display name="Final Date for Contracting" feature="Planning">
 												<tr>
 													<td width="32%"><digi:trn key="aim:ContractingDateofProject1">Final Date for Contracting</digi:trn></td>
@@ -1053,7 +1051,6 @@ function disable() {
 									</feature:display>
 									<!-- End Costing -->
 									</logic:present>
-									<logic:notEmpty name="SA" scope="application">
 									<feature:display name="Regional Funding" module="Funding">
 									<tr>
 										<td class="t-name" width="30%" align="right" bgcolor="#f4f4f2">
@@ -1190,7 +1187,6 @@ function disable() {
 										</td>
 									</tr>
 									</feature:display>
-									</logic:notEmpty>
 									<module:display name="Organizations">
 									<tr>
 										<td class="t-name" width="30%" align="right" bgcolor="#f4f4f2">

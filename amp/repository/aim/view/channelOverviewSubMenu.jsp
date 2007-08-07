@@ -5,6 +5,9 @@
 <%@ taglib uri="/taglib/struts-html" prefix="html" %>
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
+<%@ taglib uri="/taglib/fieldVisibility" prefix="field" %>
+<%@ taglib uri="/taglib/featureVisibility" prefix="feature" %>
+<%@ taglib uri="/taglib/moduleVisibility" prefix="module" %>
 
 <script language="JavaScript">
 <!--
@@ -80,17 +83,15 @@
 					<TR><TD bgcolor="#f7f9e3">
 					<DIV id="leftNav">
 
-						<logic:notEmpty name="SA" scope="application">
-					
+					<module:display name="Physical Progress">
                   <c:set target="${urlTabs}" property="tabIndex" value="2"/>
 					
 						<div id="gen" title='<digi:trn key="aim:clickToViewPhysicalProgress">Click here to view Physical Progress</digi:trn>'>
                  	<digi:link href="/viewPhysicalProgress.do" name="urlTabs" styleClass="leftNavItem">
                  		 <digi:trn key="aim:physicalProgress">Physical Progress</digi:trn>
                  	</digi:link></div>
+					</module:display>
 					
-					
-						</logic:notEmpty>
 					</td></tr>		
 					<TR><TD bgcolor="#f7f9e3">
 					<DIV id="leftNav">
@@ -107,9 +108,9 @@
 					
 					
 					</td></tr>		
+					<feature:display name="Regional Funding" module="Funding">
 					<TR><TD bgcolor="#f7f9e3">
 					<DIV id="leftNav">
-						<logic:notEmpty name="SA" scope="application">												
 					
 					
 						<c:set target="${urlTabs}" property="tabIndex" value="4"/>
@@ -121,51 +122,36 @@
 						</digi:link></div>
 					
 					
-						</logic:notEmpty>
-	<logic:notEmpty name="SA" scope="application">												
-				</DIV>
-				</TD></TR>
-			  	<TR><TD bgcolor="#f7f9e3">
-				<DIV id="leftNav">
-				
-	</logic:notEmpty>					
-					
-						<logic:notEmpty name="PI" scope="application">
-					
-					
-           			<jsp:useBean id="survey" type="java.util.Map" class="java.util.HashMap" />
-						<c:set target="${survey}" property="ampActivityId">
-							<bean:write name="aimMainProjectDetailsForm" property="ampActivityId"/>
-						</c:set>
-						<c:set target="${survey}" property="tabIndex" value="5"/>
-				
-						<div id="gen" 
-						title='<digi:trn key="aim:clickToViewAidEffectIndicators">Click here to view Aid Effectiveness Indicators</digi:trn>'>
-						<digi:link href="/viewSurveyList.do" name="survey" styleClass="leftNavItem">
-							 <digi:trn key="aim:parisIndicator">Paris Indicator</digi:trn> 	
-						</digi:link></div>
-				
-						
-						</logic:notEmpty>
-						</DIV>
+					</DIV>
 					</TD></TR>
+					</feature:display>
+				  	<TR><TD bgcolor="#f7f9e3">
+					<DIV id="leftNav">
+	           			<jsp:useBean id="survey" type="java.util.Map" class="java.util.HashMap" />
+							<c:set target="${survey}" property="ampActivityId">
+								<bean:write name="aimMainProjectDetailsForm" property="ampActivityId"/>
+							</c:set>
+							<c:set target="${survey}" property="tabIndex" value="5"/>
+					
+							<div id="gen" 
+							title='<digi:trn key="aim:clickToViewAidEffectIndicators">Click here to view Aid Effectiveness Indicators</digi:trn>'>
+							<digi:link href="/viewSurveyList.do" name="survey" styleClass="leftNavItem">
+								 <digi:trn key="aim:parisIndicator">Paris Indicator</digi:trn> 	
+							</digi:link></div>
+					</DIV>
+					</TD></TR>
+					
+					<module:display name="National Planning Dashboard">
 			  		<TR><TD bgcolor="#f7f9e3">
 					<DIV id="leftNav">
-				
-						<logic:notEmpty name="ME" scope="application">
-						
-						
 						<c:set target="${urlTabs}" property="tabIndex" value="6"/>
-					
 						<div id="gen" title='<digi:trn key="aim:clickToViewActivityDashboard">Click here to view activity dashboard</digi:trn>'>
 						<digi:link href="/viewActivityDashboard.do" name="urlTabs" styleClass="leftNavItem">
 							 <digi:trn key="aim:activityDashboard">Dashboard</digi:trn>
 						</digi:link></div>
-					
-					
-						</logic:notEmpty>
 					</DIV>
-				</TD></TR>
+					</TD></TR>
+					</module:display>
 			  	<TR><TD bgcolor="#f7f9e3">
 				<DIV id="leftNav">
 					

@@ -157,11 +157,21 @@ function delet1(val1, val2) {
 													<logic:greaterEqual name="aimAddLocationForm" property="impLevelValue" value="1">
 														<tr>
 															<td width="193" align="right" valign="top" height="19">
-																<category:getoptionvalue categoryKey="<%= org.digijava.module.aim.helper.CategoryConstants.IMPLEMENTATION_LOCATION_KEY%>" categoryIndex="0"/>
+																<c:set var="countryNormal">
+																	<category:getoptionvalue categoryKey="<%= org.digijava.module.aim.helper.CategoryConstants.IMPLEMENTATION_LOCATION_KEY%>" categoryIndex="0"/>
+																</c:set>
+																${countryNormal}
 															</td>
 															<td  align="left" width="539" valign="top" height="19">
 																<html:select property="countryId" onchange="countryChanged()"	>
-																	<html:option value="">-- Select Country --</html:option>
+																	<html:option value="">
+																		-- 
+																		<digi:trn key="aim:AmpSelectLocation">
+																			Select
+																		</digi:trn>
+																		${countryNormal}
+																		 --
+																	</html:option>
 																	<html:optionsCollection name="aimAddLocationForm" property="country" 
 																		   value="iso" label="countryName" />
 																</html:select>
@@ -188,11 +198,21 @@ function delet1(val1, val2) {
 													<logic:greaterEqual name="aimAddLocationForm" property="impLevelValue" value="1">
 														<tr>
 															<td  width="193" align="right" valign="top" height="19">
-																<category:getoptionvalue categoryKey="<%= org.digijava.module.aim.helper.CategoryConstants.IMPLEMENTATION_LOCATION_KEY%>" categoryIndex="1"/>
+																<c:set var="regionNormal">
+																	<category:getoptionvalue categoryKey="<%= org.digijava.module.aim.helper.CategoryConstants.IMPLEMENTATION_LOCATION_KEY%>" categoryIndex="1"/>	
+																</c:set>
+																${regionNormal}
 															</td>
 															<td  align="left" width="539" valign="top" height="19">
 																<html:select property="regionId"  onchange="regionChanged()">
-																	<html:option value="-1">-- Select Region --</html:option>
+																	<html:option value="-1">
+																		-- 
+																		<digi:trn key="aim:AmpSelectLocation">
+																			Select
+																		</digi:trn>
+																		${regionNormal}
+																		 --
+																	</html:option>
 																		<logic:notEmpty name="aimAddLocationForm" property="region">
 																			<html:optionsCollection name="aimAddLocationForm" property="region" 
 																							value="ampRegionId" label="name" />
@@ -231,11 +251,21 @@ function delet1(val1, val2) {
 													<logic:greaterEqual name="aimAddLocationForm" property="impLevelValue" value="1">
 														<tr>
 															<td  width="193" align="right" valign="top" height="19">
-																<category:getoptionvalue categoryKey="<%= org.digijava.module.aim.helper.CategoryConstants.IMPLEMENTATION_LOCATION_KEY%>" categoryIndex="2"/>
+																<c:set var="zoneNormal">
+																	<category:getoptionvalue categoryKey="<%= org.digijava.module.aim.helper.CategoryConstants.IMPLEMENTATION_LOCATION_KEY%>" categoryIndex="2"/>
+																</c:set>
+																${zoneNormal}
 															</td>
 															<td width="539" height="19">
 																<html:select property="zoneId" onchange="zoneChanged()">
-																	<html:option value="-1">-- Select Zone --</html:option>
+																	<html:option value="-1">
+																		-- 
+																		<digi:trn key="aim:AmpSelectLocation">
+																			Select
+																		</digi:trn>
+																		${zoneNormal}
+																		 --
+																	</html:option>
 																		<logic:notEmpty name="aimAddLocationForm" property="zone">
 																			<html:optionsCollection name="aimAddLocationForm" property="zone" 
 																					value="ampZoneId" label="name" />
@@ -274,11 +304,20 @@ function delet1(val1, val2) {
 													<logic:greaterEqual name="aimAddLocationForm" property="impLevelValue" value="1">
 														<tr>
 															<td  width="193" align="right" valign="top" height="19">
-																<category:getoptionvalue categoryKey="<%= org.digijava.module.aim.helper.CategoryConstants.IMPLEMENTATION_LOCATION_KEY%>" categoryIndex="3"/>
+																<c:set var="districtNormal"> 
+																	<category:getoptionvalue categoryKey="<%= org.digijava.module.aim.helper.CategoryConstants.IMPLEMENTATION_LOCATION_KEY%>" categoryIndex="3"/>
+																</c:set>
 															</td>
 															<td width="539" height="19">
 																<html:select property="woredaId" onchange="woredaChanged()">
-																	<html:option value="-1">-- Select District --</html:option>
+																	<html:option value="-1">
+																		-- 
+																		<digi:trn key="aim:AmpSelectLocation">
+																			Select
+																		</digi:trn>
+																		${districtNormal}
+																		 --
+																	</html:option>
 																		<logic:notEmpty name="aimAddLocationForm" property="woreda">
 																			<html:optionsCollection name="aimAddLocationForm" property="woreda" 
 																				value="ampWoredaId" label="name" />

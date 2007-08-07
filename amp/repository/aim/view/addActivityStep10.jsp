@@ -6,6 +6,9 @@
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
 <%@ taglib uri="/taglib/category" prefix="category" %>
+<%@ taglib uri="/taglib/fieldVisibility" prefix="field" %>
+<%@ taglib uri="/taglib/featureVisibility" prefix="feature" %>
+<%@ taglib uri="/taglib/moduleVisibility" prefix="module" %>
 
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/addActivity.js"/>"></script>
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
@@ -329,7 +332,7 @@
 											<tr>
 												<td colspan="2">
 													<table cellspacing="0" cellpadding="3" valign="top" align="center" width="90%">
-														<logic:empty name="SA" scope="application">
+														<field:display name="Logframe Category" feature="Logframe">
 															<tr>
 																<td >
 																	Logframe Category
@@ -338,7 +341,7 @@
 																	<category:showoptions name="aimEditActivityForm" property="logframeCategory" keyName="logframe" styleClass="inp-text" />
 																</td>
 															</tr>
-														</logic:empty>										
+														</field:display>
 														<c:if test="${aimEditActivityForm.workingTeamLeadFlag=='no'}">
 															
 															<tr>

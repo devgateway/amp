@@ -142,10 +142,7 @@ function commentWin(val) {
 											title="${translation}">
 											<digi:trn key="aim:channelOverview">Channel Overview</digi:trn>
 										</digi:link> &nbsp;&gt;&nbsp; Overview&nbsp;&gt;&nbsp;
-										<bean:define id="perspectiveNameLocal" name="aimChannelOverviewForm" property="perspective"
-										type="java.lang.String"/>
 
-										&nbsp;
 										<digi:trn key="aim:perspective">Perspective</digi:trn> </SPAN></TD>
 										<TD align="right" nowrap="nowrap">
 										<module:display name="Previews">

@@ -814,7 +814,7 @@
 
 							            	<div align="center">
 
-							              		<digi:trn key="aim:MOFED">Mofed</digi:trn> Planned 
+							              		<digi:trn key="aim:Mofed">Mofed</digi:trn> Planned 
 
 							             	</div>
 
@@ -840,7 +840,7 @@
 
 							            	<div align="center">
 
-							              		<digi:trn key="aim:MOFED">Mofed</digi:trn> Actuals 
+							              		<digi:trn key="aim:Mofed">Mofed</digi:trn> Actuals 
 
 							            	</div>
 

@@ -136,7 +136,7 @@
 														</td>
 														<td align="left" width="50%" bgcolor="#f4f4f2">
 															<html:select property="defPerspective" styleClass="inp-text">
-																<html:option value="MOFED"><digi:trn key="aim:MOFED">Mofed</digi:trn></html:option>
+																<html:option value="MOFED"><digi:trn key="aim:Mofed">Mofed</digi:trn></html:option>
 																<html:option value="Donor">Donor</html:option>
 															</html:select>
 														</td>

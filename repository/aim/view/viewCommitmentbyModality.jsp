@@ -219,7 +219,7 @@
 						<logic:equal name="aimCommitmentbyDonorForm" property="filterFlag" value="true">
 							<html:select styleClass="dr-menu" property="perspectiveFilter">
 								<html:option value="DN">Donor View</html:option>
-								<html:option value="MA"><digi:trn key="aim:MOFED">Mofed</digi:trn></html:option>
+								<html:option value="MA"><digi:trn key="aim:Mofed">Mofed</digi:trn></html:option>
 							</html:select>
 						</logic:equal>
 						</td>

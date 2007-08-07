@@ -10,7 +10,7 @@
 
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
 
-
+<%@ taglib uri="/taglib/category" prefix="category" %>
 
 <digi:ref href="css/styles.css" type="text/css" rel="stylesheet" />
 
@@ -58,7 +58,7 @@
 
 	function addLoc() {
 
-	  level = document.aimAddLocationForm.edLevel.value;
+	  level = document.aimAddLocationForm.categoryLevel.value;
 
 	  if ((document.aimAddLocationForm.name.value.length==0) ||
 
@@ -72,7 +72,7 @@
 
       }
 
-      if (level == 'country') {
+      if (level == 0) { //is country
 
       	if ((document.aimAddLocationForm.iso.value.length==0) ||
 
@@ -239,10 +239,14 @@
 
 <html:hidden property="edFlag" />
 
-<html:hidden property="edLevel" />
+<html:hidden property="categoryLevel" />
 
 <html:hidden property="start" value="false" />
 
+	<c:set var="location">
+		<category:getoptionvalue categoryKey="<%= org.digijava.module.aim.helper.CategoryConstants.IMPLEMENTATION_LOCATION_KEY%>" 
+		categoryIndex="${aimAddLocationForm.categoryLevel}"/> 
+	</c:set>
 
 
 	<table cellPadding=5 cellSpacing=0 width="600">
@@ -279,13 +283,15 @@
 
 				<c:if test="${aimAddLocationForm.edAction == 'create'}">
 
-					<digi:trn key="aim:AmpAddRegion">Add Region</digi:trn>
+					<digi:trn key="aim:AmpAddALocation">Add</digi:trn> 
+					 ${location}
 
 				</c:if>
 
 				<c:if test="${aimAddLocationForm.edAction == 'edit'}">
 
-					<digi:trn key="aim:AmpEditRegion">Edit Region</digi:trn>
+					<digi:trn key="aim:AmpEditALocation">Edit</digi:trn> 
+					 ${location}
 
 				</c:if>
 
@@ -372,7 +378,7 @@
 
                                 							<c:choose>
 
-                                								<c:when test="${aimAddLocationForm.edLevel == 'country'}">
+                                								<c:when test="${aimAddLocationForm.categoryLevel == 0}">
 
                                 									<tr>
 

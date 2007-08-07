@@ -5,8 +5,13 @@
 <%@ taglib uri="/taglib/struts-html" prefix="html" %>
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
+<%@ taglib uri="/taglib/category" prefix="category" %>
 
 <digi:ref href="css/styles.css" type="text/css" rel="stylesheet" />
+
+<c:set var="translationDeletePopup">
+	<digi:trn key="aim:deleteLocationPopup">Are you sure about deleting this</digi:trn>
+</c:set>
 
 <script language="JavaScript">
 	
@@ -21,16 +26,16 @@
 	
 	function newWin(val1, val2) {
 		<digi:context name="selectLoc" property="context/module/moduleinstance/addLocation.do" />
-		url = "<%= selectLoc %>?edLevel=" + val1 + "&edAction=" + val2;
+		url = "<%= selectLoc %>?categoryLevel=" + val1 + "&edAction=" + val2;
 		document.aimAddLocationForm.action = url;
 		document.aimAddLocationForm.currUrl.value = "<%= selectLoc %>";
 		document.aimAddLocationForm.submit();
 	}
 	
-	function delet(val1, val2) {
+	function delet(val1, val2, val3) {
 		<digi:context name="selectLoc" property="context/module/moduleinstance/addLocation.do" />
-		url = "<%= selectLoc %>?edLevel=" + val1 + "&edAction=" + val2;
-			if (confirm("Are you sure about deleting this " + val1 + " ?")) {
+		url = "<%= selectLoc %>?categoryLevel=" + val1 + "&edAction=" + val2;
+			if (confirm("${translationDeletePopup} " + val3 + " ?")) {
 				document.aimAddLocationForm.action = url;
 				document.aimAddLocationForm.target = "_self";
 				document.aimAddLocationForm.submit();
@@ -152,7 +157,7 @@ function delet1(val1, val2) {
 													<logic:greaterEqual name="aimAddLocationForm" property="impLevelValue" value="1">
 														<tr>
 															<td width="193" align="right" valign="top" height="19">
-																<digi:trn key="aim:AmpCountry">Country</digi:trn>
+																<category:getoptionvalue categoryKey="<%= org.digijava.module.aim.helper.CategoryConstants.IMPLEMENTATION_LOCATION_KEY%>" categoryIndex="0"/>
 															</td>
 															<td  align="left" width="539" valign="top" height="19">
 																<html:select property="countryId" onchange="countryChanged()"	>
@@ -161,9 +166,14 @@ function delet1(val1, val2) {
 																		   value="iso" label="countryName" />
 																</html:select>
 																<br>
+																<c:set var="country">
+																	<category:getoptionvalue lowerCase="true" categoryKey="<%= org.digijava.module.aim.helper.CategoryConstants.IMPLEMENTATION_LOCATION_KEY%>" categoryIndex="0"/>
+																</c:set>
 																<digi:img src="module/aim/images/arrow-014E86.gif" 	width="15" height="10" />
-																	<a href="javascript:newWin('country','create')">
-																	<digi:trn key="aim:AmpAddCountry">Add a country</digi:trn></a>
+																	<a href="javascript:newWin(0,'create')">
+																		<digi:trn key="aim:AmpAddALocation">Add a</digi:trn> 
+																		 ${country}
+																	</a>
 																<%--
 																<logic:notEqual name="aimAddLocationForm" property="countryId" value="">
 																	<digi:img src="module/aim/images/arrow-014E86.gif" 	width="15" height="10" />
@@ -178,7 +188,7 @@ function delet1(val1, val2) {
 													<logic:greaterEqual name="aimAddLocationForm" property="impLevelValue" value="1">
 														<tr>
 															<td  width="193" align="right" valign="top" height="19">
-																<digi:trn key="aim:AmpRegion">Region</digi:trn>
+																<category:getoptionvalue categoryKey="<%= org.digijava.module.aim.helper.CategoryConstants.IMPLEMENTATION_LOCATION_KEY%>" categoryIndex="1"/>
 															</td>
 															<td  align="left" width="539" valign="top" height="19">
 																<html:select property="regionId"  onchange="regionChanged()">
@@ -190,18 +200,28 @@ function delet1(val1, val2) {
 																</html:select>
 																<br>
 																<logic:notEqual name="aimAddLocationForm" property ="countryId" value ="">
+																	<c:set var="region">
+																		<category:getoptionvalue lowerCase="true" categoryKey="<%= org.digijava.module.aim.helper.CategoryConstants.IMPLEMENTATION_LOCATION_KEY%>" categoryIndex="1"/>
+																	</c:set>
 																	<digi:img src="module/aim/images/arrow-014E86.gif" 	width="15" height="10"/>
-																	<a href="javascript:newWin('region','create')">
-																		<digi:trn key="aim:AmpAddRegion">Add a region</digi:trn></a>
+																	<a href="javascript:newWin(1,'create')">
+																		<digi:trn key="aim:AmpAddALocation">Add a</digi:trn> 
+																		 ${region}
+																	</a>
 																</logic:notEqual>
 																	<logic:notEqual name="aimAddLocationForm" property="regionId" value="-1">
 																		<digi:img src="module/aim/images/arrow-014E86.gif" 	width="15" height="10"/>
-																			<a href="javascript:newWin('region','edit')">
-																				<digi:trn key="aim:AmpEditRegion">Edit this region</digi:trn></a>
+																			<a href="javascript:newWin(1,'edit')">
+																				<digi:trn key="aim:AmpEditThisLocation">Edit this</digi:trn> 
+																				 ${region}
+																			</a>
 																		<logic:equal name="aimAddLocationForm" property="regionFlag" value="yes">
 																			<digi:img src="module/aim/images/arrow-014E86.gif" 	width="15" height="10"/>
-																			<a href="javascript:delet('region','delete')">
-																				<digi:trn key="aim:AmpDeleteRegion">Delete this region</digi:trn></a>
+																			<a href="javascript:delet(1,'delete', '${region}' )">
+																				<digi:trn key="aim:AmpDeleteThisLocation">Delete this</digi:trn> 
+																				 ${region }
+																			</a>
+																				
 																		</logic:equal>
 												                    </logic:notEqual>
 															</td>
@@ -211,7 +231,7 @@ function delet1(val1, val2) {
 													<logic:greaterEqual name="aimAddLocationForm" property="impLevelValue" value="1">
 														<tr>
 															<td  width="193" align="right" valign="top" height="19">
-																<digi:trn key="aim:AmpZone">Zone</digi:trn>
+																<category:getoptionvalue categoryKey="<%= org.digijava.module.aim.helper.CategoryConstants.IMPLEMENTATION_LOCATION_KEY%>" categoryIndex="2"/>
 															</td>
 															<td width="539" height="19">
 																<html:select property="zoneId" onchange="zoneChanged()">
@@ -223,21 +243,27 @@ function delet1(val1, val2) {
 																</html:select>
 																<br>
 																<!--here -->
-															<logic:notEqual name="aimAddLocationForm" 			property="regionId"  value="-1">
+															<logic:notEqual name="aimAddLocationForm" property="regionId"  value="-1">
+																	<c:set var="zone">
+																		<category:getoptionvalue lowerCase="true" categoryKey="<%= org.digijava.module.aim.helper.CategoryConstants.IMPLEMENTATION_LOCATION_KEY%>" categoryIndex="2"/>
+																	</c:set>
 																	<digi:img src="module/aim/images/arrow-014E86.gif" 	width="15" height="10"/>
-																	<a href="javascript:newWin('zone','create')">
-																		<digi:trn key="aim:AmpAddZone">Add a zone </digi:trn>
-																	</a>
+																	<a href="javascript:newWin(2,'create')">
+																		<digi:trn key="aim:AmpAddALocation">Add a</digi:trn> 
+																		 ${zone}
+																	</a> 
 																</logic:notEqual>
 																	<logic:notEqual name="aimAddLocationForm" property="zoneId"  value="-1">
 																		<digi:img src="module/aim/images/arrow-014E86.gif" 	width="15" height="10"/>
-																			<a href="javascript:newWin('zone','edit')">
-																				<digi:trn key="aim:AmpEditZone">Edit this zone</digi:trn>
+																			<a href="javascript:newWin(2,'edit')">
+																				<digi:trn key="aim:AmpEditThisLocation">Edit this</digi:trn> 
+																				 ${zone}
 																			</a>
 																		<logic:equal name="aimAddLocationForm" property="zoneFlag" value="yes">
 																			<digi:img src="module/aim/images/arrow-014E86.gif" 	width="15" height="10"/>
-																				<a href="javascript:delet('zone','delete')">
-																					<digi:trn key="aim:AmpDeleteZone">Delete this zone</digi:trn>
+																				<a href="javascript:delet(2,'delete', '${zone}')">
+																					<digi:trn key="aim:AmpDeleteThisLocation">Delete this</digi:trn> 
+																					 ${zone }
 																				</a>
 																		</logic:equal>
 												                	</logic:notEqual>
@@ -248,7 +274,7 @@ function delet1(val1, val2) {
 													<logic:greaterEqual name="aimAddLocationForm" property="impLevelValue" value="1">
 														<tr>
 															<td  width="193" align="right" valign="top" height="19">
-																<digi:trn key="aim:AmpWoreda">Woreda</digi:trn>
+																<category:getoptionvalue categoryKey="<%= org.digijava.module.aim.helper.CategoryConstants.IMPLEMENTATION_LOCATION_KEY%>" categoryIndex="3"/>
 															</td>
 															<td width="539" height="19">
 																<html:select property="woredaId" onchange="woredaChanged()">
@@ -261,21 +287,26 @@ function delet1(val1, val2) {
 																<br>
 																<logic:notEqual name ="aimAddLocationForm"
 																property="zoneId" value="-1">
-
+																	<c:set var="district">
+																		<category:getoptionvalue lowerCase="true" categoryKey="<%= org.digijava.module.aim.helper.CategoryConstants.IMPLEMENTATION_LOCATION_KEY%>" categoryIndex="3"/>
+																	</c:set>
 																	<digi:img src="module/aim/images/arrow-014E86.gif" 	width="15" height="10"/>
-																	<a href="javascript:newWin('woreda','create')">
-																		<digi:trn key="aim:AmpAddWoreda">Add a district</digi:trn>
+																	<a href="javascript:newWin(3,'create')">
+																		<digi:trn key="aim:AmpAddALocation">Add a</digi:trn> 
+																		 ${district}
 																	</a>
                                                                  </logic:notEqual>
 																	<logic:notEqual name="aimAddLocationForm" property="woredaId"  value="-1">
 																		<digi:img src="module/aim/images/arrow-014E86.gif" 	width="15" height="10"/>
-																			<a href="javascript:newWin('woreda','edit')">
-																				<digi:trn key="aim:AmpEditWoreda">Edit this district</digi:trn>
+																			<a href="javascript:newWin(3,'edit')">
+																				<digi:trn key="aim:AmpEditThisLocation">Edit this</digi:trn> 
+																				 ${district }
 																			</a>
 																		<logic:equal name="aimAddLocationForm" property="woredaFlag"  value="yes">
 																			<digi:img src="module/aim/images/arrow-014E86.gif" 	width="15" height="10"/>
-																				<a href="javascript:delet1('woreda','delete')">
-																					<digi:trn key="aim:AmpDeleteWoreda">Delete this district</digi:trn>
+																				<a href="javascript:delet( 3, 'delete', '${district}' )">
+																					<digi:trn key="aim:AmpDeleteThisLocation">Delete this</digi:trn> 
+																					 ${district}
 																				</a>
 																		</logic:equal>
 																	</logic:notEqual>

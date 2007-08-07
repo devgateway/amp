@@ -47,11 +47,11 @@ public class LocationManager extends Action {
 		  			 	edFlag = false;
 		  			 	addForm.setEdFlag(null);
 		  			 	if (addForm.getEdAction().equals("delete")) {
-						 	addForm.setLevel(addForm.getEdLevel());
+						 	addForm.setLevel( this.getStringLevelName(addForm.getCategoryLevel()) );
 						 	edLevelFlag = true;
-						 }
+						}
 		  			 	addForm.setEdAction(null);
-					 	addForm.setEdLevel(null);
+					 	addForm.setCategoryLevel(null);
 		  			 }
 					 
 		  			 if (edFlag) {
@@ -172,6 +172,21 @@ public class LocationManager extends Action {
 					 
 					 return mapping.findForward("forward");
 			}
-}
 
+
+	private String getStringLevelName(Long level) {
+		switch ( (int)level.longValue() ) {
+			case 0:
+				return "country";
+			case 1:
+				return "region";
+			case 2:
+				return "zone";
+			case 3:
+				return "woreda";
+			default:
+				return null;
+		}
+	}
+}
 

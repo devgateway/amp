@@ -12,7 +12,7 @@
 		<tagclass>org.dgfoundation.amp.category.CategoryTagClass</tagclass>
 		<bodycontent>EMPTY</bodycontent>
 		<attribute>
-			<name>name</name>
+			<name>name</name> 
 			<required>true</required>
 			<rtexprvalue>true</rtexprvalue>
 		</attribute>
@@ -85,6 +85,16 @@
 		</attribute>
 		<attribute>
 			<name>categoryIndex</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>lowerCase</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>upperCase</name>
 			<required>false</required>
 			<rtexprvalue>true</rtexprvalue>
 		</attribute>

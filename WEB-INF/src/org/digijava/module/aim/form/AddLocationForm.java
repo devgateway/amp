@@ -36,8 +36,9 @@ public class AddLocationForm extends ValidatorForm {
 		  private Integer impLevelValue;
 		  private boolean start;
 		  
-		  private String edLevel = null;
-		  private String edAction = null;
+//		  private String edLevel = null;
+		  private Long categoryLevel	= null;
+		  private String edAction 	= null;
 		  
 		  /** 'yes'- location created, edited-II, deleted
 		   *  'on'- edited-II
@@ -92,7 +93,7 @@ public class AddLocationForm extends ValidatorForm {
 			else if ("off".equalsIgnoreCase(edFlag)) {
 				if (null == name || "".equals(name))
 					errors.add("name", new ActionError("error.aim.addLocation.noName"));
-				if ("country".equalsIgnoreCase(edLevel)) {
+				if (categoryLevel != null && categoryLevel.longValue() == 0) {
 					//errors = super.validate(mapping, req);
 					if (null == iso || "".equals(iso))
 						errors.add("iso", new ActionError("error.aim.addLocation.noIso"));
@@ -144,13 +145,6 @@ public class AddLocationForm extends ValidatorForm {
 			this.edFlag = edFlag;
 		  }
 		  
-		  public String getEdLevel() {
-			return edLevel;
-		  }
-
-		  public void setEdLevel(String edLevel) {
-			this.edLevel = edLevel;
-		  }
 		  
 		  public String getEdAction() {
 			return edAction;
@@ -318,6 +312,14 @@ public class AddLocationForm extends ValidatorForm {
 
 		public void setIso3(String iso3) {
 			this.iso3 = iso3;
+		}
+
+		public Long getCategoryLevel() {
+			return categoryLevel;
+		}
+
+		public void setCategoryLevel(Long categoryLevel) {
+			this.categoryLevel = categoryLevel;
 		}
 }
 

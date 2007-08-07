@@ -352,6 +352,13 @@ function loadPage()
 							   </digi:trn>
 							</b>
 						</logic:equal>
+						<logic:equal name="aimAddOrgForm" property="flag" value="fundReferences" >
+							<b><digi:trn key="aim:cannotDeleteOrgMsg"><font color="#FF0000">
+                               		Can not delete this organization as it is currently referenced by fundings !</font>
+							   </digi:trn>
+							</b>
+						</logic:equal>
+						
 						<logic:equal name="aimAddOrgForm" property="flag" value="orgCodeExist" >
 							<b><digi:trn key="aim:orgCodeExistMsg"><font color="#FF0000">
                                		Please choose other organization code as it is currently in use by some other organization !</font>

@@ -5,7 +5,9 @@
 <%@ taglib uri="/taglib/struts-html" prefix="html" %>
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
-
+<%@ taglib uri="/taglib/fieldVisibility" prefix="field" %>
+<%@ taglib uri="/taglib/featureVisibility" prefix="feature" %>
+<%@ taglib uri="/taglib/moduleVisibility" prefix="module" %>
 <script language="JavaScript">
 <!--
 
@@ -71,6 +73,7 @@
 			</digi:form>
 		</TD>
 	</TR>
+
    <TR>
 		<TD>
 
@@ -82,29 +85,41 @@
 							<TD vAlign=center><span class=subtitle-blue>
 								<bean:write name="aimMainProjectDetailsForm" property="name"/></span>
 							</TD>
+							<module:display name="Project ID and Planning">
+							<feature:display module="Project ID and Planning" name="Identification">
 							<TD align="right">
 								<SPAN class=crumb>
+									<field:display name="Description" feature="Identification">
 									<div id="gen" title='<digi:trn key="aim:clickToViewProjectDescription">Click here to View Project Description</digi:trn>'>
 									<a href="javascript:viewProjectDetails('Desc','<c:out value="${aimMainProjectDetailsForm.description}"/>')" 
 									class="comment">
 									<digi:trn key="aim:viewDescription">View Description</digi:trn></a></div>
 									&nbsp;&nbsp;
+									</field:display>
+									<field:display name="Objectives" feature="Identification">
 									<div id="gen" title='<digi:trn key="aim:clickToViewProjectObjectives">Click here to View Project Objectives</digi:trn>'>
 									<a href="javascript:viewProjectDetails('Obj','<c:out value="${aimMainProjectDetailsForm.objectives}"/>')" 
 									class="comment">
 										<digi:trn key="aim:viewObjectives">View Objectives</digi:trn></a></div>
 									&nbsp;&nbsp;
+									</field:display>
+									<field:display name="Purpose" feature="Identification">
 									<div id="gen" title='<digi:trn key="aim:clickToViewProjectPurpose">Click here to View Project Purpose</digi:trn>'>
 									<a href="javascript:viewProjectDetails('Purp','<c:out value="${aimMainProjectDetailsForm.purpose}"/>')" 
 									class="comment">
 										<digi:trn key="aim:viewPurpose">View Purpose</digi:trn></a></div>
 									&nbsp;&nbsp;
+									</field:display>
+									<field:display name="Results" feature="Identification">
 									<div id="gen" title='<digi:trn key="aim:clickToViewProjectResults">Click here to View Project Results</digi:trn>'>
 									<a href="javascript:viewProjectDetails('Res','<c:out value="${aimMainProjectDetailsForm.results}"/>')" 
 									class="comment">
 										<digi:trn key="aim:viewResults">View Results</digi:trn></a></div>
+									</field:display>
 								</SPAN>									
 							</TD>
+							</feature:display>
+							</module:display>
 							</TR>
 						</TABLE>
 					</TD>

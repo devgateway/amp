@@ -11,7 +11,9 @@
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
 
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
-
+<%@ taglib uri="/taglib/fieldVisibility" prefix="field" %>
+<%@ taglib uri="/taglib/featureVisibility" prefix="feature" %>
+<%@ taglib uri="/taglib/moduleVisibility" prefix="module" %>
 <script type="text/javascript">
 
 function login()
@@ -66,7 +68,7 @@ function previewLogframe(id)
 
 
 
-
+aimChannelOverviewForm
 function preview(id)
 
 {
@@ -176,24 +178,38 @@ function preview(id)
 							</TD>
 
 							<TD align=right>
-
-												<input type="button" value="<digi:trn key="aim:physical:preview">Preview</digi:trn>" class="dr-menu"
-
-												onclick="preview(<c:out value="${aimKnowledgeForm.id}"/>)">
-
-												<input type="button" value="<digi:trn key="aim:physical:edit">Edit</digi:trn>" class="dr-menu"
-
-												onclick="fnEditProject(<c:out value="${aimKnowledgeForm.id}"/>)">
+										<module:display name="Previews">
+											<feature:display name="Preview Activity" module="Previews">
+												<field:display feature="Preview Activity" name="Preview Button">
+													<input type="button" value="<digi:trn key="aim:physical:preview">Preview</digi:trn>" class="dr-menu"
+														onclick="preview(<c:out value="${aimKnowledgeForm.id}"/>)">
+												</field:display>
+											</feature:display>
+										</module:display>
+										<module:display name="Previews">
+											<feature:display name="Edit Activity" module="Previews">
+												<field:display feature="Edit Activity" name="Edit Activity Button">
+													<input type="button" value="<digi:trn key="aim:physical:edit">Edit</digi:trn>" class="dr-menu"
+														onclick="fnEditProject(<c:out value="${aimKnowledgeForm.id}"/>)">
+												</field:display>
+											</feature:display>
+										</module:display>
 														&nbsp;
-											<logic:empty name="SA" scope="application">
-												<input type="button" value="Preview Logframe" class="dr-menu"	onclick="previewLogframe(<c:out value="${aimKnowledgeForm.id}"/>)">
-											</logic:empty>
-											<logic:empty name="SA" scope="application">
-
-												<input type='button' value='<digi:trn key="aim:projectFiche">Project Fiche</digi:trn>' class='dr-menu'
-
-												onclick='projectFiche(<c:out value="${aimKnowledgeForm.id}"/>)'>
-											</logic:empty>
+										<module:display name="Previews">
+											<feature:display name="Logframe" module="Previews">
+												<field:display name="Logframe Preview Button" feature="Logframe" >
+													<input type="button" value="Preview Logframe" class="dr-menu"	onclick="previewLogframe(<c:out value="${aimKnowledgeForm.id}"/>)">
+												</field:display>
+											</feature:display>
+										</module:display>
+										<module:display name="Previews">
+											<feature:display name="Project Fiche" module="Previews">
+												<field:display name="Project Fiche Button" feature="Project Fiche" >
+													<input type='button' value='<digi:trn key="aim:projectFiche">Project Fiche</digi:trn>' class='dr-menu'
+														onclick='projectFiche(<c:out value="${aimKnowledgeForm.id}"/>)'>
+												</field:display>
+											</feature:display>
+										</module:display>
 
 																				
 

@@ -5,6 +5,9 @@
 <%@ taglib uri="/taglib/struts-html" prefix="html" %>
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
+<%@ taglib uri="/taglib/fieldVisibility" prefix="field" %>
+<%@ taglib uri="/taglib/featureVisibility" prefix="feature" %>
+<%@ taglib uri="/taglib/moduleVisibility" prefix="module" %>
 
 <script type="text/javascript">
 function login()
@@ -29,6 +32,21 @@ function preview(id)
 	document.aimPhysicalProgressForm.target = "_self";
     document.aimPhysicalProgressForm.submit();
 }
+function previewLogframe(id)
+{
+	openResisableWindow(700, 650);
+	<digi:context name="addUrl" property="context/module/moduleinstance/editActivity.do" />
+   	document.aimPhysicalProgressForm.action = "<%=addUrl%>~pageId=1~step=1~action=edit~surveyFlag=true~logframepr=true~activityId=" + id + "~actId=" + id;
+	document.aimPhysicalProgressForm.target = popupPointer.name;
+    document.aimPhysicalProgressForm.submit();
+}
+
+function projectFiche(id)
+{
+	<digi:context name="ficheUrl" property="context/module/moduleinstance/projectFicheExport.do" />
+	window.open ( "<%=ficheUrl%>~ampActivityId=" + id,"<digi:trn key="aim:projectFiche">Project Fiche</digi:trn>");
+}
+
 
 </script>
 <digi:errors/>
@@ -74,10 +92,40 @@ method="post">
 									</SPAN>
 								</TD>
 								<TD align=right>
-												<input type="button" value="<digi:trn key="aim:physical:preview">Preview</digi:trn>" class="dr-menu"
-												onclick="preview(<c:out value="${aimPhysicalProgressForm.ampActivityId}"/>)">
-												<input type="button" value="<digi:trn key="aim:physical:edit">Edit</digi:trn>" class="dr-menu"
-												onclick="fnEditProject(<c:out value="${aimPhysicalProgressForm.ampActivityId}"/>)">
+											<module:display name="Previews">
+												<feature:display name="Preview Activity" module="Previews">
+													<field:display feature="Preview Activity" name="Preview Button">
+														<input type="button" value="<digi:trn key="aim:physical:preview">Preview</digi:trn>" class="dr-menu"
+															onclick="preview(<c:out value="${aimPhysicalProgressForm.ampActivityId}"/>)">
+													</field:display>
+												</feature:display>
+											</module:display>
+											<module:display name="Previews">
+												<feature:display name="Edit Activity" module="Previews">
+													<field:display feature="Edit Activity" name="Edit Activity Button">
+														<input type="button" value="<digi:trn key="aim:physical:edit">Edit</digi:trn>" class="dr-menu"
+															onclick="fnEditProject(<c:out value="${aimPhysicalProgressForm.ampActivityId}"/>)">
+													</field:display>
+												</feature:display>
+											</module:display>
+										<module:display name="Previews">
+												<feature:display name="Logframe" module="Previews">
+													<field:display name="Logframe Preview Button" feature="Logframe" >
+														<input type="button" value='<digi:trn key="aim:previewLogframe">Preview Logframe</digi:trn>' class="dr-menu" 
+															onclick="previewLogframe(<c:out value="${aimPhysicalProgressForm.ampActivityId}"/>)">
+													</field:display>
+												</feature:display>
+										</module:display>
+										<module:display name="Previews">
+												<feature:display name="Project Fiche" module="Previews">
+													<field:display name="Project Fiche Button" feature="Project Fiche" >
+														<input type='button' value='<digi:trn key="aim:projectFiche">Project Fiche</digi:trn>' class='dr-menu'
+															onclick='projectFiche(<c:out value="${aimPhysicalProgressForm.ampActivityId}"/>)'>
+													</field:display>
+												</feature:display>
+										</module:display>
+											
+																							
 								</TD>
 							</TR>
 						</TABLE>

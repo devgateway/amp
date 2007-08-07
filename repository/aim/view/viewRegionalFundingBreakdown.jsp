@@ -5,6 +5,10 @@
 <%@ taglib uri="/taglib/struts-html" prefix="html" %>
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
+<%@ taglib uri="/taglib/fieldVisibility" prefix="field" %>
+<%@ taglib uri="/taglib/featureVisibility" prefix="feature" %>
+<%@ taglib uri="/taglib/moduleVisibility" prefix="module" %>
+
 <script type="text/javascript">
 	
 function fnEditProject(id)
@@ -22,6 +26,21 @@ function preview(id)
    document.aimRegionalFundingForm.action = "<%=addUrl%>~pageId=2~activityId=" + id;
 	document.aimRegionalFundingForm.target = "_self";
    document.aimRegionalFundingForm.submit();
+}
+
+function previewLogframe(id)
+{
+	openResisableWindow(700, 650);
+	<digi:context name="addUrl" property="context/module/moduleinstance/editActivity.do" />
+   	document.aimRegionalFundingForm.action = "<%=addUrl%>~pageId=1~step=1~action=edit~surveyFlag=true~logframepr=true~activityId=" + id + "~actId=" + id;
+	document.aimRegionalFundingForm.target = popupPointer.name;
+    document.aimRegionalFundingForm.submit();
+}
+
+function projectFiche(id)
+{
+	<digi:context name="ficheUrl" property="context/module/moduleinstance/projectFicheExport.do" />
+	window.open ( "<%=ficheUrl%>~ampActivityId=" + id,"<digi:trn key="aim:projectFiche">Project Fiche</digi:trn>");
 }
 
 </script>
@@ -72,10 +91,40 @@ function preview(id)
 												&nbsp;
 											</TD>
 											<TD align=right>
-												<input type="button" value="<digi:trn key="aim:physical:preview">Preview</digi:trn>" class="dr-menu"
-												onclick="preview(<c:out value="${aimRegionalFundingForm.ampActivityId}"/>)">
-												<input type="button" value="<digi:trn key="aim:physical:edit">Edit</digi:trn>" class="dr-menu"
-												onclick="fnEditProject(<c:out value="${aimRegionalFundingForm.ampActivityId}"/>)">
+											<module:display name="Previews">
+												<feature:display name="Preview Activity" module="Previews">
+													<field:display feature="Preview Activity" name="Preview Button">
+														<input type="button" value="<digi:trn key="aim:physical:preview">Preview</digi:trn>" class="dr-menu"
+															onclick="preview(<c:out value="${aimRegionalFundingForm.ampActivityId}"/>)">
+													</field:display>
+												</feature:display>
+											</module:display>
+											
+											<module:display name="Previews">
+												<feature:display name="Edit Activity" module="Previews">
+													<field:display feature="Edit Activity" name="Edit Activity Button">
+														<input type="button" value="<digi:trn key="aim:physical:edit">Edit</digi:trn>" class="dr-menu"
+															onclick="fnEditProject(<c:out value="${aimRegionalFundingForm.ampActivityId}"/>)">
+													</field:display>
+												</feature:display>
+											</module:display>
+												
+												<module:display name="Previews">
+													<feature:display name="Logframe" module="Previews">
+														<field:display name="Logframe Preview Button" feature="Logframe" >
+															<input type="button" value='<digi:trn key="aim:previewLogframe">Preview Logframe</digi:trn>' class="dr-menu" onclick="previewLogframe(<c:out value="${aimRegionalFundingForm.ampActivityId}"/>)">
+														</field:display>
+													</feature:display>
+												</module:display>
+												
+												<module:display name="Previews">
+													<feature:display name="Project Fiche" module="Previews">
+														<field:display name="Project Fiche Button" feature="Project Fiche" >
+															<input type='button' value='<digi:trn key="aim:projectFiche">Project Fiche</digi:trn>' class='dr-menu'
+															onclick='projectFiche(<c:out value="${aimRegionalFundingForm.ampActivityId}"/>)'>
+														</field:display>
+													</feature:display>
+												</module:display>
 											</TD>
 										</TR>
 									</TABLE>										

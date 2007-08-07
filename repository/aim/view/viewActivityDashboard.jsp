@@ -8,7 +8,9 @@
 <%@ taglib uri="/taglib/struts-html" prefix="html" %>
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
-
+<%@ taglib uri="/taglib/fieldVisibility" prefix="field" %>
+<%@ taglib uri="/taglib/featureVisibility" prefix="feature" %>
+<%@ taglib uri="/taglib/moduleVisibility" prefix="module" %>
 <digi:instance property="aimActivityDashboardForm" />
 
 <script language="Javascript">
@@ -88,16 +90,38 @@ method="post">
 <TABLE cellSpacing=0 cellPadding=0 align="center" vAlign="top" border=0 width="100%">
 	<TR>
 		<TD align=right>
-			<input type="button" value="Preview" class="dr-menu" onclick="preview('<%=actId%>')">
-			<input type="button" value="Edit" class="dr-menu" onclick="fnEditProject('<%=actId%>')">
-						&nbsp;
-			<logic:empty name="SA" scope="application">
-			<input type="button" value="Preview Logframe" class="dr-menu" onclick="previewLogframe('<%=actId%>')">
-			</logic:empty>
-				<logic:empty name="SA" scope="application">
-				<input type='button' value='<digi:trn key="aim:projectFiche">Project Fiche</digi:trn>' class='dr-menu'
-												onclick='projectFiche(<%=actId%>)'>
-				</logic:empty>
+										<module:display name="Previews">
+											<feature:display name="Preview Activity" module="Previews">
+												<field:display feature="Preview Activity" name="Preview Button">
+	                                          		<input type="button" value="Preview" class="dr-menu" onclick="preview('<%=actId%>')">
+												</field:display>
+											</feature:display>
+										</module:display>	
+										
+										<module:display name="Previews">
+											<feature:display name="Edit Activity" module="Previews">
+												<field:display feature="Edit Activity" name="Edit Activity Button">
+													<input type="button" value="Edit" class="dr-menu" onclick="fnEditProject('<%=actId%>')">
+												&nbsp;
+												</field:display>		
+											</feature:display>
+										</module:display>
+										
+										<module:display name="Previews">
+												<feature:display name="Logframe" module="Previews">
+													<field:display name="Logframe Preview Button" feature="Logframe" >
+														<input type="button" value="Preview Logframe" class="dr-menu" onclick="previewLogframe('<%=actId%>')">
+													</field:display>
+												</feature:display>
+										</module:display>
+										<module:display name="Previews">
+												<feature:display name="Project Fiche" module="Previews">
+													<field:display name="Project Fiche Button" feature="Project Fiche" >
+														<input type='button' value='<digi:trn key="aim:projectFiche">Project Fiche</digi:trn>' class='dr-menu'
+															onclick='projectFiche(<%=actId%>)'>
+													</field:display>
+												</feature:display>
+										</module:display>
 										
 		</TD>
 	</TR>

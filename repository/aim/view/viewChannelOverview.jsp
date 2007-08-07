@@ -5,6 +5,10 @@
 <%@ taglib uri="/taglib/struts-html" prefix="html"%>
 <%@ taglib uri="/taglib/digijava" prefix="digi"%>
 <%@ taglib uri="/taglib/jstl-core" prefix="c"%>
+<%@ taglib uri="/taglib/fieldVisibility" prefix="field" %>
+<%@ taglib uri="/taglib/featureVisibility" prefix="feature" %>
+<%@ taglib uri="/taglib/moduleVisibility" prefix="module" %>
+
 <script language="JavaScript1.2" type="text/javascript"
 	src="<digi:file src="module/aim/scripts/dscript120.js"/>"></script>
 <script language="JavaScript1.2" type="text/javascript"
@@ -145,16 +149,33 @@ function commentWin(val) {
 										&nbsp;
 										<digi:trn key="aim:perspective">Perspective</digi:trn> </SPAN></TD>
 										<TD align="right" nowrap="nowrap">
-                                          <input type="button" value='<digi:trn key="aim:preview">Preview</digi:trn>'
-											class="dr-menu"
-											onclick="preview(<c:out value="${activity.activityId}"/>)"> <c:if
-											test="${aimChannelOverviewForm.buttonText == 'edit'}">
-											<input type="button" value='<digi:trn key="aim:edit">Edit</digi:trn>' class="dr-menu"
-												onclick="fnEditProject(<c:out value="${activity.activityId}"/>)">
+										<module:display name="Previews">
+											<feature:display name="Preview Activity" module="Previews">
+												<field:display feature="Preview Activity" name="Preview Button">
+	                                          		<input type="button" value='<digi:trn key="aim:preview">Preview</digi:trn>' class="dr-menu"
+															onclick="preview(<c:out value="${activity.activityId}"/>)"> 
+												</field:display>
+											</feature:display>
+										</module:display>	
+										
+										<c:if test="${aimChannelOverviewForm.buttonText == 'edit'}">
+										<module:display name="Previews">
+											<feature:display name="Edit Activity" module="Previews">
+												<field:display feature="Edit Activity" name="Edit Activity Button">
+												<input type="button" value='<digi:trn key="aim:edit">Edit</digi:trn>' class="dr-menu"
+													onclick="fnEditProject(<c:out value="${activity.activityId}"/>)">
 												&nbsp;
-												<logic:empty name="SA" scope="application">
-													<input type="button" value='<digi:trn key="aim:previewLogframe">Preview Logframe</digi:trn>' class="dr-menu" onclick="previewLogframe(<c:out value="${activity.activityId}"/>)">
-												</logic:empty>
+												</field:display>		
+											</feature:display>
+										</module:display>
+										
+										<module:display name="Previews">
+												<feature:display name="Logframe" module="Previews">
+													<field:display name="Logframe Preview Button" feature="Logframe" >
+														<input type="button" value='<digi:trn key="aim:previewLogframe">Preview Logframe</digi:trn>' class="dr-menu" onclick="previewLogframe(<c:out value="${activity.activityId}"/>)">
+													</field:display>
+												</feature:display>
+										</module:display>
 										</c:if>
                                         <c:if test="${aimChannelOverviewForm.buttonText == 'validate'}">
 											<input type="button" value='<digi:trn key="aim:validate">Validate</digi:trn>' class="dr-menu"
@@ -164,10 +185,14 @@ function commentWin(val) {
 											<input type="button" value='<digi:trn key="aim:approvalAwaited">Approval Awaited</digi:trn>' class="dr-menu"
 												disabled>
 										</c:if>
-										<logic:empty name="SA" scope="application">
-											<input type='button' value='<digi:trn key="aim:projectFiche">Project Fiche</digi:trn>' class='dr-menu'
-												onclick='projectFiche(<c:out value="${activity.activityId}"/>)'>
-										</logic:empty>
+										<module:display name="Previews">
+												<feature:display name="Project Fiche" module="Previews">
+													<field:display name="Project Fiche Button" feature="Project Fiche" >
+														<input type='button' value='<digi:trn key="aim:projectFiche">Project Fiche</digi:trn>' class='dr-menu'
+														onclick='projectFiche(<c:out value="${activity.activityId}"/>)'>
+													</field:display>
+												</feature:display>
+										</module:display>
 										</TD>
 									</TR>
 								</TABLE>

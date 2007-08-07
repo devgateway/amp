@@ -5,6 +5,9 @@
 <%@ taglib uri="/taglib/struts-html" prefix="html" %>
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
+<%@ taglib uri="/taglib/fieldVisibility" prefix="field" %>
+<%@ taglib uri="/taglib/featureVisibility" prefix="feature" %>
+<%@ taglib uri="/taglib/moduleVisibility" prefix="module" %>
 
 
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/advanceReportManager.js"/>"></script>
@@ -152,7 +155,7 @@ function gotoStep() {
 						</html:radio>
 					</td>
 				</tr>
-				<logic:notEmpty name="SA" scope="application">
+				<field:display name="Contribution Report" feature="Reports">
 					<tr>
 					<td>
 						<html:radio property="reportType" value="contribution" >
@@ -162,7 +165,7 @@ function gotoStep() {
 						</html:radio>
 					</td>
 					</tr>
-				</logic:notEmpty>				
+				</field:display>
 			</table>
 			</td>
 			</tr>

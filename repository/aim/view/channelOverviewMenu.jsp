@@ -97,7 +97,7 @@
 					<TR><TD bgcolor="#f7f9e3">
 					<DIV id="leftNav">
 
-						<logic:notEmpty name="SA" scope="application">
+					
 						<logic:equal name="aimMainProjectDetailsForm" property="tabIndex" value="2">
 											  	<span id="leftNavSelected">
 							 <digi:trn key="aim:physicalProgress">Physical Progress</digi:trn>  
@@ -112,7 +112,7 @@
                  	</digi:link></div>
 					
 						</logic:notEqual>
-						</logic:notEmpty>
+
 					</td></tr>		
 					<TR><TD bgcolor="#f7f9e3">
 					<DIV id="leftNav">

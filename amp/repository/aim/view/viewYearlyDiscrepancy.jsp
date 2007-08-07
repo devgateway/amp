@@ -270,7 +270,7 @@
 							              	</td>
 							              	<td bgcolor="#DDDDDB">
 							              		<div align="center">
-							              			<digi:trn key="aim:MOFED">Mofed</digi:trn> Planned 
+							              			<digi:trn key="aim:Mofed">Mofed</digi:trn> Planned 
 							              		</div>
 							              	</td>
 							              	<td bgcolor="#DDDDDB">
@@ -283,7 +283,7 @@
 							              	</td>
 							              	<td bgcolor="#DDDDDB">
 							              		<div align="center">
-							              			<digi:trn key="aim:MOFED">Mofed</digi:trn> Actuals 
+							              			<digi:trn key="aim:Mofed">Mofed</digi:trn> Actuals 
 							              		</div>
 							              	</td>
 				            			</tr>

@@ -464,7 +464,7 @@
 
 												<html:select property="perspective" name="aimParisIndicatorReportForm" styleClass="dr-menu" >
 
-													<html:option value="MA"><digi:trn key="aim:MOFED">Mofed</digi:trn></html:option>
+													<html:option value="MA"><digi:trn key="aim:Mofed">Mofed</digi:trn></html:option>
 
 													<html:option value="DN"><digi:trn key="aim:DONOR">DONOR</digi:trn></html:option>
 

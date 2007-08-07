@@ -151,7 +151,7 @@ function commentWin(val) {
 										<bean:define id="perspectiveNameLocal" name="aimChannelOverviewForm" property="perspective"
 										type="java.lang.String"/>
 											<logic:notEmpty name="aimChannelOverviewForm" property="perspective">
-												<digi:trn key='<%="aim:"+ perspectiveNameLocal.toLowerCase() %>'>
+												<digi:trn key='<%="aim:"+ perspectiveNameLocal %>'>
 													<bean:write name="aimChannelOverviewForm" property="perspective"/></digi:trn>
 											</logic:notEmpty>
 										&nbsp;

@@ -104,7 +104,7 @@
 		</tr>
 
 		<tr>
-			<td><b><digi:trn key="rep:filer:Status">Status</digi:trn>Status</b></td>
+			<td><b><digi:trn key="rep:filer:Status">Status</digi:trn></b></td>
 			<td><b><digi:trn key="rep:filer:Risks">Risks</digi:trn></b></td>
 			<td>
 			<b><digi:trn key="rep:filer:LineMinRank">Line Min. Rank</digi:trn></b>

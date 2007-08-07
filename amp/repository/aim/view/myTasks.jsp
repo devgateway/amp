@@ -4,6 +4,9 @@
 <%@ taglib uri="/taglib/struts-html" prefix="html" %>
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
+<%@ taglib uri="/taglib/fieldVisibility" prefix="field" %>
+<%@ taglib uri="/taglib/featureVisibility" prefix="feature" %>
+<%@ taglib uri="/taglib/moduleVisibility" prefix="module" %>
 
 <TABLE align=center border=0 cellPadding=2 cellSpacing=3 width="100%" bgcolor="#f4f4f2">
 	<TR>
@@ -55,6 +58,7 @@
 		</TD>
 	</TR>
 	
+	<module:display name="My Messages">
 	<TR>
 		<TD class=r-dotted-lg-buttom vAlign=top>
 			<TABLE border=0 cellPadding=0 cellSpacing=0 width="100%" >
@@ -70,6 +74,7 @@
 						</TR>
 					</TABLE>
 				</TD></TR>
+				
 				
 				<logic:notEmpty name="myMessages" scope="session">
 				<TR><TD bgColor=#ffffff class=box-border align=left>
@@ -101,4 +106,5 @@
 			</TABLE>
 		</TD>
 	</TR>	
+	</module:display>
 </TABLE>

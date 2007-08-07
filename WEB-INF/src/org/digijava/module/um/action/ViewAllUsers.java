@@ -77,6 +77,7 @@ public class ViewAllUsers
                     ub.setEmail(user.getEmail());
                     ub.setFirstNames(user.getFirstNames());
                     ub.setLastName(user.getLastName());
+                    ub.setBan(user.isBanned());
 
                     Collection members = TeamMemberUtil.getTeamMembers(user.getEmail());
                     if(members != null) {

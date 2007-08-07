@@ -203,15 +203,19 @@
 															</td>
 														</tr>
 														<tr>
-															<td class=r-dotted-lg width=14>
-																<img src= "../ampTemplate/images/arrow_right.gif" border=0> <digi:trn key="aim:leve1"> Level 1</digi:trn>, 
-																<img src= "../ampTemplate/images/square1.gif" border=0>  <digi:trn key="aim:leve2"> Level 2</digi:trn>, 
-																<img src= "../ampTemplate/images/square2.gif" border=0>  <digi:trn key="aim:leve2"> Level 3</digi:trn>, 
-																<img src= "../ampTemplate/images/square3.gif" border=0>  <digi:trn key="aim:leve4"> Level 4</digi:trn>,
-																<img src= "../ampTemplate/images/square4.gif" border=0>  <digi:trn key="aim:leve5"> Level 5</digi:trn>,
-																<img src= "../ampTemplate/images/square5.gif" border=0>  <digi:trn key="aim:leve6"> Level 6</digi:trn>,
-																<img src= "../ampTemplate/images/square6.gif" border=0> <digi:trn key="aim:leve7"> Level 7</digi:trn>,
-																<img src= "../ampTemplate/images/square7.gif" border=0>  <digi:trn key="aim:leve8"> Level 8</digi:trn>.
+															<td >
+															<table  cellPadding=3 cellSpacing=1>
+			<tr>
+			<td><img src= "../ampTemplate/images/arrow_right.gif" border=0>  Level 1, </td>
+			<td>	<img src= "../ampTemplate/images/square1.gif" border=0>  Level 2, </td>
+			<td>	<img src= "../ampTemplate/images/square2.gif" border=0>  Level 3, </td>
+			<td>	<img src= "../ampTemplate/images/square3.gif" border=0>  Level 4, </td>
+			<td>	<img src= "../ampTemplate/images/square4.gif" border=0>  Level 5, </td>
+			<td>	<img src= "../ampTemplate/images/square5.gif" border=0>  Level 6, </td>
+			<td>	<img src= "../ampTemplate/images/square6.gif" border=0>  Level 7, </td>
+			<td>	<img src= "../ampTemplate/images/square7.gif" border=0>  Level 8. </td>
+			</tr>
+			</table>	
 															</td>
 														</tr>
 														<logic:notEmpty name="aimAllIndicatorForm" property="prgIndicators">

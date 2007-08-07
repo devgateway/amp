@@ -28,7 +28,7 @@ public class AddLocation extends Action
   {
 	 AddLocationForm addForm = (AddLocationForm) form;
 	 
-	 String level = addForm.getEdLevel();
+	 Long categoryLevel	 = addForm.getCategoryLevel();
 	 String action = addForm.getEdAction();
 	 boolean edFlag = false;
 	 if (addForm.getEdFlag()!= null && addForm.getEdFlag().equals("on"))
@@ -55,7 +55,7 @@ public class AddLocation extends Action
 	 	if (addForm.getCountryId() != null) {
 	 		ctry = DbUtil.getDgCountry(addForm.getCountryId());
  		}
-	 	if ("country".equalsIgnoreCase(level)){
+	 	if ( categoryLevel.longValue() == 0 ){ // is country
 	 		if (LocationUtil.chkDuplicateIso(addForm.getName(), addForm.getIso(), addForm.getIso3())) {
 	 			ctry.setCountryName(addForm.getName());
 		 		ctry.setIso(addForm.getIso());
@@ -76,7 +76,7 @@ public class AddLocation extends Action
 	 			return mapping.findForward("forward");
 	 		}
 	 	}
-		if (level.equals("region")){
+		if ( categoryLevel.longValue() == 1 ){ // is region
 	 		reg = new AmpRegion();
 	 		if(ctry != null) {
 	 			reg.setCountry(ctry);
@@ -93,8 +93,8 @@ public class AddLocation extends Action
 	 		reg.setRegionCode(addForm.getCode());
 	 		DbUtil.add(reg);
 	 	}
-	 	if (level.equals("zone")){
-	 		reg = new AmpRegion();
+	 	if ( categoryLevel.longValue() == 2 ){ // is zone
+ 	 		reg = new AmpRegion();
 	 		zon = new AmpZone();
 	 		if(ctry != null) {
 	 			zon.setCountry(ctry);
@@ -117,7 +117,7 @@ public class AddLocation extends Action
 	 		zon.setZoneCode(addForm.getCode());
 	 		DbUtil.add(zon);
 	 	}		 
-	 	if (level.equals("woreda")){
+	 	if ( categoryLevel.longValue() == 3 ){ // is woreda
 	 		AmpWoreda w = new AmpWoreda();
 	 		zon = new AmpZone();
 	 		if (addForm.getZoneId() != null) {
@@ -147,7 +147,7 @@ public class AddLocation extends Action
    }
    else if ("edit".equals(action)) {
    	if (addForm.getName() == null || edFlag) {
-			if (level.equals("region")) {
+			if ( categoryLevel.longValue() == 1) { // is region
 				AmpRegion obj = LocationUtil.getAmpRegion(addForm.getRegionId());
 				if (obj.getName() != null)
 					addForm.setName(obj.getName());
@@ -174,7 +174,7 @@ public class AddLocation extends Action
 				else
 					addForm.setDescription("");
 			}
-			if (level.equals("zone")) {
+			if ( categoryLevel.longValue() == 2 ) { // is zone
 				AmpZone obj = LocationUtil.getAmpZone(addForm.getZoneId());
 				if (obj.getName() != null)
 					addForm.setName(obj.getName());
@@ -201,7 +201,7 @@ public class AddLocation extends Action
 				else
 					addForm.setDescription("");
 			}
-			if (level.equals("woreda")) {
+			if ( categoryLevel.longValue() == 3 ) { //is woreda
 				AmpWoreda obj = LocationUtil.getAmpWoreda(addForm.getWoredaId());
 				if (obj.getName() != null)
 					addForm.setName(obj.getName());
@@ -232,7 +232,7 @@ public class AddLocation extends Action
 	 	return mapping.findForward("forward");
 	 }
    	else {
-		 	if (level.equals("region")){
+		 	if ( categoryLevel.longValue() == 1 ){ // is region
 		 		AmpRegion obj = null;
 		 		if (addForm.getRegionId() != null) {
 		 			obj = LocationUtil.getAmpRegion(addForm.getRegionId());
@@ -251,7 +251,7 @@ public class AddLocation extends Action
 		 
 		 		DbUtil.update(obj);
 		 	}
-		 	if (level.equals("zone")){
+		 	if ( categoryLevel.longValue() == 2 ){ // is zone
 		 		AmpZone obj = null;
 		 		if (addForm.getZoneId() != null) {
 		 			obj = LocationUtil.getAmpZone(addForm.getZoneId());
@@ -270,7 +270,7 @@ public class AddLocation extends Action
 		 
 		 		DbUtil.update(obj);
 		 	}
-		 	if (level.equals("woreda")){
+		 	if ( categoryLevel.longValue() == 3 ){ // is woreda
 		 		AmpWoreda obj = null;
 		 		if (addForm.getWoredaId() != null) {
 		 			obj = LocationUtil.getAmpWoreda(addForm.getWoredaId());
@@ -294,21 +294,21 @@ public class AddLocation extends Action
 		 	return mapping.findForward("added");
    	}
    }else if ("delete".equals(action)) {
-   		if (level.equals("region")){
+   		if ( categoryLevel.longValue() == 1 ){ //is region
    			AmpRegion obj = null;
    			if (addForm.getRegionId() != null) {
    				obj = LocationUtil.getAmpRegion(addForm.getRegionId());
    				DbUtil.delete(obj);
    			}
    		}
-   		if (level.equals("zone")){
+   		if ( categoryLevel.longValue() == 2 ){ //is zone
    			AmpZone obj = null;
    			if (addForm.getZoneId() != null) {
    				obj = LocationUtil.getAmpZone(addForm.getZoneId());
    				DbUtil.delete(obj);
    			}
    		}
-   		if (level.equals("woreda")){
+   		if ( categoryLevel.longValue() == 3 ){ //is woreda
    			AmpWoreda obj = null;
    			if (addForm.getWoredaId() != null) {
    				obj = LocationUtil.getAmpWoreda(addForm.getWoredaId());

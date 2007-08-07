@@ -17,6 +17,21 @@ public class CategoryValueTagClass extends TagSupport {
 	String categoryKey;
 	Long categoryIndex;
 	
+	boolean lowerCase	= false;
+	boolean upperCase	= false;
+	
+	public boolean getLowerCase() {
+		return lowerCase;
+	}
+	public void setLowerCase(boolean lowerCase) {
+		this.lowerCase = lowerCase;
+	}
+	public boolean getUpperCase() {
+		return upperCase;
+	}
+	public void setUpperCase(boolean upperCase) {
+		this.upperCase = upperCase;
+	}
 	public Long getCategoryValueId() {
 		return categoryValueId;
 	}
@@ -74,7 +89,12 @@ public class CategoryValueTagClass extends TagSupport {
 		
 		if (ampCategoryValue != null) {
 			try{
-				out.print( CategoryManagerUtil.translateAmpCategoryValue(ampCategoryValue, request, null) );
+				String translatedValue	= CategoryManagerUtil.translateAmpCategoryValue(ampCategoryValue, request, null);
+				if ( this.getLowerCase() )
+					translatedValue		= translatedValue.toLowerCase();
+				if ( this.getUpperCase() )
+					translatedValue		= translatedValue.toUpperCase();
+				out.print( translatedValue );
 			}
 			catch(Exception E){
 				logger.info(E);

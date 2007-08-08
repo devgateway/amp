@@ -11,6 +11,8 @@
 <bean:define id="bckColor" value="true" toScope="page"/>
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/arFunctions.js"/>"></script>
 
+<bean:define id="viewable" name="columnReport" type="org.dgfoundation.amp.ar.Viewable" scope="page" toScope="request"/>
+<jsp:include page="reportHeadings.jsp"/>
 <% String display=columnReport.getLevelDepth()>1?"display:none":"";%>
 
 <!-- generate total row -->

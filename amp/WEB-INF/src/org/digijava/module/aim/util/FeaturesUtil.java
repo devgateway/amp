@@ -1656,7 +1656,7 @@ public class FeaturesUtil {
 				AmpFeaturesVisibility feature=new AmpFeaturesVisibility();
 				AmpFieldsVisibility field=new AmpFieldsVisibility();
 				AmpTemplatesVisibility template=null;
-				Transaction tx;
+				Transaction tx = null;
 				try {
 					session = PersistenceManager.getSession();
 					tx=session.beginTransaction();
@@ -1673,6 +1673,12 @@ public class FeaturesUtil {
 					//tx.commit();
 					
 				} catch (Exception ex) {
+					try {
+						tx.rollback();
+					} catch (HibernateException e) {
+						logger.error(e);
+						e.printStackTrace();
+					}
 					logger.error("Exception : " + ex.getMessage());
 					ex.printStackTrace();
 				} finally {

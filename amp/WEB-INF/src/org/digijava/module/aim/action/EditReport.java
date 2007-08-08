@@ -117,6 +117,8 @@ public class EditReport extends Action {
 					this.removeAddedMeasuresFromPossibleMeasures(formBean);
 					
 					formBean.setInEditingMode( true );
+					
+			
 					formBean.setDbReportId( new Long(strReportId).longValue() );
 					
 					

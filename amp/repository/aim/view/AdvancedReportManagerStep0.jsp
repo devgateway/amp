@@ -155,7 +155,8 @@ function gotoStep() {
 						</html:radio>
 					</td>
 				</tr>
-				<field:display name="Contribution Report" feature="Reports">
+				<module:display name="Reports">
+				<feature:display module="Reports" name="Contribution Report">
 					<tr>
 					<td>
 						<html:radio property="reportType" value="contribution" >
@@ -165,7 +166,8 @@ function gotoStep() {
 						</html:radio>
 					</td>
 					</tr>
-				</field:display>
+				</feature:display>
+				</module:display>
 			</table>
 			</td>
 			</tr>

@@ -166,7 +166,7 @@ function commentWin(val) {
 											</feature:display>
 										</module:display>	
 										
-										<c:if test="${aimChannelOverviewForm.buttonText == 'edit'}">
+										
 										<module:display name="Previews">
 											<feature:display name="Edit Activity" module="Previews">
 												<field:display feature="Edit Activity" name="Edit Activity Button">
@@ -184,7 +184,7 @@ function commentWin(val) {
 													</field:display>
 												</feature:display>
 										</module:display>
-										</c:if>
+										
                                         <c:if test="${aimChannelOverviewForm.buttonText == 'validate'}">
 											<input type="button" value='<digi:trn key="aim:validate">Validate</digi:trn>' class="dr-menu"
 												onclick="fnEditProject(<c:out value="${activity.activityId}"/>)">

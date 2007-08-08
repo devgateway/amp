@@ -872,14 +872,15 @@ public class ActivityUtil {
 		} catch (Exception e) {
 		 	logger.error("Unable to getAmpActivity");
 		 	e.printStackTrace(System.out);
-		} finally {
-			try {
-				session.close();
-			} catch (HibernateException e) {
-				logger.error("Unable to close session");
-				e.printStackTrace();
-			}
 		}
+//		finally {
+//			try {
+//				session.close();
+//			} catch (HibernateException e) {
+//				logger.error("Unable to close session");
+//				e.printStackTrace();
+//			}
+//		}
 	    return activity;
 	}
 

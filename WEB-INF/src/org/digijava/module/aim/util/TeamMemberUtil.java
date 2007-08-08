@@ -50,7 +50,7 @@ public class TeamMemberUtil {
 		Session session = null;
 
 		try {
-			session = PersistenceManager.getSession();
+			session = PersistenceManager.getRequestDBSession();
 			AmpTeamMember tm = (AmpTeamMember) session.load(AmpTeamMember.class,
 					id);
 			User user = tm.getUser();
@@ -66,15 +66,16 @@ public class TeamMemberUtil {
 		} catch (Exception e) {
 			logger.error("Exception from getFundOrgOfUser()");
 			e.printStackTrace(System.out);
-		} finally {
-			if (session != null) {
-				try {
-					PersistenceManager.releaseSession(session);
-				} catch (Exception rsf) {
-					logger.error("Release session failed");
-				}
-			}
-		}
+		} 
+//		finally {
+//			if (session != null) {
+//				try {
+//					PersistenceManager.releaseSession(session);
+//				} catch (Exception rsf) {
+//					logger.error("Release session failed");
+//				}
+//			}
+//		}
 
 		logger.info("OrgId is " + orgId);
 		return orgId;

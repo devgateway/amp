@@ -15,6 +15,10 @@
 </logic:present>
 <tr id='<bean:write name="groupReport" property="absoluteReportName"/>'><td>
 
+<!-- generate report headings -->
+<bean:define id="viewable" name="groupReport" property="firstColumnReport" type="org.dgfoundation.amp.ar.Viewable" scope="page" toScope="request"/>
+<jsp:include page="../reportHeadings.jsp"/>
+
 <logic:iterate name="groupReport"  property="items" id="item" scope="page">
 	<bean:define id="viewable" name="item" type="org.dgfoundation.amp.ar.Viewable" scope="page" toScope="request"/>
 	<jsp:include page="<%=viewable.getViewerPath()%>"/>	

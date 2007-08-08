@@ -30,6 +30,7 @@ import org.digijava.module.aim.dbentity.AmpOrgGroup;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
 import org.digijava.module.um.form.ViewEditUserForm;
 import org.digijava.module.um.util.DbUtil;
+import org.digijava.kernel.exception.DgException;
 
 public class ViewEditUser
     extends Action {
@@ -42,7 +43,8 @@ public class ViewEditUser
     HttpSession session = request.getSession();
     String isAmpAdmin = (String) session.getAttribute("ampAdmin");
     ActionErrors errors = new ActionErrors();
-    Site curSite=RequestUtils.getSite(request);
+    Site curSite = RequestUtils.getSite(request);
+    UserLangPreferences langPref = null;
 
     if (uForm.getId() != null) {
       user = UserUtils.getUser(uForm.getId());
@@ -50,6 +52,17 @@ public class ViewEditUser
     else if (uForm.getEmail() != null) {
       user = UserUtils.getUserByEmail(uForm.getEmail());
     }
+    try {
+      langPref = UserUtils.getUserLangPreferences(user,
+                                                  curSite);
+    }
+    catch (DgException ex) {
+      errors.add(ActionErrors.GLOBAL_ERROR, new ActionError(
+          ex.getMessage()));
+      saveErrors(request, errors);
+
+    }
+
     Boolean isBanned = uForm.getBan();
     if (isBanned != null) {
       if (isAmpAdmin.equals("yes")) {
@@ -76,8 +89,8 @@ public class ViewEditUser
           uForm.setCountries(sortedCountrieList);
         }
 
-    	Collection userLangs=TrnUtil.getSortedUserLanguages(request);
-    	uForm.setLanguages(userLangs);
+        Collection userLangs = TrnUtil.getSortedUserLanguages(request);
+        uForm.setLanguages(userLangs);
       }
 
       Collection orgTypeCol = DbUtil.getAllOrgTypes();
@@ -115,8 +128,14 @@ public class ViewEditUser
         uForm.setLastName(user.getLastName());
         uForm.setName(user.getName());
         uForm.setUrl(user.getUrl());
+        Locale language = null;
+        if (langPref == null) {
+          language = user.getRegisterLanguage();
+        }
+        else {
+          language = langPref.getNavigationLanguage();
 
-        Locale language = user.getRegisterLanguage();
+        }
         uForm.setSelectedLanguageCode(language.getCode());
         uForm.setSelectedOrgName(user.getOrganizationName());
 
@@ -176,26 +195,27 @@ public class ViewEditUser
           user.setOrganizationName(uForm.getSelectedOrgName());
           user.setUrl(uForm.getUrl());
 
-          Locale language = DbUtil.getLanguageByCode(uForm.getSelectedLanguageCode());
-          UserLangPreferences langPref = UserUtils.getUserLangPreferences(user, curSite);
+          Locale language = DbUtil.getLanguageByCode(uForm.
+              getSelectedLanguageCode());
+          //      UserLangPreferences langPref = UserUtils.getUserLangPreferences(user,   curSite);
           if (langPref == null) {
-        	  UserPreferences pref = UserUtils.getUserPreferences(user, curSite);
-        	  if (pref == null) {
-        		  pref = new UserPreferences(user, curSite);
-        		  pref.setPublicProfile(true);
-        		  pref.setReceiveAlerts(true);
-        		  pref.setBiography("");
-        		  UserUtils.saveUserPreferences(pref);
-        	  }
-        	  langPref = new UserLangPreferences();
-        	  langPref.setId(pref.getId());
-        	  langPref.setAlertsLanguage(language);
-        	  Set<Locale> contentLangs = new HashSet<Locale>();
-        	  langPref.setContentLanguages(contentLangs);
+            UserPreferences pref = UserUtils.getUserPreferences(user, curSite);
+            if (pref == null) {
+              pref = new UserPreferences(user, curSite);
+              pref.setPublicProfile(true);
+              pref.setReceiveAlerts(true);
+              pref.setBiography("");
+              UserUtils.saveUserPreferences(pref);
+            }
+            langPref = new UserLangPreferences();
+            langPref.setId(pref.getId());
+            langPref.setAlertsLanguage(language);
+            Set<Locale> contentLangs = new HashSet<Locale> ();
+            langPref.setContentLanguages(contentLangs);
           }
           langPref.setNavigationLanguage(language);
           UserUtils.saveUserLangPreferences(langPref);
-          
+
           DbUtil.updateUser(user);
           resetViewEditUserForm(uForm);
           return mapping.findForward("saved");

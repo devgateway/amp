@@ -1399,7 +1399,7 @@
 
 														<c:if test="${aimParisIndicatorReportForm.indicatorCode == '5a'}">
 
-															<strong><digi:trn key="aim:percentOfDonorsThatUseNational">Percent of donors that use national procurement systems</digi:trn></strong>
+															<strong><digi:trn key="aim:percentOfDonorsThatUseAllThree">Percent of donors that use all three partner's PFM procedures</digi:trn></strong>
 
 														</c:if>
 

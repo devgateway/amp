@@ -44,8 +44,9 @@ public class EditReport extends Action {
 			formBean.setMaxStep(new Integer(6));
 			String strReportId	= request.getParameter("rid");
 			if (strReportId.compareTo("") != 0) {
-				//AmpReports ampreport	= (AmpReports) session.get(AmpReports.class, new Long(strReportId));
-				AmpReports ampreport	= this.getAmpReport( request, new Long(strReportId).longValue() );
+				Session session = PersistenceManager.getSession();
+				AmpReports ampreport	= (AmpReports) session.get(AmpReports.class, new Long(strReportId));
+				//AmpReports ampreport	= this.getAmpReport( request, new Long(strReportId).longValue() );
 				
 				/* Must be removed */
 //				logger.info( "Ordered columns are:" + ampreport.getOrderedColumns() );
@@ -125,6 +126,7 @@ public class EditReport extends Action {
 				}
 				else 
 					logger.error("Couldn't find the AmpReport with rid " + strReportId);
+				session.close();
 			}
 			else{
 				logger.error("Couldn't find rid" + strReportId + "parameter in request.");
@@ -150,6 +152,13 @@ public class EditReport extends Action {
 		} catch (Exception e) {
 			logger.error(e);
 			e.printStackTrace();
+		} finally {
+			try {
+				pmsession.close();
+			} catch (HibernateException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 		/* Must be removed */
 //		logger.info("MY_REPORTS is:" + myreports);

@@ -11633,10 +11633,8 @@ public class ReportUtil {
 //----------Advanced Report Function--------------------------------
 
 	public static Collection getColumnList()
-	throws java.lang.Exception
 	{
 		Session session = null;
-		session = PersistenceManager.getSession();
 		String sqlQuery = "";
 		boolean flag =false;
 		Iterator iter = null;
@@ -11645,6 +11643,7 @@ public class ReportUtil {
 		AmpColumns ampColumns = new AmpColumns();
 		try
 		{
+			session = PersistenceManager.getSession();
 			sqlQuery = "select c from "+ AmpColumns.class.getName() + " c order by columnName asc";
 			query = session.createQuery(sqlQuery);
 			if (query != null) 
@@ -11661,7 +11660,15 @@ public class ReportUtil {
 		}
 		catch(Exception e)
 		{
+			logger.error(e);
 			System.out.println(" Error in getColumnList()  :  " + e);
+		} finally {
+			try {
+				session.close();
+			} catch (HibernateException e) {
+				logger.error(e);
+				e.printStackTrace();
+			}
 		}
 
 		return coll;
@@ -11669,10 +11676,8 @@ public class ReportUtil {
 	}
 
 	public static Collection getMeasureList()
-	throws java.lang.Exception
 	{
 		Session session = null;
-		session = PersistenceManager.getSession();
 		String sqlQuery = "";
 		boolean flag =false;
 		Iterator iter = null;
@@ -11681,6 +11686,7 @@ public class ReportUtil {
 		AmpMeasures ampMeasures = new AmpMeasures();
 		try
 		{
+			session = PersistenceManager.getSession();
 			sqlQuery = "select c from "+ AmpMeasures.class.getName() + " c";
 			query = session.createQuery(sqlQuery);
 			if (query != null) 
@@ -11697,11 +11703,17 @@ public class ReportUtil {
 		}
 		catch(Exception e)
 		{
+			logger.error(e);
 			System.out.println(" Error in getMeasureList()  :  " + e);
+		} finally {
+			try {
+				session.close();
+			} catch (HibernateException e) {
+				logger.error(e);
+				e.printStackTrace();
+			}
 		}
-
 		return coll;
-			
 	}
 
 	public static Collection generateQuery(Collection coll, Long ampTeamId)

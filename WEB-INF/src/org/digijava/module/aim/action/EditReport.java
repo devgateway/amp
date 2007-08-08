@@ -1,5 +1,6 @@
 package org.digijava.module.aim.action;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashSet;
@@ -10,6 +11,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import net.sf.hibernate.HibernateException;
 import net.sf.hibernate.Session;
 
 import org.apache.log4j.Logger;
@@ -120,14 +122,9 @@ public class EditReport extends Action {
 					
 			
 					formBean.setDbReportId( new Long(strReportId).longValue() );
-					
-					
-					
 				}
 				else 
 					logger.error("Couldn't find the AmpReport with rid " + strReportId);
-				
-			
 			}
 			else{
 				logger.error("Couldn't find rid" + strReportId + "parameter in request.");
@@ -136,23 +133,27 @@ public class EditReport extends Action {
 			return mapping.findForward("forward");
 	}
 	
-	private AmpReports getAmpReport(HttpServletRequest request, long rid) throws java.lang.Exception {
+	private AmpReports getAmpReport(HttpServletRequest request, long rid){
 		HttpSession session 	= request.getSession();
 		Collection myreports	= (Collection)session.getAttribute(Constants.MY_REPORTS);
 
-		Session pmsession 		= PersistenceManager.getSession();
+		Session pmsession = null;
+		try {
+			pmsession = PersistenceManager.getSession();
+			Iterator iterator		= myreports.iterator();
+			while ( iterator.hasNext() ) {
+				AmpReports report	= (AmpReports)iterator.next();
+				if ( report.getAmpReportId().longValue() == rid ) {
+					return (AmpReports) pmsession.get(AmpReports.class, new Long(rid));
+				}
+			}
+		} catch (Exception e) {
+			logger.error(e);
+			e.printStackTrace();
+		}
 		/* Must be removed */
 //		logger.info("MY_REPORTS is:" + myreports);
-		/* Must be removed */
-		
-		Iterator iterator		= myreports.iterator();
-		while ( iterator.hasNext() ) {
-			AmpReports report	= (AmpReports)iterator.next();
-			if ( report.getAmpReportId().longValue() == rid ) {
-				return (AmpReports) pmsession.get(AmpReports.class, new Long(rid));
-			}
-				
-		}
+		/* Must be removed */ 
 		return null;
 	}
 	

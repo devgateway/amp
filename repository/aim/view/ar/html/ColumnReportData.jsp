@@ -17,61 +17,6 @@
 
 <%int rowIdx = 2;%>
 
-<!-- generate report headings -->
-<logic:equal name="columnReport" property="globalHeadingsDisplayed" value="false">
-<%int maxDepth = columnReport.getMaxColumnDepth();
-				columnReport.setGlobalHeadingsDisplayed(new Boolean(true));
-				%>
-<%for (int curDepth = 0; curDepth <= columnReport.getMaxColumnDepth(); curDepth++, rowIdx++) {%>
-<tr>
-<logic:iterate name="columnReport" property="items" id="column" scope="page" type="org.dgfoundation.amp.ar.Column">
-	<%column.setCurrentDepth(curDepth);%>
-	<%int rowsp = column.getCurrentRowSpan();
-						%>
-	<logic:iterate name="column" property="subColumnList" id="subColumn" scope="page" type="org.dgfoundation.amp.ar.Column">
-	<td align="center" class=clsTableTitleCol rowspan="<%=rowsp%>" colspan='<bean:write name="subColumn" property="width"/>'>
-	
-	<logic:equal name="column" property="columnDepth" value="1">
-	<html:link style="color:#FFFFFF;cursor:pointer" page="/viewNewAdvancedReport.do" paramName="column" paramProperty="name" paramId="sortBy">
-		
-	<c:set var="heatTitle1">
-		<%=subColumn.getName(reportMeta.getHideActivities()).toLowerCase().replaceAll(" ", "")%>
-	</c:set>	
-	<digi:trn key="aim:popwin:${heatTitle1}"><%=subColumn.getName(reportMeta.getHideActivities())%></digi:trn>
-
-
-	</html:link>
-	<c:if test="${column.name == columnReport.sorterColumn}">
-	<logic:equal name="columnReport" property="sortAscending" value="false">
-	<img src= "../ampTemplate/images/down.gif" align="absmiddle" border="0"/>
-	</logic:equal>
-	<logic:equal name="columnReport" property="sortAscending" value="true">
-	<img src= "../ampTemplate/images/up.gif" align="absmiddle" border="0"/>
-	</logic:equal>
-
-	</c:if>
-	</logic:equal>
-	<logic:notEqual name="column" property="columnDepth" value="1">
-	
-	<c:set var="heatTitle">
-			<%=subColumn.getName(reportMeta.getHideActivities()).toLowerCase().replaceAll(" ", "")%>
-	</c:set>	
-			<digi:trn key="aim:popupwin:${heatTitle}"><%=subColumn.getName(reportMeta.getHideActivities())%></digi:trn>
-
-
-
-		
-	
-	</logic:notEqual>
-	</td>
-	
-	</logic:iterate>
-</logic:iterate>
-</tr>
-<%}
-			%>
-</logic:equal>
-
 <!-- generate report data -->
 
 <logic:notEqual name="reportMeta" property="hideActivities" value="true">

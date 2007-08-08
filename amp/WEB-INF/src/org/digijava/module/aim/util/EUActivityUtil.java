@@ -30,7 +30,7 @@ public final class EUActivityUtil {
 		Collection euActivities = new ArrayList();
 
 		try {
-			session = PersistenceManager.getSession() ;
+			session = PersistenceManager.getRequestDBSession();
 			String queryString = "select eu from " + EUActivity.class.getName() +
  			 " eu " +  "where (eu.activity.ampActivityId=:actId)";
 			Query qry = session.createQuery(queryString);
@@ -43,13 +43,14 @@ public final class EUActivityUtil {
 		} catch(Exception ex) {
 			logger.error("Unable to get EUActivities for activityid="+actId +" "+ ex);
 			ex.printStackTrace();
-		} finally {
-			try {
-				PersistenceManager.releaseSession(session);
-			} catch (Exception ex2) {
-				logger.error("releaseSession() failed ");
-			}
-		}
+		} 
+//		finally {
+//			try {
+//				PersistenceManager.releaseSession(session);
+//			} catch (Exception ex2) {
+//				logger.error("releaseSession() failed ");
+//			}
+//		}
 		return euActivities;
 	}
 	

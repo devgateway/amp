@@ -169,7 +169,8 @@ public class CategoryManagerUtil {
 		Session dbSession			= null;
 		Collection returnCollection	= null;
 		try {
-			dbSession			= PersistenceManager.getSession();
+		
+			dbSession= PersistenceManager.getRequestDBSession();
 			String queryString;
 			Query qry;
 
@@ -184,13 +185,15 @@ public class CategoryManagerUtil {
 		} catch (Exception ex) {
 			logger.error("Unable to get AmpCategoryValue: " + ex.getMessage());
 			ex.printStackTrace();
-		} finally {
-			try {
-				PersistenceManager.releaseSession(dbSession);
-			} catch (Exception ex2) {
-				logger.error("releaseSession() failed :" + ex2);
-			}
-		}
+		} 
+//		finally {
+//			try {
+//				PersistenceManager.releaseSession(dbSession);
+//			} catch (Exception ex2) {
+//				logger.error("releaseSession() failed :" + ex2);
+//			}
+	//}
+	
 		if (returnCollection != null) {
 			Iterator it=returnCollection.iterator();
 			if(it.hasNext())

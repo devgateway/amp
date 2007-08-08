@@ -116,6 +116,7 @@ public class EditActivity
 
         HttpSession session = request.getSession();
         TeamMember tm = (TeamMember) session.getAttribute("currentMember");
+        
 
         //if("true".compareTo(request.getParameter("public"))!=0) 
         	//return mapping.findForward("forward");
@@ -192,6 +193,7 @@ public class EditActivity
             eaForm.setDocReset(true);
             eaForm.setComponentReset(true);
             eaForm.reset(mapping, request);
+          
 
             eaForm.setActivityId(activityId);
             HashMap activityMap = (HashMap) ampContext
@@ -1380,8 +1382,7 @@ public class EditActivity
         		return mapping.findForward("forwardToPreview");
         	}
         
-        //activityId
-       /*
+      
         Collection ampFundingsAux = DbUtil.getAmpFunding(activityId);
         FilterParams fp = (FilterParams) session.getAttribute("filterParams");
 		TeamMember teamMember=(TeamMember)session.getAttribute("currentMember");
@@ -1441,18 +1442,20 @@ public class EditActivity
 		eaForm.setTotalCommitted(overallTotalCommitted);
 		overallTotalDisbursed = FinancingBreakdownWorker.getOverallTotal(
 				fb, Constants.DISBURSEMENT);
+		
 		eaForm.setTotalDisbursed(overallTotalDisbursed);
 		overallTotalUnDisbursed = DecimalToText.getDifference(
 				overallTotalCommitted, overallTotalDisbursed);
 		eaForm.setTotalUnDisbursed(overallTotalUnDisbursed);
 		overallTotalExpenditure = FinancingBreakdownWorker.getOverallTotal(
 				fb, Constants.EXPENDITURE);
+		
 		eaForm.setTotalExpended(overallTotalExpenditure);
 		overallTotalUnExpended = DecimalToText.getDifference(
 				overallTotalDisbursed, overallTotalExpenditure);
 		eaForm.setTotalUnExpended(overallTotalUnExpended);
     		}
-    */
+    
         return mapping.findForward("forward");
     }
 }

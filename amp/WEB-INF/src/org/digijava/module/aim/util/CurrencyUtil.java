@@ -763,7 +763,7 @@ public class CurrencyUtil {
 		String queryString = null;
 		ArrayList currency = new ArrayList();
 		try {
-			session = PersistenceManager.getSession();
+			session = PersistenceManager.getRequestDBSession();
 			queryString = " select c from " + AmpCurrency.class.getName()
 					+ " c where c.activeFlag='1' order by c.currencyName";
 			q = session.createQuery(queryString);
@@ -775,13 +775,14 @@ public class CurrencyUtil {
 			}
 		} catch (Exception ex) {
 			logger.error("Unable to get currency " + ex);
-		} finally {
-			try {
-				PersistenceManager.releaseSession(session);
-			} catch (Exception ex2) {
-				logger.debug("releaseSession() failed", ex2);
-			}
-		}
+		} 
+//		finally {
+//			try {
+//				PersistenceManager.releaseSession(session);
+//			} catch (Exception ex2) {
+//				logger.debug("releaseSession() failed", ex2);
+//			}
+//		}
 		return currency;
 	}
 

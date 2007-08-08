@@ -47,7 +47,7 @@ public class FieldVisibilityTag extends BodyTagSupport {
 		// TODO Auto-generated constructor stub
 	}
 		public int doStartTag() throws JspException {
-
+		
  	   ServletContext ampContext=pageContext.getServletContext();
 	   AmpTreeVisibility ampTreeVisibility=(AmpTreeVisibility) ampContext.getAttribute("ampTreeVisibility");
 	   if(ampTreeVisibility!=null)

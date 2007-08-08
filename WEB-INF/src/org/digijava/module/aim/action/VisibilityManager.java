@@ -299,13 +299,16 @@ public class VisibilityManager extends MultiAction {
     	//Session session=this.createSession();
     	AmpTemplatesVisibility currentTemplate=FeaturesUtil.getTemplateVisibility(FeaturesUtil.getGlobalSettingValueLong("Visibility Template"),hbsession);
     	ampTreeVisibility.buildAmpTreeVisibility(currentTemplate);
-    	ampContext=session.getServletContext();
+    	
+    	//ampContext=session.getServletContext();
+    	ampContext=this.getServlet().getServletContext();
     	ampContext.setAttribute("ampTreeVisibility",ampTreeVisibility);
     	/*try {
 			PersistenceManager.releaseSession(hbsession);
 		} catch (Exception rsf) {
 			logger.error("Release session failed :4" + rsf.getMessage());
 		}*/
+    	
 		return modeEditTemplate(mapping,form,request,response);
 	}
 	

@@ -603,16 +603,28 @@ bgcolor="#006699">
 		<td align="center">
 		</td>
 	</tr>
-	<tr>
-		<td align="center">
-			<input type="button" value='<digi:trn key="aim:previewLogframe">Preview Logframe</digi:trn>' class="buton" onclick="previewLogFrameClicked()" name="logframe">
-		</td>
-	</tr>
-	<tr>
-		<td align="center">
-			<input type="button" value='<digi:trn key="aim:preview">Preview</digi:trn>' class="buton" onclick="previewClicked()">
-		</td>
-	</tr>
+	<module:display name="Previews">
+		<feature:display name="Logframe" module="Previews">
+			<field:display name="Logframe Preview Button" feature="Logframe" >
+				<tr>
+					<td align="center">
+						<input type="button" value='<digi:trn key="aim:previewLogframe">Preview Logframe</digi:trn>' class="buton" onclick="previewLogFrameClicked()" name="logframe">
+					</td>
+				</tr>
+			</field:display>
+		</feature:display>
+	</module:display>
+	<module:display name="Previews">
+		<feature:display name="Preview Activity" module="Previews">
+			<field:display feature="Preview Activity" name="Preview Button">
+				<tr>
+					<td align="center">
+						<input type="button" value='<digi:trn key="aim:preview">Preview</digi:trn>' class="buton" onclick="previewClicked()">
+					</td>
+				</tr>
+			</field:display>
+		</feature:display>
+	</module:display>
 
 	<tr>
 		<td align="center">

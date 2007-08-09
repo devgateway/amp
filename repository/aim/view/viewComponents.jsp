@@ -150,7 +150,10 @@
 										</tr>
 										<tr>
 										<td height="20" bgColor=#d7eafd class=box-title align="center"><B>
-													<html:button styleClass="dr-menu" value="Add Component" property="submitButton"  onclick="addComponent()">
+													<c:set var="translation">
+														<digi:trn key="btn:componentManagerAddComponent">Add Component</digi:trn>
+													</c:set>
+													<html:button styleClass="dr-menu" value="${translation}" property="submitButton"  onclick="addComponent()">
 														<digi:trn key="aim:clickToAddComponent">Click here to Add a Component</digi:trn>
 													</html:button>
 										</td>

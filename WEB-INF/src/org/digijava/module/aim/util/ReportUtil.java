@@ -15204,15 +15204,15 @@ public class ReportUtil {
 		}
 	}
 
-	public static boolean checkDuplicateReportName(String reportTitle){
-		boolean found=false;
+	public static AmpTeamMember checkDuplicateReportName(String reportTitle){
+		AmpTeamMember teamMember=null;
 		Session session = null;
 		Query query = null;
 		Iterator iter=null;
 		String queryString;
 		try {
 			session = PersistenceManager.getSession();
-			queryString = "select report.name from " + AmpReports.class.getName() + " report ";
+			queryString = "select report from " + AmpReports.class.getName() + " report ";
 			//logger.info( " Query :" + queryString);
 			query = session.createQuery(queryString);
 	//		iter = query.list().iterator();
@@ -15223,14 +15223,13 @@ public class ReportUtil {
 				//logger.info("............Query is not null............");
 				while(iter.hasNext())
 				{
-					String str = (String) iter.next();
-					if( reportTitle.trim().equals(str) )
+					AmpReports r = (AmpReports) iter.next();
+					if( reportTitle.trim().equals(r.getName()) )
 					{
-						found = true;
+						teamMember=r.getOwnerId();
 						break;
 					}
-					else
-						found = false;
+						
 				}
 			}
 
@@ -15245,7 +15244,7 @@ public class ReportUtil {
 				logger.debug("releaseSession() failed");
 			}
 		}
-		return found;
+		return teamMember;
 	}
 
 	// added by Rahul for Project ID..

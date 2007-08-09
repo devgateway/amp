@@ -278,14 +278,17 @@ public class AdvancedReport extends Action {
 				//for storing the value of year filter 
 				/* report Title check */
 				ActionErrors errors = new ActionErrors();	
-				boolean found = ReportUtil.checkDuplicateReportName(formBean.getReportTitle());
-				if(found==true)
+				AmpTeamMember found = ReportUtil.checkDuplicateReportName(formBean.getReportTitle());
+				if(found!=null)
 				{ 
 					errors.add("DuplicateReportName", new ActionError("error.aim.reportManager.DuplicateReportName"));
+					errors.add("DuplicateReportOwner", new ActionError("error.aim.reportManager.DuplicateReportOwner",teamMember.getMemberName(), teamMember.getTeamName()));
 					saveErrors(request, errors);
 					return mapping.findForward("MissingReportDetails");
 				}
-				// report title check ends here
+				// report title check ends hereerrors.add("DuplicateReportName", new ActionError("error.aim.reportManager.DuplicateReportName"));
+				saveErrors(request, errors);
+				
 				if(formBean.getAmpToYear()==null)
 				{
 					toYr=year;
@@ -943,22 +946,24 @@ public class AdvancedReport extends Action {
 				if(flag == false )
 				{
 					int i 			= 0;
-					boolean found 	= false;
+					AmpTeamMember found 	= null;
 					/* No need to check for duplicate if editing an exisiting report */
 					if ( !formBean.getInEditingMode() ){
 						found 			= ReportUtil.checkDuplicateReportName(formBean.getReportTitle());
 						if (formBean.getInEditingMode() == true) {
-							found = true;
+							
+							found = new AmpTeamMember(); //stupid fix
 						}
-						if(found==true )
+						if(found!=null )
 						{ 
 							errors.add("DuplicateReportName", new ActionError("error.aim.reportManager.DuplicateReportName"));
+							errors.add("DuplicateReportOwner", new ActionError("error.aim.reportManager.DuplicateReportOwner",teamMember.getMemberName(), teamMember.getTeamName()));
 							saveErrors(request, errors);
 							return mapping.findForward("MissingReportDetails");
 						}
 					}
 					
-	           	if(found == false)
+	           	if(found == null)
 	            {
 						//logger.info("............no duplicate report title............");
 		           		Session pmsession		= PersistenceManager.getSession();						
@@ -1054,7 +1059,7 @@ public class AdvancedReport extends Action {
 //								logger.info ("Updating report.." );
 								pmsession.update( ampReports );
 								pmsession.flush();
-//								log the update action for a report
+//								log the update action for a reportSaveReport
 								AuditLoggerUtil.logObject(httpSession,request,ampReports,"update");
 								
 							}

@@ -558,6 +558,7 @@ public class AddAmpActivity extends Action {
 			Long next = new Long(-1);
 			if (eaForm.getActivityId() != null){
 				ReportData rep = (ReportData) session.getAttribute("report");
+				if(rep!=null) {
 				Collection ids = (Collection) rep.getOwnerIds();
 				Iterator it = ids.iterator();
 				
@@ -573,6 +574,7 @@ public class AddAmpActivity extends Action {
 			}
 			request.setAttribute("nextId", next);
 			request.setAttribute("prevId", prev);
+			}
 			
 //			if(eaForm.getStatusCollection() == null) { //TO BE DELETED
 //				eaForm.setStatusCollection(DbUtil.getAmpStatus());

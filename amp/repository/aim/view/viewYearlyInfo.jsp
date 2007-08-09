@@ -314,8 +314,9 @@
 
 							&gt;
 
-							<bean:write name="aimYearlyInfoForm" property="perpsectiveName" />
-
+							<bean:define id="perspectiveNameTrimedLocal" name="aimYearlyInfoForm" property="perpsectiveNameTrimmed" type="java.lang.String"/>
+								<digi:trn key='<%="aim:"+ perspectiveNameTrimedLocal %>'>	
+									<bean:write name="aimYearlyInfoForm" property="perpsectiveName"/></digi:trn>
 
 
 						</SPAN>
@@ -409,11 +410,13 @@
 														<TD>
 
 															<html:select property="perspective" styleClass="dr-menu">
-
-																<html:optionsCollection name="aimYearlyInfoForm" 
-
-																property="perspectives" value="code" label="name"/>
-
+																<logic:iterate name="aimYearlyInfoForm" property="perspectives" id="perspectiveId">
+																<bean:define name="perspectiveId" property="name" id="perspectiveName"/>
+																	<html:option value="${perspectiveId.code}">
+																		<digi:trn key='<%="aim:"+perspectiveName %>' >
+																			<bean:write name="perspectiveId" property="name"/></digi:trn> 
+																	</html:option>
+																</logic:iterate>
 															</html:select>
 
 														</TD>								
@@ -458,7 +461,7 @@
 
 														<TR>
 
-															<TD><STRONG>Currency:</STRONG></TD>
+															<TD><STRONG><digi:trn key="aim:currency">Currency</digi:trn>:</STRONG></TD>
 
 															<TD>
 
@@ -488,7 +491,7 @@
 
 														<TR>
 
-															<TD><STRONG>Calendar Type:</STRONG></TD>
+															<TD><STRONG><digi:trn key="aim:calendarType">Calendar Type</digi:trn>:</STRONG></TD>
 
 															<TD>
 
@@ -518,9 +521,9 @@
 
 														<TR>
 
-															<TD><STRONG>Year&nbsp;&nbsp;</STRONG></TD>
+															<TD><STRONG><digi:trn key="aim:year">Year</digi:trn>&nbsp;&nbsp;</STRONG></TD>
 
-															<TD><STRONG>From:</STRONG></TD>
+															<TD><STRONG><digi:trn key="aim:from">From</digi:trn>:</STRONG></TD>
 
 															<TD>
 
@@ -534,7 +537,7 @@
 
 															</TD>
 
-															<TD><STRONG>To:</STRONG></TD>
+															<TD><STRONG><digi:trn key="aim:to">To</digi:trn></STRONG></TD>
 
 															<TD>
 
@@ -558,7 +561,7 @@
 
 												<TD>
 
-													<html:submit value="GO" styleClass="dr-menu"/>
+													<html:submit  styleClass="dr-menu"><digi:trn key="btn:go">Go</digi:trn></html:submit>
 
 			                        	</TD>
 

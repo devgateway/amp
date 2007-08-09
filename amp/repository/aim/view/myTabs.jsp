@@ -6,7 +6,6 @@
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
 
-
 <script language="JavaScript">
 	function addActivity() {
 		window.location.href="/aim/addActivity.do~pageId=1~reset=true~action=create";	
@@ -17,10 +16,15 @@
 	}
 	
 	var tabName	= "Tab-By Project";
-	
+
+	<logic:empty name="filterCurrentReport" scope="session">
 	<logic:notEmpty name="defaultTeamReport" scope="session">
 			tabName	= 'Tab-<bean:write name="defaultTeamReport" scope="session" property="name"/>';
 	</logic:notEmpty>
+	</logic:empty>
+	<logic:notEmpty name="filterCurrentReport" scope="session">
+		tabName	= 'Tab-<bean:write name="filterCurrentReport" scope="session" property="name"/>';
+	</logic:notEmpty>	
 	
 </script>
 

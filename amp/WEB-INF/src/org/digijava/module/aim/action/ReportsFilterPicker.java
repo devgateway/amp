@@ -31,6 +31,7 @@ import org.digijava.module.aim.dbentity.AmpCurrency;
 import org.digijava.module.aim.dbentity.AmpFiscalCalendar;
 import org.digijava.module.aim.dbentity.AmpIndicatorRiskRatings;
 import org.digijava.module.aim.dbentity.AmpOrganisation;
+import org.digijava.module.aim.dbentity.AmpReports;
 import org.digijava.module.aim.dbentity.AmpSector;
 import org.digijava.module.aim.form.ReportsFilterPickerForm;
 import org.digijava.module.aim.helper.Constants;
@@ -38,6 +39,7 @@ import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.CurrencyUtil;
 import org.digijava.module.aim.util.DbUtil;
 import org.digijava.module.aim.util.MEIndicatorsUtil;
+import org.digijava.module.aim.util.ReportUtil;
 import org.digijava.module.aim.util.SectorUtil;
 import org.digijava.module.aim.util.TeamUtil;
 import org.springframework.beans.BeanWrapperImpl;
@@ -51,9 +53,7 @@ public class ReportsFilterPicker extends MultiAction {
 	public ActionForward modePrepare(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
 
 		ReportsFilterPickerForm filterForm=(ReportsFilterPickerForm) form;
-		
 		String ampReportId=request.getParameter("ampReportId");
-		
 		if(ampReportId!=null) filterForm.setAmpReportId(new Long(ampReportId));
 		
 		HttpSession httpSession = request.getSession();
@@ -63,7 +63,7 @@ public class ReportsFilterPicker extends MultiAction {
 		Long ampTeamId = null;
 		
 		if(teamMember!=null) ampTeamId=teamMember.getTeamId();
-		
+	
 		//create filter dropdowns		
 		Collection currency = CurrencyUtil.getAmpCurrency();
 		Collection allFisCalenders = DbUtil.getAllFisCalenders();
@@ -112,7 +112,11 @@ public class ReportsFilterPicker extends MultiAction {
 		filterForm.getPageSizes().add(new BeanWrapperImpl(new String("A3")));
 		filterForm.getPageSizes().add(new BeanWrapperImpl(new String("A4")));
 		
-		
+		if (ampReportId != null){
+			
+			AmpReports rep = (AmpReports) ReportUtil.getAmpReports(new Long(ampReportId));
+			httpSession.setAttribute("filterCurrentReport", rep);
+		}
 		
 		return modeSelect(mapping,form,request,response);
 	}

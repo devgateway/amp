@@ -102,6 +102,7 @@ function addTeamMember(id) {
 						<table bgColor=#ffffff cellPadding=0 cellSpacing=0 class=box-border-nopadding width="100%">
 							<tr bgColor=#3754a1>
 								<td vAlign="top" width="100%">
+									<c:set var="selectedTab" value="4" scope="request"/>
 									<jsp:include page="teamSetupMenu.jsp" flush="true" />
 								</td>
 							</tr>

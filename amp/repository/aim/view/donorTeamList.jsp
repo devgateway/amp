@@ -121,6 +121,8 @@
 							<tr bgColor=#3754a1>
 
 								<td vAlign="top" width="100%">
+								
+									<c:set var="selectedTab" value="7" scope="request"/>
 
 									<jsp:include page="teamSetupMenu.jsp" flush="true" />
 

@@ -38,74 +38,92 @@
 				<DIV id="navlinks">
 
 					<UL>
-
-						<LI>
-
-						<div id="gen" title='<digi:trn key="aim:clickToViewWorkspaceOverview">Click here to view Workspace Overview</digi:trn>'>
-
-						<digi:link href="/workspaceOverview.do" name="urlParams">
-
-							:: <digi:trn key="aim:workspaceOverview">Workspace Overview</digi:trn>
-
-						</digi:link></div>
-
-						</LI>
-
-
-
-						<LI>
-
-						<div id="gen" title='<digi:trn key="aim:clickToViewActivityList">Click here to view Activity List</digi:trn>'>
-
-						<digi:link href="/teamActivityList.do">
-
-							:: <digi:trn key="aim:activityList">Activity List</digi:trn>
-
-						</digi:link></div>
-
-						</LI>
-
-
-
-						<LI>
-
-						<div id="gen" title='<digi:trn key="aim:clickToViewReportList">Click here to view Report List</digi:trn>'>
-
-						<digi:link href="/teamReportList.do"> 
-
-							:: <digi:trn key="aim:reportList">Report List</digi:trn>
-
-						</digi:link>
-
-						</div></LI>
+						
+						<c:if test="${selectedTab  == '0'}">
+						   	<LI class="selected">
+									:: <digi:trn key="aim:workspaceOverview">Workspace Overview</digi:trn>								
+							</LI>
+						</c:if>
+						
+						<c:if test="${selectedTab != '0'}">
+							<LI>
+								<div id="gen" title='<digi:trn key="aim:clickToViewWorkspaceOverview">Click here to view Workspace Overview</digi:trn>'>
+									<digi:link href="/workspaceOverview.do" name="urlParams">
+										:: <digi:trn key="aim:workspaceOverview">Workspace Overview</digi:trn>
+									</digi:link>							
+								</div>	
+							</LI>
+						</c:if>
 
 						
 
-						<LI>
+						<c:if test="${selectedTab == '1'}">
+							<LI class="selected">
+						
+								:: <digi:trn key="aim:activityList">Activity List</digi:trn>
+							<LI>
+						</c:if>
 
-						<div id="gen" title='<digi:trn key="aim:clickToViewRelatedLinksList">Click here to view Related Links List</digi:trn>'>
+						<c:if test="${selectedTab != '1'}">
+							<LI>
+								<div id="gen" title='<digi:trn key="aim:clickToViewActivityList">Click here to view Activity List</digi:trn>'>
+		
+								<digi:link href="/teamActivityList.do" name="urlParams">
+		
+									:: <digi:trn key="aim:activityList">Activity List</digi:trn>
+		
+								</digi:link></div>
+							</LI>
+						</c:if>
 
-						<digi:link href="/relatedLinksList.do">
+						<c:if test="${selectedTab == '2'}">
+							<LI class="selected">
+									:: <digi:trn key="aim:reportList">Report List</digi:trn>	
+							</LI>
+						</c:if>
+						
+						<c:if test="${selectedTab != '2'}">
+							<LI>
+								<div id="gen" title='<digi:trn key="aim:clickToViewReportList">Click here to view Report List</digi:trn>'>	
+								<digi:link href="/teamReportList.do"> 	
+									:: <digi:trn key="aim:reportList">Report List</digi:trn>	
+								</digi:link>	
+								</div>
+							</LI>
+						</c:if>
+						
 
-							:: <digi:trn key="aim:relatedLinksList">Related Links List</digi:trn>
+						<c:if test="${selectedTab == '3'}">
+							<LI class="selected">
+								:: <digi:trn key="aim:relatedLinksList">Related Links List</digi:trn>	
+							</LI>
+						</c:if>
+						
+						<c:if test="${selectedTab != '3'}">
+							<LI>
+								<div id="gen" title='<digi:trn key="aim:clickToViewRelatedLinksList">Click here to view Related Links List</digi:trn>'>	
+								<digi:link href="/relatedLinksList.do">	
+									:: <digi:trn key="aim:relatedLinksList">Related Links List</digi:trn>	
+								</digi:link>	
+								</div>
+							</LI>		
+						</c:if>
 
-						</digi:link>
-
-						</div></LI>		
-
-
-
-						<LI>
-
-						<div id="gen" title='<digi:trn key="aim:clickToViewMembers">Click here to view Members</digi:trn>'>
-
-						<digi:link href="/teamMemberList.do">
-
-							:: <digi:trn key="aim:members">Members</digi:trn>
-
-						</digi:link>
-
-						</div></LI>							
+						<c:if test="${selectedTab == '4'}">
+							<LI class="selected">
+								:: <digi:trn key="aim:members">Members</digi:trn>	
+							</LI>
+						</c:if>
+						
+						<c:if test="${selectedTab != '4'}">
+							<LI>
+								<div id="gen" title='<digi:trn key="aim:clickToViewMembers">Click here to view Members</digi:trn>'>	
+									<digi:link href="/teamMemberList.do">	
+										:: <digi:trn key="aim:members">Members</digi:trn>	
+									</digi:link>
+								</div>
+							</LI>							
+						</c:if>						
 
 					</UL>
 
@@ -119,50 +137,73 @@
 
 					<UL>
 
-						<LI>
+						<c:if test="${selectedTab == '5'}">
+							<LI class="selected">
+								:: <digi:trn key="aim:customizedTeamSettings">Customized Team Settings</digi:trn>
+							</LI>
+						</c:if>
+						
+						<c:if test="${selectedTab != '5'}">
+							<LI>						
+								<div id="gen" title='<digi:trn key="aim:clickToCustomizeTeamSettings">Click here to Customize Team Settings</digi:trn>'>						
+									<digi:link href="/defaultSettings.do">						
+										:: <digi:trn key="aim:customizedTeamSettings">Customized Team Settings</digi:trn>						
+									</digi:link>						
+								</div></LI>												
+						</c:if>							
 
-						<div id="gen" title='<digi:trn key="aim:clickToCustomizeTeamSettings">Click here to Customize Team Settings</digi:trn>'>
+						<c:if test="${selectedTab == '6'}">
+							<LI class="selected">
+								:: <digi:trn key="aim:configureTeamPages">Configure Team Pages</digi:trn>	
+							</LI>
+						</c:if>
+						
+						<c:if test="${selectedTab != '6'}">
+							<LI>
+								<div id="gen" title='<digi:trn key="aim:clickToConfigureTeamPages">Click here to Configure Team Pages</digi:trn>'>	
+									<digi:link href="/configureTeamPage.do">	
+										:: <digi:trn key="aim:configureTeamPages">Configure Team Pages</digi:trn>	
+									</digi:link>
+								</div>
+							</LI>
+						</c:if>
 
-						<digi:link href="/defaultSettings.do">
-
-							:: <digi:trn key="aim:customizedTeamSettings">Customized Team Settings</digi:trn>
-
-						</digi:link>
-
-						</div></LI>
-
-						<LI>
-
-						<div id="gen" title='<digi:trn key="aim:clickToConfigureTeamPages">Click here to Configure Team Pages</digi:trn>'>
-
-						<digi:link href="/configureTeamPage.do">
-
-							:: <digi:trn key="aim:configureTeamPages">Configure Team Pages</digi:trn>
-
-						</digi:link>
-
-						</div></LI>
-
-						<LI>
-
-						<div id="gen" title='<digi:trn key="aim:clickToViewDonorActivityList">Click here to view donors activity list</digi:trn>'>
-
-						<digi:link href="/donorActivityList.do">
-
-							:: <digi:trn key="aim:donorActivityList">Donor Activity List</digi:trn>
-
-						</digi:link>
-
-						</div></LI>
+						<c:if test="${selectedTab == '7'}">
+							<LI class="selected">
+								:: <digi:trn key="aim:donorActivityList">Donor Activity List</digi:trn>
+							</LI>
+						</c:if>
+						
+						<c:if test="${selectedTab != '7'}">
+							<LI>
+								<div id="gen" title='<digi:trn key="aim:clickToViewDonorActivityList">Click here to view donors activity list</digi:trn>'>
+									<digi:link href="/donorActivityList.do">
+										:: <digi:trn key="aim:donorActivityList">Donor Activity List</digi:trn>
+									</digi:link>
+								</div>
+							</LI>
+						</c:if>
 
 						<module:display name="Trend Analysis and Forecasting">
-						<LI>
-						<div id="gen" title='<digi:trn key="aim:clickToViewM&E">Click here to view M & E</digi:trn>'>
-						<digi:link href="/getTeamActivities.do">
-							:: <digi:trn key="aim:m&e">M&E</digi:trn>
-						</digi:link>
-						</div></LI>
+						
+							<c:if test="${selectedTab == '8'}">
+								<LI class="selected">
+									:: <digi:trn key="aim:m&e">M&E</digi:trn>
+								</LI>
+							</c:if>
+						
+							<c:if test="${selectedTab != '8'}">
+								<LI>
+									<div id="gen" title='<digi:trn key="aim:clickToViewM&E">Click here to view M & E</digi:trn>'>
+										<digi:link href="/getTeamActivities.do">
+											:: <digi:trn key="aim:m&e">M&E</digi:trn>
+										</digi:link>
+									</div>
+								</LI>
+							</c:if>
+							
 						</module:display>
+						
 					</UL>		
 
 				</DIV>	

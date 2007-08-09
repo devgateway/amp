@@ -88,7 +88,8 @@ public class CategoryTagClass extends TagSupport implements DynamicAttributes {
 	public int doEndTag() throws JspException {
 		Object bean						= pageContext.findAttribute(name);
 		Long valueId					= null; // for single select
-		Long [] valueIds				= null; // for multiselect			
+		//Long [] valueIds				= null; // for multiselect
+		Object values					= null; // for multiselect
 		Collection valueIdsColl			= null;
 		
 		try{
@@ -113,16 +114,22 @@ public class CategoryTagClass extends TagSupport implements DynamicAttributes {
 					/* Getting the ids (there might be more than 1 since it is a multiselect) of the current value of the category */
 					try{
 						PropertyDescriptor beanProperty	= new PropertyDescriptor(property, bean.getClass());
-						valueIds						= (Long[])(beanProperty.getReadMethod().invoke(bean,new Object[0]));
+						values							= beanProperty.getReadMethod().invoke(bean,new Object[0]);
+						//valueIds						= (Long[])(beanProperty.getReadMethod().invoke(bean,new Object[0]));
 						valueIdsColl					= new HashSet();
-						if (valueIds != null) {
-							for (int i=0; i<valueIds.length; i++) {
-								valueIdsColl.add( valueIds[i] );
-							}
+						if (values != null) {
+								Object [] valueIds	= (Object []) values;
+								for (int i=0; i<valueIds.length; i++) {
+									if ( valueIds[i] instanceof Long )
+										valueIdsColl.add( (Long)valueIds[i] );
+									if ( valueIds[i] instanceof String )
+										valueIdsColl.add( new Long ((String)valueIds[i]) );
+								}
 						}
 					}
 					catch(Exception E){
 						logger.error(E);
+						E.printStackTrace();
 					}
 				}
 				else {
@@ -133,6 +140,7 @@ public class CategoryTagClass extends TagSupport implements DynamicAttributes {
 					}
 					catch(Exception E){
 						logger.error(E);
+						E.printStackTrace();
 					}
 				}
 				

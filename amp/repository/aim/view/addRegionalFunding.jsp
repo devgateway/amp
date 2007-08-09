@@ -27,6 +27,10 @@
 
 <input type="hidden" name="regFundAct">
 
+<c:set var="translationDelete">
+	<digi:trn key="btn:addRegionalFundingDelete">Delete</digi:trn>
+</c:set>
+
 <table width="100%" border="0" cellspacing="2" cellpadding="2" align="center" class=box-border-nopadding>
 	<tr>
     	<td width="100%" vAlign="top">
@@ -142,7 +146,7 @@
 														<c:out value="${pers.name}"/>
 														</option>	
 													</c:forEach>
-												</select>&nbsp;<input type='button' value='Delete' class='inp-text' 
+												</select>&nbsp;<input type='button' value='${translationDelete}' class='inp-text' 
 												onclick="removeCommitment('<%=divName%>')"></div>
 											</c:forEach>	
 											</c:if>
@@ -215,7 +219,7 @@
 														<c:out value="${pers.name}"/>
 														</option>	
 													</c:forEach>				
-												</select>&nbsp;<input type='button' value='Delete' class='inp-text' 
+												</select>&nbsp;<input type='button' value='${translationDelete}' class='inp-text' 
 												onclick="removeDisbursement('<%=divName%>')"></div>
 											</c:forEach>	
 											</c:if>
@@ -287,7 +291,7 @@
 														<c:out value="${pers.name}"/>
 														</option>	
 													</c:forEach>
-												</select>&nbsp;<input type='button' value='Delete' class='inp-text' 
+												</select>&nbsp;<input type='button' value='${translationDelete}' class='inp-text' 
 												onclick="removeExpenditure('<%=divName%>')"></div>
 											</c:forEach>	
 											</c:if>
@@ -298,16 +302,26 @@
 							</tr>
 							<tr>
 								<td colspan="2" align="center">
+									<c:set var="translationSave">
+										<digi:trn key="btn:addRegionalFundingSave">Save</digi:trn>
+									</c:set>
+									<c:set var="translationReset">
+										<digi:trn key="btn:addRegionalFundingReset">Reset</digi:trn>
+									</c:set>
+									<c:set var="translationClose">
+										<digi:trn key="btn:addRegionalFundingClose">Close</digi:trn>
+									</c:set>
+									
 									<table cellPadding=3>
 										<tr>
 											<td>
-												<input type="button" value="Save" class="inp-text" onclick="return addRegionalFunding()">
+												<input type="button" value="${translationSave}" class="inp-text" onclick="return addRegionalFunding()">
 											</td>
 											<td>
-												<input type="reset" value="Reset" class="inp-text">
+												<input type="reset" value="${translationReset}" class="inp-text">
 											</td>
 											<td>
-												<input type="button" value="Close" class="inp-text" onclick="closeWindow()">
+												<input type="button" value="${translationClose}" class="inp-text" onclick="closeWindow()">
 											</td>
 										</tr>
 									</table>
@@ -387,7 +401,7 @@ function addCommitments() {
 			<% } 
 		} %>
 	s += "</select>&nbsp;";
-	s += "<input type='button' value='Delete' class='inp-text' onclick=removeCommitment('" + divname + "')><br>";
+	s += "<input type='button' value='${translationDelete}' class='inp-text' onclick=removeCommitment('" + divname + "')><br>";
 	
 	newdiv.innerHTML = s;
 	ni.appendChild(newdiv);
@@ -441,7 +455,7 @@ function addDisbursement() {
 			<% } 
 		} %>
 	s += "</select>&nbsp;";
-	s += "<input type='button' value='Delete' class='inp-text' onclick=removeDisbursement('" + divname + "')><br>";
+	s += "<input type='button' value='${translationDelete}' class='inp-text' onclick=removeDisbursement('" + divname + "')><br>";
 	
 	newdiv.innerHTML = s;
 	ni.appendChild(newdiv);
@@ -495,7 +509,7 @@ function addExpenditure() {
 			<% } 
 		} %>
 	s += "</select>&nbsp;";
-	s += "<input type='button' value='Delete' class='inp-text' onclick=removeExpenditure('" + divname + "')><br>";
+	s += "<input type='button' value='${translationDelete}' class='inp-text' onclick=removeExpenditure('" + divname + "')><br>";
 	
 	newdiv.innerHTML = s;
 	ni.appendChild(newdiv);

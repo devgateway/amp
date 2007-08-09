@@ -192,7 +192,9 @@
 																			<c:set var="translation">
 																				<digi:trn key="aim:clickToMakeThisPublic">Click here to make this public</digi:trn>
 																			</c:set>
-																			<digi:link href="/changeTeamReportStatus.do" name="urlParams" title="${translation}" >Make this public</digi:link>
+																			<digi:link href="/changeTeamReportStatus.do" name="urlParams" title="${translation}" >
+																				<digi:trn key="aim:teamReportListMakePublic">Make this public</digi:trn>
+																			</digi:link>
 																			]
 																		</td>
 																	</logic:equal>
@@ -209,7 +211,8 @@
 																				<digi:trn key="aim:clickToMakeThisPrivate">Click here to make this private</digi:trn>
 																			</c:set>
 																			<digi:link href="/changeTeamReportStatus.do" name="urlParams" title="${translation}" >
-																			Make this private</digi:link>
+																				<digi:trn key="aim:teamReportListMakePrivate">Make this private</digi:trn>
+																			</digi:link>
 																			]
 																		</td>
 																	</logic:equal>
@@ -224,7 +227,9 @@
 															<table cellspacing="5" width="100%">
 																<tr>
 																	<td align="left">
-													                    <a href="javascript:listReports()"> List of Unassigned Reports </a>
+													                    <a href="javascript:listReports()"> 
+													                    	<digi:trn key="aim:teamReportListUnassigned">List of Unassigned Reports </digi:trn>
+													                    </a>
 																	</td>
 																	<td >	
 																		<html:submit  styleClass="dr-menu" property="removeReports"  onclick="return validate()">
@@ -233,7 +238,9 @@
 																		
 																	</td>
 																	<td align="right">
-													                    <a href="javascript:listReports()"> List of Unassigned Reports </a>
+													                   <a href="javascript:listReports()"> 
+													                    	<digi:trn key="aim:teamReportListUnassigned">List of Unassigned Reports </digi:trn>
+													                    </a>
 																	</td>
 																</tr>
 															</table>
@@ -251,7 +258,9 @@
 														<td>
 															<font color="blue">
 															<digi:trn key="aim:reportTeamSpecific">*T</digi:trn>
-															Indicates the report is viewable by all team members.
+															<digi:trn key="aim:teamReportListViewableByAll">
+																Indicates the report is viewable by all team members.
+															</digi:trn>
 															</font>
 														</td>
 													</tr>
@@ -259,8 +268,10 @@
 													<td>
 															<font color="blue">
 															<digi:trn key="aim:reportMemberSpecific">*M</digi:trn>
+															<digi:trn key="aim:teamReportListViewableBySelected">
 															Indicates the report is viewable by selected team members, 
 															whom the team leader assigns.
+															</digi:trn>
 															</font>
 														</td>
 													</tr>

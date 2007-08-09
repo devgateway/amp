@@ -200,7 +200,10 @@ function update(action) {
 															<digi:trn key="aim:childWorkspaces">Child Workspaces</digi:trn>		
 														</td>
 														<td align="left" bgcolor="#f4f4f2">
-															<input type="button" value="Add" class="buton" onclick="addChildWorkspaces()">
+															<c:set var="translation">
+																<digi:trn key="btn:teamWorkspaceAddChildWorkspace">Add</digi:trn>
+															</c:set>
+															<input type="button" value="${translation}" class="buton" onclick="addChildWorkspaces()">
 														</td>																
 													</tr>
 													<c:if test="${!empty aimUpdateWorkspaceForm.childWorkspaces}">
@@ -242,8 +245,11 @@ function update(action) {
 													</c:if>													
 													<tr><td>&nbsp;</td></tr>
 													<tr>
+														<c:set var="translation">
+															<digi:trn key="btn:teamWorkspaceUpdate">Update</digi:trn>
+														</c:set>
 														<td colspan="2" align="center">
-															<html:submit styleClass="dr-menu" value=" Update " onclick="update('edit')"/>
+															<html:submit styleClass="dr-menu" value=" ${translation} " onclick="update('edit')"/>
 														</td>
 													</tr>							
 												</table>

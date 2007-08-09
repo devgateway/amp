@@ -40,6 +40,7 @@ public class MainProjectDetailsForm extends ValidatorForm
 	private String currency ;
 	private String perspective ;
 	private String perpsectiveName;
+	private String perpsectiveNameTrimmed;
 	private long fiscalCalId ;
 	private int fromYear ;
 	private int toYear ;
@@ -499,5 +500,13 @@ public class MainProjectDetailsForm extends ValidatorForm
 
 	public void setResults(String results) {
 		this.results = results;
+	}
+
+	public String getPerpsectiveNameTrimmed() {
+		return perpsectiveName.replaceAll(" ", "");
+	}
+
+	public void setPerpsectiveNameTrimmed(String perpsectiveNameTrimmed) {
+		this.perpsectiveNameTrimmed = perpsectiveNameTrimmed;
 	}
 }

@@ -90,7 +90,8 @@ function update(action) {
 						valign="top" align="left">
 							<tr bgColor=#3754a1>
 								<td vAlign="top" width="100%">
-									<jsp:include page="teamSetupMenu.jsp" flush="true" />
+									<c:set var="selectedTab" value="0" scope="request"/>
+									<jsp:include page="teamSetupMenu.jsp" flush="true"/>
 								</td>
 							</tr>
 							<tr bgColor=#f4f4f2>

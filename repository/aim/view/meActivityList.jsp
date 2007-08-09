@@ -124,6 +124,8 @@
 
 								<td vAlign="top" width="100%">
 
+									<c:set var="selectedTab" value="8" scope="request"/>
+
 									<jsp:include page="teamSetupMenu.jsp" flush="true" />								
 
 								</td>

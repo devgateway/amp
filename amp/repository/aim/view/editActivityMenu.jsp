@@ -608,7 +608,9 @@ bgcolor="#006699">
 			<field:display name="Logframe Preview Button" feature="Logframe" >
 				<tr>
 					<td align="center">
-						<input type="button" value='<digi:trn key="aim:previewLogframe">Preview Logframe</digi:trn>' class="buton" onclick="previewLogFrameClicked()" name="logframe">
+						<html:button  styleClass="buton" property="logframe" onclick="previewLogFrameClicked()">
+							<digi:trn key="aim:previewLogframe">Preview Logframe</digi:trn>
+						</html:button>
 					</td>
 				</tr>
 			</field:display>

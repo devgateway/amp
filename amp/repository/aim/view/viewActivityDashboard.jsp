@@ -11,6 +11,7 @@
 <%@ taglib uri="/taglib/fieldVisibility" prefix="field" %>
 <%@ taglib uri="/taglib/featureVisibility" prefix="feature" %>
 <%@ taglib uri="/taglib/moduleVisibility" prefix="module" %>
+<script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
 <digi:instance property="aimActivityDashboardForm" />
 
 <script language="Javascript">
@@ -29,8 +30,8 @@
 		
 function previewLogframe(id)
 {
+
 	<digi:context name="addUrl" property="context/module/moduleinstance/editActivity.do" />
-//	window.open("<%=addUrl%>~pageId=1~step=1~action=edit~surveyFlag=true~logframepr=true~activityId=" + id + "~actId=" + id);	
 	var url ="<%=addUrl%>~pageId=1~step=1~action=edit~surveyFlag=true~logframepr=true~activityId=" + id + "~actId=" + id;
 	openURLinWindow(url,650,500);
 }
@@ -93,7 +94,10 @@ method="post">
 										<module:display name="Previews">
 											<feature:display name="Preview Activity" module="Previews">
 												<field:display feature="Preview Activity" name="Preview Button">
-	                                          		<input type="button" value="Preview" class="dr-menu" onclick="preview('<%=actId%>')">
+	                                          		<html:button style="dr-menu" onclick="preview('${actId}')" property="previewBtn">
+		                                          		<digi:trn key="btn:preview">Preview</digi:trn>
+	                                          		</html:button>
+															&nbsp;
 												</field:display>
 											</feature:display>
 										</module:display>	
@@ -101,7 +105,9 @@ method="post">
 										<module:display name="Previews">
 											<feature:display name="Edit Activity" module="Previews">
 												<field:display feature="Edit Activity" name="Edit Activity Button">
-													<input type="button" value="Edit" class="dr-menu" onclick="fnEditProject('<%=actId%>')">
+													<html:button style="dr-menu" onclick="fnEditProject('${actId}')" property="editBtn">
+														<digi:trn key="btn:edit">Edit</digi:trn>
+													</html:button>
 												&nbsp;
 												</field:display>		
 											</feature:display>
@@ -110,15 +116,19 @@ method="post">
 										<module:display name="Previews">
 												<feature:display name="Logframe" module="Previews">
 													<field:display name="Logframe Preview Button" feature="Logframe" >
-														<input type="button" value="Preview Logframe" class="dr-menu" onclick="previewLogframe('<%=actId%>')">
+														<html:button property="logframe" style="dr-menu" onclick="previewLogframe(${actId})">
+															<digi:trn key="btn:previewLogframe">Preview Logframe</digi:trn>
+														</html:button>
+															&nbsp;
 													</field:display>
 												</feature:display>
 										</module:display>
 										<module:display name="Previews">
 												<feature:display name="Project Fiche" module="Previews">
 													<field:display name="Project Fiche Button" feature="Project Fiche" >
-														<input type='button' value='<digi:trn key="aim:projectFiche">Project Fiche</digi:trn>' class='dr-menu'
-															onclick='projectFiche(<%=actId%>)'>
+														<html:button  style="dr-menu" onclick='projectFiche(${actId})' property="projectFiche"> 
+															<digi:trn key="btn:projectFiche">Project Fiche</digi:trn>
+														</html:button>
 													</field:display>
 												</feature:display>
 										</module:display>

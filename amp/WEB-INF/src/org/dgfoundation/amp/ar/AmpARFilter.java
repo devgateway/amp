@@ -76,10 +76,15 @@ public class AmpARFilter implements Filter {
 		.getAttribute(Constants.CURRENT_MEMBER);
 		
 		if(tm!=null) {perspective = tm.getAppSettings().getPerspective();
-		if (perspective.equals("Donor"))
-			perspective = "DN";
-		if (perspective.equals("MOFED"))
-			perspective = "MA";}
+		if (perspective != null){
+			if (perspective.equals("Donor"))
+				perspective = "DN";
+			if (perspective.equals("MOFED"))
+				perspective = "MA";
+		}
+		else
+			perspective="MA";
+		}
 		else perspective="MA";
 
 		this.setPerspective(DbUtil.getPerspective(perspective));

@@ -1,3 +1,4 @@
+
 <%@ page pageEncoding="UTF-8"%>
 <%@ taglib uri="/taglib/struts-bean" prefix="bean"%>
 <%@ taglib uri="/taglib/struts-logic" prefix="logic"%>
@@ -13,7 +14,7 @@
 	src="<digi:file src="module/aim/scripts/dscript120.js"/>"></script>
 <script language="JavaScript1.2" type="text/javascript"
 	src="<digi:file src="module/aim/scripts/dscript120_ar_style.js"/>"></script>
-
+<script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
 <DIV id="TipLayer"
 	style="visibility:hidden;position:absolute;z-index:1000;top:-100;"></DIV>
 
@@ -31,11 +32,12 @@ function fnEditProject(id)
 
 function previewLogframe(id)
 {
-	openResisableWindow(700, 650);
-	<digi:context name="addUrl" property="context/module/moduleinstance/editActivity.do" />
-   	document.aimChannelOverviewForm.action = "<%=addUrl%>~pageId=1~step=1~action=edit~surveyFlag=true~logframepr=true~activityId=" + id + "~actId=" + id;
-	document.aimChannelOverviewForm.target = popupPointer.name;
-    document.aimChannelOverviewForm.submit();
+
+    
+    <digi:context name="addUrl" property="context/module/moduleinstance/editActivity.do" />
+	var url ="<%=addUrl%>~pageId=1~step=1~action=edit~surveyFlag=true~logframepr=true~activityId=" + id + "~actId=" + id;
+	openURLinWindow(url,650,500);
+    
 }
 
 function projectFiche(id)
@@ -160,8 +162,10 @@ function commentWin(val) {
 										<module:display name="Previews">
 											<feature:display name="Preview Activity" module="Previews">
 												<field:display feature="Preview Activity" name="Preview Button">
-	                                          		<input type="button" value='<digi:trn key="aim:preview">Preview</digi:trn>' class="dr-menu"
-															onclick="preview(<c:out value="${activity.activityId}"/>)"> 
+													<html:button style="dr-menu" onclick="preview(${activity.activityId})" property="previewBtn">
+		                                          		<digi:trn key="btn:preview">Preview</digi:trn>
+													</html:button>
+	                                          		&nbsp;
 												</field:display>
 											</feature:display>
 										</module:display>	
@@ -170,8 +174,9 @@ function commentWin(val) {
 										<module:display name="Previews">
 											<feature:display name="Edit Activity" module="Previews">
 												<field:display feature="Edit Activity" name="Edit Activity Button">
-												<input type="button" value='<digi:trn key="aim:edit">Edit</digi:trn>' class="dr-menu"
-													onclick="fnEditProject(<c:out value="${activity.activityId}"/>)">
+												<html:button style="dr-menu" onclick="fnEditProject(${activity.activityId})" property="editBtn">
+														<digi:trn key="btn:edit">Edit</digi:trn>
+												</html:button>
 												&nbsp;
 												</field:display>		
 											</feature:display>
@@ -180,7 +185,10 @@ function commentWin(val) {
 										<module:display name="Previews">
 												<feature:display name="Logframe" module="Previews">
 													<field:display name="Logframe Preview Button" feature="Logframe" >
-														<input type="button" value='<digi:trn key="aim:previewLogframe">Preview Logframe</digi:trn>' class="dr-menu" onclick="previewLogframe(<c:out value="${activity.activityId}"/>)">
+														<html:button  style="dr-menu" onclick="previewLogframe(${activity.activityId})" property="logframeBtn">
+															<digi:trn key="btn:previewLogframe">Preview Logframe</digi:trn>
+														</html:button>
+														<input type=button onclick="previewLogframe(${activity.activityId})" value="test"/>
 													</field:display>
 												</feature:display>
 										</module:display>
@@ -196,8 +204,9 @@ function commentWin(val) {
 										<module:display name="Previews">
 												<feature:display name="Project Fiche" module="Previews">
 													<field:display name="Project Fiche Button" feature="Project Fiche" >
-														<input type='button' value='<digi:trn key="aim:projectFiche">Project Fiche</digi:trn>' class='dr-menu'
-														onclick='projectFiche(<c:out value="${activity.activityId}"/>)'>
+														<html:button style="dr-menu" onclick='projectFiche(${activity.activityId})' property="projectFicheBtn">
+																<digi:trn key="btn:projectFiche">Project Fiche</digi:trn>
+														</html:button>
 													</field:display>
 												</feature:display>
 										</module:display>
@@ -206,48 +215,7 @@ function commentWin(val) {
 								</TABLE>
 								</TD>
 							</TR>
-							<%--
-				<TR bgColor=#f4f4f2>
-					<TD vAlign="top" align="left" width="100%">
-						<TABLE width="100%" cellPadding=2 cellSpacing=2 vAlign="top" align="left" bgColor=#f4f4f2>
-							<TR>
-								<TD width="100%">
-									<IMG  height=10 src="../ampTemplate/images/arrow-014E86.gif" width=15>
-									<b><digi:trn key="aim:objectives">Objectives</digi:trn></b>
-								</TD>
-							</TR>
-							<TR>
-								<TD width="100%">
-									<c:out value="${activity.objective}" />
-									<c:if test="${activity.objMore == true}">
-										<c:set var="translation">
-											<digi:trn key="aim:clickToViewMore">Click here to view more</digi:trn>
-										</c:set>
-										<digi:link href="/viewChannelOverviewObjective.do" paramName="aimChannelOverviewForm"
-										paramId="ampActivityId" paramProperty="ampActivityId" title="${translation}" >
-											<digi:trn key="aim:more">more...</digi:trn>
-										</digi:link>
-									</c:if>
-								</TD>
-							</TR>
-						</TABLE>
-					</TD>
-				</TR>
-				<TR bgColor=#f4f4f2>
-					<TD vAlign="top" align="left" width="100%">
-						<TABLE width="100%" cellPadding=2 cellSpacing=2 vAlign="top" align="left" bgColor=#f4f4f2>
-							<TR>
-								<TD width="100%">
-									<IMG  height=10 src="../ampTemplate/images/arrow-014E86.gif" width=15>
-									<b>
-									<digi:trn key="aim:financingInstrument">Financing Instrument</digi:trn>:</b>&nbsp;
-									<c:out value="${activity.modality}"/>
-								</TD>
-							</TR>
-						</TABLE>
-					</TD>
-				</TR>
-				--%>
+							
 							<TR bgColor=#f4f4f2>
 								<TD vAlign="top" align="center" width="100%"><html:errors /></TD>
 							</TR>

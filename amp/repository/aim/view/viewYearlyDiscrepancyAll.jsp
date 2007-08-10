@@ -200,7 +200,7 @@
 				              				</td>
 				              				<td>
 				              					<logic:equal name="aimYearlyDiscrepancyAllForm" property="yearRangePresent" value="true">
-							                      			<strong>From:</strong>
+							                      			<strong><digi:trn key="aim:from">From</digi:trn>:</strong>
 							                     </logic:equal>
 				              				</td>
 							              	<td> 
@@ -214,7 +214,7 @@
 							              	</td>
 							              	<td>
 							              		<logic:equal name="aimYearlyDiscrepancyAllForm" property="yearRangePresent" value="true">
-					                      			<strong>To:</strong>
+					                      			<strong><digi:trn key="aim:to">To</digi:trn>:</strong>
 					                      		</logic:equal>
 							              	</td>
 							              	<td>
@@ -230,7 +230,7 @@
 							              	<html:hidden property="ampActivityId" />
 											<html:hidden property="tabIndex" />
 							              	<logic:equal name="aimYearlyDiscrepancyAllForm" property="goButtonPresent" value="true">
-												<html:submit value="GO" styleClass="dr-menu"/>
+												<html:submit styleClass="dr-menu"><digi:trn key="btn:go">Go</digi:trn></html:submit>
 											</logic:equal> 
 							                </td>
 							              	<td>&nbsp;</td>
@@ -272,7 +272,7 @@
 							                </td>
 							              	<td bgcolor="#DDDDDB">
 							              		<div align="center">
-							              			Impl. Agency Actuals
+							              			<digi:trn key="aim:implAgencyActuals">Impl. Agency Actuals</digi:trn>
 							              		</div>
 							              	</td>
 							              	<td bgcolor="#DDDDDB">
@@ -289,7 +289,7 @@
 							                </td>
 							              	<td bgcolor="#DDDDDB">
 							              		<div align="center">
-							              			Impl. Agency Actuals
+							              			<digi:trn key="aim:implAgencyActuals">Impl. Agency Actuals</digi:trn>
 							              		</div>
 							              	</td>
 							              	<td bgcolor="#DDDDDB">
@@ -306,7 +306,7 @@
 							                </td>
 							              	<td bgcolor="#DDDDDB">
 							              		<div align="center">
-							              			Impl. Agency Actuals
+							              			<digi:trn key="aim:implAgencyActuals">Impl. Agency Actuals</digi:trn>
 							              		</div>
 							              	</td>
 							              	<td bgcolor="#DDDDDB">
@@ -318,7 +318,7 @@
 				            			<logic:empty name="aimYearlyDiscrepancyAllForm" property="yearlyDiscrepanciesAll" >
 			                        		<tr valign="top"> 
 			                          			<td colspan="8" align="center">
-			                          			<span class="note">No records!</span>
+			                          			<span class="note"><digi:trn key="aim:noRecords">No records!</digi:trn></span>
 			                          			</td>
 			                          		</tr>
 			                        	</logic:empty>
@@ -404,7 +404,7 @@
 		</c:set>
 		        					<digi:link href="/viewQuarterlyDiscrepancyAll.do" name="urlSubTabs" title="${translation}" >
 		        						<strong>
-										Show Quarterly
+										<digi:trn key="aim:showQuarterly">Show Quarterly </digi:trn>
 										</strong>
 		        					</digi:link>
 								</td>

@@ -144,9 +144,9 @@
 				              				<td>&nbsp;</td>
 				              				<td> 
 				              					<html:select property="transactionType" styleClass="dr-menu" onchange="formSubmit()">
-																	<html:option value="0">Commitments</html:option>
-																	<html:option value="1">Disbursements</html:option>
-																	<html:option value="2">Expenditures</html:option>
+																	<html:option value="0"><digi:trn key="aim:commitments">Commitments</digi:trn> </html:option>
+																	<html:option value="1"><digi:trn key="aim:disbursements">Disbursements</digi:trn> </html:option>
+																	<html:option value="2"><digi:trn key="aim:expedintures">Expenditures</digi:trn> </html:option>
 																</html:select>
 																<html:hidden property="ampActivityId" />
 																<html:hidden property="tabIndex" />
@@ -218,7 +218,7 @@
 				              				</td>
 				              				<td>
 				              					<logic:equal name="aimYearlyDiscrepancyForm" property="yearRangePresent" value="true">
-							                      			<strong>From:</strong>
+							                      			<strong><digi:trn key="aim:from">From</digi:trn>:</strong>
 							                     </logic:equal>
 				              				</td>
 							              	<td> 
@@ -232,7 +232,7 @@
 							              	</td>
 							              	<td>
 							              		<logic:equal name="aimYearlyDiscrepancyForm" property="yearRangePresent" value="true">
-					                      			<strong>To:</strong>
+					                      			<strong><digi:trn key="aim:to">To</digi:trn>:</strong>
 					                      		</logic:equal>
 							              	</td>
 							              	<td>
@@ -256,40 +256,40 @@
 				            			<tr bgcolor="#DDDDDB" > 
 				              				<td height="30" bgcolor="#DDDDDB">
 				              					<div align="center">
-				              						Fiscal Year 
+				              						<digi:trn key="aim:fiscalYear">Fiscal Year </digi:trn>
 				              					</div>
 				                  			</td>
 							              	
 							              	<td bgcolor="#DDDDDB">
 							              		<div align="center"> 
-							                  		<p>Donor Planned</p>
+							                  		<p><digi:trn key="aim:donorPlanned">Donor Planned</digi:trn></p>
 							                	</div>
 							                </td>
 							              	<td bgcolor="#DDDDDB">
-							              		<div align="center">Impl. Agency Planned</div>
+							              		<div align="center"><digi:trn key="aim:implAgencyPlanned">Impl. Agency Planned</digi:trn></div>
 							              	</td>
 							              	<td bgcolor="#DDDDDB">
 							              		<div align="center">
-							              			<digi:trn key="aim:MOFED">Mofed</digi:trn> Planned 
+							              			<digi:trn key="aim:MOFED">Mofed</digi:trn> <digi:trn key="aim:Planned">Planned </digi:trn>
 							              		</div>
 							              	</td>
 							              	<td bgcolor="#DDDDDB">
 							              		<div align="center">
-							              			Donor Actuals
+							              			<digi:trn key="aim:donorActuals">Donor Actuals</digi:trn>
 							              		</div>
 							              	</td>
 							              	<td bgcolor="#DDDDDB">
-							              		<div align="center">Impl. Agency Actuals</div>
+							              		<div align="center"><digi:trn key="aim:implAgencyActuals">Impl. Agency Actuals</digi:trn></div>
 							              	</td>
 							              	<td bgcolor="#DDDDDB">
 							              		<div align="center">
-							              			<digi:trn key="aim:MOFED">Mofed</digi:trn> Actuals 
+							              			<digi:trn key="aim:MOFED">Mofed</digi:trn> <digi:trn key="aim:actuals">Actuals </digi:trn>
 							              		</div>
 							              	</td>
 				            			</tr>
 				            			<logic:empty name="aimYearlyDiscrepancyForm" property="discrepancies" >
 			                        		<tr valign="top"> 
-			                          			<td colspan="8" align="center"><span class="note">No records!</td>
+			                          			<td colspan="8" align="center"><span class="note"><digi:trn key="aim:noRecords">No records!</digi:trn></td>
 			                          		</tr>
 			                        	</logic:empty>
 				            			<logic:notEmpty name="aimYearlyDiscrepancyForm" property="discrepancies">
@@ -360,7 +360,7 @@
 									</c:set>
 		        					<digi:link href="/viewQuarterlyDiscrepancy.do" name="urlSubTabs" title="${translation}" >
 		        						<strong>
-											Show Quarterly 
+											<digi:trn key="aim:showQuarterly">Show Quarterly </digi:trn>
 										</strong>
 		        					</digi:link>
 								</td>

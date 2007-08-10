@@ -69,7 +69,6 @@ public class ViewEditUser extends Action {
             }
             resetViewEditUserForm(uForm);
             return mapping.findForward("saved");
-
         }
         if (uForm.getEvent() == null) {
 
@@ -132,7 +131,7 @@ public class ViewEditUser extends Action {
                 uForm.setSelectedLanguageCode(language.getCode());
                 uForm.setSelectedOrgName(user.getOrganizationName());
 
-                if (user.getOrganizationName() != null && user.getOrganizationName().length()!=0) {
+                if (user.getOrganizationName() != null && user.getOrganizationName().length() != 0) {
                     Collection orgCol = org.digijava.module.aim.util.DbUtil.getAllOrganisation();
 
                     AmpOrganisation orgnisation = null;
@@ -150,8 +149,8 @@ public class ViewEditUser extends Action {
                     if (orgGrpCol != null && orgnisation != null) {
                         for (Iterator orgGroupIter = orgGrpCol.iterator(); orgGroupIter.hasNext(); ) {
                             orgGroup = (AmpOrgGroup) orgGroupIter.next();
-                            if(orgGroup != null && orgnisation.getOrgGrpId()!=null &&
-                               orgGroup.getAmpOrgGrpId().equals(orgnisation.getOrgGrpId().getAmpOrgGrpId())){
+                            if (orgGroup != null && orgnisation.getOrgGrpId() != null &&
+                                orgGroup.getAmpOrgGrpId().equals(orgnisation.getOrgGrpId().getAmpOrgGrpId())) {
 
                                 uForm.setSelectedOrgGroupId(orgGroup.getAmpOrgGrpId());
                                 if (orgGroup.getOrgType() != null) {
@@ -159,14 +158,6 @@ public class ViewEditUser extends Action {
                                 }
                                 break;
                             }
-
-//                            if (orgGroup != null && orgGroup.getOrgGrpName().equals(orgnisation.getOrgGroup())) {
-//                                uForm.setSelectedOrgGroupId(orgGroup.getAmpOrgGrpId());
-//                                if (orgGroup.getOrgType() != null) {
-//                                    uForm.setSelectedOrgTypeId(orgGroup.getOrgType().getAmpOrgTypeId().toString());
-//                                }
-//                                break;
-//                            }
                         }
                     }
 
@@ -177,53 +168,49 @@ public class ViewEditUser extends Action {
                     uForm.setOrgs(DbUtil.getOrgByGroup(uForm.getSelectedOrgGroupId()));
                 }
             }
-        } else {
+        } else if (uForm.getEvent().equalsIgnoreCase("save")) {
+            if (user != null) {
+                user.setCountry(org.digijava.module.aim.util.DbUtil.getDgCountry(uForm.getSelectedCountryIso()));
+                user.setEmail(uForm.getEmail());
+                user.setFirstNames(uForm.getFirstNames());
+                user.setLastName(uForm.getLastName());
+                user.setAddress(uForm.getMailingAddress());
+                user.setOrganizationName(uForm.getSelectedOrgName());
+                user.setUrl(uForm.getUrl());
 
-            if (uForm.getEvent().equalsIgnoreCase("save")) {
-                if (user != null) {
-                    user.setCountry(org.digijava.module.aim.util.DbUtil.getDgCountry(uForm.getSelectedCountryIso()));
-                    user.setEmail(uForm.getEmail());
-                    user.setFirstNames(uForm.getFirstNames());
-                    user.setLastName(uForm.getLastName());
-                    user.setAddress(uForm.getMailingAddress());
-                    user.setOrganizationName(uForm.getSelectedOrgName());
-                    user.setUrl(uForm.getUrl());
+                Locale language = DbUtil.getLanguageByCode(uForm.getSelectedLanguageCode());
 
-                    Locale language = DbUtil.getLanguageByCode(uForm.getSelectedLanguageCode());
-                    //      UserLangPreferences langPref = UserUtils.getUserLangPreferences(user,   curSite);
-                    if (langPref == null) {
-                        UserPreferences pref = UserUtils.getUserPreferences(user, curSite);
-                        if (pref == null) {
-                            pref = new UserPreferences(user, curSite);
-                            pref.setPublicProfile(true);
-                            pref.setReceiveAlerts(true);
-                            pref.setBiography("");
-                            UserUtils.saveUserPreferences(pref);
-                        }
-                        langPref = new UserLangPreferences();
-                        langPref.setId(pref.getId());
-                        langPref.setAlertsLanguage(language);
-                        Set<Locale> contentLangs = new HashSet<Locale> ();
-                        langPref.setContentLanguages(contentLangs);
+                if (langPref == null) {
+                    UserPreferences pref = UserUtils.getUserPreferences(user, curSite);
+                    if (pref == null) {
+                        pref = new UserPreferences(user, curSite);
+                        pref.setPublicProfile(true);
+                        pref.setReceiveAlerts(true);
+                        pref.setBiography("");
+                        UserUtils.saveUserPreferences(pref);
                     }
-                    langPref.setNavigationLanguage(language);
-                    UserUtils.saveUserLangPreferences(langPref);
-
-                    DbUtil.updateUser(user);
-
-                    resetViewEditUserForm(uForm);
-                    return mapping.findForward("saved");
-
-                } else if (uForm.getEvent().equalsIgnoreCase("typeSelected")) {
-                    uForm.setOrgGroups(DbUtil.getOrgGroupByType(Long.valueOf(uForm.getSelectedOrgTypeId())));
-                    if (uForm.getOrgs() != null && uForm.getOrgs().size() != 0) {
-                        uForm.getOrgs().clear();
-                    }
-                } else if (uForm.getEvent().equalsIgnoreCase("groupSelected")) {
-                    uForm.setOrgs(DbUtil.getOrgByGroup(uForm.getSelectedOrgGroupId()));
+                    langPref = new UserLangPreferences();
+                    langPref.setId(pref.getId());
+                    langPref.setAlertsLanguage(language);
+                    Set<Locale> contentLangs = new HashSet<Locale> ();
+                    langPref.setContentLanguages(contentLangs);
                 }
+                langPref.setNavigationLanguage(language);
+                UserUtils.saveUserLangPreferences(langPref);
+
+                DbUtil.updateUser(user);
+
+                resetViewEditUserForm(uForm);
+                return mapping.findForward("saved");
             }
 
+        } else if (uForm.getEvent().equalsIgnoreCase("typeSelected")) {
+            uForm.setOrgGroups(DbUtil.getOrgGroupByType(Long.valueOf(uForm.getSelectedOrgTypeId())));
+            if (uForm.getOrgs() != null && uForm.getOrgs().size() != 0) {
+                uForm.getOrgs().clear();
+            }
+        } else if (uForm.getEvent().equalsIgnoreCase("groupSelected")) {
+            uForm.setOrgs(DbUtil.getOrgByGroup(uForm.getSelectedOrgGroupId()));
         }
 
         resetViewEditUserForm(uForm);
@@ -234,7 +221,7 @@ public class ViewEditUser extends Action {
     }
 
     public void resetViewEditUserForm(ViewEditUserForm uForm) {
-        if(uForm!=null){
+        if (uForm != null) {
             uForm.setBan(null);
             uForm.setEvent(null);
         }

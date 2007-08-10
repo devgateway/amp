@@ -39,7 +39,7 @@
             return false;
         }
 
-        if(sm.match("[^0-9]")){
+        if(sm.match("[^0-9]") || sm.length == 0){
           alert("Invalid Start Month value");
           document.aimAddFiscalCalForm.startMonthNum.focus();
           return false;
@@ -49,7 +49,7 @@
           return false;
         }
 
-        if(sd.match("[^0-9]")){
+        if(sd.match("[^0-9]") || sd.length == 0){
           alert("Invalid Start Day value");
           document.aimAddFiscalCalForm.startDayNum.focus();
           return false;
@@ -59,7 +59,7 @@
           return false;
         }
 
-        if(yr.match("[^0-9,-]")){
+        if(yr.match("[^0-9,-]") || yr.length == 0){
           alert("Invalid Year Offset value");
           document.aimAddFiscalCalForm.yearOffset.focus();
           return false;
@@ -194,6 +194,7 @@
 																	</tr>
 																	<tr>
 																		<td width="30%" align="right">
+																			<font color="red"><b>*</b></font>
 																	        <digi:trn key="aim:fiscalCalendarStDay">Start Day</digi:trn>
 																		</td>
 																		<td width="30%">
@@ -202,6 +203,7 @@
 																	</tr>
 																	<tr>
 																		<td width="30%" align="right">
+																			<font color="red"><b>*</b></font>
 																	        <digi:trn key="aim:fiscalCalendarYrOffset">Year Offset</digi:trn>
 																		</td>
 																		<td width="30%">

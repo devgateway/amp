@@ -80,34 +80,40 @@ public class AddFiscalCalendarForm extends ActionForm {
 	}
 
 	public ActionErrors validate(ActionMapping mapping,
-                                 HttpServletRequest request) {
+			HttpServletRequest request) {
 
-			ActionErrors errors = new ActionErrors();
+		ActionErrors errors = new ActionErrors();
 
-			if (startMonthNum < 1 || startMonthNum > 12) {
-					  errors.add("startMonthNum",new ActionError("error.aim.addFiscalCal.invalidStartMonth"));
-			} else {
-					  if (startDayNum > 31) {
-								 errors.add("startDayNum",new ActionError("error.aim.addFiscalCal.invalidStartDay"));
-					  } else if (startMonthNum % 2 == 0 && startMonthNum < 8) {
-								 if (startDayNum > 30) {
-											errors.add("startDayNum",new ActionError("error.aim.addFiscalCal.invalidStartDay"));
-								 }
-								 if (startMonthNum == 2 && startDayNum > 28) {
-											errors.add("startDayNum",new ActionError("error.aim.addFiscalCal.invalidStartDay"));
-								 }
-					  } else if (startMonthNum % 2 != 0 && startMonthNum > 7) {
-								 if (startDayNum > 30) {
-											errors.add("startDayNum",new ActionError("error.aim.addFiscalCal.invalidStartDay"));
-								 }
-					  }
+		if (startMonthNum < 1 || startMonthNum > 12) {
+			errors.add("startMonthNum", new ActionError(
+					"error.aim.addFiscalCal.invalidStartMonth"));
+		}
+		
+		if (startDayNum > 31) {
+			errors.add("startDayNum", new ActionError(
+					"error.aim.addFiscalCal.invalidStartDay"));
+		} else if (startMonthNum % 2 == 0 && startMonthNum < 8) {
+			if (startDayNum > 30) {
+				errors.add("startDayNum", new ActionError(
+						"error.aim.addFiscalCal.invalidStartDay"));
 			}
-
-			if (yearOffset > 0) {
-					  errors.add("yearOffset",new ActionError("error.aim.addFiscalCal.invalidYearOffset"));
+			if (startMonthNum == 2 && startDayNum > 28) {
+				errors.add("startDayNum", new ActionError(
+						"error.aim.addFiscalCal.invalidStartDay"));
 			}
+		} else if (startMonthNum % 2 != 0 && startMonthNum > 7) {
+			if (startDayNum > 30) {
+				errors.add("startDayNum", new ActionError(
+						"error.aim.addFiscalCal.invalidStartDay"));
+			}
+		}
 
-			return (errors);
-    }
+		if (yearOffset > 0) {
+			errors.add("yearOffset", new ActionError(
+					"error.aim.addFiscalCal.invalidYearOffset"));
+		}
+
+		return (errors);
+	}
 
 }

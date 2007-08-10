@@ -485,16 +485,34 @@
 																			<tr>
 
 																				<td width="45%" align="right">
+																				
+																					<c:set var="translation">
+																						<digi:trn key="btn:regionManagerSave">
+																							Save
+																						</digi:trn>
+																					</c:set>
 
-																					<input type="button" value="Save" class="dr-menu" onclick="addLoc()"></td>
+																					<input type="button" value="${translation}" class="dr-menu" onclick="addLoc()"></td>
 
 																				<td width="8%" align="left">
+																				
+																					<c:set var="translation">
+																						<digi:trn key="btn:regionManagerReset">
+																							Reset
+																						</digi:trn>
+																					</c:set>
 
-																					<input type="reset" value="Reset" class="dr-menu"></td>
+																					<input type="reset" value="${translation}" class="dr-menu"></td>
 
 																				<td width="45%" align="left">
+																				
+																					<c:set var="translation">
+																						<digi:trn key="btn:regionManagerCancel">
+																							Cancel
+																						</digi:trn>
+																					</c:set>
 
-																					<input type="button" value="Cancel" class="dr-menu" onclick="move()"></td>
+																					<input type="button" value="${translation}" class="dr-menu" onclick="move()"></td>
 
 																			</tr>
 

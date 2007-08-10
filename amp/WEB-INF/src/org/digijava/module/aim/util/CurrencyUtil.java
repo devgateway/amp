@@ -298,6 +298,10 @@ public class CurrencyUtil {
 				qryStr = "select curr from " + AmpCurrency.class.getName() + " curr " +
 				"order by curr.currencyName";
 			qry = session.createQuery(qryStr);	
+			}else if(active == 3){
+				qryStr = "select curr from " + AmpCurrency.class.getName() + " curr " +
+				"order by curr.countryName";
+			qry = session.createQuery(qryStr);	
 			}else {
 				qryStr = "select curr from " + AmpCurrency.class.getName() + " curr " +
 					"where (curr.activeFlag=:flag) order by curr.currencyCode";

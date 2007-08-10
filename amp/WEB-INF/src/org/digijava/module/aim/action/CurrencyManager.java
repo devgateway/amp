@@ -49,16 +49,21 @@ public class CurrencyManager extends Action {
 			if (cantDelete != null){
 				crForm.setCantDelete(true);
 			}
-			String value = request.getParameter("sortingValue");
-			if(value==null){
-				if((crForm.getAllCurrencies() == null) ||((reload !=null) && (reload.compareTo("true") == 0))){
+			
+			String sortingValue = request.getParameter("sortingValue");
+			if (sortingValue == null) {
+				if ((crForm.getAllCurrencies() == null)
+						|| ((reload != null) && (reload.compareTo("true") == 0))) {
 					crForm.setAllCurrencies(CurrencyUtil.getAllCurrencies(-1));
 				}
-			}else if(value.equalsIgnoreCase("-1")){
+			} else if (sortingValue.equalsIgnoreCase("-1")) {
 				crForm.setAllCurrencies(CurrencyUtil.getAllCurrencies(-1));
-			}
-			else if(value.equalsIgnoreCase("2")){
+			} else if (sortingValue.equalsIgnoreCase("1")) {
+				crForm.setAllCurrencies(CurrencyUtil.getAllCurrencies(-1));
+			} else if (sortingValue.equalsIgnoreCase("2")) {
 				crForm.setAllCurrencies(CurrencyUtil.getAllCurrencies(2));
+			} else if (sortingValue.equalsIgnoreCase("3")) {
+				crForm.setAllCurrencies(CurrencyUtil.getAllCurrencies(3));
 			}
 			
 			boolean filtered = false;
@@ -127,8 +132,7 @@ public class CurrencyManager extends Action {
 			crForm.setId(null);			
 
 			} catch (Exception e) {
-				logger.error("Exception " + e);
-				e.printStackTrace(System.out);
+				logger.error(e);
 			}		
 		
 			return mapping.findForward("forward");

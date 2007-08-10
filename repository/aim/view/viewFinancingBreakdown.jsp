@@ -15,7 +15,7 @@
 	src="<digi:file src="module/aim/scripts/dscript120.js"/>"></script>	
 <script language="JavaScript1.2" type="text/javascript"
 	src="<digi:file src="module/aim/scripts/dscript120_ar_style.js"/>"></script>
-
+<script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
 <DIV id="TipLayer"
 	style="visibility:hidden;position:absolute;z-index:1000;top:-100;"></DIV>
 
@@ -38,11 +38,9 @@ function fnEditProject(id)
 
 function previewLogframe(id)
 {
-	openResisableWindow(700, 650);
-	<digi:context name="addUrl" property="context/module/moduleinstance/editActivity.do" />
-   	document.aimFinancingBreakdownForm.action = "<%=addUrl%>~pageId=1~step=1~action=edit~surveyFlag=true~logframepr=true~activityId=" + id + "~actId=" + id;
-	document.aimFinancingBreakdownForm.target = popupPointer.name;    
-    document.aimFinancingBreakdownForm.submit();
+    <digi:context name="addUrl" property="context/module/moduleinstance/editActivity.do" />
+	var url ="<%=addUrl%>~pageId=1~step=1~action=edit~surveyFlag=true~logframepr=true~activityId=" + id + "~actId=" + id;
+	openURLinWindow(url,650,500);
 }
 
 
@@ -120,7 +118,7 @@ type="org.digijava.module.aim.form.FinancingBreakdownForm" method="post">
 												<feature:display name="Preview Activity" module="Previews">
 													<field:display feature="Preview Activity" name="Preview Button">
 														<input type="button" value="<digi:trn key='btn:preview'>Preview</digi:trn>" class="dr-menu"
-														onclick="preview(<c:out value="${aimFinancingBreakdownForm.ampActivityId}"/>)">
+															onclick="preview(<c:out value="${aimFinancingBreakdownForm.ampActivityId}"/>)">
 													</field:display>
 												</feature:display>
 											</module:display>

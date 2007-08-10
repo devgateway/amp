@@ -149,7 +149,7 @@ function commentWin(val) {
 											name="urlChannelOverview" styleClass="comment"
 											title="${translation}">
 											<digi:trn key="aim:channelOverview">Channel Overview</digi:trn>
-										</digi:link> &nbsp;&gt;&nbsp; Overview&nbsp;&gt;&nbsp;
+										</digi:link> &nbsp;&gt;&nbsp;<digi:trn key="aim:overview">Overview</digi:trn>&nbsp;&gt;&nbsp;
 										<bean:define id="perspectiveNameLocal" name="aimChannelOverviewForm" property="perspective"
 										type="java.lang.String"/>
 											<logic:notEmpty name="aimChannelOverviewForm" property="perspective">

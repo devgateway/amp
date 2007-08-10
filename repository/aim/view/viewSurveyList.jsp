@@ -18,7 +18,7 @@
 <%@ taglib uri="/taglib/moduleVisibility" prefix="module" %>
 
 
-
+<script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
 
 <script language="Javascript">
 
@@ -88,11 +88,9 @@ function preview(id)
 
 function previewLogframe(id)
 {
-	openResisableWindow(700, 650);
-	<digi:context name="addUrl" property="context/module/moduleinstance/editActivity.do" />
-   	document.aimSurveyForm.action = "<%=addUrl%>~pageId=1~step=1~action=edit~surveyFlag=true~logframepr=true~activityId=" + id + "~actId=" + id;
-	document.aimSurveyForm.target = popupPointer.name;
-    document.aimSurveyForm.submit();
+    <digi:context name="addUrl" property="context/module/moduleinstance/editActivity.do" />
+	var url ="<%=addUrl%>~pageId=1~step=1~action=edit~surveyFlag=true~logframepr=true~activityId=" + id + "~actId=" + id;
+	openURLinWindow(url,650,500);
 }
 
 function projectFiche(id)

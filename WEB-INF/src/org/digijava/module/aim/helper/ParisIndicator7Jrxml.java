@@ -19,7 +19,7 @@ public class ParisIndicator7Jrxml
 				p.println("<?xml version=\"1.0\" encoding=\"UTF-8\" ?>");
 				//p.println("<?xml version=\"1.0\" encoding=\"UTF-8\" ?>");
 				p2 = new PrintStream(out2);
-				//System.out.println("creating now- dynamic trend...");
+				////System.out.println("creating now- dynamic trend...");
 				int a = (cols/4) * 270 + 80;
 				int b = (cols/4);
 				b= (b*240)+80;
@@ -54,11 +54,11 @@ public class ParisIndicator7Jrxml
 //							DYNAMIC CCCCCCCCC
 							String dc;
 							int colCnt =13;
-							//System.out.println(" Cnt = " + colCnt);
+							////System.out.println(" Cnt = " + colCnt);
 //							 gets the no of fields = 4 constants fields + YearCnt*3 + yearCnt
 							for(int k=1; k<=cols; k++)
 							{
-								//System.out.println("k="+k);
+								////System.out.println("k="+k);
 								dc="m"+k;
 								p2.println("<field name='"+dc+"' class='java.lang.String'/>");
 							}
@@ -459,12 +459,12 @@ public class ParisIndicator7Jrxml
 						{
 							if((4*i)+2 ==j)
 							{
-								//System.out.println( " in equals");
+								////System.out.println( " in equals");
 								flag = false;
 								break;
 							}
 						}
-						//System.out.println(" this is  j "+ j + " ctextkey "+ ctextkey);
+						////System.out.println(" this is  j "+ j + " ctextkey "+ ctextkey);
 						if(flag)
 						{	
 							p2.println("				<textField isStretchWithOverflow='false' pattern='' isBlankWhenNull='false' evaluationTime='Now' hyperlinkType='None' >");
@@ -650,7 +650,7 @@ public class ParisIndicator7Jrxml
 
 
 				
-		//System.out.println("hyup");			
+		////System.out.println("hyup");			
 		}
 		
 		catch(Exception e)

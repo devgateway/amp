@@ -61,7 +61,7 @@ public class UpdateWorkspace extends Action {
             String event = request.getParameter("event");
             String dest = request.getParameter("dest");
             String tId1 = request.getParameter("tId");
-            System.out.println("Am primit parametrul " + tId1 +" *****************************8");
+            //System.out.println("Am primit parametrul " + tId1 +" *****************************8");
             logger.debug("event : " + event + " dest : " + dest);
             
             AmpCategoryValue typeCategoryValue	= null;

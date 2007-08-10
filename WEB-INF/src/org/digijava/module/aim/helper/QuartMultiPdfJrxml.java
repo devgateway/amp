@@ -8,8 +8,8 @@ public class QuartMultiPdfJrxml
     {		
 		try
 		{
-			System.out.println("In QuarterlyMultilaterPdf ");
-			System.out.println(filePath);
+			//System.out.println("In QuarterlyMultilaterPdf ");
+			//System.out.println(filePath);
 			
 			FileOutputStream out2; // declare a file output object
 			PrintStream p2; // declare a print stream object

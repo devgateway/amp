@@ -49,7 +49,7 @@ public class ViewProjectPDF extends Action
 			logger.info("collection is not empty");
 			iter = coll.iterator();
 		}
-		System.out.println("col size "+ coll.size());
+		//System.out.println("col size "+ coll.size());
 		
 		int col=0, j=0, flag=0, rowCnt=0, row=0, year=0, colCnt=0, tempYear=0,countyy = 0,count=0;
 		Report report;

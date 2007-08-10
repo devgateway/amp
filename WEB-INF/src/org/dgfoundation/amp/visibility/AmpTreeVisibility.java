@@ -56,8 +56,8 @@ public class AmpTreeVisibility {
 	{
 		this.root=ampObjVis;
 		this.setItems(new HashMap());
-		//System.out.println("all items:::::"+ampObjVis.getAllItems().size());
-		//System.out.println("---- items:"+ampObjVis.getItems().size());
+		////System.out.println("all items:::::"+ampObjVis.getAllItems().size());
+		////System.out.println("---- items:"+ampObjVis.getItems().size());
 		
 		for(Iterator it=ampObjVis.getAllItems().iterator();it.hasNext();)
 		{
@@ -65,13 +65,13 @@ public class AmpTreeVisibility {
 			AmpTreeVisibility moduleNode= new AmpTreeVisibility();
 			moduleNode.setRoot(module);
 			//attach the features
-			//System.out.println("----	module:"+module.getName());
+			////System.out.println("----	module:"+module.getName());
 			for(Iterator jt=module.getItems().iterator();jt.hasNext();)
 			{
 				AmpFeaturesVisibility feature= (AmpFeaturesVisibility)jt.next();
 				AmpTreeVisibility  featureNode=new AmpTreeVisibility();
 				featureNode.setRoot(feature);
-				//System.out.println("----		"+feature.getName());
+				////System.out.println("----		"+feature.getName());
 				for(Iterator kt=feature.getItems().iterator();kt.hasNext();)
 				{
 					AmpFieldsVisibility field= (AmpFieldsVisibility)kt.next();

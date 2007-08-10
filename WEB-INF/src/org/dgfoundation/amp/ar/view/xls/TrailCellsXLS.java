@@ -75,7 +75,9 @@ public class TrailCellsXLS extends XLSExporter {
 			try{
 				translatedName=TranslatorWorker.translate(prefix+grd.getName(),locale,siteId);
 			}catch (WorkerException e)
-				{System.out.println(e);}
+				{ 
+				e.printStackTrace();
+				}
 			
 			
 			String modified;

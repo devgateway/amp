@@ -426,15 +426,15 @@ public class AdvancedReport extends Action {
 					int page=0;
 					
 /*					Collection aa= formBean.getColumnHierarchie();
-					System.out.println("hhhhhhhh: "+aa.size());
+					//System.out.println("hhhhhhhh: "+aa.size());
 					Iterator itr=aa.iterator();
 					String str="";
 					AmpColumns amp=new AmpColumns();
 					while(itr.hasNext()){
-						System.out.println("********************"+itr.next().getClass().getName());
+						//System.out.println("********************"+itr.next().getClass().getName());
 						if(itr.next() instanceof AmpColumns){
 							amp=(AmpColumns) itr.next();
-							System.out.println("h2h2h2h2h2h2:"+amp.getColumnName());
+							//System.out.println("h2h2h2h2h2h2:"+amp.getColumnName());
 						}
 					}
 */					
@@ -1160,7 +1160,7 @@ public class AdvancedReport extends Action {
 			String filename = null;
 			DefaultCategoryDataset data = new DefaultCategoryDataset(); 
 	        Iterator iter = chart_coll.iterator();
-			////System.out.println("@@@@@@@@@@ flag:"+chart_coll.size());
+			//////System.out.println("@@@@@@@@@@ flag:"+chart_coll.size());
 
 //			data.addValue(new Double(30.0), "CDAC", "");
 			
@@ -1170,15 +1170,15 @@ public class AdvancedReport extends Action {
 			while (iter.hasNext()) {
 				demp=new Double(iter.next().toString());
 				temp= (String)iter.next();
-//				System.out.println(temp+":::::"+demp);
+//				//System.out.println(temp+":::::"+demp);
 				data.addValue(demp,temp,"comm");
 				demp=new Double(iter.next().toString());
 				temp= (String)iter.next();
-//				System.out.println(temp+":::::"+demp);
+//				//System.out.println(temp+":::::"+demp);
 				data.addValue(demp,temp,"disb");
 				demp=new Double(iter.next().toString());
 				temp= (String)iter.next();
-//				System.out.println(temp+":::::"+demp);
+//				//System.out.println(temp+":::::"+demp);
 				data.addValue(demp,temp,"exp");
 	        }
 
@@ -1189,7 +1189,7 @@ public class AdvancedReport extends Action {
 
 			//String chartTitle=formBean.getReportTitle();
 			String chartTitle="";
-//			System.out.println("CHART TITLE----(ACTION)----------------"+chartTitle);
+//			//System.out.println("CHART TITLE----(ACTION)----------------"+chartTitle);
 			
 			JFreeChart jfreechart = ChartFactory.createBarChart(chartTitle+" - Bar Chart", "Title", "Amount(in US$)", categorydataset, PlotOrientation.VERTICAL,true, true, true);
 			jfreechart.setBackgroundPaint(java.awt.Color.white);
@@ -1201,7 +1201,7 @@ public class AdvancedReport extends Action {
 			int dim=chart_coll.size()/6;
 			int x=dim*30;
 			int y=dim*25;
-				System.out.println("IMG DIMMMMMMMMMMMMM: "+"dim="+dim+"x="+x+"::"+y);
+				//System.out.println("IMG DIMMMMMMMMMMMMM: "+"dim="+dim+"x="+x+"::"+y);
 			try{
 			//filename = ServletUtilities.saveChartAsPNG(jfreechart, x, y, info, httpSession);
 			}
@@ -1209,7 +1209,7 @@ public class AdvancedReport extends Action {
 					logger.info("EXCEPTION thrown at image:"+e);				
 			}
 
-//			//System.out.println("@@@@@@@@@@IMAGE FILE NAME:"+filename);
+//			////System.out.println("@@@@@@@@@@IMAGE FILE NAME:"+filename);
 
 			return filename;
 		}

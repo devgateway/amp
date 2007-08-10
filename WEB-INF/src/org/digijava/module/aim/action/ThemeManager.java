@@ -82,7 +82,7 @@ public class ThemeManager extends Action {
 			Collection col2 = ProgramUtil.getThemeIndicators(themeForm.getThemeId());
 			if((col!=null)&&(!(col.isEmpty())))
 			{
-				//System.out.println("activity references i can not delete this theme!!!!and ThemeID="+themeForm.getThemeId()+"and request param="+request.getParameter("themeId"));
+				////System.out.println("activity references i can not delete this theme!!!!and ThemeID="+themeForm.getThemeId()+"and request param="+request.getParameter("themeId"));
 				themeForm.setFlag("activityReferences");
 			}
 			else
@@ -92,7 +92,7 @@ public class ThemeManager extends Action {
 				else
 				{
 					themeForm.setFlag("deleted");
-					//System.out.println("I deleted this theme....ups!!!!!!!!and ThemeID="+themeForm.getThemeId()+"and request param="+request.getParameter("themeId"));
+					////System.out.println("I deleted this theme....ups!!!!!!!!and ThemeID="+themeForm.getThemeId()+"and request param="+request.getParameter("themeId"));
 					Long id = new Long(Long.parseLong(request.getParameter("themeId")));
 					
 					ProgramUtil.deleteTheme(id);
@@ -100,12 +100,12 @@ public class ThemeManager extends Action {
 				}
 			/*Iterator itr = DbUtil.getActivityThemeFromAAT(themeForm.getThemeId()).iterator();
 			 if (itr.hasNext()) {
-				System.out.println("activity references i can not delete this theme!!!!and ThemeID="+themeForm.getThemeId()+"and request param="+request.getParameter("themeId"));
+				//System.out.println("activity references i can not delete this theme!!!!and ThemeID="+themeForm.getThemeId()+"and request param="+request.getParameter("themeId"));
 				themeForm.setFlag("activityReferences");
 			}
 			else {
 				themeForm.setFlag("deleted");
-				System.out.println("I deleted this theme....ups!!!!!!!!and ThemeID="+themeForm.getThemeId()+"and request param="+request.getParameter("themeId"));
+				//System.out.println("I deleted this theme....ups!!!!!!!!and ThemeID="+themeForm.getThemeId()+"and request param="+request.getParameter("themeId"));
 				Long id = new Long(Long.parseLong(request.getParameter("themeId")));
 				ProgramUtil.deleteTheme(id);
 				mapping.findForward("delete");

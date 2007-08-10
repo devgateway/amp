@@ -45,24 +45,18 @@ public class QuarterlyMultilateralByDonorPDF extends Action
 		MulitlateralbyDonorForm formBean = (MulitlateralbyDonorForm)form;
 		Collection coll = new ArrayList();
 		if (formBean != null) {
-			System.out.println("formBean is not null");
+			//System.out.println("formBean is not null");
 			coll= formBean.getMultiReport();
-		} else {
-			System.out.println("formbean is null");
-		}
-		if(coll == null)
-			System.out.println("coll is null");
-		else
-			System.out.println("formBean is not null");
+		} 
 		Iterator iter = null;
 		if (coll.size() == 0) {
-			System.out.println("collection is empty");
+			//System.out.println("collection is empty");
 		} else {
-			System.out.println("collection is not empty");
+			//System.out.println("collection is not empty");
 			iter = coll.iterator();
 		}
 		
-		System.out.println("col size "+ coll.size());
+		//System.out.println("col size "+ coll.size());
 
 		multiReport report;
 		Project project = null;
@@ -271,7 +265,7 @@ public class QuarterlyMultilateralByDonorPDF extends Action
 						}
 
 						col = 4 + formBean.getFiscalYearRange().size();
-						System.out.println(  row + "  : Total Term Assit :  " + termFund.getTermAssistName());
+						//System.out.println(  row + "  : Total Term Assit :  " + termFund.getTermAssistName());
 						termFundTotals = new ArrayList(termFund.getTermFundTotal());
 						termFundTotalIter = termFundTotals.iterator();
 						while(termFundTotalIter.hasNext())
@@ -365,12 +359,12 @@ public class QuarterlyMultilateralByDonorPDF extends Action
 			}
 			catch (JRException e)
 			{
-				System.out.println("Exception from quarterlyMultilaterByDonorPdf = " + e);
+				//System.out.println("Exception from quarterlyMultilaterByDonorPdf = " + e);
 			}
 			if (bytes != null && bytes.length > 0)
 			{
 				ServletOutputStream ouputStream = response.getOutputStream();
-				System.out.println("Generating PDF");
+				//System.out.println("Generating PDF");
 				response.setContentType("application/pdf");
 				response.setHeader("Content-Disposition","inline; filename=quarterlyMultilaterByDonorPdf.pdf");
 				response.setContentLength(bytes.length);
@@ -380,7 +374,7 @@ public class QuarterlyMultilateralByDonorPDF extends Action
 			}
 			else
 			{
-				System.out.println("Nothing to display");
+				//System.out.println("Nothing to display");
 			}
 		}
 		return null;
@@ -389,7 +383,7 @@ public class QuarterlyMultilateralByDonorPDF extends Action
 
 	void calculateFieldHeight(String input)
 	{
-		System.out.println(" Large ::" + fieldHeight + " :: CUrrent : " + input.length());
+		//System.out.println(" Large ::" + fieldHeight + " :: CUrrent : " + input.length());
 		if(input.length() > fieldHeight)
 			fieldHeight = input.length();
 	}

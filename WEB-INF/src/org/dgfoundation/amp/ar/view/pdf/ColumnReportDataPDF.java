@@ -83,7 +83,9 @@ public class ColumnReportDataPDF extends PDFExporter {
 			try{
 				translatedName=TranslatorWorker.translate(prefix+columnReport.getName(),locale,siteId);
 			}catch (WorkerException e)
-				{System.out.println(e);}
+				{//System.out.println(e);
+				
+				}
 			
 			PdfPCell pdfc; 
 			if(translatedName.compareTo("")==0)
@@ -123,7 +125,10 @@ public class ColumnReportDataPDF extends PDFExporter {
 					try{
 						translatedCellValue=TranslatorWorker.translate(prefix+cellValue,locale,siteId);
 					}catch (WorkerException e)
-						{System.out.println(e);}
+						{
+						e.printStackTrace();
+						
+						}
 					PdfPCell pdfc=null;
 				 
 					if(translatedCellValue.compareTo("")==0)

@@ -109,7 +109,7 @@ public class VisibilityManager extends MultiAction {
 		}
 		else
 		{
-			System.out.println(request.getParameter("templateName"));
+			//System.out.println(request.getParameter("templateName"));
 			FeaturesUtil.insertTemplate(request.getParameter("templateName"), hbsession);
 		}
 		//for refreshing the page...
@@ -148,15 +148,15 @@ public class VisibilityManager extends MultiAction {
 		{
 			AmpTreeVisibility m=(AmpTreeVisibility) i.next();
 			AmpModulesVisibility aop=(AmpModulesVisibility) m.getRoot();
-			//System.out.println("	"+m.getRoot().getName()+m.getRoot()+aop.isVisibleId((Long)session.getAttribute("templateId")));
+			////System.out.println("	"+m.getRoot().getName()+m.getRoot()+aop.isVisibleId((Long)session.getAttribute("templateId")));
 			for(Iterator j=m.getItems().values().iterator();j.hasNext();)
 			{
 				AmpTreeVisibility n=(AmpTreeVisibility) j.next();
-				//System.out.println("		"+n.getRoot().getName());
+				////System.out.println("		"+n.getRoot().getName());
 				for(Iterator k=n.getItems().values().iterator();k.hasNext();)
 				{
 					AmpTreeVisibility p=(AmpTreeVisibility) k.next();
-					//System.out.println("xxx			"+p.getRoot().getName());
+					////System.out.println("xxx			"+p.getRoot().getName());
 				}
 
 			}
@@ -214,7 +214,7 @@ public class VisibilityManager extends MultiAction {
 	
 	public ActionForward modeDeleteTemplate(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
 		// TODO Auto-generated method stub
-		System.out.println(Long.parseLong(request.getParameter("templateId")));
+		//System.out.println(Long.parseLong(request.getParameter("templateId")));
 		Session hbsession = null;
 		hbsession = this.createSession();
 		FeaturesUtil.deleteTemplateVisibility(new Long(Long.parseLong(request.getParameter("templateId"))),hbsession);
@@ -231,8 +231,8 @@ public class VisibilityManager extends MultiAction {
 	
 	public ActionForward modeDeleteFFM(ActionMapping mapping, ActionForm form, HttpServletRequest request, HttpServletResponse response) throws Exception {
 		// TODO Auto-generated method stub
-		//System.out.println(Long.parseLong(request.getParameter("fieldId")));
-		//System.out.println(Long.parseLong(request.getParameter("featureId")));
+		////System.out.println(Long.parseLong(request.getParameter("fieldId")));
+		////System.out.println(Long.parseLong(request.getParameter("featureId")));
 		Session hbsession = null;
 		hbsession = this.createSession();
 		if(request.getParameter("fieldId")!=null) FeaturesUtil.deleteFieldVisibility(new Long(Long.parseLong(request.getParameter("fieldId"))),hbsession);//delete field

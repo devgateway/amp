@@ -66,7 +66,7 @@ public class QuarterlyReportBySectorXLS extends Action
 			iter = coll.iterator();
 		}
 		
-		System.out.println("col size "+ coll.size());
+		//System.out.println("col size "+ coll.size());
 
 		multiReport multiReport;
 		AmpTeamDonors  ampTeamDonor;

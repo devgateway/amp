@@ -8,7 +8,7 @@ public class QuartMultiXlsJrxml
     {		
 		try
 		{
-			System.out.println("In QuarterlyMultilaterXls ");
+			//System.out.println("In QuarterlyMultilaterXls ");
 			
 			FileOutputStream out2; // declare a file output object
 			PrintStream p2; // declare a print stream object

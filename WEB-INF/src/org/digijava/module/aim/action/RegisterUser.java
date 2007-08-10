@@ -86,7 +86,7 @@ public class RegisterUser extends Action {
             	Country ampG = (Country)itr.next();
             	countryIso = ampG.getIso();
             }
-            System.out.println(" this is the default country.... "+countryIso);
+            //System.out.println(" this is the default country.... "+countryIso);
             user.setCountry(new Country(countryIso));
 			//user.setCountry(new Country(org.digijava.module.aim.helper.Constants.COUNTRY_ISO));
 

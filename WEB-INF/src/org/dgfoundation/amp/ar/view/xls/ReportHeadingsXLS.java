@@ -84,7 +84,9 @@ public class ReportHeadingsXLS extends XLSExporter {
 						try{
 							translatedCellValue=TranslatorWorker.translate(prefix+cellValue,locale,siteId);
 						}catch (WorkerException e)
-							{System.out.println(e);}
+							{
+							e.printStackTrace();
+							}
 						
 					 
 						if(translatedCellValue.compareTo("")==0)
@@ -92,7 +94,7 @@ public class ReportHeadingsXLS extends XLSExporter {
 						else 
 							cell.setCellValue(translatedCellValue);
 						
-						// System.out.println("["+rowId.intValue()+"]["+colId.intValue()+"]
+						// //System.out.println("["+rowId.intValue()+"]["+colId.intValue()+"]
 						// depth="+curDepth+" "+element2.getName());
 						// create spanning
 						// if(rowsp>1) makeRowSpan(rowsp);

@@ -95,7 +95,7 @@ public class ModuleVisibilityTag extends BodyTagSupport {
    			pageContext.getOut().print(bodyText);
    		   }
    		   else{
-   			System.out.println("Field MANAGER!!!! module "+this.getName()+" is not ACTIVE");
+   			//System.out.println("Field MANAGER!!!! module "+this.getName()+" is not ACTIVE");
    			   //the field is not active!!!
    		   }
    		   session.setAttribute("currentModuleTag",null);

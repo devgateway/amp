@@ -67,7 +67,7 @@ public class TextCellPDF extends PDFExporter {
 			try{
 				translatedStatus=TranslatorWorker.translate(prefix+actualStatus,locale,siteId);
 			}catch (WorkerException e)
-				{System.out.println(e);}
+				{e.printStackTrace();}
 			if (translatedStatus.compareTo("")==0)
 				translatedStatus=actualStatus;
 			finalStatus+=translatedStatus;

@@ -11,7 +11,7 @@ public class QuarterlyReportByProjectPdfJrxml
     {		
 		try
 		{
-			System.out.println("Creating PDF...................................");
+			//System.out.println("Creating PDF...................................");
 			FileOutputStream out2; // declare a file output object
 			PrintStream p2; // declare a print stream object
 			File fopen = new File(filePath);	
@@ -35,7 +35,7 @@ public class QuarterlyReportByProjectPdfJrxml
 			{
 				height  = 75;
 			}
-			System.out.println("Height : " + height );
+			//System.out.println("Height : " + height );
 
 			p2.println("<!-- Created with iReport - A designer for JasperReports -->");
 			p2.println("<!DOCTYPE jasperReport PUBLIC '//JasperReports//DTD Report Design//EN' 'http://jasperreports.sourceforge.net/dtds/jasperreport.dtd'>");

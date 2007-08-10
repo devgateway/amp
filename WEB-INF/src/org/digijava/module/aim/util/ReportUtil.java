@@ -11661,7 +11661,7 @@ public class ReportUtil {
 		catch(Exception e)
 		{
 			logger.error(e);
-			System.out.println(" Error in getColumnList()  :  " + e);
+			//System.out.println(" Error in getColumnList()  :  " + e);
 		} finally {
 			try {
 				session.close();
@@ -11704,7 +11704,7 @@ public class ReportUtil {
 		catch(Exception e)
 		{
 			logger.error(e);
-			System.out.println(" Error in getMeasureList()  :  " + e);
+			//System.out.println(" Error in getMeasureList()  :  " + e);
 		} finally {
 			try {
 				session.close();

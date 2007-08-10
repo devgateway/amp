@@ -100,7 +100,7 @@ public class getNPDgraph extends Action {
 
             String map = ChartUtilities.getImageMap("npdChartMap", info);
             //String map = getImageMap("npdChartMap", info, new StandardToolTipTagFragmentGenerator(), new StandardURLTagFragmentGenerator());
-            System.out.println(map);
+            //System.out.println(map);
 
             //save map tor this timestamp for later use
             ChartUtil.saveMap(map, npdForm.getTimestamp(), session);

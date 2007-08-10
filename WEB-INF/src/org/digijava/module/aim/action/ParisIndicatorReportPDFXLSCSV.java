@@ -59,22 +59,15 @@ public class ParisIndicatorReportPDFXLSCSV extends Action {
 		ParisIndicatorReportForm formBean = (ParisIndicatorReportForm) form;
 		Collection coll = null;
 		if (formBean != null) {
-		//	System.out.println("formBean is not null");
+		//	//System.out.println("formBean is not null");
 			coll = formBean.getDonorsColl();
-		} else {
-			//System.out.println("formbean is null");
 		}
-		if (coll == null)
-			System.out.println("coll is null");
-		else
-			System.out.println("formBean is not null");
-
 		Iterator iter = null;
 		Iterator iter1 = null;
 		if (coll.size() == 0) {
-			System.out.println("collection is empty");
+			//System.out.println("collection is empty");
 		} else {
-			System.out.println("collection is not empty");
+			//System.out.println("collection is not empty");
 			iter = coll.iterator();
 		}
 		int colCnt1 = coll.size();
@@ -129,7 +122,7 @@ public class ParisIndicatorReportPDFXLSCSV extends Action {
 							if(val==-1)
 							{
 								data2[row][col] = "na";
-									System.out.println(" this sis where na is coming "+ col);
+									//System.out.println(" this sis where na is coming "+ col);
 							}
 							else
 							{
@@ -145,7 +138,7 @@ public class ParisIndicatorReportPDFXLSCSV extends Action {
 							int c =4;
 							for(int i=0;i<arrSize;i++)
 							{
-								System.out.println(" i am dead "+data2[row][i]+"   i       "+i);
+								//System.out.println(" i am dead "+data2[row][i]+"   i       "+i);
 								if(!data2[row][c].equals("na"))
 								{
 									data2[row][c]=data2[row][c]+"%";
@@ -159,7 +152,7 @@ public class ParisIndicatorReportPDFXLSCSV extends Action {
 						int c =5;
 						for(int i=0;i<arrSize;i++)
 						{
-							System.out.println(" i am dead "+data2[row][i]+"   i       "+i);
+							//System.out.println(" i am dead "+data2[row][i]+"   i       "+i);
 							if(!data2[row][c].equals("na"))
 							{
 								data2[row][c]=data2[row][c]+"%";
@@ -173,7 +166,7 @@ public class ParisIndicatorReportPDFXLSCSV extends Action {
 						int c =7;
 						for(int i=0;i<arrSize;i++)
 						{
-							System.out.println(" i am dead "+data2[row][i]+"   i       "+i);
+							//System.out.println(" i am dead "+data2[row][i]+"   i       "+i);
 							if(!data2[row][c].equals("na"))
 							{
 								data2[row][c]=data2[row][c]+"%";
@@ -257,8 +250,8 @@ public class ParisIndicatorReportPDFXLSCSV extends Action {
 									"/WEB-INF/classes/org/digijava/module/aim/reports/indicator3pdf.jasper");
 
 					Map parameters = new HashMap();
-					System.out.println(jasperFile);
-					System.out.println(parameters);
+					//System.out.println(jasperFile);
+					//System.out.println(parameters);
 					bytes = JasperRunManager.runReportToPdf(jasperFile,
 							parameters, dataSource);
 				} catch (JRException e) {
@@ -269,7 +262,7 @@ public class ParisIndicatorReportPDFXLSCSV extends Action {
 				if (bytes != null && bytes.length > 0) {
 					ServletOutputStream ouputStream = response
 							.getOutputStream();
-					System.out.println("Generating PDF");
+					//System.out.println("Generating PDF");
 					response.setContentType("application/pdf");
 					response.setHeader("Content-Disposition",
 							"inline; filename=ParisIndicator3.pdf");
@@ -279,7 +272,7 @@ public class ParisIndicatorReportPDFXLSCSV extends Action {
 					ouputStream.flush();
 					ouputStream.close();
 				} else {
-					System.out.println("Nothing to display");
+					//System.out.println("Nothing to display");
 				}
 			}
 			// xls
@@ -356,17 +349,17 @@ public class ParisIndicatorReportPDFXLSCSV extends Action {
 									"/WEB-INF/classes/org/digijava/module/aim/reports/indicator4pdf.jasper");
 
 					Map parameters = new HashMap();
-					System.out.println(jasperFile);
-					System.out.println(parameters);
+					//System.out.println(jasperFile);
+					//System.out.println(parameters);
 					bytes = JasperRunManager.runReportToPdf(jasperFile,
 							parameters, dataSource);
 				} catch (JRException e) {
-					System.out.println("Exception from ParisDataSource = " + e);
+					//System.out.println("Exception from ParisDataSource = " + e);
 				}
 				if (bytes != null && bytes.length > 0) {
 					ServletOutputStream ouputStream = response
 							.getOutputStream();
-					System.out.println("Generating PDF");
+					//System.out.println("Generating PDF");
 					response.setContentType("application/pdf");
 					response.setHeader("Content-Disposition",
 							"inline; filename=ParisIndicator4.pdf");
@@ -376,7 +369,7 @@ public class ParisIndicatorReportPDFXLSCSV extends Action {
 					ouputStream.flush();
 					ouputStream.close();
 				} else {
-					System.out.println("Nothing to display");
+					//System.out.println("Nothing to display");
 				}
 			}
 			// xls
@@ -458,17 +451,17 @@ public class ParisIndicatorReportPDFXLSCSV extends Action {
 							.getRealPath(
 									"/WEB-INF/classes/org/digijava/module/aim/reports/indicator6pdf.jasper");
 					Map parameters = new HashMap();
-					System.out.println(jasperFile);
-					System.out.println(parameters);
+					//System.out.println(jasperFile);
+					//System.out.println(parameters);
 					bytes = JasperRunManager.runReportToPdf(jasperFile,
 							parameters, dataSource);
 				} catch (JRException e) {
-					System.out.println("Exception from PI7 = " + e);
+					//System.out.println("Exception from PI7 = " + e);
 				}
 				if (bytes != null && bytes.length > 0) {
 					ServletOutputStream ouputStream = response
 							.getOutputStream();
-					System.out.println("Generating PDF");
+					//System.out.println("Generating PDF");
 					response.setContentType("application/pdf");
 					response.setHeader("Content-Disposition",
 							"inline; filename=ParisIndicator6.pdf");
@@ -478,7 +471,7 @@ public class ParisIndicatorReportPDFXLSCSV extends Action {
 					ouputStream.flush();
 					ouputStream.close();
 				} else {
-					System.out.println("Nothing to display");
+					//System.out.println("Nothing to display");
 				}
 			}
 			// xls
@@ -517,7 +510,7 @@ public class ParisIndicatorReportPDFXLSCSV extends Action {
 				} catch (JRException e) {
 					if (outputStream != null)
 						outputStream.close();
-					System.out.println("Exception from PI6Xls = " + e);
+					//System.out.println("Exception from PI6Xls = " + e);
 				}
 			}
 		}
@@ -555,17 +548,17 @@ public class ParisIndicatorReportPDFXLSCSV extends Action {
 							.getRealPath(
 									"/WEB-INF/classes/org/digijava/module/aim/reports/indicator7pdf.jasper");
 					Map parameters = new HashMap();
-					System.out.println(jasperFile);
-					System.out.println(parameters);
+					//System.out.println(jasperFile);
+					//System.out.println(parameters);
 					bytes = JasperRunManager.runReportToPdf(jasperFile,
 							parameters, dataSource);
 				} catch (JRException e) {
-					System.out.println("Exception from PI7 = " + e);
+					//System.out.println("Exception from PI7 = " + e);
 				}
 				if (bytes != null && bytes.length > 0) {
 					ServletOutputStream ouputStream = response
 							.getOutputStream();
-					System.out.println("Generating PDF");
+					//System.out.println("Generating PDF");
 					response.setContentType("application/pdf");
 					response.setHeader("Content-Disposition",
 							"inline; filename=ParisIndicator7.pdf");
@@ -575,7 +568,7 @@ public class ParisIndicatorReportPDFXLSCSV extends Action {
 					ouputStream.flush();
 					ouputStream.close();
 				} else {
-					System.out.println("Nothing to display");
+					//System.out.println("Nothing to display");
 				}
 			}
 			// xls
@@ -614,7 +607,7 @@ public class ParisIndicatorReportPDFXLSCSV extends Action {
 				} catch (JRException e) {
 					if (outputStream != null)
 						outputStream.close();
-					System.out.println("Exception from PI7Xls = " + e);
+					//System.out.println("Exception from PI7Xls = " + e);
 				}
 			}
 		}
@@ -651,8 +644,8 @@ public class ParisIndicatorReportPDFXLSCSV extends Action {
 							.getRealPath(
 									"/WEB-INF/classes/org/digijava/module/aim/reports/indicator9pdf.jasper");
 					Map parameters = new HashMap();
-					System.out.println(jasperFile);
-					System.out.println(parameters);
+					//System.out.println(jasperFile);
+					//System.out.println(parameters);
 					bytes = JasperRunManager.runReportToPdf(jasperFile,
 							parameters, dataSource);
 				} catch (JRException e) {
@@ -663,7 +656,7 @@ public class ParisIndicatorReportPDFXLSCSV extends Action {
 				if (bytes != null && bytes.length > 0) {
 					ServletOutputStream ouputStream = response
 							.getOutputStream();
-					System.out.println("Generating PDF");
+					//System.out.println("Generating PDF");
 					response.setContentType("application/pdf");
 					response.setHeader("Content-Disposition",
 							"inline; filename=ParisIndicator9.pdf");
@@ -673,7 +666,7 @@ public class ParisIndicatorReportPDFXLSCSV extends Action {
 					ouputStream.flush();
 					ouputStream.close();
 				} else {
-					System.out.println("Nothing to display");
+					//System.out.println("Nothing to display");
 				}
 			}
 			// xls
@@ -712,7 +705,7 @@ public class ParisIndicatorReportPDFXLSCSV extends Action {
 				} catch (JRException e) {
 					if (outputStream != null)
 						outputStream.close();
-					System.out.println("Exception from PI9Xls = " + e);
+					//System.out.println("Exception from PI9Xls = " + e);
 				}
 			}
 		}
@@ -751,8 +744,8 @@ public class ParisIndicatorReportPDFXLSCSV extends Action {
 							.getRealPath(
 									"/WEB-INF/classes/org/digijava/module/aim/reports/indicator5apdf.jasper");
 					Map parameters = new HashMap();
-					System.out.println(jasperFile);
-					System.out.println(parameters);
+					//System.out.println(jasperFile);
+					//System.out.println(parameters);
 					bytes = JasperRunManager.runReportToPdf(jasperFile,
 							parameters, dataSource);
 				} catch (JRException e) {
@@ -763,7 +756,7 @@ public class ParisIndicatorReportPDFXLSCSV extends Action {
 				if (bytes != null && bytes.length > 0) {
 					ServletOutputStream ouputStream = response
 							.getOutputStream();
-					System.out.println("Generating PDF");
+					//System.out.println("Generating PDF");
 					response.setContentType("application/pdf");
 					response.setHeader("Content-Disposition",
 							"inline; filename=ParisIndicator5a.pdf");
@@ -773,7 +766,7 @@ public class ParisIndicatorReportPDFXLSCSV extends Action {
 					ouputStream.flush();
 					ouputStream.close();
 				} else {
-					System.out.println("Nothing to display");
+					//System.out.println("Nothing to display");
 				}
 			}
 			// xls
@@ -812,7 +805,7 @@ public class ParisIndicatorReportPDFXLSCSV extends Action {
 				} catch (JRException e) {
 					if (outputStream != null)
 						outputStream.close();
-					System.out.println("Exception from PI5aXls = " + e);
+					//System.out.println("Exception from PI5aXls = " + e);
 				}
 			}
 		}
@@ -847,8 +840,8 @@ public class ParisIndicatorReportPDFXLSCSV extends Action {
 									"/WEB-INF/classes/org/digijava/module/aim/reports/indicator5bpdf.jasper");
 
 					Map parameters = new HashMap();
-					System.out.println(jasperFile);
-					System.out.println(parameters);
+					//System.out.println(jasperFile);
+					//System.out.println(parameters);
 					bytes = JasperRunManager.runReportToPdf(jasperFile,
 							parameters, dataSource);
 				} catch (JRException e) {
@@ -859,7 +852,7 @@ public class ParisIndicatorReportPDFXLSCSV extends Action {
 				if (bytes != null && bytes.length > 0) {
 					ServletOutputStream ouputStream = response
 							.getOutputStream();
-					System.out.println("Generating PDF");
+					//System.out.println("Generating PDF");
 					response.setContentType("application/pdf");
 					response.setHeader("Content-Disposition",
 							"inline; filename=ParisIndicator5b.pdf");
@@ -869,7 +862,7 @@ public class ParisIndicatorReportPDFXLSCSV extends Action {
 					ouputStream.flush();
 					ouputStream.close();
 				} else {
-					System.out.println("Nothing to display");
+					//System.out.println("Nothing to display");
 				}
 			}
 			// xls
@@ -948,8 +941,8 @@ public class ParisIndicatorReportPDFXLSCSV extends Action {
 									"/WEB-INF/classes/org/digijava/module/aim/reports/indicator10apdf.jasper");
 
 					Map parameters = new HashMap();
-					System.out.println(jasperFile);
-					System.out.println(parameters);
+					//System.out.println(jasperFile);
+					//System.out.println(parameters);
 					bytes = JasperRunManager.runReportToPdf(jasperFile,
 							parameters, dataSource);
 				} catch (JRException e) {
@@ -960,7 +953,7 @@ public class ParisIndicatorReportPDFXLSCSV extends Action {
 				if (bytes != null && bytes.length > 0) {
 					ServletOutputStream ouputStream = response
 							.getOutputStream();
-					System.out.println("Generating PDF");
+					//System.out.println("Generating PDF");
 					response.setContentType("application/pdf");
 					response.setHeader("Content-Disposition",
 							"inline; filename=ParisIndicator10a.pdf");
@@ -970,7 +963,7 @@ public class ParisIndicatorReportPDFXLSCSV extends Action {
 					ouputStream.flush();
 					ouputStream.close();
 				} else {
-					System.out.println("Nothing to display");
+					//System.out.println("Nothing to display");
 				}
 			}
 			// xls
@@ -1025,8 +1018,7 @@ public class ParisIndicatorReportPDFXLSCSV extends Action {
 	}// end of Execute Func
 
 	void calculateFieldHeight(String input) {
-		System.out.println(" Large ::" + fieldHeight + " :: Current : "
-				+ input.length());
+
 		if (input.length() > fieldHeight)
 			fieldHeight = input.length();
 	}

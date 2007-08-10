@@ -800,7 +800,7 @@ p2.println("</staticText>");
 				p2.println("<field name='"+dc+"' class='java.lang.String'/>");
 			}
 
-			System.out.println("check111111111111111111111");
+			//System.out.println("check111111111111111111111");
 			p2.println("<group  name='GroupBySector' isStartNewColumn='false' isStartNewPage='false' isResetPageNumber='false' isReprintHeaderOnEachPage='false' minHeightToStartNewPage='0' >");
 			p2.println("<groupExpression><![CDATA[$F{c4}]]></groupExpression>");
 			p2.println("<groupHeader>");
@@ -1154,7 +1154,7 @@ p2.println("</staticText>");
 			p2.println("<detail>");
 			p2.println("<band height='"+(height+1)+"'  isSplitAllowed='true' >");
 			
-			System.out.println("check22222222222222222222222");
+			//System.out.println("check22222222222222222222222");
 			x=130;y=0;
 				c=6+n+1;
 				for(int	j=1;j<n+1;j++) 
@@ -1375,7 +1375,7 @@ p2.println("</staticText>");
 			p2.println("</summary>");
 			p2.println("</jasperReport>");
 
-			System.out.println("check33333333333333333333");
+			//System.out.println("check33333333333333333333");
 
 					p2.close();
 						}

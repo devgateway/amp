@@ -180,22 +180,21 @@ function sortSubmit(value){
 							</logic:equal>
 							<tr><td bgcolor="#ffffff" valign="top" align="left">
 								<!-- Currency list table -->
-								<table cellSpacing="1" cellPadding="4" vAlign="top" align="left" bgcolor="#aaaaaa" width="450">
+								<table cellSpacing="1" cellPadding="4" vAlign="top" align="left" bgcolor="#aaaaaa" width="500">
 									<tr bgcolor="eeeeee">
-										<td colspan="2" align="center" width="40" style="cursor:pointer;" onclick="sortSubmit(1)" onMouseOver="this.className='colHeaderOver'"
+										<td width="5%" > </td>
+										<td align="left" width="20%" style="cursor:pointer;" onclick="sortSubmit(1)" onMouseOver="this.className='colHeaderOver'"
 										onMouseOut="this.className='colHeaderLink'">
 											<b><digi:trn key="aim:currCode">Code</digi:trn></b>
-										</td>
-										<td align="center" width="200"  style="cursor:pointer;" onclick="sortSubmit(2)" onMouseOver="this.className='colHeaderOver'"
+										</td>										
+										<td align="left" width="35%"  style="cursor:pointer;" onclick="sortSubmit(2)" onMouseOver="this.className='colHeaderOver'"
 										onMouseOut="this.className='colHeaderLink'">
 											<b><digi:trn key="aim:currencyName">Currency Name</digi:trn></b>
 										</td>
-										<%--
-										<td align="center" width="150" onMouseOver="this.className='colHeaderOver'"
+										<td colspan="2" align="left" style="cursor:pointer;" onMouseOver="this.className='colHeaderOver'"  onclick="sortSubmit(3)"
 										onMouseOut="this.className='colHeaderLink'">
 											<b><digi:trn key="aim:countryName">Country</digi:trn></b>
-										</td>
-										--%>
+										</td>										
 									</tr>
 									<c:if test="${empty aimCurrencyForm.currency}">
 									<tr bgcolor="#f4f4f2">
@@ -206,65 +205,57 @@ function sortSubmit(value){
 									</c:if>
 									<% int index = 0; %>
 									<c:if test="${!empty aimCurrencyForm.currency}">
-									<c:forEach var="curr" items="${aimCurrencyForm.currency}">
-									<%
-									if (index%2 == 0) { %>
+										<c:forEach var="curr" items="${aimCurrencyForm.currency}">
+										<%
+											if (index%2 == 0) { %>
 									<tr class="rowNormal">
-									<% } else { %>
+										<%  } else { %>
 									<tr class="rowAlternate">
-									<% }
-									index++;%>
-										<td align="left" bgcolor="#ffffff" width="3">
-											<c:if test="${curr.activeFlag == 1}">
-												<c:set var="translation">
-													<digi:trn key="aim:clickHereToMakeTheCurrencyInactive">
-														Click here to make the currency inactive
-													</digi:trn>
-												</c:set>
-												<a href="javascript:makeInactive('<c:out value="${curr.currencyCode}"/>')"
-												title="${translation}">
-												<digi:img src="module/aim/images/bullet_green.gif" border="0"/></a>
-											</c:if>
-											<c:if test="${curr.activeFlag != 1}">
-												<c:set var="translation">
-													<digi:trn key="aim:clickHereToMakeTheCurrencyActive">
-														Click here to make the currency Active
-													</digi:trn>
-												</c:set>
-												<a href="javascript:makeActive('<c:out value="${curr.currencyCode}"/>')"
-												title="${translation}">
-												<digi:img src="module/aim/images/bullet_grey.gif" border="0"/></a>
-											</c:if>
-										</td>
-										<td align="left">
-											<a href="javascript:editCurrency('<c:out value="${curr.currencyCode}"/>')">
-											<c:out value="${curr.currencyCode}"/></a>
-										</td>
-										<td >
-											<table width="100%">
-												<tr>
-													<td align="left" width="75%">
-											<a href="javascript:editCurrency('<c:out value="${curr.currencyCode}"/>')">
-											<c:out value="${curr.currencyName}"/></a>
-										</td>
-													<td align="right">
-														<a href="javascript:deleteCurrency('<c:out value="${curr.currencyCode}"/>')">
-												 		<digi:img src="module/cms/images/deleteIcon.gif" border="0" alt="Delete this Currency"/>
-														</a>
-															
-													</td>
-												</tr>
-												</table>
-											
-										</td>
-										
-										<%--
-										<td align="left">
-											<c:out value="${curr.countryName}"/>
-										</td>
-										--%>
-									</tr>
-									</c:forEach>
+											<% 
+											}
+											index++;
+											%>
+											<td align="left" width="3">
+												<c:if test="${curr.activeFlag == 1}">
+													<c:set var="translation">
+														<digi:trn key="aim:clickHereToMakeTheCurrencyInactive">
+															Click here to make the currency inactive
+														</digi:trn>
+													</c:set>
+													<a href="javascript:makeInactive('<c:out value="${curr.currencyCode}"/>')"
+													title="${translation}">
+													<digi:img src="module/aim/images/bullet_green.gif" border="0"/></a>
+												</c:if>
+												<c:if test="${curr.activeFlag != 1}">
+													<c:set var="translation">
+														<digi:trn key="aim:clickHereToMakeTheCurrencyActive">
+															Click here to make the currency Active
+														</digi:trn>
+													</c:set>
+													<a href="javascript:makeActive('<c:out value="${curr.currencyCode}"/>')"
+													title="${translation}">
+													<digi:img src="module/aim/images/bullet_grey.gif" border="0"/></a>
+												</c:if>
+											</td>
+											<td align="left">
+												<a href="javascript:editCurrency('<c:out value="${curr.currencyCode}"/>')">
+												<c:out value="${curr.currencyCode}"/></a>
+											</td>
+											<td align="left">
+												<a href="javascript:editCurrency('<c:out value="${curr.currencyCode}"/>')">
+												<c:out value="${curr.currencyName}"/></a>
+											</td>
+											<td align="left">
+												<a href="javascript:editCurrency('<c:out value="${curr.currencyCode}"/>')">												
+												<c:out value="${curr.countryName}"/></a>
+											</td>
+											<td align="right">
+												<a href="javascript:deleteCurrency('<c:out value="${curr.currencyCode}"/>')">
+										 		<digi:img src="module/cms/images/deleteIcon.gif" border="0" alt="Delete this Currency"/>
+												</a>													
+											</td>											
+										</tr>
+										</c:forEach>
 									</c:if>
 								</table>
 							</td></tr>

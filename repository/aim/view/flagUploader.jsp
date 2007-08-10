@@ -330,10 +330,14 @@ input.hide{
 															<html:select property="countryId" styleClass="inp-text">
 
 																<html:option value="-1">-- Select Country --</html:option>
+                                                                <c:forEach var="cn" items="${aimFlagUploaderForm.countries}">
+                                                                  <c:set var="cnName">
+                                                                    <digi:trn key="aim:cn:${cn.name}">${cn.name}</digi:trn>
+                                                                  </c:set>
+                                                                  <html:option value="${cn.id}">${cnName}</html:option>
+                                                                </c:forEach>
 
-																<html:optionsCollection name="aimFlagUploaderForm" property="countries"
-
-																value="id" label="name" />
+																<%--<html:optionsCollection name="aimFlagUploaderForm" property="countries"	value="id" label="name" />--%>
 
 															</html:select>
 

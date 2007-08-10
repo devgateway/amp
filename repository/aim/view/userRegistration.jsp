@@ -10,7 +10,7 @@
 
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
 
-
+<%@ taglib uri="/taglib/jstl-core" prefix="c" %>
 
 <script language="JavaScript">
 
@@ -18,7 +18,7 @@
 
 	function optionChanged(flag) {
 
-		
+
 
 		if (flag == 'otype') {
 
@@ -100,9 +100,9 @@
 
 
 
-<html:javascript formName="aimUserRegisterForm"/>
 
 
+<digi:instance property="aimUserRegisterForm" />
 
 <digi:form action="/registerUser.do" method="post" onsubmit="return validateAimUserRegisterForm(this);">
 
@@ -120,7 +120,7 @@
 
 <tr><td width="100%" valign="top" align="left">
 
-<jsp:include page="header.jsp" flush="true" />			
+<jsp:include page="header.jsp" flush="true" />
 
 </td>
 
@@ -142,7 +142,7 @@
 
 				<tr>
 
-					<td width="3%">&nbsp;</td>				
+					<td width="3%">&nbsp;</td>
 
 					<td align=left class=title noWrap colspan="2">
 
@@ -150,11 +150,11 @@
 
 					</td>
 
-				</tr>					
+				</tr>
 
 				<tr>
 
-					<td width="3%">&nbsp;</td>				
+					<td width="3%">&nbsp;</td>
 
 					<td align=left class=title noWrap colspan="2">
 
@@ -164,11 +164,11 @@
 
 					</td>
 
-				</tr>		
+				</tr>
 
 				<tr>
 
-					<td width="3%">&nbsp;</td>				
+					<td width="3%">&nbsp;</td>
 
 					<td align=left class=title noWrap colspan="2">
 
@@ -182,11 +182,11 @@
 
 					</td>
 
-				</tr>					
+				</tr>
 
 				<tr>
 
-					<td width="3%">&nbsp;</td>				
+					<td width="3%">&nbsp;</td>
 
 					<td align=right class=f-names noWrap width="40%">
 
@@ -204,11 +204,11 @@
 
 					</td>
 
-				</tr>				
+				</tr>
 
 				<tr>
 
-					<td width="3%">&nbsp;</td>				
+					<td width="3%">&nbsp;</td>
 
 					<td align=right class=f-names noWrap width="40%">
 
@@ -230,7 +230,7 @@
 
 				<tr>
 
-					<td width="3%">&nbsp;</td>				
+					<td width="3%">&nbsp;</td>
 
 					<td align=right class=f-names noWrap>
 
@@ -252,7 +252,7 @@
 
 				<tr>
 
-					<td width="3%">&nbsp;</td>				
+					<td width="3%">&nbsp;</td>
 
 					<td align=right class=f-names noWrap>
 
@@ -274,7 +274,7 @@
 
 				<tr>
 
-					<td width="3%">&nbsp;</td>				
+					<td width="3%">&nbsp;</td>
 
 					<td align=right class=f-names noWrap>
 
@@ -292,11 +292,11 @@
 
 					</td>
 
-				</tr>	
+				</tr>
 
 				<tr>
 
-					<td width="3%">&nbsp;</td>				
+					<td width="3%">&nbsp;</td>
 
 					<td align=right class=f-names noWrap>
 
@@ -316,11 +316,11 @@
 
 				</tr>
 
-				
+
 
 				<tr>
 
-					<td width="3%">&nbsp;</td>				
+					<td width="3%">&nbsp;</td>
 
 					<td align=right class=f-names noWrap>
 
@@ -335,13 +335,12 @@
 					<td align="left">
 
               <html:select  property="selectedCountryResidence" styleClass="inp-text">
-
-                <bean:define id="countries" name="aimUserRegisterForm" property="countryResidence" 
-
-					 type="java.util.Collection" />
-
-                <html:options  collection="countries" property="iso" labelProperty="name" />
-
+                  <c:forEach var="cn" items="${aimUserRegisterForm.countryResidence}">
+                    <c:set var="cnName">
+                      <digi:trn key="aim:cn:${cn.name}">${cn.name}</digi:trn>
+                    </c:set>
+                    <html:option value="${cn.iso}">${cnName}</html:option>
+                  </c:forEach>
               </html:select>
 
 					</td>
@@ -352,7 +351,7 @@
 
 				<tr>
 
-					<td width="3%">&nbsp;</td>				
+					<td width="3%">&nbsp;</td>
 
 					<td align=right class=f-names noWrap>
 
@@ -368,11 +367,11 @@
 
 					</td>
 
-				</tr>	
+				</tr>
 
 				<tr>
 
-					<td width="3%">&nbsp;</td>				
+					<td width="3%">&nbsp;</td>
 
 					<td align=right class=f-names noWrap>
 
@@ -388,7 +387,7 @@
 
 							<html:option value="-1">-- <digi:trn key="um:selectType">Select a type</digi:trn> --</html:option>
 
-							<html:optionsCollection name="aimUserRegisterForm" property="orgTypeColl" 
+							<html:optionsCollection name="aimUserRegisterForm" property="orgTypeColl"
 
 													value="ampOrgTypeId" label="orgType" />
 
@@ -400,7 +399,7 @@
 
 				<tr>
 
-					<td width="3%">&nbsp;</td>				
+					<td width="3%">&nbsp;</td>
 
 					<td align=right class=f-names noWrap>
 
@@ -418,23 +417,23 @@
 
 							<logic:notEmpty name="aimUserRegisterForm" property="orgGroupColl" >
 
-								<html:optionsCollection name="aimUserRegisterForm" property="orgGroupColl" 
+								<html:optionsCollection name="aimUserRegisterForm" property="orgGroupColl"
 
 									         			value="ampOrgGrpId" label="orgGrpName" />
 
 							</logic:notEmpty>
 
-							
+
 
 						</html:select>
 
 					</td>
 
-				</tr>	
+				</tr>
 
 				<tr>
 
-					<td width="3%">&nbsp;</td>				
+					<td width="3%">&nbsp;</td>
 
 					<td align=right class=f-names noWrap>
 
@@ -462,13 +461,13 @@
 
 					</td>
 
-				</tr>					
+				</tr>
 
-				
+
 
 				<!-- <tr>
 
-					<td width="3%">&nbsp;</td>				
+					<td width="3%">&nbsp;</td>
 
 					<td align=right class=f-names noWrap>
 
@@ -486,11 +485,11 @@
 
 				</tr> -->
 
-				
+
 
 				<tr>
 
-					<td width="3%">&nbsp;</td>				
+					<td width="3%">&nbsp;</td>
 
 					<td align=right class=f-names noWrap>
 
@@ -504,7 +503,7 @@
 
               <html:select  property="selectedLanguage" styleClass="inp-text">
 
-                <bean:define id="languages" name="aimUserRegisterForm" property="navigationLanguages" 
+                <bean:define id="languages" name="aimUserRegisterForm" property="navigationLanguages"
 
 					 type="java.util.Collection" />
 
@@ -514,11 +513,11 @@
 
 					</td>
 
-				</tr>					
+				</tr>
 
 				<tr>
 
-					<td>&nbsp;</td>				
+					<td>&nbsp;</td>
 
 					<td>&nbsp;</td>
 
@@ -534,7 +533,7 @@
 
 					<td colspan=3>&nbsp;</td>
 
-				</tr>				
+				</tr>
 
 			</table>
 
@@ -556,13 +555,13 @@
 
 						</c:set>
 
-						<digi:link href="/index.do" title="${translation}" >	
+						<digi:link href="/index.do" title="${translation}" >
 
 						<digi:trn key="aim:useAMPSiteNow">
 
 						Use AMP Ethiopia now
 
-						</digi:trn>	
+						</digi:trn>
 
 						</digi:link>
 
@@ -586,15 +585,15 @@
 
 						<digi:trn key="aim:loginWarning">
 
-						 You are signing-in to one or more secure applications for        
+						 You are signing-in to one or more secure applications for
 
-        			    official business. You have been granted the right to access these        
+        			    official business. You have been granted the right to access these
 
-          		 	 applications and the information contained in them to facilitate        
+          		 	 applications and the information contained in them to facilitate
 
-           			 your official business. Your accounts and passwords are your        
+           			 your official business. Your accounts and passwords are your
 
-						 responsibility. Do not share them with anyone.        
+						 responsibility. Do not share them with anyone.
 
 						 </digi:trn		>
 
@@ -602,7 +601,7 @@
 
           		</td>
 
-  				</tr> 
+  				</tr>
 
         		<tr>
 

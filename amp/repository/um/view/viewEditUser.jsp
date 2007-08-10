@@ -125,7 +125,12 @@ function goAction(value){
                 </c:set>
                 <html:option value="-1">${translation}</html:option>
                 <c:if test="${!empty umViewEditUserForm.countries}">
-                  <html:optionsCollection name="umViewEditUserForm" property="countries" value="iso" label="name"/>
+                  <c:forEach var="cn" items="${umViewEditUserForm.countries}">
+                    <c:set var="cnName">
+                      <digi:trn key="aim:cn:${cn.name}">${cn.name}</digi:trn>
+                    </c:set>
+                    <html:option value="${cn.iso}">${cnName}</html:option>
+                  </c:forEach>
                 </c:if>
               </html:select>
             </td>

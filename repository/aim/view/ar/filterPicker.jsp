@@ -48,18 +48,24 @@
 
 
 		<tr>
+			<bean:define id="calendars" name="aimReportsFilterPickerForm" property="calendars" type="java.util.Collection"/>
+			<% int size =  ((java.util.Collection)calendars).size();
+			   boolean condition = (size != 1);
+			   if (condition){%>
 			<td colspan="2"><b><digi:trn key="rep:filer:fiscalCalendar">Fiscal Calendar</digi:trn></b></td>
+			<% } %>
 			<td align="center"><b><digi:trn key="rep:filer:FromYear">From Year</digi:trn></b></td>
 			<td align="center"><b><digi:trn key="rep:filer:ToYear">To Year</digi:trn></b></td>
 		</tr>
 		<tr>
+			<% if (condition){%>
 			<td colspan="2">
 			<html:select property="calendar" style="width: 270px" styleClass="inp-text">
 				<html:optionsCollection property="calendars"
 					value="ampFiscalCalId" label="name" />
 			</html:select>
 			</td>
-	
+			<% } %>
 			<td align="center">
 			<html:select property="fromYear" styleClass="inp-text">
 				<html:option value="-1"><digi:trn key="rep:filer:All">All</digi:trn></html:option>			

@@ -181,19 +181,19 @@ function confirmFunc() {
 														 		<%
 														 			if (report.getType().equals(new Long(1))) {
 														 		%>
-														 				donor
+														 				<digi:trn key="aim:donorType">donor</digi:trn>
 														 		<%
 														 			}
 														 			else
 														 				if (report.getType().equals(new Long (2))){
 														 		%>
-														 					regional
+														 					<digi:trn key="aim:regionalType">regional</digi:trn>
 														 		<%
 														 				}
 														 				else
 														 					if (report.getType().equals(new Long(3))){
 														 		%>
-														 						component
+														 						<digi:trn key="aim:componentType">component</digi:trn>
 														 		<%
 														 					}
 														 		%>

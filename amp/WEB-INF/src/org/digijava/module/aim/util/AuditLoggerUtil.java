@@ -118,7 +118,7 @@ public class AuditLoggerUtil {
 			qryStr = "select f from " + className + " f where f.id="+id;
 			if(className.contains("AmpReports")) {
 				qryStr = "select f from " + className + " f where f.ampReportId="+id;
-				System.out.println("aaaaaaaaaaa"+qryStr);
+				//System.out.println("aaaaaaaaaaa"+qryStr);
 				
 			}
 			qry = session.createQuery(qryStr);

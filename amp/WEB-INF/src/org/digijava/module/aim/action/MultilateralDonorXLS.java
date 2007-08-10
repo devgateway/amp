@@ -39,24 +39,18 @@ public class MultilateralDonorXLS extends Action
 		MulitlateralbyDonorForm formBean = (MulitlateralbyDonorForm) form;
 		Collection coll = new ArrayList();
 		if (formBean != null) {
-			System.out.println("formBean is not null");
+			//System.out.println("formBean is not null");
 			coll= formBean.getMultiReport();
-		} else {
-			System.out.println("formbean is null");
-		}
-		if(coll == null)
-			System.out.println("coll is null");
-		else
-			System.out.println("formBean is not null");
+		} 
 		
 		Iterator iter = null;
 		if (coll.size() == 0) {
-			System.out.println("collection is empty");
+			//System.out.println("collection is empty");
 		} else {
-			System.out.println("collection is not empty");
+			//System.out.println("collection is not empty");
 			iter = coll.iterator();
 		}
-		System.out.println("col size "+ coll.size());
+		//System.out.println("col size "+ coll.size());
 		
 		multiReport report;
 		FundTotal fundTotal;
@@ -114,7 +108,7 @@ public class MultilateralDonorXLS extends Action
 		rowCnt = rowCnt + 1;
 		yyCount = formBean.getFiscalYearRange().size();
 		colCnt = 4 + yyCount + (yyCount*4) + 6 + 2 ;
-		System.out.println(rowCnt +" :  Row :Cnt : Col : " + colCnt);
+		//System.out.println(rowCnt +" :  Row :Cnt : Col : " + colCnt);
 
 		Integer year = null;
 		String teamName="";
@@ -344,7 +338,7 @@ public class MultilateralDonorXLS extends Action
 		else
 		{
 			flag = 0;	
-			System.out.println("Collection empty");
+			//System.out.println("Collection empty");
 		}
 
 		if(flag == 1)

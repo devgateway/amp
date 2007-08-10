@@ -66,7 +66,7 @@ public class ViewChannelOverview extends TilesAction {
 			for(Iterator itAux=ampFields.iterator(); itAux.hasNext();)
 			{
 				AmpField field = (AmpField) itAux.next();
-				System.out.println(field.getFieldName());
+				//System.out.println(field.getFieldName());
 				colAux = DbUtil.getAllCommentsByField(field.getAmpFieldId(),id);
 				allComments.put(field.getFieldName(),colAux);
 			}

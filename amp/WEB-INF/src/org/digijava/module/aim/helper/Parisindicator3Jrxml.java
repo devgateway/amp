@@ -19,7 +19,7 @@ public class Parisindicator3Jrxml
 				p.println("<?xml version=\"1.0\" encoding=\"UTF-8\" ?>");
 				//p.println("<?xml version=\"1.0\" encoding=\"UTF-8\" ?>");
 				p2 = new PrintStream(out2);
-				System.out.println("creating now- dynamic trend...");
+				//System.out.println("creating now- dynamic trend...");
 				
 				
 				p2.println("<!-- Created with iReport - A designer for JasperReports -->");
@@ -54,11 +54,11 @@ public class Parisindicator3Jrxml
 							int colCnt =13;
 							int height = ((cols-1)/4 )*27;
 							int height1= height+1;
-							System.out.println(" Cnt = " + colCnt +  " cols "+cols);
+							//System.out.println(" Cnt = " + colCnt +  " cols "+cols);
 //							 gets the no of fields = 4 constants fields + YearCnt*3 + yearCnt
 							for(int k=1; k<=cols; k++)
 							{
-								System.out.println("k="+k);
+								//System.out.println("k="+k);
 								dc="m"+k;
 								p2.println("<field name='"+dc+"' class='java.lang.String'/>");
 							}
@@ -446,7 +446,7 @@ public class Parisindicator3Jrxml
 							x=x+146;
 							if(count%4 == 0)
 							{
-								System.out.println(" in here  "+ count + " jjjjj "+ j + "  adasd "+add);
+								//System.out.println(" in here  "+ count + " jjjjj "+ j + "  adasd "+add);
 								x=117;
 								y=y+27;
 								add=0;
@@ -503,7 +503,7 @@ public class Parisindicator3Jrxml
 									x=x+146;
 									if(count%4 == 0)
 									{
-										System.out.println(" in here  "+ count + " jjjjj "+ j + "  adasd "+add);
+										//System.out.println(" in here  "+ count + " jjjjj "+ j + "  adasd "+add);
 										x=117;
 										y=y+27;
 										add=0;
@@ -665,7 +665,7 @@ public class Parisindicator3Jrxml
 					p2.println("		</summary>");
 					p2.println("</jasperReport>");
 
-		System.out.println("hyup");			
+		//System.out.println("hyup");			
 		}
 		
 		catch(Exception e)

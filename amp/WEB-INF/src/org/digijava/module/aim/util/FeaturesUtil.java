@@ -390,7 +390,7 @@ public class FeaturesUtil {
 			FeatureTemplates ampTemplate=new FeatureTemplates();
 			ampTemplate=(FeatureTemplates)session.load(FeatureTemplates.class,templateId);
 			ampTemplate.setFeatureTemplateName(templateName);
-		    System.out.println(ampTemplate.getFeatureTemplateName());
+		    //System.out.println(ampTemplate.getFeatureTemplateName());
 			ampTemplate.setFeatures(new HashSet());
 			//ampTemplate.getFeatures().addAll(features);
 			for(Iterator it=features.iterator();it.hasNext();)

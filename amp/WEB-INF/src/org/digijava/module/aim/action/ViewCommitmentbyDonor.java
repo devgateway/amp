@@ -132,7 +132,7 @@ public class ViewCommitmentbyDonor extends Action
 					  double plannedCommitmentForcast1 = DbUtil.getFundDetails((Long)ampFunding.getAmpFundingId(),new Integer(0),new Integer(0), new Integer(forcastYear1));			
 					  if( plannedCommitmentForcast1 == 0.0)
 					  {
-						  //System.out.println("FORCAST YEAR1 PLANNED COMMITMENT AMOUNT:" + plannedCommitmentForcast1 );
+						  ////System.out.println("FORCAST YEAR1 PLANNED COMMITMENT AMOUNT:" + plannedCommitmentForcast1 );
 						  report1.setPlannedCommitmentForcast1(0.0 );
 					  }
 					  else
@@ -144,7 +144,7 @@ public class ViewCommitmentbyDonor extends Action
 					  double plannedCommitmentForcast2 = DbUtil.getFundDetails((Long)ampFunding.getAmpFundingId(),new Integer(0),new Integer(0), new Integer(forcastYear2));			
 					  if( plannedCommitmentForcast2 == 0.0)
 					  {
-						  //System.out.println("FORCAST YEAR2 PLANNED COMMITMENT AMOUNT:" + plannedCommitmentForcast2 );
+						  ////System.out.println("FORCAST YEAR2 PLANNED COMMITMENT AMOUNT:" + plannedCommitmentForcast2 );
 						  report1.setPlannedCommitmentForcast2(0.0 );
 					  }
 					  else
@@ -156,7 +156,7 @@ public class ViewCommitmentbyDonor extends Action
 					  double plannedCommitmentForcast3 = DbUtil.getFundDetails((Long)ampFunding.getAmpFundingId(),new Integer(0),new Integer(0), new Integer(forcastYear3));			
 					  if( plannedCommitmentForcast2 == 0.0)
 					  {
-						  //System.out.println("FORCAST YEAR3 PLANNED COMMITMENT AMOUNT:" + plannedCommitmentForcast3 );
+						  ////System.out.println("FORCAST YEAR3 PLANNED COMMITMENT AMOUNT:" + plannedCommitmentForcast3 );
 						  report1.setPlannedCommitmentForcast3(0.0 );
 					  }
 					  else

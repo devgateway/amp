@@ -58,7 +58,7 @@ public class FieldVisibilityTag extends BodyTagSupport {
 	   			   FeaturesUtil.insertFieldWithFeatureVisibility(ampTreeVisibility.getRoot().getId(),ampTreeVisibility.getFeatureByNameFromRoot(this.getFeature()).getId(),this.getName());;
 	   			   
 	   			   AmpTemplatesVisibility currentTemplate=(AmpTemplatesVisibility)FeaturesUtil.getTemplateById(ampTreeVisibility.getRoot().getId());
-	   			   System.out.println("-------------------------------"+currentTemplate.getId());
+	   			   //System.out.println("-------------------------------"+currentTemplate.getId());
 	   			   ampTreeVisibility.buildAmpTreeVisibility(currentTemplate);
 	   			   ampContext.setAttribute("ampTreeVisibility", ampTreeVisibility);
 	   		   }
@@ -66,10 +66,10 @@ public class FieldVisibilityTag extends BodyTagSupport {
 	   		if(ampTreeVisibility!=null)
 	   		   if(!isFeatureTheParent(ampTreeVisibility)){
 	   			   //update(featureId, fieldname);
-				   System.out.println("error!!!! feature "+this.getFeature()+" is not the parent");
+				   //System.out.println("error!!!! feature "+this.getFeature()+" is not the parent");
 				   FeaturesUtil.updateFieldWithFeatureVisibility(ampTreeVisibility.getFeatureByNameFromRoot(this.getFeature()).getId(),this.getName());
 	   			   AmpTemplatesVisibility currentTemplate=(AmpTemplatesVisibility)FeaturesUtil.getTemplateById(ampTreeVisibility.getRoot().getId());
-	   			   System.out.println("-------------------------------"+currentTemplate.getId());
+	   			   //System.out.println("-------------------------------"+currentTemplate.getId());
 	   			   ampTreeVisibility.buildAmpTreeVisibility(currentTemplate);
 	   			   ampContext.setAttribute("ampTreeVisibility", ampTreeVisibility);
 
@@ -98,7 +98,7 @@ public class FieldVisibilityTag extends BodyTagSupport {
     	   if(ampTreeVisibility!=null)
     	   if(! existFeature(ampTreeVisibility)) {
     		   //error
-    		  System.out.println("error!!!! feature "+this.getFeature()+" doesn't exist");
+    		  //System.out.println("error!!!! feature "+this.getFeature()+" doesn't exist");
     		  return SKIP_BODY;
     	   }
    		   ampTreeVisibility=(AmpTreeVisibility) ampContext.getAttribute("ampTreeVisibility");
@@ -107,7 +107,7 @@ public class FieldVisibilityTag extends BodyTagSupport {
    			pageContext.getOut().print(bodyText);
    		   }
    		   else{
-   			System.out.println("Field MANAGER!!!! field "+this.getName()+" is not ACTIVE");
+   			//System.out.println("Field MANAGER!!!! field "+this.getName()+" is not ACTIVE");
    			   ;//the field is not active!!!
    		   }
     	   

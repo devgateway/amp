@@ -176,7 +176,7 @@ public class DbUtil {
 		String s = null;
 		if(funding!=null)
 			if(!funding.isEmpty()) s=((String)(funding.iterator().next()));
-		//System.out.println("aaaaaaaaaaaaa"+s);
+		////System.out.println("aaaaaaaaaaaaa"+s);
 		return s;
 	}
 
@@ -652,7 +652,7 @@ public class DbUtil {
 			}
 		} catch (Exception ex) {
 			logger.error("Unable to get Amp PhysicalPerformance", ex);
-			//System.out.println(ex.toString()) ;
+			////System.out.println(ex.toString()) ;
 				}
 		logger.debug("Getting components executed successfully "
 				+ component.size());
@@ -715,7 +715,7 @@ public class DbUtil {
 			}
 		} catch (Exception ex) {
 			logger.error("Unable to get Amp PhysicalPerformance", ex);
-			//System.out.println(ex.toString()) ;
+			////System.out.println(ex.toString()) ;
 				}
 		logger
 				.debug("Getting funding Executed successfully "
@@ -908,7 +908,7 @@ public class DbUtil {
 			}
 		} catch (Exception ex) {
 			logger.error("Unable to get Amp Component", ex);
-			//System.out.println(ex.toString()) ;
+			////System.out.println(ex.toString()) ;
 				}
 		logger.debug("Getting Amp Component Executed successfully ");
 		return comp;
@@ -942,7 +942,7 @@ public class DbUtil {
 			}
 		} catch (Exception ex) {
 			logger.error("Unable to get Amp PhysicalPerformance", ex);
-			//System.out.println(ex.toString()) ;
+			////System.out.println(ex.toString()) ;
 				}
 		logger.debug("Getting funding Executed successfully ");
 		return ampPhysicalPerformance;
@@ -1316,7 +1316,7 @@ public class DbUtil {
 				ampAppSettings = (AmpApplicationSettings) itr.next();
 				ampAppSettings.setDefaultTeamReport(null);
 				update(ampAppSettings);
-				//System.out.println("Am updatat: " + ampAppSettings.getAmpAppSettingsId());
+				////System.out.println("Am updatat: " + ampAppSettings.getAmpAppSettingsId());
 			}
 		} catch (Exception e) {
 			logger.error("Unable to get TeamAppSettings");
@@ -2880,7 +2880,7 @@ public class DbUtil {
 			statusItem = (AmpStatus) session.load(AmpStatus.class, id);
 		} catch (Exception ex) {
 			logger.error("DbUtil:getAmpStatus: Unable to get Amp Status ", ex);
-			//System.out.println(ex.toString()) ;
+			////System.out.println(ex.toString()) ;
 		}
 		logger.debug("DbUtil: getAmpStatus(id) executed successfully ");
 		return statusItem;

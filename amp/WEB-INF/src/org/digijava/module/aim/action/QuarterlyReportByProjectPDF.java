@@ -88,7 +88,7 @@ public class QuarterlyReportByProjectPDF extends Action
 		if(formBean != null	)
 		{
 			yearCount = formBean.getFiscalYearRange().size();
-			System.out.println("Year Coutn : " + yearCount );
+			//System.out.println("Year Coutn : " + yearCount );
 		}
 		if(coll != null)
 		{
@@ -292,7 +292,7 @@ public class QuarterlyReportByProjectPDF extends Action
 							data[row][4] = ampTeamDonors.getDonorAgency();
 							termFund = (TermFund) totalDonorTermAssistFundIter.next();
 							col+=1;
-							System.out.println(row + " : Total  "+termFund.getTermAssistName());
+							//System.out.println(row + " : Total  "+termFund.getTermAssistName());
 							data[row][col] = "Total " +termFund.getTermAssistName();
 							calculateFieldHeight(data[row][col].toString());
 							
@@ -497,7 +497,7 @@ public class QuarterlyReportByProjectPDF extends Action
 
 	void calculateFieldHeight(String input)
 	{
-		System.out.println(" Large ::" + fieldHeight + " :: CUrrent : " + input.length());
+		//System.out.println(" Large ::" + fieldHeight + " :: CUrrent : " + input.length());
 		if(input.length() > fieldHeight)
 			fieldHeight = input.length();
 	}

@@ -57,7 +57,7 @@ public class FeatureVisibilityTag extends BodyTagSupport {
    			   //insert(templateid,moduleId, featurename);
    			   FeaturesUtil.insertFeatureWithModuleVisibility(ampTreeVisibility.getRoot().getId(),ampTreeVisibility.getModuleByNameFromRoot(this.getModule()).getId(),this.getName());
    			   AmpTemplatesVisibility currentTemplate=(AmpTemplatesVisibility)FeaturesUtil.getTemplateById(ampTreeVisibility.getRoot().getId());
-   			   System.out.println("-------------------------------inserting new feature in database");
+   			   //System.out.println("-------------------------------inserting new feature in database");
    			   ampTreeVisibility.buildAmpTreeVisibility(currentTemplate);
    			   ampContext.setAttribute("ampTreeVisibility", ampTreeVisibility);
    		   }
@@ -65,18 +65,18 @@ public class FeatureVisibilityTag extends BodyTagSupport {
 	   if(ampTreeVisibility!=null)
    		   if(!isModuleTheParent(ampTreeVisibility)){
    			   //update(featureId, fieldname);
-			   System.out.println("error!!!! module "+this.getModule()+" is not the parent");
+			   //System.out.println("error!!!! module "+this.getModule()+" is not the parent");
 			   
 			   FeaturesUtil.updateFeatureWithModuleVisibility(ampTreeVisibility.getModuleByNameFromRoot(this.getModule()).getId(),this.getName());
 			   AmpTemplatesVisibility currentTemplate=(AmpTemplatesVisibility)FeaturesUtil.getTemplateById(ampTreeVisibility.getRoot().getId());
-   			   System.out.println("-------------------------------update the parent of the feature");
+   			   //System.out.println("-------------------------------update the parent of the feature");
    			   ampTreeVisibility.buildAmpTreeVisibility(currentTemplate);
    			   ampContext.setAttribute("ampTreeVisibility", ampTreeVisibility);
 		   }
 	   ampTreeVisibility=(AmpTreeVisibility) ampContext.getAttribute("ampTreeVisibility");
 	   if(!existModule(ampTreeVisibility)) {
 		   //error
-		  System.out.println("error!!!! module "+this.getModule()+" doesn't exist");
+		  //System.out.println("error!!!! module "+this.getModule()+" doesn't exist");
 		  return SKIP_BODY;
 	   }
 
@@ -106,7 +106,7 @@ public class FeatureVisibilityTag extends BodyTagSupport {
    			pageContext.getOut().print(bodyText);
    		   }
    		   else{
-   			System.out.println("Field MANAGER!!!! ffeature "+this.getName()+" is not ACTIVE");
+   			//System.out.println("Field MANAGER!!!! ffeature "+this.getName()+" is not ACTIVE");
    			   //the field is not active!!!
    		   }
     	   

@@ -48,11 +48,11 @@ public class AmpModulesVisibility extends AmpObjectVisibility implements Seriali
 	}
 	
 	public boolean isVisibleId(Long id){
-		//System.out.println("MODULUL:"+name+" are template-uri:"+this.getTemplates().size());
+		////System.out.println("MODULUL:"+name+" are template-uri:"+this.getTemplates().size());
 		for(Iterator it=this.getTemplates().iterator();it.hasNext();)
 		{
 			AmpTemplatesVisibility x=(AmpTemplatesVisibility) it.next();
-			//System.out.println("			compar template-ul"+x.getId()+" cu id:"+id);	
+			////System.out.println("			compar template-ul"+x.getId()+" cu id:"+id);	
 			if(x.getId().compareTo(id)==0) return true;
 			
 		}

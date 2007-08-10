@@ -18,7 +18,7 @@ public class ParisIndicator5aJrxml
 				p.println("<?xml version=\"1.0\" encoding=\"UTF-8\" ?>");
 				//p.println("<?xml version=\"1.0\" encoding=\"UTF-8\" ?>");
 				p2 = new PrintStream(out2);
-				System.out.println("creating now- dynamic trend...");
+				//System.out.println("creating now- dynamic trend...");
 				
 				
 				p2.println("<!-- Created with iReport - A designer for JasperReports -->");
@@ -56,11 +56,11 @@ public class ParisIndicator5aJrxml
 							height = (cols-1)/8;
 							height= height*30;
 							height1=height+1;
-							System.out.println(" Cnt = " + colCnt + " ....." + cols +"   height "+ height+"   type is  "+type);
+							//System.out.println(" Cnt = " + colCnt + " ....." + cols +"   height "+ height+"   type is  "+type);
 //							 gets the no of fields = 4 constants fields + YearCnt*3 + yearCnt
 							for(int k=1; k<=cols; k++)
 							{
-								System.out.println("k="+k);
+								//System.out.println("k="+k);
 								dc="m"+k;
 								p2.println("<field name='"+dc+"' class='java.lang.String'/>");
 							}
@@ -367,7 +367,7 @@ public class ParisIndicator5aJrxml
 							x=x+135;
 							if(count%8 == 0)
 							{
-								System.out.println(" in here  "+ count + " jjjjj "+ j + "  adasd "+add);
+								//System.out.println(" in here  "+ count + " jjjjj "+ j + "  adasd "+add);
 								x=135;
 								y=y+30;
 								add=0;
@@ -749,7 +749,7 @@ public class ParisIndicator5aJrxml
 							x=x+135;
 							if(count%8 == 0)
 							{
-								System.out.println(" in here  "+ count + " jjjjj "+ j + "  adasd "+add);
+								//System.out.println(" in here  "+ count + " jjjjj "+ j + "  adasd "+add);
 								x=135;
 								y=y+30;
 								add=0;
@@ -782,7 +782,7 @@ public class ParisIndicator5aJrxml
 					p2.println("				</line>");
 					
 					l=0;
-					System.out.println( " height  "+height);
+					//System.out.println( " height  "+height);
 					int k = height-2;
 					for(int j =0;j<=9;j++)
 					{
@@ -887,7 +887,7 @@ public class ParisIndicator5aJrxml
 
 
 				
-		System.out.println("hyup");			
+		//System.out.println("hyup");			
 		}
 		
 		catch(Exception e)

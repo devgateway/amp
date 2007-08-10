@@ -63,7 +63,7 @@ public class QuarterlyReportBySectorPDF extends Action
 			iter = coll.iterator();
 		}
 		
-		System.out.println("col size "+ coll.size());
+		//System.out.println("col size "+ coll.size());
 
 		multiReport multiReport;
 		AmpTeamDonors  ampTeamDonor;
@@ -487,7 +487,7 @@ public class QuarterlyReportBySectorPDF extends Action
 
 	void calculateFieldHeight(String input)
 	{
-		System.out.println(" Large ::" + fieldHeight + " :: CUrrent : " + input.length());
+		//System.out.println(" Large ::" + fieldHeight + " :: CUrrent : " + input.length());
 		if(input.length() > fieldHeight)
 			fieldHeight = input.length();
 	}

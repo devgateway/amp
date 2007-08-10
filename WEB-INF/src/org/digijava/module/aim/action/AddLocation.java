@@ -52,7 +52,12 @@ public class AddLocation extends Action
 	 	Country ctry  = new Country();
 	 	AmpRegion reg = null;
  		AmpZone zon   = null;
-	 	if (addForm.getCountryId() != null) {
+ 		
+ 		/* If we are adding a location which is not a country we need to get the country 
+ 		 * from the database to which the respective location will belong
+ 		 * If we are adding a country we shouldn't get anything from db. 
+ 		 */
+	 	if (addForm.getCountryId() != null && categoryLevel.longValue() > 0) {
 	 		ctry = DbUtil.getDgCountry(addForm.getCountryId());
  		}
 	 	if ( categoryLevel.longValue() == 0 ){ // is country
@@ -67,6 +72,8 @@ public class AddLocation extends Action
 		 		ctry.setCountryId(new Long(LocationUtil.getDgCountryWithMaxCountryId().intValue() + 1));
 		 		ctry.setMessageLangKey("cn:" + ctry.getIso());
 		 		DbUtil.add(ctry);
+		 		
+		 		addForm.setCountry( DbUtil.getAllCountries() );
 	 		}
 	 		else {
 	 			ActionErrors errors = new  ActionErrors();

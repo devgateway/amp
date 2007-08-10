@@ -34,8 +34,8 @@ function showUserProfile(id){
               <div title="${translation}"'>
                 <bean:define id="teamMember" name="currentMember" scope="session" type="org.digijava.module.aim.helper.TeamMember" />
                 <a href="javascript:showUserProfile(${teamMember.memberId})" class="header">
-                ${teamMember.teamName} :
-                ${teamMember.memberName}
+                <digi:trn key="aim:${teamMember.teamName}">${teamMember.teamName}</digi:trn> :
+                <digi:trn key="aim:${teamMember.memberName}">${teamMember.memberName}</digi:trn>
                 </a>
               </div>
             </td>

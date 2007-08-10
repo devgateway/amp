@@ -16,7 +16,6 @@ function showUserProfile(id){
 }
 -->
 </script>
-
 <table cellpadding="0" cellspacing="0" width="100%" style="background-image:url(module/aim/images/bg-header-1.gif);vertical-align:top;height:37px;" border=0>
   <tr>
     <td valign="top">
@@ -34,8 +33,8 @@ function showUserProfile(id){
               <div title="${translation}"'>
                 <bean:define id="teamMember" name="currentMember" scope="session" type="org.digijava.module.aim.helper.TeamMember" />
                 <a href="javascript:showUserProfile(${teamMember.memberId})" class="header">
-                <digi:trn key="aim:${teamMember.teamName}">${teamMember.teamName}</digi:trn> :
-                <digi:trn key="aim:${teamMember.memberName}">${teamMember.memberName}</digi:trn>
+                <digi:trn key="aim:pageshead:${teamMember.teamName}">${teamMember.teamName}</digi:trn> :
+                <digi:trn key="aim:pageshead:${teamMember.memberName}">${teamMember.memberName}</digi:trn>
                 </a>
               </div>
             </td>

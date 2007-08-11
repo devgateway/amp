@@ -72,6 +72,12 @@ public class ReportsFilterPickerForm extends ActionForm {
 	}
 
 	public void reset(ActionMapping mapping, HttpServletRequest request) {
+		if(request.getParameter("apply")!=null && request.getAttribute("apply")==null){
+			this.selectedDonors = null;
+			this.selectedRisks = null;
+			this.selectedSectors = null;
+			this.selectedStatuses = null;
+		}
 	}
 	
 	public Long getFromYear() {

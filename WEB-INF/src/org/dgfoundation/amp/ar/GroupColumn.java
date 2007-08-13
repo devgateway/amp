@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
 
+import org.dgfoundation.amp.ar.cell.AmountCell;
 import org.dgfoundation.amp.ar.cell.Cell;
 import org.digijava.module.aim.dbentity.AmpMeasures;
 import org.digijava.module.aim.dbentity.AmpReports;
@@ -35,7 +36,7 @@ public class GroupColumn extends Column {
 		return ret;
 	}
 	
-	public static GroupColumn verticalSplitByCategs(CellColumn src,
+	public static Column verticalSplitByCategs(CellColumn src,
             List categories, boolean generateTotalCols,AmpReports reportMetadata) {
 		
 		//create the set of unique IDS for all items that need to be categorized:
@@ -62,7 +63,7 @@ public class GroupColumn extends Column {
 	 * @return a GroupColumn that holds the categorized data
 	 * @see MetaInfo, TotalAmountColumn, CategAmountCell
 	 */
-    private static GroupColumn verticalSplitByCategs(Column src,
+    private static Column verticalSplitByCategs(Column src,
             List categories, Set ids,boolean generateTotalCols,AmpReports reportMetadata) {
         String cat = (String) categories.remove(0);
         if (categories.size() > 0)
@@ -81,7 +82,7 @@ public class GroupColumn extends Column {
      * @return a GroupColumn that holds the categorized Data
      * @see verticalSplitByCategs
      */
-    private static GroupColumn verticalSplitByCateg(Column src, 
+    private static Column verticalSplitByCateg(Column src, 
             String category,Set ids, boolean generateTotalCols,AmpReports reportMetadata) {    
     	if(src instanceof CellColumn || src instanceof AmountCellColumn) return verticalSplitByCateg((CellColumn)src,category,ids,generateTotalCols,reportMetadata);
     	else {
@@ -90,7 +91,7 @@ public class GroupColumn extends Column {
     		Iterator i=srcG.iterator();
     		while (i.hasNext()) {
 				Column element = (Column) i.next();
-				GroupColumn splitted=verticalSplitByCateg(element,category,ids,generateTotalCols,reportMetadata);
+				Column splitted=verticalSplitByCateg(element,category,ids,generateTotalCols,reportMetadata);
 				splitted.setContentCategory(category);
 				if(splitted!=null) dest.addColumn(splitted); else dest.addColumn(element);
 			}
@@ -106,9 +107,9 @@ public class GroupColumn extends Column {
      * @param generateTotalCols true when creating TotalAmountColumnS instead of CellColumnS
      * @return a GroupColumn that holds the categorized Data
      */
-    private static GroupColumn verticalSplitByCateg(CellColumn src,
+    private static Column verticalSplitByCateg(CellColumn src,
             String category, Set ids, boolean generateTotalCols,AmpReports reportMetadata) {
-        GroupColumn ret = new GroupColumn(src);
+        Column ret = new GroupColumn(src);
 
         // create a set of unique meta infos
         Set metaSet = new TreeSet();
@@ -167,7 +168,9 @@ public class GroupColumn extends Column {
                 cc = new TotalAmountColumn(element.getValue().toString(),true);
             else
                 cc = new AmountCellColumn( element.getValue().toString());
-            ret.addColumn(cc);           
+            ret.getItems().add(cc);
+            cc.setParent(ret);
+            
             cc.setContentCategory(category);
             //iterate the src column and add the items with same MetaInfo
             Iterator ii=src.iterator();
@@ -177,6 +180,27 @@ public class GroupColumn extends Column {
     		}
             
         
+        }
+        
+        if(ret.getItems().size()==0) {
+        	AmountCellColumn acc=new AmountCellColumn(ret);
+        	Iterator ii=src.iterator();
+        	while (ii.hasNext()) {
+				AmountCell element = (AmountCell) ii.next();
+				AmountCell clone = null;
+				try {
+					clone = (AmountCell) element.clone();
+				} catch (CloneNotSupportedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+					logger.error(e);
+				}
+				clone.setAmount(0);
+				clone.getMergedCells().clear();
+				acc.addCell(clone);
+			}
+        	ret=acc;
+        	
         }
         
         return ret;

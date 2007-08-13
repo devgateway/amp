@@ -16,6 +16,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
 
+import org.dgfoundation.amp.ar.cell.AmountCell;
 import org.dgfoundation.amp.ar.cell.Cell;
 import org.dgfoundation.amp.ar.exception.IncompatibleColumnException;
 import org.dgfoundation.amp.ar.exception.UnidentifiedItemException;
@@ -148,6 +149,8 @@ public class GroupReportData extends ReportData {
 			ReportData element = (ReportData) i.next();
 			element.postProcess();
 		}
+		
+	
 		// create trail cells
 		try {
 

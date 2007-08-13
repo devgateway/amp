@@ -31,6 +31,8 @@ public class AutopatcherService extends AbstractServiceImpl {
 			String realRootPath=serviceContext.getRealPath("/WEB-INF/");
 			logger.debug("Computed WEB-INF realPath is "+realRootPath);
 			
+			
+			
 			logger.info(this.toString());
 			
 		} catch (Exception ex) {

@@ -9,14 +9,11 @@
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
 
 <script language=javascript>
-<!--
 function showUserProfile(id){
 	<digi:context name="information" property="context/module/moduleinstance/userProfile.do" />
 	openURLinWindow("<%= information %>~edit=true~id="+id,480, 350);
 }
--->
 </script>
-
 <table cellpadding="0" cellspacing="0" width="100%" style="background-image:url(module/aim/images/bg-header-1.gif);vertical-align:top;height:37px;" border=0>
   <tr>
     <td valign="top">

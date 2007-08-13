@@ -13,6 +13,15 @@
 <jsp:include page="teamPagesHeader.jsp" flush="true" />
 <!-- End of Logo -->
 
+<script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
+<script language=javascript>
+function showUserProfile(id){
+	<digi:context name="information" property="context/module/moduleinstance/userProfile.do" />
+	openURLinWindow("<%= information %>~edit=true~id="+id,480, 350);
+}
+</script>
+
+
 <table bgColor=#ffffff cellPadding=0 cellSpacing=0 width=772>
 	<tr>
 		<td class=r-dotted-lg width=14>&nbsp;</td>

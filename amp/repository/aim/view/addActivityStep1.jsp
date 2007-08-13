@@ -97,7 +97,6 @@ function resetAll(){
 }
 
 function validateForm() {
-alert("aaa");
 	if (trim(document.aimEditActivityForm.title.value) == "") {
 		alert("Please enter title");
 		document.aimEditActivityForm.title.focus();

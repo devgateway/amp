@@ -12,7 +12,10 @@
 	<property name="teamName" column="teamName" type="java.lang.String" />
 	<property name="authorName" column="authorName" type="java.lang.String" />
 	<property name="authorEmail" column="authorEmail" type="java.lang.String" />
+	<property name="editorName" column="editorName" type="java.lang.String" />
+	<property name="editorEmail" column="editorEmail" type="java.lang.String" />
 	<property name="loggedDate" column="loggedDate" type="java.sql.Timestamp" />
+	<property name="modifyDate" column="modifyDate" type="java.sql.Timestamp" />
 	<property name="browser" column="browser" type="java.lang.String" />
 	<property name="ip" column="ip" type="java.lang.String" />
 	<property name="action" column="action" type="java.lang.String" />

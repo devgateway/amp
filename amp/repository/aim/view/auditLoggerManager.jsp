@@ -60,29 +60,30 @@
 					<td>
 						<table bgColor=#ffffff cellPadding=0 cellSpacing=0 border="1px">
 							<tr>
+								<th><digi:trn key="aim:name">Name</digi:trn></th>
+								<th><digi:trn key="aim:objectType">Object Type</digi:trn></th>																
 								<th><digi:trn key="aim:teamName">Team Name</digi:trn></th>
 								<th><digi:trn key="aim:authorName">Author Name</digi:trn></th>
 								<th><digi:trn key="aim:authorEmail">Author Email</digi:trn></th>
-								<th><digi:trn key="aim:loggedDate">Logged Date</digi:trn></th>
-								<th><digi:trn key="aim:browser">Browser</digi:trn></th>
-								<th><digi:trn key="aim:IP">IP</digi:trn></th>
-								<th><digi:trn key="aim:action">Action</digi:trn></th>								
-								<th><digi:trn key="aim:name">Name</digi:trn></th>								
-								<th><digi:trn key="aim:objectID">Object Id</digi:trn></th>
-								<th><digi:trn key="aim:objectType">Object Type</digi:trn></th>
+								<th><digi:trn key="aim:creationDateLogger">Creation Date</digi:trn></th>
+								<th><digi:trn key="aim:editorName">Editor Name</digi:trn></th>
+								<th><digi:trn key="aim:editorEmail">Editor Email</digi:trn></th>
+								<th><digi:trn key="aim:changeDate">Change Date</digi:trn></th>
+								<th><digi:trn key="aim:action">Action</digi:trn></th>											
+
 							</tr>
 							<logic:iterate name="aimAuditLoggerManagerForm" property="logs" id="log" type="org.digijava.module.aim.dbentity.AmpAuditLogger">
 								<tr>
+									<td align="center"><bean:write name="log" property="objectName"/></td>
+									<td align="center"><bean:write name="log" property="objectTypeTrimmed"/></td>
 									<td align="center"><bean:write name="log" property="teamName"/></td>
 									<td align="center"><bean:write name="log" property="authorName"/></td>
 									<td align="center"><bean:write name="log" property="authorEmail"/></td>
 									<td align="center"><bean:write name="log" property="loggedDate"/></td>
-									<td align="center"><bean:write name="log" property="browser"/></td>
-									<td align="center"><bean:write name="log" property="ip"/></td>
+									<td align="center"><bean:write name="log" property="editorName"/></td>
+									<td align="center"><bean:write name="log" property="editorEmail"/></td>
+									<td align="center"><bean:write name="log" property="modifyDate"/></td>
 									<td align="center"><bean:write name="log" property="action"/></td>
-									<td align="center"><bean:write name="log" property="objectName"/></td>
-									<td align="center"><bean:write name="log" property="objectId"/></td>
-									<td align="center"><bean:write name="log" property="objectType"/></td>
 								</tr>
 							</logic:iterate>
 						</table>

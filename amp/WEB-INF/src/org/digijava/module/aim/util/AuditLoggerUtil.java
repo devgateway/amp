@@ -12,14 +12,13 @@ import java.util.Collection;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+import net.sf.hibernate.Hibernate;
 import net.sf.hibernate.Query;
 import net.sf.hibernate.Session;
 import net.sf.hibernate.Transaction;
 
 import org.apache.log4j.Logger;
 import org.digijava.kernel.persistence.PersistenceManager;
-import org.digijava.module.aim.dbentity.AmpAuditLogger;
-import org.digijava.module.aim.dbentity.AmpReports;
 import org.digijava.module.aim.dbentity.*;
 import org.digijava.module.aim.helper.TeamMember;
 
@@ -39,18 +38,62 @@ public class AuditLoggerUtil {
 			Transaction tx = null;
 			TeamMember tm = (TeamMember) hsession.getAttribute("currentMember");
 			//String objectName="";
-
+			Collection col = new ArrayList();
+			String qryStr = null;
+			Query qry = null;
+			String objId=(String) o.getIdentifier();
+			String objType=(String) o.getObjectType();
 			String browser=request.getHeader("user-agent");
 			try {
 				session = PersistenceManager.getSession();
+
 				tx = session.beginTransaction();
 				AmpAuditLogger aal=new AmpAuditLogger();
-				aal.setAction(action);
+				AmpAuditLogger existentLoggerObj=null;
 				long time=System.currentTimeMillis();
 				Timestamp ts=new Timestamp(time);
-				aal.setLoggedDate(ts);
-				aal.setAuthorName(tm.getMemberName());
-				aal.setAuthorEmail(tm.getEmail());
+				if("update".compareTo(action)==0)// || "delete".compareTo(action)==0)
+				{
+					String addAction="add";
+					try {
+					qryStr = "select f from " + AmpAuditLogger.class.getName() + " f where f.objectType=:objectType and f.action=:actionObj and f.objectId=:objectId ";
+					qry = session.createQuery(qryStr);
+					qry.setParameter("objectType", objType.toString(), Hibernate.STRING);
+					qry.setParameter("actionObj", addAction.toString(), Hibernate.STRING);
+					qry.setParameter("objectId",objId.toString(), Hibernate.STRING);
+					col = qry.list();
+					} catch (Exception e) {
+						e.printStackTrace();
+						logger.error(e);
+					}
+//queryString = "select a from " + AmpModulesVisibility.class.getName()
+//				+ " a where (a.moduleName=:moduleName) ";
+//					q.setParameter("moduleName", moduleName, Hibernate.STRING);
+					if(col.size()==1)
+					{
+						existentLoggerObj = (AmpAuditLogger) col.iterator().next();
+						aal.setAuthorEmail(existentLoggerObj.getAuthorEmail());
+						aal.setAuthorName(existentLoggerObj.getAuthorName());
+						aal.setLoggedDate(existentLoggerObj.getLoggedDate());
+					}
+					else
+					{
+						;//there are data before audit logger was implemented!
+						//aal.setAuthorName(tm.getMemberName());
+						//aal.setAuthorEmail(tm.getEmail());
+						//aal.setLoggedDate(ts);
+					}
+				}
+				else
+				{
+					aal.setAuthorName(tm.getMemberName());
+					aal.setAuthorEmail(tm.getEmail());
+					aal.setLoggedDate(ts);
+				}
+				aal.setEditorEmail(tm.getEmail());
+				aal.setEditorName(tm.getMemberName());
+				aal.setAction(action);
+				aal.setModifyDate(ts);
 				aal.setBrowser(browser);
 				aal.setIp(request.getRemoteAddr());
 				aal.setObjectId((String) o.getIdentifier());

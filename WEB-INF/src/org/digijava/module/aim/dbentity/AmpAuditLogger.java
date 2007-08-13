@@ -24,13 +24,17 @@ public class AmpAuditLogger implements Serializable {
 	private Long id;
 	private String teamName;
 	private String authorName;
+	private String editorName;
 	private String authorEmail;
+	private String editorEmail;
 	private Timestamp loggedDate;
+	private Timestamp modifyDate;
 	private String browser;
 	private String ip;
 	private String action;
 	private String objectId;
 	private String objectType;
+	private String objectTypeTrimmed;
 	private String objectName;
 	
 	
@@ -111,5 +115,31 @@ public class AmpAuditLogger implements Serializable {
 	}
 	public void setAuthorEmail(String authorEmail) {
 		this.authorEmail = authorEmail;
+	}
+	public String getEditorEmail() {
+		return editorEmail;
+	}
+	public void setEditorEmail(String editorEmail) {
+		this.editorEmail = editorEmail;
+	}
+	public String getEditorName() {
+		return editorName;
+	}
+	public void setEditorName(String editorName) {
+		this.editorName = editorName;
+	}
+	public Timestamp getModifyDate() {
+		return modifyDate;
+	}
+	public void setModifyDate(Timestamp modifyDate) {
+		this.modifyDate = modifyDate;
+	}
+	public String getObjectTypeTrimmed() {
+		int i=objectType.lastIndexOf('.');
+		int j=objectType.length();
+		return objectType.substring(i+1,j);
+	}
+	public void setObjectTypeTrimmed(String objectTypeTrimmed) {
+		this.objectTypeTrimmed = objectTypeTrimmed;
 	}
 }

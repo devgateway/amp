@@ -188,7 +188,6 @@ function commentWin(val) {
 														<html:button  style="dr-menu" onclick="previewLogframe(${activity.activityId})" property="logframeBtn">
 															<digi:trn key="btn:previewLogframe">Preview Logframe</digi:trn>
 														</html:button>
-														<input type=button onclick="previewLogframe(${activity.activityId})" value="test"/>
 													</field:display>
 												</feature:display>
 										</module:display>

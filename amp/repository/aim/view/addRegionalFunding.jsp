@@ -8,8 +8,11 @@
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
 
-<script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/calendar.js"/>"></script>
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
+
+<script language="JavaScript" type="text/javascript">
+	<jsp:include page="scripts/calendar.js.jsp" flush="true" />
+</script>
 
 <% int indexC = 0; 
  	int indexD = 0; 

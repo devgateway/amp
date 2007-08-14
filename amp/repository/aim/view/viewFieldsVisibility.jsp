@@ -30,8 +30,8 @@
 
 		<tr><td bgColor=#d7eafd class=box-title height="20" align="center" colspan="3">
 	<!-- Table title -->
-	<digi:trn key="aim:ampModules">
-		AMP Modules
+	<digi:trn key="aim:ampFeatures">
+		AMP Features
 	</digi:trn>
 	<!-- end table title -->										
 	</td></tr>
@@ -40,8 +40,8 @@
 	
 	<table width="100%" cellspacing=0 cellpadding=0 valign=top align=left border="1px" >
 		<tr>
-			<th>Module</th>
-			<th>Action</th>
+			<th><digi:trn key="aim:ampFeature">Feature</digi:trn></th>
+			<th><digi:trn key="aim:ampAction">Action</digi:trn></th>
 		</tr>
 		<jsp:useBean id="urlParamsDelModule" type="java.util.Map" class="java.util.HashMap"/>
 		<logic:iterate name="aimVisibilityManagerForm" property="allModules" id="module"
@@ -67,8 +67,8 @@
 	<tr><td>&nbsp;</td></tr>
 	<tr><td bgColor=#d7eafd class=box-title height="20" align="center" colspan="3">
 	<!-- Table title -->
-	<digi:trn key="aim:ampFeatures">
-		AMP Features
+	<digi:trn key="aim:ampSections">
+		AMP Sections
 	</digi:trn>
 	<!-- end table title -->										
 	</td></tr>
@@ -77,9 +77,9 @@
 	
 	<table width="100%" cellspacing=0 cellpadding=0 valign=top align=left border="1px" >
 		<tr>
-			<th>Feature</th>
-			<th>Module</th>
-			<th>Action</th>
+			<th><digi:trn key="aim:ampSection">Section</digi:trn></th>
+			<th><digi:trn key="aim:ampFeature">Feature</digi:trn></th>
+			<th><digi:trn key="aim:ampAction">Action</digi:trn></th>
 		</tr>
 		<jsp:useBean id="urlParamsDelFeature" type="java.util.Map" class="java.util.HashMap"/>
 		<logic:iterate name="aimVisibilityManagerForm" property="allFeatures" id="feature"
@@ -116,10 +116,10 @@
 	
 	<table width="100%" cellspacing=0 cellpadding=0 valign=top align=left border="1px" >
 		<tr>
-			<th>Field</th>
-			<th>Feature</th>
-			<th>Module</th>
-			<th>Action</th>
+			<th><digi:trn key="aim:ampField">Field</digi:trn></th>
+			<th><digi:trn key="aim:ampSection">Section</digi:trn></th>
+			<th><digi:trn key="aim:ampFeature">Feature</digi:trn></th>
+			<th><digi:trn key="aim:ampAction">Action</digi:trn></th>
 		</tr>
 		<jsp:useBean id="urlParamsDelField" type="java.util.Map" class="java.util.HashMap"/>
 		<logic:iterate name="aimVisibilityManagerForm" property="allFields" id="field"

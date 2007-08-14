@@ -94,7 +94,9 @@ function gotoStep(value) {
 <table width="209" cellSpacing=4 cellPadding=2 vAlign="top" align="left" 
 bgcolor="#006699">
 <module:display name="Project ID and Planning">
+</module:display>
 	<feature:display name="Identification" module="Project ID and Planning">
+	</feature:display>
 	<tr>
 		<c:if test="${aimEditActivityForm.step != 1}">
 		<td nowrap="nowrap">
@@ -128,8 +130,9 @@ bgcolor="#006699">
 		</td>
 		</c:if>
 	</tr>
-	</feature:display>
+
 	<feature:display name="Planning" module="Project ID and Planning">
+	</feature:display>
 	<tr>
 		<c:if test="${aimEditActivityForm.step != 1}">
 		<td nowrap="nowrap">
@@ -163,13 +166,13 @@ bgcolor="#006699">
 		</td>
 		</c:if>
 	</tr>
-	</feature:display>
+
 	<feature:display name="Location" module="Project ID and Planning">
 	<tr>
 		<c:if test="${aimEditActivityForm.step != 2}">
 		<td nowrap="nowrap">
 			<IMG alt=Link height=10 src="../ampTemplate/images/arrow-th-BABAB9.gif" width=15>
-			<c:set var="trnClickToAdd2">
+			<c:set var="trnClickTohttp://amp-demo.code.ro/aim/addActivity.do~pageId=1~reset=true~action=createAdd2">
 				<digi:trn key="aim:clickToAdd/UpdateLocation">Add / Update Location</digi:trn>
 			</c:set>
 			<a href="javascript:gotoStep(2)" class="menu" title="${trnClickToAdd2}">
@@ -200,6 +203,7 @@ bgcolor="#006699">
 	</tr>
 	</feature:display>
 	<feature:display name="Sectors" module="Project ID and Planning">
+	</feature:display>
 	<tr>
 		<c:if test="${aimEditActivityForm.step != 2}">
 		<td nowrap="nowrap">
@@ -233,8 +237,8 @@ bgcolor="#006699">
 		</td>
 		</c:if>
 	</tr>
-	</feature:display>
-	</module:display>
+
+
 	<module:display name="National Planning Dashboard">
 	<feature:display name="NPD Programs" module="National Planning Dashboard">
 	<tr>

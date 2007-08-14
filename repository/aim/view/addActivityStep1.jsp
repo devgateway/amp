@@ -97,17 +97,19 @@ function resetAll(){
 }
 
 function validateForm() {
+
 	if (trim(document.aimEditActivityForm.title.value) == "") {
 		alert("Please enter title");
 		document.aimEditActivityForm.title.focus();
 		return false;
 	}
-
     var stId=document.getElementsByName("statusId");
-    if(stId==null || stId[0].value==0){
-      alert("Please select status");
+
+    if(stId==null || stId[0]==null || stId[0].value==0){
+      alert("Please select status! Maybe the  Feature \"Project ID and Planning\" is disabled!");
       return false;
     }
+    	
 /*	if (document.aimEditActivityForm.status.value == "-1") {
 		alert("Please select status");
 		document.aimEditActivityForm.status.focus();
@@ -145,7 +147,7 @@ function popupwin()
 	var l = ((screen.height)-wndHeight)/2;
 	winpopup=window.open('',"popup","height=" + wndHeight + ",width=" + wndWidth + ",top=" + l + ",left=" + t +",menubar=no,scrollbars=yes,status=no,toolbar=no");
 	winpopup.document.write('<html>\n<head>\n');
-	winpopup.document.write('<title>About : Status</title>\n');
+	winpopup.document.write('<title>About : Status</title>\n');Status
 	winpopup.document.write('</head>\n');
 	winpopup.document.write('<body bgcolor="#f4f4f2">\n');
 	winpopup.document.write('<font face="verdana" size=1>\n');
@@ -266,6 +268,9 @@ function popupwin()
 								<table width="95%" bgcolor="#f4f4f2" border=0>
 								<module:display name="Project ID and Planning">
 									<feature:display name="Identification" module="Project ID and Planning">
+									&nbsp;
+									</feature:display>
+								</module:display>
 									<tr><td>
 										<IMG alt=Link height=10 src="../ampTemplate/images/arrow-014E86.gif" width=15>
 										<b><digi:trn key="aim:identification">Identification</digi:trn></b>
@@ -274,7 +279,7 @@ function popupwin()
 									<tr><td>&nbsp;</td></tr>
 									<tr><td><jsp:include page="addActivityStep1Identification.jsp"/>
 									</td></tr>
-									</feature:display>
+									
 									<tr><td>
 										&nbsp;
 									</td></tr>
@@ -290,8 +295,10 @@ function popupwin()
 									</td></tr>
 									<tr><td bgColor=#f4f4f2>&nbsp;</td></tr>
 									<feature:display name="Planning" module="Project ID and Planning">
-											<jsp:include page="addActivityStep1Planning.jsp"/>
+									&nbsp;
 									</feature:display>
+											<jsp:include page="addActivityStep1Planning.jsp"/>
+									
 
 <!--
 									<tr><td bgColor=#f4f4f2 align="center">
@@ -309,7 +316,7 @@ function popupwin()
 									</td></tr>
  -->
 
-								</module:display>
+								
 								</table>
 
 								<!-- end contents -->

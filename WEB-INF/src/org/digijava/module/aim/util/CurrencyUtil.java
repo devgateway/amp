@@ -860,7 +860,9 @@ public class CurrencyUtil {
 /*		if (logger.isDebugEnabled())
 			logger.debug("getExchangeRate() for currency code :" + currencyCode
 					+ "returns " + exchangeRate); */
-		return exchangeRate.doubleValue();
+		if(exchangeRate.doubleValue()!=null)
+			return exchangeRate.doubleValue();
+		else return null;
 	}
 
 	public static Collection getAmpCurrencyRate() {

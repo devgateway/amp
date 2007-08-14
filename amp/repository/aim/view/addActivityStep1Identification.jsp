@@ -19,6 +19,8 @@
 										<table width="100%" bgcolor="#cccccc" cellPadding=5 cellSpacing=1>
 											
 											<field:display name="Title" feature="Identification">
+											&nbsp;
+											</field:display>
 											<tr bgcolor="#ffffff"><td valign="top" align="left">
 												<FONT color=red>*</FONT>
 												<a title="<digi:trn key="aim:TitleInDonorsOrMoFEDInternalSystems">Title used in donors or MoFED internal systems</digi:trn>">
@@ -32,7 +34,7 @@
 												<html:textarea property="title" cols="60" rows="2" styleClass="inp-text"/>
 												</a>
 											</td></tr>
-											</field:display>
+											
 											<field:display name="Objective" feature="Identification">
 											<tr bgcolor="#ffffff"><td valign="top" align="left">
 												<a title="<digi:trn key="aim:ObjectivesAndComponentsofProject">The key objectives and main components of the project</digi:trn>">

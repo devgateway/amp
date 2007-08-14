@@ -739,6 +739,7 @@ public class EditActivity
                                 }
                             }
                         }
+                        
                         eaForm.setActivitySectors(activitySectors);
                     }
 

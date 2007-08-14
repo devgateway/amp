@@ -85,8 +85,10 @@
                                                     <tr>
                                                       <td bgcolor="#ffffff">
                                                       	<field:display name="Add Sectors Button" feature="Sectors">
+                                                      	&nbsp;
+                                                      	</field:display>
                                                         	<input type="button" class="buton" onclick="addSectors();" value='<digi:trn key="btn:addSectors">Add Sectors</digi:trn>' />
-                                                        </field:display>
+                                                        
                                                       </td>
                                                     </tr>
                                                   </c:if>
@@ -130,16 +132,16 @@
                                                             <td>
                                                               <table cellSpacing=2 cellPadding=2>
                                                                 <tr>
-                                                                	<field:display name="Add Sectors Button" feature="Sectors">
+                                                                	<field:display name="Add Sectors Button" feature="Sectors">&nbsp;</field:display>
                                                                     <td>
                                                                       <input type="button" value="Add Sectors" class="buton"  onclick="addSectors();">
                                                                     </td>
-                                                                    </field:display>
-                                                                    <field:display name="Remove Sectors Button" feature="Sectors">
+                                                                    
+                                                                    <field:display name="Remove Sectors Button" feature="Sectors">&nbsp;</field:display>
                                                                   <td>
 																	<input type="button" class="buton" onclick="return removeSelSectors()" value='<digi:trn key="btn:removeSector">Remove Sector</digi:trn>' />
                                                                   </td>
-                                                                  </field:display>
+                                                                  
                                                                 </tr>
                                                               </table>
                                                             </td>

@@ -372,8 +372,10 @@ function fnChk(frmContrl){
                                         </td>
                                       </tr>
                                       <feature:display name="Sectors" module="Project ID and Planning">
+                                      &nbsp;
+                                      </feature:display>
 		                            	<jsp:include page="addActivityStep2Sector.jsp"/>
-		                             </feature:display>
+		                             
                                       <tr>
                                         <td>
                                         &nbsp;

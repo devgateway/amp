@@ -352,6 +352,8 @@
 											</field:display>
 											
 											<field:display name="Status" feature="Planning">
+											&nbsp;
+											</field:display>
 											<tr>
 												<td bgcolor="#ffffff">
 												<FONT color=red>*</FONT>&nbsp;
@@ -372,6 +374,6 @@
 													</a>
 												</td>
 											</tr>
-											</field:display>
+											
 										</table>
 									</td></tr>

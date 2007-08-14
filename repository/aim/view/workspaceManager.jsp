@@ -116,7 +116,11 @@
 															<c:set var="translation">
 																<digi:trn key="aim:clickToViewMembers">Click here to view Members</digi:trn>
 															</c:set>
-															[ <digi:link href="/teamMembers.do" name="urlParams" title="${translation}" >Members</digi:link> ]
+															[ <digi:link href="/teamMembers.do" name="urlParams" title="${translation}" >
+																<digi:trn key="aim:workspaceManagerMembersLink">
+																	Members
+																</digi:trn>
+															</digi:link> ]
 														</td>
 														<td bgcolor="#ffffff" width="70" align="center">
 															<jsp:useBean id="urlParams1" type="java.util.Map" class="java.util.HashMap"/>
@@ -127,7 +131,10 @@
 																<digi:trn key="aim:clickToViewActivities">Click here to view Activities</digi:trn>
 															</c:set>
 															[ <digi:link href="/teamActivities.do" name="urlParams1" title="${translation}" >
-															Activities</digi:link> ]
+																<digi:trn key="aim:workspaceManagerActivitiesLink">
+																	Activities
+																</digi:trn>
+															</digi:link> ]
 														</td>
 														<td bgcolor="#ffffff" width="40" align="center">
 															<%--
@@ -135,7 +142,11 @@
 															<c:set var="translation">
 																<digi:trn key="aim:clickToEditWorkspace">Click here to Edit Workspace</digi:trn>
 															</c:set>
-															[ <digi:link href="/getWorkspace.do" name="urlParams2" title="${translation}" >Edit</digi:link> ]
+															[ <digi:link href="/getWorkspace.do" name="urlParams2" title="${translation}" >
+																<digi:trn key="aim:workspaceManagerEditLink">
+																Edit
+																</digi:trn>
+															</digi:link> ]
 														</td>
 														<td bgcolor="#ffffff" width="55" align="center">
 															<jsp:useBean id="urlParams4" type="java.util.Map" class="java.util.HashMap"/>
@@ -147,7 +158,11 @@
 																<digi:trn key="aim:clickToDeleteWorkspace">Click here to Delete Workspace</digi:trn>
 															</c:set>
 															[ <digi:link href="/deleteWorkspace.do" name="urlParams4"
-																title="${translation}" onclick="return onDelete()">Delete</digi:link> ]
+																title="${translation}" onclick="return onDelete()">
+																<digi:trn key="aim:workspaceManagerDeleteLink">
+																	Delete
+																</digi:trn>
+																</digi:link> ]
 														</td>
 														<td bgcolor="#ffffff" align="center" nowrap>
 															[<a href="JavaScript:openNpdSettingsWindow(${workspaces.ampTeamId});">

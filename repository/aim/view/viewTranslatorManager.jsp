@@ -67,7 +67,9 @@
 					<digi:form action="/translationManager.do" method="post" >
 							<tr>
 								<td>
+									<digi:trn key="aim:translationManagerLangFoundMsg">
 									The following languages where found on this site:
+									</digi:trn>
 								</td>
 							</tr>
 						<c:forEach items="${aimTranslatorManagerForm.languages}" var="lang">
@@ -92,7 +94,10 @@
                                 </td>
 							 </tr>
 							 <td>
-									<br/>Please select the languages you want to export
+									<br/>
+									<digi:trn key="aim:translationManagerLangSelectMsg">
+									Please select the languages you want to export
+									</digi:trn>
 							</td>
 					 </digi:form>
 					</logic:notEmpty>
@@ -111,7 +116,7 @@
 							 <tr>
 							 	<td>
                                   <c:set var="translation">
-                                    <digi:trn key="aim:TranslationManagerImportButton">
+                                    <digi:trn key="btn:translationManagerImport">
                                     Import
                                     </digi:trn>
                                   </c:set>
@@ -124,7 +129,10 @@
 						<digi:form action="/translationManager.do" method="post" >
 							<tr>
 								<td colspan="2">
-									The following languages where found in the file you imported:<br/>
+									<digi:trn key="aim:translationManagerLangFoundImportMsg">
+									The following languages where found in the file you imported:
+									</digi:trn>
+									<br/>
 								</td>
 							</tr>
 							<logic:iterate name="aimTranslatorManagerForm" property="importedLanguages" id="lang"
@@ -137,19 +145,39 @@
 										</td>
 										<td>
 										<select name='<%="LANG:"+lang%>' >
-											<option value="-1" selected>-- Please select --</option>
-											<option value="update">Update local translations</option>
-											<option value="overwrite">Overwrite local translations</option>
+											<option value="-1" selected>
+												<digi:trn key="aim:translationManagerImportPleaseSelect">
+													-- Please select --
+												</digi:trn>
+											</option>
+											<option value="update">
+												<digi:trn key="aim:translationManagerImportUpdateLocal">
+													Update local translations
+												</digi:trn>
+											</option>
+											<option value="overwrite">
+												<digi:trn key="aim:translationManagerImportOverwriteLocal">
+													Overwrite local translations
+												</digi:trn>
+											</option>
 										</select>
 	 								</td>
 		 						</tr>
 							 </logic:iterate>
 								 <tr>
-								 	<td colspan="2"><br/><html:submit style="dr-menu" value="Import" property="importLang"/></td>
+								 	<c:set var="translation">
+								 		<digi:trn key="btn:translationManagerImport">
+								 			Import
+								 		</digi:trn>
+								 	</c:set>
+								 	<td colspan="2"><br/><html:submit style="dr-menu" value="${translation}" property="importLang"/></td>
 								 </tr>
 								 <tr>
 								<td colspan="2">
-									<br/>Please select the languages you want to update or to insert
+									<br/>
+									<digi:trn key="aim:translationManagerLangSelectImportMsg">
+									Please select the languages you want to update or to insert
+									</digi:trn>
 								</td>
 							</tr>
 						 </digi:form>

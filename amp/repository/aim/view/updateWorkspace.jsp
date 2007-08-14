@@ -333,7 +333,12 @@ onsubmit="return validateAimUpdateWorkspaceForm(this);">
 															</c:if>
 															<logic:equal name="aimUpdateWorkspaceForm" property="actionEvent" value="add">
 																<html:select property="category" styleClass="inp-text" onchange="relTeam()">
-																	<html:option value="-1">-- Select Category --</html:option>
+																	<html:option value="-1">-- 
+																		<digi:trn key="aim:createWorkspaceSelectCategFirstLine">
+																			Select Category 
+																		</digi:trn>
+																		--
+																	</html:option>
 																	<html:option value="MOFED"><digi:trn key="aim:MOFED">Mofed</digi:trn></html:option>
 																	<html:option value="DONOR">Donor</html:option>
 																</html:select>
@@ -342,13 +347,18 @@ onsubmit="return validateAimUpdateWorkspaceForm(this);">
 													</tr>
 													<tr>
 														<td align="right" bgcolor="#f4f4f2">
-															<digi:trn key="aim:teamType">Team Type</digi:trn>			
+															<digi:trn key="aim:createWorkspaceTeamType">Team Type</digi:trn>			
 														</td>
 														<td align="left" bgcolor="#f4f4f2">
+															<c:set var="teamTypeFirstLine">
+																	<digi:trn key="aim:createWorkspaceTeamTypeFirstLine">
+																		Please select team type
+																	</digi:trn>
+															</c:set>
 															<c:if test="${aimUpdateWorkspaceForm.actionEvent != 'add'}">
 																<c:choose>
 																	<c:when test="${aimUpdateWorkspaceForm.actionEvent == 'edit' && aimUpdateWorkspaceForm.relatedTeamFlag != 'noedit'}">
-																		<category:showoptions outeronchange="relTeam()" name="aimUpdateWorkspaceForm" property="typeId" styleClass="inp-text" keyName="<%= org.digijava.module.aim.helper.CategoryConstants.TEAM_TYPE_KEY %>"/>
+																		<category:showoptions firstLine="${teamTypeFirstLine}" outeronchange="relTeam()" name="aimUpdateWorkspaceForm" property="typeId" styleClass="inp-text" keyName="<%= org.digijava.module.aim.helper.CategoryConstants.TEAM_TYPE_KEY %>"/>
 																	</c:when>
 																	<c:otherwise>
 																		<c:if test="${aimUpdateWorkspaceForm.typeId > 0}">
@@ -361,7 +371,7 @@ onsubmit="return validateAimUpdateWorkspaceForm(this);">
 																</c:choose>
 															</c:if>
 															<c:if test="${aimUpdateWorkspaceForm.actionEvent == 'add'}">
-																<category:showoptions outeronchange="relTeam()" name="aimUpdateWorkspaceForm" property="typeId" styleClass="inp-text" keyName="<%= org.digijava.module.aim.helper.CategoryConstants.TEAM_TYPE_KEY %>"/>
+																<category:showoptions firstLine="${teamTypeFirstLine}" outeronchange="relTeam()" name="aimUpdateWorkspaceForm" property="typeId" styleClass="inp-text" keyName="<%= org.digijava.module.aim.helper.CategoryConstants.TEAM_TYPE_KEY %>"/>
 															</c:if>
 														</td>
 													</tr>	
@@ -509,7 +519,12 @@ onsubmit="return validateAimUpdateWorkspaceForm(this);">
 																	<digi:trn key="aim:childWorkspacesOrTeams">Child Workspaces/Teams</digi:trn>		
 																</td>
 																<td align="left" bgcolor="#f4f4f2">
-																	<input type="button" value="Add" class="buton" onclick="addChildWorkspaces()">
+																	<c:set var="translation">
+																		<digi:trn key="btn:createWorkspaceAdd">
+																			Add
+																		</digi:trn>
+																	</c:set>
+																	<input type="button" value="${translation}" class="buton" onclick="addChildWorkspaces()">
 																</td>																
 															</tr>
 														</c:if>
@@ -548,15 +563,30 @@ onsubmit="return validateAimUpdateWorkspaceForm(this);">
 																			onclick="update('add')"/>
 																		</c:if>
 																		<c:if test="${aimUpdateWorkspaceForm.actionEvent == 'edit'}">
-																			<input type="button" value="Save" class="dr-menu" onclick="update('edit')"/>
+																			<c:set var="translation">
+																				<digi:trn key="btn:createWorkspaceSave">
+																					Save
+																				</digi:trn>
+																			</c:set>
+																			<input type="button" value="${translation}" class="dr-menu" onclick="update('edit')"/>
 																		</c:if>																		
 																	</td>
 																	<td>
 																		<!-- <html:reset value="Clear" styleClass="dr-menu"/> -->
-																		<input type="button" value="Reset" class="dr-menu" onclick="update('reset')"/>
+																		<c:set var="translation">
+																			<digi:trn key="btn:createWorkspaceReset">
+																				Reset
+																			</digi:trn>
+																		</c:set>
+																		<input type="button" value="${translation}" class="dr-menu" onclick="update('reset')"/>
 																	</td>
 																	<td>
-																		<input name="" value="Cancel" onclick="cancel()" class="dr-menu" type="button">
+																		<c:set var="translation">
+																			<digi:trn key="btn:createWorkspaceCancel">
+																				Cancel
+																			</digi:trn>
+																		</c:set>
+																		<input name="" value="${translation}" onclick="cancel()" class="dr-menu" type="button">
 																	</td>
 																</tr>
 															</table>										

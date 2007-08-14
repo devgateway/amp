@@ -123,9 +123,21 @@
 								</digi:trn></td>
 							<td width="20%" bgcolor="#ECF3FD"><html:select
 								property="childWorkspaceType" styleClass="inp-text">
-								<html:option value="">ALL</html:option>
-								<html:option value="management">Management</html:option>
-								<html:option value="team">Team</html:option>
+								<html:option value="">
+									<digi:trn key="aim:addChildWorkspaceTypeAll">
+										ALL
+									</digi:trn>
+								</html:option>
+								<html:option value="management">
+									<digi:trn key="aim:addChildWorkspaceTypeManagement">
+										Management
+									</digi:trn>
+								</html:option>
+								<html:option value="team">
+									<digi:trn key="aim:addChildWorkspaceTypeTeam">
+										Team
+									</digi:trn>
+								</html:option>
 							</html:select></td>
 							<td width="20%" bgcolor="#ECF3FD"><digi:trn key="aim:teamType">
 
@@ -138,9 +150,17 @@
 							<td width="20%" bgcolor="#ECF3FD">
 								<category:showoptions name="aimUpdateWorkspaceForm" property="childTeamTypeId" firstLine="${translation}"  keyName="<%= org.digijava.module.aim.helper.CategoryConstants.TEAM_TYPE_KEY %>" styleClass="inp-text" />
 							</td>
-							<td width="20%" align="right" bgcolor="#ECF3FD"><input
-								type="button" value="GO" onclick="getChildWorkspaces()"
-								class="dr-menu"></td>
+							<td width="20%" align="right" bgcolor="#ECF3FD">
+								<c:set var="translation">
+										<digi:trn key="btn:addChildWorkspaceGo">
+											GO
+										</digi:trn>
+								</c:set>
+							
+								<input
+								type="button" value="${translation}" onclick="getChildWorkspaces()"
+								class="dr-menu">
+							</td>
 						</tr>
 					</table>
 					</td>
@@ -179,11 +199,32 @@
 										<td colspan="2" align="center">
 										<table cellPadding=5>
 											<tr>
-												<td><input type="button" value="Add" class="dr-menu"
-													onclick="return childWorkspacesAdded()"></td>
-												<td><input type="reset" value="Clear" class="dr-menu" onclick="return clearFormCheckBoxes();"></td>
-												<td><input type="button" value="Close" class="dr-menu"
-													onclick="return closeWindow();"></td>
+												<td>
+													<c:set var="translation">
+															<digi:trn key="btn:addChildWorkspaceAdd">
+																	Add
+															</digi:trn>
+													</c:set>
+													<input type="button" value="${translation}" class="dr-menu"
+													onclick="return childWorkspacesAdded()">
+												</td>
+												<td>
+													<c:set var="translation">
+															<digi:trn key="btn:addChildWorkspaceClear">
+																	Clear
+															</digi:trn>
+													</c:set>
+													<input type="reset" value="${translation}" class="dr-menu" onclick="return clearFormCheckBoxes();">
+												</td>
+												<td>
+													<c:set var="translation">
+															<digi:trn key="btn:addChildWorkspaceClose">
+																	Close
+															</digi:trn>
+													</c:set>
+													<input type="button" value="${translation}" class="dr-menu"
+													onclick="return closeWindow();">
+												</td>
 											</tr>
 										</table>
 										</td>

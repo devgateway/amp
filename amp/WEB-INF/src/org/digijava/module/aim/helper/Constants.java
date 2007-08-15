@@ -89,6 +89,8 @@ public class Constants
 	
 	//public static final String CALENDAR_DATE_FORMAT = "dd/mm/yyyy";
 	public static final String CALENDAR_DATE_FORMAT = "dd/MM/yyyy"; //error at finding month amp-1754
+	//"yyyy-MM-dd"
+	public static final String CALENDAR_DATE_PICKER = "yyyy-MM-dd"; //error at finding month amp-1754
 	public static final String SIMPLE_DATE_TIME_FORMAT = "dd MMMMM, yyyy hh:mm aaa";
 	
 	public static final int FROM_YEAR_RANGE = 22;

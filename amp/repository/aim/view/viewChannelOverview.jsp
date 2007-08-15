@@ -951,7 +951,7 @@ function commentWin(val) {
 
 													<module:display name="Funding">
 														<feature:display name="Funding Organizations" module="Funding">
-															<field:display feature="Funding Organizations" name="Type of Assistance">
+															<field:display feature="Funding Organizations" name="Type Of Assistance">
 																<TR>
 																	<TD>
 																	<TABLE width="100%" cellPadding=2 cellSpacing=1

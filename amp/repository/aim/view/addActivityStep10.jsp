@@ -132,6 +132,14 @@
 <html:hidden property="indicatorValId" />
 <html:hidden property="activityId" />
 <input type="hidden" name="edit" value="true">
+	<feature:display name="M&E" module="Trend Analysis and Forecasting"></feature:display>
+	<field:display name="Indicator Base Value" feature="M&E"></field:display>
+	<field:display name="Indicator Current Value" feature="M&E"></field:display>
+	<field:display name="Indicator Target Value" feature="M&E"></field:display>
+	<field:display name="Indicator Description" feature="M&E"></field:display>
+	<field:display name="Indicator ID" feature="M&E"></field:display>
+	<field:display name="Indicator Name" feature="M&E"></field:display>
+
 
 <table width="100%" cellPadding="0" cellSpacing="0" vAlign="top" align="left">
 <tr><td width="100%" vAlign="top" align="left">
@@ -322,10 +330,15 @@
 														</digi:link>
 													</c:if>&nbsp;&nbsp;&nbsp;<b>
 													<bean:define id="indName"> 
-														 <bean:write name="indicator" property="indicatorName"/>
-													</bean:define> 						
+														<field:display name="Indicator Name" feature="M&E">
+															<bean:write name="indicator" property="indicatorName"/>
+														</field:display>
+													</bean:define>
+
 													<digi:trn key="<%=indName%>"><%=indName%></digi:trn></b> - 
-													<bean:write name="indicator" property="indicatorCode" />
+													<field:display name="Indicator ID" feature="M&E">
+														<bean:write name="indicator" property="indicatorCode" />
+													</field:display>
 													 
 												</td>
 											</tr>
@@ -345,7 +358,6 @@
 															</tr>
 														</field:display>
 														<c:if test="${aimEditActivityForm.workingTeamLeadFlag=='no'}">
-															
 															<tr>
 																<td><b>
 																	<digi:trn key="aim:meBaseValue">Base Value</digi:trn></b>

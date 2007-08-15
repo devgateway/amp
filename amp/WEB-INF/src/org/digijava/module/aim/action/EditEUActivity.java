@@ -218,7 +218,7 @@ public class EditEUActivity extends MultiAction {
 		}
 		
 		try {
-			DateTimeUtil.parseDate(eaf.getDueDate());
+			DateTimeUtil.parseDateForPicker(eaf.getDueDate());
 		} catch (ParseException e) {			
 			errors.add("title", new ActionError(
 					"error.aim.euactivity.dueDate"));						
@@ -317,7 +317,7 @@ public class EditEUActivity extends MultiAction {
 		
 		
 		eua.setAssumptions(euaf.getAssumptions());
-		eua.setDueDate(DateTimeUtil.parseDate(euaf.getDueDate()));
+		eua.setDueDate(DateTimeUtil.parseDateForPicker(euaf.getDueDate()));
 		eua.setInputs(euaf.getInputs());
 		eua.setName(euaf.getName());
 		eua.setProgress(euaf.getProgress());

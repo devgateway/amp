@@ -48,7 +48,12 @@
 					<!-- End navigation -->
 				</tr>
 				<tr>
-					<td height=16 vAlign=center width=571><span class=subtitle-blue>Global Settings Manager</span>
+					<td height=16 vAlign=center width=571>
+						<span class=subtitle-blue>
+							<digi:trn key="aim:globalSettingsManager">
+								Global Settings Manager
+							</digi:trn>
+						</span>
 					</td>
 				</tr>
 				<tr>

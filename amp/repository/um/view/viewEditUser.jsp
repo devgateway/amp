@@ -21,7 +21,7 @@ function goAction(value){
 }
 </script>
 <digi:form action="/viewEditUser.do" method="post">
-<html:hidden name="umViewEditUserForm" property="event" styleId="event"/>
+  <html:hidden name="umViewEditUserForm" property="event" styleId="event"/>
   <table align="center">
     <tr>
       <!-- Start Navigation -->
@@ -60,6 +60,12 @@ function goAction(value){
           </digi:trn>
         </span>
       </td>
+      </tr>
+      <tr>
+      <td colspan="2">
+        <digi:errors/>
+        &nbsp;
+      </td>
     </tr>
     <tr>
       <td>
@@ -71,7 +77,7 @@ function goAction(value){
 
       </td>
       <td align="center">
-      <b><digi:trn key="aim:viewEditUser:edit">Edit</digi:trn> ${umViewEditUserForm.name}</b>
+        <b><digi:trn key="aim:viewEditUser:edit">Edit</digi:trn> ${umViewEditUserForm.name}</b>
       </td>
     </tr>
     <tr align="center">
@@ -258,7 +264,31 @@ function goAction(value){
             </td>
           </tr>
         </table>
-      </td>
+        <br />
+
+        <table border="0" class="border" width="40%">
+
+          <tr>
+            <c:set var="translation">
+              <digi:trn key="aim:viewEditUser:changePasswordButton">
+              Change password
+              </digi:trn>
+            </c:set>
+
+            <td width="10%" align="right"><b><digi:trn key="aim:viewEditUser:password">Password:</digi:trn> </b></td>
+
+            <td width="20%"><html:password name="umViewEditUserForm" property="newPassword" /></td>
+          </tr>
+          <tr>
+            <td width="10%" align="right"><b><digi:trn key="aim:viewEditUser:confirmPassword">Confirm:</digi:trn> </b></td>
+            <td width="20%"><html:password name="umViewEditUserForm" property="confirmNewPassword" /></td>
+          </tr>
+          <tr>
+            <td colspan="2"><input type="button" value="${translation}" onclick="goAction('changePassword');" style="font-family:verdana;font-size:11px;"/></td>
+          </tr>
+
+        </table>
+</td>
     </tr>
   </table>
 </digi:form>

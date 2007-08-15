@@ -40,6 +40,7 @@ import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.helper.Documents;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.cms.dbentity.CMSContentItem;
+import java.util.List;
 
 public class TeamMemberUtil {
 
@@ -66,7 +67,7 @@ public class TeamMemberUtil {
 		} catch (Exception e) {
 			logger.error("Exception from getFundOrgOfUser()");
 			e.printStackTrace(System.out);
-		} 
+		}
 //		finally {
 //			if (session != null) {
 //				try {
@@ -1459,4 +1460,30 @@ public class TeamMemberUtil {
 		AmpTeamMember currentAmpTeamMember=getAmpTeamMember(currentTeamMember.getMemberId());
 		return currentAmpTeamMember;
 	}
+        public static List getTeamMemberbyUserId(Long userId) throws Exception{
+
+
+            Session session = null;
+            Query qry = null;
+            List teamMembers = null;
+
+            try {
+                    session = PersistenceManager.getRequestDBSession();
+                    String queryString = "select tm.ampTeamMemId from "
+                                    + AmpTeamMember.class.getName()
+                                    + " tm where (tm.user.id=:user)";
+                    qry = session.createQuery(queryString);
+                    qry.setParameter("user",userId, Hibernate.LONG);
+                    teamMembers= qry.list();
+            }
+            catch (HibernateException ex) {
+                    logger.error("Unable to get team member");
+                    logger.debug("Exceptiion " + ex);
+                    throw ex;
+            }
+
+            return teamMembers;
+
+    }
+
 }

@@ -33,6 +33,8 @@ public class ViewEditUserForm
 
   private String event;
   private Boolean ban;
+  private String confirmNewPassword;
+  private String newPassword;
 
   public ViewEditUserForm() {
 
@@ -118,6 +120,15 @@ public class ViewEditUserForm
     return ban;
   }
 
+  public String getConfirmNewPassword() {
+
+    return confirmNewPassword;
+  }
+
+  public String getNewPassword() {
+    return newPassword;
+  }
+
   public void setUrl(String url) {
     this.url = url;
   }
@@ -196,6 +207,15 @@ public class ViewEditUserForm
 
   public void setBan(Boolean ban) {
     this.ban = ban;
+  }
+
+  public void setConfirmNewPassword(String confirmNewPassword) {
+
+    this.confirmNewPassword = confirmNewPassword;
+  }
+
+  public void setNewPassword(String newPassword) {
+    this.newPassword = newPassword;
   }
 
 }

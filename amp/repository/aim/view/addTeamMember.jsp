@@ -110,7 +110,11 @@ function clearForms()
 		</td>
 		<td align="left" width="50%">
 			<html:select property="role" styleClass="inp-text">
-			<html:option value="">------ Select role ------</html:option>
+			<html:option value="">
+					------ 
+				<digi:trn key="aim:addTeamMemberSelectRole">Select role</digi:trn>
+					------
+			</html:option>
 			<html:optionsCollection name="aimTeamMemberForm" property="ampRoles"
 			value="ampTeamMemRoleId" label="role" />
 			</html:select>

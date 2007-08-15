@@ -246,7 +246,12 @@
 							              	</td>
 							              	<td> 
 							              	<logic:equal name="aimYearlyDiscrepancyForm" property="goButtonPresent" value="true">
-												<html:submit value="GO" styleClass="dr-menu"/>
+							              		<c:set var="translation">
+							              			<digi:trn key="btn:go">
+							              				GO
+							              			</digi:trn>
+							              		</c:set>
+												<html:submit value="${translation}" styleClass="dr-menu"/>
 											</logic:equal> 
 							                </td>
 							              	<td>&nbsp;</td>

@@ -7,11 +7,13 @@ import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
 import java.util.Vector;
 
+import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -26,9 +28,13 @@ import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
+import org.dgfoundation.amp.visibility.AmpTreeVisibility;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.module.aim.dbentity.AmpColumns;
+import org.digijava.module.aim.dbentity.AmpColumnsVisibility;
 import org.digijava.module.aim.dbentity.AmpCurrency;
+import org.digijava.module.aim.dbentity.AmpFeaturesVisibility;
+import org.digijava.module.aim.dbentity.AmpFieldsVisibility;
 import org.digijava.module.aim.dbentity.AmpMeasures;
 import org.digijava.module.aim.dbentity.AmpReportColumn;
 import org.digijava.module.aim.dbentity.AmpReportHierarchy;
@@ -44,6 +50,7 @@ import org.digijava.module.aim.helper.ReportSelectionCriteria;
 import org.digijava.module.aim.helper.TeamMember;
 import org.digijava.module.aim.util.AuditLoggerUtil;
 import org.digijava.module.aim.util.CurrencyUtil;
+import org.digijava.module.aim.util.FeaturesUtil;
 import org.digijava.module.aim.util.ReportUtil;
 import org.digijava.module.aim.util.TeamUtil;
 
@@ -175,6 +182,42 @@ public class AdvancedReport extends Action {
 				//logger.info("inside Step 1...");
 				if (formBean.getMaxStep().intValue() < 1)
 					formBean.setMaxStep(new Integer(1));
+				
+				{
+					HashMap ampColumnsVisibles=new HashMap();
+					ServletContext ampContext;
+					ampContext=this.getServlet().getServletContext();
+					AmpTreeVisibility ampTreeVisibility=(AmpTreeVisibility) ampContext.getAttribute("ampTreeVisibility");
+					Collection ampAllFields= FeaturesUtil.getAMPFieldsVisibility();
+					Collection allAmpColumns=formBean.getAmpColumns();
+					for(Iterator it=allAmpColumns.iterator();it.hasNext();)
+					{
+						AmpColumns ampColumn=(AmpColumns) it.next();
+						for(Iterator jt=ampAllFields.iterator();jt.hasNext();)
+						{
+							AmpFieldsVisibility ampFieldVisibility=(AmpFieldsVisibility) jt.next();
+							if(ampColumn.getColumnName().compareTo(ampFieldVisibility.getName())==0)
+							{
+								//if(ampFieldVisibility.isFieldActive(ampTreeVisibility))
+								{
+									AmpColumnsVisibility ampColumnVisibilityObj=new AmpColumnsVisibility();
+									ampColumnVisibilityObj.setAmpColumn(ampColumn);
+									ampColumnVisibilityObj.setAmpfield(ampFieldVisibility);
+									ampColumnVisibilityObj.setParent((AmpFeaturesVisibility) ampFieldVisibility.getParent());
+									ampColumnsVisibles.put(ampFieldVisibility.getParent().getName(), ampColumnVisibilityObj);
+									System.out.println("xxxxxxxxxxxxxxx+:"+ampFieldVisibility.getName());
+								}
+							}
+						}
+					}
+					Iterator iterator = ampColumnsVisibles.keySet().iterator();
+					for(;iterator.hasNext();)
+					{
+						String s=(String) iterator.next();
+						//System.out.println("xxxxxxxxxxxxxxx+:"+s);
+					}
+				}
+				
 				return mapping.findForward("SelectCols");
 			}
 			// add columns that are available
@@ -267,6 +310,7 @@ public class AdvancedReport extends Action {
 			}
 			*/
 			// Goto Step 2.
+
 			if(request.getParameter("check") != null && request.getParameter("check").equals("5"))
 			{
 				//logger.info("In here  generating data..........");
@@ -762,6 +806,7 @@ public class AdvancedReport extends Action {
 
 				}
 			//	logger.info("###----------------------------------------------------------------------#####");
+
 				return mapping.findForward("GenerateReport");
 			}
 					
@@ -1312,6 +1357,7 @@ public class AdvancedReport extends Action {
 					formBean.setAddedColumns(temp);
 					formBean.setAmpColumns(coll);
 				}
+
 				if(str.equals("Step2AddRows") == true)
 				{
 					formBean.setColumnHierarchie(coll);

@@ -17,9 +17,10 @@
  *************************************************************************/
 package org.digijava.module.common.util;
 
+import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.text.ParseException;
 
 import org.digijava.module.aim.helper.Constants;
 import org.digijava.module.aim.util.FeaturesUtil;
@@ -67,6 +68,7 @@ public class DateTimeUtil {
 		}
 		SimpleDateFormat formater=new SimpleDateFormat(pattern);
 		String result = formater.format(date);
+	
 		return result;
 	}
 
@@ -81,6 +83,18 @@ public class DateTimeUtil {
 		return result;
 	}
 	
+	public static Date parseDateForPicker(String date) throws Exception{
+		// TODO This should be in some other Utility class, FormatUtil may be, or just Util
+		String pattern=FeaturesUtil.getGlobalSettingValue(Constants.GLOBALSETTINGS_DATEFORMAT);
+		if (pattern==null){
+			pattern=Constants.CALENDAR_DATE_PICKER;
+		}
+		
+		SimpleDateFormat formater=new SimpleDateFormat(pattern);
+		//if(date.contains("-")) date=date.replaceAll("-", "/");
+		Date result = formater.parse(date);
+		return result;
+	}
     
     
     

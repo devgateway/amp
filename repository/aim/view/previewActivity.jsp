@@ -999,7 +999,7 @@ function disable() {
                                                                               </tr>
                                                                               </field:display>
                                                                               <!-- type of assistance -->
-                                                                              <field:display name="Type of Assistance" feature="Funding Organizations">
+                                                                              <field:display name="Type Of Assistance" feature="Funding Organizations">
                                                                               <tr>
                                                                                 <td bgcolor="#FFFFFF" align="left" width="150">
                                                                                   <a title="<digi:trn key="aim:AssitanceType">Specify whether the project was financed through a grant, a loan or in kind</digi:trn>">

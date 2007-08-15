@@ -48,7 +48,7 @@ function checkRate(val){
 }
 
 function checkName(val){
-  if(val.match("[^a-zA-Z ]")){
+  if(val.match("[^a-zA-ZÁ-ÿ ]")){
     return false;
   }
   return true;
@@ -102,7 +102,7 @@ function unload() {
 				<tr>
 					<td vAlign="center" width="100%" align ="center" height="20">
 						<html:errors />
-					</td></tr>					
+					</td></tr>
 				<tr>
 					<td align="center">
 						<table border="0" cellpadding="2" cellspacing="1" width="100%">

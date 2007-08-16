@@ -130,10 +130,16 @@ function unload() {
 								</td>
 								<td align="left" valign="middle">
 									<html:select property="countryIso" styleClass="inp-text">
-										<html:option value="">Select a country</html:option>
-										<html:optionsCollection name="aimCurrencyForm" property="countries"
-										value="iso" label="name" />&nbsp;&nbsp;&nbsp;
-									</html:select>
+										<html:option value=""><digi:trn key="aim:selectCountry">Select a country</digi:trn></html:option>
+                                        <c:if test="${!empty aimCurrencyForm.countries}">
+                                          <c:forEach var="country" items="${aimCurrencyForm.countries}">
+                                            <c:set var="trnCountryName">
+                                              <digi:trn key="aim:cn:${country.name}">${country.name}</digi:trn>
+                                            </c:set>
+                                            <html:option value="${country.iso}">${trnCountryName}</html:option>
+                                          </c:forEach>
+                                        </c:if>
+                                    </html:select>
 								</td>
 							</tr>
 							<%--

@@ -21,11 +21,11 @@
 		document.aimEditActivityForm.target = "_self";
 		document.aimEditActivityForm.submit();
 	}
-	
+
 	function removeSelSectors() {
 		var flag = validate(2);
 		if (flag == false) return false;
-	    
+
 	    <digi:context name="remSec" property="context/addActivity.do?remSectors=true" />
 	    document.aimEditActivityForm.action = "<%= remSec %>";
 	    document.aimEditActivityForm.target = "_self";
@@ -88,7 +88,7 @@
                                                       	&nbsp;
                                                       	</field:display>
                                                         	<input type="button" class="buton" onclick="addSectors();" value='<digi:trn key="btn:addSectors">Add Sectors</digi:trn>' />
-                                                        
+
                                                       </td>
                                                     </tr>
                                                   </c:if>
@@ -134,14 +134,14 @@
                                                                 <tr>
                                                                 	<field:display name="Add Sectors Button" feature="Sectors">&nbsp;</field:display>
                                                                     <td>
-                                                                      <input type="button" value="Add Sectors" class="buton"  onclick="addSectors();">
+                                                                      <input type="button" value='<digi:trn key="btn:addSectors">Add Sectors</digi:trn>' class="buton"  onclick="addSectors();">
                                                                     </td>
-                                                                    
+
                                                                     <field:display name="Remove Sectors Button" feature="Sectors">&nbsp;</field:display>
                                                                   <td>
 																	<input type="button" class="buton" onclick="return removeSelSectors()" value='<digi:trn key="btn:removeSector">Remove Sector</digi:trn>' />
                                                                   </td>
-                                                                  
+
                                                                 </tr>
                                                               </table>
                                                             </td>

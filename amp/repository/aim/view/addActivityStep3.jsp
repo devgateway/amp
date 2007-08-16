@@ -291,14 +291,8 @@
                                   <tr>
                                     <td>
                                     	<bean:define name="aimEditActivityForm" id="myForm" type="org.digijava.module.aim.form.EditActivityForm"/>
-                                    	<%
-                                    		boolean isStatusPlanned	= false;
-                                    		if (myForm.getStatusId() != null)
-                                    			if(CategoryManagerUtil.getAmpCategoryValueFromDb(myForm.getStatusId())!=null)
-	                                    			isStatusPlanned	= Constants.ACTIVITY_STATUS_PLANNED.equals( CategoryManagerUtil.getAmpCategoryValueFromDb(myForm.getStatusId()).getValue() );
-                                    	%>
-                                    	<feature:display name="Proposed Project Cost" module="National Planning Dashboard">
-                                      <c:if test="${aimEditActivityForm.proProjCost!=null ||  isStatusPlanned  }">
+                             	  	<feature:display name="Proposed Project Cost" module="Funding">
+                                      <c:if test="${not empty aimEditActivityForm.proProjCost && aimEditActivityForm.proProjCost!=''}">
                                         <table width="100%" bgcolor="#f4f4f2" border="0" cellSpacing=0 cellPadding=0>
                                           <tr>
                                             <td>
@@ -320,7 +314,7 @@
                                                     <table cellSpacing=8 cellPadding=0 border=0 width="95%" class="box-border-nopadding" align="center">
                                                       <tr>
                                                         <td>
-                                                          <c:if test="${aimEditActivityForm.proProjCost!=null}">
+                                                          <c:if test="${not empty aimEditActivityForm.proProjCost && aimEditActivityForm.proProjCost!=''}">
                                                             <table cellSpacing=1 cellPadding="1" bgcolor="#dddddd" width="100%">
                                                               <tr bgcolor="#ffffff">
                                                                 <td bgcolor="#FFFFFF" align="left" width="30">
@@ -329,17 +323,17 @@
                                                   				</digi:trn>
                                                                 </td>
                                                                 <td bgcolor="#FFFFFF" align="left" width="10">
-                                                                  <c:if test="${aimEditActivityForm.proProjCost.funAmount!=null}">
+                                                                  <c:if test="${not empty aimEditActivityForm.proProjCost.funAmount && aimEditActivityForm.proProjCost.funAmount!=''}">
                                                                   ${aimEditActivityForm.proProjCost.funAmount}
                                                                   </c:if>
                                                                 </td>
                                                                 <td bgcolor="#FFFFFF" align="left" width="10">
-                                                                  <c:if test="${aimEditActivityForm.proProjCost.currencyCode!=null}">
+                                                                  <c:if test="${not empty aimEditActivityForm.proProjCost.currencyCode && aimEditActivityForm.proProjCost.currencyCode!=''}">
                                                                   ${aimEditActivityForm.proProjCost.currencyCode}
                                                                   </c:if>
                                                                 </td>
                                                                 <td bgcolor="#FFFFFF" align="left" width="150">
-                                                                  <c:if test="${aimEditActivityForm.proProjCost.funDate!=null}">
+                                                                  <c:if test="${not empty aimEditActivityForm.proProjCost.funDate && aimEditActivityForm.proProjCost.funDate!=''}">
                                                                   ${aimEditActivityForm.proProjCost.funDate}
                                                                   </c:if>
                                                                 </td>

@@ -11,6 +11,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Set;
+import java.util.TreeSet;
 import java.util.Vector;
 
 import javax.servlet.ServletContext;
@@ -182,14 +183,37 @@ public class AdvancedReport extends Action {
 				//logger.info("inside Step 1...");
 				if (formBean.getMaxStep().intValue() < 1)
 					formBean.setMaxStep(new Integer(1));
-				
+				HashMap ampTreeColumns=this.buildAmpTreeColumnSimple(formBean.getAmpColumns());
+				formBean.setAmpTreeColumns(ampTreeColumns);
+/*				System.out.println("ooo daaaaa");
+				for(Iterator it=ampTreeColumns.keySet().iterator();it.hasNext();)
 				{
-					HashMap ampColumnsVisibles=new HashMap();
+					String s=(String) it.next();
+					logger.info(s);
+					System.out.println("logger mai sus");
+				}
+				for(Iterator it=ampTreeColumns.values().iterator();it.hasNext();)
+				{
+					
+					ArrayList a=(ArrayList) it.next();
+					for(Iterator jt=a.iterator();jt.hasNext();)
+					{
+						AmpColumnsVisibility acv=(AmpColumnsVisibility) jt.next();
+						logger.info(acv.getAmpColumn().getColumnName());
+						System.out.println("logger mai sus a doua parte");
+
+					}
+				}*/
+//				formBean.getAmpColumns();
+				
+/*				{
+					ArrayList ampColumnsVisibles=new ArrayList();
 					ServletContext ampContext;
 					ampContext=this.getServlet().getServletContext();
 					AmpTreeVisibility ampTreeVisibility=(AmpTreeVisibility) ampContext.getAttribute("ampTreeVisibility");
 					Collection ampAllFields= FeaturesUtil.getAMPFieldsVisibility();
 					Collection allAmpColumns=formBean.getAmpColumns();
+					TreeSet ampThemes=new TreeSet();
 					for(Iterator it=allAmpColumns.iterator();it.hasNext();)
 					{
 						AmpColumns ampColumn=(AmpColumns) it.next();
@@ -204,20 +228,29 @@ public class AdvancedReport extends Action {
 									ampColumnVisibilityObj.setAmpColumn(ampColumn);
 									ampColumnVisibilityObj.setAmpfield(ampFieldVisibility);
 									ampColumnVisibilityObj.setParent((AmpFeaturesVisibility) ampFieldVisibility.getParent());
-									ampColumnsVisibles.put(ampFieldVisibility.getParent().getName(), ampColumnVisibilityObj);
+									ampColumnsVisibles.add(ampColumnVisibilityObj);
+									ampThemes.add(ampFieldVisibility.getParent().getName());
 									System.out.println("xxxxxxxxxxxxxxx+:"+ampFieldVisibility.getName());
 								}
 							}
 						}
 					}
-					Iterator iterator = ampColumnsVisibles.keySet().iterator();
-					for(;iterator.hasNext();)
+					HashMap ampTreeColumn=new HashMap();
+					for(Iterator it=ampThemes.iterator();it.hasNext();)
 					{
-						String s=(String) iterator.next();
-						//System.out.println("xxxxxxxxxxxxxxx+:"+s);
+						String themeName=(String) it.next();
+						ArrayList aux=new ArrayList();
+						for(Iterator jt=ampColumnsVisibles.iterator();jt.hasNext();)
+						{
+							AmpColumnsVisibility acv=(AmpColumnsVisibility) jt.next();
+							if(themeName.compareTo(acv.getParent().getName())==0)
+								aux.add(acv);
+							
+						}
+						ampTreeColumn.put(themeName, aux);
 					}
 				}
-				
+				*/
 				return mapping.findForward("SelectCols");
 			}
 			// add columns that are available
@@ -1398,6 +1431,101 @@ public class AdvancedReport extends Action {
 		}
 	}// end of Function ...........
 	
+	
+	private HashMap buildAmpTreeColumn(Collection formColumns)
+	{
+			ArrayList ampColumnsVisibles=new ArrayList();
+			ServletContext ampContext;
+			ampContext=this.getServlet().getServletContext();
+			AmpTreeVisibility ampTreeVisibility=(AmpTreeVisibility) ampContext.getAttribute("ampTreeVisibility");
+			Collection ampAllFields= FeaturesUtil.getAMPFieldsVisibility();
+			Collection allAmpColumns=formColumns;
+			TreeSet ampThemes=new TreeSet();
+			for(Iterator it=allAmpColumns.iterator();it.hasNext();)
+			{
+				AmpColumns ampColumn=(AmpColumns) it.next();
+				for(Iterator jt=ampAllFields.iterator();jt.hasNext();)
+				{
+					AmpFieldsVisibility ampFieldVisibility=(AmpFieldsVisibility) jt.next();
+					if(ampColumn.getColumnName().compareTo(ampFieldVisibility.getName())==0)
+					{
+						//if(ampFieldVisibility.isFieldActive(ampTreeVisibility))
+						{
+							AmpColumnsVisibility ampColumnVisibilityObj=new AmpColumnsVisibility();
+							ampColumnVisibilityObj.setAmpColumn(ampColumn);
+							ampColumnVisibilityObj.setAmpfield(ampFieldVisibility);
+							ampColumnVisibilityObj.setParent((AmpFeaturesVisibility) ampFieldVisibility.getParent());
+							ampColumnsVisibles.add(ampColumnVisibilityObj);
+							ampThemes.add(ampFieldVisibility.getParent().getName());
+							System.out.println("xxxxxxxxxxxxxxx+:"+ampFieldVisibility.getName());
+						}
+					}
+				}
+			}
+			HashMap ampTreeColumn=new HashMap();
+			for(Iterator it=ampThemes.iterator();it.hasNext();)
+			{
+				String themeName=(String) it.next();
+				ArrayList aux=new ArrayList();
+				for(Iterator jt=ampColumnsVisibles.iterator();jt.hasNext();)
+				{
+					AmpColumnsVisibility acv=(AmpColumnsVisibility) jt.next();
+					if(themeName.compareTo(acv.getParent().getName())==0)
+						aux.add(acv);
+					
+				}
+				ampTreeColumn.put(themeName, aux);
+			}
+			return ampTreeColumn;
+	}
+
+	private HashMap buildAmpTreeColumnSimple(Collection formColumns)
+	{
+			ArrayList ampColumnsVisibles=new ArrayList();
+			ServletContext ampContext;
+			ampContext=this.getServlet().getServletContext();
+			AmpTreeVisibility ampTreeVisibility=(AmpTreeVisibility) ampContext.getAttribute("ampTreeVisibility");
+			Collection ampAllFields= FeaturesUtil.getAMPFieldsVisibility();
+			Collection allAmpColumns=formColumns;
+			TreeSet ampThemes=new TreeSet();
+			for(Iterator it=allAmpColumns.iterator();it.hasNext();)
+			{
+				AmpColumns ampColumn=(AmpColumns) it.next();
+				for(Iterator jt=ampAllFields.iterator();jt.hasNext();)
+				{
+					AmpFieldsVisibility ampFieldVisibility=(AmpFieldsVisibility) jt.next();
+					if(ampColumn.getColumnName().compareTo(ampFieldVisibility.getName())==0)
+					{
+						//if(ampFieldVisibility.isFieldActive(ampTreeVisibility))
+						{
+							AmpColumnsVisibility ampColumnVisibilityObj=new AmpColumnsVisibility();
+							ampColumnVisibilityObj.setAmpColumn(ampColumn);
+							ampColumnVisibilityObj.setAmpfield(ampFieldVisibility);
+							ampColumnVisibilityObj.setParent((AmpFeaturesVisibility) ampFieldVisibility.getParent());
+							ampColumnsVisibles.add(ampColumnVisibilityObj);
+							ampThemes.add(ampFieldVisibility.getParent().getName());
+							System.out.println("xxxxxxxxxxxxxxx+:"+ampFieldVisibility.getName());
+						}
+					}
+				}
+			}
+			HashMap ampTreeColumn=new HashMap();
+			for(Iterator it=ampThemes.iterator();it.hasNext();)
+			{
+				String themeName=(String) it.next();
+				ArrayList aux=new ArrayList();
+				for(Iterator jt=ampColumnsVisibles.iterator();jt.hasNext();)
+				{
+					AmpColumnsVisibility acv=(AmpColumnsVisibility) jt.next();
+					if(themeName.compareTo(acv.getParent().getName())==0)
+						aux.add(acv.getAmpColumn());
+					
+				}
+				ampTreeColumn.put(themeName, aux);
+			}
+			return ampTreeColumn;
+	}
+
 	
 	// Function to move Columns Up and Down
 	

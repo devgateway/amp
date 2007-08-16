@@ -733,7 +733,7 @@
 
 				         					            	<div align="center" class="note">
 
-																		No records !
+																		<digi:trn key="aim:noRecords">No records</digi:trn> !
 
 																	</div>
 
@@ -855,7 +855,7 @@
 
                         		<tr valign="top"> 
 
-                         			<td colspan="8" align="center"><span class="note">No records!</td>
+                         			<td colspan="8" align="center"><span class="note"><digi:trn key="aim:noRecords">No records</digi:trn>!</td>
 
 	                          	</tr>
 
@@ -985,7 +985,7 @@
 
 			      	  											<STRONG>
 
-																	Show Quarterly 
+																	<digi:trn key="aim:showQuartery">Show Quarterly </digi:trn>
 
 																	</STRONG>
 

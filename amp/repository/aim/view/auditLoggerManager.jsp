@@ -74,16 +74,16 @@
 							</tr>
 							<logic:iterate name="aimAuditLoggerManagerForm" property="logs" id="log" type="org.digijava.module.aim.dbentity.AmpAuditLogger">
 								<tr>
-									<td align="center"><bean:write name="log" property="objectName"/></td>
-									<td align="center"><bean:write name="log" property="objectTypeTrimmed"/></td>
-									<td align="center"><bean:write name="log" property="teamName"/></td>
-									<td align="center"><bean:write name="log" property="authorName"/></td>
-									<td align="center"><bean:write name="log" property="authorEmail"/></td>
-									<td align="center"><bean:write name="log" property="loggedDate"/></td>
-									<td align="center"><bean:write name="log" property="editorName"/></td>
-									<td align="center"><bean:write name="log" property="editorEmail"/></td>
-									<td align="center"><bean:write name="log" property="modifyDate"/></td>
-									<td align="center"><bean:write name="log" property="action"/></td>
+									<td align="center">&nbsp;<bean:write name="log" property="objectName"/>&nbsp;</td>
+									<td align="center">&nbsp;<bean:write name="log" property="objectTypeTrimmed"/>&nbsp;</td>
+									<td align="center">&nbsp;<bean:write name="log" property="teamName"/>&nbsp;</td>
+									<td align="center">&nbsp;<bean:write name="log" property="authorName"/>&nbsp;</td>
+									<td align="center">&nbsp;<bean:write name="log" property="authorEmail"/>&nbsp;</td>
+									<td align="center">&nbsp;<bean:write name="log" property="loggedDate"/>&nbsp;</td>
+									<td align="center">&nbsp;<bean:write name="log" property="editorName"/>&nbsp;</td>
+									<td align="center">&nbsp;<bean:write name="log" property="editorEmail"/>&nbsp;</td>
+									<td align="center">&nbsp;<bean:write name="log" property="modifyDate"/>&nbsp;</td>
+									<td align="center">&nbsp;<bean:write name="log" property="action"/>&nbsp;</td>
 								</tr>
 							</logic:iterate>
 						</table>

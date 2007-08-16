@@ -28,6 +28,7 @@
 <!-- generate total row -->
 <logic:present name="groupReport" property="parent">
 <bean:define id="viewable" name="groupReport" type="org.dgfoundation.amp.ar.GroupReportData" scope="page" toScope="request"/>
+<bean:define id="grandTotal" toScope="request" value="yes" property="java.lang.String" />
 <jsp:include page="TrailCells.jsp"/>
 <tr><td colspan='<bean:write name="groupReport" property="totalDepth"/>'>
 &nbsp;

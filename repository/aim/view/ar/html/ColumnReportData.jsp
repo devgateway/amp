@@ -11,8 +11,8 @@
 
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/arFunctions.js"/>"></script>
 
-<tr><td colspan='<bean:write name="columnReport" property="totalDepth"/>'>
-<i><digi:trn key="rep:popup:${columnReport.nameTrn}">${columnReport.name}</digi:trn></i>
+<tr class=newClsTableL1SubTotalEndSectionLabel><td colspan='<bean:write name="columnReport" property="totalDepth"/>'>
+<b><digi:trn key="rep:popup:${columnReport.nameTrn}">${columnReport.name}</digi:trn></b>
 </td></tr>
 
 <%int rowIdx = 2;%>

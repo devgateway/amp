@@ -90,83 +90,82 @@
 										</FONT>
 									</td></tr>
 								<tr bgcolor="#f4f4f2">
-								<td colspan="2" class="box-border-alt1">
-										<span class="f-names"><digi:trn key="aim:commitmentsTotalActAllocation">Commitments - (Total Actual Allocation</digi:trn> <%=eaForm.getTotalCommitments()%>
+									<td colspan="2" class="box-border-alt1">
+										<span class="f-names">
+											<digi:trn key="aim:commitmentsTotalActAllocation">Commitments - (Total Actual Allocation</digi:trn> <%=eaForm.getTotalCommitments()%>
 															 <%=eaForm.getCurrCode()%> )
 										</span>
-
-												<digi:trn key="aim:PlannedFIE">Planned</digi:trn>/<digi:trn key="aim:ActualFIE">Actual</digi:trn>&nbsp;&nbsp;&nbsp;
+										<digi:trn key="aim:PlannedFIE">Planned</digi:trn>/<digi:trn key="aim:ActualFIE">Actual</digi:trn>&nbsp;&nbsp;&nbsp;
 										<a href="javascript:addCommitments()"><digi:trn key="btn:add">Add</digi:trn></a><br><br>
-                                                                                <digi:trn key="aim:PlannedFIE">Planned</digi:trn>/<digi:trn key="aim:ActualFIE">Actual</digi:trn>&nbsp;&nbsp;&nbsp;
-                                                                                <digi:trn key="aim:AmountFIE">Amount</digi:trn>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-												<digi:trn key="aim:CurrencyFIE">Currency</digi:trn>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-												<digi:trn key="aim:DateFIE">Date</digi:trn>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-												<digi:trn key="aim:PerspectiveFIE">Perspective</digi:trn><br>
+                                        <digi:trn key="aim:PlannedFIE">Planned</digi:trn>/<digi:trn key="aim:ActualFIE">Actual</digi:trn>&nbsp;&nbsp;&nbsp;
+                                        <digi:trn key="aim:AmountFIE">Amount</digi:trn>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+										<digi:trn key="aim:CurrencyFIE">Currency</digi:trn>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+										<digi:trn key="aim:DateFIE">Date</digi:trn>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+										<digi:trn key="aim:PerspectiveFIE">Perspective</digi:trn><br>
 										<div id="comm">
-
-										<c:if test="${aimEditActivityForm.componentId != -1}">
-											<c:forEach var="fundComp" items="${aimEditActivityForm.selectedComponents}">
-
-											<c:if test="${aimEditActivityForm.componentId == fundComp.componentId}">
-
-											<c:forEach var="comm" items="${fundComp.commitments}">
-
-
-											<% String tNameBase = "comm_" + indexC + "_";
-												String divName = "comm_" + indexC;
-												indexC++;
-												%>
-												<% String field1 = tNameBase + "1";
-												 String field2 = tNameBase + "2";
-												 String field3 = tNameBase + "3";
-												 String field4 = tNameBase + "4";
-												 String field5 = tNameBase + "5"; %>
-												 <div id="<%=divName%>">
-												<select name="<%=field1%>" class="inp-text">
-													<c:if test="${comm.adjustmentType == 1}">
-														<option value="1" selected="true"><digi:trn key="opt:actual">Actual</digi:trn></option>
-														<option value="0"><digi:trn key="opt:planned">Planned</digi:trn></option>
+											<c:if test="${aimEditActivityForm.componentId != -1}">
+											kkkkkk
+												<c:forEach var="fundComp" items="${aimEditActivityForm.selectedComponents}">
+													<c:if test="${aimEditActivityForm.componentId == fundComp.componentId}">
+														<c:forEach var="comm" items="${fundComp.commitments}">
+															<% String tNameBase = "comm_" + indexC + "_";
+																String divName = "comm_" + indexC;
+																indexC++;%>
+															<% String field1 = tNameBase + "1";
+																 String field2 = tNameBase + "2";
+																 String field3 = tNameBase + "3";
+																 String field4 = tNameBase + "4";
+															 	 String field5 = tNameBase + "5"; %>
+													 		<div id="<%=divName%>">
+																<select name="<%=field1%>" class="inp-text">
+																	<c:if test="${comm.adjustmentType == 1}">
+																		<option value="1" selected="true"><digi:trn key="opt:actual">Actual</digi:trn></option>
+																		<option value="0"><digi:trn key="opt:planned">Planned</digi:trn></option>
+																	</c:if>
+																	<c:if test="${comm.adjustmentType == 0}">
+																		<option value="1"><digi:trn key="opt:actual">Actual</digi:trn></option>
+																		<option value="0" selected="true"><digi:trn key="opt:planned">Planned</digi:trn></option>
+																	</c:if>
+																</select>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+																<input type="text" name="<%=field2%>"value="<c:out value="${comm.transactionAmount}"/>" size="15"  class='amt'>&nbsp;
+																<select name="<%=field3%>" class="inp-text">
+																	<c:forEach var="currency" items="${aimEditActivityForm.currencies}">
+																		<c:if test="${comm.currencyCode == currency.currencyCode}">
+																			<option selected="true" value="<c:out value="${currency.currencyCode}"/>">
+																		</c:if>
+																		<c:if test="${comm.currencyCode != currency.currencyCode}">
+																			<option value="<c:out value="${currency.currencyCode}"/>">
+																		</c:if>
+																		<c:out value="${currency.currencyName}"/>
+																		</option>
+																	</c:forEach>
+																</select>&nbsp;
+																<input type="text" readonly="true" name="<%=field4%>" id="<%=field4%>"value="<c:out value="${comm.transactionDate}"/>" size="10"  class="inp-text">&nbsp;
+																<a href=javascript:calendar('<%=field4%>')>
+																<img src='../ampTemplate/images/show-calendar.gif' border='0'></a>&nbsp;
+																<select name="<%=field5%>" value="<c:out value="${comm.perspectiveCode}"/>" class="inp-text">
+																	<c:forEach var="pers" items="${aimEditActivityForm.perspectives}">
+																		<c:if test="${comm.perspectiveCode == pers.code}">
+																			<option selected="true" value="<c:out value="${pers.code}"/>">
+																		</c:if>
+																		<c:if test="${comm.perspectiveCode != pers.code}">
+																			<option value="<c:out value="${pers.code}"/>">
+																		</c:if>
+																		<c:out value="${pers.name}"/>
+																		</option>
+																	</c:forEach>
+																</select>&nbsp;aaaaa
+																<input type='button' value='Delete' class='inp-text'onclick="removeCommitment('<%=divName%>')">bbbbbbb
+															</div>ccccccccccc
+														</c:forEach>
 													</c:if>
-													<c:if test="${comm.adjustmentType == 0}">
-														<option value="1"><digi:trn key="opt:actual">Actual</digi:trn></option>
-														<option value="0" selected="true"><digi:trn key="opt:planned">Planned</digi:trn></option>
-													</c:if>
-												</select>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="text" name="<%=field2%>"
-												value="<c:out value="${comm.transactionAmount}"/>" size="15"  class='amt'>&nbsp;<select name="<%=field3%>" class="inp-text">
-													<c:forEach var="currency" items="${aimEditActivityForm.currencies}">
-														<c:if test="${comm.currencyCode == currency.currencyCode}">
-															<option selected="true" value="<c:out value="${currency.currencyCode}"/>">
-														</c:if>
-														<c:if test="${comm.currencyCode != currency.currencyCode}">
-															<option value="<c:out value="${currency.currencyCode}"/>">
-														</c:if>
-															<c:out value="${currency.currencyName}"/>
-														</option>
-													</c:forEach>
-												</select>&nbsp;<input type="text" readonly="true" name="<%=field4%>" id="<%=field4%>"
-												value="<c:out value="${comm.transactionDate}"/>" size="10"  class="inp-text">&nbsp;<a href=javascript:calendar('<%=field4%>')><img src='../ampTemplate/images/show-calendar.gif' border='0'></a>&nbsp;<select name="<%=field5%>" value="<c:out value="${comm.perspectiveCode}"/>" class="inp-text">
-													<c:forEach var="pers" items="${aimEditActivityForm.perspectives}">
-														<c:if test="${comm.perspectiveCode == pers.code}">
-															<option selected="true" value="<c:out value="${pers.code}"/>">
-														</c:if>
-														<c:if test="${comm.perspectiveCode != pers.code}">
-															<option value="<c:out value="${pers.code}"/>">
-														</c:if>
-														<c:out value="${pers.name}"/>
-														</option>
-
-													</c:forEach>
-												</select>&nbsp;aaaaa<input type='button' value='Delete' class='inp-text'
-												onclick="removeCommitment('<%=divName%>')">bbbbbbb</div>ccccccccccc
-											</c:forEach>
+												</c:forEach>
 											</c:if>
-											</c:forEach>
-										</c:if>
 										</div>
-								</td>
-							</tr>
-							<tr bgcolor="#ffffff">
-								<td colspan="2" class="box-border">
+									</td>
+								</tr>
+								<tr bgcolor="#ffffff">
+									<td colspan="2" class="box-border">
 										<span class="f-names"><digi:trn key="aim:disbursementTotalActToDate"> Disbursement - (Total actual to date</digi:trn> <%=eaForm.getTotalDisbursements()%>
 															 <%=eaForm.getCurrCode()%>)
 										</span>
@@ -376,13 +375,20 @@ function addCommitments()
 		while (itr.hasNext()) {
 			AmpPerspective pers = (AmpPerspective) itr.next();
 			if (pers.getCode().equalsIgnoreCase(defPers)) { %>
-				s += "<option value='<%=pers.getCode()%>' selected='true'><%=pers.getNameTrimmedForTrn()%></option>";
+				<c:set var="trnPers">
+					<digi:trn key='<%=pers.getTrnkey()%>'><%=pers.getName()%></digi:trn>
+				</c:set>
+				s += '<option value="<%=pers.getCode()%>" selected="true">${trnPers}</option>';
 			<% } else { %>
-						s += "<option value='<%=pers.getCode()%>'><%=pers.getNameTrimmedForTrn()%></option>";
+				<c:set var="trnPers">
+					<digi:trn key='<%=pers.getTrnkey()%>'><%=pers.getName()%></digi:trn>
+				</c:set>
+				s += '<option value="<%=pers.getCode()%>">${trnPers}</option>';
 			<% }
 		} %>
 	s += "</select>&nbsp;";
-	s += "<input type='button' value='Delete' class='inp-text' onclick=removeCommitment('" + divname + "')><br>";
+    <c:set var='trnDeleteBtn'><digi:trn key='btn:delete'>delete</digi:trn></c:set>
+	s += '<input type="button" value="${trnDeleteBtn}" class="inp-text" onclick=removeCommitment("'+ divname + '")><br>';
 
 	newdiv.innerHTML = s;
 	ni.appendChild(newdiv);
@@ -430,13 +436,22 @@ function addDisbursement()
 		while (itr.hasNext()) {
 			AmpPerspective pers = (AmpPerspective) itr.next();
 			if (pers.getCode().equalsIgnoreCase(defPers)) { %>
-				s += "<option value='<%=pers.getCode()%>' selected='true'><%=pers.getNameTrimmedForTrn()%></option>";
+				<c:set var="trnPers">
+					<digi:trn key='<%=pers.getTrnkey()%>'><%=pers.getName()%></digi:trn>
+				</c:set>
+				s += '<option value="<%=pers.getCode()%>" selected="true">${trnPers}</option>';
 			<% } else { %>
-				s += "<option value='<%=pers.getCode()%>'><%=pers.getNameTrimmedForTrn()%></option>";
+				<c:set var="trnPers">
+					<digi:trn key='<%=pers.getTrnkey()%>'><%=pers.getName()%></digi:trn>
+				</c:set>
+				s += '<option value="<%=pers.getCode()%>">${trnPers}</option>';
 			<% }
+
 		} %>
 	s += "</select>&nbsp;";
-	s += "<input type='button' value='Delete' class='inp-text' onclick=removeDisbursement('" + divname + "')><br>";
+	<c:set var='trnDeleteBtn'><digi:trn key='btn:delete'>delete</digi:trn></c:set>
+	s += '<input type="button" value="${trnDeleteBtn}" class="inp-text" onclick=removeDisbursement("'+ divname + '")><br>';
+
 
 	newdiv.innerHTML = s;
 	ni.appendChild(newdiv);
@@ -484,13 +499,21 @@ function addExpenditure()
 		while (itr.hasNext()) {
 			AmpPerspective pers = (AmpPerspective) itr.next();
 			if (pers.getCode().equalsIgnoreCase(defPers)) { %>
-				s += "<option value='<%=pers.getCode()%>' selected='true'><%=pers.getNameTrimmedForTrn()%></option>";
+				<c:set var="trnPers">
+					<digi:trn key='<%=pers.getTrnkey()%>'><%=pers.getName()%></digi:trn>
+				</c:set>
+				s += '<option value="<%=pers.getCode()%>" selected="true">${trnPers}</option>';
 			<% } else { %>
-				s += "<option value='<%=pers.getCode()%>'><%=pers.getNameTrimmedForTrn()%></option>";
+				<c:set var="trnPers">
+					<digi:trn key='<%=pers.getTrnkey()%>'><%=pers.getName()%></digi:trn>
+				</c:set>
+				s += '<option value="<%=pers.getCode()%>">${trnPers}</option>';
 			<% }
 		} %>
 	s += "</select>&nbsp;";
-	s += "<input type='button' value='Delete' class='inp-text' onclick=removeExpenditure('" + divname + "')><br>";
+	<c:set var='trnDeleteBtn'><digi:trn key='btn:delete'>delete</digi:trn></c:set>
+	s += '<input type="button" value="${trnDeleteBtn}" class="inp-text" onclick=removeExpenditure("'+ divname + '")><br>';
+
 
 	newdiv.innerHTML = s;
 	ni.appendChild(newdiv);

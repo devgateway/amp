@@ -517,6 +517,13 @@ DIV.page {
 
 }
 
+.newClsTableL1SubTotalEndSection {
+
+	BORDER-RIGHT: #ffcccc 1px solid; BORDER-TOP: black 1px solid; FONT-WEIGHT: bold; FONT-SIZE: 7.5pt; CURSOR: default; COLOR: black; BORDER-BOTTOM: black 1px solid; FONT-STYLE: normal; FONT-FAMILY: Verdana; FONT-VARIANT: normal
+
+}
+
+
 .clsTableL1SubTotalEndSectionPrint {
 
 	BORDER-RIGHT: #ffcccc 1px solid; BORDER-TOP: black 1px solid; FONT-WEIGHT: bold; FONT-SIZE: 6pt; CURSOR: default; COLOR: black; BORDER-BOTTOM: black 1px solid; FONT-STYLE: normal; FONT-FAMILY: Verdana; TEXT-ALIGN: right; FONT-VARIANT: normal
@@ -550,6 +557,12 @@ DIV.page {
 .clsTableL1SubTotalEndSectionLabel {
 
 	BORDER-RIGHT: #ffcccc 1px solid; FONT-WEIGHT: bold; FONT-SIZE: 7.5pt; CURSOR: default; COLOR: black; BORDER-BOTTOM: black 1px solid; FONT-STYLE: normal; FONT-FAMILY: Verdana; BACKGROUND-COLOR: #e9f4ff; FONT-VARIANT: normal
+
+}
+
+.newClsTableL1SubTotalEndSectionLabel {
+
+	BORDER-RIGHT: #ffcccc 1px solid; FONT-WEIGHT: bold; FONT-SIZE: 7.5pt; CURSOR: default; COLOR: black; BORDER-BOTTOM: black 1px solid; BORDER-TOP: black 1px solid; FONT-STYLE: normal; FONT-FAMILY: Verdana; BACKGROUND-COLOR: #e9f4ff; FONT-VARIANT: normal
 
 }
 

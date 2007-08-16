@@ -15,7 +15,7 @@
 					return true;
 			else
 			{
-					alert("Read Permission is default all members. Please tick the box for 'Read'.");				
+					alert("Read Permission is default all members. Please tick the box for 'Read'.");
 					return false;
 			}
 	}
@@ -51,29 +51,29 @@
 							<digi:trn key="aim:clickToViewAdmin">Click here to goto Admin Home</digi:trn>
 						</c:set>
 						<digi:link href="/admin.do" styleClass="comment" title="${translation}" >
-						<digi:trn key="aim:AmpAdminHome">
-						Admin Home
-						</digi:trn>
+							<digi:trn key="aim:AmpAdminHome">
+								Admin Home
+							</digi:trn>
 						</digi:link>&nbsp;&gt;&nbsp;
 						<c:set var="translation">
 							<digi:trn key="aim:clickToViewWorkspaceManager">Click here to view Workspace Manager</digi:trn>
 						</c:set>
 						<digi:link href="/workspaceManager.do" styleClass="comment" title="${translation}" >
-						<digi:trn key="aim:workspaceManager">
-						Workspace Manager
-						</digi:trn>
+							<digi:trn key="aim:workspaceManager">
+								Workspace Manager
+							</digi:trn>
 						</digi:link>&nbsp;&gt;&nbsp;
 						<logic:equal name="aimUpdateRoleForm" property="action" value="add">
-						<digi:trn key="aim:addRole">Add Role</digi:trn>
+							<digi:trn key="aim:addRole">Add Role</digi:trn>
 						</logic:equal>
 						<logic:equal name="aimUpdateRoleForm" property="action" value="edit">
-						<digi:trn key="aim:editRole">Edit Role</digi:trn>
+							<digi:trn key="aim:editRole">Edit Role</digi:trn>
 						</logic:equal>
 						<logic:equal name="aimUpdateRoleForm" property="action" value="delete">
-						<digi:trn key="aim:deleteRole">Delete Role</digi:trn>
+							<digi:trn key="aim:deleteRole">Delete Role</digi:trn>
 						</logic:equal>
 						<logic:equal name="aimUpdateRoleForm" property="action" value="view">
-						<digi:trn key="aim:viewRole">View Role</digi:trn>
+							<digi:trn key="aim:viewRole">View Role</digi:trn>
 						</logic:equal>
 					</td>
 				</tr>
@@ -366,10 +366,16 @@
 																<table width="100%" cellspacing="5">
 																	<tr>
 																		<td width="50%" align="right">
-																			<html:submit value="Save" styleClass="dr-menu" onclick="return permissionCheck()" />
+																			<c:set var="btnSave">
+																				<digi:trn key="btn:save">Save</digi:trn>
+																			</c:set>
+																			<html:submit value="${btnSave}" styleClass="dr-menu" onclick="return permissionCheck()" />
 																		</td>
 																		<td width="50%" align="left">
-																			<html:reset value="Cancel" styleClass="dr-menu" />
+																			<c:set var="btnCancel">
+																				<digi:trn key="btn:cancel">Cancel</digi:trn>
+																			</c:set>
+																			<html:reset value="${btnCancel}" styleClass="dr-menu" />
 																		</td>
 																	</tr>
 																</table>

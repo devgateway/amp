@@ -50,7 +50,7 @@ function confirmFunc() {
 	<digi:trn key="aim:clickToViewMyDesktop">Click here to view MyDesktop</digi:trn>
 </c:set>
                 <digi:link href="/viewMyDesktop.do" styleClass="comment" title="${translation}" >
-                	My Desktop
+                	<digi:trn key="aim:MyDesktop">My Desktop</digi:trn>
                 </digi:link> &gt; <digi:trn key="aim:AllReports">All Reports</digi:trn></td></tr>
 				<tr>
 		<td>&nbsp;</td></tr>

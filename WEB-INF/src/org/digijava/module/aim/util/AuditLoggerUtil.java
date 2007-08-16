@@ -90,7 +90,12 @@ public class AuditLoggerUtil {
 					aal.setAuthorEmail(tm.getEmail());
 					aal.setLoggedDate(ts);
 				}
-				aal.setEditorEmail(tm.getEmail());
+				try{
+				if(tm.getEmail()!=null) aal.setEditorEmail(tm.getEmail());
+				}catch(Exception e)
+				{
+					e.printStackTrace();
+				}
 				aal.setEditorName(tm.getMemberName());
 				aal.setAction(action);
 				aal.setModifyDate(ts);

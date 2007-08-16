@@ -1,11 +1,9 @@
 package org.digijava.module.aim.form ;
 
 import java.util.Collection;
-
-import javax.servlet.http.HttpServletRequest;
+import java.util.HashMap;
 
 import org.apache.struts.action.ActionForm;
-import org.apache.struts.action.ActionMapping;
 import org.digijava.module.aim.helper.AmpFund;
 
 public class AdvancedReportForm extends ActionForm 
@@ -80,7 +78,15 @@ public class AdvancedReportForm extends ActionForm
 	private long dbReportId			= 0; // If in editing mode, it represents the id of the AmpReports object in the database
 	
 	private Integer maxStep = new Integer(0);
+
+	private HashMap ampTreeColumns;
 	
+	public HashMap getAmpTreeColumns() {
+		return ampTreeColumns;
+	}
+	public void setAmpTreeColumns(HashMap ampTreeColumns) {
+		this.ampTreeColumns = ampTreeColumns;
+	}
 	public Integer getMaxStep() {
 		return maxStep;
 	}

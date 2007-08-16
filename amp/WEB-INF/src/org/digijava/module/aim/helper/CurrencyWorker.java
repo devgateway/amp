@@ -75,7 +75,8 @@ public class CurrencyWorker {
 		} else {
 			resultDbl = amt;
 		}
-		return Math.round(resultDbl);
+//		return Math.round(resultDbl);
+		return resultDbl;
 	}
 
 	/**

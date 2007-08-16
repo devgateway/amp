@@ -1,7 +1,9 @@
 package org.digijava.module.aim.helper ;
 
+import org.apache.commons.beanutils.converters.DoubleConverter;
 import org.apache.log4j.Logger ;
 import java.text.DecimalFormat ;
+import java.util.StringTokenizer;
 
 public class DecimalToText
 {
@@ -12,7 +14,18 @@ public class DecimalToText
 	{
 		if ( logger.isDebugEnabled() )
 			logger.debug("Decimal passed : " + decimal ) ;
-		String text = mf.format(decimal);
+
+		String val = String.valueOf(decimal);
+		StringTokenizer tok = new StringTokenizer(val, ".");
+		
+		String text = null;
+		if (tok.countTokens() == 2){
+			text = mf.format(Double.parseDouble(tok.nextToken()));
+			text = text.concat("." + tok.nextToken());
+		}
+		else{
+			text = mf.format((double)decimal);
+		}
 		//text = CurrencyWorker.insertDecmalPlaces(text);
 		
 		if ( logger.isDebugEnabled() )

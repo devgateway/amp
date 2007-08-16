@@ -340,7 +340,7 @@ onsubmit="return validateAimUpdateWorkspaceForm(this);">
 																		--
 																	</html:option>
 																	<html:option value="MOFED"><digi:trn key="aim:MOFED">Mofed</digi:trn></html:option>
-																	<html:option value="DONOR">Donor</html:option>
+																	<html:option value="DONOR"><digi:trn key="aim:DONOR">Donor</digi:trn></html:option>
 																</html:select>
 															</logic:equal>
 														</td>

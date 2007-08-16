@@ -558,16 +558,16 @@ onsubmit="return validateAimUpdateWorkspaceForm(this);">
 															<table cellPadding=5>
 																<tr>
 																	<td>
+																		<c:set var="translation">
+																			<digi:trn key="btn:createWorkspaceSave">
+																				Save
+																			</digi:trn>
+																		</c:set>
 																		<c:if test="${aimUpdateWorkspaceForm.actionEvent == 'add'}">
-																			<input type="button" value="Save" class="dr-menu"
+																			<input type="button" value="${translation}" class="dr-menu"
 																			onclick="update('add')"/>
 																		</c:if>
 																		<c:if test="${aimUpdateWorkspaceForm.actionEvent == 'edit'}">
-																			<c:set var="translation">
-																				<digi:trn key="btn:createWorkspaceSave">
-																					Save
-																				</digi:trn>
-																			</c:set>
 																			<input type="button" value="${translation}" class="dr-menu" onclick="update('edit')"/>
 																		</c:if>																		
 																	</td>

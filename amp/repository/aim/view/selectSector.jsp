@@ -11,7 +11,6 @@
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
 
 <logic:present name="addButton" scope="request">
-	<b>YAP!</b>
 	<script language="JavaScript">
 	    window.opener.addSector();
 		window.close();
@@ -231,7 +230,7 @@ function checkNumeric(objName,comma,period,hyphen)
 											</html:select>
 										</td>
 									</tr>
-									<tr style="position:relative;display:none;">
+									<tr style="position:relative;">
 										<td>
 											<digi:trn key="aim:subSectorLevel2">
 											Sub-Sector Level 2</digi:trn>

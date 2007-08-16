@@ -43,11 +43,11 @@
 
 <digi:form action="/nationalPlaningDashboard.do">
 
-<bean:define id="noProgSelected">
+<c:set var="noProgSelected">
 	<digi:trn key="aim:npd:noProgSelected">
 			Please select a program before selecting a filter !
 	</digi:trn>
-</bean:define>
+</c:set>
 
 <script language="javascript" type="text/javascript">
 
@@ -588,7 +588,7 @@
 
 	function getActivities(){
 		if (curProgId == null) {
-			alert('<%=noProgSelected %>');
+			alert('${noProgSelected}');
 			return;
 		}
 		var actList=document.getElementById('activityListPlace');
@@ -1097,10 +1097,10 @@
 						&nbsp;<span id="actListProgname">&nbsp</span>
 					</td>
 					<td>
-						<bean:define id="translation">
+						<c:set var="translation">
 							<digi:trn key="aim:npd:dropDownAnyStatus">Any Status</digi:trn>
-						</bean:define>
-						<category:showoptions outeronchange="filterStatus()" firstLine="<%=translation %>" name="aimNPDForm" property="selectedStatuses"  keyName="<%= org.digijava.module.aim.helper.CategoryConstants.ACTIVITY_STATUS_KEY %>"  />
+						</c:set>
+						<category:showoptions outeronchange="filterStatus()" firstLine="${translation}" name="aimNPDForm" property="selectedStatuses"  keyName="<%= org.digijava.module.aim.helper.CategoryConstants.ACTIVITY_STATUS_KEY %>"  />
 					
 					</td>
 					<td>

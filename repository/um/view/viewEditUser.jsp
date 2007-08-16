@@ -19,6 +19,21 @@ function goAction(value){
     document.forms[0].submit();
   }
 }
+function resetPasswordFields(){
+  document.umViewEditUserForm.newPassword.value='';
+  document.umViewEditUserForm.confirmNewPassword.value=''
+}
+function validate(str,value){
+  var newPassword=document.umViewEditUserForm.newPassword.value;
+  var confirmNewPassword=document.umViewEditUserForm.confirmNewPassword.value;
+  if(newPassword.length==0||confirmNewPassword.length==0||newPassword!=confirmNewPassword){
+    alert(str);
+  }
+  else{
+    goAction(value);
+  }
+
+}
 </script>
 <digi:form action="/viewEditUser.do" method="post">
   <html:hidden name="umViewEditUserForm" property="event" styleId="event"/>
@@ -60,11 +75,19 @@ function goAction(value){
           </digi:trn>
         </span>
       </td>
-      </tr>
-      <tr>
+    </tr>
+    <tr>
       <td colspan="2">
         <digi:errors/>
         &nbsp;
+        <br/>
+        <logic:equal name="umViewEditUserForm" property="displaySuccessMessage" value="true" >
+          <b>
+            <digi:trn key="aim:viewEditUser:changePasswordSuccessMessage">
+            The password has been changed successfully
+            </digi:trn>
+          </b>
+        </logic:equal>
       </td>
     </tr>
     <tr>
@@ -284,7 +307,21 @@ function goAction(value){
             <td width="20%"><html:password name="umViewEditUserForm" property="confirmNewPassword" /></td>
           </tr>
           <tr>
-            <td colspan="2"><input type="button" value="${translation}" onclick="goAction('changePassword');" style="font-family:verdana;font-size:11px;"/></td>
+           <c:set var="errMsg">
+           <digi:trn key="aim:viewEditUser:errorMessage">
+              Either fields are blank or their values do not match
+            </digi:trn>
+            </c:set>
+
+
+            <td><input type="button" value="${translation}" onclick="validate('${errMsg}','changePassword');" style="font-family:verdana;font-size:11px;"/></td>
+            <td>
+              <c:set var="translation">
+                <digi:trn key="aim:viewEditUser:resetPasswordButton">
+                Reset
+                </digi:trn>
+              </c:set>
+              <input type="button" value="${translation}" onclick="resetPasswordFields()" style="font-family:verdana;font-size:11px;"/></td>
           </tr>
 
         </table>

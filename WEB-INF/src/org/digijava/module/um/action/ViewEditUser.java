@@ -124,6 +124,7 @@ public class ViewEditUser
       uForm.setEmail(null);
       uForm.setConfirmNewPassword(null);
       uForm.setNewPassword(null);
+      uForm.setDisplaySuccessMessage(null);
 
       if (user != null) {
         uForm.setMailingAddress(user.getAddress());
@@ -258,6 +259,7 @@ public class ViewEditUser
             else {
               UserUtils.setPassword(user, newPassword);
               DbUtil.updateUser(user);
+              uForm.setDisplaySuccessMessage(true);
             }
 
           }
@@ -287,6 +289,8 @@ public class ViewEditUser
     if (uForm != null) {
       uForm.setBan(null);
       uForm.setEvent(null);
+      uForm.setNewPassword(null);
+      uForm.setConfirmNewPassword(null);
     }
   }
 }

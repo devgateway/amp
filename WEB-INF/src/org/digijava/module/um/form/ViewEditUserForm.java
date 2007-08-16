@@ -35,7 +35,7 @@ public class ViewEditUserForm
   private Boolean ban;
   private String confirmNewPassword;
   private String newPassword;
-
+  private Boolean displaySuccessMessage;
   public ViewEditUserForm() {
 
   }
@@ -129,6 +129,10 @@ public class ViewEditUserForm
     return newPassword;
   }
 
+  public Boolean getDisplaySuccessMessage() {
+    return displaySuccessMessage;
+  }
+
   public void setUrl(String url) {
     this.url = url;
   }
@@ -216,6 +220,10 @@ public class ViewEditUserForm
 
   public void setNewPassword(String newPassword) {
     this.newPassword = newPassword;
+  }
+
+  public void setDisplaySuccessMessage(Boolean displaySuccessMessage) {
+    this.displaySuccessMessage = displaySuccessMessage;
   }
 
 }

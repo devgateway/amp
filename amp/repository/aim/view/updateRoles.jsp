@@ -24,6 +24,7 @@
 
 	function unload() {}
 
+
 -->
 </script>
 
@@ -357,7 +358,7 @@
 																			<html:submit value="Save" styleClass="dr-menu" onclick="return permissionCheck()" />
 																		</td>
 																		<td width="50%" align="left">
-																			<html:reset value="Cancel" styleClass="dr-menu" />
+																			<html:reset value="Cancel" styleClass="dr-menu" onclick="javascript:history.go(-1)" />
 																		</td>
 																	</tr>
 																</table>
@@ -375,7 +376,7 @@
 																			<c:set var="btnCancel">
 																				<digi:trn key="btn:cancel">Cancel</digi:trn>
 																			</c:set>
-																			<html:reset value="${btnCancel}" styleClass="dr-menu" />
+																			<html:reset value="${btnCancel}" styleClass="dr-menu" onclick="javascript:history.go(-1)" />
 																		</td>
 																	</tr>
 																</table>

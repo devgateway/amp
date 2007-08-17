@@ -178,25 +178,49 @@ function confirmFunc() {
 														 	</td>
 														 	<td>
 														 		<p style="white-space: nowrap">
-														 		<%
-														 			if (report.getType().equals(new Long(1))) {
-														 		%>
-														 				<digi:trn key="aim:donorType">donor</digi:trn>
-														 		<%
-														 			}
-														 			else
-														 				if (report.getType().equals(new Long (2))){
-														 		%>
-														 					<digi:trn key="aim:regionalType">regional</digi:trn>
-														 		<%
-														 				}
-														 				else
-														 					if (report.getType().equals(new Long(3))){
-														 		%>
-														 						<digi:trn key="aim:componentType">component</digi:trn>
-														 		<%
-														 					}
-														 		%>
+														 		<ul>
+																 		<%
+																 			if (report.getType().equals(new Long(1))) {
+																 		%>
+																 			<li>
+																 				<digi:trn key="aim:donorType">donor</digi:trn>
+																 			</li>
+																 		<%
+																 			}
+																 			else
+																 				if (report.getType().equals(new Long (2))){
+																 		%>
+																	 			<li>
+																 					<digi:trn key="aim:regionalType">regional</digi:trn>
+																	 			</li>
+																 		<%
+																 				}
+																 				else
+																 					if (report.getType().equals(new Long(3))){
+																 		%>
+																		 			<li>
+																 						<digi:trn key="aim:componentType">component</digi:trn>
+																		 			</li>
+																 		<%
+																 					}
+																 		%>
+														 			</li>
+													 				<logic:equal name="report" property="drilldownTab" value="true">
+															 			<li>
+														 					<digi:trn key="aim:drilldownTab">Drilldown Tab</digi:trn>
+															 			</li>
+													 				</logic:equal>
+													 				<logic:equal name="report" property="publicReport" value="true">
+															 			<li>
+														 					<digi:trn key="aim:drilldownTab">Public Report</digi:trn>
+															 			</li>
+													 				</logic:equal>
+													 				<logic:equal name="report" property="hideActivities" value="true">
+															 			<li>
+														 					<digi:trn key="aim:drilldownTab">Summary Report</digi:trn>
+															 			</li>
+													 				</logic:equal>
+														 		</ul>
 														 		</p>
 														 	</td>
 

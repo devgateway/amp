@@ -10,7 +10,7 @@ import org.digijava.module.aim.util.CurrencyUtil;
 public class CurrencyWorker {
 	private static Logger logger = Logger.getLogger(CurrencyWorker.class);
 
-	public static DecimalFormat mf = new DecimalFormat("###,###,###,###,###");
+	public static DecimalFormat mf = new DecimalFormat("###,###,###,###,###.##");
 
 	private static double resultDbl = 0.0;
 
@@ -30,8 +30,12 @@ public class CurrencyWorker {
 		} else {
 			resultDbl = amt;
 		}
-		resultStr = mf.format(Math.round(resultDbl));
-
+		//resultStr = mf.format(Math.round(resultDbl));
+		//*** fix for AMP-1755
+		String inputString = String.valueOf(resultDbl);
+		resultStr = CurrencyWorker.formatAmount(inputString);
+		//***
+		
 		if (logger.isDebugEnabled())
 			logger.debug("convert returns=" + resultStr);
 		return resultStr;

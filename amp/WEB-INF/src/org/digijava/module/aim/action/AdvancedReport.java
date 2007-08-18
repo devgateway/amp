@@ -144,7 +144,9 @@ public class AdvancedReport extends Action {
 				
 				formBean.setInEditingMode(false);
 				formBean.setDbReportId( 0 );
-				formBean.setMaxStep(new Integer(0));
+				formBean.setMaxStep(new Integer(0));				
+				formBean.setDuplicatedReportName(false);
+				formBean.setDuplicatedReportOwner(null);
 			} 
 			
 			
@@ -295,11 +297,14 @@ public class AdvancedReport extends Action {
 				AmpTeamMember found = ReportUtil.checkDuplicateReportName(formBean.getReportTitle());
 				if(found!=null)
 				{ 
-					errors.add("DuplicateReportName", new ActionError("error.aim.reportManager.DuplicateReportName"));
-					errors.add("DuplicateReportOwner", new ActionError("error.aim.reportManager.DuplicateReportOwner",teamMember.getMemberName(), teamMember.getTeamName()));
-					saveErrors(request, errors);
+					formBean.setDuplicatedReportName(true);
+					formBean.setDuplicatedReportOwner(teamMember.getMemberName() + " - " + teamMember.getTeamName());					
 					return mapping.findForward("MissingReportDetails");
+				}else{
+					formBean.setDuplicatedReportName(false);
+					formBean.setDuplicatedReportOwner(null);
 				}
+				
 				// report title check ends hereerrors.add("DuplicateReportName", new ActionError("error.aim.reportManager.DuplicateReportName"));
 				saveErrors(request, errors);
 				
@@ -971,10 +976,12 @@ public class AdvancedReport extends Action {
 						}
 						if(found!=null )
 						{ 
-							errors.add("DuplicateReportName", new ActionError("error.aim.reportManager.DuplicateReportName"));
-							errors.add("DuplicateReportOwner", new ActionError("error.aim.reportManager.DuplicateReportOwner",teamMember.getMemberName(), teamMember.getTeamName()));
-							saveErrors(request, errors);
+							formBean.setDuplicatedReportName(true);
+							formBean.setDuplicatedReportOwner(teamMember.getMemberName() + " - " + teamMember.getTeamName());
 							return mapping.findForward("MissingReportDetails");
+						}else{
+							formBean.setDuplicatedReportName(false);
+							formBean.setDuplicatedReportOwner(null);
 						}
 					}
 					
@@ -1327,7 +1334,6 @@ public class AdvancedReport extends Action {
 					formBean.setAddedColumns(temp);
 					formBean.setAmpColumns(coll);
 				}
-
 				if(str.equals("Step2AddRows") == true)
 				{
 					formBean.setColumnHierarchie(coll);

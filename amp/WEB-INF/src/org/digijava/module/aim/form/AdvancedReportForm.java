@@ -81,6 +81,9 @@ public class AdvancedReportForm extends ActionForm
 
 	private HashMap ampTreeColumns;
 	
+	private boolean duplicatedReportName;
+	private String duplicatedReportOwner;
+	
 	public HashMap getAmpTreeColumns() {
 		return ampTreeColumns;
 	}
@@ -1473,6 +1476,18 @@ private int yrDiff;
 	}
 	public long getDbReportId () {
 		return this.dbReportId;
+	}
+	public void setDuplicatedReportName(boolean duplicatedReportName) {
+		this.duplicatedReportName = duplicatedReportName;
+	}
+	public boolean isDuplicatedReportName() {
+		return duplicatedReportName;
+	}
+	public void setDuplicatedReportOwner(String duplicatedReportOwner) {
+		this.duplicatedReportOwner = duplicatedReportOwner;
+	}
+	public String getDuplicatedReportOwner() {
+		return duplicatedReportOwner;
 	}
 
 } //		End of Class

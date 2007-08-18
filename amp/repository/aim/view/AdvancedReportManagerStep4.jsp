@@ -190,7 +190,17 @@ function backStep() {
 										<TABLE width="100%" cellPadding=0 cellSpacing=0 vAlign="top" align="center" bgColor=#f4f4f2 >
 											<tr>	
 												<td>		
-													<digi:errors/>
+													<digi:errors/>	
+													<font color="red">
+														<UL>
+															<logic:equal name="aimAdvancedReportForm" property="duplicatedReportName" value="true">
+																<LI><digi:trn key="aim:reportBuilder:error:duplicatedReportName">A report with the same name already exists. Please choose another report name.</digi:trn></LI>
+															</logic:equal>
+															<logic:present name="aimAdvancedReportForm" property="duplicatedReportOwner">
+																<LI><digi:trn key="aim:reportBuilder:error:duplicatedReportOwner">The report with this name is owned by </digi:trn>&nbsp;<bean:write name="aimAdvancedReportForm" property="duplicatedReportOwner"/>.</LI>															
+															</logic:present>				
+														</UL>
+													</font>													
 												</td>
 											</tr>
 											<TR>

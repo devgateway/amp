@@ -104,7 +104,10 @@
 	}
 
 	function selectOrganizationPages(page) {
-		
+	   <digi:context name="searchOrg" property="context/module/moduleinstance/selectOrganization.do?edit=true&orgSelReset=false&page=" />
+	   var val = "<%=searchOrg%>";
+	   val = val + page;
+	   document.aimEditActivityForm.action = val;
 	   document.aimEditActivityForm.selectedOrganisationFromPages.value=page;
 	   document.aimEditActivityForm.submit();
 	   return true;

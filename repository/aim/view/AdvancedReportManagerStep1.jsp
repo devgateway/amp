@@ -113,6 +113,18 @@ function checkUncheckAll() {
 		document.aimAdvancedReportForm.root.checked= document.aimAdvancedReportForm.checkall.checked;;
 }
 
+function checkUncheckAll3() {
+     var items=document.aimAdvancedReportForm.selectedColumns;
+		for(i=0; i<items.length; i++){
+			document.aimAdvancedReportForm.selectedColumns[i].checked = document.aimAdvancedReportForm.checkall.checked;
+		}
+		items=document.aimAdvancedReportForm.selectedThemes;
+		for(i=0; i<items.length; i++){
+			document.aimAdvancedReportForm.selectedThemes[i].checked = document.aimAdvancedReportForm.checkall.checked;
+		}
+		// document.aimAdvancedReportForm.root.checked= document.aimAdvancedReportForm.checkall.checked;;
+}
+
 function checkUncheckAll2() {
      var items=document.aimAdvancedReportForm.removeColumns;
 		for(i=0; i<items.length; i++){
@@ -293,7 +305,7 @@ function checkUncheckAll2() {
 																							<input type=checkbox id="root" 
 																											name="root" 
 																											value="root"
-																											onclick="checkUncheckAll();"
+																											onclick="checkUncheckAll3();"
 																											
 																								/>
 																							<a href="#" id="1">AMP</a>

@@ -133,7 +133,7 @@ public class PatcherWorker {
 		Iterator i=sql.iterator();
 		while (i.hasNext()) {
 			SqlType element = (SqlType) i.next();
-			element.getType()
+			//element.getType()
 		}
 			
 		

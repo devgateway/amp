@@ -1,5 +1,11 @@
 package org.dgfoundation.amp; 
 
+import java.beans.BeanInfo;
+import java.beans.IntrospectionException;
+import java.beans.Introspector;
+import java.beans.PropertyDescriptor;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -18,6 +24,7 @@ import net.sf.hibernate.Session;
 import net.sf.swarmcache.ObjectCache;
 
 import org.apache.log4j.Logger;
+import org.dgfoundation.amp.ar.AmpARFilter;
 import org.digijava.kernel.entity.Locale;
 import org.digijava.kernel.persistence.PersistenceManager;
 import org.digijava.kernel.request.Site;
@@ -42,6 +49,46 @@ public final class Util {
 		if(ret.size()==0) return null;
 		return (Identifiable) ret.iterator().next();
 	}
+	
+	/**
+	 * provides a way to display this bean in HTML. Properties are automatically shown along with their values. CollectionS are unfolded and
+	 * excluded properties (internally used) are not shown.
+	 * @see AmpARFilter.IGNORED_PROPERTIES
+	 */
+	public static String getBeanAsString(Object b,String ignoredProperties,boolean html) {
+		StringBuffer ret=new StringBuffer();
+		BeanInfo beanInfo = null;
+		try {
+			beanInfo = Introspector.getBeanInfo(b.getClass());
+		PropertyDescriptor[] propertyDescriptors = beanInfo.getPropertyDescriptors();
+		for (int i = 0; i < propertyDescriptors.length; i++) {
+			Method m=propertyDescriptors[i].getReadMethod();
+			Object object = m.invoke(b,new Object[]{});
+			if(object==null || ignoredProperties.contains(propertyDescriptors[i].getName())) continue;			
+			ret.append(html?"<b>":"").append(propertyDescriptors[i].getName()).append(": ").append(html?"</b>":"");
+			if(object instanceof Collection) 
+				ret.append(Util.toCSString((Collection) object,false));
+			
+			else ret.append(object);
+			if(i<propertyDescriptors.length) ret.append("; ");
+		}
+		} catch (IntrospectionException e) {
+			logger.error(e);
+			e.printStackTrace();
+		} catch (IllegalArgumentException e) {
+			logger.error(e);
+			e.printStackTrace();
+		} catch (IllegalAccessException e) {
+			logger.error(e);
+			e.printStackTrace();
+		} catch (InvocationTargetException e) {
+			logger.error(e);
+			e.printStackTrace();
+		}
+		return ret.toString();
+		
+	}
+	
 	
 	/**
 	 * loads using Hibernate the object of the specified type, identified by the serializable object

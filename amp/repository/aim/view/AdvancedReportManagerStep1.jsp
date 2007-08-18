@@ -116,11 +116,11 @@ function checkUncheckAll() {
 function checkUncheckAll3() {
      var items=document.aimAdvancedReportForm.selectedColumns;
 		for(i=0; i<items.length; i++){
-			document.aimAdvancedReportForm.selectedColumns[i].checked = document.aimAdvancedReportForm.checkall.checked;
+			document.aimAdvancedReportForm.selectedColumns[i].checked = document.aimAdvancedReportForm.root.checked;
 		}
 		items=document.aimAdvancedReportForm.selectedThemes;
 		for(i=0; i<items.length; i++){
-			document.aimAdvancedReportForm.selectedThemes[i].checked = document.aimAdvancedReportForm.checkall.checked;
+			document.aimAdvancedReportForm.selectedThemes[i].checked = document.aimAdvancedReportForm.root.checked;
 		}
 		// document.aimAdvancedReportForm.root.checked= document.aimAdvancedReportForm.checkall.checked;;
 }

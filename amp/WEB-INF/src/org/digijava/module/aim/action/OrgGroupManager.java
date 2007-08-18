@@ -81,6 +81,7 @@ public class OrgGroupManager extends Action {
 					 
 					 orgForm.setOrganisation(org);
 					 orgForm.setPages(pages);
+					 orgForm.setCurrentPage(new Integer(page));
 					
 					 logger.debug("Organisation Group manager returning");
 					 return mapping.findForward("forward");

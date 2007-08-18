@@ -183,74 +183,11 @@ public class AdvancedReport extends Action {
 				//logger.info("inside Step 1...");
 				if (formBean.getMaxStep().intValue() < 1)
 					formBean.setMaxStep(new Integer(1));
-				HashMap ampTreeColumns=this.buildAmpTreeColumnSimple(formBean.getAmpColumns());
-				formBean.setAmpTreeColumns(ampTreeColumns);
-/*				System.out.println("ooo daaaaa");
-				for(Iterator it=ampTreeColumns.keySet().iterator();it.hasNext();)
-				{
-					String s=(String) it.next();
-					logger.info(s);
-					System.out.println("logger mai sus");
-				}
-				for(Iterator it=ampTreeColumns.values().iterator();it.hasNext();)
-				{
-					
-					ArrayList a=(ArrayList) it.next();
-					for(Iterator jt=a.iterator();jt.hasNext();)
-					{
-						AmpColumnsVisibility acv=(AmpColumnsVisibility) jt.next();
-						logger.info(acv.getAmpColumn().getColumnName());
-						System.out.println("logger mai sus a doua parte");
-
-					}
-				}*/
-//				formBean.getAmpColumns();
 				
-/*				{
-					ArrayList ampColumnsVisibles=new ArrayList();
-					ServletContext ampContext;
-					ampContext=this.getServlet().getServletContext();
-					AmpTreeVisibility ampTreeVisibility=(AmpTreeVisibility) ampContext.getAttribute("ampTreeVisibility");
-					Collection ampAllFields= FeaturesUtil.getAMPFieldsVisibility();
-					Collection allAmpColumns=formBean.getAmpColumns();
-					TreeSet ampThemes=new TreeSet();
-					for(Iterator it=allAmpColumns.iterator();it.hasNext();)
-					{
-						AmpColumns ampColumn=(AmpColumns) it.next();
-						for(Iterator jt=ampAllFields.iterator();jt.hasNext();)
-						{
-							AmpFieldsVisibility ampFieldVisibility=(AmpFieldsVisibility) jt.next();
-							if(ampColumn.getColumnName().compareTo(ampFieldVisibility.getName())==0)
-							{
-								//if(ampFieldVisibility.isFieldActive(ampTreeVisibility))
-								{
-									AmpColumnsVisibility ampColumnVisibilityObj=new AmpColumnsVisibility();
-									ampColumnVisibilityObj.setAmpColumn(ampColumn);
-									ampColumnVisibilityObj.setAmpfield(ampFieldVisibility);
-									ampColumnVisibilityObj.setParent((AmpFeaturesVisibility) ampFieldVisibility.getParent());
-									ampColumnsVisibles.add(ampColumnVisibilityObj);
-									ampThemes.add(ampFieldVisibility.getParent().getName());
-									System.out.println("xxxxxxxxxxxxxxx+:"+ampFieldVisibility.getName());
-								}
-							}
-						}
-					}
-					HashMap ampTreeColumn=new HashMap();
-					for(Iterator it=ampThemes.iterator();it.hasNext();)
-					{
-						String themeName=(String) it.next();
-						ArrayList aux=new ArrayList();
-						for(Iterator jt=ampColumnsVisibles.iterator();jt.hasNext();)
-						{
-							AmpColumnsVisibility acv=(AmpColumnsVisibility) jt.next();
-							if(themeName.compareTo(acv.getParent().getName())==0)
-								aux.add(acv);
-							
-						}
-						ampTreeColumn.put(themeName, aux);
-					}
-				}
-				*/
+				HashMap ampTreeColumns=this.buildAmpTreeColumnSimple(ReportUtil.getColumnList(), formBean.getArReportType());
+				//TODO
+				//System.out.println("ssssssssssssssssssss"+formBean.getArReportType());
+				formBean.setAmpTreeColumns(ampTreeColumns);
 				return mapping.findForward("SelectCols");
 			}
 			// add columns that are available
@@ -1457,7 +1394,7 @@ public class AdvancedReport extends Action {
 							ampColumnVisibilityObj.setParent((AmpFeaturesVisibility) ampFieldVisibility.getParent());
 							ampColumnsVisibles.add(ampColumnVisibilityObj);
 							ampThemes.add(ampFieldVisibility.getParent().getName());
-							System.out.println("xxxxxxxxxxxxxxx+:"+ampFieldVisibility.getName());
+							//System.out.println("xxxxxxxxxxxxxxx+:"+ampFieldVisibility.getName());
 						}
 					}
 				}
@@ -1479,7 +1416,7 @@ public class AdvancedReport extends Action {
 			return ampTreeColumn;
 	}
 
-	private HashMap buildAmpTreeColumnSimple(Collection formColumns)
+	private HashMap buildAmpTreeColumnSimple(Collection formColumns, String reportType)
 	{
 			ArrayList ampColumnsVisibles=new ArrayList();
 			ServletContext ampContext;
@@ -1496,7 +1433,7 @@ public class AdvancedReport extends Action {
 					AmpFieldsVisibility ampFieldVisibility=(AmpFieldsVisibility) jt.next();
 					if(ampColumn.getColumnName().compareTo(ampFieldVisibility.getName())==0)
 					{
-						//if(ampFieldVisibility.isFieldActive(ampTreeVisibility))
+						if(ampFieldVisibility.isFieldActive(ampTreeVisibility))
 						{
 							AmpColumnsVisibility ampColumnVisibilityObj=new AmpColumnsVisibility();
 							ampColumnVisibilityObj.setAmpColumn(ampColumn);
@@ -1504,7 +1441,6 @@ public class AdvancedReport extends Action {
 							ampColumnVisibilityObj.setParent((AmpFeaturesVisibility) ampFieldVisibility.getParent());
 							ampColumnsVisibles.add(ampColumnVisibilityObj);
 							ampThemes.add(ampFieldVisibility.getParent().getName());
-							System.out.println("xxxxxxxxxxxxxxx+:"+ampFieldVisibility.getName());
 						}
 					}
 				}
@@ -1514,14 +1450,53 @@ public class AdvancedReport extends Action {
 			{
 				String themeName=(String) it.next();
 				ArrayList aux=new ArrayList();
+				boolean added=false;
 				for(Iterator jt=ampColumnsVisibles.iterator();jt.hasNext();)
 				{
 					AmpColumnsVisibility acv=(AmpColumnsVisibility) jt.next();
 					if(themeName.compareTo(acv.getParent().getName())==0)
-						aux.add(acv.getAmpColumn());
+					{
+						////donor contribution regional component
+						if("donor".compareTo(reportType)==0)
+						{
+							aux.add(acv.getAmpColumn());
+							added=true;
+						}
+						//the contribution report doesn't have access to columns 33-38 from amp_columns
+						if("contribution".compareTo(reportType)==0 )
+						{
+							if(acv.getAmpColumn().getColumnId().intValue()<33 || acv.getAmpColumn().getColumnId().intValue()>38) 
+								{
+									aux.add(acv.getAmpColumn());
+									added=true;
+								}
+						}
+						//the regional report doesn't have access to columns 33-38 from amp_columns
+						
+						if("regional".compareTo(reportType)==0)
+						{
+							
+							if((acv.getAmpColumn().getColumnId().intValue()<33 || acv.getAmpColumn().getColumnId().intValue()>38) && acv.getAmpColumn().getColumnId().intValue()!=5) 
+							{
+								aux.add(acv.getAmpColumn());
+								added=true;
+							}
+						}
+						
+						if("component".compareTo(reportType)==0)
+						{
+							if(acv.getAmpColumn().getColumnId().intValue()!=5)
+							{
+								aux.add(acv.getAmpColumn());
+								added=true;
+							}
+						}
+					}
 					
 				}
-				ampTreeColumn.put(themeName, aux);
+				if(added) {
+					ampTreeColumn.put(themeName, aux);
+				}
 			}
 			return ampTreeColumn;
 	}

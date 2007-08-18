@@ -110,7 +110,7 @@ function checkUncheckAll() {
 		for(i=0; i<items.length; i++){
 			document.aimAdvancedReportForm.selectedThemes[i].checked = document.aimAdvancedReportForm.checkall.checked;
 		}
-		items=document.aimAdvancedReportForm.root.checked= document.aimAdvancedReportForm.checkall.checked;;
+		document.aimAdvancedReportForm.root.checked= document.aimAdvancedReportForm.checkall.checked;;
 }
 
 function checkUncheckAll2() {

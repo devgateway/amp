@@ -9,6 +9,7 @@ public class AmpColumns  implements Serializable
 
 	private Long columnId ;
 	private String columnName ;
+	private String columnNameTrimmed;
 	private String aliasName;
 	private Set reports;
 	private String cellType;
@@ -62,5 +63,11 @@ public class AmpColumns  implements Serializable
 	 */
 	public void setExtractorView(String extractorView) {
 		this.extractorView = extractorView;
+	}
+	public String getColumnNameTrimmed() {
+		return columnName.replaceAll(" ", "");
+	}
+	public void setColumnNameTrimmed(String columnNameTrimmed) {
+		this.columnNameTrimmed = columnNameTrimmed;
 	}
 }

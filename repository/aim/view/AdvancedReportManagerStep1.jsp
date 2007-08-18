@@ -5,6 +5,21 @@
 <%@ taglib uri="/taglib/struts-html" prefix="html" %>
 <%@ taglib uri="/taglib/digijava" prefix="digi" %>
 <%@ taglib uri="/taglib/jstl-core" prefix="c" %>
+<%@ taglib uri="/taglib/fieldVisibility" prefix="field" %>
+<%@ taglib uri="/taglib/featureVisibility" prefix="feature" %>
+<%@ taglib uri="/taglib/moduleVisibility" prefix="module" %>
+
+<script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/common.js"/>"></script>
+<!-- dynamic tooltip -->
+<script type="text/javascript" src="<digi:file src="module/aim/scripts/separateFiles/dhtmlSuite-ajax.js"/>"></script>
+<script type="text/javascript" src="<digi:file src="module/aim/scripts/separateFiles/dhtmlSuite-folder-tree-static.js"/>"></script>
+<script type="text/javascript" src="<digi:file src="module/aim/scripts/separateFiles/dhtmlSuite-context-menu.js"/>"></script>
+
+	<script type="text/javascript">
+		var idOfFolderTrees = ['dhtmlgoodies_tree'];
+	</script>
+<link rel="stylesheet" href="<digi:file src="module/aim/css/css_dhtmlsuite/folder-tree-static.css" />" />
+<link rel="stylesheet" href="<digi:file src="module/aim/css/css_dhtmlsuite/context-menu.css" />" />
 
 
 <script language="JavaScript" type="text/javascript" src="<digi:file src="module/aim/scripts/advanceReportManager.js"/>"></script>
@@ -91,6 +106,11 @@ function checkUncheckAll() {
 		for(i=0; i<items.length; i++){
 			document.aimAdvancedReportForm.selectedColumns[i].checked = document.aimAdvancedReportForm.checkall.checked;
 		}
+		items=document.aimAdvancedReportForm.selectedThemes;
+		for(i=0; i<items.length; i++){
+			document.aimAdvancedReportForm.selectedThemes[i].checked = document.aimAdvancedReportForm.checkall.checked;
+		}
+		items=document.aimAdvancedReportForm.root.checked= document.aimAdvancedReportForm.checkall.checked;;
 }
 
 function checkUncheckAll2() {
@@ -107,6 +127,9 @@ function checkUncheckAll2() {
 
 
 <html:hidden property="moveColumn"/>
+
+
+
 
 <TABLE cellSpacing=0 cellPadding=0 align="center" vAlign="top" border=0 width="100%">
 <tr>
@@ -194,11 +217,66 @@ function checkUncheckAll2() {
 
 																	<tr height=10>	<td align="right">
 																	<digi:trn key="aim:report:SelectAll">Select All</digi:trn>
-																	<input type="checkbox" name="checkall" onclick="checkUncheckAll();">
-																	</input>
+																	<input type="checkbox" name="checkall" onclick="checkUncheckAll();"/>
 																	</td>
 																	</tr>
-																	
+											<feature:display name="Identification" module="Project ID and Planning">
+												<field:display name="Actual Approval Date" feature="Identification" >&nbsp;</field:display>
+												<field:display name="Actual Completion Date" feature="Identification">&nbsp;</field:display>
+												<field:display name="Actual Start Date" feature="Identification">&nbsp;</field:display>
+												<field:display name="Description" feature="Identification">&nbsp;</field:display>
+												<field:display name="Objective" feature="Identification">&nbsp;</field:display>					
+												<field:display name="Project Id" feature="Identification">&nbsp;</field:display>
+												<field:display name="Project Title" feature="Identification">&nbsp;</field:display>
+												<field:display name="Status" feature="Identification">&nbsp;</field:display>
+												<field:display name="Team" feature="Identification">&nbsp;</field:display>
+												<field:display name="A.C. Chapter" feature="Identification">&nbsp;</field:display>
+												<field:display name="Accession Instrument" feature="Identification">&nbsp;</field:display>
+											</feature:display>
+												
+											<feature:display name="Location" module="Project ID and Planning">
+												<field:display name="Implementation Level" feature="Location">&nbsp;</field:display>
+												<field:display name="Region" feature="Location">&nbsp;</field:display>
+												<field:display name="Sector" feature="Location">&nbsp;</field:display>
+											</feature:display>
+											
+											<feature:display  name="Funding Organizations" module="Funding">
+												<field:display name="Cumulative Commitment" feature="Funding Organizations">&nbsp;</field:display>
+												<field:display name="Cumulative Disbursement" feature="Funding Organizations">&nbsp;</field:display>
+												<field:display name="Donor Agency" feature="Funding Organizations">&nbsp;</field:display>
+												<field:display name="Donor Commitment Date" feature="Funding Organizations">&nbsp;</field:display>
+												<field:display name="Donor Group" feature="Funding Organizations">&nbsp;</field:display>
+												<field:display name="Financing Instrument" feature="Funding Organizations">&nbsp;</field:display>
+												<field:display name="Type Of Assistance" feature="Funding Organizations">&nbsp;</field:display>
+											</feature:display>
+											
+											<feature:display name="Issues" module="Issues">
+												<field:display name="Actors" feature="Issues">&nbsp;</field:display>
+												<field:display name="Component description" feature="Issues">&nbsp;</field:display>
+												<field:display name="Component Name" feature="Issues">&nbsp;</field:display>
+												<field:display name="Issues" feature="Issues">&nbsp;</field:display>
+												<field:display name="Measures Taken" feature="Issues">&nbsp;</field:display>
+												<field:display name="Physical Progress" feature="Issues">&nbsp;</field:display>
+												<field:display name="Physical progress description" feature="Issues">&nbsp;</field:display>
+												<field:display name="Physical progress title" feature="Issues">&nbsp;</field:display>
+											</feature:display>	
+											
+											<feature:display name="Contact Information" module="Contact Information">
+												<field:display name="Contact Name" feature="Contact Information">&nbsp;</field:display>
+											</feature:display>
+												
+											<feature:display name="M & E" module="Trend Analysis and Forecasting">
+												<field:display name="Indicator Base Value" feature="M & E"></field:display>
+												<field:display name="Indicator Current Value" feature="M & E"></field:display>
+												<field:display name="Indicator Target Value" feature="M & E"></field:display>
+												<field:display name="Indicator Description" feature="M & E"></field:display>
+												<field:display name="Indicator ID" feature="M & E"></field:display>
+												<field:display name="Indicator Name" feature="M & E"></field:display>
+											</feature:display>
+											<feature:display name="Costing" module="Activity Costing">
+												<field:display name="Costing Donor" feature="Costing"></field:display>
+												<field:display name="Total Costs" feature="Costing"></field:display>
+											</feature:display>
 																	<TR>
 																		<TD>
 																			<TABLE width="100%" cellPadding=2 cellSpacing=1 vAlign="top" align="top" bgcolor="#aaaaaa" border=0>
@@ -208,13 +286,57 @@ function checkUncheckAll2() {
 																						Because the donor report and the contribution report are now different (the donor has also the indicator columnns)
 																						we have to create different c:if for each report								
 																						 -->
-																					
+																						 <font size="3">
+																							<ul id="dhtmlgoodies_tree" class="dhtmlgoodies_tree">	
+																							<bean:define name="aimAdvancedReportForm" property="ampTreeColumns" id="ampTreeColumns" type="java.util.Map"  toScope="page"/>
+																							<li >
+																							<input type=checkbox id="root" 
+																											name="root" 
+																											value="root"
+																											onclick="toggleChildrenVisibility('root')"
+																											
+																								/>
+																							<a href="#" id="1">AMP</a>
+																								<ul>																
+																							<logic:iterate name="ampTreeColumns" id="ampTreeColumn" type="java.util.Map.Entry" >
+																								<bean:define id="themeColumn" name="ampTreeColumn" property="key" type="java.lang.String" scope="page"/>
+																								<bean:define id="columnCollection" name="ampTreeColumn" property="value" type="java.util.ArrayList" scope="page"/>
+																								<li id="limodule:<bean:write name="themeColumn"/>">
+																								<input type=checkbox id="moduleVis:<bean:write name="themeColumn"/>" 
+																											name="selectedThemes" 
+																											value="<bean:write name="themeColumn"/>"
+																											onclick="toggleChildrenVisibility('limodule:<bean:write name="themeColumn"/>')"
+																											
+																								/>
+																								<a href="#" id="module:<bean:write name="themeColumn"/>">
+																									<bean:write name="themeColumn"/>
+																								</a>
+																								<ul>
+																								<logic:iterate name="columnCollection" id="ampColumnFromTree" type="org.digijava.module.aim.dbentity.AmpColumns">
+																									<li class="dhtmlgoodies_sheet.gif">
+																										<input type=checkbox id="fieldVis:<bean:write name="ampColumnFromTree" property="columnId"/>" 
+																											name="selectedColumns" 
+																											value="<bean:write name="ampColumnFromTree" property="columnId"/>"
+																										/>
+																										<a id="field:<bean:write name="ampColumnFromTree" property="columnId"/>">
+																											<bean:write name="ampColumnFromTree" property="columnName"/>
+																										</a>
+																									</li>	
+																								</logic:iterate>
+																								</ul>
+																								</li>
+																							</logic:iterate>
+																							</ul>
+																							</li></ul>
+																						</font>
+
+<!-- 																						
 																						<c:if test="${aimAdvancedReportForm.arReportType == 'donor'}">
 																						<logic:iterate name="aimAdvancedReportForm" id="ampColumns"	property="ampColumns" >
 																						<tr bgcolor="#ffffff">
 																							<td align="left" width="98%" valign=top>
 																							<digi:trn key="aim:report:${ampColumns.columnName}"><c:out value="${ampColumns.columnName}"/></digi:trn>
-																								
+																									
 																							</td>
 																							<td align="right">
 																							<html:multibox property="selectedColumns">
@@ -225,10 +347,10 @@ function checkUncheckAll2() {
 																						</logic:iterate>
 																						</c:if>
 																						
-																						
+ -->																						
 																						<!-- the contribution report doesn't have access to columns 33-38 from amp_columns -->
-																						<c:if test="${aimAdvancedReportForm.arReportType == 'contribution'}">
-
+<!-- 																						<c:if test="${aimAdvancedReportForm.arReportType == 'contribution'}">
+																						
 																						<logic:iterate name="aimAdvancedReportForm" id="ampColumns"	property="ampColumns" >
 																						<c:if test="${ampColumns.columnId<'33' || ampColumns.columnId>'38'}">
 																						<tr bgcolor="#ffffff">
@@ -238,6 +360,7 @@ function checkUncheckAll2() {
 																								
 																							</td>
 																							<td align="right">
+																							
 																							<html:multibox property="selectedColumns">
 																							<c:out value="${ampColumns.columnId}"/>
 																							</html:multibox>
@@ -246,9 +369,10 @@ function checkUncheckAll2() {
 																						</c:if>
 																						</logic:iterate>
 																						</c:if>
-																						
+ -->																						
 																						
 																						<!-- the regional report doesn't have access to columns 33-38 from amp_columns -->
+<!-- 
 																						<c:if test="${aimAdvancedReportForm.arReportType == 'regional'}">
 																						<logic:iterate name="aimAdvancedReportForm" id="ampColumns"	property="ampColumns" >
 																						<logic:notEqual name="ampColumns" property="columnId" value="5">
@@ -268,8 +392,10 @@ function checkUncheckAll2() {
 																						</logic:notEqual>
 																						</logic:iterate>
 																						</c:if>
+-->
 																					
 																						<!-- the new component report containing also indicator columns 30-35 -->
+<!-- 
 																						<c:if test="${aimAdvancedReportForm.arReportType == 'component'}">
 																						<logic:iterate name="aimAdvancedReportForm" id="ampColumns"	property="ampColumns" >
 																						<logic:notEqual name="ampColumns" property="columnId" value="5">
@@ -289,7 +415,7 @@ function checkUncheckAll2() {
 																						</logic:notEqual>
 																						</logic:iterate>
 																						</c:if>
-																						
+	-->																					
 																					
 																				</c:if>
 																			</TABLE>

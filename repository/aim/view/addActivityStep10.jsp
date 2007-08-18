@@ -132,13 +132,13 @@
 <html:hidden property="indicatorValId" />
 <html:hidden property="activityId" />
 <input type="hidden" name="edit" value="true">
-	<feature:display name="M&E" module="Trend Analysis and Forecasting"></feature:display>
-	<field:display name="Indicator Base Value" feature="M&E"></field:display>
-	<field:display name="Indicator Current Value" feature="M&E"></field:display>
-	<field:display name="Indicator Target Value" feature="M&E"></field:display>
-	<field:display name="Indicator Description" feature="M&E"></field:display>
-	<field:display name="Indicator ID" feature="M&E"></field:display>
-	<field:display name="Indicator Name" feature="M&E"></field:display>
+	<feature:display name="M & E" module="Trend Analysis and Forecasting"></feature:display>
+	<field:display name="Indicator Base Value" feature="M & E"></field:display>
+	<field:display name="Indicator Current Value" feature="M & E"></field:display>
+	<field:display name="Indicator Target Value" feature="M & E"></field:display>
+	<field:display name="Indicator Description" feature="M & E"></field:display>
+	<field:display name="Indicator ID" feature="M & E"></field:display>
+	<field:display name="Indicator Name" feature="M & E"></field:display>
 
 
 <table width="100%" cellPadding="0" cellSpacing="0" vAlign="top" align="left">

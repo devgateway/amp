@@ -75,10 +75,16 @@ Owner of DHTMLgoodies.com
 	function expandAll(treeId)
 	{
 		var menuItems = document.getElementById(treeId).getElementsByTagName('LI');
+		var aaa = menuItems[0].getElementsByTagName('UL');
+		//alert (menuItems[4].id+"  "+aaa[0].id);
 		for(var no=0;no<menuItems.length;no++){
 			var subItems = menuItems[no].getElementsByTagName('UL');
+			
 			if(subItems.length>0 && subItems[0].style.display!='block'){
+			    //alert("----"+menuItems[no].id);
+			    //if(no==0) showHideNode(false,'2122212');
 				showHideNode(false,menuItems[no].id.replace(/[^0-9]/g,''));
+				//showHideNode(false,menuItems[no].id);
 			}			
 			
 		}
@@ -148,15 +154,23 @@ Owner of DHTMLgoodies.com
 			
 	function showHideNode(e,inputId)
 	{
+		//alert(":::"+inputId);
 		if(inputId){
+			//alert("???"+this);
 			if(!document.getElementById('dhtmlgoodies_treeNode'+inputId))return;
 			thisNode = document.getElementById('dhtmlgoodies_treeNode'+inputId).getElementsByTagName('IMG')[0]; 
 		}else {
 			thisNode = this;
-			if(this.tagName=='A')thisNode = this.parentNode.getElementsByTagName('IMG')[0];	
+			//alert("!!!!"+this);
+			if(this.tagName=='A') {
+			
+			thisNode = this.parentNode.getElementsByTagName('IMG')[0];	
+			}
 			
 		}
-		if(thisNode.style.visibility=='hidden')return;
+		
+		if(thisNode.style!=null) if(thisNode.style.visibility=='hidden')return;
+		//alert(thisNode);
 		var parentNode = thisNode.parentNode;
 		inputId = parentNode.id.replace(/[^0-9]/g,'');
 		if(thisNode.src.indexOf(plusImage)>=0){

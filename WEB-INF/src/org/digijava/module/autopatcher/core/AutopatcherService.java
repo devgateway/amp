@@ -1,7 +1,5 @@
 package org.digijava.module.autopatcher.core;
 
-import java.util.Iterator;
-
 import org.apache.log4j.Logger;
 import org.digijava.kernel.service.AbstractServiceImpl;
 import org.digijava.kernel.service.ServiceContext;

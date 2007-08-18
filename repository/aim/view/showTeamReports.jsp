@@ -207,17 +207,17 @@ function confirmFunc() {
 														 			</li>
 													 				<logic:equal name="report" property="drilldownTab" value="true">
 															 			<li>
-														 					<digi:trn key="aim:drilldownTab">Drilldown Tab</digi:trn>
+														 					<digi:trn key="aim:typeDrilldownTab">Desktop Tab</digi:trn>
 															 			</li>
 													 				</logic:equal>
 													 				<logic:equal name="report" property="publicReport" value="true">
 															 			<li>
-														 					<digi:trn key="aim:drilldownTab">Public Report</digi:trn>
+														 					<digi:trn key="aim:typePublicReport">Public Report</digi:trn>
 															 			</li>
 													 				</logic:equal>
 													 				<logic:equal name="report" property="hideActivities" value="true">
 															 			<li>
-														 					<digi:trn key="aim:drilldownTab">Summary Report</digi:trn>
+														 					<digi:trn key="aim:typeSummaryReport">Summary Report</digi:trn>
 															 			</li>
 													 				</logic:equal>
 														 		</ul>

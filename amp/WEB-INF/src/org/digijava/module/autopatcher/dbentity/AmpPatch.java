@@ -1,7 +1,9 @@
 package org.digijava.module.autopatcher.dbentity;
 import java.io.Serializable;
 import java.sql.Timestamp;
-import java.util.Set;
+import java.util.List;
+
+import org.dgfoundation.amp.Util;
 
 /**
 * AmpPatch.java
@@ -11,26 +13,39 @@ import java.util.Set;
 * @since 12.08.2007
  */
 public class AmpPatch implements Serializable {
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 5759615519655548333L;
 	
 	private Long id;
-	private String keyName;
-	private String abstractFileName;
+	
+	private String abstractLocation;
+	private String name;
+	private String featureAdded;
 	private Timestamp discovered;
 	private Timestamp lastInvoked;
 	private String md5;
+	private boolean pendingExec;
 	
-	private Set logs;
+	private List logs;
+	
+	public Boolean isSuccessful() {
+		if(logs==null || logs.size()==0) return null;
+		AmpPatchLog last = (AmpPatchLog) logs.get(logs.size()-1);
+		if(last.getSuccessful()==true) return new Boolean(true);
+		return false;
+	}
+	
+	public AmpPatch() {
+		this.pendingExec=true;
+	}
+	
+	
 
-	public String getAbstractFileName() {
-		return abstractFileName;
+	public String getAbstractLocation() {
+		return abstractLocation;
 	}
 
-	public void setAbstractFileName(String abstractFileName) {
-		this.abstractFileName = abstractFileName;
+	public void setAbstractLocation(String abstractFileName) {
+		this.abstractLocation = abstractFileName;
 	}
 
 	public Timestamp getDiscovered() {
@@ -49,14 +64,6 @@ public class AmpPatch implements Serializable {
 		this.id = id;
 	}
 
-	public String getKeyName() {
-		return keyName;
-	}
-
-	public void setKeyName(String keyName) {
-		this.keyName = keyName;
-	}
-
 	public Timestamp getLastInvoked() {
 		return lastInvoked;
 	}
@@ -65,11 +72,11 @@ public class AmpPatch implements Serializable {
 		this.lastInvoked = lastInvoked;
 	}
 
-	public Set getLogs() {
+	public List getLogs() {
 		return logs;
 	}
 
-	public void setLogs(Set logs) {
+	public void setLogs(List logs) {
 		this.logs = logs;
 	}
 
@@ -80,4 +87,34 @@ public class AmpPatch implements Serializable {
 	public void setMd5(String lastMD5) {
 		this.md5 = lastMD5;
 	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public boolean isPendingExec() {
+		return pendingExec;
+	}
+
+	public void setPendingExec(boolean pendingExec) {
+		this.pendingExec = pendingExec;
+	}
+
+	public String getFeatureAdded() {
+		return featureAdded;
+	}
+
+	public void setFeatureAdded(String featureAdded) {
+		this.featureAdded = featureAdded;
+	}
+	
+	public String toString() {	
+	return Util.getBeanAsString(this, IGNORED_BEANSTRING_PROPS, false);	
+	}
+	
+	public static final String IGNORED_BEANSTRING_PROPS="logs";
 }

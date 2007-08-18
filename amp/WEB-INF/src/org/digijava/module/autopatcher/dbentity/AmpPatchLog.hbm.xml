@@ -19,12 +19,6 @@
 		<property name="actionName" column="actionName" type="java.lang.Long"/>		
 		<property name="actionReason" column="actionReason" type="java.lang.Long"/>	
 		<property name="successful" column="successful" type="java.lang.Boolean"/>			
-		
-		<set name="logs" table="AMP_PATCH_LOG" cascade="all">
-			<cache usage="read-write"/>
-			<key column="amp_patch_id"/>
-			<one-to-many class="org.digijava.module.aim.dbentity.AmpSector" />
-		</set>
-		
-		
+	
 </class>
+</hibernate-mapping>

@@ -293,7 +293,7 @@ function checkUncheckAll2() {
 																							<input type=checkbox id="root" 
 																											name="root" 
 																											value="root"
-																											onclick="toggleChildrenVisibility('root')"
+																											onclick="checkUncheckAll();"
 																											
 																								/>
 																							<a href="#" id="1">AMP</a>
